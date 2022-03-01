@@ -16,6 +16,731 @@ groups:
   name: 'Component mapping: consul'
   rules: []
 - interval: 1m
+  name: 'Component-Level SLIs: gitaly - 5m burn-rate'
+  rules:
+  - expr: |
+      (
+        sum by () (
+          rate(grpc_server_handling_seconds_bucket{grpc_method!~"CalculateChecksum|CommitLanguages|CommitStats|CreateFork|CreateRepositoryFromURL|FetchInternalRemote|FetchIntoObjectPool|FetchRemote|FetchSourceBranch|FindRemoteRepository|FindRemoteRootRef|Fsck|GarbageCollect|OptimizeRepository|PackObjectsHookWithSidechannel|PostReceiveHook|PostUploadPackWithSidechannel|PreReceiveHook|RepackFull|RepackIncremental|ReplicateRepository|SSHUploadPackWithSidechannel|UpdateHook",grpc_service!="gitaly.OperationService",grpc_type="unary",job="gitaly",le="0.5"}[5m])
+        )
+        +
+        sum by () (
+          rate(grpc_server_handling_seconds_bucket{grpc_method!~"CalculateChecksum|CommitLanguages|CommitStats|CreateFork|CreateRepositoryFromURL|FetchInternalRemote|FetchIntoObjectPool|FetchRemote|FetchSourceBranch|FindRemoteRepository|FindRemoteRootRef|Fsck|GarbageCollect|OptimizeRepository|PackObjectsHookWithSidechannel|PostReceiveHook|PostUploadPackWithSidechannel|PreReceiveHook|RepackFull|RepackIncremental|ReplicateRepository|SSHUploadPackWithSidechannel|UpdateHook",grpc_service!="gitaly.OperationService",grpc_type="unary",job="gitaly",le="1"}[5m])
+        )
+      )
+      /
+      2
+    labels:
+      component: goserver
+      tier: stor
+      type: gitaly
+    record: gitlab_component_apdex:success:rate_5m
+  - expr: |
+      sum by () (
+        rate(grpc_server_handling_seconds_bucket{grpc_method!~"CalculateChecksum|CommitLanguages|CommitStats|CreateFork|CreateRepositoryFromURL|FetchInternalRemote|FetchIntoObjectPool|FetchRemote|FetchSourceBranch|FindRemoteRepository|FindRemoteRootRef|Fsck|GarbageCollect|OptimizeRepository|PackObjectsHookWithSidechannel|PostReceiveHook|PostUploadPackWithSidechannel|PreReceiveHook|RepackFull|RepackIncremental|ReplicateRepository|SSHUploadPackWithSidechannel|UpdateHook",grpc_service!="gitaly.OperationService",grpc_type="unary",job="gitaly",le="+Inf"}[5m])
+      )
+    labels:
+      component: goserver
+      tier: stor
+      type: gitaly
+    record: gitlab_component_apdex:weight:score_5m
+  - expr: |
+      sum by () (
+        rate(gitaly_service_client_requests_total{grpc_service!="gitaly.OperationService",job="gitaly"}[5m])
+      )
+    labels:
+      component: goserver
+      tier: stor
+      type: gitaly
+    record: gitlab_component_ops:rate_5m
+  - expr: |
+      (
+        sum by () (
+          label_replace(rate(gitaly_service_client_requests_total{grpc_code!~"AlreadyExists|Canceled|DeadlineExceeded|FailedPrecondition|InvalidArgument|NotFound|OK|PermissionDenied|Unauthenticated",grpc_service!="gitaly.OperationService",job="gitaly"}[5m]), "_c", "0", "", "")
+          or
+          label_replace(rate(gitaly_service_client_requests_total{deadline_type!="limited",grpc_code="DeadlineExceeded",grpc_service!="gitaly.OperationService",job="gitaly"}[5m]), "_c", "1", "", "")
+        )
+      )
+      or
+      (
+        0 * group by() (
+          gitlab_component_ops:rate_5m{component="goserver",tier="stor",type="gitaly"}
+        )
+      )
+    labels:
+      component: goserver
+      tier: stor
+      type: gitaly
+    record: gitlab_component_errors:rate_5m
+- interval: 2m
+  name: 'Component-Level SLIs: gitaly - 30m burn-rate'
+  rules:
+  - expr: |
+      (
+        sum by () (
+          rate(grpc_server_handling_seconds_bucket{grpc_method!~"CalculateChecksum|CommitLanguages|CommitStats|CreateFork|CreateRepositoryFromURL|FetchInternalRemote|FetchIntoObjectPool|FetchRemote|FetchSourceBranch|FindRemoteRepository|FindRemoteRootRef|Fsck|GarbageCollect|OptimizeRepository|PackObjectsHookWithSidechannel|PostReceiveHook|PostUploadPackWithSidechannel|PreReceiveHook|RepackFull|RepackIncremental|ReplicateRepository|SSHUploadPackWithSidechannel|UpdateHook",grpc_service!="gitaly.OperationService",grpc_type="unary",job="gitaly",le="0.5"}[30m])
+        )
+        +
+        sum by () (
+          rate(grpc_server_handling_seconds_bucket{grpc_method!~"CalculateChecksum|CommitLanguages|CommitStats|CreateFork|CreateRepositoryFromURL|FetchInternalRemote|FetchIntoObjectPool|FetchRemote|FetchSourceBranch|FindRemoteRepository|FindRemoteRootRef|Fsck|GarbageCollect|OptimizeRepository|PackObjectsHookWithSidechannel|PostReceiveHook|PostUploadPackWithSidechannel|PreReceiveHook|RepackFull|RepackIncremental|ReplicateRepository|SSHUploadPackWithSidechannel|UpdateHook",grpc_service!="gitaly.OperationService",grpc_type="unary",job="gitaly",le="1"}[30m])
+        )
+      )
+      /
+      2
+    labels:
+      component: goserver
+      tier: stor
+      type: gitaly
+    record: gitlab_component_apdex:success:rate_30m
+  - expr: |
+      sum by () (
+        rate(grpc_server_handling_seconds_bucket{grpc_method!~"CalculateChecksum|CommitLanguages|CommitStats|CreateFork|CreateRepositoryFromURL|FetchInternalRemote|FetchIntoObjectPool|FetchRemote|FetchSourceBranch|FindRemoteRepository|FindRemoteRootRef|Fsck|GarbageCollect|OptimizeRepository|PackObjectsHookWithSidechannel|PostReceiveHook|PostUploadPackWithSidechannel|PreReceiveHook|RepackFull|RepackIncremental|ReplicateRepository|SSHUploadPackWithSidechannel|UpdateHook",grpc_service!="gitaly.OperationService",grpc_type="unary",job="gitaly",le="+Inf"}[30m])
+      )
+    labels:
+      component: goserver
+      tier: stor
+      type: gitaly
+    record: gitlab_component_apdex:weight:score_30m
+  - expr: |
+      sum by () (
+        rate(gitaly_service_client_requests_total{grpc_service!="gitaly.OperationService",job="gitaly"}[30m])
+      )
+    labels:
+      component: goserver
+      tier: stor
+      type: gitaly
+    record: gitlab_component_ops:rate_30m
+  - expr: |
+      (
+        sum by () (
+          label_replace(rate(gitaly_service_client_requests_total{grpc_code!~"AlreadyExists|Canceled|DeadlineExceeded|FailedPrecondition|InvalidArgument|NotFound|OK|PermissionDenied|Unauthenticated",grpc_service!="gitaly.OperationService",job="gitaly"}[30m]), "_c", "0", "", "")
+          or
+          label_replace(rate(gitaly_service_client_requests_total{deadline_type!="limited",grpc_code="DeadlineExceeded",grpc_service!="gitaly.OperationService",job="gitaly"}[30m]), "_c", "1", "", "")
+        )
+      )
+      or
+      (
+        0 * group by() (
+          gitlab_component_ops:rate_30m{component="goserver",tier="stor",type="gitaly"}
+        )
+      )
+    labels:
+      component: goserver
+      tier: stor
+      type: gitaly
+    record: gitlab_component_errors:rate_30m
+- interval: 1m
+  name: 'Component-Level SLIs: gitaly - 1h burn-rate'
+  rules:
+  - expr: |
+      (
+        sum by () (
+          rate(grpc_server_handling_seconds_bucket{grpc_method!~"CalculateChecksum|CommitLanguages|CommitStats|CreateFork|CreateRepositoryFromURL|FetchInternalRemote|FetchIntoObjectPool|FetchRemote|FetchSourceBranch|FindRemoteRepository|FindRemoteRootRef|Fsck|GarbageCollect|OptimizeRepository|PackObjectsHookWithSidechannel|PostReceiveHook|PostUploadPackWithSidechannel|PreReceiveHook|RepackFull|RepackIncremental|ReplicateRepository|SSHUploadPackWithSidechannel|UpdateHook",grpc_service!="gitaly.OperationService",grpc_type="unary",job="gitaly",le="0.5"}[1h])
+        )
+        +
+        sum by () (
+          rate(grpc_server_handling_seconds_bucket{grpc_method!~"CalculateChecksum|CommitLanguages|CommitStats|CreateFork|CreateRepositoryFromURL|FetchInternalRemote|FetchIntoObjectPool|FetchRemote|FetchSourceBranch|FindRemoteRepository|FindRemoteRootRef|Fsck|GarbageCollect|OptimizeRepository|PackObjectsHookWithSidechannel|PostReceiveHook|PostUploadPackWithSidechannel|PreReceiveHook|RepackFull|RepackIncremental|ReplicateRepository|SSHUploadPackWithSidechannel|UpdateHook",grpc_service!="gitaly.OperationService",grpc_type="unary",job="gitaly",le="1"}[1h])
+        )
+      )
+      /
+      2
+    labels:
+      component: goserver
+      tier: stor
+      type: gitaly
+    record: gitlab_component_apdex:success:rate_1h
+  - expr: |
+      sum by () (
+        rate(grpc_server_handling_seconds_bucket{grpc_method!~"CalculateChecksum|CommitLanguages|CommitStats|CreateFork|CreateRepositoryFromURL|FetchInternalRemote|FetchIntoObjectPool|FetchRemote|FetchSourceBranch|FindRemoteRepository|FindRemoteRootRef|Fsck|GarbageCollect|OptimizeRepository|PackObjectsHookWithSidechannel|PostReceiveHook|PostUploadPackWithSidechannel|PreReceiveHook|RepackFull|RepackIncremental|ReplicateRepository|SSHUploadPackWithSidechannel|UpdateHook",grpc_service!="gitaly.OperationService",grpc_type="unary",job="gitaly",le="+Inf"}[1h])
+      )
+    labels:
+      component: goserver
+      tier: stor
+      type: gitaly
+    record: gitlab_component_apdex:weight:score_1h
+  - expr: |
+      sum by () (
+        rate(gitaly_service_client_requests_total{grpc_service!="gitaly.OperationService",job="gitaly"}[1h])
+      )
+    labels:
+      component: goserver
+      tier: stor
+      type: gitaly
+    record: gitlab_component_ops:rate_1h
+  - expr: |
+      (
+        sum by () (
+          label_replace(rate(gitaly_service_client_requests_total{grpc_code!~"AlreadyExists|Canceled|DeadlineExceeded|FailedPrecondition|InvalidArgument|NotFound|OK|PermissionDenied|Unauthenticated",grpc_service!="gitaly.OperationService",job="gitaly"}[1h]), "_c", "0", "", "")
+          or
+          label_replace(rate(gitaly_service_client_requests_total{deadline_type!="limited",grpc_code="DeadlineExceeded",grpc_service!="gitaly.OperationService",job="gitaly"}[1h]), "_c", "1", "", "")
+        )
+      )
+      or
+      (
+        0 * group by() (
+          gitlab_component_ops:rate_1h{component="goserver",tier="stor",type="gitaly"}
+        )
+      )
+    labels:
+      component: goserver
+      tier: stor
+      type: gitaly
+    record: gitlab_component_errors:rate_1h
+- interval: 2m
+  name: 'Component-Level SLIs: gitaly - 6h burn-rate'
+  rules:
+  - expr: |
+      (
+        sum by () (
+          rate(grpc_server_handling_seconds_bucket{grpc_method!~"CalculateChecksum|CommitLanguages|CommitStats|CreateFork|CreateRepositoryFromURL|FetchInternalRemote|FetchIntoObjectPool|FetchRemote|FetchSourceBranch|FindRemoteRepository|FindRemoteRootRef|Fsck|GarbageCollect|OptimizeRepository|PackObjectsHookWithSidechannel|PostReceiveHook|PostUploadPackWithSidechannel|PreReceiveHook|RepackFull|RepackIncremental|ReplicateRepository|SSHUploadPackWithSidechannel|UpdateHook",grpc_service!="gitaly.OperationService",grpc_type="unary",job="gitaly",le="0.5"}[6h])
+        )
+        +
+        sum by () (
+          rate(grpc_server_handling_seconds_bucket{grpc_method!~"CalculateChecksum|CommitLanguages|CommitStats|CreateFork|CreateRepositoryFromURL|FetchInternalRemote|FetchIntoObjectPool|FetchRemote|FetchSourceBranch|FindRemoteRepository|FindRemoteRootRef|Fsck|GarbageCollect|OptimizeRepository|PackObjectsHookWithSidechannel|PostReceiveHook|PostUploadPackWithSidechannel|PreReceiveHook|RepackFull|RepackIncremental|ReplicateRepository|SSHUploadPackWithSidechannel|UpdateHook",grpc_service!="gitaly.OperationService",grpc_type="unary",job="gitaly",le="1"}[6h])
+        )
+      )
+      /
+      2
+    labels:
+      component: goserver
+      tier: stor
+      type: gitaly
+    record: gitlab_component_apdex:success:rate_6h
+  - expr: |
+      sum by () (
+        rate(grpc_server_handling_seconds_bucket{grpc_method!~"CalculateChecksum|CommitLanguages|CommitStats|CreateFork|CreateRepositoryFromURL|FetchInternalRemote|FetchIntoObjectPool|FetchRemote|FetchSourceBranch|FindRemoteRepository|FindRemoteRootRef|Fsck|GarbageCollect|OptimizeRepository|PackObjectsHookWithSidechannel|PostReceiveHook|PostUploadPackWithSidechannel|PreReceiveHook|RepackFull|RepackIncremental|ReplicateRepository|SSHUploadPackWithSidechannel|UpdateHook",grpc_service!="gitaly.OperationService",grpc_type="unary",job="gitaly",le="+Inf"}[6h])
+      )
+    labels:
+      component: goserver
+      tier: stor
+      type: gitaly
+    record: gitlab_component_apdex:weight:score_6h
+  - expr: |
+      sum by () (
+        rate(gitaly_service_client_requests_total{grpc_service!="gitaly.OperationService",job="gitaly"}[6h])
+      )
+    labels:
+      component: goserver
+      tier: stor
+      type: gitaly
+    record: gitlab_component_ops:rate_6h
+  - expr: |
+      (
+        sum by () (
+          label_replace(rate(gitaly_service_client_requests_total{grpc_code!~"AlreadyExists|Canceled|DeadlineExceeded|FailedPrecondition|InvalidArgument|NotFound|OK|PermissionDenied|Unauthenticated",grpc_service!="gitaly.OperationService",job="gitaly"}[6h]), "_c", "0", "", "")
+          or
+          label_replace(rate(gitaly_service_client_requests_total{deadline_type!="limited",grpc_code="DeadlineExceeded",grpc_service!="gitaly.OperationService",job="gitaly"}[6h]), "_c", "1", "", "")
+        )
+      )
+      or
+      (
+        0 * group by() (
+          gitlab_component_ops:rate_6h{component="goserver",tier="stor",type="gitaly"}
+        )
+      )
+    labels:
+      component: goserver
+      tier: stor
+      type: gitaly
+    record: gitlab_component_errors:rate_6h
+- interval: 1m
+  name: 'Component mapping: gitaly'
+  rules:
+  - expr: "1"
+    labels:
+      component: goserver
+      regional_aggregation: "no"
+      service_aggregation: "yes"
+      tier: stor
+      type: gitaly
+    record: gitlab_component_service:mapping
+- interval: 1m
+  name: 'Component-Level SLIs: logging - 5m burn-rate'
+  rules:
+  - expr: |
+      sum by () (
+        label_replace(avg_over_time(aws_es_5xx_average[5m]), "status", "5xx","","")/60 or
+        label_replace(avg_over_time(aws_es_4xx_average[5m]), "status", "4xx","","")/60 or
+        label_replace(avg_over_time(aws_es_3xx_average[5m]), "status", "3xx","","")/60 or
+        label_replace(avg_over_time(aws_es_2xx_average[5m]), "status", "2xx","","")/60
+      )
+    labels:
+      component: elasticsearch_searching
+      tier: inf
+      type: logging
+    record: gitlab_component_ops:rate_5m
+  - expr: |
+      (
+        sum by () (
+          label_replace(avg_over_time(aws_es_5xx_average[5m]), "status", "5xx","","")/60
+        )
+      )
+      or
+      (
+        0 * group by() (
+          gitlab_component_ops:rate_5m{component="elasticsearch_searching",tier="inf",type="logging"}
+        )
+      )
+    labels:
+      component: elasticsearch_searching
+      tier: inf
+      type: logging
+    record: gitlab_component_errors:rate_5m
+- interval: 2m
+  name: 'Component-Level SLIs: logging - 30m burn-rate'
+  rules:
+  - expr: |
+      sum by () (
+        label_replace(avg_over_time(aws_es_5xx_average[5m]), "status", "5xx","","")/60 or
+        label_replace(avg_over_time(aws_es_4xx_average[5m]), "status", "4xx","","")/60 or
+        label_replace(avg_over_time(aws_es_3xx_average[5m]), "status", "3xx","","")/60 or
+        label_replace(avg_over_time(aws_es_2xx_average[5m]), "status", "2xx","","")/60
+      )
+    labels:
+      component: elasticsearch_searching
+      tier: inf
+      type: logging
+    record: gitlab_component_ops:rate_30m
+  - expr: |
+      (
+        sum by () (
+          label_replace(avg_over_time(aws_es_5xx_average[5m]), "status", "5xx","","")/60
+        )
+      )
+      or
+      (
+        0 * group by() (
+          gitlab_component_ops:rate_30m{component="elasticsearch_searching",tier="inf",type="logging"}
+        )
+      )
+    labels:
+      component: elasticsearch_searching
+      tier: inf
+      type: logging
+    record: gitlab_component_errors:rate_30m
+- interval: 1m
+  name: 'Component-Level SLIs: logging - 1h burn-rate'
+  rules:
+  - expr: |
+      sum by () (
+        label_replace(avg_over_time(aws_es_5xx_average[5m]), "status", "5xx","","")/60 or
+        label_replace(avg_over_time(aws_es_4xx_average[5m]), "status", "4xx","","")/60 or
+        label_replace(avg_over_time(aws_es_3xx_average[5m]), "status", "3xx","","")/60 or
+        label_replace(avg_over_time(aws_es_2xx_average[5m]), "status", "2xx","","")/60
+      )
+    labels:
+      component: elasticsearch_searching
+      tier: inf
+      type: logging
+    record: gitlab_component_ops:rate_1h
+  - expr: |
+      (
+        sum by () (
+          label_replace(avg_over_time(aws_es_5xx_average[5m]), "status", "5xx","","")/60
+        )
+      )
+      or
+      (
+        0 * group by() (
+          gitlab_component_ops:rate_1h{component="elasticsearch_searching",tier="inf",type="logging"}
+        )
+      )
+    labels:
+      component: elasticsearch_searching
+      tier: inf
+      type: logging
+    record: gitlab_component_errors:rate_1h
+- interval: 2m
+  name: 'Component-Level SLIs: logging - 6h burn-rate'
+  rules:
+  - expr: |
+      sum by () (
+        label_replace(avg_over_time(aws_es_5xx_average[5m]), "status", "5xx","","")/60 or
+        label_replace(avg_over_time(aws_es_4xx_average[5m]), "status", "4xx","","")/60 or
+        label_replace(avg_over_time(aws_es_3xx_average[5m]), "status", "3xx","","")/60 or
+        label_replace(avg_over_time(aws_es_2xx_average[5m]), "status", "2xx","","")/60
+      )
+    labels:
+      component: elasticsearch_searching
+      tier: inf
+      type: logging
+    record: gitlab_component_ops:rate_6h
+  - expr: |
+      (
+        sum by () (
+          label_replace(avg_over_time(aws_es_5xx_average[5m]), "status", "5xx","","")/60
+        )
+      )
+      or
+      (
+        0 * group by() (
+          gitlab_component_ops:rate_6h{component="elasticsearch_searching",tier="inf",type="logging"}
+        )
+      )
+    labels:
+      component: elasticsearch_searching
+      tier: inf
+      type: logging
+    record: gitlab_component_errors:rate_6h
+- interval: 1m
+  name: 'Component mapping: logging'
+  rules:
+  - expr: "1"
+    labels:
+      component: elasticsearch_searching
+      regional_aggregation: "no"
+      service_aggregation: "yes"
+      tier: inf
+      type: logging
+    record: gitlab_component_service:mapping
+- interval: 1m
+  name: 'Component-Level SLIs: praefect - 5m burn-rate'
+  rules:
+  - expr: |
+      (
+        sum by () (
+          rate(grpc_server_handling_seconds_bucket{grpc_type="unary",job="praefect",le="0.5"}[5m])
+        )
+        +
+        sum by () (
+          rate(grpc_server_handling_seconds_bucket{grpc_type="unary",job="praefect",le="1"}[5m])
+        )
+      )
+      /
+      2
+    labels:
+      component: proxy
+      tier: stor
+      type: praefect
+    record: gitlab_component_apdex:success:rate_5m
+  - expr: |
+      sum by () (
+        rate(grpc_server_handling_seconds_bucket{grpc_type="unary",job="praefect",le="+Inf"}[5m])
+      )
+    labels:
+      component: proxy
+      tier: stor
+      type: praefect
+    record: gitlab_component_apdex:weight:score_5m
+  - expr: |
+      sum by () (
+        rate(grpc_server_handled_total{job="praefect"}[5m])
+      )
+    labels:
+      component: proxy
+      tier: stor
+      type: praefect
+    record: gitlab_component_ops:rate_5m
+  - expr: |
+      (
+        sum by () (
+          rate(grpc_server_handled_total{grpc_code!~"^(OK|NotFound|Unauthenticated|AlreadyExists|FailedPrecondition|Canceled)$",job="praefect"}[5m])
+        )
+      )
+      or
+      (
+        0 * group by() (
+          gitlab_component_ops:rate_5m{component="proxy",tier="stor",type="praefect"}
+        )
+      )
+    labels:
+      component: proxy
+      tier: stor
+      type: praefect
+    record: gitlab_component_errors:rate_5m
+  - expr: |
+      sum by () (
+        rate(gitaly_praefect_replication_delay_bucket{le="300"}[5m])
+      )
+    labels:
+      component: replicator_queue
+      tier: stor
+      type: praefect
+    record: gitlab_component_apdex:success:rate_5m
+  - expr: |
+      sum by () (
+        rate(gitaly_praefect_replication_delay_bucket{le="+Inf"}[5m])
+      )
+    labels:
+      component: replicator_queue
+      tier: stor
+      type: praefect
+    record: gitlab_component_apdex:weight:score_5m
+  - expr: |
+      sum by () (
+        rate(gitaly_praefect_replication_delay_bucket{le="+Inf"}[5m])
+      )
+    labels:
+      component: replicator_queue
+      tier: stor
+      type: praefect
+    record: gitlab_component_ops:rate_5m
+- interval: 2m
+  name: 'Component-Level SLIs: praefect - 30m burn-rate'
+  rules:
+  - expr: |
+      (
+        sum by () (
+          rate(grpc_server_handling_seconds_bucket{grpc_type="unary",job="praefect",le="0.5"}[30m])
+        )
+        +
+        sum by () (
+          rate(grpc_server_handling_seconds_bucket{grpc_type="unary",job="praefect",le="1"}[30m])
+        )
+      )
+      /
+      2
+    labels:
+      component: proxy
+      tier: stor
+      type: praefect
+    record: gitlab_component_apdex:success:rate_30m
+  - expr: |
+      sum by () (
+        rate(grpc_server_handling_seconds_bucket{grpc_type="unary",job="praefect",le="+Inf"}[30m])
+      )
+    labels:
+      component: proxy
+      tier: stor
+      type: praefect
+    record: gitlab_component_apdex:weight:score_30m
+  - expr: |
+      sum by () (
+        rate(grpc_server_handled_total{job="praefect"}[30m])
+      )
+    labels:
+      component: proxy
+      tier: stor
+      type: praefect
+    record: gitlab_component_ops:rate_30m
+  - expr: |
+      (
+        sum by () (
+          rate(grpc_server_handled_total{grpc_code!~"^(OK|NotFound|Unauthenticated|AlreadyExists|FailedPrecondition|Canceled)$",job="praefect"}[30m])
+        )
+      )
+      or
+      (
+        0 * group by() (
+          gitlab_component_ops:rate_30m{component="proxy",tier="stor",type="praefect"}
+        )
+      )
+    labels:
+      component: proxy
+      tier: stor
+      type: praefect
+    record: gitlab_component_errors:rate_30m
+  - expr: |
+      sum by () (
+        rate(gitaly_praefect_replication_delay_bucket{le="300"}[30m])
+      )
+    labels:
+      component: replicator_queue
+      tier: stor
+      type: praefect
+    record: gitlab_component_apdex:success:rate_30m
+  - expr: |
+      sum by () (
+        rate(gitaly_praefect_replication_delay_bucket{le="+Inf"}[30m])
+      )
+    labels:
+      component: replicator_queue
+      tier: stor
+      type: praefect
+    record: gitlab_component_apdex:weight:score_30m
+  - expr: |
+      sum by () (
+        rate(gitaly_praefect_replication_delay_bucket{le="+Inf"}[30m])
+      )
+    labels:
+      component: replicator_queue
+      tier: stor
+      type: praefect
+    record: gitlab_component_ops:rate_30m
+- interval: 1m
+  name: 'Component-Level SLIs: praefect - 1h burn-rate'
+  rules:
+  - expr: |
+      (
+        sum by () (
+          rate(grpc_server_handling_seconds_bucket{grpc_type="unary",job="praefect",le="0.5"}[1h])
+        )
+        +
+        sum by () (
+          rate(grpc_server_handling_seconds_bucket{grpc_type="unary",job="praefect",le="1"}[1h])
+        )
+      )
+      /
+      2
+    labels:
+      component: proxy
+      tier: stor
+      type: praefect
+    record: gitlab_component_apdex:success:rate_1h
+  - expr: |
+      sum by () (
+        rate(grpc_server_handling_seconds_bucket{grpc_type="unary",job="praefect",le="+Inf"}[1h])
+      )
+    labels:
+      component: proxy
+      tier: stor
+      type: praefect
+    record: gitlab_component_apdex:weight:score_1h
+  - expr: |
+      sum by () (
+        rate(grpc_server_handled_total{job="praefect"}[1h])
+      )
+    labels:
+      component: proxy
+      tier: stor
+      type: praefect
+    record: gitlab_component_ops:rate_1h
+  - expr: |
+      (
+        sum by () (
+          rate(grpc_server_handled_total{grpc_code!~"^(OK|NotFound|Unauthenticated|AlreadyExists|FailedPrecondition|Canceled)$",job="praefect"}[1h])
+        )
+      )
+      or
+      (
+        0 * group by() (
+          gitlab_component_ops:rate_1h{component="proxy",tier="stor",type="praefect"}
+        )
+      )
+    labels:
+      component: proxy
+      tier: stor
+      type: praefect
+    record: gitlab_component_errors:rate_1h
+  - expr: |
+      sum by () (
+        rate(gitaly_praefect_replication_delay_bucket{le="300"}[1h])
+      )
+    labels:
+      component: replicator_queue
+      tier: stor
+      type: praefect
+    record: gitlab_component_apdex:success:rate_1h
+  - expr: |
+      sum by () (
+        rate(gitaly_praefect_replication_delay_bucket{le="+Inf"}[1h])
+      )
+    labels:
+      component: replicator_queue
+      tier: stor
+      type: praefect
+    record: gitlab_component_apdex:weight:score_1h
+  - expr: |
+      sum by () (
+        rate(gitaly_praefect_replication_delay_bucket{le="+Inf"}[1h])
+      )
+    labels:
+      component: replicator_queue
+      tier: stor
+      type: praefect
+    record: gitlab_component_ops:rate_1h
+- interval: 2m
+  name: 'Component-Level SLIs: praefect - 6h burn-rate'
+  rules:
+  - expr: |
+      (
+        sum by () (
+          rate(grpc_server_handling_seconds_bucket{grpc_type="unary",job="praefect",le="0.5"}[6h])
+        )
+        +
+        sum by () (
+          rate(grpc_server_handling_seconds_bucket{grpc_type="unary",job="praefect",le="1"}[6h])
+        )
+      )
+      /
+      2
+    labels:
+      component: proxy
+      tier: stor
+      type: praefect
+    record: gitlab_component_apdex:success:rate_6h
+  - expr: |
+      sum by () (
+        rate(grpc_server_handling_seconds_bucket{grpc_type="unary",job="praefect",le="+Inf"}[6h])
+      )
+    labels:
+      component: proxy
+      tier: stor
+      type: praefect
+    record: gitlab_component_apdex:weight:score_6h
+  - expr: |
+      sum by () (
+        rate(grpc_server_handled_total{job="praefect"}[6h])
+      )
+    labels:
+      component: proxy
+      tier: stor
+      type: praefect
+    record: gitlab_component_ops:rate_6h
+  - expr: |
+      (
+        sum by () (
+          rate(grpc_server_handled_total{grpc_code!~"^(OK|NotFound|Unauthenticated|AlreadyExists|FailedPrecondition|Canceled)$",job="praefect"}[6h])
+        )
+      )
+      or
+      (
+        0 * group by() (
+          gitlab_component_ops:rate_6h{component="proxy",tier="stor",type="praefect"}
+        )
+      )
+    labels:
+      component: proxy
+      tier: stor
+      type: praefect
+    record: gitlab_component_errors:rate_6h
+  - expr: |
+      sum by () (
+        rate(gitaly_praefect_replication_delay_bucket{le="300"}[6h])
+      )
+    labels:
+      component: replicator_queue
+      tier: stor
+      type: praefect
+    record: gitlab_component_apdex:success:rate_6h
+  - expr: |
+      sum by () (
+        rate(gitaly_praefect_replication_delay_bucket{le="+Inf"}[6h])
+      )
+    labels:
+      component: replicator_queue
+      tier: stor
+      type: praefect
+    record: gitlab_component_apdex:weight:score_6h
+  - expr: |
+      sum by () (
+        rate(gitaly_praefect_replication_delay_bucket{le="+Inf"}[6h])
+      )
+    labels:
+      component: replicator_queue
+      tier: stor
+      type: praefect
+    record: gitlab_component_ops:rate_6h
+- interval: 1m
+  name: 'Component mapping: praefect'
+  rules:
+  - expr: "1"
+    labels:
+      component: proxy
+      regional_aggregation: "no"
+      service_aggregation: "yes"
+      tier: stor
+      type: praefect
+    record: gitlab_component_service:mapping
+  - expr: "1"
+    labels:
+      component: replicator_queue
+      regional_aggregation: "no"
+      service_aggregation: "yes"
+      tier: stor
+      type: praefect
+    record: gitlab_component_service:mapping
+- interval: 1m
   name: 'Component-Level SLIs: webservice - 5m burn-rate'
   rules:
   - expr: |
@@ -463,592 +1188,6 @@ groups:
       type: webservice
     record: gitlab_component_service:mapping
 - interval: 1m
-  name: 'Component-Level SLIs: gitaly - 5m burn-rate'
-  rules:
-  - expr: |
-      (
-        sum by () (
-          rate(grpc_server_handling_seconds_bucket{grpc_method!~"CalculateChecksum|CommitLanguages|CommitStats|CreateFork|CreateRepositoryFromURL|FetchInternalRemote|FetchIntoObjectPool|FetchRemote|FetchSourceBranch|FindRemoteRepository|FindRemoteRootRef|Fsck|GarbageCollect|OptimizeRepository|PackObjectsHookWithSidechannel|PostReceiveHook|PostUploadPackWithSidechannel|PreReceiveHook|RepackFull|RepackIncremental|ReplicateRepository|SSHUploadPackWithSidechannel|UpdateHook",grpc_service!="gitaly.OperationService",grpc_type="unary",job="gitaly",le="0.5"}[5m])
-        )
-        +
-        sum by () (
-          rate(grpc_server_handling_seconds_bucket{grpc_method!~"CalculateChecksum|CommitLanguages|CommitStats|CreateFork|CreateRepositoryFromURL|FetchInternalRemote|FetchIntoObjectPool|FetchRemote|FetchSourceBranch|FindRemoteRepository|FindRemoteRootRef|Fsck|GarbageCollect|OptimizeRepository|PackObjectsHookWithSidechannel|PostReceiveHook|PostUploadPackWithSidechannel|PreReceiveHook|RepackFull|RepackIncremental|ReplicateRepository|SSHUploadPackWithSidechannel|UpdateHook",grpc_service!="gitaly.OperationService",grpc_type="unary",job="gitaly",le="1"}[5m])
-        )
-      )
-      /
-      2
-    labels:
-      component: goserver
-      tier: stor
-      type: gitaly
-    record: gitlab_component_apdex:success:rate_5m
-  - expr: |
-      sum by () (
-        rate(grpc_server_handling_seconds_bucket{grpc_method!~"CalculateChecksum|CommitLanguages|CommitStats|CreateFork|CreateRepositoryFromURL|FetchInternalRemote|FetchIntoObjectPool|FetchRemote|FetchSourceBranch|FindRemoteRepository|FindRemoteRootRef|Fsck|GarbageCollect|OptimizeRepository|PackObjectsHookWithSidechannel|PostReceiveHook|PostUploadPackWithSidechannel|PreReceiveHook|RepackFull|RepackIncremental|ReplicateRepository|SSHUploadPackWithSidechannel|UpdateHook",grpc_service!="gitaly.OperationService",grpc_type="unary",job="gitaly",le="+Inf"}[5m])
-      )
-    labels:
-      component: goserver
-      tier: stor
-      type: gitaly
-    record: gitlab_component_apdex:weight:score_5m
-  - expr: |
-      sum by () (
-        rate(gitaly_service_client_requests_total{grpc_service!="gitaly.OperationService",job="gitaly"}[5m])
-      )
-    labels:
-      component: goserver
-      tier: stor
-      type: gitaly
-    record: gitlab_component_ops:rate_5m
-  - expr: |
-      (
-        sum by () (
-          label_replace(rate(gitaly_service_client_requests_total{grpc_code!~"AlreadyExists|Canceled|DeadlineExceeded|FailedPrecondition|InvalidArgument|NotFound|OK|PermissionDenied|Unauthenticated",grpc_service!="gitaly.OperationService",job="gitaly"}[5m]), "_c", "0", "", "")
-          or
-          label_replace(rate(gitaly_service_client_requests_total{deadline_type!="limited",grpc_code="DeadlineExceeded",grpc_service!="gitaly.OperationService",job="gitaly"}[5m]), "_c", "1", "", "")
-        )
-      )
-      or
-      (
-        0 * group by() (
-          gitlab_component_ops:rate_5m{component="goserver",tier="stor",type="gitaly"}
-        )
-      )
-    labels:
-      component: goserver
-      tier: stor
-      type: gitaly
-    record: gitlab_component_errors:rate_5m
-- interval: 2m
-  name: 'Component-Level SLIs: gitaly - 30m burn-rate'
-  rules:
-  - expr: |
-      (
-        sum by () (
-          rate(grpc_server_handling_seconds_bucket{grpc_method!~"CalculateChecksum|CommitLanguages|CommitStats|CreateFork|CreateRepositoryFromURL|FetchInternalRemote|FetchIntoObjectPool|FetchRemote|FetchSourceBranch|FindRemoteRepository|FindRemoteRootRef|Fsck|GarbageCollect|OptimizeRepository|PackObjectsHookWithSidechannel|PostReceiveHook|PostUploadPackWithSidechannel|PreReceiveHook|RepackFull|RepackIncremental|ReplicateRepository|SSHUploadPackWithSidechannel|UpdateHook",grpc_service!="gitaly.OperationService",grpc_type="unary",job="gitaly",le="0.5"}[30m])
-        )
-        +
-        sum by () (
-          rate(grpc_server_handling_seconds_bucket{grpc_method!~"CalculateChecksum|CommitLanguages|CommitStats|CreateFork|CreateRepositoryFromURL|FetchInternalRemote|FetchIntoObjectPool|FetchRemote|FetchSourceBranch|FindRemoteRepository|FindRemoteRootRef|Fsck|GarbageCollect|OptimizeRepository|PackObjectsHookWithSidechannel|PostReceiveHook|PostUploadPackWithSidechannel|PreReceiveHook|RepackFull|RepackIncremental|ReplicateRepository|SSHUploadPackWithSidechannel|UpdateHook",grpc_service!="gitaly.OperationService",grpc_type="unary",job="gitaly",le="1"}[30m])
-        )
-      )
-      /
-      2
-    labels:
-      component: goserver
-      tier: stor
-      type: gitaly
-    record: gitlab_component_apdex:success:rate_30m
-  - expr: |
-      sum by () (
-        rate(grpc_server_handling_seconds_bucket{grpc_method!~"CalculateChecksum|CommitLanguages|CommitStats|CreateFork|CreateRepositoryFromURL|FetchInternalRemote|FetchIntoObjectPool|FetchRemote|FetchSourceBranch|FindRemoteRepository|FindRemoteRootRef|Fsck|GarbageCollect|OptimizeRepository|PackObjectsHookWithSidechannel|PostReceiveHook|PostUploadPackWithSidechannel|PreReceiveHook|RepackFull|RepackIncremental|ReplicateRepository|SSHUploadPackWithSidechannel|UpdateHook",grpc_service!="gitaly.OperationService",grpc_type="unary",job="gitaly",le="+Inf"}[30m])
-      )
-    labels:
-      component: goserver
-      tier: stor
-      type: gitaly
-    record: gitlab_component_apdex:weight:score_30m
-  - expr: |
-      sum by () (
-        rate(gitaly_service_client_requests_total{grpc_service!="gitaly.OperationService",job="gitaly"}[30m])
-      )
-    labels:
-      component: goserver
-      tier: stor
-      type: gitaly
-    record: gitlab_component_ops:rate_30m
-  - expr: |
-      (
-        sum by () (
-          label_replace(rate(gitaly_service_client_requests_total{grpc_code!~"AlreadyExists|Canceled|DeadlineExceeded|FailedPrecondition|InvalidArgument|NotFound|OK|PermissionDenied|Unauthenticated",grpc_service!="gitaly.OperationService",job="gitaly"}[30m]), "_c", "0", "", "")
-          or
-          label_replace(rate(gitaly_service_client_requests_total{deadline_type!="limited",grpc_code="DeadlineExceeded",grpc_service!="gitaly.OperationService",job="gitaly"}[30m]), "_c", "1", "", "")
-        )
-      )
-      or
-      (
-        0 * group by() (
-          gitlab_component_ops:rate_30m{component="goserver",tier="stor",type="gitaly"}
-        )
-      )
-    labels:
-      component: goserver
-      tier: stor
-      type: gitaly
-    record: gitlab_component_errors:rate_30m
-- interval: 1m
-  name: 'Component-Level SLIs: gitaly - 1h burn-rate'
-  rules:
-  - expr: |
-      (
-        sum by () (
-          rate(grpc_server_handling_seconds_bucket{grpc_method!~"CalculateChecksum|CommitLanguages|CommitStats|CreateFork|CreateRepositoryFromURL|FetchInternalRemote|FetchIntoObjectPool|FetchRemote|FetchSourceBranch|FindRemoteRepository|FindRemoteRootRef|Fsck|GarbageCollect|OptimizeRepository|PackObjectsHookWithSidechannel|PostReceiveHook|PostUploadPackWithSidechannel|PreReceiveHook|RepackFull|RepackIncremental|ReplicateRepository|SSHUploadPackWithSidechannel|UpdateHook",grpc_service!="gitaly.OperationService",grpc_type="unary",job="gitaly",le="0.5"}[1h])
-        )
-        +
-        sum by () (
-          rate(grpc_server_handling_seconds_bucket{grpc_method!~"CalculateChecksum|CommitLanguages|CommitStats|CreateFork|CreateRepositoryFromURL|FetchInternalRemote|FetchIntoObjectPool|FetchRemote|FetchSourceBranch|FindRemoteRepository|FindRemoteRootRef|Fsck|GarbageCollect|OptimizeRepository|PackObjectsHookWithSidechannel|PostReceiveHook|PostUploadPackWithSidechannel|PreReceiveHook|RepackFull|RepackIncremental|ReplicateRepository|SSHUploadPackWithSidechannel|UpdateHook",grpc_service!="gitaly.OperationService",grpc_type="unary",job="gitaly",le="1"}[1h])
-        )
-      )
-      /
-      2
-    labels:
-      component: goserver
-      tier: stor
-      type: gitaly
-    record: gitlab_component_apdex:success:rate_1h
-  - expr: |
-      sum by () (
-        rate(grpc_server_handling_seconds_bucket{grpc_method!~"CalculateChecksum|CommitLanguages|CommitStats|CreateFork|CreateRepositoryFromURL|FetchInternalRemote|FetchIntoObjectPool|FetchRemote|FetchSourceBranch|FindRemoteRepository|FindRemoteRootRef|Fsck|GarbageCollect|OptimizeRepository|PackObjectsHookWithSidechannel|PostReceiveHook|PostUploadPackWithSidechannel|PreReceiveHook|RepackFull|RepackIncremental|ReplicateRepository|SSHUploadPackWithSidechannel|UpdateHook",grpc_service!="gitaly.OperationService",grpc_type="unary",job="gitaly",le="+Inf"}[1h])
-      )
-    labels:
-      component: goserver
-      tier: stor
-      type: gitaly
-    record: gitlab_component_apdex:weight:score_1h
-  - expr: |
-      sum by () (
-        rate(gitaly_service_client_requests_total{grpc_service!="gitaly.OperationService",job="gitaly"}[1h])
-      )
-    labels:
-      component: goserver
-      tier: stor
-      type: gitaly
-    record: gitlab_component_ops:rate_1h
-  - expr: |
-      (
-        sum by () (
-          label_replace(rate(gitaly_service_client_requests_total{grpc_code!~"AlreadyExists|Canceled|DeadlineExceeded|FailedPrecondition|InvalidArgument|NotFound|OK|PermissionDenied|Unauthenticated",grpc_service!="gitaly.OperationService",job="gitaly"}[1h]), "_c", "0", "", "")
-          or
-          label_replace(rate(gitaly_service_client_requests_total{deadline_type!="limited",grpc_code="DeadlineExceeded",grpc_service!="gitaly.OperationService",job="gitaly"}[1h]), "_c", "1", "", "")
-        )
-      )
-      or
-      (
-        0 * group by() (
-          gitlab_component_ops:rate_1h{component="goserver",tier="stor",type="gitaly"}
-        )
-      )
-    labels:
-      component: goserver
-      tier: stor
-      type: gitaly
-    record: gitlab_component_errors:rate_1h
-- interval: 2m
-  name: 'Component-Level SLIs: gitaly - 6h burn-rate'
-  rules:
-  - expr: |
-      (
-        sum by () (
-          rate(grpc_server_handling_seconds_bucket{grpc_method!~"CalculateChecksum|CommitLanguages|CommitStats|CreateFork|CreateRepositoryFromURL|FetchInternalRemote|FetchIntoObjectPool|FetchRemote|FetchSourceBranch|FindRemoteRepository|FindRemoteRootRef|Fsck|GarbageCollect|OptimizeRepository|PackObjectsHookWithSidechannel|PostReceiveHook|PostUploadPackWithSidechannel|PreReceiveHook|RepackFull|RepackIncremental|ReplicateRepository|SSHUploadPackWithSidechannel|UpdateHook",grpc_service!="gitaly.OperationService",grpc_type="unary",job="gitaly",le="0.5"}[6h])
-        )
-        +
-        sum by () (
-          rate(grpc_server_handling_seconds_bucket{grpc_method!~"CalculateChecksum|CommitLanguages|CommitStats|CreateFork|CreateRepositoryFromURL|FetchInternalRemote|FetchIntoObjectPool|FetchRemote|FetchSourceBranch|FindRemoteRepository|FindRemoteRootRef|Fsck|GarbageCollect|OptimizeRepository|PackObjectsHookWithSidechannel|PostReceiveHook|PostUploadPackWithSidechannel|PreReceiveHook|RepackFull|RepackIncremental|ReplicateRepository|SSHUploadPackWithSidechannel|UpdateHook",grpc_service!="gitaly.OperationService",grpc_type="unary",job="gitaly",le="1"}[6h])
-        )
-      )
-      /
-      2
-    labels:
-      component: goserver
-      tier: stor
-      type: gitaly
-    record: gitlab_component_apdex:success:rate_6h
-  - expr: |
-      sum by () (
-        rate(grpc_server_handling_seconds_bucket{grpc_method!~"CalculateChecksum|CommitLanguages|CommitStats|CreateFork|CreateRepositoryFromURL|FetchInternalRemote|FetchIntoObjectPool|FetchRemote|FetchSourceBranch|FindRemoteRepository|FindRemoteRootRef|Fsck|GarbageCollect|OptimizeRepository|PackObjectsHookWithSidechannel|PostReceiveHook|PostUploadPackWithSidechannel|PreReceiveHook|RepackFull|RepackIncremental|ReplicateRepository|SSHUploadPackWithSidechannel|UpdateHook",grpc_service!="gitaly.OperationService",grpc_type="unary",job="gitaly",le="+Inf"}[6h])
-      )
-    labels:
-      component: goserver
-      tier: stor
-      type: gitaly
-    record: gitlab_component_apdex:weight:score_6h
-  - expr: |
-      sum by () (
-        rate(gitaly_service_client_requests_total{grpc_service!="gitaly.OperationService",job="gitaly"}[6h])
-      )
-    labels:
-      component: goserver
-      tier: stor
-      type: gitaly
-    record: gitlab_component_ops:rate_6h
-  - expr: |
-      (
-        sum by () (
-          label_replace(rate(gitaly_service_client_requests_total{grpc_code!~"AlreadyExists|Canceled|DeadlineExceeded|FailedPrecondition|InvalidArgument|NotFound|OK|PermissionDenied|Unauthenticated",grpc_service!="gitaly.OperationService",job="gitaly"}[6h]), "_c", "0", "", "")
-          or
-          label_replace(rate(gitaly_service_client_requests_total{deadline_type!="limited",grpc_code="DeadlineExceeded",grpc_service!="gitaly.OperationService",job="gitaly"}[6h]), "_c", "1", "", "")
-        )
-      )
-      or
-      (
-        0 * group by() (
-          gitlab_component_ops:rate_6h{component="goserver",tier="stor",type="gitaly"}
-        )
-      )
-    labels:
-      component: goserver
-      tier: stor
-      type: gitaly
-    record: gitlab_component_errors:rate_6h
-- interval: 1m
-  name: 'Component mapping: gitaly'
-  rules:
-  - expr: "1"
-    labels:
-      component: goserver
-      regional_aggregation: "no"
-      service_aggregation: "yes"
-      tier: stor
-      type: gitaly
-    record: gitlab_component_service:mapping
-- interval: 1m
-  name: 'Component-Level SLIs: praefect - 5m burn-rate'
-  rules:
-  - expr: |
-      (
-        sum by () (
-          rate(grpc_server_handling_seconds_bucket{grpc_type="unary",job="praefect",le="0.5"}[5m])
-        )
-        +
-        sum by () (
-          rate(grpc_server_handling_seconds_bucket{grpc_type="unary",job="praefect",le="1"}[5m])
-        )
-      )
-      /
-      2
-    labels:
-      component: proxy
-      tier: stor
-      type: praefect
-    record: gitlab_component_apdex:success:rate_5m
-  - expr: |
-      sum by () (
-        rate(grpc_server_handling_seconds_bucket{grpc_type="unary",job="praefect",le="+Inf"}[5m])
-      )
-    labels:
-      component: proxy
-      tier: stor
-      type: praefect
-    record: gitlab_component_apdex:weight:score_5m
-  - expr: |
-      sum by () (
-        rate(grpc_server_handled_total{job="praefect"}[5m])
-      )
-    labels:
-      component: proxy
-      tier: stor
-      type: praefect
-    record: gitlab_component_ops:rate_5m
-  - expr: |
-      (
-        sum by () (
-          rate(grpc_server_handled_total{grpc_code!~"^(OK|NotFound|Unauthenticated|AlreadyExists|FailedPrecondition|Canceled)$",job="praefect"}[5m])
-        )
-      )
-      or
-      (
-        0 * group by() (
-          gitlab_component_ops:rate_5m{component="proxy",tier="stor",type="praefect"}
-        )
-      )
-    labels:
-      component: proxy
-      tier: stor
-      type: praefect
-    record: gitlab_component_errors:rate_5m
-  - expr: |
-      sum by () (
-        rate(gitaly_praefect_replication_delay_bucket{le="300"}[5m])
-      )
-    labels:
-      component: replicator_queue
-      tier: stor
-      type: praefect
-    record: gitlab_component_apdex:success:rate_5m
-  - expr: |
-      sum by () (
-        rate(gitaly_praefect_replication_delay_bucket{le="+Inf"}[5m])
-      )
-    labels:
-      component: replicator_queue
-      tier: stor
-      type: praefect
-    record: gitlab_component_apdex:weight:score_5m
-  - expr: |
-      sum by () (
-        rate(gitaly_praefect_replication_delay_bucket{le="+Inf"}[5m])
-      )
-    labels:
-      component: replicator_queue
-      tier: stor
-      type: praefect
-    record: gitlab_component_ops:rate_5m
-- interval: 2m
-  name: 'Component-Level SLIs: praefect - 30m burn-rate'
-  rules:
-  - expr: |
-      (
-        sum by () (
-          rate(grpc_server_handling_seconds_bucket{grpc_type="unary",job="praefect",le="0.5"}[30m])
-        )
-        +
-        sum by () (
-          rate(grpc_server_handling_seconds_bucket{grpc_type="unary",job="praefect",le="1"}[30m])
-        )
-      )
-      /
-      2
-    labels:
-      component: proxy
-      tier: stor
-      type: praefect
-    record: gitlab_component_apdex:success:rate_30m
-  - expr: |
-      sum by () (
-        rate(grpc_server_handling_seconds_bucket{grpc_type="unary",job="praefect",le="+Inf"}[30m])
-      )
-    labels:
-      component: proxy
-      tier: stor
-      type: praefect
-    record: gitlab_component_apdex:weight:score_30m
-  - expr: |
-      sum by () (
-        rate(grpc_server_handled_total{job="praefect"}[30m])
-      )
-    labels:
-      component: proxy
-      tier: stor
-      type: praefect
-    record: gitlab_component_ops:rate_30m
-  - expr: |
-      (
-        sum by () (
-          rate(grpc_server_handled_total{grpc_code!~"^(OK|NotFound|Unauthenticated|AlreadyExists|FailedPrecondition|Canceled)$",job="praefect"}[30m])
-        )
-      )
-      or
-      (
-        0 * group by() (
-          gitlab_component_ops:rate_30m{component="proxy",tier="stor",type="praefect"}
-        )
-      )
-    labels:
-      component: proxy
-      tier: stor
-      type: praefect
-    record: gitlab_component_errors:rate_30m
-  - expr: |
-      sum by () (
-        rate(gitaly_praefect_replication_delay_bucket{le="300"}[30m])
-      )
-    labels:
-      component: replicator_queue
-      tier: stor
-      type: praefect
-    record: gitlab_component_apdex:success:rate_30m
-  - expr: |
-      sum by () (
-        rate(gitaly_praefect_replication_delay_bucket{le="+Inf"}[30m])
-      )
-    labels:
-      component: replicator_queue
-      tier: stor
-      type: praefect
-    record: gitlab_component_apdex:weight:score_30m
-  - expr: |
-      sum by () (
-        rate(gitaly_praefect_replication_delay_bucket{le="+Inf"}[30m])
-      )
-    labels:
-      component: replicator_queue
-      tier: stor
-      type: praefect
-    record: gitlab_component_ops:rate_30m
-- interval: 1m
-  name: 'Component-Level SLIs: praefect - 1h burn-rate'
-  rules:
-  - expr: |
-      (
-        sum by () (
-          rate(grpc_server_handling_seconds_bucket{grpc_type="unary",job="praefect",le="0.5"}[1h])
-        )
-        +
-        sum by () (
-          rate(grpc_server_handling_seconds_bucket{grpc_type="unary",job="praefect",le="1"}[1h])
-        )
-      )
-      /
-      2
-    labels:
-      component: proxy
-      tier: stor
-      type: praefect
-    record: gitlab_component_apdex:success:rate_1h
-  - expr: |
-      sum by () (
-        rate(grpc_server_handling_seconds_bucket{grpc_type="unary",job="praefect",le="+Inf"}[1h])
-      )
-    labels:
-      component: proxy
-      tier: stor
-      type: praefect
-    record: gitlab_component_apdex:weight:score_1h
-  - expr: |
-      sum by () (
-        rate(grpc_server_handled_total{job="praefect"}[1h])
-      )
-    labels:
-      component: proxy
-      tier: stor
-      type: praefect
-    record: gitlab_component_ops:rate_1h
-  - expr: |
-      (
-        sum by () (
-          rate(grpc_server_handled_total{grpc_code!~"^(OK|NotFound|Unauthenticated|AlreadyExists|FailedPrecondition|Canceled)$",job="praefect"}[1h])
-        )
-      )
-      or
-      (
-        0 * group by() (
-          gitlab_component_ops:rate_1h{component="proxy",tier="stor",type="praefect"}
-        )
-      )
-    labels:
-      component: proxy
-      tier: stor
-      type: praefect
-    record: gitlab_component_errors:rate_1h
-  - expr: |
-      sum by () (
-        rate(gitaly_praefect_replication_delay_bucket{le="300"}[1h])
-      )
-    labels:
-      component: replicator_queue
-      tier: stor
-      type: praefect
-    record: gitlab_component_apdex:success:rate_1h
-  - expr: |
-      sum by () (
-        rate(gitaly_praefect_replication_delay_bucket{le="+Inf"}[1h])
-      )
-    labels:
-      component: replicator_queue
-      tier: stor
-      type: praefect
-    record: gitlab_component_apdex:weight:score_1h
-  - expr: |
-      sum by () (
-        rate(gitaly_praefect_replication_delay_bucket{le="+Inf"}[1h])
-      )
-    labels:
-      component: replicator_queue
-      tier: stor
-      type: praefect
-    record: gitlab_component_ops:rate_1h
-- interval: 2m
-  name: 'Component-Level SLIs: praefect - 6h burn-rate'
-  rules:
-  - expr: |
-      (
-        sum by () (
-          rate(grpc_server_handling_seconds_bucket{grpc_type="unary",job="praefect",le="0.5"}[6h])
-        )
-        +
-        sum by () (
-          rate(grpc_server_handling_seconds_bucket{grpc_type="unary",job="praefect",le="1"}[6h])
-        )
-      )
-      /
-      2
-    labels:
-      component: proxy
-      tier: stor
-      type: praefect
-    record: gitlab_component_apdex:success:rate_6h
-  - expr: |
-      sum by () (
-        rate(grpc_server_handling_seconds_bucket{grpc_type="unary",job="praefect",le="+Inf"}[6h])
-      )
-    labels:
-      component: proxy
-      tier: stor
-      type: praefect
-    record: gitlab_component_apdex:weight:score_6h
-  - expr: |
-      sum by () (
-        rate(grpc_server_handled_total{job="praefect"}[6h])
-      )
-    labels:
-      component: proxy
-      tier: stor
-      type: praefect
-    record: gitlab_component_ops:rate_6h
-  - expr: |
-      (
-        sum by () (
-          rate(grpc_server_handled_total{grpc_code!~"^(OK|NotFound|Unauthenticated|AlreadyExists|FailedPrecondition|Canceled)$",job="praefect"}[6h])
-        )
-      )
-      or
-      (
-        0 * group by() (
-          gitlab_component_ops:rate_6h{component="proxy",tier="stor",type="praefect"}
-        )
-      )
-    labels:
-      component: proxy
-      tier: stor
-      type: praefect
-    record: gitlab_component_errors:rate_6h
-  - expr: |
-      sum by () (
-        rate(gitaly_praefect_replication_delay_bucket{le="300"}[6h])
-      )
-    labels:
-      component: replicator_queue
-      tier: stor
-      type: praefect
-    record: gitlab_component_apdex:success:rate_6h
-  - expr: |
-      sum by () (
-        rate(gitaly_praefect_replication_delay_bucket{le="+Inf"}[6h])
-      )
-    labels:
-      component: replicator_queue
-      tier: stor
-      type: praefect
-    record: gitlab_component_apdex:weight:score_6h
-  - expr: |
-      sum by () (
-        rate(gitaly_praefect_replication_delay_bucket{le="+Inf"}[6h])
-      )
-    labels:
-      component: replicator_queue
-      tier: stor
-      type: praefect
-    record: gitlab_component_ops:rate_6h
-- interval: 1m
-  name: 'Component mapping: praefect'
-  rules:
-  - expr: "1"
-    labels:
-      component: proxy
-      regional_aggregation: "no"
-      service_aggregation: "yes"
-      tier: stor
-      type: praefect
-    record: gitlab_component_service:mapping
-  - expr: "1"
-    labels:
-      component: replicator_queue
-      regional_aggregation: "no"
-      service_aggregation: "yes"
-      tier: stor
-      type: praefect
-    record: gitlab_component_service:mapping
-- interval: 1m
   name: Global Service-Aggregated Metrics (fast burn)
   rules:
   - expr: |
@@ -1353,40 +1492,6 @@ groups:
 - interval: 5m
   name: Autogenerated Service SLOs
   rules:
-  - expr: "0.998000"
-    labels:
-      tier: app
-      type: webservice
-    record: slo:min:events:gitlab_service_apdex:ratio
-  - expr: "0.000100"
-    labels:
-      tier: app
-      type: webservice
-    record: slo:max:events:gitlab_service_errors:ratio
-  - expr: "0.998000"
-    labels:
-      component: puma
-      tier: app
-      type: webservice
-    record: slo:min:events:gitlab_service_apdex:ratio
-  - expr: "0.000100"
-    labels:
-      component: puma
-      tier: app
-      type: webservice
-    record: slo:max:events:gitlab_service_errors:ratio
-  - expr: "0.998000"
-    labels:
-      component: workhorse
-      tier: app
-      type: webservice
-    record: slo:min:events:gitlab_service_apdex:ratio
-  - expr: "0.000100"
-    labels:
-      component: workhorse
-      tier: app
-      type: webservice
-    record: slo:max:events:gitlab_service_errors:ratio
   - expr: "0.999000"
     labels:
       tier: stor
@@ -1443,6 +1548,45 @@ groups:
       tier: stor
       type: praefect
     record: slo:max:events:gitlab_service_errors:ratio
+  - expr: "0.998000"
+    labels:
+      tier: app
+      type: webservice
+    record: slo:min:events:gitlab_service_apdex:ratio
+  - expr: "0.000100"
+    labels:
+      tier: app
+      type: webservice
+    record: slo:max:events:gitlab_service_errors:ratio
+  - expr: "0.998000"
+    labels:
+      component: puma
+      tier: app
+      type: webservice
+    record: slo:min:events:gitlab_service_apdex:ratio
+  - expr: "0.000100"
+    labels:
+      component: puma
+      tier: app
+      type: webservice
+    record: slo:max:events:gitlab_service_errors:ratio
+  - expr: "0.998000"
+    labels:
+      component: workhorse
+      tier: app
+      type: webservice
+    record: slo:min:events:gitlab_service_apdex:ratio
+  - expr: "0.000100"
+    labels:
+      component: workhorse
+      tier: app
+      type: webservice
+    record: slo:max:events:gitlab_service_errors:ratio
+  - expr: "1"
+    labels:
+      tier: inf
+      type: logging
+    record: gitlab_service:mapping:disable_ops_rate_prediction
 - interval: 1m
   name: Saturation Rules (autogenerated)
   rules:
@@ -1593,6 +1737,32 @@ groups:
       max by(type) (
         clamp_min(
           clamp_max(
+            avg_over_time(aws_es_cpuutilization_average[1m])/100
+            ,
+            1)
+        ,
+        0)
+      )
+    labels:
+      component: opensearch_cpu
+    record: gitlab_component_saturation:ratio
+  - expr: |
+      max by(type) (
+        clamp_min(
+          clamp_max(
+            aws_es_cluster_used_space_average/(aws_es_free_storage_space_average+aws_es_cluster_used_space_average)
+            ,
+            1)
+        ,
+        0)
+      )
+    labels:
+      component: opensearch_disk_space
+    record: gitlab_component_saturation:ratio
+  - expr: |
+      max by(type) (
+        clamp_min(
+          clamp_max(
             avg without(cpu, mode) (1 - rate(node_cpu_seconds_total{mode="idle", type=~"gitaly|consul|praefect"}[5m]))
             ,
             1)
@@ -1677,6 +1847,22 @@ groups:
     labels:
       component: node_schedstat_waiting
     record: slo:max:hard:gitlab_component_saturation:ratio
+  - expr: "0.65"
+    labels:
+      component: opensearch_cpu
+    record: slo:max:soft:gitlab_component_saturation:ratio
+  - expr: "0.8"
+    labels:
+      component: opensearch_cpu
+    record: slo:max:hard:gitlab_component_saturation:ratio
+  - expr: "0.6"
+    labels:
+      component: opensearch_disk_space
+    record: slo:max:soft:gitlab_component_saturation:ratio
+  - expr: "0.75"
+    labels:
+      component: opensearch_disk_space
+    record: slo:max:hard:gitlab_component_saturation:ratio
   - expr: "0.9"
     labels:
       component: single_node_cpu
@@ -1759,6 +1945,22 @@ groups:
       horiz_scaling: "yes"
       quantile: max
       severity: s4
+    record: gitlab_component_saturation_info
+  - expr: "1"
+    labels:
+      capacity_planning_strategy: quantile95_1h
+      component: opensearch_cpu
+      horiz_scaling: "yes"
+      quantile: max
+      severity: s4
+    record: gitlab_component_saturation_info
+  - expr: "1"
+    labels:
+      capacity_planning_strategy: quantile95_1h
+      component: opensearch_disk_space
+      horiz_scaling: "yes"
+      quantile: max
+      severity: s3
     record: gitlab_component_saturation_info
   - expr: "1"
     labels:
@@ -2144,6 +2346,80 @@ groups:
       alert_type: cause
       rules_domain: general
       severity: s4
+  - alert: component_saturation_slo_out_of_bounds
+    annotations:
+      description: |+
+        This means that this resource is running close to capacity and is at risk of exceeding its current capacity limit.
+
+        Details of the Average CPU Utilization for Opensearch resource:
+
+        Average CPU utilization.
+
+        This resource measures the CPU utilization for the selected cluster or domain. If it is becoming saturated, it may indicate that the fleet needs horizontal or vertical scaling. The metrics are coming from cloudwatch_exporter.
+
+      grafana_dashboard_id: alerts-sat_opensearch_cpu
+      grafana_dashboard_link: https://dashboards.gitlab.net/d/alerts-sat_opensearch_cpu?from=now-6h/m&to=now-1m/m&var-type={{
+        $labels.type }}
+      grafana_min_zoom_hours: "6"
+      grafana_panel_id: "761924359"
+      grafana_variables: type
+      promql_query: |
+        max by(type) (
+          clamp_min(
+            clamp_max(
+              avg_over_time(aws_es_cpuutilization_average[1m])/100
+              ,
+              1)
+          ,
+          0)
+        )
+      runbook: docs/{{ $labels.type }}/README.md
+      title: The Average CPU Utilization for Opensearch resource of the {{ $labels.type
+        }} service has a saturation exceeding SLO and is close to its capacity limit.
+    expr: |
+      gitlab_component_saturation:ratio{component="opensearch_cpu",monitor="global"} > on(component) group_left
+      slo:max:hard:gitlab_component_saturation:ratio{component="opensearch_cpu",monitor="global"}
+    for: 5m
+    labels:
+      alert_type: cause
+      rules_domain: general
+      severity: s4
+  - alert: component_saturation_slo_out_of_bounds
+    annotations:
+      description: |+
+        This means that this resource is running close to capacity and is at risk of exceeding its current capacity limit.
+
+        Details of the Disk Utilization Overall resource:
+
+        Disk utilization for Opensearch
+
+      grafana_dashboard_id: alerts-sat_opensearch_disk_space
+      grafana_dashboard_link: https://dashboards.gitlab.net/d/alerts-sat_opensearch_disk_space?from=now-6h/m&to=now-1m/m&var-type={{
+        $labels.type }}
+      grafana_min_zoom_hours: "6"
+      grafana_panel_id: "1859424869"
+      grafana_variables: type
+      promql_query: |
+        max by(type) (
+          clamp_min(
+            clamp_max(
+              aws_es_cluster_used_space_average/(aws_es_free_storage_space_average+aws_es_cluster_used_space_average)
+              ,
+              1)
+          ,
+          0)
+        )
+      runbook: docs/{{ $labels.type }}/README.md
+      title: The Disk Utilization Overall resource of the {{ $labels.type }} service
+        has a saturation exceeding SLO and is close to its capacity limit.
+    expr: |
+      gitlab_component_saturation:ratio{component="opensearch_disk_space",monitor="global"} > on(component) group_left
+      slo:max:hard:gitlab_component_saturation:ratio{component="opensearch_disk_space",monitor="global"}
+    for: 5m
+    labels:
+      alert_type: cause
+      rules_domain: general
+      severity: s3
   - alert: component_saturation_slo_out_of_bounds
     annotations:
       description: |+

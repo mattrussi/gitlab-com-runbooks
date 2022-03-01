@@ -21,6 +21,8 @@ local labelSet = (import 'label-taxonomy/label-set.libsonnet');
     import 'saturation-monitoring/kube_container_cpu.libsonnet',
     import 'saturation-monitoring/kube_container_memory.libsonnet',
     import 'saturation-monitoring/kube_pool_cpu.libsonnet',
+    import 'saturation-monitoring/opensearch_cpu.libsonnet',
+    import 'saturation-monitoring/opensearch_disk_space.libsonnet',
     import 'saturation-monitoring/memory.libsonnet',
     import 'saturation-monitoring/node_schedstat_waiting.libsonnet',
     import 'saturation-monitoring/single_node_cpu.libsonnet',
