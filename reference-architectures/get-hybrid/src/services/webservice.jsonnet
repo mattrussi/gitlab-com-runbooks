@@ -29,7 +29,7 @@ metricsCatalog.serviceDefinition({
     labelSelectors: kubeLabelSelectors(
       podSelector=kubeSelector,
       hpaSelector=kubeSelector,
-      nodeSelector=null,
+      nodeSelector={ eks_amazonaws_com_nodegroup: 'gitlab_webservice_pool' },
       ingressSelector=kubeSelector,
       deploymentSelector=kubeSelector
     ),

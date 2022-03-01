@@ -15,12 +15,15 @@ local labelSet = (import 'label-taxonomy/label-set.libsonnet');
   // Hash of all saturation metric types that are monitored on gitlab.com
   saturationMonitoring:: objects.mergeAll([
     import 'saturation-monitoring/cpu.libsonnet',
-    import 'saturation-monitoring/single_node_cpu.libsonnet',
     import 'saturation-monitoring/disk_inodes.libsonnet',
     import 'saturation-monitoring/disk_space.libsonnet',
     import 'saturation-monitoring/go_memory.libsonnet',
+    import 'saturation-monitoring/kube_container_cpu.libsonnet',
+    import 'saturation-monitoring/kube_container_memory.libsonnet',
+    import 'saturation-monitoring/kube_pool_cpu.libsonnet',
     import 'saturation-monitoring/memory.libsonnet',
     import 'saturation-monitoring/node_schedstat_waiting.libsonnet',
+    import 'saturation-monitoring/single_node_cpu.libsonnet',
   ]),
 
   // Hash of all utilization metric types that are monitored on gitlab.com
