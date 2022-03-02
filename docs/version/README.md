@@ -22,6 +22,7 @@
 * [Chef Vault Basics](../config_management/chef-vault.md)
 * [Chef Tips and Tools](../config_management/chef-workflow.md)
 * [Chefspec](../config_management/chefspec.md)
+* [design.gitlab.com Runbook](../design/design-gitlab-com.md)
 * [../elastic/elastic-cloud.md](../elastic/elastic-cloud.md)
 * [Gitaly error rate is too high](../gitaly/gitaly-error-rate.md)
 * [Managing GitLab Storage Shards (Gitaly)](../gitaly/storage-sharding.md)
