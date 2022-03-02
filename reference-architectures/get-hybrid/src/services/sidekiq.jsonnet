@@ -188,7 +188,8 @@ metricsCatalog.serviceDefinition({
           // Default to low urgency threshold
           sidekiqHelpers.slos.lowUrgency.executionDurationSeconds,
 
-      toolingLinks: [ ],
+      // Consider adding useful links for the environment in the future.
+      toolingLinks: [],
     }
     for shard in sidekiqHelpers.shards.listAll()
   } + {
@@ -217,7 +218,9 @@ metricsCatalog.serviceDefinition({
       },
 
       significantLabels: ['error'],
-      toolingLinks: [ ],
+
+      // Consider adding useful links for the environment in the future.
+      toolingLinks: [],
     },
   },
 
