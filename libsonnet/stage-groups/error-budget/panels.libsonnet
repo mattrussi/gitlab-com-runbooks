@@ -386,33 +386,27 @@ local logLinks(featureCategories) =
   local featureCategoryFilters = matching.matchers({
     'json.meta.feature_category': featureCategories,
   });
+  local withDurationFilters = [matching.existsFilter('json.duration_s'), matching.existsFilter('json.target_duration_s')];
   local timeFrame = elasticsearchLinks.timeRange('now-7d', 'now');
 
-  local pumaSplitColumns = ['json.meta.caller_id.keyword'];
-  local pumaApdexTable = elasticsearchLinks.buildElasticTableCountVizURL(
+  local railsSplitColumns = [
+    'json.meta.caller_id.keyword',
+    'json.request_urgency.keyword',
+    'json.target_duration_s',
+  ];
+  local railsRequestsApdexTable = elasticsearchLinks.buildElasticTableCountVizURL(
     'rails',
-    featureCategoryFilters,
-    splitSeries=pumaSplitColumns,
+    featureCategoryFilters + withDurationFilters,
+    splitSeries=railsSplitColumns,
     timeRange=timeFrame,
     extraAggs=[
       {
         enabled: true,
         id: '3',
         params: {
-          customLabel: 'Operations over threshold (1s)',
+          customLabel: 'Operations over specified threshold (apdex)',
           field: 'json.duration_s',
-          json: '{"script": "doc[\'json.duration_s\'].value >= 1 ? 1 : 0"}',
-        },
-        schema: 'metric',
-        type: 'sum',
-      },
-      {
-        enabled: true,
-        id: '4',
-        params: {
-          customLabel: 'Operations over error budget threshold (5s)',
-          field: 'json.duration_s',
-          json: '{"script": "doc[\'json.duration_s\'].value >= 5 ? 1 : 0"}',
+          json: '{"script": "doc[\'json.duration_s\'].value > doc[\'json.target_duration_s\'].value ? 1 : 0"}',
         },
         schema: 'metric',
         type: 'sum',
@@ -421,7 +415,7 @@ local logLinks(featureCategories) =
     orderById='3',
   );
   local pumaErrorsTable = elasticsearchLinks.buildElasticTableFailureCountVizURL(
-    'rails', featureCategoryFilters, splitSeries=pumaSplitColumns, timeRange=timeFrame
+    'rails', featureCategoryFilters, splitSeries=railsSplitColumns, timeRange=timeFrame
   );
 
   local sidekiqSplitColumns = ['json.class.keyword'];
@@ -449,7 +443,7 @@ local logLinks(featureCategories) =
     title='Failure log links',
     mode='markdown',
     content=|||
-      ##### [Puma Apdex](%(pumaApdexLink)s): slow requests
+      ##### [Rails Requests Apdex](%(railsRequestsApdexLink)s): slow requests
 
       This shows the number of requests exceeding the request duration thresholds
       per endpoint over the past 7 days.
@@ -476,7 +470,7 @@ local logLinks(featureCategories) =
       This includes retries: if a job with a was retried 3 times, before exhausting
       its retries, this counts as 3 failures towards the budget.
     ||| % {
-      pumaApdexLink: pumaApdexTable,
+      railsRequestsApdexLink: railsRequestsApdexTable,
       requestUrgencyLink: 'https://docs.gitlab.com/ee/development/application_slis/rails_request_apdex.html#adjusting-request-urgency',
       scalability1478: 'https://gitlab.com/gitlab-com/gl-infra/scalability/-/issues/1478',
       pumaErrorsLink: pumaErrorsTable,
