@@ -43,8 +43,8 @@ test.suite({
   },
 
   testUnsafeValue: {
-    actual: rison.encode({ name: [{ first: 'A or B' }] }),
-    expect: "(name:!((first:'A+or+B')))",
+    actual: rison.encode({ name: [{ first: 'A or B+3' }] }),
+    expect: "(name:!((first:'A+or+B%2B3')))",
   },
 
 })
