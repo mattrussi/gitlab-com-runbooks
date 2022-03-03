@@ -4,6 +4,11 @@ test.suite({
   testMatcherFilter: {
     actual: matching.matcher('fieldName', 'test'),
     expect: {
+      meta: {
+        key: 'fieldName',
+        params: 'test',
+        type: 'phrase',
+      },
       query: {
         match: {
           fieldName: {
@@ -18,9 +23,9 @@ test.suite({
     actual: matching.matcher('fieldName', ['hello', 'world']),
     expect: {
       meta: {
-        key: 'query',
-        type: 'custom',
-        value: '{"bool": {"minimum_should_match": 1, "should": [{"match_phrase": {"fieldName": "hello"}}, {"match_phrase": {"fieldName": "world"}}]}}',
+        key: 'fieldName',
+        params: ['hello', 'world'],
+        type: 'phrases',
       },
       query: {
         bool: {
@@ -34,6 +39,16 @@ test.suite({
     },
   },
   testMatchers: {
+    local expectedScript = {
+      bool: {
+        minimum_should_match: 1,
+        should: [
+          { script: { script: { source: "doc['json.duration_s'].value > doc['json.target_duration_s'].value" } } },
+          { script: { script: { source: 'script 2' } } },
+        ],
+      },
+    },
+
     actual: matching.matchers({
       fieldName: ['hello', 'world'],
       rangeTest: { gte: 1, lte: 10 },
@@ -42,17 +57,19 @@ test.suite({
     }),
     expect: [
       {
-        query: {
-          bool: {
-            minimum_should_match: 1,
-            should: [
-              { script: { script: { source: "doc['json.duration_s'].value > doc['json.target_duration_s'].value" } } },
-              { script: { script: { source: 'script 2' } } },
-            ],
-          },
+        meta: {
+          key: 'query',
+          type: 'custom',
+          value: std.toString(expectedScript),
         },
+        query: expectedScript,
       },
       {
+        meta: {
+          key: 'equalMatch',
+          type: 'phrase',
+          params: 'match the exact thing',
+        },
         query: {
           match: {
             equalMatch: {
@@ -64,9 +81,9 @@ test.suite({
       },
       {
         meta: {
-          key: 'query',
-          type: 'custom',
-          value: '{"bool": {"minimum_should_match": 1, "should": [{"match_phrase": {"fieldName": "hello"}}, {"match_phrase": {"fieldName": "world"}}]}}',
+          key: 'fieldName',
+          type: 'phrases',
+          params: ['hello', 'world'],
         },
         query:
           {
@@ -79,7 +96,10 @@ test.suite({
             },
           },
       },
-      { query: { range: { rangeTest: { gte: 1, lte: 10 } } } },
+      {
+        meta: { key: 'rangeTest', params: { gte: 1, lte: 10 }, type: 'range' },
+        query: { range: { rangeTest: { gte: 1, lte: 10 } } },
+      },
     ],
   },
 })

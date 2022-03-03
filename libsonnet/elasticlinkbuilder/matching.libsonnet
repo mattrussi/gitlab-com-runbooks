@@ -1,12 +1,3 @@
-local queryWithMeta(filter) =
-  filter {
-    meta+: {
-      key: 'query',
-      type: 'custom',
-      value: std.toString(filter.query),
-    },
-  };
-
 // Builds an ElasticSearch match filter clause
 local matchFilter(field, value) =
   {
@@ -18,35 +9,59 @@ local matchFilter(field, value) =
         },
       },
     },
+    meta: {
+      key: field,
+      type: 'phrase',
+      params: value,
+    },
   };
 
 local matchInFilter(field, possibleValues) =
-  queryWithMeta({
+  {
     query: {
       bool: {
         should: [{ match_phrase: { [field]: possibleValue } } for possibleValue in possibleValues],
         minimum_should_match: 1,
       },
     },
-  });
+    meta: {
+      key: field,
+      type: 'phrases',
+      params: possibleValues,
+    },
+  };
 
 // Builds an ElasticSearch range filter clause
 local rangeFilter(field, gteValue, lteValue) =
+  local params = {
+    [if gteValue != null then 'gte']: gteValue,
+    [if lteValue != null then 'lte']: lteValue,
+  };
+
   {
     query: {
       range: {
-        [field]: {
-          [if gteValue != null then 'gte']: gteValue,
-          [if lteValue != null then 'lte']: lteValue,
-        },
+        [field]: params,
       },
+    },
+    meta: {
+      key: field,
+      type: 'range',
+      params: params,
     },
   };
 
 local existsFilter(field) =
   {
-    exists: {
-      field: field,
+    query: {
+      exists: {
+        field: field,
+      },
+    },
+    meta: {
+      key: 'exists',
+      type: field,
+      value: 'exists',
     },
   };
 
@@ -57,8 +72,8 @@ local mustNot(filter) =
     },
   };
 
-local matchAnyScriptFilter(scripts) = {
-  query: {
+local matchAnyScriptFilter(scripts) =
+  local query = {
     bool: {
       should: [
         { script: { script: { source: script } } }
@@ -66,8 +81,15 @@ local matchAnyScriptFilter(scripts) = {
       ],
       minimum_should_match: 1,
     },
-  },
-};
+  };
+  {
+    query: query,
+    meta: {
+      key: 'query',
+      type: 'custom',
+      value: std.toString(query),
+    },
+  };
 
 local matchObject(fieldName, matchInfo) =
   local gte = if std.objectHas(matchInfo, 'gte') then matchInfo.gte else null;

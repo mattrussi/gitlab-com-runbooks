@@ -123,7 +123,10 @@ test.suite({
       }
     ),
     expect: [
-      { meta: { key: 'query', type: 'custom', value: '{"bool": {"minimum_should_match": 1, "should": [{"match_phrase": {"json.meta.feature_category": "source_code_management"}}]}}' }, query: { bool: { minimum_should_match: 1, should: [{ match_phrase: { 'json.meta.feature_category': 'source_code_management' } }] } } },
+      {
+        meta: { key: 'json.meta.feature_category', type: 'phrases', params: ['source_code_management'] },
+        query: { bool: { minimum_should_match: 1, should: [{ match_phrase: { 'json.meta.feature_category': 'source_code_management' } }] } },
+      },
     ],
   },
   testGetMatchersForPrometheusSelectorHashTranslationEq: {
@@ -138,9 +141,18 @@ test.suite({
       }
     ),
     expect: [
-      { query: { match: { 'json.meta.feature_category': { query: 'pipeline_.*', type: 'phrase' } } } },
-      { query: { match: { 'json.stage': { query: 'cny', type: 'phrase' } } } },
-      { query: { match: { 'json.type': { query: 'web', type: 'phrase' } } } },
+      {
+        meta: { key: 'json.meta.feature_category', type: 'phrase', params: 'pipeline_.*' },
+        query: { match: { 'json.meta.feature_category': { query: 'pipeline_.*', type: 'phrase' } } },
+      },
+      {
+        meta: { key: 'json.stage', type: 'phrase', params: 'cny' },
+        query: { match: { 'json.stage': { query: 'cny', type: 'phrase' } } },
+      },
+      {
+        meta: { key: 'json.type', type: 'phrase', params: 'web' },
+        query: { match: { 'json.type': { query: 'web', type: 'phrase' } } },
+      },
     ],
   },
   testGetMatchersForPrometheusSelectorHashTranslationNe: {
@@ -151,7 +163,10 @@ test.suite({
       }
     ),
     expect: [
-      { meta: { negate: true }, query: { match: { 'json.stage': { query: 'cny', type: 'phrase' } } } },
+      {
+        meta: { negate: true, key: 'json.stage', type: 'phrase', params: 'cny' },
+        query: { match: { 'json.stage': { query: 'cny', type: 'phrase' } } },
+      },
     ],
   },
   testGetMatchersForPrometheusSelectorHashTranslationArrays: {
@@ -163,8 +178,14 @@ test.suite({
       }
     ),
     expect: [
-      { meta: { key: 'query', negate: true, type: 'custom', value: '{"bool": {"minimum_should_match": 1, "should": [{"match_phrase": {"json.stage": "cny"}}]}}' }, query: { bool: { minimum_should_match: 1, should: [{ match_phrase: { 'json.stage': 'cny' } }] } } },
-      { meta: { key: 'query', type: 'custom', value: '{"bool": {"minimum_should_match": 1, "should": [{"match_phrase": {"json.type": "web"}}, {"match_phrase": {"json.type": "api"}}]}}' }, query: { bool: { minimum_should_match: 1, should: [{ match_phrase: { 'json.type': 'web' } }, { match_phrase: { 'json.type': 'api' } }] } } },
+      {
+        meta: { key: 'json.stage', negate: true, type: 'phrases', params: ['cny'] },
+        query: { bool: { minimum_should_match: 1, should: [{ match_phrase: { 'json.stage': 'cny' } }] } },
+      },
+      {
+        meta: { key: 'json.type', type: 'phrases', params: ['web', 'api'] },
+        query: { bool: { minimum_should_match: 1, should: [{ match_phrase: { 'json.type': 'web' } }, { match_phrase: { 'json.type': 'api' } }] } },
+      },
     ],
   },
 })
