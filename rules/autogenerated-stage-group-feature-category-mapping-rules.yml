@@ -62,7 +62,7 @@ groups:
     labels:
       feature_category: build_artifacts
       product_stage: verify
-      stage_group: testing
+      stage_group: pipeline_insights
     expr: "1"
   - record: gitlab:feature_category:stage_group:mapping
     labels:
@@ -98,7 +98,7 @@ groups:
     labels:
       feature_category: code_testing
       product_stage: verify
-      stage_group: testing
+      stage_group: pipeline_insights
     expr: "1"
   - record: gitlab:feature_category:stage_group:mapping
     labels:
@@ -147,6 +147,12 @@ groups:
       feature_category: continuous_integration_scaling
       product_stage: verify
       stage_group: pipeline_execution
+    expr: "1"
+  - record: gitlab:feature_category:stage_group:mapping
+    labels:
+      feature_category: continuous_verification
+      product_stage: monitor
+      stage_group: respond
     expr: "1"
   - record: gitlab:feature_category:stage_group:mapping
     labels:
@@ -408,15 +414,9 @@ groups:
     expr: "1"
   - record: gitlab:feature_category:stage_group:mapping
     labels:
-      feature_category: live_preview
-      product_stage: create
-      stage_group: editor
-    expr: "1"
-  - record: gitlab:feature_category:stage_group:mapping
-    labels:
       feature_category: logging
       product_stage: monitor
-      stage_group: respond
+      stage_group: observability
     expr: "1"
   - record: gitlab:feature_category:stage_group:mapping
     labels:
@@ -434,7 +434,7 @@ groups:
     labels:
       feature_category: metrics
       product_stage: monitor
-      stage_group: respond
+      stage_group: observability
     expr: "1"
   - record: gitlab:feature_category:stage_group:mapping
     labels:
@@ -494,7 +494,7 @@ groups:
     labels:
       feature_category: performance_testing
       product_stage: verify
-      stage_group: testing
+      stage_group: pipeline_insights
     expr: "1"
   - record: gitlab:feature_category:stage_group:mapping
     labels:
@@ -572,7 +572,7 @@ groups:
     labels:
       feature_category: review_apps
       product_stage: verify
-      stage_group: testing
+      stage_group: pipeline_insights
     expr: "1"
   - record: gitlab:feature_category:stage_group:mapping
     labels:
@@ -613,8 +613,8 @@ groups:
   - record: gitlab:feature_category:stage_group:mapping
     labels:
       feature_category: secrets_management
-      product_stage: configure
-      stage_group: configure
+      product_stage: verify
+      stage_group: pipeline_authoring
     expr: "1"
   - record: gitlab:feature_category:stage_group:mapping
     labels:
@@ -627,12 +627,6 @@ groups:
       feature_category: security_orchestration
       product_stage: protect
       stage_group: container_security
-    expr: "1"
-  - record: gitlab:feature_category:stage_group:mapping
-    labels:
-      feature_category: self_monitoring
-      product_stage: monitor
-      stage_group: respond
     expr: "1"
   - record: gitlab:feature_category:stage_group:mapping
     labels:
@@ -684,12 +678,6 @@ groups:
     expr: "1"
   - record: gitlab:feature_category:stage_group:mapping
     labels:
-      feature_category: synthetic_monitoring
-      product_stage: monitor
-      stage_group: respond
-    expr: "1"
-  - record: gitlab:feature_category:stage_group:mapping
-    labels:
       feature_category: team_planning
       product_stage: plan
       stage_group: project_management
@@ -698,7 +686,7 @@ groups:
     labels:
       feature_category: tracing
       product_stage: monitor
-      stage_group: respond
+      stage_group: observability
     expr: "1"
   - record: gitlab:feature_category:stage_group:mapping
     labels:
