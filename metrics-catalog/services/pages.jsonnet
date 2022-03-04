@@ -1,6 +1,7 @@
 local metricsCatalog = import 'servicemetrics/metrics.libsonnet';
 local rateMetric = metricsCatalog.rateMetric;
 local combined = metricsCatalog.combined;
+local maturityLevels = import 'service-maturity/levels.libsonnet';
 
 metricsCatalog.serviceDefinition({
   type: 'pages',
@@ -48,4 +49,7 @@ metricsCatalog.serviceDefinition({
       significantLabels: [],
     },
   },
+  skippedMaturityCriteria: maturityLevels.skip({
+    'Structured logs available in Kibana': 'Logs from the pages HAProxy are not ingested to ElasticSearch due to volume. Usually, web-pages logs will cover the same ground.',
+  }),
 })
