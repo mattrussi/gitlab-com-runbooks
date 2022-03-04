@@ -1,4 +1,5 @@
 local elasticsearchLinks = import 'elasticlinkbuilder/elasticsearch_links.libsonnet';
+local matching = import 'elasticlinkbuilder/matching.libsonnet';
 
 local conditionScript = |||
   ctx.payload.aggregations.key.buckets.length > 0
@@ -64,8 +65,8 @@ local searchLinkTemplate(elasticsearchIndexName, keyField, percentileValueField,
   elasticsearchLinks.buildElasticDiscoverSearchQueryURL(
     elasticsearchIndexName,
     filters=[
-      elasticsearchLinks.matchFilter(keyField, '{{#url}}{{key}}{{/url}}'),
-      elasticsearchLinks.rangeFilter(percentileValueField, lteValue=null, gteValue=thresholdValue),
+      matching.matchFilter(keyField, '{{#url}}{{key}}{{/url}}'),
+      matching.rangeFilter(percentileValueField, lteValue=null, gteValue=thresholdValue),
     ],
     timeRange=timeRange,
     sort=[[percentileValueField, 'desc']],

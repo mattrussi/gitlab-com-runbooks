@@ -1,4 +1,5 @@
 local elasticsearchLinks = import 'elasticlinkbuilder/elasticsearch_links.libsonnet';
+local matching = import 'elasticlinkbuilder/matching.libsonnet';
 local basic = import 'grafana/basic.libsonnet';
 local layout = import 'grafana/layout.libsonnet';
 
@@ -10,8 +11,8 @@ local layout = import 'grafana/layout.libsonnet';
     };
 
     local elasticFilters = [
-      elasticsearchLinks.matchFilter('json.type.keyword', serviceType),
-      elasticsearchLinks.matchFilter('json.stage.keyword', serviceStage),
+      matching.matchFilter('json.type.keyword', serviceType),
+      matching.matchFilter('json.stage.keyword', serviceStage),
     ];
 
     local elasticRailsDataLink = {

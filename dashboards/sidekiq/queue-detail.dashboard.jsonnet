@@ -9,6 +9,7 @@ local sidekiqHelpers = import 'services/lib/sidekiq-helpers.libsonnet';
 local seriesOverrides = import 'grafana/series_overrides.libsonnet';
 local row = grafana.row;
 local elasticsearchLinks = import 'elasticlinkbuilder/elasticsearch_links.libsonnet';
+local matching = import 'elasticlinkbuilder/matching.libsonnet';
 local issueSearch = import 'gitlab-dashboards/issue_search.libsonnet';
 local selectors = import 'promql/selectors.libsonnet';
 
@@ -78,7 +79,7 @@ local errorRateTimeseries(title, aggregators, legendFormat) =
     legendFormat=legendFormat,
   );
 
-local elasticFilters = [elasticsearchLinks.matchFilter('json.stage.keyword', '$stage')];
+local elasticFilters = [matching.matchFilter('json.stage.keyword', '$stage')];
 local elasticQueries = ['json.queue.keyword:${queue:lucene}'];
 
 local elasticsearchLogSearchDataLink = {
@@ -302,7 +303,7 @@ basic.dashboard(
     .addDataLink({
       url: elasticsearchLinks.buildElasticLineCountVizURL(
         'sidekiq',
-        elasticFilters + [elasticsearchLinks.matchFilter('json.job_status', 'fail')],
+        elasticFilters + [matching.matchFilter('json.job_status', 'fail')],
         elasticQueries
       ),
       title: 'ElasticSearch: errors visualization',

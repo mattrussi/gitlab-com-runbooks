@@ -1,6 +1,7 @@
 local sidekiqHelpers = import '../../../metrics-catalog/services/lib/sidekiq-helpers.libsonnet';
 local utils = import './utils.libsonnet';
 local elasticsearchLinks = import 'elasticlinkbuilder/elasticsearch_links.libsonnet';
+local matching = import 'elasticlinkbuilder/matching.libsonnet';
 local basic = import 'grafana/basic.libsonnet';
 local metricsCatalog = import 'servicemetrics/metrics-catalog.libsonnet';
 local durationParser = import 'utils/duration-parser.libsonnet';
@@ -382,7 +383,7 @@ local sidekiqDurationTableFilters = std.map(
   std.objectFields(sidekiqDurationThresholdByFilter),
 );
 local logLinks(featureCategories) =
-  local featureCategoryFilters = elasticsearchLinks.matchers({
+  local featureCategoryFilters = matching.matchers({
     'json.meta.feature_category': featureCategories,
   });
   local timeFrame = elasticsearchLinks.timeRange('now-7d', 'now');
@@ -436,7 +437,7 @@ local logLinks(featureCategories) =
       filters: sidekiqDurationTableFilters,
     },
   };
-  local doneFilter = elasticsearchLinks.matchers({
+  local doneFilter = matching.matchers({
     'json.job_status': 'done',
   });
 

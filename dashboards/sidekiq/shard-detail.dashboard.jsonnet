@@ -12,6 +12,8 @@ local thresholds = import 'gitlab-dashboards/thresholds.libsonnet';
 local promQuery = import 'grafana/prom_query.libsonnet';
 local link = grafana.link;
 local elasticsearchLinks = import 'elasticlinkbuilder/elasticsearch_links.libsonnet';
+local matching = import 'elasticlinkbuilder/matching.libsonnet';
+
 local selectors = import 'promql/selectors.libsonnet';
 
 local optimalUtilization = 0.33;
@@ -383,8 +385,8 @@ basic.dashboard(
         targetBlank=true,
         url=elasticsearchLinks.buildElasticDiscoverSearchQueryURL(
           'sidekiq', [
-            elasticsearchLinks.matchFilter('json.shard', '$shard'),
-            elasticsearchLinks.matchFilter('json.stage.keyword', '$stage'),
+            matching.matchFilter('json.shard', '$shard'),
+            matching.matchFilter('json.stage.keyword', '$stage'),
           ]
         ),
       ),
@@ -395,8 +397,8 @@ basic.dashboard(
         targetBlank=true,
         url=elasticsearchLinks.buildElasticLineCountVizURL(
           'sidekiq', [
-            elasticsearchLinks.matchFilter('json.shard', '$shard'),
-            elasticsearchLinks.matchFilter('json.stage.keyword', '$stage'),
+            matching.matchFilter('json.shard', '$shard'),
+            matching.matchFilter('json.stage.keyword', '$stage'),
           ]
         ),
       ),
@@ -408,8 +410,8 @@ basic.dashboard(
         url=elasticsearchLinks.buildElasticLinePercentileVizURL(
           'sidekiq',
           [
-            elasticsearchLinks.matchFilter('json.shard', '$shard'),
-            elasticsearchLinks.matchFilter('json.stage.keyword', '$stage'),
+            matching.matchFilter('json.shard', '$shard'),
+            matching.matchFilter('json.stage.keyword', '$stage'),
           ],
           field='json.duration_s'
         ),
