@@ -1094,19 +1094,19 @@ groups:
     record: gitlab_component_errors:rate_5m
   - expr: |
       sum by () (
-        label_replace(sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate5m{le="10",shard="catchall",urgency="high"}, "_c", "0", "", "")
+        label_replace(sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate5m{le="10",urgency="high"}, "_c", "0", "", "")
         or
-        label_replace(sli_aggregations:sidekiq_jobs_queue_duration_seconds_bucket_rate5m{le="10",shard="catchall",urgency="high"}, "_c", "1", "", "")
+        label_replace(sli_aggregations:sidekiq_jobs_queue_duration_seconds_bucket_rate5m{le="10",urgency="high"}, "_c", "1", "", "")
         or
-        label_replace(sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate5m{le="300",shard="catchall",urgency="low"}, "_c", "2", "", "")
+        label_replace(sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate5m{le="300",urgency="low"}, "_c", "2", "", "")
         or
-        label_replace(sli_aggregations:sidekiq_jobs_queue_duration_seconds_bucket_rate5m{le="60",shard="catchall",urgency="low"}, "_c", "3", "", "")
+        label_replace(sli_aggregations:sidekiq_jobs_queue_duration_seconds_bucket_rate5m{le="60",urgency="low"}, "_c", "3", "", "")
         or
-        label_replace(sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate5m{le="300",shard="catchall",urgency="throttled"}, "_c", "4", "", "")
+        label_replace(sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate5m{le="300",urgency="throttled"}, "_c", "4", "", "")
         or
-        label_replace(sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate5m{le="300",shard="catchall",urgency=""}, "_c", "5", "", "")
+        label_replace(sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate5m{le="300",urgency=""}, "_c", "5", "", "")
         or
-        label_replace(sli_aggregations:sidekiq_jobs_queue_duration_seconds_bucket_rate5m{le="60",shard="catchall",urgency=""}, "_c", "6", "", "")
+        label_replace(sli_aggregations:sidekiq_jobs_queue_duration_seconds_bucket_rate5m{le="60",urgency=""}, "_c", "6", "", "")
       )
     labels:
       component: shard_catchall
@@ -1115,19 +1115,19 @@ groups:
     record: gitlab_component_apdex:success:rate_5m
   - expr: |
       sum by () (
-        label_replace(sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate5m{le="+Inf",shard="catchall",urgency="high"}, "_c", "0", "", "")
+        label_replace(sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate5m{le="+Inf",urgency="high"}, "_c", "0", "", "")
         or
-        label_replace(sli_aggregations:sidekiq_jobs_queue_duration_seconds_bucket_rate5m{le="+Inf",shard="catchall",urgency="high"}, "_c", "1", "", "")
+        label_replace(sli_aggregations:sidekiq_jobs_queue_duration_seconds_bucket_rate5m{le="+Inf",urgency="high"}, "_c", "1", "", "")
         or
-        label_replace(sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate5m{le="+Inf",shard="catchall",urgency="low"}, "_c", "2", "", "")
+        label_replace(sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate5m{le="+Inf",urgency="low"}, "_c", "2", "", "")
         or
-        label_replace(sli_aggregations:sidekiq_jobs_queue_duration_seconds_bucket_rate5m{le="+Inf",shard="catchall",urgency="low"}, "_c", "3", "", "")
+        label_replace(sli_aggregations:sidekiq_jobs_queue_duration_seconds_bucket_rate5m{le="+Inf",urgency="low"}, "_c", "3", "", "")
         or
-        label_replace(sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate5m{le="+Inf",shard="catchall",urgency="throttled"}, "_c", "4", "", "")
+        label_replace(sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate5m{le="+Inf",urgency="throttled"}, "_c", "4", "", "")
         or
-        label_replace(sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate5m{le="+Inf",shard="catchall",urgency=""}, "_c", "5", "", "")
+        label_replace(sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate5m{le="+Inf",urgency=""}, "_c", "5", "", "")
         or
-        label_replace(sli_aggregations:sidekiq_jobs_queue_duration_seconds_bucket_rate5m{le="+Inf",shard="catchall",urgency=""}, "_c", "6", "", "")
+        label_replace(sli_aggregations:sidekiq_jobs_queue_duration_seconds_bucket_rate5m{le="+Inf",urgency=""}, "_c", "6", "", "")
       )
     labels:
       component: shard_catchall
@@ -1259,19 +1259,19 @@ groups:
     record: gitlab_component_errors:rate_30m
   - expr: |
       sum by () (
-        label_replace(sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate30m{le="10",shard="catchall",urgency="high"}, "_c", "0", "", "")
+        label_replace(sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate30m{le="10",urgency="high"}, "_c", "0", "", "")
         or
-        label_replace(sli_aggregations:sidekiq_jobs_queue_duration_seconds_bucket_rate30m{le="10",shard="catchall",urgency="high"}, "_c", "1", "", "")
+        label_replace(sli_aggregations:sidekiq_jobs_queue_duration_seconds_bucket_rate30m{le="10",urgency="high"}, "_c", "1", "", "")
         or
-        label_replace(sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate30m{le="300",shard="catchall",urgency="low"}, "_c", "2", "", "")
+        label_replace(sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate30m{le="300",urgency="low"}, "_c", "2", "", "")
         or
-        label_replace(sli_aggregations:sidekiq_jobs_queue_duration_seconds_bucket_rate30m{le="60",shard="catchall",urgency="low"}, "_c", "3", "", "")
+        label_replace(sli_aggregations:sidekiq_jobs_queue_duration_seconds_bucket_rate30m{le="60",urgency="low"}, "_c", "3", "", "")
         or
-        label_replace(sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate30m{le="300",shard="catchall",urgency="throttled"}, "_c", "4", "", "")
+        label_replace(sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate30m{le="300",urgency="throttled"}, "_c", "4", "", "")
         or
-        label_replace(sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate30m{le="300",shard="catchall",urgency=""}, "_c", "5", "", "")
+        label_replace(sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate30m{le="300",urgency=""}, "_c", "5", "", "")
         or
-        label_replace(sli_aggregations:sidekiq_jobs_queue_duration_seconds_bucket_rate30m{le="60",shard="catchall",urgency=""}, "_c", "6", "", "")
+        label_replace(sli_aggregations:sidekiq_jobs_queue_duration_seconds_bucket_rate30m{le="60",urgency=""}, "_c", "6", "", "")
       )
     labels:
       component: shard_catchall
@@ -1280,19 +1280,19 @@ groups:
     record: gitlab_component_apdex:success:rate_30m
   - expr: |
       sum by () (
-        label_replace(sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate30m{le="+Inf",shard="catchall",urgency="high"}, "_c", "0", "", "")
+        label_replace(sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate30m{le="+Inf",urgency="high"}, "_c", "0", "", "")
         or
-        label_replace(sli_aggregations:sidekiq_jobs_queue_duration_seconds_bucket_rate30m{le="+Inf",shard="catchall",urgency="high"}, "_c", "1", "", "")
+        label_replace(sli_aggregations:sidekiq_jobs_queue_duration_seconds_bucket_rate30m{le="+Inf",urgency="high"}, "_c", "1", "", "")
         or
-        label_replace(sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate30m{le="+Inf",shard="catchall",urgency="low"}, "_c", "2", "", "")
+        label_replace(sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate30m{le="+Inf",urgency="low"}, "_c", "2", "", "")
         or
-        label_replace(sli_aggregations:sidekiq_jobs_queue_duration_seconds_bucket_rate30m{le="+Inf",shard="catchall",urgency="low"}, "_c", "3", "", "")
+        label_replace(sli_aggregations:sidekiq_jobs_queue_duration_seconds_bucket_rate30m{le="+Inf",urgency="low"}, "_c", "3", "", "")
         or
-        label_replace(sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate30m{le="+Inf",shard="catchall",urgency="throttled"}, "_c", "4", "", "")
+        label_replace(sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate30m{le="+Inf",urgency="throttled"}, "_c", "4", "", "")
         or
-        label_replace(sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate30m{le="+Inf",shard="catchall",urgency=""}, "_c", "5", "", "")
+        label_replace(sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate30m{le="+Inf",urgency=""}, "_c", "5", "", "")
         or
-        label_replace(sli_aggregations:sidekiq_jobs_queue_duration_seconds_bucket_rate30m{le="+Inf",shard="catchall",urgency=""}, "_c", "6", "", "")
+        label_replace(sli_aggregations:sidekiq_jobs_queue_duration_seconds_bucket_rate30m{le="+Inf",urgency=""}, "_c", "6", "", "")
       )
     labels:
       component: shard_catchall
@@ -1424,19 +1424,19 @@ groups:
     record: gitlab_component_errors:rate_1h
   - expr: |
       sum by () (
-        label_replace(sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate1h{le="10",shard="catchall",urgency="high"}, "_c", "0", "", "")
+        label_replace(sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate1h{le="10",urgency="high"}, "_c", "0", "", "")
         or
-        label_replace(sli_aggregations:sidekiq_jobs_queue_duration_seconds_bucket_rate1h{le="10",shard="catchall",urgency="high"}, "_c", "1", "", "")
+        label_replace(sli_aggregations:sidekiq_jobs_queue_duration_seconds_bucket_rate1h{le="10",urgency="high"}, "_c", "1", "", "")
         or
-        label_replace(sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate1h{le="300",shard="catchall",urgency="low"}, "_c", "2", "", "")
+        label_replace(sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate1h{le="300",urgency="low"}, "_c", "2", "", "")
         or
-        label_replace(sli_aggregations:sidekiq_jobs_queue_duration_seconds_bucket_rate1h{le="60",shard="catchall",urgency="low"}, "_c", "3", "", "")
+        label_replace(sli_aggregations:sidekiq_jobs_queue_duration_seconds_bucket_rate1h{le="60",urgency="low"}, "_c", "3", "", "")
         or
-        label_replace(sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate1h{le="300",shard="catchall",urgency="throttled"}, "_c", "4", "", "")
+        label_replace(sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate1h{le="300",urgency="throttled"}, "_c", "4", "", "")
         or
-        label_replace(sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate1h{le="300",shard="catchall",urgency=""}, "_c", "5", "", "")
+        label_replace(sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate1h{le="300",urgency=""}, "_c", "5", "", "")
         or
-        label_replace(sli_aggregations:sidekiq_jobs_queue_duration_seconds_bucket_rate1h{le="60",shard="catchall",urgency=""}, "_c", "6", "", "")
+        label_replace(sli_aggregations:sidekiq_jobs_queue_duration_seconds_bucket_rate1h{le="60",urgency=""}, "_c", "6", "", "")
       )
     labels:
       component: shard_catchall
@@ -1446,19 +1446,19 @@ groups:
     record: gitlab_component_apdex:success:rate_1h
   - expr: |
       sum by () (
-        label_replace(sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate1h{le="+Inf",shard="catchall",urgency="high"}, "_c", "0", "", "")
+        label_replace(sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate1h{le="+Inf",urgency="high"}, "_c", "0", "", "")
         or
-        label_replace(sli_aggregations:sidekiq_jobs_queue_duration_seconds_bucket_rate1h{le="+Inf",shard="catchall",urgency="high"}, "_c", "1", "", "")
+        label_replace(sli_aggregations:sidekiq_jobs_queue_duration_seconds_bucket_rate1h{le="+Inf",urgency="high"}, "_c", "1", "", "")
         or
-        label_replace(sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate1h{le="+Inf",shard="catchall",urgency="low"}, "_c", "2", "", "")
+        label_replace(sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate1h{le="+Inf",urgency="low"}, "_c", "2", "", "")
         or
-        label_replace(sli_aggregations:sidekiq_jobs_queue_duration_seconds_bucket_rate1h{le="+Inf",shard="catchall",urgency="low"}, "_c", "3", "", "")
+        label_replace(sli_aggregations:sidekiq_jobs_queue_duration_seconds_bucket_rate1h{le="+Inf",urgency="low"}, "_c", "3", "", "")
         or
-        label_replace(sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate1h{le="+Inf",shard="catchall",urgency="throttled"}, "_c", "4", "", "")
+        label_replace(sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate1h{le="+Inf",urgency="throttled"}, "_c", "4", "", "")
         or
-        label_replace(sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate1h{le="+Inf",shard="catchall",urgency=""}, "_c", "5", "", "")
+        label_replace(sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate1h{le="+Inf",urgency=""}, "_c", "5", "", "")
         or
-        label_replace(sli_aggregations:sidekiq_jobs_queue_duration_seconds_bucket_rate1h{le="+Inf",shard="catchall",urgency=""}, "_c", "6", "", "")
+        label_replace(sli_aggregations:sidekiq_jobs_queue_duration_seconds_bucket_rate1h{le="+Inf",urgency=""}, "_c", "6", "", "")
       )
     labels:
       component: shard_catchall
