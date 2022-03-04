@@ -89,7 +89,7 @@ local serviceDefinition(service) =
 
   service {
     hasApdex():: private.serviceHasComponentWith('apdex'),
-    hasRequestRate():: true,  // requestRate is mandatory
+    hasRequestRate():: std.length(std.objectFields(service.serviceLevelIndicators)) > 0,
     hasErrorRate():: private.serviceHasComponentWith('errorRate'),
     hasFeatureCatogorySLIs():: private.serviceHasComponentWithFeatureCategory(),
 
