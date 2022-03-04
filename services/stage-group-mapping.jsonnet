@@ -88,7 +88,6 @@
     feature_categories: [
       'web_ide',
       'snippets',
-      'live_preview',
       'wiki',
       'static_site_editor',
     ],
@@ -131,6 +130,7 @@
     feature_categories: [
       'pipeline_authoring',
       'jenkins_importer',
+      'secrets_management',
     ],
   },
   runner: {
@@ -142,8 +142,8 @@
       'runner_fleet',
     ],
   },
-  testing: {
-    name: 'Testing',
+  pipeline_insights: {
+    name: 'Pipeline Insights',
     stage: 'verify',
     feature_categories: [
       'code_testing',
@@ -229,7 +229,6 @@
       'kubernetes_management',
       'cluster_cost_management',
       'chatops',
-      'secrets_management',
       'deployment_management',
     ],
   },
@@ -240,12 +239,17 @@
       'error_tracking',
       'incident_management',
       'on_call_schedule_management',
+      'runbooks',
+      'continuous_verification',
+    ],
+  },
+  observability: {
+    name: 'Observability',
+    stage: 'monitor',
+    feature_categories: [
       'metrics',
       'tracing',
       'logging',
-      'synthetic_monitoring',
-      'self_monitoring',
-      'runbooks',
     ],
   },
   container_security: {
