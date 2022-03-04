@@ -106,12 +106,14 @@ metricsCatalog.serviceDefinition({
             [
               histogramApdex(
                 histogram='sidekiq_jobs_completion_seconds_bucket',
-                selector=highUrgencySelector + shardSelector,
+                selector=highUrgencySelector,
+                //selector=highUrgencySelector + shardSelector,
                 satisfiedThreshold=sidekiqHelpers.slos.urgent.executionDurationSeconds,
               ),
               histogramApdex(
                 histogram='sidekiq_jobs_queue_duration_seconds_bucket',
-                selector=highUrgencySelector + shardSelector,
+                //selector=highUrgencySelector + shardSelector,
+                selector=highUrgencySelector,
                 satisfiedThreshold=sidekiqHelpers.slos.urgent.queueingDurationSeconds,
               ),
             ] else []
@@ -122,12 +124,14 @@ metricsCatalog.serviceDefinition({
             [
               histogramApdex(
                 histogram='sidekiq_jobs_completion_seconds_bucket',
-                selector=lowUrgencySelector + shardSelector,
+                selector=lowUrgencySelector,
+                //selector=lowUrgencySelector + shardSelector,
                 satisfiedThreshold=sidekiqHelpers.slos.lowUrgency.executionDurationSeconds,
               ),
               histogramApdex(
                 histogram='sidekiq_jobs_queue_duration_seconds_bucket',
-                selector=lowUrgencySelector + shardSelector,
+                //selector=lowUrgencySelector + shardSelector,
+                selector=lowUrgencySelector,
                 satisfiedThreshold=sidekiqHelpers.slos.lowUrgency.queueingDurationSeconds,
               ),
             ] else []
@@ -138,7 +142,8 @@ metricsCatalog.serviceDefinition({
             [
               histogramApdex(
                 histogram='sidekiq_jobs_completion_seconds_bucket',
-                selector=throttledUrgencySelector + shardSelector,
+                //selector=throttledUrgencySelector + shardSelector,
+                selector=throttledUrgencySelector,
                 satisfiedThreshold=sidekiqHelpers.slos.throttled.executionDurationSeconds,
               ),
             ] else []
@@ -150,12 +155,14 @@ metricsCatalog.serviceDefinition({
               // Treat `urgency=""` as low urgency jobs.
               histogramApdex(
                 histogram='sidekiq_jobs_completion_seconds_bucket',
-                selector=noUrgencySelector + shardSelector,
+                //selector=noUrgencySelector + shardSelector,
+                selector=noUrgencySelector,
                 satisfiedThreshold=sidekiqHelpers.slos.lowUrgency.executionDurationSeconds,
               ),
               histogramApdex(
                 histogram='sidekiq_jobs_queue_duration_seconds_bucket',
-                selector=noUrgencySelector + shardSelector,
+                //selector=noUrgencySelector + shardSelector,
+                selector=noUrgencySelector,
                 satisfiedThreshold=sidekiqHelpers.slos.lowUrgency.queueingDurationSeconds,
               ),
             ] else []
