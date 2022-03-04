@@ -51,6 +51,18 @@ local indexDefaults = {
     latencyFieldUnitMultiplier: 1000,
   },
 
+  gkeKube: indexDefaults {
+    timestamp: 'json.timestamp',
+    indexPattern: '1d7c16d0-c0fa-11ea-a0f8-0b8742fd907c',
+    defaultColumns: ['json.jsonPayload.metadata.managedFields.manager', 'json.jsonPayload.message', 'json.jsonPayload.reason', 'json.jsonPayload.metadata.name', 'json.resource.labels.pod_name'],
+    defaultSeriesSplitField: 'json.jsonPayload.metadata.managedFields.manager.keyword',
+    prometheusLabelMappings+: {
+      // Gke logs don't have type field. This could be solved by https://gitlab.com/groups/gitlab-com/gl-infra/-/epics/687
+      // This field filters out related components such as kubelet, kube-scheduler, kube-controller-manager, etc.
+      type: 'json.jsonPayload.metadata.managedFields.manager',
+    },
+  },
+
   kas: indexDefaults {
     timestamp: 'json.time',
     indexPattern: '78f49290-709e-11eb-b821-df2c3b5b1510',

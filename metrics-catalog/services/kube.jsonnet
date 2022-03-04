@@ -90,6 +90,7 @@ metricsCatalog.serviceDefinition({
             severity: { one_of: ['EMERGENCY', 'ALERT', 'CRITICAL', 'ERROR', 'WARNING'] },
           },
         ),
+        toolingLinks.kibana(title='Kubernetes Cluster Logs (Kibana)', index='gkeKube'),
       ],
     },
 
