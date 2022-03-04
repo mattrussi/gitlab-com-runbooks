@@ -2,6 +2,7 @@ local metricsCatalog = import 'servicemetrics/metrics.libsonnet';
 local histogramApdex = metricsCatalog.histogramApdex;
 local rateMetric = metricsCatalog.rateMetric;
 local toolingLinks = import 'toolinglinks/toolinglinks.libsonnet';
+local maturityLevels = import 'service-maturity/levels.libsonnet';
 
 /**
  * Deprecated. These haproxy backends have moved inline with the upstream services
@@ -129,4 +130,7 @@ metricsCatalog.serviceDefinition({
       ],
     },
   },
+  skippedMaturityCriteria: maturityLevels.skip({
+    'Structured logs available in Kibana': 'Logs from HAProxy are available in BigQuery, and not ingested to ElasticSearch due to volume. Usually, workhorse logs will cover the same ground.',
+  }),
 })
