@@ -2960,7 +2960,7 @@
           "steppedLine": false,
           "targets": [
             {
-              "expr": "sum by () (\n  sli_aggregations:sidekiq_jobs_failed_total_rate5m{shard=\"catchall\"}\n)\n \u003e 0",
+              "expr": "sum by () (\n  sli_aggregations:sidekiq_jobs_failed_total_rate5m{}\n)\n \u003e 0",
               "format": "time_series",
               "interval": "1m",
               "intervalFactor": 2,
@@ -3036,7 +3036,7 @@
           "steppedLine": false,
           "targets": [
             {
-              "expr": "sum by () (\n  sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate5m{le=\"+Inf\",shard=\"catchall\"}\n)\n \u003e 0",
+              "expr": "sum by () (\n  sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate5m{le=\"+Inf\"}\n)\n \u003e 0",
               "format": "time_series",
               "interval": "1m",
               "intervalFactor": 2,
@@ -3207,7 +3207,7 @@
           "steppedLine": false,
           "targets": [
             {
-              "expr": "sum by (feature_category) (\n  sli_aggregations:sidekiq_jobs_failed_total_rate5m{feature_category!=\"\",shard=\"catchall\"}\n)\n \u003e 0",
+              "expr": "sum by (feature_category) (\n  sli_aggregations:sidekiq_jobs_failed_total_rate5m{feature_category!=\"\"}\n)\n \u003e 0",
               "format": "time_series",
               "interval": "1m",
               "intervalFactor": 2,
@@ -3283,7 +3283,7 @@
           "steppedLine": false,
           "targets": [
             {
-              "expr": "sum by (feature_category) (\n  sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate5m{feature_category!=\"\",le=\"+Inf\",shard=\"catchall\"}\n)\n \u003e 0",
+              "expr": "sum by (feature_category) (\n  sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate5m{feature_category!=\"\",le=\"+Inf\"}\n)\n \u003e 0",
               "format": "time_series",
               "interval": "1m",
               "intervalFactor": 2,
@@ -3454,7 +3454,7 @@
           "steppedLine": false,
           "targets": [
             {
-              "expr": "sum by (queue) (\n  sli_aggregations:sidekiq_jobs_failed_total_rate5m{queue!=\"\",shard=\"catchall\"}\n)\n \u003e 0",
+              "expr": "sum by (queue) (\n  sli_aggregations:sidekiq_jobs_failed_total_rate5m{queue!=\"\"}\n)\n \u003e 0",
               "format": "time_series",
               "interval": "1m",
               "intervalFactor": 2,
@@ -3530,7 +3530,7 @@
           "steppedLine": false,
           "targets": [
             {
-              "expr": "sum by (queue) (\n  sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate5m{le=\"+Inf\",queue!=\"\",shard=\"catchall\"}\n)\n \u003e 0",
+              "expr": "sum by (queue) (\n  sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate5m{le=\"+Inf\",queue!=\"\"}\n)\n \u003e 0",
               "format": "time_series",
               "interval": "1m",
               "intervalFactor": 2,
@@ -3701,7 +3701,7 @@
           "steppedLine": false,
           "targets": [
             {
-              "expr": "sum by (urgency) (\n  sli_aggregations:sidekiq_jobs_failed_total_rate5m{shard=\"catchall\",urgency!=\"\"}\n)\n \u003e 0",
+              "expr": "sum by (urgency) (\n  sli_aggregations:sidekiq_jobs_failed_total_rate5m{urgency!=\"\"}\n)\n \u003e 0",
               "format": "time_series",
               "interval": "1m",
               "intervalFactor": 2,
@@ -3777,7 +3777,7 @@
           "steppedLine": false,
           "targets": [
             {
-              "expr": "sum by (urgency) (\n  sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate5m{le=\"+Inf\",shard=\"catchall\",urgency!=\"\"}\n)\n \u003e 0",
+              "expr": "sum by (urgency) (\n  sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate5m{le=\"+Inf\",urgency!=\"\"}\n)\n \u003e 0",
               "format": "time_series",
               "interval": "1m",
               "intervalFactor": 2,
@@ -3948,7 +3948,7 @@
           "steppedLine": false,
           "targets": [
             {
-              "expr": "sum by (worker) (\n  sli_aggregations:sidekiq_jobs_failed_total_rate5m{shard=\"catchall\",worker!=\"\"}\n)\n \u003e 0",
+              "expr": "sum by (worker) (\n  sli_aggregations:sidekiq_jobs_failed_total_rate5m{worker!=\"\"}\n)\n \u003e 0",
               "format": "time_series",
               "interval": "1m",
               "intervalFactor": 2,
@@ -4024,7 +4024,7 @@
           "steppedLine": false,
           "targets": [
             {
-              "expr": "sum by (worker) (\n  sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate5m{le=\"+Inf\",shard=\"catchall\",worker!=\"\"}\n)\n \u003e 0",
+              "expr": "sum by (worker) (\n  sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate5m{le=\"+Inf\",worker!=\"\"}\n)\n \u003e 0",
               "format": "time_series",
               "interval": "1m",
               "intervalFactor": 2,

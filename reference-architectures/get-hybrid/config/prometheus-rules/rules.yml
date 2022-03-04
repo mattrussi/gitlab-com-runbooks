@@ -1136,7 +1136,7 @@ groups:
     record: gitlab_component_apdex:weight:score_5m
   - expr: |
       sum by () (
-        sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate5m{le="+Inf",shard="catchall"}
+        sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate5m{le="+Inf"}
       )
     labels:
       component: shard_catchall
@@ -1146,7 +1146,7 @@ groups:
   - expr: |
       (
         sum by () (
-          sli_aggregations:sidekiq_jobs_failed_total_rate5m{shard="catchall"}
+          sli_aggregations:sidekiq_jobs_failed_total_rate5m{}
         )
       )
       or
@@ -1301,7 +1301,7 @@ groups:
     record: gitlab_component_apdex:weight:score_30m
   - expr: |
       sum by () (
-        sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate30m{le="+Inf",shard="catchall"}
+        sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate30m{le="+Inf"}
       )
     labels:
       component: shard_catchall
@@ -1311,7 +1311,7 @@ groups:
   - expr: |
       (
         sum by () (
-          sli_aggregations:sidekiq_jobs_failed_total_rate30m{shard="catchall"}
+          sli_aggregations:sidekiq_jobs_failed_total_rate30m{}
         )
       )
       or
@@ -1468,7 +1468,7 @@ groups:
     record: gitlab_component_apdex:weight:score_1h
   - expr: |
       sum by () (
-        sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate1h{le="+Inf",shard="catchall"}
+        sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate1h{le="+Inf"}
       )
     labels:
       component: shard_catchall
@@ -1479,7 +1479,7 @@ groups:
   - expr: |
       (
         sum by () (
-          sli_aggregations:sidekiq_jobs_failed_total_rate1h{shard="catchall"}
+          sli_aggregations:sidekiq_jobs_failed_total_rate1h{}
         )
       )
       or
