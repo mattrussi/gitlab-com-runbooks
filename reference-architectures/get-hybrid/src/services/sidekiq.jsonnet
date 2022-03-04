@@ -171,12 +171,14 @@ metricsCatalog.serviceDefinition({
 
       requestRate: rateMetric(
         counter='sidekiq_jobs_completion_seconds_bucket',
-        selector=shardSelector { le: '+Inf' },
+        //selector=shardSelector { le: '+Inf' },
+        selector={ le: '+Inf' },
       ),
 
       errorRate: rateMetric(
         counter='sidekiq_jobs_failed_total',
-        selector=shardSelector,
+        //selector=shardSelector,
+        selector={ },
       ),
 
       // Note: these labels will also be included in the

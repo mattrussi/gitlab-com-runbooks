@@ -73,7 +73,7 @@ local aggregationSet = import 'servicemetrics/aggregation-set.libsonnet';
     id: 'sidekiq_execution',
     name: 'Sidekiq execution source metrics per worker',
     intermediateSource: false,
-    selector: { monitor: 'global' },
+    selector: {},
     labels: [
       'env',
       'environment',
