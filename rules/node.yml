@@ -177,6 +177,32 @@ groups:
         Check `/var/log/kern.log` for more details. You may need to contact the cloud provider and possibly redeploy the VM.
       title: CPU stall warnings have been detected on {{ if $labels.fqdn }}{{ $labels.fqdn }}
         {{ else }}{{ $labels.instance }}{{ end }} for the past 10 minutes.
+  - alert: Reboot
+    expr: changes(node_boot_time_seconds[10m]) > 0
+    labels:
+      severity: s4
+      alert_type: cause
+    annotations:
+      title: The node {{ if $labels.fqdn }}{{ $labels.fqdn }}{{ else }}{{ $labels.instance }}{{ end }} has rebooted.
+      description: >
+        The boot time on node {{ if $labels.fqdn }}{{ $labels.fqdn }}
+        {{ else }}{{ $labels.instance }}{{ end }} has changed in the last 10
+        minutes, indicating a recent reboot.
+      grafana_dashboard_id: "yzukVGtZz/reboots"
+      runbook: docs/uncategorized/node-reboots.md
+  - alert: MultipleReboots
+    expr: changes(node_boot_time_seconds[24h]) > 1
+    labels:
+      severity: s4
+      alert_type: cause
+    annotations:
+      title: The node {{ if $labels.fqdn }}{{ $labels.fqdn }}{{ else }}{{ $labels.instance }}{{ end }} has rebooted {{ $value }} times in the last 24 hours.
+      description: >
+        The boot time on node {{ if $labels.fqdn }}{{ $labels.fqdn }}
+        {{ else }}{{ $labels.instance }}{{ end }} has changed more than once in
+        the last 24 hours, indicating multiple recent reboots.
+      grafana_dashboard_id: "yzukVGtZz/reboots"
+      runbook: docs/uncategorized/node-reboots.md
 
 # TODO eventually, once all kernels are upgraded to support
 # node_vmstat_oom_kill, we can deprecate the syslog_oom_events metric and remove
