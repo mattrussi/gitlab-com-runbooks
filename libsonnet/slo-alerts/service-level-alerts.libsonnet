@@ -47,6 +47,12 @@ local commonAnnotations(serviceType, aggregationSet, metricName) =
     grafana_min_zoom_hours: '6',
   };
 
+local getAlertForDurationWithDefault(alertForDuration, windows) =
+  if alertForDuration == null then
+    multiburnFactors.alertForDurationForLongThreshold(windows[0])
+  else
+    alertForDuration;
+
 // Generates an apdex alert
 local apdexAlertsForSLI(
   alertName,  // `alert` label for the alert (ie, the name)
@@ -59,10 +65,13 @@ local apdexAlertsForSLI(
   windows,  // Array of long window durations for the alert
   metricSelectorHash,  // Additional selectors to apply to the query
   minimumSamplesForMonitoring=null,  // Minimum sample rate threshold: see docs/metrics-catalog/service-level-monitoring.md
-  alertForDuration=multiburnFactors.alertForDurationForLongThreshold(windows[0]),  // How long before alert fires
+  alertForDuration=null,  // How long before alert fires
   extraLabels={},  // Extra labels for the alert
   extraAnnotations={},  // Extra annotations for the alert
       ) =
+
+  local alertForDurationWithDefault = getAlertForDurationWithDefault(alertForDuration, windows);
+
   [
     {
       alert: alertName,
@@ -74,7 +83,7 @@ local apdexAlertsForSLI(
         windows=[windowDuration],
         operationRateWindowDuration=windowDuration,
       ),
-      'for': alertForDuration,
+      'for': alertForDurationWithDefault,
       labels: labelsForAlert(severity, aggregationSet, 'apdex', 'slo_violation', windowDuration) + extraLabels,
       annotations: commonAnnotations(serviceType, aggregationSet, 'apdex') {
         title: alertTitle,
@@ -99,10 +108,13 @@ local errorAlertsForSLI(
   windows,  // Array of long window durations for the alert
   metricSelectorHash,  // Additional selectors to apply to the query
   minimumSamplesForMonitoring=null,  // Minimum sample rate threshold see docs/metrics-catalog/service-level-monitoring.md
-  alertForDuration=multiburnFactors.alertForDurationForLongThreshold(windows[0]),  // How long before alert fires
+  alertForDuration=null,  // How long before alert fires
   extraLabels={},  // Extra labels for the alert
   extraAnnotations={},  // Extra annotations for the alert
       ) =
+
+  local alertForDurationWithDefault = getAlertForDurationWithDefault(alertForDuration, windows);
+
   [
     {
       alert: alertName,
@@ -114,7 +126,7 @@ local errorAlertsForSLI(
         windows=[windowDuration],
         operationRateWindowDuration=windowDuration,
       ),
-      'for': alertForDuration,
+      'for': alertForDurationWithDefault,
       labels: labelsForAlert(severity, aggregationSet, 'error', 'slo_violation', windowDuration) + extraLabels,
       annotations: commonAnnotations(serviceType, aggregationSet, 'error') {
         title: alertTitle,

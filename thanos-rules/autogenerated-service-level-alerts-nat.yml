@@ -43,7 +43,7 @@ groups:
       slo_alert: "no"
       user_impacting: "yes"
     expr: |
-      gitlab_component_ops:rate_30m{type="nat", component="received_tcp_packets", stage="main", monitor="global"} == 0
+      gitlab_component_ops:rate_30m{component="received_tcp_packets",monitor="global",stage="main",type="nat"} == 0
   - alert: NatServiceReceivedTcpPacketsTrafficAbsent
     for: 30m
     annotations:
@@ -84,9 +84,9 @@ groups:
       slo_alert: "no"
       user_impacting: "yes"
     expr: |
-      gitlab_component_ops:rate_5m{type="nat", component="received_tcp_packets", stage="main", monitor="global"} offset 1h
+      gitlab_component_ops:rate_5m{component="received_tcp_packets",monitor="global",stage="main",type="nat"} offset 1h
       unless
-      gitlab_component_ops:rate_5m{type="nat", component="received_tcp_packets", stage="main", monitor="global"}
+      gitlab_component_ops:rate_5m{component="received_tcp_packets",monitor="global",stage="main",type="nat"}
   - alert: NatServiceSentTcpPacketsTrafficCessation
     for: 5m
     annotations:
@@ -125,7 +125,7 @@ groups:
       slo_alert: "no"
       user_impacting: "yes"
     expr: |
-      gitlab_component_ops:rate_30m{type="nat", component="sent_tcp_packets", stage="main", monitor="global"} == 0
+      gitlab_component_ops:rate_30m{component="sent_tcp_packets",monitor="global",stage="main",type="nat"} == 0
   - alert: NatServiceSentTcpPacketsTrafficAbsent
     for: 30m
     annotations:
@@ -166,6 +166,6 @@ groups:
       slo_alert: "no"
       user_impacting: "yes"
     expr: |
-      gitlab_component_ops:rate_5m{type="nat", component="sent_tcp_packets", stage="main", monitor="global"} offset 1h
+      gitlab_component_ops:rate_5m{component="sent_tcp_packets",monitor="global",stage="main",type="nat"} offset 1h
       unless
-      gitlab_component_ops:rate_5m{type="nat", component="sent_tcp_packets", stage="main", monitor="global"}
+      gitlab_component_ops:rate_5m{component="sent_tcp_packets",monitor="global",stage="main",type="nat"}

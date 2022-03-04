@@ -37,7 +37,7 @@ groups:
       slo_alert: "no"
       user_impacting: "yes"
     expr: |
-      gitlab_component_ops:rate_30m{type="redis-sessions", component="primary_server", stage="main", monitor="global"} == 0
+      gitlab_component_ops:rate_30m{component="primary_server",monitor="global",stage="main",type="redis-sessions"} == 0
   - alert: RedisSessionsServicePrimaryServerTrafficAbsent
     for: 30m
     annotations:
@@ -72,9 +72,9 @@ groups:
       slo_alert: "no"
       user_impacting: "yes"
     expr: |
-      gitlab_component_ops:rate_5m{type="redis-sessions", component="primary_server", stage="main", monitor="global"} offset 1h
+      gitlab_component_ops:rate_5m{component="primary_server",monitor="global",stage="main",type="redis-sessions"} offset 1h
       unless
-      gitlab_component_ops:rate_5m{type="redis-sessions", component="primary_server", stage="main", monitor="global"}
+      gitlab_component_ops:rate_5m{component="primary_server",monitor="global",stage="main",type="redis-sessions"}
   - alert: RedisSessionsServiceRailsRedisClientApdexSLOViolation
     for: 2m
     annotations:
@@ -315,7 +315,7 @@ groups:
       slo_alert: "no"
       user_impacting: "yes"
     expr: |
-      gitlab_component_ops:rate_30m{type="redis-sessions", component="rails_redis_client", stage="main", monitor="global"} == 0
+      gitlab_component_ops:rate_30m{component="rails_redis_client",monitor="global",stage="main",type="redis-sessions"} == 0
   - alert: RedisSessionsServiceRailsRedisClientTrafficAbsent
     for: 30m
     annotations:
@@ -352,9 +352,9 @@ groups:
       slo_alert: "no"
       user_impacting: "yes"
     expr: |
-      gitlab_component_ops:rate_5m{type="redis-sessions", component="rails_redis_client", stage="main", monitor="global"} offset 1h
+      gitlab_component_ops:rate_5m{component="rails_redis_client",monitor="global",stage="main",type="redis-sessions"} offset 1h
       unless
-      gitlab_component_ops:rate_5m{type="redis-sessions", component="rails_redis_client", stage="main", monitor="global"}
+      gitlab_component_ops:rate_5m{component="rails_redis_client",monitor="global",stage="main",type="redis-sessions"}
   - alert: RedisSessionsServiceSecondaryServersTrafficCessation
     for: 5m
     annotations:
@@ -387,7 +387,7 @@ groups:
       slo_alert: "no"
       user_impacting: "yes"
     expr: |
-      gitlab_component_ops:rate_30m{type="redis-sessions", component="secondary_servers", stage="main", monitor="global"} == 0
+      gitlab_component_ops:rate_30m{component="secondary_servers",monitor="global",stage="main",type="redis-sessions"} == 0
   - alert: RedisSessionsServiceSecondaryServersTrafficAbsent
     for: 30m
     annotations:
@@ -422,6 +422,6 @@ groups:
       slo_alert: "no"
       user_impacting: "yes"
     expr: |
-      gitlab_component_ops:rate_5m{type="redis-sessions", component="secondary_servers", stage="main", monitor="global"} offset 1h
+      gitlab_component_ops:rate_5m{component="secondary_servers",monitor="global",stage="main",type="redis-sessions"} offset 1h
       unless
-      gitlab_component_ops:rate_5m{type="redis-sessions", component="secondary_servers", stage="main", monitor="global"}
+      gitlab_component_ops:rate_5m{component="secondary_servers",monitor="global",stage="main",type="redis-sessions"}

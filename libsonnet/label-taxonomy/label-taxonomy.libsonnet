@@ -23,7 +23,8 @@ local labelTaxonomy(labelset) =
   labelsFor(labels.service) +
   labelsFor(labels.stage) +
   labelsFor(labels.shard) +
-  labelsFor(labels.node);
+  labelsFor(labels.node) +
+  labelsFor(labels.sliComponent);
 
 // Returns a comma deliminated string of labels according to the provided hash
 local labelTaxonomySerialized(labelset) =

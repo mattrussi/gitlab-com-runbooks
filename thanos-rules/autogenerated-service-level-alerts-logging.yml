@@ -37,7 +37,7 @@ groups:
       slo_alert: "no"
       user_impacting: "no"
     expr: |
-      gitlab_component_ops:rate_30m{type="logging", component="elasticsearch_indexing_cluster", stage="main", monitor="global"} == 0
+      gitlab_component_ops:rate_30m{component="elasticsearch_indexing_cluster",monitor="global",stage="main",type="logging"} == 0
   - alert: LoggingServiceElasticsearchIndexingClusterTrafficAbsent
     for: 30m
     annotations:
@@ -72,9 +72,9 @@ groups:
       slo_alert: "no"
       user_impacting: "no"
     expr: |
-      gitlab_component_ops:rate_5m{type="logging", component="elasticsearch_indexing_cluster", stage="main", monitor="global"} offset 1h
+      gitlab_component_ops:rate_5m{component="elasticsearch_indexing_cluster",monitor="global",stage="main",type="logging"} offset 1h
       unless
-      gitlab_component_ops:rate_5m{type="logging", component="elasticsearch_indexing_cluster", stage="main", monitor="global"}
+      gitlab_component_ops:rate_5m{component="elasticsearch_indexing_cluster",monitor="global",stage="main",type="logging"}
   - alert: LoggingServiceElasticsearchIndexingIndexTrafficCessation
     for: 5m
     annotations:
@@ -107,7 +107,7 @@ groups:
       slo_alert: "no"
       user_impacting: "no"
     expr: |
-      gitlab_component_ops:rate_30m{type="logging", component="elasticsearch_indexing_index", stage="main", monitor="global"} == 0
+      gitlab_component_ops:rate_30m{component="elasticsearch_indexing_index",monitor="global",stage="main",type="logging"} == 0
   - alert: LoggingServiceElasticsearchIndexingIndexTrafficAbsent
     for: 30m
     annotations:
@@ -142,9 +142,9 @@ groups:
       slo_alert: "no"
       user_impacting: "no"
     expr: |
-      gitlab_component_ops:rate_5m{type="logging", component="elasticsearch_indexing_index", stage="main", monitor="global"} offset 1h
+      gitlab_component_ops:rate_5m{component="elasticsearch_indexing_index",monitor="global",stage="main",type="logging"} offset 1h
       unless
-      gitlab_component_ops:rate_5m{type="logging", component="elasticsearch_indexing_index", stage="main", monitor="global"}
+      gitlab_component_ops:rate_5m{component="elasticsearch_indexing_index",monitor="global",stage="main",type="logging"}
   - alert: LoggingServiceElasticsearchSearchingClusterTrafficCessation
     for: 5m
     annotations:
@@ -177,7 +177,7 @@ groups:
       slo_alert: "no"
       user_impacting: "no"
     expr: |
-      gitlab_component_ops:rate_30m{type="logging", component="elasticsearch_searching_cluster", stage="main", monitor="global"} == 0
+      gitlab_component_ops:rate_30m{component="elasticsearch_searching_cluster",monitor="global",stage="main",type="logging"} == 0
   - alert: LoggingServiceElasticsearchSearchingClusterTrafficAbsent
     for: 30m
     annotations:
@@ -212,9 +212,9 @@ groups:
       slo_alert: "no"
       user_impacting: "no"
     expr: |
-      gitlab_component_ops:rate_5m{type="logging", component="elasticsearch_searching_cluster", stage="main", monitor="global"} offset 1h
+      gitlab_component_ops:rate_5m{component="elasticsearch_searching_cluster",monitor="global",stage="main",type="logging"} offset 1h
       unless
-      gitlab_component_ops:rate_5m{type="logging", component="elasticsearch_searching_cluster", stage="main", monitor="global"}
+      gitlab_component_ops:rate_5m{component="elasticsearch_searching_cluster",monitor="global",stage="main",type="logging"}
   - alert: LoggingServiceElasticsearchSearchingIndexTrafficCessation
     for: 5m
     annotations:
@@ -247,7 +247,7 @@ groups:
       slo_alert: "no"
       user_impacting: "no"
     expr: |
-      gitlab_component_ops:rate_30m{type="logging", component="elasticsearch_searching_index", stage="main", monitor="global"} == 0
+      gitlab_component_ops:rate_30m{component="elasticsearch_searching_index",monitor="global",stage="main",type="logging"} == 0
   - alert: LoggingServiceElasticsearchSearchingIndexTrafficAbsent
     for: 30m
     annotations:
@@ -282,9 +282,9 @@ groups:
       slo_alert: "no"
       user_impacting: "no"
     expr: |
-      gitlab_component_ops:rate_5m{type="logging", component="elasticsearch_searching_index", stage="main", monitor="global"} offset 1h
+      gitlab_component_ops:rate_5m{component="elasticsearch_searching_index",monitor="global",stage="main",type="logging"} offset 1h
       unless
-      gitlab_component_ops:rate_5m{type="logging", component="elasticsearch_searching_index", stage="main", monitor="global"}
+      gitlab_component_ops:rate_5m{component="elasticsearch_searching_index",monitor="global",stage="main",type="logging"}
   - alert: LoggingServiceFluentdLogOutputErrorSLOViolation
     for: 2m
     annotations:
@@ -413,7 +413,7 @@ groups:
       slo_alert: "no"
       user_impacting: "no"
     expr: |
-      gitlab_component_ops:rate_30m{type="logging", component="fluentd_log_output", stage="main", monitor="global"} == 0
+      gitlab_component_ops:rate_30m{component="fluentd_log_output",monitor="global",stage="main",type="logging"} == 0
   - alert: LoggingServiceFluentdLogOutputTrafficAbsent
     for: 30m
     annotations:
@@ -448,9 +448,9 @@ groups:
       slo_alert: "no"
       user_impacting: "no"
     expr: |
-      gitlab_component_ops:rate_5m{type="logging", component="fluentd_log_output", stage="main", monitor="global"} offset 1h
+      gitlab_component_ops:rate_5m{component="fluentd_log_output",monitor="global",stage="main",type="logging"} offset 1h
       unless
-      gitlab_component_ops:rate_5m{type="logging", component="fluentd_log_output", stage="main", monitor="global"}
+      gitlab_component_ops:rate_5m{component="fluentd_log_output",monitor="global",stage="main",type="logging"}
   - alert: LoggingServiceKibanaGooglelbErrorSLOViolation
     for: 2m
     annotations:
@@ -575,7 +575,7 @@ groups:
       slo_alert: "no"
       user_impacting: "no"
     expr: |
-      gitlab_component_ops:rate_30m{type="logging", component="pubsub_subscriptions", stage="main", monitor="global"} == 0
+      gitlab_component_ops:rate_30m{component="pubsub_subscriptions",monitor="global",stage="main",type="logging"} == 0
   - alert: LoggingServicePubsubSubscriptionsTrafficAbsent
     for: 30m
     annotations:
@@ -610,9 +610,9 @@ groups:
       slo_alert: "no"
       user_impacting: "no"
     expr: |
-      gitlab_component_ops:rate_5m{type="logging", component="pubsub_subscriptions", stage="main", monitor="global"} offset 1h
+      gitlab_component_ops:rate_5m{component="pubsub_subscriptions",monitor="global",stage="main",type="logging"} offset 1h
       unless
-      gitlab_component_ops:rate_5m{type="logging", component="pubsub_subscriptions", stage="main", monitor="global"}
+      gitlab_component_ops:rate_5m{component="pubsub_subscriptions",monitor="global",stage="main",type="logging"}
   - alert: LoggingServicePubsubTopicsTrafficCessation
     for: 5m
     annotations:
@@ -645,7 +645,7 @@ groups:
       slo_alert: "no"
       user_impacting: "no"
     expr: |
-      gitlab_component_ops:rate_30m{type="logging", component="pubsub_topics", stage="main", monitor="global"} == 0
+      gitlab_component_ops:rate_30m{component="pubsub_topics",monitor="global",stage="main",type="logging"} == 0
   - alert: LoggingServicePubsubTopicsTrafficAbsent
     for: 30m
     annotations:
@@ -680,9 +680,9 @@ groups:
       slo_alert: "no"
       user_impacting: "no"
     expr: |
-      gitlab_component_ops:rate_5m{type="logging", component="pubsub_topics", stage="main", monitor="global"} offset 1h
+      gitlab_component_ops:rate_5m{component="pubsub_topics",monitor="global",stage="main",type="logging"} offset 1h
       unless
-      gitlab_component_ops:rate_5m{type="logging", component="pubsub_topics", stage="main", monitor="global"}
+      gitlab_component_ops:rate_5m{component="pubsub_topics",monitor="global",stage="main",type="logging"}
   - alert: LoggingServicePubsubbeatErrorSLOViolation
     for: 2m
     annotations:
@@ -811,7 +811,7 @@ groups:
       slo_alert: "no"
       user_impacting: "no"
     expr: |
-      gitlab_component_ops:rate_30m{type="logging", component="pubsubbeat", stage="main", monitor="global"} == 0
+      gitlab_component_ops:rate_30m{component="pubsubbeat",monitor="global",stage="main",type="logging"} == 0
   - alert: LoggingServicePubsubbeatTrafficAbsent
     for: 30m
     annotations:
@@ -846,6 +846,6 @@ groups:
       slo_alert: "no"
       user_impacting: "no"
     expr: |
-      gitlab_component_ops:rate_5m{type="logging", component="pubsubbeat", stage="main", monitor="global"} offset 1h
+      gitlab_component_ops:rate_5m{component="pubsubbeat",monitor="global",stage="main",type="logging"} offset 1h
       unless
-      gitlab_component_ops:rate_5m{type="logging", component="pubsubbeat", stage="main", monitor="global"}
+      gitlab_component_ops:rate_5m{component="pubsubbeat",monitor="global",stage="main",type="logging"}

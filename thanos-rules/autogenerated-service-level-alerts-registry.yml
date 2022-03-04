@@ -245,7 +245,7 @@ groups:
       slo_alert: "no"
       user_impacting: "yes"
     expr: |
-      gitlab_component_ops:rate_30m{type="registry", component="database", stage="main", monitor="global"} == 0
+      gitlab_component_ops:rate_30m{component="database",monitor="global",stage="main",type="registry"} == 0
   - alert: RegistryServiceDatabaseTrafficAbsent
     for: 30m
     annotations:
@@ -280,9 +280,83 @@ groups:
       slo_alert: "no"
       user_impacting: "yes"
     expr: |
-      gitlab_component_ops:rate_5m{type="registry", component="database", stage="main", monitor="global"} offset 1h
+      gitlab_component_ops:rate_5m{component="database",monitor="global",stage="main",type="registry"} offset 1h
       unless
-      gitlab_component_ops:rate_5m{type="registry", component="database", stage="main", monitor="global"}
+      gitlab_component_ops:rate_5m{component="database",monitor="global",stage="main",type="registry"}
+  - alert: RegistryServiceDatabaseTrafficCessationRegional
+    for: 5m
+    annotations:
+      title: The database SLI of the registry service in region `{{ $labels.region
+        }}` has not received any traffic in the past 30 minutes
+      description: |
+        Aggregation of all container registry database operations.
+
+        This alert signifies that the SLI is reporting a cessation of traffic, but the signal is not absent.
+
+        Note that this alert is specific to the `{{ $labels.region }}` region.
+      grafana_dashboard_id: registry-main/registry-overview
+      grafana_dashboard_link: https://dashboards.gitlab.net/d/registry-main/registry-overview?from=now-6h/m&to=now-1m/m&var-environment={{
+        $labels.environment }}&var-stage={{ $labels.stage }}
+      grafana_min_zoom_hours: "6"
+      grafana_panel_id: "2984148133"
+      grafana_variables: environment,stage
+      promql_template_1: |
+        sum by (env,environment,tier,stage) (
+          rate(registry_database_queries_total{environment="{{ $labels.environment }}",stage="{{ $labels.stage }}",type="registry"}[5m])
+        )
+      runbook: docs/registry/README.md
+    labels:
+      aggregation: component
+      alert_class: traffic_cessation
+      alert_type: cause
+      feature_category: container_registry
+      pager: pagerduty
+      rules_domain: general
+      severity: s2
+      sli_type: ops
+      slo_alert: "no"
+      user_impacting: "yes"
+    expr: |
+      gitlab_regional_sli_ops:rate_30m{component="database",monitor="global",stage="main",type="registry"} == 0
+  - alert: RegistryServiceDatabaseTrafficAbsentRegional
+    for: 30m
+    annotations:
+      title: The database SLI of the registry service in region `{{ $labels.region
+        }}` has not reported any traffic in the past 30 minutes
+      description: |
+        Aggregation of all container registry database operations.
+
+        This alert signifies that the SLI was previously reporting traffic, but is no longer - the signal is absent.
+
+        This could be caused by a change to the metrics used in the SLI, or by the service not receiving traffic.
+
+        Note that this alert is specific to the `{{ $labels.region }}` region.
+      grafana_dashboard_id: registry-main/registry-overview
+      grafana_dashboard_link: https://dashboards.gitlab.net/d/registry-main/registry-overview?from=now-6h/m&to=now-1m/m&var-environment={{
+        $labels.environment }}&var-stage={{ $labels.stage }}
+      grafana_min_zoom_hours: "6"
+      grafana_panel_id: "2984148133"
+      grafana_variables: environment,stage
+      promql_template_1: |
+        sum by (env,environment,tier,stage) (
+          rate(registry_database_queries_total{environment="{{ $labels.environment }}",stage="{{ $labels.stage }}",type="registry"}[5m])
+        )
+      runbook: docs/registry/README.md
+    labels:
+      aggregation: component
+      alert_class: traffic_cessation
+      alert_type: cause
+      feature_category: container_registry
+      pager: pagerduty
+      rules_domain: general
+      severity: s2
+      sli_type: ops
+      slo_alert: "no"
+      user_impacting: "yes"
+    expr: |
+      gitlab_regional_sli_ops:rate_5m{component="database",monitor="global",stage="main",type="registry"} offset 1h
+      unless
+      gitlab_regional_sli_ops:rate_5m{component="database",monitor="global",stage="main",type="registry"}
   - alert: RegistryServiceGarbagecollectorApdexSLOViolation
     for: 2m
     annotations:
@@ -719,7 +793,7 @@ groups:
       slo_alert: "no"
       user_impacting: "no"
     expr: |
-      gitlab_component_ops:rate_30m{type="registry", component="garbagecollector", stage="main", monitor="global"} == 0
+      gitlab_component_ops:rate_30m{component="garbagecollector",monitor="global",stage="main",type="registry"} == 0
   - alert: RegistryServiceGarbagecollectorTrafficAbsent
     for: 30m
     annotations:
@@ -754,9 +828,83 @@ groups:
       slo_alert: "no"
       user_impacting: "no"
     expr: |
-      gitlab_component_ops:rate_5m{type="registry", component="garbagecollector", stage="main", monitor="global"} offset 1h
+      gitlab_component_ops:rate_5m{component="garbagecollector",monitor="global",stage="main",type="registry"} offset 1h
       unless
-      gitlab_component_ops:rate_5m{type="registry", component="garbagecollector", stage="main", monitor="global"}
+      gitlab_component_ops:rate_5m{component="garbagecollector",monitor="global",stage="main",type="registry"}
+  - alert: RegistryServiceGarbagecollectorTrafficCessationRegional
+    for: 5m
+    annotations:
+      title: The garbagecollector SLI of the registry service in region `{{ $labels.region
+        }}` has not received any traffic in the past 30 minutes
+      description: |
+        Aggregation of all container registry online garbage collection operations.
+
+        This alert signifies that the SLI is reporting a cessation of traffic, but the signal is not absent.
+
+        Note that this alert is specific to the `{{ $labels.region }}` region.
+      grafana_dashboard_id: registry-main/registry-overview
+      grafana_dashboard_link: https://dashboards.gitlab.net/d/registry-main/registry-overview?from=now-6h/m&to=now-1m/m&var-environment={{
+        $labels.environment }}&var-stage={{ $labels.stage }}
+      grafana_min_zoom_hours: "6"
+      grafana_panel_id: "3281014584"
+      grafana_variables: environment,stage
+      promql_template_1: |
+        sum by (env,environment,tier,stage) (
+          rate(registry_gc_runs_total{environment="{{ $labels.environment }}",stage="{{ $labels.stage }}",type="registry"}[5m])
+        )
+      runbook: docs/registry/README.md
+    labels:
+      aggregation: component
+      alert_class: traffic_cessation
+      alert_type: cause
+      feature_category: container_registry
+      pager: pagerduty
+      rules_domain: general
+      severity: s2
+      sli_type: ops
+      slo_alert: "no"
+      user_impacting: "no"
+    expr: |
+      gitlab_regional_sli_ops:rate_30m{component="garbagecollector",monitor="global",stage="main",type="registry"} == 0
+  - alert: RegistryServiceGarbagecollectorTrafficAbsentRegional
+    for: 30m
+    annotations:
+      title: The garbagecollector SLI of the registry service in region `{{ $labels.region
+        }}` has not reported any traffic in the past 30 minutes
+      description: |
+        Aggregation of all container registry online garbage collection operations.
+
+        This alert signifies that the SLI was previously reporting traffic, but is no longer - the signal is absent.
+
+        This could be caused by a change to the metrics used in the SLI, or by the service not receiving traffic.
+
+        Note that this alert is specific to the `{{ $labels.region }}` region.
+      grafana_dashboard_id: registry-main/registry-overview
+      grafana_dashboard_link: https://dashboards.gitlab.net/d/registry-main/registry-overview?from=now-6h/m&to=now-1m/m&var-environment={{
+        $labels.environment }}&var-stage={{ $labels.stage }}
+      grafana_min_zoom_hours: "6"
+      grafana_panel_id: "3281014584"
+      grafana_variables: environment,stage
+      promql_template_1: |
+        sum by (env,environment,tier,stage) (
+          rate(registry_gc_runs_total{environment="{{ $labels.environment }}",stage="{{ $labels.stage }}",type="registry"}[5m])
+        )
+      runbook: docs/registry/README.md
+    labels:
+      aggregation: component
+      alert_class: traffic_cessation
+      alert_type: cause
+      feature_category: container_registry
+      pager: pagerduty
+      rules_domain: general
+      severity: s2
+      sli_type: ops
+      slo_alert: "no"
+      user_impacting: "no"
+    expr: |
+      gitlab_regional_sli_ops:rate_5m{component="garbagecollector",monitor="global",stage="main",type="registry"} offset 1h
+      unless
+      gitlab_regional_sli_ops:rate_5m{component="garbagecollector",monitor="global",stage="main",type="registry"}
   - alert: RegistryServiceLoadbalancerErrorSLOViolation
     for: 2m
     annotations:
@@ -845,6 +993,98 @@ groups:
       (
         sum by(env,environment,tier,type,stage,component) (gitlab_component_ops:rate_6h{component="loadbalancer",monitor="global",type="registry"}) >= 0.16667
       )
+  - alert: RegistryServiceLoadbalancerErrorSLOViolationRegional
+    for: 2m
+    annotations:
+      title: The loadbalancer SLI of the registry service in region `{{ $labels.region
+        }}` has an error rate violating SLO
+      description: |
+        Measures aggregated HTTP request traffic through the HAProxy. 5xx responses are considered to be failures.
+
+        Note that this alert is specific to the `{{ $labels.region }}` region.
+
+        Currently the error-rate is {{ $value | humanizePercentage }}.
+      grafana_dashboard_id: registry-main/registry-overview
+      grafana_dashboard_link: https://dashboards.gitlab.net/d/registry-main/registry-overview?from=now-6h/m&to=now-1m/m&var-environment={{
+        $labels.environment }}&var-stage={{ $labels.stage }}
+      grafana_min_zoom_hours: "6"
+      grafana_panel_id: "3255520955"
+      grafana_variables: environment,stage
+      runbook: docs/registry/README.md
+    labels:
+      aggregation: regional_component
+      alert_class: slo_violation
+      alert_type: symptom
+      feature_category: container_registry
+      pager: pagerduty
+      rules_domain: general
+      severity: s2
+      sli_type: error
+      slo_alert: "yes"
+      user_impacting: "yes"
+      window: 1h
+    expr: |
+      (
+        (
+          gitlab_regional_sli_errors:ratio_1h{component="loadbalancer",monitor="global",type="registry"}
+          > (14.4 * 0.000100)
+        )
+        and
+        (
+          gitlab_regional_sli_errors:ratio_5m{component="loadbalancer",monitor="global",type="registry"}
+          > (14.4 * 0.000100)
+        )
+      )
+      and on(env,environment,tier,type,stage,region,component)
+      (
+        sum by(env,environment,tier,type,stage,region,component) (gitlab_regional_sli_ops:rate_1h{component="loadbalancer",monitor="global",type="registry"}) >= 1
+      )
+  - alert: RegistryServiceLoadbalancerErrorSLOViolationRegional
+    for: 2m
+    annotations:
+      title: The loadbalancer SLI of the registry service in region `{{ $labels.region
+        }}` has an error rate violating SLO
+      description: |
+        Measures aggregated HTTP request traffic through the HAProxy. 5xx responses are considered to be failures.
+
+        Note that this alert is specific to the `{{ $labels.region }}` region.
+
+        Currently the error-rate is {{ $value | humanizePercentage }}.
+      grafana_dashboard_id: registry-main/registry-overview
+      grafana_dashboard_link: https://dashboards.gitlab.net/d/registry-main/registry-overview?from=now-6h/m&to=now-1m/m&var-environment={{
+        $labels.environment }}&var-stage={{ $labels.stage }}
+      grafana_min_zoom_hours: "6"
+      grafana_panel_id: "3255520955"
+      grafana_variables: environment,stage
+      runbook: docs/registry/README.md
+    labels:
+      aggregation: regional_component
+      alert_class: slo_violation
+      alert_type: symptom
+      feature_category: container_registry
+      pager: pagerduty
+      rules_domain: general
+      severity: s2
+      sli_type: error
+      slo_alert: "yes"
+      user_impacting: "yes"
+      window: 6h
+    expr: |
+      (
+        (
+          gitlab_regional_sli_errors:ratio_6h{component="loadbalancer",monitor="global",type="registry"}
+          > (6 * 0.000100)
+        )
+        and
+        (
+          gitlab_regional_sli_errors:ratio_30m{component="loadbalancer",monitor="global",type="registry"}
+          > (6 * 0.000100)
+        )
+      )
+      and on(env,environment,tier,type,stage,region,component)
+      (
+        sum by(env,environment,tier,type,stage,region,component) (gitlab_regional_sli_ops:rate_6h{component="loadbalancer",monitor="global",type="registry"}) >= 0.16667
+      )
   - alert: RegistryServiceLoadbalancerTrafficCessation
     for: 5m
     annotations:
@@ -873,7 +1113,7 @@ groups:
       slo_alert: "no"
       user_impacting: "yes"
     expr: |
-      gitlab_component_ops:rate_30m{type="registry", component="loadbalancer", stage="main", monitor="global"} == 0
+      gitlab_component_ops:rate_30m{component="loadbalancer",monitor="global",stage="main",type="registry"} == 0
   - alert: RegistryServiceLoadbalancerTrafficAbsent
     for: 30m
     annotations:
@@ -904,9 +1144,75 @@ groups:
       slo_alert: "no"
       user_impacting: "yes"
     expr: |
-      gitlab_component_ops:rate_5m{type="registry", component="loadbalancer", stage="main", monitor="global"} offset 1h
+      gitlab_component_ops:rate_5m{component="loadbalancer",monitor="global",stage="main",type="registry"} offset 1h
       unless
-      gitlab_component_ops:rate_5m{type="registry", component="loadbalancer", stage="main", monitor="global"}
+      gitlab_component_ops:rate_5m{component="loadbalancer",monitor="global",stage="main",type="registry"}
+  - alert: RegistryServiceLoadbalancerTrafficCessationRegional
+    for: 5m
+    annotations:
+      title: The loadbalancer SLI of the registry service in region `{{ $labels.region
+        }}` has not received any traffic in the past 30 minutes
+      description: |
+        Measures aggregated HTTP request traffic through the HAProxy. 5xx responses are considered to be failures.
+
+        This alert signifies that the SLI is reporting a cessation of traffic, but the signal is not absent.
+
+        Note that this alert is specific to the `{{ $labels.region }}` region.
+      grafana_dashboard_id: registry-main/registry-overview
+      grafana_dashboard_link: https://dashboards.gitlab.net/d/registry-main/registry-overview?from=now-6h/m&to=now-1m/m&var-environment={{
+        $labels.environment }}&var-stage={{ $labels.stage }}
+      grafana_min_zoom_hours: "6"
+      grafana_panel_id: "138982496"
+      grafana_variables: environment,stage
+      runbook: docs/registry/README.md
+    labels:
+      aggregation: component
+      alert_class: traffic_cessation
+      alert_type: cause
+      feature_category: container_registry
+      pager: pagerduty
+      rules_domain: general
+      severity: s2
+      sli_type: ops
+      slo_alert: "no"
+      user_impacting: "yes"
+    expr: |
+      gitlab_regional_sli_ops:rate_30m{component="loadbalancer",monitor="global",stage="main",type="registry"} == 0
+  - alert: RegistryServiceLoadbalancerTrafficAbsentRegional
+    for: 30m
+    annotations:
+      title: The loadbalancer SLI of the registry service in region `{{ $labels.region
+        }}` has not reported any traffic in the past 30 minutes
+      description: |
+        Measures aggregated HTTP request traffic through the HAProxy. 5xx responses are considered to be failures.
+
+        This alert signifies that the SLI was previously reporting traffic, but is no longer - the signal is absent.
+
+        This could be caused by a change to the metrics used in the SLI, or by the service not receiving traffic.
+
+        Note that this alert is specific to the `{{ $labels.region }}` region.
+      grafana_dashboard_id: registry-main/registry-overview
+      grafana_dashboard_link: https://dashboards.gitlab.net/d/registry-main/registry-overview?from=now-6h/m&to=now-1m/m&var-environment={{
+        $labels.environment }}&var-stage={{ $labels.stage }}
+      grafana_min_zoom_hours: "6"
+      grafana_panel_id: "138982496"
+      grafana_variables: environment,stage
+      runbook: docs/registry/README.md
+    labels:
+      aggregation: component
+      alert_class: traffic_cessation
+      alert_type: cause
+      feature_category: container_registry
+      pager: pagerduty
+      rules_domain: general
+      severity: s2
+      sli_type: ops
+      slo_alert: "no"
+      user_impacting: "yes"
+    expr: |
+      gitlab_regional_sli_ops:rate_5m{component="loadbalancer",monitor="global",stage="main",type="registry"} offset 1h
+      unless
+      gitlab_regional_sli_ops:rate_5m{component="loadbalancer",monitor="global",stage="main",type="registry"}
   - alert: RegistryServiceServerApdexSLOViolation
     for: 2m
     annotations:
@@ -1343,7 +1649,7 @@ groups:
       slo_alert: "no"
       user_impacting: "yes"
     expr: |
-      gitlab_component_ops:rate_30m{type="registry", component="server", stage="main", monitor="global"} == 0
+      gitlab_component_ops:rate_30m{component="server",monitor="global",stage="main",type="registry"} == 0
   - alert: RegistryServiceServerTrafficAbsent
     for: 30m
     annotations:
@@ -1378,9 +1684,83 @@ groups:
       slo_alert: "no"
       user_impacting: "yes"
     expr: |
-      gitlab_component_ops:rate_5m{type="registry", component="server", stage="main", monitor="global"} offset 1h
+      gitlab_component_ops:rate_5m{component="server",monitor="global",stage="main",type="registry"} offset 1h
       unless
-      gitlab_component_ops:rate_5m{type="registry", component="server", stage="main", monitor="global"}
+      gitlab_component_ops:rate_5m{component="server",monitor="global",stage="main",type="registry"}
+  - alert: RegistryServiceServerTrafficCessationRegional
+    for: 5m
+    annotations:
+      title: The server SLI of the registry service in region `{{ $labels.region }}`
+        has not received any traffic in the past 30 minutes
+      description: |
+        Aggregation of all registry requests.
+
+        This alert signifies that the SLI is reporting a cessation of traffic, but the signal is not absent.
+
+        Note that this alert is specific to the `{{ $labels.region }}` region.
+      grafana_dashboard_id: registry-main/registry-overview
+      grafana_dashboard_link: https://dashboards.gitlab.net/d/registry-main/registry-overview?from=now-6h/m&to=now-1m/m&var-environment={{
+        $labels.environment }}&var-stage={{ $labels.stage }}
+      grafana_min_zoom_hours: "6"
+      grafana_panel_id: "2414183688"
+      grafana_variables: environment,stage
+      promql_template_1: |
+        sum by (env,environment,tier,stage) (
+          rate(registry_http_requests_total{environment="{{ $labels.environment }}",stage="{{ $labels.stage }}",type="registry"}[5m])
+        )
+      runbook: docs/registry/README.md
+    labels:
+      aggregation: component
+      alert_class: traffic_cessation
+      alert_type: cause
+      feature_category: container_registry
+      pager: pagerduty
+      rules_domain: general
+      severity: s2
+      sli_type: ops
+      slo_alert: "no"
+      user_impacting: "yes"
+    expr: |
+      gitlab_regional_sli_ops:rate_30m{component="server",monitor="global",stage="main",type="registry"} == 0
+  - alert: RegistryServiceServerTrafficAbsentRegional
+    for: 30m
+    annotations:
+      title: The server SLI of the registry service in region `{{ $labels.region }}`
+        has not reported any traffic in the past 30 minutes
+      description: |
+        Aggregation of all registry requests.
+
+        This alert signifies that the SLI was previously reporting traffic, but is no longer - the signal is absent.
+
+        This could be caused by a change to the metrics used in the SLI, or by the service not receiving traffic.
+
+        Note that this alert is specific to the `{{ $labels.region }}` region.
+      grafana_dashboard_id: registry-main/registry-overview
+      grafana_dashboard_link: https://dashboards.gitlab.net/d/registry-main/registry-overview?from=now-6h/m&to=now-1m/m&var-environment={{
+        $labels.environment }}&var-stage={{ $labels.stage }}
+      grafana_min_zoom_hours: "6"
+      grafana_panel_id: "2414183688"
+      grafana_variables: environment,stage
+      promql_template_1: |
+        sum by (env,environment,tier,stage) (
+          rate(registry_http_requests_total{environment="{{ $labels.environment }}",stage="{{ $labels.stage }}",type="registry"}[5m])
+        )
+      runbook: docs/registry/README.md
+    labels:
+      aggregation: component
+      alert_class: traffic_cessation
+      alert_type: cause
+      feature_category: container_registry
+      pager: pagerduty
+      rules_domain: general
+      severity: s2
+      sli_type: ops
+      slo_alert: "no"
+      user_impacting: "yes"
+    expr: |
+      gitlab_regional_sli_ops:rate_5m{component="server",monitor="global",stage="main",type="registry"} offset 1h
+      unless
+      gitlab_regional_sli_ops:rate_5m{component="server",monitor="global",stage="main",type="registry"}
   - alert: RegistryServiceServerRouteManifestReadsApdexSLOViolation
     for: 2m
     annotations:
@@ -1621,7 +2001,7 @@ groups:
       slo_alert: "no"
       user_impacting: "yes"
     expr: |
-      gitlab_component_ops:rate_30m{type="registry", component="server_route_manifest_reads", stage="main", monitor="global"} == 0
+      gitlab_component_ops:rate_30m{component="server_route_manifest_reads",monitor="global",stage="main",type="registry"} == 0
   - alert: RegistryServiceServerRouteManifestReadsTrafficAbsent
     for: 30m
     annotations:
@@ -1656,9 +2036,83 @@ groups:
       slo_alert: "no"
       user_impacting: "yes"
     expr: |
-      gitlab_component_ops:rate_5m{type="registry", component="server_route_manifest_reads", stage="main", monitor="global"} offset 1h
+      gitlab_component_ops:rate_5m{component="server_route_manifest_reads",monitor="global",stage="main",type="registry"} offset 1h
       unless
-      gitlab_component_ops:rate_5m{type="registry", component="server_route_manifest_reads", stage="main", monitor="global"}
+      gitlab_component_ops:rate_5m{component="server_route_manifest_reads",monitor="global",stage="main",type="registry"}
+  - alert: RegistryServiceServerRouteManifestReadsTrafficCessationRegional
+    for: 5m
+    annotations:
+      title: The server_route_manifest_reads SLI of the registry service in region
+        `{{ $labels.region }}` has not received any traffic in the past 30 minutes
+      description: |
+        All read-requests (HEAD or GET) for the manifest endpoints on the registry. Fetch the manifest identified by name and reference where reference can be a tag or digest. A HEAD request can also be issued to this endpoint to obtain resource information without receiving all data.
+
+        This alert signifies that the SLI is reporting a cessation of traffic, but the signal is not absent.
+
+        Note that this alert is specific to the `{{ $labels.region }}` region.
+      grafana_dashboard_id: registry-main/registry-overview
+      grafana_dashboard_link: https://dashboards.gitlab.net/d/registry-main/registry-overview?from=now-6h/m&to=now-1m/m&var-environment={{
+        $labels.environment }}&var-stage={{ $labels.stage }}
+      grafana_min_zoom_hours: "6"
+      grafana_panel_id: "3999566506"
+      grafana_variables: environment,stage
+      promql_template_1: |
+        sum by (env,environment,tier,stage) (
+          rate(registry_http_request_duration_seconds_count{environment="{{ $labels.environment }}",method=~"get|head",route="/v2/{name}/manifests/{reference}",stage="{{ $labels.stage }}"}[5m])
+        )
+      runbook: docs/registry/README.md
+    labels:
+      aggregation: component
+      alert_class: traffic_cessation
+      alert_type: cause
+      feature_category: container_registry
+      pager: pagerduty
+      rules_domain: general
+      severity: s2
+      sli_type: ops
+      slo_alert: "no"
+      user_impacting: "yes"
+    expr: |
+      gitlab_regional_sli_ops:rate_30m{component="server_route_manifest_reads",monitor="global",stage="main",type="registry"} == 0
+  - alert: RegistryServiceServerRouteManifestReadsTrafficAbsentRegional
+    for: 30m
+    annotations:
+      title: The server_route_manifest_reads SLI of the registry service in region
+        `{{ $labels.region }}` has not reported any traffic in the past 30 minutes
+      description: |
+        All read-requests (HEAD or GET) for the manifest endpoints on the registry. Fetch the manifest identified by name and reference where reference can be a tag or digest. A HEAD request can also be issued to this endpoint to obtain resource information without receiving all data.
+
+        This alert signifies that the SLI was previously reporting traffic, but is no longer - the signal is absent.
+
+        This could be caused by a change to the metrics used in the SLI, or by the service not receiving traffic.
+
+        Note that this alert is specific to the `{{ $labels.region }}` region.
+      grafana_dashboard_id: registry-main/registry-overview
+      grafana_dashboard_link: https://dashboards.gitlab.net/d/registry-main/registry-overview?from=now-6h/m&to=now-1m/m&var-environment={{
+        $labels.environment }}&var-stage={{ $labels.stage }}
+      grafana_min_zoom_hours: "6"
+      grafana_panel_id: "3999566506"
+      grafana_variables: environment,stage
+      promql_template_1: |
+        sum by (env,environment,tier,stage) (
+          rate(registry_http_request_duration_seconds_count{environment="{{ $labels.environment }}",method=~"get|head",route="/v2/{name}/manifests/{reference}",stage="{{ $labels.stage }}"}[5m])
+        )
+      runbook: docs/registry/README.md
+    labels:
+      aggregation: component
+      alert_class: traffic_cessation
+      alert_type: cause
+      feature_category: container_registry
+      pager: pagerduty
+      rules_domain: general
+      severity: s2
+      sli_type: ops
+      slo_alert: "no"
+      user_impacting: "yes"
+    expr: |
+      gitlab_regional_sli_ops:rate_5m{component="server_route_manifest_reads",monitor="global",stage="main",type="registry"} offset 1h
+      unless
+      gitlab_regional_sli_ops:rate_5m{component="server_route_manifest_reads",monitor="global",stage="main",type="registry"}
   - alert: RegistryServiceServerRouteManifestWritesApdexSLOViolation
     for: 2m
     annotations:
@@ -1919,7 +2373,7 @@ groups:
       slo_alert: "no"
       user_impacting: "yes"
     expr: |
-      gitlab_component_ops:rate_30m{type="registry", component="server_route_manifest_writes", stage="main", monitor="global"} == 0
+      gitlab_component_ops:rate_30m{component="server_route_manifest_writes",monitor="global",stage="main",type="registry"} == 0
   - alert: RegistryServiceServerRouteManifestWritesTrafficAbsent
     for: 30m
     annotations:
@@ -1958,6 +2412,88 @@ groups:
       slo_alert: "no"
       user_impacting: "yes"
     expr: |
-      gitlab_component_ops:rate_5m{type="registry", component="server_route_manifest_writes", stage="main", monitor="global"} offset 1h
+      gitlab_component_ops:rate_5m{component="server_route_manifest_writes",monitor="global",stage="main",type="registry"} offset 1h
       unless
-      gitlab_component_ops:rate_5m{type="registry", component="server_route_manifest_writes", stage="main", monitor="global"}
+      gitlab_component_ops:rate_5m{component="server_route_manifest_writes",monitor="global",stage="main",type="registry"}
+  - alert: RegistryServiceServerRouteManifestWritesTrafficCessationRegional
+    for: 5m
+    annotations:
+      title: The server_route_manifest_writes SLI of the registry service in region
+        `{{ $labels.region }}` has not received any traffic in the past 30 minutes
+      description: |
+        All write-requests (put, delete) for the manifest endpoints on the registry.
+
+        Put the manifest identified by name and reference where reference can be a tag or digest.
+
+        Delete the manifest identified by name and reference. Note that a manifest can only be deleted by digest.
+
+        This alert signifies that the SLI is reporting a cessation of traffic, but the signal is not absent.
+
+        Note that this alert is specific to the `{{ $labels.region }}` region.
+      grafana_dashboard_id: registry-main/registry-overview
+      grafana_dashboard_link: https://dashboards.gitlab.net/d/registry-main/registry-overview?from=now-6h/m&to=now-1m/m&var-environment={{
+        $labels.environment }}&var-stage={{ $labels.stage }}
+      grafana_min_zoom_hours: "6"
+      grafana_panel_id: "1199706222"
+      grafana_variables: environment,stage
+      promql_template_1: |
+        sum by (env,environment,tier,stage) (
+          rate(registry_http_request_duration_seconds_count{environment="{{ $labels.environment }}",method=~"put|delete|post|patch",route="/v2/{name}/manifests/{reference}",stage="{{ $labels.stage }}"}[5m])
+        )
+      runbook: docs/registry/README.md
+    labels:
+      aggregation: component
+      alert_class: traffic_cessation
+      alert_type: cause
+      feature_category: container_registry
+      pager: pagerduty
+      rules_domain: general
+      severity: s2
+      sli_type: ops
+      slo_alert: "no"
+      user_impacting: "yes"
+    expr: |
+      gitlab_regional_sli_ops:rate_30m{component="server_route_manifest_writes",monitor="global",stage="main",type="registry"} == 0
+  - alert: RegistryServiceServerRouteManifestWritesTrafficAbsentRegional
+    for: 30m
+    annotations:
+      title: The server_route_manifest_writes SLI of the registry service in region
+        `{{ $labels.region }}` has not reported any traffic in the past 30 minutes
+      description: |
+        All write-requests (put, delete) for the manifest endpoints on the registry.
+
+        Put the manifest identified by name and reference where reference can be a tag or digest.
+
+        Delete the manifest identified by name and reference. Note that a manifest can only be deleted by digest.
+
+        This alert signifies that the SLI was previously reporting traffic, but is no longer - the signal is absent.
+
+        This could be caused by a change to the metrics used in the SLI, or by the service not receiving traffic.
+
+        Note that this alert is specific to the `{{ $labels.region }}` region.
+      grafana_dashboard_id: registry-main/registry-overview
+      grafana_dashboard_link: https://dashboards.gitlab.net/d/registry-main/registry-overview?from=now-6h/m&to=now-1m/m&var-environment={{
+        $labels.environment }}&var-stage={{ $labels.stage }}
+      grafana_min_zoom_hours: "6"
+      grafana_panel_id: "1199706222"
+      grafana_variables: environment,stage
+      promql_template_1: |
+        sum by (env,environment,tier,stage) (
+          rate(registry_http_request_duration_seconds_count{environment="{{ $labels.environment }}",method=~"put|delete|post|patch",route="/v2/{name}/manifests/{reference}",stage="{{ $labels.stage }}"}[5m])
+        )
+      runbook: docs/registry/README.md
+    labels:
+      aggregation: component
+      alert_class: traffic_cessation
+      alert_type: cause
+      feature_category: container_registry
+      pager: pagerduty
+      rules_domain: general
+      severity: s2
+      sli_type: ops
+      slo_alert: "no"
+      user_impacting: "yes"
+    expr: |
+      gitlab_regional_sli_ops:rate_5m{component="server_route_manifest_writes",monitor="global",stage="main",type="registry"} offset 1h
+      unless
+      gitlab_regional_sli_ops:rate_5m{component="server_route_manifest_writes",monitor="global",stage="main",type="registry"}

@@ -139,7 +139,7 @@ groups:
       slo_alert: "no"
       user_impacting: "yes"
     expr: |
-      gitlab_component_ops:rate_30m{type="google-cloud-storage", component="pages_range_requests", stage="main", monitor="global"} == 0
+      gitlab_component_ops:rate_30m{component="pages_range_requests",monitor="global",stage="main",type="google-cloud-storage"} == 0
   - alert: GoogleCloudStorageServicePagesRangeRequestsTrafficAbsent
     for: 30m
     annotations:
@@ -174,9 +174,9 @@ groups:
       slo_alert: "no"
       user_impacting: "yes"
     expr: |
-      gitlab_component_ops:rate_5m{type="google-cloud-storage", component="pages_range_requests", stage="main", monitor="global"} offset 1h
+      gitlab_component_ops:rate_5m{component="pages_range_requests",monitor="global",stage="main",type="google-cloud-storage"} offset 1h
       unless
-      gitlab_component_ops:rate_5m{type="google-cloud-storage", component="pages_range_requests", stage="main", monitor="global"}
+      gitlab_component_ops:rate_5m{component="pages_range_requests",monitor="global",stage="main",type="google-cloud-storage"}
   - alert: GoogleCloudStorageServicePagesRequestDurationApdexSLOViolation
     for: 2m
     annotations:
@@ -311,7 +311,7 @@ groups:
       slo_alert: "no"
       user_impacting: "yes"
     expr: |
-      gitlab_component_ops:rate_30m{type="google-cloud-storage", component="pages_request_duration", stage="main", monitor="global"} == 0
+      gitlab_component_ops:rate_30m{component="pages_request_duration",monitor="global",stage="main",type="google-cloud-storage"} == 0
   - alert: GoogleCloudStorageServicePagesRequestDurationTrafficAbsent
     for: 30m
     annotations:
@@ -346,9 +346,9 @@ groups:
       slo_alert: "no"
       user_impacting: "yes"
     expr: |
-      gitlab_component_ops:rate_5m{type="google-cloud-storage", component="pages_request_duration", stage="main", monitor="global"} offset 1h
+      gitlab_component_ops:rate_5m{component="pages_request_duration",monitor="global",stage="main",type="google-cloud-storage"} offset 1h
       unless
-      gitlab_component_ops:rate_5m{type="google-cloud-storage", component="pages_request_duration", stage="main", monitor="global"}
+      gitlab_component_ops:rate_5m{component="pages_request_duration",monitor="global",stage="main",type="google-cloud-storage"}
   - alert: GoogleCloudStorageServicePagesTotalRequestsTrafficCessation
     for: 5m
     annotations:
@@ -381,7 +381,7 @@ groups:
       slo_alert: "no"
       user_impacting: "yes"
     expr: |
-      gitlab_component_ops:rate_30m{type="google-cloud-storage", component="pages_total_requests", stage="main", monitor="global"} == 0
+      gitlab_component_ops:rate_30m{component="pages_total_requests",monitor="global",stage="main",type="google-cloud-storage"} == 0
   - alert: GoogleCloudStorageServicePagesTotalRequestsTrafficAbsent
     for: 30m
     annotations:
@@ -416,9 +416,9 @@ groups:
       slo_alert: "no"
       user_impacting: "yes"
     expr: |
-      gitlab_component_ops:rate_5m{type="google-cloud-storage", component="pages_total_requests", stage="main", monitor="global"} offset 1h
+      gitlab_component_ops:rate_5m{component="pages_total_requests",monitor="global",stage="main",type="google-cloud-storage"} offset 1h
       unless
-      gitlab_component_ops:rate_5m{type="google-cloud-storage", component="pages_total_requests", stage="main", monitor="global"}
+      gitlab_component_ops:rate_5m{component="pages_total_requests",monitor="global",stage="main",type="google-cloud-storage"}
   - alert: GoogleCloudStorageServiceRegistryStorageApdexSLOViolation
     for: 2m
     annotations:
@@ -553,7 +553,7 @@ groups:
       slo_alert: "no"
       user_impacting: "yes"
     expr: |
-      gitlab_component_ops:rate_30m{type="google-cloud-storage", component="registry_storage", stage="main", monitor="global"} == 0
+      gitlab_component_ops:rate_30m{component="registry_storage",monitor="global",stage="main",type="google-cloud-storage"} == 0
   - alert: GoogleCloudStorageServiceRegistryStorageTrafficAbsent
     for: 30m
     annotations:
@@ -588,9 +588,9 @@ groups:
       slo_alert: "no"
       user_impacting: "yes"
     expr: |
-      gitlab_component_ops:rate_5m{type="google-cloud-storage", component="registry_storage", stage="main", monitor="global"} offset 1h
+      gitlab_component_ops:rate_5m{component="registry_storage",monitor="global",stage="main",type="google-cloud-storage"} offset 1h
       unless
-      gitlab_component_ops:rate_5m{type="google-cloud-storage", component="registry_storage", stage="main", monitor="global"}
+      gitlab_component_ops:rate_5m{component="registry_storage",monitor="global",stage="main",type="google-cloud-storage"}
   - alert: GoogleCloudStorageServiceWorkhorseUploadApdexSLOViolation
     for: 2m
     annotations:
@@ -821,7 +821,7 @@ groups:
       slo_alert: "no"
       user_impacting: "yes"
     expr: |
-      gitlab_component_ops:rate_30m{type="google-cloud-storage", component="workhorse_upload", stage="main", monitor="global"} == 0
+      gitlab_component_ops:rate_30m{component="workhorse_upload",monitor="global",stage="main",type="google-cloud-storage"} == 0
   - alert: GoogleCloudStorageServiceWorkhorseUploadTrafficAbsent
     for: 30m
     annotations:
@@ -856,6 +856,6 @@ groups:
       slo_alert: "no"
       user_impacting: "yes"
     expr: |
-      gitlab_component_ops:rate_5m{type="google-cloud-storage", component="workhorse_upload", stage="main", monitor="global"} offset 1h
+      gitlab_component_ops:rate_5m{component="workhorse_upload",monitor="global",stage="main",type="google-cloud-storage"} offset 1h
       unless
-      gitlab_component_ops:rate_5m{type="google-cloud-storage", component="workhorse_upload", stage="main", monitor="global"}
+      gitlab_component_ops:rate_5m{component="workhorse_upload",monitor="global",stage="main",type="google-cloud-storage"}

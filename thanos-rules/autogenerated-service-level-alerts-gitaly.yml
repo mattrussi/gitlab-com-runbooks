@@ -441,7 +441,7 @@ groups:
       slo_alert: "no"
       user_impacting: "yes"
     expr: |
-      gitlab_component_ops:rate_30m{type="gitaly", component="gitalyruby", stage="main", monitor="global"} == 0
+      gitlab_component_ops:rate_30m{component="gitalyruby",monitor="global",stage="main",type="gitaly"} == 0
   - alert: GitalyServiceGitalyrubyTrafficAbsent
     for: 30m
     annotations:
@@ -476,9 +476,83 @@ groups:
       slo_alert: "no"
       user_impacting: "yes"
     expr: |
-      gitlab_component_ops:rate_5m{type="gitaly", component="gitalyruby", stage="main", monitor="global"} offset 1h
+      gitlab_component_ops:rate_5m{component="gitalyruby",monitor="global",stage="main",type="gitaly"} offset 1h
       unless
-      gitlab_component_ops:rate_5m{type="gitaly", component="gitalyruby", stage="main", monitor="global"}
+      gitlab_component_ops:rate_5m{component="gitalyruby",monitor="global",stage="main",type="gitaly"}
+  - alert: GitalyServiceGitalyrubyTrafficCessationSingleNode
+    for: 5m
+    annotations:
+      title: The gitalyruby SLI of the gitaly service on node `{{ $labels.fqdn }}`
+        has not received any traffic in the past 30 minutes
+      description: |
+        This SLI monitors requests to Gitaly's Ruby sidecar, known as Gitaly-Ruby. All requests made to Gitaly-Ruby are monitored in aggregate, via its GRPC interface.
+
+        This alert signifies that the SLI is reporting a cessation of traffic, but the signal is not absent.
+
+        Since the `{{ $labels.type }}` service is not fully redundant, SLI violations on a single node may represent a user-impacting service degradation.
+      grafana_dashboard_id: gitaly-main/gitaly-overview
+      grafana_dashboard_link: https://dashboards.gitlab.net/d/gitaly-main/gitaly-overview?from=now-6h/m&to=now-1m/m&var-environment={{
+        $labels.environment }}&var-stage={{ $labels.stage }}
+      grafana_min_zoom_hours: "6"
+      grafana_panel_id: "2219036706"
+      grafana_variables: environment,stage
+      promql_template_1: |
+        sum by (env,environment,tier,stage) (
+          rate(grpc_client_handled_total{environment="{{ $labels.environment }}",job="gitaly",stage="{{ $labels.stage }}"}[5m])
+        )
+      runbook: docs/gitaly/README.md
+    labels:
+      aggregation: component
+      alert_class: traffic_cessation
+      alert_type: cause
+      feature_category: gitaly
+      pager: pagerduty
+      rules_domain: general
+      severity: s2
+      sli_type: ops
+      slo_alert: "no"
+      user_impacting: "yes"
+    expr: |
+      gitlab_component_node_ops:rate_30m{component="gitalyruby",monitor="global",type="gitaly"} == 0
+  - alert: GitalyServiceGitalyrubyTrafficAbsentSingleNode
+    for: 30m
+    annotations:
+      title: The gitalyruby SLI of the gitaly service on node `{{ $labels.fqdn }}`
+        has not reported any traffic in the past 30 minutes
+      description: |
+        This SLI monitors requests to Gitaly's Ruby sidecar, known as Gitaly-Ruby. All requests made to Gitaly-Ruby are monitored in aggregate, via its GRPC interface.
+
+        This alert signifies that the SLI was previously reporting traffic, but is no longer - the signal is absent.
+
+        This could be caused by a change to the metrics used in the SLI, or by the service not receiving traffic.
+
+        Since the `{{ $labels.type }}` service is not fully redundant, SLI violations on a single node may represent a user-impacting service degradation.
+      grafana_dashboard_id: gitaly-main/gitaly-overview
+      grafana_dashboard_link: https://dashboards.gitlab.net/d/gitaly-main/gitaly-overview?from=now-6h/m&to=now-1m/m&var-environment={{
+        $labels.environment }}&var-stage={{ $labels.stage }}
+      grafana_min_zoom_hours: "6"
+      grafana_panel_id: "2219036706"
+      grafana_variables: environment,stage
+      promql_template_1: |
+        sum by (env,environment,tier,stage) (
+          rate(grpc_client_handled_total{environment="{{ $labels.environment }}",job="gitaly",stage="{{ $labels.stage }}"}[5m])
+        )
+      runbook: docs/gitaly/README.md
+    labels:
+      aggregation: component
+      alert_class: traffic_cessation
+      alert_type: cause
+      feature_category: gitaly
+      pager: pagerduty
+      rules_domain: general
+      severity: s2
+      sli_type: ops
+      slo_alert: "no"
+      user_impacting: "yes"
+    expr: |
+      gitlab_component_node_ops:rate_5m{component="gitalyruby",monitor="global",type="gitaly"} offset 1h
+      unless
+      gitlab_component_node_ops:rate_5m{component="gitalyruby",monitor="global",type="gitaly"}
   - alert: GitalyServiceGoserverApdexSLOViolation
     for: 2m
     annotations:
@@ -923,7 +997,7 @@ groups:
       slo_alert: "no"
       user_impacting: "yes"
     expr: |
-      gitlab_component_ops:rate_30m{type="gitaly", component="goserver", stage="main", monitor="global"} == 0
+      gitlab_component_ops:rate_30m{component="goserver",monitor="global",stage="main",type="gitaly"} == 0
   - alert: GitalyServiceGoserverTrafficAbsent
     for: 30m
     annotations:
@@ -958,9 +1032,83 @@ groups:
       slo_alert: "no"
       user_impacting: "yes"
     expr: |
-      gitlab_component_ops:rate_5m{type="gitaly", component="goserver", stage="main", monitor="global"} offset 1h
+      gitlab_component_ops:rate_5m{component="goserver",monitor="global",stage="main",type="gitaly"} offset 1h
       unless
-      gitlab_component_ops:rate_5m{type="gitaly", component="goserver", stage="main", monitor="global"}
+      gitlab_component_ops:rate_5m{component="goserver",monitor="global",stage="main",type="gitaly"}
+  - alert: GitalyServiceGoserverTrafficCessationSingleNode
+    for: 5m
+    annotations:
+      title: The goserver SLI of the gitaly service on node `{{ $labels.fqdn }}` has
+        not received any traffic in the past 30 minutes
+      description: |
+        This SLI monitors all Gitaly GRPC requests in aggregate, excluding the OperationService. GRPC failures which are considered to be the "server's fault" are counted as errors. The apdex score is based on a subset of GRPC methods which are expected to be fast.
+
+        This alert signifies that the SLI is reporting a cessation of traffic, but the signal is not absent.
+
+        Since the `{{ $labels.type }}` service is not fully redundant, SLI violations on a single node may represent a user-impacting service degradation.
+      grafana_dashboard_id: gitaly-main/gitaly-overview
+      grafana_dashboard_link: https://dashboards.gitlab.net/d/gitaly-main/gitaly-overview?from=now-6h/m&to=now-1m/m&var-environment={{
+        $labels.environment }}&var-stage={{ $labels.stage }}
+      grafana_min_zoom_hours: "6"
+      grafana_panel_id: "1687078843"
+      grafana_variables: environment,stage
+      promql_template_1: |
+        sum by (env,environment,tier,stage) (
+          rate(gitaly_service_client_requests_total{environment="{{ $labels.environment }}",grpc_service!="gitaly.OperationService",job="gitaly",stage="{{ $labels.stage }}"}[5m])
+        )
+      runbook: docs/gitaly/README.md
+    labels:
+      aggregation: component
+      alert_class: traffic_cessation
+      alert_type: cause
+      feature_category: gitaly
+      pager: pagerduty
+      rules_domain: general
+      severity: s2
+      sli_type: ops
+      slo_alert: "no"
+      user_impacting: "yes"
+    expr: |
+      gitlab_component_node_ops:rate_30m{component="goserver",monitor="global",type="gitaly"} == 0
+  - alert: GitalyServiceGoserverTrafficAbsentSingleNode
+    for: 30m
+    annotations:
+      title: The goserver SLI of the gitaly service on node `{{ $labels.fqdn }}` has
+        not reported any traffic in the past 30 minutes
+      description: |
+        This SLI monitors all Gitaly GRPC requests in aggregate, excluding the OperationService. GRPC failures which are considered to be the "server's fault" are counted as errors. The apdex score is based on a subset of GRPC methods which are expected to be fast.
+
+        This alert signifies that the SLI was previously reporting traffic, but is no longer - the signal is absent.
+
+        This could be caused by a change to the metrics used in the SLI, or by the service not receiving traffic.
+
+        Since the `{{ $labels.type }}` service is not fully redundant, SLI violations on a single node may represent a user-impacting service degradation.
+      grafana_dashboard_id: gitaly-main/gitaly-overview
+      grafana_dashboard_link: https://dashboards.gitlab.net/d/gitaly-main/gitaly-overview?from=now-6h/m&to=now-1m/m&var-environment={{
+        $labels.environment }}&var-stage={{ $labels.stage }}
+      grafana_min_zoom_hours: "6"
+      grafana_panel_id: "1687078843"
+      grafana_variables: environment,stage
+      promql_template_1: |
+        sum by (env,environment,tier,stage) (
+          rate(gitaly_service_client_requests_total{environment="{{ $labels.environment }}",grpc_service!="gitaly.OperationService",job="gitaly",stage="{{ $labels.stage }}"}[5m])
+        )
+      runbook: docs/gitaly/README.md
+    labels:
+      aggregation: component
+      alert_class: traffic_cessation
+      alert_type: cause
+      feature_category: gitaly
+      pager: pagerduty
+      rules_domain: general
+      severity: s2
+      sli_type: ops
+      slo_alert: "no"
+      user_impacting: "yes"
+    expr: |
+      gitlab_component_node_ops:rate_5m{component="goserver",monitor="global",type="gitaly"} offset 1h
+      unless
+      gitlab_component_node_ops:rate_5m{component="goserver",monitor="global",type="gitaly"}
   - alert: GitalyServiceGoserverOpServiceErrorSLOViolation
     for: 2m
     annotations:
@@ -1197,7 +1345,7 @@ groups:
       slo_alert: "no"
       user_impacting: "yes"
     expr: |
-      gitlab_component_ops:rate_30m{type="gitaly", component="goserver_op_service", stage="main", monitor="global"} == 0
+      gitlab_component_ops:rate_30m{component="goserver_op_service",monitor="global",stage="main",type="gitaly"} == 0
   - alert: GitalyServiceGoserverOpServiceTrafficAbsent
     for: 30m
     annotations:
@@ -1232,6 +1380,80 @@ groups:
       slo_alert: "no"
       user_impacting: "yes"
     expr: |
-      gitlab_component_ops:rate_5m{type="gitaly", component="goserver_op_service", stage="main", monitor="global"} offset 1h
+      gitlab_component_ops:rate_5m{component="goserver_op_service",monitor="global",stage="main",type="gitaly"} offset 1h
       unless
-      gitlab_component_ops:rate_5m{type="gitaly", component="goserver_op_service", stage="main", monitor="global"}
+      gitlab_component_ops:rate_5m{component="goserver_op_service",monitor="global",stage="main",type="gitaly"}
+  - alert: GitalyServiceGoserverOpServiceTrafficCessationSingleNode
+    for: 5m
+    annotations:
+      title: The goserver_op_service SLI of the gitaly service on node `{{ $labels.fqdn
+        }}` has not received any traffic in the past 30 minutes
+      description: |
+        This SLI monitors requests to Gitaly's OperationService, via its GRPC endpoint. OperationService methods are generally expected to be slower than other Gitaly endpoints and this is reflected in the SLI.
+
+        This alert signifies that the SLI is reporting a cessation of traffic, but the signal is not absent.
+
+        Since the `{{ $labels.type }}` service is not fully redundant, SLI violations on a single node may represent a user-impacting service degradation.
+      grafana_dashboard_id: gitaly-main/gitaly-overview
+      grafana_dashboard_link: https://dashboards.gitlab.net/d/gitaly-main/gitaly-overview?from=now-6h/m&to=now-1m/m&var-environment={{
+        $labels.environment }}&var-stage={{ $labels.stage }}
+      grafana_min_zoom_hours: "6"
+      grafana_panel_id: "1897473754"
+      grafana_variables: environment,stage
+      promql_template_1: |
+        sum by (env,environment,tier,stage) (
+          rate(gitaly_service_client_requests_total{environment="{{ $labels.environment }}",grpc_service="gitaly.OperationService",job="gitaly",stage="{{ $labels.stage }}"}[5m])
+        )
+      runbook: docs/gitaly/README.md
+    labels:
+      aggregation: component
+      alert_class: traffic_cessation
+      alert_type: cause
+      feature_category: gitaly
+      pager: pagerduty
+      rules_domain: general
+      severity: s2
+      sli_type: ops
+      slo_alert: "no"
+      user_impacting: "yes"
+    expr: |
+      gitlab_component_node_ops:rate_30m{component="goserver_op_service",monitor="global",type="gitaly"} == 0
+  - alert: GitalyServiceGoserverOpServiceTrafficAbsentSingleNode
+    for: 30m
+    annotations:
+      title: The goserver_op_service SLI of the gitaly service on node `{{ $labels.fqdn
+        }}` has not reported any traffic in the past 30 minutes
+      description: |
+        This SLI monitors requests to Gitaly's OperationService, via its GRPC endpoint. OperationService methods are generally expected to be slower than other Gitaly endpoints and this is reflected in the SLI.
+
+        This alert signifies that the SLI was previously reporting traffic, but is no longer - the signal is absent.
+
+        This could be caused by a change to the metrics used in the SLI, or by the service not receiving traffic.
+
+        Since the `{{ $labels.type }}` service is not fully redundant, SLI violations on a single node may represent a user-impacting service degradation.
+      grafana_dashboard_id: gitaly-main/gitaly-overview
+      grafana_dashboard_link: https://dashboards.gitlab.net/d/gitaly-main/gitaly-overview?from=now-6h/m&to=now-1m/m&var-environment={{
+        $labels.environment }}&var-stage={{ $labels.stage }}
+      grafana_min_zoom_hours: "6"
+      grafana_panel_id: "1897473754"
+      grafana_variables: environment,stage
+      promql_template_1: |
+        sum by (env,environment,tier,stage) (
+          rate(gitaly_service_client_requests_total{environment="{{ $labels.environment }}",grpc_service="gitaly.OperationService",job="gitaly",stage="{{ $labels.stage }}"}[5m])
+        )
+      runbook: docs/gitaly/README.md
+    labels:
+      aggregation: component
+      alert_class: traffic_cessation
+      alert_type: cause
+      feature_category: gitaly
+      pager: pagerduty
+      rules_domain: general
+      severity: s2
+      sli_type: ops
+      slo_alert: "no"
+      user_impacting: "yes"
+    expr: |
+      gitlab_component_node_ops:rate_5m{component="goserver_op_service",monitor="global",type="gitaly"} offset 1h
+      unless
+      gitlab_component_node_ops:rate_5m{component="goserver_op_service",monitor="global",type="gitaly"}

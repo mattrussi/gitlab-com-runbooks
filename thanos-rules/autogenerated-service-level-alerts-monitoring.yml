@@ -133,7 +133,7 @@ groups:
       slo_alert: "no"
       user_impacting: "yes"
     expr: |
-      gitlab_component_ops:rate_30m{type="monitoring", component="grafana_cloudsql", stage="main", monitor="global"} == 0
+      gitlab_component_ops:rate_30m{component="grafana_cloudsql",monitor="global",stage="main",type="monitoring"} == 0
   - alert: MonitoringServiceGrafanaCloudsqlTrafficAbsent
     for: 30m
     annotations:
@@ -168,9 +168,9 @@ groups:
       slo_alert: "no"
       user_impacting: "yes"
     expr: |
-      gitlab_component_ops:rate_5m{type="monitoring", component="grafana_cloudsql", stage="main", monitor="global"} offset 1h
+      gitlab_component_ops:rate_5m{component="grafana_cloudsql",monitor="global",stage="main",type="monitoring"} offset 1h
       unless
-      gitlab_component_ops:rate_5m{type="monitoring", component="grafana_cloudsql", stage="main", monitor="global"}
+      gitlab_component_ops:rate_5m{component="grafana_cloudsql",monitor="global",stage="main",type="monitoring"}
   - alert: MonitoringServiceGrafanaGoogleLbErrorSLOViolation
     for: 2m
     annotations:
@@ -691,7 +691,7 @@ groups:
       slo_alert: "no"
       user_impacting: "yes"
     expr: |
-      gitlab_component_ops:rate_30m{type="monitoring", component="prometheus", stage="main", monitor="global"} == 0
+      gitlab_component_ops:rate_30m{component="prometheus",monitor="global",stage="main",type="monitoring"} == 0
   - alert: MonitoringServicePrometheusTrafficAbsent
     for: 30m
     annotations:
@@ -726,9 +726,9 @@ groups:
       slo_alert: "no"
       user_impacting: "yes"
     expr: |
-      gitlab_component_ops:rate_5m{type="monitoring", component="prometheus", stage="main", monitor="global"} offset 1h
+      gitlab_component_ops:rate_5m{component="prometheus",monitor="global",stage="main",type="monitoring"} offset 1h
       unless
-      gitlab_component_ops:rate_5m{type="monitoring", component="prometheus", stage="main", monitor="global"}
+      gitlab_component_ops:rate_5m{component="prometheus",monitor="global",stage="main",type="monitoring"}
   - alert: MonitoringServicePrometheusAlertSenderErrorSLOViolation
     for: 2m
     annotations:
@@ -857,7 +857,7 @@ groups:
       slo_alert: "no"
       user_impacting: "yes"
     expr: |
-      gitlab_component_ops:rate_30m{type="monitoring", component="prometheus_alert_sender", stage="main", monitor="global"} == 0
+      gitlab_component_ops:rate_30m{component="prometheus_alert_sender",monitor="global",stage="main",type="monitoring"} == 0
   - alert: MonitoringServicePrometheusAlertSenderTrafficAbsent
     for: 30m
     annotations:
@@ -892,9 +892,9 @@ groups:
       slo_alert: "no"
       user_impacting: "yes"
     expr: |
-      gitlab_component_ops:rate_5m{type="monitoring", component="prometheus_alert_sender", stage="main", monitor="global"} offset 1h
+      gitlab_component_ops:rate_5m{component="prometheus_alert_sender",monitor="global",stage="main",type="monitoring"} offset 1h
       unless
-      gitlab_component_ops:rate_5m{type="monitoring", component="prometheus_alert_sender", stage="main", monitor="global"}
+      gitlab_component_ops:rate_5m{component="prometheus_alert_sender",monitor="global",stage="main",type="monitoring"}
   - alert: MonitoringServiceRuleEvaluationErrorSLOViolation
     for: 2m
     annotations:
@@ -1023,7 +1023,7 @@ groups:
       slo_alert: "no"
       user_impacting: "yes"
     expr: |
-      gitlab_component_ops:rate_30m{type="monitoring", component="rule_evaluation", stage="main", monitor="global"} == 0
+      gitlab_component_ops:rate_30m{component="rule_evaluation",monitor="global",stage="main",type="monitoring"} == 0
   - alert: MonitoringServiceRuleEvaluationTrafficAbsent
     for: 30m
     annotations:
@@ -1058,9 +1058,9 @@ groups:
       slo_alert: "no"
       user_impacting: "yes"
     expr: |
-      gitlab_component_ops:rate_5m{type="monitoring", component="rule_evaluation", stage="main", monitor="global"} offset 1h
+      gitlab_component_ops:rate_5m{component="rule_evaluation",monitor="global",stage="main",type="monitoring"} offset 1h
       unless
-      gitlab_component_ops:rate_5m{type="monitoring", component="rule_evaluation", stage="main", monitor="global"}
+      gitlab_component_ops:rate_5m{component="rule_evaluation",monitor="global",stage="main",type="monitoring"}
   - alert: MonitoringServiceThanosCompactorErrorSLOViolation
     for: 2m
     annotations:
@@ -1585,7 +1585,7 @@ groups:
       slo_alert: "no"
       user_impacting: "no"
     expr: |
-      gitlab_component_ops:rate_30m{type="monitoring", component="thanos_query", stage="main", monitor="global"} == 0
+      gitlab_component_ops:rate_30m{component="thanos_query",monitor="global",stage="main",type="monitoring"} == 0
   - alert: MonitoringServiceThanosQueryTrafficAbsent
     for: 30m
     annotations:
@@ -1620,9 +1620,9 @@ groups:
       slo_alert: "no"
       user_impacting: "no"
     expr: |
-      gitlab_component_ops:rate_5m{type="monitoring", component="thanos_query", stage="main", monitor="global"} offset 1h
+      gitlab_component_ops:rate_5m{component="thanos_query",monitor="global",stage="main",type="monitoring"} offset 1h
       unless
-      gitlab_component_ops:rate_5m{type="monitoring", component="thanos_query", stage="main", monitor="global"}
+      gitlab_component_ops:rate_5m{component="thanos_query",monitor="global",stage="main",type="monitoring"}
   - alert: MonitoringServiceThanosQueryFrontendApdexSLOViolation
     for: 2m
     annotations:
@@ -1853,7 +1853,7 @@ groups:
       slo_alert: "no"
       user_impacting: "no"
     expr: |
-      gitlab_component_ops:rate_30m{type="monitoring", component="thanos_query_frontend", stage="main", monitor="global"} == 0
+      gitlab_component_ops:rate_30m{component="thanos_query_frontend",monitor="global",stage="main",type="monitoring"} == 0
   - alert: MonitoringServiceThanosQueryFrontendTrafficAbsent
     for: 30m
     annotations:
@@ -1888,9 +1888,9 @@ groups:
       slo_alert: "no"
       user_impacting: "no"
     expr: |
-      gitlab_component_ops:rate_5m{type="monitoring", component="thanos_query_frontend", stage="main", monitor="global"} offset 1h
+      gitlab_component_ops:rate_5m{component="thanos_query_frontend",monitor="global",stage="main",type="monitoring"} offset 1h
       unless
-      gitlab_component_ops:rate_5m{type="monitoring", component="thanos_query_frontend", stage="main", monitor="global"}
+      gitlab_component_ops:rate_5m{component="thanos_query_frontend",monitor="global",stage="main",type="monitoring"}
   - alert: MonitoringServiceThanosRuleAlertSenderErrorSLOViolation
     for: 2m
     annotations:
@@ -2019,7 +2019,7 @@ groups:
       slo_alert: "no"
       user_impacting: "yes"
     expr: |
-      gitlab_component_ops:rate_30m{type="monitoring", component="thanos_rule_alert_sender", stage="main", monitor="global"} == 0
+      gitlab_component_ops:rate_30m{component="thanos_rule_alert_sender",monitor="global",stage="main",type="monitoring"} == 0
   - alert: MonitoringServiceThanosRuleAlertSenderTrafficAbsent
     for: 30m
     annotations:
@@ -2054,9 +2054,9 @@ groups:
       slo_alert: "no"
       user_impacting: "yes"
     expr: |
-      gitlab_component_ops:rate_5m{type="monitoring", component="thanos_rule_alert_sender", stage="main", monitor="global"} offset 1h
+      gitlab_component_ops:rate_5m{component="thanos_rule_alert_sender",monitor="global",stage="main",type="monitoring"} offset 1h
       unless
-      gitlab_component_ops:rate_5m{type="monitoring", component="thanos_rule_alert_sender", stage="main", monitor="global"}
+      gitlab_component_ops:rate_5m{component="thanos_rule_alert_sender",monitor="global",stage="main",type="monitoring"}
   - alert: MonitoringServiceThanosStoreApdexSLOViolation
     for: 2m
     annotations:
@@ -2287,7 +2287,7 @@ groups:
       slo_alert: "no"
       user_impacting: "no"
     expr: |
-      gitlab_component_ops:rate_30m{type="monitoring", component="thanos_store", stage="main", monitor="global"} == 0
+      gitlab_component_ops:rate_30m{component="thanos_store",monitor="global",stage="main",type="monitoring"} == 0
   - alert: MonitoringServiceThanosStoreTrafficAbsent
     for: 30m
     annotations:
@@ -2322,6 +2322,6 @@ groups:
       slo_alert: "no"
       user_impacting: "no"
     expr: |
-      gitlab_component_ops:rate_5m{type="monitoring", component="thanos_store", stage="main", monitor="global"} offset 1h
+      gitlab_component_ops:rate_5m{component="thanos_store",monitor="global",stage="main",type="monitoring"} offset 1h
       unless
-      gitlab_component_ops:rate_5m{type="monitoring", component="thanos_store", stage="main", monitor="global"}
+      gitlab_component_ops:rate_5m{component="thanos_store",monitor="global",stage="main",type="monitoring"}

@@ -141,7 +141,7 @@ groups:
       slo_alert: "no"
       user_impacting: "yes"
     expr: |
-      gitlab_component_ops:rate_30m{type="patroni-registry", component="pgbouncer", stage="main", monitor="global"} == 0
+      gitlab_component_ops:rate_30m{component="pgbouncer",monitor="global",stage="main",type="patroni-registry"} == 0
   - alert: PatroniRegistryServicePgbouncerTrafficAbsent
     for: 30m
     annotations:
@@ -180,9 +180,9 @@ groups:
       slo_alert: "no"
       user_impacting: "yes"
     expr: |
-      gitlab_component_ops:rate_5m{type="patroni-registry", component="pgbouncer", stage="main", monitor="global"} offset 1h
+      gitlab_component_ops:rate_5m{component="pgbouncer",monitor="global",stage="main",type="patroni-registry"} offset 1h
       unless
-      gitlab_component_ops:rate_5m{type="patroni-registry", component="pgbouncer", stage="main", monitor="global"}
+      gitlab_component_ops:rate_5m{component="pgbouncer",monitor="global",stage="main",type="patroni-registry"}
   - alert: PatroniRegistryServiceTransactionsPrimaryErrorSLOViolation
     for: 2m
     annotations:
@@ -313,7 +313,7 @@ groups:
       slo_alert: "no"
       user_impacting: "yes"
     expr: |
-      gitlab_component_ops:rate_30m{type="patroni-registry", component="transactions_primary", stage="main", monitor="global"} == 0
+      gitlab_component_ops:rate_30m{component="transactions_primary",monitor="global",stage="main",type="patroni-registry"} == 0
   - alert: PatroniRegistryServiceTransactionsPrimaryTrafficAbsent
     for: 30m
     annotations:
@@ -350,9 +350,9 @@ groups:
       slo_alert: "no"
       user_impacting: "yes"
     expr: |
-      gitlab_component_ops:rate_5m{type="patroni-registry", component="transactions_primary", stage="main", monitor="global"} offset 1h
+      gitlab_component_ops:rate_5m{component="transactions_primary",monitor="global",stage="main",type="patroni-registry"} offset 1h
       unless
-      gitlab_component_ops:rate_5m{type="patroni-registry", component="transactions_primary", stage="main", monitor="global"}
+      gitlab_component_ops:rate_5m{component="transactions_primary",monitor="global",stage="main",type="patroni-registry"}
   - alert: PatroniRegistryServiceTransactionsReplicaErrorSLOViolation
     for: 2m
     annotations:
@@ -483,7 +483,7 @@ groups:
       slo_alert: "no"
       user_impacting: "yes"
     expr: |
-      gitlab_component_ops:rate_30m{type="patroni-registry", component="transactions_replica", stage="main", monitor="global"} == 0
+      gitlab_component_ops:rate_30m{component="transactions_replica",monitor="global",stage="main",type="patroni-registry"} == 0
   - alert: PatroniRegistryServiceTransactionsReplicaTrafficAbsent
     for: 30m
     annotations:
@@ -520,6 +520,6 @@ groups:
       slo_alert: "no"
       user_impacting: "yes"
     expr: |
-      gitlab_component_ops:rate_5m{type="patroni-registry", component="transactions_replica", stage="main", monitor="global"} offset 1h
+      gitlab_component_ops:rate_5m{component="transactions_replica",monitor="global",stage="main",type="patroni-registry"} offset 1h
       unless
-      gitlab_component_ops:rate_5m{type="patroni-registry", component="transactions_replica", stage="main", monitor="global"}
+      gitlab_component_ops:rate_5m{component="transactions_replica",monitor="global",stage="main",type="patroni-registry"}

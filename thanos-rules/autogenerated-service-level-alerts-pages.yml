@@ -137,7 +137,7 @@ groups:
       slo_alert: "no"
       user_impacting: "no"
     expr: |
-      gitlab_component_ops:rate_30m{type="pages", component="loadbalancer", stage="main", monitor="global"} == 0
+      gitlab_component_ops:rate_30m{component="loadbalancer",monitor="global",stage="main",type="pages"} == 0
   - alert: PagesServiceLoadbalancerTrafficAbsent
     for: 30m
     annotations:
@@ -172,6 +172,6 @@ groups:
       slo_alert: "no"
       user_impacting: "no"
     expr: |
-      gitlab_component_ops:rate_5m{type="pages", component="loadbalancer", stage="main", monitor="global"} offset 1h
+      gitlab_component_ops:rate_5m{component="loadbalancer",monitor="global",stage="main",type="pages"} offset 1h
       unless
-      gitlab_component_ops:rate_5m{type="pages", component="loadbalancer", stage="main", monitor="global"}
+      gitlab_component_ops:rate_5m{component="loadbalancer",monitor="global",stage="main",type="pages"}

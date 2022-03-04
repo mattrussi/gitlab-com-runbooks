@@ -133,7 +133,7 @@ groups:
       slo_alert: "no"
       user_impacting: "yes"
     expr: |
-      gitlab_component_ops:rate_30m{type="praefect", component="praefect_cloudsql", stage="main", monitor="global"} == 0
+      gitlab_component_ops:rate_30m{component="praefect_cloudsql",monitor="global",stage="main",type="praefect"} == 0
   - alert: PraefectServicePraefectCloudsqlTrafficAbsent
     for: 30m
     annotations:
@@ -168,9 +168,9 @@ groups:
       slo_alert: "no"
       user_impacting: "yes"
     expr: |
-      gitlab_component_ops:rate_5m{type="praefect", component="praefect_cloudsql", stage="main", monitor="global"} offset 1h
+      gitlab_component_ops:rate_5m{component="praefect_cloudsql",monitor="global",stage="main",type="praefect"} offset 1h
       unless
-      gitlab_component_ops:rate_5m{type="praefect", component="praefect_cloudsql", stage="main", monitor="global"}
+      gitlab_component_ops:rate_5m{component="praefect_cloudsql",monitor="global",stage="main",type="praefect"}
   - alert: PraefectServiceProxyApdexSLOViolation
     for: 2m
     annotations:
@@ -401,7 +401,7 @@ groups:
       slo_alert: "no"
       user_impacting: "yes"
     expr: |
-      gitlab_component_ops:rate_30m{type="praefect", component="proxy", stage="main", monitor="global"} == 0
+      gitlab_component_ops:rate_30m{component="proxy",monitor="global",stage="main",type="praefect"} == 0
   - alert: PraefectServiceProxyTrafficAbsent
     for: 30m
     annotations:
@@ -436,9 +436,9 @@ groups:
       slo_alert: "no"
       user_impacting: "yes"
     expr: |
-      gitlab_component_ops:rate_5m{type="praefect", component="proxy", stage="main", monitor="global"} offset 1h
+      gitlab_component_ops:rate_5m{component="proxy",monitor="global",stage="main",type="praefect"} offset 1h
       unless
-      gitlab_component_ops:rate_5m{type="praefect", component="proxy", stage="main", monitor="global"}
+      gitlab_component_ops:rate_5m{component="proxy",monitor="global",stage="main",type="praefect"}
   - alert: PraefectServiceReplicatorQueueApdexSLOViolation
     for: 2m
     annotations:
@@ -573,7 +573,7 @@ groups:
       slo_alert: "no"
       user_impacting: "no"
     expr: |
-      gitlab_component_ops:rate_30m{type="praefect", component="replicator_queue", stage="main", monitor="global"} == 0
+      gitlab_component_ops:rate_30m{component="replicator_queue",monitor="global",stage="main",type="praefect"} == 0
   - alert: PraefectServiceReplicatorQueueTrafficAbsent
     for: 30m
     annotations:
@@ -608,6 +608,6 @@ groups:
       slo_alert: "no"
       user_impacting: "no"
     expr: |
-      gitlab_component_ops:rate_5m{type="praefect", component="replicator_queue", stage="main", monitor="global"} offset 1h
+      gitlab_component_ops:rate_5m{component="replicator_queue",monitor="global",stage="main",type="praefect"} offset 1h
       unless
-      gitlab_component_ops:rate_5m{type="praefect", component="replicator_queue", stage="main", monitor="global"}
+      gitlab_component_ops:rate_5m{component="replicator_queue",monitor="global",stage="main",type="praefect"}
