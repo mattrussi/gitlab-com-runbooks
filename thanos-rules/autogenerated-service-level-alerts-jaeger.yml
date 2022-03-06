@@ -95,7 +95,7 @@ groups:
       )
       and on(env,environment,tier,type,stage,component)
       (
-        sum by(env,environment,tier,type,stage,component) (gitlab_component_ops:rate_6h{component="jaeger_agent",monitor="global",type="jaeger"}) >= 1
+        sum by(env,environment,tier,type,stage,component) (gitlab_component_ops:rate_6h{component="jaeger_agent",monitor="global",type="jaeger"}) >= 0.16667
       )
   - alert: JaegerServiceJaegerAgentTrafficCessation
     for: 5m
@@ -257,7 +257,7 @@ groups:
       )
       and on(env,environment,tier,type,stage,component)
       (
-        sum by(env,environment,tier,type,stage,component) (gitlab_component_ops:rate_6h{component="jaeger_collector",monitor="global",type="jaeger"}) >= 1
+        sum by(env,environment,tier,type,stage,component) (gitlab_component_ops:rate_6h{component="jaeger_collector",monitor="global",type="jaeger"}) >= 0.16667
       )
   - alert: JaegerServiceJaegerCollectorTrafficCessation
     for: 5m
@@ -419,7 +419,7 @@ groups:
       )
       and on(env,environment,tier,type,stage,component)
       (
-        sum by(env,environment,tier,type,stage,component) (gitlab_component_ops:rate_6h{component="jaeger_query",monitor="global",type="jaeger"}) >= 1
+        sum by(env,environment,tier,type,stage,component) (gitlab_component_ops:rate_6h{component="jaeger_query",monitor="global",type="jaeger"}) >= 0.16667
       )
   - alert: JaegerServiceJaegerQueryTrafficCessation
     for: 5m

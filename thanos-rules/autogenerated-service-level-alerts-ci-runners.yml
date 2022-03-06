@@ -91,7 +91,7 @@ groups:
       )
       and on(env,environment,tier,type,stage,component)
       (
-        sum by(env,environment,tier,type,stage,component) (gitlab_component_ops:rate_6h{component="loadbalancer",monitor="global",type="ci-runners"}) >= 1
+        sum by(env,environment,tier,type,stage,component) (gitlab_component_ops:rate_6h{component="loadbalancer",monitor="global",type="ci-runners"}) >= 0.16667
       )
   - alert: CiRunnersServiceLoadbalancerTrafficCessation
     for: 5m
@@ -253,7 +253,7 @@ groups:
       )
       and on(env,environment,tier,type,stage,component)
       (
-        sum by(env,environment,tier,type,stage,component) (gitlab_component_ops:rate_6h{component="polling",monitor="global",type="ci-runners"}) >= 1
+        sum by(env,environment,tier,type,stage,component) (gitlab_component_ops:rate_6h{component="polling",monitor="global",type="ci-runners"}) >= 0.16667
       )
   - alert: CiRunnersServicePollingTrafficCessation
     for: 5m
@@ -435,7 +435,7 @@ groups:
       )
       and on(env,environment,tier,type,stage,component)
       (
-        sum by(env,environment,tier,type,stage,component) (gitlab_component_ops:rate_6h{component="queuing_queries_duration",monitor="global",type="ci-runners"}) >= 1
+        sum by(env,environment,tier,type,stage,component) (gitlab_component_ops:rate_6h{component="queuing_queries_duration",monitor="global",type="ci-runners"}) >= 0.16667
       )
   - alert: CiRunnersServiceQueuingQueriesDurationTrafficCessation
     for: 5m
@@ -621,7 +621,7 @@ groups:
       )
       and on(env,environment,tier,type,stage,component)
       (
-        sum by(env,environment,tier,type,stage,component) (gitlab_component_ops:rate_6h{component="shared_runner_queues",monitor="global",type="ci-runners"}) >= 1
+        sum by(env,environment,tier,type,stage,component) (gitlab_component_ops:rate_6h{component="shared_runner_queues",monitor="global",type="ci-runners"}) >= 0.16667
       )
   - alert: CiRunnersServiceSharedRunnerQueuesErrorSLOViolation
     for: 2m
@@ -725,7 +725,7 @@ groups:
       )
       and on(env,environment,tier,type,stage,component)
       (
-        sum by(env,environment,tier,type,stage,component) (gitlab_component_ops:rate_6h{component="shared_runner_queues",monitor="global",type="ci-runners"}) >= 1
+        sum by(env,environment,tier,type,stage,component) (gitlab_component_ops:rate_6h{component="shared_runner_queues",monitor="global",type="ci-runners"}) >= 0.16667
       )
   - alert: CiRunnersServiceSharedRunnerQueuesTrafficCessation
     for: 5m
@@ -899,7 +899,7 @@ groups:
       )
       and on(env,environment,tier,type,stage,component)
       (
-        sum by(env,environment,tier,type,stage,component) (gitlab_component_ops:rate_6h{component="trace_archiving_ci_jobs",monitor="global",type="ci-runners"}) >= 1
+        sum by(env,environment,tier,type,stage,component) (gitlab_component_ops:rate_6h{component="trace_archiving_ci_jobs",monitor="global",type="ci-runners"}) >= 0.16667
       )
   - alert: CiRunnersServiceTraceArchivingCiJobsTrafficCessation
     for: 5m

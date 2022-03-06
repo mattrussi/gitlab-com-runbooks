@@ -91,7 +91,7 @@ groups:
       )
       and on(env,environment,tier,type,stage,component)
       (
-        sum by(env,environment,tier,type,stage,component) (gitlab_component_ops:rate_6h{component="loadbalancer",monitor="global",type="camoproxy"}) >= 1
+        sum by(env,environment,tier,type,stage,component) (gitlab_component_ops:rate_6h{component="loadbalancer",monitor="global",type="camoproxy"}) >= 0.16667
       )
   - alert: CamoproxyServiceLoadbalancerTrafficCessation
     for: 5m
@@ -255,7 +255,7 @@ groups:
       )
       and on(env,environment,tier,type,stage,component)
       (
-        sum by(env,environment,tier,type,stage,component) (gitlab_component_ops:rate_6h{component="server",monitor="global",type="camoproxy"}) >= 1
+        sum by(env,environment,tier,type,stage,component) (gitlab_component_ops:rate_6h{component="server",monitor="global",type="camoproxy"}) >= 0.16667
       )
   - alert: CamoproxyServiceServerErrorSLOViolation
     for: 2m
@@ -351,7 +351,7 @@ groups:
       )
       and on(env,environment,tier,type,stage,component)
       (
-        sum by(env,environment,tier,type,stage,component) (gitlab_component_ops:rate_6h{component="server",monitor="global",type="camoproxy"}) >= 1
+        sum by(env,environment,tier,type,stage,component) (gitlab_component_ops:rate_6h{component="server",monitor="global",type="camoproxy"}) >= 0.16667
       )
   - alert: CamoproxyServiceServerTrafficCessation
     for: 5m

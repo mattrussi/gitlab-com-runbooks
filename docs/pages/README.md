@@ -21,6 +21,7 @@
 * [HAProxy management at GitLab](../frontend/haproxy.md)
 * [../gitaly/git-high-cpu-and-memory-usage.md](../gitaly/git-high-cpu-and-memory-usage.md)
 * [Gitaly unusual activity alert](../gitaly/gitaly-unusual-activity.md)
+* [Service-Level Monitoring](../metrics-catalog/service-level-monitoring.md)
 * [Node memory alerts](../monitoring/node_memory_alerts.md)
 * [Diagnosis with Kibana](../onboarding/kibana-diagnosis.md)
 * [Block specific pages domains through HAproxy](block-pages-domain.md)

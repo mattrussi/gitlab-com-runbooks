@@ -99,7 +99,7 @@ groups:
       )
       and on(env,environment,tier,type,stage,component)
       (
-        sum by(env,environment,tier,type,stage,component) (gitlab_component_ops:rate_6h{component="grafana_cloudsql",monitor="global",type="monitoring"}) >= 1
+        sum by(env,environment,tier,type,stage,component) (gitlab_component_ops:rate_6h{component="grafana_cloudsql",monitor="global",type="monitoring"}) >= 0.16667
       )
   - alert: MonitoringServiceGrafanaCloudsqlTrafficCessation
     for: 5m
@@ -261,7 +261,7 @@ groups:
       )
       and on(env,environment,tier,type,stage,component)
       (
-        sum by(env,environment,tier,type,stage,component) (gitlab_component_ops:rate_6h{component="grafana_google_lb",monitor="global",type="monitoring"}) >= 1
+        sum by(env,environment,tier,type,stage,component) (gitlab_component_ops:rate_6h{component="grafana_google_lb",monitor="global",type="monitoring"}) >= 0.16667
       )
   - alert: MonitoringServiceGrafanaTricksterApdexSLOViolation
     for: 2m
@@ -363,7 +363,7 @@ groups:
       )
       and on(env,environment,tier,type,stage,component)
       (
-        sum by(env,environment,tier,type,stage,component) (gitlab_component_ops:rate_6h{component="grafana_trickster",monitor="global",type="monitoring"}) >= 1
+        sum by(env,environment,tier,type,stage,component) (gitlab_component_ops:rate_6h{component="grafana_trickster",monitor="global",type="monitoring"}) >= 0.16667
       )
   - alert: MonitoringServiceGrafanaTricksterErrorSLOViolation
     for: 2m
@@ -459,7 +459,7 @@ groups:
       )
       and on(env,environment,tier,type,stage,component)
       (
-        sum by(env,environment,tier,type,stage,component) (gitlab_component_ops:rate_6h{component="grafana_trickster",monitor="global",type="monitoring"}) >= 1
+        sum by(env,environment,tier,type,stage,component) (gitlab_component_ops:rate_6h{component="grafana_trickster",monitor="global",type="monitoring"}) >= 0.16667
       )
   - alert: MonitoringServicePrometheusApdexSLOViolation
     for: 2m
@@ -561,7 +561,7 @@ groups:
       )
       and on(env,environment,tier,type,stage,component)
       (
-        sum by(env,environment,tier,type,stage,component) (gitlab_component_ops:rate_6h{component="prometheus",monitor="global",type="monitoring"}) >= 1
+        sum by(env,environment,tier,type,stage,component) (gitlab_component_ops:rate_6h{component="prometheus",monitor="global",type="monitoring"}) >= 0.16667
       )
   - alert: MonitoringServicePrometheusErrorSLOViolation
     for: 2m
@@ -657,7 +657,7 @@ groups:
       )
       and on(env,environment,tier,type,stage,component)
       (
-        sum by(env,environment,tier,type,stage,component) (gitlab_component_ops:rate_6h{component="prometheus",monitor="global",type="monitoring"}) >= 1
+        sum by(env,environment,tier,type,stage,component) (gitlab_component_ops:rate_6h{component="prometheus",monitor="global",type="monitoring"}) >= 0.16667
       )
   - alert: MonitoringServicePrometheusTrafficCessation
     for: 5m
@@ -823,7 +823,7 @@ groups:
       )
       and on(env,environment,tier,type,stage,component)
       (
-        sum by(env,environment,tier,type,stage,component) (gitlab_component_ops:rate_6h{component="prometheus_alert_sender",monitor="global",type="monitoring"}) >= 1
+        sum by(env,environment,tier,type,stage,component) (gitlab_component_ops:rate_6h{component="prometheus_alert_sender",monitor="global",type="monitoring"}) >= 0.16667
       )
   - alert: MonitoringServicePrometheusAlertSenderTrafficCessation
     for: 5m
@@ -989,7 +989,7 @@ groups:
       )
       and on(env,environment,tier,type,stage,component)
       (
-        sum by(env,environment,tier,type,stage,component) (gitlab_component_ops:rate_6h{component="rule_evaluation",monitor="global",type="monitoring"}) >= 1
+        sum by(env,environment,tier,type,stage,component) (gitlab_component_ops:rate_6h{component="rule_evaluation",monitor="global",type="monitoring"}) >= 0.16667
       )
   - alert: MonitoringServiceRuleEvaluationTrafficCessation
     for: 5m
@@ -1155,7 +1155,7 @@ groups:
       )
       and on(env,environment,tier,type,stage,component)
       (
-        sum by(env,environment,tier,type,stage,component) (gitlab_component_ops:rate_6h{component="thanos_compactor",monitor="global",type="monitoring"}) >= 1
+        sum by(env,environment,tier,type,stage,component) (gitlab_component_ops:rate_6h{component="thanos_compactor",monitor="global",type="monitoring"}) >= 0.16667
       )
   - alert: MonitoringServiceThanosMemcachedApdexSLOViolation
     for: 2m
@@ -1257,7 +1257,7 @@ groups:
       )
       and on(env,environment,tier,type,stage,component)
       (
-        sum by(env,environment,tier,type,stage,component) (gitlab_component_ops:rate_6h{component="thanos_memcached",monitor="global",type="monitoring"}) >= 1
+        sum by(env,environment,tier,type,stage,component) (gitlab_component_ops:rate_6h{component="thanos_memcached",monitor="global",type="monitoring"}) >= 0.16667
       )
   - alert: MonitoringServiceThanosMemcachedErrorSLOViolation
     for: 2m
@@ -1353,7 +1353,7 @@ groups:
       )
       and on(env,environment,tier,type,stage,component)
       (
-        sum by(env,environment,tier,type,stage,component) (gitlab_component_ops:rate_6h{component="thanos_memcached",monitor="global",type="monitoring"}) >= 1
+        sum by(env,environment,tier,type,stage,component) (gitlab_component_ops:rate_6h{component="thanos_memcached",monitor="global",type="monitoring"}) >= 0.16667
       )
   - alert: MonitoringServiceThanosQueryApdexSLOViolation
     for: 2m
@@ -1455,7 +1455,7 @@ groups:
       )
       and on(env,environment,tier,type,stage,component)
       (
-        sum by(env,environment,tier,type,stage,component) (gitlab_component_ops:rate_6h{component="thanos_query",monitor="global",type="monitoring"}) >= 1
+        sum by(env,environment,tier,type,stage,component) (gitlab_component_ops:rate_6h{component="thanos_query",monitor="global",type="monitoring"}) >= 0.16667
       )
   - alert: MonitoringServiceThanosQueryErrorSLOViolation
     for: 2m
@@ -1551,7 +1551,7 @@ groups:
       )
       and on(env,environment,tier,type,stage,component)
       (
-        sum by(env,environment,tier,type,stage,component) (gitlab_component_ops:rate_6h{component="thanos_query",monitor="global",type="monitoring"}) >= 1
+        sum by(env,environment,tier,type,stage,component) (gitlab_component_ops:rate_6h{component="thanos_query",monitor="global",type="monitoring"}) >= 0.16667
       )
   - alert: MonitoringServiceThanosQueryTrafficCessation
     for: 5m
@@ -1723,7 +1723,7 @@ groups:
       )
       and on(env,environment,tier,type,stage,component)
       (
-        sum by(env,environment,tier,type,stage,component) (gitlab_component_ops:rate_6h{component="thanos_query_frontend",monitor="global",type="monitoring"}) >= 1
+        sum by(env,environment,tier,type,stage,component) (gitlab_component_ops:rate_6h{component="thanos_query_frontend",monitor="global",type="monitoring"}) >= 0.16667
       )
   - alert: MonitoringServiceThanosQueryFrontendErrorSLOViolation
     for: 2m
@@ -1819,7 +1819,7 @@ groups:
       )
       and on(env,environment,tier,type,stage,component)
       (
-        sum by(env,environment,tier,type,stage,component) (gitlab_component_ops:rate_6h{component="thanos_query_frontend",monitor="global",type="monitoring"}) >= 1
+        sum by(env,environment,tier,type,stage,component) (gitlab_component_ops:rate_6h{component="thanos_query_frontend",monitor="global",type="monitoring"}) >= 0.16667
       )
   - alert: MonitoringServiceThanosQueryFrontendTrafficCessation
     for: 5m
@@ -1985,7 +1985,7 @@ groups:
       )
       and on(env,environment,tier,type,stage,component)
       (
-        sum by(env,environment,tier,type,stage,component) (gitlab_component_ops:rate_6h{component="thanos_rule_alert_sender",monitor="global",type="monitoring"}) >= 1
+        sum by(env,environment,tier,type,stage,component) (gitlab_component_ops:rate_6h{component="thanos_rule_alert_sender",monitor="global",type="monitoring"}) >= 0.16667
       )
   - alert: MonitoringServiceThanosRuleAlertSenderTrafficCessation
     for: 5m
@@ -2157,7 +2157,7 @@ groups:
       )
       and on(env,environment,tier,type,stage,component)
       (
-        sum by(env,environment,tier,type,stage,component) (gitlab_component_ops:rate_6h{component="thanos_store",monitor="global",type="monitoring"}) >= 1
+        sum by(env,environment,tier,type,stage,component) (gitlab_component_ops:rate_6h{component="thanos_store",monitor="global",type="monitoring"}) >= 0.16667
       )
   - alert: MonitoringServiceThanosStoreErrorSLOViolation
     for: 2m
@@ -2253,7 +2253,7 @@ groups:
       )
       and on(env,environment,tier,type,stage,component)
       (
-        sum by(env,environment,tier,type,stage,component) (gitlab_component_ops:rate_6h{component="thanos_store",monitor="global",type="monitoring"}) >= 1
+        sum by(env,environment,tier,type,stage,component) (gitlab_component_ops:rate_6h{component="thanos_store",monitor="global",type="monitoring"}) >= 0.16667
       )
   - alert: MonitoringServiceThanosStoreTrafficCessation
     for: 5m

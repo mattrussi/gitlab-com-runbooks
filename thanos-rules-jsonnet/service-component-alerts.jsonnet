@@ -9,11 +9,10 @@ local strings = import 'utils/strings.libsonnet';
 
 // Minimum operation rate thresholds:
 // This is to avoid low-volume, noisy alerts.
-// NOTE: at present we are transitioning from minimumOperationRateForMonitoring to minimumSamplesForMonitoring.
-// Initially only a subset of alerts are using minimumSamplesForMonitoring, but we expect this to expand
-// until all alerts are using this approach. At that point, we can drop minimumOperationRateForMonitoring.
-local minimumOperationRateForMonitoring = 1; /* rps */
-local minimumSamplesForMonitoring = 1200;
+// See docs/metrics-catalog/service-level-monitoring.md for more details
+// of how minimumSamplesForMonitoring works
+local minimumSamplesForMonitoring = 3600;
+local minimumSamplesForNodeMonitoring = 1200;
 
 // Most MWMBR alerts use a 2m period
 // Initially for this alert, use a long period to ensure that
@@ -147,7 +146,7 @@ local apdexAlertForSLI(service, sli) =
     aggregationSet=aggregationSets.componentSLIs,
     windows=service.alertWindows,
     metricSelectorHash={ type: service.type, component: sli.name },
-    minimumOperationRateForMonitoring=minimumOperationRateForMonitoring,
+    minimumSamplesForMonitoring=minimumSamplesForMonitoring,
     extraLabels=labelsForSLI(sli),
     extraAnnotations=commonAnnotationsForSLI(service.type, sli, aggregationSets.componentSLIs, 'apdex')
   )
@@ -167,7 +166,7 @@ local apdexAlertForSLI(service, sli) =
         aggregationSet=aggregationSets.nodeComponentSLIs,
         windows=service.alertWindows,
         metricSelectorHash={ type: service.type, component: sli.name },
-        minimumSamplesForMonitoring=minimumSamplesForMonitoring,
+        minimumSamplesForMonitoring=minimumSamplesForNodeMonitoring,
         alertForDuration=nodeAlertWaitPeriod,
         extraLabels=labelsForSLI(sli),
         extraAnnotations=commonAnnotationsForSLI(service.type, sli, aggregationSets.nodeComponentSLIs, 'apdex'),
@@ -191,7 +190,7 @@ local apdexAlertForSLI(service, sli) =
         aggregationSet=aggregationSets.regionalComponentSLIs,
         windows=service.alertWindows,
         metricSelectorHash={ type: service.type, component: sli.name },
-        minimumOperationRateForMonitoring=minimumOperationRateForMonitoring,
+        minimumSamplesForMonitoring=minimumSamplesForMonitoring,
         extraLabels=labelsForSLI(sli),
         extraAnnotations=commonAnnotationsForSLI(service.type, sli, aggregationSets.regionalComponentSLIs, 'apdex'),
       )
@@ -217,7 +216,7 @@ local errorRateAlertForSLI(service, sli) =
     aggregationSet=aggregationSets.componentSLIs,
     windows=service.alertWindows,
     metricSelectorHash={ type: service.type, component: sli.name },
-    minimumOperationRateForMonitoring=minimumOperationRateForMonitoring,
+    minimumSamplesForMonitoring=minimumSamplesForMonitoring,
     extraLabels=labelsForSLI(sli),
     extraAnnotations=commonAnnotationsForSLI(service.type, sli, aggregationSets.componentSLIs, 'error'),
   )
@@ -237,7 +236,7 @@ local errorRateAlertForSLI(service, sli) =
         aggregationSet=aggregationSets.nodeComponentSLIs,
         windows=service.alertWindows,
         metricSelectorHash={ type: service.type, component: sli.name },
-        minimumSamplesForMonitoring=minimumSamplesForMonitoring,
+        minimumSamplesForMonitoring=minimumSamplesForNodeMonitoring,
         alertForDuration=nodeAlertWaitPeriod,
         extraLabels=labelsForSLI(sli),
         extraAnnotations=commonAnnotationsForSLI(service.type, sli, aggregationSets.nodeComponentSLIs, 'error'),
@@ -261,7 +260,7 @@ local errorRateAlertForSLI(service, sli) =
         aggregationSet=aggregationSets.regionalComponentSLIs,
         windows=service.alertWindows,
         metricSelectorHash={ type: service.type, component: sli.name },
-        minimumOperationRateForMonitoring=minimumOperationRateForMonitoring,
+        minimumSamplesForMonitoring=minimumSamplesForMonitoring,
         extraLabels=labelsForSLI(sli),
         extraAnnotations=commonAnnotationsForSLI(service.type, sli, aggregationSets.regionalComponentSLIs, 'error'),
       )

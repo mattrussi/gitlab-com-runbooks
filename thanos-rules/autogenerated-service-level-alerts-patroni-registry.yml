@@ -103,7 +103,7 @@ groups:
       )
       and on(env,environment,tier,type,stage,component)
       (
-        sum by(env,environment,tier,type,stage,component) (gitlab_component_ops:rate_6h{component="pgbouncer",monitor="global",type="patroni-registry"}) >= 1
+        sum by(env,environment,tier,type,stage,component) (gitlab_component_ops:rate_6h{component="pgbouncer",monitor="global",type="patroni-registry"}) >= 0.16667
       )
   - alert: PatroniRegistryServicePgbouncerTrafficCessation
     for: 5m
@@ -277,7 +277,7 @@ groups:
       )
       and on(env,environment,tier,type,stage,component)
       (
-        sum by(env,environment,tier,type,stage,component) (gitlab_component_ops:rate_6h{component="transactions_primary",monitor="global",type="patroni-registry"}) >= 1
+        sum by(env,environment,tier,type,stage,component) (gitlab_component_ops:rate_6h{component="transactions_primary",monitor="global",type="patroni-registry"}) >= 0.16667
       )
   - alert: PatroniRegistryServiceTransactionsPrimaryTrafficCessation
     for: 5m
@@ -447,7 +447,7 @@ groups:
       )
       and on(env,environment,tier,type,stage,component)
       (
-        sum by(env,environment,tier,type,stage,component) (gitlab_component_ops:rate_6h{component="transactions_replica",monitor="global",type="patroni-registry"}) >= 1
+        sum by(env,environment,tier,type,stage,component) (gitlab_component_ops:rate_6h{component="transactions_replica",monitor="global",type="patroni-registry"}) >= 0.16667
       )
   - alert: PatroniRegistryServiceTransactionsReplicaTrafficCessation
     for: 5m

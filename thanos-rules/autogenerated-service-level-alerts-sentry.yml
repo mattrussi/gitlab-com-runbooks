@@ -99,7 +99,7 @@ groups:
       )
       and on(env,environment,tier,type,stage,component)
       (
-        sum by(env,environment,tier,type,stage,component) (gitlab_component_ops:rate_6h{component="pg_transactions",monitor="global",type="sentry"}) >= 1
+        sum by(env,environment,tier,type,stage,component) (gitlab_component_ops:rate_6h{component="pg_transactions",monitor="global",type="sentry"}) >= 0.16667
       )
   - alert: SentryServicePgTransactionsTrafficCessation
     for: 5m
@@ -275,7 +275,7 @@ groups:
       )
       and on(env,environment,tier,type,stage,component)
       (
-        sum by(env,environment,tier,type,stage,component) (gitlab_component_ops:rate_6h{component="sentry_events",monitor="global",type="sentry"}) >= 1
+        sum by(env,environment,tier,type,stage,component) (gitlab_component_ops:rate_6h{component="sentry_events",monitor="global",type="sentry"}) >= 0.16667
       )
   - alert: SentryServiceSentryEventsErrorSLOViolation
     for: 2m
@@ -371,7 +371,7 @@ groups:
       )
       and on(env,environment,tier,type,stage,component)
       (
-        sum by(env,environment,tier,type,stage,component) (gitlab_component_ops:rate_6h{component="sentry_events",monitor="global",type="sentry"}) >= 1
+        sum by(env,environment,tier,type,stage,component) (gitlab_component_ops:rate_6h{component="sentry_events",monitor="global",type="sentry"}) >= 0.16667
       )
   - alert: SentryServiceSentryEventsTrafficCessation
     for: 5m

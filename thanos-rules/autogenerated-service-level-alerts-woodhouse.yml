@@ -105,7 +105,7 @@ groups:
       )
       and on(env,environment,tier,type,stage,component)
       (
-        sum by(env,environment,tier,type,stage,component) (gitlab_component_ops:rate_6h{component="async_jobs",monitor="global",type="woodhouse"}) >= 1
+        sum by(env,environment,tier,type,stage,component) (gitlab_component_ops:rate_6h{component="async_jobs",monitor="global",type="woodhouse"}) >= 0.16667
       )
   - alert: WoodhouseServiceAsyncJobsErrorSLOViolation
     for: 2m
@@ -201,7 +201,7 @@ groups:
       )
       and on(env,environment,tier,type,stage,component)
       (
-        sum by(env,environment,tier,type,stage,component) (gitlab_component_ops:rate_6h{component="async_jobs",monitor="global",type="woodhouse"}) >= 1
+        sum by(env,environment,tier,type,stage,component) (gitlab_component_ops:rate_6h{component="async_jobs",monitor="global",type="woodhouse"}) >= 0.16667
       )
   - alert: WoodhouseServiceHttpApdexSLOViolation
     for: 2m
@@ -303,7 +303,7 @@ groups:
       )
       and on(env,environment,tier,type,stage,component)
       (
-        sum by(env,environment,tier,type,stage,component) (gitlab_component_ops:rate_6h{component="http",monitor="global",type="woodhouse"}) >= 1
+        sum by(env,environment,tier,type,stage,component) (gitlab_component_ops:rate_6h{component="http",monitor="global",type="woodhouse"}) >= 0.16667
       )
   - alert: WoodhouseServiceHttpErrorSLOViolation
     for: 2m
@@ -399,5 +399,5 @@ groups:
       )
       and on(env,environment,tier,type,stage,component)
       (
-        sum by(env,environment,tier,type,stage,component) (gitlab_component_ops:rate_6h{component="http",monitor="global",type="woodhouse"}) >= 1
+        sum by(env,environment,tier,type,stage,component) (gitlab_component_ops:rate_6h{component="http",monitor="global",type="woodhouse"}) >= 0.16667
       )

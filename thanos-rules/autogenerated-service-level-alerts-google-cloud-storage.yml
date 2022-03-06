@@ -105,7 +105,7 @@ groups:
       )
       and on(env,environment,tier,type,stage,component)
       (
-        sum by(env,environment,tier,type,stage,component) (gitlab_component_ops:rate_6h{component="pages_range_requests",monitor="global",type="google-cloud-storage"}) >= 1
+        sum by(env,environment,tier,type,stage,component) (gitlab_component_ops:rate_6h{component="pages_range_requests",monitor="global",type="google-cloud-storage"}) >= 0.16667
       )
   - alert: GoogleCloudStorageServicePagesRangeRequestsTrafficCessation
     for: 5m
@@ -277,7 +277,7 @@ groups:
       )
       and on(env,environment,tier,type,stage,component)
       (
-        sum by(env,environment,tier,type,stage,component) (gitlab_component_ops:rate_6h{component="pages_request_duration",monitor="global",type="google-cloud-storage"}) >= 1
+        sum by(env,environment,tier,type,stage,component) (gitlab_component_ops:rate_6h{component="pages_request_duration",monitor="global",type="google-cloud-storage"}) >= 0.16667
       )
   - alert: GoogleCloudStorageServicePagesRequestDurationTrafficCessation
     for: 5m
@@ -519,7 +519,7 @@ groups:
       )
       and on(env,environment,tier,type,stage,component)
       (
-        sum by(env,environment,tier,type,stage,component) (gitlab_component_ops:rate_6h{component="registry_storage",monitor="global",type="google-cloud-storage"}) >= 1
+        sum by(env,environment,tier,type,stage,component) (gitlab_component_ops:rate_6h{component="registry_storage",monitor="global",type="google-cloud-storage"}) >= 0.16667
       )
   - alert: GoogleCloudStorageServiceRegistryStorageTrafficCessation
     for: 5m
@@ -691,7 +691,7 @@ groups:
       )
       and on(env,environment,tier,type,stage,component)
       (
-        sum by(env,environment,tier,type,stage,component) (gitlab_component_ops:rate_6h{component="workhorse_upload",monitor="global",type="google-cloud-storage"}) >= 1
+        sum by(env,environment,tier,type,stage,component) (gitlab_component_ops:rate_6h{component="workhorse_upload",monitor="global",type="google-cloud-storage"}) >= 0.16667
       )
   - alert: GoogleCloudStorageServiceWorkhorseUploadErrorSLOViolation
     for: 2m
@@ -787,7 +787,7 @@ groups:
       )
       and on(env,environment,tier,type,stage,component)
       (
-        sum by(env,environment,tier,type,stage,component) (gitlab_component_ops:rate_6h{component="workhorse_upload",monitor="global",type="google-cloud-storage"}) >= 1
+        sum by(env,environment,tier,type,stage,component) (gitlab_component_ops:rate_6h{component="workhorse_upload",monitor="global",type="google-cloud-storage"}) >= 0.16667
       )
   - alert: GoogleCloudStorageServiceWorkhorseUploadTrafficCessation
     for: 5m

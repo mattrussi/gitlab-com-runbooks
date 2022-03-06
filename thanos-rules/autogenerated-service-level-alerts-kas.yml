@@ -95,7 +95,7 @@ groups:
       )
       and on(env,environment,tier,type,stage,component)
       (
-        sum by(env,environment,tier,type,stage,component) (gitlab_component_ops:rate_6h{component="grpc_requests",monitor="global",type="kas"}) >= 1
+        sum by(env,environment,tier,type,stage,component) (gitlab_component_ops:rate_6h{component="grpc_requests",monitor="global",type="kas"}) >= 0.16667
       )
   - alert: KasServiceGrpcRequestsTrafficCessation
     for: 5m
