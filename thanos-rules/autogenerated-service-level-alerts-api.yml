@@ -95,7 +95,7 @@ groups:
       )
       and on(env,environment,tier,type,stage,component)
       (
-        sum by(env,environment,tier,type,stage,component) (gitlab_component_ops:rate_6h{component="graphql_queries",monitor="global",type="api"}) >= 1
+        sum by(env,environment,tier,type,stage,component) (gitlab_component_ops:rate_6h{component="graphql_queries",monitor="global",type="api"}) >= 0.16667
       )
   - alert: ApiServiceGraphqlQueriesApdexSLOViolationRegional
     for: 2m
@@ -191,7 +191,7 @@ groups:
       )
       and on(env,environment,tier,type,stage,region,component)
       (
-        sum by(env,environment,tier,type,stage,region,component) (gitlab_regional_sli_ops:rate_6h{component="graphql_queries",monitor="global",type="api"}) >= 1
+        sum by(env,environment,tier,type,stage,region,component) (gitlab_regional_sli_ops:rate_6h{component="graphql_queries",monitor="global",type="api"}) >= 0.16667
       )
   - alert: ApiServiceGraphqlQueriesTrafficCessation
     for: 5m
@@ -353,7 +353,7 @@ groups:
       )
       and on(env,environment,tier,type,stage,component)
       (
-        sum by(env,environment,tier,type,stage,component) (gitlab_component_ops:rate_6h{component="loadbalancer",monitor="global",type="api"}) >= 1
+        sum by(env,environment,tier,type,stage,component) (gitlab_component_ops:rate_6h{component="loadbalancer",monitor="global",type="api"}) >= 0.16667
       )
   - alert: ApiServiceLoadbalancerTrafficCessation
     for: 5m
@@ -511,7 +511,7 @@ groups:
       )
       and on(env,environment,tier,type,stage,component)
       (
-        sum by(env,environment,tier,type,stage,component) (gitlab_component_ops:rate_6h{component="nginx_ingress",monitor="global",type="api"}) >= 1
+        sum by(env,environment,tier,type,stage,component) (gitlab_component_ops:rate_6h{component="nginx_ingress",monitor="global",type="api"}) >= 0.16667
       )
   - alert: ApiServiceNginxIngressErrorSLOViolationRegional
     for: 2m
@@ -611,7 +611,7 @@ groups:
       )
       and on(env,environment,tier,type,stage,region,component)
       (
-        sum by(env,environment,tier,type,stage,region,component) (gitlab_regional_sli_ops:rate_6h{component="nginx_ingress",monitor="global",type="api"}) >= 1
+        sum by(env,environment,tier,type,stage,region,component) (gitlab_regional_sli_ops:rate_6h{component="nginx_ingress",monitor="global",type="api"}) >= 0.16667
       )
   - alert: ApiServiceNginxIngressTrafficCessation
     for: 5m
@@ -777,7 +777,7 @@ groups:
       )
       and on(env,environment,tier,type,stage,component)
       (
-        sum by(env,environment,tier,type,stage,component) (gitlab_component_ops:rate_6h{component="puma",monitor="global",type="api"}) >= 1
+        sum by(env,environment,tier,type,stage,component) (gitlab_component_ops:rate_6h{component="puma",monitor="global",type="api"}) >= 0.16667
       )
   - alert: ApiServicePumaErrorSLOViolationRegional
     for: 2m
@@ -877,7 +877,7 @@ groups:
       )
       and on(env,environment,tier,type,stage,region,component)
       (
-        sum by(env,environment,tier,type,stage,region,component) (gitlab_regional_sli_ops:rate_6h{component="puma",monitor="global",type="api"}) >= 1
+        sum by(env,environment,tier,type,stage,region,component) (gitlab_regional_sli_ops:rate_6h{component="puma",monitor="global",type="api"}) >= 0.16667
       )
   - alert: ApiServicePumaTrafficCessation
     for: 5m
@@ -1039,7 +1039,7 @@ groups:
       )
       and on(env,environment,tier,type,stage,component)
       (
-        sum by(env,environment,tier,type,stage,component) (gitlab_component_ops:rate_6h{component="rails_requests",monitor="global",type="api"}) >= 1
+        sum by(env,environment,tier,type,stage,component) (gitlab_component_ops:rate_6h{component="rails_requests",monitor="global",type="api"}) >= 0.16667
       )
   - alert: ApiServiceRailsRequestsApdexSLOViolationRegional
     for: 2m
@@ -1135,7 +1135,7 @@ groups:
       )
       and on(env,environment,tier,type,stage,region,component)
       (
-        sum by(env,environment,tier,type,stage,region,component) (gitlab_regional_sli_ops:rate_6h{component="rails_requests",monitor="global",type="api"}) >= 1
+        sum by(env,environment,tier,type,stage,region,component) (gitlab_regional_sli_ops:rate_6h{component="rails_requests",monitor="global",type="api"}) >= 0.16667
       )
   - alert: ApiServiceRailsRequestsTrafficCessation
     for: 5m
@@ -1311,7 +1311,7 @@ groups:
       )
       and on(env,environment,tier,type,stage,component)
       (
-        sum by(env,environment,tier,type,stage,component) (gitlab_component_ops:rate_6h{component="workhorse",monitor="global",type="api"}) >= 1
+        sum by(env,environment,tier,type,stage,component) (gitlab_component_ops:rate_6h{component="workhorse",monitor="global",type="api"}) >= 0.16667
       )
   - alert: ApiServiceWorkhorseApdexSLOViolationRegional
     for: 2m
@@ -1417,7 +1417,7 @@ groups:
       )
       and on(env,environment,tier,type,stage,region,component)
       (
-        sum by(env,environment,tier,type,stage,region,component) (gitlab_regional_sli_ops:rate_6h{component="workhorse",monitor="global",type="api"}) >= 1
+        sum by(env,environment,tier,type,stage,region,component) (gitlab_regional_sli_ops:rate_6h{component="workhorse",monitor="global",type="api"}) >= 0.16667
       )
   - alert: ApiServiceWorkhorseErrorSLOViolation
     for: 2m
@@ -1513,7 +1513,7 @@ groups:
       )
       and on(env,environment,tier,type,stage,component)
       (
-        sum by(env,environment,tier,type,stage,component) (gitlab_component_ops:rate_6h{component="workhorse",monitor="global",type="api"}) >= 1
+        sum by(env,environment,tier,type,stage,component) (gitlab_component_ops:rate_6h{component="workhorse",monitor="global",type="api"}) >= 0.16667
       )
   - alert: ApiServiceWorkhorseErrorSLOViolationRegional
     for: 2m
@@ -1613,7 +1613,7 @@ groups:
       )
       and on(env,environment,tier,type,stage,region,component)
       (
-        sum by(env,environment,tier,type,stage,region,component) (gitlab_regional_sli_ops:rate_6h{component="workhorse",monitor="global",type="api"}) >= 1
+        sum by(env,environment,tier,type,stage,region,component) (gitlab_regional_sli_ops:rate_6h{component="workhorse",monitor="global",type="api"}) >= 0.16667
       )
   - alert: ApiServiceWorkhorseTrafficCessation
     for: 5m

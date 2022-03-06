@@ -99,7 +99,7 @@ groups:
       )
       and on(env,environment,tier,type,stage,component)
       (
-        sum by(env,environment,tier,type,stage,component) (gitlab_component_ops:rate_6h{component="praefect_cloudsql",monitor="global",type="praefect"}) >= 1
+        sum by(env,environment,tier,type,stage,component) (gitlab_component_ops:rate_6h{component="praefect_cloudsql",monitor="global",type="praefect"}) >= 0.16667
       )
   - alert: PraefectServicePraefectCloudsqlTrafficCessation
     for: 5m
@@ -271,7 +271,7 @@ groups:
       )
       and on(env,environment,tier,type,stage,component)
       (
-        sum by(env,environment,tier,type,stage,component) (gitlab_component_ops:rate_6h{component="proxy",monitor="global",type="praefect"}) >= 1
+        sum by(env,environment,tier,type,stage,component) (gitlab_component_ops:rate_6h{component="proxy",monitor="global",type="praefect"}) >= 0.16667
       )
   - alert: PraefectServiceProxyErrorSLOViolation
     for: 2m
@@ -367,7 +367,7 @@ groups:
       )
       and on(env,environment,tier,type,stage,component)
       (
-        sum by(env,environment,tier,type,stage,component) (gitlab_component_ops:rate_6h{component="proxy",monitor="global",type="praefect"}) >= 1
+        sum by(env,environment,tier,type,stage,component) (gitlab_component_ops:rate_6h{component="proxy",monitor="global",type="praefect"}) >= 0.16667
       )
   - alert: PraefectServiceProxyTrafficCessation
     for: 5m
@@ -539,7 +539,7 @@ groups:
       )
       and on(env,environment,tier,type,stage,component)
       (
-        sum by(env,environment,tier,type,stage,component) (gitlab_component_ops:rate_6h{component="replicator_queue",monitor="global",type="praefect"}) >= 1
+        sum by(env,environment,tier,type,stage,component) (gitlab_component_ops:rate_6h{component="replicator_queue",monitor="global",type="praefect"}) >= 0.16667
       )
   - alert: PraefectServiceReplicatorQueueTrafficCessation
     for: 5m

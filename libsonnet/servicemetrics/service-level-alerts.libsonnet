@@ -58,8 +58,7 @@ local apdexAlertsForSLI(
   aggregationSet,  // The aggregation set
   windows,  // Array of long window durations for the alert
   metricSelectorHash,  // Additional selectors to apply to the query
-  minimumOperationRateForMonitoring=null,  // Minimum operation rate threshold
-  minimumSamplesForMonitoring=null,  // Minimum sample rate threshold
+  minimumSamplesForMonitoring=null,  // Minimum sample rate threshold: see docs/metrics-catalog/service-level-monitoring.md
   alertForDuration=multiburnFactors.alertForDurationForLongThreshold(windows[0]),  // How long before alert fires
   extraLabels={},  // Extra labels for the alert
   extraAnnotations={},  // Extra annotations for the alert
@@ -70,7 +69,6 @@ local apdexAlertsForSLI(
       expr: multiburnExpression.multiburnRateApdexExpression(
         aggregationSet=aggregationSet,
         metricSelectorHash=metricSelectorHash,
-        minimumOperationRateForMonitoring=minimumOperationRateForMonitoring,
         minimumSamplesForMonitoring=minimumSamplesForMonitoring,
         thresholdSLOValue=thresholdSLOValue,
         windows=[windowDuration],
@@ -100,8 +98,7 @@ local errorAlertsForSLI(
   aggregationSet,  // The aggregation set
   windows,  // Array of long window durations for the alert
   metricSelectorHash,  // Additional selectors to apply to the query
-  minimumOperationRateForMonitoring=null,  // Minimum operation rate threshold
-  minimumSamplesForMonitoring=null,  // Minimum sample rate threshold
+  minimumSamplesForMonitoring=null,  // Minimum sample rate threshold see docs/metrics-catalog/service-level-monitoring.md
   alertForDuration=multiburnFactors.alertForDurationForLongThreshold(windows[0]),  // How long before alert fires
   extraLabels={},  // Extra labels for the alert
   extraAnnotations={},  // Extra annotations for the alert
@@ -112,7 +109,6 @@ local errorAlertsForSLI(
       expr: multiburnExpression.multiburnRateErrorExpression(
         aggregationSet=aggregationSet,
         metricSelectorHash=metricSelectorHash,
-        minimumOperationRateForMonitoring=minimumOperationRateForMonitoring,
         minimumSamplesForMonitoring=minimumSamplesForMonitoring,
         thresholdSLOValue=1 - thresholdSLOValue,
         windows=[windowDuration],

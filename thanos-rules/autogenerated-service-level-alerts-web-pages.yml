@@ -91,7 +91,7 @@ groups:
       )
       and on(env,environment,tier,type,stage,component)
       (
-        sum by(env,environment,tier,type,stage,component) (gitlab_component_ops:rate_6h{component="loadbalancer",monitor="global",type="web-pages"}) >= 1
+        sum by(env,environment,tier,type,stage,component) (gitlab_component_ops:rate_6h{component="loadbalancer",monitor="global",type="web-pages"}) >= 0.16667
       )
   - alert: WebPagesServiceLoadbalancerErrorSLOViolationRegional
     for: 2m
@@ -183,7 +183,7 @@ groups:
       )
       and on(env,environment,tier,type,stage,region,component)
       (
-        sum by(env,environment,tier,type,stage,region,component) (gitlab_regional_sli_ops:rate_6h{component="loadbalancer",monitor="global",type="web-pages"}) >= 1
+        sum by(env,environment,tier,type,stage,region,component) (gitlab_regional_sli_ops:rate_6h{component="loadbalancer",monitor="global",type="web-pages"}) >= 0.16667
       )
   - alert: WebPagesServiceLoadbalancerTrafficCessation
     for: 5m
@@ -333,7 +333,7 @@ groups:
       )
       and on(env,environment,tier,type,stage,component)
       (
-        sum by(env,environment,tier,type,stage,component) (gitlab_component_ops:rate_6h{component="loadbalancer_https",monitor="global",type="web-pages"}) >= 1
+        sum by(env,environment,tier,type,stage,component) (gitlab_component_ops:rate_6h{component="loadbalancer_https",monitor="global",type="web-pages"}) >= 0.16667
       )
   - alert: WebPagesServiceLoadbalancerHttpsErrorSLOViolationRegional
     for: 2m
@@ -425,7 +425,7 @@ groups:
       )
       and on(env,environment,tier,type,stage,region,component)
       (
-        sum by(env,environment,tier,type,stage,region,component) (gitlab_regional_sli_ops:rate_6h{component="loadbalancer_https",monitor="global",type="web-pages"}) >= 1
+        sum by(env,environment,tier,type,stage,region,component) (gitlab_regional_sli_ops:rate_6h{component="loadbalancer_https",monitor="global",type="web-pages"}) >= 0.16667
       )
   - alert: WebPagesServiceLoadbalancerHttpsTrafficCessation
     for: 5m
@@ -589,7 +589,7 @@ groups:
       )
       and on(env,environment,tier,type,stage,component)
       (
-        sum by(env,environment,tier,type,stage,component) (gitlab_component_ops:rate_6h{component="server",monitor="global",type="web-pages"}) >= 1
+        sum by(env,environment,tier,type,stage,component) (gitlab_component_ops:rate_6h{component="server",monitor="global",type="web-pages"}) >= 0.16667
       )
   - alert: WebPagesServiceServerApdexSLOViolationRegional
     for: 2m
@@ -695,7 +695,7 @@ groups:
       )
       and on(env,environment,tier,type,stage,region,component)
       (
-        sum by(env,environment,tier,type,stage,region,component) (gitlab_regional_sli_ops:rate_6h{component="server",monitor="global",type="web-pages"}) >= 1
+        sum by(env,environment,tier,type,stage,region,component) (gitlab_regional_sli_ops:rate_6h{component="server",monitor="global",type="web-pages"}) >= 0.16667
       )
   - alert: WebPagesServiceServerErrorSLOViolation
     for: 2m
@@ -791,7 +791,7 @@ groups:
       )
       and on(env,environment,tier,type,stage,component)
       (
-        sum by(env,environment,tier,type,stage,component) (gitlab_component_ops:rate_6h{component="server",monitor="global",type="web-pages"}) >= 1
+        sum by(env,environment,tier,type,stage,component) (gitlab_component_ops:rate_6h{component="server",monitor="global",type="web-pages"}) >= 0.16667
       )
   - alert: WebPagesServiceServerErrorSLOViolationRegional
     for: 2m
@@ -891,7 +891,7 @@ groups:
       )
       and on(env,environment,tier,type,stage,region,component)
       (
-        sum by(env,environment,tier,type,stage,region,component) (gitlab_regional_sli_ops:rate_6h{component="server",monitor="global",type="web-pages"}) >= 1
+        sum by(env,environment,tier,type,stage,region,component) (gitlab_regional_sli_ops:rate_6h{component="server",monitor="global",type="web-pages"}) >= 0.16667
       )
   - alert: WebPagesServiceServerTrafficCessation
     for: 5m
@@ -1063,7 +1063,7 @@ groups:
       )
       and on(env,environment,tier,type,stage,component)
       (
-        sum by(env,environment,tier,type,stage,component) (gitlab_component_ops:rate_6h{component="server_headers",monitor="global",type="web-pages"}) >= 1
+        sum by(env,environment,tier,type,stage,component) (gitlab_component_ops:rate_6h{component="server_headers",monitor="global",type="web-pages"}) >= 0.16667
       )
   - alert: WebPagesServiceServerHeadersApdexSLOViolationRegional
     for: 2m
@@ -1169,7 +1169,7 @@ groups:
       )
       and on(env,environment,tier,type,stage,region,component)
       (
-        sum by(env,environment,tier,type,stage,region,component) (gitlab_regional_sli_ops:rate_6h{component="server_headers",monitor="global",type="web-pages"}) >= 1
+        sum by(env,environment,tier,type,stage,region,component) (gitlab_regional_sli_ops:rate_6h{component="server_headers",monitor="global",type="web-pages"}) >= 0.16667
       )
   - alert: WebPagesServiceServerHeadersTrafficCessation
     for: 5m

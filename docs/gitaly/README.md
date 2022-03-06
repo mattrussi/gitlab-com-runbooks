@@ -39,6 +39,7 @@
 * [Git Storage Servers](storage-servers.md)
 * [Managing GitLab Storage Shards (Gitaly)](storage-sharding.md)
 * [Kubernetes-Agent Disable Integrations](../kas/kubernetes-agent-disable-integrations.md)
+* [Service-Level Monitoring](../metrics-catalog/service-level-monitoring.md)
 * [../monitoring/apdex-alerts-guide.md](../monitoring/apdex-alerts-guide.md)
 * [Service Apdex](../monitoring/definition-service-apdex.md)
 * [Session: Application architecture](../onboarding/architecture.md)

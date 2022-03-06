@@ -103,7 +103,7 @@ groups:
       )
       and on(env,environment,tier,type,stage,component)
       (
-        sum by(env,environment,tier,type,stage,component) (gitlab_component_ops:rate_6h{component="pgbouncer",monitor="global",type="patroni"}) >= 1
+        sum by(env,environment,tier,type,stage,component) (gitlab_component_ops:rate_6h{component="pgbouncer",monitor="global",type="patroni"}) >= 0.16667
       )
   - alert: PatroniServicePgbouncerTrafficCessation
     for: 5m
@@ -283,7 +283,7 @@ groups:
       )
       and on(env,environment,tier,type,stage,component)
       (
-        sum by(env,environment,tier,type,stage,component) (gitlab_component_ops:rate_6h{component="rails_primary_sql",monitor="global",type="patroni"}) >= 1
+        sum by(env,environment,tier,type,stage,component) (gitlab_component_ops:rate_6h{component="rails_primary_sql",monitor="global",type="patroni"}) >= 0.16667
       )
   - alert: PatroniServiceRailsPrimarySqlTrafficCessation
     for: 5m
@@ -455,7 +455,7 @@ groups:
       )
       and on(env,environment,tier,type,stage,component)
       (
-        sum by(env,environment,tier,type,stage,component) (gitlab_component_ops:rate_6h{component="rails_replica_sql",monitor="global",type="patroni"}) >= 1
+        sum by(env,environment,tier,type,stage,component) (gitlab_component_ops:rate_6h{component="rails_replica_sql",monitor="global",type="patroni"}) >= 0.16667
       )
   - alert: PatroniServiceRailsReplicaSqlTrafficCessation
     for: 5m
@@ -621,7 +621,7 @@ groups:
       )
       and on(env,environment,tier,type,stage,component)
       (
-        sum by(env,environment,tier,type,stage,component) (gitlab_component_ops:rate_6h{component="transactions_primary",monitor="global",type="patroni"}) >= 1
+        sum by(env,environment,tier,type,stage,component) (gitlab_component_ops:rate_6h{component="transactions_primary",monitor="global",type="patroni"}) >= 0.16667
       )
   - alert: PatroniServiceTransactionsPrimaryTrafficCessation
     for: 5m
@@ -791,7 +791,7 @@ groups:
       )
       and on(env,environment,tier,type,stage,component)
       (
-        sum by(env,environment,tier,type,stage,component) (gitlab_component_ops:rate_6h{component="transactions_replica",monitor="global",type="patroni"}) >= 1
+        sum by(env,environment,tier,type,stage,component) (gitlab_component_ops:rate_6h{component="transactions_replica",monitor="global",type="patroni"}) >= 0.16667
       )
   - alert: PatroniServiceTransactionsReplicaTrafficCessation
     for: 5m

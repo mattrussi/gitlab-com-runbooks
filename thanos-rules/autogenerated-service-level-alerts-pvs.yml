@@ -103,7 +103,7 @@ groups:
       )
       and on(env,environment,tier,type,stage,component)
       (
-        sum by(env,environment,tier,type,stage,component) (gitlab_component_ops:rate_6h{component="http",monitor="global",type="pvs"}) >= 1
+        sum by(env,environment,tier,type,stage,component) (gitlab_component_ops:rate_6h{component="http",monitor="global",type="pvs"}) >= 0.16667
       )
   - alert: PvsServiceHttpErrorSLOViolation
     for: 2m
@@ -197,7 +197,7 @@ groups:
       )
       and on(env,environment,tier,type,stage,component)
       (
-        sum by(env,environment,tier,type,stage,component) (gitlab_component_ops:rate_6h{component="http",monitor="global",type="pvs"}) >= 1
+        sum by(env,environment,tier,type,stage,component) (gitlab_component_ops:rate_6h{component="http",monitor="global",type="pvs"}) >= 0.16667
       )
   - alert: PvsServiceHttpTrafficCessation
     for: 5m

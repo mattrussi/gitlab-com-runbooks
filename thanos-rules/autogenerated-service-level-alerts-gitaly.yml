@@ -105,7 +105,7 @@ groups:
       )
       and on(env,environment,tier,type,stage,component)
       (
-        sum by(env,environment,tier,type,stage,component) (gitlab_component_ops:rate_6h{component="gitalyruby",monitor="global",type="gitaly"}) >= 1
+        sum by(env,environment,tier,type,stage,component) (gitlab_component_ops:rate_6h{component="gitalyruby",monitor="global",type="gitaly"}) >= 0.16667
       )
   - alert: GitalyServiceGitalyrubyApdexSLOViolationSingleNode
     for: 10m
@@ -307,7 +307,7 @@ groups:
       )
       and on(env,environment,tier,type,stage,component)
       (
-        sum by(env,environment,tier,type,stage,component) (gitlab_component_ops:rate_6h{component="gitalyruby",monitor="global",type="gitaly"}) >= 1
+        sum by(env,environment,tier,type,stage,component) (gitlab_component_ops:rate_6h{component="gitalyruby",monitor="global",type="gitaly"}) >= 0.16667
       )
   - alert: GitalyServiceGitalyrubyErrorSLOViolationSingleNode
     for: 10m
@@ -579,7 +579,7 @@ groups:
       )
       and on(env,environment,tier,type,stage,component)
       (
-        sum by(env,environment,tier,type,stage,component) (gitlab_component_ops:rate_6h{component="goserver",monitor="global",type="gitaly"}) >= 1
+        sum by(env,environment,tier,type,stage,component) (gitlab_component_ops:rate_6h{component="goserver",monitor="global",type="gitaly"}) >= 0.16667
       )
   - alert: GitalyServiceGoserverApdexSLOViolationSingleNode
     for: 10m
@@ -785,7 +785,7 @@ groups:
       )
       and on(env,environment,tier,type,stage,component)
       (
-        sum by(env,environment,tier,type,stage,component) (gitlab_component_ops:rate_6h{component="goserver",monitor="global",type="gitaly"}) >= 1
+        sum by(env,environment,tier,type,stage,component) (gitlab_component_ops:rate_6h{component="goserver",monitor="global",type="gitaly"}) >= 0.16667
       )
   - alert: GitalyServiceGoserverErrorSLOViolationSingleNode
     for: 10m
@@ -1059,7 +1059,7 @@ groups:
       )
       and on(env,environment,tier,type,stage,component)
       (
-        sum by(env,environment,tier,type,stage,component) (gitlab_component_ops:rate_6h{component="goserver_op_service",monitor="global",type="gitaly"}) >= 1
+        sum by(env,environment,tier,type,stage,component) (gitlab_component_ops:rate_6h{component="goserver_op_service",monitor="global",type="gitaly"}) >= 0.16667
       )
   - alert: GitalyServiceGoserverOpServiceErrorSLOViolationSingleNode
     for: 10m

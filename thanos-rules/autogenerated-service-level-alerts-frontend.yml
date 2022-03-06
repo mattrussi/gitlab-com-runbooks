@@ -101,7 +101,7 @@ groups:
       )
       and on(env,environment,tier,type,stage,component)
       (
-        sum by(env,environment,tier,type,stage,component) (gitlab_component_ops:rate_6h{component="cnyHttpServices",monitor="global",type="frontend"}) >= 1
+        sum by(env,environment,tier,type,stage,component) (gitlab_component_ops:rate_6h{component="cnyHttpServices",monitor="global",type="frontend"}) >= 0.16667
       )
   - alert: FrontendServiceCnyHttpServicesErrorSLOViolation
     for: 2m
@@ -193,7 +193,7 @@ groups:
       )
       and on(env,environment,tier,type,stage,component)
       (
-        sum by(env,environment,tier,type,stage,component) (gitlab_component_ops:rate_6h{component="cnyHttpServices",monitor="global",type="frontend"}) >= 1
+        sum by(env,environment,tier,type,stage,component) (gitlab_component_ops:rate_6h{component="cnyHttpServices",monitor="global",type="frontend"}) >= 0.16667
       )
   - alert: FrontendServiceCnyHttpServicesTrafficCessation
     for: 5m
@@ -361,7 +361,7 @@ groups:
       )
       and on(env,environment,tier,type,stage,component)
       (
-        sum by(env,environment,tier,type,stage,component) (gitlab_component_ops:rate_6h{component="mainHttpServices",monitor="global",type="frontend"}) >= 1
+        sum by(env,environment,tier,type,stage,component) (gitlab_component_ops:rate_6h{component="mainHttpServices",monitor="global",type="frontend"}) >= 0.16667
       )
   - alert: FrontendServiceMainHttpServicesErrorSLOViolation
     for: 2m
@@ -453,7 +453,7 @@ groups:
       )
       and on(env,environment,tier,type,stage,component)
       (
-        sum by(env,environment,tier,type,stage,component) (gitlab_component_ops:rate_6h{component="mainHttpServices",monitor="global",type="frontend"}) >= 1
+        sum by(env,environment,tier,type,stage,component) (gitlab_component_ops:rate_6h{component="mainHttpServices",monitor="global",type="frontend"}) >= 0.16667
       )
   - alert: FrontendServiceMainHttpServicesTrafficCessation
     for: 5m
@@ -621,7 +621,7 @@ groups:
       )
       and on(env,environment,tier,type,stage,component)
       (
-        sum by(env,environment,tier,type,stage,component) (gitlab_component_ops:rate_6h{component="sshServices",monitor="global",type="frontend"}) >= 1
+        sum by(env,environment,tier,type,stage,component) (gitlab_component_ops:rate_6h{component="sshServices",monitor="global",type="frontend"}) >= 0.16667
       )
   - alert: FrontendServiceSshServicesErrorSLOViolation
     for: 2m
@@ -713,7 +713,7 @@ groups:
       )
       and on(env,environment,tier,type,stage,component)
       (
-        sum by(env,environment,tier,type,stage,component) (gitlab_component_ops:rate_6h{component="sshServices",monitor="global",type="frontend"}) >= 1
+        sum by(env,environment,tier,type,stage,component) (gitlab_component_ops:rate_6h{component="sshServices",monitor="global",type="frontend"}) >= 0.16667
       )
   - alert: FrontendServiceSshServicesTrafficCessation
     for: 5m

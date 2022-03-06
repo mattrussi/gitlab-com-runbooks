@@ -105,7 +105,7 @@ groups:
       )
       and on(env,environment,tier,type,stage,component)
       (
-        sum by(env,environment,tier,type,stage,component) (gitlab_component_ops:rate_6h{component="database",monitor="global",type="registry"}) >= 1
+        sum by(env,environment,tier,type,stage,component) (gitlab_component_ops:rate_6h{component="database",monitor="global",type="registry"}) >= 0.16667
       )
   - alert: RegistryServiceDatabaseApdexSLOViolationRegional
     for: 2m
@@ -211,7 +211,7 @@ groups:
       )
       and on(env,environment,tier,type,stage,region,component)
       (
-        sum by(env,environment,tier,type,stage,region,component) (gitlab_regional_sli_ops:rate_6h{component="database",monitor="global",type="registry"}) >= 1
+        sum by(env,environment,tier,type,stage,region,component) (gitlab_regional_sli_ops:rate_6h{component="database",monitor="global",type="registry"}) >= 0.16667
       )
   - alert: RegistryServiceDatabaseTrafficCessation
     for: 5m
@@ -383,7 +383,7 @@ groups:
       )
       and on(env,environment,tier,type,stage,component)
       (
-        sum by(env,environment,tier,type,stage,component) (gitlab_component_ops:rate_6h{component="garbagecollector",monitor="global",type="registry"}) >= 1
+        sum by(env,environment,tier,type,stage,component) (gitlab_component_ops:rate_6h{component="garbagecollector",monitor="global",type="registry"}) >= 0.16667
       )
   - alert: RegistryServiceGarbagecollectorApdexSLOViolationRegional
     for: 2m
@@ -489,7 +489,7 @@ groups:
       )
       and on(env,environment,tier,type,stage,region,component)
       (
-        sum by(env,environment,tier,type,stage,region,component) (gitlab_regional_sli_ops:rate_6h{component="garbagecollector",monitor="global",type="registry"}) >= 1
+        sum by(env,environment,tier,type,stage,region,component) (gitlab_regional_sli_ops:rate_6h{component="garbagecollector",monitor="global",type="registry"}) >= 0.16667
       )
   - alert: RegistryServiceGarbagecollectorErrorSLOViolation
     for: 2m
@@ -585,7 +585,7 @@ groups:
       )
       and on(env,environment,tier,type,stage,component)
       (
-        sum by(env,environment,tier,type,stage,component) (gitlab_component_ops:rate_6h{component="garbagecollector",monitor="global",type="registry"}) >= 1
+        sum by(env,environment,tier,type,stage,component) (gitlab_component_ops:rate_6h{component="garbagecollector",monitor="global",type="registry"}) >= 0.16667
       )
   - alert: RegistryServiceGarbagecollectorErrorSLOViolationRegional
     for: 2m
@@ -685,7 +685,7 @@ groups:
       )
       and on(env,environment,tier,type,stage,region,component)
       (
-        sum by(env,environment,tier,type,stage,region,component) (gitlab_regional_sli_ops:rate_6h{component="garbagecollector",monitor="global",type="registry"}) >= 1
+        sum by(env,environment,tier,type,stage,region,component) (gitlab_regional_sli_ops:rate_6h{component="garbagecollector",monitor="global",type="registry"}) >= 0.16667
       )
   - alert: RegistryServiceGarbagecollectorTrafficCessation
     for: 5m
@@ -843,7 +843,7 @@ groups:
       )
       and on(env,environment,tier,type,stage,component)
       (
-        sum by(env,environment,tier,type,stage,component) (gitlab_component_ops:rate_6h{component="loadbalancer",monitor="global",type="registry"}) >= 1
+        sum by(env,environment,tier,type,stage,component) (gitlab_component_ops:rate_6h{component="loadbalancer",monitor="global",type="registry"}) >= 0.16667
       )
   - alert: RegistryServiceLoadbalancerTrafficCessation
     for: 5m
@@ -1007,7 +1007,7 @@ groups:
       )
       and on(env,environment,tier,type,stage,component)
       (
-        sum by(env,environment,tier,type,stage,component) (gitlab_component_ops:rate_6h{component="server",monitor="global",type="registry"}) >= 1
+        sum by(env,environment,tier,type,stage,component) (gitlab_component_ops:rate_6h{component="server",monitor="global",type="registry"}) >= 0.16667
       )
   - alert: RegistryServiceServerApdexSLOViolationRegional
     for: 2m
@@ -1113,7 +1113,7 @@ groups:
       )
       and on(env,environment,tier,type,stage,region,component)
       (
-        sum by(env,environment,tier,type,stage,region,component) (gitlab_regional_sli_ops:rate_6h{component="server",monitor="global",type="registry"}) >= 1
+        sum by(env,environment,tier,type,stage,region,component) (gitlab_regional_sli_ops:rate_6h{component="server",monitor="global",type="registry"}) >= 0.16667
       )
   - alert: RegistryServiceServerErrorSLOViolation
     for: 2m
@@ -1209,7 +1209,7 @@ groups:
       )
       and on(env,environment,tier,type,stage,component)
       (
-        sum by(env,environment,tier,type,stage,component) (gitlab_component_ops:rate_6h{component="server",monitor="global",type="registry"}) >= 1
+        sum by(env,environment,tier,type,stage,component) (gitlab_component_ops:rate_6h{component="server",monitor="global",type="registry"}) >= 0.16667
       )
   - alert: RegistryServiceServerErrorSLOViolationRegional
     for: 2m
@@ -1309,7 +1309,7 @@ groups:
       )
       and on(env,environment,tier,type,stage,region,component)
       (
-        sum by(env,environment,tier,type,stage,region,component) (gitlab_regional_sli_ops:rate_6h{component="server",monitor="global",type="registry"}) >= 1
+        sum by(env,environment,tier,type,stage,region,component) (gitlab_regional_sli_ops:rate_6h{component="server",monitor="global",type="registry"}) >= 0.16667
       )
   - alert: RegistryServiceServerTrafficCessation
     for: 5m
@@ -1481,7 +1481,7 @@ groups:
       )
       and on(env,environment,tier,type,stage,component)
       (
-        sum by(env,environment,tier,type,stage,component) (gitlab_component_ops:rate_6h{component="server_route_manifest_reads",monitor="global",type="registry"}) >= 1
+        sum by(env,environment,tier,type,stage,component) (gitlab_component_ops:rate_6h{component="server_route_manifest_reads",monitor="global",type="registry"}) >= 0.16667
       )
   - alert: RegistryServiceServerRouteManifestReadsApdexSLOViolationRegional
     for: 2m
@@ -1587,7 +1587,7 @@ groups:
       )
       and on(env,environment,tier,type,stage,region,component)
       (
-        sum by(env,environment,tier,type,stage,region,component) (gitlab_regional_sli_ops:rate_6h{component="server_route_manifest_reads",monitor="global",type="registry"}) >= 1
+        sum by(env,environment,tier,type,stage,region,component) (gitlab_regional_sli_ops:rate_6h{component="server_route_manifest_reads",monitor="global",type="registry"}) >= 0.16667
       )
   - alert: RegistryServiceServerRouteManifestReadsTrafficCessation
     for: 5m
@@ -1767,7 +1767,7 @@ groups:
       )
       and on(env,environment,tier,type,stage,component)
       (
-        sum by(env,environment,tier,type,stage,component) (gitlab_component_ops:rate_6h{component="server_route_manifest_writes",monitor="global",type="registry"}) >= 1
+        sum by(env,environment,tier,type,stage,component) (gitlab_component_ops:rate_6h{component="server_route_manifest_writes",monitor="global",type="registry"}) >= 0.16667
       )
   - alert: RegistryServiceServerRouteManifestWritesApdexSLOViolationRegional
     for: 2m
@@ -1881,7 +1881,7 @@ groups:
       )
       and on(env,environment,tier,type,stage,region,component)
       (
-        sum by(env,environment,tier,type,stage,region,component) (gitlab_regional_sli_ops:rate_6h{component="server_route_manifest_writes",monitor="global",type="registry"}) >= 1
+        sum by(env,environment,tier,type,stage,region,component) (gitlab_regional_sli_ops:rate_6h{component="server_route_manifest_writes",monitor="global",type="registry"}) >= 0.16667
       )
   - alert: RegistryServiceServerRouteManifestWritesTrafficCessation
     for: 5m

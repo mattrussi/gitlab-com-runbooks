@@ -179,7 +179,7 @@ groups:
       )
       and on(env,environment,tier,type,stage,component)
       (
-        sum by(env,environment,tier,type,stage,component) (gitlab_component_ops:rate_6h{component="rails_redis_client",monitor="global",type="redis-sessions"}) >= 1
+        sum by(env,environment,tier,type,stage,component) (gitlab_component_ops:rate_6h{component="rails_redis_client",monitor="global",type="redis-sessions"}) >= 0.16667
       )
   - alert: RedisSessionsServiceRailsRedisClientErrorSLOViolation
     for: 2m
@@ -279,7 +279,7 @@ groups:
       )
       and on(env,environment,tier,type,stage,component)
       (
-        sum by(env,environment,tier,type,stage,component) (gitlab_component_ops:rate_6h{component="rails_redis_client",monitor="global",type="redis-sessions"}) >= 1
+        sum by(env,environment,tier,type,stage,component) (gitlab_component_ops:rate_6h{component="rails_redis_client",monitor="global",type="redis-sessions"}) >= 0.16667
       )
   - alert: RedisSessionsServiceRailsRedisClientTrafficCessation
     for: 5m

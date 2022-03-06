@@ -99,7 +99,7 @@ groups:
       )
       and on(env,environment,tier,type,stage,component)
       (
-        sum by(env,environment,tier,type,stage,component) (gitlab_component_ops:rate_6h{component="emailsProcessed",monitor="global",type="mailroom"}) >= 1
+        sum by(env,environment,tier,type,stage,component) (gitlab_component_ops:rate_6h{component="emailsProcessed",monitor="global",type="mailroom"}) >= 0.16667
       )
   - alert: MailroomServiceEmailsProcessedTrafficCessation
     for: 5m

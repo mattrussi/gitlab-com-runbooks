@@ -97,7 +97,7 @@ groups:
       )
       and on(env,environment,tier,type,stage,component)
       (
-        sum by(env,environment,tier,type,stage,component) (gitlab_component_ops:rate_6h{component="email_receiver",monitor="global",type="sidekiq"}) >= 1
+        sum by(env,environment,tier,type,stage,component) (gitlab_component_ops:rate_6h{component="email_receiver",monitor="global",type="sidekiq"}) >= 0.16667
       )
   - alert: SidekiqServiceEmailReceiverTrafficCessation
     for: 5m
@@ -291,7 +291,7 @@ groups:
       )
       and on(env,environment,tier,type,stage,component)
       (
-        sum by(env,environment,tier,type,stage,component) (gitlab_component_ops:rate_6h{component="shard_catchall",monitor="global",type="sidekiq"}) >= 1
+        sum by(env,environment,tier,type,stage,component) (gitlab_component_ops:rate_6h{component="shard_catchall",monitor="global",type="sidekiq"}) >= 0.16667
       )
   - alert: SidekiqServiceShardCatchallErrorSLOViolation
     for: 2m
@@ -387,7 +387,7 @@ groups:
       )
       and on(env,environment,tier,type,stage,component)
       (
-        sum by(env,environment,tier,type,stage,component) (gitlab_component_ops:rate_6h{component="shard_catchall",monitor="global",type="sidekiq"}) >= 1
+        sum by(env,environment,tier,type,stage,component) (gitlab_component_ops:rate_6h{component="shard_catchall",monitor="global",type="sidekiq"}) >= 0.16667
       )
   - alert: SidekiqServiceShardCatchallTrafficCessation
     for: 5m
@@ -559,7 +559,7 @@ groups:
       )
       and on(env,environment,tier,type,stage,component)
       (
-        sum by(env,environment,tier,type,stage,component) (gitlab_component_ops:rate_6h{component="shard_database_throttled",monitor="global",type="sidekiq"}) >= 1
+        sum by(env,environment,tier,type,stage,component) (gitlab_component_ops:rate_6h{component="shard_database_throttled",monitor="global",type="sidekiq"}) >= 0.16667
       )
   - alert: SidekiqServiceShardDatabaseThrottledErrorSLOViolation
     for: 2m
@@ -655,7 +655,7 @@ groups:
       )
       and on(env,environment,tier,type,stage,component)
       (
-        sum by(env,environment,tier,type,stage,component) (gitlab_component_ops:rate_6h{component="shard_database_throttled",monitor="global",type="sidekiq"}) >= 1
+        sum by(env,environment,tier,type,stage,component) (gitlab_component_ops:rate_6h{component="shard_database_throttled",monitor="global",type="sidekiq"}) >= 0.16667
       )
   - alert: SidekiqServiceShardElasticsearchApdexSLOViolation
     for: 2m
@@ -757,7 +757,7 @@ groups:
       )
       and on(env,environment,tier,type,stage,component)
       (
-        sum by(env,environment,tier,type,stage,component) (gitlab_component_ops:rate_6h{component="shard_elasticsearch",monitor="global",type="sidekiq"}) >= 1
+        sum by(env,environment,tier,type,stage,component) (gitlab_component_ops:rate_6h{component="shard_elasticsearch",monitor="global",type="sidekiq"}) >= 0.16667
       )
   - alert: SidekiqServiceShardElasticsearchErrorSLOViolation
     for: 2m
@@ -853,7 +853,7 @@ groups:
       )
       and on(env,environment,tier,type,stage,component)
       (
-        sum by(env,environment,tier,type,stage,component) (gitlab_component_ops:rate_6h{component="shard_elasticsearch",monitor="global",type="sidekiq"}) >= 1
+        sum by(env,environment,tier,type,stage,component) (gitlab_component_ops:rate_6h{component="shard_elasticsearch",monitor="global",type="sidekiq"}) >= 0.16667
       )
   - alert: SidekiqServiceShardGitalyThrottledApdexSLOViolation
     for: 2m
@@ -955,7 +955,7 @@ groups:
       )
       and on(env,environment,tier,type,stage,component)
       (
-        sum by(env,environment,tier,type,stage,component) (gitlab_component_ops:rate_6h{component="shard_gitaly_throttled",monitor="global",type="sidekiq"}) >= 1
+        sum by(env,environment,tier,type,stage,component) (gitlab_component_ops:rate_6h{component="shard_gitaly_throttled",monitor="global",type="sidekiq"}) >= 0.16667
       )
   - alert: SidekiqServiceShardGitalyThrottledErrorSLOViolation
     for: 2m
@@ -1051,7 +1051,7 @@ groups:
       )
       and on(env,environment,tier,type,stage,component)
       (
-        sum by(env,environment,tier,type,stage,component) (gitlab_component_ops:rate_6h{component="shard_gitaly_throttled",monitor="global",type="sidekiq"}) >= 1
+        sum by(env,environment,tier,type,stage,component) (gitlab_component_ops:rate_6h{component="shard_gitaly_throttled",monitor="global",type="sidekiq"}) >= 0.16667
       )
   - alert: SidekiqServiceShardImportsApdexSLOViolation
     for: 2m
@@ -1153,7 +1153,7 @@ groups:
       )
       and on(env,environment,tier,type,stage,component)
       (
-        sum by(env,environment,tier,type,stage,component) (gitlab_component_ops:rate_6h{component="shard_imports",monitor="global",type="sidekiq"}) >= 1
+        sum by(env,environment,tier,type,stage,component) (gitlab_component_ops:rate_6h{component="shard_imports",monitor="global",type="sidekiq"}) >= 0.16667
       )
   - alert: SidekiqServiceShardImportsErrorSLOViolation
     for: 2m
@@ -1249,7 +1249,7 @@ groups:
       )
       and on(env,environment,tier,type,stage,component)
       (
-        sum by(env,environment,tier,type,stage,component) (gitlab_component_ops:rate_6h{component="shard_imports",monitor="global",type="sidekiq"}) >= 1
+        sum by(env,environment,tier,type,stage,component) (gitlab_component_ops:rate_6h{component="shard_imports",monitor="global",type="sidekiq"}) >= 0.16667
       )
   - alert: SidekiqServiceShardLowUrgencyCpuBoundApdexSLOViolation
     for: 2m
@@ -1355,7 +1355,7 @@ groups:
       )
       and on(env,environment,tier,type,stage,component)
       (
-        sum by(env,environment,tier,type,stage,component) (gitlab_component_ops:rate_6h{component="shard_low_urgency_cpu_bound",monitor="global",type="sidekiq"}) >= 1
+        sum by(env,environment,tier,type,stage,component) (gitlab_component_ops:rate_6h{component="shard_low_urgency_cpu_bound",monitor="global",type="sidekiq"}) >= 0.16667
       )
   - alert: SidekiqServiceShardLowUrgencyCpuBoundErrorSLOViolation
     for: 2m
@@ -1451,7 +1451,7 @@ groups:
       )
       and on(env,environment,tier,type,stage,component)
       (
-        sum by(env,environment,tier,type,stage,component) (gitlab_component_ops:rate_6h{component="shard_low_urgency_cpu_bound",monitor="global",type="sidekiq"}) >= 1
+        sum by(env,environment,tier,type,stage,component) (gitlab_component_ops:rate_6h{component="shard_low_urgency_cpu_bound",monitor="global",type="sidekiq"}) >= 0.16667
       )
   - alert: SidekiqServiceShardLowUrgencyCpuBoundTrafficCessation
     for: 5m
@@ -1623,7 +1623,7 @@ groups:
       )
       and on(env,environment,tier,type,stage,component)
       (
-        sum by(env,environment,tier,type,stage,component) (gitlab_component_ops:rate_6h{component="shard_memory_bound",monitor="global",type="sidekiq"}) >= 1
+        sum by(env,environment,tier,type,stage,component) (gitlab_component_ops:rate_6h{component="shard_memory_bound",monitor="global",type="sidekiq"}) >= 0.16667
       )
   - alert: SidekiqServiceShardMemoryBoundErrorSLOViolation
     for: 2m
@@ -1719,7 +1719,7 @@ groups:
       )
       and on(env,environment,tier,type,stage,component)
       (
-        sum by(env,environment,tier,type,stage,component) (gitlab_component_ops:rate_6h{component="shard_memory_bound",monitor="global",type="sidekiq"}) >= 1
+        sum by(env,environment,tier,type,stage,component) (gitlab_component_ops:rate_6h{component="shard_memory_bound",monitor="global",type="sidekiq"}) >= 0.16667
       )
   - alert: SidekiqServiceShardQuarantineApdexSLOViolation
     for: 2m
@@ -1825,7 +1825,7 @@ groups:
       )
       and on(env,environment,tier,type,stage,component)
       (
-        sum by(env,environment,tier,type,stage,component) (gitlab_component_ops:rate_6h{component="shard_quarantine",monitor="global",type="sidekiq"}) >= 1
+        sum by(env,environment,tier,type,stage,component) (gitlab_component_ops:rate_6h{component="shard_quarantine",monitor="global",type="sidekiq"}) >= 0.16667
       )
   - alert: SidekiqServiceShardQuarantineErrorSLOViolation
     for: 2m
@@ -1921,7 +1921,7 @@ groups:
       )
       and on(env,environment,tier,type,stage,component)
       (
-        sum by(env,environment,tier,type,stage,component) (gitlab_component_ops:rate_6h{component="shard_quarantine",monitor="global",type="sidekiq"}) >= 1
+        sum by(env,environment,tier,type,stage,component) (gitlab_component_ops:rate_6h{component="shard_quarantine",monitor="global",type="sidekiq"}) >= 0.16667
       )
   - alert: SidekiqServiceShardUrgentCpuBoundApdexSLOViolation
     for: 2m
@@ -2027,7 +2027,7 @@ groups:
       )
       and on(env,environment,tier,type,stage,component)
       (
-        sum by(env,environment,tier,type,stage,component) (gitlab_component_ops:rate_6h{component="shard_urgent_cpu_bound",monitor="global",type="sidekiq"}) >= 1
+        sum by(env,environment,tier,type,stage,component) (gitlab_component_ops:rate_6h{component="shard_urgent_cpu_bound",monitor="global",type="sidekiq"}) >= 0.16667
       )
   - alert: SidekiqServiceShardUrgentCpuBoundErrorSLOViolation
     for: 2m
@@ -2123,7 +2123,7 @@ groups:
       )
       and on(env,environment,tier,type,stage,component)
       (
-        sum by(env,environment,tier,type,stage,component) (gitlab_component_ops:rate_6h{component="shard_urgent_cpu_bound",monitor="global",type="sidekiq"}) >= 1
+        sum by(env,environment,tier,type,stage,component) (gitlab_component_ops:rate_6h{component="shard_urgent_cpu_bound",monitor="global",type="sidekiq"}) >= 0.16667
       )
   - alert: SidekiqServiceShardUrgentCpuBoundTrafficCessation
     for: 5m
@@ -2299,7 +2299,7 @@ groups:
       )
       and on(env,environment,tier,type,stage,component)
       (
-        sum by(env,environment,tier,type,stage,component) (gitlab_component_ops:rate_6h{component="shard_urgent_other",monitor="global",type="sidekiq"}) >= 1
+        sum by(env,environment,tier,type,stage,component) (gitlab_component_ops:rate_6h{component="shard_urgent_other",monitor="global",type="sidekiq"}) >= 0.16667
       )
   - alert: SidekiqServiceShardUrgentOtherErrorSLOViolation
     for: 2m
@@ -2395,7 +2395,7 @@ groups:
       )
       and on(env,environment,tier,type,stage,component)
       (
-        sum by(env,environment,tier,type,stage,component) (gitlab_component_ops:rate_6h{component="shard_urgent_other",monitor="global",type="sidekiq"}) >= 1
+        sum by(env,environment,tier,type,stage,component) (gitlab_component_ops:rate_6h{component="shard_urgent_other",monitor="global",type="sidekiq"}) >= 0.16667
       )
   - alert: SidekiqServiceShardUrgentOtherTrafficCessation
     for: 5m
