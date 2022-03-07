@@ -56,23 +56,6 @@ metricsCatalog.serviceDefinition({
     'sidekiq_jobs_failed_total',
   ],
   kubeConfig: {
-    // TODO: currently sidekiq node_pools are incorrectly labelled with the shard label
-    // See https://gitlab.com/gitlab-com/gl-infra/delivery/-/issues/2243
-    //local shardNames = std.map(function(f) f.name, sidekiqHelpers.shards.listAll()),
-    //labelSelectors: kubeLabelSelectors(
-    //  ingressSelector=null,  // no ingress for sidekiq
-    //  nodeSelector={ type: { oneOf: shardNames } },
-
-      // sidekiq pods have incorrect labels, so until
-      // https://gitlab.com/gitlab-com/gl-infra/delivery/-/issues/2243
-      // is addressed, we treat them all as being part of the first defined
-      // shard. Remove this once correctly labeled.
-      // SDASDAS podStaticLabels={ stage: sidekiqHelpers.shards.listAll()[0].name },
-      // Sidekiq nodes don't present a stage label at present, so\
-      // we hardcode to main stage
-      // SDASDAS nodeStaticLabels={ stage: 'main' },
-    //),
-
     local kubeSelector = { app: 'sidekiq' },
     labelSelectors: kubeLabelSelectors(
       podSelector=kubeSelector,
@@ -116,12 +99,10 @@ metricsCatalog.serviceDefinition({
               histogramApdex(
                 histogram='sidekiq_jobs_completion_seconds_bucket',
                 selector=highUrgencySelector,
-                //selector=highUrgencySelector + shardSelector,
                 satisfiedThreshold=sidekiqHelpers.slos.urgent.executionDurationSeconds,
               ),
               histogramApdex(
                 histogram='sidekiq_jobs_queue_duration_seconds_bucket',
-                //selector=highUrgencySelector + shardSelector,
                 selector=highUrgencySelector,
                 satisfiedThreshold=sidekiqHelpers.slos.urgent.queueingDurationSeconds,
               ),
@@ -134,12 +115,10 @@ metricsCatalog.serviceDefinition({
               histogramApdex(
                 histogram='sidekiq_jobs_completion_seconds_bucket',
                 selector=lowUrgencySelector,
-                //selector=lowUrgencySelector + shardSelector,
                 satisfiedThreshold=sidekiqHelpers.slos.lowUrgency.executionDurationSeconds,
               ),
               histogramApdex(
                 histogram='sidekiq_jobs_queue_duration_seconds_bucket',
-                //selector=lowUrgencySelector + shardSelector,
                 selector=lowUrgencySelector,
                 satisfiedThreshold=sidekiqHelpers.slos.lowUrgency.queueingDurationSeconds,
               ),
@@ -151,7 +130,6 @@ metricsCatalog.serviceDefinition({
             [
               histogramApdex(
                 histogram='sidekiq_jobs_completion_seconds_bucket',
-                //selector=throttledUrgencySelector + shardSelector,
                 selector=throttledUrgencySelector,
                 satisfiedThreshold=sidekiqHelpers.slos.throttled.executionDurationSeconds,
               ),
@@ -164,13 +142,11 @@ metricsCatalog.serviceDefinition({
               // Treat `urgency=""` as low urgency jobs.
               histogramApdex(
                 histogram='sidekiq_jobs_completion_seconds_bucket',
-                //selector=noUrgencySelector + shardSelector,
                 selector=noUrgencySelector,
                 satisfiedThreshold=sidekiqHelpers.slos.lowUrgency.executionDurationSeconds,
               ),
               histogramApdex(
                 histogram='sidekiq_jobs_queue_duration_seconds_bucket',
-                //selector=noUrgencySelector + shardSelector,
                 selector=noUrgencySelector,
                 satisfiedThreshold=sidekiqHelpers.slos.lowUrgency.queueingDurationSeconds,
               ),
@@ -180,13 +156,11 @@ metricsCatalog.serviceDefinition({
 
       requestRate: rateMetric(
         counter='sidekiq_jobs_completion_seconds_bucket',
-        //selector=shardSelector { le: '+Inf' },
         selector={ le: '+Inf' },
       ),
 
       errorRate: rateMetric(
         counter='sidekiq_jobs_failed_total',
-        //selector=shardSelector,
         selector={ },
       ),
 
