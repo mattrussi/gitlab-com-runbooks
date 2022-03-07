@@ -13,7 +13,8 @@ local toolingLinks = import 'toolinglinks/toolinglinks.libsonnet';
     targetProxyName=loadBalancerName,
     projectId,
     team=null,
-    ignoreTrafficCessation=false
+    ignoreTrafficCessation=false,
+    additionalToolingLinks=[],
   )::
     local baseSelector = { target_proxy_name: targetProxyName, project_id: projectId };
 
@@ -46,6 +47,6 @@ local toolingLinks = import 'toolinglinks/toolinglinks.libsonnet';
           instanceId=loadBalancerName,
           project=projectId
         ),
-      ],
+      ] + additionalToolingLinks,
     }),
 }
