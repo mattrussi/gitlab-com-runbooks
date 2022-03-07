@@ -2827,27 +2827,25 @@ groups:
   - expr: |
       group without(label_deployment) (
         label_replace(
-          topk by(cluster,pod) (1, kube_pod_labels{label_type="sidekiq"}),
+          topk by(cluster,pod) (1, kube_pod_labels{label_app="sidekiq"}),
           "deployment", "$0", "label_deployment", ".*"
         )
       )
     labels:
-      stage: catchall
       tier: sv
       type: sidekiq
     record: kube_pod_labels:labeled
-  - expr: topk by(cluster,horizontalpodautoscaler) (1, kube_horizontalpodautoscaler_labels{label_type="sidekiq"})
+  - expr: topk by(cluster,horizontalpodautoscaler) (1, kube_horizontalpodautoscaler_labels{horizontalpodautoscaler="gitlab-sidekiq-all-in-1-v2"})
     labels:
       tier: sv
       type: sidekiq
     record: kube_horizontalpodautoscaler_labels:labeled
-  - expr: topk by(cluster,node) (1, kube_node_labels{label_type=~"catchall"})
+  - expr: topk by(cluster,node) (1, kube_node_labels{label_eks_amazonaws_com_nodegroup="gitlab_sidekiq_pool"})
     labels:
-      stage: main
       tier: sv
       type: sidekiq
     record: kube_node_labels:labeled
-  - expr: topk by(cluster,deployment) (1, kube_deployment_labels{label_type="sidekiq"})
+  - expr: topk by(cluster,deployment) (1, kube_deployment_labels{label_app="sidekiq"})
     labels:
       tier: sv
       type: sidekiq

@@ -58,19 +58,28 @@ metricsCatalog.serviceDefinition({
   kubeConfig: {
     // TODO: currently sidekiq node_pools are incorrectly labelled with the shard label
     // See https://gitlab.com/gitlab-com/gl-infra/delivery/-/issues/2243
-    local shardNames = std.map(function(f) f.name, sidekiqHelpers.shards.listAll()),
-    labelSelectors: kubeLabelSelectors(
-      ingressSelector=null,  // no ingress for sidekiq
-      nodeSelector={ type: { oneOf: shardNames } },
+    //local shardNames = std.map(function(f) f.name, sidekiqHelpers.shards.listAll()),
+    //labelSelectors: kubeLabelSelectors(
+    //  ingressSelector=null,  // no ingress for sidekiq
+    //  nodeSelector={ type: { oneOf: shardNames } },
 
       // sidekiq pods have incorrect labels, so until
       // https://gitlab.com/gitlab-com/gl-infra/delivery/-/issues/2243
       // is addressed, we treat them all as being part of the first defined
       // shard. Remove this once correctly labeled.
-      podStaticLabels={ stage: sidekiqHelpers.shards.listAll()[0].name },
+      // SDASDAS podStaticLabels={ stage: sidekiqHelpers.shards.listAll()[0].name },
       // Sidekiq nodes don't present a stage label at present, so\
       // we hardcode to main stage
-      nodeStaticLabels={ stage: 'main' },
+      // SDASDAS nodeStaticLabels={ stage: 'main' },
+    //),
+
+    local kubeSelector = { app: 'sidekiq' },
+    labelSelectors: kubeLabelSelectors(
+      podSelector=kubeSelector,
+      ingressSelector=null,
+      hpaSelector= { horizontalpodautoscaler: 'gitlab-sidekiq-all-in-1-v2' },
+      nodeSelector={ eks_amazonaws_com_nodegroup: 'gitlab_sidekiq_pool' },
+      deploymentSelector=kubeSelector
     ),
   },
   kubeResources: std.foldl(
