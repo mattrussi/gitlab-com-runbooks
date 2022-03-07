@@ -320,6 +320,9 @@
         duration_s: {
           type: 'float',
         },
+        target_duration_s: {
+          type: 'float',
+        },
         elasticsearch_calls: {
           type: 'long',
         },
