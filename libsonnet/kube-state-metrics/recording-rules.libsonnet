@@ -210,7 +210,7 @@ local kubernetesSelectorToKubeStatePromSelector(selector) =
   objects.mapKeyValues(
     function(key, value)
       // Certain labels don't need a prefix
-      // TODO: sort out labels with charts team
+      // TODO: Ask Charts team to add app label to hpa's
       if key == 'namespace' || key == 'horizontalpodautoscaler' then
         [key, value]
       else
