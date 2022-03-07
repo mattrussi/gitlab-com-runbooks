@@ -10,4 +10,3 @@ promtool 2.30.0 # Keep this the same as GitLab.com's Prometheus version: https:/
 shellcheck 0.7.0
 shfmt 3.0.2
 thanos 0.20.1 # Keep this the same as GitLab.com's Thanos version: https://thanos.gitlab.net/status
-ruby 3.0.1
