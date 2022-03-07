@@ -308,9 +308,6 @@ teams:
   - rails_requests
 - name: product_intelligence
   product_stage_group: product_intelligence
-  ignored_components:
-  - graphql_queries
-  - rails_requests
 - name: product_planning
   product_stage_group: product_planning
   ignored_components:
