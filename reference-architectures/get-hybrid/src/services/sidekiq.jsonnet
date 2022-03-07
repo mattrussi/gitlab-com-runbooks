@@ -153,7 +153,7 @@ metricsCatalog.serviceDefinition({
             ] else []
         )
       ),
-
+// comment
       requestRate: rateMetric(
         counter='sidekiq_jobs_completion_seconds_bucket',
         selector={ le: '+Inf' },
