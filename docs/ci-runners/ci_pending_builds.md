@@ -33,7 +33,7 @@ To understand what can be wrong, you need to find a cause.
 Generally, it is not a big problem, but it generates a lot of noise in logs. It is safe to run that runbook.
 
 You should also be aware that you should then cross-check state between digital ocean and runners manager as described in
-that issue: https://gitlab.com/gitlab-com/infrastructure/issues/921 (this should be moved to script and runbook).
+that issue: https://gitlab.com/gitlab-com/gl-infra/reliability/-/issues/921 (this should be moved to script and runbook).
 
 ## 5. Verify that machines are created on `shared-runners-manager-X.gitlab.com`
 

@@ -129,4 +129,4 @@ Although, you still need to run `socat` twice.
 
 ##### Links
  1. [Issue](https://gitlab.com/gitlab-com/migration/issues/299) describing what was done in scope of the migration project to quickly set them up.
- 1. [META](https://gitlab.com/gitlab-com/infrastructure/issues/3995) issue that is a source of truth regarding middleterm/longterm setup.
+ 1. [META](https://gitlab.com/gitlab-com/gl-infra/reliability/-/issues/3995) issue that is a source of truth regarding middleterm/longterm setup.
