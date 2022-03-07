@@ -133,7 +133,7 @@ metricsCatalog.serviceDefinition({
         },
       ),
 
-      significantLabels: ['fqdn', 'route'],
+      significantLabels: ['region', 'route'],
 
       toolingLinks: [
         toolingLinks.continuousProfiler(service='workhorse-web'),
@@ -162,7 +162,7 @@ metricsCatalog.serviceDefinition({
         selector=workhorseWebSelector,
       ),
 
-      significantLabels: ['fqdn'],
+      significantLabels: ['region'],
 
       toolingLinks: [
         toolingLinks.kibana(title='Image Resizer', index='workhorse_imageresizer', type='web'),
@@ -188,7 +188,7 @@ metricsCatalog.serviceDefinition({
         selector=railsSelector { status: { re: '5..' } }
       ),
 
-      significantLabels: ['fqdn', 'method', 'feature_category'],
+      significantLabels: ['region', 'method', 'feature_category'],
 
       toolingLinks: [
         toolingLinks.sentry(slug='gitlab/gitlabcom', type='web', variables=['environment', 'stage']),

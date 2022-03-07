@@ -165,7 +165,7 @@ metricsCatalog.serviceDefinition({
         }
       ),
 
-      significantLabels: ['fqdn', 'route'],
+      significantLabels: ['region', 'route'],
 
       toolingLinks: [
         toolingLinks.continuousProfiler(service='workhorse-git'),
@@ -213,7 +213,7 @@ metricsCatalog.serviceDefinition({
         }
       ),
 
-      significantLabels: ['fqdn'],
+      significantLabels: ['region'],
 
       toolingLinks: [
         toolingLinks.continuousProfiler(service='workhorse-git'),
@@ -241,7 +241,7 @@ metricsCatalog.serviceDefinition({
         selector=railsSelector { status: { re: '5..' } }
       ),
 
-      significantLabels: ['fqdn', 'method', 'feature_category'],
+      significantLabels: ['region', 'method', 'feature_category'],
 
       toolingLinks: [
         // Improve sentry link once https://gitlab.com/gitlab-com/gl-infra/scalability/-/issues/532 arrives

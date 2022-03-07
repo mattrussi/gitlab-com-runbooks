@@ -548,7 +548,7 @@ groups:
       grafana_variables: environment,stage
       promql_template_1: |
         sum by (env,environment,tier,stage,region) (
-          rate(http_requests_total{environment="{{ $labels.environment }}",job="gitlab-rails",region="{{ $labels.region }}",stage="{{ $labels.stage }}",status=~"5..",type="web"}[5m])
+          sli_aggregations:http_requests_total_rate5m{environment="{{ $labels.environment }}",job="gitlab-rails",region="{{ $labels.region }}",stage="{{ $labels.stage }}",status=~"5..",type="web"}
         )
       runbook: docs/web/README.md
     labels:
@@ -598,7 +598,7 @@ groups:
       grafana_variables: environment,stage
       promql_template_1: |
         sum by (env,environment,tier,stage,region) (
-          rate(http_requests_total{environment="{{ $labels.environment }}",job="gitlab-rails",region="{{ $labels.region }}",stage="{{ $labels.stage }}",status=~"5..",type="web"}[5m])
+          sli_aggregations:http_requests_total_rate5m{environment="{{ $labels.environment }}",job="gitlab-rails",region="{{ $labels.region }}",stage="{{ $labels.stage }}",status=~"5..",type="web"}
         )
       runbook: docs/web/README.md
     labels:
