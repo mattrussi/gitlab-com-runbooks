@@ -52,6 +52,7 @@ metricsCatalog.serviceDefinition({
     praefect: true,
     pvs: true,
     consul: true,
+    'google-cloud-storage': true,
   },
   provisioning: {
     vms: false,

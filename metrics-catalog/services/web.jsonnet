@@ -49,6 +49,7 @@ metricsCatalog.serviceDefinition({
     pvs: true,
     search: true,
     consul: true,
+    'google-cloud-storage': true,
   },
   recordingRuleMetrics: [
     'http_requests_total',
