@@ -12,7 +12,7 @@
  - try to find the reason for the reboot.
    - have a look at the stackdriver GCE VM instance logs for cloudaudit system events and serial console output.
  - check for zero size object files
-   - necessary until [this](https://gitlab.com/gitlab-com/gl-infra/infrastructure/issues/7851) get's fixed
+   - necessary until [this](https://gitlab.com/gitlab-com/gl-infra/reliability/-/issues/7851) get's fixed
    - else there will be errors with pushing, cloning, web ui...
 
 ```

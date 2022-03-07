@@ -97,7 +97,7 @@ shadow schedule][pagerduty-blank-schedule] and initial [overrides][pagerduty-ove
 on-boarding new team members.
 
 
-[on-call-issues]:                   https://gitlab.com/gitlab-com/gl-infra/infrastructure/issues?scope=all&utf8=%E2%9C%93&&state=all&label_name[]=oncall
+[on-call-issues]:                   https://gitlab.com/gitlab-com/gl-infra/reliability/-/issues?scope=all&utf8=%E2%9C%93&&state=all&label_name[]=oncall
 [active-production-incident-issues]:https://gitlab.com/gitlab-com/gl-infra/production/issues?state=open&label_name[]=Incident::Active
 
 [pagerduty-add-user]:               https://support.pagerduty.com/docs/editing-schedules#section-adding-users

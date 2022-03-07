@@ -93,7 +93,7 @@ A simple pipeline is executed at the project [windows-srm-deadman-test](https://
 
 ### Shared Runners Manager Offline
 
-If a shared runners manager is [shown offline](https://gitlab.com/gitlab-com/gl-infra/infrastructure/issues/9186):
+If a shared runners manager is [shown offline](https://gitlab.com/gitlab-com/gl-infra/reliability/-/issues/9186):
 
 - If necessary, [download and install ScaleFT, AKA:- sft](https://gitlab.com/gitlab-com/runbooks/-/blob/master/docs/ci-runners/cicd/windows/connecting.md#required-software)
    - [`macOS`](https://help.okta.com/en/prod/Content/Topics/Adv_Server_Access/docs/sft-osx.htm)

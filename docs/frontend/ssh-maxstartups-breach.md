@@ -1,6 +1,6 @@
 # Possible breach of SSH MaxStartups
 
-https://gitlab.com/gitlab-com/gl-infra/infrastructure/issues/7168 provides the context where we discovered this was necessary.  If this document is too brief, refer to that for more detail.
+https://gitlab.com/gitlab-com/gl-infra/reliability/-/issues/7168 provides the context where we discovered this was necessary.  If this document is too brief, refer to that for more detail.
 
 ## What to do
 
@@ -13,7 +13,7 @@ Urgency: if we've been keeping on top of this, low urgency but important to moni
 * The third is the level at which all new pre-auth connections get dropped, so that needs to be some amount bigger than the first; we've used +50 so far, and that's probably sufficient.  Our goal here is to not be too brutal to connections too quickly.
 * The middle number is what random percentage of connections should be dropped between the first and second limit; 30% is ok,  you can leave this alone.  Our goal is to not drop *any* connections, so this value ideally doesn't make a lot of difference (other than to trigger the first of the drops that we are alerting on here).
 
-At this writing, the values are 250:30:300; the lower number was determined by trial and error (see the [issue](https://gitlab.com/gitlab-com/gl-infra/infrastructure/issues/7168) where this was done), increasing it to a point where errors were eliminated.  Sadly (as noted above) at this time there is no way to see how close we are to hitting this limit before the fact, meaning reducing again in future is risky.  This implies that until we gain such observability, we should not increase this by large increments (e.g. I would suggest < 50% increase at any one incident)
+At this writing, the values are 250:30:300; the lower number was determined by trial and error (see the [issue](https://gitlab.com/gitlab-com/gl-infra/reliability/-/issues/7168) where this was done), increasing it to a point where errors were eliminated.  Sadly (as noted above) at this time there is no way to see how close we are to hitting this limit before the fact, meaning reducing again in future is risky.  This implies that until we gain such observability, we should not increase this by large increments (e.g. I would suggest < 50% increase at any one incident)
 
 Commit, push, merge, upload the roles (using the CI jobs), and apply chef to the affected servers.  The SSH reload is expected to be non-interrupting, but you might like to either let chef do it in the subsequent 30 minutes, or use -C<smallnum> if invoking chef-client via knife if you want to do it slightly more quickly.
 
@@ -21,6 +21,6 @@ Limits: We don't know, but the only known direct impact of increasing this numbe
 
 ## Additional context
 
-This is a twitchy/aggressive alert (low threshold, short period), because the issue we're trying to detect is very short and spiky, but also because it absolutely should not occur under normal circumstances, and we have sufficient levers to pull to control it.  The most obvious is MaxStartups (see above), although we can also adjust `rate-limit sessions` in `roles/gprd-base-lb-altssh.json` and `roles/gprd-base-lb-fe.json` down, to control the number of connections being dispatched to SSH per second.  See https://gitlab.com/gitlab-com/gl-infra/infrastructure/issues/7168#note_191678023 and https://gitlab.com/gitlab-com/gl-infra/infrastructure/issues/7168#note_193486226 for discussion of the math of this.  However, lowering this too far will affect the user experience negatively, and MaxStartups is a much cheaper and safer level to pull (increase).
+This is a twitchy/aggressive alert (low threshold, short period), because the issue we're trying to detect is very short and spiky, but also because it absolutely should not occur under normal circumstances, and we have sufficient levers to pull to control it.  The most obvious is MaxStartups (see above), although we can also adjust `rate-limit sessions` in `roles/gprd-base-lb-altssh.json` and `roles/gprd-base-lb-fe.json` down, to control the number of connections being dispatched to SSH per second.  See https://gitlab.com/gitlab-com/gl-infra/reliability/-/issues/7168#note_191678023 and https://gitlab.com/gitlab-com/gl-infra/reliability/-/issues/7168#note_193486226 for discussion of the math of this.  However, lowering this too far will affect the user experience negatively, and MaxStartups is a much cheaper and safer level to pull (increase).
 
 The metric for this alert comes from mtail on haproxy nodes, and counts 'termination_state' of 'SD' and bytes_read of 0 bytes on SSH connections (to the git front-end servers), which is a good surrogate indicator for MaxStartups being breached.

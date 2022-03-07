@@ -130,7 +130,7 @@ for different reasons:
 
 storage usage in the web UI was in red and the absolute value was high (e.g. 99%)
 
-We plan to alert on that: https://gitlab.com/gitlab-com/gl-infra/infrastructure/issues/8548
+We plan to alert on that: https://gitlab.com/gitlab-com/gl-infra/reliability/-/issues/8548
 
 ### Cluster unhealthy
 
@@ -178,7 +178,7 @@ back to a healthy state.
 
 #### shards too big ####
 
-https://gitlab.com/gitlab-com/gl-infra/infrastructure/issues/7398
+https://gitlab.com/gitlab-com/gl-infra/reliability/-/issues/7398
 
 ## Index Lifecycle Management (ILM)
 
@@ -336,4 +336,4 @@ The short term solution is to refresh index mappings cached in Kibana. This can 
 
 Long term we would like to have more consistency in logging fields so that we can avoid mapping conflicts completely.
 
-see: https://gitlab.com/gitlab-com/gl-infra/infrastructure/issues/9364 for more details.
+see: https://gitlab.com/gitlab-com/gl-infra/reliability/-/issues/9364 for more details.
