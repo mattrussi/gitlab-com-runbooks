@@ -386,42 +386,78 @@ local logLinks(featureCategories) =
   local featureCategoryFilters = matching.matchers({
     'json.meta.feature_category': featureCategories,
   });
+  local withDurationFilters = [matching.existsFilter('json.duration_s'), matching.existsFilter('json.target_duration_s')];
   local timeFrame = elasticsearchLinks.timeRange('now-7d', 'now');
 
-  local pumaSplitColumns = ['json.meta.caller_id.keyword'];
-  local pumaApdexTable = elasticsearchLinks.buildElasticTableCountVizURL(
+  local railsSplitColumns = [
+    'json.meta.caller_id.keyword',
+    'json.request_urgency.keyword',
+    'json.target_duration_s',
+  ];
+  local apdexAgg = {
+    enabled: true,
+    id: '3',
+    params: {
+      customLabel: 'Operations over specified threshold (apdex)',
+      field: 'json.duration_s',
+      json: '{"script": "doc[\'json.duration_s\'].value > doc[\'json.target_duration_s\'].value ? 1 : 0"}',
+    },
+    schema: 'metric',
+    type: 'sum',
+  };
+
+  local railsRequestsApdexTable = elasticsearchLinks.buildElasticTableCountVizURL(
     'rails',
-    featureCategoryFilters,
-    splitSeries=pumaSplitColumns,
+    featureCategoryFilters + withDurationFilters,
+    splitSeries=railsSplitColumns,
     timeRange=timeFrame,
     extraAggs=[
+      apdexAgg,
+    ],
+    orderById='3',
+  );
+
+  local pumaErrorsTable = elasticsearchLinks.buildElasticTableFailureCountVizURL(
+    'rails', featureCategoryFilters, splitSeries=railsSplitColumns, timeRange=timeFrame
+  );
+
+  local railsAllRequestsTable = elasticsearchLinks.buildElasticTableCountVizURL(
+    'rails',
+    featureCategoryFilters + withDurationFilters,
+    splitSeries=railsSplitColumns,
+    timeRange=timeFrame,
+    extraAggs=[
+      apdexAgg,
       {
         enabled: true,
-        id: '3',
+        id: '4',
         params: {
-          customLabel: 'Operations over threshold (1s)',
-          field: 'json.duration_s',
-          json: '{"script": "doc[\'json.duration_s\'].value >= 1 ? 1 : 0"}',
+          customLabel: 'Failing requests (error)',
+          field: 'json.status',
+          json: '{"script": "doc[\'json.status\'].value >= 500 ? 1 : 0"}',
         },
         schema: 'metric',
         type: 'sum',
       },
       {
         enabled: true,
-        id: '4',
+        id: '5',
         params: {
-          customLabel: 'Operations over error budget threshold (5s)',
+          customLabel: 'Total violations (apdex + error)',
           field: 'json.duration_s',
-          json: '{"script": "doc[\'json.duration_s\'].value >= 5 ? 1 : 0"}',
+          json: std.toString({
+            script: |||
+              int errors = doc['json.status'].value >= 500 ? 1 : 0;
+              int slowRequests = doc['json.duration_s'].value > doc['json.target_duration_s'].value ? 1 : 0;
+              return errors + slowRequests;
+            |||,
+          }),
         },
         schema: 'metric',
         type: 'sum',
       },
     ],
-    orderById='3',
-  );
-  local pumaErrorsTable = elasticsearchLinks.buildElasticTableFailureCountVizURL(
-    'rails', featureCategoryFilters, splitSeries=pumaSplitColumns, timeRange=timeFrame
+    orderById='5',
   );
 
   local sidekiqSplitColumns = ['json.class.keyword'];
@@ -449,19 +485,25 @@ local logLinks(featureCategories) =
     title='Failure log links',
     mode='markdown',
     content=|||
-      ##### [Puma Apdex](%(pumaApdexLink)s): slow requests
+      ##### [Rails Requests Apdex](%(railsRequestsApdexLink)s): slow requests
 
       This shows the number of requests exceeding the request duration thresholds
-      per endpoint over the past 7 days.
+      configured per endpoint over the past 7 days.
 
-      This shows all requests exceeding 1s and 5s durations. We will make this
-      take the configured [request urgency](%(requestUrgencyLink)s) into account in
-      [this issue](%(scalability1478)s).
+      The threshold depends on the [configurable request urgency](%(requestUrgencyLink)s).
 
       ##### [Puma Errors](%(pumaErrorsLink)s): failing requests
 
       This shows the number of Rails requests that failed per endpoint over
       the past 7 days.
+
+      ##### [All request violations](%(allRequestViolations)s): slow requests + failing requests
+
+      This slow loading table shows the endpoints that errored or where slow the most often
+      in the past 7 days.
+
+      If `rails_requests` or `puma` are at the top of the table on the left side, then
+      this will show you the top endpoints to look into.
 
       ##### [Sidekiq Execution Apdex](%(sidekiqApdexLink)s): slow jobs
 
@@ -476,10 +518,10 @@ local logLinks(featureCategories) =
       This includes retries: if a job with a was retried 3 times, before exhausting
       its retries, this counts as 3 failures towards the budget.
     ||| % {
-      pumaApdexLink: pumaApdexTable,
+      railsRequestsApdexLink: railsRequestsApdexTable,
       requestUrgencyLink: 'https://docs.gitlab.com/ee/development/application_slis/rails_request_apdex.html#adjusting-request-urgency',
-      scalability1478: 'https://gitlab.com/gitlab-com/gl-infra/scalability/-/issues/1478',
       pumaErrorsLink: pumaErrorsTable,
+      allRequestViolations: railsAllRequestsTable,
       sidekiqErrorsLink: sidekiqErrorsTable,
       sidekiqApdexLink: sidekiqApdexTables,
       sidekiqUrgentThreshold: sidekiqHelpers.slos.urgent.executionDurationSeconds,

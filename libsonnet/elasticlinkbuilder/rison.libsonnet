@@ -12,7 +12,7 @@ local encodeString(string) =
   else if stringIsSafe(string) then
     string
   else
-    local replacements = [[' ', '+'], ["'", "!'"]];
+    local replacements = [['+', '%2B'], [' ', '+'], ["'", "!'"]];
     "'" + strings.urlEncode(string, replacements) + "'";
 
 local encodeArray(array, encodeUnknown) =
