@@ -16,5 +16,5 @@ The engineer on call should get paged that no successful snapshot ran.
 
 ## Preparation
 
-1. Create issue in https://gitlab.com/gitlab-com/gl-infra/infrastructure/-/issues/new
+1. Create issue in https://gitlab.com/gitlab-com/gl-infra/reliability/-/issues/new
 1. Identify and inform the SRE on-call during that day running gameday.

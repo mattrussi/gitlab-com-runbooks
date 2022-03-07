@@ -27,7 +27,7 @@ local goContainers = ['gitlab-pages', 'gitlab-workhorse', 'kas', 'registry', 'th
     // required `stage` and `shard` labels.
     // Once this is fixed, the second part of the `OR` conjuction below can
     // be removed.
-    // Tracked in https://gitlab.com/gitlab-com/gl-infra/infrastructure/-/issues/13593
+    // Tracked in https://gitlab.com/gitlab-com/gl-infra/reliability/-/issues/13593
     query: |||
       (
         go_memstats_alloc_bytes{%(selector)s}

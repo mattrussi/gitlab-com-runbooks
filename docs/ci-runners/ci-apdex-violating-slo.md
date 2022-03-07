@@ -3,7 +3,7 @@
 To Check the overall health of the runners:
 
 - Check the [CI-Runners standard SLI dashboard](https://dashboards.gitlab.net/d/ci-runners-main/ci-runners-overview?orgId=1&from=now-6h%2Fm&to=now%2Fm&var-PROMETHEUS_DS=Global&var-environment=gprd&var-stage=main) to check the impact of degradation
-  - Note that job queue charts are inaccurate in the following ways that are tracked in https://gitlab.com/gitlab-com/gl-infra/infrastructure/-/issues/12850 and https://gitlab.com/gitlab-org/gitlab/-/merge_requests/19517:
+  - Note that job queue charts are inaccurate in the following ways that are tracked in https://gitlab.com/gitlab-com/gl-infra/reliability/-/issues/12850 and https://gitlab.com/gitlab-org/gitlab/-/merge_requests/19517:
     - it's outdated, because gitlab_exporter is pointed at the archive replica (which is lagging behind)
     - it's incomplete, because most of the times the Postgres queries for pulling this data are timing out
 - [Job queue duration histogram percentiles](https://dashboards.gitlab.net/d/000000159/ci?viewPanel=89&orgId=1&from=now-6h&to=now) may also point to a degradation, note that these are only for jobs that have been picked up by a runner.

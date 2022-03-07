@@ -45,7 +45,7 @@ The [monitoring-overview](https://dashboards.gitlab.net/d/monitoring-main/monito
 
 ## Pre-Change Steps
 
-Create an [infrastructure issue](https://gitlab.com/gitlab-com/gl-infra/infrastructure/-/issues/new) if there isn't one yet.
+Create an [infrastructure issue](https://gitlab.com/gitlab-com/gl-infra/reliability/-/issues/new) if there isn't one yet.
 
 The issue should detail:
 

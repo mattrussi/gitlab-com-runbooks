@@ -300,7 +300,7 @@ You can check WAL-E `backup-push` in several ways:
 [gitlab_com:last_wale_successful_basebackup_age_in_hours](https://thanos.gitlab.net/graph?g0.range_input=1d&g0.max_source_resolution=0s&g0.expr=gitlab_com%3Alast_wale_successful_basebackup_age_in_hours&g0.tab=0)
 1. using Kibana (bear in mind that there were cases in the past when logs where
 not shipped): <!-- NS: doubtful, TODO: double check it; update once
-https://gitlab.com/gitlab-com/gl-infra/infrastructure/-/issues/10499 is done-->
+https://gitlab.com/gitlab-com/gl-infra/reliability/-/issues/10499 is done-->
   - [`log.gprd.gitlab.net`](https://log.gprd.gitlab.net)
   - index: `pubsub-system-inf-gprd`
   - document field: `json.ident` with value `wal_e.worker.upload`

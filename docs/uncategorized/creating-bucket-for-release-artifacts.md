@@ -1,6 +1,6 @@
 # Release Artifact Bucket
 
-We occasionally get a request such as [this one](https://gitlab.com/gitlab-com/gl-infra/infrastructure/-/issues/10637)
+We occasionally get a request such as [this one](https://gitlab.com/gitlab-com/gl-infra/reliability/-/issues/10637)
 that asks us to create a bucket for release artifacts. Currently we
 create the bucket in the `gitlab-ops` account and give the requested
 permissions. The required terraform will look something like this:

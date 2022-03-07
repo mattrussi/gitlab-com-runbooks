@@ -13,7 +13,7 @@ local resourceSaturationPoint = (import 'servicemetrics/resource_saturation_poin
       When saturated, new connection attempts (incoming SYN packets) are dropped with no reply, leaving clients to slowly retry (and typically fail again) over the next several seconds.  When packets are being dropped due to this condition, kernel will log the event as: "nf_conntrack: table full, dropping packet".
     |||,
     grafana_dashboard_uid: 'sat_conntrack',
-    resourceLabels: ['fqdn', 'instance'],  // Use both labels until https://gitlab.com/gitlab-com/gl-infra/infrastructure/-/issues/10299 arrives
+    resourceLabels: ['fqdn', 'instance'],  // Use both labels until https://gitlab.com/gitlab-com/gl-infra/reliability/-/issues/10299 arrives
     query: |||
       max_over_time(node_nf_conntrack_entries{%(selector)s}[%(rangeInterval)s])
       /

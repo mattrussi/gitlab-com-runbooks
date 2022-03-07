@@ -92,4 +92,4 @@ inside of that project will not be discussed as that is implementation specific.
 
 ## Future Work
 
-* Some of the above will be removed with work to be completed here: https://gitlab.com/gitlab-com/gl-infra/infrastructure/-/issues/8165
+* Some of the above will be removed with work to be completed here: https://gitlab.com/gitlab-com/gl-infra/reliability/-/issues/8165

@@ -111,7 +111,7 @@ The mechanism to reliably orchestrate VACUUM should be in place before any signi
 
 ### Major upgrade to PostgreSQL 13
 
-The benchmarked in [Benchmark of VACUUM PostgreSQL 12 vs. 13 (btree deduplication)](https://gitlab.com/gitlab-com/gl-infra/infrastructure/-/issues/14723#note_761520231) hints us that btree deduplication, introduced in PostgreSQL 13, can help with multiple problems at once.
+The benchmarked in [Benchmark of VACUUM PostgreSQL 12 vs. 13 (btree deduplication)](https://gitlab.com/gitlab-com/gl-infra/reliability/-/issues/14723#note_761520231) hints us that btree deduplication, introduced in PostgreSQL 13, can help with multiple problems at once.
 
 - Index size
 - Index performance
@@ -138,14 +138,14 @@ The benchmarked in [Benchmark of VACUUM PostgreSQL 12 vs. 13 (btree deduplicatio
 
 ## Incidents and issues involving VACUUM
 
-- [[Design Document] Configure properly Autovacuum for postgresql](https://gitlab.com/gitlab-com/gl-infra/infrastructure/-/issues/5024)
-- [Review Autovacuum Strategy for all high traffic tables](https://gitlab.com/gitlab-com/gl-infra/infrastructure/-/issues/14811)
-- [Infra review of Autovacuum historical comments and decisions](https://gitlab.com/gitlab-com/gl-infra/infrastructure/-/issues/15050)
+- [[Design Document] Configure properly Autovacuum for postgresql](https://gitlab.com/gitlab-com/gl-infra/reliability/-/issues/5024)
+- [Review Autovacuum Strategy for all high traffic tables](https://gitlab.com/gitlab-com/gl-infra/reliability/-/issues/14811)
+- [Infra review of Autovacuum historical comments and decisions](https://gitlab.com/gitlab-com/gl-infra/reliability/-/issues/15050)
 - [Optimize PostgreSQL AUTOVACUUM - 2021](https://gitlab.com/groups/gitlab-com/gl-infra/-/epics/413#note_820480832)
-- [Lower autovacuuming settings for ci_job_artifacts table](https://gitlab.com/gitlab-com/gl-infra/infrastructure/-/issues/14723)
-- [Benchmark of different VACUUM settings](https://gitlab.com/gitlab-com/gl-infra/infrastructure/-/issues/14723#note_758526535)
-- [Benchmark of VACUUM PostgreSQL 12 vs. 13 (btree deduplication)](https://gitlab.com/gitlab-com/gl-infra/infrastructure/-/issues/14723#note_761520231)
-- [Reduce database index bloat regularly](https://gitlab.com/gitlab-com/gl-infra/infrastructure/-/issues/9563)
+- [Lower autovacuuming settings for ci_job_artifacts table](https://gitlab.com/gitlab-com/gl-infra/reliability/-/issues/14723)
+- [Benchmark of different VACUUM settings](https://gitlab.com/gitlab-com/gl-infra/reliability/-/issues/14723#note_758526535)
+- [Benchmark of VACUUM PostgreSQL 12 vs. 13 (btree deduplication)](https://gitlab.com/gitlab-com/gl-infra/reliability/-/issues/14723#note_761520231)
+- [Reduce database index bloat regularly](https://gitlab.com/gitlab-com/gl-infra/reliability/-/issues/9563)
 
 ## Other related runbook pages and documents
 

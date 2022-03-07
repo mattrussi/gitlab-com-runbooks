@@ -4,7 +4,7 @@
 
  - **Temporary rules are subject to automatic expiration!** See [Automated expiration of temporary rules](#automated-expiration-of-temporary-rules) .
  - GitLab Pages and the GitLab registry are not yet fronted by Cloudflare, so these blocks would not affect them.
- - Automation mentioned in this documentation is *partially* created. (https://gitlab.com/gitlab-com/gl-infra/infrastructure/-/issues/9711#note_323835098)
+ - Automation mentioned in this documentation is *partially* created. (https://gitlab.com/gitlab-com/gl-infra/reliability/-/issues/9711#note_323835098)
    - Automated expiration is implemented as part of the [Cloudflare Audit Log](https://ops.gitlab.net/gitlab-com/gl-infra/cloudflare-audit-log) , further [described below](#automated-rule-and-issue-maintenance)
    - Chatops tooling to create a rule is not implemented
  - IP Blocks should not be a permanent solution. IP addresses get rotated on an ISP level, so we should strive to block them only as long as required to mitigate an attack or block abusive behaviour.

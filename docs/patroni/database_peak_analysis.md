@@ -5,7 +5,7 @@ The goal of this report is to detail what is being executed in the primary datab
 
 The CPU utilization peak represent that some queries are generating an excessive load on the database server and could impact the SLA, availability and performance from the database host.
 
-I will use as an example the issue: https://gitlab.com/gitlab-com/gl-infra/infrastructure/-/issues/13536
+I will use as an example the issue: https://gitlab.com/gitlab-com/gl-infra/reliability/-/issues/13536
 
 ### How we identify the CPU utilization peaks?
 

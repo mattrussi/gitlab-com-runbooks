@@ -57,7 +57,7 @@ local union(sets) = std.foldl(function(memo, a) std.setUnion(std.set(a), memo), 
         'RKrvPFp7k',
         // mkaeppler: https://gitlab.com/gitlab-com/runbooks/-/merge_requests/2345#note_358065560
         'IGBZ5H_Zz',
-        // hphilipps: osquery dashboard: https://gitlab.com/gitlab-com/gl-infra/infrastructure/-/issues/10504
+        // hphilipps: osquery dashboard: https://gitlab.com/gitlab-com/gl-infra/reliability/-/issues/10504
         'fjSLYzRWz',
         // cmiskell: "please keep fleet overview": https://gitlab.com/gitlab-com/runbooks/-/merge_requests/2345#note_358366125
         'mnbqU9Smz',

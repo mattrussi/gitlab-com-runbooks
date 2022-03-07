@@ -289,7 +289,7 @@ check for an invalid residence.
 ## Improvements for this script/process
 
 * Automatically send logs to elasticsearch instead of using `tee`.
-  - https://gitlab.com/gitlab-com/gl-infra/infrastructure/-/issues/9474
+  - https://gitlab.com/gitlab-com/gl-infra/reliability/-/issues/9474
 * Automate the invocation of the `storage_rebalance.rb` script with Ansible
   or similar. Even just having an automated script that can migrate 500GB at a
   time from the most used to least used gitaly node would help make this less

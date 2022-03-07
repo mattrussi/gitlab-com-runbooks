@@ -18,7 +18,7 @@ Both tables and indexes can be bloated. Two negative effects of the growing bloa
 ## How to see estimated bloat for tables and indexes
 
 - In monitoring: [PostgreSQL Bloat Dashboard](https://dashboards.gitlab.net/d/000000224/postgresql-bloat?orgId=1)
-- [postgres-checkup reports](https://gitlab.com/gitlab-com/gl-infra/infrastructure/-/issues?label_name%5B%5D=postgres-checkup) – see reports `F004 Autovacuum: Heap Bloat (Estimated)` and `F005 Autovacuum: Btree Index Bloat (Estimated)`. See [Checking PostgreSQL health with postgres-checkup](docs/patroni/postgres-checkup.md) for more information.
+- [postgres-checkup reports](https://gitlab.com/gitlab-com/gl-infra/reliability/-/issues?label_name%5B%5D=postgres-checkup) – see reports `F004 Autovacuum: Heap Bloat (Estimated)` and `F005 Autovacuum: Btree Index Bloat (Estimated)`. See [Checking PostgreSQL health with postgres-checkup](docs/patroni/postgres-checkup.md) for more information.
 
 ## What to repack
 

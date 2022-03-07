@@ -6,7 +6,7 @@ Rails consoles in Staging/Production are accessed via Gravitational [Teleport](h
 
 - The main reasons for this change are security and compliance: With Teleport we'll have fully flexible, on-demand, and audited access to our Rails consoles and to some other terminal/CLI tools, like `kubectl`, [Database access via psql](Connect_to_Database_Console_via_Teleport.md) and more.
 - Teleport's goal is to provide a Unified Access Plane for all our infrastructure. [Here](https://goteleport.com/teleport/docs/#why-use-teleport) you can find some of the most popular use cases for Teleport.
-- We evaluated Teleport thoroughly (see this [issue](https://gitlab.com/gitlab-com/gl-infra/infrastructure/-/issues/11568)) and found it to comply with most of our infrastructure access requirements, unlike some of its competitors ([Okta-ASA](https://gitlab.com/gitlab-com/gl-infra/infrastructure/-/issues/12042), [Hashicorp Boundary](https://gitlab.com/gitlab-com/gl-infra/infrastructure/-/issues/11666) and others).
+- We evaluated Teleport thoroughly (see this [issue](https://gitlab.com/gitlab-com/gl-infra/reliability/-/issues/11568)) and found it to comply with most of our infrastructure access requirements, unlike some of its competitors ([Okta-ASA](https://gitlab.com/gitlab-com/gl-infra/reliability/-/issues/12042), [Hashicorp Boundary](https://gitlab.com/gitlab-com/gl-infra/reliability/-/issues/11666) and others).
 
 ## Access Request
 

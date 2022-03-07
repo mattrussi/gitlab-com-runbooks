@@ -245,7 +245,7 @@ Adding a logfile and using an existing ES index
 ### Roadmap
 
 Roadmap:
-  - https://gitlab.com/gitlab-com/gl-infra/infrastructure/-/issues/10095
+  - https://gitlab.com/gitlab-com/gl-infra/reliability/-/issues/10095
   - https://docs.google.com/document/d/1EK3QUuC0JrN5ndXdz1McEwKirD_jfA7bk0siTgHXwI4/edit#
 
 ### Logging infrastructure overview ##
@@ -260,7 +260,7 @@ We are using Fluentd (`td-agent`) for parsing log files and forwarding log messa
 
 Fluentd running on VMs is configured to send logs to two destinations: [Operations](https://cloud.google.com/stackdriver/docs/)(formerly Stackdriver) and [Cloud Pub/Sub](https://cloud.google.com/pubsub/docs/). Here's the [fluentd config](https://gitlab.com/gitlab-cookbooks/gitlab_fluentd/) for running on GCE VMs.
 
-Gitlab managed Fluentd in Kubernetes (running as a DaemonSet) sends logs only to ElasticStack (this will likely change in the future, see: https://gitlab.com/gitlab-com/gl-infra/infrastructure/-/issues/11655 and: https://gitlab.com/gitlab-com/gl-infra/infrastructure/-/issues/10095). Its config can be found [here](https://gitlab.com/gitlab-com/gl-infra/k8s-workloads/tanka-deployments/-/tree/master/environments/fluentd-elasticsearch).
+Gitlab managed Fluentd in Kubernetes (running as a DaemonSet) sends logs only to ElasticStack (this will likely change in the future, see: https://gitlab.com/gitlab-com/gl-infra/reliability/-/issues/11655 and: https://gitlab.com/gitlab-com/gl-infra/reliability/-/issues/10095). Its config can be found [here](https://gitlab.com/gitlab-com/gl-infra/k8s-workloads/tanka-deployments/-/tree/master/environments/fluentd-elasticsearch).
 
 Additionally, another GitLab managed Fluentd in Kubernetes named `fluentd-archiver` (running as a StatefulSet) exports the logs sent to PubSub by `fluentd-elasticsearch` to the GCS bucket `gitlab-${env}-logging-archive` under the folder `gke/`. This is because Stackdriver exports all Kubernetes container logs mixed together into `stdout/` and `stderr/` folders, making it difficult to filter per container name. Its config can be found [here](https://gitlab.com/gitlab-com/gl-infra/k8s-workloads/tanka-deployments/-/tree/master/environments/fluentd-archiver)>
 
@@ -416,7 +416,7 @@ Design document for migration to ES7: https://about.gitlab.com/handbook/engineer
 
 There are three cookbooks that configure logging on gitlab.com
 
-* gitlab-proxy - Sets up the nginx proxy so that users can access elastic cloud via log.gprd.gitlab.net, to be deprecated: https://gitlab.com/gitlab-com/gl-infra/infrastructure/-/issues/9145 and https://gitlab.com/groups/gitlab-com/gl-infra/-/epics/331
+* gitlab-proxy - Sets up the nginx proxy so that users can access elastic cloud via log.gprd.gitlab.net, to be deprecated: https://gitlab.com/gitlab-com/gl-infra/reliability/-/issues/9145 and https://gitlab.com/groups/gitlab-com/gl-infra/-/epics/331
 * gitlab_fluentd - Sets up td-agent on all nodes, forwards logs to pubsub topics.
 * gitlab-elk (deprecated) - Sets up the pubsub beat which reads from the topics and forwards to elastic cloud.
 
@@ -436,7 +436,7 @@ There are three cookbooks that configure logging on gitlab.com
 Pub/Sub Subscriptions should be automatically created by the pubsubbeat service
 on each pubsub host. If subscriptions get misconfigured (e.g. topics appear
 as `_deleted-topic_`) you can delete them and restart the pubsubbeat services to
-re-create them. This will be deprecated soon: https://gitlab.com/gitlab-com/gl-infra/infrastructure/-/issues/8339
+re-create them. This will be deprecated soon: https://gitlab.com/gitlab-com/gl-infra/reliability/-/issues/8339
 
 ### runbooks repo
 

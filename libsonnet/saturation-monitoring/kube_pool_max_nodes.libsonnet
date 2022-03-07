@@ -7,7 +7,7 @@ local resourceSaturationPoint = (import 'servicemetrics/resource_saturation_poin
     severity: 's3',
     // Not all information required to evaluate this saturation point is available in
     // the Prometheus instance. For that reason, we need to evaluate this metric in Thanos
-    // This is not ideal. We should re-evaluate this once https://gitlab.com/gitlab-com/gl-infra/infrastructure/-/issues/13179
+    // This is not ideal. We should re-evaluate this once https://gitlab.com/gitlab-com/gl-infra/reliability/-/issues/13179
     // is merged
     dangerouslyThanosEvaluated: true,
 

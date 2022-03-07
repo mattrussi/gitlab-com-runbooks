@@ -59,7 +59,7 @@ to Cluster in the future.
 ### CPUs
 Redis VMs were the first nodes we switched to from N1 to '[C2](https://cloud.google.com/compute/docs/machine-types#c2_machine_types)'
 node types for the best raw single-threaded CPU performance.  This [halved](https://gitlab.com/gitlab-com/gl-infra/scalability/-/issues/230#note_312403063)
-the CPU usage on our sidekiq cluster, and [almost the same](https://gitlab.com/gitlab-com/gl-infra/infrastructure/-/issues/9636)
+the CPU usage on our sidekiq cluster, and [almost the same](https://gitlab.com/gitlab-com/gl-infra/reliability/-/issues/9636)
 on the cache cluster.   Just in case you were in any doubt as to how important the single-threaded CPU performance was
 to redis.
 
@@ -78,7 +78,7 @@ from the primary and then reconnecting via the sentinels again.  It requires no 
 
 The configuration is subtly different across the clusters, for historical reasons; the persistent and sidekiq clusters
 have sentinel running on the VMs alongside redis, whereas the cache cluster uses a distinct set of sentinel VMs.
-https://gitlab.com/gitlab-com/gl-infra/infrastructure/-/issues/11389 records the desire to clean this up.
+https://gitlab.com/gitlab-com/gl-infra/reliability/-/issues/11389 records the desire to clean this up.
 
 ### Node failure
 If one or more replicas fail, nothing of note occurs to Redis availability.  The primary continues to be the primary,
@@ -217,7 +217,7 @@ ensure we do not run into CROSSSLOT (cross slot) hashing problems.  At this time
 manage the performance of the existing redis clusters sufficiently that there is no urgent need.
 
 See:
-1. https://gitlab.com/gitlab-com/gl-infra/infrastructure/-/issues/9788
+1. https://gitlab.com/gitlab-com/gl-infra/reliability/-/issues/9788
 1. https://gitlab.com/gitlab-com/gl-infra/scalability/-/issues/305
 
 ## Debugging and Diagnosis

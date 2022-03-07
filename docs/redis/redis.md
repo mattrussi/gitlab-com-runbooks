@@ -919,4 +919,4 @@ If it needs to be stopped for some reason (it is running badly, is causing undue
 - https://gitlab.com/groups/gitlab-com/gl-infra/-/epics/80
 - https://gitlab.com/gitlab-com/gl-infra/scalability/issues/49
 - https://gitlab.com/gitlab-com/gl-infra/reliability/-/issues/7199
-- https://gitlab.com/gitlab-com/gl-infra/infrastructure/-/issues/9414
+- https://gitlab.com/gitlab-com/gl-infra/reliability/-/issues/9414

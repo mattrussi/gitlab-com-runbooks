@@ -21,7 +21,7 @@
 // but there are still a lot of exceptions, and this appproach
 // allows us to flexibly include and exclude resources.
 //
-// See https://gitlab.com/gitlab-com/gl-infra/infrastructure/-/issues/15208
+// See https://gitlab.com/gitlab-com/gl-infra/reliability/-/issues/15208
 
 // Special default value placeholder
 local defaultValue = { __default__: true };
