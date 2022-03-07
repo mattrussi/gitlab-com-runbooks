@@ -43,6 +43,7 @@ metricsCatalog.serviceDefinition({
     'redis-tracechunks': true,
     'redis-sidekiq': true,
     'redis-cache': true,
+    'redis-sessions': true,
     redis: true,
     patroni: true,
     pgbouncer: true,
