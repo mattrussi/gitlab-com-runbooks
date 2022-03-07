@@ -100,6 +100,7 @@ metricsCatalog.serviceDefinition({
 
   },
   skippedMaturityCriteria: maturityLevels.skip({
+    'Structured logs available in Kibana': 'Sentry is recently at a complicated state. The logs may be managed somewhere else. For more information: https://gitlab.com/gitlab-com/gl-infra/infrastructure/-/issues/13963',
     'Service exists in the dependency graph': 'Sentry is an independent internal observability tool',
   }),
 })
