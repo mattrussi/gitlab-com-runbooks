@@ -9,11 +9,11 @@ groups:
     for: 5m
     annotations:
       title: The consul SLI of the consul service (`{{ $labels.stage }}` stage) has
-        not received any traffic in the past 30 minutes
+        not received any traffic in the past 30m
       description: |
         HTTP GET requests handled by the Consul agent.
 
-        This alert signifies that the SLI is reporting a cessation of traffic, but the signal is not absent.
+        This alert signifies that the SLI is reporting a cessation of traffic; the signal is present, but is zero.
       grafana_dashboard_id: consul-main/consul-overview
       grafana_dashboard_link: https://dashboards.gitlab.net/d/consul-main/consul-overview?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-stage={{ $labels.stage }}
@@ -42,7 +42,7 @@ groups:
     for: 30m
     annotations:
       title: The consul SLI of the consul service (`{{ $labels.stage }}` stage) has
-        not reported any traffic in the past 30 minutes
+        not reported any traffic in the past 30m
       description: |
         HTTP GET requests handled by the Consul agent.
 
@@ -79,11 +79,11 @@ groups:
     for: 5m
     annotations:
       title: The consul SLI of the consul service in region `{{ $labels.region }}`
-        has not received any traffic in the past 30 minutes
+        has not received any traffic in the past 30m
       description: |
         HTTP GET requests handled by the Consul agent.
 
-        This alert signifies that the SLI is reporting a cessation of traffic, but the signal is not absent.
+        This alert signifies that the SLI is reporting a cessation of traffic; the signal is present, but is zero.
 
         Note that this alert is specific to the `{{ $labels.region }}` region.
       grafana_dashboard_id: consul-main/consul-overview
@@ -93,12 +93,12 @@ groups:
       grafana_panel_id: "4242308695"
       grafana_variables: environment,stage
       promql_template_1: |
-        sum by (env,environment,tier,stage) (
-          clamp_min(deriv(consul_http_GET_v1_agent_metrics_count{environment="{{ $labels.environment }}",stage="{{ $labels.stage }}"}[5m]), 0)
+        sum by (env,environment,tier,stage,region) (
+          clamp_min(deriv(consul_http_GET_v1_agent_metrics_count{environment="{{ $labels.environment }}",region="{{ $labels.region }}",stage="{{ $labels.stage }}"}[5m]), 0)
         )
       runbook: docs/consul/README.md
     labels:
-      aggregation: component
+      aggregation: regional_component
       alert_class: traffic_cessation
       alert_type: cause
       feature_category: not_owned
@@ -114,7 +114,7 @@ groups:
     for: 30m
     annotations:
       title: The consul SLI of the consul service in region `{{ $labels.region }}`
-        has not reported any traffic in the past 30 minutes
+        has not reported any traffic in the past 30m
       description: |
         HTTP GET requests handled by the Consul agent.
 
@@ -130,12 +130,12 @@ groups:
       grafana_panel_id: "4242308695"
       grafana_variables: environment,stage
       promql_template_1: |
-        sum by (env,environment,tier,stage) (
-          clamp_min(deriv(consul_http_GET_v1_agent_metrics_count{environment="{{ $labels.environment }}",stage="{{ $labels.stage }}"}[5m]), 0)
+        sum by (env,environment,tier,stage,region) (
+          clamp_min(deriv(consul_http_GET_v1_agent_metrics_count{environment="{{ $labels.environment }}",region="{{ $labels.region }}",stage="{{ $labels.stage }}"}[5m]), 0)
         )
       runbook: docs/consul/README.md
     labels:
-      aggregation: component
+      aggregation: regional_component
       alert_class: traffic_cessation
       alert_type: cause
       feature_category: not_owned

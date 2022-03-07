@@ -97,11 +97,11 @@ groups:
     for: 5m
     annotations:
       title: The loadbalancer SLI of the ci-runners service (`{{ $labels.stage }}`
-        stage) has not received any traffic in the past 30 minutes
+        stage) has not received any traffic in the past 30m
       description: |
         Measures aggregated HTTP request traffic through the HAProxy. 5xx responses are considered to be failures.
 
-        This alert signifies that the SLI is reporting a cessation of traffic, but the signal is not absent.
+        This alert signifies that the SLI is reporting a cessation of traffic; the signal is present, but is zero.
       grafana_dashboard_id: ci-runners-main/ci-runners-overview
       grafana_dashboard_link: https://dashboards.gitlab.net/d/ci-runners-main/ci-runners-overview?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-stage={{ $labels.stage }}
@@ -126,7 +126,7 @@ groups:
     for: 30m
     annotations:
       title: The loadbalancer SLI of the ci-runners service (`{{ $labels.stage }}`
-        stage) has not reported any traffic in the past 30 minutes
+        stage) has not reported any traffic in the past 30m
       description: |
         Measures aggregated HTTP request traffic through the HAProxy. 5xx responses are considered to be failures.
 
@@ -259,13 +259,13 @@ groups:
     for: 5m
     annotations:
       title: The polling SLI of the ci-runners service (`{{ $labels.stage }}` stage)
-        has not received any traffic in the past 30 minutes
+        has not received any traffic in the past 30m
       description: |
         This SLI monitors job polling operations from runners, via Workhorse's `/api/v4/jobs/request` route.
 
         5xx responses are considered to be errors, and could indicate postgres timeouts (after 15s) on the main query used in assigning jobs to runners.
 
-        This alert signifies that the SLI is reporting a cessation of traffic, but the signal is not absent.
+        This alert signifies that the SLI is reporting a cessation of traffic; the signal is present, but is zero.
       grafana_dashboard_id: ci-runners-main/ci-runners-overview
       grafana_dashboard_link: https://dashboards.gitlab.net/d/ci-runners-main/ci-runners-overview?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-stage={{ $labels.stage }}
@@ -294,7 +294,7 @@ groups:
     for: 30m
     annotations:
       title: The polling SLI of the ci-runners service (`{{ $labels.stage }}` stage)
-        has not reported any traffic in the past 30 minutes
+        has not reported any traffic in the past 30m
       description: |
         This SLI monitors job polling operations from runners, via Workhorse's `/api/v4/jobs/request` route.
 
@@ -441,13 +441,13 @@ groups:
     for: 5m
     annotations:
       title: The queuing_queries_duration SLI of the ci-runners service (`{{ $labels.stage
-        }}` stage) has not received any traffic in the past 30 minutes
+        }}` stage) has not received any traffic in the past 30m
       description: |
         This SLI monitors the queuing queries duration. Everything above 1 second is considered to be unexpected and needs investigation.
 
         These database queries are executed in the Rails application when a runner requests a new build to process in `POST /api/v4/jobs/request`.
 
-        This alert signifies that the SLI is reporting a cessation of traffic, but the signal is not absent.
+        This alert signifies that the SLI is reporting a cessation of traffic; the signal is present, but is zero.
       grafana_dashboard_id: ci-runners-main/ci-runners-overview
       grafana_dashboard_link: https://dashboards.gitlab.net/d/ci-runners-main/ci-runners-overview?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-stage={{ $labels.stage }}
@@ -477,7 +477,7 @@ groups:
     for: 30m
     annotations:
       title: The queuing_queries_duration SLI of the ci-runners service (`{{ $labels.stage
-        }}` stage) has not reported any traffic in the past 30 minutes
+        }}` stage) has not reported any traffic in the past 30m
       description: |
         This SLI monitors the queuing queries duration. Everything above 1 second is considered to be unexpected and needs investigation.
 
@@ -731,7 +731,7 @@ groups:
     for: 5m
     annotations:
       title: The shared_runner_queues SLI of the ci-runners service (`{{ $labels.stage
-        }}` stage) has not received any traffic in the past 30 minutes
+        }}` stage) has not received any traffic in the past 30m
       description: |
         This SLI monitors the shared runner queues on GitLab.com. Each job is an operation.
 
@@ -739,7 +739,7 @@ groups:
 
         Jobs marked as failing with runner system failures are considered to be in error.
 
-        This alert signifies that the SLI is reporting a cessation of traffic, but the signal is not absent.
+        This alert signifies that the SLI is reporting a cessation of traffic; the signal is present, but is zero.
       grafana_dashboard_id: ci-runners-main/ci-runners-overview
       grafana_dashboard_link: https://dashboards.gitlab.net/d/ci-runners-main/ci-runners-overview?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-stage={{ $labels.stage }}
@@ -768,7 +768,7 @@ groups:
     for: 30m
     annotations:
       title: The shared_runner_queues SLI of the ci-runners service (`{{ $labels.stage
-        }}` stage) has not reported any traffic in the past 30 minutes
+        }}` stage) has not reported any traffic in the past 30m
       description: |
         This SLI monitors the shared runner queues on GitLab.com. Each job is an operation.
 
@@ -905,11 +905,11 @@ groups:
     for: 5m
     annotations:
       title: The trace_archiving_ci_jobs SLI of the ci-runners service (`{{ $labels.stage
-        }}` stage) has not received any traffic in the past 30 minutes
+        }}` stage) has not received any traffic in the past 30m
       description: |
         This SLI monitors CI job archiving, via Sidekiq jobs.
 
-        This alert signifies that the SLI is reporting a cessation of traffic, but the signal is not absent.
+        This alert signifies that the SLI is reporting a cessation of traffic; the signal is present, but is zero.
       grafana_dashboard_id: ci-runners-main/ci-runners-overview
       grafana_dashboard_link: https://dashboards.gitlab.net/d/ci-runners-main/ci-runners-overview?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-stage={{ $labels.stage }}
@@ -938,7 +938,7 @@ groups:
     for: 30m
     annotations:
       title: The trace_archiving_ci_jobs SLI of the ci-runners service (`{{ $labels.stage
-        }}` stage) has not reported any traffic in the past 30 minutes
+        }}` stage) has not reported any traffic in the past 30m
       description: |
         This SLI monitors CI job archiving, via Sidekiq jobs.
 

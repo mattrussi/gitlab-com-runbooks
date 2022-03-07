@@ -189,11 +189,11 @@ groups:
     for: 5m
     annotations:
       title: The loadbalancer SLI of the websockets service (`{{ $labels.stage }}`
-        stage) has not received any traffic in the past 30 minutes
+        stage) has not received any traffic in the past 30m
       description: |
         Measures aggregated HTTP request traffic through the HAProxy. 5xx responses are considered to be failures.
 
-        This alert signifies that the SLI is reporting a cessation of traffic, but the signal is not absent.
+        This alert signifies that the SLI is reporting a cessation of traffic; the signal is present, but is zero.
       grafana_dashboard_id: websockets-main/websockets-overview
       grafana_dashboard_link: https://dashboards.gitlab.net/d/websockets-main/websockets-overview?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-stage={{ $labels.stage }}
@@ -218,7 +218,7 @@ groups:
     for: 30m
     annotations:
       title: The loadbalancer SLI of the websockets service (`{{ $labels.stage }}`
-        stage) has not reported any traffic in the past 30 minutes
+        stage) has not reported any traffic in the past 30m
       description: |
         Measures aggregated HTTP request traffic through the HAProxy. 5xx responses are considered to be failures.
 
@@ -251,11 +251,11 @@ groups:
     for: 5m
     annotations:
       title: The loadbalancer SLI of the websockets service in region `{{ $labels.region
-        }}` has not received any traffic in the past 30 minutes
+        }}` has not received any traffic in the past 30m
       description: |
         Measures aggregated HTTP request traffic through the HAProxy. 5xx responses are considered to be failures.
 
-        This alert signifies that the SLI is reporting a cessation of traffic, but the signal is not absent.
+        This alert signifies that the SLI is reporting a cessation of traffic; the signal is present, but is zero.
 
         Note that this alert is specific to the `{{ $labels.region }}` region.
       grafana_dashboard_id: websockets-main/websockets-overview
@@ -266,7 +266,7 @@ groups:
       grafana_variables: environment,stage
       runbook: docs/websockets/README.md
     labels:
-      aggregation: component
+      aggregation: regional_component
       alert_class: traffic_cessation
       alert_type: cause
       feature_category: not_owned
@@ -282,7 +282,7 @@ groups:
     for: 30m
     annotations:
       title: The loadbalancer SLI of the websockets service in region `{{ $labels.region
-        }}` has not reported any traffic in the past 30 minutes
+        }}` has not reported any traffic in the past 30m
       description: |
         Measures aggregated HTTP request traffic through the HAProxy. 5xx responses are considered to be failures.
 
@@ -299,7 +299,7 @@ groups:
       grafana_variables: environment,stage
       runbook: docs/websockets/README.md
     labels:
-      aggregation: component
+      aggregation: regional_component
       alert_class: traffic_cessation
       alert_type: cause
       feature_category: not_owned
@@ -513,11 +513,11 @@ groups:
     for: 5m
     annotations:
       title: The puma SLI of the websockets service (`{{ $labels.stage }}` stage)
-        has not received any traffic in the past 30 minutes
+        has not received any traffic in the past 30m
       description: |
         Monitors Rails endpoints, running in the Git fleet, via the HTTP interface.
 
-        This alert signifies that the SLI is reporting a cessation of traffic, but the signal is not absent.
+        This alert signifies that the SLI is reporting a cessation of traffic; the signal is present, but is zero.
       grafana_dashboard_id: websockets-main/websockets-overview
       grafana_dashboard_link: https://dashboards.gitlab.net/d/websockets-main/websockets-overview?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-stage={{ $labels.stage }}
@@ -546,7 +546,7 @@ groups:
     for: 30m
     annotations:
       title: The puma SLI of the websockets service (`{{ $labels.stage }}` stage)
-        has not reported any traffic in the past 30 minutes
+        has not reported any traffic in the past 30m
       description: |
         Monitors Rails endpoints, running in the Git fleet, via the HTTP interface.
 
@@ -583,11 +583,11 @@ groups:
     for: 5m
     annotations:
       title: The puma SLI of the websockets service in region `{{ $labels.region }}`
-        has not received any traffic in the past 30 minutes
+        has not received any traffic in the past 30m
       description: |
         Monitors Rails endpoints, running in the Git fleet, via the HTTP interface.
 
-        This alert signifies that the SLI is reporting a cessation of traffic, but the signal is not absent.
+        This alert signifies that the SLI is reporting a cessation of traffic; the signal is present, but is zero.
 
         Note that this alert is specific to the `{{ $labels.region }}` region.
       grafana_dashboard_id: websockets-main/websockets-overview
@@ -597,12 +597,12 @@ groups:
       grafana_panel_id: "110019945"
       grafana_variables: environment,stage
       promql_template_1: |
-        sum by (env,environment,tier,stage) (
-          sli_aggregations:http_requests_total_rate5m{environment="{{ $labels.environment }}",job="gitlab-rails",stage="{{ $labels.stage }}",type="websockets"}
+        sum by (env,environment,tier,stage,region) (
+          sli_aggregations:http_requests_total_rate5m{environment="{{ $labels.environment }}",job="gitlab-rails",region="{{ $labels.region }}",stage="{{ $labels.stage }}",type="websockets"}
         )
       runbook: docs/websockets/README.md
     labels:
-      aggregation: component
+      aggregation: regional_component
       alert_class: traffic_cessation
       alert_type: cause
       feature_category: not_owned
@@ -618,7 +618,7 @@ groups:
     for: 30m
     annotations:
       title: The puma SLI of the websockets service in region `{{ $labels.region }}`
-        has not reported any traffic in the past 30 minutes
+        has not reported any traffic in the past 30m
       description: |
         Monitors Rails endpoints, running in the Git fleet, via the HTTP interface.
 
@@ -634,12 +634,12 @@ groups:
       grafana_panel_id: "110019945"
       grafana_variables: environment,stage
       promql_template_1: |
-        sum by (env,environment,tier,stage) (
-          sli_aggregations:http_requests_total_rate5m{environment="{{ $labels.environment }}",job="gitlab-rails",stage="{{ $labels.stage }}",type="websockets"}
+        sum by (env,environment,tier,stage,region) (
+          sli_aggregations:http_requests_total_rate5m{environment="{{ $labels.environment }}",job="gitlab-rails",region="{{ $labels.region }}",stage="{{ $labels.stage }}",type="websockets"}
         )
       runbook: docs/websockets/README.md
     labels:
-      aggregation: component
+      aggregation: regional_component
       alert_class: traffic_cessation
       alert_type: cause
       feature_category: not_owned
@@ -853,11 +853,11 @@ groups:
     for: 5m
     annotations:
       title: The workhorse SLI of the websockets service (`{{ $labels.stage }}` stage)
-        has not received any traffic in the past 30 minutes
+        has not received any traffic in the past 30m
       description: |
         Monitors the Workhorse instance running in the Websockets fleet, via the HTTP interface. This only covers the initial protocal upgrade requests to `/-/cable`. https://gitlab.com/gitlab-org/gitlab/-/issues/296845 tracks making these metrics more useful for Websockets.
 
-        This alert signifies that the SLI is reporting a cessation of traffic, but the signal is not absent.
+        This alert signifies that the SLI is reporting a cessation of traffic; the signal is present, but is zero.
       grafana_dashboard_id: websockets-main/websockets-overview
       grafana_dashboard_link: https://dashboards.gitlab.net/d/websockets-main/websockets-overview?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-stage={{ $labels.stage }}
@@ -886,7 +886,7 @@ groups:
     for: 30m
     annotations:
       title: The workhorse SLI of the websockets service (`{{ $labels.stage }}` stage)
-        has not reported any traffic in the past 30 minutes
+        has not reported any traffic in the past 30m
       description: |
         Monitors the Workhorse instance running in the Websockets fleet, via the HTTP interface. This only covers the initial protocal upgrade requests to `/-/cable`. https://gitlab.com/gitlab-org/gitlab/-/issues/296845 tracks making these metrics more useful for Websockets.
 
@@ -923,11 +923,11 @@ groups:
     for: 5m
     annotations:
       title: The workhorse SLI of the websockets service in region `{{ $labels.region
-        }}` has not received any traffic in the past 30 minutes
+        }}` has not received any traffic in the past 30m
       description: |
         Monitors the Workhorse instance running in the Websockets fleet, via the HTTP interface. This only covers the initial protocal upgrade requests to `/-/cable`. https://gitlab.com/gitlab-org/gitlab/-/issues/296845 tracks making these metrics more useful for Websockets.
 
-        This alert signifies that the SLI is reporting a cessation of traffic, but the signal is not absent.
+        This alert signifies that the SLI is reporting a cessation of traffic; the signal is present, but is zero.
 
         Note that this alert is specific to the `{{ $labels.region }}` region.
       grafana_dashboard_id: websockets-main/websockets-overview
@@ -937,12 +937,12 @@ groups:
       grafana_panel_id: "831392945"
       grafana_variables: environment,stage
       promql_template_1: |
-        sum by (env,environment,tier,stage) (
-          rate(gitlab_workhorse_http_requests_total{environment="{{ $labels.environment }}",job="gitlab-workhorse",route!="^/-/health$",route!="^/-/(readiness|liveness)$",route!="^/api/",stage="{{ $labels.stage }}",type="websockets"}[5m])
+        sum by (env,environment,tier,stage,region) (
+          rate(gitlab_workhorse_http_requests_total{environment="{{ $labels.environment }}",job="gitlab-workhorse",region="{{ $labels.region }}",route!="^/-/health$",route!="^/-/(readiness|liveness)$",route!="^/api/",stage="{{ $labels.stage }}",type="websockets"}[5m])
         )
       runbook: docs/websockets/README.md
     labels:
-      aggregation: component
+      aggregation: regional_component
       alert_class: traffic_cessation
       alert_type: cause
       feature_category: not_owned
@@ -958,7 +958,7 @@ groups:
     for: 30m
     annotations:
       title: The workhorse SLI of the websockets service in region `{{ $labels.region
-        }}` has not reported any traffic in the past 30 minutes
+        }}` has not reported any traffic in the past 30m
       description: |
         Monitors the Workhorse instance running in the Websockets fleet, via the HTTP interface. This only covers the initial protocal upgrade requests to `/-/cable`. https://gitlab.com/gitlab-org/gitlab/-/issues/296845 tracks making these metrics more useful for Websockets.
 
@@ -974,12 +974,12 @@ groups:
       grafana_panel_id: "831392945"
       grafana_variables: environment,stage
       promql_template_1: |
-        sum by (env,environment,tier,stage) (
-          rate(gitlab_workhorse_http_requests_total{environment="{{ $labels.environment }}",job="gitlab-workhorse",route!="^/-/health$",route!="^/-/(readiness|liveness)$",route!="^/api/",stage="{{ $labels.stage }}",type="websockets"}[5m])
+        sum by (env,environment,tier,stage,region) (
+          rate(gitlab_workhorse_http_requests_total{environment="{{ $labels.environment }}",job="gitlab-workhorse",region="{{ $labels.region }}",route!="^/-/health$",route!="^/-/(readiness|liveness)$",route!="^/api/",stage="{{ $labels.stage }}",type="websockets"}[5m])
         )
       runbook: docs/websockets/README.md
     labels:
-      aggregation: component
+      aggregation: regional_component
       alert_class: traffic_cessation
       alert_type: cause
       feature_category: not_owned

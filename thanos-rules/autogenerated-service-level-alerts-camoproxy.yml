@@ -97,11 +97,11 @@ groups:
     for: 5m
     annotations:
       title: The loadbalancer SLI of the camoproxy service (`{{ $labels.stage }}`
-        stage) has not received any traffic in the past 30 minutes
+        stage) has not received any traffic in the past 30m
       description: |
         Measures aggregated HTTP request traffic through the HAProxy. 5xx responses are considered to be failures.
 
-        This alert signifies that the SLI is reporting a cessation of traffic, but the signal is not absent.
+        This alert signifies that the SLI is reporting a cessation of traffic; the signal is present, but is zero.
       grafana_dashboard_id: camoproxy-main/camoproxy-overview
       grafana_dashboard_link: https://dashboards.gitlab.net/d/camoproxy-main/camoproxy-overview?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-stage={{ $labels.stage }}
@@ -126,7 +126,7 @@ groups:
     for: 30m
     annotations:
       title: The loadbalancer SLI of the camoproxy service (`{{ $labels.stage }}`
-        stage) has not reported any traffic in the past 30 minutes
+        stage) has not reported any traffic in the past 30m
       description: |
         Measures aggregated HTTP request traffic through the HAProxy. 5xx responses are considered to be failures.
 
@@ -357,11 +357,11 @@ groups:
     for: 5m
     annotations:
       title: The server SLI of the camoproxy service (`{{ $labels.stage }}` stage)
-        has not received any traffic in the past 30 minutes
+        has not received any traffic in the past 30m
       description: |
         This SLI monitors the camoproxy server via its HTTP interface. 5xx responses are considered to be failures. Note that this SLI is highly dependent on upstream proxy targets, not under the control of GitLab. We are unable to distinguish problems in the proxy from upstream problems. This should be taken into account for this SLI.
 
-        This alert signifies that the SLI is reporting a cessation of traffic, but the signal is not absent.
+        This alert signifies that the SLI is reporting a cessation of traffic; the signal is present, but is zero.
       grafana_dashboard_id: camoproxy-main/camoproxy-overview
       grafana_dashboard_link: https://dashboards.gitlab.net/d/camoproxy-main/camoproxy-overview?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-stage={{ $labels.stage }}
@@ -390,7 +390,7 @@ groups:
     for: 30m
     annotations:
       title: The server SLI of the camoproxy service (`{{ $labels.stage }}` stage)
-        has not reported any traffic in the past 30 minutes
+        has not reported any traffic in the past 30m
       description: |
         This SLI monitors the camoproxy server via its HTTP interface. 5xx responses are considered to be failures. Note that this SLI is highly dependent on upstream proxy targets, not under the control of GitLab. We are unable to distinguish problems in the proxy from upstream problems. This should be taken into account for this SLI.
 

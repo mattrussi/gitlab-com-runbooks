@@ -203,9 +203,9 @@ groups:
     for: 5m
     annotations:
       title: The http SLI of the pvs service (`{{ $labels.stage }}` stage) has not
-        received any traffic in the past 30 minutes
+        received any traffic in the past 30m
       description: |
-        This alert signifies that the SLI is reporting a cessation of traffic, but the signal is not absent.
+        This alert signifies that the SLI is reporting a cessation of traffic; the signal is present, but is zero.
       grafana_dashboard_id: pvs-main/pvs-overview
       grafana_dashboard_link: https://dashboards.gitlab.net/d/pvs-main/pvs-overview?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-stage={{ $labels.stage }}
@@ -235,7 +235,7 @@ groups:
     for: 30m
     annotations:
       title: The http SLI of the pvs service (`{{ $labels.stage }}` stage) has not
-        reported any traffic in the past 30 minutes
+        reported any traffic in the past 30m
       description: |
         This alert signifies that the SLI was previously reporting traffic, but is no longer - the signal is absent.
 

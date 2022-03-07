@@ -217,11 +217,11 @@ groups:
     for: 5m
     annotations:
       title: The database SLI of the registry service (`{{ $labels.stage }}` stage)
-        has not received any traffic in the past 30 minutes
+        has not received any traffic in the past 30m
       description: |
         Aggregation of all container registry database operations.
 
-        This alert signifies that the SLI is reporting a cessation of traffic, but the signal is not absent.
+        This alert signifies that the SLI is reporting a cessation of traffic; the signal is present, but is zero.
       grafana_dashboard_id: registry-main/registry-overview
       grafana_dashboard_link: https://dashboards.gitlab.net/d/registry-main/registry-overview?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-stage={{ $labels.stage }}
@@ -250,7 +250,7 @@ groups:
     for: 30m
     annotations:
       title: The database SLI of the registry service (`{{ $labels.stage }}` stage)
-        has not reported any traffic in the past 30 minutes
+        has not reported any traffic in the past 30m
       description: |
         Aggregation of all container registry database operations.
 
@@ -287,11 +287,11 @@ groups:
     for: 5m
     annotations:
       title: The database SLI of the registry service in region `{{ $labels.region
-        }}` has not received any traffic in the past 30 minutes
+        }}` has not received any traffic in the past 30m
       description: |
         Aggregation of all container registry database operations.
 
-        This alert signifies that the SLI is reporting a cessation of traffic, but the signal is not absent.
+        This alert signifies that the SLI is reporting a cessation of traffic; the signal is present, but is zero.
 
         Note that this alert is specific to the `{{ $labels.region }}` region.
       grafana_dashboard_id: registry-main/registry-overview
@@ -301,12 +301,12 @@ groups:
       grafana_panel_id: "2984148133"
       grafana_variables: environment,stage
       promql_template_1: |
-        sum by (env,environment,tier,stage) (
-          rate(registry_database_queries_total{environment="{{ $labels.environment }}",stage="{{ $labels.stage }}",type="registry"}[5m])
+        sum by (env,environment,tier,stage,region) (
+          rate(registry_database_queries_total{environment="{{ $labels.environment }}",region="{{ $labels.region }}",stage="{{ $labels.stage }}",type="registry"}[5m])
         )
       runbook: docs/registry/README.md
     labels:
-      aggregation: component
+      aggregation: regional_component
       alert_class: traffic_cessation
       alert_type: cause
       feature_category: container_registry
@@ -322,7 +322,7 @@ groups:
     for: 30m
     annotations:
       title: The database SLI of the registry service in region `{{ $labels.region
-        }}` has not reported any traffic in the past 30 minutes
+        }}` has not reported any traffic in the past 30m
       description: |
         Aggregation of all container registry database operations.
 
@@ -338,12 +338,12 @@ groups:
       grafana_panel_id: "2984148133"
       grafana_variables: environment,stage
       promql_template_1: |
-        sum by (env,environment,tier,stage) (
-          rate(registry_database_queries_total{environment="{{ $labels.environment }}",stage="{{ $labels.stage }}",type="registry"}[5m])
+        sum by (env,environment,tier,stage,region) (
+          rate(registry_database_queries_total{environment="{{ $labels.environment }}",region="{{ $labels.region }}",stage="{{ $labels.stage }}",type="registry"}[5m])
         )
       runbook: docs/registry/README.md
     labels:
-      aggregation: component
+      aggregation: regional_component
       alert_class: traffic_cessation
       alert_type: cause
       feature_category: container_registry
@@ -765,11 +765,11 @@ groups:
     for: 5m
     annotations:
       title: The garbagecollector SLI of the registry service (`{{ $labels.stage }}`
-        stage) has not received any traffic in the past 30 minutes
+        stage) has not received any traffic in the past 30m
       description: |
         Aggregation of all container registry online garbage collection operations.
 
-        This alert signifies that the SLI is reporting a cessation of traffic, but the signal is not absent.
+        This alert signifies that the SLI is reporting a cessation of traffic; the signal is present, but is zero.
       grafana_dashboard_id: registry-main/registry-overview
       grafana_dashboard_link: https://dashboards.gitlab.net/d/registry-main/registry-overview?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-stage={{ $labels.stage }}
@@ -798,7 +798,7 @@ groups:
     for: 30m
     annotations:
       title: The garbagecollector SLI of the registry service (`{{ $labels.stage }}`
-        stage) has not reported any traffic in the past 30 minutes
+        stage) has not reported any traffic in the past 30m
       description: |
         Aggregation of all container registry online garbage collection operations.
 
@@ -835,11 +835,11 @@ groups:
     for: 5m
     annotations:
       title: The garbagecollector SLI of the registry service in region `{{ $labels.region
-        }}` has not received any traffic in the past 30 minutes
+        }}` has not received any traffic in the past 30m
       description: |
         Aggregation of all container registry online garbage collection operations.
 
-        This alert signifies that the SLI is reporting a cessation of traffic, but the signal is not absent.
+        This alert signifies that the SLI is reporting a cessation of traffic; the signal is present, but is zero.
 
         Note that this alert is specific to the `{{ $labels.region }}` region.
       grafana_dashboard_id: registry-main/registry-overview
@@ -849,12 +849,12 @@ groups:
       grafana_panel_id: "3281014584"
       grafana_variables: environment,stage
       promql_template_1: |
-        sum by (env,environment,tier,stage) (
-          rate(registry_gc_runs_total{environment="{{ $labels.environment }}",stage="{{ $labels.stage }}",type="registry"}[5m])
+        sum by (env,environment,tier,stage,region) (
+          rate(registry_gc_runs_total{environment="{{ $labels.environment }}",region="{{ $labels.region }}",stage="{{ $labels.stage }}",type="registry"}[5m])
         )
       runbook: docs/registry/README.md
     labels:
-      aggregation: component
+      aggregation: regional_component
       alert_class: traffic_cessation
       alert_type: cause
       feature_category: container_registry
@@ -870,7 +870,7 @@ groups:
     for: 30m
     annotations:
       title: The garbagecollector SLI of the registry service in region `{{ $labels.region
-        }}` has not reported any traffic in the past 30 minutes
+        }}` has not reported any traffic in the past 30m
       description: |
         Aggregation of all container registry online garbage collection operations.
 
@@ -886,12 +886,12 @@ groups:
       grafana_panel_id: "3281014584"
       grafana_variables: environment,stage
       promql_template_1: |
-        sum by (env,environment,tier,stage) (
-          rate(registry_gc_runs_total{environment="{{ $labels.environment }}",stage="{{ $labels.stage }}",type="registry"}[5m])
+        sum by (env,environment,tier,stage,region) (
+          rate(registry_gc_runs_total{environment="{{ $labels.environment }}",region="{{ $labels.region }}",stage="{{ $labels.stage }}",type="registry"}[5m])
         )
       runbook: docs/registry/README.md
     labels:
-      aggregation: component
+      aggregation: regional_component
       alert_class: traffic_cessation
       alert_type: cause
       feature_category: container_registry
@@ -1089,11 +1089,11 @@ groups:
     for: 5m
     annotations:
       title: The loadbalancer SLI of the registry service (`{{ $labels.stage }}` stage)
-        has not received any traffic in the past 30 minutes
+        has not received any traffic in the past 30m
       description: |
         Measures aggregated HTTP request traffic through the HAProxy. 5xx responses are considered to be failures.
 
-        This alert signifies that the SLI is reporting a cessation of traffic, but the signal is not absent.
+        This alert signifies that the SLI is reporting a cessation of traffic; the signal is present, but is zero.
       grafana_dashboard_id: registry-main/registry-overview
       grafana_dashboard_link: https://dashboards.gitlab.net/d/registry-main/registry-overview?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-stage={{ $labels.stage }}
@@ -1118,7 +1118,7 @@ groups:
     for: 30m
     annotations:
       title: The loadbalancer SLI of the registry service (`{{ $labels.stage }}` stage)
-        has not reported any traffic in the past 30 minutes
+        has not reported any traffic in the past 30m
       description: |
         Measures aggregated HTTP request traffic through the HAProxy. 5xx responses are considered to be failures.
 
@@ -1151,11 +1151,11 @@ groups:
     for: 5m
     annotations:
       title: The loadbalancer SLI of the registry service in region `{{ $labels.region
-        }}` has not received any traffic in the past 30 minutes
+        }}` has not received any traffic in the past 30m
       description: |
         Measures aggregated HTTP request traffic through the HAProxy. 5xx responses are considered to be failures.
 
-        This alert signifies that the SLI is reporting a cessation of traffic, but the signal is not absent.
+        This alert signifies that the SLI is reporting a cessation of traffic; the signal is present, but is zero.
 
         Note that this alert is specific to the `{{ $labels.region }}` region.
       grafana_dashboard_id: registry-main/registry-overview
@@ -1166,7 +1166,7 @@ groups:
       grafana_variables: environment,stage
       runbook: docs/registry/README.md
     labels:
-      aggregation: component
+      aggregation: regional_component
       alert_class: traffic_cessation
       alert_type: cause
       feature_category: container_registry
@@ -1182,7 +1182,7 @@ groups:
     for: 30m
     annotations:
       title: The loadbalancer SLI of the registry service in region `{{ $labels.region
-        }}` has not reported any traffic in the past 30 minutes
+        }}` has not reported any traffic in the past 30m
       description: |
         Measures aggregated HTTP request traffic through the HAProxy. 5xx responses are considered to be failures.
 
@@ -1199,7 +1199,7 @@ groups:
       grafana_variables: environment,stage
       runbook: docs/registry/README.md
     labels:
-      aggregation: component
+      aggregation: regional_component
       alert_class: traffic_cessation
       alert_type: cause
       feature_category: container_registry
@@ -1621,11 +1621,11 @@ groups:
     for: 5m
     annotations:
       title: The server SLI of the registry service (`{{ $labels.stage }}` stage)
-        has not received any traffic in the past 30 minutes
+        has not received any traffic in the past 30m
       description: |
         Aggregation of all registry requests.
 
-        This alert signifies that the SLI is reporting a cessation of traffic, but the signal is not absent.
+        This alert signifies that the SLI is reporting a cessation of traffic; the signal is present, but is zero.
       grafana_dashboard_id: registry-main/registry-overview
       grafana_dashboard_link: https://dashboards.gitlab.net/d/registry-main/registry-overview?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-stage={{ $labels.stage }}
@@ -1654,7 +1654,7 @@ groups:
     for: 30m
     annotations:
       title: The server SLI of the registry service (`{{ $labels.stage }}` stage)
-        has not reported any traffic in the past 30 minutes
+        has not reported any traffic in the past 30m
       description: |
         Aggregation of all registry requests.
 
@@ -1691,11 +1691,11 @@ groups:
     for: 5m
     annotations:
       title: The server SLI of the registry service in region `{{ $labels.region }}`
-        has not received any traffic in the past 30 minutes
+        has not received any traffic in the past 30m
       description: |
         Aggregation of all registry requests.
 
-        This alert signifies that the SLI is reporting a cessation of traffic, but the signal is not absent.
+        This alert signifies that the SLI is reporting a cessation of traffic; the signal is present, but is zero.
 
         Note that this alert is specific to the `{{ $labels.region }}` region.
       grafana_dashboard_id: registry-main/registry-overview
@@ -1705,12 +1705,12 @@ groups:
       grafana_panel_id: "2414183688"
       grafana_variables: environment,stage
       promql_template_1: |
-        sum by (env,environment,tier,stage) (
-          rate(registry_http_requests_total{environment="{{ $labels.environment }}",stage="{{ $labels.stage }}",type="registry"}[5m])
+        sum by (env,environment,tier,stage,region) (
+          rate(registry_http_requests_total{environment="{{ $labels.environment }}",region="{{ $labels.region }}",stage="{{ $labels.stage }}",type="registry"}[5m])
         )
       runbook: docs/registry/README.md
     labels:
-      aggregation: component
+      aggregation: regional_component
       alert_class: traffic_cessation
       alert_type: cause
       feature_category: container_registry
@@ -1726,7 +1726,7 @@ groups:
     for: 30m
     annotations:
       title: The server SLI of the registry service in region `{{ $labels.region }}`
-        has not reported any traffic in the past 30 minutes
+        has not reported any traffic in the past 30m
       description: |
         Aggregation of all registry requests.
 
@@ -1742,12 +1742,12 @@ groups:
       grafana_panel_id: "2414183688"
       grafana_variables: environment,stage
       promql_template_1: |
-        sum by (env,environment,tier,stage) (
-          rate(registry_http_requests_total{environment="{{ $labels.environment }}",stage="{{ $labels.stage }}",type="registry"}[5m])
+        sum by (env,environment,tier,stage,region) (
+          rate(registry_http_requests_total{environment="{{ $labels.environment }}",region="{{ $labels.region }}",stage="{{ $labels.stage }}",type="registry"}[5m])
         )
       runbook: docs/registry/README.md
     labels:
-      aggregation: component
+      aggregation: regional_component
       alert_class: traffic_cessation
       alert_type: cause
       feature_category: container_registry
@@ -1973,11 +1973,11 @@ groups:
     for: 5m
     annotations:
       title: The server_route_manifest_reads SLI of the registry service (`{{ $labels.stage
-        }}` stage) has not received any traffic in the past 30 minutes
+        }}` stage) has not received any traffic in the past 30m
       description: |
         All read-requests (HEAD or GET) for the manifest endpoints on the registry. Fetch the manifest identified by name and reference where reference can be a tag or digest. A HEAD request can also be issued to this endpoint to obtain resource information without receiving all data.
 
-        This alert signifies that the SLI is reporting a cessation of traffic, but the signal is not absent.
+        This alert signifies that the SLI is reporting a cessation of traffic; the signal is present, but is zero.
       grafana_dashboard_id: registry-main/registry-overview
       grafana_dashboard_link: https://dashboards.gitlab.net/d/registry-main/registry-overview?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-stage={{ $labels.stage }}
@@ -2006,7 +2006,7 @@ groups:
     for: 30m
     annotations:
       title: The server_route_manifest_reads SLI of the registry service (`{{ $labels.stage
-        }}` stage) has not reported any traffic in the past 30 minutes
+        }}` stage) has not reported any traffic in the past 30m
       description: |
         All read-requests (HEAD or GET) for the manifest endpoints on the registry. Fetch the manifest identified by name and reference where reference can be a tag or digest. A HEAD request can also be issued to this endpoint to obtain resource information without receiving all data.
 
@@ -2043,11 +2043,11 @@ groups:
     for: 5m
     annotations:
       title: The server_route_manifest_reads SLI of the registry service in region
-        `{{ $labels.region }}` has not received any traffic in the past 30 minutes
+        `{{ $labels.region }}` has not received any traffic in the past 30m
       description: |
         All read-requests (HEAD or GET) for the manifest endpoints on the registry. Fetch the manifest identified by name and reference where reference can be a tag or digest. A HEAD request can also be issued to this endpoint to obtain resource information without receiving all data.
 
-        This alert signifies that the SLI is reporting a cessation of traffic, but the signal is not absent.
+        This alert signifies that the SLI is reporting a cessation of traffic; the signal is present, but is zero.
 
         Note that this alert is specific to the `{{ $labels.region }}` region.
       grafana_dashboard_id: registry-main/registry-overview
@@ -2057,12 +2057,12 @@ groups:
       grafana_panel_id: "3999566506"
       grafana_variables: environment,stage
       promql_template_1: |
-        sum by (env,environment,tier,stage) (
-          rate(registry_http_request_duration_seconds_count{environment="{{ $labels.environment }}",method=~"get|head",route="/v2/{name}/manifests/{reference}",stage="{{ $labels.stage }}"}[5m])
+        sum by (env,environment,tier,stage,region) (
+          rate(registry_http_request_duration_seconds_count{environment="{{ $labels.environment }}",method=~"get|head",region="{{ $labels.region }}",route="/v2/{name}/manifests/{reference}",stage="{{ $labels.stage }}"}[5m])
         )
       runbook: docs/registry/README.md
     labels:
-      aggregation: component
+      aggregation: regional_component
       alert_class: traffic_cessation
       alert_type: cause
       feature_category: container_registry
@@ -2078,7 +2078,7 @@ groups:
     for: 30m
     annotations:
       title: The server_route_manifest_reads SLI of the registry service in region
-        `{{ $labels.region }}` has not reported any traffic in the past 30 minutes
+        `{{ $labels.region }}` has not reported any traffic in the past 30m
       description: |
         All read-requests (HEAD or GET) for the manifest endpoints on the registry. Fetch the manifest identified by name and reference where reference can be a tag or digest. A HEAD request can also be issued to this endpoint to obtain resource information without receiving all data.
 
@@ -2094,12 +2094,12 @@ groups:
       grafana_panel_id: "3999566506"
       grafana_variables: environment,stage
       promql_template_1: |
-        sum by (env,environment,tier,stage) (
-          rate(registry_http_request_duration_seconds_count{environment="{{ $labels.environment }}",method=~"get|head",route="/v2/{name}/manifests/{reference}",stage="{{ $labels.stage }}"}[5m])
+        sum by (env,environment,tier,stage,region) (
+          rate(registry_http_request_duration_seconds_count{environment="{{ $labels.environment }}",method=~"get|head",region="{{ $labels.region }}",route="/v2/{name}/manifests/{reference}",stage="{{ $labels.stage }}"}[5m])
         )
       runbook: docs/registry/README.md
     labels:
-      aggregation: component
+      aggregation: regional_component
       alert_class: traffic_cessation
       alert_type: cause
       feature_category: container_registry
@@ -2341,7 +2341,7 @@ groups:
     for: 5m
     annotations:
       title: The server_route_manifest_writes SLI of the registry service (`{{ $labels.stage
-        }}` stage) has not received any traffic in the past 30 minutes
+        }}` stage) has not received any traffic in the past 30m
       description: |
         All write-requests (put, delete) for the manifest endpoints on the registry.
 
@@ -2349,7 +2349,7 @@ groups:
 
         Delete the manifest identified by name and reference. Note that a manifest can only be deleted by digest.
 
-        This alert signifies that the SLI is reporting a cessation of traffic, but the signal is not absent.
+        This alert signifies that the SLI is reporting a cessation of traffic; the signal is present, but is zero.
       grafana_dashboard_id: registry-main/registry-overview
       grafana_dashboard_link: https://dashboards.gitlab.net/d/registry-main/registry-overview?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-stage={{ $labels.stage }}
@@ -2378,7 +2378,7 @@ groups:
     for: 30m
     annotations:
       title: The server_route_manifest_writes SLI of the registry service (`{{ $labels.stage
-        }}` stage) has not reported any traffic in the past 30 minutes
+        }}` stage) has not reported any traffic in the past 30m
       description: |
         All write-requests (put, delete) for the manifest endpoints on the registry.
 
@@ -2419,7 +2419,7 @@ groups:
     for: 5m
     annotations:
       title: The server_route_manifest_writes SLI of the registry service in region
-        `{{ $labels.region }}` has not received any traffic in the past 30 minutes
+        `{{ $labels.region }}` has not received any traffic in the past 30m
       description: |
         All write-requests (put, delete) for the manifest endpoints on the registry.
 
@@ -2427,7 +2427,7 @@ groups:
 
         Delete the manifest identified by name and reference. Note that a manifest can only be deleted by digest.
 
-        This alert signifies that the SLI is reporting a cessation of traffic, but the signal is not absent.
+        This alert signifies that the SLI is reporting a cessation of traffic; the signal is present, but is zero.
 
         Note that this alert is specific to the `{{ $labels.region }}` region.
       grafana_dashboard_id: registry-main/registry-overview
@@ -2437,12 +2437,12 @@ groups:
       grafana_panel_id: "1199706222"
       grafana_variables: environment,stage
       promql_template_1: |
-        sum by (env,environment,tier,stage) (
-          rate(registry_http_request_duration_seconds_count{environment="{{ $labels.environment }}",method=~"put|delete|post|patch",route="/v2/{name}/manifests/{reference}",stage="{{ $labels.stage }}"}[5m])
+        sum by (env,environment,tier,stage,region) (
+          rate(registry_http_request_duration_seconds_count{environment="{{ $labels.environment }}",method=~"put|delete|post|patch",region="{{ $labels.region }}",route="/v2/{name}/manifests/{reference}",stage="{{ $labels.stage }}"}[5m])
         )
       runbook: docs/registry/README.md
     labels:
-      aggregation: component
+      aggregation: regional_component
       alert_class: traffic_cessation
       alert_type: cause
       feature_category: container_registry
@@ -2458,7 +2458,7 @@ groups:
     for: 30m
     annotations:
       title: The server_route_manifest_writes SLI of the registry service in region
-        `{{ $labels.region }}` has not reported any traffic in the past 30 minutes
+        `{{ $labels.region }}` has not reported any traffic in the past 30m
       description: |
         All write-requests (put, delete) for the manifest endpoints on the registry.
 
@@ -2478,12 +2478,12 @@ groups:
       grafana_panel_id: "1199706222"
       grafana_variables: environment,stage
       promql_template_1: |
-        sum by (env,environment,tier,stage) (
-          rate(registry_http_request_duration_seconds_count{environment="{{ $labels.environment }}",method=~"put|delete|post|patch",route="/v2/{name}/manifests/{reference}",stage="{{ $labels.stage }}"}[5m])
+        sum by (env,environment,tier,stage,region) (
+          rate(registry_http_request_duration_seconds_count{environment="{{ $labels.environment }}",method=~"put|delete|post|patch",region="{{ $labels.region }}",route="/v2/{name}/manifests/{reference}",stage="{{ $labels.stage }}"}[5m])
         )
       runbook: docs/registry/README.md
     labels:
-      aggregation: component
+      aggregation: regional_component
       alert_class: traffic_cessation
       alert_type: cause
       feature_category: container_registry

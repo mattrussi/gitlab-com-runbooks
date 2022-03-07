@@ -65,7 +65,7 @@ local apdexAlertsForSLI(
   windows,  // Array of long window durations for the alert
   metricSelectorHash,  // Additional selectors to apply to the query
   minimumSamplesForMonitoring=null,  // Minimum sample rate threshold: see docs/metrics-catalog/service-level-monitoring.md
-  alertForDuration=null,  // How long before alert fires
+  alertForDuration=null,  // Use the default `for` alert duration
   extraLabels={},  // Extra labels for the alert
   extraAnnotations={},  // Extra annotations for the alert
       ) =
@@ -108,7 +108,7 @@ local errorAlertsForSLI(
   windows,  // Array of long window durations for the alert
   metricSelectorHash,  // Additional selectors to apply to the query
   minimumSamplesForMonitoring=null,  // Minimum sample rate threshold see docs/metrics-catalog/service-level-monitoring.md
-  alertForDuration=null,  // How long before alert fires
+  alertForDuration=null,  // Use the default `for` alert duration
   extraLabels={},  // Extra labels for the alert
   extraAnnotations={},  // Extra annotations for the alert
       ) =

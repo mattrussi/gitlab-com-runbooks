@@ -109,13 +109,13 @@ groups:
     for: 5m
     annotations:
       title: The pgbouncer SLI of the patroni-ci service (`{{ $labels.stage }}` stage)
-        has not received any traffic in the past 30 minutes
+        has not received any traffic in the past 30m
       description: |
         All transactions destined for the Postgres secondary instances are routed through the pgbouncer instances running on the patroni nodes themselves. This SLI models those transactions in aggregate.
 
         Error rate uses mtail metrics from pgbouncer logs.
 
-        This alert signifies that the SLI is reporting a cessation of traffic, but the signal is not absent.
+        This alert signifies that the SLI is reporting a cessation of traffic; the signal is present, but is zero.
       grafana_dashboard_id: patroni-ci-main/patroni-ci-overview
       grafana_dashboard_link: https://dashboards.gitlab.net/d/patroni-ci-main/patroni-ci-overview?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-stage={{ $labels.stage }}
@@ -146,7 +146,7 @@ groups:
     for: 30m
     annotations:
       title: The pgbouncer SLI of the patroni-ci service (`{{ $labels.stage }}` stage)
-        has not reported any traffic in the past 30 minutes
+        has not reported any traffic in the past 30m
       description: |
         All transactions destined for the Postgres secondary instances are routed through the pgbouncer instances running on the patroni nodes themselves. This SLI models those transactions in aggregate.
 
@@ -283,11 +283,11 @@ groups:
     for: 5m
     annotations:
       title: The transactions_primary SLI of the patroni-ci service (`{{ $labels.stage
-        }}` stage) has not received any traffic in the past 30 minutes
+        }}` stage) has not received any traffic in the past 30m
       description: |
         Represents all SQL transactions issued to the primary Postgres instance. Errors represent transaction rollbacks.
 
-        This alert signifies that the SLI is reporting a cessation of traffic, but the signal is not absent.
+        This alert signifies that the SLI is reporting a cessation of traffic; the signal is present, but is zero.
       grafana_dashboard_id: patroni-ci-main/patroni-ci-overview
       grafana_dashboard_link: https://dashboards.gitlab.net/d/patroni-ci-main/patroni-ci-overview?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-stage={{ $labels.stage }}
@@ -318,7 +318,7 @@ groups:
     for: 30m
     annotations:
       title: The transactions_primary SLI of the patroni-ci service (`{{ $labels.stage
-        }}` stage) has not reported any traffic in the past 30 minutes
+        }}` stage) has not reported any traffic in the past 30m
       description: |
         Represents all SQL transactions issued to the primary Postgres instance. Errors represent transaction rollbacks.
 
@@ -453,11 +453,11 @@ groups:
     for: 5m
     annotations:
       title: The transactions_replica SLI of the patroni-ci service (`{{ $labels.stage
-        }}` stage) has not received any traffic in the past 30 minutes
+        }}` stage) has not received any traffic in the past 30m
       description: |
         Represents all SQL transactions issued to replica Postgres instances, in aggregate. Errors represent transaction rollbacks.
 
-        This alert signifies that the SLI is reporting a cessation of traffic, but the signal is not absent.
+        This alert signifies that the SLI is reporting a cessation of traffic; the signal is present, but is zero.
       grafana_dashboard_id: patroni-ci-main/patroni-ci-overview
       grafana_dashboard_link: https://dashboards.gitlab.net/d/patroni-ci-main/patroni-ci-overview?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-stage={{ $labels.stage }}
@@ -488,7 +488,7 @@ groups:
     for: 30m
     annotations:
       title: The transactions_replica SLI of the patroni-ci service (`{{ $labels.stage
-        }}` stage) has not reported any traffic in the past 30 minutes
+        }}` stage) has not reported any traffic in the past 30m
       description: |
         Represents all SQL transactions issued to replica Postgres instances, in aggregate. Errors represent transaction rollbacks.
 

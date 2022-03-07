@@ -109,11 +109,11 @@ groups:
     for: 5m
     annotations:
       title: The loadbalancer SLI of the pages service (`{{ $labels.stage }}` stage)
-        has not received any traffic in the past 30 minutes
+        has not received any traffic in the past 30m
       description: |
         This SLI models requests passing through the loadbalancer in front of the pages service. 5xx requests for unencrypted HTTP traffic, and connection errors (not 5xx requests) for HTTPS traffic are considered to be errors. The loadbalancer is unable to determine the status code of HTTPS traffic as it passes through the loadbalancer encrypted.
 
-        This alert signifies that the SLI is reporting a cessation of traffic, but the signal is not absent.
+        This alert signifies that the SLI is reporting a cessation of traffic; the signal is present, but is zero.
       grafana_dashboard_id: pages-main/pages-overview
       grafana_dashboard_link: https://dashboards.gitlab.net/d/pages-main/pages-overview?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-stage={{ $labels.stage }}
@@ -142,7 +142,7 @@ groups:
     for: 30m
     annotations:
       title: The loadbalancer SLI of the pages service (`{{ $labels.stage }}` stage)
-        has not reported any traffic in the past 30 minutes
+        has not reported any traffic in the past 30m
       description: |
         This SLI models requests passing through the loadbalancer in front of the pages service. 5xx requests for unencrypted HTTP traffic, and connection errors (not 5xx requests) for HTTPS traffic are considered to be errors. The loadbalancer is unable to determine the status code of HTTPS traffic as it passes through the loadbalancer encrypted.
 

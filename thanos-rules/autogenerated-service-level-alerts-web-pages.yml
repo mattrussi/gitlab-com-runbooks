@@ -189,11 +189,11 @@ groups:
     for: 5m
     annotations:
       title: The loadbalancer SLI of the web-pages service (`{{ $labels.stage }}`
-        stage) has not received any traffic in the past 30 minutes
+        stage) has not received any traffic in the past 30m
       description: |
         Measures aggregated HTTP request traffic through the HAProxy. 5xx responses are considered to be failures.
 
-        This alert signifies that the SLI is reporting a cessation of traffic, but the signal is not absent.
+        This alert signifies that the SLI is reporting a cessation of traffic; the signal is present, but is zero.
       grafana_dashboard_id: web-pages-main/web-pages-overview
       grafana_dashboard_link: https://dashboards.gitlab.net/d/web-pages-main/web-pages-overview?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-stage={{ $labels.stage }}
@@ -218,7 +218,7 @@ groups:
     for: 30m
     annotations:
       title: The loadbalancer SLI of the web-pages service (`{{ $labels.stage }}`
-        stage) has not reported any traffic in the past 30 minutes
+        stage) has not reported any traffic in the past 30m
       description: |
         Measures aggregated HTTP request traffic through the HAProxy. 5xx responses are considered to be failures.
 
@@ -251,11 +251,11 @@ groups:
     for: 5m
     annotations:
       title: The loadbalancer SLI of the web-pages service in region `{{ $labels.region
-        }}` has not received any traffic in the past 30 minutes
+        }}` has not received any traffic in the past 30m
       description: |
         Measures aggregated HTTP request traffic through the HAProxy. 5xx responses are considered to be failures.
 
-        This alert signifies that the SLI is reporting a cessation of traffic, but the signal is not absent.
+        This alert signifies that the SLI is reporting a cessation of traffic; the signal is present, but is zero.
 
         Note that this alert is specific to the `{{ $labels.region }}` region.
       grafana_dashboard_id: web-pages-main/web-pages-overview
@@ -266,7 +266,7 @@ groups:
       grafana_variables: environment,stage
       runbook: docs/web-pages/README.md
     labels:
-      aggregation: component
+      aggregation: regional_component
       alert_class: traffic_cessation
       alert_type: cause
       feature_category: pages
@@ -282,7 +282,7 @@ groups:
     for: 30m
     annotations:
       title: The loadbalancer SLI of the web-pages service in region `{{ $labels.region
-        }}` has not reported any traffic in the past 30 minutes
+        }}` has not reported any traffic in the past 30m
       description: |
         Measures aggregated HTTP request traffic through the HAProxy. 5xx responses are considered to be failures.
 
@@ -299,7 +299,7 @@ groups:
       grafana_variables: environment,stage
       runbook: docs/web-pages/README.md
     labels:
-      aggregation: component
+      aggregation: regional_component
       alert_class: traffic_cessation
       alert_type: cause
       feature_category: pages
@@ -497,11 +497,11 @@ groups:
     for: 5m
     annotations:
       title: The loadbalancer_https SLI of the web-pages service (`{{ $labels.stage
-        }}` stage) has not received any traffic in the past 30 minutes
+        }}` stage) has not received any traffic in the past 30m
       description: |
         Measures aggregated L4 traffic through the HAProxy. Traffic is measured in TCP connections, with upstream TCP connection failures being treated as service-level failures.
 
-        This alert signifies that the SLI is reporting a cessation of traffic, but the signal is not absent.
+        This alert signifies that the SLI is reporting a cessation of traffic; the signal is present, but is zero.
       grafana_dashboard_id: web-pages-main/web-pages-overview
       grafana_dashboard_link: https://dashboards.gitlab.net/d/web-pages-main/web-pages-overview?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-stage={{ $labels.stage }}
@@ -526,7 +526,7 @@ groups:
     for: 30m
     annotations:
       title: The loadbalancer_https SLI of the web-pages service (`{{ $labels.stage
-        }}` stage) has not reported any traffic in the past 30 minutes
+        }}` stage) has not reported any traffic in the past 30m
       description: |
         Measures aggregated L4 traffic through the HAProxy. Traffic is measured in TCP connections, with upstream TCP connection failures being treated as service-level failures.
 
@@ -559,11 +559,11 @@ groups:
     for: 5m
     annotations:
       title: The loadbalancer_https SLI of the web-pages service in region `{{ $labels.region
-        }}` has not received any traffic in the past 30 minutes
+        }}` has not received any traffic in the past 30m
       description: |
         Measures aggregated L4 traffic through the HAProxy. Traffic is measured in TCP connections, with upstream TCP connection failures being treated as service-level failures.
 
-        This alert signifies that the SLI is reporting a cessation of traffic, but the signal is not absent.
+        This alert signifies that the SLI is reporting a cessation of traffic; the signal is present, but is zero.
 
         Note that this alert is specific to the `{{ $labels.region }}` region.
       grafana_dashboard_id: web-pages-main/web-pages-overview
@@ -574,7 +574,7 @@ groups:
       grafana_variables: environment,stage
       runbook: docs/web-pages/README.md
     labels:
-      aggregation: component
+      aggregation: regional_component
       alert_class: traffic_cessation
       alert_type: cause
       feature_category: pages
@@ -590,7 +590,7 @@ groups:
     for: 30m
     annotations:
       title: The loadbalancer_https SLI of the web-pages service in region `{{ $labels.region
-        }}` has not reported any traffic in the past 30 minutes
+        }}` has not reported any traffic in the past 30m
       description: |
         Measures aggregated L4 traffic through the HAProxy. Traffic is measured in TCP connections, with upstream TCP connection failures being treated as service-level failures.
 
@@ -607,7 +607,7 @@ groups:
       grafana_variables: environment,stage
       runbook: docs/web-pages/README.md
     labels:
-      aggregation: component
+      aggregation: regional_component
       alert_class: traffic_cessation
       alert_type: cause
       feature_category: pages
@@ -1029,11 +1029,11 @@ groups:
     for: 5m
     annotations:
       title: The server SLI of the web-pages service (`{{ $labels.stage }}` stage)
-        has not received any traffic in the past 30 minutes
+        has not received any traffic in the past 30m
       description: |
         Aggregation of most web requests into the GitLab Pages process.
 
-        This alert signifies that the SLI is reporting a cessation of traffic, but the signal is not absent.
+        This alert signifies that the SLI is reporting a cessation of traffic; the signal is present, but is zero.
       grafana_dashboard_id: web-pages-main/web-pages-overview
       grafana_dashboard_link: https://dashboards.gitlab.net/d/web-pages-main/web-pages-overview?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-stage={{ $labels.stage }}
@@ -1062,7 +1062,7 @@ groups:
     for: 30m
     annotations:
       title: The server SLI of the web-pages service (`{{ $labels.stage }}` stage)
-        has not reported any traffic in the past 30 minutes
+        has not reported any traffic in the past 30m
       description: |
         Aggregation of most web requests into the GitLab Pages process.
 
@@ -1099,11 +1099,11 @@ groups:
     for: 5m
     annotations:
       title: The server SLI of the web-pages service in region `{{ $labels.region
-        }}` has not received any traffic in the past 30 minutes
+        }}` has not received any traffic in the past 30m
       description: |
         Aggregation of most web requests into the GitLab Pages process.
 
-        This alert signifies that the SLI is reporting a cessation of traffic, but the signal is not absent.
+        This alert signifies that the SLI is reporting a cessation of traffic; the signal is present, but is zero.
 
         Note that this alert is specific to the `{{ $labels.region }}` region.
       grafana_dashboard_id: web-pages-main/web-pages-overview
@@ -1113,12 +1113,12 @@ groups:
       grafana_panel_id: "2414183688"
       grafana_variables: environment,stage
       promql_template_1: |
-        sum by (env,environment,tier,stage) (
-          rate(gitlab_pages_http_requests_total{environment="{{ $labels.environment }}",stage="{{ $labels.stage }}"}[5m])
+        sum by (env,environment,tier,stage,region) (
+          rate(gitlab_pages_http_requests_total{environment="{{ $labels.environment }}",region="{{ $labels.region }}",stage="{{ $labels.stage }}"}[5m])
         )
       runbook: docs/web-pages/README.md
     labels:
-      aggregation: component
+      aggregation: regional_component
       alert_class: traffic_cessation
       alert_type: cause
       feature_category: pages
@@ -1134,7 +1134,7 @@ groups:
     for: 30m
     annotations:
       title: The server SLI of the web-pages service in region `{{ $labels.region
-        }}` has not reported any traffic in the past 30 minutes
+        }}` has not reported any traffic in the past 30m
       description: |
         Aggregation of most web requests into the GitLab Pages process.
 
@@ -1150,12 +1150,12 @@ groups:
       grafana_panel_id: "2414183688"
       grafana_variables: environment,stage
       promql_template_1: |
-        sum by (env,environment,tier,stage) (
-          rate(gitlab_pages_http_requests_total{environment="{{ $labels.environment }}",stage="{{ $labels.stage }}"}[5m])
+        sum by (env,environment,tier,stage,region) (
+          rate(gitlab_pages_http_requests_total{environment="{{ $labels.environment }}",region="{{ $labels.region }}",stage="{{ $labels.stage }}"}[5m])
         )
       runbook: docs/web-pages/README.md
     labels:
-      aggregation: component
+      aggregation: regional_component
       alert_class: traffic_cessation
       alert_type: cause
       feature_category: pages
@@ -1381,11 +1381,11 @@ groups:
     for: 5m
     annotations:
       title: The server_headers SLI of the web-pages service (`{{ $labels.stage }}`
-        stage) has not received any traffic in the past 30 minutes
+        stage) has not received any traffic in the past 30m
       description: |
         Response time can be slow due to large files served by pages. This SLI tracks only time needed to finish writing headers. It includes API requests to GitLab instance, scanning ZIP archive for file entries, processing redirects, etc. We use it as stricter SLI for pages as it's independent of served file size
 
-        This alert signifies that the SLI is reporting a cessation of traffic, but the signal is not absent.
+        This alert signifies that the SLI is reporting a cessation of traffic; the signal is present, but is zero.
       grafana_dashboard_id: web-pages-main/web-pages-overview
       grafana_dashboard_link: https://dashboards.gitlab.net/d/web-pages-main/web-pages-overview?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-stage={{ $labels.stage }}
@@ -1414,7 +1414,7 @@ groups:
     for: 30m
     annotations:
       title: The server_headers SLI of the web-pages service (`{{ $labels.stage }}`
-        stage) has not reported any traffic in the past 30 minutes
+        stage) has not reported any traffic in the past 30m
       description: |
         Response time can be slow due to large files served by pages. This SLI tracks only time needed to finish writing headers. It includes API requests to GitLab instance, scanning ZIP archive for file entries, processing redirects, etc. We use it as stricter SLI for pages as it's independent of served file size
 
@@ -1451,11 +1451,11 @@ groups:
     for: 5m
     annotations:
       title: The server_headers SLI of the web-pages service in region `{{ $labels.region
-        }}` has not received any traffic in the past 30 minutes
+        }}` has not received any traffic in the past 30m
       description: |
         Response time can be slow due to large files served by pages. This SLI tracks only time needed to finish writing headers. It includes API requests to GitLab instance, scanning ZIP archive for file entries, processing redirects, etc. We use it as stricter SLI for pages as it's independent of served file size
 
-        This alert signifies that the SLI is reporting a cessation of traffic, but the signal is not absent.
+        This alert signifies that the SLI is reporting a cessation of traffic; the signal is present, but is zero.
 
         Note that this alert is specific to the `{{ $labels.region }}` region.
       grafana_dashboard_id: web-pages-main/web-pages-overview
@@ -1465,12 +1465,12 @@ groups:
       grafana_panel_id: "3686204985"
       grafana_variables: environment,stage
       promql_template_1: |
-        sum by (env,environment,tier,stage) (
-          rate(gitlab_pages_http_time_to_write_header_seconds_count{environment="{{ $labels.environment }}",stage="{{ $labels.stage }}",type="web-pages"}[5m])
+        sum by (env,environment,tier,stage,region) (
+          rate(gitlab_pages_http_time_to_write_header_seconds_count{environment="{{ $labels.environment }}",region="{{ $labels.region }}",stage="{{ $labels.stage }}",type="web-pages"}[5m])
         )
       runbook: docs/web-pages/README.md
     labels:
-      aggregation: component
+      aggregation: regional_component
       alert_class: traffic_cessation
       alert_type: cause
       feature_category: pages
@@ -1486,7 +1486,7 @@ groups:
     for: 30m
     annotations:
       title: The server_headers SLI of the web-pages service in region `{{ $labels.region
-        }}` has not reported any traffic in the past 30 minutes
+        }}` has not reported any traffic in the past 30m
       description: |
         Response time can be slow due to large files served by pages. This SLI tracks only time needed to finish writing headers. It includes API requests to GitLab instance, scanning ZIP archive for file entries, processing redirects, etc. We use it as stricter SLI for pages as it's independent of served file size
 
@@ -1502,12 +1502,12 @@ groups:
       grafana_panel_id: "3686204985"
       grafana_variables: environment,stage
       promql_template_1: |
-        sum by (env,environment,tier,stage) (
-          rate(gitlab_pages_http_time_to_write_header_seconds_count{environment="{{ $labels.environment }}",stage="{{ $labels.stage }}",type="web-pages"}[5m])
+        sum by (env,environment,tier,stage,region) (
+          rate(gitlab_pages_http_time_to_write_header_seconds_count{environment="{{ $labels.environment }}",region="{{ $labels.region }}",stage="{{ $labels.stage }}",type="web-pages"}[5m])
         )
       runbook: docs/web-pages/README.md
     labels:
-      aggregation: component
+      aggregation: regional_component
       alert_class: traffic_cessation
       alert_type: cause
       feature_category: pages

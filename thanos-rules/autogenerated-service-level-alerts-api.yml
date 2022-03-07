@@ -197,13 +197,13 @@ groups:
     for: 5m
     annotations:
       title: The graphql_queries SLI of the api service (`{{ $labels.stage }}` stage)
-        has not received any traffic in the past 30 minutes
+        has not received any traffic in the past 30m
       description: |
         The number of GraphQL queries meeting their duration target based on the urgency of the endpoint. By default, a query should take no more than 1s. We're working on making the urgency customizable in [this epic](https://gitlab.com/groups/gitlab-org/-/epics/5841).
 
         Mutliple queries could be batched inside a single request.
 
-        This alert signifies that the SLI is reporting a cessation of traffic, but the signal is not absent.
+        This alert signifies that the SLI is reporting a cessation of traffic; the signal is present, but is zero.
       grafana_dashboard_id: api-main/api-overview
       grafana_dashboard_link: https://dashboards.gitlab.net/d/api-main/api-overview?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-stage={{ $labels.stage }}
@@ -232,7 +232,7 @@ groups:
     for: 30m
     annotations:
       title: The graphql_queries SLI of the api service (`{{ $labels.stage }}` stage)
-        has not reported any traffic in the past 30 minutes
+        has not reported any traffic in the past 30m
       description: |
         The number of GraphQL queries meeting their duration target based on the urgency of the endpoint. By default, a query should take no more than 1s. We're working on making the urgency customizable in [this epic](https://gitlab.com/groups/gitlab-org/-/epics/5841).
 
@@ -271,13 +271,13 @@ groups:
     for: 5m
     annotations:
       title: The graphql_queries SLI of the api service in region `{{ $labels.region
-        }}` has not received any traffic in the past 30 minutes
+        }}` has not received any traffic in the past 30m
       description: |
         The number of GraphQL queries meeting their duration target based on the urgency of the endpoint. By default, a query should take no more than 1s. We're working on making the urgency customizable in [this epic](https://gitlab.com/groups/gitlab-org/-/epics/5841).
 
         Mutliple queries could be batched inside a single request.
 
-        This alert signifies that the SLI is reporting a cessation of traffic, but the signal is not absent.
+        This alert signifies that the SLI is reporting a cessation of traffic; the signal is present, but is zero.
 
         Note that this alert is specific to the `{{ $labels.region }}` region.
       grafana_dashboard_id: api-main/api-overview
@@ -287,12 +287,12 @@ groups:
       grafana_panel_id: "1423714754"
       grafana_variables: environment,stage
       promql_template_1: |
-        sum by (env,environment,tier,stage) (
-          sli_aggregations:gitlab_sli:graphql_query_apdex:total_rate5m{environment="{{ $labels.environment }}",job="gitlab-rails",stage="{{ $labels.stage }}",type="api"}
+        sum by (env,environment,tier,stage,region) (
+          rate(gitlab_sli:graphql_query_apdex:total{environment="{{ $labels.environment }}",job="gitlab-rails",region="{{ $labels.region }}",stage="{{ $labels.stage }}",type="api"}[5m])
         )
       runbook: docs/api/README.md
     labels:
-      aggregation: component
+      aggregation: regional_component
       alert_class: traffic_cessation
       alert_type: cause
       feature_category: in_source_metrics
@@ -308,7 +308,7 @@ groups:
     for: 30m
     annotations:
       title: The graphql_queries SLI of the api service in region `{{ $labels.region
-        }}` has not reported any traffic in the past 30 minutes
+        }}` has not reported any traffic in the past 30m
       description: |
         The number of GraphQL queries meeting their duration target based on the urgency of the endpoint. By default, a query should take no more than 1s. We're working on making the urgency customizable in [this epic](https://gitlab.com/groups/gitlab-org/-/epics/5841).
 
@@ -326,12 +326,12 @@ groups:
       grafana_panel_id: "1423714754"
       grafana_variables: environment,stage
       promql_template_1: |
-        sum by (env,environment,tier,stage) (
-          sli_aggregations:gitlab_sli:graphql_query_apdex:total_rate5m{environment="{{ $labels.environment }}",job="gitlab-rails",stage="{{ $labels.stage }}",type="api"}
+        sum by (env,environment,tier,stage,region) (
+          rate(gitlab_sli:graphql_query_apdex:total{environment="{{ $labels.environment }}",job="gitlab-rails",region="{{ $labels.region }}",stage="{{ $labels.stage }}",type="api"}[5m])
         )
       runbook: docs/api/README.md
     labels:
-      aggregation: component
+      aggregation: regional_component
       alert_class: traffic_cessation
       alert_type: cause
       feature_category: in_source_metrics
@@ -529,11 +529,11 @@ groups:
     for: 5m
     annotations:
       title: The loadbalancer SLI of the api service (`{{ $labels.stage }}` stage)
-        has not received any traffic in the past 30 minutes
+        has not received any traffic in the past 30m
       description: |
         Measures aggregated HTTP request traffic through the HAProxy. 5xx responses are considered to be failures.
 
-        This alert signifies that the SLI is reporting a cessation of traffic, but the signal is not absent.
+        This alert signifies that the SLI is reporting a cessation of traffic; the signal is present, but is zero.
       grafana_dashboard_id: api-main/api-overview
       grafana_dashboard_link: https://dashboards.gitlab.net/d/api-main/api-overview?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-stage={{ $labels.stage }}
@@ -558,7 +558,7 @@ groups:
     for: 30m
     annotations:
       title: The loadbalancer SLI of the api service (`{{ $labels.stage }}` stage)
-        has not reported any traffic in the past 30 minutes
+        has not reported any traffic in the past 30m
       description: |
         Measures aggregated HTTP request traffic through the HAProxy. 5xx responses are considered to be failures.
 
@@ -591,11 +591,11 @@ groups:
     for: 5m
     annotations:
       title: The loadbalancer SLI of the api service in region `{{ $labels.region
-        }}` has not received any traffic in the past 30 minutes
+        }}` has not received any traffic in the past 30m
       description: |
         Measures aggregated HTTP request traffic through the HAProxy. 5xx responses are considered to be failures.
 
-        This alert signifies that the SLI is reporting a cessation of traffic, but the signal is not absent.
+        This alert signifies that the SLI is reporting a cessation of traffic; the signal is present, but is zero.
 
         Note that this alert is specific to the `{{ $labels.region }}` region.
       grafana_dashboard_id: api-main/api-overview
@@ -606,7 +606,7 @@ groups:
       grafana_variables: environment,stage
       runbook: docs/api/README.md
     labels:
-      aggregation: component
+      aggregation: regional_component
       alert_class: traffic_cessation
       alert_type: cause
       feature_category: not_owned
@@ -622,7 +622,7 @@ groups:
     for: 30m
     annotations:
       title: The loadbalancer SLI of the api service in region `{{ $labels.region
-        }}` has not reported any traffic in the past 30 minutes
+        }}` has not reported any traffic in the past 30m
       description: |
         Measures aggregated HTTP request traffic through the HAProxy. 5xx responses are considered to be failures.
 
@@ -639,7 +639,7 @@ groups:
       grafana_variables: environment,stage
       runbook: docs/api/README.md
     labels:
-      aggregation: component
+      aggregation: regional_component
       alert_class: traffic_cessation
       alert_type: cause
       feature_category: not_owned
@@ -853,11 +853,11 @@ groups:
     for: 5m
     annotations:
       title: The nginx_ingress SLI of the api service (`{{ $labels.stage }}` stage)
-        has not received any traffic in the past 30 minutes
+        has not received any traffic in the past 30m
       description: |
         nginx for api
 
-        This alert signifies that the SLI is reporting a cessation of traffic, but the signal is not absent.
+        This alert signifies that the SLI is reporting a cessation of traffic; the signal is present, but is zero.
       grafana_dashboard_id: api-main/api-overview
       grafana_dashboard_link: https://dashboards.gitlab.net/d/api-main/api-overview?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-stage={{ $labels.stage }}
@@ -886,7 +886,7 @@ groups:
     for: 30m
     annotations:
       title: The nginx_ingress SLI of the api service (`{{ $labels.stage }}` stage)
-        has not reported any traffic in the past 30 minutes
+        has not reported any traffic in the past 30m
       description: |
         nginx for api
 
@@ -923,11 +923,11 @@ groups:
     for: 5m
     annotations:
       title: The nginx_ingress SLI of the api service in region `{{ $labels.region
-        }}` has not received any traffic in the past 30 minutes
+        }}` has not received any traffic in the past 30m
       description: |
         nginx for api
 
-        This alert signifies that the SLI is reporting a cessation of traffic, but the signal is not absent.
+        This alert signifies that the SLI is reporting a cessation of traffic; the signal is present, but is zero.
 
         Note that this alert is specific to the `{{ $labels.region }}` region.
       grafana_dashboard_id: api-main/api-overview
@@ -937,12 +937,12 @@ groups:
       grafana_panel_id: "2358192786"
       grafana_variables: environment,stage
       promql_template_1: |
-        sum by (env,environment,tier,stage) (
-          rate(nginx_ingress_controller_requests:labeled{environment="{{ $labels.environment }}",stage="{{ $labels.stage }}",type="api"}[5m])
+        sum by (env,environment,tier,stage,region) (
+          rate(nginx_ingress_controller_requests:labeled{environment="{{ $labels.environment }}",region="{{ $labels.region }}",stage="{{ $labels.stage }}",type="api"}[5m])
         )
       runbook: docs/api/README.md
     labels:
-      aggregation: component
+      aggregation: regional_component
       alert_class: traffic_cessation
       alert_type: cause
       feature_category: not_owned
@@ -958,7 +958,7 @@ groups:
     for: 30m
     annotations:
       title: The nginx_ingress SLI of the api service in region `{{ $labels.region
-        }}` has not reported any traffic in the past 30 minutes
+        }}` has not reported any traffic in the past 30m
       description: |
         nginx for api
 
@@ -974,12 +974,12 @@ groups:
       grafana_panel_id: "2358192786"
       grafana_variables: environment,stage
       promql_template_1: |
-        sum by (env,environment,tier,stage) (
-          rate(nginx_ingress_controller_requests:labeled{environment="{{ $labels.environment }}",stage="{{ $labels.stage }}",type="api"}[5m])
+        sum by (env,environment,tier,stage,region) (
+          rate(nginx_ingress_controller_requests:labeled{environment="{{ $labels.environment }}",region="{{ $labels.region }}",stage="{{ $labels.stage }}",type="api"}[5m])
         )
       runbook: docs/api/README.md
     labels:
-      aggregation: component
+      aggregation: regional_component
       alert_class: traffic_cessation
       alert_type: cause
       feature_category: not_owned
@@ -1193,11 +1193,11 @@ groups:
     for: 5m
     annotations:
       title: The puma SLI of the api service (`{{ $labels.stage }}` stage) has not
-        received any traffic in the past 30 minutes
+        received any traffic in the past 30m
       description: |
         This SLI monitors API traffic in aggregate, in the GitLab rails monolith, via its HTTP interface. 5xx responses are treated as failures.
 
-        This alert signifies that the SLI is reporting a cessation of traffic, but the signal is not absent.
+        This alert signifies that the SLI is reporting a cessation of traffic; the signal is present, but is zero.
       grafana_dashboard_id: api-main/api-overview
       grafana_dashboard_link: https://dashboards.gitlab.net/d/api-main/api-overview?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-stage={{ $labels.stage }}
@@ -1226,7 +1226,7 @@ groups:
     for: 30m
     annotations:
       title: The puma SLI of the api service (`{{ $labels.stage }}` stage) has not
-        reported any traffic in the past 30 minutes
+        reported any traffic in the past 30m
       description: |
         This SLI monitors API traffic in aggregate, in the GitLab rails monolith, via its HTTP interface. 5xx responses are treated as failures.
 
@@ -1263,11 +1263,11 @@ groups:
     for: 5m
     annotations:
       title: The puma SLI of the api service in region `{{ $labels.region }}` has
-        not received any traffic in the past 30 minutes
+        not received any traffic in the past 30m
       description: |
         This SLI monitors API traffic in aggregate, in the GitLab rails monolith, via its HTTP interface. 5xx responses are treated as failures.
 
-        This alert signifies that the SLI is reporting a cessation of traffic, but the signal is not absent.
+        This alert signifies that the SLI is reporting a cessation of traffic; the signal is present, but is zero.
 
         Note that this alert is specific to the `{{ $labels.region }}` region.
       grafana_dashboard_id: api-main/api-overview
@@ -1277,12 +1277,12 @@ groups:
       grafana_panel_id: "110019945"
       grafana_variables: environment,stage
       promql_template_1: |
-        sum by (env,environment,tier,stage) (
-          sli_aggregations:http_requests_total_rate5m{environment="{{ $labels.environment }}",job="gitlab-rails",stage="{{ $labels.stage }}",type="api"}
+        sum by (env,environment,tier,stage,region) (
+          sli_aggregations:http_requests_total_rate5m{environment="{{ $labels.environment }}",job="gitlab-rails",region="{{ $labels.region }}",stage="{{ $labels.stage }}",type="api"}
         )
       runbook: docs/api/README.md
     labels:
-      aggregation: component
+      aggregation: regional_component
       alert_class: traffic_cessation
       alert_type: cause
       feature_category: in_source_metrics
@@ -1298,7 +1298,7 @@ groups:
     for: 30m
     annotations:
       title: The puma SLI of the api service in region `{{ $labels.region }}` has
-        not reported any traffic in the past 30 minutes
+        not reported any traffic in the past 30m
       description: |
         This SLI monitors API traffic in aggregate, in the GitLab rails monolith, via its HTTP interface. 5xx responses are treated as failures.
 
@@ -1314,12 +1314,12 @@ groups:
       grafana_panel_id: "110019945"
       grafana_variables: environment,stage
       promql_template_1: |
-        sum by (env,environment,tier,stage) (
-          sli_aggregations:http_requests_total_rate5m{environment="{{ $labels.environment }}",job="gitlab-rails",stage="{{ $labels.stage }}",type="api"}
+        sum by (env,environment,tier,stage,region) (
+          sli_aggregations:http_requests_total_rate5m{environment="{{ $labels.environment }}",job="gitlab-rails",region="{{ $labels.region }}",stage="{{ $labels.stage }}",type="api"}
         )
       runbook: docs/api/README.md
     labels:
-      aggregation: component
+      aggregation: regional_component
       alert_class: traffic_cessation
       alert_type: cause
       feature_category: in_source_metrics
@@ -1525,13 +1525,13 @@ groups:
     for: 5m
     annotations:
       title: The rails_requests SLI of the api service (`{{ $labels.stage }}` stage)
-        has not received any traffic in the past 30 minutes
+        has not received any traffic in the past 30m
       description: |
         The number of requests meeting their duration target based on the urgency of the endpoint. By default, a request should take no more than 1s. But this can be adjusted by endpoint.
 
         Read more about this in the [documentation](https://docs.gitlab.com/ee/development/application_slis/rails_request_apdex.html).
 
-        This alert signifies that the SLI is reporting a cessation of traffic, but the signal is not absent.
+        This alert signifies that the SLI is reporting a cessation of traffic; the signal is present, but is zero.
       grafana_dashboard_id: api-main/api-overview
       grafana_dashboard_link: https://dashboards.gitlab.net/d/api-main/api-overview?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-stage={{ $labels.stage }}
@@ -1560,7 +1560,7 @@ groups:
     for: 30m
     annotations:
       title: The rails_requests SLI of the api service (`{{ $labels.stage }}` stage)
-        has not reported any traffic in the past 30 minutes
+        has not reported any traffic in the past 30m
       description: |
         The number of requests meeting their duration target based on the urgency of the endpoint. By default, a request should take no more than 1s. But this can be adjusted by endpoint.
 
@@ -1599,13 +1599,13 @@ groups:
     for: 5m
     annotations:
       title: The rails_requests SLI of the api service in region `{{ $labels.region
-        }}` has not received any traffic in the past 30 minutes
+        }}` has not received any traffic in the past 30m
       description: |
         The number of requests meeting their duration target based on the urgency of the endpoint. By default, a request should take no more than 1s. But this can be adjusted by endpoint.
 
         Read more about this in the [documentation](https://docs.gitlab.com/ee/development/application_slis/rails_request_apdex.html).
 
-        This alert signifies that the SLI is reporting a cessation of traffic, but the signal is not absent.
+        This alert signifies that the SLI is reporting a cessation of traffic; the signal is present, but is zero.
 
         Note that this alert is specific to the `{{ $labels.region }}` region.
       grafana_dashboard_id: api-main/api-overview
@@ -1615,12 +1615,12 @@ groups:
       grafana_panel_id: "164190586"
       grafana_variables: environment,stage
       promql_template_1: |
-        sum by (env,environment,tier,stage) (
-          sli_aggregations:gitlab_sli:rails_request_apdex:total_rate5m{environment="{{ $labels.environment }}",job="gitlab-rails",stage="{{ $labels.stage }}",type="api"}
+        sum by (env,environment,tier,stage,region) (
+          rate(gitlab_sli:rails_request_apdex:total{environment="{{ $labels.environment }}",job="gitlab-rails",region="{{ $labels.region }}",stage="{{ $labels.stage }}",type="api"}[5m])
         )
       runbook: docs/api/README.md
     labels:
-      aggregation: component
+      aggregation: regional_component
       alert_class: traffic_cessation
       alert_type: cause
       feature_category: in_source_metrics
@@ -1636,7 +1636,7 @@ groups:
     for: 30m
     annotations:
       title: The rails_requests SLI of the api service in region `{{ $labels.region
-        }}` has not reported any traffic in the past 30 minutes
+        }}` has not reported any traffic in the past 30m
       description: |
         The number of requests meeting their duration target based on the urgency of the endpoint. By default, a request should take no more than 1s. But this can be adjusted by endpoint.
 
@@ -1654,12 +1654,12 @@ groups:
       grafana_panel_id: "164190586"
       grafana_variables: environment,stage
       promql_template_1: |
-        sum by (env,environment,tier,stage) (
-          sli_aggregations:gitlab_sli:rails_request_apdex:total_rate5m{environment="{{ $labels.environment }}",job="gitlab-rails",stage="{{ $labels.stage }}",type="api"}
+        sum by (env,environment,tier,stage,region) (
+          rate(gitlab_sli:rails_request_apdex:total{environment="{{ $labels.environment }}",job="gitlab-rails",region="{{ $labels.region }}",stage="{{ $labels.stage }}",type="api"}[5m])
         )
       runbook: docs/api/README.md
     labels:
-      aggregation: component
+      aggregation: regional_component
       alert_class: traffic_cessation
       alert_type: cause
       feature_category: in_source_metrics
@@ -2081,11 +2081,11 @@ groups:
     for: 5m
     annotations:
       title: The workhorse SLI of the api service (`{{ $labels.stage }}` stage) has
-        not received any traffic in the past 30 minutes
+        not received any traffic in the past 30m
       description: |
         Aggregation of most web requests that pass through workhorse, monitored via the HTTP interface. Excludes health, readiness and liveness requests. Some known slow requests, such as HTTP uploads, are excluded from the apdex score.
 
-        This alert signifies that the SLI is reporting a cessation of traffic, but the signal is not absent.
+        This alert signifies that the SLI is reporting a cessation of traffic; the signal is present, but is zero.
       grafana_dashboard_id: api-main/api-overview
       grafana_dashboard_link: https://dashboards.gitlab.net/d/api-main/api-overview?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-stage={{ $labels.stage }}
@@ -2114,7 +2114,7 @@ groups:
     for: 30m
     annotations:
       title: The workhorse SLI of the api service (`{{ $labels.stage }}` stage) has
-        not reported any traffic in the past 30 minutes
+        not reported any traffic in the past 30m
       description: |
         Aggregation of most web requests that pass through workhorse, monitored via the HTTP interface. Excludes health, readiness and liveness requests. Some known slow requests, such as HTTP uploads, are excluded from the apdex score.
 
@@ -2151,11 +2151,11 @@ groups:
     for: 5m
     annotations:
       title: The workhorse SLI of the api service in region `{{ $labels.region }}`
-        has not received any traffic in the past 30 minutes
+        has not received any traffic in the past 30m
       description: |
         Aggregation of most web requests that pass through workhorse, monitored via the HTTP interface. Excludes health, readiness and liveness requests. Some known slow requests, such as HTTP uploads, are excluded from the apdex score.
 
-        This alert signifies that the SLI is reporting a cessation of traffic, but the signal is not absent.
+        This alert signifies that the SLI is reporting a cessation of traffic; the signal is present, but is zero.
 
         Note that this alert is specific to the `{{ $labels.region }}` region.
       grafana_dashboard_id: api-main/api-overview
@@ -2165,12 +2165,12 @@ groups:
       grafana_panel_id: "831392945"
       grafana_variables: environment,stage
       promql_template_1: |
-        sum by (env,environment,tier,stage) (
-          rate(gitlab_workhorse_http_requests_total{job=~"gitlab-workhorse-api|gitlab-workhorse", type="api", environment="{{ $labels.environment }}",stage="{{ $labels.stage }}"}[5m])
+        sum by (env,environment,tier,stage,region) (
+          rate(gitlab_workhorse_http_requests_total{job=~"gitlab-workhorse-api|gitlab-workhorse", type="api", environment="{{ $labels.environment }}",region="{{ $labels.region }}",stage="{{ $labels.stage }}"}[5m])
         )
       runbook: docs/api/README.md
     labels:
-      aggregation: component
+      aggregation: regional_component
       alert_class: traffic_cessation
       alert_type: cause
       feature_category: not_owned
@@ -2186,7 +2186,7 @@ groups:
     for: 30m
     annotations:
       title: The workhorse SLI of the api service in region `{{ $labels.region }}`
-        has not reported any traffic in the past 30 minutes
+        has not reported any traffic in the past 30m
       description: |
         Aggregation of most web requests that pass through workhorse, monitored via the HTTP interface. Excludes health, readiness and liveness requests. Some known slow requests, such as HTTP uploads, are excluded from the apdex score.
 
@@ -2202,12 +2202,12 @@ groups:
       grafana_panel_id: "831392945"
       grafana_variables: environment,stage
       promql_template_1: |
-        sum by (env,environment,tier,stage) (
-          rate(gitlab_workhorse_http_requests_total{job=~"gitlab-workhorse-api|gitlab-workhorse", type="api", environment="{{ $labels.environment }}",stage="{{ $labels.stage }}"}[5m])
+        sum by (env,environment,tier,stage,region) (
+          rate(gitlab_workhorse_http_requests_total{job=~"gitlab-workhorse-api|gitlab-workhorse", type="api", environment="{{ $labels.environment }}",region="{{ $labels.region }}",stage="{{ $labels.stage }}"}[5m])
         )
       runbook: docs/api/README.md
     labels:
-      aggregation: component
+      aggregation: regional_component
       alert_class: traffic_cessation
       alert_type: cause
       feature_category: not_owned

@@ -111,11 +111,11 @@ groups:
     for: 5m
     annotations:
       title: The pages_range_requests SLI of the google-cloud-storage service (`{{
-        $labels.stage }}` stage) has not received any traffic in the past 30 minutes
+        $labels.stage }}` stage) has not received any traffic in the past 30m
       description: |
         Monitors the latency of time-to-first-byte of HTTP range requests issued from GitLab Pages to GCS.
 
-        This alert signifies that the SLI is reporting a cessation of traffic, but the signal is not absent.
+        This alert signifies that the SLI is reporting a cessation of traffic; the signal is present, but is zero.
       grafana_dashboard_id: google-cloud-storage-main/google-cloud-storage-overview
       grafana_dashboard_link: https://dashboards.gitlab.net/d/google-cloud-storage-main/google-cloud-storage-overview?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-stage={{ $labels.stage }}
@@ -144,7 +144,7 @@ groups:
     for: 30m
     annotations:
       title: The pages_range_requests SLI of the google-cloud-storage service (`{{
-        $labels.stage }}` stage) has not reported any traffic in the past 30 minutes
+        $labels.stage }}` stage) has not reported any traffic in the past 30m
       description: |
         Monitors the latency of time-to-first-byte of HTTP range requests issued from GitLab Pages to GCS.
 
@@ -283,11 +283,11 @@ groups:
     for: 5m
     annotations:
       title: The pages_request_duration SLI of the google-cloud-storage service (`{{
-        $labels.stage }}` stage) has not received any traffic in the past 30 minutes
+        $labels.stage }}` stage) has not received any traffic in the past 30m
       description: |
         Monitors the time it takes to get a response from an httprange. Resource hosted in object storage for a request made by the zip VFS.
 
-        This alert signifies that the SLI is reporting a cessation of traffic, but the signal is not absent.
+        This alert signifies that the SLI is reporting a cessation of traffic; the signal is present, but is zero.
       grafana_dashboard_id: google-cloud-storage-main/google-cloud-storage-overview
       grafana_dashboard_link: https://dashboards.gitlab.net/d/google-cloud-storage-main/google-cloud-storage-overview?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-stage={{ $labels.stage }}
@@ -316,7 +316,7 @@ groups:
     for: 30m
     annotations:
       title: The pages_request_duration SLI of the google-cloud-storage service (`{{
-        $labels.stage }}` stage) has not reported any traffic in the past 30 minutes
+        $labels.stage }}` stage) has not reported any traffic in the past 30m
       description: |
         Monitors the time it takes to get a response from an httprange. Resource hosted in object storage for a request made by the zip VFS.
 
@@ -353,11 +353,11 @@ groups:
     for: 5m
     annotations:
       title: The pages_total_requests SLI of the google-cloud-storage service (`{{
-        $labels.stage }}` stage) has not received any traffic in the past 30 minutes
+        $labels.stage }}` stage) has not received any traffic in the past 30m
       description: |
         The number of requests made by the zip VFS to a Resource with different status codes. Could be bigger than the number of requests served.
 
-        This alert signifies that the SLI is reporting a cessation of traffic, but the signal is not absent.
+        This alert signifies that the SLI is reporting a cessation of traffic; the signal is present, but is zero.
       grafana_dashboard_id: google-cloud-storage-main/google-cloud-storage-overview
       grafana_dashboard_link: https://dashboards.gitlab.net/d/google-cloud-storage-main/google-cloud-storage-overview?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-stage={{ $labels.stage }}
@@ -386,7 +386,7 @@ groups:
     for: 30m
     annotations:
       title: The pages_total_requests SLI of the google-cloud-storage service (`{{
-        $labels.stage }}` stage) has not reported any traffic in the past 30 minutes
+        $labels.stage }}` stage) has not reported any traffic in the past 30m
       description: |
         The number of requests made by the zip VFS to a Resource with different status codes. Could be bigger than the number of requests served.
 
@@ -525,11 +525,11 @@ groups:
     for: 5m
     annotations:
       title: The registry_storage SLI of the google-cloud-storage service (`{{ $labels.stage
-        }}` stage) has not received any traffic in the past 30 minutes
+        }}` stage) has not received any traffic in the past 30m
       description: |
         Aggregation of all container registry GCS storage operations.
 
-        This alert signifies that the SLI is reporting a cessation of traffic, but the signal is not absent.
+        This alert signifies that the SLI is reporting a cessation of traffic; the signal is present, but is zero.
       grafana_dashboard_id: google-cloud-storage-main/google-cloud-storage-overview
       grafana_dashboard_link: https://dashboards.gitlab.net/d/google-cloud-storage-main/google-cloud-storage-overview?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-stage={{ $labels.stage }}
@@ -558,7 +558,7 @@ groups:
     for: 30m
     annotations:
       title: The registry_storage SLI of the google-cloud-storage service (`{{ $labels.stage
-        }}` stage) has not reported any traffic in the past 30 minutes
+        }}` stage) has not reported any traffic in the past 30m
       description: |
         Aggregation of all container registry GCS storage operations.
 
@@ -793,11 +793,11 @@ groups:
     for: 5m
     annotations:
       title: The workhorse_upload SLI of the google-cloud-storage service (`{{ $labels.stage
-        }}` stage) has not received any traffic in the past 30 minutes
+        }}` stage) has not received any traffic in the past 30m
       description: |
         Monitors the performance of file uploads from Workhorse to GCS.
 
-        This alert signifies that the SLI is reporting a cessation of traffic, but the signal is not absent.
+        This alert signifies that the SLI is reporting a cessation of traffic; the signal is present, but is zero.
       grafana_dashboard_id: google-cloud-storage-main/google-cloud-storage-overview
       grafana_dashboard_link: https://dashboards.gitlab.net/d/google-cloud-storage-main/google-cloud-storage-overview?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-stage={{ $labels.stage }}
@@ -826,7 +826,7 @@ groups:
     for: 30m
     annotations:
       title: The workhorse_upload SLI of the google-cloud-storage service (`{{ $labels.stage
-        }}` stage) has not reported any traffic in the past 30 minutes
+        }}` stage) has not reported any traffic in the past 30m
       description: |
         Monitors the performance of file uploads from Workhorse to GCS.
 

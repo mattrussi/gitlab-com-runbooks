@@ -199,9 +199,9 @@ groups:
     for: 5m
     annotations:
       title: The cnyHttpServices SLI of the frontend service (`{{ $labels.stage }}`
-        stage) has not received any traffic in the past 30 minutes
+        stage) has not received any traffic in the past 30m
       description: |
-        This alert signifies that the SLI is reporting a cessation of traffic, but the signal is not absent.
+        This alert signifies that the SLI is reporting a cessation of traffic; the signal is present, but is zero.
       grafana_dashboard_id: frontend-main/frontend-overview
       grafana_dashboard_link: https://dashboards.gitlab.net/d/frontend-main/frontend-overview?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-stage={{ $labels.stage }}
@@ -230,7 +230,7 @@ groups:
     for: 30m
     annotations:
       title: The cnyHttpServices SLI of the frontend service (`{{ $labels.stage }}`
-        stage) has not reported any traffic in the past 30 minutes
+        stage) has not reported any traffic in the past 30m
       description: |
         This alert signifies that the SLI was previously reporting traffic, but is no longer - the signal is absent.
 
@@ -455,9 +455,9 @@ groups:
     for: 5m
     annotations:
       title: The mainHttpServices SLI of the frontend service (`{{ $labels.stage }}`
-        stage) has not received any traffic in the past 30 minutes
+        stage) has not received any traffic in the past 30m
       description: |
-        This alert signifies that the SLI is reporting a cessation of traffic, but the signal is not absent.
+        This alert signifies that the SLI is reporting a cessation of traffic; the signal is present, but is zero.
       grafana_dashboard_id: frontend-main/frontend-overview
       grafana_dashboard_link: https://dashboards.gitlab.net/d/frontend-main/frontend-overview?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-stage={{ $labels.stage }}
@@ -486,7 +486,7 @@ groups:
     for: 30m
     annotations:
       title: The mainHttpServices SLI of the frontend service (`{{ $labels.stage }}`
-        stage) has not reported any traffic in the past 30 minutes
+        stage) has not reported any traffic in the past 30m
       description: |
         This alert signifies that the SLI was previously reporting traffic, but is no longer - the signal is absent.
 
@@ -711,9 +711,9 @@ groups:
     for: 5m
     annotations:
       title: The sshServices SLI of the frontend service (`{{ $labels.stage }}` stage)
-        has not received any traffic in the past 30 minutes
+        has not received any traffic in the past 30m
       description: |
-        This alert signifies that the SLI is reporting a cessation of traffic, but the signal is not absent.
+        This alert signifies that the SLI is reporting a cessation of traffic; the signal is present, but is zero.
       grafana_dashboard_id: frontend-main/frontend-overview
       grafana_dashboard_link: https://dashboards.gitlab.net/d/frontend-main/frontend-overview?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-stage={{ $labels.stage }}
@@ -742,7 +742,7 @@ groups:
     for: 30m
     annotations:
       title: The sshServices SLI of the frontend service (`{{ $labels.stage }}` stage)
-        has not reported any traffic in the past 30 minutes
+        has not reported any traffic in the past 30m
       description: |
         This alert signifies that the SLI was previously reporting traffic, but is no longer - the signal is absent.
 

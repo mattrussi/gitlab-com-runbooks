@@ -105,11 +105,11 @@ groups:
     for: 5m
     annotations:
       title: The praefect_cloudsql SLI of the praefect service (`{{ $labels.stage
-        }}` stage) has not received any traffic in the past 30 minutes
+        }}` stage) has not received any traffic in the past 30m
       description: |
         Praefect uses a GCP CloudSQL instance. This SLI represents SQL transactions to that service.
 
-        This alert signifies that the SLI is reporting a cessation of traffic, but the signal is not absent.
+        This alert signifies that the SLI is reporting a cessation of traffic; the signal is present, but is zero.
       grafana_dashboard_id: praefect-main/praefect-overview
       grafana_dashboard_link: https://dashboards.gitlab.net/d/praefect-main/praefect-overview?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-stage={{ $labels.stage }}
@@ -138,7 +138,7 @@ groups:
     for: 30m
     annotations:
       title: The praefect_cloudsql SLI of the praefect service (`{{ $labels.stage
-        }}` stage) has not reported any traffic in the past 30 minutes
+        }}` stage) has not reported any traffic in the past 30m
       description: |
         Praefect uses a GCP CloudSQL instance. This SLI represents SQL transactions to that service.
 
@@ -373,11 +373,11 @@ groups:
     for: 5m
     annotations:
       title: The proxy SLI of the praefect service (`{{ $labels.stage }}` stage) has
-        not received any traffic in the past 30 minutes
+        not received any traffic in the past 30m
       description: |
         All Gitaly operations pass through the Praefect proxy on the way to a Gitaly instance. This SLI monitors those operations in aggregate.
 
-        This alert signifies that the SLI is reporting a cessation of traffic, but the signal is not absent.
+        This alert signifies that the SLI is reporting a cessation of traffic; the signal is present, but is zero.
       grafana_dashboard_id: praefect-main/praefect-overview
       grafana_dashboard_link: https://dashboards.gitlab.net/d/praefect-main/praefect-overview?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-stage={{ $labels.stage }}
@@ -406,7 +406,7 @@ groups:
     for: 30m
     annotations:
       title: The proxy SLI of the praefect service (`{{ $labels.stage }}` stage) has
-        not reported any traffic in the past 30 minutes
+        not reported any traffic in the past 30m
       description: |
         All Gitaly operations pass through the Praefect proxy on the way to a Gitaly instance. This SLI monitors those operations in aggregate.
 
@@ -545,11 +545,11 @@ groups:
     for: 5m
     annotations:
       title: The replicator_queue SLI of the praefect service (`{{ $labels.stage }}`
-        stage) has not received any traffic in the past 30 minutes
+        stage) has not received any traffic in the past 30m
       description: |
         Praefect replication operations. Latency represents the queuing delay before replication is carried out.
 
-        This alert signifies that the SLI is reporting a cessation of traffic, but the signal is not absent.
+        This alert signifies that the SLI is reporting a cessation of traffic; the signal is present, but is zero.
       grafana_dashboard_id: praefect-main/praefect-overview
       grafana_dashboard_link: https://dashboards.gitlab.net/d/praefect-main/praefect-overview?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-stage={{ $labels.stage }}
@@ -578,7 +578,7 @@ groups:
     for: 30m
     annotations:
       title: The replicator_queue SLI of the praefect service (`{{ $labels.stage }}`
-        stage) has not reported any traffic in the past 30 minutes
+        stage) has not reported any traffic in the past 30m
       description: |
         Praefect replication operations. Latency represents the queuing delay before replication is carried out.
 

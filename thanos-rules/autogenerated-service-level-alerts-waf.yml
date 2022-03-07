@@ -9,13 +9,13 @@ groups:
     for: 5m
     annotations:
       title: The gitlab_net_zone SLI of the waf service (`{{ $labels.stage }}` stage)
-        has not received any traffic in the past 30 minutes
+        has not received any traffic in the past 30m
       description: |
         Aggregation of all GitLab.net (non-pulic) traffic passing through the WAF.
 
         Errors on this SLI may indicate that the WAF has detected malicious traffic and is blocking it.
 
-        This alert signifies that the SLI is reporting a cessation of traffic, but the signal is not absent.
+        This alert signifies that the SLI is reporting a cessation of traffic; the signal is present, but is zero.
       grafana_dashboard_id: waf-main/waf-overview
       grafana_dashboard_link: https://dashboards.gitlab.net/d/waf-main/waf-overview?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-stage={{ $labels.stage }}
@@ -44,7 +44,7 @@ groups:
     for: 30m
     annotations:
       title: The gitlab_net_zone SLI of the waf service (`{{ $labels.stage }}` stage)
-        has not reported any traffic in the past 30 minutes
+        has not reported any traffic in the past 30m
       description: |
         Aggregation of all GitLab.net (non-pulic) traffic passing through the WAF.
 
@@ -83,13 +83,13 @@ groups:
     for: 5m
     annotations:
       title: The gitlab_zone SLI of the waf service (`{{ $labels.stage }}` stage)
-        has not received any traffic in the past 30 minutes
+        has not received any traffic in the past 30m
       description: |
         Aggregation of all public traffic for GitLab.com passing through the WAF.
 
         Errors on this SLI may indicate that the WAF has detected malicious traffic and is blocking it. It may also indicate serious upstream failures on GitLab.com.
 
-        This alert signifies that the SLI is reporting a cessation of traffic, but the signal is not absent.
+        This alert signifies that the SLI is reporting a cessation of traffic; the signal is present, but is zero.
       grafana_dashboard_id: waf-main/waf-overview
       grafana_dashboard_link: https://dashboards.gitlab.net/d/waf-main/waf-overview?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-stage={{ $labels.stage }}
@@ -118,7 +118,7 @@ groups:
     for: 30m
     annotations:
       title: The gitlab_zone SLI of the waf service (`{{ $labels.stage }}` stage)
-        has not reported any traffic in the past 30 minutes
+        has not reported any traffic in the past 30m
       description: |
         Aggregation of all public traffic for GitLab.com passing through the WAF.
 

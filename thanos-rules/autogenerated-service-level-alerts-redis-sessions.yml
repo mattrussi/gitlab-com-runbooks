@@ -9,11 +9,11 @@ groups:
     for: 5m
     annotations:
       title: The primary_server SLI of the redis-sessions service (`{{ $labels.stage
-        }}` stage) has not received any traffic in the past 30 minutes
+        }}` stage) has not received any traffic in the past 30m
       description: |
         Operations on the Redis primary for Redis Sessions instance.
 
-        This alert signifies that the SLI is reporting a cessation of traffic, but the signal is not absent.
+        This alert signifies that the SLI is reporting a cessation of traffic; the signal is present, but is zero.
       grafana_dashboard_id: redis-sessions-main/redis-sessions-overview
       grafana_dashboard_link: https://dashboards.gitlab.net/d/redis-sessions-main/redis-sessions-overview?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-stage={{ $labels.stage }}
@@ -42,7 +42,7 @@ groups:
     for: 30m
     annotations:
       title: The primary_server SLI of the redis-sessions service (`{{ $labels.stage
-        }}` stage) has not reported any traffic in the past 30 minutes
+        }}` stage) has not reported any traffic in the past 30m
       description: |
         Operations on the Redis primary for Redis Sessions instance.
 
@@ -285,13 +285,13 @@ groups:
     for: 5m
     annotations:
       title: The rails_redis_client SLI of the redis-sessions service (`{{ $labels.stage
-        }}` stage) has not received any traffic in the past 30 minutes
+        }}` stage) has not received any traffic in the past 30m
       description: |
         Aggregation of all Redis Sessions operations issued from the Rails codebase.
 
         If this SLI is experiencing a degradation then logins and general session activity will be delayed, likely causing widepsread service degradation across the entire system
 
-        This alert signifies that the SLI is reporting a cessation of traffic, but the signal is not absent.
+        This alert signifies that the SLI is reporting a cessation of traffic; the signal is present, but is zero.
       grafana_dashboard_id: redis-sessions-main/redis-sessions-overview
       grafana_dashboard_link: https://dashboards.gitlab.net/d/redis-sessions-main/redis-sessions-overview?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-stage={{ $labels.stage }}
@@ -320,7 +320,7 @@ groups:
     for: 30m
     annotations:
       title: The rails_redis_client SLI of the redis-sessions service (`{{ $labels.stage
-        }}` stage) has not reported any traffic in the past 30 minutes
+        }}` stage) has not reported any traffic in the past 30m
       description: |
         Aggregation of all Redis Sessions operations issued from the Rails codebase.
 
@@ -359,11 +359,11 @@ groups:
     for: 5m
     annotations:
       title: The secondary_servers SLI of the redis-sessions service (`{{ $labels.stage
-        }}` stage) has not received any traffic in the past 30 minutes
+        }}` stage) has not received any traffic in the past 30m
       description: |
         Operations on the Redis secondaries for the Redis Sessions instance.
 
-        This alert signifies that the SLI is reporting a cessation of traffic, but the signal is not absent.
+        This alert signifies that the SLI is reporting a cessation of traffic; the signal is present, but is zero.
       grafana_dashboard_id: redis-sessions-main/redis-sessions-overview
       grafana_dashboard_link: https://dashboards.gitlab.net/d/redis-sessions-main/redis-sessions-overview?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-stage={{ $labels.stage }}
@@ -392,7 +392,7 @@ groups:
     for: 30m
     annotations:
       title: The secondary_servers SLI of the redis-sessions service (`{{ $labels.stage
-        }}` stage) has not reported any traffic in the past 30 minutes
+        }}` stage) has not reported any traffic in the past 30m
       description: |
         Operations on the Redis secondaries for the Redis Sessions instance.
 

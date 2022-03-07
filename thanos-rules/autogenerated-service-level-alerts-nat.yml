@@ -9,13 +9,13 @@ groups:
     for: 5m
     annotations:
       title: The received_tcp_packets SLI of the nat service (`{{ $labels.stage }}`
-        stage) has not received any traffic in the past 30 minutes
+        stage) has not received any traffic in the past 30m
       description: |
         Monitors GCP Cloud NAT TCP packets received. Request rate is measures in IP packets, received by the Cloud NAT. Errors are dropped packets.
 
         High error rates could lead to network issues, including application errors, container fetch failures, etc.
 
-        This alert signifies that the SLI is reporting a cessation of traffic, but the signal is not absent.
+        This alert signifies that the SLI is reporting a cessation of traffic; the signal is present, but is zero.
       grafana_dashboard_id: nat-main/nat-overview
       grafana_dashboard_link: https://dashboards.gitlab.net/d/nat-main/nat-overview?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-stage={{ $labels.stage }}
@@ -48,7 +48,7 @@ groups:
     for: 30m
     annotations:
       title: The received_tcp_packets SLI of the nat service (`{{ $labels.stage }}`
-        stage) has not reported any traffic in the past 30 minutes
+        stage) has not reported any traffic in the past 30m
       description: |
         Monitors GCP Cloud NAT TCP packets received. Request rate is measures in IP packets, received by the Cloud NAT. Errors are dropped packets.
 
@@ -91,13 +91,13 @@ groups:
     for: 5m
     annotations:
       title: The sent_tcp_packets SLI of the nat service (`{{ $labels.stage }}` stage)
-        has not received any traffic in the past 30 minutes
+        has not received any traffic in the past 30m
       description: |
         Monitors GCP Cloud NAT TCP packets sent. Request rate is measures in IP packets, sent by the Cloud NAT. Errors are dropped packets.
 
         High error rates could lead to network issues, including application errors, container fetch failures, etc.
 
-        This alert signifies that the SLI is reporting a cessation of traffic, but the signal is not absent.
+        This alert signifies that the SLI is reporting a cessation of traffic; the signal is present, but is zero.
       grafana_dashboard_id: nat-main/nat-overview
       grafana_dashboard_link: https://dashboards.gitlab.net/d/nat-main/nat-overview?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-stage={{ $labels.stage }}
@@ -130,7 +130,7 @@ groups:
     for: 30m
     annotations:
       title: The sent_tcp_packets SLI of the nat service (`{{ $labels.stage }}` stage)
-        has not reported any traffic in the past 30 minutes
+        has not reported any traffic in the past 30m
       description: |
         Monitors GCP Cloud NAT TCP packets sent. Request rate is measures in IP packets, sent by the Cloud NAT. Errors are dropped packets.
 

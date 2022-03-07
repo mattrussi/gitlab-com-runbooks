@@ -103,11 +103,11 @@ groups:
     for: 5m
     annotations:
       title: The email_receiver SLI of the sidekiq service (`{{ $labels.stage }}`
-        stage) has not received any traffic in the past 30 minutes
+        stage) has not received any traffic in the past 30m
       description: |
         Monitors ratio between all received emails and received emails which could not be processed for some reason.
 
-        This alert signifies that the SLI is reporting a cessation of traffic, but the signal is not absent.
+        This alert signifies that the SLI is reporting a cessation of traffic; the signal is present, but is zero.
       grafana_dashboard_id: sidekiq-main/sidekiq-overview
       grafana_dashboard_link: https://dashboards.gitlab.net/d/sidekiq-main/sidekiq-overview?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-stage={{ $labels.stage }}
@@ -135,7 +135,7 @@ groups:
     for: 30m
     annotations:
       title: The email_receiver SLI of the sidekiq service (`{{ $labels.stage }}`
-        stage) has not reported any traffic in the past 30 minutes
+        stage) has not reported any traffic in the past 30m
       description: |
         Monitors ratio between all received emails and received emails which could not be processed for some reason.
 
@@ -393,11 +393,11 @@ groups:
     for: 5m
     annotations:
       title: The shard_catchall SLI of the sidekiq service (`{{ $labels.stage }}`
-        stage) has not received any traffic in the past 30 minutes
+        stage) has not received any traffic in the past 30m
       description: |
         Aggregation of all jobs for the catchall Sidekiq shard.
 
-        This alert signifies that the SLI is reporting a cessation of traffic, but the signal is not absent.
+        This alert signifies that the SLI is reporting a cessation of traffic; the signal is present, but is zero.
       grafana_dashboard_id: sidekiq-main/sidekiq-overview
       grafana_dashboard_link: https://dashboards.gitlab.net/d/sidekiq-main/sidekiq-overview?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-stage={{ $labels.stage }}
@@ -426,7 +426,7 @@ groups:
     for: 30m
     annotations:
       title: The shard_catchall SLI of the sidekiq service (`{{ $labels.stage }}`
-        stage) has not reported any traffic in the past 30 minutes
+        stage) has not reported any traffic in the past 30m
       description: |
         Aggregation of all jobs for the catchall Sidekiq shard.
 
@@ -1457,11 +1457,11 @@ groups:
     for: 5m
     annotations:
       title: The shard_low_urgency_cpu_bound SLI of the sidekiq service (`{{ $labels.stage
-        }}` stage) has not received any traffic in the past 30 minutes
+        }}` stage) has not received any traffic in the past 30m
       description: |
         Aggregation of all jobs for the low-urgency-cpu-bound Sidekiq shard.
 
-        This alert signifies that the SLI is reporting a cessation of traffic, but the signal is not absent.
+        This alert signifies that the SLI is reporting a cessation of traffic; the signal is present, but is zero.
       grafana_dashboard_id: sidekiq-main/sidekiq-overview
       grafana_dashboard_link: https://dashboards.gitlab.net/d/sidekiq-main/sidekiq-overview?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-stage={{ $labels.stage }}
@@ -1490,7 +1490,7 @@ groups:
     for: 30m
     annotations:
       title: The shard_low_urgency_cpu_bound SLI of the sidekiq service (`{{ $labels.stage
-        }}` stage) has not reported any traffic in the past 30 minutes
+        }}` stage) has not reported any traffic in the past 30m
       description: |
         Aggregation of all jobs for the low-urgency-cpu-bound Sidekiq shard.
 
@@ -2129,11 +2129,11 @@ groups:
     for: 5m
     annotations:
       title: The shard_urgent_cpu_bound SLI of the sidekiq service (`{{ $labels.stage
-        }}` stage) has not received any traffic in the past 30 minutes
+        }}` stage) has not received any traffic in the past 30m
       description: |
         Aggregation of all jobs for the urgent-cpu-bound Sidekiq shard.
 
-        This alert signifies that the SLI is reporting a cessation of traffic, but the signal is not absent.
+        This alert signifies that the SLI is reporting a cessation of traffic; the signal is present, but is zero.
       grafana_dashboard_id: sidekiq-main/sidekiq-overview
       grafana_dashboard_link: https://dashboards.gitlab.net/d/sidekiq-main/sidekiq-overview?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-stage={{ $labels.stage }}
@@ -2162,7 +2162,7 @@ groups:
     for: 30m
     annotations:
       title: The shard_urgent_cpu_bound SLI of the sidekiq service (`{{ $labels.stage
-        }}` stage) has not reported any traffic in the past 30 minutes
+        }}` stage) has not reported any traffic in the past 30m
       description: |
         Aggregation of all jobs for the urgent-cpu-bound Sidekiq shard.
 
@@ -2401,11 +2401,11 @@ groups:
     for: 5m
     annotations:
       title: The shard_urgent_other SLI of the sidekiq service (`{{ $labels.stage
-        }}` stage) has not received any traffic in the past 30 minutes
+        }}` stage) has not received any traffic in the past 30m
       description: |
         Aggregation of all jobs for the urgent-other Sidekiq shard.
 
-        This alert signifies that the SLI is reporting a cessation of traffic, but the signal is not absent.
+        This alert signifies that the SLI is reporting a cessation of traffic; the signal is present, but is zero.
       grafana_dashboard_id: sidekiq-main/sidekiq-overview
       grafana_dashboard_link: https://dashboards.gitlab.net/d/sidekiq-main/sidekiq-overview?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-stage={{ $labels.stage }}
@@ -2434,7 +2434,7 @@ groups:
     for: 30m
     annotations:
       title: The shard_urgent_other SLI of the sidekiq service (`{{ $labels.stage
-        }}` stage) has not reported any traffic in the past 30 minutes
+        }}` stage) has not reported any traffic in the past 30m
       description: |
         Aggregation of all jobs for the urgent-other Sidekiq shard.
 
