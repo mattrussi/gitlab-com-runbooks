@@ -38,7 +38,7 @@ local pgbouncer_client_conn(maxClientConns, name, appliesToServiceTypes) =
     slos: {
       // in https://gitlab.com/gitlab-com/gl-infra/production/-/issues/4889 we found that
       // saturation occurred at 90%, substantially lower than the expected ceiling.
-      // TODO: reconsider as part of https://gitlab.com/gitlab-com/gl-infra/infrastructure/-/issues/13556
+      // TODO: reconsider as part of https://gitlab.com/gitlab-com/gl-infra/reliability/-/issues/13556
       soft: 0.80,
       hard: 0.85,
     },

@@ -678,7 +678,7 @@ Please see the [contribution guidelines](CONTRIBUTING.md)
 
 
 <!-- Links -->
-[on-call-issues]:                   https://gitlab.com/gitlab-com/infrastructure/issues?scope=all&utf8=%E2%9C%93&state=all&label_name[]=oncall
+[on-call-issues]:                   https://gitlab.com/gitlab-com/gl-infra/reliability/-/issues?scope=all&utf8=%E2%9C%93&state=all&label_name[]=oncall
 
 [pagerduty-add-user]:               https://support.pagerduty.com/docs/editing-schedules#section-adding-users
 [pagerduty-amer]:                   https://gitlab.pagerduty.com/schedules#PKN8L5Q

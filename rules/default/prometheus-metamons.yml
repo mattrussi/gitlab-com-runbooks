@@ -120,7 +120,7 @@ groups:
       runbook: docs/monitoring/prometheus-invalid-config.md
       title: '{{$labels.job}} has an invalid config'
 # Known issue, disabled for now as it is spamming #incident-response.
-# https://gitlab.com/gitlab-com/gl-infra/infrastructure/-/issues/12369
+# https://gitlab.com/gitlab-com/gl-infra/reliability/-/issues/12369
 #
 # - alert: PrometheusSlowRuleEvaluation
 #   expr: >

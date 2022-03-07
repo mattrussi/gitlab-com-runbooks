@@ -14,7 +14,7 @@ process documented so that we know what we need to automate.
 
 - `private`
 - `shared-gitlab-org`
-- `shared` (once https://gitlab.com/gitlab-com/gl-infra/infrastructure/-/issues/14518 is completed)
+- `shared` (once https://gitlab.com/gitlab-com/gl-infra/reliability/-/issues/14518 is completed)
 
 ## Glossary
 
@@ -84,5 +84,5 @@ and document for now.
 
 ### Deficiencies
 
-1. Deactivated deployment instances stay around. Destroy deactivated deployment :point_right: https://gitlab.com/gitlab-com/gl-infra/infrastructure/-/issues/13795
-1. Remove double concurrency window during deployment :point_right: https://gitlab.com/gitlab-com/gl-infra/infrastructure/-/issues/13844
+1. Deactivated deployment instances stay around. Destroy deactivated deployment :point_right: https://gitlab.com/gitlab-com/gl-infra/reliability/-/issues/13795
+1. Remove double concurrency window during deployment :point_right: https://gitlab.com/gitlab-com/gl-infra/reliability/-/issues/13844

@@ -57,7 +57,7 @@ local systemAvailabilityQuery(selectorHash, rangeInterval) =
   };
 
 // NB: this query takes into account values recorded in Prometheus prior to
-// https://gitlab.com/gitlab-com/gl-infra/infrastructure/-/issues/9689
+// https://gitlab.com/gitlab-com/gl-infra/reliability/-/issues/9689
 // Better fix proposed in https://gitlab.com/gitlab-com/gl-infra/scalability/-/issues/326
 // This is encoded in the `defaultSelector`
 local serviceAvailabilityQuery(selectorHash, metricName, rangeInterval) =
@@ -82,7 +82,7 @@ local serviceAvailabilityQuery(selectorHash, metricName, rangeInterval) =
   };
 
 // NB: this query takes into account values recorded in Prometheus prior to
-// https://gitlab.com/gitlab-com/gl-infra/infrastructure/-/issues/9689
+// https://gitlab.com/gitlab-com/gl-infra/reliability/-/issues/9689
 // Better fix proposed in https://gitlab.com/gitlab-com/gl-infra/scalability/-/issues/326
 // This is encoded in the `defaultSelector`
 local serviceAvailabilityMillisecondsQuery(selectorHash, metricName) =

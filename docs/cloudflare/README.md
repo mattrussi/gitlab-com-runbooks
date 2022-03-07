@@ -16,7 +16,7 @@ Cloudflare provides a web application firewall (WAF), domain name system
 
 ## [False Positive Triage Process](troubleshooting.md#false-positive-triage-process)
 
-## [Change Workflow](https://gitlab.com/gitlab-com/gl-infra/infrastructure/-/issues/10993)
+## [Change Workflow](https://gitlab.com/gitlab-com/gl-infra/reliability/-/issues/10993)
 
 ## When to use a Page Rule vs WAF Rules vs [cf_allowlists]
 
@@ -43,7 +43,7 @@ Then add the firewall tracker issue ID to the range. For example an attack, that
 
 [cf_allowlists]: https://ops.gitlab.net/gitlab-com/gl-infra/terraform-modules/cf_allowlists
 
-## [How we use Page Rules and WAF Rules to Counter Abuse and Attacks](https://gitlab.com/gitlab-com/gl-infra/infrastructure/-/issues/10277)
+## [How we use Page Rules and WAF Rules to Counter Abuse and Attacks](https://gitlab.com/gitlab-com/gl-infra/reliability/-/issues/10277)
 
 ## Updating the WAF and Page Rules in Cloudflare
 
@@ -119,7 +119,7 @@ If you'd like to watch a more detailed video about its inner workings, you can
 view [this demonstration video](https://youtu.be/vTKyf-PS7Lo) which goes into
 much more detail.
 
-### [How Page Rules work](https://gitlab.com/gitlab-com/gl-infra/infrastructure/-/issues/10989)
+### [How Page Rules work](https://gitlab.com/gitlab-com/gl-infra/reliability/-/issues/10989)
 
 ## General Information
 * [Vendor Info](./vendor.md)

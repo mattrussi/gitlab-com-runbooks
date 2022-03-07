@@ -106,7 +106,7 @@ configured.
 ## Load balancing
 
 Currently the haproxy backend configuration is such that every pool of servers is round-robin with the exception of websockets, ssh and pages.
-There is an open issue to discuss using sticky sessions for the web backend, see https://gitlab.com/gitlab-com/gl-infra/infrastructure/issues/5253.
+There is an open issue to discuss using sticky sessions for the web backend, see https://gitlab.com/gitlab-com/gl-infra/reliability/-/issues/5253.
 
 ## Server Weights
 

@@ -119,7 +119,7 @@ child processes.
 ## High (and similar) load on multiple hosts
 
 It's also possible for high load to be caused by out of date query statistics.
-For example, in <https://gitlab.com/gitlab-com/infrastructure/issues/4429> we
+For example, in <https://gitlab.com/gitlab-com/gl-infra/reliability/-/issues/4429> we
 discovered that incorrect statistics for the "namespaces" table lead to an
 increase in sequential scans on the "issues" table.
 

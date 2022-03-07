@@ -274,7 +274,7 @@ services:
     logging:
       - name: history
       - permalink: # Logs are sent to Stackdriver currently are lacking a tag, so we can't come up with a permalink
-                   # Progress is being tracked in https://gitlab.com/gitlab-com/gl-infra/infrastructure/issues/6051
+                   # Progress is being tracked in https://gitlab.com/gitlab-com/gl-infra/reliability/-/issues/6051
   infrastructure:
     provider: gcp
     architecture:

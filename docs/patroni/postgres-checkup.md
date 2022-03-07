@@ -6,7 +6,7 @@ postgres-checkup is an open-source diagnostics tool for a deep analysis of a Pos
 
 Project home: https://gitlab.com/postgres-ai/postgres-checkup. It contains all the details of how it works and how to use it. As of June 2020, 28 reports are implemented, and 25 of them are available when PG connection (not SSH connection) is used to generate reports, and two snapshots of pg_stat_statements (standard Postgres extension for query macro-analysis) data are collected. The full list of reports can be found here: https://gitlab.com/postgres-ai/postgres-checkup#the-full-list-of-reports.
 
-GitLab.com database reports can be found here: https://gitlab.com/gitlab-com/gl-infra/infrastructure/-/issues?label_name%5B%5D=postgres-checkup.
+GitLab.com database reports can be found here: https://gitlab.com/gitlab-com/gl-infra/reliability/-/issues?label_name%5B%5D=postgres-checkup.
 
 ## When and how reports are generated
 

@@ -196,7 +196,7 @@ local maxOverTime(query) =
         title: componentDetails.title,
         description: componentDetails.description,
         issueSearchLink: issueSearch.buildInfraIssueSearch(labels=['GitLab.com Resource Saturation'], search=component),
-        createIssueLink: 'https://gitlab.com/gitlab-com/gl-infra/infrastructure/issues/new?issue[title]=Resource+Saturation:+%s&issue[description]=/label+~"GitLab.com+Resource+Saturation"' % [component],
+        createIssueLink: 'https://gitlab.com/gitlab-com/gl-infra/reliability/-/issues/new?issue[title]=Resource+Saturation:+%s&issue[description]=/label+~"GitLab.com+Resource+Saturation"' % [component],
       }
     ),
 }

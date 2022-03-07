@@ -790,7 +790,7 @@ If a Patroni node's Consul agent is marked by its peers as failing that `serfHea
 
 In summary, any host's Consul agent can flag the Patroni leader's Consul agent as potentially down, and if it does not promptly refute that claim, Patroni will initiate a failover -- all because Consul's `serfHealth` check is part of Patroni's contract for maintaining the validity of its consul session.
 
-Because GCP network connectivity has proven to be intermittently unreliable, we are considering reconfiguring Patroni to ignore the `serfCheck`, so that its consul sessions would not be invalidated due to any one random VM in the environment having packet loss.  Pros and cons are described in [Issue 8050](https://gitlab.com/gitlab-com/gl-infra/infrastructure/issues/8050).
+Because GCP network connectivity has proven to be intermittently unreliable, we are considering reconfiguring Patroni to ignore the `serfCheck`, so that its consul sessions would not be invalidated due to any one random VM in the environment having packet loss.  Pros and cons are described in [Issue 8050](https://gitlab.com/gitlab-com/gl-infra/reliability/-/issues/8050).
 
 
 ### How does `serfHealth` work?
@@ -890,9 +890,9 @@ The following lists some selected illustrative failure patterns and what their s
 
 ### What specific network paths can trigger Patroni failover if they become lossy?
 
-See: ["Concise summary of RCA" comment on issue "Why are patroni failovers occurring so often?"](https://gitlab.com/gitlab-com/gl-infra/infrastructure/issues/7790#note_215232905)
+See: ["Concise summary of RCA" comment on issue "Why are patroni failovers occurring so often?"](https://gitlab.com/gitlab-com/gl-infra/reliability/-/issues/7790#note_215232905)
 
 
 ### Dedicated PgBouncer hosts can develop a very uneven distribution of client connections after maintenance or restart events
 
-See: [Why do the PgBouncer hosts have a very uneven distribution of client connections?](https://gitlab.com/gitlab-com/gl-infra/infrastructure/issues/7440)
+See: [Why do the PgBouncer hosts have a very uneven distribution of client connections?](https://gitlab.com/gitlab-com/gl-infra/reliability/-/issues/7440)

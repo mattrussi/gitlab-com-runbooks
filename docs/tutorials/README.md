@@ -47,11 +47,11 @@ These tutorials tend to be more conceptual than hands-on but still aim to give p
   A high level introduction to the major frontend and backend components of GitLab.com
 * [Life of a git request](./overview_life_of_a_git_request.md)  Life of a git request:
   Tracing a git-fetch request through the gitlab.com infrastructure, contrasting git-over-ssh and git-over-http.
-* [IN PROGRESS](https://gitlab.com/gitlab-com/gl-infra/infrastructure/-/issues/10390)  Life of a sidekiq job:
+* [IN PROGRESS](https://gitlab.com/gitlab-com/gl-infra/reliability/-/issues/10390)  Life of a sidekiq job:
   A high level introduction to asynchronous background job processing, including job creation, scheduling, execution, and callbacks
-* [TODO](https://gitlab.com/gitlab-com/gl-infra/infrastructure/-/issues/10391)  Tour of Postgres HA:
+* [TODO](https://gitlab.com/gitlab-com/gl-infra/reliability/-/issues/10391)  Tour of Postgres HA:
   Walk through the high availability and load balancing mechanisms supporting the main relational database.
-* [TODO](https://gitlab.com/gitlab-com/gl-infra/infrastructure/-/issues/10400)  Tour of Redis at GitLab.com:
+* [TODO](https://gitlab.com/gitlab-com/gl-infra/reliability/-/issues/10400)  Tour of Redis at GitLab.com:
   Tour the Redis clusters, their distinct roles as shared caching and queuing datastores, their high availability mechanisms, and scaling constraints.
 
 ## How-to: Demos of analytical methods and exploratory tools
@@ -75,19 +75,19 @@ These tutorials demonstrate generalizable methods or tools for analyzing interes
 These tutorials focus on finding, understanding, and using the metrics collected by Prometheus from hosts and services.
 
 Tutorials list:
-* [TODO](https://gitlab.com/gitlab-com/gl-infra/infrastructure/-/issues/10392)  Intro to GitLab-specific metrics catalogue:
+* [TODO](https://gitlab.com/gitlab-com/gl-infra/reliability/-/issues/10392)  Intro to GitLab-specific metrics catalogue:
   A quick tour of what metrics are available and how to explore them using basic PromQL filtering and aggregation to answer common questions
-* [TODO](https://gitlab.com/gitlab-com/gl-infra/infrastructure/-/issues/10393)  What does this apdex metric mean?
+* [TODO](https://gitlab.com/gitlab-com/gl-infra/reliability/-/issues/10393)  What does this apdex metric mean?
   Tracing a composite metric back through its recording-rule transformations, down to the original underlying raw metrics exposed by the system component being measured
-* [TODO](https://gitlab.com/gitlab-com/gl-infra/infrastructure/-/issues/10394)  How are metrics collected by Prometheus?
+* [TODO](https://gitlab.com/gitlab-com/gl-infra/reliability/-/issues/10394)  How are metrics collected by Prometheus?
   A tour of the prometheus exporters we use and what sources of information they sample
-* [TODO](https://gitlab.com/gitlab-com/gl-infra/infrastructure/-/issues/10395)  How are metrics exposed by gitlab-rails?
+* [TODO](https://gitlab.com/gitlab-com/gl-infra/reliability/-/issues/10395)  How are metrics exposed by gitlab-rails?
   Learn how to see for yourself: What events increment that counter?  What points in the code start and end this latency measurement?
-* [TODO](https://gitlab.com/gitlab-com/gl-infra/infrastructure/-/issues/10396)  How are metrics exposed by gitlab-workhorse?
+* [TODO](https://gitlab.com/gitlab-com/gl-infra/reliability/-/issues/10396)  How are metrics exposed by gitlab-workhorse?
   Learn how to see for yourself: What events increment that counter?  What points in the code start and end this latency measurement?
-* [TODO](https://gitlab.com/gitlab-com/gl-infra/infrastructure/-/issues/10397)  How are metrics exposed by gitaly?
+* [TODO](https://gitlab.com/gitlab-com/gl-infra/reliability/-/issues/10397)  How are metrics exposed by gitaly?
   Learn how to see for yourself: What events increment that counter?  What points in the code start and end this latency measurement?
-* [TODO](https://gitlab.com/gitlab-com/gl-infra/infrastructure/-/issues/10398)  How are metrics exposed by gitlab-runners?
+* [TODO](https://gitlab.com/gitlab-com/gl-infra/reliability/-/issues/10398)  How are metrics exposed by gitlab-runners?
   Learn how to see for yourself: What events increment that counter? What points in the code start and end this latency measurement?
 
 ### Performance analysis and profiling

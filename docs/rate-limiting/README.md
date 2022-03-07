@@ -122,7 +122,7 @@ pushed to the customer, rather than polled), but this is likely well worth it (i
 fields to a webhook has eliminated the need for many API calls).
 
 If adding a customers IPs to this list becomes unavoidable, create a (usually confidential) issue using the
-[request-rate-limiting](https://gitlab.com/gitlab-com/gl-infra/infrastructure/-/issues/new?issuable_template=request-rate-limiting)
+[request-rate-limiting](https://gitlab.com/gitlab-com/gl-infra/reliability/-/issues/new?issuable_template=request-rate-limiting)
 issue template discussing the justification and what steps have been taken to avoid doing so (or what could be done).
 Customers who already have IPs in the list can be assumed to have a legacy grant and may have IPs added as necessary, as
 long as it looks reasonable (e.g. adding a few more where there are already many; questions should be asked if they ask
@@ -143,7 +143,7 @@ requests with ?go_get=1.  The full list, which should include links to the justi
 https://gitlab.com/gitlab-cookbooks/gitlab-haproxy/blob/master/templates/default/haproxy-frontend.cfg.erb.
 
 Speaking of the package registries in particular, these have a much higher limit.  See
-https://gitlab.com/gitlab-com/gl-infra/infrastructure/-/issues/11748 for a full discussion of this, but in short, the
+https://gitlab.com/gitlab-com/gl-infra/reliability/-/issues/11748 for a full discussion of this, but in short, the
 endpoints are fairly cheap to process *and* are often hit fairly hard by deployment/build processes, and we have to
 support that.  It's not out of the question that the architecture of this may change in future. The others are a bit
 more special-case (and a bit less interesting) and the justifications won't be repeated here.
@@ -158,7 +158,7 @@ page](https://dashboards.gitlab.net/d/ZOOh_aNik/haproxy?orgId=1) and you can loo
 idea on what is being rate limited at this level, though note that some may also be coming from the application.
 
 In the long run, these may be replaced by either rate limits in GitLab (below) or
-[Cloudflare](https://gitlab.com/gitlab-com/gl-infra/infrastructure/-/issues/9709), or a combination of both.
+[Cloudflare](https://gitlab.com/gitlab-com/gl-infra/reliability/-/issues/9709), or a combination of both.
 
 ### Application (RackAttack)
 
@@ -220,7 +220,7 @@ exceptional list and intended primarily for the initial enabling of rate-limitin
 entries in it and we're working to eliminate those.  Adding a user to this list requires significant discussion, with a
 heavy preference to working with them and their TAM first to discover the API usage and what we can do to solve their
 problem in a more efficient way.  If it becomes unavoidable, we require a (usually confidential) issue using the
-[request-rate-limiting](https://gitlab.com/gitlab-com/gl-infra/infrastructure/-/issues/new?issuable_template=request-rate-limiting)
+[request-rate-limiting](https://gitlab.com/gitlab-com/gl-infra/reliability/-/issues/new?issuable_template=request-rate-limiting)
 issue template, that discusses why we're doing it, what we've talked about, and what the plan is for removing it, AND
 WHICH REMAINS OPEN until the bypass is removed permanently.  Link it to
 https://gitlab.com/groups/gitlab-com/gl-infra/-/epics/374 so that we can track it to completion.  These are *never*
@@ -296,7 +296,7 @@ https://ops.gitlab.net/gitlab-com/gitlab-com-infrastructure/-/blob/master/enviro
    there's no better way to solve their problem,
     * Decide if it needs to be a user-based bypass (preferred) implemented in Rails via the environment variable, or an
       IP-address based bypass (less preferred) configured in haproxy.
-    * Raise a [rate-limiting issue](https://gitlab.com/gitlab-com/gl-infra/infrastructure/-/issues/new?issuable_template=request-rate-limiting)
+    * Raise a [rate-limiting issue](https://gitlab.com/gitlab-com/gl-infra/reliability/-/issues/new?issuable_template=request-rate-limiting)
     * Get consensus/approval from some peers or managers that there's no other option (on the rate-limiting issue) and
       then implement it
     * Leave the issue open, linked to https://gitlab.com/groups/gitlab-com/gl-infra/-/epics/374 for tracking and so we

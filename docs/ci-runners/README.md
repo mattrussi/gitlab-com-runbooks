@@ -341,7 +341,7 @@ Having the peering rules in minds we've designed such networking layout:
    As we will have just these two subnetworks only in `gitlab-ci/ci` network,
    [we've chosen static CIDRs](#gitlab-ci-project) for them and will not change that.
 
-1. Until we will [introduce dedicated Prometheus servers](https://gitlab.com/gitlab-com/gl-infra/infrastructure/-/issues/13886)
+1. Until we will [introduce dedicated Prometheus servers](https://gitlab.com/gitlab-com/gl-infra/reliability/-/issues/13886)
    for our CI projects and integrate them with our Thanos cluster, we need to use our main Prometheus server in
    `gitlab-production` project. For that we've created and need to maintain a temporary peering between `gitlab-ci/ci`
    and `gitlab-production/gprd` networks. When creating this peering we've resolved all CIDR conflicts, so all is good

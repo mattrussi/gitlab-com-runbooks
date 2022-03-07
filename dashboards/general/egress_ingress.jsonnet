@@ -180,7 +180,7 @@ basic.dashboard(
           * It depends.
             * registry: all image pulls are direct from object storage
             * uploads/lfs/merge-request-diffs: currently set to proxy but we might change that
-              https://gitlab.com/gitlab-com/gl-infra/infrastructure/-/issues/10117
+              https://gitlab.com/gitlab-com/gl-infra/reliability/-/issues/10117
         * Why for HAProxy Registry backend traffic, is there so much more ingress than egress?
           * Registry downloads are direct from Object Storage
         * Why for HAProxy HTTPs and SSH Git traffic is egress so much more than ingress?

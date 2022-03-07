@@ -9,7 +9,7 @@ metricsCatalog.serviceDefinition({
   tier: 'stor',
 
   // disk_performance_monitoring requires disk utilisation metrics are currently reporting correctly for
-  // HDD volumes, see https://gitlab.com/gitlab-com/gl-infra/infrastructure/-/issues/10248
+  // HDD volumes, see https://gitlab.com/gitlab-com/gl-infra/reliability/-/issues/10248
   // as such, we only record this utilisation metric on IO subset of the fleet for now.
   tags: ['golang', 'disk_performance_monitoring'],
 

@@ -84,12 +84,12 @@ implementation details.
 
 | Service | Description | Backlog |
 |---------|------------|---------|
-| ~"Service::Prometheus" | The multiple prometheus servers that we run. | [gl-infra/infrastructure](https://gitlab.com/gitlab-com/gl-infra/infrastructure/-/issues?scope=all&state=opened&label_name[]=Service%3A%3APrometheus) |
-| ~"Service::Thanos" | Anything related to [thanos](https://thanos.io/). | [gl-infra/infrastructure](https://gitlab.com/gitlab-com/gl-infra/infrastructure/-/issues?scope=all&state=opened&label_name[]=Service%3A%3AThanos) |
-| ~"Service::Grafana" | Anything related to <https://dashboards.gitlab.net/> | [gl-infra/infrastructure](https://gitlab.com/gitlab-com/gl-infra/infrastructure/-/issues?scope=all&state=opened&label_name[]=Service%3A%3AGrafana)
-| ~"Service::PublicGrafana" | Anything related to <https://dashboards.gitlab.com/> | [gl-infra/infrastructure](https://gitlab.com/gitlab-com/gl-infra/infrastructure/-/issues?scope=all&state=opened&label_name[]=Service%3A%3APublicGrafana)
-| ~"Service::AlertManager" | Anything related to AlertManager | [gl-infra/infrastructure](https://gitlab.com/gitlab-com/gl-infra/infrastructure/-/issues?scope=all&state=opened&label_name[]=Service%3A%3AAlertManager)
-| ~"Service::Monitoring-Other" | The service we provide to engineers, this covers metrics, labels and anything else that doesn't belong in the services above. | [gl-infra/infrastructure](https://gitlab.com/gitlab-com/gl-infra/infrastructure/-/issues?scope=all&state=opened&label_name[]=Service%3A%3AMonitoring-Other) |
+| ~"Service::Prometheus" | The multiple prometheus servers that we run. | [gl-infra/infrastructure](https://gitlab.com/gitlab-com/gl-infra/reliability/-/issues?scope=all&state=opened&label_name[]=Service%3A%3APrometheus) |
+| ~"Service::Thanos" | Anything related to [thanos](https://thanos.io/). | [gl-infra/infrastructure](https://gitlab.com/gitlab-com/gl-infra/reliability/-/issues?scope=all&state=opened&label_name[]=Service%3A%3AThanos) |
+| ~"Service::Grafana" | Anything related to <https://dashboards.gitlab.net/> | [gl-infra/infrastructure](https://gitlab.com/gitlab-com/gl-infra/reliability/-/issues?scope=all&state=opened&label_name[]=Service%3A%3AGrafana)
+| ~"Service::PublicGrafana" | Anything related to <https://dashboards.gitlab.com/> | [gl-infra/infrastructure](https://gitlab.com/gitlab-com/gl-infra/reliability/-/issues?scope=all&state=opened&label_name[]=Service%3A%3APublicGrafana)
+| ~"Service::AlertManager" | Anything related to AlertManager | [gl-infra/infrastructure](https://gitlab.com/gitlab-com/gl-infra/reliability/-/issues?scope=all&state=opened&label_name[]=Service%3A%3AAlertManager)
+| ~"Service::Monitoring-Other" | The service we provide to engineers, this covers metrics, labels and anything else that doesn't belong in the services above. | [gl-infra/infrastructure](https://gitlab.com/gitlab-com/gl-infra/reliability/-/issues?scope=all&state=opened&label_name[]=Service%3A%3AMonitoring-Other) |
 
 Some of the issues in the backlog also belong in epics part of the
 [Observability Work Queue
@@ -395,7 +395,7 @@ go wrong.
   to catch evaluation failures there.
 - There is likely a hole in this setup since we introduced zonal clusters: we
   might not be attuned to monitoring outages there. See
-  [issue](https://gitlab.com/gitlab-com/gl-infra/infrastructure/-/issues/12997).
+  [issue](https://gitlab.com/gitlab-com/gl-infra/reliability/-/issues/12997).
 - Observant readers will have noticed that monitoring Prometheus/Alertmanager is
   all well and good, but if we're failing to send Alertmanager notifications
   then how can we know about it? That brings us to the next section.

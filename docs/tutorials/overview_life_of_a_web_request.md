@@ -1,7 +1,7 @@
 # Life of a Web Request
 
 Work in progress:
-* Issue: https://gitlab.com/gitlab-com/gl-infra/infrastructure/-/issues/10388
+* Issue: https://gitlab.com/gitlab-com/gl-infra/reliability/-/issues/10388
 * [Style guide](/handbook/engineering/infrastructure/tutorials/tips_for_tutorial_writing.html)
 
 ## Introduction

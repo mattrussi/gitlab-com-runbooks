@@ -22,7 +22,7 @@ Notes:
    respectively.
 
 Issues:
- - https://gitlab.com/gitlab-com/infrastructure/issues/4294
+ - https://gitlab.com/gitlab-com/gl-infra/reliability/-/issues/4294
  - https://gitlab.com/gitlab-com/migration/issues/386
 
 This was deliberately not made into chef cookbook because packer is how we should do it.

@@ -18,7 +18,7 @@ local resourceSaturationPoint = metricsCatalog.resourceSaturationPoint;
     grafana_dashboard_uid: 'sat_shared_runners_gitlab',
     resourceLabels: ['instance'],
     // TODO: remove relabelling silliness once
-    // https://gitlab.com/gitlab-com/gl-infra/infrastructure/-/issues/8456
+    // https://gitlab.com/gitlab-com/gl-infra/reliability/-/issues/8456
     // is completed
     query: |||
       sum without(executor_stage, exported_stage, state) (

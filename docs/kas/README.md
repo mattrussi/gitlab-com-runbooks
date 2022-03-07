@@ -297,7 +297,7 @@ Metrics are being collected from kas via the prometheus job name `gitlab-kas`. E
 
 E.g. Total agent connections - https://thanos-query.ops.gitlab.net/new/graph?g0.expr=sum(grpc_server_requests_in_flight%7Bapp%3D%22kas%22%2C%20grpc_method%3D%22GetConfiguration%22%7D)&g0.tab=0&g0.stacked=0&g0.range_input=12h&g0.max_source_resolution=0s&g0.deduplicate=1&g0.partial_response=0&g0.store_matches=%5B%5D&g0.end_input=2021-02-01%2000%3A54%3A18&g0.moment_input=2021-02-01%2000%3A54%3A18
 
-Observability is continued to be worked on in https://gitlab.com/gitlab-com/gl-infra/infrastructure/-/issues/12156
+Observability is continued to be worked on in https://gitlab.com/gitlab-com/gl-infra/reliability/-/issues/12156
 
 The initial SLA for this service will be targeting error rates on the `GetConfiguration()` gRPC method, which should be under 1%. After launch, Configure will implement the metrics necessary for a [more relevant SLA](https://gitlab.com/gitlab-org/cluster-integration/gitlab-agent/-/issues/90).
 

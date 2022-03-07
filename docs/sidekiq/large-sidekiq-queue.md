@@ -226,7 +226,7 @@ src: https://docs.gitlab.com/ee/administration/troubleshooting/sidekiq.html#canc
 
 ## References
 
-* https://gitlab.com/gitlab-com/infrastructure/issues/677
-* https://gitlab.com/gitlab-com/infrastructure/issues/606
-* https://gitlab.com/gitlab-com/infrastructure/issues/584
+* https://gitlab.com/gitlab-com/gl-infra/reliability/-/issues/677
+* https://gitlab.com/gitlab-com/gl-infra/reliability/-/issues/606
+* https://gitlab.com/gitlab-com/gl-infra/reliability/-/issues/584
 * https://docs.gitlab.com/ee/administration/troubleshooting/sidekiq.html

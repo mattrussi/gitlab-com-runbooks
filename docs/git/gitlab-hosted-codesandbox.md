@@ -1,7 +1,7 @@
 # GitLab Hosted CodeSandbox
 
 In
-[infrastructure#6709](https://gitlab.com/gitlab-com/gl-infra/infrastructure/issues/6709),
+[infrastructure#6709](https://gitlab.com/gitlab-com/gl-infra/reliability/-/issues/6709),
 we were asked to create a bucket and CDN for a GitLab hosted CodeSandbox.
 [CodeSandbox](https://codesandbox.io/) is JavaScript that enables live preview
 updates on our web IDE using JavaScript for client-side rendering. We intend to

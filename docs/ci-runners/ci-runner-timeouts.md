@@ -15,4 +15,4 @@ for runner in 157328 157329 380989 380990; do
 done
 ```
 
-Example Issue: https://gitlab.com/gitlab-com/gl-infra/infrastructure/issues/6547
+Example Issue: https://gitlab.com/gitlab-com/gl-infra/reliability/-/issues/6547

@@ -98,7 +98,7 @@ groups:
       runbook: docs/frontend/ssh-maxstartups-breach.md
       title: Possible breach of SSH MaxStartups limit
   - alert: HAProxyExtraneousProcesses
-    # DR environment is excluded here due to https://gitlab.com/gitlab-com/gl-infra/infrastructure/issues/8897
+    # DR environment is excluded here due to https://gitlab.com/gitlab-com/gl-infra/reliability/-/issues/8897
     expr: sum(namedprocess_namegroup_num_procs{fqdn=~"fe-[0-9].*", groupname="haproxy", env!="dr"}) by (fqdn) > 2
     for: 2h
     labels:

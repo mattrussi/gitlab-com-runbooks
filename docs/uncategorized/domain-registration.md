@@ -5,7 +5,7 @@ So you want to register a domain? This is the guide for you!
 We register our domains with AWS Route53 and also use them for DNS. If the TLD you wish to use is not available at AWS, please
 use Gandi[https://admin.gandi.net].
 In order to register a domain for GitLab, you will need to have
-access to our AWS account. Please create an [infrastructure issue](https://gitlab.com/gitlab-com/infrastructure/issues/new)
+access to our AWS account. Please create an [infrastructure issue](https://gitlab.com/gitlab-com/gl-infra/reliability/-/issues/new)
 if you need access.
 
 ## AWS Instructions

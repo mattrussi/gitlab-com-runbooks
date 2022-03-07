@@ -519,7 +519,7 @@ TODO https://github.com/elastic/beats/tree/master/packetbeat
 
 ### Profiling the application ###
 
-TODO e.g. rbspy, will be partially covered by https://gitlab.com/gitlab-com/gl-infra/infrastructure/issues/6940
+TODO e.g. rbspy, will be partially covered by https://gitlab.com/gitlab-com/gl-infra/reliability/-/issues/6940
 
 # Failover and Recovery procedures #
 
@@ -918,5 +918,5 @@ If it needs to be stopped for some reason (it is running badly, is causing undue
 - https://tech.trivago.com/2017/01/25/learn-redis-the-hard-way-in-production/
 - https://gitlab.com/groups/gitlab-com/gl-infra/-/epics/80
 - https://gitlab.com/gitlab-com/gl-infra/scalability/issues/49
-- https://gitlab.com/gitlab-com/gl-infra/infrastructure/issues/7199
-- https://gitlab.com/gitlab-com/gl-infra/infrastructure/-/issues/9414
+- https://gitlab.com/gitlab-com/gl-infra/reliability/-/issues/7199
+- https://gitlab.com/gitlab-com/gl-infra/reliability/-/issues/9414

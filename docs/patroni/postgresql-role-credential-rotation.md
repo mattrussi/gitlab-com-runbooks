@@ -48,7 +48,7 @@ bundle install --path=vendor/bundle
    ```
 1. [ ] Specify the link to this issue:
    ```bash
-   export issue_link='https://gitlab.com/gitlab-com/gl-infra/infrastructure/-/issues/10961' # CHANGEME (as necessary)
+   export issue_link='https://gitlab.com/gitlab-com/gl-infra/reliability/-/issues/10961' # CHANGEME (as necessary)
    ```
 1. [ ] Specify the username whose password you wish to rotate:
    ```bash

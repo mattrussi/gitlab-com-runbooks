@@ -257,7 +257,7 @@ ALTER DEFAULT PRIVILEGES IN SCHEMA public GRANT SELECT ON TABLES TO analytics;
 
 When a new empty PostgreSQL/Patroni cluster is deployed it creates any `user` as defined in the `patroni.yml` file, in the `bootstrap.users` section, as documented at: https://patroni.readthedocs.io/en/latest/SETTINGS.html#bootstrap-configuration
 
-If you are launching a new Patroni environment using Gitlab's `chef-repo`, then the database users can be defined under `['gitlab-patroni']['patroni']['users']`, which will then be configured by a proper recipe into the proper `patroni.yml` section, as explained at https://gitlab.com/gitlab-com/gl-infra/infrastructure/-/issues/15212#note_845820648
+If you are launching a new Patroni environment using Gitlab's `chef-repo`, then the database users can be defined under `['gitlab-patroni']['patroni']['users']`, which will then be configured by a proper recipe into the proper `patroni.yml` section, as explained at https://gitlab.com/gitlab-com/gl-infra/reliability/-/issues/15212#note_845820648
 
 The default users can be defined using 2 different methods:
 - The default users created are defined in the `gitlab-patroni` cookbook under `attributes/default.rb` - https://gitlab.com/gitlab-cookbooks/gitlab-patroni/-/blob/master/attributes/default.rb#L53

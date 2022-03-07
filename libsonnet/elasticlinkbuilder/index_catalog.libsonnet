@@ -19,7 +19,7 @@ local indexDefaults = {
 };
 
 {
-  // Improve these logs when https://gitlab.com/gitlab-com/gl-infra/infrastructure/-/issues/11221 is addressed
+  // Improve these logs when https://gitlab.com/gitlab-com/gl-infra/reliability/-/issues/11221 is addressed
   camoproxy: indexDefaults {
     timestamp: '@timestamp',
     indexPattern: 'AWz5hIoSGphUgZwzAG7q',
