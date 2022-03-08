@@ -150,7 +150,7 @@ metricsCatalog.serviceDefinition({
         selector='job=~"gitlab-workhorse-api|gitlab-workhorse", type="api", code=~"^5.*", route!="^/-/health$", route!="^/-/(readiness|liveness)$"'
       ),
 
-      significantLabels: ['method', 'route'],
+      significantLabels: ['region', 'method', 'route'],
 
       toolingLinks: [
         toolingLinks.continuousProfiler(service='workhorse-api'),
@@ -178,7 +178,7 @@ metricsCatalog.serviceDefinition({
         selector=railsSelector { status: { re: '5..' } }
       ),
 
-      significantLabels: ['fqdn', 'method', 'feature_category'],
+      significantLabels: ['region', 'method', 'feature_category'],
 
       toolingLinks: [
         toolingLinks.sentry(slug='gitlab/gitlabcom', type='api', variables=['environment', 'stage']),
