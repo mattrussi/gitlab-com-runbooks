@@ -50,10 +50,8 @@ local aggregationSet = import 'servicemetrics/aggregation-set.libsonnet';
     intermediateSource: true,
     selector: { monitor: { ne: 'global' } },
     labels: [
-      'environment',
       'tier',
       'type',
-      'stage',
       'shard',
       'queue',
       'feature_category',
@@ -75,10 +73,8 @@ local aggregationSet = import 'servicemetrics/aggregation-set.libsonnet';
     selector: {},
     labels: [
       'env',
-      'environment',
       'tier',
       'type',
-      'stage',
       'shard',
       'queue',
       'feature_category',
@@ -117,10 +113,8 @@ local aggregationSet = import 'servicemetrics/aggregation-set.libsonnet';
     intermediateSource: true,
     selector: { monitor: { ne: 'global' } },
     labels: [
-      'environment',
       'tier',
       'type',
-      'stage',
       'shard',
       'queue',
       'feature_category',
