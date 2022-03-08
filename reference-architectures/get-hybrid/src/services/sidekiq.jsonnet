@@ -181,7 +181,6 @@ metricsCatalog.serviceDefinition({
       userImpacting: true,
       severity: 's3',
       featureCategory: 'not_owned',
-      team: 'certify',
       description: |||
         Monitors ratio between all received emails and received emails which
         could not be processed for some reason.
