@@ -77,45 +77,45 @@ metricsCatalog.serviceDefinition({
       |||,
 
       apdex: combined(
-          [
-            histogramApdex(
-              histogram='sidekiq_jobs_completion_seconds_bucket',
-              selector=highUrgencySelector,
-              satisfiedThreshold=slos.urgent.executionDurationSeconds,
-            ),
-            histogramApdex(
-              histogram='sidekiq_jobs_queue_duration_seconds_bucket',
-              selector=highUrgencySelector,
-              satisfiedThreshold=slos.urgent.queueingDurationSeconds,
-            ),
-            histogramApdex(
-              histogram='sidekiq_jobs_completion_seconds_bucket',
-              selector=lowUrgencySelector,
-              satisfiedThreshold=slos.lowUrgency.executionDurationSeconds,
-            ),
-            histogramApdex(
-              histogram='sidekiq_jobs_queue_duration_seconds_bucket',
-              selector=lowUrgencySelector,
-              satisfiedThreshold=slos.lowUrgency.queueingDurationSeconds,
-            ),
-            histogramApdex(
-              histogram='sidekiq_jobs_completion_seconds_bucket',
-              selector=throttledUrgencySelector,
-              satisfiedThreshold=slos.throttled.executionDurationSeconds,
-            ),
-            // TODO: remove this once all unattribute jobs are removed
-            // Treat `urgency=""` as low urgency jobs.
-            histogramApdex(
-              histogram='sidekiq_jobs_completion_seconds_bucket',
-              selector=noUrgencySelector,
-              satisfiedThreshold=slos.lowUrgency.executionDurationSeconds,
-            ),
-            histogramApdex(
-              histogram='sidekiq_jobs_queue_duration_seconds_bucket',
-              selector=noUrgencySelector,
-              satisfiedThreshold=slos.lowUrgency.queueingDurationSeconds,
-            ),
-          ]
+        [
+          histogramApdex(
+            histogram='sidekiq_jobs_completion_seconds_bucket',
+            selector=highUrgencySelector,
+            satisfiedThreshold=slos.urgent.executionDurationSeconds,
+          ),
+          histogramApdex(
+            histogram='sidekiq_jobs_queue_duration_seconds_bucket',
+            selector=highUrgencySelector,
+            satisfiedThreshold=slos.urgent.queueingDurationSeconds,
+          ),
+          histogramApdex(
+            histogram='sidekiq_jobs_completion_seconds_bucket',
+            selector=lowUrgencySelector,
+            satisfiedThreshold=slos.lowUrgency.executionDurationSeconds,
+          ),
+          histogramApdex(
+            histogram='sidekiq_jobs_queue_duration_seconds_bucket',
+            selector=lowUrgencySelector,
+            satisfiedThreshold=slos.lowUrgency.queueingDurationSeconds,
+          ),
+          histogramApdex(
+            histogram='sidekiq_jobs_completion_seconds_bucket',
+            selector=throttledUrgencySelector,
+            satisfiedThreshold=slos.throttled.executionDurationSeconds,
+          ),
+          // TODO: remove this once all unattribute jobs are removed
+          // Treat `urgency=""` as low urgency jobs.
+          histogramApdex(
+            histogram='sidekiq_jobs_completion_seconds_bucket',
+            selector=noUrgencySelector,
+            satisfiedThreshold=slos.lowUrgency.executionDurationSeconds,
+          ),
+          histogramApdex(
+            histogram='sidekiq_jobs_queue_duration_seconds_bucket',
+            selector=noUrgencySelector,
+            satisfiedThreshold=slos.lowUrgency.queueingDurationSeconds,
+          ),
+        ]
       ),
 
       requestRate: rateMetric(
