@@ -2478,7 +2478,7 @@
       ]
     },
     {
-      "content": "### Description\n\nAggregation of all jobs for the catchall Sidekiq shard.\n\n\n\n### Observability Tools\n\n\n",
+      "content": "### Description\n\nAll Sidekiq jobs\n\n\n\n### Observability Tools\n\n\n",
       "gridPos": {
         "h": 8,
         "w": 6,
