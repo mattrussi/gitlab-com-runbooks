@@ -102,6 +102,7 @@ metricsCatalog.serviceDefinition({
                 histogram='sidekiq_jobs_completion_seconds_bucket',
                 selector=throttledUrgencySelector,
                 satisfiedThreshold=slos.throttled.executionDurationSeconds,
+              ),
               // TODO: remove this once all unattribute jobs are removed
               // Treat `urgency=""` as low urgency jobs.
               histogramApdex(
@@ -114,7 +115,7 @@ metricsCatalog.serviceDefinition({
                 selector=noUrgencySelector,
                 satisfiedThreshold=slos.lowUrgency.queueingDurationSeconds,
               ),
-             ]
+            ]
       ),
 
       requestRate: rateMetric(
