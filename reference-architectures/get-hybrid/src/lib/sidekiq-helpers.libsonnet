@@ -1,7 +1,7 @@
 // GET-hybrid deployments contain no sidekiq shards, but the configuration is left to keep the compatibility to
 // environments with multiple shards
 local shards = {
-  catchall: { urgency: null, gkeDeployment: 'not-applicable', userImpacting: true, ignoreTrafficCessation: false /* no urgency attribute since multiple values are supported */ },
+  catchall: { urgency: null, userImpacting: true, ignoreTrafficCessation: false /* no urgency attribute since multiple values are supported */ },
 };
 
 // These values are used in several places, so best to DRY them up
