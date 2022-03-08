@@ -19,22 +19,8 @@ metricsCatalog.serviceDefinition({
     apdexScore: 0.995,
     errorRatio: 0.995,
   },
-  otherThresholds: {
-    // Deployment thresholds are optional, and when they are specified, they are
-    // measured against the same multi-burn-rates as the monitoring indicators.
-    // When a service is in violation, deployments may be blocked or may be rolled
-    // back.
-    deployment: {
-      apdexScore: 0.995,
-      errorRatio: 0.995,
-    },
-  },
-  serviceDependencies: {
-    gitaly: true,
-    redis: true,
-    praefect: true,
-    consul: true,
-  },
+  otherThresholds: {},
+  serviceDependencies: {}
   provisioning: {
     kubernetes: true,
     vms: false,
@@ -208,9 +194,4 @@ metricsCatalog.serviceDefinition({
   },
 
   // Special per-worker recording rules
-  extraRecordingRulesPerBurnRate: [
-    // Adds per-work queuing/execution apdex, plus error rates etc
-    // across multiple burn rates
-    perWorkerRecordingRules,
-  ],
 })
