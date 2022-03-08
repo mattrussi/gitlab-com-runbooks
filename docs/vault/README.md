@@ -14,6 +14,7 @@
 
 ## Troubleshooting Pointers
 
+* [Camoproxy troubleshooting](../camoproxy/camoproxy.md)
 * [Cloudflare for the on-call](../cloudflare/oncall.md)
 * [VM Build Process with Terraform and Chef](../config_management/chef-process-overview.md)
 * [Chef Vault Basics](../config_management/chef-vault.md)
@@ -30,7 +31,6 @@
 * [Container Registry CDN](../registry/cdn.md)
 * [../uncategorized/about-gitlab-com.md](../uncategorized/about-gitlab-com.md)
 * [Aptly](../uncategorized/aptly.md)
-* [Camoproxy troubleshooting](../uncategorized/camoproxy.md)
 * [Chef secrets using GKMS](../uncategorized/gkms-chef-secrets.md)
 * [Managing Chef](../uncategorized/manage-chef.md)
 * [PackageCloud Infrastructure and Backups](../uncategorized/packagecloud-infrastructure.md)

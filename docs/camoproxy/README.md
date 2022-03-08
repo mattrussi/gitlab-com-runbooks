@@ -15,8 +15,8 @@
 
 ## Troubleshooting Pointers
 
-* [Camoproxy troubleshooting](../uncategorized/camoproxy.md)
-* [Upgrade camoproxy](../uncategorized/upgrade-camoproxy.md)
+* [Camoproxy troubleshooting](camoproxy.md)
+* [Upgrade camoproxy](upgrade-camoproxy.md)
 <!-- END_MARKER -->
 
 
@@ -35,5 +35,7 @@
 <!-- ## Security/Compliance -->
 
 <!-- ## Monitoring/Alerting -->
+
+* [Dashboard](https://dashboards.gitlab.net/d/camoproxy-main/camoproxy-overview?orgId=1)
 
 <!-- ## Links to further Documentation -->
