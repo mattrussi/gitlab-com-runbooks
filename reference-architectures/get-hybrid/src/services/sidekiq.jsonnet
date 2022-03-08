@@ -43,20 +43,14 @@ metricsCatalog.serviceDefinition({
       deploymentSelector=kubeSelector
     ),
   },
-  kubeResources: std.foldl(
-    function(memo, shard)
-      memo {
-        // Deployment tags follow the convention sidekiq-catchall etc
-        ['sidekiq-' + shard.name]: {
-          kind: 'Deployment',
-          containers: [
-            'sidekiq',
-          ],
-        },
-      },
-    sidekiqHelpers.shards.listAll(),
-    {},
-  ),
+  kubeResources: {
+    'gitlab-sidekiq-all-in-1-v2': {
+      kind: 'Deployment',
+      containers: [
+        'sidekiq',
+      ],
+    },
+  },
   serviceLevelIndicators: {
     ['shard_' + std.strReplace(shard.name, '-', '_')]: {
       local shardSelector = { shard: shard.name },
