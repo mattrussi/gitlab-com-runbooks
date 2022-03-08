@@ -87,6 +87,18 @@ local emailReceiverErrors =
     |||,
   );
 
+local serviceDeskLogLinks =
+  basic.text(
+    title='Service Desk Log Links',
+    mode='markdown',
+    content=|||
+      Use the links below to see logs for specific exceptions related to incoming email.
+
+
+      * [Gitlab::Email::UnknownIncomingEmail](https://log.gprd.gitlab.net/goto/a89e2320-9ee8-11ec-bd7b-c108343628c3)
+    |||,
+  );
+
 stageGroupDashboards.dashboard('certify', ['web', 'sidekiq'])
 .addPanels(
   layout.rowGrid(
@@ -96,6 +108,7 @@ stageGroupDashboards.dashboard('certify', ['web', 'sidekiq'])
       serviceDeskThankYouEmails,
       serviceDeskNewNoteEmails,
       emailReceiverErrors,
+      serviceDeskLogLinks,
     ],
     startRow=1001
   ),
