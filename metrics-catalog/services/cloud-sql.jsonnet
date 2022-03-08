@@ -1,5 +1,7 @@
 local metricsCatalog = import 'servicemetrics/metrics.libsonnet';
+local toolingLinks = import 'toolinglinks/toolinglinks.libsonnet';
 local gaugeMetric = metricsCatalog.gaugeMetric;
+local maturityLevels = import 'service-maturity/levels.libsonnet';
 
 metricsCatalog.serviceDefinition({
   type: 'cloud-sql',
@@ -42,6 +44,18 @@ metricsCatalog.serviceDefinition({
       ),
 
       significantLabels: ['database_id'],
+
+      toolingLinks: [
+        toolingLinks.stackdriverLogs(
+          title='Stackdriver Logs: Cloud SQL',
+          queryHash={
+            'resource.type': 'cloudsql_database',
+          },
+        ),
+      ],
     },
   },
+  skippedMaturityCriteria: maturityLevels.skip({
+    'Structured logs available in Kibana': 'Cloud SQL is a managed service of GCP. The logs are available in Stackdriver.',
+  }),
 })

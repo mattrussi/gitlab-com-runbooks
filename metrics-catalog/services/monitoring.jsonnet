@@ -27,6 +27,9 @@ metricsCatalog.serviceDefinition({
     kubernetes: true,
     vms: true,
   },
+  serviceDependencies: {
+    'cloud-sql': true,
+  },
   kubeConfig: {
     // TODO: monitoring doesn't have very good labelling.
     // See https://gitlab.com/gitlab-com/gl-infra/delivery/-/issues/2240

@@ -41,6 +41,7 @@ metricsCatalog.serviceDefinition({
     pvs: true,
     search: true,
     consul: true,
+    'google-cloud-storage': true,
   },
   provisioning: {
     kubernetes: true,

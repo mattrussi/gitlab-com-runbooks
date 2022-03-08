@@ -41,6 +41,7 @@ metricsCatalog.serviceDefinition({
     'redis-ratelimiting': true,
     'redis-sidekiq': true,
     'redis-cache': true,
+    'redis-sessions': true,
     redis: true,
     patroni: true,
     pgbouncer: true,
@@ -48,6 +49,7 @@ metricsCatalog.serviceDefinition({
     pvs: true,
     search: true,
     consul: true,
+    'google-cloud-storage': true,
   },
   recordingRuleMetrics: [
     'http_requests_total',

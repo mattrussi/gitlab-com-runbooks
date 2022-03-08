@@ -6,9 +6,27 @@ require_relative '../lib/jsonnet_wrapper'
 CHECK = "✅"
 STOP = "🛑"
 WHITE = "⚪️"
+MINUS = "➖"
+
+Evaluation = Struct.new(:level, :message)
+
+def evaluate(level, criterion)
+  message =
+    case criterion['result']
+    when 'passed'
+      "#{CHECK} #{criterion['name']}"
+    when 'failed'
+      "#{STOP} #{criterion['name']}"
+    when 'skipped'
+      "#{WHITE} (skipped) #{criterion['name']}. Reason: #{Array(criterion['evidence']).join(', ')}"
+    else
+      "#{MINUS} (#{criterion['result']}) #{criterion['name']}"
+    end
+  Evaluation.new(level, message)
+end
 
 # Validate the maturity model so that the mandatory level for all services is Level 1
-def validate(maturity_model)
+def validate(maturity_model, required_level, *filters)
   $stdout.puts "Validating service maturity model."
   $stdout.puts
   $stdout.puts "The maturity model itself is part of the metrics catalog, and uses information from the metrics catalog and the service catalog to score each service. To achieve a particular level in the maturity model, a service must meet all the criteria for that level and all previous levels."
@@ -18,23 +36,33 @@ def validate(maturity_model)
 
   failures = []
   maturity_model.each do |service, model|
-    # The current required level is 1
-    next if model['levelNumber'] >= 1
+    next if !filters.empty? && !filters.include?(service)
 
-    evaluation = model['details'].first['criteria'].map do |criterion|
-      case criterion['result']
-      when 'passed'
-        "#{CHECK} #{criterion['name']}"
-      when 'failed'
-        "#{STOP} #{criterion['name']}"
-      when 'skipped'
-        "#{WHITE} (skipped) #{criterion['name']}. Reason: #{Array(criterion['evidence']).join(', ')}"
-      else
-        "#{MINUS} (#{criterion['result']}) #{criterion['name']}"
+    # The current required level is 1
+    if model['levelNumber'] >= required_level
+      puts "- #{service} (Level #{model['levelNumber']})"
+      next
+    end
+
+    evaluation = model['details'].flat_map do |level|
+      level['criteria'].map do |criterion|
+        break [] if level['number'] > required_level
+
+        evaluate(level, criterion)
       end
     end
 
-    failures << [service, evaluation]
+    failures << [service, model, evaluation]
+  end
+
+  $stdout.puts
+
+  failures.each do |service, model, evaluation|
+    puts "- #{service} (Level #{model['levelNumber']})"
+    evaluation.each do |e|
+      puts "  (#{e.level['name']}) #{e.message}"
+    end
+    $stdout.puts
   end
 
   if failures.empty?
@@ -42,22 +70,14 @@ def validate(maturity_model)
     exit 0
   end
 
-  failures.each do |service, evaluation|
-    puts "- #{service}"
-    evaluation.each do |line|
-      puts "  #{line}"
-    end
-    $stdout.puts
-  end
-
-  $stdout.puts "There are #{failures.length} services under Level 1. Please visit the corresponding service definition files (in metrics-catalog/services/ folder) and fulfill the missing information. Thank you."
+  $stdout.puts "There are #{failures.length} services under Level #{required_level}. Please visit the corresponding service definition files (in metrics-catalog/services/ folder) and fulfill the missing information. Thank you."
 
   exit 1
 end
 
 begin
   maturity_model = JsonnetWrapper.new.parse(File.join(__dir__, "..", "service-maturity", "maturity.jsonnet"))
-  validate(maturity_model)
+  validate(maturity_model, 1, *ARGV)
 rescue StandardError => e
   warn [e.message, *e.backtrace].join("\n")
   exit 1

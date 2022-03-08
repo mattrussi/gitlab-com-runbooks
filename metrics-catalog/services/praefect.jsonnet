@@ -17,6 +17,7 @@ metricsCatalog.serviceDefinition({
   },
   serviceDependencies: {
     gitaly: true,
+    'cloud-sql': true,
   },
   serviceLevelIndicators: {
     proxy: {
