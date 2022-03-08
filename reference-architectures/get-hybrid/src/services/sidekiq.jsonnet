@@ -54,7 +54,7 @@ metricsCatalog.serviceDefinition({
       podSelector=kubeSelector,
       ingressSelector=null,
       hpaSelector={ horizontalpodautoscaler: 'gitlab-sidekiq-all-in-1-v2' },
-      nodeSelector={ eks_amazonaws_com_nodegroup: 'gitlab_sidekiq_pool' },
+      nodeSelector={ workload: 'sidekiq' },
       deploymentSelector=kubeSelector
     ),
   },
