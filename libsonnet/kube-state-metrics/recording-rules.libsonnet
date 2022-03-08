@@ -2,7 +2,6 @@ local labelTaxonomy = import 'label-taxonomy/label-taxonomy.libsonnet';
 local aggregations = import 'promql/aggregations.libsonnet';
 local selectors = import 'promql/selectors.libsonnet';
 local metricsCatalog = import 'servicemetrics/metrics-catalog.libsonnet';
-local objects = import 'utils/objects.libsonnet';
 local strings = import 'utils/strings.libsonnet';
 
 // These are common labels used in join expressions for kube-state-metrics
@@ -206,18 +205,6 @@ local recordingRulesFor(metricName, labels, expression) =
       expr: expression,
     }];
 
-local kubernetesSelectorToKubeStatePromSelector(selector) =
-  objects.mapKeyValues(
-    function(key, value)
-      // Certain labels don't need a prefix
-      // TODO: Ask Charts team to add app label to hpa's
-      if key == 'namespace' || key == 'horizontalpodautoscaler' then
-        [key, value]
-      else
-        ['label_' + key, value],
-    selector
-  );
-
 // Given the descriptor, the kubernetes label selector and any static labels that will
 // be applied, generates a promql expression to migrate labels, ready for use in the
 // recording rules.
@@ -230,12 +217,10 @@ local generateRelabelingExpression(descriptor, kubernetesLabelSelector, staticLa
   if kubernetesLabelSelector == null then
     null
   else
-    local kubernetesSelectorExpression = kubernetesSelectorToKubeStatePromSelector(kubernetesLabelSelector);
-
     local topKAggregationLabels = commonJoinOnLabels + [keyLabel];
 
     local baseExpression = 'topk by(%(topKAggregationLabels)s) (1, %(infoMetric)s{%(kubernetesSelectorExpression)s})' % {
-      kubernetesSelectorExpression: selectors.serializeHash(kubernetesSelectorExpression),
+      kubernetesSelectorExpression: selectors.serializeHash(kubernetesLabelSelector),
       keyLabel: keyLabel,
       infoMetric: infoMetric,
       topKAggregationLabels: aggregations.serialize(topKAggregationLabels),
@@ -276,9 +261,9 @@ local generateRelabelingExpression(descriptor, kubernetesLabelSelector, staticLa
 
 local generateLabeledMetricsForServiceType(service, kubeMetricType) =
   local descriptor = kubeStateMetricTypeDescriptors[kubeMetricType];
-  local kubernetesLabelSelector = service.kubeConfig.labelSelectors[kubeMetricType];
+  local kubernetesLabelSelector = service.kubeConfig.labelSelectors.getPromQLSelector(kubeMetricType);
   local defaultStaticLabels = { type: service.type, tier: service.tier };
-  local staticLabels = defaultStaticLabels + service.kubeConfig.labelSelectors.staticLabels[kubeMetricType];
+  local staticLabels = defaultStaticLabels + service.kubeConfig.labelSelectors.getStaticLabels(kubeMetricType);
 
   recordingRulesFor(
     descriptor.kubeLabelMetric,

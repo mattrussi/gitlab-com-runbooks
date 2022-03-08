@@ -23,8 +23,36 @@
 //
 // See https://gitlab.com/gitlab-com/gl-infra/reliability/-/issues/15208
 
+local objects = import 'utils/objects.libsonnet';
+
 // Special default value placeholder
 local defaultValue = { __default__: true };
+
+local identityFieldsForKubeMetricTypes = {
+  pod: 'pod',
+  hpa: 'horizontalpodautoscaler',
+  node: 'node',
+  ingress: 'ingress',
+  deployment: 'deployment',
+};
+
+local kubeSelectorToPromSelector(kubeMetricType, selector) =
+  local identityField = identityFieldsForKubeMetricTypes[kubeMetricType];
+
+  objects.mapKeyValues(
+    function(key, value)
+      // Namespace labels don't need a prefix
+      // All kube_*_label metrics have a namespace attribute
+      if key == 'namespace' then
+        [key, value]
+      // For each kube_metric_type (pod, ingress, etc) there is an identity label:
+      // we don't need to prefix this with `label_`
+      else if key == identityField then
+        [key, value]
+      else
+        ['label_' + key, value],
+    selector
+  );
 
 function(
 
@@ -60,5 +88,19 @@ function(
         },
 
         hasNodeSelector():: nodeSelector != null,
+
+        // Returns a promql selector suitable to `kube_*_label` metrics exported by
+        // kube_state_metrics
+        getPromQLSelector(kubeMetricType)::
+          local kubeSelectors = self[kubeMetricType];
+          if kubeSelectors == null then
+            null
+          else
+            kubeSelectorToPromSelector(kubeMetricType, kubeSelectors),
+
+        // Returns a list of static labels to apply to metrics, as defined
+        // on through static labels
+        getStaticLabels(kubeMetricType)::
+          self.staticLabels[kubeMetricType],
       },
   }
