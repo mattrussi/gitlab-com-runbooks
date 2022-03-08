@@ -16,6 +16,7 @@
 
 ## Troubleshooting Pointers
 
+* [Camoproxy troubleshooting](../camoproxy/camoproxy.md)
 * [../ci-runners/ci_pending_builds.md](../ci-runners/ci_pending_builds.md)
 * [Cloudflare Logs](../cloudflare/logging.md)
 * [Cloudflare: Managing Traffic](../cloudflare/managing-traffic.md)
@@ -46,7 +47,6 @@
 * [Life of a Web Request](../tutorials/overview_life_of_a_web_request.md)
 * [Azure Test Subscription](../uncategorized/access-azure-test-subscription.md)
 * [../uncategorized/access-gcp-hosts.md](../uncategorized/access-gcp-hosts.md)
-* [Camoproxy troubleshooting](../uncategorized/camoproxy.md)
 * [version.gitlab.com Runbook](../version/version-gitlab-com.md)
 * [Static repository objects caching](../web/static-repository-objects-caching.md)
 <!-- END_MARKER -->

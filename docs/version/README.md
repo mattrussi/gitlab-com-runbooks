@@ -15,6 +15,7 @@
 ## Troubleshooting Pointers
 
 * [Teleport Approver Workflow](../Teleport/teleport_approval_workflow.md)
+* [Upgrade camoproxy](../camoproxy/upgrade-camoproxy.md)
 * [../ci-runners/ci_pending_builds.md](../ci-runners/ci_pending_builds.md)
 * [Cloudflare: Managing Traffic](../cloudflare/managing-traffic.md)
 * [Service Locations](../cloudflare/services-locations.md)
@@ -64,7 +65,6 @@
 * [Project exports](../uncategorized/project-export.md)
 * [Removing kernels from fleet](../uncategorized/remove-kernels.md)
 * [Tweeting Guidelines](../uncategorized/tweeting-guidelines.md)
-* [Upgrade camoproxy](../uncategorized/upgrade-camoproxy.md)
 * [Configuring and Using the Yubikey](../uncategorized/yubikey.md)
 * [Gitaly version mismatch](gitaly-version-mismatch.md)
 * [version.gitlab.com Runbook](version-gitlab-com.md)

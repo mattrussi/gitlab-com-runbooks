@@ -1,24 +1,26 @@
 # Camoproxy troubleshooting
 
+Camoproxy is an SSL/TLS proxy for insecure static assets that uses [go-camo](https://github.com/cactus/go-camo).
+
 ## Blackbox alerting
 
-The core alerts are simple, using the blackbox exporter, and are only checking that camoproxy is responding with an HTTP 200 to the /status URL. 
+The core alerts are simple, using the blackbox exporter, and are only checking that camoproxy is responding with an HTTP 200 to the /status URL.
 
 If this is not working, then you're probably looking at all instances of camoproxy being down and the HTTPS GCP load balancer is returning an error code.
 
 Quick recap of what *should* be the correct running path:
 
 GCP HTTPS LB with a public IP, holder of the SSL certificate (terminates SSL).  This is user-content.gitlab-static.net.
-The LB talks/balances to haproxy on port 80 on the camoproxy nodes; haproxy is just doing URL blacklisting because it's simple doing this, fast, and we have equivalent tooling for IP blacklisting elsewhere. 
+The LB talks/balances to haproxy on port 80 on the camoproxy nodes; haproxy is just doing URL blacklisting because it's simple doing this, fast, and we have equivalent tooling for IP blacklisting elsewhere.
 Each haproxy has a single backend that is the local (to the same node) camoproxy instance on port 8080.
 
-The healthcheck URL the LB uses is /status, and haproxy passes this through to camoproxy, making it a simple end-to-end "is camoproxy alive, accepting HTTP, and in theory able to process other requests" sort of check.  
+The healthcheck URL the LB uses is /status, and haproxy passes this through to camoproxy, making it a simple end-to-end "is camoproxy alive, accepting HTTP, and in theory able to process other requests" sort of check.
 
-## Logging 
+## Logging
 
 ### Raw
 
-In elasticsearch/kibana, check out the pubsub-camoproxy-inf-gprd index.  As a quick guide, the field 'json.camoproxy\_message' describes the basic message, and then each type of message has one of json.camoproxy\_{req,resp,url} depending on the message.  
+In elasticsearch/kibana, check out the pubsub-camoproxy-inf-gprd index.  As a quick guide, the field 'json.camoproxy\_message' describes the basic message, and then each type of message has one of json.camoproxy\_{req,resp,url} depending on the message.
 
 To see URLs passing through the proxy, search for `json.camoproxy_message:"signed client url"` and look at the json.camoproxy\_url field.
 

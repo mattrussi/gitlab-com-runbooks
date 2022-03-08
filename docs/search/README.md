@@ -14,6 +14,7 @@
 
 ## Troubleshooting Pointers
 
+* [Camoproxy troubleshooting](../camoproxy/camoproxy.md)
 * [Shared CI Runner Timeouts](../ci-runners/ci-runner-timeouts.md)
 * [../ci-runners/service-ci-runners.md](../ci-runners/service-ci-runners.md)
 * [Cloudflare Logs](../cloudflare/logging.md)
@@ -43,7 +44,6 @@
 * [../sidekiq/sidekiq_error_rate_high.md](../sidekiq/sidekiq_error_rate_high.md)
 * [How to use flamegraphs for performance profiling](../tutorials/how_to_use_flamegraphs_for_perf_profiling.md)
 * [Life of a Git Request](../tutorials/overview_life_of_a_git_request.md)
-* [Camoproxy troubleshooting](../uncategorized/camoproxy.md)
 * [Domain Registration](../uncategorized/domain-registration.md)
 * [../uncategorized/gcp-network-intelligence.md](../uncategorized/gcp-network-intelligence.md)
 * [GCP Projects](../uncategorized/gcp-project.md)
