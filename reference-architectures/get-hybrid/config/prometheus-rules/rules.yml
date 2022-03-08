@@ -2671,7 +2671,7 @@ groups:
       tier: sv
       type: sidekiq
     record: kube_horizontalpodautoscaler_labels:labeled
-  - expr: topk by(cluster,node) (1, kube_node_labels{label_eks_amazonaws_com_nodegroup="gitlab_sidekiq_pool"})
+  - expr: topk by(cluster,node) (1, kube_node_labels{label_workload="sidekiq"})
     labels:
       tier: sv
       type: sidekiq
