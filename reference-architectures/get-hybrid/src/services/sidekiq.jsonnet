@@ -2,7 +2,6 @@ local metricsCatalog = import 'servicemetrics/metrics.libsonnet';
 local histogramApdex = metricsCatalog.histogramApdex;
 local rateMetric = metricsCatalog.rateMetric;
 local sidekiqHelpers = import './lib/sidekiq-helpers.libsonnet';
-local perWorkerRecordingRules = (import './lib/sidekiq-per-worker-recording-rules.libsonnet').perWorkerRecordingRules;
 local combined = metricsCatalog.combined;
 local toolingLinks = import 'toolinglinks/toolinglinks.libsonnet';
 local kubeLabelSelectors = metricsCatalog.kubeLabelSelectors;
@@ -20,7 +19,7 @@ metricsCatalog.serviceDefinition({
     errorRatio: 0.995,
   },
   otherThresholds: {},
-  serviceDependencies: {}
+  serviceDependencies: {},
   provisioning: {
     kubernetes: true,
     vms: false,
@@ -192,6 +191,4 @@ metricsCatalog.serviceDefinition({
       toolingLinks: [],
     },
   },
-
-  // Special per-worker recording rules
 })
