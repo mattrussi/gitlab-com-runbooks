@@ -19,18 +19,22 @@ local groupHandbookLink = function(group)
   normalizeUrl('https://about.gitlab.com/handbook/product/categories/#%s-group' % group.key);
 
 local errorBudgetPanels(group) =
+  local budget = errorBudget();
   [
     [
-      errorBudget.panels.availabilityStatPanel(group.key),
-      errorBudget.panels.availabilityTargetStatPanel(group.key),
+      budget.panels.availabilityStatPanel(group.key),
+      budget.panels.errorBudgetStatusPanel(group.key),
+      budget.panels.availabilityTargetStatPanel(group.key),
     ],
     [
-      errorBudget.panels.timeRemainingStatPanel(group.key),
-      errorBudget.panels.timeRemainingTargetStatPanel(group.key),
+      budget.panels.timeRemainingStatPanel(group.key),
+      budget.panels.errorBudgetStatusPanel(group.key),
+      budget.panels.timeRemainingTargetStatPanel(group.key),
     ],
     [
-      errorBudget.panels.timeSpentStatPanel(group.key),
-      errorBudget.panels.timeSpentTargetStatPanel(group.key),
+      budget.panels.timeSpentStatPanel(group.key),
+      budget.panels.errorBudgetStatusPanel(group.key),
+      budget.panels.timeSpentTargetStatPanel(group.key),
     ],
     [
       basic.text(
@@ -64,8 +68,10 @@ local selectGroups(stage, groups) =
 
   std.map(function(groupName) stages.stageGroup(groupName), groups);
 
-local dashboard(stage, groups=null, range=errorBudget.range) =
+local dashboard(stage, groups=null) =
   assert std.type(groups) == 'null' || std.type(groups) == 'array' : 'Invalid groups argument type';
+
+  local budget = errorBudget();
 
   local stageGroups =
     if groups == null then
@@ -75,12 +81,12 @@ local dashboard(stage, groups=null, range=errorBudget.range) =
 
   local basicDashboard = basic.dashboard(
     title='Error Budgets - %s' % stage,
-    time_from='now-%s' % range,
+    time_from='now-%s' % budget.range,
     tags=['product performance']
   ).addTemplate(
     prebuiltTemplates.stage
   ).addPanel(
-    errorBudget.panels.explanationPanel(stage),
+    budget.panels.explanationPanel(stage),
     gridPos={ x: 0, y: (std.length(stageGroups) + 1) * 100, w: 24, h: 6 },
   );
 
@@ -91,9 +97,9 @@ local dashboard(stage, groups=null, range=errorBudget.range) =
         local rowIndex = (groupWrapper.index + 1) * 100;
         local title = "%(group)s's Error Budgets (past %(range)s)" % {
           group: group.name,
-          range: range,
+          range: budget.range,
         };
-        layout.splitColumnGrid(errorBudgetPanels(group), startRow=rowIndex, cellHeights=[4, 2], title=title)
+        layout.splitColumnGrid(errorBudgetPanels(group), startRow=rowIndex, cellHeights=[4, 1.5, 1.5], title=title)
       ),
     std.mapWithIndex(
       function(index, group) { group: group, index: index },

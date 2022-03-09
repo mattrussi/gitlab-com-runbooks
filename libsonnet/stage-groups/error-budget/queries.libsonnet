@@ -67,17 +67,26 @@ local errorBudgetTimeSpent(range, selectors, aggregationLabels, ignoreComponents
     (
       (
          1 - %(ratioQuery)s
-      ) * %(rangeInSeconds)i
+      ) * %(rangeInSeconds)s
     )
   ||| % {
     ratioQuery: errorBudgetRatio(range, selectors, aggregationLabels, ignoreComponents),
-    rangeInSeconds: durationParser.toSeconds(range),
+    rangeInSeconds: utils.rangeInSeconds(range),
+  };
+
+local budgetSecondsForRange(slaTarget, range) =
+  |||
+    # The number of seconds allowed to be spent in %(range)s
+    %(budgetSeconds)s
+  ||| % {
+    range: range,
+    budgetSeconds: utils.budgetSeconds(slaTarget, range),
   };
 
 local errorBudgetTimeRemaining(slaTarget, range, selectors, aggregationLabels, ignoreComponents) =
   |||
     # The number of seconds allowed to be spent in %(range)s
-    %(budgetSeconds)i
+    %(budgetSeconds)s
     -
     %(timeSpentQuery)s
   ||| % {
@@ -175,6 +184,8 @@ local errorBudgetOperationRate(range, groupSelectors, aggregationLabels, ignoreC
       errorBudgetRatio(range, selectors, aggregationLabels, ignoreComponents),
     errorBudgetTimeSpent(selectors, aggregationLabels=[], ignoreComponents=true):
       errorBudgetTimeSpent(range, selectors, aggregationLabels, ignoreComponents),
+    budgetSecondsForRange():
+      budgetSecondsForRange(slaTarget, range),
     errorBudgetTimeRemaining(selectors, aggregationLabels=[], ignoreComponents=true):
       errorBudgetTimeRemaining(slaTarget, range, selectors, aggregationLabels, ignoreComponents),
     errorBudgetViolationRate(selectors, aggregationLabels=[], ignoreComponents=true):
