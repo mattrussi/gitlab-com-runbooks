@@ -39,3 +39,35 @@ package_reindex('gitlab-ce', 'el/7/gitlab-ce-11.4.12-ce.0.el7.x86_64.rpm')
   Which can be copied from the package url in the PackageCloud UI. For a package at
   `https://packages.gitlab.com/gitlab/gitlab-ce/packages/el/7/gitlab-ce-11.4.12-ce.0.el7.x86_64.rpm` we would use
   `el/7/gitlab-ce-11.4.12-ce.0.el7.x86_64.rpm`
+
+## Re-index all packages at a version
+
+We have occasionally seen instances where indexing processes were interupted, and we had to trigger a re-index of
+all packages of the specific version. In order to speed this in the future, the follwing can be used to re-index
+all public Omnibus GitLab packages at a given version.
+
+```ruby
+def package_reindex_version(version)
+  return nil if version.nil?
+
+  gitlab_repos = Repository.where(user_id: 7).select {|repo| repo.name.match? /^gitlab-[ce]e$/ }
+  gitlab_repos.each do |repo|
+    deb_packages = repo.deb_packages.select { |pkg| pkg.filename.include? version }
+    deb_packages.each { |pkg| pkg.reindex }
+
+    rpm_packages = repo.rpm_packages.select { |pkg| pkg.filename.include? version }
+    rpm_packages.each { |pkg| pkg.reindex }
+  end
+end
+```
+
+Then you can call the function to reindex all public packages at a specific `Major.Minor.Patch` version.
+
+```ruby
+package_reindex_version('14.6.6')
+```
+
+Functionally:
+1. `version` must not be `nil`.
+1. Walk all packages of `gitlab-ee` and `gitlab-ce` repositories, for both `deb` and `rpm` types
+1. If their filename `include?` supplied `version`, collect them to have `pkg.reindex` called.
