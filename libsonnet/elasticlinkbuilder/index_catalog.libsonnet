@@ -3,6 +3,7 @@ local stages = import 'service-catalog/stages.libsonnet';
 
 local rangeFilter = matching.rangeFilter;
 local matchFilter = matching.matchFilter;
+local matchInFilter = matching.matchInFilter;
 local existsFilter = matching.existsFilter;
 local mustNot = matching.mustNot;
 local matchAnyScriptFilter = matching.matchAnyScriptFilter;
@@ -35,6 +36,24 @@ local indexDefaults = {
     indexPattern: 'AWVDROsNO8Ra6d0I_oUl',
     defaultColumns: ['json.@module', 'json.@message'],
     requestsNotSupported: true,
+  },
+
+  fluentd: indexDefaults {
+    timestamp: 'json.time',
+    indexPattern: '6f3fe550-4317-11ec-8c8e-ed83b5469915',
+    defaultColumns: ['json.message', 'json.type'],
+    defaultSeriesSplitField: 'json.fqdn.keyword',
+    requestsNotSupported: true,
+    prometheusLabelMappings+: {
+      // fludentd is a service to digest logs from other services. "json.type"
+      // is preserved to indicate the sources of the logs.
+      type: 'type',
+    },
+    prometheusLabelTranslators+: {
+      // fluentd is treated as a part of logging service. The type is recently
+      // recorded as "fluentd" instead.
+      type: function(_type) 'fluentd',
+    },
   },
 
   gitaly: indexDefaults {
@@ -71,6 +90,15 @@ local indexDefaults = {
     failureFilter: [existsFilter('json.error')],
     //defaultLatencyField: '',
     //latencyFieldUnitMultiplier: 1000,
+  },
+
+  logging: indexDefaults {
+    timestamp: '@timestamp',
+    indexPattern: '3fdde960-1f73-11eb-9ead-c594f004ece2',
+    defaultColumns: ['log.level', 'message', 'elasticsearch.component'],
+    defaultSeriesSplitField: 'elasticsearch.node.name.keyword',
+    failureFilter: [matchInFilter('log.level', ['CRITICAL', 'ERROR'])],
+    kibanaEndpoint: 'https://00a4ef3362214c44a044feaa539b4686.us-central1.gcp.cloud.es.io:9243/app/kibana',
   },
 
   mailroom: indexDefaults {
@@ -133,6 +161,18 @@ local indexDefaults = {
     slowRequestFilter: [matchFilter('json.msg', 'unary')],
     defaultLatencyField: 'json.grpc.time_ms',
     latencyFieldUnitMultiplier: 1000,
+  },
+
+  pubsubbeat: indexDefaults {
+    timestamp: '@timestamp',
+    indexPattern: 'c1ee6e20-fbf1-11ea-af41-ad80f197fa45',
+    defaultColumns: ['kubernetes.host', 'json.message'],
+    defaultSeriesSplitField: 'kubernetes.host.keyword',
+    prometheusLabelTranslators+: {
+      // pubsubbeat is treated as a part of logging service. The type is recently
+      // recorded as "pubsubbeat" instead.
+      type: function(_type) 'pubsubbeat',
+    },
   },
 
   pvs: indexDefaults {
