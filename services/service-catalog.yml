@@ -1070,7 +1070,6 @@ services:
       emit InfluxDB metrics.
     customers:
       - Internally by dashboards.gitlab.net
-      - Publicly by dashboards.gitlab.com
     business_value: |
       It receives application metrics that provide useful insights about GitLab.com transactions
       like durations, method calls, etc...
@@ -2197,7 +2196,6 @@ services:
       code (e.g. database, redis, ...).
     customers:
       - Internally for infrastructure monitoring at dashboards.gitlab.net
-      - General public for publicly available dashboards at dashboards.gitlab.com
     business_value: |
       It gives visibility into our non-application infrastructure (see requirement above),
       it also powers AlertManager.
