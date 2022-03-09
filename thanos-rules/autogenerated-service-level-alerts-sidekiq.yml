@@ -103,11 +103,11 @@ groups:
     for: 5m
     annotations:
       title: The email_receiver SLI of the sidekiq service (`{{ $labels.stage }}`
-        stage) has not received any traffic in the past 30 minutes
+        stage) has not received any traffic in the past 30m
       description: |
         Monitors ratio between all received emails and received emails which could not be processed for some reason.
 
-        This alert signifies that the SLI is reporting a cessation of traffic, but the signal is not absent.
+        This alert signifies that the SLI is reporting a cessation of traffic; the signal is present, but is zero.
       grafana_dashboard_id: sidekiq-main/sidekiq-overview
       grafana_dashboard_link: https://dashboards.gitlab.net/d/sidekiq-main/sidekiq-overview?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-stage={{ $labels.stage }}
@@ -130,12 +130,12 @@ groups:
       slo_alert: "no"
       user_impacting: "yes"
     expr: |
-      gitlab_component_ops:rate_30m{type="sidekiq", component="email_receiver", stage="main", monitor="global"} == 0
+      gitlab_component_ops:rate_30m{component="email_receiver",monitor="global",stage="main",type="sidekiq"} == 0
   - alert: SidekiqServiceEmailReceiverTrafficAbsent
     for: 30m
     annotations:
       title: The email_receiver SLI of the sidekiq service (`{{ $labels.stage }}`
-        stage) has not reported any traffic in the past 30 minutes
+        stage) has not reported any traffic in the past 30m
       description: |
         Monitors ratio between all received emails and received emails which could not be processed for some reason.
 
@@ -164,9 +164,9 @@ groups:
       slo_alert: "no"
       user_impacting: "yes"
     expr: |
-      gitlab_component_ops:rate_5m{type="sidekiq", component="email_receiver", stage="main", monitor="global"} offset 1h
+      gitlab_component_ops:rate_5m{component="email_receiver",monitor="global",stage="main",type="sidekiq"} offset 1h
       unless
-      gitlab_component_ops:rate_5m{type="sidekiq", component="email_receiver", stage="main", monitor="global"}
+      gitlab_component_ops:rate_5m{component="email_receiver",monitor="global",stage="main",type="sidekiq"}
   - alert: SidekiqServiceShardCatchallApdexSLOViolation
     for: 2m
     annotations:
@@ -393,11 +393,11 @@ groups:
     for: 5m
     annotations:
       title: The shard_catchall SLI of the sidekiq service (`{{ $labels.stage }}`
-        stage) has not received any traffic in the past 30 minutes
+        stage) has not received any traffic in the past 30m
       description: |
         Aggregation of all jobs for the catchall Sidekiq shard.
 
-        This alert signifies that the SLI is reporting a cessation of traffic, but the signal is not absent.
+        This alert signifies that the SLI is reporting a cessation of traffic; the signal is present, but is zero.
       grafana_dashboard_id: sidekiq-main/sidekiq-overview
       grafana_dashboard_link: https://dashboards.gitlab.net/d/sidekiq-main/sidekiq-overview?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-stage={{ $labels.stage }}
@@ -421,12 +421,12 @@ groups:
       slo_alert: "no"
       user_impacting: "yes"
     expr: |
-      gitlab_component_ops:rate_30m{type="sidekiq", component="shard_catchall", stage="main", monitor="global"} == 0
+      gitlab_component_ops:rate_30m{component="shard_catchall",monitor="global",stage="main",type="sidekiq"} == 0
   - alert: SidekiqServiceShardCatchallTrafficAbsent
     for: 30m
     annotations:
       title: The shard_catchall SLI of the sidekiq service (`{{ $labels.stage }}`
-        stage) has not reported any traffic in the past 30 minutes
+        stage) has not reported any traffic in the past 30m
       description: |
         Aggregation of all jobs for the catchall Sidekiq shard.
 
@@ -456,9 +456,9 @@ groups:
       slo_alert: "no"
       user_impacting: "yes"
     expr: |
-      gitlab_component_ops:rate_5m{type="sidekiq", component="shard_catchall", stage="main", monitor="global"} offset 1h
+      gitlab_component_ops:rate_5m{component="shard_catchall",monitor="global",stage="main",type="sidekiq"} offset 1h
       unless
-      gitlab_component_ops:rate_5m{type="sidekiq", component="shard_catchall", stage="main", monitor="global"}
+      gitlab_component_ops:rate_5m{component="shard_catchall",monitor="global",stage="main",type="sidekiq"}
   - alert: SidekiqServiceShardDatabaseThrottledApdexSLOViolation
     for: 2m
     annotations:
@@ -1457,11 +1457,11 @@ groups:
     for: 5m
     annotations:
       title: The shard_low_urgency_cpu_bound SLI of the sidekiq service (`{{ $labels.stage
-        }}` stage) has not received any traffic in the past 30 minutes
+        }}` stage) has not received any traffic in the past 30m
       description: |
         Aggregation of all jobs for the low-urgency-cpu-bound Sidekiq shard.
 
-        This alert signifies that the SLI is reporting a cessation of traffic, but the signal is not absent.
+        This alert signifies that the SLI is reporting a cessation of traffic; the signal is present, but is zero.
       grafana_dashboard_id: sidekiq-main/sidekiq-overview
       grafana_dashboard_link: https://dashboards.gitlab.net/d/sidekiq-main/sidekiq-overview?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-stage={{ $labels.stage }}
@@ -1485,12 +1485,12 @@ groups:
       slo_alert: "no"
       user_impacting: "yes"
     expr: |
-      gitlab_component_ops:rate_30m{type="sidekiq", component="shard_low_urgency_cpu_bound", stage="main", monitor="global"} == 0
+      gitlab_component_ops:rate_30m{component="shard_low_urgency_cpu_bound",monitor="global",stage="main",type="sidekiq"} == 0
   - alert: SidekiqServiceShardLowUrgencyCpuBoundTrafficAbsent
     for: 30m
     annotations:
       title: The shard_low_urgency_cpu_bound SLI of the sidekiq service (`{{ $labels.stage
-        }}` stage) has not reported any traffic in the past 30 minutes
+        }}` stage) has not reported any traffic in the past 30m
       description: |
         Aggregation of all jobs for the low-urgency-cpu-bound Sidekiq shard.
 
@@ -1520,9 +1520,9 @@ groups:
       slo_alert: "no"
       user_impacting: "yes"
     expr: |
-      gitlab_component_ops:rate_5m{type="sidekiq", component="shard_low_urgency_cpu_bound", stage="main", monitor="global"} offset 1h
+      gitlab_component_ops:rate_5m{component="shard_low_urgency_cpu_bound",monitor="global",stage="main",type="sidekiq"} offset 1h
       unless
-      gitlab_component_ops:rate_5m{type="sidekiq", component="shard_low_urgency_cpu_bound", stage="main", monitor="global"}
+      gitlab_component_ops:rate_5m{component="shard_low_urgency_cpu_bound",monitor="global",stage="main",type="sidekiq"}
   - alert: SidekiqServiceShardMemoryBoundApdexSLOViolation
     for: 2m
     annotations:
@@ -2129,11 +2129,11 @@ groups:
     for: 5m
     annotations:
       title: The shard_urgent_cpu_bound SLI of the sidekiq service (`{{ $labels.stage
-        }}` stage) has not received any traffic in the past 30 minutes
+        }}` stage) has not received any traffic in the past 30m
       description: |
         Aggregation of all jobs for the urgent-cpu-bound Sidekiq shard.
 
-        This alert signifies that the SLI is reporting a cessation of traffic, but the signal is not absent.
+        This alert signifies that the SLI is reporting a cessation of traffic; the signal is present, but is zero.
       grafana_dashboard_id: sidekiq-main/sidekiq-overview
       grafana_dashboard_link: https://dashboards.gitlab.net/d/sidekiq-main/sidekiq-overview?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-stage={{ $labels.stage }}
@@ -2157,12 +2157,12 @@ groups:
       slo_alert: "no"
       user_impacting: "yes"
     expr: |
-      gitlab_component_ops:rate_30m{type="sidekiq", component="shard_urgent_cpu_bound", stage="main", monitor="global"} == 0
+      gitlab_component_ops:rate_30m{component="shard_urgent_cpu_bound",monitor="global",stage="main",type="sidekiq"} == 0
   - alert: SidekiqServiceShardUrgentCpuBoundTrafficAbsent
     for: 30m
     annotations:
       title: The shard_urgent_cpu_bound SLI of the sidekiq service (`{{ $labels.stage
-        }}` stage) has not reported any traffic in the past 30 minutes
+        }}` stage) has not reported any traffic in the past 30m
       description: |
         Aggregation of all jobs for the urgent-cpu-bound Sidekiq shard.
 
@@ -2192,9 +2192,9 @@ groups:
       slo_alert: "no"
       user_impacting: "yes"
     expr: |
-      gitlab_component_ops:rate_5m{type="sidekiq", component="shard_urgent_cpu_bound", stage="main", monitor="global"} offset 1h
+      gitlab_component_ops:rate_5m{component="shard_urgent_cpu_bound",monitor="global",stage="main",type="sidekiq"} offset 1h
       unless
-      gitlab_component_ops:rate_5m{type="sidekiq", component="shard_urgent_cpu_bound", stage="main", monitor="global"}
+      gitlab_component_ops:rate_5m{component="shard_urgent_cpu_bound",monitor="global",stage="main",type="sidekiq"}
   - alert: SidekiqServiceShardUrgentOtherApdexSLOViolation
     for: 2m
     annotations:
@@ -2401,11 +2401,11 @@ groups:
     for: 5m
     annotations:
       title: The shard_urgent_other SLI of the sidekiq service (`{{ $labels.stage
-        }}` stage) has not received any traffic in the past 30 minutes
+        }}` stage) has not received any traffic in the past 30m
       description: |
         Aggregation of all jobs for the urgent-other Sidekiq shard.
 
-        This alert signifies that the SLI is reporting a cessation of traffic, but the signal is not absent.
+        This alert signifies that the SLI is reporting a cessation of traffic; the signal is present, but is zero.
       grafana_dashboard_id: sidekiq-main/sidekiq-overview
       grafana_dashboard_link: https://dashboards.gitlab.net/d/sidekiq-main/sidekiq-overview?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-stage={{ $labels.stage }}
@@ -2429,12 +2429,12 @@ groups:
       slo_alert: "no"
       user_impacting: "yes"
     expr: |
-      gitlab_component_ops:rate_30m{type="sidekiq", component="shard_urgent_other", stage="main", monitor="global"} == 0
+      gitlab_component_ops:rate_30m{component="shard_urgent_other",monitor="global",stage="main",type="sidekiq"} == 0
   - alert: SidekiqServiceShardUrgentOtherTrafficAbsent
     for: 30m
     annotations:
       title: The shard_urgent_other SLI of the sidekiq service (`{{ $labels.stage
-        }}` stage) has not reported any traffic in the past 30 minutes
+        }}` stage) has not reported any traffic in the past 30m
       description: |
         Aggregation of all jobs for the urgent-other Sidekiq shard.
 
@@ -2464,6 +2464,6 @@ groups:
       slo_alert: "no"
       user_impacting: "yes"
     expr: |
-      gitlab_component_ops:rate_5m{type="sidekiq", component="shard_urgent_other", stage="main", monitor="global"} offset 1h
+      gitlab_component_ops:rate_5m{component="shard_urgent_other",monitor="global",stage="main",type="sidekiq"} offset 1h
       unless
-      gitlab_component_ops:rate_5m{type="sidekiq", component="shard_urgent_other", stage="main", monitor="global"}
+      gitlab_component_ops:rate_5m{component="shard_urgent_other",monitor="global",stage="main",type="sidekiq"}

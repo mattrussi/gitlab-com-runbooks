@@ -199,11 +199,9 @@ groups:
     for: 5m
     annotations:
       title: The cnyHttpServices SLI of the frontend service (`{{ $labels.stage }}`
-        stage) has not received any traffic in the past 30 minutes
-      description: |2
-
-
-        This alert signifies that the SLI is reporting a cessation of traffic, but the signal is not absent.
+        stage) has not received any traffic in the past 30m
+      description: |
+        This alert signifies that the SLI is reporting a cessation of traffic; the signal is present, but is zero.
       grafana_dashboard_id: frontend-main/frontend-overview
       grafana_dashboard_link: https://dashboards.gitlab.net/d/frontend-main/frontend-overview?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-stage={{ $labels.stage }}
@@ -227,15 +225,13 @@ groups:
       slo_alert: "no"
       user_impacting: "no"
     expr: |
-      gitlab_component_ops:rate_30m{type="frontend", component="cnyHttpServices", stage="main", monitor="global"} == 0
+      gitlab_component_ops:rate_30m{component="cnyHttpServices",monitor="global",stage="main",type="frontend"} == 0
   - alert: FrontendServiceCnyHttpServicesTrafficAbsent
     for: 30m
     annotations:
       title: The cnyHttpServices SLI of the frontend service (`{{ $labels.stage }}`
-        stage) has not reported any traffic in the past 30 minutes
-      description: |2
-
-
+        stage) has not reported any traffic in the past 30m
+      description: |
         This alert signifies that the SLI was previously reporting traffic, but is no longer - the signal is absent.
 
         This could be caused by a change to the metrics used in the SLI, or by the service not receiving traffic.
@@ -262,9 +258,9 @@ groups:
       slo_alert: "no"
       user_impacting: "no"
     expr: |
-      gitlab_component_ops:rate_5m{type="frontend", component="cnyHttpServices", stage="main", monitor="global"} offset 1h
+      gitlab_component_ops:rate_5m{component="cnyHttpServices",monitor="global",stage="main",type="frontend"} offset 1h
       unless
-      gitlab_component_ops:rate_5m{type="frontend", component="cnyHttpServices", stage="main", monitor="global"}
+      gitlab_component_ops:rate_5m{component="cnyHttpServices",monitor="global",stage="main",type="frontend"}
   - alert: FrontendServiceMainHttpServicesApdexSLOViolation
     for: 2m
     annotations:
@@ -459,11 +455,9 @@ groups:
     for: 5m
     annotations:
       title: The mainHttpServices SLI of the frontend service (`{{ $labels.stage }}`
-        stage) has not received any traffic in the past 30 minutes
-      description: |2
-
-
-        This alert signifies that the SLI is reporting a cessation of traffic, but the signal is not absent.
+        stage) has not received any traffic in the past 30m
+      description: |
+        This alert signifies that the SLI is reporting a cessation of traffic; the signal is present, but is zero.
       grafana_dashboard_id: frontend-main/frontend-overview
       grafana_dashboard_link: https://dashboards.gitlab.net/d/frontend-main/frontend-overview?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-stage={{ $labels.stage }}
@@ -487,15 +481,13 @@ groups:
       slo_alert: "no"
       user_impacting: "no"
     expr: |
-      gitlab_component_ops:rate_30m{type="frontend", component="mainHttpServices", stage="main", monitor="global"} == 0
+      gitlab_component_ops:rate_30m{component="mainHttpServices",monitor="global",stage="main",type="frontend"} == 0
   - alert: FrontendServiceMainHttpServicesTrafficAbsent
     for: 30m
     annotations:
       title: The mainHttpServices SLI of the frontend service (`{{ $labels.stage }}`
-        stage) has not reported any traffic in the past 30 minutes
-      description: |2
-
-
+        stage) has not reported any traffic in the past 30m
+      description: |
         This alert signifies that the SLI was previously reporting traffic, but is no longer - the signal is absent.
 
         This could be caused by a change to the metrics used in the SLI, or by the service not receiving traffic.
@@ -522,9 +514,9 @@ groups:
       slo_alert: "no"
       user_impacting: "no"
     expr: |
-      gitlab_component_ops:rate_5m{type="frontend", component="mainHttpServices", stage="main", monitor="global"} offset 1h
+      gitlab_component_ops:rate_5m{component="mainHttpServices",monitor="global",stage="main",type="frontend"} offset 1h
       unless
-      gitlab_component_ops:rate_5m{type="frontend", component="mainHttpServices", stage="main", monitor="global"}
+      gitlab_component_ops:rate_5m{component="mainHttpServices",monitor="global",stage="main",type="frontend"}
   - alert: FrontendServiceSshServicesApdexSLOViolation
     for: 2m
     annotations:
@@ -719,11 +711,9 @@ groups:
     for: 5m
     annotations:
       title: The sshServices SLI of the frontend service (`{{ $labels.stage }}` stage)
-        has not received any traffic in the past 30 minutes
-      description: |2
-
-
-        This alert signifies that the SLI is reporting a cessation of traffic, but the signal is not absent.
+        has not received any traffic in the past 30m
+      description: |
+        This alert signifies that the SLI is reporting a cessation of traffic; the signal is present, but is zero.
       grafana_dashboard_id: frontend-main/frontend-overview
       grafana_dashboard_link: https://dashboards.gitlab.net/d/frontend-main/frontend-overview?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-stage={{ $labels.stage }}
@@ -747,15 +737,13 @@ groups:
       slo_alert: "no"
       user_impacting: "no"
     expr: |
-      gitlab_component_ops:rate_30m{type="frontend", component="sshServices", stage="main", monitor="global"} == 0
+      gitlab_component_ops:rate_30m{component="sshServices",monitor="global",stage="main",type="frontend"} == 0
   - alert: FrontendServiceSshServicesTrafficAbsent
     for: 30m
     annotations:
       title: The sshServices SLI of the frontend service (`{{ $labels.stage }}` stage)
-        has not reported any traffic in the past 30 minutes
-      description: |2
-
-
+        has not reported any traffic in the past 30m
+      description: |
         This alert signifies that the SLI was previously reporting traffic, but is no longer - the signal is absent.
 
         This could be caused by a change to the metrics used in the SLI, or by the service not receiving traffic.
@@ -782,6 +770,6 @@ groups:
       slo_alert: "no"
       user_impacting: "no"
     expr: |
-      gitlab_component_ops:rate_5m{type="frontend", component="sshServices", stage="main", monitor="global"} offset 1h
+      gitlab_component_ops:rate_5m{component="sshServices",monitor="global",stage="main",type="frontend"} offset 1h
       unless
-      gitlab_component_ops:rate_5m{type="frontend", component="sshServices", stage="main", monitor="global"}
+      gitlab_component_ops:rate_5m{component="sshServices",monitor="global",stage="main",type="frontend"}

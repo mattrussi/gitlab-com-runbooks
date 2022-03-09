@@ -105,11 +105,11 @@ groups:
     for: 5m
     annotations:
       title: The pg_transactions SLI of the sentry service (`{{ $labels.stage }}`
-        stage) has not received any traffic in the past 30 minutes
+        stage) has not received any traffic in the past 30m
       description: |
         Represents all SQL transactions issued to the sentry Postgres instance. Errors represent transaction rollbacks.
 
-        This alert signifies that the SLI is reporting a cessation of traffic, but the signal is not absent.
+        This alert signifies that the SLI is reporting a cessation of traffic; the signal is present, but is zero.
       grafana_dashboard_id: sentry-main/sentry-overview
       grafana_dashboard_link: https://dashboards.gitlab.net/d/sentry-main/sentry-overview?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-stage={{ $labels.stage }}
@@ -135,12 +135,12 @@ groups:
       slo_alert: "no"
       user_impacting: "no"
     expr: |
-      gitlab_component_ops:rate_30m{type="sentry", component="pg_transactions", stage="main", monitor="global"} == 0
+      gitlab_component_ops:rate_30m{component="pg_transactions",monitor="global",stage="main",type="sentry"} == 0
   - alert: SentryServicePgTransactionsTrafficAbsent
     for: 30m
     annotations:
       title: The pg_transactions SLI of the sentry service (`{{ $labels.stage }}`
-        stage) has not reported any traffic in the past 30 minutes
+        stage) has not reported any traffic in the past 30m
       description: |
         Represents all SQL transactions issued to the sentry Postgres instance. Errors represent transaction rollbacks.
 
@@ -172,9 +172,9 @@ groups:
       slo_alert: "no"
       user_impacting: "no"
     expr: |
-      gitlab_component_ops:rate_5m{type="sentry", component="pg_transactions", stage="main", monitor="global"} offset 1h
+      gitlab_component_ops:rate_5m{component="pg_transactions",monitor="global",stage="main",type="sentry"} offset 1h
       unless
-      gitlab_component_ops:rate_5m{type="sentry", component="pg_transactions", stage="main", monitor="global"}
+      gitlab_component_ops:rate_5m{component="pg_transactions",monitor="global",stage="main",type="sentry"}
   - alert: SentryServiceSentryEventsApdexSLOViolation
     for: 2m
     annotations:
@@ -377,11 +377,11 @@ groups:
     for: 5m
     annotations:
       title: The sentry_events SLI of the sentry service (`{{ $labels.stage }}` stage)
-        has not received any traffic in the past 30 minutes
+        has not received any traffic in the past 30m
       description: |
         Sentry is an application monitoring platform.  This SLI monitors the sentry API. 5xx responses are considered failures.
 
-        This alert signifies that the SLI is reporting a cessation of traffic, but the signal is not absent.
+        This alert signifies that the SLI is reporting a cessation of traffic; the signal is present, but is zero.
       grafana_dashboard_id: sentry-main/sentry-overview
       grafana_dashboard_link: https://dashboards.gitlab.net/d/sentry-main/sentry-overview?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-stage={{ $labels.stage }}
@@ -405,12 +405,12 @@ groups:
       slo_alert: "no"
       user_impacting: "no"
     expr: |
-      gitlab_component_ops:rate_30m{type="sentry", component="sentry_events", stage="main", monitor="global"} == 0
+      gitlab_component_ops:rate_30m{component="sentry_events",monitor="global",stage="main",type="sentry"} == 0
   - alert: SentryServiceSentryEventsTrafficAbsent
     for: 30m
     annotations:
       title: The sentry_events SLI of the sentry service (`{{ $labels.stage }}` stage)
-        has not reported any traffic in the past 30 minutes
+        has not reported any traffic in the past 30m
       description: |
         Sentry is an application monitoring platform.  This SLI monitors the sentry API. 5xx responses are considered failures.
 
@@ -440,6 +440,6 @@ groups:
       slo_alert: "no"
       user_impacting: "no"
     expr: |
-      gitlab_component_ops:rate_5m{type="sentry", component="sentry_events", stage="main", monitor="global"} offset 1h
+      gitlab_component_ops:rate_5m{component="sentry_events",monitor="global",stage="main",type="sentry"} offset 1h
       unless
-      gitlab_component_ops:rate_5m{type="sentry", component="sentry_events", stage="main", monitor="global"}
+      gitlab_component_ops:rate_5m{component="sentry_events",monitor="global",stage="main",type="sentry"}

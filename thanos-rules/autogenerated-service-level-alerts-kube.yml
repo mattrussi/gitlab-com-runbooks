@@ -215,13 +215,13 @@ groups:
     for: 5m
     annotations:
       title: The apiserver SLI of the kube service (`{{ $labels.stage }}` stage) has
-        not received any traffic in the past 30 minutes
+        not received any traffic in the past 30m
       description: |
         The Kubernetes API server validates and configures data for the api objects which include pods, services, and others. The API Server services REST operations and provides the frontend to the cluster's shared state through which all other components interact.
 
         This SLI measures all non-health-check endpoints. Long-polling endpoints are excluded from apdex scores.
 
-        This alert signifies that the SLI is reporting a cessation of traffic, but the signal is not absent.
+        This alert signifies that the SLI is reporting a cessation of traffic; the signal is present, but is zero.
       grafana_dashboard_id: kube-main/kube-overview
       grafana_dashboard_link: https://dashboards.gitlab.net/d/kube-main/kube-overview?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-stage={{ $labels.stage }}
@@ -245,12 +245,12 @@ groups:
       slo_alert: "no"
       user_impacting: "no"
     expr: |
-      gitlab_component_ops:rate_30m{type="kube", component="apiserver", stage="main", monitor="global"} == 0
+      gitlab_component_ops:rate_30m{component="apiserver",monitor="global",stage="main",type="kube"} == 0
   - alert: KubeServiceApiserverTrafficAbsent
     for: 30m
     annotations:
       title: The apiserver SLI of the kube service (`{{ $labels.stage }}` stage) has
-        not reported any traffic in the past 30 minutes
+        not reported any traffic in the past 30m
       description: |
         The Kubernetes API server validates and configures data for the api objects which include pods, services, and others. The API Server services REST operations and provides the frontend to the cluster's shared state through which all other components interact.
 
@@ -282,9 +282,9 @@ groups:
       slo_alert: "no"
       user_impacting: "no"
     expr: |
-      gitlab_component_ops:rate_5m{type="kube", component="apiserver", stage="main", monitor="global"} offset 1h
+      gitlab_component_ops:rate_5m{component="apiserver",monitor="global",stage="main",type="kube"} offset 1h
       unless
-      gitlab_component_ops:rate_5m{type="kube", component="apiserver", stage="main", monitor="global"}
+      gitlab_component_ops:rate_5m{component="apiserver",monitor="global",stage="main",type="kube"}
   - alert: KubeServiceClusterScaleupsErrorSLOViolation
     for: 2m
     annotations:

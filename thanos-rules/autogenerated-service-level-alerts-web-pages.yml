@@ -189,11 +189,11 @@ groups:
     for: 5m
     annotations:
       title: The loadbalancer SLI of the web-pages service (`{{ $labels.stage }}`
-        stage) has not received any traffic in the past 30 minutes
+        stage) has not received any traffic in the past 30m
       description: |
         Measures aggregated HTTP request traffic through the HAProxy. 5xx responses are considered to be failures.
 
-        This alert signifies that the SLI is reporting a cessation of traffic, but the signal is not absent.
+        This alert signifies that the SLI is reporting a cessation of traffic; the signal is present, but is zero.
       grafana_dashboard_id: web-pages-main/web-pages-overview
       grafana_dashboard_link: https://dashboards.gitlab.net/d/web-pages-main/web-pages-overview?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-stage={{ $labels.stage }}
@@ -213,12 +213,12 @@ groups:
       slo_alert: "no"
       user_impacting: "yes"
     expr: |
-      gitlab_component_ops:rate_30m{type="web-pages", component="loadbalancer", stage="main", monitor="global"} == 0
+      gitlab_component_ops:rate_30m{component="loadbalancer",monitor="global",stage="main",type="web-pages"} == 0
   - alert: WebPagesServiceLoadbalancerTrafficAbsent
     for: 30m
     annotations:
       title: The loadbalancer SLI of the web-pages service (`{{ $labels.stage }}`
-        stage) has not reported any traffic in the past 30 minutes
+        stage) has not reported any traffic in the past 30m
       description: |
         Measures aggregated HTTP request traffic through the HAProxy. 5xx responses are considered to be failures.
 
@@ -244,9 +244,75 @@ groups:
       slo_alert: "no"
       user_impacting: "yes"
     expr: |
-      gitlab_component_ops:rate_5m{type="web-pages", component="loadbalancer", stage="main", monitor="global"} offset 1h
+      gitlab_component_ops:rate_5m{component="loadbalancer",monitor="global",stage="main",type="web-pages"} offset 1h
       unless
-      gitlab_component_ops:rate_5m{type="web-pages", component="loadbalancer", stage="main", monitor="global"}
+      gitlab_component_ops:rate_5m{component="loadbalancer",monitor="global",stage="main",type="web-pages"}
+  - alert: WebPagesServiceLoadbalancerTrafficCessationRegional
+    for: 5m
+    annotations:
+      title: The loadbalancer SLI of the web-pages service in region `{{ $labels.region
+        }}` has not received any traffic in the past 30m
+      description: |
+        Measures aggregated HTTP request traffic through the HAProxy. 5xx responses are considered to be failures.
+
+        This alert signifies that the SLI is reporting a cessation of traffic; the signal is present, but is zero.
+
+        Note that this alert is specific to the `{{ $labels.region }}` region.
+      grafana_dashboard_id: web-pages-main/web-pages-overview
+      grafana_dashboard_link: https://dashboards.gitlab.net/d/web-pages-main/web-pages-overview?from=now-6h/m&to=now-1m/m&var-environment={{
+        $labels.environment }}&var-stage={{ $labels.stage }}
+      grafana_min_zoom_hours: "6"
+      grafana_panel_id: "138982496"
+      grafana_variables: environment,stage
+      runbook: docs/web-pages/README.md
+    labels:
+      aggregation: regional_component
+      alert_class: traffic_cessation
+      alert_type: cause
+      feature_category: pages
+      pager: pagerduty
+      rules_domain: general
+      severity: s2
+      sli_type: ops
+      slo_alert: "no"
+      user_impacting: "yes"
+    expr: |
+      gitlab_regional_sli_ops:rate_30m{component="loadbalancer",monitor="global",stage="main",type="web-pages"} == 0
+  - alert: WebPagesServiceLoadbalancerTrafficAbsentRegional
+    for: 30m
+    annotations:
+      title: The loadbalancer SLI of the web-pages service in region `{{ $labels.region
+        }}` has not reported any traffic in the past 30m
+      description: |
+        Measures aggregated HTTP request traffic through the HAProxy. 5xx responses are considered to be failures.
+
+        This alert signifies that the SLI was previously reporting traffic, but is no longer - the signal is absent.
+
+        This could be caused by a change to the metrics used in the SLI, or by the service not receiving traffic.
+
+        Note that this alert is specific to the `{{ $labels.region }}` region.
+      grafana_dashboard_id: web-pages-main/web-pages-overview
+      grafana_dashboard_link: https://dashboards.gitlab.net/d/web-pages-main/web-pages-overview?from=now-6h/m&to=now-1m/m&var-environment={{
+        $labels.environment }}&var-stage={{ $labels.stage }}
+      grafana_min_zoom_hours: "6"
+      grafana_panel_id: "138982496"
+      grafana_variables: environment,stage
+      runbook: docs/web-pages/README.md
+    labels:
+      aggregation: regional_component
+      alert_class: traffic_cessation
+      alert_type: cause
+      feature_category: pages
+      pager: pagerduty
+      rules_domain: general
+      severity: s2
+      sli_type: ops
+      slo_alert: "no"
+      user_impacting: "yes"
+    expr: |
+      gitlab_regional_sli_ops:rate_5m{component="loadbalancer",monitor="global",stage="main",type="web-pages"} offset 1h
+      unless
+      gitlab_regional_sli_ops:rate_5m{component="loadbalancer",monitor="global",stage="main",type="web-pages"}
   - alert: WebPagesServiceLoadbalancerHttpsErrorSLOViolation
     for: 2m
     annotations:
@@ -431,11 +497,11 @@ groups:
     for: 5m
     annotations:
       title: The loadbalancer_https SLI of the web-pages service (`{{ $labels.stage
-        }}` stage) has not received any traffic in the past 30 minutes
+        }}` stage) has not received any traffic in the past 30m
       description: |
         Measures aggregated L4 traffic through the HAProxy. Traffic is measured in TCP connections, with upstream TCP connection failures being treated as service-level failures.
 
-        This alert signifies that the SLI is reporting a cessation of traffic, but the signal is not absent.
+        This alert signifies that the SLI is reporting a cessation of traffic; the signal is present, but is zero.
       grafana_dashboard_id: web-pages-main/web-pages-overview
       grafana_dashboard_link: https://dashboards.gitlab.net/d/web-pages-main/web-pages-overview?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-stage={{ $labels.stage }}
@@ -455,12 +521,12 @@ groups:
       slo_alert: "no"
       user_impacting: "yes"
     expr: |
-      gitlab_component_ops:rate_30m{type="web-pages", component="loadbalancer_https", stage="main", monitor="global"} == 0
+      gitlab_component_ops:rate_30m{component="loadbalancer_https",monitor="global",stage="main",type="web-pages"} == 0
   - alert: WebPagesServiceLoadbalancerHttpsTrafficAbsent
     for: 30m
     annotations:
       title: The loadbalancer_https SLI of the web-pages service (`{{ $labels.stage
-        }}` stage) has not reported any traffic in the past 30 minutes
+        }}` stage) has not reported any traffic in the past 30m
       description: |
         Measures aggregated L4 traffic through the HAProxy. Traffic is measured in TCP connections, with upstream TCP connection failures being treated as service-level failures.
 
@@ -486,9 +552,75 @@ groups:
       slo_alert: "no"
       user_impacting: "yes"
     expr: |
-      gitlab_component_ops:rate_5m{type="web-pages", component="loadbalancer_https", stage="main", monitor="global"} offset 1h
+      gitlab_component_ops:rate_5m{component="loadbalancer_https",monitor="global",stage="main",type="web-pages"} offset 1h
       unless
-      gitlab_component_ops:rate_5m{type="web-pages", component="loadbalancer_https", stage="main", monitor="global"}
+      gitlab_component_ops:rate_5m{component="loadbalancer_https",monitor="global",stage="main",type="web-pages"}
+  - alert: WebPagesServiceLoadbalancerHttpsTrafficCessationRegional
+    for: 5m
+    annotations:
+      title: The loadbalancer_https SLI of the web-pages service in region `{{ $labels.region
+        }}` has not received any traffic in the past 30m
+      description: |
+        Measures aggregated L4 traffic through the HAProxy. Traffic is measured in TCP connections, with upstream TCP connection failures being treated as service-level failures.
+
+        This alert signifies that the SLI is reporting a cessation of traffic; the signal is present, but is zero.
+
+        Note that this alert is specific to the `{{ $labels.region }}` region.
+      grafana_dashboard_id: web-pages-main/web-pages-overview
+      grafana_dashboard_link: https://dashboards.gitlab.net/d/web-pages-main/web-pages-overview?from=now-6h/m&to=now-1m/m&var-environment={{
+        $labels.environment }}&var-stage={{ $labels.stage }}
+      grafana_min_zoom_hours: "6"
+      grafana_panel_id: "2234251543"
+      grafana_variables: environment,stage
+      runbook: docs/web-pages/README.md
+    labels:
+      aggregation: regional_component
+      alert_class: traffic_cessation
+      alert_type: cause
+      feature_category: pages
+      pager: pagerduty
+      rules_domain: general
+      severity: s2
+      sli_type: ops
+      slo_alert: "no"
+      user_impacting: "yes"
+    expr: |
+      gitlab_regional_sli_ops:rate_30m{component="loadbalancer_https",monitor="global",stage="main",type="web-pages"} == 0
+  - alert: WebPagesServiceLoadbalancerHttpsTrafficAbsentRegional
+    for: 30m
+    annotations:
+      title: The loadbalancer_https SLI of the web-pages service in region `{{ $labels.region
+        }}` has not reported any traffic in the past 30m
+      description: |
+        Measures aggregated L4 traffic through the HAProxy. Traffic is measured in TCP connections, with upstream TCP connection failures being treated as service-level failures.
+
+        This alert signifies that the SLI was previously reporting traffic, but is no longer - the signal is absent.
+
+        This could be caused by a change to the metrics used in the SLI, or by the service not receiving traffic.
+
+        Note that this alert is specific to the `{{ $labels.region }}` region.
+      grafana_dashboard_id: web-pages-main/web-pages-overview
+      grafana_dashboard_link: https://dashboards.gitlab.net/d/web-pages-main/web-pages-overview?from=now-6h/m&to=now-1m/m&var-environment={{
+        $labels.environment }}&var-stage={{ $labels.stage }}
+      grafana_min_zoom_hours: "6"
+      grafana_panel_id: "2234251543"
+      grafana_variables: environment,stage
+      runbook: docs/web-pages/README.md
+    labels:
+      aggregation: regional_component
+      alert_class: traffic_cessation
+      alert_type: cause
+      feature_category: pages
+      pager: pagerduty
+      rules_domain: general
+      severity: s2
+      sli_type: ops
+      slo_alert: "no"
+      user_impacting: "yes"
+    expr: |
+      gitlab_regional_sli_ops:rate_5m{component="loadbalancer_https",monitor="global",stage="main",type="web-pages"} offset 1h
+      unless
+      gitlab_regional_sli_ops:rate_5m{component="loadbalancer_https",monitor="global",stage="main",type="web-pages"}
   - alert: WebPagesServiceServerApdexSLOViolation
     for: 2m
     annotations:
@@ -897,11 +1029,11 @@ groups:
     for: 5m
     annotations:
       title: The server SLI of the web-pages service (`{{ $labels.stage }}` stage)
-        has not received any traffic in the past 30 minutes
+        has not received any traffic in the past 30m
       description: |
         Aggregation of most web requests into the GitLab Pages process.
 
-        This alert signifies that the SLI is reporting a cessation of traffic, but the signal is not absent.
+        This alert signifies that the SLI is reporting a cessation of traffic; the signal is present, but is zero.
       grafana_dashboard_id: web-pages-main/web-pages-overview
       grafana_dashboard_link: https://dashboards.gitlab.net/d/web-pages-main/web-pages-overview?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-stage={{ $labels.stage }}
@@ -925,12 +1057,12 @@ groups:
       slo_alert: "no"
       user_impacting: "yes"
     expr: |
-      gitlab_component_ops:rate_30m{type="web-pages", component="server", stage="main", monitor="global"} == 0
+      gitlab_component_ops:rate_30m{component="server",monitor="global",stage="main",type="web-pages"} == 0
   - alert: WebPagesServiceServerTrafficAbsent
     for: 30m
     annotations:
       title: The server SLI of the web-pages service (`{{ $labels.stage }}` stage)
-        has not reported any traffic in the past 30 minutes
+        has not reported any traffic in the past 30m
       description: |
         Aggregation of most web requests into the GitLab Pages process.
 
@@ -960,9 +1092,83 @@ groups:
       slo_alert: "no"
       user_impacting: "yes"
     expr: |
-      gitlab_component_ops:rate_5m{type="web-pages", component="server", stage="main", monitor="global"} offset 1h
+      gitlab_component_ops:rate_5m{component="server",monitor="global",stage="main",type="web-pages"} offset 1h
       unless
-      gitlab_component_ops:rate_5m{type="web-pages", component="server", stage="main", monitor="global"}
+      gitlab_component_ops:rate_5m{component="server",monitor="global",stage="main",type="web-pages"}
+  - alert: WebPagesServiceServerTrafficCessationRegional
+    for: 5m
+    annotations:
+      title: The server SLI of the web-pages service in region `{{ $labels.region
+        }}` has not received any traffic in the past 30m
+      description: |
+        Aggregation of most web requests into the GitLab Pages process.
+
+        This alert signifies that the SLI is reporting a cessation of traffic; the signal is present, but is zero.
+
+        Note that this alert is specific to the `{{ $labels.region }}` region.
+      grafana_dashboard_id: web-pages-main/web-pages-overview
+      grafana_dashboard_link: https://dashboards.gitlab.net/d/web-pages-main/web-pages-overview?from=now-6h/m&to=now-1m/m&var-environment={{
+        $labels.environment }}&var-stage={{ $labels.stage }}
+      grafana_min_zoom_hours: "6"
+      grafana_panel_id: "2414183688"
+      grafana_variables: environment,stage
+      promql_template_1: |
+        sum by (env,environment,tier,stage,region) (
+          rate(gitlab_pages_http_requests_total{environment="{{ $labels.environment }}",region="{{ $labels.region }}",stage="{{ $labels.stage }}"}[5m])
+        )
+      runbook: docs/web-pages/README.md
+    labels:
+      aggregation: regional_component
+      alert_class: traffic_cessation
+      alert_type: cause
+      feature_category: pages
+      pager: pagerduty
+      rules_domain: general
+      severity: s2
+      sli_type: ops
+      slo_alert: "no"
+      user_impacting: "yes"
+    expr: |
+      gitlab_regional_sli_ops:rate_30m{component="server",monitor="global",stage="main",type="web-pages"} == 0
+  - alert: WebPagesServiceServerTrafficAbsentRegional
+    for: 30m
+    annotations:
+      title: The server SLI of the web-pages service in region `{{ $labels.region
+        }}` has not reported any traffic in the past 30m
+      description: |
+        Aggregation of most web requests into the GitLab Pages process.
+
+        This alert signifies that the SLI was previously reporting traffic, but is no longer - the signal is absent.
+
+        This could be caused by a change to the metrics used in the SLI, or by the service not receiving traffic.
+
+        Note that this alert is specific to the `{{ $labels.region }}` region.
+      grafana_dashboard_id: web-pages-main/web-pages-overview
+      grafana_dashboard_link: https://dashboards.gitlab.net/d/web-pages-main/web-pages-overview?from=now-6h/m&to=now-1m/m&var-environment={{
+        $labels.environment }}&var-stage={{ $labels.stage }}
+      grafana_min_zoom_hours: "6"
+      grafana_panel_id: "2414183688"
+      grafana_variables: environment,stage
+      promql_template_1: |
+        sum by (env,environment,tier,stage,region) (
+          rate(gitlab_pages_http_requests_total{environment="{{ $labels.environment }}",region="{{ $labels.region }}",stage="{{ $labels.stage }}"}[5m])
+        )
+      runbook: docs/web-pages/README.md
+    labels:
+      aggregation: regional_component
+      alert_class: traffic_cessation
+      alert_type: cause
+      feature_category: pages
+      pager: pagerduty
+      rules_domain: general
+      severity: s2
+      sli_type: ops
+      slo_alert: "no"
+      user_impacting: "yes"
+    expr: |
+      gitlab_regional_sli_ops:rate_5m{component="server",monitor="global",stage="main",type="web-pages"} offset 1h
+      unless
+      gitlab_regional_sli_ops:rate_5m{component="server",monitor="global",stage="main",type="web-pages"}
   - alert: WebPagesServiceServerHeadersApdexSLOViolation
     for: 2m
     annotations:
@@ -1175,11 +1381,11 @@ groups:
     for: 5m
     annotations:
       title: The server_headers SLI of the web-pages service (`{{ $labels.stage }}`
-        stage) has not received any traffic in the past 30 minutes
+        stage) has not received any traffic in the past 30m
       description: |
         Response time can be slow due to large files served by pages. This SLI tracks only time needed to finish writing headers. It includes API requests to GitLab instance, scanning ZIP archive for file entries, processing redirects, etc. We use it as stricter SLI for pages as it's independent of served file size
 
-        This alert signifies that the SLI is reporting a cessation of traffic, but the signal is not absent.
+        This alert signifies that the SLI is reporting a cessation of traffic; the signal is present, but is zero.
       grafana_dashboard_id: web-pages-main/web-pages-overview
       grafana_dashboard_link: https://dashboards.gitlab.net/d/web-pages-main/web-pages-overview?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-stage={{ $labels.stage }}
@@ -1203,12 +1409,12 @@ groups:
       slo_alert: "no"
       user_impacting: "yes"
     expr: |
-      gitlab_component_ops:rate_30m{type="web-pages", component="server_headers", stage="main", monitor="global"} == 0
+      gitlab_component_ops:rate_30m{component="server_headers",monitor="global",stage="main",type="web-pages"} == 0
   - alert: WebPagesServiceServerHeadersTrafficAbsent
     for: 30m
     annotations:
       title: The server_headers SLI of the web-pages service (`{{ $labels.stage }}`
-        stage) has not reported any traffic in the past 30 minutes
+        stage) has not reported any traffic in the past 30m
       description: |
         Response time can be slow due to large files served by pages. This SLI tracks only time needed to finish writing headers. It includes API requests to GitLab instance, scanning ZIP archive for file entries, processing redirects, etc. We use it as stricter SLI for pages as it's independent of served file size
 
@@ -1238,6 +1444,80 @@ groups:
       slo_alert: "no"
       user_impacting: "yes"
     expr: |
-      gitlab_component_ops:rate_5m{type="web-pages", component="server_headers", stage="main", monitor="global"} offset 1h
+      gitlab_component_ops:rate_5m{component="server_headers",monitor="global",stage="main",type="web-pages"} offset 1h
       unless
-      gitlab_component_ops:rate_5m{type="web-pages", component="server_headers", stage="main", monitor="global"}
+      gitlab_component_ops:rate_5m{component="server_headers",monitor="global",stage="main",type="web-pages"}
+  - alert: WebPagesServiceServerHeadersTrafficCessationRegional
+    for: 5m
+    annotations:
+      title: The server_headers SLI of the web-pages service in region `{{ $labels.region
+        }}` has not received any traffic in the past 30m
+      description: |
+        Response time can be slow due to large files served by pages. This SLI tracks only time needed to finish writing headers. It includes API requests to GitLab instance, scanning ZIP archive for file entries, processing redirects, etc. We use it as stricter SLI for pages as it's independent of served file size
+
+        This alert signifies that the SLI is reporting a cessation of traffic; the signal is present, but is zero.
+
+        Note that this alert is specific to the `{{ $labels.region }}` region.
+      grafana_dashboard_id: web-pages-main/web-pages-overview
+      grafana_dashboard_link: https://dashboards.gitlab.net/d/web-pages-main/web-pages-overview?from=now-6h/m&to=now-1m/m&var-environment={{
+        $labels.environment }}&var-stage={{ $labels.stage }}
+      grafana_min_zoom_hours: "6"
+      grafana_panel_id: "3686204985"
+      grafana_variables: environment,stage
+      promql_template_1: |
+        sum by (env,environment,tier,stage,region) (
+          rate(gitlab_pages_http_time_to_write_header_seconds_count{environment="{{ $labels.environment }}",region="{{ $labels.region }}",stage="{{ $labels.stage }}",type="web-pages"}[5m])
+        )
+      runbook: docs/web-pages/README.md
+    labels:
+      aggregation: regional_component
+      alert_class: traffic_cessation
+      alert_type: cause
+      feature_category: pages
+      pager: pagerduty
+      rules_domain: general
+      severity: s2
+      sli_type: ops
+      slo_alert: "no"
+      user_impacting: "yes"
+    expr: |
+      gitlab_regional_sli_ops:rate_30m{component="server_headers",monitor="global",stage="main",type="web-pages"} == 0
+  - alert: WebPagesServiceServerHeadersTrafficAbsentRegional
+    for: 30m
+    annotations:
+      title: The server_headers SLI of the web-pages service in region `{{ $labels.region
+        }}` has not reported any traffic in the past 30m
+      description: |
+        Response time can be slow due to large files served by pages. This SLI tracks only time needed to finish writing headers. It includes API requests to GitLab instance, scanning ZIP archive for file entries, processing redirects, etc. We use it as stricter SLI for pages as it's independent of served file size
+
+        This alert signifies that the SLI was previously reporting traffic, but is no longer - the signal is absent.
+
+        This could be caused by a change to the metrics used in the SLI, or by the service not receiving traffic.
+
+        Note that this alert is specific to the `{{ $labels.region }}` region.
+      grafana_dashboard_id: web-pages-main/web-pages-overview
+      grafana_dashboard_link: https://dashboards.gitlab.net/d/web-pages-main/web-pages-overview?from=now-6h/m&to=now-1m/m&var-environment={{
+        $labels.environment }}&var-stage={{ $labels.stage }}
+      grafana_min_zoom_hours: "6"
+      grafana_panel_id: "3686204985"
+      grafana_variables: environment,stage
+      promql_template_1: |
+        sum by (env,environment,tier,stage,region) (
+          rate(gitlab_pages_http_time_to_write_header_seconds_count{environment="{{ $labels.environment }}",region="{{ $labels.region }}",stage="{{ $labels.stage }}",type="web-pages"}[5m])
+        )
+      runbook: docs/web-pages/README.md
+    labels:
+      aggregation: regional_component
+      alert_class: traffic_cessation
+      alert_type: cause
+      feature_category: pages
+      pager: pagerduty
+      rules_domain: general
+      severity: s2
+      sli_type: ops
+      slo_alert: "no"
+      user_impacting: "yes"
+    expr: |
+      gitlab_regional_sli_ops:rate_5m{component="server_headers",monitor="global",stage="main",type="web-pages"} offset 1h
+      unless
+      gitlab_regional_sli_ops:rate_5m{component="server_headers",monitor="global",stage="main",type="web-pages"}
