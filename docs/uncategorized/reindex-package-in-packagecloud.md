@@ -43,7 +43,7 @@ package_reindex('gitlab-ce', 'el/7/gitlab-ce-11.4.12-ce.0.el7.x86_64.rpm')
 ## Re-index all packages at a version
 
 We have occasionally seen instances where indexing processes were interupted, and we had to trigger a re-index of
-all packages of the specific version. In order to speed this in the future, the follwing can be used to re-index
+all packages of the specific version. In order to speed this in the future, the following can be used to re-index
 all public Omnibus GitLab packages at a given version.
 
 ```ruby
