@@ -13,7 +13,7 @@ local toolingLinks = import 'toolinglinks/toolinglinks.libsonnet';
     targetProxyName=loadBalancerName,
     projectId,
     team=null,
-    ignoreTrafficCessation=false,
+    trafficCessationAlertConfig=true,
     additionalToolingLinks=[],
   )::
     local baseSelector = { target_proxy_name: targetProxyName, project_id: projectId };
@@ -21,7 +21,7 @@ local toolingLinks = import 'toolinglinks/toolinglinks.libsonnet';
     metricsCatalog.serviceLevelIndicatorDefinition({
       userImpacting: userImpacting,
       [if team != null then 'team']: team,
-      ignoreTrafficCessation: ignoreTrafficCessation,
+      trafficCessationAlertConfig: trafficCessationAlertConfig,
 
       staticLabels: {
         // TODO: In future, we may need to allow other stages here too

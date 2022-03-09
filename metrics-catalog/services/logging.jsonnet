@@ -140,7 +140,7 @@ metricsCatalog.serviceDefinition({
       projectId='gitlab-ops',
 
       // No need to alert if Kibana isn't receiving traffic
-      ignoreTrafficCessation=true
+      trafficCessationAlertConfig=false
     ),
 
     // Stackdriver component represents log messages
@@ -148,7 +148,7 @@ metricsCatalog.serviceDefinition({
     stackdriver: {
       userImpacting: false,
       featureCategory: 'not_owned',
-      ignoreTrafficCessation: true,
+      trafficCessationAlertConfig: false,
 
       description: |||
         This SLI monitors the total number of logs sent to GCP StackDriver logging.

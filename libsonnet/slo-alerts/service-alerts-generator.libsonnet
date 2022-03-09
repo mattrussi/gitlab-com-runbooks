@@ -103,10 +103,7 @@ local alertsForService(service, alertDescriptors) =
       )
       +
       (
-        if !sli.ignoreTrafficCessation then  // Alert on a zero RPS operation rate for this SLI
-          trafficCessationAlertsForSLI(service, sli, alertDescriptors)
-        else
-          []
+        trafficCessationAlertsForSLI(service, sli, alertDescriptors)
       ),
     slis
   );

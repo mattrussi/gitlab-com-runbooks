@@ -15,7 +15,7 @@ local serviceLevelIndicatorDefaults = {
   description: '',
   staticLabels+: {},  // by default, no static labels
   serviceAggregation: true,  // by default, requestRate is aggregated up to the service level
-  ignoreTrafficCessation: false,  // Override to true to disable alerting when SLI is zero or absent
+  trafficCessationAlertConfig: true,  // Override to false to disable alerting when SLI is zero or absent
   upscaleLongerBurnRates: false,  // When true, long-term burn rates will be upscaled from shorter burn rates, to optimize for high cardinality metrics
   severity: 's2',
 };

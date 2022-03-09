@@ -110,7 +110,7 @@ metricsCatalog.serviceDefinition({
     gitalyruby: {
       userImpacting: true,
       featureCategory: 'gitaly',
-      ignoreTrafficCessation: true,
+      trafficCessationAlertConfig: false,
       description: |||
         This SLI monitors requests to Gitaly's Ruby sidecar, known as Gitaly-Ruby. All requests made to
         Gitaly-Ruby are monitored in aggregate, via its GRPC interface.

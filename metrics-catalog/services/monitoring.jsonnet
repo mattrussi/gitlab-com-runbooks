@@ -251,7 +251,7 @@ metricsCatalog.serviceDefinition({
     thanos_compactor: {
       userImpacting: false,
       featureCategory: 'not_owned',
-      ignoreTrafficCessation: true,
+      trafficCessationAlertConfig: false,
 
       description: |||
         Thanos compactor is responsible for compaction of Prometheus series data into blocks, which are stored in GCS buckets.
@@ -348,7 +348,7 @@ metricsCatalog.serviceDefinition({
       loadBalancerName='k8s1-08811ce6-monitoring-grafana-80-013c5091',
       targetProxyName='k8s2-ts-4zodnh0s-monitoring-grafana-lhbkv8d3',
       projectId='gitlab-ops',
-      ignoreTrafficCessation=true
+      trafficCessationAlertConfig=false
     ),
 
     prometheus: {
@@ -419,7 +419,7 @@ metricsCatalog.serviceDefinition({
     grafana_trickster: {
       userImpacting: false,
       featureCategory: 'not_owned',
-      ignoreTrafficCessation: true,
+      trafficCessationAlertConfig: false,
 
       description: |||
         This SLI monitors the Trickster HTTP interface.
@@ -447,7 +447,7 @@ metricsCatalog.serviceDefinition({
       userImpacting: false,
       serviceAggregation: false,
       featureCategory: 'not_owned',
-      ignoreTrafficCessation: true,
+      trafficCessationAlertConfig: false,
 
       description: |||
         Various memcached instances support our thanos infrastructure, for the
