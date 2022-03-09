@@ -44,5 +44,6 @@ local labelSet = (import 'label-taxonomy/label-set.libsonnet');
     stage: 'stage',
     shard: 'shard',
     node: 'fqdn',
+    sliComponent: 'component',
   }),
 }

@@ -205,6 +205,7 @@ local recordingRulesFor(metricName, labels, expression) =
       expr: expression,
     }];
 
+
 // Given the descriptor, the kubernetes label selector and any static labels that will
 // be applied, generates a promql expression to migrate labels, ready for use in the
 // recording rules.

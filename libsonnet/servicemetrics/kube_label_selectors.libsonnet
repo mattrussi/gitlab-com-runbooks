@@ -55,7 +55,6 @@ local kubeSelectorToPromSelector(kubeMetricType, selector) =
   );
 
 function(
-
   podSelector=defaultValue,
   hpaSelector=defaultValue,
   nodeSelector=null,  // by default we don't define service fleets
@@ -72,6 +71,7 @@ function(
     init(type, tier)::
       local defaultSelector = { type: type };
       local defaultStaticLabels = { type: type, tier: tier };
+
       {
         pod: if podSelector == defaultValue then defaultSelector else podSelector,
         hpa: if hpaSelector == defaultValue then defaultSelector else hpaSelector,
@@ -90,7 +90,7 @@ function(
         hasNodeSelector():: nodeSelector != null,
 
         // Returns a promql selector suitable to `kube_*_label` metrics exported by
-        // kube_state_metrics
+        // kube_state_metrics for
         getPromQLSelector(kubeMetricType)::
           local kubeSelectors = self[kubeMetricType];
           if kubeSelectors == null then

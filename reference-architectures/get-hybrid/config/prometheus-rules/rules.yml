@@ -3440,3 +3440,1328 @@ groups:
       on(cluster,deployment) group_left(type)
       topk by (cluster,deployment) (1, kube_deployment_labels:labeled{type!=""})
     record: kube_deployment_status_replicas:labeled
+- interval: 1m
+  name: 'Service Component Alerts: consul'
+  rules: []
+- interval: 1m
+  name: 'Service Component Alerts: gitaly'
+  rules:
+  - alert: GitalyServiceGoserverApdexSLOViolation
+    annotations:
+      description: |
+        This SLI monitors all Gitaly GRPC requests in aggregate, excluding the OperationService. GRPC failures which are considered to be the "server's fault" are counted as errors. The apdex score is based on a subset of GRPC methods which are expected to be fast.
+
+        Currently the apdex value is {{ $value | humanizePercentage }}.
+      grafana_dashboard_id: gitaly-main/gitaly-overview
+      grafana_dashboard_link: https://dashboards.gitlab.net/d/gitaly-main/gitaly-overview?from=now-6h/m&to=now-1m/m&var-environment={{
+        $labels.environment }}&var-stage={{ $labels.stage }}
+      grafana_min_zoom_hours: "6"
+      grafana_panel_id: "877804374"
+      grafana_variables: environment,stage
+      promql_template_1: |
+        histogram_quantile(
+          0.950000,
+          sum by (le) (
+            rate(grpc_server_handling_seconds_bucket{grpc_method!~"CalculateChecksum|CommitLanguages|CommitStats|CreateFork|CreateRepositoryFromURL|FetchInternalRemote|FetchIntoObjectPool|FetchRemote|FetchSourceBranch|FindRemoteRepository|FindRemoteRootRef|Fsck|GarbageCollect|OptimizeRepository|PackObjectsHookWithSidechannel|PostReceiveHook|PostUploadPackWithSidechannel|PreReceiveHook|RepackFull|RepackIncremental|ReplicateRepository|SSHUploadPackWithSidechannel|UpdateHook",grpc_service!="gitaly.OperationService",grpc_type="unary",job="gitaly"}[5m])
+          )
+        )
+      runbook: docs/gitaly/README.md
+      title: The goserver SLI of the gitaly service has an apdex violating SLO
+    expr: |
+      (
+        (
+          gitlab_component_apdex:ratio_1h{component="goserver",type="gitaly"}
+          < (1 - 14.4 * 0.001000)
+        )
+        and
+        (
+          gitlab_component_apdex:ratio_5m{component="goserver",type="gitaly"}
+          < (1 - 14.4 * 0.001000)
+        )
+      )
+      and on(type,component)
+      (
+        sum by(type,component) (gitlab_component_ops:rate_1h{component="goserver",type="gitaly"}) >= 1
+      )
+    for: 2m
+    labels:
+      aggregation: component
+      alert_class: slo_violation
+      alert_type: symptom
+      feature_category: not_owned
+      pager: pagerduty
+      rules_domain: general
+      severity: s2
+      sli_type: apdex
+      slo_alert: "yes"
+      user_impacting: "yes"
+      window: 1h
+  - alert: GitalyServiceGoserverApdexSLOViolation
+    annotations:
+      description: |
+        This SLI monitors all Gitaly GRPC requests in aggregate, excluding the OperationService. GRPC failures which are considered to be the "server's fault" are counted as errors. The apdex score is based on a subset of GRPC methods which are expected to be fast.
+
+        Currently the apdex value is {{ $value | humanizePercentage }}.
+      grafana_dashboard_id: gitaly-main/gitaly-overview
+      grafana_dashboard_link: https://dashboards.gitlab.net/d/gitaly-main/gitaly-overview?from=now-6h/m&to=now-1m/m&var-environment={{
+        $labels.environment }}&var-stage={{ $labels.stage }}
+      grafana_min_zoom_hours: "6"
+      grafana_panel_id: "877804374"
+      grafana_variables: environment,stage
+      promql_template_1: |
+        histogram_quantile(
+          0.950000,
+          sum by (le) (
+            rate(grpc_server_handling_seconds_bucket{grpc_method!~"CalculateChecksum|CommitLanguages|CommitStats|CreateFork|CreateRepositoryFromURL|FetchInternalRemote|FetchIntoObjectPool|FetchRemote|FetchSourceBranch|FindRemoteRepository|FindRemoteRootRef|Fsck|GarbageCollect|OptimizeRepository|PackObjectsHookWithSidechannel|PostReceiveHook|PostUploadPackWithSidechannel|PreReceiveHook|RepackFull|RepackIncremental|ReplicateRepository|SSHUploadPackWithSidechannel|UpdateHook",grpc_service!="gitaly.OperationService",grpc_type="unary",job="gitaly"}[5m])
+          )
+        )
+      runbook: docs/gitaly/README.md
+      title: The goserver SLI of the gitaly service has an apdex violating SLO
+    expr: |
+      (
+        (
+          gitlab_component_apdex:ratio_6h{component="goserver",type="gitaly"}
+          < (1 - 6 * 0.001000)
+        )
+        and
+        (
+          gitlab_component_apdex:ratio_30m{component="goserver",type="gitaly"}
+          < (1 - 6 * 0.001000)
+        )
+      )
+      and on(type,component)
+      (
+        sum by(type,component) (gitlab_component_ops:rate_6h{component="goserver",type="gitaly"}) >= 0.16667
+      )
+    for: 2m
+    labels:
+      aggregation: component
+      alert_class: slo_violation
+      alert_type: symptom
+      feature_category: not_owned
+      pager: pagerduty
+      rules_domain: general
+      severity: s2
+      sli_type: apdex
+      slo_alert: "yes"
+      user_impacting: "yes"
+      window: 6h
+  - alert: GitalyServiceGoserverErrorSLOViolation
+    annotations:
+      description: |
+        This SLI monitors all Gitaly GRPC requests in aggregate, excluding the OperationService. GRPC failures which are considered to be the "server's fault" are counted as errors. The apdex score is based on a subset of GRPC methods which are expected to be fast.
+
+        Currently the error-rate is {{ $value | humanizePercentage }}.
+      grafana_dashboard_id: gitaly-main/gitaly-overview
+      grafana_dashboard_link: https://dashboards.gitlab.net/d/gitaly-main/gitaly-overview?from=now-6h/m&to=now-1m/m&var-environment={{
+        $labels.environment }}&var-stage={{ $labels.stage }}
+      grafana_min_zoom_hours: "6"
+      grafana_panel_id: "594670537"
+      grafana_variables: environment,stage
+      promql_template_1: |
+        sum by () (
+          label_replace(rate(gitaly_service_client_requests_total{grpc_code!~"AlreadyExists|Canceled|DeadlineExceeded|FailedPrecondition|InvalidArgument|NotFound|OK|PermissionDenied|Unauthenticated",grpc_service!="gitaly.OperationService",job="gitaly"}[5m]), "_c", "0", "", "")
+          or
+          label_replace(rate(gitaly_service_client_requests_total{deadline_type!="limited",grpc_code="DeadlineExceeded",grpc_service!="gitaly.OperationService",job="gitaly"}[5m]), "_c", "1", "", "")
+        )
+      runbook: docs/gitaly/README.md
+      title: The goserver SLI of the gitaly service has an error rate violating SLO
+    expr: |
+      (
+        (
+          gitlab_component_errors:ratio_1h{component="goserver",type="gitaly"}
+          > (14.4 * 0.000500)
+        )
+        and
+        (
+          gitlab_component_errors:ratio_5m{component="goserver",type="gitaly"}
+          > (14.4 * 0.000500)
+        )
+      )
+      and on(type,component)
+      (
+        sum by(type,component) (gitlab_component_ops:rate_1h{component="goserver",type="gitaly"}) >= 1
+      )
+    for: 2m
+    labels:
+      aggregation: component
+      alert_class: slo_violation
+      alert_type: symptom
+      feature_category: not_owned
+      pager: pagerduty
+      rules_domain: general
+      severity: s2
+      sli_type: error
+      slo_alert: "yes"
+      user_impacting: "yes"
+      window: 1h
+  - alert: GitalyServiceGoserverErrorSLOViolation
+    annotations:
+      description: |
+        This SLI monitors all Gitaly GRPC requests in aggregate, excluding the OperationService. GRPC failures which are considered to be the "server's fault" are counted as errors. The apdex score is based on a subset of GRPC methods which are expected to be fast.
+
+        Currently the error-rate is {{ $value | humanizePercentage }}.
+      grafana_dashboard_id: gitaly-main/gitaly-overview
+      grafana_dashboard_link: https://dashboards.gitlab.net/d/gitaly-main/gitaly-overview?from=now-6h/m&to=now-1m/m&var-environment={{
+        $labels.environment }}&var-stage={{ $labels.stage }}
+      grafana_min_zoom_hours: "6"
+      grafana_panel_id: "594670537"
+      grafana_variables: environment,stage
+      promql_template_1: |
+        sum by () (
+          label_replace(rate(gitaly_service_client_requests_total{grpc_code!~"AlreadyExists|Canceled|DeadlineExceeded|FailedPrecondition|InvalidArgument|NotFound|OK|PermissionDenied|Unauthenticated",grpc_service!="gitaly.OperationService",job="gitaly"}[5m]), "_c", "0", "", "")
+          or
+          label_replace(rate(gitaly_service_client_requests_total{deadline_type!="limited",grpc_code="DeadlineExceeded",grpc_service!="gitaly.OperationService",job="gitaly"}[5m]), "_c", "1", "", "")
+        )
+      runbook: docs/gitaly/README.md
+      title: The goserver SLI of the gitaly service has an error rate violating SLO
+    expr: |
+      (
+        (
+          gitlab_component_errors:ratio_6h{component="goserver",type="gitaly"}
+          > (6 * 0.000500)
+        )
+        and
+        (
+          gitlab_component_errors:ratio_30m{component="goserver",type="gitaly"}
+          > (6 * 0.000500)
+        )
+      )
+      and on(type,component)
+      (
+        sum by(type,component) (gitlab_component_ops:rate_6h{component="goserver",type="gitaly"}) >= 0.16667
+      )
+    for: 2m
+    labels:
+      aggregation: component
+      alert_class: slo_violation
+      alert_type: symptom
+      feature_category: not_owned
+      pager: pagerduty
+      rules_domain: general
+      severity: s2
+      sli_type: error
+      slo_alert: "yes"
+      user_impacting: "yes"
+      window: 6h
+  - alert: GitalyServiceGoserverTrafficCessation
+    annotations:
+      description: |
+        This SLI monitors all Gitaly GRPC requests in aggregate, excluding the OperationService. GRPC failures which are considered to be the "server's fault" are counted as errors. The apdex score is based on a subset of GRPC methods which are expected to be fast.
+
+        This alert signifies that the SLI is reporting a cessation of traffic; the signal is present, but is zero.
+      grafana_dashboard_id: gitaly-main/gitaly-overview
+      grafana_dashboard_link: https://dashboards.gitlab.net/d/gitaly-main/gitaly-overview?from=now-6h/m&to=now-1m/m&var-environment={{
+        $labels.environment }}&var-stage={{ $labels.stage }}
+      grafana_min_zoom_hours: "6"
+      grafana_panel_id: "1687078843"
+      grafana_variables: environment,stage
+      promql_template_1: |
+        sum by () (
+          rate(gitaly_service_client_requests_total{grpc_service!="gitaly.OperationService",job="gitaly"}[5m])
+        )
+      runbook: docs/gitaly/README.md
+      title: The goserver SLI of the gitaly service has not received any traffic in
+        the past 30m
+    expr: |
+      gitlab_component_ops:rate_30m{component="goserver",type="gitaly"} == 0
+    for: 5m
+    labels:
+      aggregation: component
+      alert_class: traffic_cessation
+      alert_type: cause
+      feature_category: not_owned
+      pager: pagerduty
+      rules_domain: general
+      severity: s2
+      sli_type: ops
+      slo_alert: "no"
+      user_impacting: "yes"
+  - alert: GitalyServiceGoserverTrafficAbsent
+    annotations:
+      description: |
+        This SLI monitors all Gitaly GRPC requests in aggregate, excluding the OperationService. GRPC failures which are considered to be the "server's fault" are counted as errors. The apdex score is based on a subset of GRPC methods which are expected to be fast.
+
+        This alert signifies that the SLI was previously reporting traffic, but is no longer - the signal is absent.
+
+        This could be caused by a change to the metrics used in the SLI, or by the service not receiving traffic.
+      grafana_dashboard_id: gitaly-main/gitaly-overview
+      grafana_dashboard_link: https://dashboards.gitlab.net/d/gitaly-main/gitaly-overview?from=now-6h/m&to=now-1m/m&var-environment={{
+        $labels.environment }}&var-stage={{ $labels.stage }}
+      grafana_min_zoom_hours: "6"
+      grafana_panel_id: "1687078843"
+      grafana_variables: environment,stage
+      promql_template_1: |
+        sum by () (
+          rate(gitaly_service_client_requests_total{grpc_service!="gitaly.OperationService",job="gitaly"}[5m])
+        )
+      runbook: docs/gitaly/README.md
+      title: The goserver SLI of the gitaly service has not reported any traffic in
+        the past 30m
+    expr: |
+      gitlab_component_ops:rate_5m{component="goserver",type="gitaly"} offset 1h
+      unless
+      gitlab_component_ops:rate_5m{component="goserver",type="gitaly"}
+    for: 30m
+    labels:
+      aggregation: component
+      alert_class: traffic_cessation
+      alert_type: cause
+      feature_category: not_owned
+      pager: pagerduty
+      rules_domain: general
+      severity: s2
+      sli_type: ops
+      slo_alert: "no"
+      user_impacting: "yes"
+- interval: 1m
+  name: 'Service Component Alerts: logging'
+  rules:
+  - alert: LoggingServiceElasticsearchSearchingTrafficCessation
+    annotations:
+      description: |
+        Opensearch global search average rate.
+
+        This alert signifies that the SLI is reporting a cessation of traffic; the signal is present, but is zero.
+      grafana_dashboard_id: logging-main/logging-overview
+      grafana_dashboard_link: https://dashboards.gitlab.net/d/logging-main/logging-overview?from=now-6h/m&to=now-1m/m&var-environment={{
+        $labels.environment }}&var-stage={{ $labels.stage }}
+      grafana_min_zoom_hours: "6"
+      grafana_panel_id: "1015871477"
+      grafana_variables: environment,stage
+      promql_template_1: |
+        sum by () (
+          label_replace(avg_over_time(aws_es_5xx_average[5m]), "status", "5xx","","")/60 or
+          label_replace(avg_over_time(aws_es_4xx_average[5m]), "status", "4xx","","")/60 or
+          label_replace(avg_over_time(aws_es_3xx_average[5m]), "status", "3xx","","")/60 or
+          label_replace(avg_over_time(aws_es_2xx_average[5m]), "status", "2xx","","")/60
+        )
+      runbook: docs/logging/README.md
+      title: The elasticsearch_searching SLI of the logging service has not received
+        any traffic in the past 30m
+    expr: |
+      gitlab_component_ops:rate_30m{component="elasticsearch_searching",type="logging"} == 0
+    for: 5m
+    labels:
+      aggregation: component
+      alert_class: traffic_cessation
+      alert_type: cause
+      feature_category: not_owned
+      pager: pagerduty
+      rules_domain: general
+      severity: s2
+      sli_type: ops
+      slo_alert: "no"
+      user_impacting: "no"
+  - alert: LoggingServiceElasticsearchSearchingTrafficAbsent
+    annotations:
+      description: |
+        Opensearch global search average rate.
+
+        This alert signifies that the SLI was previously reporting traffic, but is no longer - the signal is absent.
+
+        This could be caused by a change to the metrics used in the SLI, or by the service not receiving traffic.
+      grafana_dashboard_id: logging-main/logging-overview
+      grafana_dashboard_link: https://dashboards.gitlab.net/d/logging-main/logging-overview?from=now-6h/m&to=now-1m/m&var-environment={{
+        $labels.environment }}&var-stage={{ $labels.stage }}
+      grafana_min_zoom_hours: "6"
+      grafana_panel_id: "1015871477"
+      grafana_variables: environment,stage
+      promql_template_1: |
+        sum by () (
+          label_replace(avg_over_time(aws_es_5xx_average[5m]), "status", "5xx","","")/60 or
+          label_replace(avg_over_time(aws_es_4xx_average[5m]), "status", "4xx","","")/60 or
+          label_replace(avg_over_time(aws_es_3xx_average[5m]), "status", "3xx","","")/60 or
+          label_replace(avg_over_time(aws_es_2xx_average[5m]), "status", "2xx","","")/60
+        )
+      runbook: docs/logging/README.md
+      title: The elasticsearch_searching SLI of the logging service has not reported
+        any traffic in the past 30m
+    expr: |
+      gitlab_component_ops:rate_5m{component="elasticsearch_searching",type="logging"} offset 1h
+      unless
+      gitlab_component_ops:rate_5m{component="elasticsearch_searching",type="logging"}
+    for: 30m
+    labels:
+      aggregation: component
+      alert_class: traffic_cessation
+      alert_type: cause
+      feature_category: not_owned
+      pager: pagerduty
+      rules_domain: general
+      severity: s2
+      sli_type: ops
+      slo_alert: "no"
+      user_impacting: "no"
+- interval: 1m
+  name: 'Service Component Alerts: praefect'
+  rules:
+  - alert: PraefectServiceProxyApdexSLOViolation
+    annotations:
+      description: |
+        All Gitaly operations pass through the Praefect proxy on the way to a Gitaly instance. This SLI monitors those operations in aggregate.
+
+        Currently the apdex value is {{ $value | humanizePercentage }}.
+      grafana_dashboard_id: praefect-main/praefect-overview
+      grafana_dashboard_link: https://dashboards.gitlab.net/d/praefect-main/praefect-overview?from=now-6h/m&to=now-1m/m&var-environment={{
+        $labels.environment }}&var-stage={{ $labels.stage }}
+      grafana_min_zoom_hours: "6"
+      grafana_panel_id: "2100325234"
+      grafana_variables: environment,stage
+      promql_template_1: |
+        histogram_quantile(
+          0.950000,
+          sum by (le) (
+            rate(grpc_server_handling_seconds_bucket{grpc_type="unary",job="praefect"}[5m])
+          )
+        )
+      runbook: docs/praefect/README.md
+      title: The proxy SLI of the praefect service has an apdex violating SLO
+    expr: |
+      (
+        (
+          gitlab_component_apdex:ratio_1h{component="proxy",type="praefect"}
+          < (1 - 14.4 * 0.005000)
+        )
+        and
+        (
+          gitlab_component_apdex:ratio_5m{component="proxy",type="praefect"}
+          < (1 - 14.4 * 0.005000)
+        )
+      )
+      and on(type,component)
+      (
+        sum by(type,component) (gitlab_component_ops:rate_1h{component="proxy",type="praefect"}) >= 1
+      )
+    for: 2m
+    labels:
+      aggregation: component
+      alert_class: slo_violation
+      alert_type: symptom
+      feature_category: not_owned
+      pager: pagerduty
+      rules_domain: general
+      severity: s2
+      sli_type: apdex
+      slo_alert: "yes"
+      user_impacting: "yes"
+      window: 1h
+  - alert: PraefectServiceProxyApdexSLOViolation
+    annotations:
+      description: |
+        All Gitaly operations pass through the Praefect proxy on the way to a Gitaly instance. This SLI monitors those operations in aggregate.
+
+        Currently the apdex value is {{ $value | humanizePercentage }}.
+      grafana_dashboard_id: praefect-main/praefect-overview
+      grafana_dashboard_link: https://dashboards.gitlab.net/d/praefect-main/praefect-overview?from=now-6h/m&to=now-1m/m&var-environment={{
+        $labels.environment }}&var-stage={{ $labels.stage }}
+      grafana_min_zoom_hours: "6"
+      grafana_panel_id: "2100325234"
+      grafana_variables: environment,stage
+      promql_template_1: |
+        histogram_quantile(
+          0.950000,
+          sum by (le) (
+            rate(grpc_server_handling_seconds_bucket{grpc_type="unary",job="praefect"}[5m])
+          )
+        )
+      runbook: docs/praefect/README.md
+      title: The proxy SLI of the praefect service has an apdex violating SLO
+    expr: |
+      (
+        (
+          gitlab_component_apdex:ratio_6h{component="proxy",type="praefect"}
+          < (1 - 6 * 0.005000)
+        )
+        and
+        (
+          gitlab_component_apdex:ratio_30m{component="proxy",type="praefect"}
+          < (1 - 6 * 0.005000)
+        )
+      )
+      and on(type,component)
+      (
+        sum by(type,component) (gitlab_component_ops:rate_6h{component="proxy",type="praefect"}) >= 0.16667
+      )
+    for: 2m
+    labels:
+      aggregation: component
+      alert_class: slo_violation
+      alert_type: symptom
+      feature_category: not_owned
+      pager: pagerduty
+      rules_domain: general
+      severity: s2
+      sli_type: apdex
+      slo_alert: "yes"
+      user_impacting: "yes"
+      window: 6h
+  - alert: PraefectServiceProxyErrorSLOViolation
+    annotations:
+      description: |
+        All Gitaly operations pass through the Praefect proxy on the way to a Gitaly instance. This SLI monitors those operations in aggregate.
+
+        Currently the error-rate is {{ $value | humanizePercentage }}.
+      grafana_dashboard_id: praefect-main/praefect-overview
+      grafana_dashboard_link: https://dashboards.gitlab.net/d/praefect-main/praefect-overview?from=now-6h/m&to=now-1m/m&var-environment={{
+        $labels.environment }}&var-stage={{ $labels.stage }}
+      grafana_min_zoom_hours: "6"
+      grafana_panel_id: "1178914866"
+      grafana_variables: environment,stage
+      promql_template_1: |
+        sum by () (
+          rate(grpc_server_handled_total{grpc_code!~"^(OK|NotFound|Unauthenticated|AlreadyExists|FailedPrecondition|Canceled)$",job="praefect"}[5m])
+        )
+      runbook: docs/praefect/README.md
+      title: The proxy SLI of the praefect service has an error rate violating SLO
+    expr: |
+      (
+        (
+          gitlab_component_errors:ratio_1h{component="proxy",type="praefect"}
+          > (14.4 * 0.000500)
+        )
+        and
+        (
+          gitlab_component_errors:ratio_5m{component="proxy",type="praefect"}
+          > (14.4 * 0.000500)
+        )
+      )
+      and on(type,component)
+      (
+        sum by(type,component) (gitlab_component_ops:rate_1h{component="proxy",type="praefect"}) >= 1
+      )
+    for: 2m
+    labels:
+      aggregation: component
+      alert_class: slo_violation
+      alert_type: symptom
+      feature_category: not_owned
+      pager: pagerduty
+      rules_domain: general
+      severity: s2
+      sli_type: error
+      slo_alert: "yes"
+      user_impacting: "yes"
+      window: 1h
+  - alert: PraefectServiceProxyErrorSLOViolation
+    annotations:
+      description: |
+        All Gitaly operations pass through the Praefect proxy on the way to a Gitaly instance. This SLI monitors those operations in aggregate.
+
+        Currently the error-rate is {{ $value | humanizePercentage }}.
+      grafana_dashboard_id: praefect-main/praefect-overview
+      grafana_dashboard_link: https://dashboards.gitlab.net/d/praefect-main/praefect-overview?from=now-6h/m&to=now-1m/m&var-environment={{
+        $labels.environment }}&var-stage={{ $labels.stage }}
+      grafana_min_zoom_hours: "6"
+      grafana_panel_id: "1178914866"
+      grafana_variables: environment,stage
+      promql_template_1: |
+        sum by () (
+          rate(grpc_server_handled_total{grpc_code!~"^(OK|NotFound|Unauthenticated|AlreadyExists|FailedPrecondition|Canceled)$",job="praefect"}[5m])
+        )
+      runbook: docs/praefect/README.md
+      title: The proxy SLI of the praefect service has an error rate violating SLO
+    expr: |
+      (
+        (
+          gitlab_component_errors:ratio_6h{component="proxy",type="praefect"}
+          > (6 * 0.000500)
+        )
+        and
+        (
+          gitlab_component_errors:ratio_30m{component="proxy",type="praefect"}
+          > (6 * 0.000500)
+        )
+      )
+      and on(type,component)
+      (
+        sum by(type,component) (gitlab_component_ops:rate_6h{component="proxy",type="praefect"}) >= 0.16667
+      )
+    for: 2m
+    labels:
+      aggregation: component
+      alert_class: slo_violation
+      alert_type: symptom
+      feature_category: not_owned
+      pager: pagerduty
+      rules_domain: general
+      severity: s2
+      sli_type: error
+      slo_alert: "yes"
+      user_impacting: "yes"
+      window: 6h
+  - alert: PraefectServiceProxyTrafficCessation
+    annotations:
+      description: |
+        All Gitaly operations pass through the Praefect proxy on the way to a Gitaly instance. This SLI monitors those operations in aggregate.
+
+        This alert signifies that the SLI is reporting a cessation of traffic; the signal is present, but is zero.
+      grafana_dashboard_id: praefect-main/praefect-overview
+      grafana_dashboard_link: https://dashboards.gitlab.net/d/praefect-main/praefect-overview?from=now-6h/m&to=now-1m/m&var-environment={{
+        $labels.environment }}&var-stage={{ $labels.stage }}
+      grafana_min_zoom_hours: "6"
+      grafana_panel_id: "2797965992"
+      grafana_variables: environment,stage
+      promql_template_1: |
+        sum by () (
+          rate(grpc_server_handled_total{job="praefect"}[5m])
+        )
+      runbook: docs/praefect/README.md
+      title: The proxy SLI of the praefect service has not received any traffic in
+        the past 30m
+    expr: |
+      gitlab_component_ops:rate_30m{component="proxy",type="praefect"} == 0
+    for: 5m
+    labels:
+      aggregation: component
+      alert_class: traffic_cessation
+      alert_type: cause
+      feature_category: not_owned
+      pager: pagerduty
+      rules_domain: general
+      severity: s2
+      sli_type: ops
+      slo_alert: "no"
+      user_impacting: "yes"
+  - alert: PraefectServiceProxyTrafficAbsent
+    annotations:
+      description: |
+        All Gitaly operations pass through the Praefect proxy on the way to a Gitaly instance. This SLI monitors those operations in aggregate.
+
+        This alert signifies that the SLI was previously reporting traffic, but is no longer - the signal is absent.
+
+        This could be caused by a change to the metrics used in the SLI, or by the service not receiving traffic.
+      grafana_dashboard_id: praefect-main/praefect-overview
+      grafana_dashboard_link: https://dashboards.gitlab.net/d/praefect-main/praefect-overview?from=now-6h/m&to=now-1m/m&var-environment={{
+        $labels.environment }}&var-stage={{ $labels.stage }}
+      grafana_min_zoom_hours: "6"
+      grafana_panel_id: "2797965992"
+      grafana_variables: environment,stage
+      promql_template_1: |
+        sum by () (
+          rate(grpc_server_handled_total{job="praefect"}[5m])
+        )
+      runbook: docs/praefect/README.md
+      title: The proxy SLI of the praefect service has not reported any traffic in
+        the past 30m
+    expr: |
+      gitlab_component_ops:rate_5m{component="proxy",type="praefect"} offset 1h
+      unless
+      gitlab_component_ops:rate_5m{component="proxy",type="praefect"}
+    for: 30m
+    labels:
+      aggregation: component
+      alert_class: traffic_cessation
+      alert_type: cause
+      feature_category: not_owned
+      pager: pagerduty
+      rules_domain: general
+      severity: s2
+      sli_type: ops
+      slo_alert: "no"
+      user_impacting: "yes"
+  - alert: PraefectServiceReplicatorQueueApdexSLOViolation
+    annotations:
+      description: |
+        Praefect replication operations. Latency represents the queuing delay before replication is carried out.
+
+        Currently the apdex value is {{ $value | humanizePercentage }}.
+      grafana_dashboard_id: praefect-main/praefect-overview
+      grafana_dashboard_link: https://dashboards.gitlab.net/d/praefect-main/praefect-overview?from=now-6h/m&to=now-1m/m&var-environment={{
+        $labels.environment }}&var-stage={{ $labels.stage }}
+      grafana_min_zoom_hours: "6"
+      grafana_panel_id: "374957850"
+      grafana_variables: environment,stage
+      promql_template_1: |
+        histogram_quantile(
+          0.950000,
+          sum by (le) (
+            rate(gitaly_praefect_replication_delay_bucket{}[5m])
+          )
+        )
+      runbook: docs/praefect/README.md
+      title: The replicator_queue SLI of the praefect service has an apdex violating
+        SLO
+    expr: |
+      (
+        (
+          gitlab_component_apdex:ratio_1h{component="replicator_queue",type="praefect"}
+          < (1 - 14.4 * 0.005000)
+        )
+        and
+        (
+          gitlab_component_apdex:ratio_5m{component="replicator_queue",type="praefect"}
+          < (1 - 14.4 * 0.005000)
+        )
+      )
+      and on(type,component)
+      (
+        sum by(type,component) (gitlab_component_ops:rate_1h{component="replicator_queue",type="praefect"}) >= 1
+      )
+    for: 2m
+    labels:
+      aggregation: component
+      alert_class: slo_violation
+      alert_type: symptom
+      feature_category: not_owned
+      pager: pagerduty
+      rules_domain: general
+      severity: s2
+      sli_type: apdex
+      slo_alert: "yes"
+      user_impacting: "no"
+      window: 1h
+  - alert: PraefectServiceReplicatorQueueApdexSLOViolation
+    annotations:
+      description: |
+        Praefect replication operations. Latency represents the queuing delay before replication is carried out.
+
+        Currently the apdex value is {{ $value | humanizePercentage }}.
+      grafana_dashboard_id: praefect-main/praefect-overview
+      grafana_dashboard_link: https://dashboards.gitlab.net/d/praefect-main/praefect-overview?from=now-6h/m&to=now-1m/m&var-environment={{
+        $labels.environment }}&var-stage={{ $labels.stage }}
+      grafana_min_zoom_hours: "6"
+      grafana_panel_id: "374957850"
+      grafana_variables: environment,stage
+      promql_template_1: |
+        histogram_quantile(
+          0.950000,
+          sum by (le) (
+            rate(gitaly_praefect_replication_delay_bucket{}[5m])
+          )
+        )
+      runbook: docs/praefect/README.md
+      title: The replicator_queue SLI of the praefect service has an apdex violating
+        SLO
+    expr: |
+      (
+        (
+          gitlab_component_apdex:ratio_6h{component="replicator_queue",type="praefect"}
+          < (1 - 6 * 0.005000)
+        )
+        and
+        (
+          gitlab_component_apdex:ratio_30m{component="replicator_queue",type="praefect"}
+          < (1 - 6 * 0.005000)
+        )
+      )
+      and on(type,component)
+      (
+        sum by(type,component) (gitlab_component_ops:rate_6h{component="replicator_queue",type="praefect"}) >= 0.16667
+      )
+    for: 2m
+    labels:
+      aggregation: component
+      alert_class: slo_violation
+      alert_type: symptom
+      feature_category: not_owned
+      pager: pagerduty
+      rules_domain: general
+      severity: s2
+      sli_type: apdex
+      slo_alert: "yes"
+      user_impacting: "no"
+      window: 6h
+  - alert: PraefectServiceReplicatorQueueTrafficCessation
+    annotations:
+      description: |
+        Praefect replication operations. Latency represents the queuing delay before replication is carried out.
+
+        This alert signifies that the SLI is reporting a cessation of traffic; the signal is present, but is zero.
+      grafana_dashboard_id: praefect-main/praefect-overview
+      grafana_dashboard_link: https://dashboards.gitlab.net/d/praefect-main/praefect-overview?from=now-6h/m&to=now-1m/m&var-environment={{
+        $labels.environment }}&var-stage={{ $labels.stage }}
+      grafana_min_zoom_hours: "6"
+      grafana_panel_id: "1815534001"
+      grafana_variables: environment,stage
+      promql_template_1: |
+        sum by () (
+          rate(gitaly_praefect_replication_delay_bucket{le="+Inf"}[5m])
+        )
+      runbook: docs/praefect/README.md
+      title: The replicator_queue SLI of the praefect service has not received any
+        traffic in the past 30m
+    expr: |
+      gitlab_component_ops:rate_30m{component="replicator_queue",type="praefect"} == 0
+    for: 5m
+    labels:
+      aggregation: component
+      alert_class: traffic_cessation
+      alert_type: cause
+      feature_category: not_owned
+      pager: pagerduty
+      rules_domain: general
+      severity: s2
+      sli_type: ops
+      slo_alert: "no"
+      user_impacting: "no"
+  - alert: PraefectServiceReplicatorQueueTrafficAbsent
+    annotations:
+      description: |
+        Praefect replication operations. Latency represents the queuing delay before replication is carried out.
+
+        This alert signifies that the SLI was previously reporting traffic, but is no longer - the signal is absent.
+
+        This could be caused by a change to the metrics used in the SLI, or by the service not receiving traffic.
+      grafana_dashboard_id: praefect-main/praefect-overview
+      grafana_dashboard_link: https://dashboards.gitlab.net/d/praefect-main/praefect-overview?from=now-6h/m&to=now-1m/m&var-environment={{
+        $labels.environment }}&var-stage={{ $labels.stage }}
+      grafana_min_zoom_hours: "6"
+      grafana_panel_id: "1815534001"
+      grafana_variables: environment,stage
+      promql_template_1: |
+        sum by () (
+          rate(gitaly_praefect_replication_delay_bucket{le="+Inf"}[5m])
+        )
+      runbook: docs/praefect/README.md
+      title: The replicator_queue SLI of the praefect service has not reported any
+        traffic in the past 30m
+    expr: |
+      gitlab_component_ops:rate_5m{component="replicator_queue",type="praefect"} offset 1h
+      unless
+      gitlab_component_ops:rate_5m{component="replicator_queue",type="praefect"}
+    for: 30m
+    labels:
+      aggregation: component
+      alert_class: traffic_cessation
+      alert_type: cause
+      feature_category: not_owned
+      pager: pagerduty
+      rules_domain: general
+      severity: s2
+      sli_type: ops
+      slo_alert: "no"
+      user_impacting: "no"
+- interval: 1m
+  name: 'Service Component Alerts: webservice'
+  rules:
+  - alert: WebserviceServicePumaApdexSLOViolation
+    annotations:
+      description: |
+        Aggregation of most web requests that pass through the puma to the GitLab rails monolith. Healthchecks are excluded.
+
+        Currently the apdex value is {{ $value | humanizePercentage }}.
+      grafana_dashboard_id: webservice-main/webservice-overview
+      grafana_dashboard_link: https://dashboards.gitlab.net/d/webservice-main/webservice-overview?from=now-6h/m&to=now-1m/m&var-environment={{
+        $labels.environment }}&var-stage={{ $labels.stage }}
+      grafana_min_zoom_hours: "6"
+      grafana_panel_id: "561966508"
+      grafana_variables: environment,stage
+      promql_template_1: |
+        histogram_quantile(
+          0.950000,
+          sum by (le) (
+            rate(http_request_duration_seconds_bucket{job="gitlab-rails"}[5m])
+          )
+        )
+      runbook: docs/webservice/README.md
+      title: The puma SLI of the webservice service has an apdex violating SLO
+    expr: |
+      (
+        (
+          gitlab_component_apdex:ratio_1h{component="puma",type="webservice"}
+          < (1 - 14.4 * 0.002000)
+        )
+        and
+        (
+          gitlab_component_apdex:ratio_5m{component="puma",type="webservice"}
+          < (1 - 14.4 * 0.002000)
+        )
+      )
+      and on(type,component)
+      (
+        sum by(type,component) (gitlab_component_ops:rate_1h{component="puma",type="webservice"}) >= 1
+      )
+    for: 2m
+    labels:
+      aggregation: component
+      alert_class: slo_violation
+      alert_type: symptom
+      feature_category: not_owned
+      pager: pagerduty
+      rules_domain: general
+      severity: s2
+      sli_type: apdex
+      slo_alert: "yes"
+      user_impacting: "yes"
+      window: 1h
+  - alert: WebserviceServicePumaApdexSLOViolation
+    annotations:
+      description: |
+        Aggregation of most web requests that pass through the puma to the GitLab rails monolith. Healthchecks are excluded.
+
+        Currently the apdex value is {{ $value | humanizePercentage }}.
+      grafana_dashboard_id: webservice-main/webservice-overview
+      grafana_dashboard_link: https://dashboards.gitlab.net/d/webservice-main/webservice-overview?from=now-6h/m&to=now-1m/m&var-environment={{
+        $labels.environment }}&var-stage={{ $labels.stage }}
+      grafana_min_zoom_hours: "6"
+      grafana_panel_id: "561966508"
+      grafana_variables: environment,stage
+      promql_template_1: |
+        histogram_quantile(
+          0.950000,
+          sum by (le) (
+            rate(http_request_duration_seconds_bucket{job="gitlab-rails"}[5m])
+          )
+        )
+      runbook: docs/webservice/README.md
+      title: The puma SLI of the webservice service has an apdex violating SLO
+    expr: |
+      (
+        (
+          gitlab_component_apdex:ratio_6h{component="puma",type="webservice"}
+          < (1 - 6 * 0.002000)
+        )
+        and
+        (
+          gitlab_component_apdex:ratio_30m{component="puma",type="webservice"}
+          < (1 - 6 * 0.002000)
+        )
+      )
+      and on(type,component)
+      (
+        sum by(type,component) (gitlab_component_ops:rate_6h{component="puma",type="webservice"}) >= 0.16667
+      )
+    for: 2m
+    labels:
+      aggregation: component
+      alert_class: slo_violation
+      alert_type: symptom
+      feature_category: not_owned
+      pager: pagerduty
+      rules_domain: general
+      severity: s2
+      sli_type: apdex
+      slo_alert: "yes"
+      user_impacting: "yes"
+      window: 6h
+  - alert: WebserviceServicePumaErrorSLOViolation
+    annotations:
+      description: |
+        Aggregation of most web requests that pass through the puma to the GitLab rails monolith. Healthchecks are excluded.
+
+        Currently the error-rate is {{ $value | humanizePercentage }}.
+      grafana_dashboard_id: webservice-main/webservice-overview
+      grafana_dashboard_link: https://dashboards.gitlab.net/d/webservice-main/webservice-overview?from=now-6h/m&to=now-1m/m&var-environment={{
+        $labels.environment }}&var-stage={{ $labels.stage }}
+      grafana_min_zoom_hours: "6"
+      grafana_panel_id: "2425637513"
+      grafana_variables: environment,stage
+      promql_template_1: |
+        sum by () (
+          rate(http_requests_total{job="gitlab-rails",status=~"5.."}[5m])
+        )
+      runbook: docs/webservice/README.md
+      title: The puma SLI of the webservice service has an error rate violating SLO
+    expr: |
+      (
+        (
+          gitlab_component_errors:ratio_1h{component="puma",type="webservice"}
+          > (14.4 * 0.000100)
+        )
+        and
+        (
+          gitlab_component_errors:ratio_5m{component="puma",type="webservice"}
+          > (14.4 * 0.000100)
+        )
+      )
+      and on(type,component)
+      (
+        sum by(type,component) (gitlab_component_ops:rate_1h{component="puma",type="webservice"}) >= 1
+      )
+    for: 2m
+    labels:
+      aggregation: component
+      alert_class: slo_violation
+      alert_type: symptom
+      feature_category: not_owned
+      pager: pagerduty
+      rules_domain: general
+      severity: s2
+      sli_type: error
+      slo_alert: "yes"
+      user_impacting: "yes"
+      window: 1h
+  - alert: WebserviceServicePumaErrorSLOViolation
+    annotations:
+      description: |
+        Aggregation of most web requests that pass through the puma to the GitLab rails monolith. Healthchecks are excluded.
+
+        Currently the error-rate is {{ $value | humanizePercentage }}.
+      grafana_dashboard_id: webservice-main/webservice-overview
+      grafana_dashboard_link: https://dashboards.gitlab.net/d/webservice-main/webservice-overview?from=now-6h/m&to=now-1m/m&var-environment={{
+        $labels.environment }}&var-stage={{ $labels.stage }}
+      grafana_min_zoom_hours: "6"
+      grafana_panel_id: "2425637513"
+      grafana_variables: environment,stage
+      promql_template_1: |
+        sum by () (
+          rate(http_requests_total{job="gitlab-rails",status=~"5.."}[5m])
+        )
+      runbook: docs/webservice/README.md
+      title: The puma SLI of the webservice service has an error rate violating SLO
+    expr: |
+      (
+        (
+          gitlab_component_errors:ratio_6h{component="puma",type="webservice"}
+          > (6 * 0.000100)
+        )
+        and
+        (
+          gitlab_component_errors:ratio_30m{component="puma",type="webservice"}
+          > (6 * 0.000100)
+        )
+      )
+      and on(type,component)
+      (
+        sum by(type,component) (gitlab_component_ops:rate_6h{component="puma",type="webservice"}) >= 0.16667
+      )
+    for: 2m
+    labels:
+      aggregation: component
+      alert_class: slo_violation
+      alert_type: symptom
+      feature_category: not_owned
+      pager: pagerduty
+      rules_domain: general
+      severity: s2
+      sli_type: error
+      slo_alert: "yes"
+      user_impacting: "yes"
+      window: 6h
+  - alert: WebserviceServicePumaTrafficCessation
+    annotations:
+      description: |
+        Aggregation of most web requests that pass through the puma to the GitLab rails monolith. Healthchecks are excluded.
+
+        This alert signifies that the SLI is reporting a cessation of traffic; the signal is present, but is zero.
+      grafana_dashboard_id: webservice-main/webservice-overview
+      grafana_dashboard_link: https://dashboards.gitlab.net/d/webservice-main/webservice-overview?from=now-6h/m&to=now-1m/m&var-environment={{
+        $labels.environment }}&var-stage={{ $labels.stage }}
+      grafana_min_zoom_hours: "6"
+      grafana_panel_id: "110019945"
+      grafana_variables: environment,stage
+      promql_template_1: |
+        sum by () (
+          rate(http_requests_total{job="gitlab-rails"}[5m])
+        )
+      runbook: docs/webservice/README.md
+      title: The puma SLI of the webservice service has not received any traffic in
+        the past 30m
+    expr: |
+      gitlab_component_ops:rate_30m{component="puma",type="webservice"} == 0
+    for: 5m
+    labels:
+      aggregation: component
+      alert_class: traffic_cessation
+      alert_type: cause
+      feature_category: not_owned
+      pager: pagerduty
+      rules_domain: general
+      severity: s2
+      sli_type: ops
+      slo_alert: "no"
+      user_impacting: "yes"
+  - alert: WebserviceServicePumaTrafficAbsent
+    annotations:
+      description: |
+        Aggregation of most web requests that pass through the puma to the GitLab rails monolith. Healthchecks are excluded.
+
+        This alert signifies that the SLI was previously reporting traffic, but is no longer - the signal is absent.
+
+        This could be caused by a change to the metrics used in the SLI, or by the service not receiving traffic.
+      grafana_dashboard_id: webservice-main/webservice-overview
+      grafana_dashboard_link: https://dashboards.gitlab.net/d/webservice-main/webservice-overview?from=now-6h/m&to=now-1m/m&var-environment={{
+        $labels.environment }}&var-stage={{ $labels.stage }}
+      grafana_min_zoom_hours: "6"
+      grafana_panel_id: "110019945"
+      grafana_variables: environment,stage
+      promql_template_1: |
+        sum by () (
+          rate(http_requests_total{job="gitlab-rails"}[5m])
+        )
+      runbook: docs/webservice/README.md
+      title: The puma SLI of the webservice service has not reported any traffic in
+        the past 30m
+    expr: |
+      gitlab_component_ops:rate_5m{component="puma",type="webservice"} offset 1h
+      unless
+      gitlab_component_ops:rate_5m{component="puma",type="webservice"}
+    for: 30m
+    labels:
+      aggregation: component
+      alert_class: traffic_cessation
+      alert_type: cause
+      feature_category: not_owned
+      pager: pagerduty
+      rules_domain: general
+      severity: s2
+      sli_type: ops
+      slo_alert: "no"
+      user_impacting: "yes"
+  - alert: WebserviceServiceWorkhorseApdexSLOViolation
+    annotations:
+      description: |
+        Aggregation of most web requests that pass through workhorse, monitored via the HTTP interface. Excludes health, readiness and liveness requests. Some known slow requests, such as HTTP uploads, are excluded from the apdex score.
+
+        Currently the apdex value is {{ $value | humanizePercentage }}.
+      grafana_dashboard_id: webservice-main/webservice-overview
+      grafana_dashboard_link: https://dashboards.gitlab.net/d/webservice-main/webservice-overview?from=now-6h/m&to=now-1m/m&var-environment={{
+        $labels.environment }}&var-stage={{ $labels.stage }}
+      grafana_min_zoom_hours: "6"
+      grafana_panel_id: "2586818196"
+      grafana_variables: environment,stage
+      promql_template_1: |
+        histogram_quantile(
+          0.950000,
+          sum by (le) (
+            rate(gitlab_workhorse_http_request_duration_seconds_bucket{route!="^/-/health$",route!="^/-/(readiness|liveness)$",route!="^/([^/]+/){1,}[^/]+/uploads\\z",route!="^/([^/]+/){1,}[^/]+\\.git/git-receive-pack\\z",route!="^/([^/]+/){1,}[^/]+\\.git/git-upload-pack\\z",route!="^/([^/]+/){1,}[^/]+\\.git/info/refs\\z",route!="^/([^/]+/){1,}[^/]+\\.git/gitlab-lfs/objects/([0-9a-f]{64})/([0-9]+)\\z"}[5m])
+          )
+        )
+      runbook: docs/webservice/README.md
+      title: The workhorse SLI of the webservice service has an apdex violating SLO
+    expr: |
+      (
+        (
+          gitlab_component_apdex:ratio_1h{component="workhorse",type="webservice"}
+          < (1 - 14.4 * 0.002000)
+        )
+        and
+        (
+          gitlab_component_apdex:ratio_5m{component="workhorse",type="webservice"}
+          < (1 - 14.4 * 0.002000)
+        )
+      )
+      and on(type,component)
+      (
+        sum by(type,component) (gitlab_component_ops:rate_1h{component="workhorse",type="webservice"}) >= 1
+      )
+    for: 2m
+    labels:
+      aggregation: component
+      alert_class: slo_violation
+      alert_type: symptom
+      feature_category: not_owned
+      pager: pagerduty
+      rules_domain: general
+      severity: s2
+      sli_type: apdex
+      slo_alert: "yes"
+      user_impacting: "yes"
+      window: 1h
+  - alert: WebserviceServiceWorkhorseApdexSLOViolation
+    annotations:
+      description: |
+        Aggregation of most web requests that pass through workhorse, monitored via the HTTP interface. Excludes health, readiness and liveness requests. Some known slow requests, such as HTTP uploads, are excluded from the apdex score.
+
+        Currently the apdex value is {{ $value | humanizePercentage }}.
+      grafana_dashboard_id: webservice-main/webservice-overview
+      grafana_dashboard_link: https://dashboards.gitlab.net/d/webservice-main/webservice-overview?from=now-6h/m&to=now-1m/m&var-environment={{
+        $labels.environment }}&var-stage={{ $labels.stage }}
+      grafana_min_zoom_hours: "6"
+      grafana_panel_id: "2586818196"
+      grafana_variables: environment,stage
+      promql_template_1: |
+        histogram_quantile(
+          0.950000,
+          sum by (le) (
+            rate(gitlab_workhorse_http_request_duration_seconds_bucket{route!="^/-/health$",route!="^/-/(readiness|liveness)$",route!="^/([^/]+/){1,}[^/]+/uploads\\z",route!="^/([^/]+/){1,}[^/]+\\.git/git-receive-pack\\z",route!="^/([^/]+/){1,}[^/]+\\.git/git-upload-pack\\z",route!="^/([^/]+/){1,}[^/]+\\.git/info/refs\\z",route!="^/([^/]+/){1,}[^/]+\\.git/gitlab-lfs/objects/([0-9a-f]{64})/([0-9]+)\\z"}[5m])
+          )
+        )
+      runbook: docs/webservice/README.md
+      title: The workhorse SLI of the webservice service has an apdex violating SLO
+    expr: |
+      (
+        (
+          gitlab_component_apdex:ratio_6h{component="workhorse",type="webservice"}
+          < (1 - 6 * 0.002000)
+        )
+        and
+        (
+          gitlab_component_apdex:ratio_30m{component="workhorse",type="webservice"}
+          < (1 - 6 * 0.002000)
+        )
+      )
+      and on(type,component)
+      (
+        sum by(type,component) (gitlab_component_ops:rate_6h{component="workhorse",type="webservice"}) >= 0.16667
+      )
+    for: 2m
+    labels:
+      aggregation: component
+      alert_class: slo_violation
+      alert_type: symptom
+      feature_category: not_owned
+      pager: pagerduty
+      rules_domain: general
+      severity: s2
+      sli_type: apdex
+      slo_alert: "yes"
+      user_impacting: "yes"
+      window: 6h
+  - alert: WebserviceServiceWorkhorseErrorSLOViolation
+    annotations:
+      description: |
+        Aggregation of most web requests that pass through workhorse, monitored via the HTTP interface. Excludes health, readiness and liveness requests. Some known slow requests, such as HTTP uploads, are excluded from the apdex score.
+
+        Currently the error-rate is {{ $value | humanizePercentage }}.
+      grafana_dashboard_id: webservice-main/webservice-overview
+      grafana_dashboard_link: https://dashboards.gitlab.net/d/webservice-main/webservice-overview?from=now-6h/m&to=now-1m/m&var-environment={{
+        $labels.environment }}&var-stage={{ $labels.stage }}
+      grafana_min_zoom_hours: "6"
+      grafana_panel_id: "2047984749"
+      grafana_variables: environment,stage
+      promql_template_1: |
+        sum by () (
+          rate(gitlab_workhorse_http_requests_total{code=~"^5.*",route!="^/-/health$",route!="^/-/(readiness|liveness)$"}[5m])
+        )
+      runbook: docs/webservice/README.md
+      title: The workhorse SLI of the webservice service has an error rate violating
+        SLO
+    expr: |
+      (
+        (
+          gitlab_component_errors:ratio_1h{component="workhorse",type="webservice"}
+          > (14.4 * 0.000100)
+        )
+        and
+        (
+          gitlab_component_errors:ratio_5m{component="workhorse",type="webservice"}
+          > (14.4 * 0.000100)
+        )
+      )
+      and on(type,component)
+      (
+        sum by(type,component) (gitlab_component_ops:rate_1h{component="workhorse",type="webservice"}) >= 1
+      )
+    for: 2m
+    labels:
+      aggregation: component
+      alert_class: slo_violation
+      alert_type: symptom
+      feature_category: not_owned
+      pager: pagerduty
+      rules_domain: general
+      severity: s2
+      sli_type: error
+      slo_alert: "yes"
+      user_impacting: "yes"
+      window: 1h
+  - alert: WebserviceServiceWorkhorseErrorSLOViolation
+    annotations:
+      description: |
+        Aggregation of most web requests that pass through workhorse, monitored via the HTTP interface. Excludes health, readiness and liveness requests. Some known slow requests, such as HTTP uploads, are excluded from the apdex score.
+
+        Currently the error-rate is {{ $value | humanizePercentage }}.
+      grafana_dashboard_id: webservice-main/webservice-overview
+      grafana_dashboard_link: https://dashboards.gitlab.net/d/webservice-main/webservice-overview?from=now-6h/m&to=now-1m/m&var-environment={{
+        $labels.environment }}&var-stage={{ $labels.stage }}
+      grafana_min_zoom_hours: "6"
+      grafana_panel_id: "2047984749"
+      grafana_variables: environment,stage
+      promql_template_1: |
+        sum by () (
+          rate(gitlab_workhorse_http_requests_total{code=~"^5.*",route!="^/-/health$",route!="^/-/(readiness|liveness)$"}[5m])
+        )
+      runbook: docs/webservice/README.md
+      title: The workhorse SLI of the webservice service has an error rate violating
+        SLO
+    expr: |
+      (
+        (
+          gitlab_component_errors:ratio_6h{component="workhorse",type="webservice"}
+          > (6 * 0.000100)
+        )
+        and
+        (
+          gitlab_component_errors:ratio_30m{component="workhorse",type="webservice"}
+          > (6 * 0.000100)
+        )
+      )
+      and on(type,component)
+      (
+        sum by(type,component) (gitlab_component_ops:rate_6h{component="workhorse",type="webservice"}) >= 0.16667
+      )
+    for: 2m
+    labels:
+      aggregation: component
+      alert_class: slo_violation
+      alert_type: symptom
+      feature_category: not_owned
+      pager: pagerduty
+      rules_domain: general
+      severity: s2
+      sli_type: error
+      slo_alert: "yes"
+      user_impacting: "yes"
+      window: 6h
+  - alert: WebserviceServiceWorkhorseTrafficCessation
+    annotations:
+      description: |
+        Aggregation of most web requests that pass through workhorse, monitored via the HTTP interface. Excludes health, readiness and liveness requests. Some known slow requests, such as HTTP uploads, are excluded from the apdex score.
+
+        This alert signifies that the SLI is reporting a cessation of traffic; the signal is present, but is zero.
+      grafana_dashboard_id: webservice-main/webservice-overview
+      grafana_dashboard_link: https://dashboards.gitlab.net/d/webservice-main/webservice-overview?from=now-6h/m&to=now-1m/m&var-environment={{
+        $labels.environment }}&var-stage={{ $labels.stage }}
+      grafana_min_zoom_hours: "6"
+      grafana_panel_id: "831392945"
+      grafana_variables: environment,stage
+      promql_template_1: |
+        sum by () (
+          rate(gitlab_workhorse_http_requests_total{route!="^/-/health$",route!="^/-/(readiness|liveness)$"}[5m])
+        )
+      runbook: docs/webservice/README.md
+      title: The workhorse SLI of the webservice service has not received any traffic
+        in the past 30m
+    expr: |
+      gitlab_component_ops:rate_30m{component="workhorse",type="webservice"} == 0
+    for: 5m
+    labels:
+      aggregation: component
+      alert_class: traffic_cessation
+      alert_type: cause
+      feature_category: not_owned
+      pager: pagerduty
+      rules_domain: general
+      severity: s2
+      sli_type: ops
+      slo_alert: "no"
+      user_impacting: "yes"
+  - alert: WebserviceServiceWorkhorseTrafficAbsent
+    annotations:
+      description: |
+        Aggregation of most web requests that pass through workhorse, monitored via the HTTP interface. Excludes health, readiness and liveness requests. Some known slow requests, such as HTTP uploads, are excluded from the apdex score.
+
+        This alert signifies that the SLI was previously reporting traffic, but is no longer - the signal is absent.
+
+        This could be caused by a change to the metrics used in the SLI, or by the service not receiving traffic.
+      grafana_dashboard_id: webservice-main/webservice-overview
+      grafana_dashboard_link: https://dashboards.gitlab.net/d/webservice-main/webservice-overview?from=now-6h/m&to=now-1m/m&var-environment={{
+        $labels.environment }}&var-stage={{ $labels.stage }}
+      grafana_min_zoom_hours: "6"
+      grafana_panel_id: "831392945"
+      grafana_variables: environment,stage
+      promql_template_1: |
+        sum by () (
+          rate(gitlab_workhorse_http_requests_total{route!="^/-/health$",route!="^/-/(readiness|liveness)$"}[5m])
+        )
+      runbook: docs/webservice/README.md
+      title: The workhorse SLI of the webservice service has not reported any traffic
+        in the past 30m
+    expr: |
+      gitlab_component_ops:rate_5m{component="workhorse",type="webservice"} offset 1h
+      unless
+      gitlab_component_ops:rate_5m{component="workhorse",type="webservice"}
+    for: 30m
+    labels:
+      aggregation: component
+      alert_class: traffic_cessation
+      alert_type: cause
+      feature_category: not_owned
+      pager: pagerduty
+      rules_domain: general
+      severity: s2
+      sli_type: ops
+      slo_alert: "no"
+      user_impacting: "yes"

@@ -67,5 +67,6 @@ local labelSet = (import 'label-taxonomy/label-set.libsonnet');
     stage: null,  // No stages
     shard: null,  // No shards
     node: 'node',
+    sliComponent: 'component',
   }),
 }

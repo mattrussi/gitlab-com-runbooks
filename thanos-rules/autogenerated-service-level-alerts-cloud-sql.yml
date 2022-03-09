@@ -105,11 +105,11 @@ groups:
     for: 5m
     annotations:
       title: The cloudsql_transactions SLI of the cloud-sql service (`{{ $labels.stage
-        }}` stage) has not received any traffic in the past 30 minutes
+        }}` stage) has not received any traffic in the past 30m
       description: |
         This SLI represents SQL transactions in Cloud SQL databases.
 
-        This alert signifies that the SLI is reporting a cessation of traffic, but the signal is not absent.
+        This alert signifies that the SLI is reporting a cessation of traffic; the signal is present, but is zero.
       grafana_dashboard_id: cloud-sql-main/cloud-sql-overview
       grafana_dashboard_link: https://dashboards.gitlab.net/d/cloud-sql-main/cloud-sql-overview?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-stage={{ $labels.stage }}
@@ -133,12 +133,12 @@ groups:
       slo_alert: "no"
       user_impacting: "yes"
     expr: |
-      gitlab_component_ops:rate_30m{type="cloud-sql", component="cloudsql_transactions", stage="main", monitor="global"} == 0
+      gitlab_component_ops:rate_30m{component="cloudsql_transactions",monitor="global",stage="main",type="cloud-sql"} == 0
   - alert: CloudSqlServiceCloudsqlTransactionsTrafficAbsent
     for: 30m
     annotations:
       title: The cloudsql_transactions SLI of the cloud-sql service (`{{ $labels.stage
-        }}` stage) has not reported any traffic in the past 30 minutes
+        }}` stage) has not reported any traffic in the past 30m
       description: |
         This SLI represents SQL transactions in Cloud SQL databases.
 
@@ -168,6 +168,6 @@ groups:
       slo_alert: "no"
       user_impacting: "yes"
     expr: |
-      gitlab_component_ops:rate_5m{type="cloud-sql", component="cloudsql_transactions", stage="main", monitor="global"} offset 1h
+      gitlab_component_ops:rate_5m{component="cloudsql_transactions",monitor="global",stage="main",type="cloud-sql"} offset 1h
       unless
-      gitlab_component_ops:rate_5m{type="cloud-sql", component="cloudsql_transactions", stage="main", monitor="global"}
+      gitlab_component_ops:rate_5m{component="cloudsql_transactions",monitor="global",stage="main",type="cloud-sql"}

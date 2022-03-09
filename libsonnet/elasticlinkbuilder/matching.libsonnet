@@ -122,6 +122,7 @@ local matchers(matches) =
   matcher:: matcher,
   matchers:: matchers,
   matchFilter:: matchFilter,
+  matchInFilter:: matchInFilter,
   existsFilter:: existsFilter,
   rangeFilter:: rangeFilter,
   mustNot:: mustNot,

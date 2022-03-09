@@ -105,11 +105,11 @@ groups:
     for: 5m
     annotations:
       title: The emailsProcessed SLI of the mailroom service (`{{ $labels.stage }}`
-        stage) has not received any traffic in the past 30 minutes
+        stage) has not received any traffic in the past 30m
       description: |
         Monitors incoming emails delivered from the imap inbox and processed through Sidekiq's `email_receiver` queue. Note that since Mailroom has poor observability, we use Sidekiq metrics for this, and this could lead to certain Sidekiq problems being attributed to Mailroom
 
-        This alert signifies that the SLI is reporting a cessation of traffic, but the signal is not absent.
+        This alert signifies that the SLI is reporting a cessation of traffic; the signal is present, but is zero.
       grafana_dashboard_id: mailroom-main/mailroom-overview
       grafana_dashboard_link: https://dashboards.gitlab.net/d/mailroom-main/mailroom-overview?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-stage={{ $labels.stage }}
@@ -133,12 +133,12 @@ groups:
       slo_alert: "no"
       user_impacting: "yes"
     expr: |
-      gitlab_component_ops:rate_30m{type="mailroom", component="emailsProcessed", stage="main", monitor="global"} == 0
+      gitlab_component_ops:rate_30m{component="emailsProcessed",monitor="global",stage="main",type="mailroom"} == 0
   - alert: MailroomServiceEmailsProcessedTrafficAbsent
     for: 30m
     annotations:
       title: The emailsProcessed SLI of the mailroom service (`{{ $labels.stage }}`
-        stage) has not reported any traffic in the past 30 minutes
+        stage) has not reported any traffic in the past 30m
       description: |
         Monitors incoming emails delivered from the imap inbox and processed through Sidekiq's `email_receiver` queue. Note that since Mailroom has poor observability, we use Sidekiq metrics for this, and this could lead to certain Sidekiq problems being attributed to Mailroom
 
@@ -168,6 +168,6 @@ groups:
       slo_alert: "no"
       user_impacting: "yes"
     expr: |
-      gitlab_component_ops:rate_5m{type="mailroom", component="emailsProcessed", stage="main", monitor="global"} offset 1h
+      gitlab_component_ops:rate_5m{component="emailsProcessed",monitor="global",stage="main",type="mailroom"} offset 1h
       unless
-      gitlab_component_ops:rate_5m{type="mailroom", component="emailsProcessed", stage="main", monitor="global"}
+      gitlab_component_ops:rate_5m{component="emailsProcessed",monitor="global",stage="main",type="mailroom"}
