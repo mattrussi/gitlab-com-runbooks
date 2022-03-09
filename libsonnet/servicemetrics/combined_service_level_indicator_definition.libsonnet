@@ -19,7 +19,7 @@ local combinedServiceLevelIndicatorDefinition(
   team=null,
   serviceAggregation=false,
   staticLabels={},
-  ignoreTrafficCessation=false,
+  trafficCessationAlertConfig=true,
   regional=null,
       ) =
   {
@@ -33,7 +33,7 @@ local combinedServiceLevelIndicatorDefinition(
         featureCategory: featureCategory,
         description: description,
         team: team,
-        ignoreTrafficCessation: ignoreTrafficCessation,
+        trafficCessationAlertConfig: trafficCessationAlertConfig,
         regional: if regional != null then regional else inheritedDefaults.regional,
         severity: componentsInitialised[0].severity,
 

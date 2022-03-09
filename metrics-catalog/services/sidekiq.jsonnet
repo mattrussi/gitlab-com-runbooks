@@ -95,7 +95,7 @@ metricsCatalog.serviceDefinition({
       userImpacting: shard.userImpacting,
       featureCategory: 'not_owned',
       team: 'scalability',
-      ignoreTrafficCessation: shard.ignoreTrafficCessation,
+      trafficCessationAlertConfig: shard.trafficCessationAlertConfig,
       upscaleLongerBurnRates: true,
 
       description: |||

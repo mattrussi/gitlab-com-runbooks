@@ -14,7 +14,7 @@ local histogramApdex = metricsCatalog.histogramApdex;
     configurationName,
     projectId,
     gcpRegion,  // Don't confuse this with the prometheus `region` which is where we collect the metrics, not where google host Cloud Run
-    ignoreTrafficCessation=false,
+    trafficCessationAlertConfig=true,
     apdexSatisfactoryLatency=null,
     team=null,
     additionalToolingLinks=[]
@@ -24,7 +24,7 @@ local histogramApdex = metricsCatalog.histogramApdex;
     metricsCatalog.serviceLevelIndicatorDefinition({
       userImpacting: userImpacting,
       [if team != null then 'team']: team,
-      ignoreTrafficCessation: ignoreTrafficCessation,
+      trafficCessationAlertConfig: trafficCessationAlertConfig,
 
       staticLabels: {
         // TODO: In future, we may need to allow other stages here too

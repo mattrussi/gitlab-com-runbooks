@@ -25,8 +25,31 @@ local annotationsForTrafficAlert(service, sli, alertDescriptor, aggregationSet, 
     ),
   };
 
+local getTrafficCessationAlertSelector(service, sli, alertDescriptor) =
+  local aggregationSet = alertDescriptor.aggregationSet;
+  local aggregationSetId = aggregationSet.id;
+  local sliTrafficCessationConfig = sli.trafficCessationAlertConfig;
+
+  if sli.trafficCessationAlertConfig == false then
+    null
+  else if sli.trafficCessationAlertConfig == true then
+    {}
+  else if std.isObject(sliTrafficCessationConfig) then
+    if std.objectHas(sliTrafficCessationConfig, aggregationSetId) then
+      local aggregationSetValue = sliTrafficCessationConfig[aggregationSetId];
+      if aggregationSetValue == false then
+        null
+      else if aggregationSetValue == true then
+        {}
+      else
+        aggregationSetValue
+    else
+      {}
+  else
+    error 'Invalid traffic cessation config';
+
 // Generates traffic cessation alerts for a service/sli/alertDescriptor combination
-function(service, sli, alertDescriptor)
+local generateTrafficCessationAlerts(service, sli, alertDescriptor, trafficCessationAlertSelector) =
   local aggregationSet = alertDescriptor.aggregationSet;
 
   // Returns burn rate periods, in order of ascending duration
@@ -44,9 +67,11 @@ function(service, sli, alertDescriptor)
   local aggregationSetSelector = aggregationSet.selector;
 
   local selector = {
-    type: service.type,
-    component: sli.name,
-  } + aggregationSetSelector + alertDescriptor.trafficCessationSelector;
+                     type: service.type,
+                     component: sli.name,
+                   } + aggregationSetSelector
+                   + alertDescriptor.trafficCessationSelector
+                   + trafficCessationAlertSelector;
 
   local formatConfig = {
     opsRateShortPeriod: opsRateShortPeriod,
@@ -104,4 +129,12 @@ function(service, sli, alertDescriptor)
              This could be caused by a change to the metrics used in the SLI, or by the service not receiving traffic.
            |||
          ),
-     }] else [])
+     }] else []);
+
+function(service, sli, alertDescriptor)
+  local trafficCessationAlertSelector = getTrafficCessationAlertSelector(service, sli, alertDescriptor);
+
+  // null selector means no traffic cessation alerts for this SLI/aggregationset combination
+  if trafficCessationAlertSelector != null then
+    generateTrafficCessationAlerts(service, sli, alertDescriptor, trafficCessationAlertSelector)
+  else []
