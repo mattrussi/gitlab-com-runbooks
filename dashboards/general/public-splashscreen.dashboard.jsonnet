@@ -16,13 +16,11 @@ basic.dashboard(
     content=|||
       # GitLab Public Dashboards
 
-      Welcome to the GitLab public dashboard. GitLab [values transparency](https://about.gitlab.com/handbook/values/#transparency),
-      so we maintain a public copy of our internal dashboards.
+      Our internal dashboards are no longer available publicly due to stability and confidentiality concerns (see https://gitlab.com/gitlab-com/gl-infra/reliability/-/issues/14432).
+
+      Key metrics will now be published on our status page instead: https://status.gitlab.com/ (see https://gitlab.com/groups/gitlab-com/gl-infra/-/epics/698).
 
       Our dashboards are managed using Grafonnet, and the source is [publicly available on GitLab.com](https://gitlab.com/gitlab-com/runbooks/tree/master/dashboards).
-
-      For security reasons, and owing to an TOS violation in which an anonymous user downloaded 8GB/day of metric data for several weeks through our public Grafana instance, we now require all users to log into `dashboards.gitlab.com` with a GitLab.com login.
-      Note that in order to protect personally identifiable information (PII), and due to stricter query limitations and timeouts on this public instance, not all dashboards will work correctly.
     |||
   ),
   gridPos={

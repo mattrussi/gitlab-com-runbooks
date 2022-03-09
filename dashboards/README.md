@@ -2,7 +2,7 @@
 
 This folder is used to keep the source for some of our Grafana dashboards, checked into, and managed by, git.
 
-On `master` builds, the dashboards will be uploaded to https://dashboards.gitlab.com. Any local changes to these dashboards on
+On `master` builds, the dashboards will be uploaded to https://dashboards.gitlab.net. Any local changes to these dashboards on
 the Grafana instance will be overwritten.
 
 The dashboards are kept in [`grafonnet`](https://github.com/grafana/grafonnet-lib) format, which is based on the [jsonnet template language](https://jsonnet.org/).
