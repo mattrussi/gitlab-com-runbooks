@@ -53,7 +53,7 @@ metricsCatalog.serviceDefinition({
     labelSelectors: kubeLabelSelectors(
       podSelector=kubeSelector,
       ingressSelector=null,
-      # TODO: use a better selector for Sidekiq HPAs: https://gitlab.com/gitlab-com/runbooks/-/issues/87
+      // TODO: use a better selector for Sidekiq HPAs: https://gitlab.com/gitlab-com/runbooks/-/issues/87
       hpaSelector={ horizontalpodautoscaler: 'gitlab-sidekiq-all-in-1-v2' },
       nodeSelector={ workload: 'sidekiq' },
       deploymentSelector=kubeSelector
