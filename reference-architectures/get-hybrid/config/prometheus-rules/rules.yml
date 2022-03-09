@@ -1973,15 +1973,15 @@ groups:
 - interval: 5m
   name: GitLab Component Saturation Statistics
   rules:
-  - expr: quantile_over_time(0.95, gitlab_component_saturation:ratio{monitor="global"}[1w])
+  - expr: quantile_over_time(0.95, gitlab_component_saturation:ratio{}[1w])
     record: gitlab_component_saturation:ratio_quantile95_1w
-  - expr: quantile_over_time(0.99, gitlab_component_saturation:ratio{monitor="global"}[1w])
+  - expr: quantile_over_time(0.99, gitlab_component_saturation:ratio{}[1w])
     record: gitlab_component_saturation:ratio_quantile99_1w
-  - expr: quantile_over_time(0.95, gitlab_component_saturation:ratio{monitor="global"}[1h])
+  - expr: quantile_over_time(0.95, gitlab_component_saturation:ratio{}[1h])
     record: gitlab_component_saturation:ratio_quantile95_1h
-  - expr: quantile_over_time(0.99, gitlab_component_saturation:ratio{monitor="global"}[1h])
+  - expr: quantile_over_time(0.99, gitlab_component_saturation:ratio{}[1h])
     record: gitlab_component_saturation:ratio_quantile99_1h
-  - expr: avg_over_time(gitlab_component_saturation:ratio{monitor="global"}[1h])
+  - expr: avg_over_time(gitlab_component_saturation:ratio{}[1h])
     record: gitlab_component_saturation:ratio_avg_1h
 - interval: 1m
   name: GitLab Saturation Alerts
@@ -2017,8 +2017,8 @@ groups:
       title: The Average Service CPU Utilization resource of the {{ $labels.type }}
         service has a saturation exceeding SLO and is close to its capacity limit.
     expr: |
-      gitlab_component_saturation:ratio{component="cpu",monitor="global"} > on(component) group_left
-      slo:max:hard:gitlab_component_saturation:ratio{component="cpu",monitor="global"}
+      gitlab_component_saturation:ratio{component="cpu"} > on(component) group_left
+      slo:max:hard:gitlab_component_saturation:ratio{component="cpu"}
     for: 5m
     labels:
       alert_type: cause
@@ -2059,8 +2059,8 @@ groups:
       title: The Disk inode Utilization per Device per Node resource of the {{ $labels.type
         }} service has a saturation exceeding SLO and is close to its capacity limit.
     expr: |
-      gitlab_component_saturation:ratio{component="disk_inodes",monitor="global"} > on(component) group_left
-      slo:max:hard:gitlab_component_saturation:ratio{component="disk_inodes",monitor="global"}
+      gitlab_component_saturation:ratio{component="disk_inodes"} > on(component) group_left
+      slo:max:hard:gitlab_component_saturation:ratio{component="disk_inodes"}
     for: 15m
     labels:
       alert_type: cause
@@ -2098,8 +2098,8 @@ groups:
       title: The Disk Space Utilization per Device per Node resource of the {{ $labels.type
         }} service has a saturation exceeding SLO and is close to its capacity limit.
     expr: |
-      gitlab_component_saturation:ratio{component="disk_space",monitor="global"} > on(component) group_left
-      slo:max:hard:gitlab_component_saturation:ratio{component="disk_space",monitor="global"}
+      gitlab_component_saturation:ratio{component="disk_space"} > on(component) group_left
+      slo:max:hard:gitlab_component_saturation:ratio{component="disk_space"}
     for: 15m
     labels:
       alert_type: cause
@@ -2141,8 +2141,8 @@ groups:
       title: The Go Memory Utilization per Node resource of the {{ $labels.type }}
         service has a saturation exceeding SLO and is close to its capacity limit.
     expr: |
-      gitlab_component_saturation:ratio{component="go_memory",monitor="global"} > on(component) group_left
-      slo:max:hard:gitlab_component_saturation:ratio{component="go_memory",monitor="global"}
+      gitlab_component_saturation:ratio{component="go_memory"} > on(component) group_left
+      slo:max:hard:gitlab_component_saturation:ratio{component="go_memory"}
     for: 5m
     labels:
       alert_type: cause
@@ -2185,8 +2185,8 @@ groups:
       title: The Kube Container CPU Utilization resource of the {{ $labels.type }}
         service has a saturation exceeding SLO and is close to its capacity limit.
     expr: |
-      gitlab_component_saturation:ratio{component="kube_container_cpu",monitor="global"} > on(component) group_left
-      slo:max:hard:gitlab_component_saturation:ratio{component="kube_container_cpu",monitor="global"}
+      gitlab_component_saturation:ratio{component="kube_container_cpu"} > on(component) group_left
+      slo:max:hard:gitlab_component_saturation:ratio{component="kube_container_cpu"}
     for: 15m
     labels:
       alert_type: cause
@@ -2223,8 +2223,8 @@ groups:
       title: The Kube Container Memory Utilization resource of the {{ $labels.type
         }} service has a saturation exceeding SLO and is close to its capacity limit.
     expr: |
-      gitlab_component_saturation:ratio{component="kube_container_memory",monitor="global"} > on(component) group_left
-      slo:max:hard:gitlab_component_saturation:ratio{component="kube_container_memory",monitor="global"}
+      gitlab_component_saturation:ratio{component="kube_container_memory"} > on(component) group_left
+      slo:max:hard:gitlab_component_saturation:ratio{component="kube_container_memory"}
     for: 15m
     labels:
       alert_type: cause
@@ -2263,8 +2263,8 @@ groups:
       title: The Average Node Pool CPU Utilization resource of the {{ $labels.type
         }} service has a saturation exceeding SLO and is close to its capacity limit.
     expr: |
-      gitlab_component_saturation:ratio{component="kube_pool_cpu",monitor="global"} > on(component) group_left
-      slo:max:hard:gitlab_component_saturation:ratio{component="kube_pool_cpu",monitor="global"}
+      gitlab_component_saturation:ratio{component="kube_pool_cpu"} > on(component) group_left
+      slo:max:hard:gitlab_component_saturation:ratio{component="kube_pool_cpu"}
     for: 5m
     labels:
       alert_type: cause
@@ -2299,8 +2299,8 @@ groups:
       title: The Memory Utilization per Node resource of the {{ $labels.type }} service
         has a saturation exceeding SLO and is close to its capacity limit.
     expr: |
-      gitlab_component_saturation:ratio{component="memory",monitor="global"} > on(component) group_left
-      slo:max:hard:gitlab_component_saturation:ratio{component="memory",monitor="global"}
+      gitlab_component_saturation:ratio{component="memory"} > on(component) group_left
+      slo:max:hard:gitlab_component_saturation:ratio{component="memory"}
     for: 5m
     labels:
       alert_type: cause
@@ -2339,8 +2339,8 @@ groups:
       title: The Node Scheduler Waiting Time resource of the {{ $labels.type }} service
         has a saturation exceeding SLO and is close to its capacity limit.
     expr: |
-      gitlab_component_saturation:ratio{component="node_schedstat_waiting",monitor="global"} > on(component) group_left
-      slo:max:hard:gitlab_component_saturation:ratio{component="node_schedstat_waiting",monitor="global"}
+      gitlab_component_saturation:ratio{component="node_schedstat_waiting"} > on(component) group_left
+      slo:max:hard:gitlab_component_saturation:ratio{component="node_schedstat_waiting"}
     for: 90m
     labels:
       alert_type: cause
@@ -2377,8 +2377,8 @@ groups:
       title: The Average CPU Utilization for Opensearch resource of the {{ $labels.type
         }} service has a saturation exceeding SLO and is close to its capacity limit.
     expr: |
-      gitlab_component_saturation:ratio{component="opensearch_cpu",monitor="global"} > on(component) group_left
-      slo:max:hard:gitlab_component_saturation:ratio{component="opensearch_cpu",monitor="global"}
+      gitlab_component_saturation:ratio{component="opensearch_cpu"} > on(component) group_left
+      slo:max:hard:gitlab_component_saturation:ratio{component="opensearch_cpu"}
     for: 5m
     labels:
       alert_type: cause
@@ -2413,8 +2413,8 @@ groups:
       title: The Disk Utilization Overall resource of the {{ $labels.type }} service
         has a saturation exceeding SLO and is close to its capacity limit.
     expr: |
-      gitlab_component_saturation:ratio{component="opensearch_disk_space",monitor="global"} > on(component) group_left
-      slo:max:hard:gitlab_component_saturation:ratio{component="opensearch_disk_space",monitor="global"}
+      gitlab_component_saturation:ratio{component="opensearch_disk_space"} > on(component) group_left
+      slo:max:hard:gitlab_component_saturation:ratio{component="opensearch_disk_space"}
     for: 5m
     labels:
       alert_type: cause
@@ -2451,8 +2451,8 @@ groups:
       title: The Average CPU Utilization per Node resource of the {{ $labels.type
         }} service has a saturation exceeding SLO and is close to its capacity limit.
     expr: |
-      gitlab_component_saturation:ratio{component="single_node_cpu",monitor="global"} > on(component) group_left
-      slo:max:hard:gitlab_component_saturation:ratio{component="single_node_cpu",monitor="global"}
+      gitlab_component_saturation:ratio{component="single_node_cpu"} > on(component) group_left
+      slo:max:hard:gitlab_component_saturation:ratio{component="single_node_cpu"}
     for: 10m
     labels:
       alert_type: cause

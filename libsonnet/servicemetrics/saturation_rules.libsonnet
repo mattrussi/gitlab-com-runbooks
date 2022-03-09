@@ -5,7 +5,7 @@ local generateSaturationRulesGroup(
   includeDangerouslyThanosEvaluated,
   saturationResources
       ) =
-  local selectorHash = if includeDangerouslyThanosEvaluated then { monitor: 'global' } else {};
+  local selectorHash = if includeDangerouslyThanosEvaluated && !includePrometheusEvaluated then { monitor: 'global' } else {};
   local selector = selectors.serializeHash(selectorHash);
 
   local saturationResourceNames = std.objectFields(saturationResources);
