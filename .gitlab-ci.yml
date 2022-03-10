@@ -2,9 +2,14 @@ include:
   # Import GL_ASDF_* variables to match versions declared in ASDF
   - local: .gitlab-ci-asdf-versions.yml
 
+  # automatically tag releases using semantic-releases, based on conventional commit messages
+  - project: 'gitlab-com/gl-infra/common-ci-tasks'
+    file: 'semantic-release.yml'
+
 stages:
   - notify
   - images
+  - release # used for semantic-release
   - test
   - deploy
   - deploy-rules-production
@@ -546,28 +551,6 @@ docker_image_build:
     - tags
   except:
     - schedules
-
-publish:
-  image: node:14
-  stage: images
-  before_script:
-    - npm install -g semantic-release @semantic-release/gitlab
-  script:
-    - semantic-release
-  only:
-    refs:
-      - master
-  except:
-    variables:
-      # Publishing only happens on gitlab.com, the tag
-      # will be created on gitlab.com, mirrored to ops,
-      # and the image will be built in both locations
-      - $CI_API_V4_URL == "https://ops.gitlab.net/api/v4"
-      # Don't run when the pipeline was triggered by another pipeline
-      - $CI_PIPELINE_SOURCE == "pipeline"
-    refs:
-      - tags
-      - schedules
 
 test-alertmanager:
   extends: .default-job-rules

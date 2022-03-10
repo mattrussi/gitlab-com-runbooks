@@ -9,12 +9,12 @@ You can use [this metric](https://prometheus.gprd.gitlab.net/graph?g0.range_inpu
 
 Check if values are getting close to `1`
 
-You can also take a look on [this graph](https://dashboards.gitlab.com/d/000000144/postgresql-overview?orgId=1&from=1594050133725&to=1594060933725&var-prometheus=Global&var-environment=gprd&var-type=patroni&viewPanel=9) - part of the [Patroni Overview](https://dashboards.gitlab.com/d/000000144/postgresql-overview?orgId=1) panel - to check the host load.
+You can also take a look on [this graph](https://dashboards.gitlab.net/d/000000144/postgresql-overview?orgId=1&from=1594050133725&to=1594060933725&var-prometheus=Global&var-environment=gprd&var-type=patroni&viewPanel=9) - part of the [Patroni Overview](https://dashboards.gitlab.net/d/000000144/postgresql-overview?orgId=1) panel - to check the host load.
 ![](img/patroni-load.png)
 
 
 ### Check for memory utilization
-Check [this graph](https://dashboards.gitlab.com/d/000000144/postgresql-overview?orgId=1&from=now-3h&to=now&var-prometheus=Global&var-environment=gprd&var-type=patroni&viewPanel=12) for an overview of memory utilization:
+Check [this graph](https://dashboards.gitlab.net/d/000000144/postgresql-overview?orgId=1&from=now-3h&to=now&var-prometheus=Global&var-environment=gprd&var-type=patroni&viewPanel=12) for an overview of memory utilization:
 ![](img/patroni-memory.png)
 
 ### Check for Context Switches anomalies
@@ -30,7 +30,7 @@ Specially after a failover, a DB repair (indexing, repacking), the cache access 
 
 
 ### Check for IO saturation
-Disk saturation can cause severe service degradation. Check the [PostgreSQL Overview](https://dashboards.gitlab.com/d/000000144/postgresql-overview?orgId=1) dashboard, specially at the following graphs:
+Disk saturation can cause severe service degradation. Check the [PostgreSQL Overview](https://dashboards.gitlab.net/d/000000144/postgresql-overview?orgId=1) dashboard, specially at the following graphs:
 - disk IO wait `sdb`
 - Disk IO utilization `sdb`
 - Retransmit rate (outbound only), resending possibly lost packets
@@ -131,10 +131,10 @@ In general, when those differences are not easy to explain, its because on some 
 
 ### Check for slow queries
 
-[This board](https://dashboards.gitlab.com/d/000000278/postgresql-slow-queries?orgId=1) contains information about how many queries took more than 5 seconds.
+[This board](https://dashboards.gitlab.net/d/000000278/postgresql-slow-queries?orgId=1) contains information about how many queries took more than 5 seconds.
 ![](img/patroni-slow-queries.png)
 
-Check the [PostgreSQL queries](https://dashboards.gitlab.com/d/000000153/postgresql-queries?orgId=1&from=now-3h&to=now&var-environment=gprd&var-type=patroni&var-fqdn=patroni-01-db-gprd.c.gitlab-production.internal&var-prometheus=Global) board to check for an increasing rate of slow queries (`Slow queries` graph). You can also check for blocked queries (`Blocked Queries` graph).
+Check the [PostgreSQL queries](https://dashboards.gitlab.net/d/000000153/postgresql-queries?orgId=1&from=now-3h&to=now&var-environment=gprd&var-type=patroni&var-fqdn=patroni-01-db-gprd.c.gitlab-production.internal&var-prometheus=Global) board to check for an increasing rate of slow queries (`Slow queries` graph). You can also check for blocked queries (`Blocked Queries` graph).
 
 ![](img/patroni-postgresql-queries.png)
 
@@ -142,7 +142,7 @@ For troubleshooting blocked queries, see [this runbook](postgresql-locking.md)
 
 
 ### Checkpoint activity
-Checkpoint is the act of pushing all the write buffers to disk. A sudden increase of write activity (like indexing, repacking, etc) may also increase the rate of checkpoints, and can cause the system to slow down. You can see [this graph](https://dashboards.gitlab.com/d/000000224/postgresql-bloat?viewPanel=35&orgId=1&from=now-1h&to=now) to see how often checkpoints are taking place. Focus on the current leader. If checkpoints do ocurr too often (more than [checkpoint_warning](https://postgresqlco.nf/en/doc/param/checkpoint_warning/11/)) you will see a message in the logs, similar to
+Checkpoint is the act of pushing all the write buffers to disk. A sudden increase of write activity (like indexing, repacking, etc) may also increase the rate of checkpoints, and can cause the system to slow down. You can see [this graph](https://dashboards.gitlab.net/d/000000224/postgresql-bloat?viewPanel=35&orgId=1&from=now-1h&to=now) to see how often checkpoints are taking place. Focus on the current leader. If checkpoints do ocurr too often (more than [checkpoint_warning](https://postgresqlco.nf/en/doc/param/checkpoint_warning/11/)) you will see a message in the logs, similar to
 
 ``` LOG:  checkpoints are occurring too frequently (8 seconds apart) ```
 
@@ -157,7 +157,7 @@ Too much concurrent activity can affect performance. Refer to [this runbook](pos
 ### Checks for pgBouncer
 
 #### Waiting clients
-The [PgBouncer Overview](https://dashboards.gitlab.com/d/PwlB97Jmk/pgbouncer-overview?orgId=1&from=now-3h&to=now) shows pgBouncer related information.
+The [PgBouncer Overview](https://dashboards.gitlab.net/d/PwlB97Jmk/pgbouncer-overview?orgId=1&from=now-3h&to=now) shows pgBouncer related information.
 
 ![](img/pgbouncer-overview.png)
 

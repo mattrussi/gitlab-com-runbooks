@@ -140,7 +140,6 @@ By editing list inside `prometheus.jobs.blackbox-ssl.target` attribute in the ro
 | chef.gitlab.com | COMODO RSA Domain Validation Secure Server CA | Chef server | [Chef Server][cs] | - |
 | contributors.gitlab.com | GlobalSign CloudSSL CA - SHA256 - G3 | Redirect to gitlab.biterg.io, hosted on fastly | [Fastly][f] | Auto-renewed shared certificate |
 | customers.gitlab.com | Sectigo RSA Domain Validation Secure Server CA | Customer management | [Chef Vault][cv] | data bag: `customers-gitlab-com`, item: `_default`, fields: `ssl_certificate`, `ssl_key` |
-| dashboards.gitlab.com | Let's Encrypt Authority X3 | Public grafana | automated [GCP Load Balancer][gcp] | project: `gitlab-ops` |
 | dashboards.gitlab.net | Let's Encrypt Authority X3 | Internal grafana | automated [GCP Load Balancer][gcp] | project: `gitlab-ops`|
 | dev.gitlab.org | COMODO RSA Domain Validation Secure Server CA | dev instance | [Chef Vault][cv] | data bag: `dev-gitlab-org`, item: `_default`, fields: `ssl.certificate`, `ssl.private_key` |
 | docs.gitlab.com | Let's Encrypt Authority X3 | - | automated (GitLab Pages managed) | |

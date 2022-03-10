@@ -10,7 +10,7 @@
 
 ## Prechecks
 
-* This [dashboard](https://dashboards.gitlab.com/d/USVj3qHmk/logging)
+* This [dashboard](https://dashboards.gitlab.net/d/USVj3qHmk/logging)
   will provide details on the status of our pubsubs
   * If the queues for the following are growing, continue to investigate:
     * Backlog size

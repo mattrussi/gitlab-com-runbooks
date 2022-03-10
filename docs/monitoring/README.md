@@ -87,7 +87,6 @@ implementation details.
 | ~"Service::Prometheus" | The multiple prometheus servers that we run. | [gl-infra/infrastructure](https://gitlab.com/gitlab-com/gl-infra/reliability/-/issues?scope=all&state=opened&label_name[]=Service%3A%3APrometheus) |
 | ~"Service::Thanos" | Anything related to [thanos](https://thanos.io/). | [gl-infra/infrastructure](https://gitlab.com/gitlab-com/gl-infra/reliability/-/issues?scope=all&state=opened&label_name[]=Service%3A%3AThanos) |
 | ~"Service::Grafana" | Anything related to <https://dashboards.gitlab.net/> | [gl-infra/infrastructure](https://gitlab.com/gitlab-com/gl-infra/reliability/-/issues?scope=all&state=opened&label_name[]=Service%3A%3AGrafana)
-| ~"Service::PublicGrafana" | Anything related to <https://dashboards.gitlab.com/> | [gl-infra/infrastructure](https://gitlab.com/gitlab-com/gl-infra/reliability/-/issues?scope=all&state=opened&label_name[]=Service%3A%3APublicGrafana)
 | ~"Service::AlertManager" | Anything related to AlertManager | [gl-infra/infrastructure](https://gitlab.com/gitlab-com/gl-infra/reliability/-/issues?scope=all&state=opened&label_name[]=Service%3A%3AAlertManager)
 | ~"Service::Monitoring-Other" | The service we provide to engineers, this covers metrics, labels and anything else that doesn't belong in the services above. | [gl-infra/infrastructure](https://gitlab.com/gitlab-com/gl-infra/reliability/-/issues?scope=all&state=opened&label_name[]=Service%3A%3AMonitoring-Other) |
 
@@ -117,23 +116,8 @@ use the "Global" data source as it points to Thanos which aggregates metrics fro
 than any of the regular Prometheus instances.
 
 All dashboards are downloaded/saved automatically into https://gitlab.com/gitlab-org/grafana-dashboards, in the dashboards directory.
-This happens from the gitlab-grafan:export_dashboards recipe, which runs some Ruby/chef code at every *chef run* on the *public* dashboards server, pulling from the pulling from the *private* dashboards server and then committing any changes to the git repository.  The repo is also mirror to https://ops.gitlab.net/gitlab-org/grafana-dashboards
-
-Grafana dashboards on dashboards.gitlab.com are synced from dashboards.gitlab.net every 5 minutes by a script (/usr/local/sbin/sync_grafana_dashboards) run by cron every 5 minutes on the public grafana server (dashboards-com-01-inf-ops.c.gitlab-ops.internal).
-
-### Public dashboards
-
-Available to all gitlab.com users at <https://dashboards.gitlab.com>. The query
-stack is:
-
-- [Trickster](https://github.com/tricksterproxy/trickster) as Grafana's
-  datasource, running colocated with Grafana.
-- Trickster calls an also-colocated thanos-query instance.
-- This thanos-query is pointed at gprd and gstg Prometheus shards, and also at a
-  dedicated thanos-store deployment ("thanos-store-global").
-
-In this way we isolate public queries from interfering with our metrics stack as
-much as possible, while still providing metrics in the interest of transparency.
+This happens from the [dashboards exports scheduled pipeline](https://gitlab.com/gitlab-org/grafana-dashboards/-/pipeline_schedules), which runs a Ruby script pulling all dashboards from Grafana and then committing any changes to the git repository.
+The repo is also mirror to https://ops.gitlab.net/gitlab-org/grafana-dashboards.
 
 ## Instrumentation
 
