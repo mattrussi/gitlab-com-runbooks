@@ -134,7 +134,7 @@ INFO: 2021/09/02 15:57:44.189580 FILE PATH: 000000050005E5750000001D.br
 INFO: 2021/09/02 15:57:44.482529 FILE PATH: 000000050005E5750000001E.br
 ```
 
-> See also: [How to check if WAL-E/WAL-G backups are
+> See also: [How to check if WAL-G backups are
 > running](#how-to-check-if-wal-e-backups-are-running).
 
 #### How to check the full backups (basebackups) creation
@@ -174,7 +174,7 @@ $ sudo tail -n30 /var/log/wal-g/wal-g_backup_push.log.1
 <13>Sep  2 00:00:01 backup.sh:
 ```
 
-#### Checklist of reconfiguration / WAL-G upgrades
+#### Checklist of reconfiguration WAL-G upgrades
 After upgrades or reconfiguration check:
 1. Check that WAL-G binary is working and shows the expected version:
     ```shell
@@ -201,6 +201,8 @@ After upgrades or reconfiguration check:
 ## Restoring Data
 ### Oh Sh*t, I Need to Get It BACK!
 Before we start, take a deep breath and don't panic.
+
+**TODO: update to WAL-G**
 
 #### Production
 
@@ -295,7 +297,7 @@ WAL-G `/opt/wal-g/bin/backup.sh` script is running on all machines in the patron
 You can check WAL-G `backup-push` in several ways:
 
 1. Metric (injected via prometheus push-gateway from the backup script):
-[gitlab_com:last_wale_successful_basebackup_age_in_hours](https://thanos.gitlab.net/graph?g0.range_input=1d&g0.max_source_resolution=0s&g0.expr=gitlab_com%3Alast_wale_successful_basebackup_age_in_hours&g0.tab=0)
+[gitlab_com:last_walg_successful_basebackup_age_in_hours](https://thanos.gitlab.net/graph?g0.range_input=1d&g0.max_source_resolution=0s&g0.expr=gitlab_com%3Alast_walg_successful_basebackup_age_in_hours&g0.tab=0)
 1. using Kibana (not valid while wal-g logs are not yet shipped to Elastic Search): <!-- TODO: implement redirect of wal-g output to syslog similar to https://gitlab.com/gitlab-com/gl-infra/infrastructure/-/issues/10499 -->
   - [`log.gprd.gitlab.net`](https://log.gprd.gitlab.net)
   - index: `pubsub-system-inf-gprd`
@@ -372,11 +374,11 @@ For each failed attempt to archive a wal file, there would be an entry like the 
 
 ### Continuous Shipping of WAL Files (wal-push) is not working
 
-Metric (via mtail): [gitlab_com:last_wale_backup_age_in_seconds
-metric](https://thanos.gitlab.net/graph?g0.range_input=2h&g0.max_source_resolution=0s&g0.expr=gitlab_com%3Alast_wale_backup_age_in_seconds&g0.tab=0)
+Metric (via mtail): [gitlab_com:last_walg_backup_age_in_seconds
+metric](https://thanos.gitlab.net/graph?g0.range_input=2h&g0.max_source_resolution=0s&g0.expr=gitlab_com%3Alast_walg_backup_age_in_seconds&g0.tab=0)
 
 *Attention*: If WAL shipping (`archive_command`) fails for some reason, WAL
-files will be kept on the server until the disk is running full!
+files will be kept on the server until the disk is running full! [Check disk available space of Prod Patroni servers] (https://thanos-query.ops.gitlab.net/graph?g0.expr=node_filesystem_avail_bytes%7Benv%3D%22gprd%22%2Ctype%3D%22patroni%22%2Cmountpoint%3D%22%2Fvar%2Fopt%2Fgitlab%22%2Cshard%3D%22default%22%7D&g0.tab=0&g0.stacked=0&g0.range_input=2w&g0.max_source_resolution=0s&g0.deduplicate=1&g0.partial_response=0&g0.store_matches=%5B%5D)
 
 #### WAL-G `wal-push` process stuck ####
 
