@@ -14,11 +14,14 @@ For remote access to the VMs, refer to
 [these instructions](https://gitlab.com/gitlab-org/customers-gitlab-com/-/blob/staging/doc/testing/staging.md#ssh-config)
 
 #### CDN
-Both staging and production services are proxied through Cloudflare.
+Both staging and production services are proxied through Cloudflare. Refer to
+the section for NGINX below for rate limit information.
 
 #### NGINX
 The web server on the VM has a rate limit set that should return a 429
-when the rate is exceeded.
+when the rate is exceeded. This rate limit is specific to API Seat Requests
+and is is managed in
+[Ansible](https://gitlab.com/gitlab-com/gl-infra/customersdot-ansible).
 
 #### Logs
 * Local Logs
@@ -30,8 +33,9 @@ when the rate is exceeded.
   - https://cloudlogging.app.goo.gl/Jew7kUFaW8SUgeew9
 
 #### Metrics
-There are no current metrics or dashboards that can be referenced. Building
-out metrics and dashboards are TODO tasks.
+Metrics are currently limited, only some are exported (node-exporter),
+no dashboards exist that can be referenced. Building out metrics and dashboards
+are TODO tasks.
 
 #### Database Access
 Once you have logged into a VM, if you have the rights you can connect to the
@@ -76,5 +80,5 @@ Chef is used essentially to bootstrap user access for users and Ansible.
 * [Staging Base](https://gitlab.com/gitlab-com/gl-infra/chef-repo/-/blob/master/roles/stgsub-base.json)
 * [Production Base](https://gitlab.com/gitlab-com/gl-infra/chef-repo/-/blob/master/roles/prdsub-base.json)
 
-[Ansible](https://gitlab.com/gitlab-com/gl-infra/customersdot-ansible-poc/)
+[Ansible](https://gitlab.com/gitlab-com/gl-infra/customersdot-ansible)
 is used to deploy the latest code to staging.
