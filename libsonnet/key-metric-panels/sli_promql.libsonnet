@@ -1,8 +1,12 @@
+local labelTaxonomy = import 'label-taxonomy/label-taxonomy.libsonnet';
 local multiburnFactors = import 'mwmbr/multiburn_factors.libsonnet';
 local aggregations = import 'promql/aggregations.libsonnet';
 local selectors = import 'promql/selectors.libsonnet';
 
-local globalSelector = { monitor: 'global' };
+// Only use the monitor=global selector on Thanos instances...
+local globalSelector = if labelTaxonomy.hasLabelFor(labelTaxonomy.labels.environmentThanos) then
+  { monitor: 'global' }
+else {};
 
 local apdexQuery(aggregationSet, aggregationLabels, selectorHash, range=null, worstCase=true, offset=null, clampToExpression=null) =
   local metric = aggregationSet.getApdexRatioMetricForBurnRate('5m');
@@ -116,8 +120,13 @@ local errorRatioQuery(aggregationSet, aggregationLabels, selectorHash, range=nul
 
 local sloLabels(selectorHash) =
   // An `component=''` will result in the overal service SLO recording, not a component specific one
-  local defaults = { monitor: 'global', component: '' };
-  local supportedStaticLabels = std.set(['component', 'tier', 'type']);
+  local defaults = globalSelector { component: '' };
+
+  local supportedStaticLabels = std.set(labelTaxonomy.labelTaxonomy(
+    labelTaxonomy.labels.sliComponent |
+    labelTaxonomy.labels.tier |
+    labelTaxonomy.labels.service
+  ));
   local supportedSelector = std.foldl(
     function(memo, labelName)
       if std.setMember(labelName, supportedStaticLabels) then

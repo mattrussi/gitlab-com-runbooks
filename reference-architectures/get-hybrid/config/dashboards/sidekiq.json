@@ -248,7 +248,7 @@
           "refId": "A"
         },
         {
-          "expr": "(1 - 6 * (1 - avg(slo:min:events:gitlab_service_apdex:ratio{component=\"\",monitor=\"global\",type=\"sidekiq\"})\n))\n",
+          "expr": "(1 - 6 * (1 - avg(slo:min:events:gitlab_service_apdex:ratio{component=\"\",type=\"sidekiq\"})\n))\n",
           "format": "time_series",
           "interval": "5m",
           "intervalFactor": 3,
@@ -256,7 +256,7 @@
           "refId": "B"
         },
         {
-          "expr": "(1 - 14.4 * (1 - avg(slo:min:events:gitlab_service_apdex:ratio{component=\"\",monitor=\"global\",type=\"sidekiq\"})\n))\n",
+          "expr": "(1 - 14.4 * (1 - avg(slo:min:events:gitlab_service_apdex:ratio{component=\"\",type=\"sidekiq\"})\n))\n",
           "format": "time_series",
           "interval": "5m",
           "intervalFactor": 3,
@@ -272,7 +272,7 @@
           "refId": "D"
         },
         {
-          "expr": "clamp_min(\n  gitlab_service_apdex:ratio_5m{type=\"sidekiq\"} offset 1w\n,\n  scalar(min((1 - 14.4 * (1 - avg(slo:min:events:gitlab_service_apdex:ratio{component=\"\",monitor=\"global\",type=\"sidekiq\"})\n))\n))\n)\n",
+          "expr": "clamp_min(\n  gitlab_service_apdex:ratio_5m{type=\"sidekiq\"} offset 1w\n,\n  scalar(min((1 - 14.4 * (1 - avg(slo:min:events:gitlab_service_apdex:ratio{component=\"\",type=\"sidekiq\"})\n))\n))\n)\n",
           "format": "time_series",
           "interval": "1m",
           "intervalFactor": 3,
@@ -496,7 +496,7 @@
       "pluginVersion": "7",
       "targets": [
         {
-          "expr": "sum(\n  label_replace(\n    vector(0) and on() (gitlab_service_apdex:ratio_1h{type=\"sidekiq\"}),\n    \"period\", \"na\", \"\", \"\"\n  )\n  or\n  label_replace(\n    vector(1) and on () (gitlab_service_apdex:ratio_5m{type=\"sidekiq\"} \u003c on(tier, type) group_left() (1 - (14.4 * (1 - slo:min:events:gitlab_service_apdex:ratio{component=\"\",monitor=\"global\",type=\"sidekiq\"})))),\n    \"period\", \"5m\", \"\", \"\"\n  )\n  or\n  label_replace(\n    vector(2) and on () (gitlab_service_apdex:ratio_1h{type=\"sidekiq\"} \u003c on(tier, type) group_left() (1 - (14.4 * (1 - slo:min:events:gitlab_service_apdex:ratio{component=\"\",monitor=\"global\",type=\"sidekiq\"})))),\n    \"period\", \"1h\", \"\", \"\"\n  )\n  or\n  label_replace(\n    vector(4) and on () (gitlab_service_apdex:ratio_30m{type=\"sidekiq\"} \u003c on(tier, type) group_left() (1 - (6 * (1 - slo:min:events:gitlab_service_apdex:ratio{component=\"\",monitor=\"global\",type=\"sidekiq\"})))),\n    \"period\", \"30m\", \"\", \"\"\n  )\n  or\n  label_replace(\n    vector(8) and on () (gitlab_service_apdex:ratio_6h{type=\"sidekiq\"} \u003c on(tier, type) group_left() (1 - (6 * (1 - slo:min:events:gitlab_service_apdex:ratio{component=\"\",monitor=\"global\",type=\"sidekiq\"})))),\n    \"period\", \"6h\", \"\", \"\"\n  )\n)\n",
+          "expr": "sum(\n  label_replace(\n    vector(0) and on() (gitlab_service_apdex:ratio_1h{type=\"sidekiq\"}),\n    \"period\", \"na\", \"\", \"\"\n  )\n  or\n  label_replace(\n    vector(1) and on () (gitlab_service_apdex:ratio_5m{type=\"sidekiq\"} \u003c on(tier, type) group_left() (1 - (14.4 * (1 - slo:min:events:gitlab_service_apdex:ratio{component=\"\",type=\"sidekiq\"})))),\n    \"period\", \"5m\", \"\", \"\"\n  )\n  or\n  label_replace(\n    vector(2) and on () (gitlab_service_apdex:ratio_1h{type=\"sidekiq\"} \u003c on(tier, type) group_left() (1 - (14.4 * (1 - slo:min:events:gitlab_service_apdex:ratio{component=\"\",type=\"sidekiq\"})))),\n    \"period\", \"1h\", \"\", \"\"\n  )\n  or\n  label_replace(\n    vector(4) and on () (gitlab_service_apdex:ratio_30m{type=\"sidekiq\"} \u003c on(tier, type) group_left() (1 - (6 * (1 - slo:min:events:gitlab_service_apdex:ratio{component=\"\",type=\"sidekiq\"})))),\n    \"period\", \"30m\", \"\", \"\"\n  )\n  or\n  label_replace(\n    vector(8) and on () (gitlab_service_apdex:ratio_6h{type=\"sidekiq\"} \u003c on(tier, type) group_left() (1 - (6 * (1 - slo:min:events:gitlab_service_apdex:ratio{component=\"\",type=\"sidekiq\"})))),\n    \"period\", \"6h\", \"\", \"\"\n  )\n)\n",
           "format": "time_series",
           "instant": true,
           "interval": "1m",
@@ -621,7 +621,7 @@
           "refId": "A"
         },
         {
-          "expr": "(6 * avg(slo:max:events:gitlab_service_errors:ratio{component=\"\",monitor=\"global\",type=\"sidekiq\"})\n)\n",
+          "expr": "(6 * avg(slo:max:events:gitlab_service_errors:ratio{component=\"\",type=\"sidekiq\"})\n)\n",
           "format": "time_series",
           "interval": "5m",
           "intervalFactor": 3,
@@ -629,7 +629,7 @@
           "refId": "B"
         },
         {
-          "expr": "(14.4 * avg(slo:max:events:gitlab_service_errors:ratio{component=\"\",monitor=\"global\",type=\"sidekiq\"})\n)\n",
+          "expr": "(14.4 * avg(slo:max:events:gitlab_service_errors:ratio{component=\"\",type=\"sidekiq\"})\n)\n",
           "format": "time_series",
           "interval": "5m",
           "intervalFactor": 3,
@@ -645,7 +645,7 @@
           "refId": "D"
         },
         {
-          "expr": "clamp_max(\n  gitlab_service_errors:ratio_5m{type=\"sidekiq\"} offset 1w\n,\n  scalar(max((14.4 * avg(slo:max:events:gitlab_service_errors:ratio{component=\"\",monitor=\"global\",type=\"sidekiq\"})\n)\n))\n)\n",
+          "expr": "clamp_max(\n  gitlab_service_errors:ratio_5m{type=\"sidekiq\"} offset 1w\n,\n  scalar(max((14.4 * avg(slo:max:events:gitlab_service_errors:ratio{component=\"\",type=\"sidekiq\"})\n)\n))\n)\n",
           "format": "time_series",
           "interval": "1m",
           "intervalFactor": 3,
@@ -869,7 +869,7 @@
       "pluginVersion": "7",
       "targets": [
         {
-          "expr": "sum (\n  label_replace(\n    vector(0) and on() (gitlab_service_errors:ratio_1h{type=\"sidekiq\"}),\n    \"period\", \"na\", \"\", \"\"\n  )\n  or\n  label_replace(\n    vector(1) and on() (gitlab_service_errors:ratio_5m{type=\"sidekiq\"} \u003e on(tier, type) group_left() (14.4 * slo:max:events:gitlab_service_errors:ratio{component=\"\",monitor=\"global\",type=\"sidekiq\"})),\n    \"period\", \"5m\", \"\", \"\"\n  )\n  or\n  label_replace(\n    vector(2) and on() (gitlab_service_errors:ratio_1h{type=\"sidekiq\"} \u003e on(tier, type) group_left() (14.4 * slo:max:events:gitlab_service_errors:ratio{component=\"\",monitor=\"global\",type=\"sidekiq\"})),\n    \"period\", \"1h\", \"\", \"\"\n  )\n  or\n  label_replace(\n    vector(4) and on() (gitlab_service_errors:ratio_30m{type=\"sidekiq\"} \u003e on(tier, type) group_left() (6 * slo:max:events:gitlab_service_errors:ratio{component=\"\",monitor=\"global\",type=\"sidekiq\"})),\n    \"period\", \"30m\", \"\", \"\"\n  )\n  or\n  label_replace(\n    vector(8) and on() (gitlab_service_errors:ratio_6h{type=\"sidekiq\"} \u003e on(tier, type) group_left() (6 * slo:max:events:gitlab_service_errors:ratio{component=\"\",monitor=\"global\",type=\"sidekiq\"})),\n    \"period\", \"6h\", \"\", \"\"\n  )\n)\n",
+          "expr": "sum (\n  label_replace(\n    vector(0) and on() (gitlab_service_errors:ratio_1h{type=\"sidekiq\"}),\n    \"period\", \"na\", \"\", \"\"\n  )\n  or\n  label_replace(\n    vector(1) and on() (gitlab_service_errors:ratio_5m{type=\"sidekiq\"} \u003e on(tier, type) group_left() (14.4 * slo:max:events:gitlab_service_errors:ratio{component=\"\",type=\"sidekiq\"})),\n    \"period\", \"5m\", \"\", \"\"\n  )\n  or\n  label_replace(\n    vector(2) and on() (gitlab_service_errors:ratio_1h{type=\"sidekiq\"} \u003e on(tier, type) group_left() (14.4 * slo:max:events:gitlab_service_errors:ratio{component=\"\",type=\"sidekiq\"})),\n    \"period\", \"1h\", \"\", \"\"\n  )\n  or\n  label_replace(\n    vector(4) and on() (gitlab_service_errors:ratio_30m{type=\"sidekiq\"} \u003e on(tier, type) group_left() (6 * slo:max:events:gitlab_service_errors:ratio{component=\"\",type=\"sidekiq\"})),\n    \"period\", \"30m\", \"\", \"\"\n  )\n  or\n  label_replace(\n    vector(8) and on() (gitlab_service_errors:ratio_6h{type=\"sidekiq\"} \u003e on(tier, type) group_left() (6 * slo:max:events:gitlab_service_errors:ratio{component=\"\",type=\"sidekiq\"})),\n    \"period\", \"6h\", \"\", \"\"\n  )\n)\n",
           "format": "time_series",
           "instant": true,
           "interval": "1m",
@@ -984,7 +984,7 @@
           "refId": "B"
         },
         {
-          "expr": "clamp_min(\n  avg by (type) (\n    gitlab_service_ops:rate:prediction{monitor=\"global\",type=\"sidekiq\"}\n    + (1) *\n    gitlab_service_ops:rate:stddev_over_time_1w{monitor=\"global\",type=\"sidekiq\"}\n  ),\n  0\n)\n",
+          "expr": "clamp_min(\n  avg by (type) (\n    gitlab_service_ops:rate:prediction{type=\"sidekiq\"}\n    + (1) *\n    gitlab_service_ops:rate:stddev_over_time_1w{type=\"sidekiq\"}\n  ),\n  0\n)\n",
           "format": "time_series",
           "interval": "1m",
           "intervalFactor": 3,
@@ -992,7 +992,7 @@
           "refId": "C"
         },
         {
-          "expr": "clamp_min(\n  avg by (type) (\n    gitlab_service_ops:rate:prediction{monitor=\"global\",type=\"sidekiq\"}\n    + (-1) *\n    gitlab_service_ops:rate:stddev_over_time_1w{monitor=\"global\",type=\"sidekiq\"}\n  ),\n  0\n)\n",
+          "expr": "clamp_min(\n  avg by (type) (\n    gitlab_service_ops:rate:prediction{type=\"sidekiq\"}\n    + (-1) *\n    gitlab_service_ops:rate:stddev_over_time_1w{type=\"sidekiq\"}\n  ),\n  0\n)\n",
           "format": "time_series",
           "interval": "1m",
           "intervalFactor": 3,
@@ -1236,7 +1236,7 @@
           "refId": "A"
         },
         {
-          "expr": "(6 * avg(slo:max:events:gitlab_service_errors:ratio{component=\"email_receiver\",monitor=\"global\",type=\"sidekiq\"})\n)\n",
+          "expr": "(6 * avg(slo:max:events:gitlab_service_errors:ratio{component=\"email_receiver\",type=\"sidekiq\"})\n)\n",
           "format": "time_series",
           "interval": "5m",
           "intervalFactor": 3,
@@ -1244,7 +1244,7 @@
           "refId": "B"
         },
         {
-          "expr": "(14.4 * avg(slo:max:events:gitlab_service_errors:ratio{component=\"email_receiver\",monitor=\"global\",type=\"sidekiq\"})\n)\n",
+          "expr": "(14.4 * avg(slo:max:events:gitlab_service_errors:ratio{component=\"email_receiver\",type=\"sidekiq\"})\n)\n",
           "format": "time_series",
           "interval": "5m",
           "intervalFactor": 3,
@@ -1260,7 +1260,7 @@
           "refId": "D"
         },
         {
-          "expr": "clamp_max(\n  gitlab_component_errors:ratio_5m{component=\"email_receiver\",type=\"sidekiq\"} offset 1w\n,\n  scalar(max((14.4 * avg(slo:max:events:gitlab_service_errors:ratio{component=\"email_receiver\",monitor=\"global\",type=\"sidekiq\"})\n)\n))\n)\n",
+          "expr": "clamp_max(\n  gitlab_component_errors:ratio_5m{component=\"email_receiver\",type=\"sidekiq\"} offset 1w\n,\n  scalar(max((14.4 * avg(slo:max:events:gitlab_service_errors:ratio{component=\"email_receiver\",type=\"sidekiq\"})\n)\n))\n)\n",
           "format": "time_series",
           "interval": "1m",
           "intervalFactor": 3,
@@ -1484,7 +1484,7 @@
       "pluginVersion": "7",
       "targets": [
         {
-          "expr": "sum (\n  label_replace(\n    vector(0) and on() (gitlab_component_errors:ratio_1h{component=\"email_receiver\",type=\"sidekiq\"}),\n    \"period\", \"na\", \"\", \"\"\n  )\n  or\n  label_replace(\n    vector(1) and on() (gitlab_component_errors:ratio_5m{component=\"email_receiver\",type=\"sidekiq\"} \u003e on(tier, type) group_left() (14.4 * slo:max:events:gitlab_service_errors:ratio{component=\"email_receiver\",monitor=\"global\",type=\"sidekiq\"})),\n    \"period\", \"5m\", \"\", \"\"\n  )\n  or\n  label_replace(\n    vector(2) and on() (gitlab_component_errors:ratio_1h{component=\"email_receiver\",type=\"sidekiq\"} \u003e on(tier, type) group_left() (14.4 * slo:max:events:gitlab_service_errors:ratio{component=\"email_receiver\",monitor=\"global\",type=\"sidekiq\"})),\n    \"period\", \"1h\", \"\", \"\"\n  )\n  or\n  label_replace(\n    vector(4) and on() (gitlab_component_errors:ratio_30m{component=\"email_receiver\",type=\"sidekiq\"} \u003e on(tier, type) group_left() (6 * slo:max:events:gitlab_service_errors:ratio{component=\"email_receiver\",monitor=\"global\",type=\"sidekiq\"})),\n    \"period\", \"30m\", \"\", \"\"\n  )\n  or\n  label_replace(\n    vector(8) and on() (gitlab_component_errors:ratio_6h{component=\"email_receiver\",type=\"sidekiq\"} \u003e on(tier, type) group_left() (6 * slo:max:events:gitlab_service_errors:ratio{component=\"email_receiver\",monitor=\"global\",type=\"sidekiq\"})),\n    \"period\", \"6h\", \"\", \"\"\n  )\n)\n",
+          "expr": "sum (\n  label_replace(\n    vector(0) and on() (gitlab_component_errors:ratio_1h{component=\"email_receiver\",type=\"sidekiq\"}),\n    \"period\", \"na\", \"\", \"\"\n  )\n  or\n  label_replace(\n    vector(1) and on() (gitlab_component_errors:ratio_5m{component=\"email_receiver\",type=\"sidekiq\"} \u003e on(tier, type) group_left() (14.4 * slo:max:events:gitlab_service_errors:ratio{component=\"email_receiver\",type=\"sidekiq\"})),\n    \"period\", \"5m\", \"\", \"\"\n  )\n  or\n  label_replace(\n    vector(2) and on() (gitlab_component_errors:ratio_1h{component=\"email_receiver\",type=\"sidekiq\"} \u003e on(tier, type) group_left() (14.4 * slo:max:events:gitlab_service_errors:ratio{component=\"email_receiver\",type=\"sidekiq\"})),\n    \"period\", \"1h\", \"\", \"\"\n  )\n  or\n  label_replace(\n    vector(4) and on() (gitlab_component_errors:ratio_30m{component=\"email_receiver\",type=\"sidekiq\"} \u003e on(tier, type) group_left() (6 * slo:max:events:gitlab_service_errors:ratio{component=\"email_receiver\",type=\"sidekiq\"})),\n    \"period\", \"30m\", \"\", \"\"\n  )\n  or\n  label_replace(\n    vector(8) and on() (gitlab_component_errors:ratio_6h{component=\"email_receiver\",type=\"sidekiq\"} \u003e on(tier, type) group_left() (6 * slo:max:events:gitlab_service_errors:ratio{component=\"email_receiver\",type=\"sidekiq\"})),\n    \"period\", \"6h\", \"\", \"\"\n  )\n)\n",
           "format": "time_series",
           "instant": true,
           "interval": "1m",
@@ -1738,7 +1738,7 @@
           "refId": "A"
         },
         {
-          "expr": "(1 - 6 * (1 - avg(slo:min:events:gitlab_service_apdex:ratio{component=\"shard_catchall\",monitor=\"global\",type=\"sidekiq\"})\n))\n",
+          "expr": "(1 - 6 * (1 - avg(slo:min:events:gitlab_service_apdex:ratio{component=\"shard_catchall\",type=\"sidekiq\"})\n))\n",
           "format": "time_series",
           "interval": "5m",
           "intervalFactor": 3,
@@ -1746,7 +1746,7 @@
           "refId": "B"
         },
         {
-          "expr": "(1 - 14.4 * (1 - avg(slo:min:events:gitlab_service_apdex:ratio{component=\"shard_catchall\",monitor=\"global\",type=\"sidekiq\"})\n))\n",
+          "expr": "(1 - 14.4 * (1 - avg(slo:min:events:gitlab_service_apdex:ratio{component=\"shard_catchall\",type=\"sidekiq\"})\n))\n",
           "format": "time_series",
           "interval": "5m",
           "intervalFactor": 3,
@@ -1762,7 +1762,7 @@
           "refId": "D"
         },
         {
-          "expr": "clamp_min(\n  gitlab_component_apdex:ratio_5m{component=\"shard_catchall\",type=\"sidekiq\"} offset 1w\n,\n  scalar(min((1 - 14.4 * (1 - avg(slo:min:events:gitlab_service_apdex:ratio{component=\"shard_catchall\",monitor=\"global\",type=\"sidekiq\"})\n))\n))\n)\n",
+          "expr": "clamp_min(\n  gitlab_component_apdex:ratio_5m{component=\"shard_catchall\",type=\"sidekiq\"} offset 1w\n,\n  scalar(min((1 - 14.4 * (1 - avg(slo:min:events:gitlab_service_apdex:ratio{component=\"shard_catchall\",type=\"sidekiq\"})\n))\n))\n)\n",
           "format": "time_series",
           "interval": "1m",
           "intervalFactor": 3,
@@ -1986,7 +1986,7 @@
       "pluginVersion": "7",
       "targets": [
         {
-          "expr": "sum(\n  label_replace(\n    vector(0) and on() (gitlab_component_apdex:ratio_1h{component=\"shard_catchall\",type=\"sidekiq\"}),\n    \"period\", \"na\", \"\", \"\"\n  )\n  or\n  label_replace(\n    vector(1) and on () (gitlab_component_apdex:ratio_5m{component=\"shard_catchall\",type=\"sidekiq\"} \u003c on(tier, type) group_left() (1 - (14.4 * (1 - slo:min:events:gitlab_service_apdex:ratio{component=\"shard_catchall\",monitor=\"global\",type=\"sidekiq\"})))),\n    \"period\", \"5m\", \"\", \"\"\n  )\n  or\n  label_replace(\n    vector(2) and on () (gitlab_component_apdex:ratio_1h{component=\"shard_catchall\",type=\"sidekiq\"} \u003c on(tier, type) group_left() (1 - (14.4 * (1 - slo:min:events:gitlab_service_apdex:ratio{component=\"shard_catchall\",monitor=\"global\",type=\"sidekiq\"})))),\n    \"period\", \"1h\", \"\", \"\"\n  )\n  or\n  label_replace(\n    vector(4) and on () (gitlab_component_apdex:ratio_30m{component=\"shard_catchall\",type=\"sidekiq\"} \u003c on(tier, type) group_left() (1 - (6 * (1 - slo:min:events:gitlab_service_apdex:ratio{component=\"shard_catchall\",monitor=\"global\",type=\"sidekiq\"})))),\n    \"period\", \"30m\", \"\", \"\"\n  )\n  or\n  label_replace(\n    vector(8) and on () (gitlab_component_apdex:ratio_6h{component=\"shard_catchall\",type=\"sidekiq\"} \u003c on(tier, type) group_left() (1 - (6 * (1 - slo:min:events:gitlab_service_apdex:ratio{component=\"shard_catchall\",monitor=\"global\",type=\"sidekiq\"})))),\n    \"period\", \"6h\", \"\", \"\"\n  )\n)\n",
+          "expr": "sum(\n  label_replace(\n    vector(0) and on() (gitlab_component_apdex:ratio_1h{component=\"shard_catchall\",type=\"sidekiq\"}),\n    \"period\", \"na\", \"\", \"\"\n  )\n  or\n  label_replace(\n    vector(1) and on () (gitlab_component_apdex:ratio_5m{component=\"shard_catchall\",type=\"sidekiq\"} \u003c on(tier, type) group_left() (1 - (14.4 * (1 - slo:min:events:gitlab_service_apdex:ratio{component=\"shard_catchall\",type=\"sidekiq\"})))),\n    \"period\", \"5m\", \"\", \"\"\n  )\n  or\n  label_replace(\n    vector(2) and on () (gitlab_component_apdex:ratio_1h{component=\"shard_catchall\",type=\"sidekiq\"} \u003c on(tier, type) group_left() (1 - (14.4 * (1 - slo:min:events:gitlab_service_apdex:ratio{component=\"shard_catchall\",type=\"sidekiq\"})))),\n    \"period\", \"1h\", \"\", \"\"\n  )\n  or\n  label_replace(\n    vector(4) and on () (gitlab_component_apdex:ratio_30m{component=\"shard_catchall\",type=\"sidekiq\"} \u003c on(tier, type) group_left() (1 - (6 * (1 - slo:min:events:gitlab_service_apdex:ratio{component=\"shard_catchall\",type=\"sidekiq\"})))),\n    \"period\", \"30m\", \"\", \"\"\n  )\n  or\n  label_replace(\n    vector(8) and on () (gitlab_component_apdex:ratio_6h{component=\"shard_catchall\",type=\"sidekiq\"} \u003c on(tier, type) group_left() (1 - (6 * (1 - slo:min:events:gitlab_service_apdex:ratio{component=\"shard_catchall\",type=\"sidekiq\"})))),\n    \"period\", \"6h\", \"\", \"\"\n  )\n)\n",
           "format": "time_series",
           "instant": true,
           "interval": "1m",
@@ -2111,7 +2111,7 @@
           "refId": "A"
         },
         {
-          "expr": "(6 * avg(slo:max:events:gitlab_service_errors:ratio{component=\"shard_catchall\",monitor=\"global\",type=\"sidekiq\"})\n)\n",
+          "expr": "(6 * avg(slo:max:events:gitlab_service_errors:ratio{component=\"shard_catchall\",type=\"sidekiq\"})\n)\n",
           "format": "time_series",
           "interval": "5m",
           "intervalFactor": 3,
@@ -2119,7 +2119,7 @@
           "refId": "B"
         },
         {
-          "expr": "(14.4 * avg(slo:max:events:gitlab_service_errors:ratio{component=\"shard_catchall\",monitor=\"global\",type=\"sidekiq\"})\n)\n",
+          "expr": "(14.4 * avg(slo:max:events:gitlab_service_errors:ratio{component=\"shard_catchall\",type=\"sidekiq\"})\n)\n",
           "format": "time_series",
           "interval": "5m",
           "intervalFactor": 3,
@@ -2135,7 +2135,7 @@
           "refId": "D"
         },
         {
-          "expr": "clamp_max(\n  gitlab_component_errors:ratio_5m{component=\"shard_catchall\",type=\"sidekiq\"} offset 1w\n,\n  scalar(max((14.4 * avg(slo:max:events:gitlab_service_errors:ratio{component=\"shard_catchall\",monitor=\"global\",type=\"sidekiq\"})\n)\n))\n)\n",
+          "expr": "clamp_max(\n  gitlab_component_errors:ratio_5m{component=\"shard_catchall\",type=\"sidekiq\"} offset 1w\n,\n  scalar(max((14.4 * avg(slo:max:events:gitlab_service_errors:ratio{component=\"shard_catchall\",type=\"sidekiq\"})\n)\n))\n)\n",
           "format": "time_series",
           "interval": "1m",
           "intervalFactor": 3,
@@ -2359,7 +2359,7 @@
       "pluginVersion": "7",
       "targets": [
         {
-          "expr": "sum (\n  label_replace(\n    vector(0) and on() (gitlab_component_errors:ratio_1h{component=\"shard_catchall\",type=\"sidekiq\"}),\n    \"period\", \"na\", \"\", \"\"\n  )\n  or\n  label_replace(\n    vector(1) and on() (gitlab_component_errors:ratio_5m{component=\"shard_catchall\",type=\"sidekiq\"} \u003e on(tier, type) group_left() (14.4 * slo:max:events:gitlab_service_errors:ratio{component=\"shard_catchall\",monitor=\"global\",type=\"sidekiq\"})),\n    \"period\", \"5m\", \"\", \"\"\n  )\n  or\n  label_replace(\n    vector(2) and on() (gitlab_component_errors:ratio_1h{component=\"shard_catchall\",type=\"sidekiq\"} \u003e on(tier, type) group_left() (14.4 * slo:max:events:gitlab_service_errors:ratio{component=\"shard_catchall\",monitor=\"global\",type=\"sidekiq\"})),\n    \"period\", \"1h\", \"\", \"\"\n  )\n  or\n  label_replace(\n    vector(4) and on() (gitlab_component_errors:ratio_30m{component=\"shard_catchall\",type=\"sidekiq\"} \u003e on(tier, type) group_left() (6 * slo:max:events:gitlab_service_errors:ratio{component=\"shard_catchall\",monitor=\"global\",type=\"sidekiq\"})),\n    \"period\", \"30m\", \"\", \"\"\n  )\n  or\n  label_replace(\n    vector(8) and on() (gitlab_component_errors:ratio_6h{component=\"shard_catchall\",type=\"sidekiq\"} \u003e on(tier, type) group_left() (6 * slo:max:events:gitlab_service_errors:ratio{component=\"shard_catchall\",monitor=\"global\",type=\"sidekiq\"})),\n    \"period\", \"6h\", \"\", \"\"\n  )\n)\n",
+          "expr": "sum (\n  label_replace(\n    vector(0) and on() (gitlab_component_errors:ratio_1h{component=\"shard_catchall\",type=\"sidekiq\"}),\n    \"period\", \"na\", \"\", \"\"\n  )\n  or\n  label_replace(\n    vector(1) and on() (gitlab_component_errors:ratio_5m{component=\"shard_catchall\",type=\"sidekiq\"} \u003e on(tier, type) group_left() (14.4 * slo:max:events:gitlab_service_errors:ratio{component=\"shard_catchall\",type=\"sidekiq\"})),\n    \"period\", \"5m\", \"\", \"\"\n  )\n  or\n  label_replace(\n    vector(2) and on() (gitlab_component_errors:ratio_1h{component=\"shard_catchall\",type=\"sidekiq\"} \u003e on(tier, type) group_left() (14.4 * slo:max:events:gitlab_service_errors:ratio{component=\"shard_catchall\",type=\"sidekiq\"})),\n    \"period\", \"1h\", \"\", \"\"\n  )\n  or\n  label_replace(\n    vector(4) and on() (gitlab_component_errors:ratio_30m{component=\"shard_catchall\",type=\"sidekiq\"} \u003e on(tier, type) group_left() (6 * slo:max:events:gitlab_service_errors:ratio{component=\"shard_catchall\",type=\"sidekiq\"})),\n    \"period\", \"30m\", \"\", \"\"\n  )\n  or\n  label_replace(\n    vector(8) and on() (gitlab_component_errors:ratio_6h{component=\"shard_catchall\",type=\"sidekiq\"} \u003e on(tier, type) group_left() (6 * slo:max:events:gitlab_service_errors:ratio{component=\"shard_catchall\",type=\"sidekiq\"})),\n    \"period\", \"6h\", \"\", \"\"\n  )\n)\n",
           "format": "time_series",
           "instant": true,
           "interval": "1m",
