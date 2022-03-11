@@ -209,7 +209,6 @@ teams:
   product_stage_group: compliance
   ignored_components:
   - graphql_queries
-  - rails_requests
 - name: composition_analysis
   product_stage_group: composition_analysis
   ignored_components:
