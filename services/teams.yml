@@ -219,9 +219,6 @@ teams:
   product_stage_group: container_security
 - name: conversion
   product_stage_group: conversion
-  ignored_components:
-  - graphql_queries
-  - rails_requests
 - name: database
   product_stage_group: database
   ignored_components:
@@ -243,9 +240,6 @@ teams:
   - graphql_queries
 - name: expansion
   product_stage_group: expansion
-  ignored_components:
-  - graphql_queries
-  - rails_requests
 - name: foundations
   product_stage_group: foundations
   ignored_components:
