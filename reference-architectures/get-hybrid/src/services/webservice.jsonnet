@@ -5,7 +5,7 @@ local kubeLabelSelectors = metricsCatalog.kubeLabelSelectors;
 
 metricsCatalog.serviceDefinition({
   type: 'webservice',
-  tier: 'app',
+  tier: 'sv',
 
   tags: ['golang'],
 

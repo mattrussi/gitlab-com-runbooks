@@ -1145,7 +1145,7 @@ groups:
       2
     labels:
       component: puma
-      tier: app
+      tier: sv
       type: webservice
     record: gitlab_component_apdex:success:rate_5m
   - expr: |
@@ -1154,7 +1154,7 @@ groups:
       )
     labels:
       component: puma
-      tier: app
+      tier: sv
       type: webservice
     record: gitlab_component_apdex:weight:score_5m
   - expr: |
@@ -1163,7 +1163,7 @@ groups:
       )
     labels:
       component: puma
-      tier: app
+      tier: sv
       type: webservice
     record: gitlab_component_ops:rate_5m
   - expr: |
@@ -1175,12 +1175,12 @@ groups:
       or
       (
         0 * group by() (
-          gitlab_component_ops:rate_5m{component="puma",tier="app",type="webservice"}
+          gitlab_component_ops:rate_5m{component="puma",tier="sv",type="webservice"}
         )
       )
     labels:
       component: puma
-      tier: app
+      tier: sv
       type: webservice
     record: gitlab_component_errors:rate_5m
   - expr: |
@@ -1197,7 +1197,7 @@ groups:
       2
     labels:
       component: workhorse
-      tier: app
+      tier: sv
       type: webservice
     record: gitlab_component_apdex:success:rate_5m
   - expr: |
@@ -1206,7 +1206,7 @@ groups:
       )
     labels:
       component: workhorse
-      tier: app
+      tier: sv
       type: webservice
     record: gitlab_component_apdex:weight:score_5m
   - expr: |
@@ -1215,7 +1215,7 @@ groups:
       )
     labels:
       component: workhorse
-      tier: app
+      tier: sv
       type: webservice
     record: gitlab_component_ops:rate_5m
   - expr: |
@@ -1227,12 +1227,12 @@ groups:
       or
       (
         0 * group by() (
-          gitlab_component_ops:rate_5m{component="workhorse",tier="app",type="webservice"}
+          gitlab_component_ops:rate_5m{component="workhorse",tier="sv",type="webservice"}
         )
       )
     labels:
       component: workhorse
-      tier: app
+      tier: sv
       type: webservice
     record: gitlab_component_errors:rate_5m
 - interval: 2m
@@ -1252,7 +1252,7 @@ groups:
       2
     labels:
       component: puma
-      tier: app
+      tier: sv
       type: webservice
     record: gitlab_component_apdex:success:rate_30m
   - expr: |
@@ -1261,7 +1261,7 @@ groups:
       )
     labels:
       component: puma
-      tier: app
+      tier: sv
       type: webservice
     record: gitlab_component_apdex:weight:score_30m
   - expr: |
@@ -1270,7 +1270,7 @@ groups:
       )
     labels:
       component: puma
-      tier: app
+      tier: sv
       type: webservice
     record: gitlab_component_ops:rate_30m
   - expr: |
@@ -1282,12 +1282,12 @@ groups:
       or
       (
         0 * group by() (
-          gitlab_component_ops:rate_30m{component="puma",tier="app",type="webservice"}
+          gitlab_component_ops:rate_30m{component="puma",tier="sv",type="webservice"}
         )
       )
     labels:
       component: puma
-      tier: app
+      tier: sv
       type: webservice
     record: gitlab_component_errors:rate_30m
   - expr: |
@@ -1304,7 +1304,7 @@ groups:
       2
     labels:
       component: workhorse
-      tier: app
+      tier: sv
       type: webservice
     record: gitlab_component_apdex:success:rate_30m
   - expr: |
@@ -1313,7 +1313,7 @@ groups:
       )
     labels:
       component: workhorse
-      tier: app
+      tier: sv
       type: webservice
     record: gitlab_component_apdex:weight:score_30m
   - expr: |
@@ -1322,7 +1322,7 @@ groups:
       )
     labels:
       component: workhorse
-      tier: app
+      tier: sv
       type: webservice
     record: gitlab_component_ops:rate_30m
   - expr: |
@@ -1334,12 +1334,12 @@ groups:
       or
       (
         0 * group by() (
-          gitlab_component_ops:rate_30m{component="workhorse",tier="app",type="webservice"}
+          gitlab_component_ops:rate_30m{component="workhorse",tier="sv",type="webservice"}
         )
       )
     labels:
       component: workhorse
-      tier: app
+      tier: sv
       type: webservice
     record: gitlab_component_errors:rate_30m
 - interval: 1m
@@ -1359,7 +1359,7 @@ groups:
       2
     labels:
       component: puma
-      tier: app
+      tier: sv
       type: webservice
     record: gitlab_component_apdex:success:rate_1h
   - expr: |
@@ -1368,7 +1368,7 @@ groups:
       )
     labels:
       component: puma
-      tier: app
+      tier: sv
       type: webservice
     record: gitlab_component_apdex:weight:score_1h
   - expr: |
@@ -1377,7 +1377,7 @@ groups:
       )
     labels:
       component: puma
-      tier: app
+      tier: sv
       type: webservice
     record: gitlab_component_ops:rate_1h
   - expr: |
@@ -1389,12 +1389,12 @@ groups:
       or
       (
         0 * group by() (
-          gitlab_component_ops:rate_1h{component="puma",tier="app",type="webservice"}
+          gitlab_component_ops:rate_1h{component="puma",tier="sv",type="webservice"}
         )
       )
     labels:
       component: puma
-      tier: app
+      tier: sv
       type: webservice
     record: gitlab_component_errors:rate_1h
   - expr: |
@@ -1411,7 +1411,7 @@ groups:
       2
     labels:
       component: workhorse
-      tier: app
+      tier: sv
       type: webservice
     record: gitlab_component_apdex:success:rate_1h
   - expr: |
@@ -1420,7 +1420,7 @@ groups:
       )
     labels:
       component: workhorse
-      tier: app
+      tier: sv
       type: webservice
     record: gitlab_component_apdex:weight:score_1h
   - expr: |
@@ -1429,7 +1429,7 @@ groups:
       )
     labels:
       component: workhorse
-      tier: app
+      tier: sv
       type: webservice
     record: gitlab_component_ops:rate_1h
   - expr: |
@@ -1441,12 +1441,12 @@ groups:
       or
       (
         0 * group by() (
-          gitlab_component_ops:rate_1h{component="workhorse",tier="app",type="webservice"}
+          gitlab_component_ops:rate_1h{component="workhorse",tier="sv",type="webservice"}
         )
       )
     labels:
       component: workhorse
-      tier: app
+      tier: sv
       type: webservice
     record: gitlab_component_errors:rate_1h
 - interval: 2m
@@ -1466,7 +1466,7 @@ groups:
       2
     labels:
       component: puma
-      tier: app
+      tier: sv
       type: webservice
     record: gitlab_component_apdex:success:rate_6h
   - expr: |
@@ -1475,7 +1475,7 @@ groups:
       )
     labels:
       component: puma
-      tier: app
+      tier: sv
       type: webservice
     record: gitlab_component_apdex:weight:score_6h
   - expr: |
@@ -1484,7 +1484,7 @@ groups:
       )
     labels:
       component: puma
-      tier: app
+      tier: sv
       type: webservice
     record: gitlab_component_ops:rate_6h
   - expr: |
@@ -1496,12 +1496,12 @@ groups:
       or
       (
         0 * group by() (
-          gitlab_component_ops:rate_6h{component="puma",tier="app",type="webservice"}
+          gitlab_component_ops:rate_6h{component="puma",tier="sv",type="webservice"}
         )
       )
     labels:
       component: puma
-      tier: app
+      tier: sv
       type: webservice
     record: gitlab_component_errors:rate_6h
   - expr: |
@@ -1518,7 +1518,7 @@ groups:
       2
     labels:
       component: workhorse
-      tier: app
+      tier: sv
       type: webservice
     record: gitlab_component_apdex:success:rate_6h
   - expr: |
@@ -1527,7 +1527,7 @@ groups:
       )
     labels:
       component: workhorse
-      tier: app
+      tier: sv
       type: webservice
     record: gitlab_component_apdex:weight:score_6h
   - expr: |
@@ -1536,7 +1536,7 @@ groups:
       )
     labels:
       component: workhorse
-      tier: app
+      tier: sv
       type: webservice
     record: gitlab_component_ops:rate_6h
   - expr: |
@@ -1548,12 +1548,12 @@ groups:
       or
       (
         0 * group by() (
-          gitlab_component_ops:rate_6h{component="workhorse",tier="app",type="webservice"}
+          gitlab_component_ops:rate_6h{component="workhorse",tier="sv",type="webservice"}
         )
       )
     labels:
       component: workhorse
-      tier: app
+      tier: sv
       type: webservice
     record: gitlab_component_errors:rate_6h
 - interval: 1m
@@ -1564,7 +1564,7 @@ groups:
       component: puma
       regional_aggregation: "no"
       service_aggregation: "yes"
-      tier: app
+      tier: sv
       type: webservice
     record: gitlab_component_service:mapping
   - expr: "1"
@@ -1572,7 +1572,7 @@ groups:
       component: workhorse
       regional_aggregation: "no"
       service_aggregation: "yes"
-      tier: app
+      tier: sv
       type: webservice
     record: gitlab_component_service:mapping
 - interval: 1m
@@ -1972,36 +1972,36 @@ groups:
     record: slo:max:events:gitlab_service_errors:ratio
   - expr: "0.998000"
     labels:
-      tier: app
+      tier: sv
       type: webservice
     record: slo:min:events:gitlab_service_apdex:ratio
   - expr: "0.000100"
     labels:
-      tier: app
+      tier: sv
       type: webservice
     record: slo:max:events:gitlab_service_errors:ratio
   - expr: "0.998000"
     labels:
       component: puma
-      tier: app
+      tier: sv
       type: webservice
     record: slo:min:events:gitlab_service_apdex:ratio
   - expr: "0.000100"
     labels:
       component: puma
-      tier: app
+      tier: sv
       type: webservice
     record: slo:max:events:gitlab_service_errors:ratio
   - expr: "0.998000"
     labels:
       component: workhorse
-      tier: app
+      tier: sv
       type: webservice
     record: slo:min:events:gitlab_service_apdex:ratio
   - expr: "0.000100"
     labels:
       component: workhorse
-      tier: app
+      tier: sv
       type: webservice
     record: slo:max:events:gitlab_service_errors:ratio
   - expr: "1"
@@ -2891,7 +2891,7 @@ groups:
         )
       )
     labels:
-      tier: sv
+      tier: inf
       type: consul
     record: kube_pod_labels:labeled
 - interval: 1m
@@ -2934,27 +2934,27 @@ groups:
         )
       )
     labels:
-      tier: app
+      tier: sv
       type: webservice
     record: kube_pod_labels:labeled
   - expr: topk by(cluster,horizontalpodautoscaler) (1, kube_horizontalpodautoscaler_labels{label_app="webservice"})
     labels:
-      tier: app
+      tier: sv
       type: webservice
     record: kube_horizontalpodautoscaler_labels:labeled
   - expr: topk by(cluster,node) (1, kube_node_labels{label_eks_amazonaws_com_nodegroup="gitlab_webservice_pool"})
     labels:
-      tier: app
+      tier: sv
       type: webservice
     record: kube_node_labels:labeled
   - expr: topk by(cluster,ingress) (1, kube_ingress_labels{label_app="webservice"})
     labels:
-      tier: app
+      tier: sv
       type: webservice
     record: kube_ingress_labels:labeled
   - expr: topk by(cluster,deployment) (1, kube_deployment_labels{label_app="webservice"})
     labels:
-      tier: app
+      tier: sv
       type: webservice
     record: kube_deployment_labels:labeled
 - interval: 1m

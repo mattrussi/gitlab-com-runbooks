@@ -4,7 +4,7 @@ local kubeLabelSelectors = metricsCatalog.kubeLabelSelectors;
 
 metricsCatalog.serviceDefinition({
   type: 'consul',
-  tier: 'sv',
+  tier: 'inf',
   provisioning: {
     vms: true,
     kubernetes: true,
