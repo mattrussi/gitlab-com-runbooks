@@ -255,6 +255,237 @@ groups:
       type: gitaly
     record: gitlab_component_service:mapping
 - interval: 1m
+  name: 'Component-Level SLIs: gitlab-shell - 5m burn-rate'
+  rules:
+  - expr: |
+      (
+        sum by () (
+          rate(grpc_server_handling_seconds_bucket{grpc_service="gitaly.SSHService",grpc_type="unary",job="praefect",le="30"}[5m])
+        )
+        +
+        sum by () (
+          rate(grpc_server_handling_seconds_bucket{grpc_service="gitaly.SSHService",grpc_type="unary",job="praefect",le="60"}[5m])
+        )
+      )
+      /
+      2
+    labels:
+      component: grpc_requests
+      tier: sv
+      type: gitlab-shell
+    record: gitlab_component_apdex:success:rate_5m
+  - expr: |
+      sum by () (
+        rate(grpc_server_handling_seconds_bucket{grpc_service="gitaly.SSHService",grpc_type="unary",job="praefect",le="+Inf"}[5m])
+      )
+    labels:
+      component: grpc_requests
+      tier: sv
+      type: gitlab-shell
+    record: gitlab_component_apdex:weight:score_5m
+  - expr: |
+      sum by () (
+        rate(gitaly_service_client_requests_total{grpc_service="gitaly.SSHService",job="praefect"}[5m])
+      )
+    labels:
+      component: grpc_requests
+      tier: sv
+      type: gitlab-shell
+    record: gitlab_component_ops:rate_5m
+  - expr: |
+      (
+        sum by () (
+          rate(grpc_server_handled_total{grpc_code!="OK",grpc_service="gitaly.SSHService",job="praefect"}[5m])
+        )
+      )
+      or
+      (
+        0 * group by() (
+          gitlab_component_ops:rate_5m{component="grpc_requests",tier="sv",type="gitlab-shell"}
+        )
+      )
+    labels:
+      component: grpc_requests
+      tier: sv
+      type: gitlab-shell
+    record: gitlab_component_errors:rate_5m
+- interval: 2m
+  name: 'Component-Level SLIs: gitlab-shell - 30m burn-rate'
+  rules:
+  - expr: |
+      (
+        sum by () (
+          rate(grpc_server_handling_seconds_bucket{grpc_service="gitaly.SSHService",grpc_type="unary",job="praefect",le="30"}[30m])
+        )
+        +
+        sum by () (
+          rate(grpc_server_handling_seconds_bucket{grpc_service="gitaly.SSHService",grpc_type="unary",job="praefect",le="60"}[30m])
+        )
+      )
+      /
+      2
+    labels:
+      component: grpc_requests
+      tier: sv
+      type: gitlab-shell
+    record: gitlab_component_apdex:success:rate_30m
+  - expr: |
+      sum by () (
+        rate(grpc_server_handling_seconds_bucket{grpc_service="gitaly.SSHService",grpc_type="unary",job="praefect",le="+Inf"}[30m])
+      )
+    labels:
+      component: grpc_requests
+      tier: sv
+      type: gitlab-shell
+    record: gitlab_component_apdex:weight:score_30m
+  - expr: |
+      sum by () (
+        rate(gitaly_service_client_requests_total{grpc_service="gitaly.SSHService",job="praefect"}[30m])
+      )
+    labels:
+      component: grpc_requests
+      tier: sv
+      type: gitlab-shell
+    record: gitlab_component_ops:rate_30m
+  - expr: |
+      (
+        sum by () (
+          rate(grpc_server_handled_total{grpc_code!="OK",grpc_service="gitaly.SSHService",job="praefect"}[30m])
+        )
+      )
+      or
+      (
+        0 * group by() (
+          gitlab_component_ops:rate_30m{component="grpc_requests",tier="sv",type="gitlab-shell"}
+        )
+      )
+    labels:
+      component: grpc_requests
+      tier: sv
+      type: gitlab-shell
+    record: gitlab_component_errors:rate_30m
+- interval: 1m
+  name: 'Component-Level SLIs: gitlab-shell - 1h burn-rate'
+  rules:
+  - expr: |
+      (
+        sum by () (
+          rate(grpc_server_handling_seconds_bucket{grpc_service="gitaly.SSHService",grpc_type="unary",job="praefect",le="30"}[1h])
+        )
+        +
+        sum by () (
+          rate(grpc_server_handling_seconds_bucket{grpc_service="gitaly.SSHService",grpc_type="unary",job="praefect",le="60"}[1h])
+        )
+      )
+      /
+      2
+    labels:
+      component: grpc_requests
+      tier: sv
+      type: gitlab-shell
+    record: gitlab_component_apdex:success:rate_1h
+  - expr: |
+      sum by () (
+        rate(grpc_server_handling_seconds_bucket{grpc_service="gitaly.SSHService",grpc_type="unary",job="praefect",le="+Inf"}[1h])
+      )
+    labels:
+      component: grpc_requests
+      tier: sv
+      type: gitlab-shell
+    record: gitlab_component_apdex:weight:score_1h
+  - expr: |
+      sum by () (
+        rate(gitaly_service_client_requests_total{grpc_service="gitaly.SSHService",job="praefect"}[1h])
+      )
+    labels:
+      component: grpc_requests
+      tier: sv
+      type: gitlab-shell
+    record: gitlab_component_ops:rate_1h
+  - expr: |
+      (
+        sum by () (
+          rate(grpc_server_handled_total{grpc_code!="OK",grpc_service="gitaly.SSHService",job="praefect"}[1h])
+        )
+      )
+      or
+      (
+        0 * group by() (
+          gitlab_component_ops:rate_1h{component="grpc_requests",tier="sv",type="gitlab-shell"}
+        )
+      )
+    labels:
+      component: grpc_requests
+      tier: sv
+      type: gitlab-shell
+    record: gitlab_component_errors:rate_1h
+- interval: 2m
+  name: 'Component-Level SLIs: gitlab-shell - 6h burn-rate'
+  rules:
+  - expr: |
+      (
+        sum by () (
+          rate(grpc_server_handling_seconds_bucket{grpc_service="gitaly.SSHService",grpc_type="unary",job="praefect",le="30"}[6h])
+        )
+        +
+        sum by () (
+          rate(grpc_server_handling_seconds_bucket{grpc_service="gitaly.SSHService",grpc_type="unary",job="praefect",le="60"}[6h])
+        )
+      )
+      /
+      2
+    labels:
+      component: grpc_requests
+      tier: sv
+      type: gitlab-shell
+    record: gitlab_component_apdex:success:rate_6h
+  - expr: |
+      sum by () (
+        rate(grpc_server_handling_seconds_bucket{grpc_service="gitaly.SSHService",grpc_type="unary",job="praefect",le="+Inf"}[6h])
+      )
+    labels:
+      component: grpc_requests
+      tier: sv
+      type: gitlab-shell
+    record: gitlab_component_apdex:weight:score_6h
+  - expr: |
+      sum by () (
+        rate(gitaly_service_client_requests_total{grpc_service="gitaly.SSHService",job="praefect"}[6h])
+      )
+    labels:
+      component: grpc_requests
+      tier: sv
+      type: gitlab-shell
+    record: gitlab_component_ops:rate_6h
+  - expr: |
+      (
+        sum by () (
+          rate(grpc_server_handled_total{grpc_code!="OK",grpc_service="gitaly.SSHService",job="praefect"}[6h])
+        )
+      )
+      or
+      (
+        0 * group by() (
+          gitlab_component_ops:rate_6h{component="grpc_requests",tier="sv",type="gitlab-shell"}
+        )
+      )
+    labels:
+      component: grpc_requests
+      tier: sv
+      type: gitlab-shell
+    record: gitlab_component_errors:rate_6h
+- interval: 1m
+  name: 'Component mapping: gitlab-shell'
+  rules:
+  - expr: "1"
+    labels:
+      component: grpc_requests
+      regional_aggregation: "no"
+      service_aggregation: "yes"
+      tier: sv
+      type: gitlab-shell
+    record: gitlab_component_service:mapping
+- interval: 1m
   name: 'Component-Level SLIs: logging - 5m burn-rate'
   rules:
   - expr: |
@@ -1902,6 +2133,28 @@ groups:
       tier: stor
       type: gitaly
     record: slo:max:events:gitlab_service_errors:ratio
+  - expr: "0.999000"
+    labels:
+      tier: sv
+      type: gitlab-shell
+    record: slo:min:events:gitlab_service_apdex:ratio
+  - expr: "0.001000"
+    labels:
+      tier: sv
+      type: gitlab-shell
+    record: slo:max:events:gitlab_service_errors:ratio
+  - expr: "0.999000"
+    labels:
+      component: grpc_requests
+      tier: sv
+      type: gitlab-shell
+    record: slo:min:events:gitlab_service_apdex:ratio
+  - expr: "0.001000"
+    labels:
+      component: grpc_requests
+      tier: sv
+      type: gitlab-shell
+    record: slo:max:events:gitlab_service_errors:ratio
   - expr: "0.995000"
     labels:
       tier: stor
@@ -2083,13 +2336,13 @@ groups:
         clamp_min(
           clamp_max(
             sum by (type, pod, container) (
-              rate(container_cpu_usage_seconds_total:labeled{container!="", container!="POD", type=~"consul|sidekiq|webservice"}[5m])
+              rate(container_cpu_usage_seconds_total:labeled{container!="", container!="POD", type=~"consul|gitlab-shell|sidekiq|webservice"}[5m])
             )
             /
             sum by(type, pod, container) (
-              container_spec_cpu_quota:labeled{container!="", container!="POD", type=~"consul|sidekiq|webservice"}
+              container_spec_cpu_quota:labeled{container!="", container!="POD", type=~"consul|gitlab-shell|sidekiq|webservice"}
               /
-              container_spec_cpu_period:labeled{container!="", container!="POD", type=~"consul|sidekiq|webservice"}
+              container_spec_cpu_period:labeled{container!="", container!="POD", type=~"consul|gitlab-shell|sidekiq|webservice"}
             )
             ,
             1)
@@ -2103,9 +2356,9 @@ groups:
       max by(type) (
         clamp_min(
           clamp_max(
-            container_memory_working_set_bytes:labeled{container!="", container!="POD", type=~"consul|sidekiq|webservice"}
+            container_memory_working_set_bytes:labeled{container!="", container!="POD", type=~"consul|gitlab-shell|sidekiq|webservice"}
             /
-            (container_spec_memory_limit_bytes:labeled{container!="", container!="POD", type=~"consul|sidekiq|webservice"} > 0)
+            (container_spec_memory_limit_bytes:labeled{container!="", container!="POD", type=~"consul|gitlab-shell|sidekiq|webservice"} > 0)
             ,
             1)
         ,
@@ -2894,6 +3147,30 @@ groups:
       tier: inf
       type: consul
     record: kube_pod_labels:labeled
+- interval: 1m
+  name: 'kube-state-metrics-recording-rules: gitlab-shell'
+  rules:
+  - expr: |
+      group without(label_deployment) (
+        label_replace(
+          topk by(cluster,pod) (1, kube_pod_labels{label_app="gitlab-shell"}),
+          "deployment", "$0", "label_deployment", ".*"
+        )
+      )
+    labels:
+      tier: sv
+      type: gitlab-shell
+    record: kube_pod_labels:labeled
+  - expr: topk by(cluster,horizontalpodautoscaler) (1, kube_horizontalpodautoscaler_labels{horizontalpodautoscaler="gitlab-gitlab-shell"})
+    labels:
+      tier: sv
+      type: gitlab-shell
+    record: kube_horizontalpodautoscaler_labels:labeled
+  - expr: topk by(cluster,deployment) (1, kube_deployment_labels{label_app="gitlab-shell"})
+    labels:
+      tier: sv
+      type: gitlab-shell
+    record: kube_deployment_labels:labeled
 - interval: 1m
   name: 'kube-state-metrics-recording-rules: sidekiq'
   rules:
@@ -3702,6 +3979,289 @@ groups:
       gitlab_component_ops:rate_5m{component="goserver",type="gitaly"} offset 1h
       unless
       gitlab_component_ops:rate_5m{component="goserver",type="gitaly"}
+    for: 30m
+    labels:
+      aggregation: component
+      alert_class: traffic_cessation
+      alert_type: cause
+      feature_category: not_owned
+      pager: pagerduty
+      rules_domain: general
+      severity: s2
+      sli_type: ops
+      slo_alert: "no"
+      user_impacting: "yes"
+- interval: 1m
+  name: 'Service Component Alerts: gitlab-shell'
+  rules:
+  - alert: GitlabShellServiceGrpcRequestsApdexSLOViolation
+    annotations:
+      description: |
+        A proxy measurement of the number of GRPC SSH service requests made to Gitaly and Praefect.
+
+        Since we are unable to measure gitlab-shell directly at present, this is the best substitute we can provide.
+
+        Currently the apdex value is {{ $value | humanizePercentage }}.
+      grafana_dashboard_id: gitlab-shell-main/gitlab-shell-overview
+      grafana_dashboard_link: https://dashboards.gitlab.net/d/gitlab-shell-main/gitlab-shell-overview?from=now-6h/m&to=now-1m/m&var-environment={{
+        $labels.environment }}&var-stage={{ $labels.stage }}
+      grafana_min_zoom_hours: "6"
+      grafana_panel_id: "2041855155"
+      grafana_variables: environment,stage
+      promql_template_1: |
+        histogram_quantile(
+          0.950000,
+          sum by (le) (
+            rate(grpc_server_handling_seconds_bucket{grpc_service="gitaly.SSHService",grpc_type="unary",job="praefect"}[5m])
+          )
+        )
+      runbook: docs/gitlab-shell/README.md
+      title: The grpc_requests SLI of the gitlab-shell service has an apdex violating
+        SLO
+    expr: |
+      (
+        (
+          gitlab_component_apdex:ratio_1h{component="grpc_requests",type="gitlab-shell"}
+          < (1 - 14.4 * 0.001000)
+        )
+        and
+        (
+          gitlab_component_apdex:ratio_5m{component="grpc_requests",type="gitlab-shell"}
+          < (1 - 14.4 * 0.001000)
+        )
+      )
+      and on(type,component)
+      (
+        sum by(type,component) (gitlab_component_ops:rate_1h{component="grpc_requests",type="gitlab-shell"}) >= 1
+      )
+    for: 2m
+    labels:
+      aggregation: component
+      alert_class: slo_violation
+      alert_type: symptom
+      feature_category: not_owned
+      pager: pagerduty
+      rules_domain: general
+      severity: s2
+      sli_type: apdex
+      slo_alert: "yes"
+      user_impacting: "yes"
+      window: 1h
+  - alert: GitlabShellServiceGrpcRequestsApdexSLOViolation
+    annotations:
+      description: |
+        A proxy measurement of the number of GRPC SSH service requests made to Gitaly and Praefect.
+
+        Since we are unable to measure gitlab-shell directly at present, this is the best substitute we can provide.
+
+        Currently the apdex value is {{ $value | humanizePercentage }}.
+      grafana_dashboard_id: gitlab-shell-main/gitlab-shell-overview
+      grafana_dashboard_link: https://dashboards.gitlab.net/d/gitlab-shell-main/gitlab-shell-overview?from=now-6h/m&to=now-1m/m&var-environment={{
+        $labels.environment }}&var-stage={{ $labels.stage }}
+      grafana_min_zoom_hours: "6"
+      grafana_panel_id: "2041855155"
+      grafana_variables: environment,stage
+      promql_template_1: |
+        histogram_quantile(
+          0.950000,
+          sum by (le) (
+            rate(grpc_server_handling_seconds_bucket{grpc_service="gitaly.SSHService",grpc_type="unary",job="praefect"}[5m])
+          )
+        )
+      runbook: docs/gitlab-shell/README.md
+      title: The grpc_requests SLI of the gitlab-shell service has an apdex violating
+        SLO
+    expr: |
+      (
+        (
+          gitlab_component_apdex:ratio_6h{component="grpc_requests",type="gitlab-shell"}
+          < (1 - 6 * 0.001000)
+        )
+        and
+        (
+          gitlab_component_apdex:ratio_30m{component="grpc_requests",type="gitlab-shell"}
+          < (1 - 6 * 0.001000)
+        )
+      )
+      and on(type,component)
+      (
+        sum by(type,component) (gitlab_component_ops:rate_6h{component="grpc_requests",type="gitlab-shell"}) >= 0.16667
+      )
+    for: 2m
+    labels:
+      aggregation: component
+      alert_class: slo_violation
+      alert_type: symptom
+      feature_category: not_owned
+      pager: pagerduty
+      rules_domain: general
+      severity: s2
+      sli_type: apdex
+      slo_alert: "yes"
+      user_impacting: "yes"
+      window: 6h
+  - alert: GitlabShellServiceGrpcRequestsErrorSLOViolation
+    annotations:
+      description: |
+        A proxy measurement of the number of GRPC SSH service requests made to Gitaly and Praefect.
+
+        Since we are unable to measure gitlab-shell directly at present, this is the best substitute we can provide.
+
+        Currently the error-rate is {{ $value | humanizePercentage }}.
+      grafana_dashboard_id: gitlab-shell-main/gitlab-shell-overview
+      grafana_dashboard_link: https://dashboards.gitlab.net/d/gitlab-shell-main/gitlab-shell-overview?from=now-6h/m&to=now-1m/m&var-environment={{
+        $labels.environment }}&var-stage={{ $labels.stage }}
+      grafana_min_zoom_hours: "6"
+      grafana_panel_id: "928307072"
+      grafana_variables: environment,stage
+      promql_template_1: |
+        sum by () (
+          rate(grpc_server_handled_total{grpc_code!="OK",grpc_service="gitaly.SSHService",job="praefect"}[5m])
+        )
+      runbook: docs/gitlab-shell/README.md
+      title: The grpc_requests SLI of the gitlab-shell service has an error rate violating
+        SLO
+    expr: |
+      (
+        (
+          gitlab_component_errors:ratio_1h{component="grpc_requests",type="gitlab-shell"}
+          > (14.4 * 0.001000)
+        )
+        and
+        (
+          gitlab_component_errors:ratio_5m{component="grpc_requests",type="gitlab-shell"}
+          > (14.4 * 0.001000)
+        )
+      )
+      and on(type,component)
+      (
+        sum by(type,component) (gitlab_component_ops:rate_1h{component="grpc_requests",type="gitlab-shell"}) >= 1
+      )
+    for: 2m
+    labels:
+      aggregation: component
+      alert_class: slo_violation
+      alert_type: symptom
+      feature_category: not_owned
+      pager: pagerduty
+      rules_domain: general
+      severity: s2
+      sli_type: error
+      slo_alert: "yes"
+      user_impacting: "yes"
+      window: 1h
+  - alert: GitlabShellServiceGrpcRequestsErrorSLOViolation
+    annotations:
+      description: |
+        A proxy measurement of the number of GRPC SSH service requests made to Gitaly and Praefect.
+
+        Since we are unable to measure gitlab-shell directly at present, this is the best substitute we can provide.
+
+        Currently the error-rate is {{ $value | humanizePercentage }}.
+      grafana_dashboard_id: gitlab-shell-main/gitlab-shell-overview
+      grafana_dashboard_link: https://dashboards.gitlab.net/d/gitlab-shell-main/gitlab-shell-overview?from=now-6h/m&to=now-1m/m&var-environment={{
+        $labels.environment }}&var-stage={{ $labels.stage }}
+      grafana_min_zoom_hours: "6"
+      grafana_panel_id: "928307072"
+      grafana_variables: environment,stage
+      promql_template_1: |
+        sum by () (
+          rate(grpc_server_handled_total{grpc_code!="OK",grpc_service="gitaly.SSHService",job="praefect"}[5m])
+        )
+      runbook: docs/gitlab-shell/README.md
+      title: The grpc_requests SLI of the gitlab-shell service has an error rate violating
+        SLO
+    expr: |
+      (
+        (
+          gitlab_component_errors:ratio_6h{component="grpc_requests",type="gitlab-shell"}
+          > (6 * 0.001000)
+        )
+        and
+        (
+          gitlab_component_errors:ratio_30m{component="grpc_requests",type="gitlab-shell"}
+          > (6 * 0.001000)
+        )
+      )
+      and on(type,component)
+      (
+        sum by(type,component) (gitlab_component_ops:rate_6h{component="grpc_requests",type="gitlab-shell"}) >= 0.16667
+      )
+    for: 2m
+    labels:
+      aggregation: component
+      alert_class: slo_violation
+      alert_type: symptom
+      feature_category: not_owned
+      pager: pagerduty
+      rules_domain: general
+      severity: s2
+      sli_type: error
+      slo_alert: "yes"
+      user_impacting: "yes"
+      window: 6h
+  - alert: GitlabShellServiceGrpcRequestsTrafficCessation
+    annotations:
+      description: |
+        A proxy measurement of the number of GRPC SSH service requests made to Gitaly and Praefect.
+
+        Since we are unable to measure gitlab-shell directly at present, this is the best substitute we can provide.
+
+        This alert signifies that the SLI is reporting a cessation of traffic; the signal is present, but is zero.
+      grafana_dashboard_id: gitlab-shell-main/gitlab-shell-overview
+      grafana_dashboard_link: https://dashboards.gitlab.net/d/gitlab-shell-main/gitlab-shell-overview?from=now-6h/m&to=now-1m/m&var-environment={{
+        $labels.environment }}&var-stage={{ $labels.stage }}
+      grafana_min_zoom_hours: "6"
+      grafana_panel_id: "3837654202"
+      grafana_variables: environment,stage
+      promql_template_1: |
+        sum by () (
+          rate(gitaly_service_client_requests_total{grpc_service="gitaly.SSHService",job="praefect"}[5m])
+        )
+      runbook: docs/gitlab-shell/README.md
+      title: The grpc_requests SLI of the gitlab-shell service has not received any
+        traffic in the past 30m
+    expr: |
+      gitlab_component_ops:rate_30m{component="grpc_requests",type="gitlab-shell"} == 0
+    for: 5m
+    labels:
+      aggregation: component
+      alert_class: traffic_cessation
+      alert_type: cause
+      feature_category: not_owned
+      pager: pagerduty
+      rules_domain: general
+      severity: s2
+      sli_type: ops
+      slo_alert: "no"
+      user_impacting: "yes"
+  - alert: GitlabShellServiceGrpcRequestsTrafficAbsent
+    annotations:
+      description: |
+        A proxy measurement of the number of GRPC SSH service requests made to Gitaly and Praefect.
+
+        Since we are unable to measure gitlab-shell directly at present, this is the best substitute we can provide.
+
+        This alert signifies that the SLI was previously reporting traffic, but is no longer - the signal is absent.
+
+        This could be caused by a change to the metrics used in the SLI, or by the service not receiving traffic.
+      grafana_dashboard_id: gitlab-shell-main/gitlab-shell-overview
+      grafana_dashboard_link: https://dashboards.gitlab.net/d/gitlab-shell-main/gitlab-shell-overview?from=now-6h/m&to=now-1m/m&var-environment={{
+        $labels.environment }}&var-stage={{ $labels.stage }}
+      grafana_min_zoom_hours: "6"
+      grafana_panel_id: "3837654202"
+      grafana_variables: environment,stage
+      promql_template_1: |
+        sum by () (
+          rate(gitaly_service_client_requests_total{grpc_service="gitaly.SSHService",job="praefect"}[5m])
+        )
+      runbook: docs/gitlab-shell/README.md
+      title: The grpc_requests SLI of the gitlab-shell service has not reported any
+        traffic in the past 30m
+    expr: |
+      gitlab_component_ops:rate_5m{component="grpc_requests",type="gitlab-shell"} offset 1h
+      unless
+      gitlab_component_ops:rate_5m{component="grpc_requests",type="gitlab-shell"}
     for: 30m
     labels:
       aggregation: component

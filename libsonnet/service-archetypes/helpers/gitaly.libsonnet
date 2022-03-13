@@ -48,14 +48,14 @@ local gitalyRubyApdexIgnoredMethods = gitalyApdexIgnoredMethods + ['GetLFSPointe
 // GRPC service. Since this is an SLI only, not all operations are included,
 // only unary ones, and even then known slow operations are excluded from
 // the apdex calculation
-local grpcServiceApdex(baseSelector) =
+local grpcServiceApdex(baseSelector, satisfiedThreshold=0.5, toleratedThreshold=1) =
   histogramApdex(
     histogram='grpc_server_handling_seconds_bucket',
     selector=baseSelector {
       grpc_type: 'unary',
     },
-    satisfiedThreshold=0.5,
-    toleratedThreshold=1
+    satisfiedThreshold=satisfiedThreshold,
+    toleratedThreshold=toleratedThreshold
   );
 
 local gitalyGRPCErrorRate(baseSelector) =
