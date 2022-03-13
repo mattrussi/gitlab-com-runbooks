@@ -1109,7 +1109,7 @@
       "repeatIteration": null,
       "repeatRowId": null,
       "showTitle": true,
-      "title": "sidekiq Service",
+      "title": "registry Service",
       "titleSize": "h6",
       "type": "row"
     },
@@ -1127,6 +1127,1027 @@
         "w": 5,
         "x": 0,
         "y": 1901
+      },
+      "id": 1020364880,
+      "legend": {
+        "alignAsTable": true,
+        "avg": true,
+        "current": true,
+        "hideEmpty": true,
+        "max": true,
+        "min": true,
+        "rightSide": false,
+        "show": true,
+        "total": false,
+        "values": true
+      },
+      "lines": true,
+      "linewidth": 2,
+      "nullPointMode": "null",
+      "options": {
+        "dataLinks": [
+          {
+            "targetBlank": true,
+            "title": "registry Service Apdex SLO Analysis",
+            "url": "/d/alerts-service_slo_apdex?${__url_time_range}\u0026${__all_variables}\u0026var-type=registry"
+          }
+        ]
+      },
+      "percentage": false,
+      "pointradius": 5,
+      "points": false,
+      "renderer": "flot",
+      "seriesOverrides": [
+        {
+          "alias": "6h Degradation SLO (5% of monthly error budget)",
+          "color": "#FF4500",
+          "dashLength": 4,
+          "dashes": true,
+          "legend": true,
+          "lines": true,
+          "linewidth": 2,
+          "nullPointMode": "connected",
+          "spaceLength": 10,
+          "zindex": -2
+        },
+        {
+          "alias": "1h Outage SLO (2% of monthly error budget)",
+          "color": "#F2495C",
+          "dashLength": 4,
+          "dashes": true,
+          "legend": true,
+          "lines": true,
+          "linewidth": 4,
+          "nullPointMode": "connected",
+          "spaceLength": 4,
+          "zindex": -2
+        },
+        {
+          "alias": "SLO",
+          "color": "#FF4500",
+          "dashLength": 4,
+          "dashes": true,
+          "legend": true,
+          "lines": true,
+          "linewidth": 4,
+          "nullPointMode": "connected",
+          "spaceLength": 4,
+          "zindex": -2
+        },
+        {
+          "alias": "registry apdex",
+          "color": "#E7D551",
+          "zindex": 3
+        },
+        {
+          "alias": "registry apdex avg",
+          "color": "#5794F2",
+          "dashLength": 1,
+          "fillBelowTo": "registry apdex",
+          "linewidth": 1,
+          "spaceLength": 1,
+          "zindex": -3
+        },
+        {
+          "alias": "last week",
+          "color": "#dddddd80",
+          "dashLength": 4,
+          "dashes": true,
+          "fill": 0,
+          "legend": true,
+          "lines": true,
+          "linewidth": 1,
+          "nullPointMode": "connected",
+          "spaceLength": 2,
+          "zindex": -3
+        }
+      ],
+      "spaceLength": 10,
+      "stableId": "registryservice-registry-apdex",
+      "stack": false,
+      "steppedLine": false,
+      "targets": [
+        {
+          "expr": "min_over_time(gitlab_service_apdex:ratio_5m{type=\"registry\"}[$__interval])\n",
+          "format": "time_series",
+          "interval": "1m",
+          "intervalFactor": 3,
+          "legendFormat": "registry apdex",
+          "refId": "A"
+        },
+        {
+          "expr": "(1 - 6 * (1 - avg(slo:min:events:gitlab_service_apdex:ratio{component=\"\",type=\"registry\"})\n))\n",
+          "format": "time_series",
+          "interval": "5m",
+          "intervalFactor": 3,
+          "legendFormat": "6h Degradation SLO (5% of monthly error budget)",
+          "refId": "B"
+        },
+        {
+          "expr": "(1 - 14.4 * (1 - avg(slo:min:events:gitlab_service_apdex:ratio{component=\"\",type=\"registry\"})\n))\n",
+          "format": "time_series",
+          "interval": "5m",
+          "intervalFactor": 3,
+          "legendFormat": "1h Outage SLO (2% of monthly error budget)",
+          "refId": "C"
+        },
+        {
+          "expr": "avg_over_time(gitlab_service_apdex:ratio_5m{type=\"registry\"}[$__interval])\n",
+          "format": "time_series",
+          "interval": "1m",
+          "intervalFactor": 3,
+          "legendFormat": "registry apdex avg",
+          "refId": "D"
+        },
+        {
+          "expr": "clamp_min(\n  gitlab_service_apdex:ratio_5m{type=\"registry\"} offset 1w\n,\n  scalar(min((1 - 14.4 * (1 - avg(slo:min:events:gitlab_service_apdex:ratio{component=\"\",type=\"registry\"})\n))\n))\n)\n",
+          "format": "time_series",
+          "interval": "1m",
+          "intervalFactor": 3,
+          "legendFormat": "last week",
+          "refId": "E"
+        }
+      ],
+      "title": "registry Service Apdex",
+      "tooltip": {
+        "shared": true,
+        "sort": 1,
+        "value_type": "individual"
+      },
+      "type": "graph",
+      "xaxis": {
+        "mode": "time",
+        "show": true
+      },
+      "yaxes": [
+        {
+          "format": "percentunit",
+          "label": "Apdex %",
+          "logBase": 1,
+          "max": 1,
+          "show": true
+        },
+        {
+          "format": "short",
+          "logBase": 1,
+          "max": 1,
+          "min": 0,
+          "show": false
+        }
+      ]
+    },
+    {
+      "fieldConfig": {
+        "defaults": {
+          "displayName": "Status",
+          "mappings": [
+            {
+              "id": 0,
+              "options": {
+                "0": {
+                  "color": "black",
+                  "index": 0,
+                  "text": "Healthy"
+                },
+                "1": {
+                  "color": "orange",
+                  "index": 1,
+                  "text": "Warning 🔥"
+                },
+                "10": {
+                  "color": "orange",
+                  "index": 10,
+                  "text": "Warning 🔥🥵"
+                },
+                "11": {
+                  "color": "red",
+                  "index": 11,
+                  "text": "Degraded 🔥🥵"
+                },
+                "12": {
+                  "color": "red",
+                  "index": 12,
+                  "text": "Degraded 🥵"
+                },
+                "13": {
+                  "color": "red",
+                  "index": 13,
+                  "text": "Degraded 🔥🥵"
+                },
+                "14": {
+                  "color": "red",
+                  "index": 14,
+                  "text": "Degraded 🔥🥵"
+                },
+                "15": {
+                  "color": "red",
+                  "index": 15,
+                  "text": "Degraded 🔥🥵"
+                },
+                "2": {
+                  "color": "orange",
+                  "index": 2,
+                  "text": "Warning 🔥"
+                },
+                "3": {
+                  "color": "red",
+                  "index": 3,
+                  "text": "Degraded 🔥"
+                },
+                "4": {
+                  "color": "orange",
+                  "index": 4,
+                  "text": "Warning 🥵"
+                },
+                "5": {
+                  "color": "orange",
+                  "index": 5,
+                  "text": "Warning 🔥🥵"
+                },
+                "6": {
+                  "color": "orange",
+                  "index": 6,
+                  "text": "Warning 🔥🥵"
+                },
+                "7": {
+                  "color": "red",
+                  "index": 7,
+                  "text": "Degraded 🔥🥵"
+                },
+                "8": {
+                  "color": "orange",
+                  "index": 8,
+                  "text": "Warning 🥵"
+                },
+                "9": {
+                  "color": "orange",
+                  "index": 9,
+                  "text": "Warning 🔥🥵"
+                }
+              },
+              "type": "value"
+            }
+          ],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "black",
+                "value": 0
+              },
+              {
+                "color": "orange",
+                "value": 1
+              },
+              {
+                "color": "orange",
+                "value": 2
+              },
+              {
+                "color": "red",
+                "value": 3
+              },
+              {
+                "color": "orange",
+                "value": 4
+              },
+              {
+                "color": "orange",
+                "value": 5
+              },
+              {
+                "color": "orange",
+                "value": 6
+              },
+              {
+                "color": "red",
+                "value": 7
+              },
+              {
+                "color": "orange",
+                "value": 8
+              },
+              {
+                "color": "orange",
+                "value": 9
+              },
+              {
+                "color": "orange",
+                "value": 10
+              },
+              {
+                "color": "red",
+                "value": 11
+              },
+              {
+                "color": "red",
+                "value": 12
+              },
+              {
+                "color": "red",
+                "value": 13
+              },
+              {
+                "color": "red",
+                "value": 14
+              },
+              {
+                "color": "red",
+                "value": 15
+              }
+            ]
+          },
+          "unit": "none"
+        }
+      },
+      "gridPos": {
+        "h": 1,
+        "w": 5,
+        "x": 0,
+        "y": 1907
+      },
+      "id": 13,
+      "options": {
+        "colorMode": "background",
+        "graphMode": "none",
+        "justifyMode": "auto",
+        "orientation": "vertical",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "textMode": "auto"
+      },
+      "pluginVersion": "7",
+      "targets": [
+        {
+          "expr": "sum(\n  label_replace(\n    vector(0) and on() (gitlab_service_apdex:ratio_1h{type=\"registry\"}),\n    \"period\", \"na\", \"\", \"\"\n  )\n  or\n  label_replace(\n    vector(1) and on () (gitlab_service_apdex:ratio_5m{type=\"registry\"} \u003c on(tier, type) group_left() (1 - (14.4 * (1 - slo:min:events:gitlab_service_apdex:ratio{component=\"\",type=\"registry\"})))),\n    \"period\", \"5m\", \"\", \"\"\n  )\n  or\n  label_replace(\n    vector(2) and on () (gitlab_service_apdex:ratio_1h{type=\"registry\"} \u003c on(tier, type) group_left() (1 - (14.4 * (1 - slo:min:events:gitlab_service_apdex:ratio{component=\"\",type=\"registry\"})))),\n    \"period\", \"1h\", \"\", \"\"\n  )\n  or\n  label_replace(\n    vector(4) and on () (gitlab_service_apdex:ratio_30m{type=\"registry\"} \u003c on(tier, type) group_left() (1 - (6 * (1 - slo:min:events:gitlab_service_apdex:ratio{component=\"\",type=\"registry\"})))),\n    \"period\", \"30m\", \"\", \"\"\n  )\n  or\n  label_replace(\n    vector(8) and on () (gitlab_service_apdex:ratio_6h{type=\"registry\"} \u003c on(tier, type) group_left() (1 - (6 * (1 - slo:min:events:gitlab_service_apdex:ratio{component=\"\",type=\"registry\"})))),\n    \"period\", \"6h\", \"\", \"\"\n  )\n)\n",
+          "format": "time_series",
+          "instant": true,
+          "interval": "1m",
+          "intervalFactor": 3,
+          "legendFormat": "registry Service | Latency/Apdex",
+          "refId": "A"
+        }
+      ],
+      "title": "",
+      "transparent": false,
+      "type": "stat"
+    },
+    {
+      "bars": false,
+      "dashLength": 10,
+      "dashes": false,
+      "datasource": "$PROMETHEUS_DS",
+      "decimals": 2,
+      "description": "Error rates are a measure of unhandled service exceptions per second. Client errors are excluded when possible. Lower is better",
+      "fill": 0,
+      "fillGradient": 0,
+      "gridPos": {
+        "h": 6,
+        "w": 5,
+        "x": 5,
+        "y": 1901
+      },
+      "id": 3392065145,
+      "legend": {
+        "alignAsTable": true,
+        "avg": true,
+        "current": true,
+        "hideEmpty": true,
+        "max": true,
+        "min": true,
+        "rightSide": false,
+        "show": true,
+        "total": false,
+        "values": true
+      },
+      "lines": true,
+      "linewidth": 2,
+      "nullPointMode": "null",
+      "options": {
+        "dataLinks": [
+          {
+            "targetBlank": true,
+            "title": "registry Service Error-Rate SLO Analysis",
+            "url": "/d/alerts-service_slo_error?${__url_time_range}\u0026${__all_variables}\u0026var-type=registry"
+          }
+        ]
+      },
+      "percentage": false,
+      "pointradius": 5,
+      "points": false,
+      "renderer": "flot",
+      "seriesOverrides": [
+        {
+          "alias": "6h Degradation SLO (5% of monthly error budget)",
+          "color": "#FF4500",
+          "dashLength": 4,
+          "dashes": true,
+          "legend": true,
+          "lines": true,
+          "linewidth": 2,
+          "nullPointMode": "connected",
+          "spaceLength": 10,
+          "zindex": -2
+        },
+        {
+          "alias": "1h Outage SLO (2% of monthly error budget)",
+          "color": "#F2495C",
+          "dashLength": 4,
+          "dashes": true,
+          "legend": true,
+          "lines": true,
+          "linewidth": 4,
+          "nullPointMode": "connected",
+          "spaceLength": 4,
+          "zindex": -2
+        },
+        {
+          "alias": "registry error ratio",
+          "color": "#E7D551",
+          "fillBelowTo": "registry error ratio avg",
+          "zindex": 3
+        },
+        {
+          "alias": "registry error ratio avg",
+          "color": "#5794F2",
+          "dashLength": 1,
+          "fillGradient": 10,
+          "linewidth": 1,
+          "spaceLength": 1,
+          "zindex": -3
+        },
+        {
+          "alias": "last week",
+          "color": "#dddddd80",
+          "dashLength": 4,
+          "dashes": true,
+          "fill": 0,
+          "legend": true,
+          "lines": true,
+          "linewidth": 1,
+          "nullPointMode": "connected",
+          "spaceLength": 2,
+          "zindex": -3
+        }
+      ],
+      "spaceLength": 10,
+      "stableId": "registryservice-registry-error-rate",
+      "stack": false,
+      "steppedLine": false,
+      "targets": [
+        {
+          "expr": "clamp_max(\n  max_over_time(gitlab_service_errors:ratio_5m{type=\"registry\"}[$__interval])\n,\n  1\n)\n",
+          "format": "time_series",
+          "interval": "1m",
+          "intervalFactor": 3,
+          "legendFormat": "registry error ratio",
+          "refId": "A"
+        },
+        {
+          "expr": "(6 * avg(slo:max:events:gitlab_service_errors:ratio{component=\"\",type=\"registry\"})\n)\n",
+          "format": "time_series",
+          "interval": "5m",
+          "intervalFactor": 3,
+          "legendFormat": "6h Degradation SLO (5% of monthly error budget)",
+          "refId": "B"
+        },
+        {
+          "expr": "(14.4 * avg(slo:max:events:gitlab_service_errors:ratio{component=\"\",type=\"registry\"})\n)\n",
+          "format": "time_series",
+          "interval": "5m",
+          "intervalFactor": 3,
+          "legendFormat": "1h Outage SLO (2% of monthly error budget)",
+          "refId": "C"
+        },
+        {
+          "expr": "clamp_max(\n  avg_over_time(gitlab_service_errors:ratio_5m{type=\"registry\"}[$__interval])\n,\n  1\n)\n",
+          "format": "time_series",
+          "interval": "1m",
+          "intervalFactor": 3,
+          "legendFormat": "registry error ratio avg",
+          "refId": "D"
+        },
+        {
+          "expr": "clamp_max(\n  gitlab_service_errors:ratio_5m{type=\"registry\"} offset 1w\n,\n  scalar(max((14.4 * avg(slo:max:events:gitlab_service_errors:ratio{component=\"\",type=\"registry\"})\n)\n))\n)\n",
+          "format": "time_series",
+          "interval": "1m",
+          "intervalFactor": 3,
+          "legendFormat": "last week",
+          "refId": "E"
+        }
+      ],
+      "title": "registry Service Error Ratio",
+      "tooltip": {
+        "shared": true,
+        "sort": 2,
+        "value_type": "individual"
+      },
+      "type": "graph",
+      "xaxis": {
+        "mode": "time",
+        "show": true
+      },
+      "yaxes": [
+        {
+          "format": "percentunit",
+          "label": "Error %",
+          "logBase": 1,
+          "min": 0,
+          "show": true
+        },
+        {
+          "format": "short",
+          "logBase": 1,
+          "max": 1,
+          "min": 0,
+          "show": false
+        }
+      ]
+    },
+    {
+      "fieldConfig": {
+        "defaults": {
+          "displayName": "Status",
+          "mappings": [
+            {
+              "id": 0,
+              "options": {
+                "0": {
+                  "color": "black",
+                  "index": 0,
+                  "text": "Healthy"
+                },
+                "1": {
+                  "color": "orange",
+                  "index": 1,
+                  "text": "Warning 🔥"
+                },
+                "10": {
+                  "color": "orange",
+                  "index": 10,
+                  "text": "Warning 🔥🥵"
+                },
+                "11": {
+                  "color": "red",
+                  "index": 11,
+                  "text": "Degraded 🔥🥵"
+                },
+                "12": {
+                  "color": "red",
+                  "index": 12,
+                  "text": "Degraded 🥵"
+                },
+                "13": {
+                  "color": "red",
+                  "index": 13,
+                  "text": "Degraded 🔥🥵"
+                },
+                "14": {
+                  "color": "red",
+                  "index": 14,
+                  "text": "Degraded 🔥🥵"
+                },
+                "15": {
+                  "color": "red",
+                  "index": 15,
+                  "text": "Degraded 🔥🥵"
+                },
+                "2": {
+                  "color": "orange",
+                  "index": 2,
+                  "text": "Warning 🔥"
+                },
+                "3": {
+                  "color": "red",
+                  "index": 3,
+                  "text": "Degraded 🔥"
+                },
+                "4": {
+                  "color": "orange",
+                  "index": 4,
+                  "text": "Warning 🥵"
+                },
+                "5": {
+                  "color": "orange",
+                  "index": 5,
+                  "text": "Warning 🔥🥵"
+                },
+                "6": {
+                  "color": "orange",
+                  "index": 6,
+                  "text": "Warning 🔥🥵"
+                },
+                "7": {
+                  "color": "red",
+                  "index": 7,
+                  "text": "Degraded 🔥🥵"
+                },
+                "8": {
+                  "color": "orange",
+                  "index": 8,
+                  "text": "Warning 🥵"
+                },
+                "9": {
+                  "color": "orange",
+                  "index": 9,
+                  "text": "Warning 🔥🥵"
+                }
+              },
+              "type": "value"
+            }
+          ],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "black",
+                "value": 0
+              },
+              {
+                "color": "orange",
+                "value": 1
+              },
+              {
+                "color": "orange",
+                "value": 2
+              },
+              {
+                "color": "red",
+                "value": 3
+              },
+              {
+                "color": "orange",
+                "value": 4
+              },
+              {
+                "color": "orange",
+                "value": 5
+              },
+              {
+                "color": "orange",
+                "value": 6
+              },
+              {
+                "color": "red",
+                "value": 7
+              },
+              {
+                "color": "orange",
+                "value": 8
+              },
+              {
+                "color": "orange",
+                "value": 9
+              },
+              {
+                "color": "orange",
+                "value": 10
+              },
+              {
+                "color": "red",
+                "value": 11
+              },
+              {
+                "color": "red",
+                "value": 12
+              },
+              {
+                "color": "red",
+                "value": 13
+              },
+              {
+                "color": "red",
+                "value": 14
+              },
+              {
+                "color": "red",
+                "value": 15
+              }
+            ]
+          },
+          "unit": "none"
+        }
+      },
+      "gridPos": {
+        "h": 1,
+        "w": 5,
+        "x": 5,
+        "y": 1907
+      },
+      "id": 15,
+      "options": {
+        "colorMode": "background",
+        "graphMode": "none",
+        "justifyMode": "auto",
+        "orientation": "vertical",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "textMode": "auto"
+      },
+      "pluginVersion": "7",
+      "targets": [
+        {
+          "expr": "sum (\n  label_replace(\n    vector(0) and on() (gitlab_service_errors:ratio_1h{type=\"registry\"}),\n    \"period\", \"na\", \"\", \"\"\n  )\n  or\n  label_replace(\n    vector(1) and on() (gitlab_service_errors:ratio_5m{type=\"registry\"} \u003e on(tier, type) group_left() (14.4 * slo:max:events:gitlab_service_errors:ratio{component=\"\",type=\"registry\"})),\n    \"period\", \"5m\", \"\", \"\"\n  )\n  or\n  label_replace(\n    vector(2) and on() (gitlab_service_errors:ratio_1h{type=\"registry\"} \u003e on(tier, type) group_left() (14.4 * slo:max:events:gitlab_service_errors:ratio{component=\"\",type=\"registry\"})),\n    \"period\", \"1h\", \"\", \"\"\n  )\n  or\n  label_replace(\n    vector(4) and on() (gitlab_service_errors:ratio_30m{type=\"registry\"} \u003e on(tier, type) group_left() (6 * slo:max:events:gitlab_service_errors:ratio{component=\"\",type=\"registry\"})),\n    \"period\", \"30m\", \"\", \"\"\n  )\n  or\n  label_replace(\n    vector(8) and on() (gitlab_service_errors:ratio_6h{type=\"registry\"} \u003e on(tier, type) group_left() (6 * slo:max:events:gitlab_service_errors:ratio{component=\"\",type=\"registry\"})),\n    \"period\", \"6h\", \"\", \"\"\n  )\n)\n",
+          "format": "time_series",
+          "instant": true,
+          "interval": "1m",
+          "intervalFactor": 3,
+          "legendFormat": "registry Service | Errors",
+          "refId": "A"
+        }
+      ],
+      "title": "",
+      "transparent": false,
+      "type": "stat"
+    },
+    {
+      "bars": false,
+      "dashLength": 10,
+      "dashes": false,
+      "datasource": "$PROMETHEUS_DS",
+      "decimals": 2,
+      "description": "The operation rate is the sum total of all requests being handle for all components within this service. Note that a single user request can lead to requests to multiple components. Higher is busier.",
+      "fill": 0,
+      "fillGradient": 0,
+      "gridPos": {
+        "h": 7,
+        "w": 5,
+        "x": 10,
+        "y": 1901
+      },
+      "id": 750584801,
+      "legend": {
+        "alignAsTable": true,
+        "avg": true,
+        "current": true,
+        "hideEmpty": true,
+        "max": true,
+        "min": true,
+        "rightSide": false,
+        "show": true,
+        "total": false,
+        "values": true
+      },
+      "lines": true,
+      "linewidth": 2,
+      "nullPointMode": "null",
+      "percentage": false,
+      "pointradius": 5,
+      "points": false,
+      "renderer": "flot",
+      "seriesOverrides": [
+        {
+          "alias": "registry RPS",
+          "color": "#E7D551",
+          "zindex": 3
+        },
+        {
+          "alias": "last week",
+          "color": "#dddddd80",
+          "dashLength": 4,
+          "dashes": true,
+          "fill": 0,
+          "legend": true,
+          "lines": true,
+          "linewidth": 1,
+          "nullPointMode": "connected",
+          "spaceLength": 2,
+          "zindex": -3
+        },
+        {
+          "alias": "upper normal",
+          "color": "#73BF69",
+          "dashLength": 8,
+          "dashes": true,
+          "fillBelowTo": "lower normal",
+          "legend": false,
+          "lines": false,
+          "linewidth": 1,
+          "nullPointMode": "connected",
+          "spaceLength": 8,
+          "zindex": -3
+        },
+        {
+          "alias": "lower normal",
+          "color": "#73BF69",
+          "dashLength": 8,
+          "dashes": true,
+          "legend": false,
+          "lines": false,
+          "linewidth": 1,
+          "nullPointMode": "connected",
+          "spaceLength": 8,
+          "zindex": -3
+        }
+      ],
+      "spaceLength": 10,
+      "stableId": "registryservice-registry-ops-rate",
+      "stack": false,
+      "steppedLine": false,
+      "targets": [
+        {
+          "expr": "avg_over_time(gitlab_service_ops:rate_5m{type=\"registry\"}[$__interval])\n",
+          "format": "time_series",
+          "interval": "1m",
+          "intervalFactor": 3,
+          "legendFormat": "registry RPS",
+          "refId": "A"
+        },
+        {
+          "expr": "gitlab_service_ops:rate_5m{type=\"registry\"} offset 1w\n",
+          "format": "time_series",
+          "interval": "1m",
+          "intervalFactor": 3,
+          "legendFormat": "last week",
+          "refId": "B"
+        },
+        {
+          "expr": "clamp_min(\n  avg by (type) (\n    gitlab_service_ops:rate:prediction{type=\"registry\"}\n    + (1) *\n    gitlab_service_ops:rate:stddev_over_time_1w{type=\"registry\"}\n  ),\n  0\n)\n",
+          "format": "time_series",
+          "interval": "1m",
+          "intervalFactor": 3,
+          "legendFormat": "upper normal",
+          "refId": "C"
+        },
+        {
+          "expr": "clamp_min(\n  avg by (type) (\n    gitlab_service_ops:rate:prediction{type=\"registry\"}\n    + (-1) *\n    gitlab_service_ops:rate:stddev_over_time_1w{type=\"registry\"}\n  ),\n  0\n)\n",
+          "format": "time_series",
+          "interval": "1m",
+          "intervalFactor": 3,
+          "legendFormat": "lower normal",
+          "refId": "D"
+        }
+      ],
+      "title": "registry Service RPS - Requests per Second",
+      "tooltip": {
+        "shared": true,
+        "sort": 2,
+        "value_type": "individual"
+      },
+      "type": "graph",
+      "xaxis": {
+        "mode": "time",
+        "show": true
+      },
+      "yaxes": [
+        {
+          "format": "short",
+          "label": "Operations per Second",
+          "logBase": 1,
+          "min": 0,
+          "show": true
+        },
+        {
+          "format": "short",
+          "logBase": 1,
+          "max": 1,
+          "min": 0,
+          "show": false
+        }
+      ]
+    },
+    {
+      "bars": false,
+      "dashLength": 10,
+      "dashes": false,
+      "datasource": "$PROMETHEUS_DS",
+      "decimals": 2,
+      "description": "Saturation is a measure of what ratio of a finite resource is currently being utilized. Lower is better.",
+      "fill": 0,
+      "fillGradient": 0,
+      "gridPos": {
+        "h": 7,
+        "w": 6,
+        "x": 15,
+        "y": 1901
+      },
+      "id": 1808812872,
+      "legend": {
+        "alignAsTable": true,
+        "avg": true,
+        "current": true,
+        "hideEmpty": true,
+        "max": true,
+        "min": true,
+        "rightSide": false,
+        "show": true,
+        "total": false,
+        "values": true
+      },
+      "lines": true,
+      "linewidth": 2,
+      "nullPointMode": "null",
+      "percentage": false,
+      "pointradius": 5,
+      "points": false,
+      "renderer": "flot",
+      "spaceLength": 10,
+      "stableId": "registryservice-utilization",
+      "stack": false,
+      "steppedLine": false,
+      "targets": [
+        {
+          "expr": "max(\n  max_over_time(\n    gitlab_component_saturation:ratio{type=\"registry\"}[$__interval]\n  )\n) by (component)\n",
+          "format": "time_series",
+          "interval": "1m",
+          "intervalFactor": 3,
+          "legendFormat": "{{ component }} component",
+          "refId": "A"
+        }
+      ],
+      "title": "Saturation",
+      "tooltip": {
+        "shared": true,
+        "sort": 2,
+        "value_type": "individual"
+      },
+      "type": "graph",
+      "xaxis": {
+        "mode": "time",
+        "show": true
+      },
+      "yaxes": [
+        {
+          "format": "percentunit",
+          "label": "Saturation %",
+          "logBase": 1,
+          "max": 1,
+          "show": true
+        },
+        {
+          "format": "short",
+          "logBase": 1,
+          "max": 1,
+          "min": 0,
+          "show": false
+        }
+      ]
+    },
+    {
+      "description": "",
+      "gridPos": {
+        "h": 7,
+        "w": 3,
+        "x": 21,
+        "y": 1901
+      },
+      "headings": false,
+      "id": 18,
+      "limit": 10,
+      "pluginVersion": "7.2.0",
+      "query": "",
+      "recent": false,
+      "search": true,
+      "starred": false,
+      "tags": [
+        "type:registry"
+      ],
+      "title": "",
+      "type": "dashlist"
+    },
+    {
+      "collapse": false,
+      "collapsed": false,
+      "gridPos": {
+        "h": 1,
+        "w": 24,
+        "x": 0,
+        "y": 2700
+      },
+      "id": 19,
+      "panels": [],
+      "repeat": null,
+      "repeatIteration": null,
+      "repeatRowId": null,
+      "showTitle": true,
+      "title": "sidekiq Service",
+      "titleSize": "h6",
+      "type": "row"
+    },
+    {
+      "bars": false,
+      "dashLength": 10,
+      "dashes": false,
+      "datasource": "$PROMETHEUS_DS",
+      "decimals": 2,
+      "description": "Apdex is a measure of requests that complete within a tolerable period of time for the service. Higher is better.",
+      "fill": 0,
+      "fillGradient": 0,
+      "gridPos": {
+        "h": 6,
+        "w": 5,
+        "x": 0,
+        "y": 2701
       },
       "id": 3725127254,
       "legend": {
@@ -1464,9 +2485,9 @@
         "h": 1,
         "w": 5,
         "x": 0,
-        "y": 1907
+        "y": 2707
       },
-      "id": 13,
+      "id": 21,
       "options": {
         "colorMode": "background",
         "graphMode": "none",
@@ -1510,7 +2531,7 @@
         "h": 6,
         "w": 5,
         "x": 5,
-        "y": 1901
+        "y": 2701
       },
       "id": 2740455213,
       "legend": {
@@ -1837,9 +2858,9 @@
         "h": 1,
         "w": 5,
         "x": 5,
-        "y": 1907
+        "y": 2707
       },
-      "id": 15,
+      "id": 23,
       "options": {
         "colorMode": "background",
         "graphMode": "none",
@@ -1883,7 +2904,7 @@
         "h": 7,
         "w": 5,
         "x": 10,
-        "y": 1901
+        "y": 2701
       },
       "id": 365480900,
       "legend": {
@@ -2029,7 +3050,7 @@
         "h": 7,
         "w": 6,
         "x": 15,
-        "y": 1901
+        "y": 2701
       },
       "id": 1954725218,
       "legend": {
@@ -2099,10 +3120,10 @@
         "h": 7,
         "w": 3,
         "x": 21,
-        "y": 1901
+        "y": 2701
       },
       "headings": false,
-      "id": 18,
+      "id": 26,
       "limit": 10,
       "pluginVersion": "7.2.0",
       "query": "",
@@ -2122,9 +3143,9 @@
         "h": 1,
         "w": 24,
         "x": 0,
-        "y": 2700
+        "y": 3500
       },
-      "id": 19,
+      "id": 27,
       "panels": [],
       "repeat": null,
       "repeatIteration": null,
@@ -2147,7 +3168,7 @@
         "h": 6,
         "w": 5,
         "x": 0,
-        "y": 2701
+        "y": 3501
       },
       "id": 2821070550,
       "legend": {
@@ -2485,9 +3506,9 @@
         "h": 1,
         "w": 5,
         "x": 0,
-        "y": 2707
+        "y": 3507
       },
-      "id": 21,
+      "id": 29,
       "options": {
         "colorMode": "background",
         "graphMode": "none",
@@ -2531,7 +3552,7 @@
         "h": 6,
         "w": 5,
         "x": 5,
-        "y": 2701
+        "y": 3501
       },
       "id": 2793174379,
       "legend": {
@@ -2858,9 +3879,9 @@
         "h": 1,
         "w": 5,
         "x": 5,
-        "y": 2707
+        "y": 3507
       },
-      "id": 23,
+      "id": 31,
       "options": {
         "colorMode": "background",
         "graphMode": "none",
@@ -2904,7 +3925,7 @@
         "h": 7,
         "w": 5,
         "x": 10,
-        "y": 2701
+        "y": 3501
       },
       "id": 1244022200,
       "legend": {
@@ -3050,7 +4071,7 @@
         "h": 7,
         "w": 6,
         "x": 15,
-        "y": 2701
+        "y": 3501
       },
       "id": 3156200393,
       "legend": {
@@ -3120,10 +4141,10 @@
         "h": 7,
         "w": 3,
         "x": 21,
-        "y": 2701
+        "y": 3501
       },
       "headings": false,
-      "id": 26,
+      "id": 34,
       "limit": 10,
       "pluginVersion": "7.2.0",
       "query": "",
@@ -3143,9 +4164,9 @@
         "h": 1,
         "w": 24,
         "x": 0,
-        "y": 3500
+        "y": 4300
       },
-      "id": 27,
+      "id": 35,
       "panels": [],
       "repeat": null,
       "repeatIteration": null,
@@ -3168,7 +4189,7 @@
         "h": 6,
         "w": 5,
         "x": 0,
-        "y": 3501
+        "y": 4301
       },
       "id": 3032091142,
       "legend": {
@@ -3506,9 +4527,9 @@
         "h": 1,
         "w": 5,
         "x": 0,
-        "y": 3507
+        "y": 4307
       },
-      "id": 29,
+      "id": 37,
       "options": {
         "colorMode": "background",
         "graphMode": "none",
@@ -3552,7 +4573,7 @@
         "h": 6,
         "w": 5,
         "x": 5,
-        "y": 3501
+        "y": 4301
       },
       "id": 1775121435,
       "legend": {
@@ -3879,9 +4900,9 @@
         "h": 1,
         "w": 5,
         "x": 5,
-        "y": 3507
+        "y": 4307
       },
-      "id": 31,
+      "id": 39,
       "options": {
         "colorMode": "background",
         "graphMode": "none",
@@ -3925,7 +4946,7 @@
         "h": 7,
         "w": 5,
         "x": 10,
-        "y": 3501
+        "y": 4301
       },
       "id": 2407688615,
       "legend": {
@@ -4071,7 +5092,7 @@
         "h": 7,
         "w": 6,
         "x": 15,
-        "y": 3501
+        "y": 4301
       },
       "id": 3608557538,
       "legend": {
@@ -4141,10 +5162,10 @@
         "h": 7,
         "w": 3,
         "x": 21,
-        "y": 3501
+        "y": 4301
       },
       "headings": false,
-      "id": 34,
+      "id": 42,
       "limit": 10,
       "pluginVersion": "7.2.0",
       "query": "",
@@ -4164,9 +5185,9 @@
         "h": 1,
         "w": 24,
         "x": 0,
-        "y": 4300
+        "y": 5100
       },
-      "id": 35,
+      "id": 43,
       "panels": [],
       "repeat": null,
       "repeatIteration": null,
@@ -4189,7 +5210,7 @@
         "h": 6,
         "w": 5,
         "x": 0,
-        "y": 4301
+        "y": 5101
       },
       "id": 1462485464,
       "legend": {
@@ -4527,9 +5548,9 @@
         "h": 1,
         "w": 5,
         "x": 0,
-        "y": 4307
+        "y": 5107
       },
-      "id": 37,
+      "id": 45,
       "options": {
         "colorMode": "background",
         "graphMode": "none",
@@ -4573,7 +5594,7 @@
         "h": 6,
         "w": 5,
         "x": 5,
-        "y": 4301
+        "y": 5101
       },
       "id": 4217231753,
       "legend": {
@@ -4900,9 +5921,9 @@
         "h": 1,
         "w": 5,
         "x": 5,
-        "y": 4307
+        "y": 5107
       },
-      "id": 39,
+      "id": 47,
       "options": {
         "colorMode": "background",
         "graphMode": "none",
@@ -4946,7 +5967,7 @@
         "h": 7,
         "w": 5,
         "x": 10,
-        "y": 4301
+        "y": 5101
       },
       "id": 3420507204,
       "legend": {
@@ -5092,7 +6113,7 @@
         "h": 7,
         "w": 6,
         "x": 15,
-        "y": 4301
+        "y": 5101
       },
       "id": 1588309641,
       "legend": {
@@ -5162,10 +6183,10 @@
         "h": 7,
         "w": 3,
         "x": 21,
-        "y": 4301
+        "y": 5101
       },
       "headings": false,
-      "id": 42,
+      "id": 50,
       "limit": 10,
       "pluginVersion": "7.2.0",
       "query": "",
@@ -5185,9 +6206,9 @@
         "h": 1,
         "w": 24,
         "x": 0,
-        "y": 5100
+        "y": 5900
       },
-      "id": 43,
+      "id": 51,
       "panels": [],
       "repeat": null,
       "repeatIteration": null,
@@ -5210,7 +6231,7 @@
         "h": 7,
         "w": 21,
         "x": 0,
-        "y": 5101
+        "y": 5901
       },
       "id": 2120645664,
       "legend": {
@@ -5280,10 +6301,10 @@
         "h": 7,
         "w": 3,
         "x": 21,
-        "y": 5101
+        "y": 5901
       },
       "headings": false,
-      "id": 45,
+      "id": 53,
       "limit": 10,
       "pluginVersion": "7.2.0",
       "query": "",
@@ -5303,9 +6324,9 @@
         "h": 1,
         "w": 24,
         "x": 0,
-        "y": 5400
+        "y": 6200
       },
-      "id": 46,
+      "id": 54,
       "panels": [],
       "repeat": null,
       "repeatIteration": null,
@@ -5328,7 +6349,7 @@
         "h": 6,
         "w": 7,
         "x": 0,
-        "y": 5401
+        "y": 6201
       },
       "id": 2070955448,
       "legend": {
@@ -5655,9 +6676,9 @@
         "h": 1,
         "w": 7,
         "x": 0,
-        "y": 5407
+        "y": 6207
       },
-      "id": 48,
+      "id": 56,
       "options": {
         "colorMode": "background",
         "graphMode": "none",
@@ -5701,7 +6722,7 @@
         "h": 7,
         "w": 7,
         "x": 7,
-        "y": 5401
+        "y": 6201
       },
       "id": 4207135033,
       "legend": {
@@ -5847,7 +6868,7 @@
         "h": 7,
         "w": 7,
         "x": 14,
-        "y": 5401
+        "y": 6201
       },
       "id": 1953118522,
       "legend": {
@@ -5917,10 +6938,10 @@
         "h": 7,
         "w": 3,
         "x": 21,
-        "y": 5401
+        "y": 6201
       },
       "headings": false,
-      "id": 51,
+      "id": 59,
       "limit": 10,
       "pluginVersion": "7.2.0",
       "query": "",
@@ -5942,7 +6963,7 @@
         "x": 0,
         "y": 110000
       },
-      "id": 52,
+      "id": 60,
       "mode": "markdown",
       "title": "Source",
       "type": "text"

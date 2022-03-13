@@ -972,6 +972,237 @@ groups:
       type: praefect
     record: gitlab_component_service:mapping
 - interval: 1m
+  name: 'Component-Level SLIs: registry - 5m burn-rate'
+  rules:
+  - expr: |
+      (
+        sum by () (
+          rate(registry_http_request_duration_seconds_bucket{le="2.5"}[5m])
+        )
+        +
+        sum by () (
+          rate(registry_http_request_duration_seconds_bucket{le="25"}[5m])
+        )
+      )
+      /
+      2
+    labels:
+      component: server
+      tier: sv
+      type: registry
+    record: gitlab_component_apdex:success:rate_5m
+  - expr: |
+      sum by () (
+        rate(registry_http_request_duration_seconds_bucket{le="+Inf"}[5m])
+      )
+    labels:
+      component: server
+      tier: sv
+      type: registry
+    record: gitlab_component_apdex:weight:score_5m
+  - expr: |
+      sum by () (
+        rate(registry_http_requests_total{}[5m])
+      )
+    labels:
+      component: server
+      tier: sv
+      type: registry
+    record: gitlab_component_ops:rate_5m
+  - expr: |
+      (
+        sum by () (
+          rate(registry_http_requests_total{code=~"5.."}[5m])
+        )
+      )
+      or
+      (
+        0 * group by() (
+          gitlab_component_ops:rate_5m{component="server",tier="sv",type="registry"}
+        )
+      )
+    labels:
+      component: server
+      tier: sv
+      type: registry
+    record: gitlab_component_errors:rate_5m
+- interval: 2m
+  name: 'Component-Level SLIs: registry - 30m burn-rate'
+  rules:
+  - expr: |
+      (
+        sum by () (
+          rate(registry_http_request_duration_seconds_bucket{le="2.5"}[30m])
+        )
+        +
+        sum by () (
+          rate(registry_http_request_duration_seconds_bucket{le="25"}[30m])
+        )
+      )
+      /
+      2
+    labels:
+      component: server
+      tier: sv
+      type: registry
+    record: gitlab_component_apdex:success:rate_30m
+  - expr: |
+      sum by () (
+        rate(registry_http_request_duration_seconds_bucket{le="+Inf"}[30m])
+      )
+    labels:
+      component: server
+      tier: sv
+      type: registry
+    record: gitlab_component_apdex:weight:score_30m
+  - expr: |
+      sum by () (
+        rate(registry_http_requests_total{}[30m])
+      )
+    labels:
+      component: server
+      tier: sv
+      type: registry
+    record: gitlab_component_ops:rate_30m
+  - expr: |
+      (
+        sum by () (
+          rate(registry_http_requests_total{code=~"5.."}[30m])
+        )
+      )
+      or
+      (
+        0 * group by() (
+          gitlab_component_ops:rate_30m{component="server",tier="sv",type="registry"}
+        )
+      )
+    labels:
+      component: server
+      tier: sv
+      type: registry
+    record: gitlab_component_errors:rate_30m
+- interval: 1m
+  name: 'Component-Level SLIs: registry - 1h burn-rate'
+  rules:
+  - expr: |
+      (
+        sum by () (
+          rate(registry_http_request_duration_seconds_bucket{le="2.5"}[1h])
+        )
+        +
+        sum by () (
+          rate(registry_http_request_duration_seconds_bucket{le="25"}[1h])
+        )
+      )
+      /
+      2
+    labels:
+      component: server
+      tier: sv
+      type: registry
+    record: gitlab_component_apdex:success:rate_1h
+  - expr: |
+      sum by () (
+        rate(registry_http_request_duration_seconds_bucket{le="+Inf"}[1h])
+      )
+    labels:
+      component: server
+      tier: sv
+      type: registry
+    record: gitlab_component_apdex:weight:score_1h
+  - expr: |
+      sum by () (
+        rate(registry_http_requests_total{}[1h])
+      )
+    labels:
+      component: server
+      tier: sv
+      type: registry
+    record: gitlab_component_ops:rate_1h
+  - expr: |
+      (
+        sum by () (
+          rate(registry_http_requests_total{code=~"5.."}[1h])
+        )
+      )
+      or
+      (
+        0 * group by() (
+          gitlab_component_ops:rate_1h{component="server",tier="sv",type="registry"}
+        )
+      )
+    labels:
+      component: server
+      tier: sv
+      type: registry
+    record: gitlab_component_errors:rate_1h
+- interval: 2m
+  name: 'Component-Level SLIs: registry - 6h burn-rate'
+  rules:
+  - expr: |
+      (
+        sum by () (
+          rate(registry_http_request_duration_seconds_bucket{le="2.5"}[6h])
+        )
+        +
+        sum by () (
+          rate(registry_http_request_duration_seconds_bucket{le="25"}[6h])
+        )
+      )
+      /
+      2
+    labels:
+      component: server
+      tier: sv
+      type: registry
+    record: gitlab_component_apdex:success:rate_6h
+  - expr: |
+      sum by () (
+        rate(registry_http_request_duration_seconds_bucket{le="+Inf"}[6h])
+      )
+    labels:
+      component: server
+      tier: sv
+      type: registry
+    record: gitlab_component_apdex:weight:score_6h
+  - expr: |
+      sum by () (
+        rate(registry_http_requests_total{}[6h])
+      )
+    labels:
+      component: server
+      tier: sv
+      type: registry
+    record: gitlab_component_ops:rate_6h
+  - expr: |
+      (
+        sum by () (
+          rate(registry_http_requests_total{code=~"5.."}[6h])
+        )
+      )
+      or
+      (
+        0 * group by() (
+          gitlab_component_ops:rate_6h{component="server",tier="sv",type="registry"}
+        )
+      )
+    labels:
+      component: server
+      tier: sv
+      type: registry
+    record: gitlab_component_errors:rate_6h
+- interval: 1m
+  name: 'Component mapping: registry'
+  rules:
+  - expr: "1"
+    labels:
+      component: server
+      regional_aggregation: "no"
+      service_aggregation: "yes"
+      tier: sv
+      type: registry
+    record: gitlab_component_service:mapping
+- interval: 1m
   name: 'Component-Level SLIs: sidekiq - 5m burn-rate'
   rules:
   - expr: |
@@ -2189,6 +2420,28 @@ groups:
       tier: stor
       type: praefect
     record: slo:max:events:gitlab_service_errors:ratio
+  - expr: "0.997000"
+    labels:
+      tier: sv
+      type: registry
+    record: slo:min:events:gitlab_service_apdex:ratio
+  - expr: "0.000100"
+    labels:
+      tier: sv
+      type: registry
+    record: slo:max:events:gitlab_service_errors:ratio
+  - expr: "0.997000"
+    labels:
+      component: server
+      tier: sv
+      type: registry
+    record: slo:min:events:gitlab_service_apdex:ratio
+  - expr: "0.000100"
+    labels:
+      component: server
+      tier: sv
+      type: registry
+    record: slo:max:events:gitlab_service_errors:ratio
   - expr: "0.995000"
     labels:
       tier: sv
@@ -2336,13 +2589,13 @@ groups:
         clamp_min(
           clamp_max(
             sum by (type, pod, container) (
-              rate(container_cpu_usage_seconds_total:labeled{container!="", container!="POD", type=~"consul|gitlab-shell|sidekiq|webservice"}[5m])
+              rate(container_cpu_usage_seconds_total:labeled{container!="", container!="POD", type=~"consul|gitlab-shell|registry|sidekiq|webservice"}[5m])
             )
             /
             sum by(type, pod, container) (
-              container_spec_cpu_quota:labeled{container!="", container!="POD", type=~"consul|gitlab-shell|sidekiq|webservice"}
+              container_spec_cpu_quota:labeled{container!="", container!="POD", type=~"consul|gitlab-shell|registry|sidekiq|webservice"}
               /
-              container_spec_cpu_period:labeled{container!="", container!="POD", type=~"consul|gitlab-shell|sidekiq|webservice"}
+              container_spec_cpu_period:labeled{container!="", container!="POD", type=~"consul|gitlab-shell|registry|sidekiq|webservice"}
             )
             ,
             1)
@@ -2356,9 +2609,9 @@ groups:
       max by(type) (
         clamp_min(
           clamp_max(
-            container_memory_working_set_bytes:labeled{container!="", container!="POD", type=~"consul|gitlab-shell|sidekiq|webservice"}
+            container_memory_working_set_bytes:labeled{container!="", container!="POD", type=~"consul|gitlab-shell|registry|sidekiq|webservice"}
             /
-            (container_spec_memory_limit_bytes:labeled{container!="", container!="POD", type=~"consul|gitlab-shell|sidekiq|webservice"} > 0)
+            (container_spec_memory_limit_bytes:labeled{container!="", container!="POD", type=~"consul|gitlab-shell|registry|sidekiq|webservice"} > 0)
             ,
             1)
         ,
@@ -3170,6 +3423,35 @@ groups:
     labels:
       tier: sv
       type: gitlab-shell
+    record: kube_deployment_labels:labeled
+- interval: 1m
+  name: 'kube-state-metrics-recording-rules: registry'
+  rules:
+  - expr: |
+      group without(label_deployment) (
+        label_replace(
+          topk by(cluster,pod) (1, kube_pod_labels{label_app="registry"}),
+          "deployment", "$0", "label_deployment", ".*"
+        )
+      )
+    labels:
+      tier: sv
+      type: registry
+    record: kube_pod_labels:labeled
+  - expr: topk by(cluster,horizontalpodautoscaler) (1, kube_horizontalpodautoscaler_labels{horizontalpodautoscaler="gitlab-registry"})
+    labels:
+      tier: sv
+      type: registry
+    record: kube_horizontalpodautoscaler_labels:labeled
+  - expr: topk by(cluster,ingress) (1, kube_ingress_labels{label_app="registry"})
+    labels:
+      tier: sv
+      type: registry
+    record: kube_ingress_labels:labeled
+  - expr: topk by(cluster,deployment) (1, kube_deployment_labels{label_app="registry"})
+    labels:
+      tier: sv
+      type: registry
     record: kube_deployment_labels:labeled
 - interval: 1m
   name: 'kube-state-metrics-recording-rules: sidekiq'
@@ -4792,6 +5074,273 @@ groups:
       sli_type: ops
       slo_alert: "no"
       user_impacting: "no"
+- interval: 1m
+  name: 'Service Component Alerts: registry'
+  rules:
+  - alert: RegistryServiceServerApdexSLOViolation
+    annotations:
+      description: |
+        Aggregation of all registry HTTP requests.
+
+        Currently the apdex value is {{ $value | humanizePercentage }}.
+      grafana_dashboard_id: registry-main/registry-overview
+      grafana_dashboard_link: https://dashboards.gitlab.net/d/registry-main/registry-overview?from=now-6h/m&to=now-1m/m&var-environment={{
+        $labels.environment }}&var-stage={{ $labels.stage }}
+      grafana_min_zoom_hours: "6"
+      grafana_panel_id: "2863319079"
+      grafana_variables: environment,stage
+      promql_template_1: |
+        histogram_quantile(
+          0.950000,
+          sum by (le) (
+            rate(registry_http_request_duration_seconds_bucket{}[5m])
+          )
+        )
+      runbook: docs/registry/README.md
+      title: The server SLI of the registry service has an apdex violating SLO
+    expr: |
+      (
+        (
+          gitlab_component_apdex:ratio_1h{component="server",type="registry"}
+          < (1 - 14.4 * 0.003000)
+        )
+        and
+        (
+          gitlab_component_apdex:ratio_5m{component="server",type="registry"}
+          < (1 - 14.4 * 0.003000)
+        )
+      )
+      and on(type,component)
+      (
+        sum by(type,component) (gitlab_component_ops:rate_1h{component="server",type="registry"}) >= 1
+      )
+    for: 2m
+    labels:
+      aggregation: component
+      alert_class: slo_violation
+      alert_type: symptom
+      feature_category: not_owned
+      pager: pagerduty
+      rules_domain: general
+      severity: s2
+      sli_type: apdex
+      slo_alert: "yes"
+      user_impacting: "yes"
+      window: 1h
+  - alert: RegistryServiceServerApdexSLOViolation
+    annotations:
+      description: |
+        Aggregation of all registry HTTP requests.
+
+        Currently the apdex value is {{ $value | humanizePercentage }}.
+      grafana_dashboard_id: registry-main/registry-overview
+      grafana_dashboard_link: https://dashboards.gitlab.net/d/registry-main/registry-overview?from=now-6h/m&to=now-1m/m&var-environment={{
+        $labels.environment }}&var-stage={{ $labels.stage }}
+      grafana_min_zoom_hours: "6"
+      grafana_panel_id: "2863319079"
+      grafana_variables: environment,stage
+      promql_template_1: |
+        histogram_quantile(
+          0.950000,
+          sum by (le) (
+            rate(registry_http_request_duration_seconds_bucket{}[5m])
+          )
+        )
+      runbook: docs/registry/README.md
+      title: The server SLI of the registry service has an apdex violating SLO
+    expr: |
+      (
+        (
+          gitlab_component_apdex:ratio_6h{component="server",type="registry"}
+          < (1 - 6 * 0.003000)
+        )
+        and
+        (
+          gitlab_component_apdex:ratio_30m{component="server",type="registry"}
+          < (1 - 6 * 0.003000)
+        )
+      )
+      and on(type,component)
+      (
+        sum by(type,component) (gitlab_component_ops:rate_6h{component="server",type="registry"}) >= 0.16667
+      )
+    for: 2m
+    labels:
+      aggregation: component
+      alert_class: slo_violation
+      alert_type: symptom
+      feature_category: not_owned
+      pager: pagerduty
+      rules_domain: general
+      severity: s2
+      sli_type: apdex
+      slo_alert: "yes"
+      user_impacting: "yes"
+      window: 6h
+  - alert: RegistryServiceServerErrorSLOViolation
+    annotations:
+      description: |
+        Aggregation of all registry HTTP requests.
+
+        Currently the error-rate is {{ $value | humanizePercentage }}.
+      grafana_dashboard_id: registry-main/registry-overview
+      grafana_dashboard_link: https://dashboards.gitlab.net/d/registry-main/registry-overview?from=now-6h/m&to=now-1m/m&var-environment={{
+        $labels.environment }}&var-stage={{ $labels.stage }}
+      grafana_min_zoom_hours: "6"
+      grafana_panel_id: "1631973137"
+      grafana_variables: environment,stage
+      promql_template_1: |
+        sum by () (
+          rate(registry_http_requests_total{code=~"5.."}[5m])
+        )
+      runbook: docs/registry/README.md
+      title: The server SLI of the registry service has an error rate violating SLO
+    expr: |
+      (
+        (
+          gitlab_component_errors:ratio_1h{component="server",type="registry"}
+          > (14.4 * 0.000100)
+        )
+        and
+        (
+          gitlab_component_errors:ratio_5m{component="server",type="registry"}
+          > (14.4 * 0.000100)
+        )
+      )
+      and on(type,component)
+      (
+        sum by(type,component) (gitlab_component_ops:rate_1h{component="server",type="registry"}) >= 1
+      )
+    for: 2m
+    labels:
+      aggregation: component
+      alert_class: slo_violation
+      alert_type: symptom
+      feature_category: not_owned
+      pager: pagerduty
+      rules_domain: general
+      severity: s2
+      sli_type: error
+      slo_alert: "yes"
+      user_impacting: "yes"
+      window: 1h
+  - alert: RegistryServiceServerErrorSLOViolation
+    annotations:
+      description: |
+        Aggregation of all registry HTTP requests.
+
+        Currently the error-rate is {{ $value | humanizePercentage }}.
+      grafana_dashboard_id: registry-main/registry-overview
+      grafana_dashboard_link: https://dashboards.gitlab.net/d/registry-main/registry-overview?from=now-6h/m&to=now-1m/m&var-environment={{
+        $labels.environment }}&var-stage={{ $labels.stage }}
+      grafana_min_zoom_hours: "6"
+      grafana_panel_id: "1631973137"
+      grafana_variables: environment,stage
+      promql_template_1: |
+        sum by () (
+          rate(registry_http_requests_total{code=~"5.."}[5m])
+        )
+      runbook: docs/registry/README.md
+      title: The server SLI of the registry service has an error rate violating SLO
+    expr: |
+      (
+        (
+          gitlab_component_errors:ratio_6h{component="server",type="registry"}
+          > (6 * 0.000100)
+        )
+        and
+        (
+          gitlab_component_errors:ratio_30m{component="server",type="registry"}
+          > (6 * 0.000100)
+        )
+      )
+      and on(type,component)
+      (
+        sum by(type,component) (gitlab_component_ops:rate_6h{component="server",type="registry"}) >= 0.16667
+      )
+    for: 2m
+    labels:
+      aggregation: component
+      alert_class: slo_violation
+      alert_type: symptom
+      feature_category: not_owned
+      pager: pagerduty
+      rules_domain: general
+      severity: s2
+      sli_type: error
+      slo_alert: "yes"
+      user_impacting: "yes"
+      window: 6h
+  - alert: RegistryServiceServerTrafficCessation
+    annotations:
+      description: |
+        Aggregation of all registry HTTP requests.
+
+        This alert signifies that the SLI is reporting a cessation of traffic; the signal is present, but is zero.
+      grafana_dashboard_id: registry-main/registry-overview
+      grafana_dashboard_link: https://dashboards.gitlab.net/d/registry-main/registry-overview?from=now-6h/m&to=now-1m/m&var-environment={{
+        $labels.environment }}&var-stage={{ $labels.stage }}
+      grafana_min_zoom_hours: "6"
+      grafana_panel_id: "2414183688"
+      grafana_variables: environment,stage
+      promql_template_1: |
+        sum by () (
+          rate(registry_http_requests_total{}[5m])
+        )
+      runbook: docs/registry/README.md
+      title: The server SLI of the registry service has not received any traffic in
+        the past 30m
+    expr: |
+      gitlab_component_ops:rate_30m{component="server",type="registry"} == 0
+    for: 5m
+    labels:
+      aggregation: component
+      alert_class: traffic_cessation
+      alert_type: cause
+      feature_category: not_owned
+      pager: pagerduty
+      rules_domain: general
+      severity: s2
+      sli_type: ops
+      slo_alert: "no"
+      user_impacting: "yes"
+  - alert: RegistryServiceServerTrafficAbsent
+    annotations:
+      description: |
+        Aggregation of all registry HTTP requests.
+
+        This alert signifies that the SLI was previously reporting traffic, but is no longer - the signal is absent.
+
+        This could be caused by a change to the metrics used in the SLI, or by the service not receiving traffic.
+      grafana_dashboard_id: registry-main/registry-overview
+      grafana_dashboard_link: https://dashboards.gitlab.net/d/registry-main/registry-overview?from=now-6h/m&to=now-1m/m&var-environment={{
+        $labels.environment }}&var-stage={{ $labels.stage }}
+      grafana_min_zoom_hours: "6"
+      grafana_panel_id: "2414183688"
+      grafana_variables: environment,stage
+      promql_template_1: |
+        sum by () (
+          rate(registry_http_requests_total{}[5m])
+        )
+      runbook: docs/registry/README.md
+      title: The server SLI of the registry service has not reported any traffic in
+        the past 30m
+    expr: |
+      gitlab_component_ops:rate_5m{component="server",type="registry"} offset 1h
+      unless
+      gitlab_component_ops:rate_5m{component="server",type="registry"}
+    for: 30m
+    labels:
+      aggregation: component
+      alert_class: traffic_cessation
+      alert_type: cause
+      feature_category: not_owned
+      pager: pagerduty
+      rules_domain: general
+      severity: s2
+      sli_type: ops
+      slo_alert: "no"
+      user_impacting: "yes"
 - interval: 1m
   name: 'Service Component Alerts: sidekiq'
   rules:
