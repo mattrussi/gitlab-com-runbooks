@@ -1,7 +1,5 @@
 local durationParser = import 'utils/duration-parser.libsonnet';
 
-// If the input range is null, it means the range is dynamic, aka evaluated in
-// the client side
 local dynamicRange = '$__range';
 local isDynamicRange(range) = range == dynamicRange;
 
