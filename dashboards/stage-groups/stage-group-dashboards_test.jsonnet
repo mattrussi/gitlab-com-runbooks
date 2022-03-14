@@ -191,7 +191,7 @@ test.suite({
       feature_categories: ['team_planning', 'planning_analytics'],
     })),
     expect: [
-      'Error Budget (past 28 days)',
+      'Error Budget (From ${__from:date:YYYY-MM-DD HHːmm} to ${__to:date:YYYY-MM-DD HHːmm})',
       'Availability',
       'Budget remaining',
       'Budget spent',

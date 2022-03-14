@@ -19,20 +19,21 @@ local selector = {
   environment: 'gprd',
   monitor: 'global',
 };
+local budget = errorBudget();
 local rules = {
   groups: [
     ruleGroup {
       name: '28d availability by stage group',
       rules: [{
         record: 'gitlab:stage_group:availability:ratio_28d',
-        expr: errorBudget.queries.errorBudgetRatio(selector, aggregationLabels),
+        expr: budget.queries.errorBudgetRatio(selector, aggregationLabels),
       }],
     },
     ruleGroup {
       name: '28d availability by stage group and SLI kind',
       rules: [{
         record: 'gitlab:stage_group:sli_kind:availability:ratio_28d',
-        expr: errorBudget.queries.errorBudgetRatio(selector, aggregationLabels + ['sli_kind']),
+        expr: budget.queries.errorBudgetRatio(selector, aggregationLabels + ['sli_kind']),
       }],
     },
     ruleGroup {
@@ -49,9 +50,9 @@ local rules = {
           )
         ||| % {
           operationRateByStageGroup:
-            strings.indent(strings.chomp(errorBudget.queries.errorBudgetOperationRate(selector, aggregationLabels)), 2),
+            strings.indent(strings.chomp(budget.queries.errorBudgetOperationRate(selector, aggregationLabels)), 2),
           operationRateByEnvironment:
-            strings.indent(strings.chomp(errorBudget.queries.errorBudgetOperationRate(selector, environmentLabels)), 2),
+            strings.indent(strings.chomp(budget.queries.errorBudgetOperationRate(selector, environmentLabels)), 2),
           groupLabels: aggregations.serialize(groupLabels),
         },
       }],
