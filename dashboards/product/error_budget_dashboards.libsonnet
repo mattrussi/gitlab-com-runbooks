@@ -2,6 +2,7 @@ local basic = import 'grafana/basic.libsonnet';
 local layout = import 'grafana/layout.libsonnet';
 local prebuiltTemplates = import 'grafana/templates.libsonnet';
 local stages = import 'service-catalog/stages.libsonnet';
+local errorBudgetUtils = import 'stage-groups/error-budget/utils.libsonnet';
 local errorBudget = import 'stage-groups/error_budget.libsonnet';
 local toolingLinks = import 'toolinglinks/toolinglinks.libsonnet';
 
@@ -19,7 +20,7 @@ local groupHandbookLink = function(group)
   normalizeUrl('https://about.gitlab.com/handbook/product/categories/#%s-group' % group.key);
 
 local errorBudgetPanels(group) =
-  local budget = errorBudget();
+  local budget = errorBudget(errorBudgetUtils.dynamicRange);
   [
     [
       budget.panels.availabilityStatPanel(group.key),
@@ -71,7 +72,7 @@ local selectGroups(stage, groups) =
 local dashboard(stage, groups=null) =
   assert std.type(groups) == 'null' || std.type(groups) == 'array' : 'Invalid groups argument type';
 
-  local budget = errorBudget();
+  local budget = errorBudget(errorBudgetUtils.dynamicRange);
 
   local stageGroups =
     if groups == null then
@@ -81,7 +82,7 @@ local dashboard(stage, groups=null) =
 
   local basicDashboard = basic.dashboard(
     title='Error Budgets - %s' % stage,
-    time_from='now-%s' % budget.range,
+    time_from='now-28d',
     tags=['product performance']
   ).addTemplate(
     prebuiltTemplates.stage
@@ -95,7 +96,7 @@ local dashboard(stage, groups=null) =
       d.addPanels(
         local group = groupWrapper.group;
         local rowIndex = (groupWrapper.index + 1) * 100;
-        local title = "%(group)s's Error Budgets (past %(range)s)" % {
+        local title = "%(group)s's Error Budgets (From ${__from:date:YYYY-MM-DD HHːmm} to ${__to:date:YYYY-MM-DD HHːmm})" % {
           group: group.name,
           range: budget.range,
         };
