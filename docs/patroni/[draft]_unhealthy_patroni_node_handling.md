@@ -45,7 +45,7 @@ What this means is that we need to be aware of and think of:
 - Safely shutdown and destroy the node
 - Let Terraform replace the instance
 
-## Diagnose
+## Chapter 1 - Diagnose
 
 ### PostgreSQL health
 
@@ -77,7 +77,7 @@ If just one or a few Replicas are lagging in relation with the Primary/Writer no
 
 
 
-## Draining Workload from the Unhealty Patroni replica
+## Chapter 2 - Draining Workload from the Unhealty Patroni replica
 
 
 
@@ -138,40 +138,79 @@ If just one or a few Replicas are lagging in relation with the Primary/Writer no
     ```
 
 You can see an example of taking a node out of service in [this issue](https://gitlab.com/gitlab-com/gl-infra/production/-/issues/1061).
+ 
+ 
+### Step 3 - Decide if you will remove the node or wait for it to recover
 
-### Step 3 - Stop patroni service on the node
+This is a critical decision because replacing a Patroni Replica can take up to <mark>reference to Mean-Time-To-Create instance</mark>. Also consider that creating/replacing a Replica will have significant I/O impact in the Primary/Writer node during the whole operation.
+
+If you decide to relpace the unhealthy replica proceed to chapter 3.
+
+
+## Chapter 3 - Removing an unhealty replica from the Patroni cluster
+
+
+**IMPORTANT:** make sure that the connections that the workload is drained from the unhealthy replica (link to previous chapter)
+
+
+### Step 1 - Stop patroni service on the node
 
 Now it is save to stop the patroni service on this node. This will also stop postgres and thus terminate all remaining db connections if there are still some. With the patroni service stopped, you should see this node vanish from the cluster after a while when you run `gitlab-patronictl list` on any of the other nodes. 
 
 We have alerts that fire when patroni is deemed to be down. Since this is an intentional change - either silence the alarm in advance and/or give a heads up to the EOC (by messaging `@sre-oncall` at `#infrastructure-lounge` Slack channel).
 
-* Stop the patroni service on the unhealthy node
+- Stop the patroni service on the unhealthy node
 
 	```
 	sudo systemctl stop patroni
 	sudo systemctl disable patroni.service
 	```
 
-* Check that patroni service is stopped in the host
+- Check that patroni service is stopped in the host
 
    ```
    sudo gitlab-patronictl list
-   ```   
-   
-
-## Removing an unhealty replica from the Patroni cluster
+   ``` 
 
 
-**IMPORTANT:** make sure that the connections that the workload is drained from the unhealthy replica (link to previous chapter)
+### Step 2 - Shutdown the node
+
+- Stop the VM
+	
+	```
+	gcloud compute instances stop <vm_name> 
+	```
 
 
-### Step 1 - 
+
+### Step 3 - Delete the VM and disks
+
+- List the VM Disks
+
+	```
+	INSTANCE_NAME="<VM_NAME>"
+	IFS=","
+	for disk in $(gcloud compute instances describe $INSTANCE_NAME --format="value(disks.source.basename().list())")
+	do
+	    echo "Run: gcloud compute disks delete $disk"
+	done
+	```
+
+- Take note of the VM Disks to delete them latter
+
+- Delete the VM
+	
+	```
+	gcloud compute instances delete <VM_NAME>
+	```
+
+- Delete the Disks
+	- Execute the commands of the list VM disks
 
 
-
-### Step 2 - 
-
-
+- Confirm that Compute instances and disks were deleted in the 
+	- https://console.cloud.google.com/compute/instances
+	- https://console.cloud.google.com/compute/disks
 
 ## Replacing the replica
 
