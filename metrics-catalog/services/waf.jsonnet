@@ -25,9 +25,8 @@ metricsCatalog.serviceDefinition({
       description: |||
         Aggregation of all public traffic for GitLab.com passing through the WAF.
 
-        Errors on this SLI may indicate that the WAF has detected
-        malicious traffic and is blocking it. It may also indicate
-        serious upstream failures on GitLab.com.
+        Errors on this SLI may indicate indicate
+        upstream failures on GitLab.com.
       |||,
 
       requestRate: rateMetric(
@@ -37,7 +36,7 @@ metricsCatalog.serviceDefinition({
 
       errorRate: rateMetric(
         counter='cloudflare_zones_http_responses_total',
-        selector='zone=~"gitlab.com|staging.gitlab.com", edge_response_status=~"5.."',
+        selector='zone=~"gitlab.com|staging.gitlab.com", origin_response_status="0", edge_response_status=~"52{2,3}"',
       ),
 
       significantLabels: [],
