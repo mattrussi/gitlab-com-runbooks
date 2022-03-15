@@ -52,13 +52,15 @@ What this means is that we need to be aware of and think of:
 
 #### A - Replication Lagging
 
+If just one or a few Replicas are lagging in relation with the Primary/Writer node there is a great chance that the issue is on the Replica side, so the first evidence of an unhealthy replica is replication lag.
+
 
 #### B - SQL Query Latency
 
 
 --
 
-### Check Resource Contention
+### Host health - Check Resource Contention
 
 
 #### A - Disk
@@ -75,7 +77,7 @@ What this means is that we need to be aware of and think of:
 
 
 
-## Pausing Workload in the Unhealty Patroni replica
+## Draining Workload from the Unhealty Patroni replica
 
 
 
@@ -100,7 +102,15 @@ What this means is that we need to be aware of and think of:
       nofailover: true
       noloadbalance: true
     ```
-- sudo systemctl reload patroni
+- Reload Patroni
+    ```
+    sudo systemctl reload patroni
+    ```
+- Check that Patroni host now is no longer considered for failover nor loadbalance 
+   ```
+   sudo gitlab-patronictl list
+   ```
+ 
 - Test the efficacy of that reload by checking for the node name in the list of replicas:
 
     ```
@@ -119,39 +129,60 @@ What this means is that we need to be aware of and think of:
     It can take a few minutes until all connections are gone. If there are still a few connections on pgbouncers after 5m you can check if there are actually any active connections in the DB (should be 0 most of the time):
 
     ```
-    gitlab-psql -qtc "SELECT count(*) FROM pg_stat_activity
-    WHERE pid <> pg_backend_pid()
-    AND datname = 'gitlabhq_production'
-    AND state <> 'idle'
-    AND usename <> 'gitlab-monitor'
-    AND usename <> 'postgres_exporter';"
+    gitlab-psql -qc \
+       "select count(*) from pg_stat_activity
+        where backend_type = 'client backend'
+        and state <> 'idle'
+        and pid <> pg_backend_pid()
+        and datname <> 'postgres'"
     ```
 
 You can see an example of taking a node out of service in [this issue](https://gitlab.com/gitlab-com/gl-infra/production/-/issues/1061).
 
 ### Step 3 - Stop patroni service on the node
 
-Now it is save to stop the patroni service on this node. This will also stop postgres and thus terminate all remaining db connections if there are still some. With the patroni service stopped, you should see this node vanish from the cluster after a while when you run `gitlab-patronictl list` on any of the other nodes. We have alerts that fire when patroni is deemed to be down. Since this is an intentional change - either silence the alarm in advance and/or give a heads up to the EOC.
+Now it is save to stop the patroni service on this node. This will also stop postgres and thus terminate all remaining db connections if there are still some. With the patroni service stopped, you should see this node vanish from the cluster after a while when you run `gitlab-patronictl list` on any of the other nodes. 
 
-### Step 4 - 
+We have alerts that fire when patroni is deemed to be down. Since this is an intentional change - either silence the alarm in advance and/or give a heads up to the EOC (by messaging `@sre-oncall` at `#infrastructure-lounge` Slack channel).
 
+* Stop the patroni service on the unhealthy node
 
-### Step 5 - 
+	```
+	sudo systemctl stop patroni
+	sudo systemctl disable patroni.service
+	```
 
+* Check that patroni service is stopped in the host
 
-
+   ```
+   sudo gitlab-patronictl list
+   ```   
+   
 
 ## Removing an unhealty replica from the Patroni cluster
 
+
+**IMPORTANT:** make sure that the connections that the workload is drained from the unhealthy replica (link to previous chapter)
+
+
 ### Step 1 - 
 
+
+
 ### Step 2 - 
+
+
 
 ## Replacing the replica
 
+
 ### Step 1 - 
 
+
+
 ### Step 2 - 
+
+
 
 ## Automation Thoughts
 
