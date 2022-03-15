@@ -18,7 +18,7 @@ generate() {
     grep "${ROOT_DIR}/" |
     awk '
     BEGIN {
-      print "# DO NOT MANUALLY EDIT; Run ./scripts/update-asdf-version-variables to update this";
+      print "# DO NOT MANUALLY EDIT; Run ./scripts/update-asdf-version-variables.sh to update this";
       print "variables:"
     }
     {
