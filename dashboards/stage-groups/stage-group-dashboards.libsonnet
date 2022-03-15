@@ -383,6 +383,8 @@ local commonHeader(
   displayBudget,
   title,
   budget,
+  time_from='now-6h/m',
+  time_to='now/m'
       ) =
   basic
   .dashboard(
@@ -391,8 +393,8 @@ local commonHeader(
       'feature_category',
       groupTag(group),
     ] + extraTags,
-    time_from='now-6h/m',
-    time_to='now/m'
+    time_from=time_from,
+    time_to=time_to,
   )
   .addTemplate(prebuiltTemplates.stage)
   .addTemplates(
@@ -632,6 +634,7 @@ local errorBudgetDetailDashboard(stageGroup) =
       displayBudget=true,
       title='%s: group error budget detail' % [stageGroup.name],
       budget=budget,
+      time_from='now-28d/m',
     )
     .addPanels(
       keyMetrics.headlineMetricsRow(
