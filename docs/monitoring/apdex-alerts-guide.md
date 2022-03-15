@@ -9,13 +9,13 @@ In the interests of consistent and mathematically sound alerts about which we ca
 
 ### Service
 
-A "Service" is made up of one or more components, e.g. Praefect is made up of the cloudsql, proxy, and replicator_queue components, the API service is made up of the loadbalancer, puma, and workhose components.  The apdexes of the individual components combine to give an overall apdex for the Service in a given environment (gstg, gprd, etc) across all nodes, pods, and clusters (VMs or k8bs).
+A "Service" is made up of one or more service level indicators (SLIs), e.g. Praefect is made up of the cloudsql, proxy, and replicator_queue SLIs, the API service is made up of the loadbalancer, puma, and workhose SLIs.  The apdexes of the individual SLIs combine to give an overall apdex for the Service in a given environment (gstg, gprd, etc) across all nodes, pods, and clusters (VMs or k8bs).
 
-### Component
+### Service Level Indicators
 
-A component is a single measureable thing; it is often an independent daemon but can also be an identifiable portion of a thing e.g. for API it is the workhorse and puma daemons, and the /api handling backends from haproxy.  The key is that the metrics can be explicitly identified, potentially by label.
+An SLI is an individually measurable thing within a service; they are often an independent daemon but can also be an discretely identifiable portion of the service e.g. for API it is the workhorse and puma daemons, and the /api handling backends from haproxy.  The key is that some set of metrics can be explicitly identified as belonging to that indicator, potentially by label.
 
-Each component has its own apdex definition. Apdex definitions are part of the metrics catalog. They live in files defining services, for example, for the workhorse component of the git service: https://gitlab.com/gitlab-com/runbooks/-/blob/c010a387c36fc8e2dd00d224302139eba7225f44/metrics-catalog/services/git.jsonnet#L111 . They can be any valid Prometheus query. In most cases, definitions are actually jsonnet function calls (to make it more declarative) which evaluate to Prometheus queries.
+Each SLI has its own apdex definition. Apdex definitions are part of the metrics catalog. They live in files defining services, for example, for the workhorse SLI of the git service: https://gitlab.com/gitlab-com/runbooks/-/blob/c010a387c36fc8e2dd00d224302139eba7225f44/metrics-catalog/services/git.jsonnet#L111 . They can be any valid Prometheus query. In most cases, definitions are actually jsonnet function calls (to make it more declarative) which evaluate to Prometheus queries.
 
 One such function is `histogramApdex`. It takes as parameters: a name of a histogram in Prometheus, a selector that identifies the relevant requests (perhaps filtering on various labels to achieve that) and thresholds. The histogram name will almost always be a `FOO_duration_seconds_bucket`, or be very similarly named, and is ultimately 'how long the request took to complete'. The thresholds define latency ranges for satisfied and tolerated, as per service apdex ( see [service apdex](./definition-service-apdex.md) ).  Only user-facing requests are included in this, because this is all about measuring the end-user experience (human or API); internal requests/book-keeping details like healthchecks are excluded where possible; exceptions may apply for technical reasons, although we will try to remove those exceptions when identified.
 
@@ -63,11 +63,11 @@ An apdex alert in #production should be paired with an alert in #feed_alerts-gen
 
 #### Service Level Indicators
 
-The alert will have identified which component of the service is at fault, but in case it's not clear check the 'Service Level Indicators' section of the dashboard detailing SLI metrics for components.  This should confirm which component is causing the alerts (or show that it is multiple).
+The alert will have identified which SLI of the service is at fault, but in case it's not clear check the 'Service Level Indicators' section of the dashboard.  This should confirm which SLI is causing the alerts (or show that it is multiple).
 
 ![sli-section](img/apdex-dashboard-sli.png)
 
-Each row shows metrics for a given component. The three columns are, from left to right:
+Each row shows metrics for a given SLI. The three columns are, from left to right:
 1. Apdex
 1. Error Ratio
 1. RPS (Requests per second)
@@ -78,9 +78,9 @@ This section also contains links to useful Kibana queries. See 'Kibana links' se
 
 #### Service Level Indicator Detail
 
-Once you identify a component that's misbehaving (either from the alert or using the SLI section), , expand its `<COMPONENT> Service Level Indicator Detail` section.
+Once you identify a SLI that's misbehaving (either from the alert or using the Service Level Indicators section), expand the relevant `SLI Detail: <sli>` section.
 
-As the name suggests, this section contains a more detailed view into the health of a component. For example, it contains a row for each 'significant label' (see the [metrics_catalog](#metrics_catalog) definitions).
+As the name suggests, this section contains a more detailed view into the health of a SLI. For example, it contains a row for each 'significant label' (see the [metrics_catalog](#metrics_catalog) definitions).
 
 ![significant-label-row](img/apdex-dashboard-significant-label-row.png)
 
@@ -98,7 +98,7 @@ Kibana will provide more detail (particularly the ability to group by user, grou
 
 #### Kibana links (for exploring more grouping/aggregation dimensions)
 
-In the [Service Level Indicators] section, each component has a `Tooling Links` section on the right, mainly being links to Kibana.  As noted above, kibana contains more detail but shorter retention; the detail is in dimensions that would otherwise cause performance problems for Prometheus, like users + projects.
+In the [Service Level Indicators] section, each SLI may have a `Tooling Links` section on the right, mainly being links to Kibana.  As noted above, kibana contains more detail but shorter retention; the detail is in dimensions that would otherwise cause performance problems for Prometheus, like users + projects.
 
 In particular, if the simple "show all logs" links don't provide the split/detail you need, the ones with the "(split)" suffix are your starting point for aggregating on the additional dimensions.
 
