@@ -195,6 +195,8 @@ We have alerts that fire when patroni is deemed to be down. Since this is an int
 	    echo "Run: gcloud compute disks delete $disk"
 	done
 	```
+	
+	_To-Do: ideally we should just list the disks where `disks.autoDelete=False`_
 
 - Take note of the VM Disks to delete them latter
 
@@ -208,18 +210,33 @@ We have alerts that fire when patroni is deemed to be down. Since this is an int
 	- Execute the commands of the list VM disks
 
 
-- Confirm that Compute instances and disks were deleted in the 
+- Confirm that Compute instances and disks were deleted in the GCP console:
 	- https://console.cloud.google.com/compute/instances
 	- https://console.cloud.google.com/compute/disks
 
 ## Replacing the replica
 
 
-### Step 1 - 
+### Step 1 - Check if Terraform will re-create the removed node
+
+- Go into the proper Terraform environment workspace, within `config-mgmt/environments/<environment>`
+
+- Perform a Terraform plan and check the resources that will be created
+
+	```
+	tf plan
+	```
+
+- TF should create 4 resources for each removed Patroni Replica: 3 disks, 1 network interface and 1 VM/instance
 
 
+### Step 2 - Recreate the removed node
 
-### Step 2 - 
+- Create the new resources
+
+	```
+	tf apply 
+	```
 
 
 
