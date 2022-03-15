@@ -54,6 +54,38 @@ What this means is that we need to be aware of and think of:
 
 If just one or a few Replicas are lagging in relation with the Primary/Writer node there is a great chance that the issue is on the Replica side, so the first evidence of an unhealthy replica is replication lag.
 
+- Execute `gitlab-patronictl list` to get the amount of Lag, in MBytes, for each Replica
+
+For example the following output show aprox. 19 GB (19382 MB) of lag in the `patroni-08-db-gstg` host
+
+```
+# gitlab-patronictl list
++ Cluster: pg12-ha-cluster-stg (6951753467583460143) ------------+---------+---------+----+-----------+---------------------+
+| Member                                         | Host          | Role    | State   | TL | Lag in MB | Tags                |
++------------------------------------------------+---------------+---------+---------+----+-----------+---------------------+
+| patroni-01-db-gstg.c.gitlab-staging-1.internal | 10.224.29.101 | Leader  | running |  7 |           |                     |
++------------------------------------------------+---------------+---------+---------+----+-----------+---------------------+
+| patroni-02-db-gstg.c.gitlab-staging-1.internal | 10.224.29.102 | Replica | running |  7 |         3 |                     |
++------------------------------------------------+---------------+---------+---------+----+-----------+---------------------+
+| patroni-03-db-gstg.c.gitlab-staging-1.internal | 10.224.29.103 | Replica | running |  7 |         0 |                     |
++------------------------------------------------+---------------+---------+---------+----+-----------+---------------------+
+| patroni-04-db-gstg.c.gitlab-staging-1.internal | 10.224.29.104 | Replica | running |  7 |         0 |                     |
++------------------------------------------------+---------------+---------+---------+----+-----------+---------------------+
+| patroni-05-db-gstg.c.gitlab-staging-1.internal | 10.224.29.105 | Replica | running |  7 |         0 | nofailover: true    |
++------------------------------------------------+---------------+---------+---------+----+-----------+---------------------+
+| patroni-06-db-gstg.c.gitlab-staging-1.internal | 10.224.29.106 | Replica | running |  7 |         3 | nofailover: true    |
++------------------------------------------------+---------------+---------+---------+----+-----------+---------------------+
+| patroni-07-db-gstg.c.gitlab-staging-1.internal | 10.224.29.107 | Replica | running |  7 |         0 |                     |
++------------------------------------------------+---------------+---------+---------+----+-----------+---------------------+
+| patroni-08-db-gstg.c.gitlab-staging-1.internal | 10.224.29.108 | Replica | running |  7 |     19382 |                     |
++------------------------------------------------+---------------+---------+---------+----+-----------+---------------------+
+```
+
+- Or you can look into the following Grafana Dashboard:
+
+	- Lag time: https://dashboards.gitlab.net/d/000000144/postgresql-overview?orgId=1&viewPanel=16 
+	- Lag size: https://dashboards.gitlab.net/d/000000144/postgresql-overview?orgId=1&viewPanel=11
+
 
 #### B - SQL Query Latency
 
