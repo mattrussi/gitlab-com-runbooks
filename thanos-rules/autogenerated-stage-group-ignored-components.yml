@@ -435,16 +435,6 @@ groups:
       product_stage: mobile
       stage_group: moble_devops
     expr: "1"
-- name: 'Stage group Ignored components: manage - Optimize'
-  interval: 1m
-  partial_response_strategy: warn
-  rules:
-  - record: gitlab:ignored_component:stage_group
-    labels:
-      component: graphql_queries
-      product_stage: manage
-      stage_group: optimize
-    expr: "1"
 - name: 'Stage group Ignored components: package - Package'
   interval: 1m
   partial_response_strategy: warn

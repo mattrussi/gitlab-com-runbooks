@@ -291,8 +291,6 @@ teams:
   - rails_requests
 - name: optimize
   product_stage_group: optimize
-  ignored_components:
-  - graphql_queries
 - name: pipeline_authoring
   product_stage_group: pipeline_authoring
   send_slo_alerts_to_team_slack_channel: true
