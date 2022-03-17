@@ -26,6 +26,7 @@
 * [design.gitlab.com Runbook](../design/design-gitlab-com.md)
 * [../elastic/elastic-cloud.md](../elastic/elastic-cloud.md)
 * [Gitaly error rate is too high](../gitaly/gitaly-error-rate.md)
+* [Upgrading the OS of Gitaly VMs](../gitaly/gitaly-os-upgrade.md)
 * [Managing GitLab Storage Shards (Gitaly)](../gitaly/storage-sharding.md)
 * [GKE Cluster Upgrade Procedure](../kube/k8s-cluster-upgrade.md)
 * [../kube/k8s-oncall-setup.md](../kube/k8s-oncall-setup.md)

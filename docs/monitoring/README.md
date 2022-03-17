@@ -19,6 +19,7 @@
 * [How to detect CI Abuse](../ci-runners/ci-abuse-handling.md)
 * [../ci-runners/ci_pending_builds.md](../ci-runners/ci_pending_builds.md)
 * [../elastic/elasticsearch-integration-in-gitlab.md](../elastic/elasticsearch-integration-in-gitlab.md)
+* [Upgrading the OS of Gitaly VMs](../gitaly/gitaly-os-upgrade.md)
 * [GitLab.com on Kubernetes](../kube/k8s-new-cluster.md)
 * [../kube/k8s-operations.md](../kube/k8s-operations.md)
 * [How to resize Persistent Volumes in Kubernetes](../kube/k8s-pvc-resize.md)
