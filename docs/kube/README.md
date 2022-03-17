@@ -23,7 +23,6 @@
 * [How to resize Persistent Volumes in Kubernetes](k8s-pvc-resize.md)
 * [How to take a snapshot of an application running in a StatefulSet](k8s-sts-snapshot.md)
 * [Kubernetes](kubernetes.md)
-* [license.gitlab.com Runbook](../license/license-gitlab-com.md)
 * [Prometheus pod crashlooping](../monitoring/prometheus-pod-crashlooping.md)
 * [../registry/gitlab-registry.md](../registry/gitlab-registry.md)
 * [version.gitlab.com Runbook](../version/version-gitlab-com.md)

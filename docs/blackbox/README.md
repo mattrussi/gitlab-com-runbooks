@@ -16,7 +16,6 @@
 
 * [Blackbox git exporter is down](blackbox-git-exporter.md)
 * [Camoproxy troubleshooting](../camoproxy/camoproxy.md)
-* [license.gitlab.com Runbook](../license/license-gitlab-com.md)
 * [../patroni/postgres.md](../patroni/postgres.md)
 * [../patroni/postgresql-backups-wale-walg.md](../patroni/postgresql-backups-wale-walg.md)
 * [Container Registry CDN](../registry/cdn.md)

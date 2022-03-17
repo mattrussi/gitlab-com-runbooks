@@ -18,7 +18,6 @@
 * [Disk space alerts (production)](../customers/disk-space.md)
 * [Management for forum.gitlab.com](../forum/discourse-forum.md)
 * [HAProxy management at GitLab](../frontend/haproxy.md)
-* [license.gitlab.com Runbook](../license/license-gitlab-com.md)
 * [Service Error Rate](../monitoring/definition-service-error-rate.md)
 * [Service Operation Rate](../monitoring/definition-service-ops-rate.md)
 * [Filesystem errors are reported in LOG files](../monitoring/filesystem_alerts.md)
