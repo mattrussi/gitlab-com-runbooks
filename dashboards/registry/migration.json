@@ -77,7 +77,7 @@
   "fiscalYearStartMonth": 0,
   "graphTooltip": 1,
   "id": null,
-  "iteration": 1647525600384,
+  "iteration": 1647598200651,
   "links": [
     {
       "asDropdown": true,
@@ -575,8 +575,7 @@
       "targets": [
         {
           "datasource": {
-            "type": "prometheus",
-            "uid": "PA258B30F88C30650"
+            "uid": "$PROMETHEUS_DS"
           },
           "exemplar": false,
           "expr": "sum (rate(registry_http_requests_total{environment=\"$environment\", stage=\"$stage\", migration_path=\"new\"}[$__interval]))\n/\nsum (rate(registry_http_requests_total{environment=\"$environment\", stage=\"$stage\", migration_path=~\"new|old\"}[$__interval]))",
@@ -588,8 +587,7 @@
         },
         {
           "datasource": {
-            "type": "prometheus",
-            "uid": "PA258B30F88C30650"
+            "uid": "$PROMETHEUS_DS"
           },
           "exemplar": false,
           "expr": "sum (rate(registry_http_requests_total{environment=\"$environment\", stage=\"$stage\", migration_path=\"old\"}[$__interval]))\n/\nsum (rate(registry_http_requests_total{environment=\"$environment\", stage=\"$stage\", migration_path=~\"new|old\"}[$__interval]))",
@@ -610,6 +608,1205 @@
         "w": 24,
         "x": 0,
         "y": 17
+      },
+      "id": 115,
+      "panels": [],
+      "title": "Phase 2 (Registry)",
+      "type": "row"
+    },
+    {
+      "description": "Per-second rate of requests for the `/gitlab/v1/import/{name}` endpoint. These are used by Rails to start, cancel and query the status of (pre)imports.",
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "palette-classic"
+          },
+          "custom": {
+            "axisLabel": "",
+            "axisPlacement": "auto",
+            "barAlignment": 0,
+            "drawStyle": "line",
+            "fillOpacity": 10,
+            "gradientMode": "none",
+            "hideFrom": {
+              "legend": false,
+              "tooltip": false,
+              "viz": false
+            },
+            "lineInterpolation": "linear",
+            "lineWidth": 2,
+            "pointSize": 5,
+            "scaleDistribution": {
+              "type": "linear"
+            },
+            "showPoints": "never",
+            "spanNulls": true,
+            "stacking": {
+              "group": "A",
+              "mode": "none"
+            },
+            "thresholdsStyle": {
+              "mode": "off"
+            }
+          },
+          "decimals": 2,
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          },
+          "unit": "reqps"
+        },
+        "overrides": [
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "{method=\"get\"}"
+            },
+            "properties": [
+              {
+                "id": "displayName",
+                "value": "GET"
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "{method=\"put\"}"
+            },
+            "properties": [
+              {
+                "id": "displayName",
+                "value": "PUT"
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byRegexp",
+              "options": "{method=\"delete\"}"
+            },
+            "properties": [
+              {
+                "id": "displayName",
+                "value": "DELETE"
+              }
+            ]
+          }
+        ]
+      },
+      "gridPos": {
+        "h": 10,
+        "w": 8,
+        "x": 0,
+        "y": 18
+      },
+      "id": 119,
+      "options": {
+        "legend": {
+          "calcs": [
+            "min",
+            "max",
+            "mean",
+            "lastNotNull"
+          ],
+          "displayMode": "table",
+          "placement": "bottom"
+        },
+        "tooltip": {
+          "mode": "multi",
+          "sort": "none"
+        }
+      },
+      "pluginVersion": "8.4.1",
+      "targets": [
+        {
+          "datasource": {
+            "uid": "$PROMETHEUS_DS"
+          },
+          "exemplar": true,
+          "expr": "sum by(method) (\n  rate(registry_http_requests_total{env=\"$environment\",stage=\"$stage\", route=\"/gitlab/v1/import/{name}\"}[$__interval])\n)",
+          "interval": "",
+          "legendFormat": "",
+          "refId": "A"
+        }
+      ],
+      "title": "Import API RPS",
+      "type": "timeseries"
+    },
+    {
+      "description": "p90 latency of requests for the `/gitlab/v1/import/{name}` endpoint. These are used by Rails to start, cancel and query the status of (pre)imports.",
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "palette-classic"
+          },
+          "custom": {
+            "axisLabel": "",
+            "axisPlacement": "auto",
+            "barAlignment": 0,
+            "drawStyle": "line",
+            "fillOpacity": 0,
+            "gradientMode": "none",
+            "hideFrom": {
+              "legend": false,
+              "tooltip": false,
+              "viz": false
+            },
+            "lineInterpolation": "linear",
+            "lineStyle": {
+              "fill": "solid"
+            },
+            "lineWidth": 2,
+            "pointSize": 5,
+            "scaleDistribution": {
+              "type": "linear"
+            },
+            "showPoints": "auto",
+            "spanNulls": 3600000,
+            "stacking": {
+              "group": "A",
+              "mode": "none"
+            },
+            "thresholdsStyle": {
+              "mode": "off"
+            }
+          },
+          "decimals": 2,
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          },
+          "unit": "s"
+        },
+        "overrides": [
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "{method=\"get\"}"
+            },
+            "properties": [
+              {
+                "id": "displayName",
+                "value": "GET"
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "{method=\"put\"}"
+            },
+            "properties": [
+              {
+                "id": "displayName",
+                "value": "PUT"
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byRegexp",
+              "options": "{method=\"delete\"}"
+            },
+            "properties": [
+              {
+                "id": "displayName",
+                "value": "DELETE"
+              }
+            ]
+          }
+        ]
+      },
+      "gridPos": {
+        "h": 10,
+        "w": 8,
+        "x": 8,
+        "y": 18
+      },
+      "id": 120,
+      "options": {
+        "legend": {
+          "calcs": [
+            "min",
+            "max",
+            "mean",
+            "lastNotNull"
+          ],
+          "displayMode": "table",
+          "placement": "bottom"
+        },
+        "tooltip": {
+          "mode": "multi",
+          "sort": "none"
+        }
+      },
+      "targets": [
+        {
+          "datasource": {
+            "uid": "$PROMETHEUS_DS"
+          },
+          "exemplar": true,
+          "expr": "histogram_quantile(\n  0.9,\n  sum by (method,le) (\n     rate(registry_http_request_duration_seconds_bucket{env=\"$environment\",route=\"/gitlab/v1/import/{name}\" ,stage=\"$stage\"}[$__interval])\n  )\n)",
+          "interval": "",
+          "legendFormat": "",
+          "refId": "A"
+        }
+      ],
+      "title": "Import API p90 latency",
+      "type": "timeseries"
+    },
+    {
+      "description": "Error rate of requests for the `/gitlab/v1/import/{name}` endpoint. These are used by Rails to start, cancel and query the status of (pre)imports.",
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "palette-classic"
+          },
+          "custom": {
+            "axisLabel": "Errors",
+            "axisPlacement": "auto",
+            "barAlignment": 0,
+            "drawStyle": "line",
+            "fillOpacity": 0,
+            "gradientMode": "none",
+            "hideFrom": {
+              "legend": false,
+              "tooltip": false,
+              "viz": false
+            },
+            "lineInterpolation": "linear",
+            "lineStyle": {
+              "fill": "solid"
+            },
+            "lineWidth": 2,
+            "pointSize": 5,
+            "scaleDistribution": {
+              "type": "linear"
+            },
+            "showPoints": "auto",
+            "spanNulls": 3600000,
+            "stacking": {
+              "group": "A",
+              "mode": "none"
+            },
+            "thresholdsStyle": {
+              "mode": "off"
+            }
+          },
+          "decimals": 2,
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          },
+          "unit": "short"
+        },
+        "overrides": [
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "{method=\"get\"}"
+            },
+            "properties": [
+              {
+                "id": "displayName",
+                "value": "GET"
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "{method=\"put\"}"
+            },
+            "properties": [
+              {
+                "id": "displayName",
+                "value": "PUT"
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byRegexp",
+              "options": "{method=\"delete\"}"
+            },
+            "properties": [
+              {
+                "id": "displayName",
+                "value": "DELETE"
+              }
+            ]
+          }
+        ]
+      },
+      "gridPos": {
+        "h": 10,
+        "w": 8,
+        "x": 16,
+        "y": 18
+      },
+      "id": 121,
+      "options": {
+        "legend": {
+          "calcs": [
+            "min",
+            "max",
+            "mean",
+            "lastNotNull"
+          ],
+          "displayMode": "table",
+          "placement": "bottom"
+        },
+        "tooltip": {
+          "mode": "multi",
+          "sort": "none"
+        }
+      },
+      "targets": [
+        {
+          "datasource": {
+            "uid": "$PROMETHEUS_DS"
+          },
+          "exemplar": true,
+          "expr": "sum by (method) (\n  rate(registry_http_requests_total{code=~\"5..\",env=\"$environment\",stage=\"$stage\", route=\"/gitlab/v1/import/{name}\"}[$__interval])\n)",
+          "interval": "",
+          "legendFormat": "",
+          "refId": "A"
+        }
+      ],
+      "title": "Import API error rate",
+      "type": "timeseries"
+    },
+    {
+      "description": "Per-second rate of repository (pre)imports.",
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "palette-classic"
+          },
+          "custom": {
+            "axisLabel": "",
+            "axisPlacement": "auto",
+            "barAlignment": 0,
+            "drawStyle": "line",
+            "fillOpacity": 0,
+            "gradientMode": "none",
+            "hideFrom": {
+              "legend": false,
+              "tooltip": false,
+              "viz": false
+            },
+            "lineInterpolation": "linear",
+            "lineWidth": 2,
+            "pointSize": 5,
+            "scaleDistribution": {
+              "type": "linear"
+            },
+            "showPoints": "auto",
+            "spanNulls": 3600000,
+            "stacking": {
+              "group": "A",
+              "mode": "none"
+            },
+            "thresholdsStyle": {
+              "mode": "off"
+            }
+          },
+          "decimals": 2,
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          },
+          "unit": "reqps"
+        },
+        "overrides": [
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "{exported_type=\"import\"}"
+            },
+            "properties": [
+              {
+                "id": "displayName",
+                "value": "Final"
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "{exported_type=\"pre_import\"}"
+            },
+            "properties": [
+              {
+                "id": "displayName",
+                "value": "Pre"
+              }
+            ]
+          }
+        ]
+      },
+      "gridPos": {
+        "h": 10,
+        "w": 8,
+        "x": 0,
+        "y": 28
+      },
+      "id": 124,
+      "options": {
+        "legend": {
+          "calcs": [
+            "min",
+            "max",
+            "mean",
+            "lastNotNull"
+          ],
+          "displayMode": "table",
+          "placement": "bottom"
+        },
+        "tooltip": {
+          "mode": "single",
+          "sort": "none"
+        }
+      },
+      "targets": [
+        {
+          "datasource": {
+            "uid": "$PROMETHEUS_DS"
+          },
+          "exemplar": true,
+          "expr": "sum by (exported_type) (\n    rate(registry_http_imports_total{environment=\"$environment\", stage=\"$stage\"}[$__interval])\n)",
+          "interval": "",
+          "legendFormat": "",
+          "refId": "A"
+        }
+      ],
+      "title": "Import rate",
+      "type": "timeseries"
+    },
+    {
+      "description": "The number of active (pre)imports.",
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "palette-classic"
+          },
+          "custom": {
+            "axisLabel": "",
+            "axisPlacement": "auto",
+            "barAlignment": 0,
+            "drawStyle": "line",
+            "fillOpacity": 0,
+            "gradientMode": "none",
+            "hideFrom": {
+              "legend": false,
+              "tooltip": false,
+              "viz": false
+            },
+            "lineInterpolation": "linear",
+            "lineWidth": 2,
+            "pointSize": 5,
+            "scaleDistribution": {
+              "type": "linear"
+            },
+            "showPoints": "auto",
+            "spanNulls": 3600000,
+            "stacking": {
+              "group": "A",
+              "mode": "none"
+            },
+            "thresholdsStyle": {
+              "mode": "off"
+            }
+          },
+          "decimals": 0,
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          },
+          "unit": "short"
+        },
+        "overrides": [
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "{exported_type=\"import\"}"
+            },
+            "properties": [
+              {
+                "id": "displayName",
+                "value": "Final"
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "{exported_type=\"pre_import\"}"
+            },
+            "properties": [
+              {
+                "id": "displayName",
+                "value": "Pre"
+              }
+            ]
+          }
+        ]
+      },
+      "gridPos": {
+        "h": 10,
+        "w": 8,
+        "x": 8,
+        "y": 28
+      },
+      "id": 123,
+      "options": {
+        "legend": {
+          "calcs": [
+            "min",
+            "max",
+            "mean",
+            "lastNotNull"
+          ],
+          "displayMode": "table",
+          "placement": "bottom"
+        },
+        "tooltip": {
+          "mode": "single",
+          "sort": "none"
+        }
+      },
+      "targets": [
+        {
+          "datasource": {
+            "uid": "$PROMETHEUS_DS"
+          },
+          "exemplar": true,
+          "expr": "sum by (exported_type) (registry_http_in_flight_imports{environment=\"$environment\", stage=\"$stage\"})",
+          "interval": "",
+          "legendFormat": "",
+          "refId": "A"
+        }
+      ],
+      "title": "Inflight imports",
+      "type": "timeseries"
+    },
+    {
+      "description": "p90 latency of repository (pre)imports.",
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "palette-classic"
+          },
+          "custom": {
+            "axisLabel": "",
+            "axisPlacement": "auto",
+            "barAlignment": 0,
+            "drawStyle": "line",
+            "fillOpacity": 0,
+            "gradientMode": "none",
+            "hideFrom": {
+              "legend": false,
+              "tooltip": false,
+              "viz": false
+            },
+            "lineInterpolation": "linear",
+            "lineStyle": {
+              "fill": "solid"
+            },
+            "lineWidth": 2,
+            "pointSize": 5,
+            "scaleDistribution": {
+              "type": "linear"
+            },
+            "showPoints": "auto",
+            "spanNulls": 3600000,
+            "stacking": {
+              "group": "A",
+              "mode": "none"
+            },
+            "thresholdsStyle": {
+              "mode": "off"
+            }
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          },
+          "unit": "s"
+        },
+        "overrides": [
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "{exported_type=\"pre_import\"}"
+            },
+            "properties": [
+              {
+                "id": "displayName",
+                "value": "Pre"
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "{exported_type=\"import\"}"
+            },
+            "properties": [
+              {
+                "id": "displayName",
+                "value": "Final"
+              }
+            ]
+          }
+        ]
+      },
+      "gridPos": {
+        "h": 10,
+        "w": 8,
+        "x": 16,
+        "y": 28
+      },
+      "id": 127,
+      "options": {
+        "legend": {
+          "calcs": [
+            "min",
+            "max",
+            "mean",
+            "lastNotNull"
+          ],
+          "displayMode": "table",
+          "placement": "bottom"
+        },
+        "tooltip": {
+          "mode": "multi",
+          "sort": "none"
+        }
+      },
+      "targets": [
+        {
+          "datasource": {
+            "uid": "$PROMETHEUS_DS"
+          },
+          "exemplar": true,
+          "expr": "histogram_quantile(\n  0.900000,\n  sum by (exported_type, le) (\n    rate(registry_http_import_duration_seconds_bucket{environment=\"$environment\", stage=\"$stage\", attempted=\"true\"}[$__interval])\n  )\n)",
+          "interval": "",
+          "legendFormat": "",
+          "refId": "A"
+        }
+      ],
+      "title": "Import p90 latency",
+      "type": "timeseries"
+    },
+    {
+      "description": "Per-second rate of failed repository (pre)imports.",
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "palette-classic"
+          },
+          "custom": {
+            "axisLabel": "",
+            "axisPlacement": "auto",
+            "barAlignment": 0,
+            "drawStyle": "line",
+            "fillOpacity": 0,
+            "gradientMode": "none",
+            "hideFrom": {
+              "legend": false,
+              "tooltip": false,
+              "viz": false
+            },
+            "lineInterpolation": "linear",
+            "lineWidth": 2,
+            "pointSize": 5,
+            "scaleDistribution": {
+              "type": "linear"
+            },
+            "showPoints": "auto",
+            "spanNulls": 3600000,
+            "stacking": {
+              "group": "A",
+              "mode": "none"
+            },
+            "thresholdsStyle": {
+              "mode": "off"
+            }
+          },
+          "decimals": 2,
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          },
+          "unit": "reqps"
+        },
+        "overrides": [
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "{exported_type=\"import\"}"
+            },
+            "properties": [
+              {
+                "id": "displayName",
+                "value": "Final"
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "{exported_type=\"pre_import\"}"
+            },
+            "properties": [
+              {
+                "id": "displayName",
+                "value": "Pre"
+              }
+            ]
+          }
+        ]
+      },
+      "gridPos": {
+        "h": 10,
+        "w": 8,
+        "x": 0,
+        "y": 38
+      },
+      "id": 125,
+      "options": {
+        "legend": {
+          "calcs": [
+            "min",
+            "max",
+            "mean",
+            "lastNotNull"
+          ],
+          "displayMode": "table",
+          "placement": "bottom"
+        },
+        "tooltip": {
+          "mode": "single",
+          "sort": "none"
+        }
+      },
+      "targets": [
+        {
+          "datasource": {
+            "uid": "$PROMETHEUS_DS"
+          },
+          "exemplar": true,
+          "expr": "sum by (exported_type) (\n    rate(registry_http_imports_total{environment=\"$environment\", stage=\"$stage\", error=\"true\"}[$__interval])\n)",
+          "interval": "",
+          "legendFormat": "",
+          "refId": "A"
+        }
+      ],
+      "title": "Failed import rate",
+      "type": "timeseries"
+    },
+    {
+      "description": "Per-second rate of repository (pre)imports that did not initiated.",
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "palette-classic"
+          },
+          "custom": {
+            "axisLabel": "",
+            "axisPlacement": "auto",
+            "barAlignment": 0,
+            "drawStyle": "line",
+            "fillOpacity": 0,
+            "gradientMode": "none",
+            "hideFrom": {
+              "legend": false,
+              "tooltip": false,
+              "viz": false
+            },
+            "lineInterpolation": "linear",
+            "lineWidth": 2,
+            "pointSize": 5,
+            "scaleDistribution": {
+              "type": "linear"
+            },
+            "showPoints": "auto",
+            "spanNulls": 3600000,
+            "stacking": {
+              "group": "A",
+              "mode": "none"
+            },
+            "thresholdsStyle": {
+              "mode": "off"
+            }
+          },
+          "decimals": 2,
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          },
+          "unit": "reqps"
+        },
+        "overrides": [
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "{exported_type=\"import\"}"
+            },
+            "properties": [
+              {
+                "id": "displayName",
+                "value": "Final"
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "{exported_type=\"pre_import\"}"
+            },
+            "properties": [
+              {
+                "id": "displayName",
+                "value": "Pre"
+              }
+            ]
+          }
+        ]
+      },
+      "gridPos": {
+        "h": 10,
+        "w": 8,
+        "x": 8,
+        "y": 38
+      },
+      "id": 126,
+      "options": {
+        "legend": {
+          "calcs": [
+            "min",
+            "max",
+            "mean",
+            "lastNotNull"
+          ],
+          "displayMode": "table",
+          "placement": "bottom"
+        },
+        "tooltip": {
+          "mode": "single",
+          "sort": "none"
+        }
+      },
+      "targets": [
+        {
+          "datasource": {
+            "uid": "$PROMETHEUS_DS"
+          },
+          "exemplar": true,
+          "expr": "sum by (exported_type) (\n    rate(registry_http_imports_total{environment=\"$environment\", stage=\"$stage\", attempted=\"false\"}[$__interval])\n)",
+          "interval": "",
+          "legendFormat": "",
+          "refId": "A"
+        }
+      ],
+      "title": "Noop import rate",
+      "type": "timeseries"
+    },
+    {
+      "description": "p90 latency of failed repository (pre)imports.",
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "palette-classic"
+          },
+          "custom": {
+            "axisLabel": "",
+            "axisPlacement": "auto",
+            "barAlignment": 0,
+            "drawStyle": "line",
+            "fillOpacity": 0,
+            "gradientMode": "none",
+            "hideFrom": {
+              "legend": false,
+              "tooltip": false,
+              "viz": false
+            },
+            "lineInterpolation": "linear",
+            "lineStyle": {
+              "fill": "solid"
+            },
+            "lineWidth": 2,
+            "pointSize": 5,
+            "scaleDistribution": {
+              "type": "linear"
+            },
+            "showPoints": "auto",
+            "spanNulls": 3600000,
+            "stacking": {
+              "group": "A",
+              "mode": "none"
+            },
+            "thresholdsStyle": {
+              "mode": "off"
+            }
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          },
+          "unit": "s"
+        },
+        "overrides": [
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "{exported_type=\"pre_import\"}"
+            },
+            "properties": [
+              {
+                "id": "displayName",
+                "value": "Pre"
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "{exported_type=\"import\"}"
+            },
+            "properties": [
+              {
+                "id": "displayName",
+                "value": "Final"
+              }
+            ]
+          }
+        ]
+      },
+      "gridPos": {
+        "h": 10,
+        "w": 8,
+        "x": 16,
+        "y": 38
+      },
+      "id": 128,
+      "options": {
+        "legend": {
+          "calcs": [
+            "min",
+            "max",
+            "mean",
+            "lastNotNull"
+          ],
+          "displayMode": "table",
+          "placement": "bottom"
+        },
+        "tooltip": {
+          "mode": "multi",
+          "sort": "none"
+        }
+      },
+      "targets": [
+        {
+          "datasource": {
+            "uid": "$PROMETHEUS_DS"
+          },
+          "exemplar": true,
+          "expr": "histogram_quantile(\n  0.900000,\n  sum by (exported_type, le) (\n    rate(registry_http_import_duration_seconds_bucket{environment=\"$environment\", stage=\"$stage\", attempted=\"true\", error=\"true\"}[$__interval])\n  )\n)",
+          "interval": "",
+          "legendFormat": "",
+          "refId": "A"
+        }
+      ],
+      "title": "Failed import p90 latency",
+      "type": "timeseries"
+    },
+    {
+      "description": "The saturation percentage of import workers per registry instance. Each registry instance can have up to `migration.maxconcurrentimports` goroutines processing imports (workers).",
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "palette-classic"
+          },
+          "custom": {
+            "axisLabel": "",
+            "axisPlacement": "auto",
+            "barAlignment": 0,
+            "drawStyle": "line",
+            "fillOpacity": 0,
+            "gradientMode": "none",
+            "hideFrom": {
+              "legend": false,
+              "tooltip": false,
+              "viz": false
+            },
+            "lineInterpolation": "linear",
+            "lineWidth": 2,
+            "pointSize": 5,
+            "scaleDistribution": {
+              "type": "linear"
+            },
+            "showPoints": "auto",
+            "spanNulls": false,
+            "stacking": {
+              "group": "A",
+              "mode": "none"
+            },
+            "thresholdsStyle": {
+              "mode": "off"
+            }
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          },
+          "unit": "percent"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 10,
+        "w": 8,
+        "x": 0,
+        "y": 48
+      },
+      "id": 117,
+      "options": {
+        "legend": {
+          "calcs": [],
+          "displayMode": "hidden",
+          "placement": "bottom"
+        },
+        "tooltip": {
+          "mode": "single",
+          "sort": "none"
+        }
+      },
+      "targets": [
+        {
+          "datasource": {
+            "uid": "$PROMETHEUS_DS"
+          },
+          "exemplar": true,
+          "expr": "avg(registry_http_import_worker_saturation{environment=\"$environment\", stage=\"$stage\"})",
+          "interval": "",
+          "legendFormat": "",
+          "refId": "A"
+        }
+      ],
+      "title": "Worker saturation per instance",
+      "type": "timeseries"
+    },
+    {
+      "collapsed": false,
+      "gridPos": {
+        "h": 1,
+        "w": 24,
+        "x": 0,
+        "y": 58
       },
       "id": 105,
       "panels": [],
@@ -670,10 +1867,10 @@
         "overrides": []
       },
       "gridPos": {
-        "h": 8,
+        "h": 9,
         "w": 6,
         "x": 0,
-        "y": 18
+        "y": 59
       },
       "id": 107,
       "options": {
@@ -756,10 +1953,10 @@
         "overrides": []
       },
       "gridPos": {
-        "h": 8,
+        "h": 9,
         "w": 6,
         "x": 6,
-        "y": 18
+        "y": 59
       },
       "id": 109,
       "options": {
@@ -842,10 +2039,10 @@
         "overrides": []
       },
       "gridPos": {
-        "h": 8,
+        "h": 9,
         "w": 6,
         "x": 12,
-        "y": 18
+        "y": 59
       },
       "id": 111,
       "options": {
@@ -928,10 +2125,10 @@
         "overrides": []
       },
       "gridPos": {
-        "h": 8,
+        "h": 9,
         "w": 6,
         "x": 18,
-        "y": 18
+        "y": 59
       },
       "id": 108,
       "options": {
@@ -1014,10 +2211,10 @@
         "overrides": []
       },
       "gridPos": {
-        "h": 8,
+        "h": 9,
         "w": 6,
         "x": 0,
-        "y": 26
+        "y": 68
       },
       "id": 110,
       "options": {
@@ -1100,10 +2297,10 @@
         "overrides": []
       },
       "gridPos": {
-        "h": 8,
+        "h": 9,
         "w": 6,
         "x": 6,
-        "y": 26
+        "y": 68
       },
       "id": 112,
       "options": {
@@ -1186,10 +2383,10 @@
         "overrides": []
       },
       "gridPos": {
-        "h": 8,
+        "h": 9,
         "w": 6,
         "x": 12,
-        "y": 26
+        "y": 68
       },
       "id": 113,
       "options": {
@@ -1225,7 +2422,7 @@
         "h": 1,
         "w": 24,
         "x": 0,
-        "y": 34
+        "y": 77
       },
       "id": 52,
       "panels": [],
@@ -1250,7 +2447,7 @@
         "h": 10,
         "w": 8,
         "x": 0,
-        "y": 35
+        "y": 78
       },
       "hiddenSeries": false,
       "id": 53,
@@ -1360,7 +2557,7 @@
         "h": 10,
         "w": 8,
         "x": 8,
-        "y": 35
+        "y": 78
       },
       "hiddenSeries": false,
       "id": 54,
@@ -1451,7 +2648,7 @@
         "h": 10,
         "w": 8,
         "x": 16,
-        "y": 35
+        "y": 78
       },
       "hiddenSeries": false,
       "id": 55,
@@ -1542,7 +2739,7 @@
         "h": 10,
         "w": 6,
         "x": 0,
-        "y": 45
+        "y": 88
       },
       "hiddenSeries": false,
       "id": 56,
@@ -1652,7 +2849,7 @@
         "h": 10,
         "w": 6,
         "x": 6,
-        "y": 45
+        "y": 88
       },
       "hiddenSeries": false,
       "id": 57,
@@ -1737,6 +2934,7 @@
       "dashLength": 10,
       "dashes": false,
       "datasource": {
+        "type": "prometheus",
         "uid": "$PROMETHEUS_DS"
       },
       "decimals": 2,
@@ -1747,7 +2945,7 @@
         "h": 10,
         "w": 6,
         "x": 12,
-        "y": 45
+        "y": 88
       },
       "hiddenSeries": false,
       "id": 58,
@@ -1780,6 +2978,10 @@
       "steppedLine": false,
       "targets": [
         {
+          "datasource": {
+            "uid": "$PROMETHEUS_DS"
+          },
+          "exemplar": true,
           "expr": "sum by (route) (\n  rate(registry_http_requests_total{code=~\"5..\",env=\"$environment\",environment=\"$environment\",stage=\"$stage\",type=\"registry\",migration_path=~\"$migration_path\"}[$__interval])\n)\n",
           "format": "time_series",
           "interval": "1m",
@@ -1804,6 +3006,7 @@
       },
       "yaxes": [
         {
+          "$$hashKey": "object:275",
           "format": "short",
           "label": "Errors",
           "logBase": 1,
@@ -1811,6 +3014,7 @@
           "show": true
         },
         {
+          "$$hashKey": "object:276",
           "format": "short",
           "logBase": 1,
           "max": 1,
@@ -1838,7 +3042,7 @@
         "h": 10,
         "w": 6,
         "x": 18,
-        "y": 45
+        "y": 88
       },
       "hiddenSeries": false,
       "id": 59,
@@ -1929,7 +3133,7 @@
         "h": 10,
         "w": 6,
         "x": 0,
-        "y": 55
+        "y": 98
       },
       "hiddenSeries": false,
       "id": 60,
@@ -2039,7 +3243,7 @@
         "h": 10,
         "w": 6,
         "x": 6,
-        "y": 55
+        "y": 98
       },
       "hiddenSeries": false,
       "id": 61,
@@ -2134,7 +3338,7 @@
         "h": 10,
         "w": 6,
         "x": 12,
-        "y": 55
+        "y": 98
       },
       "hiddenSeries": false,
       "id": 62,
@@ -2225,7 +3429,7 @@
         "h": 10,
         "w": 6,
         "x": 18,
-        "y": 55
+        "y": 98
       },
       "hiddenSeries": false,
       "id": 63,
@@ -2307,7 +3511,7 @@
         "h": 1,
         "w": 24,
         "x": 0,
-        "y": 65
+        "y": 108
       },
       "id": 68,
       "panels": [
@@ -2851,7 +4055,7 @@
         "h": 1,
         "w": 24,
         "x": 0,
-        "y": 66
+        "y": 109
       },
       "id": 77,
       "panels": [
@@ -3395,7 +4599,7 @@
         "h": 1,
         "w": 24,
         "x": 0,
-        "y": 67
+        "y": 110
       },
       "id": 86,
       "panels": [
@@ -3937,6 +5141,8 @@
   "tags": [
     "managed",
     "registry",
+    "managed",
+    "registry",
     "unmanaged"
   ],
   "templating": {
@@ -4084,6 +5290,6 @@
     ]
   },
   "timezone": "utc",
-  "title": "registry: Migration Detail",
-  "version": 20
+  "title": "Migration Detail",
+  "version": 21
 }
