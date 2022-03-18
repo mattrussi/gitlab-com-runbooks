@@ -72,12 +72,12 @@
       }
     ]
   },
-  "description": "Uploaded by https://gitlab.com/gitlab-com/runbooks/-/jobs/2132083598 at Thu Feb 24 11:16:13 UTC 2022",
+  "description": "Uploaded by https://gitlab.com/gitlab-com/runbooks/-/jobs/2216159324 at Thu Mar 17 12:56:01 UTC 2022",
   "editable": true,
   "fiscalYearStartMonth": 0,
   "graphTooltip": 1,
   "id": null,
-  "iteration": 1646045130839,
+  "iteration": 1647525600384,
   "links": [
     {
       "asDropdown": true,
@@ -604,13 +604,628 @@
       "type": "timeseries"
     },
     {
-      "collapse": true,
       "collapsed": false,
       "gridPos": {
         "h": 1,
         "w": 24,
         "x": 0,
         "y": 17
+      },
+      "id": 105,
+      "panels": [],
+      "title": "Phase 2 Progress (Rails)",
+      "type": "row"
+    },
+    {
+      "description": "Count container repositories that have not yet been (pre)imported into the new registry.",
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "palette-classic"
+          },
+          "custom": {
+            "axisLabel": "",
+            "axisPlacement": "auto",
+            "barAlignment": 0,
+            "drawStyle": "line",
+            "fillOpacity": 0,
+            "gradientMode": "none",
+            "hideFrom": {
+              "legend": false,
+              "tooltip": false,
+              "viz": false
+            },
+            "lineInterpolation": "linear",
+            "lineWidth": 2,
+            "pointSize": 5,
+            "scaleDistribution": {
+              "type": "linear"
+            },
+            "showPoints": "auto",
+            "spanNulls": true,
+            "stacking": {
+              "group": "A",
+              "mode": "none"
+            },
+            "thresholdsStyle": {
+              "mode": "off"
+            }
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          },
+          "unit": "short"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 8,
+        "w": 6,
+        "x": 0,
+        "y": 18
+      },
+      "id": 107,
+      "options": {
+        "legend": {
+          "calcs": [],
+          "displayMode": "hidden",
+          "placement": "bottom"
+        },
+        "tooltip": {
+          "mode": "single",
+          "sort": "none"
+        }
+      },
+      "targets": [
+        {
+          "datasource": {
+            "uid": "$PROMETHEUS_DS"
+          },
+          "exemplar": true,
+          "expr": "avg (gitlab_database_rows{query_name=\"container_repositories_migration_pending\", environment=\"$environment\"})",
+          "interval": "",
+          "legendFormat": "",
+          "refId": "A"
+        }
+      ],
+      "title": "Pending",
+      "type": "timeseries"
+    },
+    {
+      "description": "Count of container repositories that have been successfully imported into the new registry.",
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "palette-classic"
+          },
+          "custom": {
+            "axisLabel": "",
+            "axisPlacement": "auto",
+            "barAlignment": 0,
+            "drawStyle": "line",
+            "fillOpacity": 0,
+            "gradientMode": "none",
+            "hideFrom": {
+              "legend": false,
+              "tooltip": false,
+              "viz": false
+            },
+            "lineInterpolation": "linear",
+            "lineWidth": 2,
+            "pointSize": 5,
+            "scaleDistribution": {
+              "type": "linear"
+            },
+            "showPoints": "auto",
+            "spanNulls": true,
+            "stacking": {
+              "group": "A",
+              "mode": "none"
+            },
+            "thresholdsStyle": {
+              "mode": "off"
+            }
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          },
+          "unit": "short"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 8,
+        "w": 6,
+        "x": 6,
+        "y": 18
+      },
+      "id": 109,
+      "options": {
+        "legend": {
+          "calcs": [],
+          "displayMode": "hidden",
+          "placement": "bottom"
+        },
+        "tooltip": {
+          "mode": "single",
+          "sort": "none"
+        }
+      },
+      "targets": [
+        {
+          "datasource": {
+            "uid": "$PROMETHEUS_DS"
+          },
+          "exemplar": true,
+          "expr": "avg (gitlab_database_rows{query_name=\"container_repositories_import_done\", environment=\"$environment\"})",
+          "interval": "",
+          "legendFormat": "",
+          "refId": "A"
+        }
+      ],
+      "title": "Imported",
+      "type": "timeseries"
+    },
+    {
+      "description": "Count of container repositories that are currently being imported into the new registry.",
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "palette-classic"
+          },
+          "custom": {
+            "axisLabel": "",
+            "axisPlacement": "auto",
+            "barAlignment": 0,
+            "drawStyle": "line",
+            "fillOpacity": 0,
+            "gradientMode": "none",
+            "hideFrom": {
+              "legend": false,
+              "tooltip": false,
+              "viz": false
+            },
+            "lineInterpolation": "linear",
+            "lineWidth": 2,
+            "pointSize": 5,
+            "scaleDistribution": {
+              "type": "linear"
+            },
+            "showPoints": "auto",
+            "spanNulls": true,
+            "stacking": {
+              "group": "A",
+              "mode": "none"
+            },
+            "thresholdsStyle": {
+              "mode": "off"
+            }
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          },
+          "unit": "short"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 8,
+        "w": 6,
+        "x": 12,
+        "y": 18
+      },
+      "id": 111,
+      "options": {
+        "legend": {
+          "calcs": [],
+          "displayMode": "hidden",
+          "placement": "bottom"
+        },
+        "tooltip": {
+          "mode": "single",
+          "sort": "none"
+        }
+      },
+      "targets": [
+        {
+          "datasource": {
+            "uid": "$PROMETHEUS_DS"
+          },
+          "exemplar": true,
+          "expr": "avg (gitlab_database_rows{query_name=\"container_repositories_importing\", environment=\"$environment\"})",
+          "interval": "",
+          "legendFormat": "",
+          "refId": "A"
+        }
+      ],
+      "title": "Importing",
+      "type": "timeseries"
+    },
+    {
+      "description": "Count of container repositories that are currently being pre-imported into the new registry.",
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "palette-classic"
+          },
+          "custom": {
+            "axisLabel": "",
+            "axisPlacement": "auto",
+            "barAlignment": 0,
+            "drawStyle": "line",
+            "fillOpacity": 0,
+            "gradientMode": "none",
+            "hideFrom": {
+              "legend": false,
+              "tooltip": false,
+              "viz": false
+            },
+            "lineInterpolation": "linear",
+            "lineWidth": 2,
+            "pointSize": 5,
+            "scaleDistribution": {
+              "type": "linear"
+            },
+            "showPoints": "auto",
+            "spanNulls": true,
+            "stacking": {
+              "group": "A",
+              "mode": "none"
+            },
+            "thresholdsStyle": {
+              "mode": "off"
+            }
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          },
+          "unit": "short"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 8,
+        "w": 6,
+        "x": 18,
+        "y": 18
+      },
+      "id": 108,
+      "options": {
+        "legend": {
+          "calcs": [],
+          "displayMode": "hidden",
+          "placement": "bottom"
+        },
+        "tooltip": {
+          "mode": "single",
+          "sort": "none"
+        }
+      },
+      "targets": [
+        {
+          "datasource": {
+            "uid": "$PROMETHEUS_DS"
+          },
+          "exemplar": true,
+          "expr": "avg (gitlab_database_rows{query_name=\"container_repositories_pre_importing\", environment=\"$environment\"})",
+          "interval": "",
+          "legendFormat": "",
+          "refId": "A"
+        }
+      ],
+      "title": "Pre-imported",
+      "type": "timeseries"
+    },
+    {
+      "description": "Count of container repositories that have been pre-imported and are now pending of a final import into the new registry.",
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "palette-classic"
+          },
+          "custom": {
+            "axisLabel": "",
+            "axisPlacement": "auto",
+            "barAlignment": 0,
+            "drawStyle": "line",
+            "fillOpacity": 0,
+            "gradientMode": "none",
+            "hideFrom": {
+              "legend": false,
+              "tooltip": false,
+              "viz": false
+            },
+            "lineInterpolation": "linear",
+            "lineWidth": 2,
+            "pointSize": 5,
+            "scaleDistribution": {
+              "type": "linear"
+            },
+            "showPoints": "auto",
+            "spanNulls": true,
+            "stacking": {
+              "group": "A",
+              "mode": "none"
+            },
+            "thresholdsStyle": {
+              "mode": "off"
+            }
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          },
+          "unit": "short"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 8,
+        "w": 6,
+        "x": 0,
+        "y": 26
+      },
+      "id": 110,
+      "options": {
+        "legend": {
+          "calcs": [],
+          "displayMode": "hidden",
+          "placement": "bottom"
+        },
+        "tooltip": {
+          "mode": "single",
+          "sort": "none"
+        }
+      },
+      "targets": [
+        {
+          "datasource": {
+            "uid": "$PROMETHEUS_DS"
+          },
+          "exemplar": true,
+          "expr": "avg (gitlab_database_rows{query_name=\"container_repositories_pre_importing\", environment=\"$environment\"})",
+          "interval": "",
+          "legendFormat": "",
+          "refId": "A"
+        }
+      ],
+      "title": "Pre-importing",
+      "type": "timeseries"
+    },
+    {
+      "description": "Count of container repositories imports that were skipped because they do not match a given requirement (such as the max number of tags).",
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "palette-classic"
+          },
+          "custom": {
+            "axisLabel": "",
+            "axisPlacement": "auto",
+            "barAlignment": 0,
+            "drawStyle": "line",
+            "fillOpacity": 0,
+            "gradientMode": "none",
+            "hideFrom": {
+              "legend": false,
+              "tooltip": false,
+              "viz": false
+            },
+            "lineInterpolation": "linear",
+            "lineWidth": 2,
+            "pointSize": 5,
+            "scaleDistribution": {
+              "type": "linear"
+            },
+            "showPoints": "auto",
+            "spanNulls": true,
+            "stacking": {
+              "group": "A",
+              "mode": "none"
+            },
+            "thresholdsStyle": {
+              "mode": "off"
+            }
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          },
+          "unit": "short"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 8,
+        "w": 6,
+        "x": 6,
+        "y": 26
+      },
+      "id": 112,
+      "options": {
+        "legend": {
+          "calcs": [],
+          "displayMode": "hidden",
+          "placement": "bottom"
+        },
+        "tooltip": {
+          "mode": "single",
+          "sort": "none"
+        }
+      },
+      "targets": [
+        {
+          "datasource": {
+            "uid": "$PROMETHEUS_DS"
+          },
+          "exemplar": true,
+          "expr": "avg (gitlab_database_rows{query_name=\"container_repositories_import_skipped\", environment=\"$environment\"})",
+          "interval": "",
+          "legendFormat": "",
+          "refId": "A"
+        }
+      ],
+      "title": "Skipped",
+      "type": "timeseries"
+    },
+    {
+      "description": "Count of container repositories imports that were aborted because an unexpected error occurred.",
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "palette-classic"
+          },
+          "custom": {
+            "axisLabel": "",
+            "axisPlacement": "auto",
+            "barAlignment": 0,
+            "drawStyle": "line",
+            "fillOpacity": 0,
+            "gradientMode": "none",
+            "hideFrom": {
+              "legend": false,
+              "tooltip": false,
+              "viz": false
+            },
+            "lineInterpolation": "linear",
+            "lineWidth": 2,
+            "pointSize": 5,
+            "scaleDistribution": {
+              "type": "linear"
+            },
+            "showPoints": "auto",
+            "spanNulls": true,
+            "stacking": {
+              "group": "A",
+              "mode": "none"
+            },
+            "thresholdsStyle": {
+              "mode": "off"
+            }
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          },
+          "unit": "short"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 8,
+        "w": 6,
+        "x": 12,
+        "y": 26
+      },
+      "id": 113,
+      "options": {
+        "legend": {
+          "calcs": [],
+          "displayMode": "hidden",
+          "placement": "bottom"
+        },
+        "tooltip": {
+          "mode": "single",
+          "sort": "none"
+        }
+      },
+      "targets": [
+        {
+          "datasource": {
+            "uid": "$PROMETHEUS_DS"
+          },
+          "exemplar": true,
+          "expr": "avg (gitlab_database_rows{query_name=\"container_repositories_import_aborted\", environment=\"$environment\"})",
+          "interval": "",
+          "legendFormat": "",
+          "refId": "A"
+        }
+      ],
+      "title": "Aborted",
+      "type": "timeseries"
+    },
+    {
+      "collapse": true,
+      "collapsed": false,
+      "gridPos": {
+        "h": 1,
+        "w": 24,
+        "x": 0,
+        "y": 34
       },
       "id": 52,
       "panels": [],
@@ -635,7 +1250,7 @@
         "h": 10,
         "w": 8,
         "x": 0,
-        "y": 18
+        "y": 35
       },
       "hiddenSeries": false,
       "id": 53,
@@ -745,7 +1360,7 @@
         "h": 10,
         "w": 8,
         "x": 8,
-        "y": 18
+        "y": 35
       },
       "hiddenSeries": false,
       "id": 54,
@@ -836,7 +1451,7 @@
         "h": 10,
         "w": 8,
         "x": 16,
-        "y": 18
+        "y": 35
       },
       "hiddenSeries": false,
       "id": 55,
@@ -927,7 +1542,7 @@
         "h": 10,
         "w": 6,
         "x": 0,
-        "y": 28
+        "y": 45
       },
       "hiddenSeries": false,
       "id": 56,
@@ -1037,7 +1652,7 @@
         "h": 10,
         "w": 6,
         "x": 6,
-        "y": 28
+        "y": 45
       },
       "hiddenSeries": false,
       "id": 57,
@@ -1132,7 +1747,7 @@
         "h": 10,
         "w": 6,
         "x": 12,
-        "y": 28
+        "y": 45
       },
       "hiddenSeries": false,
       "id": 58,
@@ -1223,7 +1838,7 @@
         "h": 10,
         "w": 6,
         "x": 18,
-        "y": 28
+        "y": 45
       },
       "hiddenSeries": false,
       "id": 59,
@@ -1314,7 +1929,7 @@
         "h": 10,
         "w": 6,
         "x": 0,
-        "y": 38
+        "y": 55
       },
       "hiddenSeries": false,
       "id": 60,
@@ -1424,7 +2039,7 @@
         "h": 10,
         "w": 6,
         "x": 6,
-        "y": 38
+        "y": 55
       },
       "hiddenSeries": false,
       "id": 61,
@@ -1519,7 +2134,7 @@
         "h": 10,
         "w": 6,
         "x": 12,
-        "y": 38
+        "y": 55
       },
       "hiddenSeries": false,
       "id": 62,
@@ -1610,7 +2225,7 @@
         "h": 10,
         "w": 6,
         "x": 18,
-        "y": 38
+        "y": 55
       },
       "hiddenSeries": false,
       "id": 63,
@@ -1692,7 +2307,7 @@
         "h": 1,
         "w": 24,
         "x": 0,
-        "y": 48
+        "y": 65
       },
       "id": 68,
       "panels": [
@@ -2236,7 +2851,7 @@
         "h": 1,
         "w": 24,
         "x": 0,
-        "y": 49
+        "y": 66
       },
       "id": 77,
       "panels": [
@@ -2780,7 +3395,7 @@
         "h": 1,
         "w": 24,
         "x": 0,
-        "y": 50
+        "y": 67
       },
       "id": 86,
       "panels": [
@@ -3470,5 +4085,5 @@
   },
   "timezone": "utc",
   "title": "registry: Migration Detail",
-  "version": 19
+  "version": 20
 }
