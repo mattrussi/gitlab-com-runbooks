@@ -5141,8 +5141,6 @@
   "tags": [
     "managed",
     "registry",
-    "managed",
-    "registry",
     "unmanaged"
   ],
   "templating": {
