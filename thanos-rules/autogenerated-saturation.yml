@@ -7,6 +7,26 @@ groups:
   rules:
   - record: gitlab_component_saturation:ratio
     labels:
+      component: kube_node_ips
+      stage: main
+      tier: inf
+      type: kube
+    expr: |
+      max by(env, environment) (
+        clamp_min(
+          clamp_max(
+            sum(:kube_pod_info_node_count:) by (env, environment, cluster)
+            /
+            sum(
+              gitlab:gcp_subnet_max_ips * on (subnet) group_right gitlab:cluster:subnet:mapping
+            ) by (env, environment, cluster)
+            ,
+            1)
+        ,
+        0)
+      )
+  - record: gitlab_component_saturation:ratio
+    labels:
       component: kube_pool_max_nodes
     expr: |
       max by(env, environment, tier, type, stage) (
@@ -81,6 +101,14 @@ groups:
   rules:
   - record: slo:max:soft:gitlab_component_saturation:ratio
     labels:
+      component: kube_node_ips
+    expr: "0.8"
+  - record: slo:max:hard:gitlab_component_saturation:ratio
+    labels:
+      component: kube_node_ips
+    expr: "0.9"
+  - record: slo:max:soft:gitlab_component_saturation:ratio
+    labels:
       component: kube_pool_max_nodes
     expr: "0.9"
   - record: slo:max:hard:gitlab_component_saturation:ratio
@@ -107,6 +135,14 @@ groups:
   interval: 5m
   partial_response_strategy: warn
   rules:
+  - record: gitlab_component_saturation_info
+    labels:
+      capacity_planning_strategy: quantile95_1h
+      component: kube_node_ips
+      horiz_scaling: "no"
+      quantile: max
+      severity: s3
+    expr: "1"
   - record: gitlab_component_saturation_info
     labels:
       capacity_planning_strategy: quantile95_1h
@@ -149,6 +185,49 @@ groups:
   interval: 1m
   partial_response_strategy: warn
   rules:
+  - alert: component_saturation_slo_out_of_bounds
+    for: 5m
+    annotations:
+      title: The Node IP subnet saturation resource of the {{ $labels.type }} service
+        ({{ $labels.stage }} stage) has a saturation exceeding SLO and is close to
+        its capacity limit.
+      description: |
+        This means that this resource is running close to capacity and is at risk of exceeding its current capacity limit.
+
+        Details of the Node IP subnet saturation resource:
+
+        This resource measures the number of nodes per subnet.
+
+        If it is becoming saturated, it may indicate that clusters need to be rebuilt with a larger subnet.
+      grafana_dashboard_id: alerts-sat_kube_node_ips
+      grafana_dashboard_link: https://dashboards.gitlab.net/d/alerts-sat_kube_node_ips?from=now-6h/m&to=now-1m/m&var-environment={{
+        $labels.environment }}&var-type={{ $labels.type }}&var-stage={{ $labels.stage
+        }}
+      grafana_min_zoom_hours: "6"
+      grafana_panel_id: "776071338"
+      grafana_variables: environment,type,stage
+      promql_query: |
+        max by(env, environment, cluster) (
+          clamp_min(
+            clamp_max(
+              sum(:kube_pod_info_node_count:) by (env, environment, cluster)
+              /
+              sum(
+                gitlab:gcp_subnet_max_ips * on (subnet) group_right gitlab:cluster:subnet:mapping
+              ) by (env, environment, cluster)
+              ,
+              1)
+          ,
+          0)
+        )
+      runbook: docs/{{ $labels.type }}/README.md
+    labels:
+      alert_type: cause
+      rules_domain: general
+      severity: s3
+    expr: |
+      gitlab_component_saturation:ratio{component="kube_node_ips",monitor="global"} > on(component) group_left
+      slo:max:hard:gitlab_component_saturation:ratio{component="kube_node_ips",monitor="global"}
   - alert: component_saturation_slo_out_of_bounds
     for: 5m
     annotations:
