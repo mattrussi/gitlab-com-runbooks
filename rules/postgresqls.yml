@@ -148,7 +148,7 @@ groups:
       runbook: docs/patroni/postgres.md#replication-is-lagging-or-has-stopped
       title: Postgres Replication lag (in bytes) is high
   - alert: PostgreSQL_PendingWALFilesTooHigh
-    expr: pg_archiver_pending_wal_count > 2000
+    expr: pg_archiver_pending_wal_count > 3000
     for: 5m
     labels:
       pager: pagerduty
