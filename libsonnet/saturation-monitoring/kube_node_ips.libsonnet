@@ -5,6 +5,7 @@ local resourceSaturationPoint = (import 'servicemetrics/resource_saturation_poin
   kube_node_ips: resourceSaturationPoint({
     title: 'Node IP subnet saturation',
     severity: 's3',
+    dangerouslyThanosEvaluated: true,
     horizontallyScalable: false,
     appliesTo: ['kube'],
     description: |||
