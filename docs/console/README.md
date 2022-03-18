@@ -45,7 +45,6 @@
 * [How to resize Persistent Volumes in Kubernetes](../kube/k8s-pvc-resize.md)
 * [How to take a snapshot of an application running in a StatefulSet](../kube/k8s-sts-snapshot.md)
 * [Kubernetes](../kube/kubernetes.md)
-* [license.gitlab.com Runbook](../license/license-gitlab-com.md)
 * [../logging/logging_gcs_archive_bigquery.md](../logging/logging_gcs_archive_bigquery.md)
 * [Alertmanager Notification Failures](../monitoring/alertmanager-notification-failures.md)
 * [Accessing a GKE Alertmanager](../monitoring/alerts_gke.md)

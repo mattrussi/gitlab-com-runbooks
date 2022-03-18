@@ -29,7 +29,6 @@
 * [Purge Git data](../git/purge-git-data.md)
 * [Kubernetes-Agent Basic Troubleshooting](../kas/kubernetes-agent-basic-troubleshooting.md)
 * [Kubernetes](../kube/kubernetes.md)
-* [license.gitlab.com Runbook](../license/license-gitlab-com.md)
 * [logging_gcs_archive_bigquery.md](logging_gcs_archive_bigquery.md)
 * [Diagnosis with Kibana](../onboarding/kibana-diagnosis.md)
 * [GitLab Pages returning 404](../pages/gitlab-pages.md)
