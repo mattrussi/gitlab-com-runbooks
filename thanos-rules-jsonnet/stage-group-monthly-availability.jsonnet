@@ -23,12 +23,14 @@ local budget = errorBudget();
 local rules = {
   groups: [
     ruleGroup {
-      name: '28d availability by stage group',
+      name: '%s availability by stage group' % [range],
       rules: [{
-        record: 'gitlab:stage_group:availability:ratio_28d',
-        expr: budget.queries.errorBudgetRatio(selector, aggregationLabels),
+        record: 'gitlab:stage_group:availability:ratio_%s' % [range],
+        expr: errorBudget(range).queries.errorBudgetRatio(selector, aggregationLabels),
       }],
-    },
+    }
+    for range in ['7d', '28d']
+  ] + [
     ruleGroup {
       name: '28d availability by stage group and SLI kind',
       rules: [{
@@ -37,7 +39,7 @@ local rules = {
       }],
     },
     ruleGroup {
-      name: '28 traffic share per stage group',
+      name: '28d traffic share per stage group',
       rules: [{
         record: 'gitlab:stage_group:traffic_share:ratio_28d',
         expr: |||
