@@ -53,25 +53,26 @@ test.suite({
       aggregationSet=testAggregationSet,
       thresholdSLOValue=0.99,
       metricSelectorHash={ type: 'web' },
+      alertForDuration='5m'
     ),
     expect: |||
       (
-        error:ratio_1h{monitor="global",type="web"}
+        last_over_time(error:ratio_1h{monitor="global",type="web"}[5m])
         > (14.4 * 0.990000)
       )
       and
       (
-        error:ratio_5m{monitor="global",type="web"}
+        last_over_time(error:ratio_5m{monitor="global",type="web"}[5m])
         > (14.4 * 0.990000)
       )
       or
       (
-        error:ratio_6h{monitor="global",type="web"}
+        last_over_time(error:ratio_6h{monitor="global",type="web"}[5m])
         > (6 * 0.990000)
       )
       and
       (
-        error:ratio_30m{monitor="global",type="web"}
+        last_over_time(error:ratio_30m{monitor="global",type="web"}[5m])
         > (6 * 0.990000)
       )
     |||,
@@ -84,32 +85,35 @@ test.suite({
       metricSelectorHash={ type: 'web' },
       minimumSamplesForMonitoring=3600 * 10,
       thresholdSLOValue=0.01,
+      alertForDuration='4m'
     ),
     expect: |||
       (
         (
-          error:ratio_1h{monitor="global",type="web"}
+          last_over_time(error:ratio_1h{monitor="global",type="web"}[4m])
           > (14.4 * 0.010000)
         )
         and
         (
-          error:ratio_5m{monitor="global",type="web"}
+          last_over_time(error:ratio_5m{monitor="global",type="web"}[4m])
           > (14.4 * 0.010000)
         )
         or
         (
-          error:ratio_6h{monitor="global",type="web"}
+          last_over_time(error:ratio_6h{monitor="global",type="web"}[4m])
           > (6 * 0.010000)
         )
         and
         (
-          error:ratio_30m{monitor="global",type="web"}
+          last_over_time(error:ratio_30m{monitor="global",type="web"}[4m])
           > (6 * 0.010000)
         )
       )
       and on(environment,tier,type,stage)
       (
-        sum by(environment,tier,type,stage) (operation:rate_1h{monitor="global",type="web"}) >= 10
+        sum by(environment,tier,type,stage) (
+          last_over_time(operation:rate_1h{monitor="global",type="web"}[4m])
+        ) >= 10
       )
     |||,
   },
@@ -119,25 +123,26 @@ test.suite({
       aggregationSet=testAggregationSet,
       metricSelectorHash={ type: 'web' },
       thresholdSLOValue=0.99,
+      alertForDuration='5m'
     ),
     expect: |||
       (
-        apdex:ratio_1h{monitor="global",type="web"}
+        last_over_time(apdex:ratio_1h{monitor="global",type="web"}[5m])
         < (1 - 14.4 * 0.010000)
       )
       and
       (
-        apdex:ratio_5m{monitor="global",type="web"}
+        last_over_time(apdex:ratio_5m{monitor="global",type="web"}[5m])
         < (1 - 14.4 * 0.010000)
       )
       or
       (
-        apdex:ratio_6h{monitor="global",type="web"}
+        last_over_time(apdex:ratio_6h{monitor="global",type="web"}[5m])
         < (1 - 6 * 0.010000)
       )
       and
       (
-        apdex:ratio_30m{monitor="global",type="web"}
+        last_over_time(apdex:ratio_30m{monitor="global",type="web"}[5m])
         < (1 - 6 * 0.010000)
       )
     |||,
@@ -148,25 +153,26 @@ test.suite({
       aggregationSet=testAggregationSet,
       metricSelectorHash={ type: 'web' },
       thresholdSLOValue=0.9995,
+      alertForDuration='5m'
     ),
     expect: |||
       (
-        apdex:ratio_1h{monitor="global",type="web"}
+        last_over_time(apdex:ratio_1h{monitor="global",type="web"}[5m])
         < (1 - 14.4 * 0.000500)
       )
       and
       (
-        apdex:ratio_5m{monitor="global",type="web"}
+        last_over_time(apdex:ratio_5m{monitor="global",type="web"}[5m])
         < (1 - 14.4 * 0.000500)
       )
       or
       (
-        apdex:ratio_6h{monitor="global",type="web"}
+        last_over_time(apdex:ratio_6h{monitor="global",type="web"}[5m])
         < (1 - 6 * 0.000500)
       )
       and
       (
-        apdex:ratio_30m{monitor="global",type="web"}
+        last_over_time(apdex:ratio_30m{monitor="global",type="web"}[5m])
         < (1 - 6 * 0.000500)
       )
     |||,
@@ -180,22 +186,25 @@ test.suite({
       windows=['1h'],
       minimumSamplesForMonitoring=60,
       operationRateWindowDuration='1h',
+      alertForDuration='5m'
     ),
     expect: |||
       (
         (
-          apdex:ratio_1h{monitor="global",type="web"}
+          last_over_time(apdex:ratio_1h{monitor="global",type="web"}[5m])
           < (1 - 14.4 * 0.010000)
         )
         and
         (
-          apdex:ratio_5m{monitor="global",type="web"}
+          last_over_time(apdex:ratio_5m{monitor="global",type="web"}[5m])
           < (1 - 14.4 * 0.010000)
         )
       )
       and on(environment,tier,type,stage)
       (
-        sum by(environment,tier,type,stage) (operation:rate_1h{monitor="global",type="web"}) >= 0.01667
+        sum by(environment,tier,type,stage) (
+          last_over_time(operation:rate_1h{monitor="global",type="web"}[5m])
+        ) >= 0.01667
       )
     |||,
   },
@@ -208,22 +217,25 @@ test.suite({
       windows=['3d'],
       minimumSamplesForMonitoring=60,
       operationRateWindowDuration='3d',
+      alertForDuration='5m'
     ),
     expect: |||
       (
         (
-          error:ratio_3d{monitor="global",type="web"}
+          last_over_time(error:ratio_3d{monitor="global",type="web"}[5m])
           > (1 * 0.990000)
         )
         and
         (
-          error:ratio_6h{monitor="global",type="web"}
+          last_over_time(error:ratio_6h{monitor="global",type="web"}[5m])
           > (1 * 0.990000)
         )
       )
       and on(environment,tier,type,stage)
       (
-        sum by(environment,tier,type,stage) (operation:rate_3d{monitor="global",type="web"}) >= 0.00023
+        sum by(environment,tier,type,stage) (
+          last_over_time(operation:rate_3d{monitor="global",type="web"}[5m])
+        ) >= 0.00023
       )
     |||,
   },

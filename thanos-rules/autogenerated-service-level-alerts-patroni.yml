@@ -42,18 +42,20 @@ groups:
     expr: |
       (
         (
-          gitlab_component_errors:ratio_1h{component="pgbouncer",monitor="global",type="patroni"}
+          last_over_time(gitlab_component_errors:ratio_1h{component="pgbouncer",monitor="global",type="patroni"}[2m])
           > (14.4 * 0.001000)
         )
         and
         (
-          gitlab_component_errors:ratio_5m{component="pgbouncer",monitor="global",type="patroni"}
+          last_over_time(gitlab_component_errors:ratio_5m{component="pgbouncer",monitor="global",type="patroni"}[2m])
           > (14.4 * 0.001000)
         )
       )
       and on(env,environment,tier,type,stage,component)
       (
-        sum by(env,environment,tier,type,stage,component) (gitlab_component_ops:rate_1h{component="pgbouncer",monitor="global",type="patroni"}) >= 1
+        sum by(env,environment,tier,type,stage,component) (
+          last_over_time(gitlab_component_ops:rate_1h{component="pgbouncer",monitor="global",type="patroni"}[2m])
+        ) >= 1
       )
   - alert: PatroniServicePgbouncerErrorSLOViolation
     for: 2m
@@ -92,18 +94,20 @@ groups:
     expr: |
       (
         (
-          gitlab_component_errors:ratio_6h{component="pgbouncer",monitor="global",type="patroni"}
+          last_over_time(gitlab_component_errors:ratio_6h{component="pgbouncer",monitor="global",type="patroni"}[2m])
           > (6 * 0.001000)
         )
         and
         (
-          gitlab_component_errors:ratio_30m{component="pgbouncer",monitor="global",type="patroni"}
+          last_over_time(gitlab_component_errors:ratio_30m{component="pgbouncer",monitor="global",type="patroni"}[2m])
           > (6 * 0.001000)
         )
       )
       and on(env,environment,tier,type,stage,component)
       (
-        sum by(env,environment,tier,type,stage,component) (gitlab_component_ops:rate_6h{component="pgbouncer",monitor="global",type="patroni"}) >= 0.16667
+        sum by(env,environment,tier,type,stage,component) (
+          last_over_time(gitlab_component_ops:rate_6h{component="pgbouncer",monitor="global",type="patroni"}[2m])
+        ) >= 0.16667
       )
   - alert: PatroniServicePgbouncerTrafficCessation
     for: 5m
@@ -221,18 +225,20 @@ groups:
     expr: |
       (
         (
-          gitlab_component_apdex:ratio_1h{component="rails_primary_sql",monitor="global",type="patroni"}
+          last_over_time(gitlab_component_apdex:ratio_1h{component="rails_primary_sql",monitor="global",type="patroni"}[2m])
           < (1 - 14.4 * 0.001000)
         )
         and
         (
-          gitlab_component_apdex:ratio_5m{component="rails_primary_sql",monitor="global",type="patroni"}
+          last_over_time(gitlab_component_apdex:ratio_5m{component="rails_primary_sql",monitor="global",type="patroni"}[2m])
           < (1 - 14.4 * 0.001000)
         )
       )
       and on(env,environment,tier,type,stage,component)
       (
-        sum by(env,environment,tier,type,stage,component) (gitlab_component_ops:rate_1h{component="rails_primary_sql",monitor="global",type="patroni"}) >= 1
+        sum by(env,environment,tier,type,stage,component) (
+          last_over_time(gitlab_component_ops:rate_1h{component="rails_primary_sql",monitor="global",type="patroni"}[2m])
+        ) >= 1
       )
   - alert: PatroniServiceRailsPrimarySqlApdexSLOViolation
     for: 2m
@@ -272,18 +278,20 @@ groups:
     expr: |
       (
         (
-          gitlab_component_apdex:ratio_6h{component="rails_primary_sql",monitor="global",type="patroni"}
+          last_over_time(gitlab_component_apdex:ratio_6h{component="rails_primary_sql",monitor="global",type="patroni"}[2m])
           < (1 - 6 * 0.001000)
         )
         and
         (
-          gitlab_component_apdex:ratio_30m{component="rails_primary_sql",monitor="global",type="patroni"}
+          last_over_time(gitlab_component_apdex:ratio_30m{component="rails_primary_sql",monitor="global",type="patroni"}[2m])
           < (1 - 6 * 0.001000)
         )
       )
       and on(env,environment,tier,type,stage,component)
       (
-        sum by(env,environment,tier,type,stage,component) (gitlab_component_ops:rate_6h{component="rails_primary_sql",monitor="global",type="patroni"}) >= 0.16667
+        sum by(env,environment,tier,type,stage,component) (
+          last_over_time(gitlab_component_ops:rate_6h{component="rails_primary_sql",monitor="global",type="patroni"}[2m])
+        ) >= 0.16667
       )
   - alert: PatroniServiceRailsPrimarySqlTrafficCessation
     for: 5m
@@ -393,18 +401,20 @@ groups:
     expr: |
       (
         (
-          gitlab_component_apdex:ratio_1h{component="rails_replica_sql",monitor="global",type="patroni"}
+          last_over_time(gitlab_component_apdex:ratio_1h{component="rails_replica_sql",monitor="global",type="patroni"}[2m])
           < (1 - 14.4 * 0.001000)
         )
         and
         (
-          gitlab_component_apdex:ratio_5m{component="rails_replica_sql",monitor="global",type="patroni"}
+          last_over_time(gitlab_component_apdex:ratio_5m{component="rails_replica_sql",monitor="global",type="patroni"}[2m])
           < (1 - 14.4 * 0.001000)
         )
       )
       and on(env,environment,tier,type,stage,component)
       (
-        sum by(env,environment,tier,type,stage,component) (gitlab_component_ops:rate_1h{component="rails_replica_sql",monitor="global",type="patroni"}) >= 1
+        sum by(env,environment,tier,type,stage,component) (
+          last_over_time(gitlab_component_ops:rate_1h{component="rails_replica_sql",monitor="global",type="patroni"}[2m])
+        ) >= 1
       )
   - alert: PatroniServiceRailsReplicaSqlApdexSLOViolation
     for: 2m
@@ -444,18 +454,20 @@ groups:
     expr: |
       (
         (
-          gitlab_component_apdex:ratio_6h{component="rails_replica_sql",monitor="global",type="patroni"}
+          last_over_time(gitlab_component_apdex:ratio_6h{component="rails_replica_sql",monitor="global",type="patroni"}[2m])
           < (1 - 6 * 0.001000)
         )
         and
         (
-          gitlab_component_apdex:ratio_30m{component="rails_replica_sql",monitor="global",type="patroni"}
+          last_over_time(gitlab_component_apdex:ratio_30m{component="rails_replica_sql",monitor="global",type="patroni"}[2m])
           < (1 - 6 * 0.001000)
         )
       )
       and on(env,environment,tier,type,stage,component)
       (
-        sum by(env,environment,tier,type,stage,component) (gitlab_component_ops:rate_6h{component="rails_replica_sql",monitor="global",type="patroni"}) >= 0.16667
+        sum by(env,environment,tier,type,stage,component) (
+          last_over_time(gitlab_component_ops:rate_6h{component="rails_replica_sql",monitor="global",type="patroni"}[2m])
+        ) >= 0.16667
       )
   - alert: PatroniServiceRailsReplicaSqlTrafficCessation
     for: 5m
@@ -562,18 +574,20 @@ groups:
     expr: |
       (
         (
-          gitlab_component_errors:ratio_1h{component="transactions_primary",monitor="global",type="patroni"}
+          last_over_time(gitlab_component_errors:ratio_1h{component="transactions_primary",monitor="global",type="patroni"}[2m])
           > (14.4 * 0.001000)
         )
         and
         (
-          gitlab_component_errors:ratio_5m{component="transactions_primary",monitor="global",type="patroni"}
+          last_over_time(gitlab_component_errors:ratio_5m{component="transactions_primary",monitor="global",type="patroni"}[2m])
           > (14.4 * 0.001000)
         )
       )
       and on(env,environment,tier,type,stage,component)
       (
-        sum by(env,environment,tier,type,stage,component) (gitlab_component_ops:rate_1h{component="transactions_primary",monitor="global",type="patroni"}) >= 1
+        sum by(env,environment,tier,type,stage,component) (
+          last_over_time(gitlab_component_ops:rate_1h{component="transactions_primary",monitor="global",type="patroni"}[2m])
+        ) >= 1
       )
   - alert: PatroniServiceTransactionsPrimaryErrorSLOViolation
     for: 2m
@@ -610,18 +624,20 @@ groups:
     expr: |
       (
         (
-          gitlab_component_errors:ratio_6h{component="transactions_primary",monitor="global",type="patroni"}
+          last_over_time(gitlab_component_errors:ratio_6h{component="transactions_primary",monitor="global",type="patroni"}[2m])
           > (6 * 0.001000)
         )
         and
         (
-          gitlab_component_errors:ratio_30m{component="transactions_primary",monitor="global",type="patroni"}
+          last_over_time(gitlab_component_errors:ratio_30m{component="transactions_primary",monitor="global",type="patroni"}[2m])
           > (6 * 0.001000)
         )
       )
       and on(env,environment,tier,type,stage,component)
       (
-        sum by(env,environment,tier,type,stage,component) (gitlab_component_ops:rate_6h{component="transactions_primary",monitor="global",type="patroni"}) >= 0.16667
+        sum by(env,environment,tier,type,stage,component) (
+          last_over_time(gitlab_component_ops:rate_6h{component="transactions_primary",monitor="global",type="patroni"}[2m])
+        ) >= 0.16667
       )
   - alert: PatroniServiceTransactionsPrimaryTrafficCessation
     for: 5m
@@ -732,18 +748,20 @@ groups:
     expr: |
       (
         (
-          gitlab_component_errors:ratio_1h{component="transactions_replica",monitor="global",type="patroni"}
+          last_over_time(gitlab_component_errors:ratio_1h{component="transactions_replica",monitor="global",type="patroni"}[2m])
           > (14.4 * 0.001000)
         )
         and
         (
-          gitlab_component_errors:ratio_5m{component="transactions_replica",monitor="global",type="patroni"}
+          last_over_time(gitlab_component_errors:ratio_5m{component="transactions_replica",monitor="global",type="patroni"}[2m])
           > (14.4 * 0.001000)
         )
       )
       and on(env,environment,tier,type,stage,component)
       (
-        sum by(env,environment,tier,type,stage,component) (gitlab_component_ops:rate_1h{component="transactions_replica",monitor="global",type="patroni"}) >= 1
+        sum by(env,environment,tier,type,stage,component) (
+          last_over_time(gitlab_component_ops:rate_1h{component="transactions_replica",monitor="global",type="patroni"}[2m])
+        ) >= 1
       )
   - alert: PatroniServiceTransactionsReplicaErrorSLOViolation
     for: 2m
@@ -780,18 +798,20 @@ groups:
     expr: |
       (
         (
-          gitlab_component_errors:ratio_6h{component="transactions_replica",monitor="global",type="patroni"}
+          last_over_time(gitlab_component_errors:ratio_6h{component="transactions_replica",monitor="global",type="patroni"}[2m])
           > (6 * 0.001000)
         )
         and
         (
-          gitlab_component_errors:ratio_30m{component="transactions_replica",monitor="global",type="patroni"}
+          last_over_time(gitlab_component_errors:ratio_30m{component="transactions_replica",monitor="global",type="patroni"}[2m])
           > (6 * 0.001000)
         )
       )
       and on(env,environment,tier,type,stage,component)
       (
-        sum by(env,environment,tier,type,stage,component) (gitlab_component_ops:rate_6h{component="transactions_replica",monitor="global",type="patroni"}) >= 0.16667
+        sum by(env,environment,tier,type,stage,component) (
+          last_over_time(gitlab_component_ops:rate_6h{component="transactions_replica",monitor="global",type="patroni"}[2m])
+        ) >= 0.16667
       )
   - alert: PatroniServiceTransactionsReplicaTrafficCessation
     for: 5m

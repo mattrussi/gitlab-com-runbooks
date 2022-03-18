@@ -43,18 +43,20 @@ groups:
     expr: |
       (
         (
-          gitlab_component_apdex:ratio_1h{component="pages_range_requests",monitor="global",type="google-cloud-storage"}
+          last_over_time(gitlab_component_apdex:ratio_1h{component="pages_range_requests",monitor="global",type="google-cloud-storage"}[2m])
           < (1 - 14.4 * 0.003000)
         )
         and
         (
-          gitlab_component_apdex:ratio_5m{component="pages_range_requests",monitor="global",type="google-cloud-storage"}
+          last_over_time(gitlab_component_apdex:ratio_5m{component="pages_range_requests",monitor="global",type="google-cloud-storage"}[2m])
           < (1 - 14.4 * 0.003000)
         )
       )
       and on(env,environment,tier,type,stage,component)
       (
-        sum by(env,environment,tier,type,stage,component) (gitlab_component_ops:rate_1h{component="pages_range_requests",monitor="global",type="google-cloud-storage"}) >= 1
+        sum by(env,environment,tier,type,stage,component) (
+          last_over_time(gitlab_component_ops:rate_1h{component="pages_range_requests",monitor="global",type="google-cloud-storage"}[2m])
+        ) >= 1
       )
   - alert: GoogleCloudStorageServicePagesRangeRequestsApdexSLOViolation
     for: 2m
@@ -94,18 +96,20 @@ groups:
     expr: |
       (
         (
-          gitlab_component_apdex:ratio_6h{component="pages_range_requests",monitor="global",type="google-cloud-storage"}
+          last_over_time(gitlab_component_apdex:ratio_6h{component="pages_range_requests",monitor="global",type="google-cloud-storage"}[2m])
           < (1 - 6 * 0.003000)
         )
         and
         (
-          gitlab_component_apdex:ratio_30m{component="pages_range_requests",monitor="global",type="google-cloud-storage"}
+          last_over_time(gitlab_component_apdex:ratio_30m{component="pages_range_requests",monitor="global",type="google-cloud-storage"}[2m])
           < (1 - 6 * 0.003000)
         )
       )
       and on(env,environment,tier,type,stage,component)
       (
-        sum by(env,environment,tier,type,stage,component) (gitlab_component_ops:rate_6h{component="pages_range_requests",monitor="global",type="google-cloud-storage"}) >= 0.16667
+        sum by(env,environment,tier,type,stage,component) (
+          last_over_time(gitlab_component_ops:rate_6h{component="pages_range_requests",monitor="global",type="google-cloud-storage"}[2m])
+        ) >= 0.16667
       )
   - alert: GoogleCloudStorageServicePagesRangeRequestsTrafficCessation
     for: 5m
@@ -215,18 +219,20 @@ groups:
     expr: |
       (
         (
-          gitlab_component_apdex:ratio_1h{component="pages_request_duration",monitor="global",type="google-cloud-storage"}
+          last_over_time(gitlab_component_apdex:ratio_1h{component="pages_request_duration",monitor="global",type="google-cloud-storage"}[2m])
           < (1 - 14.4 * 0.003000)
         )
         and
         (
-          gitlab_component_apdex:ratio_5m{component="pages_request_duration",monitor="global",type="google-cloud-storage"}
+          last_over_time(gitlab_component_apdex:ratio_5m{component="pages_request_duration",monitor="global",type="google-cloud-storage"}[2m])
           < (1 - 14.4 * 0.003000)
         )
       )
       and on(env,environment,tier,type,stage,component)
       (
-        sum by(env,environment,tier,type,stage,component) (gitlab_component_ops:rate_1h{component="pages_request_duration",monitor="global",type="google-cloud-storage"}) >= 1
+        sum by(env,environment,tier,type,stage,component) (
+          last_over_time(gitlab_component_ops:rate_1h{component="pages_request_duration",monitor="global",type="google-cloud-storage"}[2m])
+        ) >= 1
       )
   - alert: GoogleCloudStorageServicePagesRequestDurationApdexSLOViolation
     for: 2m
@@ -266,18 +272,20 @@ groups:
     expr: |
       (
         (
-          gitlab_component_apdex:ratio_6h{component="pages_request_duration",monitor="global",type="google-cloud-storage"}
+          last_over_time(gitlab_component_apdex:ratio_6h{component="pages_request_duration",monitor="global",type="google-cloud-storage"}[2m])
           < (1 - 6 * 0.003000)
         )
         and
         (
-          gitlab_component_apdex:ratio_30m{component="pages_request_duration",monitor="global",type="google-cloud-storage"}
+          last_over_time(gitlab_component_apdex:ratio_30m{component="pages_request_duration",monitor="global",type="google-cloud-storage"}[2m])
           < (1 - 6 * 0.003000)
         )
       )
       and on(env,environment,tier,type,stage,component)
       (
-        sum by(env,environment,tier,type,stage,component) (gitlab_component_ops:rate_6h{component="pages_request_duration",monitor="global",type="google-cloud-storage"}) >= 0.16667
+        sum by(env,environment,tier,type,stage,component) (
+          last_over_time(gitlab_component_ops:rate_6h{component="pages_request_duration",monitor="global",type="google-cloud-storage"}[2m])
+        ) >= 0.16667
       )
   - alert: GoogleCloudStorageServicePagesRequestDurationTrafficCessation
     for: 5m
@@ -457,18 +465,20 @@ groups:
     expr: |
       (
         (
-          gitlab_component_apdex:ratio_1h{component="registry_storage",monitor="global",type="google-cloud-storage"}
+          last_over_time(gitlab_component_apdex:ratio_1h{component="registry_storage",monitor="global",type="google-cloud-storage"}[2m])
           < (1 - 14.4 * 0.003000)
         )
         and
         (
-          gitlab_component_apdex:ratio_5m{component="registry_storage",monitor="global",type="google-cloud-storage"}
+          last_over_time(gitlab_component_apdex:ratio_5m{component="registry_storage",monitor="global",type="google-cloud-storage"}[2m])
           < (1 - 14.4 * 0.003000)
         )
       )
       and on(env,environment,tier,type,stage,component)
       (
-        sum by(env,environment,tier,type,stage,component) (gitlab_component_ops:rate_1h{component="registry_storage",monitor="global",type="google-cloud-storage"}) >= 1
+        sum by(env,environment,tier,type,stage,component) (
+          last_over_time(gitlab_component_ops:rate_1h{component="registry_storage",monitor="global",type="google-cloud-storage"}[2m])
+        ) >= 1
       )
   - alert: GoogleCloudStorageServiceRegistryStorageApdexSLOViolation
     for: 2m
@@ -508,18 +518,20 @@ groups:
     expr: |
       (
         (
-          gitlab_component_apdex:ratio_6h{component="registry_storage",monitor="global",type="google-cloud-storage"}
+          last_over_time(gitlab_component_apdex:ratio_6h{component="registry_storage",monitor="global",type="google-cloud-storage"}[2m])
           < (1 - 6 * 0.003000)
         )
         and
         (
-          gitlab_component_apdex:ratio_30m{component="registry_storage",monitor="global",type="google-cloud-storage"}
+          last_over_time(gitlab_component_apdex:ratio_30m{component="registry_storage",monitor="global",type="google-cloud-storage"}[2m])
           < (1 - 6 * 0.003000)
         )
       )
       and on(env,environment,tier,type,stage,component)
       (
-        sum by(env,environment,tier,type,stage,component) (gitlab_component_ops:rate_6h{component="registry_storage",monitor="global",type="google-cloud-storage"}) >= 0.16667
+        sum by(env,environment,tier,type,stage,component) (
+          last_over_time(gitlab_component_ops:rate_6h{component="registry_storage",monitor="global",type="google-cloud-storage"}[2m])
+        ) >= 0.16667
       )
   - alert: GoogleCloudStorageServiceRegistryStorageTrafficCessation
     for: 5m
@@ -629,18 +641,20 @@ groups:
     expr: |
       (
         (
-          gitlab_component_apdex:ratio_1h{component="workhorse_upload",monitor="global",type="google-cloud-storage"}
+          last_over_time(gitlab_component_apdex:ratio_1h{component="workhorse_upload",monitor="global",type="google-cloud-storage"}[2m])
           < (1 - 14.4 * 0.003000)
         )
         and
         (
-          gitlab_component_apdex:ratio_5m{component="workhorse_upload",monitor="global",type="google-cloud-storage"}
+          last_over_time(gitlab_component_apdex:ratio_5m{component="workhorse_upload",monitor="global",type="google-cloud-storage"}[2m])
           < (1 - 14.4 * 0.003000)
         )
       )
       and on(env,environment,tier,type,stage,component)
       (
-        sum by(env,environment,tier,type,stage,component) (gitlab_component_ops:rate_1h{component="workhorse_upload",monitor="global",type="google-cloud-storage"}) >= 1
+        sum by(env,environment,tier,type,stage,component) (
+          last_over_time(gitlab_component_ops:rate_1h{component="workhorse_upload",monitor="global",type="google-cloud-storage"}[2m])
+        ) >= 1
       )
   - alert: GoogleCloudStorageServiceWorkhorseUploadApdexSLOViolation
     for: 2m
@@ -680,18 +694,20 @@ groups:
     expr: |
       (
         (
-          gitlab_component_apdex:ratio_6h{component="workhorse_upload",monitor="global",type="google-cloud-storage"}
+          last_over_time(gitlab_component_apdex:ratio_6h{component="workhorse_upload",monitor="global",type="google-cloud-storage"}[2m])
           < (1 - 6 * 0.003000)
         )
         and
         (
-          gitlab_component_apdex:ratio_30m{component="workhorse_upload",monitor="global",type="google-cloud-storage"}
+          last_over_time(gitlab_component_apdex:ratio_30m{component="workhorse_upload",monitor="global",type="google-cloud-storage"}[2m])
           < (1 - 6 * 0.003000)
         )
       )
       and on(env,environment,tier,type,stage,component)
       (
-        sum by(env,environment,tier,type,stage,component) (gitlab_component_ops:rate_6h{component="workhorse_upload",monitor="global",type="google-cloud-storage"}) >= 0.16667
+        sum by(env,environment,tier,type,stage,component) (
+          last_over_time(gitlab_component_ops:rate_6h{component="workhorse_upload",monitor="global",type="google-cloud-storage"}[2m])
+        ) >= 0.16667
       )
   - alert: GoogleCloudStorageServiceWorkhorseUploadErrorSLOViolation
     for: 2m
@@ -728,18 +744,20 @@ groups:
     expr: |
       (
         (
-          gitlab_component_errors:ratio_1h{component="workhorse_upload",monitor="global",type="google-cloud-storage"}
+          last_over_time(gitlab_component_errors:ratio_1h{component="workhorse_upload",monitor="global",type="google-cloud-storage"}[2m])
           > (14.4 * 0.000100)
         )
         and
         (
-          gitlab_component_errors:ratio_5m{component="workhorse_upload",monitor="global",type="google-cloud-storage"}
+          last_over_time(gitlab_component_errors:ratio_5m{component="workhorse_upload",monitor="global",type="google-cloud-storage"}[2m])
           > (14.4 * 0.000100)
         )
       )
       and on(env,environment,tier,type,stage,component)
       (
-        sum by(env,environment,tier,type,stage,component) (gitlab_component_ops:rate_1h{component="workhorse_upload",monitor="global",type="google-cloud-storage"}) >= 1
+        sum by(env,environment,tier,type,stage,component) (
+          last_over_time(gitlab_component_ops:rate_1h{component="workhorse_upload",monitor="global",type="google-cloud-storage"}[2m])
+        ) >= 1
       )
   - alert: GoogleCloudStorageServiceWorkhorseUploadErrorSLOViolation
     for: 2m
@@ -776,18 +794,20 @@ groups:
     expr: |
       (
         (
-          gitlab_component_errors:ratio_6h{component="workhorse_upload",monitor="global",type="google-cloud-storage"}
+          last_over_time(gitlab_component_errors:ratio_6h{component="workhorse_upload",monitor="global",type="google-cloud-storage"}[2m])
           > (6 * 0.000100)
         )
         and
         (
-          gitlab_component_errors:ratio_30m{component="workhorse_upload",monitor="global",type="google-cloud-storage"}
+          last_over_time(gitlab_component_errors:ratio_30m{component="workhorse_upload",monitor="global",type="google-cloud-storage"}[2m])
           > (6 * 0.000100)
         )
       )
       and on(env,environment,tier,type,stage,component)
       (
-        sum by(env,environment,tier,type,stage,component) (gitlab_component_ops:rate_6h{component="workhorse_upload",monitor="global",type="google-cloud-storage"}) >= 0.16667
+        sum by(env,environment,tier,type,stage,component) (
+          last_over_time(gitlab_component_ops:rate_6h{component="workhorse_upload",monitor="global",type="google-cloud-storage"}[2m])
+        ) >= 0.16667
       )
   - alert: GoogleCloudStorageServiceWorkhorseUploadTrafficCessation
     for: 5m

@@ -43,18 +43,20 @@ groups:
     expr: |
       (
         (
-          gitlab_component_apdex:ratio_1h{component="gitalyruby",monitor="global",type="gitaly"}
+          last_over_time(gitlab_component_apdex:ratio_1h{component="gitalyruby",monitor="global",type="gitaly"}[2m])
           < (1 - 14.4 * 0.001000)
         )
         and
         (
-          gitlab_component_apdex:ratio_5m{component="gitalyruby",monitor="global",type="gitaly"}
+          last_over_time(gitlab_component_apdex:ratio_5m{component="gitalyruby",monitor="global",type="gitaly"}[2m])
           < (1 - 14.4 * 0.001000)
         )
       )
       and on(env,environment,tier,type,stage,component)
       (
-        sum by(env,environment,tier,type,stage,component) (gitlab_component_ops:rate_1h{component="gitalyruby",monitor="global",type="gitaly"}) >= 1
+        sum by(env,environment,tier,type,stage,component) (
+          last_over_time(gitlab_component_ops:rate_1h{component="gitalyruby",monitor="global",type="gitaly"}[2m])
+        ) >= 1
       )
   - alert: GitalyServiceGitalyrubyApdexSLOViolation
     for: 2m
@@ -94,18 +96,20 @@ groups:
     expr: |
       (
         (
-          gitlab_component_apdex:ratio_6h{component="gitalyruby",monitor="global",type="gitaly"}
+          last_over_time(gitlab_component_apdex:ratio_6h{component="gitalyruby",monitor="global",type="gitaly"}[2m])
           < (1 - 6 * 0.001000)
         )
         and
         (
-          gitlab_component_apdex:ratio_30m{component="gitalyruby",monitor="global",type="gitaly"}
+          last_over_time(gitlab_component_apdex:ratio_30m{component="gitalyruby",monitor="global",type="gitaly"}[2m])
           < (1 - 6 * 0.001000)
         )
       )
       and on(env,environment,tier,type,stage,component)
       (
-        sum by(env,environment,tier,type,stage,component) (gitlab_component_ops:rate_6h{component="gitalyruby",monitor="global",type="gitaly"}) >= 0.16667
+        sum by(env,environment,tier,type,stage,component) (
+          last_over_time(gitlab_component_ops:rate_6h{component="gitalyruby",monitor="global",type="gitaly"}[2m])
+        ) >= 0.16667
       )
   - alert: GitalyServiceGitalyrubyApdexSLOViolationSingleNode
     for: 10m
@@ -147,18 +151,20 @@ groups:
     expr: |
       (
         (
-          gitlab_component_node_apdex:ratio_1h{component="gitalyruby",monitor="global",type="gitaly"}
+          last_over_time(gitlab_component_node_apdex:ratio_1h{component="gitalyruby",monitor="global",type="gitaly"}[10m])
           < (1 - 14.4 * 0.001000)
         )
         and
         (
-          gitlab_component_node_apdex:ratio_5m{component="gitalyruby",monitor="global",type="gitaly"}
+          last_over_time(gitlab_component_node_apdex:ratio_5m{component="gitalyruby",monitor="global",type="gitaly"}[10m])
           < (1 - 14.4 * 0.001000)
         )
       )
       and on(env,environment,tier,type,stage,shard,fqdn,component)
       (
-        sum by(env,environment,tier,type,stage,shard,fqdn,component) (gitlab_component_node_ops:rate_1h{component="gitalyruby",monitor="global",type="gitaly"}) >= 0.33333
+        sum by(env,environment,tier,type,stage,shard,fqdn,component) (
+          last_over_time(gitlab_component_node_ops:rate_1h{component="gitalyruby",monitor="global",type="gitaly"}[10m])
+        ) >= 0.33333
       )
   - alert: GitalyServiceGitalyrubyApdexSLOViolationSingleNode
     for: 10m
@@ -200,18 +206,20 @@ groups:
     expr: |
       (
         (
-          gitlab_component_node_apdex:ratio_6h{component="gitalyruby",monitor="global",type="gitaly"}
+          last_over_time(gitlab_component_node_apdex:ratio_6h{component="gitalyruby",monitor="global",type="gitaly"}[10m])
           < (1 - 6 * 0.001000)
         )
         and
         (
-          gitlab_component_node_apdex:ratio_30m{component="gitalyruby",monitor="global",type="gitaly"}
+          last_over_time(gitlab_component_node_apdex:ratio_30m{component="gitalyruby",monitor="global",type="gitaly"}[10m])
           < (1 - 6 * 0.001000)
         )
       )
       and on(env,environment,tier,type,stage,shard,fqdn,component)
       (
-        sum by(env,environment,tier,type,stage,shard,fqdn,component) (gitlab_component_node_ops:rate_6h{component="gitalyruby",monitor="global",type="gitaly"}) >= 0.05556
+        sum by(env,environment,tier,type,stage,shard,fqdn,component) (
+          last_over_time(gitlab_component_node_ops:rate_6h{component="gitalyruby",monitor="global",type="gitaly"}[10m])
+        ) >= 0.05556
       )
   - alert: GitalyServiceGitalyrubyErrorSLOViolation
     for: 2m
@@ -248,18 +256,20 @@ groups:
     expr: |
       (
         (
-          gitlab_component_errors:ratio_1h{component="gitalyruby",monitor="global",type="gitaly"}
+          last_over_time(gitlab_component_errors:ratio_1h{component="gitalyruby",monitor="global",type="gitaly"}[2m])
           > (14.4 * 0.000500)
         )
         and
         (
-          gitlab_component_errors:ratio_5m{component="gitalyruby",monitor="global",type="gitaly"}
+          last_over_time(gitlab_component_errors:ratio_5m{component="gitalyruby",monitor="global",type="gitaly"}[2m])
           > (14.4 * 0.000500)
         )
       )
       and on(env,environment,tier,type,stage,component)
       (
-        sum by(env,environment,tier,type,stage,component) (gitlab_component_ops:rate_1h{component="gitalyruby",monitor="global",type="gitaly"}) >= 1
+        sum by(env,environment,tier,type,stage,component) (
+          last_over_time(gitlab_component_ops:rate_1h{component="gitalyruby",monitor="global",type="gitaly"}[2m])
+        ) >= 1
       )
   - alert: GitalyServiceGitalyrubyErrorSLOViolation
     for: 2m
@@ -296,18 +306,20 @@ groups:
     expr: |
       (
         (
-          gitlab_component_errors:ratio_6h{component="gitalyruby",monitor="global",type="gitaly"}
+          last_over_time(gitlab_component_errors:ratio_6h{component="gitalyruby",monitor="global",type="gitaly"}[2m])
           > (6 * 0.000500)
         )
         and
         (
-          gitlab_component_errors:ratio_30m{component="gitalyruby",monitor="global",type="gitaly"}
+          last_over_time(gitlab_component_errors:ratio_30m{component="gitalyruby",monitor="global",type="gitaly"}[2m])
           > (6 * 0.000500)
         )
       )
       and on(env,environment,tier,type,stage,component)
       (
-        sum by(env,environment,tier,type,stage,component) (gitlab_component_ops:rate_6h{component="gitalyruby",monitor="global",type="gitaly"}) >= 0.16667
+        sum by(env,environment,tier,type,stage,component) (
+          last_over_time(gitlab_component_ops:rate_6h{component="gitalyruby",monitor="global",type="gitaly"}[2m])
+        ) >= 0.16667
       )
   - alert: GitalyServiceGitalyrubyErrorSLOViolationSingleNode
     for: 10m
@@ -346,18 +358,20 @@ groups:
     expr: |
       (
         (
-          gitlab_component_node_errors:ratio_1h{component="gitalyruby",monitor="global",type="gitaly"}
+          last_over_time(gitlab_component_node_errors:ratio_1h{component="gitalyruby",monitor="global",type="gitaly"}[10m])
           > (14.4 * 0.000500)
         )
         and
         (
-          gitlab_component_node_errors:ratio_5m{component="gitalyruby",monitor="global",type="gitaly"}
+          last_over_time(gitlab_component_node_errors:ratio_5m{component="gitalyruby",monitor="global",type="gitaly"}[10m])
           > (14.4 * 0.000500)
         )
       )
       and on(env,environment,tier,type,stage,shard,fqdn,component)
       (
-        sum by(env,environment,tier,type,stage,shard,fqdn,component) (gitlab_component_node_ops:rate_1h{component="gitalyruby",monitor="global",type="gitaly"}) >= 0.33333
+        sum by(env,environment,tier,type,stage,shard,fqdn,component) (
+          last_over_time(gitlab_component_node_ops:rate_1h{component="gitalyruby",monitor="global",type="gitaly"}[10m])
+        ) >= 0.33333
       )
   - alert: GitalyServiceGitalyrubyErrorSLOViolationSingleNode
     for: 10m
@@ -396,18 +410,20 @@ groups:
     expr: |
       (
         (
-          gitlab_component_node_errors:ratio_6h{component="gitalyruby",monitor="global",type="gitaly"}
+          last_over_time(gitlab_component_node_errors:ratio_6h{component="gitalyruby",monitor="global",type="gitaly"}[10m])
           > (6 * 0.000500)
         )
         and
         (
-          gitlab_component_node_errors:ratio_30m{component="gitalyruby",monitor="global",type="gitaly"}
+          last_over_time(gitlab_component_node_errors:ratio_30m{component="gitalyruby",monitor="global",type="gitaly"}[10m])
           > (6 * 0.000500)
         )
       )
       and on(env,environment,tier,type,stage,shard,fqdn,component)
       (
-        sum by(env,environment,tier,type,stage,shard,fqdn,component) (gitlab_component_node_ops:rate_6h{component="gitalyruby",monitor="global",type="gitaly"}) >= 0.05556
+        sum by(env,environment,tier,type,stage,shard,fqdn,component) (
+          last_over_time(gitlab_component_node_ops:rate_6h{component="gitalyruby",monitor="global",type="gitaly"}[10m])
+        ) >= 0.05556
       )
   - alert: GitalyServiceGitalyrubyTrafficCessation
     for: 5m
@@ -517,18 +533,20 @@ groups:
     expr: |
       (
         (
-          gitlab_component_apdex:ratio_1h{component="goserver",monitor="global",type="gitaly"}
+          last_over_time(gitlab_component_apdex:ratio_1h{component="goserver",monitor="global",type="gitaly"}[2m])
           < (1 - 14.4 * 0.001000)
         )
         and
         (
-          gitlab_component_apdex:ratio_5m{component="goserver",monitor="global",type="gitaly"}
+          last_over_time(gitlab_component_apdex:ratio_5m{component="goserver",monitor="global",type="gitaly"}[2m])
           < (1 - 14.4 * 0.001000)
         )
       )
       and on(env,environment,tier,type,stage,component)
       (
-        sum by(env,environment,tier,type,stage,component) (gitlab_component_ops:rate_1h{component="goserver",monitor="global",type="gitaly"}) >= 1
+        sum by(env,environment,tier,type,stage,component) (
+          last_over_time(gitlab_component_ops:rate_1h{component="goserver",monitor="global",type="gitaly"}[2m])
+        ) >= 1
       )
   - alert: GitalyServiceGoserverApdexSLOViolation
     for: 2m
@@ -568,18 +586,20 @@ groups:
     expr: |
       (
         (
-          gitlab_component_apdex:ratio_6h{component="goserver",monitor="global",type="gitaly"}
+          last_over_time(gitlab_component_apdex:ratio_6h{component="goserver",monitor="global",type="gitaly"}[2m])
           < (1 - 6 * 0.001000)
         )
         and
         (
-          gitlab_component_apdex:ratio_30m{component="goserver",monitor="global",type="gitaly"}
+          last_over_time(gitlab_component_apdex:ratio_30m{component="goserver",monitor="global",type="gitaly"}[2m])
           < (1 - 6 * 0.001000)
         )
       )
       and on(env,environment,tier,type,stage,component)
       (
-        sum by(env,environment,tier,type,stage,component) (gitlab_component_ops:rate_6h{component="goserver",monitor="global",type="gitaly"}) >= 0.16667
+        sum by(env,environment,tier,type,stage,component) (
+          last_over_time(gitlab_component_ops:rate_6h{component="goserver",monitor="global",type="gitaly"}[2m])
+        ) >= 0.16667
       )
   - alert: GitalyServiceGoserverApdexSLOViolationSingleNode
     for: 10m
@@ -621,18 +641,20 @@ groups:
     expr: |
       (
         (
-          gitlab_component_node_apdex:ratio_1h{component="goserver",monitor="global",type="gitaly"}
+          last_over_time(gitlab_component_node_apdex:ratio_1h{component="goserver",monitor="global",type="gitaly"}[10m])
           < (1 - 14.4 * 0.001000)
         )
         and
         (
-          gitlab_component_node_apdex:ratio_5m{component="goserver",monitor="global",type="gitaly"}
+          last_over_time(gitlab_component_node_apdex:ratio_5m{component="goserver",monitor="global",type="gitaly"}[10m])
           < (1 - 14.4 * 0.001000)
         )
       )
       and on(env,environment,tier,type,stage,shard,fqdn,component)
       (
-        sum by(env,environment,tier,type,stage,shard,fqdn,component) (gitlab_component_node_ops:rate_1h{component="goserver",monitor="global",type="gitaly"}) >= 0.33333
+        sum by(env,environment,tier,type,stage,shard,fqdn,component) (
+          last_over_time(gitlab_component_node_ops:rate_1h{component="goserver",monitor="global",type="gitaly"}[10m])
+        ) >= 0.33333
       )
   - alert: GitalyServiceGoserverApdexSLOViolationSingleNode
     for: 10m
@@ -674,18 +696,20 @@ groups:
     expr: |
       (
         (
-          gitlab_component_node_apdex:ratio_6h{component="goserver",monitor="global",type="gitaly"}
+          last_over_time(gitlab_component_node_apdex:ratio_6h{component="goserver",monitor="global",type="gitaly"}[10m])
           < (1 - 6 * 0.001000)
         )
         and
         (
-          gitlab_component_node_apdex:ratio_30m{component="goserver",monitor="global",type="gitaly"}
+          last_over_time(gitlab_component_node_apdex:ratio_30m{component="goserver",monitor="global",type="gitaly"}[10m])
           < (1 - 6 * 0.001000)
         )
       )
       and on(env,environment,tier,type,stage,shard,fqdn,component)
       (
-        sum by(env,environment,tier,type,stage,shard,fqdn,component) (gitlab_component_node_ops:rate_6h{component="goserver",monitor="global",type="gitaly"}) >= 0.05556
+        sum by(env,environment,tier,type,stage,shard,fqdn,component) (
+          last_over_time(gitlab_component_node_ops:rate_6h{component="goserver",monitor="global",type="gitaly"}[10m])
+        ) >= 0.05556
       )
   - alert: GitalyServiceGoserverErrorSLOViolation
     for: 2m
@@ -724,18 +748,20 @@ groups:
     expr: |
       (
         (
-          gitlab_component_errors:ratio_1h{component="goserver",monitor="global",type="gitaly"}
+          last_over_time(gitlab_component_errors:ratio_1h{component="goserver",monitor="global",type="gitaly"}[2m])
           > (14.4 * 0.000500)
         )
         and
         (
-          gitlab_component_errors:ratio_5m{component="goserver",monitor="global",type="gitaly"}
+          last_over_time(gitlab_component_errors:ratio_5m{component="goserver",monitor="global",type="gitaly"}[2m])
           > (14.4 * 0.000500)
         )
       )
       and on(env,environment,tier,type,stage,component)
       (
-        sum by(env,environment,tier,type,stage,component) (gitlab_component_ops:rate_1h{component="goserver",monitor="global",type="gitaly"}) >= 1
+        sum by(env,environment,tier,type,stage,component) (
+          last_over_time(gitlab_component_ops:rate_1h{component="goserver",monitor="global",type="gitaly"}[2m])
+        ) >= 1
       )
   - alert: GitalyServiceGoserverErrorSLOViolation
     for: 2m
@@ -774,18 +800,20 @@ groups:
     expr: |
       (
         (
-          gitlab_component_errors:ratio_6h{component="goserver",monitor="global",type="gitaly"}
+          last_over_time(gitlab_component_errors:ratio_6h{component="goserver",monitor="global",type="gitaly"}[2m])
           > (6 * 0.000500)
         )
         and
         (
-          gitlab_component_errors:ratio_30m{component="goserver",monitor="global",type="gitaly"}
+          last_over_time(gitlab_component_errors:ratio_30m{component="goserver",monitor="global",type="gitaly"}[2m])
           > (6 * 0.000500)
         )
       )
       and on(env,environment,tier,type,stage,component)
       (
-        sum by(env,environment,tier,type,stage,component) (gitlab_component_ops:rate_6h{component="goserver",monitor="global",type="gitaly"}) >= 0.16667
+        sum by(env,environment,tier,type,stage,component) (
+          last_over_time(gitlab_component_ops:rate_6h{component="goserver",monitor="global",type="gitaly"}[2m])
+        ) >= 0.16667
       )
   - alert: GitalyServiceGoserverErrorSLOViolationSingleNode
     for: 10m
@@ -826,18 +854,20 @@ groups:
     expr: |
       (
         (
-          gitlab_component_node_errors:ratio_1h{component="goserver",monitor="global",type="gitaly"}
+          last_over_time(gitlab_component_node_errors:ratio_1h{component="goserver",monitor="global",type="gitaly"}[10m])
           > (14.4 * 0.000500)
         )
         and
         (
-          gitlab_component_node_errors:ratio_5m{component="goserver",monitor="global",type="gitaly"}
+          last_over_time(gitlab_component_node_errors:ratio_5m{component="goserver",monitor="global",type="gitaly"}[10m])
           > (14.4 * 0.000500)
         )
       )
       and on(env,environment,tier,type,stage,shard,fqdn,component)
       (
-        sum by(env,environment,tier,type,stage,shard,fqdn,component) (gitlab_component_node_ops:rate_1h{component="goserver",monitor="global",type="gitaly"}) >= 0.33333
+        sum by(env,environment,tier,type,stage,shard,fqdn,component) (
+          last_over_time(gitlab_component_node_ops:rate_1h{component="goserver",monitor="global",type="gitaly"}[10m])
+        ) >= 0.33333
       )
   - alert: GitalyServiceGoserverErrorSLOViolationSingleNode
     for: 10m
@@ -878,18 +908,20 @@ groups:
     expr: |
       (
         (
-          gitlab_component_node_errors:ratio_6h{component="goserver",monitor="global",type="gitaly"}
+          last_over_time(gitlab_component_node_errors:ratio_6h{component="goserver",monitor="global",type="gitaly"}[10m])
           > (6 * 0.000500)
         )
         and
         (
-          gitlab_component_node_errors:ratio_30m{component="goserver",monitor="global",type="gitaly"}
+          last_over_time(gitlab_component_node_errors:ratio_30m{component="goserver",monitor="global",type="gitaly"}[10m])
           > (6 * 0.000500)
         )
       )
       and on(env,environment,tier,type,stage,shard,fqdn,component)
       (
-        sum by(env,environment,tier,type,stage,shard,fqdn,component) (gitlab_component_node_ops:rate_6h{component="goserver",monitor="global",type="gitaly"}) >= 0.05556
+        sum by(env,environment,tier,type,stage,shard,fqdn,component) (
+          last_over_time(gitlab_component_node_ops:rate_6h{component="goserver",monitor="global",type="gitaly"}[10m])
+        ) >= 0.05556
       )
   - alert: GitalyServiceGoserverTrafficCessation
     for: 5m
@@ -1072,18 +1104,20 @@ groups:
     expr: |
       (
         (
-          gitlab_component_errors:ratio_1h{component="goserver_op_service",monitor="global",type="gitaly"}
+          last_over_time(gitlab_component_errors:ratio_1h{component="goserver_op_service",monitor="global",type="gitaly"}[2m])
           > (14.4 * 0.000500)
         )
         and
         (
-          gitlab_component_errors:ratio_5m{component="goserver_op_service",monitor="global",type="gitaly"}
+          last_over_time(gitlab_component_errors:ratio_5m{component="goserver_op_service",monitor="global",type="gitaly"}[2m])
           > (14.4 * 0.000500)
         )
       )
       and on(env,environment,tier,type,stage,component)
       (
-        sum by(env,environment,tier,type,stage,component) (gitlab_component_ops:rate_1h{component="goserver_op_service",monitor="global",type="gitaly"}) >= 1
+        sum by(env,environment,tier,type,stage,component) (
+          last_over_time(gitlab_component_ops:rate_1h{component="goserver_op_service",monitor="global",type="gitaly"}[2m])
+        ) >= 1
       )
   - alert: GitalyServiceGoserverOpServiceErrorSLOViolation
     for: 2m
@@ -1122,18 +1156,20 @@ groups:
     expr: |
       (
         (
-          gitlab_component_errors:ratio_6h{component="goserver_op_service",monitor="global",type="gitaly"}
+          last_over_time(gitlab_component_errors:ratio_6h{component="goserver_op_service",monitor="global",type="gitaly"}[2m])
           > (6 * 0.000500)
         )
         and
         (
-          gitlab_component_errors:ratio_30m{component="goserver_op_service",monitor="global",type="gitaly"}
+          last_over_time(gitlab_component_errors:ratio_30m{component="goserver_op_service",monitor="global",type="gitaly"}[2m])
           > (6 * 0.000500)
         )
       )
       and on(env,environment,tier,type,stage,component)
       (
-        sum by(env,environment,tier,type,stage,component) (gitlab_component_ops:rate_6h{component="goserver_op_service",monitor="global",type="gitaly"}) >= 0.16667
+        sum by(env,environment,tier,type,stage,component) (
+          last_over_time(gitlab_component_ops:rate_6h{component="goserver_op_service",monitor="global",type="gitaly"}[2m])
+        ) >= 0.16667
       )
   - alert: GitalyServiceGoserverOpServiceErrorSLOViolationSingleNode
     for: 10m
@@ -1174,18 +1210,20 @@ groups:
     expr: |
       (
         (
-          gitlab_component_node_errors:ratio_1h{component="goserver_op_service",monitor="global",type="gitaly"}
+          last_over_time(gitlab_component_node_errors:ratio_1h{component="goserver_op_service",monitor="global",type="gitaly"}[10m])
           > (14.4 * 0.000500)
         )
         and
         (
-          gitlab_component_node_errors:ratio_5m{component="goserver_op_service",monitor="global",type="gitaly"}
+          last_over_time(gitlab_component_node_errors:ratio_5m{component="goserver_op_service",monitor="global",type="gitaly"}[10m])
           > (14.4 * 0.000500)
         )
       )
       and on(env,environment,tier,type,stage,shard,fqdn,component)
       (
-        sum by(env,environment,tier,type,stage,shard,fqdn,component) (gitlab_component_node_ops:rate_1h{component="goserver_op_service",monitor="global",type="gitaly"}) >= 0.33333
+        sum by(env,environment,tier,type,stage,shard,fqdn,component) (
+          last_over_time(gitlab_component_node_ops:rate_1h{component="goserver_op_service",monitor="global",type="gitaly"}[10m])
+        ) >= 0.33333
       )
   - alert: GitalyServiceGoserverOpServiceErrorSLOViolationSingleNode
     for: 10m
@@ -1226,18 +1264,20 @@ groups:
     expr: |
       (
         (
-          gitlab_component_node_errors:ratio_6h{component="goserver_op_service",monitor="global",type="gitaly"}
+          last_over_time(gitlab_component_node_errors:ratio_6h{component="goserver_op_service",monitor="global",type="gitaly"}[10m])
           > (6 * 0.000500)
         )
         and
         (
-          gitlab_component_node_errors:ratio_30m{component="goserver_op_service",monitor="global",type="gitaly"}
+          last_over_time(gitlab_component_node_errors:ratio_30m{component="goserver_op_service",monitor="global",type="gitaly"}[10m])
           > (6 * 0.000500)
         )
       )
       and on(env,environment,tier,type,stage,shard,fqdn,component)
       (
-        sum by(env,environment,tier,type,stage,shard,fqdn,component) (gitlab_component_node_ops:rate_6h{component="goserver_op_service",monitor="global",type="gitaly"}) >= 0.05556
+        sum by(env,environment,tier,type,stage,shard,fqdn,component) (
+          last_over_time(gitlab_component_node_ops:rate_6h{component="goserver_op_service",monitor="global",type="gitaly"}[10m])
+        ) >= 0.05556
       )
   - alert: GitalyServiceGoserverOpServiceTrafficCessation
     for: 5m

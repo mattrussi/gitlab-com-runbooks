@@ -36,18 +36,20 @@ groups:
     expr: |
       (
         (
-          gitlab_component_errors:ratio_1h{component="loadbalancer",monitor="global",type="web-pages"}
+          last_over_time(gitlab_component_errors:ratio_1h{component="loadbalancer",monitor="global",type="web-pages"}[2m])
           > (14.4 * 0.000500)
         )
         and
         (
-          gitlab_component_errors:ratio_5m{component="loadbalancer",monitor="global",type="web-pages"}
+          last_over_time(gitlab_component_errors:ratio_5m{component="loadbalancer",monitor="global",type="web-pages"}[2m])
           > (14.4 * 0.000500)
         )
       )
       and on(env,environment,tier,type,stage,component)
       (
-        sum by(env,environment,tier,type,stage,component) (gitlab_component_ops:rate_1h{component="loadbalancer",monitor="global",type="web-pages"}) >= 1
+        sum by(env,environment,tier,type,stage,component) (
+          last_over_time(gitlab_component_ops:rate_1h{component="loadbalancer",monitor="global",type="web-pages"}[2m])
+        ) >= 1
       )
   - alert: WebPagesServiceLoadbalancerErrorSLOViolation
     for: 2m
@@ -80,18 +82,20 @@ groups:
     expr: |
       (
         (
-          gitlab_component_errors:ratio_6h{component="loadbalancer",monitor="global",type="web-pages"}
+          last_over_time(gitlab_component_errors:ratio_6h{component="loadbalancer",monitor="global",type="web-pages"}[2m])
           > (6 * 0.000500)
         )
         and
         (
-          gitlab_component_errors:ratio_30m{component="loadbalancer",monitor="global",type="web-pages"}
+          last_over_time(gitlab_component_errors:ratio_30m{component="loadbalancer",monitor="global",type="web-pages"}[2m])
           > (6 * 0.000500)
         )
       )
       and on(env,environment,tier,type,stage,component)
       (
-        sum by(env,environment,tier,type,stage,component) (gitlab_component_ops:rate_6h{component="loadbalancer",monitor="global",type="web-pages"}) >= 0.16667
+        sum by(env,environment,tier,type,stage,component) (
+          last_over_time(gitlab_component_ops:rate_6h{component="loadbalancer",monitor="global",type="web-pages"}[2m])
+        ) >= 0.16667
       )
   - alert: WebPagesServiceLoadbalancerErrorSLOViolationRegional
     for: 2m
@@ -126,18 +130,20 @@ groups:
     expr: |
       (
         (
-          gitlab_regional_sli_errors:ratio_1h{component="loadbalancer",monitor="global",type="web-pages"}
+          last_over_time(gitlab_regional_sli_errors:ratio_1h{component="loadbalancer",monitor="global",type="web-pages"}[2m])
           > (14.4 * 0.000500)
         )
         and
         (
-          gitlab_regional_sli_errors:ratio_5m{component="loadbalancer",monitor="global",type="web-pages"}
+          last_over_time(gitlab_regional_sli_errors:ratio_5m{component="loadbalancer",monitor="global",type="web-pages"}[2m])
           > (14.4 * 0.000500)
         )
       )
       and on(env,environment,tier,type,stage,region,component)
       (
-        sum by(env,environment,tier,type,stage,region,component) (gitlab_regional_sli_ops:rate_1h{component="loadbalancer",monitor="global",type="web-pages"}) >= 1
+        sum by(env,environment,tier,type,stage,region,component) (
+          last_over_time(gitlab_regional_sli_ops:rate_1h{component="loadbalancer",monitor="global",type="web-pages"}[2m])
+        ) >= 1
       )
   - alert: WebPagesServiceLoadbalancerErrorSLOViolationRegional
     for: 2m
@@ -172,18 +178,20 @@ groups:
     expr: |
       (
         (
-          gitlab_regional_sli_errors:ratio_6h{component="loadbalancer",monitor="global",type="web-pages"}
+          last_over_time(gitlab_regional_sli_errors:ratio_6h{component="loadbalancer",monitor="global",type="web-pages"}[2m])
           > (6 * 0.000500)
         )
         and
         (
-          gitlab_regional_sli_errors:ratio_30m{component="loadbalancer",monitor="global",type="web-pages"}
+          last_over_time(gitlab_regional_sli_errors:ratio_30m{component="loadbalancer",monitor="global",type="web-pages"}[2m])
           > (6 * 0.000500)
         )
       )
       and on(env,environment,tier,type,stage,region,component)
       (
-        sum by(env,environment,tier,type,stage,region,component) (gitlab_regional_sli_ops:rate_6h{component="loadbalancer",monitor="global",type="web-pages"}) >= 0.16667
+        sum by(env,environment,tier,type,stage,region,component) (
+          last_over_time(gitlab_regional_sli_ops:rate_6h{component="loadbalancer",monitor="global",type="web-pages"}[2m])
+        ) >= 0.16667
       )
   - alert: WebPagesServiceLoadbalancerTrafficCessation
     for: 5m
@@ -344,18 +352,20 @@ groups:
     expr: |
       (
         (
-          gitlab_component_errors:ratio_1h{component="loadbalancer_https",monitor="global",type="web-pages"}
+          last_over_time(gitlab_component_errors:ratio_1h{component="loadbalancer_https",monitor="global",type="web-pages"}[2m])
           > (14.4 * 0.000500)
         )
         and
         (
-          gitlab_component_errors:ratio_5m{component="loadbalancer_https",monitor="global",type="web-pages"}
+          last_over_time(gitlab_component_errors:ratio_5m{component="loadbalancer_https",monitor="global",type="web-pages"}[2m])
           > (14.4 * 0.000500)
         )
       )
       and on(env,environment,tier,type,stage,component)
       (
-        sum by(env,environment,tier,type,stage,component) (gitlab_component_ops:rate_1h{component="loadbalancer_https",monitor="global",type="web-pages"}) >= 1
+        sum by(env,environment,tier,type,stage,component) (
+          last_over_time(gitlab_component_ops:rate_1h{component="loadbalancer_https",monitor="global",type="web-pages"}[2m])
+        ) >= 1
       )
   - alert: WebPagesServiceLoadbalancerHttpsErrorSLOViolation
     for: 2m
@@ -388,18 +398,20 @@ groups:
     expr: |
       (
         (
-          gitlab_component_errors:ratio_6h{component="loadbalancer_https",monitor="global",type="web-pages"}
+          last_over_time(gitlab_component_errors:ratio_6h{component="loadbalancer_https",monitor="global",type="web-pages"}[2m])
           > (6 * 0.000500)
         )
         and
         (
-          gitlab_component_errors:ratio_30m{component="loadbalancer_https",monitor="global",type="web-pages"}
+          last_over_time(gitlab_component_errors:ratio_30m{component="loadbalancer_https",monitor="global",type="web-pages"}[2m])
           > (6 * 0.000500)
         )
       )
       and on(env,environment,tier,type,stage,component)
       (
-        sum by(env,environment,tier,type,stage,component) (gitlab_component_ops:rate_6h{component="loadbalancer_https",monitor="global",type="web-pages"}) >= 0.16667
+        sum by(env,environment,tier,type,stage,component) (
+          last_over_time(gitlab_component_ops:rate_6h{component="loadbalancer_https",monitor="global",type="web-pages"}[2m])
+        ) >= 0.16667
       )
   - alert: WebPagesServiceLoadbalancerHttpsErrorSLOViolationRegional
     for: 2m
@@ -434,18 +446,20 @@ groups:
     expr: |
       (
         (
-          gitlab_regional_sli_errors:ratio_1h{component="loadbalancer_https",monitor="global",type="web-pages"}
+          last_over_time(gitlab_regional_sli_errors:ratio_1h{component="loadbalancer_https",monitor="global",type="web-pages"}[2m])
           > (14.4 * 0.000500)
         )
         and
         (
-          gitlab_regional_sli_errors:ratio_5m{component="loadbalancer_https",monitor="global",type="web-pages"}
+          last_over_time(gitlab_regional_sli_errors:ratio_5m{component="loadbalancer_https",monitor="global",type="web-pages"}[2m])
           > (14.4 * 0.000500)
         )
       )
       and on(env,environment,tier,type,stage,region,component)
       (
-        sum by(env,environment,tier,type,stage,region,component) (gitlab_regional_sli_ops:rate_1h{component="loadbalancer_https",monitor="global",type="web-pages"}) >= 1
+        sum by(env,environment,tier,type,stage,region,component) (
+          last_over_time(gitlab_regional_sli_ops:rate_1h{component="loadbalancer_https",monitor="global",type="web-pages"}[2m])
+        ) >= 1
       )
   - alert: WebPagesServiceLoadbalancerHttpsErrorSLOViolationRegional
     for: 2m
@@ -480,18 +494,20 @@ groups:
     expr: |
       (
         (
-          gitlab_regional_sli_errors:ratio_6h{component="loadbalancer_https",monitor="global",type="web-pages"}
+          last_over_time(gitlab_regional_sli_errors:ratio_6h{component="loadbalancer_https",monitor="global",type="web-pages"}[2m])
           > (6 * 0.000500)
         )
         and
         (
-          gitlab_regional_sli_errors:ratio_30m{component="loadbalancer_https",monitor="global",type="web-pages"}
+          last_over_time(gitlab_regional_sli_errors:ratio_30m{component="loadbalancer_https",monitor="global",type="web-pages"}[2m])
           > (6 * 0.000500)
         )
       )
       and on(env,environment,tier,type,stage,region,component)
       (
-        sum by(env,environment,tier,type,stage,region,component) (gitlab_regional_sli_ops:rate_6h{component="loadbalancer_https",monitor="global",type="web-pages"}) >= 0.16667
+        sum by(env,environment,tier,type,stage,region,component) (
+          last_over_time(gitlab_regional_sli_ops:rate_6h{component="loadbalancer_https",monitor="global",type="web-pages"}[2m])
+        ) >= 0.16667
       )
   - alert: WebPagesServiceLoadbalancerHttpsTrafficCessation
     for: 5m
@@ -659,18 +675,20 @@ groups:
     expr: |
       (
         (
-          gitlab_component_apdex:ratio_1h{component="server",monitor="global",type="web-pages"}
+          last_over_time(gitlab_component_apdex:ratio_1h{component="server",monitor="global",type="web-pages"}[2m])
           < (1 - 14.4 * 0.005000)
         )
         and
         (
-          gitlab_component_apdex:ratio_5m{component="server",monitor="global",type="web-pages"}
+          last_over_time(gitlab_component_apdex:ratio_5m{component="server",monitor="global",type="web-pages"}[2m])
           < (1 - 14.4 * 0.005000)
         )
       )
       and on(env,environment,tier,type,stage,component)
       (
-        sum by(env,environment,tier,type,stage,component) (gitlab_component_ops:rate_1h{component="server",monitor="global",type="web-pages"}) >= 1
+        sum by(env,environment,tier,type,stage,component) (
+          last_over_time(gitlab_component_ops:rate_1h{component="server",monitor="global",type="web-pages"}[2m])
+        ) >= 1
       )
   - alert: WebPagesServiceServerApdexSLOViolation
     for: 2m
@@ -710,18 +728,20 @@ groups:
     expr: |
       (
         (
-          gitlab_component_apdex:ratio_6h{component="server",monitor="global",type="web-pages"}
+          last_over_time(gitlab_component_apdex:ratio_6h{component="server",monitor="global",type="web-pages"}[2m])
           < (1 - 6 * 0.005000)
         )
         and
         (
-          gitlab_component_apdex:ratio_30m{component="server",monitor="global",type="web-pages"}
+          last_over_time(gitlab_component_apdex:ratio_30m{component="server",monitor="global",type="web-pages"}[2m])
           < (1 - 6 * 0.005000)
         )
       )
       and on(env,environment,tier,type,stage,component)
       (
-        sum by(env,environment,tier,type,stage,component) (gitlab_component_ops:rate_6h{component="server",monitor="global",type="web-pages"}) >= 0.16667
+        sum by(env,environment,tier,type,stage,component) (
+          last_over_time(gitlab_component_ops:rate_6h{component="server",monitor="global",type="web-pages"}[2m])
+        ) >= 0.16667
       )
   - alert: WebPagesServiceServerApdexSLOViolationRegional
     for: 2m
@@ -763,18 +783,20 @@ groups:
     expr: |
       (
         (
-          gitlab_regional_sli_apdex:ratio_1h{component="server",monitor="global",type="web-pages"}
+          last_over_time(gitlab_regional_sli_apdex:ratio_1h{component="server",monitor="global",type="web-pages"}[2m])
           < (1 - 14.4 * 0.005000)
         )
         and
         (
-          gitlab_regional_sli_apdex:ratio_5m{component="server",monitor="global",type="web-pages"}
+          last_over_time(gitlab_regional_sli_apdex:ratio_5m{component="server",monitor="global",type="web-pages"}[2m])
           < (1 - 14.4 * 0.005000)
         )
       )
       and on(env,environment,tier,type,stage,region,component)
       (
-        sum by(env,environment,tier,type,stage,region,component) (gitlab_regional_sli_ops:rate_1h{component="server",monitor="global",type="web-pages"}) >= 1
+        sum by(env,environment,tier,type,stage,region,component) (
+          last_over_time(gitlab_regional_sli_ops:rate_1h{component="server",monitor="global",type="web-pages"}[2m])
+        ) >= 1
       )
   - alert: WebPagesServiceServerApdexSLOViolationRegional
     for: 2m
@@ -816,18 +838,20 @@ groups:
     expr: |
       (
         (
-          gitlab_regional_sli_apdex:ratio_6h{component="server",monitor="global",type="web-pages"}
+          last_over_time(gitlab_regional_sli_apdex:ratio_6h{component="server",monitor="global",type="web-pages"}[2m])
           < (1 - 6 * 0.005000)
         )
         and
         (
-          gitlab_regional_sli_apdex:ratio_30m{component="server",monitor="global",type="web-pages"}
+          last_over_time(gitlab_regional_sli_apdex:ratio_30m{component="server",monitor="global",type="web-pages"}[2m])
           < (1 - 6 * 0.005000)
         )
       )
       and on(env,environment,tier,type,stage,region,component)
       (
-        sum by(env,environment,tier,type,stage,region,component) (gitlab_regional_sli_ops:rate_6h{component="server",monitor="global",type="web-pages"}) >= 0.16667
+        sum by(env,environment,tier,type,stage,region,component) (
+          last_over_time(gitlab_regional_sli_ops:rate_6h{component="server",monitor="global",type="web-pages"}[2m])
+        ) >= 0.16667
       )
   - alert: WebPagesServiceServerErrorSLOViolation
     for: 2m
@@ -864,18 +888,20 @@ groups:
     expr: |
       (
         (
-          gitlab_component_errors:ratio_1h{component="server",monitor="global",type="web-pages"}
+          last_over_time(gitlab_component_errors:ratio_1h{component="server",monitor="global",type="web-pages"}[2m])
           > (14.4 * 0.000500)
         )
         and
         (
-          gitlab_component_errors:ratio_5m{component="server",monitor="global",type="web-pages"}
+          last_over_time(gitlab_component_errors:ratio_5m{component="server",monitor="global",type="web-pages"}[2m])
           > (14.4 * 0.000500)
         )
       )
       and on(env,environment,tier,type,stage,component)
       (
-        sum by(env,environment,tier,type,stage,component) (gitlab_component_ops:rate_1h{component="server",monitor="global",type="web-pages"}) >= 1
+        sum by(env,environment,tier,type,stage,component) (
+          last_over_time(gitlab_component_ops:rate_1h{component="server",monitor="global",type="web-pages"}[2m])
+        ) >= 1
       )
   - alert: WebPagesServiceServerErrorSLOViolation
     for: 2m
@@ -912,18 +938,20 @@ groups:
     expr: |
       (
         (
-          gitlab_component_errors:ratio_6h{component="server",monitor="global",type="web-pages"}
+          last_over_time(gitlab_component_errors:ratio_6h{component="server",monitor="global",type="web-pages"}[2m])
           > (6 * 0.000500)
         )
         and
         (
-          gitlab_component_errors:ratio_30m{component="server",monitor="global",type="web-pages"}
+          last_over_time(gitlab_component_errors:ratio_30m{component="server",monitor="global",type="web-pages"}[2m])
           > (6 * 0.000500)
         )
       )
       and on(env,environment,tier,type,stage,component)
       (
-        sum by(env,environment,tier,type,stage,component) (gitlab_component_ops:rate_6h{component="server",monitor="global",type="web-pages"}) >= 0.16667
+        sum by(env,environment,tier,type,stage,component) (
+          last_over_time(gitlab_component_ops:rate_6h{component="server",monitor="global",type="web-pages"}[2m])
+        ) >= 0.16667
       )
   - alert: WebPagesServiceServerErrorSLOViolationRegional
     for: 2m
@@ -962,18 +990,20 @@ groups:
     expr: |
       (
         (
-          gitlab_regional_sli_errors:ratio_1h{component="server",monitor="global",type="web-pages"}
+          last_over_time(gitlab_regional_sli_errors:ratio_1h{component="server",monitor="global",type="web-pages"}[2m])
           > (14.4 * 0.000500)
         )
         and
         (
-          gitlab_regional_sli_errors:ratio_5m{component="server",monitor="global",type="web-pages"}
+          last_over_time(gitlab_regional_sli_errors:ratio_5m{component="server",monitor="global",type="web-pages"}[2m])
           > (14.4 * 0.000500)
         )
       )
       and on(env,environment,tier,type,stage,region,component)
       (
-        sum by(env,environment,tier,type,stage,region,component) (gitlab_regional_sli_ops:rate_1h{component="server",monitor="global",type="web-pages"}) >= 1
+        sum by(env,environment,tier,type,stage,region,component) (
+          last_over_time(gitlab_regional_sli_ops:rate_1h{component="server",monitor="global",type="web-pages"}[2m])
+        ) >= 1
       )
   - alert: WebPagesServiceServerErrorSLOViolationRegional
     for: 2m
@@ -1012,18 +1042,20 @@ groups:
     expr: |
       (
         (
-          gitlab_regional_sli_errors:ratio_6h{component="server",monitor="global",type="web-pages"}
+          last_over_time(gitlab_regional_sli_errors:ratio_6h{component="server",monitor="global",type="web-pages"}[2m])
           > (6 * 0.000500)
         )
         and
         (
-          gitlab_regional_sli_errors:ratio_30m{component="server",monitor="global",type="web-pages"}
+          last_over_time(gitlab_regional_sli_errors:ratio_30m{component="server",monitor="global",type="web-pages"}[2m])
           > (6 * 0.000500)
         )
       )
       and on(env,environment,tier,type,stage,region,component)
       (
-        sum by(env,environment,tier,type,stage,region,component) (gitlab_regional_sli_ops:rate_6h{component="server",monitor="global",type="web-pages"}) >= 0.16667
+        sum by(env,environment,tier,type,stage,region,component) (
+          last_over_time(gitlab_regional_sli_ops:rate_6h{component="server",monitor="global",type="web-pages"}[2m])
+        ) >= 0.16667
       )
   - alert: WebPagesServiceServerTrafficCessation
     for: 5m
@@ -1207,18 +1239,20 @@ groups:
     expr: |
       (
         (
-          gitlab_component_apdex:ratio_1h{component="server_headers",monitor="global",type="web-pages"}
+          last_over_time(gitlab_component_apdex:ratio_1h{component="server_headers",monitor="global",type="web-pages"}[2m])
           < (1 - 14.4 * 0.005000)
         )
         and
         (
-          gitlab_component_apdex:ratio_5m{component="server_headers",monitor="global",type="web-pages"}
+          last_over_time(gitlab_component_apdex:ratio_5m{component="server_headers",monitor="global",type="web-pages"}[2m])
           < (1 - 14.4 * 0.005000)
         )
       )
       and on(env,environment,tier,type,stage,component)
       (
-        sum by(env,environment,tier,type,stage,component) (gitlab_component_ops:rate_1h{component="server_headers",monitor="global",type="web-pages"}) >= 1
+        sum by(env,environment,tier,type,stage,component) (
+          last_over_time(gitlab_component_ops:rate_1h{component="server_headers",monitor="global",type="web-pages"}[2m])
+        ) >= 1
       )
   - alert: WebPagesServiceServerHeadersApdexSLOViolation
     for: 2m
@@ -1258,18 +1292,20 @@ groups:
     expr: |
       (
         (
-          gitlab_component_apdex:ratio_6h{component="server_headers",monitor="global",type="web-pages"}
+          last_over_time(gitlab_component_apdex:ratio_6h{component="server_headers",monitor="global",type="web-pages"}[2m])
           < (1 - 6 * 0.005000)
         )
         and
         (
-          gitlab_component_apdex:ratio_30m{component="server_headers",monitor="global",type="web-pages"}
+          last_over_time(gitlab_component_apdex:ratio_30m{component="server_headers",monitor="global",type="web-pages"}[2m])
           < (1 - 6 * 0.005000)
         )
       )
       and on(env,environment,tier,type,stage,component)
       (
-        sum by(env,environment,tier,type,stage,component) (gitlab_component_ops:rate_6h{component="server_headers",monitor="global",type="web-pages"}) >= 0.16667
+        sum by(env,environment,tier,type,stage,component) (
+          last_over_time(gitlab_component_ops:rate_6h{component="server_headers",monitor="global",type="web-pages"}[2m])
+        ) >= 0.16667
       )
   - alert: WebPagesServiceServerHeadersApdexSLOViolationRegional
     for: 2m
@@ -1311,18 +1347,20 @@ groups:
     expr: |
       (
         (
-          gitlab_regional_sli_apdex:ratio_1h{component="server_headers",monitor="global",type="web-pages"}
+          last_over_time(gitlab_regional_sli_apdex:ratio_1h{component="server_headers",monitor="global",type="web-pages"}[2m])
           < (1 - 14.4 * 0.005000)
         )
         and
         (
-          gitlab_regional_sli_apdex:ratio_5m{component="server_headers",monitor="global",type="web-pages"}
+          last_over_time(gitlab_regional_sli_apdex:ratio_5m{component="server_headers",monitor="global",type="web-pages"}[2m])
           < (1 - 14.4 * 0.005000)
         )
       )
       and on(env,environment,tier,type,stage,region,component)
       (
-        sum by(env,environment,tier,type,stage,region,component) (gitlab_regional_sli_ops:rate_1h{component="server_headers",monitor="global",type="web-pages"}) >= 1
+        sum by(env,environment,tier,type,stage,region,component) (
+          last_over_time(gitlab_regional_sli_ops:rate_1h{component="server_headers",monitor="global",type="web-pages"}[2m])
+        ) >= 1
       )
   - alert: WebPagesServiceServerHeadersApdexSLOViolationRegional
     for: 2m
@@ -1364,18 +1402,20 @@ groups:
     expr: |
       (
         (
-          gitlab_regional_sli_apdex:ratio_6h{component="server_headers",monitor="global",type="web-pages"}
+          last_over_time(gitlab_regional_sli_apdex:ratio_6h{component="server_headers",monitor="global",type="web-pages"}[2m])
           < (1 - 6 * 0.005000)
         )
         and
         (
-          gitlab_regional_sli_apdex:ratio_30m{component="server_headers",monitor="global",type="web-pages"}
+          last_over_time(gitlab_regional_sli_apdex:ratio_30m{component="server_headers",monitor="global",type="web-pages"}[2m])
           < (1 - 6 * 0.005000)
         )
       )
       and on(env,environment,tier,type,stage,region,component)
       (
-        sum by(env,environment,tier,type,stage,region,component) (gitlab_regional_sli_ops:rate_6h{component="server_headers",monitor="global",type="web-pages"}) >= 0.16667
+        sum by(env,environment,tier,type,stage,region,component) (
+          last_over_time(gitlab_regional_sli_ops:rate_6h{component="server_headers",monitor="global",type="web-pages"}[2m])
+        ) >= 0.16667
       )
   - alert: WebPagesServiceServerHeadersTrafficCessation
     for: 5m

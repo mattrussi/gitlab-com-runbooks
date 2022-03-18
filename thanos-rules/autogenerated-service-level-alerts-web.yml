@@ -43,18 +43,20 @@ groups:
     expr: |
       (
         (
-          gitlab_component_apdex:ratio_1h{component="imagescaler",monitor="global",type="web"}
+          last_over_time(gitlab_component_apdex:ratio_1h{component="imagescaler",monitor="global",type="web"}[2m])
           < (1 - 14.4 * 0.002000)
         )
         and
         (
-          gitlab_component_apdex:ratio_5m{component="imagescaler",monitor="global",type="web"}
+          last_over_time(gitlab_component_apdex:ratio_5m{component="imagescaler",monitor="global",type="web"}[2m])
           < (1 - 14.4 * 0.002000)
         )
       )
       and on(env,environment,tier,type,stage,component)
       (
-        sum by(env,environment,tier,type,stage,component) (gitlab_component_ops:rate_1h{component="imagescaler",monitor="global",type="web"}) >= 1
+        sum by(env,environment,tier,type,stage,component) (
+          last_over_time(gitlab_component_ops:rate_1h{component="imagescaler",monitor="global",type="web"}[2m])
+        ) >= 1
       )
   - alert: WebServiceImagescalerApdexSLOViolation
     for: 2m
@@ -94,18 +96,20 @@ groups:
     expr: |
       (
         (
-          gitlab_component_apdex:ratio_6h{component="imagescaler",monitor="global",type="web"}
+          last_over_time(gitlab_component_apdex:ratio_6h{component="imagescaler",monitor="global",type="web"}[2m])
           < (1 - 6 * 0.002000)
         )
         and
         (
-          gitlab_component_apdex:ratio_30m{component="imagescaler",monitor="global",type="web"}
+          last_over_time(gitlab_component_apdex:ratio_30m{component="imagescaler",monitor="global",type="web"}[2m])
           < (1 - 6 * 0.002000)
         )
       )
       and on(env,environment,tier,type,stage,component)
       (
-        sum by(env,environment,tier,type,stage,component) (gitlab_component_ops:rate_6h{component="imagescaler",monitor="global",type="web"}) >= 0.16667
+        sum by(env,environment,tier,type,stage,component) (
+          last_over_time(gitlab_component_ops:rate_6h{component="imagescaler",monitor="global",type="web"}[2m])
+        ) >= 0.16667
       )
   - alert: WebServiceImagescalerApdexSLOViolationRegional
     for: 2m
@@ -147,18 +151,20 @@ groups:
     expr: |
       (
         (
-          gitlab_regional_sli_apdex:ratio_1h{component="imagescaler",monitor="global",type="web"}
+          last_over_time(gitlab_regional_sli_apdex:ratio_1h{component="imagescaler",monitor="global",type="web"}[2m])
           < (1 - 14.4 * 0.002000)
         )
         and
         (
-          gitlab_regional_sli_apdex:ratio_5m{component="imagescaler",monitor="global",type="web"}
+          last_over_time(gitlab_regional_sli_apdex:ratio_5m{component="imagescaler",monitor="global",type="web"}[2m])
           < (1 - 14.4 * 0.002000)
         )
       )
       and on(env,environment,tier,type,stage,region,component)
       (
-        sum by(env,environment,tier,type,stage,region,component) (gitlab_regional_sli_ops:rate_1h{component="imagescaler",monitor="global",type="web"}) >= 1
+        sum by(env,environment,tier,type,stage,region,component) (
+          last_over_time(gitlab_regional_sli_ops:rate_1h{component="imagescaler",monitor="global",type="web"}[2m])
+        ) >= 1
       )
   - alert: WebServiceImagescalerApdexSLOViolationRegional
     for: 2m
@@ -200,18 +206,20 @@ groups:
     expr: |
       (
         (
-          gitlab_regional_sli_apdex:ratio_6h{component="imagescaler",monitor="global",type="web"}
+          last_over_time(gitlab_regional_sli_apdex:ratio_6h{component="imagescaler",monitor="global",type="web"}[2m])
           < (1 - 6 * 0.002000)
         )
         and
         (
-          gitlab_regional_sli_apdex:ratio_30m{component="imagescaler",monitor="global",type="web"}
+          last_over_time(gitlab_regional_sli_apdex:ratio_30m{component="imagescaler",monitor="global",type="web"}[2m])
           < (1 - 6 * 0.002000)
         )
       )
       and on(env,environment,tier,type,stage,region,component)
       (
-        sum by(env,environment,tier,type,stage,region,component) (gitlab_regional_sli_ops:rate_6h{component="imagescaler",monitor="global",type="web"}) >= 0.16667
+        sum by(env,environment,tier,type,stage,region,component) (
+          last_over_time(gitlab_regional_sli_ops:rate_6h{component="imagescaler",monitor="global",type="web"}[2m])
+        ) >= 0.16667
       )
   - alert: WebServiceImagescalerTrafficCessation
     for: 5m
@@ -388,18 +396,20 @@ groups:
     expr: |
       (
         (
-          gitlab_component_errors:ratio_1h{component="loadbalancer",monitor="global",type="web"}
+          last_over_time(gitlab_component_errors:ratio_1h{component="loadbalancer",monitor="global",type="web"}[2m])
           > (14.4 * 0.000100)
         )
         and
         (
-          gitlab_component_errors:ratio_5m{component="loadbalancer",monitor="global",type="web"}
+          last_over_time(gitlab_component_errors:ratio_5m{component="loadbalancer",monitor="global",type="web"}[2m])
           > (14.4 * 0.000100)
         )
       )
       and on(env,environment,tier,type,stage,component)
       (
-        sum by(env,environment,tier,type,stage,component) (gitlab_component_ops:rate_1h{component="loadbalancer",monitor="global",type="web"}) >= 1
+        sum by(env,environment,tier,type,stage,component) (
+          last_over_time(gitlab_component_ops:rate_1h{component="loadbalancer",monitor="global",type="web"}[2m])
+        ) >= 1
       )
   - alert: WebServiceLoadbalancerErrorSLOViolation
     for: 2m
@@ -432,18 +442,20 @@ groups:
     expr: |
       (
         (
-          gitlab_component_errors:ratio_6h{component="loadbalancer",monitor="global",type="web"}
+          last_over_time(gitlab_component_errors:ratio_6h{component="loadbalancer",monitor="global",type="web"}[2m])
           > (6 * 0.000100)
         )
         and
         (
-          gitlab_component_errors:ratio_30m{component="loadbalancer",monitor="global",type="web"}
+          last_over_time(gitlab_component_errors:ratio_30m{component="loadbalancer",monitor="global",type="web"}[2m])
           > (6 * 0.000100)
         )
       )
       and on(env,environment,tier,type,stage,component)
       (
-        sum by(env,environment,tier,type,stage,component) (gitlab_component_ops:rate_6h{component="loadbalancer",monitor="global",type="web"}) >= 0.16667
+        sum by(env,environment,tier,type,stage,component) (
+          last_over_time(gitlab_component_ops:rate_6h{component="loadbalancer",monitor="global",type="web"}[2m])
+        ) >= 0.16667
       )
   - alert: WebServiceLoadbalancerErrorSLOViolationRegional
     for: 2m
@@ -478,18 +490,20 @@ groups:
     expr: |
       (
         (
-          gitlab_regional_sli_errors:ratio_1h{component="loadbalancer",monitor="global",type="web"}
+          last_over_time(gitlab_regional_sli_errors:ratio_1h{component="loadbalancer",monitor="global",type="web"}[2m])
           > (14.4 * 0.000100)
         )
         and
         (
-          gitlab_regional_sli_errors:ratio_5m{component="loadbalancer",monitor="global",type="web"}
+          last_over_time(gitlab_regional_sli_errors:ratio_5m{component="loadbalancer",monitor="global",type="web"}[2m])
           > (14.4 * 0.000100)
         )
       )
       and on(env,environment,tier,type,stage,region,component)
       (
-        sum by(env,environment,tier,type,stage,region,component) (gitlab_regional_sli_ops:rate_1h{component="loadbalancer",monitor="global",type="web"}) >= 1
+        sum by(env,environment,tier,type,stage,region,component) (
+          last_over_time(gitlab_regional_sli_ops:rate_1h{component="loadbalancer",monitor="global",type="web"}[2m])
+        ) >= 1
       )
   - alert: WebServiceLoadbalancerErrorSLOViolationRegional
     for: 2m
@@ -524,18 +538,20 @@ groups:
     expr: |
       (
         (
-          gitlab_regional_sli_errors:ratio_6h{component="loadbalancer",monitor="global",type="web"}
+          last_over_time(gitlab_regional_sli_errors:ratio_6h{component="loadbalancer",monitor="global",type="web"}[2m])
           > (6 * 0.000100)
         )
         and
         (
-          gitlab_regional_sli_errors:ratio_30m{component="loadbalancer",monitor="global",type="web"}
+          last_over_time(gitlab_regional_sli_errors:ratio_30m{component="loadbalancer",monitor="global",type="web"}[2m])
           > (6 * 0.000100)
         )
       )
       and on(env,environment,tier,type,stage,region,component)
       (
-        sum by(env,environment,tier,type,stage,region,component) (gitlab_regional_sli_ops:rate_6h{component="loadbalancer",monitor="global",type="web"}) >= 0.16667
+        sum by(env,environment,tier,type,stage,region,component) (
+          last_over_time(gitlab_regional_sli_ops:rate_6h{component="loadbalancer",monitor="global",type="web"}[2m])
+        ) >= 0.16667
       )
   - alert: WebServiceLoadbalancerTrafficCessation
     for: 5m
@@ -700,18 +716,20 @@ groups:
     expr: |
       (
         (
-          gitlab_component_errors:ratio_1h{component="puma",monitor="global",type="web"}
+          last_over_time(gitlab_component_errors:ratio_1h{component="puma",monitor="global",type="web"}[2m])
           > (14.4 * 0.000100)
         )
         and
         (
-          gitlab_component_errors:ratio_5m{component="puma",monitor="global",type="web"}
+          last_over_time(gitlab_component_errors:ratio_5m{component="puma",monitor="global",type="web"}[2m])
           > (14.4 * 0.000100)
         )
       )
       and on(env,environment,tier,type,stage,component)
       (
-        sum by(env,environment,tier,type,stage,component) (gitlab_component_ops:rate_1h{component="puma",monitor="global",type="web"}) >= 1
+        sum by(env,environment,tier,type,stage,component) (
+          last_over_time(gitlab_component_ops:rate_1h{component="puma",monitor="global",type="web"}[2m])
+        ) >= 1
       )
   - alert: WebServicePumaErrorSLOViolation
     for: 2m
@@ -748,18 +766,20 @@ groups:
     expr: |
       (
         (
-          gitlab_component_errors:ratio_6h{component="puma",monitor="global",type="web"}
+          last_over_time(gitlab_component_errors:ratio_6h{component="puma",monitor="global",type="web"}[2m])
           > (6 * 0.000100)
         )
         and
         (
-          gitlab_component_errors:ratio_30m{component="puma",monitor="global",type="web"}
+          last_over_time(gitlab_component_errors:ratio_30m{component="puma",monitor="global",type="web"}[2m])
           > (6 * 0.000100)
         )
       )
       and on(env,environment,tier,type,stage,component)
       (
-        sum by(env,environment,tier,type,stage,component) (gitlab_component_ops:rate_6h{component="puma",monitor="global",type="web"}) >= 0.16667
+        sum by(env,environment,tier,type,stage,component) (
+          last_over_time(gitlab_component_ops:rate_6h{component="puma",monitor="global",type="web"}[2m])
+        ) >= 0.16667
       )
   - alert: WebServicePumaErrorSLOViolationRegional
     for: 2m
@@ -798,18 +818,20 @@ groups:
     expr: |
       (
         (
-          gitlab_regional_sli_errors:ratio_1h{component="puma",monitor="global",type="web"}
+          last_over_time(gitlab_regional_sli_errors:ratio_1h{component="puma",monitor="global",type="web"}[2m])
           > (14.4 * 0.000100)
         )
         and
         (
-          gitlab_regional_sli_errors:ratio_5m{component="puma",monitor="global",type="web"}
+          last_over_time(gitlab_regional_sli_errors:ratio_5m{component="puma",monitor="global",type="web"}[2m])
           > (14.4 * 0.000100)
         )
       )
       and on(env,environment,tier,type,stage,region,component)
       (
-        sum by(env,environment,tier,type,stage,region,component) (gitlab_regional_sli_ops:rate_1h{component="puma",monitor="global",type="web"}) >= 1
+        sum by(env,environment,tier,type,stage,region,component) (
+          last_over_time(gitlab_regional_sli_ops:rate_1h{component="puma",monitor="global",type="web"}[2m])
+        ) >= 1
       )
   - alert: WebServicePumaErrorSLOViolationRegional
     for: 2m
@@ -848,18 +870,20 @@ groups:
     expr: |
       (
         (
-          gitlab_regional_sli_errors:ratio_6h{component="puma",monitor="global",type="web"}
+          last_over_time(gitlab_regional_sli_errors:ratio_6h{component="puma",monitor="global",type="web"}[2m])
           > (6 * 0.000100)
         )
         and
         (
-          gitlab_regional_sli_errors:ratio_30m{component="puma",monitor="global",type="web"}
+          last_over_time(gitlab_regional_sli_errors:ratio_30m{component="puma",monitor="global",type="web"}[2m])
           > (6 * 0.000100)
         )
       )
       and on(env,environment,tier,type,stage,region,component)
       (
-        sum by(env,environment,tier,type,stage,region,component) (gitlab_regional_sli_ops:rate_6h{component="puma",monitor="global",type="web"}) >= 0.16667
+        sum by(env,environment,tier,type,stage,region,component) (
+          last_over_time(gitlab_regional_sli_ops:rate_6h{component="puma",monitor="global",type="web"}[2m])
+        ) >= 0.16667
       )
   - alert: WebServicePumaTrafficCessation
     for: 5m
@@ -1038,18 +1062,20 @@ groups:
     expr: |
       (
         (
-          gitlab_component_apdex:ratio_1h{component="rails_requests",monitor="global",type="web"}
+          last_over_time(gitlab_component_apdex:ratio_1h{component="rails_requests",monitor="global",type="web"}[2m])
           < (1 - 14.4 * 0.002000)
         )
         and
         (
-          gitlab_component_apdex:ratio_5m{component="rails_requests",monitor="global",type="web"}
+          last_over_time(gitlab_component_apdex:ratio_5m{component="rails_requests",monitor="global",type="web"}[2m])
           < (1 - 14.4 * 0.002000)
         )
       )
       and on(env,environment,tier,type,stage,component)
       (
-        sum by(env,environment,tier,type,stage,component) (gitlab_component_ops:rate_1h{component="rails_requests",monitor="global",type="web"}) >= 1
+        sum by(env,environment,tier,type,stage,component) (
+          last_over_time(gitlab_component_ops:rate_1h{component="rails_requests",monitor="global",type="web"}[2m])
+        ) >= 1
       )
   - alert: WebServiceRailsRequestsApdexSLOViolation
     for: 2m
@@ -1084,18 +1110,20 @@ groups:
     expr: |
       (
         (
-          gitlab_component_apdex:ratio_6h{component="rails_requests",monitor="global",type="web"}
+          last_over_time(gitlab_component_apdex:ratio_6h{component="rails_requests",monitor="global",type="web"}[2m])
           < (1 - 6 * 0.002000)
         )
         and
         (
-          gitlab_component_apdex:ratio_30m{component="rails_requests",monitor="global",type="web"}
+          last_over_time(gitlab_component_apdex:ratio_30m{component="rails_requests",monitor="global",type="web"}[2m])
           < (1 - 6 * 0.002000)
         )
       )
       and on(env,environment,tier,type,stage,component)
       (
-        sum by(env,environment,tier,type,stage,component) (gitlab_component_ops:rate_6h{component="rails_requests",monitor="global",type="web"}) >= 0.16667
+        sum by(env,environment,tier,type,stage,component) (
+          last_over_time(gitlab_component_ops:rate_6h{component="rails_requests",monitor="global",type="web"}[2m])
+        ) >= 0.16667
       )
   - alert: WebServiceRailsRequestsApdexSLOViolationRegional
     for: 2m
@@ -1132,18 +1160,20 @@ groups:
     expr: |
       (
         (
-          gitlab_regional_sli_apdex:ratio_1h{component="rails_requests",monitor="global",type="web"}
+          last_over_time(gitlab_regional_sli_apdex:ratio_1h{component="rails_requests",monitor="global",type="web"}[2m])
           < (1 - 14.4 * 0.002000)
         )
         and
         (
-          gitlab_regional_sli_apdex:ratio_5m{component="rails_requests",monitor="global",type="web"}
+          last_over_time(gitlab_regional_sli_apdex:ratio_5m{component="rails_requests",monitor="global",type="web"}[2m])
           < (1 - 14.4 * 0.002000)
         )
       )
       and on(env,environment,tier,type,stage,region,component)
       (
-        sum by(env,environment,tier,type,stage,region,component) (gitlab_regional_sli_ops:rate_1h{component="rails_requests",monitor="global",type="web"}) >= 1
+        sum by(env,environment,tier,type,stage,region,component) (
+          last_over_time(gitlab_regional_sli_ops:rate_1h{component="rails_requests",monitor="global",type="web"}[2m])
+        ) >= 1
       )
   - alert: WebServiceRailsRequestsApdexSLOViolationRegional
     for: 2m
@@ -1180,18 +1210,20 @@ groups:
     expr: |
       (
         (
-          gitlab_regional_sli_apdex:ratio_6h{component="rails_requests",monitor="global",type="web"}
+          last_over_time(gitlab_regional_sli_apdex:ratio_6h{component="rails_requests",monitor="global",type="web"}[2m])
           < (1 - 6 * 0.002000)
         )
         and
         (
-          gitlab_regional_sli_apdex:ratio_30m{component="rails_requests",monitor="global",type="web"}
+          last_over_time(gitlab_regional_sli_apdex:ratio_30m{component="rails_requests",monitor="global",type="web"}[2m])
           < (1 - 6 * 0.002000)
         )
       )
       and on(env,environment,tier,type,stage,region,component)
       (
-        sum by(env,environment,tier,type,stage,region,component) (gitlab_regional_sli_ops:rate_6h{component="rails_requests",monitor="global",type="web"}) >= 0.16667
+        sum by(env,environment,tier,type,stage,region,component) (
+          last_over_time(gitlab_regional_sli_ops:rate_6h{component="rails_requests",monitor="global",type="web"}[2m])
+        ) >= 0.16667
       )
   - alert: WebServiceRailsRequestsTrafficCessation
     for: 5m
@@ -1383,18 +1415,20 @@ groups:
     expr: |
       (
         (
-          gitlab_component_apdex:ratio_1h{component="workhorse",monitor="global",type="web"}
+          last_over_time(gitlab_component_apdex:ratio_1h{component="workhorse",monitor="global",type="web"}[2m])
           < (1 - 14.4 * 0.002000)
         )
         and
         (
-          gitlab_component_apdex:ratio_5m{component="workhorse",monitor="global",type="web"}
+          last_over_time(gitlab_component_apdex:ratio_5m{component="workhorse",monitor="global",type="web"}[2m])
           < (1 - 14.4 * 0.002000)
         )
       )
       and on(env,environment,tier,type,stage,component)
       (
-        sum by(env,environment,tier,type,stage,component) (gitlab_component_ops:rate_1h{component="workhorse",monitor="global",type="web"}) >= 1
+        sum by(env,environment,tier,type,stage,component) (
+          last_over_time(gitlab_component_ops:rate_1h{component="workhorse",monitor="global",type="web"}[2m])
+        ) >= 1
       )
   - alert: WebServiceWorkhorseApdexSLOViolation
     for: 2m
@@ -1434,18 +1468,20 @@ groups:
     expr: |
       (
         (
-          gitlab_component_apdex:ratio_6h{component="workhorse",monitor="global",type="web"}
+          last_over_time(gitlab_component_apdex:ratio_6h{component="workhorse",monitor="global",type="web"}[2m])
           < (1 - 6 * 0.002000)
         )
         and
         (
-          gitlab_component_apdex:ratio_30m{component="workhorse",monitor="global",type="web"}
+          last_over_time(gitlab_component_apdex:ratio_30m{component="workhorse",monitor="global",type="web"}[2m])
           < (1 - 6 * 0.002000)
         )
       )
       and on(env,environment,tier,type,stage,component)
       (
-        sum by(env,environment,tier,type,stage,component) (gitlab_component_ops:rate_6h{component="workhorse",monitor="global",type="web"}) >= 0.16667
+        sum by(env,environment,tier,type,stage,component) (
+          last_over_time(gitlab_component_ops:rate_6h{component="workhorse",monitor="global",type="web"}[2m])
+        ) >= 0.16667
       )
   - alert: WebServiceWorkhorseApdexSLOViolationRegional
     for: 2m
@@ -1487,18 +1523,20 @@ groups:
     expr: |
       (
         (
-          gitlab_regional_sli_apdex:ratio_1h{component="workhorse",monitor="global",type="web"}
+          last_over_time(gitlab_regional_sli_apdex:ratio_1h{component="workhorse",monitor="global",type="web"}[2m])
           < (1 - 14.4 * 0.002000)
         )
         and
         (
-          gitlab_regional_sli_apdex:ratio_5m{component="workhorse",monitor="global",type="web"}
+          last_over_time(gitlab_regional_sli_apdex:ratio_5m{component="workhorse",monitor="global",type="web"}[2m])
           < (1 - 14.4 * 0.002000)
         )
       )
       and on(env,environment,tier,type,stage,region,component)
       (
-        sum by(env,environment,tier,type,stage,region,component) (gitlab_regional_sli_ops:rate_1h{component="workhorse",monitor="global",type="web"}) >= 1
+        sum by(env,environment,tier,type,stage,region,component) (
+          last_over_time(gitlab_regional_sli_ops:rate_1h{component="workhorse",monitor="global",type="web"}[2m])
+        ) >= 1
       )
   - alert: WebServiceWorkhorseApdexSLOViolationRegional
     for: 2m
@@ -1540,18 +1578,20 @@ groups:
     expr: |
       (
         (
-          gitlab_regional_sli_apdex:ratio_6h{component="workhorse",monitor="global",type="web"}
+          last_over_time(gitlab_regional_sli_apdex:ratio_6h{component="workhorse",monitor="global",type="web"}[2m])
           < (1 - 6 * 0.002000)
         )
         and
         (
-          gitlab_regional_sli_apdex:ratio_30m{component="workhorse",monitor="global",type="web"}
+          last_over_time(gitlab_regional_sli_apdex:ratio_30m{component="workhorse",monitor="global",type="web"}[2m])
           < (1 - 6 * 0.002000)
         )
       )
       and on(env,environment,tier,type,stage,region,component)
       (
-        sum by(env,environment,tier,type,stage,region,component) (gitlab_regional_sli_ops:rate_6h{component="workhorse",monitor="global",type="web"}) >= 0.16667
+        sum by(env,environment,tier,type,stage,region,component) (
+          last_over_time(gitlab_regional_sli_ops:rate_6h{component="workhorse",monitor="global",type="web"}[2m])
+        ) >= 0.16667
       )
   - alert: WebServiceWorkhorseErrorSLOViolation
     for: 2m
@@ -1588,18 +1628,20 @@ groups:
     expr: |
       (
         (
-          gitlab_component_errors:ratio_1h{component="workhorse",monitor="global",type="web"}
+          last_over_time(gitlab_component_errors:ratio_1h{component="workhorse",monitor="global",type="web"}[2m])
           > (14.4 * 0.000100)
         )
         and
         (
-          gitlab_component_errors:ratio_5m{component="workhorse",monitor="global",type="web"}
+          last_over_time(gitlab_component_errors:ratio_5m{component="workhorse",monitor="global",type="web"}[2m])
           > (14.4 * 0.000100)
         )
       )
       and on(env,environment,tier,type,stage,component)
       (
-        sum by(env,environment,tier,type,stage,component) (gitlab_component_ops:rate_1h{component="workhorse",monitor="global",type="web"}) >= 1
+        sum by(env,environment,tier,type,stage,component) (
+          last_over_time(gitlab_component_ops:rate_1h{component="workhorse",monitor="global",type="web"}[2m])
+        ) >= 1
       )
   - alert: WebServiceWorkhorseErrorSLOViolation
     for: 2m
@@ -1636,18 +1678,20 @@ groups:
     expr: |
       (
         (
-          gitlab_component_errors:ratio_6h{component="workhorse",monitor="global",type="web"}
+          last_over_time(gitlab_component_errors:ratio_6h{component="workhorse",monitor="global",type="web"}[2m])
           > (6 * 0.000100)
         )
         and
         (
-          gitlab_component_errors:ratio_30m{component="workhorse",monitor="global",type="web"}
+          last_over_time(gitlab_component_errors:ratio_30m{component="workhorse",monitor="global",type="web"}[2m])
           > (6 * 0.000100)
         )
       )
       and on(env,environment,tier,type,stage,component)
       (
-        sum by(env,environment,tier,type,stage,component) (gitlab_component_ops:rate_6h{component="workhorse",monitor="global",type="web"}) >= 0.16667
+        sum by(env,environment,tier,type,stage,component) (
+          last_over_time(gitlab_component_ops:rate_6h{component="workhorse",monitor="global",type="web"}[2m])
+        ) >= 0.16667
       )
   - alert: WebServiceWorkhorseErrorSLOViolationRegional
     for: 2m
@@ -1686,18 +1730,20 @@ groups:
     expr: |
       (
         (
-          gitlab_regional_sli_errors:ratio_1h{component="workhorse",monitor="global",type="web"}
+          last_over_time(gitlab_regional_sli_errors:ratio_1h{component="workhorse",monitor="global",type="web"}[2m])
           > (14.4 * 0.000100)
         )
         and
         (
-          gitlab_regional_sli_errors:ratio_5m{component="workhorse",monitor="global",type="web"}
+          last_over_time(gitlab_regional_sli_errors:ratio_5m{component="workhorse",monitor="global",type="web"}[2m])
           > (14.4 * 0.000100)
         )
       )
       and on(env,environment,tier,type,stage,region,component)
       (
-        sum by(env,environment,tier,type,stage,region,component) (gitlab_regional_sli_ops:rate_1h{component="workhorse",monitor="global",type="web"}) >= 1
+        sum by(env,environment,tier,type,stage,region,component) (
+          last_over_time(gitlab_regional_sli_ops:rate_1h{component="workhorse",monitor="global",type="web"}[2m])
+        ) >= 1
       )
   - alert: WebServiceWorkhorseErrorSLOViolationRegional
     for: 2m
@@ -1736,18 +1782,20 @@ groups:
     expr: |
       (
         (
-          gitlab_regional_sli_errors:ratio_6h{component="workhorse",monitor="global",type="web"}
+          last_over_time(gitlab_regional_sli_errors:ratio_6h{component="workhorse",monitor="global",type="web"}[2m])
           > (6 * 0.000100)
         )
         and
         (
-          gitlab_regional_sli_errors:ratio_30m{component="workhorse",monitor="global",type="web"}
+          last_over_time(gitlab_regional_sli_errors:ratio_30m{component="workhorse",monitor="global",type="web"}[2m])
           > (6 * 0.000100)
         )
       )
       and on(env,environment,tier,type,stage,region,component)
       (
-        sum by(env,environment,tier,type,stage,region,component) (gitlab_regional_sli_ops:rate_6h{component="workhorse",monitor="global",type="web"}) >= 0.16667
+        sum by(env,environment,tier,type,stage,region,component) (
+          last_over_time(gitlab_regional_sli_ops:rate_6h{component="workhorse",monitor="global",type="web"}[2m])
+        ) >= 0.16667
       )
   - alert: WebServiceWorkhorseTrafficCessation
     for: 5m

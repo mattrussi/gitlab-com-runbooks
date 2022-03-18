@@ -41,18 +41,20 @@ groups:
     expr: |
       (
         (
-          gitlab_component_apdex:ratio_1h{component="cnyHttpServices",monitor="global",type="frontend"}
+          last_over_time(gitlab_component_apdex:ratio_1h{component="cnyHttpServices",monitor="global",type="frontend"}[2m])
           < (1 - 14.4 * 0.001000)
         )
         and
         (
-          gitlab_component_apdex:ratio_5m{component="cnyHttpServices",monitor="global",type="frontend"}
+          last_over_time(gitlab_component_apdex:ratio_5m{component="cnyHttpServices",monitor="global",type="frontend"}[2m])
           < (1 - 14.4 * 0.001000)
         )
       )
       and on(env,environment,tier,type,stage,component)
       (
-        sum by(env,environment,tier,type,stage,component) (gitlab_component_ops:rate_1h{component="cnyHttpServices",monitor="global",type="frontend"}) >= 1
+        sum by(env,environment,tier,type,stage,component) (
+          last_over_time(gitlab_component_ops:rate_1h{component="cnyHttpServices",monitor="global",type="frontend"}[2m])
+        ) >= 1
       )
   - alert: FrontendServiceCnyHttpServicesApdexSLOViolation
     for: 2m
@@ -90,18 +92,20 @@ groups:
     expr: |
       (
         (
-          gitlab_component_apdex:ratio_6h{component="cnyHttpServices",monitor="global",type="frontend"}
+          last_over_time(gitlab_component_apdex:ratio_6h{component="cnyHttpServices",monitor="global",type="frontend"}[2m])
           < (1 - 6 * 0.001000)
         )
         and
         (
-          gitlab_component_apdex:ratio_30m{component="cnyHttpServices",monitor="global",type="frontend"}
+          last_over_time(gitlab_component_apdex:ratio_30m{component="cnyHttpServices",monitor="global",type="frontend"}[2m])
           < (1 - 6 * 0.001000)
         )
       )
       and on(env,environment,tier,type,stage,component)
       (
-        sum by(env,environment,tier,type,stage,component) (gitlab_component_ops:rate_6h{component="cnyHttpServices",monitor="global",type="frontend"}) >= 0.16667
+        sum by(env,environment,tier,type,stage,component) (
+          last_over_time(gitlab_component_ops:rate_6h{component="cnyHttpServices",monitor="global",type="frontend"}[2m])
+        ) >= 0.16667
       )
   - alert: FrontendServiceCnyHttpServicesErrorSLOViolation
     for: 2m
@@ -136,18 +140,20 @@ groups:
     expr: |
       (
         (
-          gitlab_component_errors:ratio_1h{component="cnyHttpServices",monitor="global",type="frontend"}
+          last_over_time(gitlab_component_errors:ratio_1h{component="cnyHttpServices",monitor="global",type="frontend"}[2m])
           > (14.4 * 0.000100)
         )
         and
         (
-          gitlab_component_errors:ratio_5m{component="cnyHttpServices",monitor="global",type="frontend"}
+          last_over_time(gitlab_component_errors:ratio_5m{component="cnyHttpServices",monitor="global",type="frontend"}[2m])
           > (14.4 * 0.000100)
         )
       )
       and on(env,environment,tier,type,stage,component)
       (
-        sum by(env,environment,tier,type,stage,component) (gitlab_component_ops:rate_1h{component="cnyHttpServices",monitor="global",type="frontend"}) >= 1
+        sum by(env,environment,tier,type,stage,component) (
+          last_over_time(gitlab_component_ops:rate_1h{component="cnyHttpServices",monitor="global",type="frontend"}[2m])
+        ) >= 1
       )
   - alert: FrontendServiceCnyHttpServicesErrorSLOViolation
     for: 2m
@@ -182,18 +188,20 @@ groups:
     expr: |
       (
         (
-          gitlab_component_errors:ratio_6h{component="cnyHttpServices",monitor="global",type="frontend"}
+          last_over_time(gitlab_component_errors:ratio_6h{component="cnyHttpServices",monitor="global",type="frontend"}[2m])
           > (6 * 0.000100)
         )
         and
         (
-          gitlab_component_errors:ratio_30m{component="cnyHttpServices",monitor="global",type="frontend"}
+          last_over_time(gitlab_component_errors:ratio_30m{component="cnyHttpServices",monitor="global",type="frontend"}[2m])
           > (6 * 0.000100)
         )
       )
       and on(env,environment,tier,type,stage,component)
       (
-        sum by(env,environment,tier,type,stage,component) (gitlab_component_ops:rate_6h{component="cnyHttpServices",monitor="global",type="frontend"}) >= 0.16667
+        sum by(env,environment,tier,type,stage,component) (
+          last_over_time(gitlab_component_ops:rate_6h{component="cnyHttpServices",monitor="global",type="frontend"}[2m])
+        ) >= 0.16667
       )
   - alert: FrontendServiceCnyHttpServicesTrafficCessation
     for: 5m
@@ -297,18 +305,20 @@ groups:
     expr: |
       (
         (
-          gitlab_component_apdex:ratio_1h{component="mainHttpServices",monitor="global",type="frontend"}
+          last_over_time(gitlab_component_apdex:ratio_1h{component="mainHttpServices",monitor="global",type="frontend"}[2m])
           < (1 - 14.4 * 0.001000)
         )
         and
         (
-          gitlab_component_apdex:ratio_5m{component="mainHttpServices",monitor="global",type="frontend"}
+          last_over_time(gitlab_component_apdex:ratio_5m{component="mainHttpServices",monitor="global",type="frontend"}[2m])
           < (1 - 14.4 * 0.001000)
         )
       )
       and on(env,environment,tier,type,stage,component)
       (
-        sum by(env,environment,tier,type,stage,component) (gitlab_component_ops:rate_1h{component="mainHttpServices",monitor="global",type="frontend"}) >= 1
+        sum by(env,environment,tier,type,stage,component) (
+          last_over_time(gitlab_component_ops:rate_1h{component="mainHttpServices",monitor="global",type="frontend"}[2m])
+        ) >= 1
       )
   - alert: FrontendServiceMainHttpServicesApdexSLOViolation
     for: 2m
@@ -346,18 +356,20 @@ groups:
     expr: |
       (
         (
-          gitlab_component_apdex:ratio_6h{component="mainHttpServices",monitor="global",type="frontend"}
+          last_over_time(gitlab_component_apdex:ratio_6h{component="mainHttpServices",monitor="global",type="frontend"}[2m])
           < (1 - 6 * 0.001000)
         )
         and
         (
-          gitlab_component_apdex:ratio_30m{component="mainHttpServices",monitor="global",type="frontend"}
+          last_over_time(gitlab_component_apdex:ratio_30m{component="mainHttpServices",monitor="global",type="frontend"}[2m])
           < (1 - 6 * 0.001000)
         )
       )
       and on(env,environment,tier,type,stage,component)
       (
-        sum by(env,environment,tier,type,stage,component) (gitlab_component_ops:rate_6h{component="mainHttpServices",monitor="global",type="frontend"}) >= 0.16667
+        sum by(env,environment,tier,type,stage,component) (
+          last_over_time(gitlab_component_ops:rate_6h{component="mainHttpServices",monitor="global",type="frontend"}[2m])
+        ) >= 0.16667
       )
   - alert: FrontendServiceMainHttpServicesErrorSLOViolation
     for: 2m
@@ -392,18 +404,20 @@ groups:
     expr: |
       (
         (
-          gitlab_component_errors:ratio_1h{component="mainHttpServices",monitor="global",type="frontend"}
+          last_over_time(gitlab_component_errors:ratio_1h{component="mainHttpServices",monitor="global",type="frontend"}[2m])
           > (14.4 * 0.000100)
         )
         and
         (
-          gitlab_component_errors:ratio_5m{component="mainHttpServices",monitor="global",type="frontend"}
+          last_over_time(gitlab_component_errors:ratio_5m{component="mainHttpServices",monitor="global",type="frontend"}[2m])
           > (14.4 * 0.000100)
         )
       )
       and on(env,environment,tier,type,stage,component)
       (
-        sum by(env,environment,tier,type,stage,component) (gitlab_component_ops:rate_1h{component="mainHttpServices",monitor="global",type="frontend"}) >= 1
+        sum by(env,environment,tier,type,stage,component) (
+          last_over_time(gitlab_component_ops:rate_1h{component="mainHttpServices",monitor="global",type="frontend"}[2m])
+        ) >= 1
       )
   - alert: FrontendServiceMainHttpServicesErrorSLOViolation
     for: 2m
@@ -438,18 +452,20 @@ groups:
     expr: |
       (
         (
-          gitlab_component_errors:ratio_6h{component="mainHttpServices",monitor="global",type="frontend"}
+          last_over_time(gitlab_component_errors:ratio_6h{component="mainHttpServices",monitor="global",type="frontend"}[2m])
           > (6 * 0.000100)
         )
         and
         (
-          gitlab_component_errors:ratio_30m{component="mainHttpServices",monitor="global",type="frontend"}
+          last_over_time(gitlab_component_errors:ratio_30m{component="mainHttpServices",monitor="global",type="frontend"}[2m])
           > (6 * 0.000100)
         )
       )
       and on(env,environment,tier,type,stage,component)
       (
-        sum by(env,environment,tier,type,stage,component) (gitlab_component_ops:rate_6h{component="mainHttpServices",monitor="global",type="frontend"}) >= 0.16667
+        sum by(env,environment,tier,type,stage,component) (
+          last_over_time(gitlab_component_ops:rate_6h{component="mainHttpServices",monitor="global",type="frontend"}[2m])
+        ) >= 0.16667
       )
   - alert: FrontendServiceMainHttpServicesTrafficCessation
     for: 5m
@@ -553,18 +569,20 @@ groups:
     expr: |
       (
         (
-          gitlab_component_apdex:ratio_1h{component="sshServices",monitor="global",type="frontend"}
+          last_over_time(gitlab_component_apdex:ratio_1h{component="sshServices",monitor="global",type="frontend"}[2m])
           < (1 - 14.4 * 0.001000)
         )
         and
         (
-          gitlab_component_apdex:ratio_5m{component="sshServices",monitor="global",type="frontend"}
+          last_over_time(gitlab_component_apdex:ratio_5m{component="sshServices",monitor="global",type="frontend"}[2m])
           < (1 - 14.4 * 0.001000)
         )
       )
       and on(env,environment,tier,type,stage,component)
       (
-        sum by(env,environment,tier,type,stage,component) (gitlab_component_ops:rate_1h{component="sshServices",monitor="global",type="frontend"}) >= 1
+        sum by(env,environment,tier,type,stage,component) (
+          last_over_time(gitlab_component_ops:rate_1h{component="sshServices",monitor="global",type="frontend"}[2m])
+        ) >= 1
       )
   - alert: FrontendServiceSshServicesApdexSLOViolation
     for: 2m
@@ -602,18 +620,20 @@ groups:
     expr: |
       (
         (
-          gitlab_component_apdex:ratio_6h{component="sshServices",monitor="global",type="frontend"}
+          last_over_time(gitlab_component_apdex:ratio_6h{component="sshServices",monitor="global",type="frontend"}[2m])
           < (1 - 6 * 0.001000)
         )
         and
         (
-          gitlab_component_apdex:ratio_30m{component="sshServices",monitor="global",type="frontend"}
+          last_over_time(gitlab_component_apdex:ratio_30m{component="sshServices",monitor="global",type="frontend"}[2m])
           < (1 - 6 * 0.001000)
         )
       )
       and on(env,environment,tier,type,stage,component)
       (
-        sum by(env,environment,tier,type,stage,component) (gitlab_component_ops:rate_6h{component="sshServices",monitor="global",type="frontend"}) >= 0.16667
+        sum by(env,environment,tier,type,stage,component) (
+          last_over_time(gitlab_component_ops:rate_6h{component="sshServices",monitor="global",type="frontend"}[2m])
+        ) >= 0.16667
       )
   - alert: FrontendServiceSshServicesErrorSLOViolation
     for: 2m
@@ -648,18 +668,20 @@ groups:
     expr: |
       (
         (
-          gitlab_component_errors:ratio_1h{component="sshServices",monitor="global",type="frontend"}
+          last_over_time(gitlab_component_errors:ratio_1h{component="sshServices",monitor="global",type="frontend"}[2m])
           > (14.4 * 0.001000)
         )
         and
         (
-          gitlab_component_errors:ratio_5m{component="sshServices",monitor="global",type="frontend"}
+          last_over_time(gitlab_component_errors:ratio_5m{component="sshServices",monitor="global",type="frontend"}[2m])
           > (14.4 * 0.001000)
         )
       )
       and on(env,environment,tier,type,stage,component)
       (
-        sum by(env,environment,tier,type,stage,component) (gitlab_component_ops:rate_1h{component="sshServices",monitor="global",type="frontend"}) >= 1
+        sum by(env,environment,tier,type,stage,component) (
+          last_over_time(gitlab_component_ops:rate_1h{component="sshServices",monitor="global",type="frontend"}[2m])
+        ) >= 1
       )
   - alert: FrontendServiceSshServicesErrorSLOViolation
     for: 2m
@@ -694,18 +716,20 @@ groups:
     expr: |
       (
         (
-          gitlab_component_errors:ratio_6h{component="sshServices",monitor="global",type="frontend"}
+          last_over_time(gitlab_component_errors:ratio_6h{component="sshServices",monitor="global",type="frontend"}[2m])
           > (6 * 0.001000)
         )
         and
         (
-          gitlab_component_errors:ratio_30m{component="sshServices",monitor="global",type="frontend"}
+          last_over_time(gitlab_component_errors:ratio_30m{component="sshServices",monitor="global",type="frontend"}[2m])
           > (6 * 0.001000)
         )
       )
       and on(env,environment,tier,type,stage,component)
       (
-        sum by(env,environment,tier,type,stage,component) (gitlab_component_ops:rate_6h{component="sshServices",monitor="global",type="frontend"}) >= 0.16667
+        sum by(env,environment,tier,type,stage,component) (
+          last_over_time(gitlab_component_ops:rate_6h{component="sshServices",monitor="global",type="frontend"}[2m])
+        ) >= 0.16667
       )
   - alert: FrontendServiceSshServicesTrafficCessation
     for: 5m

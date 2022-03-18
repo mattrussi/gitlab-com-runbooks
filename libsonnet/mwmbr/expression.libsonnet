@@ -21,7 +21,8 @@ local operationRateFilter(
   operationRateAggregationLabels,
   operationRateSelectorHash,
   operationRateWindowDuration,
-  minimumSamplesForMonitoring
+  minimumSamplesForMonitoring,
+  alertForDuration,
       ) =
 
   local requiredOpRate = calculateMinimumOperationRateForMonitoring(
@@ -38,7 +39,9 @@ local operationRateFilter(
       )
       and on(%(operationRateAggregationLabels)s)
       (
-        sum by(%(operationRateAggregationLabels)s) (%(operationRateMetric)s{%(operationRateSelector)s}) >= %(requiredOpRate)g
+        sum by(%(operationRateAggregationLabels)s) (
+          last_over_time(%(operationRateMetric)s{%(operationRateSelector)s}[%(sampleDuration)s])
+        ) >= %(requiredOpRate)g
       )
     ||| % {
       expression: strings.indent(expression, 2),
@@ -46,6 +49,7 @@ local operationRateFilter(
       requiredOpRate: requiredOpRate,
       operationRateSelector: selectors.serializeHash(operationRateSelectorHash),
       operationRateAggregationLabels: aggregations.serialize(operationRateAggregationLabels),
+      sampleDuration: alertForDuration,
     };
 
 local clampMaxHealthExpression(expression) =
@@ -69,6 +73,7 @@ local defaultWindows = ['1h', '6h'];
     metricSelectorHash,  // Selectors for the error rate metrics
     windows=defaultWindows,  // Sets of windows in this SLO expression, identified by longWindow duration
     thresholdSLOValue,  // Error budget float value (between 0 and 1)
+    alertForDuration,  // The time we look back for the last sample to not cancel an alert when a metric goes missing
     minimumSamplesForMonitoring=null,  // minimum number of operations recorded, over the longWindow period, for monitoring
     operationRateWindowDuration='1h',  // Window over which to evaluate operation rate
   )::
@@ -78,7 +83,7 @@ local defaultWindows = ['1h', '6h'];
       aggregationSet=aggregationSet,
       metricSelectorHash=metricSelectorHash,
       windows=windows,
-      termGenerator=generator.termGenerators.fixed(thresholdValue=thresholdSLOValue),
+      termGenerator=generator.termGenerators(alertForDuration).fixed(thresholdValue=thresholdSLOValue),
       metricLookup=generator.metricLookups.errorRate(),
       isApdexExpression=false,
     );
@@ -90,6 +95,7 @@ local defaultWindows = ['1h', '6h'];
       mergedMetricSelectors,
       operationRateWindowDuration=operationRateWindowDuration,
       minimumSamplesForMonitoring=minimumSamplesForMonitoring,
+      alertForDuration=alertForDuration,
     ),
 
   // Generates a multi-window, multi-burn-rate apdex score expression
@@ -97,6 +103,7 @@ local defaultWindows = ['1h', '6h'];
     aggregationSet,
     metricSelectorHash,  // Selectors for the error rate metrics
     thresholdSLOValue,  // Error budget float value (between 0 and 1)
+    alertForDuration,  // The time we look back for the last sample to not cancel an alert when a metric goes missing
     windows=['1h', '6h'],  // Sets of windows in this SLO expression, identified by longWindow duration
     minimumSamplesForMonitoring=null,  // minimum number of operations recorded, over the longWindow period, for monitoring
     operationRateWindowDuration='1h',  // Window over which to evaluate operation rate
@@ -107,7 +114,7 @@ local defaultWindows = ['1h', '6h'];
       aggregationSet=aggregationSet,
       metricSelectorHash=metricSelectorHash,
       windows=windows,
-      termGenerator=generator.termGenerators.fixed(thresholdValue=thresholdSLOValue),
+      termGenerator=generator.termGenerators(alertForDuration).fixed(thresholdValue=thresholdSLOValue),
       metricLookup=generator.metricLookups.apdex(),
       isApdexExpression=true,
     );
@@ -119,6 +126,7 @@ local defaultWindows = ['1h', '6h'];
       mergedMetricSelectors,
       operationRateWindowDuration=operationRateWindowDuration,
       minimumSamplesForMonitoring=minimumSamplesForMonitoring,
+      alertForDuration=alertForDuration,
     ),
 
   errorHealthExpression(
@@ -128,7 +136,7 @@ local defaultWindows = ['1h', '6h'];
     thresholdSLOMetricAggregationLabels,  // Labels to join the SLO metric to the error rate metrics with
   )::
     local termGenerator =
-      generator.termGenerators.metricThreshold(
+      generator.termGenerators('5m').metricThreshold(
         thresholdSLOMetricAggregationLabels=thresholdSLOMetricAggregationLabels,
         thresholdSLOMetricName=thresholdSLOMetricName,
         sloSelector=aggregationSet.selector
@@ -161,7 +169,7 @@ local defaultWindows = ['1h', '6h'];
     thresholdSLOMetricAggregationLabels,  // Labels to join the SLO metric to the error rate metrics with
   )::
     local termGenerator =
-      generator.termGenerators.metricThreshold(
+      generator.termGenerators('5m').metricThreshold(
         thresholdSLOMetricAggregationLabels=thresholdSLOMetricAggregationLabels,
         thresholdSLOMetricName=thresholdSLOMetricName,
         sloSelector=aggregationSet.selector

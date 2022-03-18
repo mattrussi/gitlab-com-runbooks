@@ -36,18 +36,20 @@ groups:
     expr: |
       (
         (
-          gitlab_component_errors:ratio_1h{component="loadbalancer",monitor="global",type="websockets"}
+          last_over_time(gitlab_component_errors:ratio_1h{component="loadbalancer",monitor="global",type="websockets"}[2m])
           > (14.4 * 0.000500)
         )
         and
         (
-          gitlab_component_errors:ratio_5m{component="loadbalancer",monitor="global",type="websockets"}
+          last_over_time(gitlab_component_errors:ratio_5m{component="loadbalancer",monitor="global",type="websockets"}[2m])
           > (14.4 * 0.000500)
         )
       )
       and on(env,environment,tier,type,stage,component)
       (
-        sum by(env,environment,tier,type,stage,component) (gitlab_component_ops:rate_1h{component="loadbalancer",monitor="global",type="websockets"}) >= 1
+        sum by(env,environment,tier,type,stage,component) (
+          last_over_time(gitlab_component_ops:rate_1h{component="loadbalancer",monitor="global",type="websockets"}[2m])
+        ) >= 1
       )
   - alert: WebsocketsServiceLoadbalancerErrorSLOViolation
     for: 2m
@@ -80,18 +82,20 @@ groups:
     expr: |
       (
         (
-          gitlab_component_errors:ratio_6h{component="loadbalancer",monitor="global",type="websockets"}
+          last_over_time(gitlab_component_errors:ratio_6h{component="loadbalancer",monitor="global",type="websockets"}[2m])
           > (6 * 0.000500)
         )
         and
         (
-          gitlab_component_errors:ratio_30m{component="loadbalancer",monitor="global",type="websockets"}
+          last_over_time(gitlab_component_errors:ratio_30m{component="loadbalancer",monitor="global",type="websockets"}[2m])
           > (6 * 0.000500)
         )
       )
       and on(env,environment,tier,type,stage,component)
       (
-        sum by(env,environment,tier,type,stage,component) (gitlab_component_ops:rate_6h{component="loadbalancer",monitor="global",type="websockets"}) >= 0.16667
+        sum by(env,environment,tier,type,stage,component) (
+          last_over_time(gitlab_component_ops:rate_6h{component="loadbalancer",monitor="global",type="websockets"}[2m])
+        ) >= 0.16667
       )
   - alert: WebsocketsServiceLoadbalancerErrorSLOViolationRegional
     for: 2m
@@ -126,18 +130,20 @@ groups:
     expr: |
       (
         (
-          gitlab_regional_sli_errors:ratio_1h{component="loadbalancer",monitor="global",type="websockets"}
+          last_over_time(gitlab_regional_sli_errors:ratio_1h{component="loadbalancer",monitor="global",type="websockets"}[2m])
           > (14.4 * 0.000500)
         )
         and
         (
-          gitlab_regional_sli_errors:ratio_5m{component="loadbalancer",monitor="global",type="websockets"}
+          last_over_time(gitlab_regional_sli_errors:ratio_5m{component="loadbalancer",monitor="global",type="websockets"}[2m])
           > (14.4 * 0.000500)
         )
       )
       and on(env,environment,tier,type,stage,region,component)
       (
-        sum by(env,environment,tier,type,stage,region,component) (gitlab_regional_sli_ops:rate_1h{component="loadbalancer",monitor="global",type="websockets"}) >= 1
+        sum by(env,environment,tier,type,stage,region,component) (
+          last_over_time(gitlab_regional_sli_ops:rate_1h{component="loadbalancer",monitor="global",type="websockets"}[2m])
+        ) >= 1
       )
   - alert: WebsocketsServiceLoadbalancerErrorSLOViolationRegional
     for: 2m
@@ -172,18 +178,20 @@ groups:
     expr: |
       (
         (
-          gitlab_regional_sli_errors:ratio_6h{component="loadbalancer",monitor="global",type="websockets"}
+          last_over_time(gitlab_regional_sli_errors:ratio_6h{component="loadbalancer",monitor="global",type="websockets"}[2m])
           > (6 * 0.000500)
         )
         and
         (
-          gitlab_regional_sli_errors:ratio_30m{component="loadbalancer",monitor="global",type="websockets"}
+          last_over_time(gitlab_regional_sli_errors:ratio_30m{component="loadbalancer",monitor="global",type="websockets"}[2m])
           > (6 * 0.000500)
         )
       )
       and on(env,environment,tier,type,stage,region,component)
       (
-        sum by(env,environment,tier,type,stage,region,component) (gitlab_regional_sli_ops:rate_6h{component="loadbalancer",monitor="global",type="websockets"}) >= 0.16667
+        sum by(env,environment,tier,type,stage,region,component) (
+          last_over_time(gitlab_regional_sli_ops:rate_6h{component="loadbalancer",monitor="global",type="websockets"}[2m])
+        ) >= 0.16667
       )
   - alert: WebsocketsServiceLoadbalancerTrafficCessation
     for: 5m
@@ -348,18 +356,20 @@ groups:
     expr: |
       (
         (
-          gitlab_component_errors:ratio_1h{component="puma",monitor="global",type="websockets"}
+          last_over_time(gitlab_component_errors:ratio_1h{component="puma",monitor="global",type="websockets"}[2m])
           > (14.4 * 0.000500)
         )
         and
         (
-          gitlab_component_errors:ratio_5m{component="puma",monitor="global",type="websockets"}
+          last_over_time(gitlab_component_errors:ratio_5m{component="puma",monitor="global",type="websockets"}[2m])
           > (14.4 * 0.000500)
         )
       )
       and on(env,environment,tier,type,stage,component)
       (
-        sum by(env,environment,tier,type,stage,component) (gitlab_component_ops:rate_1h{component="puma",monitor="global",type="websockets"}) >= 1
+        sum by(env,environment,tier,type,stage,component) (
+          last_over_time(gitlab_component_ops:rate_1h{component="puma",monitor="global",type="websockets"}[2m])
+        ) >= 1
       )
   - alert: WebsocketsServicePumaErrorSLOViolation
     for: 2m
@@ -396,18 +406,20 @@ groups:
     expr: |
       (
         (
-          gitlab_component_errors:ratio_6h{component="puma",monitor="global",type="websockets"}
+          last_over_time(gitlab_component_errors:ratio_6h{component="puma",monitor="global",type="websockets"}[2m])
           > (6 * 0.000500)
         )
         and
         (
-          gitlab_component_errors:ratio_30m{component="puma",monitor="global",type="websockets"}
+          last_over_time(gitlab_component_errors:ratio_30m{component="puma",monitor="global",type="websockets"}[2m])
           > (6 * 0.000500)
         )
       )
       and on(env,environment,tier,type,stage,component)
       (
-        sum by(env,environment,tier,type,stage,component) (gitlab_component_ops:rate_6h{component="puma",monitor="global",type="websockets"}) >= 0.16667
+        sum by(env,environment,tier,type,stage,component) (
+          last_over_time(gitlab_component_ops:rate_6h{component="puma",monitor="global",type="websockets"}[2m])
+        ) >= 0.16667
       )
   - alert: WebsocketsServicePumaErrorSLOViolationRegional
     for: 2m
@@ -446,18 +458,20 @@ groups:
     expr: |
       (
         (
-          gitlab_regional_sli_errors:ratio_1h{component="puma",monitor="global",type="websockets"}
+          last_over_time(gitlab_regional_sli_errors:ratio_1h{component="puma",monitor="global",type="websockets"}[2m])
           > (14.4 * 0.000500)
         )
         and
         (
-          gitlab_regional_sli_errors:ratio_5m{component="puma",monitor="global",type="websockets"}
+          last_over_time(gitlab_regional_sli_errors:ratio_5m{component="puma",monitor="global",type="websockets"}[2m])
           > (14.4 * 0.000500)
         )
       )
       and on(env,environment,tier,type,stage,region,component)
       (
-        sum by(env,environment,tier,type,stage,region,component) (gitlab_regional_sli_ops:rate_1h{component="puma",monitor="global",type="websockets"}) >= 1
+        sum by(env,environment,tier,type,stage,region,component) (
+          last_over_time(gitlab_regional_sli_ops:rate_1h{component="puma",monitor="global",type="websockets"}[2m])
+        ) >= 1
       )
   - alert: WebsocketsServicePumaErrorSLOViolationRegional
     for: 2m
@@ -496,18 +510,20 @@ groups:
     expr: |
       (
         (
-          gitlab_regional_sli_errors:ratio_6h{component="puma",monitor="global",type="websockets"}
+          last_over_time(gitlab_regional_sli_errors:ratio_6h{component="puma",monitor="global",type="websockets"}[2m])
           > (6 * 0.000500)
         )
         and
         (
-          gitlab_regional_sli_errors:ratio_30m{component="puma",monitor="global",type="websockets"}
+          last_over_time(gitlab_regional_sli_errors:ratio_30m{component="puma",monitor="global",type="websockets"}[2m])
           > (6 * 0.000500)
         )
       )
       and on(env,environment,tier,type,stage,region,component)
       (
-        sum by(env,environment,tier,type,stage,region,component) (gitlab_regional_sli_ops:rate_6h{component="puma",monitor="global",type="websockets"}) >= 0.16667
+        sum by(env,environment,tier,type,stage,region,component) (
+          last_over_time(gitlab_regional_sli_ops:rate_6h{component="puma",monitor="global",type="websockets"}[2m])
+        ) >= 0.16667
       )
   - alert: WebsocketsServicePumaTrafficCessation
     for: 5m
@@ -688,18 +704,20 @@ groups:
     expr: |
       (
         (
-          gitlab_component_errors:ratio_1h{component="workhorse",monitor="global",type="websockets"}
+          last_over_time(gitlab_component_errors:ratio_1h{component="workhorse",monitor="global",type="websockets"}[2m])
           > (14.4 * 0.000500)
         )
         and
         (
-          gitlab_component_errors:ratio_5m{component="workhorse",monitor="global",type="websockets"}
+          last_over_time(gitlab_component_errors:ratio_5m{component="workhorse",monitor="global",type="websockets"}[2m])
           > (14.4 * 0.000500)
         )
       )
       and on(env,environment,tier,type,stage,component)
       (
-        sum by(env,environment,tier,type,stage,component) (gitlab_component_ops:rate_1h{component="workhorse",monitor="global",type="websockets"}) >= 1
+        sum by(env,environment,tier,type,stage,component) (
+          last_over_time(gitlab_component_ops:rate_1h{component="workhorse",monitor="global",type="websockets"}[2m])
+        ) >= 1
       )
   - alert: WebsocketsServiceWorkhorseErrorSLOViolation
     for: 2m
@@ -736,18 +754,20 @@ groups:
     expr: |
       (
         (
-          gitlab_component_errors:ratio_6h{component="workhorse",monitor="global",type="websockets"}
+          last_over_time(gitlab_component_errors:ratio_6h{component="workhorse",monitor="global",type="websockets"}[2m])
           > (6 * 0.000500)
         )
         and
         (
-          gitlab_component_errors:ratio_30m{component="workhorse",monitor="global",type="websockets"}
+          last_over_time(gitlab_component_errors:ratio_30m{component="workhorse",monitor="global",type="websockets"}[2m])
           > (6 * 0.000500)
         )
       )
       and on(env,environment,tier,type,stage,component)
       (
-        sum by(env,environment,tier,type,stage,component) (gitlab_component_ops:rate_6h{component="workhorse",monitor="global",type="websockets"}) >= 0.16667
+        sum by(env,environment,tier,type,stage,component) (
+          last_over_time(gitlab_component_ops:rate_6h{component="workhorse",monitor="global",type="websockets"}[2m])
+        ) >= 0.16667
       )
   - alert: WebsocketsServiceWorkhorseErrorSLOViolationRegional
     for: 2m
@@ -786,18 +806,20 @@ groups:
     expr: |
       (
         (
-          gitlab_regional_sli_errors:ratio_1h{component="workhorse",monitor="global",type="websockets"}
+          last_over_time(gitlab_regional_sli_errors:ratio_1h{component="workhorse",monitor="global",type="websockets"}[2m])
           > (14.4 * 0.000500)
         )
         and
         (
-          gitlab_regional_sli_errors:ratio_5m{component="workhorse",monitor="global",type="websockets"}
+          last_over_time(gitlab_regional_sli_errors:ratio_5m{component="workhorse",monitor="global",type="websockets"}[2m])
           > (14.4 * 0.000500)
         )
       )
       and on(env,environment,tier,type,stage,region,component)
       (
-        sum by(env,environment,tier,type,stage,region,component) (gitlab_regional_sli_ops:rate_1h{component="workhorse",monitor="global",type="websockets"}) >= 1
+        sum by(env,environment,tier,type,stage,region,component) (
+          last_over_time(gitlab_regional_sli_ops:rate_1h{component="workhorse",monitor="global",type="websockets"}[2m])
+        ) >= 1
       )
   - alert: WebsocketsServiceWorkhorseErrorSLOViolationRegional
     for: 2m
@@ -836,18 +858,20 @@ groups:
     expr: |
       (
         (
-          gitlab_regional_sli_errors:ratio_6h{component="workhorse",monitor="global",type="websockets"}
+          last_over_time(gitlab_regional_sli_errors:ratio_6h{component="workhorse",monitor="global",type="websockets"}[2m])
           > (6 * 0.000500)
         )
         and
         (
-          gitlab_regional_sli_errors:ratio_30m{component="workhorse",monitor="global",type="websockets"}
+          last_over_time(gitlab_regional_sli_errors:ratio_30m{component="workhorse",monitor="global",type="websockets"}[2m])
           > (6 * 0.000500)
         )
       )
       and on(env,environment,tier,type,stage,region,component)
       (
-        sum by(env,environment,tier,type,stage,region,component) (gitlab_regional_sli_ops:rate_6h{component="workhorse",monitor="global",type="websockets"}) >= 0.16667
+        sum by(env,environment,tier,type,stage,region,component) (
+          last_over_time(gitlab_regional_sli_ops:rate_6h{component="workhorse",monitor="global",type="websockets"}[2m])
+        ) >= 0.16667
       )
   - alert: WebsocketsServiceWorkhorseTrafficCessation
     for: 5m

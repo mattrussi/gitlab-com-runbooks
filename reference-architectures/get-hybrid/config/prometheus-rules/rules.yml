@@ -4029,18 +4029,20 @@ groups:
     expr: |
       (
         (
-          gitlab_component_apdex:ratio_1h{component="goserver",type="gitaly"}
+          last_over_time(gitlab_component_apdex:ratio_1h{component="goserver",type="gitaly"}[2m])
           < (1 - 14.4 * 0.001000)
         )
         and
         (
-          gitlab_component_apdex:ratio_5m{component="goserver",type="gitaly"}
+          last_over_time(gitlab_component_apdex:ratio_5m{component="goserver",type="gitaly"}[2m])
           < (1 - 14.4 * 0.001000)
         )
       )
       and on(type,component)
       (
-        sum by(type,component) (gitlab_component_ops:rate_1h{component="goserver",type="gitaly"}) >= 1
+        sum by(type,component) (
+          last_over_time(gitlab_component_ops:rate_1h{component="goserver",type="gitaly"}[2m])
+        ) >= 1
       )
     for: 2m
     labels:
@@ -4079,18 +4081,20 @@ groups:
     expr: |
       (
         (
-          gitlab_component_apdex:ratio_6h{component="goserver",type="gitaly"}
+          last_over_time(gitlab_component_apdex:ratio_6h{component="goserver",type="gitaly"}[2m])
           < (1 - 6 * 0.001000)
         )
         and
         (
-          gitlab_component_apdex:ratio_30m{component="goserver",type="gitaly"}
+          last_over_time(gitlab_component_apdex:ratio_30m{component="goserver",type="gitaly"}[2m])
           < (1 - 6 * 0.001000)
         )
       )
       and on(type,component)
       (
-        sum by(type,component) (gitlab_component_ops:rate_6h{component="goserver",type="gitaly"}) >= 0.16667
+        sum by(type,component) (
+          last_over_time(gitlab_component_ops:rate_6h{component="goserver",type="gitaly"}[2m])
+        ) >= 0.16667
       )
     for: 2m
     labels:
@@ -4128,18 +4132,20 @@ groups:
     expr: |
       (
         (
-          gitlab_component_errors:ratio_1h{component="goserver",type="gitaly"}
+          last_over_time(gitlab_component_errors:ratio_1h{component="goserver",type="gitaly"}[2m])
           > (14.4 * 0.000500)
         )
         and
         (
-          gitlab_component_errors:ratio_5m{component="goserver",type="gitaly"}
+          last_over_time(gitlab_component_errors:ratio_5m{component="goserver",type="gitaly"}[2m])
           > (14.4 * 0.000500)
         )
       )
       and on(type,component)
       (
-        sum by(type,component) (gitlab_component_ops:rate_1h{component="goserver",type="gitaly"}) >= 1
+        sum by(type,component) (
+          last_over_time(gitlab_component_ops:rate_1h{component="goserver",type="gitaly"}[2m])
+        ) >= 1
       )
     for: 2m
     labels:
@@ -4177,18 +4183,20 @@ groups:
     expr: |
       (
         (
-          gitlab_component_errors:ratio_6h{component="goserver",type="gitaly"}
+          last_over_time(gitlab_component_errors:ratio_6h{component="goserver",type="gitaly"}[2m])
           > (6 * 0.000500)
         )
         and
         (
-          gitlab_component_errors:ratio_30m{component="goserver",type="gitaly"}
+          last_over_time(gitlab_component_errors:ratio_30m{component="goserver",type="gitaly"}[2m])
           > (6 * 0.000500)
         )
       )
       and on(type,component)
       (
-        sum by(type,component) (gitlab_component_ops:rate_6h{component="goserver",type="gitaly"}) >= 0.16667
+        sum by(type,component) (
+          last_over_time(gitlab_component_ops:rate_6h{component="goserver",type="gitaly"}[2m])
+        ) >= 0.16667
       )
     for: 2m
     labels:
@@ -4303,18 +4311,20 @@ groups:
     expr: |
       (
         (
-          gitlab_component_apdex:ratio_1h{component="grpc_requests",type="gitlab-shell"}
+          last_over_time(gitlab_component_apdex:ratio_1h{component="grpc_requests",type="gitlab-shell"}[2m])
           < (1 - 14.4 * 0.001000)
         )
         and
         (
-          gitlab_component_apdex:ratio_5m{component="grpc_requests",type="gitlab-shell"}
+          last_over_time(gitlab_component_apdex:ratio_5m{component="grpc_requests",type="gitlab-shell"}[2m])
           < (1 - 14.4 * 0.001000)
         )
       )
       and on(type,component)
       (
-        sum by(type,component) (gitlab_component_ops:rate_1h{component="grpc_requests",type="gitlab-shell"}) >= 1
+        sum by(type,component) (
+          last_over_time(gitlab_component_ops:rate_1h{component="grpc_requests",type="gitlab-shell"}[2m])
+        ) >= 1
       )
     for: 2m
     labels:
@@ -4356,18 +4366,20 @@ groups:
     expr: |
       (
         (
-          gitlab_component_apdex:ratio_6h{component="grpc_requests",type="gitlab-shell"}
+          last_over_time(gitlab_component_apdex:ratio_6h{component="grpc_requests",type="gitlab-shell"}[2m])
           < (1 - 6 * 0.001000)
         )
         and
         (
-          gitlab_component_apdex:ratio_30m{component="grpc_requests",type="gitlab-shell"}
+          last_over_time(gitlab_component_apdex:ratio_30m{component="grpc_requests",type="gitlab-shell"}[2m])
           < (1 - 6 * 0.001000)
         )
       )
       and on(type,component)
       (
-        sum by(type,component) (gitlab_component_ops:rate_6h{component="grpc_requests",type="gitlab-shell"}) >= 0.16667
+        sum by(type,component) (
+          last_over_time(gitlab_component_ops:rate_6h{component="grpc_requests",type="gitlab-shell"}[2m])
+        ) >= 0.16667
       )
     for: 2m
     labels:
@@ -4406,18 +4418,20 @@ groups:
     expr: |
       (
         (
-          gitlab_component_errors:ratio_1h{component="grpc_requests",type="gitlab-shell"}
+          last_over_time(gitlab_component_errors:ratio_1h{component="grpc_requests",type="gitlab-shell"}[2m])
           > (14.4 * 0.001000)
         )
         and
         (
-          gitlab_component_errors:ratio_5m{component="grpc_requests",type="gitlab-shell"}
+          last_over_time(gitlab_component_errors:ratio_5m{component="grpc_requests",type="gitlab-shell"}[2m])
           > (14.4 * 0.001000)
         )
       )
       and on(type,component)
       (
-        sum by(type,component) (gitlab_component_ops:rate_1h{component="grpc_requests",type="gitlab-shell"}) >= 1
+        sum by(type,component) (
+          last_over_time(gitlab_component_ops:rate_1h{component="grpc_requests",type="gitlab-shell"}[2m])
+        ) >= 1
       )
     for: 2m
     labels:
@@ -4456,18 +4470,20 @@ groups:
     expr: |
       (
         (
-          gitlab_component_errors:ratio_6h{component="grpc_requests",type="gitlab-shell"}
+          last_over_time(gitlab_component_errors:ratio_6h{component="grpc_requests",type="gitlab-shell"}[2m])
           > (6 * 0.001000)
         )
         and
         (
-          gitlab_component_errors:ratio_30m{component="grpc_requests",type="gitlab-shell"}
+          last_over_time(gitlab_component_errors:ratio_30m{component="grpc_requests",type="gitlab-shell"}[2m])
           > (6 * 0.001000)
         )
       )
       and on(type,component)
       (
-        sum by(type,component) (gitlab_component_ops:rate_6h{component="grpc_requests",type="gitlab-shell"}) >= 0.16667
+        sum by(type,component) (
+          last_over_time(gitlab_component_ops:rate_6h{component="grpc_requests",type="gitlab-shell"}[2m])
+        ) >= 0.16667
       )
     for: 2m
     labels:
@@ -4662,18 +4678,20 @@ groups:
     expr: |
       (
         (
-          gitlab_component_apdex:ratio_1h{component="proxy",type="praefect"}
+          last_over_time(gitlab_component_apdex:ratio_1h{component="proxy",type="praefect"}[2m])
           < (1 - 14.4 * 0.005000)
         )
         and
         (
-          gitlab_component_apdex:ratio_5m{component="proxy",type="praefect"}
+          last_over_time(gitlab_component_apdex:ratio_5m{component="proxy",type="praefect"}[2m])
           < (1 - 14.4 * 0.005000)
         )
       )
       and on(type,component)
       (
-        sum by(type,component) (gitlab_component_ops:rate_1h{component="proxy",type="praefect"}) >= 1
+        sum by(type,component) (
+          last_over_time(gitlab_component_ops:rate_1h{component="proxy",type="praefect"}[2m])
+        ) >= 1
       )
     for: 2m
     labels:
@@ -4712,18 +4730,20 @@ groups:
     expr: |
       (
         (
-          gitlab_component_apdex:ratio_6h{component="proxy",type="praefect"}
+          last_over_time(gitlab_component_apdex:ratio_6h{component="proxy",type="praefect"}[2m])
           < (1 - 6 * 0.005000)
         )
         and
         (
-          gitlab_component_apdex:ratio_30m{component="proxy",type="praefect"}
+          last_over_time(gitlab_component_apdex:ratio_30m{component="proxy",type="praefect"}[2m])
           < (1 - 6 * 0.005000)
         )
       )
       and on(type,component)
       (
-        sum by(type,component) (gitlab_component_ops:rate_6h{component="proxy",type="praefect"}) >= 0.16667
+        sum by(type,component) (
+          last_over_time(gitlab_component_ops:rate_6h{component="proxy",type="praefect"}[2m])
+        ) >= 0.16667
       )
     for: 2m
     labels:
@@ -4759,18 +4779,20 @@ groups:
     expr: |
       (
         (
-          gitlab_component_errors:ratio_1h{component="proxy",type="praefect"}
+          last_over_time(gitlab_component_errors:ratio_1h{component="proxy",type="praefect"}[2m])
           > (14.4 * 0.000500)
         )
         and
         (
-          gitlab_component_errors:ratio_5m{component="proxy",type="praefect"}
+          last_over_time(gitlab_component_errors:ratio_5m{component="proxy",type="praefect"}[2m])
           > (14.4 * 0.000500)
         )
       )
       and on(type,component)
       (
-        sum by(type,component) (gitlab_component_ops:rate_1h{component="proxy",type="praefect"}) >= 1
+        sum by(type,component) (
+          last_over_time(gitlab_component_ops:rate_1h{component="proxy",type="praefect"}[2m])
+        ) >= 1
       )
     for: 2m
     labels:
@@ -4806,18 +4828,20 @@ groups:
     expr: |
       (
         (
-          gitlab_component_errors:ratio_6h{component="proxy",type="praefect"}
+          last_over_time(gitlab_component_errors:ratio_6h{component="proxy",type="praefect"}[2m])
           > (6 * 0.000500)
         )
         and
         (
-          gitlab_component_errors:ratio_30m{component="proxy",type="praefect"}
+          last_over_time(gitlab_component_errors:ratio_30m{component="proxy",type="praefect"}[2m])
           > (6 * 0.000500)
         )
       )
       and on(type,component)
       (
-        sum by(type,component) (gitlab_component_ops:rate_6h{component="proxy",type="praefect"}) >= 0.16667
+        sum by(type,component) (
+          last_over_time(gitlab_component_ops:rate_6h{component="proxy",type="praefect"}[2m])
+        ) >= 0.16667
       )
     for: 2m
     labels:
@@ -4927,18 +4951,20 @@ groups:
     expr: |
       (
         (
-          gitlab_component_apdex:ratio_1h{component="replicator_queue",type="praefect"}
+          last_over_time(gitlab_component_apdex:ratio_1h{component="replicator_queue",type="praefect"}[2m])
           < (1 - 14.4 * 0.005000)
         )
         and
         (
-          gitlab_component_apdex:ratio_5m{component="replicator_queue",type="praefect"}
+          last_over_time(gitlab_component_apdex:ratio_5m{component="replicator_queue",type="praefect"}[2m])
           < (1 - 14.4 * 0.005000)
         )
       )
       and on(type,component)
       (
-        sum by(type,component) (gitlab_component_ops:rate_1h{component="replicator_queue",type="praefect"}) >= 1
+        sum by(type,component) (
+          last_over_time(gitlab_component_ops:rate_1h{component="replicator_queue",type="praefect"}[2m])
+        ) >= 1
       )
     for: 2m
     labels:
@@ -4978,18 +5004,20 @@ groups:
     expr: |
       (
         (
-          gitlab_component_apdex:ratio_6h{component="replicator_queue",type="praefect"}
+          last_over_time(gitlab_component_apdex:ratio_6h{component="replicator_queue",type="praefect"}[2m])
           < (1 - 6 * 0.005000)
         )
         and
         (
-          gitlab_component_apdex:ratio_30m{component="replicator_queue",type="praefect"}
+          last_over_time(gitlab_component_apdex:ratio_30m{component="replicator_queue",type="praefect"}[2m])
           < (1 - 6 * 0.005000)
         )
       )
       and on(type,component)
       (
-        sum by(type,component) (gitlab_component_ops:rate_6h{component="replicator_queue",type="praefect"}) >= 0.16667
+        sum by(type,component) (
+          last_over_time(gitlab_component_ops:rate_6h{component="replicator_queue",type="praefect"}[2m])
+        ) >= 0.16667
       )
     for: 2m
     labels:
@@ -5101,18 +5129,20 @@ groups:
     expr: |
       (
         (
-          gitlab_component_apdex:ratio_1h{component="server",type="registry"}
+          last_over_time(gitlab_component_apdex:ratio_1h{component="server",type="registry"}[2m])
           < (1 - 14.4 * 0.003000)
         )
         and
         (
-          gitlab_component_apdex:ratio_5m{component="server",type="registry"}
+          last_over_time(gitlab_component_apdex:ratio_5m{component="server",type="registry"}[2m])
           < (1 - 14.4 * 0.003000)
         )
       )
       and on(type,component)
       (
-        sum by(type,component) (gitlab_component_ops:rate_1h{component="server",type="registry"}) >= 1
+        sum by(type,component) (
+          last_over_time(gitlab_component_ops:rate_1h{component="server",type="registry"}[2m])
+        ) >= 1
       )
     for: 2m
     labels:
@@ -5151,18 +5181,20 @@ groups:
     expr: |
       (
         (
-          gitlab_component_apdex:ratio_6h{component="server",type="registry"}
+          last_over_time(gitlab_component_apdex:ratio_6h{component="server",type="registry"}[2m])
           < (1 - 6 * 0.003000)
         )
         and
         (
-          gitlab_component_apdex:ratio_30m{component="server",type="registry"}
+          last_over_time(gitlab_component_apdex:ratio_30m{component="server",type="registry"}[2m])
           < (1 - 6 * 0.003000)
         )
       )
       and on(type,component)
       (
-        sum by(type,component) (gitlab_component_ops:rate_6h{component="server",type="registry"}) >= 0.16667
+        sum by(type,component) (
+          last_over_time(gitlab_component_ops:rate_6h{component="server",type="registry"}[2m])
+        ) >= 0.16667
       )
     for: 2m
     labels:
@@ -5198,18 +5230,20 @@ groups:
     expr: |
       (
         (
-          gitlab_component_errors:ratio_1h{component="server",type="registry"}
+          last_over_time(gitlab_component_errors:ratio_1h{component="server",type="registry"}[2m])
           > (14.4 * 0.000100)
         )
         and
         (
-          gitlab_component_errors:ratio_5m{component="server",type="registry"}
+          last_over_time(gitlab_component_errors:ratio_5m{component="server",type="registry"}[2m])
           > (14.4 * 0.000100)
         )
       )
       and on(type,component)
       (
-        sum by(type,component) (gitlab_component_ops:rate_1h{component="server",type="registry"}) >= 1
+        sum by(type,component) (
+          last_over_time(gitlab_component_ops:rate_1h{component="server",type="registry"}[2m])
+        ) >= 1
       )
     for: 2m
     labels:
@@ -5245,18 +5279,20 @@ groups:
     expr: |
       (
         (
-          gitlab_component_errors:ratio_6h{component="server",type="registry"}
+          last_over_time(gitlab_component_errors:ratio_6h{component="server",type="registry"}[2m])
           > (6 * 0.000100)
         )
         and
         (
-          gitlab_component_errors:ratio_30m{component="server",type="registry"}
+          last_over_time(gitlab_component_errors:ratio_30m{component="server",type="registry"}[2m])
           > (6 * 0.000100)
         )
       )
       and on(type,component)
       (
-        sum by(type,component) (gitlab_component_ops:rate_6h{component="server",type="registry"}) >= 0.16667
+        sum by(type,component) (
+          last_over_time(gitlab_component_ops:rate_6h{component="server",type="registry"}[2m])
+        ) >= 0.16667
       )
     for: 2m
     labels:
@@ -5366,18 +5402,20 @@ groups:
     expr: |
       (
         (
-          gitlab_component_errors:ratio_1h{component="email_receiver",type="sidekiq"}
+          last_over_time(gitlab_component_errors:ratio_1h{component="email_receiver",type="sidekiq"}[2m])
           > (14.4 * 0.300000)
         )
         and
         (
-          gitlab_component_errors:ratio_5m{component="email_receiver",type="sidekiq"}
+          last_over_time(gitlab_component_errors:ratio_5m{component="email_receiver",type="sidekiq"}[2m])
           > (14.4 * 0.300000)
         )
       )
       and on(type,component)
       (
-        sum by(type,component) (gitlab_component_ops:rate_1h{component="email_receiver",type="sidekiq"}) >= 1
+        sum by(type,component) (
+          last_over_time(gitlab_component_ops:rate_1h{component="email_receiver",type="sidekiq"}[2m])
+        ) >= 1
       )
     for: 2m
     labels:
@@ -5413,18 +5451,20 @@ groups:
     expr: |
       (
         (
-          gitlab_component_errors:ratio_6h{component="email_receiver",type="sidekiq"}
+          last_over_time(gitlab_component_errors:ratio_6h{component="email_receiver",type="sidekiq"}[2m])
           > (6 * 0.300000)
         )
         and
         (
-          gitlab_component_errors:ratio_30m{component="email_receiver",type="sidekiq"}
+          last_over_time(gitlab_component_errors:ratio_30m{component="email_receiver",type="sidekiq"}[2m])
           > (6 * 0.300000)
         )
       )
       and on(type,component)
       (
-        sum by(type,component) (gitlab_component_ops:rate_6h{component="email_receiver",type="sidekiq"}) >= 0.16667
+        sum by(type,component) (
+          last_over_time(gitlab_component_ops:rate_6h{component="email_receiver",type="sidekiq"}[2m])
+        ) >= 0.16667
       )
     for: 2m
     labels:
@@ -5543,18 +5583,20 @@ groups:
     expr: |
       (
         (
-          gitlab_component_apdex:ratio_1h{component="shard_catchall",type="sidekiq"}
+          last_over_time(gitlab_component_apdex:ratio_1h{component="shard_catchall",type="sidekiq"}[2m])
           < (1 - 14.4 * 0.005000)
         )
         and
         (
-          gitlab_component_apdex:ratio_5m{component="shard_catchall",type="sidekiq"}
+          last_over_time(gitlab_component_apdex:ratio_5m{component="shard_catchall",type="sidekiq"}[2m])
           < (1 - 14.4 * 0.005000)
         )
       )
       and on(type,component)
       (
-        sum by(type,component) (gitlab_component_ops:rate_1h{component="shard_catchall",type="sidekiq"}) >= 1
+        sum by(type,component) (
+          last_over_time(gitlab_component_ops:rate_1h{component="shard_catchall",type="sidekiq"}[2m])
+        ) >= 1
       )
     for: 2m
     labels:
@@ -5606,18 +5648,20 @@ groups:
     expr: |
       (
         (
-          gitlab_component_apdex:ratio_6h{component="shard_catchall",type="sidekiq"}
+          last_over_time(gitlab_component_apdex:ratio_6h{component="shard_catchall",type="sidekiq"}[2m])
           < (1 - 6 * 0.005000)
         )
         and
         (
-          gitlab_component_apdex:ratio_30m{component="shard_catchall",type="sidekiq"}
+          last_over_time(gitlab_component_apdex:ratio_30m{component="shard_catchall",type="sidekiq"}[2m])
           < (1 - 6 * 0.005000)
         )
       )
       and on(type,component)
       (
-        sum by(type,component) (gitlab_component_ops:rate_6h{component="shard_catchall",type="sidekiq"}) >= 0.16667
+        sum by(type,component) (
+          last_over_time(gitlab_component_ops:rate_6h{component="shard_catchall",type="sidekiq"}[2m])
+        ) >= 0.16667
       )
     for: 2m
     labels:
@@ -5654,18 +5698,20 @@ groups:
     expr: |
       (
         (
-          gitlab_component_errors:ratio_1h{component="shard_catchall",type="sidekiq"}
+          last_over_time(gitlab_component_errors:ratio_1h{component="shard_catchall",type="sidekiq"}[2m])
           > (14.4 * 0.005000)
         )
         and
         (
-          gitlab_component_errors:ratio_5m{component="shard_catchall",type="sidekiq"}
+          last_over_time(gitlab_component_errors:ratio_5m{component="shard_catchall",type="sidekiq"}[2m])
           > (14.4 * 0.005000)
         )
       )
       and on(type,component)
       (
-        sum by(type,component) (gitlab_component_ops:rate_1h{component="shard_catchall",type="sidekiq"}) >= 1
+        sum by(type,component) (
+          last_over_time(gitlab_component_ops:rate_1h{component="shard_catchall",type="sidekiq"}[2m])
+        ) >= 1
       )
     for: 2m
     labels:
@@ -5702,18 +5748,20 @@ groups:
     expr: |
       (
         (
-          gitlab_component_errors:ratio_6h{component="shard_catchall",type="sidekiq"}
+          last_over_time(gitlab_component_errors:ratio_6h{component="shard_catchall",type="sidekiq"}[2m])
           > (6 * 0.005000)
         )
         and
         (
-          gitlab_component_errors:ratio_30m{component="shard_catchall",type="sidekiq"}
+          last_over_time(gitlab_component_errors:ratio_30m{component="shard_catchall",type="sidekiq"}[2m])
           > (6 * 0.005000)
         )
       )
       and on(type,component)
       (
-        sum by(type,component) (gitlab_component_ops:rate_6h{component="shard_catchall",type="sidekiq"}) >= 0.16667
+        sum by(type,component) (
+          last_over_time(gitlab_component_ops:rate_6h{component="shard_catchall",type="sidekiq"}[2m])
+        ) >= 0.16667
       )
     for: 2m
     labels:
@@ -5825,18 +5873,20 @@ groups:
     expr: |
       (
         (
-          gitlab_component_apdex:ratio_1h{component="puma",type="webservice"}
+          last_over_time(gitlab_component_apdex:ratio_1h{component="puma",type="webservice"}[2m])
           < (1 - 14.4 * 0.002000)
         )
         and
         (
-          gitlab_component_apdex:ratio_5m{component="puma",type="webservice"}
+          last_over_time(gitlab_component_apdex:ratio_5m{component="puma",type="webservice"}[2m])
           < (1 - 14.4 * 0.002000)
         )
       )
       and on(type,component)
       (
-        sum by(type,component) (gitlab_component_ops:rate_1h{component="puma",type="webservice"}) >= 1
+        sum by(type,component) (
+          last_over_time(gitlab_component_ops:rate_1h{component="puma",type="webservice"}[2m])
+        ) >= 1
       )
     for: 2m
     labels:
@@ -5875,18 +5925,20 @@ groups:
     expr: |
       (
         (
-          gitlab_component_apdex:ratio_6h{component="puma",type="webservice"}
+          last_over_time(gitlab_component_apdex:ratio_6h{component="puma",type="webservice"}[2m])
           < (1 - 6 * 0.002000)
         )
         and
         (
-          gitlab_component_apdex:ratio_30m{component="puma",type="webservice"}
+          last_over_time(gitlab_component_apdex:ratio_30m{component="puma",type="webservice"}[2m])
           < (1 - 6 * 0.002000)
         )
       )
       and on(type,component)
       (
-        sum by(type,component) (gitlab_component_ops:rate_6h{component="puma",type="webservice"}) >= 0.16667
+        sum by(type,component) (
+          last_over_time(gitlab_component_ops:rate_6h{component="puma",type="webservice"}[2m])
+        ) >= 0.16667
       )
     for: 2m
     labels:
@@ -5922,18 +5974,20 @@ groups:
     expr: |
       (
         (
-          gitlab_component_errors:ratio_1h{component="puma",type="webservice"}
+          last_over_time(gitlab_component_errors:ratio_1h{component="puma",type="webservice"}[2m])
           > (14.4 * 0.000100)
         )
         and
         (
-          gitlab_component_errors:ratio_5m{component="puma",type="webservice"}
+          last_over_time(gitlab_component_errors:ratio_5m{component="puma",type="webservice"}[2m])
           > (14.4 * 0.000100)
         )
       )
       and on(type,component)
       (
-        sum by(type,component) (gitlab_component_ops:rate_1h{component="puma",type="webservice"}) >= 1
+        sum by(type,component) (
+          last_over_time(gitlab_component_ops:rate_1h{component="puma",type="webservice"}[2m])
+        ) >= 1
       )
     for: 2m
     labels:
@@ -5969,18 +6023,20 @@ groups:
     expr: |
       (
         (
-          gitlab_component_errors:ratio_6h{component="puma",type="webservice"}
+          last_over_time(gitlab_component_errors:ratio_6h{component="puma",type="webservice"}[2m])
           > (6 * 0.000100)
         )
         and
         (
-          gitlab_component_errors:ratio_30m{component="puma",type="webservice"}
+          last_over_time(gitlab_component_errors:ratio_30m{component="puma",type="webservice"}[2m])
           > (6 * 0.000100)
         )
       )
       and on(type,component)
       (
-        sum by(type,component) (gitlab_component_ops:rate_6h{component="puma",type="webservice"}) >= 0.16667
+        sum by(type,component) (
+          last_over_time(gitlab_component_ops:rate_6h{component="puma",type="webservice"}[2m])
+        ) >= 0.16667
       )
     for: 2m
     labels:
@@ -6089,18 +6145,20 @@ groups:
     expr: |
       (
         (
-          gitlab_component_apdex:ratio_1h{component="workhorse",type="webservice"}
+          last_over_time(gitlab_component_apdex:ratio_1h{component="workhorse",type="webservice"}[2m])
           < (1 - 14.4 * 0.002000)
         )
         and
         (
-          gitlab_component_apdex:ratio_5m{component="workhorse",type="webservice"}
+          last_over_time(gitlab_component_apdex:ratio_5m{component="workhorse",type="webservice"}[2m])
           < (1 - 14.4 * 0.002000)
         )
       )
       and on(type,component)
       (
-        sum by(type,component) (gitlab_component_ops:rate_1h{component="workhorse",type="webservice"}) >= 1
+        sum by(type,component) (
+          last_over_time(gitlab_component_ops:rate_1h{component="workhorse",type="webservice"}[2m])
+        ) >= 1
       )
     for: 2m
     labels:
@@ -6139,18 +6197,20 @@ groups:
     expr: |
       (
         (
-          gitlab_component_apdex:ratio_6h{component="workhorse",type="webservice"}
+          last_over_time(gitlab_component_apdex:ratio_6h{component="workhorse",type="webservice"}[2m])
           < (1 - 6 * 0.002000)
         )
         and
         (
-          gitlab_component_apdex:ratio_30m{component="workhorse",type="webservice"}
+          last_over_time(gitlab_component_apdex:ratio_30m{component="workhorse",type="webservice"}[2m])
           < (1 - 6 * 0.002000)
         )
       )
       and on(type,component)
       (
-        sum by(type,component) (gitlab_component_ops:rate_6h{component="workhorse",type="webservice"}) >= 0.16667
+        sum by(type,component) (
+          last_over_time(gitlab_component_ops:rate_6h{component="workhorse",type="webservice"}[2m])
+        ) >= 0.16667
       )
     for: 2m
     labels:
@@ -6187,18 +6247,20 @@ groups:
     expr: |
       (
         (
-          gitlab_component_errors:ratio_1h{component="workhorse",type="webservice"}
+          last_over_time(gitlab_component_errors:ratio_1h{component="workhorse",type="webservice"}[2m])
           > (14.4 * 0.000100)
         )
         and
         (
-          gitlab_component_errors:ratio_5m{component="workhorse",type="webservice"}
+          last_over_time(gitlab_component_errors:ratio_5m{component="workhorse",type="webservice"}[2m])
           > (14.4 * 0.000100)
         )
       )
       and on(type,component)
       (
-        sum by(type,component) (gitlab_component_ops:rate_1h{component="workhorse",type="webservice"}) >= 1
+        sum by(type,component) (
+          last_over_time(gitlab_component_ops:rate_1h{component="workhorse",type="webservice"}[2m])
+        ) >= 1
       )
     for: 2m
     labels:
@@ -6235,18 +6297,20 @@ groups:
     expr: |
       (
         (
-          gitlab_component_errors:ratio_6h{component="workhorse",type="webservice"}
+          last_over_time(gitlab_component_errors:ratio_6h{component="workhorse",type="webservice"}[2m])
           > (6 * 0.000100)
         )
         and
         (
-          gitlab_component_errors:ratio_30m{component="workhorse",type="webservice"}
+          last_over_time(gitlab_component_errors:ratio_30m{component="workhorse",type="webservice"}[2m])
           > (6 * 0.000100)
         )
       )
       and on(type,component)
       (
-        sum by(type,component) (gitlab_component_ops:rate_6h{component="workhorse",type="webservice"}) >= 0.16667
+        sum by(type,component) (
+          last_over_time(gitlab_component_ops:rate_6h{component="workhorse",type="webservice"}[2m])
+        ) >= 0.16667
       )
     for: 2m
     labels:

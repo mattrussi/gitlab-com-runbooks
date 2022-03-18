@@ -115,18 +115,20 @@ groups:
     expr: |
       (
         (
-          gitlab_component_apdex:ratio_1h{component="rails_redis_client",monitor="global",type="redis-tracechunks"}
+          last_over_time(gitlab_component_apdex:ratio_1h{component="rails_redis_client",monitor="global",type="redis-tracechunks"}[2m])
           < (1 - 14.4 * 0.000100)
         )
         and
         (
-          gitlab_component_apdex:ratio_5m{component="rails_redis_client",monitor="global",type="redis-tracechunks"}
+          last_over_time(gitlab_component_apdex:ratio_5m{component="rails_redis_client",monitor="global",type="redis-tracechunks"}[2m])
           < (1 - 14.4 * 0.000100)
         )
       )
       and on(env,environment,tier,type,stage,component)
       (
-        sum by(env,environment,tier,type,stage,component) (gitlab_component_ops:rate_1h{component="rails_redis_client",monitor="global",type="redis-tracechunks"}) >= 1
+        sum by(env,environment,tier,type,stage,component) (
+          last_over_time(gitlab_component_ops:rate_1h{component="rails_redis_client",monitor="global",type="redis-tracechunks"}[2m])
+        ) >= 1
       )
   - alert: RedisTracechunksServiceRailsRedisClientApdexSLOViolation
     for: 2m
@@ -168,18 +170,20 @@ groups:
     expr: |
       (
         (
-          gitlab_component_apdex:ratio_6h{component="rails_redis_client",monitor="global",type="redis-tracechunks"}
+          last_over_time(gitlab_component_apdex:ratio_6h{component="rails_redis_client",monitor="global",type="redis-tracechunks"}[2m])
           < (1 - 6 * 0.000100)
         )
         and
         (
-          gitlab_component_apdex:ratio_30m{component="rails_redis_client",monitor="global",type="redis-tracechunks"}
+          last_over_time(gitlab_component_apdex:ratio_30m{component="rails_redis_client",monitor="global",type="redis-tracechunks"}[2m])
           < (1 - 6 * 0.000100)
         )
       )
       and on(env,environment,tier,type,stage,component)
       (
-        sum by(env,environment,tier,type,stage,component) (gitlab_component_ops:rate_6h{component="rails_redis_client",monitor="global",type="redis-tracechunks"}) >= 0.16667
+        sum by(env,environment,tier,type,stage,component) (
+          last_over_time(gitlab_component_ops:rate_6h{component="rails_redis_client",monitor="global",type="redis-tracechunks"}[2m])
+        ) >= 0.16667
       )
   - alert: RedisTracechunksServiceRailsRedisClientErrorSLOViolation
     for: 2m
@@ -218,18 +222,20 @@ groups:
     expr: |
       (
         (
-          gitlab_component_errors:ratio_1h{component="rails_redis_client",monitor="global",type="redis-tracechunks"}
+          last_over_time(gitlab_component_errors:ratio_1h{component="rails_redis_client",monitor="global",type="redis-tracechunks"}[2m])
           > (14.4 * 0.001000)
         )
         and
         (
-          gitlab_component_errors:ratio_5m{component="rails_redis_client",monitor="global",type="redis-tracechunks"}
+          last_over_time(gitlab_component_errors:ratio_5m{component="rails_redis_client",monitor="global",type="redis-tracechunks"}[2m])
           > (14.4 * 0.001000)
         )
       )
       and on(env,environment,tier,type,stage,component)
       (
-        sum by(env,environment,tier,type,stage,component) (gitlab_component_ops:rate_1h{component="rails_redis_client",monitor="global",type="redis-tracechunks"}) >= 1
+        sum by(env,environment,tier,type,stage,component) (
+          last_over_time(gitlab_component_ops:rate_1h{component="rails_redis_client",monitor="global",type="redis-tracechunks"}[2m])
+        ) >= 1
       )
   - alert: RedisTracechunksServiceRailsRedisClientErrorSLOViolation
     for: 2m
@@ -268,18 +274,20 @@ groups:
     expr: |
       (
         (
-          gitlab_component_errors:ratio_6h{component="rails_redis_client",monitor="global",type="redis-tracechunks"}
+          last_over_time(gitlab_component_errors:ratio_6h{component="rails_redis_client",monitor="global",type="redis-tracechunks"}[2m])
           > (6 * 0.001000)
         )
         and
         (
-          gitlab_component_errors:ratio_30m{component="rails_redis_client",monitor="global",type="redis-tracechunks"}
+          last_over_time(gitlab_component_errors:ratio_30m{component="rails_redis_client",monitor="global",type="redis-tracechunks"}[2m])
           > (6 * 0.001000)
         )
       )
       and on(env,environment,tier,type,stage,component)
       (
-        sum by(env,environment,tier,type,stage,component) (gitlab_component_ops:rate_6h{component="rails_redis_client",monitor="global",type="redis-tracechunks"}) >= 0.16667
+        sum by(env,environment,tier,type,stage,component) (
+          last_over_time(gitlab_component_ops:rate_6h{component="rails_redis_client",monitor="global",type="redis-tracechunks"}[2m])
+        ) >= 0.16667
       )
   - alert: RedisTracechunksServiceRailsRedisClientTrafficCessation
     for: 5m

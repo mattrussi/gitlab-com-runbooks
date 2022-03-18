@@ -82,6 +82,7 @@ local apdexAlertsForSLI(
         thresholdSLOValue=thresholdSLOValue,
         windows=[windowDuration],
         operationRateWindowDuration=windowDuration,
+        alertForDuration=alertForDurationWithDefault
       ),
       'for': alertForDurationWithDefault,
       labels: labelsForAlert(severity, aggregationSet, 'apdex', 'slo_violation', windowDuration) + extraLabels,
@@ -125,6 +126,7 @@ local errorAlertsForSLI(
         thresholdSLOValue=1 - thresholdSLOValue,
         windows=[windowDuration],
         operationRateWindowDuration=windowDuration,
+        alertForDuration=alertForDurationWithDefault
       ),
       'for': alertForDurationWithDefault,
       labels: labelsForAlert(severity, aggregationSet, 'error', 'slo_violation', windowDuration) + extraLabels,

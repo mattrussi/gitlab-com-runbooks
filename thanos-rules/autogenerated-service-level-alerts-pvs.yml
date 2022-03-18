@@ -42,18 +42,20 @@ groups:
     expr: |
       (
         (
-          gitlab_component_apdex:ratio_1h{component="http",monitor="global",type="pvs"}
+          last_over_time(gitlab_component_apdex:ratio_1h{component="http",monitor="global",type="pvs"}[2m])
           < (1 - 14.4 * 0.001000)
         )
         and
         (
-          gitlab_component_apdex:ratio_5m{component="http",monitor="global",type="pvs"}
+          last_over_time(gitlab_component_apdex:ratio_5m{component="http",monitor="global",type="pvs"}[2m])
           < (1 - 14.4 * 0.001000)
         )
       )
       and on(env,environment,tier,type,stage,component)
       (
-        sum by(env,environment,tier,type,stage,component) (gitlab_component_ops:rate_1h{component="http",monitor="global",type="pvs"}) >= 1
+        sum by(env,environment,tier,type,stage,component) (
+          last_over_time(gitlab_component_ops:rate_1h{component="http",monitor="global",type="pvs"}[2m])
+        ) >= 1
       )
   - alert: PvsServiceHttpApdexSLOViolation
     for: 2m
@@ -92,18 +94,20 @@ groups:
     expr: |
       (
         (
-          gitlab_component_apdex:ratio_6h{component="http",monitor="global",type="pvs"}
+          last_over_time(gitlab_component_apdex:ratio_6h{component="http",monitor="global",type="pvs"}[2m])
           < (1 - 6 * 0.001000)
         )
         and
         (
-          gitlab_component_apdex:ratio_30m{component="http",monitor="global",type="pvs"}
+          last_over_time(gitlab_component_apdex:ratio_30m{component="http",monitor="global",type="pvs"}[2m])
           < (1 - 6 * 0.001000)
         )
       )
       and on(env,environment,tier,type,stage,component)
       (
-        sum by(env,environment,tier,type,stage,component) (gitlab_component_ops:rate_6h{component="http",monitor="global",type="pvs"}) >= 0.16667
+        sum by(env,environment,tier,type,stage,component) (
+          last_over_time(gitlab_component_ops:rate_6h{component="http",monitor="global",type="pvs"}[2m])
+        ) >= 0.16667
       )
   - alert: PvsServiceHttpErrorSLOViolation
     for: 2m
@@ -139,18 +143,20 @@ groups:
     expr: |
       (
         (
-          gitlab_component_errors:ratio_1h{component="http",monitor="global",type="pvs"}
+          last_over_time(gitlab_component_errors:ratio_1h{component="http",monitor="global",type="pvs"}[2m])
           > (14.4 * 0.001000)
         )
         and
         (
-          gitlab_component_errors:ratio_5m{component="http",monitor="global",type="pvs"}
+          last_over_time(gitlab_component_errors:ratio_5m{component="http",monitor="global",type="pvs"}[2m])
           > (14.4 * 0.001000)
         )
       )
       and on(env,environment,tier,type,stage,component)
       (
-        sum by(env,environment,tier,type,stage,component) (gitlab_component_ops:rate_1h{component="http",monitor="global",type="pvs"}) >= 1
+        sum by(env,environment,tier,type,stage,component) (
+          last_over_time(gitlab_component_ops:rate_1h{component="http",monitor="global",type="pvs"}[2m])
+        ) >= 1
       )
   - alert: PvsServiceHttpErrorSLOViolation
     for: 2m
@@ -186,18 +192,20 @@ groups:
     expr: |
       (
         (
-          gitlab_component_errors:ratio_6h{component="http",monitor="global",type="pvs"}
+          last_over_time(gitlab_component_errors:ratio_6h{component="http",monitor="global",type="pvs"}[2m])
           > (6 * 0.001000)
         )
         and
         (
-          gitlab_component_errors:ratio_30m{component="http",monitor="global",type="pvs"}
+          last_over_time(gitlab_component_errors:ratio_30m{component="http",monitor="global",type="pvs"}[2m])
           > (6 * 0.001000)
         )
       )
       and on(env,environment,tier,type,stage,component)
       (
-        sum by(env,environment,tier,type,stage,component) (gitlab_component_ops:rate_6h{component="http",monitor="global",type="pvs"}) >= 0.16667
+        sum by(env,environment,tier,type,stage,component) (
+          last_over_time(gitlab_component_ops:rate_6h{component="http",monitor="global",type="pvs"}[2m])
+        ) >= 0.16667
       )
   - alert: PvsServiceHttpTrafficCessation
     for: 5m

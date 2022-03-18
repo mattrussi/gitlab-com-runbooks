@@ -40,18 +40,20 @@ groups:
     expr: |
       (
         (
-          gitlab_component_errors:ratio_1h{component="pg_transactions",monitor="global",type="sentry"}
+          last_over_time(gitlab_component_errors:ratio_1h{component="pg_transactions",monitor="global",type="sentry"}[2m])
           > (14.4 * 0.010000)
         )
         and
         (
-          gitlab_component_errors:ratio_5m{component="pg_transactions",monitor="global",type="sentry"}
+          last_over_time(gitlab_component_errors:ratio_5m{component="pg_transactions",monitor="global",type="sentry"}[2m])
           > (14.4 * 0.010000)
         )
       )
       and on(env,environment,tier,type,stage,component)
       (
-        sum by(env,environment,tier,type,stage,component) (gitlab_component_ops:rate_1h{component="pg_transactions",monitor="global",type="sentry"}) >= 1
+        sum by(env,environment,tier,type,stage,component) (
+          last_over_time(gitlab_component_ops:rate_1h{component="pg_transactions",monitor="global",type="sentry"}[2m])
+        ) >= 1
       )
   - alert: SentryServicePgTransactionsErrorSLOViolation
     for: 2m
@@ -88,18 +90,20 @@ groups:
     expr: |
       (
         (
-          gitlab_component_errors:ratio_6h{component="pg_transactions",monitor="global",type="sentry"}
+          last_over_time(gitlab_component_errors:ratio_6h{component="pg_transactions",monitor="global",type="sentry"}[2m])
           > (6 * 0.010000)
         )
         and
         (
-          gitlab_component_errors:ratio_30m{component="pg_transactions",monitor="global",type="sentry"}
+          last_over_time(gitlab_component_errors:ratio_30m{component="pg_transactions",monitor="global",type="sentry"}[2m])
           > (6 * 0.010000)
         )
       )
       and on(env,environment,tier,type,stage,component)
       (
-        sum by(env,environment,tier,type,stage,component) (gitlab_component_ops:rate_6h{component="pg_transactions",monitor="global",type="sentry"}) >= 0.16667
+        sum by(env,environment,tier,type,stage,component) (
+          last_over_time(gitlab_component_ops:rate_6h{component="pg_transactions",monitor="global",type="sentry"}[2m])
+        ) >= 0.16667
       )
   - alert: SentryServicePgTransactionsTrafficCessation
     for: 5m
@@ -213,18 +217,20 @@ groups:
     expr: |
       (
         (
-          gitlab_component_apdex:ratio_1h{component="sentry_events",monitor="global",type="sentry"}
+          last_over_time(gitlab_component_apdex:ratio_1h{component="sentry_events",monitor="global",type="sentry"}[2m])
           < (1 - 14.4 * 0.010000)
         )
         and
         (
-          gitlab_component_apdex:ratio_5m{component="sentry_events",monitor="global",type="sentry"}
+          last_over_time(gitlab_component_apdex:ratio_5m{component="sentry_events",monitor="global",type="sentry"}[2m])
           < (1 - 14.4 * 0.010000)
         )
       )
       and on(env,environment,tier,type,stage,component)
       (
-        sum by(env,environment,tier,type,stage,component) (gitlab_component_ops:rate_1h{component="sentry_events",monitor="global",type="sentry"}) >= 1
+        sum by(env,environment,tier,type,stage,component) (
+          last_over_time(gitlab_component_ops:rate_1h{component="sentry_events",monitor="global",type="sentry"}[2m])
+        ) >= 1
       )
   - alert: SentryServiceSentryEventsApdexSLOViolation
     for: 2m
@@ -264,18 +270,20 @@ groups:
     expr: |
       (
         (
-          gitlab_component_apdex:ratio_6h{component="sentry_events",monitor="global",type="sentry"}
+          last_over_time(gitlab_component_apdex:ratio_6h{component="sentry_events",monitor="global",type="sentry"}[2m])
           < (1 - 6 * 0.010000)
         )
         and
         (
-          gitlab_component_apdex:ratio_30m{component="sentry_events",monitor="global",type="sentry"}
+          last_over_time(gitlab_component_apdex:ratio_30m{component="sentry_events",monitor="global",type="sentry"}[2m])
           < (1 - 6 * 0.010000)
         )
       )
       and on(env,environment,tier,type,stage,component)
       (
-        sum by(env,environment,tier,type,stage,component) (gitlab_component_ops:rate_6h{component="sentry_events",monitor="global",type="sentry"}) >= 0.16667
+        sum by(env,environment,tier,type,stage,component) (
+          last_over_time(gitlab_component_ops:rate_6h{component="sentry_events",monitor="global",type="sentry"}[2m])
+        ) >= 0.16667
       )
   - alert: SentryServiceSentryEventsErrorSLOViolation
     for: 2m
@@ -312,18 +320,20 @@ groups:
     expr: |
       (
         (
-          gitlab_component_errors:ratio_1h{component="sentry_events",monitor="global",type="sentry"}
+          last_over_time(gitlab_component_errors:ratio_1h{component="sentry_events",monitor="global",type="sentry"}[2m])
           > (14.4 * 0.010000)
         )
         and
         (
-          gitlab_component_errors:ratio_5m{component="sentry_events",monitor="global",type="sentry"}
+          last_over_time(gitlab_component_errors:ratio_5m{component="sentry_events",monitor="global",type="sentry"}[2m])
           > (14.4 * 0.010000)
         )
       )
       and on(env,environment,tier,type,stage,component)
       (
-        sum by(env,environment,tier,type,stage,component) (gitlab_component_ops:rate_1h{component="sentry_events",monitor="global",type="sentry"}) >= 1
+        sum by(env,environment,tier,type,stage,component) (
+          last_over_time(gitlab_component_ops:rate_1h{component="sentry_events",monitor="global",type="sentry"}[2m])
+        ) >= 1
       )
   - alert: SentryServiceSentryEventsErrorSLOViolation
     for: 2m
@@ -360,18 +370,20 @@ groups:
     expr: |
       (
         (
-          gitlab_component_errors:ratio_6h{component="sentry_events",monitor="global",type="sentry"}
+          last_over_time(gitlab_component_errors:ratio_6h{component="sentry_events",monitor="global",type="sentry"}[2m])
           > (6 * 0.010000)
         )
         and
         (
-          gitlab_component_errors:ratio_30m{component="sentry_events",monitor="global",type="sentry"}
+          last_over_time(gitlab_component_errors:ratio_30m{component="sentry_events",monitor="global",type="sentry"}[2m])
           > (6 * 0.010000)
         )
       )
       and on(env,environment,tier,type,stage,component)
       (
-        sum by(env,environment,tier,type,stage,component) (gitlab_component_ops:rate_6h{component="sentry_events",monitor="global",type="sentry"}) >= 0.16667
+        sum by(env,environment,tier,type,stage,component) (
+          last_over_time(gitlab_component_ops:rate_6h{component="sentry_events",monitor="global",type="sentry"}[2m])
+        ) >= 0.16667
       )
   - alert: SentryServiceSentryEventsTrafficCessation
     for: 5m

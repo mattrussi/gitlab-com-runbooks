@@ -40,18 +40,20 @@ groups:
     expr: |
       (
         (
-          gitlab_component_errors:ratio_1h{component="praefect_cloudsql",monitor="global",type="praefect"}
+          last_over_time(gitlab_component_errors:ratio_1h{component="praefect_cloudsql",monitor="global",type="praefect"}[2m])
           > (14.4 * 0.000500)
         )
         and
         (
-          gitlab_component_errors:ratio_5m{component="praefect_cloudsql",monitor="global",type="praefect"}
+          last_over_time(gitlab_component_errors:ratio_5m{component="praefect_cloudsql",monitor="global",type="praefect"}[2m])
           > (14.4 * 0.000500)
         )
       )
       and on(env,environment,tier,type,stage,component)
       (
-        sum by(env,environment,tier,type,stage,component) (gitlab_component_ops:rate_1h{component="praefect_cloudsql",monitor="global",type="praefect"}) >= 1
+        sum by(env,environment,tier,type,stage,component) (
+          last_over_time(gitlab_component_ops:rate_1h{component="praefect_cloudsql",monitor="global",type="praefect"}[2m])
+        ) >= 1
       )
   - alert: PraefectServicePraefectCloudsqlErrorSLOViolation
     for: 2m
@@ -88,18 +90,20 @@ groups:
     expr: |
       (
         (
-          gitlab_component_errors:ratio_6h{component="praefect_cloudsql",monitor="global",type="praefect"}
+          last_over_time(gitlab_component_errors:ratio_6h{component="praefect_cloudsql",monitor="global",type="praefect"}[2m])
           > (6 * 0.000500)
         )
         and
         (
-          gitlab_component_errors:ratio_30m{component="praefect_cloudsql",monitor="global",type="praefect"}
+          last_over_time(gitlab_component_errors:ratio_30m{component="praefect_cloudsql",monitor="global",type="praefect"}[2m])
           > (6 * 0.000500)
         )
       )
       and on(env,environment,tier,type,stage,component)
       (
-        sum by(env,environment,tier,type,stage,component) (gitlab_component_ops:rate_6h{component="praefect_cloudsql",monitor="global",type="praefect"}) >= 0.16667
+        sum by(env,environment,tier,type,stage,component) (
+          last_over_time(gitlab_component_ops:rate_6h{component="praefect_cloudsql",monitor="global",type="praefect"}[2m])
+        ) >= 0.16667
       )
   - alert: PraefectServicePraefectCloudsqlTrafficCessation
     for: 5m
@@ -209,18 +213,20 @@ groups:
     expr: |
       (
         (
-          gitlab_component_apdex:ratio_1h{component="proxy",monitor="global",type="praefect"}
+          last_over_time(gitlab_component_apdex:ratio_1h{component="proxy",monitor="global",type="praefect"}[2m])
           < (1 - 14.4 * 0.005000)
         )
         and
         (
-          gitlab_component_apdex:ratio_5m{component="proxy",monitor="global",type="praefect"}
+          last_over_time(gitlab_component_apdex:ratio_5m{component="proxy",monitor="global",type="praefect"}[2m])
           < (1 - 14.4 * 0.005000)
         )
       )
       and on(env,environment,tier,type,stage,component)
       (
-        sum by(env,environment,tier,type,stage,component) (gitlab_component_ops:rate_1h{component="proxy",monitor="global",type="praefect"}) >= 1
+        sum by(env,environment,tier,type,stage,component) (
+          last_over_time(gitlab_component_ops:rate_1h{component="proxy",monitor="global",type="praefect"}[2m])
+        ) >= 1
       )
   - alert: PraefectServiceProxyApdexSLOViolation
     for: 2m
@@ -260,18 +266,20 @@ groups:
     expr: |
       (
         (
-          gitlab_component_apdex:ratio_6h{component="proxy",monitor="global",type="praefect"}
+          last_over_time(gitlab_component_apdex:ratio_6h{component="proxy",monitor="global",type="praefect"}[2m])
           < (1 - 6 * 0.005000)
         )
         and
         (
-          gitlab_component_apdex:ratio_30m{component="proxy",monitor="global",type="praefect"}
+          last_over_time(gitlab_component_apdex:ratio_30m{component="proxy",monitor="global",type="praefect"}[2m])
           < (1 - 6 * 0.005000)
         )
       )
       and on(env,environment,tier,type,stage,component)
       (
-        sum by(env,environment,tier,type,stage,component) (gitlab_component_ops:rate_6h{component="proxy",monitor="global",type="praefect"}) >= 0.16667
+        sum by(env,environment,tier,type,stage,component) (
+          last_over_time(gitlab_component_ops:rate_6h{component="proxy",monitor="global",type="praefect"}[2m])
+        ) >= 0.16667
       )
   - alert: PraefectServiceProxyErrorSLOViolation
     for: 2m
@@ -308,18 +316,20 @@ groups:
     expr: |
       (
         (
-          gitlab_component_errors:ratio_1h{component="proxy",monitor="global",type="praefect"}
+          last_over_time(gitlab_component_errors:ratio_1h{component="proxy",monitor="global",type="praefect"}[2m])
           > (14.4 * 0.000500)
         )
         and
         (
-          gitlab_component_errors:ratio_5m{component="proxy",monitor="global",type="praefect"}
+          last_over_time(gitlab_component_errors:ratio_5m{component="proxy",monitor="global",type="praefect"}[2m])
           > (14.4 * 0.000500)
         )
       )
       and on(env,environment,tier,type,stage,component)
       (
-        sum by(env,environment,tier,type,stage,component) (gitlab_component_ops:rate_1h{component="proxy",monitor="global",type="praefect"}) >= 1
+        sum by(env,environment,tier,type,stage,component) (
+          last_over_time(gitlab_component_ops:rate_1h{component="proxy",monitor="global",type="praefect"}[2m])
+        ) >= 1
       )
   - alert: PraefectServiceProxyErrorSLOViolation
     for: 2m
@@ -356,18 +366,20 @@ groups:
     expr: |
       (
         (
-          gitlab_component_errors:ratio_6h{component="proxy",monitor="global",type="praefect"}
+          last_over_time(gitlab_component_errors:ratio_6h{component="proxy",monitor="global",type="praefect"}[2m])
           > (6 * 0.000500)
         )
         and
         (
-          gitlab_component_errors:ratio_30m{component="proxy",monitor="global",type="praefect"}
+          last_over_time(gitlab_component_errors:ratio_30m{component="proxy",monitor="global",type="praefect"}[2m])
           > (6 * 0.000500)
         )
       )
       and on(env,environment,tier,type,stage,component)
       (
-        sum by(env,environment,tier,type,stage,component) (gitlab_component_ops:rate_6h{component="proxy",monitor="global",type="praefect"}) >= 0.16667
+        sum by(env,environment,tier,type,stage,component) (
+          last_over_time(gitlab_component_ops:rate_6h{component="proxy",monitor="global",type="praefect"}[2m])
+        ) >= 0.16667
       )
   - alert: PraefectServiceProxyTrafficCessation
     for: 5m
@@ -477,18 +489,20 @@ groups:
     expr: |
       (
         (
-          gitlab_component_apdex:ratio_1h{component="replicator_queue",monitor="global",type="praefect"}
+          last_over_time(gitlab_component_apdex:ratio_1h{component="replicator_queue",monitor="global",type="praefect"}[2m])
           < (1 - 14.4 * 0.005000)
         )
         and
         (
-          gitlab_component_apdex:ratio_5m{component="replicator_queue",monitor="global",type="praefect"}
+          last_over_time(gitlab_component_apdex:ratio_5m{component="replicator_queue",monitor="global",type="praefect"}[2m])
           < (1 - 14.4 * 0.005000)
         )
       )
       and on(env,environment,tier,type,stage,component)
       (
-        sum by(env,environment,tier,type,stage,component) (gitlab_component_ops:rate_1h{component="replicator_queue",monitor="global",type="praefect"}) >= 1
+        sum by(env,environment,tier,type,stage,component) (
+          last_over_time(gitlab_component_ops:rate_1h{component="replicator_queue",monitor="global",type="praefect"}[2m])
+        ) >= 1
       )
   - alert: PraefectServiceReplicatorQueueApdexSLOViolation
     for: 2m
@@ -528,18 +542,20 @@ groups:
     expr: |
       (
         (
-          gitlab_component_apdex:ratio_6h{component="replicator_queue",monitor="global",type="praefect"}
+          last_over_time(gitlab_component_apdex:ratio_6h{component="replicator_queue",monitor="global",type="praefect"}[2m])
           < (1 - 6 * 0.005000)
         )
         and
         (
-          gitlab_component_apdex:ratio_30m{component="replicator_queue",monitor="global",type="praefect"}
+          last_over_time(gitlab_component_apdex:ratio_30m{component="replicator_queue",monitor="global",type="praefect"}[2m])
           < (1 - 6 * 0.005000)
         )
       )
       and on(env,environment,tier,type,stage,component)
       (
-        sum by(env,environment,tier,type,stage,component) (gitlab_component_ops:rate_6h{component="replicator_queue",monitor="global",type="praefect"}) >= 0.16667
+        sum by(env,environment,tier,type,stage,component) (
+          last_over_time(gitlab_component_ops:rate_6h{component="replicator_queue",monitor="global",type="praefect"}[2m])
+        ) >= 0.16667
       )
   - alert: PraefectServiceReplicatorQueueTrafficCessation
     for: 5m

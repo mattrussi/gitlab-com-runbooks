@@ -45,18 +45,20 @@ groups:
     expr: |
       (
         (
-          gitlab_component_apdex:ratio_1h{component="apiserver",monitor="global",type="kube"}
+          last_over_time(gitlab_component_apdex:ratio_1h{component="apiserver",monitor="global",type="kube"}[2m])
           < (1 - 14.4 * 0.000500)
         )
         and
         (
-          gitlab_component_apdex:ratio_5m{component="apiserver",monitor="global",type="kube"}
+          last_over_time(gitlab_component_apdex:ratio_5m{component="apiserver",monitor="global",type="kube"}[2m])
           < (1 - 14.4 * 0.000500)
         )
       )
       and on(env,environment,tier,type,stage,component)
       (
-        sum by(env,environment,tier,type,stage,component) (gitlab_component_ops:rate_1h{component="apiserver",monitor="global",type="kube"}) >= 1
+        sum by(env,environment,tier,type,stage,component) (
+          last_over_time(gitlab_component_ops:rate_1h{component="apiserver",monitor="global",type="kube"}[2m])
+        ) >= 1
       )
   - alert: KubeServiceApiserverApdexSLOViolation
     for: 2m
@@ -98,18 +100,20 @@ groups:
     expr: |
       (
         (
-          gitlab_component_apdex:ratio_6h{component="apiserver",monitor="global",type="kube"}
+          last_over_time(gitlab_component_apdex:ratio_6h{component="apiserver",monitor="global",type="kube"}[2m])
           < (1 - 6 * 0.000500)
         )
         and
         (
-          gitlab_component_apdex:ratio_30m{component="apiserver",monitor="global",type="kube"}
+          last_over_time(gitlab_component_apdex:ratio_30m{component="apiserver",monitor="global",type="kube"}[2m])
           < (1 - 6 * 0.000500)
         )
       )
       and on(env,environment,tier,type,stage,component)
       (
-        sum by(env,environment,tier,type,stage,component) (gitlab_component_ops:rate_6h{component="apiserver",monitor="global",type="kube"}) >= 0.16667
+        sum by(env,environment,tier,type,stage,component) (
+          last_over_time(gitlab_component_ops:rate_6h{component="apiserver",monitor="global",type="kube"}[2m])
+        ) >= 0.16667
       )
   - alert: KubeServiceApiserverErrorSLOViolation
     for: 2m
@@ -148,18 +152,20 @@ groups:
     expr: |
       (
         (
-          gitlab_component_errors:ratio_1h{component="apiserver",monitor="global",type="kube"}
+          last_over_time(gitlab_component_errors:ratio_1h{component="apiserver",monitor="global",type="kube"}[2m])
           > (14.4 * 0.000500)
         )
         and
         (
-          gitlab_component_errors:ratio_5m{component="apiserver",monitor="global",type="kube"}
+          last_over_time(gitlab_component_errors:ratio_5m{component="apiserver",monitor="global",type="kube"}[2m])
           > (14.4 * 0.000500)
         )
       )
       and on(env,environment,tier,type,stage,component)
       (
-        sum by(env,environment,tier,type,stage,component) (gitlab_component_ops:rate_1h{component="apiserver",monitor="global",type="kube"}) >= 1
+        sum by(env,environment,tier,type,stage,component) (
+          last_over_time(gitlab_component_ops:rate_1h{component="apiserver",monitor="global",type="kube"}[2m])
+        ) >= 1
       )
   - alert: KubeServiceApiserverErrorSLOViolation
     for: 2m
@@ -198,18 +204,20 @@ groups:
     expr: |
       (
         (
-          gitlab_component_errors:ratio_6h{component="apiserver",monitor="global",type="kube"}
+          last_over_time(gitlab_component_errors:ratio_6h{component="apiserver",monitor="global",type="kube"}[2m])
           > (6 * 0.000500)
         )
         and
         (
-          gitlab_component_errors:ratio_30m{component="apiserver",monitor="global",type="kube"}
+          last_over_time(gitlab_component_errors:ratio_30m{component="apiserver",monitor="global",type="kube"}[2m])
           > (6 * 0.000500)
         )
       )
       and on(env,environment,tier,type,stage,component)
       (
-        sum by(env,environment,tier,type,stage,component) (gitlab_component_ops:rate_6h{component="apiserver",monitor="global",type="kube"}) >= 0.16667
+        sum by(env,environment,tier,type,stage,component) (
+          last_over_time(gitlab_component_ops:rate_6h{component="apiserver",monitor="global",type="kube"}[2m])
+        ) >= 0.16667
       )
   - alert: KubeServiceApiserverTrafficCessation
     for: 5m
@@ -324,18 +332,20 @@ groups:
     expr: |
       (
         (
-          gitlab_component_errors:ratio_1h{component="cluster_scaleups",monitor="global",type="kube"}
+          last_over_time(gitlab_component_errors:ratio_1h{component="cluster_scaleups",monitor="global",type="kube"}[2m])
           > (14.4 * 0.000500)
         )
         and
         (
-          gitlab_component_errors:ratio_5m{component="cluster_scaleups",monitor="global",type="kube"}
+          last_over_time(gitlab_component_errors:ratio_5m{component="cluster_scaleups",monitor="global",type="kube"}[2m])
           > (14.4 * 0.000500)
         )
       )
       and on(env,environment,tier,type,stage,component)
       (
-        sum by(env,environment,tier,type,stage,component) (gitlab_component_ops:rate_1h{component="cluster_scaleups",monitor="global",type="kube"}) >= 1
+        sum by(env,environment,tier,type,stage,component) (
+          last_over_time(gitlab_component_ops:rate_1h{component="cluster_scaleups",monitor="global",type="kube"}[2m])
+        ) >= 1
       )
   - alert: KubeServiceClusterScaleupsErrorSLOViolation
     for: 2m
@@ -376,16 +386,18 @@ groups:
     expr: |
       (
         (
-          gitlab_component_errors:ratio_6h{component="cluster_scaleups",monitor="global",type="kube"}
+          last_over_time(gitlab_component_errors:ratio_6h{component="cluster_scaleups",monitor="global",type="kube"}[2m])
           > (6 * 0.000500)
         )
         and
         (
-          gitlab_component_errors:ratio_30m{component="cluster_scaleups",monitor="global",type="kube"}
+          last_over_time(gitlab_component_errors:ratio_30m{component="cluster_scaleups",monitor="global",type="kube"}[2m])
           > (6 * 0.000500)
         )
       )
       and on(env,environment,tier,type,stage,component)
       (
-        sum by(env,environment,tier,type,stage,component) (gitlab_component_ops:rate_6h{component="cluster_scaleups",monitor="global",type="kube"}) >= 0.16667
+        sum by(env,environment,tier,type,stage,component) (
+          last_over_time(gitlab_component_ops:rate_6h{component="cluster_scaleups",monitor="global",type="kube"}[2m])
+        ) >= 0.16667
       )

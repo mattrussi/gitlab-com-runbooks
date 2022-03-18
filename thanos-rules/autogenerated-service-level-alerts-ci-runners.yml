@@ -36,18 +36,20 @@ groups:
     expr: |
       (
         (
-          gitlab_component_errors:ratio_1h{component="loadbalancer",monitor="global",type="ci-runners"}
+          last_over_time(gitlab_component_errors:ratio_1h{component="loadbalancer",monitor="global",type="ci-runners"}[2m])
           > (14.4 * 0.001000)
         )
         and
         (
-          gitlab_component_errors:ratio_5m{component="loadbalancer",monitor="global",type="ci-runners"}
+          last_over_time(gitlab_component_errors:ratio_5m{component="loadbalancer",monitor="global",type="ci-runners"}[2m])
           > (14.4 * 0.001000)
         )
       )
       and on(env,environment,tier,type,stage,component)
       (
-        sum by(env,environment,tier,type,stage,component) (gitlab_component_ops:rate_1h{component="loadbalancer",monitor="global",type="ci-runners"}) >= 1
+        sum by(env,environment,tier,type,stage,component) (
+          last_over_time(gitlab_component_ops:rate_1h{component="loadbalancer",monitor="global",type="ci-runners"}[2m])
+        ) >= 1
       )
   - alert: CiRunnersServiceLoadbalancerErrorSLOViolation
     for: 2m
@@ -80,18 +82,20 @@ groups:
     expr: |
       (
         (
-          gitlab_component_errors:ratio_6h{component="loadbalancer",monitor="global",type="ci-runners"}
+          last_over_time(gitlab_component_errors:ratio_6h{component="loadbalancer",monitor="global",type="ci-runners"}[2m])
           > (6 * 0.001000)
         )
         and
         (
-          gitlab_component_errors:ratio_30m{component="loadbalancer",monitor="global",type="ci-runners"}
+          last_over_time(gitlab_component_errors:ratio_30m{component="loadbalancer",monitor="global",type="ci-runners"}[2m])
           > (6 * 0.001000)
         )
       )
       and on(env,environment,tier,type,stage,component)
       (
-        sum by(env,environment,tier,type,stage,component) (gitlab_component_ops:rate_6h{component="loadbalancer",monitor="global",type="ci-runners"}) >= 0.16667
+        sum by(env,environment,tier,type,stage,component) (
+          last_over_time(gitlab_component_ops:rate_6h{component="loadbalancer",monitor="global",type="ci-runners"}[2m])
+        ) >= 0.16667
       )
   - alert: CiRunnersServiceLoadbalancerTrafficCessation
     for: 5m
@@ -192,18 +196,20 @@ groups:
     expr: |
       (
         (
-          gitlab_component_errors:ratio_1h{component="polling",monitor="global",type="ci-runners"}
+          last_over_time(gitlab_component_errors:ratio_1h{component="polling",monitor="global",type="ci-runners"}[2m])
           > (14.4 * 0.001000)
         )
         and
         (
-          gitlab_component_errors:ratio_5m{component="polling",monitor="global",type="ci-runners"}
+          last_over_time(gitlab_component_errors:ratio_5m{component="polling",monitor="global",type="ci-runners"}[2m])
           > (14.4 * 0.001000)
         )
       )
       and on(env,environment,tier,type,stage,component)
       (
-        sum by(env,environment,tier,type,stage,component) (gitlab_component_ops:rate_1h{component="polling",monitor="global",type="ci-runners"}) >= 1
+        sum by(env,environment,tier,type,stage,component) (
+          last_over_time(gitlab_component_ops:rate_1h{component="polling",monitor="global",type="ci-runners"}[2m])
+        ) >= 1
       )
   - alert: CiRunnersServicePollingErrorSLOViolation
     for: 2m
@@ -242,18 +248,20 @@ groups:
     expr: |
       (
         (
-          gitlab_component_errors:ratio_6h{component="polling",monitor="global",type="ci-runners"}
+          last_over_time(gitlab_component_errors:ratio_6h{component="polling",monitor="global",type="ci-runners"}[2m])
           > (6 * 0.001000)
         )
         and
         (
-          gitlab_component_errors:ratio_30m{component="polling",monitor="global",type="ci-runners"}
+          last_over_time(gitlab_component_errors:ratio_30m{component="polling",monitor="global",type="ci-runners"}[2m])
           > (6 * 0.001000)
         )
       )
       and on(env,environment,tier,type,stage,component)
       (
-        sum by(env,environment,tier,type,stage,component) (gitlab_component_ops:rate_6h{component="polling",monitor="global",type="ci-runners"}) >= 0.16667
+        sum by(env,environment,tier,type,stage,component) (
+          last_over_time(gitlab_component_ops:rate_6h{component="polling",monitor="global",type="ci-runners"}[2m])
+        ) >= 0.16667
       )
   - alert: CiRunnersServicePollingTrafficCessation
     for: 5m
@@ -370,18 +378,20 @@ groups:
     expr: |
       (
         (
-          gitlab_component_apdex:ratio_1h{component="queuing_queries_duration",monitor="global",type="ci-runners"}
+          last_over_time(gitlab_component_apdex:ratio_1h{component="queuing_queries_duration",monitor="global",type="ci-runners"}[2m])
           < (1 - 14.4 * 0.001000)
         )
         and
         (
-          gitlab_component_apdex:ratio_5m{component="queuing_queries_duration",monitor="global",type="ci-runners"}
+          last_over_time(gitlab_component_apdex:ratio_5m{component="queuing_queries_duration",monitor="global",type="ci-runners"}[2m])
           < (1 - 14.4 * 0.001000)
         )
       )
       and on(env,environment,tier,type,stage,component)
       (
-        sum by(env,environment,tier,type,stage,component) (gitlab_component_ops:rate_1h{component="queuing_queries_duration",monitor="global",type="ci-runners"}) >= 1
+        sum by(env,environment,tier,type,stage,component) (
+          last_over_time(gitlab_component_ops:rate_1h{component="queuing_queries_duration",monitor="global",type="ci-runners"}[2m])
+        ) >= 1
       )
   - alert: CiRunnersServiceQueuingQueriesDurationApdexSLOViolation
     for: 2m
@@ -424,18 +434,20 @@ groups:
     expr: |
       (
         (
-          gitlab_component_apdex:ratio_6h{component="queuing_queries_duration",monitor="global",type="ci-runners"}
+          last_over_time(gitlab_component_apdex:ratio_6h{component="queuing_queries_duration",monitor="global",type="ci-runners"}[2m])
           < (1 - 6 * 0.001000)
         )
         and
         (
-          gitlab_component_apdex:ratio_30m{component="queuing_queries_duration",monitor="global",type="ci-runners"}
+          last_over_time(gitlab_component_apdex:ratio_30m{component="queuing_queries_duration",monitor="global",type="ci-runners"}[2m])
           < (1 - 6 * 0.001000)
         )
       )
       and on(env,environment,tier,type,stage,component)
       (
-        sum by(env,environment,tier,type,stage,component) (gitlab_component_ops:rate_6h{component="queuing_queries_duration",monitor="global",type="ci-runners"}) >= 0.16667
+        sum by(env,environment,tier,type,stage,component) (
+          last_over_time(gitlab_component_ops:rate_6h{component="queuing_queries_duration",monitor="global",type="ci-runners"}[2m])
+        ) >= 0.16667
       )
   - alert: CiRunnersServiceQueuingQueriesDurationTrafficCessation
     for: 5m
@@ -555,18 +567,20 @@ groups:
     expr: |
       (
         (
-          gitlab_component_apdex:ratio_1h{component="shared_runner_queues",monitor="global",type="ci-runners"}
+          last_over_time(gitlab_component_apdex:ratio_1h{component="shared_runner_queues",monitor="global",type="ci-runners"}[2m])
           < (1 - 14.4 * 0.030000)
         )
         and
         (
-          gitlab_component_apdex:ratio_5m{component="shared_runner_queues",monitor="global",type="ci-runners"}
+          last_over_time(gitlab_component_apdex:ratio_5m{component="shared_runner_queues",monitor="global",type="ci-runners"}[2m])
           < (1 - 14.4 * 0.030000)
         )
       )
       and on(env,environment,tier,type,stage,component)
       (
-        sum by(env,environment,tier,type,stage,component) (gitlab_component_ops:rate_1h{component="shared_runner_queues",monitor="global",type="ci-runners"}) >= 1
+        sum by(env,environment,tier,type,stage,component) (
+          last_over_time(gitlab_component_ops:rate_1h{component="shared_runner_queues",monitor="global",type="ci-runners"}[2m])
+        ) >= 1
       )
   - alert: CiRunnersServiceSharedRunnerQueuesApdexSLOViolation
     for: 2m
@@ -610,18 +624,20 @@ groups:
     expr: |
       (
         (
-          gitlab_component_apdex:ratio_6h{component="shared_runner_queues",monitor="global",type="ci-runners"}
+          last_over_time(gitlab_component_apdex:ratio_6h{component="shared_runner_queues",monitor="global",type="ci-runners"}[2m])
           < (1 - 6 * 0.030000)
         )
         and
         (
-          gitlab_component_apdex:ratio_30m{component="shared_runner_queues",monitor="global",type="ci-runners"}
+          last_over_time(gitlab_component_apdex:ratio_30m{component="shared_runner_queues",monitor="global",type="ci-runners"}[2m])
           < (1 - 6 * 0.030000)
         )
       )
       and on(env,environment,tier,type,stage,component)
       (
-        sum by(env,environment,tier,type,stage,component) (gitlab_component_ops:rate_6h{component="shared_runner_queues",monitor="global",type="ci-runners"}) >= 0.16667
+        sum by(env,environment,tier,type,stage,component) (
+          last_over_time(gitlab_component_ops:rate_6h{component="shared_runner_queues",monitor="global",type="ci-runners"}[2m])
+        ) >= 0.16667
       )
   - alert: CiRunnersServiceSharedRunnerQueuesErrorSLOViolation
     for: 2m
@@ -662,18 +678,20 @@ groups:
     expr: |
       (
         (
-          gitlab_component_errors:ratio_1h{component="shared_runner_queues",monitor="global",type="ci-runners"}
+          last_over_time(gitlab_component_errors:ratio_1h{component="shared_runner_queues",monitor="global",type="ci-runners"}[2m])
           > (14.4 * 0.001000)
         )
         and
         (
-          gitlab_component_errors:ratio_5m{component="shared_runner_queues",monitor="global",type="ci-runners"}
+          last_over_time(gitlab_component_errors:ratio_5m{component="shared_runner_queues",monitor="global",type="ci-runners"}[2m])
           > (14.4 * 0.001000)
         )
       )
       and on(env,environment,tier,type,stage,component)
       (
-        sum by(env,environment,tier,type,stage,component) (gitlab_component_ops:rate_1h{component="shared_runner_queues",monitor="global",type="ci-runners"}) >= 1
+        sum by(env,environment,tier,type,stage,component) (
+          last_over_time(gitlab_component_ops:rate_1h{component="shared_runner_queues",monitor="global",type="ci-runners"}[2m])
+        ) >= 1
       )
   - alert: CiRunnersServiceSharedRunnerQueuesErrorSLOViolation
     for: 2m
@@ -714,18 +732,20 @@ groups:
     expr: |
       (
         (
-          gitlab_component_errors:ratio_6h{component="shared_runner_queues",monitor="global",type="ci-runners"}
+          last_over_time(gitlab_component_errors:ratio_6h{component="shared_runner_queues",monitor="global",type="ci-runners"}[2m])
           > (6 * 0.001000)
         )
         and
         (
-          gitlab_component_errors:ratio_30m{component="shared_runner_queues",monitor="global",type="ci-runners"}
+          last_over_time(gitlab_component_errors:ratio_30m{component="shared_runner_queues",monitor="global",type="ci-runners"}[2m])
           > (6 * 0.001000)
         )
       )
       and on(env,environment,tier,type,stage,component)
       (
-        sum by(env,environment,tier,type,stage,component) (gitlab_component_ops:rate_6h{component="shared_runner_queues",monitor="global",type="ci-runners"}) >= 0.16667
+        sum by(env,environment,tier,type,stage,component) (
+          last_over_time(gitlab_component_ops:rate_6h{component="shared_runner_queues",monitor="global",type="ci-runners"}[2m])
+        ) >= 0.16667
       )
   - alert: CiRunnersServiceSharedRunnerQueuesTrafficCessation
     for: 5m
@@ -840,18 +860,20 @@ groups:
     expr: |
       (
         (
-          gitlab_component_errors:ratio_1h{component="trace_archiving_ci_jobs",monitor="global",type="ci-runners"}
+          last_over_time(gitlab_component_errors:ratio_1h{component="trace_archiving_ci_jobs",monitor="global",type="ci-runners"}[2m])
           > (14.4 * 0.001000)
         )
         and
         (
-          gitlab_component_errors:ratio_5m{component="trace_archiving_ci_jobs",monitor="global",type="ci-runners"}
+          last_over_time(gitlab_component_errors:ratio_5m{component="trace_archiving_ci_jobs",monitor="global",type="ci-runners"}[2m])
           > (14.4 * 0.001000)
         )
       )
       and on(env,environment,tier,type,stage,component)
       (
-        sum by(env,environment,tier,type,stage,component) (gitlab_component_ops:rate_1h{component="trace_archiving_ci_jobs",monitor="global",type="ci-runners"}) >= 1
+        sum by(env,environment,tier,type,stage,component) (
+          last_over_time(gitlab_component_ops:rate_1h{component="trace_archiving_ci_jobs",monitor="global",type="ci-runners"}[2m])
+        ) >= 1
       )
   - alert: CiRunnersServiceTraceArchivingCiJobsErrorSLOViolation
     for: 2m
@@ -888,18 +910,20 @@ groups:
     expr: |
       (
         (
-          gitlab_component_errors:ratio_6h{component="trace_archiving_ci_jobs",monitor="global",type="ci-runners"}
+          last_over_time(gitlab_component_errors:ratio_6h{component="trace_archiving_ci_jobs",monitor="global",type="ci-runners"}[2m])
           > (6 * 0.001000)
         )
         and
         (
-          gitlab_component_errors:ratio_30m{component="trace_archiving_ci_jobs",monitor="global",type="ci-runners"}
+          last_over_time(gitlab_component_errors:ratio_30m{component="trace_archiving_ci_jobs",monitor="global",type="ci-runners"}[2m])
           > (6 * 0.001000)
         )
       )
       and on(env,environment,tier,type,stage,component)
       (
-        sum by(env,environment,tier,type,stage,component) (gitlab_component_ops:rate_6h{component="trace_archiving_ci_jobs",monitor="global",type="ci-runners"}) >= 0.16667
+        sum by(env,environment,tier,type,stage,component) (
+          last_over_time(gitlab_component_ops:rate_6h{component="trace_archiving_ci_jobs",monitor="global",type="ci-runners"}[2m])
+        ) >= 0.16667
       )
   - alert: CiRunnersServiceTraceArchivingCiJobsTrafficCessation
     for: 5m

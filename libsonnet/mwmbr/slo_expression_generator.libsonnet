@@ -4,11 +4,12 @@ local joins = import 'promql/joins.libsonnet';
 local selectors = import 'promql/selectors.libsonnet';
 
 {
-  termGenerators:: {
+  termGenerators(sampleDuration):: {
     fixed(thresholdValue)::
       function(metric, metricSelector, comparator, factor, invertedForApdex=false)
         local formatConfig = {
           metric: metric,
+          sampleDuration: sampleDuration,
           inverseThresholdValue: 1 - thresholdValue,
           thresholdValue: thresholdValue,
           metricSelector: selectors.serializeHash(metricSelector),
@@ -18,12 +19,12 @@ local selectors = import 'promql/selectors.libsonnet';
 
         if invertedForApdex then
           |||
-            %(metric)s{%(metricSelector)s}
+            last_over_time(%(metric)s{%(metricSelector)s}[%(sampleDuration)s])
             %(comparator)s (1 - %(factor)g * %(inverseThresholdValue)f)
           ||| % formatConfig
         else
           |||
-            %(metric)s{%(metricSelector)s}
+            last_over_time(%(metric)s{%(metricSelector)s}[%(sampleDuration)s])
             %(comparator)s (%(factor)g * %(thresholdValue)f)
           ||| % formatConfig,
 
@@ -31,6 +32,7 @@ local selectors = import 'promql/selectors.libsonnet';
       function(metric, metricSelector, comparator, factor, invertedForApdex=false)
         local formatConfig = {
           metric: metric,
+          sampleDuration: sampleDuration,
           thresholdSLOMetricAggregationLabels: aggregations.serialize(thresholdSLOMetricAggregationLabels),
           thresholdSLOMetricName: thresholdSLOMetricName,
           sloSelector: selectors.serializeHash(sloSelector),
@@ -41,7 +43,7 @@ local selectors = import 'promql/selectors.libsonnet';
 
         if invertedForApdex then
           |||
-            %(metric)s{%(metricSelector)s}
+            last_over_time(%(metric)s{%(metricSelector)s}[%(sampleDuration)s])
             %(comparator)s on(%(thresholdSLOMetricAggregationLabels)s) group_left()
             (
               1 -
@@ -52,7 +54,7 @@ local selectors = import 'promql/selectors.libsonnet';
           ||| % formatConfig
         else
           |||
-            %(metric)s{%(metricSelector)s}
+            last_over_time(%(metric)s{%(metricSelector)s}[%(sampleDuration)s])
             %(comparator)s on(%(thresholdSLOMetricAggregationLabels)s) group_left()
             (
               %(factor)g * (
