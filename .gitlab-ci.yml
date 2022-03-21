@@ -12,6 +12,11 @@ include:
   - project: 'gitlab-com/gl-infra/common-ci-tasks'
     file: asdf-tool-versions.yml
 
+  # Import the danger-review job
+  - project: 'gitlab-org/quality/pipeline-common'
+    file:
+      - '/ci/danger-review.yml'
+
 stages:
   - notify
   - images
@@ -172,17 +177,10 @@ verify:
   script:
     - make verify
 
-danger:
-  stage: test
-  script:
+danger-review:
+  before_script:
     - gem install bundler --no-document -v $BUNDLER_VERSION
-    - bundle install --with=test
-    - bundle exec danger --fail-on-errors=true --verbose
-  only:
-    variables:
-      - $CI_PROJECT_URL =~ /^https:\/\/gitlab\.com\/.*/
-    refs:
-      - merge_requests
+    - bundle install --with=danger
 
 rubocop:
   extends: .default-job-rules
