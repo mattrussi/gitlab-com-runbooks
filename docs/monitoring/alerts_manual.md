@@ -156,6 +156,9 @@ fqdn                    sync.geo.gitlab.com
 mountpoint              /var/opt/gitlab
 ```
 * Set a duration, an owner and a comment.
+* In the comment field, link to either an infradev issue or a related issue investigation with a DRI that was created from the incident.
+  Create these issues using the "Related Issue" section of the incident template.
+* Once a silence is created, the associated incident issue should be closed.
 
 *Note*: During a site-wide outage it may be desired to globally silence alerts while we investigate issues.
 To create one, navigate to https://alerts.gitlab.net/#/silences and add a silence for `env=gprd` with a duration of <= 1hour.
