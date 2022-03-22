@@ -9,18 +9,18 @@ The dashboards are kept in [`grafonnet`](https://github.com/grafana/grafonnet-li
 
 # File nomenclature
 
-We utilize the following file format: `dashboards/<service name, aka type>/<dashboard name>.dashboard.libsonnet`
+We utilize the following file format: `dashboards/<service name, aka type>/<dashboard name>.dashboard.jsonnet`
 
 Using this consistent schema makes URLs consistent, etc.
 
-Example, the Container Registry is of service type `registry`.  Therefore,
-`dashboards/registry/<somedashboard>.dashboard.libsonnet`
+Example, the Container Registry is of service type `registry`. Therefore,
+`dashboards/registry/<some dashboard>.dashboard.jsonnet`
 
 # Extending Grafana dashboards
 
 In order to extend Grafana dashboard you don't need to run Grafana locally. The most common scheme for extending dashboards is updating their definitions in your local repository and pushing changes to a testing playground on `dashboards.gitlab.net`.
 
-An alternative way to check simple changes, that does not require installing dependencies on your local machine, is using a Grafana Playground folder. All users with viewer access to dashboards.gitlab.net, (ie, all GitLab team members), have full permission to edit all dashboards in the [Playground Grafana folder](https://dashboards.gitlab.net/dashboards/f/playground-FOR-TESTING-ONLY/playground-for-testing-purposes-only). You can create dashboards in this folder using the Grafana Web UI.
+An alternative way to check simple changes, that does not require installing dependencies on your local machine, is using a Grafana Playground folder. All users with viewer access to `dashboards.gitlab.net`, (ie, all GitLab team members), have full permission to edit all dashboards in the [Playground Grafana folder](https://dashboards.gitlab.net/dashboards/f/playground-FOR-TESTING-ONLY/playground-for-testing-purposes-only). You can create dashboards in this folder using the Grafana Web UI.
 
 If you, however, need to extend or modify an existing dashboard and create a merge request to persist these modification, you need be able to quickly create a snapshot of a new version of a dashboard to validate your changes. In order to do that you first need to install dependencies required by the [test-dashboard.sh](test-dashboard.sh) script. You will also need to obtain an API token for Grafana from 1Password.
 
@@ -51,14 +51,11 @@ In order to modify a dashboard you will need to write code using [Grafonnet libr
 # Editing Files
 
 * Dashboards should be kept in files with the following name: `/dashboards/[grafana_folder_name]/[name].dashboard.jsonnet`
-  * `grafana_folder_name` refers to the grafana folder where the files will be uploaded to. Note that the folder must already be created.
-  * These can be created via `./create-grafana-folder.sh <grafana_folder_name> <friendly name>`
-  * Example: `./create-grafana-folder.sh registry 'Container Registry'`
-  * Note that if a folder already contains the name, it'll need to be removed or
-    renamed in order for the API to accept the creation of a new folder
+  * `grafana_folder_name` refers to the grafana folder where the files will be uploaded to.
+  * These folders are created by Terraform in CI. You can set a fancy folder title by adding it to the map `folder_titles` in `dashboards-terraform/folders.tf`.
 * Obtain a API key to the Grafana instance and export it in `GRAFANA_API_TOKEN`:
   * `export GRAFANA_API_TOKEN=123`
-* To upload the files, run `./dashboards/upload.sh`
+* To upload the dashboards, open a merge request, get it approved and merged, they will be created by Terraform in CI.
 
 ## Shared Dashboard Definition Files
 
