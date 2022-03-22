@@ -22,7 +22,7 @@ groups:
       grafana_variables: environment,stage
       promql_template_1: |
         sum by (env,environment,tier,stage) (
-          avg_over_time(stackdriver_cloudsql_database_cloudsql_googleapis_com_database_postgresql_transaction_count{database!~"postgres|template[0-9]+|default|cloudsqladmin",environment="{{ $labels.environment }}",stage="{{ $labels.stage }}",transaction_type="rollback"}[5m])
+          avg_over_time(stackdriver_cloudsql_database_cloudsql_googleapis_com_database_postgresql_transaction_count{database!~"postgres|template[0-9]+|default|cloudsqladmin",database_id!~".+:(praefect-db-|grafana-).+",environment="{{ $labels.environment }}",stage="{{ $labels.stage }}",transaction_type="rollback"}[5m])
         )
       runbook: docs/cloud-sql/README.md
     labels:
@@ -70,7 +70,7 @@ groups:
       grafana_variables: environment,stage
       promql_template_1: |
         sum by (env,environment,tier,stage) (
-          avg_over_time(stackdriver_cloudsql_database_cloudsql_googleapis_com_database_postgresql_transaction_count{database!~"postgres|template[0-9]+|default|cloudsqladmin",environment="{{ $labels.environment }}",stage="{{ $labels.stage }}",transaction_type="rollback"}[5m])
+          avg_over_time(stackdriver_cloudsql_database_cloudsql_googleapis_com_database_postgresql_transaction_count{database!~"postgres|template[0-9]+|default|cloudsqladmin",database_id!~".+:(praefect-db-|grafana-).+",environment="{{ $labels.environment }}",stage="{{ $labels.stage }}",transaction_type="rollback"}[5m])
         )
       runbook: docs/cloud-sql/README.md
     labels:
@@ -118,7 +118,7 @@ groups:
       grafana_variables: environment,stage
       promql_template_1: |
         sum by (env,environment,tier,stage) (
-          avg_over_time(stackdriver_cloudsql_database_cloudsql_googleapis_com_database_postgresql_transaction_count{database!~"postgres|template[0-9]+|default|cloudsqladmin",environment="{{ $labels.environment }}",stage="{{ $labels.stage }}"}[5m])
+          avg_over_time(stackdriver_cloudsql_database_cloudsql_googleapis_com_database_postgresql_transaction_count{database!~"postgres|template[0-9]+|default|cloudsqladmin",database_id!~".+:(praefect-db-|grafana-).+",environment="{{ $labels.environment }}",stage="{{ $labels.stage }}"}[5m])
         )
       runbook: docs/cloud-sql/README.md
     labels:
@@ -153,7 +153,7 @@ groups:
       grafana_variables: environment,stage
       promql_template_1: |
         sum by (env,environment,tier,stage) (
-          avg_over_time(stackdriver_cloudsql_database_cloudsql_googleapis_com_database_postgresql_transaction_count{database!~"postgres|template[0-9]+|default|cloudsqladmin",environment="{{ $labels.environment }}",stage="{{ $labels.stage }}"}[5m])
+          avg_over_time(stackdriver_cloudsql_database_cloudsql_googleapis_com_database_postgresql_transaction_count{database!~"postgres|template[0-9]+|default|cloudsqladmin",database_id!~".+:(praefect-db-|grafana-).+",environment="{{ $labels.environment }}",stage="{{ $labels.stage }}"}[5m])
         )
       runbook: docs/cloud-sql/README.md
     labels:

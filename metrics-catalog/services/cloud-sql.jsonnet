@@ -28,6 +28,7 @@ metricsCatalog.serviceDefinition({
       |||,
 
       local baseSelector = {
+        database_id: { nre: '.+:(praefect-db-|grafana-).+' },
         database: { nre: 'postgres|template[0-9]+|default|cloudsqladmin' },
       },
 
