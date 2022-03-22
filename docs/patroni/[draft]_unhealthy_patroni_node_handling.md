@@ -67,13 +67,7 @@ For example the following output show aprox. 19 GB (19382 MB) of lag in the `pat
 +------------------------------------------------+---------------+---------+---------+----+-----------+---------------------+
 | patroni-02-db-gstg.c.gitlab-staging-1.internal | 10.224.29.102 | Replica | running |  7 |         3 |                     |
 +------------------------------------------------+---------------+---------+---------+----+-----------+---------------------+
-| patroni-03-db-gstg.c.gitlab-staging-1.internal | 10.224.29.103 | Replica | running |  7 |         0 |                     |
-+------------------------------------------------+---------------+---------+---------+----+-----------+---------------------+
-| patroni-04-db-gstg.c.gitlab-staging-1.internal | 10.224.29.104 | Replica | running |  7 |         0 |                     |
-+------------------------------------------------+---------------+---------+---------+----+-----------+---------------------+
-| patroni-05-db-gstg.c.gitlab-staging-1.internal | 10.224.29.105 | Replica | running |  7 |         0 | nofailover: true    |
-+------------------------------------------------+---------------+---------+---------+----+-----------+---------------------+
-| patroni-06-db-gstg.c.gitlab-staging-1.internal | 10.224.29.106 | Replica | running |  7 |         3 | nofailover: true    |
+...
 +------------------------------------------------+---------------+---------+---------+----+-----------+---------------------+
 | patroni-07-db-gstg.c.gitlab-staging-1.internal | 10.224.29.107 | Replica | running |  7 |         0 |                     |
 +------------------------------------------------+---------------+---------+---------+----+-----------+---------------------+
@@ -81,7 +75,7 @@ For example the following output show aprox. 19 GB (19382 MB) of lag in the `pat
 +------------------------------------------------+---------------+---------+---------+----+-----------+---------------------+
 ```
 
-- Or you can look into the following Grafana Dashboard:
+- Or you can look into the following Grafana Dashboards:
 
 	- Lag time: https://dashboards.gitlab.net/d/000000144/postgresql-overview?orgId=1&viewPanel=16 
 	- Lag size: https://dashboards.gitlab.net/d/000000144/postgresql-overview?orgId=1&viewPanel=11
@@ -187,7 +181,7 @@ If you decide to relpace the unhealthy replica proceed to chapter 3.
 
 ### Step 1 - Stop patroni service on the node
 
-Now it is save to stop the patroni service on this node. This will also stop postgres and thus terminate all remaining db connections if there are still some. With the patroni service stopped, you should see this node vanish from the cluster after a while when you run `gitlab-patronictl list` on any of the other nodes. 
+Now it is safe to stop the patroni service on this node. This will also stop postgres and thus terminate all remaining db connections if there are still some. With the patroni service stopped, you should see this node vanish from the cluster after a while when you run `gitlab-patronictl list` on any of the other nodes. 
 
 We have alerts that fire when patroni is deemed to be down. Since this is an intentional change - either silence the alarm in advance and/or give a heads up to the EOC (by messaging `@sre-oncall` at `#infrastructure-lounge` Slack channel).
 
@@ -207,10 +201,19 @@ We have alerts that fire when patroni is deemed to be down. Since this is an int
 
 ### Step 2 - Shutdown the node
 
+
+- Find the instance name in GCloud
+
+	TODO
+
+	```
+	INSTANCE_NAME = $(gcloud compute instance describe ???????)
+	```
+
 - Stop the VM
 	
 	```
-	gcloud compute instances stop <vm_name> 
+	gcloud compute instances stop $INSTANCE_NAME
 	```
 
 
@@ -219,23 +222,22 @@ We have alerts that fire when patroni is deemed to be down. Since this is an int
 
 - List the VM Disks
 
+	TODO: get `zone` with disk and just disks where `disks.autoDelete=False`
+
 	```
-	INSTANCE_NAME="<VM_NAME>"
 	IFS=","
-	for disk in $(gcloud compute instances describe $INSTANCE_NAME --format="value(disks.source.basename().list())")
+	for (disk, zone) in $(gcloud compute instances describe $INSTANCE_NAME --format="value(disks.source.basename().list())")
 	do
 	    echo "Run: gcloud compute disks delete $disk"
 	done
 	```
-	
-	_To-Do: ideally we should just list the disks where `disks.autoDelete=False`_
 
 - Take note of the VM Disks to delete them latter
 
 - Delete the VM
 	
 	```
-	gcloud compute instances delete <VM_NAME>
+	gcloud compute instances delete $INSTANCE_NAME
 	```
 
 - Delete the Disks
@@ -246,6 +248,24 @@ We have alerts that fire when patroni is deemed to be down. Since this is an int
 	- https://console.cloud.google.com/compute/instances
 	- https://console.cloud.google.com/compute/disks
 
+
+- List the nodes in Chef	
+
+	```
+   ENVIRONMENT= <enter the environment>
+	cd <chef-repo directory>
+	knife node list | grep $ENVIRONMENT | grep patroni
+	```
+
+
+- Delete the node from Chef server	
+
+	```
+	knife node delete <NODE_NAME>
+	knife client delete <NODE_NAME>
+	
+	```
+
 ## Replacing the replica
 
 
@@ -253,13 +273,20 @@ We have alerts that fire when patroni is deemed to be down. Since this is an int
 
 - Go into the proper Terraform environment workspace, within `config-mgmt/environments/<environment>`
 
+- Resync your local repository if necessary and perform a `tf init --upgrade`
+
 - Perform a Terraform plan and check the resources that will be created
 
 	```
-	tf plan
+	tf plan -out resync-tf.plan
 	```
-
-- TF should create 4 resources for each removed Patroni Replica: 3 disks, 1 network interface and 1 VM/instance
+	
+- Check the Terraform change before applying
+   
+  TF should create 3 resources for each removed Patroni Replica: 2 disks and 1 VM/instance
+  - module.patroni.google_compute_disk.data_disk
+  - module.patroni.google_compute_disk.log_disk
+  - module.patroni.google_compute_instance.instance_with_attached_disk
 
 
 ### Step 2 - Recreate the removed node
@@ -267,9 +294,68 @@ We have alerts that fire when patroni is deemed to be down. Since this is an int
 - Create the new resources
 
 	```
-	tf apply 
+	tf apply "resync-tf.plan"
 	```
 
+- Wait for the resources to be created in GCloud
+
+- Check GCloud if the replaced node is listed
+
+- Check Chef nodes 	
+	
+	```
+	ENVIRONMENT= <enter the environment>
+	cd <chef-repo directory>
+	knife node list | grep $ENVIRONMENT | grep patroni
+	```
+
+- Check the instance Serial 1 port (Linux console) to see if there was any errors
+
+	Note: it happen a few times during tests that chef-client crashed during the bootstrap, but if you login in the host and manually call `sudo chef-client` it should finish the bootstrap setup.
+
+
+### Step 3 - Check Patroni, PGBouncer and PostgreSQL
+
+- Start Patroni in the node
+
+	```
+	systemctl enable patroni && systemctl start patroni
+	```
+
+### Step 4 - Check Patroni, PGBouncer and PostgreSQL
+
+- Login into the node and check if Patroni is running and in sync with Writer/Primary
+
+
+   ```
+   sudo gitlab-patronictl list
+
+	```
+
+- Checking for the node name in the list of replicas in Consul:
+
+    ```
+    dig @127.0.0.1 -p 8600 db-replica.service.consul. SRV
+    ```
+
+    If the name of the replaced host is in the list it should start receiving connections;
+    
+
+- Check Pgbouncer status:
+
+    ```
+    for c in /usr/local/bin/pgb-console*; do $c -c 'SHOW CLIENTS;'
+    ```
+
+- Check PostgreSQL for connected clients:
+
+    ```
+    gitlab-psql -qc \
+       "select count(*) from pg_stat_activity
+        where backend_type = 'client backend'
+        and pid <> pg_backend_pid()
+        and datname <> 'postgres'"
+    ```
 
 
 ## Automation Thoughts
