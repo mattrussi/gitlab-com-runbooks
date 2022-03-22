@@ -479,6 +479,8 @@ metricsCatalog.serviceDefinition({
     grafana_cloudsql: {
       userImpacting: true,
       featureCategory: 'not_owned',
+      trafficCessationAlertConfig: false,
+
       description: |||
         Grafana uses a GCP CloudSQL instance. This SLI represents SQL transactions to that service.
       |||,
