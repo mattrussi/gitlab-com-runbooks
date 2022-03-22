@@ -23,6 +23,7 @@ metricsCatalog.serviceDefinition({
   serviceLevelIndicators: {
     cloudsql_transactions: {
       userImpacting: true,
+      trafficCessationAlertConfig: false,
       description: |||
         This SLI represents SQL transactions in Cloud SQL databases.
       |||,
