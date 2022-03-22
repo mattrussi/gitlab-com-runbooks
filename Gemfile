@@ -16,9 +16,12 @@ group :development, :test do
   gem 'rspec-parameterized'
   gem 'rubocop'
   gem 'gitlab-styles', '~> 6.2', require: false
-  gem 'danger-gitlab'
   gem 'bigdecimal'
   gem 'webmock'
   gem 'super_diff'
   gem 'byebug'
+end
+
+group :danger do
+  gem 'gitlab-dangerfiles', '~> 3.0', require: false
 end
