@@ -51,7 +51,7 @@ local ratioQuery = |||
         -
         %(timeSpentQuery)s
       ||| % {
-        budgetSeconds: budgetSeconds(errorBudget.slaTarget, '28d'),
+        budgetSeconds: budgetSeconds(errorBudget().slaTarget, '28d'),
         timeSpentQuery: secondsSpent.query,
       },
       time: midnight,
