@@ -612,6 +612,7 @@ test-periodic-queries:
     - *avoid-maturity-model-generate-rule
     - if: '$CI_PIPELINE_SOURCE == "merge_request_event"'
       changes:
+        - libsonnet/**/*
         - periodic-thanos-queries/*
         - lib/periodic_queries.rb
         - lib/periodic_queries/**/*
