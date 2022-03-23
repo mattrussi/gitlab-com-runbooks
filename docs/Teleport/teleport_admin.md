@@ -6,6 +6,9 @@ This run book covers administration of the Teleport service from an infrastructu
 - See the [Teleport Database Console](Connect_to_Database_Console_via_Teleport.md) runbook if you'd like to connect to a database using teleport
 - See the [Teleport Approval Workflow](teleport_approval_workflow.md) runbook if you'd like to review and approve access requests
 
+## Quick fix
+
+In almost all cases, when the service is not responding, the safest and most effective fix is simply to restart either the teleport service (`sudo systemctl restart teleport`), or the entire teleport node.  The only reason not to reboot the node is that it will interrupt existing sessions, but if there is a problem establishing sessions, this won't be a problem.  We have seen a lot of cases where a restart provided a permanent fix to strange issues.  Try this first.
 ## Access Changes
 
 Access is configured in the [Teleport Chef Cookbook](https://gitlab.com/gitlab-cookbooks/gitlab-teleport)
@@ -49,7 +52,7 @@ tf apply --target module.teleport --target module.gcp-tcp-lb-teleport -target mo
 
 ### Secrets
 
-Once everything is up and running, the teleport server will have generated a new CA key.  The other nodes need this key in order to join the cluster.
+Once everything is up and running, the teleport server will have generated a new CA key.  The other nodes need this key in order to join the cluster. Note that there is no need to do this on an existing cluster. This only applies on a new cluster, or if you have run `tf destroy` and are building the cluster again from scratch.
 
 Get the key from the auth server:
 
@@ -71,3 +74,13 @@ For some reason, when deleting these nodes, sometimes the chef client and node r
 knife client delete console-ro-01-sv-gprd.c.gitlab-production.internal
 knife node delete console-ro-01-sv-gprd.c.gitlab-production.internal
 ```
+
+## Slack integration
+
+The slack integration connects to the authentication proxy as a user, using client certificate auth.  This client certificate does not yet auto-renew. You can check the expiration date with:
+
+```shell
+devin@teleport-01-inf-gstg.c.gitlab-staging-1.internal:~$ sudo openssl x509 -enddate -noout -in /var/lib/teleport/plugins/slack/auth.crt
+```
+
+Then follow the Teleport documentation for [generating a new cert](https://goteleport.com/docs/enterprise/workflow/ssh-approval-slack/#export-the-access-plugin-certificate) (you can't yet renew the existing one, but a new one works fine)
