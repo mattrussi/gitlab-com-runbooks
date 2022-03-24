@@ -475,46 +475,6 @@ metricsCatalog.serviceDefinition({
 
       significantLabels: ['operation', 'reason'],
     },
-
-    grafana_cloudsql: {
-      userImpacting: true,
-      featureCategory: 'not_owned',
-      trafficCessationAlertConfig: false,
-
-      description: |||
-        Grafana uses a GCP CloudSQL instance. This SLI represents SQL transactions to that service.
-      |||,
-
-      local baseSelector = {
-        job: 'stackdriver',
-        database_id: { re: '.+:grafana-.+' },
-        database: 'grafana',
-      },
-
-      staticLabels: {
-        tier: 'inf',
-        type: 'monitoring',
-      },
-
-      requestRate: gaugeMetric(
-        gauge='stackdriver_cloudsql_database_cloudsql_googleapis_com_database_postgresql_transaction_count',
-        selector=baseSelector
-      ),
-
-      errorRate: gaugeMetric(
-        gauge='stackdriver_cloudsql_database_cloudsql_googleapis_com_database_postgresql_transaction_count',
-        selector=baseSelector {
-          transaction_type: 'rollback',
-        }
-      ),
-
-      significantLabels: ['database_id'],
-      serviceAggregation: false,
-      toolingLinks: [
-        toolingLinks.cloudSQL('grafana-internal-f534', project='gitlab-ops'),
-        toolingLinks.cloudSQL('grafana-pre-2718', project='gitlab-pre'),
-      ],
-    },
   },
 
   skippedMaturityCriteria: maturityLevels.skip({
