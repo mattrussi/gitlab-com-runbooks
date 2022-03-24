@@ -253,18 +253,6 @@ groups:
     expr: "0.000100"
   - record: slo:min:events:gitlab_service_apdex:ratio
     labels:
-      component: cloudsql_transactions
-      tier: db
-      type: cloud-sql
-    expr: "0.995000"
-  - record: slo:max:events:gitlab_service_errors:ratio
-    labels:
-      component: cloudsql_transactions
-      tier: db
-      type: cloud-sql
-    expr: "0.000100"
-  - record: slo:min:events:gitlab_service_apdex:ratio
-    labels:
       tier: lb
       type: frontend
     expr: "0.999000"
@@ -712,18 +700,6 @@ groups:
     expr: "0.999000"
   - record: slo:max:events:gitlab_service_errors:ratio
     labels:
-      tier: inf
-      type: monitoring
-    expr: "0.001000"
-  - record: slo:min:events:gitlab_service_apdex:ratio
-    labels:
-      component: grafana_cloudsql
-      tier: inf
-      type: monitoring
-    expr: "0.999000"
-  - record: slo:max:events:gitlab_service_errors:ratio
-    labels:
-      component: grafana_cloudsql
       tier: inf
       type: monitoring
     expr: "0.001000"
@@ -2058,14 +2034,6 @@ groups:
     expr: "1"
   - record: gitlab_component_service:mapping
     labels:
-      component: cloudsql_transactions
-      regional_aggregation: "no"
-      service_aggregation: "yes"
-      tier: db
-      type: cloud-sql
-    expr: "1"
-  - record: gitlab_component_service:mapping
-    labels:
       component: consul
       regional_aggregation: "yes"
       service_aggregation: "yes"
@@ -2359,14 +2327,6 @@ groups:
       service_aggregation: "yes"
       tier: sv
       type: mailroom
-    expr: "1"
-  - record: gitlab_component_service:mapping
-    labels:
-      component: grafana_cloudsql
-      regional_aggregation: "no"
-      service_aggregation: "no"
-      tier: inf
-      type: monitoring
     expr: "1"
   - record: gitlab_component_service:mapping
     labels:
