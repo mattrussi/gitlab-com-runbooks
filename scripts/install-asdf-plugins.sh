@@ -58,6 +58,7 @@ install_plugin go-jsonnet
 install_plugin jb
 install_plugin shellcheck
 install_plugin shfmt
+install_plugin terraform
 install_plugin promtool https://gitlab.com/gitlab-com/gl-infra/asdf-promtool
 install_plugin thanos https://gitlab.com/gitlab-com/gl-infra/asdf-thanos
 install_plugin jsonnet-tool https://gitlab.com/gitlab-com/gl-infra/asdf-jsonnet-tool.git

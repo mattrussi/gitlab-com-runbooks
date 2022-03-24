@@ -525,9 +525,10 @@ docker_image_test:
     - docker build
       --build-arg GL_ASDF_GO_JSONNET_VERSION=${GL_ASDF_GO_JSONNET_VERSION}
       --build-arg GL_ASDF_JB_VERSION=${GL_ASDF_JB_VERSION}
-      --build-arg GL_ASDF_SHFMT_VERSION=${GL_ASDF_SHFMT_VERSION}
       --build-arg GL_ASDF_JSONNET_TOOL_VERSION=${GL_ASDF_JSONNET_TOOL_VERSION}
       --build-arg GL_ASDF_PROMTOOL_VERSION=${GL_ASDF_PROMTOOL_VERSION}
+      --build-arg GL_ASDF_SHFMT_VERSION=${GL_ASDF_SHFMT_VERSION}
+      --build-arg GL_ASDF_TERRAFORM_VERSION=${GL_ASDF_TERRAFORM_VERSION}
       --build-arg GL_ASDF_THANOS_VERSION=${GL_ASDF_THANOS_VERSION}
       .
   only:
@@ -548,9 +549,10 @@ docker_image_build:
     - docker build -t ${IMAGE}:$ci_image_tag -t ${IMAGE}:latest
         --build-arg GL_ASDF_GO_JSONNET_VERSION=${GL_ASDF_GO_JSONNET_VERSION}
         --build-arg GL_ASDF_JB_VERSION=${GL_ASDF_JB_VERSION}
-        --build-arg GL_ASDF_SHFMT_VERSION=${GL_ASDF_SHFMT_VERSION}
         --build-arg GL_ASDF_JSONNET_TOOL_VERSION=${GL_ASDF_JSONNET_TOOL_VERSION}
         --build-arg GL_ASDF_PROMTOOL_VERSION=${GL_ASDF_PROMTOOL_VERSION}
+        --build-arg GL_ASDF_SHFMT_VERSION=${GL_ASDF_SHFMT_VERSION}
+        --build-arg GL_ASDF_TERRAFORM_VERSION=${GL_ASDF_TERRAFORM_VERSION}
         --build-arg GL_ASDF_THANOS_VERSION=${GL_ASDF_THANOS_VERSION}
         .
     - docker push ${IMAGE}:latest
