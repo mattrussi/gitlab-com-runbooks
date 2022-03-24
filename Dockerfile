@@ -1,9 +1,12 @@
 ARG GL_ASDF_JSONNET_TOOL_VERSION
 ARG GL_ASDF_SHFMT_VERSION
+ARG GL_ASDF_TERRAFORM_VERSION
 
 FROM registry.gitlab.com/gitlab-com/gl-infra/jsonnet-tool:v${GL_ASDF_JSONNET_TOOL_VERSION} as jsonnet-tool-image
 
 FROM mvdan/shfmt:v${GL_ASDF_SHFMT_VERSION} as shfmt-image
+
+FROM hashicorp/terraform:${GL_ASDF_TERRAFORM_VERSION} AS terraform
 
 FROM golang:alpine AS go-jsonnet
 
@@ -69,6 +72,8 @@ COPY --from=go-jsonnet /build/bin/jsonnetfmt /bin/jsonnetfmt
 COPY --from=go-jsonnet /build/bin/jb /bin/jb
 
 COPY --from=jsonnet-tool-image /usr/local/bin/jsonnet-tool /bin/jsonnet-tool
+
+COPY --from=terraform /bin/terraform /bin/terraform
 
 RUN gem install --no-document json && \
     gem install --no-document yaml-lint && \
