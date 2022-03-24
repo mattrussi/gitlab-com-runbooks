@@ -66,9 +66,7 @@ metricsCatalog.serviceDefinition({
     goserver_op_service: {
       userImpacting: true,
       featureCategory: 'gitaly',
-      trafficCessationAlertConfig: {
-        component_node: { shard: { oneOf: ['default', 'praefect'] } },  // Only alert on the default and praefect shards
-      },
+      trafficCessationAlertConfig: false,
       description: |||
         This SLI monitors requests to Gitaly's OperationService, via its GRPC endpoint.
         OperationService methods are generally expected to be slower than other Gitaly endpoints
