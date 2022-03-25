@@ -77,12 +77,11 @@ test.suite({
     |||,
   },
 
-
   testErrorBurnWithThreshold: {
     actual: expression.multiburnRateErrorExpression(
       aggregationSet=testAggregationSet,
       metricSelectorHash={ type: 'web' },
-      minimumSamplesForMonitoring=3600 * 10,
+      requiredOpRate=10,
       thresholdSLOValue=0.01,
     ),
     expect: |||
@@ -178,7 +177,7 @@ test.suite({
       metricSelectorHash={ type: 'web' },
       thresholdSLOValue=0.99,
       windows=['1h'],
-      minimumSamplesForMonitoring=60,
+      requiredOpRate=0.01667,
       operationRateWindowDuration='1h',
     ),
     expect: |||
@@ -199,33 +198,4 @@ test.suite({
       )
     |||,
   },
-
-  testErrorBurnWithMinimumSamples3d: {
-    actual: expression.multiburnRateErrorExpression(
-      aggregationSet=testAggregationSet,
-      metricSelectorHash={ type: 'web' },
-      thresholdSLOValue=0.99,
-      windows=['3d'],
-      minimumSamplesForMonitoring=60,
-      operationRateWindowDuration='3d',
-    ),
-    expect: |||
-      (
-        (
-          error:ratio_3d{monitor="global",type="web"}
-          > (1 * 0.990000)
-        )
-        and
-        (
-          error:ratio_6h{monitor="global",type="web"}
-          > (1 * 0.990000)
-        )
-      )
-      and on(environment,tier,type,stage)
-      (
-        sum by(environment,tier,type,stage) (operation:rate_3d{monitor="global",type="web"}) >= 0.00023
-      )
-    |||,
-  },
-
 })
