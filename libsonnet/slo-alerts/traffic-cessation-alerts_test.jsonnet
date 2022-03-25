@@ -115,6 +115,7 @@ local alertDescriptorFixtureBase = {
   minimumSamplesForMonitoring: 10,
   alertForDuration: null,  // Use default for window...
   trafficCessationSelector: { stage: 'main' },  // Don't alert on cny stage traffic cessation for now
+  minimumSamplesForTrafficCessation: 300,
 };
 
 local alertDescriptorFixture1 = alertDescriptorFixtureBase {
@@ -166,10 +167,13 @@ test.suite({
     actual: std.map(function(f) f.expr, underTest(serviceFixture, serviceFixture.serviceLevelIndicators.test_sli_partial_cessation_alerts_with_selector, alertDescriptorFixture1)),
     expect: [|||
       operation:rate_30m{component="test_sli_partial_cessation_alerts_with_selector",monitor="global",selector1="value1",stage="main",type="service_type"} == 0
+      and
+      operation:rate_30m{component="test_sli_partial_cessation_alerts_with_selector",monitor="global",selector1="value1",stage="main",type="service_type"} offset 1h >= 0.16666666666666666
     |||, |||
       operation:rate_5m{component="test_sli_partial_cessation_alerts_with_selector",monitor="global",selector1="value1",stage="main",type="service_type"} offset 1h
       unless
       operation:rate_5m{component="test_sli_partial_cessation_alerts_with_selector",monitor="global",selector1="value1",stage="main",type="service_type"}
     |||],
   },
+
 })

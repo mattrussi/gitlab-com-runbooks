@@ -246,6 +246,8 @@ groups:
       user_impacting: "yes"
     expr: |
       gitlab_component_ops:rate_30m{component="database",monitor="global",stage="main",type="registry"} == 0
+      and
+      gitlab_component_ops:rate_30m{component="database",monitor="global",stage="main",type="registry"} offset 1h >= 0.16666666666666666
   - alert: RegistryServiceDatabaseTrafficAbsent
     for: 30m
     annotations:
@@ -318,6 +320,8 @@ groups:
       user_impacting: "yes"
     expr: |
       gitlab_regional_sli_ops:rate_30m{component="database",monitor="global",stage="main",type="registry"} == 0
+      and
+      gitlab_regional_sli_ops:rate_30m{component="database",monitor="global",stage="main",type="registry"} offset 1h >= 0.16666666666666666
   - alert: RegistryServiceDatabaseTrafficAbsentRegional
     for: 30m
     annotations:
@@ -794,6 +798,8 @@ groups:
       user_impacting: "no"
     expr: |
       gitlab_component_ops:rate_30m{component="garbagecollector",monitor="global",stage="main",type="registry"} == 0
+      and
+      gitlab_component_ops:rate_30m{component="garbagecollector",monitor="global",stage="main",type="registry"} offset 1h >= 0.16666666666666666
   - alert: RegistryServiceGarbagecollectorTrafficAbsent
     for: 30m
     annotations:
@@ -866,6 +872,8 @@ groups:
       user_impacting: "no"
     expr: |
       gitlab_regional_sli_ops:rate_30m{component="garbagecollector",monitor="global",stage="main",type="registry"} == 0
+      and
+      gitlab_regional_sli_ops:rate_30m{component="garbagecollector",monitor="global",stage="main",type="registry"} offset 1h >= 0.16666666666666666
   - alert: RegistryServiceGarbagecollectorTrafficAbsentRegional
     for: 30m
     annotations:
@@ -1114,6 +1122,8 @@ groups:
       user_impacting: "yes"
     expr: |
       gitlab_component_ops:rate_30m{component="loadbalancer",monitor="global",stage="main",type="registry"} == 0
+      and
+      gitlab_component_ops:rate_30m{component="loadbalancer",monitor="global",stage="main",type="registry"} offset 1h >= 0.16666666666666666
   - alert: RegistryServiceLoadbalancerTrafficAbsent
     for: 30m
     annotations:
@@ -1178,6 +1188,8 @@ groups:
       user_impacting: "yes"
     expr: |
       gitlab_regional_sli_ops:rate_30m{component="loadbalancer",monitor="global",stage="main",type="registry"} == 0
+      and
+      gitlab_regional_sli_ops:rate_30m{component="loadbalancer",monitor="global",stage="main",type="registry"} offset 1h >= 0.16666666666666666
   - alert: RegistryServiceLoadbalancerTrafficAbsentRegional
     for: 30m
     annotations:
@@ -1650,6 +1662,8 @@ groups:
       user_impacting: "yes"
     expr: |
       gitlab_component_ops:rate_30m{component="server",monitor="global",stage="main",type="registry"} == 0
+      and
+      gitlab_component_ops:rate_30m{component="server",monitor="global",stage="main",type="registry"} offset 1h >= 0.16666666666666666
   - alert: RegistryServiceServerTrafficAbsent
     for: 30m
     annotations:
@@ -1722,6 +1736,8 @@ groups:
       user_impacting: "yes"
     expr: |
       gitlab_regional_sli_ops:rate_30m{component="server",monitor="global",stage="main",type="registry"} == 0
+      and
+      gitlab_regional_sli_ops:rate_30m{component="server",monitor="global",stage="main",type="registry"} offset 1h >= 0.16666666666666666
   - alert: RegistryServiceServerTrafficAbsentRegional
     for: 30m
     annotations:
@@ -2002,6 +2018,8 @@ groups:
       user_impacting: "yes"
     expr: |
       gitlab_component_ops:rate_30m{component="server_route_manifest_reads",monitor="global",stage="main",type="registry"} == 0
+      and
+      gitlab_component_ops:rate_30m{component="server_route_manifest_reads",monitor="global",stage="main",type="registry"} offset 1h >= 0.16666666666666666
   - alert: RegistryServiceServerRouteManifestReadsTrafficAbsent
     for: 30m
     annotations:
@@ -2074,6 +2092,8 @@ groups:
       user_impacting: "yes"
     expr: |
       gitlab_regional_sli_ops:rate_30m{component="server_route_manifest_reads",monitor="global",stage="main",type="registry"} == 0
+      and
+      gitlab_regional_sli_ops:rate_30m{component="server_route_manifest_reads",monitor="global",stage="main",type="registry"} offset 1h >= 0.16666666666666666
   - alert: RegistryServiceServerRouteManifestReadsTrafficAbsentRegional
     for: 30m
     annotations:
@@ -2374,6 +2394,8 @@ groups:
       user_impacting: "yes"
     expr: |
       gitlab_component_ops:rate_30m{component="server_route_manifest_writes",monitor="global",stage="main",type="registry"} == 0
+      and
+      gitlab_component_ops:rate_30m{component="server_route_manifest_writes",monitor="global",stage="main",type="registry"} offset 1h >= 0.16666666666666666
   - alert: RegistryServiceServerRouteManifestWritesTrafficAbsent
     for: 30m
     annotations:
@@ -2454,6 +2476,8 @@ groups:
       user_impacting: "yes"
     expr: |
       gitlab_regional_sli_ops:rate_30m{component="server_route_manifest_writes",monitor="global",stage="main",type="registry"} == 0
+      and
+      gitlab_regional_sli_ops:rate_30m{component="server_route_manifest_writes",monitor="global",stage="main",type="registry"} offset 1h >= 0.16666666666666666
   - alert: RegistryServiceServerRouteManifestWritesTrafficAbsentRegional
     for: 30m
     annotations:

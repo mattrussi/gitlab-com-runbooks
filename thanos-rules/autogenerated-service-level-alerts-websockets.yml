@@ -214,6 +214,8 @@ groups:
       user_impacting: "yes"
     expr: |
       gitlab_component_ops:rate_30m{component="loadbalancer",monitor="global",stage="main",type="websockets"} == 0
+      and
+      gitlab_component_ops:rate_30m{component="loadbalancer",monitor="global",stage="main",type="websockets"} offset 1h >= 0.16666666666666666
   - alert: WebsocketsServiceLoadbalancerTrafficAbsent
     for: 30m
     annotations:
@@ -278,6 +280,8 @@ groups:
       user_impacting: "yes"
     expr: |
       gitlab_regional_sli_ops:rate_30m{component="loadbalancer",monitor="global",stage="main",type="websockets"} == 0
+      and
+      gitlab_regional_sli_ops:rate_30m{component="loadbalancer",monitor="global",stage="main",type="websockets"} offset 1h >= 0.16666666666666666
   - alert: WebsocketsServiceLoadbalancerTrafficAbsentRegional
     for: 30m
     annotations:
@@ -542,6 +546,8 @@ groups:
       user_impacting: "yes"
     expr: |
       gitlab_component_ops:rate_30m{component="puma",monitor="global",stage="main",type="websockets"} == 0
+      and
+      gitlab_component_ops:rate_30m{component="puma",monitor="global",stage="main",type="websockets"} offset 1h >= 0.16666666666666666
   - alert: WebsocketsServicePumaTrafficAbsent
     for: 30m
     annotations:
@@ -614,6 +620,8 @@ groups:
       user_impacting: "yes"
     expr: |
       gitlab_regional_sli_ops:rate_30m{component="puma",monitor="global",stage="main",type="websockets"} == 0
+      and
+      gitlab_regional_sli_ops:rate_30m{component="puma",monitor="global",stage="main",type="websockets"} offset 1h >= 0.16666666666666666
   - alert: WebsocketsServicePumaTrafficAbsentRegional
     for: 30m
     annotations:
@@ -882,6 +890,8 @@ groups:
       user_impacting: "yes"
     expr: |
       gitlab_component_ops:rate_30m{component="workhorse",monitor="global",stage="main",type="websockets"} == 0
+      and
+      gitlab_component_ops:rate_30m{component="workhorse",monitor="global",stage="main",type="websockets"} offset 1h >= 0.16666666666666666
   - alert: WebsocketsServiceWorkhorseTrafficAbsent
     for: 30m
     annotations:
@@ -954,6 +964,8 @@ groups:
       user_impacting: "yes"
     expr: |
       gitlab_regional_sli_ops:rate_30m{component="workhorse",monitor="global",stage="main",type="websockets"} == 0
+      and
+      gitlab_regional_sli_ops:rate_30m{component="workhorse",monitor="global",stage="main",type="websockets"} offset 1h >= 0.16666666666666666
   - alert: WebsocketsServiceWorkhorseTrafficAbsentRegional
     for: 30m
     annotations:

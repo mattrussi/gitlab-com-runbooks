@@ -4224,6 +4224,8 @@ groups:
         the past 30m
     expr: |
       gitlab_component_ops:rate_30m{component="goserver",type="gitaly"} == 0
+      and
+      gitlab_component_ops:rate_30m{component="goserver",type="gitaly"} offset 1h >= 0.16666666666666666
     for: 5m
     labels:
       aggregation: component
@@ -4505,6 +4507,8 @@ groups:
         traffic in the past 30m
     expr: |
       gitlab_component_ops:rate_30m{component="grpc_requests",type="gitlab-shell"} == 0
+      and
+      gitlab_component_ops:rate_30m{component="grpc_requests",type="gitlab-shell"} offset 1h >= 0.16666666666666666
     for: 5m
     labels:
       aggregation: component
@@ -4583,6 +4587,8 @@ groups:
         any traffic in the past 30m
     expr: |
       gitlab_component_ops:rate_30m{component="elasticsearch_searching",type="logging"} == 0
+      and
+      gitlab_component_ops:rate_30m{component="elasticsearch_searching",type="logging"} offset 1h >= 0.16666666666666666
     for: 5m
     labels:
       aggregation: component
@@ -4853,6 +4859,8 @@ groups:
         the past 30m
     expr: |
       gitlab_component_ops:rate_30m{component="proxy",type="praefect"} == 0
+      and
+      gitlab_component_ops:rate_30m{component="proxy",type="praefect"} offset 1h >= 0.16666666666666666
     for: 5m
     labels:
       aggregation: component
@@ -5025,6 +5033,8 @@ groups:
         traffic in the past 30m
     expr: |
       gitlab_component_ops:rate_30m{component="replicator_queue",type="praefect"} == 0
+      and
+      gitlab_component_ops:rate_30m{component="replicator_queue",type="praefect"} offset 1h >= 0.16666666666666666
     for: 5m
     labels:
       aggregation: component
@@ -5292,6 +5302,8 @@ groups:
         the past 30m
     expr: |
       gitlab_component_ops:rate_30m{component="server",type="registry"} == 0
+      and
+      gitlab_component_ops:rate_30m{component="server",type="registry"} offset 1h >= 0.16666666666666666
     for: 5m
     labels:
       aggregation: component
@@ -5459,6 +5471,8 @@ groups:
         in the past 30m
     expr: |
       gitlab_component_ops:rate_30m{component="email_receiver",type="sidekiq"} == 0
+      and
+      gitlab_component_ops:rate_30m{component="email_receiver",type="sidekiq"} offset 1h >= 0.16666666666666666
     for: 5m
     labels:
       aggregation: component
@@ -5749,6 +5763,8 @@ groups:
         in the past 30m
     expr: |
       gitlab_component_ops:rate_30m{component="shard_catchall",type="sidekiq"} == 0
+      and
+      gitlab_component_ops:rate_30m{component="shard_catchall",type="sidekiq"} offset 1h >= 0.16666666666666666
     for: 5m
     labels:
       aggregation: component
@@ -6016,6 +6032,8 @@ groups:
         the past 30m
     expr: |
       gitlab_component_ops:rate_30m{component="puma",type="webservice"} == 0
+      and
+      gitlab_component_ops:rate_30m{component="puma",type="webservice"} offset 1h >= 0.16666666666666666
     for: 5m
     labels:
       aggregation: component
@@ -6282,6 +6300,8 @@ groups:
         in the past 30m
     expr: |
       gitlab_component_ops:rate_30m{component="workhorse",type="webservice"} == 0
+      and
+      gitlab_component_ops:rate_30m{component="workhorse",type="webservice"} offset 1h >= 0.16666666666666666
     for: 5m
     labels:
       aggregation: component

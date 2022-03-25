@@ -6,8 +6,11 @@ Because of the way alerts in Prometheus are built, it treats "no-signal" and "no
 
 Two types of traffic cessation conditions are monitored:
 
-1. **Traffic Cessation**: traffic is non-absent, but zero for an extended period.
-1. **Traffic Absence**: traffic is absent (missing, non-zero) for an extended period.
+1. **Traffic Cessation**: traffic is non-absent, but zero for an
+   extended period. Only if there were more than 300 operations an
+   hour ago.
+1. **Traffic Absence**: traffic is absent (missing, non-zero) for an
+   extended period. Only if the metric was present an hour ago.
 
 ## Configuring Traffic Cessation Rules
 

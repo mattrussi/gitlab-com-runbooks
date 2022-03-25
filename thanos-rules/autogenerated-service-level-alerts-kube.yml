@@ -246,6 +246,8 @@ groups:
       user_impacting: "no"
     expr: |
       gitlab_component_ops:rate_30m{component="apiserver",monitor="global",stage="main",type="kube"} == 0
+      and
+      gitlab_component_ops:rate_30m{component="apiserver",monitor="global",stage="main",type="kube"} offset 1h >= 0.16666666666666666
   - alert: KubeServiceApiserverTrafficAbsent
     for: 30m
     annotations:
