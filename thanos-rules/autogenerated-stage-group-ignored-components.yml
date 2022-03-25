@@ -371,22 +371,6 @@ groups:
       product_stage: ecosystem
       stage_group: integrations
     expr: "1"
-- name: 'Stage group Ignored components: fulfillment - License'
-  interval: 1m
-  partial_response_strategy: warn
-  rules:
-  - record: gitlab:ignored_component:stage_group
-    labels:
-      component: graphql_queries
-      product_stage: fulfillment
-      stage_group: license
-    expr: "1"
-  - record: gitlab:ignored_component:stage_group
-    labels:
-      component: rails_requests
-      product_stage: fulfillment
-      stage_group: license
-    expr: "1"
 - name: 'Stage group Ignored components: enablement - Memory'
   interval: 1m
   partial_response_strategy: warn
@@ -538,6 +522,22 @@ groups:
       component: rails_requests
       product_stage: plan
       stage_group: project_management
+    expr: "1"
+- name: 'Stage group Ignored components: fulfillment - Provision'
+  interval: 1m
+  partial_response_strategy: warn
+  rules:
+  - record: gitlab:ignored_component:stage_group
+    labels:
+      component: graphql_queries
+      product_stage: fulfillment
+      stage_group: provision
+    expr: "1"
+  - record: gitlab:ignored_component:stage_group
+    labels:
+      component: rails_requests
+      product_stage: fulfillment
+      stage_group: provision
     expr: "1"
 - name: 'Stage group Ignored components: fulfillment - Purchase'
   interval: 1m

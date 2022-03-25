@@ -90,6 +90,7 @@
       'snippets',
       'wiki',
       'static_site_editor',
+      'pages',
     ],
   },
   gitaly: {
@@ -216,7 +217,6 @@
       'feature_flags',
       'release_orchestration',
       'release_evidence',
-      'pages',
       'environment_management',
     ],
   },
@@ -269,11 +269,11 @@
       'purchase',
     ],
   },
-  license: {
-    name: 'License',
+  provision: {
+    name: 'Provision',
     stage: 'fulfillment',
     feature_categories: [
-      'license',
+      'provision',
     ],
   },
   utilization: {
@@ -317,7 +317,6 @@
     stage: 'growth',
     feature_categories: [
       'product_analytics',
-      'usage_ping',
       'service_ping',
       'privacy_control_center',
     ],
