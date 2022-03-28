@@ -1910,7 +1910,7 @@ groups:
         histogram_quantile(
           0.950000,
           sum by (env,environment,tier,stage,le) (
-            rate(grpc_server_handling_seconds_bucket{environment="{{ $labels.environment }}",grpc_service="thanos.Store",grpc_type="unary",job=~"thanos|thanos-store(-[0-9]+)?",stage="{{ $labels.stage }}",type="monitoring"}[5m])
+            rate(grpc_server_handling_seconds_bucket{environment="{{ $labels.environment }}",grpc_service=~"thanos.Store|thanos.info.Info",grpc_type="unary",job=~"thanos|thanos-store(-[0-9]+)?",stage="{{ $labels.stage }}",type="monitoring"}[5m])
           )
         )
       runbook: docs/monitoring/README.md
@@ -1961,7 +1961,7 @@ groups:
         histogram_quantile(
           0.950000,
           sum by (env,environment,tier,stage,le) (
-            rate(grpc_server_handling_seconds_bucket{environment="{{ $labels.environment }}",grpc_service="thanos.Store",grpc_type="unary",job=~"thanos|thanos-store(-[0-9]+)?",stage="{{ $labels.stage }}",type="monitoring"}[5m])
+            rate(grpc_server_handling_seconds_bucket{environment="{{ $labels.environment }}",grpc_service=~"thanos.Store|thanos.info.Info",grpc_type="unary",job=~"thanos|thanos-store(-[0-9]+)?",stage="{{ $labels.stage }}",type="monitoring"}[5m])
           )
         )
       runbook: docs/monitoring/README.md
@@ -2010,7 +2010,7 @@ groups:
       grafana_variables: environment,stage
       promql_template_1: |
         sum by (env,environment,tier,stage) (
-          rate(grpc_server_handled_total{environment="{{ $labels.environment }}",grpc_code!="OK",grpc_service="thanos.Store",grpc_type="unary",job=~"thanos|thanos-store(-[0-9]+)?",stage="{{ $labels.stage }}",type="monitoring"}[5m])
+          rate(grpc_server_handled_total{environment="{{ $labels.environment }}",grpc_code!="OK",grpc_service=~"thanos.Store|thanos.info.Info",grpc_type="unary",job=~"thanos|thanos-store(-[0-9]+)?",stage="{{ $labels.stage }}",type="monitoring"}[5m])
         )
       runbook: docs/monitoring/README.md
     labels:
@@ -2058,7 +2058,7 @@ groups:
       grafana_variables: environment,stage
       promql_template_1: |
         sum by (env,environment,tier,stage) (
-          rate(grpc_server_handled_total{environment="{{ $labels.environment }}",grpc_code!="OK",grpc_service="thanos.Store",grpc_type="unary",job=~"thanos|thanos-store(-[0-9]+)?",stage="{{ $labels.stage }}",type="monitoring"}[5m])
+          rate(grpc_server_handled_total{environment="{{ $labels.environment }}",grpc_code!="OK",grpc_service=~"thanos.Store|thanos.info.Info",grpc_type="unary",job=~"thanos|thanos-store(-[0-9]+)?",stage="{{ $labels.stage }}",type="monitoring"}[5m])
         )
       runbook: docs/monitoring/README.md
     labels:
@@ -2106,7 +2106,7 @@ groups:
       grafana_variables: environment,stage
       promql_template_1: |
         sum by (env,environment,tier,stage) (
-          rate(grpc_server_handled_total{environment="{{ $labels.environment }}",grpc_service="thanos.Store",grpc_type="unary",job=~"thanos|thanos-store(-[0-9]+)?",stage="{{ $labels.stage }}",type="monitoring"}[5m])
+          rate(grpc_server_handled_total{environment="{{ $labels.environment }}",grpc_service=~"thanos.Store|thanos.info.Info",grpc_type="unary",job=~"thanos|thanos-store(-[0-9]+)?",stage="{{ $labels.stage }}",type="monitoring"}[5m])
         )
       runbook: docs/monitoring/README.md
     labels:
@@ -2141,7 +2141,7 @@ groups:
       grafana_variables: environment,stage
       promql_template_1: |
         sum by (env,environment,tier,stage) (
-          rate(grpc_server_handled_total{environment="{{ $labels.environment }}",grpc_service="thanos.Store",grpc_type="unary",job=~"thanos|thanos-store(-[0-9]+)?",stage="{{ $labels.stage }}",type="monitoring"}[5m])
+          rate(grpc_server_handled_total{environment="{{ $labels.environment }}",grpc_service=~"thanos.Store|thanos.info.Info",grpc_type="unary",job=~"thanos|thanos-store(-[0-9]+)?",stage="{{ $labels.stage }}",type="monitoring"}[5m])
         )
       runbook: docs/monitoring/README.md
     labels:

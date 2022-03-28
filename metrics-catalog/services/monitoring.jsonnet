@@ -217,7 +217,7 @@ metricsCatalog.serviceDefinition({
         // exclusive by stage.
         job: { re: 'thanos|thanos-store(-[0-9]+)?' },
         type: 'monitoring',
-        grpc_service: 'thanos.Store',
+        grpc_service: { re: 'thanos.Store|thanos.info.Info' },
         grpc_type: 'unary',
       },
 
