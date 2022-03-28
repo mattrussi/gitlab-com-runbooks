@@ -374,23 +374,23 @@ Selected logging documents and resources:
 # Running helper scripts from runbook
 
 Inside of the [bin](bin) directory you can find a list of scripts that can help
-running repetative commands or setting up your machine to debug the
+running repetitive commands or setting up your machine to debug the
 infrastructure. These scripts can be bash, ruby, python or any other executable.
 
-`glsh` in the single entrypoint to interect with the [`bin`](bin) directory. For
+`glsh` in the single entrypoint to interact with the [`bin`](bin) directory. For
 example if you can `glsh hello` it will check if `hello` file exists inside of
 [`bin`](bin) directory and execute it. You can also pass multiple arguments, that the
 script will have access to.
 
 Demo: https://youtu.be/RsGgxm55YBg
 
-```
+```shell
 glsh hello arg1 arg2
 ```
 
 ## Install
 
-```
+```shell
 git clone git@gitlab.com:gitlab-com/runbooks.git
 cd runbooks
 sudo make glsh-install
@@ -398,7 +398,7 @@ sudo make glsh-install
 
 ## Update
 
-```
+```shell
 glsh update
 ```
 
@@ -470,7 +470,7 @@ git commit --allow-empty -m '[BREAKING CHANGE|feat|fix]: <changelog summary mess
 
 ## Tool Versioning
 
-This project has adopted [`adsf version-manager`](https://github.com/asdf-vm/asdf) for tool versioning.
+This project has adopted [`asdf version-manager`](https://github.com/asdf-vm/asdf) for tool versioning.
 
 Installation instructions for `asdf` can be found at https://asdf-vm.com/#/core-manage-asdf-vm?id=install.
 
@@ -547,9 +547,10 @@ You could follow that project's README to install manually;
 
 Or via homebrew:
 
-```
+```shell
 brew install go-jsonnet
 ```
+
 Or if you're using `asdf`, you can use [an asdf
 plugin](https://gitlab.com/craigfurman/asdf-go-jsonnet).
 
@@ -570,7 +571,7 @@ asdf install
 
 ### Ruby
 
-Additional to `adsf`, many developers use `rbenv`, `rvm` or other tooling, so, for convenience, we maintain
+Additional to `asdf`, many developers use `rbenv`, `rvm` or other tooling, so, for convenience, we maintain
 the standard `.ruby-version` file for the Ruby version. ASDF needs to be configured using
 the `legacy_version_file = yes` setting described in the [parent section](#tool-versioning).
 
