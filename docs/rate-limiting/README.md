@@ -178,6 +178,9 @@ categories:
    /user/sign_in, although we also do similar in CloudFlare so this might be redundant in some cases.  The identifier is
    the IP address for unauthenticated, or the user if authenticated.
 
+**Note**: Internal API endpoints [bypass these rate limits](https://gitlab.com/gitlab-org/gitlab/-/blob/fe7b5313bfbe9913a5ede9c1a017269b9a8aba6d/lib/gitlab/rack_attack/request.rb#L58-60)
+like all `/api/v4/internal` requests, health checks and `/api/v4/container_registry_event`.
+
 This list may grow a bit over time, but is unlikely to become huge while RackAttack is the implementation.  One of the
 key facts is that Rails knows much more than haproxy or Cloudflare can about user identities (the actual user,
 authentication methods, and so on) and is thus able to make more informed calculations about allowed levels of traffic.
