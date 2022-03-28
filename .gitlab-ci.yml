@@ -507,9 +507,13 @@ plan-dashboards:
   stage: plan
   needs:
     - validate-dashboards-terraform
+  variables:
+    TF_LOG: trace
+    TF_LOG_PATH: terraform-trace.log
   artifacts:
     paths:
       - dashboards/kubernetes/
+      - dashboards-terraform/${TF_LOG_PATH}
       - dashboards-terraform/${TF_PLAN_FILE}
       - vendor/
   script:
