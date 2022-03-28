@@ -53,8 +53,8 @@ and the old style (external page), but the screenshots may appear with
 differing styles.
 
 1. Create a dataset if necessary to group related tables.
-1. Click on a control to "Add a new table".
-1. Choose "Google Cloud Storage" with "JSON (Newline Delimted)" as the `Source data`.
+1. Click on the dataset's `...` menu to "Create table".
+1. Choose "Google Cloud Storage" with "JSONL (Newline delimited JSON)" as the `Source data`.
 1. Using the browse functionality to find an appropriate bucket is not always
    an option, as only buckets in the same project are listed and data is
    usually imported from, for example, `gitlab-production` or
@@ -65,7 +65,7 @@ differing styles.
      - for GKE container logs, look under the `gke/` folder
      - for any other logs, look under the other folders
 
-1. Insert the bucket URI as follows: `bucket/folder/folder/myfile.json` for a
+1. Insert the bucket path as follows: `bucket/folder/folder/myfile.json` for a
    single file or `bucket/folder/folder/*.json` for all files in that folder
    and its subfolders. When using hive partitioning with GKE container logs
    (see next step), add `dt=` to the prefix to filter out older path that don't
@@ -93,12 +93,11 @@ differing styles.
 
    ![record type](./img/bigquery_schema_record.png)
 
-1. In `Advanced options`, check `Ignore unknown values`
+1. In `Advanced options`, check `Unknown values`
 1. If the data to be imported is large, consider whether partioning will be necessary.
-
-   1. Add `timestamp` field of type `TIMESTAMP`
-   1. In `Advanced options`, select it as the partitioning field:
-
+   In `Partitioning`, select the field on which to partition the data (a `TIMESTAMP`, typically).
+   Only fields from the schema will be considered.
+   
       ![partition by timestamp](./img/bigquery_table_partition.png)
 
 1. Create the table.  If everything is right, a background job will run to load
