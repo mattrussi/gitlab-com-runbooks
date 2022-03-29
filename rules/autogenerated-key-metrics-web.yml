@@ -27,7 +27,7 @@ groups:
     expr: |
       (
         sum by (environment,stage) (
-          rate(gitlab_workhorse_image_resize_duration_seconds_bucket{job=~"gitlab-workhorse|gitlab-workhorse-web",le="0.2",type="web"}[1m])
+          rate(gitlab_workhorse_image_resize_duration_seconds_bucket{job=~"gitlab-workhorse|gitlab-workhorse-web",le="0.4",type="web"}[1m])
         )
         +
         sum by (environment,stage) (
@@ -241,7 +241,7 @@ groups:
     expr: |
       (
         sum by (environment,stage) (
-          rate(gitlab_workhorse_image_resize_duration_seconds_bucket{job=~"gitlab-workhorse|gitlab-workhorse-web",le="0.2",type="web"}[5m])
+          rate(gitlab_workhorse_image_resize_duration_seconds_bucket{job=~"gitlab-workhorse|gitlab-workhorse-web",le="0.4",type="web"}[5m])
         )
         +
         sum by (environment,stage) (
@@ -455,7 +455,7 @@ groups:
     expr: |
       (
         sum by (environment,stage) (
-          rate(gitlab_workhorse_image_resize_duration_seconds_bucket{job=~"gitlab-workhorse|gitlab-workhorse-web",le="0.2",type="web"}[30m])
+          rate(gitlab_workhorse_image_resize_duration_seconds_bucket{job=~"gitlab-workhorse|gitlab-workhorse-web",le="0.4",type="web"}[30m])
         )
         +
         sum by (environment,stage) (
@@ -669,7 +669,7 @@ groups:
     expr: |
       (
         sum by (environment,stage) (
-          rate(gitlab_workhorse_image_resize_duration_seconds_bucket{job=~"gitlab-workhorse|gitlab-workhorse-web",le="0.2",type="web"}[1h])
+          rate(gitlab_workhorse_image_resize_duration_seconds_bucket{job=~"gitlab-workhorse|gitlab-workhorse-web",le="0.4",type="web"}[1h])
         )
         +
         sum by (environment,stage) (
@@ -883,7 +883,7 @@ groups:
     expr: |
       (
         sum by (environment,stage) (
-          rate(gitlab_workhorse_image_resize_duration_seconds_bucket{job=~"gitlab-workhorse|gitlab-workhorse-web",le="0.2",type="web"}[6h])
+          rate(gitlab_workhorse_image_resize_duration_seconds_bucket{job=~"gitlab-workhorse|gitlab-workhorse-web",le="0.4",type="web"}[6h])
         )
         +
         sum by (environment,stage) (
