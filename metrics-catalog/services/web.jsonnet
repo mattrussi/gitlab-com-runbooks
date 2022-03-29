@@ -155,7 +155,7 @@ metricsCatalog.serviceDefinition({
       apdex: histogramApdex(
         histogram='gitlab_workhorse_image_resize_duration_seconds_bucket',
         selector=workhorseWebSelector,
-        satisfiedThreshold=0.2,
+        satisfiedThreshold=0.4,
         toleratedThreshold=0.8
       ),
 
