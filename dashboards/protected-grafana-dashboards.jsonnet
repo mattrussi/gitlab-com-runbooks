@@ -6,7 +6,6 @@ local union(sets) = std.foldl(function(memo, a) std.setUnion(std.set(a), memo), 
       // Dashboards referenced from www-gitlab-com
       [
         '000000043',
-        '000000044',
         '000000045',
         '000000159',
         '1EBTz3Dmz',
@@ -14,7 +13,6 @@ local union(sets) = std.foldl(function(memo, a) std.setUnion(std.set(a), memo), 
         'SOn6MeNmk',
         'SaIRBwuWk',
         'WO9bDCnmz',
-        '_03KZ-ZWz',
         'bd2Kl9Imk',
         'l8ifheiik',
         'rKo7Hg1Wk',
@@ -29,7 +27,6 @@ local union(sets) = std.foldl(function(memo, a) std.setUnion(std.set(a), memo), 
         '000000167',
         '000000204',
         '000000244',
-        '26q8nTzZz',
         '7Zq1euZmz',
         '8EAXC-AWz',
         '9GOIu9Siz',
@@ -39,12 +36,10 @@ local union(sets) = std.foldl(function(memo, a) std.setUnion(std.set(a), memo), 
         'RZmbBr7mk',
         'USVj3qHmk',
         'VE4pXc1iz',
-        'WOtyonOiz',
         'ZOOh_aNik',
         'bd2Kl9Imk',
         'fasrTtKik',
         'llfd4b2ik',
-        'oWe9aYxmk',
         'xSYVQ9Sik',
       ],
       // Quality owned dashboards
@@ -63,15 +58,6 @@ local union(sets) = std.foldl(function(memo, a) std.setUnion(std.set(a), memo), 
         'mnbqU9Smz',
         // T4cC0re: "I would like to keep" https://gitlab.com/gitlab-com/runbooks/-/merge_requests/2345#note_358837191
         'FvOt_fNZk',
-        // joshlambert: "performance dashboards":
-        'performance-manage',
-        'performance-create',
-        'performance-plan',
-        'performance-enablement',
-        'performance-verify',
-        'performance-release',
-        'performance-secure',
-        'performance-package',
         // Brendan O'Leary/Andrew Newdigate: Vanity metrics dashboard
         'vanity-metrics',
       ],
@@ -86,7 +72,6 @@ local union(sets) = std.foldl(function(memo, a) std.setUnion(std.set(a), memo), 
         '9l09q0qik',  // node-iostat
         'u0LwqvzWk',  // node-ntp
         '-UvftW1iz',  // ssh-performance
-        'KqPVKRIiz',  // thanos-store
         '64YQGnbZz',  // thanos-store-oom
         '4QhoV1tZk',  // writes-per-gitaly-operation-copy
         'memcached',  // memcached
