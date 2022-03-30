@@ -9,12 +9,12 @@ The dashboards are kept in [`grafonnet`](https://github.com/grafana/grafonnet-li
 
 # File nomenclature
 
-We utilize the following file format: `dashboards/<service name, aka type>/<dashboard name>.dashboard.libsonnet`
+We utilize the following file format: `dashboards/<service name, aka type>/<dashboard name>.dashboard.jsonnet`
 
 Using this consistent schema makes URLs consistent, etc.
 
 Example, the Container Registry is of service type `registry`.  Therefore,
-`dashboards/registry/<somedashboard>.dashboard.libsonnet`
+`dashboards/registry/<somedashboard>.dashboard.jsonnet`
 
 # Extending Grafana dashboards
 
