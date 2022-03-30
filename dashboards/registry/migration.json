@@ -72,12 +72,12 @@
       }
     ]
   },
-  "description": "Uploaded by https://gitlab.com/gitlab-com/runbooks/-/jobs/2216159324 at Thu Mar 17 12:56:01 UTC 2022",
+  "description": "Uploaded by https://gitlab.com/gitlab-com/runbooks/-/jobs/2268353838 at Wed Mar 30 08:13:22 UTC 2022",
   "editable": true,
   "fiscalYearStartMonth": 0,
   "graphTooltip": 1,
   "id": null,
-  "iteration": 1647598200651,
+  "iteration": 1648669888883,
   "links": [
     {
       "asDropdown": true,
@@ -212,7 +212,7 @@
         "alertThreshold": true
       },
       "percentage": false,
-      "pluginVersion": "8.4.1",
+      "pluginVersion": "8.4.4",
       "pointradius": 2,
       "points": false,
       "renderer": "flot",
@@ -292,7 +292,7 @@
         "alertThreshold": true
       },
       "percentage": false,
-      "pluginVersion": "8.4.1",
+      "pluginVersion": "8.4.4",
       "pointradius": 2,
       "points": false,
       "renderer": "flot",
@@ -372,7 +372,7 @@
         "alertThreshold": true
       },
       "percentage": false,
-      "pluginVersion": "8.4.1",
+      "pluginVersion": "8.4.4",
       "pointradius": 2,
       "points": false,
       "renderer": "flot",
@@ -452,7 +452,7 @@
         "alertThreshold": true
       },
       "percentage": false,
-      "pluginVersion": "8.4.1",
+      "pluginVersion": "8.4.4",
       "pointradius": 2,
       "points": false,
       "renderer": "flot",
@@ -2416,13 +2416,243 @@
       "type": "timeseries"
     },
     {
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "mappings": [],
+          "max": 100,
+          "min": 0,
+          "thresholds": {
+            "mode": "percentage",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              }
+            ]
+          },
+          "unit": "percent"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 9,
+        "w": 6,
+        "x": 0,
+        "y": 77
+      },
+      "id": 133,
+      "options": {
+        "orientation": "auto",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "showThresholdLabels": false,
+        "showThresholdMarkers": true
+      },
+      "pluginVersion": "8.4.4",
+      "targets": [
+        {
+          "datasource": {
+            "uid": "$PROMETHEUS_DS"
+          },
+          "exemplar": true,
+          "expr": "100 * avg(gitlab_database_rows{query_name=\"container_repositories_import_done_free\", environment=\"${environment}\"}) / avg(gitlab_database_rows{query_name=\"container_repositories_migration_all_free\", environment=\"${environment}\"})",
+          "instant": false,
+          "interval": "",
+          "legendFormat": "",
+          "refId": "A"
+        }
+      ],
+      "title": "% Free Complete",
+      "type": "gauge"
+    },
+    {
+      "description": "Count of container repositories imports that were aborted because an unexpected error occurred.",
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "palette-classic"
+          },
+          "custom": {
+            "axisLabel": "",
+            "axisPlacement": "auto",
+            "barAlignment": 0,
+            "drawStyle": "line",
+            "fillOpacity": 0,
+            "gradientMode": "none",
+            "hideFrom": {
+              "legend": false,
+              "tooltip": false,
+              "viz": false
+            },
+            "lineInterpolation": "linear",
+            "lineWidth": 2,
+            "pointSize": 5,
+            "scaleDistribution": {
+              "type": "linear"
+            },
+            "showPoints": "auto",
+            "spanNulls": true,
+            "stacking": {
+              "group": "A",
+              "mode": "none"
+            },
+            "thresholdsStyle": {
+              "mode": "off"
+            }
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          },
+          "unit": "short"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 9,
+        "w": 6,
+        "x": 6,
+        "y": 77
+      },
+      "id": 129,
+      "options": {
+        "legend": {
+          "calcs": [],
+          "displayMode": "hidden",
+          "placement": "bottom"
+        },
+        "tooltip": {
+          "mode": "single",
+          "sort": "none"
+        }
+      },
+      "targets": [
+        {
+          "datasource": {
+            "uid": "$PROMETHEUS_DS"
+          },
+          "exemplar": true,
+          "expr": "avg(gitlab_database_rows{query_name=\"container_repositories_migration_pending_free\", environment=\"$environment\"})",
+          "interval": "",
+          "legendFormat": "",
+          "refId": "A"
+        }
+      ],
+      "title": "Pending Free",
+      "type": "timeseries"
+    },
+    {
+      "description": "Count of container repositories imports that were aborted because an unexpected error occurred.",
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "palette-classic"
+          },
+          "custom": {
+            "axisLabel": "",
+            "axisPlacement": "auto",
+            "barAlignment": 0,
+            "drawStyle": "line",
+            "fillOpacity": 0,
+            "gradientMode": "none",
+            "hideFrom": {
+              "legend": false,
+              "tooltip": false,
+              "viz": false
+            },
+            "lineInterpolation": "linear",
+            "lineWidth": 2,
+            "pointSize": 5,
+            "scaleDistribution": {
+              "type": "linear"
+            },
+            "showPoints": "auto",
+            "spanNulls": true,
+            "stacking": {
+              "group": "A",
+              "mode": "none"
+            },
+            "thresholdsStyle": {
+              "mode": "off"
+            }
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          },
+          "unit": "short"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 9,
+        "w": 6,
+        "x": 12,
+        "y": 77
+      },
+      "id": 131,
+      "options": {
+        "legend": {
+          "calcs": [],
+          "displayMode": "hidden",
+          "placement": "bottom"
+        },
+        "tooltip": {
+          "mode": "single",
+          "sort": "none"
+        }
+      },
+      "targets": [
+        {
+          "datasource": {
+            "uid": "$PROMETHEUS_DS"
+          },
+          "exemplar": true,
+          "expr": "avg(gitlab_database_rows{query_name=\"container_repositories_import_done_free\", environment=\"$environment\"})",
+          "interval": "",
+          "legendFormat": "",
+          "refId": "A"
+        }
+      ],
+      "title": "Done Free",
+      "type": "timeseries"
+    },
+    {
       "collapse": true,
       "collapsed": false,
       "gridPos": {
         "h": 1,
         "w": 24,
         "x": 0,
-        "y": 77
+        "y": 86
       },
       "id": 52,
       "panels": [],
@@ -2447,7 +2677,7 @@
         "h": 10,
         "w": 8,
         "x": 0,
-        "y": 78
+        "y": 87
       },
       "hiddenSeries": false,
       "id": 53,
@@ -2470,7 +2700,7 @@
         "alertThreshold": true
       },
       "percentage": false,
-      "pluginVersion": "8.4.1",
+      "pluginVersion": "8.4.4",
       "pointradius": 5,
       "points": false,
       "renderer": "flot",
@@ -2557,7 +2787,7 @@
         "h": 10,
         "w": 8,
         "x": 8,
-        "y": 78
+        "y": 87
       },
       "hiddenSeries": false,
       "id": 54,
@@ -2580,7 +2810,7 @@
         "alertThreshold": true
       },
       "percentage": false,
-      "pluginVersion": "8.4.1",
+      "pluginVersion": "8.4.4",
       "pointradius": 5,
       "points": false,
       "renderer": "flot",
@@ -2648,7 +2878,7 @@
         "h": 10,
         "w": 8,
         "x": 16,
-        "y": 78
+        "y": 87
       },
       "hiddenSeries": false,
       "id": 55,
@@ -2671,7 +2901,7 @@
         "alertThreshold": true
       },
       "percentage": false,
-      "pluginVersion": "8.4.1",
+      "pluginVersion": "8.4.4",
       "pointradius": 5,
       "points": false,
       "renderer": "flot",
@@ -2739,7 +2969,7 @@
         "h": 10,
         "w": 6,
         "x": 0,
-        "y": 88
+        "y": 97
       },
       "hiddenSeries": false,
       "id": 56,
@@ -2762,7 +2992,7 @@
         "alertThreshold": true
       },
       "percentage": false,
-      "pluginVersion": "8.4.1",
+      "pluginVersion": "8.4.4",
       "pointradius": 5,
       "points": false,
       "renderer": "flot",
@@ -2849,7 +3079,7 @@
         "h": 10,
         "w": 6,
         "x": 6,
-        "y": 88
+        "y": 97
       },
       "hiddenSeries": false,
       "id": 57,
@@ -2872,7 +3102,7 @@
         "alertThreshold": true
       },
       "percentage": false,
-      "pluginVersion": "8.4.1",
+      "pluginVersion": "8.4.4",
       "pointradius": 5,
       "points": false,
       "renderer": "flot",
@@ -2945,7 +3175,7 @@
         "h": 10,
         "w": 6,
         "x": 12,
-        "y": 88
+        "y": 97
       },
       "hiddenSeries": false,
       "id": 58,
@@ -2968,7 +3198,7 @@
         "alertThreshold": true
       },
       "percentage": false,
-      "pluginVersion": "8.4.1",
+      "pluginVersion": "8.4.4",
       "pointradius": 5,
       "points": false,
       "renderer": "flot",
@@ -3042,7 +3272,7 @@
         "h": 10,
         "w": 6,
         "x": 18,
-        "y": 88
+        "y": 97
       },
       "hiddenSeries": false,
       "id": 59,
@@ -3065,7 +3295,7 @@
         "alertThreshold": true
       },
       "percentage": false,
-      "pluginVersion": "8.4.1",
+      "pluginVersion": "8.4.4",
       "pointradius": 5,
       "points": false,
       "renderer": "flot",
@@ -3133,7 +3363,7 @@
         "h": 10,
         "w": 6,
         "x": 0,
-        "y": 98
+        "y": 107
       },
       "hiddenSeries": false,
       "id": 60,
@@ -3156,7 +3386,7 @@
         "alertThreshold": true
       },
       "percentage": false,
-      "pluginVersion": "8.4.1",
+      "pluginVersion": "8.4.4",
       "pointradius": 5,
       "points": false,
       "renderer": "flot",
@@ -3243,7 +3473,7 @@
         "h": 10,
         "w": 6,
         "x": 6,
-        "y": 98
+        "y": 107
       },
       "hiddenSeries": false,
       "id": 61,
@@ -3266,7 +3496,7 @@
         "alertThreshold": true
       },
       "percentage": false,
-      "pluginVersion": "8.4.1",
+      "pluginVersion": "8.4.4",
       "pointradius": 5,
       "points": false,
       "renderer": "flot",
@@ -3338,7 +3568,7 @@
         "h": 10,
         "w": 6,
         "x": 12,
-        "y": 98
+        "y": 107
       },
       "hiddenSeries": false,
       "id": 62,
@@ -3361,7 +3591,7 @@
         "alertThreshold": true
       },
       "percentage": false,
-      "pluginVersion": "8.4.1",
+      "pluginVersion": "8.4.4",
       "pointradius": 5,
       "points": false,
       "renderer": "flot",
@@ -3429,7 +3659,7 @@
         "h": 10,
         "w": 6,
         "x": 18,
-        "y": 98
+        "y": 107
       },
       "hiddenSeries": false,
       "id": 63,
@@ -3452,7 +3682,7 @@
         "alertThreshold": true
       },
       "percentage": false,
-      "pluginVersion": "8.4.1",
+      "pluginVersion": "8.4.4",
       "pointradius": 5,
       "points": false,
       "renderer": "flot",
@@ -3511,7 +3741,7 @@
         "h": 1,
         "w": 24,
         "x": 0,
-        "y": 108
+        "y": 117
       },
       "id": 68,
       "panels": [
@@ -4055,7 +4285,7 @@
         "h": 1,
         "w": 24,
         "x": 0,
-        "y": 109
+        "y": 118
       },
       "id": 77,
       "panels": [
@@ -4599,7 +4829,7 @@
         "h": 1,
         "w": 24,
         "x": 0,
-        "y": 110
+        "y": 119
       },
       "id": 86,
       "panels": [
@@ -5289,5 +5519,5 @@
   },
   "timezone": "utc",
   "title": "Migration Detail",
-  "version": 21
+  "version": 22
 }
