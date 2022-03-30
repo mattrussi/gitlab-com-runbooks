@@ -422,9 +422,9 @@ groups:
       max by(environment, tier, type, stage) (
         clamp_min(
           clamp_max(
-            kube_horizontalpodautoscaler_status_desired_replicas:labeled{type=~"web|api|consul|git|kas|kube|logging|mailroom|monitoring|nginx|plantuml|registry|sidekiq|web-pages|websockets|woodhouse", shard!~"database-throttled|elasticsearch|gitaly-throttled|imports|memory-bound|urgent-other"}
+            kube_horizontalpodautoscaler_status_desired_replicas:labeled{type=~"web|api|consul|git|kas|kube|logging|mailroom|monitoring|nginx|plantuml|registry|sidekiq|web-pages|websockets|woodhouse", shard!~"database-throttled|elasticsearch|gitaly-throttled|imports|urgent-other"}
             /
-            kube_horizontalpodautoscaler_spec_max_replicas:labeled{type=~"web|api|consul|git|kas|kube|logging|mailroom|monitoring|nginx|plantuml|registry|sidekiq|web-pages|websockets|woodhouse", shard!~"database-throttled|elasticsearch|gitaly-throttled|imports|memory-bound|urgent-other"}
+            kube_horizontalpodautoscaler_spec_max_replicas:labeled{type=~"web|api|consul|git|kas|kube|logging|mailroom|monitoring|nginx|plantuml|registry|sidekiq|web-pages|websockets|woodhouse", shard!~"database-throttled|elasticsearch|gitaly-throttled|imports|urgent-other"}
             ,
             1)
         ,
@@ -1108,11 +1108,11 @@ groups:
         clamp_min(
           clamp_max(
             sum by (environment, tier, type, stage, shard) (
-              avg_over_time(sidekiq_running_jobs{shard!~"database-throttled|elasticsearch|gitaly-throttled|imports|memory-bound", type="sidekiq"}[5m])
+              avg_over_time(sidekiq_running_jobs{shard!~"database-throttled|elasticsearch|gitaly-throttled", type="sidekiq"}[5m])
             )
             /
             sum by (environment, tier, type, stage, shard) (
-              avg_over_time(sidekiq_concurrency{shard!~"database-throttled|elasticsearch|gitaly-throttled|imports|memory-bound", type="sidekiq"}[5m])
+              avg_over_time(sidekiq_concurrency{shard!~"database-throttled|elasticsearch|gitaly-throttled", type="sidekiq"}[5m])
             )
             ,
             1)
@@ -3284,9 +3284,9 @@ groups:
         max by(environment, tier, type, stage, horizontalpodautoscaler, shard) (
           clamp_min(
             clamp_max(
-              kube_horizontalpodautoscaler_status_desired_replicas:labeled{environment="{{ $labels.environment }}",stage="{{ $labels.stage }}",type="{{ $labels.type }}", shard!~"database-throttled|elasticsearch|gitaly-throttled|imports|memory-bound|urgent-other"}
+              kube_horizontalpodautoscaler_status_desired_replicas:labeled{environment="{{ $labels.environment }}",stage="{{ $labels.stage }}",type="{{ $labels.type }}", shard!~"database-throttled|elasticsearch|gitaly-throttled|imports|urgent-other"}
               /
-              kube_horizontalpodautoscaler_spec_max_replicas:labeled{environment="{{ $labels.environment }}",stage="{{ $labels.stage }}",type="{{ $labels.type }}", shard!~"database-throttled|elasticsearch|gitaly-throttled|imports|memory-bound|urgent-other"}
+              kube_horizontalpodautoscaler_spec_max_replicas:labeled{environment="{{ $labels.environment }}",stage="{{ $labels.stage }}",type="{{ $labels.type }}", shard!~"database-throttled|elasticsearch|gitaly-throttled|imports|urgent-other"}
               ,
               1)
           ,
@@ -5063,11 +5063,11 @@ groups:
           clamp_min(
             clamp_max(
               sum by (environment, tier, type, stage, shard) (
-                avg_over_time(sidekiq_running_jobs{shard!~"database-throttled|elasticsearch|gitaly-throttled|imports|memory-bound", environment="{{ $labels.environment }}",stage="{{ $labels.stage }}",type="{{ $labels.type }}"}[5m])
+                avg_over_time(sidekiq_running_jobs{shard!~"database-throttled|elasticsearch|gitaly-throttled", environment="{{ $labels.environment }}",stage="{{ $labels.stage }}",type="{{ $labels.type }}"}[5m])
               )
               /
               sum by (environment, tier, type, stage, shard) (
-                avg_over_time(sidekiq_concurrency{shard!~"database-throttled|elasticsearch|gitaly-throttled|imports|memory-bound", environment="{{ $labels.environment }}",stage="{{ $labels.stage }}",type="{{ $labels.type }}"}[5m])
+                avg_over_time(sidekiq_concurrency{shard!~"database-throttled|elasticsearch|gitaly-throttled", environment="{{ $labels.environment }}",stage="{{ $labels.stage }}",type="{{ $labels.type }}"}[5m])
               )
               ,
               1)
