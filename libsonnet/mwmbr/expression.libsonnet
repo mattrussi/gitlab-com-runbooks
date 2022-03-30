@@ -4,30 +4,14 @@ local generator = import 'slo_expression_generator.libsonnet';
 local durationParser = import 'utils/duration-parser.libsonnet';
 local strings = import 'utils/strings.libsonnet';
 
-// For minimumSamplesForMonitoring, calculates what the minimum sample rate per second,
-// over the longWindow needs to be. If null, returns null
-local calculateMinimumOperationRateForMonitoring(
-  operationRateWindowDuration,
-  minimumSamplesForMonitoring,
-      ) =
-  if minimumSamplesForMonitoring == null then
-    null
-  else
-    minimumSamplesForMonitoring / durationParser.toSeconds(operationRateWindowDuration);
-
 local operationRateFilter(
   expression,
   operationRateMetric,
   operationRateAggregationLabels,
   operationRateSelectorHash,
   operationRateWindowDuration,
-  minimumSamplesForMonitoring
+  requiredOpRate
       ) =
-
-  local requiredOpRate = calculateMinimumOperationRateForMonitoring(
-    operationRateWindowDuration=operationRateWindowDuration,
-    minimumSamplesForMonitoring=minimumSamplesForMonitoring,
-  );
 
   if requiredOpRate == null then
     expression
@@ -69,7 +53,7 @@ local defaultWindows = ['1h', '6h'];
     metricSelectorHash,  // Selectors for the error rate metrics
     windows=defaultWindows,  // Sets of windows in this SLO expression, identified by longWindow duration
     thresholdSLOValue,  // Error budget float value (between 0 and 1)
-    minimumSamplesForMonitoring=null,  // minimum number of operations recorded, over the longWindow period, for monitoring
+    requiredOpRate=null,  // minimum operation rate recorded, over the longWindow period, for monitoring
     operationRateWindowDuration='1h',  // Window over which to evaluate operation rate
   )::
     local mergedMetricSelectors = selectors.merge(aggregationSet.selector, metricSelectorHash);
@@ -89,7 +73,7 @@ local defaultWindows = ['1h', '6h'];
       aggregationSet.labels,
       mergedMetricSelectors,
       operationRateWindowDuration=operationRateWindowDuration,
-      minimumSamplesForMonitoring=minimumSamplesForMonitoring,
+      requiredOpRate=requiredOpRate,
     ),
 
   // Generates a multi-window, multi-burn-rate apdex score expression
@@ -98,7 +82,7 @@ local defaultWindows = ['1h', '6h'];
     metricSelectorHash,  // Selectors for the error rate metrics
     thresholdSLOValue,  // Error budget float value (between 0 and 1)
     windows=['1h', '6h'],  // Sets of windows in this SLO expression, identified by longWindow duration
-    minimumSamplesForMonitoring=null,  // minimum number of operations recorded, over the longWindow period, for monitoring
+    requiredOpRate=null,  // minimum operation-rate, over the longWindow period, for monitoring
     operationRateWindowDuration='1h',  // Window over which to evaluate operation rate
   )::
     local mergedMetricSelectors = selectors.merge(aggregationSet.selector, metricSelectorHash);
@@ -118,7 +102,7 @@ local defaultWindows = ['1h', '6h'];
       aggregationSet.labels,
       mergedMetricSelectors,
       operationRateWindowDuration=operationRateWindowDuration,
-      minimumSamplesForMonitoring=minimumSamplesForMonitoring,
+      requiredOpRate=requiredOpRate,
     ),
 
   errorHealthExpression(

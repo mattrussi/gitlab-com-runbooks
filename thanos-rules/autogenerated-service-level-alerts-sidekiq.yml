@@ -131,6 +131,8 @@ groups:
       user_impacting: "yes"
     expr: |
       gitlab_component_ops:rate_30m{component="email_receiver",monitor="global",stage="main",type="sidekiq"} == 0
+      and
+      gitlab_component_ops:rate_30m{component="email_receiver",monitor="global",stage="main",type="sidekiq"} offset 1h >= 0.16666666666666666
   - alert: SidekiqServiceEmailReceiverTrafficAbsent
     for: 30m
     annotations:
@@ -422,6 +424,8 @@ groups:
       user_impacting: "yes"
     expr: |
       gitlab_component_ops:rate_30m{component="shard_catchall",monitor="global",stage="main",type="sidekiq"} == 0
+      and
+      gitlab_component_ops:rate_30m{component="shard_catchall",monitor="global",stage="main",type="sidekiq"} offset 1h >= 0.16666666666666666
   - alert: SidekiqServiceShardCatchallTrafficAbsent
     for: 30m
     annotations:
@@ -1486,6 +1490,8 @@ groups:
       user_impacting: "yes"
     expr: |
       gitlab_component_ops:rate_30m{component="shard_low_urgency_cpu_bound",monitor="global",stage="main",type="sidekiq"} == 0
+      and
+      gitlab_component_ops:rate_30m{component="shard_low_urgency_cpu_bound",monitor="global",stage="main",type="sidekiq"} offset 1h >= 0.16666666666666666
   - alert: SidekiqServiceShardLowUrgencyCpuBoundTrafficAbsent
     for: 30m
     annotations:
@@ -2158,6 +2164,8 @@ groups:
       user_impacting: "yes"
     expr: |
       gitlab_component_ops:rate_30m{component="shard_urgent_cpu_bound",monitor="global",stage="main",type="sidekiq"} == 0
+      and
+      gitlab_component_ops:rate_30m{component="shard_urgent_cpu_bound",monitor="global",stage="main",type="sidekiq"} offset 1h >= 0.16666666666666666
   - alert: SidekiqServiceShardUrgentCpuBoundTrafficAbsent
     for: 30m
     annotations:
@@ -2430,6 +2438,8 @@ groups:
       user_impacting: "yes"
     expr: |
       gitlab_component_ops:rate_30m{component="shard_urgent_other",monitor="global",stage="main",type="sidekiq"} == 0
+      and
+      gitlab_component_ops:rate_30m{component="shard_urgent_other",monitor="global",stage="main",type="sidekiq"} offset 1h >= 0.16666666666666666
   - alert: SidekiqServiceShardUrgentOtherTrafficAbsent
     for: 30m
     annotations:

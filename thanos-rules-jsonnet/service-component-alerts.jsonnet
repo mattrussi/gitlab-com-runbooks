@@ -9,6 +9,11 @@ local serviceAlertsGenerator = import 'slo-alerts/service-alerts-generator.libso
 local minimumSamplesForMonitoring = 3600;
 local minimumSamplesForNodeMonitoring = 1200;
 
+// 300 requests in 30m required an hour ago before we trigger cessation alerts
+// This is about 10 requests per minute, which is not that busy
+// The difference between 0.1666 RPS and 0 PRS can occur on calmer periods
+local minimumSamplesForTrafficCessation = 300;
+
 // Most MWMBR alerts use a 2m period
 // Initially for this alert, use a long period to ensure that
 // it's not too noisy.
@@ -24,6 +29,7 @@ local alertDescriptors = [{
   minimumSamplesForMonitoring: minimumSamplesForMonitoring,
   alertForDuration: null,  // Use default for window...
   trafficCessationSelector: { stage: 'main' },  // Don't alert on cny stage traffic cessation for now
+  minimumSamplesForTrafficCessation: minimumSamplesForTrafficCessation,
 }, {
   predicate: function(service) service.nodeLevelMonitoring,
   alertSuffix: 'SingleNode',
@@ -33,6 +39,7 @@ local alertDescriptors = [{
   minimumSamplesForMonitoring: minimumSamplesForNodeMonitoring,  // Note: lower minimum sample rate for node-level monitoring
   alertForDuration: nodeAlertWaitPeriod,
   trafficCessationSelector: {},
+  minimumSamplesForTrafficCessation: minimumSamplesForTrafficCessation,
 }, {
   predicate: function(service) service.regional,
   alertSuffix: 'Regional',
@@ -42,6 +49,7 @@ local alertDescriptors = [{
   minimumSamplesForMonitoring: minimumSamplesForMonitoring,
   alertForDuration: null,  // Use default for window...
   trafficCessationSelector: { stage: 'main' },  // Don't alert on cny stage traffic cessation for now
+  minimumSamplesForTrafficCessation: minimumSamplesForTrafficCessation,
 }];
 
 local groupsForService(service) = {

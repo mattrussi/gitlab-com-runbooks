@@ -38,6 +38,8 @@ groups:
       user_impacting: "yes"
     expr: |
       gitlab_component_ops:rate_30m{component="gitlab_shell",monitor="global",stage="main",type="git"} == 0
+      and
+      gitlab_component_ops:rate_30m{component="gitlab_shell",monitor="global",stage="main",type="git"} offset 1h >= 0.16666666666666666
   - alert: GitServiceGitlabShellTrafficAbsent
     for: 30m
     annotations:
@@ -110,6 +112,8 @@ groups:
       user_impacting: "yes"
     expr: |
       gitlab_regional_sli_ops:rate_30m{component="gitlab_shell",monitor="global",stage="main",type="git"} == 0
+      and
+      gitlab_regional_sli_ops:rate_30m{component="gitlab_shell",monitor="global",stage="main",type="git"} offset 1h >= 0.16666666666666666
   - alert: GitServiceGitlabShellTrafficAbsentRegional
     for: 30m
     annotations:
@@ -390,6 +394,8 @@ groups:
       user_impacting: "yes"
     expr: |
       gitlab_component_ops:rate_30m{component="gitlab_sshd",monitor="global",stage="main",type="git"} == 0
+      and
+      gitlab_component_ops:rate_30m{component="gitlab_sshd",monitor="global",stage="main",type="git"} offset 1h >= 0.16666666666666666
   - alert: GitServiceGitlabSshdTrafficAbsent
     for: 30m
     annotations:
@@ -462,6 +468,8 @@ groups:
       user_impacting: "yes"
     expr: |
       gitlab_regional_sli_ops:rate_30m{component="gitlab_sshd",monitor="global",stage="main",type="git"} == 0
+      and
+      gitlab_regional_sli_ops:rate_30m{component="gitlab_sshd",monitor="global",stage="main",type="git"} offset 1h >= 0.16666666666666666
   - alert: GitServiceGitlabSshdTrafficAbsentRegional
     for: 30m
     annotations:
@@ -710,6 +718,8 @@ groups:
       user_impacting: "yes"
     expr: |
       gitlab_component_ops:rate_30m{component="loadbalancer",monitor="global",stage="main",type="git"} == 0
+      and
+      gitlab_component_ops:rate_30m{component="loadbalancer",monitor="global",stage="main",type="git"} offset 1h >= 0.16666666666666666
   - alert: GitServiceLoadbalancerTrafficAbsent
     for: 30m
     annotations:
@@ -774,6 +784,8 @@ groups:
       user_impacting: "yes"
     expr: |
       gitlab_regional_sli_ops:rate_30m{component="loadbalancer",monitor="global",stage="main",type="git"} == 0
+      and
+      gitlab_regional_sli_ops:rate_30m{component="loadbalancer",monitor="global",stage="main",type="git"} offset 1h >= 0.16666666666666666
   - alert: GitServiceLoadbalancerTrafficAbsentRegional
     for: 30m
     annotations:
@@ -1018,6 +1030,8 @@ groups:
       user_impacting: "yes"
     expr: |
       gitlab_component_ops:rate_30m{component="loadbalancer_ssh",monitor="global",stage="main",type="git"} == 0
+      and
+      gitlab_component_ops:rate_30m{component="loadbalancer_ssh",monitor="global",stage="main",type="git"} offset 1h >= 0.16666666666666666
   - alert: GitServiceLoadbalancerSshTrafficAbsent
     for: 30m
     annotations:
@@ -1082,6 +1096,8 @@ groups:
       user_impacting: "yes"
     expr: |
       gitlab_regional_sli_ops:rate_30m{component="loadbalancer_ssh",monitor="global",stage="main",type="git"} == 0
+      and
+      gitlab_regional_sli_ops:rate_30m{component="loadbalancer_ssh",monitor="global",stage="main",type="git"} offset 1h >= 0.16666666666666666
   - alert: GitServiceLoadbalancerSshTrafficAbsentRegional
     for: 30m
     annotations:
@@ -1346,6 +1362,8 @@ groups:
       user_impacting: "yes"
     expr: |
       gitlab_component_ops:rate_30m{component="puma",monitor="global",stage="main",type="git"} == 0
+      and
+      gitlab_component_ops:rate_30m{component="puma",monitor="global",stage="main",type="git"} offset 1h >= 0.16666666666666666
   - alert: GitServicePumaTrafficAbsent
     for: 30m
     annotations:
@@ -1418,6 +1436,8 @@ groups:
       user_impacting: "yes"
     expr: |
       gitlab_regional_sli_ops:rate_30m{component="puma",monitor="global",stage="main",type="git"} == 0
+      and
+      gitlab_regional_sli_ops:rate_30m{component="puma",monitor="global",stage="main",type="git"} offset 1h >= 0.16666666666666666
   - alert: GitServicePumaTrafficAbsentRegional
     for: 30m
     annotations:
@@ -1680,6 +1700,8 @@ groups:
       user_impacting: "yes"
     expr: |
       gitlab_component_ops:rate_30m{component="rails_requests",monitor="global",stage="main",type="git"} == 0
+      and
+      gitlab_component_ops:rate_30m{component="rails_requests",monitor="global",stage="main",type="git"} offset 1h >= 0.16666666666666666
   - alert: GitServiceRailsRequestsTrafficAbsent
     for: 30m
     annotations:
@@ -1756,6 +1778,8 @@ groups:
       user_impacting: "yes"
     expr: |
       gitlab_regional_sli_ops:rate_30m{component="rails_requests",monitor="global",stage="main",type="git"} == 0
+      and
+      gitlab_regional_sli_ops:rate_30m{component="rails_requests",monitor="global",stage="main",type="git"} offset 1h >= 0.16666666666666666
   - alert: GitServiceRailsRequestsTrafficAbsentRegional
     for: 30m
     annotations:
@@ -2234,6 +2258,8 @@ groups:
       user_impacting: "yes"
     expr: |
       gitlab_component_ops:rate_30m{component="workhorse",monitor="global",stage="main",type="git"} == 0
+      and
+      gitlab_component_ops:rate_30m{component="workhorse",monitor="global",stage="main",type="git"} offset 1h >= 0.16666666666666666
   - alert: GitServiceWorkhorseTrafficAbsent
     for: 30m
     annotations:
@@ -2306,6 +2332,8 @@ groups:
       user_impacting: "yes"
     expr: |
       gitlab_regional_sli_ops:rate_30m{component="workhorse",monitor="global",stage="main",type="git"} == 0
+      and
+      gitlab_regional_sli_ops:rate_30m{component="workhorse",monitor="global",stage="main",type="git"} offset 1h >= 0.16666666666666666
   - alert: GitServiceWorkhorseTrafficAbsentRegional
     for: 30m
     annotations:
@@ -2782,6 +2810,8 @@ groups:
       user_impacting: "yes"
     expr: |
       gitlab_component_ops:rate_30m{component="workhorse_auth_api",monitor="global",stage="main",type="git"} == 0
+      and
+      gitlab_component_ops:rate_30m{component="workhorse_auth_api",monitor="global",stage="main",type="git"} offset 1h >= 0.16666666666666666
   - alert: GitServiceWorkhorseAuthApiTrafficAbsent
     for: 30m
     annotations:
@@ -2854,6 +2884,8 @@ groups:
       user_impacting: "yes"
     expr: |
       gitlab_regional_sli_ops:rate_30m{component="workhorse_auth_api",monitor="global",stage="main",type="git"} == 0
+      and
+      gitlab_regional_sli_ops:rate_30m{component="workhorse_auth_api",monitor="global",stage="main",type="git"} offset 1h >= 0.16666666666666666
   - alert: GitServiceWorkhorseAuthApiTrafficAbsentRegional
     for: 30m
     annotations:

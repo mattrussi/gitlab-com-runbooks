@@ -7,6 +7,7 @@ local serviceAlertsGenerator = import 'slo-alerts/service-alerts-generator.libso
 // See docs/metrics-catalog/service-level-monitoring.md for more details
 // of how minimumSamplesForMonitoring works
 local minimumSamplesForMonitoring = 3600;
+local minimumSamplesForTrafficCessation = 300;
 
 local alertDescriptors = [{
   predicate: function(service) true,
@@ -17,6 +18,7 @@ local alertDescriptors = [{
   minimumSamplesForMonitoring: minimumSamplesForMonitoring,
   alertForDuration: null,  // Use default for window...
   trafficCessationSelector: {},
+  minimumSamplesForTrafficCessation: minimumSamplesForTrafficCessation,
 }];
 
 std.flatMap(

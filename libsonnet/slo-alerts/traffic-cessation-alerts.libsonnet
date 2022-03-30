@@ -1,3 +1,4 @@
+local minimumOpRate = import './minimum-op-rate.libsonnet';
 local serviceLevelAlerts = import './service-level-alerts.libsonnet';
 local sloAlertAnnotations = import './slo-alert-annotations.libsonnet';
 local labelsForSLIAlert = import './slo-alert-labels.libsonnet';
@@ -24,6 +25,16 @@ local annotationsForTrafficAlert(service, sli, alertDescriptor, aggregationSet, 
       if alertDescriptor.alertExtraDetail != null then [alertDescriptor.alertExtraDetail] else []
     ),
   };
+
+local trafficCessationRequiredOpRateFormat(requiredOpRate) =
+  if requiredOpRate == null then
+    ''
+  else
+    |||
+      and
+      %(opsRateIntermediateMetric)s{%(selector)s} offset 1h >= %(requiredOpRate)s
+    |||;
+
 
 local getTrafficCessationAlertSelector(service, sli, alertDescriptor) =
   local aggregationSet = alertDescriptor.aggregationSet;
@@ -56,7 +67,7 @@ local generateTrafficCessationAlerts(service, sli, alertDescriptor, trafficCessa
   // Exclude the legacy 1m period
   local burnRates = std.filter(function(f) durationParser.toSeconds(f) > 60, aggregationSet.getBurnRates());
 
-  // The short period is the shortest period, excluding the legacy 1m period
+  // The short period is the shortest period, excluding the legacy 1m period (usually 5m)
   local opsRateShortPeriod = burnRates[0];
   local opsRateShortMetric = aggregationSet.getOpsRateMetricForBurnRate(opsRateShortPeriod, required=false);
 
@@ -81,6 +92,11 @@ local generateTrafficCessationAlerts(service, sli, alertDescriptor, trafficCessa
     selector: selectors.serializeHash(selector),
   };
 
+  local requiredOpRate = minimumOpRate.calculateFromSamplesForDuration(
+    duration=opsRateIntermediatePeriod,
+    sampleCount=alertDescriptor.minimumSamplesForTrafficCessation
+  );
+
   // TrafficCessation and TrafficAbsent alerts use the same labels, for easier matching
   local labelsForTrafficAlerts =
     serviceLevelAlerts.labelsForAlert(sli.severity, aggregationSet, 'ops', 'traffic_cessation', windowDuration=null)
@@ -89,10 +105,14 @@ local generateTrafficCessationAlerts(service, sli, alertDescriptor, trafficCessa
 
   (if opsRateIntermediateMetric != null then
      [{
-       alert: serviceLevelAlerts.nameSLOViolationAlert(service.type, sli.name, 'TrafficCessation' + alertDescriptor.alertSuffix),
-       expr: |||
+       local expr = |||
          %(opsRateIntermediateMetric)s{%(selector)s} == 0
-       ||| % formatConfig,
+       ||| + trafficCessationRequiredOpRateFormat(requiredOpRate),
+
+       alert: serviceLevelAlerts.nameSLOViolationAlert(service.type, sli.name, 'TrafficCessation' + alertDescriptor.alertSuffix),
+       expr: expr % formatConfig {
+         requiredOpRate: requiredOpRate,
+       },
        'for': opsRateShortPeriod,
        labels: labelsForTrafficAlerts,
        annotations:

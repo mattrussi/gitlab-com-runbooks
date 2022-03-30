@@ -38,6 +38,8 @@ groups:
       user_impacting: "no"
     expr: |
       gitlab_component_ops:rate_30m{component="elasticsearch_indexing_cluster",monitor="global",stage="main",type="logging"} == 0
+      and
+      gitlab_component_ops:rate_30m{component="elasticsearch_indexing_cluster",monitor="global",stage="main",type="logging"} offset 1h >= 0.16666666666666666
   - alert: LoggingServiceElasticsearchIndexingClusterTrafficAbsent
     for: 30m
     annotations:
@@ -108,6 +110,8 @@ groups:
       user_impacting: "no"
     expr: |
       gitlab_component_ops:rate_30m{component="elasticsearch_indexing_index",monitor="global",stage="main",type="logging"} == 0
+      and
+      gitlab_component_ops:rate_30m{component="elasticsearch_indexing_index",monitor="global",stage="main",type="logging"} offset 1h >= 0.16666666666666666
   - alert: LoggingServiceElasticsearchIndexingIndexTrafficAbsent
     for: 30m
     annotations:
@@ -178,6 +182,8 @@ groups:
       user_impacting: "no"
     expr: |
       gitlab_component_ops:rate_30m{component="elasticsearch_searching_cluster",monitor="global",stage="main",type="logging"} == 0
+      and
+      gitlab_component_ops:rate_30m{component="elasticsearch_searching_cluster",monitor="global",stage="main",type="logging"} offset 1h >= 0.16666666666666666
   - alert: LoggingServiceElasticsearchSearchingClusterTrafficAbsent
     for: 30m
     annotations:
@@ -248,6 +254,8 @@ groups:
       user_impacting: "no"
     expr: |
       gitlab_component_ops:rate_30m{component="elasticsearch_searching_index",monitor="global",stage="main",type="logging"} == 0
+      and
+      gitlab_component_ops:rate_30m{component="elasticsearch_searching_index",monitor="global",stage="main",type="logging"} offset 1h >= 0.16666666666666666
   - alert: LoggingServiceElasticsearchSearchingIndexTrafficAbsent
     for: 30m
     annotations:
@@ -414,6 +422,8 @@ groups:
       user_impacting: "no"
     expr: |
       gitlab_component_ops:rate_30m{component="fluentd_log_output",monitor="global",stage="main",type="logging"} == 0
+      and
+      gitlab_component_ops:rate_30m{component="fluentd_log_output",monitor="global",stage="main",type="logging"} offset 1h >= 0.16666666666666666
   - alert: LoggingServiceFluentdLogOutputTrafficAbsent
     for: 30m
     annotations:
@@ -576,6 +586,8 @@ groups:
       user_impacting: "no"
     expr: |
       gitlab_component_ops:rate_30m{component="pubsub_subscriptions",monitor="global",stage="main",type="logging"} == 0
+      and
+      gitlab_component_ops:rate_30m{component="pubsub_subscriptions",monitor="global",stage="main",type="logging"} offset 1h >= 0.16666666666666666
   - alert: LoggingServicePubsubSubscriptionsTrafficAbsent
     for: 30m
     annotations:
@@ -646,6 +658,8 @@ groups:
       user_impacting: "no"
     expr: |
       gitlab_component_ops:rate_30m{component="pubsub_topics",monitor="global",stage="main",type="logging"} == 0
+      and
+      gitlab_component_ops:rate_30m{component="pubsub_topics",monitor="global",stage="main",type="logging"} offset 1h >= 0.16666666666666666
   - alert: LoggingServicePubsubTopicsTrafficAbsent
     for: 30m
     annotations:
@@ -812,6 +826,8 @@ groups:
       user_impacting: "no"
     expr: |
       gitlab_component_ops:rate_30m{component="pubsubbeat",monitor="global",stage="main",type="logging"} == 0
+      and
+      gitlab_component_ops:rate_30m{component="pubsubbeat",monitor="global",stage="main",type="logging"} offset 1h >= 0.16666666666666666
   - alert: LoggingServicePubsubbeatTrafficAbsent
     for: 30m
     annotations:

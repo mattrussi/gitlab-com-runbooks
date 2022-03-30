@@ -226,6 +226,8 @@ groups:
       user_impacting: "no"
     expr: |
       gitlab_component_ops:rate_30m{component="cnyHttpServices",monitor="global",stage="main",type="frontend"} == 0
+      and
+      gitlab_component_ops:rate_30m{component="cnyHttpServices",monitor="global",stage="main",type="frontend"} offset 1h >= 0.16666666666666666
   - alert: FrontendServiceCnyHttpServicesTrafficAbsent
     for: 30m
     annotations:
@@ -482,6 +484,8 @@ groups:
       user_impacting: "no"
     expr: |
       gitlab_component_ops:rate_30m{component="mainHttpServices",monitor="global",stage="main",type="frontend"} == 0
+      and
+      gitlab_component_ops:rate_30m{component="mainHttpServices",monitor="global",stage="main",type="frontend"} offset 1h >= 0.16666666666666666
   - alert: FrontendServiceMainHttpServicesTrafficAbsent
     for: 30m
     annotations:
@@ -738,6 +742,8 @@ groups:
       user_impacting: "no"
     expr: |
       gitlab_component_ops:rate_30m{component="sshServices",monitor="global",stage="main",type="frontend"} == 0
+      and
+      gitlab_component_ops:rate_30m{component="sshServices",monitor="global",stage="main",type="frontend"} offset 1h >= 0.16666666666666666
   - alert: FrontendServiceSshServicesTrafficAbsent
     for: 30m
     annotations:

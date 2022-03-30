@@ -136,6 +136,8 @@ groups:
       user_impacting: "no"
     expr: |
       gitlab_component_ops:rate_30m{component="pg_transactions",monitor="global",stage="main",type="sentry"} == 0
+      and
+      gitlab_component_ops:rate_30m{component="pg_transactions",monitor="global",stage="main",type="sentry"} offset 1h >= 0.16666666666666666
   - alert: SentryServicePgTransactionsTrafficAbsent
     for: 30m
     annotations:
@@ -406,6 +408,8 @@ groups:
       user_impacting: "no"
     expr: |
       gitlab_component_ops:rate_30m{component="sentry_events",monitor="global",stage="main",type="sentry"} == 0
+      and
+      gitlab_component_ops:rate_30m{component="sentry_events",monitor="global",stage="main",type="sentry"} offset 1h >= 0.16666666666666666
   - alert: SentryServiceSentryEventsTrafficAbsent
     for: 30m
     annotations:

@@ -134,6 +134,8 @@ groups:
       user_impacting: "yes"
     expr: |
       gitlab_component_ops:rate_30m{component="praefect_cloudsql",monitor="global",stage="main",type="praefect"} == 0
+      and
+      gitlab_component_ops:rate_30m{component="praefect_cloudsql",monitor="global",stage="main",type="praefect"} offset 1h >= 0.16666666666666666
   - alert: PraefectServicePraefectCloudsqlTrafficAbsent
     for: 30m
     annotations:
@@ -402,6 +404,8 @@ groups:
       user_impacting: "yes"
     expr: |
       gitlab_component_ops:rate_30m{component="proxy",monitor="global",stage="main",type="praefect"} == 0
+      and
+      gitlab_component_ops:rate_30m{component="proxy",monitor="global",stage="main",type="praefect"} offset 1h >= 0.16666666666666666
   - alert: PraefectServiceProxyTrafficAbsent
     for: 30m
     annotations:
@@ -574,6 +578,8 @@ groups:
       user_impacting: "no"
     expr: |
       gitlab_component_ops:rate_30m{component="replicator_queue",monitor="global",stage="main",type="praefect"} == 0
+      and
+      gitlab_component_ops:rate_30m{component="replicator_queue",monitor="global",stage="main",type="praefect"} offset 1h >= 0.16666666666666666
   - alert: PraefectServiceReplicatorQueueTrafficAbsent
     for: 30m
     annotations:

@@ -1,5 +1,6 @@
 local multiburnExpression = import 'mwmbr/expression.libsonnet';
 local multiburnFactors = import 'mwmbr/multiburn_factors.libsonnet';
+local minimumOpRate = import 'slo-alerts/minimum-op-rate.libsonnet';
 local stableIds = import 'stable-ids/stable-ids.libsonnet';
 local strings = import 'utils/strings.libsonnet';
 
@@ -78,7 +79,7 @@ local apdexAlertsForSLI(
       expr: multiburnExpression.multiburnRateApdexExpression(
         aggregationSet=aggregationSet,
         metricSelectorHash=metricSelectorHash,
-        minimumSamplesForMonitoring=minimumSamplesForMonitoring,
+        requiredOpRate=minimumOpRate.calculateFromSamplesForDuration(windowDuration, minimumSamplesForMonitoring),
         thresholdSLOValue=thresholdSLOValue,
         windows=[windowDuration],
         operationRateWindowDuration=windowDuration,
@@ -121,7 +122,7 @@ local errorAlertsForSLI(
       expr: multiburnExpression.multiburnRateErrorExpression(
         aggregationSet=aggregationSet,
         metricSelectorHash=metricSelectorHash,
-        minimumSamplesForMonitoring=minimumSamplesForMonitoring,
+        requiredOpRate=minimumOpRate.calculateFromSamplesForDuration(windowDuration, minimumSamplesForMonitoring),
         thresholdSLOValue=1 - thresholdSLOValue,
         windows=[windowDuration],
         operationRateWindowDuration=windowDuration,
