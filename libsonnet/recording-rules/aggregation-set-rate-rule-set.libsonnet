@@ -21,29 +21,6 @@ local getDirectRateExpression(sourceAggregationSet, targetAggregationSet, burnRa
     }
   else null;
 
-local getErrorSourcedSuccessRateExpression(source, target, burnRate, errorVisitor, opsVisitor) =
-  local sourceErrorRateMetricName = errorVisitor.metricName(source, burnRate);
-  local sourceOpsRateMetricName = opsVisitor.metricName(source, burnRate);
-  local targetAggregationLabels = aggregations.serialize(target.labels);
-  local sourceSelector = selectors.serializeHash(source.selector);
-  if sourceErrorRateMetricName != null && sourceOpsRateMetricName != null then
-    |||
-      sum by (%(targetAggregationLabels)s) (
-        (
-          %(opsRateMetricName)s{%(sourceSelector)s}
-          -
-          %(errorRate)s{%(sourceSelector)s}
-        )%(aggregationFilterExpr)s
-      )
-    ||| % {
-      targetAggregationLabels: targetAggregationLabels,
-      opsRateMetricName: sourceOpsRateMetricName,
-      errorRate: sourceErrorRateMetricName,
-      sourceSelector: sourceSelector,
-      aggregationFilterExpr: helpers.aggregationFilterExpr(target),
-    }
-  else null;
-
 local errorRateVisitor = {
   metricName(aggregationSet, burnRate, required=false)::
     aggregationSet.getErrorRateMetricForBurnRate(burnRate, required),
@@ -60,22 +37,6 @@ local opsRateVisitor = {
   getRateExpression(sourceAggregationSet, targetAggregationSet, burnRate)::
     local directExpr = getDirectRateExpression(sourceAggregationSet, targetAggregationSet, burnRate, self);
     helpers.combinedOpsRateExpression(sourceAggregationSet, targetAggregationSet, burnRate, directExpr),
-};
-
-local getSuccessRateExpression(source, target, burnRate, successRateVisitor) =
-  local sourceSuccessRateMetric = successRateVisitor.metricName(source, burnRate);
-  if sourceSuccessRateMetric != null then
-    getDirectRateExpression(source, target, burnRate, successRateVisitor)
-  else
-    getErrorSourcedSuccessRateExpression(source, target, burnRate, errorRateVisitor, opsRateVisitor);
-
-local successRateVisitor = {
-  metricName(aggregationSet, burnRate, required=false)::
-    aggregationSet.getSuccessRateMetricForBurnRate(burnRate, required),
-
-  getRateExpression(source, target, burnRate)::
-    local expression = getSuccessRateExpression(source, target, burnRate, self);
-    helpers.combinedSuccessRateExpression(source, target, burnRate, expression),
 };
 
 // Generates the recording rule YAML when required. Returns an array of 0 or more definitions
@@ -95,7 +56,5 @@ local getRecordingRuleDefinitions(sourceAggregationSet, targetAggregationSet, bu
   aggregationSetRateRuleSet(sourceAggregationSet, targetAggregationSet, burnRate)::
     getRecordingRuleDefinitions(sourceAggregationSet, targetAggregationSet, burnRate, errorRateVisitor)
     +
-    getRecordingRuleDefinitions(sourceAggregationSet, targetAggregationSet, burnRate, opsRateVisitor)
-    +
-    getRecordingRuleDefinitions(sourceAggregationSet, targetAggregationSet, burnRate, successRateVisitor),
+    getRecordingRuleDefinitions(sourceAggregationSet, targetAggregationSet, burnRate, opsRateVisitor),
 }

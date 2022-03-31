@@ -179,45 +179,6 @@ local upscaledErrorRateExpression(sourceAggregationSet, targetAggregationSet, bu
     extraSelectors=extraSelectors
   );
 
-local upscaledSuccessRateExpression(sourceAggregationSet, targetAggregationSet, burnRate, extraSelectors={}) =
-  local sourceMetricName = sourceAggregationSet.getSuccessRateMetricForBurnRate('1h', required=false);
-  if sourceMetricName != null then
-    upscaledRateExpression(
-      sourceAggregationSet,
-      targetAggregationSet,
-      burnRate,
-      metricName=sourceMetricName,
-      extraSelectors=extraSelectors
-    )
-  else
-    local upscaledOpsRate = strings.chomp(upscaledRateExpression(
-      sourceAggregationSet,
-      targetAggregationSet,
-      burnRate,
-      metricName=sourceAggregationSet.getOpsRateMetricForBurnRate('1h', required=true),
-      extraSelectors=extraSelectors,
-    ));
-    local upscaledErrorRate = strings.chomp(upscaledRateExpression(
-      sourceAggregationSet,
-      targetAggregationSet,
-      burnRate,
-      metricName=sourceAggregationSet.getErrorRateMetricForBurnRate('1h', required=true),
-      extraSelectors=extraSelectors,
-    ));
-    |||
-      %(upscaledOpsRate)s
-      -
-      (
-        %(upscaledErrorRate)s or (
-          0 * %(indentedUpscaledOpsRate)s
-        )
-      )
-    ||| % {
-      upscaledOpsRate: upscaledOpsRate,
-      upscaledErrorRate: strings.chomp(strings.indent(upscaledErrorRate, 2)),
-      indentedUpscaledOpsRate: strings.chomp(strings.indent(upscaledOpsRate, 4)),
-    };
-
 // Generates a transformation expression that either uses direct, upscaled or
 // or combines both in cases where the source expression contains a mixture
 local combineUpscaleAndDirectTransformationExpressions(upscaledExprType, upscaleExpressionFn, sourceAggregationSet, targetAggregationSet, burnRate, directExpr) =
@@ -290,5 +251,4 @@ local curry(upscaledExprType, upscaleExpressionFn) =
   combinedApdexWeightExpression: curry('apdexWeight', upscaledApdexWeightExpression),
   combinedOpsRateExpression: curry('opsRate', upscaledOpsRateExpression),
   combinedErrorRateExpression: curry('errorRate', upscaledErrorRateExpression),
-  combinedSuccessRateExpression: curry('successRate', upscaledSuccessRateExpression),
 }
