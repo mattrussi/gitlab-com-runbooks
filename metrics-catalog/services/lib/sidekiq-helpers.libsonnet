@@ -12,10 +12,10 @@
 local shards = {
   'database-throttled': { urgency: 'throttled', gkeDeployment: 'gitlab-sidekiq-database-throttled-v1', userImpacting: false, trafficCessationAlertConfig: false },
   'gitaly-throttled': { urgency: 'throttled', gkeDeployment: 'gitlab-sidekiq-gitaly-throttled-v1', userImpacting: false, trafficCessationAlertConfig: false },
-  imports: { urgency: 'throttled', gkeDeployment: 'gitlab-sidekiq-catchall-v1', userImpacting: true, trafficCessationAlertConfig: false },
+  imports: { urgency: null, gkeDeployment: 'gitlab-sidekiq-catchall-v1', userImpacting: true, trafficCessationAlertConfig: false, autoScaling: false },
   'low-urgency-cpu-bound': { urgency: 'low', gkeDeployment: 'gitlab-sidekiq-low-urgency-cpu-bound-v1', userImpacting: true, trafficCessationAlertConfig: true },
-  'memory-bound': { urgency: 'throttled', gkeDeployment: 'gitlab-sidekiq-memory-bound-v1', userImpacting: true, trafficCessationAlertConfig: false },
-  quarantine: { urgency: 'high', gkeDeployment: 'gitlab-sidekiq-catchall-v1', userImpacting: true, trafficCessationAlertConfig: false },
+  'memory-bound': { urgency: null, gkeDeployment: 'gitlab-sidekiq-memory-bound-v1', userImpacting: true, trafficCessationAlertConfig: false },
+  quarantine: { urgency: null, gkeDeployment: 'gitlab-sidekiq-catchall-v1', userImpacting: true, trafficCessationAlertConfig: false },
   'urgent-cpu-bound': { urgency: 'high', gkeDeployment: 'gitlab-sidekiq-urgent-cpu-bound-v1', userImpacting: true, trafficCessationAlertConfig: true },
   'urgent-other': { urgency: 'high', autoScaling: false, gkeDeployment: 'gitlab-sidekiq-urgent-other-v1', userImpacting: true, trafficCessationAlertConfig: true },
   catchall: { urgency: null, gkeDeployment: 'gitlab-sidekiq-catchall-v1', userImpacting: true, trafficCessationAlertConfig: true /* no urgency attribute since multiple values are supported */ },

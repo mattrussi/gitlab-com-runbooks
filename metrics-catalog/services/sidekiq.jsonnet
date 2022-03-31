@@ -102,65 +102,34 @@ metricsCatalog.serviceDefinition({
         Aggregation of all jobs for the %(shard)s Sidekiq shard.
       ||| % shardSelector,
       apdex: combined(
-        (
-          if shard.urgency == null || shard.urgency == 'high' then
-            [
-              histogramApdex(
-                histogram='sidekiq_jobs_completion_seconds_bucket',
-                selector=highUrgencySelector + shardSelector,
-                satisfiedThreshold=sidekiqHelpers.slos.urgent.executionDurationSeconds,
-              ),
-              histogramApdex(
-                histogram='sidekiq_jobs_queue_duration_seconds_bucket',
-                selector=highUrgencySelector + shardSelector,
-                satisfiedThreshold=sidekiqHelpers.slos.urgent.queueingDurationSeconds,
-              ),
-            ] else []
-        )
-        +
-        (
-          if shard.urgency == null || shard.urgency == 'low' then
-            [
-              histogramApdex(
-                histogram='sidekiq_jobs_completion_seconds_bucket',
-                selector=lowUrgencySelector + shardSelector,
-                satisfiedThreshold=sidekiqHelpers.slos.lowUrgency.executionDurationSeconds,
-              ),
-              histogramApdex(
-                histogram='sidekiq_jobs_queue_duration_seconds_bucket',
-                selector=lowUrgencySelector + shardSelector,
-                satisfiedThreshold=sidekiqHelpers.slos.lowUrgency.queueingDurationSeconds,
-              ),
-            ] else []
-        )
-        +
-        (
-          if shard.urgency == null || shard.urgency == 'throttled' then
-            [
-              histogramApdex(
-                histogram='sidekiq_jobs_completion_seconds_bucket',
-                selector=throttledUrgencySelector + shardSelector,
-                satisfiedThreshold=sidekiqHelpers.slos.throttled.executionDurationSeconds,
-              ),
-            ] else []
-        ) +
-        (
-          if shard.urgency == null then
-            [
-              // TODO: remove this once all unattribute jobs are removed
-              // Treat `urgency=""` as low urgency jobs.
-              histogramApdex(
-                histogram='sidekiq_jobs_completion_seconds_bucket',
-                selector=noUrgencySelector + shardSelector,
-                satisfiedThreshold=sidekiqHelpers.slos.lowUrgency.executionDurationSeconds,
-              ),
-              histogramApdex(
-                histogram='sidekiq_jobs_queue_duration_seconds_bucket',
-                selector=noUrgencySelector + shardSelector,
-                satisfiedThreshold=sidekiqHelpers.slos.lowUrgency.queueingDurationSeconds,
-              ),
-            ] else []
-        )
+        [
+          histogramApdex(
+            histogram='sidekiq_jobs_completion_seconds_bucket',
+            selector=highUrgencySelector + shardSelector,
+            satisfiedThreshold=sidekiqHelpers.slos.urgent.executionDurationSeconds,
+          ),
+          histogramApdex(
+            histogram='sidekiq_jobs_queue_duration_seconds_bucket',
+            selector=highUrgencySelector + shardSelector,
+            satisfiedThreshold=sidekiqHelpers.slos.urgent.queueingDurationSeconds,
+          ),
+          histogramApdex(
+            histogram='sidekiq_jobs_completion_seconds_bucket',
+            selector=lowUrgencySelector + shardSelector,
+            satisfiedThreshold=sidekiqHelpers.slos.lowUrgency.executionDurationSeconds,
+          ),
+          histogramApdex(
+            histogram='sidekiq_jobs_queue_duration_seconds_bucket',
+            selector=lowUrgencySelector + shardSelector,
+            satisfiedThreshold=sidekiqHelpers.slos.lowUrgency.queueingDurationSeconds,
+          ),
+          histogramApdex(
+            histogram='sidekiq_jobs_completion_seconds_bucket',
+            selector=throttledUrgencySelector + shardSelector,
+            satisfiedThreshold=sidekiqHelpers.slos.throttled.executionDurationSeconds,
+          ),
+          // No queueing apdex for throttled jobs
+        ]
       ),
 
       requestRate: rateMetric(
@@ -178,6 +147,8 @@ metricsCatalog.serviceDefinition({
       // `recordingRuleMetrics` stanza above
       significantLabels: ['feature_category', 'queue', 'urgency', 'worker'],
 
+      // We don't have an `urgency` field in Sidekiq logs. Improve this in
+      // https://gitlab.com/groups/gitlab-com/gl-infra/-/epics/700
       local slowRequestSeconds =
         if shard.urgency == 'high' then
           sidekiqHelpers.slos.urgent.executionDurationSeconds
