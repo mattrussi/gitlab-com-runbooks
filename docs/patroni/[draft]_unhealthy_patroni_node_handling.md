@@ -43,7 +43,8 @@ What this means is that we need to be aware of and think of:
 - Stop chef-client so that any change we make to the replica node and patroni doesn't get overwritten
 - Take the node out of loadbalancing to drain all connections and then take the replica node out of the cluster
 - Safely shutdown and destroy the node
-- Let Terraform replace the instance
+- Let Terraform replace the instance 
+- Initialize the Patroni service in the replaced instance to re-build it back as a PostgreSQL Replica
 
 ## Chapter 1 - Diagnose
 
@@ -53,6 +54,11 @@ What this means is that we need to be aware of and think of:
 #### A - Replication Lagging
 
 If just one or a few Replicas are lagging in relation with the Primary/Writer node there is a great chance that the issue is on the Replica side, so the first evidence of an unhealthy replica is replication lag.
+
+**Note 1:** lag spikes of a few seconds are common; up to `max_standby_stream_delay` (default to 30 seconds) are allowed; 
+
+**Note 2:** if the lag is building up in all nodes, it's more likely that the issue is related with the Writer or the workload and not the case of an unhealthy replica;
+
 
 - Execute `gitlab-patronictl list` to get the amount of Lag, in MBytes, for each Replica
 
@@ -83,11 +89,15 @@ For example the following output show aprox. 19 GB (19382 MB) of lag in the `pat
 
 #### B - SQL Query Latency
 
+- If you compare the "" metric between nodes, the nodes presenting higher values :
+
+
 
 --
 
 ### Host health - Check Resource Contention
 
+If there is intense resource contention a resource can become unhealthy, 
 
 #### A - Disk
 
