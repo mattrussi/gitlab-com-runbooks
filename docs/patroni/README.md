@@ -31,6 +31,7 @@
 * [gitlab-com-walg-backups.md](gitlab-com-walg-backups.md)
 * [Log analysis on PostgreSQL, Pgbouncer, Patroni and consul Runbook](log_analysis.md)
 * [Mapping Postgres Statements, Slowlogs, Activity Monitoring and Traces](mapping_statements.md)
+* [OS Upgrade Reference Architecture](os_upgrade_reference_architecture.md)
 * [Patroni](patroni-management.md)
 * [performance-degradation-troubleshooting.md](performance-degradation-troubleshooting.md)
 * [PostgreSQL HA](pg-ha.md)

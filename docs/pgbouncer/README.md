@@ -19,6 +19,7 @@
 * [Interacting with Consul](../consul/interaction.md)
 * [../frontend/gitlab-com-is-down.md](../frontend/gitlab-com-is-down.md)
 * [Log analysis on PostgreSQL, Pgbouncer, Patroni and consul Runbook](../patroni/log_analysis.md)
+* [OS Upgrade Reference Architecture](../patroni/os_upgrade_reference_architecture.md)
 * [Patroni](../patroni/patroni-management.md)
 * [../patroni/performance-degradation-troubleshooting.md](../patroni/performance-degradation-troubleshooting.md)
 * [PostgreSQL HA](../patroni/pg-ha.md)

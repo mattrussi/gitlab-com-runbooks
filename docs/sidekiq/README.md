@@ -29,6 +29,7 @@
 * [Diagnosis with Kibana](../onboarding/kibana-diagnosis.md)
 * [../patroni/database_peak_analysis.md](../patroni/database_peak_analysis.md)
 * [Geo Patroni Cluster Management](../patroni/geo-patroni-cluster.md)
+* [OS Upgrade Reference Architecture](../patroni/os_upgrade_reference_architecture.md)
 * [../patroni/pg_collect_query_data.md](../patroni/pg_collect_query_data.md)
 * [../patroni/postgresql-locking.md](../patroni/postgresql-locking.md)
 * [How to provision the benchmark environment](../patroni/provisioning_bench_env.md)
