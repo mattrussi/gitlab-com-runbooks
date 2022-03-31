@@ -101,7 +101,7 @@ metricsCatalog.serviceDefinition({
       description: |||
         Aggregation of all jobs for the %(shard)s Sidekiq shard.
       ||| % shardSelector,
-      apdex: combined(
+      [if shard.urgency != 'throttled' then 'apdex']: combined(
         (
           if shard.urgency == null || shard.urgency == 'high' then
             [
@@ -134,16 +134,6 @@ metricsCatalog.serviceDefinition({
             ] else []
         )
         +
-        (
-          if shard.urgency == null || shard.urgency == 'throttled' then
-            [
-              histogramApdex(
-                histogram='sidekiq_jobs_completion_seconds_bucket',
-                selector=throttledUrgencySelector + shardSelector,
-                satisfiedThreshold=sidekiqHelpers.slos.throttled.executionDurationSeconds,
-              ),
-            ] else []
-        ) +
         (
           if shard.urgency == null then
             [
