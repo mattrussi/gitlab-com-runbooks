@@ -90,7 +90,7 @@ metricsCatalog.serviceDefinition({
         histogram='haproxy_ssh_request_duration_seconds_bucket',
         selector='type="frontend"',
         satisfiedThreshold=16,
-        toleratedThreshold=32,
+        toleratedThreshold=40,
       ),
 
       requestRate: rateMetric(

@@ -112,7 +112,7 @@ groups:
         )
         +
         sum by (environment,stage) (
-          rate(haproxy_ssh_request_duration_seconds_bucket{type="frontend", le="32"}[1m])
+          rate(haproxy_ssh_request_duration_seconds_bucket{type="frontend", le="40"}[1m])
         )
       )
       /
@@ -263,7 +263,7 @@ groups:
         )
         +
         sum by (environment,stage) (
-          rate(haproxy_ssh_request_duration_seconds_bucket{type="frontend", le="32"}[5m])
+          rate(haproxy_ssh_request_duration_seconds_bucket{type="frontend", le="40"}[5m])
         )
       )
       /
@@ -414,7 +414,7 @@ groups:
         )
         +
         sum by (environment,stage) (
-          rate(haproxy_ssh_request_duration_seconds_bucket{type="frontend", le="32"}[30m])
+          rate(haproxy_ssh_request_duration_seconds_bucket{type="frontend", le="40"}[30m])
         )
       )
       /
@@ -565,7 +565,7 @@ groups:
         )
         +
         sum by (environment,stage) (
-          rate(haproxy_ssh_request_duration_seconds_bucket{type="frontend", le="32"}[1h])
+          rate(haproxy_ssh_request_duration_seconds_bucket{type="frontend", le="40"}[1h])
         )
       )
       /
@@ -716,7 +716,7 @@ groups:
         )
         +
         sum by (environment,stage) (
-          rate(haproxy_ssh_request_duration_seconds_bucket{type="frontend", le="32"}[6h])
+          rate(haproxy_ssh_request_duration_seconds_bucket{type="frontend", le="40"}[6h])
         )
       )
       /
