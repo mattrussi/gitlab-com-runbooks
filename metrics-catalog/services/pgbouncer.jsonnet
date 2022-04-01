@@ -7,6 +7,7 @@ metricsCatalog.serviceDefinition(
     type='pgbouncer',
     extraTags=[
       'pgbouncer_async_primary',
+      'pgbouncer_async_replica',
     ],
   )
   {
