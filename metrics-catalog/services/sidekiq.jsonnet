@@ -59,7 +59,7 @@ metricsCatalog.serviceDefinition({
   kubeConfig: {
     // TODO: currently sidekiq node_pools are incorrectly labelled with the shard label
     // See https://gitlab.com/gitlab-com/gl-infra/delivery/-/issues/2243
-    local shardNames = std.map(function(f) f.name, sidekiqHelpers.shards.listAll()),
+    local shardNames = sidekiqHelpers.shards.listByName(),
     labelSelectors: kubeLabelSelectors(
       ingressSelector=null,  // no ingress for sidekiq
       nodeSelector={ type: { oneOf: shardNames } },
@@ -85,7 +85,7 @@ metricsCatalog.serviceDefinition({
           ],
         },
       },
-    sidekiqHelpers.shards.listAll(),
+    std.map(function(s) std.trace('shard: %s' % [s], s), sidekiqHelpers.shards.listAll()),
     {},
   ),
   serviceLevelIndicators: {
@@ -97,6 +97,7 @@ metricsCatalog.serviceDefinition({
       team: 'scalability',
       trafficCessationAlertConfig: shard.trafficCessationAlertConfig,
       upscaleLongerBurnRates: true,
+      monitoringThresholds+: shard.monitoringThresholds,
 
       description: |||
         Aggregation of all jobs for the %(shard)s Sidekiq shard.

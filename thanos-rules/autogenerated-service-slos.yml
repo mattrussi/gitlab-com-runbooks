@@ -1644,7 +1644,7 @@ groups:
       component: shard_memory_bound
       tier: sv
       type: sidekiq
-    expr: "0.995000"
+    expr: "0.920000"
   - record: slo:max:events:gitlab_service_errors:ratio
     labels:
       component: shard_memory_bound
