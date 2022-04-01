@@ -91,6 +91,7 @@ metricsCatalog.serviceDefinition({
   serviceLevelIndicators: {
     ['shard_' + std.strReplace(shard.name, '-', '_')]: {
       local shardSelector = { shard: shard.name },
+      local completionApdexSelector = { worker: { noneOf: sidekiqHelpers.longRunningWorkers } },
 
       userImpacting: shard.userImpacting,
       featureCategory: 'not_owned',
@@ -105,7 +106,7 @@ metricsCatalog.serviceDefinition({
         [
           histogramApdex(
             histogram='sidekiq_jobs_completion_seconds_bucket',
-            selector=highUrgencySelector + shardSelector,
+            selector=highUrgencySelector + shardSelector + completionApdexSelector,
             satisfiedThreshold=sidekiqHelpers.slos.urgent.executionDurationSeconds,
           ),
           histogramApdex(
@@ -115,7 +116,7 @@ metricsCatalog.serviceDefinition({
           ),
           histogramApdex(
             histogram='sidekiq_jobs_completion_seconds_bucket',
-            selector=lowUrgencySelector + shardSelector,
+            selector=lowUrgencySelector + shardSelector + completionApdexSelector,
             satisfiedThreshold=sidekiqHelpers.slos.lowUrgency.executionDurationSeconds,
           ),
           histogramApdex(
@@ -125,7 +126,7 @@ metricsCatalog.serviceDefinition({
           ),
           histogramApdex(
             histogram='sidekiq_jobs_completion_seconds_bucket',
-            selector=throttledUrgencySelector + shardSelector,
+            selector=throttledUrgencySelector + shardSelector + completionApdexSelector,
             satisfiedThreshold=sidekiqHelpers.slos.throttled.executionDurationSeconds,
           ),
           // No queueing apdex for throttled jobs

@@ -188,15 +188,15 @@ groups:
         histogram_quantile(
           0.950000,
           sum by (env,environment,tier,stage,le) (
-            sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate5m{environment="{{ $labels.environment }}",shard="catchall",stage="{{ $labels.stage }}",urgency="high"}
+            sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate5m{environment="{{ $labels.environment }}",shard="catchall",stage="{{ $labels.stage }}",urgency="high",worker!~"ProjectExportWorker"}
             or
             sli_aggregations:sidekiq_jobs_queue_duration_seconds_bucket_rate5m{environment="{{ $labels.environment }}",shard="catchall",stage="{{ $labels.stage }}",urgency="high"}
             or
-            sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate5m{environment="{{ $labels.environment }}",shard="catchall",stage="{{ $labels.stage }}",urgency="low"}
+            sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate5m{environment="{{ $labels.environment }}",shard="catchall",stage="{{ $labels.stage }}",urgency="low",worker!~"ProjectExportWorker"}
             or
             sli_aggregations:sidekiq_jobs_queue_duration_seconds_bucket_rate5m{environment="{{ $labels.environment }}",shard="catchall",stage="{{ $labels.stage }}",urgency="low"}
             or
-            sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate5m{environment="{{ $labels.environment }}",shard="catchall",stage="{{ $labels.stage }}",urgency="throttled"}
+            sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate5m{environment="{{ $labels.environment }}",shard="catchall",stage="{{ $labels.stage }}",urgency="throttled",worker!~"ProjectExportWorker"}
           )
         )
       runbook: docs/sidekiq/README.md
@@ -247,15 +247,15 @@ groups:
         histogram_quantile(
           0.950000,
           sum by (env,environment,tier,stage,le) (
-            sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate5m{environment="{{ $labels.environment }}",shard="catchall",stage="{{ $labels.stage }}",urgency="high"}
+            sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate5m{environment="{{ $labels.environment }}",shard="catchall",stage="{{ $labels.stage }}",urgency="high",worker!~"ProjectExportWorker"}
             or
             sli_aggregations:sidekiq_jobs_queue_duration_seconds_bucket_rate5m{environment="{{ $labels.environment }}",shard="catchall",stage="{{ $labels.stage }}",urgency="high"}
             or
-            sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate5m{environment="{{ $labels.environment }}",shard="catchall",stage="{{ $labels.stage }}",urgency="low"}
+            sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate5m{environment="{{ $labels.environment }}",shard="catchall",stage="{{ $labels.stage }}",urgency="low",worker!~"ProjectExportWorker"}
             or
             sli_aggregations:sidekiq_jobs_queue_duration_seconds_bucket_rate5m{environment="{{ $labels.environment }}",shard="catchall",stage="{{ $labels.stage }}",urgency="low"}
             or
-            sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate5m{environment="{{ $labels.environment }}",shard="catchall",stage="{{ $labels.stage }}",urgency="throttled"}
+            sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate5m{environment="{{ $labels.environment }}",shard="catchall",stage="{{ $labels.stage }}",urgency="throttled",worker!~"ProjectExportWorker"}
           )
         )
       runbook: docs/sidekiq/README.md
@@ -474,15 +474,15 @@ groups:
         histogram_quantile(
           0.950000,
           sum by (env,environment,tier,stage,le) (
-            sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate5m{environment="{{ $labels.environment }}",shard="database-throttled",stage="{{ $labels.stage }}",urgency="high"}
+            sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate5m{environment="{{ $labels.environment }}",shard="database-throttled",stage="{{ $labels.stage }}",urgency="high",worker!~"ProjectExportWorker"}
             or
             sli_aggregations:sidekiq_jobs_queue_duration_seconds_bucket_rate5m{environment="{{ $labels.environment }}",shard="database-throttled",stage="{{ $labels.stage }}",urgency="high"}
             or
-            sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate5m{environment="{{ $labels.environment }}",shard="database-throttled",stage="{{ $labels.stage }}",urgency="low"}
+            sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate5m{environment="{{ $labels.environment }}",shard="database-throttled",stage="{{ $labels.stage }}",urgency="low",worker!~"ProjectExportWorker"}
             or
             sli_aggregations:sidekiq_jobs_queue_duration_seconds_bucket_rate5m{environment="{{ $labels.environment }}",shard="database-throttled",stage="{{ $labels.stage }}",urgency="low"}
             or
-            sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate5m{environment="{{ $labels.environment }}",shard="database-throttled",stage="{{ $labels.stage }}",urgency="throttled"}
+            sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate5m{environment="{{ $labels.environment }}",shard="database-throttled",stage="{{ $labels.stage }}",urgency="throttled",worker!~"ProjectExportWorker"}
           )
         )
       runbook: docs/sidekiq/README.md
@@ -533,15 +533,15 @@ groups:
         histogram_quantile(
           0.950000,
           sum by (env,environment,tier,stage,le) (
-            sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate5m{environment="{{ $labels.environment }}",shard="database-throttled",stage="{{ $labels.stage }}",urgency="high"}
+            sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate5m{environment="{{ $labels.environment }}",shard="database-throttled",stage="{{ $labels.stage }}",urgency="high",worker!~"ProjectExportWorker"}
             or
             sli_aggregations:sidekiq_jobs_queue_duration_seconds_bucket_rate5m{environment="{{ $labels.environment }}",shard="database-throttled",stage="{{ $labels.stage }}",urgency="high"}
             or
-            sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate5m{environment="{{ $labels.environment }}",shard="database-throttled",stage="{{ $labels.stage }}",urgency="low"}
+            sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate5m{environment="{{ $labels.environment }}",shard="database-throttled",stage="{{ $labels.stage }}",urgency="low",worker!~"ProjectExportWorker"}
             or
             sli_aggregations:sidekiq_jobs_queue_duration_seconds_bucket_rate5m{environment="{{ $labels.environment }}",shard="database-throttled",stage="{{ $labels.stage }}",urgency="low"}
             or
-            sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate5m{environment="{{ $labels.environment }}",shard="database-throttled",stage="{{ $labels.stage }}",urgency="throttled"}
+            sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate5m{environment="{{ $labels.environment }}",shard="database-throttled",stage="{{ $labels.stage }}",urgency="throttled",worker!~"ProjectExportWorker"}
           )
         )
       runbook: docs/sidekiq/README.md
@@ -688,15 +688,15 @@ groups:
         histogram_quantile(
           0.950000,
           sum by (env,environment,tier,stage,le) (
-            sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate5m{environment="{{ $labels.environment }}",shard="elasticsearch",stage="{{ $labels.stage }}",urgency="high"}
+            sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate5m{environment="{{ $labels.environment }}",shard="elasticsearch",stage="{{ $labels.stage }}",urgency="high",worker!~"ProjectExportWorker"}
             or
             sli_aggregations:sidekiq_jobs_queue_duration_seconds_bucket_rate5m{environment="{{ $labels.environment }}",shard="elasticsearch",stage="{{ $labels.stage }}",urgency="high"}
             or
-            sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate5m{environment="{{ $labels.environment }}",shard="elasticsearch",stage="{{ $labels.stage }}",urgency="low"}
+            sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate5m{environment="{{ $labels.environment }}",shard="elasticsearch",stage="{{ $labels.stage }}",urgency="low",worker!~"ProjectExportWorker"}
             or
             sli_aggregations:sidekiq_jobs_queue_duration_seconds_bucket_rate5m{environment="{{ $labels.environment }}",shard="elasticsearch",stage="{{ $labels.stage }}",urgency="low"}
             or
-            sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate5m{environment="{{ $labels.environment }}",shard="elasticsearch",stage="{{ $labels.stage }}",urgency="throttled"}
+            sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate5m{environment="{{ $labels.environment }}",shard="elasticsearch",stage="{{ $labels.stage }}",urgency="throttled",worker!~"ProjectExportWorker"}
           )
         )
       runbook: docs/sidekiq/README.md
@@ -747,15 +747,15 @@ groups:
         histogram_quantile(
           0.950000,
           sum by (env,environment,tier,stage,le) (
-            sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate5m{environment="{{ $labels.environment }}",shard="elasticsearch",stage="{{ $labels.stage }}",urgency="high"}
+            sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate5m{environment="{{ $labels.environment }}",shard="elasticsearch",stage="{{ $labels.stage }}",urgency="high",worker!~"ProjectExportWorker"}
             or
             sli_aggregations:sidekiq_jobs_queue_duration_seconds_bucket_rate5m{environment="{{ $labels.environment }}",shard="elasticsearch",stage="{{ $labels.stage }}",urgency="high"}
             or
-            sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate5m{environment="{{ $labels.environment }}",shard="elasticsearch",stage="{{ $labels.stage }}",urgency="low"}
+            sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate5m{environment="{{ $labels.environment }}",shard="elasticsearch",stage="{{ $labels.stage }}",urgency="low",worker!~"ProjectExportWorker"}
             or
             sli_aggregations:sidekiq_jobs_queue_duration_seconds_bucket_rate5m{environment="{{ $labels.environment }}",shard="elasticsearch",stage="{{ $labels.stage }}",urgency="low"}
             or
-            sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate5m{environment="{{ $labels.environment }}",shard="elasticsearch",stage="{{ $labels.stage }}",urgency="throttled"}
+            sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate5m{environment="{{ $labels.environment }}",shard="elasticsearch",stage="{{ $labels.stage }}",urgency="throttled",worker!~"ProjectExportWorker"}
           )
         )
       runbook: docs/sidekiq/README.md
@@ -902,15 +902,15 @@ groups:
         histogram_quantile(
           0.950000,
           sum by (env,environment,tier,stage,le) (
-            sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate5m{environment="{{ $labels.environment }}",shard="gitaly-throttled",stage="{{ $labels.stage }}",urgency="high"}
+            sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate5m{environment="{{ $labels.environment }}",shard="gitaly-throttled",stage="{{ $labels.stage }}",urgency="high",worker!~"ProjectExportWorker"}
             or
             sli_aggregations:sidekiq_jobs_queue_duration_seconds_bucket_rate5m{environment="{{ $labels.environment }}",shard="gitaly-throttled",stage="{{ $labels.stage }}",urgency="high"}
             or
-            sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate5m{environment="{{ $labels.environment }}",shard="gitaly-throttled",stage="{{ $labels.stage }}",urgency="low"}
+            sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate5m{environment="{{ $labels.environment }}",shard="gitaly-throttled",stage="{{ $labels.stage }}",urgency="low",worker!~"ProjectExportWorker"}
             or
             sli_aggregations:sidekiq_jobs_queue_duration_seconds_bucket_rate5m{environment="{{ $labels.environment }}",shard="gitaly-throttled",stage="{{ $labels.stage }}",urgency="low"}
             or
-            sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate5m{environment="{{ $labels.environment }}",shard="gitaly-throttled",stage="{{ $labels.stage }}",urgency="throttled"}
+            sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate5m{environment="{{ $labels.environment }}",shard="gitaly-throttled",stage="{{ $labels.stage }}",urgency="throttled",worker!~"ProjectExportWorker"}
           )
         )
       runbook: docs/sidekiq/README.md
@@ -961,15 +961,15 @@ groups:
         histogram_quantile(
           0.950000,
           sum by (env,environment,tier,stage,le) (
-            sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate5m{environment="{{ $labels.environment }}",shard="gitaly-throttled",stage="{{ $labels.stage }}",urgency="high"}
+            sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate5m{environment="{{ $labels.environment }}",shard="gitaly-throttled",stage="{{ $labels.stage }}",urgency="high",worker!~"ProjectExportWorker"}
             or
             sli_aggregations:sidekiq_jobs_queue_duration_seconds_bucket_rate5m{environment="{{ $labels.environment }}",shard="gitaly-throttled",stage="{{ $labels.stage }}",urgency="high"}
             or
-            sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate5m{environment="{{ $labels.environment }}",shard="gitaly-throttled",stage="{{ $labels.stage }}",urgency="low"}
+            sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate5m{environment="{{ $labels.environment }}",shard="gitaly-throttled",stage="{{ $labels.stage }}",urgency="low",worker!~"ProjectExportWorker"}
             or
             sli_aggregations:sidekiq_jobs_queue_duration_seconds_bucket_rate5m{environment="{{ $labels.environment }}",shard="gitaly-throttled",stage="{{ $labels.stage }}",urgency="low"}
             or
-            sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate5m{environment="{{ $labels.environment }}",shard="gitaly-throttled",stage="{{ $labels.stage }}",urgency="throttled"}
+            sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate5m{environment="{{ $labels.environment }}",shard="gitaly-throttled",stage="{{ $labels.stage }}",urgency="throttled",worker!~"ProjectExportWorker"}
           )
         )
       runbook: docs/sidekiq/README.md
@@ -1116,15 +1116,15 @@ groups:
         histogram_quantile(
           0.950000,
           sum by (env,environment,tier,stage,le) (
-            sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate5m{environment="{{ $labels.environment }}",shard="imports",stage="{{ $labels.stage }}",urgency="high"}
+            sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate5m{environment="{{ $labels.environment }}",shard="imports",stage="{{ $labels.stage }}",urgency="high",worker!~"ProjectExportWorker"}
             or
             sli_aggregations:sidekiq_jobs_queue_duration_seconds_bucket_rate5m{environment="{{ $labels.environment }}",shard="imports",stage="{{ $labels.stage }}",urgency="high"}
             or
-            sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate5m{environment="{{ $labels.environment }}",shard="imports",stage="{{ $labels.stage }}",urgency="low"}
+            sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate5m{environment="{{ $labels.environment }}",shard="imports",stage="{{ $labels.stage }}",urgency="low",worker!~"ProjectExportWorker"}
             or
             sli_aggregations:sidekiq_jobs_queue_duration_seconds_bucket_rate5m{environment="{{ $labels.environment }}",shard="imports",stage="{{ $labels.stage }}",urgency="low"}
             or
-            sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate5m{environment="{{ $labels.environment }}",shard="imports",stage="{{ $labels.stage }}",urgency="throttled"}
+            sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate5m{environment="{{ $labels.environment }}",shard="imports",stage="{{ $labels.stage }}",urgency="throttled",worker!~"ProjectExportWorker"}
           )
         )
       runbook: docs/sidekiq/README.md
@@ -1175,15 +1175,15 @@ groups:
         histogram_quantile(
           0.950000,
           sum by (env,environment,tier,stage,le) (
-            sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate5m{environment="{{ $labels.environment }}",shard="imports",stage="{{ $labels.stage }}",urgency="high"}
+            sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate5m{environment="{{ $labels.environment }}",shard="imports",stage="{{ $labels.stage }}",urgency="high",worker!~"ProjectExportWorker"}
             or
             sli_aggregations:sidekiq_jobs_queue_duration_seconds_bucket_rate5m{environment="{{ $labels.environment }}",shard="imports",stage="{{ $labels.stage }}",urgency="high"}
             or
-            sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate5m{environment="{{ $labels.environment }}",shard="imports",stage="{{ $labels.stage }}",urgency="low"}
+            sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate5m{environment="{{ $labels.environment }}",shard="imports",stage="{{ $labels.stage }}",urgency="low",worker!~"ProjectExportWorker"}
             or
             sli_aggregations:sidekiq_jobs_queue_duration_seconds_bucket_rate5m{environment="{{ $labels.environment }}",shard="imports",stage="{{ $labels.stage }}",urgency="low"}
             or
-            sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate5m{environment="{{ $labels.environment }}",shard="imports",stage="{{ $labels.stage }}",urgency="throttled"}
+            sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate5m{environment="{{ $labels.environment }}",shard="imports",stage="{{ $labels.stage }}",urgency="throttled",worker!~"ProjectExportWorker"}
           )
         )
       runbook: docs/sidekiq/README.md
@@ -1330,15 +1330,15 @@ groups:
         histogram_quantile(
           0.950000,
           sum by (env,environment,tier,stage,le) (
-            sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate5m{environment="{{ $labels.environment }}",shard="low-urgency-cpu-bound",stage="{{ $labels.stage }}",urgency="high"}
+            sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate5m{environment="{{ $labels.environment }}",shard="low-urgency-cpu-bound",stage="{{ $labels.stage }}",urgency="high",worker!~"ProjectExportWorker"}
             or
             sli_aggregations:sidekiq_jobs_queue_duration_seconds_bucket_rate5m{environment="{{ $labels.environment }}",shard="low-urgency-cpu-bound",stage="{{ $labels.stage }}",urgency="high"}
             or
-            sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate5m{environment="{{ $labels.environment }}",shard="low-urgency-cpu-bound",stage="{{ $labels.stage }}",urgency="low"}
+            sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate5m{environment="{{ $labels.environment }}",shard="low-urgency-cpu-bound",stage="{{ $labels.stage }}",urgency="low",worker!~"ProjectExportWorker"}
             or
             sli_aggregations:sidekiq_jobs_queue_duration_seconds_bucket_rate5m{environment="{{ $labels.environment }}",shard="low-urgency-cpu-bound",stage="{{ $labels.stage }}",urgency="low"}
             or
-            sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate5m{environment="{{ $labels.environment }}",shard="low-urgency-cpu-bound",stage="{{ $labels.stage }}",urgency="throttled"}
+            sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate5m{environment="{{ $labels.environment }}",shard="low-urgency-cpu-bound",stage="{{ $labels.stage }}",urgency="throttled",worker!~"ProjectExportWorker"}
           )
         )
       runbook: docs/sidekiq/README.md
@@ -1389,15 +1389,15 @@ groups:
         histogram_quantile(
           0.950000,
           sum by (env,environment,tier,stage,le) (
-            sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate5m{environment="{{ $labels.environment }}",shard="low-urgency-cpu-bound",stage="{{ $labels.stage }}",urgency="high"}
+            sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate5m{environment="{{ $labels.environment }}",shard="low-urgency-cpu-bound",stage="{{ $labels.stage }}",urgency="high",worker!~"ProjectExportWorker"}
             or
             sli_aggregations:sidekiq_jobs_queue_duration_seconds_bucket_rate5m{environment="{{ $labels.environment }}",shard="low-urgency-cpu-bound",stage="{{ $labels.stage }}",urgency="high"}
             or
-            sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate5m{environment="{{ $labels.environment }}",shard="low-urgency-cpu-bound",stage="{{ $labels.stage }}",urgency="low"}
+            sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate5m{environment="{{ $labels.environment }}",shard="low-urgency-cpu-bound",stage="{{ $labels.stage }}",urgency="low",worker!~"ProjectExportWorker"}
             or
             sli_aggregations:sidekiq_jobs_queue_duration_seconds_bucket_rate5m{environment="{{ $labels.environment }}",shard="low-urgency-cpu-bound",stage="{{ $labels.stage }}",urgency="low"}
             or
-            sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate5m{environment="{{ $labels.environment }}",shard="low-urgency-cpu-bound",stage="{{ $labels.stage }}",urgency="throttled"}
+            sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate5m{environment="{{ $labels.environment }}",shard="low-urgency-cpu-bound",stage="{{ $labels.stage }}",urgency="throttled",worker!~"ProjectExportWorker"}
           )
         )
       runbook: docs/sidekiq/README.md
@@ -1616,15 +1616,15 @@ groups:
         histogram_quantile(
           0.950000,
           sum by (env,environment,tier,stage,le) (
-            sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate5m{environment="{{ $labels.environment }}",shard="memory-bound",stage="{{ $labels.stage }}",urgency="high"}
+            sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate5m{environment="{{ $labels.environment }}",shard="memory-bound",stage="{{ $labels.stage }}",urgency="high",worker!~"ProjectExportWorker"}
             or
             sli_aggregations:sidekiq_jobs_queue_duration_seconds_bucket_rate5m{environment="{{ $labels.environment }}",shard="memory-bound",stage="{{ $labels.stage }}",urgency="high"}
             or
-            sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate5m{environment="{{ $labels.environment }}",shard="memory-bound",stage="{{ $labels.stage }}",urgency="low"}
+            sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate5m{environment="{{ $labels.environment }}",shard="memory-bound",stage="{{ $labels.stage }}",urgency="low",worker!~"ProjectExportWorker"}
             or
             sli_aggregations:sidekiq_jobs_queue_duration_seconds_bucket_rate5m{environment="{{ $labels.environment }}",shard="memory-bound",stage="{{ $labels.stage }}",urgency="low"}
             or
-            sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate5m{environment="{{ $labels.environment }}",shard="memory-bound",stage="{{ $labels.stage }}",urgency="throttled"}
+            sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate5m{environment="{{ $labels.environment }}",shard="memory-bound",stage="{{ $labels.stage }}",urgency="throttled",worker!~"ProjectExportWorker"}
           )
         )
       runbook: docs/sidekiq/README.md
@@ -1675,15 +1675,15 @@ groups:
         histogram_quantile(
           0.950000,
           sum by (env,environment,tier,stage,le) (
-            sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate5m{environment="{{ $labels.environment }}",shard="memory-bound",stage="{{ $labels.stage }}",urgency="high"}
+            sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate5m{environment="{{ $labels.environment }}",shard="memory-bound",stage="{{ $labels.stage }}",urgency="high",worker!~"ProjectExportWorker"}
             or
             sli_aggregations:sidekiq_jobs_queue_duration_seconds_bucket_rate5m{environment="{{ $labels.environment }}",shard="memory-bound",stage="{{ $labels.stage }}",urgency="high"}
             or
-            sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate5m{environment="{{ $labels.environment }}",shard="memory-bound",stage="{{ $labels.stage }}",urgency="low"}
+            sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate5m{environment="{{ $labels.environment }}",shard="memory-bound",stage="{{ $labels.stage }}",urgency="low",worker!~"ProjectExportWorker"}
             or
             sli_aggregations:sidekiq_jobs_queue_duration_seconds_bucket_rate5m{environment="{{ $labels.environment }}",shard="memory-bound",stage="{{ $labels.stage }}",urgency="low"}
             or
-            sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate5m{environment="{{ $labels.environment }}",shard="memory-bound",stage="{{ $labels.stage }}",urgency="throttled"}
+            sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate5m{environment="{{ $labels.environment }}",shard="memory-bound",stage="{{ $labels.stage }}",urgency="throttled",worker!~"ProjectExportWorker"}
           )
         )
       runbook: docs/sidekiq/README.md
@@ -1830,15 +1830,15 @@ groups:
         histogram_quantile(
           0.950000,
           sum by (env,environment,tier,stage,le) (
-            sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate5m{environment="{{ $labels.environment }}",shard="quarantine",stage="{{ $labels.stage }}",urgency="high"}
+            sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate5m{environment="{{ $labels.environment }}",shard="quarantine",stage="{{ $labels.stage }}",urgency="high",worker!~"ProjectExportWorker"}
             or
             sli_aggregations:sidekiq_jobs_queue_duration_seconds_bucket_rate5m{environment="{{ $labels.environment }}",shard="quarantine",stage="{{ $labels.stage }}",urgency="high"}
             or
-            sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate5m{environment="{{ $labels.environment }}",shard="quarantine",stage="{{ $labels.stage }}",urgency="low"}
+            sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate5m{environment="{{ $labels.environment }}",shard="quarantine",stage="{{ $labels.stage }}",urgency="low",worker!~"ProjectExportWorker"}
             or
             sli_aggregations:sidekiq_jobs_queue_duration_seconds_bucket_rate5m{environment="{{ $labels.environment }}",shard="quarantine",stage="{{ $labels.stage }}",urgency="low"}
             or
-            sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate5m{environment="{{ $labels.environment }}",shard="quarantine",stage="{{ $labels.stage }}",urgency="throttled"}
+            sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate5m{environment="{{ $labels.environment }}",shard="quarantine",stage="{{ $labels.stage }}",urgency="throttled",worker!~"ProjectExportWorker"}
           )
         )
       runbook: docs/sidekiq/README.md
@@ -1889,15 +1889,15 @@ groups:
         histogram_quantile(
           0.950000,
           sum by (env,environment,tier,stage,le) (
-            sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate5m{environment="{{ $labels.environment }}",shard="quarantine",stage="{{ $labels.stage }}",urgency="high"}
+            sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate5m{environment="{{ $labels.environment }}",shard="quarantine",stage="{{ $labels.stage }}",urgency="high",worker!~"ProjectExportWorker"}
             or
             sli_aggregations:sidekiq_jobs_queue_duration_seconds_bucket_rate5m{environment="{{ $labels.environment }}",shard="quarantine",stage="{{ $labels.stage }}",urgency="high"}
             or
-            sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate5m{environment="{{ $labels.environment }}",shard="quarantine",stage="{{ $labels.stage }}",urgency="low"}
+            sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate5m{environment="{{ $labels.environment }}",shard="quarantine",stage="{{ $labels.stage }}",urgency="low",worker!~"ProjectExportWorker"}
             or
             sli_aggregations:sidekiq_jobs_queue_duration_seconds_bucket_rate5m{environment="{{ $labels.environment }}",shard="quarantine",stage="{{ $labels.stage }}",urgency="low"}
             or
-            sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate5m{environment="{{ $labels.environment }}",shard="quarantine",stage="{{ $labels.stage }}",urgency="throttled"}
+            sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate5m{environment="{{ $labels.environment }}",shard="quarantine",stage="{{ $labels.stage }}",urgency="throttled",worker!~"ProjectExportWorker"}
           )
         )
       runbook: docs/sidekiq/README.md
@@ -2044,15 +2044,15 @@ groups:
         histogram_quantile(
           0.950000,
           sum by (env,environment,tier,stage,le) (
-            sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate5m{environment="{{ $labels.environment }}",shard="urgent-cpu-bound",stage="{{ $labels.stage }}",urgency="high"}
+            sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate5m{environment="{{ $labels.environment }}",shard="urgent-cpu-bound",stage="{{ $labels.stage }}",urgency="high",worker!~"ProjectExportWorker"}
             or
             sli_aggregations:sidekiq_jobs_queue_duration_seconds_bucket_rate5m{environment="{{ $labels.environment }}",shard="urgent-cpu-bound",stage="{{ $labels.stage }}",urgency="high"}
             or
-            sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate5m{environment="{{ $labels.environment }}",shard="urgent-cpu-bound",stage="{{ $labels.stage }}",urgency="low"}
+            sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate5m{environment="{{ $labels.environment }}",shard="urgent-cpu-bound",stage="{{ $labels.stage }}",urgency="low",worker!~"ProjectExportWorker"}
             or
             sli_aggregations:sidekiq_jobs_queue_duration_seconds_bucket_rate5m{environment="{{ $labels.environment }}",shard="urgent-cpu-bound",stage="{{ $labels.stage }}",urgency="low"}
             or
-            sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate5m{environment="{{ $labels.environment }}",shard="urgent-cpu-bound",stage="{{ $labels.stage }}",urgency="throttled"}
+            sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate5m{environment="{{ $labels.environment }}",shard="urgent-cpu-bound",stage="{{ $labels.stage }}",urgency="throttled",worker!~"ProjectExportWorker"}
           )
         )
       runbook: docs/sidekiq/README.md
@@ -2103,15 +2103,15 @@ groups:
         histogram_quantile(
           0.950000,
           sum by (env,environment,tier,stage,le) (
-            sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate5m{environment="{{ $labels.environment }}",shard="urgent-cpu-bound",stage="{{ $labels.stage }}",urgency="high"}
+            sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate5m{environment="{{ $labels.environment }}",shard="urgent-cpu-bound",stage="{{ $labels.stage }}",urgency="high",worker!~"ProjectExportWorker"}
             or
             sli_aggregations:sidekiq_jobs_queue_duration_seconds_bucket_rate5m{environment="{{ $labels.environment }}",shard="urgent-cpu-bound",stage="{{ $labels.stage }}",urgency="high"}
             or
-            sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate5m{environment="{{ $labels.environment }}",shard="urgent-cpu-bound",stage="{{ $labels.stage }}",urgency="low"}
+            sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate5m{environment="{{ $labels.environment }}",shard="urgent-cpu-bound",stage="{{ $labels.stage }}",urgency="low",worker!~"ProjectExportWorker"}
             or
             sli_aggregations:sidekiq_jobs_queue_duration_seconds_bucket_rate5m{environment="{{ $labels.environment }}",shard="urgent-cpu-bound",stage="{{ $labels.stage }}",urgency="low"}
             or
-            sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate5m{environment="{{ $labels.environment }}",shard="urgent-cpu-bound",stage="{{ $labels.stage }}",urgency="throttled"}
+            sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate5m{environment="{{ $labels.environment }}",shard="urgent-cpu-bound",stage="{{ $labels.stage }}",urgency="throttled",worker!~"ProjectExportWorker"}
           )
         )
       runbook: docs/sidekiq/README.md
@@ -2330,15 +2330,15 @@ groups:
         histogram_quantile(
           0.950000,
           sum by (env,environment,tier,stage,le) (
-            sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate5m{environment="{{ $labels.environment }}",shard="urgent-other",stage="{{ $labels.stage }}",urgency="high"}
+            sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate5m{environment="{{ $labels.environment }}",shard="urgent-other",stage="{{ $labels.stage }}",urgency="high",worker!~"ProjectExportWorker"}
             or
             sli_aggregations:sidekiq_jobs_queue_duration_seconds_bucket_rate5m{environment="{{ $labels.environment }}",shard="urgent-other",stage="{{ $labels.stage }}",urgency="high"}
             or
-            sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate5m{environment="{{ $labels.environment }}",shard="urgent-other",stage="{{ $labels.stage }}",urgency="low"}
+            sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate5m{environment="{{ $labels.environment }}",shard="urgent-other",stage="{{ $labels.stage }}",urgency="low",worker!~"ProjectExportWorker"}
             or
             sli_aggregations:sidekiq_jobs_queue_duration_seconds_bucket_rate5m{environment="{{ $labels.environment }}",shard="urgent-other",stage="{{ $labels.stage }}",urgency="low"}
             or
-            sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate5m{environment="{{ $labels.environment }}",shard="urgent-other",stage="{{ $labels.stage }}",urgency="throttled"}
+            sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate5m{environment="{{ $labels.environment }}",shard="urgent-other",stage="{{ $labels.stage }}",urgency="throttled",worker!~"ProjectExportWorker"}
           )
         )
       runbook: docs/sidekiq/README.md
@@ -2389,15 +2389,15 @@ groups:
         histogram_quantile(
           0.950000,
           sum by (env,environment,tier,stage,le) (
-            sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate5m{environment="{{ $labels.environment }}",shard="urgent-other",stage="{{ $labels.stage }}",urgency="high"}
+            sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate5m{environment="{{ $labels.environment }}",shard="urgent-other",stage="{{ $labels.stage }}",urgency="high",worker!~"ProjectExportWorker"}
             or
             sli_aggregations:sidekiq_jobs_queue_duration_seconds_bucket_rate5m{environment="{{ $labels.environment }}",shard="urgent-other",stage="{{ $labels.stage }}",urgency="high"}
             or
-            sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate5m{environment="{{ $labels.environment }}",shard="urgent-other",stage="{{ $labels.stage }}",urgency="low"}
+            sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate5m{environment="{{ $labels.environment }}",shard="urgent-other",stage="{{ $labels.stage }}",urgency="low",worker!~"ProjectExportWorker"}
             or
             sli_aggregations:sidekiq_jobs_queue_duration_seconds_bucket_rate5m{environment="{{ $labels.environment }}",shard="urgent-other",stage="{{ $labels.stage }}",urgency="low"}
             or
-            sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate5m{environment="{{ $labels.environment }}",shard="urgent-other",stage="{{ $labels.stage }}",urgency="throttled"}
+            sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate5m{environment="{{ $labels.environment }}",shard="urgent-other",stage="{{ $labels.stage }}",urgency="throttled",worker!~"ProjectExportWorker"}
           )
         )
       runbook: docs/sidekiq/README.md

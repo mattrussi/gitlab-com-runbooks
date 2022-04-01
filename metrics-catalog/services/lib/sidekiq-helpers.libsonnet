@@ -24,6 +24,9 @@ local shards = {
 
 // These values are used in several places, so best to DRY them up
 {
+  longRunningWorkers: [
+    'ProjectExportWorker',
+  ],
   slos: {
     urgent: {
       queueingDurationSeconds: 10,
