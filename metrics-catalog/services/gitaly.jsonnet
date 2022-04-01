@@ -35,10 +35,10 @@ metricsCatalog.serviceDefinition({
 
       local baseSelector = {
         job: 'gitaly',
-        grpc_service: { noneOf: ['gitaly.CommitService', 'gitaly.OperationService', 'gitaly.RepositoryService'] },
+        grpc_service: { ne: ['gitaly.OperationService'] },
       },
       local baseSelectorApdex = baseSelector {
-        grpc_method: { noneOf: gitalyHelper.gitalyApdexIgnoredMethods },
+        grpc_method: { noneOf: gitalyHelper.gitalyMainApdexIgnoredMethods },
       },
 
       apdex: gitalyHelper.grpcServiceApdex(baseSelectorApdex),
@@ -79,7 +79,7 @@ metricsCatalog.serviceDefinition({
         grpc_method: { noneOf: gitalyHelper.gitalyApdexIgnoredMethods },
       },
 
-      apdex: gitalyHelper.grpcServiceApdex(baseSelectorApdex, toleratedThreshold=10),
+      apdex: gitalyHelper.grpcServiceApdex(baseSelectorApdex, satisfiedThreshold=10, toleratedThreshold=30),
 
       requestRate: rateMetric(
         counter='gitaly_service_client_requests_total',
@@ -115,7 +115,7 @@ metricsCatalog.serviceDefinition({
         grpc_method: { noneOf: gitalyHelper.gitalyApdexIgnoredMethods },
       },
 
-      apdex: gitalyHelper.grpcServiceApdex(baseSelectorApdex, toleratedThreshold=10),
+      apdex: gitalyHelper.grpcServiceApdex(baseSelectorApdex, satisfiedThreshold=10, toleratedThreshold=30),
 
       requestRate: rateMetric(
         counter='gitaly_service_client_requests_total',

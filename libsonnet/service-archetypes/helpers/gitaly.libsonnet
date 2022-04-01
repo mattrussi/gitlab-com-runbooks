@@ -41,6 +41,12 @@ local gitalyApdexIgnoredMethods = [
   'UpdateHook',
 ];
 
+// Ignored from the main apdex because those methods trigger too many short and
+// most often unactionable alerts and so require different thresholds in
+// separate SLIs
+// https://gitlab.com/gitlab-com/gl-infra/reliability/-/issues/15525
+local gitalyMainApdexIgnoredMethods = gitalyApdexIgnoredMethods + ['FindCommit', 'GetArchive'];
+
 // Ignored because of https://gitlab.com/gitlab-org/gitaly/-/issues/3441
 local gitalyRubyApdexIgnoredMethods = gitalyApdexIgnoredMethods + ['GetLFSPointers', 'GetAllLFSPointers'];
 
@@ -78,6 +84,7 @@ local gitalyGRPCErrorRate(baseSelector) =
 
 {
   gitalyApdexIgnoredMethods:: gitalyApdexIgnoredMethods,
+  gitalyMainApdexIgnoredMethods:: gitalyMainApdexIgnoredMethods,
   gitalyRubyApdexIgnoredMethods:: gitalyRubyApdexIgnoredMethods,
 
   grpcServiceApdex:: grpcServiceApdex,
