@@ -548,7 +548,7 @@ groups:
       component: goserver_commit_service
       tier: stor
       type: gitaly
-    expr: "0.000500"
+    expr: "0.750000"
   - record: slo:min:events:gitlab_service_apdex:ratio
     labels:
       component: goserver_op_service
@@ -572,7 +572,7 @@ groups:
       component: goserver_repository_service
       tier: stor
       type: gitaly
-    expr: "0.000500"
+    expr: "0.750000"
   - record: slo:max:events:gitlab_service_errors:ratio
     labels:
       tier: inf
