@@ -39,17 +39,11 @@ local gitalyApdexIgnoredMethods = [
   'PreReceiveHook',
   'PostReceiveHook',
   'UpdateHook',
-];
 
-// Ignored from the main apdex because those methods trigger too many short and
-// most often unactionable alerts and so require different thresholds in
-// separate SLIs
-// https://gitlab.com/gitlab-com/gl-infra/reliability/-/issues/15525
-local gitalyMainApdexIgnoredMethods = gitalyApdexIgnoredMethods + [
-  // gitaly.CommitService
+  // Those methods trigger too many short and most often unactionable alerts
+  // https://gitlab.com/gitlab-com/gl-infra/reliability/-/issues/15525
   'FindCommit',
   'LastCommitForPath',
-  // gitaly.RepositoryService
   'GetArchive',
 ];
 
@@ -90,7 +84,6 @@ local gitalyGRPCErrorRate(baseSelector) =
 
 {
   gitalyApdexIgnoredMethods:: gitalyApdexIgnoredMethods,
-  gitalyMainApdexIgnoredMethods:: gitalyMainApdexIgnoredMethods,
   gitalyRubyApdexIgnoredMethods:: gitalyRubyApdexIgnoredMethods,
 
   grpcServiceApdex:: grpcServiceApdex,

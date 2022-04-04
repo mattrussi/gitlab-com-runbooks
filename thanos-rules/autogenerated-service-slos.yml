@@ -539,18 +539,6 @@ groups:
     expr: "0.000500"
   - record: slo:min:events:gitlab_service_apdex:ratio
     labels:
-      component: goserver_commit_service
-      tier: stor
-      type: gitaly
-    expr: "0.950000"
-  - record: slo:max:events:gitlab_service_errors:ratio
-    labels:
-      component: goserver_commit_service
-      tier: stor
-      type: gitaly
-    expr: "0.750000"
-  - record: slo:min:events:gitlab_service_apdex:ratio
-    labels:
       component: goserver_op_service
       tier: stor
       type: gitaly
@@ -561,18 +549,6 @@ groups:
       tier: stor
       type: gitaly
     expr: "0.000500"
-  - record: slo:min:events:gitlab_service_apdex:ratio
-    labels:
-      component: goserver_repository_service
-      tier: stor
-      type: gitaly
-    expr: "0.950000"
-  - record: slo:max:events:gitlab_service_errors:ratio
-    labels:
-      component: goserver_repository_service
-      tier: stor
-      type: gitaly
-    expr: "0.750000"
   - record: slo:max:events:gitlab_service_errors:ratio
     labels:
       tier: inf
@@ -2210,23 +2186,7 @@ groups:
     expr: "1"
   - record: gitlab_component_service:mapping
     labels:
-      component: goserver_commit_service
-      regional_aggregation: "no"
-      service_aggregation: "yes"
-      tier: stor
-      type: gitaly
-    expr: "1"
-  - record: gitlab_component_service:mapping
-    labels:
       component: goserver_op_service
-      regional_aggregation: "no"
-      service_aggregation: "yes"
-      tier: stor
-      type: gitaly
-    expr: "1"
-  - record: gitlab_component_service:mapping
-    labels:
-      component: goserver_repository_service
       regional_aggregation: "no"
       service_aggregation: "yes"
       tier: stor

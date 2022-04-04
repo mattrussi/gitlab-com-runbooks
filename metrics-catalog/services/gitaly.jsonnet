@@ -38,7 +38,7 @@ metricsCatalog.serviceDefinition({
         grpc_service: { ne: ['gitaly.OperationService'] },
       },
       local baseSelectorApdex = baseSelector {
-        grpc_method: { noneOf: gitalyHelper.gitalyMainApdexIgnoredMethods },
+        grpc_method: { noneOf: gitalyHelper.gitalyApdexIgnoredMethods },
       },
 
       apdex: gitalyHelper.grpcServiceApdex(baseSelectorApdex),
@@ -56,88 +56,6 @@ metricsCatalog.serviceDefinition({
         toolingLinks.continuousProfiler(service='gitaly'),
         toolingLinks.sentry(slug='gitlab/gitaly-production'),
         toolingLinks.kibana(title='Gitaly', index='gitaly', slowRequestSeconds=1),
-      ],
-    },
-
-    goserver_commit_service: {
-      userImpacting: true,
-      featureCategory: 'gitaly',
-      trafficCessationAlertConfig: false,
-      description: |||
-        This SLI monitors requests to Gitaly's CommitService, via its GRPC endpoint.
-        CommitService methods are generally expected to be fast but can
-        sometimes be slower for large repositories during short bursts of
-        normal traffic, therefore the service is tracked in a separate SLI with
-        a higher tolerance threshold.
-      |||,
-
-      monitoringThresholds+: {
-        apdexScore: 0.95,
-        errorRatio: 0.25,
-      },
-
-      local baseSelector = {
-        job: 'gitaly',
-        grpc_service: 'gitaly.CommitService',
-      },
-      local baseSelectorApdex = baseSelector {
-        grpc_method: { noneOf: gitalyHelper.gitalyApdexIgnoredMethods },
-      },
-
-      apdex: gitalyHelper.grpcServiceApdex(baseSelectorApdex, satisfiedThreshold=10, toleratedThreshold=30),
-
-      requestRate: rateMetric(
-        counter='gitaly_service_client_requests_total',
-        selector=baseSelector
-      ),
-
-      errorRate: gitalyHelper.gitalyGRPCErrorRate(baseSelector),
-
-      significantLabels: ['fqdn'],
-
-      toolingLinks: [
-        toolingLinks.kibana(title='Gitaly CommitService', index='gitaly', slowRequestSeconds=1, matches={ 'json.grpc.service': 'gitaly.CommitService' }),
-      ],
-    },
-
-    goserver_repository_service: {
-      userImpacting: true,
-      featureCategory: 'gitaly',
-      trafficCessationAlertConfig: false,
-      description: |||
-        This SLI monitors requests to Gitaly's RepositoryService, via its GRPC endpoint.
-        RepositoryService methods are generally expected to be fast but can
-        sometimes be slower for large repositories during short bursts of
-        normal traffic, therefore the service is tracked in a separate SLI with
-        a higher tolerance threshold.
-      |||,
-
-      monitoringThresholds+: {
-        apdexScore: 0.95,
-        errorRatio: 0.25,
-      },
-
-      local baseSelector = {
-        job: 'gitaly',
-        grpc_service: 'gitaly.RepositoryService',
-      },
-      local baseSelectorApdex = baseSelector {
-        grpc_method: { noneOf: gitalyHelper.gitalyApdexIgnoredMethods },
-      },
-
-      apdex: gitalyHelper.grpcServiceApdex(baseSelectorApdex, satisfiedThreshold=10, toleratedThreshold=30),
-
-      requestRate: rateMetric(
-        counter='gitaly_service_client_requests_total',
-        selector=baseSelector
-      ),
-
-      errorRate: gitalyHelper.gitalyGRPCErrorRate(baseSelector),
-
-      significantLabels: ['fqdn'],
-
-      toolingLinks: [
-        toolingLinks.kibana(title='Gitaly RepositoryService', index='gitaly', slowRequestSeconds=1, matches={ 'json.grpc.service': 'gitaly.RepositoryService' }),
       ],
     },
 
