@@ -558,12 +558,12 @@ groups:
       (
         (
           gitlab_component_apdex:ratio_1h{component="sshServices",monitor="global",type="frontend"}
-          < (1 - 14.4 * 0.001000)
+          < (1 - 14.4 * 0.005000)
         )
         and
         (
           gitlab_component_apdex:ratio_5m{component="sshServices",monitor="global",type="frontend"}
-          < (1 - 14.4 * 0.001000)
+          < (1 - 14.4 * 0.005000)
         )
       )
       and on(env,environment,tier,type,stage,component)
@@ -607,12 +607,12 @@ groups:
       (
         (
           gitlab_component_apdex:ratio_6h{component="sshServices",monitor="global",type="frontend"}
-          < (1 - 6 * 0.001000)
+          < (1 - 6 * 0.005000)
         )
         and
         (
           gitlab_component_apdex:ratio_30m{component="sshServices",monitor="global",type="frontend"}
-          < (1 - 6 * 0.001000)
+          < (1 - 6 * 0.005000)
         )
       )
       and on(env,environment,tier,type,stage,component)
