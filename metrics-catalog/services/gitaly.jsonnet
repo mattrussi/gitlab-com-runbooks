@@ -73,6 +73,7 @@ metricsCatalog.serviceDefinition({
 
       monitoringThresholds+: {
         apdexScore: 0.95,
+        errorRatio: 0.25,
       },
 
       local baseSelector = {
@@ -113,6 +114,7 @@ metricsCatalog.serviceDefinition({
 
       monitoringThresholds+: {
         apdexScore: 0.95,
+        errorRatio: 0.25,
       },
 
       local baseSelector = {
