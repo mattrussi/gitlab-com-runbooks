@@ -45,7 +45,13 @@ local gitalyApdexIgnoredMethods = [
 // most often unactionable alerts and so require different thresholds in
 // separate SLIs
 // https://gitlab.com/gitlab-com/gl-infra/reliability/-/issues/15525
-local gitalyMainApdexIgnoredMethods = gitalyApdexIgnoredMethods + ['FindCommit', 'GetArchive'];
+local gitalyMainApdexIgnoredMethods = gitalyApdexIgnoredMethods + [
+  // gitaly.CommitService
+  'FindCommit',
+  'LastCommitForPath',
+  // gitaly.RepositoryService
+  'GetArchive',
+];
 
 // Ignored because of https://gitlab.com/gitlab-org/gitaly/-/issues/3441
 local gitalyRubyApdexIgnoredMethods = gitalyApdexIgnoredMethods + ['GetLFSPointers', 'GetAllLFSPointers'];
