@@ -5,14 +5,14 @@ local defaultSelector = {
   env: 'gprd',
   environment: 'gprd',
   device: { ne: 'lo' },
-  backend: { re: '.*api$' },
+  backend: { nre: 'canary.*|camoproxy|429.*' },
 };
 local interval = '1d';
 
 {
   total_haproxy_bytes_out: periodicQuery.new({
     query: |||
-      sum(increase(haproxy_backend_bytes_out_total{%(selectors)s}[%(interval)s]))
+      sum by (backend)(increase(haproxy_backend_bytes_out_total{%(selectors)s}[%(interval)s]))
     ||| % {
       selectors: selectors.serializeHash(defaultSelector),
       interval: interval,
