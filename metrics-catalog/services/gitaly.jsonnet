@@ -1,6 +1,7 @@
 local metricsCatalog = import 'servicemetrics/metrics.libsonnet';
-local rateMetric = metricsCatalog.rateMetric;
+local combined = metricsCatalog.combined;
 local customApdex = metricsCatalog.customApdex;
+local rateMetric = metricsCatalog.rateMetric;
 local gitalyHelper = import 'service-archetypes/helpers/gitaly.libsonnet';
 local toolingLinks = import 'toolinglinks/toolinglinks.libsonnet';
 
@@ -37,11 +38,19 @@ metricsCatalog.serviceDefinition({
         job: 'gitaly',
         grpc_service: { ne: ['gitaly.OperationService'] },
       },
-      local baseSelectorApdex = baseSelector {
-        grpc_method: { noneOf: gitalyHelper.gitalyApdexIgnoredMethods },
+      local mainApdexSelector = baseSelector {
+        grpc_method: { noneOf: gitalyHelper.gitalyApdexIgnoredMethods + gitalyHelper.gitalyApdexSlowMethods },
+      },
+      local slowApdexSelector = baseSelector {
+        grpc_method: gitalyHelper.gitalyApdexSlowMethods,
       },
 
-      apdex: gitalyHelper.grpcServiceApdex(baseSelectorApdex),
+      apdex: combined(
+        [
+          gitalyHelper.grpcServiceApdex(mainApdexSelector),
+          gitalyHelper.grpcServiceApdex(slowApdexSelector, satisfiedThreshold=10, toleratedThreshold=30),
+        ]
+      ),
 
       requestRate: rateMetric(
         counter='gitaly_service_client_requests_total',
