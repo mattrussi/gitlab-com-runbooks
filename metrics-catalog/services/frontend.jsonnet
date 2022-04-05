@@ -82,6 +82,7 @@ metricsCatalog.serviceDefinition({
 
     sshServices: {
       monitoringThresholds+: {
+        apdexScore: 0.995,
         errorRatio: 0.999,
       },
 
