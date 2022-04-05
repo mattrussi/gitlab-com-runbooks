@@ -39,9 +39,13 @@ local gitalyApdexIgnoredMethods = [
   'PreReceiveHook',
   'PostReceiveHook',
   'UpdateHook',
+];
 
-  // Those methods trigger too many short and most often unactionable alerts
-  // https://gitlab.com/gitlab-com/gl-infra/reliability/-/issues/15525
+// Those methods can sometimes be slow under load, resulting in too many
+// short and most often unactionable alerts, but are still important to
+// monitor, so they requires a separate apdex with higher thresholds
+// https://gitlab.com/gitlab-com/gl-infra/reliability/-/issues/15525
+local gitalyApdexSlowMethods = [
   'FindCommit',
   'LastCommitForPath',
   'GetArchive',
@@ -85,6 +89,7 @@ local gitalyGRPCErrorRate(baseSelector) =
 {
   gitalyApdexIgnoredMethods:: gitalyApdexIgnoredMethods,
   gitalyRubyApdexIgnoredMethods:: gitalyRubyApdexIgnoredMethods,
+  gitalyApdexSlowMethods:: gitalyApdexSlowMethods,
 
   grpcServiceApdex:: grpcServiceApdex,
   gitalyGRPCErrorRate:: gitalyGRPCErrorRate,
