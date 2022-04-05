@@ -42,7 +42,7 @@ metricsCatalog.serviceDefinition({
         grpc_method: { noneOf: gitalyHelper.gitalyApdexIgnoredMethods + gitalyHelper.gitalyApdexSlowMethods },
       },
       local slowApdexSelector = baseSelector {
-        grpc_method: gitalyHelper.gitalyApdexSlowMethods,
+        grpc_method: { noneOf: gitalyHelper.gitalyApdexIgnoredMethods },
       },
 
       apdex: combined(
