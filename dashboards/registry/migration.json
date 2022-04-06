@@ -72,12 +72,12 @@
       }
     ]
   },
-  "description": "Uploaded by https://gitlab.com/gitlab-com/runbooks/-/jobs/2279465769 at Fri Apr  1 08:44:31 UTC 2022",
+  "description": "Uploaded by https://gitlab.com/gitlab-com/runbooks/-/jobs/2297863832 at Wed Apr  6 09:39:38 UTC 2022",
   "editable": true,
   "fiscalYearStartMonth": 0,
   "graphTooltip": 1,
   "id": null,
-  "iteration": 1648808858174,
+  "iteration": 1649244342477,
   "links": [
     {
       "asDropdown": true,
@@ -2377,6 +2377,116 @@
         }
       ],
       "title": "Aborted",
+      "type": "timeseries"
+    },
+    {
+      "description": "Count of container repositories that are potentially stalled in a transient import state.",
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "palette-classic"
+          },
+          "custom": {
+            "axisLabel": "",
+            "axisPlacement": "auto",
+            "barAlignment": 0,
+            "drawStyle": "line",
+            "fillOpacity": 0,
+            "gradientMode": "none",
+            "hideFrom": {
+              "legend": false,
+              "tooltip": false,
+              "viz": false
+            },
+            "lineInterpolation": "linear",
+            "lineWidth": 2,
+            "pointSize": 5,
+            "scaleDistribution": {
+              "type": "linear"
+            },
+            "showPoints": "auto",
+            "spanNulls": true,
+            "stacking": {
+              "group": "A",
+              "mode": "none"
+            },
+            "thresholdsStyle": {
+              "mode": "off"
+            }
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "red",
+                "value": 5
+              }
+            ]
+          },
+          "unit": "short"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 9,
+        "w": 6,
+        "x": 18,
+        "y": 68
+      },
+      "id": 136,
+      "options": {
+        "legend": {
+          "calcs": [],
+          "displayMode": "hidden",
+          "placement": "bottom"
+        },
+        "tooltip": {
+          "mode": "single",
+          "sort": "none"
+        }
+      },
+      "targets": [
+        {
+          "datasource": {
+            "uid": "$PROMETHEUS_DS"
+          },
+          "exemplar": true,
+          "expr": "avg (gitlab_database_rows{query_name=\"container_repositories_stalled_pre_importing\", environment=\"$environment\"})",
+          "interval": "",
+          "legendFormat": "pre_importing",
+          "refId": "A"
+        },
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "PA258B30F88C30650"
+          },
+          "exemplar": true,
+          "expr": "avg (gitlab_database_rows{query_name=\"container_repositories_stalled_pre_import_done\", environment=\"$environment\"})",
+          "hide": false,
+          "interval": "",
+          "legendFormat": "pre_import_done",
+          "refId": "B"
+        },
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "PA258B30F88C30650"
+          },
+          "exemplar": true,
+          "expr": "avg (gitlab_database_rows{query_name=\"container_repositories_stalled_importing\", environment=\"$environment\"})",
+          "hide": false,
+          "interval": "",
+          "legendFormat": "importing",
+          "refId": "C"
+        }
+      ],
+      "title": "Potentially stalled",
       "type": "timeseries"
     },
     {
@@ -5496,5 +5606,5 @@
   },
   "timezone": "utc",
   "title": "Migration Detail",
-  "version": 23
+  "uid": "24"
 }
