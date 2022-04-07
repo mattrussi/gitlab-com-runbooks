@@ -45,6 +45,7 @@
 * [Add a new PgBouncer instance](../pgbouncer/pgbouncer-add-instance.md)
 * [PgBouncer connection management and troubleshooting](../pgbouncer/pgbouncer-connections.md)
 * [../redis/redis.md](../redis/redis.md)
+* [Container Registry Migration Phase 2](../registry/migration-phase2.md)
 * [Sentry is down and gives error 500](../sentry/sentry-is-down.md)
 * [A survival guide for SREs to working with Sidekiq at GitLab](../sidekiq/sidekiq-survival-guide-for-sres.md)
 * [../spamcheck/index.md](../spamcheck/index.md)

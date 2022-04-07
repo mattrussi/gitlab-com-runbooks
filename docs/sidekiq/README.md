@@ -42,6 +42,7 @@
 * [Redis-Sidekiq catchall workloads reduction](../redis/redis-sidekiq-catchall-workloads-reduction.md)
 * [A survival guide for SREs to working with Redis at GitLab](../redis/redis-survival-guide-for-sres.md)
 * [../redis/redis.md](../redis/redis.md)
+* [Container Registry Migration Phase 2](../registry/migration-phase2.md)
 * [Creating a Sidekiq Shard](creating-a-shard.md)
 * [Disabling a Sidekiq queue](disabling-a-queue.md)
 * [Pull mirror overdue queue is too large](large-pull-mirror-queue.md)

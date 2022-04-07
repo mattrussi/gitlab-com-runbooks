@@ -60,6 +60,7 @@
 * [A survival guide for SREs to working with Redis at GitLab](../redis/redis-survival-guide-for-sres.md)
 * [Database Connection Pool Saturation](../registry/app-db-conn-pool-saturation.md)
 * [../registry/migration-failure-scenarios.md](../registry/migration-failure-scenarios.md)
+* [Container Registry Migration Phase 2](../registry/migration-phase2.md)
 * [High Number of Overdue Online GC Tasks](../registry/online-gc-high-overdue-tasks.md)
 * [Sidekiq Queue Out of Control](../sidekiq/large-sidekiq-queue.md)
 * [A survival guide for SREs to working with Sidekiq at GitLab](../sidekiq/sidekiq-survival-guide-for-sres.md)
