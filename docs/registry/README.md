@@ -31,6 +31,7 @@
 * [Container Registry CDN](cdn.md)
 * [gitlab-registry.md](gitlab-registry.md)
 * [migration-failure-scenarios.md](migration-failure-scenarios.md)
+* [Container Registry Migration Phase 2](migration-phase2.md)
 * [High Number of Overdue Online GC Tasks](online-gc-high-overdue-tasks.md)
 * [Deleting a project manually](../uncategorized/delete-projects-manually.md)
 * [An impatient SRE's guide to deleting alerts](../uncategorized/deleting-alerts.md)
