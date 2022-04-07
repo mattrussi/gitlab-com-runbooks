@@ -18,3 +18,43 @@ groups:
       description: 'The average application-side database connection pool saturation in env {{ $labels.environment }} {{ $labels.stage }} stage has been above 70% for the last 30 minutes.'
       grafana_dashboard_id: registry-database/registry-database-detail
       runbook: docs/registry/app-db-conn-pool-saturation.md
+  - alert: ContainerRegistryProdDBSizeCloseToExceedPatroniNodeMemory
+    expr: >
+      (
+        sum (
+          gitlab_database_bloat_table_real_size{type="patroni-registry", environment="gprd", shard="default"}
+        )
+        +
+        sum (
+          gitlab_database_bloat_btree_real_size{type="patroni-registry", environment="gprd", shard="default"}
+        )
+      ) > 153330332467
+    for: 30m
+    labels:
+      severity: s4
+      alert_type: cause
+      team: package
+    annotations:
+      title: 'The estimated Container Registry database size is close to exceed patroni node memory capacity'
+      description: 'The estimated size is above 142GiB, which represents 70% of the current amount of RAM allocated to Patroni nodes. This can lead to decreased performance moving forward.'
+      grafana_dashboard_id: registry-database/registry-database-detail
+  - alert: ContainerRegistryProdDBSizeExceedsPatroniNodeMemory
+    expr: >
+      (
+        sum (
+          gitlab_database_bloat_table_real_size{type="patroni-registry", environment="gprd", shard="default"}
+        )
+        +
+        sum (
+          gitlab_database_bloat_btree_real_size{type="patroni-registry", environment="gprd", shard="default"}
+        )
+      ) > 219043332096
+    for: 30m
+    labels:
+      severity: s4
+      alert_type: cause
+      team: package
+    annotations:
+      title: 'The estimated Container Registry database size exceeds patroni node memory capacity'
+      description: 'The estimated size is above 204GiB, which is the current amount of RAM allocated to Patroni nodes. This will lead to decreased performance moving forward.'
+      grafana_dashboard_id: registry-database/registry-database-detail
