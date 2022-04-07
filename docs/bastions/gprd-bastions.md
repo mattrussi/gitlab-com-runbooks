@@ -18,6 +18,7 @@ Testing (for example, if you have access to deploy node), output should be like 
 $> be knife ssh 'roles:gprd-base-deploy-node' 'hostname'
 deploy-01-sv-gprd.c.gitlab-production.internal deploy-01-sv-gprd
 ```
+
 ##### Console access
 
 There is a dedicated server for console access named
@@ -126,6 +127,16 @@ ssh -N -L 8443:fe-01-lb-gprd.c.gitlab-production.internal:443 \
 ```
 
 Although, you still need to run `socat` twice.
+
+##### IAP tunnel alternative
+
+If tunneling over `lb-bastion` is too slow due to high latency, [GCP Identity-Aware Proxy](https://cloud.google.com/iap/) can be used to tunnel TCP directly to the target VM (if allowed), this is faster than SSH over SSH.
+
+Connect directly to console:
+```
+Host console-01-sv-gprd.c.gitlab-production.internal
+        ProxyCommand gcloud compute start-iap-tunnel console-01-sv-gprd 22 --listen-on-stdin --project=gitlab-production --zone=us-east1-c --verbosity=warning
+```
 
 ##### Links
  1. [Issue](https://gitlab.com/gitlab-com/migration/issues/299) describing what was done in scope of the migration project to quickly set them up.
