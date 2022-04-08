@@ -2,10 +2,18 @@
 
 ##### How to start using them
 Add the following to your `~/.ssh/config` (specify your username and path to ssh private key):
+
+You can find your username in the [data_bags](https://gitlab.com/gitlab-com/gl-infra/chef-repo/-/tree/master/data_bags/users). It should
+be `YOUR_SSH_USERNAME.json`.
+
+The SSH Private Key `~/.ssh/id_rsa` should be changed if you have another key name. Or it can be skipped if you have the default one `~/.ssh/id_rsa`.
+
 ```
 # GCP staging bastion host
 Host lb-bastion.gstg.gitlab.com
         User                            YOUR_SSH_USERNAME
+        PreferredAuthentications        publickey
+        IdentityFile                    ~/.ssh/id_rsa_gitlab       
 
 # gstg boxes
 Host *.gitlab-staging-1.internal
@@ -33,6 +41,8 @@ Host gstg-console
         ProxyCommand            ssh lb-bastion.gstg.gitlab.com -W %h:%p
 ```
 where `SERVICE_NAME` is either `rails` or `db`.
+
+With this config, you can access the console using `ssh gtg-console`
 
 See [granting rails or db access](../uncategorized/granting-rails-or-db-access.md) for more
 information on how to request console access.
