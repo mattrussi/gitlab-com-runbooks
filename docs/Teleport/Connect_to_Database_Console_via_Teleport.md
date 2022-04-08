@@ -121,7 +121,7 @@ $ tsh status
   Extensions:         permit-pty
 ```
 
-Note that the default certificate does not have the `databae-ro` role assigned. The default certificate allows you to interact with the Teleport server, and to request more roles, but does not allow connecting to any other services.
+Note that the default certificate does not have the `database-ro` role assigned. The default certificate allows you to interact with the Teleport server, and to request more roles, but does not allow connecting to any other services.
 
 To request permission to connect to a service, you must use the `--request-roles` flag.  You can request a role after already having a valid certificate, or simply by adding the flag to your initial login. Each `--request-roles` requires a `--request-reason`. It's best to use the URL of the issue or incident that this activity relates to.
 
