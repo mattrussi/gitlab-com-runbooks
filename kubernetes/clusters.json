@@ -1,0 +1,85 @@
+{
+  "gstg": {
+    "name": "gstg-gitlab-gke",
+    "project": "gitlab-staging-1",
+    "region": "us-east1",
+    "ssh_proxy": "console-01-sv-gstg.c.gitlab-staging-1.internal"
+  },
+  "gstg-us-east1-b": {
+    "name": "gstg-us-east1-b",
+    "project": "gitlab-staging-1",
+    "region": "us-east1-b",
+    "ssh_proxy": "console-01-sv-gstg.c.gitlab-staging-1.internal"
+  },
+  "gstg-us-east1-c": {
+    "name": "gstg-us-east1-c",
+    "project": "gitlab-staging-1",
+    "region": "us-east1-c",
+    "ssh_proxy": "console-01-sv-gstg.c.gitlab-staging-1.internal"
+  },
+  "gstg-us-east1-d": {
+    "name": "gstg-us-east1-d",
+    "project": "gitlab-staging-1",
+    "region": "us-east1-d",
+    "ssh_proxy": "console-01-sv-gstg.c.gitlab-staging-1.internal"
+  },
+
+  "gprd": {
+    "name": "gprd-gitlab-gke",
+    "project": "gitlab-production",
+    "region": "us-east1",
+    "ssh_proxy": "console-01-sv-gprd.c.gitlab-production.internal"
+  },
+  "gprd-us-east1-b": {
+    "name": "gprd-us-east1-b",
+    "project": "gitlab-production",
+    "region": "us-east1-b",
+    "ssh_proxy": "console-01-sv-gprd.c.gitlab-production.internal"
+  },
+  "gprd-us-east1-c": {
+    "name": "gprd-us-east1-c",
+    "project": "gitlab-production",
+    "region": "us-east1-c",
+    "ssh_proxy": "console-01-sv-gprd.c.gitlab-production.internal"
+  },
+  "gprd-us-east1-d": {
+    "name": "gprd-us-east1-d",
+    "project": "gitlab-production",
+    "region": "us-east1-d",
+    "ssh_proxy": "console-01-sv-gprd.c.gitlab-production.internal"
+  },
+
+  "stgsub": {
+    "name": "stgsub-customers-gke",
+    "project": "gitlab-subscriptions-staging",
+    "region": "us-east1",
+    "ssh_proxy": "bastion-01-inf-stgsub.c.gitlab-subscriptions-staging.internal"
+  },
+  "prdsub": {
+    "name": "prdsub-customers-gke",
+    "project": "gitlab-subscriptions-prod",
+    "region": "us-east1",
+    "ssh_proxy": "bastion-01-inf-prdsub.c.gitlab-subscriptions-prod.internal"
+  },
+
+  "pre": {
+    "name": "pre-gitlab-gke",
+    "project": "gitlab-pre",
+    "region": "us-east1",
+    "ssh_proxy": "console-01-sv-pre.c.gitlab-pre.internal"
+  },
+
+  "ops": {
+    "name": "ops-gitlab-gke",
+    "project": "gitlab-ops",
+    "region": "us-east1",
+    "ssh_proxy": "bastion-01-inf-ops.c.gitlab-ops.internal"
+  },
+
+  "org-ci": {
+    "name": "org-ci-gitlab-gke",
+    "project": "gitlab-org-ci-0d24e2",
+    "region": "us-east1",
+    "ssh_proxy": "bastion-01-inf-org-ci.c.gitlab-org-ci-0d24e2.internal"
+  }
+}
