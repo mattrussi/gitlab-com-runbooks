@@ -2,14 +2,14 @@
 
 set -eufo pipefail
 
-export RUNBOOK_PATH
+export RUNBOOKS_PATH
 if [[ $(uname -s) = "Darwin" ]]; then
-  RUNBOOK_PATH=$(dirname "$(readlink "$0")")
+  RUNBOOKS_PATH=$(dirname "$(readlink "$0")")
 else
-  RUNBOOK_PATH=$(dirname "$(readlink -f "$0")")
+  RUNBOOKS_PATH=$(dirname "$(readlink -f "$0")")
 fi
 
-BIN_DIR="$RUNBOOK_PATH/bin"
+BIN_DIR="$RUNBOOKS_PATH/bin"
 
 if [[ $# -eq 0 ]]; then
   SUBCMD="help"
@@ -27,7 +27,7 @@ if [[ ! -f "$EXEC_PATH" ]]; then
 fi
 
 if [[ ! -x "$EXEC_PATH" ]]; then
-  echo >&2 "glsh: File not executable run: chmod +x $EXEC_PATH"
+  echo >&2 "glsh: File not executable, please run: chmod +x $EXEC_PATH"
   exit 1
 fi
 
