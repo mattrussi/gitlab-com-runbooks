@@ -18,7 +18,7 @@ tf destroy --target="module.patroni-data-analytics"
 tf apply --target="module.patroni-data-analytics"
 ```
 
-Note that there should be 10 items to be destroyed and rebuilt.
+Note that there should be 10 items to be destroyed and rebuilt, but there are two null items (`module.gcp_database_snapshot.null_resource.contents` and `module.gcp_database_snapshot.null_resource.shell`) which will be destroyed and created on apply.  This looks strange, but it is fine.
 <sample output> to show what is okay.
 
 ## Procedure to reconfigure the `patroni-data-analytics` cluster after recreating the VM:
