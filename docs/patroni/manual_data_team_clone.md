@@ -7,7 +7,8 @@ and is based on the notes from [Reliability](https://gitlab.com/gitlab-com/gl-in
 This machine currently needs to be remade daily and available by 00:00 UTC each day.
 The steps should take a total of roughly 1-2 hours though most of that time is waiting.  The recreation of the VM should take ~30 min in Terraform.
 
-Once things are complete, we have been commenting in Slack in #data-team-temp-database and on [issue 15574](https://gitlab.com/gitlab-com/gl-infra/reliability/-/issues/15574) 
+Once things are complete, we have been commenting in Slack in #data-team-temp-database and on [issue 15574](https://gitlab.com/gitlab-com/gl-infra/reliability/-/issues/15574). We have been mentioning Ved and Dennis like the comments here: https://gitlab.com/gitlab-com/gl-infra/reliability/-/issues/15574#note_907842307
+
 
 ## How to recreate VM from the latest snapshot:
 
@@ -22,6 +23,14 @@ Note that there should be 10 items to be destroyed and rebuilt, but there are tw
 <sample output> to show what is okay.
 
 ## Procedure to reconfigure the `patroni-data-analytics` cluster after recreating the VM:
+
+For SSH to the box:
+a) make sure your ssh_config has the correct bastion:
+```  
+Host *.gitlab-db-benchmarking.internal
+ProxyCommand ssh lb-bastion.db-benchmarking.gitlab.com -W %h:%p
+```
+b) the ssh to `patroni-data-analytics-01-db-db-benchmarking.c.gitlab-db-benchmarking.internal`
 
 1. Stop the Patroni service in the nodes with the command: `sudo systemctl stop patroni`
 2. Get the cluster name: `sudo gitlab-patronictl list`
@@ -38,15 +47,11 @@ cd /var/log/gitlab/
 chown -R gitlab-psql:gitlab-psql postgresql/
 chown -R syslog:syslog patroni/
 ```
-5 - Delete recovery.conf config file if exists, for all nodes in all clusters:
-```
-sudo rm -rf /var/opt/gitlab/postgresql/data12/recovery.conf
-```
-6 - Start Patroni:
+5 - Start Patroni:
 ```
 sudo systemctl start patroni
 ```
-7 - Monitor the patroni status and wait until the node is ready:
+6 - Monitor the patroni status and wait until the node is ready:
 ```
 watch -n 1 sudo gitlab-patronictl list
 ```
