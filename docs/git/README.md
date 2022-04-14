@@ -64,6 +64,7 @@
 * [Bypass Praefect](../praefect/praefect-bypass.md)
 * [Praefect has read-only repositories](../praefect/praefect-read-only.md)
 * [Praefect replication is lagging or has stopped](../praefect/praefect-replication.md)
+* [Redis on Kubernetes](../redis/kubernetes.md)
 * [Redis-Sidekiq catchall workloads reduction](../redis/redis-sidekiq-catchall-workloads-reduction.md)
 * [A survival guide for SREs to working with Redis at GitLab](../redis/redis-survival-guide-for-sres.md)
 * [Sidekiq Queue Out of Control](../sidekiq/large-sidekiq-queue.md)

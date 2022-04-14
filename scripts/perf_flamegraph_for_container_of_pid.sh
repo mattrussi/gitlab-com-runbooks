@@ -4,12 +4,14 @@ set -o pipefail
 set -o errexit
 
 function usage() {
-  cat <<HERE
-Usage: perf_flamegraph_for_all_running_processes.sh
+  ERROR_MESSAGE=$1
+  [[ -n "$ERROR_MESSAGE" ]] && echo "Error: $ERROR_MESSAGE" && echo
 
-Captures an on-CPU stack profile for the whole host, and renders it as a flamegraph.
-Does not filter which PIDs to capture.
-Stack traces will be collected from any processes running on CPU each time the sampling timer event triggers.
+  cat <<HERE
+Usage: perf_flamegraph_for_container_of_pid.sh [pid]
+
+Captures an on-CPU stack profile for a container's processes, and renders it as a flamegraph.
+Finds the cpu cgroup of the given PID and profiles all processes in that container cgroup.
 HERE
   exit 1
 }
@@ -34,26 +36,33 @@ function gke_install_flamegraph_pl() {
 }
 
 function main() {
+  CHOSEN_PID=$1
   DURATION_SECONDS=60
   SAMPLES_PER_SECOND=99
 
   [[ $1 =~ ^-h|--help$ ]] && usage
-  [[ $# -eq 0 ]] || usage
+  [[ $# -eq 1 ]] || usage "Wrong number of arguments"
+  [[ "$CHOSEN_PID" =~ ^[0-9,]+$ ]] || usage "Invalid PID: '$CHOSEN_PID'"
 
   is_gke && gke_install_flamegraph_pl
+
+  # Find the given PID's container CPU cgroup.
+  CONTAINER_CGROUP=$(awk -F':' '$2 == "cpu,cpuacct" { print $3 }' "/proc/$CHOSEN_PID/cgroup")
+  [[ -z "$CONTAINER_CGROUP" ]] && echo "ERROR: PID $CHOSEN_PID does not appear to have a cgroup" && exit 1
+  echo "Target PID $CHOSEN_PID belongs to cgroup: $CONTAINER_CGROUP"
 
   # Use a temp dir.  This avoids polluting current dir and supports concurrent runs of this script.
   OUTDIR=$(mktemp -d /tmp/perf-record-results.XXXXXXXX)
   cd "$OUTDIR"
 
   # Name the output files to clearly indicate the scope and timestamp of the capture.
-  OUTFILE_PREFIX="$(hostname -s).$(date +%Y%m%d_%H%M%S_%Z).all_cpus"
+  OUTFILE_PREFIX="$(hostname -s).$(date +%Y%m%d_%H%M%S_%Z).container_of_pid_${CHOSEN_PID}"
   OUTFILE_PERF_SCRIPT="${OUTFILE_PREFIX}.perf-script.txt.gz"
   OUTFILE_FLAMEGRAPH="${OUTFILE_PREFIX}.flamegraph.svg"
 
   # Capture timer-based profile, resolve symbols, and render as a flamegraph.
   echo "Starting capture for $DURATION_SECONDS seconds."
-  sudo perf record --freq "$SAMPLES_PER_SECOND" -g --all-cpus -- sleep "$DURATION_SECONDS"
+  sudo perf record --freq "$SAMPLES_PER_SECOND" -g --all-cpus -e cpu-cycles --cgroup "$CONTAINER_CGROUP" -- sleep "$DURATION_SECONDS"
   sudo perf script --header | gzip >"$OUTFILE_PERF_SCRIPT"
 
   if is_gke; then

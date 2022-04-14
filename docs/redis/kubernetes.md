@@ -48,3 +48,36 @@ Now you can scp the flamegraph to your local machine:
 ```
 ➜  ~ gcloud --project gitlab-pre compute scp gke-pre-gitlab-gke-redis-ratelimiting-231e75c5-mabc:/tmp/perf-record-results.6VUGMYa4/gke-pre-gitlab-gke-redis-ratelimiting-231e75c5-mabc.20220331_144401_UTC.all_cpus.flamegraph.svg .
 ```
+
+#### Profiling a specific container
+
+Similar to the above, you can profile a single container rather than the whole host.
+
+Find and ssh into a GKE node:
+
+```
+$ gcloud --project gitlab-pre compute instances list --filter 'name:gke-pre-gitlab-gke-redis'
+$ gcloud compute ssh --project gitlab-pre --zone us-east1-b gke-pre-gitlab-gke-redis-ratelimiting-231e75c5-mabc
+```
+
+On the GKE node, fetch the helper script:
+
+```
+$ git clone git@gitlab.com:gitlab-com/runbooks.git
+$ cd runbooks/scripts/
+```
+
+Choose your target PID, and run the profiler on just its container:
+
+```
+$ TARGET_PID=$( pgrep -n -f 'redis-server .*:6379' )
+$ bash ./perf_flamegraph_for_container_of_pid.sh $TARGET_PID
+```
+
+On your laptop, download the flamegraph (and optionally the perf-script output for fine-grained analysis):
+
+```
+$ gcloud compute scp --project gitlab-pre --zone us-east1-b gke-pre-gitlab-gke-redis-ratelimiting-231e75c5-mabc:/tmp/perf-record-results.oI3YR698/gke-pre-gitlab-gke-redis-ratelimiting-231e75c5-mabc.20220414_010939_UTC.container_of_pid_7154.flamegraph.svg .
+
+$ gcloud compute scp --project gitlab-pre --zone us-east1-b gke-pre-gitlab-gke-redis-ratelimiting-231e75c5-mabc:/tmp/perf-record-results.oI3YR698/gke-pre-gitlab-gke-redis-ratelimiting-231e75c5-mabc.20220414_010939_UTC.container_of_pid_7154.perf-script.txt.gz .
+```
