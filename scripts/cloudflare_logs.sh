@@ -58,11 +58,11 @@ while getopts "e:b:d:t:h12" OPTION; do
       esac
       ;;
     1)
-       VERSION=1
-       ;;
+      VERSION=1
+      ;;
     2)
-       VERSION=2
-       ;;
+      VERSION=2
+      ;;
     d)
       if $DATE_CMD --date "${OPTARG}" &>/dev/null; then
         DATE="${OPTARG}"
