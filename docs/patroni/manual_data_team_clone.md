@@ -30,7 +30,7 @@ a) make sure your ssh_config has the correct bastion:
 Host *.gitlab-db-benchmarking.internal
 ProxyCommand ssh lb-bastion.db-benchmarking.gitlab.com -W %h:%p
 ```
-b) the ssh to `patroni-data-analytics-01-db-db-benchmarking.c.gitlab-db-benchmarking.internal`
+b) then ssh to `patroni-data-analytics-01-db-db-benchmarking.c.gitlab-db-benchmarking.internal`
 
 1. Stop the Patroni service in the nodes with the command: `sudo systemctl stop patroni`
 2. Get the cluster name: `sudo gitlab-patronictl list`
