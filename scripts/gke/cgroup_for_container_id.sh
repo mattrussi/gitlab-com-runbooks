@@ -7,10 +7,10 @@ source "$( dirname $0 )/container_inspection_library.sh"
 
 function main()
 {
-    local TARGET_PID=$1
+    local TARGET_CONTAINER_ID=$1
     [[ $1 =~ ^-h|--help$ ]] && usage
     [[ $# -eq 1 ]] || usage "Wrong number of arguments"
-    cgroup_path_for_pid "$TARGET_PID"
+    cgroup_for_container_id "$TARGET_CONTAINER_ID"
 }
 
 function usage()
@@ -19,9 +19,9 @@ function usage()
     [[ -n "$ERROR_MESSAGE" ]] && echo "Error: $ERROR_MESSAGE" && echo
 
     cat <<HERE
-Usage: cgroup_for_pid.sh [pid]
+Usage: cgroup_for_container_id.sh [container id]
 
-Finds the cpu cgroup path of the given PID.
+Finds the cpu cgroup path of the given container id.
 
 This cgroup path uniquely identifies the cgroup and the discrete set of processes it includes.
 Each container and pod typically has its own cgroup.
