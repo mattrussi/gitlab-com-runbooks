@@ -3,6 +3,8 @@
 set -o pipefail
 set -o errexit
 
+source "$( dirname $0 )/container_inspection_library.sh"
+
 function main()
 {
     local TARGET_PID=$1
@@ -24,28 +26,6 @@ This cgroup path uniquely identifies the cgroup and the discrete set of processe
 Each container and pod typically has its own cgroup.
 The cgroup path can be used as a group identified, for example to find and profile all member processes.
 HERE
-    exit 1
-}
-
-function cgroup_path_for_pid()
-{
-    local TARGET_PID=$1
-    assert_is_pid "$TARGET_PID"
-    local CPU_CGROUP=$( awk -F':' '$2 == "cpu,cpuacct" { print $3 }' "/proc/$TARGET_PID/cgroup" )
-    [[ -n "$CPU_CGROUP" ]] || die "Could not find the CPU cgroup for PID $TARGET_PID"
-    echo "$CPU_CGROUP"
-}
-
-function assert_is_pid()
-{
-    local TARGET_PID=$1
-    [[ "$TARGET_PID" =~ ^[0-9,]+$ ]] || die "Invalid PID: '$TARGET_PID'"
-    [[ -d "/proc/$TARGET_PID" ]] || die "PID $TARGET_PID does not exist in this PID namespace"
-}
-
-function die()
-{
-    echo "ERROR: $*" 1>&2
     exit 1
 }
 
