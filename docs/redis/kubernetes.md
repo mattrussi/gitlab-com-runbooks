@@ -24,7 +24,7 @@ SSH into node:
 Once on the node, install and run `perf_flamegraph_for_all_running_processes.sh`:
 
 ```
-igor@gke-pre-gitlab-gke-redis-ratelimiting-231e75c5-mabc ~ $ wget https://gitlab.com/gitlab-com/runbooks/-/raw/master/scripts/perf_flamegraph_for_all_running_processes.sh
+igor@gke-pre-gitlab-gke-redis-ratelimiting-231e75c5-mabc ~ $ wget https://gitlab.com/gitlab-com/runbooks/-/raw/master/scripts/gke/perf_flamegraph_for_all_running_processes.sh
 
 igor@gke-pre-gitlab-gke-redis-ratelimiting-231e75c5-mabc ~ $ bash perf_flamegraph_for_all_running_processes.sh
 
@@ -64,7 +64,7 @@ On the GKE node, fetch the helper script:
 
 ```
 $ git clone git@gitlab.com:gitlab-com/runbooks.git
-$ cd runbooks/scripts/
+$ cd runbooks/scripts/gke/
 ```
 
 Choose your target PID, and run the profiler on just its container:
