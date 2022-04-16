@@ -3,7 +3,7 @@
 set -o pipefail
 set -o errexit
 
-source "$( dirname "$0" )/container_inspection_library.sh"
+source "$(dirname "$0")/container_inspection_library.sh"
 
 function usage() {
   ERROR_MESSAGE=$1
