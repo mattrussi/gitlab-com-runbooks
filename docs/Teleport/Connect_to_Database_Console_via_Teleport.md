@@ -34,7 +34,7 @@ Linux install instructions are [also available on the Teleport site](https://got
 > Note: It is not required, but it is easier to be logged in to Okta already before starting
 
 1. Authenticate to the Teleport server
-2. Request approval for the database role that you need
+2. Unless using read only access in staging, request approval for the database role that you need
 3. Log in to the database with the appropriate database user
 4. Connect the database console
 
@@ -48,10 +48,12 @@ Authenticate to the Teleport proxy/server. This command opens Okta in a browser 
 tsh login --proxy=teleport.gstg.gitlab.net
 ```
 
-Then request a role which includes permissions for the staging Database console (for production, see the note below)
+> Note: The `database-ro` role in the `gstg` environment does not require a request or approval, so you can skip this step. Us this unless you know for sure that you need something else.
+
+If you need to request a role which includes elevated permissions for the Database console. Request either `database`, `database-ro`, or `database-admin`, for `gstg` or `gprd`, using the following format.
 
 ```shell
-tsh login --proxy=teleport.gstg.gitlab.net --request-roles=database-ro --request-reason="Issue-URL or explanation"
+tsh login --proxy=teleport.gstg.gitlab.net --request-roles=database --request-reason="Issue-URL or explanation"
 ```
 
 This command will pause while it waits for the approver to approve the request.  It may appear to hang, but it is waiting for someone to approve it.  The command will return as soon as the request is approved, denied, or times out.
