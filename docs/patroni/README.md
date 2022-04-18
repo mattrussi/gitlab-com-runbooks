@@ -30,6 +30,7 @@
 * [gitlab-com-wale-backups.md](gitlab-com-wale-backups.md)
 * [gitlab-com-walg-backups.md](gitlab-com-walg-backups.md)
 * [Log analysis on PostgreSQL, Pgbouncer, Patroni and consul Runbook](log_analysis.md)
+* [Making a manual clone of the DB for the data team](manual_data_team_clone.md)
 * [Mapping Postgres Statements, Slowlogs, Activity Monitoring and Traces](mapping_statements.md)
 * [OS Upgrade Reference Architecture](os_upgrade_reference_architecture.md)
 * [Patroni](patroni-management.md)
