@@ -9,6 +9,7 @@ local row = grafana.row;
 local metricsCatalogDashboards = import 'gitlab-dashboards/metrics_catalog_dashboards.libsonnet';
 local selectors = import 'promql/selectors.libsonnet';
 local processExporter = import 'gitlab-dashboards/process_exporter.libsonnet';
+local gitalyCommandStats = import 'gitlab-dashboards/gitaly_command_stats.libsonnet';
 local metricsCatalog = import 'servicemetrics/metrics-catalog.libsonnet';
 local aggregationSets = (import 'gitlab-metrics-config.libsonnet').aggregationSets;
 local singleMetricRow = import 'key-metric-panels/single-metric-row.libsonnet';
@@ -235,6 +236,39 @@ basic.dashboard(
     },
     aggregationLabels=[],
     startRow=8201
+  )
+)
+.addPanel(
+  row.new(title='gitaly command stats by command'),
+  gridPos={
+    x: 0,
+    y: 8300,
+    w: 24,
+    h: 1,
+  }
+)
+.addPanels(
+  gitalyCommandStats.metricsForNode(
+    selectorHash,
+    includeDetails=false,
+    aggregationLabels=['cmd', 'subcmd'],
+    startRow=8301
+  )
+)
+.addPanel(
+  row.new(title='gitaly command stats by RPC'),
+  gridPos={
+    x: 0,
+    y: 8400,
+    w: 24,
+    h: 1,
+  }
+)
+.addPanels(
+  gitalyCommandStats.metricsForNode(
+    selectorHash,
+    aggregationLabels=['grpc_service', 'grpc_method'],
+    startRow=8401
   )
 )
 
