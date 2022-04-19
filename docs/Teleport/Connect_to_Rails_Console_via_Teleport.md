@@ -34,7 +34,7 @@ Linux install instructions are [also available on the Teleport site](https://got
 > Note: It is not required, but it is easier to be logged in to Okta already before this step
 
 1. Authenticate to the Teleport server
-2. Request approval for the rails console role that you need
+2. Unless using read only access in staging, request approval for the rails console role that you need
 3. Connect the Rails Console
 
 The access will be temporary (`24h` max) and can be approved by any SRE or Reliability Manager.  The `@sre-oncall` can help if it's urgent, but if you can wait it is considerate to spread the load out by asking the wider SRE team in `#infrastructure-lounge`. Access can be extended before or after expiration using the same process.
@@ -47,7 +47,9 @@ Authenticate to the Teleport proxy/server. This command opens Okta in a browser 
 tsh login --proxy=teleport.gstg.gitlab.net
 ```
 
-Then request a role which includes permissions for the staging Rails console (for production, see the note below)
+> Note: The `rails-ro` role in the `gstg` environment does not require a request or approval, so you can skip this step. Us this unless you know for sure that you need something else.
+
+If you need to request a role which includes elevated permissions for the Rails console.  Currently only `rails-ro` is implemented, and is only required in `gprd`
 
 ```shell
 tsh login --proxy=teleport.gstg.gitlab.net --request-roles=rails-ro --request-reason="Issue-URL or explanation"
