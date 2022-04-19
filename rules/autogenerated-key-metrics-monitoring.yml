@@ -380,11 +380,11 @@ groups:
     expr: |
       (
         sum by (environment,stage) (
-          sli_aggregations:grpc_server_handling_seconds_bucket_rate1m{grpc_service=~"thanos.Store|thanos.info.Info",grpc_type="unary",job=~"thanos|thanos-store(-[0-9]+)?",le=~"1|1\\.0",type="monitoring"}
+          rate(grpc_server_handling_seconds_bucket{grpc_service=~"thanos.Store|thanos.info.Info",grpc_type="unary",job=~"thanos|thanos-store(-[0-9]+)?",le=~"1|1\\.0",type="monitoring"}[1m])
         )
         +
         sum by (environment,stage) (
-          sli_aggregations:grpc_server_handling_seconds_bucket_rate1m{grpc_service=~"thanos.Store|thanos.info.Info",grpc_type="unary",job=~"thanos|thanos-store(-[0-9]+)?",le=~"3|3\\.0",type="monitoring"}
+          rate(grpc_server_handling_seconds_bucket{grpc_service=~"thanos.Store|thanos.info.Info",grpc_type="unary",job=~"thanos|thanos-store(-[0-9]+)?",le=~"3|3\\.0",type="monitoring"}[1m])
         )
       )
       /
@@ -396,7 +396,7 @@ groups:
       type: monitoring
     expr: |
       sum by (environment,stage) (
-        sli_aggregations:grpc_server_handling_seconds_bucket_rate1m{grpc_service=~"thanos.Store|thanos.info.Info",grpc_type="unary",job=~"thanos|thanos-store(-[0-9]+)?",le="+Inf",type="monitoring"}
+        rate(grpc_server_handling_seconds_bucket{grpc_service=~"thanos.Store|thanos.info.Info",grpc_type="unary",job=~"thanos|thanos-store(-[0-9]+)?",le="+Inf",type="monitoring"}[1m])
       )
   - record: gitlab_component_ops:rate
     labels:
@@ -803,11 +803,11 @@ groups:
     expr: |
       (
         sum by (environment,stage) (
-          sli_aggregations:grpc_server_handling_seconds_bucket_rate5m{grpc_service=~"thanos.Store|thanos.info.Info",grpc_type="unary",job=~"thanos|thanos-store(-[0-9]+)?",le=~"1|1\\.0",type="monitoring"}
+          rate(grpc_server_handling_seconds_bucket{grpc_service=~"thanos.Store|thanos.info.Info",grpc_type="unary",job=~"thanos|thanos-store(-[0-9]+)?",le=~"1|1\\.0",type="monitoring"}[5m])
         )
         +
         sum by (environment,stage) (
-          sli_aggregations:grpc_server_handling_seconds_bucket_rate5m{grpc_service=~"thanos.Store|thanos.info.Info",grpc_type="unary",job=~"thanos|thanos-store(-[0-9]+)?",le=~"3|3\\.0",type="monitoring"}
+          rate(grpc_server_handling_seconds_bucket{grpc_service=~"thanos.Store|thanos.info.Info",grpc_type="unary",job=~"thanos|thanos-store(-[0-9]+)?",le=~"3|3\\.0",type="monitoring"}[5m])
         )
       )
       /
@@ -819,7 +819,7 @@ groups:
       type: monitoring
     expr: |
       sum by (environment,stage) (
-        sli_aggregations:grpc_server_handling_seconds_bucket_rate5m{grpc_service=~"thanos.Store|thanos.info.Info",grpc_type="unary",job=~"thanos|thanos-store(-[0-9]+)?",le="+Inf",type="monitoring"}
+        rate(grpc_server_handling_seconds_bucket{grpc_service=~"thanos.Store|thanos.info.Info",grpc_type="unary",job=~"thanos|thanos-store(-[0-9]+)?",le="+Inf",type="monitoring"}[5m])
       )
   - record: gitlab_component_ops:rate_5m
     labels:
@@ -1226,11 +1226,11 @@ groups:
     expr: |
       (
         sum by (environment,stage) (
-          sli_aggregations:grpc_server_handling_seconds_bucket_rate30m{grpc_service=~"thanos.Store|thanos.info.Info",grpc_type="unary",job=~"thanos|thanos-store(-[0-9]+)?",le=~"1|1\\.0",type="monitoring"}
+          rate(grpc_server_handling_seconds_bucket{grpc_service=~"thanos.Store|thanos.info.Info",grpc_type="unary",job=~"thanos|thanos-store(-[0-9]+)?",le=~"1|1\\.0",type="monitoring"}[30m])
         )
         +
         sum by (environment,stage) (
-          sli_aggregations:grpc_server_handling_seconds_bucket_rate30m{grpc_service=~"thanos.Store|thanos.info.Info",grpc_type="unary",job=~"thanos|thanos-store(-[0-9]+)?",le=~"3|3\\.0",type="monitoring"}
+          rate(grpc_server_handling_seconds_bucket{grpc_service=~"thanos.Store|thanos.info.Info",grpc_type="unary",job=~"thanos|thanos-store(-[0-9]+)?",le=~"3|3\\.0",type="monitoring"}[30m])
         )
       )
       /
@@ -1242,7 +1242,7 @@ groups:
       type: monitoring
     expr: |
       sum by (environment,stage) (
-        sli_aggregations:grpc_server_handling_seconds_bucket_rate30m{grpc_service=~"thanos.Store|thanos.info.Info",grpc_type="unary",job=~"thanos|thanos-store(-[0-9]+)?",le="+Inf",type="monitoring"}
+        rate(grpc_server_handling_seconds_bucket{grpc_service=~"thanos.Store|thanos.info.Info",grpc_type="unary",job=~"thanos|thanos-store(-[0-9]+)?",le="+Inf",type="monitoring"}[30m])
       )
   - record: gitlab_component_ops:rate_30m
     labels:
@@ -1649,11 +1649,11 @@ groups:
     expr: |
       (
         sum by (environment,stage) (
-          sli_aggregations:grpc_server_handling_seconds_bucket_rate1h{grpc_service=~"thanos.Store|thanos.info.Info",grpc_type="unary",job=~"thanos|thanos-store(-[0-9]+)?",le=~"1|1\\.0",type="monitoring"}
+          rate(grpc_server_handling_seconds_bucket{grpc_service=~"thanos.Store|thanos.info.Info",grpc_type="unary",job=~"thanos|thanos-store(-[0-9]+)?",le=~"1|1\\.0",type="monitoring"}[1h])
         )
         +
         sum by (environment,stage) (
-          sli_aggregations:grpc_server_handling_seconds_bucket_rate1h{grpc_service=~"thanos.Store|thanos.info.Info",grpc_type="unary",job=~"thanos|thanos-store(-[0-9]+)?",le=~"3|3\\.0",type="monitoring"}
+          rate(grpc_server_handling_seconds_bucket{grpc_service=~"thanos.Store|thanos.info.Info",grpc_type="unary",job=~"thanos|thanos-store(-[0-9]+)?",le=~"3|3\\.0",type="monitoring"}[1h])
         )
       )
       /
@@ -1665,7 +1665,7 @@ groups:
       type: monitoring
     expr: |
       sum by (environment,stage) (
-        sli_aggregations:grpc_server_handling_seconds_bucket_rate1h{grpc_service=~"thanos.Store|thanos.info.Info",grpc_type="unary",job=~"thanos|thanos-store(-[0-9]+)?",le="+Inf",type="monitoring"}
+        rate(grpc_server_handling_seconds_bucket{grpc_service=~"thanos.Store|thanos.info.Info",grpc_type="unary",job=~"thanos|thanos-store(-[0-9]+)?",le="+Inf",type="monitoring"}[1h])
       )
   - record: gitlab_component_ops:rate_1h
     labels:
@@ -2072,11 +2072,11 @@ groups:
     expr: |
       (
         sum by (environment,stage) (
-          sli_aggregations:grpc_server_handling_seconds_bucket_rate6h{grpc_service=~"thanos.Store|thanos.info.Info",grpc_type="unary",job=~"thanos|thanos-store(-[0-9]+)?",le=~"1|1\\.0",type="monitoring"}
+          rate(grpc_server_handling_seconds_bucket{grpc_service=~"thanos.Store|thanos.info.Info",grpc_type="unary",job=~"thanos|thanos-store(-[0-9]+)?",le=~"1|1\\.0",type="monitoring"}[6h])
         )
         +
         sum by (environment,stage) (
-          sli_aggregations:grpc_server_handling_seconds_bucket_rate6h{grpc_service=~"thanos.Store|thanos.info.Info",grpc_type="unary",job=~"thanos|thanos-store(-[0-9]+)?",le=~"3|3\\.0",type="monitoring"}
+          rate(grpc_server_handling_seconds_bucket{grpc_service=~"thanos.Store|thanos.info.Info",grpc_type="unary",job=~"thanos|thanos-store(-[0-9]+)?",le=~"3|3\\.0",type="monitoring"}[6h])
         )
       )
       /
@@ -2088,7 +2088,7 @@ groups:
       type: monitoring
     expr: |
       sum by (environment,stage) (
-        sli_aggregations:grpc_server_handling_seconds_bucket_rate6h{grpc_service=~"thanos.Store|thanos.info.Info",grpc_type="unary",job=~"thanos|thanos-store(-[0-9]+)?",le="+Inf",type="monitoring"}
+        rate(grpc_server_handling_seconds_bucket{grpc_service=~"thanos.Store|thanos.info.Info",grpc_type="unary",job=~"thanos|thanos-store(-[0-9]+)?",le="+Inf",type="monitoring"}[6h])
       )
   - record: gitlab_component_ops:rate_6h
     labels:

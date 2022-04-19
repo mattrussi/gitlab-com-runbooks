@@ -192,7 +192,7 @@ groups:
         histogram_quantile(
           0.950000,
           sum by (env,environment,tier,stage,le) (
-            sli_aggregations:grpc_server_handling_seconds_bucket_rate5m{environment="{{ $labels.environment }}",grpc_type="unary",job="praefect",stage="{{ $labels.stage }}"}
+            rate(grpc_server_handling_seconds_bucket{environment="{{ $labels.environment }}",grpc_type="unary",job="praefect",stage="{{ $labels.stage }}"}[5m])
           )
         )
       runbook: docs/praefect/README.md
@@ -243,7 +243,7 @@ groups:
         histogram_quantile(
           0.950000,
           sum by (env,environment,tier,stage,le) (
-            sli_aggregations:grpc_server_handling_seconds_bucket_rate5m{environment="{{ $labels.environment }}",grpc_type="unary",job="praefect",stage="{{ $labels.stage }}"}
+            rate(grpc_server_handling_seconds_bucket{environment="{{ $labels.environment }}",grpc_type="unary",job="praefect",stage="{{ $labels.stage }}"}[5m])
           )
         )
       runbook: docs/praefect/README.md

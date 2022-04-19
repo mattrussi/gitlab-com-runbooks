@@ -38,11 +38,11 @@ groups:
     expr: |
       (
         sum by (environment,stage) (
-          sli_aggregations:grpc_server_handling_seconds_bucket_rate1m{grpc_type="unary",job="praefect",le="0.5"}
+          rate(grpc_server_handling_seconds_bucket{grpc_type="unary",job="praefect",le="0.5"}[1m])
         )
         +
         sum by (environment,stage) (
-          sli_aggregations:grpc_server_handling_seconds_bucket_rate1m{grpc_type="unary",job="praefect",le="1"}
+          rate(grpc_server_handling_seconds_bucket{grpc_type="unary",job="praefect",le="1"}[1m])
         )
       )
       /
@@ -54,7 +54,7 @@ groups:
       type: praefect
     expr: |
       sum by (environment,stage) (
-        sli_aggregations:grpc_server_handling_seconds_bucket_rate1m{grpc_type="unary",job="praefect",le="+Inf"}
+        rate(grpc_server_handling_seconds_bucket{grpc_type="unary",job="praefect",le="+Inf"}[1m])
       )
   - record: gitlab_component_ops:rate
     labels:
@@ -146,11 +146,11 @@ groups:
     expr: |
       (
         sum by (environment,stage) (
-          sli_aggregations:grpc_server_handling_seconds_bucket_rate5m{grpc_type="unary",job="praefect",le="0.5"}
+          rate(grpc_server_handling_seconds_bucket{grpc_type="unary",job="praefect",le="0.5"}[5m])
         )
         +
         sum by (environment,stage) (
-          sli_aggregations:grpc_server_handling_seconds_bucket_rate5m{grpc_type="unary",job="praefect",le="1"}
+          rate(grpc_server_handling_seconds_bucket{grpc_type="unary",job="praefect",le="1"}[5m])
         )
       )
       /
@@ -162,7 +162,7 @@ groups:
       type: praefect
     expr: |
       sum by (environment,stage) (
-        sli_aggregations:grpc_server_handling_seconds_bucket_rate5m{grpc_type="unary",job="praefect",le="+Inf"}
+        rate(grpc_server_handling_seconds_bucket{grpc_type="unary",job="praefect",le="+Inf"}[5m])
       )
   - record: gitlab_component_ops:rate_5m
     labels:
@@ -254,11 +254,11 @@ groups:
     expr: |
       (
         sum by (environment,stage) (
-          sli_aggregations:grpc_server_handling_seconds_bucket_rate30m{grpc_type="unary",job="praefect",le="0.5"}
+          rate(grpc_server_handling_seconds_bucket{grpc_type="unary",job="praefect",le="0.5"}[30m])
         )
         +
         sum by (environment,stage) (
-          sli_aggregations:grpc_server_handling_seconds_bucket_rate30m{grpc_type="unary",job="praefect",le="1"}
+          rate(grpc_server_handling_seconds_bucket{grpc_type="unary",job="praefect",le="1"}[30m])
         )
       )
       /
@@ -270,7 +270,7 @@ groups:
       type: praefect
     expr: |
       sum by (environment,stage) (
-        sli_aggregations:grpc_server_handling_seconds_bucket_rate30m{grpc_type="unary",job="praefect",le="+Inf"}
+        rate(grpc_server_handling_seconds_bucket{grpc_type="unary",job="praefect",le="+Inf"}[30m])
       )
   - record: gitlab_component_ops:rate_30m
     labels:
@@ -362,11 +362,11 @@ groups:
     expr: |
       (
         sum by (environment,stage) (
-          sli_aggregations:grpc_server_handling_seconds_bucket_rate1h{grpc_type="unary",job="praefect",le="0.5"}
+          rate(grpc_server_handling_seconds_bucket{grpc_type="unary",job="praefect",le="0.5"}[1h])
         )
         +
         sum by (environment,stage) (
-          sli_aggregations:grpc_server_handling_seconds_bucket_rate1h{grpc_type="unary",job="praefect",le="1"}
+          rate(grpc_server_handling_seconds_bucket{grpc_type="unary",job="praefect",le="1"}[1h])
         )
       )
       /
@@ -378,7 +378,7 @@ groups:
       type: praefect
     expr: |
       sum by (environment,stage) (
-        sli_aggregations:grpc_server_handling_seconds_bucket_rate1h{grpc_type="unary",job="praefect",le="+Inf"}
+        rate(grpc_server_handling_seconds_bucket{grpc_type="unary",job="praefect",le="+Inf"}[1h])
       )
   - record: gitlab_component_ops:rate_1h
     labels:
@@ -470,11 +470,11 @@ groups:
     expr: |
       (
         sum by (environment,stage) (
-          sli_aggregations:grpc_server_handling_seconds_bucket_rate6h{grpc_type="unary",job="praefect",le="0.5"}
+          rate(grpc_server_handling_seconds_bucket{grpc_type="unary",job="praefect",le="0.5"}[6h])
         )
         +
         sum by (environment,stage) (
-          sli_aggregations:grpc_server_handling_seconds_bucket_rate6h{grpc_type="unary",job="praefect",le="1"}
+          rate(grpc_server_handling_seconds_bucket{grpc_type="unary",job="praefect",le="1"}[6h])
         )
       )
       /
@@ -486,7 +486,7 @@ groups:
       type: praefect
     expr: |
       sum by (environment,stage) (
-        sli_aggregations:grpc_server_handling_seconds_bucket_rate6h{grpc_type="unary",job="praefect",le="+Inf"}
+        rate(grpc_server_handling_seconds_bucket{grpc_type="unary",job="praefect",le="+Inf"}[6h])
       )
   - record: gitlab_component_ops:rate_6h
     labels:
