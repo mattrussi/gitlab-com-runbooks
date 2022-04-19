@@ -363,8 +363,8 @@ teams:
   ignored_components:
   - graphql_queries
   - rails_requests
-- name: purchase
-  product_stage_group: purchase
+- name: fulfillment_platform
+  product_stage_group: fulfillment_platform
   ignored_components:
   - graphql_queries
   - rails_requests
