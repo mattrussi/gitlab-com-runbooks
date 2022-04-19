@@ -1922,7 +1922,7 @@ groups:
         histogram_quantile(
           0.950000,
           sum by (env,environment,tier,stage,le) (
-            rate(grpc_server_handling_seconds_bucket{environment="{{ $labels.environment }}",grpc_service=~"thanos.Store|thanos.info.Info",grpc_type="unary",job=~"thanos|thanos-store(-[0-9]+)?",stage="{{ $labels.stage }}",type="monitoring"}[5m])
+            sli_aggregations:grpc_server_handling_seconds_bucket_rate5m{environment="{{ $labels.environment }}",grpc_service=~"thanos.Store|thanos.info.Info",grpc_type="unary",job=~"thanos|thanos-store(-[0-9]+)?",stage="{{ $labels.stage }}",type="monitoring"}
           )
         )
       runbook: docs/monitoring/README.md
@@ -1973,7 +1973,7 @@ groups:
         histogram_quantile(
           0.950000,
           sum by (env,environment,tier,stage,le) (
-            rate(grpc_server_handling_seconds_bucket{environment="{{ $labels.environment }}",grpc_service=~"thanos.Store|thanos.info.Info",grpc_type="unary",job=~"thanos|thanos-store(-[0-9]+)?",stage="{{ $labels.stage }}",type="monitoring"}[5m])
+            sli_aggregations:grpc_server_handling_seconds_bucket_rate5m{environment="{{ $labels.environment }}",grpc_service=~"thanos.Store|thanos.info.Info",grpc_type="unary",job=~"thanos|thanos-store(-[0-9]+)?",stage="{{ $labels.stage }}",type="monitoring"}
           )
         )
       runbook: docs/monitoring/README.md
