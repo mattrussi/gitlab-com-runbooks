@@ -16,6 +16,7 @@
 ## Troubleshooting Pointers
 
 * [Cloud SQL Troubleshooting](../cloud-sql/cloud-sql.md)
+* [Upgrading the OS of Gitaly VMs](../gitaly/gitaly-os-upgrade.md)
 * [../monitoring/apdex-alerts-guide.md](../monitoring/apdex-alerts-guide.md)
 * [Diagnosis with Kibana](../onboarding/kibana-diagnosis.md)
 * [Bypass Praefect](praefect-bypass.md)
