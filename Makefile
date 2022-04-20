@@ -75,6 +75,7 @@ validate-service-mappings:
 
 .PHONY: validate-prom-rules
 validate-prom-rules:
+	./scripts/validate-recording-rule-groups
 	# TODO: Add rules/*/*.yml when valid rules are created.
 	@$(PROMTOOL_COMMAND) check rules $(PROM_RULE_FILES)
 	# Temporary command. Remove when https://github.com/thanos-io/thanos/issues/4082 is fixed (v0.20.2+)
