@@ -156,6 +156,12 @@ groups:
     expr: "1"
   - record: gitlab:feature_category:stage_group:mapping
     labels:
+      feature_category: credential_management
+      product_stage: manage
+      stage_group: authentication_and_authorization
+    expr: "1"
+  - record: gitlab:feature_category:stage_group:mapping
+    labels:
       feature_category: database
       product_stage: enablement
       stage_group: database
@@ -248,7 +254,7 @@ groups:
     labels:
       feature_category: error_tracking
       product_stage: monitor
-      stage_group: respond
+      stage_group: observability
     expr: "1"
   - record: gitlab:feature_category:stage_group:mapping
     labels:
@@ -285,6 +291,12 @@ groups:
       feature_category: five_minute_production_app
       product_stage: deploy
       stage_group: 5-min-app
+    expr: "1"
+  - record: gitlab:feature_category:stage_group:mapping
+    labels:
+      feature_category: fulfillment_platform
+      product_stage: fulfillment
+      stage_group: fulfillment_platform
     expr: "1"
   - record: gitlab:feature_category:stage_group:mapping
     labels:
@@ -492,6 +504,12 @@ groups:
     expr: "1"
   - record: gitlab:feature_category:stage_group:mapping
     labels:
+      feature_category: permissions
+      product_stage: manage
+      stage_group: authentication_and_authorization
+    expr: "1"
+  - record: gitlab:feature_category:stage_group:mapping
+    labels:
       feature_category: pipeline_authoring
       product_stage: verify
       stage_group: pipeline_authoring
@@ -678,6 +696,12 @@ groups:
     expr: "1"
   - record: gitlab:feature_category:stage_group:mapping
     labels:
+      feature_category: system_access
+      product_stage: manage
+      stage_group: authentication_and_authorization
+    expr: "1"
+  - record: gitlab:feature_category:stage_group:mapping
+    labels:
       feature_category: team_planning
       product_stage: plan
       stage_group: project_management
@@ -687,6 +711,12 @@ groups:
       feature_category: tracing
       product_stage: monitor
       stage_group: observability
+    expr: "1"
+  - record: gitlab:feature_category:stage_group:mapping
+    labels:
+      feature_category: user_management
+      product_stage: manage
+      stage_group: authentication_and_authorization
     expr: "1"
   - record: gitlab:feature_category:stage_group:mapping
     labels:

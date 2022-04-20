@@ -6,6 +6,10 @@
     stage: 'manage',
     feature_categories: [
       'authentication_and_authorization',
+      'permissions',
+      'user_management',
+      'credential_management',
+      'system_access',
     ],
   },
   workspace: {
@@ -236,7 +240,6 @@
     name: 'Respond',
     stage: 'monitor',
     feature_categories: [
-      'error_tracking',
       'incident_management',
       'on_call_schedule_management',
       'runbooks',
@@ -250,6 +253,7 @@
       'metrics',
       'tracing',
       'logging',
+      'error_tracking',
     ],
   },
   container_security: {
@@ -281,6 +285,13 @@
     stage: 'fulfillment',
     feature_categories: [
       'utilization',
+    ],
+  },
+  fulfillment_platform: {
+    name: 'Fulfillment Platform',
+    stage: 'fulfillment',
+    feature_categories: [
+      'fulfillment_platform',
     ],
   },
   activation: {
