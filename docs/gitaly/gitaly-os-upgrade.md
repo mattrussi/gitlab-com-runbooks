@@ -31,7 +31,7 @@ regardless of batch size.
 
 ### Executing the playbooks
 
-The playbooks are setup to have a single point of entry that exeutes the whole
+The playbooks are setup to have a single point of entry that executes the whole
 procedure in a mostly* idempotent manner. To run the playbooks, we employ a
 wrapper that can be invoked as follows from the `gitaly-os-upgrade` repository
 root:
@@ -78,6 +78,18 @@ bin/rebuild gprd 7 --check
   no deployments in progress while executing the change, to ensure the
   omnibus-gitlab version used to build the Packer image matches the one deployed
   in the environment
+
+### Lessons learnt from previous upgrades
+
+In April 2022 we performed an upgrade which is described 
+in [this epic](https://gitlab.com/groups/gitlab-com/gl-infra/-/epics/601).
+
+We learnt that:
+- we did not have to be as worried as we were for asking for longer maintenance windows
+- the windows we asked for (4x of 2 hours each) were too short and we should have asked for 5x 4 hour windows
+- it was helpful to have several people on the upgrade call with specific responsibilities
+  which were: 1) IM, 2) Change technician, 3) SRE support, 4) Progress monitoring
+- keeping Praefect servers separate made it easier to reason about specific failures 
 
 ## Gotchas
 
