@@ -45,7 +45,7 @@ local ruleGroup(version, interval) =
     sla_type: version,
   };
   {
-    name: 'SLA weight calculations',
+    name: 'SLA weight calculations - %s' % [version],
     partial_response_strategy: 'warn',
     interval: '1m',
     rules: [{
