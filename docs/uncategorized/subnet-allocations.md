@@ -18,7 +18,32 @@ gitlab-ops project for network peering.
 
 | First IP | Last IP | Subnet | Project | Description
 | -------  | ------  | -----  | ------  | --------
-| `10.0.0.0`      | `10.31.255.255`    | `10.0.0.0/11`    | N/A                            | RESERVED
+| `10.0.0.0`      | `10.0.255.255`     | `10.0.0.0/16`    | N/A                            | RESERVED
+| `10.1.0.0`      | `10.1.3.255`       | `10.1.0.0/22`    | N/A                            | RESERVED
+| `10.1.4.0`      | `10.1.4.255`       | `10.1.4.0/24`    | N/A                            | RESERVED
+| `10.1.5.0`      | `10.1.5.255`       | `10.1.5.0/24`    | gitlab-ci Runner Managers      | CI
+| `10.1.6.0`      | `10.1.7.255`       | `10.1.6.0/23`    | N/A                            | RESERVED
+| `10.1.8.0`      | `10.1.15.255`      | `10.1.8.0/21`    | N/A                            | RESERVED
+| `10.1.16.0`     | `10.1.31.255`      | `10.1.16.0/20`   | N/A                            | RESERVED
+| `10.1.32.0`     | `10.1.63.255`      | `10.1.32.0/19`   | N/A                            | RESERVED
+| `10.1.64.0`     | `10.1.127.255`     | `10.1.64.0/18`   | N/A                            | RESERVED
+| `10.1.128.0`    | `10.1.255.255`     | `10.1.128.0/17`  | N/A                            | RESERVED
+| `10.2.0.0`      | `10.3.255.255`     | `10.2.0.0/15`    | N/A                            | RESERVED
+| `10.4.0.0`      | `10.7.255.255`     | `10.4.0.0/14`    | N/A                            | RESERVED
+| `10.8.0.0`      | `10.9.255.255`     | `10.8.0.0/15`    | N/A                            | RESERVED
+| `10.10.0.0`     | `10.10.7.255`      | `10.10.0.0/21`   | gitlab-ci Ephemeral Runners    | CI-plan-free-7
+| `10.10.8.0`     | `10.10.15.255`     | `10.10.8.0/21`   | gitlab-ci Ephemeral Runners    | CI-plan-free-6
+| `10.10.16.0`    | `10.10.23.255`     | `10.10.16.0/21`  | gitlab-ci Ephemeral Runners    | CI-plan-free-5
+| `10.10.24.0`    | `10.10.31.255`     | `10.10.24.0/21`  | gitlab-ci Ephemeral Runners    | CI-plan-free-4
+| `10.10.32.0`    | `10.10.39.255`     | `10.10.32.0/21`  | gitlab-ci Ephemeral Runners    | CI-plan-free-3
+| `10.10.40.0`    | `10.10.47.255`     | `10.10.40.0/21`  | gitlab-ci Ephemeral Runners    | CI private
+| `10.10.48.0`    | `10.10.55.255`     | `10.10.48.0/21`  | gitlab-ci Ephemeral Runners    | CI shared-gitlab-org
+| `10.10.56.0`    | `10.10.63.255`     | `10.10.56.0/21`  | gitlab-ci Ephemeral Runners    | CI private-2
+| `10.10.64.0`    | `10.10.127.255`    | `10.10.64.0/18`  | N/A                            | RESERVED
+| `10.10.128.0`   | `10.10.255.255`    | `10.10.128.0/17` | N/A                            | RESERVED
+| `10.11.0.0`     | `10.11.255.255`    | `10.11.0.0/16`   | N/A                            | RESERVED
+| `10.12.0.0`     | `10.15.255.255`    | `10.12.0.0/14`   | N/A                            | RESERVED
+| `10.16.0.0`     | `10.31.255.255`    | `10.16.0.0/12`   | N/A                            | RESERVED
 | `10.32.0.0`     | `10.32.255.255`    | `10.32.0.0/16`   | SnowPlow                       | AWS-SnowPlow
 | `10.33.0.0`     | `10.33.255.255`    | `10.33.0.0/16`   | N/A                            | Legacy Azure
 | `10.34.0.0`     | `10.34.255.255`    | `10.34.0.0/16`   | gitlab-vault                   | Vault and Vault-nonprod GKE
@@ -43,11 +68,11 @@ gitlab-ops project for network peering.
 | `10.176.0.0`    | `10.183.255.255`   | `10.183.0.0/16`  | N/A                            | AVAILABLE GCP
 | `10.184.0.0`    | `10.191.255.255`   | `10.184.0.0/13`  | N/A                            | AVAILABLE GCP
 | `10.185.2.0`    | `10.185.2.255`     | `10.185.2.0/24`  | gitlab-subscriptions-staging   | Stgsub GCP
-| `10.185.3.0`    | `10.185.3.255`     | `10.185.3.0/24`  | gitlab-subscriptions-staging   | Stgsub GCP 
+| `10.185.3.0`    | `10.185.3.255`     | `10.185.3.0/24`  | gitlab-subscriptions-staging   | Stgsub GCP
 | `10.185.4.0`    | `10.185.4.255`     | `10.185.4.0/24`  | gitlab-subscriptions-staging   | Stgsub GKE
-| `10.185.5.0`    | `10.185.5.255`     | `10.185.5.0/24`  | gitlab-subscriptions-staging   | Stgsub GKE Service 
+| `10.185.5.0`    | `10.185.5.255`     | `10.185.5.0/24`  | gitlab-subscriptions-staging   | Stgsub GKE Service
 | `10.185.6.0`    | `10.185.6.255`     | `10.185.6.0/24`  | gitlab-subscriptions-prod      | Prdsub GCP
-| `10.185.7.0`    | `10.185.7.255`     | `10.185.7.0/24`  | gitlab-subscriptions-prod      | Prdsub GCP 
+| `10.185.7.0`    | `10.185.7.255`     | `10.185.7.0/24`  | gitlab-subscriptions-prod      | Prdsub GCP
 | `10.185.8.0`    | `10.185.8.255`     | `10.185.8.0/24`  | gitlab-subscriptions-prod      | Prdsub GKE
 | `10.185.9.0`    | `10.185.9.255`     | `10.185.9.0/24`  | gitlab-subscriptions-prod      | Prdsub GKE Service
 | `10.186.0.0`    | `10.186.255.255`   | `10.186.0.0/16`  | gitlab-subscriptions-staging   | Stgsub GKE Pods
