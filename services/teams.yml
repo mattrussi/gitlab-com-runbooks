@@ -335,9 +335,6 @@ teams:
   - graphql_queries
 - name: static_analysis
   product_stage_group: static_analysis
-  ignored_components:
-  - graphql_queries
-  - rails_requests
 - name: pipeline_insights
   product_stage_group: pipeline_insights
   ignored_components:
