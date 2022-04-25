@@ -15,10 +15,11 @@ local toolingLinks = import 'toolinglinks/toolinglinks.libsonnet';
     team=null,
     trafficCessationAlertConfig=true,
     additionalToolingLinks=[],
+    extra={},
   )::
     local baseSelector = { target_proxy_name: targetProxyName, project_id: projectId };
 
-    metricsCatalog.serviceLevelIndicatorDefinition({
+    metricsCatalog.serviceLevelIndicatorDefinition(extra {
       userImpacting: userImpacting,
       [if team != null then 'team']: team,
       trafficCessationAlertConfig: trafficCessationAlertConfig,

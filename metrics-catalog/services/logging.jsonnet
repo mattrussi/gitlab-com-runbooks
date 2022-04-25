@@ -140,7 +140,12 @@ metricsCatalog.serviceDefinition({
       projectId='gitlab-ops',
 
       // No need to alert if Kibana isn't receiving traffic
-      trafficCessationAlertConfig=false
+      trafficCessationAlertConfig=false,
+      extra={
+        monitoringThresholds+: {
+          errorRatio: 0.995,
+        },
+      }
     ),
 
     // Stackdriver component represents log messages
