@@ -6,8 +6,8 @@ teams:
   oncall_schedule: https://gitlab.pagerduty.com/schedules#P22HQSG
 
 - name: create
-  url: https://about.gitlab.com/handbook/engineering/dev-backend/create/
-  manager_slug: douwe
+  url: https://about.gitlab.com/handbook/engineering/development/dev/create/
+  manager_slug: dsatcher
   slack_channel: g_create
   engagement_policy: # Link to doc that talks about engagement
                      # and escalation policy
@@ -333,7 +333,6 @@ teams:
   product_stage_group: source_code
   ignored_components:
   - graphql_queries
-  - rails_requests
 - name: static_analysis
   product_stage_group: static_analysis
   ignored_components:
