@@ -495,12 +495,12 @@ groups:
       (
         (
           gitlab_component_errors:ratio_1h{component="kibana_googlelb",monitor="global",type="logging"}
-          > (14.4 * 0.001000)
+          > (14.4 * 0.005000)
         )
         and
         (
           gitlab_component_errors:ratio_5m{component="kibana_googlelb",monitor="global",type="logging"}
-          > (14.4 * 0.001000)
+          > (14.4 * 0.005000)
         )
       )
       and on(env,environment,tier,type,stage,component)
@@ -541,12 +541,12 @@ groups:
       (
         (
           gitlab_component_errors:ratio_6h{component="kibana_googlelb",monitor="global",type="logging"}
-          > (6 * 0.001000)
+          > (6 * 0.005000)
         )
         and
         (
           gitlab_component_errors:ratio_30m{component="kibana_googlelb",monitor="global",type="logging"}
-          > (6 * 0.001000)
+          > (6 * 0.005000)
         )
       )
       and on(env,environment,tier,type,stage,component)

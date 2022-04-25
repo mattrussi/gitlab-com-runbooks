@@ -657,7 +657,7 @@ groups:
       component: kibana_googlelb
       tier: inf
       type: logging
-    expr: "0.001000"
+    expr: "0.005000"
   - record: slo:max:events:gitlab_service_errors:ratio
     labels:
       component: pubsub_subscriptions
