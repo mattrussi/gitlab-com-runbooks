@@ -655,22 +655,6 @@ groups:
       product_stage: create
       stage_group: source_code
     expr: "1"
-- name: 'Stage group Ignored components: secure - Static Analysis'
-  interval: 1m
-  partial_response_strategy: warn
-  rules:
-  - record: gitlab:ignored_component:stage_group
-    labels:
-      component: graphql_queries
-      product_stage: secure
-      stage_group: static_analysis
-    expr: "1"
-  - record: gitlab:ignored_component:stage_group
-    labels:
-      component: rails_requests
-      product_stage: secure
-      stage_group: static_analysis
-    expr: "1"
 - name: 'Stage group Ignored components: secure - Threat Insights'
   interval: 1m
   partial_response_strategy: warn
