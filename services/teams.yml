@@ -105,7 +105,6 @@ teams:
   slack_alerts_channel: alerts-ci-cd
   ignored_components:
   - graphql_queries
-  - rails_requests
 
 # From https://gitlab.com/gitlab-com/gl-infra/scalability/-/issues/344
 - name: gitlab-pages
