@@ -287,14 +287,14 @@ metricsCatalog.serviceDefinition({
       },
 
       apdex: histogramApdex(
-        histogram='gitlab_shell_sshd_connection_duration_seconds_bucket',
+        histogram='gitlab_shell_sshd_session_established_duration_seconds_bucket',
         selector=baseSelector,
         satisfiedThreshold=10,
         toleratedThreshold=20
       ),
 
       requestRate: rateMetric(
-        counter='gitlab_shell_sshd_connection_duration_seconds_count',
+        counter='gitlab_shell_sshd_session_established_duration_seconds_count',
         selector=baseSelector
       ),
 

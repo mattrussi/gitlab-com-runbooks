@@ -172,7 +172,7 @@ groups:
         histogram_quantile(
           0.950000,
           sum by (env,environment,tier,stage,le) (
-            rate(gitlab_shell_sshd_connection_duration_seconds_bucket{environment="{{ $labels.environment }}",stage="{{ $labels.stage }}",type="git"}[5m])
+            rate(gitlab_shell_sshd_session_established_duration_seconds_bucket{environment="{{ $labels.environment }}",stage="{{ $labels.stage }}",type="git"}[5m])
           )
         )
       runbook: docs/git/README.md
@@ -223,7 +223,7 @@ groups:
         histogram_quantile(
           0.950000,
           sum by (env,environment,tier,stage,le) (
-            rate(gitlab_shell_sshd_connection_duration_seconds_bucket{environment="{{ $labels.environment }}",stage="{{ $labels.stage }}",type="git"}[5m])
+            rate(gitlab_shell_sshd_session_established_duration_seconds_bucket{environment="{{ $labels.environment }}",stage="{{ $labels.stage }}",type="git"}[5m])
           )
         )
       runbook: docs/git/README.md
@@ -276,7 +276,7 @@ groups:
         histogram_quantile(
           0.950000,
           sum by (env,environment,tier,stage,region,le) (
-            rate(gitlab_shell_sshd_connection_duration_seconds_bucket{environment="{{ $labels.environment }}",region="{{ $labels.region }}",stage="{{ $labels.stage }}",type="git"}[5m])
+            rate(gitlab_shell_sshd_session_established_duration_seconds_bucket{environment="{{ $labels.environment }}",region="{{ $labels.region }}",stage="{{ $labels.stage }}",type="git"}[5m])
           )
         )
       runbook: docs/git/README.md
@@ -329,7 +329,7 @@ groups:
         histogram_quantile(
           0.950000,
           sum by (env,environment,tier,stage,region,le) (
-            rate(gitlab_shell_sshd_connection_duration_seconds_bucket{environment="{{ $labels.environment }}",region="{{ $labels.region }}",stage="{{ $labels.stage }}",type="git"}[5m])
+            rate(gitlab_shell_sshd_session_established_duration_seconds_bucket{environment="{{ $labels.environment }}",region="{{ $labels.region }}",stage="{{ $labels.stage }}",type="git"}[5m])
           )
         )
       runbook: docs/git/README.md
@@ -378,7 +378,7 @@ groups:
       grafana_variables: environment,stage
       promql_template_1: |
         sum by (env,environment,tier,stage) (
-          rate(gitlab_shell_sshd_connection_duration_seconds_count{environment="{{ $labels.environment }}",stage="{{ $labels.stage }}",type="git"}[5m])
+          rate(gitlab_shell_sshd_session_established_duration_seconds_count{environment="{{ $labels.environment }}",stage="{{ $labels.stage }}",type="git"}[5m])
         )
       runbook: docs/git/README.md
     labels:
@@ -415,7 +415,7 @@ groups:
       grafana_variables: environment,stage
       promql_template_1: |
         sum by (env,environment,tier,stage) (
-          rate(gitlab_shell_sshd_connection_duration_seconds_count{environment="{{ $labels.environment }}",stage="{{ $labels.stage }}",type="git"}[5m])
+          rate(gitlab_shell_sshd_session_established_duration_seconds_count{environment="{{ $labels.environment }}",stage="{{ $labels.stage }}",type="git"}[5m])
         )
       runbook: docs/git/README.md
     labels:
@@ -452,7 +452,7 @@ groups:
       grafana_variables: environment,stage
       promql_template_1: |
         sum by (env,environment,tier,stage,region) (
-          rate(gitlab_shell_sshd_connection_duration_seconds_count{environment="{{ $labels.environment }}",region="{{ $labels.region }}",stage="{{ $labels.stage }}",type="git"}[5m])
+          rate(gitlab_shell_sshd_session_established_duration_seconds_count{environment="{{ $labels.environment }}",region="{{ $labels.region }}",stage="{{ $labels.stage }}",type="git"}[5m])
         )
       runbook: docs/git/README.md
     labels:
@@ -491,7 +491,7 @@ groups:
       grafana_variables: environment,stage
       promql_template_1: |
         sum by (env,environment,tier,stage,region) (
-          rate(gitlab_shell_sshd_connection_duration_seconds_count{environment="{{ $labels.environment }}",region="{{ $labels.region }}",stage="{{ $labels.stage }}",type="git"}[5m])
+          rate(gitlab_shell_sshd_session_established_duration_seconds_count{environment="{{ $labels.environment }}",region="{{ $labels.region }}",stage="{{ $labels.stage }}",type="git"}[5m])
         )
       runbook: docs/git/README.md
     labels:
