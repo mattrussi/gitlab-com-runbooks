@@ -37,6 +37,7 @@ metricsCatalog.serviceDefinition({
   serviceLevelIndicators: {
 
     sentry_events: {
+      severity: 's3',
       userImpacting: false,
       featureCategory: 'not_owned',
       description: |||
@@ -69,6 +70,7 @@ metricsCatalog.serviceDefinition({
     },
 
     pg_transactions: {
+      severity: 's3',
       userImpacting: false,
       serviceAggregation: false,
       featureCategory: 'not_owned',
