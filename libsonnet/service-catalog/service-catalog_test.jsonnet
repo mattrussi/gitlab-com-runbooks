@@ -100,7 +100,7 @@ test.suite({
       product_stage_group: 'authentication_and_authorization',
       send_slo_alerts_to_team_slack_channel: true,
       slack_alerts_channel: 'feed_alerts_access',
-      ignored_components: ['graphql_queries', 'rails_requests'],
+      ignored_components: ['graphql_queries'],
     },
     testLookupNonExistingTeamForStageGroup: {
       actual: serviceCatalog.lookupTeamForStageGroup('huzzah'),
