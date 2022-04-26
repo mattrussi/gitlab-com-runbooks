@@ -22,11 +22,11 @@ groups:
     expr: |
       (
         sum by (environment,stage) (
-          rate(gitlab_shell_sshd_connection_duration_seconds_bucket{le="10",type="git"}[1m])
+          rate(gitlab_shell_sshd_session_established_duration_seconds_bucket{le="10",type="git"}[1m])
         )
         +
         sum by (environment,stage) (
-          rate(gitlab_shell_sshd_connection_duration_seconds_bucket{le="20",type="git"}[1m])
+          rate(gitlab_shell_sshd_session_established_duration_seconds_bucket{le="20",type="git"}[1m])
         )
       )
       /
@@ -38,7 +38,7 @@ groups:
       type: git
     expr: |
       sum by (environment,stage) (
-        rate(gitlab_shell_sshd_connection_duration_seconds_bucket{le="+Inf",type="git"}[1m])
+        rate(gitlab_shell_sshd_session_established_duration_seconds_bucket{le="+Inf",type="git"}[1m])
       )
   - record: gitlab_component_ops:rate
     labels:
@@ -47,7 +47,7 @@ groups:
       type: git
     expr: |
       sum by (environment,stage) (
-        rate(gitlab_shell_sshd_connection_duration_seconds_count{type="git"}[1m])
+        rate(gitlab_shell_sshd_session_established_duration_seconds_count{type="git"}[1m])
       )
   - record: gitlab_component_ops:rate
     labels:
@@ -303,11 +303,11 @@ groups:
     expr: |
       (
         sum by (environment,stage) (
-          rate(gitlab_shell_sshd_connection_duration_seconds_bucket{le="10",type="git"}[5m])
+          rate(gitlab_shell_sshd_session_established_duration_seconds_bucket{le="10",type="git"}[5m])
         )
         +
         sum by (environment,stage) (
-          rate(gitlab_shell_sshd_connection_duration_seconds_bucket{le="20",type="git"}[5m])
+          rate(gitlab_shell_sshd_session_established_duration_seconds_bucket{le="20",type="git"}[5m])
         )
       )
       /
@@ -319,7 +319,7 @@ groups:
       type: git
     expr: |
       sum by (environment,stage) (
-        rate(gitlab_shell_sshd_connection_duration_seconds_bucket{le="+Inf",type="git"}[5m])
+        rate(gitlab_shell_sshd_session_established_duration_seconds_bucket{le="+Inf",type="git"}[5m])
       )
   - record: gitlab_component_ops:rate_5m
     labels:
@@ -328,7 +328,7 @@ groups:
       type: git
     expr: |
       sum by (environment,stage) (
-        rate(gitlab_shell_sshd_connection_duration_seconds_count{type="git"}[5m])
+        rate(gitlab_shell_sshd_session_established_duration_seconds_count{type="git"}[5m])
       )
   - record: gitlab_component_ops:rate_5m
     labels:
@@ -584,11 +584,11 @@ groups:
     expr: |
       (
         sum by (environment,stage) (
-          rate(gitlab_shell_sshd_connection_duration_seconds_bucket{le="10",type="git"}[30m])
+          rate(gitlab_shell_sshd_session_established_duration_seconds_bucket{le="10",type="git"}[30m])
         )
         +
         sum by (environment,stage) (
-          rate(gitlab_shell_sshd_connection_duration_seconds_bucket{le="20",type="git"}[30m])
+          rate(gitlab_shell_sshd_session_established_duration_seconds_bucket{le="20",type="git"}[30m])
         )
       )
       /
@@ -600,7 +600,7 @@ groups:
       type: git
     expr: |
       sum by (environment,stage) (
-        rate(gitlab_shell_sshd_connection_duration_seconds_bucket{le="+Inf",type="git"}[30m])
+        rate(gitlab_shell_sshd_session_established_duration_seconds_bucket{le="+Inf",type="git"}[30m])
       )
   - record: gitlab_component_ops:rate_30m
     labels:
@@ -609,7 +609,7 @@ groups:
       type: git
     expr: |
       sum by (environment,stage) (
-        rate(gitlab_shell_sshd_connection_duration_seconds_count{type="git"}[30m])
+        rate(gitlab_shell_sshd_session_established_duration_seconds_count{type="git"}[30m])
       )
   - record: gitlab_component_ops:rate_30m
     labels:
@@ -865,11 +865,11 @@ groups:
     expr: |
       (
         sum by (environment,stage) (
-          rate(gitlab_shell_sshd_connection_duration_seconds_bucket{le="10",type="git"}[1h])
+          rate(gitlab_shell_sshd_session_established_duration_seconds_bucket{le="10",type="git"}[1h])
         )
         +
         sum by (environment,stage) (
-          rate(gitlab_shell_sshd_connection_duration_seconds_bucket{le="20",type="git"}[1h])
+          rate(gitlab_shell_sshd_session_established_duration_seconds_bucket{le="20",type="git"}[1h])
         )
       )
       /
@@ -881,7 +881,7 @@ groups:
       type: git
     expr: |
       sum by (environment,stage) (
-        rate(gitlab_shell_sshd_connection_duration_seconds_bucket{le="+Inf",type="git"}[1h])
+        rate(gitlab_shell_sshd_session_established_duration_seconds_bucket{le="+Inf",type="git"}[1h])
       )
   - record: gitlab_component_ops:rate_1h
     labels:
@@ -890,7 +890,7 @@ groups:
       type: git
     expr: |
       sum by (environment,stage) (
-        rate(gitlab_shell_sshd_connection_duration_seconds_count{type="git"}[1h])
+        rate(gitlab_shell_sshd_session_established_duration_seconds_count{type="git"}[1h])
       )
   - record: gitlab_component_ops:rate_1h
     labels:
@@ -1146,11 +1146,11 @@ groups:
     expr: |
       (
         sum by (environment,stage) (
-          rate(gitlab_shell_sshd_connection_duration_seconds_bucket{le="10",type="git"}[6h])
+          rate(gitlab_shell_sshd_session_established_duration_seconds_bucket{le="10",type="git"}[6h])
         )
         +
         sum by (environment,stage) (
-          rate(gitlab_shell_sshd_connection_duration_seconds_bucket{le="20",type="git"}[6h])
+          rate(gitlab_shell_sshd_session_established_duration_seconds_bucket{le="20",type="git"}[6h])
         )
       )
       /
@@ -1162,7 +1162,7 @@ groups:
       type: git
     expr: |
       sum by (environment,stage) (
-        rate(gitlab_shell_sshd_connection_duration_seconds_bucket{le="+Inf",type="git"}[6h])
+        rate(gitlab_shell_sshd_session_established_duration_seconds_bucket{le="+Inf",type="git"}[6h])
       )
   - record: gitlab_component_ops:rate_6h
     labels:
@@ -1171,7 +1171,7 @@ groups:
       type: git
     expr: |
       sum by (environment,stage) (
-        rate(gitlab_shell_sshd_connection_duration_seconds_count{type="git"}[6h])
+        rate(gitlab_shell_sshd_session_established_duration_seconds_count{type="git"}[6h])
       )
   - record: gitlab_component_ops:rate_6h
     labels:
