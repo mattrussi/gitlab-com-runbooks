@@ -164,7 +164,6 @@ teams:
   send_slo_alerts_to_team_slack_channel: true
   ignored_components:
   - graphql_queries
-  - rails_requests
 
 - name: global_search
   slack_alerts_channel: g_global_search
