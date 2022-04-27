@@ -74,16 +74,14 @@ For more details, see https://www.pgbouncer.org/features.html
 
 ## PgBouncer Hosts
 
+![architecture overview of pgbouncer](./img/overview.png)
+
+- Primary (read-write) has 3 dedicated hosts in front of the database host, since it serving more traffic.
+- Replica (read-only) had 3 PgBouncer processes running on the same host that is running the  PostgreSQL process.
+
 PgBouncer is configured via omnibus via these [config options](https://gitlab.com/gitlab-org/omnibus-gitlab/blob/34b92e63f765a4d74c3384e3c7c08a4750f9d2c5/files/gitlab-config-template/gitlab.rb.template#L2185-2290).
-
-The PgBouncers for read-write traffic are in dedicated hosts in front of the
-primary database node. The PgBouncers for read-only traffic are deployed in the
-secondary hosts.
-
 The PgBouncer configuration files are located in `/var/opt/gitlab/pgbouncer`,
-including a `database.ini` file from consul.
-
-The port PgBouncer listens on is 6432.
+including a `database.ini` file from consul, the port PgBouncer listens on is 6432.
 
 ## PgBouncer Commands
 
