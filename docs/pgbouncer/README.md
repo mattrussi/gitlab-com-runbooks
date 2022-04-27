@@ -105,7 +105,9 @@ roles:
 - roles/[env]-base-db-pgbouncer-common.json
 - roles/[env]-base-db-pgbouncer-pool.json
 - roles/[env]-base-db-pgbouncer-sidekiq.json
+- roles/[env]-base-db-pgbouncer-sidekiq-ci.json
 - roles/[env]-base-db-pgbouncer.json
+- roles/[env]-base-db-pgbouncer-ci.json
 
 Most settings only require a reload of pgbouncer and will not cause an
 interruption of service. To manually reload, run `sudo systemctl reload pgbouncer`
