@@ -125,6 +125,7 @@ Use [this view](https://log.gprd.gitlab.net/goto/224257f0-b668-11ec-afaf-2bca15d
 
   ```sql
   select * from repositories where path = 'path/to/repo';
+  ```
 
 ### Potentially Stalled Imports
 
@@ -148,3 +149,53 @@ repo.cancel_migration(force: true)
 ```
 
 Rails will no longer refuse to serve JWT tokens for the corresponding repository as soon as this is done. On the registry side, any inbound requests will be served through the old code path (not using the metadata database but rather the data in the old bucket partition). This gives us time to investigate the problem, fix it, and later retry the migration.
+
+### Stuck Deduplication
+
+The `ContainerRegistry::Migration::EnqueuerWorker`
+ background worker is responsible for starting all imports. This worker uses a deduplication strategy of [`until_executing`](https://docs.gitlab.com/ee/development/sidekiq/idempotent_jobs.html#until-executing). 
+
+The deduplication works using redis keys for locking. It is possible for the key to be set, and then something to happen causing the key to remain while no `EnqueuerWorker` jobs are running. This means anytime an `EnqueuerWorker` is queued, it will be deduplicated because the deduplication key already exists. The key will not expire for [30 minutes](https://gitlab.com/gitlab-org/gitlab/-/blob/b506aab65c3f5acbd6482fdaf8957a40da2ace21/app/workers/container_registry/migration/enqueuer_worker.rb#L16), meaning no imports will be able to run during that time.
+
+Symptoms of this problem are:
+
+- No imports occurring for a prolonged period
+- The [EnqueuerWorker](https://log.gprd.gitlab.net/goto/89642580-c59a-11ec-b73f-692cc1ae8214) shows the last scheduled workers having `json.job_status: deduplicated` repeating 45 minutes past every hour (via cron).
+
+To fix this problem:
+
+1. Open a production Rails console with write access and save the `ContainerRegistry::Migration::EnqueuerWorker` deduplication key in a variable named `key` (this is a fixed value):
+   ```rb
+   key = 'resque:gitlab:duplicate:default:ab8e4f6ae672f357497ee5977e24e7155aa83eef7c83ddba6548d62ca5bec3a1'
+   ```
+
+1. Find the corresponding deduplication Redis key:
+   ```rb
+   [ gprd ] production> Sidekiq.redis { |redis| redis.get(key) }
+   => "8bba23b6e44730d4c7b3ac01" # sample, your value will defer
+   ```
+
+1. Delete the deduplication key:
+   ```rb
+   [ gprd ] production> Sidekiq.redis { |redis| redis.del(key) }
+   => true
+   ```
+
+### Stuck Exclusive Lease
+
+The Rails background workers are based on Sidekiq. It is known and accepted that Sidekiq workers can occasionally be killed (due to memory constraints, a server restart, etc.).
+
+The `Enqueuer` worker obtains an exclusive lease for concurrency safety reasons. If such worker is forcefully killed during execution, it is possible that the lease is not canceled and therefore the migration will be blocked until it expires (30 minutes).
+
+In such situation, the migration innactivity can be confirmed by looking at the [migration detail](https://dashboards.gitlab.net/d/registry-migration/registry-migration-detail) dashboard, more precisely the `Inflight imports` graph. We can also confirm on the Rails console that a lease was taken using the following command:
+
+```rb
+[ gprd ] production> uuid = Gitlab::ExclusiveLease.get_uuid('container_registry:migration:enqueuer_worker')
+=> "3f666424-e485-4728-8d3a-fe208f8bd090" # sample UUID. `false` is shown if no lease has been obtained.
+```
+
+If necessary, the lease can be canceled by running the following command on the Rails console:
+
+```rb
+uuid = Gitlab::ExclusiveLease.cancel('container_registry:migration:enqueuer_worker', uuid)
+```
