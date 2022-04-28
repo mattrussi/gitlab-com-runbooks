@@ -256,7 +256,6 @@ teams:
   product_stage_group: import
   ignored_components:
   - graphql_queries
-  - rails_requests
 - name: integrations
   product_stage_group: integrations
   ignored_components:
