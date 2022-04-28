@@ -85,6 +85,24 @@
             },
           },
         },
+        'server-id': {
+          type: 'text',
+          fields: {
+            keyword: {
+              type: 'keyword',
+              ignore_above: 256,
+            },
+          },
+        },
+        candidate: {
+          type: 'text',
+          fields: {
+            keyword: {
+              type: 'keyword',
+              ignore_above: 256,
+            },
+          },
+        },
         from: {
           type: 'text',
           fields: {
@@ -95,6 +113,15 @@
           },
         },
         leader: {
+          type: 'text',
+          fields: {
+            keyword: {
+              type: 'keyword',
+              ignore_above: 256,
+            },
+          },
+        },
+        'last-leader': {
           type: 'text',
           fields: {
             keyword: {
@@ -162,6 +189,15 @@
             },
           },
         },
+        config: {
+          type: 'text',
+          fields: {
+            keyword: {
+              type: 'keyword',
+              ignore_above: 256,
+            },
+          },
+        },
         index: {
           type: 'long',
         },
@@ -178,6 +214,9 @@
           type: 'long',
         },
         term: {
+          type: 'long',
+        },
+        'last-term': {
           type: 'long',
         },
         time: {
