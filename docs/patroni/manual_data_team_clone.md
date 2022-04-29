@@ -12,6 +12,7 @@ Once things are complete, we have been commenting in Slack in #data-team-temp-da
 
 ## How to recreate VM from the latest snapshot:
 
+The VM that will be destroyed and rebuilt is in the `db-benchmarking` environment.
 
 First in Terraform:
 ```
