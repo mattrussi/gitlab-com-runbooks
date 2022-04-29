@@ -503,7 +503,7 @@ groups:
     expr: "max by(environment) (\n  clamp_min(\n    clamp_max(\n      sum without(nat_ip)
       (\n        stackdriver_nat_gateway_router_googleapis_com_nat_allocated_ports{\n
       \         job=\"stackdriver\",\n          project_id=\"gitlab-production\",\n
-      \         \n        }\n      )\n      /\n      ( 64512 * 36 )\n      or\n      sum
+      \         \n        }\n      )\n      /\n      ( 64512 * 43 )\n      or\n      sum
       without(nat_ip) (\n        stackdriver_nat_gateway_router_googleapis_com_nat_allocated_ports{\n
       \         job=\"stackdriver\",\n          project_id=\"gitlab-staging-1\",\n
       \         \n        }\n      )\n      /\n      ( 64512 * 16 )\n      ,\n      1)\n
@@ -3532,7 +3532,7 @@ groups:
                 }
               )
               /
-              ( 64512 * 36 )
+              ( 64512 * 43 )
               or
               sum without(nat_ip) (
                 stackdriver_nat_gateway_router_googleapis_com_nat_allocated_ports{
