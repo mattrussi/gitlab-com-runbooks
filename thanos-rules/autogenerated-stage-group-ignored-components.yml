@@ -353,12 +353,6 @@ groups:
       product_stage: manage
       stage_group: import
     expr: "1"
-  - record: gitlab:ignored_component:stage_group
-    labels:
-      component: rails_requests
-      product_stage: manage
-      stage_group: import
-    expr: "1"
 - name: 'Stage group Ignored components: ecosystem - Integrations'
   interval: 1m
   partial_response_strategy: warn
