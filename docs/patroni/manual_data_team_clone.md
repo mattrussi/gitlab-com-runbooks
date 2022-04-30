@@ -12,6 +12,7 @@ Once things are complete, we have been commenting in Slack in #data-team-temp-da
 
 ## How to recreate VM from the latest snapshot:
 
+The VM that will be destroyed and rebuilt is in the `db-benchmarking` environment.
 
 First in Terraform:
 ```
@@ -31,6 +32,7 @@ Host *.gitlab-db-benchmarking.internal
 ProxyCommand ssh lb-bastion.db-benchmarking.gitlab.com -W %h:%p
 ```
 b) then ssh to `patroni-data-analytics-01-db-db-benchmarking.c.gitlab-db-benchmarking.internal`
+c) You may want to start up a tmux session for the rest of these steps...
 
 1. Stop the Patroni service in the nodes with the command: `sudo systemctl stop patroni`
 2. Get the cluster name: `sudo gitlab-patronictl list`
@@ -54,4 +56,11 @@ sudo systemctl start patroni
 6 - Monitor the patroni status and wait until the node is ready:
 ```
 watch -n 1 sudo gitlab-patronictl list
+```
+7 - Once it is ready, collect this information to share:
+```
+sudo su -
+gitlab-psql
+select pg_last_xact_replay_timestamp();
+exit
 ```
