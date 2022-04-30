@@ -57,3 +57,10 @@ sudo systemctl start patroni
 ```
 watch -n 1 sudo gitlab-patronictl list
 ```
+7 - Once it is ready, collect this information to share:
+```
+sudo su -
+gitlab-psql
+select pg_last_xact_replay_timestamp();
+exit
+```
