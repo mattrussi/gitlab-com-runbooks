@@ -32,6 +32,7 @@ Host *.gitlab-db-benchmarking.internal
 ProxyCommand ssh lb-bastion.db-benchmarking.gitlab.com -W %h:%p
 ```
 b) then ssh to `patroni-data-analytics-01-db-db-benchmarking.c.gitlab-db-benchmarking.internal`
+c) You may want to start up a tmux session for the rest of these steps...
 
 1. Stop the Patroni service in the nodes with the command: `sudo systemctl stop patroni`
 2. Get the cluster name: `sudo gitlab-patronictl list`
