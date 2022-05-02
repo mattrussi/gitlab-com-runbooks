@@ -72,12 +72,12 @@
       }
     ]
   },
-  "description": "Uploaded by https://gitlab.com/gitlab-com/runbooks/-/jobs/2385967664 at Wed Apr 27 20:08:55 UTC 2022",
+  "description": "Uploaded by https://gitlab.com/gitlab-com/runbooks/-/jobs/2401918903 at Mon May  2 09:35:02 UTC 2022",
   "editable": true,
   "fiscalYearStartMonth": 0,
   "graphTooltip": 1,
   "id": null,
-  "iteration": 1651138614372,
+  "iteration": 1651505995325,
   "links": [
     {
       "asDropdown": true,
@@ -2842,8 +2842,8 @@
         "overrides": []
       },
       "gridPos": {
-        "h": 9,
-        "w": 6,
+        "h": 8,
+        "w": 8,
         "x": 0,
         "y": 89
       },
@@ -2928,9 +2928,9 @@
         "overrides": []
       },
       "gridPos": {
-        "h": 9,
-        "w": 6,
-        "x": 6,
+        "h": 8,
+        "w": 8,
+        "x": 8,
         "y": 89
       },
       "id": 109,
@@ -3014,9 +3014,9 @@
         "overrides": []
       },
       "gridPos": {
-        "h": 9,
-        "w": 6,
-        "x": 12,
+        "h": 8,
+        "w": 8,
+        "x": 16,
         "y": 89
       },
       "id": 111,
@@ -3044,6 +3044,116 @@
         }
       ],
       "title": "Importing",
+      "type": "timeseries"
+    },
+    {
+      "description": "Count of container repositories that are potentially stalled in a transient import state.",
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "palette-classic"
+          },
+          "custom": {
+            "axisLabel": "",
+            "axisPlacement": "auto",
+            "barAlignment": 0,
+            "drawStyle": "line",
+            "fillOpacity": 0,
+            "gradientMode": "none",
+            "hideFrom": {
+              "legend": false,
+              "tooltip": false,
+              "viz": false
+            },
+            "lineInterpolation": "linear",
+            "lineWidth": 2,
+            "pointSize": 5,
+            "scaleDistribution": {
+              "type": "linear"
+            },
+            "showPoints": "auto",
+            "spanNulls": true,
+            "stacking": {
+              "group": "A",
+              "mode": "none"
+            },
+            "thresholdsStyle": {
+              "mode": "off"
+            }
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "red",
+                "value": 5
+              }
+            ]
+          },
+          "unit": "short"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 8,
+        "w": 8,
+        "x": 0,
+        "y": 97
+      },
+      "id": 136,
+      "options": {
+        "legend": {
+          "calcs": [],
+          "displayMode": "list",
+          "placement": "bottom"
+        },
+        "tooltip": {
+          "mode": "single",
+          "sort": "none"
+        }
+      },
+      "targets": [
+        {
+          "datasource": {
+            "uid": "$PROMETHEUS_DS"
+          },
+          "exemplar": true,
+          "expr": "avg (gitlab_database_rows{query_name=\"container_repositories_stalled_pre_importing\", environment=\"$environment\", shard=\"default\"})",
+          "interval": "",
+          "legendFormat": "pre_importing",
+          "refId": "A"
+        },
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "$PROMETHEUS_DS"
+          },
+          "exemplar": true,
+          "expr": "avg (gitlab_database_rows{query_name=\"container_repositories_stalled_pre_import_done\", environment=\"$environment\", shard=\"default\"})",
+          "hide": false,
+          "interval": "",
+          "legendFormat": "pre_import_done",
+          "refId": "B"
+        },
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "$PROMETHEUS_DS"
+          },
+          "exemplar": true,
+          "expr": "avg (gitlab_database_rows{query_name=\"container_repositories_stalled_importing\", environment=\"$environment\", shard=\"default\"})",
+          "hide": false,
+          "interval": "",
+          "legendFormat": "importing",
+          "refId": "C"
+        }
+      ],
+      "title": "Potentially stalled",
       "type": "timeseries"
     },
     {
@@ -3100,10 +3210,10 @@
         "overrides": []
       },
       "gridPos": {
-        "h": 9,
-        "w": 6,
-        "x": 18,
-        "y": 89
+        "h": 8,
+        "w": 8,
+        "x": 8,
+        "y": 97
       },
       "id": 108,
       "options": {
@@ -3186,10 +3296,10 @@
         "overrides": []
       },
       "gridPos": {
-        "h": 9,
-        "w": 6,
-        "x": 0,
-        "y": 98
+        "h": 8,
+        "w": 8,
+        "x": 16,
+        "y": 97
       },
       "id": 110,
       "options": {
@@ -3216,92 +3326,6 @@
         }
       ],
       "title": "Pre-importing",
-      "type": "timeseries"
-    },
-    {
-      "description": "Count of container repositories imports that were skipped because they do not match a given requirement (such as the max number of tags).",
-      "fieldConfig": {
-        "defaults": {
-          "color": {
-            "mode": "palette-classic"
-          },
-          "custom": {
-            "axisLabel": "",
-            "axisPlacement": "auto",
-            "barAlignment": 0,
-            "drawStyle": "line",
-            "fillOpacity": 0,
-            "gradientMode": "none",
-            "hideFrom": {
-              "legend": false,
-              "tooltip": false,
-              "viz": false
-            },
-            "lineInterpolation": "linear",
-            "lineWidth": 2,
-            "pointSize": 5,
-            "scaleDistribution": {
-              "type": "linear"
-            },
-            "showPoints": "auto",
-            "spanNulls": true,
-            "stacking": {
-              "group": "A",
-              "mode": "none"
-            },
-            "thresholdsStyle": {
-              "mode": "off"
-            }
-          },
-          "mappings": [],
-          "thresholds": {
-            "mode": "absolute",
-            "steps": [
-              {
-                "color": "green",
-                "value": null
-              },
-              {
-                "color": "red",
-                "value": 80
-              }
-            ]
-          },
-          "unit": "short"
-        },
-        "overrides": []
-      },
-      "gridPos": {
-        "h": 9,
-        "w": 6,
-        "x": 6,
-        "y": 98
-      },
-      "id": 112,
-      "options": {
-        "legend": {
-          "calcs": [],
-          "displayMode": "hidden",
-          "placement": "bottom"
-        },
-        "tooltip": {
-          "mode": "single",
-          "sort": "none"
-        }
-      },
-      "targets": [
-        {
-          "datasource": {
-            "uid": "$PROMETHEUS_DS"
-          },
-          "exemplar": true,
-          "expr": "avg (gitlab_database_rows{query_name=\"container_repositories_import_skipped\", environment=\"$environment\", shard=\"default\"})",
-          "interval": "",
-          "legendFormat": "",
-          "refId": "A"
-        }
-      ],
-      "title": "Skipped",
       "type": "timeseries"
     },
     {
@@ -3358,10 +3382,10 @@
         "overrides": []
       },
       "gridPos": {
-        "h": 9,
-        "w": 6,
-        "x": 12,
-        "y": 98
+        "h": 8,
+        "w": 8,
+        "x": 0,
+        "y": 105
       },
       "id": 113,
       "options": {
@@ -3391,7 +3415,7 @@
       "type": "timeseries"
     },
     {
-      "description": "Count of container repositories that are potentially stalled in a transient import state.",
+      "description": "Count of container repositories imports that were skipped because they do not match a given requirement (such as the max number of tags).",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -3435,7 +3459,7 @@
               },
               {
                 "color": "red",
-                "value": 5
+                "value": 80
               }
             ]
           },
@@ -3444,16 +3468,16 @@
         "overrides": []
       },
       "gridPos": {
-        "h": 9,
-        "w": 6,
-        "x": 18,
-        "y": 98
+        "h": 8,
+        "w": 8,
+        "x": 8,
+        "y": 105
       },
-      "id": 136,
+      "id": 112,
       "options": {
         "legend": {
           "calcs": [],
-          "displayMode": "list",
+          "displayMode": "hidden",
           "placement": "bottom"
         },
         "tooltip": {
@@ -3467,37 +3491,188 @@
             "uid": "$PROMETHEUS_DS"
           },
           "exemplar": true,
-          "expr": "avg (gitlab_database_rows{query_name=\"container_repositories_stalled_pre_importing\", environment=\"$environment\", shard=\"default\"})",
+          "expr": "avg (gitlab_database_rows{query_name=\"container_repositories_import_skipped\", environment=\"$environment\", shard=\"default\"})",
           "interval": "",
-          "legendFormat": "pre_importing",
+          "legendFormat": "",
+          "refId": "A"
+        }
+      ],
+      "title": "Skipped",
+      "type": "timeseries"
+    },
+    {
+      "description": "Count of container repositories skipped grouped by skipped reason.",
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "palette-classic"
+          },
+          "custom": {
+            "axisLabel": "",
+            "axisPlacement": "auto",
+            "barAlignment": 0,
+            "drawStyle": "line",
+            "fillOpacity": 0,
+            "gradientMode": "none",
+            "hideFrom": {
+              "legend": false,
+              "tooltip": false,
+              "viz": false
+            },
+            "lineInterpolation": "linear",
+            "lineWidth": 2,
+            "pointSize": 5,
+            "scaleDistribution": {
+              "type": "linear"
+            },
+            "showPoints": "auto",
+            "spanNulls": true,
+            "stacking": {
+              "group": "A",
+              "mode": "none"
+            },
+            "thresholdsStyle": {
+              "mode": "off"
+            }
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          },
+          "unit": "short"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 8,
+        "w": 8,
+        "x": 16,
+        "y": 105
+      },
+      "id": 149,
+      "options": {
+        "legend": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "displayMode": "table",
+          "placement": "bottom"
+        },
+        "tooltip": {
+          "mode": "single",
+          "sort": "none"
+        }
+      },
+      "targets": [
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "$PROMETHEUS_DS"
+          },
+          "editorMode": "code",
+          "expr": "avg (gitlab_database_rows{query_name=\"container_repositories_skipped_not_in_plan\", environment=\"$environment\", shard=\"default\"})",
+          "hide": false,
+          "interval": "",
+          "legendFormat": "Not in plan",
+          "range": true,
+          "refId": "B"
+        },
+        {
+          "datasource": {
+            "uid": "$PROMETHEUS_DS"
+          },
+          "editorMode": "code",
+          "exemplar": true,
+          "expr": "avg (gitlab_database_rows{query_name=\"container_repositories_skipped_too_many_retries\", environment=\"$environment\", shard=\"default\"})",
+          "interval": "",
+          "legendFormat": "Too Many Retries",
+          "range": true,
           "refId": "A"
         },
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "PA258B30F88C30650"
+            "uid": "$PROMETHEUS_DS"
           },
-          "exemplar": true,
-          "expr": "avg (gitlab_database_rows{query_name=\"container_repositories_stalled_pre_import_done\", environment=\"$environment\", shard=\"default\"})",
+          "editorMode": "code",
+          "expr": "avg (gitlab_database_rows{query_name=\"container_repositories_skipped_too_many_tags\", environment=\"$environment\", shard=\"default\"})",
           "hide": false,
-          "interval": "",
-          "legendFormat": "pre_import_done",
-          "refId": "B"
+          "legendFormat": "Too many tags",
+          "range": true,
+          "refId": "C"
         },
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "PA258B30F88C30650"
+            "uid": "$PROMETHEUS_DS"
           },
-          "exemplar": true,
-          "expr": "avg (gitlab_database_rows{query_name=\"container_repositories_stalled_importing\", environment=\"$environment\", shard=\"default\"})",
+          "editorMode": "code",
+          "expr": "avg (gitlab_database_rows{query_name=\"container_repositories_skipped_deny_list\", environment=\"$environment\", shard=\"default\"})",
           "hide": false,
-          "interval": "",
-          "legendFormat": "importing",
-          "refId": "C"
+          "legendFormat": "Deny List",
+          "range": true,
+          "refId": "D"
+        },
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "$PROMETHEUS_DS"
+          },
+          "editorMode": "code",
+          "expr": "avg (gitlab_database_rows{query_name=\"container_repositories_skipped_canceled\", environment=\"$environment\", shard=\"default\"})",
+          "hide": false,
+          "legendFormat": "Canceled",
+          "range": true,
+          "refId": "E"
+        },
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "$PROMETHEUS_DS"
+          },
+          "editorMode": "code",
+          "expr": "avg (gitlab_database_rows{query_name=\"container_repositories_skipped_native\", environment=\"$environment\", shard=\"default\"})",
+          "hide": false,
+          "legendFormat": "Native",
+          "range": true,
+          "refId": "F"
+        },
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "$PROMETHEUS_DS"
+          },
+          "editorMode": "code",
+          "expr": "avg (gitlab_database_rows{query_name=\"container_repositories_skipped_force_canceled\", environment=\"$environment\", shard=\"default\"})",
+          "hide": false,
+          "legendFormat": "Force canceled",
+          "range": true,
+          "refId": "G"
+        },
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "$PROMETHEUS_DS"
+          },
+          "editorMode": "code",
+          "expr": "avg (gitlab_database_rows{query_name=\"container_repositories_skipped_not_found\", environment=\"$environment\", shard=\"default\"})",
+          "hide": false,
+          "legendFormat": "Not found",
+          "range": true,
+          "refId": "H"
         }
       ],
-      "title": "Potentially stalled",
+      "title": "Skipped Reason",
       "type": "timeseries"
     },
     {
@@ -3506,7 +3681,7 @@
         "h": 1,
         "w": 24,
         "x": 0,
-        "y": 107
+        "y": 113
       },
       "id": 135,
       "panels": [],
@@ -3539,7 +3714,7 @@
         "h": 9,
         "w": 6,
         "x": 0,
-        "y": 108
+        "y": 114
       },
       "id": 133,
       "options": {
@@ -3628,7 +3803,7 @@
         "h": 9,
         "w": 6,
         "x": 6,
-        "y": 108
+        "y": 114
       },
       "id": 129,
       "options": {
@@ -3714,7 +3889,7 @@
         "h": 9,
         "w": 6,
         "x": 12,
-        "y": 108
+        "y": 114
       },
       "id": 131,
       "options": {
@@ -3769,7 +3944,7 @@
         "h": 9,
         "w": 3,
         "x": 18,
-        "y": 108
+        "y": 114
       },
       "id": 147,
       "options": {
@@ -3829,7 +4004,7 @@
         "h": 9,
         "w": 3,
         "x": 21,
-        "y": 108
+        "y": 114
       },
       "id": 148,
       "options": {
@@ -3871,7 +4046,7 @@
         "h": 1,
         "w": 24,
         "x": 0,
-        "y": 117
+        "y": 123
       },
       "id": 52,
       "panels": [
@@ -4961,7 +5136,7 @@
         "h": 1,
         "w": 24,
         "x": 0,
-        "y": 118
+        "y": 124
       },
       "id": 68,
       "panels": [
@@ -5505,7 +5680,7 @@
         "h": 1,
         "w": 24,
         "x": 0,
-        "y": 119
+        "y": 125
       },
       "id": 77,
       "panels": [
@@ -6049,7 +6224,7 @@
         "h": 1,
         "w": 24,
         "x": 0,
-        "y": 120
+        "y": 126
       },
       "id": 86,
       "panels": [
@@ -6586,7 +6761,7 @@
     }
   ],
   "refresh": false,
-  "schemaVersion": 35,
+  "schemaVersion": 36,
   "style": "light",
   "tags": [
     "managed",
@@ -6739,5 +6914,5 @@
   },
   "timezone": "utc",
   "title": "Migration Detail",
-  "version": "27"
+  "version": "28"
 }
