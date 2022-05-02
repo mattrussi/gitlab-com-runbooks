@@ -104,19 +104,25 @@ graph LR
 Rails is configured to connect to the primary db using a static host/port pointing to the ILB:
 
 ```shell
-$ sudo egrep 'host:|port:' /var/opt/gitlab/gitlab-rails/etc/database.yml
-  host: "pgbouncer.int.gprd.gitlab.net"
-  port: 6432
+$ egrep 'host:|port:' /srv/gitlab/config/database.yml
+    host: "pgbouncer.int.gprd.gitlab.net"
+    port: 6432
+        port: 8600
+    host: "pgbouncer-ci.int.gprd.gitlab.net"
+    port: 6432
+        port: 8600
 
 $ dig +short pgbouncer.int.gprd.gitlab.net
 10.217.4.5
+$ dig +short pgbouncer-ci.int.gprd.gitlab.net
+10.217.16.5
 ```
 
-Note that even though this is an internal-only IP address, that DNS `A` record is served by our public DNS provider, AWS Route 53:
+Note that even though this is an internal-only IP address, that DNS `A` record is served by our public DNS provider:
 
 ```shell
 $ dig +noall +authority -t SOA pgbouncer.int.gprd.gitlab.net
-gitlab.net.    812    IN    SOA    ns-1532.awsdns-63.org. awsdns-hostmaster.amazon.com. 1 7200 900 1209600 86400
+gitlab.net.             1800    IN      SOA     arya.ns.cloudflare.com. dns.cloudflare.com. 2276495604 10000 2400 604800 3600
 ```
 
 The ILB (a Google Internal TCP/UDP Load Balancer) is just a set of network configurations, not an in-line proxy for the traffic.  Its forwarding-rule routes each new connection to one of the registered backends (in this case, dedicated PgBouncer hosts).  For details on how to inspect the ILB's components, see section [Internal Loadbalancer (ILB)](#internal-loadbalancer-ilb).
@@ -180,8 +186,22 @@ graph LR
 Rails is configured to connect to the read-only replca dbs using Consul service discovery.  Rails sends a DNS query to the local Consul agent to get a set of DNS `SRV` (service) records.  This provides a list of IP and port combinations to reach all available PgBouncer instances.
 
 ```shell
-$ sudo egrep 'load_balancing:' /var/opt/gitlab/gitlab-rails/etc/database.yml
-  load_balancing: {"hosts":[],"discover":{"record":"db-replica.service.consul.","nameserver":"127.0.0.1","port":8600,"use_tcp":true,"record_type":"SRV"}}
+$ grep -A6 'load_balancing:' /srv/gitlab/config/database.yml
+    load_balancing:
+      discover:
+        nameserver: gke-gprd-us-east1-d-web-0-f4bee7c1-xwwh
+        record: "db-replica.service.consul."
+        record_type: "SRV"
+        port: 8600
+        use_tcp: true
+--
+    load_balancing:
+      discover:
+        nameserver: gke-gprd-us-east1-d-web-0-f4bee7c1-xwwh
+        record: "ci-db-replica.service.consul."
+        record_type: "SRV"
+        port: 8600
+        use_tcp: true
 
 $ dig +short -t SRV -p 8600 @127.0.0.1 db-replica.service.consul. | wc -l
 27
