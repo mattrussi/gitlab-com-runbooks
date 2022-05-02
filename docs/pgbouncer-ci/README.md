@@ -17,6 +17,7 @@
 ## Troubleshooting Pointers
 
 * [OS Upgrade Reference Architecture](../patroni/os_upgrade_reference_architecture.md)
+* [../pgbouncer/patroni-consul-postgres-pgbouncer-interactions.md](../pgbouncer/patroni-consul-postgres-pgbouncer-interactions.md)
 <!-- END_MARKER -->
 
 <!-- ## Summary -->
