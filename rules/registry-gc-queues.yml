@@ -11,6 +11,7 @@ groups:
       severity: s4
       alert_type: symptom
       team: package
+      rules_domain: general
     annotations:
       title: 'The number of overdue Container Registry online GC blob tasks is too high'
       description: 'There have been over 50k overdue blob tasks queued in env {{ $labels.environment }} {{ $labels.stage }} stage for the last 30 minutes.'
@@ -26,6 +27,7 @@ groups:
       severity: s4
       alert_type: symptom
       team: package
+      rules_domain: general
     annotations:
       title: 'The number of overdue Container Registry online GC manifest tasks is too high'
       description: 'There have been over 10k overdue manifest tasks queued in env {{ $labels.environment }} {{ $labels.stage }} stage for the last 30 minutes.'
