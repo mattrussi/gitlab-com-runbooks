@@ -327,12 +327,12 @@ groups:
       (
         (
           gitlab_component_errors:ratio_1h{component="cluster_scaleups",monitor="global",type="kube"}
-          > (14.4 * 0.000500)
+          > (14.4 * 0.050000)
         )
         and
         (
           gitlab_component_errors:ratio_5m{component="cluster_scaleups",monitor="global",type="kube"}
-          > (14.4 * 0.000500)
+          > (14.4 * 0.050000)
         )
       )
       and on(env,environment,tier,type,stage,component)
@@ -379,12 +379,12 @@ groups:
       (
         (
           gitlab_component_errors:ratio_6h{component="cluster_scaleups",monitor="global",type="kube"}
-          > (6 * 0.000500)
+          > (6 * 0.050000)
         )
         and
         (
           gitlab_component_errors:ratio_30m{component="cluster_scaleups",monitor="global",type="kube"}
-          > (6 * 0.000500)
+          > (6 * 0.050000)
         )
       )
       and on(env,environment,tier,type,stage,component)

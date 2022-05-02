@@ -112,6 +112,10 @@ metricsCatalog.serviceDefinition({
         stage: 'main',
       },
 
+      monitoringThresholds: {
+        errorRatio: 0.95,
+      },
+
       // Unfortunately Log-Based Metrics aren't counters, so we need to fill-in-the-gaps when
       // events don't occur. We use the `group by` term for these cases.
       requestRate: customRateQuery(|||
