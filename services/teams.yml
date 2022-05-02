@@ -222,6 +222,7 @@ teams:
   product_stage_group: database
   ignored_components:
   - graphql_queries
+  - rails_requests
 - name: dataops
   product_stage_group: dataops
   ignored_components:
