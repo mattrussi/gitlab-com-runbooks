@@ -34,7 +34,6 @@ teams:
   product_stage_group: geo
   ignored_components:
   - graphql_queries
-  - rails_requests
 
 - name: gitaly
   url: https://about.gitlab.com/handbook/engineering/dev-backend/gitaly/
