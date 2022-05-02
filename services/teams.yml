@@ -169,7 +169,6 @@ teams:
   product_stage_group: global_search
   ignored_components:
   - graphql_queries
-  - rails_requests
 
 - name: 5-min-app
   product_stage_group: 5-min-app
