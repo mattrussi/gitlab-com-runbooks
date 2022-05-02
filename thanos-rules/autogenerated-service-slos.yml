@@ -605,18 +605,12 @@ groups:
       tier: inf
       type: kube
     expr: "0.000500"
-  - record: slo:min:events:gitlab_service_apdex:ratio
-    labels:
-      component: cluster_scaleups
-      tier: inf
-      type: kube
-    expr: "0.999500"
   - record: slo:max:events:gitlab_service_errors:ratio
     labels:
       component: cluster_scaleups
       tier: inf
       type: kube
-    expr: "0.000500"
+    expr: "0.050000"
   - record: slo:max:events:gitlab_service_errors:ratio
     labels:
       tier: inf
