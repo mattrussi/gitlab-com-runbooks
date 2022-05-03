@@ -71,7 +71,6 @@ teams:
   product_stage_group: release
   ignored_components:
   - graphql_queries
-  - rails_requests
 
 - name: release-management
   url: https://about.gitlab.com/handbook/engineering/development/ci-cd/release/release-management/
