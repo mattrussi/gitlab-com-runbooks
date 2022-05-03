@@ -671,9 +671,3 @@ groups:
       product_stage: manage
       stage_group: workspace
     expr: "1"
-  - record: gitlab:ignored_component:stage_group
-    labels:
-      component: rails_requests
-      product_stage: manage
-      stage_group: workspace
-    expr: "1"
