@@ -108,18 +108,6 @@ groups:
     expr: "1"
   - record: gitlab:feature_category:stage_group:mapping
     labels:
-      feature_category: container_host_security
-      product_stage: protect
-      stage_group: container_security
-    expr: "1"
-  - record: gitlab:feature_category:stage_group:mapping
-    labels:
-      feature_category: container_network_security
-      product_stage: protect
-      stage_group: container_security
-    expr: "1"
-  - record: gitlab:feature_category:stage_group:mapping
-    labels:
       feature_category: container_registry
       product_stage: package
       stage_group: package
