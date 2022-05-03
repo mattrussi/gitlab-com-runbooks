@@ -261,8 +261,6 @@
     stage: 'protect',
     feature_categories: [
       'security_orchestration',
-      'container_network_security',
-      'container_host_security',
       'container_scanning',
     ],
   },
