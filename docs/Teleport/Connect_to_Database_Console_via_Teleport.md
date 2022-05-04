@@ -27,6 +27,12 @@ On MacOS, It is as simple as running, from your laptop's console:
 brew install teleport
 ```
 
+However, the database console requires `psql` so if it is not already installed on your machine, you'll also have to run:
+
+```shell
+brew install postgres
+```
+
 Linux install instructions are [also available on the Teleport site](https://goteleport.com/docs/installation/#linux)
 
 ### Accessing the Database console via Teleport
@@ -38,7 +44,7 @@ Linux install instructions are [also available on the Teleport site](https://got
 3. Log in to the database with the appropriate database user
 4. Connect the database console
 
-The access will be temporary (`24h` max) and can be approved by any SRE or Reliability Manager.  The `@sre-oncall` can help if it's urgent, but if you can wait it is considerate to spread the load out by asking the wider SRE team in `#infrastructure-lounge`. Access can be extended before or after expiration using the same process.
+The access will be temporary (`12h` max) and can be approved by any SRE or Reliability Manager.  The `@sre-oncall` can help if it's urgent, but if you can wait it is considerate to spread the load out by asking the wider SRE team in `#infrastructure-lounge`. Access can be extended before or after expiration using the same process.
 
 > Tip: As long as you understand that two separate things are happening in the second command below, you can skip the first and just use the second.
 
@@ -48,7 +54,7 @@ Authenticate to the Teleport proxy/server. This command opens Okta in a browser 
 tsh login --proxy=teleport.gstg.gitlab.net
 ```
 
-> Note: The `database-ro` role in the `gstg` environment does not require a request or approval, so you can skip this step. Us this unless you know for sure that you need something else.
+> Note: The `database-ro` role in the `gstg` environment does not require a request or approval, so you can skip the next step. Use the `database-ro` role unless you know for sure that you need something else.
 
 If you need to request a role which includes elevated permissions for the Database console. Request either `database`, `database-ro`, or `database-admin`, for `gstg` or `gprd`, using the following format.
 
@@ -87,7 +93,7 @@ Once an approval is issued, the next step is to log in to the database. Note tha
 tsh db login --db-user=console-ro --db-name=gitlabhq_production db-secondary
 ```
 
-Remember that your access request, its approval, and any associated database logins will expire in `24h` maximum unless renewed.
+Remember that your access request, its approval, and any associated database logins will expire in `12h` maximum unless renewed.
 
 > Tip: The above command connects to a secondary database (`db-secondary`).  Secondaries are always read only.  If you need write access, you will have to log in to `db-primary` in addition to connecting as a database user with write permissions. Once logged in to teleport, you can view the databases available to your role with `tsh db ls`
 

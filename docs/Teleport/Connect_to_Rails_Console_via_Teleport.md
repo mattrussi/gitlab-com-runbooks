@@ -37,7 +37,7 @@ Linux install instructions are [also available on the Teleport site](https://got
 2. Unless using read only access in staging, request approval for the rails console role that you need
 3. Connect the Rails Console
 
-The access will be temporary (`24h` max) and can be approved by any SRE or Reliability Manager.  The `@sre-oncall` can help if it's urgent, but if you can wait it is considerate to spread the load out by asking the wider SRE team in `#infrastructure-lounge`. Access can be extended before or after expiration using the same process.
+The access will be temporary (`12h` max) and can be approved by any SRE or Reliability Manager.  The `@sre-oncall` can help if it's urgent, but if you can wait it is considerate to spread the load out by asking the wider SRE team in `#infrastructure-lounge`. Access can be extended before or after expiration using the same process.
 
 > Tip: As long as you understand that two separate things are happening in the second command below, you can skip the first and just use the second.
 
@@ -86,7 +86,7 @@ Once an approval is issued, access the Rails console via:
 tsh ssh rails-ro@console-ro-01-sv-gstg
 ```
 
-Remember that your access request, its approval, and any associated sessions will expire in `24h` maximum unless renewed.
+Remember that your access request, its approval, and any associated sessions will expire in `12h` maximum unless renewed.
 
 > Tip: The syntax and options for `tsh ssh` are very similar to `ssh` (with some additional options), so it's possible to do something like `alias ssh="tsh ssh"`
 
