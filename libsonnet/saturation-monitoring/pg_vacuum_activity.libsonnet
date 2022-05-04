@@ -56,6 +56,11 @@ local metricsCatalog = import 'servicemetrics/metrics-catalog.libsonnet';
     severity: 's2',
     horizontallyScalable: true,  // We can add more vacuum workers, but at a resource utilization cost
 
+    // We need to evalutate this in thanos: `pg_settings_autovacuum_max_workers` and
+    // `pg_replication_is_replica` are from prometheus-db, while
+    // `fluentd_pg_auto_vacuum_elapsed_seconds_total` comes from prometheus.gprd.gitlab.net
+    dangerouslyThanosEvaluated: true,
+
     // Use patroni tag, not postgres since we only want clusters that have primaries
     // not postgres-archive, or postgres-delayed nodes for example
     appliesTo: metricsCatalog.findServicesWithTag(tag='postgres_fluent_csvlog_monitoring'),
