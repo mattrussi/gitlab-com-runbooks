@@ -484,6 +484,11 @@ local routingTree = Route(
       matchers={ env: { re: 'pre|dr|db-integration|gstg(-ref)?' } },
       continue=false,
     ),
+    Route(
+      receiver='blackhole',
+      matchers={ environment: { re: 'db-integration' } },
+      continue=false,
+    ),
     // Pager alerts should appear in the production channel
     Route(
       receiver='production_slack_channel',
