@@ -86,10 +86,11 @@ teams:
                      # and escalation policy
   oncall_schedule: https://gitlab.pagerduty.com/schedules#PIQ317K
 
-# Package team doesn't seem to exist
 - name: package
-  url: https://about.gitlab.com/handbook/engineering/dev-backend/
-  slack_channel: backend
+  url: https://about.gitlab.com/handbook/engineering/development/ops/package/
+  slack_channel: s_package
+  slack_alerts_channel: s_package
+  send_slo_alerts_to_team_slack_channel: true
   engagement_policy: # Link to doc that talks about engagement
                      # and escalation policy
   oncall_schedule:   # Link to pagerduty oncall schedule
