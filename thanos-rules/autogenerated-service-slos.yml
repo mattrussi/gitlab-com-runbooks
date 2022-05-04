@@ -530,7 +530,7 @@ groups:
       component: goserver
       tier: stor
       type: gitaly
-    expr: "0.999000"
+    expr: "0.968000"
   - record: slo:max:events:gitlab_service_errors:ratio
     labels:
       component: goserver

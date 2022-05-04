@@ -520,12 +520,12 @@ groups:
       (
         (
           gitlab_component_apdex:ratio_1h{component="goserver",monitor="global",type="gitaly"}
-          < (1 - 14.4 * 0.001000)
+          < (1 - 14.4 * 0.032000)
         )
         and
         (
           gitlab_component_apdex:ratio_5m{component="goserver",monitor="global",type="gitaly"}
-          < (1 - 14.4 * 0.001000)
+          < (1 - 14.4 * 0.032000)
         )
       )
       and on(env,environment,tier,type,stage,component)
@@ -571,12 +571,12 @@ groups:
       (
         (
           gitlab_component_apdex:ratio_6h{component="goserver",monitor="global",type="gitaly"}
-          < (1 - 6 * 0.001000)
+          < (1 - 6 * 0.032000)
         )
         and
         (
           gitlab_component_apdex:ratio_30m{component="goserver",monitor="global",type="gitaly"}
-          < (1 - 6 * 0.001000)
+          < (1 - 6 * 0.032000)
         )
       )
       and on(env,environment,tier,type,stage,component)
@@ -624,12 +624,12 @@ groups:
       (
         (
           gitlab_component_node_apdex:ratio_1h{component="goserver",monitor="global",type="gitaly"}
-          < (1 - 14.4 * 0.001000)
+          < (1 - 14.4 * 0.032000)
         )
         and
         (
           gitlab_component_node_apdex:ratio_5m{component="goserver",monitor="global",type="gitaly"}
-          < (1 - 14.4 * 0.001000)
+          < (1 - 14.4 * 0.032000)
         )
       )
       and on(env,environment,tier,type,stage,shard,fqdn,component)
@@ -677,12 +677,12 @@ groups:
       (
         (
           gitlab_component_node_apdex:ratio_6h{component="goserver",monitor="global",type="gitaly"}
-          < (1 - 6 * 0.001000)
+          < (1 - 6 * 0.032000)
         )
         and
         (
           gitlab_component_node_apdex:ratio_30m{component="goserver",monitor="global",type="gitaly"}
-          < (1 - 6 * 0.001000)
+          < (1 - 6 * 0.032000)
         )
       )
       and on(env,environment,tier,type,stage,shard,fqdn,component)

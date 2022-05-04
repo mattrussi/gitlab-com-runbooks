@@ -33,6 +33,10 @@ metricsCatalog.serviceDefinition({
         The apdex score is based on a subset of GRPC methods which are expected to be fast.
       |||,
 
+      monitoringThresholds+: {
+        apdexScore: 0.968
+      },
+
       local baseSelector = {
         job: 'gitaly',
         grpc_service: { ne: ['gitaly.OperationService'] },
