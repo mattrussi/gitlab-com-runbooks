@@ -34,7 +34,7 @@ metricsCatalog.serviceDefinition({
       |||,
 
       monitoringThresholds+: {
-        apdexScore: 0.968
+        apdexScore: 0.968,
       },
 
       local baseSelector = {
