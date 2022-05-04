@@ -197,7 +197,7 @@ Adding a logfile and using an existing ES index
 
 ##### Kubernetes infrastructure
 
-* Update config of the Gitlab managed Fluentd DaemonSet here: https://gitlab.com/gitlab-com/gl-infra/k8s-workloads/gitlab-helmfiles/-/tree/master/releases/fluentd
+* Update config of the Gitlab managed Fluentd DaemonSet here: https://gitlab.com/gitlab-com/gl-infra/k8s-workloads/tanka-deployments/-/tree/master/environments/fluentd-elasticsearch
 
 #### Adding a logfile and creating a dedicated index for it
 
@@ -233,7 +233,7 @@ Adding a logfile and using an existing ES index
         * Edit the relevant roles in the chef repo to apply the new recipe to VMs managed with that role, for example: https://ops.gitlab.net/gitlab-cookbooks/chef-repo/merge_requests/2367/diffs
         * follow the chef roll out process
     * For log files in GKE
-        * Update config of the Gitlab managed Fluentd DaemonSet here: https://gitlab.com/gitlab-com/gl-infra/k8s-workloads/gitlab-helmfiles/-/tree/master/releases/fluentd
+        * Update config of the Gitlab managed Fluentd DaemonSet here: https://gitlab.com/gitlab-com/gl-infra/k8s-workloads/tanka-deployments/-/tree/master/environments/fluentd-elasticsearch
 	* To view the logs in kibana you'll need to create an index pattern. You can do this by going to Management > Stack Management > Kibana > Index Patterns and click on the "Create index pattern" button.
 
 
