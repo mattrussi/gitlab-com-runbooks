@@ -431,6 +431,13 @@ a little more simple.
 Windows project will most probably get the `runners-gke` network and GKE based monitoring in the future. This
 is however not yet scheduled.
 
+#### gitlab-ci-macos project
+
+| Network Name | Subnet Name        | CIDR          | Purpose |
+| ------------ | ------------------ | ------------- | ------- |
+| `ci-macos`   | `bastion-ci-macos` | `10.5.1.0/24` | Bastion network |
+| `ci-macos`   | `default`          | `10.5.1.0/24` | Default network for the project; general purpose |
+
 ## Monitoring
 
 ![CI Runners monitoring stack design](./img/ci-runners-monitoring.png)
