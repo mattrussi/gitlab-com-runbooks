@@ -35,9 +35,7 @@ local getWeightQuery(weights, interval) =
   std.join('\n  or\n  ', items);
 
 local weightedIntervalVersions = {
-  'weighted_v1.1': '5m',
-  'weighted_v1.2': '10m',
-  'weighted_v1.3': '15m',
+  'weighted_v2.1': '5m',
 };
 
 local ruleGroup(version, interval) =

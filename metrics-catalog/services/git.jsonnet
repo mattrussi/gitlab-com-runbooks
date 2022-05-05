@@ -17,7 +17,7 @@ metricsCatalog.serviceDefinition({
   tags: ['golang'],
 
   contractualThresholds: {
-    apdexRatio: 0.95,
+    apdexRatio: 0.9,
     errorRatio: 0.005,
   },
   monitoringThresholds: {

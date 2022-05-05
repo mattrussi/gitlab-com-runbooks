@@ -371,7 +371,7 @@ groups:
     labels:
       tier: sv
       type: git
-    expr: "0.950000"
+    expr: "0.900000"
   - record: slo:max:gitlab_service_errors:ratio
     labels:
       tier: sv
@@ -1749,7 +1749,7 @@ groups:
     labels:
       tier: sv
       type: web
-    expr: "0.950000"
+    expr: "0.900000"
   - record: slo:max:gitlab_service_errors:ratio
     labels:
       tier: sv
