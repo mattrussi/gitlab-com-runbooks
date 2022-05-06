@@ -361,6 +361,202 @@ groups:
       (
         sum by(env,environment,tier,type,stage,region,component) (gitlab_regional_sli_ops:rate_6h{component="gitlab_sshd",monitor="global",type="git"}) >= 0.16667
       )
+  - alert: GitServiceGitlabSshdErrorSLOViolation
+    for: 2m
+    annotations:
+      title: The gitlab_sshd SLI of the git service (`{{ $labels.stage }}` stage)
+        has an error rate violating SLO
+      description: |
+        Monitors Gitlab-sshd, using the connections bucket, and http requests bucket.
+
+        Currently the error-rate is {{ $value | humanizePercentage }}.
+      grafana_dashboard_id: git-main/git-overview
+      grafana_dashboard_link: https://dashboards.gitlab.net/d/git-main/git-overview?from=now-6h/m&to=now-1m/m&var-environment={{
+        $labels.environment }}&var-stage={{ $labels.stage }}
+      grafana_min_zoom_hours: "6"
+      grafana_panel_id: "2213856730"
+      grafana_variables: environment,stage
+      promql_template_1: |
+        sum by (env,environment,tier,stage) (
+          rate(gitlab_sli:shell_sshd_sessions:errors_total{environment="{{ $labels.environment }}",stage="{{ $labels.stage }}",type="git"}[5m])
+        )
+      runbook: docs/git/README.md
+    labels:
+      aggregation: component
+      alert_class: slo_violation
+      alert_type: symptom
+      feature_category: source_code_management
+      pager: pagerduty
+      rules_domain: general
+      severity: s2
+      sli_type: error
+      slo_alert: "yes"
+      user_impacting: "yes"
+      window: 1h
+    expr: |
+      (
+        (
+          gitlab_component_errors:ratio_1h{component="gitlab_sshd",monitor="global",type="git"}
+          > (14.4 * 0.000500)
+        )
+        and
+        (
+          gitlab_component_errors:ratio_5m{component="gitlab_sshd",monitor="global",type="git"}
+          > (14.4 * 0.000500)
+        )
+      )
+      and on(env,environment,tier,type,stage,component)
+      (
+        sum by(env,environment,tier,type,stage,component) (gitlab_component_ops:rate_1h{component="gitlab_sshd",monitor="global",type="git"}) >= 1
+      )
+  - alert: GitServiceGitlabSshdErrorSLOViolation
+    for: 2m
+    annotations:
+      title: The gitlab_sshd SLI of the git service (`{{ $labels.stage }}` stage)
+        has an error rate violating SLO
+      description: |
+        Monitors Gitlab-sshd, using the connections bucket, and http requests bucket.
+
+        Currently the error-rate is {{ $value | humanizePercentage }}.
+      grafana_dashboard_id: git-main/git-overview
+      grafana_dashboard_link: https://dashboards.gitlab.net/d/git-main/git-overview?from=now-6h/m&to=now-1m/m&var-environment={{
+        $labels.environment }}&var-stage={{ $labels.stage }}
+      grafana_min_zoom_hours: "6"
+      grafana_panel_id: "2213856730"
+      grafana_variables: environment,stage
+      promql_template_1: |
+        sum by (env,environment,tier,stage) (
+          rate(gitlab_sli:shell_sshd_sessions:errors_total{environment="{{ $labels.environment }}",stage="{{ $labels.stage }}",type="git"}[5m])
+        )
+      runbook: docs/git/README.md
+    labels:
+      aggregation: component
+      alert_class: slo_violation
+      alert_type: symptom
+      feature_category: source_code_management
+      pager: pagerduty
+      rules_domain: general
+      severity: s2
+      sli_type: error
+      slo_alert: "yes"
+      user_impacting: "yes"
+      window: 6h
+    expr: |
+      (
+        (
+          gitlab_component_errors:ratio_6h{component="gitlab_sshd",monitor="global",type="git"}
+          > (6 * 0.000500)
+        )
+        and
+        (
+          gitlab_component_errors:ratio_30m{component="gitlab_sshd",monitor="global",type="git"}
+          > (6 * 0.000500)
+        )
+      )
+      and on(env,environment,tier,type,stage,component)
+      (
+        sum by(env,environment,tier,type,stage,component) (gitlab_component_ops:rate_6h{component="gitlab_sshd",monitor="global",type="git"}) >= 0.16667
+      )
+  - alert: GitServiceGitlabSshdErrorSLOViolationRegional
+    for: 2m
+    annotations:
+      title: The gitlab_sshd SLI of the git service in region `{{ $labels.region }}`
+        has an error rate violating SLO
+      description: |
+        Monitors Gitlab-sshd, using the connections bucket, and http requests bucket.
+
+        Note that this alert is specific to the `{{ $labels.region }}` region.
+
+        Currently the error-rate is {{ $value | humanizePercentage }}.
+      grafana_dashboard_id: git-main/git-overview
+      grafana_dashboard_link: https://dashboards.gitlab.net/d/git-main/git-overview?from=now-6h/m&to=now-1m/m&var-environment={{
+        $labels.environment }}&var-stage={{ $labels.stage }}
+      grafana_min_zoom_hours: "6"
+      grafana_panel_id: "2213856730"
+      grafana_variables: environment,stage
+      promql_template_1: |
+        sum by (env,environment,tier,stage,region) (
+          rate(gitlab_sli:shell_sshd_sessions:errors_total{environment="{{ $labels.environment }}",region="{{ $labels.region }}",stage="{{ $labels.stage }}",type="git"}[5m])
+        )
+      runbook: docs/git/README.md
+    labels:
+      aggregation: regional_component
+      alert_class: slo_violation
+      alert_type: symptom
+      feature_category: source_code_management
+      pager: pagerduty
+      rules_domain: general
+      severity: s2
+      sli_type: error
+      slo_alert: "yes"
+      user_impacting: "yes"
+      window: 1h
+    expr: |
+      (
+        (
+          gitlab_regional_sli_errors:ratio_1h{component="gitlab_sshd",monitor="global",type="git"}
+          > (14.4 * 0.000500)
+        )
+        and
+        (
+          gitlab_regional_sli_errors:ratio_5m{component="gitlab_sshd",monitor="global",type="git"}
+          > (14.4 * 0.000500)
+        )
+      )
+      and on(env,environment,tier,type,stage,region,component)
+      (
+        sum by(env,environment,tier,type,stage,region,component) (gitlab_regional_sli_ops:rate_1h{component="gitlab_sshd",monitor="global",type="git"}) >= 1
+      )
+  - alert: GitServiceGitlabSshdErrorSLOViolationRegional
+    for: 2m
+    annotations:
+      title: The gitlab_sshd SLI of the git service in region `{{ $labels.region }}`
+        has an error rate violating SLO
+      description: |
+        Monitors Gitlab-sshd, using the connections bucket, and http requests bucket.
+
+        Note that this alert is specific to the `{{ $labels.region }}` region.
+
+        Currently the error-rate is {{ $value | humanizePercentage }}.
+      grafana_dashboard_id: git-main/git-overview
+      grafana_dashboard_link: https://dashboards.gitlab.net/d/git-main/git-overview?from=now-6h/m&to=now-1m/m&var-environment={{
+        $labels.environment }}&var-stage={{ $labels.stage }}
+      grafana_min_zoom_hours: "6"
+      grafana_panel_id: "2213856730"
+      grafana_variables: environment,stage
+      promql_template_1: |
+        sum by (env,environment,tier,stage,region) (
+          rate(gitlab_sli:shell_sshd_sessions:errors_total{environment="{{ $labels.environment }}",region="{{ $labels.region }}",stage="{{ $labels.stage }}",type="git"}[5m])
+        )
+      runbook: docs/git/README.md
+    labels:
+      aggregation: regional_component
+      alert_class: slo_violation
+      alert_type: symptom
+      feature_category: source_code_management
+      pager: pagerduty
+      rules_domain: general
+      severity: s2
+      sli_type: error
+      slo_alert: "yes"
+      user_impacting: "yes"
+      window: 6h
+    expr: |
+      (
+        (
+          gitlab_regional_sli_errors:ratio_6h{component="gitlab_sshd",monitor="global",type="git"}
+          > (6 * 0.000500)
+        )
+        and
+        (
+          gitlab_regional_sli_errors:ratio_30m{component="gitlab_sshd",monitor="global",type="git"}
+          > (6 * 0.000500)
+        )
+      )
+      and on(env,environment,tier,type,stage,region,component)
+      (
+        sum by(env,environment,tier,type,stage,region,component) (gitlab_regional_sli_ops:rate_6h{component="gitlab_sshd",monitor="global",type="git"}) >= 0.16667
+      )
   - alert: GitServiceGitlabSshdTrafficCessation
     for: 5m
     annotations:
@@ -378,7 +574,7 @@ groups:
       grafana_variables: environment,stage
       promql_template_1: |
         sum by (env,environment,tier,stage) (
-          rate(gitlab_shell_sshd_session_established_duration_seconds_count{environment="{{ $labels.environment }}",stage="{{ $labels.stage }}",type="git"}[5m])
+          rate(gitlab_sli:shell_sshd_sessions:total{environment="{{ $labels.environment }}",stage="{{ $labels.stage }}",type="git"}[5m])
         )
       runbook: docs/git/README.md
     labels:
@@ -415,7 +611,7 @@ groups:
       grafana_variables: environment,stage
       promql_template_1: |
         sum by (env,environment,tier,stage) (
-          rate(gitlab_shell_sshd_session_established_duration_seconds_count{environment="{{ $labels.environment }}",stage="{{ $labels.stage }}",type="git"}[5m])
+          rate(gitlab_sli:shell_sshd_sessions:total{environment="{{ $labels.environment }}",stage="{{ $labels.stage }}",type="git"}[5m])
         )
       runbook: docs/git/README.md
     labels:
@@ -452,7 +648,7 @@ groups:
       grafana_variables: environment,stage
       promql_template_1: |
         sum by (env,environment,tier,stage,region) (
-          rate(gitlab_shell_sshd_session_established_duration_seconds_count{environment="{{ $labels.environment }}",region="{{ $labels.region }}",stage="{{ $labels.stage }}",type="git"}[5m])
+          rate(gitlab_sli:shell_sshd_sessions:total{environment="{{ $labels.environment }}",region="{{ $labels.region }}",stage="{{ $labels.stage }}",type="git"}[5m])
         )
       runbook: docs/git/README.md
     labels:
@@ -491,7 +687,7 @@ groups:
       grafana_variables: environment,stage
       promql_template_1: |
         sum by (env,environment,tier,stage,region) (
-          rate(gitlab_shell_sshd_session_established_duration_seconds_count{environment="{{ $labels.environment }}",region="{{ $labels.region }}",stage="{{ $labels.stage }}",type="git"}[5m])
+          rate(gitlab_sli:shell_sshd_sessions:total{environment="{{ $labels.environment }}",region="{{ $labels.region }}",stage="{{ $labels.stage }}",type="git"}[5m])
         )
       runbook: docs/git/README.md
     labels:
