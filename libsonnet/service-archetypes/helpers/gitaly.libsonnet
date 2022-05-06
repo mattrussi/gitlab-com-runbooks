@@ -24,6 +24,7 @@ local gitalyApdexIgnoredMethods = [
   'FetchSourceBranch',
   'OptimizeRepository',
   'CommitStats',  // https://gitlab.com/gitlab-org/gitlab/-/issues/337080
+  'RepositorySize',
 
   // PackObjectsHookWithSidechannel, PostUploadPackWithSidechannel and
   // SSHUploadPackWithSidechannel are used to serve 'git fetch' traffic.
