@@ -42,7 +42,6 @@ teams:
   send_slo_alerts_to_team_slack_channel: true
   ignored_components:
   - graphql_queries
-  - rails_requests
 
 - name: manage
   url: https://about.gitlab.com/handbook/engineering/dev-backend/manage/
@@ -215,7 +214,6 @@ teams:
   product_stage_group: conversion
   ignored_components:
   - graphql_queries
-  - rails_requests
 - name: database
   product_stage_group: database
   ignored_components:
@@ -238,7 +236,6 @@ teams:
   product_stage_group: expansion
   ignored_components:
   - graphql_queries
-  - rails_requests
 - name: foundations
   product_stage_group: foundations
   ignored_components:

@@ -141,12 +141,6 @@ groups:
       product_stage: growth
       stage_group: conversion
     expr: "1"
-  - record: gitlab:ignored_component:stage_group
-    labels:
-      component: rails_requests
-      product_stage: growth
-      stage_group: conversion
-    expr: "1"
 - name: 'Stage group Ignored components: enablement - Database'
   interval: 1m
   partial_response_strategy: warn
@@ -241,12 +235,6 @@ groups:
       product_stage: growth
       stage_group: expansion
     expr: "1"
-  - record: gitlab:ignored_component:stage_group
-    labels:
-      component: rails_requests
-      product_stage: growth
-      stage_group: expansion
-    expr: "1"
 - name: 'Stage group Ignored components: ecosystem - Foundations'
   interval: 1m
   partial_response_strategy: warn
@@ -296,12 +284,6 @@ groups:
   - record: gitlab:ignored_component:stage_group
     labels:
       component: graphql_queries
-      product_stage: create
-      stage_group: gitaly
-    expr: "1"
-  - record: gitlab:ignored_component:stage_group
-    labels:
-      component: rails_requests
       product_stage: create
       stage_group: gitaly
     expr: "1"
