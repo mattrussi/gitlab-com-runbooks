@@ -74,7 +74,7 @@ metricsCatalog.serviceDefinition({
       significantLabels: ['fqdn', 'route'],
     },
 
-    puma: {                 // Defines a service called `workhorse`
+    puma: {                 // Defines a service called `puma`
       ...
     },
   },
