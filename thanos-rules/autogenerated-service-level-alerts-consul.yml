@@ -5,28 +5,310 @@ groups:
   interval: 1m
   partial_response_strategy: warn
   rules:
-  - alert: ConsulServiceConsulTrafficCessation
+  - alert: ConsulServiceDnsApdexSLOViolation
+    for: 2m
+    annotations:
+      title: The dns SLI of the consul service (`{{ $labels.stage }}` stage) has an
+        apdex violating SLO
+      description: |
+        This SLI monitors the DNS API that makes it possible to retrieve network details for services and nodes
+
+        Currently the apdex value is {{ $value | humanizePercentage }}.
+      grafana_dashboard_id: consul-main/consul-overview
+      grafana_dashboard_link: https://dashboards.gitlab.net/d/consul-main/consul-overview?from=now-6h/m&to=now-1m/m&var-environment={{
+        $labels.environment }}&var-stage={{ $labels.stage }}
+      grafana_min_zoom_hours: "6"
+      grafana_panel_id: "3776717354"
+      grafana_variables: environment,stage
+      promql_template_1: |
+        histogram_quantile(
+          0.950000,
+          sum by (env,environment,tier,stage,le) (
+            rate(consul_dns_domain_query{environment="{{ $labels.environment }}",stage="{{ $labels.stage }}",type="consul"}[5m])
+          )
+        )
+      runbook: docs/consul/README.md
+    labels:
+      aggregation: component
+      alert_class: slo_violation
+      alert_type: symptom
+      feature_category: not_owned
+      pager: pagerduty
+      rules_domain: general
+      severity: s2
+      sli_type: apdex
+      slo_alert: "yes"
+      user_impacting: "no"
+      window: 1h
+    expr: |
+      (
+        (
+          gitlab_component_apdex:ratio_1h{component="dns",monitor="global",type="consul"}
+          < (1 - 14.4 * 0.050000)
+        )
+        and
+        (
+          gitlab_component_apdex:ratio_5m{component="dns",monitor="global",type="consul"}
+          < (1 - 14.4 * 0.050000)
+        )
+      )
+      and on(env,environment,tier,type,stage,component)
+      (
+        sum by(env,environment,tier,type,stage,component) (gitlab_component_ops:rate_1h{component="dns",monitor="global",type="consul"}) >= 1
+      )
+  - alert: ConsulServiceDnsApdexSLOViolation
+    for: 2m
+    annotations:
+      title: The dns SLI of the consul service (`{{ $labels.stage }}` stage) has an
+        apdex violating SLO
+      description: |
+        This SLI monitors the DNS API that makes it possible to retrieve network details for services and nodes
+
+        Currently the apdex value is {{ $value | humanizePercentage }}.
+      grafana_dashboard_id: consul-main/consul-overview
+      grafana_dashboard_link: https://dashboards.gitlab.net/d/consul-main/consul-overview?from=now-6h/m&to=now-1m/m&var-environment={{
+        $labels.environment }}&var-stage={{ $labels.stage }}
+      grafana_min_zoom_hours: "6"
+      grafana_panel_id: "3776717354"
+      grafana_variables: environment,stage
+      promql_template_1: |
+        histogram_quantile(
+          0.950000,
+          sum by (env,environment,tier,stage,le) (
+            rate(consul_dns_domain_query{environment="{{ $labels.environment }}",stage="{{ $labels.stage }}",type="consul"}[5m])
+          )
+        )
+      runbook: docs/consul/README.md
+    labels:
+      aggregation: component
+      alert_class: slo_violation
+      alert_type: symptom
+      feature_category: not_owned
+      pager: pagerduty
+      rules_domain: general
+      severity: s2
+      sli_type: apdex
+      slo_alert: "yes"
+      user_impacting: "no"
+      window: 6h
+    expr: |
+      (
+        (
+          gitlab_component_apdex:ratio_6h{component="dns",monitor="global",type="consul"}
+          < (1 - 6 * 0.050000)
+        )
+        and
+        (
+          gitlab_component_apdex:ratio_30m{component="dns",monitor="global",type="consul"}
+          < (1 - 6 * 0.050000)
+        )
+      )
+      and on(env,environment,tier,type,stage,component)
+      (
+        sum by(env,environment,tier,type,stage,component) (gitlab_component_ops:rate_6h{component="dns",monitor="global",type="consul"}) >= 0.16667
+      )
+  - alert: ConsulServiceDnsApdexSLOViolationRegional
+    for: 2m
+    annotations:
+      title: The dns SLI of the consul service in region `{{ $labels.region }}` has
+        an apdex violating SLO
+      description: |
+        This SLI monitors the DNS API that makes it possible to retrieve network details for services and nodes
+
+        Note that this alert is specific to the `{{ $labels.region }}` region.
+
+        Currently the apdex value is {{ $value | humanizePercentage }}.
+      grafana_dashboard_id: consul-main/consul-overview
+      grafana_dashboard_link: https://dashboards.gitlab.net/d/consul-main/consul-overview?from=now-6h/m&to=now-1m/m&var-environment={{
+        $labels.environment }}&var-stage={{ $labels.stage }}
+      grafana_min_zoom_hours: "6"
+      grafana_panel_id: "3776717354"
+      grafana_variables: environment,stage
+      promql_template_1: |
+        histogram_quantile(
+          0.950000,
+          sum by (env,environment,tier,stage,region,le) (
+            rate(consul_dns_domain_query{environment="{{ $labels.environment }}",region="{{ $labels.region }}",stage="{{ $labels.stage }}",type="consul"}[5m])
+          )
+        )
+      runbook: docs/consul/README.md
+    labels:
+      aggregation: regional_component
+      alert_class: slo_violation
+      alert_type: symptom
+      feature_category: not_owned
+      pager: pagerduty
+      rules_domain: general
+      severity: s2
+      sli_type: apdex
+      slo_alert: "yes"
+      user_impacting: "no"
+      window: 1h
+    expr: |
+      (
+        (
+          gitlab_regional_sli_apdex:ratio_1h{component="dns",monitor="global",type="consul"}
+          < (1 - 14.4 * 0.050000)
+        )
+        and
+        (
+          gitlab_regional_sli_apdex:ratio_5m{component="dns",monitor="global",type="consul"}
+          < (1 - 14.4 * 0.050000)
+        )
+      )
+      and on(env,environment,tier,type,stage,region,component)
+      (
+        sum by(env,environment,tier,type,stage,region,component) (gitlab_regional_sli_ops:rate_1h{component="dns",monitor="global",type="consul"}) >= 1
+      )
+  - alert: ConsulServiceDnsApdexSLOViolationRegional
+    for: 2m
+    annotations:
+      title: The dns SLI of the consul service in region `{{ $labels.region }}` has
+        an apdex violating SLO
+      description: |
+        This SLI monitors the DNS API that makes it possible to retrieve network details for services and nodes
+
+        Note that this alert is specific to the `{{ $labels.region }}` region.
+
+        Currently the apdex value is {{ $value | humanizePercentage }}.
+      grafana_dashboard_id: consul-main/consul-overview
+      grafana_dashboard_link: https://dashboards.gitlab.net/d/consul-main/consul-overview?from=now-6h/m&to=now-1m/m&var-environment={{
+        $labels.environment }}&var-stage={{ $labels.stage }}
+      grafana_min_zoom_hours: "6"
+      grafana_panel_id: "3776717354"
+      grafana_variables: environment,stage
+      promql_template_1: |
+        histogram_quantile(
+          0.950000,
+          sum by (env,environment,tier,stage,region,le) (
+            rate(consul_dns_domain_query{environment="{{ $labels.environment }}",region="{{ $labels.region }}",stage="{{ $labels.stage }}",type="consul"}[5m])
+          )
+        )
+      runbook: docs/consul/README.md
+    labels:
+      aggregation: regional_component
+      alert_class: slo_violation
+      alert_type: symptom
+      feature_category: not_owned
+      pager: pagerduty
+      rules_domain: general
+      severity: s2
+      sli_type: apdex
+      slo_alert: "yes"
+      user_impacting: "no"
+      window: 6h
+    expr: |
+      (
+        (
+          gitlab_regional_sli_apdex:ratio_6h{component="dns",monitor="global",type="consul"}
+          < (1 - 6 * 0.050000)
+        )
+        and
+        (
+          gitlab_regional_sli_apdex:ratio_30m{component="dns",monitor="global",type="consul"}
+          < (1 - 6 * 0.050000)
+        )
+      )
+      and on(env,environment,tier,type,stage,region,component)
+      (
+        sum by(env,environment,tier,type,stage,region,component) (gitlab_regional_sli_ops:rate_6h{component="dns",monitor="global",type="consul"}) >= 0.16667
+      )
+  - alert: ConsulServiceDnsTrafficCessation
     for: 5m
     annotations:
-      title: The consul SLI of the consul service (`{{ $labels.stage }}` stage) has
+      title: The dns SLI of the consul service (`{{ $labels.stage }}` stage) has not
+        received any traffic in the past 30m
+      description: |
+        This SLI monitors the DNS API that makes it possible to retrieve network details for services and nodes
+
+        This alert signifies that the SLI is reporting a cessation of traffic; the signal is present, but is zero.
+      grafana_dashboard_id: consul-main/consul-overview
+      grafana_dashboard_link: https://dashboards.gitlab.net/d/consul-main/consul-overview?from=now-6h/m&to=now-1m/m&var-environment={{
+        $labels.environment }}&var-stage={{ $labels.stage }}
+      grafana_min_zoom_hours: "6"
+      grafana_panel_id: "1633448612"
+      grafana_variables: environment,stage
+      promql_template_1: |
+        sum by (env,environment,tier,stage) (
+          rate(consul_dns_domain_query_count{environment="{{ $labels.environment }}",stage="{{ $labels.stage }}",type="consul"}[5m])
+        )
+      runbook: docs/consul/README.md
+    labels:
+      aggregation: component
+      alert_class: traffic_cessation
+      alert_type: cause
+      feature_category: not_owned
+      pager: pagerduty
+      rules_domain: general
+      severity: s2
+      sli_type: ops
+      slo_alert: "no"
+      user_impacting: "no"
+    expr: |
+      gitlab_component_ops:rate_30m{component="dns",monitor="global",stage="main",type="consul"} == 0
+      and
+      gitlab_component_ops:rate_30m{component="dns",monitor="global",stage="main",type="consul"} offset 1h >= 0.16666666666666666
+  - alert: ConsulServiceDnsTrafficAbsent
+    for: 30m
+    annotations:
+      title: The dns SLI of the consul service (`{{ $labels.stage }}` stage) has not
+        reported any traffic in the past 30m
+      description: |
+        This SLI monitors the DNS API that makes it possible to retrieve network details for services and nodes
+
+        This alert signifies that the SLI was previously reporting traffic, but is no longer - the signal is absent.
+
+        This could be caused by a change to the metrics used in the SLI, or by the service not receiving traffic.
+      grafana_dashboard_id: consul-main/consul-overview
+      grafana_dashboard_link: https://dashboards.gitlab.net/d/consul-main/consul-overview?from=now-6h/m&to=now-1m/m&var-environment={{
+        $labels.environment }}&var-stage={{ $labels.stage }}
+      grafana_min_zoom_hours: "6"
+      grafana_panel_id: "1633448612"
+      grafana_variables: environment,stage
+      promql_template_1: |
+        sum by (env,environment,tier,stage) (
+          rate(consul_dns_domain_query_count{environment="{{ $labels.environment }}",stage="{{ $labels.stage }}",type="consul"}[5m])
+        )
+      runbook: docs/consul/README.md
+    labels:
+      aggregation: component
+      alert_class: traffic_cessation
+      alert_type: cause
+      feature_category: not_owned
+      pager: pagerduty
+      rules_domain: general
+      severity: s2
+      sli_type: ops
+      slo_alert: "no"
+      user_impacting: "no"
+    expr: |
+      gitlab_component_ops:rate_5m{component="dns",monitor="global",stage="main",type="consul"} offset 1h
+      unless
+      gitlab_component_ops:rate_5m{component="dns",monitor="global",stage="main",type="consul"}
+  - alert: ConsulServiceDnsTrafficCessationRegional
+    for: 5m
+    annotations:
+      title: The dns SLI of the consul service in region `{{ $labels.region }}` has
         not received any traffic in the past 30m
       description: |
-        HTTP GET requests handled by the Consul agent.
+        This SLI monitors the DNS API that makes it possible to retrieve network details for services and nodes
 
         This alert signifies that the SLI is reporting a cessation of traffic; the signal is present, but is zero.
+
+        Note that this alert is specific to the `{{ $labels.region }}` region.
       grafana_dashboard_id: consul-main/consul-overview
       grafana_dashboard_link: https://dashboards.gitlab.net/d/consul-main/consul-overview?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-stage={{ $labels.stage }}
       grafana_min_zoom_hours: "6"
-      grafana_panel_id: "4242308695"
+      grafana_panel_id: "1633448612"
       grafana_variables: environment,stage
       promql_template_1: |
-        sum by (env,environment,tier,stage) (
-          clamp_min(deriv(consul_http_GET_v1_agent_metrics_count{environment="{{ $labels.environment }}",stage="{{ $labels.stage }}"}[5m]), 0)
+        sum by (env,environment,tier,stage,region) (
+          rate(consul_dns_domain_query_count{environment="{{ $labels.environment }}",region="{{ $labels.region }}",stage="{{ $labels.stage }}",type="consul"}[5m])
         )
       runbook: docs/consul/README.md
     labels:
-      aggregation: component
+      aggregation: regional_component
       alert_class: traffic_cessation
       alert_type: cause
       feature_category: not_owned
@@ -37,29 +319,274 @@ groups:
       slo_alert: "no"
       user_impacting: "no"
     expr: |
-      gitlab_component_ops:rate_30m{component="consul",monitor="global",stage="main",type="consul"} == 0
+      gitlab_regional_sli_ops:rate_30m{component="dns",monitor="global",stage="main",type="consul"} == 0
       and
-      gitlab_component_ops:rate_30m{component="consul",monitor="global",stage="main",type="consul"} offset 1h >= 0.16666666666666666
-  - alert: ConsulServiceConsulTrafficAbsent
+      gitlab_regional_sli_ops:rate_30m{component="dns",monitor="global",stage="main",type="consul"} offset 1h >= 0.16666666666666666
+  - alert: ConsulServiceDnsTrafficAbsentRegional
     for: 30m
     annotations:
-      title: The consul SLI of the consul service (`{{ $labels.stage }}` stage) has
+      title: The dns SLI of the consul service in region `{{ $labels.region }}` has
         not reported any traffic in the past 30m
       description: |
-        HTTP GET requests handled by the Consul agent.
+        This SLI monitors the DNS API that makes it possible to retrieve network details for services and nodes
 
         This alert signifies that the SLI was previously reporting traffic, but is no longer - the signal is absent.
 
         This could be caused by a change to the metrics used in the SLI, or by the service not receiving traffic.
+
+        Note that this alert is specific to the `{{ $labels.region }}` region.
       grafana_dashboard_id: consul-main/consul-overview
       grafana_dashboard_link: https://dashboards.gitlab.net/d/consul-main/consul-overview?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-stage={{ $labels.stage }}
       grafana_min_zoom_hours: "6"
-      grafana_panel_id: "4242308695"
+      grafana_panel_id: "1633448612"
+      grafana_variables: environment,stage
+      promql_template_1: |
+        sum by (env,environment,tier,stage,region) (
+          rate(consul_dns_domain_query_count{environment="{{ $labels.environment }}",region="{{ $labels.region }}",stage="{{ $labels.stage }}",type="consul"}[5m])
+        )
+      runbook: docs/consul/README.md
+    labels:
+      aggregation: regional_component
+      alert_class: traffic_cessation
+      alert_type: cause
+      feature_category: not_owned
+      pager: pagerduty
+      rules_domain: general
+      severity: s2
+      sli_type: ops
+      slo_alert: "no"
+      user_impacting: "no"
+    expr: |
+      gitlab_regional_sli_ops:rate_5m{component="dns",monitor="global",stage="main",type="consul"} offset 1h
+      unless
+      gitlab_regional_sli_ops:rate_5m{component="dns",monitor="global",stage="main",type="consul"}
+  - alert: ConsulServiceRaftCommitsApdexSLOViolation
+    for: 2m
+    annotations:
+      title: The raft_commits SLI of the consul service (`{{ $labels.stage }}` stage)
+        has an apdex violating SLO
+      description: |
+        A Raft log is committed when the leader saves the new logs to disk, and confirms that the most recently saved log matches the most recent log in the leader’s memory. An increase in commit time can indicate heightened load on the Consul servers, and might indicate that clients are accessing stale data.
+
+        Currently the apdex value is {{ $value | humanizePercentage }}.
+      grafana_dashboard_id: consul-main/consul-overview
+      grafana_dashboard_link: https://dashboards.gitlab.net/d/consul-main/consul-overview?from=now-6h/m&to=now-1m/m&var-environment={{
+        $labels.environment }}&var-stage={{ $labels.stage }}
+      grafana_min_zoom_hours: "6"
+      grafana_panel_id: "418527166"
+      grafana_variables: environment,stage
+      promql_template_1: |
+        histogram_quantile(
+          0.950000,
+          sum by (env,environment,tier,stage,le) (
+            rate(consul_raft_commitTime{environment="{{ $labels.environment }}",stage="{{ $labels.stage }}",type="consul"}[5m])
+          )
+        )
+      runbook: docs/consul/README.md
+    labels:
+      aggregation: component
+      alert_class: slo_violation
+      alert_type: symptom
+      feature_category: not_owned
+      pager: pagerduty
+      rules_domain: general
+      severity: s2
+      sli_type: apdex
+      slo_alert: "yes"
+      user_impacting: "no"
+      window: 1h
+    expr: |
+      (
+        (
+          gitlab_component_apdex:ratio_1h{component="raft_commits",monitor="global",type="consul"}
+          < (1 - 14.4 * 0.050000)
+        )
+        and
+        (
+          gitlab_component_apdex:ratio_5m{component="raft_commits",monitor="global",type="consul"}
+          < (1 - 14.4 * 0.050000)
+        )
+      )
+      and on(env,environment,tier,type,stage,component)
+      (
+        sum by(env,environment,tier,type,stage,component) (gitlab_component_ops:rate_1h{component="raft_commits",monitor="global",type="consul"}) >= 1
+      )
+  - alert: ConsulServiceRaftCommitsApdexSLOViolation
+    for: 2m
+    annotations:
+      title: The raft_commits SLI of the consul service (`{{ $labels.stage }}` stage)
+        has an apdex violating SLO
+      description: |
+        A Raft log is committed when the leader saves the new logs to disk, and confirms that the most recently saved log matches the most recent log in the leader’s memory. An increase in commit time can indicate heightened load on the Consul servers, and might indicate that clients are accessing stale data.
+
+        Currently the apdex value is {{ $value | humanizePercentage }}.
+      grafana_dashboard_id: consul-main/consul-overview
+      grafana_dashboard_link: https://dashboards.gitlab.net/d/consul-main/consul-overview?from=now-6h/m&to=now-1m/m&var-environment={{
+        $labels.environment }}&var-stage={{ $labels.stage }}
+      grafana_min_zoom_hours: "6"
+      grafana_panel_id: "418527166"
+      grafana_variables: environment,stage
+      promql_template_1: |
+        histogram_quantile(
+          0.950000,
+          sum by (env,environment,tier,stage,le) (
+            rate(consul_raft_commitTime{environment="{{ $labels.environment }}",stage="{{ $labels.stage }}",type="consul"}[5m])
+          )
+        )
+      runbook: docs/consul/README.md
+    labels:
+      aggregation: component
+      alert_class: slo_violation
+      alert_type: symptom
+      feature_category: not_owned
+      pager: pagerduty
+      rules_domain: general
+      severity: s2
+      sli_type: apdex
+      slo_alert: "yes"
+      user_impacting: "no"
+      window: 6h
+    expr: |
+      (
+        (
+          gitlab_component_apdex:ratio_6h{component="raft_commits",monitor="global",type="consul"}
+          < (1 - 6 * 0.050000)
+        )
+        and
+        (
+          gitlab_component_apdex:ratio_30m{component="raft_commits",monitor="global",type="consul"}
+          < (1 - 6 * 0.050000)
+        )
+      )
+      and on(env,environment,tier,type,stage,component)
+      (
+        sum by(env,environment,tier,type,stage,component) (gitlab_component_ops:rate_6h{component="raft_commits",monitor="global",type="consul"}) >= 0.16667
+      )
+  - alert: ConsulServiceRaftCommitsApdexSLOViolationRegional
+    for: 2m
+    annotations:
+      title: The raft_commits SLI of the consul service in region `{{ $labels.region
+        }}` has an apdex violating SLO
+      description: |
+        A Raft log is committed when the leader saves the new logs to disk, and confirms that the most recently saved log matches the most recent log in the leader’s memory. An increase in commit time can indicate heightened load on the Consul servers, and might indicate that clients are accessing stale data.
+
+        Note that this alert is specific to the `{{ $labels.region }}` region.
+
+        Currently the apdex value is {{ $value | humanizePercentage }}.
+      grafana_dashboard_id: consul-main/consul-overview
+      grafana_dashboard_link: https://dashboards.gitlab.net/d/consul-main/consul-overview?from=now-6h/m&to=now-1m/m&var-environment={{
+        $labels.environment }}&var-stage={{ $labels.stage }}
+      grafana_min_zoom_hours: "6"
+      grafana_panel_id: "418527166"
+      grafana_variables: environment,stage
+      promql_template_1: |
+        histogram_quantile(
+          0.950000,
+          sum by (env,environment,tier,stage,region,le) (
+            rate(consul_raft_commitTime{environment="{{ $labels.environment }}",region="{{ $labels.region }}",stage="{{ $labels.stage }}",type="consul"}[5m])
+          )
+        )
+      runbook: docs/consul/README.md
+    labels:
+      aggregation: regional_component
+      alert_class: slo_violation
+      alert_type: symptom
+      feature_category: not_owned
+      pager: pagerduty
+      rules_domain: general
+      severity: s2
+      sli_type: apdex
+      slo_alert: "yes"
+      user_impacting: "no"
+      window: 1h
+    expr: |
+      (
+        (
+          gitlab_regional_sli_apdex:ratio_1h{component="raft_commits",monitor="global",type="consul"}
+          < (1 - 14.4 * 0.050000)
+        )
+        and
+        (
+          gitlab_regional_sli_apdex:ratio_5m{component="raft_commits",monitor="global",type="consul"}
+          < (1 - 14.4 * 0.050000)
+        )
+      )
+      and on(env,environment,tier,type,stage,region,component)
+      (
+        sum by(env,environment,tier,type,stage,region,component) (gitlab_regional_sli_ops:rate_1h{component="raft_commits",monitor="global",type="consul"}) >= 1
+      )
+  - alert: ConsulServiceRaftCommitsApdexSLOViolationRegional
+    for: 2m
+    annotations:
+      title: The raft_commits SLI of the consul service in region `{{ $labels.region
+        }}` has an apdex violating SLO
+      description: |
+        A Raft log is committed when the leader saves the new logs to disk, and confirms that the most recently saved log matches the most recent log in the leader’s memory. An increase in commit time can indicate heightened load on the Consul servers, and might indicate that clients are accessing stale data.
+
+        Note that this alert is specific to the `{{ $labels.region }}` region.
+
+        Currently the apdex value is {{ $value | humanizePercentage }}.
+      grafana_dashboard_id: consul-main/consul-overview
+      grafana_dashboard_link: https://dashboards.gitlab.net/d/consul-main/consul-overview?from=now-6h/m&to=now-1m/m&var-environment={{
+        $labels.environment }}&var-stage={{ $labels.stage }}
+      grafana_min_zoom_hours: "6"
+      grafana_panel_id: "418527166"
+      grafana_variables: environment,stage
+      promql_template_1: |
+        histogram_quantile(
+          0.950000,
+          sum by (env,environment,tier,stage,region,le) (
+            rate(consul_raft_commitTime{environment="{{ $labels.environment }}",region="{{ $labels.region }}",stage="{{ $labels.stage }}",type="consul"}[5m])
+          )
+        )
+      runbook: docs/consul/README.md
+    labels:
+      aggregation: regional_component
+      alert_class: slo_violation
+      alert_type: symptom
+      feature_category: not_owned
+      pager: pagerduty
+      rules_domain: general
+      severity: s2
+      sli_type: apdex
+      slo_alert: "yes"
+      user_impacting: "no"
+      window: 6h
+    expr: |
+      (
+        (
+          gitlab_regional_sli_apdex:ratio_6h{component="raft_commits",monitor="global",type="consul"}
+          < (1 - 6 * 0.050000)
+        )
+        and
+        (
+          gitlab_regional_sli_apdex:ratio_30m{component="raft_commits",monitor="global",type="consul"}
+          < (1 - 6 * 0.050000)
+        )
+      )
+      and on(env,environment,tier,type,stage,region,component)
+      (
+        sum by(env,environment,tier,type,stage,region,component) (gitlab_regional_sli_ops:rate_6h{component="raft_commits",monitor="global",type="consul"}) >= 0.16667
+      )
+  - alert: ConsulServiceRaftCommitsTrafficCessation
+    for: 5m
+    annotations:
+      title: The raft_commits SLI of the consul service (`{{ $labels.stage }}` stage)
+        has not received any traffic in the past 30m
+      description: |
+        A Raft log is committed when the leader saves the new logs to disk, and confirms that the most recently saved log matches the most recent log in the leader’s memory. An increase in commit time can indicate heightened load on the Consul servers, and might indicate that clients are accessing stale data.
+
+        This alert signifies that the SLI is reporting a cessation of traffic; the signal is present, but is zero.
+      grafana_dashboard_id: consul-main/consul-overview
+      grafana_dashboard_link: https://dashboards.gitlab.net/d/consul-main/consul-overview?from=now-6h/m&to=now-1m/m&var-environment={{
+        $labels.environment }}&var-stage={{ $labels.stage }}
+      grafana_min_zoom_hours: "6"
+      grafana_panel_id: "3214843321"
       grafana_variables: environment,stage
       promql_template_1: |
         sum by (env,environment,tier,stage) (
-          clamp_min(deriv(consul_http_GET_v1_agent_metrics_count{environment="{{ $labels.environment }}",stage="{{ $labels.stage }}"}[5m]), 0)
+          rate(consul_raft_apply{environment="{{ $labels.environment }}",stage="{{ $labels.stage }}",type="consul"}[5m])
         )
       runbook: docs/consul/README.md
     labels:
@@ -74,16 +601,53 @@ groups:
       slo_alert: "no"
       user_impacting: "no"
     expr: |
-      gitlab_component_ops:rate_5m{component="consul",monitor="global",stage="main",type="consul"} offset 1h
+      gitlab_component_ops:rate_30m{component="raft_commits",monitor="global",stage="main",type="consul"} == 0
+      and
+      gitlab_component_ops:rate_30m{component="raft_commits",monitor="global",stage="main",type="consul"} offset 1h >= 0.16666666666666666
+  - alert: ConsulServiceRaftCommitsTrafficAbsent
+    for: 30m
+    annotations:
+      title: The raft_commits SLI of the consul service (`{{ $labels.stage }}` stage)
+        has not reported any traffic in the past 30m
+      description: |
+        A Raft log is committed when the leader saves the new logs to disk, and confirms that the most recently saved log matches the most recent log in the leader’s memory. An increase in commit time can indicate heightened load on the Consul servers, and might indicate that clients are accessing stale data.
+
+        This alert signifies that the SLI was previously reporting traffic, but is no longer - the signal is absent.
+
+        This could be caused by a change to the metrics used in the SLI, or by the service not receiving traffic.
+      grafana_dashboard_id: consul-main/consul-overview
+      grafana_dashboard_link: https://dashboards.gitlab.net/d/consul-main/consul-overview?from=now-6h/m&to=now-1m/m&var-environment={{
+        $labels.environment }}&var-stage={{ $labels.stage }}
+      grafana_min_zoom_hours: "6"
+      grafana_panel_id: "3214843321"
+      grafana_variables: environment,stage
+      promql_template_1: |
+        sum by (env,environment,tier,stage) (
+          rate(consul_raft_apply{environment="{{ $labels.environment }}",stage="{{ $labels.stage }}",type="consul"}[5m])
+        )
+      runbook: docs/consul/README.md
+    labels:
+      aggregation: component
+      alert_class: traffic_cessation
+      alert_type: cause
+      feature_category: not_owned
+      pager: pagerduty
+      rules_domain: general
+      severity: s2
+      sli_type: ops
+      slo_alert: "no"
+      user_impacting: "no"
+    expr: |
+      gitlab_component_ops:rate_5m{component="raft_commits",monitor="global",stage="main",type="consul"} offset 1h
       unless
-      gitlab_component_ops:rate_5m{component="consul",monitor="global",stage="main",type="consul"}
-  - alert: ConsulServiceConsulTrafficCessationRegional
+      gitlab_component_ops:rate_5m{component="raft_commits",monitor="global",stage="main",type="consul"}
+  - alert: ConsulServiceRaftCommitsTrafficCessationRegional
     for: 5m
     annotations:
-      title: The consul SLI of the consul service in region `{{ $labels.region }}`
-        has not received any traffic in the past 30m
+      title: The raft_commits SLI of the consul service in region `{{ $labels.region
+        }}` has not received any traffic in the past 30m
       description: |
-        HTTP GET requests handled by the Consul agent.
+        A Raft log is committed when the leader saves the new logs to disk, and confirms that the most recently saved log matches the most recent log in the leader’s memory. An increase in commit time can indicate heightened load on the Consul servers, and might indicate that clients are accessing stale data.
 
         This alert signifies that the SLI is reporting a cessation of traffic; the signal is present, but is zero.
 
@@ -92,11 +656,11 @@ groups:
       grafana_dashboard_link: https://dashboards.gitlab.net/d/consul-main/consul-overview?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-stage={{ $labels.stage }}
       grafana_min_zoom_hours: "6"
-      grafana_panel_id: "4242308695"
+      grafana_panel_id: "3214843321"
       grafana_variables: environment,stage
       promql_template_1: |
         sum by (env,environment,tier,stage,region) (
-          clamp_min(deriv(consul_http_GET_v1_agent_metrics_count{environment="{{ $labels.environment }}",region="{{ $labels.region }}",stage="{{ $labels.stage }}"}[5m]), 0)
+          rate(consul_raft_apply{environment="{{ $labels.environment }}",region="{{ $labels.region }}",stage="{{ $labels.stage }}",type="consul"}[5m])
         )
       runbook: docs/consul/README.md
     labels:
@@ -111,16 +675,16 @@ groups:
       slo_alert: "no"
       user_impacting: "no"
     expr: |
-      gitlab_regional_sli_ops:rate_30m{component="consul",monitor="global",stage="main",type="consul"} == 0
+      gitlab_regional_sli_ops:rate_30m{component="raft_commits",monitor="global",stage="main",type="consul"} == 0
       and
-      gitlab_regional_sli_ops:rate_30m{component="consul",monitor="global",stage="main",type="consul"} offset 1h >= 0.16666666666666666
-  - alert: ConsulServiceConsulTrafficAbsentRegional
+      gitlab_regional_sli_ops:rate_30m{component="raft_commits",monitor="global",stage="main",type="consul"} offset 1h >= 0.16666666666666666
+  - alert: ConsulServiceRaftCommitsTrafficAbsentRegional
     for: 30m
     annotations:
-      title: The consul SLI of the consul service in region `{{ $labels.region }}`
-        has not reported any traffic in the past 30m
+      title: The raft_commits SLI of the consul service in region `{{ $labels.region
+        }}` has not reported any traffic in the past 30m
       description: |
-        HTTP GET requests handled by the Consul agent.
+        A Raft log is committed when the leader saves the new logs to disk, and confirms that the most recently saved log matches the most recent log in the leader’s memory. An increase in commit time can indicate heightened load on the Consul servers, and might indicate that clients are accessing stale data.
 
         This alert signifies that the SLI was previously reporting traffic, but is no longer - the signal is absent.
 
@@ -131,11 +695,11 @@ groups:
       grafana_dashboard_link: https://dashboards.gitlab.net/d/consul-main/consul-overview?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-stage={{ $labels.stage }}
       grafana_min_zoom_hours: "6"
-      grafana_panel_id: "4242308695"
+      grafana_panel_id: "3214843321"
       grafana_variables: environment,stage
       promql_template_1: |
         sum by (env,environment,tier,stage,region) (
-          clamp_min(deriv(consul_http_GET_v1_agent_metrics_count{environment="{{ $labels.environment }}",region="{{ $labels.region }}",stage="{{ $labels.stage }}"}[5m]), 0)
+          rate(consul_raft_apply{environment="{{ $labels.environment }}",region="{{ $labels.region }}",stage="{{ $labels.stage }}",type="consul"}[5m])
         )
       runbook: docs/consul/README.md
     labels:
@@ -150,6 +714,362 @@ groups:
       slo_alert: "no"
       user_impacting: "no"
     expr: |
-      gitlab_regional_sli_ops:rate_5m{component="consul",monitor="global",stage="main",type="consul"} offset 1h
+      gitlab_regional_sli_ops:rate_5m{component="raft_commits",monitor="global",stage="main",type="consul"} offset 1h
       unless
-      gitlab_regional_sli_ops:rate_5m{component="consul",monitor="global",stage="main",type="consul"}
+      gitlab_regional_sli_ops:rate_5m{component="raft_commits",monitor="global",stage="main",type="consul"}
+  - alert: ConsulServiceRaftLogsApdexSLOViolation
+    for: 2m
+    annotations:
+      title: The raft_logs SLI of the consul service (`{{ $labels.stage }}` stage)
+        has an apdex violating SLO
+      description: |
+        Raft log entry include adding nodes, adding services, new keys and values, etc. Increases in this metric can indicate higher load on the Consul servers and carry the risk of stale data.
+
+        Currently the apdex value is {{ $value | humanizePercentage }}.
+      grafana_dashboard_id: consul-main/consul-overview
+      grafana_dashboard_link: https://dashboards.gitlab.net/d/consul-main/consul-overview?from=now-6h/m&to=now-1m/m&var-environment={{
+        $labels.environment }}&var-stage={{ $labels.stage }}
+      grafana_min_zoom_hours: "6"
+      grafana_panel_id: "1976919368"
+      grafana_variables: environment,stage
+      promql_template_1: |
+        histogram_quantile(
+          0.950000,
+          sum by (env,environment,tier,stage,le) (
+            rate(consul_raft_rpc_appendEntries{environment="{{ $labels.environment }}",stage="{{ $labels.stage }}",type="consul"}[5m])
+          )
+        )
+      runbook: docs/consul/README.md
+    labels:
+      aggregation: component
+      alert_class: slo_violation
+      alert_type: symptom
+      feature_category: not_owned
+      pager: pagerduty
+      rules_domain: general
+      severity: s2
+      sli_type: apdex
+      slo_alert: "yes"
+      user_impacting: "no"
+      window: 1h
+    expr: |
+      (
+        (
+          gitlab_component_apdex:ratio_1h{component="raft_logs",monitor="global",type="consul"}
+          < (1 - 14.4 * 0.050000)
+        )
+        and
+        (
+          gitlab_component_apdex:ratio_5m{component="raft_logs",monitor="global",type="consul"}
+          < (1 - 14.4 * 0.050000)
+        )
+      )
+      and on(env,environment,tier,type,stage,component)
+      (
+        sum by(env,environment,tier,type,stage,component) (gitlab_component_ops:rate_1h{component="raft_logs",monitor="global",type="consul"}) >= 1
+      )
+  - alert: ConsulServiceRaftLogsApdexSLOViolation
+    for: 2m
+    annotations:
+      title: The raft_logs SLI of the consul service (`{{ $labels.stage }}` stage)
+        has an apdex violating SLO
+      description: |
+        Raft log entry include adding nodes, adding services, new keys and values, etc. Increases in this metric can indicate higher load on the Consul servers and carry the risk of stale data.
+
+        Currently the apdex value is {{ $value | humanizePercentage }}.
+      grafana_dashboard_id: consul-main/consul-overview
+      grafana_dashboard_link: https://dashboards.gitlab.net/d/consul-main/consul-overview?from=now-6h/m&to=now-1m/m&var-environment={{
+        $labels.environment }}&var-stage={{ $labels.stage }}
+      grafana_min_zoom_hours: "6"
+      grafana_panel_id: "1976919368"
+      grafana_variables: environment,stage
+      promql_template_1: |
+        histogram_quantile(
+          0.950000,
+          sum by (env,environment,tier,stage,le) (
+            rate(consul_raft_rpc_appendEntries{environment="{{ $labels.environment }}",stage="{{ $labels.stage }}",type="consul"}[5m])
+          )
+        )
+      runbook: docs/consul/README.md
+    labels:
+      aggregation: component
+      alert_class: slo_violation
+      alert_type: symptom
+      feature_category: not_owned
+      pager: pagerduty
+      rules_domain: general
+      severity: s2
+      sli_type: apdex
+      slo_alert: "yes"
+      user_impacting: "no"
+      window: 6h
+    expr: |
+      (
+        (
+          gitlab_component_apdex:ratio_6h{component="raft_logs",monitor="global",type="consul"}
+          < (1 - 6 * 0.050000)
+        )
+        and
+        (
+          gitlab_component_apdex:ratio_30m{component="raft_logs",monitor="global",type="consul"}
+          < (1 - 6 * 0.050000)
+        )
+      )
+      and on(env,environment,tier,type,stage,component)
+      (
+        sum by(env,environment,tier,type,stage,component) (gitlab_component_ops:rate_6h{component="raft_logs",monitor="global",type="consul"}) >= 0.16667
+      )
+  - alert: ConsulServiceRaftLogsApdexSLOViolationRegional
+    for: 2m
+    annotations:
+      title: The raft_logs SLI of the consul service in region `{{ $labels.region
+        }}` has an apdex violating SLO
+      description: |
+        Raft log entry include adding nodes, adding services, new keys and values, etc. Increases in this metric can indicate higher load on the Consul servers and carry the risk of stale data.
+
+        Note that this alert is specific to the `{{ $labels.region }}` region.
+
+        Currently the apdex value is {{ $value | humanizePercentage }}.
+      grafana_dashboard_id: consul-main/consul-overview
+      grafana_dashboard_link: https://dashboards.gitlab.net/d/consul-main/consul-overview?from=now-6h/m&to=now-1m/m&var-environment={{
+        $labels.environment }}&var-stage={{ $labels.stage }}
+      grafana_min_zoom_hours: "6"
+      grafana_panel_id: "1976919368"
+      grafana_variables: environment,stage
+      promql_template_1: |
+        histogram_quantile(
+          0.950000,
+          sum by (env,environment,tier,stage,region,le) (
+            rate(consul_raft_rpc_appendEntries{environment="{{ $labels.environment }}",region="{{ $labels.region }}",stage="{{ $labels.stage }}",type="consul"}[5m])
+          )
+        )
+      runbook: docs/consul/README.md
+    labels:
+      aggregation: regional_component
+      alert_class: slo_violation
+      alert_type: symptom
+      feature_category: not_owned
+      pager: pagerduty
+      rules_domain: general
+      severity: s2
+      sli_type: apdex
+      slo_alert: "yes"
+      user_impacting: "no"
+      window: 1h
+    expr: |
+      (
+        (
+          gitlab_regional_sli_apdex:ratio_1h{component="raft_logs",monitor="global",type="consul"}
+          < (1 - 14.4 * 0.050000)
+        )
+        and
+        (
+          gitlab_regional_sli_apdex:ratio_5m{component="raft_logs",monitor="global",type="consul"}
+          < (1 - 14.4 * 0.050000)
+        )
+      )
+      and on(env,environment,tier,type,stage,region,component)
+      (
+        sum by(env,environment,tier,type,stage,region,component) (gitlab_regional_sli_ops:rate_1h{component="raft_logs",monitor="global",type="consul"}) >= 1
+      )
+  - alert: ConsulServiceRaftLogsApdexSLOViolationRegional
+    for: 2m
+    annotations:
+      title: The raft_logs SLI of the consul service in region `{{ $labels.region
+        }}` has an apdex violating SLO
+      description: |
+        Raft log entry include adding nodes, adding services, new keys and values, etc. Increases in this metric can indicate higher load on the Consul servers and carry the risk of stale data.
+
+        Note that this alert is specific to the `{{ $labels.region }}` region.
+
+        Currently the apdex value is {{ $value | humanizePercentage }}.
+      grafana_dashboard_id: consul-main/consul-overview
+      grafana_dashboard_link: https://dashboards.gitlab.net/d/consul-main/consul-overview?from=now-6h/m&to=now-1m/m&var-environment={{
+        $labels.environment }}&var-stage={{ $labels.stage }}
+      grafana_min_zoom_hours: "6"
+      grafana_panel_id: "1976919368"
+      grafana_variables: environment,stage
+      promql_template_1: |
+        histogram_quantile(
+          0.950000,
+          sum by (env,environment,tier,stage,region,le) (
+            rate(consul_raft_rpc_appendEntries{environment="{{ $labels.environment }}",region="{{ $labels.region }}",stage="{{ $labels.stage }}",type="consul"}[5m])
+          )
+        )
+      runbook: docs/consul/README.md
+    labels:
+      aggregation: regional_component
+      alert_class: slo_violation
+      alert_type: symptom
+      feature_category: not_owned
+      pager: pagerduty
+      rules_domain: general
+      severity: s2
+      sli_type: apdex
+      slo_alert: "yes"
+      user_impacting: "no"
+      window: 6h
+    expr: |
+      (
+        (
+          gitlab_regional_sli_apdex:ratio_6h{component="raft_logs",monitor="global",type="consul"}
+          < (1 - 6 * 0.050000)
+        )
+        and
+        (
+          gitlab_regional_sli_apdex:ratio_30m{component="raft_logs",monitor="global",type="consul"}
+          < (1 - 6 * 0.050000)
+        )
+      )
+      and on(env,environment,tier,type,stage,region,component)
+      (
+        sum by(env,environment,tier,type,stage,region,component) (gitlab_regional_sli_ops:rate_6h{component="raft_logs",monitor="global",type="consul"}) >= 0.16667
+      )
+  - alert: ConsulServiceRaftLogsTrafficCessation
+    for: 5m
+    annotations:
+      title: The raft_logs SLI of the consul service (`{{ $labels.stage }}` stage)
+        has not received any traffic in the past 30m
+      description: |
+        Raft log entry include adding nodes, adding services, new keys and values, etc. Increases in this metric can indicate higher load on the Consul servers and carry the risk of stale data.
+
+        This alert signifies that the SLI is reporting a cessation of traffic; the signal is present, but is zero.
+      grafana_dashboard_id: consul-main/consul-overview
+      grafana_dashboard_link: https://dashboards.gitlab.net/d/consul-main/consul-overview?from=now-6h/m&to=now-1m/m&var-environment={{
+        $labels.environment }}&var-stage={{ $labels.stage }}
+      grafana_min_zoom_hours: "6"
+      grafana_panel_id: "2777267404"
+      grafana_variables: environment,stage
+      promql_template_1: |
+        sum by (env,environment,tier,stage) (
+          rate(consul_raft_leader_dispatchLog_count{environment="{{ $labels.environment }}",stage="{{ $labels.stage }}",type="consul"}[5m])
+        )
+      runbook: docs/consul/README.md
+    labels:
+      aggregation: component
+      alert_class: traffic_cessation
+      alert_type: cause
+      feature_category: not_owned
+      pager: pagerduty
+      rules_domain: general
+      severity: s2
+      sli_type: ops
+      slo_alert: "no"
+      user_impacting: "no"
+    expr: |
+      gitlab_component_ops:rate_30m{component="raft_logs",monitor="global",stage="main",type="consul"} == 0
+      and
+      gitlab_component_ops:rate_30m{component="raft_logs",monitor="global",stage="main",type="consul"} offset 1h >= 0.16666666666666666
+  - alert: ConsulServiceRaftLogsTrafficAbsent
+    for: 30m
+    annotations:
+      title: The raft_logs SLI of the consul service (`{{ $labels.stage }}` stage)
+        has not reported any traffic in the past 30m
+      description: |
+        Raft log entry include adding nodes, adding services, new keys and values, etc. Increases in this metric can indicate higher load on the Consul servers and carry the risk of stale data.
+
+        This alert signifies that the SLI was previously reporting traffic, but is no longer - the signal is absent.
+
+        This could be caused by a change to the metrics used in the SLI, or by the service not receiving traffic.
+      grafana_dashboard_id: consul-main/consul-overview
+      grafana_dashboard_link: https://dashboards.gitlab.net/d/consul-main/consul-overview?from=now-6h/m&to=now-1m/m&var-environment={{
+        $labels.environment }}&var-stage={{ $labels.stage }}
+      grafana_min_zoom_hours: "6"
+      grafana_panel_id: "2777267404"
+      grafana_variables: environment,stage
+      promql_template_1: |
+        sum by (env,environment,tier,stage) (
+          rate(consul_raft_leader_dispatchLog_count{environment="{{ $labels.environment }}",stage="{{ $labels.stage }}",type="consul"}[5m])
+        )
+      runbook: docs/consul/README.md
+    labels:
+      aggregation: component
+      alert_class: traffic_cessation
+      alert_type: cause
+      feature_category: not_owned
+      pager: pagerduty
+      rules_domain: general
+      severity: s2
+      sli_type: ops
+      slo_alert: "no"
+      user_impacting: "no"
+    expr: |
+      gitlab_component_ops:rate_5m{component="raft_logs",monitor="global",stage="main",type="consul"} offset 1h
+      unless
+      gitlab_component_ops:rate_5m{component="raft_logs",monitor="global",stage="main",type="consul"}
+  - alert: ConsulServiceRaftLogsTrafficCessationRegional
+    for: 5m
+    annotations:
+      title: The raft_logs SLI of the consul service in region `{{ $labels.region
+        }}` has not received any traffic in the past 30m
+      description: |
+        Raft log entry include adding nodes, adding services, new keys and values, etc. Increases in this metric can indicate higher load on the Consul servers and carry the risk of stale data.
+
+        This alert signifies that the SLI is reporting a cessation of traffic; the signal is present, but is zero.
+
+        Note that this alert is specific to the `{{ $labels.region }}` region.
+      grafana_dashboard_id: consul-main/consul-overview
+      grafana_dashboard_link: https://dashboards.gitlab.net/d/consul-main/consul-overview?from=now-6h/m&to=now-1m/m&var-environment={{
+        $labels.environment }}&var-stage={{ $labels.stage }}
+      grafana_min_zoom_hours: "6"
+      grafana_panel_id: "2777267404"
+      grafana_variables: environment,stage
+      promql_template_1: |
+        sum by (env,environment,tier,stage,region) (
+          rate(consul_raft_leader_dispatchLog_count{environment="{{ $labels.environment }}",region="{{ $labels.region }}",stage="{{ $labels.stage }}",type="consul"}[5m])
+        )
+      runbook: docs/consul/README.md
+    labels:
+      aggregation: regional_component
+      alert_class: traffic_cessation
+      alert_type: cause
+      feature_category: not_owned
+      pager: pagerduty
+      rules_domain: general
+      severity: s2
+      sli_type: ops
+      slo_alert: "no"
+      user_impacting: "no"
+    expr: |
+      gitlab_regional_sli_ops:rate_30m{component="raft_logs",monitor="global",stage="main",type="consul"} == 0
+      and
+      gitlab_regional_sli_ops:rate_30m{component="raft_logs",monitor="global",stage="main",type="consul"} offset 1h >= 0.16666666666666666
+  - alert: ConsulServiceRaftLogsTrafficAbsentRegional
+    for: 30m
+    annotations:
+      title: The raft_logs SLI of the consul service in region `{{ $labels.region
+        }}` has not reported any traffic in the past 30m
+      description: |
+        Raft log entry include adding nodes, adding services, new keys and values, etc. Increases in this metric can indicate higher load on the Consul servers and carry the risk of stale data.
+
+        This alert signifies that the SLI was previously reporting traffic, but is no longer - the signal is absent.
+
+        This could be caused by a change to the metrics used in the SLI, or by the service not receiving traffic.
+
+        Note that this alert is specific to the `{{ $labels.region }}` region.
+      grafana_dashboard_id: consul-main/consul-overview
+      grafana_dashboard_link: https://dashboards.gitlab.net/d/consul-main/consul-overview?from=now-6h/m&to=now-1m/m&var-environment={{
+        $labels.environment }}&var-stage={{ $labels.stage }}
+      grafana_min_zoom_hours: "6"
+      grafana_panel_id: "2777267404"
+      grafana_variables: environment,stage
+      promql_template_1: |
+        sum by (env,environment,tier,stage,region) (
+          rate(consul_raft_leader_dispatchLog_count{environment="{{ $labels.environment }}",region="{{ $labels.region }}",stage="{{ $labels.stage }}",type="consul"}[5m])
+        )
+      runbook: docs/consul/README.md
+    labels:
+      aggregation: regional_component
+      alert_class: traffic_cessation
+      alert_type: cause
+      feature_category: not_owned
+      pager: pagerduty
+      rules_domain: general
+      severity: s2
+      sli_type: ops
+      slo_alert: "no"
+      user_impacting: "no"
+    expr: |
+      gitlab_regional_sli_ops:rate_5m{component="raft_logs",monitor="global",stage="main",type="consul"} offset 1h
+      unless
+      gitlab_regional_sli_ops:rate_5m{component="raft_logs",monitor="global",stage="main",type="consul"}

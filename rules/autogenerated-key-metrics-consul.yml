@@ -4,69 +4,565 @@ groups:
 - name: 'Component-Level SLIs: consul - 1m burn-rate'
   interval: 1m
   rules:
-  - record: gitlab_component_ops:rate
+  - record: gitlab_component_apdex:success:rate
     labels:
-      component: consul
+      component: dns
+      tier: sv
+      type: consul
+    expr: |
+      (
+        sum by (environment,stage) (
+          rate(consul_dns_domain_query{le="0.05",type="consul"}[1m])
+        )
+        +
+        sum by (environment,stage) (
+          rate(consul_dns_domain_query{le="0.1",type="consul"}[1m])
+        )
+      )
+      /
+      2
+  - record: gitlab_component_apdex:weight:score
+    labels:
+      component: dns
       tier: sv
       type: consul
     expr: |
       sum by (environment,stage) (
-        clamp_min(deriv(consul_http_GET_v1_agent_metrics_count{}[1m]), 0)
+        rate(consul_dns_domain_query{le="+Inf",type="consul"}[1m])
+      )
+  - record: gitlab_component_ops:rate
+    labels:
+      component: dns
+      tier: sv
+      type: consul
+    expr: |
+      sum by (environment,stage) (
+        rate(consul_dns_domain_query_count{type="consul"}[1m])
+      )
+  - record: gitlab_component_apdex:success:rate
+    labels:
+      component: raft_commits
+      tier: sv
+      type: consul
+    expr: |
+      (
+        sum by (environment,stage) (
+          rate(consul_raft_commitTime{le="0.05",type="consul"}[1m])
+        )
+        +
+        sum by (environment,stage) (
+          rate(consul_raft_commitTime{le="0.1",type="consul"}[1m])
+        )
+      )
+      /
+      2
+  - record: gitlab_component_apdex:weight:score
+    labels:
+      component: raft_commits
+      tier: sv
+      type: consul
+    expr: |
+      sum by (environment,stage) (
+        rate(consul_raft_commitTime{le="+Inf",type="consul"}[1m])
+      )
+  - record: gitlab_component_ops:rate
+    labels:
+      component: raft_commits
+      tier: sv
+      type: consul
+    expr: |
+      sum by (environment,stage) (
+        rate(consul_raft_apply{type="consul"}[1m])
+      )
+  - record: gitlab_component_apdex:success:rate
+    labels:
+      component: raft_logs
+      tier: sv
+      type: consul
+    expr: |
+      (
+        sum by (environment,stage) (
+          rate(consul_raft_rpc_appendEntries{le="0.05",type="consul"}[1m])
+        )
+        +
+        sum by (environment,stage) (
+          rate(consul_raft_rpc_appendEntries{le="0.1",type="consul"}[1m])
+        )
+      )
+      /
+      2
+  - record: gitlab_component_apdex:weight:score
+    labels:
+      component: raft_logs
+      tier: sv
+      type: consul
+    expr: |
+      sum by (environment,stage) (
+        rate(consul_raft_rpc_appendEntries{le="+Inf",type="consul"}[1m])
+      )
+  - record: gitlab_component_ops:rate
+    labels:
+      component: raft_logs
+      tier: sv
+      type: consul
+    expr: |
+      sum by (environment,stage) (
+        rate(consul_raft_leader_dispatchLog_count{type="consul"}[1m])
       )
 - name: 'Component-Level SLIs: consul - 5m burn-rate'
   interval: 1m
   rules:
-  - record: gitlab_component_ops:rate_5m
+  - record: gitlab_component_apdex:success:rate_5m
     labels:
-      component: consul
+      component: dns
+      tier: sv
+      type: consul
+    expr: |
+      (
+        sum by (environment,stage) (
+          rate(consul_dns_domain_query{le="0.05",type="consul"}[5m])
+        )
+        +
+        sum by (environment,stage) (
+          rate(consul_dns_domain_query{le="0.1",type="consul"}[5m])
+        )
+      )
+      /
+      2
+  - record: gitlab_component_apdex:weight:score_5m
+    labels:
+      component: dns
       tier: sv
       type: consul
     expr: |
       sum by (environment,stage) (
-        clamp_min(deriv(consul_http_GET_v1_agent_metrics_count{}[5m]), 0)
+        rate(consul_dns_domain_query{le="+Inf",type="consul"}[5m])
+      )
+  - record: gitlab_component_ops:rate_5m
+    labels:
+      component: dns
+      tier: sv
+      type: consul
+    expr: |
+      sum by (environment,stage) (
+        rate(consul_dns_domain_query_count{type="consul"}[5m])
+      )
+  - record: gitlab_component_apdex:success:rate_5m
+    labels:
+      component: raft_commits
+      tier: sv
+      type: consul
+    expr: |
+      (
+        sum by (environment,stage) (
+          rate(consul_raft_commitTime{le="0.05",type="consul"}[5m])
+        )
+        +
+        sum by (environment,stage) (
+          rate(consul_raft_commitTime{le="0.1",type="consul"}[5m])
+        )
+      )
+      /
+      2
+  - record: gitlab_component_apdex:weight:score_5m
+    labels:
+      component: raft_commits
+      tier: sv
+      type: consul
+    expr: |
+      sum by (environment,stage) (
+        rate(consul_raft_commitTime{le="+Inf",type="consul"}[5m])
+      )
+  - record: gitlab_component_ops:rate_5m
+    labels:
+      component: raft_commits
+      tier: sv
+      type: consul
+    expr: |
+      sum by (environment,stage) (
+        rate(consul_raft_apply{type="consul"}[5m])
+      )
+  - record: gitlab_component_apdex:success:rate_5m
+    labels:
+      component: raft_logs
+      tier: sv
+      type: consul
+    expr: |
+      (
+        sum by (environment,stage) (
+          rate(consul_raft_rpc_appendEntries{le="0.05",type="consul"}[5m])
+        )
+        +
+        sum by (environment,stage) (
+          rate(consul_raft_rpc_appendEntries{le="0.1",type="consul"}[5m])
+        )
+      )
+      /
+      2
+  - record: gitlab_component_apdex:weight:score_5m
+    labels:
+      component: raft_logs
+      tier: sv
+      type: consul
+    expr: |
+      sum by (environment,stage) (
+        rate(consul_raft_rpc_appendEntries{le="+Inf",type="consul"}[5m])
+      )
+  - record: gitlab_component_ops:rate_5m
+    labels:
+      component: raft_logs
+      tier: sv
+      type: consul
+    expr: |
+      sum by (environment,stage) (
+        rate(consul_raft_leader_dispatchLog_count{type="consul"}[5m])
       )
 - name: 'Component-Level SLIs: consul - 30m burn-rate'
   interval: 2m
   rules:
-  - record: gitlab_component_ops:rate_30m
+  - record: gitlab_component_apdex:success:rate_30m
     labels:
-      component: consul
+      component: dns
+      tier: sv
+      type: consul
+    expr: |
+      (
+        sum by (environment,stage) (
+          rate(consul_dns_domain_query{le="0.05",type="consul"}[30m])
+        )
+        +
+        sum by (environment,stage) (
+          rate(consul_dns_domain_query{le="0.1",type="consul"}[30m])
+        )
+      )
+      /
+      2
+  - record: gitlab_component_apdex:weight:score_30m
+    labels:
+      component: dns
       tier: sv
       type: consul
     expr: |
       sum by (environment,stage) (
-        clamp_min(deriv(consul_http_GET_v1_agent_metrics_count{}[30m]), 0)
+        rate(consul_dns_domain_query{le="+Inf",type="consul"}[30m])
+      )
+  - record: gitlab_component_ops:rate_30m
+    labels:
+      component: dns
+      tier: sv
+      type: consul
+    expr: |
+      sum by (environment,stage) (
+        rate(consul_dns_domain_query_count{type="consul"}[30m])
+      )
+  - record: gitlab_component_apdex:success:rate_30m
+    labels:
+      component: raft_commits
+      tier: sv
+      type: consul
+    expr: |
+      (
+        sum by (environment,stage) (
+          rate(consul_raft_commitTime{le="0.05",type="consul"}[30m])
+        )
+        +
+        sum by (environment,stage) (
+          rate(consul_raft_commitTime{le="0.1",type="consul"}[30m])
+        )
+      )
+      /
+      2
+  - record: gitlab_component_apdex:weight:score_30m
+    labels:
+      component: raft_commits
+      tier: sv
+      type: consul
+    expr: |
+      sum by (environment,stage) (
+        rate(consul_raft_commitTime{le="+Inf",type="consul"}[30m])
+      )
+  - record: gitlab_component_ops:rate_30m
+    labels:
+      component: raft_commits
+      tier: sv
+      type: consul
+    expr: |
+      sum by (environment,stage) (
+        rate(consul_raft_apply{type="consul"}[30m])
+      )
+  - record: gitlab_component_apdex:success:rate_30m
+    labels:
+      component: raft_logs
+      tier: sv
+      type: consul
+    expr: |
+      (
+        sum by (environment,stage) (
+          rate(consul_raft_rpc_appendEntries{le="0.05",type="consul"}[30m])
+        )
+        +
+        sum by (environment,stage) (
+          rate(consul_raft_rpc_appendEntries{le="0.1",type="consul"}[30m])
+        )
+      )
+      /
+      2
+  - record: gitlab_component_apdex:weight:score_30m
+    labels:
+      component: raft_logs
+      tier: sv
+      type: consul
+    expr: |
+      sum by (environment,stage) (
+        rate(consul_raft_rpc_appendEntries{le="+Inf",type="consul"}[30m])
+      )
+  - record: gitlab_component_ops:rate_30m
+    labels:
+      component: raft_logs
+      tier: sv
+      type: consul
+    expr: |
+      sum by (environment,stage) (
+        rate(consul_raft_leader_dispatchLog_count{type="consul"}[30m])
       )
 - name: 'Component-Level SLIs: consul - 1h burn-rate'
   interval: 1m
   rules:
-  - record: gitlab_component_ops:rate_1h
+  - record: gitlab_component_apdex:success:rate_1h
     labels:
-      component: consul
+      component: dns
+      tier: sv
+      type: consul
+    expr: |
+      (
+        sum by (environment,stage) (
+          rate(consul_dns_domain_query{le="0.05",type="consul"}[1h])
+        )
+        +
+        sum by (environment,stage) (
+          rate(consul_dns_domain_query{le="0.1",type="consul"}[1h])
+        )
+      )
+      /
+      2
+  - record: gitlab_component_apdex:weight:score_1h
+    labels:
+      component: dns
       tier: sv
       type: consul
     expr: |
       sum by (environment,stage) (
-        clamp_min(deriv(consul_http_GET_v1_agent_metrics_count{}[1h]), 0)
+        rate(consul_dns_domain_query{le="+Inf",type="consul"}[1h])
+      )
+  - record: gitlab_component_ops:rate_1h
+    labels:
+      component: dns
+      tier: sv
+      type: consul
+    expr: |
+      sum by (environment,stage) (
+        rate(consul_dns_domain_query_count{type="consul"}[1h])
+      )
+  - record: gitlab_component_apdex:success:rate_1h
+    labels:
+      component: raft_commits
+      tier: sv
+      type: consul
+    expr: |
+      (
+        sum by (environment,stage) (
+          rate(consul_raft_commitTime{le="0.05",type="consul"}[1h])
+        )
+        +
+        sum by (environment,stage) (
+          rate(consul_raft_commitTime{le="0.1",type="consul"}[1h])
+        )
+      )
+      /
+      2
+  - record: gitlab_component_apdex:weight:score_1h
+    labels:
+      component: raft_commits
+      tier: sv
+      type: consul
+    expr: |
+      sum by (environment,stage) (
+        rate(consul_raft_commitTime{le="+Inf",type="consul"}[1h])
+      )
+  - record: gitlab_component_ops:rate_1h
+    labels:
+      component: raft_commits
+      tier: sv
+      type: consul
+    expr: |
+      sum by (environment,stage) (
+        rate(consul_raft_apply{type="consul"}[1h])
+      )
+  - record: gitlab_component_apdex:success:rate_1h
+    labels:
+      component: raft_logs
+      tier: sv
+      type: consul
+    expr: |
+      (
+        sum by (environment,stage) (
+          rate(consul_raft_rpc_appendEntries{le="0.05",type="consul"}[1h])
+        )
+        +
+        sum by (environment,stage) (
+          rate(consul_raft_rpc_appendEntries{le="0.1",type="consul"}[1h])
+        )
+      )
+      /
+      2
+  - record: gitlab_component_apdex:weight:score_1h
+    labels:
+      component: raft_logs
+      tier: sv
+      type: consul
+    expr: |
+      sum by (environment,stage) (
+        rate(consul_raft_rpc_appendEntries{le="+Inf",type="consul"}[1h])
+      )
+  - record: gitlab_component_ops:rate_1h
+    labels:
+      component: raft_logs
+      tier: sv
+      type: consul
+    expr: |
+      sum by (environment,stage) (
+        rate(consul_raft_leader_dispatchLog_count{type="consul"}[1h])
       )
 - name: 'Component-Level SLIs: consul - 6h burn-rate'
   interval: 2m
   rules:
-  - record: gitlab_component_ops:rate_6h
+  - record: gitlab_component_apdex:success:rate_6h
     labels:
-      component: consul
+      component: dns
+      tier: sv
+      type: consul
+    expr: |
+      (
+        sum by (environment,stage) (
+          rate(consul_dns_domain_query{le="0.05",type="consul"}[6h])
+        )
+        +
+        sum by (environment,stage) (
+          rate(consul_dns_domain_query{le="0.1",type="consul"}[6h])
+        )
+      )
+      /
+      2
+  - record: gitlab_component_apdex:weight:score_6h
+    labels:
+      component: dns
       tier: sv
       type: consul
     expr: |
       sum by (environment,stage) (
-        clamp_min(deriv(consul_http_GET_v1_agent_metrics_count{}[6h]), 0)
+        rate(consul_dns_domain_query{le="+Inf",type="consul"}[6h])
+      )
+  - record: gitlab_component_ops:rate_6h
+    labels:
+      component: dns
+      tier: sv
+      type: consul
+    expr: |
+      sum by (environment,stage) (
+        rate(consul_dns_domain_query_count{type="consul"}[6h])
+      )
+  - record: gitlab_component_apdex:success:rate_6h
+    labels:
+      component: raft_commits
+      tier: sv
+      type: consul
+    expr: |
+      (
+        sum by (environment,stage) (
+          rate(consul_raft_commitTime{le="0.05",type="consul"}[6h])
+        )
+        +
+        sum by (environment,stage) (
+          rate(consul_raft_commitTime{le="0.1",type="consul"}[6h])
+        )
+      )
+      /
+      2
+  - record: gitlab_component_apdex:weight:score_6h
+    labels:
+      component: raft_commits
+      tier: sv
+      type: consul
+    expr: |
+      sum by (environment,stage) (
+        rate(consul_raft_commitTime{le="+Inf",type="consul"}[6h])
+      )
+  - record: gitlab_component_ops:rate_6h
+    labels:
+      component: raft_commits
+      tier: sv
+      type: consul
+    expr: |
+      sum by (environment,stage) (
+        rate(consul_raft_apply{type="consul"}[6h])
+      )
+  - record: gitlab_component_apdex:success:rate_6h
+    labels:
+      component: raft_logs
+      tier: sv
+      type: consul
+    expr: |
+      (
+        sum by (environment,stage) (
+          rate(consul_raft_rpc_appendEntries{le="0.05",type="consul"}[6h])
+        )
+        +
+        sum by (environment,stage) (
+          rate(consul_raft_rpc_appendEntries{le="0.1",type="consul"}[6h])
+        )
+      )
+      /
+      2
+  - record: gitlab_component_apdex:weight:score_6h
+    labels:
+      component: raft_logs
+      tier: sv
+      type: consul
+    expr: |
+      sum by (environment,stage) (
+        rate(consul_raft_rpc_appendEntries{le="+Inf",type="consul"}[6h])
+      )
+  - record: gitlab_component_ops:rate_6h
+    labels:
+      component: raft_logs
+      tier: sv
+      type: consul
+    expr: |
+      sum by (environment,stage) (
+        rate(consul_raft_leader_dispatchLog_count{type="consul"}[6h])
       )
 - name: 'Component mapping: consul'
   interval: 1m
   rules:
   - record: gitlab_component_service:mapping
     labels:
-      component: consul
+      component: dns
+      regional_aggregation: "yes"
+      service_aggregation: "yes"
+      tier: sv
+      type: consul
+    expr: "1"
+  - record: gitlab_component_service:mapping
+    labels:
+      component: raft_commits
+      regional_aggregation: "yes"
+      service_aggregation: "yes"
+      tier: sv
+      type: consul
+    expr: "1"
+  - record: gitlab_component_service:mapping
+    labels:
+      component: raft_logs
       regional_aggregation: "yes"
       service_aggregation: "yes"
       tier: sv
