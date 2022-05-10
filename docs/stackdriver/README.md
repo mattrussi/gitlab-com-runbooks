@@ -19,6 +19,7 @@
 * [../kube/k8s-operations.md](../kube/k8s-operations.md)
 * [Kubernetes](../kube/kubernetes.md)
 * [../logging/logging_gcs_archive_bigquery.md](../logging/logging_gcs_archive_bigquery.md)
+* [Stackdriver tracing for the Thanos stack](../monitoring/thanos-tracing.md)
 * [Diagnosis with Kibana](../onboarding/kibana-diagnosis.md)
 * [Sidekiq or Web/API is using most of its PgBouncer connections](../pgbouncer/pgbouncer-saturation.md)
 * [PubSub Queuing Rate Increasing](../pubsub/pubsub-queing.md)
