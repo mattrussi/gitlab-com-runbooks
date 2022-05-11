@@ -9,7 +9,7 @@ groups:
     labels:
       slo: 'apdex_ratio'
     expr: >
-      avg_over_time(gitlab_service_apdex:ratio{monitor="global"}[1m])
+      gitlab_service_apdex:ratio_5m{monitor="global"}
       >= bool on(tier, type) group_left
       slo:min:gitlab_service_apdex:ratio{monitor="global"}
 
@@ -17,6 +17,6 @@ groups:
     labels:
       slo: 'error_ratio'
     expr: >
-      avg_over_time(gitlab_service_errors:ratio{monitor="global"}[1m])
+      gitlab_service_errors:ratio_5m{monitor="global"}
       <= bool on(tier, type) group_left
       slo:max:gitlab_service_errors:ratio{monitor="global"}

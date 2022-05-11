@@ -166,7 +166,7 @@ basic.dashboard(
     'sla_type',
     '$PROMETHEUS_DS',
     'label_values(sla:gitlab:ratio, sla_type)',
-    current='weighted_v1.1',
+    current='weighted_v2.1',
     refresh='load',
     sort=1,
   )
