@@ -29,7 +29,7 @@ metricsCatalog.serviceDefinition({
     },
   },
   provisioning: {
-    vms: false,
+    vms: true,  // pages haproxy frontend still runs on vms
     kubernetes: true,
   },
 
@@ -61,7 +61,7 @@ metricsCatalog.serviceDefinition({
         main: { backends: ['pages_http'], toolingLinks: [] },
         // TODO: cny stage for pages?
       },
-      selector={ type: 'pages' },
+      selector={ type: { re: 'pages|web-pages' } },
     ),
 
     loadbalancer_https: haproxyComponents.haproxyL4LoadBalancer(
@@ -71,7 +71,7 @@ metricsCatalog.serviceDefinition({
         main: { backends: ['pages_https'], toolingLinks: [] },
         // TODO: cny stage for pages?
       },
-      selector={ type: 'pages' },
+      selector={ type: { re: 'pages|web-pages' } },
     ),
 
     server: {
