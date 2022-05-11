@@ -829,17 +829,6 @@ groups:
       tier: inf
       type: monitoring
     expr: "0.050000"
-  - record: slo:max:events:gitlab_service_errors:ratio
-    labels:
-      tier: lb
-      type: pages
-    expr: "0.000100"
-  - record: slo:max:events:gitlab_service_errors:ratio
-    labels:
-      component: loadbalancer
-      tier: lb
-      type: pages
-    expr: "0.000100"
   - record: slo:min:events:gitlab_service_apdex:ratio
     labels:
       tier: db
@@ -1914,11 +1903,6 @@ groups:
     expr: "1"
   - record: gitlab_service:mapping:disable_ops_rate_prediction
     labels:
-      tier: lb
-      type: pages
-    expr: "1"
-  - record: gitlab_service:mapping:disable_ops_rate_prediction
-    labels:
       tier: inf
       type: search
     expr: "1"
@@ -2433,14 +2417,6 @@ groups:
       service_aggregation: "yes"
       tier: sv
       type: nginx
-    expr: "1"
-  - record: gitlab_component_service:mapping
-    labels:
-      component: loadbalancer
-      regional_aggregation: "no"
-      service_aggregation: "yes"
-      tier: lb
-      type: pages
     expr: "1"
   - record: gitlab_component_service:mapping
     labels:
