@@ -17,7 +17,7 @@ metricsCatalog.serviceDefinition({
   tags: ['golang'],
 
   contractualThresholds: {
-    apdexRatio: 0.95,
+    apdexRatio: 0.9,
     errorRatio: 0.005,
   },
   monitoringThresholds: {
@@ -289,12 +289,17 @@ metricsCatalog.serviceDefinition({
       apdex: histogramApdex(
         histogram='gitlab_shell_sshd_session_established_duration_seconds_bucket',
         selector=baseSelector,
-        satisfiedThreshold=10,
-        toleratedThreshold=20
+        satisfiedThreshold=1,
+        toleratedThreshold=5
+      ),
+
+      errorRate: rateMetric(
+        counter='gitlab_sli:shell_sshd_sessions:errors_total',
+        selector=baseSelector
       ),
 
       requestRate: rateMetric(
-        counter='gitlab_shell_sshd_session_established_duration_seconds_count',
+        counter='gitlab_sli:shell_sshd_sessions:total',
         selector=baseSelector
       ),
 

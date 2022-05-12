@@ -33,12 +33,12 @@ local generateIncreaseQuery(c, selector, rangeInterval, withoutLabels) =
   orJoin(increaseQueries);
 
 local generateApdexNumeratorQuery(c, aggregationLabels, selector, rangeInterval, withoutLabels) =
-  local numeratorQueries = std.mapWithIndex(function(index, metric) wrapForUniqueness(index, metric.apdexNumerator(selector, rangeInterval, withoutLabels=withoutLabels)), c.metrics);
+  local numeratorQueries = std.mapWithIndex(function(index, metric) wrapForUniqueness(index, metric.apdexSuccessRateQuery(aggregationLabels, selector, rangeInterval, withoutLabels=withoutLabels)), c.metrics);
   aggregations.aggregateOverQuery('sum', aggregationLabels, orJoin(numeratorQueries));
 
 local generateApdexQuery(c, aggregationLabels, selector, rangeInterval, withoutLabels) =
   local aggregatedNumerators = generateApdexNumeratorQuery(c, aggregationLabels, selector, rangeInterval, withoutLabels=withoutLabels);
-  local denominatorQueries = std.mapWithIndex(function(index, metric) wrapForUniqueness(index, metric.apdexDenominator(selector, rangeInterval, withoutLabels=withoutLabels)), c.metrics);
+  local denominatorQueries = std.mapWithIndex(function(index, metric) wrapForUniqueness(index, metric.apdexQuery(aggregationLabels, selector, rangeInterval, withoutLabels=withoutLabels)), c.metrics);
 
   local aggregatedDenominators = aggregations.aggregateOverQuery('sum', aggregationLabels, orJoin(denominatorQueries));
 
@@ -54,7 +54,7 @@ local generateApdexQuery(c, aggregationLabels, selector, rangeInterval, withoutL
   };
 
 local generateApdexWeightQuery(c, aggregationLabels, selector, rangeInterval, withoutLabels) =
-  local apdexWeightQueries = std.mapWithIndex(function(index, metric) wrapForUniqueness(index, metric.apdexDenominator(selector, rangeInterval, withoutLabels=withoutLabels)), c.metrics);
+  local apdexWeightQueries = std.mapWithIndex(function(index, metric) wrapForUniqueness(index, metric.apdexWeightQuery(aggregationLabels, selector, rangeInterval, withoutLabels=withoutLabels)), c.metrics);
   aggregations.aggregateOverQuery('sum', aggregationLabels, orJoin(apdexWeightQueries));
 
 local generateApdexPercentileLatencyQuery(c, percentile, aggregationLabels, selector, rangeInterval, withoutLabels) =

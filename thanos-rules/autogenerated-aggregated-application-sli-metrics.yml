@@ -49,3 +49,28 @@ groups:
       sum by (env,environment,tier,type,stage,endpoint_id,feature_category,query_urgency) (
         (sli_aggregations:gitlab_sli:graphql_query_apdex:success_total_rate1h{monitor!="global"} >= 0)
       )
+- name: 'Application Defined SLI Global metrics: customers_dot_requests_apdex (fast
+    burn)'
+  interval: 1m
+  partial_response_strategy: warn
+  rules:
+  - record: application_sli_aggregation:customers_dot_requests_apdex:apdex:weight:score_5m
+    expr: |
+      sum by (env,environment,tier,type,stage,endpoint_id) (
+        (application_sli_aggregation:customers_dot_requests_apdex:apdex:weight:score_5m{monitor!="global"} >= 0)
+      )
+  - record: application_sli_aggregation:customers_dot_requests_apdex:apdex:success:rate_5m
+    expr: |
+      sum by (env,environment,tier,type,stage,endpoint_id) (
+        (application_sli_aggregation:customers_dot_requests_apdex:apdex:success:rate_5m{monitor!="global"} >= 0)
+      )
+  - record: application_sli_aggregation:customers_dot_requests_apdex:apdex:weight:score_1h
+    expr: |
+      sum by (env,environment,tier,type,stage,endpoint_id) (
+        (application_sli_aggregation:customers_dot_requests_apdex:apdex:weight:score_1h{monitor!="global"} >= 0)
+      )
+  - record: application_sli_aggregation:customers_dot_requests_apdex:apdex:success:rate_1h
+    expr: |
+      sum by (env,environment,tier,type,stage,endpoint_id) (
+        (application_sli_aggregation:customers_dot_requests_apdex:apdex:success:rate_1h{monitor!="global"} >= 0)
+      )

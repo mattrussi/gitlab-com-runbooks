@@ -20,7 +20,6 @@
   import 'monitoring.jsonnet',
   import 'nat.jsonnet',
   import 'nginx.jsonnet',
-  import 'pages.jsonnet',
   import 'patroni.jsonnet',
   import 'patroni-registry.jsonnet',
   import 'patroni-ci.jsonnet',
