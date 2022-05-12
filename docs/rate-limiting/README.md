@@ -1,4 +1,4 @@
-# Overview of rate limits for GitLab.com
+## Overview of rate limits for https://gitlab.com
 
 To keep gitlab.com stable in the face of both malicious and unintentional traffic levels, we have rate-limiting (or
 similar) controls at several layers, that can interact in interesting and sometimes surprising ways.  There are also a
@@ -9,7 +9,7 @@ discussion and context; if you are looking for some more formulaic options for r
 incidents, these are at the end, but deliberately so because very little about making changes has an automatic simple
 answer.  Please consider strongly reading the relevant context before using those simpler sections.
 
-## What are the current rate-limits?
+### What are the current rate-limits?
 
 Not the actual numbers, but links to where to find the current active values:
 1. CloudFlare: https://dash.cloudflare.com/852e9d53d0f8adbd9205389356f2303d/gitlab.com/firewall/tools
@@ -20,9 +20,9 @@ Not the actual numbers, but links to where to find the current active values:
    * In `User and IP Rate Limits`, and also `Protected Paths`
    * Published (manually) at https://docs.gitlab.com/ee/user/gitlab_com/#gitlabcom-specific-rate-limits
 
-## 4 layers of Rate Limiting:
+### 4 layers of Rate Limiting:
 
-### CloudFlare
+#### CloudFlare
 
 Cloudflare serves as our "outer-most" layer of protection.   We use Cloudflare's standard DDOS protection plus
 [Spectrum](https://www.cloudflare.com/products/cloudflare-spectrum/) to protect git over ssh.
@@ -45,7 +45,7 @@ and does not know how to map to our users and groups.
 Changes to either of these (additions, deletions, or modifications) must be very carefully considered indeed, and should
 be discussed with the wider SRE team before implementing.
 
-### HAProxy
+#### HAProxy
 
 We have rate limiting in HAProxy, using stick tables, per IP address per minute.  These rate-limits are only applied to
 /api endpoints, for historical reasons (those were the endpoints that were problematic).  The haproxy peer configuration
@@ -64,7 +64,7 @@ some clients actually assume this period, but it is also a reasonable one, and i
 disallow reasonable bursts, and longer would mean a prolonged impact on a given user/IP when big bursts breach the
 limit.
 
-#### Implementation
+##### Implementation
 
 To sketch out the relevant flows through haproxy (omitting a lot of other bits), it looks something like this:
 
@@ -80,7 +80,7 @@ graph LR
 
 The call from the 'api_rate_limit' backend to the 'api_rate_limit' frontend is over TCP on localhost (port 4444, as currently configured).
 
-#### Logs/metrics
+##### Logs/metrics
 
 These are not entirely straightforward at first glance because of the interaction of the frontends and backends diagrammed above:
 1. The api_rate_limit frontend has no explicit logging config, so it uses the default format, which looks like:
@@ -245,7 +245,7 @@ often assume, and they can move/change sometimes without notice (or awareness), 
 use by the original user but we're not informed, and so on.  User ids are much less fungible, and carry implications of
 paid groups/users and permanent identities of customers.
 
-### Application (ApplicationRateLimiter)
+#### Application (ApplicationRateLimiter)
 
 The application has simple rate limit logic that can be used to throttle certain actions which is used when we need more
 flexibility than what Rack Attack can provide, since it can throttle at the controller or API level.  The scope is up to the individual limit
@@ -257,7 +257,7 @@ At this time there is no way to bypass these rate limits (e.g. for select users/
 
 [Example of a rate limit response.](https://gitlab.com/gitlab-org/gitlab/-/blob/7a99c1e7b4435fa230735b9046f7a0eacfa5b5a5/app/controllers/projects_controller.rb#L525-529)
 
-## Headers
+### Headers
 
 Both haproxy and RackAttack return a set of semi-standard headers:
 
@@ -284,7 +284,7 @@ truth for how long to back off.
 
 NB: at this writing, RackAttack returns the wrong value for RateLimit-Reset, but this will be [fixed](https://gitlab.com/gitlab-com/gl-infra/scalability/-/issues/795)
 
-## How-tos
+### How-tos
 
 So you're faced with some sort of urgent issue related to rate-limiting.  What are your basic options?
 
@@ -325,3 +325,39 @@ https://ops.gitlab.net/gitlab-com/gitlab-com-infrastructure/-/blob/master/enviro
       change.
     * Ensure https://gitlab.com/gitlab-org/gitlab/-/tree/master/doc/user/gitlab_com/#gitlabcom-specific-rate-limits is
       updated to match the new values
+
+## Overview of rate limits for GitLab Pages
+
+GitLab Pages is not behind CloudFlare and [doesn't have CDN support](https://gitlab.com/groups/gitlab-org/-/epics/6757), rate limits are set both at HAProxy and the Pages application running in Kubernetes.
+
+### HAProxy rate limits
+
+Rate limiting at HAProxy is based on domain, which is set to the [HAProxy cookbook default value of 800 requests/second](https://gitlab.com/gitlab-cookbooks/gitlab-haproxy/-/blob/bfbdf4e4915c5268ffa99b73210c767c692b3366/attributes/default.rb).
+Because SSL termination is done at the pages application, when we rate limit at HAProxy users are given an SSL error at the browser, not a `429` status code.
+For this reason we prefer to make this limit more generous than the application limit.
+A per domain limit was added to HAProxy to help prevent degradation due to traffic spikes for single domains.
+
+Note that HAProxy does not log, or increment any metrics when there are rejects for HTTPs, to determine whether we are being rate limited see the [HAProxy rejection dashboard](https://dashboards.gitlab.net/d/web-pages-haproxy-rejections/web-pages-haproxy-rejections-due-to-rate-limiting-and-blocks?from=now-6h%2Fm&to=now%2Fm&var-PROMETHEUS_DS=Global&var-environment=gprd&var-stage=main&orgId=1) which counts the session rate for the backends we use for http and https rejections.
+
+If there are a lot of rejections and we think it is due to a single domain, the best way to determine the source is to look at the GitLab Pages [requests by domain at the application](https://log.gprd.gitlab.net/goto/2f1fbbf0-d1fe-11ec-b73f-692cc1ae8214). To see the domain blocking closer to the source at HAProxy, it will be necessary to inspect the HAProxy stick table:
+
+```
+# On one of the pages HAProxy nodes
+
+echo 'show table pages_https' | sudo socat stdio /run/haproxy/admin.sock
+# table: pages_https, type: string, size:1048576, used:2
+0x562815b3b9d0: key=pages-test.pre.gitlab.io use=0 exp=8512 gpc0=43 conn_rate(1000)=1
+0x562815b3b8a0: key=jarv.pre.gitlab.io use=5 exp=9998 gpc0=2267 conn_rate(1000)=133
+```
+
+- In this example there are two domains receiving traffic
+- Look for `conn_rate` to see how many connections per second (1000ms) are seen by the HAProxy nodes
+
+### Application rate limits
+
+There are several different rate limits that can be configured in the Pages application.
+They are set in [`values.yml`](https://gitlab.com/gitlab-com/gl-infra/k8s-workloads/gitlab-com/-/blob/ffbdc9286ca86691fcde6a10afcb3fd8fe71a080/releases/gitlab/values/values.yaml.gotmpl#L481-488) and limiting is done per process.
+These means that as we scale up pods, the rate limits will naturally increase.
+The interval for these limits is set to `1s` which is the same interval we use at HAProxy.
+
+For an explanation of the different limit types, see the [Pages rate limit documentation](https://docs.gitlab.com/ee/administration/pages/index.html#rate-limits).
