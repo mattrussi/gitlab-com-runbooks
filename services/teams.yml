@@ -227,7 +227,6 @@ teams:
   product_stage_group: dynamic_analysis
   ignored_components:
   - graphql_queries
-  - rails_requests
 - name: editor
   product_stage_group: editor
   ignored_components:
