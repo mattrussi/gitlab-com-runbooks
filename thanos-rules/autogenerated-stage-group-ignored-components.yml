@@ -209,12 +209,6 @@ groups:
       product_stage: secure
       stage_group: dynamic_analysis
     expr: "1"
-  - record: gitlab:ignored_component:stage_group
-    labels:
-      component: rails_requests
-      product_stage: secure
-      stage_group: dynamic_analysis
-    expr: "1"
 - name: 'Stage group Ignored components: create - Editor'
   interval: 1m
   partial_response_strategy: warn
