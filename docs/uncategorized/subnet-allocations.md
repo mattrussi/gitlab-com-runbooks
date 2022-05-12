@@ -36,10 +36,12 @@ gitlab-ops project for network peering.
 | `10.10.16.0`    | `10.10.23.255`     | `10.10.16.0/21`  | gitlab-ci Ephemeral Runners    | CI-plan-free-5
 | `10.10.24.0`    | `10.10.31.255`     | `10.10.24.0/21`  | gitlab-ci Ephemeral Runners    | CI-plan-free-4
 | `10.10.32.0`    | `10.10.39.255`     | `10.10.32.0/21`  | gitlab-ci Ephemeral Runners    | CI-plan-free-3
-| `10.10.40.0`    | `10.10.47.255`     | `10.10.40.0/21`  | gitlab-ci Ephemeral Runners    | CI private
+| `10.10.40.0`    | `10.10.47.255`     | `10.10.40.0/21`  | gitlab-ci Ephemeral Runners    | CI private (old)
 | `10.10.48.0`    | `10.10.55.255`     | `10.10.48.0/21`  | gitlab-ci Ephemeral Runners    | CI shared-gitlab-org
-| `10.10.56.0`    | `10.10.63.255`     | `10.10.56.0/21`  | gitlab-ci Ephemeral Runners    | CI private-2
-| `10.10.64.0`    | `10.10.127.255`    | `10.10.64.0/18`  | N/A                            | RESERVED
+| `10.10.56.0`    | `10.10.63.255`     | `10.10.56.0/21`  | N/A                            | RESERVED
+| `10.10.64.0`    | `10.10.79.255`     | `10.10.64.0/20`  | gitlab-ci Temp Priv Runners    | CI private temp
+| `10.10.80.0`    | `10.10.95.244`     | `10.10.80.0/20`  | gitlab-ci Ephemeral Runners    | CI private (new)
+| `10.10.96.0`    | `10.10.127.255`    | `10.10.96.0/19`  | N/A                            | RESERVED
 | `10.10.128.0`   | `10.10.255.255`    | `10.10.128.0/17` | N/A                            | RESERVED
 | `10.11.0.0`     | `10.11.255.255`    | `10.11.0.0/16`   | N/A                            | RESERVED
 | `10.12.0.0`     | `10.15.255.255`    | `10.12.0.0/14`   | N/A                            | RESERVED
