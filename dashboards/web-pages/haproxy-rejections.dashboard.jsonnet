@@ -38,7 +38,7 @@ basic.dashboard(
   'HAProxy rejections due to rate limiting and blocks',
   tags=[
     'managed',
-    'type:web-pages',
+    'web-pages',
   ],
   time_from='now-6h/m',
   time_to='now/m',
