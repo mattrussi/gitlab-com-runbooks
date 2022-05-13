@@ -96,7 +96,6 @@ teams:
   product_stage_group: package
   ignored_components:
   - graphql_queries
-  - rails_requests
 
 - name: runner
   product_stage_group: runner
