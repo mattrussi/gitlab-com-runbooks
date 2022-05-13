@@ -37,7 +37,6 @@ local trafficGraph = function(title, source)
 basic.dashboard(
   'HAProxy rejections due to rate limiting and blocks',
   tags=[
-    'managed',
     'type:web-pages',
   ],
   time_from='now-6h/m',
