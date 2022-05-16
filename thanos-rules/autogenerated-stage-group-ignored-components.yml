@@ -17,22 +17,6 @@ groups:
       product_stage: deploy
       stage_group: 5-min-app
     expr: "1"
-- name: 'Stage group Ignored components: growth - Activation'
-  interval: 1m
-  partial_response_strategy: warn
-  rules:
-  - record: gitlab:ignored_component:stage_group
-    labels:
-      component: graphql_queries
-      product_stage: growth
-      stage_group: activation
-    expr: "1"
-  - record: gitlab:ignored_component:stage_group
-    labels:
-      component: rails_requests
-      product_stage: growth
-      stage_group: activation
-    expr: "1"
 - name: 'Stage group Ignored components: growth - Adoption'
   interval: 1m
   partial_response_strategy: warn
@@ -49,20 +33,20 @@ groups:
       product_stage: growth
       stage_group: adoption
     expr: "1"
-- name: 'Stage group Ignored components: ModelOps - Applied Machine Learning'
+- name: 'Stage group Ignored components: modelops - Applied Machine Learning'
   interval: 1m
   partial_response_strategy: warn
   rules:
   - record: gitlab:ignored_component:stage_group
     labels:
       component: graphql_queries
-      product_stage: ModelOps
+      product_stage: modelops
       stage_group: applied_ml
     expr: "1"
   - record: gitlab:ignored_component:stage_group
     labels:
       component: rails_requests
-      product_stage: ModelOps
+      product_stage: modelops
       stage_group: applied_ml
     expr: "1"
 - name: 'Stage group Ignored components: manage - Authentication & Authorization'
@@ -151,21 +135,37 @@ groups:
       product_stage: enablement
       stage_group: database
     expr: "1"
-- name: 'Stage group Ignored components: ModelOps - DataOps'
+- name: 'Stage group Ignored components: modelops - DataOps'
   interval: 1m
   partial_response_strategy: warn
   rules:
   - record: gitlab:ignored_component:stage_group
     labels:
       component: graphql_queries
-      product_stage: ModelOps
+      product_stage: modelops
       stage_group: dataops
     expr: "1"
   - record: gitlab:ignored_component:stage_group
     labels:
       component: rails_requests
-      product_stage: ModelOps
+      product_stage: modelops
       stage_group: dataops
+    expr: "1"
+- name: 'Stage group Ignored components: platforms - GitLab Dedicated'
+  interval: 1m
+  partial_response_strategy: warn
+  rules:
+  - record: gitlab:ignored_component:stage_group
+    labels:
+      component: graphql_queries
+      product_stage: platforms
+      stage_group: dedicated
+    expr: "1"
+  - record: gitlab:ignored_component:stage_group
+    labels:
+      component: rails_requests
+      product_stage: platforms
+      stage_group: dedicated
     expr: "1"
 - name: 'Stage group Ignored components: platforms - Delivery'
   interval: 1m
@@ -291,22 +291,6 @@ groups:
       product_stage: enablement
       stage_group: global_search
     expr: "1"
-- name: 'Stage group Ignored components: platforms - Project Horse'
-  interval: 1m
-  partial_response_strategy: warn
-  rules:
-  - record: gitlab:ignored_component:stage_group
-    labels:
-      component: graphql_queries
-      product_stage: platforms
-      stage_group: horse
-    expr: "1"
-  - record: gitlab:ignored_component:stage_group
-    labels:
-      component: rails_requests
-      product_stage: platforms
-      stage_group: horse
-    expr: "1"
 - name: 'Stage group Ignored components: manage - Import'
   interval: 1m
   partial_response_strategy: warn
@@ -343,20 +327,20 @@ groups:
       product_stage: enablement
       stage_group: memory
     expr: "1"
-- name: 'Stage group Ignored components: ModelOps - MLOps'
+- name: 'Stage group Ignored components: modelops - MLOps'
   interval: 1m
   partial_response_strategy: warn
   rules:
   - record: gitlab:ignored_component:stage_group
     labels:
       component: graphql_queries
-      product_stage: ModelOps
+      product_stage: modelops
       stage_group: mlops
     expr: "1"
   - record: gitlab:ignored_component:stage_group
     labels:
       component: rails_requests
-      product_stage: ModelOps
+      product_stage: modelops
       stage_group: mlops
     expr: "1"
 - name: 'Stage group Ignored components: mobile - DevOps for Mobile Apps'

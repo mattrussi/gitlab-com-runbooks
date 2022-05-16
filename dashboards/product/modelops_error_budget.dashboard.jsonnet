@@ -3,5 +3,5 @@
 local errorBudgetsDashboards = import './error_budget_dashboards.libsonnet';
 
 errorBudgetsDashboards
-.dashboard('growth', groups=['adoption', 'conversion', 'expansion', 'product_intelligence'])
+.dashboard('modelops')
 .trailer()
