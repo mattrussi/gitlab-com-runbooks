@@ -309,7 +309,6 @@ teams:
   product_stage_group: project_management
   ignored_components:
   - graphql_queries
-  - rails_requests
 - name: purchase
   product_stage_group: purchase
   ignored_components:
