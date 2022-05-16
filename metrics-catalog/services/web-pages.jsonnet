@@ -28,6 +28,9 @@ metricsCatalog.serviceDefinition({
       errorRatio: 0.9999,
     },
   },
+  serviceDependencies: {
+    'google-cloud-storage': true,
+  },
   provisioning: {
     vms: true,  // pages haproxy frontend still runs on vms
     kubernetes: true,
