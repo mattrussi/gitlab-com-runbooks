@@ -127,7 +127,7 @@ groups:
       title: 'Gitaly: Auth-tokens are invalid, failing RPCs'
 
   - alert: LowCountOfActiveGitalyShards
-    expr: sum by (env) (gitaly_shard_weight_total > bool 0) < 10
+    expr: count by (env) (gitaly_shard_weight_total > 0) < 10
     for: 1h
     labels:
       severity: s2
@@ -138,5 +138,6 @@ groups:
       title: Number of active Gitaly shards is low
       description: >
         There are less than 10 Gitaly shards that actively receive new project, this could cause them to fill up quickly and put more
-        stress on them. Consider adding a new Gitaly shard
-        https://gitlab.com/gitlab-com/gl-infra/production/-/issues/new?issuable_template=storage_shard_creation
+        stress on them. Consider adding a new Gitaly shard https://gitlab.com/gitlab-com/gl-infra/production/-/issues/new?issuable_template=storage_shard_creation.
+        The gitaly-shard-weights assigner (https://gitlab.com/gitlab-com/gl-infra/gitaly-shard-weights-assigner) will cut off gitaly nodes
+        that are above 80% disk space utilization.
