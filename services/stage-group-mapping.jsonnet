@@ -95,6 +95,7 @@
       'wiki',
       'static_site_editor',
       'pages',
+      'remote_development',
     ],
   },
   gitaly: {
@@ -212,6 +213,14 @@
       'security_benchmarking',
     ],
   },
+  'anti-abuse': {
+    name: 'Anti-Abuse',
+    stage: 'anti-abuse',
+    feature_categories: [
+      'instance_resiliency',
+      'insider_threat',
+    ],
+  },
   release: {
     name: 'Release',
     stage: 'release',
@@ -292,19 +301,12 @@
       'fulfillment_platform',
     ],
   },
-  activation: {
-    name: 'Activation',
-    stage: 'growth',
-    feature_categories: [
-      'experimentation_activation',
-      'onboarding',
-    ],
-  },
   conversion: {
     name: 'Conversion',
     stage: 'growth',
     feature_categories: [
       'experimentation_conversion',
+      'onboarding',
     ],
   },
   expansion: {
@@ -319,6 +321,7 @@
     stage: 'growth',
     feature_categories: [
       'experimentation_adoption',
+      'experimentation_activation',
     ],
   },
   product_intelligence: {
@@ -398,39 +401,31 @@
       'error_budgets',
     ],
   },
-  horse: {
-    name: 'Project Horse',
+  dedicated: {
+    name: 'GitLab Dedicated',
     stage: 'platforms',
     feature_categories: [
-      'horse',
+      'dedicated',
     ],
   },
   applied_ml: {
     name: 'Applied Machine Learning',
-    stage: 'ModelOps',
+    stage: 'modelops',
     feature_categories: [
       'workflow_automation',
       'intel_code_security',
     ],
   },
-  anti_abuse: {
-    name: 'Anti-Abuse',
-    stage: 'ModelOps',
-    feature_categories: [
-      'instance_resiliency',
-      'insider_threat',
-    ],
-  },
   mlops: {
     name: 'MLOps',
-    stage: 'ModelOps',
+    stage: 'modelops',
     feature_categories: [
       'mlops',
     ],
   },
   dataops: {
     name: 'DataOps',
-    stage: 'ModelOps',
+    stage: 'modelops',
     feature_categories: [
       'dataops',
     ],

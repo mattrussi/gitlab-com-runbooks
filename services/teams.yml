@@ -172,11 +172,6 @@ teams:
   ignored_components:
   - graphql_queries
   - rails_requests
-- name: activation
-  product_stage_group: activation
-  ignored_components:
-  - graphql_queries
-  - rails_requests
 - name: adoption
   product_stage_group: adoption
   ignored_components:
@@ -239,8 +234,8 @@ teams:
   ignored_components:
   - graphql_queries
   - rails_requests
-- name: horse
-  product_stage_group: horse
+- name: dedicated
+  product_stage_group: dedicated
   ignored_components:
   - graphql_queries
   - rails_requests
