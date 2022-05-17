@@ -20,9 +20,8 @@ metricsCatalog.serviceDefinition({
 
   serviceLevelIndicators: {
     rails_requests:
-      sliLibrary.get('customers_dot_requests_apdex').generateServiceLevelIndicator(extraSelector={}) {
+      sliLibrary.get('customers_dot_requests').generateServiceLevelIndicator(extraSelector={}) {
         severity: 's3',
-
         toolingLinks: [
           toolingLinks.stackdriverLogs(
             'Stackdriver Logs: CustomersDot',

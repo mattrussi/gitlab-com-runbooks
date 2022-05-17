@@ -4,7 +4,7 @@ local objects = import 'utils/objects.libsonnet';
 
 local validSLI = {
   name: 'hello_sli',
-  kind: 'apdex',
+  kinds: [sliDefinition.apdexKind],
   description: 'an SLI counting hellos',
   significantLabels: ['world'],
   featureCategory: 'error_budgets',
@@ -15,14 +15,15 @@ test.suite({
     actual: sliDefinition.new(validSLI),
     expect: {
       name: 'hello_sli',
-      kind: 'apdex',
+      kinds: [sliDefinition.apdexKind],
       featureCategory: 'error_budgets',
       description: 'an SLI counting hellos',
       significantLabels: ['world'],
       inRecordingRuleRegistry: false,
-      totalCounterName: 'gitlab_sli:hello_sli:total',
-      successCounterName: 'gitlab_sli:hello_sli:success_total',
-      recordingRuleMetrics: ['gitlab_sli:hello_sli:total', 'gitlab_sli:hello_sli:success_total'],
+      totalCounterName: 'gitlab_sli:hello_sli_apdex:total',
+      apdexTotalCounterName: 'gitlab_sli:hello_sli_apdex:total',
+      apdexSuccessCounterName: 'gitlab_sli:hello_sli_apdex:success_total',
+      recordingRuleMetrics: ['gitlab_sli:hello_sli_apdex:total', 'gitlab_sli:hello_sli_apdex:success_total'],
     },
   },
 
@@ -33,14 +34,15 @@ test.suite({
     actual: sliDefinition.new(sli),
     expect: {
       name: 'hello_sli',
-      kind: 'apdex',
+      kinds: [sliDefinition.apdexKind],
       featureCategory: 'featureCategoryFromSourceMetrics',
       description: 'an SLI counting hellos',
       significantLabels: ['world', 'feature_category'],
       inRecordingRuleRegistry: false,
-      totalCounterName: 'gitlab_sli:hello_sli:total',
-      successCounterName: 'gitlab_sli:hello_sli:success_total',
-      recordingRuleMetrics: ['gitlab_sli:hello_sli:total', 'gitlab_sli:hello_sli:success_total'],
+      totalCounterName: 'gitlab_sli:hello_sli_apdex:total',
+      apdexTotalCounterName: 'gitlab_sli:hello_sli_apdex:total',
+      apdexSuccessCounterName: 'gitlab_sli:hello_sli_apdex:success_total',
+      recordingRuleMetrics: ['gitlab_sli:hello_sli_apdex:total', 'gitlab_sli:hello_sli_apdex:success_total'],
     },
   },
 
@@ -67,6 +69,36 @@ test.suite({
   testFeatureCategoryMissing: {
     local sli = objects.objectWithout(validSLI, 'featureCategory'),
     actual: validate(sli),
+    expect: false,
+  },
+
+  testNewMultipleKinds: {
+    actual: sliDefinition.new(validSLI {
+      kinds: [sliDefinition.apdexKind, sliDefinition.errorRateKind],
+    }),
+    expect: {
+      name: 'hello_sli',
+      kinds: [sliDefinition.apdexKind, sliDefinition.errorRateKind],
+      description: 'an SLI counting hellos',
+      significantLabels: ['world'],
+      featureCategory: 'error_budgets',
+      inRecordingRuleRegistry: false,
+      totalCounterName: 'gitlab_sli:hello_sli:total',
+      apdexTotalCounterName: 'gitlab_sli:hello_sli_apdex:total',
+      apdexSuccessCounterName: 'gitlab_sli:hello_sli_apdex:success_total',
+      errorTotalCounterName: 'gitlab_sli:hello_sli:total',
+      errorCounterName: 'gitlab_sli:hello_sli:error_total',
+      recordingRuleMetrics: ['gitlab_sli:hello_sli_apdex:total', 'gitlab_sli:hello_sli_apdex:success_total', 'gitlab_sli:hello_sli:total', 'gitlab_sli:hello_sli:error_total'],
+    },
+  },
+
+  testNewInvalidKind: {
+    actual: validate(validSLI { kinds: ['foo_rate'] }),
+    expect: false,
+  },
+
+  testNewNoKind: {
+    actual: validate(validSLI { kinds: [] }),
     expect: false,
   },
 })
