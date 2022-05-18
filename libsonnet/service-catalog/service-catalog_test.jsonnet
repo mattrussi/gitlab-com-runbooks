@@ -72,7 +72,7 @@ test.suite({
   testGetTeam: {
     actual: serviceCatalog.getTeam('scalability'),
     expect: {
-      ignored_components: ['graphql_queries', 'rails_requests'],
+      ignored_components: ['graphql_queries'],
       issue_tracker: null,
       name: 'scalability',
       product_stage_group: 'scalability',
