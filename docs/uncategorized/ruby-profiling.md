@@ -144,7 +144,7 @@ capabilities. This can be done by configuring the `MALLOC_CONF` environment
 variable.
 
 This profiler is a sampling profiler that grabs a stack every 512 allocated
-bytes. It also tracks when those sampled allocations are freed. Over time, that
+kilobytes. It also tracks when those sampled allocations are freed. Over time, that
 can give an idea of where long-lived allocations are originating from.
 
 A sample configuration:
@@ -154,6 +154,9 @@ MALLOC_CONF='prof:true,prof_prefix:/tmp/jeprof.out,lg_prof_interval:30'
 ```
 
 This will enable profiling, write dumps to `/tmp`, and write out one dump every 2^30 bytes = ~every 1GB allocated.
+
+Other modes such as `prof_gdump` are also supported, see the
+[`jemalloc(3)`](https://linux.die.net/man/3/jemalloc) man page for more details.
 
 To process the profile, you can use `jeprof`:
 
