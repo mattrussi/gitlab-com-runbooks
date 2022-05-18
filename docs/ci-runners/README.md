@@ -363,6 +363,9 @@ Every new CIDR should start at directly after the previously reserved one ends.
 
 **Please consult every new range with it and keep this list up-to-date!**
 
+**When adding any new ephemeral-runners subnetwork don't forget to update the
+[`ci-gateway` firewall](#ci-gateway-ilb-firewall)!**
+
 | GCP project             | Network "$VPC/$SUBNETWORK"               | CIDR            |
 | ----------------------- | ---------------------------------------- | --------------- |
 | `gitlab-ci-plan-free-7` | `ephemeral-runners/ephemeral-runners`    | `10.10.0.0/21`  |
@@ -373,6 +376,22 @@ Every new CIDR should start at directly after the previously reserved one ends.
 | `gitlab-ci`             | `ci/ephemeral-runners-private`           | `10.10.40.0/21` |
 | `gitlab-ci`             | `ci/ephemeral-runners-shared-gitlab-org` | `10.10.48.0/21` |
 | `gitlab-ci`             | `ci/ephemeral-runners-private-2`         | `10.10.56.0/21` |
+
+##### `ci-gateway` ILB firewall
+
+When updating the `ephemeral-runners` CIDRs please remember to update the firewall rules for
+the `ci-gateway` ILBs.
+
+The rules are managed with Terraform in GPRD and GSTG environments within the `google_compute_firewall` resource
+named `ci-gateway-allow-runners`.
+
+The GPRD (GitLab.com) definition can be found [here](https://ops.gitlab.net/gitlab-com/gl-infra/config-mgmt/-/blob/743cf13a31633a62f9e6e8b67abeee3d151792ed/environments/gprd/main.tf#L2960).
+
+The GSTG (staging.gitlab.com) definition can be found [here](https://ops.gitlab.net/gitlab-com/gl-infra/config-mgmt/-/blob/743cf13a31633a62f9e6e8b67abeee3d151792ed/environments/gstg/main.tf#L2957)
+
+When doing any changes related to ephemeral runners make sure to check which GitLab environments that runner
+supports (for example our `private` runners support both GPRD and GSTG while `shared` only GPRD) and update
+the firewall rules respectively.
 
 ### GCP projects
 
