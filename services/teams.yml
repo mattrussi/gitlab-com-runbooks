@@ -233,7 +233,6 @@ teams:
   product_stage_group: foundations
   ignored_components:
   - graphql_queries
-  - rails_requests
 - name: dedicated
   product_stage_group: dedicated
   ignored_components:
