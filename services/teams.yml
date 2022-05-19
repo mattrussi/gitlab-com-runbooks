@@ -171,7 +171,6 @@ teams:
   product_stage_group: 5-min-app
   ignored_components:
   - graphql_queries
-  - rails_requests
 - name: adoption
   product_stage_group: adoption
   ignored_components:
