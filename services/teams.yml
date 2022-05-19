@@ -301,7 +301,6 @@ teams:
   product_stage_group: purchase
   ignored_components:
   - graphql_queries
-  - rails_requests
 - name: sharding
   product_stage_group: sharding
   ignored_components:
