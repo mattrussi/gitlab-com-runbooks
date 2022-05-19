@@ -250,7 +250,6 @@ teams:
   product_stage_group: provision
   ignored_components:
   - graphql_queries
-  - rails_requests
 - name: memory
   product_stage_group: memory
   ignored_components:
