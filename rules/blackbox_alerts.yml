@@ -13,7 +13,7 @@ groups:
       runbook: docs/blackbox/README.md
       title: Blackbox probes for {{ $labels.instance }} are failing.
   - alert: BlackboxProbeFailuresLong
-    expr: avg_over_time(probe_success{job="blackbox", instance=~"(https://ops.gitlab.net/users/sign_in|https://dev.gitlab.org|https://pre.gitlab.com|https://release.gitlab.net)"}[1h]) * 100 < 75
+    expr: avg_over_time(probe_success{job="blackbox", instance=~"(https://ops.gitlab.net/users/sign_in|https://dev.gitlab.org)"}[1h]) * 100 < 75
     labels:
       pager: pagerduty
       severity: s1
@@ -67,3 +67,26 @@ groups:
       description: blackbox probe availability {{ $labels.instance }} is less than {{ $value | printf "%.2f" }}% for the last 30 minutes.
       runbook: docs/frontend/gitlab-com-is-down.md
       title: staging.gitlab.com is down for 30 minutes
+# pre.gitlab.com and release.gitlab.net probe alerts
+- name: Blackbox pre.gitlab.com and release.gitlab.net
+  rules:
+  - alert: PreGitlabComDownLong
+    expr: avg_over_time(probe_success{job="blackbox", instance="https://pre.gitlab.com"}[1h]) * 100 < 75
+    labels:
+      severity: s3
+      alert_type: symptom
+      team: delivery
+    annotations:
+      description: blackbox probe availability {{ $labels.instance }} is less than {{ $value | printf "%.2f" }}% for the last 1 hour.
+      runbook: docs/blackbox/README.md
+      title: Blackbox probes for {{ $labels.instance }} are failing.
+  - alert: ReleaseGitlabNetDownLong
+    expr: avg_over_time(probe_success{job="blackbox", instance="https://release.gitlab.net"}[1h]) * 100 < 75
+    labels:
+      severity: s3
+      alert_type: symptom
+      team: delivery
+    annotations:
+      description: blackbox probe availability {{ $labels.instance }} is less than {{ $value | printf "%.2f" }}% for the last 1 hour.
+      runbook: docs/blackbox/README.md
+      title: Blackbox probes for {{ $labels.instance }} are failing.
