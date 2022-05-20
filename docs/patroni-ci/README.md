@@ -15,13 +15,23 @@
 * [Postgres](https://log.gprd.gitlab.net/goto/d0f8993486c9007a69d85e3a08f1ea7c)
 * [system](https://log.gprd.gitlab.net/goto/3669d551a595a3a5cf1e9318b74e6c22)
 
-## Troubleshooting Pointers
+## Troubleshooting 
 
 * [OS Upgrade Reference Architecture](../patroni/os_upgrade_reference_architecture.md)
 
-## Recovering from CI Patroni cluster lagging too much or becoming completely broken
+### Recovering from CI Patroni cluster lagging too much or becoming completely broken
 
-### Before CI decomposition is finished (ie. `patroni-ci` is still just a standby replica of `patroni`)
+**IMPORTANT: This troubleshooting only applies before CI decomposition is finished (ie. `patroni-ci` is still just a standby replica of `patroni`), after `patroni-ci` is promoted as Writer this runbook is no longer valid**
+
+#### Symptoms
+
+//TODO
+
+#### Possible checks
+
+//TODO
+
+#### Resolution
 
 This procedure can recover from `patroni-ci` being broken but was designed as a
 [rollback procedure in case CI decomposition failover
