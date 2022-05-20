@@ -5,7 +5,7 @@ groups:
     expr: >
       avg (
         gitlab_database_rows{query_name="container_repositories_stalled_pre_importing"}
-      ) > 10
+      ) > 15
     for: 30m
     labels:
       severity: s4
