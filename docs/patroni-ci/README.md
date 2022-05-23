@@ -17,19 +17,32 @@
 
 ## Troubleshooting 
 
-* [OS Upgrade Reference Architecture](../patroni/os_upgrade_reference_architecture.md)
+[Reference Architecture (OS Upgrade)](../patroni/os_upgrade_reference_architecture.md)
 
 ### Recovering from CI Patroni cluster lagging too much or becoming completely broken
 
-**IMPORTANT: This troubleshooting only applies before CI decomposition is finished (ie. `patroni-ci` is still just a standby replica of `patroni`), after `patroni-ci` is promoted as Writer this runbook is no longer valid**
+**IMPORTANT:** This troubleshooting only applies before CI decomposition is finished (ie. `patroni-ci` is still just a standby replica of `patroni`), after `patroni-ci` is promoted as Writer this runbook is no longer valid.
 
 #### Symptoms
 
-//TODO
+We have several alerts that detect replication problems, but this Runbook should only be considered if these alerts are related with the `Standby Leader` of our `patroni-ci` cluster, otherwise please consider this incident as a [regular Replica lagging issue](https://gitlab.com/gitlab-com/runbooks/-/blob/202ea907ce949198cec1b0f901f11a8bfb3acadd/docs/patroni/postgres.md#replication-is-lagging-or-has-stopped);
+
+Possible related alerts are:
+
+- Alert that replication is stopped
+- Alert that replication lag is over 2min (over 120m on archive and delayed
+replica)
+- Alert that replication lag is over 200MB
+
+To check what node is the `Standby Leader` of our `patroni-ci` cluster execute `ssh patroni-ci-01-db-gprd.c.gitlab-production.internal "sudo gitlab-patronictl list"`
 
 #### Possible checks
 
-//TODO
+- Check for lag pile up (continuous lag increase without reducing) in the `patroni-ci` Standby Leader [lag in Thanos](https://thanos.gitlab.net/graph?g0.expr=pg_replication_lag%7Benv%3D%22gprd%22%2C%20type%3D%22patroni-ci%22%7D&g0.tab=0&g0.stacked=0&g0.range_input=2d&g0.max_source_resolution=0s&g0.deduplicate=1&g0.partial_response=0&g0.store_matches=%5B%5D)
+- Check if the CI Standby Leader can't find WAL segments from WAL stream
+   1. SSH into the Standby Leader of `patroni-ci` cluster
+   2. Check the `/var/log/gitlab/postgresql/postgresql.csv` log file for errors like `FATAL,XX000,"could not receive data from WAL stream: ERROR: requested WAL segment ???????????? has already been removed"`
+
 
 #### Resolution
 
