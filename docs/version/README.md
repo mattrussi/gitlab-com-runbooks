@@ -50,6 +50,7 @@
 * [Postgres Replicas](../postgres-dr-delayed/postgres-dr-replicas.md)
 * [Praefect has read-only repositories](../praefect/praefect-read-only.md)
 * [Removing cache entries from Redis](../redis-cache/remove-cache-entries.md)
+* [Redis on Kubernetes](../redis/kubernetes.md)
 * [Redis-Sidekiq catchall workloads reduction](../redis/redis-sidekiq-catchall-workloads-reduction.md)
 * [../redis/redis.md](../redis/redis.md)
 * [../registry/migration-failure-scenarios.md](../registry/migration-failure-scenarios.md)
