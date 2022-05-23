@@ -42,7 +42,7 @@ To check what node is the `Standby Leader` of our `patroni-ci` cluster execute `
 - Check if the CI Standby Leader can't find WAL segments from WAL stream
    1. SSH into the Standby Leader of `patroni-ci` cluster
    2. Check the `/var/log/gitlab/postgresql/postgresql.csv` log file for errors like `FATAL,XX000,"could not receive data from WAL stream: ERROR: requested WAL segment ???????????? has already been removed"`
-
+- [Search `patroni-ci` logs into Elastic](https://log.gprd.gitlab.net/goto/54b89750-da38-11ec-aade-19e9974a7229) for `FATAL` error and messages like `XX000` or `"could not receive data from WAL stream"`
 
 #### Resolution
 
