@@ -377,7 +377,6 @@ local routingTree = Route(
       when=[
         { matchers: { slo_alert: 'yes', env: 'gprd', stage: 'cny' }, receiver: 'slo_gprd_cny' },
         { matchers: { slo_alert: 'yes', env: 'gprd', stage: 'main' }, receiver: 'slo_gprd_main' },
-        { matchers: { slo_alert: 'yes', env: 'gprd', stage: 'main' }, receiver: 'slo_gprd_main' },
       ],
       defaultReceiver='prod_pagerduty',
     ),
