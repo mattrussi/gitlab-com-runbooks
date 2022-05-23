@@ -12,7 +12,7 @@ groups:
       type: frontend
     expr: |
       sum by (environment) (
-        rate(haproxy_http_response_duration_seconds_bucket{type="frontend", backend_name=~"canary_.*", le="5"}[1m])
+        rate(haproxy_http_response_duration_seconds_bucket{type="frontend", backend=~"canary_.*", le="5"}[1m])
       )
   - record: gitlab_component_apdex:weight:score
     labels:
@@ -22,7 +22,7 @@ groups:
       type: frontend
     expr: |
       sum by (environment) (
-        rate(haproxy_http_response_duration_seconds_bucket{type="frontend", backend_name=~"canary_.*", le="+Inf"}[1m])
+        rate(haproxy_http_response_duration_seconds_bucket{type="frontend", backend=~"canary_.*", le="+Inf"}[1m])
       )
   - record: gitlab_component_ops:rate
     labels:
@@ -60,7 +60,7 @@ groups:
       type: frontend
     expr: |
       sum by (environment) (
-        rate(haproxy_http_response_duration_seconds_bucket{type="frontend", backend_name!~"canary_.*", backend_name!="api_rate_limit", backend_name!="websockets", le="5"}[1m])
+        rate(haproxy_http_response_duration_seconds_bucket{type="frontend", backend!~"canary_.*", backend!="api_rate_limit", backend!="websockets", le="5"}[1m])
       )
   - record: gitlab_component_apdex:weight:score
     labels:
@@ -70,7 +70,7 @@ groups:
       type: frontend
     expr: |
       sum by (environment) (
-        rate(haproxy_http_response_duration_seconds_bucket{type="frontend", backend_name!~"canary_.*", backend_name!="api_rate_limit", backend_name!="websockets", le="+Inf"}[1m])
+        rate(haproxy_http_response_duration_seconds_bucket{type="frontend", backend!~"canary_.*", backend!="api_rate_limit", backend!="websockets", le="+Inf"}[1m])
       )
   - record: gitlab_component_ops:rate
     labels:
@@ -80,7 +80,7 @@ groups:
       type: frontend
     expr: |
       sum by (environment) (
-        rate(haproxy_backend_http_responses_total{type="frontend", backend!~"canary_.*", backend_name!="api_rate_limit"}[1m])
+        rate(haproxy_backend_http_responses_total{type="frontend", backend!~"canary_.*", backend!="api_rate_limit"}[1m])
       )
   - record: gitlab_component_errors:rate
     labels:
@@ -91,7 +91,7 @@ groups:
     expr: |
       (
         sum by (environment) (
-          rate(haproxy_backend_response_errors_total{type="frontend", backend!~"canary_.*", backend_name!="api_rate_limit"}[1m])
+          rate(haproxy_backend_response_errors_total{type="frontend", backend!~"canary_.*", backend!="api_rate_limit"}[1m])
         )
       )
       or
@@ -163,7 +163,7 @@ groups:
       type: frontend
     expr: |
       sum by (environment) (
-        rate(haproxy_http_response_duration_seconds_bucket{type="frontend", backend_name=~"canary_.*", le="5"}[5m])
+        rate(haproxy_http_response_duration_seconds_bucket{type="frontend", backend=~"canary_.*", le="5"}[5m])
       )
   - record: gitlab_component_apdex:weight:score_5m
     labels:
@@ -173,7 +173,7 @@ groups:
       type: frontend
     expr: |
       sum by (environment) (
-        rate(haproxy_http_response_duration_seconds_bucket{type="frontend", backend_name=~"canary_.*", le="+Inf"}[5m])
+        rate(haproxy_http_response_duration_seconds_bucket{type="frontend", backend=~"canary_.*", le="+Inf"}[5m])
       )
   - record: gitlab_component_ops:rate_5m
     labels:
@@ -211,7 +211,7 @@ groups:
       type: frontend
     expr: |
       sum by (environment) (
-        rate(haproxy_http_response_duration_seconds_bucket{type="frontend", backend_name!~"canary_.*", backend_name!="api_rate_limit", backend_name!="websockets", le="5"}[5m])
+        rate(haproxy_http_response_duration_seconds_bucket{type="frontend", backend!~"canary_.*", backend!="api_rate_limit", backend!="websockets", le="5"}[5m])
       )
   - record: gitlab_component_apdex:weight:score_5m
     labels:
@@ -221,7 +221,7 @@ groups:
       type: frontend
     expr: |
       sum by (environment) (
-        rate(haproxy_http_response_duration_seconds_bucket{type="frontend", backend_name!~"canary_.*", backend_name!="api_rate_limit", backend_name!="websockets", le="+Inf"}[5m])
+        rate(haproxy_http_response_duration_seconds_bucket{type="frontend", backend!~"canary_.*", backend!="api_rate_limit", backend!="websockets", le="+Inf"}[5m])
       )
   - record: gitlab_component_ops:rate_5m
     labels:
@@ -231,7 +231,7 @@ groups:
       type: frontend
     expr: |
       sum by (environment) (
-        rate(haproxy_backend_http_responses_total{type="frontend", backend!~"canary_.*", backend_name!="api_rate_limit"}[5m])
+        rate(haproxy_backend_http_responses_total{type="frontend", backend!~"canary_.*", backend!="api_rate_limit"}[5m])
       )
   - record: gitlab_component_errors:rate_5m
     labels:
@@ -242,7 +242,7 @@ groups:
     expr: |
       (
         sum by (environment) (
-          rate(haproxy_backend_response_errors_total{type="frontend", backend!~"canary_.*", backend_name!="api_rate_limit"}[5m])
+          rate(haproxy_backend_response_errors_total{type="frontend", backend!~"canary_.*", backend!="api_rate_limit"}[5m])
         )
       )
       or
@@ -314,7 +314,7 @@ groups:
       type: frontend
     expr: |
       sum by (environment) (
-        rate(haproxy_http_response_duration_seconds_bucket{type="frontend", backend_name=~"canary_.*", le="5"}[30m])
+        rate(haproxy_http_response_duration_seconds_bucket{type="frontend", backend=~"canary_.*", le="5"}[30m])
       )
   - record: gitlab_component_apdex:weight:score_30m
     labels:
@@ -324,7 +324,7 @@ groups:
       type: frontend
     expr: |
       sum by (environment) (
-        rate(haproxy_http_response_duration_seconds_bucket{type="frontend", backend_name=~"canary_.*", le="+Inf"}[30m])
+        rate(haproxy_http_response_duration_seconds_bucket{type="frontend", backend=~"canary_.*", le="+Inf"}[30m])
       )
   - record: gitlab_component_ops:rate_30m
     labels:
@@ -362,7 +362,7 @@ groups:
       type: frontend
     expr: |
       sum by (environment) (
-        rate(haproxy_http_response_duration_seconds_bucket{type="frontend", backend_name!~"canary_.*", backend_name!="api_rate_limit", backend_name!="websockets", le="5"}[30m])
+        rate(haproxy_http_response_duration_seconds_bucket{type="frontend", backend!~"canary_.*", backend!="api_rate_limit", backend!="websockets", le="5"}[30m])
       )
   - record: gitlab_component_apdex:weight:score_30m
     labels:
@@ -372,7 +372,7 @@ groups:
       type: frontend
     expr: |
       sum by (environment) (
-        rate(haproxy_http_response_duration_seconds_bucket{type="frontend", backend_name!~"canary_.*", backend_name!="api_rate_limit", backend_name!="websockets", le="+Inf"}[30m])
+        rate(haproxy_http_response_duration_seconds_bucket{type="frontend", backend!~"canary_.*", backend!="api_rate_limit", backend!="websockets", le="+Inf"}[30m])
       )
   - record: gitlab_component_ops:rate_30m
     labels:
@@ -382,7 +382,7 @@ groups:
       type: frontend
     expr: |
       sum by (environment) (
-        rate(haproxy_backend_http_responses_total{type="frontend", backend!~"canary_.*", backend_name!="api_rate_limit"}[30m])
+        rate(haproxy_backend_http_responses_total{type="frontend", backend!~"canary_.*", backend!="api_rate_limit"}[30m])
       )
   - record: gitlab_component_errors:rate_30m
     labels:
@@ -393,7 +393,7 @@ groups:
     expr: |
       (
         sum by (environment) (
-          rate(haproxy_backend_response_errors_total{type="frontend", backend!~"canary_.*", backend_name!="api_rate_limit"}[30m])
+          rate(haproxy_backend_response_errors_total{type="frontend", backend!~"canary_.*", backend!="api_rate_limit"}[30m])
         )
       )
       or
@@ -465,7 +465,7 @@ groups:
       type: frontend
     expr: |
       sum by (environment) (
-        rate(haproxy_http_response_duration_seconds_bucket{type="frontend", backend_name=~"canary_.*", le="5"}[1h])
+        rate(haproxy_http_response_duration_seconds_bucket{type="frontend", backend=~"canary_.*", le="5"}[1h])
       )
   - record: gitlab_component_apdex:weight:score_1h
     labels:
@@ -475,7 +475,7 @@ groups:
       type: frontend
     expr: |
       sum by (environment) (
-        rate(haproxy_http_response_duration_seconds_bucket{type="frontend", backend_name=~"canary_.*", le="+Inf"}[1h])
+        rate(haproxy_http_response_duration_seconds_bucket{type="frontend", backend=~"canary_.*", le="+Inf"}[1h])
       )
   - record: gitlab_component_ops:rate_1h
     labels:
@@ -513,7 +513,7 @@ groups:
       type: frontend
     expr: |
       sum by (environment) (
-        rate(haproxy_http_response_duration_seconds_bucket{type="frontend", backend_name!~"canary_.*", backend_name!="api_rate_limit", backend_name!="websockets", le="5"}[1h])
+        rate(haproxy_http_response_duration_seconds_bucket{type="frontend", backend!~"canary_.*", backend!="api_rate_limit", backend!="websockets", le="5"}[1h])
       )
   - record: gitlab_component_apdex:weight:score_1h
     labels:
@@ -523,7 +523,7 @@ groups:
       type: frontend
     expr: |
       sum by (environment) (
-        rate(haproxy_http_response_duration_seconds_bucket{type="frontend", backend_name!~"canary_.*", backend_name!="api_rate_limit", backend_name!="websockets", le="+Inf"}[1h])
+        rate(haproxy_http_response_duration_seconds_bucket{type="frontend", backend!~"canary_.*", backend!="api_rate_limit", backend!="websockets", le="+Inf"}[1h])
       )
   - record: gitlab_component_ops:rate_1h
     labels:
@@ -533,7 +533,7 @@ groups:
       type: frontend
     expr: |
       sum by (environment) (
-        rate(haproxy_backend_http_responses_total{type="frontend", backend!~"canary_.*", backend_name!="api_rate_limit"}[1h])
+        rate(haproxy_backend_http_responses_total{type="frontend", backend!~"canary_.*", backend!="api_rate_limit"}[1h])
       )
   - record: gitlab_component_errors:rate_1h
     labels:
@@ -544,7 +544,7 @@ groups:
     expr: |
       (
         sum by (environment) (
-          rate(haproxy_backend_response_errors_total{type="frontend", backend!~"canary_.*", backend_name!="api_rate_limit"}[1h])
+          rate(haproxy_backend_response_errors_total{type="frontend", backend!~"canary_.*", backend!="api_rate_limit"}[1h])
         )
       )
       or
@@ -616,7 +616,7 @@ groups:
       type: frontend
     expr: |
       sum by (environment) (
-        rate(haproxy_http_response_duration_seconds_bucket{type="frontend", backend_name=~"canary_.*", le="5"}[6h])
+        rate(haproxy_http_response_duration_seconds_bucket{type="frontend", backend=~"canary_.*", le="5"}[6h])
       )
   - record: gitlab_component_apdex:weight:score_6h
     labels:
@@ -626,7 +626,7 @@ groups:
       type: frontend
     expr: |
       sum by (environment) (
-        rate(haproxy_http_response_duration_seconds_bucket{type="frontend", backend_name=~"canary_.*", le="+Inf"}[6h])
+        rate(haproxy_http_response_duration_seconds_bucket{type="frontend", backend=~"canary_.*", le="+Inf"}[6h])
       )
   - record: gitlab_component_ops:rate_6h
     labels:
@@ -664,7 +664,7 @@ groups:
       type: frontend
     expr: |
       sum by (environment) (
-        rate(haproxy_http_response_duration_seconds_bucket{type="frontend", backend_name!~"canary_.*", backend_name!="api_rate_limit", backend_name!="websockets", le="5"}[6h])
+        rate(haproxy_http_response_duration_seconds_bucket{type="frontend", backend!~"canary_.*", backend!="api_rate_limit", backend!="websockets", le="5"}[6h])
       )
   - record: gitlab_component_apdex:weight:score_6h
     labels:
@@ -674,7 +674,7 @@ groups:
       type: frontend
     expr: |
       sum by (environment) (
-        rate(haproxy_http_response_duration_seconds_bucket{type="frontend", backend_name!~"canary_.*", backend_name!="api_rate_limit", backend_name!="websockets", le="+Inf"}[6h])
+        rate(haproxy_http_response_duration_seconds_bucket{type="frontend", backend!~"canary_.*", backend!="api_rate_limit", backend!="websockets", le="+Inf"}[6h])
       )
   - record: gitlab_component_ops:rate_6h
     labels:
@@ -684,7 +684,7 @@ groups:
       type: frontend
     expr: |
       sum by (environment) (
-        rate(haproxy_backend_http_responses_total{type="frontend", backend!~"canary_.*", backend_name!="api_rate_limit"}[6h])
+        rate(haproxy_backend_http_responses_total{type="frontend", backend!~"canary_.*", backend!="api_rate_limit"}[6h])
       )
   - record: gitlab_component_errors:rate_6h
     labels:
@@ -695,7 +695,7 @@ groups:
     expr: |
       (
         sum by (environment) (
-          rate(haproxy_backend_response_errors_total{type="frontend", backend!~"canary_.*", backend_name!="api_rate_limit"}[6h])
+          rate(haproxy_backend_response_errors_total{type="frontend", backend!~"canary_.*", backend!="api_rate_limit"}[6h])
         )
       )
       or
