@@ -30,7 +30,7 @@ metricsCatalog.serviceDefinition({
 
       apdex: histogramApdex(
         histogram='haproxy_http_response_duration_seconds_bucket',
-        selector='type="frontend", backend!~"canary_.*|api_rate_limit|websockets"',
+        selector='type="frontend", backend_name!~"canary_.*|api_rate_limit|websockets"',
         satisfiedThreshold=5
       ),
 
@@ -59,7 +59,7 @@ metricsCatalog.serviceDefinition({
 
       apdex: histogramApdex(
         histogram='haproxy_http_response_duration_seconds_bucket',
-        selector='type="frontend", backend=~"canary_.*"',
+        selector='type="frontend", backend_name=~"canary_.*"',
         satisfiedThreshold=5
       ),
 

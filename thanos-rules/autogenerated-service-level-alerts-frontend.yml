@@ -22,7 +22,7 @@ groups:
         histogram_quantile(
           0.950000,
           sum by (env,environment,tier,stage,le) (
-            rate(haproxy_http_response_duration_seconds_bucket{type="frontend", backend=~"canary_.*", environment="{{ $labels.environment }}",stage="{{ $labels.stage }}"}[5m])
+            rate(haproxy_http_response_duration_seconds_bucket{type="frontend", backend_name=~"canary_.*", environment="{{ $labels.environment }}",stage="{{ $labels.stage }}"}[5m])
           )
         )
       runbook: docs/frontend/README.md
@@ -71,7 +71,7 @@ groups:
         histogram_quantile(
           0.950000,
           sum by (env,environment,tier,stage,le) (
-            rate(haproxy_http_response_duration_seconds_bucket{type="frontend", backend=~"canary_.*", environment="{{ $labels.environment }}",stage="{{ $labels.stage }}"}[5m])
+            rate(haproxy_http_response_duration_seconds_bucket{type="frontend", backend_name=~"canary_.*", environment="{{ $labels.environment }}",stage="{{ $labels.stage }}"}[5m])
           )
         )
       runbook: docs/frontend/README.md
@@ -280,7 +280,7 @@ groups:
         histogram_quantile(
           0.950000,
           sum by (env,environment,tier,stage,le) (
-            rate(haproxy_http_response_duration_seconds_bucket{type="frontend", backend!~"canary_.*|api_rate_limit|websockets", environment="{{ $labels.environment }}",stage="{{ $labels.stage }}"}[5m])
+            rate(haproxy_http_response_duration_seconds_bucket{type="frontend", backend_name!~"canary_.*|api_rate_limit|websockets", environment="{{ $labels.environment }}",stage="{{ $labels.stage }}"}[5m])
           )
         )
       runbook: docs/frontend/README.md
@@ -329,7 +329,7 @@ groups:
         histogram_quantile(
           0.950000,
           sum by (env,environment,tier,stage,le) (
-            rate(haproxy_http_response_duration_seconds_bucket{type="frontend", backend!~"canary_.*|api_rate_limit|websockets", environment="{{ $labels.environment }}",stage="{{ $labels.stage }}"}[5m])
+            rate(haproxy_http_response_duration_seconds_bucket{type="frontend", backend_name!~"canary_.*|api_rate_limit|websockets", environment="{{ $labels.environment }}",stage="{{ $labels.stage }}"}[5m])
           )
         )
       runbook: docs/frontend/README.md
