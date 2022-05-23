@@ -12,7 +12,7 @@ local resourceSaturationPoint = (import 'servicemetrics/resource_saturation_poin
       the memory limit as configured through Kubernetes.
     |||,
     grafana_dashboard_uid: 'sat_kube_container_memory',
-    resourceLabels: ['pod', 'container'],
+    resourceLabels: [],
     // burnRatePeriod: '5m',
     query: |||
       container_memory_working_set_bytes:labeled{container!="", container!="POD", %(selector)s}
@@ -20,8 +20,8 @@ local resourceSaturationPoint = (import 'servicemetrics/resource_saturation_poin
       (container_spec_memory_limit_bytes:labeled{container!="", container!="POD", %(selector)s} > 0)
     |||,
     slos: {
-      soft: 0.90,
-      hard: 0.99,
+      soft: 0.80,
+      hard: 0.90,
       alertTriggerDuration: '15m',
     },
   }),

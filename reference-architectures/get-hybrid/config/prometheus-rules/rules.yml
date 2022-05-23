@@ -2869,11 +2869,11 @@ groups:
     labels:
       component: kube_container_cpu
     record: slo:max:hard:gitlab_component_saturation:ratio
-  - expr: "0.9"
+  - expr: "0.8"
     labels:
       component: kube_container_memory
     record: slo:max:soft:gitlab_component_saturation:ratio
-  - expr: "0.99"
+  - expr: "0.9"
     labels:
       component: kube_container_memory
     record: slo:max:hard:gitlab_component_saturation:ratio
@@ -3262,7 +3262,7 @@ groups:
       grafana_panel_id: "172578411"
       grafana_variables: type
       promql_query: |
-        max by(type, pod, container) (
+        max by(type) (
           clamp_min(
             clamp_max(
               container_memory_working_set_bytes:labeled{container!="", container!="POD", type="{{ $labels.type }}"}
