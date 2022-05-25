@@ -70,7 +70,7 @@ names. In case this MR is unavailable the diff is:
 
 ```diff
 diff --git a/roles/gstg-base-db-patroni-ci.json b/roles/gstg-base-db-patroni-ci.json
-index 0bb77e15e..ccb0f86f4 100644
+index 0bb77e15e..711fe39c6 100644
 --- a/roles/gstg-base-db-patroni-ci.json
 +++ b/roles/gstg-base-db-patroni-ci.json
 @@ -38,7 +38,7 @@
@@ -82,18 +82,20 @@ index 0bb77e15e..ccb0f86f4 100644
          "extra_checks": [
            {
              "http": "http://0.0.0.0:8009/replica",
-diff --git a/roles/gstg-base-db-patroni.json b/roles/gstg-base-db-patroni.json
-index 13d13550a..7d62b68be 100644
---- a/roles/gstg-base-db-patroni.json
-+++ b/roles/gstg-base-db-patroni.json
-@@ -20,6 +20,7 @@
-       "psql_command": "gitlab-psql -h /var/opt/gitlab/pgbouncer",
-       "consul": {
-         "service_name": "db-replica",
-+	"additional_service_names": ["ci-db-replica"],
-         "extra_checks": [
-           {
-             "http": "http://0.0.0.0:8009/replica",
+diff --git a/roles/gstg-base-db-patroni-main.json b/roles/gstg-base-db-patroni-main.json
+index 44a9d55db..a4154ebb8 100644
+--- a/roles/gstg-base-db-patroni-main.json
++++ b/roles/gstg-base-db-patroni-main.json
+@@ -4,6 +4,9 @@
+   "json_class": "Chef::Role",
+   "default_attributes": {
+     "gitlab-pgbouncer": {
++      "consul": {
++        "additional_service_names": ["ci-db-replica"]
++      },
+       "databases": {
+         "gitlabhq_production": {
+           "host": "127.0.0.1",
 ```
 
 </details>
@@ -112,7 +114,7 @@ changes but you should do this in 2 MRs using the following steps:
    CI Patroni nodes and confirm they are correctly registering in consul
    under DNS `ci-db-replica.service.consul`
 2. Remove `additional_service_names` from
-   `roles/gstg-base-db-patroni.json` so that Main nodes stop registering
+   `roles/gstg-base-db-patroni-main.json` so that Main nodes stop registering
    in Consul for `ci-db-replica.service.consul`
 3. Remove `/etc/consul/conf.d/recovering-ci-db-replica*.json` from CI Patroni
    nodes as this is no longer needed and Chef won't clean this up for you
