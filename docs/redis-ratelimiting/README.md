@@ -15,7 +15,7 @@
 
 ## Troubleshooting Pointers
 
-* [Redis on Kubernetes](../redis/kubernetes.md)
+* [Ad hoc observability tools on Kubernetes nodes](../kube/k8s-adhoc-observability.md)
 * [A survival guide for SREs to working with Redis at GitLab](../redis/redis-survival-guide-for-sres.md)
 * [../redis/redis.md](../redis/redis.md)
 <!-- END_MARKER -->

@@ -1,10 +1,56 @@
-# Redis on Kubernetes
+# Ad hoc observability tools on Kubernetes nodes
 
-## CPU profiling
+The following notes cover a variety of tools and methods for capturing and analyzing ad hoc observability data
+(e.g. resource usage and performance characteristics) on a GKE node.
 
-In order to collect a CPU profile for redis, you need to SSH into the node and run `perf_flamegraph_for_all_running_processes.sh`.
+Some tools that are not container-aware have some unintuitive scoping challenges.  Known gotchas are included in their sections.
 
-List nodes:
+## Helper scripts overview
+
+Some helper scripts to facilitate ad hoc observations and exploratory work are available in this repo's `scripts/gke` directory.
+
+When running these scripts you must explicitly run `bash <script>`, because our home directories on the GKE nodes are subject to
+the `noexec` mount option.  To run shell scripts we must explicitly invoke the shell binary (in this case `/bin/bash`).
+
+The sections below cover more details, but as a brief summary:
+
+```
+CPU profiling:
+
+$ bash perf_flamegraph_for_all_running_processes.sh
+$ bash perf_flamegraph_for_container_id.sh [container_id]
+$ bash perf_flamegraph_for_container_of_pid.sh [pid]
+$ bash perf_flamegraph_for_pod_id.sh [pod_id]
+
+Mapping between IDs for PIDs, pods, containers, and cgroups:
+
+$ bash container_id_for_pid.sh [pid]
+$ bash container_id_for_cgroup.sh [cgroup_path]
+
+$ bash pod_id_for_pid.sh [pid]
+$ bash pod_id_for_cgroup.sh [cgroup_path]
+
+$ bash cgroup_for_container_id.sh [container_id]
+$ bash cgroup_for_pid.sh [pid]
+$ bash cgroup_for_pod_id.sh [pod_id]
+
+Packet captures:
+
+$ bash tcpdump_on_gke_node.sh [max_duration] [tcpdump_options...]
+$ bash tcpdump_on_gke_node_for_pod_id.using_pod_iface.sh [pod_id] [max_duration_seconds] [tcpdump_options...]
+$ bash tcpdump_on_gke_node_for_pod_id.using_pod_netns.sh [pod_id] [max_duration_seconds] [tcpdump_options...]
+
+$ bash ip_addr_for_pod_id.sh [pod_id]
+```
+
+## Picking a GKE node
+
+All of these tools and methods are meant to be run on a specific GKE node.
+
+If you have not already chosen a target GKE node to observe, here are some ways to list the currently running nodes.
+
+
+List GKE nodes:
 
 ```
 ➜  ~ gcloud --project gitlab-pre compute instances list --filter 'name:gke-pre-gitlab-gke-redis'
@@ -24,14 +70,31 @@ gke-pre-gitlab-gke-redis-ratelimiting-231e75c5-l90m   Ready    <none>   3d17h   
 gke-pre-gitlab-gke-redis-ratelimiting-231e75c5-rpfh   Ready    <none>   3d17h   v1.21.11-gke.900
 ```
 
-
 SSH into node:
 
 ```
 ➜  ~ gcloud --project gitlab-pre compute ssh gke-pre-gitlab-gke-redis-ratelimiting-231e75c5-mabc
 ```
 
-Once on the node, install and run `perf_flamegraph_for_all_running_processes.sh`:
+## CPU profiling
+
+Once you SSH onto a GKE node, you can capture a CPU profile for a container, a pod, or the whole host.
+
+### Usage
+
+All of the following helper scripts use the same approach and output format.
+The main difference is letting you optionally scope the capture to a container or pod:
+
+```
+$ bash perf_flamegraph_for_all_running_processes.sh
+$ bash perf_flamegraph_for_container_id.sh [container_id]
+$ bash perf_flamegraph_for_container_of_pid.sh [pid]
+$ bash perf_flamegraph_for_pod_id.sh [pod_id]
+```
+
+### Profiling the whole GKE node
+
+Install and run `perf_flamegraph_for_all_running_processes.sh`:
 
 ```
 igor@gke-pre-gitlab-gke-redis-ratelimiting-231e75c5-mabc ~ $ wget https://gitlab.com/gitlab-com/runbooks/-/raw/master/scripts/gke/perf_flamegraph_for_all_running_processes.sh
@@ -66,14 +129,14 @@ Similar to the above, you can profile a single container rather than the whole h
 Find and ssh into a GKE node:
 
 ```
-$ gcloud --project gitlab-pre compute instances list --filter 'name:gke-pre-gitlab-gke-redis'
-$ gcloud compute ssh --project gitlab-pre --zone us-east1-b gke-pre-gitlab-gke-redis-ratelimiting-231e75c5-mabc
+$ gcloud compute instances list --project gitlab-pre --filter 'name:gke-pre-gitlab-gke-redis'
+$ gcloud compute ssh --project gitlab-pre gke-pre-gitlab-gke-redis-ratelimiting-231e75c5-mabc
 ```
 
 On the GKE node, fetch the helper script:
 
 ```
-$ git clone git@gitlab.com:gitlab-com/runbooks.git
+$ git clone https://gitlab.com/gitlab-com/runbooks.git
 $ cd runbooks/scripts/gke/
 ```
 
@@ -84,12 +147,19 @@ $ TARGET_PID=$( pgrep -n -f 'redis-server .*:6379' )
 $ bash ./perf_flamegraph_for_container_of_pid.sh $TARGET_PID
 ```
 
+Alternately, you can specify the target container by id:
+
+```
+$ CONTAINER_ID=$( crictl ps --latest --quiet --name 'redis' )
+$ bash ./perf_flamegraph_for_container_id.sh $CONTAINER_ID
+```
+
 On your laptop, download the flamegraph (and optionally the perf-script output for fine-grained analysis):
 
 ```
-$ gcloud compute scp --project gitlab-pre --zone us-east1-b gke-pre-gitlab-gke-redis-ratelimiting-231e75c5-mabc:/tmp/perf-record-results.oI3YR698/gke-pre-gitlab-gke-redis-ratelimiting-231e75c5-mabc.20220414_010939_UTC.container_of_pid_7154.flamegraph.svg .
+$ gcloud compute scp --project gitlab-pre gke-pre-gitlab-gke-redis-ratelimiting-231e75c5-mabc:/tmp/perf-record-results.oI3YR698/gke-pre-gitlab-gke-redis-ratelimiting-231e75c5-mabc.20220414_010939_UTC.container_of_pid_7154.flamegraph.svg .
 
-$ gcloud compute scp --project gitlab-pre --zone us-east1-b gke-pre-gitlab-gke-redis-ratelimiting-231e75c5-mabc:/tmp/perf-record-results.oI3YR698/gke-pre-gitlab-gke-redis-ratelimiting-231e75c5-mabc.20220414_010939_UTC.container_of_pid_7154.perf-script.txt.gz .
+$ gcloud compute scp --project gitlab-pre gke-pre-gitlab-gke-redis-ratelimiting-231e75c5-mabc:/tmp/perf-record-results.oI3YR698/gke-pre-gitlab-gke-redis-ratelimiting-231e75c5-mabc.20220414_010939_UTC.container_of_pid_7154.perf-script.txt.gz .
 ```
 
 ## Finding relationships between processes, containers, and pods
@@ -99,7 +169,7 @@ After SSHing to a GKE node, you can use `crictl` to view containers and pods run
 To find which container or pod owns a process, you can use the utilities in the runbooks repo's `scripts/gke` directory,
 as shown below.
 
-This is all run from outside the target container, in the GKE node's root process namespace.
+This is all run from a normal shell on the GKE node (outside the target container, in the GKE node's root process namespace).
 
 Choose a process to inspect.
 
