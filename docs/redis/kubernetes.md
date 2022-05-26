@@ -421,3 +421,183 @@ May 20, 2022 22:44:50.994896000 UTC	·······A··S·	127.0.0.1	127.0.0.1	6
 
 $ wireshark -r $PCAP_FILE -Y 'ip.addr == 127.0.0.1 && tcp.port == 39114 && tcp.port == 6379'
 ```
+
+## Misc other resource usage observability tools on a GKE node
+
+Sometimes we need to run ad hoc observations of a running container, but its image may lack the required tooling.
+In such cases we can either install and run the tool outside of the target container or add it to the container.
+
+Both of those options have trade-offs and depending on the circumstances either may be impractical or undesirable.
+For example, adding a tool to a container implicitly gives it the same context and isolation properties as the
+processes to be observed, but the tool may also have conflicting library dependencies or require elevated privileges.
+Conversely, installing and running a tool from outside the target container means it lacks visibility into the
+container's mount namespace, and consequently cannot resolve paths or inspect files within the container.
+There are sometimes work-arounds for these problems (e.g. statically linking the tool before copying it into
+the container to avoid library conflicts; using tools that natively switch namespaces when needed, etc.),
+but these solutions are not always convenient or supported.
+
+For each of the following tools, we show installation, usage, and known gotchas for both running the tool
+and interpreting its output.
+
+### Using `vmstat`
+
+`vmstat` reports host-level resource usage statistics.
+
+`vmstat` is not container-aware.  Typically it reports host-level utilization metrics
+whether or not it is run inside a container.
+
+Usually you want to ignore its first line of output, since that represents
+averages since the last reboot.  All subsequent measurements are real-time averages
+for the requested interval seconds.
+
+To install and run `vmstat` using `toolbox`, run the following on the GKE node:
+
+```
+Install vmstat.
+$ toolbox apt update -y
+$ toolbox apt install -y procps
+$ toolbox which vmstat
+
+Run vmstat via toolbox, using a 1-second interval 3 times.
+$ toolbox vmstat --wide 1 3
+```
+
+### Using `pidstat`
+
+`pidstat` gathers and reports process-level statistics, covering many of the same metrics as `sar`.
+
+To install and run `pidstat` using `toolbox`, run the following on the GKE node:
+
+```
+Install pidstat.
+$ toolbox apt update -y
+$ toolbox apt install -y sysstat
+$ toolbox which pidstat
+
+Choose a target host PID (not a container PID).
+This can optionally be a comma-delimited list of PIDs, as shown here.
+$ TARGET_PID_LIST=$( pgrep -f 'puma: cluster worker' | tr '\n' ',' )
+
+Run pidstat via toolbox for the chosen PIDs, using a 1-second interval 3 times.
+$ toolbox pidstat -p $TARGET_PID_LIST 1 3
+
+Run pidstat, matching processes on their full command line (rather than specifying PIDs).
+$ toolbox pidstat -l -G 'puma: cluster worker'
+
+Show all threads for a matching PID.
+$ toolbox pidstat -t -p $TARGET_PID 1 3
+```
+
+#### Tips for interpreting `pidstat` output
+
+* `pidstat` is not aware of cgroup limits.
+  * CPU utilization percentage represents mean CPU time / wallclock time during the interval.
+* CPU utilization can exceed 100% if a process has multiple threads concurrently running on CPUs.
+* Even a completely CPU-bound process may not reach 100% utilization if it is starved for CPU time by:
+  * the container's cgroup limit being budgeted less than 1 CPU core
+  * competing processes within the container using CPU time
+  * competing processes outside the container using CPU time, if the host is oversubscribed (which is common)
+
+#### Background and demo: Which PID to use for a process?
+
+`pidstat` can be run either inside or outside of the target container, but since it is usually not included
+by default, here we show how to run it from outside of the target container using `toolbox`.
+
+The same process can have a different identifier (PID) in each PID namespace, and for tools like `pidstat`
+(or `ps`, etc.) that take a PID as an argument, we must give them the PID that the target process uses
+in the namespace where we are running the tool.
+
+```
+# Make a toy process to observe from inside and outside the target container.
+
+msmiley@gke-gprd-us-east1-b-api-2-c1ce60b7-mfxl ~ $ CONTAINER_ID=$( crictl ps --name webservice --latest --quiet )
+msmiley@gke-gprd-us-east1-b-api-2-c1ce60b7-mfxl ~ $ crictl exec $CONTAINER_ID sleep 123 &
+
+# Find the process's PID from inside and outside the container.
+
+msmiley@gke-gprd-us-east1-b-api-2-c1ce60b7-mfxl ~ $ crictl exec $CONTAINER_ID pgrep -n -a -f 'sleep 123'
+1089 sleep 123
+
+msmiley@gke-gprd-us-east1-b-api-2-c1ce60b7-mfxl ~ $ pgrep -n -a -f 'sleep 123'
+789724 sleep 123
+
+# Must use the host namespace's PID when running pidstat.
+
+msmiley@gke-gprd-us-east1-b-api-2-c1ce60b7-mfxl ~ $ toolbox pidstat -p 1089 1 3
+Linux 5.4.170+ (gke-gprd-us-east1-b-api-2-c1ce60b7-mfxl) 	05/24/22 	_x86_64_	(30 CPU)
+
+23:25:37      UID       PID    %usr %system  %guest   %wait    %CPU   CPU  Command
+
+msmiley@gke-gprd-us-east1-b-api-2-c1ce60b7-mfxl ~ $ toolbox pidstat -p 789724 1 3
+Linux 5.4.170+ (gke-gprd-us-east1-b-api-2-c1ce60b7-mfxl) 	05/24/22 	_x86_64_	(30 CPU)
+
+23:25:44      UID       PID    %usr %system  %guest   %wait    %CPU   CPU  Command
+23:25:45     1000    789724    0.00    0.00    0.00    0.00    0.00     1  sleep
+23:25:46     1000    789724    0.00    0.00    0.00    0.00    0.00     1  sleep
+23:25:47     1000    789724    0.00    0.00    0.00    0.00    0.00     1  sleep
+Average:     1000    789724    0.00    0.00    0.00    0.00    0.00     -  sleep
+```
+
+#### How does `pidstat` represent container CPU limit
+
+`pidstat` is not aware of container cgroup limits.
+It reports CPU utilization as used CPU seconds divided by wallclock seconds (not divided by quota seconds).
+
+When the container cgroup is using a hard CPU limit (a CFS quota), if it runs out of quota, the wallclock time
+spent stalled waiting for quota to refill is reported by `pidstat` as wait time.
+
+Example:
+
+This demo shows that when a container's CPU quota is exhausted, its processes do not actually get scheduled
+onto a CPU until the quota refills again (every 100 ms), and "pidstat" reflects this starvation as "%wait".
+
+```
+# Create a CPU-bound process in a container.
+
+$ docker run -it --rm --name test_cpu_quota_starvation ubuntu:latest /bin/bash -c 'while true ; do foo=1 ; done'
+
+# Find the container id and PID.
+
+$ CONTAINER_ID=$( docker ps --quiet --no-trunc --filter 'name=test_cpu_quota_starvation' )
+$ TARGET_PID=$( cat /sys/fs/cgroup/cpu/docker/$CONTAINER_ID/cgroup.procs | head -n1 )
+
+# Initially the process uses a whole CPU.
+
+$ pidstat -p $TARGET_PID 1 3
+Linux 5.13.0-41-generic (saoirse) 	05/25/2022 	_x86_64_	(8 CPU)
+
+10:51:39 PM   UID       PID    %usr %system  %guest   %wait    %CPU   CPU  Command
+10:51:40 PM     0    161603  100.00    1.00    0.00    1.00  101.00     3  bash
+10:51:41 PM     0    161603   99.00    0.00    0.00    0.00   99.00     3  bash
+10:51:42 PM     0    161603  100.00    0.00    0.00    0.00  100.00     3  bash
+Average:        0    161603   99.67    0.33    0.00    0.33  100.00     -  bash
+
+# Reduce the container's cgroup quota to 700 millicores (70K us CPU time per 100K us wallclock time).
+
+$ grep '' /sys/fs/cgroup/cpu/docker/$CONTAINER_ID/cpu.cfs_*
+/sys/fs/cgroup/cpu/docker/805b4538c8236665bce5de1cce08ef2f27b3b6b5238fadb68597016c5a06e45e/cpu.cfs_period_us:100000
+/sys/fs/cgroup/cpu/docker/805b4538c8236665bce5de1cce08ef2f27b3b6b5238fadb68597016c5a06e45e/cpu.cfs_quota_us:-1
+
+$ echo 70000 | sudo tee /sys/fs/cgroup/cpu/docker/$CONTAINER_ID/cpu.cfs_quota_us
+70000
+
+# Show the process now spends 70% its wallclock time on CPU and 30% waiting for quota to refill.
+
+$ pidstat -p $TARGET_PID 1 3
+Linux 5.13.0-41-generic (saoirse) 	05/25/2022 	_x86_64_	(8 CPU)
+
+10:54:35 PM   UID       PID    %usr %system  %guest   %wait    %CPU   CPU  Command
+10:54:36 PM     0    161603   70.00    0.00    0.00   30.00   70.00     6  bash
+10:54:37 PM     0    161603   70.00    0.00    0.00   30.00   70.00     6  bash
+10:54:38 PM     0    161603   70.00    0.00    0.00   31.00   70.00     6  bash
+Average:        0    161603   70.00    0.00    0.00   30.33   70.00     -  bash
+
+# The process remains runnable (state "R") the entire time.
+
+$ for i in $( seq 100 ) ; do sleep 0.01 ; ps -o s= $TARGET_PID ; done | sort | uniq -c
+    100 R
+
+# Clean up.
+
+$ docker stop test_cpu_quota_starvation
+```
