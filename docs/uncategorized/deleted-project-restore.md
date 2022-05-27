@@ -50,6 +50,7 @@ procedure.
 1. `ssh` to the delayed replica.
 1. In a `gitlab-psql` shell: `SELECT pg_wal_replay_pause();`
 1. `systemctl stop chef-client.service`
+1. In a `gitlab-psql` shell: `select now()-pg_last_xact_replay_timestamp() as replication_lag;` and replication lag should start increasing.
 
 Later, when you have extracted the project export:
 
