@@ -43,7 +43,7 @@ Host gstg-console
 ```
 where `SERVICE_NAME` is either `rails` or `db`.
 
-With this config, you can access the console using `ssh gtg-console`
+With this config, you can access the console using `ssh gstg-console`
 
 See [granting rails or db access](../uncategorized/granting-rails-or-db-access.md) for more
 information on how to request console access.
