@@ -1,4 +1,6 @@
+local sliLibrary = import 'gitlab-slis/library.libsonnet';
 local metricsCatalog = import 'servicemetrics/metrics.libsonnet';
+local toolingLinks = import 'toolinglinks/toolinglinks.libsonnet';
 
 metricsCatalog.serviceDefinition({
   type: 'customersdot',
@@ -9,8 +11,6 @@ metricsCatalog.serviceDefinition({
     errorRatio: 0.998,
   },
 
-  recordingRuleMetrics: sliLibrary.get('customers_dot_requests_apdex').recordingRuleMetrics,
-
   provisioning: {
     vms: true,
     kubernetes: false,
@@ -20,7 +20,7 @@ metricsCatalog.serviceDefinition({
 
   serviceLevelIndicators: {
     rails_requests:
-      sliLibrary.get('customers_dot_requests_apdex').generateServiceLevelIndicator(railsSelector) {
+      sliLibrary.get('customers_dot_requests_apdex').generateServiceLevelIndicator(extraSelector={}) {
         toolingLinks: [
           toolingLinks.stackdriverLogs(
             'Stackdriver Logs: CustomersDot',
