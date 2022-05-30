@@ -17,10 +17,10 @@ notify_shell() {
 
 print_help() {
   echo >&2 "\"kube\" is used to help you setup and interect with our kubernetes clusters"
-  echo >&2 "USAGE:"
+  echo >&2 "USAGE: "
   echo >&2 "    glsh kube [SUBCOMMAND]"
   echo >&2
-  echo >&2 "SUBCOMMANDS:"
+  echo >&2 "SUBCOMMANDS: "
   echo >&2 "    setup: Configure the local machine with all cluster contexts"
   echo >&2 "    use-cluster: Specify which cluster to use"
 }
@@ -39,18 +39,38 @@ setup() {
     gcloud container clusters get-credentials ${cluster_params}
   done
 
+  socks_port=1080
+  echo "Setting up SOCKS5 Proxy"
+  for cluster in $(all_clusters); do
+    context="$(get_kube_context "${cluster}")"
+
+    kubectl config set "clusters.${context}.proxy-url" "socks5://localhost:${socks_port}"
+    ((socks_port = socks_port + 1))
+  done
+
   echo "Creating empty cluster context for fallback purposes"
   kubectl config set-context empty
 }
 
 use_cluster() {
   context="$(get_kube_context "$1")"
+
+  proxy_url="$(kubectl config view -o jsonpath="{.clusters[?(@.name == \"${context}\")].cluster.proxy-url}")"
+  if [ -z "$proxy_url" ]; then
+    echo >&2 "glsh: proxy-url not set in \$KUBECONFIG, run glsh kube setup"
+    exit 1
+  fi
+
   kubectx "${context}"
-  api_ip="$(get_cluster_ip "${context}")"
+
   ssh_proxy="$(get_ssh_proxy "$1")"
 
   notify_shell
-  sshuttle -r "${ssh_proxy}" "${api_ip}/32"
+
+  proxy_port=$(echo "${proxy_url}" | awk -F: '{print $3}')
+
+  # shellcheck disable=SC2029
+  ssh -D "${proxy_port}" -q -N "${ssh_proxy}"
 }
 
 all_clusters() {
@@ -69,10 +89,6 @@ get_ssh_proxy() {
   jq --arg cluster "$1" -r '.[$cluster].ssh_proxy' "${CLUSTERS_JSON}"
 }
 
-get_cluster_ip() {
-  kubectl config view -o jsonpath="{.clusters[?(@.name == \"$1\")].cluster.server}" | sed 's@^https://@@'
-}
-
 check_command() {
   if ! command -v "$1" >/dev/null; then
     echo >&2 "glsh: \"$1\" could not be found, please follow $2"
@@ -84,7 +100,11 @@ check_command "gcloud" "https://cloud.google.com/sdk/docs/install"
 check_command "jq" "https://stedolan.github.io/jq/download/"
 check_command "kubectl" "https://kubernetes.io/docs/tasks/tools/"
 check_command "kubectx" "https://github.com/ahmetb/kubectx#installation"
-check_command "sshuttle" "https://github.com/sshuttle/sshuttle#obtaining-sshuttle"
+
+if (("$(kubectl version --client -o json | jq -r '.clientVersion.minor')" < "24")); then
+  echo >&2 "glsh: kubectl 1.24 or higher is required"
+  exit 1
+fi
 
 if [[ $# -eq 0 ]]; then
   print_help
