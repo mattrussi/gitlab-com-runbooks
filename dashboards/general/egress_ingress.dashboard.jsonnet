@@ -90,10 +90,10 @@ local networkPanelK8s(
 local osPanel(title) =
   generalGraphPanel(title)
   .addTarget(
-    promQuery.target('sum by (bucket_name) (stackdriver_gcs_bucket_storage_googleapis_com_network_sent_bytes_count{env="$environment"}) * 1440', legendFormat='egress {{ bucket_name }}', interval='1d')
+    promQuery.target('sum by (bucket_name) (sum_over_time(stackdriver_gcs_bucket_storage_googleapis_com_network_sent_bytes_count{env="$environment"}[1d]))', legendFormat='egress {{ bucket_name }}', interval='1d')
   )
   .addTarget(
-    promQuery.target('sum by (bucket_name) (stackdriver_gcs_bucket_storage_googleapis_com_network_received_bytes_count{env="$environment"}) * 1440 * -1', legendFormat='ingress {{ bucket_name }}', interval='1d')
+    promQuery.target('sum by (bucket_name) (sum_over_time(stackdriver_gcs_bucket_storage_googleapis_com_network_received_bytes_count{env="$environment"}[1d])) * -1', legendFormat='ingress {{ bucket_name }}', interval='1d')
   )
   .resetYaxes()
   .addYaxis(
