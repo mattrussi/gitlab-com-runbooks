@@ -26,7 +26,7 @@ metricsCatalog.serviceDefinition({
             'Stackdriver Logs: CustomersDot',
             queryHash={
               'resource.type': 'gce_instance',
-              'jsonPayload.controller': { ne: '' },
+              'jsonPayload.controller': { exists: true },
               'jsonPayload.duration': { exists: true },
             },
           ),
