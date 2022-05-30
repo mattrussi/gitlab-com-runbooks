@@ -11,7 +11,7 @@ groups:
       title: The rails_requests SLI of the customersdot service (`{{ $labels.stage
         }}` stage) has an apdex violating SLO
       description: |
-        The number of CustomersDot requests meeting their duration target based on the urgency of the endpoint. By default, a request should take no more than 0.5s. But this can be adjusted by endpoint.
+        The number of CustomersDot requests meeting their duration target based on the urgency of the endpoint. By default, a request should take no more than 0.4s. But this can be adjusted by endpoint.
 
         Currently the apdex value is {{ $value | humanizePercentage }}.
       grafana_dashboard_id: customersdot-main/customersdot-overview
@@ -37,12 +37,12 @@ groups:
       (
         (
           gitlab_component_apdex:ratio_1h{component="rails_requests",monitor="global",type="customersdot"}
-          < (1 - 14.4 * 0.080000)
+          < (1 - 14.4 * 0.100000)
         )
         and
         (
           gitlab_component_apdex:ratio_5m{component="rails_requests",monitor="global",type="customersdot"}
-          < (1 - 14.4 * 0.080000)
+          < (1 - 14.4 * 0.100000)
         )
       )
       and on(env,environment,tier,type,stage,component)
@@ -55,7 +55,7 @@ groups:
       title: The rails_requests SLI of the customersdot service (`{{ $labels.stage
         }}` stage) has an apdex violating SLO
       description: |
-        The number of CustomersDot requests meeting their duration target based on the urgency of the endpoint. By default, a request should take no more than 0.5s. But this can be adjusted by endpoint.
+        The number of CustomersDot requests meeting their duration target based on the urgency of the endpoint. By default, a request should take no more than 0.4s. But this can be adjusted by endpoint.
 
         Currently the apdex value is {{ $value | humanizePercentage }}.
       grafana_dashboard_id: customersdot-main/customersdot-overview
@@ -81,12 +81,12 @@ groups:
       (
         (
           gitlab_component_apdex:ratio_6h{component="rails_requests",monitor="global",type="customersdot"}
-          < (1 - 6 * 0.080000)
+          < (1 - 6 * 0.100000)
         )
         and
         (
           gitlab_component_apdex:ratio_30m{component="rails_requests",monitor="global",type="customersdot"}
-          < (1 - 6 * 0.080000)
+          < (1 - 6 * 0.100000)
         )
       )
       and on(env,environment,tier,type,stage,component)
@@ -99,7 +99,7 @@ groups:
       title: The rails_requests SLI of the customersdot service (`{{ $labels.stage
         }}` stage) has not received any traffic in the past 30m
       description: |
-        The number of CustomersDot requests meeting their duration target based on the urgency of the endpoint. By default, a request should take no more than 0.5s. But this can be adjusted by endpoint.
+        The number of CustomersDot requests meeting their duration target based on the urgency of the endpoint. By default, a request should take no more than 0.4s. But this can be adjusted by endpoint.
 
         This alert signifies that the SLI is reporting a cessation of traffic; the signal is present, but is zero.
       grafana_dashboard_id: customersdot-main/customersdot-overview
@@ -134,7 +134,7 @@ groups:
       title: The rails_requests SLI of the customersdot service (`{{ $labels.stage
         }}` stage) has not reported any traffic in the past 30m
       description: |
-        The number of CustomersDot requests meeting their duration target based on the urgency of the endpoint. By default, a request should take no more than 0.5s. But this can be adjusted by endpoint.
+        The number of CustomersDot requests meeting their duration target based on the urgency of the endpoint. By default, a request should take no more than 0.4s. But this can be adjusted by endpoint.
 
         This alert signifies that the SLI was previously reporting traffic, but is no longer - the signal is absent.
 

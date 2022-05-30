@@ -19,7 +19,7 @@
 * [VM Build Process with Terraform and Chef](../config_management/chef-process-overview.md)
 * [Chef Vault Basics](../config_management/chef-vault.md)
 * [Chef Tips and Tools](../config_management/chef-workflow.md)
-* [customers.gitlab.com](../customers/api-key-rotation.md)
+* [customers.gitlab.com](../customersdot/api-key-rotation.md)
 * [../elastic/elastic-cloud.md](../elastic/elastic-cloud.md)
 * [HAProxy management at GitLab](../frontend/haproxy.md)
 * [Gitaly token rotation](../gitaly/gitaly-token-rotation.md)

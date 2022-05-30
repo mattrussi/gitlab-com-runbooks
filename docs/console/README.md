@@ -29,7 +29,7 @@
 * [../ci-runners/service-ci-runners.md](../ci-runners/service-ci-runners.md)
 * [Cloud SQL Troubleshooting](../cloud-sql/cloud-sql.md)
 * [Cloudflare Logs](../cloudflare/logging.md)
-* [customers.gitlab.com](../customers/api-key-rotation.md)
+* [customers.gitlab.com](../customersdot/api-key-rotation.md)
 * [../elastic/elasticsearch-integration-in-gitlab.md](../elastic/elasticsearch-integration-in-gitlab.md)
 * [Frontend (HAProxy) Logging](../frontend/haproxy-logging.md)
 * [HAProxy management at GitLab](../frontend/haproxy.md)
