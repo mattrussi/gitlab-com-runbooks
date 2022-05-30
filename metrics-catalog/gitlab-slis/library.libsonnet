@@ -33,7 +33,7 @@ local list = [
     feature_category: 'fulfillment_platform',
     description: |||
       The number of CustomersDot requests meeting their duration target based on the urgency
-      of the endpoint. By default, a request should take no more than 0.5s. But
+      of the endpoint. By default, a request should take no more than 0.4s. But
       this can be adjusted by endpoint.
     |||,
   }),

@@ -7,7 +7,7 @@ metricsCatalog.serviceDefinition({
   tier: 'sv',
 
   monitoringThresholds: {
-    apdexScore: 0.92,
+    apdexScore: 0.9,
     errorRatio: 0.998,
   },
 
@@ -26,7 +26,8 @@ metricsCatalog.serviceDefinition({
             'Stackdriver Logs: CustomersDot',
             queryHash={
               'resource.type': 'gce_instance',
-              'jsonPayload.duration': '*',
+              'jsonPayload.controller': { ne: '' },
+              'jsonPayload.duration': { exists: true },
             },
           ),
         ],
