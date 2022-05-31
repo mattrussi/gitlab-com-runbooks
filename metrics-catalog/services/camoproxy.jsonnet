@@ -15,6 +15,10 @@ metricsCatalog.serviceDefinition({
   serviceDependencies: {
     // If Camoproxy has any dependencies, we should add them here
   },
+  provisioning: {
+    vms: true,
+    kubernetes: true,
+  },
   serviceLevelIndicators: {
     loadbalancer: haproxyComponents.haproxyHTTPLoadBalancer(
       userImpacting=true,
