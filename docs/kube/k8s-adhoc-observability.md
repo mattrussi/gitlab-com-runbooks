@@ -15,6 +15,11 @@ the `noexec` mount option.  To run shell scripts we must explicitly invoke the s
 The sections below cover more details, but as a brief summary:
 
 ```
+Get the helper scripts:
+
+$ git clone https://gitlab.com/gitlab-com/runbooks.git
+$ cd runbooks/scripts/gke/
+
 CPU profiling:
 
 $ bash perf_flamegraph_for_all_running_processes.sh
