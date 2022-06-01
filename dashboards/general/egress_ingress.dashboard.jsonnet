@@ -90,10 +90,10 @@ local networkPanelK8s(
 local osPanel(title) =
   generalGraphPanel(title)
   .addTarget(
-    promQuery.target('sum by (bucket_name) (sum_over_time(stackdriver_gcs_bucket_storage_googleapis_com_network_sent_bytes_count{env="$environment"}[1d]))', legendFormat='egress {{ bucket_name }}', interval='1d')
+    promQuery.target('sum by (bucket_name) (sum_over_time(stackdriver_gcs_bucket_storage_googleapis_com_network_sent_bytes_count{env="$environment"}[1h]))', legendFormat='egress {{ bucket_name }}', interval='1h')
   )
   .addTarget(
-    promQuery.target('sum by (bucket_name) (sum_over_time(stackdriver_gcs_bucket_storage_googleapis_com_network_received_bytes_count{env="$environment"}[1d])) * -1', legendFormat='ingress {{ bucket_name }}', interval='1d')
+    promQuery.target('sum by (bucket_name) (sum_over_time(stackdriver_gcs_bucket_storage_googleapis_com_network_received_bytes_count{env="$environment"}[1h])) * -1', legendFormat='ingress {{ bucket_name }}', interval='1h')
   )
   .resetYaxes()
   .addYaxis(
@@ -111,7 +111,7 @@ basic.dashboard(
   editable=true,
   includeStandardEnvironmentAnnotations=false,
   includeEnvironmentTemplate=false,
-  time_from='now-30d',
+  time_from='now-14d',
   time_to='now'
 )
 
@@ -293,6 +293,6 @@ basic.dashboard(
 )
 .addPanels(
   layout.grid([
-    osPanel('Object Storage by Bucket data transfer / 24h'),
+    osPanel('Object Storage by Bucket data transfer / hour'),
   ], cols=1, rowHeight=7, startRow=8)
 )
