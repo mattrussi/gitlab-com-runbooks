@@ -208,4 +208,13 @@ local defaultPrometheusDatasource = (import 'gitlab-metrics-config.libsonnet').d
       includeAll=true,
       allValues='.*',
     ),
+  slaType::
+    template.new(
+      'sla_type',
+      '$PROMETHEUS_DS',
+      'label_values(sla:gitlab:ratio, sla_type)',
+      current='weighted_v2.1',
+      refresh='load',
+      sort=1,
+    ),
 }
