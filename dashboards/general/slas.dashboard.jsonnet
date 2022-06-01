@@ -7,6 +7,7 @@ local layout = import 'grafana/layout.libsonnet';
 local row = grafana.row;
 local selectors = import 'promql/selectors.libsonnet';
 local seriesOverrides = import 'grafana/series_overrides.libsonnet';
+local templates = import 'grafana/templates.libsonnet';
 local thresholds = import 'gitlab-dashboards/thresholds.libsonnet';
 local generalServicesDashboard = import 'general-services-dashboard.libsonnet';
 local template = grafana.template;
@@ -162,14 +163,7 @@ basic.dashboard(
   time_to='now-1d/d',
 )
 .addTemplate(
-  template.new(
-    'sla_type',
-    '$PROMETHEUS_DS',
-    'label_values(sla:gitlab:ratio, sla_type)',
-    current='weighted_v2.1',
-    refresh='load',
-    sort=1,
-  )
+  templates.slaType,
 )
 .addPanel(
   row.new(title='Overall System Availability'),

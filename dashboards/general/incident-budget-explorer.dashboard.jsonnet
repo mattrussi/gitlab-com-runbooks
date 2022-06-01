@@ -121,6 +121,7 @@ basic.dashboard(
   time_to='now/m',
 )
 .addTemplate(templates.stage)
+.addTemplate(templates.slaType)
 .addPanel(
   row.new(title='Overall GitLab.com Availability Points Spent'),
   gridPos={
@@ -137,7 +138,7 @@ basic.dashboard(
       query=|||
         (1 - %(budgetExpression)s) * ($__range_ms / (86400000 * 30.5)) * 100 * 100
       ||| % {
-        budgetExpression: serviceAvailabilityQuery({}, 'sla:gitlab:ratio', '$__range'),
+        budgetExpression: serviceAvailabilityQuery({ sla_type: '$sla_type' }, 'sla:gitlab:ratio', '$__range'),
       },
       invertColors=true,
       decimals=2,
@@ -148,7 +149,7 @@ basic.dashboard(
       query=|||
         (1 - sla:gitlab:target{monitor="global"}) * 100 * 100
       ||| % {
-        budgetExpression: serviceAvailabilityQuery({}, 'sla:gitlab:ratio', '$__range'),
+        budgetExpression: serviceAvailabilityQuery({ sla_type: '$sla_type' }, 'sla:gitlab:ratio', '$__range'),
       },
       invertColors=true,
       decimals=0,
@@ -158,7 +159,7 @@ basic.dashboard(
       title='Availability - gitlab.com',
       description='Rolling average SLO adherence across all primary services. Higher is better.',
       yAxisLabel='SLA',
-      query=serviceAvailabilityQuery({}, 'sla:gitlab:ratio', '$__interval'),
+      query=serviceAvailabilityQuery({ sla_type: '$sla_type' }, 'sla:gitlab:ratio', '$__interval'),
       legendFormat='gitlab.com SLA',
       interval='1m',
       legend_show=false
