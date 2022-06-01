@@ -29,6 +29,7 @@ metricsCatalog.serviceDefinition({
               'jsonPayload.controller': { exists: true },
               'jsonPayload.duration': { exists: true },
             },
+            project='gitlab-subscriptions-prod',
           ),
         ],
       },
