@@ -335,14 +335,14 @@
   },
   distribution_build: {
     name: 'Distribution:Build',
-    stage: 'enablement',
+    stage: 'systems',
     feature_categories: [
       'build',
     ],
   },
   distribution_deploy: {
     name: 'Distribution:Deploy',
-    stage: 'enablement',
+    stage: 'systems',
     feature_categories: [
       'omnibus_package',
       'cloud_native_installation',
@@ -350,7 +350,7 @@
   },
   geo: {
     name: 'Geo',
-    stage: 'enablement',
+    stage: 'systems',
     feature_categories: [
       'geo_replication',
       'disaster_recovery',
@@ -359,7 +359,7 @@
   },
   memory: {
     name: 'Memory',
-    stage: 'enablement',
+    stage: 'data_stores',
     feature_categories: [
       'memory',
       'redis',
@@ -367,21 +367,21 @@
   },
   global_search: {
     name: 'Global Search',
-    stage: 'enablement',
+    stage: 'data_stores',
     feature_categories: [
       'global_search',
     ],
   },
   database: {
     name: 'Database',
-    stage: 'enablement',
+    stage: 'data_stores',
     feature_categories: [
       'database',
     ],
   },
   sharding: {
     name: 'Sharding',
-    stage: 'enablement',
+    stage: 'data_stores',
     feature_categories: [
       'sharding',
     ],

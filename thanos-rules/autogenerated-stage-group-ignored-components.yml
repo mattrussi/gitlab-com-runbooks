@@ -101,14 +101,14 @@ groups:
       product_stage: growth
       stage_group: conversion
     expr: "1"
-- name: 'Stage group Ignored components: enablement - Database'
+- name: 'Stage group Ignored components: data_stores - Database'
   interval: 1m
   partial_response_strategy: warn
   rules:
   - record: gitlab:ignored_component:stage_group
     labels:
       component: graphql_queries
-      product_stage: enablement
+      product_stage: data_stores
       stage_group: database
     expr: "1"
 - name: 'Stage group Ignored components: modelops - DataOps'
@@ -141,14 +141,14 @@ groups:
       product_stage: platforms
       stage_group: delivery
     expr: "1"
-- name: 'Stage group Ignored components: enablement - Distribution:Deploy'
+- name: 'Stage group Ignored components: systems - Distribution:Deploy'
   interval: 1m
   partial_response_strategy: warn
   rules:
   - record: gitlab:ignored_component:stage_group
     labels:
       component: graphql_queries
-      product_stage: enablement
+      product_stage: systems
       stage_group: distribution_deploy
     expr: "1"
 - name: 'Stage group Ignored components: secure - Dynamic Analysis'
@@ -201,14 +201,14 @@ groups:
       product_stage: fulfillment
       stage_group: fulfillment_platform
     expr: "1"
-- name: 'Stage group Ignored components: enablement - Geo'
+- name: 'Stage group Ignored components: systems - Geo'
   interval: 1m
   partial_response_strategy: warn
   rules:
   - record: gitlab:ignored_component:stage_group
     labels:
       component: graphql_queries
-      product_stage: enablement
+      product_stage: systems
       stage_group: geo
     expr: "1"
 - name: 'Stage group Ignored components: create - Gitaly'
@@ -221,14 +221,14 @@ groups:
       product_stage: create
       stage_group: gitaly
     expr: "1"
-- name: 'Stage group Ignored components: enablement - Global Search'
+- name: 'Stage group Ignored components: data_stores - Global Search'
   interval: 1m
   partial_response_strategy: warn
   rules:
   - record: gitlab:ignored_component:stage_group
     labels:
       component: graphql_queries
-      product_stage: enablement
+      product_stage: data_stores
       stage_group: global_search
     expr: "1"
 - name: 'Stage group Ignored components: manage - Import'
@@ -251,14 +251,14 @@ groups:
       product_stage: ecosystem
       stage_group: integrations
     expr: "1"
-- name: 'Stage group Ignored components: enablement - Memory'
+- name: 'Stage group Ignored components: data_stores - Memory'
   interval: 1m
   partial_response_strategy: warn
   rules:
   - record: gitlab:ignored_component:stage_group
     labels:
       component: graphql_queries
-      product_stage: enablement
+      product_stage: data_stores
       stage_group: memory
     expr: "1"
 - name: 'Stage group Ignored components: modelops - MLOps'
@@ -431,14 +431,14 @@ groups:
       product_stage: platforms
       stage_group: scalability
     expr: "1"
-- name: 'Stage group Ignored components: enablement - Sharding'
+- name: 'Stage group Ignored components: data_stores - Sharding'
   interval: 1m
   partial_response_strategy: warn
   rules:
   - record: gitlab:ignored_component:stage_group
     labels:
       component: graphql_queries
-      product_stage: enablement
+      product_stage: data_stores
       stage_group: sharding
     expr: "1"
 - name: 'Stage group Ignored components: create - Source Code'
