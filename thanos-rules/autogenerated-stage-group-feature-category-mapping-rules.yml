@@ -50,13 +50,13 @@ groups:
   - record: gitlab:feature_category:stage_group:mapping
     labels:
       feature_category: backup_restore
-      product_stage: enablement
+      product_stage: systems
       stage_group: geo
     expr: "1"
   - record: gitlab:feature_category:stage_group:mapping
     labels:
       feature_category: build
-      product_stage: enablement
+      product_stage: systems
       stage_group: distribution_build
     expr: "1"
   - record: gitlab:feature_category:stage_group:mapping
@@ -74,7 +74,7 @@ groups:
   - record: gitlab:feature_category:stage_group:mapping
     labels:
       feature_category: cloud_native_installation
-      product_stage: enablement
+      product_stage: systems
       stage_group: distribution_deploy
     expr: "1"
   - record: gitlab:feature_category:stage_group:mapping
@@ -152,7 +152,7 @@ groups:
   - record: gitlab:feature_category:stage_group:mapping
     labels:
       feature_category: database
-      product_stage: enablement
+      product_stage: data_stores
       stage_group: database
     expr: "1"
   - record: gitlab:feature_category:stage_group:mapping
@@ -218,7 +218,7 @@ groups:
   - record: gitlab:feature_category:stage_group:mapping
     labels:
       feature_category: disaster_recovery
-      product_stage: enablement
+      product_stage: systems
       stage_group: geo
     expr: "1"
   - record: gitlab:feature_category:stage_group:mapping
@@ -302,7 +302,7 @@ groups:
   - record: gitlab:feature_category:stage_group:mapping
     labels:
       feature_category: geo_replication
-      product_stage: enablement
+      product_stage: systems
       stage_group: geo
     expr: "1"
   - record: gitlab:feature_category:stage_group:mapping
@@ -326,7 +326,7 @@ groups:
   - record: gitlab:feature_category:stage_group:mapping
     labels:
       feature_category: global_search
-      product_stage: enablement
+      product_stage: data_stores
       stage_group: global_search
     expr: "1"
   - record: gitlab:feature_category:stage_group:mapping
@@ -416,7 +416,7 @@ groups:
   - record: gitlab:feature_category:stage_group:mapping
     labels:
       feature_category: memory
-      product_stage: enablement
+      product_stage: data_stores
       stage_group: memory
     expr: "1"
   - record: gitlab:feature_category:stage_group:mapping
@@ -458,7 +458,7 @@ groups:
   - record: gitlab:feature_category:stage_group:mapping
     labels:
       feature_category: omnibus_package
-      product_stage: enablement
+      product_stage: systems
       stage_group: distribution_deploy
     expr: "1"
   - record: gitlab:feature_category:stage_group:mapping
@@ -554,7 +554,7 @@ groups:
   - record: gitlab:feature_category:stage_group:mapping
     labels:
       feature_category: redis
-      product_stage: enablement
+      product_stage: data_stores
       stage_group: memory
     expr: "1"
   - record: gitlab:feature_category:stage_group:mapping
@@ -656,7 +656,7 @@ groups:
   - record: gitlab:feature_category:stage_group:mapping
     labels:
       feature_category: sharding
-      product_stage: enablement
+      product_stage: data_stores
       stage_group: sharding
     expr: "1"
   - record: gitlab:feature_category:stage_group:mapping
