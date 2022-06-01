@@ -15,6 +15,7 @@
 
 ## Troubleshooting Pointers
 
+* [design.gitlab.com Runbook](../design/design-gitlab-com.md)
 * [Kubernetes-Agent Basic Troubleshooting](kubernetes-agent-basic-troubleshooting.md)
 * [Kubernetes-Agent Disable Integrations](kubernetes-agent-disable-integrations.md)
 * [Gitlab.com on Kubernetes](../onboarding/gitlab.com_on_k8s.md)
