@@ -474,12 +474,6 @@ This project has adopted [`asdf version-manager`](https://github.com/asdf-vm/asd
 
 Installation instructions for `asdf` can be found at https://asdf-vm.com/#/core-manage-asdf-vm?id=install.
 
-For compatibility, please configure the following line in `~/.asdfrc`
-
-```
-legacy_version_file = yes
-```
-
 ### Dependencies and required tooling
 
 Following tools and libraries are required to develop dashboards locally:
@@ -571,9 +565,10 @@ asdf install
 
 ### Ruby
 
-Additional to `asdf`, many developers use `rbenv`, `rvm` or other tooling, so, for convenience, we maintain
-the standard `.ruby-version` file for the Ruby version. ASDF needs to be configured using
-the `legacy_version_file = yes` setting described in the [parent section](#tool-versioning).
+Ruby is managed through `asdf`. The version of Ruby is configured via the `.tool-versions` file.
+Note that previously, contributors on this project needed to configure
+[`legacy_version_file = yes`](https://asdf-vm.com/manage/configuration.html#legacy-version-file)
+but this setting is no longer required.
 
 ## Test jsonnet files
 

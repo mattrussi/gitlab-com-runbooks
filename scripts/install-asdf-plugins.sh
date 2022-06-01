@@ -3,6 +3,9 @@
 set -euo pipefail
 IFS=$'\n\t'
 
+# shellcheck source=/dev/null
+source "$ASDF_DIR/asdf.sh"
+
 plugin_list=$(asdf plugin list || echo "")
 
 install_plugin() {
@@ -20,6 +23,9 @@ install_plugin() {
     echo "Failed to perform version installation: ${plugin}"
     return 1
   }
+
+  # Use this plugin for the rest of the install-asdf-plugins.sh script...
+  asdf shell "${plugin}" "$(asdf current "${plugin}" | awk '{print $2}')"
 }
 
 check_global_golang_install() {
@@ -62,15 +68,4 @@ install_plugin terraform
 install_plugin promtool https://gitlab.com/gitlab-com/gl-infra/asdf-promtool
 install_plugin thanos https://gitlab.com/gitlab-com/gl-infra/asdf-thanos
 install_plugin jsonnet-tool https://gitlab.com/gitlab-com/gl-infra/asdf-jsonnet-tool.git
-install_plugin ruby || {
-  cat <<-EOF
----------------------------------------------------------------------------------------
-Ruby install failed. Are you sure you've followed the instructions at
-https://gitlab.com/gitlab-com/runbooks/-/blob/master/README.md#tool-versioning
-and added \`legacy_version_file = yes\` to ~/.asdfrc?
-
-echo "legacy_version_file = yes" >> ~/.asdfrc
----------------------------------------------------------------------------------------
-EOF
-  exit 1
-}
+install_plugin ruby
