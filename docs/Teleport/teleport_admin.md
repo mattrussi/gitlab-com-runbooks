@@ -31,9 +31,14 @@ Summary from the [teleport admin docs](https://goteleport.com/docs/admin-guide/)
 - Check the systemd logs: `sudo journalctl -u teleport`
 - local check that things are up: `sudo tctl status`
 
-## Rebuilding the service
+## Rebuilding the teleport server
 
-For the most part, the service can be rebuilt by using `tf destroy` and `tf apply` in the usual way.  There are a few manual steps though.
+If you just want to rebuild the teleport server, and not the load balancers, console servers, and instance groups that are associated with it, then you just need to taint the node (`tf taint module.teleport.google_compute_instance.default[0]`) and do a targetted plan (`tf plan -target=module.teleport`) and apply (`tf apply -target=module.teleport`).
+
+Once the node is rebuilt, all settings and certificates will have been destroyed, so you'll need to set up the [Secrets](#secrets) and [Slack integration](#slack-integration) again.
+## Rebuilding the entire service
+
+For the most part, the service can be rebuilt by using `tf destroy` and `tf apply` in the usual way. Many of the components have their lifecycle settings set to not allow destroy, so you'll have to go through the messy process of disabling them if you really want to do this.  There is a very good chance that you really don't want to do this.  Unless you are really sure that this is the only way to accomplish what you want to accomplish, you should probably just be rebuilding the teleport server itself (See the section above)
 
 ### Terraform
 
