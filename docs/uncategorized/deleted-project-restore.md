@@ -118,25 +118,27 @@ ProjectTreeSaver needs to run "as a user", so we use an admin user to ensure
 that we have permissions.
 
 ```ruby
-Namespace.find_by_full_path('some-ns')
-=> #<Group id:1234 @myns>
-irb(main):027:0> Project.where(namespace_id: 1234, path: 'some-project')
-=> #<ActiveRecord::Relation [#<Project id:5678 myns/some-project>]>
-irb(main):028:0> proj = Project.find(5678)
-=> #<Project id:5678 myns/some-project>
+irb(main):001:0> user = User.find_by_username('an-admin')
+=> #<User id:1234 @an-admin>
+irb(main):002:0> project = Project.find_by_full_path('namespace/project-name')
+=> #<Project id:5678 namespace/project-name>
 
-irb(main):028:0> proj.repository_storage
+irb(main):003:0> project.repository_storage
 ... note down this output...
 
-irb(main):028:0> proj.disk_path
+irb(main):004:0> project.disk_path
 ... note down this output ...
 
-irb(main):023:0> admin_user = User.find_by_username('an-admin')
-=> #<User id:1234 @an-admin>
+irb(main):005:0> shared = Gitlab::ImportExport::Shared.new(project)
+irb(main):006:0> version_saver = Gitlab::ImportExport::VersionSaver.new(shared: shared)
+irb(main):007:0> tree_saver = Gitlab::ImportExport::Project::TreeSaver.new(project: project, current_user: user, shared: shared)
+irb(main):009:0> version_saver.save
+irb(main):010:0> tree_saver.save
 
-pts = Gitlab::ImportExport::Project::TreeSaver.new(project: proj, current_user: admin_user, shared: proj.import_export_shared)
+irb(main):011:0> include Gitlab::ImportExport::CommandLineUtil
+irb(main):012:0> archive_file = File.join(shared.archive_path, Gitlab::ImportExport.export_filename(exportable: project))
+irb(main):013:0> tar_czf(archive: archive_file, dir: shared.export_path)
 ... some output that includes the path to a project tree directory, which will be something like /var/opt/gitlab/gitlab-rails/shared/tmp/gitlab_exports/@hashed/. Note this down.
-pts.save
 ```
 
 We now have the Gitaly shard and path on persistent disk the project was stored
