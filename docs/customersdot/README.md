@@ -33,9 +33,16 @@ and is is managed in
   - https://cloudlogging.app.goo.gl/Jew7kUFaW8SUgeew9
 
 #### Metrics
-Metrics are currently limited, only some are exported (node-exporter),
-no dashboards exist that can be referenced. Building out metrics and dashboards
-are TODO tasks.
+
+Specifications for a Customersdot metric catalog is available at [`metrics-catalog/services/customersdot.jsonnet`](../../metrics-catalog/services/customersdot.jsonnet).
+
+This catalog references the `customers_dot_requests_apdex` SLI, introduced as a
+[Rails application SLI](https://docs.gitlab.com/ee/development/application_slis/#gitlab-application-service-level-indicators-slis) for CustomersDot (see [Collector class](https://gitlab.com/gitlab-org/customers-gitlab-com/-/blob/main/lib/metrics/collector.rb) for more details).
+
+Two Prometheus instances have been set up for CustomersDot:
+- [Prometheus instance for Staging](https://prometheus-gke.stgsub.gitlab.net/graph)
+- [Prometheus instance for Production](https://prometheus-gke.prdsub.gitlab.net/graph)
+
 
 #### Database Access
 Once you have logged into a VM, if you have the rights you can connect to the

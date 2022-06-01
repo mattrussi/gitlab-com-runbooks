@@ -15,7 +15,7 @@
 
 ## Troubleshooting Pointers
 
-* [Disk space alerts (production)](../customers/disk-space.md)
+* [Disk space alerts (production)](../customersdot/disk-space.md)
 * [Management for forum.gitlab.com](../forum/discourse-forum.md)
 * [HAProxy management at GitLab](../frontend/haproxy.md)
 * [Service Error Rate](../monitoring/definition-service-error-rate.md)

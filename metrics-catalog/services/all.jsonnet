@@ -8,6 +8,7 @@
   import 'ci-runners.jsonnet',
   import 'cloud-sql.jsonnet',
   import 'consul.jsonnet',
+  import 'customersdot.jsonnet',
   import 'frontend.jsonnet',
   import 'google-cloud-storage.jsonnet',
   import 'git.jsonnet',
