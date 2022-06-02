@@ -36,3 +36,5 @@ for i in "${REPO_DIR}"/reference-architectures/*/src/generate.jsonnet; do
   rm -rf "${dir}/config"
   render_multi_jsonnet "${dir}/config" "$i"
 done
+
+"${REPO_DIR}"/scripts/generate-reference-architecture-docs.sh
