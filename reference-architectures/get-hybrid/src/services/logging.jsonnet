@@ -36,5 +36,20 @@ metricsCatalog.serviceDefinition({
 
       significantLabels: ['domain_name'],
     },
+
+    firehose_record_delivery: {
+      userImpacting: false,
+      featureCategory: 'not_owned',
+      description: |||
+        This SLI monitors records delivered to Opensearch using Kinesis Firehose.
+      |||,
+
+      requestRate: customRateQuery(|||
+        avg_over_time(aws_firehose_delivery_to_elasticsearch_records_average[%(burnRate)s])
+      |||),
+
+      significantLabels: ['name'],
+
+    },
   },
 })
