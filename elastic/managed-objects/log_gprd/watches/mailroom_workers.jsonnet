@@ -95,7 +95,7 @@ local es_query = {
         message: {
           from: 'ElasticCloud Watcher: MailRoom jobs have got exceptions',
           to: [
-            '#g_scalability',
+            '#alerts_mailroom',
           ],
           text: 'MailRoom jobs have got exceptions while processing. Logs:  https://log.gprd.gitlab.net/goto/4dd1ac50-e19b-11ec-aade-19e9974a7229. Please check this issue for more information: https://gitlab.com/gitlab-com/gl-infra/production/-/issues/7124',
         },

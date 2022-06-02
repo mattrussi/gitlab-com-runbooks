@@ -70,7 +70,7 @@ local es_query = {
         message: {
           from: 'ElasticCloud Watcher: MailRoom process gets some errors',
           to: [
-            '#g_scalability',
+            '#alerts_mailroom',
           ],
           text: 'MailRoom process logged errors. This could be caused by a process restart. Logs: https://log.gprd.gitlab.net/goto/7d651600-e19b-11ec-8741-ad075583b944. Please check this issue for more information: https://gitlab.com/gitlab-com/gl-infra/production/-/issues/7124',
         },

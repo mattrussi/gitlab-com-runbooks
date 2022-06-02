@@ -71,7 +71,7 @@ local es_query = {
         message: {
           from: 'ElasticCloud Watcher: MailRoom internal endpoint returns 500 status',
           to: [
-            '#g_scalability',
+            '#alerts_mailroom',
           ],
           text: 'MailRoom internal endpoint returned 500 status. Logs: https://log.gprd.gitlab.net/goto/8948e8c0-e19b-11ec-aade-19e9974a7229. Please check this issue for more information: https://gitlab.com/gitlab-com/gl-infra/production/-/issues/7124',
         },
