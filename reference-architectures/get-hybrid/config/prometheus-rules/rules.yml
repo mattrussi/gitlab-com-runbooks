@@ -517,6 +517,15 @@ groups:
       tier: inf
       type: logging
     record: gitlab_component_errors:rate_5m
+  - expr: |
+      sum by () (
+        avg_over_time(aws_firehose_delivery_to_elasticsearch_records_average[5m])
+      )
+    labels:
+      component: firehose_record_delivery
+      tier: inf
+      type: logging
+    record: gitlab_component_ops:rate_5m
 - interval: 2m
   name: 'Component-Level SLIs: logging - 30m burn-rate'
   rules:
@@ -549,6 +558,15 @@ groups:
       tier: inf
       type: logging
     record: gitlab_component_errors:rate_30m
+  - expr: |
+      sum by () (
+        avg_over_time(aws_firehose_delivery_to_elasticsearch_records_average[30m])
+      )
+    labels:
+      component: firehose_record_delivery
+      tier: inf
+      type: logging
+    record: gitlab_component_ops:rate_30m
 - interval: 1m
   name: 'Component-Level SLIs: logging - 1h burn-rate'
   rules:
@@ -581,6 +599,15 @@ groups:
       tier: inf
       type: logging
     record: gitlab_component_errors:rate_1h
+  - expr: |
+      sum by () (
+        avg_over_time(aws_firehose_delivery_to_elasticsearch_records_average[1h])
+      )
+    labels:
+      component: firehose_record_delivery
+      tier: inf
+      type: logging
+    record: gitlab_component_ops:rate_1h
 - interval: 2m
   name: 'Component-Level SLIs: logging - 6h burn-rate'
   rules:
@@ -613,12 +640,29 @@ groups:
       tier: inf
       type: logging
     record: gitlab_component_errors:rate_6h
+  - expr: |
+      sum by () (
+        avg_over_time(aws_firehose_delivery_to_elasticsearch_records_average[6h])
+      )
+    labels:
+      component: firehose_record_delivery
+      tier: inf
+      type: logging
+    record: gitlab_component_ops:rate_6h
 - interval: 1m
   name: 'Component mapping: logging'
   rules:
   - expr: "1"
     labels:
       component: elasticsearch_searching
+      regional_aggregation: "no"
+      service_aggregation: "yes"
+      tier: inf
+      type: logging
+    record: gitlab_component_service:mapping
+  - expr: "1"
+    labels:
+      component: firehose_record_delivery
       regional_aggregation: "no"
       service_aggregation: "yes"
       tier: inf
@@ -4755,6 +4799,78 @@ groups:
       gitlab_component_ops:rate_5m{component="elasticsearch_searching",type="logging"} offset 1h
       unless
       gitlab_component_ops:rate_5m{component="elasticsearch_searching",type="logging"}
+    for: 30m
+    labels:
+      aggregation: component
+      alert_class: traffic_cessation
+      alert_type: cause
+      feature_category: not_owned
+      pager: pagerduty
+      rules_domain: general
+      severity: s2
+      sli_type: ops
+      slo_alert: "no"
+      user_impacting: "no"
+  - alert: LoggingServiceFirehoseRecordDeliveryTrafficCessation
+    annotations:
+      description: |
+        This SLI monitors records delivered to Opensearch using Kinesis Firehose.
+
+        This alert signifies that the SLI is reporting a cessation of traffic; the signal is present, but is zero.
+      grafana_dashboard_id: logging-main/logging-overview
+      grafana_dashboard_link: https://dashboards.gitlab.net/d/logging-main/logging-overview?from=now-6h/m&to=now-1m/m&var-environment={{
+        $labels.environment }}&var-stage={{ $labels.stage }}
+      grafana_min_zoom_hours: "6"
+      grafana_panel_id: "562608976"
+      grafana_variables: environment,stage
+      promql_template_1: |
+        sum by () (
+          avg_over_time(aws_firehose_delivery_to_elasticsearch_records_average[5m])
+        )
+      runbook: docs/logging/README.md
+      title: The firehose_record_delivery SLI of the logging service has not received
+        any traffic in the past 30m
+    expr: |
+      gitlab_component_ops:rate_30m{component="firehose_record_delivery",type="logging"} == 0
+      and
+      gitlab_component_ops:rate_30m{component="firehose_record_delivery",type="logging"} offset 1h >= 0.16666666666666666
+    for: 5m
+    labels:
+      aggregation: component
+      alert_class: traffic_cessation
+      alert_type: cause
+      feature_category: not_owned
+      pager: pagerduty
+      rules_domain: general
+      severity: s2
+      sli_type: ops
+      slo_alert: "no"
+      user_impacting: "no"
+  - alert: LoggingServiceFirehoseRecordDeliveryTrafficAbsent
+    annotations:
+      description: |
+        This SLI monitors records delivered to Opensearch using Kinesis Firehose.
+
+        This alert signifies that the SLI was previously reporting traffic, but is no longer - the signal is absent.
+
+        This could be caused by a change to the metrics used in the SLI, or by the service not receiving traffic.
+      grafana_dashboard_id: logging-main/logging-overview
+      grafana_dashboard_link: https://dashboards.gitlab.net/d/logging-main/logging-overview?from=now-6h/m&to=now-1m/m&var-environment={{
+        $labels.environment }}&var-stage={{ $labels.stage }}
+      grafana_min_zoom_hours: "6"
+      grafana_panel_id: "562608976"
+      grafana_variables: environment,stage
+      promql_template_1: |
+        sum by () (
+          avg_over_time(aws_firehose_delivery_to_elasticsearch_records_average[5m])
+        )
+      runbook: docs/logging/README.md
+      title: The firehose_record_delivery SLI of the logging service has not reported
+        any traffic in the past 30m
+    expr: |
+      gitlab_component_ops:rate_5m{component="firehose_record_delivery",type="logging"} offset 1h
+      unless
+      gitlab_component_ops:rate_5m{component="firehose_record_delivery",type="logging"}
     for: 30m
     labels:
       aggregation: component
