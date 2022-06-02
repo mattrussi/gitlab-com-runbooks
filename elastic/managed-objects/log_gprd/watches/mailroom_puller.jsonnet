@@ -5,7 +5,7 @@ local query_period = schedule_mins + 2;
 local alert_threshold = 0;
 
 // Using this a variant of query:
-// https://log.gprd.gitlab.net/goto/558fbc0dd1e5c53b69f9e95c542b36b1
+// https://log.gprd.gitlab.net/goto/7d651600-e19b-11ec-8741-ad075583b944
 local es_query = {
   search_type: 'query_then_fetch',
   indices: [
@@ -72,7 +72,7 @@ local es_query = {
           to: [
             '#g_scalability',
           ],
-          text: 'MailRoom process gets some errors. This may make MailRoom process restarts. This maybe a signal for potential issue. Logs: https://log.gprd.gitlab.net/goto/7d651600-e19b-11ec-8741-ad075583b944. Please check this issue for more information: https://gitlab.com/gitlab-com/gl-infra/production/-/issues/7124',
+          text: 'MailRoom process logged errors. This could be caused by a process restart. Logs: https://log.gprd.gitlab.net/goto/7d651600-e19b-11ec-8741-ad075583b944. Please check this issue for more information: https://gitlab.com/gitlab-com/gl-infra/production/-/issues/7124',
         },
       },
     },

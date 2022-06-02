@@ -6,7 +6,7 @@ local query_period = schedule_mins + 2;
 local alert_threshold = 0;
 
 // Using this a variant of query:
-// https://log.gprd.gitlab.net/goto/558fbc0dd1e5c53b69f9e95c542b36b1
+// https://log.gprd.gitlab.net/goto/8948e8c0-e19b-11ec-aade-19e9974a7229
 local es_query = {
   search_type: 'query_then_fetch',
   indices: [
@@ -73,7 +73,7 @@ local es_query = {
           to: [
             '#g_scalability',
           ],
-          text: 'MailRoom internal endpoint returns 500 status for some request. This maybe a signal for potential issue. Logs: https://log.gprd.gitlab.net/goto/8948e8c0-e19b-11ec-aade-19e9974a7229. Please check this issue for more information: https://gitlab.com/gitlab-com/gl-infra/production/-/issues/7124',
+          text: 'MailRoom internal endpoint returned 500 status. Logs: https://log.gprd.gitlab.net/goto/8948e8c0-e19b-11ec-aade-19e9974a7229. Please check this issue for more information: https://gitlab.com/gitlab-com/gl-infra/production/-/issues/7124',
         },
       },
     },
