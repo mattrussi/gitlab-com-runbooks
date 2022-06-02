@@ -61,10 +61,7 @@ metricsCatalog.serviceDefinition({
   regional: true,
   kubeConfig: {
     labelSelectors: kubeLabelSelectors(
-      nodeSelector={ type: 'api' },
-      // TODO: at present, api nodepools do not have the correct stage, shard labels
-      // see https://gitlab.com/gitlab-com/gl-infra/delivery/-/issues/2236
-      nodeStaticLabels={ stage: 'main' },
+      nodeSelector={ type: 'api' }
     ),
   },
   kubeResources: {
