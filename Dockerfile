@@ -1,10 +1,13 @@
 ARG GL_ASDF_JSONNET_TOOL_VERSION
+ARG GL_ASDF_SHELLCHECK_VERSION
 ARG GL_ASDF_SHFMT_VERSION
 ARG GL_ASDF_TERRAFORM_VERSION
 
-FROM registry.gitlab.com/gitlab-com/gl-infra/jsonnet-tool:v${GL_ASDF_JSONNET_TOOL_VERSION} as jsonnet-tool-image
+FROM registry.gitlab.com/gitlab-com/gl-infra/jsonnet-tool:v${GL_ASDF_JSONNET_TOOL_VERSION} AS jsonnet-tool
 
-FROM mvdan/shfmt:v${GL_ASDF_SHFMT_VERSION} as shfmt-image
+FROM koalaman/shellcheck:v${GL_ASDF_SHELLCHECK_VERSION} AS shellcheck
+
+FROM mvdan/shfmt:v${GL_ASDF_SHFMT_VERSION}-alpine as shfmt
 
 FROM hashicorp/terraform:${GL_ASDF_TERRAFORM_VERSION} AS terraform
 
@@ -27,21 +30,20 @@ RUN apk add --no-cache bash git && \
 
 FROM google/cloud-sdk:alpine
 ARG GL_ASDF_PROMTOOL_VERSION
+ARG GL_ASDF_RUBY_VERSION
 ARG GL_ASDF_THANOS_VERSION
 
 # Make sure these version numbers are not ahead of whats running in Production
 ENV ALERTMANAGER_VERSION 0.22.2
 
-RUN apk add --no-cache curl bash git jq alpine-sdk build-base openssl tar gcc libc-dev make
+RUN apk add --no-cache curl bash git jq openssl tar zlib
 
-COPY .ruby-version .ruby-version
-
-RUN apk add --no-cache linux-headers openssl-dev zlib-dev && \
+RUN apk add --no-cache --virtual .build-deps build-base openssl-dev zlib-dev && \
   git clone https://github.com/rbenv/ruby-build.git && \
   PREFIX=/usr/local ./ruby-build/install.sh && \
-  ruby-build $(cat .ruby-version) /usr/local && \
-  apk del --no-cache glib-dev linux-headers openssl-dev zlib-dev && \
-  rm -rf /tmp/* /var/tmp/* /var/cache/apk/*
+  ruby-build ${GL_ASDF_RUBY_VERSION} /usr/local && \
+  apk del --no-cache .build-deps && \
+  rm -rf ./ruby-build/ /tmp/* /var/tmp/* /var/cache/apk/*
 
 RUN gcloud components install kubectl -q
 
@@ -64,19 +66,20 @@ RUN mkdir /thanos && \
   rm thanos.tar.gz && \
   ln -s /thanos/thanos /bin/thanos
 
-COPY --from=nlknguyen/alpine-shellcheck:latest /usr/local/bin/shellcheck /usr/local/bin/shellcheck
-COPY --from=shfmt-image /bin/shfmt /usr/local/bin/shfmt
+COPY --from=shellcheck /bin/shellcheck /bin/shellcheck
+COPY --from=shfmt /bin/shfmt /bin/shfmt
 
 COPY --from=go-jsonnet /build/bin/jsonnet /bin/jsonnet
 COPY --from=go-jsonnet /build/bin/jsonnetfmt /bin/jsonnetfmt
 COPY --from=go-jsonnet /build/bin/jb /bin/jb
 
-COPY --from=jsonnet-tool-image /usr/local/bin/jsonnet-tool /bin/jsonnet-tool
+COPY --from=jsonnet-tool /usr/local/bin/jsonnet-tool /bin/jsonnet-tool
 
 COPY --from=terraform /bin/terraform /bin/terraform
 
-RUN gem install --no-document json && \
-    gem install --no-document yaml-lint && \
+RUN apk add --no-cache --virtual .build-deps build-base && \
+    gem install --no-document json yaml-lint && \
+    apk del --no-cache .build-deps && \
     rm -rf /tmp/* /var/tmp/* /var/cache/apk/*
 
 ENTRYPOINT ["/bin/sh", "-c"]
