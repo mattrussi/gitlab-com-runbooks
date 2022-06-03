@@ -16,6 +16,9 @@ inherit_gem:
   - rubocop-naming.yml
   - rubocop-style.yml
 
+AllCops:
+  TargetRubyVersion: 3.0
+
 # This project doesn't use ActiveRecord, so these will all be false
 # positives.
 CodeReuse/ActiveRecord:
