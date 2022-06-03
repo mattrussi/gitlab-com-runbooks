@@ -6,26 +6,18 @@ set -euo pipefail
 IFS=$'\n\t'
 
 ROOT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
-asdf_current() {
-  asdf current 2>&1 || {
-    echo "# asdf current failed"
-    exit 1
-  }
-}
 
 generate() {
-  asdf_current |
-    grep "${ROOT_DIR}/" |
-    awk '
+  awk '
     BEGIN {
       print "# DO NOT MANUALLY EDIT; Run ./scripts/update-asdf-version-variables.sh to update this";
       print "variables:"
     }
-    {
+    /^[^# ]/ {
       gsub("-", "_", $1);
       print "    GL_ASDF_" toupper($1) "_VERSION: " $2
     }
-    '
+    ' "${ROOT_DIR}/.tool-versions"
 }
 
 generate >"${ROOT_DIR}/.gitlab-ci-asdf-versions.yml"
