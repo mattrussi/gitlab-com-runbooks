@@ -92,8 +92,8 @@ validate-alerts:
 
 .PHONY:validate-yaml
 validate-yaml:
-	if ! $$(command -v yaml-lint); then echo "Please install yaml-lint with 'gem install -N yaml-lint'"; exit 1; fi
-	yaml-lint $(YAML_FILES)
+	if ! command -v yamllint >/dev/null; then echo "Please install yamllint: https://yamllint.readthedocs.io/en/stable/quickstart.html#installing-yamllint"; exit 1; fi
+	yamllint -f colored $(YAML_FILES)
 
 .PHONY: test-jsonnet
 test-jsonnet:
