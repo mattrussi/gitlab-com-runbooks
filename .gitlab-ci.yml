@@ -196,11 +196,18 @@ danger-review:
 
 rubocop:
   extends: .default-job-rules
-  stage: test
+  stage: validate
   script:
     - gem install bundler --no-document -v $BUNDLER_VERSION
     - bundle install --with=test
     - bundle exec rubocop
+
+markdownlint:
+  extends: .default-job-rules
+  stage: validate
+  script:
+    - npm install
+    - npm run markdownlint docs README.md
 
 rspec:
   extends: .default-job-rules
