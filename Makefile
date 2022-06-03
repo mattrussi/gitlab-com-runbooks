@@ -78,12 +78,9 @@ validate-prom-rules:
 	./scripts/validate-recording-rule-groups
 	# TODO: Add rules/*/*.yml when valid rules are created.
 	@$(PROMTOOL_COMMAND) check rules $(PROM_RULE_FILES)
-	# Temporary command. Remove when https://github.com/thanos-io/thanos/issues/4082 is fixed (v0.20.2+)
-	@$(THANOS_COMMAND) tools rules-check $(shell ls thanos-rules/*.yml|awk '{ print "--rules"; print $1 }');
-	# Original command
-	#$(THANOS_COMMAND) tools rules-check --rules thanos-rules/*.yml
+	@$(THANOS_COMMAND) tools rules-check --rules 'thanos-rules/*.yml'
 	# Prometheus config checks are stricter than rules checks, so use a fake config to check this too
-	$(PROMTOOL_COMMAND)  check config scripts/prometheus.yml
+	$(PROMTOOL_COMMAND) check config scripts/prometheus.yml
 
 .PHONY: validate-kibana-urls
 validate-kibana-urls:
@@ -95,8 +92,8 @@ validate-alerts:
 
 .PHONY:validate-yaml
 validate-yaml:
-	if ! $$(command -v yaml-lint); then echo "Please install yaml-lint with 'gem install -N yaml-lint'"; exit 1; fi
-	yaml-lint $(YAML_FILES)
+	if ! command -v yamllint >/dev/null; then echo "Please install yamllint: https://yamllint.readthedocs.io/en/stable/quickstart.html#installing-yamllint"; exit 1; fi
+	yamllint -f colored $(YAML_FILES)
 
 .PHONY: test-jsonnet
 test-jsonnet:

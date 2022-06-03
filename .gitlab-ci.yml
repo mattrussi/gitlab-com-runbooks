@@ -28,7 +28,7 @@ stages:
   - scheduled
 
 variables:
-  BUNDLER_VERSION: 2.1.4
+  BUNDLER_VERSION: 2.3.15
   GOLANG_IMAGE: golang:${GL_ASDF_GOLANG_VERSION}
 
 .matrix_production:
