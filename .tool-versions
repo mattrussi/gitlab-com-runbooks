@@ -9,6 +9,6 @@ jsonnet-tool 1.7.0
 promtool 2.34.0 # Keep this the same as GitLab.com's Prometheus version: https://prometheus.gprd.gitlab.net/status
 ruby 3.1.2
 shellcheck 0.8.0
-shfmt 3.5.1
+shfmt 3.5.0
 terraform 1.2.2
 thanos 0.26.0 # Keep this the same as GitLab.com's Thanos version: https://thanos.gitlab.net/status
