@@ -89,3 +89,7 @@ RSpec/SubjectStub:
     - 'spec/storage_rebalance_spec.rb'
     - 'spec/storage_revert_spec.rb'
     - 'spec/uploads_cleanup_spec.rb'
+
+# Offense count: 4
+Style/OpenStructUse:
+  Enabled: false
