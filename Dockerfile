@@ -36,9 +36,9 @@ ARG GL_ASDF_THANOS_VERSION
 # Make sure these version numbers are not ahead of whats running in Production
 ENV ALERTMANAGER_VERSION 0.22.2
 
-RUN apk add --no-cache curl bash git jq openssl tar zlib
+RUN apk add --no-cache curl bash build-base git jq make openssl tar zlib
 
-RUN apk add --no-cache --virtual .build-deps build-base openssl-dev zlib-dev && \
+RUN apk add --no-cache --virtual .build-deps openssl-dev zlib-dev && \
   git clone https://github.com/rbenv/ruby-build.git && \
   PREFIX=/usr/local ./ruby-build/install.sh && \
   ruby-build ${GL_ASDF_RUBY_VERSION} /usr/local && \
@@ -77,9 +77,7 @@ COPY --from=jsonnet-tool /usr/local/bin/jsonnet-tool /bin/jsonnet-tool
 
 COPY --from=terraform /bin/terraform /bin/terraform
 
-RUN apk add --no-cache --virtual .build-deps build-base && \
-    gem install --no-document json yaml-lint && \
-    apk del --no-cache .build-deps && \
+RUN gem install --no-document json yaml-lint && \
     rm -rf /tmp/* /var/tmp/* /var/cache/apk/*
 
 ENTRYPOINT ["/bin/sh", "-c"]
