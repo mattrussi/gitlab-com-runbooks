@@ -322,5 +322,7 @@ teams:
   - graphql_queries
 - name: fulfillment_platform
   product_stage_group: fulfillment_platform
+  slack_alerts_channel: g_fulfillment_status
+  send_slo_alerts_to_team_slack_channel: true
   ignored_components:
   - graphql_queries
