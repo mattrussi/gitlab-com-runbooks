@@ -11,6 +11,9 @@
 
 ## Logging
 
+* [Admin Activity](https://cloudlogging.app.goo.gl/Htfsfyye1PeAfc1r6)
+* [Data Access](https://cloudlogging.app.goo.gl/fSJgyQ1k1Fupsqb1A)
+
 ## Troubleshooting Pointers
 
 * [../logging/logging_gcs_archive_bigquery.md](../logging/logging_gcs_archive_bigquery.md)
