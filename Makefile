@@ -121,3 +121,8 @@ diagrams:
 
 glsh-install:
 	ln -s $$PWD/glsh.sh /usr/local/bin/glsh
+
+build-docker-image:
+	docker build -t runbooks \
+		$(shell awk '/^[^# ]/ { gsub("-", "_", $$1); print "--build-arg=GL_ASDF_" toupper($$1) "_VERSION=" $$2 }' .tool-versions) \
+		.
