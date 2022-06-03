@@ -142,12 +142,12 @@ duplicates ahead, which will cause the alert to re-fire. Pay attention to
 Thanos / Prometheus has a maximum index size of 64GB. As thanos compacts
 segments together, it tries to avoid creating new indexes larger than this size,
 by skipping compaction of such blocks. Sometimes, this doesn't work
-(https://github.com/thanos-io/thanos/issues/3724).
+(<https://github.com/thanos-io/thanos/issues/3724>).
 
 #### Symptoms
 
-- Thanos compaction halted (`thanos_compact_halted == 1`).
-- `level: error` messages in the logs, with content "compact blocks... exceeding max size of 64GiB"
+* Thanos compaction halted (`thanos_compact_halted == 1`).
+* `level: error` messages in the logs, with content "compact blocks... exceeding max size of 64GiB"
 
 At the time compaction halted, you should see a message of the form:
 
@@ -190,4 +190,4 @@ Restart thanos-compact.
 
 #### Example incidents
 
-- https://gitlab.com/gitlab-com/gl-infra/production/-/issues/3308
+* <https://gitlab.com/gitlab-com/gl-infra/production/-/issues/3308>

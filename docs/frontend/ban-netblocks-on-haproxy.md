@@ -16,9 +16,7 @@ are distributed to the HA Proxy nodes on each chef run by the [gitlab-haproxy](h
 
 **Even if it's called `deny-403-ips.lst` - it will also block non-HTTP traffic!**
 
-**The gitlab.com repo is mirrored by the https://ops.gitlab.net/infrastructure/lib/front-end-security/ instance and the `gitlab-haproxy` role is picking up changes from there!**
-
-
+**The gitlab.com repo is mirrored by the <https://ops.gitlab.net/infrastructure/lib/front-end-security/> instance and the `gitlab-haproxy` role is picking up changes from there!**
 
 ## How do I
 

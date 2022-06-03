@@ -29,6 +29,7 @@ To remove a read/write node:
   - It can take a quite a while for all clients to relinquish their DB connections, so plan ahead.
     - Alternatively, you can incrementally HUP/restart clients to speed up the process.
     - Use this one-liner to target clients connected to the to-be-removed instance.
+
       ```
       # Change hostname (first line) to to-be-removed instance
       # Change `hup puma` to `restart sidekiq-cluster` when removing a PgBouncer-specific instance
@@ -36,6 +37,7 @@ To remove a read/write node:
         "sudo pgb-console -c 'SHOW CLIENTS' | grep 'gitlabhq_production' | awk '{print \$9}' | sort | uniq" | \
         xargs -P3 -L3 -I{} knife ssh ip:{} 'sudo gitlab-ctl hup puma'
       ```
+
 - Create a Merge Request on
   [gitlab-com-infrastructure](https://ops.gitlab.net/gitlab-com/gitlab-com-infrastructure/)
   that updates the `node_count` variable for the module you want to target.
@@ -61,9 +63,11 @@ following adjustments:
 - Put the Consul services to be removed in maintenance mode by running `consul maint -enable -service=db-replica-<n>`
   - For example, assuming there were 3 ports and only one is removed, then the service to disable is `db-replica-2` (service names are zero-indexed).
 - Wait for the clients to drain from this particular PgBouncer instance by running and waiting for zero to be in the output:
+
   ```
   while true; do sudo pgb-console-2 -c 'SHOW CLIENTS;' | grep gitlabhq_production | cut -d '|' -f 2 | awk '{$1=$1};1' | grep -v gitlab-monitor | wc -l; sleep 5; done
   ```
+
 - Enable Chef by running `sudo chef-client-enable` then run `chef-client` on the targeted hosts.
 
 ## Preserving underlying connection count

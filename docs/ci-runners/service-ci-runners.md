@@ -6,6 +6,7 @@ Because this allows even free accounts to execute arbitrary code for up to 2000 
 it is ripe for abuse.
 
 Quick reference links:
+
 * [CI dashboard](https://dashboards.gitlab.net/d/000000159/ci)
 * [CI architecture summary](https://about.gitlab.com/handbook/engineering/infrastructure/production-architecture/ci-architecture.html)
 * [CI Runner docs](https://docs.gitlab.com/runner/)
@@ -21,6 +22,7 @@ We aim for pending jobs to be started promptly, so a scheduling delay can cause 
 on-call engineer about SLO violation.
 
 Quick reference:
+
 * [Example PagerDuty alert](https://gitlab.pagerduty.com/incidents/PVDAS6I)
 * [Apdex formula (search for `type: ci-runners`)](https://gitlab.com/gitlab-com/runbooks/blob/master/rules/service_apdex.yml)
 * [list of users in the queue](https://log.gprd.gitlab.net/goto/4109739640f8b21b278ca5060012fbf7)
@@ -61,6 +63,7 @@ To find miners running numerous concurrent jobs from one or more accounts (a.k.a
 These namespace ids are all that the abuse-team needs to block the accounts and cancel the running or pending jobs, so if the situation is dire, skip ahead to the "Mitigation" step.
 
 Caveats:
+
 * Normally the namespace called "namespace" can be ignored.  It is an "everything else" bucket for the many small namespaces that did not rank in the top-N that get individually tallied.  Usually you can ignore it, but if it has an outrageously high count of jobs, that might indicate there are numerous namespaces being collectively aggressive in scheduling jobs (which would warrant further research).
 * Namespace 9970 is the `gitlab-org` namespace and is expected to routinely have heavy CI activity.
 
@@ -81,14 +84,14 @@ The easiest way is to use this ChatOps command in Slack to lookup the namespace 
 Connect to any Postgres database (primary or replica) and get a `psql` prompt:
 
 ```shell
-$ ssh <username>-db@gprd-console
+ssh <username>-db@gprd-console
 ```
 
 or
 
 ```shell
-$ ssh patroni-01-db-gprd.c.gitlab-production.internal   # Any patroni is fine, replica or primary.
-$ sudo gitlab-psql
+ssh patroni-01-db-gprd.c.gitlab-production.internal   # Any patroni is fine, replica or primary.
+sudo gitlab-psql
 ```
 
 Put your namespace ids into the IN-list of the following query:
@@ -113,7 +116,7 @@ order by
 Connect to the Rails console server:
 
 ```shell
-$ ssh <username>-rails@gprd-console
+ssh <username>-rails@gprd-console
 ```
 
 Put your namespace ids into the array at the start of this iterator expression:
@@ -137,4 +140,5 @@ View the `.gitlab-ci.yml` file.  Does its job definition look like a miner?  Doe
 Contact the Abuse Team via Slack (`@abuse-team`), and ask them to run `Scrubber` for the namespace ids you identified above as abusive.
 
 Quick reference:
+
 * [Scrubber runbook](https://gitlab.com/gitlab-com/gl-security/abuse-team/abuse/wikis/Runbook/Mitigation-Tool-%28Scrubber%29)

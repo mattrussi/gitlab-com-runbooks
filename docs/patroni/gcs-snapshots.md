@@ -21,8 +21,9 @@ Occasionally as part of maintenance activities or during an emergency, we may ne
 The GCS snapshots are a high I/O demanding operation since we are making a copy of the whole disk. It is not recommended to execute in a database receiving traffic, and never on the primary node from a Patroni cluster. To execute this snapshot we suggest to use one of these two options:
 
 a) Currently we have one node Patroni-08, that has the Patroni flags :
- - `no-loadbalancer`: to not receive traffic.
- - `no-failover`: to not be promoted as a primary.
+
+- `no-loadbalancer`: to not receive traffic.
+- `no-failover`: to not be promoted as a primary.
 
 b) Provision a new node to the cluster with the tags mentioned above. Or add the tags a node to execute the snapshot.
 
@@ -32,6 +33,7 @@ Here are the steps to take following the best practices and allowing us to safel
 
 - Start a session with a pg_start_backup, that will start the backup mode:
   - Execute the following command in `gitlab-psql`:
+
     ```sql
     SELECT pg_start_backup('Manual GCS snapshot', TRUE, FALSE);
     ```
@@ -43,6 +45,7 @@ Here are the steps to take following the best practices and allowing us to safel
 
 - Stop the backup command, in the same session you started the backup mode:
   - Execute the following command  `gitlab-psql`:
+
     ```sql
     SELECT pg_stop_backup(FALSE, FALSE);
     ```
@@ -60,8 +63,8 @@ the last ones and see if an error is logged.
 Try running the script manually like this and see if it exits successfully:
 
 ```
-$ sudo su - gitlab-psql
-$ /usr/local/bin/gcs-snapshot.sh
+sudo su - gitlab-psql
+/usr/local/bin/gcs-snapshot.sh
 ```
 
 [tf-replica-example]: https://ops.gitlab.net/gitlab-com/gitlab-com-infrastructure/-/blob/235d69658055dd8174d774340d8a67734d997129/environments/gprd/main.tf#L825

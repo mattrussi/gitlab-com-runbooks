@@ -4,7 +4,6 @@
 
 # Staging ref
 
-
 ## Logging
 
 * [Stackdriver Logs](https://console.cloud.google.com/logs/query?project=gitlab-staging-ref)
@@ -12,7 +11,6 @@
 ## Troubleshooting Pointers
 
 <!-- END_MARKER -->
-
 
 ## Summary
 
@@ -37,5 +35,6 @@ Staging ref has a [hybrid architecture](https://docs.gitlab.com/ee/administratio
 For more information see [GET monitoring setup](/get-monitoring-setup.md)
 
 ## Links to further Documentation
+
 * [https://gitlab.com/gitlab-org/quality/gitlab-environment-toolkit-configs/staging-ref](https://gitlab.com/gitlab-org/quality/gitlab-environment-toolkit-configs/staging-ref)
 * [Staging Ref environment documentation in Handbook](https://about.gitlab.com/handbook/engineering/infrastructure/environments/staging-ref/)

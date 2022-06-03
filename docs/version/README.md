@@ -4,8 +4,9 @@
 
 [[_TOC_]]
 
-#  Version Service
-* **Alerts**: https://alerts.gitlab.net/#/alerts?filter=%7Btype%3D%22version%22%2C%20tier%3D%22sv%22%7D
+# Version Service
+
+* **Alerts**: <https://alerts.gitlab.net/#/alerts?filter=%7Btype%3D%22version%22%2C%20tier%3D%22sv%22%7D>
 * **Label**: gitlab-com/gl-infra/production~"Service:Version"
 
 ## Logging
@@ -72,7 +73,6 @@
 * [version.gitlab.com Runbook](version-gitlab-com.md)
 * [Static repository objects caching](../web/static-repository-objects-caching.md)
 <!-- END_MARKER -->
-
 
 <!-- ## Summary -->
 

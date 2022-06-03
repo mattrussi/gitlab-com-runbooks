@@ -51,26 +51,26 @@ issues.
 
 Start by checking how many alerts are in flight right now
 
--   go to the [fleet overview dashboard](https://dashboards.gitlab.net/d/RZmbBr7mk/gitlab-triage) and check the number of Active Alerts, it should be 0. If it is not 0
-    -   go to the alerts dashboard and check what is being triggered
-        -   [azure][prometheus-azure]
-        -   [gprd prometheus][prometheus-gprd]
-        -   [gprd prometheus-app][prometheus-app-gprd]
-    -   watch the [#alerts][slack-alerts] and [#feed_alerts-general][slack-alerts-general] channels for alert notifications; each alert here should point you to the right [runbook][runbook-repo] to fix it.
-    -   if they don't, you have more work to do.
-    -   be sure to create an issue, particularly to declare toil so we can work on it and suppress it.
+- go to the [fleet overview dashboard](https://dashboards.gitlab.net/d/RZmbBr7mk/gitlab-triage) and check the number of Active Alerts, it should be 0. If it is not 0
+  - go to the alerts dashboard and check what is being triggered
+    - [azure][prometheus-azure]
+    - [gprd prometheus][prometheus-gprd]
+    - [gprd prometheus-app][prometheus-app-gprd]
+  - watch the [#alerts][slack-alerts] and [#feed_alerts-general][slack-alerts-general] channels for alert notifications; each alert here should point you to the right [runbook][runbook-repo] to fix it.
+  - if they don't, you have more work to do.
+  - be sure to create an issue, particularly to declare toil so we can work on it and suppress it.
 
 ### Prometheus targets down
 
 Check how many targets are not scraped at the moment. alerts are in flight right now, to do this:
 
--   go to the [fleet overview dashboard](https://dashboards.gitlab.net/d/RZmbBr7mk/gitlab-triage) and check the number of Targets down. It should be 0. If it is not 0
-    -   go to the [targets down list] and check what is.
-        -   [azure][prometheus-azure-targets-down]
-        -   [gprd prometheus][prometheus-gprd-targets-down]
-        -   [gprd prometheus-app][prometheus-app-gprd-targets-down]
-    -   try to figure out why there is scraping problems and try to fix it. Note that sometimes there can be temporary scraping problems because of exporter errors.
-    -   be sure to create an issue, particularly to declare toil so we can work on it and suppress it.
+- go to the [fleet overview dashboard](https://dashboards.gitlab.net/d/RZmbBr7mk/gitlab-triage) and check the number of Targets down. It should be 0. If it is not 0
+  - go to the [targets down list] and check what is.
+    - [azure][prometheus-azure-targets-down]
+    - [gprd prometheus][prometheus-gprd-targets-down]
+    - [gprd prometheus-app][prometheus-app-gprd-targets-down]
+  - try to figure out why there is scraping problems and try to fix it. Note that sometimes there can be temporary scraping problems because of exporter errors.
+  - be sure to create an issue, particularly to declare toil so we can work on it and suppress it.
 
 ## Incidents
 
@@ -100,212 +100,221 @@ Remember to close out the incident when the issue is resolved.  Also, when possi
 ## [Reporting and incident](https://about.gitlab.com/handbook/engineering/infrastructure/incident-management/#reporting-an-incident)
 
 ## Roles
+
 During an incident, we have [roles defined in the handbook](https://about.gitlab.com/handbook/engineering/infrastructure/incident-management/#roles-and-responsibilities)
 
-## General guidelines for production incidents.
+## General guidelines for production incidents
 
-* Is this an emergency incident?
-	* Are we losing data?
-	* Is GitLab.com not working or offline?
-	* Has the incident affected users for greater than 1 hour?
-* Join the `#incident management` channel
-* If the _point person_ needs someone to do something, give a direct command: _@someone: please run `this` command_
-* Be sure to be in sync - if you are going to reboot a service, say so: _I'm bouncing server X_
-* If you have conflicting information, **stop and think**, bounce ideas, escalate
-* Gather information when the incident is done - logs, samples of graphs, whatever could help figuring out what happened
-* use `/security` if you have any security concerns and need to pull in the Security Incident Response team
-
+- Is this an emergency incident?
+  - Are we losing data?
+  - Is GitLab.com not working or offline?
+  - Has the incident affected users for greater than 1 hour?
+- Join the `#incident management` channel
+- If the _point person_ needs someone to do something, give a direct command: _@someone: please run `this` command_
+- Be sure to be in sync - if you are going to reboot a service, say so: _I'm bouncing server X_
+- If you have conflicting information, **stop and think**, bounce ideas, escalate
+- Gather information when the incident is done - logs, samples of graphs, whatever could help figuring out what happened
+- use `/security` if you have any security concerns and need to pull in the Security Incident Response team
 
 ### PostgreSQL
 
-* [PostgreSQL](docs/patroni/postgres.md)
-* [more postgresql](docs/patroni/postgresql.md)
-* [PgBouncer](docs/pgbouncer/pgbouncer-1.md)
-* [PostgreSQL High Availability & Failovers](docs/patroni/pg-ha.md)
-* [PostgreSQL switchover](howto/postgresql-switchover.md)
-* [Read-only Load Balancing](docs/uncategorized/load-balancing.md)
-* [Add a new secondary replica](docs/patroni/postgresql-replica.md)
-* [Database backups](docs/patroni/postgresql-backups-wale-walg.md)
-* [Database backups restore testing](docs/patroni/postgresql-backups-wale-walg.md#database-backups-restore-testing)
-* [Rebuild a corrupt index](docs/patroni/postgresql.md#rebuild-a-corrupt-index)
-* [Checking PostgreSQL health with postgres-checkup](docs/patroni/postgres-checkup.md)
-* [Reducing table and index bloat using pg_repack](docs/patroni/pg_repack.md)
+- [PostgreSQL](docs/patroni/postgres.md)
+- [more postgresql](docs/patroni/postgresql.md)
+- [PgBouncer](docs/pgbouncer/pgbouncer-1.md)
+- [PostgreSQL High Availability & Failovers](docs/patroni/pg-ha.md)
+- [PostgreSQL switchover](howto/postgresql-switchover.md)
+- [Read-only Load Balancing](docs/uncategorized/load-balancing.md)
+- [Add a new secondary replica](docs/patroni/postgresql-replica.md)
+- [Database backups](docs/patroni/postgresql-backups-wale-walg.md)
+- [Database backups restore testing](docs/patroni/postgresql-backups-wale-walg.md#database-backups-restore-testing)
+- [Rebuild a corrupt index](docs/patroni/postgresql.md#rebuild-a-corrupt-index)
+- [Checking PostgreSQL health with postgres-checkup](docs/patroni/postgres-checkup.md)
+- [Reducing table and index bloat using pg_repack](docs/patroni/pg_repack.md)
 
 ### Frontend Services
 
-* [GitLab Pages returns 404](docs/pages/gitlab-pages.md)
-* [HAProxy is missing workers](docs/config_management/chef-troubleshooting.md)
-* [Worker's root filesystem is running out of space](docs/monitoring/filesystem_alerts.md)
-* [Azure Load Balancers Misbehave](docs/frontend/load-balancer-outage.md)
-* [GitLab registry is down](docs/registry/gitlab-registry.md)
-* [Sidekiq stats no longer showing](docs/sidekiq/sidekiq_stats_no_longer_showing.md)
-* [Gemnasium is down](docs/uncategorized/gemnasium_is_down.md)
-* [Blocking a project causing high load](docs/uncategorized/block-high-load-project.md)
+- [GitLab Pages returns 404](docs/pages/gitlab-pages.md)
+- [HAProxy is missing workers](docs/config_management/chef-troubleshooting.md)
+- [Worker's root filesystem is running out of space](docs/monitoring/filesystem_alerts.md)
+- [Azure Load Balancers Misbehave](docs/frontend/load-balancer-outage.md)
+- [GitLab registry is down](docs/registry/gitlab-registry.md)
+- [Sidekiq stats no longer showing](docs/sidekiq/sidekiq_stats_no_longer_showing.md)
+- [Gemnasium is down](docs/uncategorized/gemnasium_is_down.md)
+- [Blocking a project causing high load](docs/uncategorized/block-high-load-project.md)
 
 ### Supporting Services
 
-* [Redis](docs/redis/redis.md)
-* [Sentry is down](docs/monitoring/sentry-is-down.md)
+- [Redis](docs/redis/redis.md)
+- [Sentry is down](docs/monitoring/sentry-is-down.md)
 
 ### Gitaly
 
-* [Gitaly error rate is too high](docs/gitaly/gitaly-error-rate.md)
-* [Gitaly latency is too high](docs/gitaly/gitaly-latency.md)
-* [Sidekiq Queues are out of control](docs/sidekiq/large-sidekiq-queue.md)
-* [Workers have huge load because of cat-files](docs/uncategorized/workers-high-load.md)
-* [Test pushing through all the git nodes](docs/git/git.md)
-* [How to gracefully restart gitaly-ruby](docs/gitaly/gracefully-restart-gitaly-ruby.md)
-* [Debugging gitaly with gitaly-debug](docs/gitaly/gitaly-debugging-tool.md)
-* [Gitaly token rotation](docs/gitaly/gitaly-token-rotation.md)
-* [Praefect is down](docs/praefect/praefect-startup.md)
-* [Praefect error rate is too high](docs/praefect/praefect-error-rate.md)
+- [Gitaly error rate is too high](docs/gitaly/gitaly-error-rate.md)
+- [Gitaly latency is too high](docs/gitaly/gitaly-latency.md)
+- [Sidekiq Queues are out of control](docs/sidekiq/large-sidekiq-queue.md)
+- [Workers have huge load because of cat-files](docs/uncategorized/workers-high-load.md)
+- [Test pushing through all the git nodes](docs/git/git.md)
+- [How to gracefully restart gitaly-ruby](docs/gitaly/gracefully-restart-gitaly-ruby.md)
+- [Debugging gitaly with gitaly-debug](docs/gitaly/gitaly-debugging-tool.md)
+- [Gitaly token rotation](docs/gitaly/gitaly-token-rotation.md)
+- [Praefect is down](docs/praefect/praefect-startup.md)
+- [Praefect error rate is too high](docs/praefect/praefect-error-rate.md)
 
 ### CI
 
-* [Large number of CI pending builds](troubleshooting/ci_pending_builds.md)
-* [The CI runner manager report a high number of errors](troubleshooting/ci_runner_manager_errors.md)
+- [Large number of CI pending builds](troubleshooting/ci_pending_builds.md)
+- [The CI runner manager report a high number of errors](troubleshooting/ci_runner_manager_errors.md)
 
 ### Geo
 
-* [Geo database replication](docs/patroni/geo-patroni-cluster.md)
+- [Geo database replication](docs/patroni/geo-patroni-cluster.md)
 
 ### ELK
 
-* [`mapper_parsing_exception` errors](troubleshooting/elk_mapper_parsing_exception.md)
+- [`mapper_parsing_exception` errors](troubleshooting/elk_mapper_parsing_exception.md)
 
 ## Non-Critical
 
-* [SSL certificate expires](docs/frontend/ssl_cert.md)
-* [Troubleshoot git stuck processes](docs/git/git-stuck-processes.md)
+- [SSL certificate expires](docs/frontend/ssl_cert.md)
+- [Troubleshoot git stuck processes](docs/git/git-stuck-processes.md)
 
 ## Non-Core Applications
 
-* [version.gitlab.com](docs/version/version-gitlab-com.md)
+- [version.gitlab.com](docs/version/version-gitlab-com.md)
 
 ### Chef/Knife
 
-* [General Troubleshooting](docs/config_management/chef-troubleshooting.md)
-* [Error executing action `create` on resource 'directory[/some/path]'](docs/uncategorized/stale-file-handles.md)
+- [General Troubleshooting](docs/config_management/chef-troubleshooting.md)
+- [Error executing action `create` on resource 'directory[/some/path]'](docs/uncategorized/stale-file-handles.md)
 
 ### Certificates
-* [Certificate runbooks](certificates/README.md)
+
+- [Certificate runbooks](certificates/README.md)
 
 ## Learning
 
 ### Alerting and monitoring
-* [GitLab monitoring overview](docs/monitoring/monitoring-overview.md)
-* [How to add alerts: Alerts manual](docs/monitoring/alerts_manual.md)
-* [How to add/update deadman switches](docs/uncategorized/deadman-switches.md)
-* [How to silence alerts](howto/silence-alerts.md)
-* [Alert for SSL certificate expiration](docs/uncategorized/alert-for-ssl-certificate-expiration.md)
-* [Working with Grafana](monitoring/grafana.md)
-* [Working with Prometheus](monitoring/prometheus.md)
-* [Upgrade Prometheus and exporters](docs/monitoring/upgrades.md)
-* [Use mtail to capture metrics from logs](docs/uncategorized/mtail.md)
+
+- [GitLab monitoring overview](docs/monitoring/monitoring-overview.md)
+- [How to add alerts: Alerts manual](docs/monitoring/alerts_manual.md)
+- [How to add/update deadman switches](docs/uncategorized/deadman-switches.md)
+- [How to silence alerts](howto/silence-alerts.md)
+- [Alert for SSL certificate expiration](docs/uncategorized/alert-for-ssl-certificate-expiration.md)
+- [Working with Grafana](monitoring/grafana.md)
+- [Working with Prometheus](monitoring/prometheus.md)
+- [Upgrade Prometheus and exporters](docs/monitoring/upgrades.md)
+- [Use mtail to capture metrics from logs](docs/uncategorized/mtail.md)
 
 ### CI
 
-* [Introduction to Shared Runners](troubleshooting/ci_introduction.md)
-* [Understand CI graphs](troubleshooting/ci_graphs.md)
+- [Introduction to Shared Runners](troubleshooting/ci_introduction.md)
+- [Understand CI graphs](troubleshooting/ci_graphs.md)
 
 ### Access Requests
 
-* [Deal with various kinds of access requests](docs/uncategorized/access-requests.md)
+- [Deal with various kinds of access requests](docs/uncategorized/access-requests.md)
 
 ### Deploy
 
-* [Get the diff between dev versions](docs/uncategorized/dev-environment.md#figure-out-the-diff-of-deployed-versions)
-* [Deploy GitLab.com](https://ops.gitlab.net/gitlab-cookbooks/chef-repo/blob/master/doc/deploying.md)
-* [Rollback GitLab.com](https://gitlab.com/gitlab-org/release/docs/-/blob/master/runbooks/rollback-a-deployment.md)
-* [Deploy staging.GitLab.com](https://ops.gitlab.net/gitlab-cookbooks/chef-repo/blob/master/doc/staging.md)
-* [Refresh data on staging.gitlab.com](https://ops.gitlab.net/gitlab-cookbooks/chef-repo/blob/master/doc/staging.md)
-* [Background Migrations](https://gitlab.com/gitlab-org/release/docs/-/blob/master/runbooks/background-migrations.md)
+- [Get the diff between dev versions](docs/uncategorized/dev-environment.md#figure-out-the-diff-of-deployed-versions)
+- [Deploy GitLab.com](https://ops.gitlab.net/gitlab-cookbooks/chef-repo/blob/master/doc/deploying.md)
+- [Rollback GitLab.com](https://gitlab.com/gitlab-org/release/docs/-/blob/master/runbooks/rollback-a-deployment.md)
+- [Deploy staging.GitLab.com](https://ops.gitlab.net/gitlab-cookbooks/chef-repo/blob/master/doc/staging.md)
+- [Refresh data on staging.gitlab.com](https://ops.gitlab.net/gitlab-cookbooks/chef-repo/blob/master/doc/staging.md)
+- [Background Migrations](https://gitlab.com/gitlab-org/release/docs/-/blob/master/runbooks/background-migrations.md)
 
 ### Work with the fleet and the rails app
 
-* [Reload Puma with zero downtime](docs/uncategorized/manage-workers.md#reload-puma-with-zero-downtime)
-* [How to perform zero downtime frontend host reboot](docs/uncategorized/manage-workers.md#how-to-perform-zero-downtime-frontend-host-reboot)
-* [Gracefully restart sidekiq jobs](docs/uncategorized/manage-workers.md#gracefully-restart-sidekiq-jobs)
-* [Start a read-only rails console](docs/Teleport/Connect_to_Rails_Console_via_Teleport.md)
-* [Start a rails console in the staging environment](docs/uncategorized/staging-environment.md#run-a-rails-console-in-staging-environment)
-* [Start a redis console in the staging environment](docs/uncategorized/staging-environment.md#run-a-redis-console-in-staging-environment)
-* [Start a psql console in the staging environment](docs/uncategorized/staging-environment.md#run-a-psql-console-in-staging-environment)
-* [Force a failover with postgres](docs/patroni/patroni-management.md#failoverswitchover)
-* [Force a failover with redis](docs/uncategorized/manage-pacemaker.md#force-a-failover)
-* [Use aptly](docs/uncategorized/aptly.md)
-* [Disable PackageCloud](docs/uncategorized/stop-or-start-packagecloud.md)
-* [Re-index a package in PackageCloud](docs/uncategorized/reindex-package-in-packagecloud.md)
-* [Access hosts in GCP](docs/uncategorized/access-gcp-hosts.md)
+- [Reload Puma with zero downtime](docs/uncategorized/manage-workers.md#reload-puma-with-zero-downtime)
+- [How to perform zero downtime frontend host reboot](docs/uncategorized/manage-workers.md#how-to-perform-zero-downtime-frontend-host-reboot)
+- [Gracefully restart sidekiq jobs](docs/uncategorized/manage-workers.md#gracefully-restart-sidekiq-jobs)
+- [Start a read-only rails console](docs/Teleport/Connect_to_Rails_Console_via_Teleport.md)
+- [Start a rails console in the staging environment](docs/uncategorized/staging-environment.md#run-a-rails-console-in-staging-environment)
+- [Start a redis console in the staging environment](docs/uncategorized/staging-environment.md#run-a-redis-console-in-staging-environment)
+- [Start a psql console in the staging environment](docs/uncategorized/staging-environment.md#run-a-psql-console-in-staging-environment)
+- [Force a failover with postgres](docs/patroni/patroni-management.md#failoverswitchover)
+- [Force a failover with redis](docs/uncategorized/manage-pacemaker.md#force-a-failover)
+- [Use aptly](docs/uncategorized/aptly.md)
+- [Disable PackageCloud](docs/uncategorized/stop-or-start-packagecloud.md)
+- [Re-index a package in PackageCloud](docs/uncategorized/reindex-package-in-packagecloud.md)
+- [Access hosts in GCP](docs/uncategorized/access-gcp-hosts.md)
 
 ### Restore Backups
 
-* [Deleted Project Restoration](docs/uncategorized/deleted-project-restore.md)
-* [PostgreSQL Backups: WAL-E, WAL-G](docs/patroni/postgresql-backups-wale-walg.md)
-* [Work with Azure Snapshots](docs/uncategorized/azure-snapshots.md)
-* [Work with GCP Snapshots](docs/uncategorized/gcp-snapshots.md)
-* [PackageCloud Infrastructure And Recovery](docs/uncategorized/packagecloud-infrastructure.md)
+- [Deleted Project Restoration](docs/uncategorized/deleted-project-restore.md)
+- [PostgreSQL Backups: WAL-E, WAL-G](docs/patroni/postgresql-backups-wale-walg.md)
+- [Work with Azure Snapshots](docs/uncategorized/azure-snapshots.md)
+- [Work with GCP Snapshots](docs/uncategorized/gcp-snapshots.md)
+- [PackageCloud Infrastructure And Recovery](docs/uncategorized/packagecloud-infrastructure.md)
 
 ### Work with storage
 
-* [Understanding GitLab Storage Shards](docs/gitaly/storage-sharding.md)
-* [How to re-balance GitLab Storage Shards](docs/gitaly/storage-rebalancing.md)
-* [Build and Deploy New Storage Servers](docs/gitaly/storage-servers.md)
-* [Manage uploads](docs/uncategorized/uploads.md)
+- [Understanding GitLab Storage Shards](docs/gitaly/storage-sharding.md)
+- [How to re-balance GitLab Storage Shards](docs/gitaly/storage-rebalancing.md)
+- [Build and Deploy New Storage Servers](docs/gitaly/storage-servers.md)
+- [Manage uploads](docs/uncategorized/uploads.md)
 
 ### Mangle front end load balancers
-* [Isolate a worker by disabling the service in the LBs](docs/frontend/block-things-in-haproxy.md#disable-a-whole-service-in-a-load-balancer)
-* [Deny a path in the load balancers](docs/frontend/block-things-in-haproxy.md#deny-a-path-with-the-delete-http-method)
-* [Purchasing/Renewing SSL Certificates](docs/frontend/ssl_cert-1.md)
+
+- [Isolate a worker by disabling the service in the LBs](docs/frontend/block-things-in-haproxy.md#disable-a-whole-service-in-a-load-balancer)
+- [Deny a path in the load balancers](docs/frontend/block-things-in-haproxy.md#deny-a-path-with-the-delete-http-method)
+- [Purchasing/Renewing SSL Certificates](docs/frontend/ssl_cert-1.md)
 
 ### Work with Chef
-* [Create users, rotate or remove keys from chef](docs/uncategorized/manage-chef.md)
-* [Update packages manually for a given role](docs/uncategorized/manage-workers.md#update-packages-fleet-wide)
-* [Rename a node already in Chef](docs/uncategorized/rename-nodes.md)
-* [Reprovisioning nodes](docs/uncategorized/reprovisioning-nodes.md)
-* [Speed up chefspec tests](docs/uncategorized/chefspec.md#tests-are-taking-too-long-to-run)
-* [Manage Chef Cookbooks](docs/uncategorized/chef-documentation.md)
-* [Chef Guidelines](docs/uncategorized/chef-guidelines.md)
-* [Chef Vault](docs/uncategorized/chef-vault.md)
-* [Debug failed provisioning](howto/debug-failed-chef-provisioning.md)
+
+- [Create users, rotate or remove keys from chef](docs/uncategorized/manage-chef.md)
+- [Update packages manually for a given role](docs/uncategorized/manage-workers.md#update-packages-fleet-wide)
+- [Rename a node already in Chef](docs/uncategorized/rename-nodes.md)
+- [Reprovisioning nodes](docs/uncategorized/reprovisioning-nodes.md)
+- [Speed up chefspec tests](docs/uncategorized/chefspec.md#tests-are-taking-too-long-to-run)
+- [Manage Chef Cookbooks](docs/uncategorized/chef-documentation.md)
+- [Chef Guidelines](docs/uncategorized/chef-guidelines.md)
+- [Chef Vault](docs/uncategorized/chef-vault.md)
+- [Debug failed provisioning](howto/debug-failed-chef-provisioning.md)
 
 ### Work with CI Infrastructure
-* [Runners fleet configuration management](docs/ci-runners/fleet-configuration-management/README.md)
-* [Investigate Abuse Reports](docs/ci-runners/ci-investigate-abuse.md)
-* [Create runners manager for GitLab.com](docs/ci-runners/create-runners-manager-node.md)
-* [Update docker-machine](docs/uncategorized/upgrade-docker-machine.md)
-* [CI project namespace check](docs/ci-runners/ci-project-namespace-check.md)
+
+- [Runners fleet configuration management](docs/ci-runners/fleet-configuration-management/README.md)
+- [Investigate Abuse Reports](docs/ci-runners/ci-investigate-abuse.md)
+- [Create runners manager for GitLab.com](docs/ci-runners/create-runners-manager-node.md)
+- [Update docker-machine](docs/uncategorized/upgrade-docker-machine.md)
+- [CI project namespace check](docs/ci-runners/ci-project-namespace-check.md)
 
 ### Work with Infrastructure Providers (VMs)
-* [Getting Support from GCP](docs/uncategorized/externalvendors/GCP-rackspace-support.md)
-* [Create a DO VM for a Service Engineer](docs/uncategorized/create-do-vm-for-service-engineer.md)
-* [Create VMs in Azure, add disks, etc](https://ops.gitlab.net/gitlab-cookbooks/chef-repo/blob/master/doc/azure.md#managing-vms-in-azure)
-* [Bootstrap a new VM](https://ops.gitlab.net/gitlab-cookbooks/chef-repo/blob/master/doc/new-vps.md)
-* [Remove existing node checklist](docs/uncategorized/remove-node.md)
+
+- [Getting Support from GCP](docs/uncategorized/externalvendors/GCP-rackspace-support.md)
+- [Create a DO VM for a Service Engineer](docs/uncategorized/create-do-vm-for-service-engineer.md)
+- [Create VMs in Azure, add disks, etc](https://ops.gitlab.net/gitlab-cookbooks/chef-repo/blob/master/doc/azure.md#managing-vms-in-azure)
+- [Bootstrap a new VM](https://ops.gitlab.net/gitlab-cookbooks/chef-repo/blob/master/doc/new-vps.md)
+- [Remove existing node checklist](docs/uncategorized/remove-node.md)
 
 ### Manually ban an IP or netblock
-* [Ban a single IP using Redis and Rack Attack](docs/redis/ban-an-IP-with-redis.md)
-* [Ban a netblock on HAProxy](docs/frontend/ban-netblocks-on-haproxy.md)
+
+- [Ban a single IP using Redis and Rack Attack](docs/redis/ban-an-IP-with-redis.md)
+- [Ban a netblock on HAProxy](docs/frontend/ban-netblocks-on-haproxy.md)
 
 ### Dealing with Spam
-* [General procedures for fighting spam in snippets, issues, projects, and comments](https://docs.google.com/document/d/1V0X2aYiNTZE1npzeqDvq-dhNFZsEPsL__FqKOMXOjE8)
+
+- [General procedures for fighting spam in snippets, issues, projects, and comments](https://docs.google.com/document/d/1V0X2aYiNTZE1npzeqDvq-dhNFZsEPsL__FqKOMXOjE8)
 
 ### Manage Marvin, our infra bot
-* [Manage cog](docs/uncategorized/manage-cog.md)
+
+- [Manage cog](docs/uncategorized/manage-cog.md)
 
 ### ElasticStack (previously Elasticsearch)
 
 Selected elastic documents and resources:
 
 - elastic/
-    - doc/
-        - [elastic-cloud.md](elastic/doc/elastic-cloud.md) (hosted ES provider docs)
-        - [exercises](elastic/doc/exercises) (e.g. cluster performance tuning)
-        - [kibana.md](elastic/doc/kibana.md)
-        - [README.md](elastic/doc/README.md) (ES overview)
-        - troubleshooting/
-            - [README.md](elastic/doc/troubleshooting/README.md) (troubleshooting overview)
-    - [scripts/](elastic/scripts) (api calls used for admin tasks documented as bash scripts)
-    - watchers/
+  - doc/
+    - [elastic-cloud.md](elastic/doc/elastic-cloud.md) (hosted ES provider docs)
+    - [exercises](elastic/doc/exercises) (e.g. cluster performance tuning)
+    - [kibana.md](elastic/doc/kibana.md)
+    - [README.md](elastic/doc/README.md) (ES overview)
+    - troubleshooting/
+      - [README.md](elastic/doc/troubleshooting/README.md) (troubleshooting overview)
+  - [scripts/](elastic/scripts) (api calls used for admin tasks documented as bash scripts)
+  - watchers/
 
 ### ElasticStack integration in Gitlab (indexing Gitlab data)
 
@@ -316,59 +325,67 @@ Selected elastic documents and resources:
 Selected logging documents and resources:
 
 - logging/
-    - doc/
-        - [exercises](logging/doc/exercises) (e.g. searching logs in Kibana)
-        - [README.md](logging/doc/README.md) (logging overview)
-            - [quick-start](logging/doc/README.md#quick-start)
-            - [what-are-we-logging](logging/doc/README.md#what-are-we-logging)
-            - [searching-logs](logging/doc/README.md#searching-logs)
-            - [logging-infrastructure-overview](logging/doc/README.md#logging-infrastructure-overview)
-        - troubleshooting/
-            - [README.md](logging/doc/troubleshooting/README.md)
+  - doc/
+    - [exercises](logging/doc/exercises) (e.g. searching logs in Kibana)
+    - [README.md](logging/doc/README.md) (logging overview)
+      - [quick-start](logging/doc/README.md#quick-start)
+      - [what-are-we-logging](logging/doc/README.md#what-are-we-logging)
+      - [searching-logs](logging/doc/README.md#searching-logs)
+      - [logging-infrastructure-overview](logging/doc/README.md#logging-infrastructure-overview)
+    - troubleshooting/
+      - [README.md](logging/doc/troubleshooting/README.md)
 
 ### Internal DNS
-* [Managing internal DNS](docs/uncategorized/internal_dns.md)
+
+- [Managing internal DNS](docs/uncategorized/internal_dns.md)
 
 ### Debug and monitor
-* [Tracing the source of an expensive query](docs/uncategorized/tracing-app-db-queries.md)
-* [Work with Kibana (logs view)](logging/doc/README.md#searching-logs)
+
+- [Tracing the source of an expensive query](docs/uncategorized/tracing-app-db-queries.md)
+- [Work with Kibana (logs view)](logging/doc/README.md#searching-logs)
 
 ### Secrets
-* [Working with Google Cloud secrets](docs/uncategorized/working-with-gcloud-secrets.md)
+
+- [Working with Google Cloud secrets](docs/uncategorized/working-with-gcloud-secrets.md)
 
 ### Security
 
-* [Working with the CloudFlare WAF/CDN](howto/externalvendors/cloudflare.md)
-* [OSQuery](docs/uncategorized/osquery.md)
+- [Working with the CloudFlare WAF/CDN](howto/externalvendors/cloudflare.md)
+- [OSQuery](docs/uncategorized/osquery.md)
 
 ### Other
-* [Setup oauth2-proxy protection for web based application](docs/uncategorized/setup-oauth2-proxy-protected-application.md)
-* [Register new domain(s)](docs/uncategorized/domain-registration.md)
-* [Manage DNS entries](docs/uncategorized/manage-dns-entries.md)
-* [Setup and Use my Yubikey](docs/uncategorized/yubikey.md)
-* [Purge Git data](docs/git/purge-git-data.md)
-* [Getting Started with Kubernetes and GitLab.com](docs/kube/k8s-gitlab.md)
-* [Using Chatops bot to run commands across the fleet](docs/uncategorized/deploycmd.md)
+
+- [Setup oauth2-proxy protection for web based application](docs/uncategorized/setup-oauth2-proxy-protected-application.md)
+- [Register new domain(s)](docs/uncategorized/domain-registration.md)
+- [Manage DNS entries](docs/uncategorized/manage-dns-entries.md)
+- [Setup and Use my Yubikey](docs/uncategorized/yubikey.md)
+- [Purge Git data](docs/git/purge-git-data.md)
+- [Getting Started with Kubernetes and GitLab.com](docs/kube/k8s-gitlab.md)
+- [Using Chatops bot to run commands across the fleet](docs/uncategorized/deploycmd.md)
 
 ### Gitter
-* [MongoDB operations](docs/git/gitter/mongodb-operations.md)
-* [Renew the Gitter TLS certificate](docs/git/gitter/renew-certificates.md)
+
+- [MongoDB operations](docs/git/gitter/mongodb-operations.md)
+- [Renew the Gitter TLS certificate](docs/git/gitter/renew-certificates.md)
 
 ### Manage Package Signing Keys
-* [Manage Package Signing Keys](docs/uncategorized/manage-package-signing-keys.md)
+
+- [Manage Package Signing Keys](docs/uncategorized/manage-package-signing-keys.md)
 
 ### Other Servers and Services
-* [GitHost / GitLab Hosted](docs/git/githost.md)
+
+- [GitHost / GitLab Hosted](docs/git/githost.md)
 
 ### Adding runbooks rules
-* Make it quick - add links for checks
-* Don't make me think - write clear guidelines, write expectations
-* Recommended structure
-  * Symptoms - how can I quickly tell that this is what is going on
-  * Pre-checks - how can I be 100% sure
-  * Resolution - what do I have to do to fix it
-  * Post-checks - how can I be 100% sure that it is solved
-  * Rollback - optional, how can I undo my fix
+
+- Make it quick - add links for checks
+- Don't make me think - write clear guidelines, write expectations
+- Recommended structure
+  - Symptoms - how can I quickly tell that this is what is going on
+  - Pre-checks - how can I be 100% sure
+  - Resolution - what do I have to do to fix it
+  - Post-checks - how can I be 100% sure that it is solved
+  - Rollback - optional, how can I undo my fix
 
 # Running helper scripts from runbook
 
@@ -381,7 +398,7 @@ example if you can `glsh hello` it will check if `hello` file exists inside of
 [`bin`](bin) directory and execute it. You can also pass multiple arguments, that the
 script will have access to.
 
-Demo: https://youtu.be/RsGgxm55YBg
+Demo: <https://youtu.be/RsGgxm55YBg>
 
 ```shell
 glsh hello arg1 arg2
@@ -405,6 +422,7 @@ glsh update
 
 1. Create a new file inside of [`bin`](bin) directory: `touch bin/hello`
 1. Populate the file with the contents that you want. The command below updates the file with a simple `echo` command.
+
     ```
     cat > bin/hello <<EOF
     #!/usr/bin/env bash
@@ -412,6 +430,7 @@ glsh update
     echo "Hello from glsh"
     EOF
     ```
+
 1. Make it executable: `chmod +x bin/hello`
 1. Run it: `glsh hello`
 
@@ -447,9 +466,9 @@ the conventions of [Conventional Commits (v1.0.0-beta.2)](https://www.convention
 
 #### TL;DR
 
-- Commit messages starting with `fix: ` trigger a patch version bump
-- Commit messages starting with `feat: ` trigger a minor version bump
-- Commit messages starting with `BREAKING CHANGE: ` trigger a major version bump.
+- Commit messages starting with `fix:` trigger a patch version bump
+- Commit messages starting with `feat:` trigger a minor version bump
+- Commit messages starting with `BREAKING CHANGE:` trigger a major version bump.
 - If you don't want to publish a new image, do not use the above starting
   strings.
 
@@ -458,7 +477,7 @@ the conventions of [Conventional Commits (v1.0.0-beta.2)](https://www.convention
 Each push to `master` triggers a [`semantic-release`](https://semantic-release.gitbook.io/semantic-release/)
 CI job that determines and pushes a new version tag (if any) based on the
 last version tagged and the new commits pushed. Notice that this means that if a
-Merge Request contains, for example, several `feat: ` commits, only one minor
+Merge Request contains, for example, several `feat:` commits, only one minor
 version bump will occur on merge. If your Merge Request includes several commits
 you may prefer to ignore the prefix on each individual commit and instead add
 an empty commit summarizing your changes like so:
@@ -512,7 +531,7 @@ ruby           2.6.5    (set by ~/runbooks/.ruby-version)
 You don't need to use `asdf`, but in such case you will need install all
 dependencies manually and track their versions.
 
-### Keeping Versions in Sync between GitLab-CI and `asdf`.
+### Keeping Versions in Sync between GitLab-CI and `asdf`
 
 `asdf` (and `.tool-versions` generally) is the SSOT for tool versions used in this repository.
 To keep `.tool-versions` in sync with `.gitlab-ci.yml`, there is a helper script,
@@ -558,10 +577,10 @@ than the bash scripts we used to use for the task. Some tasks have gone from 20+
 We recommend using asdf to manage `jsonnet-tool`. The plugin will be installed when
 
 ```console
-$ # Install jsonnet-tool
-$ ./scripts/install-asdf-plugins.sh
-$ # Install the correct version of jsonnet-tool from `.tool-versions`
-$ asdf install
+# Install jsonnet-tool
+./scripts/install-asdf-plugins.sh
+# Install the correct version of jsonnet-tool from `.tool-versions`
+asdf install
 ```
 
 ### Ruby
@@ -650,12 +669,12 @@ expect(
 ### Location of test files
 
 - JsonnetUnit tests must stay in the same directory and have the same name as the jsonnet file being tested but ending in `_test.jsonnet`. Some examples:
-  + `services/stages.libsonnet`  -> `services/stages_test.jsonnet`
-  + `libsonnet/toolinglinks/sentry.libsonnet`  -> `libsonnet/toolinglinks/sentry_test.jsonnet`
+  - `services/stages.libsonnet`  -> `services/stages_test.jsonnet`
+  - `libsonnet/toolinglinks/sentry.libsonnet`  -> `libsonnet/toolinglinks/sentry_test.jsonnet`
 
 - RSpec tests replicates the directory structure of the Jsonnet files inside `spec` directory and must end in `_spec.rb` suffixes. Some example:
-  + `libsonnet/toolinglinks/grafana.libsonnet` -> `spec/libsonnet/toolinglinks/grafana_spec.rb`
-  + `dashboards/stage-groups/stage-group-dashboards.libsonnet` -> `spec/dashboards/stage-groups/stage-group-dashboards_spec.rb`
+  - `libsonnet/toolinglinks/grafana.libsonnet` -> `spec/libsonnet/toolinglinks/grafana_spec.rb`
+  - `dashboards/stage-groups/stage-group-dashboards.libsonnet` -> `spec/dashboards/stage-groups/stage-group-dashboards_spec.rb`
 
 ### How to run tests?
 
@@ -663,7 +682,7 @@ expect(
 - Run a particular Jsonnet unit test file with `scripts/jsonnet_test.sh periodic-thanos-queries/periodic-query_test.jsonnet`
 - Run a particular Jsonnet integration test file with `bundle exec rspec spec/libsonnet/toolinglinks/grafana_spec.rb`
 
-*Note*: Verify that you have all the jsonnet dependencies downloaded  before attempting to run the tests, you can
+_Note_: Verify that you have all the jsonnet dependencies downloaded  before attempting to run the tests, you can
 automatically download the necessary dependencies by running `make jsonnet-bundle`.
 
 ## Pre-commit hooks
@@ -704,10 +723,9 @@ shfmt....................................................................Passed
 
 Please see the [contribution guidelines](CONTRIBUTING.md)
 
-# But always remember!
+# But always remember
 
 ![Dont Panic](img/dont_panic_towel.jpg)
-
 
 <!-- Links -->
 [on-call-issues]:                   https://gitlab.com/gitlab-com/gl-infra/reliability/-/issues?scope=all&utf8=%E2%9C%93&state=all&label_name[]=oncall

@@ -4,9 +4,10 @@
 
 [[_TOC_]]
 
-#  Gitaly Service
+# Gitaly Service
+
 * [Service Overview](https://dashboards.gitlab.net/d/gitaly-main/gitaly-overview)
-* **Alerts**: https://alerts.gitlab.net/#/alerts?filter=%7Btype%3D%22gitaly%22%2C%20tier%3D%22stor%22%7D
+* **Alerts**: <https://alerts.gitlab.net/#/alerts?filter=%7Btype%3D%22gitaly%22%2C%20tier%3D%22stor%22%7D>
 * **Label**: gitlab-com/gl-infra/production~"Service:Gitaly"
 
 ## Logging
@@ -61,7 +62,6 @@
 * [How to upload a file to Google Cloud Storage from any system without a credentials configuration](../uncategorized/upload-file-to-gcs-using-signed-url.md)
 * [Gitaly version mismatch](../version/gitaly-version-mismatch.md)
 <!-- END_MARKER -->
-
 
 <!-- ## Summary -->
 

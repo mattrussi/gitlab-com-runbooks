@@ -3,6 +3,7 @@
 ## Purpose
 
 This Tutorials section provides a public area for sharing knowledge with teammates related to operating GitLab at scale.  This helps supports:
+
 * **Onboarding new members of the infrastructure team:**
   This orientation style of tutorial progressively introduces topics along an orderly learning path to establish a broad baseline understanding
   of the major components and their purposes, their interactions and interfaces, their behaviors and ways to observe them.  This general base
@@ -20,7 +21,6 @@ This Tutorials section provides a public area for sharing knowledge with teammat
 Sharing reusable techniques through a curated set of overviews and demos helps us rely less on tribal knowledge.
 Asynchronous knowledge sharing is especially important in GitLab's globally distributed work model, where colleagues in widely separated time zones
 rarely have the chance to informally share tips and insights.
-
 
 ## Suggested guidelines for contributing tutorials
 
@@ -75,6 +75,7 @@ These tutorials demonstrate generalizable methods or tools for analyzing interes
 These tutorials focus on finding, understanding, and using the metrics collected by Prometheus from hosts and services.
 
 Tutorials list:
+
 * [TODO](https://gitlab.com/gitlab-com/gl-infra/reliability/-/issues/10392)  Intro to GitLab-specific metrics catalogue:
   A quick tour of what metrics are available and how to explore them using basic PromQL filtering and aggregation to answer common questions
 * [TODO](https://gitlab.com/gitlab-com/gl-infra/reliability/-/issues/10393)  What does this apdex metric mean?
@@ -105,6 +106,7 @@ Understanding where a system spends its time, memory, I/O, and other resources h
 most relevant areas -- the places in the code or infrastructure that represent a capacity constraint, a tipping point, or a potentially large efficiency gain.
 
 Tutorials list:
+
 * [How to use flamegraphs for performance profiling](./how_to_use_flamegraphs_for_perf_profiling.md):
   Find what code paths we spend the most time in.
 * **(TODO)**  Demo: Profiling a process starved for disk I/O, including variants such as synchronous reads, synchronous writes, serial I/O, frequent fsyncs

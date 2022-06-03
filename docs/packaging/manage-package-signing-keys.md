@@ -13,6 +13,7 @@ The notes contained here are intended to provide documentation on how keys are g
 ## Usage of the keys
 
 For a complete implementation, the following will be done:
+
 * Generate and Securely store the private keys
 * Publish the public keys
   * To a public PGP key server, such as `pgp.mit.edu`
@@ -30,7 +31,7 @@ a secure note in the Build vault in 1Password.
 
 Managing private keys follows the best practice of Least Privileged Access, and
 access to the storage location and passphrase itself is highly restricted. These
-two items _should never_ be stored together.
+two items *should never* be stored together.
 
 * There is a private, highly restricted location for the key itself to be stored.
 * There is a private, highly restricted vault for the key's passphrase to be stored.
@@ -45,16 +46,15 @@ The private key content should be kept secret, with restricted access. The passp
 
 The following sections explain how to create and manage the keys.
 
-
 ### Ensuring Entropy
 
 #### Linux
 
 To properly secure they key generation process, one should do their best to provide extensive amounts entropy on their system. We'll cover how to do so on `Linux`.
 
-- We're **requiring** physical hardware. **Absolutely** *No virtualized instances.*
-- Check for access to a hardware random number generator (`hwrng`), `ls /dev/hwrng`
-    - Check loaded kernel modules for `rng` or random number generator. `lsmod | grep rng`. This should output something akin to the following:
+* We're **requiring** physical hardware. **Absolutely** *No virtualized instances.*
+* Check for access to a hardware random number generator (`hwrng`), `ls /dev/hwrng`
+  * Check loaded kernel modules for `rng` or random number generator. `lsmod | grep rng`. This should output something akin to the following:
 
     ```
     tpm_rng                16384  0
@@ -62,15 +62,15 @@ To properly secure they key generation process, one should do their best to prov
     tpm                    40960  5 tpm_tis,trusted,tpm_crb,tpm_rng,tpm_tis_core
     ```
 
-  - What we're looking for is a hardware random source, such as the `tpm`, beyond just `rng_core`. This may be: `intel-rng`, `amd-rng`, `tpm-rng`, even `bcm2708-rng`
-  - If there are no modules other than `rng_core` present, then it is likely that you do not have a hardware random generator, or it is not active.
-  - Depending on compute hardware, you may have a TPM, but is not active. If the hardware has it, attempt to load the module with `sudo modprobe tpm-rng`, and check `ls /dev/tpm*` and `ls /dev/hwrng` again.
-  - If you do have a `hwrng`, this will need to be activated & tied to the [CSPRNG][] thanks to `rngd` daemon. This is often provided by the `rng-tools` packages, and should be started before continuing.
-- If the hardware does not have a hardware RNG, we'll want to provide extra entropy by creating a lot of extra input/output to feed the [CSPRNG][] in the kernel.
-  - Install and activate [`haveged`](http://www.issihosts.com/haveged/)
-  - Be prepared to run a few tasks in the background (using screen, or backgrounding a call)
-    - `dd if=/dev/<largedisk> of=/dev/null bs=1M` will generate extensive amounts of disk read IO, while not impacting any other subsystems.
-    - `iperf` command can be used to create network load.
+  * What we're looking for is a hardware random source, such as the `tpm`, beyond just `rng_core`. This may be: `intel-rng`, `amd-rng`, `tpm-rng`, even `bcm2708-rng`
+  * If there are no modules other than `rng_core` present, then it is likely that you do not have a hardware random generator, or it is not active.
+  * Depending on compute hardware, you may have a TPM, but is not active. If the hardware has it, attempt to load the module with `sudo modprobe tpm-rng`, and check `ls /dev/tpm*` and `ls /dev/hwrng` again.
+  * If you do have a `hwrng`, this will need to be activated & tied to the [CSPRNG][] thanks to `rngd` daemon. This is often provided by the `rng-tools` packages, and should be started before continuing.
+* If the hardware does not have a hardware RNG, we'll want to provide extra entropy by creating a lot of extra input/output to feed the [CSPRNG][] in the kernel.
+  * Install and activate [`haveged`](http://www.issihosts.com/haveged/)
+  * Be prepared to run a few tasks in the background (using screen, or backgrounding a call)
+    * `dd if=/dev/<largedisk> of=/dev/null bs=1M` will generate extensive amounts of disk read IO, while not impacting any other subsystems.
+    * `iperf` command can be used to create network load.
 
 #### OSX
 
@@ -85,12 +85,13 @@ to increase the entropy.
 To generate a key pair, a user will need [GnuPG](https://www.gnupg.org), preferably but not required to be version `2.1` or greater.
 
 The following information will need to be provided when generating a key.
-- `kind of key you want`, which will be `(1) RSA and RSA`
-- `keysize`, which will be `4096`, _not the default of `2048`_
-- `how long the key is valid for`, which will be `2y` for 2 years.
-- `Real Name`, which will be `GitLab, Inc.`
-- `Email Address`, which will be `support@gitlab.com`
-- `Comment`, which will be _an empty value_, `''`
+
+* `kind of key you want`, which will be `(1) RSA and RSA`
+* `keysize`, which will be `4096`, _not the default of `2048`_
+* `how long the key is valid for`, which will be `2y` for 2 years.
+* `Real Name`, which will be `GitLab, Inc.`
+* `Email Address`, which will be `support@gitlab.com`
+* `Comment`, which will be *an empty value*, `''`
 
 Run `gpg --full-generate-key`, and provide values as above. You will be prompted for a passphrase, which should be an alpha-numeric combination that is 20+ characters long, such as generated by `1Password`.
 
@@ -124,22 +125,23 @@ This key should be uploaded to the secure storage location.
 By "extending" keys, we're actually referring to extending the `expire` field into the future, thus extending the useful lifespan of the key(s). To extend the signing key pair, one needs access to the original private key and passphrase.
 
 The steps to extend are as follows:
-- Import the original private key, as this should *never* be kept on a system.
+
+* Import the original private key, as this should *never* be kept on a system.
 
   `gpg --allow-secret-key-import --import packages.gitlab.gpg`
-- Confirm the key is imported and accessible with the private key:
+* Confirm the key is imported and accessible with the private key:
 
   `gpg -k support@gitlab.com`
-- Edit the key interactively with `gpg`:
+* Edit the key interactively with `gpg`:
 
   `gpg --edit-key <KEYID>`
-- Enter `expire`, follow prompts to expire by X years with `2y`
-- At this stage, you will be prompted to the key's passphrase.
-- Enter `key 1` to select the subkey
-- Enter `expire`, follow prompts to expire by X years with `2y`
-- Enter `save` to store the changes to the key and exit.
-- Export the updated key(s), and upload to appropriate storage locations & systems.
-- Ensure to copy the original key to a backup file in the secure storage location.
+* Enter `expire`, follow prompts to expire by X years with `2y`
+* At this stage, you will be prompted to the key's passphrase.
+* Enter `key 1` to select the subkey
+* Enter `expire`, follow prompts to expire by X years with `2y`
+* Enter `save` to store the changes to the key and exit.
+* Export the updated key(s), and upload to appropriate storage locations & systems.
+* Ensure to copy the original key to a backup file in the secure storage location.
 
 See [Exporting the Keys]()
 
@@ -151,7 +153,7 @@ Citing from [gpg-announce in 2009'Q1](http://lists.gnupg.org/pipermail/gnupg-ann
 > using your existing key include keeping the signatures on the key so that any
 > trust you've built up by others signing your key remains."
 
-### Purging local copies!
+### Purging local copies
 
 Once one has completed any step here, and have **_safely uploaded to secure
 storage_**, it is **very important** that they then **purge** the signing keys off their system.
@@ -159,12 +161,13 @@ storage_**, it is **very important** that they then **purge** the signing keys o
 `gpg --delete-secret-key <KEYID>`
 
 ## Reference material
-- [http://irtfweb.ifa.hawaii.edu/~lockhart/gpg/]()
-- [http://blog.jonliv.es/blog/2011/04/26/creating-your-own-signed-apt-repository-and-debian-packages/]()
-- [https://www.2uo.de/myths-about-urandom/]()
-- [http://cromwell-intl.com/linux/dev-random.html]()
-- [https://www.gnupg.org/faq/gnupg-faq.html#new_key_after_generation]()
-- [https://www.gnupg.org/gph/en/manual/c235.html#AEN328]()
-- [https://riseup.net/en/security/message-security/openpgp/best-practices]()
+
+* [http://irtfweb.ifa.hawaii.edu/~lockhart/gpg/]()
+* [http://blog.jonliv.es/blog/2011/04/26/creating-your-own-signed-apt-repository-and-debian-packages/]()
+* [https://www.2uo.de/myths-about-urandom/]()
+* [http://cromwell-intl.com/linux/dev-random.html]()
+* [https://www.gnupg.org/faq/gnupg-faq.html#new_key_after_generation]()
+* [https://www.gnupg.org/gph/en/manual/c235.html#AEN328]()
+* [https://riseup.net/en/security/message-security/openpgp/best-practices]()
 
 [CSPRNG]: https://en.wikipedia.org/wiki/Cryptographically_secure_pseudorandom_number_generator

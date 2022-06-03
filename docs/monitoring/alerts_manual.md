@@ -1,6 +1,6 @@
 # Alerting
 
-## Overview ##
+## Overview
 
 videos and materials in `./runbooks/docs/monitoring/monitoring-overview.md`
 
@@ -86,7 +86,7 @@ groups:
   * team: which team the alert should go to. Teams are defined in `./runbooks/services/service-catalog.yml`
   * severity: `critical` for it to be red, `warn` for it to be only a warning (orange)
   * pager: if `pagerduty` then the alert will be also sent to pagerduty to the production on-call
-	* environment: this one generally comes with the metric, we can override it to send to different channels (stg, pre, or geo)
+    * environment: this one generally comes with the metric, we can override it to send to different channels (stg, pre, or geo)
 * annotations: there are 2 annotations that will be always used: title and descriptions. These should be static (they can't have any variable in them) more on this later on. Additionally we can define as many other annotations as we want, more on this later.
 
 ### Annotations
@@ -108,7 +108,6 @@ each host.
 
 Alerts raised by Prometheus, as defined by alert rules, are sent to alertmanager. Alertmanager is configured with routing rules and receivers. Incoming alerts from Prometheus are routed to receivers based on routing rules.
 
-
 ## How to add new alerts (alert rules in Prometheus config)
 
 Create a new yml file under `/rules` in this repo, and submit a MR. Once the MR has been approved &
@@ -117,7 +116,7 @@ merged it will automatically converge in Chef and be pushed to Kubernetes.
 In order to get rules deployed into Kubernetes, follow the above and watch the
 CI/CD pipeline on the ops instance.  The `./bin/create_kubernetes_rules` script
 will take the generated file and convert it to a PrometheusRules object.
-https://github.com/coreos/prometheus-operator/blob/master/Documentation/api.md#prometheusrule
+<https://github.com/coreos/prometheus-operator/blob/master/Documentation/api.md#prometheusrule>
 
 ## Where to find things
 
@@ -144,7 +143,7 @@ Silencing alerts is helpful to reduce the broken window effect, critical alarms 
 be actionable and if they aren't we should ideally change the alert or if it something temporary
 silence them.
 
-* Go to https://alerts.gitlab.net/#/silences and select "New Silence"
+* Go to <https://alerts.gitlab.net/#/silences> and select "New Silence"
 * Add matchers for the conditions to target the specific alert, for example:
 
 ```
@@ -155,18 +154,19 @@ alertname               LowDiskSpace
 fqdn                    sync.geo.gitlab.com
 mountpoint              /var/opt/gitlab
 ```
+
 * Set a duration, an owner and a comment.
 * In the comment field, link to a change request, an infradev issue, or a related investigation issue with a DRI that was created from an incident. For the latter, create these issues using the "Related Issue" section of the incident template.
-    * Once a silence is created, the associated incident issue(s) should be closed.
+  * Once a silence is created, the associated incident issue(s) should be closed.
 
 *Note*: During a site-wide outage it may be desired to globally silence alerts while we investigate issues.
-To create one, navigate to https://alerts.gitlab.net/#/silences and add a silence for `env=gprd` with a duration of <= 1hour.
+To create one, navigate to <https://alerts.gitlab.net/#/silences> and add a silence for `env=gprd` with a duration of <= 1hour.
 
 ## Tips and tricks
 
 * Trigger alerts to see how they work by writing a condition that will always be true.
 * Print the whole alerting data and model using go template printf, with a text such as: `text: '{{ printf "%#v" . }}'` in the alert receiver configuration on the alert manager.
-* Verify alertmanager config using https://prometheus.io/webtools/alerting/routing-tree-editor/ . It will also visualize the routing tree for you. When pasting config, remove any ruby templated strings and do not paste any secrets!
+* Verify alertmanager config using <https://prometheus.io/webtools/alerting/routing-tree-editor/> . It will also visualize the routing tree for you. When pasting config, remove any ruby templated strings and do not paste any secrets!
 * Test changes to routing rules in alertmanager's config using routing tree editor and alerts which can be [easily found in Thanos](https://thanos.gitlab.net/graph?g0.range_input=1h&g0.expr=ALERTS&g0.tab=1)
 
 ## References

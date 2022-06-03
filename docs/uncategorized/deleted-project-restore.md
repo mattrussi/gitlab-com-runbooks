@@ -1,6 +1,6 @@
 # Deleted Project Restoration
 
-# You should not perform this action!
+# You should not perform this action
 
 As a general policy, we do not perform these restores. You should refuse to perform this restore unless the request is escalated to an Infrastructure manager.
 
@@ -275,11 +275,14 @@ failed, we can't know whether the corruption predated the snapshot or not.
 # Troubleshooting
 
 ## Rails console errors out with a stacktrace
+
 You may need to copy the production `db_key_base` key into the restore node. You can find the key in `/etc/gitlab/gitlab-secrets.json`.
 
 ## Gitlab reconfigure fails
+
 You may need to edit the `/etc/gitlab/gitlab.rb` file and disable object_store like this: `gitlab_rails['object_store']['enabled'] = false`
 
 ## Copying the Git repository results in a bad fsck or non-working repository
+
 You may be recovering a repository with objects in a shared pool. Try to
 re-copy using [these instructions](../gitaly/git-copy-by-hand.md).

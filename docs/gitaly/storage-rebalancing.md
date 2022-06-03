@@ -26,9 +26,9 @@ writable again by setting `project.repository_read_only = false`.
 In order to orchestrate this, a `gitlab-rails` app feature is responsible
 for scheduling a sidekiq job called `ProjectUpdateRepositoryStorageWorker`.
 During invocation, activity for this job will appear in the kibana logs. For
-example: https://log.gprd.gitlab.net/goto/1a02b96a7066e7c2cbacbf55e3d5947d
+example: <https://log.gprd.gitlab.net/goto/1a02b96a7066e7c2cbacbf55e3d5947d>
 
-You may find the implementation here: https://gitlab.com/gitlab-org/gitlab/-/blob/master/app/services/projects/update_repository_storage_service.rb#L16
+You may find the implementation here: <https://gitlab.com/gitlab-org/gitlab/-/blob/master/app/services/projects/update_repository_storage_service.rb#L16>
 
 ## Dashboards
 
@@ -46,21 +46,28 @@ system to another.
 ### Single repo manual selection
 
 1. Login to gitlab.com using an admin account.
-1. Navigate to https://gitlab.com/profile/personal_access_tokens and generate a private token.
-  - Enable the scope for `api`.
-  - Set an expiration date three or four days from now.
+1. Navigate to <https://gitlab.com/profile/personal_access_tokens> and generate a private token.
+
+- Enable the scope for `api`.
+- Set an expiration date three or four days from now.
+
 1. Take note of the project ID. You will need it to move the project via the API. You can find it in the project page, next to the project avatar and under the project name.
 1. Export your admin auth token as an environmdent variable in your shell session.
+
    ```bash
    export GITLAB_GPRD_ADMIN_API_PRIVATE_TOKEN=CHANGEME
    ```
+
 1. Trigger the move using the API.  For example:
+
    ```bash
    ./scripts/storage_repository_move.sh 'path/to/project' 'nfs-fileYY'
    ```
-  - _Note_: The parameter of `nfs-fileYY` is the name of the destination gitaly shard as configured in the `git_data_dirs` options of the `gitlab.rb` file.
-  - _Note_: The project will automatically be set into read-only and set back to read-write after the move.
-1. If needed, check logs for the sidekiq job in Kibana: https://log.gprd.gitlab.net/goto/35c31768d3be0137be06e562422ffba0
+
+- *Note*: The parameter of `nfs-fileYY` is the name of the destination gitaly shard as configured in the `git_data_dirs` options of the `gitlab.rb` file.
+- *Note*: The project will automatically be set into read-only and set back to read-write after the move.
+
+1. If needed, check logs for the sidekiq job in Kibana: <https://log.gprd.gitlab.net/goto/35c31768d3be0137be06e562422ffba0>
 
 ### Slightly automated selection
 
@@ -81,25 +88,32 @@ gigabytes replicated has reached the given amount.
 1. Clone this repository: `git clone git@gitlab.com:gitlab-com/runbooks.git`
 1. Change directory into the cloned runbooks project repository: `cd runbooks`
 1. Install any necessary rubies and dependencies:
+
    ```bash
    rbenv install $(rbenv local)
    gem install bundler
    bundle install --path=vendor/bundle
    ```
+
 1. You will need a personal access token with the `api` scope enabled. Export
 the token as an environment variable in your shell session:
+
    ```bash
    export GITLAB_GPRD_ADMIN_API_PRIVATE_TOKEN=CHANGEME
    ```
+
 1. Invoke the script using the `--help` flag for usage details: `bundle exec scripts/storage_rebalance.rb --help`
 1. [Create a new production change issue using the `storage_rebalancing` template](https://gitlab.com/gitlab-com/gl-infra/production/-/issues/new?issuable_template=storage_rebalance) and follow the instructions in the issue description.
 1. Invoke a dry run and record the output in the re-balancing issue.
+
    ```bash
    bundle exec scripts/storage_rebalance.rb nfs-fileXX nfs-fileYY --move-amount=1000 --dry-run=yes | tee scripts/logs/nfs-fileXX.migration.$(date --utc +%Y-%m-%d_%H:%M).log
    ```
+
 1. Invoke the same command except with the `--dry-run=no` argument.
 
 **Note:** Repository replication errors are recorded, and their log artifacts may be reviewed:
+
 ```bash
 find scripts/storage_migrations -name failed*.log -exec cat {} \; | jq
 ```
@@ -113,9 +127,9 @@ in subsequent invocations.  Additional projects may be skipped using the
 Plenty of progress has been made recently to reduce failure cases. There are still a handful of ways that a repository can fail to replicate onto the file system of another shard.
 
 - **Checksum validation failure**
-  * This means that the collective refs of the replica do not match the collective refs of the original.
+  - This means that the collective refs of the replica do not match the collective refs of the original.
 - **Timeout**
-  * This means that some process or `grpc` operation has taken too long, and did not complete within a pre-configured or programmatic parametric timeout.
+  - This means that some process or `grpc` operation has taken too long, and did not complete within a pre-configured or programmatic parametric timeout.
 
 In both of these situations, no roll-back is required, because the error is
 raised by gitaly and interrupts the worker process.
@@ -145,17 +159,20 @@ replication.
 ### How to use it
 
 Using the pretend disk path `@hashed/4a/68/4a68b75506effac26bc7660ffb4ff46cbb11ba00ed4795c1c5f0125f256d7f6a`:
+
 ```bash
 export disk_path='@hashed/4a/68/4a68b75506effac26bc7660ffb4ff46cbb11ba00ed4795c1c5f0125f256d7f6a'
 ssh file-33-stor-gprd.c.gitlab-production.internal "sudo /var/opt/gitlab/scripts/storage_repository_info.sh '${disk_path}'"
 ```
 
 Users of macOS can make their lives easier using `pbcopy`:
+
 ```bash
 ssh file-33-stor-gprd.c.gitlab-production.internal "sudo /var/opt/gitlab/scripts/storage_repository_info.sh '${disk_path}'" | pbcopy; pbpaste
 ```
 
 You should execute the `info.sh` script on both the source and target shard node systems.
+
 ```bash
 ssh file-43-stor-gprd.c.gitlab-production.internal "sudo /var/opt/gitlab/scripts/storage_repository_info.sh '${disk_path}'" | pbcopy; pbpaste
 ```
@@ -168,15 +185,20 @@ operations.  This may be useful diagnostic for other engineers.
 For undoing the replica repository creation operation: [`../../scripts/storage_repository_delete.sh`](../../scripts/storage_repository_delete.sh)
 
 1. Download this script to the target shard node file system:
+
    ```bash
    sudo mkdir -p /var/opt/gitlab/scripts; cd /var/opt/gitlab/scripts; sudo curl --silent https://gitlab.com/gitlab-com/runbooks/raw/master/scripts/storage_repository_delete.sh --output /var/opt/gitlab/scripts/storage_repository_delete.sh; sudo chmod +x /var/opt/gitlab/scripts/storage_repository_delete.sh
    ```
+
 1. Invoke a dry-run with:
+
    ```bash
    sudo /var/opt/gitlab/scripts/storage_repository_delete.sh --dry-run=yes '@hashed/XX/XX/XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX'` (Where again the second parameter is the disk path of the project repository)
    ```
+
 1. Review the output.
 1. Invoke:
+
    ```bash
    sudo /var/opt/gitlab/scripts/storage_repository_delete.sh --dry-run=no '@hashed/XX/XX/XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX'
    ```
@@ -188,20 +210,26 @@ After each project repository has finished being completely mirrored to its new 
 ### Manual method
 
 1. Create a list of moved repositories to delete on `file-XX`:
+
    ```bash
    find /var/opt/gitlab/git-data/repositories/@hashed -mindepth 2 -maxdepth 3 -name *+moved*.git > files_to_remove.txt
    < files_to_remove.txt xargs du -ch | tail -n1
    ```
+
 1. Have another SRE review the files to be removed to avoid loss of data.
 1. Create GCP snapshot of disk on `file-XX` and include a link to the production issue in the snapshot description.
 1. Record the current disk space usage:
+
    ```bash
    df -h /dev/sdb`
    ```
+
 1. Remove the files:
+
    ```bash
    < files_to_remove.txt xargs -rn1 ionice -c 3 rm -fr
    ```
+
 1. Record the recovered disk space: `df -h /dev/sdb`
 
 ### Somewhat automated method
@@ -222,12 +250,15 @@ your local workstation, because it will need secure shell access to the file
 storage nodes which contain the remaining project repositories.)
 1. Confirm that the script can be ran: `bundle exec scripts/storage_cleanup.rb --help`
 1. Conduct a dry-run of the cleanup script:
+
    ```bash
    bundle exec scripts/storage_cleanup.rb file-XX-stor-gprd.c.gitlab-production.internal --verbose --scan --dry-run=yes
    ```
+
 1. For each unique storage node listed in the dry-run output, you should
 perform a GCP snapshot of its larger disk.  This way any deleted repository can
 be recovered, if needed. For example:
+
    ```bash
    export disk_name='file-XX-stor-gprd-data'
    gcloud auth login
@@ -238,9 +269,11 @@ be recovered, if needed. For example:
    echo "${snapshot_name}"
    gcloud compute snapshots list --filter="name=('${snapshot_name}')" --format=json | jq -r '.[0]["status"]'
    ```
+
 1. Request a review from another SRE of the output of the dry-run execution
 plan of the cleanup script.
 1. Finally, execute the cleanup script:
+
    ```bash
    bundle exec scripts/storage_cleanup.rb file-XX-stor-gprd.c.gitlab-production.internal --verbose --scan --dry-run=no
    ```
@@ -288,13 +321,13 @@ check for an invalid residence.
 
 ## Improvements for this script/process
 
-* Automatically send logs to elasticsearch instead of using `tee`.
-  - https://gitlab.com/gitlab-com/gl-infra/reliability/-/issues/9474
-* Automate the invocation of the `storage_rebalance.rb` script with Ansible
+- Automatically send logs to elasticsearch instead of using `tee`.
+  - <https://gitlab.com/gitlab-com/gl-infra/reliability/-/issues/9474>
+- Automate the invocation of the `storage_rebalance.rb` script with Ansible
   or similar. Even just having an automated script that can migrate 500GB at a
   time from the most used to least used gitaly node would help make this less
   of a chore.
-* Ideally, the GitLab application itself could autonomously balance git
+- Ideally, the GitLab application itself could autonomously balance git
 repositories in the background.
 
 ## Behind the scenes

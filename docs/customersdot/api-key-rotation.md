@@ -1,9 +1,9 @@
 # customers.gitlab.com
 
-Overview: https://gitlab.com/gitlab-org/customers-gitlab-com/-/blob/staging/README.md
+Overview: <https://gitlab.com/gitlab-org/customers-gitlab-com/-/blob/staging/README.md>
 
 customers.gitlab.com is currently hosted in Azure with a plan to move it to
-auto-devops in GCP https://gitlab.com/gitlab-org/customers-gitlab-com/-/issues/671
+auto-devops in GCP <https://gitlab.com/gitlab-org/customers-gitlab-com/-/issues/671>
 
 ## API key rotation
 
@@ -15,7 +15,6 @@ GitLab.com and Staging.GitLab.com are configured with two environment variables:
 Although it this token is called an ADMIN it has limited access.
 
 The admin token can be rotated on the customers.gitlab.com rails console:
-
 
 ```
 ssh customers.gitlab.com

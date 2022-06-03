@@ -10,9 +10,9 @@ gitlab-ops project for network peering.
 
 ## Reserving a new subnet
 
-- Update this MR with a new allocation, pick a row that has `AVAILABLE GCP`, if
+* Update this MR with a new allocation, pick a row that has `AVAILABLE GCP`, if
   needed we can start using previously allocated subnets for Azure
-- Larger subnets can be split into smaller ones, if necessary
+* Larger subnets can be split into smaller ones, if necessary
 
 ## Subnet Allocations
 

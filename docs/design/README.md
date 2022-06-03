@@ -4,7 +4,7 @@
 
 [[_TOC_]]
 
-#  Design.gitlab.com Service
+# Design.gitlab.com Service
 
 ## Logging
 
@@ -12,7 +12,6 @@
 
 [design.gitlab.com Runbook](/design-gitlab-com.md)
 <!-- END_MARKER -->
-
 
 <!-- ## Summary -->
 

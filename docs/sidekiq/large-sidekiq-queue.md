@@ -43,7 +43,7 @@ Let that run for around 30 seconds and then check the report `sudo perf report`
 
 If the queue is all in `mailers` and is in the many tens to hundreds of thousands it is
 possible we have a spam/junk issue problem.  If so, refer to the abuse team for assistance,
-and also https://gitlab.com/gitlab-com/runbooks/snippets/1923045 for some spam-fighting
+and also <https://gitlab.com/gitlab-com/runbooks/snippets/1923045> for some spam-fighting
 techniques we have used in the past to clean up.  This is in a private snippet so as not
 to tip our hand to the miscreants.  Often shows up in our gitlab public projects but could
 plausibly be in any other project as well.
@@ -106,7 +106,7 @@ bundle exec knife ssh -aipaddress 'role:gitlab-cluster-worker' 'sudo chef-client
 
 ### Get queues using admin interface
 
-https://gitlab.com/admin/sidekiq/queues
+<https://gitlab.com/admin/sidekiq/queues>
 
 ### Get queue size using rails console
 
@@ -116,7 +116,7 @@ $ gitlab-rails console
 > Sidekiq::Queue.new("pipeline_processing:build_queue").size
 ```
 
-src: https://docs.gitlab.com/ee/administration/troubleshooting/sidekiq.html#view-the-queue-size
+src: <https://docs.gitlab.com/ee/administration/troubleshooting/sidekiq.html#view-the-queue-size>
 
 ### Get enqueued jobs using rails console
 
@@ -128,7 +128,7 @@ queue.each do |job|
 end
 ```
 
-src: https://docs.gitlab.com/ee/administration/troubleshooting/sidekiq.html#enumerate-all-enqueued-jobs
+src: <https://docs.gitlab.com/ee/administration/troubleshooting/sidekiq.html#enumerate-all-enqueued-jobs>
 
 ### Get queues using sq.rb script
 
@@ -137,20 +137,20 @@ assist you in viewing the state of Sidekiq and killing certain workers. To use i
 first download a copy:
 
 ```bash
-$ curl -o /tmp/sq.rb https://gitlab.com/gitlab-com/runbooks/raw/master/docs/uncategorized/db_scripts/sq.rb
+curl -o /tmp/sq.rb https://gitlab.com/gitlab-com/runbooks/raw/master/docs/uncategorized/db_scripts/sq.rb
 ```
 
 To display a breakdown of all the workers, run:
 
 ```bash
-$ sudo gitlab-rails runner /tmp/sq.rb
+sudo gitlab-rails runner /tmp/sq.rb
 ```
 
 ### Remove all jobs from a queue
 
 If you need to drop an entire queue (e.g. `expire_build_instance_artifacts`):
 
-1. Visit https://gitlab.com/admin/sidekiq/queues
+1. Visit <https://gitlab.com/admin/sidekiq/queues>
 2. Find the queue you want to drop and click "Delete"
 
 Dropped queues will be automatically recreated as needed.
@@ -166,15 +166,15 @@ BE CAREFUL WITH THIS COMMAND! You can see how many jobs would be killed using th
 parameter:
 
 ```bash
-$ curl -o /tmp/sq.rb https://gitlab.com/gitlab-com/runbooks/raw/master/docs/uncategorized/db_scripts/sq.rb
-$ sudo gitlab-rails runner /tmp/sq.rb
-$ sudo gitlab-rails runner /tmp/sq.rb kill <WORKER NAME> --dry-run
+curl -o /tmp/sq.rb https://gitlab.com/gitlab-com/runbooks/raw/master/docs/uncategorized/db_scripts/sq.rb
+sudo gitlab-rails runner /tmp/sq.rb
+sudo gitlab-rails runner /tmp/sq.rb kill <WORKER NAME> --dry-run
 ```
 
 For example:
 
 ```bash
-$ sudo gitlab-rails runner /tmp/sq.rb kill RepositoryMirrorUpdateWorker --dry-run
+sudo gitlab-rails runner /tmp/sq.rb kill RepositoryMirrorUpdateWorker --dry-run
 ```
 
 You can omit the `--dry-run` option if you want to remove the jobs.
@@ -195,13 +195,14 @@ used to remove jobs from queues based on these medata values.
 For instance:
 
 ```shell
-$ curl --request DELETE --header "Private-Token: $GITLAB_API_TOKEN_ADMIN" https://gitlab.com/api/v4/admin/sidekiq/queues/post_receive?user=reprazent&project=gitlab-org/gitlab
+curl --request DELETE --header "Private-Token: $GITLAB_API_TOKEN_ADMIN" https://gitlab.com/api/v4/admin/sidekiq/queues/post_receive?user=reprazent&project=gitlab-org/gitlab
 ```
 
 Will delete all jobs from `post_receive` triggered by a user with
 username `reprazent` for the project `gitlab-org/gitlab`.
 
 Check the output of each call:
+
 1. It will report how many jobs were deleted.  0 may mean your conditions (queue, user, project etc) do not match anything.
 1. This API endpoint is bound by the HTTP request time limit, so it will delete as many jobs as it can before terminating. If the `completed` key in the response is `false`, then the whole queue was not processed, so we can try again with the same command to remove further jobs.
 
@@ -212,6 +213,7 @@ THIS PROCEDURE WAS NOT TESTED IN PRODUCTION!!!!!!!!!!
 This is a highly risky operation and use it as a last resort. Doing this might result in data corruption, as the job is interrupted mid-execution and it is not guaranteed that proper rollback of transactions is implemented.
 
 Here's an example of how to get all jobs of one type, from one user and how to kill them:
+
 ```ruby
 queue_types = ["project_export"]
 username = ["blahblahputusernamehere"]
@@ -222,11 +224,11 @@ users_jobs = all_jobs_of_type.to_enum(:each).select { |pid, tid, work| username.
 users_jobs.each { |pid, tid, work| puts "Killing job with jid: #{work["payload"]["jid"]}"; Gitlab::SidekiqDaemon::Monitor.cancel_job(work["payload"]["jid"])  }
 ```
 
-src: https://docs.gitlab.com/ee/administration/troubleshooting/sidekiq.html#canceling-running-jobs-destructive
+src: <https://docs.gitlab.com/ee/administration/troubleshooting/sidekiq.html#canceling-running-jobs-destructive>
 
 ## References
 
-* https://gitlab.com/gitlab-com/gl-infra/reliability/-/issues/677
-* https://gitlab.com/gitlab-com/gl-infra/reliability/-/issues/606
-* https://gitlab.com/gitlab-com/gl-infra/reliability/-/issues/584
-* https://docs.gitlab.com/ee/administration/troubleshooting/sidekiq.html
+* <https://gitlab.com/gitlab-com/gl-infra/reliability/-/issues/677>
+* <https://gitlab.com/gitlab-com/gl-infra/reliability/-/issues/606>
+* <https://gitlab.com/gitlab-com/gl-infra/reliability/-/issues/584>
+* <https://docs.gitlab.com/ee/administration/troubleshooting/sidekiq.html>

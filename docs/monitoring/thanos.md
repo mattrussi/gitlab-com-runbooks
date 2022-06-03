@@ -1,6 +1,6 @@
 # Thanos General Alerts
 
-Docs: https://thanos.io/
+Docs: <https://thanos.io/>
 
 ### ThanosBucketHighOperationFailures
 

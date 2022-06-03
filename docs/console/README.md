@@ -4,8 +4,9 @@
 
 [[_TOC_]]
 
-#  Console Service
-* **Alerts**: https://alerts.gitlab.net/#/alerts?filter=%7Btype%3D%22console%22%2C%20tier%3D%22sv%22%7D
+# Console Service
+
+* **Alerts**: <https://alerts.gitlab.net/#/alerts?filter=%7Btype%3D%22console%22%2C%20tier%3D%22sv%22%7D>
 * **Label**: gitlab-com/gl-infra/production~"Service:Console"
 
 ## Logging
@@ -109,7 +110,6 @@
 * [Gitlab Vault](../vault/vault.md)
 * [version.gitlab.com Runbook](../version/version-gitlab-com.md)
 <!-- END_MARKER -->
-
 
 <!-- ## Summary -->
 

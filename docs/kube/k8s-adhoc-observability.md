@@ -54,7 +54,6 @@ All of these tools and methods are meant to be run on a specific GKE node.
 
 If you have not already chosen a target GKE node to observe, here are some ways to list the currently running nodes.
 
-
 List GKE nodes:
 
 ```
@@ -91,10 +90,10 @@ All of the following helper scripts use the same approach and output format.
 The main difference is letting you optionally scope the capture to a container or pod:
 
 ```
-$ bash perf_flamegraph_for_all_running_processes.sh
-$ bash perf_flamegraph_for_container_id.sh [container_id]
-$ bash perf_flamegraph_for_container_of_pid.sh [pid]
-$ bash perf_flamegraph_for_pod_id.sh [pod_id]
+bash perf_flamegraph_for_all_running_processes.sh
+bash perf_flamegraph_for_container_id.sh [container_id]
+bash perf_flamegraph_for_container_of_pid.sh [pid]
+bash perf_flamegraph_for_pod_id.sh [pod_id]
 ```
 
 ### Profiling the whole GKE node
@@ -134,37 +133,37 @@ Similar to the above, you can profile a single container rather than the whole h
 Find and ssh into a GKE node:
 
 ```
-$ gcloud compute instances list --project gitlab-pre --filter 'name:gke-pre-gitlab-gke-redis'
-$ gcloud compute ssh --project gitlab-pre gke-pre-gitlab-gke-redis-ratelimiting-231e75c5-mabc
+gcloud compute instances list --project gitlab-pre --filter 'name:gke-pre-gitlab-gke-redis'
+gcloud compute ssh --project gitlab-pre gke-pre-gitlab-gke-redis-ratelimiting-231e75c5-mabc
 ```
 
 On the GKE node, fetch the helper script:
 
 ```
-$ git clone https://gitlab.com/gitlab-com/runbooks.git
-$ cd runbooks/scripts/gke/
+git clone https://gitlab.com/gitlab-com/runbooks.git
+cd runbooks/scripts/gke/
 ```
 
 Choose your target PID, and run the profiler on just its container:
 
 ```
-$ TARGET_PID=$( pgrep -n -f 'redis-server .*:6379' )
-$ bash ./perf_flamegraph_for_container_of_pid.sh $TARGET_PID
+TARGET_PID=$( pgrep -n -f 'redis-server .*:6379' )
+bash ./perf_flamegraph_for_container_of_pid.sh $TARGET_PID
 ```
 
 Alternately, you can specify the target container by id:
 
 ```
-$ CONTAINER_ID=$( crictl ps --latest --quiet --name 'redis' )
-$ bash ./perf_flamegraph_for_container_id.sh $CONTAINER_ID
+CONTAINER_ID=$( crictl ps --latest --quiet --name 'redis' )
+bash ./perf_flamegraph_for_container_id.sh $CONTAINER_ID
 ```
 
 On your laptop, download the flamegraph (and optionally the perf-script output for fine-grained analysis):
 
 ```
-$ gcloud compute scp --project gitlab-pre gke-pre-gitlab-gke-redis-ratelimiting-231e75c5-mabc:/tmp/perf-record-results.oI3YR698/gke-pre-gitlab-gke-redis-ratelimiting-231e75c5-mabc.20220414_010939_UTC.container_of_pid_7154.flamegraph.svg .
+gcloud compute scp --project gitlab-pre gke-pre-gitlab-gke-redis-ratelimiting-231e75c5-mabc:/tmp/perf-record-results.oI3YR698/gke-pre-gitlab-gke-redis-ratelimiting-231e75c5-mabc.20220414_010939_UTC.container_of_pid_7154.flamegraph.svg .
 
-$ gcloud compute scp --project gitlab-pre gke-pre-gitlab-gke-redis-ratelimiting-231e75c5-mabc:/tmp/perf-record-results.oI3YR698/gke-pre-gitlab-gke-redis-ratelimiting-231e75c5-mabc.20220414_010939_UTC.container_of_pid_7154.perf-script.txt.gz .
+gcloud compute scp --project gitlab-pre gke-pre-gitlab-gke-redis-ratelimiting-231e75c5-mabc:/tmp/perf-record-results.oI3YR698/gke-pre-gitlab-gke-redis-ratelimiting-231e75c5-mabc.20220414_010939_UTC.container_of_pid_7154.perf-script.txt.gz .
 ```
 
 ## Finding relationships between processes, containers, and pods
@@ -301,6 +300,7 @@ $ bash ./tcpdump_on_gke_node_for_pod_id.using_pod_netns.sh "$POD_ID" 10 'dst por
 ### Gotchas
 
 Before running large or long-running packet captures, be aware of the following gotchas:
+
 * Disk space:
   * The pcap files are saved to `/var/pcap` on the GKE host.
   * This is a disk-backed filesystem, so writing there is safer than writing to a `tmpfs` filesystem (i.e. does not consume memory).
@@ -310,8 +310,9 @@ Before running large or long-running packet captures, be aware of the following 
   * Because we must run `tcpdump` inside the `toolbox` container, we cannot interactively interrupt the capture by pressing Ctrl-C.
   * Choose a reasonable max duration when running the tcpdump wrapper scripts.  Optionally also specify a max packet count (`-c 10000`).
   * If you need to quickly kill a capture, start a new shell on the GKE node and kill the `tcpdump` process:
+
     ```
-    $ sudo pkill tcpdump
+    sudo pkill tcpdump
     ```
 
 ### Clone the tools onto your target GKE node
@@ -319,15 +320,15 @@ Before running large or long-running packet captures, be aware of the following 
 Find and ssh into a GKE node:
 
 ```
-$ gcloud --project gitlab-pre compute instances list --filter 'name:gke-pre-gitlab-gke-redis'
-$ gcloud compute ssh --project gitlab-pre gke-pre-gitlab-gke-redis-ratelimiting-231e75c5-rpfh
+gcloud --project gitlab-pre compute instances list --filter 'name:gke-pre-gitlab-gke-redis'
+gcloud compute ssh --project gitlab-pre gke-pre-gitlab-gke-redis-ratelimiting-231e75c5-rpfh
 ```
 
 On the GKE node, fetch the helper script:
 
 ```
-$ git clone https://gitlab.com/gitlab-com/runbooks.git
-$ cd runbooks/scripts/gke/
+git clone https://gitlab.com/gitlab-com/runbooks.git
+cd runbooks/scripts/gke/
 ```
 
 ### Capturing traffic at the host or pod level
@@ -342,14 +343,14 @@ The following example captures for 10 seconds all traffic on port 6379
 in both directions for all pods.
 
 ```
-$ bash ./tcpdump_on_gke_node.sh 10 'port 6379'
+bash ./tcpdump_on_gke_node.sh 10 'port 6379'
 ```
 
 To do the same capture for a specific single pod, choose a pod id, and run:
 
 ```
-$ POD_ID=$( crictl pods --latest --quiet --namespace redis )
-$ bash ./tcpdump_on_gke_node_for_pod_id.using_pod_netns.sh "$POD_ID" 10 'port 6379'
+POD_ID=$( crictl pods --latest --quiet --namespace redis )
+bash ./tcpdump_on_gke_node_for_pod_id.using_pod_netns.sh "$POD_ID" 10 'port 6379'
 ```
 
 For reference during analysis, it is often helpful to know the pod's IP address:
@@ -424,7 +425,7 @@ tcpdump: listening on any, link-type LINUX_SLL (Linux cooked), capture size 2621
 0 packets dropped by kernel
 Container msmiley-gcr.io_google-containers_toolbox-20201104-00 exited successfully.
 Compressing pcap file.
-/media/root/var/pcap/gke-pre-gitlab-gke-redis-ratelimiting-231e75c5-rpfh.pod_7373dfce7087b83d7d9040dd3149a3a81ff14c946f572aa7949a39a694eb69b6.20220520_224447.pcap:	 81.5% -- replaced with /media/root/var/pcap/gke-pre-gitlab-gke-redis-ratelimiting-231e75c5-rpfh.pod_7373dfce7087b83d7d9040dd3149a3a81ff14c946f572aa7949a39a694eb69b6.20220520_224447.pcap.gz
+/media/root/var/pcap/gke-pre-gitlab-gke-redis-ratelimiting-231e75c5-rpfh.pod_7373dfce7087b83d7d9040dd3149a3a81ff14c946f572aa7949a39a694eb69b6.20220520_224447.pcap:  81.5% -- replaced with /media/root/var/pcap/gke-pre-gitlab-gke-redis-ratelimiting-231e75c5-rpfh.pod_7373dfce7087b83d7d9040dd3149a3a81ff14c946f572aa7949a39a694eb69b6.20220520_224447.pcap.gz
 Results:
 -rw-r--r-- 1 root root 23K May 20 22:45 /var/pcap/gke-pre-gitlab-gke-redis-ratelimiting-231e75c5-rpfh.pod_7373dfce7087b83d7d9040dd3149a3a81ff14c946f572aa7949a39a694eb69b6.20220520_224447.pcap.gz
 ```
@@ -489,10 +490,10 @@ $ tshark -r $PCAP_FILE -T fields -e tcp.flags.str | sort | uniq -c
       4 ··········S·
 
 $ tshark -r $PCAP_FILE -Y 'tcp.flags.syn == 1' -T fields -e frame.time -e tcp.flags.str -e ip.src -e ip.dst -e tcp.srcport -e tcp.dstport | head -n4
-May 20, 2022 22:44:50.961767000 UTC	··········S·	127.0.0.1	127.0.0.1	39114	6379
-May 20, 2022 22:44:50.961774000 UTC	·······A··S·	127.0.0.1	127.0.0.1	6379	39114
-May 20, 2022 22:44:50.994887000 UTC	··········S·	127.0.0.1	127.0.0.1	39116	6379
-May 20, 2022 22:44:50.994896000 UTC	·······A··S·	127.0.0.1	127.0.0.1	6379	39116
+May 20, 2022 22:44:50.961767000 UTC ··········S· 127.0.0.1 127.0.0.1 39114 6379
+May 20, 2022 22:44:50.961774000 UTC ·······A··S· 127.0.0.1 127.0.0.1 6379 39114
+May 20, 2022 22:44:50.994887000 UTC ··········S· 127.0.0.1 127.0.0.1 39116 6379
+May 20, 2022 22:44:50.994896000 UTC ·······A··S· 127.0.0.1 127.0.0.1 6379 39116
 
 $ wireshark -r $PCAP_FILE -Y 'ip.addr == 127.0.0.1 && tcp.port == 39114 && tcp.port == 6379'
 ```
@@ -599,12 +600,12 @@ msmiley@gke-gprd-us-east1-b-api-2-c1ce60b7-mfxl ~ $ pgrep -n -a -f 'sleep 123'
 # Must use the host namespace's PID when running pidstat.
 
 msmiley@gke-gprd-us-east1-b-api-2-c1ce60b7-mfxl ~ $ toolbox pidstat -p 1089 1 3
-Linux 5.4.170+ (gke-gprd-us-east1-b-api-2-c1ce60b7-mfxl) 	05/24/22 	_x86_64_	(30 CPU)
+Linux 5.4.170+ (gke-gprd-us-east1-b-api-2-c1ce60b7-mfxl)  05/24/22  _x86_64_ (30 CPU)
 
 23:25:37      UID       PID    %usr %system  %guest   %wait    %CPU   CPU  Command
 
 msmiley@gke-gprd-us-east1-b-api-2-c1ce60b7-mfxl ~ $ toolbox pidstat -p 789724 1 3
-Linux 5.4.170+ (gke-gprd-us-east1-b-api-2-c1ce60b7-mfxl) 	05/24/22 	_x86_64_	(30 CPU)
+Linux 5.4.170+ (gke-gprd-us-east1-b-api-2-c1ce60b7-mfxl)  05/24/22  _x86_64_ (30 CPU)
 
 23:25:44      UID       PID    %usr %system  %guest   %wait    %CPU   CPU  Command
 23:25:45     1000    789724    0.00    0.00    0.00    0.00    0.00     1  sleep
@@ -639,7 +640,7 @@ $ TARGET_PID=$( cat /sys/fs/cgroup/cpu/docker/$CONTAINER_ID/cgroup.procs | head 
 # Initially the process uses a whole CPU.
 
 $ pidstat -p $TARGET_PID 1 3
-Linux 5.13.0-41-generic (saoirse) 	05/25/2022 	_x86_64_	(8 CPU)
+Linux 5.13.0-41-generic (saoirse)  05/25/2022  _x86_64_ (8 CPU)
 
 10:51:39 PM   UID       PID    %usr %system  %guest   %wait    %CPU   CPU  Command
 10:51:40 PM     0    161603  100.00    1.00    0.00    1.00  101.00     3  bash
@@ -659,7 +660,7 @@ $ echo 70000 | sudo tee /sys/fs/cgroup/cpu/docker/$CONTAINER_ID/cpu.cfs_quota_us
 # Show the process now spends 70% its wallclock time on CPU and 30% waiting for quota to refill.
 
 $ pidstat -p $TARGET_PID 1 3
-Linux 5.13.0-41-generic (saoirse) 	05/25/2022 	_x86_64_	(8 CPU)
+Linux 5.13.0-41-generic (saoirse)  05/25/2022  _x86_64_ (8 CPU)
 
 10:54:35 PM   UID       PID    %usr %system  %guest   %wait    %CPU   CPU  Command
 10:54:36 PM     0    161603   70.00    0.00    0.00   30.00   70.00     6  bash

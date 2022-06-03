@@ -34,27 +34,27 @@ application code, by setting instance-level CI/CD variables.
 ### Resolution
 
 1. Identify a good image version:
-    - `AUTO_DEPLOY_IMAGE_VERSION` and `DAST_AUTO_DEPLOY_IMAGE_VERSION`:
-      - If the problem was caused by an update, use the previously version in [`Jobs/Deploy.gitlab-ci.yml`](https://gitlab.com/gitlab-org/gitlab/-/blob/master/lib/gitlab/ci/templates/Jobs/Deploy.gitlab-ci.yml).
-      - In rare cases, a fix may need to be implemented in  [`auto-deploy-image`](https://gitlab.com/gitlab-org/cluster-integration/auto-deploy-image). For example, if a hardcoded remote goes permanently offline, then every released version will be equally broken.
-    - `AUTO_BUILD_IMAGE_VERSION`:
-      - If the problem was caused by an update, use the previously used version in [`Jobs/Build.gitlab-ci.yml`](https://gitlab.com/gitlab-org/gitlab/-/blob/master/lib/gitlab/ci/templates/Jobs/Build.gitlab-ci.yml).
-      - In rare cases, a fix may need to be implemented in [`auto-build-image`](https://gitlab.com/gitlab-org/cluster-integration/auto-build-image) (e.g. hardcoded remote going offline).
+    * `AUTO_DEPLOY_IMAGE_VERSION` and `DAST_AUTO_DEPLOY_IMAGE_VERSION`:
+      * If the problem was caused by an update, use the previously version in [`Jobs/Deploy.gitlab-ci.yml`](https://gitlab.com/gitlab-org/gitlab/-/blob/master/lib/gitlab/ci/templates/Jobs/Deploy.gitlab-ci.yml).
+      * In rare cases, a fix may need to be implemented in  [`auto-deploy-image`](https://gitlab.com/gitlab-org/cluster-integration/auto-deploy-image). For example, if a hardcoded remote goes permanently offline, then every released version will be equally broken.
+    * `AUTO_BUILD_IMAGE_VERSION`:
+      * If the problem was caused by an update, use the previously used version in [`Jobs/Build.gitlab-ci.yml`](https://gitlab.com/gitlab-org/gitlab/-/blob/master/lib/gitlab/ci/templates/Jobs/Build.gitlab-ci.yml).
+      * In rare cases, a fix may need to be implemented in [`auto-build-image`](https://gitlab.com/gitlab-org/cluster-integration/auto-build-image) (e.g. hardcoded remote going offline).
 1. Set instance CI/CD variables to override the default versions of the affected image.
-    - Navigate to [instance level CI/CD settings](https://gitlab.com/admin/application_settings/ci_cd) and expand the **Variables** section.
-    - The version overrides should **not be protected**, and **not be masked**
-    - For Auto Deploy, set `AUTO_DEPLOY_IMAGE_VERSION` _and_ `DAST_AUTO_DEPLOY_IMAGE_VERSION` to the chosen version
-    - For Auto Build, set `AUTO_BUILD_IMAGE_VERSION` to the chosen version
+    * Navigate to [instance level CI/CD settings](https://gitlab.com/admin/application_settings/ci_cd) and expand the **Variables** section.
+    * The version overrides should **not be protected**, and **not be masked**
+    * For Auto Deploy, set `AUTO_DEPLOY_IMAGE_VERSION` _and_ `DAST_AUTO_DEPLOY_IMAGE_VERSION` to the chosen version
+    * For Auto Build, set `AUTO_BUILD_IMAGE_VERSION` to the chosen version
 1. Open an MR against the CI/CD template with the fix
-    - For Auto Deploy:
-       - Update `AUTO_DEPLOY_IMAGE_VERSION` in [`Jobs/Deploy.gitlab-ci.yml`](https://gitlab.com/gitlab-org/gitlab/-/blob/master/lib/gitlab/ci/templates/Jobs/Deploy.gitlab-ci.yml)
-       - Update `DAST_AUTO_DEPLOY_IMAGE_VERSION` in [`Jobs/DAST-Default-Branch-Deploy.gitlab-ci.yml`](https://gitlab.com/gitlab-org/gitlab/-/blob/master/lib/gitlab/ci/templates/Jobs/DAST-Default-Branch-Deploy.gitlab-ci.yml)
-    - For Auto Build:
-       - Update `AUTO_BUILD_IMAGE_VERSION` in [`Jobs/Build.gitlab-ci.yml`](https://gitlab.com/gitlab-org/gitlab/-/blob/master/lib/gitlab/ci/templates/Jobs/Build.gitlab-ci.yml)
+    * For Auto Deploy:
+       * Update `AUTO_DEPLOY_IMAGE_VERSION` in [`Jobs/Deploy.gitlab-ci.yml`](https://gitlab.com/gitlab-org/gitlab/-/blob/master/lib/gitlab/ci/templates/Jobs/Deploy.gitlab-ci.yml)
+       * Update `DAST_AUTO_DEPLOY_IMAGE_VERSION` in [`Jobs/DAST-Default-Branch-Deploy.gitlab-ci.yml`](https://gitlab.com/gitlab-org/gitlab/-/blob/master/lib/gitlab/ci/templates/Jobs/DAST-Default-Branch-Deploy.gitlab-ci.yml)
+    * For Auto Build:
+       * Update `AUTO_BUILD_IMAGE_VERSION` in [`Jobs/Build.gitlab-ci.yml`](https://gitlab.com/gitlab-org/gitlab/-/blob/master/lib/gitlab/ci/templates/Jobs/Build.gitlab-ci.yml)
 1. Once updated code fully rolled out to gprd, unset the CI/CD variables.
-    - Navigate to [instance level CI/CD settings](https://gitlab.com/admin/application_settings/ci_cd) and expand the **Variables** section.
-    - For Auto Deploy, remove `AUTO_DEPLOY_IMAGE_VERSION` _and_ `DAST_AUTO_DEPLOY_IMAGE_VERSION`
-    - For Auto Build, remove `AUTO_BUILD_IMAGE_VERSION`
+    * Navigate to [instance level CI/CD settings](https://gitlab.com/admin/application_settings/ci_cd) and expand the **Variables** section.
+    * For Auto Deploy, remove `AUTO_DEPLOY_IMAGE_VERSION` _and_ `DAST_AUTO_DEPLOY_IMAGE_VERSION`
+    * For Auto Build, remove `AUTO_BUILD_IMAGE_VERSION`
 
 ### Post-checks
 

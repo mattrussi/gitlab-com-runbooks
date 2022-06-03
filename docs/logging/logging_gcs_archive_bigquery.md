@@ -27,9 +27,9 @@ In order to load a BQ table from a SD produced log archive stored in GCS a datas
 
 ### Why
 
- * You need to query logs older than 7 days and thus are no longer in our [ELK](https://log.gprd.gitlab.net) instance.
- * You need to query logs older than 30 days and thus are no longer in our SD.
- * You need aggregate operators, summarized reports or output visualizations.
+- You need to query logs older than 7 days and thus are no longer in our [ELK](https://log.gprd.gitlab.net) instance.
+- You need to query logs older than 30 days and thus are no longer in our SD.
+- You need aggregate operators, summarized reports or output visualizations.
 
 ### What
 
@@ -110,7 +110,7 @@ To save time and increase usability, the text version of a table schema can be
 dumped with the `bq` command-line tool as follows:
 
 ```
-  $ bq show --schema --format=prettyjson myproject:myhaproxy.haproxy > haproxy_schema.json
+  bq show --schema --format=prettyjson myproject:myhaproxy.haproxy > haproxy_schema.json
 ```
 
 The result can be copied and pasted into BQ by selecting `Edit as text` when creating a table that relies on a similar schema.
@@ -140,6 +140,7 @@ do the following:
       gs://gitlab-gprd-logging-archive/${DIRECTORY}/* \
       json:STRING
     ```
+
 2. Transform that data and load into the desired table using
    [`JSON_EXTRACT`](https://cloud.google.com/bigquery/docs/reference/standard-sql/json_functions#json_extract):
 
@@ -157,6 +158,7 @@ do the following:
 
     bq --project_id "$GCP_PROJECT" query --nouse_legacy_sql "$query"
     ```
+
 3. The table with the `_pre` suffix can now be deleted.
 
 ## Example Queries
@@ -183,4 +185,4 @@ select count(jsonPayload.path) as count from dataset.table where jsonPayload.use
 
 # TODO
 
- * It's probably possible to perform the above tasks with the `bq` command line.
+- It's probably possible to perform the above tasks with the `bq` command line.

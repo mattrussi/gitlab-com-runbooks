@@ -4,7 +4,7 @@
 
 This usually means that the certificates in
 `/root/.docker/machine/certs` has expired and we are facing
-https://gitlab.com/gitlab-org/gitlab-runner/-/issues/3676.
+<https://gitlab.com/gitlab-org/gitlab-runner/-/issues/3676>.
 
 1. Verify the certs were recently created.
 

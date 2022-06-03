@@ -1,6 +1,6 @@
 # PostgreSQL Trigram Indexes
 
-This documents to action taken on https://gitlab.com/gitlab-com/database/issues/14. The script below rebuilds
+This documents to action taken on <https://gitlab.com/gitlab-com/database/issues/14>. The script below rebuilds
 all trigram indexes that existed at the time of writing (note this may change in the future).
 
 The reason why this cannot be part of a regular migration is that it takes too long to rebuild indexes on

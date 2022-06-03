@@ -7,6 +7,7 @@ The registry is the one responsible for generating pre-signed URLs and redirecti
 ## Possible Checks
 
 If it is believed that there is an issue with the Registry CDN:
+
 - Check the [Registry Storage Overview dashboard](https://dashboards.gitlab.net/d/registry-storage/registry-storage-detail?from=now-1h&to=now&var-PROMETHEUS_DS=Global&var-environment=gprd&var-stage=main&orgId=1) to ensure that the CDN is caching requests and serving `200` status codes
 - Ensure that there is a valid certificate associated with the load balancer, the certificate is Google managed and issued by LetsEncrypt.
 
@@ -25,8 +26,9 @@ Where `/tmp/gprd-key-file` is the base64 encoded key value that can be read fetc
 ## Alerting
 
 There are two BlackBox probes for the Staging and Production CDN endpoints:
-- https://cdn.registry.staging.gitlab-static.net
-- https://cdn.registry.gitlab-static.net
+
+- <https://cdn.registry.staging.gitlab-static.net>
+- <https://cdn.registry.gitlab-static.net>
 
 These [were added](https://gitlab.com/gitlab-com/gl-infra/chef-repo/-/merge_requests/1273) so that we can validate the CDN endpoint and certificate.
 If this alert fires, check to be sure the `health` object exists in the bucket `/cdn-test/health`.
@@ -40,6 +42,7 @@ gsutil -h "Content-Type:text/html" cp /tmp/health gs://gitlab-$env-registry/cdn-
 ```
 
 ## Secret Key and Key Rotation
+
 ### Overview
 
 The CDN is configured with a secret key that is used by the registry to generate signed URLs. This key is configured in Terraform, and is configured as a Kubernetes secret. The secret is sourced from GKMS.
@@ -81,6 +84,7 @@ After the new key is associated with the CDN:
 ...
 
 ```
+
 - Create an MR in [k8s-workload/gitlab-com](https://gitlab.com/gitlab-com/gl-infra/k8s-workloads/gitlab-com) for a ["Chef only" change](https://gitlab.com/gitlab-com/gl-infra/k8s-workloads/gitlab-com/-/blob/9320b1e58f53711ec39057c99d17dad76bcdcb92/CHEF_CONFIG_UPDATE), this will force a config update and fetch the new secret value.
 - After the secret is updated **you will need to force a deployment** [due to an outstanding issue](https://gitlab.com/gitlab-com/gl-infra/delivery/-/issues/2189) where application secrets are not updated unless deployment occurs for the service.
 

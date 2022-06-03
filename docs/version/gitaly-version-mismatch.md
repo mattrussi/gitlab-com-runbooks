@@ -43,13 +43,13 @@ Resolution:
 * Examine the process table, write down the pids of the "old" gitaly process
   ("the parent") that refuses to exit, and its main gitaly process child.
 * Ensure that the gitaly binary has been replaced with the desired new version:
-   * On the affected host: `/opt/gitlab/embedded/bin/gitaly --version`
+  * On the affected host: `/opt/gitlab/embedded/bin/gitaly --version`
 * Follow `/var/log/gitlab/gitaly/current`
-   * Look for logs with a "pid" field. Both parent and child PIDs should be
+  * Look for logs with a "pid" field. Both parent and child PIDs should be
      serving requests successfully.
-   * Keep following this log file throughout the resolution.
+  * Keep following this log file throughout the resolution.
 * `kill -9 <parent PID>`.
-   * Note that this might interrupt in-flight requests, but there is not a more
+  * Note that this might interrupt in-flight requests, but there is not a more
      graceful solution to this problem at this time.
 * `gitlab-ctl hup gitaly`. This should succeed. The process tree should appear
   "normal", with one main gitaly process with a set of gitaly-ruby worker
@@ -108,6 +108,6 @@ git      12915 12827  0 11:54 ?        00:00:09      \_ ruby /opt/gitlab/embedde
 git      23079 12827 77 13:00 ?        00:00:24      \_ /opt/gitlab/embedded/bin/git --git-dir /var/opt/gitlab/git-data/repositories/@hashed/fa/53/fa539965395b8382145f8370b34eab249cf610d2d6f2943c95b9b9d08a63d4a3.git fetch --prune ssh://gitaly/internal.git +refs/*:refs/* --end-of-options
 ```
 
-Example incident: https://gitlab.com/gitlab-com/gl-infra/production/-/issues/2452
+Example incident: <https://gitlab.com/gitlab-com/gl-infra/production/-/issues/2452>
 
-Tracking issue: https://gitlab.com/gitlab-org/gitaly/-/issues/2988
+Tracking issue: <https://gitlab.com/gitlab-org/gitaly/-/issues/2988>

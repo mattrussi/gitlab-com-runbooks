@@ -4,9 +4,10 @@
 
 [[_TOC_]]
 
-#  Web Service
+# Web Service
+
 * [Service Overview](https://dashboards.gitlab.net/d/web-main/web-overview)
-* **Alerts**: https://alerts.gitlab.net/#/alerts?filter=%7Btype%3D%22web%22%2C%20tier%3D%22sv%22%7D
+* **Alerts**: <https://alerts.gitlab.net/#/alerts?filter=%7Btype%3D%22web%22%2C%20tier%3D%22sv%22%7D>
 * **Label**: gitlab-com/gl-infra/production~"Service:Web"
 
 ## Logging
@@ -79,7 +80,6 @@
 * [Setup oauth2-proxy protection for web based application](../uncategorized/setup-oauth2-proxy-protected-application.md)
 * [Workhorse Image Scaler](workhorse-image-scaler.md)
 <!-- END_MARKER -->
-
 
 <!-- ## Summary -->
 

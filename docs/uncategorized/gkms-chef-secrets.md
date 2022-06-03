@@ -10,7 +10,6 @@ define some secrets and merge them into node attributes. Here is an example
 for using gkms secrets, assuming you want them for some `<cookbook>` in the
 `gprd` environment.
 
-
 ```
 secrets_hash = node['<cookbook>']['secrets']
 secrets = get_secrets(secrets_hash['backend'], secrets_hash['path'], secrets_hash['key'])

@@ -4,9 +4,10 @@
 
 [[_TOC_]]
 
-#  Praefect Service
+# Praefect Service
+
 * [Service Overview](https://dashboards.gitlab.net/d/praefect-main/praefect-overview)
-* **Alerts**: https://alerts.gitlab.net/#/alerts?filter=%7Btype%3D%22praefect%22%2C%20tier%3D%22stor%22%7D
+* **Alerts**: <https://alerts.gitlab.net/#/alerts?filter=%7Btype%3D%22praefect%22%2C%20tier%3D%22stor%22%7D>
 * **Label**: gitlab-com/gl-infra/production~"Service:Praefect"
 
 ## Logging
@@ -30,10 +31,9 @@
 * [Gitaly version mismatch](../version/gitaly-version-mismatch.md)
 <!-- END_MARKER -->
 
-## How To...
+## How To
 
 * [Add and remove file storages to praefect](praefect-file-storages.md)
-
 
 <!-- ## Summary -->
 

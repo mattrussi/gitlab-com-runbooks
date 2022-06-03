@@ -44,7 +44,6 @@ It is unlikely that we will ever have the need to restore packages, but the pack
 bucket uses Amazon's [cross-region replication](http://docs.aws.amazon.com/AmazonS3/latest/dev/crr.html)
 so that we can have extra certainty that the packages will survive.
 
-
 ## How Is the DB Backed Up?
 
 The native PackageCloud backups use [xbstream](https://www.percona.com/doc/percona-xtrabackup/LATEST/xbstream/xbstream.html).
@@ -56,6 +55,7 @@ entire backup.
 We have a Dead Man's Snitch that should notice the job not running (no changes to the S3 bucket) or being somehow broken/stalled, and e-mail ops-contact+packagecloudbackups@gitlab.com
 
 In one case, the upload to S3 was stalled/locked, and no further backups were running (they run under sv; when one finishes it exits, sv starts the job again which immediately sleeps for 1 day before doing the next backup.  If it stalls/locks up, that's it until we take action).  This manifested as:
+
 1. a very long running process that was doing nothing,
 2. The last line of /var/log/packagecloud/database-backups/current being something like `uploading backups/packagecloud-streamed-database-backup.DATESTAMP/packagecloud-streamed-database-backup.DATESTAMP.xbstream`, and nothing else showing the backup completing
 3. `sudo packagecloud-ctl status database_backups` indicating a very long lifetime for the service process
@@ -76,6 +76,7 @@ rebuild and will thus begin with building and configuring the server.
 There are two ways to build the server:
 
 ### Building it the semi-automated way
+
 1. Make sure your `aws` cli is working (`aws ec2 describe-vpcs` as test cmd)
 1. `mkdir ./bad && cd ./bad`
 1. grab backup_scripts/04-packagecloud.sh
@@ -86,15 +87,16 @@ There are two ways to build the server:
 ### Building it the manual way
 
 1. Build a new server! The current specs are listed below.
-  * Instance Size: c4.2xlarge
-  * Root Disk Size: 8GB (gp2)
-  * Data Disk Size: 2TB (gp2), xfs, mounted on /var/opt/packagecloud
-  * OS: Ubuntu 14.04 LTS
-  * Security Groups With Inbound Ports:
-    * 80
-    * 443
-    * 22
-    * Standard monitoring ports, available only to prometheus servers
+
+* Instance Size: c4.2xlarge
+* Root Disk Size: 8GB (gp2)
+* Data Disk Size: 2TB (gp2), xfs, mounted on /var/opt/packagecloud
+* OS: Ubuntu 14.04 LTS
+* Security Groups With Inbound Ports:
+  * 80
+  * 443
+  * 22
+  * Standard monitoring ports, available only to prometheus servers
 
 ### Configuring the server
 
@@ -110,10 +112,12 @@ There are two ways to build the server:
 3. Install s3cmd and use the credentials in the `packagecloud.rb` file for the credentials.
 4. Download the most recent backup from `s3://gitlab-packagecloud-db-backups/backups` and place it in `/var/opt/packagecloud/backups/`.
 5. The restore command will extract a large amount of data to `/tmp`. To make sure you don't run out of space you can:
+
     ```
     mkdir /var/opt/packagecloud/tmp
     mount --rbind /var/opt/packagecloud/tmp /tmp
     ```
+
 6. Run the restore command `packagecloud-ctl backup-database-restore /var/opt/packagecloud/backups/<name of tgz file>`
 This step will take around 2 hours. As the database grows, so too will this time.
 Be certain to run this step in `screen` or `tmux`!
@@ -137,9 +141,10 @@ and unreleased builds before they are released.
 #### Key rotation
 
 * To rotate the package key visit
-https://packages.gitlab.com/gitlab/pre-release/tokens and select `rotate`
+<https://packages.gitlab.com/gitlab/pre-release/tokens> and select `rotate`
 
 * Update the secret in each environment, for example:
+
 ```
     ./bin/gkms-vault-edit gitlab-omnibus-secrets gprd
     ./bin/gkms-vault-edit gitlab-omnibus-secrets gstg
@@ -157,10 +162,13 @@ https://packages.gitlab.com/gitlab/pre-release/tokens and select `rotate`
     },
 
 ```
-* _Note: For an updated list of envs see https://ops.gitlab.net/gitlab-cookbooks/chef-repo/blob/master/bin/gkms-vault-common#L56_
-* Because of https://gitlab.com/gitlab-com/gl-infra/reliability/-/issues/7459 , after the update chef runs will fail because the sources file is not updated
+
+* _Note: For an updated list of envs see <https://ops.gitlab.net/gitlab-cookbooks/chef-repo/blob/master/bin/gkms-vault-common#L56>_
+* Because of <https://gitlab.com/gitlab-com/gl-infra/reliability/-/issues/7459> , after the update chef runs will fail because the sources file is not updated
   automatically, the following knife command can workaround the issue:
+
 ```
 knife ssh -C10  "recipes:omnibus-gitlab\\:\\:default" "sudo rm -f /etc/apt/sources.list.d/gitlab_pre-release.list"
 ```
+
 * Verify that chef runs complete successfully after deleting the sources file

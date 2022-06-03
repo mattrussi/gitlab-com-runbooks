@@ -36,13 +36,13 @@ on GitLab.com while still getting some benefit from the Cloudflare WAF product.
 ### Supporting Artifacts to Collect
 
 - If an incident has already been created due to a large number of reports:
-    - Copy the [generic trace template](#generic-trace-template) below and
+  - Copy the [generic trace template](#generic-trace-template) below and
       ask users to report their results.
-    - If further details are required, direct users to create confidential
+  - If further details are required, direct users to create confidential
       [Cloudflare Troubleshooting Issue](https://gitlab.com/gitlab-com/gl-infra/-/issues/new?issuable_template=Cloudflare%20Troubleshooting.md) and link it to the
       incident issue.
 - If the problem is a specific URI or request:
-    - Direct them to create a [Cloudflare Troubleshooting Issue](https://gitlab.com/gitlab-com/gl-infra/-/issues/new?issuable_template=Cloudflare%20Troubleshooting.md), making it confidential if necessary.
+  - Direct them to create a [Cloudflare Troubleshooting Issue](https://gitlab.com/gitlab-com/gl-infra/-/issues/new?issuable_template=Cloudflare%20Troubleshooting.md), making it confidential if necessary.
 
 ### Confirming Cloudflare and other service Connectivity
 
@@ -60,7 +60,6 @@ on GitLab.com while still getting some benefit from the Cloudflare WAF product.
    1. Attempt the same connections using both the DNS supplied addresses for `gitlab.com`
       and the hardcoded origin addresses from different GCP regions and/or other
       cloud providers to further narrow down specific paths exhibiting problems.
-
 
 ### Generic trace template
 

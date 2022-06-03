@@ -4,9 +4,10 @@
 
 [[_TOC_]]
 
-#  Redis-sessions Service
+# Redis-sessions Service
+
 * [Service Overview](https://dashboards.gitlab.net/d/redis-sessions-main/redis-sessions-overview)
-* **Alerts**: https://alerts.gitlab.net/#/alerts?filter=%7Btype%3D%22redis-sessions%22%2C%20tier%3D%22db%22%7D
+* **Alerts**: <https://alerts.gitlab.net/#/alerts?filter=%7Btype%3D%22redis-sessions%22%2C%20tier%3D%22db%22%7D>
 * **Label**: gitlab-com/gl-infra/production~"Service:Redis"
 
 ## Logging
@@ -30,15 +31,16 @@ Redis is deployed in the usual 3-node single-primary/two-replica VM configuratio
 <!-- ## Performance -->
 
 ## Scalability
+
 Single threaded CPU is the normal constraint for Redis, but at initial move we are anticipating something in the order of 20% absolute CPU usage.  Data storage for sessions is in the order of 10GB (at end of 2021).
 
 ## Availability
 
-The usual redis availability expectations for our 3-node clusters apply (see https://gitlab.com/gitlab-com/runbooks/-/blob/master/docs/redis/redis-survival-guide-for-sres.md#high-availability )
+The usual redis availability expectations for our 3-node clusters apply (see <https://gitlab.com/gitlab-com/runbooks/-/blob/master/docs/redis/redis-survival-guide-for-sres.md#high-availability> )
 
 ## Durability
 
-Session data is an interesting hybrid; we do *generally* want durability/persistence, but can tolerate some loss of data (generally a log-out for affected users).  As such while we persist to disk with RDB, we also have maxmemory and an eviction policy (volatile-ttl) that will, if necessary, evict data with the shortest TTL remaining (sessions that were close to expiry anyway).  Alerting is set to tell us if we are approaching that state of affairs, but that policy gives us space to mitigate/manage the situation without disaster.
+Session data is an interesting hybrid; we do _generally_ want durability/persistence, but can tolerate some loss of data (generally a log-out for affected users).  As such while we persist to disk with RDB, we also have maxmemory and an eviction policy (volatile-ttl) that will, if necessary, evict data with the shortest TTL remaining (sessions that were close to expiry anyway).  Alerting is set to tell us if we are approaching that state of affairs, but that policy gives us space to mitigate/manage the situation without disaster.
 
 <!-- ## Security/Compliance -->
 

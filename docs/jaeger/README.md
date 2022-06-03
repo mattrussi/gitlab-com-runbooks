@@ -4,9 +4,10 @@
 
 [[_TOC_]]
 
-#  Jaeger Service
+# Jaeger Service
+
 * [Service Overview](https://dashboards.gitlab.net/d/jaeger-main/jaeger-overview)
-* **Alerts**: https://alerts.gitlab.net/#/alerts?filter=%7Btype%3D%22jaeger%22%2C%20tier%3D%22inf%22%7D
+* **Alerts**: <https://alerts.gitlab.net/#/alerts?filter=%7Btype%3D%22jaeger%22%2C%20tier%3D%22inf%22%7D>
 * **Label**: gitlab-com/gl-infra/production~"Service:Jaeger"
 
 ## Logging
@@ -246,7 +247,7 @@ done in:
 
 The Jaeger core services, collector and query, are managed through the Jaeger
 Operator, and their config lives in
-[tanka-deployments])(https://gitlab.com/gitlab-com/gl-infra/k8s-workloads/tanka-deployments).
+[tanka-deployments])(<https://gitlab.com/gitlab-com/gl-infra/k8s-workloads/tanka-deployments>).
 
 ### Elasticsearch
 

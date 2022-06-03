@@ -6,7 +6,7 @@ A Prometheus Kubernetes pod is crashlooping.
 
 ### Out of memory
 
-Increase the memory: https://gitlab.com/gitlab-com/gl-infra/k8s-workloads/gitlab-helmfiles/blob/master/releases/30-gitlab-monitoring/gprd.yaml.gotmpl
+Increase the memory: <https://gitlab.com/gitlab-com/gl-infra/k8s-workloads/gitlab-helmfiles/blob/master/releases/30-gitlab-monitoring/gprd.yaml.gotmpl>
 
 Ensure that we have enough cluster-level headroom to accommodate this. As of
 today, there is no simple, single procedure to ensure this.

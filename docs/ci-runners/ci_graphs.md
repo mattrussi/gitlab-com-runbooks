@@ -1,6 +1,6 @@
 ## CI graphs
 
-When you go to https://dashboards.gitlab.net/dashboard/db/ci you will see a number of graphs.
+When you go to <https://dashboards.gitlab.net/dashboard/db/ci> you will see a number of graphs.
 
 This document tries to explain what you see and what each of the values does indicate.
 
@@ -40,15 +40,16 @@ These graphs represent data that are exported out of Runner Manager with Prometh
 The first graph represents a number of currently running jobs on specific Runner Manager.
 
 The second graph gathers data from GitLab perspective about a number of jobs running on:
+
 * **private-runners** specific runners owned by GitLab Inc. (not all GitLab specific runners), currently it is: `docker-ci-X.gitlap.com`,
 * **shared-runners-gitlab-org** shared runners owned by GitLab Inc. that are used for running jobs with tag `gitlab-org`: `gitlab-shared-runners-manager-X.gitlab.com`,
 * **shared-runners** shared runners owned by GitLab Inc. that are used for running all public jobs `shared-runners-manager-X.gitlab.com`,
 
 The third graphs represent runner point of view of how many jobs are right now in given stage.
 Most of the stages are self-explanatory, excluding one:
+
 * **stage**: currently the name of this is stage can be considered as an error.
 This name indicates that job is currently on preparation phase: download docker images and configuring services.
-
 
 ### How to interpret this data?
 
@@ -101,6 +102,7 @@ If the request cannot be handled it is proxied to GitLab.
 ![](../img/long_polling_states.png)
 
 This graph represents a number of hits for given state when handling job request in Workhorse:
+
 * **body-parse-error**, **body-read-error**, **missing-values**: we received invalid body that is too large, is of invalid content or does not have all required arguments, in this case, request is proxied to GitLab,
 * **watch-error**: we failed to start watcher process, request is proxied to GitLab,
 * **no-change**: we received notification, but the current value of notification is the same as sent by Runner, we return no new jobs to Runner,
@@ -113,6 +115,7 @@ Here we aim to minimize the number of errors, as they indicate that request cann
 ![](../img/long_polling_state.png)
 
 This graph represents a current number of requests in given state:
+
 * **reading**: Workhorse is reading request body, if client is slow to send body we can see some number here,
 * **watching**: Workhorse is long polling request and watching for Redis change notification,
 * **proxying**: Workhorse is proxying request to GitLab.
@@ -126,11 +129,13 @@ We use Workhorse Queueing request to limit the capacity that is given to job req
 Only this endpoint is affected by these changes. This allows us to easily control the percentage of the resources of a single server that job requesting can use.
 
 All requests to this endpoint end up in the queue. The queue has:
+
 * width: how many requests we can run concurrently,
 * timeout: how long we allow request to be in queue,
 * length: how many requests we allow to be in the queue.
 
 Requests that:
+
 * do end up in queue, but do timeout are rejected with: **503 Service Unavailable**,
 * that cannot be put enqueued because we have more than limit are rejected with: **429 Too Many Requests**.
 

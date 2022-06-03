@@ -105,6 +105,7 @@ query parameters expected by the application to go through. This is to prevent
 malicious users from bypassing the cache by adding arbitrary query parameters.
 
 The following rules are applied:
+
 * For `/raw/` requests
   * `inline` query parameter is only allowed if its value is either `true` or
     `false`

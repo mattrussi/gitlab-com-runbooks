@@ -35,14 +35,15 @@ Using mtail, we scrape the logs and count certain errors.  At this writing there
 ## Manual testing
 
 If you need to generate a URL that you can pass through camoproxy to verify its behavior:
+
 1. ssh to one of the camoproxy nodes
 1. KEY=$(grep 'GOCAMO_HMAC=' /etc/sv/camoproxy/run|cut -d= -f2|tr -d '"')
-1. URL=https://example.com/path/to/image.jpg
-1. echo https://user-content.gitlab-static.net$(/opt/camoproxy/bin/url-tool --key $KEY encode $URL)
+1. URL=<https://example.com/path/to/image.jpg>
+1. echo <https://user-content.gitlab-static.net$(/opt/camoproxy/bin/url-tool> --key $KEY encode $URL)
 
 (NB: staging is at user-content.staging.gitlab-static.net; substitute the domain necessary, as the HMAC keys are not the same across both environments)
 
-Alternatively, you can grab the camoproxy binaries from https://github.com/cactus/go-camo/releases/ to your laptop, and get the key value the same way or from the GKMS vault (`/path/to/chef-repo/bin/gkms-vault-show camoproxy gstg`)
+Alternatively, you can grab the camoproxy binaries from <https://github.com/cactus/go-camo/releases/> to your laptop, and get the key value the same way or from the GKMS vault (`/path/to/chef-repo/bin/gkms-vault-show camoproxy gstg`)
 
 ## Graphs
 

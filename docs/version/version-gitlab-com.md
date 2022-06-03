@@ -57,7 +57,6 @@ The application is deployed using Auto DevOps from the [version-gitlab-com](http
 
 > Note that the `gitlab-services` project is outside of the `gitlab-org` and `gitlab-com` namespaces.  Everyone does not automatically have access to this project.  If the above URL's result in `404` errors, chances are the user needs to be added to the project or group.
 
-
 ### Project
 
 The production deployment of the `version.gitlab.com` application is in the `gs-production` GCP project. The components to be aware of are:
@@ -77,7 +76,6 @@ This instance is shared among the projects in the `gitlab-services` group. The d
 
 Database backups are handled automatically by CloudSQL, and can be restored from the `Backups` tab of the CloudSQL instance.  There are also occasional exports placed in the `gs-production-db-backups` bucket. These will not be as up to date, but they are easier to copy and move around.
 
-
 ### Terraform
 
 This GCP project and the infrastructure components in it are managed by the [services-base](https://ops.gitlab.net/gitlab-com/services-base) project.  Any infrastructure changes to the environment or K8s cluster should be made as an MR there.  Changes will be applied automatically via CI jobs when the MR is merged.  `gs-production` and `gs-staging` are represented as [Environments](https://ops.gitlab.net/gitlab-com/services-base/environments) in that project.
@@ -88,7 +86,7 @@ This workflow is different from other areas of the infrastructure. `services-bas
 
 Monitoring is handled from within the GitLab application, using the [built in monitoring functionality](https://gitlab.com/gitlab-services/version-gitlab-com/environments/1089581/metrics).  This is done to dogfood the built in monitoring tools.  Any shortcomings should be pointed out using [GitLab Product issues](https://gitlab.com/gitlab-org/gitlab/issues) and labelled for the Monitor team.  The Prometheus instance used is deployed via the [Kubernetes Integration](https://gitlab.com/groups/gitlab-services/-/clusters/74458) page.
 
-The issue discussing setup of the monitoring dashboards is https://gitlab.com/gitlab-services/version-gitlab-com/issues/185
+The issue discussing setup of the monitoring dashboards is <https://gitlab.com/gitlab-services/version-gitlab-com/issues/185>
 
 ### Checking the Ingress
 
@@ -111,6 +109,7 @@ Check for Events:
 ```
 kubectl describe deployment -n gitlab-managed-apps ingress-nginx-ingress-controller
 ```
+
  The bottom of this output will show health check failures, pod migrations and restarts, and other events which might effect availability of the ingress. `Events: <none>` means the problem is probably elsewhere.
 
 After 1 hour, these events are removed from the output, so historical information can be found in the [stackdriver logs](https://console.cloud.google.com/logs/viewer?interval=NO_LIMIT&project=gs-production-efd5e8&minLogLevel=0&expandAll=false&timestamp=2019-11-08T21:11:39.147000000Z&customFacets=&limitCustomFacetWidth=true&advancedFilter=resource.type%3D%22k8s_container%22%0Aresource.labels.project_id%3D%22gs-production-efd5e8%22%0Aresource.labels.location%3D%22us-east1%22%0Aresource.labels.cluster_name%3D%22gs-production-gke%22%0Aresource.labels.namespace_name%3D%22gitlab-managed-apps%22%0Alabels.k8s-pod%2Fapp%3D%22nginx-ingress%22%0Alabels.k8s-pod%2Frelease%3D%22ingress%22&scrollTimestamp=2019-11-08T21:11:28.371054395Z)
@@ -193,4 +192,4 @@ version-gitlab-com-6491770-production   production-65577f7bc4-fs7v6             
 
 Currently, the only alerting is the pingdom blackbox alerts.  This is the same as what was set up in the previous AWS environment, but probably needs to be improved.  The preference is to use built in GitLab functionality where possible.
 
-There is work to improve the current alerting mechanism inside of the GitLab product.  This work can be followed here: https://gitlab.com/gitlab-org/gitlab/issues/30832
+There is work to improve the current alerting mechanism inside of the GitLab product.  This work can be followed here: <https://gitlab.com/gitlab-org/gitlab/issues/30832>

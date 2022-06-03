@@ -17,7 +17,6 @@ If you are reading this runbook you are most likely tasked to scale down our Pat
 - Terraform
     You are expected to know what Terraform is, how we use it and how we make change safely (`tf plan` first).
 
-
 ### Scope
 
 This runbook is intended only for one or more `read` replica node(s) of Patroni cluster.
@@ -62,6 +61,7 @@ What this means is that we need to be aware of and think of:
       nofailover: true
       noloadbalance: true
     ```
+
 - sudo systemctl reload patroni
 - Test the efficacy of that reload by checking for the node name in the list of replicas:
 
@@ -70,7 +70,6 @@ What this means is that we need to be aware of and think of:
     ```
 
     If the name is absent, then the reload worked.
-
 
 - Wait until all client connections are drained from the replica (it depends on the interval value set for the clients), use this command to track number of client connections:
 
@@ -106,7 +105,7 @@ Take a look at a sample [code change](https://ops.gitlab.net/gitlab-com/gitlab-c
 
 ## Automation Thoughts
 
-An excellent automation initiative is underway: https://ops.gitlab.net/gitlab-com/gl-infra/db-ops/-/blob/master/ansible/playbooks/roles/patroni/tasks/stop_traffic.yml.
+An excellent automation initiative is underway: <https://ops.gitlab.net/gitlab-com/gl-infra/db-ops/-/blob/master/ansible/playbooks/roles/patroni/tasks/stop_traffic.yml>.
 
 ## Reference
 

@@ -1,7 +1,9 @@
 ## GPRD bastion hosts
 
 ##### How to start using them
+
 Add the following to your `~/.ssh/config` (specify your username and path to ssh private key):
+
 ```
 # GCP production bastion host
 Host lb-bastion.gprd.gitlab.com
@@ -14,6 +16,7 @@ Host *.gitlab-production.internal
 ```
 
 Testing (for example, if you have access to deploy node), output should be like this:
+
 ```bash
 $> be knife ssh 'roles:gprd-base-deploy-node' 'hostname'
 deploy-01-sv-gprd.c.gitlab-production.internal deploy-01-sv-gprd
@@ -33,13 +36,16 @@ Host gprd-console
         HostName                console-01-sv-gprd.c.gitlab-production.internal
         ProxyCommand            ssh lb-bastion.gprd.gitlab.com -W %h:%p
 ```
+
 where `SERVICE_NAME` is either `rails` or `db`.
 
 See [granting rails or db access](../uncategorized/granting-rails-or-db-access.md) for more
 information on how to request console access.
 
 ##### Host keys
+
 If you care about security enough to compare ssh host keys, here they are, both sha256 and md5 sums:
+
 ```
 $> ssh-keygen -lf <(ssh-keyscan lb-bastion.gprd.gitlab.com 2>/dev/null)
 2048 SHA256:ygMvT9QHMoqxvUULMfvSyo/Lsbx6UEiKoLloFf/BSU0 lb-bastion.gprd.gitlab.com (RSA)
@@ -65,7 +71,7 @@ To set up such a tunnel:
     ssh -N -L 8443:fe-01-lb-gprd.c.gitlab-production.internal:443 lb-bastion.gprd.gitlab.com
     ```
 
-    While you leave the SSH session open, this will make it possible to browse to https://localhost:8443/users/sign_in,
+    While you leave the SSH session open, this will make it possible to browse to <https://localhost:8443/users/sign_in>,
     although it'll cause a TLS certificate error due domain name mismatch.
 
 1. To be able to visit the server at the correct address, add the following line to `/etc/hosts`:
@@ -133,11 +139,13 @@ Although, you still need to run `socat` twice.
 If tunneling over `lb-bastion` is too slow due to high latency, [GCP Identity-Aware Proxy](https://cloud.google.com/iap/) can be used to tunnel TCP directly to the target VM (if allowed), this is faster than SSH over SSH.
 
 Connect directly to console:
+
 ```
 Host console-01-sv-gprd.c.gitlab-production.internal
         ProxyCommand gcloud compute start-iap-tunnel console-01-sv-gprd 22 --listen-on-stdin --project=gitlab-production --zone=us-east1-c --verbosity=warning
 ```
 
 ##### Links
+
  1. [Issue](https://gitlab.com/gitlab-com/migration/issues/299) describing what was done in scope of the migration project to quickly set them up.
  1. [META](https://gitlab.com/gitlab-com/gl-infra/reliability/-/issues/3995) issue that is a source of truth regarding middleterm/longterm setup.

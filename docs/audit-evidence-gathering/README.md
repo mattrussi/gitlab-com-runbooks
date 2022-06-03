@@ -16,7 +16,7 @@ In general, we will follow the same overall process for any artifact we sign. Al
 
 #### Public keys
 
-The GPG signature(s) can be verified using the collector's public key, which is associated with their GitLab profile and is available at https://gitlab.com/USERNAME.gpg. To validate the GPG signature on any artifacts provided, the collector's public key will need to be imported into the local keyring on a system with GPG installed.
+The GPG signature(s) can be verified using the collector's public key, which is associated with their GitLab profile and is available at <https://gitlab.com/USERNAME.gpg>. To validate the GPG signature on any artifacts provided, the collector's public key will need to be imported into the local keyring on a system with GPG installed.
 
 ```bash
 # Download and import the engineer's public key(s) from gitlab.com
@@ -48,7 +48,7 @@ craig@fredjones compliance-3173 %
 3. Should you need to get a list of the chef users (people with access to interact with knife)
 `for u in $(sudo chef-server-ctl user-list); do sudo chef-server-ctl user-show $u |head -n 2|sed 's/display_name://g' |sed 's/email://g'|paste -sd "," -; done`
 
-4. chef-repo project admins:  `https://ops.gitlab.net/api/v4/projects/139/members/all?sort=access_level_desc&per_page=200` and parse for users who are level 40 or above per https://docs.gitlab.com/ee/api/members.html
+4. chef-repo project admins:  `https://ops.gitlab.net/api/v4/projects/139/members/all?sort=access_level_desc&per_page=200` and parse for users who are level 40 or above per <https://docs.gitlab.com/ee/api/members.html>
 
 #### Gathering the list of people with production access
 
@@ -120,6 +120,7 @@ The project IAM policy does not enumerate the group memberships to provide a lis
 Clone down [chef repo](https://ops.gitlab.net/gitlab-cookbooks/chef-repo) and:
 Find the right roles for the 3 above categories.
 Run the commands:
+
 - $ knife search node role:gprd-base-bastion -i
 - $ knife search node roles:gprd-base -i
 - $ knife search node 'roles:gprd-base-db-postgres OR roles:gprd-base-db-patroni' -i

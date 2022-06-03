@@ -8,21 +8,22 @@ that are attached to GCP load balancers. These are split into the following
 groups:
 
 * `<env>-base-lb-pages`: HTTP/HTTPS traffic for `*.gitlab.io`. It is also where customers point custom DNS for pages.
-    * frontends: `pages_http`, `pages_https`
-    * backends: `pages_http`, `pages_https`
+  * frontends: `pages_http`, `pages_https`
+  * backends: `pages_http`, `pages_https`
 * `<env>-base-lb-fe`: HTTP/HTTPS, SSH for gitlab.com
-    * frontends: `http`, `https`, `ssh`, `api_rate_limit`, `https_git_ci_gateway`
-    * backends: `429_slow_down`, `asset_proxy`, `api`, `api_rate_limit`,
+  * frontends: `http`, `https`, `ssh`, `api_rate_limit`, `https_git_ci_gateway`
+  * backends: `429_slow_down`, `asset_proxy`, `api`, `api_rate_limit`,
       `canary_api`, `canary_https_git`, `canary_web`, `ci_gateway_catch_all`,
       `https_git`, `main_api`, `main_web`, `ssh`, `web`,`websocket`
 * `<env>-base-lb-fe-ci`: HTTP/HTTPS, SSH for gitlab.com, dedicated gateway for internal CI runners
-    * frontends: see above
-    * backends: see above
+  * frontends: see above
+  * backends: see above
 * `<env>-base-lb-registry`: HTTP/HTTPS for registry.gitlab.com
-    * frontends: `http`, `https`
-    * backends: `registry`, `canary_registry`
+  * frontends: `http`, `https`
+  * backends: `registry`, `canary_registry`
 
 Explanation:
+
 * Each `<env>-base-lb-*` above represents a Chef role since we use Chef to
 configure our nodes. Browse to `chef-repo/roles` directory and you will see them.
 * The references after the _frontends_ and _backends_ refer to _node_ concept in
@@ -49,28 +50,28 @@ h[CI Runner] --> d
 ### Frontends
 
 * `http`: port 80
-    *  delivers a 301 to https
+  * delivers a 301 to https
 * `https`: port 443
-    * sends to the `429_slow_down` backend if the client is rate-limited
-    * sends to the `assets_proxy` backend if the request matches `/assets/`
-    * sends to the `api` rate limited backend if the request matches `/api` (skips the rate limit if your ip is on a statically configured whitelist)
-    * sends to the `https_git` backend if the request matches a regex that tries to determine if it looks like a git path
-    * sends to the `registry` backend if the request is registry.gitlab.com
-    * sends to the `websocket` backend if it looks like a websocket request
-    * sends to the `canary_api`, `canary_https_git` or `canary_web` backend if it looks like a canary request (cookie and `canary.\*`)
-    * if nothing else matches requests are sent to the `web` backend.
+  * sends to the `429_slow_down` backend if the client is rate-limited
+  * sends to the `assets_proxy` backend if the request matches `/assets/`
+  * sends to the `api` rate limited backend if the request matches `/api` (skips the rate limit if your ip is on a statically configured whitelist)
+  * sends to the `https_git` backend if the request matches a regex that tries to determine if it looks like a git path
+  * sends to the `registry` backend if the request is registry.gitlab.com
+  * sends to the `websocket` backend if it looks like a websocket request
+  * sends to the `canary_api`, `canary_https_git` or `canary_web` backend if it looks like a canary request (cookie and `canary.\*`)
+  * if nothing else matches requests are sent to the `web` backend.
 * `ssh`: port 22
-    * sends to the `ssh` backend
+  * sends to the `ssh` backend
 * `api_rate_limit`: port 4444
-    * used by the `https` front-end (see above)
+  * used by the `https` front-end (see above)
 * `https_git_ci_gateway`: port 8989
-    * receives requests from CI runners through a private network
-    * sends to the `api` rate if the request matches `/api/v[0-9]/jobs/(jobs|request|trace),`
-    * all other requests are sent to `ci_gateway_catch_all` backend
+  * receives requests from CI runners through a private network
+  * sends to the `api` rate if the request matches `/api/v[0-9]/jobs/(jobs|request|trace),`
+  * all other requests are sent to `ci_gateway_catch_all` backend
 * `pages_http`: port 80
-    * sends to the `pages_http` backend
+  * sends to the `pages_http` backend
 * `pages_https`: port 443
-    * sends to the `pages_https` backend
+  * sends to the `pages_https` backend
 
 ### Backends
 
@@ -117,7 +118,7 @@ configured.
 ## Load balancing
 
 Currently the HAProxy backend configuration is such that every pool of servers is round-robin with the exception of `asset_proxy`, `ssh` and `pages`.
-There is an open issue to discuss using sticky sessions for the web backend, see https://gitlab.com/gitlab-com/gl-infra/reliability/-/issues/5253.
+There is an open issue to discuss using sticky sessions for the web backend, see <https://gitlab.com/gitlab-com/gl-infra/reliability/-/issues/5253>.
 
 ## Server Weights
 
@@ -139,7 +140,7 @@ This script is automatically called as part of the systemd unit start and stop p
 For example:
 
 ```console
-$ sudo systemctl stop haproxy
+sudo systemctl stop haproxy
 ```
 
 NOTE: This stop command will wait 10 minutes before it completes.
@@ -147,13 +148,13 @@ NOTE: This stop command will wait 10 minutes before it completes.
 To drain the node with a custom time, or drain without stopping haproxy:
 
 ```console # Drain, but wait 1 minute
-$ sudo /usr/local/sbin/drain_haproxy.sh -w 60
+sudo /usr/local/sbin/drain_haproxy.sh -w 60
 ```
 
 Un-draining is executed as part of the HAProxy systemd unit start process. It can also be done manually by calling the drain script again in un-drain mode.
 
 ```console
-$ sudo /usr/local/sbin/drain_haproxy.sh -u
+sudo /usr/local/sbin/drain_haproxy.sh -u
 ```
 
 ## Tooling
@@ -313,7 +314,7 @@ HAProxy has a built-in web admin console; this is not terribly useful for managi
 ssh -L 7331:localhost:7331 fe-01-lb-gstg.c.gitlab-staging-1.internal
 ```
 
-Then access http://localhost:7331/ in  your browser.
+Then access <http://localhost:7331/> in  your browser.
 
 The username is `admin`, the password is most easily obtained from `haproxy.cfg` on the server itself (look for `stats auth` section), but can also be obtained by looking for the `admin_password` value in GKME vault, e.g.:
 
@@ -327,7 +328,7 @@ It is possible to temporarily remove HAProxy machines from the GCP Load Balancer
 
 The load balancer backend service is defined in the corresponding tf module (at the moment of writing that's `generic-sv-with-group`) so doing it with the use of Terraform is non-trivial.
 
-It can be done using the GCP console: *Load Balancing -> click on the relevant lb -> Edit -> Backend configuration -> remove the HAProxy machine from the "Select existing instances" list -> Click update*.
+It can be done using the GCP console: _Load Balancing -> click on the relevant lb -> Edit -> Backend configuration -> remove the HAProxy machine from the "Select existing instances" list -> Click update_.
 
 ## `hatop`
 
@@ -349,12 +350,12 @@ sudo hatop -s /run/haproxy/admin.sock
 ## Prechecks
 
 * Examine the health of all backends and the HAProxy dashboard
-    * HAProxy - https://dashboards.gitlab.net/d/ZOOh_aNik/haproxy
-    * HAProxy Backend Status - https://dashboards.gitlab.net/d/frontend-main/frontend-overview?orgId=1
+  * HAProxy - <https://dashboards.gitlab.net/d/ZOOh_aNik/haproxy>
+  * HAProxy Backend Status - <https://dashboards.gitlab.net/d/frontend-main/frontend-overview?orgId=1>
 * Is the alert specific to canary servers or the canary backend? Check canaries
   to ensure they are reporting OK. If this is the cause you should immediately change the weight of canary traffic.
-    * Canary dashboard - https://dashboards.gitlab.net/d/llfd4b2ik/canary
-    * To disable canary traffic see the [Canary ChatOps documentation](https://gitlab.com/gitlab-org/release/docs/blob/master/general/deploy/canary.md#canary-chatops)
+  * Canary dashboard - <https://dashboards.gitlab.net/d/llfd4b2ik/canary>
+  * To disable canary traffic see the [Canary ChatOps documentation](https://gitlab.com/gitlab-org/release/docs/blob/master/general/deploy/canary.md#canary-chatops)
 
 ## Resolution
 
@@ -362,21 +363,25 @@ sudo hatop -s /run/haproxy/admin.sock
   the host status dashboard. It is possible in some cases, most notably the git
   server where it is possible to reject connections even though the server is
   reporting healthy. Check the health of the deployment in Kubernetes:
+
   ```
   kubectl --namespace gitlab get deployment gitlab-gitlab-shell
   kubectl --namespace gitlab get pods --selector app=gitlab-shell
   ```
+
 * HAProxy logs are not currently being sent to ELK because of capacity issues.
   More information can be read [here](./haproxy-logging.md).
 * If the errors are from pages backends, consider possible intentional abuse or accidental DoS from specific IPs or for specific domains in Pages
   * Client IPs can be identified by volume from the current HAProxy logs on the Haproxy nodes with:
+
     ```
     sudo grep -v check_http /var/log/haproxy.log | awk '{print $6}' | cut -d: -f1|sort|uniq -c |sort -n|tail
     ```
+
     Identifying problematic levels is not set in stone; hopefully if there is one or two (or a subnet), they will stand out.  Consider removing the 'tail' or making it 'tail -100' etc, to get more context.
-    * To block: In https://gitlab.com/gitlab-com/security-tools/front-end-security/ edit `deny-403-ips.lst`.  commit, push, MR, ensure it has pull mirrored to `ops.gitlab.net`, then run chef on the pages HAProxy nodes to deploy. This will block that IP across *all* frontend (pages, web, api etc), so be sure you want to do this.
-  * Problem sites/projects/domains can be identified with the `Gitlab-Pages activity` dashboard on Kibana - https://log.gprd.gitlab.net/app/kibana#/dashboard/AW6GlNKPqthdGjPJ2HqH
-    * To block: In https://gitlab.com/gitlab-com/security-tools/front-end-security/ edit `deny-403-ips.lst`.  commit, push, MR, ensure it has pull mirrored to `ops.gitlab.net`, then run chef on the pages HAProxy nodes to deploy. This will block only the named domain (exact match) in pages, preventing the request ever making it to the pages deployments. This is very low-risk.
+    * To block: In <https://gitlab.com/gitlab-com/security-tools/front-end-security/> edit `deny-403-ips.lst`.  commit, push, MR, ensure it has pull mirrored to `ops.gitlab.net`, then run chef on the pages HAProxy nodes to deploy. This will block that IP across _all_ frontend (pages, web, api etc), so be sure you want to do this.
+  * Problem sites/projects/domains can be identified with the `Gitlab-Pages activity` dashboard on Kibana - <https://log.gprd.gitlab.net/app/kibana#/dashboard/AW6GlNKPqthdGjPJ2HqH>
+    * To block: In <https://gitlab.com/gitlab-com/security-tools/front-end-security/> edit `deny-403-ips.lst`.  commit, push, MR, ensure it has pull mirrored to `ops.gitlab.net`, then run chef on the pages HAProxy nodes to deploy. This will block only the named domain (exact match) in pages, preventing the request ever making it to the pages deployments. This is very low-risk.
 
 ## Extraneous processes
 
@@ -384,7 +389,7 @@ HAProxy forks on reload and old processes will continue to service requests, for
 long-lived SSH connections we use the `hard-stop` [configuration parameter](https://ops.gitlab.net/gitlab-com/gl-infra/chef-repo/-/blob/6156b09464c18bc5b584f5bf5e363fd50ded4af7/roles/gprd-base-lb-fe.json#L6-10)
 to prevent processes from lingering more than 5 minutes.
 
-In https://gitlab.com/gitlab-com/gl-infra/delivery/issues/588 we have observed that processes remain for longer than this interval, this may require manual intervention:
+In <https://gitlab.com/gitlab-com/gl-infra/delivery/issues/588> we have observed that processes remain for longer than this interval, this may require manual intervention:
 
 * Display the process tree for HAProxy, for example here it shows two processes where we expect one:
 

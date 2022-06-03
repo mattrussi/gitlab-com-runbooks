@@ -34,7 +34,7 @@ curl -X POST -H 'Content-type: application/json' \
 
 If it receives a 404 result then the channel does not exist. See [slack docs](https://api.slack.com/changelog/2016-05-17-changes-to-errors-for-incoming-webhooks) for other possible error codes.
 
-For more information see https://api.slack.com/incoming-webhooks
+For more information see <https://api.slack.com/incoming-webhooks>
 
 ## Troubleshooting which integration is failing
 
@@ -47,6 +47,6 @@ For more information see https://api.slack.com/incoming-webhooks
 
 ## Manually review the currently open alerts
 
-* Open the alert-manager UI: https://alerts.gitlab.net/
+* Open the alert-manager UI: <https://alerts.gitlab.net/>
 * Review each alert to check if it's notification has failed and whether
   further action is required.

@@ -4,8 +4,9 @@
 
 [[_TOC_]]
 
-#  Pages Service
-* **Alerts**: https://alerts.gitlab.net/#/alerts?filter=%7Btype%3D%22pages%22%2C%20tier%3D%22lb%22%7D
+# Pages Service
+
+* **Alerts**: <https://alerts.gitlab.net/#/alerts?filter=%7Btype%3D%22pages%22%2C%20tier%3D%22lb%22%7D>
 * **Label**: gitlab-com/gl-infra/production~"Service:Pages"
 
 ## Logging
@@ -32,7 +33,6 @@
 * [PostgreSQL VACUUM](../patroni/postgresql-vacuum.md)
 * [Deploy Cmd for Chatops](../uncategorized/deploycmd.md)
 <!-- END_MARKER -->
-
 
 <!-- ## Summary -->
 

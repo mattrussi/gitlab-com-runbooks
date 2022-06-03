@@ -53,7 +53,7 @@ Follow the patroni logs (`journalctl -u patroni`). A pg_basebackup will take sev
 
 ## Automation Thoughts
 
-Some steps of: https://ops.gitlab.net/gitlab-com/gl-infra/db-ops/-/blob/master/ansible/playbooks/roles/patroni/tasks/start_traffic.yml could be used in starting the traffic on a patroni node. And in the same project, further automation work would be contributed to.
+Some steps of: <https://ops.gitlab.net/gitlab-com/gl-infra/db-ops/-/blob/master/ansible/playbooks/roles/patroni/tasks/start_traffic.yml> could be used in starting the traffic on a patroni node. And in the same project, further automation work would be contributed to.
 
 ## Reference
 

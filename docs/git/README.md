@@ -4,9 +4,10 @@
 
 [[_TOC_]]
 
-#  Git Service
+# Git Service
+
 * [Service Overview](https://dashboards.gitlab.net/d/git-main/git-overview)
-* **Alerts**: https://alerts.gitlab.net/#/alerts?filter=%7Btype%3D%22git%22%2C%20tier%3D%22sv%22%7D
+* **Alerts**: <https://alerts.gitlab.net/#/alerts?filter=%7Btype%3D%22git%22%2C%20tier%3D%22sv%22%7D>
 * **Label**: gitlab-com/gl-infra/production~"Service:Git"
 
 ## Logging
@@ -87,7 +88,6 @@
 * [Gitlab Vault](../vault/vault.md)
 * [Gitaly version mismatch](../version/gitaly-version-mismatch.md)
 <!-- END_MARKER -->
-
 
 <!-- ## Summary -->
 

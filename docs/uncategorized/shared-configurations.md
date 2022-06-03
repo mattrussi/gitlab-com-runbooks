@@ -32,12 +32,12 @@ necessary to pull this data.
 #### Secrets
 
 This repo contains a custom helm chart located here:
-https://gitlab.com/gitlab-com/gl-infra/k8s-workloads/gitlab-secrets/-/blob/main/releases/gitlab-secrets/helmfile.yaml
+<https://gitlab.com/gitlab-com/gl-infra/k8s-workloads/gitlab-secrets/-/blob/main/releases/gitlab-secrets/helmfile.yaml>
 That contains all shared secrets.  This custom helm chart currently utilizes
 shell commands, `gcloud`, `gsutil`, and `jq` to pull the necessary values
 required out of our [`GKMS Vault`].  A few details about this can be found in
 the
-[README}(https://gitlab.com/gitlab-com/gl-infra/k8s-workloads/gitlab-secrets/-/blob/main/README.md)
+[README}(<https://gitlab.com/gitlab-com/gl-infra/k8s-workloads/gitlab-secrets/-/blob/main/README.md>)
 of [`k8s-workloads/gitlab-secrets`].
 
 #### Configurations (Non-Secrets)

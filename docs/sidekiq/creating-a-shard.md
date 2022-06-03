@@ -43,22 +43,22 @@ configuration choices:
 
 * Modify the necessary items in [runbooks] to ensure the new shard will have it's
   own dedicated metrics.  Includes at least the following:
-    * Add an entry in `shards` in metrics-catalog/services/lib/sidekiq-helpers.libsonnet
-    * Add a line to `services` in dashboards/delivery/k8s_migration_overview.jsonnet
+  * Add an entry in `shards` in metrics-catalog/services/lib/sidekiq-helpers.libsonnet
+  * Add a line to `services` in dashboards/delivery/k8s_migration_overview.jsonnet
 * Modify the necessary items in [k8s-workloads/gitlab-helmfiles] such that we
   get logs
-    * A new section in releases/fluentd/defaults.yaml
+  * A new section in releases/fluentd/defaults.yaml
 * If necessary create a new dedicated node pool
-    * Add in terraform; currently in environments/ENV/gke-regional.tf; generally
+  * Add in terraform; currently in environments/ENV/gke-regional.tf; generally
       look for the other node pool definitions and duplicate/extend
 * Modify the necessary items in [k8s-workloads/gitlab-com] adding the new shard
-    * Another section in `gitlab.sidekiq.pods` with settings determined above
+  * Another section in `gitlab.sidekiq.pods` with settings determined above
 * Stop the relevant workers running on their previous shard (usually)
-    * Add an expression to the selector (or routing config) for the old shard
+  * Add an expression to the selector (or routing config) for the old shard
       to exclude the newly moved workers. Honestly, this is complicated as of
       June 2021. Talk to Craig Miskell if you need help; he'll update these docs
-      when https://gitlab.com/groups/gitlab-com/gl-infra/-/epics/447 and
-      https://gitlab.com/groups/gitlab-com/gl-infra/-/epics/469 are done and
+      when <https://gitlab.com/groups/gitlab-com/gl-infra/-/epics/447> and
+      <https://gitlab.com/groups/gitlab-com/gl-infra/-/epics/469> are done and
       its all a lot simpler.
 
 [k8s-workloads/gitlab-helmfiles]: https://gitlab.com/gitlab-com/gl-infra/k8s-workloads/gitlab-helmfiles

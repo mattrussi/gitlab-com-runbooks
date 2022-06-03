@@ -8,7 +8,6 @@
 
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
 
-
 ## Symptoms
 
 You see messages like the following on a pubsubbeat log:

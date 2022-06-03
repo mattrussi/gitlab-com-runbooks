@@ -8,9 +8,9 @@
   * Test things in a local LB when possible
   * Get a second set of eyes to look at your change / MR
 
-## Examples - how we have blocked before:
+## Examples - how we have blocked before
 
-* https://ops.gitlab.net/gitlab-cookbooks/chef-repo/commit/30744f5b8fce05acf1f13e813526b3d5b3512cd0
+* <https://ops.gitlab.net/gitlab-cookbooks/chef-repo/commit/30744f5b8fce05acf1f13e813526b3d5b3512cd0>
 
 ## Background
 
@@ -26,6 +26,7 @@ to do so you will need to issue the command `bundle exec rake "edit_role[gitlab-
 chef-repo folder with knife properly configured.
 
 The value to change is "https_custom_config", be careful to respect spaces and to keep previous values:
+
 ``` json
   "override_attributes": {
     "gitlab-nfs-cluster": {
@@ -37,7 +38,7 @@ The value to change is "https_custom_config", be careful to respect spaces and t
     }
 ```
 
-#### Samples of configurations:
+#### Samples of configurations
 
 ##### Deny a path with the DELETE http method
 

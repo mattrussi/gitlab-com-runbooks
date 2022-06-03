@@ -1,11 +1,13 @@
 # Access Requests
 
 ## Add or verify data bag
+
 1. Check ssh key
 1. Check unix groups
 1. knife data bag from file users <user>.json
 
 ## Chef Access
+
 ```
 # on chef.gitlab.com
 chef-server-ctl user-create <username> <first> <last> <email> $(openssl rand -hex 20)
@@ -14,6 +16,7 @@ chef-server-ctl org-user-add gitlab <username>
 ```
 
 ## Ops Instance Access
+
 Generally when developers ask for access to the ops instance, we are concerned
 with chatops access, which requires developer on `gitlab-com` group.
 If access to any other groups are needed, please clarify with the requester.

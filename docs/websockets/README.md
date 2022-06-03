@@ -4,9 +4,10 @@
 
 [[_TOC_]]
 
-#  Websockets Service
+# Websockets Service
+
 * [Service Overview](https://dashboards.gitlab.net/d/websockets/websockets)
-* **Alerts**: https://alerts.gitlab.net/#/alerts?filter=%7Btype%3D%22websockets%22%2C%20tier%3D%22sv%22%7D
+* **Alerts**: <https://alerts.gitlab.net/#/alerts?filter=%7Btype%3D%22websockets%22%2C%20tier%3D%22sv%22%7D>
 * **Label**: gitlab-com/gl-infra/production~"Service:Websockets"
 
 ## Logging

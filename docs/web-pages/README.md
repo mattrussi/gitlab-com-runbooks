@@ -4,9 +4,10 @@
 
 [[_TOC_]]
 
-#  Web-pages Service
+# Web-pages Service
+
 * [Service Overview](https://dashboards.gitlab.net/d/web-pages-main/web-pages-overview)
-* **Alerts**: https://alerts.gitlab.net/#/alerts?filter=%7Btype%3D%22web-pages%22%2C%20tier%3D%22sv%22%7D
+* **Alerts**: <https://alerts.gitlab.net/#/alerts?filter=%7Btype%3D%22web-pages%22%2C%20tier%3D%22sv%22%7D>
 * **Label**: gitlab-com/gl-infra/production~"Service:Pages"
 
 ## Logging
@@ -17,7 +18,6 @@
 * [Kubernetes](https://log.gprd.gitlab.net/goto/f12db328608ead73063861ce1a53822b)
 
 <!-- END_MARKER -->
-
 
 <!-- ## Summary -->
 

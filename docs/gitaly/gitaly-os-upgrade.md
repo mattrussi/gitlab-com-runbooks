@@ -11,7 +11,7 @@ deployed in the target environment.
 
 We created a set of Ansible playbooks to automate most of the process. They can
 be found at
-https://gitlab.com/gitlab-com/gl-infra/ansible-workloads/gitaly-os-upgrade.
+<https://gitlab.com/gitlab-com/gl-infra/ansible-workloads/gitaly-os-upgrade>.
 Setup instructions are provided in the project's README.md
 
 ### Inventory
@@ -65,13 +65,13 @@ bin/rebuild gprd 7 --check
 ## Planning an upgrade
 
 - Update the base packer image to match your expected OS base version
-  https://ops.gitlab.net/gitlab-com/gl-infra/config-mgmt/blob/master/packer/gitaly.pkr.hcl#L3
+  <https://ops.gitlab.net/gitlab-com/gl-infra/config-mgmt/blob/master/packer/gitaly.pkr.hcl#L3>
 - Update the inventories for the target environments in the `gitaly-os-upgrade`
   project. It is recommended that your first batches are small and contain a
   representative sample of different types of nodes, to detect possible failures
   related to particularities of each node type in a more limited scope. For more
   discussion regarding host distribution in batches see
-  https://gitlab.com/gitlab-com/gl-infra/ansible-workloads/gitaly-os-upgrade/-/merge_requests/3.
+  <https://gitlab.com/gitlab-com/gl-infra/ansible-workloads/gitaly-os-upgrade/-/merge_requests/3>.
 - Run the entire process in `gstg` before moving to `gprd`. The playbooks will
   perform pre and post upgrade validations for each execution.
 - Coordinate execution times with release managers. You should make sure there's
@@ -85,6 +85,7 @@ In April 2022 we performed an upgrade which is described
 in [this epic](https://gitlab.com/groups/gitlab-com/gl-infra/-/epics/601).
 
 We learnt that:
+
 - we did not have to be as worried as we were for asking for longer maintenance windows
 - the windows we asked for (4x of 2 hours each) were too short and we should have asked for 5x 4 hour windows
 - it was helpful to have several people on the upgrade call with specific responsibilities
@@ -101,7 +102,7 @@ We learnt that:
 - Fluentd's position file is stored on the root disk. Since the root disk is
   deleted during a rebuild, this will make fluentd replay all of its logs after
   the machine comes up for the first time. See
-  https://gitlab.com/gitlab-com/gl-infra/reliability/-/issues/15621 for more
+  <https://gitlab.com/gitlab-com/gl-infra/reliability/-/issues/15621> for more
   details
 - Because fluentd is configured with the packer VM hostname upon boot, initial
   logs (including the replayed ones) will have the wrong hostname. Only once

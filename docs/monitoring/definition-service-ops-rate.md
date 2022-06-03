@@ -15,4 +15,4 @@ sources to a single request.
 
 ## Service Availability Definitions
 
-The definitions of service availability are defined in https://gitlab.com/gitlab-com/runbooks/blob/master/rules/service_ops_rate.yml
+The definitions of service availability are defined in <https://gitlab.com/gitlab-com/runbooks/blob/master/rules/service_ops_rate.yml>

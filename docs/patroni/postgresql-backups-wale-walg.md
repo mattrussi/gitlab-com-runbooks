@@ -1,7 +1,9 @@
 [[_TOC_]]
 
 # PostgreSQL Backups: WAL-G
+
 ## WAL-G Overview and its ancestor, WAL-E
+
 Here the link to the video of the [runbook
 simulation](https://www.youtube.com/watch?v=YqAeOblI4NM&feature=youtu.be).
 
@@ -28,7 +30,9 @@ Currently (September 2021), the main backup tool for GitLab.com is WAL-G, we ful
 migrated to using it from WAL-E.
 
 ## Very Quick Intro: 5 Main Commands
+
 Backups consists of two parts:
+
 - periodical (daily) "full" backups (a.k.a "base backups" executed by the
   `wal-g backup-push` command), and
 - constant shipping of completed WAL files to GCS to enable Point-in-time
@@ -49,7 +53,7 @@ WAL-G has 5 main commands:
 | `backup-list`   | Get the list of full backups currently stored in the archive   | Manually | It is helpful to see if there are "gaps" (missing full backups).<br/> Also, based on displayed LSNs, we can calculate the amount of WALs generated per day.<br/> Notice, there is no "wal-list" – this command would print too much information so it would be hard to use it, so neither WAL-E nor WAL-G implement it. |
 | `backup-push`   | Create a full backup: archive PostgreSQL data directory fully   | Manually or automatically | Daily execution is configured in a cron record (see `crontab -l` under `gitlab-psql`, it has an entry running the script `/opt/wal-g/bin/backup.sh`, writing logs to `/var/log/wal-g/wal-g_backup_push.log[.1]`).<br/> At the moment, it is executed daily (at 00:00 UTC) on one of the secondaries (chosen using a lock in Consul), using WAL-G.<br/>  This operation is very IO-intensive, the expected speed: ~0.5-1 TiB/h for WAL-G, 1-2 TiB/h for WAL-G.<br/>    |
 | `wal-push`   | Archive WALs. Each WAL is 16 MiB by default    | Automatically (`archive_command`) | This command is usually used in `archive_command` (PostgreSQL configuration parameter) and automatically executed<br/>  by PostgreSQL on the primary node. As of June 2020, ~1.5-2 TiB of WAL files is archived each working day<br/>  (less on holidays and weekends).  |
-| <nobr>`backup-fetch`</nobr>   | Restore PostgreSQL data directory from a full backup  | Manually | Is it to executed manually a fresh restore from backups is needed. Also used in "gitlab-restore" for daily verification of backups<br/> (see https://ops.gitlab.net/gitlab-com/gl-infra/gitlab-restore/postgres-gprd/-/blob/master/bootstrap.sh).   |
+| <nobr>`backup-fetch`</nobr>   | Restore PostgreSQL data directory from a full backup  | Manually | Is it to executed manually a fresh restore from backups is needed. Also used in "gitlab-restore" for daily verification of backups<br/> (see <https://ops.gitlab.net/gitlab-com/gl-infra/gitlab-restore/postgres-gprd/-/blob/master/bootstrap.sh>).   |
 | `wal-fetch`   | Get a WAL from the archive   | Automatically<br/> (`restore_command`; not used on `patroni-XX` nodes) | It is to be used in `restore_command` (see `recovery.conf` in the case of PostgreSQL 11 or older, and `postgresql.conf` for PostgreSQL 12+).<br/>  Postgres automatically uses it to fetch and replay a stream of WALs on replicas.<br/>  As of June 2020, `restore_command` is NOT configured on production and staging instances – we use only streaming replication there. However, in the future, it may change.<br/>  Two "special" replicas, "archive" and "delayed", do not use streaming replication – instead, they rely on fetching WALs from the archive, therefore, they have `wal-fetch` present in `restore_command`. |
 
 ## Backing Our Data Up
@@ -69,11 +73,11 @@ All GCS buckets are multi-reginal storage in the US location.
 
 | environment | bucket |
 |-------------|--------|
-| gprd | https://console.cloud.google.com/storage/browser/gitlab-gprd-postgres-backup |
-| gstg | https://console.cloud.google.com/storage/browser/gitlab-gstg-postgres-backup |
-| prdsub | https://console.cloud.google.com/storage/browser/gitlab-prdsub-postgres-backup |
-| stgsub | https://console.cloud.google.com/storage/browser/gitlab-stgsub-postgres-backup |
-| sentry | https://s3.console.aws.amazon.com/s3/buckets/gitlab-secondarydb-backups?region=us-east-1&prefix=sentry/&showversions=false |
+| gprd | <https://console.cloud.google.com/storage/browser/gitlab-gprd-postgres-backup> |
+| gstg | <https://console.cloud.google.com/storage/browser/gitlab-gstg-postgres-backup> |
+| prdsub | <https://console.cloud.google.com/storage/browser/gitlab-prdsub-postgres-backup> |
+| stgsub | <https://console.cloud.google.com/storage/browser/gitlab-stgsub-postgres-backup> |
+| sentry | <https://s3.console.aws.amazon.com/s3/buckets/gitlab-secondarydb-backups?region=us-east-1&prefix=sentry/&showversions=false> |
 
 ### Interval and Retention
 
@@ -92,11 +96,13 @@ Backups are kept for 14 days, moved to the Nearline storage class after 14 days,
 - `gprd`/`gstg`:
   [`gitlab-walg`](https://ops.gitlab.net/gitlab-cookbooks/gitlab-walg) cookbook
   installs WAL-G and a cron job to run every day.
+
     ```shell
     $ ssh patroni-v12-01-db-gprd.c.gitlab-production.internal -- 'sudo -u gitlab-psql crontab -l'
     # Chef Name: full wal-g backup
     0 0 * * * /opt/wal-g/bin/backup.sh >> /var/log/wal-g/wal-g_backup_push.log 2>&1
     ```
+
 - `prdsub`/`stgsub`:
   [walg](https://gitlab.com/gitlab-com/gl-infra/customersdot-ansible-poc/-/blob/74856576703c8caad8e354bdffce9d70665cea7f/roles/walg/tasks/main.yml)
   ansible role installs WAL-G and a cron job to run every day.
@@ -117,11 +123,15 @@ archive_command = /opt/wal-g/bin/archive-walg.sh %p
 ```
 
 ### How Do I Verify This?
+
  You can always check the GCS storage bucket and see the contents of the  basebackup and WAL archive folders.
 
 Alternatively, you can check the results of continuous WAL archiving and daily full backup creation manually on servers:
+
 #### How to check WAL archiving
+
 See `/var/log/wal-g/wal-g.log` on primary:
+
 ```shell
 $ sudo tail /var/log/wal-g/wal-g.log
 INFO: 2021/09/02 15:57:42.138682 FILE PATH: 000000050005E57500000016.br
@@ -142,6 +152,7 @@ INFO: 2021/09/02 15:57:44.482529 FILE PATH: 000000050005E5750000001E.br
 #### How to check the full backups (basebackups) creation
 
 Check `/var/log/wal-g/wal-g_backup_push.log` / `/var/log/wal-g/wal-g_backup_push.log.1` on replicas:
+
 ```shell
 $ sudo tail -n30 /var/log/wal-g/wal-g_backup_push.log.1
 <13>Sep  2 00:00:01 backup.sh: INFO: 2021/09/02 08:20:54.653809 Starting part 14244 ...
@@ -177,31 +188,42 @@ $ sudo tail -n30 /var/log/wal-g/wal-g_backup_push.log.1
 ```
 
 #### Checklist of reconfiguration / WAL-G upgrades
+
 After upgrades or reconfiguration check:
+
 1. Check that WAL-G binary is working and shows the expected version:
+
     ```shell
     cd /tmp
     sudo -u gitlab-psql /usr/bin/envdir /etc/wal-g.d/env /opt/wal-g/bin/wal-g --version
     ```
+
 1. Check the logs (as described above):
     - WAL archiving (check this on the primary)
+
         ```shel
        sudo tail /var/log/wal-g/wal-g.log
         ```
+
     - full backup creation (check all replicas or only that one where you know that `backup-push` is happening
+
         ```shel
         sudo tail /var/log/wal-g/wal-g_backup_push.log.1
         ```
+
 1. Once a new full backup is created, check the list of full backups available:
+
     ```shell
     sudo -u gitlab-psql /usr/bin/envdir /etc/wal-g.d/env /opt/wal-g/bin/wal-g backup-list
     ```
+
     (Important note: the output shows modification timestamps. In WAL-G versions prior 1.1, the list was ordered by modification time; since 1.1 it's ordered by creation time, which is important for our case, when we automatically move older backups to the Nearline storage class)
 1. After 1-2 days, check that verification jobs ("gitlab-restore" project) are not failing.
 
-
 ## Restoring Data
-### Oh Sh*t, I Need to Get It BACK!
+
+### Oh Sh*t, I Need to Get It BACK
+
 Before we start, take a deep breath and don't panic.
 
 #### Production
@@ -220,12 +242,11 @@ switch to WAL-E if needed (just set this variable to `wal-e`). For the
 Below we describe the restore process step by step for the case of WAL-E (old
 procedure). For WAL-G, it is very similar, with a couple of nuances. For
 details, please see
-https://ops.gitlab.net/gitlab-com/gl-infra/gitlab-restore/postgres-gprd/blob/master/bootstrap.sh.
+<https://ops.gitlab.net/gitlab-com/gl-infra/gitlab-restore/postgres-gprd/blob/master/bootstrap.sh>.
 
 In order to restore, the following steps should be performed. It is assumed that
 you have already set up the new server, and that server is configured with our
 current chef configuration.
-
 
 1. In the Chef role assigned to the node, add `recipe[gitlab-server::postgresql-standby]` to the runlist,
    apply the following attributes then converge Chef:
@@ -284,9 +305,8 @@ current chef configuration.
       promote`), and adjust configuration (`archive_command`,
       `restore_command`).
 
-
-
 ## Troubleshooting
+
 **NB: the document below is slightly outdated, refering WAL-E, but in general, WAL-E instructions are relevalt to WAL-G**
 **TODO: update it**
 
@@ -301,20 +321,22 @@ You can check WAL-E `backup-push` in several ways:
 1. using Kibana (bear in mind that there were cases in the past when logs where
 not shipped): <!-- NS: doubtful, TODO: double check it; update once
 https://gitlab.com/gitlab-com/gl-infra/reliability/-/issues/10499 is done-->
-  - [`log.gprd.gitlab.net`](https://log.gprd.gitlab.net)
-  - index: `pubsub-system-inf-gprd`
-  - document field: `json.ident` with value `wal_e.worker.upload`
+
+- [`log.gprd.gitlab.net`](https://log.gprd.gitlab.net)
+- index: `pubsub-system-inf-gprd`
+- document field: `json.ident` with value `wal_e.worker.upload`
+
 1. by logging directly into the VM:
-  - ssh to the patroni master
-  - logs are located in `/var/log/wal-e/wal-e_backup_push.log`, the file is
+
+- ssh to the patroni master
+- logs are located in `/var/log/wal-e/wal-e_backup_push.log`, the file is
     under rotation, so check also `/var/log/wal-e/wal-e_backup_push.log.1`, etc
-  - alternatively, see syslog `/var/log/syslog`, look for `wal\_e.worker.upload`
+- alternatively, see syslog `/var/log/syslog`, look for `wal\_e.worker.upload`
     – but note, that `wal-push` log entries also have
     ``wal\_e.worker.upload`. So reading syslog, look only for those lines that
-    are deal with `basebackup` (example: `sudo journalctl --since yesterday |
+are deal with`basebackup` (example: `sudo journalctl --since yesterday |
     grep "worker.upload" | grep basebackup` to see activity for yesterday and
     today))
-
 
 `backup-push` on the primary: example of log entries on the primary working
 correctly:
@@ -354,7 +376,7 @@ workers (in our case for the WAL-E `wal-push`) can be found in the postgres log
 file, for example:
 
 ```bash
-$ tail -n 100 /var/log/gitlab/postgresql/postgresql.log
+tail -n 100 /var/log/gitlab/postgresql/postgresql.log
 ```
 
 For each successful `wal-push` upload there should be two log entries in the
@@ -375,10 +397,10 @@ wal_e.worker.upload INFO     MSG: completed archiving to a file
 Metric (via mtail): [gitlab_com:last_wale_backup_age_in_seconds
 metric](https://thanos.gitlab.net/graph?g0.range_input=2h&g0.max_source_resolution=0s&g0.expr=gitlab_com%3Alast_wale_backup_age_in_seconds&g0.tab=0)
 
-*Attention*: If WAL shipping (`archive_command`) fails for some reason, WAL
+_Attention_: If WAL shipping (`archive_command`) fails for some reason, WAL
 files will be kept on the server until the disk is running full!
 
-#### WAL-E `wal-push` process stuck ####
+#### WAL-E `wal-push` process stuck
 
 If you're not seeing logs for successfull `wal-push` uploads (e.g. nothing
 writes to the log file or there are only entries with `state=begin` but not with
@@ -437,7 +459,7 @@ The problem might be `mtail`.
 
 ### Regular basebackup has failed
 
-1. Check the logs in ` /var/log/wal-g/wal-g_backup_push.log` (and possibly
+1. Check the logs in `/var/log/wal-g/wal-g_backup_push.log` (and possibly
    rotated files).
 1. If the error looks to be a transient GCS error, you can retry the backup in a
    tmux with:
@@ -448,12 +470,12 @@ The problem might be `mtail`.
    ```
 
 Transient object store errors should be retried once this PR lands in a wal-g
-release that we consume: https://github.com/wal-g/wal-g/pull/833.
+release that we consume: <https://github.com/wal-g/wal-g/pull/833>.
 
 ## Database Backups Restore Testing
 
 Backups restore testing is fully automated with GitLab CI pipelines, see
-https://ops.gitlab.net/gitlab-com/gl-infra/gitlab-restore.
+<https://ops.gitlab.net/gitlab-com/gl-infra/gitlab-restore>.
 
 1. [`postgres-gprd`](https://ops.gitlab.net/gitlab-com/gl-infra/gitlab-restore/postgres-gprd/-/pipeline_schedules): Backups of production GitLab.com backup are tested twice per day:
     1. Slightly after the time when `backup-push` is expected to be finished on
@@ -511,7 +533,7 @@ find an instance with the pipeline ID in instance name. SSH to it and check:
     1. Wait until the issue repeats and backup verification fails (assuming it's
     permament – if not, we only can analyze the logs of the previous runs).
     1. Manually follow the steps from
-    https://ops.gitlab.net/gitlab-com/gl-infra/gitlab-restore/postgres-gprd/blob/master/bootstrap.sh,
+    <https://ops.gitlab.net/gitlab-com/gl-infra/gitlab-restore/postgres-gprd/blob/master/bootstrap.sh>,
     starting from erasing PGDATA directory and proceedign to WAL-E's (WAL-G's)
     `backup-fetch` step which normally takes a few hours.
     1. Once `backup-fetch` is finished, you should have a Postgres "archive

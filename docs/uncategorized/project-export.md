@@ -102,7 +102,7 @@ node (and delete it again when you are done!)
 ## Statement timeouts
 
 That can happen because of some non-optimized queries in the current Exporter
-code (e.g. https://gitlab.com/gitlab-org/gitlab/-/issues/212355#note_364049215).
+code (e.g. <https://gitlab.com/gitlab-org/gitlab/-/issues/212355#note_364049215>).
 This needs to get fixed in code probably. Try to get help from the Import team
 (#g_manage_import).
 
@@ -110,12 +110,14 @@ This needs to get fixed in code probably. Try to get help from the Import team
 
 On at least one occasion the export + archive worked fine, but the upload to
 GCS failed with:
+
 ```
 Sending upload query command to https://www.googleapis.com/upload/storage/v1/b/gitlab-gprd-uploads/o?upload_id=REDACTED&upload_protocol=resumable
 Upload status active
 Sending upload command to https://www.googleapis.com/upload/storage/v1/b/gitlab-gprd-uploads/o?upload_id=REDACTED&upload_protocol=resumable
 Error - #<HTTPClient::SendTimeoutError: execution expired>
 ```
+
 8 times, 4 times each with 2 different values for `REDACTED`.  Given the
 archive is written to disk, tar/gzipped, then uploaded, we can bypass the
 final upload step, and use `gsutil` and a manual cleanup instead.

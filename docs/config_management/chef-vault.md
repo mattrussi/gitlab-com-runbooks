@@ -11,8 +11,6 @@ but sometimes, not everything is as it seems.
 
 In general, `vaults` are data bag items which have been encrypted.
 
-
-
 Given vault `public-grafana`
 
     ```
@@ -34,14 +32,14 @@ values:
 
     ```
     ~ knife data bagshow public-grafana _default
-		grafana:
-			auth_tag:       GwOf7d7uDTEY0xkz9/XDyg==
+  grafana:
+   auth_tag:       GwOf7d7uDTEY0xkz9/XDyg==
 
-			cipher:         aes-256-gcm
-			encrypted_data: LOTS-OF-LETTERS
+   cipher:         aes-256-gcm
+   encrypted_data: LOTS-OF-LETTERS
 
-			version:        3
-		id:      _default
+   version:        3
+  id:      _default
     ```
 
 You can see the keys in clear text, but not the values.

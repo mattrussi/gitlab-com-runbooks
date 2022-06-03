@@ -4,7 +4,7 @@
 
 # Quick start
 
-## Elastic related resources ##
+## Elastic related resources
 
 1. [Logging dashboard in Grafana](https://dashboards.gitlab.net/d/USVj3qHmk/logging?orgId=1&from=now-7d&to=now)
 1. runbooks repo:
@@ -17,18 +17,18 @@
 1. chef config
 1. Design documents in `www-gitlab-com` repo:
 TODO: link here design docs once they are ready
-1. Logging working group: https://about.gitlab.com/company/team/structure/working-groups/log-aggregation/
+1. Logging working group: <https://about.gitlab.com/company/team/structure/working-groups/log-aggregation/>
 1. Elastic engineering team within Enablement
-1. vendor issue tracker: https://gitlab.com/gitlab-com/gl-infra/elastic/issues
+1. vendor issue tracker: <https://gitlab.com/gitlab-com/gl-infra/elastic/issues>
 1. Slack channel `g_search`
 1. Discussions in different issues across multiple projects (e.g. regarding costs for indexing entire gitlab.com)
 1. Discussions in PM&Engineering meetings
 
-## Historical notes ##
+## Historical notes
 
 1. [esc-tools](https://ops.gitlab.net/gitlab-com/gl-infra/gitlab-restore/esc-tools) repo used for managing the ES5 cluster
 
-# How-to guides #
+# How-to guides
 
 ## Upgrade checklist
 
@@ -50,14 +50,14 @@ TODO: link here design docs once they are ready
 * In Elastic Cloud UI, upgrade the **Staging** cluster to the desired version
 * Wait until the rolling upgrade is complete
 * Verify that the [Elasticsearch cluster is healthy](#how-to-verify-the-elasticsearch-cluster-is-healthy) in **Staging**
-* Go to GitLab.com **Staging** and test that [searches across all scopes in the `gitlab-org` group](https://staging.gitlab.com/search?utf8=%E2%9C%93&snippets=false&scope=issues&repository_ref=&search=*&group_id=9970) still work and return results. *Note: We should not unpause indexing since that could result in data loss*
+* Go to GitLab.com **Staging** and test that [searches across all scopes in the `gitlab-org` group](https://staging.gitlab.com/search?utf8=%E2%9C%93&snippets=false&scope=issues&repository_ref=&search=*&group_id=9970) still work and return results. _Note: We should not unpause indexing since that could result in data loss_
 * Once all search scopes are verified, unpause indexing in **Staging** `GitLab > Admin > Settings -> General > Advanced Search` or through the console `::Gitlab::CurrentSettings.update!(elasticsearch_pause_indexing: false)`
 * Wait until the [Sidekiq Queues (Global Search)](https://dashboards.gitlab.net/d/sidekiq-main/sidekiq-overview?orgId=1) have caught up
 * Verify that the [Advanced Search feature is working](#how-to-verify-that-the-advanced-search-feature-is-working) in **Staging**
 
 ### Upgrade Production
 
-* Add a silence via https://alerts.gitlab.net/#/silences/new with a matcher on the following alert names (link the comment field in each silence back to the Change Request Issue URL)
+* Add a silence via <https://alerts.gitlab.net/#/silences/new> with a matcher on the following alert names (link the comment field in each silence back to the Change Request Issue URL)
   * `alertname="SearchServiceElasticsearchIndexingTrafficAbsent"`
   * `alertname="gitlab_search_indexing_queue_backing_up"`
 * Pause indexing in **Production** `GitLab > Admin > Settings -> General > Advanced Search` or through the console `::Gitlab::CurrentSettings.update!(elasticsearch_pause_indexing: true)`
@@ -67,7 +67,7 @@ TODO: link here design docs once they are ready
 * In Elastic Cloud UI, upgrade the **Production** cluster to the desired version
 * Wait until the rolling upgrade is complete
 * Verify that the [Elasticsearch cluster is healthy](#how-to-verify-the-elasticsearch-cluster-is-healthy) in **Production**
-* Go to GitLab.com **Production** and test that [searches across all scopes in the `gitlab-org` group](https://gitlab.com/search?utf8=%E2%9C%93&snippets=false&scope=issues&repository_ref=&search=*&group_id=9970) still work and return results. *Note: We should not unpause indexing since that could result in data loss*
+* Go to GitLab.com **Production** and test that [searches across all scopes in the `gitlab-org` group](https://gitlab.com/search?utf8=%E2%9C%93&snippets=false&scope=issues&repository_ref=&search=*&group_id=9970) still work and return results. _Note: We should not unpause indexing since that could result in data loss_
 * Once all search scopes are verified, unpause indexing in **Production** `GitLab > Admin > Settings -> General > Advanced Search` or through the console `::Gitlab::CurrentSettings.update!(elasticsearch_pause_indexing: false)`
 * Wait until the [Sidekiq Queues (Global Search)](https://dashboards.gitlab.net/d/sidekiq-main/sidekiq-overview?orgId=1) have caught up
 * Verify that the [Advanced Search feature is working](#how-to-verify-that-the-advanced-search-feature-is-working) in **Production**
@@ -83,35 +83,37 @@ TODO: link here design docs once they are ready
 
 ### How to verify that the Advanced Search feature is working
 
-*  Add a comment to an issue and then search for that comment. *Note: that  before the results show up, all jobs in the queue need to be processed and this can take a few minutes. In addition, refreshing of the Elasticsearch index can take another 30s (if there were no search requests in the last 30s).*
+* Add a comment to an issue and then search for that comment. _Note: that  before the results show up, all jobs in the queue need to be processed and this can take a few minutes. In addition, refreshing of the Elasticsearch index can take another 30s (if there were no search requests in the last 30s)._
 * Search for a commit that was added after indexing was paused
 
 ### Monitoring
 
 #### Metric: Search overview metrics
 
-* Location: https://dashboards.gitlab.net/d/search-main/search-overview?orgId=1
+* Location: <https://dashboards.gitlab.net/d/search-main/search-overview?orgId=1>
 * What changes to this metric should prompt a rollback: Flatline of RPS
 
 #### Metric: Search controller performance
 
-* Location: https://dashboards.gitlab.net/d/web-rails-controller/web-rails-controller?orgId=1&var-PROMETHEUS_DS=Global&var-environment=gprd&var-stage=main&var-controller=SearchController&var-action=show
+* Location: <https://dashboards.gitlab.net/d/web-rails-controller/web-rails-controller?orgId=1&var-PROMETHEUS_DS=Global&var-environment=gprd&var-stage=main&var-controller=SearchController&var-action=show>
 * What changes to this metric should prompt a rollback: Massive spike in latency
 
 #### Metric: Search sidekiq indexing queues (Sidekiq Queues (Global Search))
-* Location: https://dashboards.gitlab.net/d/sidekiq-main/sidekiq-overview?orgId=1
+
+* Location: <https://dashboards.gitlab.net/d/sidekiq-main/sidekiq-overview?orgId=1>
 * What changes to this metric should prompt a rollback: Queues not draining
 
 #### Metric: Search sidekiq in flight jobs
 
-* Location: https://dashboards.gitlab.net/d/sidekiq-shard-detail/sidekiq-shard-detail?orgId=1&from=now-30m&to=now&var-PROMETHEUS_DS=Global&var-environment=gprd&var-stage=main&var-shard=elasticsearch
+* Location: <https://dashboards.gitlab.net/d/sidekiq-shard-detail/sidekiq-shard-detail?orgId=1&from=now-30m&to=now&var-PROMETHEUS_DS=Global&var-environment=gprd&var-stage=main&var-shard=elasticsearch>
 * What changes to this metric should prompt a rollback: No jobs in flight
 
 #### Metric: Elastic Cloud outages
-* Location: https://status.elastic.co/#past-incidents
+
+* Location: <https://status.elastic.co/#past-incidents>
 * What changes to this metric should prompt a rollback: Incidents which prevent upgrade of the cluster
 
-## Performing operations on the Elastic cluster ##
+## Performing operations on the Elastic cluster
 
 One time Elastic operations should be documented as `api_calls` in this repo. Everything else, for example cluster config, index templates, should be managed using CI (with the exception of dashboards and visualizations created in Kibana by users).
 
@@ -166,35 +168,35 @@ nginx logs would increase that by 0.6TiB/day (15%), haproxy logs by 2.5TiB/day (
 ## Analyzing index mappings
 
 At the moment of writing, we utilize static mappings defined in this repository. Here are a few ideas for analysis of those mappings:
+
 ```bash
-$ jsonnet elastic/managed-objects/lib/index_mappings/rails.jsonnet | jq -r 'leaf_paths|join(".")' | grep -E '\.type$' | wc -l
-$ jsonnet elastic/managed-objects/lib/index_mappings/rails.jsonnet | jq -r 'leaf_paths|join(".")' | grep -E '\.type$' | head
-$ jsonnet elastic/managed-objects/lib/index_mappings/rails.jsonnet | jq -r 'leaf_paths|join(";")' | grep -E ';type$' | awk '{ print $1, 1 }' | inferno-flamegraph > mapping_rails.svg
+jsonnet elastic/managed-objects/lib/index_mappings/rails.jsonnet | jq -r 'leaf_paths|join(".")' | grep -E '\.type$' | wc -l
+jsonnet elastic/managed-objects/lib/index_mappings/rails.jsonnet | jq -r 'leaf_paths|join(".")' | grep -E '\.type$' | head
+jsonnet elastic/managed-objects/lib/index_mappings/rails.jsonnet | jq -r 'leaf_paths|join(";")' | grep -E ';type$' | awk '{ print $1, 1 }' | inferno-flamegraph > mapping_rails.svg
 ```
 
-# Concepts #
+# Concepts
 
-## Elastic learning materials ##
+## Elastic learning materials
 
-## Design Document (Elastic at Gitlab) ##
+## Design Document (Elastic at Gitlab)
 
-https://gitlab.com/gitlab-com/www-gitlab-com/merge_requests/23545
+<https://gitlab.com/gitlab-com/www-gitlab-com/merge_requests/23545>
 TODO: update this link once merged
 
-## Monitoring ##
+## Monitoring
 
 Because Elastic Cloud is running on infrastructure that we do not manage or have access to, we cannot use our exporters/Prometheus/Thanos/Alertmanager setup. For this reason, the best option is to use Elasticsearch built-in x-pack monitoring that is storing monitoring metrics in Elasticsearch indices. In production environment, it makes sense to use a separate cluster for storing monitoring metrics (if metrics were stored on the same cluster, we wouldn't know the cluster is down because monitoring would be down as well).
 
-When monitoring is enabled and configured to send metrics to another Elastic cluster, it's the receiving clusters' responsibility to handle metrics rotation, i.e. the receiving cluster needs to have retention configured. For more details see: https://www.elastic.co/guide/en/cloud/current/ec-enable-monitoring.html#ec-monitoring-retention  and https://www.elastic.co/guide/en/elasticsearch/reference/current/monitoring-settings.html
+When monitoring is enabled and configured to send metrics to another Elastic cluster, it's the receiving clusters' responsibility to handle metrics rotation, i.e. the receiving cluster needs to have retention configured. For more details see: <https://www.elastic.co/guide/en/cloud/current/ec-enable-monitoring.html#ec-monitoring-retention>  and <https://www.elastic.co/guide/en/elasticsearch/reference/current/monitoring-settings.html>
 
 Apart from monitoring using x-pack metrics + watches, we are also using a blackbox exporter in our infrastructure. It's used for monitoring selected API endpoints, such as ILM explain API.
 
-## Alerting ##
+## Alerting
 
 Since we cannot use our Alertmanager, Elasticsearch Watches have to be used for alerting. They will be configured on the Elastic cluster used for storing monitoring indices.
 
 Blackbox probes cannot provide us with sufficient granularity of state reporting.
-
 
 <!-- ## Summary -->
 

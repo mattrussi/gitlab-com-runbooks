@@ -14,17 +14,18 @@ Despite being a free feature, Service Desk has low usage and spikes up and down 
 Zoom out to a few days (3 or 7) to get a feel for the impact.
 
 - Is traffic completely flat?
-    - There could be a problem with Sidekiq, Mailroom or email ingestion as a whole. See [Determine root cause](#determine-root-cause).
-    - There may be a recent change merged to [Gitlab::Email::Handler](https://gitlab.com/gitlab-org/gitlab/-/blob/master/lib/gitlab/email/handler.rb).
-    - There may be a problem with GitLab DNS.
+  - There could be a problem with Sidekiq, Mailroom or email ingestion as a whole. See [Determine root cause](#determine-root-cause).
+  - There may be a recent change merged to [Gitlab::Email::Handler](https://gitlab.com/gitlab-org/gitlab/-/blob/master/lib/gitlab/email/handler.rb).
+  - There may be a problem with GitLab DNS.
 - Is traffic lower than normal?
-    - There may be a recent breaking change to regular incoming email (for example, [`Gitlab::Email::Receiver`](https://gitlab.com/gitlab-org/gitlab/-/blob/master/lib/gitlab/email/receiver.rb) or Service Desk email ingestion (for example, [`Gitlab::Email::ServiceDeskReceiver`](https://gitlab.com/gitlab-org/gitlab/-/blob/master/lib/gitlab/email/service_desk_receiver.rb).
-    - There could be a problem with a 3rd party service customers use for redirection; such as GMail or Google Groups. See [Find where the email goes](#find-where-the-email-goes).
+  - There may be a recent breaking change to regular incoming email (for example, [`Gitlab::Email::Receiver`](https://gitlab.com/gitlab-org/gitlab/-/blob/master/lib/gitlab/email/receiver.rb) or Service Desk email ingestion (for example, [`Gitlab::Email::ServiceDeskReceiver`](https://gitlab.com/gitlab-org/gitlab/-/blob/master/lib/gitlab/email/service_desk_receiver.rb).
+  - There could be a problem with a 3rd party service customers use for redirection; such as GMail or Google Groups. See [Find where the email goes](#find-where-the-email-goes).
 - No detectable change?
-    - Customers may be using an uncommon service for redirection that has changed its headers.
-    - The customer's email may be marked as Spam in the incoming mail inbox.
+  - Customers may be using an uncommon service for redirection that has changed its headers.
+  - The customer's email may be marked as Spam in the incoming mail inbox.
 
 Check the [Certify Grafana charts](https://dashboards.gitlab.net/d/stage-groups-certify/stage-groups-certify-group-dashboard?orgId=1&from=now-7d&to=now)
+
 - Is there a noticeable impact?
 
 There are helpful links to the side of the Certify charts (e.g. Kibana, Sentry links).
@@ -93,27 +94,27 @@ Emails go through the following to get to Service Desk:
 - [Mailroom](https://gitlab.com/gitlab-org/gitlab-mail_room)
   - See [mail-room runbooks](../mailroom/README.md) for detailed debugging
   - Mailroom is a separate process outside of Rails. It ingests emails and determines whether to send them to different processes (e.g. Sidekiq queue, API, etc)
-      - Reply to a note
-      - Service Desk
-      - etc
+    - Reply to a note
+    - Service Desk
+    - etc
   - Mailroom interacts with rails using redis (adding a job to a sidekiq queue directly). This might be changed to an API call that enqueues the job instead.
-      - [Infra epic &644](https://gitlab.com/groups/gitlab-com/gl-infra/-/epics/644) and [Scalability epic 1462](https://gitlab.com/gitlab-com/gl-infra/scalability/-/issues/1462)
-      - `POST /api/:version/internal/mail_room/*mailbox_type`
+    - [Infra epic &644](https://gitlab.com/groups/gitlab-com/gl-infra/-/epics/644) and [Scalability epic 1462](https://gitlab.com/gitlab-com/gl-infra/scalability/-/issues/1462)
+    - `POST /api/:version/internal/mail_room/*mailbox_type`
   - For source and Omnibus installs, we use [`config/mail_room.yml`](https://gitlab.com/gitlab-org/gitlab/-/blob/master/config/mail_room.yml) (via [`files/gitlab-cookbooks/gitlab/recipes/mailroom.rb`](https://gitlab.com/gitlab-org/omnibus-gitlab/-/blob/master/files/gitlab-cookbooks/gitlab/recipes/mailroom.rb#L25) for Omnibus).
   - For charts, we use [`config/mail_room.yml`](https://gitlab.com/gitlab-org/gitlab/-/blob/master/config/mail_room.yml)
-      - [Charts docs](https://docs.gitlab.com/charts/charts/gitlab/mailroom/)
+    - [Charts docs](https://docs.gitlab.com/charts/charts/gitlab/mailroom/)
 - Rails - either Mailroom-direct-to-Sidekiq (old method) or API-call-to-Sidekiq (new method)
-    - If a Mailroom-initiated Sidekiq job:
-        - In Kibana, make the following query to `pubsub-sidekiq-inf-gprd`:
-            - `json.class: EmailReceiverWorker`
-            - `json.delivered_to: exists`
-        - Code path:
-            - [`app/workers/service_desk_email_receiver_worker.rb`](https://gitlab.com/gitlab-org/gitlab/blob/master/app/workers/service_desk_email_receiver_worker.rb) OR [`app/workers/email_receiver_worker.rb`](https://gitlab.com/gitlab-org/gitlab/blob/master/app/workers/email_receiver_worker.rb)
-            - [`lib/gitlab/email/service_desk_receiver.rb`](https://gitlab.com/gitlab-org/gitlab/blob/master/lib/gitlab/email/service_desk_receiver.rb)
-    - If an API call-initiated job, we make a postback POST request to our internal API, which enqueues the job via Sidekiq:
-        - In Kibana, make the following query to `pubsub-rails-inf-gprd`:
-            - `json.route: /api/:version/internal/mail_room/*mailbox_type`
-            - `json.method: POST`
-            - (if needed) `json.project_id: <the project ID>`
-        - [`lib/api/internal/base.rb`](https://gitlab.com/gitlab-org/gitlab/-/blob/509e4ffb7626999af33406638bb80cd0de695d85/lib/api/internal/base.rb#L278-284)
-        - [`lib/api/internal/mail_room.rb](https://gitlab.com/gitlab-org/gitlab/blob/master/lib/api/internal/mail_room.rb)
+  - If a Mailroom-initiated Sidekiq job:
+    - In Kibana, make the following query to `pubsub-sidekiq-inf-gprd`:
+      - `json.class: EmailReceiverWorker`
+      - `json.delivered_to: exists`
+    - Code path:
+      - [`app/workers/service_desk_email_receiver_worker.rb`](https://gitlab.com/gitlab-org/gitlab/blob/master/app/workers/service_desk_email_receiver_worker.rb) OR [`app/workers/email_receiver_worker.rb`](https://gitlab.com/gitlab-org/gitlab/blob/master/app/workers/email_receiver_worker.rb)
+      - [`lib/gitlab/email/service_desk_receiver.rb`](https://gitlab.com/gitlab-org/gitlab/blob/master/lib/gitlab/email/service_desk_receiver.rb)
+  - If an API call-initiated job, we make a postback POST request to our internal API, which enqueues the job via Sidekiq:
+    - In Kibana, make the following query to `pubsub-rails-inf-gprd`:
+      - `json.route: /api/:version/internal/mail_room/*mailbox_type`
+      - `json.method: POST`
+      - (if needed) `json.project_id: <the project ID>`
+    - [`lib/api/internal/base.rb`](https://gitlab.com/gitlab-org/gitlab/-/blob/509e4ffb7626999af33406638bb80cd0de695d85/lib/api/internal/base.rb#L278-284)
+    - [`lib/api/internal/mail_room.rb](https://gitlab.com/gitlab-org/gitlab/blob/master/lib/api/internal/mail_room.rb)

@@ -15,6 +15,7 @@ information has been retained.
    ```
 
 ### Commands
+
 * To force an update to `/var/opt/gitlab/consul/databases.ini` on the pgbouncer server
 
    ```shell
@@ -77,6 +78,7 @@ information has been retained.
     template1# select * from pg_is_in_recovery();
     ...
     ```
+
     `f` indicates the node is a primary
     `t` indicates the node is a standby
 
