@@ -3,12 +3,12 @@
 # NOTE: please add new plugins to ./scripts/install-asdf-plugins.sh when adding items here
 
 go-jsonnet 0.18.0
-golang 1.17.6
+golang 1.17.11
 jb 0.4.0
 jsonnet-tool 1.7.0
 promtool 2.34.0 # Keep this the same as GitLab.com's Prometheus version: https://prometheus.gprd.gitlab.net/status
-ruby 3.0.1
-shellcheck 0.7.0
-shfmt 3.5.0
-terraform 1.1.7
-thanos 0.24.0 # Keep this the same as GitLab.com's Thanos version: https://thanos.gitlab.net/status
+ruby 3.1.2
+shellcheck 0.8.0
+shfmt 3.5.1
+terraform 1.2.2
+thanos 0.26.0 # Keep this the same as GitLab.com's Thanos version: https://thanos.gitlab.net/status
