@@ -82,7 +82,9 @@ run the command on only one runner at a time.
 
 ### How to stop Runner Manager with Graceful Shutdown
 
-1. Run the stop script:
+1. Login to the node where you want to perform the operations.
+
+1. Enter `screen` or `tmux` session and run the stop script:
 
     ```shell
     sudo /root/runner_upgrade.sh stop
@@ -91,9 +93,11 @@ run the command on only one runner at a time.
     This command will suspend `chef-client` (to make sure it will not restart Runner's service automatically nor add
     any other unexpected change) and terminate Runner's process with the usage of Graceful Shutdown.
 
+    You can leave the `screen`/`tmux` session when it's done.
+
 1. Do whatever you needed to do with terminated Runner.
 
-1. Restart the Runner with:
+1. Enter `screen` or `tmux` session and restart the Runner with:
 
     ```shell
     sudo /root/runner_upgrade.sh update
@@ -102,13 +106,15 @@ run the command on only one runner at a time.
     This will restore the `chef-client`, cleanup old non-removed Docker Machine VMs that were left, refresh the
     configuration and finally start the Runner process.
 
+    You can leave the `screen`/`tmux` session when it's done.
+
 ### How to stop or restart Runner Manager's VM with Graceful Shutdown.
 
 1. Do shutdown
 
     1. If you want to stop the VM
 
-        1. Run the script:
+        1. Enter `screen` or `tmux` session and run the script:
 
             ```shell
             sudo /root/runner_upgrade.sh stop_and_poweroff
@@ -118,11 +124,13 @@ run the command on only one runner at a time.
             any other unexpected change) and terminate Runner's process with the usage of Graceful Shutdown. Finally it
             will turn off the VM.
 
+            You can leave the `screen`/`tmux` session when it's done.
+
         1. Do whatever you needed to do with Runner's VM terminated.
 
         1. Restart the VM in GCP console.
 
-    1. If you want to restart the VM, run the script:
+    1. If you want to restart the VM, enter `screen` or `tmux` session and run the script:
 
         ```shell
         sudo /root/runner_upgrade.sh stop_and_reboot
@@ -132,7 +140,9 @@ run the command on only one runner at a time.
         any other unexpected change) and terminate Runner's process with the usage of Graceful Shutdown. Finally it
         will reboot the VM.
 
-1. Restart the Runner with:
+        You can leave the `screen`/`tmux` session when it's done.
+
+1. Login to the VM, enter `screen` or `tmux` session and restart the Runner with:
 
     ```shell
     sudo /root/runner_upgrade.sh update
@@ -140,6 +150,8 @@ run the command on only one runner at a time.
 
     This will restore the `chef-client`, cleanup old non-removed Docker Machine VMs that were left, refresh the
     configuration and finally start the Runner process.
+
+    You can leave the `screen`/`tmux` session when it's done.
 
 ### How to proceed Runner Manager configuration changes with Graceful Shutdown
 

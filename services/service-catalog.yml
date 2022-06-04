@@ -3146,6 +3146,7 @@ services:
       - https://gitlab.com/gitlab-com/runbooks/blob/master/docs/ci-runners/create-runners-manager-node.md
       - https://gitlab.com/gitlab-com/runbooks/-/blob/master/docs/ci-runners/linux/docker-machine/deploy.md
       - https://gitlab.com/gitlab-com/runbooks/blob/master/docs/ci-runners/fleet-configuration-management/README.md
+      - https://gitlab.com/gitlab-com/runbooks/blob/master/docs/ci-runners/linux/change-runner-manager-instance-specs.md
     error_budget: https://docs.google.com/spreadsheets/d/1wkK2n5EAvoVXwQZrVoCDsvkYTb1BftL56EzsFW_IA-w/edit
   observability:
     monitors:
