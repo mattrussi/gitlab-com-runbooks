@@ -1,6 +1,6 @@
 # Steps to Recreate/Rebuild the CI CLuster using a Snapshot from the Master cluster (instead of pg_basebackup)
 
-The recreation of the CI Cluster is done entirely localy through TF and Ansible, therefore **DO NOT COMMIT ANY FILE CHANGES** into the config-mgmt repo.
+The recreation of the CI Cluster is done entirely locally through TF and Ansible, therefore **DO NOT COMMIT ANY FILE CHANGES** into the config-mgmt repo.
 
 Make sure that **there are no CI Read requests being made in the patroni-ci cluster**,  as this indicates that the cluster is being used
 
