@@ -125,7 +125,7 @@ does not handle renaming `service_name` you will also need to delete
 
 ##### Resolution Steps - Redeploy and Resync the Patroni CI cluster
 
-Escalate the incident to a DBRE and request him to proceed with the recovery of the broken CI Patroni cluster.
+Escalate the incident to a DBRE and ask them to proceed with the recovery of the broken CI Patroni cluster.
 
 Once the CI Patroni cluster has fully recovered you can revert these
 changes but you should do this in 2 MRs using the following steps:
