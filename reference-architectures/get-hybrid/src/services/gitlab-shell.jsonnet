@@ -49,7 +49,7 @@ metricsCatalog.serviceDefinition({
       |||,
 
       local baseSelector = {
-        job: 'praefect',  // gitlab-shell talks to Praefect, so use that as the proxy implementation
+        job: 'gitaly',  // Looking for gitaly let the check to work with and without Praefect in the cluster.
         grpc_service: 'gitaly.SSHService',
       },
 
