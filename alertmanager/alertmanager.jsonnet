@@ -52,16 +52,19 @@ local snitchReceiverChannelName(channel) =
   local receiver_name = if cluster == '' then env else env + '_' + cluster;
   'dead_mans_snitch_' + receiver_name;
 
+local sendResolved(channel, default) =
+  if std.objectHas(channel, 'sendResolved') then channel.sendResolved else default;
+
 local webhookChannels =
   [
-    { name: snitchReceiverChannelName(s), url: 'https://nosnch.in/' + s.apiKey, sendResolved: false }
+    { name: snitchReceiverChannelName(s), url: 'https://nosnch.in/' + s.apiKey, sendResolved: sendResolved(s, default=false) }
     for s in secrets.snitchChannels
   ] +
   [
     {
       name: w.name,
       url: w.url,
-      sendResolved: true,
+      sendResolved: sendResolved(w, default=true),
       httpConfig: {
         bearer_token: w.token,
       },
@@ -72,7 +75,7 @@ local webhookChannels =
     {
       name: 'issue:' + s.name,
       url: 'https://' + s.name + '/alerts/notify.json',
-      sendResolved: true,
+      sendResolved: sendResolved(s, default=true),
       httpConfig: {
         bearer_token: s.token,
       },
