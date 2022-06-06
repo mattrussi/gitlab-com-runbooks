@@ -1,4 +1,4 @@
-# Steps to Recreate the CI CLuster using a Snapshot from Production (instead of pg_basebackup)
+# Steps to Recreate/Rebuild the CI CLuster using a Snapshot from the Master cluster (instead of pg_basebackup)
 
 The recreation of the CI Cluster is done entirely localy through TF and Ansible, therefore **DO NOT COMMIT ANY FILE CHANGES** into the config-mgmt repo.
 
