@@ -8,12 +8,12 @@ Make sure that **there are no CI Read requests being made in the patroni-ci clus
 
 ## Pre-requisites
 
-    1. Terraform should be installed and configured;
-    1. Ansible should be installed and configured;
-    1. Download/clone the https://ops.gitlab.net/gitlab-com/gl-infra/config-mgmt project into your workspace;
-    1. Download/clone the https://gitlab.com/gitlab-com/gl-infra/db-migration project into your workspace;
-    1. Check that the inventory file for your desired environment exists in `db-migration/pg-replica-rebuild/inventory/` and it's up-to-date with the hosts you're targeting;
-    1. Run `cd db-migration/pg-replica-rebuild; ansible -i inventory/<file> all -m ping` and ensure that all nodes are reachable;
+1. Terraform should be installed and configured;
+1. Ansible should be installed and configured;
+1. Download/clone the https://ops.gitlab.net/gitlab-com/gl-infra/config-mgmt project into your workspace;
+1. Download/clone the https://gitlab.com/gitlab-com/gl-infra/db-migration project into your workspace;
+1. Check that the inventory file for your desired environment exists in `db-migration/pg-replica-rebuild/inventory/` and it's up-to-date with the hosts you're targeting;
+1. Run `cd db-migration/pg-replica-rebuild; ansible -i inventory/<file> all -m ping` and ensure that all nodes are reachable;
 
 
 ## Destroy the Standby Cluster
