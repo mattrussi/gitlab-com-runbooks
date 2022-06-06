@@ -55,10 +55,10 @@ Replication Backup nodes are:
         ```
     - Add the following line into `patroni-ci` module at `main.tf`
         ```
-          data_disk_snapshot     = local.gcp_database_snapshot`
+          data_disk_snapshot     = local.gcp_database_snapshot
         ```
     - Change the `"node_count"` of patroni CI back to 7 at `variables.tf`, 
-        ````
+        ```
           "patroni-ci"           = 7
         ```
 2. Create just the 1st Patroni CI node localy with: `tf apply`
