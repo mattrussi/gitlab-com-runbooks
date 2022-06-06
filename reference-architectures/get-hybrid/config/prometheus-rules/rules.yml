@@ -260,11 +260,11 @@ groups:
   - expr: |
       (
         sum by () (
-          rate(grpc_server_handling_seconds_bucket{grpc_service="gitaly.SSHService",grpc_type="unary",job="praefect",le="30"}[5m])
+          rate(grpc_server_handling_seconds_bucket{grpc_service="gitaly.SSHService",grpc_type="unary",job="gitaly",le="30"}[5m])
         )
         +
         sum by () (
-          rate(grpc_server_handling_seconds_bucket{grpc_service="gitaly.SSHService",grpc_type="unary",job="praefect",le="60"}[5m])
+          rate(grpc_server_handling_seconds_bucket{grpc_service="gitaly.SSHService",grpc_type="unary",job="gitaly",le="60"}[5m])
         )
       )
       /
@@ -276,7 +276,7 @@ groups:
     record: gitlab_component_apdex:success:rate_5m
   - expr: |
       sum by () (
-        rate(grpc_server_handling_seconds_bucket{grpc_service="gitaly.SSHService",grpc_type="unary",job="praefect",le="+Inf"}[5m])
+        rate(grpc_server_handling_seconds_bucket{grpc_service="gitaly.SSHService",grpc_type="unary",job="gitaly",le="+Inf"}[5m])
       )
     labels:
       component: grpc_requests
@@ -285,7 +285,7 @@ groups:
     record: gitlab_component_apdex:weight:score_5m
   - expr: |
       sum by () (
-        rate(gitaly_service_client_requests_total{grpc_service="gitaly.SSHService",job="praefect"}[5m])
+        rate(gitaly_service_client_requests_total{grpc_service="gitaly.SSHService",job="gitaly"}[5m])
       )
     labels:
       component: grpc_requests
@@ -295,7 +295,7 @@ groups:
   - expr: |
       (
         sum by () (
-          rate(grpc_server_handled_total{grpc_code!="OK",grpc_service="gitaly.SSHService",job="praefect"}[5m])
+          rate(grpc_server_handled_total{grpc_code!="OK",grpc_service="gitaly.SSHService",job="gitaly"}[5m])
         )
       )
       or
@@ -315,11 +315,11 @@ groups:
   - expr: |
       (
         sum by () (
-          rate(grpc_server_handling_seconds_bucket{grpc_service="gitaly.SSHService",grpc_type="unary",job="praefect",le="30"}[30m])
+          rate(grpc_server_handling_seconds_bucket{grpc_service="gitaly.SSHService",grpc_type="unary",job="gitaly",le="30"}[30m])
         )
         +
         sum by () (
-          rate(grpc_server_handling_seconds_bucket{grpc_service="gitaly.SSHService",grpc_type="unary",job="praefect",le="60"}[30m])
+          rate(grpc_server_handling_seconds_bucket{grpc_service="gitaly.SSHService",grpc_type="unary",job="gitaly",le="60"}[30m])
         )
       )
       /
@@ -331,7 +331,7 @@ groups:
     record: gitlab_component_apdex:success:rate_30m
   - expr: |
       sum by () (
-        rate(grpc_server_handling_seconds_bucket{grpc_service="gitaly.SSHService",grpc_type="unary",job="praefect",le="+Inf"}[30m])
+        rate(grpc_server_handling_seconds_bucket{grpc_service="gitaly.SSHService",grpc_type="unary",job="gitaly",le="+Inf"}[30m])
       )
     labels:
       component: grpc_requests
@@ -340,7 +340,7 @@ groups:
     record: gitlab_component_apdex:weight:score_30m
   - expr: |
       sum by () (
-        rate(gitaly_service_client_requests_total{grpc_service="gitaly.SSHService",job="praefect"}[30m])
+        rate(gitaly_service_client_requests_total{grpc_service="gitaly.SSHService",job="gitaly"}[30m])
       )
     labels:
       component: grpc_requests
@@ -350,7 +350,7 @@ groups:
   - expr: |
       (
         sum by () (
-          rate(grpc_server_handled_total{grpc_code!="OK",grpc_service="gitaly.SSHService",job="praefect"}[30m])
+          rate(grpc_server_handled_total{grpc_code!="OK",grpc_service="gitaly.SSHService",job="gitaly"}[30m])
         )
       )
       or
@@ -370,11 +370,11 @@ groups:
   - expr: |
       (
         sum by () (
-          rate(grpc_server_handling_seconds_bucket{grpc_service="gitaly.SSHService",grpc_type="unary",job="praefect",le="30"}[1h])
+          rate(grpc_server_handling_seconds_bucket{grpc_service="gitaly.SSHService",grpc_type="unary",job="gitaly",le="30"}[1h])
         )
         +
         sum by () (
-          rate(grpc_server_handling_seconds_bucket{grpc_service="gitaly.SSHService",grpc_type="unary",job="praefect",le="60"}[1h])
+          rate(grpc_server_handling_seconds_bucket{grpc_service="gitaly.SSHService",grpc_type="unary",job="gitaly",le="60"}[1h])
         )
       )
       /
@@ -386,7 +386,7 @@ groups:
     record: gitlab_component_apdex:success:rate_1h
   - expr: |
       sum by () (
-        rate(grpc_server_handling_seconds_bucket{grpc_service="gitaly.SSHService",grpc_type="unary",job="praefect",le="+Inf"}[1h])
+        rate(grpc_server_handling_seconds_bucket{grpc_service="gitaly.SSHService",grpc_type="unary",job="gitaly",le="+Inf"}[1h])
       )
     labels:
       component: grpc_requests
@@ -395,7 +395,7 @@ groups:
     record: gitlab_component_apdex:weight:score_1h
   - expr: |
       sum by () (
-        rate(gitaly_service_client_requests_total{grpc_service="gitaly.SSHService",job="praefect"}[1h])
+        rate(gitaly_service_client_requests_total{grpc_service="gitaly.SSHService",job="gitaly"}[1h])
       )
     labels:
       component: grpc_requests
@@ -405,7 +405,7 @@ groups:
   - expr: |
       (
         sum by () (
-          rate(grpc_server_handled_total{grpc_code!="OK",grpc_service="gitaly.SSHService",job="praefect"}[1h])
+          rate(grpc_server_handled_total{grpc_code!="OK",grpc_service="gitaly.SSHService",job="gitaly"}[1h])
         )
       )
       or
@@ -425,11 +425,11 @@ groups:
   - expr: |
       (
         sum by () (
-          rate(grpc_server_handling_seconds_bucket{grpc_service="gitaly.SSHService",grpc_type="unary",job="praefect",le="30"}[6h])
+          rate(grpc_server_handling_seconds_bucket{grpc_service="gitaly.SSHService",grpc_type="unary",job="gitaly",le="30"}[6h])
         )
         +
         sum by () (
-          rate(grpc_server_handling_seconds_bucket{grpc_service="gitaly.SSHService",grpc_type="unary",job="praefect",le="60"}[6h])
+          rate(grpc_server_handling_seconds_bucket{grpc_service="gitaly.SSHService",grpc_type="unary",job="gitaly",le="60"}[6h])
         )
       )
       /
@@ -441,7 +441,7 @@ groups:
     record: gitlab_component_apdex:success:rate_6h
   - expr: |
       sum by () (
-        rate(grpc_server_handling_seconds_bucket{grpc_service="gitaly.SSHService",grpc_type="unary",job="praefect",le="+Inf"}[6h])
+        rate(grpc_server_handling_seconds_bucket{grpc_service="gitaly.SSHService",grpc_type="unary",job="gitaly",le="+Inf"}[6h])
       )
     labels:
       component: grpc_requests
@@ -450,7 +450,7 @@ groups:
     record: gitlab_component_apdex:weight:score_6h
   - expr: |
       sum by () (
-        rate(gitaly_service_client_requests_total{grpc_service="gitaly.SSHService",job="praefect"}[6h])
+        rate(gitaly_service_client_requests_total{grpc_service="gitaly.SSHService",job="gitaly"}[6h])
       )
     labels:
       component: grpc_requests
@@ -460,7 +460,7 @@ groups:
   - expr: |
       (
         sum by () (
-          rate(grpc_server_handled_total{grpc_code!="OK",grpc_service="gitaly.SSHService",job="praefect"}[6h])
+          rate(grpc_server_handled_total{grpc_code!="OK",grpc_service="gitaly.SSHService",job="gitaly"}[6h])
         )
       )
       or
@@ -4466,7 +4466,7 @@ groups:
         histogram_quantile(
           0.950000,
           sum by (le) (
-            rate(grpc_server_handling_seconds_bucket{grpc_service="gitaly.SSHService",grpc_type="unary",job="praefect"}[5m])
+            rate(grpc_server_handling_seconds_bucket{grpc_service="gitaly.SSHService",grpc_type="unary",job="gitaly"}[5m])
           )
         )
       runbook: docs/gitlab-shell/README.md
@@ -4519,7 +4519,7 @@ groups:
         histogram_quantile(
           0.950000,
           sum by (le) (
-            rate(grpc_server_handling_seconds_bucket{grpc_service="gitaly.SSHService",grpc_type="unary",job="praefect"}[5m])
+            rate(grpc_server_handling_seconds_bucket{grpc_service="gitaly.SSHService",grpc_type="unary",job="gitaly"}[5m])
           )
         )
       runbook: docs/gitlab-shell/README.md
@@ -4570,7 +4570,7 @@ groups:
       grafana_variables: environment,stage
       promql_template_1: |
         sum by () (
-          rate(grpc_server_handled_total{grpc_code!="OK",grpc_service="gitaly.SSHService",job="praefect"}[5m])
+          rate(grpc_server_handled_total{grpc_code!="OK",grpc_service="gitaly.SSHService",job="gitaly"}[5m])
         )
       runbook: docs/gitlab-shell/README.md
       title: The grpc_requests SLI of the gitlab-shell service has an error rate violating
@@ -4620,7 +4620,7 @@ groups:
       grafana_variables: environment,stage
       promql_template_1: |
         sum by () (
-          rate(grpc_server_handled_total{grpc_code!="OK",grpc_service="gitaly.SSHService",job="praefect"}[5m])
+          rate(grpc_server_handled_total{grpc_code!="OK",grpc_service="gitaly.SSHService",job="gitaly"}[5m])
         )
       runbook: docs/gitlab-shell/README.md
       title: The grpc_requests SLI of the gitlab-shell service has an error rate violating
@@ -4670,7 +4670,7 @@ groups:
       grafana_variables: environment,stage
       promql_template_1: |
         sum by () (
-          rate(gitaly_service_client_requests_total{grpc_service="gitaly.SSHService",job="praefect"}[5m])
+          rate(gitaly_service_client_requests_total{grpc_service="gitaly.SSHService",job="gitaly"}[5m])
         )
       runbook: docs/gitlab-shell/README.md
       title: The grpc_requests SLI of the gitlab-shell service has not received any
@@ -4709,7 +4709,7 @@ groups:
       grafana_variables: environment,stage
       promql_template_1: |
         sum by () (
-          rate(gitaly_service_client_requests_total{grpc_service="gitaly.SSHService",job="praefect"}[5m])
+          rate(gitaly_service_client_requests_total{grpc_service="gitaly.SSHService",job="gitaly"}[5m])
         )
       runbook: docs/gitlab-shell/README.md
       title: The grpc_requests SLI of the gitlab-shell service has not reported any
