@@ -1,0 +1,67 @@
+# Steps to Recreate the CI CLuster using a Snapshot from Production (instead of pg_basebackup)
+
+The recreation of the CI Cluster is done entirely localy through TF and Ansible, therefore **DO NOT COMMIT ANY FILE CHANGES** into the config-mgmt repo.
+
+Make sure that **there are no CI Read requests being made in the patroni-ci cluster**,  as this indicates that the cluster is being used
+
+    - Check the [CI Reads in CI cluster thanos query](https://thanos-query.ops.gitlab.net/graph?g0.expr=(sum(rate(pg_stat_user_tables_idx_tup_fetch%7Benv%3D%22gprd%22%2C%20relname%3D~%22(ci_.*%7Cexternal_pull_requests%7Ctaggings%7Ctags)%22%2Cinstance%3D~%22patroni-ci-.*%22%7D%5B1m%5D))%20by%20(relname%2C%20instance)%20%3E%201)%20and%20on(instance)%20pg_replication_is_replica%3D%3D1&g0.tab=0&g0.stacked=0&g0.range_input=6h&g0.max_source_resolution=0s&g0.deduplicate=1&g0.partial_response=0&g0.store_matches=%5B%5D)
+
+## Pre-requisites
+
+    1. Terraform should be installed and configured;
+    1. Ansible should be installed and configured;
+    1. Download/clone the https://ops.gitlab.net/gitlab-com/gl-infra/config-mgmt project into your workspace;
+    1. Download/clone the https://gitlab.com/gitlab-com/gl-infra/db-migration project into your workspace;
+    1. Check that the inventory file for your desired environment exists in `db-migration/pg-replica-rebuild/inventory/` and it's up-to-date with the hosts you're targeting;
+    1. Run `cd db-migration/pg-replica-rebuild; ansible -i inventory/<file> all -m ping` and ensure that all nodes are reachable;
+
+
+## Destroy the Standby Cluster
+
+1. Change the `"node_count"` at `variables.tf` to `=0` for the `patroni-ci` and `patroni-zfs-ci` clusters:
+```
+    "patroni-ci"           = 0
+    "patroni-zfs-ci"       = 0
+```
+
+2. Apply the TF change `tf apply` checking if only the `patroni-ci` and its related modules are the ones that will be removed.
+
+## Take a snapshot from the Writer node
+
+1. Log in into a Replication Backup node and execute a gcs-snapshot:
+```
+PATH="/usr/local/sbin:/usr/sbin/:/sbin:/usr/local/bin:/usr/bin:/bin:/snap/bin"
+/usr/local/bin/gcs-snapshot.sh
+```
+Replication Backup nodes are:
+  - GSTG: patroni-06-db-gstg.c.gitlab-staging-1.internal
+  - GPRD: patroni-10-db-gprd.c.gitlab-production.internal
+
+## Create the Standby Cluster
+
+1. Change Terraform environment 
+    - Add the following module at `main.tf`, but **DO NOT SIMPLY COPY/PASTE IT**, set the `--project` and `--filter` accordingly with the environment you are performing the restore
+        ```
+        module "gcp_database_snapshot" {
+            source        = "matti/resource/shell"
+            version       = "1.5.0"
+            command       = "gcloud compute snapshots list --project [gitlab-staging-1|gitlab-production] --limit=1 --uri --sort-by=~creationTimestamp --filter=status~READY --filter=sourceDisk~patroni-[06-db-gstg|10-db-gprd]-data"
+            trigger       = timestamp()
+            fail_on_error = true
+        }
+            locals {
+            gcp_database_snapshot = trimprefix(module.gcp_database_snapshot.stdout, "https://www.googleapis.com/compute/v1/")
+        }
+        ```
+    - Add the following line into `patroni-ci` module at `main.tf`
+        `data_disk_snapshot     = local.gcp_database_snapshot`
+    - Change the `"node_count"` of patroni CI back to 7 at `variables.tf`, 
+        `"patroni-ci"           = 7`
+2. Create just the 1st Patroni CI node localy with: `tf apply`
+3. Check the `patroni-ci-01-db` Serial port in GCP console to see if the instance is already intialized and if Chef have finished to run, for example:
+   - GSTG: https://console.cloud.google.com/compute/instancesDetail/zones/us-east1-c/instances/patroni-ci-01-db-gstg/console?port=1&project=gitlab-staging-1
+   - GPRD: https://console.cloud.google.com/compute/instancesDetail/zones/us-east1-c/instances/patroni-ci-01-db-gprd/console?port=1&project=gitlab-production
+5. Initialize the cluster using the `db-migration/pg-replica-rebuild` Ansible playbook, by executing:
+    `ansible-playbook -i inventory/<file> rebuild.yml`
+
+

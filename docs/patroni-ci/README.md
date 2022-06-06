@@ -162,7 +162,7 @@ $ dig @localhost ci-db-replica.service.consul +short SRV | sort -k 4
 
 ##### Resolution Steps - Redeploy and Resync the Patroni CI cluster
 
-Escalate the incident to a DBRE and ask them to proceed with the recovery of the broken CI Patroni cluster.
+Fistly, escalate the incident to a DBRE and ask them to proceed with the recovery of the broken CI Patroni cluster.
 
 Once the CI Patroni cluster has fully recovered you can revert these
 changes but you should do this in 2 MRs using the following steps:
