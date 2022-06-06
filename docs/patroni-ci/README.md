@@ -70,9 +70,9 @@ If they are not being used these ports are defined as `idle-ci-db-replica` Consu
 
 In case of incident you will have to:
 
-- **1.** In `patroni-main` nodes, rename the `idle-ci-db-replica` ports to answer as `ci-db-replica` by the Consul service name. We have a sample MR at for what this would involve - https://gitlab.com/gitlab-com/gl-infra/chef-repo/-/merge_requests/1952/diffs
+   - **1.** In `patroni-main` nodes, rename the `idle-ci-db-replica` ports to answer as `ci-db-replica` by the Consul service name. We have a sample MR at for what this would involve - https://gitlab.com/gitlab-com/gl-infra/chef-repo/-/merge_requests/1952/diffs
 
-- **2.** In `patroni-ci` nodes, rename Consul service name from `ci-db-replica` to `dormant-ci-db-replica`. We have a sample MR at for what this would involve - https://gitlab.com/gitlab-com/gl-infra/chef-repo/-/merge_requests/1875/diffs
+   - **2.** In `patroni-ci` nodes, rename Consul service name from `ci-db-replica` to `dormant-ci-db-replica`. We have a sample MR at for what this would involve - https://gitlab.com/gitlab-com/gl-infra/chef-repo/-/merge_requests/1875/diffs
 
 
 _Note: In case these MRs are unavailable the diffs are:_
@@ -119,7 +119,9 @@ directly on all the Patroni Main nodes.
    - **4.** Once you've done this you will have to
 do 1 minor cleanup on Patroni CI nodes, since the `gitlab-pgbouncer` cookbook
 does not handle renaming `service_name` you will also need to delete
-`/etc/consul/conf.d/ci-db-replica*.json` from the problematic CI Patroni nodes.
+`/etc/consul/conf.d/ci-db-replica*.json` from the problematic CI Patroni nodes, by executing:
+     1. `knife ssh -C 10 'roles:gprd-base-db-patroni-ci' 'sudo rm -f /etc/consul/conf.d/ci-db-replica*.json'`
+     1. `knife ssh -C 10 'roles:gprd-base-db-patroni-ci' 'sudo consul reload'`
 
 ##### Resolution Steps - Redeploy and Resync the Patroni CI cluster
 
@@ -132,6 +134,7 @@ changes but you should do this in 2 MRs using the following steps:
    back to `service_name: ci-db-replica` . Then wait for chef to run on
    CI Patroni nodes and confirm they are correctly registering in consul
    under DNS `ci-db-replica.service.consul` - for example 
+
 2. Remove `additional_service_names` from
    `roles/gstg-base-db-patroni-main.json` so that Main nodes stop registering
    in Consul for `ci-db-replica.service.consul`
