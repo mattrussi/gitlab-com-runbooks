@@ -61,7 +61,7 @@ Replication Backup nodes are:
         ```
             "patroni-ci"           = 7
         ```
-2. Create all the Patroni CI node locally with: `tf apply`
+2. Create all the Patroni CI node with: `tf apply`
 3. Check the `patroni-ci-01-db` Serial port in GCP console to see if the instance is already intialized and if Chef have finished to run, for example:
    - GSTG: https://console.cloud.google.com/compute/instancesDetail/zones/us-east1-c/instances/patroni-ci-01-db-gstg/console?port=1&project=gitlab-staging-1
    - GPRD: https://console.cloud.google.com/compute/instancesDetail/zones/us-east1-c/instances/patroni-ci-01-db-gprd/console?port=1&project=gitlab-production
@@ -87,7 +87,7 @@ The ZFS cluster nodes can't be rebuild through GCP snapshots, because the `/var/
         ```
             "patroni-zfs-ci"       = 1
         ```
-2. Create Patroni ZFS CI node locally with: `tf apply`
+2. Create Patroni ZFS CI node with: `tf apply`
 3. Check the `patroni-zfs-ci-01-db` Serial port in GCP console to see if the instance is already intialized and if Chef have finished to run, for example:
    - GSTG: https://console.cloud.google.com/compute/instancesDetail/zones/us-east1-c/instances/patroni-zfs-ci-01-db-gstg/console?port=1&project=gitlab-staging-1
    - GPRD: https://console.cloud.google.com/compute/instancesDetail/zones/us-east1-c/instances/patroni-zfs-ci-01-db-gprd/console?port=1&project=gitlab-production
