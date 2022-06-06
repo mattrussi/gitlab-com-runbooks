@@ -69,10 +69,13 @@ If they are not being used these ports are defined as `idle-ci-db-replica` Consu
 ##### Resolution Steps - Route CI read-only workload to Main
 
 In case of incident you will have to:
-1. In `patroni-main` nodes, rename the `idle-ci-db-replica` ports to answer as `ci-db-replica` by the Consul service name. We have a sample MR at for what this would involve - https://gitlab.com/gitlab-com/gl-infra/chef-repo/-/merge_requests/1952/diffs
-2.. In `patroni-ci` nodes, rename Consul service name from `ci-db-replica` to `dormant-ci-db-replica`. We have a sample MR at for what this would involve - https://gitlab.com/gitlab-com/gl-infra/chef-repo/-/merge_requests/1875/diffs
 
-In case this MR is unavailable the diff are:
+- **1.** In `patroni-main` nodes, rename the `idle-ci-db-replica` ports to answer as `ci-db-replica` by the Consul service name. We have a sample MR at for what this would involve - https://gitlab.com/gitlab-com/gl-infra/chef-repo/-/merge_requests/1952/diffs
+
+- **2.** In `patroni-ci` nodes, rename Consul service name from `ci-db-replica` to `dormant-ci-db-replica`. We have a sample MR at for what this would involve - https://gitlab.com/gitlab-com/gl-infra/chef-repo/-/merge_requests/1875/diffs
+
+
+_Note: In case these MRs are unavailable the diffs are:_
 
 <details><summary>Diff for reconfiguring Patroni cluster to also present as ci-db-replica in Consul</summary>
 
@@ -110,10 +113,10 @@ diff --git a/roles/gprd-base-db-patroni-ci.json b/roles/gprd-base-db-patroni-ci.
 
 </details>
 
-3. You will likely want to apply this as quickly as possible by running chef
+   - **3.** You will likely want to apply this as quickly as possible by running chef
 directly on all the Patroni Main nodes. 
 
-4. Once you've done this you will have to
+   - **4.** Once you've done this you will have to
 do 1 minor cleanup on Patroni CI nodes, since the `gitlab-pgbouncer` cookbook
 does not handle renaming `service_name` you will also need to delete
 `/etc/consul/conf.d/ci-db-replica*.json` from the problematic CI Patroni nodes.
