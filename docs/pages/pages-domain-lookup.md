@@ -5,4 +5,3 @@ Incoming requests to GitLab Pages loadbalancers will include the requested domai
 ```Ruby
 domain=PagesDomain.find_by!(domain:"example.com")
 ```
-

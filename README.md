@@ -26,7 +26,6 @@ This [pagerduty forum post][pagerduty-shadow-schedule] was referenced when setti
 shadow schedule][pagerduty-blank-schedule] and initial [overrides][pagerduty-overrides] for
 on-boarding new team member
 
-
 ## Checklists
 
 - [Engineer on Call (EOC)](on-call/checklists/eoc.md)
@@ -470,19 +469,25 @@ git commit --allow-empty -m '[BREAKING CHANGE|feat|fix]: <changelog summary mess
 
 ## Tool Versioning
 
-This project has adopted [`asdf version-manager`](https://github.com/asdf-vm/asdf) for tool versioning.
+This project has adopted [`asdf version-manager`](https://github.com/asdf-vm/asdf) for tool versioning. Using `asdf` is recommended, although not mandatory. Please note that if you chose not to use `asdf`, you'll need to ensure that all the required binaries, an the correct versions, are installed and on your path.
 
-Installation instructions for `asdf` can be found at https://asdf-vm.com/#/core-manage-asdf-vm?id=install.
+## Contributor Onboarding
+
+If you would like to contribute to this project, follow these steps to get your local development environment ready-to-go:
+
+1. Follow the common environment setup steps described in <https://gitlab.com/gitlab-com/gl-infra/common-ci-tasks/-/blob/main/docs/developer-setup.md>.
+1. Run the `./scripts/prepare-dev-env.sh` to download and install development dependencies, configure [`pre-commit` hooks](#pre-commit-hooks) etc.
+1. That's it. You should be ready!
 
 ### Dependencies and required tooling
 
 Following tools and libraries are required to develop dashboards locally:
 
-* Go programming langugage
-* Ruby programming language
-* `go-jsonnet` - Jsonnet implementation written in Go
-* `jsonnet-bundler` - package manager for Jsonnet
-* `jq` - command line JSON processor
+- Go programming language
+- Ruby programming language
+- `go-jsonnet` - Jsonnet implementation written in Go
+- `jsonnet-bundler` - package manager for Jsonnet
+- `jq` - command line JSON processor
 
 You can install most of them using `asdf` tool.
 
@@ -494,14 +499,9 @@ Before using `asdf` for the first time, install all the plugins by running:
 ./scripts/install-asdf-plugins.sh
 ```
 
-Once you have installed the plugins, run the following command to install the
-required versions of each tool.
+Running this command will automatically install the versions of each tool, as specified in the `.tool-versions` file.
 
 ```console
-$ asdf install
-go-jsonnet 0.16.0 is already installed
-golang 1.14 is already installed
-ruby 2.6.5 is already installed
 $ # Confirm everything is working with....
 $ asdf current
 go-jsonnet     0.16.0   (set by ~/runbooks/.tool-versions)
@@ -516,13 +516,13 @@ dependencies manually and track their versions.
 
 `asdf` (and `.tool-versions` generally) is the SSOT for tool versions used in this repository.
 To keep `.tool-versions` in sync with `.gitlab-ci.yml`, there is a helper script,
-`./scripts/update-asdf-version-variables`.
+`./scripts/update-asdf-version-variables.sh`.
 
 #### Process for updating a tool version
 
 1. Update the version in `.tool-versions`
 1. Run `asdf install` to install latest version
-1. Run `./scripts/update-asdf-version-variables` to update a refresh of the `.gitlab-ci-asdf-versions.yml` file
+1. Run `./scripts/update-asdf-version-variables.sh` to update a refresh of the `.gitlab-ci-asdf-versions.yml` file
 1. Commit the changes
 
 ### Go, Jsonnet
@@ -535,9 +535,13 @@ go-jsonnet we use in CI. This should be kept in sync with `.tool-versions`, and
 a (non-gating) CI job enforces this.
 
 To install [go-jsonnet](https://github.com/google/go-jsonnet), you have a few
-options.
+options. We recommend using `asdf` and installing via `./scripts/install-asdf-plugins.sh`.
 
-You could follow that project's README to install manually;
+```shell
+./scripts/install-asdf-plugins.sh
+```
+
+Alternatively, you could follow that project's README to install manually. Please ensure that you install the same version as specific in `.tool-versions`.
 
 Or via homebrew:
 
@@ -545,23 +549,20 @@ Or via homebrew:
 brew install go-jsonnet
 ```
 
-Or if you're using `asdf`, you can use [an asdf
-plugin](https://gitlab.com/craigfurman/asdf-go-jsonnet).
-
 ### `jsonnet-tool`
 
 [`jsonnet-tool`](https://gitlab.com/gitlab-com/gl-infra/jsonnet-tool) is a small home-grown tool for
 generating configuration from Jsonnet files. The primary reason we use it is because it is much faster
 than the bash scripts we used to use for the task. Some tasks have gone from 20+ minutes to 2.5 minutes.
 
-We recommend using asdf to manage `jsonnet-tool`. The plugin can be installed with:
+We recommend using asdf to manage `jsonnet-tool`. The plugin will be installed when
 
 ```console
-# Install the plugin once
-asdf plugin add jsonnet-tool https://gitlab.com/gitlab-com/gl-infra/asdf-jsonnet-tool.git
-# Install the correct version of jsonnet-tool from `.tool-versions`
-asdf install
-````
+$ # Install jsonnet-tool
+$ ./scripts/install-asdf-plugins.sh
+$ # Install the correct version of jsonnet-tool from `.tool-versions`
+$ asdf install
+```
 
 ### Ruby
 
@@ -573,6 +574,7 @@ but this setting is no longer required.
 ## Test jsonnet files
 
 There are 2 approaches to write a test for a jsonnet file:
+
 - Use [`jsonnetunit`](https://github.com/yugui/jsonnetunit). This method is
   simple and straight-forward. This approach is perfect for writing unit tests
   that asserts the output of a particular method. The downside is that it
@@ -663,6 +665,40 @@ expect(
 
 *Note*: Verify that you have all the jsonnet dependencies downloaded  before attempting to run the tests, you can
 automatically download the necessary dependencies by running `make jsonnet-bundle`.
+
+## Pre-commit hooks
+
+This project supports a set of [`pre-commit`](https://pre-commit.com/) hooks which can assist catching CI validation errors before early. While they are not required, they are recommended.
+
+After running the `./scripts/prepare-dev-env.sh` script as described in the [Contributor Onboarding](#contributor-onboarding) section, the `pre-commit` hooks will be automatically installed and ready to go.
+
+When running `git commit`, the hooks will check all staged changes, ensuring that they are valid. The `pre-commit` checks may in some cases automatically fix any problems. If they do this, you'll need to stage the changes and try again.
+
+```console
+$ git commit
+check for case conflicts.................................................Passed
+check that executables have shebangs.....................................Passed
+check json...........................................(no files to check)Skipped
+check for merge conflicts................................................Passed
+check that scripts with shebangs are executable..........................Passed
+check for broken symlinks............................(no files to check)Skipped
+check yaml...........................................(no files to check)Skipped
+detect private key.......................................................Passed
+fix end of files.........................................................Failed
+- hook id: end-of-file-fixer
+- exit code: 1
+- files were modified by this hook
+
+Fixing scripts/prepare-dev-env.sh
+
+fix utf-8 byte order marker..............................................Passed
+trim trailing whitespace.................................................Passed
+mixed line ending........................................................Passed
+don't commit to branch...................................................Passed
+jsonnetfmt...........................................(no files to check)Skipped
+shellcheck...............................................................Passed
+shfmt....................................................................Passed
+```
 
 ## Contributing
 

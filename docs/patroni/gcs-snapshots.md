@@ -16,7 +16,7 @@ Prometheus Pushgateway with the current timestamp for observability.
 
 ## Manual GCS Snapshots
 
-Occasionally as part of maintenance activities or during an emergency, we may need to manually snapshot the Patroni cluster. 
+Occasionally as part of maintenance activities or during an emergency, we may need to manually snapshot the Patroni cluster.
 
 The GCS snapshots are a high I/O demanding operation since we are making a copy of the whole disk. It is not recommended to execute in a database receiving traffic, and never on the primary node from a Patroni cluster. To execute this snapshot we suggest to use one of these two options:
 
@@ -30,7 +30,7 @@ The optimal procedure is getting the database in a backed-up state, using the co
 
 Here are the steps to take following the best practices and allowing us to safely conduct a manual snapshot, on a host without production traffic:
 
-- Start a session with a pg_start_backup, that will start the backup mode: 
+- Start a session with a pg_start_backup, that will start the backup mode:
   - Execute the following command in `gitlab-psql`:
     ```sql
     SELECT pg_start_backup('Manual GCS snapshot', TRUE, FALSE);
@@ -40,7 +40,7 @@ Here are the steps to take following the best practices and allowing us to safel
   - gcloud compute disks snapshot ${disk} --description "manual GCS snapshot $(date +%Y-%m-%dT%H:%M:%S%z)" --snapshot-names=${disk}-manual-snapshot --zone=${zone}
   - disk example= `patroni-01-db-gprd-data`
   - zone example= `us-east1-c`
-  
+
 - Stop the backup command, in the same session you started the backup mode:
   - Execute the following command  `gitlab-psql`:
     ```sql

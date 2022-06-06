@@ -47,7 +47,7 @@ of this document.
       This setting lets us use the Yubikey as both a SmartCard and an OTP device
       at the same time.
 
-  * For Yubikey 5 **only** -> ykman. On Linux the pkg name is `yubikey-manager`. 
+  * For Yubikey 5 **only** -> ykman. On Linux the pkg name is `yubikey-manager`.
 
       ```
       sudo apt-get install yubikey-manager
@@ -105,7 +105,7 @@ of this document.
 
 ### 2. Change the default PIN entries
 
-The yubikey comes pre-configured with a set of default PINs that we need to change. By default the user PIN is `123456` and the ADMIN PIN is `12345678`. 
+The yubikey comes pre-configured with a set of default PINs that we need to change. By default the user PIN is `123456` and the ADMIN PIN is `12345678`.
 
 <p>
 <details>
@@ -180,7 +180,7 @@ gpg/card> quit
 
 </details>
 </p>
-    
+
 
 ### 3. Create a secure storage for the Master Key
 
@@ -356,10 +356,10 @@ only the certify capability.
 
     </details>
     </p>
-        
+
 
 1. Place a reminder in your calendar in about 3 years 11 months (if you chose 4y lifetime above; adjust as necessary) to extend the expiry of your master key.
-        
+
 
 ### 5. Create Subkeys
 
@@ -869,7 +869,7 @@ The solution is to "kick" gpg-agent into checking for a SmartCard by running
 
 If you run gpg --card-status with the YubiKey plugged in and GPG does not detect the YubiKey, try the steps below:
 
-* Specify the smart card reader GPG uses by adding the line `reader-port Yubico Yubi` to the scdaemon.conf file; create the file if it does not exist. After making this change, reboot your computer to ensure it takes affect. 
+* Specify the smart card reader GPG uses by adding the line `reader-port Yubico Yubi` to the scdaemon.conf file; create the file if it does not exist. After making this change, reboot your computer to ensure it takes affect.
   * On macOS and Linux it is at: ~/.gnupg/scdaemon.conf
   * On macOS or Linux, you may need to add "reader-port Yubico Yubikey" (with a lowercase K) instead of what is above if you are using a YubiKey 4 Series or NEO
 

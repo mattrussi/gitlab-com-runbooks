@@ -71,7 +71,7 @@ Below is a list of Grafana dashboards and the most relevant metrics within:
 - [registry: Database Detail](https://dashboards.gitlab.net/d/registry-database/registry-database-detail):
    - RPS, latency and error rate for queries (each identified by a unique name);
    - Overall, table bloat and index bloat size;
-   - Application-side connection pool metrics. 
+   - Application-side connection pool metrics.
 
 ### Logs
 
@@ -110,7 +110,7 @@ Use [this view](https://log.gprd.gitlab.net/goto/224257f0-b668-11ec-afaf-2bca15d
   ```
 
 - Identify migration status of a given repository:
-  
+
   ```rb
   repo = ContainerRepository.find_by_path(ContainerRegistry::Path.new('path/to/repo'))
   repo.migration_state
@@ -153,7 +153,7 @@ Rails will no longer refuse to serve JWT tokens for the corresponding repository
 ### Stuck Deduplication
 
 The `ContainerRegistry::Migration::EnqueuerWorker`
- background worker is responsible for starting all imports. This worker uses a deduplication strategy of [`until_executing`](https://docs.gitlab.com/ee/development/sidekiq/idempotent_jobs.html#until-executing). 
+ background worker is responsible for starting all imports. This worker uses a deduplication strategy of [`until_executing`](https://docs.gitlab.com/ee/development/sidekiq/idempotent_jobs.html#until-executing).
 
 The deduplication works using redis keys for locking. It is possible for the key to be set, and then something to happen causing the key to remain while no `EnqueuerWorker` jobs are running. This means anytime an `EnqueuerWorker` is queued, it will be deduplicated because the deduplication key already exists. The key will not expire for [30 minutes](https://gitlab.com/gitlab-org/gitlab/-/blob/b506aab65c3f5acbd6482fdaf8957a40da2ace21/app/workers/container_registry/migration/enqueuer_worker.rb#L16), meaning no imports will be able to run during that time.
 

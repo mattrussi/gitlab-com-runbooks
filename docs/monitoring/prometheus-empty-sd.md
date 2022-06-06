@@ -8,7 +8,7 @@ Prometheus has one or more jobs with empty target lists.
 
 Check to see if there are problems with the service discovery method.
 
-For `file_sd_configs`, check to see if there is a problem with Chef generating the target file. 
+For `file_sd_configs`, check to see if there is a problem with Chef generating the target file.
 
 There may also be jobs that are obsolete and need to be removed.
 

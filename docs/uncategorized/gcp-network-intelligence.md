@@ -13,4 +13,3 @@ The two key things it shows are Packet loss and Latency.  This is an excellent p
 https://console.cloud.google.com/net-intelligence/topology?project=gitlab-production
 
 Pointy-clicky map of the GCP networks, including load balancers, peers, etc. Clicking on an item annotates the links to the other itesm with their current bandwidth, with graphs for total bandwidth to/from.  Items initially visible include External LBs, Internal LBs, Peer Networks, and Regions.  A search box for node can open up the Region to show the node and break down traffic to/from that node to other server groups and drill down to other nodes.  It can be a little slow, but the data is there.
-

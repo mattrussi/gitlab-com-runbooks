@@ -70,7 +70,7 @@ For gitlab.com - SREs have access to the `incoming@gitlab.com` mailbox, which ca
 
 You can look up what happened to a specific e-mail by matching its SMTP `Message-Id` header to the `json.mail_uid` field.
 
-In Kibana, find the logs via search: `json.mail_uid: <Message-Id>` and either `json.class: EmailReceiverWorker` or `json.class: ServiceDeskEmailReceiverWorker` (Service Desk emails may be serviced by either worker class, so it's ideal to check both) 
+In Kibana, find the logs via search: `json.mail_uid: <Message-Id>` and either `json.class: EmailReceiverWorker` or `json.class: ServiceDeskEmailReceiverWorker` (Service Desk emails may be serviced by either worker class, so it's ideal to check both)
 [Here's an example](https://gitlab.com/gitlab-org/gitlab/-/issues/362030#note_942296374).
 
 The headers we log are in [`lib/gitlab/email/receiver.rb`](https://gitlab.com/gitlab-org/gitlab/-/blob/98b8898604f3bc8d43ec079d51814d7ecadd3419/lib/gitlab/email/receiver.rb#L32-49).
@@ -91,7 +91,7 @@ A full list of the headers we accept can be found the [incoming email](https://d
 Emails go through the following to get to Service Desk:
 
 - [Mailroom](https://gitlab.com/gitlab-org/gitlab-mail_room)
-  - See [mail-room runbooks](../mailroom/README.md) for detailed debugging 
+  - See [mail-room runbooks](../mailroom/README.md) for detailed debugging
   - Mailroom is a separate process outside of Rails. It ingests emails and determines whether to send them to different processes (e.g. Sidekiq queue, API, etc)
       - Reply to a note
       - Service Desk
@@ -108,7 +108,7 @@ Emails go through the following to get to Service Desk:
             - `json.class: EmailReceiverWorker`
             - `json.delivered_to: exists`
         - Code path:
-            - [`app/workers/service_desk_email_receiver_worker.rb`](https://gitlab.com/gitlab-org/gitlab/blob/master/app/workers/service_desk_email_receiver_worker.rb) OR [`app/workers/email_receiver_worker.rb`](https://gitlab.com/gitlab-org/gitlab/blob/master/app/workers/email_receiver_worker.rb) 
+            - [`app/workers/service_desk_email_receiver_worker.rb`](https://gitlab.com/gitlab-org/gitlab/blob/master/app/workers/service_desk_email_receiver_worker.rb) OR [`app/workers/email_receiver_worker.rb`](https://gitlab.com/gitlab-org/gitlab/blob/master/app/workers/email_receiver_worker.rb)
             - [`lib/gitlab/email/service_desk_receiver.rb`](https://gitlab.com/gitlab-org/gitlab/blob/master/lib/gitlab/email/service_desk_receiver.rb)
     - If an API call-initiated job, we make a postback POST request to our internal API, which enqueues the job via Sidekiq:
         - In Kibana, make the following query to `pubsub-rails-inf-gprd`:

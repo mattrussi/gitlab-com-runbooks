@@ -1,6 +1,6 @@
-# Postgresql minor upgrade 
+# Postgresql minor upgrade
 
-This runbook describes all the steps to execute a Postgresql minor upgrade. 
+This runbook describes all the steps to execute a Postgresql minor upgrade.
 
 **Important!** Please read the release notes before getting started (for all minor versions after the current version of postgresql) - https://www.postgresql.org/docs/12/release.html
 
@@ -25,7 +25,7 @@ Add the `no-failover` and `no-loadbalance` tags in Patroni ( in the config file 
 * Reload patroni: `sudo systemctl reload patroni`
 
 ### Pre checks:
-Wait until the traffic is drained. 
+Wait until the traffic is drained.
 
 * Verify the connection status with the commad on pg_stat_activity:
 `select count(*) from pg_stat_activity where backend_type = 'client backend' and state <> 'idle';`
@@ -56,7 +56,7 @@ Update extensions, on the primary database node:
 ```shell
 `sudo gitlab-psql`
 ```sql
--- Get a list of installed and available versions of extensions in the current database: 
+-- Get a list of installed and available versions of extensions in the current database:
 select ae.name, installed_version, default_version,
 case when installed_version <> default_version then 'OLD' end as is_old
 from pg_extension e

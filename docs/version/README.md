@@ -19,7 +19,7 @@
 * [../ci-runners/ci_pending_builds.md](../ci-runners/ci_pending_builds.md)
 * [Cloudflare: Managing Traffic](../cloudflare/managing-traffic.md)
 * [Service Locations](../cloudflare/services-locations.md)
-* [Chef Guidlines](../config_management/chef-guidelines.md)
+* [Chef Guidelines](../config_management/chef-guidelines.md)
 * [Chef Vault Basics](../config_management/chef-vault.md)
 * [Chef Tips and Tools](../config_management/chef-workflow.md)
 * [Chefspec](../config_management/chefspec.md)

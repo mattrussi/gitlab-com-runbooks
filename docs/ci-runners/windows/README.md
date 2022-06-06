@@ -64,7 +64,7 @@ in reading Ryan Palo's [PowerShell Tutorial](https://simpleprogrammer.com/powers
 as it is written with those who hate PowerShell in mind and helps relate it to
 more familiar `bash` commands.
 
-1. `Get-Content` is a tool similar to `head`, `tail`, and `cat` on Linux. 
+1. `Get-Content` is a tool similar to `head`, `tail`, and `cat` on Linux.
    1. Ex. `Get-Content -Path .\logfile.log -TotalCount 5` will get the first 5 lines of a file.
    2. Ex. `Get-Content -Path .\logfile.log -Tail 5 -Wait` will get the last 5 lines of a file AND follow it for any changes.
    3. [`Get-Content` documentation](https://docs.microsoft.com/en-us/powershell/module/microsoft.powershell.management/get-content?view=powershell-7)

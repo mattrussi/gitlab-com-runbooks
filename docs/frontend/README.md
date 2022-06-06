@@ -15,7 +15,7 @@
 
 ## Troubleshooting Pointers
 
-* [Chef Guidlines](../config_management/chef-guidelines.md)
+* [Chef Guidelines](../config_management/chef-guidelines.md)
 * [Disk space alerts (production)](../customersdot/disk-space.md)
 * [Frontend (HAProxy) Logging](haproxy-logging.md)
 * [HAProxy management at GitLab](haproxy.md)

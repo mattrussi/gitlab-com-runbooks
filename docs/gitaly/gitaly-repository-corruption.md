@@ -9,7 +9,7 @@ Objects are fine (with errors being detectable that is) as they are hashed, and 
 
 ## Detecting corruption
 
-When viewing a project's main site returns 5xx errors, it might have been a victim of corruption. To confirm, double check with [this dashboard](https://log.gprd.gitlab.net/goto/5d10a91b65b89df295d089f1bd5f8a52) (internal). If it appears there, it has at least parts of it's refs corrupted.  
+When viewing a project's main site returns 5xx errors, it might have been a victim of corruption. To confirm, double check with [this dashboard](https://log.gprd.gitlab.net/goto/5d10a91b65b89df295d089f1bd5f8a52) (internal). If it appears there, it has at least parts of it's refs corrupted.
 Any curruption will only surface here if there is traffic on that project. It might get picked up during housekeeping, but then additional damage is done.
 
 ## Before you start
@@ -49,7 +49,7 @@ Not all of those errors must appear, but this is what you may expect. Anything c
 
 Luckily, we have some redundancy in state, so we can manually piece together the state the project should have been in (for the most part).
 
-The portion on figuring out which hash should be restored follows below, but first how to restore a ref once you know the commit. 
+The portion on figuring out which hash should be restored follows below, but first how to restore a ref once you know the commit.
 
 To restore a ref you should first use `git update-ref`.
 ```bash
@@ -97,7 +97,7 @@ Alternatively, if you saw dangling commits during `git fsck` it is very likely, 
 
 #### Finding root commits with broken refs
 
-**Regardless which approach you take** you might end up with multiple root commits (if there was an orphaned branch created for example). In those cases, you can use `git log <hash>` to see if there are any indicators for the commit belonging to another ref, that was not destroyed. 
+**Regardless which approach you take** you might end up with multiple root commits (if there was an orphaned branch created for example). In those cases, you can use `git log <hash>` to see if there are any indicators for the commit belonging to another ref, that was not destroyed.
 Once you restored the primary branch with the root commit, things will start working again, but you **must** to make an effort to find the latest commit for that branch, once context is available.
 
 ###### Approach 1
@@ -137,7 +137,7 @@ find objects/ -type f | tr -d '/' | sed 's/objects//g' | xargs -rn1 git rev-list
 
 ### `refs/keep-around/*`
 
-These refs are the easiest to repair, as they contain what they should point to right in their name.  
+These refs are the easiest to repair, as they contain what they should point to right in their name.
 For example, `refs/keep-around/0123456789abcdef0123456789abcdef01234567` should point to `0123456789abcdef0123456789abcdef01234567`.
 
 ### `refs/merge-requests/*/merge`
@@ -150,7 +150,7 @@ These refs are bound to tags. You probably want to use the project's tag list (v
 
 ### `refs/pipelines/123456789`
 
-These refs are bound to a pipeline. Look up the CI pipeline ID from the ref (`refs/pipelines/123456789` would be pipeline ID `123456789`). Then click any job, and on the right-hand side you will see the commit it is targeting.  
+These refs are bound to a pipeline. Look up the CI pipeline ID from the ref (`refs/pipelines/123456789` would be pipeline ID `123456789`). Then click any job, and on the right-hand side you will see the commit it is targeting.
 
 ## Oh no! There are missing commits after a garbage collection!
 
@@ -167,5 +167,5 @@ Once those are identified:
 - merge the contents of both `objects` directories into the `objects` directory you want to restore. Do **not** overwrite files. If they are there, they are probably fine.
 
 ###### What did we just do?
-We supplied git with any object it had before. While this is inefficient, as the `.pack` files in the more recent repo have most of the objects packed into them, this also provides a fallback for git to retrieve the objects, that were previously lost.  
+We supplied git with any object it had before. While this is inefficient, as the `.pack` files in the more recent repo have most of the objects packed into them, this also provides a fallback for git to retrieve the objects, that were previously lost.
 This is fine, as a garbage collection run later on will just clean up anything that it does not need anymore.

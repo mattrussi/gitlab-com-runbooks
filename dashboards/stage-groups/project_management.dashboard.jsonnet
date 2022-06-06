@@ -80,7 +80,7 @@ local banzaiAvgRenderingDuration() =
     }, {
       query: |||
         histogram_quantile(
-          0.95, 
+          0.95,
           sum(
             rate(gitlab_banzai_cacheless_render_real_duration_seconds_bucket[1m])
           ) by (le)
@@ -90,7 +90,7 @@ local banzaiAvgRenderingDuration() =
     }, {
       query: |||
         histogram_quantile(
-          0.99, 
+          0.99,
           sum(
             rate(gitlab_banzai_cacheless_render_real_duration_seconds_bucket[1m])
           ) by (le)

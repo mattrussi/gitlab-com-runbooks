@@ -1,6 +1,6 @@
 # Getting help with GCP support and Rackspace
 
-** Engineer(s) oncall - you now go to Google first in the GCP console for support tickets ** 
+** Engineer(s) oncall - you now go to Google first in the GCP console for support tickets **
 
 1. File support cases for GCP issues with the [Google Support case system](https://console.cloud.google.com/support/cases?organizationId=769164969568&supportedpurview=project). See the [readme in the vendor tracker](https://gitlab.com/gitlab-com/gl-infra/google-gitlab-tracker) for more details and additional escalation paths.
 1. We use Rackspace for billing of GCP.  Questions for billing can be opened in the Rackspace portal.
@@ -10,11 +10,11 @@
 Google:
 * There is also a dedicated slack channel to inquire about any issues which GCP may be seeing and for seeking assistance: [#ext-google-cloud](https://gitlab.slack.com/archives/C01KPV0V3SM)
 
-Rackspace: 
+Rackspace:
 * Link to Portal https://mycloud.rackspace.com
 * SRE managers and Infra Analysts have acces to the rackspace portal
 
-## GitLab issues Trackers 
+## GitLab issues Trackers
 
 **Google Vendor Tracker**:https://gitlab.com/gitlab-com/gl-infra/google-gitlab-tracker
 

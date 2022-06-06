@@ -19,7 +19,7 @@
 * [../ci-runners/service-ci-runners.md](../ci-runners/service-ci-runners.md)
 * [Cloudflare Logs](../cloudflare/logging.md)
 * [CloudFlare Troubleshooting](../cloudflare/troubleshooting.md)
-* [Chef Guidlines](../config_management/chef-guidelines.md)
+* [Chef Guidelines](../config_management/chef-guidelines.md)
 * [Chef troubleshooting](../config_management/chef-troubleshooting.md)
 * [Chef Tips and Tools](../config_management/chef-workflow.md)
 * [../elastic/elasticsearch-integration-in-gitlab.md](../elastic/elasticsearch-integration-in-gitlab.md)

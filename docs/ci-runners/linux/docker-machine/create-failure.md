@@ -57,4 +57,3 @@ see what flags are defined.
     ```shell
     sudo /root/runner_upgrade.sh
     ```
-

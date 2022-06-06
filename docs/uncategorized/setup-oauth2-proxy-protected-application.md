@@ -132,4 +132,3 @@ $ knife ssh -C1 -aipaddress 'roles:general_role_here' -- sudo chef-client
 
 This command will update chef managed configuration on all nodes connected to `general_role_here` role, in one-by-one
 mode.
-

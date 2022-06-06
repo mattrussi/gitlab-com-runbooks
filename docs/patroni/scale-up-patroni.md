@@ -1,4 +1,4 @@
-# Patroni 
+# Patroni
 
 ## Scale Up
 
@@ -6,17 +6,17 @@
 
 If you are reading this runbook you are most likely tasked to scale up our Patroni cluster by certain number of nodes. Use this runbook as a guidance on how to safely scale up a Patroni cluster.
 
-### Pre-requisite 
+### Pre-requisite
 
 - Patroni
-    This runbook assumes that you know what Patroni is, what and how we use it for and possible consequences that might come up if we do not approach this operation carefully. This is not to scare you away, but in the worst case: Patroni going down means we will lose our ability to preserve HA (High Availability) on Postgres. Postgres not being HA means if there is an issue with the primary node Postgres wouldn't be able to do a failover and GitLab would shut down to the world. Thus, this runbook assumes you know this ahead of time before you execute this runbook. 
+    This runbook assumes that you know what Patroni is, what and how we use it for and possible consequences that might come up if we do not approach this operation carefully. This is not to scare you away, but in the worst case: Patroni going down means we will lose our ability to preserve HA (High Availability) on Postgres. Postgres not being HA means if there is an issue with the primary node Postgres wouldn't be able to do a failover and GitLab would shut down to the world. Thus, this runbook assumes you know this ahead of time before you execute this runbook.
 
 - Terraform
-    You are expected to know what Terraform is, how we use it and how we make change safely (`tf plan` first).  
+    You are expected to know what Terraform is, how we use it and how we make change safely (`tf plan` first).
 
 ### Scope
 
-This runbook is intended only for one or more `read` replica node(s) of Patroni cluster. 
+This runbook is intended only for one or more `read` replica node(s) of Patroni cluster.
 
 ### Mental Model
 
@@ -27,7 +27,7 @@ A good mental model to have for this exercise is that we have a Patroni cluster 
 ### Preparation
 
 - You should do this activity in a CR (thus, allowing you to practice all of it in staging first)
-- After you have executed Step 3, you should silence alerts around replication lag for the new nodes. 
+- After you have executed Step 3, you should silence alerts around replication lag for the new nodes.
 
 ### Step 1
 
@@ -57,4 +57,4 @@ Some steps of: https://ops.gitlab.net/gitlab-com/gl-infra/db-ops/-/blob/master/a
 
 ## Reference
 
-Majority of this runbook was written based on the content we have in: [patroni-management](https://gitlab.com/gitlab-com/runbooks/-/blob/master/docs/patroni/patroni-management.md#scaling-the-cluster-up) and with some updates. But since we are going through a sprint of creating separate runbook for each activity, it makes sense to separate out the individual type of work into its own runbook. 
+Majority of this runbook was written based on the content we have in: [patroni-management](https://gitlab.com/gitlab-com/runbooks/-/blob/master/docs/patroni/patroni-management.md#scaling-the-cluster-up) and with some updates. But since we are going through a sprint of creating separate runbook for each activity, it makes sense to separate out the individual type of work into its own runbook.

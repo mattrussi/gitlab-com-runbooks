@@ -12,8 +12,8 @@ PostgreSQL implements several kinds and layers of locks, and even SELECT stateme
 Below is a comparison of the most commonly used SQL commands that can run concurrently with each other on the same table:
 
 | Runs concurrently with | SELECT | INSERT UPDATE DELETE    | CREATE INDEX (CONC) VACUUM ANALYZE	| CREATE INDEX	| CREATE TRIGGER | ALTER TABLE DROP TABLE TRUNCATE VACUUM (FULL)|
-| --- | --- | --- | --- | --- | --- | --- | 
-|SELECT| :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: | :x:| 
+| --- | --- | --- | --- | --- | --- | --- |
+|SELECT| :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: | :x:|
 | INSERT UPDATE DELETE | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: | :x: | :x: | :x:|
 | CREATE INDEX (CONC) VACUUM ANALYZE | :heavy_check_mark: | :heavy_check_mark: | :x: | :x: | :x: | :x: |
 |CREATE INDEX | :heavy_check_mark: | :x: | :x: | :heavy_check_mark: | :x: | :x: |
@@ -124,7 +124,7 @@ order by (now() - r.xact_start), path
 
 This will show a complete _tree_ of blocking and blocked queries:
 ```
- transaction_age | change_age | datname  | usename  | client_addr |  pid  | wait_event_type | wait_event | blocked_by_pids | state  | lvl | blocking_others |        latest_query_in_tx        
+ transaction_age | change_age | datname  | usename  | client_addr |  pid  | wait_event_type | wait_event | blocked_by_pids | state  | lvl | blocking_others |        latest_query_in_tx
 -----------------+------------+----------+----------+-------------+-------+-----------------+------------+-----------------+--------+-----+-----------------+----------------------------------
  00:10:25        | 00:10:18   | locktest | postgres | 127.0.0.1   | 20252 | Client          | ClientRead | {}              | idletx |   0 |               1 |  lock TABLE mytable ;
  00:09:14        | 00:09:14   | locktest | postgres | 127.0.0.1   | 20594 | Lock            | relation   | {20252}         | active |   1 |               0 |  . select count(*) from mytable;
@@ -144,7 +144,7 @@ In practice, you will probably add a `\watch 2` in _gitlab-psql_ session, for au
 
 ## How to cancel (or terminate) a blocking query
 
-If you decided to cancel the blocking query, you only need to take that from the `pid` column and execute a 
+If you decided to cancel the blocking query, you only need to take that from the `pid` column and execute a
 ```sql
 select pg_cancel_backend(<pid>);
 ```

@@ -205,4 +205,3 @@ Now that the original superuser role is not being used by the patroni cluster or
 ### TODO
 
 1. [ ] Delete the temporary superuser role which is no longer being used by any patroni node or database operation.
-

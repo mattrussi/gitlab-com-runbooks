@@ -29,4 +29,3 @@
 * Issue had two major components. HAProxy was thottling all traffic, particularly outbound git traffic. This
   led to longer clone times and a surge in the number of active concurrent sessions.
 * The Gitaly rate-limiter then kicked in and was causing major tailbacks.
-

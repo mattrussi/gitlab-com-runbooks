@@ -16,7 +16,7 @@ In general, we will follow the same overall process for any artifact we sign. Al
 
 #### Public keys
 
-The GPG signature(s) can be verified using the collector's public key, which is associated with their GitLab profile and is available at https://gitlab.com/USERNAME.gpg. To validate the GPG signature on any artifacts provided, the collector's public key will need to be imported into the local keyring on a system with GPG installed. 
+The GPG signature(s) can be verified using the collector's public key, which is associated with their GitLab profile and is available at https://gitlab.com/USERNAME.gpg. To validate the GPG signature on any artifacts provided, the collector's public key will need to be imported into the local keyring on a system with GPG installed.
 
 ```bash
 # Download and import the engineer's public key(s) from gitlab.com
@@ -113,7 +113,7 @@ craig@fredjones compliance-3173 %
 The project IAM policy does not enumerate the group memberships to provide a list of all users with access to the project. For this we follow a similar pattern, but we extract all groups from the policy, and list the members for each.
 
 1. `gcloud beta identity groups memberships list --group-email="gcp-ops-sg@gitlab.com" |grep id|sed 's/id://g'`
-2. `gcloud beta identity groups memberships list --group-email="gcp-owners-sg@gitlab.com" |grep id|sed 's/id://g'` 
+2. `gcloud beta identity groups memberships list --group-email="gcp-owners-sg@gitlab.com" |grep id|sed 's/id://g'`
 
 ### Production Server list (Server lists for bastions, production servers, database servers)
 

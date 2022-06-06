@@ -97,7 +97,7 @@ we can take any combination of the following actions.
 
 #### Kill `git pack-objects` processes
 
-**WARNING:** Ideally we only want to kill `git pack-objects` processes that were spawned by `git upload-pack`.  Try to avoid killing the ones spawned by `git repack`. 
+**WARNING:** Ideally we only want to kill `git pack-objects` processes that were spawned by `git upload-pack`.  Try to avoid killing the ones spawned by `git repack`.
 
 To instantly reduce CPU and memory pressure, kill some or all of the `git pack-objects` processes associated with that git repo.
 Often this is enough to resolve the immediate problem, and its effect is mild: the active git clients fail their clone/fetch attempt.
@@ -283,5 +283,3 @@ by the `git pack-objects` processes.
 [Dashboard link](https://dashboards.gitlab.net/d/bd2Kl9Imk/host-stats?orgId=1&var-env=gprd&var-node=file-31-stor-gprd.c.gitlab-production.internal&var-promethus=prometheus-01-inf-gprd&from=1599013800000&to=1599019200000)
 
 ![dashboard-host-stats-cpu-and-memory](img/dashboard-host-stats-cpu-and-memory.png)
-
-

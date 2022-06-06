@@ -1,13 +1,13 @@
 {
-   "index_patterns": [
-      "events-gstg-*"
-   ],
-   "settings": {
-      "index": {
-         "lifecycle": {
-            "name": "gitlab-events-ilm-policy"
-         }
-      },
-      "number_of_shards": 1
-   }
+  "index_patterns": [
+    "events-gstg-*"
+  ],
+  "settings": {
+    "index": {
+        "lifecycle": {
+          "name": "gitlab-events-ilm-policy"
+        }
+    },
+    "number_of_shards": 1
+  }
 }

@@ -46,7 +46,7 @@ Our PostgreSQL exporter, exports metrics to Thanos from pg_stat_statements, whic
 
 Having these metrics in a timeline we execute a search for what is being executed in a range of 15 minutes by some criteria:
 
-#### total time: 
+#### total time:
 
 we filter for the 10 statements that consumed more time during the peak time.
 
@@ -54,7 +54,7 @@ The PROMQL query is :
 
 
 ```
-topk(10, 
+topk(10,
   sum by (queryid) (
     rate(pg_stat_statements_seconds_total{env="gprd", monitor="db", type="patroni",instance="patroni-v12-02-db-gprd.c.gitlab-production.internal:9187"}[1m])
   )
@@ -78,13 +78,13 @@ QueryId: 8726813440039762943  ( at this moment you can scroll the mouse over the
 
 Now we want to find the query ids from the top 10 statements of this query:
 
-Click on the button: 
+Click on the button:
 
 
 we need to adapt our query to:
 
 ```
-topk(10, 
+topk(10,
   sum by (queryid) (
     rate(pg_stat_statements_seconds_total{env="gprd", monitor="db", type="patroni",instance="patroni-v12-02-db-gprd.c.gitlab-production.internal:9187"}[15m])
   )
@@ -128,31 +128,31 @@ The next step is to find what SQL statement is each one of these queryIds. To ga
 
 
 ```
-SELECT 
-	queryid, 
+SELECT
+	queryid,
 	query
-FROM 
-	pg_stat_statements 
+FROM
+	pg_stat_statements
 WHERE queryid IN ('8726813440039762943','-6812972096491682787', '-2309322950358119582', '2641605326964226569', '3600603111656588484', '-7827483573918570705', '-2106760600543814756', '-6000510059798491917', '-8911006510108689902', '5637456866954582000') ;
 ```
 
 Or if you want a specific query you can execute the follow SQL command:
 
 ```
-SELECT 
-	queryid, 
+SELECT
+	queryid,
 	query
-FROM 
-	pg_stat_statements 
+FROM
+	pg_stat_statements
 WHERE queryid ='8726813440039762943';
 ```
 
 Those query ids are the following SQL statements:
- 
+
 | QueryId | Query |
 |---------|-------|
 | 8726813440039762943 |/*application:sidekiq,correlation_id:01F7HWR7B46Q5S8QGP8MTZ7BG5,jid:ce7921e9ee2a1c66e3072cb9,endpoint_id:AuthorizedProjectsWorker*/ WITH RECURSIVE "namespaces_cte" AS ((SELECT "namespaces"."id", "members"."access_level" FROM "namespaces" INNER JOIN "members" ON "namespaces"."id" = "members"."source_id" WHERE "members"."type" = $1 AND "members"."source_type" = $2 AND "namespaces"."type" = $3 AND "members"."user_id" = $4 AND "members"."requested_at" IS NULL AND (access_level >= $5)) UNION (SELECT "namespaces"."id", LEAST("members"."access_level", "group_group_links"."group_access") AS access_level FROM "namespaces" INNER JOIN "group_group_links" ON "group_group_links"."shared_group_id" = "namespaces"."id" INNER JOIN "members" ON "group_group_links"."shared_with_group_id" = "members"."source_id" AND "members"."source_type" = $6 AND "members"."requested_at" IS NULL AND "members"."user_id" = $7 AND "members"."access_level" > $8 WHERE "namespaces"."type" = $9) UNION (SELECT "namespaces"."id", GREATEST("members"."access_level", "namespaces_cte"."access_level") AS access_level FROM "namespaces" INNER JOIN "namespaces_cte" ON "namespaces_cte"."id" = "namespaces"."parent_id" LEFT OUTER JOIN "members" ON "members"."source_id" = "namespaces"."id" AND "members"."source_type" = $10 AND "members"."requested_at" IS NULL AND "members"."user_id" = $11 AND "members"."access_level" > $12 WHERE "namespaces"."type" = $13)) SELECT "project_authorizations"."project_id", MAX(access_level) AS access_level FROM ((SELECT projects.id AS project_id, members.access_level FROM "projects" INNER JOIN "members" ON "projects"."id" = "members"."source_id" WHERE "members"."type" = $14 AND "members"."source_type" = $15 AND "members"."user_id" = $16 AND "members"."requested_at" IS NULL) UNION (SELECT projects.id AS project_id, $17 AS access_level FROM "projects" INNER JOIN "namespaces" ON "projects"."namespace_id" = "namespaces"."id" WHERE "namespaces"."owner_id" = $18 AND "namespaces"."type" IS NULL) UNION (SELECT "projects"."id" AS project_id, "namespaces"."access_level" FROM "namespaces_cte" "namespaces" INNER JOIN "projects" ON "projects"."namespace_id" = "namespaces"."id") UNION (SELECT "project_group_links"."project_id", LEAST("namespaces"."access_level", "project_group_links"."group_access") AS access_level FROM "namespaces_cte" "namespaces" INNER JOIN project_group_links ON project_group_links.group_id = namespaces.id INNER JOIN projects ON projects.id = project_group_links.project_id INNER JOIN namespaces p_ns ON p_ns.id = projects.namespace_id WHERE (p_ns.share_with_group_lock IS FALSE))) project_authorizations GROUP BY "project_authorizations"."project_id" |
-|-8911006510108689902 | /*application:sidekiq,correlation_id:01F7HWR7B46Q5S8QGP8MTZ7BG5,jid:e28658e88753abf0df5f6ccf,endpoint_id:AuthorizedProjectsWorker*/ SELECT "project_authorizations"."project_id", "project_authorizations"."access_level" FROM "project_authorizations" WHERE "project_authorizations"."user_id" = $1 |  
+|-8911006510108689902 | /*application:sidekiq,correlation_id:01F7HWR7B46Q5S8QGP8MTZ7BG5,jid:e28658e88753abf0df5f6ccf,endpoint_id:AuthorizedProjectsWorker*/ SELECT "project_authorizations"."project_id", "project_authorizations"."access_level" FROM "project_authorizations" WHERE "project_authorizations"."user_id" = $1 |
 | -2309322950358119582|/*application:sidekiq,correlation_id:01F5674N38JY1BXZN23B6X33B8,jid:f25a38c1fe96c9d7b38fc400,endpoint_id:PostReceive*/ SELECT "ci_pipelines".* FROM "ci_pipelines" WHERE "ci_pipelines"."project_id" = $1 AND ("ci_pipelines"."source" IN ($2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12) OR "ci_pipelines"."source" IS NULL) AND "ci_pipelines"."ref" = $13 AND "ci_pipelines"."id" NOT IN (WITH RECURSIVE "base_and_descendants" AS ((SELECT "ci_pipelines".* FROM "ci_pipelines" WHERE "ci_pipelines"."id" = $14) UNION (SELECT "ci_pipelines".* FROM "ci_pipelines", "base_and_descendants", "ci_sources_pipelines" WHERE "ci_sources_pipelines"."pipeline_id" = "ci_pipelines"."id" AND "ci_sources_pipelines"."source_pipeline_id" = "base_and_descendants"."id" AND "ci_sources_pipelines"."source_project_id" = "ci_sources_pipelines"."project_id")) SELECT "id" FROM "base_and_descendants" AS "ci_pipelines") AND "ci_pipelines"."sha" != $15 AND ("ci_pipelines"."status" IN ($16,$17,$18,$19,$20,$21)) AND (NOT EXISTS (SELECT "ci_builds".* FROM "ci_builds" INNER JOIN "ci_builds_metadata" ON "ci_builds_metadata"."build_id" = "ci_builds"."id" WHERE "ci_builds"."type" = $22 AND (ci_builds.commit_id = ci_pipelines.id) AND ("ci_builds"."status" IN ($23,$24,$25)) AND "ci_builds_metadata"."id" NOT IN (SELECT "ci_builds_metadata"."id" FROM "ci_builds_metadata" WHERE (ci_builds_metadata.build_id = ci_builds.id) AND "ci_builds_metadata"."interruptible" = $26))) ORDER BY "ci_pipelines"."id" ASC LIMIT $27 |
 | -6812972096491682787|/*application:web,correlation_id:01F55SGG3SY4NKQ02TTWXGA29Q,endpoint_id:GET /api/:version/projects/:id/users*/ SELECT "users".* FROM "users" INNER JOIN "project_authorizations" ON "users"."id" = "project_authorizations"."user_id" WHERE "project_authorizations"."project_id" = $1 |
 | -7805178175512984379 | /*application:sidekiq,correlation_id:01F7J00Y4PX1JP1JPPTB87MMNG,jid:a256f85c7e488bf99360eb8f,endpoint_id:Deployments::DropOlderDeploymentsWorker*/ SELECT "deployments".* FROM "deployments" INNER JOIN ci_builds ON ci_builds.id = deployments.deployable_id WHERE "deployments"."environment_id" = $1 AND "deployments"."status" IN ($2, $3) AND (deployments.id < $4) ORDER BY "deployments"."id" ASC LIMIT $5 |
@@ -179,7 +179,7 @@ in the field query we have a SQL comment called marginalia: /*application:sideki
  We follow the same process as for the total time, just considering a different PROMQL query:
 
  ```
- topk(10, 
+ topk(10,
   sum by (queryid) (
     rate(pg_stat_statements_calls_total{env="gprd", monitor="db", type="patroni",instance="patroni-v12-02-db-gprd.c.gitlab-production.internal:9187"}[1m])
   )
@@ -191,16 +191,16 @@ in the field query we have a SQL comment called marginalia: /*application:sideki
 
  ### Slow log analysis
 
-All the queries that take more than 1 second to resolve are logged by PostgreSQL. The logs are available in ELK. 
+All the queries that take more than 1 second to resolve are logged by PostgreSQL. The logs are available in ELK.
 
 We can execute queries on Kibana to verify what statements took more time to resolve in the logs too. This verification can be an instrumental analysis to understand the root cause of the peak.
 
-We have the following video from Andrew on how to create the visualization of the top queries and the consumed time, step by step: 
+We have the following video from Andrew on how to create the visualization of the top queries and the consumed time, step by step:
 https://www.loom.com/share/cfd5878b1e894e019ccde7768149ca17
 
 When we are in discovery mode, look for the info of the endpoint and the SQL statement. Consider that the peak info here can have a slight delay since it is after the statement's conclusion when we have the information in the logs.
 
-Please look at the following visualization based on fingerprints from the queries:  
+Please look at the following visualization based on fingerprints from the queries:
 
 https://log.gprd.gitlab.net/goto/8f45712823ee99eceebf4fb2a6e87671
 

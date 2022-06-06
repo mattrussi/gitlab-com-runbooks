@@ -25,7 +25,7 @@
 * [Cloudflare for the on-call](../cloudflare/oncall.md)
 * [Service Locations](../cloudflare/services-locations.md)
 * [CloudFlare Troubleshooting](../cloudflare/troubleshooting.md)
-* [Chef Guidlines](../config_management/chef-guidelines.md)
+* [Chef Guidelines](../config_management/chef-guidelines.md)
 * [Chef Tips and Tools](../config_management/chef-workflow.md)
 * [Interacting with Consul](../consul/interaction.md)
 * [../elastic/elastic-cloud.md](../elastic/elastic-cloud.md)

@@ -25,7 +25,7 @@ stageGroupDashboards.dashboard('pipeline_execution')
         `chunks_invalid_size`) means by looking at the definition of these metrics in
         [gitlab/trace/metrics.rb][metrics-definition] file.
 
-        The key metrics for build logs here are `chunks_invalid_size` and 
+        The key metrics for build logs here are `chunks_invalid_size` and
         `archive_invalid_checksum`. These should be 0, anything more than zero
         indicates problems.
 

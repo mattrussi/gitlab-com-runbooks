@@ -23,5 +23,4 @@ checklist for starting and incident:
 
 ## Taking Ownership of an Incident
 
-The CMOC 
-
+The CMOC

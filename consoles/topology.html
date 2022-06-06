@@ -17,8 +17,8 @@
   {{ range query "count(pg_settings_server_version_num) by (environment)" | sortByLabel "environment" }}
   <a href="?environment={{.Labels.environment}}">{{.Labels.environment}}</a>
   {{ end }}
-  
-  
+
+
   <div class="mermaid">
   graph LR
 

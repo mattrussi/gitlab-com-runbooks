@@ -23,7 +23,7 @@ application code, by setting instance-level CI/CD variables.
 
 ### Symptoms
 
-* Numerous reports of failing Auto Build jobs following an update to `AUTO_BUILD_IMAGE_VERSION` 
+* Numerous reports of failing Auto Build jobs following an update to `AUTO_BUILD_IMAGE_VERSION`
 * Numerous reports of failing Auto Deploy jobs following an update to `AUTO_DEPLOY_IMAGE_VERSION` or `DAST_AUTO_DEPLOY_IMAGE_VERSION`
 
 ### Pre-checks
@@ -59,7 +59,7 @@ application code, by setting instance-level CI/CD variables.
 ### Post-checks
 
 * If you were able to reproduce the problem, you should be able to reproduce the fix
-* Double check that the overrides have been removed from the **Variables** section in thethe override has 
+* Double check that the overrides have been removed from the **Variables** section in thethe override has
 [instance level CI/CD settings](https://gitlab.com/admin/application_settings/ci_cd)
 
 ### Rollback

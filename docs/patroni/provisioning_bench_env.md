@@ -19,7 +19,7 @@ The benchmark environment consists of the following layers:
   * pg12ute-patroni-source-03-db-db-benchmarking.c.gitlab-db-benchmarking.internal
 
 - Target cluster: 3 nodes with a secondary Patroni cluster, in cascade replication from the source cluster.
- 
+
   Hosts:
   * pg12ute-patroni-target-01-db-db-benchmarking.c.gitlab-db-benchmarking.internal
   * pg12ute-patroni-target-02-db-db-benchmarking.c.gitlab-db-benchmarking.internal
@@ -28,28 +28,28 @@ The benchmark environment consists of the following layers:
 #### PGBouncer layer:
 
 - Pgbouncer webapi cluster: 3 nodes from pgbouncer pointing to the source cluster.
- 
+
   Hosts:
   * pgbouncer-01-db-db-benchmarking.c.gitlab-db-benchmarking.internal
   * pgbouncer-02-db-db-benchmarking.c.gitlab-db-benchmarking.internal
   * pgbouncer-03-db-db-benchmarking.c.gitlab-db-benchmarking.internal
 
 - Pgbouncer sidekiq cluster: 3 nodes from pgbouncer pointing to the source cluster.
- 
+
   Hosts:
   * pgbouncer-sidekiq-01-db-db-benchmarking.c.gitlab-db-benchmarking.internal
   * pgbouncer-sidekiq-02-db-db-benchmarking.c.gitlab-db-benchmarking.internal
-  * pgbouncer-sidekiq-03-db-db-benchmarking.c.gitlab-db-benchmarking.internal  
+  * pgbouncer-sidekiq-03-db-db-benchmarking.c.gitlab-db-benchmarking.internal
 
 - Pgbouncer CI webapi cluster: 3 nodes from pgbouncer pointing to the source cluster.
- 
+
   Hosts:
   * ci-pgbouncer-01-db-db-benchmarking.c.gitlab-db-benchmarking.internal
   * ci-pgbouncer-02-db-db-benchmarking.c.gitlab-db-benchmarking.internal
   * ci-pgbouncer-03-db-db-benchmarking.c.gitlab-db-benchmarking.internal
 
 - Pgbouncer CI sidekiq cluster: 3 nodes from pgbouncer pointing to the source cluster.
- 
+
   Hosts:
    * ci-pgbouncer-sidekiq-01-db-db-benchmarking.c.gitlab-db-benchmarking.internal
    * ci-pgbouncer-sidekiq-02-db-db-benchmarking.c.gitlab-db-benchmarking.internal
@@ -58,7 +58,7 @@ The benchmark environment consists of the following layers:
 #### Jmeter layer:
 
 - Jmeter: 2 instances to run Jmeter against the pgbouncers that will connect to the database.
- 
+
   Hosts:
    * jmeter-01-inf-db-benchmarking.c.gitlab-db-benchmarking.internal
    * jmeter-02-inf-db-benchmarking.c.gitlab-db-benchmarking.internal
@@ -66,26 +66,26 @@ The benchmark environment consists of the following layers:
 #### Console layer:
 
 - Console: one console box where we execute the ansible code.
- 
+
   Host:
    * console-01-sv-db-benchmarking.c.gitlab-db-benchmarking.internal
 
 ### Monitoring layer:
 
 - PGWatch2: one console box where we have the core of the pgwatch2 running.
- 
+
   Host:
    * pgwatch-01-sv-db-benchmarking.c.gitlab-db-benchmarking.internal
 
 # How to initialize the benchmark environment in Terraform:
 
-To generate the environment, please consider the following files on the [terraform repo](): 
+To generate the environment, please consider the following files on the [terraform repo]():
 - environments/db-benchmarking/pgute12.tf
 - environments/db-benchmarking/main.tf
 
 Execute a `tf apply` in the folder from the benchmark environment:
 
-`environments/db-benchmarking/` 
+`environments/db-benchmarking/`
 
 The outcome expected is something like:
 
@@ -225,7 +225,7 @@ tf plan -replace="module.pg12ute-patroni-target.google_compute_instance.instance
 
 2 - Remove the DCS entry from the Source cluster, executing : `gitlab-patronictl remove pg12ute-patroni-source`
 
-Answer the name of the cluster that will be removed: pg12ute-patroni-source 
+Answer the name of the cluster that will be removed: pg12ute-patroni-source
 
 Answer the confirmation message: `Yes I am aware`
 
@@ -283,7 +283,7 @@ root@pg12ute-patroni-source-01-db-db-benchmarking.c.gitlab-db-benchmarking.inter
 +--------------------------------------------------------------------------------+--------------+---------+----------+----+-----------+
 ```
 
-10 - Check the leader assumed: `gitlab-patronictl list` 
+10 - Check the leader assumed: `gitlab-patronictl list`
 
 ```
 root@pg12ute-patroni-source-01-db-db-benchmarking.c.gitlab-db-benchmarking.internal:/var/log/gitlab# gitlab-patronictl list
@@ -296,7 +296,7 @@ root@pg12ute-patroni-source-01-db-db-benchmarking.c.gitlab-db-benchmarking.inter
 +--------------------------------------------------------------------------------+--------------+---------+----------+----+-----------+
 ```
 
-10 - Check the source cluster is running: `gitlab-patronictl list` . 
+10 - Check the source cluster is running: `gitlab-patronictl list` .
 
 ```
 root@pg12ute-patroni-source-01-db-db-benchmarking.c.gitlab-db-benchmarking.internal:/var/log/gitlab# gitlab-patronictl list
@@ -312,7 +312,7 @@ root@pg12ute-patroni-source-01-db-db-benchmarking.c.gitlab-db-benchmarking.inter
 11 - Start the Patroni service on the target primary: `systemctl start patroni`. You can start this host 30 seconds after the secondaries from the source cluster. You do not need to wait for the secondaries 01 to be started completely.
 
 
-12 - Check the leader assumed: `gitlab-patronictl list` 
+12 - Check the leader assumed: `gitlab-patronictl list`
 
 Output:
 ```
@@ -327,7 +327,7 @@ root@pg12ute-patroni-target-01-db-db-benchmarking.c.gitlab-db-benchmarking.inter
 
 13 - Start the Patroni service on the target secondaries: `systemctl start patroni`. You can start this host 30 seconds after the primary from the target cluster. You do not need to wait for the target 01 to be started completely.
 
-14 - Check the leader assumed: `gitlab-patronictl list` 
+14 - Check the leader assumed: `gitlab-patronictl list`
 
 Output:
 ```
@@ -398,7 +398,7 @@ Removed symlink /etc/systemd/system/multi-user.target.wants/chef-client.service.
 
 verify the status with: `systemctl status chef-client`
 
-Output: 
+Output:
 ```
 root@pg12ute-patroni-source-01-db-db-benchmarking.c.gitlab-db-benchmarking.internal:/var/log/gitlab# systemctl status chef-client
 ● chef-client.service - Chef Client daemon
@@ -486,9 +486,9 @@ The URL to access in the browser:
 http://127.0.0.1:3000/
 ```
 
-## Reset database statistics 
+## Reset database statistics
 
-On the source primary execute, connecting with `gitlab-psql`: 
+On the source primary execute, connecting with `gitlab-psql`:
 
 ```
 select pg_stat_reset(), pg_stat_statements_reset()/*, pg_stat_kcache_reset()*/, pg_stat_reset_shared('archiver'), pg_stat_reset_shared('bgwriter');
@@ -505,11 +505,11 @@ select pg_stat_reset(), pg_stat_statements_reset()/*, pg_stat_kcache_reset()*/, 
 
 ## Verify the number of connections on each primary database on the clusters source and target
 
-Create a session on the primary from the source cluster: 
+Create a session on the primary from the source cluster:
 
 Execute: `watch -n 1 "gitlab-psql -c \"select count(*) from pg_stat_activity where state!='IDLE';\""`
 
-Create a session on the primary from the target cluster: 
+Create a session on the primary from the target cluster:
 
 Execute: `watch -n 1 "gitlab-psql -c \"select count(*) from pg_stat_activity where state!='IDLE';\""`
 
@@ -519,7 +519,7 @@ Execute: `watch -n 1 "gitlab-psql -c \"select count(*) from pg_stat_activity whe
 In this step, we will start the traffic on the JMeter nodes, which will create database traffic to the pgbouncer nodes. The Pgbouncer nodes will redirect the traffic to the primary at source cluster.
 
 
-JMeter01: 
+JMeter01:
 
 Path: `/db-migration/benchmark/bin/`
 
@@ -533,7 +533,7 @@ Session 02:
 ./run-bench.sh -h ci-pgbouncer-sidekiq.service.consul -d gitlabhq_production -U gitlab-superuser -p 6432 -e prd -t by-time-ci-related.jmx -j 60 -T 3600 -r test0002.csv
 ```
 
-In the JMeter 02 instance, start: 
+In the JMeter 02 instance, start:
 
 Path: `/db-migration/benchmark/bin/`
 
@@ -549,23 +549,23 @@ Session 02:
 
 How to start simulating the traffic to the patroni read replicas:
 
-To generate traffic on source read replica: 
+To generate traffic on source read replica:
 ```
 ./run-bench-secondaries.sh -h pg12ute-patroni-source-replica.service.consul -d gitlabhq_production -U gitlab-superuser -p 6432 -e prd -t by-time-ci-unrelated-secondaries.jmx -j 60 -T 3600 -r test0004.csv
 ```
 
-To generate traffic on target read replica: 
+To generate traffic on target read replica:
 ```
 ./run-bench-secondaries.sh -h pg12ute-patroni-target-replica.service.consul -d gitlabhq_production -U gitlab-superuser -p 6432 -e prd -t by-time-ci-unrelated-secondaries.jmx -j 60 -T 3600 -r test0004.csv
 ```
 
-Additional test plans to run on read replica are available under ```db-migration/benchmark/plans-secondaries``` directory 
+Additional test plans to run on read replica are available under ```db-migration/benchmark/plans-secondaries``` directory
 
 
 
 ## How to execute the switchover or the activity that will be tested
 
-Until now, we have done the setup for the environment, and we have all the monitoring ready to collect data and execute the change we want to execute in the benchmark environment. 
+Until now, we have done the setup for the environment, and we have all the monitoring ready to collect data and execute the change we want to execute in the benchmark environment.
 
 In this test, we are executing the switchover and promotion of a new database cluster. After this ansible-playbook, we expect to split the traffic related to CI to the target database cluster:
 
@@ -573,7 +573,7 @@ Path: `/db-migration/db-sharding/`
 
 Command: `export ENVIRONMENT=db-benchmarking; ansible-playbook -i inventory/db-benchmarking.yml playbooks/upgrade_to_sharding.yml`
 
-Resumed output: 
+Resumed output:
 ```
 Thursday 02 September 2021  14:05:57 +0000 (0:00:01.174)       0:00:39.225 ****
 ===============================================================================
@@ -601,7 +601,7 @@ After the switchover, please verify the number of connections on both sides.
 After few minutes, stop the JMeter sessions.
 
 
-## Export data from Netdata from source and target 
+## Export data from Netdata from source and target
 
 Now In the Netdata GUI on the HTTP address: `http://127.0.0.1:20000/`
 
@@ -703,7 +703,7 @@ Additionally, you could execute this query for analysis in both primary hosts fo
 select substr(query , 1,40 ) , queryid , calls , total_time , min_time , max_time, mean_time , stddev_time , rows from pg_stat_statements order by 3 desc ;
 ```
 
-And the  output is: 
+And the  output is:
 
 ```
                   substr                  |       queryid        | calls  |      total_time      |       min_time        |       max_time       |       mean_time       |      stddev_time      |  rows
@@ -777,8 +777,8 @@ TOTAL,10511168,1,1,2,3,7,0,9352,50.995%,34061.25809,135945.32,0.00
 ```
 
 I recommend improving the visibility to everyone use any tool that converts from '*.csv' files to Markdown Language.
- 
-I used a web page like: 
+
+I used a web page like:
 https://www.convertcsv.com/csv-to-markdown.htm
 
 and the output will be similar to:
@@ -802,5 +802,3 @@ and the output will be similar to:
 
 
 It is possible to generate different reports from JMeter. Another one I use sometimes is the `Summary Report`.
-
-

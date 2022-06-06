@@ -29,7 +29,7 @@ Important numbers to identify:
 - 16401 represent the oid of the database, as in
 ```
 gitlabhq_production=# select oid,datname from pg_database;
-  oid  |       datname       
+  oid  |       datname
 -------+---------------------
  13052 | template0
  16400 | template1
@@ -45,7 +45,7 @@ select n.nspname AS schema, c.relkind, c.relname AS relation from pg_class c inn
 ```
 
 ```
- schema | relkind | relation 
+ schema | relkind | relation
 --------+---------+----------
  public | r       | users
 (1 row)
@@ -53,7 +53,7 @@ select n.nspname AS schema, c.relkind, c.relname AS relation from pg_class c inn
 
 _Note_: Common values for `relkind` column are:
 - r for regular tables
-- i for indexes 
+- i for indexes
 - t for TOAST tables
 
 For more details about this, check the [Official Documentation](https://www.postgresql.org/docs/current/catalog-pg-class.html)
@@ -64,7 +64,7 @@ For more details about this, check the [Official Documentation](https://www.post
 
 - If this problems affects the leader, then:
 
-  
+
   - If the relation is an index, you could:
     * [REINDEX CONCURRENTLY](https://www.postgresql.org/docs/12/sql-reindex.html#SQL-REINDEX-CONCURRENTLY) (only for PostgreSQL >=12), or
     * Re-create the index. (i)
@@ -80,7 +80,7 @@ For more details about this, check the [Official Documentation](https://www.post
 1. Find how this index is defined:
 ```
 gitlabhq_production=# select pg_get_indexdef('index_on_users_lower_email'::regclass);
-                                      pg_get_indexdef                                       
+                                      pg_get_indexdef
 --------------------------------------------------------------------------------------------
  CREATE INDEX index_on_users_lower_email ON public.users USING btree (lower((email)::text))
 (1 row)

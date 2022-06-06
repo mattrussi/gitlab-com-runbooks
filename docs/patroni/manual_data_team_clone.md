@@ -27,7 +27,7 @@ Note that there should be 10 items to be destroyed and rebuilt, but there are tw
 
 For SSH to the box:
 a) make sure your ssh_config has the correct bastion:
-```  
+```
 Host *.gitlab-db-benchmarking.internal
 ProxyCommand ssh lb-bastion.db-benchmarking.gitlab.com -W %h:%p
 ```

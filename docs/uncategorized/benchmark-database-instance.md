@@ -80,7 +80,7 @@ The code is the same as in step "Small-sized, mixed workload"
 
 ## Visualizing results with gnuplot
 
-In this example the benchmark results for two instances are combined in one picture: 
+In this example the benchmark results for two instances are combined in one picture:
 ```shell
 N=300
 for s in 1700 100000; do

@@ -12,10 +12,10 @@ It is important to monitor the `TXID` of the tables to check if this table is ne
 
 You can check the `help` and see the parameters for the script
 
-```       
+```
 sh wraparound.sh -h
 
-Script for check wraparound status and generate FREEZE command 
+Script for check wraparound status and generate FREEZE command
 wraparound.sh  -m check -p 95
 options
  mode: -m check/generate (default check)
@@ -24,12 +24,12 @@ options
 
 ```
 
-Only 9% of tables exceeding 10GB of size, and these tables are 97% size of the whole database  
+Only 9% of tables exceeding 10GB of size, and these tables are 97% size of the whole database
 
 **Mode options**
 * check: Show which tables are exceeding the threshold of -s(size) and -p (percent of TXID age)
 * generate: Return commands to run to prevent wraparound tables from exceeding   the threshold of -s(size) and -p (percent of TXID age)
- 
+
 ```
 
 
@@ -40,7 +40,7 @@ sh wraparound.sh -p 95 -m check -s 10000000000
 You will get an output similar to:
 ```
  mode: check, size: 10000000000, percent: 95
-   full_table_name   | pg_size_pretty | freeze_age | percent 
+   full_table_name   | pg_size_pretty | freeze_age | percent
 ---------------------+----------------+------------+---------
  push_event_payloads | 72 GB          |  188675977 |      98
  notes               | 431 GB         |  184676635 |      96
@@ -60,9 +60,9 @@ sh wraparound.sh -p 95 -m generate -s 10000000000
 The previous query returns the `FREEZE` commands for maintenance (can filter by tablename)
 
 You will get an output similar to:
-```        
+```
 mode: generate, size: 10000000000, percent: 95
-                            command                             
+                            command
 ----------------------------------------------------------------
  VACUUM FREEZE ANALYZE push_event_payloads; select pg_sleep(2);
  VACUUM FREEZE ANALYZE notes; select pg_sleep(2);
@@ -77,9 +77,9 @@ for example:
 ```
 gitlabhq_production=# VACUUM FREEZE ANALYZE system_note_metadata; select pg_sleep(2);
 VACUUM
- pg_sleep 
+ pg_sleep
 ----------
- 
+
 (1 row)
 
 ```

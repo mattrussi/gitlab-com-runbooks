@@ -139,4 +139,3 @@ This is likely to be highly contextual, but a few things to look out for:
 - Was there a problem accessing the image in object storage? Check if there is a problem with GCS credentials.
 - Did `gitlab-resize-image` return with a non-zero exit code? Scan logs for why this happened.
 - Are clients timing out and closing the connection? This could indicate that we are taking too long to serve image data.
-

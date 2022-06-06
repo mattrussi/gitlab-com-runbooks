@@ -65,7 +65,7 @@ This topic requires deep Postgres expertise. Reports in group F have Conclusions
 
 `F008 Autovacuum: Resource Usage` helps understand if autovacuum can use too many resources (CPU, disk IO).
 
-If you see recommendations to repack some database object, schedule using pg_repack to do it. The corresponding runbook: 
+If you see recommendations to repack some database object, schedule using pg_repack to do it. The corresponding runbook:
 
 ### Health of indexes
 
@@ -87,10 +87,10 @@ Query analysis is based on the standard [`pg_stat_statements`](https://www.postg
 Each report, K001-K003, have not only metric deltas (such as `calls` or `total_time`) from `pg_stat_statements`, they also provide the following additional "sub-lines" for each big line:
 
 - `metric / observation period in seconds`. Example: `calls per second` (it's QPS, queries per second), or `total_time per second`.
-- `metric / calls`. Example: `calls per call` -- it's always `1`, `total_time per call` – it's latency (average duration of an individual query in the given group). 
-- `percentage (%)` – how much this line contributes to the whole picture, considering this particular metric. 
+- `metric / calls`. Example: `calls per call` -- it's always `1`, `total_time per call` – it's latency (average duration of an individual query in the given group).
+- `percentage (%)` – how much this line contributes to the whole picture, considering this particular metric.
 
-The basic report is `K003 Top-N Queries by total_time` (`N` here is configurable, see the CI variables), this is where query groups are analyzed, and Top-N of the most time-consuming groups are provided. To improve scalability, we always need to start from the top of this report. If you see some queries that are >>10% by `total_time`, it's a strong signal that optimization is needed. Ping `@gl-database` for help. 
+The basic report is `K003 Top-N Queries by total_time` (`N` here is configurable, see the CI variables), this is where query groups are analyzed, and Top-N of the most time-consuming groups are provided. To improve scalability, we always need to start from the top of this report. If you see some queries that are >>10% by `total_time`, it's a strong signal that optimization is needed. Ping `@gl-database` for help.
 
 So, the rule of thumb:
 
@@ -100,7 +100,7 @@ Why query timing can be bad and what to do:
 
 - The query is slow. It can bee seen in `Total time`: if the `total time per call` (in other words, average duration) is high (everything that is more than 100ms should be considered is slow in OLTP context), optimization is needed, ping `@gl-database` and request optimization. Options will be:
     - if micro-analysis reveals that individual query, being executed without background workload, is also slow, the query itself needs optimization. Use [Joe Bot and `#database-lab`](https://about.gitlab.com/handbook/engineering/infrastructure/library/database/postgres/query-optimization-bot/design/) to analyze and verify optimization ideas.
-    - if an individual query is fast, but statistics for the corresponding query group look bad, this is a sign of locking issues. Transaction and locking analysis is needed. 
+    - if an individual query is fast, but statistics for the corresponding query group look bad, this is a sign of locking issues. Transaction and locking analysis is needed.
 - The query is fast (`total time per call` is << 100ms), but the frequency is high (`calls per second` >> 1). In this case, reduction of the frequency is recommended. Again, ping `@gl-database` for that. Options will be:
     - redesign the application code to reduce the frequency (for instance, cache more often; sometimes, high frequency is just a bug),
     - if it's a SELECT happening on the primary, consider offloading it to secondaries.

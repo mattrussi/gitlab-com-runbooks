@@ -90,21 +90,21 @@ TODO: link here design docs once they are ready
 
 #### Metric: Search overview metrics
 
-* Location: https://dashboards.gitlab.net/d/search-main/search-overview?orgId=1   
+* Location: https://dashboards.gitlab.net/d/search-main/search-overview?orgId=1
 * What changes to this metric should prompt a rollback: Flatline of RPS
 
 #### Metric: Search controller performance
 
-* Location: https://dashboards.gitlab.net/d/web-rails-controller/web-rails-controller?orgId=1&var-PROMETHEUS_DS=Global&var-environment=gprd&var-stage=main&var-controller=SearchController&var-action=show          
+* Location: https://dashboards.gitlab.net/d/web-rails-controller/web-rails-controller?orgId=1&var-PROMETHEUS_DS=Global&var-environment=gprd&var-stage=main&var-controller=SearchController&var-action=show
 * What changes to this metric should prompt a rollback: Massive spike in latency
 
 #### Metric: Search sidekiq indexing queues (Sidekiq Queues (Global Search))
-* Location: https://dashboards.gitlab.net/d/sidekiq-main/sidekiq-overview?orgId=1   
+* Location: https://dashboards.gitlab.net/d/sidekiq-main/sidekiq-overview?orgId=1
 * What changes to this metric should prompt a rollback: Queues not draining
 
 #### Metric: Search sidekiq in flight jobs
 
-* Location: https://dashboards.gitlab.net/d/sidekiq-shard-detail/sidekiq-shard-detail?orgId=1&from=now-30m&to=now&var-PROMETHEUS_DS=Global&var-environment=gprd&var-stage=main&var-shard=elasticsearch   
+* Location: https://dashboards.gitlab.net/d/sidekiq-shard-detail/sidekiq-shard-detail?orgId=1&from=now-30m&to=now&var-PROMETHEUS_DS=Global&var-environment=gprd&var-stage=main&var-shard=elasticsearch
 * What changes to this metric should prompt a rollback: No jobs in flight
 
 #### Metric: Elastic Cloud outages

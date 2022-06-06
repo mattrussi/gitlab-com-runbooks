@@ -34,4 +34,4 @@ Most important is ensuring `maxReplicas` is adjusted back to the same version as
 
 To enhance findability, here are some keywords.
 
-redis, redis-sidekiq, catchall, workloads, k8s, kubernetes, VMs, virtual machines, gke, 
+redis, redis-sidekiq, catchall, workloads, k8s, kubernetes, VMs, virtual machines, gke,

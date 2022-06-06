@@ -2,11 +2,11 @@ From time to time, for legal reasons, we are required to export projects without
 
 While it is possible for an admin to create an export and it won't *email* the owner, it will be visible in the UI while the export exists, and the owner might notice this and infer something is going on.
 
-To avoid this we can do it by hand with some effort.  
+To avoid this we can do it by hand with some effort.
 
 * Open a session to the rails console with ```ssh gprd-rails-console```
 * Find the user (we should have been given the name as part of the request): ```u = User.find_by(username: 'USERNAME')```
-* List their projects, assuming we want all of them: 
+* List their projects, assuming we want all of them:
 ```
 u.projects.each do |p|
   puts "#{p.path}: #{p.repository_storage} #{p.repository.path_to_repo}"
