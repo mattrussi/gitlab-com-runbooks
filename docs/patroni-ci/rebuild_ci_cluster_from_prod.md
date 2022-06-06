@@ -55,11 +55,11 @@ Replication Backup nodes are:
         ```
     - Add the following line into `patroni-ci` module at `main.tf`
         ```
-          data_disk_snapshot     = local.gcp_database_snapshot
+            data_disk_snapshot     = local.gcp_database_snapshot
         ```
     - Change the `"node_count"` of patroni CI back to 7 at `variables.tf`, 
         ```
-          "patroni-ci"           = 7
+            "patroni-ci"           = 7
         ```
 2. Create just the 1st Patroni CI node localy with: `tf apply`
 3. Check the `patroni-ci-01-db` Serial port in GCP console to see if the instance is already intialized and if Chef have finished to run, for example:
@@ -75,7 +75,7 @@ Replication Backup nodes are:
 4. Initialize the cluster using the `db-migration/pg-replica-rebuild` Ansible playbook, by executing:
     ```
     $ cd <workspace>/db-migration/pg-replica-rebuild
-    $ ansible-playbook -i inventory/<file> rebuild.yml`
+    $ ansible-playbook -i inventory/<file> rebuild.yml
     ```
 
 
