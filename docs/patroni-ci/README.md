@@ -135,8 +135,9 @@ changes but you should do this in 2 MRs using the following steps:
    CI Patroni nodes and confirm they are correctly registering in consul
    under DNS `ci-db-replica.service.consul` - for example 
 
-2. Remove `additional_service_names` from
-   `roles/gstg-base-db-patroni-main.json` so that Main nodes stop registering
+2. Revert the `port_service_name_overrides` in
+   `roles/gstg-base-db-patroni-main.json` to `idle-ci-db-replica` so that Main nodes stop registering
+   in Consul for `ci-db-replica.service.consul`
    in Consul for `ci-db-replica.service.consul`
 3. Remove `/etc/consul/conf.d/recovering-ci-db-replica*.json` from CI Patroni
    nodes as this is no longer needed and Chef won't clean this up for you
