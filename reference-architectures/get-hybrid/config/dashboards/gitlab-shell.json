@@ -2050,7 +2050,7 @@
           "steppedLine": false,
           "targets": [
             {
-              "expr": "histogram_quantile(\n  0.950000,\n  sum by (le) (\n    rate(grpc_server_handling_seconds_bucket{grpc_service=\"gitaly.SSHService\",grpc_type=\"unary\",job=\"praefect\"}[$__interval])\n  )\n)\n \u003e 0",
+              "expr": "histogram_quantile(\n  0.950000,\n  sum by (le) (\n    rate(grpc_server_handling_seconds_bucket{grpc_service=\"gitaly.SSHService\",grpc_type=\"unary\",job=\"gitaly\"}[$__interval])\n  )\n)\n \u003e 0",
               "format": "time_series",
               "interval": "1m",
               "intervalFactor": 2,
@@ -2146,7 +2146,7 @@
           "steppedLine": false,
           "targets": [
             {
-              "expr": "sum by () (\n  rate(grpc_server_handled_total{grpc_code!=\"OK\",grpc_service=\"gitaly.SSHService\",job=\"praefect\"}[$__interval])\n)\n \u003e 0",
+              "expr": "sum by () (\n  rate(grpc_server_handled_total{grpc_code!=\"OK\",grpc_service=\"gitaly.SSHService\",job=\"gitaly\"}[$__interval])\n)\n \u003e 0",
               "format": "time_series",
               "interval": "1m",
               "intervalFactor": 2,
@@ -2222,7 +2222,7 @@
           "steppedLine": false,
           "targets": [
             {
-              "expr": "sum by () (\n  rate(gitaly_service_client_requests_total{grpc_service=\"gitaly.SSHService\",job=\"praefect\"}[$__interval])\n)\n \u003e 0",
+              "expr": "sum by () (\n  rate(gitaly_service_client_requests_total{grpc_service=\"gitaly.SSHService\",job=\"gitaly\"}[$__interval])\n)\n \u003e 0",
               "format": "time_series",
               "interval": "1m",
               "intervalFactor": 2,
@@ -2298,7 +2298,7 @@
           "steppedLine": false,
           "targets": [
             {
-              "expr": "histogram_quantile(\n  0.950000,\n  sum by (le,node) (\n    rate(grpc_server_handling_seconds_bucket{grpc_service=\"gitaly.SSHService\",grpc_type=\"unary\",job=\"praefect\",node!=\"\"}[$__interval])\n  )\n)\n \u003e 0",
+              "expr": "histogram_quantile(\n  0.950000,\n  sum by (le,node) (\n    rate(grpc_server_handling_seconds_bucket{grpc_service=\"gitaly.SSHService\",grpc_type=\"unary\",job=\"gitaly\",node!=\"\"}[$__interval])\n  )\n)\n \u003e 0",
               "format": "time_series",
               "interval": "1m",
               "intervalFactor": 2,
@@ -2400,7 +2400,7 @@
           "steppedLine": false,
           "targets": [
             {
-              "expr": "clamp_min(clamp_max((\n  (\n    sum by (node) (\n  rate(grpc_server_handling_seconds_bucket{grpc_service=\"gitaly.SSHService\",grpc_type=\"unary\",job=\"praefect\",le=\"+Inf\",node!=\"\"}[$__interval])\n)\n\n    -\n    (\n      (\n  sum by (node) (\n    rate(grpc_server_handling_seconds_bucket{grpc_service=\"gitaly.SSHService\",grpc_type=\"unary\",job=\"praefect\",le=\"30\",node!=\"\"}[$__interval])\n  )\n  +\n  sum by (node) (\n    rate(grpc_server_handling_seconds_bucket{grpc_service=\"gitaly.SSHService\",grpc_type=\"unary\",job=\"praefect\",le=\"60\",node!=\"\"}[$__interval])\n  )\n)\n/\n2\n\n    )\n  )\n  / ignoring(node) group_left()\n  (\n    sum by () (\n  rate(grpc_server_handling_seconds_bucket{grpc_service=\"gitaly.SSHService\",grpc_type=\"unary\",job=\"praefect\",le=\"+Inf\",node!=\"\"}[$__interval])\n)\n\n  )\n) \u003e 0\n,1),0)\n",
+              "expr": "clamp_min(clamp_max((\n  (\n    sum by (node) (\n  rate(grpc_server_handling_seconds_bucket{grpc_service=\"gitaly.SSHService\",grpc_type=\"unary\",job=\"gitaly\",le=\"+Inf\",node!=\"\"}[$__interval])\n)\n\n    -\n    (\n      (\n  sum by (node) (\n    rate(grpc_server_handling_seconds_bucket{grpc_service=\"gitaly.SSHService\",grpc_type=\"unary\",job=\"gitaly\",le=\"30\",node!=\"\"}[$__interval])\n  )\n  +\n  sum by (node) (\n    rate(grpc_server_handling_seconds_bucket{grpc_service=\"gitaly.SSHService\",grpc_type=\"unary\",job=\"gitaly\",le=\"60\",node!=\"\"}[$__interval])\n  )\n)\n/\n2\n\n    )\n  )\n  / ignoring(node) group_left()\n  (\n    sum by () (\n  rate(grpc_server_handling_seconds_bucket{grpc_service=\"gitaly.SSHService\",grpc_type=\"unary\",job=\"gitaly\",le=\"+Inf\",node!=\"\"}[$__interval])\n)\n\n  )\n) \u003e 0\n,1),0)\n",
               "format": "time_series",
               "interval": "1m",
               "intervalFactor": 3,
@@ -2475,7 +2475,7 @@
           "steppedLine": false,
           "targets": [
             {
-              "expr": "sum by (node) (\n  rate(grpc_server_handled_total{grpc_code!=\"OK\",grpc_service=\"gitaly.SSHService\",job=\"praefect\",node!=\"\"}[$__interval])\n)\n \u003e 0",
+              "expr": "sum by (node) (\n  rate(grpc_server_handled_total{grpc_code!=\"OK\",grpc_service=\"gitaly.SSHService\",job=\"gitaly\",node!=\"\"}[$__interval])\n)\n \u003e 0",
               "format": "time_series",
               "interval": "1m",
               "intervalFactor": 2,
@@ -2551,7 +2551,7 @@
           "steppedLine": false,
           "targets": [
             {
-              "expr": "sum by (node) (\n  rate(gitaly_service_client_requests_total{grpc_service=\"gitaly.SSHService\",job=\"praefect\",node!=\"\"}[$__interval])\n)\n \u003e 0",
+              "expr": "sum by (node) (\n  rate(gitaly_service_client_requests_total{grpc_service=\"gitaly.SSHService\",job=\"gitaly\",node!=\"\"}[$__interval])\n)\n \u003e 0",
               "format": "time_series",
               "interval": "1m",
               "intervalFactor": 2,
