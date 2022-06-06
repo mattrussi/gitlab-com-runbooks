@@ -73,6 +73,9 @@ Replication Backup nodes are:
     name: patroni-ci-01-db-gstg.c.gitlab-staging-1.internal
     ```
 4. Initialize the cluster using the `db-migration/pg-replica-rebuild` Ansible playbook, by executing:
-    `ansible-playbook -i inventory/<file> rebuild.yml`
+    ```
+    $ cd <workspace>/db-migration/pg-replica-rebuild
+    $ ansible-playbook -i inventory/<file> rebuild.yml`
+    ```
 
 
