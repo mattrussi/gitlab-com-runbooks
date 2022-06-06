@@ -86,7 +86,7 @@ teams:
 - name: package
   url: https://about.gitlab.com/handbook/engineering/development/ops/package/
   slack_channel: s_package
-  slack_alerts_channel: s_package
+  slack_alerts_channel: s_package_alerts
   send_slo_alerts_to_team_slack_channel: true
   engagement_policy: # Link to doc that talks about engagement
                      # and escalation policy
