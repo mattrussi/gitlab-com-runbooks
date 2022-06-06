@@ -139,7 +139,7 @@ changes but you should do this in 2 MRs using the following steps:
    `roles/gstg-base-db-patroni-main.json` to `idle-ci-db-replica` so that Main nodes stop registering
    in Consul for `ci-db-replica.service.consul`
    in Consul for `ci-db-replica.service.consul`
-3. Remove `/etc/consul/conf.d/recovering-ci-db-replica*.json` from CI Patroni
+3. Remove `/etc/consul/conf.d/dormant-ci-db-replica*.json` from CI Patroni
    nodes as this is no longer needed and Chef won't clean this up for you
 
 <!-- END_MARKER -->
