@@ -55,16 +55,23 @@ Replication Backup nodes are:
         ```
     - Add the following line into `patroni-ci` module at `main.tf`
         ```
-        data_disk_snapshot     = local.gcp_database_snapshot`
+          data_disk_snapshot     = local.gcp_database_snapshot`
         ```
     - Change the `"node_count"` of patroni CI back to 7 at `variables.tf`, 
         ````
-        "patroni-ci"           = 7`
+          "patroni-ci"           = 7
         ```
 2. Create just the 1st Patroni CI node localy with: `tf apply`
 3. Check the `patroni-ci-01-db` Serial port in GCP console to see if the instance is already intialized and if Chef have finished to run, for example:
    - GSTG: https://console.cloud.google.com/compute/instancesDetail/zones/us-east1-c/instances/patroni-ci-01-db-gstg/console?port=1&project=gitlab-staging-1
    - GPRD: https://console.cloud.google.com/compute/instancesDetail/zones/us-east1-c/instances/patroni-ci-01-db-gprd/console?port=1&project=gitlab-production
+4. Check if `scope=<cluster_name>` and if `name=<hostname>` in the `/var/opt/gitlab/patroni/patroni.yml` file, this is an evidence that Chef have sucessfully executed on the node. For example in the `patroni-ci-01-db-gstg` node the content of the file should be the following:
+    ```
+    $ sudo head -3 /var/opt/gitlab/patroni/patroni.yml
+    ---
+    scope: gstg-patroni-ci
+    name: patroni-ci-01-db-gstg.c.gitlab-staging-1.internal
+    ```
 4. Initialize the cluster using the `db-migration/pg-replica-rebuild` Ansible playbook, by executing:
     `ansible-playbook -i inventory/<file> rebuild.yml`
 
