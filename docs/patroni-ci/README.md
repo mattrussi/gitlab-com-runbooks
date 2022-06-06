@@ -47,8 +47,7 @@ To check what node is the `Standby Leader` of our `patroni-ci` cluster execute `
 #### Resolution
 
 This procedure can recover from `patroni-ci` being broken but was designed as a
-[rollback procedure in case CI decomposition failover
-fails](https://gitlab.com/gitlab-org/gitlab/-/issues/361759).
+[rollback procedure in case CI decomposition failover fails](https://gitlab.com/gitlab-org/gitlab/-/issues/361759). 
 
 This solution will not be applicable once CI decomposition is finished
 and the CI cluster is diverged fully from Main.
@@ -61,50 +60,67 @@ lagged behind or otherwise unavailable. The solution is to just send all CI
 reconfigure all Patroni Main replicas to also present as
 `ci-db-replica.service.consul`.
 
-We have a sample MR at for what this would involve on Staging
-https://gitlab.com/gitlab-com/gl-infra/chef-repo/-/merge_requests/1865 . The
-equivalent for production would just be to change `gstg` to `gprd` in all file
-names. In case this MR is unavailable the diff is:
+The resolution to this problem basically consist into temporarily routing the CI `read-only` workload from the `patroni-ci` 
+cluster in our `patroni-main` Replicas, while we can rebuild and re-sync the `patroni-ci` cluster.
+
+To handle the CI `read-only` workload in case of incident, all `patroni-main` nodes have 3 additional pgbouncers deployed and listening in 6435, 6436 and 6437 TCP ports.
+If they are not being used these ports are defined as `idle-ci-db-replica` Consul service name.
+
+##### Resolution Steps - Route CI read-only workload to Main
+
+In case of incident you will have to:
+1. In `patroni-main` nodes, rename the `idle-ci-db-replica` ports to answer as `ci-db-replica` by the Consul service name. We have a sample MR at for what this would involve - https://gitlab.com/gitlab-com/gl-infra/chef-repo/-/merge_requests/1952/diffs
+2.. In `patroni-ci` nodes, rename Consul service name from `ci-db-replica` to `dormant-ci-db-replica`. We have a sample MR at for what this would involve - https://gitlab.com/gitlab-com/gl-infra/chef-repo/-/merge_requests/1875/diffs
+
+In case this MR is unavailable the diff are:
 
 <details><summary>Diff for reconfiguring Patroni cluster to also present as ci-db-replica in Consul</summary>
 
 ```diff
-diff --git a/roles/gstg-base-db-patroni-ci.json b/roles/gstg-base-db-patroni-ci.json
-index 0bb77e15e..711fe39c6 100644
---- a/roles/gstg-base-db-patroni-ci.json
-+++ b/roles/gstg-base-db-patroni-ci.json
-@@ -38,7 +38,7 @@
-       ],
-       "psql_command": "gitlab-psql -h /var/opt/gitlab/pgbouncer",
-       "consul": {
--        "service_name": "ci-db-replica",
-+        "service_name": "recovering-ci-db-replica",
-         "extra_checks": [
-           {
-             "http": "http://0.0.0.0:8009/replica",
-diff --git a/roles/gstg-base-db-patroni-main.json b/roles/gstg-base-db-patroni-main.json
-index 44a9d55db..a4154ebb8 100644
---- a/roles/gstg-base-db-patroni-main.json
-+++ b/roles/gstg-base-db-patroni-main.json
-@@ -4,6 +4,9 @@
-   "json_class": "Chef::Role",
-   "default_attributes": {
-     "gitlab-pgbouncer": {
-+      "consul": {
-+        "additional_service_names": ["ci-db-replica"]
-+      },
-       "databases": {
-         "gitlabhq_production": {
-           "host": "127.0.0.1",
+diff --git a/roles/gprd-base-db-patroni-v12.json b/roles/gprd-base-db-patroni-v12.json
+--- a/roles/gprd-base-db-patroni-v12.json
++++ b/roles/gprd-base-db-patroni-v12.json
+@@ -5,9 +5,9 @@
+    "gitlab-pgbouncer": {
+      "consul": {
+        "port_service_name_overrides": {
+-          "6435": "idle-ci-db-replica",
+-          "6436": "idle-ci-db-replica",
+-          "6437": "idle-ci-db-replica"
++          "6435": "ci-db-replica",
++          "6436": "ci-db-replica",
++          "6437": "ci-db-replica"
+        }
+      },
+      "listen_ports": [
+
+diff --git a/roles/gprd-base-db-patroni-ci.json b/roles/gprd-base-db-patroni-ci.json
+--- a/roles/gprd-base-db-patroni-ci.json
++++ b/roles/gprd-base-db-patroni-ci.json
+@@ -5,7 +5,7 @@
+  "default_attributes": {
+    "gitlab-pgbouncer": {
+      "consul": {
+-        "service_name": "ci-db-replica"
++        "service_name": "dormant-ci-db-replica"
+      },
+      "databases": {
+        "gitlabhq_production": {
 ```
 
 </details>
 
-You will likely want to apply this as quickly as possible by running chef
-directly on all the Patroni Main nodes. Once you've done this you will have to
+3. You will likely want to apply this as quickly as possible by running chef
+directly on all the Patroni Main nodes. 
+
+4. Once you've done this you will have to
 do 1 minor cleanup on Patroni CI nodes, since the `gitlab-pgbouncer` cookbook
 does not handle renaming `service_name` you will also need to delete
 `/etc/consul/conf.d/ci-db-replica*.json` from the problematic CI Patroni nodes.
+
+##### Resolution Steps - Redeploy and Resync the Patroni CI cluster
+
+Escalate the incident to a DBRE and request him to proceed with the recovery of the broken CI Patroni cluster.
 
 Once the CI Patroni cluster has fully recovered you can revert these
 changes but you should do this in 2 MRs using the following steps:
@@ -112,7 +128,7 @@ changes but you should do this in 2 MRs using the following steps:
 1. Change `roles/gstg-base-db-patroni-ci.json`
    back to `service_name: ci-db-replica` . Then wait for chef to run on
    CI Patroni nodes and confirm they are correctly registering in consul
-   under DNS `ci-db-replica.service.consul`
+   under DNS `ci-db-replica.service.consul` - for example 
 2. Remove `additional_service_names` from
    `roles/gstg-base-db-patroni-main.json` so that Main nodes stop registering
    in Consul for `ci-db-replica.service.consul`
