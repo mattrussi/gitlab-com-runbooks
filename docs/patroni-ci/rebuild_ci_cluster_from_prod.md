@@ -37,7 +37,7 @@ Replication Backup nodes are:
   - GSTG: patroni-06-db-gstg.c.gitlab-staging-1.internal
   - GPRD: patroni-10-db-gprd.c.gitlab-production.internal
 
-## Create the Standby Cluster
+## Recover the Patroni CI Standby Cluster
 
 1. Change Terraform environment 
     - Add the following module at `main.tf`, but **DO NOT SIMPLY COPY/PASTE IT**, set the `--project` and `--filter` accordingly with the environment you are performing the restore
@@ -61,7 +61,7 @@ Replication Backup nodes are:
         ```
             "patroni-ci"           = 7
         ```
-2. Create just the 1st Patroni CI node localy with: `tf apply`
+2. Create all the Patroni CI node locally with: `tf apply`
 3. Check the `patroni-ci-01-db` Serial port in GCP console to see if the instance is already intialized and if Chef have finished to run, for example:
    - GSTG: https://console.cloud.google.com/compute/instancesDetail/zones/us-east1-c/instances/patroni-ci-01-db-gstg/console?port=1&project=gitlab-staging-1
    - GPRD: https://console.cloud.google.com/compute/instancesDetail/zones/us-east1-c/instances/patroni-ci-01-db-gprd/console?port=1&project=gitlab-production
@@ -78,4 +78,31 @@ Replication Backup nodes are:
     $ ansible-playbook -i inventory/<file> rebuild.yml
     ```
 
+## Recover the Patroni ZFS CI cluster
 
+The ZFS cluster nodes can't be rebuild through GCP snapshots, because the `/var/opt/gitlab` mount point is a ZFS filesystem instead of EXT4 used by other Patroni nodes, therefore it's necessary to use the default `pg_basebackup` process to recreate this cluster.
+
+1. Change Terraform environment 
+    - Change the `"node_count"` of patroni ZFS CI back to 1 at `variables.tf`, 
+        ```
+            "patroni-zfs-ci"       = 1
+        ```
+2. Create Patroni ZFS CI node locally with: `tf apply`
+3. Check the `patroni-zfs-ci-01-db` Serial port in GCP console to see if the instance is already intialized and if Chef have finished to run, for example:
+   - GSTG: https://console.cloud.google.com/compute/instancesDetail/zones/us-east1-c/instances/patroni-zfs-ci-01-db-gstg/console?port=1&project=gitlab-staging-1
+   - GPRD: https://console.cloud.google.com/compute/instancesDetail/zones/us-east1-c/instances/patroni-zfs-ci-01-db-gprd/console?port=1&project=gitlab-production
+3. Check if `scope=<cluster_name>` and if `name=<hostname>` in the `/var/opt/gitlab/patroni/patroni.yml` file, this is an evidence that Chef have sucessfully executed on the node. For example in the `patroni-zfs-ci-01-db-gstg` node the content of the file should be the following:
+    ```
+    $ sudo head -3 /var/opt/gitlab/patroni/patroni.yml
+    ---
+    scope: gstg-patroni-zfs-ci
+    name: patroni-zfs-ci-01-db-gstg.c.gitlab-staging-1.internal
+    ```
+4. Start the Patroni Cluster
+    - Execute: `sudo systemctl patroni.service start`
+    - If you observe the `/var/log/gitlab/patroni/patroni.log` you should see the `INFO: waiting for standby_leader to bootstrap` message
+5. Remove the Patroni Cluster from DCS
+    - Execute: `sudo gitlab-patronictl remove <cluster_name>`
+    - If you observe the `/var/log/gitlab/patroni/patroni.log` you should see the `INFO: bootstrap_standby_leader in progress` message
+6. Check if `pg_basebackup` is running 
+    - Execute: `ps -ef | grep pg_basebackup` 
