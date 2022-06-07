@@ -32,11 +32,6 @@ metricsCatalog.serviceDefinition({
     labelSelectors: kubeLabelSelectors(
       ingressSelector=null,  // Websockets does not have its own ingress
       nodeSelector={ type: 'websockets' },
-
-      // TODO: websockets nodes do not present a stage label at present
-      // See https://gitlab.com/gitlab-com/gl-infra/delivery/-/issues/2245
-      // We hard-code to main for now
-      nodeStaticLabels={ stage: 'main' },
     ),
   },
   kubeResources: {

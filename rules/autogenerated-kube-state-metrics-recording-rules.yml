@@ -814,13 +814,15 @@ groups:
       )
   - record: kube_node_labels:labeled
     labels:
-      stage: main
       tier: sv
       type: websockets
     expr: |
-      group without(label_shard) (
+      group without(label_stage,label_shard) (
         label_replace(
-          topk by(environment,cluster,node) (1, kube_node_labels{label_type="websockets"}),
+          label_replace(
+            topk by(environment,cluster,node) (1, kube_node_labels{label_type="websockets"}),
+            "stage", "$0", "label_stage", ".*"
+          ),
           "shard", "$0", "label_shard", ".*"
         )
       )
