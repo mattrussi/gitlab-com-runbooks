@@ -268,8 +268,9 @@ the gitlab code base.
 ## Logs
 
 The Sidekiq logs have a wealth of additional metadata. In Kibana, change to the `pubsub-sidekiq-inf-gprd\*` index.
-Interesting fields to search or aggregate on: 1. queue: The lower-snake-case queue name
+Interesting fields to search or aggregate on:
 
+1. queue: The lower-snake-case queue name
 1. jid: An ID that is the unique to a job (allocated when the job is enqueued). Useful for tracking a job through the system
 1. job_status: start, fail, deduplicated, done (or empty for some ancillary cases)
    * In a debugging/incident, you *probably* want to filter for `done` so you get the timing information below.
@@ -280,7 +281,7 @@ Interesting fields to search or aggregate on: 1. queue: The lower-snake-case que
    * The "meta" fields are particularly useful when trying to find who is dumping a bunch of jobs on us and causing things to page
 1. {db_,cpu_,gitaly_,redis_,}duration_s: How long the job spent in each of those areas
    * Useful for guiding investigations into slow jobs; only logged on `done` job_status (for hopefully obvious reasons)
-1. error_message:
+1. exception.{class,message,backtrace}:
    * Mostly on 'fail' job_status, which is useful for debugging high error rates. You'll see lots of external calls failing (webhooks, mailers, etc) here, under normal circumstances
 1. retry/retry_count:
    * See [Retries + Fails](#retries-fails) below
