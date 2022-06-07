@@ -61,11 +61,7 @@ metricsCatalog.serviceDefinition({
   regional: true,
   kubeConfig: {
     labelSelectors: kubeLabelSelectors(
-      nodeSelector={ type: 'web' },
-
-      // TODO: at present, web nodepools do not have the correct stage, shard labels
-      // see https://gitlab.com/gitlab-com/gl-infra/delivery/-/issues/2247
-      nodeStaticLabels={ stage: 'main' },
+      nodeSelector={ type: 'web' }
     ),
   },
 
