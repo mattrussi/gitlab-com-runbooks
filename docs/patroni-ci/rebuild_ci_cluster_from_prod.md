@@ -25,20 +25,20 @@ Make sure that **there are no CI Read requests being made in the patroni-ci clus
     ```
 2. Apply the TF change `tf apply` checking if only the `patroni-ci` and its related modules are the ones that will be removed.
 3. Manually delete the nodes from Chef
-<details><summary>Knife node delete GSTG</summary>
+    <details><summary>Knife node delete GSTG</summary>
 
-```
-for i in `seq 7`; do for type in node client; do knife $type delete -y patroni-ci-$(printf '%02d' $i)-db-gstg.c.gitlab-staging-1.internal; done; done
-```
+    ```
+    for i in `seq 7`; do for type in node client; do knife $type delete -y patroni-ci-$(printf '%02d' $i)-db-gstg.c.gitlab-staging-1.internal; done; done
+    ```
 
-</details>
-<details><summary>Knife node delete GPRD</summary>
+    </details>
+    <details><summary>Knife node delete GPRD</summary>
 
-```
-for i in `seq 10`; do for type in node client; do knife $type delete -y patroni-ci-$(printf '%02d' $i)-db-gprd.c.gitlab-production.internal; done; done
-```
-
-</details>
+    ```
+    for i in `seq 10`; do for type in node client; do knife $type delete -y patroni-ci-$(printf '%02d' $i)-db-gprd.c.gitlab-production.internal; done; done
+    ```
+    
+    </details>
 
 ## Take a snapshot from the Writer node
 
