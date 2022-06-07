@@ -309,4 +309,3 @@ then updates the `Project.repository_storage` in the application database to
 specify the name of the new shard, i.e.: `nfs-fileYY`.  The original repository
 is renamed by the Worker to mark it as `+moved+`.  The project is marked
 read-only in the database throughout this entire procedure.
-

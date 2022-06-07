@@ -53,9 +53,9 @@ work and display the nodes running on the cluster:
 
 ### Deployment
 
-The application is deployed using Auto DevOps from the [version-gitlab-com](https://gitlab.com/gitlab-services/version-gitlab-com/) project. It uses a Review/Staging/Production scheme with no `.gitlab-ci.yml` file. If deployment problems are suspected, check for [failed or incomplete jobs](https://gitlab.com/gitlab-services/version-gitlab-com/pipelines), and check the [Environments](https://gitlab.com/gitlab-services/version-gitlab-com/environments) page to make sure everything looks reasonable. 
+The application is deployed using Auto DevOps from the [version-gitlab-com](https://gitlab.com/gitlab-services/version-gitlab-com/) project. It uses a Review/Staging/Production scheme with no `.gitlab-ci.yml` file. If deployment problems are suspected, check for [failed or incomplete jobs](https://gitlab.com/gitlab-services/version-gitlab-com/pipelines), and check the [Environments](https://gitlab.com/gitlab-services/version-gitlab-com/environments) page to make sure everything looks reasonable.
 
-> Note that the `gitlab-services` project is outside of the `gitlab-org` and `gitlab-com` namespaces.  Everyone does not automatically have access to this project.  If the above URL's result in `404` errors, chances are the user needs to be added to the project or group. 
+> Note that the `gitlab-services` project is outside of the `gitlab-org` and `gitlab-com` namespaces.  Everyone does not automatically have access to this project.  If the above URL's result in `404` errors, chances are the user needs to be added to the project or group.
 
 
 ### Project
@@ -71,7 +71,7 @@ The review and staging deployments share the `gs-staging` GCP project. The Kuber
 
 ### Database
 
-The production database resides in a regional (`us-east1`) HA CloudSQL instance. Currently this is `cloudsql-411f` (but could change if it is rebuilt). 
+The production database resides in a regional (`us-east1`) HA CloudSQL instance. Currently this is `cloudsql-411f` (but could change if it is rebuilt).
 
 This instance is shared among the projects in the `gitlab-services` group. The database schema for the version application is `default`. The username and password can be found in the `DATABASE_URL` CI variable in the project settings.
 
@@ -122,11 +122,11 @@ Currently, the integration does not have a way to upgrade components. To upgrade
 1. Submit a [production change issue](https://gitlab.com/gitlab-com/gl-infra/production/issues/new?issue%5Bassignee_id%5D=&issue%5Bmilestone_id%5D=) to schedule a maintenance window
 2. Go to the Kubernetes integration page, and uninstall the ingress controller
 3. Once it finishes, click the install button
-4. The IP address will change.  Take this new IP address and replace the existing one in the DNS for the wildcard entry on that page, as well as any site specific entries (`version.gitlab.com` in this case).  
+4. The IP address will change.  Take this new IP address and replace the existing one in the DNS for the wildcard entry on that page, as well as any site specific entries (`version.gitlab.com` in this case).
 
 ### Certificates
 
-Certificates are managed by the `cert-manager` pod installed via the [Kubernetes Integration](https://gitlab.com/groups/gitlab-services/-/clusters/74458) page. This will handle automatic renewals. All of this only works if all DNS entries named in the certificate point to the ingress IP. 
+Certificates are managed by the `cert-manager` pod installed via the [Kubernetes Integration](https://gitlab.com/groups/gitlab-services/-/clusters/74458) page. This will handle automatic renewals. All of this only works if all DNS entries named in the certificate point to the ingress IP.
 
 ### DNS
 
@@ -139,7 +139,7 @@ Switch contexts to the `gs-production-gke` cluster in the `gs-production` namesp
 The overall usage can be checked like this:
 
 ```
-$ kubectl top nodes 
+$ kubectl top nodes
 NAME                                              CPU(cores)   CPU%   MEMORY(bytes)   MEMORY%
 gke-gs-production-gke-node-pool-0-08bfc75b-v8dk   132m         1%     3183Mi          11%
 gke-gs-production-gke-node-pool-0-a6855491-hrx5   125m         1%     2534Mi          9%
@@ -194,4 +194,3 @@ version-gitlab-com-6491770-production   production-65577f7bc4-fs7v6             
 Currently, the only alerting is the pingdom blackbox alerts.  This is the same as what was set up in the previous AWS environment, but probably needs to be improved.  The preference is to use built in GitLab functionality where possible.
 
 There is work to improve the current alerting mechanism inside of the GitLab product.  This work can be followed here: https://gitlab.com/gitlab-org/gitlab/issues/30832
-

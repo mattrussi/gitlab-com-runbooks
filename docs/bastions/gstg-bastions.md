@@ -13,7 +13,7 @@ The SSH Private Key `~/.ssh/id_rsa` should be changed if you have another key na
 Host lb-bastion.gstg.gitlab.com
         User                            YOUR_SSH_USERNAME
         PreferredAuthentications        publickey
-        IdentityFile                    ~/.ssh/id_rsa_gitlab       
+        IdentityFile                    ~/.ssh/id_rsa_gitlab
 
 # gstg boxes
 Host *.gitlab-staging-1.internal

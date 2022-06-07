@@ -39,7 +39,7 @@ In (2), we should double-check the connection pool saturation graph. Online GC w
 
 In (3), we should look for potential exhaustions in CPU and memory across pods.
 
-Finally and most importantly, in (4), we can look at all online GC metrics. Here we can see the number and the evolution of all queued tasks, including the overdue ones. Try to identify the point in time where the significant increase started and link it to the remaining metrics. In this same dashboard, it's also possible to observe database and storage backend metrics, so a problem in operating each of those backends can be detected here. Run rates and latencies are also displayed. 
+Finally and most importantly, in (4), we can look at all online GC metrics. Here we can see the number and the evolution of all queued tasks, including the overdue ones. Try to identify the point in time where the significant increase started and link it to the remaining metrics. In this same dashboard, it's also possible to observe database and storage backend metrics, so a problem in operating each of those backends can be detected here. Run rates and latencies are also displayed.
 
 In the presence of errors, we should also look at the registry access/application logs in Kibana. This should allow us to identify the cause of application/database/storage/network errors. The same applies to Sentry, where all unknown application errors are reported.
 

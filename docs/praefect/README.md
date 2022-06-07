@@ -41,7 +41,7 @@
 
 ### File storage locations
 
-Praefect itself is a transparent proxy with no local storage. 
+Praefect itself is a transparent proxy with no local storage.
 
 The praefect nodes that run praefect are named in the format praefect-XX-stor-ENV.
 

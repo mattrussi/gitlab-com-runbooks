@@ -81,7 +81,7 @@ bin/rebuild gprd 7 --check
 
 ### Lessons learnt from previous upgrades
 
-In April 2022 we performed an upgrade which is described 
+In April 2022 we performed an upgrade which is described
 in [this epic](https://gitlab.com/groups/gitlab-com/gl-infra/-/epics/601).
 
 We learnt that:
@@ -89,7 +89,7 @@ We learnt that:
 - the windows we asked for (4x of 2 hours each) were too short and we should have asked for 5x 4 hour windows
 - it was helpful to have several people on the upgrade call with specific responsibilities
   which were: 1) IM, 2) Change technician, 3) SRE support, 4) Progress monitoring
-- keeping Praefect servers separate made it easier to reason about specific failures 
+- keeping Praefect servers separate made it easier to reason about specific failures
 
 ## Gotchas
 

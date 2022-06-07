@@ -174,4 +174,3 @@ s.send(:save_upload)
 
 Please make sure to delete the created files under `tmp/gitlab_exports/...` when
 you are done.
-

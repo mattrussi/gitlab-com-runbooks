@@ -904,7 +904,7 @@ Per https://gitlab.com/gitlab-com/gl-infra/scalability/-/issues/360 there may be
 
 The bigkeys are stored in a GCS bucket named `gitlab-gprd-redis-analysis` under the `gitlab-production` project.
 
-The frequency can be controlled with the chef attribute `redis_analysis.bigkeys.timer_on_calendar`, being a systemd time spec.  You probably do not want to run it more than once an hour (it's intended for broad-brush data collection, not fine-grained), although other than considering how long it takes to run and avoiding overlap there's not actual constraint on that.  
+The frequency can be controlled with the chef attribute `redis_analysis.bigkeys.timer_on_calendar`, being a systemd time spec.  You probably do not want to run it more than once an hour (it's intended for broad-brush data collection, not fine-grained), although other than considering how long it takes to run and avoiding overlap there's not actual constraint on that.
 
 If it needs to be stopped for some reason (it is running badly, is causing undue load, or other unexpected effects) it can be
 1. Stopped if currently running, with `sudo systemctl stop redis-bigkeys-extract.service'

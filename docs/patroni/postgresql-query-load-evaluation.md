@@ -8,7 +8,7 @@ PostgreSQL supports a high level of concurrency by implementing what is called [
 High degree of concurrency can make one or more (or every) node to be under heavy load. This runbook is for searching specific queries that may be the source of the slowness.
 
 
-### How to see current activity 
+### How to see current activity
 
 The main source of information is the [pg_stat_activity](https://www.postgresql.org/docs/11/monitoring-stats.html#PG-STAT-ACTIVITY-VIEW) system view. It contains a lot of information about what is currently connected to the database. The most commonly used columns are:
 - application_name: Application depending. It helps to identify wich application is executing the current query
@@ -43,7 +43,7 @@ select state, count(*) from pg_stat_activity group by 1;
 
 ```
 gitlabhq_production=# select state, count(*) from pg_stat_activity group by 1;
- state  | count 
+ state  | count
 --------+-------
         |     4
  active |    11
@@ -61,7 +61,7 @@ select count(*) from pg_stat_activity where state='active' and now() - query_sta
 
 ```
 gitlabhq_production=# select count(*) from pg_stat_activity where state='active' and now() - query_start >= interval '1 second';
- count 
+ count
 -------
      3
 (1 row)
@@ -83,14 +83,14 @@ select client_addr, count(*) from pg_stat_activity where state='active' group by
 ### Database load distribution (by query)
 This query is an attempt to "generalize" the contents of `pg_stat_activity.query`, when you want to see how often a query is being executed, without taking care of query parameters:
 ```sql
-select regexp_replace(regexp_replace( regexp_replace(query,'\m[0-9]+\M','?','g')  , E'''[^'']+''', '?', 'g'), '\/\*.*\*\/', '') query, count(*) from pg_stat_activity 
-group by 1 
-order by 2 desc 
+select regexp_replace(regexp_replace( regexp_replace(query,'\m[0-9]+\M','?','g')  , E'''[^'']+''', '?', 'g'), '\/\*.*\*\/', '') query, count(*) from pg_stat_activity
+group by 1
+order by 2 desc
 limit 5;
 ```
 
 ```
-                                  query                                    | count 
+                                  query                                    | count
 ----------------------------------------------------------------------------+-------
                                                                             |     9
  SELECT username, password FROM public.pg_shadow_lookup($?)                 |     6
@@ -120,7 +120,7 @@ select queryid, substr(query, 1, 50), calls, total_time, min_time, max_time, mea
 ```
 
 ```
-       queryid        |                       substr                       |   calls    | total_time  | min_time | max_time | meantime |    rows    
+       queryid        |                       substr                       |   calls    | total_time  | min_time | max_time | meantime |    rows
 ----------------------+----------------------------------------------------+------------+-------------+----------+----------+----------+------------
    833913155023572892 | SELECT $1                                          | 3719787524 | 10023670.69 |     0.00 |    24.98 |     0.00 | 3719787524
  -2598210124401935501 | SELECT "licenses".* FROM "licenses" ORDER BY "lice | 1964360578 | 37747205.12 |     0.01 |  3728.41 |     0.02 | 9595904226
@@ -149,7 +149,3 @@ Different metrics can be used to refer `pg_stat_statements` from the _calls_, _s
 So, if you see an spike on the "calls", that could point to a sudden raise of traffic (and futher analysis could be made based on that).
 
 If you see a raise on the "seconds total" column that does not correspond to a raise of "calls" for the same queryid, then that query might be underperforming for some reason (an index migth have been dropped, old statistics and so on)
-
-
-
-

@@ -72,7 +72,7 @@ Certificates are managed by the `cert-manager` pod installed CI in the cluster m
 The overall usage can be checked like this:
 
 ```shell
-$ kubectl top nodes 
+$ kubectl top nodes
 NAME                                            CPU(cores)   CPU%   MEMORY(bytes)   MEMORY%
 gke-design-prod-gke-node-pool-0-58e08e59-popj   132m         1%     3183Mi          11%
 gke-design-prod-gke-node-pool-0-870e91bf-n1jh   125m         1%     2534Mi          9%

@@ -257,7 +257,7 @@ impacted depends on the service.
   lead to higher pressure on the remaining replicas.  If the primary database
 * Agent failure on nodes running GitLab Services == GitLab services will be
   unable to properly query which database server to talk to.  Due to this, the
-  application will default to always opening connections to the primary.  
+  application will default to always opening connections to the primary.
 
 Diagnosing agent failures requires observing logs and taking action based on the
 failure scenario.

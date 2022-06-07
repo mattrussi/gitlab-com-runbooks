@@ -44,10 +44,10 @@ The general form of the command is:
 /chatops run deploycmd CMD_NAME BASE_ROLE_NAME [--ENVIRONMENT] [--skip-haproxy] [--no-check]
 ```
 
-where 
+where
 * CMD_NAME is a file from https://ops.gitlab.net/gitlab-com/gl-infra/deploy-tooling/-/tree/master/cmds
     (without the .yml extension)
-* BASE_ROLE_NAME is the name of the chef role to operate on *without* the 
+* BASE_ROLE_NAME is the name of the chef role to operate on *without* the
     environment prefix, and with underscores replacing hyphens, e.g. base_fe_git
 * ENVIRONMENT is optional, defaulting to staging.  You can choose from
     production, dr, canary, or pre, e.g. `--production`
@@ -71,4 +71,3 @@ and will do the graceful haproxy removal and re-addition. The
 ```
 /chatops run deploycmd hostname base_stor --no-check --production
 ```
-

@@ -17,7 +17,7 @@
 ## Troubleshooting Pointers
 
 * [../ci-runners/ci_graphs.md](../ci-runners/ci_graphs.md)
-* [Chef Guidlines](../config_management/chef-guidelines.md)
+* [Chef Guidelines](../config_management/chef-guidelines.md)
 * [../elastic/elasticsearch-integration-in-gitlab.md](../elastic/elasticsearch-integration-in-gitlab.md)
 * [Kubernetes-Agent Disable Integrations](../kas/kubernetes-agent-disable-integrations.md)
 * [Ad hoc observability tools on Kubernetes nodes](../kube/k8s-adhoc-observability.md)

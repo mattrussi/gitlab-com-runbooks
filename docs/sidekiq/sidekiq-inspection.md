@@ -1,6 +1,6 @@
 # Poking around at sidekiq's running state
 
-Here in are some pre-packaged bits of Ruby for poking around (non-destructively) in what's running on Sidekiq.  
+Here in are some pre-packaged bits of Ruby for poking around (non-destructively) in what's running on Sidekiq.
 
 ## Prep/connection
 
@@ -14,7 +14,7 @@ After it starts, run:
 
 which we'll assume for all the other snippets
 
-The snippets look into (I assume) redis to can see what's running, so this is a global view and can be run from any sidekiq node.  You could also, with some effort, connect from a redis node (or anywhere else that has some common gems installed, and network connectivity to redis). 
+The snippets look into (I assume) redis to can see what's running, so this is a global view and can be run from any sidekiq node.  You could also, with some effort, connect from a redis node (or anywhere else that has some common gems installed, and network connectivity to redis).
 
 Initial details borrowed from https://gitlab.com/gitlab-org/gitlab-ce/blob/master/doc/administration/troubleshooting/sidekiq.md; that has some other useful context if you need to go further.
 
@@ -50,4 +50,3 @@ Note interesting data (IMO):
 
 ### Find the x-longest running jobs (10 is the number)
 `workers.map { |process_id, thread_id, work| runtime = Time.now.to_i-work["run_at"]; { pid: process_id, class: work["payload"]["class"], runtime: runtime } }.sort { |a,b| b[:runtime] <=> a[:runtime] }[0..10].each { |j| puts "#{j[:pid]}: #{j[:class]} #{j[:runtime]}s" }; nil`
-

@@ -107,4 +107,3 @@ Example:
 ```
 resize2fs /dev/sda1
 ```
-

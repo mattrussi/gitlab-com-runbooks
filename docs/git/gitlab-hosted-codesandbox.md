@@ -19,7 +19,7 @@ https://sandbox.gitlab-static.net/ and is set up in Fastly with TLS under the
 name `sandbox.gitlab-static.net`.
 
 It was decided that none of the above would be in terraform as it did not fit
-into our current model of terraform and will likely never be touched. 
+into our current model of terraform and will likely never be touched.
 
 ## Deployment (tentative)
 

@@ -191,4 +191,3 @@ There are many reasons why containers will fail to start, but some include:
 1. A configuration error has been pushed to the application, resulting in a termination during startup and a `CrashLoopBackOff`.
 1. Kubernetes is unable to pull the required image from the registry
 1. An increase in the amount of containers that need to be created during a deployment.
-

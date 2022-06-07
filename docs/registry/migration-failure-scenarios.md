@@ -144,7 +144,7 @@ The registry CLI will output the corresponding error. For example:
 
 ```shell
 ERRO[0000] Exec                                          args="[]" database=registry err="ERROR: column \"stop_level_namespace_id\" does not exist (SQLSTATE 42703)" pid=77733 sql="CREATE INDEX IF NOT EXISTS index_repositories_on_top_level_namespace_id_and_parent_id ON repositories USING btree (stop_level_namespace_id, parent_id)"
-failed to run database migrations: ERROR: column "stop_level_namespace_id" does not exist (SQLSTATE 42703) handling 20210503145616_create_repositories_table⏎  
+failed to run database migrations: ERROR: column "stop_level_namespace_id" does not exist (SQLSTATE 42703) handling 20210503145616_create_repositories_table⏎
 ```
 
 ##### Recovery definition
@@ -286,7 +286,7 @@ For subsequent read requests, data written to the new path will be visible to th
 
 ##### Observability
 
-The logs in Kibana will always include `serving request in migration mode` for once for each request made in migration mode. This log entry will contain the path that the repository followed, but its presence is not a signal or alert for this scenario in particular. 
+The logs in Kibana will always include `serving request in migration mode` for once for each request made in migration mode. This log entry will contain the path that the repository followed, but its presence is not a signal or alert for this scenario in particular.
 
 End users will observe this issue as older tags not suddenly and consistently not appearing in the UI and older images suddenly and consistently failing to pull. While newer tags and images consistently remain visible in the UI and pullable.
 
@@ -332,7 +332,7 @@ For subsequent read requests, data written to the old path will be visible to th
 
 ##### Observability
 
-The logs in Kibana will always include `serving request in migration mode` for once for each request made in migration mode. This log entry will contain the path that the repository followed, but its presence is not a signal or alert for this scenario in particular. 
+The logs in Kibana will always include `serving request in migration mode` for once for each request made in migration mode. This log entry will contain the path that the repository followed, but its presence is not a signal or alert for this scenario in particular.
 
 End users will observe this issue as older tags not suddenly and consistently not appearing in the UI and older images suddenly and consistently failing to pull. While newer tags and images consistently remain visible in the UI and pullable.
 

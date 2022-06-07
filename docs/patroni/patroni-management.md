@@ -46,7 +46,7 @@ Is located at `/var/opt/gitlab/patroni/patroni.yml`. It contains all the directi
 - `name`: Name of this instance
 - `consul`: Location of the consul agent (usually localhost)
 - `bootstrap`: Directives for configure and deploy new instances
-- `postgresql`: General configuration settings for PostgreSQL 
+- `postgresql`: General configuration settings for PostgreSQL
 
 ### Checking service status
 
@@ -56,7 +56,7 @@ Is located at `/var/opt/gitlab/patroni/patroni.yml`. It contains all the directi
 - `name`: Name of this instance
 - `consul`: Location of the consul agent (usually localhost)
 - `bootstrap`: Directives to configure and deploy new instances
-- `postgresql`: General configuration settings for PostgreSQL 
+- `postgresql`: General configuration settings for PostgreSQL
 
 ### Checking service status
 
@@ -160,7 +160,7 @@ sudo gitlab-psql -c "select name, setting,  short_desc, sourcefile, sourceline  
 
 And a possible result:
 ```
-      name       | setting |                     short_desc                     |               sourcefile                | sourceline 
+      name       | setting |                     short_desc                     |               sourcefile                | sourceline
 -----------------+---------+----------------------------------------------------+-----------------------------------------+------------
  max_connections | 500     | Sets the maximum number of concurrent connections. | /etc/postgresql/11/main/postgresql.conf |         64
 
@@ -181,7 +181,7 @@ sudo gitlab-psql -c "select name, setting,  short_desc, sourcefile, sourceline  
 
 And a possible result:
 ```
-      name       | setting |                     short_desc                     |               sourcefile                | sourceline 
+      name       | setting |                     short_desc                     |               sourcefile                | sourceline
 -----------------+---------+----------------------------------------------------+-----------------------------------------+------------
  max_connections | 500     | Sets the maximum number of concurrent connections. | /etc/postgresql/11/main/postgresql.conf |         64
 
@@ -618,7 +618,7 @@ by running `sudo chef-client` across the cluster.
 [chef-repo]: https://ops.gitlab.net/gitlab-cookbooks/chef-repo/
 
 
-## Auditing patroni 
+## Auditing patroni
 
 Patroni holds a log file under `/var/log/gitlab/patroni/patroni.log` where patroni activity and messages can be found:
 ```

@@ -66,7 +66,7 @@ kubectl -n gitlab logs vault-0
 ```
 
 ### Determining status of Vault from Vault itself
-You can either setup `sshuttle` access to the Vault instance and login to it, or connect to one of the Vault pods and running 
+You can either setup `sshuttle` access to the Vault instance and login to it, or connect to one of the Vault pods and running
 ```
 kubectl -n vault exec -it vault-0 sh
 $ vault status

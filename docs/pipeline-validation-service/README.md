@@ -47,7 +47,7 @@ Currently there are no alerts in place for this service. Once we are able to est
 Logs are ingested into Elasticsearch and can be searched via the [pubsub-pvs-inf-gprd\*](https://log.gprd.gitlab.net/app/management/kibana/indexPatterns/patterns/4858f3a0-a312-11eb-966b-2361593353f9#/?_a=h@9293420) index.
 
 The logs can be observed from both sides:
-* PVS (logs from the service itself): https://log.gprd.gitlab.net/goto/0fa08b4c0506cdee202d4b58736c7330 
+* PVS (logs from the service itself): https://log.gprd.gitlab.net/goto/0fa08b4c0506cdee202d4b58736c7330
 * GitLab (logging the rejection): https://log.gprd.gitlab.net/goto/764d373889cb1d9f6fd6f7f93856198c
    * There is some duplication/repeat logging here, so raw counts may be misleading
 

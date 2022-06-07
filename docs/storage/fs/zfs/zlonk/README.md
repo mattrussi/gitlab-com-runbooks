@@ -9,7 +9,7 @@
 
 ## Overview
 
-Zlonk creates, prepares for use, and destroys ZFS clones. 
+Zlonk creates, prepares for use, and destroys ZFS clones.
 
 In its [first iteration](https://gitlab.com/gitlab-com/gl-infra/zlonk/-/blob/master/bin/zlonk.sh), it is a simple shell script that is customized for *cloned Postgres replicas*. It was initially written to address the [long data extraction outage](https://gitlab.com/gitlab-data/analytics/-/issues/8576) we experienced around March - May 2021. Other uses uses include the generation of ad-hoc replicas for [testing and clean-up purposes](https://gitlab.com/gitlab-com/gl-infra/production/-/issues/4591).
 

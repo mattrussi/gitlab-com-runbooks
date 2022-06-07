@@ -38,7 +38,7 @@ The general settings of our PostgreSQL clusters are managed by Chef and can be f
 "autovacuum_vacuum_cost_limit": 6000,
 "autovacuum_vacuum_scale_factor": "0.005",
 ...
-"log_autovacuum_min_duration": "0", 
+"log_autovacuum_min_duration": "0",
 ```
 
 ## Per table settings
@@ -92,7 +92,7 @@ The goal of this epic is reduce the resource consumption from autovacuum, and ke
 
 Currently, we are reaching the `autovacuum_freeze_max_age` threshold of `200000000` in less than 3 days on average.
 
-Having this configuration so low for our environment forces the execution of `AUTOVACUUM TO PREVENT WRAPAROUND` in less than 3 days. 
+Having this configuration so low for our environment forces the execution of `AUTOVACUUM TO PREVENT WRAPAROUND` in less than 3 days.
 
 ### Desired State
 

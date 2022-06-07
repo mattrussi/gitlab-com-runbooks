@@ -56,7 +56,7 @@ To check the created Roles/Users in the database instance, you can use the [meta
 postgres=# \dg
 
                                       List of roles
-    Role name    |                         Attributes                         | Member of 
+    Role name    |                         Attributes                         | Member of
 -----------------+------------------------------------------------------------+-----------
  postgres        | Superuser, Create role, Create DB, Replication, Bypass RLS | {}
  readonly_roles  | Cannot login                                               | {}
@@ -80,7 +80,7 @@ GRANT INSERT on new_schema.new_table to user1;
 GRANT UPDATE, DELETE on new_schema.new_table to user1;
 ```
 
-You can use the clause `ALL PRIVILEGES`  to grant all permissions at once. 
+You can use the clause `ALL PRIVILEGES`  to grant all permissions at once.
 
 ```sql
 GRANT ALL PRIVILEGES on new_schema.new_table to user1;
@@ -114,7 +114,7 @@ postgres=# GRANT readonly_roles to user1 ;
 GRANT ROLE
 postgres=# \dg
                                       List of roles
-    Role name    |                         Attributes                         | Member of 
+    Role name    |                         Attributes                         | Member of
 -----------------+------------------------------------------------------------+-----------
  postgres        | Superuser, Create role, Create DB, Replication, Bypass RLS | {}
  readonly_roles  | Cannot login                                               | {}
@@ -127,7 +127,7 @@ grant SELECT on ALL tables in schema public to readonly_roles ;
 
 ```
 select grantor,grantee,table_schema||'.'||table_name as table, string_agg(privilege_type,',') as permissions ,string_agg( is_grantable,',') granteable from information_schema.table_privileges where table_schema<> 'pg_catalog' and table_schema<>'information_schema' and  grantee='readonly_roles'  group by 1,2,3 order by 3;
-     grantor      |    grantee     |                         table                          | permissions | granteable 
+     grantor      |    grantee     |                         table                          | permissions | granteable
 ------------------+----------------+--------------------------------------------------------+-------------+------------
  gitlab           | readonly_roles | public.abuse_reports                                   | SELECT      | NO
  gitlab           | readonly_roles | public.alert_management_alert_assignees                | SELECT      | NO
@@ -144,7 +144,7 @@ If a non-privleged user needs to execute a function that access privileged data,
 CREATE FUNCTION function_name(...)
 SECURITY DEFINER
 AS
-$$ 
+$$
 SELECT * from some_table...
 $$
 ...
@@ -200,7 +200,7 @@ host    dbXXX         userXXX         XXX.XXX.XX.XXX/N_mask_byte     md5
 **Important:** Gitlab uses a Patroni managed cluster, in that deployment mode the correct method to add manage client authorization is through the [`pg_hba` settings](https://patroni.readthedocs.io/en/latest/SETTINGS.html#postgresql) defined in the `patroni.yml` file. Any entries persisted directly into the `pg_hba.conf` can be overriden by Patroni.
 
 
-## Propagated user to PGBouncer 
+## Propagated user to PGBouncer
 PGBouncer also needs to be setup for authenticating users. In the simplest case, pgBouncer uses its own file for storing users and passwords (by default `userlist.txt`). But pgBouncer can also query the database to authenticate the user being connected to pgBouncer. In our case we are doing it via [auth_query](https://www.pgbouncer.org/config.html#auth_query) parameter, like in:
 
 ```
@@ -244,7 +244,7 @@ In order to avoid those errors, you must create all roles previously:
 
 
 ## Giving permissions to objects that will be created in the future
-When a new table is created, by default only the table creator and the superusers can access it. That behaviour can be changed using [`ALTER DEFAULT PRIVILEGES`](https://www.postgresql.org/docs/11/sql-alterdefaultprivileges.html), like in 
+When a new table is created, by default only the table creator and the superusers can access it. That behaviour can be changed using [`ALTER DEFAULT PRIVILEGES`](https://www.postgresql.org/docs/11/sql-alterdefaultprivileges.html), like in
 
 
 

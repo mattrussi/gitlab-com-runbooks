@@ -24,6 +24,3 @@
    * Gitaly concurrency limits (which had contributed)
 * Smoking gun: not only git clones which were slow, artifact downloads against S3 had also sky-rocket in latency
 * Testing git clones and artifact downloads via https://gitlab.com, then against front-end load balancers, then again Workhorse helps us pinpoint the issue with the HAProxy front-end fleet.
-
-
-

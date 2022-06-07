@@ -9,7 +9,7 @@ groups:
       alert_type: cause
     annotations:
       description: |
-        This is a test alert for Alertmanager Incident Integration. The 
+        This is a test alert for Alertmanager Incident Integration. The
         `incident_project_test_up` can be deployed/removed using the node_exporter
         textfile collector.
       title: This is a test of Alertmanager Incident Integration

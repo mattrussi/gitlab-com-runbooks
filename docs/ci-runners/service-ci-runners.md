@@ -46,7 +46,7 @@ In the case of a scheduled pipeline surge triggering the alert, it should resolv
 
 ### GitLab.com usage has outgrown it's surge capacity
 
-Each runner manager tries to maintain a [pool of idle virtual machines](https://ops.gitlab.net/gitlab-cookbooks/chef-repo/-/blob/master/roles/gitlab-runner-srm-gce.json#L19) 
+Each runner manager tries to maintain a [pool of idle virtual machines](https://ops.gitlab.net/gitlab-cookbooks/chef-repo/-/blob/master/roles/gitlab-runner-srm-gce.json#L19)
 to assign to new jobs. This allows jobs to start as soon as they're assigned without waiting for the VM spin-up time. However, if the idle pool is exhausted and new jobs keep coming in, the new jobs will have to wait for availble VMs.
 
 This scenario actually describes the above two scenarios as well, however because the idle count is a hard coded value per runner manager, over time it will need to be updated as usage on GitLab.com grows.
@@ -138,4 +138,3 @@ Contact the Abuse Team via Slack (`@abuse-team`), and ask them to run `Scrubber`
 
 Quick reference:
 * [Scrubber runbook](https://gitlab.com/gitlab-com/gl-security/abuse-team/abuse/wikis/Runbook/Mitigation-Tool-%28Scrubber%29)
-

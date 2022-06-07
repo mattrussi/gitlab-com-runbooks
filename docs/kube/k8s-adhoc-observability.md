@@ -367,7 +367,7 @@ On your laptop, download the file using `gcloud compute scp`:
 $ gcloud compute scp --project gitlab-pre gke-pre-gitlab-gke-redis-ratelimiting-231e75c5-rpfh:/var/pcap/gke-pre-gitlab-gke-redis-ratelimiting-231e75c5-rpfh.pod_7373dfce7087b83d7d9040dd3149a3a81ff14c946f572aa7949a39a694eb69b6.20220520_224447.pcap.gz  /tmp/
 No zone specified. Using zone [us-east1-b] for instance: [gke-pre-gitlab-gke-redis-ratelimiting-231e75c5-rpfh].
 External IP address was not found; defaulting to using IAP tunneling.
-gke-pre-gitlab-gke-redis-ratelimiting-231e75c5-rpfh.pod_7373dfce7087b83d7d9040dd3149a3a81ff14c946f572aa79 100%   23KB 152.1KB/s   00:00    
+gke-pre-gitlab-gke-redis-ratelimiting-231e75c5-rpfh.pod_7373dfce7087b83d7d9040dd3149a3a81ff14c946f572aa79 100%   23KB 152.1KB/s   00:00
 ```
 
 ### Demo

@@ -97,7 +97,7 @@ differing styles.
 1. If the data to be imported is large, consider whether partioning will be necessary.
    In `Partitioning`, select the field on which to partition the data (a `TIMESTAMP`, typically).
    Only fields from the schema will be considered.
-   
+
       ![partition by timestamp](./img/bigquery_table_partition.png)
 
 1. Create the table.  If everything is right, a background job will run to load

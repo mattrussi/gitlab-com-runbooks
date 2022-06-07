@@ -3,7 +3,7 @@
 
 ## Intro
 Nowadays all informatics services/system has a log mechanism due to can register events from services/system and can be useful for *audit* or *troubleshooting*. The Gitlab database architecture is made up of some components such as: [PostgreSQL](https://www.postgresql.org/), [pgbouncer](https://www.pgbouncer.org/), [patroni](https://github.com/zalando/patroni) and [counsul](https://www.consul.io/intro/index). This runbook describe the most common errors for each component, what that means and how to anlayze logs for these components.
- 
+
 
 
 ## PostgreSQL's log
@@ -42,7 +42,7 @@ The rest of log's parameters you can check the values with the following query:
 
 ```
         gitlabhq_production=# select name, setting from pg_settings where name like 'log_%';
-                    name             |                       setting                       
+                    name             |                       setting
         -----------------------------+-----------------------------------------------------
         log_autovacuum_min_duration | 0
         log_checkpoints             | on
@@ -56,7 +56,7 @@ The rest of log's parameters you can check the values with the following query:
         log_file_mode               | 0640
         log_filename                | postgresql.log
         log_hostname                | off
-        log_line_prefix             | %m [%p, %x]: [%l-1] user=%u,db=%d,app=%a,client=%h 
+        log_line_prefix             | %m [%p, %x]: [%l-1] user=%u,db=%d,app=%a,client=%h
         log_lock_waits              | on
         log_min_duration_statement  | 1000
         log_min_error_statement     | error
@@ -88,7 +88,7 @@ Most important columns when dealing with PostgreSQL errors are:
 - timestamp: To know the exact moment of the error
 - severity level: PostgreSQL has different levels of severity, showed here in increasing order:
     - WARNING: An event that, while not preventing the command to complete, may lead to failures if not addressed. Monitoring for warnings is a good practice in early detection of issues on both the server and application side.
-    - ERROR: Failure to execute a command. 
+    - ERROR: Failure to execute a command.
     - FATAL: The current session is aborted due to an error. The client may retry.
     - PANIC: All sessions are aborted. This situation affects all the clients.
 - error code: Provides more insights about the source of the error. A complete list of error codes can be found [here](https://www.postgresql.org/docs/11/errcodes-appendix.html). In the example above, the error code is "_57014_", typified as "_query_canceled_"
@@ -102,7 +102,7 @@ Some common PostgreSQL errors, what it means and how to solve/address it:
 By default, the maximum amount of time that any query can be active is `15 seconds`:
 ```
 gitlabhq_production=# show statement_timeout ;
- statement_timeout 
+ statement_timeout
 -------------------
  15s
 (1 row)
@@ -130,13 +130,13 @@ An attempt to write more data than allowed for a column. To correct this, you co
 
 ``` FATAL: remaining connection slots are reserved for non-replication superuser connections ```. This means that this PostgreSQL instance has no more connections available. This is related to the [max_connections](https://postgresqlco.nf/en/doc/param/max_connections/11/) setting.
 
-``` ERROR: deadlock detected ```. This happens when 2 separate connections needs a resource (a table, row, etc) that is being locked by the other, mutually locking each other. One of the connections will be terminated. Verify the application flow to see if this situation can be avoided. 
+``` ERROR: deadlock detected ```. This happens when 2 separate connections needs a resource (a table, row, etc) that is being locked by the other, mutually locking each other. One of the connections will be terminated. Verify the application flow to see if this situation can be avoided.
 
-```FATAL: too many connections for role "xxx"```  Specific roles can have specific connection limit set. Check the `\du` command to check the current limit for that user, and investigate futher. 
+```FATAL: too many connections for role "xxx"```  Specific roles can have specific connection limit set. Check the `\du` command to check the current limit for that user, and investigate futher.
 ```
 gitlabhq_production=# \du gitlab
               List of roles
- Role name |   Attributes    | Member of 
+ Role name |   Attributes    | Member of
 -----------+-----------------+-----------
  gitlab    | 270 connections | {}
  ```
@@ -150,15 +150,15 @@ For deeper, broad analysis of PostgreSQL's logs, [pgbadger](https://github.com/d
 
 
 ## pgbouncer's log
-The pgbouncer's log can be as verbose as we configure it, you can check the log parameters [here](https://www.pgbouncer.org/config.html#log-settings). 
-some important parameters to analyze log are: 
+The pgbouncer's log can be as verbose as we configure it, you can check the log parameters [here](https://www.pgbouncer.org/config.html#log-settings).
+some important parameters to analyze log are:
 
-* log_connections: log successfully logins 
+* log_connections: log successfully logins
 * log_disconnections: Log disconnections with reasons
 * log_stats: log statistics about queries and I/O traffics (useful to analyzing the server activity)
 
 Common entries from pgBouncer logs are:
-```gitlabhq_production/gitlab@xxxxx:zzz taking connection from reserve_pool```. This means that the pool is under heavy use. May be related to a burst of long running queries on the postgres side. 
+```gitlabhq_production/gitlab@xxxxx:zzz taking connection from reserve_pool```. This means that the pool is under heavy use. May be related to a burst of long running queries on the postgres side.
 
 ```gitlabhq_production/gitlab@xxxxx:zzzz pooler error: server conn crashed?```. This is usually related to connections being canceled (i.e. timeout) on the postgres side.
 
@@ -172,7 +172,7 @@ Common entries from pgBouncer logs are:
 - wait us -> waiting average (in us)
 
 For analyzing pgbouncer's logs can be used this [script](scripts/parse_bouncer.sh) , the location for pgbouncer logs in Gitlab are: */var/log/gitlab/pgbouncer*
-### Audit  
+### Audit
 You must run the script
 ```
         sh scripts/parse_bouncer.sh -f name_of_pgbouncer_log_file
@@ -291,13 +291,13 @@ You will get an output similar to:
         pgbouncer[43984]-> (nodb)/(nouser)@10.250.8.11: 11
         pgbouncer[44022]-> (nodb)/(nouser)@10.250.8.11: 11
         pgbouncer[44052]-> (nodb)/(nouser)@10.250.8.11: 11
-``` 
+```
 
 ## Patroni's log
 The Patroni's log can help to analyze the health of PostgreSQL cluster for HA implemented by Patroni [here](https://github.com/zalando/patroni). The logs of patroni are located in */var/log/gitlab/patroni*.
 
 * In Normal behavior, you will see in the logs something like:
-  * Master 
+  * Master
   ```
   INFO: Lock owner: patroni-01-db-gprd.c.gitlab-production.internal; I am patroni-01-db-gprd.c.gitlab-production.internal
   INFO: no action.  i am the leader with the lock
@@ -310,13 +310,13 @@ The Patroni's log can help to analyze the health of PostgreSQL cluster for HA im
   ```
   Meaning this is a standby server `I am patroni-05-db-gprd.c.gitlab-production.internal` following the leader `patroni-01-db-gprd.c.gitlab-production.internal`
 
-* Error  
+* Error
 
      For analyzing patroni's logs with `error`  you can use this [script](scripts/parse_patroni.sh):
 
 
      ```
-      sh scripts/parse_patroni.sh -f patroni.log.1 
+      sh scripts/parse_patroni.sh -f patroni.log.1
         * WARNINGS
     WARNING: Postgresql is not running.->1782
         * ERRORS
@@ -340,7 +340,7 @@ FileNotFoundError: [Errno 2] No such file or directory: '/var/opt/gitlab/postgre
 Consul is the consensus tool that is integrated to patroni in Gitlab and the logs can be found in */var/log/syslog* with tag  **[consul]**
 
 * In Normal behavior, you will see in the logs something like:
-  
+
   ```
    [WARN]  agent: Check is now critical: check=service:patroni-master
    agent: Check is now critical: check=service:patroni-master
@@ -348,17 +348,16 @@ Consul is the consensus tool that is integrated to patroni in Gitlab and the log
    agent: Synced check: check=service:db-replica:2
   ```
   The output that Consul "synced",  meaning that agent loaded the service, and has successfully registered it in the catalog.
-  
 
-* Error  
+
+* Error
 
      If some error happed you will find  in the logs the tag **[ERR]** and  you can used this [script](scripts/parse_consul.sh) to anlayze:
 
 
      ```
-      sh scripts/parse_consul.sh -f syslog.1 
+      sh scripts/parse_consul.sh -f syslog.1
        * ERRORS
     [ERR] yamux: keepalive failed: session shutdown->2
 
      ```
-

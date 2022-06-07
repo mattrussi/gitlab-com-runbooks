@@ -81,7 +81,7 @@ General principles: runbooks should be
 Runbooks are most often used to mitigate issues / react to alerts. Therefore
 runbooks should have a "Troubleshooting" section simply structured by describing
 symptom, cause (use the alertname if possible) and solution and a "Maintenance"
-section for other general maintenance tasks. 
+section for other general maintenance tasks.
 
 ```
 [[_TOC_]]
@@ -137,4 +137,3 @@ Identifyable by:
 
 
 ```
-

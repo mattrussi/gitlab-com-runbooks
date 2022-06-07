@@ -45,7 +45,7 @@ The `agentk` clients will receive no indication that the flag is disabled.
 
 NOTE: As this will cause `kas` to silently fail to connect to the Gitlab API, the end result for users will be that they will see their `agentk` clients fail to do anything silently, while the `kas` containers on our side will throw errors. This could become a cause for confusion for users, so we must ensure we only disable this in the most dire of circumstances, and communicate to users that agents will by non-functional while disabled.
 
-Other configurations 
+Other configurations
 # Architecture
 
 ```plantuml
@@ -304,4 +304,4 @@ The initial SLA for this service will be targeting error rates on the `GetConfig
 
 # Links to further Documentation
 
-- [Kubernetes Agent Readiness Review](https://gitlab.com/gitlab-com/gl-infra/readiness/-/blob/master/kubernetes-agent/index.md) 
+- [Kubernetes Agent Readiness Review](https://gitlab.com/gitlab-com/gl-infra/readiness/-/blob/master/kubernetes-agent/index.md)

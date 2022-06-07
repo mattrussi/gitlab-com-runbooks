@@ -28,4 +28,3 @@ identify the instance with a high error rate.
 ```
 sudo less /var/log/gitlab/praefect/current
 ```
-

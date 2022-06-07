@@ -23,8 +23,8 @@ For a complete implementation, the following will be done:
 
 ## Location of the Key
 
-The location of the Omnibus package signing key can be found by searching for 
-a secure note in the Build vault in 1Password. 
+The location of the Omnibus package signing key can be found by searching for
+a secure note in the Build vault in 1Password.
 
 ## Securing Keys
 

@@ -9,7 +9,7 @@
 
 From time to time it may become necessary to block IP addresses or networks of IP addresses from accessing GitLab.
 We now generally use Cloudflare for that, but as of now GitLab Pages and registry are not
-behind Cloudflare. In this case we can still use the old way by managing those IP adresses in the file 
+behind Cloudflare. In this case we can still use the old way by managing those IP adresses in the file
 [deny-403-ips.lst](https://gitlab.com/gitlab-com/security-tools/front-end-security/blob/master/deny-403-ips.lst) in the
 [security-tools/front-end](https://gitlab.com/gitlab-com/security-tools/front-end-security) repository. Updates to this file
 are distributed to the HA Proxy nodes on each chef run by the [gitlab-haproxy](https://gitlab.com/gitlab-cookbooks/gitlab-haproxy) cookbook.

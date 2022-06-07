@@ -15,13 +15,13 @@
 <!-- markdown-toc end -->
 
 # About #
-The [about.gitlab.com](https://gitlab.com/gitlab-com/www-gitlab-com) website is the go-to place to learn pretty much everything about GitLab: the product, pricing, various resources, blogs, support and most importantly our handbook 
+The [about.gitlab.com](https://gitlab.com/gitlab-com/www-gitlab-com) website is the go-to place to learn pretty much everything about GitLab: the product, pricing, various resources, blogs, support and most importantly our handbook
 
 # Repository #
 Here is the project repository behind about.gitlab.com: https://gitlab.com/gitlab-com/www-gitlab-com
 
 # How it is setup #
-- The about.gitlab.com project is hosted on [about.gitlab.com](https://console.cloud.google.com/storage/browser/about.gitlab.com?forceOnBucketsSortingFiltering=false&authuser=1&folder=&organizationId=&project=gitlab-production) GCS bucket. The website configuration has it that it points to an `index.html` file at the root level. 
+- The about.gitlab.com project is hosted on [about.gitlab.com](https://console.cloud.google.com/storage/browser/about.gitlab.com?forceOnBucketsSortingFiltering=false&authuser=1&folder=&organizationId=&project=gitlab-production) GCS bucket. The website configuration has it that it points to an `index.html` file at the root level.
 - The DNS is setup on Fastly. (You can get the Fastly login credentials from 1Password)
 
 # Availability Issues #
@@ -125,4 +125,3 @@ There are three deploy jobs:
 
 The last two use the runner on about-src.gitlab.com, it's a shell runner.
 All three deploy websites content by rsyncing artifacts generated using MiddleMan in previous jobs
-

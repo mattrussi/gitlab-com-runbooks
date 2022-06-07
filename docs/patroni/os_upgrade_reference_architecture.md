@@ -73,27 +73,27 @@ Standby clusters are created from a Snapshot of the Primary Cluster. We need to 
 
 ### Reset Cluster Configs and Permissions
 
-> Reconfiguring the existing `patroni-main` and `patroni-ci` clusters is not needed for `gstg` and `gprd`. We perform these steps on `db-benchmarking because we are deploying all clusters from scratch. 
+> Reconfiguring the existing `patroni-main` and `patroni-ci` clusters is not needed for `gstg` and `gprd`. We perform these steps on `db-benchmarking because we are deploying all clusters from scratch.
 
 ### Execute steps [1-3] on all 01 nodes of the following clusters:
 - `patroni-main-pg12-1604`
 - `patroni-main-pg12-2004`
 - `patroni-ci-pg12-1604`
-- `patroni-ci-pg12-2004` 
+- `patroni-ci-pg12-2004`
 
-1 - Stop the Patroni service in all the nodes with the command: 
+1 - Stop the Patroni service in all the nodes with the command:
 ```sudo systemctl stop patroni```
 
-2 - Get the cluster name: 
+2 - Get the cluster name:
 ```sudo gitlab-patroni list```
 
-3 - Remove the DCS entry from the cluster, executing : 
+3 - Remove the DCS entry from the cluster, executing :
 `gitlab-patronictl remove db-benchmarking-patroni-main-pg12-1604`
 
-Answer the name of the cluster that will be removed: 
-`db-benchmarking-patroni-main-pg12-1604` 
+Answer the name of the cluster that will be removed:
+`db-benchmarking-patroni-main-pg12-1604`
 
-Answer the confirmation message: 
+Answer the confirmation message:
 `Yes I am aware`
 
 ### Execute steps [4-6] in all nodes for all clusters:
@@ -125,7 +125,7 @@ sudo rm -rf /var/opt/gitlab/postgresql/data12/patroni.dynamic.json
 
 **Initialize Patroni Main Cluster**
 
-7 - Start the Patroni service on `patroni-main-pg12-1604-01` primary node: 
+7 - Start the Patroni service on `patroni-main-pg12-1604-01` primary node:
 ```sudo systemctl start patroni```
 
 8 - check the cluster status: `sudo gitlab-patronictl list`
@@ -164,10 +164,10 @@ mchacon@patroni-main-pg12-1604-02-db-db-benchmarking.c.gitlab-db-benchmarking.in
 - `patroni-ci-pg12-1604-01`
 - `patroni-ci-pg12-2004-01`
 
-  
-`sudo systemctl start patroni`. 
 
-12 - Check the leader assumed: `sudo gitlab-patronictl list` 
+`sudo systemctl start patroni`.
+
+12 - Check the leader assumed: `sudo gitlab-patronictl list`
 Output:
 ```
 mchacon@patroni-main-pg12-2004-01-db-db-benchmarking.c.gitlab-db-benchmarking.internal:/var/log/gitlab$ sudo gitlab-patronictl list
@@ -192,9 +192,9 @@ mchacon@patroni-main-pg12-2004-01-db-db-benchmarking.c.gitlab-db-benchmarking.in
 - `patroni-ci-pg12-1604-02`
 - `patroni-ci-pg12-2004-02`
 
- `systemctl start patroni`. 
+ `systemctl start patroni`.
 
-15 - Check the leader assumed: `gitlab-patronictl list` 
+15 - Check the leader assumed: `gitlab-patronictl list`
 
 Output:
 ```

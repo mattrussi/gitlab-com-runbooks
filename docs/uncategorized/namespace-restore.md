@@ -223,4 +223,3 @@ irb(main):6:1>   puts project.repository_storage
 irb(main):7:1>   puts project.disk_path
 irb(main):8:1> end; nil
 ```
-
