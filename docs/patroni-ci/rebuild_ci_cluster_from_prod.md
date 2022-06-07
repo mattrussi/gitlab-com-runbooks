@@ -75,6 +75,8 @@ Replication Backup nodes are:
     ```
 1. If Chef failed, you might have to:
     - Manually delete the nodes from Chef
+        <details><summary>Knife node delete GSTG</summary>
+
         ```
         knife node delete patroni-ci-01-db-gstg.c.gitlab-staging-1.internal
         knife node delete patroni-ci-02-db-gstg.c.gitlab-staging-1.internal
@@ -93,6 +95,30 @@ Replication Backup nodes are:
         knife client delete patroni-ci-07-db-gstg.c.gitlab-staging-1.internal
         knife client delete patroni-zfs-ci-01-db-gstg.c.gitlab-staging-1.internal
         ````
+
+        </details>
+        <details><summary>Knife node delete GPRD</summary>
+
+        ```
+        knife node delete patroni-ci-01-db-gprd.c.gitlab-production.internal
+        knife node delete patroni-ci-02-db-gprd.c.gitlab-production.internal
+        knife node delete patroni-ci-03-db-gprd.c.gitlab-production.internal
+        knife node delete patroni-ci-04-db-gprd.c.gitlab-production.internal
+        knife node delete patroni-ci-05-db-gprd.c.gitlab-production.internal
+        knife node delete patroni-ci-06-db-gprd.c.gitlab-production.internal
+        knife node delete patroni-ci-07-db-gprd.c.gitlab-production.internal
+        knife node delete patroni-zfs-ci-01-db-gprd.c.gitlab-production.internal
+        knife client delete patroni-ci-01-db-gprd.c.gitlab-production.internal
+        knife client delete patroni-ci-02-db-gprd.c.gitlab-production.internal
+        knife client delete patroni-ci-03-db-gprd.c.gitlab-production.internal
+        knife client delete patroni-ci-04-db-gprd.c.gitlab-production.internal
+        knife client delete patroni-ci-05-db-gprd.c.gitlab-production.internal
+        knife client delete patroni-ci-06-db-gprd.c.gitlab-production.internal
+        knife client delete patroni-ci-07-db-gprd.c.gitlab-production.internal
+        knife client delete patroni-zfs-ci-01-db-gprd.c.gitlab-production.internal
+        ````
+
+        </details>
     - Restart the VM instances through the GCP console
 1. Initialize the cluster using the `db-migration/pg-replica-rebuild` Ansible playbook, by executing:
     ```
