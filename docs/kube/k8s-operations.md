@@ -2,7 +2,7 @@
 
 # GitLab
 
-https://gitlab.com/gitlab-com/gl-infra/k8s-workloads/gitlab-com
+<https://gitlab.com/gitlab-com/gl-infra/k8s-workloads/gitlab-com>
 
 ## Setup for the oncall
 
@@ -18,7 +18,7 @@ https://gitlab.com/gitlab-com/gl-infra/k8s-workloads/gitlab-com
 
 Creating a new node pool will be necessary if we need to change the instance sizes of our nodes or any setting that requires nodes to be stopped.
 It is possible to create a new pool without any service interruption by migrating workloads.
-The following outlines the procedure, note that when doing this in production you should create a change issue, see https://gitlab.com/gitlab-com/gl-infra/production/issues/1192 as an example.
+The following outlines the procedure, note that when doing this in production you should create a change issue, see <https://gitlab.com/gitlab-com/gl-infra/production/issues/1192> as an example.
 
 **Note**: When creating a new node pool to replace an existing node pool, be sure to use the same [`type`](https://gitlab.com/gitlab-com/gitlab-com-infrastructure/-/blob/c33ca88c65a7be73f946c750a6eb988b2a982b12/environments/gprd/gke-regional.tf#L172) for pod scheduling.
 
@@ -95,8 +95,8 @@ kubectl scale deployments/gitlab-sidekiq-memory-bound-v1 --replicas=1
 
 Refer to existing Kubernetes documentation for reference and further details:
 
-- https://kubernetes.io/docs/tasks/run-application/horizontal-pod-autoscale/
-- https://github.com/kubernetes/community/blob/master/contributors/design-proposals/autoscaling/horizontal-pod-autoscaler.md
+- <https://kubernetes.io/docs/tasks/run-application/horizontal-pod-autoscale/>
+- <https://github.com/kubernetes/community/blob/master/contributors/design-proposals/autoscaling/horizontal-pod-autoscaler.md>
 
 ## Deployment lifecycle
 
@@ -109,9 +109,9 @@ The most complete source of information about changes in kubernetes clusters is 
 An example of how you can get a diff between different deployment versions using rollout history (revisions have to exist in the cluster)
 
 ```
-$ kubectl -n gitlab rollout history deployment/gitlab-gitlab-shell  # get all deployment revisions
-$ kubectl -n gitlab rollout history deployment/gitlab-gitlab-shell --revision 22 > ~/deployment_rev22  # get deployment yaml at rev 22
-$ kubectl -n gitlab rollout history deployment/gitlab-gitlab-shell --revision 21 > ~/deployment_rev21  # get deployment yaml at rev 21
+kubectl -n gitlab rollout history deployment/gitlab-gitlab-shell  # get all deployment revisions
+kubectl -n gitlab rollout history deployment/gitlab-gitlab-shell --revision 22 > ~/deployment_rev22  # get deployment yaml at rev 22
+kubectl -n gitlab rollout history deployment/gitlab-gitlab-shell --revision 21 > ~/deployment_rev21  # get deployment yaml at rev 21
 ```
 
 You can also find the diff in the body of the patch request sent to the apiserver. These are logged in the audit logs. You can find these events with this search:
@@ -256,7 +256,7 @@ The toolbox's file system is available on the host at `/var/lib/toolbox/`.
 You can specify which container image you want to use, for example you can use `coreos/toolbox` or build and publish your own image.
 There can only be one toolbox running on a host at any given time.
 
-For more details see: https://cloud.google.com/container-optimized-os/docs/how-to/toolbox
+For more details see: <https://cloud.google.com/container-optimized-os/docs/how-to/toolbox>
 
 ### Debugging containers in pods
 
@@ -295,13 +295,13 @@ Only available for docker, not containerd:
 For example:
 
 ```
-$ docker run --rm --name pause --hostname pause gcr.io/google_containers/pause-amd64:3.0   # this is an example, it will run a simple container which you will connect to in a moment
-$ docker run --rm -ti --net=container:pause --pid=container:pause -v /:/media/root:ro --name ubuntu ubuntu bash  # this will run an ubuntu container with network and process namespaces from the pause container and host's root file system mounted under /media/root
+docker run --rm --name pause --hostname pause gcr.io/google_containers/pause-amd64:3.0   # this is an example, it will run a simple container which you will connect to in a moment
+docker run --rm -ti --net=container:pause --pid=container:pause -v /:/media/root:ro --name ubuntu ubuntu bash  # this will run an ubuntu container with network and process namespaces from the pause container and host's root file system mounted under /media/root
 ```
 
 #### Add an ephemeral debug container (Kubernetes >= 1.23)
 
-https://kubernetes.io/docs/tasks/debug-application-cluster/debug-running-pod/#ephemeral-container
+<https://kubernetes.io/docs/tasks/debug-application-cluster/debug-running-pod/#ephemeral-container>
 
 This adds a new container inside the pod sharing the same process namespace.
 
@@ -311,13 +311,13 @@ kubectl debug -it mypod --image=busybox --target=mypod
 
 #### Share process namespace between containers in a pod
 
-https://kubernetes.io/docs/tasks/configure-pod-container/share-process-namespace/
+<https://kubernetes.io/docs/tasks/configure-pod-container/share-process-namespace/>
 
 ## Auto-scaling, Eviction and Quota
 
 ### Nodes
 
-- Node auto-scaling: https://cloud.google.com/kubernetes-engine/docs/concepts/cluster-autoscaler
+- Node auto-scaling: <https://cloud.google.com/kubernetes-engine/docs/concepts/cluster-autoscaler>
 
 Node auto-scaling is part of GKE's cluster auto-scaler, new nodes will be added
 to the cluster if there is not enough capacity to run pods.
@@ -327,7 +327,7 @@ The maximum node count is set as part of the cluster configuration for the
 
 ### Pods
 
-- Pod auto-scaling: https://cloud.google.com/kubernetes-engine/docs/how-to/scaling-apps
+- Pod auto-scaling: <https://cloud.google.com/kubernetes-engine/docs/how-to/scaling-apps>
 
 Pods are configured to scale by CPU utilization, targeted at `75%`
 
@@ -351,23 +351,23 @@ If a large number of pods are being evicted it's possible that increasing the
 requests will help as it will ask Kubernetes to provision new nodes if capacity
 is limited.
 
-Kubernetes Resource Management: https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
+Kubernetes Resource Management: <https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/>
 
 ## Profiling in kubernetes
 
 ### Get ContainerID and node name
 
 ```bash
-$ kubectl -n pubsubbeat get po pubsubbeat-pubsub-sidekiq-inf-gstg-669679fcbd-hhb2m -o json | jq .status.containerStatuses # All containers returned, save ID of the one you are interested in
-$ NODE_NAME=$(kubectl -n pubsubbeat get po pubsubbeat-pubsub-sidekiq-inf-gstg-669679fcbd-hhb2m -o json | jq -r .spec.nodeName) # Get node name
-$ ZONE=$(gcloud compute instances list --filter name=$node_name --format="value(zone)") # get the zone
-$ gcloud compute ssh --zone $ZONE $NODE_NAME --project "gitlab-production"  # ssh to the GKE node
+kubectl -n pubsubbeat get po pubsubbeat-pubsub-sidekiq-inf-gstg-669679fcbd-hhb2m -o json | jq .status.containerStatuses # All containers returned, save ID of the one you are interested in
+NODE_NAME=$(kubectl -n pubsubbeat get po pubsubbeat-pubsub-sidekiq-inf-gstg-669679fcbd-hhb2m -o json | jq -r .spec.nodeName) # Get node name
+ZONE=$(gcloud compute instances list --filter name=$node_name --format="value(zone)") # get the zone
+gcloud compute ssh --zone $ZONE $NODE_NAME --project "gitlab-production"  # ssh to the GKE node
 ```
 
 ### Prepare toolbox
 
 ```bash
-$ toolbox apt install -y jq file
+toolbox apt install -y jq file
 ```
 
 ### Check for presence of symbols
@@ -389,7 +389,7 @@ $ toolbox -q file "/media/root$CONTAINER_ROOTFS/bin/pubsubbeat"  # check if the 
 #### on the entire node
 
 ```bash
-$ sudo perf record -a -g -e cpu-cycles --freq 99 -- sleep 60
+sudo perf record -a -g -e cpu-cycles --freq 99 -- sleep 60
 ```
 
 #### on a single container
@@ -397,15 +397,15 @@ $ sudo perf record -a -g -e cpu-cycles --freq 99 -- sleep 60
 If the binary running in the container doesn't contain symbols, the data you collect will include empty function names (will not provide a lot of value).
 
 ```bash
-$ CONTAINER_ID=$(crictl ps -q --name pubsubbeat_pubsubbeat-pubsub-rails)  # Find the ContainerID of the container you want to profile
-$ CONTAINER_CGROUP=$(crictl inspect $CONTAINER_ID | toolbox -q jq -r .info.runtimeSpec.linux.cgroupsPath)  # Find the cgroup of the container
-$ sudo perf record -a -g -e cpu-cycles --freq 99 --cgroup $CONTAINER_CGROUP -- sleep 60
+CONTAINER_ID=$(crictl ps -q --name pubsubbeat_pubsubbeat-pubsub-rails)  # Find the ContainerID of the container you want to profile
+CONTAINER_CGROUP=$(crictl inspect $CONTAINER_ID | toolbox -q jq -r .info.runtimeSpec.linux.cgroupsPath)  # Find the cgroup of the container
+sudo perf record -a -g -e cpu-cycles --freq 99 --cgroup $CONTAINER_CGROUP -- sleep 60
 ```
 
 ### Extract stacks from `perf record` data with `perf script`
 
 ```bash
-$ sudo perf script --header | gzip > stacks.$(hostname).$(date +'%Y-%m-%d_%H%M%S_%Z').gz
+sudo perf script --header | gzip > stacks.$(hostname).$(date +'%Y-%m-%d_%H%M%S_%Z').gz
 ```
 
 ### Download `perf script` output
@@ -415,18 +415,18 @@ So that we avoid installing additional tooling on the GKE node.
 On your localhost:
 
 ```bash
-$ gcloud compute scp --zone "us-east1-c" "gke-gprd-gitlab-gke-sidekiq-urgent-ot-9be5be8a-o05q:stacks.gke-gprd-gitlab-gke-sidekiq-urgent-ot-9be5be8a-o05q.2021-03-05_173617.gz" --project "gitlab-production" .
-$ gunzip stacks.gke-gprd-gitlab-gke-sidekiq-urgent-ot-9be5be8a-o05q.2021-03-05_173617.gz
+gcloud compute scp --zone "us-east1-c" "gke-gprd-gitlab-gke-sidekiq-urgent-ot-9be5be8a-o05q:stacks.gke-gprd-gitlab-gke-sidekiq-urgent-ot-9be5be8a-o05q.2021-03-05_173617.gz" --project "gitlab-production" .
+gunzip stacks.gke-gprd-gitlab-gke-sidekiq-urgent-ot-9be5be8a-o05q.2021-03-05_173617.gz
 ```
 
 ### Visualize using Flamescope
 
 ```bash
-$ docker run -d --rm -v $(pwd):/profiles:ro -p 5000:5000 igorwgitlab/flamescope  # open your browser and go to http://127.0.0.1:5000/
+docker run -d --rm -v $(pwd):/profiles:ro -p 5000:5000 igorwgitlab/flamescope  # open your browser and go to http://127.0.0.1:5000/
 ```
 
 ### Visualize using Flamegraph
 
 ```bash
-$ cat stacks.gke-gprd-gitlab-gke-sidekiq-urgent-ot-9be5be8a-o05q.2021-03-05_173617 | stackcollapse-perf.pl --kernel | flamegraph.pl > flamegraph.$(hostname).$(date '+%Y%m%d_%H%M%S_%Z').svg
+cat stacks.gke-gprd-gitlab-gke-sidekiq-urgent-ot-9be5be8a-o05q.2021-03-05_173617 | stackcollapse-perf.pl --kernel | flamegraph.pl > flamegraph.$(hostname).$(date '+%Y%m%d_%H%M%S_%Z').svg
 ```

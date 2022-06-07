@@ -12,7 +12,7 @@ Be sure to join the `#ci-abuse-alerting` private Slack channel for abuse reports
 
 For information about how to handle certain types of CI abuse, see the [SIRT runbook](https://gitlab.com/gitlab-com/gl-security/runbooks/-/blob/master/sirt/gitlab/cryptomining_and_ci_abuse.md). (gitlab internal)
 
-- For blocking users see the Scrubber Runbook: https://gitlab.com/gitlab-com/gl-security/runbooks/-/blob/ad11eaf0771badcc9a7ae24885e5f969b420b37a/trust_and_safety/Abuse_Mitigation_Bouncer_Web.md
+- For blocking users see the Scrubber Runbook: <https://gitlab.com/gitlab-com/gl-security/runbooks/-/blob/ad11eaf0771badcc9a7ae24885e5f969b420b37a/trust_and_safety/Abuse_Mitigation_Bouncer_Web.md>
 - For all issues be sure to also notify `@trust-and-safety` on Slack
 - Additional methods of finding potential abusers [issues/12776](https://gitlab.com/gitlab-com/gl-infra/reliability/-/issues/12776#note_530435580)):
 

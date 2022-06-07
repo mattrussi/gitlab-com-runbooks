@@ -3,7 +3,7 @@
 ## Symptoms
 
 Users may report seeing 404 errors whenever they access a GitLab pages domain
-(e.g. https://pages.gitlab.io). If they try from a different IP address,
+(e.g. <https://pages.gitlab.io>). If they try from a different IP address,
 things may work fine.
 
 This may be an issue with one or more gitlab-pages instances. Since the load
@@ -18,8 +18,7 @@ only apparent to some users but not others.
     curl -v https://pages.gitlab.io > /dev/null
     ```
 
-1. Go to https://log.gprd.gitlab.net and look for that request. You can search in Kibana for the terms:
-
+1. Go to <https://log.gprd.gitlab.net> and look for that request. You can search in Kibana for the terms:
 
     ```
     curl AND "gitlab-pages"
@@ -54,7 +53,6 @@ only apparent to some users but not others.
 
 1. Now attempt to run `curl` by proxying through this SOCKS host with a custom
   `Host` header and SSL verification disabled:
-
 
     ```sh
     curl -I -k -v --header "Host: pages.gitlab.io" --socks5 localhost:5000 https://127.0.0.1:1443
@@ -118,11 +116,10 @@ only apparent to some users but not others.
 
     This means gitlab-pages had trouble reading `/var/opt/gitlab/gitlab-rails/shared/pages/.update`.
 
-
 1. Gather some strace information for a few minutes before restarting gitlab-pages:
 
     ```sh
-    $ sudo strace -f -p `pidof gitlab-pages-unprivileged` >& /tmp/gitlab-pages-debug.txt
+    sudo strace -f -p `pidof gitlab-pages-unprivileged` >& /tmp/gitlab-pages-debug.txt
     ```
 
 ## Resolution
@@ -130,7 +127,7 @@ only apparent to some users but not others.
 1. Restart gitlab-pages:
 
     ```sh
-    $ sudo gitlab-ctl restart gitlab-pages
+    sudo gitlab-ctl restart gitlab-pages
     ```
 
 ## Post Checks

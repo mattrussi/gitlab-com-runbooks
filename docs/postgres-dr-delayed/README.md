@@ -4,9 +4,10 @@
 
 [[_TOC_]]
 
-#  Postgres-dr-delayed Service
+# Postgres-dr-delayed Service
+
 * [Service Overview](https://dashboards.gitlab.net/d/000000144/postgresql-overview)
-* **Alerts**: https://alerts.gitlab.net/#/alerts?filter=%7Btype%3D%22postgres-dr-delayed%22%2C%20tier%3D%22db%22%7D
+* **Alerts**: <https://alerts.gitlab.net/#/alerts?filter=%7Btype%3D%22postgres-dr-delayed%22%2C%20tier%3D%22db%22%7D>
 * **Label**: gitlab-com/gl-infra/production~"Service:PostgresDelayed"
 
 ## Logging
@@ -19,7 +20,6 @@
 * [Postgres archive replicas](../postgres-archive/postgres-dr-replicas.md)
 * [Postgres Replicas](postgres-dr-replicas.md)
 <!-- END_MARKER -->
-
 
 <!-- ## Summary -->
 

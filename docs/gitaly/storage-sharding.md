@@ -7,6 +7,7 @@ The fundamentals of sharding can be found in the GitLab Documentation under
 [Repository Storage Paths](https://docs.gitlab.com/ce/administration/repository_storage_paths.html).
 
 The summary of the documentation being as such:
+
 1. Storage targets must be defined in the `gitlab.rb` configuration file within
 the `git_data_dirs` parameter.
 1. Selection of targets for random new project assignment is done through the
@@ -22,4 +23,4 @@ settings are applied via the `gitlab-base` chef role [internal link](https://ops
 The how-to instructional documentation for re-balancing git project
 repositories between `gitaly` storage shard node file systems is here:
 
-https://gitlab.com/gitlab-com/runbooks/-/blob/master/docs/gitaly/storage-rebalancing.md
+<https://gitlab.com/gitlab-com/runbooks/-/blob/master/docs/gitaly/storage-rebalancing.md>

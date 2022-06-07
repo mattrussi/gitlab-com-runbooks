@@ -13,7 +13,7 @@ of this document.
 <details>
 <summary>Linux</summary>
 
-  * `gpg2`
+* `gpg2`
 
       ```
       sudo apt-get install gnupg2
@@ -25,14 +25,13 @@ of this document.
       echo "alias gpg='gpg2'" >> ~/.bashrc
       ```
 
-
-  * `scdaemon`
+* `scdaemon`
 
       ```
       sudo apt-get install scdaemon
       ```
 
-  * For Yubikey 4 **only** -> `yubikey-personalization`
+* For Yubikey 4 **only** -> `yubikey-personalization`
 
       ```
       sudo apt-get install yubikey-personalization
@@ -47,7 +46,7 @@ of this document.
       This setting lets us use the Yubikey as both a SmartCard and an OTP device
       at the same time.
 
-  * For Yubikey 5 **only** -> ykman. On Linux the pkg name is `yubikey-manager`.
+* For Yubikey 5 **only** -> ykman. On Linux the pkg name is `yubikey-manager`.
 
       ```
       sudo apt-get install yubikey-manager
@@ -58,18 +57,17 @@ of this document.
 </details>
 </p>
 
-
 <p>
 <details>
 <summary>MacOS</summary>
 
-  * `gpg2`
+* `gpg2`
 
       ```
       brew install gnupg
       ```
 
-  * For Yubikey 4 **only** -> `yubikey-personalization`
+* For Yubikey 4 **only** -> `yubikey-personalization`
 
       ```
       brew install yubikey-personalization
@@ -84,7 +82,7 @@ of this document.
       This setting lets us use the Yubikey as both a SmartCard and an OTP device
       at the same time.
 
-  * For Yubikey 5 **only** -> `ykman`
+* For Yubikey 5 **only** -> `ykman`
 
       ```
       brew install ykman
@@ -92,16 +90,14 @@ of this document.
 
       `ykman` manual can be found [online](https://support.yubico.com/hc/en-us/articles/360016614940-YubiKey-Manager-CLI-ykman-User-Manual)
 
-  * For graphical pin-entry on MacOS install the brew package `pinentry-mac`
+* For graphical pin-entry on MacOS install the brew package `pinentry-mac`
 
     ```bash
     brew install pinentry-mac
     ```
 
-
 </details>
 </p>
-
 
 ### 2. Change the default PIN entries
 
@@ -181,7 +177,6 @@ gpg/card> quit
 </details>
 </p>
 
-
 ### 3. Create a secure storage for the Master Key
 
 We want to be able to keep a backup of the GPG master key offline, encrypted,
@@ -239,7 +234,7 @@ To do that:
       The VeraCrypt volume has been successfully created.
       ```
 
-      **Note:** The default (just hit Enter) for the PIM is probably fine, but if you want some extra security, put in a custom value.  Higher values will take longer to open the vault, lower ones will take less time but be less secure. See https://www.veracrypt.fr/en/Personal%20Iterations%20Multiplier%20%28PIM%29.html for further discussion including the default values.
+      **Note:** The default (just hit Enter) for the PIM is probably fine, but if you want some extra security, put in a custom value.  Higher values will take longer to open the vault, lower ones will take less time but be less secure. See <https://www.veracrypt.fr/en/Personal%20Iterations%20Multiplier%20%28PIM%29.html> for further discussion including the default values.
 
       Mount the volume
 
@@ -287,7 +282,6 @@ To do that:
       echo use-agent >> $MOUNTPOINT/gpg_config/gpg.conf
       ```
 
-
     </details>
     </p>
 
@@ -300,7 +294,6 @@ only the certify capability.
     <p>
     <details>
     <summary>How to create a master key using gpg</summary>
-
 
     ```bash
     > gpg --expert --full-generate-key
@@ -357,9 +350,7 @@ only the certify capability.
     </details>
     </p>
 
-
 1. Place a reminder in your calendar in about 3 years 11 months (if you chose 4y lifetime above; adjust as necessary) to extend the expiry of your master key.
-
 
 ### 5. Create Subkeys
 
@@ -693,7 +684,6 @@ After all the files are changed:
 </details>
 </p>
 
-
 <p>
 <details>
 <summary>Linux</summary>
@@ -752,29 +742,30 @@ Connection to gitlab.com closed.
 </details>
 </p>
 
-
 ## Maintenance
 
 ### Renew expiring subkeys
 
 Remount your encrypted secrets image using the [veracrypt mount](#linux) or [hidutil attach](#macos) commands
 Setup env vars:
+
 ```
 export MOUNTPOINT=/path/to/mountpoint
 export GNUPGHOME=$MOUNTPOINT/gpg_config/
 ```
 
 Optionally take a backup of the original gpg\_config, inside your encrypted volume (size is tiny, it's a small price to pay)
+
 ```bash
 cp -r $MOUNTPOINT/gpg_config $MOUNTPOINT/gpg_config.$(date +%Y-%m-%d).bak
 ```
-
 
 <p>
 <details>
 <summary>Renew the sub keys</summary>
 
 Edit the key:
+
 ```bash
 $ gpg --edit-key <youremail>
 # Ensure that after the boilerplate license it reports "Secret key is available",
@@ -838,20 +829,21 @@ gpg> quit
 ```
 
 Export the updated key information:
+
 ```
-$ gpg --armor --export FAEFD83E > $MOUNTPOINT/gpg_config/FAEFD83E.asc
+gpg --armor --export FAEFD83E > $MOUNTPOINT/gpg_config/FAEFD83E.asc
 ```
 
 From a fresh terminal (using your normal ~/.gnupg GPG directory:
+
 ```
-$ gpg --import $MOUNTPOINT/gpg_config/FAEFD83E.asc
+gpg --import $MOUNTPOINT/gpg_config/FAEFD83E.asc
 ```
 
 Unmount your encrypted volume, re-copy the image file to your external safe storage (e.g. USB flash drive)
 
 </details>
 </p>
-
 
 ## Troubleshooting
 
@@ -887,21 +879,28 @@ add `disable-ccid` to `~/.gnupg/scdaemon.conf` and use the restart script to res
   the work we've accomplished above
 
 ## Linux tips
+
 ### gpg: selecting openpgp failed: No such device
+
 On recent Ubuntu/Mint releases (18.04+), GPG has a lot of quality-of-life enhancements, which have just bit you in the butt.   When you run gpg with a 'new' GNUPGHOME value, a dir is created in /run/user/<uid>/gnupg/, based in what looks to be a hash of the value of GNUPGHOME, and agents stated (gpg-agent, scdaemon, at least) with sockets in that directory, so there can be multiple running at once.  You've got this message because the scdaemon that you're accessing (via its socket) is not the one that has ownership of the Yubikey right now.  You can release the other one by executing
+
 ```bash
 gpg-connect-agent "SCD KILLSCD" "SCD BYE" /bye
 ```
+
 with GNUPGHOME set to the path of the instance that currently owns the card that you want to go away.  A simple 'kill' will not cause scdaemon to exit, and this is nicer than doing a kill -9.  You could also just kill (SIGTERM) the gpg-agent for the undesired GNUPGHOME, which will close all the things down for that config.
 
 **Note** GPG does *not* normalize the value of $GNUPGHOME to a path, so /media/Gitlab/gpg_config is not the same as /media/Gitlab//gpg_config (two slashes) and each will have its own directory and set of agents/sockets.  This is lightly surprising, and can be very confusing.
 
 ### Linux Mint (GTK2) + Pinentry
+
 Noted on Mint 19 Mate edition, because it's GTK2 and the default pinentry install was for GNOME3, but may apply elsewhere:
+
 ```bash
 sudo apt install pinentry-gtk2
 sudo update-alternatives --set pinentry /usr/bin/pinentry-gtk-2
 ```
+
 Otherwise it falls back to curses, and picks whichever terminal/PTY it thinks is right (probably where you last tickled gpg-agent from), which is usually horribly wrong or dead.   It is also possible to explicitly call the binary as pinentry-program in gpg-agent.conf, but update-alternatives is a bit more blessed/proper for the Debian ecosystem.
 
 ```gpg-connect-agent updatestartuptty /bye```
@@ -909,5 +908,5 @@ can help too, but only temporarily (it'll set the TTY to the terminal where this
 
 ## Reference Material
 
-* https://github.com/drduh/YubiKey-Guide#21-install---linux
-* https://wiki.archlinux.org/index.php/GnuPG
+* <https://github.com/drduh/YubiKey-Guide#21-install---linux>
+* <https://wiki.archlinux.org/index.php/GnuPG>

@@ -4,9 +4,10 @@
 
 [[_TOC_]]
 
-#  Redis Service
+# Redis Service
+
 * [Service Overview](https://dashboards.gitlab.net/d/redis-main/redis-overview)
-* **Alerts**: https://alerts.gitlab.net/#/alerts?filter=%7Btype%3D%22redis%22%2C%20tier%3D%22db%22%7D
+* **Alerts**: <https://alerts.gitlab.net/#/alerts?filter=%7Btype%3D%22redis%22%2C%20tier%3D%22db%22%7D>
 * **Label**: gitlab-com/gl-infra/production~"Service:Redis"
 
 ## Logging
@@ -49,7 +50,6 @@
 * [GitLab staging environment](../uncategorized/staging-environment.md)
 * [Tweeting Guidelines](../uncategorized/tweeting-guidelines.md)
 <!-- END_MARKER -->
-
 
 <!-- ## Summary -->
 

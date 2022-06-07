@@ -4,9 +4,10 @@
 
 [[_TOC_]]
 
-#  Pgbouncer Service
+# Pgbouncer Service
+
 * [Service Overview](https://dashboards.gitlab.net/d/pgbouncer-main/pgbouncer-overview)
-* **Alerts**: https://alerts.gitlab.net/#/alerts?filter=%7Btype%3D%22pgbouncer%22%2C%20tier%3D%22db%22%7D
+* **Alerts**: <https://alerts.gitlab.net/#/alerts?filter=%7Btype%3D%22pgbouncer%22%2C%20tier%3D%22db%22%7D>
 * **Label**: gitlab-com/gl-infra/production~"Service:pgbouncer"
 
 ## Logging
@@ -56,28 +57,27 @@ website](http://pgbouncer.github.io/).
 PgBouncer has three pooling "aggressiveness" settings that uses to determine how
 it manages its pooled connections:
 
-- Session Pooling: When a (postgres) client connects, a server connection will
+* Session Pooling: When a (postgres) client connects, a server connection will
   be assigned to it until it disconnects. All Postgres features are available.
-- Transaction Pooling: A server connection is assigned to a client only during a
+* Transaction Pooling: A server connection is assigned to a client only during a
   transaction. Session based-features like `SET statement_timeout = 0` cannot be
   relied on in this mode.
-- Statement Pooling: A server connection per statement. This means that only
+* Statement Pooling: A server connection per statement. This means that only
   single-statement (i.e. "autocommit") transactions are allowed.
-
 
 Given that our postgres clients (sidekiq nodes, web nodes, etc) use long-lived
 connections to execute transactions from different requests spread over time,
 session pooling is inefficient for our purposes. And evidently our application
 logic doesn't work in autocommit mode. Therefore, we use Transaction Pooling.
 
-For more details, see https://www.pgbouncer.org/features.html
+For more details, see <https://www.pgbouncer.org/features.html>
 
 ## PgBouncer Hosts
 
 ![architecture overview of pgbouncer](./img/overview.png)
 
-- Primary (read-write) has 3 dedicated hosts in front of the database host, since it serving more traffic.
-- Replica (read-only) had 3 PgBouncer processes running on the same host that is running the  PostgreSQL process.
+* Primary (read-write) has 3 dedicated hosts in front of the database host, since it serving more traffic.
+* Replica (read-only) had 3 PgBouncer processes running on the same host that is running the  PostgreSQL process.
 
 PgBouncer is configured via omnibus via these [config options](https://gitlab.com/gitlab-org/omnibus-gitlab/blob/34b92e63f765a4d74c3384e3c7c08a4750f9d2c5/files/gitlab-config-template/gitlab.rb.template#L2185-2290).
 The PgBouncer configuration files are located in `/var/opt/gitlab/pgbouncer`,
@@ -102,12 +102,12 @@ using its own set of commands. See
 Almost all settings of PgBouncer can be managed by editing the relevant Chef
 roles:
 
-- roles/[env]-base-db-pgbouncer-common.json
-- roles/[env]-base-db-pgbouncer-pool.json
-- roles/[env]-base-db-pgbouncer-sidekiq.json
-- roles/[env]-base-db-pgbouncer-sidekiq-ci.json
-- roles/[env]-base-db-pgbouncer.json
-- roles/[env]-base-db-pgbouncer-ci.json
+* roles/[env]-base-db-pgbouncer-common.json
+* roles/[env]-base-db-pgbouncer-pool.json
+* roles/[env]-base-db-pgbouncer-sidekiq.json
+* roles/[env]-base-db-pgbouncer-sidekiq-ci.json
+* roles/[env]-base-db-pgbouncer.json
+* roles/[env]-base-db-pgbouncer-ci.json
 
 Most settings only require a reload of pgbouncer and will not cause an
 interruption of service. To manually reload, run `sudo systemctl reload pgbouncer`

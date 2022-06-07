@@ -4,7 +4,7 @@ We have a CRON job that checks the disk space and alerts in `#g_fulfillment_stat
 
 Currently Slack alerts are triggered when disk space has less than 6% free space (>94% used), and it runs the check every 3 hours.
 
-## What to remove should an alert happen:
+## What to remove should an alert happen
 
 1. `sudo apt-get clean && sudo apt-get autoremove`
 1. Old Nginx logs in `/var/log/nginx`

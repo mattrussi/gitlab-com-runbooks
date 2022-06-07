@@ -4,9 +4,10 @@
 
 [[_TOC_]]
 
-#  Stackdriver Service
+# Stackdriver Service
+
 * [Service Overview](https://dashboards.gitlab.net/d/USVj3qHmk/logging)
-* **Alerts**: https://alerts.gitlab.net/#/alerts?filter=%7Btype%3D%22stackdriver%22%2C%20tier%3D%22inf%22%7D
+* **Alerts**: <https://alerts.gitlab.net/#/alerts?filter=%7Btype%3D%22stackdriver%22%2C%20tier%3D%22inf%22%7D>
 * **Label**: gitlab-com/gl-infra/production~"Service:Stackdriver"
 
 ## Logging
@@ -28,7 +29,6 @@
 * [Node Reboots](../uncategorized/node-reboots.md)
 * [version.gitlab.com Runbook](../version/version-gitlab-com.md)
 <!-- END_MARKER -->
-
 
 <!-- ## Summary -->
 

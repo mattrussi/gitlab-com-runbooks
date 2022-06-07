@@ -19,9 +19,10 @@ The Cloudflare configurations for terraform are found in each environment:
 
 The criteria for what configuration may have high risk is still being developed,
 so
-* for any operational or incident related rules, follow the
+
+- for any operational or incident related rules, follow the
 [manual process](cloudflare-managing-traffic.md#manually) and use confidential issues.
-* request review from other team members for any other new additions
+- request review from other team members for any other new additions
 
 ## Managing Individual Rules
 
@@ -40,8 +41,8 @@ this, the following assumption is being made:
 If individual rule settings get out of sync and need to be reset, they can
 be reset in bulk with terraform by
 
-* Apply something like configuration below.
-* Remove it from the configuration. It will be deleted from the terraform
+- Apply something like configuration below.
+- Remove it from the configuration. It will be deleted from the terraform
   state, but the rules will be left in the configured in Cloudflare.
 
 <p>

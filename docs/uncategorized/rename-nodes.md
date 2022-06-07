@@ -10,9 +10,11 @@ Renaming a node after it is already in Chef is a multi-step process to ensure th
 1. **Ensure** that `hostname -f` returns expected hostname. Chef can be very touchy about DNS and hostname changes and you really want to get this done correctly the first time.
 1. Add/Change the DNS record associated with the node on AWS.
 1. Bootstrap the node with Chef.
+
 ```
 knife bootstrap 12.34.56.78 --node-name example.gitlap.com --sudo -x username
 ```
+
 1. Move the old node info to the new name in the [chef-repo](https://ops.gitlab.net/gitlab-cookbooks/chef-repo/tree/master/nodes). Be certain you also update the "name" attribute and not just copy the file to a new name.
 1. Add the node to any secrets it needs to access to. `bundle exec rake 'add_node_secrets[example.gitlap.com, syslog-client]'`
 1. Run chef-client on the newly renamed node to ensure success.
@@ -26,11 +28,13 @@ To fix this you should be checking the node in chef with `knife node show <noden
 You may get secrets problem as you run chef-client, to fix this:
 
 1. Identify which vault is failing by looking at the error, for example:
+
 ```
 ChefVault::Exceptions::SecretDecryption
 ---------------------------------------
 syslog_client/_default is encrypted for you, but your private key failed to decrypt the contents.  (if you regenerated your client key, have an administrator of the vault run 'knife vault refresh')
 ```
+
 The vault here is **syslog_client** and the vault item is **_default**
 
 1. wipe the old node registration in the chef vault file by editing it with `knife data bag edit syslog_client _default_keys`, look for the node name 2 times and delete the lines.

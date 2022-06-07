@@ -69,9 +69,9 @@ Below is a list of Grafana dashboards and the most relevant metrics within:
   - Rate of `429 Too Many Requests` responses from GCS. Used to monitor possible rate limits imposed by Google;
 
 - [registry: Database Detail](https://dashboards.gitlab.net/d/registry-database/registry-database-detail):
-   - RPS, latency and error rate for queries (each identified by a unique name);
-   - Overall, table bloat and index bloat size;
-   - Application-side connection pool metrics.
+  - RPS, latency and error rate for queries (each identified by a unique name);
+  - Overall, table bloat and index bloat size;
+  - Application-side connection pool metrics.
 
 ### Logs
 
@@ -117,7 +117,6 @@ Use [this view](https://log.gprd.gitlab.net/goto/224257f0-b668-11ec-afaf-2bca15d
   ```
 
   Refer to the `State machine` section in the [Rails spec](https://gitlab.com/groups/gitlab-org/-/epics/7316#note_897867569) for more details about each state.
-
 
 ### Registry Database Tips
 
@@ -165,17 +164,20 @@ Symptoms of this problem are:
 To fix this problem:
 
 1. Open a production Rails console with write access and save the `ContainerRegistry::Migration::EnqueuerWorker` deduplication key in a variable named `key` (this is a fixed value):
+
    ```rb
    key = 'resque:gitlab:duplicate:default:ab8e4f6ae672f357497ee5977e24e7155aa83eef7c83ddba6548d62ca5bec3a1'
    ```
 
 1. Find the corresponding deduplication Redis key:
+
    ```rb
    [ gprd ] production> Sidekiq.redis { |redis| redis.get(key) }
    => "8bba23b6e44730d4c7b3ac01" # sample, your value will defer
    ```
 
 1. Delete the deduplication key:
+
    ```rb
    [ gprd ] production> Sidekiq.redis { |redis| redis.del(key) }
    => true

@@ -102,7 +102,7 @@ run the command on only one runner at a time.
     This will restore the `chef-client`, cleanup old non-removed Docker Machine VMs that were left, refresh the
     configuration and finally start the Runner process.
 
-### How to stop or restart Runner Manager's VM with Graceful Shutdown.
+### How to stop or restart Runner Manager's VM with Graceful Shutdown
 
 1. Do shutdown
 

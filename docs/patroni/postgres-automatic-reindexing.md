@@ -84,6 +84,7 @@ gitlabhq_production=# select * from postgres_reindex_actions order by action_sta
 ```
 
 The `state` column [translates](https://gitlab.com/gitlab-org/gitlab/-/blob/master/lib/gitlab/database/reindexing/reindex_action.rb#L10) as follows:
+
 1. 0 - `started`
 1. 1 - `finished`
 1. 2 - `failed`

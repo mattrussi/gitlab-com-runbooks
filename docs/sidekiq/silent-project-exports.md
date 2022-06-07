@@ -7,13 +7,16 @@ To avoid this we can do it by hand with some effort.
 * Open a session to the rails console with ```ssh gprd-rails-console```
 * Find the user (we should have been given the name as part of the request): ```u = User.find_by(username: 'USERNAME')```
 * List their projects, assuming we want all of them:
+
 ```
 u.projects.each do |p|
   puts "#{p.path}: #{p.repository_storage} #{p.repository.path_to_repo}"
 end
 ```
+
 * Keep note of the and storage node, you'll need that soon.
 * Export the projects:
+
 ```
 u.projects.each do |p|
   pts = Gitlab::ImportExport::ProjectTreeSaver.new(project: p, current_user: u, shared: p.import_export_shared)
@@ -22,6 +25,7 @@ u.projects.each do |p|
   puts "mkdir -p #{dir}; cp #{pts.full_path} #{dir}/project.json"
 end
 ```
+
 * This will output a bunch of commands (mkdir + cp) to copy the generated project.json files to your homedir.  In a root shell on the console server (console-01-sv-gprd), run them.
 * Copy the directory from your homedir (it will be the username) to the appropriate target location.
 * You don't need the console anymore, but you will need the output of the first loop.

@@ -24,6 +24,7 @@ One such issue resulted in this log on `/var/log/prometheus/thanos-compact/curre
 
 The key identifier is "compaction failed for group".
 The rest of the message is a bit hard to read, but the interesting facts are
+
 1. the identifier of the source: "0@{env=\"gprd\",monitor=\"app\",provider=\"gcp\",region=\"us-east\",replica=\"02\"}", which says that this came from prometheus-app-02-inf-gprd ('env', 'monitor', and 'replica' are the relevant parts).  This is possibly only tangentially interesting, for locating the source of the corruption
 1. The chunk names.  In the above example, these are 01DS5AQG40F0NWX3GP57KR1XGF, 01DS5HK7C0HR5WNS9KHEXV0J68, 01DS5REYM1E1J0X3GTVZ9NNJ68 , and 01DS5ZANVZ9N7A14EKPHPZ70MM
 

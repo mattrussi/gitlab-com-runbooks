@@ -4,9 +4,10 @@
 
 [[_TOC_]]
 
-#  Sidekiq Service
+# Sidekiq Service
+
 * [Service Overview](https://dashboards.gitlab.net/d/sidekiq-main/sidekiq-overview)
-* **Alerts**: https://alerts.gitlab.net/#/alerts?filter=%7Btype%3D%22sidekiq%22%2C%20tier%3D%22sv%22%7D
+* **Alerts**: <https://alerts.gitlab.net/#/alerts?filter=%7Btype%3D%22sidekiq%22%2C%20tier%3D%22sv%22%7D>
 * **Label**: gitlab-com/gl-infra/production~"Service:Sidekiq"
 
 ## Logging
@@ -59,7 +60,6 @@
 * [Application Database Queries](../uncategorized/tracing-app-db-queries.md)
 * [Tweeting Guidelines](../uncategorized/tweeting-guidelines.md)
 <!-- END_MARKER -->
-
 
 <!-- ## Summary -->
 

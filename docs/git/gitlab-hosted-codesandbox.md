@@ -15,7 +15,7 @@ in the admin panel.
 We have created the `gitlab-gprd-codesandbox` bucket in the `gitlab-production`
 project on GCP. Because the files there are public and will be consumed by
 everyone, the bucket is set to public. The CDN frontend domain is
-https://sandbox.gitlab-static.net/ and is set up in Fastly with TLS under the
+<https://sandbox.gitlab-static.net/> and is set up in Fastly with TLS under the
 name `sandbox.gitlab-static.net`.
 
 It was decided that none of the above would be in terraform as it did not fit

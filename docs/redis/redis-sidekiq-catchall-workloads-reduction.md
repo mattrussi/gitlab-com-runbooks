@@ -2,7 +2,7 @@
 
 To reduce the load on Redis-Sidekiq from the number of catchall workloads,
 
-## For VMs:
+## For VMs
 
 `ssh sidekiq-catchall-XX-sv-gprd.c.gitlab-production.internal`
 
@@ -10,7 +10,7 @@ There, invoke: `sudo gitlab-ctl stop sidekiq`
 
 Needs may vary. There are 7 virtual machines which is likely overkill right now even at peaks, but at quiet times we can get away with only 1 active.  Adjust how many are running as necessary (keep an eye on queues in general).  Restart with the hopefully intuitive: `sudo gitlab-ctl start sidekiq`
 
-## For K8S:
+## For K8S
 
 Establish a secure shell session to the production console system: `ssh console-01-sv-gprd.c.gitlab-production.internal`
 

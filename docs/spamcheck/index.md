@@ -2,7 +2,7 @@ For gitlab.com we use the external Spam Check endpoint to hook up to a system ru
 
 # Configuration
 
-Configured in the `Spam and Anti-bot Protection` section of https://gitlab.com/admin/application_settings/reporting.  It can be turned off quickly with the `Enable Spam Check via external API endpoint` checkbox in the event it causes troubles.
+Configured in the `Spam and Anti-bot Protection` section of <https://gitlab.com/admin/application_settings/reporting>.  It can be turned off quickly with the `Enable Spam Check via external API endpoint` checkbox in the event it causes troubles.
 
 Configuration of the rules in the spamcheck service itself is the responsibility of the Security department; as far as gitlab.com is concerned, it is a blackbox service that we interact with via gRPC or web calls, and on-call SREs do not need to concern themselves any further with the implementation under most normal circumstances.
 
@@ -22,4 +22,4 @@ More metrics to come to prometheus/grafana in future
 
 # Reference
 
-* Security documentation: https://gitlab.com/gitlab-com/gl-security/runbooks/-/blob/master/automation/spamcheck.md
+* Security documentation: <https://gitlab.com/gitlab-com/gl-security/runbooks/-/blob/master/automation/spamcheck.md>

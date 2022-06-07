@@ -28,6 +28,7 @@ StatefulFul sets `thanos-store-0` from 5GiB to 20GiB.
 Check that the current Persistent Volume Claim in the targeted StateFul Set
 matches its original definition, and than the existing Persistent Volumes are
 really those you are targeting and that their original size also matches:
+
 ```
 $ kubectl -n monitoring describe sts/thanos-store-0
 Name:               thanos-store-0
@@ -56,11 +57,13 @@ Nothing unexpected? Great, let's proceed!
 ### Step 3: Delete the StateFul Set
 
 Delete the StatefulSet object without deleting the pods underneath:
+
 ```
 kubectl -n monitoring delete --cascade=orphan sts/thanos-store-0
 ```
 
 Confirm that the pods still exist:
+
 ```
 kubectl -n monitoring get pod -l app.kubernetes.io/name=thanos-store
 ```
@@ -70,12 +73,14 @@ Our service is still up? Let's continue!
 ### Step 4: Resize the Persistent Volumes
 
 Manually patch the Persistent Volume Claims to their new size:
+
 ```
 kubectl -n monitoring patch pvc/data-thanos-store-0-0 -p '{ "spec": { "resources": { "requests": { "storage": "20Gi" }}}}'
 kubectl -n monitoring patch pvc/data-thanos-store-0-1 -p '{ "spec": { "resources": { "requests": { "storage": "20Gi" }}}}'
 ```
 
 Their status should show that the resize is pending, waiting for the attached pods to be restarted:
+
 ```
 $ kubectl -n monitoring get pvc -l app.kubernetes.io/name=thanos-store -o yaml
 apiVersion: v1
@@ -108,6 +113,7 @@ recreating them.
 At this point the Persistent Volumes are still at their original size and their
 resize is still pending, so let's restart the attached pods one at a time to
 arrange that:
+
 ```
 kubectl -n monitoring delete pod/thanos-store-0-0
 kubectl -n monitoring get pods -l app.kubernetes.io/name=thanos-store -o wide
@@ -121,6 +127,7 @@ Are the pods running? Awesome! The Persistent Volumes should now be resized, let
 # Step 5: Post-operation checks
 
 Check that the Persistent Volume Claims are showing the new size:
+
 ```
 $ kubectl -n monitoring get pvc -l app.kubernetes.io/name=thanos-store -o wide
 NAME                    STATUS   VOLUME                                     CAPACITY   ACCESS MODES   STORAGECLASS   AGE    VOLUMEMODE
@@ -129,12 +136,14 @@ data-thanos-store-0-1   Bound    pvc-9d8cc41f-cfb5-4828-ad55-3e703337c6e2   20Gi
 ```
 
 You can also confirm inside a pod that new volume mount shows an increased size:
+
 ```
 kubectl -n monitoring exec -it thanos-store-0-0 -- df -h /var/thanos/store
 kubectl -n monitoring exec -it thanos-store-0-1 -- df -h /var/thanos/store
 ```
 
 And finally, check that the Stateful Set exists:
+
 ```
 kubectl -n monitoring get sts/thanos-store-0
 ```
@@ -147,6 +156,7 @@ In case something goes unexpectedly wrong and the resize fails, you can simply
 revert the Stateful Set to its previous state.
 
 If the StateFul Set exists, delete it with `--cascade=orphan`:
+
 ```
 kubectl -n monitoring delete --cascade=orphan sts/thanos-store-0
 ```
@@ -154,6 +164,7 @@ kubectl -n monitoring delete --cascade=orphan sts/thanos-store-0
 Then create a revert MR for your changes and apply it.
 
 And finally, confirm that the Stateful Set and its pods exist:
+
 ```
 kubectl -n monitoring get sts/thanos-store-0
 kubectl -n monitoring get pod -l app.kubernetes.io/name=thanos-store

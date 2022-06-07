@@ -23,7 +23,6 @@ The graph labeled **Select a trace** displays a dot for each request in your sel
 
 ### [Waterfall view](https://cloud.google.com/trace/docs/viewing-details)
 
-
 This represents a complete request through the application. Each step in the timeline is a span, which you can click to view details.
 
 * If the `access_time` symbol is displayed, then Cloud Trace detected a span whose start time is earlier than the start time of the span's parent. Cloud Trace automatically compensates for this inconsistency when displaying the span; however, the span data isn't modified. The timestamp inconsistency can occur when a service relies on multiple clock sources or different language libraries.

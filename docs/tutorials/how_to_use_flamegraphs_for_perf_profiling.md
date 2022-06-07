@@ -1,6 +1,5 @@
 # How to use flamegraphs for performance profiling
 
-
 ## Learning objectives
 
 Profiling lets you observe a live system to see where the code is spending its time.
@@ -21,7 +20,6 @@ In this tutorial, you will learn how to:
 For troubleshooting incomplete or broken profiling results, it is helpful but not required to have a basic understanding of how compilers and linkers work.
 The essentials will be covered in this tutorial.
 
-
 ## Quick tour of a flamegraph
 
 As a quick preview of what we will be learning, here is an example flamegraph with doodles highlighting some noteworthy parts.
@@ -33,13 +31,13 @@ By the end of this tutorial, you will know how to read the shape and structure o
 
 [Interactive SVG image](how_to_use_flamegraphs_for_perf_profiling/postgres_primary_db.svg) -- Open this link in its own browser tab to zoom in and see full function names.
 
-
 ### What am I looking at?
 
 The above flamegraph shows where CPU time is being spent by our primary production Postgres database.
 For now, don't worry about the details of this particular graph; just get familiar with its appearance and layout.
 
 We will go through this in more detail later, but as a preview, here are some key points for interpreting a flamegraph:
+
 * Each colored cell in the graph represents a *function* that was called by one of the processes being profiled.
 * As a whole, the graph represents a large collection of *stack traces*.
 * Each of those stack traces records the *chain of function calls* that lead up to whatever function was actively running on the CPU at that moment in time.
@@ -51,12 +49,14 @@ We will go through this in more detail later, but as a preview, here are some ke
 **Tip:** You *do not* have to know what every function does.  A little context goes a long way.
 
 For example:
+
 * We know that Postgres is a SQL database.
 * Like most databases, when a client sends it a query, before it can run that query, it must make a plan (e.g. choose which indexes would be most efficient, what order to join tables, etc.).
 * Without even looking at the source code, when we notice that the graph is showing us function `pg_plan_query` calling `standard_planner` calling `subquery_planner`,
   we can reasonably infer that this is part of Postgres' query planner code path.
 
 Similarly:
+
 * We know that Postgres must also run those queries after it chooses an execution plan.
 * When we notice the graph showing us a wide cell for function `PortalRun` that spends most of its time calling `standard_ExecutorRun`,
   we can reasonably infer that this is a common code path for executing a query.
@@ -67,7 +67,6 @@ to discover that query planning is a significant activity of the database.
 Exploring the call chains in a flamegraph can be a way to learn interesting internal behaviors of even programs that you know very little about.
 It shows which components are interacting for your workload, which lets you focus your exploration on those particular code paths that matter in your environment.
 
-
 ### What is this telling me?
 
 Perhaps surprisingly, one of the stories this graph tells is that the way we currently use Postgres, it spends a larger proportion of its CPU time
@@ -76,7 +75,6 @@ parsing and planning queries than it does actually running them.
 This relatively high overhead is not obvious from looking at just query latency statistics, and it is not typical of many other Postgres workloads.
 CPU profiling has given us a novel perspective on the essential performance question "Where was the time spent?" -- a perspective that is specific
 to our workload, configuration, and environment.
-
 
 ### What is causing that?
 
@@ -97,7 +95,6 @@ But proportionally the CPU overhead is large, so at a high query rate, it adds u
 It could save perhaps as much as 30% CPU time if clients were able to use long-lived prepared statements to parse and plan each query once and then skip the overhead during subsequent runs.
 A future release of Postgres may make that possible, but currently each db session has its own private pool of prepared statements and cached query plans.
 
-
 ## How to make flamegraphs from `perf` profiles
 
 Linux's `perf` tool supports several different profiling techniques.
@@ -107,17 +104,18 @@ Here we will focus on just one use case:
 
 Timer-based profiling is arguably the most common use-case, and mastering it gives you a good foundation for more advanced cases (e.g. profiling which code paths make calls to a specific function).
 
-
 ### The easy way: Helper scripts
 
 A set of convenience scripts that is available on all of GitLab.com's Chef-managed hosts.
 
 These helper scripts make it easy to quickly capture a `perf` profile and generate a flamegraph with a minimum of arguments.
+
 * They run for 60 seconds capturing stack traces at a sampling rate of 99 times per second.
 * When finished, they generate a flamegraph (which you can download and open in your browser), along with the raw stack traces as a text file.
 * Depending on which script you use, it will capture one, some, or all running processes on the host.
 
 Here are the scripts:
+
 * `perf_flamegraph_for_all_running_processes.sh` takes no arguments.
   * This is the most general-purpose script.
   * It captures the whole host's activity.  It essentially runs with no filters, so whatever processes are running on the CPU will be sampled by the profiler.
@@ -150,9 +148,9 @@ Raw stack traces: /tmp/perf-record-results.VIZtuZzA/redis-03-db-gprd.20200618_15
 You can then download the flamegraph to your workstation and open it in your (javascript-enabled) web browser to explore the results.
 
 ```shell
-$ scp -p redis-03-db-gprd.c.gitlab-production.internal:/tmp/perf-record-results.VIZtuZzA/redis-03-db-gprd.20200618_153650_UTC.pid_2997.flamegraph.svg /tmp/
+scp -p redis-03-db-gprd.c.gitlab-production.internal:/tmp/perf-record-results.VIZtuZzA/redis-03-db-gprd.20200618_153650_UTC.pid_2997.flamegraph.svg /tmp/
 
-$ firefox /tmp/redis-03-db-gprd.20200618_153650_UTC.pid_2997.flamegraph.svg
+firefox /tmp/redis-03-db-gprd.20200618_153650_UTC.pid_2997.flamegraph.svg
 ```
 
 <img src="how_to_use_flamegraphs_for_perf_profiling/redis-03-db-gprd.20200618_153650_UTC.pid_2997.flamegraph.svg">
@@ -168,9 +166,7 @@ Once you are comfortable using these helper scripts, you may later be interested
 A brief introduction to such tricks is included at the end of this tutorial:
 [Bonus: Custom capture using `perf record`](#bonus-custom-capture-using-perf-record)
 
-
 ## How to interpret flamegraphs for profiling where CPU time is spent
-
 
 ### Background: What is a stack trace?
 
@@ -188,7 +184,6 @@ Recovering the names of the functions for compiled software can be surprisingly 
 In pursuit of other efficiencies, compilers often make tracing difficult.  Usually this shows up as missing stack frames or unknown function names.
 Later we will review a few examples, but for now, just be aware that these deficiencies can occur.  Remedies such as resolving debug symbols may or may not
 be straightforward depending on how the software was built.
-
 
 #### Example stack trace
 
@@ -237,7 +232,6 @@ This aggregation shows us which call chains occur most often, which in turn impl
 There are some caveats that we will review later, but for now let's look at an example of how sampling stack traces
 roughly every 10 milliseconds for 30 seconds can give us a picture of how our process threads are spending their CPU time.
 
-
 ### How are stack traces aggregated into a flamegraph?
 
 The example stack trace we examined above was a random pick from the 637 stack traces sampled by this command:
@@ -262,9 +256,9 @@ $ sudo perf script --header | gzip > redis_stack_traces.out.gz
 To aggregate those 637 stack traces into a flamegraph, we can run:
 
 ```shell
-$ git clone --quiet https://github.com/brendangregg/FlameGraph.git
+git clone --quiet https://github.com/brendangregg/FlameGraph.git
 
-$ zcat redis_stack_traces.out.gz | ./FlameGraph/stackcollapse-perf.pl | ./FlameGraph/flamegraph.pl > redis-server.svg
+zcat redis_stack_traces.out.gz | ./FlameGraph/stackcollapse-perf.pl | ./FlameGraph/flamegraph.pl > redis-server.svg
 ```
 
 The `stackcollapse-perf.pl` script folds the perf-script output into 1 line per stack, with a count of the number of times each stack was seen.
@@ -274,10 +268,10 @@ Then `flamegraph.pl` renders this into an SVG image.
 
 [View as an interactive SVG image](how_to_use_flamegraphs_for_perf_profiling/redis-server.svg)
 
-
 ### Flamegraphs in SVG format are interactive
 
 When viewed in a Javascript-capable browser, the SVG image supports interactive exploration:
+
 * Mouseover any frame to see: the full function name, the number of times that function was called in this call chain,
   and the percentage out of all sampled stacks that this function and its ancestors were seen.
   * *Example:* The `all` virtual frame is included in 100% of the 637 stack traces.  The `beforeSleep` frame is included in 38.5% (245 out of 637 stack traces).
@@ -287,7 +281,6 @@ When viewed in a Javascript-capable browser, the SVG image supports interactive 
 * Search for function names, to highlight all occurrences of that string.
   * *Example:* Search for `expireIfNeeded`.  Several different call chains include this function, and they are now all highlighted in magenta.
     The bottom righthand corner of the flamegraph shows that a total of 6.8% of stack traces include that frame somewhere.
-
 
 ### In flamegraphs, plateaus are relevant, spikes are not
 
@@ -307,19 +300,18 @@ Overall, we can see from this flamegraph that redis-server spends a significant 
 
 Also, ignore the colors.  By default, they are randomized from a red/orange color pallette, just to show at a glance which cells are wide.
 Optionally, it is possible to choose other more meaningful color schemes, such as:
+
 * Choose the color by function name, to more easily see multiple occurrences of functions that appear in multiple call chains.
 * Use a different hue for kernel functions than userspace functions, so syscalls are easier to see.
-
 
 ## Common profiling gotchas
 
 When profiling with perf, there are a few things to be aware of, and issues you might run into.
 
-- **Off-CPU time:** The most common type of profiling will tell you about time spent running on the CPU. However, it may also be interesting to understand why a process is being de-scheduled (e.g. IO and other blocking syscalls, waiting for a wake-up event, etc.). For this purpose you can perform an [off-CPU analysis](http://www.brendangregg.com/offcpuanalysis.html).
-- **Incomplete/incorrect stack traces:** To produce a stack trace, `perf` has to "unwind" the stack, finding the address of each stack frame's next instruction. To do this stack walk, `perf` by default relies on frame pointers. However, for largely historical reasons, compilers often try to use an optimization technique that opportunistically omits frame pointers. This can cause `perf` to produce bogus call graphs. This kind of breakage is obvious when it occurs. As a work-around, you can tell perf to use an alternative method for unwinding stacks (e.g. `--call-graph=dwarf`). See the manpage for `perf record` for more details. Alternately, if you happen to be able to customize the build procedure for the binary you want to trace, you can explicitly request that the compiler use frame pointers (e.g. add `CFLAGS=-fno-omit-frame-pointer` when the compiling the binary you are analyzing).  Doing so may fix framepointer-based stack unwind (for perf and other similar profilers).
-- **Missing function names:** Another thing that `perf` needs is symbols. If symbols were stripped from the binary as part of the build procedure, then perf cannot translate addresses into function names. Sometimes the build process will produce a separate package containing debug info, including symbols, and installing that supplemental package (e.g. `-dbg` or `-dbgsym` suffix) will provide the missing symbols. Alternately, if you control the build procedure for the binary you want to trace, you can disable stripping symbols. This is standard practice for most of GitLab's build pipelines, so typically the binaries shipped by GitLab do have all of their debug symbols.
-- **Catching or excluding rare outlier events:** A sampling profiler will not catch examples of every executed code path. Rare events may not show up in profiles. If you need to capture rare events involving a certain code path or need to audit every code executed code path that leads to a certain function, you can use `perf` for tracing specific events via kprobes or uprobes. Rather than sampling based on a timer, this use-case captures data (e.g. increments a counter or saves a stack trace) every time that instrumented function call occurs. This may incur a noticeable overhead for very frequently executed functions, so use this approach with caution. If the function you want to trace is called a million times per second, consider if there are other functions that could answer the same question, and if you must use high frequency instrumentation, keep the tracing brief.
-
+* **Off-CPU time:** The most common type of profiling will tell you about time spent running on the CPU. However, it may also be interesting to understand why a process is being de-scheduled (e.g. IO and other blocking syscalls, waiting for a wake-up event, etc.). For this purpose you can perform an [off-CPU analysis](http://www.brendangregg.com/offcpuanalysis.html).
+* **Incomplete/incorrect stack traces:** To produce a stack trace, `perf` has to "unwind" the stack, finding the address of each stack frame's next instruction. To do this stack walk, `perf` by default relies on frame pointers. However, for largely historical reasons, compilers often try to use an optimization technique that opportunistically omits frame pointers. This can cause `perf` to produce bogus call graphs. This kind of breakage is obvious when it occurs. As a work-around, you can tell perf to use an alternative method for unwinding stacks (e.g. `--call-graph=dwarf`). See the manpage for `perf record` for more details. Alternately, if you happen to be able to customize the build procedure for the binary you want to trace, you can explicitly request that the compiler use frame pointers (e.g. add `CFLAGS=-fno-omit-frame-pointer` when the compiling the binary you are analyzing).  Doing so may fix framepointer-based stack unwind (for perf and other similar profilers).
+* **Missing function names:** Another thing that `perf` needs is symbols. If symbols were stripped from the binary as part of the build procedure, then perf cannot translate addresses into function names. Sometimes the build process will produce a separate package containing debug info, including symbols, and installing that supplemental package (e.g. `-dbg` or `-dbgsym` suffix) will provide the missing symbols. Alternately, if you control the build procedure for the binary you want to trace, you can disable stripping symbols. This is standard practice for most of GitLab's build pipelines, so typically the binaries shipped by GitLab do have all of their debug symbols.
+* **Catching or excluding rare outlier events:** A sampling profiler will not catch examples of every executed code path. Rare events may not show up in profiles. If you need to capture rare events involving a certain code path or need to audit every code executed code path that leads to a certain function, you can use `perf` for tracing specific events via kprobes or uprobes. Rather than sampling based on a timer, this use-case captures data (e.g. increments a counter or saves a stack trace) every time that instrumented function call occurs. This may incur a noticeable overhead for very frequently executed functions, so use this approach with caution. If the function you want to trace is called a million times per second, consider if there are other functions that could answer the same question, and if you must use high frequency instrumentation, keep the tracing brief.
 
 ## Bonus: Custom capture using `perf record`
 
@@ -347,15 +339,14 @@ $ ./FlameGraph/flamegraph.pl < perf-script.folded.txt > flamegraph.svg
 Or more concisely:
 
 ```shell
-$ git clone --quiet https://github.com/brendangregg/FlameGraph.git && export PATH=./FlameGraph:$PATH
-$ sudo perf record --freq 99 -g --all-cpus -- sleep 60
-$ sudo perf script --header | tee perf-script.txt | stackcollapse-perf.pl | flamegraph.pl > flamegraph.svg
+git clone --quiet https://github.com/brendangregg/FlameGraph.git && export PATH=./FlameGraph:$PATH
+sudo perf record --freq 99 -g --all-cpus -- sleep 60
+sudo perf script --header | tee perf-script.txt | stackcollapse-perf.pl | flamegraph.pl > flamegraph.svg
 ```
 
 You may still wish to use a variation of the above procedure if you need to customize some aspect of the capture or post-processing.
 
 The next sections walk through a few examples.
-
 
 ### Show only stacks that match a regexp
 
@@ -364,13 +355,14 @@ only the stack traces from a particular process name or that include a call to a
 For example, if you only want to see call chains that include a `write` syscall (i.e. writes to a file or a network socket), you can do this:
 
 ```shell
-$ cat perf-script.folded.txt | grep 'vfs_write' | ./FlameGraph/flamegraph.pl > flamegraph.svg
+cat perf-script.folded.txt | grep 'vfs_write' | ./FlameGraph/flamegraph.pl > flamegraph.svg
 ```
 
 ### Capture a larger sample
 
 Sometimes you may need more profiling data.  Maybe there are relatively rare call paths don't reliably get caught by the default sampling rate and duration.
 To capture more data (i.e. sample more stack traces), you can either:
+
 * Increase the duration of the capture.
 * Increase the sampling rate per second.
 
@@ -395,18 +387,18 @@ $ sudo perf record --freq 497 -g --pid 1234 -- sleep 30
 After running `perf record`, you can generate a flamegraph using the same post-processing steps shown above (starting with the `perf script` command).
 
 ```shell
-$ sudo perf script --header | tee perf-script.txt | stackcollapse-perf.pl | flamegraph.pl > flamegraph.svg
+sudo perf script --header | tee perf-script.txt | stackcollapse-perf.pl | flamegraph.pl > flamegraph.svg
 ```
-
 
 #### Tips for choosing a sampling rate
 
 *TLDR:* Pick one of these safe sampling rates: 49 Hz, 99 Hz, or 497 Hz
 
 Here's why:
+
 * A slightly off-center rate reduces the risk of accidentally synchronizing the capture interval with some periodic behavior of the process being observed -- which would
   bias your samples and produce misleading profiling results.
-* Keeping it close to a round number makes it easy to mentally estimate the expected event count: 99 HZ * 8 CPUs * 10 seconds =~ 8000 events
+* Keeping it close to a round number makes it easy to mentally estimate the expected event count: 99 HZ *8 CPUs* 10 seconds =~ 8000 events
 * These rates all have low overhead, and hence a low risk of noticeably affect the behavior or performance of the processes being traced.
 
 Profiling costs some CPU time per event.
@@ -424,7 +416,6 @@ For example:
 Even a single-threaded CPU-bound application can tolerate a 497 Hz sampling rate.
 That rate would cost the application 0.05% of its CPU time:
 Sampling 1 CPU at a rate of 497 times per second with an overhead of 1 microsecond per sampling event costs a total of 0.5 CPU milliseconds per wallclock second (0.05% overhead for a CPU-bound process).
-
 
 ### Capturing events without a timer
 
@@ -503,10 +494,10 @@ $ ./show_perf_record_silently_ignores_count_option_for_tracepoint_events.sh
 ...
 ```
 
-
 ## Bonus: Exploring subsets of a timeline with Flamescope
 
 The `perf-script` output can be downloaded to your laptop and loaded into [Flamescope](https://github.com/Netflix/flamescope), where you can more interactively explore the data you captured:
+
 * visualize what points in the timeline had more on-CPU activity (i.e. more stack traces collected per second)
 * select any portion of the timeline and generate a flamegraph for just that timespan
 * directly compare two flamegraphs, somewhat like a `diff` for visualizing which functions were more or less prominently on-CPU during timespan A versus timespan B
@@ -535,16 +526,13 @@ $ firefox http://0.0.0.0:5000/
 
 Another tool that can provide ad-hoc flamegraphs and includes a time dimension is [speedscope](https://www.speedscope.app/).
 
-
 ## Learn more
-
 
 ### Continuous profiling
 
 In addition to the ad hoc profiling covered here, some of the GitLab components support continuous profiling.
 
 These profiles can be accessed [in the GCP Cloud Profiler](https://console.cloud.google.com/profiler?project=gitlab-production).
-
 
 ### More about `perf` tool
 
@@ -556,6 +544,7 @@ Many of its use-cases overlap with BPF-based instrumentation.
 BPF programs typically use the kernel's `perf_events` infrastructure, and `perf` itself can attach a BPF program to a `perf_event`.
 
 [Brendan Gregg's Perf Tutorial](http://www.brendangregg.com/perf.html) provides a rich collection of reference material, including:
+
 * a long annotated list of `perf` one-liners
 * essential background why it is sometimes challenging to reassociate function names with stack frames
 * summary of the different types of events that can be instrumented

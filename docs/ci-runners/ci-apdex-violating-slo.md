@@ -3,7 +3,7 @@
 To Check the overall health of the runners:
 
 - Check the [CI-Runners standard SLI dashboard](https://dashboards.gitlab.net/d/ci-runners-main/ci-runners-overview?orgId=1&from=now-6h%2Fm&to=now%2Fm&var-PROMETHEUS_DS=Global&var-environment=gprd&var-stage=main) to check the impact of degradation
-  - Note that job queue charts are inaccurate in the following ways that are tracked in https://gitlab.com/gitlab-com/gl-infra/reliability/-/issues/12850 and https://gitlab.com/gitlab-org/gitlab/-/merge_requests/19517:
+  - Note that job queue charts are inaccurate in the following ways that are tracked in <https://gitlab.com/gitlab-com/gl-infra/reliability/-/issues/12850> and <https://gitlab.com/gitlab-org/gitlab/-/merge_requests/19517>:
     - it's outdated, because gitlab_exporter is pointed at the archive replica (which is lagging behind)
     - it's incomplete, because most of the times the Postgres queries for pulling this data are timing out
 - [Job queue duration histogram percentiles](https://dashboards.gitlab.net/d/000000159/ci?viewPanel=89&orgId=1&from=now-6h&to=now) may also point to a degradation, note that these are only for jobs that have been picked up by a runner.
@@ -12,11 +12,12 @@ This alert has the following possible causes, in the first few minutes it is imp
 
 ### GCP Quotas causing scaling issues
 
-Look for quota-exceeded errors in logs to determine if we are hitting any GCP `gitlab-ci` project quotas that are causing scaling issues: https://log.gprd.gitlab.net/goto/8f65b43718b6e95ccf5f6972e7ca1887
+Look for quota-exceeded errors in logs to determine if we are hitting any GCP `gitlab-ci` project quotas that are causing scaling issues: <https://log.gprd.gitlab.net/goto/8f65b43718b6e95ccf5f6972e7ca1887>
 
 Check the [Quotas Runbook](./providers/gcp/quotas.md) for more details.
 
 **If we believe there is a GCP scaling or quota issue**:
+
 - Contact the Runner team 24/7 using [this contact sheet](https://docs.google.com/spreadsheets/d/1JPgmmYgJxom-__vgDnvX0yyQaDPwX-XNmPsGT-S-Dvw/edit#gid=0)
 
 ### Database issue or API Errors / Saturation
@@ -27,9 +28,10 @@ Check the [Quotas Runbook](./providers/gcp/quotas.md) for more details.
 - Check [API requests for 500 errors](https://dashboards.gitlab.net/d/000000159/ci?viewPanel=91&orgId=1&var-shard=All&var-runner_type=All&var-runner_managers=All&var-gitlab_env=gprd&var-gl_monitor_fqdn=All&var-has_minutes=yes&var-runner_job_failure_reason=All&var-jobs_running_for_project=0&var-runner_request_endpoint_status=All)
 
 **If we believe there is a problem with PostgreSQL:**
+
 - Notify the DBRE `@Jose Finotto` with a link to the incident channel
 - Page Ongres support by [creating an incident in PD](https://gitlab.pagerduty.com/service-directory/PP6HCS3?)
 
 ### Abuse
 
-See https://gitlab.com/gitlab-com/runbooks/-/blob/master/docs/ci-runners/ci-abuse-handling.md
+See <https://gitlab.com/gitlab-com/runbooks/-/blob/master/docs/ci-runners/ci-abuse-handling.md>

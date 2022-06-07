@@ -10,23 +10,22 @@ This documentation outlines setting up the staging-ref environment to work with 
 
 * Staging-ref is not VPC peered environment therefore we had to add workarounds such as [adding an ingress for each alertmanager and configuring Cloud Armor](https://gitlab.com/gitlab-com/gl-infra/k8s-workloads/gitlab-helmfiles/-/merge_requests/551).
 
-
 ### Disable built-in GET monitoring
 
 GET sets up Prometheus and Grafana in a VM and the default GitLab Helm chart defaults which enable Prometheus and Grafana. They will not be used and can be disabled. You can view examples of how to do this via the following MRs:
 
 * [Disable Grafana and prometheus managed by GET](https://gitlab.com/gitlab-org/quality/gitlab-environment-toolkit-configs/staging-ref/-/merge_requests/9/diffs) and remove [GET monitoring VMs](https://gitlab.com/gitlab-org/quality/gitlab-environment-toolkit-configs/staging-ref/-/merge_requests/43) in the [`gitlab_charts.yml`](https://gitlab.com/gitlab-org/quality/gitlab-environment-toolkit-configs/staging-ref/-/blob/ccc354908f8366f0c701c0630d014a9d68de943e/10k_hybrid/ansible/files/gitlab_configs/gitlab_charts.yml) custom helm config used by GET. This can be done by adding the following to the GitLab helm values:
 
-	```yaml
-	global:
-	  # Disable Grafana
-	  grafana:
-	    enabled: false
-	...
-	# Disable built-in Prometheus
-	prometheus:
-	  install: false
-	```
+ ```yaml
+ global:
+   # Disable Grafana
+   grafana:
+     enabled: false
+ ...
+ # Disable built-in Prometheus
+ prometheus:
+   install: false
+ ```
 
 #### Enable labels
 
@@ -34,14 +33,14 @@ Labels help organize metrics by service. Labels can be added via the GitLab helm
 
 * Labels need to be added to the GitLab helm values:
 
-	```yaml
-	global:
-	  common:
-	    labels:
-	      stage: main
-	      shard: default
-	      tier: sv
-	```
+ ```yaml
+ global:
+   common:
+     labels:
+       stage: main
+       shard: default
+       tier: sv
+ ```
 
 * Deployment labels need to be added. For an up-to date list check out [`gitlab_charts.yml.j2`](https://gitlab.com/gitlab-org/quality/gitlab-environment-toolkit-configs/staging-ref/-/blob/main/10k_hybrid/ansible/files/gitlab_configs/gitlab_charts.yml.j2) in the `staging-ref` repository.
 
@@ -70,11 +69,9 @@ Exporters are "exporting" existing metrics from their applications or services. 
 * gitlab-shell [(merge request example)](https://gitlab.com/gitlab-org/quality/gitlab-environment-toolkit-configs/staging-ref/-/commit/bb55ac754f937f07eabd6ec3d108094630c4c648)
 * http-workhorse-exporter [(merge request example)](https://gitlab.com/gitlab-org/quality/gitlab-environment-toolkit-configs/staging-ref/-/commit/05b590a610f0853f6eaac567c0a31288d614005f)
 
-
 ### Thanos
 
 Thanos is a set of components that aids in maintaining a highly available Prometheus setup with long term storage capabilities. Here we will not be deploying thanos, but rather connecting prometheus to our already existing thanos cluster.
-
 
 #### Thanos sidecar
 
@@ -82,16 +79,17 @@ The sidecar component of Thanos gets deployed along with the Prometheus instance
 
 1. To be added in terraform:
 
-  * Create an [external IP in terraform](https://gitlab.com/gitlab-org/quality/gitlab-environment-toolkit-configs/staging-ref/-/blob/2005cbcc49034513111dd3f9ed842bfba5e9dcc2/10k_hybrid/terraform/prometheus.tf#L7-11) to use as a `loadBalancerIP`
-  * A GCS bucket for prometheus data needs to be created in terraform
-  * Service account used by thanos-store in Kubernetes for access to its GCS bucket needs to be created in terraform
-  * Configure a workload identity to be used by Thanos in terraform
+* Create an [external IP in terraform](https://gitlab.com/gitlab-org/quality/gitlab-environment-toolkit-configs/staging-ref/-/blob/2005cbcc49034513111dd3f9ed842bfba5e9dcc2/10k_hybrid/terraform/prometheus.tf#L7-11) to use as a `loadBalancerIP`
+* A GCS bucket for prometheus data needs to be created in terraform
+* Service account used by thanos-store in Kubernetes for access to its GCS bucket needs to be created in terraform
+* Configure a workload identity to be used by Thanos in terraform
 
 2. To be [configured in the helm chart](https://github.com/prometheus-operator/prometheus-operator/blob/main/Documentation/thanos.md#configuring-thanos-object-storage):
-  * Enable [service to expose thanos-sidecar](https://gitlab.com/gitlab-org/quality/gitlab-environment-toolkit-configs/staging-ref/-/blob/main/10k_hybrid/helm/prometheus-stack/values.yaml#L424-429)
-  * Add a secret with object storage credentials
-  * Configure object storage
-  * You can view an example [MR of these configurations here](https://gitlab.com/gitlab-org/quality/gitlab-environment-toolkit-configs/staging-ref/-/commit/60de8961c4d073afd5f5bbbf450c1584f4b898e4).
+
+* Enable [service to expose thanos-sidecar](https://gitlab.com/gitlab-org/quality/gitlab-environment-toolkit-configs/staging-ref/-/blob/main/10k_hybrid/helm/prometheus-stack/values.yaml#L424-429)
+* Add a secret with object storage credentials
+* Configure object storage
+* You can view an example [MR of these configurations here](https://gitlab.com/gitlab-org/quality/gitlab-environment-toolkit-configs/staging-ref/-/commit/60de8961c4d073afd5f5bbbf450c1584f4b898e4).
 
 3. Lastly, you need to add prometheus to thanos-store in order be able to query historical data from thanos-query. You can view an [example MR on how to do that here](https://gitlab.com/gitlab-com/gl-infra/k8s-workloads/tanka-deployments/-/merge_requests/303/diffs).
 
@@ -102,7 +100,8 @@ Alerting rules are configured in Prometheus and then it sends alerts to an Alert
 Note: If using a public cluster you will need to configure [IP Masquerade Agent](https://kubernetes.io/docs/tasks/administer-cluster/ip-masq-agent/#ip-masquerade-agent-user-guide) in your cluster. [Example configuration](https://gitlab.com/gitlab-org/quality/gitlab-environment-toolkit-configs/staging-ref/-/tree/7106fd07bf06ae63aab4d77797447fef955c95fc/10k_hybrid/helm/ip-masq-agent).
 
 1. Configure Alertmanager
-  - [Add the cluster IP](https://ops.gitlab.net/gitlab-com/gl-infra/config-mgmt/-/blob/74a38839b57d326a0ff8ffdf86f61a803890adc5/environments/ops/main.tf#L1294-1296) to the allowed IP ranges used by our [CloudArmor](https://cloud.google.com/armor/docs/configure-security-policies) security policy.
+
+* [Add the cluster IP](https://ops.gitlab.net/gitlab-com/gl-infra/config-mgmt/-/blob/74a38839b57d326a0ff8ffdf86f61a803890adc5/environments/ops/main.tf#L1294-1296) to the allowed IP ranges used by our [CloudArmor](https://cloud.google.com/armor/docs/configure-security-policies) security policy.
 
   ```
           src_ip_ranges = [
@@ -111,15 +110,14 @@ Note: If using a public cluster you will need to configure [IP Masquerade Agent]
 
   ```
 
-  - Configure `additionalAlertManagerConfigs` ([example merge request](https://gitlab.com/gitlab-org/quality/gitlab-environment-toolkit-configs/staging-ref/-/merge_requests/42/diffs)).
+* Configure `additionalAlertManagerConfigs` ([example merge request](https://gitlab.com/gitlab-org/quality/gitlab-environment-toolkit-configs/staging-ref/-/merge_requests/42/diffs)).
 
 1. Configure Dead Man's Snitch for Alertmanager. Alertmanager should send notifications for the dead man’s switch to the configured notification provider. This ensures that communication between the Alertmanager and the notification provider is working. ([example merge request](https://gitlab.com/gitlab-com/runbooks/-/merge_requests/4287))
 1. Configure routing to Slack channels ([example merge request](https://gitlab.com/gitlab-com/runbooks/-/merge_requests/4281/diffs)).
 
-
 ### Prometheus rules
 
-- TBA.
+* TBA.
 
 ### Dashboards
 

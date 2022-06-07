@@ -9,6 +9,7 @@ connection errors.
 
 Create a [C1 change request](https://gitlab.com/gitlab-com/gl-infra/production/-/issues/new?issuable_template=change_c1),
 add the steps below to the request, changing the following:
+
 * `[old-username]` to the current username used by the Rails application, usually it is `gitlab`
 * `[temp-username]` to anything reasonable, e.g. `gitlab-app`
 * `<env>` to the target environment identifier, e.g. `gstg`, `gprd`, `dr`, ...

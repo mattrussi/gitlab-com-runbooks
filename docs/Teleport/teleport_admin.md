@@ -9,6 +9,7 @@ This run book covers administration of the Teleport service from an infrastructu
 ## Quick fix
 
 In almost all cases, when the service is not responding, the safest and most effective fix is simply to restart either the teleport service (`sudo systemctl restart teleport`), or the entire teleport node.  The only reason not to reboot the node is that it will interrupt existing sessions, but if there is a problem establishing sessions, this won't be a problem.  We have seen a lot of cases where a restart provided a permanent fix to strange issues.  Try this first.
+
 ## Access Changes
 
 Access is configured in the [Teleport Chef Cookbook](https://gitlab.com/gitlab-cookbooks/gitlab-teleport)
@@ -36,6 +37,7 @@ Summary from the [teleport admin docs](https://goteleport.com/docs/admin-guide/)
 If you just want to rebuild the teleport server, and not the load balancers, console servers, and instance groups that are associated with it, then you just need to taint the node (`tf taint module.teleport.google_compute_instance.default[0]`) and do a targetted plan (`tf plan -target=module.teleport`) and apply (`tf apply -target=module.teleport`).
 
 Once the node is rebuilt, all settings and certificates will have been destroyed, so you'll need to set up the [Secrets](#secrets) and [Slack integration](#slack-integration) again.
+
 ## Rebuilding the entire service
 
 For the most part, the service can be rebuilt by using `tf destroy` and `tf apply` in the usual way. Many of the components have their lifecycle settings set to not allow destroy, so you'll have to go through the messy process of disabling them if you really want to do this.  There is a very good chance that you really don't want to do this.  Unless you are really sure that this is the only way to accomplish what you want to accomplish, you should probably just be rebuilding the teleport server itself (See the section above)

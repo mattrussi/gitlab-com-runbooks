@@ -7,7 +7,7 @@ This is particularly useful to understand if a particular git node is misbehavin
 ### Steps
 
 1. Ensure that you have a test repo in your GitLab account you can push to.
-1.  Use this script
+1. Use this script
 
 ```
 for i in $(seq -w 1 12);do

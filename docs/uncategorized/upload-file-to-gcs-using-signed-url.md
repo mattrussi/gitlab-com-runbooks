@@ -8,7 +8,7 @@ This document describes how to use `gsutil signurl` and a couple of `curl` calls
 gsutil signurl -m RESUMABLE -d 24h -c application/tar+gzip <private-key-file> gs://bucket/<obj>
 ```
 
--- https://cloud.google.com/storage/docs/gsutil/commands/signurl
+-- <https://cloud.google.com/storage/docs/gsutil/commands/signurl>
 
 The documentation presumes that you have configured Google Cloud credentials so that you may use `gcloud` and `gsutil`.
 
@@ -51,13 +51,13 @@ A service account key is required for the `gsutil signurl` command to work.
 You may either create a brand new service account for this, or use an existing one.
 
 ```bash
-$ gcloud iam service-accounts create gitlab-project-storage-internal --display-name "Gitlab Internal Project Storage"
+gcloud iam service-accounts create gitlab-project-storage-internal --display-name "Gitlab Internal Project Storage"
 ```
 
 If you have decided to create a new service account, please consider also deleting the account when the work which required its creation has completed.
 
 ```bash
-$ gcloud iam service-accounts delete gitlab-project-storage-internal
+gcloud iam service-accounts delete gitlab-project-storage-internal
 ```
 
 It should go without saying, but please don't delete a service account that you yourself did not also create.
@@ -67,7 +67,7 @@ It should go without saying, but please don't delete a service account that you 
 Create a service account key on an existing service account for use for this work.  I'm naming this file `gitlab-gcs-key-35864.json` so it includes the issue number that is tracking the work I am doing.
 
 ```bash
-$ gcloud iam service-accounts keys create ~/gitlab-gcs-key-35864.json --iam-account gitlab-gcs@gitlab-internal-153318.iam.gserviceaccount.com
+gcloud iam service-accounts keys create ~/gitlab-gcs-key-35864.json --iam-account gitlab-gcs@gitlab-internal-153318.iam.gserviceaccount.com
 ```
 
 ### Create a new bucket
@@ -75,13 +75,13 @@ $ gcloud iam service-accounts keys create ~/gitlab-gcs-key-35864.json --iam-acco
 Now, create a new bucket in GCS.
 
 ```bash
-$ gsutil mb -l us-east1 gs://vsizov-test-git-repos-35864/
+gsutil mb -l us-east1 gs://vsizov-test-git-repos-35864/
 ```
 
 Or else use an existing one.
 
 ```bash
-$ gsutil ls
+gsutil ls
 ```
 
 ### Set the bucket access control
@@ -89,7 +89,7 @@ $ gsutil ls
 The bucket access control list must be configured.
 
 ```bash
-$ gsutil acl ch -u gitlab-gcs@gitlab-internal-153318.iam.gserviceaccount.com:WRITE gs://vsizov-test-git-repos-35864
+gsutil acl ch -u gitlab-gcs@gitlab-internal-153318.iam.gserviceaccount.com:WRITE gs://vsizov-test-git-repos-35864
 ```
 
 ### Create a signed url
@@ -108,13 +108,13 @@ gs://vsizov-test-git-repos-35864/7ea325136e6d19b8ae3561d28652a557dbfcba11da21bfd
 
 ### Uploading a file
 
-Operating the `POST` and subsequent `PUT` commands for `curl`.  Complete documentation here: https://cloud.google.com/storage/docs/access-control/signed-urls#signing-resumable
+Operating the `POST` and subsequent `PUT` commands for `curl`.  Complete documentation here: <https://cloud.google.com/storage/docs/access-control/signed-urls#signing-resumable>
 
 The following command yields a url in the `location` response header, to which the actual file data will be `PUT`:
 
 ```bash
-$ export SIGNED_URL='https://storage.googleapis.com/vsizov-test-git-repos-35864/7ea325136e6d19b8ae3561d28652a557dbfcba11da21bfd81ebb2ff19f844e62.tar.gz?x-goog-signature=[redacted]&x-goog-algorithm=GOOG4-RSA-SHA256&x-goog-credential=gitlab-gcs%40gitlab-internal-153318.iam.gserviceaccount.com%2F20200130%2Fus-east1%2Fstorage%2Fgoog4_request&x-goog-date=20200130T183820Z&x-goog-expires=21600&x-goog-signedheaders=content-type%3Bhost%3Bx-goog-resumable'
-$ export LOCATION_URL=`curl --silent --location --request POST "${SIGNED_URL}" --header 'Content-Type: application/tar+gzip' --header 'x-goog-resumable: start' --data '' --include | grep 'Location: ' | awk '{print $2}'`
+export SIGNED_URL='https://storage.googleapis.com/vsizov-test-git-repos-35864/7ea325136e6d19b8ae3561d28652a557dbfcba11da21bfd81ebb2ff19f844e62.tar.gz?x-goog-signature=[redacted]&x-goog-algorithm=GOOG4-RSA-SHA256&x-goog-credential=gitlab-gcs%40gitlab-internal-153318.iam.gserviceaccount.com%2F20200130%2Fus-east1%2Fstorage%2Fgoog4_request&x-goog-date=20200130T183820Z&x-goog-expires=21600&x-goog-signedheaders=content-type%3Bhost%3Bx-goog-resumable'
+export LOCATION_URL=`curl --silent --location --request POST "${SIGNED_URL}" --header 'Content-Type: application/tar+gzip' --header 'x-goog-resumable: start' --data '' --include | grep 'Location: ' | awk '{print $2}'`
 ```
 
 ```bash
@@ -125,5 +125,5 @@ https://storage.googleapis.com/vsizov-test-git-repos-35864/7ea325136e6d19b8ae356
 Now the file may be uploaded to Google Cloud Storage.
 
 ```bash
-$ curl --verbose --request PUT "${LOCATION_URL}" --output /tmp/curl.log --upload-file 7ea325136e6d19b8ae3561d28652a557dbfcba11da21bfd81ebb2ff19f844e62.tar.gz
+curl --verbose --request PUT "${LOCATION_URL}" --output /tmp/curl.log --upload-file 7ea325136e6d19b8ae3561d28652a557dbfcba11da21bfd81ebb2ff19f844e62.tar.gz
 ```

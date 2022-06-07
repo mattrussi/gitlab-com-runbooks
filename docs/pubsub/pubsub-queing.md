@@ -20,11 +20,12 @@
       positive and flat, ingestion has likely stopped altogether.
 
 ## Resolution
+
 * If `Publish message operations` has a spike, ensure it goes back down.
   * Ask around for potential changes to any characteristics of our
     infrastructure or application logging
 * If the queues continue to climb, check the health of the elastic cluster
-  * https://cloud.elastic.co/region/gcp-us-central1/deployment/022d92a4ba7ff6fdacc2a7182948cb0a/elasticsearch
+  * <https://cloud.elastic.co/region/gcp-us-central1/deployment/022d92a4ba7ff6fdacc2a7182948cb0a/elasticsearch>
     * Ensure we have enough space in disk usage, and ensure we aren't toppling
       memory usage
     * [Performance Charts](https://cloud.elastic.co/region/gcp-us-central1/deployment/022d92a4ba7ff6fdacc2a7182948cb0a/metrics)
@@ -47,9 +48,11 @@
   * This will induce data loss, so this would only be recommended as a final
     resort, and for queues in which we are okay with losing said data
   * Example command for execution:
+
 ```
 gcloud alpha pubsub subscriptions seek <subscription path> --time=yyyy-mm-ddThh:mm:ss
 ```
 
 ## Postchecks
+
 * Check our stackdriver chart and ensure we don't have things queued.

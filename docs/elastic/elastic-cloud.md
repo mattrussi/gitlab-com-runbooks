@@ -16,18 +16,17 @@
 
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
 
-
 # Quick start
 
 ## Elastic Cloud Web UI
 
-https://cloud.elastic.co/deployments
+<https://cloud.elastic.co/deployments>
 
 Login using credentials in 1password, Vault: "Production", Login entry called: "Elastic Cloud"
 
 ## Elastic Vendor Tracker
 
-https://gitlab.com/gitlab-com/gl-infra/elastic/issues
+<https://gitlab.com/gitlab-com/gl-infra/elastic/issues>
 
 # How-to guides
 
@@ -52,8 +51,10 @@ https://gitlab.com/gitlab-com/gl-infra/elastic/issues
 1. Create index templates, alias and first index using a script in esc-tools
 1. Start sending logs to the cluster
 1. Configure index patterns in Kibana (logs have to be present in the cluster):
-  - where possible, use json.time (timestamp of the log) rather than timestamp (when the log was received by the cluster)
-  - it's currently impossible to configure index patterns through api: https://github.com/elastic/kibana/issues/2310 and https://github.com/elastic/kibana/issues/3709
+
+- where possible, use json.time (timestamp of the log) rather than timestamp (when the log was received by the cluster)
+- it's currently impossible to configure index patterns through api: <https://github.com/elastic/kibana/issues/2310> and <https://github.com/elastic/kibana/issues/3709>
+
 1. Check all ILM policies (in particular the ones for APM indices) and make sure that they use node attributes when moving shards between phase. You might also want to review times shards spend in different phases.
 
 ## Creating a cluster (general notes)
@@ -64,16 +65,15 @@ Sometimes when you create a cluster there are unallocated shards belonging to sy
 
 In this situation you can create an additional template (so that it is applied over the default system indices templates) with `"order": 2` and `"auto_expand_replicas":"0-1"`. The template should have for example `"index_patters":["apm-7.3.0*"]` (so that it is applied over the default "apm-7.3.0" template). You will have to remember though to update the index pattern in this custom additional template whenever you upgrade to the next version, and also to remove it if you do move to >=3 hot nodes so that the desired 2 replicas can be achieved.
 
-## Resizing a cluster ##
+## Resizing a cluster
 
+### Adding new availability zones
 
-### Adding new availability zones ###
-
-https://www.elastic.co/guide/en/cloud-enterprise/current/ece-resize-deployment.html
+<https://www.elastic.co/guide/en/cloud-enterprise/current/ece-resize-deployment.html>
 
 Adding and removing availability zones was tested. elastic.co decides whether to have a dedicated VM for master or to nominate master from among the data nodes. The number of availability zones determines in how many zones there will be data nodes (you might actually end up with more VMs if elastic.co decides to run master on a dedicated node).
 
-### Resizing instances ###
+### Resizing instances
 
 Before resizing, you need to make sure the cluster is in a healthy state. If needed, release some disk space or reallocate shards to distribute cpu load more evenly. Otherwise, the resize might fail in the middle, as it happened in the past.
 
@@ -81,6 +81,6 @@ The way resizing works is new machines are created with the desired spec, they a
 
 We can scale up and down. Resizing is done live.
 
-### Failures caused by snapshoting ###
+### Failures caused by snapshoting
 
 Resizing cannot succeed without a successful snapshot. This means that if Elastic Cloud is unable to take a snapshot (e.g. cluster is unhealthy), the resize will fail. It also means that if there is a snapshot in flight, the resize will fail.

@@ -27,11 +27,10 @@ In a Rails console, grab some information about the project, keep it open as it 
 Log in to the shard we think the repository is under, run
 
 ```
-$ sudo ls /var/opt/gitlab/git-data/repositories/gitlab/top-secret.git
+sudo ls /var/opt/gitlab/git-data/repositories/gitlab/top-secret.git
 ```
 
 If you see a repository present, then it could be a caching problem which can happen for various reasons, see how to clear it below.
-
 
 ### Clearing repository cache
 
@@ -50,14 +49,15 @@ A failed group move operation can end the project in an inconsistent state. Say 
 In a local workstation, run
 
 ```
-$ knife ssh 'roles:gprd-base-stor-nfs' 'sudo ls -hal /var/opt/gitlab/git-data/repositories/gitlab 2>/dev/null'
-$ knife ssh 'roles:gprd-base-stor-nfs' 'sudo ls -hal /var/opt/gitlab/git-data/repositories/gitlab-new 2>/dev/null'
+knife ssh 'roles:gprd-base-stor-nfs' 'sudo ls -hal /var/opt/gitlab/git-data/repositories/gitlab 2>/dev/null'
+knife ssh 'roles:gprd-base-stor-nfs' 'sudo ls -hal /var/opt/gitlab/git-data/repositories/gitlab-new 2>/dev/null'
 ```
 
 You can find the project name present in a different shard and/or under a different namespace.
 
 * Different namespace: Move the repository and its wiki to the current namespace of the project (i.e. the one the project is associated with currently)
 * Different shard: In a Rails console, update the `repository_storage` attribute of the project to the shard holding the repository
+
 ```
 > Project.find_by_full_path('gitlab/top-secret').update_attribute(:repository_storage, 'nfs-file10')
 ```

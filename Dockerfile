@@ -36,7 +36,7 @@ ARG GL_ASDF_THANOS_VERSION
 # Make sure these version numbers are not ahead of whats running in Production
 ENV ALERTMANAGER_VERSION 0.22.2
 
-RUN apk add --no-cache curl bash build-base git jq make openssl tar yamllint zlib
+RUN apk add --no-cache curl bash build-base git jq make openssl tar yamllint zlib npm
 
 RUN apk add --no-cache --virtual .build-deps openssl-dev zlib-dev && \
   git clone https://github.com/rbenv/ruby-build.git && \

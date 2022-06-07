@@ -36,6 +36,7 @@ Loading packages...
 ```
 
 ### Now create a new snapshot for this version of the repository
+
 Snapshots preserve the state of the repository. Include the date so that multiple snapshots can co-exist.
 
 ```
@@ -47,6 +48,7 @@ You can run 'aptly publish snapshot gitlab-utils-stable-20161221' to publish sna
 ```
 
 ### Switch the published snapshots
+
 Now we must replace the currently published snapshot with the newly created snapshot
 
 ```
@@ -136,6 +138,5 @@ Cleaning up prefix "." components main...
 
 Publish for snapshot ./xenial [amd64] publishes {main: [ceph-jewel-2016-11-07]: Snapshot from mirror [ceph-jewel]: https://download.ceph.com/debian-jewel/ xenial} has been successfully switched to new snapshot.
 ```
-
 
 [cadvisor]: https://gitlab.com/gitlab-pkg/gitlab-cadvisor/

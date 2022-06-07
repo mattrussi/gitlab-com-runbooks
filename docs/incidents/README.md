@@ -13,7 +13,7 @@ down, this will fail.
 As a backup, open a Google doc in order to collaborate with others to help
 resolve the incident:
 
-- Navigate to https://drive.google.com/
+- Navigate to <https://drive.google.com/>
 - Create a new Google Doc
 - Click "Share" in the top-right corner
 - In the "Get link" section of the modal, click "Change link to GitLab" to make

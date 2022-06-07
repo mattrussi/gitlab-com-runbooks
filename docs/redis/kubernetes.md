@@ -86,6 +86,7 @@ The redis container writes its RDB dump file to container path `/data/dump.rdb`.
 Container path "/data" is a persistent volume acting as the `REDIS_DATA_DIR`.
 
 The simplest way to download a file from a container is to use `kubectl cp`, but that poses several problems:
+
 * It is painfully slow (< 1 MB/s), untennable large files like RDB dumps.
 * It is prone to failing partway into the download, even if the pod and node remain healthy, wasting time and losing the point-in-time.
 * It implicitly increases the disk space usage on the redis volume, because the next scheduled dump cannot deallocate the old dump's inode while the file is downloading.

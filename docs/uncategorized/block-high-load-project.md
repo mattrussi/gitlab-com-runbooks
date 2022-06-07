@@ -15,7 +15,7 @@
 1. If that fails for some reason, navigate to the project via an admin
 account and disable that. For example, the URL for the example above would be:
 
-    https://gitlab.com/my-namespace/my-group/my-project/settings/edit
+    <https://gitlab.com/my-namespace/my-group/my-project/settings/edit>
 
     Under `Permissions`, click `Expand`, and set `Project visibility` from `Public` to `Private`.
 

@@ -22,12 +22,12 @@
 Besides our Patroni-managed databases we also have 2 single Postgresql instances
 for disaster recovery and wal archive testing purposes:
 
-* gprd:
-  * postgres-dr-archive-01-db-gprd.c.gitlab-production.internal
-  * postgres-dr-delayed-01-db-gprd.c.gitlab-production.internal
-* gstg:
-  * postgres-dr-archive-01-db-gstg.c.gitlab-staging-1.internal
-  * postgres-dr-delayed-01-db-gstg.c.gitlab-staging-1.internal
+- gprd:
+  - postgres-dr-archive-01-db-gprd.c.gitlab-production.internal
+  - postgres-dr-delayed-01-db-gprd.c.gitlab-production.internal
+- gstg:
+  - postgres-dr-archive-01-db-gstg.c.gitlab-staging-1.internal
+  - postgres-dr-delayed-01-db-gstg.c.gitlab-staging-1.internal
 
 Archive and delayed replica both are replaying WAL archive files from GCS via
 wal-g which are send to GCS by the Patroni primary (with a [retention
@@ -47,8 +47,8 @@ to).
 
 Both instances are setup using terraform and Chef:
 
-* [gprd-base-db-postgres-archive role](https://ops.gitlab.net/gitlab-cookbooks/chef-repo/-/blob/master/roles/gprd-base-db-postgres-archive.json)
-* [gprd-base-db-postgres-delayed role](https://ops.gitlab.net/gitlab-cookbooks/chef-repo/-/blob/master/roles/gprd-base-db-postgres-delayed.json)
+- [gprd-base-db-postgres-archive role](https://ops.gitlab.net/gitlab-cookbooks/chef-repo/-/blob/master/roles/gprd-base-db-postgres-archive.json)
+- [gprd-base-db-postgres-delayed role](https://ops.gitlab.net/gitlab-cookbooks/chef-repo/-/blob/master/roles/gprd-base-db-postgres-delayed.json)
 
 They use the postgresql version coming with omnibus.
 
@@ -61,8 +61,8 @@ GCS after a primary failover or for a major postgres version upgrade).
 
 There are 2 ways to (re-)start replication:
 
-* Using wal-g to fetch a base-backup from GCS (easy and works in all cases, but slow)
-* Using a disk snapshot from the dr replica before replication broke (faster,
+- Using wal-g to fetch a base-backup from GCS (easy and works in all cases, but slow)
+- Using a disk snapshot from the dr replica before replication broke (faster,
   but a bit more involved and mostly applicable for diverged timelines after a
   failover). You also could take a snapshot from a patroni node, but then you
   need to move PGDATA from `.../data11` to `.../data` manually.
@@ -131,7 +131,6 @@ The following Chef attributes are used for the delayed replica:
 }
 ```
 
-
 #### Restoring with WAL-G
 
 We will delete the content of the existing PGDATA dir and re-fill it using
@@ -145,25 +144,25 @@ you'll just restore then re-run the WALs to the failover point at which time the
 will fail again in exactly the same manner.  The primary base backups occur at/around midnight UTC,
 and (currently) take about 9 hrs (mileage-may-vary)
 
-* `chef-client-disable <comment or link to issue>`
-* `gitlab-ctl stop postgresql`
-* Clean up the current PGDATA: `rm -rf /var/opt/gitlab/postgresql/data/*`
-* Run backup-fetch __in a tmux__ as it will take hours:
-  * `BASE=<base_000... from backup-list above>`
-  * `cd /tmp/; sudo -u gitlab-psql /usr/bin/envdir /etc/wal-g.d/env /opt/wal-g/bin/wal-g backup-fetch /var/opt/gitlab/postgresql/data/ $BASE`
-* Converge Chef to create `postgresql.auto.conf` and `standby.signal`: `sudo /opt/chef/bin/chef-client`
-* run `gitlab-ctl reconfigure`; this will generate a new postgresql.conf, but will
+- `chef-client-disable <comment or link to issue>`
+- `gitlab-ctl stop postgresql`
+- Clean up the current PGDATA: `rm -rf /var/opt/gitlab/postgresql/data/*`
+- Run backup-fetch __in a tmux__ as it will take hours:
+  - `BASE=<base_000... from backup-list above>`
+  - `cd /tmp/; sudo -u gitlab-psql /usr/bin/envdir /etc/wal-g.d/env /opt/wal-g/bin/wal-g backup-fetch /var/opt/gitlab/postgresql/data/ $BASE`
+- Converge Chef to create `postgresql.auto.conf` and `standby.signal`: `sudo /opt/chef/bin/chef-client`
+- run `gitlab-ctl reconfigure`; this will generate a new postgresql.conf, but will
   probably then fail trying to connect to the newly started up (but still not recovered)
   DB, to create users (or some such).
   [This is fine](https://i.kym-cdn.com/photos/images/newsfeed/000/962/640/658.png)
-* chef should have started postgresql, but check with `gitlab-ctl status postgresql`, and
+- chef should have started postgresql, but check with `gitlab-ctl status postgresql`, and
   if necessary, `gitlab-ctl start postgresql`
-* check logs in `/var/log/gitlab/postgresql/current` - postgres should be in
+- check logs in `/var/log/gitlab/postgresql/current` - postgres should be in
   startup first and then start replaying WAL files all the time
-* Once postgres is accepting connections again (many hours, but before it gets fully
+- Once postgres is accepting connections again (many hours, but before it gets fully
   up to date, based on some internal determination by postgres), run `gitlab-ctl reconfigure`
   again to ensure it completes any configuration, and will be clean in future.
-* `chef-client-enable`
+- `chef-client-enable`
 
 #### Restoring with a disk-snapshot
 
@@ -172,9 +171,9 @@ gstg downloading a base-backup takes around half an hour). We will create a new
 disk from the latest data disk snapshot of the postgres dr instance and mount it
 in place of the existing data disk and then start WAL fetching.
 
-* make a screenshot of the order of attached disks of the instance in google
+- make a screenshot of the order of attached disks of the instance in google
   cloud console
-* get the config of the current data disk:
+- get the config of the current data disk:
 
 ```
 env="gprd"
@@ -189,7 +188,7 @@ size=<size in Gb from above>
 labels="key1=value1,key2=value2,..."  # from labels above
 ```
 
-* find the last data disk snapshot:
+- find the last data disk snapshot:
 
 ```
 gcloud compute snapshots list --filter="sourceDisk~$disk_name" --sort-by=creationTimestamp --format=json
@@ -197,10 +196,10 @@ gcloud compute snapshots list --filter="sourceDisk~$disk_name" --sort-by=creatio
 snapshot_name=<name of last snapshot from above>
 ```
 
-* adjust the `/etc/fstab` entry for the data disk to also make it work for the
+- adjust the `/etc/fstab` entry for the data disk to also make it work for the
   new disk:
-  * replace `UUID=...` for the mount point `/var/opt/gitlab` with `/dev/disk/by-id/google-$disk_name` (and make sure this device really exists)
-* exchange the disk with a new one created from the snapshot:
+  - replace `UUID=...` for the mount point `/var/opt/gitlab` with `/dev/disk/by-id/google-$disk_name` (and make sure this device really exists)
+- exchange the disk with a new one created from the snapshot:
 
 ```
 # stop the instance
@@ -231,7 +230,7 @@ the screenshot at the beginning.
 If everything worked out, postgres should be recovering now and replication lag
 catching up slowly.
 
-* Check there is no terraform plan diff for the archival replicas. Run the
+- Check there is no terraform plan diff for the archival replicas. Run the
   following for the matching environment:
 
  ```
@@ -253,13 +252,13 @@ our Patroni cluster, we can do it on the delayed replica, because it is
 replaying the WAL files with an 8h delay. To prevent reaching the 8h limit, we
 can temporarily pause the replay:
 
-* eventually silence replication lag alerts first
-* ssh to the delayed replica
-* `systemctl stop chef-client`
-* `gitlab-psql -c 'SELECT pg_xlog_replay_pause();'`
-* extract the data you need...
-* `gitlab-psql -c 'SELECT pg_xlog_replay_resume();'`
-* `systemctl start chef-client`
+- eventually silence replication lag alerts first
+- ssh to the delayed replica
+- `systemctl stop chef-client`
+- `gitlab-psql -c 'SELECT pg_xlog_replay_pause();'`
+- extract the data you need...
+- `gitlab-psql -c 'SELECT pg_xlog_replay_resume();'`
+- `systemctl start chef-client`
 
 Also see the [deleted-project-restore runbook](../uncategorized/deleted-project-restore.md).
 
@@ -267,15 +266,20 @@ Also see the [deleted-project-restore runbook](../uncategorized/deleted-project-
 
 Archive and delayed replicas manage their PostgreSQL instance with the `gitlab-ctl` command. Chef-client should start PostgreSQL automatically, but in case it doesn't you can use the following commands:
 
-* Check PostgreSQL Status:
+- Check PostgreSQL Status:
+
 ```
 gitlab-ctl status postgresql
 ```
-* Start PostgreSQL:
+
+- Start PostgreSQL:
+
 ```
 gitlab-ctl start postgresql
 ```
-* Stop PostgreSQL
+
+- Stop PostgreSQL
+
 ```
 gitlab-ctl stop postgresql
 ```

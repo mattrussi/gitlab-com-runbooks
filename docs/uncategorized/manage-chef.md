@@ -39,6 +39,7 @@ To do this it will be necessary to create a new keypair. Because of how chef beh
 If _default_ is not declared chef will use the fingerprint of the key as a name.
 This will end up breaking chef execution as it will not be able of finding this key.
 To check if the user is correctly setup after the key rotation run this command:
+
 ```
 $ bundle exec knife user show _username_
 display_name: NAME
@@ -72,6 +73,7 @@ For this example we'll use the username "keysersoze".
 The chef-client version installed is managed through the Chef omnibus package and as such we will be controlling
 it using the [omnibus_updater](https://supermarket.chef.io/cookbooks/omnibus_updater) cookbook.
 The versions chef-client are currently managed via an environment override.
+
 ```
 override_attributes(
   :omnibus_updater => {
@@ -92,6 +94,7 @@ This will dump a lot of output, and in case of a ruby exception it will also pri
 Another interesting step to run when troubleshooting is checking what commands were sent to chef, to do so just grep nginx access log for relevant information
 
 For ex, search accions performed by a given user:
+
 ```
 grep '"janedoe"' /var/log/opscode/nginx/access.log
 ```

@@ -96,6 +96,7 @@ replication (see recovery.conf). As of writing,
    `chown` it to `gitlab-psql:gitlab-psql` and `chmod` it to `600` (if needed).
 
 * Create `standby.signal`:
+
   ```
   touch /var/opt/gitlab/postgresql/data/standby.signal
   chown gitlab-psql:gitlab-psql /var/opt/gitlab/postgresql/data/standby.signal
@@ -128,7 +129,7 @@ replication (see recovery.conf). As of writing,
   * `gitlab-ctl hup puma`
   * `gitlab-ctl restart sidekiq`
   * `gitlab-ctl restart geo-logcursor`
-* Check https://staging.gitlab.com/admin/geo/nodes and https://geo.staging.gitlab.com/admin/geo/nodes for status
+* Check <https://staging.gitlab.com/admin/geo/nodes> and <https://geo.staging.gitlab.com/admin/geo/nodes> for status
 
 ## Setup replication for a patroni-managed cluster
 
@@ -166,13 +167,13 @@ the entire cluster following below steps:
     ```sh
     /usr/bin/envdir /etc/wal-g.d/env /opt/wal-g/bin/wal-g backup-list | sort
 
-    name	last_modified	expanded_size_bytes	wal_segment_backup_start	wal_segment_offset_backup_start	wal_segment_backup_stop	wal_segment_offset_backup_stop
-    base_000000140001047600000023_02614680	2019-06-15 04:27:42.235000+00:00		000000140001047600000023	02614680
-    base_00000014000104FA000000C1_07405208	2019-06-17 08:21:45.506000+00:00		00000014000104FA000000C1	07405208
-    base_0000001400010883000000AB_14587176	2019-06-22 06:52:57.460000+00:00		0000001400010883000000AB	14587176
-    base_00000014000109D40000008E_00851408	2019-06-25 08:16:19.988000+00:00		00000014000109D40000008E	00851408
-    base_0000001400010A8C000000E8_13030128	2019-06-26 04:45:10.121000+00:00		0000001400010A8C000000E8	13030128
-    base_0000001400010B4C0000008B_12535584	2019-06-27 07:24:35.529000+00:00		0000001400010B4C0000008B	12535584
+    name last_modified expanded_size_bytes wal_segment_backup_start wal_segment_offset_backup_start wal_segment_backup_stop wal_segment_offset_backup_stop
+    base_000000140001047600000023_02614680 2019-06-15 04:27:42.235000+00:00  000000140001047600000023 02614680
+    base_00000014000104FA000000C1_07405208 2019-06-17 08:21:45.506000+00:00  00000014000104FA000000C1 07405208
+    base_0000001400010883000000AB_14587176 2019-06-22 06:52:57.460000+00:00  0000001400010883000000AB 14587176
+    base_00000014000109D40000008E_00851408 2019-06-25 08:16:19.988000+00:00  00000014000109D40000008E 00851408
+    base_0000001400010A8C000000E8_13030128 2019-06-26 04:45:10.121000+00:00  0000001400010A8C000000E8 13030128
+    base_0000001400010B4C0000008B_12535584 2019-06-27 07:24:35.529000+00:00  0000001400010B4C0000008B 12535584
     ```
 
 4. Start patroni in one of the node. This node will likely become the leader

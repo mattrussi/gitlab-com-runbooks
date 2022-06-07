@@ -4,9 +4,10 @@
 
 [[_TOC_]]
 
-#  Ci-runners Service
+# Ci-runners Service
+
 * [Service Overview](https://dashboards.gitlab.net/d/ci-runners-main/ci-runners-overview)
-* **Alerts**: https://alerts.gitlab.net/#/alerts?filter=%7Btype%3D%22ci-runners%22%2C%20tier%3D%22sv%22%7D
+* **Alerts**: <https://alerts.gitlab.net/#/alerts?filter=%7Btype%3D%22ci-runners%22%2C%20tier%3D%22sv%22%7D>
 * **Label**: gitlab-com/gl-infra/production~"Service:CI Runner"
 
 ## Logging
@@ -26,19 +27,19 @@
 We have several different kind of runners. Below is a brief overview of each.
 They all have acronyms as well, which are indicated next to each name.
 
-- [Logging](#logging)
-- [Troubleshooting Pointers](#troubleshooting-pointers)
-- [Configuration management for the Linux based Runners fleet](linux/README.md)
-- [Runner Descriptions](#runner-descriptions)
-  - [shared-runners-manager (SRM)](#shared-runners-manager-srm)
-  - [gitlab-shared-runners-manager (GSRM)](#gitlab-shared-runners-manager-gsrm)
-  - [private-runners-manager (PRM)](#private-runners-manager-prm)
-  - [gitlab-docker-shared-runners-manager (GDSRM)](#gitlab-docker-shared-runners-manager-gdsrm)
-  - [windows-shared-runners-manager (WSRM)](#windows-shared-runners-manager-wsrm)
-- [Cost Factors](#cost-factors)
-- [Network Info](#network-info)
-- [Monitoring](#monitoring)
-- [Production Change Lock (PCL)](#production-change-lock-pcl)
+* [Logging](#logging)
+* [Troubleshooting Pointers](#troubleshooting-pointers)
+* [Configuration management for the Linux based Runners fleet](linux/README.md)
+* [Runner Descriptions](#runner-descriptions)
+  * [shared-runners-manager (SRM)](#shared-runners-manager-srm)
+  * [gitlab-shared-runners-manager (GSRM)](#gitlab-shared-runners-manager-gsrm)
+  * [private-runners-manager (PRM)](#private-runners-manager-prm)
+  * [gitlab-docker-shared-runners-manager (GDSRM)](#gitlab-docker-shared-runners-manager-gdsrm)
+  * [windows-shared-runners-manager (WSRM)](#windows-shared-runners-manager-wsrm)
+* [Cost Factors](#cost-factors)
+* [Network Info](#network-info)
+* [Monitoring](#monitoring)
+* [Production Change Lock (PCL)](#production-change-lock-pcl)
 
 ## Runner Descriptions
 
@@ -313,9 +314,9 @@ need to be able to communicate with ephemeral VMs created in the `gitlab-ci-plan
 
 Here we have a mix of direct peering and [peering with one hop](#peering-conflicting-networks-with-one-hop-between-them):
 
-- `gitlab-ci/ci` and `gitlab-ci-plan-free-3/ephemeral-runners` are peered directly, so their subnetworks
+* `gitlab-ci/ci` and `gitlab-ci-plan-free-3/ephemeral-runners` are peered directly, so their subnetworks
   can't have conflicting CIDRs.
-- `gitlab-ci/ci` and `gitlab-ci-plan-free-3/gke` are peered through `gitlab-ci-plan-free-3/ephemeral-runners`. Their
+* `gitlab-ci/ci` and `gitlab-ci-plan-free-3/gke` are peered through `gitlab-ci-plan-free-3/ephemeral-runners`. Their
   networks also can't have conflicting CIDRs, as this would create conflict in `gitlab-ci-plan-free-3/ephemeral-runners`.
 
 Also `gitlab-ci-plan-free-X/ephemeral-runners` are connected between each other with only one hop (`gitlab-ci/ci`),
@@ -404,7 +405,7 @@ Here you can find details about networking in different projects used by CI Runn
 | `default`      | `default`                   | `10.142.0.0/20` | all non-runner machines (managers, prometheus, etc.). In `us-east1` - we don't use this subnetwork in any other region. |
 | `default`      | `shared-runners`            | `10.0.32.0/20`  | shared runner (SRM) machines                           |
 | `default`      | `private-runners`           | `10.0.0.0/20`   | private runner (PRM) machines                          |
-| `default`      | `gitlab-shared-runners `    | `10.0.16.0/20`  | gitlab shared runner (GSRM) machines                   |
+| `default`      | `gitlab-shared-runners`    | `10.0.16.0/20`  | gitlab shared runner (GSRM) machines                   |
 | `ci`           | `bastion-ci`                | `10.1.4.0/24`   | Bastion network                                        |
 | `ci`           | `runner-managers`           | `10.1.5.0/24`   | Network for Runner Managers ([new ones](https://gitlab.com/groups/gitlab-com/gl-infra/-/epics/456))                 |
 | `ci`           | `ephemeral-runners-private` | `10.10.40.0/21` | Ephemeral runner machines for the new `private` shard. See [`ephemeral-runnes` unique CIDRs list](#ephemeral-runners-unique-cidrs-list) above |
@@ -591,10 +592,10 @@ availability zone.
 
 For that, the following FQDNs were created:
 
-- `git-us-east1-c.ci-gateway.int.gstg.gitlab.net`
-- `git-us-east1-d.ci-gateway.int.gstg.gitlab.net`
-- `git-us-east1-c.ci-gateway.int.gprd.gitlab.net`
-- `git-us-east1-d.ci-gateway.int.gprd.gitlab.net`
+* `git-us-east1-c.ci-gateway.int.gstg.gitlab.net`
+* `git-us-east1-d.ci-gateway.int.gstg.gitlab.net`
+* `git-us-east1-c.ci-gateway.int.gprd.gitlab.net`
+* `git-us-east1-d.ci-gateway.int.gprd.gitlab.net`
 
 Runner nodes are configured to point the ILBs with the `url` and `clone_url` settings.
 As we set our runners to operate in a specific availability zone, each of them
@@ -650,13 +651,13 @@ and Let's Encrypt certificates are used for TLS.
 For external access each project where monitoring is deployed is using a reserved public IP address. This address
 is bound to two DNS A records:
 
-- `monitoring-lb.[ENVIRONMENT].ci-runners.gitlab.net` - which is used for Thanos Query store DNS discovery and
+* `monitoring-lb.[ENVIRONMENT].ci-runners.gitlab.net` - which is used for Thanos Query store DNS discovery and
   to access Traefik dashboard in the browser. Access to the Dashboard is limited by oAuth, using Google as the Identity
   Provider allowing `@gitlab.com` accounts. Consent screen and oAuth2 secrets are defined in the `gitlab-ci-155816`
   project and should be used for all deployments of this monitoring stack (**remember:** new deploys will use new
   domains for the redirection URLs, which should be added to the oAuth2 credentials configuration; unfortunately this
   can't be managed by terraform).
-- `prometheus.[ENVIRONMENT].ci-runners.gitlab.net` - which is used to access directly the Prometheus deployment. As with
+* `prometheus.[ENVIRONMENT].ci-runners.gitlab.net` - which is used to access directly the Prometheus deployment. As with
   the Traefik dashboard, access is limited by oAuth2 with the same configuration.
 
 K8S deployment configuration is managed fully from CI. [A dedicated

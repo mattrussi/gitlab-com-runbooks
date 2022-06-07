@@ -1,23 +1,24 @@
 # Log analysis on PostgreSQL, Pgbouncer, Patroni and consul Runbook
 
-
 ## Intro
+
 Nowadays all informatics services/system has a log mechanism due to can register events from services/system and can be useful for *audit* or *troubleshooting*. The Gitlab database architecture is made up of some components such as: [PostgreSQL](https://www.postgresql.org/), [pgbouncer](https://www.pgbouncer.org/), [patroni](https://github.com/zalando/patroni) and [counsul](https://www.consul.io/intro/index). This runbook describe the most common errors for each component, what that means and how to anlayze logs for these components.
 
-
+Nowadays all informatics services/system has a log mechanism due to can register events from services/system and can be useful for *audit* or *troubleshooting*. The Gitlab database architecture is made up of some components such as: [PostgreSQL](https://www.postgresql.org/), [pgbouncer](https://www.pgbouncer.org/), [patroni](https://github.com/zalando/patroni) and [counsul](https://www.consul.io/intro/index). This runbook describe the most common errors for each component, what that means and how to anlayze logs for these components.
 
 ## PostgreSQL's log
+
 The PostgreSQL's log can be as verbose as we configure it, you can check the log parameters [here](https://www.postgresql.org/docs/11/runtime-config-logging.html). The PostgreSQL log's parameters can be grouping in 3 group(**Where To Log,When To Log,What To Log**), some important parameters to analyze log are:
 
 * Where To Log
-    * log_destination: Indicate which methods will be used for logs (stderr, csvlog and syslog), Gitlab use *csvlog*
-    * log_directory: Shows where the log files will be, Gitlab use */var/log/gitlab/postgresql*
+  * log_destination: Indicate which methods will be used for logs (stderr, csvlog and syslog), Gitlab use *csvlog*
+  * log_directory: Shows where the log files will be, Gitlab use */var/log/gitlab/postgresql*
 
 * When To Log
-    * log_min_duration_statement: will log all statements whose runtime exceeds this value in milliseconds
+  * log_min_duration_statement: will log all statements whose runtime exceeds this value in milliseconds
 
 * What To Log
-    * log_line_prefix :Is the *printf-style* string that appear at the beginning of each line in logs, Gitlab use *%m [%p, %x]: [%l-1] user=%u,db=%d,app=%a,client=%h*. The meaning of each option is:
+  * log_line_prefix :Is the *printf-style* string that appear at the beginning of each line in logs, Gitlab use *%m [%p, %x]: [%l-1] user=%u,db=%d,app=%a,client=%h*. The meaning of each option is:
 
     ```
         #   %a = application name
@@ -38,6 +39,7 @@ The PostgreSQL's log can be as verbose as we configure it, you can check the log
         #   %x = transaction ID (0 if none)
 
     ```
+
 The rest of log's parameters you can check the values with the following query:
 
 ```
@@ -85,21 +87,22 @@ PostgreSQL logs are stored in `csv format`. A typical error line for postgresql 
 The actual query has been trimed for readability.
 
 Most important columns when dealing with PostgreSQL errors are:
-- timestamp: To know the exact moment of the error
-- severity level: PostgreSQL has different levels of severity, showed here in increasing order:
-    - WARNING: An event that, while not preventing the command to complete, may lead to failures if not addressed. Monitoring for warnings is a good practice in early detection of issues on both the server and application side.
-    - ERROR: Failure to execute a command.
-    - FATAL: The current session is aborted due to an error. The client may retry.
-    - PANIC: All sessions are aborted. This situation affects all the clients.
-- error code: Provides more insights about the source of the error. A complete list of error codes can be found [here](https://www.postgresql.org/docs/11/errcodes-appendix.html). In the example above, the error code is "_57014_", typified as "_query_canceled_"
-- message: A human readable, more verbose message describing the error: "_canceling statement due to statement timeout_"
-- hints: Some errors will give hints, clues about the possible solution to this problem.
 
+* timestamp: To know the exact moment of the error
+* severity level: PostgreSQL has different levels of severity, showed here in increasing order:
+  * WARNING: An event that, while not preventing the command to complete, may lead to failures if not addressed. Monitoring for warnings is a good practice in early detection of issues on both the server and application side.
+  * ERROR: Failure to execute a command.
+  * FATAL: The current session is aborted due to an error. The client may retry.
+  * PANIC: All sessions are aborted. This situation affects all the clients.
+* error code: Provides more insights about the source of the error. A complete list of error codes can be found [here](https://www.postgresql.org/docs/11/errcodes-appendix.html). In the example above, the error code is "*57014*", typified as "*query_canceled*"
+* message: A human readable, more verbose message describing the error: "*canceling statement due to statement timeout*"
+* hints: Some errors will give hints, clues about the possible solution to this problem.
 
 Some common PostgreSQL errors, what it means and how to solve/address it:
 
 ``` ERROR,57014,"canceling statement due to statement timeout" ```
 By default, the maximum amount of time that any query can be active is `15 seconds`:
+
 ```
 gitlabhq_production=# show statement_timeout ;
  statement_timeout
@@ -111,28 +114,25 @@ gitlabhq_production=# show statement_timeout ;
 After that, the query is automacally cancelled. Superusers and other administrative role does not have this limitation.
 If you need to extend the timeout, you can set `statement_timeout` to a higher threshold, or use a superuser/administrator role.
 
-
 ``` FATAL:the database system is starting up ```
 This error can be seen after a server crash. The startup routine needs to be redo all the transactions that were running before the crash,and the system should be ready in 1 minute or less, depending on the load. Another source of this error is when an application tries to connect to a replica that does not have the [hot_standby](https://postgresqlco.nf/en/doc/param/hot_standby/11/) parameter set to `on`.
-
 
 ```ERROR:duplicate key value violates unique constraint```
 An application is trying to insert a record that contains an existing value for a unique constraint (means a unique index or a primary key). This can because of a sequence (implemented for `serial` columns) has been modified (i.e. has been RESET).
 
 Application code could use the [ON CONFLICT](https://www.postgresql.org/docs/11/sql-insert.html#SQL-ON-CONFLICT) clause to avoid this error.
 
-
 ```ERROR: value too long for type character varying(64)```
 An attempt to write more data than allowed for a column. To correct this, you could issue an `ALTER TABLE table_name ALTER COLUMN column_name varchar(128)` to extend that column to accept up to 128 characters.
 
 ```FATAL: terminating connection due to idle-in-transaction timeout```. This is due by the [idle_in_transatcion_session_timeout](https://postgresqlco.nf/en/doc/param/idle_in_transaction_session_timeout/11/) setting, to prevent idle transactions for holding connections.
-
 
 ``` FATAL: remaining connection slots are reserved for non-replication superuser connections ```. This means that this PostgreSQL instance has no more connections available. This is related to the [max_connections](https://postgresqlco.nf/en/doc/param/max_connections/11/) setting.
 
 ``` ERROR: deadlock detected ```. This happens when 2 separate connections needs a resource (a table, row, etc) that is being locked by the other, mutually locking each other. One of the connections will be terminated. Verify the application flow to see if this situation can be avoided.
 
 ```FATAL: too many connections for role "xxx"```  Specific roles can have specific connection limit set. Check the `\du` command to check the current limit for that user, and investigate futher.
+
 ```
 gitlabhq_production=# \du gitlab
               List of roles
@@ -143,13 +143,10 @@ gitlabhq_production=# \du gitlab
 
 To manage role specific limits, an `ALTER role xxx CONNECTION LIMIT nn` may be issued.
 
-
 For deeper, broad analysis of PostgreSQL's logs, [pgbadger](https://github.com/darold/pgbadger) is a tool that can be used for. Check the [pgbadger Runbook](docs/patroni/pgbadger_report.md) to see how to use it.
 
-
-
-
 ## pgbouncer's log
+
 The pgbouncer's log can be as verbose as we configure it, you can check the log parameters [here](https://www.pgbouncer.org/config.html#log-settings).
 some important parameters to analyze log are:
 
@@ -163,22 +160,27 @@ Common entries from pgBouncer logs are:
 ```gitlabhq_production/gitlab@xxxxx:zzzz pooler error: server conn crashed?```. This is usually related to connections being canceled (i.e. timeout) on the postgres side.
 
 ```stats: 2933 xacts/s, 3187 queries/s, in 635683 B/s, out 1328827 B/s, xact 1387 us, query 912 us, wait 101 us```. PgBouncer logs his activity every minute. Each column represents values for the last minute:
-- xacts/s -> transactions per second
-- queries/s -> queries per second
-- in B/s -> incoming traffic (in bytes)
-- out B/s -> outgoing traffic (in bytes)
-- xact us -> transaction duration average (in us)
-- query us -> query duration average (in us)
-- wait us -> waiting average (in us)
+
+* xacts/s -> transactions per second
+* queries/s -> queries per second
+* in B/s -> incoming traffic (in bytes)
+* out B/s -> outgoing traffic (in bytes)
+* xact us -> transaction duration average (in us)
+* query us -> query duration average (in us)
+* wait us -> waiting average (in us)
 
 For analyzing pgbouncer's logs can be used this [script](scripts/parse_bouncer.sh) , the location for pgbouncer logs in Gitlab are: */var/log/gitlab/pgbouncer*
+
 ### Audit
+
 You must run the script
+
 ```
         sh scripts/parse_bouncer.sh -f name_of_pgbouncer_log_file
 ```
 
 You will get an output similar to:
+
 ```
         * AVG Number of queries/sec by pgbouncer
         pgbouncer[43984]: 3615.78
@@ -294,26 +296,30 @@ You will get an output similar to:
 ```
 
 ## Patroni's log
+
 The Patroni's log can help to analyze the health of PostgreSQL cluster for HA implemented by Patroni [here](https://github.com/zalando/patroni). The logs of patroni are located in */var/log/gitlab/patroni*.
 
 * In Normal behavior, you will see in the logs something like:
   * Master
+
   ```
   INFO: Lock owner: patroni-01-db-gprd.c.gitlab-production.internal; I am patroni-01-db-gprd.c.gitlab-production.internal
   INFO: no action.  i am the leader with the lock
   ```
+
   Meaning this is the leader `patroni-01-db-gprd.c.gitlab-production.internal`
   * Standby
+
   ```
   INFO: Lock owner: patroni-01-db-gprd.c.gitlab-production.internal; I am patroni-05-db-gprd.c.gitlab-production.internal
   INFO: does not have lock
   ```
+
   Meaning this is a standby server `I am patroni-05-db-gprd.c.gitlab-production.internal` following the leader `patroni-01-db-gprd.c.gitlab-production.internal`
 
 * Error
 
      For analyzing patroni's logs with `error`  you can use this [script](scripts/parse_patroni.sh):
-
 
      ```
       sh scripts/parse_patroni.sh -f patroni.log.1
@@ -331,6 +337,7 @@ Then you must find inside the registers some previous and later lines the cause 
  DETAIL:  Permissions should be u=rwx (0700) or u=rwx,g=rx (0750).
 
 ```
+
 ```
 FileNotFoundError: [Errno 2] No such file or directory: '/var/opt/gitlab/postgresql/data11/postmaster.opts'
 ```
@@ -347,13 +354,12 @@ Consul is the consensus tool that is integrated to patroni in Gitlab and the log
    [INFO]  agent: Synced check: check=service:db-replica:2
    agent: Synced check: check=service:db-replica:2
   ```
-  The output that Consul "synced",  meaning that agent loaded the service, and has successfully registered it in the catalog.
 
+  The output that Consul "synced",  meaning that agent loaded the service, and has successfully registered it in the catalog.
 
 * Error
 
      If some error happed you will find  in the logs the tag **[ERR]** and  you can used this [script](scripts/parse_consul.sh) to anlayze:
-
 
      ```
       sh scripts/parse_consul.sh -f syslog.1

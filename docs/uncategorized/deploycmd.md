@@ -40,12 +40,14 @@ The Chatops bot can list the ansible playbooks available to run in the
 [deploy-tooling project](https://ops.gitlab.net/gitlab-com/gl-infra/deploy-tooling).
 
 The general form of the command is:
+
 ```
 /chatops run deploycmd CMD_NAME BASE_ROLE_NAME [--ENVIRONMENT] [--skip-haproxy] [--no-check]
 ```
 
 where
-* CMD_NAME is a file from https://ops.gitlab.net/gitlab-com/gl-infra/deploy-tooling/-/tree/master/cmds
+
+* CMD_NAME is a file from <https://ops.gitlab.net/gitlab-com/gl-infra/deploy-tooling/-/tree/master/cmds>
     (without the .yml extension)
 * BASE_ROLE_NAME is the name of the chef role to operate on *without* the
     environment prefix, and with underscores replacing hyphens, e.g. base_fe_git
@@ -56,11 +58,14 @@ where
 * --no-check is required to actually run commands; without this, ansible will
      operate in `dry-run` mode and take no active/destructive actions
 
-### Examples:
+### Examples
+
 To run the `hostname` command on the `base-fe-we-pages` chef role systems in staging:
+
 ```
 /chatops run deploycmd hostname base_stor --skip-haproxy
 ```
+
 This will run the `hostname` command on the staging nodes with the role
 `base-stor` and skip the haproxy drain/add. This specific command will be
 a dry-run with no changes made.
@@ -68,6 +73,7 @@ a dry-run with no changes made.
 This command will run hostname on the `base-stor` nodes in production
 and will do the graceful haproxy removal and re-addition. The
 `--no-check` flag will allow this command to actually make changes.
+
 ```
 /chatops run deploycmd hostname base_stor --no-check --production
 ```

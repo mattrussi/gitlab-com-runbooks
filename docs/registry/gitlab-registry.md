@@ -4,7 +4,7 @@ GitLab Container Registry is not responding or returns not 200 OK statuses.
 
 ## Possible checks
 
-1. Open https://registry.gitlab.com and if you are seeing empty page, not 4xx or 5xx error page, then things are generally functional, and you don't need to panic heavily.  However, continue looking for more subtle causes.
+1. Open <https://registry.gitlab.com> and if you are seeing empty page, not 4xx or 5xx error page, then things are generally functional, and you don't need to panic heavily.  However, continue looking for more subtle causes.
 1. Validate running pods and associated metrics via our dashboards:
    * [Pod Info](https://dashboards.gitlab.net/d/registry-pod/registry-pod-info)
    * [Kubernetes Deployment Detail](https://dashboards.gitlab.net/d/registry-kube-deployments/registry-kube-deployment-detail)
@@ -21,7 +21,7 @@ GitLab Container Registry is not responding or returns not 200 OK statuses.
 
 1. Determine the state of the Pods
     * If they are running, find out why they are tossing errors
-      * Check the status of GCS - https://status.cloud.google.com/
+      * Check the status of GCS - <https://status.cloud.google.com/>
       * Look at logs described above
     * If we have a low amount of pods, less than baseline (roughly 20) validate
       we are receiving traffic at the haproxy layer
@@ -52,6 +52,7 @@ GitLab Container Registry is not responding or returns not 200 OK statuses.
       * Validate the `gke-registry` backend is healthy
 
 ### Broken images - empty/null/just now, "invalid checksum digest format", "unknown error"
+
 From the error logs, you should see a URI in the form `/v2/<group>/<nestedgroup>/<project>/<imagename>/manifests/<tag>`.
 
 You can also check the haproxy logs on the frontend load balancers `fe-registry-0[1|2]-lb-gprd.c.gitlab-production.internal` for the paths which are returning 5xx errors, sorted by frequency.
@@ -68,16 +69,19 @@ $ sudo su -
 ```
 
 Once the failing image is identified, there are two ways to fix it:
+
 1. Re-push an image to the tag; this seems to just overwrite and clears the problem.  Often can be done by simply re-running the CI job, if such exists
 1. Delete the tag entirely, from the underlying object storage.
 
 We should usually ask the customer nicely to try the first option themselves; contact support and get them to reach out.  However, the image is fundamentally broken, and won't magically fix itself, so retain the option to Just Do It if circumstances feel right, e.g. long delay in getting a response, or the issue is super widespread and we're drowning in fail logs.  To do the deletion:
 
-Goto https://console.cloud.google.com/storage/browser in the gitlab-production project, and navigate into the registry bucket (gitlab-prd-registry), then down into `docker/registry/v2/repositories/`.  From there, follow the (nested) group names, to the image name, then into `\_manifests/tags`.  There should be a folder with the tag from the original error log.  Optionally have a poke in that folder (if you're interested in exact failure modes), but then just delete the tag folder.
+Goto <https://console.cloud.google.com/storage/browser> in the gitlab-production project, and navigate into the registry bucket (gitlab-prd-registry), then down into `docker/registry/v2/repositories/`.  From there, follow the (nested) group names, to the image name, then into `\_manifests/tags`.  There should be a folder with the tag from the original error log.  Optionally have a poke in that folder (if you're interested in exact failure modes), but then just delete the tag folder.
 
 #### Failure modes
+
 If you're investigating further, there's at least two cases seen so far:
-1. Inside this folder there's some more folders, ending in link files, the contents of which reference non-existent layers in the _layers folder (sibling of _manifests)
+
+1. Inside this folder there's some more folders, ending in link files, the contents of which reference non-existent layers in the _layers folder (sibling of_manifests)
 1. Inside this folder, in current/link the link file is *empty* (which correlates more directly with the UI experience often seen)
 
 It may be worth noting which case we're seeing, and if you see other failure modes, note them down too.  We should eventually get to the bottom of the source of these corrupt states, and fix them there.

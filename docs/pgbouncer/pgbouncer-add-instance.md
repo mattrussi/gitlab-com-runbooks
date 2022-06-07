@@ -33,16 +33,18 @@ To add a new read/write node:
 - Merge and apply the terraform changes.
 - Wait for the node to be provisioned.
 - Make sure that pgbouncer can establish connections to the primary database:
+
   ````
     $ sudo pgb-console
     pgbouncer=# SHOW STATS;
   ````
+
   You should see an entry for the `gitlabhq_production` database.
 - Keep an eye on the node metrics at
-  https://dashboards.gitlab.net/d/bd2Kl9Imk/host-stats?orgId=1&var-environment=gprd&var-node=pgbouncer-01-db-gprd.c.gitlab-production.internal&var-promethus=prometheus-01-inf-gprd
+  <https://dashboards.gitlab.net/d/bd2Kl9Imk/host-stats?orgId=1&var-environment=gprd&var-node=pgbouncer-01-db-gprd.c.gitlab-production.internal&var-promethus=prometheus-01-inf-gprd>
   (substitute `pgbouncer-01-db-gprd` for the name of your new node), and on the
   PgBouncer main dashboard
-  https://dashboards.gitlab.net/d/pgbouncer-main/pgbouncer-overview?orgId=1
+  <https://dashboards.gitlab.net/d/pgbouncer-main/pgbouncer-overview?orgId=1>
 
 ## Adding a read-only PgBouncer instance
 
@@ -57,17 +59,19 @@ following adjustments:
 - On `roles/gprd-base-db-pgbouncer-common.json`:
   - Add the new systemd service under `gitlab-server.systemd_service_overrides`
 
-See https://ops.gitlab.net/gitlab-cookbooks/chef-repo/-/merge_requests/2159 for
+See <https://ops.gitlab.net/gitlab-cookbooks/chef-repo/-/merge_requests/2159> for
 a reference MR (though notice that we don't need to do the prometheus changes
 anymore).
 
 - Merge and apply the chef-repo changes.
 - Run chef-client on the targeted hosts.
 - Make sure that pgbouncer can establish a connection to the secondary database:
+
   ````
     $ sudo pgb-console-[n]
     pgbouncer=# SHOW STATS;
   ````
+
   where `n` is the index corresponding to the ports you added on
   `gitlab-pgbouncer.listening_ports` (e.g. `pgb-console-3` if you added a fourth
   port). You should see an entry for the `gitlabhq_production` database. If you

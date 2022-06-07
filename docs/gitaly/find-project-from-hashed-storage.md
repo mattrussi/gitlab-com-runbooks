@@ -5,13 +5,15 @@ From time to time you might have a hashed repo path like `/var/opt/gitlab/git-da
 There are a variety of ways you can do this, and the most effective will depend on what you've currently got to hand.
 
 ## Rails console
+
 Most reliable, and quick if you already have a console open
 
 ProjectRepository.find_by(disk_path:"@hashed/00/11/00112233445566778899aabbccddeeff00112233445566778899aabbccddeeff").project
  (note the lack of a trailing .git in the path)
 
 ## Config on disk
-Not 100% reliable; under some circumstances (https://gitlab.com/gitlab-org/gitlab-ce/issues/48527#note_116019702) the config file might not be populated at the time you need it.  But definitely quick, if you're already on the server
+
+Not 100% reliable; under some circumstances (<https://gitlab.com/gitlab-org/gitlab-ce/issues/48527#note_116019702>) the config file might not be populated at the time you need it.  But definitely quick, if you're already on the server
 
 `cat /var/opt/gitlab/git-data/repositories/@hashed/00/11/00112233445566778899aabbccddeeff00112233445566778899aabbccddeeff.git/config`
 

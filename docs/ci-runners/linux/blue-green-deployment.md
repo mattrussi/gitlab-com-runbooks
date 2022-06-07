@@ -14,14 +14,14 @@ process documented so that we know what we need to automate.
 
 - `private`
 - `shared-gitlab-org`
-- `shared` (once https://gitlab.com/gitlab-com/gl-infra/reliability/-/issues/14518 is completed)
+- `shared` (once <https://gitlab.com/gitlab-com/gl-infra/reliability/-/issues/14518> is completed)
 
 ## Glossary
 
-- `chef-repo`: https://gitlab.com/gitlab-com/gl-infra/chef-repo where
+- `chef-repo`: <https://gitlab.com/gitlab-com/gl-infra/chef-repo> where
   all chef configuration is located.
 - `terraform`:
-  https://ops.gitlab.net/gitlab-com/gitlab-com-infrastructure where all
+  <https://ops.gitlab.net/gitlab-com/gitlab-com-infrastructure> where all
   the terraform code is located.
 - `deployment`: Referring if `blue` or `green` is active, it can also be
   both.
@@ -59,7 +59,7 @@ and document for now.
 1. `blue` deployment is [active](https://ops.gitlab.net/gitlab-com/gitlab-com-infrastructure/-/blob/84c9b3cdfd76e108243f57910d5ac59971038538/environments/ci/runner-managers.tf#L82-83)
   via `terraform`, and running [`v14.1.0-rc1`](https://gitlab.com/gitlab-com/gl-infra/chef-repo/-/blob/dfb57033011ced4fea6fc7210331be72a0e1c75c/roles/runners-manager-private-blue.json#L12-13) configured by `chef-repo`.
 1. Open a merge request to `chef-repo` to update the version for the
-`green` deployment. :point_right: https://gitlab.com/gitlab-com/gl-infra/chef-repo/-/merge_requests/364
+`green` deployment. :point_right: <https://gitlab.com/gitlab-com/gl-infra/chef-repo/-/merge_requests/364>
     1. Make sure the merge request has the `~deploy` and
     `~group::runner` labels.
     1. Get the [merge request](https://gitlab.com/gitlab-com/gl-infra/chef-repo/-/merge_requests/364) merged.
@@ -84,5 +84,5 @@ and document for now.
 
 ### Deficiencies
 
-1. Deactivated deployment instances stay around. Destroy deactivated deployment :point_right: https://gitlab.com/gitlab-com/gl-infra/reliability/-/issues/13795
-1. Remove double concurrency window during deployment :point_right: https://gitlab.com/gitlab-com/gl-infra/reliability/-/issues/13844
+1. Deactivated deployment instances stay around. Destroy deactivated deployment :point_right: <https://gitlab.com/gitlab-com/gl-infra/reliability/-/issues/13795>
+1. Remove double concurrency window during deployment :point_right: <https://gitlab.com/gitlab-com/gl-infra/reliability/-/issues/13844>

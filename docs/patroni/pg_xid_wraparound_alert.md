@@ -37,10 +37,10 @@ order by
 
 ## More Reading
 
-1. Official documentation: https://www.postgresql.org/docs/current/routine-vacuuming.html#VACUUM-FOR-WRAPAROUND
-1. Internals: https://www.interdb.jp/pg/pgsql05.html#_5.10.1.
+1. Official documentation: <https://www.postgresql.org/docs/current/routine-vacuuming.html#VACUUM-FOR-WRAPAROUND>
+1. Internals: <https://www.interdb.jp/pg/pgsql05.html#_5.10.1>.
 
 Others' experience when reaching the limit (good to understand how painful it is and what people do when it happens):
 
-1. Sentry Transaction ID Wraparound Outage Incident Review: https://blog.sentry.io/2015/07/23/transaction-id-wraparound-in-postgres
-1. Mailchimp Outage Incident Review: https://mailchimp.com/what-we-learned-from-the-recent-mandrill-outage/. [Thread on the orange website](https://news.ycombinator.com/item?id=19084525).
+1. Sentry Transaction ID Wraparound Outage Incident Review: <https://blog.sentry.io/2015/07/23/transaction-id-wraparound-in-postgres>
+1. Mailchimp Outage Incident Review: <https://mailchimp.com/what-we-learned-from-the-recent-mandrill-outage/>. [Thread on the orange website](https://news.ycombinator.com/item?id=19084525).

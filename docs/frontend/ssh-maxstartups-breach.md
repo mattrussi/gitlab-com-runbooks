@@ -1,6 +1,6 @@
 # Possible breach of SSH MaxStartups
 
-https://gitlab.com/gitlab-com/gl-infra/reliability/-/issues/7168 provides the context where we discovered this was necessary.  If this document is too brief, refer to that for more detail.
+<https://gitlab.com/gitlab-com/gl-infra/reliability/-/issues/7168> provides the context where we discovered this was necessary.  If this document is too brief, refer to that for more detail.
 
 ## What to do
 
@@ -9,6 +9,7 @@ Verify that nothing *else* is exploding.  This alert may go off when other major
 If nothing else is exploding, then this alert suggests that the MaxStartups limit is being breached and git+ssh connections are being dropped.  Note that the metric we're alerting on is derived from HAProxy logs and is a proxy indicator of the underlying problem and thus we may yet find false-positives.  In future (Ubuntu 18.04) we can get better logging out of openssh that will explicitly tell us when this is happening, and can alert on that instead.  However there is no expectation that we will be able to see how close we are to this limit *before* it happens, unless we manage to get some stats exporting capability into openssh (a long shot, at best).
 
 Urgency: if we've been keeping on top of this, low urgency but important to monitor.  We should be alerted when we first start breaching the threshold, and the impact on customers is still low.  I would expect that when it starts happening again, we'll see it occur at the top of the hour, perhaps only a couple of times a day at peak.  Once there's the slightest pattern to occurrences, it's time to make configuration changes, namely to bump MaxStartups in our SSH config. In `k8s-workloads/gitlab-com`, in [`releases/gitlab/values/values.yaml.gotmpl`](https://gitlab.com/gitlab-com/gl-infra/k8s-workloads/gitlab-com/-/blob/master/releases/gitlab/values/values.yaml.gotmpl), adjust the `gitlab.gitlab-shell.config.maxStartups` settings. The `start` and `full` numbers need to increase:
+
 * `start` is the level at which we start dropping pre-auth connections, and this is what we suspect is being hit.
 * `full` is the level at which all new pre-auth connections get dropped, so that needs to be some amount bigger than the first; we've used +50 so far, and that's probably sufficient.  Our goal here is to not be too brutal to connections too quickly.
 * `rate` is what random percentage of connections should be dropped between the first and second limit; 30% is ok,  you can leave this alone.  Our goal is to not drop *any* connections, so this value ideally doesn't make a lot of difference (other than to trigger the first of the drops that we are alerting on here).
@@ -21,6 +22,6 @@ Limits: We don't know, but the only known direct impact of increasing this numbe
 
 ## Additional context
 
-This is a twitchy/aggressive alert (low threshold, short period), because the issue we're trying to detect is very short and spiky, but also because it absolutely should not occur under normal circumstances, and we have sufficient levers to pull to control it.  The most obvious is MaxStartups (see above), although we can also adjust `rate-limit sessions` in `roles/gprd-base-lb-fe.json` down, to control the number of connections being dispatched to SSH per second.  See https://gitlab.com/gitlab-com/gl-infra/reliability/-/issues/7168#note_191678023 and https://gitlab.com/gitlab-com/gl-infra/reliability/-/issues/7168#note_193486226 for discussion of the math of this.  However, lowering this too far will affect the user experience negatively, and MaxStartups is a much cheaper and safer level to pull (increase).
+This is a twitchy/aggressive alert (low threshold, short period), because the issue we're trying to detect is very short and spiky, but also because it absolutely should not occur under normal circumstances, and we have sufficient levers to pull to control it.  The most obvious is MaxStartups (see above), although we can also adjust `rate-limit sessions` in `roles/gprd-base-lb-fe.json` down, to control the number of connections being dispatched to SSH per second.  See <https://gitlab.com/gitlab-com/gl-infra/reliability/-/issues/7168#note_191678023> and <https://gitlab.com/gitlab-com/gl-infra/reliability/-/issues/7168#note_193486226> for discussion of the math of this.  However, lowering this too far will affect the user experience negatively, and MaxStartups is a much cheaper and safer level to pull (increase).
 
 The metric for this alert comes from mtail on HAProxy nodes, and counts 'termination_state' of 'SD' and bytes_read of 0 bytes on SSH connections (to the git front-end servers), which is a good surrogate indicator for MaxStartups being breached.

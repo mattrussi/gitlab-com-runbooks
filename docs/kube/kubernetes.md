@@ -5,12 +5,12 @@ resources.
 
 Groups/Repositories of interest:
 
-* https://gitlab.com/gitlab-com/gl-infra/k8s-workloads
+* <https://gitlab.com/gitlab-com/gl-infra/k8s-workloads>
 
 ## Cluster Configurations
 
 * Configurations for how our GKE clusters and associated node pools are defined
-  are stored in https://ops.gitlab.net/gitlab-com/gitlab-com-infrastructure/
+  are stored in <https://ops.gitlab.net/gitlab-com/gitlab-com-infrastructure/>
 * For our staging and production environments, we run 1 regional cluster, and 3
   zonal clusters
 * The 3 zonal clusters are clusters that are locked into the zone for which
@@ -115,7 +115,6 @@ alleviate the pain.  We alert for containers that trigger this alert that we
 cannot manage as any container in this namespace is critical for the successful
 operation of the cluster and it's health overall.
 
-
 ## HPAScaleCapability
 
 The Horizontal Pod Autoscaler has reached it's maximum configured allowed Pods.
@@ -138,7 +137,7 @@ haven't noticed over time, or if there's a problem processing requests which led
 to an undesired effect of scaling upwards out of normal.
 
 Utilize the dashboard
-https://dashboards.gitlab.net/d/alerts-sat_kube_horizontalpodautoscaler/alerts-kube_horizontalpodautoscaler_desired_replicas-saturation-detail
+<https://dashboards.gitlab.net/d/alerts-sat_kube_horizontalpodautoscaler/alerts-kube_horizontalpodautoscaler_desired_replicas-saturation-detail>
 and observe the Saturation over the course of time to take into account how many
 Pods we've been scaling.  Normally we scale with traffic, but how this is
 derived differs between services.  If we've been scaling up over a lengthy
@@ -152,7 +151,7 @@ making changes to the HPA we need to ensure that the cluster will not endure
 undue stress.
 
 These configurations are located:
-https://gitlab.com/gitlab-com/gl-infra/k8s-workloads/gitlab-com/
+<https://gitlab.com/gitlab-com/gl-infra/k8s-workloads/gitlab-com/>
 
 ## GKENodeCountCritical
 

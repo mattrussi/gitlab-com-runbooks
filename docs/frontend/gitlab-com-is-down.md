@@ -7,4 +7,5 @@
 1. Check the [pgbouncer overview](https://dashboards.gitlab.net/d/PwlB97Jmk/pgbouncer-overview?orgId=1).
 
 ## Things to Look for
+
 * Look for resource exhaustion of the pgbouncer connections

@@ -1,7 +1,9 @@
 ## OPS bastion hosts
 
 ##### How to start using them
+
 Add the following to your `~/.ssh/config` (specify your username and path to ssh private key):
+
 ```
 # GCP staging bastion host
 Host lb-bastion.ops.gitlab.com
@@ -13,9 +15,10 @@ Host *.gitlab-ops.internal
         ProxyCommand                    ssh lb-bastion.ops.gitlab.com -W %h:%p
 ```
 
-
 ##### Host keys
+
 If you care about security enough to compare ssh host keys, here they are, both sha256 and md5 sums:
+
 ```
 $> ssh-keygen -lf <(ssh-keyscan lb-bastion.ops.gitlab.com 2>/dev/null)
 256 SHA256:YjrYlnAlbKv23MI+h4UJGaGU32SWHngXti2ahIEEVz0 lb-bastion.ops.gitlab.com (ECDSA)

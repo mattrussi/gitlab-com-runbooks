@@ -1,7 +1,8 @@
 # Life of a Web Request
 
 Work in progress:
-* Issue: https://gitlab.com/gitlab-com/gl-infra/reliability/-/issues/10388
+
+* Issue: <https://gitlab.com/gitlab-com/gl-infra/reliability/-/issues/10388>
 * [Style guide](/handbook/engineering/infrastructure/tutorials/tips_for_tutorial_writing.html)
 
 ## Introduction
@@ -15,13 +16,11 @@ and then progressively introduces more details by following the life of an examp
 The application and infrastructure components are individually documented in more detail elsewhere.  This walk-through aims to give a
 quick orientation and a big-picture context as a backdrop for more detailed and narrowly focused learning activities.
 
-
 ## Learning objectives
 
 * Introduce the major architectural components involved in handling common types of HTTP request to gitlab.com.
 * Use event logs to trace an example request through some service layers.
 * Use service dashboards to observe typical throughput, latency, and error rate for the service as a whole and its individual components and workers.
-
 
 ## What does the service do?
 
@@ -35,7 +34,6 @@ To get a sense of the breadth of the product, take a moment to browse the [brill
 
 <img src="overview_life_of_a_web_request/feature_matrix.png">
 
-
 ## Components of the application and infrastructure
 
 GitLab is primarily a Ruby on Rails application, but it is supported by many other components.
@@ -44,9 +42,9 @@ This tutorial will introduce many of those components gradually, starting with a
 We will then visit additional components as we trace some common requests on their paths through the system, giving context to the role played by each component.
 
 If you prefer to preview the full list of components:
+
 * The [application architecture components](https://docs.gitlab.com/ee/development/architecture.html#components) are listed in the GitLab product documentation.
 * The [GitLab.com infrastructure components](https://about.gitlab.com/handbook/engineering/infrastructure/production/architecture/) are diagrammed in the Infrastructure section of the GitLab Handbook.
-
 
 ### Short list of core components
 
@@ -59,20 +57,22 @@ The main application components involved in handling a typical HTTP request are:
 * Redis: Key-value datastore used for application metadata storage, job delivery, and caching
 
 In addition to the above application components, some major supporting infrastructure components include:
+
 * Cloudflare: Denial-of-service protection, web-application firewall, and caching tier for some static content.
 * HAProxy: Load balancer, security control point, and first layer of request routing.
 * GCP load balancers: Handles TCP connection routing from external or internal clients to backend instances of the targeted service.
-
 
 ## Clients and entry points
 
 In this tutorial, we focus on clients that interact with GitLab via HTTP.
 
 Mostly this traffic consists of:
+
 * Web browsers using the web UI
 * REST API calls from external and internal user-agents
 
 But it also includes:
+
 * GraphQL API calls
 * Websockets
 
@@ -80,7 +80,6 @@ Apart from HTTP-based interactions, clients can also use git-over-SSH to interac
 
 The entry point for all of these interactions is the HAProxy fleet, which implements routing rules to delegate traffic from the main frontend (`https`)
 to workload-specific backends like `api`, `web`, and `https_git`.
-
 
 ### What does this service do?
 
@@ -97,7 +96,6 @@ The rails infrastructure is partitioned into distinct "webservice" fleets, servi
 * `web`: This fleet serves user interactions. Web is what you see when you visit GitLab.com in a browser.
 
 This partitioning can be seen in [the production architecture diagram](https://about.gitlab.com/handbook/engineering/infrastructure/production/architecture/#gitlab-com-architecture).
-
 
 ## Walk-through: Life of a request
 
@@ -122,22 +120,28 @@ graph LR
 In practice, each service in the above diagram has multiple nodes and supporting infrastructure, but for now we will focus on high level interactions.
 
 1. `Browser --> Cloudflare`
-  * The user's web browser (or other user-agent) resolves the domain name `gitlab.com` to a Cloudflare IP address and connects to Cloudflare's nearest point-of-presence (POP or data center).
-  * The browser and Cloudflare establish an SSL session, and the browser sends an HTTP request.
-  * Cloudflare evaluates traffic scrubbing rules to block abuse and then forwards the HTTP request to "origin" (i.e. the HAProxy pool in our GCP infrastructure).
-2. `Cloudflare -> HAProxy`
-  * For tracking purposes, Cloudflare injects some extra HTTP headers into the request: the original client's IP address and a unique id for finding this request in Cloudflare's logs.
-  * Cloudflare establishes an SSL session with HAProxy and forwards the HTTP request.
-3. `HAProxy --> Workhorse`
-  * HAProxy parses the HTTP request URI and headers, and routes the request to one of its backends.
-  * As part of our release-testing process, HAProxy sends a small random percentage of requests to the `canary` stage, and the majority of requests are sent to the `main` stage.
-  * If you are curious about the details of how HAProxy chooses which backend to handle a request, these rules are defined in the HAProxy configuration file (`/etc/haproxy/haproxy.cfg`) on the `fe-XX` nodes.
-  * For some backends, an Nginx instance sits between HAProxy and Workhorse, but this approach is being phased out, so it is elided in this diagram.
-4. `Workhorse --> Rails` and `Workhorse --> Gitaly`
-  * Workhorse and Rails (Puma) are tightly coupled, typically running together on the same VM or kubernetes pod.
-  * Workhorse handles certain kinds of requests that would be too expensive (harder to scale) in Rails itself.
-  * For example, Git Fetch operations are often much slower than most HTTP requests (e.g. due to large response payloads and limited client network bandwidth).  It is much cheaper to delegate that IO-bound work to a goroutine in Workhorse than a Puma thread.
 
+* The user's web browser (or other user-agent) resolves the domain name `gitlab.com` to a Cloudflare IP address and connects to Cloudflare's nearest point-of-presence (POP or data center).
+* The browser and Cloudflare establish an SSL session, and the browser sends an HTTP request.
+* Cloudflare evaluates traffic scrubbing rules to block abuse and then forwards the HTTP request to "origin" (i.e. the HAProxy pool in our GCP infrastructure).
+
+2. `Cloudflare -> HAProxy`
+
+* For tracking purposes, Cloudflare injects some extra HTTP headers into the request: the original client's IP address and a unique id for finding this request in Cloudflare's logs.
+* Cloudflare establishes an SSL session with HAProxy and forwards the HTTP request.
+
+3. `HAProxy --> Workhorse`
+
+* HAProxy parses the HTTP request URI and headers, and routes the request to one of its backends.
+* As part of our release-testing process, HAProxy sends a small random percentage of requests to the `canary` stage, and the majority of requests are sent to the `main` stage.
+* If you are curious about the details of how HAProxy chooses which backend to handle a request, these rules are defined in the HAProxy configuration file (`/etc/haproxy/haproxy.cfg`) on the `fe-XX` nodes.
+* For some backends, an Nginx instance sits between HAProxy and Workhorse, but this approach is being phased out, so it is elided in this diagram.
+
+4. `Workhorse --> Rails` and `Workhorse --> Gitaly`
+
+* Workhorse and Rails (Puma) are tightly coupled, typically running together on the same VM or kubernetes pod.
+* Workhorse handles certain kinds of requests that would be too expensive (harder to scale) in Rails itself.
+* For example, Git Fetch operations are often much slower than most HTTP requests (e.g. due to large response payloads and limited client network bandwidth).  It is much cheaper to delegate that IO-bound work to a goroutine in Workhorse than a Puma thread.
 
 ## Demo: Observing a single example request
 
@@ -149,7 +153,6 @@ Possible methods for observing a request:
 * Performance bar on gitlab.com
 * Anonymous API request via curl
 * Authenticated API request via curl
-
 
 ## Demo: How to interpret the dashboards representing service health, capacity, errors, and other key properties
 
@@ -180,6 +183,7 @@ How do we answer ad hoc questions about the service's workload and behaviors?
 For some services this is easier than others, but this is always a critical topic to address.
 
 Most services export performance metrics to efficiently answer generic questions about workload.  For this demo, focus on the next steps of investigating an anomaly, such as:
+
 * For services that emit structured event logs (e.g. JSON formatted request logs), recent log entries are often available via Kibana, which provides convenient ad hoc filtering and aggregation.
 * For long-term analysis and for unstructured event logs, raw logs are typically archived to Stackdriver and may be available for ad hoc query via BigQuery.
 * When event logs do not suffice, stack profiling, dynamic tracing, or traffic sampling may lead to novel insights and inspire future enhancements to logging and instrumentation.
@@ -188,11 +192,11 @@ List what options are available for analyzing this service, and then walk throug
 Explicitly state the example questions you are showing how to answer.
 Ideally make it a short progression of exploratory questions, showing how iterative analysis and assumption-testing is a crucial part of reverse engineering.
 For example, suppose the service dashboard shows an increase in HTTP 500 responses.
+
 * How do we find the associated request paths?
 * Are the most common request paths for failed requests distinct from the most common request paths overall?
 * Are the failures coming from a single service node?  Or a specific set of client IPs?  Do they have a distinctive user-agent string?
 * Are these errors all associated with high latency, such that timeouts in this or other services may play a role?  If so, is the time spent in this service or in a dependency it calls?
-
 
 ## Exercises
 
@@ -211,7 +215,6 @@ For example, suppose the service dashboard shows an increase in HTTP 500 respons
   * Review the service's main configuration file.  What other services is it explicitly configured to directly interact with?  Are there additional services it uses either implicitly or via dynamic configuration?
   * List or trace new and existing outgoing connections from a service node via TCP, UDP, or Unix socket.  Does this match the expected list of dependencies?
   * List or trace new and existing incoming connections to a service node via TCP, UDP, or Unix socket.  Does this match the expected list of clients?
-
 
 ## Summary
 

@@ -14,20 +14,24 @@
 
 <!-- markdown-toc end -->
 
-# About #
+# About
+
 The [about.gitlab.com](https://gitlab.com/gitlab-com/www-gitlab-com) website is the go-to place to learn pretty much everything about GitLab: the product, pricing, various resources, blogs, support and most importantly our handbook
 
-# Repository #
-Here is the project repository behind about.gitlab.com: https://gitlab.com/gitlab-com/www-gitlab-com
+# Repository
 
-# How it is setup #
+Here is the project repository behind about.gitlab.com: <https://gitlab.com/gitlab-com/www-gitlab-com>
+
+# How it is setup
+
 - The about.gitlab.com project is hosted on [about.gitlab.com](https://console.cloud.google.com/storage/browser/about.gitlab.com?forceOnBucketsSortingFiltering=false&authuser=1&folder=&organizationId=&project=gitlab-production) GCS bucket. The website configuration has it that it points to an `index.html` file at the root level.
 - The DNS is setup on Fastly. (You can get the Fastly login credentials from 1Password)
 
-# Availability Issues #
+# Availability Issues
 
 ### about.gitlab.com is down
-If an issue such as: https://gitlab.com/gitlab-com/gl-infra/production/-/issues/2087 occurs:
+
+If an issue such as: <https://gitlab.com/gitlab-com/gl-infra/production/-/issues/2087> occurs:
 
 1. Check the pipeline to see if there has been a recent deployment to which you can co-relate the issue you are seeing
 2. Check Fastly to see if there has been a recent change
@@ -35,7 +39,7 @@ If an issue such as: https://gitlab.com/gitlab-com/gl-infra/production/-/issues/
 
 ### Users experiencing 503 errors
 
-Example incident: https://gitlab.com/gitlab-com/gl-infra/production/-/issues/5230.
+Example incident: <https://gitlab.com/gitlab-com/gl-infra/production/-/issues/5230>.
 
 Full error might appear as: `Error 503 No healthy IP available for the backend`
 
@@ -43,11 +47,11 @@ Full error might appear as: `Error 503 No healthy IP available for the backend`
 1. Check the Errors dashboard.
 1. You can find which datacenters are affected by selecting 1 datacenter at a time from the dropdown menu that defaults to `All datacenters`.
 
-# Escalation #
+# Escalation
 
-about.gitlab.com has a section dedicated to on-call support for the handbook. It is located at: https://about.gitlab.com/handbook/about/on-call.
+about.gitlab.com has a section dedicated to on-call support for the handbook. It is located at: <https://about.gitlab.com/handbook/about/on-call>.
 
-# Fastly #
+# Fastly
 
 The [about.gitlab.com Fastly service](https://manage.fastly.com/configure/services/652MHuIME217ZATbh7vFWC)
 is configured to use the [about.gitlab.com Google Cloud Storage bucket](https://console.cloud.google.com/storage/browser/about.gitlab.com?project=gitlab-production)
@@ -62,7 +66,7 @@ $ dig +short about.gitlab.com
 $ whois 151.101.194.49 # Fastly
 ```
 
-# Azure #
+# Azure
 
 Terraform code for Azure infra is deprecated and no longer maintained, it hasn't been used in a long time so any changes should be made manually through the WebUI
 
@@ -76,9 +80,7 @@ $ ssh about-src.gitlab.com # ssh keys are put there by Chef
 
 Ubuntu 14.04
 
-
-# Chef #
-
+# Chef
 
 ```
 $ knife node show about.gitlab.com
@@ -94,6 +96,7 @@ Tags:
 ```
 
 relevant bits of config:
+
 - node-exporter (there are no other exporters, we do not ship logs anywhere)
 - secrets in gitlab-vault (tls certs)
 - nginx
@@ -102,7 +105,7 @@ relevant bits of config:
 - gitlab-runner (only installs the package, gitlab-runner config or gitlab-runner register command are not managed with Chef!)
 - cron to prune review apps
 
-# AWS DNS entries (production console) #
+# AWS DNS entries (production console)
 
 about-src.gitlab.com - vm in Azure
 
@@ -111,7 +114,7 @@ about.gitlab.com - fastly
 4 AAAA records
 1 global-sign-domain
 
-# gitlab-ci.yml config in www-gitlab-com #
+# gitlab-ci.yml config in www-gitlab-com
 
 [url](https://gitlab.com/gitlab-com/www-gitlab-com/blob/master/.gitlab-ci.yml)
 

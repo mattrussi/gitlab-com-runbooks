@@ -16,7 +16,6 @@ rm /var/opt/gitlab/postgresql/data/standby.signal
 gitlab-ctl start postgresql
 ```
 
-
 ## Restore the snapshots
 
 Change the zone and type options to your desired destination
@@ -41,6 +40,7 @@ gcloud compute --project=gitlab-restore disks create file-20-stor-gprd-data-08-1
 First attach all of the shards created above in the GCP console
 
 Add this to the end of `/etc/fstab`
+
 ```
 UUID=98a22450-f02e-4ee7-ab76-97ff490bc90a   /mnt/file-09    ext4    defaults    0 0
 UUID=ba8c6f55-c8d9-4e3c-a955-4c49d5e0efb6   /mnt/file-10    ext4    defaults    0 0
@@ -57,6 +57,7 @@ UUID=9c65caa8-f3ef-4bfc-89ee-3a7364f51a29   /mnt/file-20    ext4    defaults    
 ```
 
 Then mount all the shards:
+
 ```shell
 for i in {09..20} ; do mkdir /mnt/file-$i ; mount /mnt/file-$i; done
 ```
@@ -78,12 +79,13 @@ $ mount /dev/sdc /mnt/file-16
 Since the gitaly nodes and the restore nodes have different `passwd` files and therefore different UID's, we need to make them match. `chown -R git /mnt/file-16/git-data
 ` takes an extremely long time for each shard (much longer than it takes to restore the whole disk from backup).  If we rebuild the restore node, it would be nice to set the `git` UID to `500` rather than setting the files to the new UID.
 
-
 Find the UID and GIT of the existing git user and group:
+
 ```shell
 grep git /etc/passwd
 grep git /etc/group
 ```
+
 Replace the 998 below with those ID's if different:
 
 ```shell
@@ -145,7 +147,6 @@ PersonalAccessToken.create!(name: 'Full Access', scopes: [:api], user: user, tok
 
 The `PLAIN_TEXT_YOU_MAKE_UP_FOR_THE_TOKEN` is what you will feed to the `congregate configure` command
 
-
 ## Install and configure the congregate tool
 
 The [congregate tool](https://gitlab.com/gitlab-com/customer-success/tools/congregate) is a migration tool written by the Customer Success team. It has its own readme file with details for how to set it up.  Running the docker image should be sufficient, so there's no need to follow the readme in order.  It shows how to set up a development environment before how to set up a simpler user environment.
@@ -159,7 +160,6 @@ src_parent_group_path = deletednamespace
 ```
 
 After this, if the tokens and IP's are configured correctly, running `congregate list` should succeed.  If it doesn't, watch the logs on the source server for the reason why (`sudo gitlab-ctl tail gitlab-rails`)
-
 
 ## Can't delete the namespace on a test instance?
 
@@ -199,7 +199,6 @@ irb(main):019:0> g = Group.find_by_full_path("renamedgroup")
 => #<Group id:1857667 @ renamedgroup>
 irb(main):020:0> exit
 ```
-
 
 ## Some useful commands
 

@@ -4,9 +4,10 @@
 
 [[_TOC_]]
 
-#  Frontend Service
+# Frontend Service
+
 * [Service Overview](https://dashboards.gitlab.net/d/frontend-main/frontend-overview)
-* **Alerts**: https://alerts.gitlab.net/#/alerts?filter=%7Btype%3D%22frontend%22%2C%20tier%3D%22lb%22%7D
+* **Alerts**: <https://alerts.gitlab.net/#/alerts?filter=%7Btype%3D%22frontend%22%2C%20tier%3D%22lb%22%7D>
 * **Label**: gitlab-com/gl-infra/production~"Service:HAProxy"
 
 ## Logging
@@ -31,7 +32,6 @@
 * [Alert about SSL certificate expiration](../uncategorized/alert-for-ssl-certificate-expiration.md)
 * [An impatient SRE's guide to deleting alerts](../uncategorized/deleting-alerts.md)
 <!-- END_MARKER -->
-
 
 <!-- ## Summary -->
 

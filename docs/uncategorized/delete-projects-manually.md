@@ -16,6 +16,7 @@ Sometimes projects are not completely deleted due to [postgres statement timeout
     Project.find_by_full_path('path/to/project').delete_error
     => "PG::QueryCanceled: ERROR:  canceling statement due to statement timeout\nCONTEXT:  SQL statement \"DELETE FROM ONLY \"public\".\"merge_request_diff_files\" WHERE $1 OPERATOR(pg_catalog.=) \"merge_request_diff_id\"\"\n: DELETE FROM \"projects\" WHERE \"projects\".\"id\" = 12345"
     ```
+
 1. Fetch the username and project:
 
     ```ruby
@@ -34,7 +35,7 @@ Sometimes projects are not completely deleted due to [postgres statement timeout
     proj.destroy_dependent_associations_in_batches(exclude: [:container_repositories]);nil
     ```
 
-1.  Attempt to delete the project via the `DestroyService` to clean up the rest of the project such as the wiki, registry images, etc. You may need to run this more than once if you encounter a statement timeout (it will return false):
+1. Attempt to delete the project via the `DestroyService` to clean up the rest of the project such as the wiki, registry images, etc. You may need to run this more than once if you encounter a statement timeout (it will return false):
 
     ```ruby
     Projects::DestroyService.new(proj, user, {}).execute

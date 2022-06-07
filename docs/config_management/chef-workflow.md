@@ -8,31 +8,39 @@ Creating new cookbook consists of several steps:
    which have all the necessary bits to speed up cookbook creation. To init
    new cookbook from template, do the following:
    1. Clone the template into new cookbook directory:
+
       ```
       git clone git@gitlab.com:gitlab-cookbooks/template.git gitlab_newcookbook
       ```
+
       Please use the `gitlab_` prefix for new cookbooks names.
    1. Replace the `template` with `gitlab_newcookbook` everywhere:
+
       ```
       find * -type f | xargs -n1 sed -i 's/template/gitlab_newcookbook/g'
       ls .kitchen*yml | xargs -n1 sed -i 's/template/gitlab_newcookbook/g'
       ```
+
       This will also update badges in README.md, attributes, and recipes.
    1. At this point, you have a fully functional initial commit with passing
       tests (see the Testing section in cookbooks README.md for details), and
       you can rewrite git commit history from template to you cookbook:
+
       ```
       git checkout --orphan latest && \
       git add -A && \
       git commit -am 'Initial commit'
       ```
+
       :point_up: the above may ask for GPG password if you sign your commits,
       so its separated from the branch switch below :point_down:
+
       ```
       git branch -D master && \
       git branch -m master && \
       sed -i 's/template/gitlab_newcookbook/' .git/config
       ```
+
 1. Now its time to create two repos for your new cookbook. The main one, on
    `gitlab.com`, is used for everyday work, and template points to .com by
    default. The mirror cookbook on `ops.gitlab.net` is used by chef-server
@@ -69,6 +77,7 @@ For cookbooks with Makefiles in them, see the README.md for testing instructions
 
 Some points that might not be in the README.md, for historical reasons:
 Builds happen in the "GitLab Dev" project.  When running from your own machine for initial testing, you need to export `DIGITALOCEAN_ACCESS_TOKEN` and `DIGITALOCEAN_SSH_KEY_IDS`.  To get values for these:
+
 * Look in 1password for "DIGITALOCEAN_ACCESS_TOKEN for gitlab-cookbooks CICD".
 * Upload your SSH key to the GitLab Dev project, then  and obtain the ID value with: `curl -s -S -X GET https://api.digitalocean.com/v2/account/keys/<fingerprint>  -H "Authorization: Bearer $DIGITALOCEAN_ACCESS_TOKEN" | jq .ssh_key.id`.  The fingerprint is visible in the web UI after upload, and can be copy/pasted as is into the API URL.  The ID returned is what you put into DIGITALOCEAN_SSH_KEY_IDS; if it outputs 'null', remove the pipe to jq, and see what the API is saying.
 
@@ -177,7 +186,7 @@ this may still freak out when a chef-vault is involved.
 ## Update cookbook and deploy to production
 
 When it comes time to edit a cookbook, you first need to clone it from its repo, most likely
-in https://gitlab.com/gitlab-cookbooks/.
+in <https://gitlab.com/gitlab-cookbooks/>.
 
 Once you make your changes to a cookbook, you will want to be sure to bump the version
 number in metadata.rb as we have versioning requirements in place so Chef will not accept
@@ -209,7 +218,6 @@ divide up our infrastructure the same way was in terraform:
 
 with the addition of the chef default environment:
 
-
 * [\_default](https://ops.gitlab.net/gitlab-cookbooks/chef-repo/blob/master/environments/_default.json)
 
 To see the nodes in an environment use a knife search command such as:
@@ -233,21 +241,21 @@ environment, since `_default` has no version constraints. The next steps are the
 for any omnibus deploy:
 
 1. deploy and test in staging
-  1. edit the [environment file](https://ops.gitlab.net/gitlab-cookbooks/chef-repo/blob/master/environments/stg.json)
-  1. upload the environment file `knife environment from file path/to/stg.json`
-  1. verify changes (e.g. run `chef-client` on a server)
+    1. edit the [environment file](https://ops.gitlab.net/gitlab-cookbooks/chef-repo/blob/master/environments/stg.json)
+    1. upload the environment file `knife environment from file path/to/stg.json`
+    1. verify changes (e.g. run `chef-client` on a server)
 1. deploy and test in pre-production
-  1. edit the [environment file](https://ops.gitlab.net/gitlab-cookbooks/chef-repo/blob/master/environments/pre.json)
-  1. upload the environment file `knife environment from file path/to/pre.json`
-  1. verify changes (e.g. run `chef-client` on a server)
+    1. edit the [environment file](https://ops.gitlab.net/gitlab-cookbooks/chef-repo/blob/master/environments/pre.json)
+    1. upload the environment file `knife environment from file path/to/pre.json`
+    1. verify changes (e.g. run `chef-client` on a server)
 1. deploy and test in canary
-  1. edit the [environment file](https://ops.gitlab.net/gitlab-cookbooks/chef-repo/blob/master/environments/cny.json)
-  1. upload the environment file `knife environment from file path/to/cny.json`
-  1. verify changes (e.g. run `chef-client` on a server)
+    1. edit the [environment file](https://ops.gitlab.net/gitlab-cookbooks/chef-repo/blob/master/environments/cny.json)
+    1. upload the environment file `knife environment from file path/to/cny.json`
+    1. verify changes (e.g. run `chef-client` on a server)
 1. deploy and run in production
-  1. edit the [environment file](https://ops.gitlab.net/gitlab-cookbooks/chef-repo/blob/master/environments/prd.json)
-  1. upload the environment file `knife environment from file path/to/prd.json`
-  1. verify changes (e.g. run `chef-client` on a server)
+    1. edit the [environment file](https://ops.gitlab.net/gitlab-cookbooks/chef-repo/blob/master/environments/prd.json)
+    1. upload the environment file `knife environment from file path/to/prd.json`
+    1. verify changes (e.g. run `chef-client` on a server)
 
 This method does come with inherent risks: if this is done sloppily, it is possible that
 cookbook version can *fall under the table* and never be applied to an environment. We have
@@ -262,7 +270,7 @@ Really useful to troubleshoot.
 Starting from the chef-repo folder run the following command:
 
 ```
-$ chef-shell -z -c .chef/knife.rb
+chef-shell -z -c .chef/knife.rb
 ```
 
 In here you can type `help` to get really useful help, but then for instance you can do this
@@ -274,8 +282,9 @@ In here you can type `help` to get really useful help, but then for instance you
 And then examine this node from chef's perspective
 
 ## References
-  - [GitLab's chef-repo](https://ops.gitlab.net/gitlab-cookbooks/chef-repo/)
-  - [ChefSpec documentation](https://docs.chef.io/chefspec.html)
-  - [ChefSpec examples on GitHub](https://github.com/sethvargo/chefspec/tree/master/examples)
-  - [KitchenCI getting started guide](http://kitchen.ci/docs/getting-started/)
-  - [test-kitchen repo](https://github.com/test-kitchen/test-kitchen)
+
+* [GitLab's chef-repo](https://ops.gitlab.net/gitlab-cookbooks/chef-repo/)
+* [ChefSpec documentation](https://docs.chef.io/chefspec.html)
+* [ChefSpec examples on GitHub](https://github.com/sethvargo/chefspec/tree/master/examples)
+* [KitchenCI getting started guide](http://kitchen.ci/docs/getting-started/)
+* [test-kitchen repo](https://github.com/test-kitchen/test-kitchen)

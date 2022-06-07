@@ -210,8 +210,8 @@ Most of the configuration is handled by two Chef cookbooks specific for GitLab R
 
 To manage CI Runners fleet configuration you need to:
 
-- have write access to https://ops.gitlab.net/gitlab-cookbooks/chef-repo,
-- have write access to https://ops.gitlab.net/gitlab-com/gitlab-com-infrastructure (`gdsrmX` managers are managed by terraform)
+- have write access to <https://ops.gitlab.net/gitlab-cookbooks/chef-repo>,
+- have write access to <https://ops.gitlab.net/gitlab-com/gitlab-com-infrastructure> (`gdsrmX` managers are managed by terraform)
 - have write access to `chef.gitlab.com`,
 - have configured `knife` environment,
 - have admin access to nodes (sudo access).

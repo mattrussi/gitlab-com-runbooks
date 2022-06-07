@@ -4,9 +4,10 @@
 
 [[_TOC_]]
 
-#  Pubsub Service
+# Pubsub Service
+
 * [Service Overview](https://dashboards.gitlab.net/d/USVj3qHmk/logging)
-* **Alerts**: https://alerts.gitlab.net/#/alerts?filter=%7Btype%3D%22pubsub%22%2C%20tier%3D%22inf%22%7D
+* **Alerts**: <https://alerts.gitlab.net/#/alerts?filter=%7Btype%3D%22pubsub%22%2C%20tier%3D%22inf%22%7D>
 * **Label**: gitlab-com/gl-infra/production~"Service:PubSub"
 
 ## Logging
@@ -29,7 +30,6 @@
 * [A survival guide for SREs to working with Sidekiq at GitLab](../sidekiq/sidekiq-survival-guide-for-sres.md)
 * [Life of a Git Request](../tutorials/overview_life_of_a_git_request.md)
 <!-- END_MARKER -->
-
 
 <!-- ## Summary -->
 

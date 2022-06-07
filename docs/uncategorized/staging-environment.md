@@ -75,8 +75,8 @@ to [block the deployment to production](https://about.gitlab.com/handbook/engine
 
 Past related issues have :
 
-- caused a production incident of severity 2 (https://gitlab.com/gitlab-com/gl-infra/production/-/issues/5931)
-- been caused by a feature flag rollout in staging (https://gitlab.com/gitlab-org/gitlab/-/issues/346766)
+* caused a production incident of severity 2 (<https://gitlab.com/gitlab-com/gl-infra/production/-/issues/5931>)
+* been caused by a feature flag rollout in staging (<https://gitlab.com/gitlab-org/gitlab/-/issues/346766>)
 
 ## ElasticCloud Watcher: Segmentation faults
 
@@ -97,4 +97,4 @@ to [block the deployment to production](https://about.gitlab.com/handbook/engine
 
 Past related issues:
 
-- Upgrade to Debian bullseye caused jemalloc calls to be mixed with standard malloc calls (https://gitlab.com/gitlab-com/gl-infra/production/-/issues/6276)
+* Upgrade to Debian bullseye caused jemalloc calls to be mixed with standard malloc calls (<https://gitlab.com/gitlab-com/gl-infra/production/-/issues/6276>)

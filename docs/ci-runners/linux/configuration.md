@@ -33,7 +33,7 @@ The settings that require Runner's restart, are:
   [`[session_server]`](https://docs.gitlab.com/runner/configuration/advanced-configuration.html#the-session_server-section)
   section).
 
-For a reference - all `config.toml` settings are documented at: https://docs.gitlab.com/runner/configuration/advanced-configuration.html.
+For a reference - all `config.toml` settings are documented at: <https://docs.gitlab.com/runner/configuration/advanced-configuration.html>.
 
 Apart of that Runner should automatically reload the updated configuration file within a minute since the file
 update and should apply all other settings.

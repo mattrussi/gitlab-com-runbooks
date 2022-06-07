@@ -4,9 +4,10 @@
 
 [[_TOC_]]
 
-#  Mailroom Service
+# Mailroom Service
+
 * [Service Overview](https://dashboards.gitlab.net/d/mailroom-main/mailroom-overview)
-* **Alerts**: https://alerts.gitlab.net/#/alerts?filter=%7Btype%3D%22mailroom%22%2C%20tier%3D%22sv%22%7D
+* **Alerts**: <https://alerts.gitlab.net/#/alerts?filter=%7Btype%3D%22mailroom%22%2C%20tier%3D%22sv%22%7D>
 * **Label**: gitlab-com/gl-infra/production~"Service:Mailroom"
 
 ## Logging
@@ -44,6 +45,7 @@ reattempt to process the email.
 
 * Clear the unread count
 From a gitlab-console session:
+
 ```
 imap = Net::IMAP.new("imap.gmail.com", 993, :ssl => true)
 config = Gitlab::MailRoom.config
@@ -100,7 +102,7 @@ end
 If you want to clear out some obvious ones (e.g. bots) then re-evaluate, feel
 free to run this multiple times; it will only show the remaining UNSEEN messages
 each run.  Once you've marked as seen all mails you do NOT want to be ingested,
-you need to force it to re-ingest.  Stop mail_room on *all* Mailroom servers for
+you need to force it to re-ingest.  Stop mail_room on _all_ Mailroom servers for
 the environment for slightly more than 10 minutes, then start it on one of them,
 wait 30-60 seconds, then start it on the others.  This lets the TTL for the key
 expire in Redis to allow it to pick up the messages again.  One could directly

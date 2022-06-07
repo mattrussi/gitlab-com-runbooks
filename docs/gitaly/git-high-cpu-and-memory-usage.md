@@ -12,7 +12,6 @@ This runbook walks through an example of that scenario.
 See also [this incident](https://gitlab.com/gitlab-com/gl-infra/production/-/issues/2600)
 as another example walk-through of this behavior.
 
-
 ## Quick reference commands
 
 The walk-through gives more context, but for quick reference in a pinch:
@@ -23,19 +22,20 @@ Find `git pack-objects` processes that are children of `git upload-pack` (rather
 Each of these processes corresponds to one git client running `git fetch` or `git clone`.  Killing them will gracefully abort the client and will not harm the repo.
 
 Notes:
+
 * This step defines a bash alias `find_git_pack_pids` to use as a macro function in several later steps.  If your shell is not Bash, please adjust accordingly.
 * Because the list of PIDs may change quickly, it is helpful to have a dynamic function to find the currently running matching PIDs.
 * If you prefer to work with a static list of PIDs, you can substitute `$( echo <PID> ... )` instead of running the `find_git_pack_pids` bash alias.
 
 ```shell
-$ alias find_git_pack_pids=$"pgrep -f 'git .*upload-pack' | tr '\n' ',' | perl -pe 's/,$//' | xargs -i pgrep --parent {} -f 'git .*pack-objects .*--stdout'"
-$ find_git_pack_pids | xargs -r ps uwf | cat
+alias find_git_pack_pids=$"pgrep -f 'git .*upload-pack' | tr '\n' ',' | perl -pe 's/,$//' | xargs -i pgrep --parent {} -f 'git .*pack-objects .*--stdout'"
+find_git_pack_pids | xargs -r ps uwf | cat
 ```
 
 Which git repo directory are most of these git-pack-objects processes using?
 
 ```shell
-$ find_git_pack_pids | xargs -i sudo ls -l /proc/{}/cwd | perl -pe 's/.* -> //' | sort | uniq -c | sort -rn
+find_git_pack_pids | xargs -i sudo ls -l /proc/{}/cwd | perl -pe 's/.* -> //' | sort | uniq -c | sort -rn
 ```
 
 Show the GitLab correlation_id for these "git pack-objects" processes.
@@ -43,15 +43,15 @@ Show the GitLab correlation_id for these "git pack-objects" processes.
 Note: The Kibana indexes for Gitaly and Workhorse may not have log events for these correlation_ids until these processes exit.
 
 ```shell
-$ find_git_pack_pids | xargs -i sudo cat /proc/{}/environ | tr '\0' '\n' | grep 'CORRELATION_ID'
+find_git_pack_pids | xargs -i sudo cat /proc/{}/environ | tr '\0' '\n' | grep 'CORRELATION_ID'
 ```
 
 What is the GitLab project path for a git repo?
 You can use this in Kibana queries or to browse to the project as an admin of gitlab.com.
 
 ```shell
-$ TARGET_GIT_DIR='/var/opt/gitlab/git-data/repositories/@hashed/71/40/71408c63d137df0bf79664aa4371ecd00a6682a3e52e08c976487e52ea6b3dad.git'
-$ sudo grep 'fullpath' $TARGET_GIT_DIR/config
+TARGET_GIT_DIR='/var/opt/gitlab/git-data/repositories/@hashed/71/40/71408c63d137df0bf79664aa4371ecd00a6682a3e52e08c976487e52ea6b3dad.git'
+sudo grep 'fullpath' $TARGET_GIT_DIR/config
 ```
 
 Capture a 30-second "perf" CPU profile for the whole host.
@@ -63,17 +63,17 @@ in an effort to see if sending the delta would cost less network bandwidth than 
 be very expensive.
 
 ```shell
-$ sudo perf record -a -g --freq 99 -- sleep 30
-$ sudo perf script --header > $( hostname -s ).perf-script.txt
-$ git clone --quiet https://github.com/brendangregg/FlameGraph.git ~/FlameGraph
-$ PATH="$HOME/FlameGraph:$PATH"
-$ cat $( hostname -s ).perf-script.txt | stackcollapse-perf.pl --kernel | flamegraph.pl --hash --colors=perl > $( hostname -s ).flamegraph.svg
+sudo perf record -a -g --freq 99 -- sleep 30
+sudo perf script --header > $( hostname -s ).perf-script.txt
+git clone --quiet https://github.com/brendangregg/FlameGraph.git ~/FlameGraph
+PATH="$HOME/FlameGraph:$PATH"
+cat $( hostname -s ).perf-script.txt | stackcollapse-perf.pl --kernel | flamegraph.pl --hash --colors=perl > $( hostname -s ).flamegraph.svg
 ```
 
 Or to capture a 30-second "perf" CPU profile of only the `git pack-objects` PIDs, replace the 1st step of the above commands with:
 
 ```shell
-$ find_git_pack_pids | tr '\n' ',' | perl -pe 's/,$//' | xargs -i sudo perf record -g --freq 99 --pid {} -- sleep 30
+find_git_pack_pids | tr '\n' ',' | perl -pe 's/,$//' | xargs -i sudo perf record -g --freq 99 --pid {} -- sleep 30
 ```
 
 How many objects are in this git repo?
@@ -88,12 +88,10 @@ How many large objects in this git repo are over 100 MB?
 sudo git -C "$TARGET_GIT_DIR" cat-file --batch-all-objects --batch-check='%(objectname) %(objecttype) %(objectsize)' | awk '$3 >= 100*1024^2' | sort -k3 -n -r | wc -l
 ```
 
-
 ### Remedies
 
 Once we identify the affected git repo and its associated gitlab project (e.g. using the methods above),
 we can take any combination of the following actions.
-
 
 #### Kill `git pack-objects` processes
 
@@ -110,17 +108,16 @@ Its only argument is the absolute path to a git repo.
 [kill_git_pack_objects_processes_for_repo_path.sh](../../scripts/kill_git_pack_objects_processes_for_repo_path.sh)
 
 ```shell
-$ TARGET_GIT_DIR='/var/opt/gitlab/git-data/repositories/@hashed/71/40/71408c63d137df0bf79664aa4371ecd00a6682a3e52e08c976487e52ea6b3dad.git'
-$ ./kill_git_pack_objects_processes_for_repo_path.sh "$TARGET_GIT_DIR"
+TARGET_GIT_DIR='/var/opt/gitlab/git-data/repositories/@hashed/71/40/71408c63d137df0bf79664aa4371ecd00a6682a3e52e08c976487e52ea6b3dad.git'
+./kill_git_pack_objects_processes_for_repo_path.sh "$TARGET_GIT_DIR"
 ```
-
 
 #### Block the repo
 
 To block anonymous clients from running `git clone` or `git fetch` on this repo, either:
+
 * Contact the Trust and Safety Team (formerly the Abuse Team) via slack handle `@trust-and-safety`, and ask them to block the project using Bouncer.
 * Login as an Admin to the GitLab web UI, browse to the project, and mark it as "Private".  This blocks anonymous access but does not block authorized members.
-
 
 #### Run `git repack` on the repo
 
@@ -156,20 +153,22 @@ but it may shift the burden to costing more network throughput and potentially e
 instead of what might have been a much smaller delta object.
 
 As a first draft, it may be worth trying a smaller `core.bigFileThreshold` if the repo has:
+
 * at least one large object (< 512 MB and > 100 MB)
 * fairly few commits
 * low rate of new commits being pushed
 
-
 ## Symptoms
 
 Symptoms of the problem include:
+
 * The latency apdex or error rate spikes for the `web` and `api` backends in HAProxy.  This may trigger alerts if severe enough.
 * One Gitaly node's CPU and anonymous memory usage rises significantly above its peers and above its recent norm.
 * Running "top" on the affected Gitaly node shows many CPU-bound `git pack-objects` processes.
   * Most of these processes are children of `git-upload-pack` and are associated with a single git repo.  (See below for how to check this.)
 
 In more detail:
+
 * For one Gitaly host, CPU or memory usage rises significantly above the norm, potentially reaching saturation for the host or cgroup.
   * Typically a single git repo will be associated with most of the running `git pack-objects` processes.
 * CPU saturation can starve other processes, lead to general slowness and timeout errors for other RPC calls to the affected Gitaly node.
@@ -179,7 +178,6 @@ In more detail:
     Gitaly will automatically spawn a replacement, but it will cause an error rate spike.
 * The affected Gitaly node's slowness and timeouts noted above will typically lead to higher latency and error rates on Gitaly's
   clients, primarily Workhorse and Rails on the `web`, `api`, and `git` fleets.
-
 
 ## How to diagnose this problem
 
@@ -205,8 +203,6 @@ In more detail:
   * If the culprit is `PostUploadPack` method, you should see it stand out here
 * [Gitaly - sum of time spent serving requests, split by project](https://log.gprd.gitlab.net/app/kibana#/visualize/edit/50fdf910-edfa-11ea-81e5-155ba78758d4)
   * You can narrow this visualization further down by adding filters for a specific host and a specific method. This will show you which project is most likely causing the problem.
-
-
 
 ## Example
 
@@ -269,7 +265,6 @@ The same dashboard's "Node Metrics" section includes CPU and memory panels that 
 [Dashboard link](https://dashboards.gitlab.net/d/gitaly-main/gitaly-overview?viewPanel=50&orgId=1&from=1599013800000&to=1599019200000)
 
 ![gitaly-overview-node-memory-usage](img/gitaly-overview-node-memory-usage.png)
-
 
 ### Dashboard Host Stats
 

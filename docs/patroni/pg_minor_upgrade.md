@@ -2,7 +2,7 @@
 
 This runbook describes all the steps to execute a Postgresql minor upgrade.
 
-**Important!** Please read the release notes before getting started (for all minor versions after the current version of postgresql) - https://www.postgresql.org/docs/12/release.html
+**Important!** Please read the release notes before getting started (for all minor versions after the current version of postgresql) - <https://www.postgresql.org/docs/12/release.html>
 
 Considering the database, one of the most critical components from our infrastructure, we want to execute the upgrade node by node by executing tests, monitoring the performance and behavior after the upgrade in each node.
 
@@ -18,13 +18,14 @@ The main steps on the read-only replicas, are:
 
 * Disable chef-client.
 
- - Execute the command: `sudo chef-client-disable`
+* Execute the command: `sudo chef-client-disable`
 
 Add the `no-failover` and `no-loadbalance` tags in Patroni ( in the config file patroni.yml).
 
 * Reload patroni: `sudo systemctl reload patroni`
 
-### Pre checks:
+### Pre checks
+
 Wait until the traffic is drained.
 
 * Verify the connection status with the commad on pg_stat_activity:
@@ -34,7 +35,8 @@ Execute a checkpoint. Command: `gitlab-psql -c "checkpoint;"`
 
 Shutdown PostgreSQL. Command: `sudo systemctl stop patroni`
 
-### Main actions:
+### Main actions
+
 Update the binaries:
 
 ```shell

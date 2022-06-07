@@ -885,6 +885,12 @@ services:
     label: Service:GoogleCloudStorage
     infrastructure:
       provider: gcp
+    technical:
+      logging:
+        - name: Admin Activity
+          permalink: https://cloudlogging.app.goo.gl/Htfsfyye1PeAfc1r6
+        - name: Data Access
+          permalink: https://cloudlogging.app.goo.gl/fSJgyQ1k1Fupsqb1A
     observability:
       monitors:
         grafana_folder:

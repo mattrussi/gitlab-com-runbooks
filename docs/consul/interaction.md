@@ -7,6 +7,7 @@ The `consul` CLI is very extensive.  Check out [Consul's Commands Documentation]
 ## Useful Commands
 
 To [identify the current server](https://www.consul.io/commands/operator/raft) with the leader role:
+
 ```
 $ consul operator raft list-peers
 Node                ID                                    Address          State     Voter  RaftProtocol
@@ -18,6 +19,7 @@ consul-02-inf-gstg  dd04fcd5-7c30-a3b8-b351-daed6c80a692  10.224.4.3:8300  follo
 ```
 
 To [follow the debug logs](https://www.consul.io/commands/monitor) of a consul agent:
+
 ```
 consul monitor -log-level debug
 ```
@@ -31,13 +33,17 @@ consul kv export | jq .
 ### Some commands interesting for patroni
 
 * get the patroni leader
+
   ```
   consul kv get service/gstg-pg12-patroni-registry/leader
   ```
+
 * get the patroni attributes of a patroni node
+
   ```
   consul kv get service/pg12-ha-cluster-stg/members/patroni-06-db-gstg.c.gitlab-staging-1.internal
   ```
+
 * The dns name of the primary db: `master.patroni.service.consul`
 * The round-robin dns name of the replicas: `replica.patroni.service.consul`
 
