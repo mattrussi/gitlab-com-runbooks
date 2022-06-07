@@ -1,7 +1,7 @@
 // Watcher to notify when internal mailroom endpoint /api/v4/internal/mail_room
 // gets any unexpected 500 errors
 // For https://gitlab.com/gitlab-com/gl-infra/production/-/issues/7124
-local schedule_mins = 5;  // Run this watch at this frequency, in minutes
+local schedule_mins = 720;  // Run this watch at this frequency, 12 hours in minutes
 local query_period = schedule_mins + 2;
 local alert_threshold = 0;
 
