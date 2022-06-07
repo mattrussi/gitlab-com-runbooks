@@ -16,7 +16,7 @@ groups:
           title: 'Large number of documents waiting to be indexed by ElasticSearch'
           environment: "{{ $labels.environment }}"
           grafana_dashboard_id: stage-groups-global_search/stage-groups-group-dashboard-enablement-global-search
-          grafana_panel_id: "499025569" # stableId=global-search-queue-size-overall
+          grafana_panel_id: "499025569"  # stableId=global-search-queue-size-overall
           grafana_dashobard_link: >
             https://dashboards.gitlab.net/d/stage-groups-global_search/stage-groups-group-dashboard-enablement-global-search?orgId=1&var-environment={{ $labels.environment }}&var-stage={{ $labels.stage }}
           description: >

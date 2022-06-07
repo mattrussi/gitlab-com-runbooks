@@ -1,17 +1,8 @@
 ---
 extends: default
 rules:
-  line-length: disable
   document-start: disable
-  colons:
-    level: warning
-  empty-lines:
-    level: warning
   indentation:
-    level: warning
+    indent-sequences: consistent
     spaces: 2
-    indent-sequences: whatever
-  new-line-at-end-of-file:
-    level: warning
-  trailing-spaces:
-    level: warning
+  line-length: disable

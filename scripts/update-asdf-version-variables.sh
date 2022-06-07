@@ -16,7 +16,7 @@ generate() {
     /^[^# ]/ {
       if ($1 != "" && $2 != "system") {
         gsub("-", "_", $1);
-        print "    GL_ASDF_" toupper($1) "_VERSION: \"" $2 "\""
+        print "  GL_ASDF_" toupper($1) "_VERSION: \"" $2 "\""
       }
     }
     ' "${ROOT_DIR}/.tool-versions"

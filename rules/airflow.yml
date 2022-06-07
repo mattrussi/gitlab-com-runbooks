@@ -1,16 +1,16 @@
 groups:
 - name: airflow.rules
   rules:
-    - alert: AirflowDown
-      expr: >
-        count(avg_over_time(up{job='airflow'}[5m]) * 100 < 50)
-      for: 5m
-      labels:
-        alert_type: cause
-        severity: s4
-        team: data-analytics
-      annotations:
-        title: Airflow is down
-        description: >
-          Prometheus has failed to get metrics from Airflow for about 10 minutes.
-          See 'https://thanos.gitlab.net/graph?g0.expr=up%7Benv%3D"{{ $externalLabels.env }}"%2Cjob%3D"{{ $labels.job }}"%7D%20%3D%3D%200'
+  - alert: AirflowDown
+    expr: >
+      count(avg_over_time(up{job='airflow'}[5m]) * 100 < 50)
+    for: 5m
+    labels:
+      alert_type: cause
+      severity: s4
+      team: data-analytics
+    annotations:
+      title: Airflow is down
+      description: >
+        Prometheus has failed to get metrics from Airflow for about 10 minutes.
+        See 'https://thanos.gitlab.net/graph?g0.expr=up%7Benv%3D"{{ $externalLabels.env }}"%2Cjob%3D"{{ $labels.job }}"%7D%20%3D%3D%200'
