@@ -30,6 +30,7 @@ Make sure that **there are no CI Read requests being made in the patroni-ci clus
 
 1. Log in into a Replication Backup node and execute a gcs-snapshot:
 ```
+sudo su - gitlab-psql
 PATH="/usr/local/sbin:/usr/sbin/:/sbin:/usr/local/bin:/usr/bin:/bin:/snap/bin"
 /usr/local/bin/gcs-snapshot.sh
 ```
@@ -61,18 +62,39 @@ Replication Backup nodes are:
         ```
             "patroni-ci"           = 7
         ```
-2. Create all the Patroni CI node with: `tf apply`
-3. Check the `patroni-ci-01-db` Serial port in GCP console to see if the instance is already intialized and if Chef have finished to run, for example:
+1. Create all the Patroni CI node with: `tf apply`
+1. Check the `patroni-ci-01-db` Serial port in GCP console to see if the instance is already intialized and if Chef have finished to run, for example:
    - GSTG: https://console.cloud.google.com/compute/instancesDetail/zones/us-east1-c/instances/patroni-ci-01-db-gstg/console?port=1&project=gitlab-staging-1
    - GPRD: https://console.cloud.google.com/compute/instancesDetail/zones/us-east1-c/instances/patroni-ci-01-db-gprd/console?port=1&project=gitlab-production
-4. Check if `scope=<cluster_name>` and if `name=<hostname>` in the `/var/opt/gitlab/patroni/patroni.yml` file, this is an evidence that Chef have sucessfully executed on the node. For example in the `patroni-ci-01-db-gstg` node the content of the file should be the following:
+1. Check if `scope=<cluster_name>` and if `name=<hostname>` in the `/var/opt/gitlab/patroni/patroni.yml` file, this is an evidence that Chef have sucessfully executed on the node. For example in the `patroni-ci-01-db-gstg` node the content of the file should be the following:
     ```
     $ sudo head -3 /var/opt/gitlab/patroni/patroni.yml
     ---
     scope: gstg-patroni-ci
     name: patroni-ci-01-db-gstg.c.gitlab-staging-1.internal
     ```
-4. Initialize the cluster using the `db-migration/pg-replica-rebuild` Ansible playbook, by executing:
+1. If Chef failed, you might have to:
+    - Manually delete the nodes from Chef
+        ```
+        knife node delete patroni-ci-01-db-gstg.c.gitlab-staging-1.internal
+        knife node delete patroni-ci-02-db-gstg.c.gitlab-staging-1.internal
+        knife node delete patroni-ci-03-db-gstg.c.gitlab-staging-1.internal
+        knife node delete patroni-ci-04-db-gstg.c.gitlab-staging-1.internal
+        knife node delete patroni-ci-05-db-gstg.c.gitlab-staging-1.internal
+        knife node delete patroni-ci-06-db-gstg.c.gitlab-staging-1.internal
+        knife node delete patroni-ci-07-db-gstg.c.gitlab-staging-1.internal
+        knife node delete patroni-zfs-ci-01-db-gstg.c.gitlab-staging-1.internal
+        knife client delete patroni-ci-01-db-gstg.c.gitlab-staging-1.internal
+        knife client delete patroni-ci-02-db-gstg.c.gitlab-staging-1.internal
+        knife client delete patroni-ci-03-db-gstg.c.gitlab-staging-1.internal
+        knife client delete patroni-ci-04-db-gstg.c.gitlab-staging-1.internal
+        knife client delete patroni-ci-05-db-gstg.c.gitlab-staging-1.internal
+        knife client delete patroni-ci-06-db-gstg.c.gitlab-staging-1.internal
+        knife client delete patroni-ci-07-db-gstg.c.gitlab-staging-1.internal
+        knife client delete patroni-zfs-ci-01-db-gstg.c.gitlab-staging-1.internal
+        ````
+    - Restart the VM instances through the GCP console
+1. Initialize the cluster using the `db-migration/pg-replica-rebuild` Ansible playbook, by executing:
     ```
     $ cd <workspace>/db-migration/pg-replica-rebuild
     $ ansible-playbook -i inventory/<file> rebuild.yml
@@ -87,21 +109,21 @@ The ZFS cluster nodes can't be rebuild through GCP snapshots, because the `/var/
         ```
             "patroni-zfs-ci"       = 1
         ```
-2. Create Patroni ZFS CI node with: `tf apply`
-3. Check the `patroni-zfs-ci-01-db` Serial port in GCP console to see if the instance is already intialized and if Chef have finished to run, for example:
+1. Create Patroni ZFS CI node with: `tf apply`
+1. Check the `patroni-zfs-ci-01-db` Serial port in GCP console to see if the instance is already intialized and if Chef have finished to run, for example:
    - GSTG: https://console.cloud.google.com/compute/instancesDetail/zones/us-east1-c/instances/patroni-zfs-ci-01-db-gstg/console?port=1&project=gitlab-staging-1
    - GPRD: https://console.cloud.google.com/compute/instancesDetail/zones/us-east1-c/instances/patroni-zfs-ci-01-db-gprd/console?port=1&project=gitlab-production
-3. Check if `scope=<cluster_name>` and if `name=<hostname>` in the `/var/opt/gitlab/patroni/patroni.yml` file, this is an evidence that Chef have sucessfully executed on the node. For example in the `patroni-zfs-ci-01-db-gstg` node the content of the file should be the following:
+1. Check if `scope=<cluster_name>` and if `name=<hostname>` in the `/var/opt/gitlab/patroni/patroni.yml` file, this is an evidence that Chef have sucessfully executed on the node. For example in the `patroni-zfs-ci-01-db-gstg` node the content of the file should be the following:
     ```
     $ sudo head -3 /var/opt/gitlab/patroni/patroni.yml
     ---
     scope: gstg-patroni-zfs-ci
     name: patroni-zfs-ci-01-db-gstg.c.gitlab-staging-1.internal
     ```
-4. Start the Patroni Cluster
+1. Start the Patroni Cluster
     - Execute: `sudo systemctl patroni.service start`
     - If you observe the `/var/log/gitlab/patroni/patroni.log` you should see the `INFO: waiting for standby_leader to bootstrap` message
-5. Remove the Patroni Cluster from DCS
+1. Remove the Patroni Cluster from DCS
     - Execute: `sudo gitlab-patronictl remove <cluster_name>`
     - If you observe the `/var/log/gitlab/patroni/patroni.log` you should see the `INFO: bootstrap_standby_leader in progress` message
 6. Check if `pg_basebackup` is running 
