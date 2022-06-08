@@ -9,8 +9,6 @@ JSONNET_FILES ?= $(shell find . \( -name "*.jsonnet" -o -name "*.libsonnet" \)  
 SHELL_FMT_FLAGS := -i 2 -ci
 SHELL_FILES = $(shell find . -type f \( -perm -u=x -o -name "*.sh" \) $(VERIFY_PATH_SELECTOR) -print0|xargs -0 file -n |grep 'Bourne-Again'|cut -d: -f1)
 
-YAML_FILES = $(shell find . \( -name "*.yml" -o -name "*.yaml" \) -type f $(VERIFY_PATH_SELECTOR) )
-
 AMTOOL = $(shell which amtool || echo "/alertmanager/amtool")
 AMTOOL_PATH=$(dir $(AMTOOL))
 JSONET_COMMAND = $(shell which jsonnetfmt || (which jsonnet && echo " fmt"))
@@ -92,8 +90,8 @@ validate-alerts:
 
 .PHONY:validate-yaml
 validate-yaml:
-	if ! command -v yamllint >/dev/null; then echo "Please install yamllint: https://yamllint.readthedocs.io/en/stable/quickstart.html#installing-yamllint"; exit 1; fi
-	yamllint -f colored $(YAML_FILES)
+	@if ! command -v yamllint >/dev/null; then echo "Please install yamllint: https://yamllint.readthedocs.io/en/stable/quickstart.html#installing-yamllint"; exit 1; fi
+	yamllint -f colored .
 
 .PHONY: test-jsonnet
 test-jsonnet:
