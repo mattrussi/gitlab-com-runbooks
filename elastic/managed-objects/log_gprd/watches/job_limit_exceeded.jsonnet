@@ -29,13 +29,7 @@ local es_query = {
                     'json.exception.class': 'Gitlab::SidekiqMiddleware::SizeLimiter::ExceedLimitError',
                   },
                 },
-                {
-                  match_phrase: {
-                    'json.error_class': 'Gitlab::SidekiqMiddleware::SizeLimiter::ExceedLimitError',
-                  },
-                },
               ],
-              minimum_should_match: 1,
             },
           },
           {
@@ -44,7 +38,7 @@ local es_query = {
               must_not: [
                 {
                   match_phrase: {
-                    'json.error_message': 'WebHookWorker job exceeds payload size limit',
+                    'json.exception.message': 'WebHookWorker job exceeds payload size limit',
                   },
                 },
                 {
