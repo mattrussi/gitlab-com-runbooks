@@ -37,7 +37,7 @@ repos:
         language: system
         files: '^(.*\.sh|bin/[^\.]*)$'
   - repo: https://github.com/scop/pre-commit-shfmt
-    rev: v3.4.3-1 # Note: keep this in sync with .tool-versions
+    rev: v3.4.3-1  # Note: keep this in sync with .tool-versions
     hooks:
       - id: shfmt
         args: ["-i", "2", "-ci"]
