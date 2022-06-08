@@ -11,7 +11,7 @@ metricsCatalog.serviceDefinition({
   tier: 'inf',
   serviceIsStageless: true,  // kube does not have a cny stage
   monitoringThresholds: {
-    apdexScore: 0.9995,
+    apdexScore: 0.999,
     errorRatio: 0.9995,
   },
   /*

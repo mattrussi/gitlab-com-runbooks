@@ -609,7 +609,7 @@ groups:
     labels:
       tier: inf
       type: kube
-    expr: "0.999500"
+    expr: "0.999000"
   - record: slo:max:events:gitlab_service_errors:ratio
     labels:
       tier: inf
@@ -620,7 +620,7 @@ groups:
       component: apiserver
       tier: inf
       type: kube
-    expr: "0.999500"
+    expr: "0.999000"
   - record: slo:max:events:gitlab_service_errors:ratio
     labels:
       component: apiserver
