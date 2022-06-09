@@ -1905,6 +1905,94 @@ services:
         grafana_folder: RNfEDpLmz  # TODO: Update when provisioned
         primary_grafana_dashboard: patroni-main/patroni-overview
 
+  - name: patroni-ci1
+    tier: db
+    friendly_name: CI1 Postgres (Patroni)
+    label: Service:Postgres
+    business:
+      requirement: We use Postgres as our backend database.
+      customers:
+        - GitLab.com customers
+      business_value: |
+        PostgreSQL is a powerful, open source object-relational database system
+        that uses and extends the SQL language combined with many features
+        that safely store and scale the most complicated data workloads.
+        We use Patroni as the high-availability solution, PGBouncer as the pooling solution, and WAL-G as the backup solution.
+
+      SLA:
+        availability:   # Availability SLA promised to customers
+        response_time:  # Response time for inquiries or issues relating this service
+    technical:
+      project:
+        - https://github.com/postgres/postgres
+      slx:
+      documents:
+        design:
+        architecture: https://about.gitlab.com/handbook/engineering/infrastructure/production-architecture/#database-architecture
+        readiness_review:
+        service:
+          - https://www.postgresql.org/docs/9.6/index.html
+        security: https://www.postgresql.org/support/security/
+      dependencies:
+        - service: consul
+      components:
+        - patroni
+      configurations:
+        - config_name: postgresql.conf
+          location: /var/opt/gitlab/postgresql/postgresql.conf
+        - config_name: pg_ident.conf
+          location: /var/opt/gitlab/postgresql/pg_ident.conf
+        - config_name: pg_hba.conf
+          location: /var/opt/gitlab/postgresql/pg_hba.conf
+        - config_name: postgresql.auto.conf
+          location: /var/opt/gitlab/postgresql/postgresql.auto.conf
+        - config_name: patroni.yml
+          location: /var/opt/gitlab/patroni/patroni.yml
+      chef_roles:
+        - gstg-base-db-patroni-ci1
+        - gprd-base-db-patroni-ci1
+        - db-integration-base-db-patroni-ci1
+      scalability:
+        bound: cpu, memory, disk
+        scalable: horizontal or vertical. We can horizontally scale by adding more
+          read only replicas to serve read oprations. However, for serving read/write
+          operations we may need to scale vertically.
+      security:
+        security_reviewed:
+        data_classification: red
+        security_incidents:
+      logging:
+        - name: Postgres
+          permalink: https://log.gprd.gitlab.net/goto/d0f8993486c9007a69d85e3a08f1ea7c  # TODO: Update when provisioned in gprd
+        - name: system
+          permalink: https://log.gprd.gitlab.net/goto/3669d551a595a3a5cf1e9318b74e6c22  # TODO: Update when provisioned in gprd
+    infrastructure:
+      provider: gcp
+      architecture: https://about.gitlab.com/handbook/engineering/infrastructure/production-architecture/#database-architecture
+      provisioning: terraform
+      accesses:
+        - account_name:
+          access_type:
+          reviewed:
+    operations:
+      maintenance:
+      runbooks:
+        - https://gitlab.com/gitlab-com/runbooks/blob/master/docs/patroni/postgres.md
+        - https://gitlab.com/gitlab-com/runbooks/blob/master/docs/patroni/postgresql-backups-wale-walg.md
+      playbooks:
+        - https://gitlab.com/gitlab-com/runbooks/blob/master/docs/patroni/patroni-management.md
+        - https://gitlab.com/gitlab-com/runbooks/blob/master/docs/patroni/postgresql.md
+        - https://gitlab.com/gitlab-com/runbooks/blob/master/docs/patroni/pg-ha.md
+        - https://gitlab.com/gitlab-com/runbooks/blob/master/docs/patroni/postgresql-disk-space.md
+        - https://gitlab.com/gitlab-com/runbooks/blob/master/docs/patroni/postgresql-rebuild-trigram-indexes.md
+        - https://gitlab.com/gitlab-com/runbooks/blob/master/docs/patroni/postgresql-replica.md
+        - https://gitlab.com/gitlab-com/runbooks/blob/master/howto/postgresql-switchover.md
+      error_budget: https://docs.google.com/spreadsheets/d/1wkK2n5EAvoVXwQZrVoCDsvkYTb1BftL56EzsFW_IA-w/edit
+    observability:
+      monitors:
+        grafana_folder: RNfEDpLmz  # TODO: Update when provisioned
+        primary_grafana_dashboard: patroni-ci/patroni-ci1-overview
+
   - name: plantuml
     tier: sv
     friendly_name: PlantUML
