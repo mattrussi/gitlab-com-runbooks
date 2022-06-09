@@ -58,6 +58,7 @@ metricsCatalog.serviceDefinition({
     // * https://gitlab.com/gitlab-com/gl-infra/reliability/-/issues/11027
     // * https://gitlab.com/gitlab-org/gitaly/-/issues/2915
     replicator_queue: {
+      trafficCessationAlertConfig: false,
       userImpacting: false,
       featureCategory: 'gitaly',
       description: |||
