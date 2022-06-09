@@ -1,4 +1,4 @@
-local aggregationSets = import 'aggregation-sets.libsonnet';
+local aggregationSets = (import 'gitlab-metrics-config.libsonnet').aggregationSets;
 local metricsCatalog = import 'servicemetrics/metrics-catalog.libsonnet';
 local serviceAlertsGenerator = import 'slo-alerts/service-alerts-generator.libsonnet';
 

@@ -311,6 +311,12 @@ test-jsonnet:
   script:
     - make jsonnet-bundle test-jsonnet
 
+test-shunit:
+  extends: .default-job-rules
+  stage: test
+  script:
+    - make jsonnet-bundle test-shunit
+
 ensure_generated_content_up_to_date:
   extends: .default-job-rules
   stage: test

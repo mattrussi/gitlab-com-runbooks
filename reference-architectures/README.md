@@ -1,4 +1,4 @@
- Reference Architecture Monitoring
+# Reference Architecture Monitoring
 
 This directory contains configuration to provide observability into other GitLab instances (not GitLab.com).
 
@@ -34,3 +34,53 @@ Ensure you are scraping the metrics from all required sub-systems, using the cor
 | sidekiq | - | /metrics  | - | - |
 | webservice (rails) | /-/metrics ; in kubernetes, on the `http-webservice` port  | `gitlab-rails` | - |
 | webservice (workhorse) | /metrics ; in kubernetes, on the `http-workhorse-exporter` port | `gitlab-rails` | - |
+
+## Generating a Customized Set of Recording Rules, Alerts, and Dashboards
+
+### Generation Steps
+
+It's possible to customize the configuration of the reference architecture to suit your GitLab deployment.
+
+- Step 1: Clone this repository locally: `git clone git@gitlab.com:gitlab-com/runbooks.git`
+
+- Step 2: Check which version of `jsonnet-tool` is required by consulting the `.tool-versions` file, and install it from <https://gitlab.com/gitlab-com/gl-infra/jsonnet-tool/-/releases>. Alternatively, follow the **Contributor Onboarding** steps in [`README.md`](../README.md#contributor-onboarding) to setup your local development environment. This approach will use `asdf` to install the correct version of `jsonnet-tool` automatically.
+
+- Step 3: create a directory which will contain your local overrides. `mkdir overrides`.
+
+- Step 4: in the `overrides` directory, create an `gitlab-metrics-options.libsonnet` file containing the configuration options. Documentation around possible options is available in the [Options section](#options) later in the documentation. Reviewing the [default options](../libsonnet/reference-architecture-options/validate.libsonnet) can shed light on configuration options available.
+
+```jsonnet
+// overrides/gitlab-metrics-options.libsonnet
+{
+  // Disable praefect
+  praefect: {
+    enable: false,
+  }
+}
+```
+
+- Step 5: create a directory which will contain your custom recording rules and Grafana dashboards: `mkdir output`.
+
+- Step 6: use the `generate-reference-architecture-config.sh` script to generate your custom configuration.
+
+```shell
+# generate a custom configuration, using the `get-hybrid` reference architecture,
+# emitting configuration to the `output` directory, and reading overrides from the
+# `overrides/` directory.
+runbooks/scripts/generate-reference-architecture-config.sh \
+    runbooks/reference-architectures/get-hybrid/src/ \
+    output/ \
+    overrides/
+```
+
+- Step 7: install the recording rules from `output/prometheus-rules/rules.yml` into your [Prometheus configuration](https://prometheus.io/docs/prometheus/latest/configuration/recording_rules/). Depending on the deployment, this can be done with the [Kube Prometheus Stack](https://github.com/prometheus-community/helm-charts/tree/main/charts/kube-prometheus-stack) helm chart, local file deployment or another means.
+
+- Step 8: install the Grafana dashboards from `output/dashboards/*.json` into your Grafana instance. The means of deployment will depend on the local configuration.
+
+## Options
+
+The following configuration options are available in `gitlab-metrics-options.libsonnet`.
+
+| **Option**        | **Type** | **Default** | **Description** |
+| ----------------- | -------- | ----------- | --------------- |
+| `praefect.enable` | Boolean  | `true`      | Set to `false` to disable Praefect monitoring. This is usually done when Praefect/Gitaly Cluster is disabled in GitLab Environment Toolkit with `praefect_node_count = 0` |
