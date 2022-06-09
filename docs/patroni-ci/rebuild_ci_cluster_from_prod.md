@@ -122,7 +122,7 @@ Replication Backup nodes are:
     <details><summary>Force run of Chef-Client in GPRD</summary>
 
     ```
-    knife ssh -C 7 "role:gprd-base-db-patroni-ci" "sudo chef-client"
+    knife ssh -C 10 "role:gprd-base-db-patroni-ci" "sudo chef-client"
     ```
 
     </details>
