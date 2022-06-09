@@ -6,7 +6,7 @@
 
 # Patroni-ci1 Service
 
-* [Service Overview](https://dashboards.gitlab.net/d/patroni-ci/patroni-ci1-overview)
+* [Service Overview](https://dashboards.gitlab.net/d/patroni-ci1-main/patroni-ci1-overview)
 * **Alerts**: <https://alerts.gitlab.net/#/alerts?filter=%7Btype%3D%22patroni-ci1%22%2C%20tier%3D%22db%22%7D>
 * **Label**: gitlab-com/gl-infra/production~"Service:Postgres"
 
