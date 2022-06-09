@@ -24,6 +24,11 @@ metricsCatalog.serviceDefinition({
 
   regional: false,
 
+  serviceDependencies: {
+    web: true,
+    api: true,
+  },
+
   serviceLevelIndicators: {
     rails_requests:
       sliLibrary.get('customers_dot_requests').generateServiceLevelIndicator(extraSelector={}) {
