@@ -30,7 +30,7 @@ local list = [
     name: 'customers_dot_requests_apdex',
     significantLabels: ['endpoint_id'],
     kind: sliDefinition.apdexKind,
-    feature_category: 'fulfillment_platform',
+    featureCategory: 'fulfillment_platform',
     description: |||
       The number of CustomersDot requests meeting their duration target based on the urgency
       of the endpoint. By default, a request should take no more than 0.4s. But

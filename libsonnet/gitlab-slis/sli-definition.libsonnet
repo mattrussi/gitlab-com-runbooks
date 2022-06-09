@@ -4,17 +4,28 @@ local rateApdex = (import 'servicemetrics/rate_apdex.libsonnet').rateApdex;
 local recordingRuleRegistry = import 'servicemetrics/recording-rule-registry.libsonnet';
 local serviceLevelIndicatorDefinition = import 'servicemetrics/service_level_indicator_definition.libsonnet';
 local misc = import 'utils/misc.libsonnet';
+local stages = import 'service-catalog/stages.libsonnet';
+
 
 // We might add `success` and `error` in the future
 // When adding support for these, please update the metrics catalog to add
 // recording names to the aggregation sets and recording rules
 local apdexKind = 'apdex';
 
+local validateFeatureCategory(value) =
+  if value == serviceLevelIndicatorDefinition.featureCategoryFromSourceMetrics then
+    true
+  else if value != null then
+    std.objectHas(stages.featureCategoryMap, value)
+  else
+    false;
+
 local sliValidator = validator.new({
   name: validator.string,
   significantLabels: validator.array,
   description: validator.string,
   kind: validator.validator(function(value) value == apdexKind, 'only %s is supported' % apdexKind),
+  featureCategory: validator.validator(validateFeatureCategory, 'please specify a known feature category or include `feature_category` as a significant label'),
 });
 
 local operationRate(definition, selector) =
@@ -22,11 +33,16 @@ local operationRate(definition, selector) =
 local successRate(definition, selector) =
   rateMetric(definition.successCounterName, selector);
 
+local applyDefaults(definition) = {
+  featureCategory: if std.member(definition.significantLabels, 'feature_category') then
+    serviceLevelIndicatorDefinition.featureCategoryFromSourceMetrics,
+  totalCounterName: 'gitlab_sli:%s:total' % [definition.name],
+  successCounterName: 'gitlab_sli:%s:success_total' % [definition.name],
+} + definition;
+
 local validateAndApplyDefaults(definition) =
-  local sli = sliValidator.assertValid(definition) {
-    totalCounterName: 'gitlab_sli:%s:total' % [definition.name],
-    successCounterName: 'gitlab_sli:%s:success_total' % [definition.name],
-  };
+  local definitionWithDefaults = applyDefaults(definition);
+  local sli = sliValidator.assertValid(definitionWithDefaults);
 
   sli {
     aggregatedOperationRateQuery(selector={}, aggregationLabels=[], rangeInterval)::
@@ -45,12 +61,7 @@ local validateAndApplyDefaults(definition) =
 
     generateServiceLevelIndicator(extraSelector):: {
       userImpacting: true,
-      featureCategory: if std.objectHas(sli, 'featureCategory') && sli.featureCategory != serviceLevelIndicatorDefinition.featureCategoryNotOwned then
-        sli.featureCategory
-      else if std.setMember('feature_category', sli.significantLabels) then
-        serviceLevelIndicatorDefinition.featureCategoryFromSourceMetrics
-      else
-        serviceLevelIndicatorDefinition.featureCategoryNotOwned,
+      featureCategory: sli.featureCategory,
 
       description: sli.description,
 
@@ -68,4 +79,8 @@ local validateAndApplyDefaults(definition) =
   apdexKind: apdexKind,
 
   new(definition):: validateAndApplyDefaults(definition),
+
+  // For testing only
+  _sliValidator:: sliValidator,
+
 }
