@@ -152,10 +152,16 @@ The ZFS cluster nodes can't be rebuild through GCP snapshots, because the `/var/
     name: patroni-zfs-ci-01-db-gstg.c.gitlab-staging-1.internal
     ```
 1. Start the Patroni Cluster
-    - Execute: `sudo systemctl patroni.service start`
+    - Execute: `sudo systemctl start patroni.service`
     - If you observe the `/var/log/gitlab/patroni/patroni.log` you should see the `INFO: waiting for standby_leader to bootstrap` message
 1. Remove the Patroni Cluster from DCS
     - Execute: `sudo gitlab-patronictl remove <cluster_name>`
+        - GSTG cluster name: gstg-patroni-zfs-ci
+        - GPRD cluster name: gprd-patroni-zfs-ci
     - If you observe the `/var/log/gitlab/patroni/patroni.log` you should see the `INFO: bootstrap_standby_leader in progress` message
 6. Check if `pg_basebackup` is running 
-    - Execute: `ps -ef | grep pg_basebackup` 
+    - Execute: `ps -ef | grep pg_basebackup`
+    - If there is a `/usr/lib/postgresql/??/bin/pg_basebackup` process running then you will have to wait it for completeion (which can take dozens of hours)
+7. After `pg_basebackup` is finished the replica should apply/stream pending WAL files from the primary/writer or its archive location (which can take dozens of hours);
+    - Check the logs at `/var/log/gitlab/postgresql/postgresql.csv` to see if there is progress in the WAL recovery;
+    - If the instance can't find the archive logs you should have to modify the archive location in `/etc/wal-g.d/env/WALG_GS_PREFIX`
