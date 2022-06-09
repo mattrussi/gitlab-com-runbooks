@@ -107,8 +107,23 @@ Replication Backup nodes are:
 1. Initialize the cluster using the `db-migration/pg-replica-rebuild` Ansible playbook, by executing:
     ```
     $ cd <workspace>/db-migration/pg-replica-rebuild
-    $ ansible-playbook -i inventory/<file> rebuild.yml
+    $ ansible-playbook -i inventory/gstg.yml rebuild-all.yml
     ```
+
+1. Force run of Chef-Client in the nodes to let all configuration files in sync with repo
+        <details><summary>Force run of Chef-Client in GSTG</summary>
+
+        ```
+        knife ssh -C 7 "role:gstg-base-db-patroni-ci" "sudo chef-client"
+        ````
+
+        </details>
+        <details><summary>Force run of Chef-Client in GPRD</summary>
+
+        ```
+        knife ssh -C 7 "role:gprd-base-db-patroni-ci" "sudo chef-client"
+        ````
+ 
 
 ## Recover the Patroni ZFS CI cluster
 
