@@ -112,20 +112,20 @@ Replication Backup nodes are:
     ```
 
 1. Force run of Chef-Client in the nodes to let all configuration files in sync with repo
-        <details><summary>Force run of Chef-Client in GSTG</summary>
+    <details><summary>Force run of Chef-Client in GSTG</summary>
 
-        ```
-        knife ssh -C 7 "role:gstg-base-db-patroni-ci" "sudo chef-client"
-        ```
+    ```
+    knife ssh -C 7 "role:gstg-base-db-patroni-ci" "sudo chef-client"
+    ```
 
-        </details>
-        <details><summary>Force run of Chef-Client in GPRD</summary>
+    </details>
+    <details><summary>Force run of Chef-Client in GPRD</summary>
 
-        ```
-        knife ssh -C 7 "role:gprd-base-db-patroni-ci" "sudo chef-client"
-        ```
- 
-         </details>
+    ```
+    knife ssh -C 7 "role:gprd-base-db-patroni-ci" "sudo chef-client"
+    ```
+
+    </details>
 
 ## Recover the Patroni ZFS CI cluster
 
