@@ -182,7 +182,12 @@ local RealSlackReceiver(channelWithDefaults) =
                       {{- .Name }}%3D%22{{- reReplaceAll " +" "%20" .Value -}}%22%2C%20
                   {{- end -}}
               {{- end -}}
-              alertname%3D%22{{ reReplaceAll " +" "%20" .CommonLabels.alertname }}%22%7D
+              alertname%3D%7E%22
+              {{- range $index, $alert := .Alerts -}}
+                {{- if $index -}}%7C{{- end -}}
+                {{- $alert.Labels.alertname -}}
+              {{- end -}}
+              %22%7D
             |||,
           ),
         ],
@@ -265,6 +270,12 @@ local defaultGroupBy = [
   'alertname',
   'stage',
   'component',
+];
+
+local groupByType = [
+  'type',
+  'env',
+  'environment',
 ];
 
 local Route(
@@ -371,6 +382,7 @@ local routingTree = Route(
         pager: 'pagerduty',
         env: { re: 'gprd|ops' },
       },
+      group_by=groupByType,
       continue=true,
       /* must be less than the 6h auto-resolve in PagerDuty */
       repeat_interval='2h',
@@ -487,6 +499,7 @@ local routingTree = Route(
     Route(
       receiver='production_slack_channel',
       matchers={ pager: 'pagerduty' },
+      group_by=groupByType,
       continue=false,
     ),
     // All else to #alerts
