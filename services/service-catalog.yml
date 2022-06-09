@@ -421,6 +421,58 @@ services:
         primary_grafana_dashboard:
         sentry_slug:
 
+  - name: customersdot
+    tier: sv
+    friendly_name: CustomersDot
+    teams:
+      - fulfillment
+    label: Service:Customersdot
+    business:
+      requirement: |
+        This service is needed so that GitLab.com customers can buy licenses to be able to utilize GitLab.com EE-level features.
+      customers:
+        - GitLab.com customers
+      business_value: |
+        Customers Dot allows customers to buy and upgrade subscriptions by adding more seats and add/edit payment records. It also manages self-managed licenses and has an admin interface.
+      SLA:
+        overall_sal_weighting:
+        availability:
+        response_time:
+    technical:
+      project:
+        - https://gitlab.com/gitlab-org/customers-gitlab-com
+      slx:
+      documents:
+        design:
+        architecture: https://gitlab.com/gitlab-org/customers-gitlab-com/-/blob/main/doc/architecture/index.md
+        readiness_review:
+        service:
+          - https://gitlab.com/gitlab-org/customers-gitlab-com/-/tree/main/doc
+        security:
+      dependencies:
+      logging:
+        - name: Rails
+          permalink: https://console.cloud.google.com/logs/query;query=resource.type%3D%22gce_instance%22%0Alog_name%3D%22projects%2Fgitlab-subscriptions-prod%2Flogs%2Frails.production%22;cursorTimestamp=2022-06-08T08:35:26.081Z?referrer=search&project=gitlab-subscriptions-prod
+        - name: Sidekiq
+          permalink: https://console.cloud.google.com/logs/query;query=resource.type%3D%22gce_instance%22%0Alog_name%3D%22projects%2Fgitlab-subscriptions-prod%2Flogs%2Fsidekiq.production%22;cursorTimestamp=2022-06-08T08:34:39.368440702Z?referrer=search&project=gitlab-subscriptions-prod/
+    infrastructure:
+      provider: gcp
+      architecture:
+      provisioning: terraform
+      accesses:
+        - account_name:  # User or system account that has access to the service components in the infra provider
+          access_type:   # Level of access
+          reviewed:      # Is it reviewed and approved?
+    operations:
+      maintenance:  # Link to maintenance procedures document
+      runbooks:
+      playbooks:
+        - https://gitlab.com/gitlab-com/gl-infra/customersdot-ansible
+    observability:
+      monitors:
+        sentry_slug: gitlab/customersgitlabcom/
+        primary_grafana_dashboard: customersdot-main/customersdot-overview
+
   - name: forum
     tier: sv
     friendly_name: forum.gitlab.com

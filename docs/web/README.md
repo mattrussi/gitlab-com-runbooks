@@ -29,6 +29,7 @@
 * [Chef Guidelines](../config_management/chef-guidelines.md)
 * [Chef Tips and Tools](../config_management/chef-workflow.md)
 * [Interacting with Consul](../consul/interaction.md)
+* [CustomersDot main troubleshoot documentation](../customersdot/overview.md)
 * [../elastic/elastic-cloud.md](../elastic/elastic-cloud.md)
 * [../elastic/kibana.md](../elastic/kibana.md)
 * [Management for forum.gitlab.com](../forum/discourse-forum.md)
