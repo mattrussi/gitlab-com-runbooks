@@ -7,7 +7,7 @@ metricsCatalog.serviceDefinition({
   tier: 'sv',
 
   monitoringThresholds: {
-    apdexScore: 0.9,
+    apdexScore: 0.95,
     errorRatio: 0.998,
   },
 
@@ -21,6 +21,8 @@ metricsCatalog.serviceDefinition({
   serviceLevelIndicators: {
     rails_requests:
       sliLibrary.get('customers_dot_requests_apdex').generateServiceLevelIndicator(extraSelector={}) {
+        severity: 's3',
+
         toolingLinks: [
           toolingLinks.stackdriverLogs(
             'Stackdriver Logs: CustomersDot',

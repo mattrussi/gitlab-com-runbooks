@@ -26,9 +26,8 @@ groups:
       alert_class: slo_violation
       alert_type: symptom
       feature_category: fulfillment_platform
-      pager: pagerduty
       rules_domain: general
-      severity: s2
+      severity: s3
       sli_type: apdex
       slo_alert: "yes"
       user_impacting: "yes"
@@ -37,12 +36,12 @@ groups:
       (
         (
           gitlab_component_apdex:ratio_1h{component="rails_requests",monitor="global",type="customersdot"}
-          < (1 - 14.4 * 0.100000)
+          < (1 - 14.4 * 0.050000)
         )
         and
         (
           gitlab_component_apdex:ratio_5m{component="rails_requests",monitor="global",type="customersdot"}
-          < (1 - 14.4 * 0.100000)
+          < (1 - 14.4 * 0.050000)
         )
       )
       and on(env,environment,tier,type,stage,component)
@@ -70,9 +69,8 @@ groups:
       alert_class: slo_violation
       alert_type: symptom
       feature_category: fulfillment_platform
-      pager: pagerduty
       rules_domain: general
-      severity: s2
+      severity: s3
       sli_type: apdex
       slo_alert: "yes"
       user_impacting: "yes"
@@ -81,12 +79,12 @@ groups:
       (
         (
           gitlab_component_apdex:ratio_6h{component="rails_requests",monitor="global",type="customersdot"}
-          < (1 - 6 * 0.100000)
+          < (1 - 6 * 0.050000)
         )
         and
         (
           gitlab_component_apdex:ratio_30m{component="rails_requests",monitor="global",type="customersdot"}
-          < (1 - 6 * 0.100000)
+          < (1 - 6 * 0.050000)
         )
       )
       and on(env,environment,tier,type,stage,component)
@@ -118,9 +116,8 @@ groups:
       alert_class: traffic_cessation
       alert_type: cause
       feature_category: fulfillment_platform
-      pager: pagerduty
       rules_domain: general
-      severity: s2
+      severity: s3
       sli_type: ops
       slo_alert: "no"
       user_impacting: "yes"
@@ -155,9 +152,8 @@ groups:
       alert_class: traffic_cessation
       alert_type: cause
       feature_category: fulfillment_platform
-      pager: pagerduty
       rules_domain: general
-      severity: s2
+      severity: s3
       sli_type: ops
       slo_alert: "no"
       user_impacting: "yes"
