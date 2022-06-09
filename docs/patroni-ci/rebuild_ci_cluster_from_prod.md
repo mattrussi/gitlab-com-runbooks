@@ -104,6 +104,7 @@ Replication Backup nodes are:
 
         </details>
     - Restart the VM instances through the GCP console
+
 1. Initialize the cluster using the `db-migration/pg-replica-rebuild` Ansible playbook, by executing:
     ```
     $ cd <workspace>/db-migration/pg-replica-rebuild
@@ -115,15 +116,16 @@ Replication Backup nodes are:
 
         ```
         knife ssh -C 7 "role:gstg-base-db-patroni-ci" "sudo chef-client"
-        ````
+        ```
 
         </details>
         <details><summary>Force run of Chef-Client in GPRD</summary>
 
         ```
         knife ssh -C 7 "role:gprd-base-db-patroni-ci" "sudo chef-client"
-        ````
+        ```
  
+         </details>
 
 ## Recover the Patroni ZFS CI cluster
 
