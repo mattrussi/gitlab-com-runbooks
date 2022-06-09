@@ -162,6 +162,6 @@ The ZFS cluster nodes can't be rebuild through GCP snapshots, because the `/var/
 6. Check if `pg_basebackup` is running 
     - Execute: `ps -ef | grep pg_basebackup`
     - If there is a `/usr/lib/postgresql/??/bin/pg_basebackup` process running then you will have to wait it for completeion (which can take dozens of hours)
-7. After `pg_basebackup` is finished the replica should apply/stream pending WAL files from the primary/writer or its archive location (which can take dozens of hours);
+7. After `pg_basebackup` is finished the replica should apply/stream pending WAL files from the primary/writer or its archive location (which can also take dozens of hours);
     - Check the logs at `/var/log/gitlab/postgresql/postgresql.csv` to see if there is progress in the WAL recovery;
     - If the instance can't find the archive logs you should have to modify the archive location in `/etc/wal-g.d/env/WALG_GS_PREFIX`
