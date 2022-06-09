@@ -1903,7 +1903,7 @@ services:
     observability:
       monitors:
         grafana_folder: RNfEDpLmz  # TODO: Update when provisioned
-        primary_grafana_dashboard: patroni-main/patroni-overview
+        primary_grafana_dashboard: patroni-ci-main/patroni-ci-overview
 
   - name: patroni-ci1
     tier: db
@@ -1991,7 +1991,7 @@ services:
     observability:
       monitors:
         grafana_folder: RNfEDpLmz  # TODO: Update when provisioned
-        primary_grafana_dashboard: patroni-ci/patroni-ci1-overview
+        primary_grafana_dashboard: patroni-ci1-main/patroni-ci1-overview
 
   - name: plantuml
     tier: sv
