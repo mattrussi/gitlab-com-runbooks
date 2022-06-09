@@ -30,6 +30,7 @@
 * [Cloudflare: Terraform Configuration](../cloudflare/terraform.md)
 * [Chef Tips and Tools](../config_management/chef-workflow.md)
 * [customers.gitlab.com](../customersdot/api-key-rotation.md)
+* [CustomersDot main troubleshoot documentation](../customersdot/overview.md)
 * [../elastic/elastic-cloud.md](../elastic/elastic-cloud.md)
 * [../elastic/elasticsearch-integration-in-gitlab.md](../elastic/elasticsearch-integration-in-gitlab.md)
 * [Blocking and disabling things in the HAProxy load balancers](../frontend/block-things-in-haproxy.md)

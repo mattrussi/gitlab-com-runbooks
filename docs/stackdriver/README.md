@@ -16,6 +16,7 @@
 
 ## Troubleshooting Pointers
 
+* [CustomersDot main troubleshoot documentation](../customersdot/overview.md)
 * [Gitaly is down](../gitaly/gitaly-down.md)
 * [../kube/k8s-operations.md](../kube/k8s-operations.md)
 * [Kubernetes](../kube/kubernetes.md)
