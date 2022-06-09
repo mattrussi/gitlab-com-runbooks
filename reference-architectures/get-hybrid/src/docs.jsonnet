@@ -1,11 +1,15 @@
 local services = (import 'gitlab-metrics-config.libsonnet').monitoredServices;
+local saturationMonitoring = (import 'gitlab-metrics-config.libsonnet').saturationMonitoring;
+local metricsCatalog = import 'servicemetrics/metrics-catalog.libsonnet';
+local saturationResource = import 'servicemetrics/saturation-resources.libsonnet';
 
 // This jsonnet file is used by `scripts/generate-reference-architecture-docs.sh` to
 // generate documentation that is embedded with the README.md file for this
 // reference-architecture.
 //
 // It will be called when scripts/generate-reference-architecture-configs.sh is executed.
-local generateDocsForService(service) =
+
+local generateSLISnippetForService(service) =
   local slis = service.listServiceLevelIndicators();
 
   // header +
@@ -26,15 +30,47 @@ local generateDocsForService(service) =
         '-',
   }, slis));
 
+local generateSaturationSnippetForResourceType(resourceType) =
+  local resource = saturationMonitoring[resourceType];
+
+  local matchingServices = std.filter(function(service) resource.appliesToService(service.type), services);
+  local matchingServiceDescriptors = std.map(function(service) '`' + service.type + '`', matchingServices);
+
+  |||
+    | `%(resourceType)s` | %(services)s | %(description)s | %(horizontallyScalable)s | %(alertingThreshold)g%% |
+  ||| % {
+    resourceType: resourceType,
+    services: std.join(', ', matchingServiceDescriptors),
+    description: std.strReplace(resource.description, '\n', ' '),
+    horizontallyScalable: if resource.horizontallyScalable then '✅' else '-',
+    alertingThreshold: resource.slos.hard * 100,
+  };
 {
-  'README.snippet.md':
+  'README.snippet-slis.md':
     |||
       ## Service Level Indicators
 
       | **Service** | **Component** | **Description** | **Apdex** | **Error Ratio** | **Operation Rate** |
       | ----------- | ------------- | --------------- | --------- | --------------- | ------------------ |
-    ||| + std.join('',
-                   std.map(
-                     generateDocsForService, services
-                   )),
+    ||| +
+    std.join(
+      '',
+      std.map(
+        generateSLISnippetForService, services
+      )
+    ),
+
+  'README.snippet-saturation.md':
+    |||
+      ### Monitored Saturation Resources
+
+      | **Resource** | **Applicable Services** | **Description** | **Horizontally Scalable?** | **Alerting Threshold** |
+      | ------------ | ----------------------- | --------------- | -------------------------- | -----------------------|
+    ||| +
+    std.join(
+      '',
+      std.map(
+        generateSaturationSnippetForResourceType, std.sort(std.objectFields(saturationMonitoring))
+      )
+    ),
 }
