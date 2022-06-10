@@ -57,8 +57,8 @@ Make sure that **there are no CI Read requests being made in the patroni-ci clus
     ```
     
 Note: _At the last update (2022/06/10) the Replication Backup nodes were_ :
-    - GSTG: patroni-06-db-gstg.c.gitlab-staging-1.internal
-    - GPRD: patroni-10-db-gprd.c.gitlab-production.internal
+- GSTG: patroni-06-db-gstg.c.gitlab-staging-1.internal
+- GPRD: patroni-10-db-gprd.c.gitlab-production.internal
 
 
 ## Recover the Patroni CI Standby Cluster
