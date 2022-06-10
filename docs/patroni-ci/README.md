@@ -64,7 +64,7 @@ The resolution to this problem basically consist into temporarily routing the CI
 cluster in our `patroni-main` Replicas, while we can rebuild and re-sync the `patroni-ci` cluster.
 
 To handle the CI `read-only` workload in case of incident, all `patroni-main` nodes have 3 additional pgbouncers deployed and listening in 6435, 6436 and 6437 TCP ports.
-If they are not being used these ports are defined as `idle-ci-db-replica` Consul service name.
+If they are not being used these ports are defined as `idle-ci-db-replica` Consul service name and as the name suggests, nothing points at these extra pgbouncers.
 
 ##### Resolution Steps - Route CI read-only workload to Main
 
