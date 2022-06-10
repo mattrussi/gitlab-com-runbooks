@@ -49,16 +49,16 @@ Make sure that **there are no CI Read requests being made in the patroni-ci clus
 1. Find which instance is the database cluster Backup Node
     - GSTG: `knife search 'roles:gstg-base-db-patroni-backup-replica AND roles:gstg-base-db-patroni-main' --id-only`
     - GPRD: `knife search 'roles:gprd-base-db-patroni-backup-replica AND roles:gprd-base-db-patroni-v12' --id-only`
-    - _At 2022/06/10_ Replication Backup nodes are:
-        - GSTG: patroni-06-db-gstg.c.gitlab-staging-1.internal
-        - GPRD: patroni-10-db-gprd.c.gitlab-production.internal
-
 1. Log in into the Backup Node and execute a gcs-snapshot:
     ```
     sudo su - gitlab-psql
     PATH="/usr/local/sbin:/usr/sbin/:/sbin:/usr/local/bin:/usr/bin:/bin:/snap/bin"
     /usr/local/bin/gcs-snapshot.sh
     ```
+
+_Note: Replication Backup nodes should be (last update _2022/06/10_):
+    - GSTG: patroni-06-db-gstg.c.gitlab-staging-1.internal
+    - GPRD: patroni-10-db-gprd.c.gitlab-production.internal
 
 
 ## Recover the Patroni CI Standby Cluster
