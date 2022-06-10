@@ -54,9 +54,9 @@ Make sure that **there are no CI Read requests being made in the patroni-ci clus
     sudo su - gitlab-psql
     PATH="/usr/local/sbin:/usr/sbin/:/sbin:/usr/local/bin:/usr/bin:/bin:/snap/bin"
     /usr/local/bin/gcs-snapshot.sh
-    ```
-
-_Note: Replication Backup nodes should be (last update _2022/06/10_):
+    `
+    
+Note: _At the last update (2022/06/10) the Replication Backup nodes were:_
     - GSTG: patroni-06-db-gstg.c.gitlab-staging-1.internal
     - GPRD: patroni-10-db-gprd.c.gitlab-production.internal
 
