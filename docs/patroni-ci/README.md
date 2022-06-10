@@ -70,7 +70,7 @@ If they are not being used these ports are defined as `idle-ci-db-replica` Consu
 
 In case of incident you will have to:
 
-   - **1.** In `patroni-main` nodes, rename the `idle-ci-db-replica` ports to answer as `ci-db-replica` by the Consul service name. We have a sample MR at for what this would involve - https://gitlab.com/gitlab-com/gl-infra/chef-repo/-/merge_requests/1952/diffs
+   - **1.** In `patroni-main` nodes, rename the Consul service `idle-ci-db-replica` to `ci-db-replica`. We have a sample MR at for what this would involve - https://gitlab.com/gitlab-com/gl-infra/chef-repo/-/merge_requests/1952/diffs
 
    - **2.** In `patroni-ci` nodes, rename Consul service name from `ci-db-replica` to `dormant-ci-db-replica`. We have a sample MR at for what this would involve - https://gitlab.com/gitlab-com/gl-infra/chef-repo/-/merge_requests/1875/diffs
 
