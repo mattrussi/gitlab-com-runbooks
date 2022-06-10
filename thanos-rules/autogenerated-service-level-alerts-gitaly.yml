@@ -714,9 +714,11 @@ groups:
       grafana_variables: environment,stage
       promql_template_1: |
         sum by (env,environment,tier,stage) (
-          label_replace(rate(gitaly_service_client_requests_total{environment="{{ $labels.environment }}",grpc_code!~"AlreadyExists|Canceled|DeadlineExceeded|FailedPrecondition|InvalidArgument|NotFound|OK|PermissionDenied|Unauthenticated",grpc_service!="gitaly.OperationService",job="gitaly",stage="{{ $labels.stage }}"}[5m]), "_c", "0", "", "")
+          label_replace(rate(gitaly_service_client_requests_total{environment="{{ $labels.environment }}",grpc_code!~"AlreadyExists|Canceled|DeadlineExceeded|FailedPrecondition|InvalidArgument|NotFound|OK|PermissionDenied|Unauthenticated|Unavailable",grpc_service!="gitaly.OperationService",job="gitaly",stage="{{ $labels.stage }}"}[5m]), "_c", "0", "", "")
           or
           label_replace(rate(gitaly_service_client_requests_total{deadline_type!="limited",environment="{{ $labels.environment }}",grpc_code="DeadlineExceeded",grpc_service!="gitaly.OperationService",job="gitaly",stage="{{ $labels.stage }}"}[5m]), "_c", "1", "", "")
+          or
+          label_replace(rate(gitaly_service_client_requests_total{environment="{{ $labels.environment }}",grpc_code="Unavailable",grpc_method!~"PostUploadPackWithSidechannel|SSHUploadPackWithSidechannel",grpc_service!="gitaly.OperationService",job="gitaly",stage="{{ $labels.stage }}"}[5m]), "_c", "2", "", "")
         )
       runbook: docs/gitaly/README.md
     labels:
@@ -764,9 +766,11 @@ groups:
       grafana_variables: environment,stage
       promql_template_1: |
         sum by (env,environment,tier,stage) (
-          label_replace(rate(gitaly_service_client_requests_total{environment="{{ $labels.environment }}",grpc_code!~"AlreadyExists|Canceled|DeadlineExceeded|FailedPrecondition|InvalidArgument|NotFound|OK|PermissionDenied|Unauthenticated",grpc_service!="gitaly.OperationService",job="gitaly",stage="{{ $labels.stage }}"}[5m]), "_c", "0", "", "")
+          label_replace(rate(gitaly_service_client_requests_total{environment="{{ $labels.environment }}",grpc_code!~"AlreadyExists|Canceled|DeadlineExceeded|FailedPrecondition|InvalidArgument|NotFound|OK|PermissionDenied|Unauthenticated|Unavailable",grpc_service!="gitaly.OperationService",job="gitaly",stage="{{ $labels.stage }}"}[5m]), "_c", "0", "", "")
           or
           label_replace(rate(gitaly_service_client_requests_total{deadline_type!="limited",environment="{{ $labels.environment }}",grpc_code="DeadlineExceeded",grpc_service!="gitaly.OperationService",job="gitaly",stage="{{ $labels.stage }}"}[5m]), "_c", "1", "", "")
+          or
+          label_replace(rate(gitaly_service_client_requests_total{environment="{{ $labels.environment }}",grpc_code="Unavailable",grpc_method!~"PostUploadPackWithSidechannel|SSHUploadPackWithSidechannel",grpc_service!="gitaly.OperationService",job="gitaly",stage="{{ $labels.stage }}"}[5m]), "_c", "2", "", "")
         )
       runbook: docs/gitaly/README.md
     labels:
@@ -816,9 +820,11 @@ groups:
       grafana_variables: environment,stage
       promql_template_1: |
         sum by (env,environment,tier,stage,shard,fqdn) (
-          label_replace(rate(gitaly_service_client_requests_total{environment="{{ $labels.environment }}",fqdn="{{ $labels.fqdn }}",grpc_code!~"AlreadyExists|Canceled|DeadlineExceeded|FailedPrecondition|InvalidArgument|NotFound|OK|PermissionDenied|Unauthenticated",grpc_service!="gitaly.OperationService",job="gitaly",shard="{{ $labels.shard }}",stage="{{ $labels.stage }}"}[5m]), "_c", "0", "", "")
+          label_replace(rate(gitaly_service_client_requests_total{environment="{{ $labels.environment }}",fqdn="{{ $labels.fqdn }}",grpc_code!~"AlreadyExists|Canceled|DeadlineExceeded|FailedPrecondition|InvalidArgument|NotFound|OK|PermissionDenied|Unauthenticated|Unavailable",grpc_service!="gitaly.OperationService",job="gitaly",shard="{{ $labels.shard }}",stage="{{ $labels.stage }}"}[5m]), "_c", "0", "", "")
           or
           label_replace(rate(gitaly_service_client_requests_total{deadline_type!="limited",environment="{{ $labels.environment }}",fqdn="{{ $labels.fqdn }}",grpc_code="DeadlineExceeded",grpc_service!="gitaly.OperationService",job="gitaly",shard="{{ $labels.shard }}",stage="{{ $labels.stage }}"}[5m]), "_c", "1", "", "")
+          or
+          label_replace(rate(gitaly_service_client_requests_total{environment="{{ $labels.environment }}",fqdn="{{ $labels.fqdn }}",grpc_code="Unavailable",grpc_method!~"PostUploadPackWithSidechannel|SSHUploadPackWithSidechannel",grpc_service!="gitaly.OperationService",job="gitaly",shard="{{ $labels.shard }}",stage="{{ $labels.stage }}"}[5m]), "_c", "2", "", "")
         )
       runbook: docs/gitaly/README.md
     labels:
@@ -868,9 +874,11 @@ groups:
       grafana_variables: environment,stage
       promql_template_1: |
         sum by (env,environment,tier,stage,shard,fqdn) (
-          label_replace(rate(gitaly_service_client_requests_total{environment="{{ $labels.environment }}",fqdn="{{ $labels.fqdn }}",grpc_code!~"AlreadyExists|Canceled|DeadlineExceeded|FailedPrecondition|InvalidArgument|NotFound|OK|PermissionDenied|Unauthenticated",grpc_service!="gitaly.OperationService",job="gitaly",shard="{{ $labels.shard }}",stage="{{ $labels.stage }}"}[5m]), "_c", "0", "", "")
+          label_replace(rate(gitaly_service_client_requests_total{environment="{{ $labels.environment }}",fqdn="{{ $labels.fqdn }}",grpc_code!~"AlreadyExists|Canceled|DeadlineExceeded|FailedPrecondition|InvalidArgument|NotFound|OK|PermissionDenied|Unauthenticated|Unavailable",grpc_service!="gitaly.OperationService",job="gitaly",shard="{{ $labels.shard }}",stage="{{ $labels.stage }}"}[5m]), "_c", "0", "", "")
           or
           label_replace(rate(gitaly_service_client_requests_total{deadline_type!="limited",environment="{{ $labels.environment }}",fqdn="{{ $labels.fqdn }}",grpc_code="DeadlineExceeded",grpc_service!="gitaly.OperationService",job="gitaly",shard="{{ $labels.shard }}",stage="{{ $labels.stage }}"}[5m]), "_c", "1", "", "")
+          or
+          label_replace(rate(gitaly_service_client_requests_total{environment="{{ $labels.environment }}",fqdn="{{ $labels.fqdn }}",grpc_code="Unavailable",grpc_method!~"PostUploadPackWithSidechannel|SSHUploadPackWithSidechannel",grpc_service!="gitaly.OperationService",job="gitaly",shard="{{ $labels.shard }}",stage="{{ $labels.stage }}"}[5m]), "_c", "2", "", "")
         )
       runbook: docs/gitaly/README.md
     labels:
@@ -1066,9 +1074,11 @@ groups:
       grafana_variables: environment,stage
       promql_template_1: |
         sum by (env,environment,tier,stage) (
-          label_replace(rate(gitaly_service_client_requests_total{environment="{{ $labels.environment }}",grpc_code!~"AlreadyExists|Canceled|DeadlineExceeded|FailedPrecondition|InvalidArgument|NotFound|OK|PermissionDenied|Unauthenticated",grpc_service="gitaly.OperationService",job="gitaly",stage="{{ $labels.stage }}"}[5m]), "_c", "0", "", "")
+          label_replace(rate(gitaly_service_client_requests_total{environment="{{ $labels.environment }}",grpc_code!~"AlreadyExists|Canceled|DeadlineExceeded|FailedPrecondition|InvalidArgument|NotFound|OK|PermissionDenied|Unauthenticated|Unavailable",grpc_service="gitaly.OperationService",job="gitaly",stage="{{ $labels.stage }}"}[5m]), "_c", "0", "", "")
           or
           label_replace(rate(gitaly_service_client_requests_total{deadline_type!="limited",environment="{{ $labels.environment }}",grpc_code="DeadlineExceeded",grpc_service="gitaly.OperationService",job="gitaly",stage="{{ $labels.stage }}"}[5m]), "_c", "1", "", "")
+          or
+          label_replace(rate(gitaly_service_client_requests_total{environment="{{ $labels.environment }}",grpc_code="Unavailable",grpc_method!~"PostUploadPackWithSidechannel|SSHUploadPackWithSidechannel",grpc_service="gitaly.OperationService",job="gitaly",stage="{{ $labels.stage }}"}[5m]), "_c", "2", "", "")
         )
       runbook: docs/gitaly/README.md
     labels:
@@ -1116,9 +1126,11 @@ groups:
       grafana_variables: environment,stage
       promql_template_1: |
         sum by (env,environment,tier,stage) (
-          label_replace(rate(gitaly_service_client_requests_total{environment="{{ $labels.environment }}",grpc_code!~"AlreadyExists|Canceled|DeadlineExceeded|FailedPrecondition|InvalidArgument|NotFound|OK|PermissionDenied|Unauthenticated",grpc_service="gitaly.OperationService",job="gitaly",stage="{{ $labels.stage }}"}[5m]), "_c", "0", "", "")
+          label_replace(rate(gitaly_service_client_requests_total{environment="{{ $labels.environment }}",grpc_code!~"AlreadyExists|Canceled|DeadlineExceeded|FailedPrecondition|InvalidArgument|NotFound|OK|PermissionDenied|Unauthenticated|Unavailable",grpc_service="gitaly.OperationService",job="gitaly",stage="{{ $labels.stage }}"}[5m]), "_c", "0", "", "")
           or
           label_replace(rate(gitaly_service_client_requests_total{deadline_type!="limited",environment="{{ $labels.environment }}",grpc_code="DeadlineExceeded",grpc_service="gitaly.OperationService",job="gitaly",stage="{{ $labels.stage }}"}[5m]), "_c", "1", "", "")
+          or
+          label_replace(rate(gitaly_service_client_requests_total{environment="{{ $labels.environment }}",grpc_code="Unavailable",grpc_method!~"PostUploadPackWithSidechannel|SSHUploadPackWithSidechannel",grpc_service="gitaly.OperationService",job="gitaly",stage="{{ $labels.stage }}"}[5m]), "_c", "2", "", "")
         )
       runbook: docs/gitaly/README.md
     labels:
@@ -1168,9 +1180,11 @@ groups:
       grafana_variables: environment,stage
       promql_template_1: |
         sum by (env,environment,tier,stage,shard,fqdn) (
-          label_replace(rate(gitaly_service_client_requests_total{environment="{{ $labels.environment }}",fqdn="{{ $labels.fqdn }}",grpc_code!~"AlreadyExists|Canceled|DeadlineExceeded|FailedPrecondition|InvalidArgument|NotFound|OK|PermissionDenied|Unauthenticated",grpc_service="gitaly.OperationService",job="gitaly",shard="{{ $labels.shard }}",stage="{{ $labels.stage }}"}[5m]), "_c", "0", "", "")
+          label_replace(rate(gitaly_service_client_requests_total{environment="{{ $labels.environment }}",fqdn="{{ $labels.fqdn }}",grpc_code!~"AlreadyExists|Canceled|DeadlineExceeded|FailedPrecondition|InvalidArgument|NotFound|OK|PermissionDenied|Unauthenticated|Unavailable",grpc_service="gitaly.OperationService",job="gitaly",shard="{{ $labels.shard }}",stage="{{ $labels.stage }}"}[5m]), "_c", "0", "", "")
           or
           label_replace(rate(gitaly_service_client_requests_total{deadline_type!="limited",environment="{{ $labels.environment }}",fqdn="{{ $labels.fqdn }}",grpc_code="DeadlineExceeded",grpc_service="gitaly.OperationService",job="gitaly",shard="{{ $labels.shard }}",stage="{{ $labels.stage }}"}[5m]), "_c", "1", "", "")
+          or
+          label_replace(rate(gitaly_service_client_requests_total{environment="{{ $labels.environment }}",fqdn="{{ $labels.fqdn }}",grpc_code="Unavailable",grpc_method!~"PostUploadPackWithSidechannel|SSHUploadPackWithSidechannel",grpc_service="gitaly.OperationService",job="gitaly",shard="{{ $labels.shard }}",stage="{{ $labels.stage }}"}[5m]), "_c", "2", "", "")
         )
       runbook: docs/gitaly/README.md
     labels:
@@ -1220,9 +1234,11 @@ groups:
       grafana_variables: environment,stage
       promql_template_1: |
         sum by (env,environment,tier,stage,shard,fqdn) (
-          label_replace(rate(gitaly_service_client_requests_total{environment="{{ $labels.environment }}",fqdn="{{ $labels.fqdn }}",grpc_code!~"AlreadyExists|Canceled|DeadlineExceeded|FailedPrecondition|InvalidArgument|NotFound|OK|PermissionDenied|Unauthenticated",grpc_service="gitaly.OperationService",job="gitaly",shard="{{ $labels.shard }}",stage="{{ $labels.stage }}"}[5m]), "_c", "0", "", "")
+          label_replace(rate(gitaly_service_client_requests_total{environment="{{ $labels.environment }}",fqdn="{{ $labels.fqdn }}",grpc_code!~"AlreadyExists|Canceled|DeadlineExceeded|FailedPrecondition|InvalidArgument|NotFound|OK|PermissionDenied|Unauthenticated|Unavailable",grpc_service="gitaly.OperationService",job="gitaly",shard="{{ $labels.shard }}",stage="{{ $labels.stage }}"}[5m]), "_c", "0", "", "")
           or
           label_replace(rate(gitaly_service_client_requests_total{deadline_type!="limited",environment="{{ $labels.environment }}",fqdn="{{ $labels.fqdn }}",grpc_code="DeadlineExceeded",grpc_service="gitaly.OperationService",job="gitaly",shard="{{ $labels.shard }}",stage="{{ $labels.stage }}"}[5m]), "_c", "1", "", "")
+          or
+          label_replace(rate(gitaly_service_client_requests_total{environment="{{ $labels.environment }}",fqdn="{{ $labels.fqdn }}",grpc_code="Unavailable",grpc_method!~"PostUploadPackWithSidechannel|SSHUploadPackWithSidechannel",grpc_service="gitaly.OperationService",job="gitaly",shard="{{ $labels.shard }}",stage="{{ $labels.stage }}"}[5m]), "_c", "2", "", "")
         )
       runbook: docs/gitaly/README.md
     labels:
