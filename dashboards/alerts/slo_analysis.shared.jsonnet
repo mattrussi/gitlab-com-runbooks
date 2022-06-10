@@ -238,11 +238,12 @@ local multiburnRateAlertsDashboard(
 
   local selectorHash = dashboardAndSelector.selectorHash;
 
+  local sloMetricName = if sliType == 'apdex' then
+    apdexSLOMetric
+  else
+    errorSLOMetric;
   local slaQuery =
-    if sliType == 'apdex' then
-      'avg(slo:min:events:gitlab_service_apdex:ratio{monitor="global",type="$type"}) by (type)'
-    else
-      'avg(slo:min:events:gitlab_service_apdex:ratio{monitor="global",type="$type"}) by (type)';
+    'avg(%s{monitor="global",type="$type"}) by (type)' % [sloMetricName];
 
   local pairFunction = if sliType == 'apdex' then apdexBurnRatePair else errorBurnRatePair;
 
