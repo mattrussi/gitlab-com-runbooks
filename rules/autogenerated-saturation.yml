@@ -688,36 +688,6 @@ groups:
       )
   - record: gitlab_component_saturation:ratio
     labels:
-      component: pg_vacuum_activity
-    expr: |
-      max by(environment, tier, type, stage) (
-        clamp_min(
-          clamp_max(
-            (
-              sum by (environment, tier, type, stage) (
-                avg_over_time(pg_stat_activity_autovacuum_active_workers_count{type=~"patroni|patroni-registry|patroni-ci|patroni-ci1|sentry"}[1m])
-                and on (instance, job) (pg_replication_is_replica{type=~"patroni|patroni-registry|patroni-ci|patroni-ci1|sentry"} == 0)
-              )
-              or
-              clamp_max(
-                group by (environment, tier, type, stage) (
-                  pg_settings_autovacuum_max_workers{type=~"patroni|patroni-registry|patroni-ci|patroni-ci1|sentry"}
-                  and on (instance, job) (pg_replication_is_replica{type=~"patroni|patroni-registry|patroni-ci|patroni-ci1|sentry"} == 0)
-                ),
-              0)
-            )
-            /
-            avg by (environment, tier, type, stage) (
-              pg_settings_autovacuum_max_workers{type=~"patroni|patroni-registry|patroni-ci|patroni-ci1|sentry"}
-              and on (instance, job) (pg_replication_is_replica{type=~"patroni|patroni-registry|patroni-ci|patroni-ci1|sentry"} == 0)
-            )
-            ,
-            1)
-        ,
-        0)
-      )
-  - record: gitlab_component_saturation:ratio
-    labels:
       component: pg_xid_wraparound
     expr: |
       max by(environment, tier, type, stage) (
@@ -1510,14 +1480,6 @@ groups:
     expr: "0.33"
   - record: slo:max:soft:gitlab_component_saturation:ratio
     labels:
-      component: pg_vacuum_activity
-    expr: "0.9"
-  - record: slo:max:hard:gitlab_component_saturation:ratio
-    labels:
-      component: pg_vacuum_activity
-    expr: "1"
-  - record: slo:max:soft:gitlab_component_saturation:ratio
-    labels:
       component: pg_xid_wraparound
     expr: "0.6"
   - record: slo:max:hard:gitlab_component_saturation:ratio
@@ -2038,14 +2000,6 @@ groups:
       horiz_scaling: "no"
       quantile: max
       severity: s1
-    expr: "1"
-  - record: gitlab_component_saturation_info
-    labels:
-      capacity_planning_strategy: quantile95_1w
-      component: pg_vacuum_activity
-      horiz_scaling: "yes"
-      quantile: max
-      severity: s2
     expr: "1"
   - record: gitlab_component_saturation_info
     labels:
@@ -4010,65 +3964,6 @@ groups:
     expr: |
       gitlab_component_saturation:ratio{component="pg_txid_vacuum_to_wraparound"} > on(component) group_left
       slo:max:hard:gitlab_component_saturation:ratio{component="pg_txid_vacuum_to_wraparound"}
-  - alert: component_saturation_slo_out_of_bounds
-    for: 60m
-    annotations:
-      title: The Postgres Autovacuum Activity (sampled) resource of the {{ $labels.type
-        }} service ({{ $labels.stage }} stage) has a saturation exceeding SLO and
-        is close to its capacity limit.
-      description: |
-        This means that this resource is running close to capacity and is at risk of exceeding its current capacity limit.
-
-        Details of the Postgres Autovacuum Activity (sampled) resource:
-
-        Measures the number of active autovacuum workers, as a percentage of the maximum, configured via the `autovacuum_max_workers` setting.
-
-        If this is saturated for a sustained period, it may indicate that postgres is struggling to keep up with vacuum activity.
-
-        This could ultimately lead to a transaction ID wraparound situation: see https://gitlab.com/gitlab-com/runbooks/-/blob/master/docs/patroni/pg_xid_wraparound_alert.md
-      grafana_dashboard_id: alerts-sat_pg_vacuum_activity
-      grafana_dashboard_link: https://dashboards.gitlab.net/d/alerts-sat_pg_vacuum_activity?from=now-6h/m&to=now-1m/m&var-environment={{
-        $labels.environment }}&var-type={{ $labels.type }}&var-stage={{ $labels.stage
-        }}
-      grafana_min_zoom_hours: "6"
-      grafana_panel_id: "1494397745"
-      grafana_variables: environment,type,stage
-      promql_query: |
-        max by(environment, tier, type, stage) (
-          clamp_min(
-            clamp_max(
-              (
-                sum by (environment, tier, type, stage) (
-                  avg_over_time(pg_stat_activity_autovacuum_active_workers_count{environment="{{ $labels.environment }}",stage="{{ $labels.stage }}",type="{{ $labels.type }}"}[1m])
-                  and on (instance, job) (pg_replication_is_replica{environment="{{ $labels.environment }}",stage="{{ $labels.stage }}",type="{{ $labels.type }}"} == 0)
-                )
-                or
-                clamp_max(
-                  group by (environment, tier, type, stage) (
-                    pg_settings_autovacuum_max_workers{environment="{{ $labels.environment }}",stage="{{ $labels.stage }}",type="{{ $labels.type }}"}
-                    and on (instance, job) (pg_replication_is_replica{environment="{{ $labels.environment }}",stage="{{ $labels.stage }}",type="{{ $labels.type }}"} == 0)
-                  ),
-                0)
-              )
-              /
-              avg by (environment, tier, type, stage) (
-                pg_settings_autovacuum_max_workers{environment="{{ $labels.environment }}",stage="{{ $labels.stage }}",type="{{ $labels.type }}"}
-                and on (instance, job) (pg_replication_is_replica{environment="{{ $labels.environment }}",stage="{{ $labels.stage }}",type="{{ $labels.type }}"} == 0)
-              )
-              ,
-              1)
-          ,
-          0)
-        )
-      runbook: docs/{{ $labels.type }}/README.md
-    labels:
-      alert_type: cause
-      pager: pagerduty
-      rules_domain: general
-      severity: s2
-    expr: |
-      gitlab_component_saturation:ratio{component="pg_vacuum_activity"} > on(component) group_left
-      slo:max:hard:gitlab_component_saturation:ratio{component="pg_vacuum_activity"}
   - alert: component_saturation_slo_out_of_bounds
     for: 5m
     annotations:
