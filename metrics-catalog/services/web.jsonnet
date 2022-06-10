@@ -53,7 +53,7 @@ metricsCatalog.serviceDefinition({
   },
   recordingRuleMetrics: [
     'http_requests_total',
-  ] + sliLibrary.get('rails_request_apdex').recordingRuleMetrics,
+  ] + sliLibrary.get('rails_request').recordingRuleMetrics,
   provisioning: {
     vms: false,
     kubernetes: true,
@@ -194,7 +194,7 @@ metricsCatalog.serviceDefinition({
     },
 
     rails_requests:
-      sliLibrary.get('rails_request_apdex').generateServiceLevelIndicator(railsSelector) {
+      sliLibrary.get('rails_request').generateServiceLevelIndicator(railsSelector) {
         toolingLinks: [
           toolingLinks.kibana(title='Rails', index='rails'),
         ],
