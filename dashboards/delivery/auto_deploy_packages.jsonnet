@@ -78,6 +78,27 @@ basic.dashboard(
 )
 .addPanel(
   graphPanel.new(
+    'Active coordinated pipelines',
+    description='Number of deployments pipelines that are running, scheduled, or manual',
+    decimals=0,
+    stack=true,
+    legend_current=true,
+    legend_alignAsTable=true,
+    legend_values=true,
+    legend_max=true,
+    legend_avg=true,
+    min=0,
+  )
+  .addTarget(
+    prometheus.target(
+      'max(delivery_deployment_pipelines_total{status=~"scheduled|running|manual"}) by (status)',
+      legendFormat='{{status}}',
+    ),
+  ), gridPos={ x: 0, y: 100, w: 24, h: 12 }
+)
+
+.addPanel(
+  graphPanel.new(
     '🚀 Number of deployments started per day',
     description='Number of deployments started per day.',
     decimals=0,
@@ -92,5 +113,6 @@ basic.dashboard(
       'sum(increase(delivery_deployment_started_total{target_env!="gstg-ref"}[1d])) by (target_env)',
       legendFormat='{{target_env}}',
     ),
-  ), gridPos={ x: 0, y: 10, w: 24, h: 12 }
+  ), gridPos={ x: 0, y: 200, w: 24, h: 12 }
 )
+.trailer()
