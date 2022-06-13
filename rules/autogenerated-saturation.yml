@@ -1353,11 +1353,11 @@ groups:
   - record: slo:max:soft:gitlab_component_saturation:ratio
     labels:
       component: kube_horizontalpodautoscaler_desired_replicas
-    expr: "0.95"
+    expr: "0.9"
   - record: slo:max:hard:gitlab_component_saturation:ratio
     labels:
       component: kube_horizontalpodautoscaler_desired_replicas
-    expr: "0.9"
+    expr: "0.95"
   - record: slo:max:soft:gitlab_component_saturation:ratio
     labels:
       component: kube_persistent_volume_claim_disk_space
