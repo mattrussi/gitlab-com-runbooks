@@ -576,22 +576,26 @@ deploy_dashboards:
 docker_image_test:
   extends: .docker_image_template
   stage: test
+  needs: []
   script:
     - docker build
-      --build-arg GL_ASDF_GO_JSONNET_VERSION=${GL_ASDF_GO_JSONNET_VERSION}
-      --build-arg GL_ASDF_JB_VERSION=${GL_ASDF_JB_VERSION}
-      --build-arg GL_ASDF_JSONNET_TOOL_VERSION=${GL_ASDF_JSONNET_TOOL_VERSION}
-      --build-arg GL_ASDF_PROMTOOL_VERSION=${GL_ASDF_PROMTOOL_VERSION}
-      --build-arg GL_ASDF_RUBY_VERSION=${GL_ASDF_RUBY_VERSION}
-      --build-arg GL_ASDF_SHELLCHECK_VERSION=${GL_ASDF_SHELLCHECK_VERSION}
-      --build-arg GL_ASDF_SHFMT_VERSION=${GL_ASDF_SHFMT_VERSION}
-      --build-arg GL_ASDF_TERRAFORM_VERSION=${GL_ASDF_TERRAFORM_VERSION}
-      --build-arg GL_ASDF_THANOS_VERSION=${GL_ASDF_THANOS_VERSION}
-      --build-arg GL_ASDF_YQ_VERSION=${GL_ASDF_YQ_VERSION}
+      --build-arg GL_ASDF_GO_JSONNET_VERSION
+      --build-arg GL_ASDF_JB_VERSION
+      --build-arg GL_ASDF_JSONNET_TOOL_VERSION
+      --build-arg GL_ASDF_PROMTOOL_VERSION
+      --build-arg GL_ASDF_RUBY_VERSION
+      --build-arg GL_ASDF_SHELLCHECK_VERSION
+      --build-arg GL_ASDF_SHFMT_VERSION
+      --build-arg GL_ASDF_TERRAFORM_VERSION
+      --build-arg GL_ASDF_THANOS_VERSION
+      --build-arg GL_ASDF_YQ_VERSION
+      --build-arg GL_ASDF_AMTOOL_VERSION
       .
   only:
     changes:
       - Dockerfile
+      - .tool-versions
+      - .gitlab-ci-asdf-versions.yml
     refs:
       - merge_requests
       - tags
@@ -605,16 +609,17 @@ docker_image_build:
     - export ci_image_tag=${CI_COMMIT_TAG:-$CI_COMMIT_SHORT_SHA}
     - echo ${CI_JOB_TOKEN} | docker login --password-stdin -u $CI_REGISTRY_USER $CI_REGISTRY
     - docker build -t ${IMAGE}:$ci_image_tag -t ${IMAGE}:latest
-        --build-arg GL_ASDF_GO_JSONNET_VERSION=${GL_ASDF_GO_JSONNET_VERSION}
-        --build-arg GL_ASDF_JB_VERSION=${GL_ASDF_JB_VERSION}
-        --build-arg GL_ASDF_JSONNET_TOOL_VERSION=${GL_ASDF_JSONNET_TOOL_VERSION}
-        --build-arg GL_ASDF_PROMTOOL_VERSION=${GL_ASDF_PROMTOOL_VERSION}
-        --build-arg GL_ASDF_RUBY_VERSION=${GL_ASDF_RUBY_VERSION}
-        --build-arg GL_ASDF_SHELLCHECK_VERSION=${GL_ASDF_SHELLCHECK_VERSION}
-        --build-arg GL_ASDF_SHFMT_VERSION=3.5.1
-        --build-arg GL_ASDF_TERRAFORM_VERSION=${GL_ASDF_TERRAFORM_VERSION}
-        --build-arg GL_ASDF_THANOS_VERSION=${GL_ASDF_THANOS_VERSION}
-        --build-arg GL_ASDF_YQ_VERSION=${GL_ASDF_YQ_VERSION}
+        --build-arg GL_ASDF_GO_JSONNET_VERSION
+        --build-arg GL_ASDF_JB_VERSION
+        --build-arg GL_ASDF_JSONNET_TOOL_VERSION
+        --build-arg GL_ASDF_PROMTOOL_VERSION
+        --build-arg GL_ASDF_RUBY_VERSION
+        --build-arg GL_ASDF_SHELLCHECK_VERSION
+        --build-arg GL_ASDF_SHFMT_VERSION
+        --build-arg GL_ASDF_TERRAFORM_VERSION
+        --build-arg GL_ASDF_THANOS_VERSION
+        --build-arg GL_ASDF_YQ_VERSION
+        --build-arg GL_ASDF_AMTOOL_VERSION
         .
     - docker push ${IMAGE}:latest
     - docker push ${IMAGE}:$ci_image_tag
