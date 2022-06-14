@@ -10,18 +10,20 @@ Make sure that **there are no CI Read requests being made in the patroni-ci clus
 
 1. Terraform should be installed and configured;
 1. Ansible should be installed and configured;
-1. Download/clone the https://ops.gitlab.net/gitlab-com/gl-infra/config-mgmt project into your workspace;
-1. Download/clone the https://gitlab.com/gitlab-com/gl-infra/db-migration project into your workspace;
+1. Download/clone the [ops.gitlab.net/gitlab-com/gl-infra/config-mgmt](https://ops.gitlab.net/gitlab-com/gl-infra/config-mgmt) project into your workspace;
+1. Download/clone the [gitlab.com/gitlab-com/gl-infra/db-migration](https://gitlab.com/gitlab-com/gl-infra/db-migration) project into your workspace;
 1. Check that the inventory file for your desired environment exists in `db-migration/pg-replica-rebuild/inventory/` and it's up-to-date with the hosts you're targeting;
 1. Run `cd db-migration/pg-replica-rebuild; ansible -i inventory/<file> all -m ping` and ensure that all nodes are reachable;
 
 ## Destroy the Standby Cluster
 
 1. Change the `"node_count"` at `variables.tf` to `=0` for the `patroni-ci` and `patroni-zfs-ci` clusters:
+
     ```
         "patroni-ci"           = 0
         "patroni-zfs-ci"       = 0
     ```
+
 2. Apply the TF change `tf apply` checking if only the `patroni-ci` and its related modules are the ones that will be removed.
 3. Manually delete the nodes from Chef
     <details><summary>Knife node delete GSTG</summary>
@@ -46,8 +48,10 @@ Make sure that **there are no CI Read requests being made in the patroni-ci clus
 ## Take a snapshot from the Writer node
 
 1. Find which instance is the database cluster Backup Node
+
     - GSTG: `knife search 'roles:gstg-base-db-patroni-backup-replica AND roles:gstg-base-db-patroni-main' --id-only`
     - GPRD: `knife search 'roles:gprd-base-db-patroni-backup-replica AND roles:gprd-base-db-patroni-v12' --id-only`
+
 1. Log in into the Backup Node and execute a gcs-snapshot:
     ```
     sudo su - gitlab-psql
