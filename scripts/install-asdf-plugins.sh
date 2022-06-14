@@ -70,3 +70,4 @@ install_plugin thanos https://gitlab.com/gitlab-com/gl-infra/asdf-thanos
 install_plugin jsonnet-tool https://gitlab.com/gitlab-com/gl-infra/asdf-jsonnet-tool.git
 install_plugin ruby
 install_plugin nodejs
+install_plugin yq
