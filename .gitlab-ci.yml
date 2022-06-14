@@ -587,6 +587,7 @@ docker_image_test:
       --build-arg GL_ASDF_SHFMT_VERSION=${GL_ASDF_SHFMT_VERSION}
       --build-arg GL_ASDF_TERRAFORM_VERSION=${GL_ASDF_TERRAFORM_VERSION}
       --build-arg GL_ASDF_THANOS_VERSION=${GL_ASDF_THANOS_VERSION}
+      --build-arg GL_ASDF_YQ_VERSION=${GL_ASDF_YQ_VERSION}
       .
   only:
     changes:
@@ -613,6 +614,7 @@ docker_image_build:
         --build-arg GL_ASDF_SHFMT_VERSION=3.5.1
         --build-arg GL_ASDF_TERRAFORM_VERSION=${GL_ASDF_TERRAFORM_VERSION}
         --build-arg GL_ASDF_THANOS_VERSION=${GL_ASDF_THANOS_VERSION}
+        --build-arg GL_ASDF_YQ_VERSION=${GL_ASDF_YQ_VERSION}
         .
     - docker push ${IMAGE}:latest
     - docker push ${IMAGE}:$ci_image_tag

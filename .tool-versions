@@ -15,3 +15,4 @@ shfmt 3.5.1 # datasource=github-releases depName=mvdan/sh
 terraform 1.2.2 # datasource=github-releases depName=hashicorp/terraform
 thanos 0.26.0 # datasource=github-releases depName=thanos-io/thanos
 nodejs 16.14.0
+yq 4.25.2 # datasource=github-releases depName=mikefarah/yq

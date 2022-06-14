@@ -2,6 +2,7 @@ ARG GL_ASDF_JSONNET_TOOL_VERSION
 ARG GL_ASDF_SHELLCHECK_VERSION
 ARG GL_ASDF_SHFMT_VERSION
 ARG GL_ASDF_TERRAFORM_VERSION
+ARG GL_ASDF_YQ_VERSION
 
 FROM registry.gitlab.com/gitlab-com/gl-infra/jsonnet-tool:v${GL_ASDF_JSONNET_TOOL_VERSION} AS jsonnet-tool
 
@@ -10,6 +11,8 @@ FROM koalaman/shellcheck:v${GL_ASDF_SHELLCHECK_VERSION} AS shellcheck
 FROM mvdan/shfmt:v${GL_ASDF_SHFMT_VERSION}-alpine as shfmt
 
 FROM hashicorp/terraform:${GL_ASDF_TERRAFORM_VERSION} AS terraform
+
+FROM docker.io/mikefarah/yq:${GL_ASDF_YQ_VERSION} as yq
 
 FROM golang:alpine AS go-jsonnet
 
@@ -74,7 +77,7 @@ COPY --from=go-jsonnet /build/bin/jsonnetfmt /bin/jsonnetfmt
 COPY --from=go-jsonnet /build/bin/jb /bin/jb
 
 COPY --from=jsonnet-tool /usr/local/bin/jsonnet-tool /bin/jsonnet-tool
-
+COPY --from=yq /usr/bin/yq /usr/bin/yq
 COPY --from=terraform /bin/terraform /bin/terraform
 
 RUN gem install --no-document json && \
