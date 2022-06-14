@@ -26,7 +26,7 @@ To check what node is the `Standby Leader` of our `patroni-ci` cluster execute `
 ## Resolution
 
 This procedure can recover from `patroni-ci` being broken but was designed as a
-[rollback procedure in case CI decomposition failover fails](https://gitlab.com/gitlab-org/gitlab/-/issues/361759). 
+[rollback procedure in case CI decomposition failover fails](https://gitlab.com/gitlab-org/gitlab/-/issues/361759).
 
 This solution will not be applicable once CI decomposition is finished
 and the CI cluster is diverged fully from Main.
@@ -39,7 +39,7 @@ lagged behind or otherwise unavailable. The solution is to just send all CI
 reconfigure all Patroni Main replicas to also present as
 `ci-db-replica.service.consul`.
 
-The resolution to this problem basically consist into temporarily routing the CI `read-only` workload from the `patroni-ci` 
+The resolution to this problem basically consist into temporarily routing the CI `read-only` workload from the `patroni-ci`
 cluster in our `patroni-main` Replicas, while we can rebuild and re-sync the `patroni-ci` cluster.
 
 To handle the CI `read-only` workload in case of incident, all `patroni-main` nodes have 3 additional pgbouncers deployed and listening in 6435, 6436 and 6437 TCP ports.
@@ -92,7 +92,7 @@ diff --git a/roles/gprd-base-db-patroni-ci.json b/roles/gprd-base-db-patroni-ci.
 </details>
 
    - **3.** You will likely want to apply this as quickly as possible by running chef
-directly on all the Patroni Main nodes. 
+directly on all the Patroni Main nodes.
 
    - **4.** Once you've done this you will have to
 do 1 minor cleanup on Patroni CI nodes, since the `gitlab-pgbouncer` cookbook
@@ -210,7 +210,7 @@ $ dig @localhost ci-db-replica.service.consul +short SRV | sort -k 4
    - **3.** Remove `/etc/consul/conf.d/dormant-ci-db-replica*.json` from CI Patroni nodes as this is no longer needed and Chef won't clean this up for you
       1. `knife ssh -C 10 'roles:gprd-base-db-patroni-ci' 'sudo rm -f /etc/consul/conf.d/dormant-ci-db-replica*.json'`
       1. `knife ssh -C 10 'roles:gprd-base-db-patroni-ci' 'sudo consul reload'`
-   - **4.** Verify the that DNS resolve for `ci-db-replica.service.consul` is only returning `patroni-ci` nodes, 
+   - **4.** Verify the that DNS resolve for `ci-db-replica.service.consul` is only returning `patroni-ci` nodes,
    by executing `dig @localhost ci-db-replica.service.consul +short SRV | sort -k 4`
    - **5.**  Verify that CI read requests shifted back:
       - From [CI Read requests in patroni-main](https://thanos-query.ops.gitlab.net/graph?g0.expr=(sum(rate(pg_stat_user_tables_idx_tup_fetch%7Benv%3D%22gprd%22%2C%20relname%3D~%22(ci_.*%7Cexternal_pull_requests%7Ctaggings%7Ctags)%22%2Cinstance%3D~%22patroni-v12-.*%22%7D%5B1m%5D))%20by%20(relname%2C%20instance)%20%3E%201)%20and%20on(instance)%20pg_replication_is_replica%3D%3D1&g0.tab=0&g0.stacked=0&g0.range_input=6h&g0.max_source_resolution=0s&g0.deduplicate=1&g0.partial_response=0&g0.store_matches=%5B%5D)

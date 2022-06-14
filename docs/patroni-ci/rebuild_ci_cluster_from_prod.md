@@ -61,7 +61,7 @@ Note: _At the last update (2022/06/10) the Replication Backup nodes were_ :
 
 ## Recover the Patroni CI Standby Cluster
 
-1. Change Terraform environment 
+1. Change Terraform environment
     - Add the following module at `main.tf`, but **DO NOT SIMPLY COPY/PASTE IT**, set the `--project` and `--filter` accordingly with the environment you are performing the restore
         ```
         module "gcp_database_snapshot" {
@@ -79,7 +79,7 @@ Note: _At the last update (2022/06/10) the Replication Backup nodes were_ :
         ```
             data_disk_snapshot     = local.gcp_database_snapshot
         ```
-    - Change the `"node_count"` of patroni CI back to 7 at `variables.tf`, 
+    - Change the `"node_count"` of patroni CI back to 7 at `variables.tf`,
         ```
             "patroni-ci"           = 7
         ```
@@ -138,8 +138,8 @@ Note: _At the last update (2022/06/10) the Replication Backup nodes were_ :
 
 The ZFS cluster nodes can't be rebuild through GCP snapshots, because the `/var/opt/gitlab` mount point is a ZFS filesystem instead of EXT4 used by other Patroni nodes, therefore it's necessary to use the default `pg_basebackup` process to recreate this cluster.
 
-1. Change Terraform environment 
-    - Change the `"node_count"` of patroni ZFS CI back to 1 at `variables.tf`, 
+1. Change Terraform environment
+    - Change the `"node_count"` of patroni ZFS CI back to 1 at `variables.tf`,
         ```
             "patroni-zfs-ci"       = 1
         ```
@@ -162,7 +162,7 @@ The ZFS cluster nodes can't be rebuild through GCP snapshots, because the `/var/
         - GSTG cluster name: gstg-patroni-zfs-ci
         - GPRD cluster name: gprd-patroni-zfs-ci
     - If you observe the `/var/log/gitlab/patroni/patroni.log` you should see the `INFO: bootstrap_standby_leader in progress` message
-6. Check if `pg_basebackup` is running 
+6. Check if `pg_basebackup` is running
     - Execute: `ps -ef | grep pg_basebackup`
     - If there is a `/usr/lib/postgresql/??/bin/pg_basebackup` process running then you will have to wait it for completeion (which can take dozens of hours)
 7. After `pg_basebackup` is finished the replica should apply/stream pending WAL files from the primary/writer or its archive location (which can also take dozens of hours);
