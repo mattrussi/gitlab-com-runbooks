@@ -7,7 +7,7 @@ local saturationResource = import 'servicemetrics/saturation-resources.libsonnet
 // generate documentation that is embedded with the README.md file for this
 // reference-architecture.
 //
-// It will be called when scripts/generate-reference-architecture-configs.sh is executed.
+// It will be called when scripts/generate-all-reference-architecture-configs.sh is executed.
 
 local generateSLISnippetForService(service) =
   local slis = service.listServiceLevelIndicators();

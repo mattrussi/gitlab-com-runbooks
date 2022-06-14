@@ -43,6 +43,7 @@ function render_readme_for_dir() {
 
   jsonnet-tool \
     -J "libsonnet" \
+    -J "reference-architectures/default-overrides" \
     -J "$dir/src" \
     -J "vendor" \
     render \
