@@ -1,0 +1,5 @@
+# CODEOWNERS for versioning-related files.
+# Original discussion around reviewers from
+# See https://gitlab.com/gitlab-com/runbooks/-/issues/96#note_975210568
+.tool-versions @andrewn @pguinoiseau @steveazz @f_santos @mwasilewski-gitlab @jarv @smcgivern @reprazent
+.gitlab-ci-asdf-versions.yml @andrewn @pguinoiseau @steveazz @f_santos @mwasilewski-gitlab @jarv @smcgivern @reprazent
