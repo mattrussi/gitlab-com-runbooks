@@ -53,7 +53,6 @@ In case of incident you will have to:
 
    - **2.** In `patroni-ci` nodes, rename Consul service name from `ci-db-replica` to `dormant-ci-db-replica`. We have a sample MR at for what this would involve - https://gitlab.com/gitlab-com/gl-infra/chef-repo/-/merge_requests/1875/diffs
 
-
 _Note: In case these MRs are unavailable the diffs are:_
 
 <details><summary>Diff for reconfiguring Patroni cluster to also present as ci-db-replica in Consul</summary>
@@ -101,7 +100,7 @@ does not handle renaming `service_name` you will also need to delete
 `/etc/consul/conf.d/ci-db-replica*.json` from the problematic CI Patroni nodes, by executing:
      1. `knife ssh -C 10 'roles:gprd-base-db-patroni-ci' 'sudo rm -f /etc/consul/conf.d/ci-db-replica*.json'`
      1. `knife ssh -C 10 'roles:gprd-base-db-patroni-ci' 'sudo consul reload'`
-   
+
    - **5.** Validate Consul resolver should return just `patroni-v12` (aka `patroni-main`) replica hosts, by running `dig @localhost ci-db-replica.service.consul +short SRV | sort -k 4`, like for example:
 <details><summary>Name resolution for `ci-db-replica.service.consul` after route of CI read-only workload to Main is done</summary>
 
@@ -216,4 +215,3 @@ $ dig @localhost ci-db-replica.service.consul +short SRV | sort -k 4
    - **5.**  Verify that CI read requests shifted back:
       - From [CI Read requests in patroni-main](https://thanos-query.ops.gitlab.net/graph?g0.expr=(sum(rate(pg_stat_user_tables_idx_tup_fetch%7Benv%3D%22gprd%22%2C%20relname%3D~%22(ci_.*%7Cexternal_pull_requests%7Ctaggings%7Ctags)%22%2Cinstance%3D~%22patroni-v12-.*%22%7D%5B1m%5D))%20by%20(relname%2C%20instance)%20%3E%201)%20and%20on(instance)%20pg_replication_is_replica%3D%3D1&g0.tab=0&g0.stacked=0&g0.range_input=6h&g0.max_source_resolution=0s&g0.deduplicate=1&g0.partial_response=0&g0.store_matches=%5B%5D)
       - To [CI Read requests in patroni-ci](https://thanos-query.ops.gitlab.net/graph?g0.expr=(sum(rate(pg_stat_user_tables_idx_tup_fetch%7Benv%3D%22gprd%22%2C%20relname%3D~%22(ci_.*%7Cexternal_pull_requests%7Ctaggings%7Ctags)%22%2Cinstance%3D~%22patroni-ci-.*%22%7D%5B1m%5D))%20by%20(relname%2C%20instance)%20%3E%201)%20and%20on(instance)%20pg_replication_is_replica%3D%3D1&g0.tab=0&g0.stacked=0&g0.range_input=6h&g0.max_source_resolution=0s&g0.deduplicate=1&g0.partial_response=0&g0.store_matches=%5B%5D)
-      

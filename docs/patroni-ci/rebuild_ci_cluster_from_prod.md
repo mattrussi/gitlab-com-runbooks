@@ -15,7 +15,6 @@ Make sure that **there are no CI Read requests being made in the patroni-ci clus
 1. Check that the inventory file for your desired environment exists in `db-migration/pg-replica-rebuild/inventory/` and it's up-to-date with the hosts you're targeting;
 1. Run `cd db-migration/pg-replica-rebuild; ansible -i inventory/<file> all -m ping` and ensure that all nodes are reachable;
 
-
 ## Destroy the Standby Cluster
 
 1. Change the `"node_count"` at `variables.tf` to `=0` for the `patroni-ci` and `patroni-zfs-ci` clusters:
@@ -41,7 +40,7 @@ Make sure that **there are no CI Read requests being made in the patroni-ci clus
     knife node delete -y patroni-zfs-ci-01-db-gprd.c.gitlab-production.internal
     knife client delete -y patroni-zfs-ci-01-db-gprd.c.gitlab-production.internal
     ```
-    
+
     </details>
 
 ## Take a snapshot from the Writer node
@@ -55,11 +54,10 @@ Make sure that **there are no CI Read requests being made in the patroni-ci clus
     PATH="/usr/local/sbin:/usr/sbin/:/sbin:/usr/local/bin:/usr/bin:/bin:/snap/bin"
     /usr/local/bin/gcs-snapshot.sh
     ```
-    
+
 Note: _At the last update (2022/06/10) the Replication Backup nodes were_ :
 - GSTG: patroni-06-db-gstg.c.gitlab-staging-1.internal
 - GPRD: patroni-10-db-gprd.c.gitlab-production.internal
-
 
 ## Recover the Patroni CI Standby Cluster
 
