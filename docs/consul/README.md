@@ -19,6 +19,7 @@
 
 * [Interacting with Consul](interaction.md)
 * [Diagnosis with Kibana](../onboarding/kibana-diagnosis.md)
+* [Recovering from CI Patroni cluster lagging too much or becoming completely broken](../patroni-ci/recovering_patroni_ci_intense_lagging_or_replication_stopped.md)
 * [Geo Patroni Cluster Management](../patroni/geo-patroni-cluster.md)
 * [Log analysis on PostgreSQL, Pgbouncer, Patroni and consul Runbook](../patroni/log_analysis.md)
 * [Patroni](../patroni/patroni-management.md)

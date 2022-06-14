@@ -23,6 +23,8 @@
 * [Backups](../customersdot/backups.md)
 * [../monitoring/prometheus-failing-rule-evaluations.md](../monitoring/prometheus-failing-rule-evaluations.md)
 * [Diagnosis with Kibana](../onboarding/kibana-diagnosis.md)
+* [Steps to Recreate/Rebuild the CI CLuster using a Snapshot from the Master cluster (instead of pg_basebackup)](../patroni-ci/rebuild_ci_cluster_from_prod.md)
+* [Recovering from CI Patroni cluster lagging too much or becoming completely broken](../patroni-ci/recovering_patroni_ci_intense_lagging_or_replication_stopped.md)
 * [Check the status of transaction wraparound Runbook](check_wraparound.md)
 * [Custom PostgreSQL Package Build Process for Ubuntu Xenial 16.04](custom_postgres_packages.md)
 * [database_peak_analysis.md](database_peak_analysis.md)
