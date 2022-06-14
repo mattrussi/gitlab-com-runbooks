@@ -129,8 +129,8 @@ Note: _At the last update (2022/06/10) the Replication Backup nodes were_ :
 1. Initialize the cluster using the `db-migration/pg-replica-rebuild` Ansible playbook, by executing:
 
     ```
-    $ cd <workspace>/db-migration/pg-replica-rebuild
-    $ ansible-playbook -i inventory/gstg.yml rebuild-all.yml
+    cd <workspace>/db-migration/pg-replica-rebuild
+    ansible-playbook -i inventory/gstg.yml rebuild-all.yml
     ```
 
 1. Force run of Chef-Client in the nodes to let all configuration files in sync with repo
