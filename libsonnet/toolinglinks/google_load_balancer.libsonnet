@@ -19,7 +19,7 @@ local stackdriverLogs = import './stackdriver_logs.libsonnet';
           title='Stackdriver Logs: Loadbalancer Access Logs',
           queryHash={
             'resource.type': 'http_load_balancer',
-            'resource.labels.target_proxy_name': instanceId,
+            'resource.labels.url_map_name': instanceId,
           },
           project=project
         )(options),
@@ -27,7 +27,7 @@ local stackdriverLogs = import './stackdriver_logs.libsonnet';
           title='Stackdriver Logs: Loadbalancer Access 5xx Logs',
           queryHash={
             'resource.type': 'http_load_balancer',
-            'resource.labels.target_proxy_name': instanceId,
+            'resource.labels.url_map_name': instanceId,
             'httpRequest.status': { gte: 500 },
           },
           project=project
