@@ -80,7 +80,7 @@ groups:
       type: logging
     expr: |
       sum by (environment) (
-        rate(stackdriver_https_lb_rule_loadbalancing_googleapis_com_https_request_count{project_id="gitlab-ops",target_proxy_name="ops-prod-proxy"}[1m])
+        rate(stackdriver_https_lb_rule_loadbalancing_googleapis_com_https_request_count{project_id="gitlab-ops",url_map_name="ops-prod-proxy"}[1m])
       )
   - record: gitlab_component_errors:rate
     labels:
@@ -91,7 +91,7 @@ groups:
     expr: |
       (
         sum by (environment) (
-          rate(stackdriver_https_lb_rule_loadbalancing_googleapis_com_https_request_count{project_id="gitlab-ops",response_code_class="500",target_proxy_name="ops-prod-proxy"}[1m])
+          rate(stackdriver_https_lb_rule_loadbalancing_googleapis_com_https_request_count{project_id="gitlab-ops",response_code_class="500",url_map_name="ops-prod-proxy"}[1m])
         )
       )
       or
@@ -237,7 +237,7 @@ groups:
       type: logging
     expr: |
       sum by (environment) (
-        rate(stackdriver_https_lb_rule_loadbalancing_googleapis_com_https_request_count{project_id="gitlab-ops",target_proxy_name="ops-prod-proxy"}[5m])
+        rate(stackdriver_https_lb_rule_loadbalancing_googleapis_com_https_request_count{project_id="gitlab-ops",url_map_name="ops-prod-proxy"}[5m])
       )
   - record: gitlab_component_errors:rate_5m
     labels:
@@ -248,7 +248,7 @@ groups:
     expr: |
       (
         sum by (environment) (
-          rate(stackdriver_https_lb_rule_loadbalancing_googleapis_com_https_request_count{project_id="gitlab-ops",response_code_class="500",target_proxy_name="ops-prod-proxy"}[5m])
+          rate(stackdriver_https_lb_rule_loadbalancing_googleapis_com_https_request_count{project_id="gitlab-ops",response_code_class="500",url_map_name="ops-prod-proxy"}[5m])
         )
       )
       or
@@ -394,7 +394,7 @@ groups:
       type: logging
     expr: |
       sum by (environment) (
-        rate(stackdriver_https_lb_rule_loadbalancing_googleapis_com_https_request_count{project_id="gitlab-ops",target_proxy_name="ops-prod-proxy"}[30m])
+        rate(stackdriver_https_lb_rule_loadbalancing_googleapis_com_https_request_count{project_id="gitlab-ops",url_map_name="ops-prod-proxy"}[30m])
       )
   - record: gitlab_component_errors:rate_30m
     labels:
@@ -405,7 +405,7 @@ groups:
     expr: |
       (
         sum by (environment) (
-          rate(stackdriver_https_lb_rule_loadbalancing_googleapis_com_https_request_count{project_id="gitlab-ops",response_code_class="500",target_proxy_name="ops-prod-proxy"}[30m])
+          rate(stackdriver_https_lb_rule_loadbalancing_googleapis_com_https_request_count{project_id="gitlab-ops",response_code_class="500",url_map_name="ops-prod-proxy"}[30m])
         )
       )
       or
@@ -551,7 +551,7 @@ groups:
       type: logging
     expr: |
       sum by (environment) (
-        rate(stackdriver_https_lb_rule_loadbalancing_googleapis_com_https_request_count{project_id="gitlab-ops",target_proxy_name="ops-prod-proxy"}[1h])
+        rate(stackdriver_https_lb_rule_loadbalancing_googleapis_com_https_request_count{project_id="gitlab-ops",url_map_name="ops-prod-proxy"}[1h])
       )
   - record: gitlab_component_errors:rate_1h
     labels:
@@ -562,7 +562,7 @@ groups:
     expr: |
       (
         sum by (environment) (
-          rate(stackdriver_https_lb_rule_loadbalancing_googleapis_com_https_request_count{project_id="gitlab-ops",response_code_class="500",target_proxy_name="ops-prod-proxy"}[1h])
+          rate(stackdriver_https_lb_rule_loadbalancing_googleapis_com_https_request_count{project_id="gitlab-ops",response_code_class="500",url_map_name="ops-prod-proxy"}[1h])
         )
       )
       or
@@ -708,7 +708,7 @@ groups:
       type: logging
     expr: |
       sum by (environment) (
-        rate(stackdriver_https_lb_rule_loadbalancing_googleapis_com_https_request_count{project_id="gitlab-ops",target_proxy_name="ops-prod-proxy"}[6h])
+        rate(stackdriver_https_lb_rule_loadbalancing_googleapis_com_https_request_count{project_id="gitlab-ops",url_map_name="ops-prod-proxy"}[6h])
       )
   - record: gitlab_component_errors:rate_6h
     labels:
@@ -719,7 +719,7 @@ groups:
     expr: |
       (
         sum by (environment) (
-          rate(stackdriver_https_lb_rule_loadbalancing_googleapis_com_https_request_count{project_id="gitlab-ops",response_code_class="500",target_proxy_name="ops-prod-proxy"}[6h])
+          rate(stackdriver_https_lb_rule_loadbalancing_googleapis_com_https_request_count{project_id="gitlab-ops",response_code_class="500",url_map_name="ops-prod-proxy"}[6h])
         )
       )
       or

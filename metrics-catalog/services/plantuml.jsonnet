@@ -28,7 +28,6 @@ metricsCatalog.serviceDefinition({
     loadbalancer: googleLoadBalancerComponents.googleLoadBalancer(
       userImpacting=true,
       loadBalancerName='k8s-um-plantuml-plantuml--58df01f69d082883',  // This LB name seems to be auto-generated, but appears to be stable
-      targetProxyName='k8s-tps-plantuml-plantuml--58df01f69d082883',  // This LB name seems to be auto-generated, but appears to be stable
       projectId='gitlab-production',
       additionalToolingLinks=[
         toolingLinks.stackdriverLogs(
