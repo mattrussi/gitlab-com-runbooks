@@ -476,7 +476,7 @@ groups:
       grafana_variables: environment,stage
       promql_template_1: |
         sum by (env,environment,tier,stage) (
-          rate(stackdriver_https_lb_rule_loadbalancing_googleapis_com_https_request_count{environment="{{ $labels.environment }}",project_id="gitlab-ops",response_code_class="500",stage="{{ $labels.stage }}",target_proxy_name="ops-prod-proxy"}[5m])
+          rate(stackdriver_https_lb_rule_loadbalancing_googleapis_com_https_request_count{environment="{{ $labels.environment }}",project_id="gitlab-ops",response_code_class="500",stage="{{ $labels.stage }}",url_map_name="ops-prod-proxy"}[5m])
         )
       runbook: docs/logging/README.md
     labels:
@@ -522,7 +522,7 @@ groups:
       grafana_variables: environment,stage
       promql_template_1: |
         sum by (env,environment,tier,stage) (
-          rate(stackdriver_https_lb_rule_loadbalancing_googleapis_com_https_request_count{environment="{{ $labels.environment }}",project_id="gitlab-ops",response_code_class="500",stage="{{ $labels.stage }}",target_proxy_name="ops-prod-proxy"}[5m])
+          rate(stackdriver_https_lb_rule_loadbalancing_googleapis_com_https_request_count{environment="{{ $labels.environment }}",project_id="gitlab-ops",response_code_class="500",stage="{{ $labels.stage }}",url_map_name="ops-prod-proxy"}[5m])
         )
       runbook: docs/logging/README.md
     labels:

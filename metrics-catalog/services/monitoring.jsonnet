@@ -346,7 +346,6 @@ metricsCatalog.serviceDefinition({
       userImpacting=false,
       // LB automatically created by the k8s ingress
       loadBalancerName='k8s2-um-4zodnh0s-monitoring-grafana-lhbkv8d3',
-      targetProxyName='k8s2-ts-4zodnh0s-monitoring-grafana-lhbkv8d3',
       projectId='gitlab-ops',
       trafficCessationAlertConfig=false
     ),

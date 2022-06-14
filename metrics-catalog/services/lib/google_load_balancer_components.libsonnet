@@ -10,14 +10,13 @@ local toolingLinks = import 'toolinglinks/toolinglinks.libsonnet';
   googleLoadBalancer(
     userImpacting,
     loadBalancerName,
-    targetProxyName=loadBalancerName,
     projectId,
     team=null,
     trafficCessationAlertConfig=true,
     additionalToolingLinks=[],
     extra={},
   )::
-    local baseSelector = { target_proxy_name: targetProxyName, project_id: projectId };
+    local baseSelector = { url_map_name: loadBalancerName, project_id: projectId };
 
     metricsCatalog.serviceLevelIndicatorDefinition(extra {
       userImpacting: userImpacting,
