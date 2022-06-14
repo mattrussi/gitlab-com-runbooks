@@ -48,10 +48,8 @@ If they are not being used these ports are defined as `idle-ci-db-replica` Consu
 ### Resolution Steps - Route CI read-only workload to Main
 
 In case of incident you will have to:
-
-   - **1.** In `patroni-main` nodes, rename the Consul service `idle-ci-db-replica` to `ci-db-replica`. We have a sample MR at for what this would involve - https://gitlab.com/gitlab-com/gl-infra/chef-repo/-/merge_requests/1952/diffs
-
-   - **2.** In `patroni-ci` nodes, rename Consul service name from `ci-db-replica` to `dormant-ci-db-replica`. We have a sample MR at for what this would involve - https://gitlab.com/gitlab-com/gl-infra/chef-repo/-/merge_requests/1875/diffs
+- **1.** In `patroni-main` nodes, rename the Consul service `idle-ci-db-replica` to `ci-db-replica`. We have a [sample MR at for what this would involve](https://gitlab.com/gitlab-com/gl-infra/chef-repo/-/merge_requests/1952/diffs)
+- **2.** In `patroni-ci` nodes, rename Consul service name from `ci-db-replica` to `dormant-ci-db-replica`. We have a [sample MR at for what this would involve](https://gitlab.com/gitlab-com/gl-infra/chef-repo/-/merge_requests/1875/diffs)
 
 _Note: In case these MRs are unavailable the diffs are:_
 
@@ -91,17 +89,17 @@ diff --git a/roles/gprd-base-db-patroni-ci.json b/roles/gprd-base-db-patroni-ci.
 
 </details>
 
-   - **3.** You will likely want to apply this as quickly as possible by running chef
+- **3.** You will likely want to apply this as quickly as possible by running chef
 directly on all the Patroni Main nodes.
 
-   - **4.** Once you've done this you will have to
+- **4.** Once you've done this you will have to
 do 1 minor cleanup on Patroni CI nodes, since the `gitlab-pgbouncer` cookbook
 does not handle renaming `service_name` you will also need to delete
 `/etc/consul/conf.d/ci-db-replica*.json` from the problematic CI Patroni nodes, by executing:
-     1. `knife ssh -C 10 'roles:gprd-base-db-patroni-ci' 'sudo rm -f /etc/consul/conf.d/ci-db-replica*.json'`
-     1. `knife ssh -C 10 'roles:gprd-base-db-patroni-ci' 'sudo consul reload'`
+   1. `knife ssh -C 10 'roles:gprd-base-db-patroni-ci' 'sudo rm -f /etc/consul/conf.d/ci-db-replica*.json'`
+   1. `knife ssh -C 10 'roles:gprd-base-db-patroni-ci' 'sudo consul reload'`
 
-   - **5.** Validate Consul resolver should return just `patroni-v12` (aka `patroni-main`) replica hosts, by running `dig @localhost ci-db-replica.service.consul +short SRV | sort -k 4`, like for example:
+- **5.** Validate Consul resolver should return just `patroni-v12` (aka `patroni-main`) replica hosts, by running `dig @localhost ci-db-replica.service.consul +short SRV | sort -k 4`, like for example:
 <details><summary>Name resolution for `ci-db-replica.service.consul` after route of CI read-only workload to Main is done</summary>
 
 ```dig
@@ -134,9 +132,9 @@ $ dig @localhost ci-db-replica.service.consul +short SRV | sort -k 4
 
 </details>
 
-   - **6.** Verify that CI read requests are shifting:
-      - From [CI Read requests in patroni-ci](https://thanos-query.ops.gitlab.net/graph?g0.expr=(sum(rate(pg_stat_user_tables_idx_tup_fetch%7Benv%3D%22gprd%22%2C%20relname%3D~%22(ci_.*%7Cexternal_pull_requests%7Ctaggings%7Ctags)%22%2Cinstance%3D~%22patroni-ci-.*%22%7D%5B1m%5D))%20by%20(relname%2C%20instance)%20%3E%201)%20and%20on(instance)%20pg_replication_is_replica%3D%3D1&g0.tab=0&g0.stacked=0&g0.range_input=6h&g0.max_source_resolution=0s&g0.deduplicate=1&g0.partial_response=0&g0.store_matches=%5B%5D)
-      - To [CI Read requests in patroni-main](https://thanos-query.ops.gitlab.net/graph?g0.expr=(sum(rate(pg_stat_user_tables_idx_tup_fetch%7Benv%3D%22gprd%22%2C%20relname%3D~%22(ci_.*%7Cexternal_pull_requests%7Ctaggings%7Ctags)%22%2Cinstance%3D~%22patroni-v12-.*%22%7D%5B1m%5D))%20by%20(relname%2C%20instance)%20%3E%201)%20and%20on(instance)%20pg_replication_is_replica%3D%3D1&g0.tab=0&g0.stacked=0&g0.range_input=6h&g0.max_source_resolution=0s&g0.deduplicate=1&g0.partial_response=0&g0.store_matches=%5B%5D)
+- **6.** Verify that CI read requests are shifting:
+   - From [CI Read requests in patroni-ci](https://thanos-query.ops.gitlab.net/graph?g0.expr=(sum(rate(pg_stat_user_tables_idx_tup_fetch%7Benv%3D%22gprd%22%2C%20relname%3D~%22(ci_.*%7Cexternal_pull_requests%7Ctaggings%7Ctags)%22%2Cinstance%3D~%22patroni-ci-.*%22%7D%5B1m%5D))%20by%20(relname%2C%20instance)%20%3E%201)%20and%20on(instance)%20pg_replication_is_replica%3D%3D1&g0.tab=0&g0.stacked=0&g0.range_input=6h&g0.max_source_resolution=0s&g0.deduplicate=1&g0.partial_response=0&g0.store_matches=%5B%5D)
+   - To [CI Read requests in patroni-main](https://thanos-query.ops.gitlab.net/graph?g0.expr=(sum(rate(pg_stat_user_tables_idx_tup_fetch%7Benv%3D%22gprd%22%2C%20relname%3D~%22(ci_.*%7Cexternal_pull_requests%7Ctaggings%7Ctags)%22%2Cinstance%3D~%22patroni-v12-.*%22%7D%5B1m%5D))%20by%20(relname%2C%20instance)%20%3E%201)%20and%20on(instance)%20pg_replication_is_replica%3D%3D1&g0.tab=0&g0.stacked=0&g0.range_input=6h&g0.max_source_resolution=0s&g0.deduplicate=1&g0.partial_response=0&g0.store_matches=%5B%5D)
 
 ### Resolution Steps - Redeploy and Resync the Patroni CI cluster
 
@@ -145,73 +143,73 @@ Fistly, escalate the incident to a DBRE and ask them to proceed with the [recove
 Once the CI Patroni cluster has fully recovered you can revert these
 changes but you should do this in 2 MRs using the following steps:
 
-   - **1.** Change `roles/gstg-base-db-patroni-ci.json`
+- **1.** Change `roles/gstg-base-db-patroni-ci.json`
    back to `service_name: ci-db-replica` . Then wait for chef to run on
    CI Patroni nodes and confirm they are correctly registering in consul
    under DNS `ci-db-replica.service.consul`
-         - You can validate by running `dig @localhost ci-db-replica.service.consul +short SRV | sort -k 4` and the resolver should return both `patroni-v12` (aka `patroni-main`) and `patroni-ci` replica hosts, like for example:
-<details><summary>Name resolution for `ci-db-replica.service.consul` SRV name </summary>
+   - You can validate by running `dig @localhost ci-db-replica.service.consul +short SRV | sort -k 4` and the resolver should return both `patroni-v12` (aka `patroni-main`) and `patroni-ci` replica hosts, like for example:
+   <details><summary>Name resolution for `ci-db-replica.service.consul` SRV name </summary>
 
-```dig
-$ dig @localhost ci-db-replica.service.consul +short SRV | sort -k 4
-1 1 6432 patroni-ci-02-db-gprd.node.east-us-2.consul.
-1 1 6433 patroni-ci-02-db-gprd.node.east-us-2.consul.
-1 1 6434 patroni-ci-02-db-gprd.node.east-us-2.consul.
-1 1 6432 patroni-ci-04-db-gprd.node.east-us-2.consul.
-1 1 6433 patroni-ci-04-db-gprd.node.east-us-2.consul.
-1 1 6434 patroni-ci-04-db-gprd.node.east-us-2.consul.
-1 1 6432 patroni-ci-05-db-gprd.node.east-us-2.consul.
-1 1 6433 patroni-ci-05-db-gprd.node.east-us-2.consul.
-1 1 6434 patroni-ci-05-db-gprd.node.east-us-2.consul.
-1 1 6432 patroni-ci-06-db-gprd.node.east-us-2.consul.
-1 1 6433 patroni-ci-06-db-gprd.node.east-us-2.consul.
-1 1 6434 patroni-ci-06-db-gprd.node.east-us-2.consul.
-1 1 6432 patroni-ci-07-db-gprd.node.east-us-2.consul.
-1 1 6433 patroni-ci-07-db-gprd.node.east-us-2.consul.
-1 1 6434 patroni-ci-07-db-gprd.node.east-us-2.consul.
-1 1 6432 patroni-ci-08-db-gprd.node.east-us-2.consul.
-1 1 6433 patroni-ci-08-db-gprd.node.east-us-2.consul.
-1 1 6434 patroni-ci-08-db-gprd.node.east-us-2.consul.
-1 1 6432 patroni-ci-09-db-gprd.node.east-us-2.consul.
-1 1 6433 patroni-ci-09-db-gprd.node.east-us-2.consul.
-1 1 6434 patroni-ci-09-db-gprd.node.east-us-2.consul.
-1 1 6432 patroni-ci-10-db-gprd.node.east-us-2.consul.
-1 1 6433 patroni-ci-10-db-gprd.node.east-us-2.consul.
-1 1 6434 patroni-ci-10-db-gprd.node.east-us-2.consul.
-1 1 6435 patroni-v12-01-db-gprd.node.east-us-2.consul.
-1 1 6436 patroni-v12-01-db-gprd.node.east-us-2.consul.
-1 1 6437 patroni-v12-01-db-gprd.node.east-us-2.consul.
-1 1 6435 patroni-v12-02-db-gprd.node.east-us-2.consul.
-1 1 6436 patroni-v12-02-db-gprd.node.east-us-2.consul.
-1 1 6437 patroni-v12-02-db-gprd.node.east-us-2.consul.
-1 1 6435 patroni-v12-03-db-gprd.node.east-us-2.consul.
-1 1 6436 patroni-v12-03-db-gprd.node.east-us-2.consul.
-1 1 6437 patroni-v12-03-db-gprd.node.east-us-2.consul.
-1 1 6435 patroni-v12-04-db-gprd.node.east-us-2.consul.
-1 1 6436 patroni-v12-04-db-gprd.node.east-us-2.consul.
-1 1 6437 patroni-v12-04-db-gprd.node.east-us-2.consul.
-1 1 6435 patroni-v12-06-db-gprd.node.east-us-2.consul.
-1 1 6436 patroni-v12-06-db-gprd.node.east-us-2.consul.
-1 1 6437 patroni-v12-06-db-gprd.node.east-us-2.consul.
-1 1 6435 patroni-v12-07-db-gprd.node.east-us-2.consul.
-1 1 6436 patroni-v12-07-db-gprd.node.east-us-2.consul.
-1 1 6437 patroni-v12-07-db-gprd.node.east-us-2.consul.
-1 1 6435 patroni-v12-08-db-gprd.node.east-us-2.consul.
-1 1 6436 patroni-v12-08-db-gprd.node.east-us-2.consul.
-1 1 6437 patroni-v12-08-db-gprd.node.east-us-2.consul.
-1 1 6435 patroni-v12-09-db-gprd.node.east-us-2.consul.
-1 1 6436 patroni-v12-09-db-gprd.node.east-us-2.consul.
-1 1 6437 patroni-v12-09-db-gprd.node.east-us-2.consul.
-```
+   ```dig
+   $ dig @localhost ci-db-replica.service.consul +short SRV | sort -k 4
+   1 1 6432 patroni-ci-02-db-gprd.node.east-us-2.consul.
+   1 1 6433 patroni-ci-02-db-gprd.node.east-us-2.consul.
+   1 1 6434 patroni-ci-02-db-gprd.node.east-us-2.consul.
+   1 1 6432 patroni-ci-04-db-gprd.node.east-us-2.consul.
+   1 1 6433 patroni-ci-04-db-gprd.node.east-us-2.consul.
+   1 1 6434 patroni-ci-04-db-gprd.node.east-us-2.consul.
+   1 1 6432 patroni-ci-05-db-gprd.node.east-us-2.consul.
+   1 1 6433 patroni-ci-05-db-gprd.node.east-us-2.consul.
+   1 1 6434 patroni-ci-05-db-gprd.node.east-us-2.consul.
+   1 1 6432 patroni-ci-06-db-gprd.node.east-us-2.consul.
+   1 1 6433 patroni-ci-06-db-gprd.node.east-us-2.consul.
+   1 1 6434 patroni-ci-06-db-gprd.node.east-us-2.consul.
+   1 1 6432 patroni-ci-07-db-gprd.node.east-us-2.consul.
+   1 1 6433 patroni-ci-07-db-gprd.node.east-us-2.consul.
+   1 1 6434 patroni-ci-07-db-gprd.node.east-us-2.consul.
+   1 1 6432 patroni-ci-08-db-gprd.node.east-us-2.consul.
+   1 1 6433 patroni-ci-08-db-gprd.node.east-us-2.consul.
+   1 1 6434 patroni-ci-08-db-gprd.node.east-us-2.consul.
+   1 1 6432 patroni-ci-09-db-gprd.node.east-us-2.consul.
+   1 1 6433 patroni-ci-09-db-gprd.node.east-us-2.consul.
+   1 1 6434 patroni-ci-09-db-gprd.node.east-us-2.consul.
+   1 1 6432 patroni-ci-10-db-gprd.node.east-us-2.consul.
+   1 1 6433 patroni-ci-10-db-gprd.node.east-us-2.consul.
+   1 1 6434 patroni-ci-10-db-gprd.node.east-us-2.consul.
+   1 1 6435 patroni-v12-01-db-gprd.node.east-us-2.consul.
+   1 1 6436 patroni-v12-01-db-gprd.node.east-us-2.consul.
+   1 1 6437 patroni-v12-01-db-gprd.node.east-us-2.consul.
+   1 1 6435 patroni-v12-02-db-gprd.node.east-us-2.consul.
+   1 1 6436 patroni-v12-02-db-gprd.node.east-us-2.consul.
+   1 1 6437 patroni-v12-02-db-gprd.node.east-us-2.consul.
+   1 1 6435 patroni-v12-03-db-gprd.node.east-us-2.consul.
+   1 1 6436 patroni-v12-03-db-gprd.node.east-us-2.consul.
+   1 1 6437 patroni-v12-03-db-gprd.node.east-us-2.consul.
+   1 1 6435 patroni-v12-04-db-gprd.node.east-us-2.consul.
+   1 1 6436 patroni-v12-04-db-gprd.node.east-us-2.consul.
+   1 1 6437 patroni-v12-04-db-gprd.node.east-us-2.consul.
+   1 1 6435 patroni-v12-06-db-gprd.node.east-us-2.consul.
+   1 1 6436 patroni-v12-06-db-gprd.node.east-us-2.consul.
+   1 1 6437 patroni-v12-06-db-gprd.node.east-us-2.consul.
+   1 1 6435 patroni-v12-07-db-gprd.node.east-us-2.consul.
+   1 1 6436 patroni-v12-07-db-gprd.node.east-us-2.consul.
+   1 1 6437 patroni-v12-07-db-gprd.node.east-us-2.consul.
+   1 1 6435 patroni-v12-08-db-gprd.node.east-us-2.consul.
+   1 1 6436 patroni-v12-08-db-gprd.node.east-us-2.consul.
+   1 1 6437 patroni-v12-08-db-gprd.node.east-us-2.consul.
+   1 1 6435 patroni-v12-09-db-gprd.node.east-us-2.consul.
+   1 1 6436 patroni-v12-09-db-gprd.node.east-us-2.consul.
+   1 1 6437 patroni-v12-09-db-gprd.node.east-us-2.consul.
+   ```
 
-</details>
+   </details>
 
-   - **2.** Revert the `port_service_name_overrides` in `roles/gprd-base-db-patroni-main.json` to `idle-ci-db-replica` so that `patroni-main` nodes stop registering in Consul for `ci-db-replica.service.consul`
-   - **3.** Remove `/etc/consul/conf.d/dormant-ci-db-replica*.json` from CI Patroni nodes as this is no longer needed and Chef won't clean this up for you
-      1. `knife ssh -C 10 'roles:gprd-base-db-patroni-ci' 'sudo rm -f /etc/consul/conf.d/dormant-ci-db-replica*.json'`
-      1. `knife ssh -C 10 'roles:gprd-base-db-patroni-ci' 'sudo consul reload'`
-   - **4.** Verify the that DNS resolve for `ci-db-replica.service.consul` is only returning `patroni-ci` nodes,
+- **2.** Revert the `port_service_name_overrides` in `roles/gprd-base-db-patroni-main.json` to `idle-ci-db-replica` so that `patroni-main` nodes stop registering in Consul for `ci-db-replica.service.consul`
+- **3.** Remove `/etc/consul/conf.d/dormant-ci-db-replica*.json` from CI Patroni nodes as this is no longer needed and Chef won't clean this up for you
+   1. `knife ssh -C 10 'roles:gprd-base-db-patroni-ci' 'sudo rm -f /etc/consul/conf.d/dormant-ci-db-replica*.json'`
+   1. `knife ssh -C 10 'roles:gprd-base-db-patroni-ci' 'sudo consul reload'`
+- **4.** Verify the that DNS resolve for `ci-db-replica.service.consul` is only returning `patroni-ci` nodes,
    by executing `dig @localhost ci-db-replica.service.consul +short SRV | sort -k 4`
-   - **5.**  Verify that CI read requests shifted back:
-      - From [CI Read requests in patroni-main](https://thanos-query.ops.gitlab.net/graph?g0.expr=(sum(rate(pg_stat_user_tables_idx_tup_fetch%7Benv%3D%22gprd%22%2C%20relname%3D~%22(ci_.*%7Cexternal_pull_requests%7Ctaggings%7Ctags)%22%2Cinstance%3D~%22patroni-v12-.*%22%7D%5B1m%5D))%20by%20(relname%2C%20instance)%20%3E%201)%20and%20on(instance)%20pg_replication_is_replica%3D%3D1&g0.tab=0&g0.stacked=0&g0.range_input=6h&g0.max_source_resolution=0s&g0.deduplicate=1&g0.partial_response=0&g0.store_matches=%5B%5D)
-      - To [CI Read requests in patroni-ci](https://thanos-query.ops.gitlab.net/graph?g0.expr=(sum(rate(pg_stat_user_tables_idx_tup_fetch%7Benv%3D%22gprd%22%2C%20relname%3D~%22(ci_.*%7Cexternal_pull_requests%7Ctaggings%7Ctags)%22%2Cinstance%3D~%22patroni-ci-.*%22%7D%5B1m%5D))%20by%20(relname%2C%20instance)%20%3E%201)%20and%20on(instance)%20pg_replication_is_replica%3D%3D1&g0.tab=0&g0.stacked=0&g0.range_input=6h&g0.max_source_resolution=0s&g0.deduplicate=1&g0.partial_response=0&g0.store_matches=%5B%5D)
+- **5.**  Verify that CI read requests shifted back:
+   - From [CI Read requests in patroni-main](https://thanos-query.ops.gitlab.net/graph?g0.expr=(sum(rate(pg_stat_user_tables_idx_tup_fetch%7Benv%3D%22gprd%22%2C%20relname%3D~%22(ci_.*%7Cexternal_pull_requests%7Ctaggings%7Ctags)%22%2Cinstance%3D~%22patroni-v12-.*%22%7D%5B1m%5D))%20by%20(relname%2C%20instance)%20%3E%201)%20and%20on(instance)%20pg_replication_is_replica%3D%3D1&g0.tab=0&g0.stacked=0&g0.range_input=6h&g0.max_source_resolution=0s&g0.deduplicate=1&g0.partial_response=0&g0.store_matches=%5B%5D)
+   - To [CI Read requests in patroni-ci](https://thanos-query.ops.gitlab.net/graph?g0.expr=(sum(rate(pg_stat_user_tables_idx_tup_fetch%7Benv%3D%22gprd%22%2C%20relname%3D~%22(ci_.*%7Cexternal_pull_requests%7Ctaggings%7Ctags)%22%2Cinstance%3D~%22patroni-ci-.*%22%7D%5B1m%5D))%20by%20(relname%2C%20instance)%20%3E%201)%20and%20on(instance)%20pg_replication_is_replica%3D%3D1&g0.tab=0&g0.stacked=0&g0.range_input=6h&g0.max_source_resolution=0s&g0.deduplicate=1&g0.partial_response=0&g0.store_matches=%5B%5D)
