@@ -91,7 +91,7 @@ basic.dashboard(
   )
   .addTarget(
     prometheus.target(
-      'max(delivery_deployment_pipelines_total{status=~"scheduled|running|manual"}) by (status)',
+      'max(delivery_deployment_pipelines_total{status=~"scheduled|running|manual|failed"}) by (status)',
       legendFormat='{{status}}',
     ),
   ), gridPos={ x: 0, y: 100, w: 24, h: 12 }
