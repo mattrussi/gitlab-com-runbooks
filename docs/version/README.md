@@ -39,6 +39,7 @@
 * [Thanos Compact](../monitoring/thanos-compact.md)
 * [Session: Application architecture](../onboarding/architecture.md)
 * [GPG Keys for Package Signing](../packaging/manage-package-signing-keys.md)
+* [Steps to Recreate/Rebuild the CI CLuster using a Snapshot from the Master cluster (instead of pg_basebackup)](../patroni-ci/rebuild_ci_cluster_from_prod.md)
 * [Custom PostgreSQL Package Build Process for Ubuntu Xenial 16.04](../patroni/custom_postgres_packages.md)
 * [../patroni/database_peak_analysis.md](../patroni/database_peak_analysis.md)
 * [Geo Patroni Cluster Management](../patroni/geo-patroni-cluster.md)

@@ -55,6 +55,7 @@
 * [Gitlab.com on Kubernetes](../onboarding/gitlab.com_on_k8s.md)
 * [Determine The GitLab Project Associated with a Domain](../pages/pages-domain-lookup.md)
 * [Troubleshooting LetsEncrypt for Pages](../pages/pages-letsencrypt.md)
+* [Steps to Recreate/Rebuild the CI CLuster using a Snapshot from the Master cluster (instead of pg_basebackup)](../patroni-ci/rebuild_ci_cluster_from_prod.md)
 * [Patroni](../patroni/patroni-management.md)
 * [../patroni/performance-degradation-troubleshooting.md](../patroni/performance-degradation-troubleshooting.md)
 * [PostgreSQL HA](../patroni/pg-ha.md)
