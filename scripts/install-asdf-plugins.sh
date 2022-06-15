@@ -60,13 +60,19 @@ EOF
   fi
 fi
 
+# The location of the Thanos ASDF plugin has changed.
+if asdf plugin list --urls | grep -Fq https://gitlab.com/gitlab-com/gl-infra/asdf-thanos; then
+  asdf plugin remove thanos
+fi
+
 install_plugin go-jsonnet
 install_plugin jb
 install_plugin shellcheck
 install_plugin shfmt
 install_plugin terraform
-install_plugin promtool https://gitlab.com/gitlab-com/gl-infra/asdf-promtool
-install_plugin thanos https://gitlab.com/gitlab-com/gl-infra/asdf-thanos
+install_plugin promtool https://gitlab.com/gitlab-com/gl-infra/asdf-promtool.git
+install_plugin thanos https://gitlab.com/gitlab-com/gl-infra/asdf-promtool.git
+install_plugin amtool https://gitlab.com/gitlab-com/gl-infra/asdf-promtool.git
 install_plugin jsonnet-tool https://gitlab.com/gitlab-com/gl-infra/asdf-jsonnet-tool.git
 install_plugin ruby
 install_plugin nodejs

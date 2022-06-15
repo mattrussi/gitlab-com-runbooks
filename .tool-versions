@@ -2,6 +2,7 @@
 # Use the script: ./scripts/install-asdf-plugins.sh
 # NOTE: please add new plugins to ./scripts/install-asdf-plugins.sh when adding items here
 
+amtool 0.22.2 # datasource=github-releases depName=prometheus/alertmanager
 go-jsonnet 0.18.0 # datasource=github-releases depName=google/go-jsonnet
 golang 1.17.11 # datasource=golang-version depName=golang/go
 jb 0.4.0 # datasource=github-releases depName=jsonnet-bundler/jsonnet-bundler
