@@ -21,9 +21,12 @@
         {{- end -}}
 
         {{- if gt (len .CommonLabels) 0 -}}
+            {{- $removeLabels := stringSlice "alert_class" "environment" "feature_category" "pager" "monitor" "rules_domain" "severity" "slo_alert" "user_impacting" -}}
+            {{- $filteredLabels := .CommonLabels.Remove $removeLabels -}}
+
             {{- printf "\n:label: Labels :label:\n" -}}
 
-            {{- range .CommonLabels.SortedPairs -}}
+            {{- range $filteredLabels.SortedPairs -}}
                 {{- printf "*%s*: %s\n" (.Name | title) .Value -}}
             {{- end -}}
         {{- end -}}
