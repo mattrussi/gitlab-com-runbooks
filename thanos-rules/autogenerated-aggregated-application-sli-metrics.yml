@@ -53,6 +53,16 @@ groups:
   interval: 1m
   partial_response_strategy: warn
   rules:
+  - record: application_sli_aggregation:customers_dot_requests:error:rate_5m
+    expr: |
+      sum by (env,environment,tier,type,stage,endpoint_id) (
+        (application_sli_aggregation:customers_dot_requests:error:rate_5m{monitor!="global"} >= 0)
+      )
+  - record: application_sli_aggregation:customers_dot_requests:ops:rate_5m
+    expr: |
+      sum by (env,environment,tier,type,stage,endpoint_id) (
+        (application_sli_aggregation:customers_dot_requests:ops:rate_5m{monitor!="global"} >= 0)
+      )
   - record: application_sli_aggregation:customers_dot_requests:apdex:weight:score_5m
     expr: |
       sum by (env,environment,tier,type,stage,endpoint_id) (
@@ -62,6 +72,16 @@ groups:
     expr: |
       sum by (env,environment,tier,type,stage,endpoint_id) (
         (application_sli_aggregation:customers_dot_requests:apdex:success:rate_5m{monitor!="global"} >= 0)
+      )
+  - record: application_sli_aggregation:customers_dot_requests:error:rate_1h
+    expr: |
+      sum by (env,environment,tier,type,stage,endpoint_id) (
+        (application_sli_aggregation:customers_dot_requests:error:rate_1h{monitor!="global"} >= 0)
+      )
+  - record: application_sli_aggregation:customers_dot_requests:ops:rate_1h
+    expr: |
+      sum by (env,environment,tier,type,stage,endpoint_id) (
+        (application_sli_aggregation:customers_dot_requests:ops:rate_1h{monitor!="global"} >= 0)
       )
   - record: application_sli_aggregation:customers_dot_requests:apdex:weight:score_1h
     expr: |

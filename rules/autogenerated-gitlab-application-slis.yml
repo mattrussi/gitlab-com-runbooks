@@ -14,6 +14,16 @@ groups:
       sum by (endpoint_id,environment,stage,tier,type) (
         rate(gitlab_sli:customers_dot_requests_apdex:success_total{monitor!="global"}[5m])
       )
+  - record: application_sli_aggregation:customers_dot_requests:ops:rate_5m
+    expr: |
+      sum by (endpoint_id,environment,stage,tier,type) (
+        rate(gitlab_sli:customers_dot_requests:total{monitor!="global"}[5m])
+      )
+  - record: application_sli_aggregation:customers_dot_requests:error:rate_5m
+    expr: |
+      sum by (endpoint_id,environment,stage,tier,type) (
+        rate(gitlab_sli:customers_dot_requests:error_total{monitor!="global"}[5m])
+      )
   - record: application_sli_aggregation:customers_dot_requests:apdex:weight:score_1h
     expr: |
       sum by (endpoint_id,environment,stage,tier,type) (
@@ -23,4 +33,14 @@ groups:
     expr: |
       sum by (endpoint_id,environment,stage,tier,type) (
         rate(gitlab_sli:customers_dot_requests_apdex:success_total{monitor!="global"}[1h])
+      )
+  - record: application_sli_aggregation:customers_dot_requests:ops:rate_1h
+    expr: |
+      sum by (endpoint_id,environment,stage,tier,type) (
+        rate(gitlab_sli:customers_dot_requests:total{monitor!="global"}[1h])
+      )
+  - record: application_sli_aggregation:customers_dot_requests:error:rate_1h
+    expr: |
+      sum by (endpoint_id,environment,stage,tier,type) (
+        rate(gitlab_sli:customers_dot_requests:error_total{monitor!="global"}[1h])
       )
