@@ -91,7 +91,7 @@ local PagerDutyReceiver(channel) = {
       description: '{{ template "slack.title" . }}',
       client: 'GitLab Alertmanager',
       details: {
-        note: '{{ template "slack.text" . }}',
+        firing: '{{ template "slack.text" . }}',
         alertname: '{{ .CommonLabels.alertname }}',
         component: '{{ .CommonLabels.component }}',
         feature_category: '{{ .CommonLabels.feature_category }}',
