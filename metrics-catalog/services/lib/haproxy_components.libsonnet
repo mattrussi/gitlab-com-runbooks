@@ -72,7 +72,7 @@ local singleL4Component(stage, selector, definition, userImpacting) =
   });
 
 local combinedBackendCurry(generator, defaultSLIDescription, trafficCessationAlertConfig) =
-  function(userImpacting, stageMappings, selector, featureCategory, team=null, description=defaultSLIDescription, regional=null)
+  function(userImpacting, stageMappings, selector, featureCategory, team=null, description=defaultSLIDescription, regional=null, dependsOn=[])
     metricsCatalog.combinedServiceLevelIndicatorDefinition(
       userImpacting=userImpacting,
       featureCategory=featureCategory,
@@ -85,7 +85,8 @@ local combinedBackendCurry(generator, defaultSLIDescription, trafficCessationAle
       ],
       // Don't double-up RPS by including loadbalancer again
       serviceAggregation=false,
-      regional=regional
+      regional=regional,
+      dependsOn=dependsOn
     );
 
 

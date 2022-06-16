@@ -43,7 +43,10 @@ local validateAndApplyServiceDefaults(service) =
     serviceWithProvisioningDefaults;
 
   local sliInheritedDefaults =
-    { regional: serviceWithDefaults.regional }
+    {
+      regional: serviceWithDefaults.regional,
+      type: serviceWithDefaults.type,
+    }
     +
     (
       // When stage labels are disabled, we default all SLI recording rules
