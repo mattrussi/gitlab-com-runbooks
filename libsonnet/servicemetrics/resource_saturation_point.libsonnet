@@ -20,7 +20,7 @@ local defaultAlertingLabels =
   labelTaxonomy.labels.service |
   labelTaxonomy.labels.stage;
 
-local capacityPlanningStrategies = std.set(['quantile95_1w', 'quantile99_1w', 'quantile95_1h']);
+local capacityPlanningStrategies = std.set(['quantile95_1w', 'quantile99_1w', 'quantile95_1h', 'exclude']);
 
 local sloValidator = validator.validator(function(v) v > 0 && v <= 1, 'SLO threshold should be in the range (0,1]');
 
