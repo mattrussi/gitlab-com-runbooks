@@ -6,7 +6,7 @@ groups:
   rules:
   - record: sli_aggregations:http_requests_total_rate1m
     expr: |
-      sum by (code,environment,feature_category,fqdn,job,method,region,shard,stage,status,tier,type) (
+      sum by (code,environment,feature_category,fqdn,job,method,pod,region,shard,stage,status,tier,type) (
         rate(http_requests_total[1m])
       )
   - record: sli_aggregations:gitlab_sli:rails_request_apdex:total_rate1m
@@ -220,7 +220,7 @@ groups:
   rules:
   - record: sli_aggregations:http_requests_total_rate5m
     expr: |
-      sum by (code,environment,feature_category,fqdn,job,method,region,shard,stage,status,tier,type) (
+      sum by (code,environment,feature_category,fqdn,job,method,pod,region,shard,stage,status,tier,type) (
         rate(http_requests_total[5m])
       )
   - record: sli_aggregations:gitlab_sli:rails_request_apdex:total_rate5m
@@ -434,7 +434,7 @@ groups:
   rules:
   - record: sli_aggregations:http_requests_total_rate30m
     expr: |
-      sum by (code,environment,feature_category,fqdn,job,method,region,shard,stage,status,tier,type) (
+      sum by (code,environment,feature_category,fqdn,job,method,pod,region,shard,stage,status,tier,type) (
         rate(http_requests_total[30m])
       )
   - record: sli_aggregations:gitlab_sli:rails_request_apdex:total_rate30m
@@ -648,7 +648,7 @@ groups:
   rules:
   - record: sli_aggregations:http_requests_total_rate1h
     expr: |
-      sum by (code,environment,feature_category,fqdn,job,method,region,shard,stage,status,tier,type) (
+      sum by (code,environment,feature_category,fqdn,job,method,pod,region,shard,stage,status,tier,type) (
         rate(http_requests_total[1h])
       )
   - record: sli_aggregations:gitlab_sli:rails_request_apdex:total_rate1h
@@ -862,7 +862,7 @@ groups:
   rules:
   - record: sli_aggregations:http_requests_total_rate6h
     expr: |
-      sum by (code,environment,feature_category,fqdn,job,method,region,shard,stage,status,tier,type) (
+      sum by (code,environment,feature_category,fqdn,job,method,pod,region,shard,stage,status,tier,type) (
         rate(http_requests_total[6h])
       )
   - record: sli_aggregations:gitlab_sli:rails_request_apdex:total_rate6h

@@ -5,6 +5,300 @@ groups:
   interval: 1m
   partial_response_strategy: warn
   rules:
+  - alert: MonitoringServiceGrafanaApdexSLOViolation
+    for: 2m
+    annotations:
+      title: The grafana SLI of the monitoring service (`{{ $labels.stage }}` stage)
+        has an apdex violating SLO
+      description: |
+        Grafana builds and displays dashboards querying Thanos, Elasticsearch and other datasources. This SLI monitors the Grafana HTTP interface.
+
+        Currently the apdex value is {{ $value | humanizePercentage }}.
+      grafana_dashboard_id: monitoring-main/monitoring-overview
+      grafana_dashboard_link: https://dashboards.gitlab.net/d/monitoring-main/monitoring-overview?from=now-6h/m&to=now-1m/m&var-environment={{
+        $labels.environment }}&var-stage={{ $labels.stage }}
+      grafana_min_zoom_hours: "6"
+      grafana_panel_id: "1543481783"
+      grafana_variables: environment,stage
+      promql_template_1: |
+        histogram_quantile(
+          0.950000,
+          sum by (env,environment,tier,stage,le) (
+            rate(grafana_http_request_duration_seconds_bucket{environment="{{ $labels.environment }}",job="grafana",shard="default",stage="{{ $labels.stage }}",type="monitoring"}[5m])
+          )
+        )
+      runbook: docs/monitoring/README.md
+    labels:
+      aggregation: component
+      alert_class: slo_violation
+      alert_type: symptom
+      feature_category: not_owned
+      pager: pagerduty
+      rules_domain: general
+      severity: s2
+      sli_type: apdex
+      slo_alert: "yes"
+      user_impacting: "no"
+      window: 1h
+    expr: |
+      (
+        (
+          gitlab_component_apdex:ratio_1h{component="grafana",monitor="global",type="monitoring"}
+          < (1 - 14.4 * 0.001000)
+        )
+        and
+        (
+          gitlab_component_apdex:ratio_5m{component="grafana",monitor="global",type="monitoring"}
+          < (1 - 14.4 * 0.001000)
+        )
+      )
+      and on(env,environment,tier,type,stage,component)
+      (
+        sum by(env,environment,tier,type,stage,component) (gitlab_component_ops:rate_1h{component="grafana",monitor="global",type="monitoring"}) >= 1
+      )
+  - alert: MonitoringServiceGrafanaApdexSLOViolation
+    for: 2m
+    annotations:
+      title: The grafana SLI of the monitoring service (`{{ $labels.stage }}` stage)
+        has an apdex violating SLO
+      description: |
+        Grafana builds and displays dashboards querying Thanos, Elasticsearch and other datasources. This SLI monitors the Grafana HTTP interface.
+
+        Currently the apdex value is {{ $value | humanizePercentage }}.
+      grafana_dashboard_id: monitoring-main/monitoring-overview
+      grafana_dashboard_link: https://dashboards.gitlab.net/d/monitoring-main/monitoring-overview?from=now-6h/m&to=now-1m/m&var-environment={{
+        $labels.environment }}&var-stage={{ $labels.stage }}
+      grafana_min_zoom_hours: "6"
+      grafana_panel_id: "1543481783"
+      grafana_variables: environment,stage
+      promql_template_1: |
+        histogram_quantile(
+          0.950000,
+          sum by (env,environment,tier,stage,le) (
+            rate(grafana_http_request_duration_seconds_bucket{environment="{{ $labels.environment }}",job="grafana",shard="default",stage="{{ $labels.stage }}",type="monitoring"}[5m])
+          )
+        )
+      runbook: docs/monitoring/README.md
+    labels:
+      aggregation: component
+      alert_class: slo_violation
+      alert_type: symptom
+      feature_category: not_owned
+      pager: pagerduty
+      rules_domain: general
+      severity: s2
+      sli_type: apdex
+      slo_alert: "yes"
+      user_impacting: "no"
+      window: 6h
+    expr: |
+      (
+        (
+          gitlab_component_apdex:ratio_6h{component="grafana",monitor="global",type="monitoring"}
+          < (1 - 6 * 0.001000)
+        )
+        and
+        (
+          gitlab_component_apdex:ratio_30m{component="grafana",monitor="global",type="monitoring"}
+          < (1 - 6 * 0.001000)
+        )
+      )
+      and on(env,environment,tier,type,stage,component)
+      (
+        sum by(env,environment,tier,type,stage,component) (gitlab_component_ops:rate_6h{component="grafana",monitor="global",type="monitoring"}) >= 0.16667
+      )
+  - alert: MonitoringServiceGrafanaErrorSLOViolation
+    for: 2m
+    annotations:
+      title: The grafana SLI of the monitoring service (`{{ $labels.stage }}` stage)
+        has an error rate violating SLO
+      description: |
+        Grafana builds and displays dashboards querying Thanos, Elasticsearch and other datasources. This SLI monitors the Grafana HTTP interface.
+
+        Currently the error-rate is {{ $value | humanizePercentage }}.
+      grafana_dashboard_id: monitoring-main/monitoring-overview
+      grafana_dashboard_link: https://dashboards.gitlab.net/d/monitoring-main/monitoring-overview?from=now-6h/m&to=now-1m/m&var-environment={{
+        $labels.environment }}&var-stage={{ $labels.stage }}
+      grafana_min_zoom_hours: "6"
+      grafana_panel_id: "3079737102"
+      grafana_variables: environment,stage
+      promql_template_1: |
+        sum by (env,environment,tier,stage) (
+          rate(grafana_http_request_duration_seconds_bucket{code=~"^5.*",environment="{{ $labels.environment }}",job="grafana",le="+Inf",shard="default",stage="{{ $labels.stage }}",type="monitoring"}[5m])
+        )
+      runbook: docs/monitoring/README.md
+    labels:
+      aggregation: component
+      alert_class: slo_violation
+      alert_type: symptom
+      feature_category: not_owned
+      pager: pagerduty
+      rules_domain: general
+      severity: s2
+      sli_type: error
+      slo_alert: "yes"
+      user_impacting: "no"
+      window: 1h
+    expr: |
+      (
+        (
+          gitlab_component_errors:ratio_1h{component="grafana",monitor="global",type="monitoring"}
+          > (14.4 * 0.001000)
+        )
+        and
+        (
+          gitlab_component_errors:ratio_5m{component="grafana",monitor="global",type="monitoring"}
+          > (14.4 * 0.001000)
+        )
+      )
+      and on(env,environment,tier,type,stage,component)
+      (
+        sum by(env,environment,tier,type,stage,component) (gitlab_component_ops:rate_1h{component="grafana",monitor="global",type="monitoring"}) >= 1
+      )
+  - alert: MonitoringServiceGrafanaErrorSLOViolation
+    for: 2m
+    annotations:
+      title: The grafana SLI of the monitoring service (`{{ $labels.stage }}` stage)
+        has an error rate violating SLO
+      description: |
+        Grafana builds and displays dashboards querying Thanos, Elasticsearch and other datasources. This SLI monitors the Grafana HTTP interface.
+
+        Currently the error-rate is {{ $value | humanizePercentage }}.
+      grafana_dashboard_id: monitoring-main/monitoring-overview
+      grafana_dashboard_link: https://dashboards.gitlab.net/d/monitoring-main/monitoring-overview?from=now-6h/m&to=now-1m/m&var-environment={{
+        $labels.environment }}&var-stage={{ $labels.stage }}
+      grafana_min_zoom_hours: "6"
+      grafana_panel_id: "3079737102"
+      grafana_variables: environment,stage
+      promql_template_1: |
+        sum by (env,environment,tier,stage) (
+          rate(grafana_http_request_duration_seconds_bucket{code=~"^5.*",environment="{{ $labels.environment }}",job="grafana",le="+Inf",shard="default",stage="{{ $labels.stage }}",type="monitoring"}[5m])
+        )
+      runbook: docs/monitoring/README.md
+    labels:
+      aggregation: component
+      alert_class: slo_violation
+      alert_type: symptom
+      feature_category: not_owned
+      pager: pagerduty
+      rules_domain: general
+      severity: s2
+      sli_type: error
+      slo_alert: "yes"
+      user_impacting: "no"
+      window: 6h
+    expr: |
+      (
+        (
+          gitlab_component_errors:ratio_6h{component="grafana",monitor="global",type="monitoring"}
+          > (6 * 0.001000)
+        )
+        and
+        (
+          gitlab_component_errors:ratio_30m{component="grafana",monitor="global",type="monitoring"}
+          > (6 * 0.001000)
+        )
+      )
+      and on(env,environment,tier,type,stage,component)
+      (
+        sum by(env,environment,tier,type,stage,component) (gitlab_component_ops:rate_6h{component="grafana",monitor="global",type="monitoring"}) >= 0.16667
+      )
+  - alert: MonitoringServiceGrafanaDatasourcesErrorSLOViolation
+    for: 2m
+    annotations:
+      title: The grafana_datasources SLI of the monitoring service (`{{ $labels.stage
+        }}` stage) has an error rate violating SLO
+      description: |
+        Grafana builds and displays dashboards querying Thanos, Elasticsearch and other datasources. This SLI monitors the requests from Grafana to its datasources.
+
+        Currently the error-rate is {{ $value | humanizePercentage }}.
+      grafana_dashboard_id: monitoring-main/monitoring-overview
+      grafana_dashboard_link: https://dashboards.gitlab.net/d/monitoring-main/monitoring-overview?from=now-6h/m&to=now-1m/m&var-environment={{
+        $labels.environment }}&var-stage={{ $labels.stage }}
+      grafana_min_zoom_hours: "6"
+      grafana_panel_id: "402312104"
+      grafana_variables: environment,stage
+      promql_template_1: |
+        sum by (env,environment,tier,stage) (
+          rate(grafana_datasource_request_total{code=~"^5.*",environment="{{ $labels.environment }}",job="grafana",shard="default",stage="{{ $labels.stage }}",type="monitoring"}[5m])
+        )
+      runbook: docs/monitoring/README.md
+    labels:
+      aggregation: component
+      alert_class: slo_violation
+      alert_type: symptom
+      feature_category: not_owned
+      pager: pagerduty
+      rules_domain: general
+      severity: s2
+      sli_type: error
+      slo_alert: "yes"
+      user_impacting: "no"
+      window: 1h
+    expr: |
+      (
+        (
+          gitlab_component_errors:ratio_1h{component="grafana_datasources",monitor="global",type="monitoring"}
+          > (14.4 * 0.001000)
+        )
+        and
+        (
+          gitlab_component_errors:ratio_5m{component="grafana_datasources",monitor="global",type="monitoring"}
+          > (14.4 * 0.001000)
+        )
+      )
+      and on(env,environment,tier,type,stage,component)
+      (
+        sum by(env,environment,tier,type,stage,component) (gitlab_component_ops:rate_1h{component="grafana_datasources",monitor="global",type="monitoring"}) >= 1
+      )
+  - alert: MonitoringServiceGrafanaDatasourcesErrorSLOViolation
+    for: 2m
+    annotations:
+      title: The grafana_datasources SLI of the monitoring service (`{{ $labels.stage
+        }}` stage) has an error rate violating SLO
+      description: |
+        Grafana builds and displays dashboards querying Thanos, Elasticsearch and other datasources. This SLI monitors the requests from Grafana to its datasources.
+
+        Currently the error-rate is {{ $value | humanizePercentage }}.
+      grafana_dashboard_id: monitoring-main/monitoring-overview
+      grafana_dashboard_link: https://dashboards.gitlab.net/d/monitoring-main/monitoring-overview?from=now-6h/m&to=now-1m/m&var-environment={{
+        $labels.environment }}&var-stage={{ $labels.stage }}
+      grafana_min_zoom_hours: "6"
+      grafana_panel_id: "402312104"
+      grafana_variables: environment,stage
+      promql_template_1: |
+        sum by (env,environment,tier,stage) (
+          rate(grafana_datasource_request_total{code=~"^5.*",environment="{{ $labels.environment }}",job="grafana",shard="default",stage="{{ $labels.stage }}",type="monitoring"}[5m])
+        )
+      runbook: docs/monitoring/README.md
+    labels:
+      aggregation: component
+      alert_class: slo_violation
+      alert_type: symptom
+      feature_category: not_owned
+      pager: pagerduty
+      rules_domain: general
+      severity: s2
+      sli_type: error
+      slo_alert: "yes"
+      user_impacting: "no"
+      window: 6h
+    expr: |
+      (
+        (
+          gitlab_component_errors:ratio_6h{component="grafana_datasources",monitor="global",type="monitoring"}
+          > (6 * 0.001000)
+        )
+        and
+        (
+          gitlab_component_errors:ratio_30m{component="grafana_datasources",monitor="global",type="monitoring"}
+          > (6 * 0.001000)
+        )
+      )
+      and on(env,environment,tier,type,stage,component)
+      (
+        sum by(env,environment,tier,type,stage,component) (gitlab_component_ops:rate_6h{component="grafana_datasources",monitor="global",type="monitoring"}) >= 0.16667
+      )
   - alert: MonitoringServiceGrafanaGoogleLbErrorSLOViolation
     for: 2m
     annotations:
@@ -96,6 +390,204 @@ groups:
       and on(env,environment,tier,type,stage,component)
       (
         sum by(env,environment,tier,type,stage,component) (gitlab_component_ops:rate_6h{component="grafana_google_lb",monitor="global",type="monitoring"}) >= 0.16667
+      )
+  - alert: MonitoringServiceGrafanaImageRendererApdexSLOViolation
+    for: 2m
+    annotations:
+      title: The grafana_image_renderer SLI of the monitoring service (`{{ $labels.stage
+        }}` stage) has an apdex violating SLO
+      description: |
+        The Grafana Image Renderer exports Grafana dashboards or panels to PNG for external use. This SLI monitors the Grafana Image Renderer HTTP interface.
+
+        Currently the apdex value is {{ $value | humanizePercentage }}.
+      grafana_dashboard_id: monitoring-main/monitoring-overview
+      grafana_dashboard_link: https://dashboards.gitlab.net/d/monitoring-main/monitoring-overview?from=now-6h/m&to=now-1m/m&var-environment={{
+        $labels.environment }}&var-stage={{ $labels.stage }}
+      grafana_min_zoom_hours: "6"
+      grafana_panel_id: "3617039935"
+      grafana_variables: environment,stage
+      promql_template_1: |
+        histogram_quantile(
+          0.950000,
+          sum by (env,environment,tier,stage,le) (
+            rate(grafana_image_renderer_service_http_request_duration_seconds_bucket{environment="{{ $labels.environment }}",job="grafana-image-renderer",shard="default",stage="{{ $labels.stage }}",type="monitoring"}[5m])
+          )
+        )
+      runbook: docs/monitoring/README.md
+    labels:
+      aggregation: component
+      alert_class: slo_violation
+      alert_type: symptom
+      feature_category: not_owned
+      pager: pagerduty
+      rules_domain: general
+      severity: s2
+      sli_type: apdex
+      slo_alert: "yes"
+      user_impacting: "no"
+      window: 1h
+    expr: |
+      (
+        (
+          gitlab_component_apdex:ratio_1h{component="grafana_image_renderer",monitor="global",type="monitoring"}
+          < (1 - 14.4 * 0.001000)
+        )
+        and
+        (
+          gitlab_component_apdex:ratio_5m{component="grafana_image_renderer",monitor="global",type="monitoring"}
+          < (1 - 14.4 * 0.001000)
+        )
+      )
+      and on(env,environment,tier,type,stage,component)
+      (
+        sum by(env,environment,tier,type,stage,component) (gitlab_component_ops:rate_1h{component="grafana_image_renderer",monitor="global",type="monitoring"}) >= 1
+      )
+  - alert: MonitoringServiceGrafanaImageRendererApdexSLOViolation
+    for: 2m
+    annotations:
+      title: The grafana_image_renderer SLI of the monitoring service (`{{ $labels.stage
+        }}` stage) has an apdex violating SLO
+      description: |
+        The Grafana Image Renderer exports Grafana dashboards or panels to PNG for external use. This SLI monitors the Grafana Image Renderer HTTP interface.
+
+        Currently the apdex value is {{ $value | humanizePercentage }}.
+      grafana_dashboard_id: monitoring-main/monitoring-overview
+      grafana_dashboard_link: https://dashboards.gitlab.net/d/monitoring-main/monitoring-overview?from=now-6h/m&to=now-1m/m&var-environment={{
+        $labels.environment }}&var-stage={{ $labels.stage }}
+      grafana_min_zoom_hours: "6"
+      grafana_panel_id: "3617039935"
+      grafana_variables: environment,stage
+      promql_template_1: |
+        histogram_quantile(
+          0.950000,
+          sum by (env,environment,tier,stage,le) (
+            rate(grafana_image_renderer_service_http_request_duration_seconds_bucket{environment="{{ $labels.environment }}",job="grafana-image-renderer",shard="default",stage="{{ $labels.stage }}",type="monitoring"}[5m])
+          )
+        )
+      runbook: docs/monitoring/README.md
+    labels:
+      aggregation: component
+      alert_class: slo_violation
+      alert_type: symptom
+      feature_category: not_owned
+      pager: pagerduty
+      rules_domain: general
+      severity: s2
+      sli_type: apdex
+      slo_alert: "yes"
+      user_impacting: "no"
+      window: 6h
+    expr: |
+      (
+        (
+          gitlab_component_apdex:ratio_6h{component="grafana_image_renderer",monitor="global",type="monitoring"}
+          < (1 - 6 * 0.001000)
+        )
+        and
+        (
+          gitlab_component_apdex:ratio_30m{component="grafana_image_renderer",monitor="global",type="monitoring"}
+          < (1 - 6 * 0.001000)
+        )
+      )
+      and on(env,environment,tier,type,stage,component)
+      (
+        sum by(env,environment,tier,type,stage,component) (gitlab_component_ops:rate_6h{component="grafana_image_renderer",monitor="global",type="monitoring"}) >= 0.16667
+      )
+  - alert: MonitoringServiceGrafanaImageRendererErrorSLOViolation
+    for: 2m
+    annotations:
+      title: The grafana_image_renderer SLI of the monitoring service (`{{ $labels.stage
+        }}` stage) has an error rate violating SLO
+      description: |
+        The Grafana Image Renderer exports Grafana dashboards or panels to PNG for external use. This SLI monitors the Grafana Image Renderer HTTP interface.
+
+        Currently the error-rate is {{ $value | humanizePercentage }}.
+      grafana_dashboard_id: monitoring-main/monitoring-overview
+      grafana_dashboard_link: https://dashboards.gitlab.net/d/monitoring-main/monitoring-overview?from=now-6h/m&to=now-1m/m&var-environment={{
+        $labels.environment }}&var-stage={{ $labels.stage }}
+      grafana_min_zoom_hours: "6"
+      grafana_panel_id: "1209709030"
+      grafana_variables: environment,stage
+      promql_template_1: |
+        sum by (env,environment,tier,stage) (
+          rate(grafana_image_renderer_service_http_request_duration_seconds_bucket{environment="{{ $labels.environment }}",job="grafana-image-renderer",le="+Inf",shard="default",stage="{{ $labels.stage }}",status_code=~"^5.*",type="monitoring"}[5m])
+        )
+      runbook: docs/monitoring/README.md
+    labels:
+      aggregation: component
+      alert_class: slo_violation
+      alert_type: symptom
+      feature_category: not_owned
+      pager: pagerduty
+      rules_domain: general
+      severity: s2
+      sli_type: error
+      slo_alert: "yes"
+      user_impacting: "no"
+      window: 1h
+    expr: |
+      (
+        (
+          gitlab_component_errors:ratio_1h{component="grafana_image_renderer",monitor="global",type="monitoring"}
+          > (14.4 * 0.001000)
+        )
+        and
+        (
+          gitlab_component_errors:ratio_5m{component="grafana_image_renderer",monitor="global",type="monitoring"}
+          > (14.4 * 0.001000)
+        )
+      )
+      and on(env,environment,tier,type,stage,component)
+      (
+        sum by(env,environment,tier,type,stage,component) (gitlab_component_ops:rate_1h{component="grafana_image_renderer",monitor="global",type="monitoring"}) >= 1
+      )
+  - alert: MonitoringServiceGrafanaImageRendererErrorSLOViolation
+    for: 2m
+    annotations:
+      title: The grafana_image_renderer SLI of the monitoring service (`{{ $labels.stage
+        }}` stage) has an error rate violating SLO
+      description: |
+        The Grafana Image Renderer exports Grafana dashboards or panels to PNG for external use. This SLI monitors the Grafana Image Renderer HTTP interface.
+
+        Currently the error-rate is {{ $value | humanizePercentage }}.
+      grafana_dashboard_id: monitoring-main/monitoring-overview
+      grafana_dashboard_link: https://dashboards.gitlab.net/d/monitoring-main/monitoring-overview?from=now-6h/m&to=now-1m/m&var-environment={{
+        $labels.environment }}&var-stage={{ $labels.stage }}
+      grafana_min_zoom_hours: "6"
+      grafana_panel_id: "1209709030"
+      grafana_variables: environment,stage
+      promql_template_1: |
+        sum by (env,environment,tier,stage) (
+          rate(grafana_image_renderer_service_http_request_duration_seconds_bucket{environment="{{ $labels.environment }}",job="grafana-image-renderer",le="+Inf",shard="default",stage="{{ $labels.stage }}",status_code=~"^5.*",type="monitoring"}[5m])
+        )
+      runbook: docs/monitoring/README.md
+    labels:
+      aggregation: component
+      alert_class: slo_violation
+      alert_type: symptom
+      feature_category: not_owned
+      pager: pagerduty
+      rules_domain: general
+      severity: s2
+      sli_type: error
+      slo_alert: "yes"
+      user_impacting: "no"
+      window: 6h
+    expr: |
+      (
+        (
+          gitlab_component_errors:ratio_6h{component="grafana_image_renderer",monitor="global",type="monitoring"}
+          > (6 * 0.001000)
+        )
+        and
+        (
+          gitlab_component_errors:ratio_30m{component="grafana_image_renderer",monitor="global",type="monitoring"}
+          > (6 * 0.001000)
+        )
+      )
+      and on(env,environment,tier,type,stage,component)
+      (
+        sum by(env,environment,tier,type,stage,component) (gitlab_component_ops:rate_6h{component="grafana_image_renderer",monitor="global",type="monitoring"}) >= 0.16667
       )
   - alert: MonitoringServiceGrafanaTricksterApdexSLOViolation
     for: 2m
@@ -1484,7 +1976,7 @@ groups:
         histogram_quantile(
           0.950000,
           sum by (env,environment,tier,stage,le) (
-            rate(http_request_duration_seconds_bucket{environment="{{ $labels.environment }}",job=~"thanos|thanos-query-frontend",shard="default",stage="{{ $labels.stage }}",type="monitoring"}[5m])
+            rate(http_request_duration_seconds_bucket{environment="{{ $labels.environment }}",job="thanos-query-frontend",shard="default",stage="{{ $labels.stage }}",type="monitoring"}[5m])
           )
         )
       runbook: docs/monitoring/README.md
@@ -1535,7 +2027,7 @@ groups:
         histogram_quantile(
           0.950000,
           sum by (env,environment,tier,stage,le) (
-            rate(http_request_duration_seconds_bucket{environment="{{ $labels.environment }}",job=~"thanos|thanos-query-frontend",shard="default",stage="{{ $labels.stage }}",type="monitoring"}[5m])
+            rate(http_request_duration_seconds_bucket{environment="{{ $labels.environment }}",job="thanos-query-frontend",shard="default",stage="{{ $labels.stage }}",type="monitoring"}[5m])
           )
         )
       runbook: docs/monitoring/README.md
@@ -1584,7 +2076,7 @@ groups:
       grafana_variables: environment,stage
       promql_template_1: |
         sum by (env,environment,tier,stage) (
-          sli_aggregations:http_requests_total_rate5m{code=~"^5.*",environment="{{ $labels.environment }}",job=~"thanos|thanos-query-frontend",shard="default",stage="{{ $labels.stage }}",type="monitoring"}
+          sli_aggregations:http_requests_total_rate5m{code=~"^5.*",environment="{{ $labels.environment }}",job="thanos-query-frontend",shard="default",stage="{{ $labels.stage }}",type="monitoring"}
         )
       runbook: docs/monitoring/README.md
     labels:
@@ -1632,7 +2124,7 @@ groups:
       grafana_variables: environment,stage
       promql_template_1: |
         sum by (env,environment,tier,stage) (
-          sli_aggregations:http_requests_total_rate5m{code=~"^5.*",environment="{{ $labels.environment }}",job=~"thanos|thanos-query-frontend",shard="default",stage="{{ $labels.stage }}",type="monitoring"}
+          sli_aggregations:http_requests_total_rate5m{code=~"^5.*",environment="{{ $labels.environment }}",job="thanos-query-frontend",shard="default",stage="{{ $labels.stage }}",type="monitoring"}
         )
       runbook: docs/monitoring/README.md
     labels:
@@ -1680,7 +2172,7 @@ groups:
       grafana_variables: environment,stage
       promql_template_1: |
         sum by (env,environment,tier,stage) (
-          sli_aggregations:http_requests_total_rate5m{environment="{{ $labels.environment }}",job=~"thanos|thanos-query-frontend",shard="default",stage="{{ $labels.stage }}",type="monitoring"}
+          sli_aggregations:http_requests_total_rate5m{environment="{{ $labels.environment }}",job="thanos-query-frontend",shard="default",stage="{{ $labels.stage }}",type="monitoring"}
         )
       runbook: docs/monitoring/README.md
     labels:
@@ -1717,7 +2209,7 @@ groups:
       grafana_variables: environment,stage
       promql_template_1: |
         sum by (env,environment,tier,stage) (
-          sli_aggregations:http_requests_total_rate5m{environment="{{ $labels.environment }}",job=~"thanos|thanos-query-frontend",shard="default",stage="{{ $labels.stage }}",type="monitoring"}
+          sli_aggregations:http_requests_total_rate5m{environment="{{ $labels.environment }}",job="thanos-query-frontend",shard="default",stage="{{ $labels.stage }}",type="monitoring"}
         )
       runbook: docs/monitoring/README.md
     labels:
@@ -1922,7 +2414,7 @@ groups:
         histogram_quantile(
           0.950000,
           sum by (env,environment,tier,stage,le) (
-            rate(grpc_server_handling_seconds_bucket{environment="{{ $labels.environment }}",grpc_service=~"thanos.Store|thanos.info.Info",grpc_type="unary",job=~"thanos|thanos-store(-[0-9]+)?",stage="{{ $labels.stage }}",type="monitoring"}[5m])
+            rate(grpc_server_handling_seconds_bucket{environment="{{ $labels.environment }}",grpc_service=~"thanos.Store|thanos.info.Info",grpc_type="unary",job=~"thanos-store(-[0-9]+)?",stage="{{ $labels.stage }}",type="monitoring"}[5m])
           )
         )
       runbook: docs/monitoring/README.md
@@ -1973,7 +2465,7 @@ groups:
         histogram_quantile(
           0.950000,
           sum by (env,environment,tier,stage,le) (
-            rate(grpc_server_handling_seconds_bucket{environment="{{ $labels.environment }}",grpc_service=~"thanos.Store|thanos.info.Info",grpc_type="unary",job=~"thanos|thanos-store(-[0-9]+)?",stage="{{ $labels.stage }}",type="monitoring"}[5m])
+            rate(grpc_server_handling_seconds_bucket{environment="{{ $labels.environment }}",grpc_service=~"thanos.Store|thanos.info.Info",grpc_type="unary",job=~"thanos-store(-[0-9]+)?",stage="{{ $labels.stage }}",type="monitoring"}[5m])
           )
         )
       runbook: docs/monitoring/README.md
@@ -2022,7 +2514,7 @@ groups:
       grafana_variables: environment,stage
       promql_template_1: |
         sum by (env,environment,tier,stage) (
-          rate(grpc_server_handled_total{environment="{{ $labels.environment }}",grpc_code!="OK",grpc_service=~"thanos.Store|thanos.info.Info",grpc_type="unary",job=~"thanos|thanos-store(-[0-9]+)?",stage="{{ $labels.stage }}",type="monitoring"}[5m])
+          rate(grpc_server_handled_total{environment="{{ $labels.environment }}",grpc_code!="OK",grpc_service=~"thanos.Store|thanos.info.Info",grpc_type="unary",job=~"thanos-store(-[0-9]+)?",stage="{{ $labels.stage }}",type="monitoring"}[5m])
         )
       runbook: docs/monitoring/README.md
     labels:
@@ -2070,7 +2562,7 @@ groups:
       grafana_variables: environment,stage
       promql_template_1: |
         sum by (env,environment,tier,stage) (
-          rate(grpc_server_handled_total{environment="{{ $labels.environment }}",grpc_code!="OK",grpc_service=~"thanos.Store|thanos.info.Info",grpc_type="unary",job=~"thanos|thanos-store(-[0-9]+)?",stage="{{ $labels.stage }}",type="monitoring"}[5m])
+          rate(grpc_server_handled_total{environment="{{ $labels.environment }}",grpc_code!="OK",grpc_service=~"thanos.Store|thanos.info.Info",grpc_type="unary",job=~"thanos-store(-[0-9]+)?",stage="{{ $labels.stage }}",type="monitoring"}[5m])
         )
       runbook: docs/monitoring/README.md
     labels:
@@ -2118,7 +2610,7 @@ groups:
       grafana_variables: environment,stage
       promql_template_1: |
         sum by (env,environment,tier,stage) (
-          rate(grpc_server_handled_total{environment="{{ $labels.environment }}",grpc_service=~"thanos.Store|thanos.info.Info",grpc_type="unary",job=~"thanos|thanos-store(-[0-9]+)?",stage="{{ $labels.stage }}",type="monitoring"}[5m])
+          rate(grpc_server_handled_total{environment="{{ $labels.environment }}",grpc_service=~"thanos.Store|thanos.info.Info",grpc_type="unary",job=~"thanos-store(-[0-9]+)?",stage="{{ $labels.stage }}",type="monitoring"}[5m])
         )
       runbook: docs/monitoring/README.md
     labels:
@@ -2155,7 +2647,7 @@ groups:
       grafana_variables: environment,stage
       promql_template_1: |
         sum by (env,environment,tier,stage) (
-          rate(grpc_server_handled_total{environment="{{ $labels.environment }}",grpc_service=~"thanos.Store|thanos.info.Info",grpc_type="unary",job=~"thanos|thanos-store(-[0-9]+)?",stage="{{ $labels.stage }}",type="monitoring"}[5m])
+          rate(grpc_server_handled_total{environment="{{ $labels.environment }}",grpc_service=~"thanos.Store|thanos.info.Info",grpc_type="unary",job=~"thanos-store(-[0-9]+)?",stage="{{ $labels.stage }}",type="monitoring"}[5m])
         )
       runbook: docs/monitoring/README.md
     labels:

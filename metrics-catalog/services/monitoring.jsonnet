@@ -71,6 +71,12 @@ metricsCatalog.serviceDefinition({
         'grafana-trickster',
       ],
     },
+    'thanos-query': {
+      kind: 'Deployment',
+      containers: [
+        'thanos-query',
+      ],
+    },
     'thanos-query-frontend': {
       kind: 'Deployment',
       containers: [
@@ -131,7 +137,7 @@ metricsCatalog.serviceDefinition({
         histogram='http_request_duration_seconds_bucket',
         selector=thanosQuerySelector,
         satisfiedThreshold=30,
-        metricsFormat='migrating'
+        metricsFormat='openmetrics'
       ),
 
       requestRate: rateMetric(
@@ -144,11 +150,7 @@ metricsCatalog.serviceDefinition({
         selector=thanosQuerySelector { code: { re: '^5.*' } }
       ),
 
-      significantLabels: ['fqdn'],
-
-      toolingLinks: [
-        toolingLinks.elasticAPM(service='thanos'),
-      ],
+      significantLabels: ['pod'],
     },
 
     thanos_query_frontend: {
@@ -160,17 +162,7 @@ metricsCatalog.serviceDefinition({
       |||,
 
       local thanosQuerySelector = {
-        // The job regex was written while we were transitioning from a thanos
-        // stack deployed in GCE to a new one deployed in GKE. job=thanos
-        // covers all thanos components, but the metrics this filter is used for
-        // are unambiguous because only the query component exposes them - in
-        // the old stack.
-        // In the new stack, we include the query frontend component, which we'd
-        // prefer to measure from.
-        // The generated rules always retain the "stage" label, which is used to
-        // distinguish between the 2 stacks, so the metrics are never blended:
-        // each job name is only present in one stack.
-        job: { re: 'thanos|thanos-query-frontend' },
+        job: 'thanos-query-frontend',
         type: 'monitoring',
         shard: 'default',
       },
@@ -179,6 +171,7 @@ metricsCatalog.serviceDefinition({
         histogram='http_request_duration_seconds_bucket',
         selector=thanosQuerySelector,
         satisfiedThreshold=30,
+        metricsFormat='openmetrics'
       ),
 
       requestRate: rateMetric(
@@ -191,10 +184,9 @@ metricsCatalog.serviceDefinition({
         selector=thanosQuerySelector { code: { re: '^5.*' } }
       ),
 
-      significantLabels: ['fqdn'],
+      significantLabels: ['pod'],
 
       toolingLinks: [
-        toolingLinks.elasticAPM(service='thanos'),
         toolingLinks.kibana(title='Thanos Query', index='monitoring_ops', tag='monitoring.systemd.thanos-query'),
       ],
     },
@@ -212,10 +204,7 @@ metricsCatalog.serviceDefinition({
       |||,
 
       local thanosStoreSelector = {
-        // Similar to the query selector above, we must pull data from jobs
-        // corresponding to the old and new thanos stacks, which are mutually
-        // exclusive by stage.
-        job: { re: 'thanos|thanos-store(-[0-9]+)?' },
+        job: { re: 'thanos-store(-[0-9]+)?' },
         type: 'monitoring',
         grpc_service: { re: 'thanos.Store|thanos.info.Info' },
         grpc_type: 'unary',
@@ -226,7 +215,7 @@ metricsCatalog.serviceDefinition({
         selector=thanosStoreSelector,
         satisfiedThreshold=1,
         toleratedThreshold=3,
-        metricsFormat='migrating'
+        metricsFormat='openmetrics'
       ),
 
       requestRate: rateMetric(
@@ -239,10 +228,9 @@ metricsCatalog.serviceDefinition({
         selector=thanosStoreSelector { grpc_code: { ne: 'OK' } }
       ),
 
-      significantLabels: ['fqdn'],
+      significantLabels: ['pod'],
 
       toolingLinks: [
-        toolingLinks.elasticAPM(service='thanos'),
         toolingLinks.kibana(title='Thanos Store (gprd)', index='monitoring_gprd', tag='monitoring.systemd.thanos-store'),
         toolingLinks.kibana(title='Thanos Store (ops)', index='monitoring_ops', tag='monitoring.systemd.thanos-store'),
       ],
@@ -276,7 +264,6 @@ metricsCatalog.serviceDefinition({
       significantLabels: ['fqdn'],
 
       toolingLinks: [
-        toolingLinks.elasticAPM(service='thanos'),
         toolingLinks.kibana(title='Thanos Compact (gprd)', index='monitoring_gprd', tag='monitoring.systemd.thanos-compact'),
         toolingLinks.kibana(title='Thanos Compact (ops)', index='monitoring_ops', tag='monitoring.systemd.thanos-compact'),
       ],
@@ -306,7 +293,7 @@ metricsCatalog.serviceDefinition({
         selector=prometheusAlertsSelector
       ),
 
-      significantLabels: ['fqdn', 'alertmanager'],
+      significantLabels: ['fqdn', 'pod', 'alertmanager'],
     },
 
     thanos_rule_alert_sender: {
@@ -335,7 +322,6 @@ metricsCatalog.serviceDefinition({
       significantLabels: ['fqdn'],
 
       toolingLinks: [
-        toolingLinks.elasticAPM(service='thanos'),
         toolingLinks.kibana(title='Thanos Rule', index='monitoring_ops', tag='monitoring.systemd.thanos-rule'),
       ],
     },
@@ -380,7 +366,7 @@ metricsCatalog.serviceDefinition({
         selector=prometheusSelector { code: { re: '^5.*' } }
       ),
 
-      significantLabels: ['fqdn', 'handler'],
+      significantLabels: ['fqdn', 'pod', 'handler'],
 
       toolingLinks: [
         toolingLinks.kibana(title='Prometheus (gprd)', index='monitoring_gprd', tag='monitoring.prometheus'),
@@ -410,7 +396,107 @@ metricsCatalog.serviceDefinition({
         selector=selector
       ),
 
-      significantLabels: ['fqdn'],
+      significantLabels: ['fqdn', 'pod'],
+    },
+
+    grafana: {
+      userImpacting: false,
+      featureCategory: 'not_owned',
+      trafficCessationAlertConfig: false,
+
+      description: |||
+        Grafana builds and displays dashboards querying Thanos, Elasticsearch and other datasources.
+        This SLI monitors the Grafana HTTP interface.
+      |||,
+
+      local grafanaSelector = {
+        job: 'grafana',
+        type: 'monitoring',
+        shard: 'default',
+      },
+
+      apdex: histogramApdex(
+        histogram='grafana_http_request_duration_seconds_bucket',
+        selector=grafanaSelector,
+        satisfiedThreshold=5,
+        metricsFormat='openmetrics'
+      ),
+
+      requestRate: rateMetric(
+        counter='grafana_http_request_duration_seconds_bucket',
+        selector=grafanaSelector { le: '+Inf' },
+      ),
+
+      errorRate: rateMetric(
+        counter='grafana_http_request_duration_seconds_bucket',
+        selector=grafanaSelector { le: '+Inf', code: { re: '^5.*' } }
+      ),
+
+      significantLabels: ['pod'],
+    },
+
+    grafana_datasources: {
+      userImpacting: false,
+      featureCategory: 'not_owned',
+      trafficCessationAlertConfig: false,
+
+      description: |||
+        Grafana builds and displays dashboards querying Thanos, Elasticsearch and other datasources.
+        This SLI monitors the requests from Grafana to its datasources.
+      |||,
+
+      local grafanaSelector = {
+        job: 'grafana',
+        type: 'monitoring',
+        shard: 'default',
+      },
+
+      requestRate: rateMetric(
+        counter='grafana_datasource_request_total',
+        selector=grafanaSelector,
+      ),
+
+      errorRate: rateMetric(
+        counter='grafana_datasource_request_total',
+        selector=grafanaSelector { code: { re: '^5.*' } }
+      ),
+
+      significantLabels: ['pod', 'datasource'],
+    },
+
+    grafana_image_renderer: {
+      userImpacting: false,
+      featureCategory: 'not_owned',
+      trafficCessationAlertConfig: false,
+
+      description: |||
+        The Grafana Image Renderer exports Grafana dashboards or panels to PNG for external use.
+        This SLI monitors the Grafana Image Renderer HTTP interface.
+      |||,
+
+      local grafanaSelector = {
+        job: 'grafana-image-renderer',
+        type: 'monitoring',
+        shard: 'default',
+      },
+
+      apdex: histogramApdex(
+        histogram='grafana_image_renderer_service_http_request_duration_seconds_bucket',
+        selector=grafanaSelector,
+        satisfiedThreshold=30,
+      ),
+
+      requestRate: rateMetric(
+        counter='grafana_image_renderer_service_http_request_duration_seconds_bucket',
+        selector=grafanaSelector { le: '+Inf' },
+      ),
+
+      errorRate: rateMetric(
+        counter='grafana_image_renderer_service_http_request_duration_seconds_bucket',
+        selector=grafanaSelector { le: '+Inf', status_code: { re: '^5.*' } }
+      ),
+
+      significantLabels: ['pod'],
     },
 
     // Trickster is a prometheus caching layer that serves requests to our
@@ -459,7 +545,7 @@ metricsCatalog.serviceDefinition({
         histogram='thanos_memcached_operation_duration_seconds_bucket',
         satisfiedThreshold=0.5,
         selector=selector,
-        metricsFormat='migrating'
+        metricsFormat='openmetrics'
       ),
 
       requestRate: rateMetric(
