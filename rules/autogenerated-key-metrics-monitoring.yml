@@ -4,6 +4,76 @@ groups:
 - name: 'Component-Level SLIs: monitoring - 1m burn-rate'
   interval: 1m
   rules:
+  - record: gitlab_component_apdex:success:rate
+    labels:
+      component: grafana
+      tier: inf
+      type: monitoring
+    expr: |
+      sum by (environment,stage) (
+        rate(grafana_http_request_duration_seconds_bucket{job="grafana",le="5.0",shard="default",type="monitoring"}[1m])
+      )
+  - record: gitlab_component_apdex:weight:score
+    labels:
+      component: grafana
+      tier: inf
+      type: monitoring
+    expr: |
+      sum by (environment,stage) (
+        rate(grafana_http_request_duration_seconds_bucket{job="grafana",le="+Inf",shard="default",type="monitoring"}[1m])
+      )
+  - record: gitlab_component_ops:rate
+    labels:
+      component: grafana
+      tier: inf
+      type: monitoring
+    expr: |
+      sum by (environment,stage) (
+        rate(grafana_http_request_duration_seconds_bucket{job="grafana",le="+Inf",shard="default",type="monitoring"}[1m])
+      )
+  - record: gitlab_component_errors:rate
+    labels:
+      component: grafana
+      tier: inf
+      type: monitoring
+    expr: |
+      (
+        sum by (environment,stage) (
+          rate(grafana_http_request_duration_seconds_bucket{code=~"^5.*",job="grafana",le="+Inf",shard="default",type="monitoring"}[1m])
+        )
+      )
+      or
+      (
+        0 * group by(environment,stage) (
+          gitlab_component_ops:rate{component="grafana",tier="inf",type="monitoring"}
+        )
+      )
+  - record: gitlab_component_ops:rate
+    labels:
+      component: grafana_datasources
+      tier: inf
+      type: monitoring
+    expr: |
+      sum by (environment,stage) (
+        rate(grafana_datasource_request_total{job="grafana",shard="default",type="monitoring"}[1m])
+      )
+  - record: gitlab_component_errors:rate
+    labels:
+      component: grafana_datasources
+      tier: inf
+      type: monitoring
+    expr: |
+      (
+        sum by (environment,stage) (
+          rate(grafana_datasource_request_total{code=~"^5.*",job="grafana",shard="default",type="monitoring"}[1m])
+        )
+      )
+      or
+      (
+        0 * group by(environment,stage) (
+          gitlab_component_ops:rate{component="grafana_datasources",tier="inf",type="monitoring"}
+        )
+      )
   - record: gitlab_component_ops:rate
     labels:
       component: grafana_google_lb
@@ -30,6 +100,50 @@ groups:
       (
         0 * group by(environment) (
           gitlab_component_ops:rate{component="grafana_google_lb",stage="main",tier="inf",type="monitoring"}
+        )
+      )
+  - record: gitlab_component_apdex:success:rate
+    labels:
+      component: grafana_image_renderer
+      tier: inf
+      type: monitoring
+    expr: |
+      sum by (environment,stage) (
+        rate(grafana_image_renderer_service_http_request_duration_seconds_bucket{job="grafana-image-renderer",le="30",shard="default",type="monitoring"}[1m])
+      )
+  - record: gitlab_component_apdex:weight:score
+    labels:
+      component: grafana_image_renderer
+      tier: inf
+      type: monitoring
+    expr: |
+      sum by (environment,stage) (
+        rate(grafana_image_renderer_service_http_request_duration_seconds_bucket{job="grafana-image-renderer",le="+Inf",shard="default",type="monitoring"}[1m])
+      )
+  - record: gitlab_component_ops:rate
+    labels:
+      component: grafana_image_renderer
+      tier: inf
+      type: monitoring
+    expr: |
+      sum by (environment,stage) (
+        rate(grafana_image_renderer_service_http_request_duration_seconds_bucket{job="grafana-image-renderer",le="+Inf",shard="default",type="monitoring"}[1m])
+      )
+  - record: gitlab_component_errors:rate
+    labels:
+      component: grafana_image_renderer
+      tier: inf
+      type: monitoring
+    expr: |
+      (
+        sum by (environment,stage) (
+          rate(grafana_image_renderer_service_http_request_duration_seconds_bucket{job="grafana-image-renderer",le="+Inf",shard="default",status_code=~"^5.*",type="monitoring"}[1m])
+        )
+      )
+      or
+      (
+        0 * group by(environment,stage) (
+          gitlab_component_ops:rate{component="grafana_image_renderer",tier="inf",type="monitoring"}
         )
       )
   - record: gitlab_component_apdex:success:rate
@@ -221,7 +335,7 @@ groups:
       type: monitoring
     expr: |
       sum by (environment,stage) (
-        rate(thanos_memcached_operation_duration_seconds_bucket{le=~"0\\.5",type="monitoring"}[1m])
+        rate(thanos_memcached_operation_duration_seconds_bucket{le="0.5",type="monitoring"}[1m])
       )
   - record: gitlab_component_apdex:weight:score
     labels:
@@ -265,7 +379,7 @@ groups:
       type: monitoring
     expr: |
       sum by (environment,stage) (
-        rate(http_request_duration_seconds_bucket{job="thanos-query",le=~"30|30\\.0",shard="default",type="monitoring"}[1m])
+        rate(http_request_duration_seconds_bucket{job="thanos-query",le="30.0",shard="default",type="monitoring"}[1m])
       )
   - record: gitlab_component_apdex:weight:score
     labels:
@@ -309,7 +423,7 @@ groups:
       type: monitoring
     expr: |
       sum by (environment,stage) (
-        rate(http_request_duration_seconds_bucket{job=~"thanos|thanos-query-frontend",le="30",shard="default",type="monitoring"}[1m])
+        rate(http_request_duration_seconds_bucket{job="thanos-query-frontend",le="30.0",shard="default",type="monitoring"}[1m])
       )
   - record: gitlab_component_apdex:weight:score
     labels:
@@ -318,7 +432,7 @@ groups:
       type: monitoring
     expr: |
       sum by (environment,stage) (
-        rate(http_request_duration_seconds_bucket{job=~"thanos|thanos-query-frontend",le="+Inf",shard="default",type="monitoring"}[1m])
+        rate(http_request_duration_seconds_bucket{job="thanos-query-frontend",le="+Inf",shard="default",type="monitoring"}[1m])
       )
   - record: gitlab_component_ops:rate
     labels:
@@ -327,7 +441,7 @@ groups:
       type: monitoring
     expr: |
       sum by (environment,stage) (
-        sli_aggregations:http_requests_total_rate1m{job=~"thanos|thanos-query-frontend",shard="default",type="monitoring"}
+        sli_aggregations:http_requests_total_rate1m{job="thanos-query-frontend",shard="default",type="monitoring"}
       )
   - record: gitlab_component_errors:rate
     labels:
@@ -337,7 +451,7 @@ groups:
     expr: |
       (
         sum by (environment,stage) (
-          sli_aggregations:http_requests_total_rate1m{code=~"^5.*",job=~"thanos|thanos-query-frontend",shard="default",type="monitoring"}
+          sli_aggregations:http_requests_total_rate1m{code=~"^5.*",job="thanos-query-frontend",shard="default",type="monitoring"}
         )
       )
       or
@@ -380,11 +494,11 @@ groups:
     expr: |
       (
         sum by (environment,stage) (
-          rate(grpc_server_handling_seconds_bucket{grpc_service=~"thanos.Store|thanos.info.Info",grpc_type="unary",job=~"thanos|thanos-store(-[0-9]+)?",le=~"1|1\\.0",type="monitoring"}[1m])
+          rate(grpc_server_handling_seconds_bucket{grpc_service=~"thanos.Store|thanos.info.Info",grpc_type="unary",job=~"thanos-store(-[0-9]+)?",le="1.0",type="monitoring"}[1m])
         )
         +
         sum by (environment,stage) (
-          rate(grpc_server_handling_seconds_bucket{grpc_service=~"thanos.Store|thanos.info.Info",grpc_type="unary",job=~"thanos|thanos-store(-[0-9]+)?",le=~"3|3\\.0",type="monitoring"}[1m])
+          rate(grpc_server_handling_seconds_bucket{grpc_service=~"thanos.Store|thanos.info.Info",grpc_type="unary",job=~"thanos-store(-[0-9]+)?",le="3.0",type="monitoring"}[1m])
         )
       )
       /
@@ -396,7 +510,7 @@ groups:
       type: monitoring
     expr: |
       sum by (environment,stage) (
-        rate(grpc_server_handling_seconds_bucket{grpc_service=~"thanos.Store|thanos.info.Info",grpc_type="unary",job=~"thanos|thanos-store(-[0-9]+)?",le="+Inf",type="monitoring"}[1m])
+        rate(grpc_server_handling_seconds_bucket{grpc_service=~"thanos.Store|thanos.info.Info",grpc_type="unary",job=~"thanos-store(-[0-9]+)?",le="+Inf",type="monitoring"}[1m])
       )
   - record: gitlab_component_ops:rate
     labels:
@@ -405,7 +519,7 @@ groups:
       type: monitoring
     expr: |
       sum by (environment,stage) (
-        rate(grpc_server_handled_total{grpc_service=~"thanos.Store|thanos.info.Info",grpc_type="unary",job=~"thanos|thanos-store(-[0-9]+)?",type="monitoring"}[1m])
+        rate(grpc_server_handled_total{grpc_service=~"thanos.Store|thanos.info.Info",grpc_type="unary",job=~"thanos-store(-[0-9]+)?",type="monitoring"}[1m])
       )
   - record: gitlab_component_errors:rate
     labels:
@@ -415,7 +529,7 @@ groups:
     expr: |
       (
         sum by (environment,stage) (
-          rate(grpc_server_handled_total{grpc_code!="OK",grpc_service=~"thanos.Store|thanos.info.Info",grpc_type="unary",job=~"thanos|thanos-store(-[0-9]+)?",type="monitoring"}[1m])
+          rate(grpc_server_handled_total{grpc_code!="OK",grpc_service=~"thanos.Store|thanos.info.Info",grpc_type="unary",job=~"thanos-store(-[0-9]+)?",type="monitoring"}[1m])
         )
       )
       or
@@ -427,6 +541,76 @@ groups:
 - name: 'Component-Level SLIs: monitoring - 5m burn-rate'
   interval: 1m
   rules:
+  - record: gitlab_component_apdex:success:rate_5m
+    labels:
+      component: grafana
+      tier: inf
+      type: monitoring
+    expr: |
+      sum by (environment,stage) (
+        rate(grafana_http_request_duration_seconds_bucket{job="grafana",le="5.0",shard="default",type="monitoring"}[5m])
+      )
+  - record: gitlab_component_apdex:weight:score_5m
+    labels:
+      component: grafana
+      tier: inf
+      type: monitoring
+    expr: |
+      sum by (environment,stage) (
+        rate(grafana_http_request_duration_seconds_bucket{job="grafana",le="+Inf",shard="default",type="monitoring"}[5m])
+      )
+  - record: gitlab_component_ops:rate_5m
+    labels:
+      component: grafana
+      tier: inf
+      type: monitoring
+    expr: |
+      sum by (environment,stage) (
+        rate(grafana_http_request_duration_seconds_bucket{job="grafana",le="+Inf",shard="default",type="monitoring"}[5m])
+      )
+  - record: gitlab_component_errors:rate_5m
+    labels:
+      component: grafana
+      tier: inf
+      type: monitoring
+    expr: |
+      (
+        sum by (environment,stage) (
+          rate(grafana_http_request_duration_seconds_bucket{code=~"^5.*",job="grafana",le="+Inf",shard="default",type="monitoring"}[5m])
+        )
+      )
+      or
+      (
+        0 * group by(environment,stage) (
+          gitlab_component_ops:rate_5m{component="grafana",tier="inf",type="monitoring"}
+        )
+      )
+  - record: gitlab_component_ops:rate_5m
+    labels:
+      component: grafana_datasources
+      tier: inf
+      type: monitoring
+    expr: |
+      sum by (environment,stage) (
+        rate(grafana_datasource_request_total{job="grafana",shard="default",type="monitoring"}[5m])
+      )
+  - record: gitlab_component_errors:rate_5m
+    labels:
+      component: grafana_datasources
+      tier: inf
+      type: monitoring
+    expr: |
+      (
+        sum by (environment,stage) (
+          rate(grafana_datasource_request_total{code=~"^5.*",job="grafana",shard="default",type="monitoring"}[5m])
+        )
+      )
+      or
+      (
+        0 * group by(environment,stage) (
+          gitlab_component_ops:rate_5m{component="grafana_datasources",tier="inf",type="monitoring"}
+        )
+      )
   - record: gitlab_component_ops:rate_5m
     labels:
       component: grafana_google_lb
@@ -453,6 +637,50 @@ groups:
       (
         0 * group by(environment) (
           gitlab_component_ops:rate_5m{component="grafana_google_lb",stage="main",tier="inf",type="monitoring"}
+        )
+      )
+  - record: gitlab_component_apdex:success:rate_5m
+    labels:
+      component: grafana_image_renderer
+      tier: inf
+      type: monitoring
+    expr: |
+      sum by (environment,stage) (
+        rate(grafana_image_renderer_service_http_request_duration_seconds_bucket{job="grafana-image-renderer",le="30",shard="default",type="monitoring"}[5m])
+      )
+  - record: gitlab_component_apdex:weight:score_5m
+    labels:
+      component: grafana_image_renderer
+      tier: inf
+      type: monitoring
+    expr: |
+      sum by (environment,stage) (
+        rate(grafana_image_renderer_service_http_request_duration_seconds_bucket{job="grafana-image-renderer",le="+Inf",shard="default",type="monitoring"}[5m])
+      )
+  - record: gitlab_component_ops:rate_5m
+    labels:
+      component: grafana_image_renderer
+      tier: inf
+      type: monitoring
+    expr: |
+      sum by (environment,stage) (
+        rate(grafana_image_renderer_service_http_request_duration_seconds_bucket{job="grafana-image-renderer",le="+Inf",shard="default",type="monitoring"}[5m])
+      )
+  - record: gitlab_component_errors:rate_5m
+    labels:
+      component: grafana_image_renderer
+      tier: inf
+      type: monitoring
+    expr: |
+      (
+        sum by (environment,stage) (
+          rate(grafana_image_renderer_service_http_request_duration_seconds_bucket{job="grafana-image-renderer",le="+Inf",shard="default",status_code=~"^5.*",type="monitoring"}[5m])
+        )
+      )
+      or
+      (
+        0 * group by(environment,stage) (
+          gitlab_component_ops:rate_5m{component="grafana_image_renderer",tier="inf",type="monitoring"}
         )
       )
   - record: gitlab_component_apdex:success:rate_5m
@@ -644,7 +872,7 @@ groups:
       type: monitoring
     expr: |
       sum by (environment,stage) (
-        rate(thanos_memcached_operation_duration_seconds_bucket{le=~"0\\.5",type="monitoring"}[5m])
+        rate(thanos_memcached_operation_duration_seconds_bucket{le="0.5",type="monitoring"}[5m])
       )
   - record: gitlab_component_apdex:weight:score_5m
     labels:
@@ -688,7 +916,7 @@ groups:
       type: monitoring
     expr: |
       sum by (environment,stage) (
-        rate(http_request_duration_seconds_bucket{job="thanos-query",le=~"30|30\\.0",shard="default",type="monitoring"}[5m])
+        rate(http_request_duration_seconds_bucket{job="thanos-query",le="30.0",shard="default",type="monitoring"}[5m])
       )
   - record: gitlab_component_apdex:weight:score_5m
     labels:
@@ -732,7 +960,7 @@ groups:
       type: monitoring
     expr: |
       sum by (environment,stage) (
-        rate(http_request_duration_seconds_bucket{job=~"thanos|thanos-query-frontend",le="30",shard="default",type="monitoring"}[5m])
+        rate(http_request_duration_seconds_bucket{job="thanos-query-frontend",le="30.0",shard="default",type="monitoring"}[5m])
       )
   - record: gitlab_component_apdex:weight:score_5m
     labels:
@@ -741,7 +969,7 @@ groups:
       type: monitoring
     expr: |
       sum by (environment,stage) (
-        rate(http_request_duration_seconds_bucket{job=~"thanos|thanos-query-frontend",le="+Inf",shard="default",type="monitoring"}[5m])
+        rate(http_request_duration_seconds_bucket{job="thanos-query-frontend",le="+Inf",shard="default",type="monitoring"}[5m])
       )
   - record: gitlab_component_ops:rate_5m
     labels:
@@ -750,7 +978,7 @@ groups:
       type: monitoring
     expr: |
       sum by (environment,stage) (
-        sli_aggregations:http_requests_total_rate5m{job=~"thanos|thanos-query-frontend",shard="default",type="monitoring"}
+        sli_aggregations:http_requests_total_rate5m{job="thanos-query-frontend",shard="default",type="monitoring"}
       )
   - record: gitlab_component_errors:rate_5m
     labels:
@@ -760,7 +988,7 @@ groups:
     expr: |
       (
         sum by (environment,stage) (
-          sli_aggregations:http_requests_total_rate5m{code=~"^5.*",job=~"thanos|thanos-query-frontend",shard="default",type="monitoring"}
+          sli_aggregations:http_requests_total_rate5m{code=~"^5.*",job="thanos-query-frontend",shard="default",type="monitoring"}
         )
       )
       or
@@ -803,11 +1031,11 @@ groups:
     expr: |
       (
         sum by (environment,stage) (
-          rate(grpc_server_handling_seconds_bucket{grpc_service=~"thanos.Store|thanos.info.Info",grpc_type="unary",job=~"thanos|thanos-store(-[0-9]+)?",le=~"1|1\\.0",type="monitoring"}[5m])
+          rate(grpc_server_handling_seconds_bucket{grpc_service=~"thanos.Store|thanos.info.Info",grpc_type="unary",job=~"thanos-store(-[0-9]+)?",le="1.0",type="monitoring"}[5m])
         )
         +
         sum by (environment,stage) (
-          rate(grpc_server_handling_seconds_bucket{grpc_service=~"thanos.Store|thanos.info.Info",grpc_type="unary",job=~"thanos|thanos-store(-[0-9]+)?",le=~"3|3\\.0",type="monitoring"}[5m])
+          rate(grpc_server_handling_seconds_bucket{grpc_service=~"thanos.Store|thanos.info.Info",grpc_type="unary",job=~"thanos-store(-[0-9]+)?",le="3.0",type="monitoring"}[5m])
         )
       )
       /
@@ -819,7 +1047,7 @@ groups:
       type: monitoring
     expr: |
       sum by (environment,stage) (
-        rate(grpc_server_handling_seconds_bucket{grpc_service=~"thanos.Store|thanos.info.Info",grpc_type="unary",job=~"thanos|thanos-store(-[0-9]+)?",le="+Inf",type="monitoring"}[5m])
+        rate(grpc_server_handling_seconds_bucket{grpc_service=~"thanos.Store|thanos.info.Info",grpc_type="unary",job=~"thanos-store(-[0-9]+)?",le="+Inf",type="monitoring"}[5m])
       )
   - record: gitlab_component_ops:rate_5m
     labels:
@@ -828,7 +1056,7 @@ groups:
       type: monitoring
     expr: |
       sum by (environment,stage) (
-        rate(grpc_server_handled_total{grpc_service=~"thanos.Store|thanos.info.Info",grpc_type="unary",job=~"thanos|thanos-store(-[0-9]+)?",type="monitoring"}[5m])
+        rate(grpc_server_handled_total{grpc_service=~"thanos.Store|thanos.info.Info",grpc_type="unary",job=~"thanos-store(-[0-9]+)?",type="monitoring"}[5m])
       )
   - record: gitlab_component_errors:rate_5m
     labels:
@@ -838,7 +1066,7 @@ groups:
     expr: |
       (
         sum by (environment,stage) (
-          rate(grpc_server_handled_total{grpc_code!="OK",grpc_service=~"thanos.Store|thanos.info.Info",grpc_type="unary",job=~"thanos|thanos-store(-[0-9]+)?",type="monitoring"}[5m])
+          rate(grpc_server_handled_total{grpc_code!="OK",grpc_service=~"thanos.Store|thanos.info.Info",grpc_type="unary",job=~"thanos-store(-[0-9]+)?",type="monitoring"}[5m])
         )
       )
       or
@@ -850,6 +1078,76 @@ groups:
 - name: 'Component-Level SLIs: monitoring - 30m burn-rate'
   interval: 2m
   rules:
+  - record: gitlab_component_apdex:success:rate_30m
+    labels:
+      component: grafana
+      tier: inf
+      type: monitoring
+    expr: |
+      sum by (environment,stage) (
+        rate(grafana_http_request_duration_seconds_bucket{job="grafana",le="5.0",shard="default",type="monitoring"}[30m])
+      )
+  - record: gitlab_component_apdex:weight:score_30m
+    labels:
+      component: grafana
+      tier: inf
+      type: monitoring
+    expr: |
+      sum by (environment,stage) (
+        rate(grafana_http_request_duration_seconds_bucket{job="grafana",le="+Inf",shard="default",type="monitoring"}[30m])
+      )
+  - record: gitlab_component_ops:rate_30m
+    labels:
+      component: grafana
+      tier: inf
+      type: monitoring
+    expr: |
+      sum by (environment,stage) (
+        rate(grafana_http_request_duration_seconds_bucket{job="grafana",le="+Inf",shard="default",type="monitoring"}[30m])
+      )
+  - record: gitlab_component_errors:rate_30m
+    labels:
+      component: grafana
+      tier: inf
+      type: monitoring
+    expr: |
+      (
+        sum by (environment,stage) (
+          rate(grafana_http_request_duration_seconds_bucket{code=~"^5.*",job="grafana",le="+Inf",shard="default",type="monitoring"}[30m])
+        )
+      )
+      or
+      (
+        0 * group by(environment,stage) (
+          gitlab_component_ops:rate_30m{component="grafana",tier="inf",type="monitoring"}
+        )
+      )
+  - record: gitlab_component_ops:rate_30m
+    labels:
+      component: grafana_datasources
+      tier: inf
+      type: monitoring
+    expr: |
+      sum by (environment,stage) (
+        rate(grafana_datasource_request_total{job="grafana",shard="default",type="monitoring"}[30m])
+      )
+  - record: gitlab_component_errors:rate_30m
+    labels:
+      component: grafana_datasources
+      tier: inf
+      type: monitoring
+    expr: |
+      (
+        sum by (environment,stage) (
+          rate(grafana_datasource_request_total{code=~"^5.*",job="grafana",shard="default",type="monitoring"}[30m])
+        )
+      )
+      or
+      (
+        0 * group by(environment,stage) (
+          gitlab_component_ops:rate_30m{component="grafana_datasources",tier="inf",type="monitoring"}
+        )
+      )
   - record: gitlab_component_ops:rate_30m
     labels:
       component: grafana_google_lb
@@ -876,6 +1174,50 @@ groups:
       (
         0 * group by(environment) (
           gitlab_component_ops:rate_30m{component="grafana_google_lb",stage="main",tier="inf",type="monitoring"}
+        )
+      )
+  - record: gitlab_component_apdex:success:rate_30m
+    labels:
+      component: grafana_image_renderer
+      tier: inf
+      type: monitoring
+    expr: |
+      sum by (environment,stage) (
+        rate(grafana_image_renderer_service_http_request_duration_seconds_bucket{job="grafana-image-renderer",le="30",shard="default",type="monitoring"}[30m])
+      )
+  - record: gitlab_component_apdex:weight:score_30m
+    labels:
+      component: grafana_image_renderer
+      tier: inf
+      type: monitoring
+    expr: |
+      sum by (environment,stage) (
+        rate(grafana_image_renderer_service_http_request_duration_seconds_bucket{job="grafana-image-renderer",le="+Inf",shard="default",type="monitoring"}[30m])
+      )
+  - record: gitlab_component_ops:rate_30m
+    labels:
+      component: grafana_image_renderer
+      tier: inf
+      type: monitoring
+    expr: |
+      sum by (environment,stage) (
+        rate(grafana_image_renderer_service_http_request_duration_seconds_bucket{job="grafana-image-renderer",le="+Inf",shard="default",type="monitoring"}[30m])
+      )
+  - record: gitlab_component_errors:rate_30m
+    labels:
+      component: grafana_image_renderer
+      tier: inf
+      type: monitoring
+    expr: |
+      (
+        sum by (environment,stage) (
+          rate(grafana_image_renderer_service_http_request_duration_seconds_bucket{job="grafana-image-renderer",le="+Inf",shard="default",status_code=~"^5.*",type="monitoring"}[30m])
+        )
+      )
+      or
+      (
+        0 * group by(environment,stage) (
+          gitlab_component_ops:rate_30m{component="grafana_image_renderer",tier="inf",type="monitoring"}
         )
       )
   - record: gitlab_component_apdex:success:rate_30m
@@ -1067,7 +1409,7 @@ groups:
       type: monitoring
     expr: |
       sum by (environment,stage) (
-        rate(thanos_memcached_operation_duration_seconds_bucket{le=~"0\\.5",type="monitoring"}[30m])
+        rate(thanos_memcached_operation_duration_seconds_bucket{le="0.5",type="monitoring"}[30m])
       )
   - record: gitlab_component_apdex:weight:score_30m
     labels:
@@ -1111,7 +1453,7 @@ groups:
       type: monitoring
     expr: |
       sum by (environment,stage) (
-        rate(http_request_duration_seconds_bucket{job="thanos-query",le=~"30|30\\.0",shard="default",type="monitoring"}[30m])
+        rate(http_request_duration_seconds_bucket{job="thanos-query",le="30.0",shard="default",type="monitoring"}[30m])
       )
   - record: gitlab_component_apdex:weight:score_30m
     labels:
@@ -1155,7 +1497,7 @@ groups:
       type: monitoring
     expr: |
       sum by (environment,stage) (
-        rate(http_request_duration_seconds_bucket{job=~"thanos|thanos-query-frontend",le="30",shard="default",type="monitoring"}[30m])
+        rate(http_request_duration_seconds_bucket{job="thanos-query-frontend",le="30.0",shard="default",type="monitoring"}[30m])
       )
   - record: gitlab_component_apdex:weight:score_30m
     labels:
@@ -1164,7 +1506,7 @@ groups:
       type: monitoring
     expr: |
       sum by (environment,stage) (
-        rate(http_request_duration_seconds_bucket{job=~"thanos|thanos-query-frontend",le="+Inf",shard="default",type="monitoring"}[30m])
+        rate(http_request_duration_seconds_bucket{job="thanos-query-frontend",le="+Inf",shard="default",type="monitoring"}[30m])
       )
   - record: gitlab_component_ops:rate_30m
     labels:
@@ -1173,7 +1515,7 @@ groups:
       type: monitoring
     expr: |
       sum by (environment,stage) (
-        sli_aggregations:http_requests_total_rate30m{job=~"thanos|thanos-query-frontend",shard="default",type="monitoring"}
+        sli_aggregations:http_requests_total_rate30m{job="thanos-query-frontend",shard="default",type="monitoring"}
       )
   - record: gitlab_component_errors:rate_30m
     labels:
@@ -1183,7 +1525,7 @@ groups:
     expr: |
       (
         sum by (environment,stage) (
-          sli_aggregations:http_requests_total_rate30m{code=~"^5.*",job=~"thanos|thanos-query-frontend",shard="default",type="monitoring"}
+          sli_aggregations:http_requests_total_rate30m{code=~"^5.*",job="thanos-query-frontend",shard="default",type="monitoring"}
         )
       )
       or
@@ -1226,11 +1568,11 @@ groups:
     expr: |
       (
         sum by (environment,stage) (
-          rate(grpc_server_handling_seconds_bucket{grpc_service=~"thanos.Store|thanos.info.Info",grpc_type="unary",job=~"thanos|thanos-store(-[0-9]+)?",le=~"1|1\\.0",type="monitoring"}[30m])
+          rate(grpc_server_handling_seconds_bucket{grpc_service=~"thanos.Store|thanos.info.Info",grpc_type="unary",job=~"thanos-store(-[0-9]+)?",le="1.0",type="monitoring"}[30m])
         )
         +
         sum by (environment,stage) (
-          rate(grpc_server_handling_seconds_bucket{grpc_service=~"thanos.Store|thanos.info.Info",grpc_type="unary",job=~"thanos|thanos-store(-[0-9]+)?",le=~"3|3\\.0",type="monitoring"}[30m])
+          rate(grpc_server_handling_seconds_bucket{grpc_service=~"thanos.Store|thanos.info.Info",grpc_type="unary",job=~"thanos-store(-[0-9]+)?",le="3.0",type="monitoring"}[30m])
         )
       )
       /
@@ -1242,7 +1584,7 @@ groups:
       type: monitoring
     expr: |
       sum by (environment,stage) (
-        rate(grpc_server_handling_seconds_bucket{grpc_service=~"thanos.Store|thanos.info.Info",grpc_type="unary",job=~"thanos|thanos-store(-[0-9]+)?",le="+Inf",type="monitoring"}[30m])
+        rate(grpc_server_handling_seconds_bucket{grpc_service=~"thanos.Store|thanos.info.Info",grpc_type="unary",job=~"thanos-store(-[0-9]+)?",le="+Inf",type="monitoring"}[30m])
       )
   - record: gitlab_component_ops:rate_30m
     labels:
@@ -1251,7 +1593,7 @@ groups:
       type: monitoring
     expr: |
       sum by (environment,stage) (
-        rate(grpc_server_handled_total{grpc_service=~"thanos.Store|thanos.info.Info",grpc_type="unary",job=~"thanos|thanos-store(-[0-9]+)?",type="monitoring"}[30m])
+        rate(grpc_server_handled_total{grpc_service=~"thanos.Store|thanos.info.Info",grpc_type="unary",job=~"thanos-store(-[0-9]+)?",type="monitoring"}[30m])
       )
   - record: gitlab_component_errors:rate_30m
     labels:
@@ -1261,7 +1603,7 @@ groups:
     expr: |
       (
         sum by (environment,stage) (
-          rate(grpc_server_handled_total{grpc_code!="OK",grpc_service=~"thanos.Store|thanos.info.Info",grpc_type="unary",job=~"thanos|thanos-store(-[0-9]+)?",type="monitoring"}[30m])
+          rate(grpc_server_handled_total{grpc_code!="OK",grpc_service=~"thanos.Store|thanos.info.Info",grpc_type="unary",job=~"thanos-store(-[0-9]+)?",type="monitoring"}[30m])
         )
       )
       or
@@ -1273,6 +1615,76 @@ groups:
 - name: 'Component-Level SLIs: monitoring - 1h burn-rate'
   interval: 1m
   rules:
+  - record: gitlab_component_apdex:success:rate_1h
+    labels:
+      component: grafana
+      tier: inf
+      type: monitoring
+    expr: |
+      sum by (environment,stage) (
+        rate(grafana_http_request_duration_seconds_bucket{job="grafana",le="5.0",shard="default",type="monitoring"}[1h])
+      )
+  - record: gitlab_component_apdex:weight:score_1h
+    labels:
+      component: grafana
+      tier: inf
+      type: monitoring
+    expr: |
+      sum by (environment,stage) (
+        rate(grafana_http_request_duration_seconds_bucket{job="grafana",le="+Inf",shard="default",type="monitoring"}[1h])
+      )
+  - record: gitlab_component_ops:rate_1h
+    labels:
+      component: grafana
+      tier: inf
+      type: monitoring
+    expr: |
+      sum by (environment,stage) (
+        rate(grafana_http_request_duration_seconds_bucket{job="grafana",le="+Inf",shard="default",type="monitoring"}[1h])
+      )
+  - record: gitlab_component_errors:rate_1h
+    labels:
+      component: grafana
+      tier: inf
+      type: monitoring
+    expr: |
+      (
+        sum by (environment,stage) (
+          rate(grafana_http_request_duration_seconds_bucket{code=~"^5.*",job="grafana",le="+Inf",shard="default",type="monitoring"}[1h])
+        )
+      )
+      or
+      (
+        0 * group by(environment,stage) (
+          gitlab_component_ops:rate_1h{component="grafana",tier="inf",type="monitoring"}
+        )
+      )
+  - record: gitlab_component_ops:rate_1h
+    labels:
+      component: grafana_datasources
+      tier: inf
+      type: monitoring
+    expr: |
+      sum by (environment,stage) (
+        rate(grafana_datasource_request_total{job="grafana",shard="default",type="monitoring"}[1h])
+      )
+  - record: gitlab_component_errors:rate_1h
+    labels:
+      component: grafana_datasources
+      tier: inf
+      type: monitoring
+    expr: |
+      (
+        sum by (environment,stage) (
+          rate(grafana_datasource_request_total{code=~"^5.*",job="grafana",shard="default",type="monitoring"}[1h])
+        )
+      )
+      or
+      (
+        0 * group by(environment,stage) (
+          gitlab_component_ops:rate_1h{component="grafana_datasources",tier="inf",type="monitoring"}
+        )
+      )
   - record: gitlab_component_ops:rate_1h
     labels:
       component: grafana_google_lb
@@ -1299,6 +1711,50 @@ groups:
       (
         0 * group by(environment) (
           gitlab_component_ops:rate_1h{component="grafana_google_lb",stage="main",tier="inf",type="monitoring"}
+        )
+      )
+  - record: gitlab_component_apdex:success:rate_1h
+    labels:
+      component: grafana_image_renderer
+      tier: inf
+      type: monitoring
+    expr: |
+      sum by (environment,stage) (
+        rate(grafana_image_renderer_service_http_request_duration_seconds_bucket{job="grafana-image-renderer",le="30",shard="default",type="monitoring"}[1h])
+      )
+  - record: gitlab_component_apdex:weight:score_1h
+    labels:
+      component: grafana_image_renderer
+      tier: inf
+      type: monitoring
+    expr: |
+      sum by (environment,stage) (
+        rate(grafana_image_renderer_service_http_request_duration_seconds_bucket{job="grafana-image-renderer",le="+Inf",shard="default",type="monitoring"}[1h])
+      )
+  - record: gitlab_component_ops:rate_1h
+    labels:
+      component: grafana_image_renderer
+      tier: inf
+      type: monitoring
+    expr: |
+      sum by (environment,stage) (
+        rate(grafana_image_renderer_service_http_request_duration_seconds_bucket{job="grafana-image-renderer",le="+Inf",shard="default",type="monitoring"}[1h])
+      )
+  - record: gitlab_component_errors:rate_1h
+    labels:
+      component: grafana_image_renderer
+      tier: inf
+      type: monitoring
+    expr: |
+      (
+        sum by (environment,stage) (
+          rate(grafana_image_renderer_service_http_request_duration_seconds_bucket{job="grafana-image-renderer",le="+Inf",shard="default",status_code=~"^5.*",type="monitoring"}[1h])
+        )
+      )
+      or
+      (
+        0 * group by(environment,stage) (
+          gitlab_component_ops:rate_1h{component="grafana_image_renderer",tier="inf",type="monitoring"}
         )
       )
   - record: gitlab_component_apdex:success:rate_1h
@@ -1490,7 +1946,7 @@ groups:
       type: monitoring
     expr: |
       sum by (environment,stage) (
-        rate(thanos_memcached_operation_duration_seconds_bucket{le=~"0\\.5",type="monitoring"}[1h])
+        rate(thanos_memcached_operation_duration_seconds_bucket{le="0.5",type="monitoring"}[1h])
       )
   - record: gitlab_component_apdex:weight:score_1h
     labels:
@@ -1534,7 +1990,7 @@ groups:
       type: monitoring
     expr: |
       sum by (environment,stage) (
-        rate(http_request_duration_seconds_bucket{job="thanos-query",le=~"30|30\\.0",shard="default",type="monitoring"}[1h])
+        rate(http_request_duration_seconds_bucket{job="thanos-query",le="30.0",shard="default",type="monitoring"}[1h])
       )
   - record: gitlab_component_apdex:weight:score_1h
     labels:
@@ -1578,7 +2034,7 @@ groups:
       type: monitoring
     expr: |
       sum by (environment,stage) (
-        rate(http_request_duration_seconds_bucket{job=~"thanos|thanos-query-frontend",le="30",shard="default",type="monitoring"}[1h])
+        rate(http_request_duration_seconds_bucket{job="thanos-query-frontend",le="30.0",shard="default",type="monitoring"}[1h])
       )
   - record: gitlab_component_apdex:weight:score_1h
     labels:
@@ -1587,7 +2043,7 @@ groups:
       type: monitoring
     expr: |
       sum by (environment,stage) (
-        rate(http_request_duration_seconds_bucket{job=~"thanos|thanos-query-frontend",le="+Inf",shard="default",type="monitoring"}[1h])
+        rate(http_request_duration_seconds_bucket{job="thanos-query-frontend",le="+Inf",shard="default",type="monitoring"}[1h])
       )
   - record: gitlab_component_ops:rate_1h
     labels:
@@ -1596,7 +2052,7 @@ groups:
       type: monitoring
     expr: |
       sum by (environment,stage) (
-        sli_aggregations:http_requests_total_rate1h{job=~"thanos|thanos-query-frontend",shard="default",type="monitoring"}
+        sli_aggregations:http_requests_total_rate1h{job="thanos-query-frontend",shard="default",type="monitoring"}
       )
   - record: gitlab_component_errors:rate_1h
     labels:
@@ -1606,7 +2062,7 @@ groups:
     expr: |
       (
         sum by (environment,stage) (
-          sli_aggregations:http_requests_total_rate1h{code=~"^5.*",job=~"thanos|thanos-query-frontend",shard="default",type="monitoring"}
+          sli_aggregations:http_requests_total_rate1h{code=~"^5.*",job="thanos-query-frontend",shard="default",type="monitoring"}
         )
       )
       or
@@ -1649,11 +2105,11 @@ groups:
     expr: |
       (
         sum by (environment,stage) (
-          rate(grpc_server_handling_seconds_bucket{grpc_service=~"thanos.Store|thanos.info.Info",grpc_type="unary",job=~"thanos|thanos-store(-[0-9]+)?",le=~"1|1\\.0",type="monitoring"}[1h])
+          rate(grpc_server_handling_seconds_bucket{grpc_service=~"thanos.Store|thanos.info.Info",grpc_type="unary",job=~"thanos-store(-[0-9]+)?",le="1.0",type="monitoring"}[1h])
         )
         +
         sum by (environment,stage) (
-          rate(grpc_server_handling_seconds_bucket{grpc_service=~"thanos.Store|thanos.info.Info",grpc_type="unary",job=~"thanos|thanos-store(-[0-9]+)?",le=~"3|3\\.0",type="monitoring"}[1h])
+          rate(grpc_server_handling_seconds_bucket{grpc_service=~"thanos.Store|thanos.info.Info",grpc_type="unary",job=~"thanos-store(-[0-9]+)?",le="3.0",type="monitoring"}[1h])
         )
       )
       /
@@ -1665,7 +2121,7 @@ groups:
       type: monitoring
     expr: |
       sum by (environment,stage) (
-        rate(grpc_server_handling_seconds_bucket{grpc_service=~"thanos.Store|thanos.info.Info",grpc_type="unary",job=~"thanos|thanos-store(-[0-9]+)?",le="+Inf",type="monitoring"}[1h])
+        rate(grpc_server_handling_seconds_bucket{grpc_service=~"thanos.Store|thanos.info.Info",grpc_type="unary",job=~"thanos-store(-[0-9]+)?",le="+Inf",type="monitoring"}[1h])
       )
   - record: gitlab_component_ops:rate_1h
     labels:
@@ -1674,7 +2130,7 @@ groups:
       type: monitoring
     expr: |
       sum by (environment,stage) (
-        rate(grpc_server_handled_total{grpc_service=~"thanos.Store|thanos.info.Info",grpc_type="unary",job=~"thanos|thanos-store(-[0-9]+)?",type="monitoring"}[1h])
+        rate(grpc_server_handled_total{grpc_service=~"thanos.Store|thanos.info.Info",grpc_type="unary",job=~"thanos-store(-[0-9]+)?",type="monitoring"}[1h])
       )
   - record: gitlab_component_errors:rate_1h
     labels:
@@ -1684,7 +2140,7 @@ groups:
     expr: |
       (
         sum by (environment,stage) (
-          rate(grpc_server_handled_total{grpc_code!="OK",grpc_service=~"thanos.Store|thanos.info.Info",grpc_type="unary",job=~"thanos|thanos-store(-[0-9]+)?",type="monitoring"}[1h])
+          rate(grpc_server_handled_total{grpc_code!="OK",grpc_service=~"thanos.Store|thanos.info.Info",grpc_type="unary",job=~"thanos-store(-[0-9]+)?",type="monitoring"}[1h])
         )
       )
       or
@@ -1696,6 +2152,76 @@ groups:
 - name: 'Component-Level SLIs: monitoring - 6h burn-rate'
   interval: 2m
   rules:
+  - record: gitlab_component_apdex:success:rate_6h
+    labels:
+      component: grafana
+      tier: inf
+      type: monitoring
+    expr: |
+      sum by (environment,stage) (
+        rate(grafana_http_request_duration_seconds_bucket{job="grafana",le="5.0",shard="default",type="monitoring"}[6h])
+      )
+  - record: gitlab_component_apdex:weight:score_6h
+    labels:
+      component: grafana
+      tier: inf
+      type: monitoring
+    expr: |
+      sum by (environment,stage) (
+        rate(grafana_http_request_duration_seconds_bucket{job="grafana",le="+Inf",shard="default",type="monitoring"}[6h])
+      )
+  - record: gitlab_component_ops:rate_6h
+    labels:
+      component: grafana
+      tier: inf
+      type: monitoring
+    expr: |
+      sum by (environment,stage) (
+        rate(grafana_http_request_duration_seconds_bucket{job="grafana",le="+Inf",shard="default",type="monitoring"}[6h])
+      )
+  - record: gitlab_component_errors:rate_6h
+    labels:
+      component: grafana
+      tier: inf
+      type: monitoring
+    expr: |
+      (
+        sum by (environment,stage) (
+          rate(grafana_http_request_duration_seconds_bucket{code=~"^5.*",job="grafana",le="+Inf",shard="default",type="monitoring"}[6h])
+        )
+      )
+      or
+      (
+        0 * group by(environment,stage) (
+          gitlab_component_ops:rate_6h{component="grafana",tier="inf",type="monitoring"}
+        )
+      )
+  - record: gitlab_component_ops:rate_6h
+    labels:
+      component: grafana_datasources
+      tier: inf
+      type: monitoring
+    expr: |
+      sum by (environment,stage) (
+        rate(grafana_datasource_request_total{job="grafana",shard="default",type="monitoring"}[6h])
+      )
+  - record: gitlab_component_errors:rate_6h
+    labels:
+      component: grafana_datasources
+      tier: inf
+      type: monitoring
+    expr: |
+      (
+        sum by (environment,stage) (
+          rate(grafana_datasource_request_total{code=~"^5.*",job="grafana",shard="default",type="monitoring"}[6h])
+        )
+      )
+      or
+      (
+        0 * group by(environment,stage) (
+          gitlab_component_ops:rate_6h{component="grafana_datasources",tier="inf",type="monitoring"}
+        )
+      )
   - record: gitlab_component_ops:rate_6h
     labels:
       component: grafana_google_lb
@@ -1722,6 +2248,50 @@ groups:
       (
         0 * group by(environment) (
           gitlab_component_ops:rate_6h{component="grafana_google_lb",stage="main",tier="inf",type="monitoring"}
+        )
+      )
+  - record: gitlab_component_apdex:success:rate_6h
+    labels:
+      component: grafana_image_renderer
+      tier: inf
+      type: monitoring
+    expr: |
+      sum by (environment,stage) (
+        rate(grafana_image_renderer_service_http_request_duration_seconds_bucket{job="grafana-image-renderer",le="30",shard="default",type="monitoring"}[6h])
+      )
+  - record: gitlab_component_apdex:weight:score_6h
+    labels:
+      component: grafana_image_renderer
+      tier: inf
+      type: monitoring
+    expr: |
+      sum by (environment,stage) (
+        rate(grafana_image_renderer_service_http_request_duration_seconds_bucket{job="grafana-image-renderer",le="+Inf",shard="default",type="monitoring"}[6h])
+      )
+  - record: gitlab_component_ops:rate_6h
+    labels:
+      component: grafana_image_renderer
+      tier: inf
+      type: monitoring
+    expr: |
+      sum by (environment,stage) (
+        rate(grafana_image_renderer_service_http_request_duration_seconds_bucket{job="grafana-image-renderer",le="+Inf",shard="default",type="monitoring"}[6h])
+      )
+  - record: gitlab_component_errors:rate_6h
+    labels:
+      component: grafana_image_renderer
+      tier: inf
+      type: monitoring
+    expr: |
+      (
+        sum by (environment,stage) (
+          rate(grafana_image_renderer_service_http_request_duration_seconds_bucket{job="grafana-image-renderer",le="+Inf",shard="default",status_code=~"^5.*",type="monitoring"}[6h])
+        )
+      )
+      or
+      (
+        0 * group by(environment,stage) (
+          gitlab_component_ops:rate_6h{component="grafana_image_renderer",tier="inf",type="monitoring"}
         )
       )
   - record: gitlab_component_apdex:success:rate_6h
@@ -1913,7 +2483,7 @@ groups:
       type: monitoring
     expr: |
       sum by (environment,stage) (
-        rate(thanos_memcached_operation_duration_seconds_bucket{le=~"0\\.5",type="monitoring"}[6h])
+        rate(thanos_memcached_operation_duration_seconds_bucket{le="0.5",type="monitoring"}[6h])
       )
   - record: gitlab_component_apdex:weight:score_6h
     labels:
@@ -1957,7 +2527,7 @@ groups:
       type: monitoring
     expr: |
       sum by (environment,stage) (
-        rate(http_request_duration_seconds_bucket{job="thanos-query",le=~"30|30\\.0",shard="default",type="monitoring"}[6h])
+        rate(http_request_duration_seconds_bucket{job="thanos-query",le="30.0",shard="default",type="monitoring"}[6h])
       )
   - record: gitlab_component_apdex:weight:score_6h
     labels:
@@ -2001,7 +2571,7 @@ groups:
       type: monitoring
     expr: |
       sum by (environment,stage) (
-        rate(http_request_duration_seconds_bucket{job=~"thanos|thanos-query-frontend",le="30",shard="default",type="monitoring"}[6h])
+        rate(http_request_duration_seconds_bucket{job="thanos-query-frontend",le="30.0",shard="default",type="monitoring"}[6h])
       )
   - record: gitlab_component_apdex:weight:score_6h
     labels:
@@ -2010,7 +2580,7 @@ groups:
       type: monitoring
     expr: |
       sum by (environment,stage) (
-        rate(http_request_duration_seconds_bucket{job=~"thanos|thanos-query-frontend",le="+Inf",shard="default",type="monitoring"}[6h])
+        rate(http_request_duration_seconds_bucket{job="thanos-query-frontend",le="+Inf",shard="default",type="monitoring"}[6h])
       )
   - record: gitlab_component_ops:rate_6h
     labels:
@@ -2019,7 +2589,7 @@ groups:
       type: monitoring
     expr: |
       sum by (environment,stage) (
-        sli_aggregations:http_requests_total_rate6h{job=~"thanos|thanos-query-frontend",shard="default",type="monitoring"}
+        sli_aggregations:http_requests_total_rate6h{job="thanos-query-frontend",shard="default",type="monitoring"}
       )
   - record: gitlab_component_errors:rate_6h
     labels:
@@ -2029,7 +2599,7 @@ groups:
     expr: |
       (
         sum by (environment,stage) (
-          sli_aggregations:http_requests_total_rate6h{code=~"^5.*",job=~"thanos|thanos-query-frontend",shard="default",type="monitoring"}
+          sli_aggregations:http_requests_total_rate6h{code=~"^5.*",job="thanos-query-frontend",shard="default",type="monitoring"}
         )
       )
       or
@@ -2072,11 +2642,11 @@ groups:
     expr: |
       (
         sum by (environment,stage) (
-          rate(grpc_server_handling_seconds_bucket{grpc_service=~"thanos.Store|thanos.info.Info",grpc_type="unary",job=~"thanos|thanos-store(-[0-9]+)?",le=~"1|1\\.0",type="monitoring"}[6h])
+          rate(grpc_server_handling_seconds_bucket{grpc_service=~"thanos.Store|thanos.info.Info",grpc_type="unary",job=~"thanos-store(-[0-9]+)?",le="1.0",type="monitoring"}[6h])
         )
         +
         sum by (environment,stage) (
-          rate(grpc_server_handling_seconds_bucket{grpc_service=~"thanos.Store|thanos.info.Info",grpc_type="unary",job=~"thanos|thanos-store(-[0-9]+)?",le=~"3|3\\.0",type="monitoring"}[6h])
+          rate(grpc_server_handling_seconds_bucket{grpc_service=~"thanos.Store|thanos.info.Info",grpc_type="unary",job=~"thanos-store(-[0-9]+)?",le="3.0",type="monitoring"}[6h])
         )
       )
       /
@@ -2088,7 +2658,7 @@ groups:
       type: monitoring
     expr: |
       sum by (environment,stage) (
-        rate(grpc_server_handling_seconds_bucket{grpc_service=~"thanos.Store|thanos.info.Info",grpc_type="unary",job=~"thanos|thanos-store(-[0-9]+)?",le="+Inf",type="monitoring"}[6h])
+        rate(grpc_server_handling_seconds_bucket{grpc_service=~"thanos.Store|thanos.info.Info",grpc_type="unary",job=~"thanos-store(-[0-9]+)?",le="+Inf",type="monitoring"}[6h])
       )
   - record: gitlab_component_ops:rate_6h
     labels:
@@ -2097,7 +2667,7 @@ groups:
       type: monitoring
     expr: |
       sum by (environment,stage) (
-        rate(grpc_server_handled_total{grpc_service=~"thanos.Store|thanos.info.Info",grpc_type="unary",job=~"thanos|thanos-store(-[0-9]+)?",type="monitoring"}[6h])
+        rate(grpc_server_handled_total{grpc_service=~"thanos.Store|thanos.info.Info",grpc_type="unary",job=~"thanos-store(-[0-9]+)?",type="monitoring"}[6h])
       )
   - record: gitlab_component_errors:rate_6h
     labels:
@@ -2107,7 +2677,7 @@ groups:
     expr: |
       (
         sum by (environment,stage) (
-          rate(grpc_server_handled_total{grpc_code!="OK",grpc_service=~"thanos.Store|thanos.info.Info",grpc_type="unary",job=~"thanos|thanos-store(-[0-9]+)?",type="monitoring"}[6h])
+          rate(grpc_server_handled_total{grpc_code!="OK",grpc_service=~"thanos.Store|thanos.info.Info",grpc_type="unary",job=~"thanos-store(-[0-9]+)?",type="monitoring"}[6h])
         )
       )
       or
@@ -2121,7 +2691,31 @@ groups:
   rules:
   - record: gitlab_component_service:mapping
     labels:
+      component: grafana
+      regional_aggregation: "no"
+      service_aggregation: "yes"
+      tier: inf
+      type: monitoring
+    expr: "1"
+  - record: gitlab_component_service:mapping
+    labels:
+      component: grafana_datasources
+      regional_aggregation: "no"
+      service_aggregation: "yes"
+      tier: inf
+      type: monitoring
+    expr: "1"
+  - record: gitlab_component_service:mapping
+    labels:
       component: grafana_google_lb
+      regional_aggregation: "no"
+      service_aggregation: "yes"
+      tier: inf
+      type: monitoring
+    expr: "1"
+  - record: gitlab_component_service:mapping
+    labels:
+      component: grafana_image_renderer
       regional_aggregation: "no"
       service_aggregation: "yes"
       tier: inf
