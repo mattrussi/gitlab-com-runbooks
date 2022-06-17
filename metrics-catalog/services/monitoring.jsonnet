@@ -206,7 +206,6 @@ metricsCatalog.serviceDefinition({
       local thanosStoreSelector = {
         job: { re: 'thanos-store(-[0-9]+)?' },
         type: 'monitoring',
-        grpc_service: { re: 'thanos.Store|thanos.info.Info' },
         grpc_type: 'unary',
       },
 

@@ -494,11 +494,11 @@ groups:
     expr: |
       (
         sum by (environment,stage) (
-          rate(grpc_server_handling_seconds_bucket{grpc_service=~"thanos.Store|thanos.info.Info",grpc_type="unary",job=~"thanos-store(-[0-9]+)?",le="1.0",type="monitoring"}[1m])
+          rate(grpc_server_handling_seconds_bucket{grpc_type="unary",job=~"thanos-store(-[0-9]+)?",le="1.0",type="monitoring"}[1m])
         )
         +
         sum by (environment,stage) (
-          rate(grpc_server_handling_seconds_bucket{grpc_service=~"thanos.Store|thanos.info.Info",grpc_type="unary",job=~"thanos-store(-[0-9]+)?",le="3.0",type="monitoring"}[1m])
+          rate(grpc_server_handling_seconds_bucket{grpc_type="unary",job=~"thanos-store(-[0-9]+)?",le="3.0",type="monitoring"}[1m])
         )
       )
       /
@@ -510,7 +510,7 @@ groups:
       type: monitoring
     expr: |
       sum by (environment,stage) (
-        rate(grpc_server_handling_seconds_bucket{grpc_service=~"thanos.Store|thanos.info.Info",grpc_type="unary",job=~"thanos-store(-[0-9]+)?",le="+Inf",type="monitoring"}[1m])
+        rate(grpc_server_handling_seconds_bucket{grpc_type="unary",job=~"thanos-store(-[0-9]+)?",le="+Inf",type="monitoring"}[1m])
       )
   - record: gitlab_component_ops:rate
     labels:
@@ -519,7 +519,7 @@ groups:
       type: monitoring
     expr: |
       sum by (environment,stage) (
-        rate(grpc_server_handled_total{grpc_service=~"thanos.Store|thanos.info.Info",grpc_type="unary",job=~"thanos-store(-[0-9]+)?",type="monitoring"}[1m])
+        rate(grpc_server_handled_total{grpc_type="unary",job=~"thanos-store(-[0-9]+)?",type="monitoring"}[1m])
       )
   - record: gitlab_component_errors:rate
     labels:
@@ -529,7 +529,7 @@ groups:
     expr: |
       (
         sum by (environment,stage) (
-          rate(grpc_server_handled_total{grpc_code!="OK",grpc_service=~"thanos.Store|thanos.info.Info",grpc_type="unary",job=~"thanos-store(-[0-9]+)?",type="monitoring"}[1m])
+          rate(grpc_server_handled_total{grpc_code!="OK",grpc_type="unary",job=~"thanos-store(-[0-9]+)?",type="monitoring"}[1m])
         )
       )
       or
@@ -1031,11 +1031,11 @@ groups:
     expr: |
       (
         sum by (environment,stage) (
-          rate(grpc_server_handling_seconds_bucket{grpc_service=~"thanos.Store|thanos.info.Info",grpc_type="unary",job=~"thanos-store(-[0-9]+)?",le="1.0",type="monitoring"}[5m])
+          rate(grpc_server_handling_seconds_bucket{grpc_type="unary",job=~"thanos-store(-[0-9]+)?",le="1.0",type="monitoring"}[5m])
         )
         +
         sum by (environment,stage) (
-          rate(grpc_server_handling_seconds_bucket{grpc_service=~"thanos.Store|thanos.info.Info",grpc_type="unary",job=~"thanos-store(-[0-9]+)?",le="3.0",type="monitoring"}[5m])
+          rate(grpc_server_handling_seconds_bucket{grpc_type="unary",job=~"thanos-store(-[0-9]+)?",le="3.0",type="monitoring"}[5m])
         )
       )
       /
@@ -1047,7 +1047,7 @@ groups:
       type: monitoring
     expr: |
       sum by (environment,stage) (
-        rate(grpc_server_handling_seconds_bucket{grpc_service=~"thanos.Store|thanos.info.Info",grpc_type="unary",job=~"thanos-store(-[0-9]+)?",le="+Inf",type="monitoring"}[5m])
+        rate(grpc_server_handling_seconds_bucket{grpc_type="unary",job=~"thanos-store(-[0-9]+)?",le="+Inf",type="monitoring"}[5m])
       )
   - record: gitlab_component_ops:rate_5m
     labels:
@@ -1056,7 +1056,7 @@ groups:
       type: monitoring
     expr: |
       sum by (environment,stage) (
-        rate(grpc_server_handled_total{grpc_service=~"thanos.Store|thanos.info.Info",grpc_type="unary",job=~"thanos-store(-[0-9]+)?",type="monitoring"}[5m])
+        rate(grpc_server_handled_total{grpc_type="unary",job=~"thanos-store(-[0-9]+)?",type="monitoring"}[5m])
       )
   - record: gitlab_component_errors:rate_5m
     labels:
@@ -1066,7 +1066,7 @@ groups:
     expr: |
       (
         sum by (environment,stage) (
-          rate(grpc_server_handled_total{grpc_code!="OK",grpc_service=~"thanos.Store|thanos.info.Info",grpc_type="unary",job=~"thanos-store(-[0-9]+)?",type="monitoring"}[5m])
+          rate(grpc_server_handled_total{grpc_code!="OK",grpc_type="unary",job=~"thanos-store(-[0-9]+)?",type="monitoring"}[5m])
         )
       )
       or
@@ -1568,11 +1568,11 @@ groups:
     expr: |
       (
         sum by (environment,stage) (
-          rate(grpc_server_handling_seconds_bucket{grpc_service=~"thanos.Store|thanos.info.Info",grpc_type="unary",job=~"thanos-store(-[0-9]+)?",le="1.0",type="monitoring"}[30m])
+          rate(grpc_server_handling_seconds_bucket{grpc_type="unary",job=~"thanos-store(-[0-9]+)?",le="1.0",type="monitoring"}[30m])
         )
         +
         sum by (environment,stage) (
-          rate(grpc_server_handling_seconds_bucket{grpc_service=~"thanos.Store|thanos.info.Info",grpc_type="unary",job=~"thanos-store(-[0-9]+)?",le="3.0",type="monitoring"}[30m])
+          rate(grpc_server_handling_seconds_bucket{grpc_type="unary",job=~"thanos-store(-[0-9]+)?",le="3.0",type="monitoring"}[30m])
         )
       )
       /
@@ -1584,7 +1584,7 @@ groups:
       type: monitoring
     expr: |
       sum by (environment,stage) (
-        rate(grpc_server_handling_seconds_bucket{grpc_service=~"thanos.Store|thanos.info.Info",grpc_type="unary",job=~"thanos-store(-[0-9]+)?",le="+Inf",type="monitoring"}[30m])
+        rate(grpc_server_handling_seconds_bucket{grpc_type="unary",job=~"thanos-store(-[0-9]+)?",le="+Inf",type="monitoring"}[30m])
       )
   - record: gitlab_component_ops:rate_30m
     labels:
@@ -1593,7 +1593,7 @@ groups:
       type: monitoring
     expr: |
       sum by (environment,stage) (
-        rate(grpc_server_handled_total{grpc_service=~"thanos.Store|thanos.info.Info",grpc_type="unary",job=~"thanos-store(-[0-9]+)?",type="monitoring"}[30m])
+        rate(grpc_server_handled_total{grpc_type="unary",job=~"thanos-store(-[0-9]+)?",type="monitoring"}[30m])
       )
   - record: gitlab_component_errors:rate_30m
     labels:
@@ -1603,7 +1603,7 @@ groups:
     expr: |
       (
         sum by (environment,stage) (
-          rate(grpc_server_handled_total{grpc_code!="OK",grpc_service=~"thanos.Store|thanos.info.Info",grpc_type="unary",job=~"thanos-store(-[0-9]+)?",type="monitoring"}[30m])
+          rate(grpc_server_handled_total{grpc_code!="OK",grpc_type="unary",job=~"thanos-store(-[0-9]+)?",type="monitoring"}[30m])
         )
       )
       or
@@ -2105,11 +2105,11 @@ groups:
     expr: |
       (
         sum by (environment,stage) (
-          rate(grpc_server_handling_seconds_bucket{grpc_service=~"thanos.Store|thanos.info.Info",grpc_type="unary",job=~"thanos-store(-[0-9]+)?",le="1.0",type="monitoring"}[1h])
+          rate(grpc_server_handling_seconds_bucket{grpc_type="unary",job=~"thanos-store(-[0-9]+)?",le="1.0",type="monitoring"}[1h])
         )
         +
         sum by (environment,stage) (
-          rate(grpc_server_handling_seconds_bucket{grpc_service=~"thanos.Store|thanos.info.Info",grpc_type="unary",job=~"thanos-store(-[0-9]+)?",le="3.0",type="monitoring"}[1h])
+          rate(grpc_server_handling_seconds_bucket{grpc_type="unary",job=~"thanos-store(-[0-9]+)?",le="3.0",type="monitoring"}[1h])
         )
       )
       /
@@ -2121,7 +2121,7 @@ groups:
       type: monitoring
     expr: |
       sum by (environment,stage) (
-        rate(grpc_server_handling_seconds_bucket{grpc_service=~"thanos.Store|thanos.info.Info",grpc_type="unary",job=~"thanos-store(-[0-9]+)?",le="+Inf",type="monitoring"}[1h])
+        rate(grpc_server_handling_seconds_bucket{grpc_type="unary",job=~"thanos-store(-[0-9]+)?",le="+Inf",type="monitoring"}[1h])
       )
   - record: gitlab_component_ops:rate_1h
     labels:
@@ -2130,7 +2130,7 @@ groups:
       type: monitoring
     expr: |
       sum by (environment,stage) (
-        rate(grpc_server_handled_total{grpc_service=~"thanos.Store|thanos.info.Info",grpc_type="unary",job=~"thanos-store(-[0-9]+)?",type="monitoring"}[1h])
+        rate(grpc_server_handled_total{grpc_type="unary",job=~"thanos-store(-[0-9]+)?",type="monitoring"}[1h])
       )
   - record: gitlab_component_errors:rate_1h
     labels:
@@ -2140,7 +2140,7 @@ groups:
     expr: |
       (
         sum by (environment,stage) (
-          rate(grpc_server_handled_total{grpc_code!="OK",grpc_service=~"thanos.Store|thanos.info.Info",grpc_type="unary",job=~"thanos-store(-[0-9]+)?",type="monitoring"}[1h])
+          rate(grpc_server_handled_total{grpc_code!="OK",grpc_type="unary",job=~"thanos-store(-[0-9]+)?",type="monitoring"}[1h])
         )
       )
       or
@@ -2642,11 +2642,11 @@ groups:
     expr: |
       (
         sum by (environment,stage) (
-          rate(grpc_server_handling_seconds_bucket{grpc_service=~"thanos.Store|thanos.info.Info",grpc_type="unary",job=~"thanos-store(-[0-9]+)?",le="1.0",type="monitoring"}[6h])
+          rate(grpc_server_handling_seconds_bucket{grpc_type="unary",job=~"thanos-store(-[0-9]+)?",le="1.0",type="monitoring"}[6h])
         )
         +
         sum by (environment,stage) (
-          rate(grpc_server_handling_seconds_bucket{grpc_service=~"thanos.Store|thanos.info.Info",grpc_type="unary",job=~"thanos-store(-[0-9]+)?",le="3.0",type="monitoring"}[6h])
+          rate(grpc_server_handling_seconds_bucket{grpc_type="unary",job=~"thanos-store(-[0-9]+)?",le="3.0",type="monitoring"}[6h])
         )
       )
       /
@@ -2658,7 +2658,7 @@ groups:
       type: monitoring
     expr: |
       sum by (environment,stage) (
-        rate(grpc_server_handling_seconds_bucket{grpc_service=~"thanos.Store|thanos.info.Info",grpc_type="unary",job=~"thanos-store(-[0-9]+)?",le="+Inf",type="monitoring"}[6h])
+        rate(grpc_server_handling_seconds_bucket{grpc_type="unary",job=~"thanos-store(-[0-9]+)?",le="+Inf",type="monitoring"}[6h])
       )
   - record: gitlab_component_ops:rate_6h
     labels:
@@ -2667,7 +2667,7 @@ groups:
       type: monitoring
     expr: |
       sum by (environment,stage) (
-        rate(grpc_server_handled_total{grpc_service=~"thanos.Store|thanos.info.Info",grpc_type="unary",job=~"thanos-store(-[0-9]+)?",type="monitoring"}[6h])
+        rate(grpc_server_handled_total{grpc_type="unary",job=~"thanos-store(-[0-9]+)?",type="monitoring"}[6h])
       )
   - record: gitlab_component_errors:rate_6h
     labels:
@@ -2677,7 +2677,7 @@ groups:
     expr: |
       (
         sum by (environment,stage) (
-          rate(grpc_server_handled_total{grpc_code!="OK",grpc_service=~"thanos.Store|thanos.info.Info",grpc_type="unary",job=~"thanos-store(-[0-9]+)?",type="monitoring"}[6h])
+          rate(grpc_server_handled_total{grpc_code!="OK",grpc_type="unary",job=~"thanos-store(-[0-9]+)?",type="monitoring"}[6h])
         )
       )
       or
