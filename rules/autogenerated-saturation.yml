@@ -1787,7 +1787,7 @@ groups:
     expr: "1"
   - record: gitlab_component_saturation_info
     labels:
-      capacity_planning_strategy: quantile95_1h
+      capacity_planning_strategy: exclude
       component: elastic_jvm_heap_memory
       horiz_scaling: "yes"
       quantile: max
