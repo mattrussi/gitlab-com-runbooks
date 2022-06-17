@@ -44,12 +44,12 @@ groups:
       (
         (
           gitlab_component_apdex:ratio_1h{component="grafana",monitor="global",type="monitoring"}
-          < (1 - 14.4 * 0.001000)
+          < (1 - 14.4 * 0.080000)
         )
         and
         (
           gitlab_component_apdex:ratio_5m{component="grafana",monitor="global",type="monitoring"}
-          < (1 - 14.4 * 0.001000)
+          < (1 - 14.4 * 0.080000)
         )
       )
       and on(env,environment,tier,type,stage,component)
@@ -95,12 +95,12 @@ groups:
       (
         (
           gitlab_component_apdex:ratio_6h{component="grafana",monitor="global",type="monitoring"}
-          < (1 - 6 * 0.001000)
+          < (1 - 6 * 0.080000)
         )
         and
         (
           gitlab_component_apdex:ratio_30m{component="grafana",monitor="global",type="monitoring"}
-          < (1 - 6 * 0.001000)
+          < (1 - 6 * 0.080000)
         )
       )
       and on(env,environment,tier,type,stage,component)
@@ -430,12 +430,12 @@ groups:
       (
         (
           gitlab_component_apdex:ratio_1h{component="grafana_image_renderer",monitor="global",type="monitoring"}
-          < (1 - 14.4 * 0.001000)
+          < (1 - 14.4 * 0.080000)
         )
         and
         (
           gitlab_component_apdex:ratio_5m{component="grafana_image_renderer",monitor="global",type="monitoring"}
-          < (1 - 14.4 * 0.001000)
+          < (1 - 14.4 * 0.080000)
         )
       )
       and on(env,environment,tier,type,stage,component)
@@ -481,12 +481,12 @@ groups:
       (
         (
           gitlab_component_apdex:ratio_6h{component="grafana_image_renderer",monitor="global",type="monitoring"}
-          < (1 - 6 * 0.001000)
+          < (1 - 6 * 0.080000)
         )
         and
         (
           gitlab_component_apdex:ratio_30m{component="grafana_image_renderer",monitor="global",type="monitoring"}
-          < (1 - 6 * 0.001000)
+          < (1 - 6 * 0.080000)
         )
       )
       and on(env,environment,tier,type,stage,component)
@@ -2414,7 +2414,7 @@ groups:
         histogram_quantile(
           0.950000,
           sum by (env,environment,tier,stage,le) (
-            rate(grpc_server_handling_seconds_bucket{environment="{{ $labels.environment }}",grpc_service=~"thanos.Store|thanos.info.Info",grpc_type="unary",job=~"thanos-store(-[0-9]+)?",stage="{{ $labels.stage }}",type="monitoring"}[5m])
+            rate(grpc_server_handling_seconds_bucket{environment="{{ $labels.environment }}",grpc_type="unary",job=~"thanos-store(-[0-9]+)?",stage="{{ $labels.stage }}",type="monitoring"}[5m])
           )
         )
       runbook: docs/monitoring/README.md
@@ -2465,7 +2465,7 @@ groups:
         histogram_quantile(
           0.950000,
           sum by (env,environment,tier,stage,le) (
-            rate(grpc_server_handling_seconds_bucket{environment="{{ $labels.environment }}",grpc_service=~"thanos.Store|thanos.info.Info",grpc_type="unary",job=~"thanos-store(-[0-9]+)?",stage="{{ $labels.stage }}",type="monitoring"}[5m])
+            rate(grpc_server_handling_seconds_bucket{environment="{{ $labels.environment }}",grpc_type="unary",job=~"thanos-store(-[0-9]+)?",stage="{{ $labels.stage }}",type="monitoring"}[5m])
           )
         )
       runbook: docs/monitoring/README.md
@@ -2514,7 +2514,7 @@ groups:
       grafana_variables: environment,stage
       promql_template_1: |
         sum by (env,environment,tier,stage) (
-          rate(grpc_server_handled_total{environment="{{ $labels.environment }}",grpc_code!="OK",grpc_service=~"thanos.Store|thanos.info.Info",grpc_type="unary",job=~"thanos-store(-[0-9]+)?",stage="{{ $labels.stage }}",type="monitoring"}[5m])
+          rate(grpc_server_handled_total{environment="{{ $labels.environment }}",grpc_code!="OK",grpc_type="unary",job=~"thanos-store(-[0-9]+)?",stage="{{ $labels.stage }}",type="monitoring"}[5m])
         )
       runbook: docs/monitoring/README.md
     labels:
@@ -2562,7 +2562,7 @@ groups:
       grafana_variables: environment,stage
       promql_template_1: |
         sum by (env,environment,tier,stage) (
-          rate(grpc_server_handled_total{environment="{{ $labels.environment }}",grpc_code!="OK",grpc_service=~"thanos.Store|thanos.info.Info",grpc_type="unary",job=~"thanos-store(-[0-9]+)?",stage="{{ $labels.stage }}",type="monitoring"}[5m])
+          rate(grpc_server_handled_total{environment="{{ $labels.environment }}",grpc_code!="OK",grpc_type="unary",job=~"thanos-store(-[0-9]+)?",stage="{{ $labels.stage }}",type="monitoring"}[5m])
         )
       runbook: docs/monitoring/README.md
     labels:
@@ -2610,7 +2610,7 @@ groups:
       grafana_variables: environment,stage
       promql_template_1: |
         sum by (env,environment,tier,stage) (
-          rate(grpc_server_handled_total{environment="{{ $labels.environment }}",grpc_service=~"thanos.Store|thanos.info.Info",grpc_type="unary",job=~"thanos-store(-[0-9]+)?",stage="{{ $labels.stage }}",type="monitoring"}[5m])
+          rate(grpc_server_handled_total{environment="{{ $labels.environment }}",grpc_type="unary",job=~"thanos-store(-[0-9]+)?",stage="{{ $labels.stage }}",type="monitoring"}[5m])
         )
       runbook: docs/monitoring/README.md
     labels:
@@ -2647,7 +2647,7 @@ groups:
       grafana_variables: environment,stage
       promql_template_1: |
         sum by (env,environment,tier,stage) (
-          rate(grpc_server_handled_total{environment="{{ $labels.environment }}",grpc_service=~"thanos.Store|thanos.info.Info",grpc_type="unary",job=~"thanos-store(-[0-9]+)?",stage="{{ $labels.stage }}",type="monitoring"}[5m])
+          rate(grpc_server_handled_total{environment="{{ $labels.environment }}",grpc_type="unary",job=~"thanos-store(-[0-9]+)?",stage="{{ $labels.stage }}",type="monitoring"}[5m])
         )
       runbook: docs/monitoring/README.md
     labels:

@@ -724,7 +724,7 @@ groups:
       component: grafana
       tier: inf
       type: monitoring
-    expr: "0.999000"
+    expr: "0.920000"
   - record: slo:max:events:gitlab_service_errors:ratio
     labels:
       component: grafana
@@ -760,7 +760,7 @@ groups:
       component: grafana_image_renderer
       tier: inf
       type: monitoring
-    expr: "0.999000"
+    expr: "0.920000"
   - record: slo:max:events:gitlab_service_errors:ratio
     labels:
       component: grafana_image_renderer

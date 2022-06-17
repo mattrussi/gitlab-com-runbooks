@@ -206,7 +206,6 @@ metricsCatalog.serviceDefinition({
       local thanosStoreSelector = {
         job: { re: 'thanos-store(-[0-9]+)?' },
         type: 'monitoring',
-        grpc_service: { re: 'thanos.Store|thanos.info.Info' },
         grpc_type: 'unary',
       },
 
@@ -404,6 +403,10 @@ metricsCatalog.serviceDefinition({
       featureCategory: 'not_owned',
       trafficCessationAlertConfig: false,
 
+      monitoringThresholds+: {
+        apdexScore: 0.92,
+      },
+
       description: |||
         Grafana builds and displays dashboards querying Thanos, Elasticsearch and other datasources.
         This SLI monitors the Grafana HTTP interface.
@@ -468,6 +471,10 @@ metricsCatalog.serviceDefinition({
       userImpacting: false,
       featureCategory: 'not_owned',
       trafficCessationAlertConfig: false,
+
+      monitoringThresholds+: {
+        apdexScore: 0.92,
+      },
 
       description: |||
         The Grafana Image Renderer exports Grafana dashboards or panels to PNG for external use.
