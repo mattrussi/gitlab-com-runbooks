@@ -75,6 +75,17 @@ metricsCatalog.serviceDefinition({
     },
   },
   serviceLevelIndicators: {
+    local dependsOnPatroni = [
+      {
+        component: 'rails_primary_sql',
+        type: 'patroni',
+      },
+      {
+        component: 'rails_replica_sql',
+        type: 'patroni',
+      },
+    ],
+
     loadbalancer: haproxyComponents.haproxyHTTPLoadBalancer(
       userImpacting=true,
       featureCategory='not_owned',
@@ -84,6 +95,7 @@ metricsCatalog.serviceDefinition({
       },
       selector={ type: 'frontend' },
       regional=false,
+      dependsOn=dependsOnPatroni,
     ),
 
     local workhorseWebSelector = { job: { re: 'gitlab-workhorse|gitlab-workhorse-web' }, type: 'web' },
@@ -138,6 +150,8 @@ metricsCatalog.serviceDefinition({
         toolingLinks.sentry(slug='gitlab/gitlab-workhorse-gitlabcom'),
         toolingLinks.kibana(title='Workhorse', index='workhorse', type='web', slowRequestSeconds=10),
       ],
+
+      dependsOn: dependsOnPatroni,
     },
 
     imagescaler: {
@@ -191,6 +205,7 @@ metricsCatalog.serviceDefinition({
       toolingLinks: [
         toolingLinks.sentry(slug='gitlab/gitlabcom', type='web', variables=['environment', 'stage']),
       ],
+      dependsOn: dependsOnPatroni,
     },
 
     rails_requests:
@@ -198,6 +213,7 @@ metricsCatalog.serviceDefinition({
         toolingLinks: [
           toolingLinks.kibana(title='Rails', index='rails'),
         ],
+        dependsOn: dependsOnPatroni,
       },
   },
 })
