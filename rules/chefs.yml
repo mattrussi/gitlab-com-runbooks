@@ -13,7 +13,7 @@ groups:
       runbook: docs/config_management/chef-troubleshooting.md
       title: Chef client failed for more than 5hs
   - alert: ChefClientErrorCritical
-    expr: avg(chef_client_error) by (type) * 100 > 10
+    expr: avg(chef_client_error) by (env) * 100 > 10
     for: 1h
     labels:
       severity: s1
@@ -21,7 +21,7 @@ groups:
       alert_type: cause
     annotations:
       description: >
-        At least 10% of type {{ $labels.type }} are failing chef-runs, this likely points to a configuration
+        At least 10% of chef-runs are failing for the {{ $labels.env }} environment, this likely points to a configuration
         error. Check the syslog of the failing hosts to see the reasons
       grafana_dashboard_id: "000000231/chef-client"
       runbook: docs/config_management/chef-troubleshooting.md
