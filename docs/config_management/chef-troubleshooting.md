@@ -75,6 +75,7 @@ What to do:
 
 1. Find one of the nodes that is affected
    * The alert is summarized; click the link to the prometheus graph from the alert (to get to the alerting environment easily), and adjust the query to just be `chef_client_error > 0`.  It should list a metric for each node that is currently broken, from which you can select one of the type that is alerting.  There will often be some correlation/commonality that may stand out and allow you to select a suitable first candidate.
+   * Alternatively you can use [Thanos](https://thanos.gitlab.net/graph?g0.expr=count(chef_client_error%20%3E%200)%20by%20(fqdn%2C%20env)&g0.tab=1&g0.stacked=0&g0.range_input=8w&g0.max_source_resolution=0s&g0.deduplicate=1&g0.partial_response=0&g0.store_matches=%5B%5D) which will list the nodes in each environment
 1. On that node, inspect the chef logs (`sudo grep chef-client /var/log/syslog|less`) to determine what's broken.
 
 * It could be anything, but td-agent and incompatible gem combinations is common.  In that case you can use `td-agent-gem` to manually adjust installed versions until the list of gems, often google-related, are all compatible with each other (compare to a still functional node for versions if necessary).  Or delete all the installed gems and start again (running chef-client may bootstrap things again in that case).
