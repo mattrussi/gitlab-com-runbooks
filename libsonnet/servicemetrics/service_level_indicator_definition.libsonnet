@@ -92,7 +92,7 @@ local serviceLevelIndicatorDefinition(sliName, serviceLevelIndicator) =
       // Only apdex SLIs using a histogram can generate a histogram_quantile graph
       // in alerts
       self.hasApdex() &&
-      std.objectHasAll(serviceLevelIndicator.apdex, 'percentileLatencyQuery'),
+      std.objectHasAll(serviceLevelIndicator.apdex, 'histogram'),
 
     hasRequestRate():: true,  // requestRate is mandatory
     hasAggregatableRequestRate():: std.objectHasAll(serviceLevelIndicator.requestRate, 'aggregatedRateQuery'),

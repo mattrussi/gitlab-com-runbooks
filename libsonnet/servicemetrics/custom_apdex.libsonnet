@@ -120,6 +120,7 @@ local generateApdexAttributionQuery(customApdex, selector, rangeInterval, aggreg
     toleratedThreshold=null
   ):: {
     rateQueryTemplate: rateQueryTemplate,
+    histogram: rateQueryTemplate,
     selector: selector,
     satisfiedThreshold: satisfiedThreshold,
     toleratedThreshold: toleratedThreshold,
