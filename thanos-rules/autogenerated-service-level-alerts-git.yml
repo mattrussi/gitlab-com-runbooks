@@ -1880,7 +1880,9 @@ groups:
       grafana_variables: environment,stage
       promql_template_1: |
         sum by (env,environment,tier,stage) (
-          sli_aggregations:gitlab_sli:rails_request_apdex:total_rate5m{environment="{{ $labels.environment }}",job="gitlab-rails",stage="{{ $labels.stage }}",type="git"}
+          label_replace(rate(gitlab_sli_rails_request_apdex_total{environment="{{ $labels.environment }}",job="gitlab-rails",stage="{{ $labels.stage }}",type="git"}[5m]), "_c", "0", "", "")
+          or
+          label_replace(rate(gitlab_sli:rails_request_apdex:total{environment="{{ $labels.environment }}",job="gitlab-rails",stage="{{ $labels.stage }}",type="git"}[5m]), "_c", "1", "", "")
         )
       runbook: docs/git/README.md
     labels:
@@ -1919,7 +1921,9 @@ groups:
       grafana_variables: environment,stage
       promql_template_1: |
         sum by (env,environment,tier,stage) (
-          sli_aggregations:gitlab_sli:rails_request_apdex:total_rate5m{environment="{{ $labels.environment }}",job="gitlab-rails",stage="{{ $labels.stage }}",type="git"}
+          label_replace(rate(gitlab_sli_rails_request_apdex_total{environment="{{ $labels.environment }}",job="gitlab-rails",stage="{{ $labels.stage }}",type="git"}[5m]), "_c", "0", "", "")
+          or
+          label_replace(rate(gitlab_sli:rails_request_apdex:total{environment="{{ $labels.environment }}",job="gitlab-rails",stage="{{ $labels.stage }}",type="git"}[5m]), "_c", "1", "", "")
         )
       runbook: docs/git/README.md
     labels:
@@ -1958,7 +1962,9 @@ groups:
       grafana_variables: environment,stage
       promql_template_1: |
         sum by (env,environment,tier,stage,region) (
-          rate(gitlab_sli:rails_request_apdex:total{environment="{{ $labels.environment }}",job="gitlab-rails",region="{{ $labels.region }}",stage="{{ $labels.stage }}",type="git"}[5m])
+          label_replace(rate(gitlab_sli_rails_request_apdex_total{environment="{{ $labels.environment }}",job="gitlab-rails",region="{{ $labels.region }}",stage="{{ $labels.stage }}",type="git"}[5m]), "_c", "0", "", "")
+          or
+          label_replace(rate(gitlab_sli:rails_request_apdex:total{environment="{{ $labels.environment }}",job="gitlab-rails",region="{{ $labels.region }}",stage="{{ $labels.stage }}",type="git"}[5m]), "_c", "1", "", "")
         )
       runbook: docs/git/README.md
     labels:
@@ -1999,7 +2005,9 @@ groups:
       grafana_variables: environment,stage
       promql_template_1: |
         sum by (env,environment,tier,stage,region) (
-          rate(gitlab_sli:rails_request_apdex:total{environment="{{ $labels.environment }}",job="gitlab-rails",region="{{ $labels.region }}",stage="{{ $labels.stage }}",type="git"}[5m])
+          label_replace(rate(gitlab_sli_rails_request_apdex_total{environment="{{ $labels.environment }}",job="gitlab-rails",region="{{ $labels.region }}",stage="{{ $labels.stage }}",type="git"}[5m]), "_c", "0", "", "")
+          or
+          label_replace(rate(gitlab_sli:rails_request_apdex:total{environment="{{ $labels.environment }}",job="gitlab-rails",region="{{ $labels.region }}",stage="{{ $labels.stage }}",type="git"}[5m]), "_c", "1", "", "")
         )
       runbook: docs/git/README.md
     labels:

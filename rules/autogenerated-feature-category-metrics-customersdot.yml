@@ -11,7 +11,15 @@ groups:
       type: customersdot
     expr: |
       sum by (env,environment,stage) (
-        rate(gitlab_sli:customers_dot_requests_apdex:success_total{}[5m])
+        label_replace(sum by (env,environment,stage) (
+          rate(gitlab_sli_customers_dot_requests_apdex_success_total{}[5m])
+        )
+        , "_c", "0", "", "")
+        or
+        label_replace(sum by (env,environment,stage) (
+          rate(gitlab_sli:customers_dot_requests_apdex:success_total{}[5m])
+        )
+        , "_c", "1", "", "")
       )
   - record: gitlab:component:feature_category:execution:apdex:weight:score_5m
     labels:
@@ -21,7 +29,15 @@ groups:
       type: customersdot
     expr: |
       sum by (env,environment,stage) (
-        rate(gitlab_sli:customers_dot_requests_apdex:total{}[5m])
+        label_replace(sum by (env,environment,stage) (
+          rate(gitlab_sli_customers_dot_requests_apdex_total{}[5m])
+        )
+        , "_c", "0", "", "")
+        or
+        label_replace(sum by (env,environment,stage) (
+          rate(gitlab_sli:customers_dot_requests_apdex:total{}[5m])
+        )
+        , "_c", "1", "", "")
       )
   - record: gitlab:component:feature_category:execution:ops:rate_5m
     labels:
@@ -31,7 +47,9 @@ groups:
       type: customersdot
     expr: |
       sum by (env,environment,stage) (
-        rate(gitlab_sli:customers_dot_requests_apdex:total{}[5m])
+        label_replace(rate(gitlab_sli_customers_dot_requests_apdex_total{}[5m]), "_c", "0", "", "")
+        or
+        label_replace(rate(gitlab_sli:customers_dot_requests_apdex:total{}[5m]), "_c", "1", "", "")
       )
 - name: 'Prometheus Intermediate Metrics per feature: customersdot - burn-rate 30m'
   rules:
@@ -43,7 +61,15 @@ groups:
       type: customersdot
     expr: |
       sum by (env,environment,stage) (
-        rate(gitlab_sli:customers_dot_requests_apdex:success_total{}[30m])
+        label_replace(sum by (env,environment,stage) (
+          rate(gitlab_sli_customers_dot_requests_apdex_success_total{}[30m])
+        )
+        , "_c", "0", "", "")
+        or
+        label_replace(sum by (env,environment,stage) (
+          rate(gitlab_sli:customers_dot_requests_apdex:success_total{}[30m])
+        )
+        , "_c", "1", "", "")
       )
   - record: gitlab:component:feature_category:execution:apdex:weight:score_30m
     labels:
@@ -53,7 +79,15 @@ groups:
       type: customersdot
     expr: |
       sum by (env,environment,stage) (
-        rate(gitlab_sli:customers_dot_requests_apdex:total{}[30m])
+        label_replace(sum by (env,environment,stage) (
+          rate(gitlab_sli_customers_dot_requests_apdex_total{}[30m])
+        )
+        , "_c", "0", "", "")
+        or
+        label_replace(sum by (env,environment,stage) (
+          rate(gitlab_sli:customers_dot_requests_apdex:total{}[30m])
+        )
+        , "_c", "1", "", "")
       )
   - record: gitlab:component:feature_category:execution:ops:rate_30m
     labels:
@@ -63,7 +97,9 @@ groups:
       type: customersdot
     expr: |
       sum by (env,environment,stage) (
-        rate(gitlab_sli:customers_dot_requests_apdex:total{}[30m])
+        label_replace(rate(gitlab_sli_customers_dot_requests_apdex_total{}[30m]), "_c", "0", "", "")
+        or
+        label_replace(rate(gitlab_sli:customers_dot_requests_apdex:total{}[30m]), "_c", "1", "", "")
       )
 - name: 'Prometheus Intermediate Metrics per feature: customersdot - burn-rate 1h'
   rules:
@@ -75,7 +111,15 @@ groups:
       type: customersdot
     expr: |
       sum by (env,environment,stage) (
-        rate(gitlab_sli:customers_dot_requests_apdex:success_total{}[1h])
+        label_replace(sum by (env,environment,stage) (
+          rate(gitlab_sli_customers_dot_requests_apdex_success_total{}[1h])
+        )
+        , "_c", "0", "", "")
+        or
+        label_replace(sum by (env,environment,stage) (
+          rate(gitlab_sli:customers_dot_requests_apdex:success_total{}[1h])
+        )
+        , "_c", "1", "", "")
       )
   - record: gitlab:component:feature_category:execution:apdex:weight:score_1h
     labels:
@@ -85,7 +129,15 @@ groups:
       type: customersdot
     expr: |
       sum by (env,environment,stage) (
-        rate(gitlab_sli:customers_dot_requests_apdex:total{}[1h])
+        label_replace(sum by (env,environment,stage) (
+          rate(gitlab_sli_customers_dot_requests_apdex_total{}[1h])
+        )
+        , "_c", "0", "", "")
+        or
+        label_replace(sum by (env,environment,stage) (
+          rate(gitlab_sli:customers_dot_requests_apdex:total{}[1h])
+        )
+        , "_c", "1", "", "")
       )
   - record: gitlab:component:feature_category:execution:ops:rate_1h
     labels:
@@ -95,5 +147,7 @@ groups:
       type: customersdot
     expr: |
       sum by (env,environment,stage) (
-        rate(gitlab_sli:customers_dot_requests_apdex:total{}[1h])
+        label_replace(rate(gitlab_sli_customers_dot_requests_apdex_total{}[1h]), "_c", "0", "", "")
+        or
+        label_replace(rate(gitlab_sli:customers_dot_requests_apdex:total{}[1h]), "_c", "1", "", "")
       )

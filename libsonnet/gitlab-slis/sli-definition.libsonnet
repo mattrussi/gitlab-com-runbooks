@@ -5,7 +5,7 @@ local recordingRuleRegistry = import 'servicemetrics/recording-rule-registry.lib
 local serviceLevelIndicatorDefinition = import 'servicemetrics/service_level_indicator_definition.libsonnet';
 local misc = import 'utils/misc.libsonnet';
 local stages = import 'service-catalog/stages.libsonnet';
-
+local combined = (import 'servicemetrics/combined.libsonnet').combined;
 
 // When adding new kinds, please update the metrics catalog to add recording
 // names to the aggregation sets and recording rules
@@ -29,6 +29,10 @@ local sliValidator = validator.new({
     validator.validator(function(values) std.isArray(values) && std.length(values) > 0, 'must be present'),
     validator.validator(function(values) misc.all(function(v) std.member(validKinds, v), values), 'only %s are supported' % [std.join(', ', validKinds)])
   ),
+  metricNameSeparator: validator.and(
+    validator.string,
+    validator.validator(function(value) std.length(value) == 1, 'must be one char long')
+  ),
   featureCategory: validator.validator(validateFeatureCategory, 'please specify a known feature category or include `feature_category` as a significant label'),
 });
 
@@ -40,19 +44,30 @@ local rateQueryFunction(sli, counter) =
 local applyDefaults(definition) = {
   featureCategory: if std.member(definition.significantLabels, 'feature_category') then
     serviceLevelIndicatorDefinition.featureCategoryFromSourceMetrics,
+  metricNameSeparator: '_',
   hasApdex():: std.member(definition.kinds, apdexKind),
   hasErrorRate():: std.member(definition.kinds, errorRateKind),
+
+  // Temporary default fallback while we work on
+  // https://gitlab.com/gitlab-com/gl-infra/scalability/-/issues/1760
+  fallback: definition { metricNameSeparator: ':', fallback: null },
 } + definition;
 
 local validateAndApplyDefaults(definition) =
   local definitionWithDefaults = applyDefaults(definition);
   local sli = sliValidator.assertValid(definitionWithDefaults);
 
+  local fallback = if definitionWithDefaults.fallback != null then
+    validateAndApplyDefaults(definitionWithDefaults.fallback)
+  else
+    null;
+
   sli {
-    [if sli.hasApdex() then 'apdexTotalCounterName']: 'gitlab_sli:%s_apdex:total' % [self.name],
-    [if sli.hasApdex() then 'apdexSuccessCounterName']: 'gitlab_sli:%s_apdex:success_total' % [self.name],
-    [if sli.hasErrorRate() then 'errorTotalCounterName']: 'gitlab_sli:%s:total' % [self.name],
-    [if sli.hasErrorRate() then 'errorCounterName']: 'gitlab_sli:%s:error_total' % [self.name],
+    local templateVariables = { name: sli.name, separator: sli.metricNameSeparator },
+    [if sli.hasApdex() then 'apdexTotalCounterName']: 'gitlab_sli%(separator)s%(name)s_apdex%(separator)stotal' % templateVariables,
+    [if sli.hasApdex() then 'apdexSuccessCounterName']: 'gitlab_sli%(separator)s%(name)s_apdex%(separator)ssuccess_total' % templateVariables,
+    [if sli.hasErrorRate() then 'errorTotalCounterName']: 'gitlab_sli%(separator)s%(name)s%(separator)stotal' % templateVariables,
+    [if sli.hasErrorRate() then 'errorCounterName']: 'gitlab_sli%(separator)s%(name)s%(separator)serror_total' % templateVariables,
     totalCounterName: if sli.hasErrorRate() then self.errorTotalCounterName else self.apdexTotalCounterName,
 
     [if sli.hasApdex() then 'aggregatedApdexOperationRateQuery']:: rateQueryFunction(self, 'apdexTotalCounterName'),
@@ -65,7 +80,7 @@ local validateAndApplyDefaults(definition) =
       misc.dig(self, ['apdexSuccessCounterName']),
       misc.dig(self, ['errorTotalCounterName']),
       misc.dig(self, ['errorCounterName']),
-    ]),
+    ]) + if fallback != null then fallback.recordingRuleMetrics else [],
 
     inRecordingRuleRegistry: misc.all(
       function(metricName)
@@ -81,11 +96,32 @@ local validateAndApplyDefaults(definition) =
 
       description: parent.description,
 
-      requestRate: rateMetric(parent.totalCounterName, extraSelector),
-      significantLabels: parent.significantLabels,
+      local fallbackSLI = if fallback != null then fallback.generateServiceLevelIndicator(extraSelector) else null,
 
-      [if parent.hasApdex() then 'apdex']: rateApdex(parent.apdexSuccessCounterName, parent.apdexTotalCounterName, extraSelector),
-      [if parent.hasErrorRate() then 'errorRate']: rateMetric(parent.errorCounterName, extraSelector),
+      local requestRate = rateMetric(parent.totalCounterName, extraSelector),
+      requestRate: if fallbackSLI == null then
+        requestRate
+      else
+        combined([
+          requestRate,
+          fallbackSLI.requestRate,
+        ]),
+
+      significantLabels: parent.significantLabels + if fallback != null then
+        fallback.significantLabels
+      else [],
+
+      local apdex = rateApdex(parent.apdexSuccessCounterName, parent.apdexTotalCounterName, extraSelector),
+      [if parent.hasApdex() then 'apdex']: if fallbackSLI == null then
+        apdex
+      else
+        combined([apdex, fallbackSLI.apdex]),
+
+      local errorRate = rateMetric(parent.errorCounterName, extraSelector),
+      [if parent.hasErrorRate() then 'errorRate']: if fallback == null then
+        errorRate
+      else
+        combined([errorRate, fallbackSLI.errorRate]),
     },
   };
 

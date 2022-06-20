@@ -11,7 +11,15 @@ groups:
       type: customersdot
     expr: |
       sum by (environment,stage) (
-        rate(gitlab_sli:customers_dot_requests_apdex:success_total{}[1m])
+        label_replace(sum by (environment,stage) (
+          rate(gitlab_sli_customers_dot_requests_apdex_success_total{}[1m])
+        )
+        , "_c", "0", "", "")
+        or
+        label_replace(sum by (environment,stage) (
+          rate(gitlab_sli:customers_dot_requests_apdex:success_total{}[1m])
+        )
+        , "_c", "1", "", "")
       )
   - record: gitlab_component_apdex:weight:score
     labels:
@@ -20,7 +28,15 @@ groups:
       type: customersdot
     expr: |
       sum by (environment,stage) (
-        rate(gitlab_sli:customers_dot_requests_apdex:total{}[1m])
+        label_replace(sum by (environment,stage) (
+          rate(gitlab_sli_customers_dot_requests_apdex_total{}[1m])
+        )
+        , "_c", "0", "", "")
+        or
+        label_replace(sum by (environment,stage) (
+          rate(gitlab_sli:customers_dot_requests_apdex:total{}[1m])
+        )
+        , "_c", "1", "", "")
       )
   - record: gitlab_component_ops:rate
     labels:
@@ -29,7 +45,9 @@ groups:
       type: customersdot
     expr: |
       sum by (environment,stage) (
-        rate(gitlab_sli:customers_dot_requests_apdex:total{}[1m])
+        label_replace(rate(gitlab_sli_customers_dot_requests_apdex_total{}[1m]), "_c", "0", "", "")
+        or
+        label_replace(rate(gitlab_sli:customers_dot_requests_apdex:total{}[1m]), "_c", "1", "", "")
       )
 - name: 'Component-Level SLIs: customersdot - 5m burn-rate'
   interval: 1m
@@ -41,7 +59,15 @@ groups:
       type: customersdot
     expr: |
       sum by (environment,stage) (
-        rate(gitlab_sli:customers_dot_requests_apdex:success_total{}[5m])
+        label_replace(sum by (environment,stage) (
+          rate(gitlab_sli_customers_dot_requests_apdex_success_total{}[5m])
+        )
+        , "_c", "0", "", "")
+        or
+        label_replace(sum by (environment,stage) (
+          rate(gitlab_sli:customers_dot_requests_apdex:success_total{}[5m])
+        )
+        , "_c", "1", "", "")
       )
   - record: gitlab_component_apdex:weight:score_5m
     labels:
@@ -50,7 +76,15 @@ groups:
       type: customersdot
     expr: |
       sum by (environment,stage) (
-        rate(gitlab_sli:customers_dot_requests_apdex:total{}[5m])
+        label_replace(sum by (environment,stage) (
+          rate(gitlab_sli_customers_dot_requests_apdex_total{}[5m])
+        )
+        , "_c", "0", "", "")
+        or
+        label_replace(sum by (environment,stage) (
+          rate(gitlab_sli:customers_dot_requests_apdex:total{}[5m])
+        )
+        , "_c", "1", "", "")
       )
   - record: gitlab_component_ops:rate_5m
     labels:
@@ -59,7 +93,9 @@ groups:
       type: customersdot
     expr: |
       sum by (environment,stage) (
-        rate(gitlab_sli:customers_dot_requests_apdex:total{}[5m])
+        label_replace(rate(gitlab_sli_customers_dot_requests_apdex_total{}[5m]), "_c", "0", "", "")
+        or
+        label_replace(rate(gitlab_sli:customers_dot_requests_apdex:total{}[5m]), "_c", "1", "", "")
       )
 - name: 'Component-Level SLIs: customersdot - 30m burn-rate'
   interval: 2m
@@ -71,7 +107,15 @@ groups:
       type: customersdot
     expr: |
       sum by (environment,stage) (
-        rate(gitlab_sli:customers_dot_requests_apdex:success_total{}[30m])
+        label_replace(sum by (environment,stage) (
+          rate(gitlab_sli_customers_dot_requests_apdex_success_total{}[30m])
+        )
+        , "_c", "0", "", "")
+        or
+        label_replace(sum by (environment,stage) (
+          rate(gitlab_sli:customers_dot_requests_apdex:success_total{}[30m])
+        )
+        , "_c", "1", "", "")
       )
   - record: gitlab_component_apdex:weight:score_30m
     labels:
@@ -80,7 +124,15 @@ groups:
       type: customersdot
     expr: |
       sum by (environment,stage) (
-        rate(gitlab_sli:customers_dot_requests_apdex:total{}[30m])
+        label_replace(sum by (environment,stage) (
+          rate(gitlab_sli_customers_dot_requests_apdex_total{}[30m])
+        )
+        , "_c", "0", "", "")
+        or
+        label_replace(sum by (environment,stage) (
+          rate(gitlab_sli:customers_dot_requests_apdex:total{}[30m])
+        )
+        , "_c", "1", "", "")
       )
   - record: gitlab_component_ops:rate_30m
     labels:
@@ -89,7 +141,9 @@ groups:
       type: customersdot
     expr: |
       sum by (environment,stage) (
-        rate(gitlab_sli:customers_dot_requests_apdex:total{}[30m])
+        label_replace(rate(gitlab_sli_customers_dot_requests_apdex_total{}[30m]), "_c", "0", "", "")
+        or
+        label_replace(rate(gitlab_sli:customers_dot_requests_apdex:total{}[30m]), "_c", "1", "", "")
       )
 - name: 'Component-Level SLIs: customersdot - 1h burn-rate'
   interval: 1m
@@ -101,7 +155,15 @@ groups:
       type: customersdot
     expr: |
       sum by (environment,stage) (
-        rate(gitlab_sli:customers_dot_requests_apdex:success_total{}[1h])
+        label_replace(sum by (environment,stage) (
+          rate(gitlab_sli_customers_dot_requests_apdex_success_total{}[1h])
+        )
+        , "_c", "0", "", "")
+        or
+        label_replace(sum by (environment,stage) (
+          rate(gitlab_sli:customers_dot_requests_apdex:success_total{}[1h])
+        )
+        , "_c", "1", "", "")
       )
   - record: gitlab_component_apdex:weight:score_1h
     labels:
@@ -110,7 +172,15 @@ groups:
       type: customersdot
     expr: |
       sum by (environment,stage) (
-        rate(gitlab_sli:customers_dot_requests_apdex:total{}[1h])
+        label_replace(sum by (environment,stage) (
+          rate(gitlab_sli_customers_dot_requests_apdex_total{}[1h])
+        )
+        , "_c", "0", "", "")
+        or
+        label_replace(sum by (environment,stage) (
+          rate(gitlab_sli:customers_dot_requests_apdex:total{}[1h])
+        )
+        , "_c", "1", "", "")
       )
   - record: gitlab_component_ops:rate_1h
     labels:
@@ -119,7 +189,9 @@ groups:
       type: customersdot
     expr: |
       sum by (environment,stage) (
-        rate(gitlab_sli:customers_dot_requests_apdex:total{}[1h])
+        label_replace(rate(gitlab_sli_customers_dot_requests_apdex_total{}[1h]), "_c", "0", "", "")
+        or
+        label_replace(rate(gitlab_sli:customers_dot_requests_apdex:total{}[1h]), "_c", "1", "", "")
       )
 - name: 'Component-Level SLIs: customersdot - 6h burn-rate'
   interval: 2m
@@ -131,7 +203,15 @@ groups:
       type: customersdot
     expr: |
       sum by (environment,stage) (
-        rate(gitlab_sli:customers_dot_requests_apdex:success_total{}[6h])
+        label_replace(sum by (environment,stage) (
+          rate(gitlab_sli_customers_dot_requests_apdex_success_total{}[6h])
+        )
+        , "_c", "0", "", "")
+        or
+        label_replace(sum by (environment,stage) (
+          rate(gitlab_sli:customers_dot_requests_apdex:success_total{}[6h])
+        )
+        , "_c", "1", "", "")
       )
   - record: gitlab_component_apdex:weight:score_6h
     labels:
@@ -140,7 +220,15 @@ groups:
       type: customersdot
     expr: |
       sum by (environment,stage) (
-        rate(gitlab_sli:customers_dot_requests_apdex:total{}[6h])
+        label_replace(sum by (environment,stage) (
+          rate(gitlab_sli_customers_dot_requests_apdex_total{}[6h])
+        )
+        , "_c", "0", "", "")
+        or
+        label_replace(sum by (environment,stage) (
+          rate(gitlab_sli:customers_dot_requests_apdex:total{}[6h])
+        )
+        , "_c", "1", "", "")
       )
   - record: gitlab_component_ops:rate_6h
     labels:
@@ -149,7 +237,9 @@ groups:
       type: customersdot
     expr: |
       sum by (environment,stage) (
-        rate(gitlab_sli:customers_dot_requests_apdex:total{}[6h])
+        label_replace(rate(gitlab_sli_customers_dot_requests_apdex_total{}[6h]), "_c", "0", "", "")
+        or
+        label_replace(rate(gitlab_sli:customers_dot_requests_apdex:total{}[6h]), "_c", "1", "", "")
       )
 - name: 'Component mapping: customersdot'
   interval: 1m
