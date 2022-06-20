@@ -130,4 +130,18 @@ test.suite({
     actual: misc.arrayDiff(['a', 'b', 'c'], []),
     expect: ['a', 'b', 'c'],
   },
+  testObjectIncludes: {
+    actual: misc.objectIncludes({ a: 'a', b: 2 }, { b: 2 }),
+    expect: true,
+  },
+  testObjectIncludesFalse: {
+    actual: misc.objectIncludes({ a: 'a', b: 2 }, { b: 1 }),
+    expect: false,
+  },
+
+  testObjectIncludesMultiple: {
+    actual: misc.objectIncludes({ a: 'a', b: 1, c: 'b' }, { c: 'b', b: 1 }),
+    expect: true,
+  },
+
 })

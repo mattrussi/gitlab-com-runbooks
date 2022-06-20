@@ -97,5 +97,5 @@ local validateAndApplyDefaults(definition) =
 
   // For testing only
   _sliValidator:: sliValidator,
-
+  _applyDefaults:: applyDefaults,
 }

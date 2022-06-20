@@ -47,6 +47,14 @@ local arrayDiff(arr1, arr2) =
 
 local digHas(object, keys) = dig(object, keys) != {};
 
+local objectIncludes(underTest, other) =
+  local expectedKeys = std.objectFields(other);
+  all(
+    function(expectedKey)
+      std.objectHas(underTest, expectedKey) && underTest[expectedKey] == other[expectedKey],
+    expectedKeys
+  );
+
 {
   all: all,
   any: any,
@@ -54,4 +62,5 @@ local digHas(object, keys) = dig(object, keys) != {};
   dig: dig,
   digHas: digHas,
   arrayDiff: arrayDiff,
+  objectIncludes: objectIncludes,
 }
