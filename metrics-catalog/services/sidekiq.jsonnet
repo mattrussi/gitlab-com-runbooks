@@ -85,7 +85,7 @@ metricsCatalog.serviceDefinition({
           ],
         },
       },
-    std.map(function(s) std.trace('shard: %s' % [s], s), sidekiqHelpers.shards.listAll()),
+    sidekiqHelpers.shards.listAll(),
     {},
   ),
   serviceLevelIndicators: {

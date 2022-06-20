@@ -59,7 +59,8 @@ local generateApdexWeightQuery(c, aggregationLabels, selector, rangeInterval, wi
 
 local generateApdexPercentileLatencyQuery(c, percentile, aggregationLabels, selector, rangeInterval, withoutLabels) =
   local rateQueries = std.map(function(i) i.apdexNumerator(selector, rangeInterval, histogramRates=true, withoutLabels=withoutLabels), c.metrics);
-  local aggregationLabelsWithLe = aggregationLabels + ['le'];
+  local aggregationLabelsWithLe = aggregations.join([aggregationLabels, 'le']);
+
   local aggregatedRateQueries = aggregations.aggregateOverQuery('sum', aggregationLabelsWithLe, orJoin(rateQueries));
 
   |||
@@ -85,6 +86,11 @@ local generateApdexPercentileLatencyQuery(c, percentile, aggregationLabels, sele
     else
       {
         metrics: metrics,
+        // We use `combined(histogramApdex(), histogramApdex())` with diferent
+        // thresholds to categorize different operations.
+        // This allows us to still generate the `histogram_quantile` graphs on
+        // service dashboards.
+        [if std.objectHas(metrics[0], 'histogram') then 'histogram']: metrics[0].histogram,
 
         // This creates a rate query of the form
         // rate(....{<selector>}[<rangeInterval>])
