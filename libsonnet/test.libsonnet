@@ -1,5 +1,6 @@
 local test = import 'github.com/yugui/jsonnetunit/jsonnetunit/test.libsonnet';
 local matcher = import 'jsonnetunit/matcher.libsonnet';
+local misc = import 'utils/misc.libsonnet';
 local objects = import 'utils/objects.libsonnet';
 
 local matchers = {
@@ -28,6 +29,37 @@ local matchers = {
         local notSatisfied = std.filter(function(e) !f(e), actual),
         satisfied: std.length(notSatisfied) == 0,
         positiveMessage: 'Expected all elements to satisfy function but %s did not' % [notSatisfied],
+      },
+    expectationType: true,
+  },
+
+  expectContains: {
+    matcher(actual, expected):
+      matcher {
+        satisfied: misc.objectIncludes(actual, expected),
+        positiveMessage: 'Expected %s to include %s' % [actual, expected],
+      },
+    expectationType: true,
+  },
+
+  expectValid: {
+    matcher(o, validator):
+      matcher {
+        satisfied: validator.isValid(o),
+        positiveMessage: 'Expected no validation errors but had %s' % [validator._validationMessages(o)],
+      },
+    expectationType: true,
+  },
+
+  expectMatchingValidationError: {
+    matcher(o, validation):
+      matcher {
+        local messages = validation.validator._validationMessages(o),
+        satisfied: misc.any(
+          function(message) std.member(message, validation.message),
+          messages,
+        ),
+        positiveMessage: 'Expected %s validation errors but only had %s' % [validation.message, messages],
       },
     expectationType: true,
   },

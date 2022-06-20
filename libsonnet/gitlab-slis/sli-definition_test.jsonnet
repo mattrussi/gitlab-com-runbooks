@@ -1,8 +1,8 @@
 local sliDefinition = import './sli-definition.libsonnet';
-local test = import 'github.com/yugui/jsonnetunit/jsonnetunit/test.libsonnet';
+local test = import 'test.libsonnet';
 local objects = import 'utils/objects.libsonnet';
 
-local validSLI = {
+local validDefinition = {
   name: 'hello_sli',
   kinds: [sliDefinition.apdexKind],
   description: 'an SLI counting hellos',
@@ -12,8 +12,8 @@ local validSLI = {
 
 test.suite({
   testNew: {
-    actual: sliDefinition.new(validSLI),
-    expect: {
+    actual: sliDefinition.new(validDefinition),
+    expectContains: {
       name: 'hello_sli',
       kinds: [sliDefinition.apdexKind],
       featureCategory: 'error_budgets',
@@ -23,82 +23,91 @@ test.suite({
       totalCounterName: 'gitlab_sli:hello_sli_apdex:total',
       apdexTotalCounterName: 'gitlab_sli:hello_sli_apdex:total',
       apdexSuccessCounterName: 'gitlab_sli:hello_sli_apdex:success_total',
-      recordingRuleMetrics: ['gitlab_sli:hello_sli_apdex:total', 'gitlab_sli:hello_sli_apdex:success_total'],
+      recordingRuleMetrics: [
+        'gitlab_sli:hello_sli_apdex:total',
+        'gitlab_sli:hello_sli_apdex:success_total',
+      ],
     },
   },
 
   testNewWithoutFeatureCategory: {
-    local sli = objects.objectWithout(validSLI, 'featureCategory') {
+    local definitionWithoutFeatureCategory = objects.objectWithout(validDefinition, 'featureCategory') {
       significantLabels: ['world', 'feature_category'],
     },
-    actual: sliDefinition.new(sli),
-    expect: {
-      name: 'hello_sli',
-      kinds: [sliDefinition.apdexKind],
+    actual: sliDefinition.new(definitionWithoutFeatureCategory),
+    expectContains: {
       featureCategory: 'featureCategoryFromSourceMetrics',
-      description: 'an SLI counting hellos',
       significantLabels: ['world', 'feature_category'],
-      inRecordingRuleRegistry: false,
-      totalCounterName: 'gitlab_sli:hello_sli_apdex:total',
-      apdexTotalCounterName: 'gitlab_sli:hello_sli_apdex:total',
-      apdexSuccessCounterName: 'gitlab_sli:hello_sli_apdex:success_total',
-      recordingRuleMetrics: ['gitlab_sli:hello_sli_apdex:total', 'gitlab_sli:hello_sli_apdex:success_total'],
     },
-  },
-
-  local validate(sli) = sliDefinition._sliValidator.isValid(sli),
-
-  testFeatureCategoryUnknown: {
-    local sli = validSLI { featureCategory: 'not a feature' },
-    actual: validate(sli),
-    expect: false,
-  },
-
-  testFeatureCategoryNotOwned: {
-    local sli = validSLI { featureCategory: 'not_owned' },
-    actual: validate(sli),
-    expect: true,
-  },
-
-  testFeatureCategoryNull: {
-    local sli = validSLI { featureCategory: null },
-    actual: validate(sli),
-    expect: false,
-  },
-
-  testFeatureCategoryMissing: {
-    local sli = objects.objectWithout(validSLI, 'featureCategory'),
-    actual: validate(sli),
-    expect: false,
   },
 
   testNewMultipleKinds: {
-    actual: sliDefinition.new(validSLI {
+    actual: sliDefinition.new(validDefinition {
       kinds: [sliDefinition.apdexKind, sliDefinition.errorRateKind],
     }),
-    expect: {
-      name: 'hello_sli',
+    expectContains: {
       kinds: [sliDefinition.apdexKind, sliDefinition.errorRateKind],
-      description: 'an SLI counting hellos',
-      significantLabels: ['world'],
-      featureCategory: 'error_budgets',
-      inRecordingRuleRegistry: false,
       totalCounterName: 'gitlab_sli:hello_sli:total',
       apdexTotalCounterName: 'gitlab_sli:hello_sli_apdex:total',
       apdexSuccessCounterName: 'gitlab_sli:hello_sli_apdex:success_total',
       errorTotalCounterName: 'gitlab_sli:hello_sli:total',
       errorCounterName: 'gitlab_sli:hello_sli:error_total',
-      recordingRuleMetrics: ['gitlab_sli:hello_sli_apdex:total', 'gitlab_sli:hello_sli_apdex:success_total', 'gitlab_sli:hello_sli:total', 'gitlab_sli:hello_sli:error_total'],
+      recordingRuleMetrics: [
+        'gitlab_sli:hello_sli_apdex:total',
+        'gitlab_sli:hello_sli_apdex:success_total',
+        'gitlab_sli:hello_sli:total',
+        'gitlab_sli:hello_sli:error_total',
+      ],
     },
   },
 
-  testNewInvalidKind: {
-    actual: validate(validSLI { kinds: ['foo_rate'] }),
-    expect: false,
+  local validSLI = sliDefinition._applyDefaults(validDefinition),
+  testValidateFeatureCategoryUnknown: {
+    local sli = validSLI { featureCategory: 'not a feature' },
+    actual: sli,
+    expectMatchingValidationError: {
+      validator: sliDefinition._sliValidator,
+      message: 'field featureCategory',
+    },
   },
 
-  testNewNoKind: {
-    actual: validate(validSLI { kinds: [] }),
-    expect: false,
+  testValdidateFeatureCategoryNotOwned: {
+    local sli = validSLI { featureCategory: 'not_owned' },
+    actual: sli,
+    expectValid: sliDefinition._sliValidator,
+  },
+
+  testValidateFeatureCategoryNull: {
+    local sli = validSLI { featureCategory: null },
+    actual: sli,
+    expectMatchingValidationError: {
+      validator: sliDefinition._sliValidator,
+      message: 'field featureCategory',
+    },
+  },
+
+  testValidateFeatureCategoryMissing: {
+    local sli = objects.objectWithout(validSLI, 'featureCategory'),
+    actual: sli,
+    expectMatchingValidationError: {
+      validator: sliDefinition._sliValidator,
+      message: 'field featureCategory',
+    },
+  },
+
+  testValidateInvalidKind: {
+    actual: validSLI { kinds: ['foo_rate'] },
+    expectMatchingValidationError: {
+      validator: sliDefinition._sliValidator,
+      message: 'field kinds',
+    },
+  },
+
+  testValidateNoKind: {
+    actual: validSLI { kinds: [] },
+    expectMatchingValidationError: {
+      validator: sliDefinition._sliValidator,
+      message: 'field kinds',
+    },
   },
 })
