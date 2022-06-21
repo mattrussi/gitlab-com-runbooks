@@ -104,10 +104,11 @@ Note: _At the last update (2022/06/10) the Replication Backup nodes were_ :
         </details>
 
 1. Create all the Patroni CI node with: `tf apply`
-1. Check the `patroni-ci-01-db` Serial port in GCP console to see if the instance is already intialized and if Chef have finished to run, for example:
-   - GSTG: [patroni-ci-01-db-gstg/console?port=1&project=gitlab-staging-1](https://console.cloud.google.com/compute/instancesDetail/zones/us-east1-c/instances/patroni-ci-01-db-gstg/console?port=1&project=gitlab-staging-1)
-   - GPRD: [patroni-ci-01-db-gprd/console?port=1&project=gitlab-production](https://console.cloud.google.com/compute/instancesDetail/zones/us-east1-c/instances/patroni-ci-01-db-gprd/console?port=1&project=gitlab-production)
-1. Check if Chef boostrap have executed. I might have falied while while performing `usermod: directory /var/opt/gitlab/postgresql`, but this is ok, as the Ansible playbook will check a re-execute chef-client if necessary, therefore if you observer the following message you can skip the next step and start executing the pg-replica-rebuild Ansible playbook.
+1. Check the `patroni-ci-01-db` Serial port in GCP console to see if the instance is already intialized and if Chef have finished to run, like for example:
+   - GSTG: instance [patroni-ci-01-db-gstg/console?port=1&project=gitlab-staging-1](https://console.cloud.google.com/compute/instancesDetail/zones/us-east1-c/instances/patroni-ci-01-db-gstg/console?port=1&project=gitlab-staging-1)
+   - GPRD: instance [patroni-ci-01-db-gprd/console?port=1&project=gitlab-production](https://console.cloud.google.com/compute/instancesDetail/zones/us-east1-c/instances/patroni-ci-01-db-gprd/console?port=1&project=gitlab-production)
+   - Or you can execute `gcloud compute instances get-serial-port-output <instance_name>`
+1. Look into the instance Serial Console, or into `/var/log/syslog` log file, if the Chef boostrap have failed. Any kind of error needs to be addressed, except for while while performing `usermod: directory /var/opt/gitlab/postgresql`, which is a known issue that can be ignored. Therefore if you observer the following message in `/var/log/syslog` or the instance serial port/console, you can start executing the pg-replica-rebuild Ansible playbook.
 
     ```
     $ sudo cat /var/log/syslog | grep "STDERR: usermod: directory /var/opt/gitlab/postgresql exists"
