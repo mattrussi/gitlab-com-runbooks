@@ -9,9 +9,10 @@ Make sure that **there are no CI Read requests being made in the patroni-ci clus
 ## Pre-requisites
 
 1. Terraform should be installed and configured;
-1. Ansible should be installed and configured;
-1. Download/clone the [ops.gitlab.net/gitlab-com/gl-infra/config-mgmt](https://ops.gitlab.net/gitlab-com/gl-infra/config-mgmt) project into your workspace;
-1. Download/clone the [gitlab.com/gitlab-com/gl-infra/db-migration](https://gitlab.com/gitlab-com/gl-infra/db-migration) project into your workspace;
+1. Ansible should be installed and configured into your account into a `console` node;
+    1. {+ TODO +}
+1. Download/clone the [ops.gitlab.net/gitlab-com/gl-infra/config-mgmt](https://ops.gitlab.net/gitlab-com/gl-infra/config-mgmt) project into a `console` node;
+1. Download/clone the [gitlab.com/gitlab-com/gl-infra/db-migration](https://gitlab.com/gitlab-com/gl-infra/db-migration) project into a `console` node;
 1. Check that the inventory file for your desired environment exists in `db-migration/pg-replica-rebuild/inventory/` and it's up-to-date with the hosts you're targeting;
 1. Run `cd db-migration/pg-replica-rebuild; ansible -i inventory/<file> all -m ping` and ensure that all nodes are reachable;
 
@@ -68,25 +69,21 @@ Note: _At the last update (2022/06/10) the Replication Backup nodes were_ :
 ## Recover the Patroni CI Standby Cluster
 
 1. Change Terraform environment
-    - Add the following module at `main.tf`, but **DO NOT SIMPLY COPY/PASTE IT**, set the `--project` and `--filter` accordingly with the environment you are performing the restore
+    - Execute the following `gcloud` command to get the name of the most recent GCS snapshot from the patroni backup data disk, but **DO NOT SIMPLY COPY/PASTE IT**, set the `--project` and `--filter` accordingly with the environment you are performing the restore:
 
         ```
-        module "gcp_database_snapshot" {
-            source        = "matti/resource/shell"
-            version       = "1.5.0"
-            command       = "gcloud compute snapshots list --project [gitlab-staging-1|gitlab-production] --limit=1 --uri --sort-by=~creationTimestamp --filter=status~READY --filter=sourceDisk~patroni-[06-db-gstg|v12-10-db-gprd]-data"
-            trigger       = timestamp()
-            fail_on_error = true
-        }
-        locals {
-            gcp_database_snapshot = trimprefix(module.gcp_database_snapshot.stdout, "https://www.googleapis.com/compute/v1/")
-        }
+        gcloud compute snapshots list --project [gitlab-staging-1|gitlab-production] --limit=1 --uri --sort-by=~creationTimestamp --filter=status~READY --filter=sourceDisk~patroni-[06-db-gstg|v12-10-db-gprd]-data
         ```
+
+    - Remove the `https://www.googleapis.com/compute/v1/` prefix of the snapshot name 
+
+        - For example: `https://www.googleapis.com/compute/v1/projects/gitlab-production/global/snapshots/nukw46z00o90` will turn into `projects/gitlab-production/global/snapshots/nukw46z00o90`
 
     - Add the following line into `patroni-ci` module at `main.tf`
 
         ```
-            data_disk_snapshot     = local.gcp_database_snapshot
+          data_disk_snapshot     = "<snapshot_name>"
+          data_disk_create_timeout = "120m"
         ```
 
     - Change the `"node_count"` of patroni CI back to the original amount of nodes at `variables.tf`:
@@ -137,7 +134,9 @@ Note: _At the last update (2022/06/10) the Replication Backup nodes were_ :
         </details>
     - Restart the VM instances through the GCP console
 
-1. Initialize the cluster using the `db-migration/pg-replica-rebuild` Ansible playbook, by executing:
+1. From a `console` node initialize a Tmux session to execute the Ansible playbook from it;
+
+1. Execute the `db-migration/pg-replica-rebuild` Ansible playbook from your Tmux session to Initialize the cluster:
 
     ```
     cd <workspace>/db-migration/pg-replica-rebuild
