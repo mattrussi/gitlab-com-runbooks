@@ -83,7 +83,7 @@ Note: _At the last update (2022/06/10) the Replication Backup nodes were_ :
         gcloud compute snapshots list --project [gitlab-staging-1|gitlab-production] --limit=1 --uri --sort-by=~creationTimestamp --filter=status~READY --filter=sourceDisk~patroni-[06-db-gstg|v12-10-db-gprd]-data
         ```
 
-    - Remove the `https://www.googleapis.com/compute/v1/` prefix of the snapshot name 
+    - Remove the `https://www.googleapis.com/compute/v1/` prefix of the snapshot name
 
         - For example: `https://www.googleapis.com/compute/v1/projects/gitlab-production/global/snapshots/nukw46z00o90` will turn into `projects/gitlab-production/global/snapshots/nukw46z00o90`
 
