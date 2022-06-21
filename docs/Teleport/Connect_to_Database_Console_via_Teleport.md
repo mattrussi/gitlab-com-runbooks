@@ -95,7 +95,7 @@ tsh db login --db-user=console-ro --db-name=gitlabhq_production db-secondary
 
 Remember that your access request, its approval, and any associated database logins will expire in `12h` maximum unless renewed.
 
-> Tip: The above command connects to a secondary database (`db-secondary`).  Secondaries are always read only.  If you need write access, you will have to log in to `db-primary` in addition to connecting as a database user with write permissions. Once logged in to teleport, you can view the databases available to your role with `tsh db ls`
+> Tip: The above command connects to a secondary database (`db-secondary`).  Secondaries are always read only.  If you need write access, you will have to log in to `db-primary` in addition to connecting as a database user with write permissions. The `console-rw` user is allowed to write and permission is granted as part of the `database` role. Once logged in to teleport, you can view the databases available to your role with `tsh db ls`
 
 The database login command only needs to be executed once per day, unless you manually log out or need to change something.  Once logged in, you can connect and disconnect from the console as many times as needed.
 
