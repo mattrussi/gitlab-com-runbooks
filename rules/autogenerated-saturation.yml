@@ -488,7 +488,20 @@ groups:
       max by(environment, tier, type, stage) (
         clamp_min(
           clamp_max(
-            instance:node_memory_utilization:ratio{type=~"gitaly|ci-runners|consul|customersdot|frontend|jaeger|monitoring|patroni|patroni-registry|patroni-ci|patroni-ci1|postgres-archive|pgbouncer|pgbouncer-registry|pgbouncer-ci|praefect|redis-cache|redis-sidekiq|redis-tracechunks|redis-ratelimiting|redis-sessions|redis|registry|sentry|web-pages"} or instance:node_memory_utilisation:ratio{type=~"gitaly|ci-runners|consul|customersdot|frontend|jaeger|monitoring|patroni|patroni-registry|patroni-ci|patroni-ci1|postgres-archive|pgbouncer|pgbouncer-registry|pgbouncer-ci|praefect|redis-cache|redis-sidekiq|redis-tracechunks|redis-ratelimiting|redis-sessions|redis|registry|sentry|web-pages"}
+            instance:node_memory_utilization:ratio{type=~"gitaly|ci-runners|consul|customersdot|frontend|jaeger|monitoring|patroni|patroni-registry|patroni-ci|patroni-ci1|postgres-archive|pgbouncer|pgbouncer-registry|pgbouncer-ci|praefect|redis-sidekiq|redis-tracechunks|redis-ratelimiting|redis-sessions|redis|registry|sentry|web-pages"} or instance:node_memory_utilisation:ratio{type=~"gitaly|ci-runners|consul|customersdot|frontend|jaeger|monitoring|patroni|patroni-registry|patroni-ci|patroni-ci1|postgres-archive|pgbouncer|pgbouncer-registry|pgbouncer-ci|praefect|redis-sidekiq|redis-tracechunks|redis-ratelimiting|redis-sessions|redis|registry|sentry|web-pages"}
+            ,
+            1)
+        ,
+        0)
+      )
+  - record: gitlab_component_saturation:ratio
+    labels:
+      component: memory_redis_cache
+    expr: |
+      max by(environment, tier, type, stage) (
+        clamp_min(
+          clamp_max(
+            instance:node_memory_utilization:ratio{type="redis-cache"} or instance:node_memory_utilisation:ratio{type="redis-cache"}
             ,
             1)
         ,
@@ -915,13 +928,34 @@ groups:
         clamp_min(
           clamp_max(
             max by (environment, tier, type, stage, fqdn) (
-              label_replace(redis_memory_used_rss_bytes{type=~"redis-cache|redis-sidekiq|redis-ratelimiting|redis-sessions|redis"}, "memtype", "rss","","")
+              label_replace(redis_memory_used_rss_bytes{type=~"redis-sidekiq|redis-ratelimiting|redis-sessions|redis"}, "memtype", "rss","","")
               or
-              label_replace(redis_memory_used_bytes{type=~"redis-cache|redis-sidekiq|redis-ratelimiting|redis-sessions|redis"}, "memtype", "used","","")
+              label_replace(redis_memory_used_bytes{type=~"redis-sidekiq|redis-ratelimiting|redis-sessions|redis"}, "memtype", "used","","")
             )
             /
             avg by (environment, tier, type, stage, fqdn) (
-              node_memory_MemTotal_bytes{type=~"redis-cache|redis-sidekiq|redis-ratelimiting|redis-sessions|redis"}
+              node_memory_MemTotal_bytes{type=~"redis-sidekiq|redis-ratelimiting|redis-sessions|redis"}
+            )
+            ,
+            1)
+        ,
+        0)
+      )
+  - record: gitlab_component_saturation:ratio
+    labels:
+      component: redis_memory_cache
+    expr: |
+      max by(environment, tier, type, stage) (
+        clamp_min(
+          clamp_max(
+            max by (environment, tier, type, stage, fqdn) (
+              label_replace(redis_memory_used_rss_bytes{type="redis-cache"}, "memtype", "rss","","")
+              or
+              label_replace(redis_memory_used_bytes{type="redis-cache"}, "memtype", "used","","")
+            )
+            /
+            avg by (environment, tier, type, stage, fqdn) (
+              node_memory_MemTotal_bytes{type="redis-cache"}
             )
             ,
             1)
@@ -1392,6 +1426,14 @@ groups:
     expr: "0.98"
   - record: slo:max:soft:gitlab_component_saturation:ratio
     labels:
+      component: memory_redis_cache
+    expr: "0.9"
+  - record: slo:max:hard:gitlab_component_saturation:ratio
+    labels:
+      component: memory_redis_cache
+    expr: "0.98"
+  - record: slo:max:soft:gitlab_component_saturation:ratio
+    labels:
       component: nat_gateway_port_allocation
     expr: "0.8"
   - record: slo:max:hard:gitlab_component_saturation:ratio
@@ -1581,6 +1623,14 @@ groups:
   - record: slo:max:hard:gitlab_component_saturation:ratio
     labels:
       component: redis_memory
+    expr: "0.7"
+  - record: slo:max:soft:gitlab_component_saturation:ratio
+    labels:
+      component: redis_memory_cache
+    expr: "0.65"
+  - record: slo:max:hard:gitlab_component_saturation:ratio
+    labels:
+      component: redis_memory_cache
     expr: "0.7"
   - record: slo:max:soft:gitlab_component_saturation:ratio
     labels:
@@ -1915,6 +1965,14 @@ groups:
     expr: "1"
   - record: gitlab_component_saturation_info
     labels:
+      capacity_planning_strategy: exclude
+      component: memory_redis_cache
+      horiz_scaling: "yes"
+      quantile: max
+      severity: s4
+    expr: "1"
+  - record: gitlab_component_saturation_info
+    labels:
       capacity_planning_strategy: quantile95_1h
       component: nat_gateway_port_allocation
       horiz_scaling: "no"
@@ -2101,6 +2159,14 @@ groups:
     labels:
       capacity_planning_strategy: quantile95_1h
       component: redis_memory
+      horiz_scaling: "no"
+      quantile: max
+      severity: s2
+    expr: "1"
+  - record: gitlab_component_saturation_info
+    labels:
+      capacity_planning_strategy: exclude
+      component: redis_memory_cache
       horiz_scaling: "no"
       quantile: max
       severity: s2
@@ -3438,6 +3504,46 @@ groups:
   - alert: component_saturation_slo_out_of_bounds
     for: 5m
     annotations:
+      title: The Memory Utilization per Node resource of the {{ $labels.type }} service
+        ({{ $labels.stage }} stage) has a saturation exceeding SLO and is close to
+        its capacity limit.
+      description: |
+        This means that this resource is running close to capacity and is at risk of exceeding its current capacity limit.
+
+        Details of the Memory Utilization per Node resource:
+
+        Memory utilization per device per node.
+
+
+        redis-cache has a separate saturation point for this to exclude it from capacity planning calculations.
+      grafana_dashboard_id: alerts-sat_memory_redis_cache
+      grafana_dashboard_link: https://dashboards.gitlab.net/d/alerts-sat_memory_redis_cache?from=now-6h/m&to=now-1m/m&var-environment={{
+        $labels.environment }}&var-type={{ $labels.type }}&var-stage={{ $labels.stage
+        }}
+      grafana_min_zoom_hours: "6"
+      grafana_panel_id: "2178235391"
+      grafana_variables: environment,type,stage
+      promql_query: |
+        max by(environment, tier, type, stage, fqdn) (
+          clamp_min(
+            clamp_max(
+              instance:node_memory_utilization:ratio{environment="{{ $labels.environment }}",stage="{{ $labels.stage }}",type="{{ $labels.type }}"} or instance:node_memory_utilisation:ratio{environment="{{ $labels.environment }}",stage="{{ $labels.stage }}",type="{{ $labels.type }}"}
+              ,
+              1)
+          ,
+          0)
+        )
+      runbook: docs/{{ $labels.type }}/README.md
+    labels:
+      alert_type: cause
+      rules_domain: general
+      severity: s4
+    expr: |
+      gitlab_component_saturation:ratio{component="memory_redis_cache"} > on(component) group_left
+      slo:max:hard:gitlab_component_saturation:ratio{component="memory_redis_cache"}
+  - alert: component_saturation_slo_out_of_bounds
+    for: 5m
+    annotations:
       title: The Cloud NAT Gateway Port Allocation resource of the {{ $labels.type
         }} service ({{ $labels.stage }} stage) has a saturation exceeding SLO and
         is close to its capacity limit.
@@ -4595,6 +4701,58 @@ groups:
     expr: |
       gitlab_component_saturation:ratio{component="redis_memory"} > on(component) group_left
       slo:max:hard:gitlab_component_saturation:ratio{component="redis_memory"}
+  - alert: component_saturation_slo_out_of_bounds
+    for: 5m
+    annotations:
+      title: The Redis Memory Utilization per Node resource of the {{ $labels.type
+        }} service ({{ $labels.stage }} stage) has a saturation exceeding SLO and
+        is close to its capacity limit.
+      description: |
+        This means that this resource is running close to capacity and is at risk of exceeding its current capacity limit.
+
+        Details of the Redis Memory Utilization per Node resource:
+
+        Redis memory utilization per node.
+
+        As Redis memory saturates node memory, the likelyhood of OOM kills, possibly to the Redis process, become more likely.
+
+        For caches, consider lowering the `maxmemory` setting in Redis. For non-caching Redis instances, this has been caused in the past by credential stuffing, leading to large numbers of web sessions.
+
+        This threshold is kept deliberately low, since Redis RDB snapshots could consume a significant amount of memory, especially when the rate of change in Redis is high, leading to copy-on-write consuming more memory than when the rate-of-change is low.
+      grafana_dashboard_id: alerts-sat_redis_memory_cache
+      grafana_dashboard_link: https://dashboards.gitlab.net/d/alerts-sat_redis_memory_cache?from=now-6h/m&to=now-1m/m&var-environment={{
+        $labels.environment }}&var-type={{ $labels.type }}&var-stage={{ $labels.stage
+        }}
+      grafana_min_zoom_hours: "6"
+      grafana_panel_id: "19142171"
+      grafana_variables: environment,type,stage
+      promql_query: |
+        max by(environment, tier, type, stage, fqdn) (
+          clamp_min(
+            clamp_max(
+              max by (environment, tier, type, stage, fqdn) (
+                label_replace(redis_memory_used_rss_bytes{environment="{{ $labels.environment }}",stage="{{ $labels.stage }}",type="{{ $labels.type }}"}, "memtype", "rss","","")
+                or
+                label_replace(redis_memory_used_bytes{environment="{{ $labels.environment }}",stage="{{ $labels.stage }}",type="{{ $labels.type }}"}, "memtype", "used","","")
+              )
+              /
+              avg by (environment, tier, type, stage, fqdn) (
+                node_memory_MemTotal_bytes{environment="{{ $labels.environment }}",stage="{{ $labels.stage }}",type="{{ $labels.type }}"}
+              )
+              ,
+              1)
+          ,
+          0)
+        )
+      runbook: docs/{{ $labels.type }}/README.md
+    labels:
+      alert_type: cause
+      pager: pagerduty
+      rules_domain: general
+      severity: s2
+    expr: |
+      gitlab_component_saturation:ratio{component="redis_memory_cache"} > on(component) group_left
+      slo:max:hard:gitlab_component_saturation:ratio{component="redis_memory_cache"}
   - alert: component_saturation_slo_out_of_bounds
     for: 5m
     annotations:
