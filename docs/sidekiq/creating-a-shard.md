@@ -51,15 +51,18 @@ configuration choices:
 * If necessary create a new dedicated node pool
   * Add in terraform; currently in environments/ENV/gke-regional.tf; generally
       look for the other node pool definitions and duplicate/extend
-* Modify the necessary items in [k8s-workloads/gitlab-com] adding the new shard
-  * Another section in `gitlab.sidekiq.pods` with settings determined above
-* Stop the relevant workers running on their previous shard (usually)
-  * Add an expression to the selector (or routing config) for the old shard
-      to exclude the newly moved workers. Honestly, this is complicated as of
-      June 2021. Talk to Craig Miskell if you need help; he'll update these docs
-      when <https://gitlab.com/groups/gitlab-com/gl-infra/-/epics/447> and
-      <https://gitlab.com/groups/gitlab-com/gl-infra/-/epics/469> are done and
-      its all a lot simpler.
+* Modify [k8s-workloads/gitlab-com] adding the new sidekiq shard by adding a new section
+  in `gitlab.sidekiq.pods` with settings determined above
+  * This prepares a place for the jobs to run but does not cause anything to be routed
+    to them just yet. The  "queues" value is the list of queues (probably just one) that
+    this shard will listen on (used in the next step).
+* Modify global.appConfig.sidekiq.routingRules in [k8s-workloads/gitlab-com] to select
+  the jobs you want (by name or other characteristics) in the first array value, and
+  route them to the new queue (the second value in the array, being the name of the queue
+  that the new shard is listening on)
+  * When deployed, this is what will cause the jobs to be put into the named queue to be picked
+    up by the new shard
+    * Note: During the deploy, pods are slowly cycled over a period of time.  Due to this, there's a window of time for which the old and new shard will process the same work queue.
 
 [k8s-workloads/gitlab-helmfiles]: https://gitlab.com/gitlab-com/gl-infra/k8s-workloads/gitlab-helmfiles
 [k8s-workloads/gitlab-com]: https://gitlab.com/gitlab-com/gl-infra/k8s-workloads/gitlab-com
