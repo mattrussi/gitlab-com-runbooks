@@ -96,7 +96,6 @@ groups:
   - alert: SentryBlackboxProbeFailures
     expr: avg_over_time(probe_success{job="blackbox", instance="https://sentry.gitlab.net"}[10m]) * 100 < 75
     labels:
-      pager: pagerduty
       severity: s3
       alert_type: symptom
     annotations:
