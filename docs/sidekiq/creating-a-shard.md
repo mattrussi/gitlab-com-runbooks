@@ -62,6 +62,7 @@ configuration choices:
   that the new shard is listening on)
   * When deployed, this is what will cause the jobs to be put into the named queue to be picked
     up by the new shard
+    * Note: During the deploy, pods are slowly cycled over a period of time.  Due to this, there's a window of time for which the old and new shard will process the same work queue.
 
 [k8s-workloads/gitlab-helmfiles]: https://gitlab.com/gitlab-com/gl-infra/k8s-workloads/gitlab-helmfiles
 [k8s-workloads/gitlab-com]: https://gitlab.com/gitlab-com/gl-infra/k8s-workloads/gitlab-com
