@@ -11,15 +11,9 @@ groups:
       type: customersdot
     expr: |
       sum by (env,environment,stage) (
-        label_replace(sum by (env,environment,stage) (
-          rate(gitlab_sli_customers_dot_requests_apdex_success_total{}[5m])
-        )
-        , "_c", "0", "", "")
+        label_replace(rate(gitlab_sli_customers_dot_requests_apdex_success_total{}[5m]), "_c", "0", "", "")
         or
-        label_replace(sum by (env,environment,stage) (
-          rate(gitlab_sli:customers_dot_requests_apdex:success_total{}[5m])
-        )
-        , "_c", "1", "", "")
+        label_replace(rate(gitlab_sli:customers_dot_requests_apdex:success_total{}[5m]), "_c", "1", "", "")
       )
   - record: gitlab:component:feature_category:execution:apdex:weight:score_5m
     labels:
@@ -29,15 +23,9 @@ groups:
       type: customersdot
     expr: |
       sum by (env,environment,stage) (
-        label_replace(sum by (env,environment,stage) (
-          rate(gitlab_sli_customers_dot_requests_apdex_total{}[5m])
-        )
-        , "_c", "0", "", "")
+        label_replace(rate(gitlab_sli_customers_dot_requests_apdex_total{}[5m]), "_c", "0", "", "")
         or
-        label_replace(sum by (env,environment,stage) (
-          rate(gitlab_sli:customers_dot_requests_apdex:total{}[5m])
-        )
-        , "_c", "1", "", "")
+        label_replace(rate(gitlab_sli:customers_dot_requests_apdex:total{}[5m]), "_c", "1", "", "")
       )
   - record: gitlab:component:feature_category:execution:ops:rate_5m
     labels:
@@ -61,15 +49,9 @@ groups:
       type: customersdot
     expr: |
       sum by (env,environment,stage) (
-        label_replace(sum by (env,environment,stage) (
-          rate(gitlab_sli_customers_dot_requests_apdex_success_total{}[30m])
-        )
-        , "_c", "0", "", "")
+        label_replace(rate(gitlab_sli_customers_dot_requests_apdex_success_total{}[30m]), "_c", "0", "", "")
         or
-        label_replace(sum by (env,environment,stage) (
-          rate(gitlab_sli:customers_dot_requests_apdex:success_total{}[30m])
-        )
-        , "_c", "1", "", "")
+        label_replace(rate(gitlab_sli:customers_dot_requests_apdex:success_total{}[30m]), "_c", "1", "", "")
       )
   - record: gitlab:component:feature_category:execution:apdex:weight:score_30m
     labels:
@@ -79,15 +61,9 @@ groups:
       type: customersdot
     expr: |
       sum by (env,environment,stage) (
-        label_replace(sum by (env,environment,stage) (
-          rate(gitlab_sli_customers_dot_requests_apdex_total{}[30m])
-        )
-        , "_c", "0", "", "")
+        label_replace(rate(gitlab_sli_customers_dot_requests_apdex_total{}[30m]), "_c", "0", "", "")
         or
-        label_replace(sum by (env,environment,stage) (
-          rate(gitlab_sli:customers_dot_requests_apdex:total{}[30m])
-        )
-        , "_c", "1", "", "")
+        label_replace(rate(gitlab_sli:customers_dot_requests_apdex:total{}[30m]), "_c", "1", "", "")
       )
   - record: gitlab:component:feature_category:execution:ops:rate_30m
     labels:
@@ -111,15 +87,9 @@ groups:
       type: customersdot
     expr: |
       sum by (env,environment,stage) (
-        label_replace(sum by (env,environment,stage) (
-          rate(gitlab_sli_customers_dot_requests_apdex_success_total{}[1h])
-        )
-        , "_c", "0", "", "")
+        label_replace(rate(gitlab_sli_customers_dot_requests_apdex_success_total{}[1h]), "_c", "0", "", "")
         or
-        label_replace(sum by (env,environment,stage) (
-          rate(gitlab_sli:customers_dot_requests_apdex:success_total{}[1h])
-        )
-        , "_c", "1", "", "")
+        label_replace(rate(gitlab_sli:customers_dot_requests_apdex:success_total{}[1h]), "_c", "1", "", "")
       )
   - record: gitlab:component:feature_category:execution:apdex:weight:score_1h
     labels:
@@ -129,15 +99,9 @@ groups:
       type: customersdot
     expr: |
       sum by (env,environment,stage) (
-        label_replace(sum by (env,environment,stage) (
-          rate(gitlab_sli_customers_dot_requests_apdex_total{}[1h])
-        )
-        , "_c", "0", "", "")
+        label_replace(rate(gitlab_sli_customers_dot_requests_apdex_total{}[1h]), "_c", "0", "", "")
         or
-        label_replace(sum by (env,environment,stage) (
-          rate(gitlab_sli:customers_dot_requests_apdex:total{}[1h])
-        )
-        , "_c", "1", "", "")
+        label_replace(rate(gitlab_sli:customers_dot_requests_apdex:total{}[1h]), "_c", "1", "", "")
       )
   - record: gitlab:component:feature_category:execution:ops:rate_1h
     labels:

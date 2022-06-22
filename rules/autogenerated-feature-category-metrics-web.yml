@@ -74,15 +74,9 @@ groups:
       type: web
     expr: |
       sum by (env,environment,stage,feature_category) (
-        label_replace(sum by (env,environment,stage,feature_category) (
-          sli_aggregations:gitlab_sli_rails_request_apdex_success_total_rate5m{job="gitlab-rails",type="web"}
-        )
-        , "_c", "0", "", "")
+        label_replace(sli_aggregations:gitlab_sli_rails_request_apdex_success_total_rate5m{job="gitlab-rails",type="web"}, "_c", "0", "", "")
         or
-        label_replace(sum by (env,environment,stage,feature_category) (
-          sli_aggregations:gitlab_sli:rails_request_apdex:success_total_rate5m{job="gitlab-rails",type="web"}
-        )
-        , "_c", "1", "", "")
+        label_replace(sli_aggregations:gitlab_sli:rails_request_apdex:success_total_rate5m{job="gitlab-rails",type="web"}, "_c", "1", "", "")
       )
   - record: gitlab:component:feature_category:execution:apdex:weight:score_5m
     labels:
@@ -91,15 +85,9 @@ groups:
       type: web
     expr: |
       sum by (env,environment,stage,feature_category) (
-        label_replace(sum by (env,environment,stage,feature_category) (
-          sli_aggregations:gitlab_sli_rails_request_apdex_total_rate5m{job="gitlab-rails",type="web"}
-        )
-        , "_c", "0", "", "")
+        label_replace(sli_aggregations:gitlab_sli_rails_request_apdex_total_rate5m{job="gitlab-rails",type="web"}, "_c", "0", "", "")
         or
-        label_replace(sum by (env,environment,stage,feature_category) (
-          sli_aggregations:gitlab_sli:rails_request_apdex:total_rate5m{job="gitlab-rails",type="web"}
-        )
-        , "_c", "1", "", "")
+        label_replace(sli_aggregations:gitlab_sli:rails_request_apdex:total_rate5m{job="gitlab-rails",type="web"}, "_c", "1", "", "")
       )
   - record: gitlab:component:feature_category:execution:ops:rate_5m
     labels:
@@ -185,15 +173,9 @@ groups:
       type: web
     expr: |
       sum by (env,environment,stage,feature_category) (
-        label_replace(sum by (env,environment,stage,feature_category) (
-          sli_aggregations:gitlab_sli_rails_request_apdex_success_total_rate30m{job="gitlab-rails",type="web"}
-        )
-        , "_c", "0", "", "")
+        label_replace(sli_aggregations:gitlab_sli_rails_request_apdex_success_total_rate30m{job="gitlab-rails",type="web"}, "_c", "0", "", "")
         or
-        label_replace(sum by (env,environment,stage,feature_category) (
-          sli_aggregations:gitlab_sli:rails_request_apdex:success_total_rate30m{job="gitlab-rails",type="web"}
-        )
-        , "_c", "1", "", "")
+        label_replace(sli_aggregations:gitlab_sli:rails_request_apdex:success_total_rate30m{job="gitlab-rails",type="web"}, "_c", "1", "", "")
       )
   - record: gitlab:component:feature_category:execution:apdex:weight:score_30m
     labels:
@@ -202,15 +184,9 @@ groups:
       type: web
     expr: |
       sum by (env,environment,stage,feature_category) (
-        label_replace(sum by (env,environment,stage,feature_category) (
-          sli_aggregations:gitlab_sli_rails_request_apdex_total_rate30m{job="gitlab-rails",type="web"}
-        )
-        , "_c", "0", "", "")
+        label_replace(sli_aggregations:gitlab_sli_rails_request_apdex_total_rate30m{job="gitlab-rails",type="web"}, "_c", "0", "", "")
         or
-        label_replace(sum by (env,environment,stage,feature_category) (
-          sli_aggregations:gitlab_sli:rails_request_apdex:total_rate30m{job="gitlab-rails",type="web"}
-        )
-        , "_c", "1", "", "")
+        label_replace(sli_aggregations:gitlab_sli:rails_request_apdex:total_rate30m{job="gitlab-rails",type="web"}, "_c", "1", "", "")
       )
   - record: gitlab:component:feature_category:execution:ops:rate_30m
     labels:
@@ -296,15 +272,9 @@ groups:
       type: web
     expr: |
       sum by (env,environment,stage,feature_category) (
-        label_replace(sum by (env,environment,stage,feature_category) (
-          sli_aggregations:gitlab_sli_rails_request_apdex_success_total_rate1h{job="gitlab-rails",type="web"}
-        )
-        , "_c", "0", "", "")
+        label_replace(sli_aggregations:gitlab_sli_rails_request_apdex_success_total_rate1h{job="gitlab-rails",type="web"}, "_c", "0", "", "")
         or
-        label_replace(sum by (env,environment,stage,feature_category) (
-          sli_aggregations:gitlab_sli:rails_request_apdex:success_total_rate1h{job="gitlab-rails",type="web"}
-        )
-        , "_c", "1", "", "")
+        label_replace(sli_aggregations:gitlab_sli:rails_request_apdex:success_total_rate1h{job="gitlab-rails",type="web"}, "_c", "1", "", "")
       )
   - record: gitlab:component:feature_category:execution:apdex:weight:score_1h
     labels:
@@ -313,15 +283,9 @@ groups:
       type: web
     expr: |
       sum by (env,environment,stage,feature_category) (
-        label_replace(sum by (env,environment,stage,feature_category) (
-          sli_aggregations:gitlab_sli_rails_request_apdex_total_rate1h{job="gitlab-rails",type="web"}
-        )
-        , "_c", "0", "", "")
+        label_replace(sli_aggregations:gitlab_sli_rails_request_apdex_total_rate1h{job="gitlab-rails",type="web"}, "_c", "0", "", "")
         or
-        label_replace(sum by (env,environment,stage,feature_category) (
-          sli_aggregations:gitlab_sli:rails_request_apdex:total_rate1h{job="gitlab-rails",type="web"}
-        )
-        , "_c", "1", "", "")
+        label_replace(sli_aggregations:gitlab_sli:rails_request_apdex:total_rate1h{job="gitlab-rails",type="web"}, "_c", "1", "", "")
       )
   - record: gitlab:component:feature_category:execution:ops:rate_1h
     labels:
