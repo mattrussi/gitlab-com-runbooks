@@ -3,7 +3,7 @@ groups:
 - name: Blackbox Generic Probes
   rules:
   - alert: BlackboxProbeFailures
-    expr: avg_over_time(probe_success{job="blackbox", instance!~"(https://ops.gitlab.net/users/sign_in|https://dev.gitlab.org.*|https://pre.gitlab.com|https://registry.pre.gitlab.com|https://release.gitlab.net|https://status.gitlab.com)"}[10m]) * 100 < 75
+    expr: avg_over_time(probe_success{job="blackbox", instance!~"(https://ops.gitlab.net/users/sign_in|https://dev.gitlab.org.*|https://pre.gitlab.com|https://registry.pre.gitlab.com|https://release.gitlab.net|https://status.gitlab.com|https://sentry.gitlab.net)"}[10m]) * 100 < 75
     labels:
       pager: pagerduty
       severity: s1
@@ -13,7 +13,7 @@ groups:
       runbook: docs/blackbox/README.md
       title: Blackbox probes for {{ $labels.instance }} are failing.
   - alert: BlackboxProbeFailuresLong
-    expr: avg_over_time(probe_success{job="blackbox", instance=~"(https://ops.gitlab.net/users/sign_in|https://dev.gitlab.org)"}[1h]) * 100 < 75
+    expr: avg_over_time(probe_success{job="blackbox", instance=~"(https://ops.gitlab.net/users/sign_in|https://dev.gitlab.org|https://sentry.gitlab.net)"}[1h]) * 100 < 75
     labels:
       pager: pagerduty
       severity: s1
@@ -88,5 +88,18 @@ groups:
       team: delivery
     annotations:
       description: blackbox probe availability {{ $labels.instance }} is less than {{ $value | printf "%.2f" }}% for the last 1 hour.
+      runbook: docs/blackbox/README.md
+      title: Blackbox probes for {{ $labels.instance }} are failing.
+# sentry.gitlab.net custom probe alerts
+- name: Blackbox sentry.gitlab.net
+  rules:
+  - alert: SentryBlackboxProbeFailures
+    expr: avg_over_time(probe_success{job="blackbox", instance="https://sentry.gitlab.net"}[10m]) * 100 < 75
+    labels:
+      pager: pagerduty
+      severity: s3
+      alert_type: symptom
+    annotations:
+      description: blackbox probe availability {{ $labels.instance }} is less than {{ $value | printf "%.2f" }}% for the last 10 minutes.
       runbook: docs/blackbox/README.md
       title: Blackbox probes for {{ $labels.instance }} are failing.
