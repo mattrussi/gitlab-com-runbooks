@@ -37,12 +37,12 @@ groups:
       (
         (
           gitlab_component_errors:ratio_1h{component="loadbalancer",monitor="global",type="camoproxy"}
-          > (14.4 * 0.010000)
+          > (14.4 * 0.200000)
         )
         and
         (
           gitlab_component_errors:ratio_5m{component="loadbalancer",monitor="global",type="camoproxy"}
-          > (14.4 * 0.010000)
+          > (14.4 * 0.200000)
         )
       )
       and on(env,environment,tier,type,stage,component)
@@ -81,12 +81,12 @@ groups:
       (
         (
           gitlab_component_errors:ratio_6h{component="loadbalancer",monitor="global",type="camoproxy"}
-          > (6 * 0.010000)
+          > (6 * 0.200000)
         )
         and
         (
           gitlab_component_errors:ratio_30m{component="loadbalancer",monitor="global",type="camoproxy"}
-          > (6 * 0.010000)
+          > (6 * 0.200000)
         )
       )
       and on(env,environment,tier,type,stage,component)
@@ -295,12 +295,12 @@ groups:
       (
         (
           gitlab_component_errors:ratio_1h{component="server",monitor="global",type="camoproxy"}
-          > (14.4 * 0.010000)
+          > (14.4 * 0.200000)
         )
         and
         (
           gitlab_component_errors:ratio_5m{component="server",monitor="global",type="camoproxy"}
-          > (14.4 * 0.010000)
+          > (14.4 * 0.200000)
         )
       )
       and on(env,environment,tier,type,stage,component)
@@ -343,12 +343,12 @@ groups:
       (
         (
           gitlab_component_errors:ratio_6h{component="server",monitor="global",type="camoproxy"}
-          > (6 * 0.010000)
+          > (6 * 0.200000)
         )
         and
         (
           gitlab_component_errors:ratio_30m{component="server",monitor="global",type="camoproxy"}
-          > (6 * 0.010000)
+          > (6 * 0.200000)
         )
       )
       and on(env,environment,tier,type,stage,component)

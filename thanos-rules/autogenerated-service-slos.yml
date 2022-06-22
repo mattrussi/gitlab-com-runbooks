@@ -126,7 +126,7 @@ groups:
     labels:
       tier: sv
       type: camoproxy
-    expr: "0.010000"
+    expr: "0.200000"
   - record: slo:min:events:gitlab_service_apdex:ratio
     labels:
       component: loadbalancer
@@ -138,7 +138,7 @@ groups:
       component: loadbalancer
       tier: sv
       type: camoproxy
-    expr: "0.010000"
+    expr: "0.200000"
   - record: slo:min:events:gitlab_service_apdex:ratio
     labels:
       component: server
@@ -150,7 +150,7 @@ groups:
       component: server
       tier: sv
       type: camoproxy
-    expr: "0.010000"
+    expr: "0.200000"
   - record: slo:min:gitlab_service_apdex:ratio
     labels:
       tier: runners
