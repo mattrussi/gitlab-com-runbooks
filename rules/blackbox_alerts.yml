@@ -13,7 +13,7 @@ groups:
       runbook: docs/blackbox/README.md
       title: Blackbox probes for {{ $labels.instance }} are failing.
   - alert: BlackboxProbeFailuresLong
-    expr: avg_over_time(probe_success{job="blackbox", instance=~"(https://ops.gitlab.net/users/sign_in|https://dev.gitlab.org|https://sentry.gitlab.net)"}[1h]) * 100 < 75
+    expr: avg_over_time(probe_success{job="blackbox", instance=~"(https://ops.gitlab.net/users/sign_in|https://dev.gitlab.org)"}[1h]) * 100 < 75
     labels:
       pager: pagerduty
       severity: s1
