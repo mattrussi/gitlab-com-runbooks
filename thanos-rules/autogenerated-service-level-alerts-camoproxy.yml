@@ -11,8 +11,6 @@ groups:
       title: The loadbalancer SLI of the camoproxy service (`{{ $labels.stage }}`
         stage) has an error rate violating SLO
       description: |
-        Measures aggregated HTTP request traffic through the HAProxy. 5xx responses are considered to be failures.
-
         Currently the error-rate is {{ $value | humanizePercentage }}.
       grafana_dashboard_id: camoproxy-main/camoproxy-overview
       grafana_dashboard_link: https://dashboards.gitlab.net/d/camoproxy-main/camoproxy-overview?from=now-6h/m&to=now-1m/m&var-environment={{
@@ -20,6 +18,10 @@ groups:
       grafana_min_zoom_hours: "6"
       grafana_panel_id: "3255520955"
       grafana_variables: environment,stage
+      promql_template_1: |
+        sum by (env,environment,tier,stage) (
+          rate(stackdriver_https_lb_rule_loadbalancing_googleapis_com_https_request_count{environment="{{ $labels.environment }}",project_id="gitlab-production",response_code_class="500",stage="{{ $labels.stage }}",url_map_name="k8s2-um-8kvupfyn-camoproxy-camoproxy-6ygs428t"}[5m])
+        )
       runbook: docs/camoproxy/README.md
     labels:
       aggregation: component
@@ -55,8 +57,6 @@ groups:
       title: The loadbalancer SLI of the camoproxy service (`{{ $labels.stage }}`
         stage) has an error rate violating SLO
       description: |
-        Measures aggregated HTTP request traffic through the HAProxy. 5xx responses are considered to be failures.
-
         Currently the error-rate is {{ $value | humanizePercentage }}.
       grafana_dashboard_id: camoproxy-main/camoproxy-overview
       grafana_dashboard_link: https://dashboards.gitlab.net/d/camoproxy-main/camoproxy-overview?from=now-6h/m&to=now-1m/m&var-environment={{
@@ -64,6 +64,10 @@ groups:
       grafana_min_zoom_hours: "6"
       grafana_panel_id: "3255520955"
       grafana_variables: environment,stage
+      promql_template_1: |
+        sum by (env,environment,tier,stage) (
+          rate(stackdriver_https_lb_rule_loadbalancing_googleapis_com_https_request_count{environment="{{ $labels.environment }}",project_id="gitlab-production",response_code_class="500",stage="{{ $labels.stage }}",url_map_name="k8s2-um-8kvupfyn-camoproxy-camoproxy-6ygs428t"}[5m])
+        )
       runbook: docs/camoproxy/README.md
     labels:
       aggregation: component
@@ -99,8 +103,6 @@ groups:
       title: The loadbalancer SLI of the camoproxy service (`{{ $labels.stage }}`
         stage) has not received any traffic in the past 30m
       description: |
-        Measures aggregated HTTP request traffic through the HAProxy. 5xx responses are considered to be failures.
-
         This alert signifies that the SLI is reporting a cessation of traffic; the signal is present, but is zero.
       grafana_dashboard_id: camoproxy-main/camoproxy-overview
       grafana_dashboard_link: https://dashboards.gitlab.net/d/camoproxy-main/camoproxy-overview?from=now-6h/m&to=now-1m/m&var-environment={{
@@ -108,6 +110,10 @@ groups:
       grafana_min_zoom_hours: "6"
       grafana_panel_id: "138982496"
       grafana_variables: environment,stage
+      promql_template_1: |
+        sum by (env,environment,tier,stage) (
+          rate(stackdriver_https_lb_rule_loadbalancing_googleapis_com_https_request_count{environment="{{ $labels.environment }}",project_id="gitlab-production",stage="{{ $labels.stage }}",url_map_name="k8s2-um-8kvupfyn-camoproxy-camoproxy-6ygs428t"}[5m])
+        )
       runbook: docs/camoproxy/README.md
     labels:
       aggregation: component
@@ -130,8 +136,6 @@ groups:
       title: The loadbalancer SLI of the camoproxy service (`{{ $labels.stage }}`
         stage) has not reported any traffic in the past 30m
       description: |
-        Measures aggregated HTTP request traffic through the HAProxy. 5xx responses are considered to be failures.
-
         This alert signifies that the SLI was previously reporting traffic, but is no longer - the signal is absent.
 
         This could be caused by a change to the metrics used in the SLI, or by the service not receiving traffic.
@@ -141,6 +145,10 @@ groups:
       grafana_min_zoom_hours: "6"
       grafana_panel_id: "138982496"
       grafana_variables: environment,stage
+      promql_template_1: |
+        sum by (env,environment,tier,stage) (
+          rate(stackdriver_https_lb_rule_loadbalancing_googleapis_com_https_request_count{environment="{{ $labels.environment }}",project_id="gitlab-production",stage="{{ $labels.stage }}",url_map_name="k8s2-um-8kvupfyn-camoproxy-camoproxy-6ygs428t"}[5m])
+        )
       runbook: docs/camoproxy/README.md
     labels:
       aggregation: component

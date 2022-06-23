@@ -2062,7 +2062,7 @@ groups:
     labels:
       component: loadbalancer
       regional_aggregation: "no"
-      service_aggregation: "no"
+      service_aggregation: "yes"
       tier: sv
       type: camoproxy
     expr: "1"
