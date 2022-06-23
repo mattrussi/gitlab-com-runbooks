@@ -869,6 +869,10 @@ If you run gpg --card-status with the YubiKey plugged in and GPG does not detect
 
 add `disable-ccid` to `~/.gnupg/scdaemon.conf` and use the restart script to restart `gpg-agent` (which manages scdaemon)
 
+### Unable to sign commits with backup YubiKey
+
+If you have configured subkeys on a second, backup YubiKey, you must append a `!` after the `keyid` specified for the `user.signingkey` config attribute in `~/.gitconfig`, before git will use the new signing key. Otherwise git will continue to prompt for the last written YubiKey, regardless of which `keyid` is specified. For additional context, see [this github issue comment](https://github.com/drduh/YubiKey-Guide/issues/19#issuecomment-1143557632).
+
 ## Cleanup
 
 * Unmount the encrypted GPG master volume. Linux: `sudo veracrypt -d
