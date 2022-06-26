@@ -43,8 +43,8 @@ configuration choices:
 
 * Modify the necessary items in [runbooks] to ensure the new shard will have it's
   own dedicated metrics.  Includes at least the following:
-  * Add an entry in `shards` in metrics-catalog/services/lib/sidekiq-helpers.libsonnet
-  * Add a line to `services` in dashboards/delivery/k8s_migration_overview.jsonnet
+  * Add an entry in `shards` in [metrics-catalog/services/lib/sidekiq-helpers.libsonnet](https://gitlab.com/gitlab-com/runbooks/-/blob/master/metrics-catalog/services/lib/sidekiq-helpers.libsonnet)
+  * Add a line to `services` in [dashboards/delivery/k8s_migration_overview.dashboard.jsonnet](https://gitlab.com/gitlab-com/runbooks/-/blob/master/dashboards/delivery/k8s_migration_overview.dashboard.jsonnet)
 * Modify the necessary items in [k8s-workloads/gitlab-helmfiles] such that we
   get logs
   * A new section in releases/fluentd/defaults.yaml
