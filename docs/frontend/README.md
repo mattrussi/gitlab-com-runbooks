@@ -24,6 +24,7 @@
 * [GitLab Hosted CodeSandbox](../git/gitlab-hosted-codesandbox.md)
 * [Gitaly latency is too high](../gitaly/gitaly-latency.md)
 * [Gitaly PermissionDenied alert](../gitaly/gitaly-permission-denied.md)
+* [Tuning and Modifying Alerts](../monitoring/alert_tuning.md)
 * [Block specific pages domains through HAproxy](../pages/block-pages-domain.md)
 * [../pgbouncer/service-pgbouncer.md](../pgbouncer/service-pgbouncer.md)
 * [../registry/gitlab-registry.md](../registry/gitlab-registry.md)
