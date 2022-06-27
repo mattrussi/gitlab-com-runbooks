@@ -31,6 +31,7 @@ local shardDefinitions = {
   quarantine: { urgency: null, gkeDeployment: 'gitlab-sidekiq-catchall-v1', userImpacting: true, trafficCessationAlertConfig: false },
   'urgent-cpu-bound': { urgency: 'high', gkeDeployment: 'gitlab-sidekiq-urgent-cpu-bound-v1', userImpacting: true, trafficCessationAlertConfig: true },
   'urgent-other': { urgency: 'high', autoScaling: false, gkeDeployment: 'gitlab-sidekiq-urgent-other-v1', userImpacting: true, trafficCessationAlertConfig: true },
+  'urgent-authorized-projects': { urgency: 'high', gkeDeployment: 'gitlab-sidekiq-urgent-authorized-projects-v1', userImpacting: true, trafficCessationAlertConfig: false },
   catchall: { urgency: null, gkeDeployment: 'gitlab-sidekiq-catchall-v1', userImpacting: true, trafficCessationAlertConfig: true /* no urgency attribute since multiple values are supported */ },
   elasticsearch: { urgency: 'throttled', gkeDeployment: 'gitlab-sidekiq-elasticsearch-v1', userImpacting: false, trafficCessationAlertConfig: false },
 };
