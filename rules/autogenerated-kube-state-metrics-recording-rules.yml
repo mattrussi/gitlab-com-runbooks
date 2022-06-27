@@ -593,7 +593,7 @@ groups:
   rules:
   - record: kube_pod_labels:labeled
     labels:
-      stage: authorized-projects-throttled
+      stage: catchall
       tier: sv
       type: sidekiq
     expr: |
@@ -628,7 +628,7 @@ groups:
     expr: |
       group without(label_shard) (
         label_replace(
-          topk by(environment,cluster,node) (1, kube_node_labels{label_type=~"authorized-projects-throttled|catchall|database-throttled|elasticsearch|gitaly-throttled|imports|low-urgency-cpu-bound|memory-bound|quarantine|urgent-cpu-bound|urgent-other"}),
+          topk by(environment,cluster,node) (1, kube_node_labels{label_type=~"catchall|database-throttled|elasticsearch|gitaly-throttled|imports|low-urgency-cpu-bound|memory-bound|quarantine|urgent-cpu-bound|urgent-other"}),
           "shard", "$0", "label_shard", ".*"
         )
       )

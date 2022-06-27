@@ -29,7 +29,6 @@ local shardDefinitions = {
     },
   },
   quarantine: { urgency: null, gkeDeployment: 'gitlab-sidekiq-catchall-v1', userImpacting: true, trafficCessationAlertConfig: false },
-  'authorized-projects-throttled': { urgency: 'throttled', gkeDeployment: 'gitlab-sidekiq-authorized-projects-throttled-v1', userImpacting: true, trafficCessationAlertConfig: false },
   'urgent-cpu-bound': { urgency: 'high', gkeDeployment: 'gitlab-sidekiq-urgent-cpu-bound-v1', userImpacting: true, trafficCessationAlertConfig: true },
   'urgent-other': { urgency: 'high', autoScaling: false, gkeDeployment: 'gitlab-sidekiq-urgent-other-v1', userImpacting: true, trafficCessationAlertConfig: true },
   catchall: { urgency: null, gkeDeployment: 'gitlab-sidekiq-catchall-v1', userImpacting: true, trafficCessationAlertConfig: true /* no urgency attribute since multiple values are supported */ },
