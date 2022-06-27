@@ -12,7 +12,7 @@
 
         {{- range .Alerts -}}
             {{- if .GeneratorURL -}}
-                {{- printf "*<%s|%s:>*\n" .GeneratorURL .Labels.alertname -}}
+                {{- printf "*<%s|%s>*\n" .GeneratorURL .Labels.alertname -}}
             {{- else -}}
                 {{- printf "*%s*\n" .Labels.alertname -}}
             {{- end -}}
