@@ -26,7 +26,9 @@ Make sure that **there are no CI Read requests being made in the patroni-ci clus
 
 ## Destroy the Standby Cluster
 
-1. Change the `"node_count"` at `variables.tf` to `=0` for the `patroni-ci` and `patroni-zfs-ci` clusters:
+You can destroy all the nodes in the cluster by setting the node counter to `0` (zero), or just the last `n` nodes by reducing the node count.
+
+1. To destroy the whole cluster set the `"node_count"` at `variables.tf` to `=0` for the `patroni-ci` and `patroni-zfs-ci` clusters:
 
     ```
         "patroni-ci"           = 0
@@ -61,7 +63,7 @@ Make sure that **there are no CI Read requests being made in the patroni-ci clus
     - GSTG: `knife search 'roles:gstg-base-db-patroni-backup-replica AND roles:gstg-base-db-patroni-main' --id-only`
     - GPRD: `knife search 'roles:gprd-base-db-patroni-backup-replica AND roles:gprd-base-db-patroni-v12' --id-only`
 
-1. Log in into the Backup Node and execute a gcs-snapshot:
+1. Login into the Backup Node and execute a gcs-snapshot:
 
     ```
     sudo su - gitlab-psql
@@ -74,7 +76,9 @@ Note: _At the last update (2022/06/10) the Replication Backup nodes were_ :
 - GSTG: patroni-06-db-gstg.c.gitlab-staging-1.internal
 - GPRD: patroni-v12-10-db-gprd.c.gitlab-production.internal
 
-## Recover the Patroni CI Standby Cluster
+## Create the Patroni CI Standby Cluster instances
+
+You can use the following steps to create all or a subset of the patroni CI instances, just depending on how many instances were previously destroyed.
 
 1. Change Terraform environment
     - Execute the following `gcloud` command to get the name of the most recent GCS snapshot from the patroni backup data disk, but **DO NOT SIMPLY COPY/PASTE IT**, set the `--project` and `--filter` accordingly with the environment you are performing the restore:
@@ -111,12 +115,12 @@ Note: _At the last update (2022/06/10) the Replication Backup nodes were_ :
 
         </details>
 
-1. Create all the Patroni CI node with: `tf apply`
-1. Check the `patroni-ci-01-db` Serial port in GCP console to see if the instance is already intialized and if Chef have finished to run, like for example:
+1. Create all the Patroni CI nodes with: `tf apply`
+1. Check the VM instance Serial port in the GCP console to see if the instance is already initialized and if Chef has finished running, for example:
    - GSTG: instance [patroni-ci-01-db-gstg/console?port=1&project=gitlab-staging-1](https://console.cloud.google.com/compute/instancesDetail/zones/us-east1-c/instances/patroni-ci-01-db-gstg/console?port=1&project=gitlab-staging-1)
    - GPRD: instance [patroni-ci-01-db-gprd/console?port=1&project=gitlab-production](https://console.cloud.google.com/compute/instancesDetail/zones/us-east1-c/instances/patroni-ci-01-db-gprd/console?port=1&project=gitlab-production)
    - Or you can execute `gcloud compute instances get-serial-port-output <instance_name>`
-1. Look into the instance Serial Console, or into `/var/log/syslog` log file, if the Chef boostrap have failed. Any kind of error needs to be addressed, except for while while performing `usermod: directory /var/opt/gitlab/postgresql`, which is a known issue that can be ignored. Therefore if you observer the following message in `/var/log/syslog` or the instance serial port/console, you can start executing the pg-replica-rebuild Ansible playbook.
+1. Look into the instance Serial Console, or `/var/log/syslog` log file, if the Chef bootstrap has failed. Any kind of error needs to be addressed, except for while performing `usermod: directory /var/opt/gitlab/postgresql`, which is a known issue that can be ignored. Therefore if you observe the following message in `/var/log/syslog` or the instance serial port/console, you can start executing the pg-replica-rebuild Ansible playbook.
 
     ```
     $ sudo cat /var/log/syslog | grep "STDERR: usermod: directory /var/opt/gitlab/postgresql exists"
@@ -145,14 +149,32 @@ Note: _At the last update (2022/06/10) the Replication Backup nodes were_ :
 
 1. From a `console` node initialize a Tmux session to execute the Ansible playbook from it;
 
-1. Execute the `db-migration/pg-replica-rebuild` Ansible playbook from your Tmux session to Initialize the cluster:
+1. Execute the `db-migration/pg-replica-rebuild` Ansible playbook from your Tmux session to Initialize the whole cluster or a set of Replicas:
 
-    ```
-    cd <workspace>/db-migration/pg-replica-rebuild
-    ansible-playbook -i inventory/<environment_file>.yml rebuild-all.yml
-    ```
+    - To initialize the whole cluster, including the Standby Leader, run the `rebuild-all.yml` playbook:
 
-1. Force run of Chef-Client in the nodes to let all configuration files in sync with repo
+        ```
+        cd <workspace>/db-migration/pg-replica-rebuild
+        ansible-playbook -i inventory/<environment_file>.yml rebuild-all.yml
+        ```
+
+    - To initialize only  Replicas in the cluster, run the `rebuild-replicas.yml` playbook using [Ansible's `-l <SUBSET>`](https://docs.ansible.com/ansible/latest/cli/ansible-playbook.html#cmdoption-ansible-playbook-l) and [patterns to target hosts and groups](https://docs.ansible.com/ansible/latest/user_guide/intro_patterns.html#patterns-targeting-hosts-and-groups), limiting the replica hosts where the playbook will be executed, like for example:
+        
+        - For example, to initialize all replicas except node `patroni-ci-01` you can use the following pattern regex: 
+
+            ```
+            cd <workspace>/db-migration/pg-replica-rebuild
+            ansible-playbook -i inventory/<environment_file>.yml rebuild-replicas.yml -l '!~patroni-ci-01'
+            ```
+
+        - For example, to initialize the range of 4 replicas starting from `patroni-ci-06` up to `patroni-ci-10` you can use the following pattern regex: 
+
+            ```
+            cd <workspace>/db-migration/pg-replica-rebuild
+            ansible-playbook -i inventory/<environment_file>.yml rebuild-replicas.yml -l '~patroni-ci-(0[6-9]|10)'
+            ```
+
+1. Force run of Chef-Client in the nodes to let all configuration files in sync with the repo
     <details><summary>Force run of Chef-Client in GSTG</summary>
 
     ```
@@ -170,7 +192,7 @@ Note: _At the last update (2022/06/10) the Replication Backup nodes were_ :
 
 ## Recover the Patroni ZFS CI cluster
 
-The ZFS cluster nodes can't be rebuild through GCP snapshots, because the `/var/opt/gitlab` mount point is a ZFS filesystem instead of EXT4 used by other Patroni nodes, therefore it's necessary to use the default `pg_basebackup` process to recreate this cluster.
+The ZFS cluster nodes can't be rebuilt through GCP snapshots, because the `/var/opt/gitlab` mount point is a ZFS filesystem instead of EXT4 used by other Patroni nodes, therefore it's necessary to use the default `pg_basebackup` process to recreate this cluster.
 
 1. Change Terraform environment
     - Change the `"node_count"` of patroni ZFS CI back to 1 at `variables.tf`:
@@ -202,7 +224,7 @@ The ZFS cluster nodes can't be rebuild through GCP snapshots, because the `/var/
     - If you observe the `/var/log/gitlab/patroni/patroni.log` you should see the `INFO: bootstrap_standby_leader in progress` message
 6. Check if `pg_basebackup` is running
     - Execute: `ps -ef | grep pg_basebackup`
-    - If there is a `/usr/lib/postgresql/??/bin/pg_basebackup` process running then you will have to wait it for completeion (which can take dozens of hours)
+    - If there is a `/usr/lib/postgresql/??/bin/pg_basebackup` process running then you will have to wait for it to finish (which can take dozens of hours)
 7. After `pg_basebackup` is finished the replica should apply/stream pending WAL files from the primary/writer or its archive location (which can also take dozens of hours);
     - Check the logs at `/var/log/gitlab/postgresql/postgresql.csv` to see if there is progress in the WAL recovery;
     - If the instance can't find the archive logs you should have to modify the archive location in `/etc/wal-g.d/env/WALG_GS_PREFIX`
