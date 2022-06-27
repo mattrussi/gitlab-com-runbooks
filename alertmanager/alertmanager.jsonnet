@@ -1,6 +1,7 @@
 // Generate Alertmanager configurations
 local secrets = std.extVar('secrets_file');
 local serviceCatalog = import 'service-catalog/service-catalog.libsonnet';
+local metricsCatalog = import 'servicemetrics/metrics-catalog.libsonnet';
 local selectors = import 'promql/selectors.libsonnet';
 local stages = import 'service-catalog/stages.libsonnet';
 
@@ -547,7 +548,15 @@ local receivers =
     },
   ];
 
-//
+local inhibitRules() = std.flattenArrays(
+  [
+    sli.dependencies.generateInhibitionRules()
+    for service in metricsCatalog.services
+    for sli in service.listServiceLevelIndicators()
+    if sli.hasDependencies()
+  ]
+);
+
 // Generate the whole alertmanager config.
 local alertmanager = {
   global: {
@@ -558,6 +567,7 @@ local alertmanager = {
   templates: [
     templateDir + '/*.tmpl',
   ],
+  inhibit_rules: inhibitRules(),
 };
 
 local k8sAlertmanagerSecret = {

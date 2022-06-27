@@ -51,4 +51,6 @@ local serviceApplicableSaturationTypes(service)
   findKubeProvisionedServicesWithDedicatedNodePool(first=null)::
     findServiceTypesWithFirst(first, function(s) s.hasDedicatedKubeNodePool()),
 
+  serviceExists(serviceType)::
+    std.objectHas(serviceMap, serviceType),
 }
