@@ -24,6 +24,7 @@ These configurations should be reviewed often and updated when neccessary. The f
 Selectors can allow a metric to exclude or include metric labels.
 
 For example, this selector definition for the frontend service excludes canary, websockets, and api_rate_limit backends from the apdex.
+
 ```
 selector='type="frontend", backend_name!~"canary_.*|api_rate_limit|websockets"'
 ```
