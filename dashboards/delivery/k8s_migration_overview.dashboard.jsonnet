@@ -22,6 +22,7 @@ local services = [
   'sidekiq-database-throttled',
   'sidekiq-gitaly-throttled',
   'sidekiq-urgent-cpu-bound',
+  'sidekiq-authorized-projects-throttled',
   'webservice',
 ];
 
