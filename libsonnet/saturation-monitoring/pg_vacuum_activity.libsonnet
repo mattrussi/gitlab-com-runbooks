@@ -4,7 +4,7 @@ local metricsCatalog = import 'servicemetrics/metrics-catalog.libsonnet';
 {
   pg_vacuum_activity_v2: resourceSaturationPoint({
     title: 'Postgres Autovacuum Activity (non-sampled)',
-    severity: 's2',
+    severity: 's3',
     horizontallyScalable: true,  // We can add more vacuum workers, but at a resource utilization cost
 
     // We need to evalutate this in thanos: `pg_settings_autovacuum_max_workers` and

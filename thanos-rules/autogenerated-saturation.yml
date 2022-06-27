@@ -198,7 +198,7 @@ groups:
       component: pg_vacuum_activity_v2
       horiz_scaling: "yes"
       quantile: max
-      severity: s2
+      severity: s3
     expr: "1"
   - record: gitlab_component_saturation_info
     labels:
@@ -414,9 +414,8 @@ groups:
       runbook: docs/{{ $labels.type }}/README.md
     labels:
       alert_type: cause
-      pager: pagerduty
       rules_domain: general
-      severity: s2
+      severity: s3
     expr: |
       gitlab_component_saturation:ratio{component="pg_vacuum_activity_v2",monitor="global"} > on(component) group_left
       slo:max:hard:gitlab_component_saturation:ratio{component="pg_vacuum_activity_v2",monitor="global"}
