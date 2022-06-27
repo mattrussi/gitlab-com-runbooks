@@ -63,7 +63,7 @@ You can destroy all the nodes in the cluster by setting the node counter to `0` 
     - GSTG: `knife search 'roles:gstg-base-db-patroni-backup-replica AND roles:gstg-base-db-patroni-main' --id-only`
     - GPRD: `knife search 'roles:gprd-base-db-patroni-backup-replica AND roles:gprd-base-db-patroni-v12' --id-only`
 
-1. Login into the Backup Node and execute a gcs-snapshot:
+1. Log into the Backup Node and execute a gcs-snapshot:
 
     ```
     sudo su - gitlab-psql
