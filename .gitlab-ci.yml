@@ -111,8 +111,8 @@ default:
 .avoid-stage-group-check: &avoid-stage-group-check-rule
   if: '$CHECK_STAGE_GROUPS == "1"'
   when: never
-.avoid-maturity-model-generate: &avoid-maturity-model-generate-rule
-  if: '$GENERATE_SERVICE_MATURITY_MANIFEST == "1"'
+.avoid-downstream-generation-pipelines: &avoid-downstream-generation-pipelines-rule
+  if: '($GENERATE_SERVICE_MATURITY_MANIFEST == "1") || ($GENERATE_TAMLAND_SATURATION_MANIFEST == "1")'
   when: never
 .avoid-schedule: &avoid-schedule-rule
   if: '$CI_PIPELINE_SOURCE == "schedule"'
@@ -127,7 +127,7 @@ default:
     # by default, don't create a job when triggered with `CHECK_STAGE_GROUPS` set
     # in this case we'll only want to run the `check-stage-groups` job.
     - *avoid-stage-group-check-rule
-    - *avoid-maturity-model-generate-rule
+    - *avoid-downstream-generation-pipelines-rule
     - *avoid-schedule-rule
     - when: always
 
@@ -148,7 +148,7 @@ workflow:
     KUBE_NAMESPACE: monitoring
   rules:
     - *avoid-stage-group-check-rule
-    - *avoid-maturity-model-generate-rule
+    - *avoid-downstream-generation-pipelines-rule
     - *avoid-schedule-rule
     # Only run deploy rules from ops on the default branch
     - if: '$CI_API_V4_URL == "https://ops.gitlab.net/api/v4" && $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH'
@@ -168,7 +168,7 @@ workflow:
 .dashboards:
   rules:
     - *avoid-stage-group-check-rule
-    - *avoid-maturity-model-generate-rule
+    - *avoid-downstream-generation-pipelines-rule
     - *avoid-schedule-rule
     - if: '$CI_PROJECT_URL !~ /^https:\/\/gitlab\.com\/.*/'
       when: never
@@ -340,7 +340,7 @@ ensure_maturity_model_minimum_level:
 update_elastic_log_gprd_ilm:
   rules:
     - *avoid-stage-group-check-rule
-    - *avoid-maturity-model-generate-rule
+    - *avoid-downstream-generation-pipelines-rule
     - *avoid-schedule-rule
     - if: '$CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH && $ES_LOG_GPRD_URL'
       changes:
@@ -352,7 +352,7 @@ update_elastic_log_gprd_ilm:
 update_elastic_log_gprd_watches:
   rules:
     - *avoid-stage-group-check-rule
-    - *avoid-maturity-model-generate-rule
+    - *avoid-downstream-generation-pipelines-rule
     - *avoid-schedule-rule
     - if: '$CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH && $ES_LOG_GPRD_URL'
       changes:
@@ -365,7 +365,7 @@ update_elastic_log_gprd_index_templates:
   stage: deploy
   rules:
     - *avoid-stage-group-check-rule
-    - *avoid-maturity-model-generate-rule
+    - *avoid-downstream-generation-pipelines-rule
     - *avoid-schedule-rule
     - if: '$CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH && $ES_LOG_GPRD_URL'
       changes:
@@ -381,7 +381,7 @@ update_elastic_log_gprd_cluster_settings:
   stage: deploy
   rules:
     - *avoid-stage-group-check-rule
-    - *avoid-maturity-model-generate-rule
+    - *avoid-downstream-generation-pipelines-rule
     - *avoid-schedule-rule
     - if: '$CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH && $ES_LOG_GPRD_URL'
       changes:
@@ -404,7 +404,7 @@ update_elastic_nonprod-log_watches:
   stage: deploy
   rules:
     - *avoid-stage-group-check-rule
-    - *avoid-maturity-model-generate-rule
+    - *avoid-downstream-generation-pipelines-rule
     - *avoid-schedule-rule
     - if: '$CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH && $ES_NONPROD_URL'
       changes:
@@ -416,7 +416,7 @@ update_elastic_nonprod-log_ilm:
   stage: deploy
   rules:
     - *avoid-stage-group-check-rule
-    - *avoid-maturity-model-generate-rule
+    - *avoid-downstream-generation-pipelines-rule
     - *avoid-schedule-rule
     - if: '$CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH && $ES_NONPROD_URL'
       changes:
@@ -428,7 +428,7 @@ update_elastic_nonprod-log_index_templates:
   stage: deploy
   rules:
     - *avoid-stage-group-check-rule
-    - *avoid-maturity-model-generate-rule
+    - *avoid-downstream-generation-pipelines-rule
     - *avoid-schedule-rule
     - if: '$CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH && $ES_NONPROD_URL'
       changes:
@@ -444,7 +444,7 @@ update_elastic_nonprod-log_cluster_settings:
   stage: deploy
   rules:
     - *avoid-stage-group-check-rule
-    - *avoid-maturity-model-generate-rule
+    - *avoid-downstream-generation-pipelines-rule
     - *avoid-schedule-rule
     - if: '$CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH && $ES_NONPROD_URL'
       changes:
@@ -468,7 +468,7 @@ update_elastic_monitoring-es7_cluster_settings:
   stage: deploy
   rules:
     - *avoid-stage-group-check-rule
-    - *avoid-maturity-model-generate-rule
+    - *avoid-downstream-generation-pipelines-rule
     - *avoid-schedule-rule
     - if: '$CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH && $ES_MONITORING_ES7_URL'
       changes:
@@ -480,7 +480,7 @@ update_elastic_monitoring-es7_ilm:
   stage: deploy
   rules:
     - *avoid-stage-group-check-rule
-    - *avoid-maturity-model-generate-rule
+    - *avoid-downstream-generation-pipelines-rule
     - *avoid-schedule-rule
     - if: '$CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH && $ES_MONITORING_ES7_URL'
       changes:
@@ -550,7 +550,7 @@ deploy_dashboards:
   rules:
     # This will override all the rules from .dashboards, we only want to run this on master
     - *avoid-stage-group-check-rule
-    - *avoid-maturity-model-generate-rule
+    - *avoid-downstream-generation-pipelines-rule
     - *avoid-schedule-rule
     - if: '$CI_PROJECT_URL !~ /^https:\/\/gitlab\.com\/.*/'
       when: never
@@ -671,11 +671,30 @@ generate_service_maturity_manifest:
     paths:
       - service-maturity-manifest/
 
+generate_tamland_saturation_manifest:
+  stage: test
+  rules:
+    - *avoid-stage-group-check-rule
+    - if: '$GENERATE_TAMLAND_SATURATION_MANIFEST == "1"'
+      when: always
+    - if: '$CI_PIPELINE_SOURCE == "merge_request_event"'
+      when: always
+  script:
+    - ./scripts/bundler.sh  # Install jsonnet bundles
+    - ./scripts/generate-jsonnet-rules.sh
+    - mkdir -p tamland-saturation-manifest
+    - ./scripts/compile_jsonnet.rb ./metrics-catalog/saturation/tamland.jsonnet > ./tamland-saturation-manifest/saturation.json
+  artifacts:
+    expose_as: 'Tamland saturation manifest'
+    expire_in: 1 day
+    paths:
+      - tamland-saturation-manifest/
+
 test-periodic-queries:
   rules:
     - *avoid-schedule-rule
     - *avoid-stage-group-check-rule
-    - *avoid-maturity-model-generate-rule
+    - *avoid-downstream-generation-pipelines-rule
     - if: '$CI_PIPELINE_SOURCE == "merge_request_event"'
       changes:
         - libsonnet/**/*
