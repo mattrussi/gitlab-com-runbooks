@@ -159,15 +159,15 @@ You can use the following steps to create all or a subset of the patroni CI inst
         ```
 
     - To initialize only  Replicas in the cluster, run the `rebuild-replicas.yml` playbook using [Ansible's `-l <SUBSET>`](https://docs.ansible.com/ansible/latest/cli/ansible-playbook.html#cmdoption-ansible-playbook-l) and [patterns to target hosts and groups](https://docs.ansible.com/ansible/latest/user_guide/intro_patterns.html#patterns-targeting-hosts-and-groups), limiting the replica hosts where the playbook will be executed, like for example:
-        
-        - For example, to initialize all replicas except node `patroni-ci-01` you can use the following pattern regex: 
+
+        - For example, to initialize all replicas except node `patroni-ci-01` you can use the following pattern regex:
 
             ```
             cd <workspace>/db-migration/pg-replica-rebuild
             ansible-playbook -i inventory/<environment_file>.yml rebuild-replicas.yml -l '!~patroni-ci-01'
             ```
 
-        - For example, to initialize the range of 4 replicas starting from `patroni-ci-06` up to `patroni-ci-10` you can use the following pattern regex: 
+        - For example, to initialize the range of 4 replicas starting from `patroni-ci-06` up to `patroni-ci-10` you can use the following pattern regex:
 
             ```
             cd <workspace>/db-migration/pg-replica-rebuild
