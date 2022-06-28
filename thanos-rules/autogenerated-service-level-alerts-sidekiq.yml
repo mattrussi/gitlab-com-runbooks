@@ -2025,6 +2025,220 @@ groups:
       (
         sum by(env,environment,tier,type,stage,component) (gitlab_component_ops:rate_6h{component="shard_quarantine",monitor="global",type="sidekiq"}) >= 0.16667
       )
+  - alert: SidekiqServiceShardUrgentAuthorizedProjectsApdexSLOViolation
+    for: 2m
+    annotations:
+      title: The shard_urgent_authorized_projects SLI of the sidekiq service (`{{
+        $labels.stage }}` stage) has an apdex violating SLO
+      description: |
+        Aggregation of all jobs for the urgent-authorized-projects Sidekiq shard.
+
+        Currently the apdex value is {{ $value | humanizePercentage }}.
+      grafana_dashboard_id: sidekiq-main/sidekiq-overview
+      grafana_dashboard_link: https://dashboards.gitlab.net/d/sidekiq-main/sidekiq-overview?from=now-6h/m&to=now-1m/m&var-environment={{
+        $labels.environment }}&var-stage={{ $labels.stage }}
+      grafana_min_zoom_hours: "6"
+      grafana_panel_id: "3650911195"
+      grafana_variables: environment,stage
+      promql_template_1: |
+        histogram_quantile(
+          0.950000,
+          sum by (env,environment,tier,stage,le) (
+            sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate5m{environment="{{ $labels.environment }}",shard="urgent-authorized-projects",stage="{{ $labels.stage }}",urgency="high"}
+            or
+            sli_aggregations:sidekiq_jobs_queue_duration_seconds_bucket_rate5m{environment="{{ $labels.environment }}",shard="urgent-authorized-projects",stage="{{ $labels.stage }}",urgency="high"}
+            or
+            sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate5m{environment="{{ $labels.environment }}",shard="urgent-authorized-projects",stage="{{ $labels.stage }}",urgency="low"}
+            or
+            sli_aggregations:sidekiq_jobs_queue_duration_seconds_bucket_rate5m{environment="{{ $labels.environment }}",shard="urgent-authorized-projects",stage="{{ $labels.stage }}",urgency="low"}
+            or
+            sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate5m{environment="{{ $labels.environment }}",shard="urgent-authorized-projects",stage="{{ $labels.stage }}",urgency="throttled"}
+          )
+        )
+      runbook: docs/sidekiq/README.md
+    labels:
+      aggregation: component
+      alert_class: slo_violation
+      alert_type: symptom
+      feature_category: not_owned
+      pager: pagerduty
+      rules_domain: general
+      severity: s2
+      sli_type: apdex
+      slo_alert: "yes"
+      user_impacting: "yes"
+      window: 1h
+    expr: |
+      (
+        (
+          gitlab_component_apdex:ratio_1h{component="shard_urgent_authorized_projects",monitor="global",type="sidekiq"}
+          < (1 - 14.4 * 0.005000)
+        )
+        and
+        (
+          gitlab_component_apdex:ratio_5m{component="shard_urgent_authorized_projects",monitor="global",type="sidekiq"}
+          < (1 - 14.4 * 0.005000)
+        )
+      )
+      and on(env,environment,tier,type,stage,component)
+      (
+        sum by(env,environment,tier,type,stage,component) (gitlab_component_ops:rate_1h{component="shard_urgent_authorized_projects",monitor="global",type="sidekiq"}) >= 1
+      )
+  - alert: SidekiqServiceShardUrgentAuthorizedProjectsApdexSLOViolation
+    for: 2m
+    annotations:
+      title: The shard_urgent_authorized_projects SLI of the sidekiq service (`{{
+        $labels.stage }}` stage) has an apdex violating SLO
+      description: |
+        Aggregation of all jobs for the urgent-authorized-projects Sidekiq shard.
+
+        Currently the apdex value is {{ $value | humanizePercentage }}.
+      grafana_dashboard_id: sidekiq-main/sidekiq-overview
+      grafana_dashboard_link: https://dashboards.gitlab.net/d/sidekiq-main/sidekiq-overview?from=now-6h/m&to=now-1m/m&var-environment={{
+        $labels.environment }}&var-stage={{ $labels.stage }}
+      grafana_min_zoom_hours: "6"
+      grafana_panel_id: "3650911195"
+      grafana_variables: environment,stage
+      promql_template_1: |
+        histogram_quantile(
+          0.950000,
+          sum by (env,environment,tier,stage,le) (
+            sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate5m{environment="{{ $labels.environment }}",shard="urgent-authorized-projects",stage="{{ $labels.stage }}",urgency="high"}
+            or
+            sli_aggregations:sidekiq_jobs_queue_duration_seconds_bucket_rate5m{environment="{{ $labels.environment }}",shard="urgent-authorized-projects",stage="{{ $labels.stage }}",urgency="high"}
+            or
+            sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate5m{environment="{{ $labels.environment }}",shard="urgent-authorized-projects",stage="{{ $labels.stage }}",urgency="low"}
+            or
+            sli_aggregations:sidekiq_jobs_queue_duration_seconds_bucket_rate5m{environment="{{ $labels.environment }}",shard="urgent-authorized-projects",stage="{{ $labels.stage }}",urgency="low"}
+            or
+            sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate5m{environment="{{ $labels.environment }}",shard="urgent-authorized-projects",stage="{{ $labels.stage }}",urgency="throttled"}
+          )
+        )
+      runbook: docs/sidekiq/README.md
+    labels:
+      aggregation: component
+      alert_class: slo_violation
+      alert_type: symptom
+      feature_category: not_owned
+      pager: pagerduty
+      rules_domain: general
+      severity: s2
+      sli_type: apdex
+      slo_alert: "yes"
+      user_impacting: "yes"
+      window: 6h
+    expr: |
+      (
+        (
+          gitlab_component_apdex:ratio_6h{component="shard_urgent_authorized_projects",monitor="global",type="sidekiq"}
+          < (1 - 6 * 0.005000)
+        )
+        and
+        (
+          gitlab_component_apdex:ratio_30m{component="shard_urgent_authorized_projects",monitor="global",type="sidekiq"}
+          < (1 - 6 * 0.005000)
+        )
+      )
+      and on(env,environment,tier,type,stage,component)
+      (
+        sum by(env,environment,tier,type,stage,component) (gitlab_component_ops:rate_6h{component="shard_urgent_authorized_projects",monitor="global",type="sidekiq"}) >= 0.16667
+      )
+  - alert: SidekiqServiceShardUrgentAuthorizedProjectsErrorSLOViolation
+    for: 2m
+    annotations:
+      title: The shard_urgent_authorized_projects SLI of the sidekiq service (`{{
+        $labels.stage }}` stage) has an error rate violating SLO
+      description: |
+        Aggregation of all jobs for the urgent-authorized-projects Sidekiq shard.
+
+        Currently the error-rate is {{ $value | humanizePercentage }}.
+      grafana_dashboard_id: sidekiq-main/sidekiq-overview
+      grafana_dashboard_link: https://dashboards.gitlab.net/d/sidekiq-main/sidekiq-overview?from=now-6h/m&to=now-1m/m&var-environment={{
+        $labels.environment }}&var-stage={{ $labels.stage }}
+      grafana_min_zoom_hours: "6"
+      grafana_panel_id: "3367299711"
+      grafana_variables: environment,stage
+      promql_template_1: |
+        sum by (env,environment,tier,stage) (
+          sli_aggregations:sidekiq_jobs_failed_total_rate5m{environment="{{ $labels.environment }}",shard="urgent-authorized-projects",stage="{{ $labels.stage }}"}
+        )
+      runbook: docs/sidekiq/README.md
+    labels:
+      aggregation: component
+      alert_class: slo_violation
+      alert_type: symptom
+      feature_category: not_owned
+      pager: pagerduty
+      rules_domain: general
+      severity: s2
+      sli_type: error
+      slo_alert: "yes"
+      user_impacting: "yes"
+      window: 1h
+    expr: |
+      (
+        (
+          gitlab_component_errors:ratio_1h{component="shard_urgent_authorized_projects",monitor="global",type="sidekiq"}
+          > (14.4 * 0.005000)
+        )
+        and
+        (
+          gitlab_component_errors:ratio_5m{component="shard_urgent_authorized_projects",monitor="global",type="sidekiq"}
+          > (14.4 * 0.005000)
+        )
+      )
+      and on(env,environment,tier,type,stage,component)
+      (
+        sum by(env,environment,tier,type,stage,component) (gitlab_component_ops:rate_1h{component="shard_urgent_authorized_projects",monitor="global",type="sidekiq"}) >= 1
+      )
+  - alert: SidekiqServiceShardUrgentAuthorizedProjectsErrorSLOViolation
+    for: 2m
+    annotations:
+      title: The shard_urgent_authorized_projects SLI of the sidekiq service (`{{
+        $labels.stage }}` stage) has an error rate violating SLO
+      description: |
+        Aggregation of all jobs for the urgent-authorized-projects Sidekiq shard.
+
+        Currently the error-rate is {{ $value | humanizePercentage }}.
+      grafana_dashboard_id: sidekiq-main/sidekiq-overview
+      grafana_dashboard_link: https://dashboards.gitlab.net/d/sidekiq-main/sidekiq-overview?from=now-6h/m&to=now-1m/m&var-environment={{
+        $labels.environment }}&var-stage={{ $labels.stage }}
+      grafana_min_zoom_hours: "6"
+      grafana_panel_id: "3367299711"
+      grafana_variables: environment,stage
+      promql_template_1: |
+        sum by (env,environment,tier,stage) (
+          sli_aggregations:sidekiq_jobs_failed_total_rate5m{environment="{{ $labels.environment }}",shard="urgent-authorized-projects",stage="{{ $labels.stage }}"}
+        )
+      runbook: docs/sidekiq/README.md
+    labels:
+      aggregation: component
+      alert_class: slo_violation
+      alert_type: symptom
+      feature_category: not_owned
+      pager: pagerduty
+      rules_domain: general
+      severity: s2
+      sli_type: error
+      slo_alert: "yes"
+      user_impacting: "yes"
+      window: 6h
+    expr: |
+      (
+        (
+          gitlab_component_errors:ratio_6h{component="shard_urgent_authorized_projects",monitor="global",type="sidekiq"}
+          > (6 * 0.005000)
+        )
+        and
+        (
+          gitlab_component_errors:ratio_30m{component="shard_urgent_authorized_projects",monitor="global",type="sidekiq"}
+          > (6 * 0.005000)
+        )
+      )
+      and on(env,environment,tier,type,stage,component)
+      (
+        sum by(env,environment,tier,type,stage,component) (gitlab_component_ops:rate_6h{component="shard_urgent_authorized_projects",monitor="global",type="sidekiq"}) >= 0.16667
+      )
   - alert: SidekiqServiceShardUrgentCpuBoundApdexSLOViolation
     for: 2m
     annotations:
