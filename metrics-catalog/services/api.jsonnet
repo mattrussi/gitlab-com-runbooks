@@ -74,6 +74,17 @@ metricsCatalog.serviceDefinition({
     },
   },
   serviceLevelIndicators: {
+    local dependsOnPatroni = [
+      {
+        component: 'rails_primary_sql',
+        type: 'patroni',
+      },
+      {
+        component: 'rails_replica_sql',
+        type: 'patroni',
+      },
+    ],
+
     loadbalancer: haproxyComponents.haproxyHTTPLoadBalancer(
       userImpacting=true,
       featureCategory='not_owned',
@@ -88,6 +99,7 @@ metricsCatalog.serviceDefinition({
       },
       selector={ type: 'frontend' },
       regional=false,
+      dependsOn=dependsOnPatroni,
     ),
 
     nginx_ingress: {
@@ -117,6 +129,7 @@ metricsCatalog.serviceDefinition({
       toolingLinks: [
       ],
       serviceAggregation: false,
+      dependsOn: dependsOnPatroni,
     },
 
     workhorse: {
@@ -156,6 +169,8 @@ metricsCatalog.serviceDefinition({
         toolingLinks.sentry(slug='gitlab/gitlab-workhorse-gitlabcom'),
         toolingLinks.kibana(title='Workhorse', index='workhorse', type='api', slowRequestSeconds=10),
       ],
+
+      dependsOn: dependsOnPatroni,
     },
 
     local railsSelector = { job: 'gitlab-rails', type: 'api' },
@@ -183,6 +198,8 @@ metricsCatalog.serviceDefinition({
         toolingLinks.sentry(slug='gitlab/gitlabcom', type='api', variables=['environment', 'stage']),
         toolingLinks.kibana(title='Rails', index='rails'),
       ],
+
+      dependsOn: dependsOnPatroni,
     },
 
     rails_requests:
@@ -194,6 +211,7 @@ metricsCatalog.serviceDefinition({
         toolingLinks: [
           toolingLinks.kibana(title='Rails', index='rails'),
         ],
+        dependsOn: dependsOnPatroni,
       },
 
     graphql_queries:
@@ -201,6 +219,7 @@ metricsCatalog.serviceDefinition({
         toolingLinks: [
           toolingLinks.kibana(title='Rails', index='rails_graphql'),
         ],
+        dependsOn: dependsOnPatroni,
       },
   },
 })
