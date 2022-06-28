@@ -25,6 +25,7 @@
 * [HAProxy management at GitLab](../frontend/haproxy.md)
 * [../kube/k8s-operations.md](../kube/k8s-operations.md)
 * [Kubernetes](../kube/kubernetes.md)
+* [An impatient SRE's guide to deleting alerts](../monitoring/deleting-alerts.md)
 * [Gitlab.com on Kubernetes](../onboarding/gitlab.com_on_k8s.md)
 * [Diagnosis with Kibana](../onboarding/kibana-diagnosis.md)
 * [../patroni/postgresql-backups-wale-walg.md](../patroni/postgresql-backups-wale-walg.md)
@@ -35,7 +36,6 @@
 * [Container Registry Migration Phase 2](migration-phase2.md)
 * [High Number of Overdue Online GC Tasks](online-gc-high-overdue-tasks.md)
 * [Deleting a project manually](../uncategorized/delete-projects-manually.md)
-* [An impatient SRE's guide to deleting alerts](../uncategorized/deleting-alerts.md)
 * [Tweeting Guidelines](../uncategorized/tweeting-guidelines.md)
 * [Gitlab Vault](../vault/vault.md)
 <!-- END_MARKER -->

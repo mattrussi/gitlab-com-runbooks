@@ -19,9 +19,9 @@
 * [design.gitlab.com Runbook](../design/design-gitlab-com.md)
 * [Kubernetes-Agent Basic Troubleshooting](kubernetes-agent-basic-troubleshooting.md)
 * [Kubernetes-Agent Disable Integrations](kubernetes-agent-disable-integrations.md)
+* [An impatient SRE's guide to deleting alerts](../monitoring/deleting-alerts.md)
 * [Gitlab.com on Kubernetes](../onboarding/gitlab.com_on_k8s.md)
 * [Diagnosis with Kibana](../onboarding/kibana-diagnosis.md)
-* [An impatient SRE's guide to deleting alerts](../uncategorized/deleting-alerts.md)
 <!-- END_MARKER -->
 
 # Summary

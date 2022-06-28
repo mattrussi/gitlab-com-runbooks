@@ -18,11 +18,11 @@
 * [Blackbox git exporter is down](blackbox-git-exporter.md)
 * [Camoproxy troubleshooting](../camoproxy/camoproxy.md)
 * [design.gitlab.com Runbook](../design/design-gitlab-com.md)
+* [An impatient SRE's guide to deleting alerts](../monitoring/deleting-alerts.md)
 * [../patroni/postgres.md](../patroni/postgres.md)
 * [../patroni/postgresql-backups-wale-walg.md](../patroni/postgresql-backups-wale-walg.md)
 * [Container Registry CDN](../registry/cdn.md)
 * [../spamcheck/index.md](../spamcheck/index.md)
-* [An impatient SRE's guide to deleting alerts](../uncategorized/deleting-alerts.md)
 * [GitLab Job Completion](../uncategorized/job_completion.md)
 * [version.gitlab.com Runbook](../version/version-gitlab-com.md)
 <!-- END_MARKER -->
