@@ -31,6 +31,8 @@ We use private GKE clusters, with the control plane only accessible from within
 the cluster's VPC. So we need to set up our local machine to tunnel requests
 through a proxy.
 
+1. Setup Yubikey SSH keys: <https://gitlab.com/gitlab-com/runbooks/-/blob/master/docs/uncategorized/yubikey.md>
+1. Setup bastion for clusters: <https://gitlab.com/gitlab-com/runbooks/-/tree/master/docs/bastions>
 1. Install `gcloud`: <https://cloud.google.com/sdk/docs/install>
 1. Install `kubectl`: <https://kubernetes.io/docs/tasks/tools/install-kubectl-windows/>
 1. Install `sshuttle`: <https://github.com/sshuttle/sshuttle#obtaining-sshuttle>
@@ -169,3 +171,9 @@ _Use the `bin/get-server-state` script in [chef-repo](https://ops.gitlab.net/git
 ```
 
 `./bin/set-server-state` is used to set the state, just like any other server in an HAProxy backend
+
+# Troubleshooting
+
+## Connection to the server refused
+
+If `kubectl get nodes` returns an error like "The connection to the server xx.xx.xxx.xx was refused - did you specify the right host or port?", this probably means SSH access via bastion was not set up properly. Refer to the [bastion setup documentation](https://gitlab.com/gitlab-com/runbooks/-/tree/master/docs/bastions) to set up your bastion SSH access. You can use your yubikey to set up your SSH keys by following [documentation here](https://gitlab.com/gitlab-com/runbooks/-/blob/master/docs/uncategorized/yubikey.md).
