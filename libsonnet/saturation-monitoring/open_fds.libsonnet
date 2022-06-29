@@ -1,12 +1,12 @@
-local metricsCatalog = import 'servicemetrics/metrics.libsonnet';
-local resourceSaturationPoint = metricsCatalog.resourceSaturationPoint;
+local metricsCatalog = import 'servicemetrics/metrics-catalog.libsonnet';
+local resourceSaturationPoint = (import 'servicemetrics/metrics.libsonnet').resourceSaturationPoint;
 
 {
   open_fds: resourceSaturationPoint({
     title: 'Open file descriptor utilization per instance',
     severity: 's2',
     horizontallyScalable: true,
-    appliesTo: { allExcept: ['cloud-sql', 'nat', 'waf', 'kube'] },
+    appliesTo: metricsCatalog.findServicesExcluding(excluding=['cloud-sql', 'nat', 'waf', 'kube']),
     description: |||
       Open file descriptor utilization per instance.
 
