@@ -29,7 +29,7 @@ local list = [
   sliDefinition.new({
     name: 'customers_dot_requests',
     significantLabels: ['endpoint_id'],
-    kinds: [sliDefinition.apdexKind],
+    kinds: [sliDefinition.apdexKind, sliDefinition.errorRateKind],
     featureCategory: 'fulfillment_platform',
     description: |||
       The number of CustomersDot requests meeting their duration target based on the urgency
