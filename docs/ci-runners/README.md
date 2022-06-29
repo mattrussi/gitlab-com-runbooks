@@ -377,6 +377,10 @@ Every new CIDR should start at directly after the previously reserved one ends.
 | `gitlab-ci`             | `ci/ephemeral-runners-private`           | `10.10.40.0/21` |
 | `gitlab-ci`             | `ci/ephemeral-runners-shared-gitlab-org` | `10.10.48.0/21` |
 | `gitlab-ci`             | `ci/ephemeral-runners-private-2`         | `10.10.56.0/21` |
+| `gitlab-ci-private-1`   | `ephemeral-runners/ephemeral-runners`    | `10.10.64.0/21` |
+| `gitlab-ci-private-2`   | `ephemeral-runners/ephemeral-runners`    | `10.10.72.0/21` |
+| `gitlab-ci-private-3`   | `ephemeral-runners/ephemeral-runners`    | `10.10.80.0/21` |
+| `gitlab-ci-private-4`   | `ephemeral-runners/ephemeral-runners`    | `10.10.88.0/21` |
 
 ##### `ci-gateway` ILB firewall
 
