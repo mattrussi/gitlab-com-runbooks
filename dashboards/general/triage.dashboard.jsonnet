@@ -166,6 +166,7 @@ local activeAlertsPanel =
 basic.dashboard(
   'Platform Triage',
   tags=['general'],
+  refresh='5m',
 )
 .addTemplate(templates.stage)
 .addPanel(activeAlertsPanel, gridPos=genGridPos(0, 0, w=2, h=0.5))
