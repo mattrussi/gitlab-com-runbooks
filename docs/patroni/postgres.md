@@ -428,3 +428,7 @@ If this is an alert for any other error you're on your own. But be
 aware that it could be caused by something mundane such as an admin
 typing commands at the console generating "invalid command" errors or
 the database server restarting or clients dying.
+
+## Sentry - Postgres pending WAL files on primary is high
+
+Check the Runbook [sentry_pending_wal_files_too_high.md](../../sentry/sentry_pending_wal_files_too_high.md).

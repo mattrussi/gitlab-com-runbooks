@@ -2940,7 +2940,7 @@ services:
       slx:
       documents:
         design:
-        architecture:
+        architecture: A single VM node running the services needed for Sentry, mainly PostgreSQL, Redis Server, and Prometheus for monitoring.
         readiness_review:
         service:
         security:
