@@ -16,6 +16,10 @@ function(
   {
     type: type,
     tier: 'db',
+    provisioning: {
+      vms: true,
+      kubernetes: true,
+    },
     serviceIsStageless: true,  // We don't have cny stage for Redis instances
 
     tags: [
@@ -28,6 +32,15 @@ function(
       errorRatio: 0.999,
     },
 
+
+    kubeResources: {
+      redis: {
+        kind: 'Deployment',
+        containers: [
+          type,
+        ],
+      },
+    },
     serviceLevelIndicators: {
       rails_redis_client: {
         userImpacting: true,

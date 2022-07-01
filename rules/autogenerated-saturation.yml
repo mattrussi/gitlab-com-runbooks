@@ -360,13 +360,13 @@ groups:
         clamp_min(
           clamp_max(
             sum by (environment, tier, type, stage, pod, container) (
-              rate(container_cpu_usage_seconds_total:labeled{container!="", container!="POD", type=~"web|api|camoproxy|consul|git|kas|kube|logging|mailroom|monitoring|nginx|plantuml|registry|sidekiq|web-pages|websockets|woodhouse"}[5m])
+              rate(container_cpu_usage_seconds_total:labeled{container!="", container!="POD", type=~"web|api|camoproxy|consul|git|kas|kube|logging|mailroom|monitoring|nginx|plantuml|redis-cache|redis-sidekiq|redis-tracechunks|redis-ratelimiting|redis-sessions|redis|registry|sidekiq|web-pages|websockets|woodhouse"}[5m])
             )
             /
             sum by(environment, tier, type, stage, pod, container) (
-              container_spec_cpu_quota:labeled{container!="", container!="POD", type=~"web|api|camoproxy|consul|git|kas|kube|logging|mailroom|monitoring|nginx|plantuml|registry|sidekiq|web-pages|websockets|woodhouse"}
+              container_spec_cpu_quota:labeled{container!="", container!="POD", type=~"web|api|camoproxy|consul|git|kas|kube|logging|mailroom|monitoring|nginx|plantuml|redis-cache|redis-sidekiq|redis-tracechunks|redis-ratelimiting|redis-sessions|redis|registry|sidekiq|web-pages|websockets|woodhouse"}
               /
-              container_spec_cpu_period:labeled{container!="", container!="POD", type=~"web|api|camoproxy|consul|git|kas|kube|logging|mailroom|monitoring|nginx|plantuml|registry|sidekiq|web-pages|websockets|woodhouse"}
+              container_spec_cpu_period:labeled{container!="", container!="POD", type=~"web|api|camoproxy|consul|git|kas|kube|logging|mailroom|monitoring|nginx|plantuml|redis-cache|redis-sidekiq|redis-tracechunks|redis-ratelimiting|redis-sessions|redis|registry|sidekiq|web-pages|websockets|woodhouse"}
             )
             ,
             1)
@@ -380,9 +380,9 @@ groups:
       max by(environment, tier, type, stage) (
         clamp_min(
           clamp_max(
-            container_memory_working_set_bytes:labeled{container!="", container!="POD", type=~"web|api|camoproxy|consul|git|kas|kube|logging|mailroom|monitoring|nginx|plantuml|registry|sidekiq|web-pages|websockets|woodhouse"}
+            container_memory_working_set_bytes:labeled{container!="", container!="POD", type=~"web|api|camoproxy|consul|git|kas|kube|logging|mailroom|monitoring|nginx|plantuml|redis-cache|redis-sidekiq|redis-tracechunks|redis-ratelimiting|redis-sessions|redis|registry|sidekiq|web-pages|websockets|woodhouse"}
             /
-            (container_spec_memory_limit_bytes:labeled{container!="", container!="POD", type=~"web|api|camoproxy|consul|git|kas|kube|logging|mailroom|monitoring|nginx|plantuml|registry|sidekiq|web-pages|websockets|woodhouse"} > 0)
+            (container_spec_memory_limit_bytes:labeled{container!="", container!="POD", type=~"web|api|camoproxy|consul|git|kas|kube|logging|mailroom|monitoring|nginx|plantuml|redis-cache|redis-sidekiq|redis-tracechunks|redis-ratelimiting|redis-sessions|redis|registry|sidekiq|web-pages|websockets|woodhouse"} > 0)
             ,
             1)
         ,
@@ -422,9 +422,9 @@ groups:
       max by(environment, tier, type, stage) (
         clamp_min(
           clamp_max(
-            kube_horizontalpodautoscaler_status_desired_replicas:labeled{type=~"web|api|camoproxy|consul|git|kas|kube|logging|mailroom|monitoring|nginx|plantuml|registry|sidekiq|web-pages|websockets|woodhouse", shard!~"database-throttled|elasticsearch|gitaly-throttled|imports|urgent-other"}
+            kube_horizontalpodautoscaler_status_desired_replicas:labeled{type=~"web|api|camoproxy|consul|git|kas|kube|logging|mailroom|monitoring|nginx|plantuml|redis-cache|redis-sidekiq|redis-tracechunks|redis-ratelimiting|redis-sessions|redis|registry|sidekiq|web-pages|websockets|woodhouse", shard!~"database-throttled|elasticsearch|gitaly-throttled|imports|urgent-other"}
             /
-            kube_horizontalpodautoscaler_spec_max_replicas:labeled{type=~"web|api|camoproxy|consul|git|kas|kube|logging|mailroom|monitoring|nginx|plantuml|registry|sidekiq|web-pages|websockets|woodhouse", shard!~"database-throttled|elasticsearch|gitaly-throttled|imports|urgent-other"}
+            kube_horizontalpodautoscaler_spec_max_replicas:labeled{type=~"web|api|camoproxy|consul|git|kas|kube|logging|mailroom|monitoring|nginx|plantuml|redis-cache|redis-sidekiq|redis-tracechunks|redis-ratelimiting|redis-sessions|redis|registry|sidekiq|web-pages|websockets|woodhouse", shard!~"database-throttled|elasticsearch|gitaly-throttled|imports|urgent-other"}
             ,
             1)
         ,
