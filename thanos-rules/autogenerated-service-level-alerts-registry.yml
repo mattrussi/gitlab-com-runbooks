@@ -389,9 +389,8 @@ groups:
       alert_class: slo_violation
       alert_type: symptom
       feature_category: container_registry
-      pager: pagerduty
       rules_domain: general
-      severity: s2
+      severity: s3
       sli_type: apdex
       slo_alert: "yes"
       user_impacting: "no"
@@ -440,9 +439,8 @@ groups:
       alert_class: slo_violation
       alert_type: symptom
       feature_category: container_registry
-      pager: pagerduty
       rules_domain: general
-      severity: s2
+      severity: s3
       sli_type: apdex
       slo_alert: "yes"
       user_impacting: "no"
@@ -493,9 +491,8 @@ groups:
       alert_class: slo_violation
       alert_type: symptom
       feature_category: container_registry
-      pager: pagerduty
       rules_domain: general
-      severity: s2
+      severity: s3
       sli_type: apdex
       slo_alert: "yes"
       user_impacting: "no"
@@ -546,9 +543,8 @@ groups:
       alert_class: slo_violation
       alert_type: symptom
       feature_category: container_registry
-      pager: pagerduty
       rules_domain: general
-      severity: s2
+      severity: s3
       sli_type: apdex
       slo_alert: "yes"
       user_impacting: "no"
@@ -594,9 +590,8 @@ groups:
       alert_class: slo_violation
       alert_type: symptom
       feature_category: container_registry
-      pager: pagerduty
       rules_domain: general
-      severity: s2
+      severity: s3
       sli_type: error
       slo_alert: "yes"
       user_impacting: "no"
@@ -642,9 +637,8 @@ groups:
       alert_class: slo_violation
       alert_type: symptom
       feature_category: container_registry
-      pager: pagerduty
       rules_domain: general
-      severity: s2
+      severity: s3
       sli_type: error
       slo_alert: "yes"
       user_impacting: "no"
@@ -692,9 +686,8 @@ groups:
       alert_class: slo_violation
       alert_type: symptom
       feature_category: container_registry
-      pager: pagerduty
       rules_domain: general
-      severity: s2
+      severity: s3
       sli_type: error
       slo_alert: "yes"
       user_impacting: "no"
@@ -742,9 +735,8 @@ groups:
       alert_class: slo_violation
       alert_type: symptom
       feature_category: container_registry
-      pager: pagerduty
       rules_domain: general
-      severity: s2
+      severity: s3
       sli_type: error
       slo_alert: "yes"
       user_impacting: "no"
@@ -790,9 +782,8 @@ groups:
       alert_class: traffic_cessation
       alert_type: cause
       feature_category: container_registry
-      pager: pagerduty
       rules_domain: general
-      severity: s2
+      severity: s3
       sli_type: ops
       slo_alert: "no"
       user_impacting: "no"
@@ -827,9 +818,8 @@ groups:
       alert_class: traffic_cessation
       alert_type: cause
       feature_category: container_registry
-      pager: pagerduty
       rules_domain: general
-      severity: s2
+      severity: s3
       sli_type: ops
       slo_alert: "no"
       user_impacting: "no"
@@ -864,9 +854,8 @@ groups:
       alert_class: traffic_cessation
       alert_type: cause
       feature_category: container_registry
-      pager: pagerduty
       rules_domain: general
-      severity: s2
+      severity: s3
       sli_type: ops
       slo_alert: "no"
       user_impacting: "no"
@@ -903,9 +892,8 @@ groups:
       alert_class: traffic_cessation
       alert_type: cause
       feature_category: container_registry
-      pager: pagerduty
       rules_domain: general
-      severity: s2
+      severity: s3
       sli_type: ops
       slo_alert: "no"
       user_impacting: "no"
