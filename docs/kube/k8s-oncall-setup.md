@@ -72,6 +72,8 @@ kubectl get pods -o wide  # find the name of the node that you want to access
 gcloud compute --project "gitlab-production" ssh <node name> --tunnel-through-iap
 ```
 
+This will create an ssh key that is propogated to the GCP project to allow access.  You may receive a message from SIRTBot afterwards.
+
 * [ ] From the node you can list containers, and get shell access to a pod as root.  At this writing our nodepools run a mix of docker and containerd, but eventually we expect them to be all containerd.
 
 When using the code snippets below on docker nodes, change `crictl` to `docker`; they are functionally mostly equivalent for common basic tasks.
