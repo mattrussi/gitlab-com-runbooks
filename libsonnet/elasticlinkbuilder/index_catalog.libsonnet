@@ -259,6 +259,15 @@ local indexDefaults = {
     latencyFieldUnitMultiplier: 1000,
   },
 
+  registry_garbagecollection: indexDefaults {
+    timestamp: 'json.time',
+    indexPattern: '97ce8e90-63ad-11ea-8617-2347010d3aab',
+    defaultColumns: ['json.correlation_id', 'json.component', 'json.worker', 'json.msg', 'json.error', 'json.duration_s'],
+    defaultSeriesSplitField: 'json.worker',
+    failureFilter: [matchFilter('json.level', 'error')],
+    defaultLatencyField: 'json.duration_s',
+  },
+
   runners: indexDefaults {
     timestamp: '@timestamp',
     indexPattern: 'pubsub-runner-inf-gprd',
