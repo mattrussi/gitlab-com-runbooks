@@ -155,6 +155,14 @@ metricsCatalog.serviceDefinition({
       ),
 
       significantLabels: ['worker'],
+      toolingLinks: [
+        toolingLinks.kibana(
+          title='Garbage Collector',
+          index='registry_garbagecollection',
+          type='registry',
+          matches={ 'json.component': ['registry.gc.Agent', 'registry.gc.worker.ManifestWorker', 'registry.gc.worker.BlobWorker'] }
+        ),
+      ],
     },
   } + registryHelpers.apdexPerRoute,
 })
