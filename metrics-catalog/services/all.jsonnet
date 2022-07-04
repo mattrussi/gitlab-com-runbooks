@@ -9,6 +9,7 @@
   import 'cloud-sql.jsonnet',
   import 'consul.jsonnet',
   import 'customersdot.jsonnet',
+  import 'external-dns.jsonnet',
   import 'frontend.jsonnet',
   import 'google-cloud-storage.jsonnet',
   import 'git.jsonnet',

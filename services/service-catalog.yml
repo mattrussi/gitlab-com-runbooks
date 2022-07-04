@@ -3679,3 +3679,58 @@ services:
       monitors:
         grafana_folder: cloud-sql
         primary_grafana_dashboard: cloud-sql-main/cloud-sql-overview
+
+  - name: external-dns
+    tier: sv
+    friendly_name: ExternalDNS
+    label: Service:ExternalDNS
+    business:
+      requirement: Control DNS records dynamically via Kubernetes resources
+      customers:
+        - Infrastructure dept
+      business_value: |
+        Provide hostnames to services running in Kubernetes for service
+        discovery, inter-, and intra-service operability
+      SLA:
+        availability:
+        response_time:
+    technical:
+      project:
+        - https://github.com/kubernetes-sigs/external-dns
+        - https://gitlab.com/gitlab-com/gl-infra/k8s-workloads/gitlab-helmfiles/-/tree/master/releases/external-dns
+      slx:
+      documents:
+        design:
+        architecture:
+        readiness_review:
+        service:
+        security:
+      dependencies:
+      configurations:
+      chef_roles:
+      scalability:
+        bound:
+        scalable:
+      security:
+        security_reviewed:
+        data_classification:
+        security_incidents:
+      logging:
+        - name: Stackdriver logs
+          permalink: https://cloudlogging.app.goo.gl/UY7qbsc5KoZZALtT7
+    infrastructure:
+      provider: gcp
+      architecture: gke
+      provisioning: kubernetes
+      accesses:
+        - account_name:
+          access_type:
+          reviewed:
+    operations:
+      maintenance:
+      runbooks:
+      playbooks:
+      error_budget:
+    observability:
+      monitors:
+        primary_grafana_dashboard: external-dns-main/external-dns-overview
