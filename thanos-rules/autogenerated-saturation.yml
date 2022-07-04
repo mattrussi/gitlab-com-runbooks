@@ -63,9 +63,9 @@ groups:
               1
               -
               (
-                rate(node_cpu_seconds_total{mode="idle", type=~"patroni|patroni-registry|patroni-ci|patroni-ci1|postgres-archive|sentry"}[5m])
+                rate(node_cpu_seconds_total{mode="idle", type=~"patroni|patroni-registry|patroni-ci|postgres-archive|sentry"}[5m])
                 and on(fqdn)
-                pg_replication_is_replica{type=~"patroni|patroni-registry|patroni-ci|patroni-ci1|postgres-archive|sentry"} == 0
+                pg_replication_is_replica{type=~"patroni|patroni-registry|patroni-ci|postgres-archive|sentry"} == 0
               )
             )
             ,
@@ -82,12 +82,12 @@ groups:
           clamp_max(
             sum by (env, environment, tier, type, stage) (
               rate(fluentd_pg_auto_vacuum_elapsed_seconds_total{env="gprd"}[1d])
-              and on (fqdn) (pg_replication_is_replica{type=~"patroni|patroni-registry|patroni-ci|patroni-ci1"} == 0)
+              and on (fqdn) (pg_replication_is_replica{type=~"patroni|patroni-registry|patroni-ci"} == 0)
             )
             /
             avg by (env, environment, tier, type, stage) (
-              pg_settings_autovacuum_max_workers{type=~"patroni|patroni-registry|patroni-ci|patroni-ci1"}
-              and on (instance, job) (pg_replication_is_replica{type=~"patroni|patroni-registry|patroni-ci|patroni-ci1"} == 0)
+              pg_settings_autovacuum_max_workers{type=~"patroni|patroni-registry|patroni-ci"}
+              and on (instance, job) (pg_replication_is_replica{type=~"patroni|patroni-registry|patroni-ci"} == 0)
             )
             ,
             1)
@@ -103,12 +103,12 @@ groups:
           clamp_max(
             sum by (env, environment, tier, type, stage) (
               sum by(env, environment, tier, type, stage, fqdn) (
-                rate(namedprocess_namegroup_cpu_seconds_total{type=~"patroni|patroni-registry|patroni-ci|patroni-ci1", groupname=~"pg.worker.walsender|pg.worker.walwriter|wal-g"}[5m])
-                and on (fqdn) (pg_replication_is_replica{type=~"patroni|patroni-registry|patroni-ci|patroni-ci1"} == 0)
+                rate(namedprocess_namegroup_cpu_seconds_total{type=~"patroni|patroni-registry|patroni-ci", groupname=~"pg.worker.walsender|pg.worker.walwriter|wal-g"}[5m])
+                and on (fqdn) (pg_replication_is_replica{type=~"patroni|patroni-registry|patroni-ci"} == 0)
               )
               /
               count by (env, environment, tier, type, stage, fqdn) (
-                node_cpu_seconds_total{type=~"patroni|patroni-registry|patroni-ci|patroni-ci1", mode="idle"} and on(fqdn) (pg_replication_is_replica{type=~"patroni|patroni-registry|patroni-ci|patroni-ci1"} == 0)
+                node_cpu_seconds_total{type=~"patroni|patroni-registry|patroni-ci", mode="idle"} and on(fqdn) (pg_replication_is_replica{type=~"patroni|patroni-registry|patroni-ci"} == 0)
               )
             )
             ,

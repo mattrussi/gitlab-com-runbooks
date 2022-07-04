@@ -24,7 +24,6 @@
   import 'patroni.jsonnet',
   import 'patroni-registry.jsonnet',
   import 'patroni-ci.jsonnet',
-  import 'patroni-ci1.jsonnet',
   import 'postgres-archive.jsonnet',
   import 'pgbouncer.jsonnet',
   import 'pgbouncer-registry.jsonnet',
