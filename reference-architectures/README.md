@@ -49,6 +49,8 @@ It's possible to customize the configuration of the reference architecture to su
 
 - Step 4: in the `overrides` directory, create an `gitlab-metrics-options.libsonnet` file containing the configuration options. Documentation around possible options is available in the [Options section](#options) later in the documentation. Reviewing the [default options](../libsonnet/reference-architecture-options/validate.libsonnet) can shed light on configuration options available.
 
+- Step 5: optionally add local services in the `overrides` directory you want to include. Review some services defined in `/reference-architectures/get-hybrid/src/services` to understand how such a service would look like.
+
 ```jsonnet
 // overrides/gitlab-metrics-options.libsonnet
 {
@@ -56,12 +58,16 @@ It's possible to customize the configuration of the reference architecture to su
   praefect: {
     enable: false,
   }
+  // Add your own locally defined services
+  services: [
+    import 'logging.libsonnet',
+  ],
 }
 ```
 
-- Step 5: create a directory which will contain your custom recording rules and Grafana dashboards: `mkdir output`.
+- Step 6: create a directory which will contain your custom recording rules and Grafana dashboards: `mkdir output`.
 
-- Step 6: use the `generate-reference-architecture-config.sh` script to generate your custom configuration.
+- Step 7: use the `generate-reference-architecture-config.sh` script to generate your custom configuration.
 
 ```shell
 # generate a custom configuration, using the `get-hybrid` reference architecture,
@@ -84,3 +90,4 @@ The following configuration options are available in `gitlab-metrics-options.lib
 | **Option**        | **Type** | **Default** | **Description** |
 | ----------------- | -------- | ----------- | --------------- |
 | `praefect.enable` | Boolean  | `true`      | Set to `false` to disable Praefect monitoring. This is usually done when Praefect/Gitaly Cluster is disabled in GitLab Environment Toolkit with `praefect_node_count = 0` |
+| `services`        | Array    | empty       | Import any customized service monitoring. For examples see [`reference-architectures/get-hybrid/src/services/`](reference-architectures/get-hybrid/src/services/)  |
