@@ -32,10 +32,8 @@ metricsCatalog.serviceDefinition({
       hpaSelector=null,
       ingressSelector=null,
       deploymentSelector=null,
-      nodeSelector={ type: { oneOf: ['default', 'highmem', '' /* Unlabelled nodepools belong here */] } },
-
-      // TODO: fix the stage label for default and highmem nodes
-      // See https://gitlab.com/gitlab-com/gl-infra/delivery/-/issues/2238
+      nodeSelector={ type: { oneOf: ['default', 'highmem', 'kube', '' /* Unlabelled nodepools belong here */] } },
+      nodeSelector={ shard: { oneOf: ['default', 'highmem', '' /* Unlabelled nodepools belong here */] } },
       nodeStaticLabels={ stage: 'main' },
     ),
   },
