@@ -128,6 +128,7 @@ metricsCatalog.serviceDefinition({
     },
 
     garbagecollector: {
+      severity: 's3',
       userImpacting: false,
       serviceAggregation: false,
       featureCategory: 'container_registry',
