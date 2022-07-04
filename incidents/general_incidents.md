@@ -54,7 +54,7 @@ During a high-profile and high-impact incident (e.g severity 1), one of your pri
 
 See the guidance from the IMOC onboarding:
 
-- [How does an Incident Manager effectively engage with the Engineer On-Call?](https://gitlab.com/gitlab-com/gl-infra/infrastructure/-/blob/master/.gitlab/issue_templates/im_onboarding.md#how-does-an-incident-manager-effectively-engage-with-the-engineer-on-call).
+- [How does an Incident Manager effectively engage with the Engineer On-Call?](https://gitlab.com/gitlab-com/gl-infra/infrastructure/-/blob/master/.gitlab/issue_templates/onboarding-im.md#how-does-an-incident-manager-effectively-engage-with-the-engineer-on-call).
 
 ### Estimate the Severity of the issue
 
