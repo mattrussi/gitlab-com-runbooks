@@ -267,8 +267,25 @@ basic.dashboard(
 .addPanels(
   gitalyCommandStats.metricsForNode(
     selectorHash,
+    includeDetails=false,
     aggregationLabels=['grpc_service', 'grpc_method'],
     startRow=8401
+  )
+)
+.addPanel(
+  row.new(title='gitaly command stats by commands per RPC'),
+  gridPos={
+    x: 0,
+    y: 8500,
+    w: 24,
+    h: 1,
+  }
+)
+.addPanels(
+  gitalyCommandStats.metricsForNode(
+    selectorHash,
+    aggregationLabels=['grpc_method', 'cmd', 'subcmd'],
+    startRow=8501
   )
 )
 
