@@ -29,8 +29,6 @@ Here are some examples of the dashboards generated for this reference architectu
 | ----------- | ------------- | --------------- | --------- | --------------- | ------------------ |
 | `gitaly` | `goserver` | This SLI monitors all Gitaly GRPC requests in aggregate, excluding the OperationService. GRPC failures which are considered to be the "server's fault" are counted as errors. The apdex score is based on a subset of GRPC methods which are expected to be fast.  | ✅ SLO: 99.9% | ✅ SLO: 99.95% | ✅ |
 | `gitlab-shell` | `grpc_requests` | A proxy measurement of the number of GRPC SSH service requests made to Gitaly and Praefect.  Since we are unable to measure gitlab-shell directly at present, this is the best substitute we can provide.  | ✅ SLO: 99.9% | ✅ SLO: 99.9% | ✅ |
-| `logging` | `elasticsearch_searching` | Opensearch global search average rate.  | - | ✅ | ✅ |
-| `logging` | `firehose_record_delivery` | This SLI monitors records delivered to Opensearch using Kinesis Firehose.  | - | - | ✅ |
 | `praefect` | `proxy` | All Gitaly operations pass through the Praefect proxy on the way to a Gitaly instance. This SLI monitors those operations in aggregate.  | ✅ SLO: 99.5% | ✅ SLO: 99.95% | ✅ |
 | `praefect` | `replicator_queue` | Praefect replication operations. Latency represents the queuing delay before replication is carried out.  | ✅ SLO: 99.5% | - | ✅ |
 | `registry` | `server` | Aggregation of all registry HTTP requests.  | ✅ SLO: 99.7% | ✅ SLO: 99.99% | ✅ |
@@ -59,8 +57,8 @@ Saturation monitoring is handled differently to the service-level monitoring des
 | `memory` | `consul`, `gitaly`, `praefect` | Memory utilization per device per node.  | ✅ | 98% |
 | `memory_redis_cache` |  | Memory utilization per device per node.   redis-cache has a separate saturation point for this to exclude it from capacity planning calculations.  | ✅ | 98% |
 | `node_schedstat_waiting` | `consul`, `gitaly`, `praefect` | Measures the amount of scheduler waiting time that processes are waiting to be scheduled, according to [`CPU Scheduling Metrics`](https://www.robustperception.io/cpu-scheduling-metrics-from-the-node-exporter).  A high value indicates that a node has more processes to be run than CPU time available to handle them, and may lead to degraded responsiveness and performance from the application.  Additionally, it may indicate that the fleet is under-provisioned.  | ✅ | 15% |
-| `opensearch_cpu` | `logging` | Average CPU utilization.  This resource measures the CPU utilization for the selected cluster or domain. If it is becoming saturated, it may indicate that the fleet needs horizontal or vertical scaling. The metrics are coming from cloudwatch_exporter.  | ✅ | 80% |
-| `opensearch_disk_space` | `logging` | Disk utilization for Opensearch  | ✅ | 75% |
+| `opensearch_cpu` |  | Average CPU utilization.  This resource measures the CPU utilization for the selected cluster or domain. If it is becoming saturated, it may indicate that the fleet needs horizontal or vertical scaling. The metrics are coming from cloudwatch_exporter.  | ✅ | 80% |
+| `opensearch_disk_space` |  | Disk utilization for Opensearch  | ✅ | 75% |
 | `single_node_cpu` | `consul`, `gitaly`, `praefect` | Average CPU utilization per Node.  If average CPU is saturated, it may indicate that a fleet is in need to horizontal or vertical scaling. It may also indicate imbalances in load in a fleet.  | ✅ | 95% |
 <!-- END_MARKER:saturation -->
 
