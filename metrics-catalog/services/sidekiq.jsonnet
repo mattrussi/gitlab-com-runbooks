@@ -57,18 +57,9 @@ metricsCatalog.serviceDefinition({
     'sidekiq_jobs_failed_total',
   ],
   kubeConfig: {
-    // TODO: currently sidekiq node_pools are incorrectly labelled with the shard label
-    // See https://gitlab.com/gitlab-com/gl-infra/delivery/-/issues/2243
-    local shardNames = sidekiqHelpers.shards.listByName(),
     labelSelectors: kubeLabelSelectors(
       ingressSelector=null,  // no ingress for sidekiq
-      nodeSelector={ type: { oneOf: shardNames } },
-
-      // sidekiq pods have incorrect labels, so until
-      // https://gitlab.com/gitlab-com/gl-infra/delivery/-/issues/2243
-      // is addressed, we treat them all as being part of the first defined
-      // shard. Remove this once correctly labeled.
-      podStaticLabels={ stage: sidekiqHelpers.shards.listAll()[0].name },
+      nodeSelector={ type: 'sidekiq' },
       // Sidekiq nodes don't present a stage label at present, so\
       // we hardcode to main stage
       nodeStaticLabels={ stage: 'main' },
