@@ -40,7 +40,7 @@ groups:
       runbook: docs/patroni/postgresql-backups-wale-walg.md
       title: Last WAL was archived {{ .Value | humanizeDuration }} ago for env {{ $labels.environment }}.
   - alert: walgBaseBackupDelayed
-    expr: gitlab_com:last_walg_successful_basebackup_age_in_hours >= 30
+    expr: gitlab_com:last_walg_successful_basebackup_age_in_hours{type!~"patroni-ci1|patroni-v12-zfs"} >= 30
     for: 5m
     labels:
       pager: pagerduty
