@@ -294,7 +294,7 @@ groups:
     expr: |
       group without(label_shard) (
         label_replace(
-          topk by(environment,cluster,node) (1, kube_node_labels{label_type=~"|kube"}),
+          topk by(environment,cluster,node) (1, kube_node_labels{label_type="kube"}),
           "shard", "$0", "label_shard", ".*"
         )
       )

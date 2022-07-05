@@ -32,7 +32,7 @@ metricsCatalog.serviceDefinition({
       hpaSelector=null,
       ingressSelector=null,
       deploymentSelector=null,
-      nodeSelector={ type: { oneOf: ['kube', '' /* Unlabeled nodepools belong here */] } },
+      nodeSelector={ type: 'kube' },
       nodeStaticLabels={ stage: 'main' },
     ),
   },
