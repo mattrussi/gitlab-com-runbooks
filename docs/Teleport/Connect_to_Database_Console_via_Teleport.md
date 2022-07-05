@@ -89,8 +89,16 @@ Approvers will review the issue URL in the request and if database access seems 
 
 Once an approval is issued, the next step is to log in to the database. Note that the `--db-name` option refers to the internal database schema name.  The database name at the end of the line refers to the database host that Teleport is pointing to (which you can see with `tsh db ls`):
 
+For the Main Database:
+
 ```shell
 tsh db login --db-user=console-ro --db-name=gitlabhq_production db-secondary
+```
+
+For the CI Database:
+
+```shell
+tsh db login --db-user=console-ro --db-name=gitlabhq_production db-secondary-ci
 ```
 
 Remember that your access request, its approval, and any associated database logins will expire in `12h` maximum unless renewed.
@@ -99,8 +107,16 @@ Remember that your access request, its approval, and any associated database log
 
 The database login command only needs to be executed once per day, unless you manually log out or need to change something.  Once logged in, you can connect and disconnect from the console as many times as needed.
 
+For the Main Database:
+
 ```shell
 tsh db connect db-secondary
+```
+
+For the CI Database:
+
+```shell
+tsh db connect db-secondary-ci
 ```
 
 > Tip: use the `tsh status` command to show which logins you are currently approved for.
