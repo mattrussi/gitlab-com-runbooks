@@ -11,7 +11,7 @@ groups:
       type: customersdot
     expr: |
       sum by (env,environment,stage) (
-        rate(gitlab_sli:customers_dot_requests_apdex:success_total{}[5m])
+        rate(gitlab_sli_customers_dot_requests_apdex_success_total{}[5m])
       )
   - record: gitlab:component:feature_category:execution:apdex:weight:score_5m
     labels:
@@ -21,7 +21,7 @@ groups:
       type: customersdot
     expr: |
       sum by (env,environment,stage) (
-        rate(gitlab_sli:customers_dot_requests_apdex:total{}[5m])
+        rate(gitlab_sli_customers_dot_requests_apdex_total{}[5m])
       )
   - record: gitlab:component:feature_category:execution:ops:rate_5m
     labels:
@@ -31,7 +31,7 @@ groups:
       type: customersdot
     expr: |
       sum by (env,environment,stage) (
-        rate(gitlab_sli:customers_dot_requests:total{}[5m])
+        rate(gitlab_sli_customers_dot_requests_total{}[5m])
       )
   - record: gitlab:component:feature_category:execution:error:rate_5m
     labels:
@@ -42,7 +42,7 @@ groups:
     expr: |
       (
         sum by (env,environment,stage) (
-          rate(gitlab_sli:customers_dot_requests:error_total{}[5m])
+          rate(gitlab_sli_customers_dot_requests_error_total{}[5m])
         )
       )
       or
@@ -61,7 +61,7 @@ groups:
       type: customersdot
     expr: |
       sum by (env,environment,stage) (
-        rate(gitlab_sli:customers_dot_requests_apdex:success_total{}[30m])
+        rate(gitlab_sli_customers_dot_requests_apdex_success_total{}[30m])
       )
   - record: gitlab:component:feature_category:execution:apdex:weight:score_30m
     labels:
@@ -71,7 +71,7 @@ groups:
       type: customersdot
     expr: |
       sum by (env,environment,stage) (
-        rate(gitlab_sli:customers_dot_requests_apdex:total{}[30m])
+        rate(gitlab_sli_customers_dot_requests_apdex_total{}[30m])
       )
   - record: gitlab:component:feature_category:execution:ops:rate_30m
     labels:
@@ -81,7 +81,7 @@ groups:
       type: customersdot
     expr: |
       sum by (env,environment,stage) (
-        rate(gitlab_sli:customers_dot_requests:total{}[30m])
+        rate(gitlab_sli_customers_dot_requests_total{}[30m])
       )
   - record: gitlab:component:feature_category:execution:error:rate_30m
     labels:
@@ -92,7 +92,7 @@ groups:
     expr: |
       (
         sum by (env,environment,stage) (
-          rate(gitlab_sli:customers_dot_requests:error_total{}[30m])
+          rate(gitlab_sli_customers_dot_requests_error_total{}[30m])
         )
       )
       or
@@ -111,7 +111,7 @@ groups:
       type: customersdot
     expr: |
       sum by (env,environment,stage) (
-        rate(gitlab_sli:customers_dot_requests_apdex:success_total{}[1h])
+        rate(gitlab_sli_customers_dot_requests_apdex_success_total{}[1h])
       )
   - record: gitlab:component:feature_category:execution:apdex:weight:score_1h
     labels:
@@ -121,7 +121,7 @@ groups:
       type: customersdot
     expr: |
       sum by (env,environment,stage) (
-        rate(gitlab_sli:customers_dot_requests_apdex:total{}[1h])
+        rate(gitlab_sli_customers_dot_requests_apdex_total{}[1h])
       )
   - record: gitlab:component:feature_category:execution:ops:rate_1h
     labels:
@@ -131,7 +131,7 @@ groups:
       type: customersdot
     expr: |
       sum by (env,environment,stage) (
-        rate(gitlab_sli:customers_dot_requests:total{}[1h])
+        rate(gitlab_sli_customers_dot_requests_total{}[1h])
       )
   - record: gitlab:component:feature_category:execution:error:rate_1h
     labels:
@@ -142,7 +142,7 @@ groups:
     expr: |
       (
         sum by (env,environment,stage) (
-          rate(gitlab_sli:customers_dot_requests:error_total{}[1h])
+          rate(gitlab_sli_customers_dot_requests_error_total{}[1h])
         )
       )
       or
