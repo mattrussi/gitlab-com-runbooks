@@ -18,6 +18,7 @@
 
 * [Camoproxy troubleshooting](camoproxy.md)
 * [Upgrade camoproxy](upgrade-camoproxy.md)
+* [Tuning and Modifying Alerts](../monitoring/alert_tuning.md)
 <!-- END_MARKER -->
 
 <!-- ## Summary -->

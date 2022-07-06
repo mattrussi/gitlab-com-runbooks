@@ -18,6 +18,7 @@
 
 * [Cloud SQL Troubleshooting](../cloud-sql/cloud-sql.md)
 * [Upgrading the OS of Gitaly VMs](../gitaly/gitaly-os-upgrade.md)
+* [Tuning and Modifying Alerts](../monitoring/alert_tuning.md)
 * [../monitoring/apdex-alerts-guide.md](../monitoring/apdex-alerts-guide.md)
 * [Diagnosis with Kibana](../onboarding/kibana-diagnosis.md)
 * [Bypass Praefect](praefect-bypass.md)

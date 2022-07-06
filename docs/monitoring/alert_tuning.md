@@ -41,6 +41,11 @@ serviceLevelIndicators: {
       userImpacting: false,
 ```
 
+**Examples**
+
+- [Adjusting the Severity for archive replicas](https://gitlab.com/gitlab-com/runbooks/-/merge_requests/2150)
+- [Turning blackbox notifications into slack only](https://gitlab.com/gitlab-com/runbooks/-/merge_requests/4755)
+
 ### Selectors
 
 SLI component selectors can allow a metric to exclude or include metric labels.
@@ -51,6 +56,10 @@ For example, this selector definition for the frontend service excludes canary, 
 selector='type="frontend", backend_name!~"canary_.*|api_rate_limit|websockets"'
 ```
 
+**Examples**
+
+- [Exclude unavailable from gitaly error rate](https://gitlab.com/gitlab-com/runbooks/-/merge_requests/4693)
+
 ### Thresholds
 
 For an Apdex, the [tolerated and satisfied thresholds](./definition-service-apdex.md) can be changed to better match the expected latency of service requests.
@@ -59,10 +68,22 @@ For an Apdex, the [tolerated and satisfied thresholds](./definition-service-apde
 
 Modifying the monitoringThresholds apdexScore value will alter the Apdex threshold for the service as a whole.
 
+**Examples**
+
+- [Lower APDEX for an SLI](https://gitlab.com/gitlab-com/runbooks/-/merge_requests/4734)
+
 ### ErrorRatio
 
 This is similar to the apdexScore but is a value for how many errors are tolerated for the service as a whole.
 
+**Examples**
+
+- [Lower camoproxy error rate](https://gitlab.com/gitlab-com/runbooks/-/merge_requests/4752)
+
 ## Removing Notifications
 
 It is also quite reasonable to consider removing metrics, stopping notifications, or lowering their severity.
+
+**Examples**
+
+- [Remove praefect replication cessation metrics](https://gitlab.com/gitlab-com/runbooks/-/merge_requests/4689)
