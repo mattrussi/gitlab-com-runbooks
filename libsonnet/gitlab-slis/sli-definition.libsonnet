@@ -49,10 +49,10 @@ local validateAndApplyDefaults(definition) =
   local sli = sliValidator.assertValid(definitionWithDefaults);
 
   sli {
-    [if sli.hasApdex() then 'apdexTotalCounterName']: 'gitlab_sli:%s_apdex:total' % [self.name],
-    [if sli.hasApdex() then 'apdexSuccessCounterName']: 'gitlab_sli:%s_apdex:success_total' % [self.name],
-    [if sli.hasErrorRate() then 'errorTotalCounterName']: 'gitlab_sli:%s:total' % [self.name],
-    [if sli.hasErrorRate() then 'errorCounterName']: 'gitlab_sli:%s:error_total' % [self.name],
+    [if sli.hasApdex() then 'apdexTotalCounterName']: 'gitlab_sli_%s_apdex_total' % [self.name],
+    [if sli.hasApdex() then 'apdexSuccessCounterName']: 'gitlab_sli_%s_apdex_success_total' % [self.name],
+    [if sli.hasErrorRate() then 'errorTotalCounterName']: 'gitlab_sli_%s_total' % [self.name],
+    [if sli.hasErrorRate() then 'errorCounterName']: 'gitlab_sli_%s_error_total' % [self.name],
     totalCounterName: if sli.hasErrorRate() then self.errorTotalCounterName else self.apdexTotalCounterName,
 
     [if sli.hasApdex() then 'aggregatedApdexOperationRateQuery']:: rateQueryFunction(self, 'apdexTotalCounterName'),
