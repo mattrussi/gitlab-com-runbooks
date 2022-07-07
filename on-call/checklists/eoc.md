@@ -36,6 +36,13 @@ At the end of a shift:
 - Comment on any open S1 incidents at: https://gitlab.com/gitlab-com/gl-infra/production/issues?scope=all&utf8=✓&state=opened&label_name%5B%5D=incident&label_name%5B%5D=S1
 - At the end of each on-call day, post a quick update in slack so the next person is aware of anything ongoing, any false alerts, or anything that needs to be handed over.
 
+## Going off call
+
+- Take a deep breath! You did it!
+- Review your incidents and see if any of them need corrective actions, to be marked as resolved, or reviews filled out.
+- Take note of any alerts that were not productive and use [these resources](../../docs/monitoring/alert_tuning.md) to make notifications more helpful.
+- Schedule some down time to recouperate and relax. Being on call is stressful, even on a good week.
+
 ## Things to keep an eye on
 
 ### On-call issues
