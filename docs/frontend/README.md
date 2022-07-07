@@ -24,13 +24,14 @@
 * [GitLab Hosted CodeSandbox](../git/gitlab-hosted-codesandbox.md)
 * [Gitaly latency is too high](../gitaly/gitaly-latency.md)
 * [Gitaly PermissionDenied alert](../gitaly/gitaly-permission-denied.md)
+* [Tuning and Modifying Alerts](../monitoring/alert_tuning.md)
+* [An impatient SRE's guide to deleting alerts](../monitoring/deleting-alerts.md)
 * [Block specific pages domains through HAproxy](../pages/block-pages-domain.md)
 * [../pgbouncer/service-pgbouncer.md](../pgbouncer/service-pgbouncer.md)
 * [../registry/gitlab-registry.md](../registry/gitlab-registry.md)
 * [Sentry is down and gives error 500](../sentry/sentry-is-down.md)
 * [Life of a Web Request](../tutorials/overview_life_of_a_web_request.md)
 * [Alert about SSL certificate expiration](../uncategorized/alert-for-ssl-certificate-expiration.md)
-* [An impatient SRE's guide to deleting alerts](../uncategorized/deleting-alerts.md)
 <!-- END_MARKER -->
 
 <!-- ## Summary -->

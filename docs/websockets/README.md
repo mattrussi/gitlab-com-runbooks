@@ -18,6 +18,7 @@
 
 * [HAProxy management at GitLab](../frontend/haproxy.md)
 * [../kube/k8s-operations.md](../kube/k8s-operations.md)
+* [Tuning and Modifying Alerts](../monitoring/alert_tuning.md)
 * [Gitlab.com on Kubernetes](../onboarding/gitlab.com_on_k8s.md)
 * [Life of a Web Request](../tutorials/overview_life_of_a_web_request.md)
 <!-- END_MARKER -->
