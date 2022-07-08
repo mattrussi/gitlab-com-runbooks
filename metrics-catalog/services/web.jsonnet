@@ -6,6 +6,7 @@ local haproxyComponents = import './lib/haproxy_components.libsonnet';
 local sliLibrary = import 'gitlab-slis/library.libsonnet';
 local serviceLevelIndicatorDefinition = import 'servicemetrics/service_level_indicator_definition.libsonnet';
 local kubeLabelSelectors = metricsCatalog.kubeLabelSelectors;
+local dependOnPatroni = import 'inhibit-rules/depend_on_patroni.libsonnet';
 
 metricsCatalog.serviceDefinition({
   type: 'web',
@@ -75,17 +76,6 @@ metricsCatalog.serviceDefinition({
     },
   },
   serviceLevelIndicators: {
-    local dependsOnPatroni = [
-      {
-        component: 'rails_primary_sql',
-        type: 'patroni',
-      },
-      {
-        component: 'rails_replica_sql',
-        type: 'patroni',
-      },
-    ],
-
     loadbalancer: haproxyComponents.haproxyHTTPLoadBalancer(
       userImpacting=true,
       featureCategory='not_owned',
@@ -95,7 +85,7 @@ metricsCatalog.serviceDefinition({
       },
       selector={ type: 'frontend' },
       regional=false,
-      dependsOn=dependsOnPatroni,
+      dependsOn=dependOnPatroni.sqlComponents,
     ),
 
     local workhorseWebSelector = { job: { re: 'gitlab-workhorse|gitlab-workhorse-web' }, type: 'web' },
@@ -151,7 +141,7 @@ metricsCatalog.serviceDefinition({
         toolingLinks.kibana(title='Workhorse', index='workhorse', type='web', slowRequestSeconds=10),
       ],
 
-      dependsOn: dependsOnPatroni,
+      dependsOn: dependOnPatroni.sqlComponents,
     },
 
     imagescaler: {
@@ -205,7 +195,7 @@ metricsCatalog.serviceDefinition({
       toolingLinks: [
         toolingLinks.sentry(slug='gitlab/gitlabcom', type='web', variables=['environment', 'stage']),
       ],
-      dependsOn: dependsOnPatroni,
+      dependsOn: dependOnPatroni.sqlComponents,
     },
 
     rails_requests:
@@ -213,7 +203,7 @@ metricsCatalog.serviceDefinition({
         toolingLinks: [
           toolingLinks.kibana(title='Rails', index='rails'),
         ],
-        dependsOn: dependsOnPatroni,
+        dependsOn: dependOnPatroni.sqlComponents,
       },
   },
 })
