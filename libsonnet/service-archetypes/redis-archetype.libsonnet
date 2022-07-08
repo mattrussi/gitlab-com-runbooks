@@ -1,6 +1,7 @@
 local metricsCatalog = import 'servicemetrics/metrics.libsonnet';
 local histogramApdex = metricsCatalog.histogramApdex;
 local rateMetric = metricsCatalog.rateMetric;
+local kubeLabelSelectors = metricsCatalog.kubeLabelSelectors;
 
 function(
   type,
@@ -33,6 +34,12 @@ function(
     },
 
 
+    kubeConfig: {
+      labelSelectors: kubeLabelSelectors(
+        ingressSelector=null,
+        nodeSelector=baseSelector,
+      ),
+    },
     kubeResources: {
       redis: {
         kind: 'Deployment',

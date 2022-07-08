@@ -562,7 +562,7 @@ groups:
           "shard", "$0", "label_shard", ".*"
         )
       )
-  - record: kube_ingress_labels:labeled
+  - record: kube_node_labels:labeled
     labels:
       tier: db
       type: redis-cache
@@ -570,7 +570,7 @@ groups:
       group without(label_stage,label_shard) (
         label_replace(
           label_replace(
-            topk by(environment,cluster,ingress) (1, kube_ingress_labels{label_type="redis-cache"}),
+            topk by(environment,cluster,node) (1, kube_node_labels{label_type="redis-cache"}),
             "stage", "$0", "label_stage", ".*"
           ),
           "shard", "$0", "label_shard", ".*"
@@ -624,7 +624,7 @@ groups:
           "shard", "$0", "label_shard", ".*"
         )
       )
-  - record: kube_ingress_labels:labeled
+  - record: kube_node_labels:labeled
     labels:
       tier: db
       type: redis-sidekiq
@@ -632,7 +632,7 @@ groups:
       group without(label_stage,label_shard) (
         label_replace(
           label_replace(
-            topk by(environment,cluster,ingress) (1, kube_ingress_labels{label_type="redis-sidekiq"}),
+            topk by(environment,cluster,node) (1, kube_node_labels{label_type="redis-sidekiq"}),
             "stage", "$0", "label_stage", ".*"
           ),
           "shard", "$0", "label_shard", ".*"
@@ -686,7 +686,7 @@ groups:
           "shard", "$0", "label_shard", ".*"
         )
       )
-  - record: kube_ingress_labels:labeled
+  - record: kube_node_labels:labeled
     labels:
       tier: db
       type: redis-tracechunks
@@ -694,7 +694,7 @@ groups:
       group without(label_stage,label_shard) (
         label_replace(
           label_replace(
-            topk by(environment,cluster,ingress) (1, kube_ingress_labels{label_type="redis-tracechunks"}),
+            topk by(environment,cluster,node) (1, kube_node_labels{label_type="redis-tracechunks"}),
             "stage", "$0", "label_stage", ".*"
           ),
           "shard", "$0", "label_shard", ".*"
@@ -748,7 +748,7 @@ groups:
           "shard", "$0", "label_shard", ".*"
         )
       )
-  - record: kube_ingress_labels:labeled
+  - record: kube_node_labels:labeled
     labels:
       tier: db
       type: redis-ratelimiting
@@ -756,7 +756,7 @@ groups:
       group without(label_stage,label_shard) (
         label_replace(
           label_replace(
-            topk by(environment,cluster,ingress) (1, kube_ingress_labels{label_type="redis-ratelimiting"}),
+            topk by(environment,cluster,node) (1, kube_node_labels{label_type="redis-ratelimiting"}),
             "stage", "$0", "label_stage", ".*"
           ),
           "shard", "$0", "label_shard", ".*"
@@ -810,7 +810,7 @@ groups:
           "shard", "$0", "label_shard", ".*"
         )
       )
-  - record: kube_ingress_labels:labeled
+  - record: kube_node_labels:labeled
     labels:
       tier: db
       type: redis-sessions
@@ -818,7 +818,7 @@ groups:
       group without(label_stage,label_shard) (
         label_replace(
           label_replace(
-            topk by(environment,cluster,ingress) (1, kube_ingress_labels{label_type="redis-sessions"}),
+            topk by(environment,cluster,node) (1, kube_node_labels{label_type="redis-sessions"}),
             "stage", "$0", "label_stage", ".*"
           ),
           "shard", "$0", "label_shard", ".*"
@@ -872,7 +872,7 @@ groups:
           "shard", "$0", "label_shard", ".*"
         )
       )
-  - record: kube_ingress_labels:labeled
+  - record: kube_node_labels:labeled
     labels:
       tier: db
       type: redis
@@ -880,7 +880,7 @@ groups:
       group without(label_stage,label_shard) (
         label_replace(
           label_replace(
-            topk by(environment,cluster,ingress) (1, kube_ingress_labels{label_type="redis"}),
+            topk by(environment,cluster,node) (1, kube_node_labels{label_type="redis"}),
             "stage", "$0", "label_stage", ".*"
           ),
           "shard", "$0", "label_shard", ".*"
