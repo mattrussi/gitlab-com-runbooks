@@ -212,7 +212,7 @@ generateTests([
       stage: 'cny',
     },
     receivers: [
-      'slo_gprd_cny',  // Pagerduty
+      'prod_pagerduty',
       'slack_bridge-prod',  // Slackline
       'team_gitaly_alerts_channel',  // Gitaly team alerts channel
       'production_slack_channel',  // production channel for pager alerts
@@ -409,7 +409,7 @@ generateTests([
       window: '6h',
     },
     receivers: [
-      'slo_gprd_main',
+      'prod_pagerduty',
       'slack_bridge-prod',
       'team_pipeline_validation_alerts_channel',
       'production_slack_channel',
