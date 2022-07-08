@@ -9,6 +9,8 @@ Our metrics and notification systems are all configurable to help engineers be a
 
 ## Other Notification Management Resources
 
+- [A video walkthrough of this runbook entry](https://youtu.be/D3id5u_gCgA)
+- [Tuning Camoproxy's Loadbalancer SLI Demo](https://www.youtube.com/watch?v=1dG0VsulOqY)
 - [An impatient SRE's guide to deleting alerts](./deleting-alerts.md)
 - [Apdex alerts troubleshooting](./apdex-alerts-guide.md)
 - [Alerting Manual](./alerts_manual.md)
@@ -43,6 +45,7 @@ serviceLevelIndicators: {
 
 **Examples**
 
+- [Downgrade Sentry SLO service alerts to not page](https://gitlab.com/gitlab-com/runbooks/-/merge_requests/4552)
 - [Adjusting the Severity for archive replicas](https://gitlab.com/gitlab-com/runbooks/-/merge_requests/2150)
 - [Turning blackbox notifications into slack only](https://gitlab.com/gitlab-com/runbooks/-/merge_requests/4755)
 
@@ -63,6 +66,10 @@ selector='type="frontend", backend_name!~"canary_.*|api_rate_limit|websockets"'
 ### Thresholds
 
 For an Apdex, the [tolerated and satisfied thresholds](./definition-service-apdex.md) can be changed to better match the expected latency of service requests.
+
+**Examples**
+
+- [Relax imagescaler satisfiedThreshold to 0.4](https://gitlab.com/gitlab-com/runbooks/-/merge_requests/4477)
 
 ### ApdexScore
 
