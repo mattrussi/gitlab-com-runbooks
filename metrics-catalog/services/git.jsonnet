@@ -7,7 +7,7 @@ local haproxyComponents = import './lib/haproxy_components.libsonnet';
 local sliLibrary = import 'gitlab-slis/library.libsonnet';
 local serviceLevelIndicatorDefinition = import 'servicemetrics/service_level_indicator_definition.libsonnet';
 local kubeLabelSelectors = metricsCatalog.kubeLabelSelectors;
-
+local dependOnPatroni = import 'inhibit-rules/depend_on_patroni.libsonnet';
 local gitWorkhorseJobNameSelector = { job: { re: 'gitlab-workhorse|gitlab-workhorse-git' } };
 
 metricsCatalog.serviceDefinition({
@@ -97,7 +97,8 @@ metricsCatalog.serviceDefinition({
       },
       selector={ type: 'frontend' },
       // Load balancer is single region
-      regional=false
+      regional=false,
+      dependsOn=dependOnPatroni.sqlComponents
     ),
 
     loadbalancer_ssh: haproxyComponents.haproxyL4LoadBalancer(
@@ -114,7 +115,8 @@ metricsCatalog.serviceDefinition({
       },
       selector={ type: 'frontend' },
       // Load balancer is single region
-      regional=false
+      regional=false,
+      dependsOn=dependOnPatroni.sqlComponents
     ),
 
     workhorse: {
@@ -166,6 +168,7 @@ metricsCatalog.serviceDefinition({
         toolingLinks.sentry(slug='gitlab/gitlab-workhorse-gitlabcom'),
         toolingLinks.kibana(title='Workhorse', index='workhorse', type='git', slowRequestSeconds=10),
       ],
+      dependsOn: dependOnPatroni.sqlComponents,
     },
 
     /**
@@ -215,6 +218,7 @@ metricsCatalog.serviceDefinition({
         // TODO: filter kibana query on route once https://gitlab.com/gitlab-org/gitlab-workhorse/-/merge_requests/624 arrives
         toolingLinks.kibana(title='Workhorse', index='workhorse', type='git', slowRequestSeconds=10),
       ],
+      dependsOn: dependOnPatroni.sqlComponents,
     },
 
     local railsSelector = { job: 'gitlab-rails', type: 'git' },
@@ -241,6 +245,8 @@ metricsCatalog.serviceDefinition({
         // Improve sentry link once https://gitlab.com/gitlab-com/gl-infra/scalability/-/issues/532 arrives
         toolingLinks.sentry(slug='gitlab/gitlabcom', type='git', variables=['environment', 'stage']),
       ],
+
+      dependsOn: dependOnPatroni.sqlComponents,
     },
 
     gitlab_shell: {
@@ -266,6 +272,7 @@ metricsCatalog.serviceDefinition({
       toolingLinks: [
         toolingLinks.kibana(title='GitLab Shell', index='shell'),
       ],
+      dependsOn: dependOnPatroni.sqlComponents,
     },
 
     gitlab_sshd: {
@@ -301,6 +308,7 @@ metricsCatalog.serviceDefinition({
       toolingLinks: [
         toolingLinks.kibana(title='GitLab Shell', index='shell'),
       ],
+      dependsOn: dependOnPatroni.sqlComponents,
     },
     rails_requests:
       sliLibrary.get('rails_request').generateServiceLevelIndicator(railsSelector) {
@@ -311,6 +319,8 @@ metricsCatalog.serviceDefinition({
         toolingLinks: [
           toolingLinks.kibana(title='Rails', index='rails'),
         ],
+
+        dependsOn: dependOnPatroni.sqlComponents,
       },
   },
 })
