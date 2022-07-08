@@ -6,6 +6,7 @@ local haproxyComponents = import './lib/haproxy_components.libsonnet';
 local sliLibrary = import 'gitlab-slis/library.libsonnet';
 local serviceLevelIndicatorDefinition = import 'servicemetrics/service_level_indicator_definition.libsonnet';
 local kubeLabelSelectors = metricsCatalog.kubeLabelSelectors;
+local dependOnPatroni = import 'inhibit-rules/depend_on_patroni.libsonnet';
 
 metricsCatalog.serviceDefinition({
   type: 'api',
@@ -74,17 +75,6 @@ metricsCatalog.serviceDefinition({
     },
   },
   serviceLevelIndicators: {
-    local dependsOnPatroni = [
-      {
-        component: 'rails_primary_sql',
-        type: 'patroni',
-      },
-      {
-        component: 'rails_replica_sql',
-        type: 'patroni',
-      },
-    ],
-
     loadbalancer: haproxyComponents.haproxyHTTPLoadBalancer(
       userImpacting=true,
       featureCategory='not_owned',
@@ -99,7 +89,7 @@ metricsCatalog.serviceDefinition({
       },
       selector={ type: 'frontend' },
       regional=false,
-      dependsOn=dependsOnPatroni,
+      dependsOn=dependOnPatroni.sqlComponents,
     ),
 
     nginx_ingress: {
@@ -129,7 +119,7 @@ metricsCatalog.serviceDefinition({
       toolingLinks: [
       ],
       serviceAggregation: false,
-      dependsOn: dependsOnPatroni,
+      dependsOn: dependOnPatroni.sqlComponents,
     },
 
     workhorse: {
@@ -170,7 +160,7 @@ metricsCatalog.serviceDefinition({
         toolingLinks.kibana(title='Workhorse', index='workhorse', type='api', slowRequestSeconds=10),
       ],
 
-      dependsOn: dependsOnPatroni,
+      dependsOn: dependOnPatroni.sqlComponents,
     },
 
     local railsSelector = { job: 'gitlab-rails', type: 'api' },
@@ -199,7 +189,7 @@ metricsCatalog.serviceDefinition({
         toolingLinks.kibana(title='Rails', index='rails'),
       ],
 
-      dependsOn: dependsOnPatroni,
+      dependsOn: dependOnPatroni.sqlComponents,
     },
 
     rails_requests:
@@ -211,7 +201,7 @@ metricsCatalog.serviceDefinition({
         toolingLinks: [
           toolingLinks.kibana(title='Rails', index='rails'),
         ],
-        dependsOn: dependsOnPatroni,
+        dependsOn: dependOnPatroni.sqlComponents,
       },
 
     graphql_queries:
@@ -219,7 +209,7 @@ metricsCatalog.serviceDefinition({
         toolingLinks: [
           toolingLinks.kibana(title='Rails', index='rails_graphql'),
         ],
-        dependsOn: dependsOnPatroni,
+        dependsOn: dependOnPatroni.sqlComponents,
       },
   },
 })
