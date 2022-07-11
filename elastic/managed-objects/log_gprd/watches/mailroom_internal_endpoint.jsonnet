@@ -3,7 +3,7 @@
 // For https://gitlab.com/gitlab-com/gl-infra/production/-/issues/7124
 local schedule_mins = 720;  // Run this watch at this frequency, 12 hours in minutes
 local query_period = schedule_mins + 2;
-local alert_threshold = 0;
+local alert_threshold = 5;
 
 // Using this a variant of query:
 // https://log.gprd.gitlab.net/goto/8948e8c0-e19b-11ec-aade-19e9974a7229
@@ -73,7 +73,7 @@ local es_query = {
           to: [
             '#alerts_mailroom',
           ],
-          text: 'MailRoom internal endpoint returned 500 status. Logs: https://log.gprd.gitlab.net/goto/8948e8c0-e19b-11ec-aade-19e9974a7229. Please check this issue for more information: https://gitlab.com/gitlab-com/gl-infra/production/-/issues/7124',
+          text: 'MailRoom internal endpoint returned 500 status. Logs: https://log.gprd.gitlab.net/goto/618086c0-00bf-11ed-8656-f5f2137823ba. Please check this issue for more information: https://gitlab.com/gitlab-com/gl-infra/production/-/issues/7124',
         },
       },
     },

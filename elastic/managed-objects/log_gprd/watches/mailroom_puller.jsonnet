@@ -2,7 +2,7 @@
 // For https://gitlab.com/gitlab-com/gl-infra/production/-/issues/7124
 local schedule_mins = 720;  // Run this watch at this frequency, 12 hours in minutes
 local query_period = schedule_mins + 2;
-local alert_threshold = 0;
+local alert_threshold = 5;
 
 // Using this a variant of query:
 // https://log.gprd.gitlab.net/goto/7d651600-e19b-11ec-8741-ad075583b944
