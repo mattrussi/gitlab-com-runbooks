@@ -269,6 +269,10 @@ metricsCatalog.serviceDefinition({
     },
 
     gitlab_sshd: {
+      // https://gitlab.com/gitlab-org/gitaly/-/issues/4331
+      monitoringThresholds+: {
+        errorRatio: 0.999,
+      },
       userImpacting: true,
       featureCategory: 'source_code_management',
       description: |||
