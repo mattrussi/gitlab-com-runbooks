@@ -73,7 +73,7 @@ local es_query = {
           to: [
             '#alerts_mailroom',
           ],
-          text: 'MailRoom internal endpoint returned 500 status. Logs: https://log.gprd.gitlab.net/goto/8948e8c0-e19b-11ec-aade-19e9974a7229. Please check this issue for more information: https://gitlab.com/gitlab-com/gl-infra/production/-/issues/7124',
+          text: 'MailRoom internal endpoint returned 500 status. Logs: https://log.gprd.gitlab.net/goto/618086c0-00bf-11ed-8656-f5f2137823ba. Please check this issue for more information: https://gitlab.com/gitlab-com/gl-infra/production/-/issues/7124',
         },
       },
     },
