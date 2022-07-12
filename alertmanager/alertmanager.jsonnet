@@ -303,38 +303,6 @@ local Route(
     [if continue != null then 'continue']: continue,
   };
 
-local RouteCase(
-  matchers=null,
-  group_by=null,
-  group_wait=null,
-  group_interval=null,
-  repeat_interval=null,
-  continue=true,
-  defaultReceiver=null,
-  when=null,
-      ) =
-  Route(
-    receiver=defaultReceiver,
-    matchers=matchers,
-    group_by=group_by,
-    group_wait=group_wait,
-    group_interval=group_interval,
-    repeat_interval=repeat_interval,
-    continue=continue,
-    routes=[
-      (
-        local c = { matchers: null } + case;
-        Route(
-          receiver=c.receiver,
-          matchers=c.matchers,
-          group_by=null,
-          continue=false
-        )
-      )
-      for case in when
-    ],
-  );
-
 local SnitchRoute(channel) =
   Route(
     receiver=snitchReceiverChannelName(channel),
@@ -380,8 +348,8 @@ local routingTree = Route(
     for issueChannel in secrets.issueChannels
     for env in ['gprd', 'ops']
   ] + [
-    /* pager=pagerduty alerts do continue */
-    RouteCase(
+    Route(
+      receiver='prod_pagerduty',
       matchers={
         pager: 'pagerduty',
         env: { re: 'gprd|ops' },
@@ -390,11 +358,6 @@ local routingTree = Route(
       continue=true,
       /* must be less than the 6h auto-resolve in PagerDuty */
       repeat_interval='2h',
-      when=[
-        { matchers: { slo_alert: 'yes', env: 'gprd', stage: 'cny' }, receiver: 'slo_gprd_cny' },
-        { matchers: { slo_alert: 'yes', env: 'gprd', stage: 'main' }, receiver: 'slo_gprd_main' },
-      ],
-      defaultReceiver='prod_pagerduty',
     ),
     /*
      * Send ops/gprd slackline alerts to production slackline
