@@ -20,6 +20,7 @@ groups:
       pager: pagerduty
       severity: s1
       alert_type: cause
+      type: patroni
     annotations:
       description: WAL-G replication seems to be stopped on {{$labels.instance}}.
         Check if PostgreSQL isn't stuck on restoring a WAL segment or if it's capabale
@@ -34,6 +35,7 @@ groups:
       pager: pagerduty
       severity: s1
       alert_type: cause
+      type: patroni
     annotations:
       description: Commits/s on {{$labels.instance}} database {{$labels.datname}}
         is {{$value | printf "%.0f" }} which is implausibly low. Perhaps the application
@@ -47,6 +49,7 @@ groups:
     labels:
       severity: s4
       alert_type: cause
+      type: patroni
     annotations:
       runbook: docs/patroni/postgres.md#connections
       title: Postgres has {{$value}} connections on {{$labels.fqdn}} which is close
@@ -60,6 +63,7 @@ groups:
     labels:
       severity: s4
       alert_type: cause
+      type: patroni
     annotations:
       description: Ratio of transactions being aborted compared to committed is {{
         $value | printf "%.2f" }} on {{$labels.instance}}
@@ -72,6 +76,7 @@ groups:
       severity: s1
       pager: pagerduty
       alert_type: cause
+      type: patroni
     annotations:
       descrition: Database {{$labels.fqdn}} has {{ $value | printf "%.1f" }} statement
         timeouts per second
@@ -82,6 +87,7 @@ groups:
     labels:
       severity: s4
       alert_type: cause
+      type: patroni
     annotations:
       descrition: Database {{$labels.fqdn}} has {{ $value | printf "%.1f" }} deadlock
         errors per minute
@@ -93,6 +99,7 @@ groups:
       severity: s1
       pager: pagerduty
       alert_type: cause
+      type: patroni
     annotations:
       descrition: Database {{$labels.fqdn}} has {{ $value | printf "%.1f" }}
         invalid page errors
@@ -105,6 +112,7 @@ groups:
       pager: pagerduty
       severity: s1
       alert_type: cause
+      type: patroni
     annotations:
       description: Replication lag on server {{$labels.instance}} is currently {{
         $value | humanizeDuration }}
@@ -114,10 +122,9 @@ groups:
     expr: (pg_replication_lag > 10800) and ON(instance) (pg_replication_is_replica{type = "postgres-archive"} == 1)
     for: 5m
     labels:
-      # TODO: notify the data team about this
-      # team: data
       severity: s3
       alert_type: cause
+      type: patroni
     annotations:
       description: Replication lag on server {{$labels.instance}} is currently {{
         $value | humanizeDuration }}
@@ -130,6 +137,7 @@ groups:
       pager: pagerduty
       severity: s1
       alert_type: cause
+      type: patroni
     annotations:
       description: Replication lag on server {{$labels.instance}} is currently {{
         $value | humanizeDuration }}
@@ -142,6 +150,7 @@ groups:
       pager: pagerduty
       severity: s1
       alert_type: cause
+      type: patroni
     annotations:
       description: Replication lag on server {{$labels.instance}} is currently {{
         $value | humanize1024}}B behind {{$labels.primary}}
@@ -154,6 +163,7 @@ groups:
       pager: pagerduty
       severity: s1
       alert_type: cause
+      type: patroni
     annotations:
       description: There are currently {{$value}} pending WAL files waiting to be archived on the primary db {{$labels.instance}}.
         This is putting us at risk to lose data and can be caused by high write activity on the primary.
@@ -165,6 +175,7 @@ groups:
     labels:
       severity: s3
       alert_type: cause
+      type: patroni
     annotations:
       description: XLOG is being generated at a rate of {{ $value | humanize1024 }}B/s
         on {{$labels.instance}}
@@ -178,6 +189,7 @@ groups:
       pager: pagerduty
       severity: s1
       alert_type: cause
+      type: patroni
     annotations:
       description: Unused {{$labels.slot_type}} slot "{{$labels.slot_name}}" on {{$labels.fqdn}}
       runbook: "docs/patroni/postgres.md#replication_slots"
@@ -188,6 +200,7 @@ groups:
     labels:
       severity: s3
       alert_type: cause
+      type: patroni
     annotations:
       title: |
         PostgreSQL replication slot {{$labels.slot_name}} on {{$labels.fqdn}} is
@@ -205,6 +218,7 @@ groups:
       pager: pagerduty
       severity: s1
       alert_type: cause
+      type: patroni
     annotations:
       description: >
         Really high load in the database for the last minute, there are
@@ -228,6 +242,7 @@ groups:
     labels:
       severity: s3
       alert_type: cause
+      type: patroni
     annotations:
       description: "The dead tuple ratio of {{$labels.relname}} is greater than 10%"
       table: "{{$labels.relname}}"
@@ -241,6 +256,7 @@ groups:
       pager: pagerduty
       severity: s1
       alert_type: cause
+      type: patroni
     annotations:
       description: 'The following {{$value}} {{$labels.type}} databases are in read-write
       (primary) mode: {{range query
@@ -257,6 +273,7 @@ groups:
       pager: pagerduty
       severity: s1
       alert_type: cause
+      type: patroni
     annotations:
       description: >
         In environment {{$labels.environment}} there are {{$value}} different
@@ -272,6 +289,7 @@ groups:
       pager: pagerduty
       severity: s1
       alert_type: cause
+      type: patroni
     annotations:
       runbook: "docs/patroni/postgres.md"
       title: |
@@ -282,6 +300,7 @@ groups:
     labels:
       severity: s4
       alert_type: cause
+      type: patroni
     annotations:
       runbook: "docs/patroni/postgres.md"
       title: |
@@ -292,6 +311,7 @@ groups:
       severity: s1
       alert_type: cause
       pager: pagerduty
+      type: patroni
     annotations:
       description: Database on {{$labels.fqdn}} changed role to {{if eq $value 1.0}}
         *replica* {{else}} *primary* {{end}}, which indicates possible failover.
@@ -302,6 +322,7 @@ groups:
     labels:
       severity: s4
       alert_type: cause
+      type: patroni
     annotations:
       description: Database on {{$labels.fqdn}} setting now {{$labels.__name__}}={{$value}}
       title: Postgres Database configuration change has occurred on "{{$labels.fqdn}}"
@@ -312,6 +333,7 @@ groups:
       pager: pagerduty
       severity: s1
       alert_type: cause
+      type: patroni
     annotations:
       description: '{{$labels.fqdn}} is showing only {{$value}} scrapes per second
         which should be > 0.2'
@@ -323,6 +345,7 @@ groups:
       pager: pagerduty
       severity: s1
       alert_type: cause
+      type: patroni
     annotations:
       description: This may indicate postgres_exporter is not running or a buggy query
         in query.yaml on {{$labels.fqdn}}
@@ -333,6 +356,7 @@ groups:
     labels:
       severity: s4
       alert_type: cause
+      type: patroni
     annotations:
       message: "{{$labels.errmsg}}"
       description: >
@@ -345,6 +369,7 @@ groups:
       pager: pagerduty
       severity: s1
       alert_type: cause
+      type: patroni
     annotations:
       description: The number of client connections has reached max_client_conn.
         Consider raising this parameter or investigating the source of the unusually large number of connections
@@ -357,6 +382,7 @@ groups:
       pager: pagerduty
       severity: s1
       alert_type: cause
+      type: patroni
     annotations:
       description: >
         Database {{ $labels.fqdn }} has {{ $value | printf "%.1f" }} slow
@@ -370,6 +396,7 @@ groups:
     labels:
       severity: s4
       alert_type: cause
+      type: patroni
     annotations:
       description: >
         Database {{ $labels.fqdn }} has {{ $value | printf "%.1f" }}
@@ -383,6 +410,7 @@ groups:
     labels:
       severity: s4
       alert_type: cause
+      type: patroni
     annotations:
       description: >
         Database {{ $labels.fqdn }} has a high rate of temporary files creation,
@@ -394,6 +422,7 @@ groups:
     labels:
       severity: s4
       alert_type: cause
+      type: patroni
     annotations:
       description: >
         Database instance {{ $labels.fqdn }}.
@@ -412,6 +441,7 @@ groups:
       pager: pagerduty
       severity: s2
       alert_type: cause
+      type: patroni
     annotations:
       title: PostgreSQL queries dominating total query time
       description: The top 3 PostgreSQL queries are dominating the total query time (> 50%).
