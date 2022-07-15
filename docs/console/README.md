@@ -69,7 +69,6 @@
 * [PgBouncer connection management and troubleshooting](../pgbouncer/pgbouncer-connections.md)
 * [Removing a PgBouncer instance](../pgbouncer/pgbouncer-remove-instance.md)
 * [Sidekiq or Web/API is using most of its PgBouncer connections](../pgbouncer/pgbouncer-saturation.md)
-* [Postgres Replicas](../postgres-dr-delayed/postgres-dr-replicas.md)
 * [Praefect Database](../praefect/praefect-database.md)
 * [Removing cache entries from Redis](../redis-cache/remove-cache-entries.md)
 * [Clearing sessions for anonymous users](../redis/clear_anonymous_sessions.md)

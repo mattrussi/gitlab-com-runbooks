@@ -38,6 +38,7 @@
 * [Removing a PgBouncer instance](pgbouncer-remove-instance.md)
 * [Sidekiq or Web/API is using most of its PgBouncer connections](pgbouncer-saturation.md)
 * [service-pgbouncer.md](service-pgbouncer.md)
+* [Postgres Replicas](../postgres-dr-delayed/postgres-dr-replicas.md)
 * [Database Connection Pool Saturation](../registry/app-db-conn-pool-saturation.md)
 * [../registry/migration-failure-scenarios.md](../registry/migration-failure-scenarios.md)
 * [Pull mirror overdue queue is too large](../sidekiq/large-pull-mirror-queue.md)
