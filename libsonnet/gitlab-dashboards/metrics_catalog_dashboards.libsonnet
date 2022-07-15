@@ -227,14 +227,29 @@ local sliDetailErrorRatePanel(
     expectMultipleSeries=false,
     sliFilter=function(x) x,
   )::
-    local slis = objects.fromPairs(
-      std.flattenArrays(
-        std.map(
-          function(serviceType) objects.toPairs(metricsCatalog.getService(serviceType).serviceLevelIndicators),
-          serviceTypes
-        )
-      ),
+
+//    local h_slis = objects.fromPairs(
+//      std.flattenArrays(
+//        std.map(
+//          function(serviceType) objects.toPairs(metricsCatalog.getService(serviceType).serviceLevelIndicators),
+//          serviceTypes
+//        )
+//      ),
+//    );
+
+ //   local slis = std.trace('%s' % [std.objectFields(h_slis)], h_slis);
+
+local allSLIsForServices = std.flatMap(
+      function(serviceType) std.objectValues(metricsCatalog.getService(serviceType).serviceLevelIndicators),
+      serviceTypes
     );
+    local filteredSLIs = std.filter(sliFilter, allSLIsForServices);
+    local slis = std.foldl(
+      function(memo, sli)
+        memo { [sli.name]: sli },
+      filteredSLIs, {}
+    );
+
 
     layout.titleRowWithPanels(
       title=title,
