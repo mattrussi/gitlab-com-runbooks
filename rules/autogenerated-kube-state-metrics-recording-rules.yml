@@ -1027,14 +1027,16 @@ groups:
   rules:
   - record: kube_pod_labels:labeled
     labels:
-      stage: catchall
       tier: sv
       type: sidekiq
     expr: |
-      group without(label_shard,label_deployment) (
+      group without(label_stage,label_shard,label_deployment) (
         label_replace(
           label_replace(
-            topk by(environment,cluster,pod) (1, kube_pod_labels{label_type="sidekiq"}),
+            label_replace(
+              topk by(environment,cluster,pod) (1, kube_pod_labels{label_type="sidekiq"}),
+              "stage", "$0", "label_stage", ".*"
+            ),
             "shard", "$0", "label_shard", ".*"
           ),
           "deployment", "$0", "label_deployment", ".*"
@@ -1062,7 +1064,7 @@ groups:
     expr: |
       group without(label_shard) (
         label_replace(
-          topk by(environment,cluster,node) (1, kube_node_labels{label_type=~"catchall|database-throttled|elasticsearch|gitaly-throttled|imports|low-urgency-cpu-bound|memory-bound|quarantine|urgent-authorized-projects|urgent-cpu-bound|urgent-other"}),
+          topk by(environment,cluster,node) (1, kube_node_labels{label_type="sidekiq"}),
           "shard", "$0", "label_shard", ".*"
         )
       )
