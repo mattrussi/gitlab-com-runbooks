@@ -216,13 +216,14 @@ set +x
 - On the instance you're working on, adjust the `/etc/fstab` entry for the data disk to also make it work for the new disk:
 
     ```sh
-    PD_PATH="/dev/disk/by-id/google-persistent-disk-1"
+    pd_name="persistent-disk-1"
+    pd_path="/dev/disk/by-id/google-${pd_name}"
 
-    if test -L $PD_PATH; then
-        sudo awk -i inplace 'match($0, /\/var\/opt\/gitlab/) { $0 = gensub(/^UUID=[^\ ]+/, "'$PD_PATH'", 1) } 1 {print $0}' /etc/fstab
+    if test -L $pd_path; then
+        sudo awk -i inplace 'match($0, /\/var\/opt\/gitlab/) { $0 = gensub(/^UUID=[^\ ]+/, "'$pd_path'", 1) } 1 {print $0}' /etc/fstab
         echo "Updated /etc/fstab"
     else
-        echo "ERROR - double-check the persistent disk path as '${PD_PATH}' does not exist"
+        echo "ERROR - double-check the persistent disk path as '${pd_path}' does not exist"
     fi
     ```
 
@@ -242,7 +243,7 @@ gcloud --project $project beta compute disks delete $disk_name --zone $zone
 gcloud --project $project beta compute disks create $disk_name --type pd-ssd --source-snapshot $snapshot_name --labels="$labels" --zone $zone
 
 # attach disk
-gcloud --project $project compute instances attach-disk $instance --disk $disk_name --device-name persistent-disk-1 --zone $zone
+gcloud --project $project compute instances attach-disk $instance --disk $disk_name --device-name $pd_name --zone $zone
 
 # start instance
 gcloud --project $project compute instances start $instance --zone $zone
