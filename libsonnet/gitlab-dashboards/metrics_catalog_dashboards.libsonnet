@@ -228,17 +228,6 @@ local sliDetailErrorRatePanel(
     sliFilter=function(x) x,
   )::
 
-//    local h_slis = objects.fromPairs(
-//      std.flattenArrays(
-//        std.map(
-//          function(serviceType) objects.toPairs(metricsCatalog.getService(serviceType).serviceLevelIndicators),
-//          serviceTypes
-//        )
-//      ),
-//    );
-
- //   local slis = std.trace('%s' % [std.objectFields(h_slis)], h_slis);
-
 local allSLIsForServices = std.flatMap(
       function(serviceType) std.objectValues(metricsCatalog.getService(serviceType).serviceLevelIndicators),
       serviceTypes
@@ -249,7 +238,6 @@ local allSLIsForServices = std.flatMap(
         memo { [sli.name]: sli },
       filteredSLIs, {}
     );
-
 
     layout.titleRowWithPanels(
       title=title,
