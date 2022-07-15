@@ -249,7 +249,7 @@ gcloud --project $project compute instances attach-disk $instance --disk $disk_n
 gcloud --project $project compute instances start $instance --zone $zone
 ```
 
-- If you're using a snapshot from a Patroni host, you'll have to do the following:
+- If you're using a snapshot from a Patroni host, then SSH to `$instance` and do the following:
 
     1. Ensure Postgres is not running:
 
@@ -279,9 +279,24 @@ gcloud --project $project compute instances start $instance --zone $zone
         gitlab-ctl reconfigure postgresql
         ```
 
-        This step should start Postgres and start recovering. It'll ultimately fail as it tries to talk to the DB and the DB is recovering. Try again once it has finished recovering.
+        This step should start Postgres and start recovering. It'll ultimately fail as it tries to talk to the DB and the DB is recovering. Try again once it has finished
+        recovering (could take minutes/hours depending on how many WALs it has to catch up on)
 
-        Keep an eye on replication lag as it should be coming down.
+        Keep an eye on the CSV log (in `/var/log/gitlab/postgresql`) for a `restartpoint complete` message.
+
+    1. Run the reconfigure step again:
+
+        ```sh
+        gitlab-ctl reconfigure postgresql
+        ```
+
+      It should run quickly and finish gracefully.
+
+    1. Restart Postgres for good measure (maybe a new version of Postgres was installed as a result of the reconfigure):
+
+      ```sh
+      gitlab-ctl restart postgresql
+      ```
 
 - Check there is no terraform plan diff for the archival replicas. Run the
   following for the matching environment:
