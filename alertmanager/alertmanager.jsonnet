@@ -437,7 +437,7 @@ local routingTree = Route(
       matchers={
         env: { re: 'gstg(-ref)?' },
         slo_alert: 'yes',
-        type: { re: 'api|web|git' },
+        type: { re: 'api|web|git|registry|web-pages' },
 
         // Traffic volumes in staging are very low, and even lower in
         // the regional clusters. Since SLO alerting requires reasonable
