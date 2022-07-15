@@ -40,6 +40,7 @@
 * [Shared Configurations](../uncategorized/shared-configurations.md)
 * [../uncategorized/subnet-allocations.md](../uncategorized/subnet-allocations.md)
 * [Configuring and Using the Yubikey](../uncategorized/yubikey.md)
+* [Troubleshooting Hashicorp Vault](troubleshooting.md)
 * [Gitlab Vault](vault.md)
 <!-- END_MARKER -->
 

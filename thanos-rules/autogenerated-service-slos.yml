@@ -1726,6 +1726,40 @@ groups:
       tier: sv
       type: sidekiq
     expr: "0.005000"
+  - record: slo:min:events:gitlab_service_apdex:ratio
+    labels:
+      tier: inf
+      type: vault
+    expr: "0.999000"
+  - record: slo:max:events:gitlab_service_errors:ratio
+    labels:
+      tier: inf
+      type: vault
+    expr: "0.001000"
+  - record: slo:min:events:gitlab_service_apdex:ratio
+    labels:
+      component: vault
+      tier: inf
+      type: vault
+    expr: "0.999000"
+  - record: slo:max:events:gitlab_service_errors:ratio
+    labels:
+      component: vault
+      tier: inf
+      type: vault
+    expr: "0.001000"
+  - record: slo:min:events:gitlab_service_apdex:ratio
+    labels:
+      component: vault_google_lb
+      tier: inf
+      type: vault
+    expr: "0.999000"
+  - record: slo:max:events:gitlab_service_errors:ratio
+    labels:
+      component: vault_google_lb
+      tier: inf
+      type: vault
+    expr: "0.001000"
   - record: slo:min:gitlab_service_apdex:ratio
     labels:
       tier: sv
@@ -3007,6 +3041,22 @@ groups:
       service_aggregation: "yes"
       tier: sv
       type: sidekiq
+    expr: "1"
+  - record: gitlab_component_service:mapping
+    labels:
+      component: vault
+      regional_aggregation: "no"
+      service_aggregation: "yes"
+      tier: inf
+      type: vault
+    expr: "1"
+  - record: gitlab_component_service:mapping
+    labels:
+      component: vault_google_lb
+      regional_aggregation: "no"
+      service_aggregation: "yes"
+      tier: inf
+      type: vault
     expr: "1"
   - record: gitlab_component_service:mapping
     labels:
