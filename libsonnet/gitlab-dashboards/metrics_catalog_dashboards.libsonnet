@@ -228,7 +228,7 @@ local sliDetailErrorRatePanel(
     sliFilter=function(x) x,
   )::
 
-local allSLIsForServices = std.flatMap(
+  local allSLIsForServices = std.flatMap(
       function(serviceType) std.objectValues(metricsCatalog.getService(serviceType).serviceLevelIndicators),
       serviceTypes
     );
