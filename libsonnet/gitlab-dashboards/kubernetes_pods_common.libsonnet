@@ -61,7 +61,7 @@ local env_cluster_ns = 'env=~"$environment", cluster="$cluster", namespace="$nam
     layout.grid([
       basic.gaugePanel(
         'Deployment Memory Usage',
-        query='sum (container_memory_working_set_bytes{' + env_cluster_node_ns + ', pod=~"^$' + deploymentKind + '.*$", pod!=""}) / sum (kube_node_status_allocatable{resource="memory", unit= "byte", env=~"$environment", node=~"^$Node.*$"}) * 100',
+        query='sum (container_memory_working_set_bytes{' + env_cluster_node_ns + ', pod=~"^$' + deploymentKind + '.*$"}) / sum (kube_node_status_allocatable{resource="memory", unit= "byte", env=~"$environment", node=~"^$Node.*$"}) * 100',
         instant=false,
         unit='percent',
         color=[
@@ -102,7 +102,7 @@ local env_cluster_ns = 'env=~"$environment", cluster="$cluster", namespace="$nam
         '',
         'Memory Used',
         color='',
-        query='sum (container_memory_working_set_bytes{' + env_cluster_node_ns + ', pod=~"^$' + deploymentKind + '.*$", pod!=""})',
+        query='sum (container_memory_working_set_bytes{' + env_cluster_node_ns + ', pod=~"^$' + deploymentKind + '.*$"})',
         instant=false,
         unit='bytes',
         decimals=2,
