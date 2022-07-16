@@ -37,7 +37,7 @@ local generalGraphPanel(
   legend_rightSide=true,
 );
 
-local env_cluster_node = 'env=~"$environment", cluster="$cluster", kubernetes_io_hostname=~"^$Node$"';
+local env_cluster_node = 'env=~"$environment", cluster="$cluster", node=~"^$Node.*$"';
 local env_cluster_node_ns = env_cluster_node + ', namespace="$namespace"';
 local env_cluster_ns = 'env=~"$environment", cluster="$cluster", namespace="$namespace"';
 
@@ -112,7 +112,7 @@ local env_cluster_ns = 'env=~"$environment", cluster="$cluster", namespace="$nam
         '',
         'Memory Total (cluster)',
         color='',
-        query='sum (kube_node_status_allocatable{'+env_cluster_node+', resource="memory", unit="byte"})',
+        query='sum (kube_node_status_allocatable{env=~"$environment", cluster="$cluster", resource="memory", unit="byte"})',
         instant=false,
         unit='bytes',
         decimals=2,
@@ -131,7 +131,7 @@ local env_cluster_ns = 'env=~"$environment", cluster="$cluster", namespace="$nam
         '',
         'CPU Cores Total (cluster)',
         color='',
-        query='sum (machine_cpu_cores{'+env_cluster_node+'})',
+        query='sum (machine_cpu_cores{env=~"$environment", cluster="$cluster"})',
         instant=false,
         unit='none',
         colorMode='none',
