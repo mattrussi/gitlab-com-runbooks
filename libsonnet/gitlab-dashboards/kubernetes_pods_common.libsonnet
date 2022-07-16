@@ -37,12 +37,15 @@ local generalGraphPanel(
   legend_rightSide=true,
 );
 
+local env_cluster_node = 'env=~"$environment", cluster="$cluster", kubernetes_io_hostname=~"^$Node$"';
+local env_cluster_node_ns = env_cluster_node + ', namespace="$namespace"';
+
 {
   version(startRow, deploymentKind='Deployment')::
     layout.grid([
       basic.timeseries(
         title='Active Version',
-        query='count(kube_pod_container_info{container_id!="", cluster="$cluster", namespace="$namespace"}) by (image)',
+        query='count(kube_pod_container_info{' + env_cluster_node_ns + ', container_id!="", pod=~"^$' + deploymentKind + '.*$"}) by (image)',
         legendFormat='{{ image }}',
       ),
       basic.timeseries(
