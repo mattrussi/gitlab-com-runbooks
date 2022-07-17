@@ -1,80 +1,165 @@
-# Gitlab Vault
+# Vault Secrets Management
 
-## Vault configuration repository and setup
+[[_TOC_]]
 
-In order to minimise the amount of code repositories, systems, CI jobs, and user permissions needed, almost all Vault configuration has been isolated into a single Git repository at
+## Summary
 
-<https://ops.gitlab.net/infrastructure/workloads/vault/>
-
-This repository contains the terraform configuration for the Vault infrastructure, the `helmfile` configuration to deploy Vault onto GKE, and the terraform configuration to configure
-the running Vault instance itself. The [README.md](https://ops.gitlab.net/infrastructure/workloads/vault/-/blob/master/README.md) inside the repository goes into its layout in more detail.
-
-## Vault Architecture
-
-Vault is a standard Kubernetes application run inside of an isolated GKE cluster. It is behind an `Ingress` object handled by [GCP HTTPS load balancing](https://cloud.google.com/load-balancing/docs/https). While the Vault application is highly available, Vault clustering relies on the [raft protocol](https://raft.github.io/), and thus the Vault application is deployed as a [StateFulSet](https://kubernetes.io/docs/concepts/workloads/controllers/statefulset/). The data storage for Vault is handled by each pod having its own [PersistentVolumeClaim](https://kubernetes.io/docs/concepts/storage/persistent-volumes/) to store its data. Vault naturally encrypts all data at rest. The PersistentVolumes underneath Vault are just [GCP Persistent Disks] dynamically generated and managed.
-
-### Vault Seal Configuration
-
-Every Vault instance has a [seal configuration](https://www.vaultproject.io/docs/concepts/seal). This means that every Vault installation, upon startup, is in a "Sealed" state and unable to be accessed. Typically Vault installations are either manually unsealed using keys distributed to people managing Vault, or automatically using [auto unseal](https://www.vaultproject.io/docs/concepts/seal#auto-unseal) combined with a specific secret key storage service. In our case, we rely on Vault auto-unseal with GKMS. This means that in any failure in GKE or Vault, when service is restored, Vault will be able automatically unseal itself and restore access automatically. It also means that because the seal is stored in GKMS, if an attacker was to get access to the contents of Vault storage, they would be unable to unseal and access the contents outside the specific Vault deployment environment.
+Vault is an identity-based secret and encryption management system. It can be used as a central store to manage access and secrets across applications, systems, and infrastructure.
 
 ## Vault Environments
 
-We currently have two specific Vault instances setup to provide secrets to our infrastructure. The Two Vault instances are
+We currently have two specific Vault instances setup to provide secrets to our infrastructure.
 
-* <https://vault.gitlab.net> For `gprd` and `ops` environments
-* <https://vault-nonprod.gitlab.net> For `gstg` and `pre` environments
+- <https://vault.gitlab.net> For all environments using secrets
+- <https://vault.pre.gitlab.net> For testing configuration/deployments
 
-## Connecting to a Vault instance
+## Architecture
 
-As we only expose the Vault HTTPS endpoints inside our GKE networks (not externally to the internet), in order to connect to and talk to the Vault instances, we need to establish connectivity to our internal GKE network via the console hosts. To do this easily, we typically leverage the [sshuttle](https://github.com/sshuttle/sshuttle) tool to provide network access over ssh.
+### High level overview
 
-### Connecting to vault.gitlab.net application
+```mermaid
+graph TB
 
-Install `sshuttle` and run the following from a terminal
+https://vault.env.gitlab.net
 
-```shell
-sshuttle -r console-01-sv-gprd.c.gitlab-production.internal `dig +short vault.gitlab.net`/32
-# in another window
-export VAULT_ADDR=https://vault.gitlab.net
+subgraph GCP
+
+  IAP-Load-balancer
+  Internal-clients
+  raft-snapshots-bucket
+
+  subgraph GKE-Vault-Deployment
+    Vault
+    Raft-PVC
+    K8s-CronJob
+  end
+
+end
+
+https://vault.env.gitlab.net --> IAP-Load-balancer --> Vault
+Internal-clients --> Vault
+Vault --> Raft-PVC
+K8s-CronJob --> Vault
+K8s-CronJob --> raft-snapshots-bucket
 ```
 
-The root token (with full admin privileges) for Vault is in 1password
+The application is deployed in Kubernetes using the official [Vault Helm chart](https://github.com/hashicorp/vault-helm).
 
-### Connecting to vault-nonprod.gitlab.net application
+* Helm chart deployment ([example](https://gitlab.com/gitlab-com/gl-infra/k8s-workloads/gitlab-helmfiles/-/tree/master/releases/vault))
+* Internal and external ingress (see [ingress section below](#ingress))
 
-Install `sshuttle` and run the following from a terminal
+#### Availability
 
-```shell
-sshuttle -r console-01-sv-gprd.c.gitlab-production.internal `dig +short vault-nonprod.gitlab.net`/32
-# in another window
-export VAULT_ADDR=https://vault-nonprod.gitlab.net
+We run vault in [High Availability mode](https://www.vaultproject.io/docs/concepts/ha). This consists of one active Vault server and several standby servers. Since we're using the community version, standby instances are not unsealed and are only replicating the data but are not able to read it. The standby instances only unseal when being promoted to leader.
+
+We have enabled [automatic unseal with GKMS](https://learn.hashicorp.com/tutorials/vault/autounseal-gcp-kms?in=vault/auto-unseal). The unsealing process is delegated to Google KMS in the event of a failure. The Vault cluster will coordinate leader elections and failovers internally.
+
+We've configured 5 replicas with spread constraints for pods to be in [different hosts and be distributed in different zones](https://gitlab.com/gitlab-com/gl-infra/k8s-workloads/gitlab-helmfiles/-/blob/3477f7a2e0cce14039f577caac19fef5c522168d/releases/vault/values.yaml.gotmpl#L46-52). Which gives us multi-zone failure tolerance across 3 different zones.
+
+Raft storage is configured with regional SSD persistent disks which provide durable storage and replication of data between three zones in the same region.
+
+Additionally, we have multi-region backups we can restore as disaster recovery (in case of full region failure) (see [storage section below](#storage)).
+
+#### Ingress
+
+We have one internal and one external endpoint, keeping the service not directly exposed to the internet.
+
+- External ingress for web user access is accessible through a GCP HTTPS load balancer that uses Google Identity-Aware Proxy
+(IAP). Can be accessed through `https://vault.{env}.gitlab.net`.
+  - Vault CLI does not work through this load balancer.
+- Internal ingress for CI/Kubernetes/Terraform/Chef/Ansible/etc (API) is exposed through a Kubernetes service with a zonal network endpoint group (NEG) as a backend. The Vault service uses the default port `8200`.
+  - Prometheus metrics are gathered from the endpoint `/v1/sys/metrics` on that same port
+
+#### Storage
+
+[Raft](https://www.vaultproject.io/docs/concepts/integrated-storage) is used, Vault's built-in storage engine. This allows all the nodes in a Vault cluster to have a replicated copy of Vault's data.
+
+![storage](img/storage.png)
+
+[Source](https://learn.hashicorp.com/tutorials/vault/raft-storage?in=vault/raft)
+
+We are not using the enterprise version for Vault which come with automatic backups. We are running a [Kubernetes job](https://gitlab.com/gitlab-com/gl-infra/k8s-workloads/gitlab-helmfiles/-/blob/master/releases/vault/charts/vault-extras/templates/job.yaml) to create and save raft snapshots. Manual testing was done in the pre environment for
+validation, snapshot backup, and restoration.
+
+Backups are saved [across multiple regions in the United States](https://ops.gitlab.net/gitlab-com/gl-infra/config-mgmt/-/blob/b061f37e606f3f81502bae5a8c68571d5bc0f2f0/modules/vault/variables.tf) and can be used as region failure disaster recovery.
+
+#### Resources and configuration
+
+* Infrastructure resources (IAM, KMS, etc) are managed through Terraform via a [module](https://ops.gitlab.net/gitlab-com/gl-infra/config-mgmt/-/blob/master/modules/vault) located in the `config-mgmt` repository.
+  * [Pre environment vault configuration](https://ops.gitlab.net/gitlab-com/gl-infra/config-mgmt/-/blob/f308d4b6754c2377175867dd836c3bc174ec09c2/environments/pre/vault.tf)
+* To maintain consistency across deployments Vault configurations are maintained through the [terraform provider](https://registry.terraform.io/providers/hashicorp/vault/latest/docs) and located in the `config-mgmt` repository. For an example view, the [staging configuration](https://ops.gitlab.net/gitlab-com/gl-infra/config-mgmt/-/blob/5c0152cbd4136b198f5b44a61d49fa788e02d441/environments/vault-staging).
+
+### Authentication
+
+#### User authentication
+We're using [Google Identity-Aware Proxy](https://cloud.google.com/iap/) for the load balancer and [Google OIDC](https://www.vaultproject.io/docs/auth/jwt/oidc_providers#google) is required to log in to the Vault web interface.
+
+#### API authentication
+
+- CI runners can be authenticated with [JWT/OIDC](https://www.vaultproject.io/docs/auth/jwt) with [JWKS](https://docs.gitlab.com/ee/ci/secrets/#configure-your-vault-server)
+- GCP servers (chef client, ansible, etc) can be authenticated with [Google Cloud auth](https://www.vaultproject.io/docs/auth/gcp) (service accounts or instance service accounts)
+- Kubernetes can be authenticated with [Kubernetes Service Account Tokens](https://www.vaultproject.io/docs/auth/kubernetes)
+
+[Identities/Roles](https://www.vaultproject.io/docs/concepts/identity) and [Policies](https://www.vaultproject.io/docs/concepts/policies) are used to enforce RBAC and limit scope of access to necessary secrets. See the [secret access](#secrets-access) section for more information.
+
+## Security Considerations
+
+### Data Encryption and Unsealing
+
+Vault data is encrypted at all times. When Vault is started, it is always started in a sealed state and will not be able to decrypt data until it is unsealed.
+
+To [unseal](https://www.vaultproject.io/docs/concepts/seal) vault, a root key is needed to decrypt the Vault data encryption key.
+
+To ensure that the root key is never known or leaked, we have configured auto-unseal using [`GCP KMS`](https://www.vaultproject.io/docs/configuration/seal/gcpckms) which lets us leverage GCP KMS to encrypt and decrypt the root key. Only the KMS key is able to decrypt the root key in our configuration. There is no other method possible to decrypt the root key. You can [view the configuration in terraform](https://ops.gitlab.net/gitlab-com/gl-infra/config-mgmt/-/blob/master/modules/vault-project/kms.tf).
+
+```mermaid
+graph TD
+    A[Encryption Key] -->|Encrypted by | B(Root Key)
+    B --> D[GCP Cloud KMS key]
 ```
 
-The root token (with full admin privileges) for Vault-nonprod is in 1password
+### Recovery keys
 
-### Connecting to the vault.gitlab.net GKE cluster
+Vault uses an algorithm known as [Shamir's Secret Sharing](https://en.wikipedia.org/wiki/Shamir%27s_Secret_Sharing) to split the recovery key into shards. It is important to know that the recovery key can **only** used to generate a root token and not any keys.
 
-Install `sshuttle` and run the following from a terminal
+Additionally, we're also using end-to-end TLS encryption for vault.
 
-```shell
-gcloud --project gitlab-vault container clusters get-credentials vault-gitlab-gke --region us-east1
-sshuttle -r console-01-sv-gprd.c.gitlab-production.internal `gcloud --project gitlab-vault container clusters describe vault-gitlab-gke --region us-east1 --format 'value(endpoint)'`/32
-```
+### Secret Access
 
-### Connecting to the vault-nonprod.gitlab.net GKE cluster
+#### Role-based Access Control (RBAC) Policies
 
-Install `sshuttle` and run the following from a terminal
+Vault uses policies to govern the behavior of clients and instrument Role-Based Access Control (RBAC). A policy defines a list of paths. Each path declares the capabilities (e.g. "create", "read", "update", "delete", "list", etc) that are allowed. Vault's denies capabilities by default unless explicitly stated other wise.
 
-```shell
-gcloud --project gitlab-vault-nonprod container clusters get-credentials vault-gitlab-gke --region us-east1
-sshuttle -r console-01-sv-gprd.c.gitlab-production.internal `gcloud --project gitlab-vault-nonprod container clusters describe vault-gitlab-gke --region us-east1 --format 'value(endpoint)'`/32
-```
+There are some [built in policies](https://www.vaultproject.io/docs/concepts/policies#built-in-policies) generated by vault and we've currently configured the following policies:
+
+* [Vault policies](https://ops.gitlab.net/gitlab-com/gl-infra/config-mgmt/-/blob/master/environments/vault-production/policies.tf)
+* [GitLab CI policies](https://ops.gitlab.net/gitlab-com/gl-infra/config-mgmt/-/blob/master/environments/vault-production/policies_gitlab.tf)
+* [Infra project GitLab CI policies](https://ops.gitlab.net/gitlab-com/gl-infra/config-mgmt/-/blob/master/environments/vault-production/policies_gitlab_ci.tf)
+* [K8s policies](https://ops.gitlab.net/gitlab-com/gl-infra/config-mgmt/-/blob/master/environments/vault-production/policies_kubernetes.tf)
+
+#### JWT Authentication and Bound Claims
+
+The JSON web token (JWT) method can be used to authenticate with Vault by a JWT authentication method or an OIDC. These JWTs can contain claims or a key/value pair. These can be used by Vault to validate that any configured "bound" parameters match which provide more granularity to authentication permissions.
+
+For an example, see the [the bounds claims](https://ops.gitlab.net/gitlab-com/gl-infra/config-mgmt/-/blob/f3a02f1df3901361b2031bf04b110b82af1d3eee/environments/vault-staging/roles_oidc.tf#L45-47) configured for OIDC users.
+
+More details and specifications can be found in [the vault documentation](https://www.vaultproject.io/docs/auth/jwt#bound-claims).
+
+## Observability
+
+### Prometheus and Thanos
+
+Vault is monitored via Prometheus in GKE. Configuration is done through a [`PodMonitor`](https://gitlab.com/gitlab-com/gl-infra/k8s-workloads/gitlab-helmfiles/-/blob/master/releases/vault/charts/vault-extras/templates/pod-monitor.yaml) which scrapes the `/v1/sys/metrics` endpoint. Our GKE prometheus metrics are also accessible in our thanos cluster ([example metric](https://thanos.gitlab.net/graph?g0.expr=vault_core_unsealed&g0.tab=1&g0.stacked=0&g0.range_input=1h&g0.max_source_resolution=0s&g0.deduplicate=1&g0.partial_response=0&g0.store_matches=%5B%5D)).
+
+### Logs
+
+We've configured audit logging to output to stdout which forwards logs to Kibana. You can [view Vault logs here](https://nonprod-log.gitlab.net/goto/<FIXME>).
 
 ## Troubleshooting
 
 ### Determining Pod status and logs
 
-Follow the instructions to connect to the appropriate GKE cluster, then list/look at all pods in the `vault` namespace
+Connect to the appropriate GKE cluster, then list/look at all pods in the `vault` namespace:
 
 ```shell
 kubectl -n gitlab get pods
@@ -83,7 +168,7 @@ kubectl -n gitlab logs vault-0
 
 ### Determining status of Vault from Vault itself
 
-You can either setup `sshuttle` access to the Vault instance and login to it, or connect to one of the Vault pods and running
+Connect to one of the Vault pods and run:
 
 ```
 kubectl -n vault exec -it vault-0 sh

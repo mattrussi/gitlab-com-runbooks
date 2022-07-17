@@ -86,7 +86,6 @@
 * [How to upload a file to Google Cloud Storage from any system without a credentials configuration](../uncategorized/upload-file-to-gcs-using-signed-url.md)
 * [Workers under heavy load because of being used as a CDN](../uncategorized/workers-high-load.md)
 * [Configuring and Using the Yubikey](../uncategorized/yubikey.md)
-* [Gitlab Vault](../vault/vault.md)
 * [Gitaly version mismatch](../version/gitaly-version-mismatch.md)
 <!-- END_MARKER -->
 

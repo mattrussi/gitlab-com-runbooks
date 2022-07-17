@@ -70,6 +70,7 @@
 * [Removing kernels from fleet](../uncategorized/remove-kernels.md)
 * [Tweeting Guidelines](../uncategorized/tweeting-guidelines.md)
 * [Configuring and Using the Yubikey](../uncategorized/yubikey.md)
+* [Vault Secrets Management](../vault/vault.md)
 * [Gitaly version mismatch](gitaly-version-mismatch.md)
 * [version.gitlab.com Runbook](version-gitlab-com.md)
 * [Static repository objects caching](../web/static-repository-objects-caching.md)

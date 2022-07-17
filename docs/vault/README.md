@@ -41,7 +41,7 @@
 * [../uncategorized/subnet-allocations.md](../uncategorized/subnet-allocations.md)
 * [Configuring and Using the Yubikey](../uncategorized/yubikey.md)
 * [Troubleshooting Hashicorp Vault](troubleshooting.md)
-* [Gitlab Vault](vault.md)
+* [Vault Secrets Management](vault.md)
 <!-- END_MARKER -->
 
 <!-- ## Summary -->
