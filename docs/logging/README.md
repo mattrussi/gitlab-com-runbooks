@@ -42,6 +42,7 @@
 * [../pgbouncer/service-pgbouncer.md](../pgbouncer/service-pgbouncer.md)
 * [PubSub Queuing Rate Increasing](../pubsub/pubsub-queing.md)
 * [../registry/gitlab-registry.md](../registry/gitlab-registry.md)
+* [Creating a Sidekiq Shard](../sidekiq/creating-a-shard.md)
 * [Example Tutorial Template](../tutorials/example_tutorial_template.md)
 * [Life of a Git Request](../tutorials/overview_life_of_a_git_request.md)
 * [Life of a Web Request](../tutorials/overview_life_of_a_web_request.md)
