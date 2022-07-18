@@ -56,10 +56,6 @@ terminate for example both `srm1` and `prm1` at once. Or `srm1` and `prm2`. But 
 and `srm2` or both `prm1` and `prm2`. Only one `srmX` and only one `prmX` can be down (or in the process of going
 down with the Graceful Shutdown) at once.
 
-> **Notice:** GitLab Runner on Windows works differently. If you need to handle things with `windows-runners-manager-X`
-> please read the [Graceful Shutdown and Windows Runner Managers](#graceful-shutdown-and-windows-runner-managers)
-> section.
-
 ## Graceful Shutdown scripting
 
 We have a script at `/root/runner_upgrade.sh` that abstracts all the steps needed for Graceful Shutdown handling.

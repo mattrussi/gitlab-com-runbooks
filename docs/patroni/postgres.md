@@ -3,7 +3,6 @@
 **Table of Contents**  *generated with [DocToc](https://github.com/thlorenz/doctoc)*
 
 - [Postgresql troubleshooting](#postgresql-troubleshooting)
-  - [First and foremost](#first-and-foremost)
   - [Dashboards](#dashboards)
   - [Availability](#availability)
   - [Errors](#errors)

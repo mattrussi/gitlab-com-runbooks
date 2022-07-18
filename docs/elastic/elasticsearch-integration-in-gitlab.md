@@ -19,7 +19,7 @@
     - [Impact on gitlab](#impact-on-gitlab)
     - [Impact on Elastic cluster](#impact-on-elastic-cluster)
 - [Concepts](#concepts)
-  - [ES integration docs & video](#es-integration-docs-&-video)
+  - [ES integration docs and video](#es-integration-docs-and-video)
   - [Indexer](#indexer)
     - [Overview](#overview)
     - [Sidekiq jobs](#sidekiq-jobs)
@@ -140,7 +140,7 @@ Estimate number of requests -> measure impact on Elastic
 
 # Concepts
 
-## ES integration docs & video
+## ES integration docs and video
 
 More detailed instructions and docs: <https://docs.gitlab.com/ee/integration/elasticsearch.html>
 

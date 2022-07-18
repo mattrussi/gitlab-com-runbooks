@@ -118,7 +118,7 @@ REDISCLI_AUTH=$(sudo grep ^masterauth /var/opt/gitlab/redis/redis.conf|cut -d\" 
 
 ### Grafana
 
-[see above](#grafana-dashboards)
+[see above](#grafana)
 
 ### Prometheus/Thanos
 
@@ -148,7 +148,7 @@ Explore Prometheus/Thanos/Grafana. Historical metrics might suggest a sudden cha
 - operations rate, 7d: <https://dashboards.gitlab.net/d/redis-cache-main/redis-cache-overview?orgId=1&from=now-7d&to=now&fullscreen&panelId=54>
 - keys rate of change, 7d: <https://dashboards.gitlab.net/d/redis-cache-main/redis-cache-overview?orgId=1&from=now-7d&to=now&fullscreen&panelId=64>
 
-For Grafana links [see above](#grafana-dashboards).
+For Grafana links [see above](#grafana).
 
 ### slowlog
 
