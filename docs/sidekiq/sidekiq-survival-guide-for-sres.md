@@ -284,7 +284,7 @@ Interesting fields to search or aggregate on:
 1. exception.{class,message,backtrace}:
    * Mostly on 'fail' job_status, which is useful for debugging high error rates. You'll see lots of external calls failing (webhooks, mailers, etc) here, under normal circumstances
 1. retry/retry_count:
-   * See [Retries + Fails](#retries-fails) below
+   * See [Retries + Fails](#retries-and-fails) below
 
 There are a bunch of other fields too, so go exploring, but the above are a really good starting point.
 
@@ -304,7 +304,7 @@ In either case, when a sidekiq process is killed sidekiq-cluster sees this as a 
 all its other workers) entirely as a result. This is a safety-valve for run-away jobs eating all the RAM, but obviously
 needs careful tuning; we don't want to rely on this under normal circumstances.
 
-## Retries + Fails
+## Retries and Fails
 
 These can be a little counter-intuitive in implementation. The `retry` field in the logs indicates
 how many retries are *allowed* for this job; it will be the same for every log entry for a given job id. The

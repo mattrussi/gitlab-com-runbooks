@@ -97,9 +97,9 @@ Redis Sidekiq and Gitaly.
 
 ## Architecture
 
-* [Handbook architecture overview for GitLab.com][1]
-* [Handbook K8s Cluster configuration][2]
-* [Handbook K8s architecture overview][3]
+* [Handbook architecture overview for GitLab.com](https://about.gitlab.com/handbook/engineering/infrastructure/production/architecture/#gitlab-com-architecture)
+* [Handbook K8s Cluster configuration](https://about.gitlab.com/handbook/engineering/infrastructure/production/architecture/#cluster-configuration)
+* [Handbook K8s architecture overview](https://gitlab.com/gitlab-com/gl-infra/readiness/-/tree/master/library/kubernetes)
 
 ### Logical Architecture
 
@@ -350,7 +350,7 @@ catalog](https://gitlab.com/gitlab-com/runbooks/-/blob/master/metrics-catalog/se
 
 ## Links to further Documentation
 
-[1]: https://about.gitlab.com/handbook/engineering/infrastructure/production/architecture/#gitlab-com-architecture "Handbook architecture overview for GitLab.com"
-[2]: https://about.gitlab.com/handbook/engineering/infrastructure/production/architecture/#cluster-configuration "Handbook K8s Cluster configuration"
-[3]: https://gitlab.com/gitlab-com/gl-infra/readiness/-/tree/master/library/kubernetes "General K8s design docs"
-[4]: https://gitlab.com/groups/gitlab-com/gl-infra/-/epics/271 "API K8s Migration Epic"
+1. [Handbook architecture overview for GitLab.com](https://about.gitlab.com/handbook/engineering/infrastructure/production/architecture/#gitlab-com-architecture)
+1. [Handbook K8s Cluster configuration](https://about.gitlab.com/handbook/engineering/infrastructure/production/architecture/#cluster-configuration)
+1. [General K8s design docs](https://gitlab.com/gitlab-com/gl-infra/readiness/-/tree/master/library/kubernetes)
+1. [API K8s Migration Epic](https://gitlab.com/groups/gitlab-com/gl-infra/-/epics/271)

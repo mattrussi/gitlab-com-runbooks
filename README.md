@@ -731,11 +731,7 @@ Please see the [contribution guidelines](CONTRIBUTING.md)
 [on-call-issues]:                   https://gitlab.com/gitlab-com/gl-infra/reliability/-/issues?scope=all&utf8=%E2%9C%93&state=all&label_name[]=oncall
 
 [pagerduty-add-user]:               https://support.pagerduty.com/docs/editing-schedules#section-adding-users
-[pagerduty-amer]:                   https://gitlab.pagerduty.com/schedules#PKN8L5Q
-[pagerduty-amer-shadow]:            https://gitlab.pagerduty.com/schedules#P0HRY7O
 [pagerduty-blank-schedule]:         https://community.pagerduty.com/t/creating-a-blank-schedule/212
-[pagerduty-emea]:                   https://gitlab.pagerduty.com/schedules#PWDTHYI
-[pagerduty-emea-shadow]:            https://gitlab.pagerduty.com/schedules#PSWRHSH
 [pagerduty-overrides]:              https://support.pagerduty.com/docs/editing-schedules#section-create-and-delete-overrides
 [pagerduty-shadow-schedule]:        https://community.pagerduty.com/t/creating-a-shadow-schedule-to-onboard-new-employees/214
 
@@ -750,6 +746,5 @@ Please see the [contribution guidelines](CONTRIBUTING.md)
 
 [slack-alerts]:                     https://gitlab.slack.com/channels/alerts
 [slack-alerts-general]:             https://gitlab.slack.com/channels/alerts-general
-[slack-alerts-gstg]:                https://gitlab.slack.com/channels/alerts-gstg
 [slack-incident-management]:        https://gitlab.slack.com/channels/incident-management
 [slack-production]:                 https://gitlab.slack.com/channels/production

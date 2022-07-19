@@ -746,7 +746,7 @@ Connection to gitlab.com closed.
 
 ### Renew expiring subkeys
 
-Remount your encrypted secrets image using the [veracrypt mount](#linux) or [hidutil attach](#macos) commands
+Remount your encrypted secrets image using the `veracrypt mount` or `hdiutil attach` commands
 Setup env vars:
 
 ```

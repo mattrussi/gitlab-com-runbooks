@@ -30,11 +30,11 @@ Warning: on prod, there is a lot of data.  This is an exploratory diagnostic onl
 
 Note interesting data (IMO):
 
-* work["payload"]["class"]
-* work["payload"]["created_at"]
-* work["payload"]["enqueued_at"]
-* work["run_at"]
-* work["payload"]["jid"] #Job id, useful for killing
+* `work["payload"]["class"]`
+* `work["payload"]["created_at"]`
+* `work["payload"]["enqueued_at"]`
+* `work["run_at"]`
+* `work["payload"]["jid"]` #Job id, useful for killing
 
 ## Report run_at (when they started) in human terms
 

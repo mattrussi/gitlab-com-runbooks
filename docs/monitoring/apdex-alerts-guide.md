@@ -54,7 +54,7 @@ All these bits and pieces are defined in `metrics-catalog/services/<service-name
 
 As always the goal is to find the misbehaving thing, which could be anything from a server to a single endpoint/RPC/controller.  Here's some things you can do.
 
-An apdex alert in #production should be paired with an alert in #feed_alerts-general from [Slackline](https://gitlab.com/gitlab-com/gl-infra/slackline).  The Prometheus link on the origin alert might give you a broad brush idea of the impact (length, intensity etc), but you probably want to find the Slackline message.  That will also give you an idea of whether it's a slow or fast burn (see [Burn Rate](#burn_rate) and more particularly a '<service> Overview' button/link, which takes you to the relevant Grafana dashboard:
+An apdex alert in #production should be paired with an alert in #feed_alerts-general from [Slackline](https://gitlab.com/gitlab-com/gl-infra/slackline).  The Prometheus link on the origin alert might give you a broad brush idea of the impact (length, intensity etc), but you probably want to find the Slackline message.  That will also give you an idea of whether it's a slow or fast burn (see [Burn Rate](#burn-rate) and more particularly a '<service> Overview' button/link, which takes you to the relevant Grafana dashboard:
 
 ![Slackline message](img/apdex-slackline-message.png)
 
@@ -82,7 +82,7 @@ This section also contains links to useful Kibana queries. See 'Kibana links' se
 
 Once you identify a SLI that's misbehaving (either from the alert or using the Service Level Indicators section), expand the relevant `SLI Detail: <sli>` section.
 
-As the name suggests, this section contains a more detailed view into the health of a SLI. For example, it contains a row for each 'significant label' (see the [metrics_catalog](#metrics_catalog) definitions).
+As the name suggests, this section contains a more detailed view into the health of a SLI. For example, it contains a row for each 'significant label' (see the [metrics_catalog](#metrics-catalog) definitions).
 
 ![significant-label-row](img/apdex-dashboard-significant-label-row.png)
 

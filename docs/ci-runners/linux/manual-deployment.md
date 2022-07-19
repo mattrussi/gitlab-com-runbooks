@@ -197,5 +197,4 @@ time wait
 > anyone that needs to update/restart Runner on our CI fleet should expect, that the operation will be
 > **really long** and that during this time the networking connection can't be terminated.
 
-[gitlab-ce-new-mr]: https://gitlab.com/gitlab-org/gitlab-ce/merge_requests/new
 [k8s-deployment]: https://gitlab.com/gitlab-com/gl-infra/reliability/-/issues/4813

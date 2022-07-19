@@ -19,7 +19,7 @@ Zoom out to a few days (3 or 7) to get a feel for the impact.
   - There may be a problem with GitLab DNS.
 - Is traffic lower than normal?
   - There may be a recent breaking change to regular incoming email (for example, [`Gitlab::Email::Receiver`](https://gitlab.com/gitlab-org/gitlab/-/blob/master/lib/gitlab/email/receiver.rb) or Service Desk email ingestion (for example, [`Gitlab::Email::ServiceDeskReceiver`](https://gitlab.com/gitlab-org/gitlab/-/blob/master/lib/gitlab/email/service_desk_receiver.rb).
-  - There could be a problem with a 3rd party service customers use for redirection; such as GMail or Google Groups. See [Find where the email goes](#find-where-the-email-goes).
+  - There could be a problem with a 3rd party service customers use for redirection; such as GMail or Google Groups. See [Find where the email goes](#find-where-the-emails-go).
 - No detectable change?
   - Customers may be using an uncommon service for redirection that has changed its headers.
   - The customer's email may be marked as Spam in the incoming mail inbox.
