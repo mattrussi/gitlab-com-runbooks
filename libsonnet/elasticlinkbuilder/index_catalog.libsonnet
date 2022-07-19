@@ -197,7 +197,7 @@ local indexDefaults = {
       'json.duration_s',
       'json.target_duration_s',
     ],
-    defaultSeriesSplitField: 'json.meta.caller_id',
+    defaultSeriesSplitField: 'json.meta.caller_id.keyword',
     failureFilter: statusCode('json.status'),
     defaultLatencyField: 'json.duration_s',
     latencyFieldUnitMultiplier: 1,
