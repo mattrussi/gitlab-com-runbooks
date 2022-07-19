@@ -1,4 +1,5 @@
 local sliLibrary = import 'gitlab-slis/library.libsonnet';
+local maturityLevels = import 'service-maturity/levels.libsonnet';
 local metricsCatalog = import 'servicemetrics/metrics.libsonnet';
 local toolingLinks = import 'toolinglinks/toolinglinks.libsonnet';
 
@@ -9,6 +10,10 @@ metricsCatalog.serviceDefinition({
   monitoringThresholds: {
     apdexScore: 0.95,
     errorRatio: 0.998,
+  },
+
+  serviceDependencies: {
+    api: true,
   },
 
   provisioning: {
@@ -35,4 +40,7 @@ metricsCatalog.serviceDefinition({
         ],
       },
   },
+  skippedMaturityCriteria: maturityLevels.skip({
+    'Structured logs available in Kibana': 'All logs are available in Stackdriver',
+  }),
 })

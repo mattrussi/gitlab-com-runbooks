@@ -328,7 +328,6 @@ ensure_maturity_model_minimum_level:
   rules:
     - if: '$CI_PIPELINE_SOURCE == "merge_request_event"'
       when: always
-      allow_failure: true
   stage: test
   script:
     - scripts/bundler.sh  # Install jsonnet bundles

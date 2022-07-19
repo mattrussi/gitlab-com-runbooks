@@ -2,6 +2,7 @@ local metricsCatalog = import 'servicemetrics/metrics.libsonnet';
 local kubeLabelSelectors = metricsCatalog.kubeLabelSelectors;
 local rateMetric = metricsCatalog.rateMetric;
 local googleLoadBalancerComponents = import './lib/google_load_balancer_components.libsonnet';
+local maturityLevels = import 'service-maturity/levels.libsonnet';
 
 // See https://www.vaultproject.io/docs/internals/telemetry for more details about Vault metrics
 
@@ -72,4 +73,8 @@ metricsCatalog.serviceDefinition({
       significantLabels: ['pod'],
     },
   },
+  skippedMaturityCriteria: maturityLevels.skip({
+    'Structured logs available in Kibana': "Vault is a pending project at the moment. There is no traffic at the moment. We'll add logs and metrics in https://gitlab.com/groups/gitlab-com/gl-infra/-/epics/739",
+    'Service exists in the dependency graph': 'Vault is a pending project at the moment. There is no traffic at the moment. The progress can be tracked at https://gitlab.com/groups/gitlab-com/gl-infra/-/epics/739',
+  }),
 })
