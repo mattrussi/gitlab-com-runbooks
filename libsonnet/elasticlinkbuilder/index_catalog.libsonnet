@@ -145,6 +145,10 @@ local indexDefaults = {
     latencyFieldUnitMultiplier: 1,
   },
 
+  postgres_archive: self.postgres {
+    defaultFilters: [matchFilter('json.type', 'archive')],
+  },
+
   postgres_pgbouncer: indexDefaults {
     timestamp: 'json.time',
     indexPattern: '97f04200-024b-11eb-81e5-155ba78758d4',
