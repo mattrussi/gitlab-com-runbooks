@@ -42,6 +42,7 @@
   import 'search.jsonnet',
   import 'sentry.jsonnet',
   import 'sidekiq.jsonnet',
+  import 'vault.jsonnet',
   import 'waf.jsonnet',
   import 'web-pages.jsonnet',
   import 'web.jsonnet',

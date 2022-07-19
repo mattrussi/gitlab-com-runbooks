@@ -54,6 +54,7 @@
 * [Managing Chef](../uncategorized/manage-chef.md)
 * [Node Reboots](../uncategorized/node-reboots.md)
 * [Uploads](../uncategorized/uploads.md)
+* [Troubleshooting Hashicorp Vault](../vault/troubleshooting.md)
 <!-- END_MARKER -->
 
 <!-- ## Summary -->
