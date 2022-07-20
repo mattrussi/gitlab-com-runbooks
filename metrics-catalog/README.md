@@ -118,9 +118,9 @@ This definition is used to generate several different configurations, including:
 1. **Grafana Dashboards** for each service with SLI overview panels and detailed drilldown panels. See https://dashboards.gitlab.net/d/web-main for an example
 1. **GitLab Dashboards**. See https://gitlab.com/gitlab-com/runbooks/-/metrics/key-metrics-web.yml for an example
 1. **Alertmanager inhibit_rules** for each `dependsOn` it will create an [`inhibit_rule`](https://prometheus.io/docs/alerting/latest/configuration/#inhibit_rule) so the upstream service doesn't alert when the downstream service is already alerting. `dependsOn` should **only be used** when there is a hard dependency between two services for example `web -> patroni` and shouldn't be used for `web -> gitaly`. The following validation rules apply:
-  1. It can't depend on an SLI of the same `type`.
-  1. The `type` has to exist.
-  1. The `component` has to exist and belong to the specified `type`.
+    1. It can't depend on an SLI of the same `type`.
+    1. The `type` has to exist.
+    1. The `component` has to exist and belong to the specified `type`.
 
 ### Available aggregation sets
 
