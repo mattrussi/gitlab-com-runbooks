@@ -6,9 +6,12 @@ groups:
   rules:
   - alert: NoActiveVaultInstance
     expr: |
-      absent(vault_core_active{env="ops"} == 1) > 0
-      or
-      absent(vault_core_active{env="pre"} == 1) > 0
+      (
+        absent(vault_core_active{env="ops"})
+        or
+        absent(vault_core_active{env="pre"})
+      )
+      or sum by (env) (vault_core_active) == 0
     for: 5m
     labels:
       severity: s2
@@ -23,9 +26,12 @@ groups:
 
   - alert: VaultSealed
     expr: |
-      absent(vault_core_unsealed{env="ops"} == 1) > 0
-      or
-      absent(vault_core_unsealed{env="pre"} == 1) > 0
+      (
+        absent(vault_core_unsealed{env="ops"})
+        or
+        absent(vault_core_unsealed{env="pre"})
+      )
+      or sum by (env) (vault_core_unsealed) == 0
     for: 5m
     labels:
       severity: s2
