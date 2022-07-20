@@ -21,7 +21,7 @@ Currently we have multiple ways of deploying certificates. Please see the `Manag
 ## General info
 
 - COMODO has renamed to Sectigo, those names might get used interchangeably in this document. Any Certificate that is listed as issued by COMODO will in the future be issued by Sectigo.
-- Our primary certificate source is [SSMLate](https://sslmate.com/console/orders/).
+- Our primary certificate source is [SSLMate](https://sslmate.com/console/orders/).
   - Using the above link it is possible to retrieve the current certificate file for each CN listed there.
   - Those files are permanent links to the public chain of the certificate. The key is *not* part of that chain.
   - Some tasks require the commandline tool (available via https://sslmate.com/help/install and `brew install sslmate`).
