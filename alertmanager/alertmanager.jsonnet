@@ -49,8 +49,9 @@ local slackChannels = [
 
 local snitchReceiverChannelName(channel) =
   local env = channel.name;
-  local cluster = channel.cluster;
-  local receiver_name = if cluster == '' then env else env + '_' + cluster;
+  local cluster = if channel.cluster != '' then channel.cluster;
+  local instance = if std.objectHas(channel, 'instance') then std.strReplace(channel.instance, '/', '_');
+  local receiver_name = std.join('_', std.prune([env, cluster, instance]));
   'dead_mans_snitch_' + receiver_name;
 
 local sendResolved(channel, default) =
@@ -309,6 +310,7 @@ local SnitchRoute(channel) =
     matchers={
       alertname: 'SnitchHeartBeat',
       cluster: channel.cluster,
+      [if std.objectHas(channel, 'instance') then 'prometheus']: channel.instance,
       env: channel.name,
     },
     group_by=null,
