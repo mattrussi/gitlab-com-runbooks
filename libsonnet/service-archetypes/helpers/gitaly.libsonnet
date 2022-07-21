@@ -75,7 +75,7 @@ local gitalyGRPCErrorRate(baseSelector) =
     rateMetric(
       counter='gitaly_service_client_requests_total',
       selector=baseSelector {
-        grpc_code: { noneOf: ['OK', 'NotFound', 'Unauthenticated', 'AlreadyExists', 'FailedPrecondition', 'DeadlineExceeded', 'Canceled', 'InvalidArgument', 'PermissionDenied', 'Unavailable'] },
+        grpc_code: { noneOf: ['OK', 'NotFound', 'Unauthenticated', 'AlreadyExists', 'FailedPrecondition', 'DeadlineExceeded', 'Canceled', 'InvalidArgument', 'PermissionDenied', 'Unavailable', 'no tag found'] },
         // Temporary exclusion of upload-pack due to high volume of "fatal: the remote end hung up unexpectedly" classified as "Internal"
         // https://gitlab.com/gitlab-org/gitlab/-/issues/364607
         // https://gitlab.com/gitlab-org/gitaly/-/issues/4331
