@@ -6,7 +6,7 @@ Search keywords: attachments, files
 
 Uploads in production are stored in a GCS bucket: <https://docs.gitlab.com/ee/administration/uploads.html#object-storage-settings>
 
-Here's an example of an upload URL: `https://gitlab.com/4dface/4dface-sdk/uploads/<secret>/image.png`
+Here's an example of an upload URL: `https://gitlab.com/<full/project/path>/uploads/<secret>/image.png`
 
 Upload objects in rails are defined here: `./gitlab-ce/app/models/upload.rb`
 
@@ -17,28 +17,43 @@ At the moment of writing there is no UI for managing uploads: <https://gitlab.co
 Using the console, you can find the upload object in the rails application:
 
 ```ruby
-u = Upload.find_by_secret("<secret>")
+upload = Upload.find_by_secret('<secret>')
+```
+
+**NOTE**: This operation will likely time out in production since its search scope is the entirety of the user uploads table.
+
+Do this instead:
+
+```rb
+project = Project.find_by_full_path('full/project/path')
+```
+
+And now that the search scope has been narrowed down to a single project:
+
+```rb
+upload = project.uploads.find_by_secret('<secret>')
+upload.path
 ```
 
 its path in GCS (the storage path consists of two hashes: storage hash and upload's secret):
 
 ```ruby
-u.path
+upload.path
 ```
 
 and delete the upload together with the file on GCS:
 
 ```ruby
-u.destroy
+upload.destroy
 ```
 
 or rename it:
 
 ```ruby
-> u.secret = "<new GUID>"
-> u.path  # this path consists of a hash and the upload's secret, it will be used in the next command
-> u.path = "<path from previous command with upload's secret replaced with the newly generated secret>"
-> u.save!
+> upload.secret = "<new GUID>"
+> upload.path  # this path consists of a hash and the upload's secret, it will be used in the next command
+> upload.path = "<path from previous command with upload's secret replaced with the newly generated secret>"
+> upload.save!
 # move file in object storage manually to new path
 ```
 
@@ -49,8 +64,9 @@ URL of an upload that needs to be removed: <https://gitlab.com/4dface/4dface-sdk
 1. Get the upload's path on GCS:
 
 ```ruby
-> u = Project.find_by_full_path('4dface/4dface-sdk').uploads.find_by_secret("f7a123bb72bfa73a2d0cf9c12cab99e1")
-> u.path
+> project = Project.find_by_full_path('4dface/4dface-sdk')
+> upload = project.uploads.find_by_secret("f7a123bb72bfa73a2d0cf9c12cab99e1")
+> upload.path
 ```
 
 2. Check in GCS that the file is present
@@ -58,7 +74,7 @@ URL of an upload that needs to be removed: <https://gitlab.com/4dface/4dface-sdk
 3. Remove the file from the rails app and GCS:
 
 ```ruby
-u.destroy
+upload.destroy
 ```
 
 4. Check again on GCS that the file is gone
