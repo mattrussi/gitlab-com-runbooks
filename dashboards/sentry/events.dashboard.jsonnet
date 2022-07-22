@@ -68,12 +68,9 @@ basic.dashboard(
       description='Responses from client api by version and status',
       query='sum by (le) (rate(sentry_events_latency_seconds_bucket{env="ops"}[$__interval]))',
       legendFormat='{{ le }}',
-      format='seconds',
       interval='1m',
       intervalFactor=5,
-      yAxisLabel='',
       legend_show=true,
-      linewidth=2,
       dataFormat='tsbuckets',
       hideZeroBuckets=false
     ),

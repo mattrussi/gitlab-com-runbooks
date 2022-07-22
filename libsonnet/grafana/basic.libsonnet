@@ -304,12 +304,10 @@ local validateTags(tags) =
     description='',
     query='',
     legendFormat='',
-    format='short',
     interval='1m',
     intervalFactor=3,
-    yAxisLabel='',
-    legend_show=true,
-    linewidth=2,
+    legend_show=false,
+    yAxis_format='s',
     stableId=null,
     dataFormat='timeseries',
     hideZeroBuckets=true
@@ -318,13 +316,13 @@ local validateTags(tags) =
       title,
       description=description,
       datasource='$PROMETHEUS_DS',
-      legend_show=false,
-      yAxis_format='s',
+      legend_show=legend_show,
+      yAxis_format=yAxis_format,
       color_mode='opacity',
       dataFormat=dataFormat,
       hideZeroBuckets=hideZeroBuckets
     )
-    .addTarget(promQuery.target(query, legendFormat=legendFormat, interval=interval, intervalFactor=intervalFactor))
+    .addTarget(promQuery.target(query, format='heatmap', legendFormat=legendFormat, interval=interval, intervalFactor=intervalFactor))
     + panelOverrides(stableId),
 
   table(
