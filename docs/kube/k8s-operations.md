@@ -10,9 +10,8 @@
 
 ## Application Upgrading
 
-- [CHART_VERSION](https://gitlab.com/gitlab-com/gl-infra/k8s-workloads/gitlab-com/-/tree/master#setting-chart-version)
-  sets the version of the GitLab helm chart
-- For individual services see the project [README](https://gitlab.com/gitlab-com/gl-infra/k8s-workloads/gitlab-com/#services)
+- Setting the version of the Helm Chart utilized by .com can be accomplished by following the instructions for [Setting Chart Version](https://gitlab.com/gitlab-com/gl-infra/k8s-workloads/gitlab-com/-/tree/master#setting-chart-version)
+- Most services are handled via Auto-Deploy.  Some are not, reference [DEPLOYMENT.md](https://gitlab.com/gitlab-com/gl-infra/k8s-workloads/gitlab-com/-/blob/master/DEPLOYMENT.md#auto-deploy)
 
 ## Creating a new node pool
 
@@ -145,11 +144,7 @@ production container which may be servicing customer traffic. Some
 troubleshooting may incur performance penalties or expose you and tooling to
 Red classified data. Consider removing the Pod after your work is complete.
 
-### Using Docker/Containerd
-
-**Note**: Most of our nodepools run containerd, but a few still run docker. Due to this we'll use a combination of commands, either `docker` or `crictl`; while they are similar to an extent, both have a significantly different UX when performing the below troubleshooting.
-
-Regardless of runtime, we just need the following information:
+We just need the following information:
 
 - target Pod
 - container we want to exploit
@@ -164,15 +159,7 @@ node_name=<NODE_NAME>
 zone=$(gcloud compute instances list --filter name=$node_name --format="value(zone)") # get the zone
 ```
 
-Determine the runtime of that node:
-
-```
-kubectl get node $node_name -o json | jq .metadata.labels.\"cloud.google.com/gke-container-runtime\"
-```
-
-If using the `containerd` runtime, we now need to figure out the container ID
-(for the docker runtime, we'll do this in a bit, for now, skip to ssh'ing into
-the node):
+We now need to figure out the container ID:
 
 ```
 kubectl get pod $pod_name -o json | jq .status.containerStatuses
@@ -191,46 +178,20 @@ gcloud compute ssh $node_name --zone=$zone --tunnel-through-iap
 Get the container ID:
 
 ```
-# docker runtime
-docker ps | grep 'websockets-57dbbcdcbd-crv2p'
-
-# containerd runtime
 crictl ps | grep 'websockets-57dbbcdcbd-crv2p'
 ```
-
-- Note that in `docker` runtime the result will be at least two containers, one using the `pause` image, and others representing each container participating in our target Pod. [The `pause` image is NOT the one you are looking for.](https://www.ianlewis.org/en/almighty-pause-container)
 
 If the container contains all the tools you need, you can simply exec into it:
 
 ```
-# docker runtime:
-docker exec -it 7aa3c4ad2775c /bin/bash
-
-# containerd runtime:
 crictl exec -it 7aa3c4ad2775c /bin/bash
 ```
 
-Where `7aa3c4ad2775c` is the container id that you have already found. If it doesn't have `/bin/bash`, try `/bin/sh` or just execing `ls` to find what binaries are available.
+Where `7aa3c4ad2775c` is the container id that you have already found. If it doesn't have `/bin/bash`, try `/bin/sh` or just `exec`ing `ls` to find what binaries are available.
 
-At this point we can install some tooling necessary and interrogate the best we can. Remember that the container could be shutdown at any time by k8s, and any changes are very transient.
+At this point we can install some tooling necessary and interrogate the best we can. Remember that the container could be shutdown at any time by Kubernetes, and any changes are very transient.
 
 If you need higher permissions or more tooling in the container, examples include needing a root shell or perhaps a tool you need does not exist on the image, you can attach another container to the same network/pid namespaces when running.
-
-- For `docker` runtime, you can utilize the below.
-
-```sh
-docker run \
-  -it \
-  --pid=container:k8s_sidekiq_gitlab-sidekiq-export-966444c8-sbpj5_gitlab_148e5cfb-21a2-11ea-b2f5-4201ac100006_0 \
-  --net=container:k8s_sidekiq_gitlab-sidekiq-export-966444c8-sbpj5_gitlab_148e5cfb-21a2-11ea-b2f5-4201ac100006_0 \
-  --cap-add sys_admin \
-  --cap-add sys_ptrace \
-  ubuntu /bin/bash
-```
-
-In the above example we attached an ubuntu container running `bash` to the sidekiq container. This will be a read-only filesystem (unlike the `exec` case above)
-
-- For `containerd` runtime we can pop directly onto the container as root:
 
 ```sh
 runc --root /run/containerd/runc/k8s.io/ \
@@ -242,11 +203,10 @@ runc --root /run/containerd/runc/k8s.io/ \
 ```
 
 Or use whatever shell you know is readily available. Note you need the entire
-container ID that you had found earlier, unlike docker who accepts shorter IDs,
-`runc` will toss you an error that the container does not exist if a shortened
-ID is utilized. Note we are using `runc` here, as `crictl` does not provide us
-this capability. `runc` is the underlying runtime, `containerd` is how
-Kubernetes interfaces with it.
+container ID that you had found earlier, `runc` will toss you an error that the
+container does not exist if a shortened ID is utilized. Note we are using `runc`
+here, as `crictl` does not provide us this capability. `runc` is the underlying
+runtime, `containerd` is how Kubernetes interfaces with it.
 
 ### Using Toolbox
 
@@ -270,8 +230,6 @@ One way to workaround it is to investigate the container from the host. Below ar
    - `containerd` Get PID of a process running in a container:
      1. List containers and get container ID: `crictl ps -a`
      1. Get pid of a process in a container with a given ID: `crictl inspect <containerID>` search for `info.pid` field
-   - `docker` Get PIDs and hostnames of all containers running:
-     - `docker ps -a | tail -n +2 | awk '{ print $1}' | xargs docker inspect -f '{{ .State.Pid }} {{ .Config.Hostname }}'`
 1. Run a command with the network namespace
    - Entire toolbox started with the given namespace:
      - `toolbox --network-namespace-path=/proc/<container_pid>/ns/net`
@@ -283,21 +241,6 @@ One way to workaround it is to investigate the container from the host. Below ar
 An existing volume can be attached to toolbox for debugging using `--bind=` or `--bind-ro=` (read only).
 
 - `toolbox --bind=/var/lib/kubelet/pods/<containerID>/volume-subpaths/<pvc_id>/...`
-
-#### Start a container that will use network and process namespaces of a pod
-
-Only available for docker, not containerd:
-
-1. Get container id from PID: `cat /proc/<PID>/cgroup`
-1. Get container name from container id: `docker inspect --format '{{.Name}}' "<containerId>" | sed 's/^\///'`
-1. Create a container on the host: `docker run --rm -ti --net=container:<container_name> --pid=container:<container_name> --name ubuntu ubuntu bash`
-
-For example:
-
-```
-docker run --rm --name pause --hostname pause gcr.io/google_containers/pause-amd64:3.0   # this is an example, it will run a simple container which you will connect to in a moment
-docker run --rm -ti --net=container:pause --pid=container:pause -v /:/media/root:ro --name ubuntu ubuntu bash  # this will run an ubuntu container with network and process namespaces from the pause container and host's root file system mounted under /media/root
-```
 
 #### Add an ephemeral debug container (Kubernetes >= 1.23)
 
@@ -430,3 +373,55 @@ docker run -d --rm -v $(pwd):/profiles:ro -p 5000:5000 igorwgitlab/flamescope  #
 ```bash
 cat stacks.gke-gprd-gitlab-gke-sidekiq-urgent-ot-9be5be8a-o05q.2021-03-05_173617 | stackcollapse-perf.pl --kernel | flamegraph.pl > flamegraph.$(hostname).$(date '+%Y%m%d_%H%M%S_%Z').svg
 ```
+
+## Bringing a cluster down for Maintenance
+
+The following is a psuedo procedure that must be completed via a Change Request.
+The end result after following this procedure is that a single zonal cluster
+will no longer be accepting any user traffic and thus should be safe to do
+whatever maintenance necessary.  This procedure is written in a way that
+prevents any maintenance from negatively interfering with Auto-Deployment and
+configuration change spawned from the `k8s-workloads/gitlab-com` repository.
+
+:warning: This procedure is targeted for our zonal clusters.  We do **NOT** have
+a similar procedure for the regional cluster where Sidekiq currently runs.
+:warning:
+
+1. Identify the target cluster to be turned down
+1. Identify when deployments/configuration changes may occur on the target
+   cluster
+    - This is to ensure that we work with Release Management to prevent blocking
+      deployments as well as catching a cluster back up to the same running
+      version of the components after maintenance is completed if necessary.
+    - This is to ensure that we work with Infrastructure team members to ensure
+      that configuration changes are propagated as desired, and later we catch
+      the cluster up if changes were made while the cluster was offline.
+1. Gather all HAProxy backend names associated with the cluster
+    - We lack consistency in the naming of the backends in HAProxy, thus let's
+      document the precise commands required to remove traffic to the cluster.
+1. Set environment variable to skip deployments/configurations to the target
+   cluster.  Refer to: [`k8s-workloads/gitlab-com/TROUBLESHOOTING.md#skipping-cluster-deployments`](https://gitlab.com/gitlab-com/gl-infra/k8s-workloads/gitlab-com/-/blob/master/TROUBLESHOOTING.md#skipping-cluster-deployments)
+1. Remove traffic going to canary from the same zone the HAProxy nodes are
+   located in.
+    - If this is missed, we risk overloading Canary with traffic on a cluster
+      that may not be capable of handling the load.
+    - This can be achieved by something similar to: `./bin/set-server-state -z b
+      -s 60 gstg maint gke-cny-ssh`
+    - The above command will ask all HAProxies located in zone b to set their
+      state to `MAINT`, waiting 60 seconds between each HAProxy node to be
+      modified.
+1. Remove traffic from going to this cluster
+    - This can be achieved by something similar to `./bin/set-server-state -z b
+      -s 60 gstg maint shell-gke-us-east1-b`
+    - The above command will ask all HAProxies located in zone b to set their
+      state to `MAINT`, waiting 60 seconds between each HAProxy node to be
+      modified.
+    - We wait 60 seconds in this example as a way to avoid overloading the
+      clusters that remain from becoming overloaded or being unable to scale up
+      quickly enough as the load shifts.
+1. Validate via metrics that the cluster is receiving the least amount of
+   traffic possible
+    - Normally the RPS value for a given workload on a target cluster SHOULD be
+      0, or the metric will disappear.  For most workloads we exclude
+      healthchecks and metrics gathering from displaying as part of our
+      dashboards.
