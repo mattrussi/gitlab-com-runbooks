@@ -255,24 +255,24 @@ groups:
     labels:
       tier: sv
       type: customersdot
-    expr: "0.950000"
+    expr: "0.900000"
   - record: slo:max:events:gitlab_service_errors:ratio
     labels:
       tier: sv
       type: customersdot
-    expr: "0.002000"
+    expr: "0.050000"
   - record: slo:min:events:gitlab_service_apdex:ratio
     labels:
       component: rails_requests
       tier: sv
       type: customersdot
-    expr: "0.950000"
+    expr: "0.900000"
   - record: slo:max:events:gitlab_service_errors:ratio
     labels:
       component: rails_requests
       tier: sv
       type: customersdot
-    expr: "0.002000"
+    expr: "0.050000"
   - record: slo:min:events:gitlab_service_apdex:ratio
     labels:
       tier: lb
