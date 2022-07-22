@@ -8,8 +8,8 @@ metricsCatalog.serviceDefinition({
   tier: 'sv',
 
   monitoringThresholds: {
-    apdexScore: 0.95,
-    errorRatio: 0.998,
+    apdexScore: 0.9,
+    errorRatio: 0.95,
   },
 
   serviceDependencies: {
