@@ -10,7 +10,6 @@ basic.dashboard(
   'Pod Info',
   tags=[
     'kas',
-    'kubernetes-agent',
   ],
 )
 .addTemplate(templates.gkeCluster)
