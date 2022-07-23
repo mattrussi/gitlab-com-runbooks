@@ -108,7 +108,7 @@
 * [Uploads](../uncategorized/uploads.md)
 * [Workers under heavy load because of being used as a CDN](../uncategorized/workers-high-load.md)
 * [Troubleshooting Hashicorp Vault](../vault/troubleshooting.md)
-* [Gitlab Vault](../vault/vault.md)
+* [Vault Secrets Management](../vault/vault.md)
 * [version.gitlab.com Runbook](../version/version-gitlab-com.md)
 <!-- END_MARKER -->
 
