@@ -33,6 +33,7 @@
 * [GKE Cluster Upgrade Procedure](../kube/k8s-cluster-upgrade.md)
 * [../kube/k8s-oncall-setup.md](../kube/k8s-oncall-setup.md)
 * [../kube/k8s-operations.md](../kube/k8s-operations.md)
+* [Kubernetes](../kube/kubernetes.md)
 * [../logging/logging_gcs_archive_bigquery.md](../logging/logging_gcs_archive_bigquery.md)
 * [../monitoring/apdex-alerts-guide.md](../monitoring/apdex-alerts-guide.md)
 * [../monitoring/filesystem_alerts_inodes.md](../monitoring/filesystem_alerts_inodes.md)
