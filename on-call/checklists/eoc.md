@@ -61,7 +61,7 @@ any on-going issues.
 
 Start by checking how many alerts are in flight right now
 
--   go to the [fleet overview dashboard](https://dashboards.gitlab.net/dashboard/db/fleet-overview) and check the number of Active Alerts, it should be 0. If it is not 0
+-   go to the [fleet overview dashboard](https://dashboards.gitlab.net/d/mnbqU9Smz/fleet-overview?orgId=1) and check the number of Active Alerts, it should be 0. If it is not 0
     -   go to the alerts dashboard and check what is being triggered
         -   [azure][prometheus-azure]
         -   [gprd prometheus][prometheus-gprd]
