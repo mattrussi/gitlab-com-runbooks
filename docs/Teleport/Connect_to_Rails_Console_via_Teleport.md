@@ -31,6 +31,18 @@ Linux install instructions are [also available on the Teleport site](https://got
 
 #### Accessing the Rails console via Teleport
 
+##### Staging
+
+The `rails-ro` role in the `gstg` environment does not require a request or approval, use this unless you require production
+
+```shell
+tsh ssh rails-ro@console-ro-01-sv-gstg
+```
+
+> Tip: The syntax and options for `tsh ssh` are very similar to `ssh` (with some additional options), so it's possible to do something like `alias ssh="tsh ssh"`
+
+##### Production
+
 > Note: It is not required, but it is easier to be logged in to Okta already before this step
 
 1. Authenticate to the Teleport server
@@ -44,20 +56,16 @@ The access will be temporary (`12h` max) and can be approved by any SRE or Relia
 Authenticate to the Teleport proxy/server. This command opens Okta in a browser window:
 
 ```shell
-tsh login --proxy=teleport.gstg.gitlab.net
+tsh login --proxy=teleport.gprd.gitlab.net
 ```
-
-> Note: The `rails-ro` role in the `gstg` environment does not require a request or approval, so you can skip this step. Us this unless you know for sure that you need something else.
 
 If you need to request a role which includes elevated permissions for the Rails console.  Currently only `rails-ro` is implemented, and is only required in `gprd`
 
 ```shell
-tsh login --proxy=teleport.gstg.gitlab.net --request-roles=rails-ro --request-reason="Issue-URL or explanation"
+tsh login --proxy=teleport.gprd.gitlab.net --request-roles=rails-ro --request-reason="Issue-URL or explanation"
 ```
 
 This command will pause while it waits for the approver to approve the request.  It may appear to hang, but it is waiting for someone to approve it.  The command will return as soon as the request is approved, denied, or times out.
-
-> Note: All examples are for the **staging environment** only! This is to limit the consequences of unintended copy/paste errors.  To connect to the production environment, change `gstg` to `gprd`
 
 If the command is stopped or times out, but the request is approved, you don't need to request another approval.  Simply login and provide the approved request ID (output by the previous command, or find it in the web interface):
 
@@ -83,7 +91,7 @@ Approvers will review the issue URL in the request and if Rails Console access s
 Once an approval is issued, access the Rails console via:
 
 ```shell
-tsh ssh rails-ro@console-ro-01-sv-gstg
+tsh ssh rails-ro@console-ro-01-sv-gprd
 ```
 
 Remember that your access request, its approval, and any associated sessions will expire in `12h` maximum unless renewed.
