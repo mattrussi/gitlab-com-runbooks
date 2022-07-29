@@ -40,12 +40,12 @@ Look at [Apdex and Error Ratio Graphs](https://dashboards.gitlab.net/d/general-s
    1. the graph has been past the SLO for outage for more than 5 min.
    1. the slope of the graph is continuing down for the last 5 min.
 
-  1. Is GitLab.com up/degraded? Start with [general: GitLab Dashboards](https://dashboards.gitlab.net/d/general-public-splashscreen/general-gitlab-dashboards?orgId=1) and then drill further
+1. Is GitLab.com up/degraded? Start with [general: GitLab Dashboards](https://dashboards.gitlab.net/d/general-public-splashscreen/general-gitlab-dashboards?orgId=1) and then drill further
     * [Web](https://dashboards.gitlab.net/d/web-main/web-overview?orgId=1). This is what users see.
     * [API](https://dashboards.gitlab.net/d/api-main/api-overview?orgId=1). This is what automation (including gitaly/registry/kas) sees.
-  2. Are runners doing okay?
+2. Are runners doing okay?
     * [ci-runners: Overview](https://dashboards.gitlab.net/d/ci-runners-main/ci-runners-overview?orgId=1)
-  3. Other services overview:
+3. Other services overview:
     * [general: Service Platform Metrics](https://dashboards.gitlab.net/d/general-service/general-service-platform-metrics?orgId=1). You can pick services here in the “type” dropdown. Make sure environment is `gprd` (not `gstg`) and stage is `main` (all servers) or `cny` (canary) depending on what you are looking at.
 
 ### Lower stress of the EOC
@@ -80,9 +80,9 @@ As an IMOC, on roughly these times, you can ask yourself these questions:
   1. Do we have the right people in the incident room? (every 5 min early on)
   2. Do we need [DB team help](https://about.gitlab.com/handbook/engineering/infrastructure/database/)? (if postgres related, have we engaged DBRE or the Database team?)
   3. Do we understand what is going on? (first 10 min frequently - every 2-3 min)
-    * If not sev1/down, a little more relaxed - say every 15 min
+      * If not sev1/down, a little more relaxed - say every 15 min
   4. Do we understand what to do to resolve or mitigate the problem? (first 10 min frequently after we have identified the issue- every 2-3 min)
-    * If not sev1/down, again a little more relaxed, every 15 min
+      * If not sev1/down, again a little more relaxed, every 15 min
   5. Do we need a [CMOC](https://about.gitlab.com/handbook/engineering/infrastructure/incident-management/#how-to-engage-the-cmoc-only-during-weekdays)?  Is this customer facing?  Default to yes, but if deploy blocker - probably no.
   6. Regularly check on the EOC. EOC is in a highly stressful situation, pager is going off every few minutes and they are asked to try and deduct what is happening. As IMOC, you need to support the EOC.
   7. 10-15 minutes in.  Make sure there is an executive summary somewhere.  Most times at the top of the prod issue description.  If hard down, make sure gdoc exists with this summary.  Make sure the gdoc is shared in slack so people see it.
@@ -91,9 +91,9 @@ As an IMOC, on roughly these times, you can ask yourself these questions:
 ### Handling S3/S4
 If not on full alert, now in the realm of judgement related to next steps
   1. Is this internal?
-    * Deploy blocker?
-    * Data team (replication delay)?
-    * Are the right people involved to fix the problem? Ask for help if not.
+      * Deploy blocker?
+      * Data team (replication delay)?
+      * Are the right people involved to fix the problem? Ask for help if not.
   2. You can click the runbooks links from the alerts in #production
-    * Are we doing / have we done the things listed there?
+      * Are we doing / have we done the things listed there?
   3. If the alert is not actionable, review the [alert deletion guide](https://gitlab.com/gitlab-com/runbooks/-/blob/master/docs/uncategorized/deleting-alerts.md#an-impatient-sres-guide-to-deleting-alerts).
