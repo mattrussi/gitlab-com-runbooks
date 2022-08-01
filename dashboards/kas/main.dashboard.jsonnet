@@ -21,11 +21,11 @@ serviceDashboard.overview('kas')
       queries=[
         {
           legendFormat: 'Number of connected agentk Pods',
-          query: 'sum(grpc_server_requests_in_flight{app="kas", stage=~"$stage", env=~"$environment", grpc_service="gitlab.agent.agent_configuration.rpc.AgentConfiguration", grpc_method="GetConfiguration"})',
+          query: 'sum(grpc_server_requests_in_flight{app="kas", stage="$stage", env="$environment", grpc_service="gitlab.agent.agent_configuration.rpc.AgentConfiguration", grpc_method="GetConfiguration"})',
         },
         {
           legendFormat: 'Number of connected agents',
-          query: 'avg(connected_agents_count{app="kas", stage=~"$stage", env=~"$environment"})',
+          query: 'avg(connected_agents_count{app="kas", stage="$stage", env="$environment"})',
         },
       ],
       yAxisLabel='Count',
