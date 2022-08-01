@@ -36,6 +36,7 @@ Linux install instructions are [also available on the Teleport site](https://got
 The `rails-ro` role in the `gstg` environment does not require a request or approval, use this unless you require production
 
 ```shell
+tsh login --proxy=teleport.gstg.gitlab.net
 tsh ssh rails-ro@console-ro-01-sv-gstg
 ```
 
