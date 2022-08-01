@@ -365,3 +365,7 @@ These means that as we scale up pods, the rate limits will naturally increase.
 The interval for these limits is set to `1s` which is the same interval we use at HAProxy.
 
 For an explanation of the different limit types, see the [Pages rate limit documentation](https://docs.gitlab.com/ee/administration/pages/index.html#rate-limits).
+
+## Overview of rate limits for Container Registry
+
+The Container Registry sits behind Cloudflare and IP rate limits are applied there. The limit is currently set to 4000 requests per 10 seconds, with a 10 seconds IP ban ([source](https://ops.gitlab.net/gitlab-com/gl-infra/config-mgmt/-/blob/d1ab27126212ef5d54b164a47097b2659b6973bb/environments/gprd/cloudflare-waf.tf#L11)).
