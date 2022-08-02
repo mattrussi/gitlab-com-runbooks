@@ -1,0 +1,13 @@
+{
+  "index_patterns": [
+    "chatops-*"
+  ],
+  "settings": {
+    "index": {
+        "lifecycle": {
+          "name": "gitlab-chatops-ilm-policy"
+        }
+    },
+    "number_of_shards": 1
+  }
+}
