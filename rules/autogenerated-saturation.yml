@@ -1547,19 +1547,19 @@ groups:
   - record: slo:max:soft:gitlab_component_saturation:ratio
     labels:
       component: pgbouncer_client_conn_primary
-    expr: "0.8"
+    expr: "0.9"
   - record: slo:max:hard:gitlab_component_saturation:ratio
     labels:
       component: pgbouncer_client_conn_primary
-    expr: "0.85"
+    expr: "0.95"
   - record: slo:max:soft:gitlab_component_saturation:ratio
     labels:
       component: pgbouncer_client_conn_replicas
-    expr: "0.8"
+    expr: "0.9"
   - record: slo:max:hard:gitlab_component_saturation:ratio
     labels:
       component: pgbouncer_client_conn_replicas
-    expr: "0.85"
+    expr: "0.95"
   - record: slo:max:soft:gitlab_component_saturation:ratio
     labels:
       component: pgbouncer_single_core
