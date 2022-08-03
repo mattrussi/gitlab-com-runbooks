@@ -16,7 +16,6 @@
 ## Troubleshooting Pointers
 
 * [Blackbox git exporter is down](blackbox-git-exporter.md)
-* [Camoproxy troubleshooting](../camoproxy/camoproxy.md)
 * [design.gitlab.com Runbook](../design/design-gitlab-com.md)
 * [Tuning and Modifying Alerts](../monitoring/alert_tuning.md)
 * [An impatient SRE's guide to deleting alerts](../monitoring/deleting-alerts.md)
