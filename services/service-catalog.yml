@@ -174,7 +174,7 @@ services:
     technical:
       project:
         - https://github.com/cactus/go-camo
-        - https://gitlab.com/gitlab-cookbooks/gitlab-camoproxy
+        - https://gitlab.com/gitlab-com/gl-infra/k8s-workloads/gitlab-helmfiles/-/tree/master/releases/camoproxy/charts
       slx:
       documents:
         design:
@@ -185,8 +185,6 @@ services:
       dependencies:
       configurations:
       chef_roles:
-        - gstg-svc-camoproxy
-        - gprd-svc-camoproxy
       scalability:
         bound: cpu
         scalable: horizontal
@@ -200,7 +198,7 @@ services:
     infrastructure:
       provider: gcp
       architecture:
-      provisioning: terraform
+      provisioning: kubernetes
       accesses:
         - account_name:
           access_type:
