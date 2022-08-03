@@ -1,7 +1,6 @@
 local grafana = import 'github.com/grafana/grafonnet-lib/grafonnet/grafana.libsonnet';
 local promQuery = import 'grafana/prom_query.libsonnet';
 local graphPanel = grafana.graphPanel;
-local grafana = import 'github.com/grafana/grafonnet-lib/grafonnet/grafana.libsonnet';
 local heatmapPanel = grafana.heatmapPanel;
 local text = grafana.text;
 local seriesOverrides = import 'grafana/series_overrides.libsonnet';
