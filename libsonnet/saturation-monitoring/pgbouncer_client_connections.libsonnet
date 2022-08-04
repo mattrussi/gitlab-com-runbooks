@@ -36,9 +36,8 @@ local pgbouncer_client_conn(maxClientConns, name, appliesToServiceTypes) =
       %(maxClientConns)g
     |||,
     slos: {
-      // Move pack to 0.80 (soft) and 0.85 (hard) when we increase `max_client_conn` https://gitlab.com/gitlab-com/gl-infra/reliability/-/issues/16121
-      soft: 0.90,
-      hard: 0.95,
+      soft: 0.80,
+      hard: 0.85,
     },
   });
 
