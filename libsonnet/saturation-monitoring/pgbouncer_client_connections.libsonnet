@@ -43,6 +43,6 @@ local pgbouncer_client_conn(maxClientConns, name, appliesToServiceTypes) =
   });
 
 {
-  pgbouncer_client_conn_primary: pgbouncer_client_conn(maxClientConns=8192, name='Primary', appliesToServiceTypes=['pgbouncer', 'pgbouncer-registry', 'pgbouncer-ci']),
+  pgbouncer_client_conn_primary: pgbouncer_client_conn(maxClientConns=10000, name='Primary', appliesToServiceTypes=['pgbouncer', 'pgbouncer-registry', 'pgbouncer-ci']),
   pgbouncer_client_conn_replicas: pgbouncer_client_conn(maxClientConns=20000, name='Replicas', appliesToServiceTypes=['patroni', 'patroni-registry', 'patroni-ci']),
 }
