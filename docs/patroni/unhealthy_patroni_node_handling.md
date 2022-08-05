@@ -342,21 +342,31 @@ You can use the following steps to create all or a subset of the patroni CI inst
 
     ```
     ssh <node_fqdn> "sudo chef-client"
+    ssh <node_fqdn> "sudo chown -R gitlab-psql.gitlab-psql /var/opt/gitlab"
     ```
 
 1. Start patroni service on the node
 
     ```
-    ssh <node_fqdn> "sudo service start patroni"
+    ssh <node_fqdn> "systemctl enable patroni && systemctl start patroni"
     ```
 
 ### Step 3 - Check Patroni, PGBouncer and PostgreSQL
 
 - Login into the node and check if Patroni is running and in sync with Writer/Primary
 
-    ```
-    sudo gitlab-patronictl list
-    ```
+    - Node patroni status and lag
+    
+        ```
+        sudo gitlab-patronictl list
+        ```
+
+    - If the node is not in 'running' state with 0 lag, check the postgresql logs:
+
+        ```
+        tail -n 1000 -f /var/log/gitlab/postgresql/postgresql.csv
+        ```
+
 - Checking for the node name in the list of replicas in Consul:
 
     ```
@@ -368,13 +378,13 @@ You can use the following steps to create all or a subset of the patroni CI inst
 - Check Pgbouncer status:
 
     ```
-    for c in /usr/local/bin/pgb-console*; do $c -c 'SHOW CLIENTS;'
+    for c in /usr/local/bin/pgb-console*; do $c -c 'SHOW CLIENTS;'; done;
     ```
 
 - Check PostgreSQL for connected clients:
 
     ```
-    gitlab-psql -qc \
+    sudo gitlab-psql -qc \
        "select count(*) from pg_stat_activity
         where backend_type = 'client backend'
         and pid <> pg_backend_pid()
