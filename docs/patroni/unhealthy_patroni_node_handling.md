@@ -6,22 +6,22 @@
 	* 1.2. [Pre-requisite](#Pre-requisite)
 	* 1.3. [Scope](#Scope)
 	* 1.4. [Mental Model](#MentalModel)
-* 2. [Chapter 1 - Diagnose](#Chapter1-Diagnose)
+* 2. [Diagnose](#Diagnose)
 	* 2.1. [PostgreSQL health](#PostgreSQLhealth)
 		* 2.1.1. [A - Replication Lagging](#A-ReplicationLagging)
 	* 2.2. [Host health - Check Resource Contention](#Hosthealth-CheckResourceContention)
 		* 2.2.1. [A - Disk](#A-Disk)
 		* 2.2.2. [B - Memory](#B-Memory)
-* 3. [Chapter 2 - Draining Workload from the Unhealty Patroni replica](#Chapter2-DrainingWorkloadfromtheUnhealtyPatronireplica)
+* 3. [Draining Workload from the Unhealty Patroni replica](#DrainingWorkloadfromtheUnhealtyPatronireplica)
 	* 3.1. [Preparation](#Preparation)
 	* 3.2. [Step 1 - Stop chef-client](#Step1-Stopchef-client)
 	* 3.3. [Step 2 - Take the replicate node out of load balancing](#Step2-Takethereplicatenodeoutofloadbalancing)
 	* 3.4. [Step 3 - Decide if you will remove the node or wait for it to recover](#Step3-Decideifyouwillremovethenodeorwaitforittorecover)
-* 4. [Chapter 3 - Removing an unhealty replica from the Patroni cluster](#Chapter3-RemovinganunhealtyreplicafromthePatronicluster)
+* 4. [Removing an unhealty replica from the Patroni cluster](#RemovinganunhealtyreplicafromthePatronicluster)
 	* 4.1. [Step 1 - Stop patroni service on the node](#Step1-Stoppatroniserviceonthenode)
 	* 4.2. [Step 2 - Shutdown the node](#Step2-Shutdownthenode)
 	* 4.3. [Step 3 - Delete the VM and disks](#Step3-DeletetheVManddisks)
-* 5. [Chapter 4 - Replacing the replica](#Chapter4-Replacingthereplica)
+* 5. [Replacing the replica](#Replacingthereplica)
 	* 5.1. [Step 1 - Take a Disk Snapshot of the backup node, to recreate the replica](#Step1-TakeaDiskSnapshotofthebackupnodetorecreatethereplica)
 	* 5.2. [Step 2 - Recreate the removed node](#Step2-Recreatetheremovednode)
 	* 5.3. [Step 3 - Check Patroni, PGBouncer and PostgreSQL](#Step3-CheckPatroniPGBouncerandPostgreSQL)
@@ -79,7 +79,7 @@ What this means is that we need to be aware of and think of:
 - Let Terraform replace the instance 
 - Initialize the Patroni service in the replaced instance to re-build it back as a PostgreSQL Replica
 
-##  2. <a name='Chapter1-Diagnose'></a>Chapter 1 - Diagnose
+##  2. <a name='Diagnose'></a>Diagnose
 
 ###  2.1. <a name='PostgreSQLhealth'></a>PostgreSQL health
 
@@ -133,7 +133,7 @@ If there is intense resource contention a resource can become unhealthy,
 - Trashing/Swapping
 - OOM Kill
 
-##  3. <a name='Chapter2-DrainingWorkloadfromtheUnhealtyPatronireplica'></a>Chapter 2 - Draining Workload from the Unhealty Patroni replica
+##  3. <a name='DrainingWorkloadfromtheUnhealtyPatronireplica'></a>Draining Workload from the Unhealty Patroni replica
 
 ###  3.1. <a name='Preparation'></a>Preparation
 
@@ -201,7 +201,7 @@ This is a critical decision because replacing a Patroni Replica can take up to <
 If you decide to relpace the unhealthy replica proceed to chapter 3.
 
 
-##  4. <a name='Chapter3-RemovinganunhealtyreplicafromthePatronicluster'></a>Chapter 3 - Removing an unhealty replica from the Patroni cluster
+##  4. <a name='RemovinganunhealtyreplicafromthePatronicluster'></a>Removing an unhealty replica from the Patroni cluster
 
 
 **IMPORTANT:** make sure that the connections that the workload is drained from the unhealthy replica (link to previous chapter)
@@ -300,7 +300,7 @@ We have alerts that fire when patroni is deemed to be down. Since this is an int
         knife client delete <NODE_NAME>
         ```
 
-##  5. <a name='Chapter4-Replacingthereplica'></a>Chapter 4 - Replacing the replica
+##  5. <a name='Replacingthereplica'></a>Replacing the replica
 
 ###  5.1. <a name='Step1-TakeaDiskSnapshotofthebackupnodetorecreatethereplica'></a>Step 1 - Take a Disk Snapshot of the backup node, to recreate the replica
 
