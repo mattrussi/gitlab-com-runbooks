@@ -193,9 +193,7 @@ We have alerts that fire when patroni is deemed to be down. Since this is an int
    sudo gitlab-patronictl list
    ``` 
 
-
 ### Step 2 - Shutdown the node
-
 
 1. Find the instance name in GCloud
 
@@ -271,70 +269,94 @@ We have alerts that fire when patroni is deemed to be down. Since this is an int
 
 ## Replacing the replica
 
+### Step 1 - Take a Disk Snapshot of the backup node, to recreate the replica
 
-### Step 1 - Check if Terraform will re-create the removed node
+1. Find which instance is the database cluster Backup Node
 
-- Go into the proper Terraform environment workspace, within `config-mgmt/environments/<environment>`
+    - GSTG Main: `knife search 'roles:gstg-base-db-patroni-backup-replica AND roles:gstg-base-db-patroni-main' --id-only`
+    - GSTG CI: `knife search 'roles:gstg-base-db-patroni-ci-backup-replica AND roles:gstg-base-db-patroni-ci' --id-only`
+    - GPRD Main: `knife search 'roles:gprd-base-db-patroni-backup-replica AND roles:gprd-base-db-patroni-v12' --id-only`
+    - GPRD CI: `knife search 'roles:gprd-base-db-patroni-ci-backup-replica AND roles:gprd-base-db-patroni-ci' --id-only`
 
-- Resync your local repository if necessary and perform a `tf init --upgrade`
+2. Log into the Backup Node and execute a gcs-snapshot:
 
-- Perform a Terraform plan and check the resources that will be created
-
-	```
-	tf plan -out resync-tf.plan
-	```
-	
-- Check the Terraform change before applying
-   
-  TF should create 3 resources for each removed Patroni Replica: 2 disks and 1 VM/instance
-  - module.patroni.google_compute_disk.data_disk
-  - module.patroni.google_compute_disk.log_disk
-  - module.patroni.google_compute_instance.instance_with_attached_disk
-
+    ```
+    sudo su - gitlab-psql
+    PATH="/usr/local/sbin:/usr/sbin/:/sbin:/usr/local/bin:/usr/bin:/bin:/snap/bin"
+    /usr/local/bin/gcs-snapshot.sh
+    ```
 
 ### Step 2 - Recreate the removed node
 
-- Create the new resources
+You can use the following steps to create all or a subset of the patroni CI instances, just depending on how many instances were previously destroyed.
 
-	```
-	tf apply "resync-tf.plan"
-	```
+1. Change Terraform environment
+    - Execute the following `gcloud` command to get the name of the most recent GCS snapshot from the patroni backup data disk, but **DO NOT SIMPLY COPY/PASTE IT**, set the `--project` and `--filter` accordingly with the environment you are performing the restore:
 
-- Wait for the resources to be created in GCloud
+        ```
+        gcloud compute snapshots list --project [gitlab-staging-1|gitlab-production] --limit=1 --uri --sort-by=~creationTimestamp --filter=status~READY --filter=sourceDisk~patroni-[06-db-gstg|ci-03-db-gstg|v12-10-db-gprd|ci-03-db-gprd]-data
+        ```
 
-- Check GCloud if the replaced node is listed
+    - Remove the `https://www.googleapis.com/compute/v1/` prefix of the snapshot name
 
-- Check Chef nodes 	
-	
-	```
-	ENVIRONMENT= <enter the environment>
-	cd <chef-repo directory>
-	knife node list | grep $ENVIRONMENT | grep patroni
-	```
+        - For example: `https://www.googleapis.com/compute/v1/projects/gitlab-production/global/snapshots/nukw46z00o90` will turn into `projects/gitlab-production/global/snapshots/nukw46z00o90`
 
-- Check the instance Serial 1 port (Linux console) to see if there was any errors
+    - Add the following line into the proper `patroni-*` module at `main.tf`
 
-	Note: it happen a few times during tests that chef-client crashed during the bootstrap, but if you login in the host and manually call `sudo chef-client` it should finish the bootstrap setup.
+        ```
+          data_disk_snapshot     = "<snapshot_name>"
+          data_disk_create_timeout = "180m"
+        ```
+1. Check the resources that will be created on the plan
 
+    ```
+    tf plan -out resync-tf.plan
+    ```
+
+    - Check the Terraform change before applying, TF should create 3 resources for each removed Patroni Replica: 2 disks and 1 VM/instance
+
+        - module.patroni.google_compute_disk.data_disk
+        - module.patroni.google_compute_disk.log_disk
+        - module.patroni.google_compute_instance.instance_with_attached_disk
+
+1. Re-create the unhealthy patroni node
+
+    ```
+    tf apply "resync-tf.plan"
+    ```
+
+1. Check the VM instance Serial port in the GCP console to see if the instance is already initialized and if Chef has finished running, for example:
+   - GSTG Main: instance [patroni-01-db-gstg/console?port=1&project=gitlab-staging-1](https://console.cloud.google.com/compute/instancesDetail/zones/us-east1-c/instances/patroni-ci-01-db-gstg/console?port=1&project=gitlab-staging-1)
+   - GPRD Main: instance [patroni-v12-01-db-gprd/console?port=1&project=gitlab-production](https://console.cloud.google.com/compute/instancesDetail/zones/us-east1-c/instances/patroni-ci-01-db-gprd/console?port=1&project=gitlab-production)
+   - Or you can execute `gcloud compute instances get-serial-port-output <instance_name>`
+1. Look into the instance Serial Console, or `/var/log/syslog` log file, if the Chef bootstrap has failed. Any kind of error needs to be addressed, except for while performing `usermod: directory /var/opt/gitlab/postgresql`, which is a known issue that can be ignored. Therefore if you observe the following message in `/var/log/syslog` or the instance serial port/console, you can start executing the pg-replica-rebuild Ansible playbook.
+
+    ```
+    $ sudo cat /var/log/syslog | grep "STDERR: usermod: directory /var/opt/gitlab/postgresql exists"
+
+    ??? ??? GCEMetadataScripts[1935]: ??? GCEMetadataScripts: startup-script: #033[0m    STDERR: usermod: directory /var/opt/gitlab/postgresql exists
+    ??? ??? GCEMetadataScripts[1935]: ??? GCEMetadataScripts: startup-script: STDERR: usermod: directory /var/opt/gitlab/postgresql exists
+    ```
+
+1. Force run of Chef-Client in the nodes to let all configuration files in sync with the repo
+
+    ```
+    ssh <node_fqdn> "sudo chef-client"
+    ```
+
+1. Start patroni service on the node
+
+    ```
+    ssh <node_fqdn> "sudo service start patroni"
+    ```
 
 ### Step 3 - Check Patroni, PGBouncer and PostgreSQL
 
-- Start Patroni in the node
-
-	```
-	systemctl enable patroni && systemctl start patroni
-	```
-
-### Step 4 - Check Patroni, PGBouncer and PostgreSQL
-
 - Login into the node and check if Patroni is running and in sync with Writer/Primary
 
-
-   ```
-   sudo gitlab-patronictl list
-
-	```
-
+    ```
+    sudo gitlab-patronictl list
+    ```
 - Checking for the node name in the list of replicas in Consul:
 
     ```
@@ -343,7 +365,6 @@ We have alerts that fire when patroni is deemed to be down. Since this is an int
 
     If the name of the replaced host is in the list it should start receiving connections;
     
-
 - Check Pgbouncer status:
 
     ```
@@ -359,11 +380,6 @@ We have alerts that fire when patroni is deemed to be down. Since this is an int
         and pid <> pg_backend_pid()
         and datname <> 'postgres'"
     ```
-
-
-## Automation Thoughts
-
-
 
 ## Reference
 
