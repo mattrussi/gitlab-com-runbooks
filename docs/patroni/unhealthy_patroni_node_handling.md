@@ -1,6 +1,6 @@
 # Patroni 
 
-## [DRAFT] Handling Unhealthy Patroni Replica
+## Handling Unhealthy Patroni Replica
 
 ### Overview
 
