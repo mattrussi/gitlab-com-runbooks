@@ -7,11 +7,9 @@
 	* 1.3. [Scope](#Scope)
 	* 1.4. [Mental Model](#MentalModel)
 * 2. [Diagnose](#Diagnose)
-	* 2.1. [PostgreSQL health](#PostgreSQLhealth)
-		* 2.1.1. [A - Replication Lagging](#A-ReplicationLagging)
-	* 2.2. [Host health - Check Resource Contention](#Hosthealth-CheckResourceContention)
-		* 2.2.1. [A - Disk](#A-Disk)
-		* 2.2.2. [B - Memory](#B-Memory)
+	* 2.1. [Node availability](#Nodeavailability)
+	* 2.2. [Replication Lagging](#ReplicationLagging)
+	* 2.3. [Resource Contention](#ResourceContention)
 * 3. [Draining Workload from the Unhealty Patroni replica](#DrainingWorkloadfromtheUnhealtyPatronireplica)
 	* 3.1. [Preparation](#Preparation)
 	* 3.2. [Step 1 - Stop chef-client](#Step1-Stopchef-client)
@@ -81,10 +79,18 @@ What this means is that we need to be aware of and think of:
 
 ##  2. <a name='Diagnose'></a>Diagnose
 
-###  2.1. <a name='PostgreSQLhealth'></a>PostgreSQL health
+###  2.1. <a name='Nodeavailability'></a>Node availability
 
+The main reason that an instance is unhealthy is if it's considered unavailable.
 
-####  2.1.1. <a name='A-ReplicationLagging'></a>A - Replication Lagging
+The 3 evidences that point if a Patroni instance is unavailable are:
+    - If you can't log/ssh into the node;
+    - If the Thanos/Graphana metrics are missing for the instance - https://dashboards.gitlab.net/d/bd2Kl9Imk/host-stats;
+    - Execute `gitlab-patronictl list` from any other node in the cluster and check if the instance is not listed;
+
+Beside unavailability, a Patroni instance can be considere unhealthy for other reasons like Replication Lagging and Resource Contention.
+
+###  2.2. <a name='ReplicationLagging'></a>Replication Lagging
 
 If just one or a few Replicas are lagging in relation with the Primary/Writer node there is a great chance that the issue is on the Replica side, so the first evidence of an unhealthy replica is replication lag.
 
@@ -95,43 +101,37 @@ If just one or a few Replicas are lagging in relation with the Primary/Writer no
 
 - Execute `gitlab-patronictl list` to get the amount of Lag, in MBytes, for each Replica
 
-For example the following output show aprox. 19 GB (19382 MB) of lag in the `patroni-08-db-gstg` host
+    For example the following output show aprox. 19 GB (19382 MB) of lag in the `patroni-08-db-gstg` host
 
-```
-# gitlab-patronictl list
-+ Cluster: pg12-ha-cluster-stg (6951753467583460143) ------------+---------+---------+----+-----------+---------------------+
-| Member                                         | Host          | Role    | State   | TL | Lag in MB | Tags                |
-+------------------------------------------------+---------------+---------+---------+----+-----------+---------------------+
-| patroni-01-db-gstg.c.gitlab-staging-1.internal | 10.224.29.101 | Leader  | running |  7 |           |                     |
-+------------------------------------------------+---------------+---------+---------+----+-----------+---------------------+
-| patroni-02-db-gstg.c.gitlab-staging-1.internal | 10.224.29.102 | Replica | running |  7 |         3 |                     |
-+------------------------------------------------+---------------+---------+---------+----+-----------+---------------------+
-...
-+------------------------------------------------+---------------+---------+---------+----+-----------+---------------------+
-| patroni-07-db-gstg.c.gitlab-staging-1.internal | 10.224.29.107 | Replica | running |  7 |         0 |                     |
-+------------------------------------------------+---------------+---------+---------+----+-----------+---------------------+
-| patroni-08-db-gstg.c.gitlab-staging-1.internal | 10.224.29.108 | Replica | running |  7 |     19382 |                     |
-+------------------------------------------------+---------------+---------+---------+----+-----------+---------------------+
-```
+    ```
+    # gitlab-patronictl list
+    + Cluster: pg12-ha-cluster-stg (6951753467583460143) ------------+---------+---------+----+-----------+---------------------+
+    | Member                                         | Host          | Role    | State   | TL | Lag in MB | Tags                |
+    +------------------------------------------------+---------------+---------+---------+----+-----------+---------------------+
+    | patroni-01-db-gstg.c.gitlab-staging-1.internal | 10.224.29.101 | Leader  | running |  7 |           |                     |
+    +------------------------------------------------+---------------+---------+---------+----+-----------+---------------------+
+    | patroni-02-db-gstg.c.gitlab-staging-1.internal | 10.224.29.102 | Replica | running |  7 |         3 |                     |
+    +------------------------------------------------+---------------+---------+---------+----+-----------+---------------------+
+    ...
+    +------------------------------------------------+---------------+---------+---------+----+-----------+---------------------+
+    | patroni-07-db-gstg.c.gitlab-staging-1.internal | 10.224.29.107 | Replica | running |  7 |         0 |                     |
+    +------------------------------------------------+---------------+---------+---------+----+-----------+---------------------+
+    | patroni-08-db-gstg.c.gitlab-staging-1.internal | 10.224.29.108 | Replica | running |  7 |     19382 |                     |
+    +------------------------------------------------+---------------+---------+---------+----+-----------+---------------------+
+    ```
 
-- Or you can look into the following Grafana Dashboards:
+- Or you can look into the `Lag time` or `Lag size` Graphana dashboards, or `pg_replication_lag` or `pg_stat_replication_pg_wal_lsn_diff` Thanos metrics.
 
-	- Lag time: https://dashboards.gitlab.net/d/000000144/postgresql-overview?orgId=1&viewPanel=16 
-	- Lag size: https://dashboards.gitlab.net/d/000000144/postgresql-overview?orgId=1&viewPanel=11
 
-###  2.2. <a name='Hosthealth-CheckResourceContention'></a>Host health - Check Resource Contention
+###  2.3. <a name='ResourceContention'></a>Resource Contention
 
-If there is intense resource contention a resource can become unhealthy, 
+If there is intense resource contention a resource can become unhealthy and get stuck/unavailable, check for:
 
-####  2.2.1. <a name='A-Disk'></a>A - Disk
-
-- Metrics
+- CPU usage stuck close to 100%
+- Disk Metrics (eg. I/O wait per operation)
 - Look for Stuck I/O and Disk Failure in syslog
-
-####  2.2.2. <a name='B-Memory'></a>B - Memory
-
-- Trashing/Swapping
-- OOM Kill
+- Memory Swapping (ocasional swapping can happen, intense swapping can cause PostgreSQL to hang) 
+- OOM Kill messages in syslog or VM serial console
 
 ##  3. <a name='DrainingWorkloadfromtheUnhealtyPatronireplica'></a>Draining Workload from the Unhealty Patroni replica
 
@@ -196,10 +196,9 @@ You can see an example of taking a node out of service in [this issue](https://g
  
 ###  3.4. <a name='Step3-Decideifyouwillremovethenodeorwaitforittorecover'></a>Step 3 - Decide if you will remove the node or wait for it to recover
 
-This is a critical decision because replacing a Patroni Replica can take up to <mark>reference to Mean-Time-To-Create instance</mark>. Also consider that creating/replacing a Replica will have significant I/O impact in the Primary/Writer node during the whole operation.
+This is a critical decision because replacing a Patroni Replica can take a couple of hours, but letting it to recover without intervention can take up to several days deppending on lag size and write workload.
 
-If you decide to relpace the unhealthy replica proceed to chapter 3.
-
+If you decide to relpace the unhealthy replica proceed to the next chapter.
 
 ##  4. <a name='RemovinganunhealtyreplicafromthePatronicluster'></a>Removing an unhealty replica from the Patroni cluster
 
