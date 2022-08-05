@@ -5,6 +5,8 @@
 customers.gitlab.com is the site where GitLab customers can manage
 their subscription(s) for GitLab.com.
 
+For all availability issues see the **[escalation process for incidents or outages](https://about.gitlab.com/handbook/engineering/development/fulfillment/#escalation-process-for-incidents-or-outages)**.
+
 ### Production and Staging
 
 The production and staging environments reside in Google Cloud projects.
@@ -86,3 +88,7 @@ Chef is used essentially to bootstrap user access for users and Ansible.
 * [Production Base](https://gitlab.com/gitlab-com/gl-infra/chef-repo/-/blob/master/roles/prdsub-base.json)
 
 [Ansible](https://gitlab.com/gitlab-com/gl-infra/customersdot-ansible) is used to deploy the latest code to staging.
+
+### Alerting
+
+Currently, the only alerting is a blackbox probe.

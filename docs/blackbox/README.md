@@ -15,8 +15,8 @@
 
 ## Troubleshooting Pointers
 
-* [Blackbox probes for https://customers.gitlab.com are failing](../customersdot/README.md)
 * [Blackbox git exporter is down](blackbox-git-exporter.md)
+* [CustomersDot main troubleshoot documentation](../customersdot/overview.md)
 * [design.gitlab.com Runbook](../design/design-gitlab-com.md)
 * [Tuning and Modifying Alerts](../monitoring/alert_tuning.md)
 * [An impatient SRE's guide to deleting alerts](../monitoring/deleting-alerts.md)
