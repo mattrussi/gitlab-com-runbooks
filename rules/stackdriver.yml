@@ -35,17 +35,3 @@ groups:
       sum without (instance_id) (
         stackdriver_gce_instance_logging_googleapis_com_user_unstructured_500_deadline_exceeded
       ) / 60
-
-  - alert: High503ErrorRate
-    expr: zone:stackdriver_haproxy_errors:rate1m{code="503"} > 0
-    for: 10m
-    labels:
-      pager: pagerduty
-      severity: s1
-      alert_type: symptom
-    annotations:
-      description: HAProxy is responding with 503 at a high rate for the {{ $labels.zone }} zone, which could indicate
-        a problem with Kubernetes pods. Check the Kubernetes deployments in the zone for any signs of errors
-        (Status column showing "Does not have minimum availability", "Pods have warnings", etc.)
-      runbook: docs/kube/kubernetes.md
-      title: High 503 Error Rate on HAProxy
