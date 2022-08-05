@@ -86,15 +86,6 @@ For example the following output show aprox. 19 GB (19382 MB) of lag in the `pat
 	- Lag time: https://dashboards.gitlab.net/d/000000144/postgresql-overview?orgId=1&viewPanel=16 
 	- Lag size: https://dashboards.gitlab.net/d/000000144/postgresql-overview?orgId=1&viewPanel=11
 
-
-#### B - SQL Query Latency
-
-- If you compare the "" metric between nodes, the nodes presenting higher values :
-
-
-
---
-
 ### Host health - Check Resource Contention
 
 If there is intense resource contention a resource can become unhealthy, 
@@ -104,18 +95,12 @@ If there is intense resource contention a resource can become unhealthy,
 - Metrics
 - Look for Stuck I/O and Disk Failure in syslog
 
-
 #### B - Memory
 
 - Trashing/Swapping
 - OOM Kill
 
-
-
-
 ## Chapter 2 - Draining Workload from the Unhealty Patroni replica
-
-
 
 ### Preparation
 
@@ -125,29 +110,29 @@ If there is intense resource contention a resource can become unhealthy,
 
 ### Step 1 - Stop chef-client
 
-- On the replica node run: `sudo chef-client-disable "Removing patroni node: Ref issue prod#xyz"`
+1. On the replica node run: `sudo chef-client-disable "Removing patroni node: Ref issue prod#xyz"`
 
 ### Step 2 - Take the replicate node out of load balancing
 
  If clients are connecting to replicas by means of [service discovery](https://docs.gitlab.com/ee/administration/database_load_balancing.html#service-discovery) (as opposed to hard-coded list of hosts), you can remove a replica from the list of hosts used by the clients by tagging it as not suitable for failing over (`nofailover: true`) and load balancing (`noloadbalance: true`). (If clients are configured with `replica.patroni.service.consul. DNS record` look at [this legacy method](https://gitlab.com/gitlab-com/runbooks/-/blob/master/docs/patroni/patroni-management.md#legacy-method-consul-maintenance))
 
-- Add a tags section to /var/opt/gitlab/patroni/patroni.yml on the node:
+1. Add a tags section to /var/opt/gitlab/patroni/patroni.yml on the node:
 
     ```
     tags:
       nofailover: true
       noloadbalance: true
     ```
-- Reload Patroni
+1. Reload Patroni
     ```
     sudo systemctl reload patroni
     ```
-- Check that Patroni host now is no longer considered for failover nor loadbalance 
+1. Check that Patroni host now is no longer considered for failover nor loadbalance 
    ```
    sudo gitlab-patronictl list
    ```
  
-- Test the efficacy of that reload by checking for the node name in the list of replicas:
+1. Test the efficacy of that reload by checking for the node name in the list of replicas:
 
     ```
     dig @127.0.0.1 -p 8600 db-replica.service.consul. SRV
@@ -156,7 +141,7 @@ If there is intense resource contention a resource can become unhealthy,
     If the name is absent, then the reload worked.
 
 
-- Wait until all client connections are drained from the replica (it depends on the interval value set for the clients), use this command to track number of client connections:
+1. Wait until all client connections are drained from the replica (it depends on the interval value set for the clients), use this command to track number of client connections:
 
     ```
     for c in /usr/local/bin/pgb-console*; do $c -c 'SHOW CLIENTS;' | grep gitlabhq_production | grep -v gitlab-monitor; done | wc -l
@@ -195,14 +180,14 @@ Now it is safe to stop the patroni service on this node. This will also stop pos
 
 We have alerts that fire when patroni is deemed to be down. Since this is an intentional change - either silence the alarm in advance and/or give a heads up to the EOC (by messaging `@sre-oncall` at `#infrastructure-lounge` Slack channel).
 
-- Stop the patroni service on the unhealthy node
+1. Stop the patroni service on the unhealthy node
 
 	```
 	sudo systemctl stop patroni
 	sudo systemctl disable patroni.service
 	```
 
-- Check that patroni service is stopped in the host
+1. Check that patroni service is stopped in the host
 
    ```
    sudo gitlab-patronictl list
@@ -212,69 +197,77 @@ We have alerts that fire when patroni is deemed to be down. Since this is an int
 ### Step 2 - Shutdown the node
 
 
-- Find the instance name in GCloud
+1. Find the instance name in GCloud
 
-	TODO
+    1. You can use `gcloud compute instances list | grep <name>` to search for the instances, or get it using GCP console https://console.cloud.google.com/compute/instances;
+    1. Define the `INSTANCE_NAME=<name>` variable with the proper instance name
 
-	```
-	INSTANCE_NAME = $(gcloud compute instance describe ???????)
-	```
-
-- Stop the VM
+1. Stop the VM
 	
 	```
 	gcloud compute instances stop $INSTANCE_NAME
 	```
 
-
-
 ### Step 3 - Delete the VM and disks
 
-- List the VM Disks
+1. List the VM Disks
 
-	TODO: get `zone` with disk and just disks where `disks.autoDelete=False`
+    Execute the following script lines:
 
-	```
-	IFS=","
-	for (disk, zone) in $(gcloud compute instances describe $INSTANCE_NAME --format="value(disks.source.basename().list())")
-	do
-	    echo "Run: gcloud compute disks delete $disk"
-	done
-	```
+        ```
+        IFS=","
+        echo "#### List disks:"
+        gcloud compute instances describe $INSTANCE_NAME --format="value(disks.source.list())"
+        echo "#### Delete Disks Commands - TAKE NOTE of them:"
+        for disk in $(gcloud compute instances describe $INSTANCE_NAME --format="value(disks.source.basename().list())")
+        do
+            echo "Run: gcloud compute disks delete $disk --zone <zone_name>"
+        done
+        ```
 
-- Take note of the VM Disks to delete them latter
-
-- Delete the VM
+1. Delete the VM
 	
-	```
-	gcloud compute instances delete $INSTANCE_NAME
-	```
+    - Execute the following command:
 
-- Delete the Disks
-	- Execute the commands of the list VM disks
+        ```
+        gcloud compute instances delete $INSTANCE_NAME
+        ```
 
+    - Take note of the zone where the instance is hosted, you will need to delete the instance disks;
 
-- Confirm that Compute instances and disks were deleted in the GCP console:
+1. Delete the Disks
+	- Execute the delete disks command listed in the "List VM Disks" step. You would need to delete only the `data` disk and the `log` disk of the Patroni node as the instance disk is automatically deleted with the instance.
+
+    - If you didn't took note of the delete disk commands above, execute the following commands to delete the `data` and `log` disks:
+
+        ```
+        gcloud compute disks delete $INSTANCE_NAME-data --zone <zone_name>
+        gcloud compute disks delete $INSTANCE_NAME-log --zone <zone_name>
+        ```
+
+1. Confirm that Compute instances and disks were deleted in the GCP console:
+
 	- https://console.cloud.google.com/compute/instances
 	- https://console.cloud.google.com/compute/disks
 
 
-- List the nodes in Chef	
+1. Check if the instance nodes still exist in Chef and delete them if necessary
 
-	```
-   ENVIRONMENT= <enter the environment>
-	cd <chef-repo directory>
-	knife node list | grep $ENVIRONMENT | grep patroni
-	```
+    - Execute the following command:
 
+        ```
+        ENVIRONMENT=<enter the environment, eg. gstg or gprd>
+        cd <your chef-repo directory>
+        knife node list | grep $ENVIRONMENT | grep $INSTANCE_NAME
+        knife client list | grep $ENVIRONMENT | grep $INSTANCE_NAME
+        ```
 
-- Delete the node from Chef server	
+    - If the node still is listed delete the node from Chef server with:
 
-	```
-	knife node delete <NODE_NAME>
-	knife client delete <NODE_NAME>
-	
-	```
+        ```
+        knife node delete <NODE_NAME>
+        knife client delete <NODE_NAME>
+        ```
 
 ## Replacing the replica
 
