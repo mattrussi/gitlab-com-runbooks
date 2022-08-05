@@ -17,6 +17,7 @@
 
 ## Troubleshooting Pointers
 
+* **[Escalation process for incidents or outages](https://about.gitlab.com/handbook/engineering/development/fulfillment/#escalation-process-for-incidents-or-outages)**
 * [CustomersDot main troubleshoot documentation](overview.md)
 * [../patroni/postgresql-backups-wale-walg.md](../patroni/postgresql-backups-wale-walg.md)
 <!-- END_MARKER -->
