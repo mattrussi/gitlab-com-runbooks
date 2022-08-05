@@ -84,9 +84,9 @@ What this means is that we need to be aware of and think of:
 The main reason that an instance is unhealthy is if it's considered unavailable.
 
 The 3 evidences that point if a Patroni instance is unavailable are:
-    - If you can't log/ssh into the node;
-    - If the Thanos/Graphana metrics are missing for the instance - https://dashboards.gitlab.net/d/bd2Kl9Imk/host-stats;
-    - Execute `gitlab-patronictl list` from any other node in the cluster and check if the instance is not listed;
+- If you can't log/ssh into the node;
+- If the Thanos/Graphana metrics are missing for the instance - https://dashboards.gitlab.net/d/bd2Kl9Imk/host-stats;
+- Execute `gitlab-patronictl list` from any other node in the cluster and check if the instance is not listed;
 
 Beside unavailability, a Patroni instance can be considere unhealthy for other reasons like Replication Lagging and Resource Contention.
 
@@ -126,7 +126,6 @@ If just one or a few Replicas are lagging in relation with the Primary/Writer no
 ###  2.3. <a name='ResourceContention'></a>Resource Contention
 
 If there is intense resource contention a resource can become unhealthy and get stuck/unavailable, check for:
-
 - CPU usage stuck close to 100%
 - Disk Metrics (eg. I/O wait per operation)
 - Look for Stuck I/O and Disk Failure in syslog
