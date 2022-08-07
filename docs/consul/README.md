@@ -26,6 +26,7 @@
 * [How to provision the benchmark environment](../patroni/provisioning_bench_env.md)
 * [Patroni](../patroni/scale-down-patroni.md)
 * [Patroni](../patroni/scale-up-patroni.md)
+* [Patroni](../patroni/unhealthy_patroni_node_handling.md)
 * [../pgbouncer/patroni-consul-postgres-pgbouncer-interactions.md](../pgbouncer/patroni-consul-postgres-pgbouncer-interactions.md)
 * [PgBouncer connection management and troubleshooting](../pgbouncer/pgbouncer-connections.md)
 * [Removing a PgBouncer instance](../pgbouncer/pgbouncer-remove-instance.md)

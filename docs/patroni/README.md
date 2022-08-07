@@ -55,6 +55,7 @@
 * [Rotating Rails' PostgreSQL password](rotating-rails-postgresql-password.md)
 * [Patroni](scale-down-patroni.md)
 * [Patroni](scale-up-patroni.md)
+* [Patroni](unhealthy_patroni_node_handling.md)
 * [Roles/Users grants and permission Runbook](user_grants_permission.md)
 * [using-wale-gpg.md](using-wale-gpg.md)
 * [../pgbouncer/patroni-consul-postgres-pgbouncer-interactions.md](../pgbouncer/patroni-consul-postgres-pgbouncer-interactions.md)
