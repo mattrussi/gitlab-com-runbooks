@@ -93,16 +93,8 @@
       'web_ide',
       'snippets',
       'wiki',
-      'static_site_editor',
       'pages',
       'remote_development',
-    ],
-  },
-  gitaly: {
-    name: 'Gitaly',
-    stage: 'create',
-    feature_categories: [
-      'gitaly',
     ],
   },
   integrations: {
@@ -209,7 +201,7 @@
     name: 'Vulnerability Research',
     stage: 'secure',
     feature_categories: [
-      'vulnerability_database',
+      'advisory_database',
       'security_benchmarking',
     ],
   },
@@ -273,6 +265,15 @@
       'container_scanning',
     ],
   },
+  product_intelligence: {
+    name: 'Product Intelligence',
+    stage: 'analytics',
+    feature_categories: [
+      'product_analytics',
+      'service_ping',
+      'privacy_control_center',
+    ],
+  },
   purchase: {
     name: 'Purchase',
     stage: 'fulfillment',
@@ -301,36 +302,21 @@
       'fulfillment_platform',
     ],
   },
-  conversion: {
-    name: 'Conversion',
+  acquisition: {
+    name: 'Acquisition',
     stage: 'growth',
     feature_categories: [
       'experimentation_conversion',
+      'experimentation_expansion',
       'onboarding',
     ],
   },
-  expansion: {
-    name: 'Expansion',
-    stage: 'growth',
-    feature_categories: [
-      'experimentation_expansion',
-    ],
-  },
-  adoption: {
-    name: 'Adoption',
+  activation: {
+    name: 'Activation',
     stage: 'growth',
     feature_categories: [
       'experimentation_adoption',
       'experimentation_activation',
-    ],
-  },
-  product_intelligence: {
-    name: 'Product Intelligence',
-    stage: 'growth',
-    feature_categories: [
-      'product_analytics',
-      'service_ping',
-      'privacy_control_center',
     ],
   },
   distribution_build: {
@@ -346,6 +332,13 @@
     feature_categories: [
       'omnibus_package',
       'cloud_native_installation',
+    ],
+  },
+  gitaly: {
+    name: 'Gitaly',
+    stage: 'systems',
+    feature_categories: [
+      'gitaly',
     ],
   },
   geo: {
@@ -379,11 +372,11 @@
       'database',
     ],
   },
-  sharding: {
-    name: 'Sharding',
+  pods: {
+    name: 'Pods',
     stage: 'data_stores',
     feature_categories: [
-      'sharding',
+      'pods',
     ],
   },
   delivery: {
@@ -399,6 +392,7 @@
     feature_categories: [
       'scalability',
       'error_budgets',
+      'infrastructure_cost_data',
     ],
   },
   dedicated: {
@@ -406,6 +400,13 @@
     stage: 'platforms',
     feature_categories: [
       'dedicated',
+    ],
+  },
+  pubsec_services: {
+    name: 'US Public Sector Services',
+    stage: 'platforms',
+    feature_categories: [
+      'pubsec_services',
     ],
   },
   applied_ml: {

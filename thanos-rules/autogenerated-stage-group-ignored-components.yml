@@ -11,7 +11,7 @@ groups:
       product_stage: deploy
       stage_group: 5-min-app
     expr: "1"
-- name: 'Stage group Ignored components: growth - Adoption'
+- name: 'Stage group Ignored components: growth - Acquisition'
   interval: 1m
   partial_response_strategy: warn
   rules:
@@ -19,7 +19,17 @@ groups:
     labels:
       component: graphql_queries
       product_stage: growth
-      stage_group: adoption
+      stage_group: acquisition
+    expr: "1"
+- name: 'Stage group Ignored components: growth - Activation'
+  interval: 1m
+  partial_response_strategy: warn
+  rules:
+  - record: gitlab:ignored_component:stage_group
+    labels:
+      component: graphql_queries
+      product_stage: growth
+      stage_group: activation
     expr: "1"
 - name: 'Stage group Ignored components: modelops - Applied Machine Learning'
   interval: 1m
@@ -91,16 +101,6 @@ groups:
       product_stage: configure
       stage_group: configure
     expr: "1"
-- name: 'Stage group Ignored components: growth - Conversion'
-  interval: 1m
-  partial_response_strategy: warn
-  rules:
-  - record: gitlab:ignored_component:stage_group
-    labels:
-      component: graphql_queries
-      product_stage: growth
-      stage_group: conversion
-    expr: "1"
 - name: 'Stage group Ignored components: data_stores - Database'
   interval: 1m
   partial_response_strategy: warn
@@ -171,16 +171,6 @@ groups:
       product_stage: create
       stage_group: editor
     expr: "1"
-- name: 'Stage group Ignored components: growth - Expansion'
-  interval: 1m
-  partial_response_strategy: warn
-  rules:
-  - record: gitlab:ignored_component:stage_group
-    labels:
-      component: graphql_queries
-      product_stage: growth
-      stage_group: expansion
-    expr: "1"
 - name: 'Stage group Ignored components: ecosystem - Foundations'
   interval: 1m
   partial_response_strategy: warn
@@ -211,14 +201,14 @@ groups:
       product_stage: systems
       stage_group: geo
     expr: "1"
-- name: 'Stage group Ignored components: create - Gitaly'
+- name: 'Stage group Ignored components: systems - Gitaly'
   interval: 1m
   partial_response_strategy: warn
   rules:
   - record: gitlab:ignored_component:stage_group
     labels:
       component: graphql_queries
-      product_stage: create
+      product_stage: systems
       stage_group: gitaly
     expr: "1"
 - name: 'Stage group Ignored components: data_stores - Global Search'
@@ -341,14 +331,24 @@ groups:
       product_stage: verify
       stage_group: pipeline_insights
     expr: "1"
-- name: 'Stage group Ignored components: growth - Product Intelligence'
+- name: 'Stage group Ignored components: data_stores - Pods'
   interval: 1m
   partial_response_strategy: warn
   rules:
   - record: gitlab:ignored_component:stage_group
     labels:
       component: graphql_queries
-      product_stage: growth
+      product_stage: data_stores
+      stage_group: pods
+    expr: "1"
+- name: 'Stage group Ignored components: analytics - Product Intelligence'
+  interval: 1m
+  partial_response_strategy: warn
+  rules:
+  - record: gitlab:ignored_component:stage_group
+    labels:
+      component: graphql_queries
+      product_stage: analytics
       stage_group: product_intelligence
     expr: "1"
 - name: 'Stage group Ignored components: plan - Product Planning'
@@ -430,16 +430,6 @@ groups:
       component: graphql_queries
       product_stage: platforms
       stage_group: scalability
-    expr: "1"
-- name: 'Stage group Ignored components: data_stores - Sharding'
-  interval: 1m
-  partial_response_strategy: warn
-  rules:
-  - record: gitlab:ignored_component:stage_group
-    labels:
-      component: graphql_queries
-      product_stage: data_stores
-      stage_group: sharding
     expr: "1"
 - name: 'Stage group Ignored components: create - Source Code'
   interval: 1m
