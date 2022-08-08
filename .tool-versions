@@ -11,7 +11,7 @@ nodejs 16.16.0 # datasource=node depName=nodejs/node
 pre-commit 2.20.0 # datasource=github-releases depName=pre-commit/pre-commit
 promtool 2.34.0 # datasource=github-releases depName=prometheus/prometheus
 python system
-ruby 3.0.4
+ruby 3.0.4 # datasource=ruby-version depName=ruby/ruby
 shellcheck 0.8.0 # datasource=github-releases depName=koalaman/shellcheck
 shfmt 3.5.1 # datasource=github-releases depName=mvdan/sh
 terraform 1.2.6 # datasource=github-releases depName=hashicorp/terraform
