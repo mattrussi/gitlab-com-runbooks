@@ -49,20 +49,20 @@ groups:
   - record: gitlab:feature_category:stage_group:mapping
     labels:
       feature_category: backup_restore
-      product_stage: enablement
+      product_stage: systems
       stage_group: geo
     expr: "1"
   - record: gitlab:feature_category:stage_group:mapping
     labels:
       feature_category: build
-      product_stage: enablement
+      product_stage: systems
       stage_group: distribution_build
     expr: "1"
   - record: gitlab:feature_category:stage_group:mapping
     labels:
       feature_category: build_artifacts
       product_stage: verify
-      stage_group: testing
+      stage_group: pipeline_insights
     expr: "1"
   - record: gitlab:feature_category:stage_group:mapping
     labels:
@@ -73,7 +73,7 @@ groups:
   - record: gitlab:feature_category:stage_group:mapping
     labels:
       feature_category: cloud_native_installation
-      product_stage: enablement
+      product_stage: systems
       stage_group: distribution_deploy
     expr: "1"
   - record: gitlab:feature_category:stage_group:mapping
@@ -98,25 +98,13 @@ groups:
     labels:
       feature_category: code_testing
       product_stage: verify
-      stage_group: testing
+      stage_group: pipeline_insights
     expr: "1"
   - record: gitlab:feature_category:stage_group:mapping
     labels:
       feature_category: compliance_management
       product_stage: manage
       stage_group: compliance
-    expr: "1"
-  - record: gitlab:feature_category:stage_group:mapping
-    labels:
-      feature_category: container_host_security
-      product_stage: protect
-      stage_group: container_security
-    expr: "1"
-  - record: gitlab:feature_category:stage_group:mapping
-    labels:
-      feature_category: container_network_security
-      product_stage: protect
-      stage_group: container_security
     expr: "1"
   - record: gitlab:feature_category:stage_group:mapping
     labels:
@@ -150,15 +138,33 @@ groups:
     expr: "1"
   - record: gitlab:feature_category:stage_group:mapping
     labels:
+      feature_category: continuous_verification
+      product_stage: monitor
+      stage_group: respond
+    expr: "1"
+  - record: gitlab:feature_category:stage_group:mapping
+    labels:
+      feature_category: credential_management
+      product_stage: manage
+      stage_group: authentication_and_authorization
+    expr: "1"
+  - record: gitlab:feature_category:stage_group:mapping
+    labels:
       feature_category: database
-      product_stage: enablement
+      product_stage: data_stores
       stage_group: database
     expr: "1"
   - record: gitlab:feature_category:stage_group:mapping
     labels:
       feature_category: dataops
-      product_stage: ModelOps
+      product_stage: modelops
       stage_group: dataops
+    expr: "1"
+  - record: gitlab:feature_category:stage_group:mapping
+    labels:
+      feature_category: dedicated
+      product_stage: platforms
+      stage_group: dedicated
     expr: "1"
   - record: gitlab:feature_category:stage_group:mapping
     labels:
@@ -211,7 +217,7 @@ groups:
   - record: gitlab:feature_category:stage_group:mapping
     labels:
       feature_category: disaster_recovery
-      product_stage: enablement
+      product_stage: systems
       stage_group: geo
     expr: "1"
   - record: gitlab:feature_category:stage_group:mapping
@@ -242,13 +248,13 @@ groups:
     labels:
       feature_category: error_tracking
       product_stage: monitor
-      stage_group: respond
+      stage_group: observability
     expr: "1"
   - record: gitlab:feature_category:stage_group:mapping
     labels:
       feature_category: experimentation_activation
       product_stage: growth
-      stage_group: activation
+      stage_group: adoption
     expr: "1"
   - record: gitlab:feature_category:stage_group:mapping
     labels:
@@ -282,6 +288,12 @@ groups:
     expr: "1"
   - record: gitlab:feature_category:stage_group:mapping
     labels:
+      feature_category: fulfillment_platform
+      product_stage: fulfillment
+      stage_group: fulfillment_platform
+    expr: "1"
+  - record: gitlab:feature_category:stage_group:mapping
+    labels:
       feature_category: fuzz_testing
       product_stage: secure
       stage_group: dynamic_analysis
@@ -289,7 +301,7 @@ groups:
   - record: gitlab:feature_category:stage_group:mapping
     labels:
       feature_category: geo_replication
-      product_stage: enablement
+      product_stage: systems
       stage_group: geo
     expr: "1"
   - record: gitlab:feature_category:stage_group:mapping
@@ -313,7 +325,7 @@ groups:
   - record: gitlab:feature_category:stage_group:mapping
     labels:
       feature_category: global_search
-      product_stage: enablement
+      product_stage: data_stores
       stage_group: global_search
     expr: "1"
   - record: gitlab:feature_category:stage_group:mapping
@@ -321,12 +333,6 @@ groups:
       feature_category: helm_chart_registry
       product_stage: package
       stage_group: package
-    expr: "1"
-  - record: gitlab:feature_category:stage_group:mapping
-    labels:
-      feature_category: horse
-      product_stage: platforms
-      stage_group: horse
     expr: "1"
   - record: gitlab:feature_category:stage_group:mapping
     labels:
@@ -349,14 +355,14 @@ groups:
   - record: gitlab:feature_category:stage_group:mapping
     labels:
       feature_category: insider_threat
-      product_stage: ModelOps
-      stage_group: anti_abuse
+      product_stage: anti-abuse
+      stage_group: anti-abuse
     expr: "1"
   - record: gitlab:feature_category:stage_group:mapping
     labels:
       feature_category: instance_resiliency
-      product_stage: ModelOps
-      stage_group: anti_abuse
+      product_stage: anti-abuse
+      stage_group: anti-abuse
     expr: "1"
   - record: gitlab:feature_category:stage_group:mapping
     labels:
@@ -367,7 +373,7 @@ groups:
   - record: gitlab:feature_category:stage_group:mapping
     labels:
       feature_category: intel_code_security
-      product_stage: ModelOps
+      product_stage: modelops
       stage_group: applied_ml
     expr: "1"
   - record: gitlab:feature_category:stage_group:mapping
@@ -396,32 +402,20 @@ groups:
     expr: "1"
   - record: gitlab:feature_category:stage_group:mapping
     labels:
-      feature_category: license
-      product_stage: fulfillment
-      stage_group: license
-    expr: "1"
-  - record: gitlab:feature_category:stage_group:mapping
-    labels:
       feature_category: license_compliance
       product_stage: secure
       stage_group: composition_analysis
     expr: "1"
   - record: gitlab:feature_category:stage_group:mapping
     labels:
-      feature_category: live_preview
-      product_stage: create
-      stage_group: editor
-    expr: "1"
-  - record: gitlab:feature_category:stage_group:mapping
-    labels:
       feature_category: logging
       product_stage: monitor
-      stage_group: respond
+      stage_group: observability
     expr: "1"
   - record: gitlab:feature_category:stage_group:mapping
     labels:
       feature_category: memory
-      product_stage: enablement
+      product_stage: data_stores
       stage_group: memory
     expr: "1"
   - record: gitlab:feature_category:stage_group:mapping
@@ -434,12 +428,12 @@ groups:
     labels:
       feature_category: metrics
       product_stage: monitor
-      stage_group: respond
+      stage_group: observability
     expr: "1"
   - record: gitlab:feature_category:stage_group:mapping
     labels:
       feature_category: mlops
-      product_stage: ModelOps
+      product_stage: modelops
       stage_group: mlops
     expr: "1"
   - record: gitlab:feature_category:stage_group:mapping
@@ -463,7 +457,7 @@ groups:
   - record: gitlab:feature_category:stage_group:mapping
     labels:
       feature_category: omnibus_package
-      product_stage: enablement
+      product_stage: systems
       stage_group: distribution_deploy
     expr: "1"
   - record: gitlab:feature_category:stage_group:mapping
@@ -476,7 +470,7 @@ groups:
     labels:
       feature_category: onboarding
       product_stage: growth
-      stage_group: activation
+      stage_group: conversion
     expr: "1"
   - record: gitlab:feature_category:stage_group:mapping
     labels:
@@ -487,14 +481,20 @@ groups:
   - record: gitlab:feature_category:stage_group:mapping
     labels:
       feature_category: pages
-      product_stage: release
-      stage_group: release
+      product_stage: create
+      stage_group: editor
     expr: "1"
   - record: gitlab:feature_category:stage_group:mapping
     labels:
       feature_category: performance_testing
       product_stage: verify
-      stage_group: testing
+      stage_group: pipeline_insights
+    expr: "1"
+  - record: gitlab:feature_category:stage_group:mapping
+    labels:
+      feature_category: permissions
+      product_stage: manage
+      stage_group: authentication_and_authorization
     expr: "1"
   - record: gitlab:feature_category:stage_group:mapping
     labels:
@@ -534,6 +534,12 @@ groups:
     expr: "1"
   - record: gitlab:feature_category:stage_group:mapping
     labels:
+      feature_category: provision
+      product_stage: fulfillment
+      stage_group: provision
+    expr: "1"
+  - record: gitlab:feature_category:stage_group:mapping
+    labels:
       feature_category: purchase
       product_stage: fulfillment
       stage_group: purchase
@@ -547,7 +553,7 @@ groups:
   - record: gitlab:feature_category:stage_group:mapping
     labels:
       feature_category: redis
-      product_stage: enablement
+      product_stage: data_stores
       stage_group: memory
     expr: "1"
   - record: gitlab:feature_category:stage_group:mapping
@@ -564,6 +570,12 @@ groups:
     expr: "1"
   - record: gitlab:feature_category:stage_group:mapping
     labels:
+      feature_category: remote_development
+      product_stage: create
+      stage_group: editor
+    expr: "1"
+  - record: gitlab:feature_category:stage_group:mapping
+    labels:
       feature_category: requirements_management
       product_stage: plan
       stage_group: certify
@@ -572,7 +584,7 @@ groups:
     labels:
       feature_category: review_apps
       product_stage: verify
-      stage_group: testing
+      stage_group: pipeline_insights
     expr: "1"
   - record: gitlab:feature_category:stage_group:mapping
     labels:
@@ -613,8 +625,8 @@ groups:
   - record: gitlab:feature_category:stage_group:mapping
     labels:
       feature_category: secrets_management
-      product_stage: configure
-      stage_group: configure
+      product_stage: verify
+      stage_group: pipeline_authoring
     expr: "1"
   - record: gitlab:feature_category:stage_group:mapping
     labels:
@@ -627,12 +639,6 @@ groups:
       feature_category: security_orchestration
       product_stage: protect
       stage_group: container_security
-    expr: "1"
-  - record: gitlab:feature_category:stage_group:mapping
-    labels:
-      feature_category: self_monitoring
-      product_stage: monitor
-      stage_group: respond
     expr: "1"
   - record: gitlab:feature_category:stage_group:mapping
     labels:
@@ -649,7 +655,7 @@ groups:
   - record: gitlab:feature_category:stage_group:mapping
     labels:
       feature_category: sharding
-      product_stage: enablement
+      product_stage: data_stores
       stage_group: sharding
     expr: "1"
   - record: gitlab:feature_category:stage_group:mapping
@@ -684,9 +690,9 @@ groups:
     expr: "1"
   - record: gitlab:feature_category:stage_group:mapping
     labels:
-      feature_category: synthetic_monitoring
-      product_stage: monitor
-      stage_group: respond
+      feature_category: system_access
+      product_stage: manage
+      stage_group: authentication_and_authorization
     expr: "1"
   - record: gitlab:feature_category:stage_group:mapping
     labels:
@@ -698,13 +704,13 @@ groups:
     labels:
       feature_category: tracing
       product_stage: monitor
-      stage_group: respond
+      stage_group: observability
     expr: "1"
   - record: gitlab:feature_category:stage_group:mapping
     labels:
-      feature_category: usage_ping
-      product_stage: growth
-      stage_group: product_intelligence
+      feature_category: user_management
+      product_stage: manage
+      stage_group: authentication_and_authorization
     expr: "1"
   - record: gitlab:feature_category:stage_group:mapping
     labels:
@@ -751,6 +757,6 @@ groups:
   - record: gitlab:feature_category:stage_group:mapping
     labels:
       feature_category: workflow_automation
-      product_stage: ModelOps
+      product_stage: modelops
       stage_group: applied_ml
     expr: "1"

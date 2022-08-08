@@ -36,6 +36,13 @@ At the end of a shift:
 - Comment on any open S1 incidents at: https://gitlab.com/gitlab-com/gl-infra/production/issues?scope=all&utf8=✓&state=opened&label_name%5B%5D=incident&label_name%5B%5D=S1
 - At the end of each on-call day, post a quick update in slack so the next person is aware of anything ongoing, any false alerts, or anything that needs to be handed over.
 
+## Going off call
+
+- Take a deep breath! You did it!
+- Review your incidents and see if any of them need corrective actions, to be marked as resolved, or reviews filled out.
+- Take note of any alerts that were not productive and use [these resources](../../docs/monitoring/alert_tuning.md) to make notifications more helpful.
+- Schedule some down time to recouperate and relax. Being on call is stressful, even on a good week.
+
 ## Things to keep an eye on
 
 ### On-call issues
@@ -54,7 +61,7 @@ any on-going issues.
 
 Start by checking how many alerts are in flight right now
 
--   go to the [fleet overview dashboard](https://dashboards.gitlab.net/dashboard/db/fleet-overview) and check the number of Active Alerts, it should be 0. If it is not 0
+-   go to the [fleet overview dashboard](https://dashboards.gitlab.net/d/mnbqU9Smz/fleet-overview?orgId=1) and check the number of Active Alerts, it should be 0. If it is not 0
     -   go to the alerts dashboard and check what is being triggered
         -   [azure][prometheus-azure]
         -   [gprd prometheus][prometheus-gprd]
@@ -97,7 +104,7 @@ shadow schedule][pagerduty-blank-schedule] and initial [overrides][pagerduty-ove
 on-boarding new team members.
 
 
-[on-call-issues]:                   https://gitlab.com/gitlab-com/gl-infra/infrastructure/issues?scope=all&utf8=%E2%9C%93&&state=all&label_name[]=oncall
+[on-call-issues]:                   https://gitlab.com/gitlab-com/gl-infra/reliability/-/issues?scope=all&utf8=%E2%9C%93&&state=all&label_name[]=oncall
 [active-production-incident-issues]:https://gitlab.com/gitlab-com/gl-infra/production/issues?state=open&label_name[]=Incident::Active
 
 [pagerduty-add-user]:               https://support.pagerduty.com/docs/editing-schedules#section-adding-users

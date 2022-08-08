@@ -59,7 +59,7 @@ metricsCatalog.serviceDefinition({
     http: {
       userImpacting: false,
       feature_category: 'not_owned',
-      ignoreTrafficCessation: true,
+      trafficCessationAlertConfig: false,
 
       description: |||
         HTTP requests handled by woodhouse.
@@ -91,7 +91,7 @@ metricsCatalog.serviceDefinition({
     async_jobs: {
       userImpacting: false,
       feature_category: 'not_owned',
-      ignoreTrafficCessation: true,
+      trafficCessationAlertConfig: false,
 
       description: |||
         Async jobs performed by woodhouse.

@@ -1,7 +1,7 @@
 # GitLab Hosted CodeSandbox
 
 In
-[infrastructure#6709](https://gitlab.com/gitlab-com/gl-infra/infrastructure/issues/6709),
+[infrastructure#6709](https://gitlab.com/gitlab-com/gl-infra/reliability/-/issues/6709),
 we were asked to create a bucket and CDN for a GitLab hosted CodeSandbox.
 [CodeSandbox](https://codesandbox.io/) is JavaScript that enables live preview
 updates on our web IDE using JavaScript for client-side rendering. We intend to
@@ -15,11 +15,11 @@ in the admin panel.
 We have created the `gitlab-gprd-codesandbox` bucket in the `gitlab-production`
 project on GCP. Because the files there are public and will be consumed by
 everyone, the bucket is set to public. The CDN frontend domain is
-https://sandbox.gitlab-static.net/ and is set up in Fastly with TLS under the
+<https://sandbox.gitlab-static.net/> and is set up in Fastly with TLS under the
 name `sandbox.gitlab-static.net`.
 
 It was decided that none of the above would be in terraform as it did not fit
-into our current model of terraform and will likely never be touched. 
+into our current model of terraform and will likely never be touched.
 
 ## Deployment (tentative)
 

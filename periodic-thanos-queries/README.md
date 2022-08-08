@@ -8,7 +8,7 @@ The periodic queries are executed on a [scheduled pipeline running on
 ops.GitLab.net][ops-scheduled-pipelines] from the job
 `publish-periodic-queries`. The schedule currently runs daily.
 
-[ops-scheduled-pipeliens]: https://ops.gitlab.net/gitlab-com/runbooks/-/pipeline_schedules
+[ops-scheduled-pipelines]: https://ops.gitlab.net/gitlab-com/runbooks/-/pipeline_schedules
 
 The results are stored as job-artifacts and uploaded to GCS bucket in
 the `gitlab-internal` project, from either of these locations the can

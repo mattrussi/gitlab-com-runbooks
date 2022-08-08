@@ -28,4 +28,14 @@ test.suite({
     actual: underTest.getLabelFor(l.stage),
     expect: 'stage',
   },
+
+  testLabelTaxonomyComponent: {
+    actual: underTest.labelTaxonomy(l.sliComponent),
+    expect: ['component'],
+  },
+
+  testHasLabelFor: {
+    actual: underTest.hasLabelFor(l.sliComponent),
+    expect: true,
+  },
 })

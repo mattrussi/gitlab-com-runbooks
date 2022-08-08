@@ -97,17 +97,17 @@ groups:
       )
       and on(env,environment,tier,type,stage,component)
       (
-        sum by(env,environment,tier,type,stage,component) (gitlab_component_ops:rate_6h{component="email_receiver",monitor="global",type="sidekiq"}) >= 1
+        sum by(env,environment,tier,type,stage,component) (gitlab_component_ops:rate_6h{component="email_receiver",monitor="global",type="sidekiq"}) >= 0.16667
       )
   - alert: SidekiqServiceEmailReceiverTrafficCessation
     for: 5m
     annotations:
       title: The email_receiver SLI of the sidekiq service (`{{ $labels.stage }}`
-        stage) has not received any traffic in the past 30 minutes
+        stage) has not received any traffic in the past 30m
       description: |
         Monitors ratio between all received emails and received emails which could not be processed for some reason.
 
-        This alert signifies that the SLI is reporting a cessation of traffic, but the signal is not absent.
+        This alert signifies that the SLI is reporting a cessation of traffic; the signal is present, but is zero.
       grafana_dashboard_id: sidekiq-main/sidekiq-overview
       grafana_dashboard_link: https://dashboards.gitlab.net/d/sidekiq-main/sidekiq-overview?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-stage={{ $labels.stage }}
@@ -130,12 +130,14 @@ groups:
       slo_alert: "no"
       user_impacting: "yes"
     expr: |
-      gitlab_component_ops:rate_30m{type="sidekiq", component="email_receiver", stage="main", monitor="global"} == 0
+      gitlab_component_ops:rate_30m{component="email_receiver",monitor="global",stage="main",type="sidekiq"} == 0
+      and
+      gitlab_component_ops:rate_30m{component="email_receiver",monitor="global",stage="main",type="sidekiq"} offset 1h >= 0.16666666666666666
   - alert: SidekiqServiceEmailReceiverTrafficAbsent
     for: 30m
     annotations:
       title: The email_receiver SLI of the sidekiq service (`{{ $labels.stage }}`
-        stage) has not reported any traffic in the past 30 minutes
+        stage) has not reported any traffic in the past 30m
       description: |
         Monitors ratio between all received emails and received emails which could not be processed for some reason.
 
@@ -164,9 +166,9 @@ groups:
       slo_alert: "no"
       user_impacting: "yes"
     expr: |
-      gitlab_component_ops:rate_5m{type="sidekiq", component="email_receiver", stage="main", monitor="global"} offset 1h
+      gitlab_component_ops:rate_5m{component="email_receiver",monitor="global",stage="main",type="sidekiq"} offset 1h
       unless
-      gitlab_component_ops:rate_5m{type="sidekiq", component="email_receiver", stage="main", monitor="global"}
+      gitlab_component_ops:rate_5m{component="email_receiver",monitor="global",stage="main",type="sidekiq"}
   - alert: SidekiqServiceShardCatchallApdexSLOViolation
     for: 2m
     annotations:
@@ -195,10 +197,6 @@ groups:
             sli_aggregations:sidekiq_jobs_queue_duration_seconds_bucket_rate5m{environment="{{ $labels.environment }}",shard="catchall",stage="{{ $labels.stage }}",urgency="low"}
             or
             sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate5m{environment="{{ $labels.environment }}",shard="catchall",stage="{{ $labels.stage }}",urgency="throttled"}
-            or
-            sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate5m{environment="{{ $labels.environment }}",shard="catchall",stage="{{ $labels.stage }}",urgency=""}
-            or
-            sli_aggregations:sidekiq_jobs_queue_duration_seconds_bucket_rate5m{environment="{{ $labels.environment }}",shard="catchall",stage="{{ $labels.stage }}",urgency=""}
           )
         )
       runbook: docs/sidekiq/README.md
@@ -258,10 +256,6 @@ groups:
             sli_aggregations:sidekiq_jobs_queue_duration_seconds_bucket_rate5m{environment="{{ $labels.environment }}",shard="catchall",stage="{{ $labels.stage }}",urgency="low"}
             or
             sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate5m{environment="{{ $labels.environment }}",shard="catchall",stage="{{ $labels.stage }}",urgency="throttled"}
-            or
-            sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate5m{environment="{{ $labels.environment }}",shard="catchall",stage="{{ $labels.stage }}",urgency=""}
-            or
-            sli_aggregations:sidekiq_jobs_queue_duration_seconds_bucket_rate5m{environment="{{ $labels.environment }}",shard="catchall",stage="{{ $labels.stage }}",urgency=""}
           )
         )
       runbook: docs/sidekiq/README.md
@@ -291,7 +285,7 @@ groups:
       )
       and on(env,environment,tier,type,stage,component)
       (
-        sum by(env,environment,tier,type,stage,component) (gitlab_component_ops:rate_6h{component="shard_catchall",monitor="global",type="sidekiq"}) >= 1
+        sum by(env,environment,tier,type,stage,component) (gitlab_component_ops:rate_6h{component="shard_catchall",monitor="global",type="sidekiq"}) >= 0.16667
       )
   - alert: SidekiqServiceShardCatchallErrorSLOViolation
     for: 2m
@@ -387,17 +381,17 @@ groups:
       )
       and on(env,environment,tier,type,stage,component)
       (
-        sum by(env,environment,tier,type,stage,component) (gitlab_component_ops:rate_6h{component="shard_catchall",monitor="global",type="sidekiq"}) >= 1
+        sum by(env,environment,tier,type,stage,component) (gitlab_component_ops:rate_6h{component="shard_catchall",monitor="global",type="sidekiq"}) >= 0.16667
       )
   - alert: SidekiqServiceShardCatchallTrafficCessation
     for: 5m
     annotations:
       title: The shard_catchall SLI of the sidekiq service (`{{ $labels.stage }}`
-        stage) has not received any traffic in the past 30 minutes
+        stage) has not received any traffic in the past 30m
       description: |
         Aggregation of all jobs for the catchall Sidekiq shard.
 
-        This alert signifies that the SLI is reporting a cessation of traffic, but the signal is not absent.
+        This alert signifies that the SLI is reporting a cessation of traffic; the signal is present, but is zero.
       grafana_dashboard_id: sidekiq-main/sidekiq-overview
       grafana_dashboard_link: https://dashboards.gitlab.net/d/sidekiq-main/sidekiq-overview?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-stage={{ $labels.stage }}
@@ -421,12 +415,14 @@ groups:
       slo_alert: "no"
       user_impacting: "yes"
     expr: |
-      gitlab_component_ops:rate_30m{type="sidekiq", component="shard_catchall", stage="main", monitor="global"} == 0
+      gitlab_component_ops:rate_30m{component="shard_catchall",monitor="global",stage="main",type="sidekiq"} == 0
+      and
+      gitlab_component_ops:rate_30m{component="shard_catchall",monitor="global",stage="main",type="sidekiq"} offset 1h >= 0.16666666666666666
   - alert: SidekiqServiceShardCatchallTrafficAbsent
     for: 30m
     annotations:
       title: The shard_catchall SLI of the sidekiq service (`{{ $labels.stage }}`
-        stage) has not reported any traffic in the past 30 minutes
+        stage) has not reported any traffic in the past 30m
       description: |
         Aggregation of all jobs for the catchall Sidekiq shard.
 
@@ -456,9 +452,9 @@ groups:
       slo_alert: "no"
       user_impacting: "yes"
     expr: |
-      gitlab_component_ops:rate_5m{type="sidekiq", component="shard_catchall", stage="main", monitor="global"} offset 1h
+      gitlab_component_ops:rate_5m{component="shard_catchall",monitor="global",stage="main",type="sidekiq"} offset 1h
       unless
-      gitlab_component_ops:rate_5m{type="sidekiq", component="shard_catchall", stage="main", monitor="global"}
+      gitlab_component_ops:rate_5m{component="shard_catchall",monitor="global",stage="main",type="sidekiq"}
   - alert: SidekiqServiceShardDatabaseThrottledApdexSLOViolation
     for: 2m
     annotations:
@@ -478,6 +474,14 @@ groups:
         histogram_quantile(
           0.950000,
           sum by (env,environment,tier,stage,le) (
+            sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate5m{environment="{{ $labels.environment }}",shard="database-throttled",stage="{{ $labels.stage }}",urgency="high"}
+            or
+            sli_aggregations:sidekiq_jobs_queue_duration_seconds_bucket_rate5m{environment="{{ $labels.environment }}",shard="database-throttled",stage="{{ $labels.stage }}",urgency="high"}
+            or
+            sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate5m{environment="{{ $labels.environment }}",shard="database-throttled",stage="{{ $labels.stage }}",urgency="low"}
+            or
+            sli_aggregations:sidekiq_jobs_queue_duration_seconds_bucket_rate5m{environment="{{ $labels.environment }}",shard="database-throttled",stage="{{ $labels.stage }}",urgency="low"}
+            or
             sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate5m{environment="{{ $labels.environment }}",shard="database-throttled",stage="{{ $labels.stage }}",urgency="throttled"}
           )
         )
@@ -529,6 +533,14 @@ groups:
         histogram_quantile(
           0.950000,
           sum by (env,environment,tier,stage,le) (
+            sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate5m{environment="{{ $labels.environment }}",shard="database-throttled",stage="{{ $labels.stage }}",urgency="high"}
+            or
+            sli_aggregations:sidekiq_jobs_queue_duration_seconds_bucket_rate5m{environment="{{ $labels.environment }}",shard="database-throttled",stage="{{ $labels.stage }}",urgency="high"}
+            or
+            sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate5m{environment="{{ $labels.environment }}",shard="database-throttled",stage="{{ $labels.stage }}",urgency="low"}
+            or
+            sli_aggregations:sidekiq_jobs_queue_duration_seconds_bucket_rate5m{environment="{{ $labels.environment }}",shard="database-throttled",stage="{{ $labels.stage }}",urgency="low"}
+            or
             sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate5m{environment="{{ $labels.environment }}",shard="database-throttled",stage="{{ $labels.stage }}",urgency="throttled"}
           )
         )
@@ -559,7 +571,7 @@ groups:
       )
       and on(env,environment,tier,type,stage,component)
       (
-        sum by(env,environment,tier,type,stage,component) (gitlab_component_ops:rate_6h{component="shard_database_throttled",monitor="global",type="sidekiq"}) >= 1
+        sum by(env,environment,tier,type,stage,component) (gitlab_component_ops:rate_6h{component="shard_database_throttled",monitor="global",type="sidekiq"}) >= 0.16667
       )
   - alert: SidekiqServiceShardDatabaseThrottledErrorSLOViolation
     for: 2m
@@ -655,7 +667,7 @@ groups:
       )
       and on(env,environment,tier,type,stage,component)
       (
-        sum by(env,environment,tier,type,stage,component) (gitlab_component_ops:rate_6h{component="shard_database_throttled",monitor="global",type="sidekiq"}) >= 1
+        sum by(env,environment,tier,type,stage,component) (gitlab_component_ops:rate_6h{component="shard_database_throttled",monitor="global",type="sidekiq"}) >= 0.16667
       )
   - alert: SidekiqServiceShardElasticsearchApdexSLOViolation
     for: 2m
@@ -676,6 +688,14 @@ groups:
         histogram_quantile(
           0.950000,
           sum by (env,environment,tier,stage,le) (
+            sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate5m{environment="{{ $labels.environment }}",shard="elasticsearch",stage="{{ $labels.stage }}",urgency="high"}
+            or
+            sli_aggregations:sidekiq_jobs_queue_duration_seconds_bucket_rate5m{environment="{{ $labels.environment }}",shard="elasticsearch",stage="{{ $labels.stage }}",urgency="high"}
+            or
+            sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate5m{environment="{{ $labels.environment }}",shard="elasticsearch",stage="{{ $labels.stage }}",urgency="low"}
+            or
+            sli_aggregations:sidekiq_jobs_queue_duration_seconds_bucket_rate5m{environment="{{ $labels.environment }}",shard="elasticsearch",stage="{{ $labels.stage }}",urgency="low"}
+            or
             sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate5m{environment="{{ $labels.environment }}",shard="elasticsearch",stage="{{ $labels.stage }}",urgency="throttled"}
           )
         )
@@ -727,6 +747,14 @@ groups:
         histogram_quantile(
           0.950000,
           sum by (env,environment,tier,stage,le) (
+            sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate5m{environment="{{ $labels.environment }}",shard="elasticsearch",stage="{{ $labels.stage }}",urgency="high"}
+            or
+            sli_aggregations:sidekiq_jobs_queue_duration_seconds_bucket_rate5m{environment="{{ $labels.environment }}",shard="elasticsearch",stage="{{ $labels.stage }}",urgency="high"}
+            or
+            sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate5m{environment="{{ $labels.environment }}",shard="elasticsearch",stage="{{ $labels.stage }}",urgency="low"}
+            or
+            sli_aggregations:sidekiq_jobs_queue_duration_seconds_bucket_rate5m{environment="{{ $labels.environment }}",shard="elasticsearch",stage="{{ $labels.stage }}",urgency="low"}
+            or
             sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate5m{environment="{{ $labels.environment }}",shard="elasticsearch",stage="{{ $labels.stage }}",urgency="throttled"}
           )
         )
@@ -757,7 +785,7 @@ groups:
       )
       and on(env,environment,tier,type,stage,component)
       (
-        sum by(env,environment,tier,type,stage,component) (gitlab_component_ops:rate_6h{component="shard_elasticsearch",monitor="global",type="sidekiq"}) >= 1
+        sum by(env,environment,tier,type,stage,component) (gitlab_component_ops:rate_6h{component="shard_elasticsearch",monitor="global",type="sidekiq"}) >= 0.16667
       )
   - alert: SidekiqServiceShardElasticsearchErrorSLOViolation
     for: 2m
@@ -853,7 +881,7 @@ groups:
       )
       and on(env,environment,tier,type,stage,component)
       (
-        sum by(env,environment,tier,type,stage,component) (gitlab_component_ops:rate_6h{component="shard_elasticsearch",monitor="global",type="sidekiq"}) >= 1
+        sum by(env,environment,tier,type,stage,component) (gitlab_component_ops:rate_6h{component="shard_elasticsearch",monitor="global",type="sidekiq"}) >= 0.16667
       )
   - alert: SidekiqServiceShardGitalyThrottledApdexSLOViolation
     for: 2m
@@ -874,6 +902,14 @@ groups:
         histogram_quantile(
           0.950000,
           sum by (env,environment,tier,stage,le) (
+            sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate5m{environment="{{ $labels.environment }}",shard="gitaly-throttled",stage="{{ $labels.stage }}",urgency="high"}
+            or
+            sli_aggregations:sidekiq_jobs_queue_duration_seconds_bucket_rate5m{environment="{{ $labels.environment }}",shard="gitaly-throttled",stage="{{ $labels.stage }}",urgency="high"}
+            or
+            sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate5m{environment="{{ $labels.environment }}",shard="gitaly-throttled",stage="{{ $labels.stage }}",urgency="low"}
+            or
+            sli_aggregations:sidekiq_jobs_queue_duration_seconds_bucket_rate5m{environment="{{ $labels.environment }}",shard="gitaly-throttled",stage="{{ $labels.stage }}",urgency="low"}
+            or
             sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate5m{environment="{{ $labels.environment }}",shard="gitaly-throttled",stage="{{ $labels.stage }}",urgency="throttled"}
           )
         )
@@ -925,6 +961,14 @@ groups:
         histogram_quantile(
           0.950000,
           sum by (env,environment,tier,stage,le) (
+            sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate5m{environment="{{ $labels.environment }}",shard="gitaly-throttled",stage="{{ $labels.stage }}",urgency="high"}
+            or
+            sli_aggregations:sidekiq_jobs_queue_duration_seconds_bucket_rate5m{environment="{{ $labels.environment }}",shard="gitaly-throttled",stage="{{ $labels.stage }}",urgency="high"}
+            or
+            sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate5m{environment="{{ $labels.environment }}",shard="gitaly-throttled",stage="{{ $labels.stage }}",urgency="low"}
+            or
+            sli_aggregations:sidekiq_jobs_queue_duration_seconds_bucket_rate5m{environment="{{ $labels.environment }}",shard="gitaly-throttled",stage="{{ $labels.stage }}",urgency="low"}
+            or
             sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate5m{environment="{{ $labels.environment }}",shard="gitaly-throttled",stage="{{ $labels.stage }}",urgency="throttled"}
           )
         )
@@ -955,7 +999,7 @@ groups:
       )
       and on(env,environment,tier,type,stage,component)
       (
-        sum by(env,environment,tier,type,stage,component) (gitlab_component_ops:rate_6h{component="shard_gitaly_throttled",monitor="global",type="sidekiq"}) >= 1
+        sum by(env,environment,tier,type,stage,component) (gitlab_component_ops:rate_6h{component="shard_gitaly_throttled",monitor="global",type="sidekiq"}) >= 0.16667
       )
   - alert: SidekiqServiceShardGitalyThrottledErrorSLOViolation
     for: 2m
@@ -1051,7 +1095,7 @@ groups:
       )
       and on(env,environment,tier,type,stage,component)
       (
-        sum by(env,environment,tier,type,stage,component) (gitlab_component_ops:rate_6h{component="shard_gitaly_throttled",monitor="global",type="sidekiq"}) >= 1
+        sum by(env,environment,tier,type,stage,component) (gitlab_component_ops:rate_6h{component="shard_gitaly_throttled",monitor="global",type="sidekiq"}) >= 0.16667
       )
   - alert: SidekiqServiceShardImportsApdexSLOViolation
     for: 2m
@@ -1072,6 +1116,14 @@ groups:
         histogram_quantile(
           0.950000,
           sum by (env,environment,tier,stage,le) (
+            sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate5m{environment="{{ $labels.environment }}",shard="imports",stage="{{ $labels.stage }}",urgency="high"}
+            or
+            sli_aggregations:sidekiq_jobs_queue_duration_seconds_bucket_rate5m{environment="{{ $labels.environment }}",shard="imports",stage="{{ $labels.stage }}",urgency="high"}
+            or
+            sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate5m{environment="{{ $labels.environment }}",shard="imports",stage="{{ $labels.stage }}",urgency="low"}
+            or
+            sli_aggregations:sidekiq_jobs_queue_duration_seconds_bucket_rate5m{environment="{{ $labels.environment }}",shard="imports",stage="{{ $labels.stage }}",urgency="low"}
+            or
             sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate5m{environment="{{ $labels.environment }}",shard="imports",stage="{{ $labels.stage }}",urgency="throttled"}
           )
         )
@@ -1123,6 +1175,14 @@ groups:
         histogram_quantile(
           0.950000,
           sum by (env,environment,tier,stage,le) (
+            sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate5m{environment="{{ $labels.environment }}",shard="imports",stage="{{ $labels.stage }}",urgency="high"}
+            or
+            sli_aggregations:sidekiq_jobs_queue_duration_seconds_bucket_rate5m{environment="{{ $labels.environment }}",shard="imports",stage="{{ $labels.stage }}",urgency="high"}
+            or
+            sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate5m{environment="{{ $labels.environment }}",shard="imports",stage="{{ $labels.stage }}",urgency="low"}
+            or
+            sli_aggregations:sidekiq_jobs_queue_duration_seconds_bucket_rate5m{environment="{{ $labels.environment }}",shard="imports",stage="{{ $labels.stage }}",urgency="low"}
+            or
             sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate5m{environment="{{ $labels.environment }}",shard="imports",stage="{{ $labels.stage }}",urgency="throttled"}
           )
         )
@@ -1153,7 +1213,7 @@ groups:
       )
       and on(env,environment,tier,type,stage,component)
       (
-        sum by(env,environment,tier,type,stage,component) (gitlab_component_ops:rate_6h{component="shard_imports",monitor="global",type="sidekiq"}) >= 1
+        sum by(env,environment,tier,type,stage,component) (gitlab_component_ops:rate_6h{component="shard_imports",monitor="global",type="sidekiq"}) >= 0.16667
       )
   - alert: SidekiqServiceShardImportsErrorSLOViolation
     for: 2m
@@ -1249,7 +1309,7 @@ groups:
       )
       and on(env,environment,tier,type,stage,component)
       (
-        sum by(env,environment,tier,type,stage,component) (gitlab_component_ops:rate_6h{component="shard_imports",monitor="global",type="sidekiq"}) >= 1
+        sum by(env,environment,tier,type,stage,component) (gitlab_component_ops:rate_6h{component="shard_imports",monitor="global",type="sidekiq"}) >= 0.16667
       )
   - alert: SidekiqServiceShardLowUrgencyCpuBoundApdexSLOViolation
     for: 2m
@@ -1270,9 +1330,15 @@ groups:
         histogram_quantile(
           0.950000,
           sum by (env,environment,tier,stage,le) (
+            sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate5m{environment="{{ $labels.environment }}",shard="low-urgency-cpu-bound",stage="{{ $labels.stage }}",urgency="high"}
+            or
+            sli_aggregations:sidekiq_jobs_queue_duration_seconds_bucket_rate5m{environment="{{ $labels.environment }}",shard="low-urgency-cpu-bound",stage="{{ $labels.stage }}",urgency="high"}
+            or
             sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate5m{environment="{{ $labels.environment }}",shard="low-urgency-cpu-bound",stage="{{ $labels.stage }}",urgency="low"}
             or
             sli_aggregations:sidekiq_jobs_queue_duration_seconds_bucket_rate5m{environment="{{ $labels.environment }}",shard="low-urgency-cpu-bound",stage="{{ $labels.stage }}",urgency="low"}
+            or
+            sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate5m{environment="{{ $labels.environment }}",shard="low-urgency-cpu-bound",stage="{{ $labels.stage }}",urgency="throttled"}
           )
         )
       runbook: docs/sidekiq/README.md
@@ -1323,9 +1389,15 @@ groups:
         histogram_quantile(
           0.950000,
           sum by (env,environment,tier,stage,le) (
+            sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate5m{environment="{{ $labels.environment }}",shard="low-urgency-cpu-bound",stage="{{ $labels.stage }}",urgency="high"}
+            or
+            sli_aggregations:sidekiq_jobs_queue_duration_seconds_bucket_rate5m{environment="{{ $labels.environment }}",shard="low-urgency-cpu-bound",stage="{{ $labels.stage }}",urgency="high"}
+            or
             sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate5m{environment="{{ $labels.environment }}",shard="low-urgency-cpu-bound",stage="{{ $labels.stage }}",urgency="low"}
             or
             sli_aggregations:sidekiq_jobs_queue_duration_seconds_bucket_rate5m{environment="{{ $labels.environment }}",shard="low-urgency-cpu-bound",stage="{{ $labels.stage }}",urgency="low"}
+            or
+            sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate5m{environment="{{ $labels.environment }}",shard="low-urgency-cpu-bound",stage="{{ $labels.stage }}",urgency="throttled"}
           )
         )
       runbook: docs/sidekiq/README.md
@@ -1355,7 +1427,7 @@ groups:
       )
       and on(env,environment,tier,type,stage,component)
       (
-        sum by(env,environment,tier,type,stage,component) (gitlab_component_ops:rate_6h{component="shard_low_urgency_cpu_bound",monitor="global",type="sidekiq"}) >= 1
+        sum by(env,environment,tier,type,stage,component) (gitlab_component_ops:rate_6h{component="shard_low_urgency_cpu_bound",monitor="global",type="sidekiq"}) >= 0.16667
       )
   - alert: SidekiqServiceShardLowUrgencyCpuBoundErrorSLOViolation
     for: 2m
@@ -1451,17 +1523,17 @@ groups:
       )
       and on(env,environment,tier,type,stage,component)
       (
-        sum by(env,environment,tier,type,stage,component) (gitlab_component_ops:rate_6h{component="shard_low_urgency_cpu_bound",monitor="global",type="sidekiq"}) >= 1
+        sum by(env,environment,tier,type,stage,component) (gitlab_component_ops:rate_6h{component="shard_low_urgency_cpu_bound",monitor="global",type="sidekiq"}) >= 0.16667
       )
   - alert: SidekiqServiceShardLowUrgencyCpuBoundTrafficCessation
     for: 5m
     annotations:
       title: The shard_low_urgency_cpu_bound SLI of the sidekiq service (`{{ $labels.stage
-        }}` stage) has not received any traffic in the past 30 minutes
+        }}` stage) has not received any traffic in the past 30m
       description: |
         Aggregation of all jobs for the low-urgency-cpu-bound Sidekiq shard.
 
-        This alert signifies that the SLI is reporting a cessation of traffic, but the signal is not absent.
+        This alert signifies that the SLI is reporting a cessation of traffic; the signal is present, but is zero.
       grafana_dashboard_id: sidekiq-main/sidekiq-overview
       grafana_dashboard_link: https://dashboards.gitlab.net/d/sidekiq-main/sidekiq-overview?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-stage={{ $labels.stage }}
@@ -1485,12 +1557,14 @@ groups:
       slo_alert: "no"
       user_impacting: "yes"
     expr: |
-      gitlab_component_ops:rate_30m{type="sidekiq", component="shard_low_urgency_cpu_bound", stage="main", monitor="global"} == 0
+      gitlab_component_ops:rate_30m{component="shard_low_urgency_cpu_bound",monitor="global",stage="main",type="sidekiq"} == 0
+      and
+      gitlab_component_ops:rate_30m{component="shard_low_urgency_cpu_bound",monitor="global",stage="main",type="sidekiq"} offset 1h >= 0.16666666666666666
   - alert: SidekiqServiceShardLowUrgencyCpuBoundTrafficAbsent
     for: 30m
     annotations:
       title: The shard_low_urgency_cpu_bound SLI of the sidekiq service (`{{ $labels.stage
-        }}` stage) has not reported any traffic in the past 30 minutes
+        }}` stage) has not reported any traffic in the past 30m
       description: |
         Aggregation of all jobs for the low-urgency-cpu-bound Sidekiq shard.
 
@@ -1520,9 +1594,9 @@ groups:
       slo_alert: "no"
       user_impacting: "yes"
     expr: |
-      gitlab_component_ops:rate_5m{type="sidekiq", component="shard_low_urgency_cpu_bound", stage="main", monitor="global"} offset 1h
+      gitlab_component_ops:rate_5m{component="shard_low_urgency_cpu_bound",monitor="global",stage="main",type="sidekiq"} offset 1h
       unless
-      gitlab_component_ops:rate_5m{type="sidekiq", component="shard_low_urgency_cpu_bound", stage="main", monitor="global"}
+      gitlab_component_ops:rate_5m{component="shard_low_urgency_cpu_bound",monitor="global",stage="main",type="sidekiq"}
   - alert: SidekiqServiceShardMemoryBoundApdexSLOViolation
     for: 2m
     annotations:
@@ -1542,6 +1616,14 @@ groups:
         histogram_quantile(
           0.950000,
           sum by (env,environment,tier,stage,le) (
+            sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate5m{environment="{{ $labels.environment }}",shard="memory-bound",stage="{{ $labels.stage }}",urgency="high"}
+            or
+            sli_aggregations:sidekiq_jobs_queue_duration_seconds_bucket_rate5m{environment="{{ $labels.environment }}",shard="memory-bound",stage="{{ $labels.stage }}",urgency="high"}
+            or
+            sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate5m{environment="{{ $labels.environment }}",shard="memory-bound",stage="{{ $labels.stage }}",urgency="low"}
+            or
+            sli_aggregations:sidekiq_jobs_queue_duration_seconds_bucket_rate5m{environment="{{ $labels.environment }}",shard="memory-bound",stage="{{ $labels.stage }}",urgency="low"}
+            or
             sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate5m{environment="{{ $labels.environment }}",shard="memory-bound",stage="{{ $labels.stage }}",urgency="throttled"}
           )
         )
@@ -1562,12 +1644,12 @@ groups:
       (
         (
           gitlab_component_apdex:ratio_1h{component="shard_memory_bound",monitor="global",type="sidekiq"}
-          < (1 - 14.4 * 0.005000)
+          < (1 - 14.4 * 0.080000)
         )
         and
         (
           gitlab_component_apdex:ratio_5m{component="shard_memory_bound",monitor="global",type="sidekiq"}
-          < (1 - 14.4 * 0.005000)
+          < (1 - 14.4 * 0.080000)
         )
       )
       and on(env,environment,tier,type,stage,component)
@@ -1593,6 +1675,14 @@ groups:
         histogram_quantile(
           0.950000,
           sum by (env,environment,tier,stage,le) (
+            sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate5m{environment="{{ $labels.environment }}",shard="memory-bound",stage="{{ $labels.stage }}",urgency="high"}
+            or
+            sli_aggregations:sidekiq_jobs_queue_duration_seconds_bucket_rate5m{environment="{{ $labels.environment }}",shard="memory-bound",stage="{{ $labels.stage }}",urgency="high"}
+            or
+            sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate5m{environment="{{ $labels.environment }}",shard="memory-bound",stage="{{ $labels.stage }}",urgency="low"}
+            or
+            sli_aggregations:sidekiq_jobs_queue_duration_seconds_bucket_rate5m{environment="{{ $labels.environment }}",shard="memory-bound",stage="{{ $labels.stage }}",urgency="low"}
+            or
             sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate5m{environment="{{ $labels.environment }}",shard="memory-bound",stage="{{ $labels.stage }}",urgency="throttled"}
           )
         )
@@ -1613,17 +1703,17 @@ groups:
       (
         (
           gitlab_component_apdex:ratio_6h{component="shard_memory_bound",monitor="global",type="sidekiq"}
-          < (1 - 6 * 0.005000)
+          < (1 - 6 * 0.080000)
         )
         and
         (
           gitlab_component_apdex:ratio_30m{component="shard_memory_bound",monitor="global",type="sidekiq"}
-          < (1 - 6 * 0.005000)
+          < (1 - 6 * 0.080000)
         )
       )
       and on(env,environment,tier,type,stage,component)
       (
-        sum by(env,environment,tier,type,stage,component) (gitlab_component_ops:rate_6h{component="shard_memory_bound",monitor="global",type="sidekiq"}) >= 1
+        sum by(env,environment,tier,type,stage,component) (gitlab_component_ops:rate_6h{component="shard_memory_bound",monitor="global",type="sidekiq"}) >= 0.16667
       )
   - alert: SidekiqServiceShardMemoryBoundErrorSLOViolation
     for: 2m
@@ -1719,7 +1809,7 @@ groups:
       )
       and on(env,environment,tier,type,stage,component)
       (
-        sum by(env,environment,tier,type,stage,component) (gitlab_component_ops:rate_6h{component="shard_memory_bound",monitor="global",type="sidekiq"}) >= 1
+        sum by(env,environment,tier,type,stage,component) (gitlab_component_ops:rate_6h{component="shard_memory_bound",monitor="global",type="sidekiq"}) >= 0.16667
       )
   - alert: SidekiqServiceShardQuarantineApdexSLOViolation
     for: 2m
@@ -1743,6 +1833,12 @@ groups:
             sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate5m{environment="{{ $labels.environment }}",shard="quarantine",stage="{{ $labels.stage }}",urgency="high"}
             or
             sli_aggregations:sidekiq_jobs_queue_duration_seconds_bucket_rate5m{environment="{{ $labels.environment }}",shard="quarantine",stage="{{ $labels.stage }}",urgency="high"}
+            or
+            sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate5m{environment="{{ $labels.environment }}",shard="quarantine",stage="{{ $labels.stage }}",urgency="low"}
+            or
+            sli_aggregations:sidekiq_jobs_queue_duration_seconds_bucket_rate5m{environment="{{ $labels.environment }}",shard="quarantine",stage="{{ $labels.stage }}",urgency="low"}
+            or
+            sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate5m{environment="{{ $labels.environment }}",shard="quarantine",stage="{{ $labels.stage }}",urgency="throttled"}
           )
         )
       runbook: docs/sidekiq/README.md
@@ -1796,6 +1892,12 @@ groups:
             sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate5m{environment="{{ $labels.environment }}",shard="quarantine",stage="{{ $labels.stage }}",urgency="high"}
             or
             sli_aggregations:sidekiq_jobs_queue_duration_seconds_bucket_rate5m{environment="{{ $labels.environment }}",shard="quarantine",stage="{{ $labels.stage }}",urgency="high"}
+            or
+            sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate5m{environment="{{ $labels.environment }}",shard="quarantine",stage="{{ $labels.stage }}",urgency="low"}
+            or
+            sli_aggregations:sidekiq_jobs_queue_duration_seconds_bucket_rate5m{environment="{{ $labels.environment }}",shard="quarantine",stage="{{ $labels.stage }}",urgency="low"}
+            or
+            sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate5m{environment="{{ $labels.environment }}",shard="quarantine",stage="{{ $labels.stage }}",urgency="throttled"}
           )
         )
       runbook: docs/sidekiq/README.md
@@ -1825,7 +1927,7 @@ groups:
       )
       and on(env,environment,tier,type,stage,component)
       (
-        sum by(env,environment,tier,type,stage,component) (gitlab_component_ops:rate_6h{component="shard_quarantine",monitor="global",type="sidekiq"}) >= 1
+        sum by(env,environment,tier,type,stage,component) (gitlab_component_ops:rate_6h{component="shard_quarantine",monitor="global",type="sidekiq"}) >= 0.16667
       )
   - alert: SidekiqServiceShardQuarantineErrorSLOViolation
     for: 2m
@@ -1921,7 +2023,221 @@ groups:
       )
       and on(env,environment,tier,type,stage,component)
       (
-        sum by(env,environment,tier,type,stage,component) (gitlab_component_ops:rate_6h{component="shard_quarantine",monitor="global",type="sidekiq"}) >= 1
+        sum by(env,environment,tier,type,stage,component) (gitlab_component_ops:rate_6h{component="shard_quarantine",monitor="global",type="sidekiq"}) >= 0.16667
+      )
+  - alert: SidekiqServiceShardUrgentAuthorizedProjectsApdexSLOViolation
+    for: 2m
+    annotations:
+      title: The shard_urgent_authorized_projects SLI of the sidekiq service (`{{
+        $labels.stage }}` stage) has an apdex violating SLO
+      description: |
+        Aggregation of all jobs for the urgent-authorized-projects Sidekiq shard.
+
+        Currently the apdex value is {{ $value | humanizePercentage }}.
+      grafana_dashboard_id: sidekiq-main/sidekiq-overview
+      grafana_dashboard_link: https://dashboards.gitlab.net/d/sidekiq-main/sidekiq-overview?from=now-6h/m&to=now-1m/m&var-environment={{
+        $labels.environment }}&var-stage={{ $labels.stage }}
+      grafana_min_zoom_hours: "6"
+      grafana_panel_id: "3650911195"
+      grafana_variables: environment,stage
+      promql_template_1: |
+        histogram_quantile(
+          0.950000,
+          sum by (env,environment,tier,stage,le) (
+            sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate5m{environment="{{ $labels.environment }}",shard="urgent-authorized-projects",stage="{{ $labels.stage }}",urgency="high"}
+            or
+            sli_aggregations:sidekiq_jobs_queue_duration_seconds_bucket_rate5m{environment="{{ $labels.environment }}",shard="urgent-authorized-projects",stage="{{ $labels.stage }}",urgency="high"}
+            or
+            sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate5m{environment="{{ $labels.environment }}",shard="urgent-authorized-projects",stage="{{ $labels.stage }}",urgency="low"}
+            or
+            sli_aggregations:sidekiq_jobs_queue_duration_seconds_bucket_rate5m{environment="{{ $labels.environment }}",shard="urgent-authorized-projects",stage="{{ $labels.stage }}",urgency="low"}
+            or
+            sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate5m{environment="{{ $labels.environment }}",shard="urgent-authorized-projects",stage="{{ $labels.stage }}",urgency="throttled"}
+          )
+        )
+      runbook: docs/sidekiq/README.md
+    labels:
+      aggregation: component
+      alert_class: slo_violation
+      alert_type: symptom
+      feature_category: not_owned
+      pager: pagerduty
+      rules_domain: general
+      severity: s2
+      sli_type: apdex
+      slo_alert: "yes"
+      user_impacting: "yes"
+      window: 1h
+    expr: |
+      (
+        (
+          gitlab_component_apdex:ratio_1h{component="shard_urgent_authorized_projects",monitor="global",type="sidekiq"}
+          < (1 - 14.4 * 0.005000)
+        )
+        and
+        (
+          gitlab_component_apdex:ratio_5m{component="shard_urgent_authorized_projects",monitor="global",type="sidekiq"}
+          < (1 - 14.4 * 0.005000)
+        )
+      )
+      and on(env,environment,tier,type,stage,component)
+      (
+        sum by(env,environment,tier,type,stage,component) (gitlab_component_ops:rate_1h{component="shard_urgent_authorized_projects",monitor="global",type="sidekiq"}) >= 1
+      )
+  - alert: SidekiqServiceShardUrgentAuthorizedProjectsApdexSLOViolation
+    for: 2m
+    annotations:
+      title: The shard_urgent_authorized_projects SLI of the sidekiq service (`{{
+        $labels.stage }}` stage) has an apdex violating SLO
+      description: |
+        Aggregation of all jobs for the urgent-authorized-projects Sidekiq shard.
+
+        Currently the apdex value is {{ $value | humanizePercentage }}.
+      grafana_dashboard_id: sidekiq-main/sidekiq-overview
+      grafana_dashboard_link: https://dashboards.gitlab.net/d/sidekiq-main/sidekiq-overview?from=now-6h/m&to=now-1m/m&var-environment={{
+        $labels.environment }}&var-stage={{ $labels.stage }}
+      grafana_min_zoom_hours: "6"
+      grafana_panel_id: "3650911195"
+      grafana_variables: environment,stage
+      promql_template_1: |
+        histogram_quantile(
+          0.950000,
+          sum by (env,environment,tier,stage,le) (
+            sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate5m{environment="{{ $labels.environment }}",shard="urgent-authorized-projects",stage="{{ $labels.stage }}",urgency="high"}
+            or
+            sli_aggregations:sidekiq_jobs_queue_duration_seconds_bucket_rate5m{environment="{{ $labels.environment }}",shard="urgent-authorized-projects",stage="{{ $labels.stage }}",urgency="high"}
+            or
+            sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate5m{environment="{{ $labels.environment }}",shard="urgent-authorized-projects",stage="{{ $labels.stage }}",urgency="low"}
+            or
+            sli_aggregations:sidekiq_jobs_queue_duration_seconds_bucket_rate5m{environment="{{ $labels.environment }}",shard="urgent-authorized-projects",stage="{{ $labels.stage }}",urgency="low"}
+            or
+            sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate5m{environment="{{ $labels.environment }}",shard="urgent-authorized-projects",stage="{{ $labels.stage }}",urgency="throttled"}
+          )
+        )
+      runbook: docs/sidekiq/README.md
+    labels:
+      aggregation: component
+      alert_class: slo_violation
+      alert_type: symptom
+      feature_category: not_owned
+      pager: pagerduty
+      rules_domain: general
+      severity: s2
+      sli_type: apdex
+      slo_alert: "yes"
+      user_impacting: "yes"
+      window: 6h
+    expr: |
+      (
+        (
+          gitlab_component_apdex:ratio_6h{component="shard_urgent_authorized_projects",monitor="global",type="sidekiq"}
+          < (1 - 6 * 0.005000)
+        )
+        and
+        (
+          gitlab_component_apdex:ratio_30m{component="shard_urgent_authorized_projects",monitor="global",type="sidekiq"}
+          < (1 - 6 * 0.005000)
+        )
+      )
+      and on(env,environment,tier,type,stage,component)
+      (
+        sum by(env,environment,tier,type,stage,component) (gitlab_component_ops:rate_6h{component="shard_urgent_authorized_projects",monitor="global",type="sidekiq"}) >= 0.16667
+      )
+  - alert: SidekiqServiceShardUrgentAuthorizedProjectsErrorSLOViolation
+    for: 2m
+    annotations:
+      title: The shard_urgent_authorized_projects SLI of the sidekiq service (`{{
+        $labels.stage }}` stage) has an error rate violating SLO
+      description: |
+        Aggregation of all jobs for the urgent-authorized-projects Sidekiq shard.
+
+        Currently the error-rate is {{ $value | humanizePercentage }}.
+      grafana_dashboard_id: sidekiq-main/sidekiq-overview
+      grafana_dashboard_link: https://dashboards.gitlab.net/d/sidekiq-main/sidekiq-overview?from=now-6h/m&to=now-1m/m&var-environment={{
+        $labels.environment }}&var-stage={{ $labels.stage }}
+      grafana_min_zoom_hours: "6"
+      grafana_panel_id: "3367299711"
+      grafana_variables: environment,stage
+      promql_template_1: |
+        sum by (env,environment,tier,stage) (
+          sli_aggregations:sidekiq_jobs_failed_total_rate5m{environment="{{ $labels.environment }}",shard="urgent-authorized-projects",stage="{{ $labels.stage }}"}
+        )
+      runbook: docs/sidekiq/README.md
+    labels:
+      aggregation: component
+      alert_class: slo_violation
+      alert_type: symptom
+      feature_category: not_owned
+      pager: pagerduty
+      rules_domain: general
+      severity: s2
+      sli_type: error
+      slo_alert: "yes"
+      user_impacting: "yes"
+      window: 1h
+    expr: |
+      (
+        (
+          gitlab_component_errors:ratio_1h{component="shard_urgent_authorized_projects",monitor="global",type="sidekiq"}
+          > (14.4 * 0.005000)
+        )
+        and
+        (
+          gitlab_component_errors:ratio_5m{component="shard_urgent_authorized_projects",monitor="global",type="sidekiq"}
+          > (14.4 * 0.005000)
+        )
+      )
+      and on(env,environment,tier,type,stage,component)
+      (
+        sum by(env,environment,tier,type,stage,component) (gitlab_component_ops:rate_1h{component="shard_urgent_authorized_projects",monitor="global",type="sidekiq"}) >= 1
+      )
+  - alert: SidekiqServiceShardUrgentAuthorizedProjectsErrorSLOViolation
+    for: 2m
+    annotations:
+      title: The shard_urgent_authorized_projects SLI of the sidekiq service (`{{
+        $labels.stage }}` stage) has an error rate violating SLO
+      description: |
+        Aggregation of all jobs for the urgent-authorized-projects Sidekiq shard.
+
+        Currently the error-rate is {{ $value | humanizePercentage }}.
+      grafana_dashboard_id: sidekiq-main/sidekiq-overview
+      grafana_dashboard_link: https://dashboards.gitlab.net/d/sidekiq-main/sidekiq-overview?from=now-6h/m&to=now-1m/m&var-environment={{
+        $labels.environment }}&var-stage={{ $labels.stage }}
+      grafana_min_zoom_hours: "6"
+      grafana_panel_id: "3367299711"
+      grafana_variables: environment,stage
+      promql_template_1: |
+        sum by (env,environment,tier,stage) (
+          sli_aggregations:sidekiq_jobs_failed_total_rate5m{environment="{{ $labels.environment }}",shard="urgent-authorized-projects",stage="{{ $labels.stage }}"}
+        )
+      runbook: docs/sidekiq/README.md
+    labels:
+      aggregation: component
+      alert_class: slo_violation
+      alert_type: symptom
+      feature_category: not_owned
+      pager: pagerduty
+      rules_domain: general
+      severity: s2
+      sli_type: error
+      slo_alert: "yes"
+      user_impacting: "yes"
+      window: 6h
+    expr: |
+      (
+        (
+          gitlab_component_errors:ratio_6h{component="shard_urgent_authorized_projects",monitor="global",type="sidekiq"}
+          > (6 * 0.005000)
+        )
+        and
+        (
+          gitlab_component_errors:ratio_30m{component="shard_urgent_authorized_projects",monitor="global",type="sidekiq"}
+          > (6 * 0.005000)
+        )
+      )
+      and on(env,environment,tier,type,stage,component)
+      (
+        sum by(env,environment,tier,type,stage,component) (gitlab_component_ops:rate_6h{component="shard_urgent_authorized_projects",monitor="global",type="sidekiq"}) >= 0.16667
       )
   - alert: SidekiqServiceShardUrgentCpuBoundApdexSLOViolation
     for: 2m
@@ -1945,6 +2261,12 @@ groups:
             sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate5m{environment="{{ $labels.environment }}",shard="urgent-cpu-bound",stage="{{ $labels.stage }}",urgency="high"}
             or
             sli_aggregations:sidekiq_jobs_queue_duration_seconds_bucket_rate5m{environment="{{ $labels.environment }}",shard="urgent-cpu-bound",stage="{{ $labels.stage }}",urgency="high"}
+            or
+            sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate5m{environment="{{ $labels.environment }}",shard="urgent-cpu-bound",stage="{{ $labels.stage }}",urgency="low"}
+            or
+            sli_aggregations:sidekiq_jobs_queue_duration_seconds_bucket_rate5m{environment="{{ $labels.environment }}",shard="urgent-cpu-bound",stage="{{ $labels.stage }}",urgency="low"}
+            or
+            sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate5m{environment="{{ $labels.environment }}",shard="urgent-cpu-bound",stage="{{ $labels.stage }}",urgency="throttled"}
           )
         )
       runbook: docs/sidekiq/README.md
@@ -1998,6 +2320,12 @@ groups:
             sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate5m{environment="{{ $labels.environment }}",shard="urgent-cpu-bound",stage="{{ $labels.stage }}",urgency="high"}
             or
             sli_aggregations:sidekiq_jobs_queue_duration_seconds_bucket_rate5m{environment="{{ $labels.environment }}",shard="urgent-cpu-bound",stage="{{ $labels.stage }}",urgency="high"}
+            or
+            sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate5m{environment="{{ $labels.environment }}",shard="urgent-cpu-bound",stage="{{ $labels.stage }}",urgency="low"}
+            or
+            sli_aggregations:sidekiq_jobs_queue_duration_seconds_bucket_rate5m{environment="{{ $labels.environment }}",shard="urgent-cpu-bound",stage="{{ $labels.stage }}",urgency="low"}
+            or
+            sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate5m{environment="{{ $labels.environment }}",shard="urgent-cpu-bound",stage="{{ $labels.stage }}",urgency="throttled"}
           )
         )
       runbook: docs/sidekiq/README.md
@@ -2027,7 +2355,7 @@ groups:
       )
       and on(env,environment,tier,type,stage,component)
       (
-        sum by(env,environment,tier,type,stage,component) (gitlab_component_ops:rate_6h{component="shard_urgent_cpu_bound",monitor="global",type="sidekiq"}) >= 1
+        sum by(env,environment,tier,type,stage,component) (gitlab_component_ops:rate_6h{component="shard_urgent_cpu_bound",monitor="global",type="sidekiq"}) >= 0.16667
       )
   - alert: SidekiqServiceShardUrgentCpuBoundErrorSLOViolation
     for: 2m
@@ -2123,17 +2451,17 @@ groups:
       )
       and on(env,environment,tier,type,stage,component)
       (
-        sum by(env,environment,tier,type,stage,component) (gitlab_component_ops:rate_6h{component="shard_urgent_cpu_bound",monitor="global",type="sidekiq"}) >= 1
+        sum by(env,environment,tier,type,stage,component) (gitlab_component_ops:rate_6h{component="shard_urgent_cpu_bound",monitor="global",type="sidekiq"}) >= 0.16667
       )
   - alert: SidekiqServiceShardUrgentCpuBoundTrafficCessation
     for: 5m
     annotations:
       title: The shard_urgent_cpu_bound SLI of the sidekiq service (`{{ $labels.stage
-        }}` stage) has not received any traffic in the past 30 minutes
+        }}` stage) has not received any traffic in the past 30m
       description: |
         Aggregation of all jobs for the urgent-cpu-bound Sidekiq shard.
 
-        This alert signifies that the SLI is reporting a cessation of traffic, but the signal is not absent.
+        This alert signifies that the SLI is reporting a cessation of traffic; the signal is present, but is zero.
       grafana_dashboard_id: sidekiq-main/sidekiq-overview
       grafana_dashboard_link: https://dashboards.gitlab.net/d/sidekiq-main/sidekiq-overview?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-stage={{ $labels.stage }}
@@ -2157,12 +2485,14 @@ groups:
       slo_alert: "no"
       user_impacting: "yes"
     expr: |
-      gitlab_component_ops:rate_30m{type="sidekiq", component="shard_urgent_cpu_bound", stage="main", monitor="global"} == 0
+      gitlab_component_ops:rate_30m{component="shard_urgent_cpu_bound",monitor="global",stage="main",type="sidekiq"} == 0
+      and
+      gitlab_component_ops:rate_30m{component="shard_urgent_cpu_bound",monitor="global",stage="main",type="sidekiq"} offset 1h >= 0.16666666666666666
   - alert: SidekiqServiceShardUrgentCpuBoundTrafficAbsent
     for: 30m
     annotations:
       title: The shard_urgent_cpu_bound SLI of the sidekiq service (`{{ $labels.stage
-        }}` stage) has not reported any traffic in the past 30 minutes
+        }}` stage) has not reported any traffic in the past 30m
       description: |
         Aggregation of all jobs for the urgent-cpu-bound Sidekiq shard.
 
@@ -2192,9 +2522,9 @@ groups:
       slo_alert: "no"
       user_impacting: "yes"
     expr: |
-      gitlab_component_ops:rate_5m{type="sidekiq", component="shard_urgent_cpu_bound", stage="main", monitor="global"} offset 1h
+      gitlab_component_ops:rate_5m{component="shard_urgent_cpu_bound",monitor="global",stage="main",type="sidekiq"} offset 1h
       unless
-      gitlab_component_ops:rate_5m{type="sidekiq", component="shard_urgent_cpu_bound", stage="main", monitor="global"}
+      gitlab_component_ops:rate_5m{component="shard_urgent_cpu_bound",monitor="global",stage="main",type="sidekiq"}
   - alert: SidekiqServiceShardUrgentOtherApdexSLOViolation
     for: 2m
     annotations:
@@ -2217,6 +2547,12 @@ groups:
             sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate5m{environment="{{ $labels.environment }}",shard="urgent-other",stage="{{ $labels.stage }}",urgency="high"}
             or
             sli_aggregations:sidekiq_jobs_queue_duration_seconds_bucket_rate5m{environment="{{ $labels.environment }}",shard="urgent-other",stage="{{ $labels.stage }}",urgency="high"}
+            or
+            sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate5m{environment="{{ $labels.environment }}",shard="urgent-other",stage="{{ $labels.stage }}",urgency="low"}
+            or
+            sli_aggregations:sidekiq_jobs_queue_duration_seconds_bucket_rate5m{environment="{{ $labels.environment }}",shard="urgent-other",stage="{{ $labels.stage }}",urgency="low"}
+            or
+            sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate5m{environment="{{ $labels.environment }}",shard="urgent-other",stage="{{ $labels.stage }}",urgency="throttled"}
           )
         )
       runbook: docs/sidekiq/README.md
@@ -2270,6 +2606,12 @@ groups:
             sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate5m{environment="{{ $labels.environment }}",shard="urgent-other",stage="{{ $labels.stage }}",urgency="high"}
             or
             sli_aggregations:sidekiq_jobs_queue_duration_seconds_bucket_rate5m{environment="{{ $labels.environment }}",shard="urgent-other",stage="{{ $labels.stage }}",urgency="high"}
+            or
+            sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate5m{environment="{{ $labels.environment }}",shard="urgent-other",stage="{{ $labels.stage }}",urgency="low"}
+            or
+            sli_aggregations:sidekiq_jobs_queue_duration_seconds_bucket_rate5m{environment="{{ $labels.environment }}",shard="urgent-other",stage="{{ $labels.stage }}",urgency="low"}
+            or
+            sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate5m{environment="{{ $labels.environment }}",shard="urgent-other",stage="{{ $labels.stage }}",urgency="throttled"}
           )
         )
       runbook: docs/sidekiq/README.md
@@ -2299,7 +2641,7 @@ groups:
       )
       and on(env,environment,tier,type,stage,component)
       (
-        sum by(env,environment,tier,type,stage,component) (gitlab_component_ops:rate_6h{component="shard_urgent_other",monitor="global",type="sidekiq"}) >= 1
+        sum by(env,environment,tier,type,stage,component) (gitlab_component_ops:rate_6h{component="shard_urgent_other",monitor="global",type="sidekiq"}) >= 0.16667
       )
   - alert: SidekiqServiceShardUrgentOtherErrorSLOViolation
     for: 2m
@@ -2395,17 +2737,17 @@ groups:
       )
       and on(env,environment,tier,type,stage,component)
       (
-        sum by(env,environment,tier,type,stage,component) (gitlab_component_ops:rate_6h{component="shard_urgent_other",monitor="global",type="sidekiq"}) >= 1
+        sum by(env,environment,tier,type,stage,component) (gitlab_component_ops:rate_6h{component="shard_urgent_other",monitor="global",type="sidekiq"}) >= 0.16667
       )
   - alert: SidekiqServiceShardUrgentOtherTrafficCessation
     for: 5m
     annotations:
       title: The shard_urgent_other SLI of the sidekiq service (`{{ $labels.stage
-        }}` stage) has not received any traffic in the past 30 minutes
+        }}` stage) has not received any traffic in the past 30m
       description: |
         Aggregation of all jobs for the urgent-other Sidekiq shard.
 
-        This alert signifies that the SLI is reporting a cessation of traffic, but the signal is not absent.
+        This alert signifies that the SLI is reporting a cessation of traffic; the signal is present, but is zero.
       grafana_dashboard_id: sidekiq-main/sidekiq-overview
       grafana_dashboard_link: https://dashboards.gitlab.net/d/sidekiq-main/sidekiq-overview?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-stage={{ $labels.stage }}
@@ -2429,12 +2771,14 @@ groups:
       slo_alert: "no"
       user_impacting: "yes"
     expr: |
-      gitlab_component_ops:rate_30m{type="sidekiq", component="shard_urgent_other", stage="main", monitor="global"} == 0
+      gitlab_component_ops:rate_30m{component="shard_urgent_other",monitor="global",stage="main",type="sidekiq"} == 0
+      and
+      gitlab_component_ops:rate_30m{component="shard_urgent_other",monitor="global",stage="main",type="sidekiq"} offset 1h >= 0.16666666666666666
   - alert: SidekiqServiceShardUrgentOtherTrafficAbsent
     for: 30m
     annotations:
       title: The shard_urgent_other SLI of the sidekiq service (`{{ $labels.stage
-        }}` stage) has not reported any traffic in the past 30 minutes
+        }}` stage) has not reported any traffic in the past 30m
       description: |
         Aggregation of all jobs for the urgent-other Sidekiq shard.
 
@@ -2464,6 +2808,6 @@ groups:
       slo_alert: "no"
       user_impacting: "yes"
     expr: |
-      gitlab_component_ops:rate_5m{type="sidekiq", component="shard_urgent_other", stage="main", monitor="global"} offset 1h
+      gitlab_component_ops:rate_5m{component="shard_urgent_other",monitor="global",stage="main",type="sidekiq"} offset 1h
       unless
-      gitlab_component_ops:rate_5m{type="sidekiq", component="shard_urgent_other", stage="main", monitor="global"}
+      gitlab_component_ops:rate_5m{component="shard_urgent_other",monitor="global",stage="main",type="sidekiq"}

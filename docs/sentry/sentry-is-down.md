@@ -39,7 +39,6 @@ If sentry.gitlab.net returns HTTP 500 status code.
 
 1. Check Redis service status:
 
-
     ```
     sudo service redis-server status
     ```

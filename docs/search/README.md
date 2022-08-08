@@ -4,8 +4,9 @@
 
 [[_TOC_]]
 
-#  Search Service
-* **Alerts**: https://alerts.gitlab.net/#/alerts?filter=%7Btype%3D%22search%22%2C%20tier%3D%22inf%22%7D
+# Search Service
+
+* **Alerts**: <https://alerts.gitlab.net/#/alerts?filter=%7Btype%3D%22search%22%2C%20tier%3D%22inf%22%7D>
 * **Label**: gitlab-com/gl-infra/production~"Service:Elasticsearch"
 
 ## Logging
@@ -14,11 +15,12 @@
 
 ## Troubleshooting Pointers
 
+* [Camoproxy troubleshooting](../camoproxy/camoproxy.md)
 * [Shared CI Runner Timeouts](../ci-runners/ci-runner-timeouts.md)
 * [../ci-runners/service-ci-runners.md](../ci-runners/service-ci-runners.md)
 * [Cloudflare Logs](../cloudflare/logging.md)
 * [CloudFlare Troubleshooting](../cloudflare/troubleshooting.md)
-* [Chef Guidlines](../config_management/chef-guidelines.md)
+* [Chef Guidelines](../config_management/chef-guidelines.md)
 * [Chef troubleshooting](../config_management/chef-troubleshooting.md)
 * [Chef Tips and Tools](../config_management/chef-workflow.md)
 * [../elastic/elasticsearch-integration-in-gitlab.md](../elastic/elasticsearch-integration-in-gitlab.md)
@@ -30,6 +32,8 @@
 * [Kubernetes](../kube/kubernetes.md)
 * [Prometheus pod crashlooping](../monitoring/prometheus-pod-crashlooping.md)
 * [GitLab Pages returning 404](../pages/gitlab-pages.md)
+* [Steps to Recreate/Rebuild the CI CLuster using a Snapshot from the Master cluster (instead of pg_basebackup)](../patroni-ci/rebuild_ci_cluster_from_prod.md)
+* [Recovering from CI Patroni cluster lagging too much or becoming completely broken](../patroni-ci/recovering_patroni_ci_intense_lagging_or_replication_stopped.md)
 * [../patroni/database_peak_analysis.md](../patroni/database_peak_analysis.md)
 * [Mapping Postgres Statements, Slowlogs, Activity Monitoring and Traces](../patroni/mapping_statements.md)
 * [../patroni/performance-degradation-troubleshooting.md](../patroni/performance-degradation-troubleshooting.md)
@@ -45,7 +49,6 @@
 * [../sidekiq/sidekiq_error_rate_high.md](../sidekiq/sidekiq_error_rate_high.md)
 * [How to use flamegraphs for performance profiling](../tutorials/how_to_use_flamegraphs_for_perf_profiling.md)
 * [Life of a Git Request](../tutorials/overview_life_of_a_git_request.md)
-* [Camoproxy troubleshooting](../uncategorized/camoproxy.md)
 * [Domain Registration](../uncategorized/domain-registration.md)
 * [../uncategorized/gcp-network-intelligence.md](../uncategorized/gcp-network-intelligence.md)
 * [GCP Projects](../uncategorized/gcp-project.md)
@@ -53,6 +56,7 @@
 * [Managing Chef](../uncategorized/manage-chef.md)
 * [Node Reboots](../uncategorized/node-reboots.md)
 * [Uploads](../uncategorized/uploads.md)
+* [Troubleshooting Hashicorp Vault](../vault/troubleshooting.md)
 <!-- END_MARKER -->
 
 <!-- ## Summary -->

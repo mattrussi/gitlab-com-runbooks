@@ -4,9 +4,10 @@
 
 [[_TOC_]]
 
-#  Consul Service
+# Consul Service
+
 * [Service Overview](https://dashboards.gitlab.net/d/a988f2tmz/consul)
-* **Alerts**: https://alerts.gitlab.net/#/alerts?filter=%7Btype%3D%22consul%22%2C%20tier%3D%22inf%22%7D
+* **Alerts**: <https://alerts.gitlab.net/#/alerts?filter=%7Btype%3D%22consul%22%2C%20tier%3D%22inf%22%7D>
 * **Label**: gitlab-com/gl-infra/production~"Service:Consul"
 
 ## Logging
@@ -18,6 +19,7 @@
 
 * [Interacting with Consul](interaction.md)
 * [Diagnosis with Kibana](../onboarding/kibana-diagnosis.md)
+* [Recovering from CI Patroni cluster lagging too much or becoming completely broken](../patroni-ci/recovering_patroni_ci_intense_lagging_or_replication_stopped.md)
 * [Geo Patroni Cluster Management](../patroni/geo-patroni-cluster.md)
 * [Log analysis on PostgreSQL, Pgbouncer, Patroni and consul Runbook](../patroni/log_analysis.md)
 * [Patroni](../patroni/patroni-management.md)
@@ -32,7 +34,6 @@
 * [Removing a PgBouncer instance](../pgbouncer/pgbouncer-remove-instance.md)
 * [../pgbouncer/service-pgbouncer.md](../pgbouncer/service-pgbouncer.md)
 <!-- END_MARKER -->
-
 
 ## Summary
 
@@ -132,7 +133,6 @@ package "GCP" {
     speak to the local node on port `8600` for any inquiry.
   * This is configured via [`k8s-workloads/gitlab-helmfiles`](https://gitlab.com/gitlab-com/gl-infra/k8s-workloads/gitlab-helmfiles/-/tree/master/releases/consul)
 
-
 ### Consul Servers/Agents
 
 All VM's that have consul installed contain all configuration files in
@@ -143,13 +143,11 @@ execute to tell the consul cluster if that service is healthy on that particular
 node. The `ssl` directory contains secret items that are discussed later in this
 document.
 
-
 ### Environment Specific
 
 In general, the configurations look nearly identical between production and
 staging.  Items that differ include the certificates, they keys, hostnames, and
 the environment metadata.
-
 
 ## Performance
 
@@ -258,7 +256,7 @@ impacted depends on the service.
   lead to higher pressure on the remaining replicas.  If the primary database
 * Agent failure on nodes running GitLab Services == GitLab services will be
   unable to properly query which database server to talk to.  Due to this, the
-  application will default to always opening connections to the primary.  
+  application will default to always opening connections to the primary.
 
 Diagnosing agent failures requires observing logs and taking action based on the
 failure scenario.

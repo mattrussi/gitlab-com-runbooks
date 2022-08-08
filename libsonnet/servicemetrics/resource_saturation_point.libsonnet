@@ -20,7 +20,7 @@ local defaultAlertingLabels =
   labelTaxonomy.labels.service |
   labelTaxonomy.labels.stage;
 
-local capacityPlanningStrategies = std.set(['quantile95_1w', 'quantile99_1w', 'quantile95_1h']);
+local capacityPlanningStrategies = std.set(['quantile95_1w', 'quantile99_1w', 'quantile95_1h', 'exclude']);
 
 local sloValidator = validator.validator(function(v) v > 0 && v <= 1, 'SLO threshold should be in the range (0,1]');
 
@@ -74,6 +74,20 @@ local validateAndApplyDefaults(definition) =
       alertTriggerDuration: '5m',
     } + definition.slos,
   };
+
+local typeFilter(definition) =
+  (
+    if std.isArray(definition.appliesTo) then
+      if std.length(definition.appliesTo) > 1 then
+        { type: { re: std.join('|', definition.appliesTo) } }
+      else
+        { type: definition.appliesTo[0] }
+    else
+      if std.length(definition.appliesTo.allExcept) > 0 then
+        { type: [{ ne: '' }, { nre: std.join('|', definition.appliesTo.allExcept) }] }
+      else
+        { type: { ne: '' } }
+  );
 
 local resourceSaturationPoint = function(options)
   local definition = validateAndApplyDefaults(options);
@@ -149,24 +163,23 @@ local resourceSaturationPoint = function(options)
     getRecordingRuleDefinition(componentName)::
       local definition = self;
 
-      local typeFilter =
-        (
-          if std.isArray(definition.appliesTo) then
-            if std.length(definition.appliesTo) > 1 then
-              { type: { re: std.join('|', definition.appliesTo) } }
-            else
-              { type: definition.appliesTo[0] }
-          else
-            if std.length(definition.appliesTo.allExcept) > 0 then
-              { type: [{ ne: '' }, { nre: std.join('|', definition.appliesTo.allExcept) }] }
-            else
-              { type: { ne: '' } }
-        );
-
-      local query = definition.getQuery(typeFilter, definition.getBurnRatePeriod());
+      local query = definition.getQuery(typeFilter(definition), definition.getBurnRatePeriod());
 
       {
         record: 'gitlab_component_saturation:ratio',
+        labels: {
+          component: componentName,
+        } + definition.getStaticLabels(),
+        expr: query,
+      },
+
+    getResourceAutoscalingRecordingRuleDefinition(componentName)::
+      local definition = self;
+
+      local query = definition.getQuery(typeFilter(definition), definition.getBurnRatePeriod(), definition.resourceLabels);
+
+      {
+        record: 'gitlab_component_resource_saturation:ratio',
         labels: {
           component: componentName,
         } + definition.getStaticLabels(),

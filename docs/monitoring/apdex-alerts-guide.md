@@ -1,7 +1,8 @@
 [[_TOC_]]
 
 # Apdex alerts troubleshooting
-Or: *How I learned to stop worrying and love the metrics*
+
+Or: _How I learned to stop worrying and love the metrics_
 
 In the interests of consistent and mathematically sound alerts about which we can reason, we use the [Apdex concept](./definition-service-apdex.md).  But as an on-call SRE, what do you do when confronted with an apdex alert for a service?  How do we drill down to identify the problematic area?
 
@@ -9,13 +10,13 @@ In the interests of consistent and mathematically sound alerts about which we ca
 
 ### Service
 
-A "Service" is made up of one or more components, e.g. Praefect is made up of the cloudsql, proxy, and replicator_queue components, the API service is made up of the loadbalancer, puma, and workhose components.  The apdexes of the individual components combine to give an overall apdex for the Service in a given environment (gstg, gprd, etc) across all nodes, pods, and clusters (VMs or k8bs).
+A "Service" is made up of one or more service level indicators (SLIs), e.g. Praefect is made up of the cloudsql, proxy, and replicator_queue SLIs, the API service is made up of the loadbalancer, puma, and workhose SLIs.  The apdexes of the individual SLIs combine to give an overall apdex for the Service in a given environment (gstg, gprd, etc) across all nodes, pods, and clusters (VMs or k8bs).
 
-### Component
+### Service Level Indicators
 
-A component is a single measureable thing; it is often an independent daemon but can also be an identifiable portion of a thing e.g. for API it is the workhorse and puma daemons, and the /api handling backends from haproxy.  The key is that the metrics can be explicitly identified, potentially by label.
+An SLI is an individually measurable thing within a service; they are often an independent daemon but can also be an discretely identifiable portion of the service e.g. for API it is the workhorse and puma daemons, and the /api handling backends from haproxy.  The key is that some set of metrics can be explicitly identified as belonging to that indicator, potentially by label.
 
-Each component has its own apdex definition. Apdex definitions are part of the metrics catalog. They live in files defining services, for example, for the workhorse component of the git service: https://gitlab.com/gitlab-com/runbooks/-/blob/c010a387c36fc8e2dd00d224302139eba7225f44/metrics-catalog/services/git.jsonnet#L111 . They can be any valid Prometheus query. In most cases, definitions are actually jsonnet function calls (to make it more declarative) which evaluate to Prometheus queries.
+Each SLI has its own apdex definition. Apdex definitions are part of the metrics catalog. They live in files defining services, for example, for the workhorse SLI of the git service: <https://gitlab.com/gitlab-com/runbooks/-/blob/c010a387c36fc8e2dd00d224302139eba7225f44/metrics-catalog/services/git.jsonnet#L111> . They can be any valid Prometheus query. In most cases, definitions are actually jsonnet function calls (to make it more declarative) which evaluate to Prometheus queries.
 
 One such function is `histogramApdex`. It takes as parameters: a name of a histogram in Prometheus, a selector that identifies the relevant requests (perhaps filtering on various labels to achieve that) and thresholds. The histogram name will almost always be a `FOO_duration_seconds_bucket`, or be very similarly named, and is ultimately 'how long the request took to complete'. The thresholds define latency ranges for satisfied and tolerated, as per service apdex ( see [service apdex](./definition-service-apdex.md) ).  Only user-facing requests are included in this, because this is all about measuring the end-user experience (human or API); internal requests/book-keeping details like healthchecks are excluded where possible; exceptions may apply for technical reasons, although we will try to remove those exceptions when identified.
 
@@ -23,7 +24,7 @@ One such function is `histogramApdex`. It takes as parameters: a name of a histo
 
 [MWMBR](https://landing.google.com/sre/workbook/chapters/alerting-on-slos/#6-multiwindow-multi-burn-rate-alerts): Multi Window Multi Burn Rate
 
-In short: we have a budget (SLA) for being "out-of-spec" that we can burn through in a given period.  If the burn rate is high, we can't tolerate that for long (high burn, small window); if we're only slightly out-of-spec, we can burn for longer.  The idea is to alert quickly if things are going awry, but to not *miss* slow burning problems (commonly regressions, but not always) that are degrading performance a little bit for a long period.
+In short: we have a budget (SLA) for being "out-of-spec" that we can burn through in a given period.  If the burn rate is high, we can't tolerate that for long (high burn, small window); if we're only slightly out-of-spec, we can burn for longer.  The idea is to alert quickly if things are going awry, but to not _miss_ slow burning problems (commonly regressions, but not always) that are degrading performance a little bit for a long period.
 
 More specifically, on gitlab.com, we measure two burn rates, a 1h burn rate (fast 🔥) and a 6h burn rate (slow 🥵).  In a 1 hour period, we allow a service to burn 2% of its monthly error budget, and in a 6 hour period, we allow 5% of the monthly error budget to be used.
 
@@ -53,7 +54,7 @@ All these bits and pieces are defined in `metrics-catalog/services/<service-name
 
 As always the goal is to find the misbehaving thing, which could be anything from a server to a single endpoint/RPC/controller.  Here's some things you can do.
 
-An apdex alert in #production should be paired with an alert in #feed_alerts-general from [Slackline](https://gitlab.com/gitlab-com/gl-infra/slackline).  The Prometheus link on the origin alert might give you a broad brush idea of the impact (length, intensity etc), but you probably want to find the Slackline message.  That will also give you an idea of whether it's a slow or fast burn (see [Burn Rate](#burn_rate) and more particularly a '<service> Overview' button/link, which takes you to the relevant Grafana dashboard:
+An apdex alert in #production should be paired with an alert in #feed_alerts-general from [Slackline](https://gitlab.com/gitlab-com/gl-infra/slackline).  The Prometheus link on the origin alert might give you a broad brush idea of the impact (length, intensity etc), but you probably want to find the Slackline message.  That will also give you an idea of whether it's a slow or fast burn (see [Burn Rate](#burn-rate) and more particularly a '<service> Overview' button/link, which takes you to the relevant Grafana dashboard:
 
 ![Slackline message](img/apdex-slackline-message.png)
 
@@ -63,34 +64,36 @@ An apdex alert in #production should be paired with an alert in #feed_alerts-gen
 
 #### Service Level Indicators
 
-The alert will have identified which component of the service is at fault, but in case it's not clear check the 'Service Level Indicators' section of the dashboard detailing SLI metrics for components.  This should confirm which component is causing the alerts (or show that it is multiple).
+The alert will have identified which SLI of the service is at fault, but in case it's not clear check the 'Service Level Indicators' section of the dashboard.  This should confirm which SLI is causing the alerts (or show that it is multiple).
 
 ![sli-section](img/apdex-dashboard-sli.png)
 
-Each row shows metrics for a given component. The three columns are, from left to right:
+Each row shows metrics for a given SLI. The three columns are, from left to right:
+
 1. Apdex
 1. Error Ratio
 1. RPS (Requests per second)
 
-Apdex alerts are about latency, but keep an eye on error rates and RPS as well, as changes in behavior on those *may* provide clues for the apdex alert.
+Apdex alerts are about latency, but keep an eye on error rates and RPS as well, as changes in behavior on those _may_ provide clues for the apdex alert.
 
 This section also contains links to useful Kibana queries. See 'Kibana links' section below for more details.
 
 #### Service Level Indicator Detail
 
-Once you identify a component that's misbehaving (either from the alert or using the SLI section), , expand its `<COMPONENT> Service Level Indicator Detail` section.
+Once you identify a SLI that's misbehaving (either from the alert or using the Service Level Indicators section), expand the relevant `SLI Detail: <sli>` section.
 
-As the name suggests, this section contains a more detailed view into the health of a component. For example, it contains a row for each 'significant label' (see the [metrics_catalog](#metrics_catalog) definitions).
+As the name suggests, this section contains a more detailed view into the health of a SLI. For example, it contains a row for each 'significant label' (see the [metrics_catalog](#metrics-catalog) definitions).
 
 ![significant-label-row](img/apdex-dashboard-significant-label-row.png)
 
 Each row has apdex, error ratio and rps graphs that show the same data that is visible in the [Service Level Indicators] section, except it's split by 'significant label'. This is where outliers (e.g. a specific queue, gRPC method, etc) may be visible, suggesting specific code-paths (endpoint, class, controller, etc) that are causing the alert.
 
-Most (all?) have the `fqdn` label as significant by default so that we can see if some subset of servers are outliers; this is an *excellent* thing to check early.  An outlier on cattle-class machines (e.g. web, API) suggests a single machine may be failing; an outlier on Single-Point-Of-Failure machines indicates something specific to that node (e.g. an issue on a gitaly file storage node probably implicates repos specific to that node)
+Most (all?) have the `fqdn` label as significant by default so that we can see if some subset of servers are outliers; this is an _excellent_ thing to check early.  An outlier on cattle-class machines (e.g. web, API) suggests a single machine may be failing; an outlier on Single-Point-Of-Failure machines indicates something specific to that node (e.g. an issue on a gitaly file storage node probably implicates repos specific to that node)
 
 However, fqdn is only one possible such significant label, e.g. sidekiq has feature_category, urgency, queue.
 
-If you suspect grouping/aggregating by some *other* dimensions (labels) might provide insight, you have two options for ad-hoc explorations:
+If you suspect grouping/aggregating by some _other_ dimensions (labels) might provide insight, you have two options for ad-hoc explorations:
+
 1. Use Kibana to query logs
 1. Use the Grafana 'Explore' functionality to query metrics
 
@@ -98,13 +101,14 @@ Kibana will provide more detail (particularly the ability to group by user, grou
 
 #### Kibana links (for exploring more grouping/aggregation dimensions)
 
-In the [Service Level Indicators] section, each component has a `Tooling Links` section on the right, mainly being links to Kibana.  As noted above, kibana contains more detail but shorter retention; the detail is in dimensions that would otherwise cause performance problems for Prometheus, like users + projects.
+In the [Service Level Indicators] section, each SLI may have a `Tooling Links` section on the right, mainly being links to Kibana.  As noted above, kibana contains more detail but shorter retention; the detail is in dimensions that would otherwise cause performance problems for Prometheus, like users + projects.
 
 In particular, if the simple "show all logs" links don't provide the split/detail you need, the ones with the "(split)" suffix are your starting point for aggregating on the additional dimensions.
 
 ![Kibana link](img/apdex-dashboard-kibana-link.png)
 
 The initially chosen split is somewhat arbitrary (e.g. for Web it is 'controller') but it is simple to change the field (dimension) on which the series split is occurring.  Commonly useful fields (across many indexes/log types):
+
 * `json.meta.user.keyword`
 * `json.meta.project.keyword`
 * `json.meta.root_namespace`
@@ -124,8 +128,9 @@ although there are others and you should explore as necessary.  As at the curren
 1. Remove the original (top) query
     * ![Remove original](./img/apdex-dashboard-remove-query.png)
 
-If you're not sure what labels are available to aggregate on, copy the metric name (inside the 'rate' expression), paste it into https://thanos.gitlab.net/graph and inspect/choose from the available labels (warning: there can be a lot of metric instances, so you probably want to also include the `job` label from the original expression as well, e.g. `grpc_server_handling_seconds_bucket{job="gitaly"}`
+If you're not sure what labels are available to aggregate on, copy the metric name (inside the 'rate' expression), paste it into <https://thanos.gitlab.net/graph> and inspect/choose from the available labels (warning: there can be a lot of metric instances, so you probably want to also include the `job` label from the original expression as well, e.g. `grpc_server_handling_seconds_bucket{job="gitaly"}`
 
 Notes:
+
 1. Adding/copying the query ensures you get a label key on the graph that reflects the label you chose; if you just edit the original in place, the label definition isn't updated.
 1. It's possible to end up with such low-volume data that the graph becomes just points, not lines.  This is one of the downsides of this approach.

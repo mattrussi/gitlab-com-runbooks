@@ -13,17 +13,18 @@ very useful to see what firewall rules are being applied to traffic.
 
 ## Using Cloudflare to stop problems
 
-** During an incident, making changes to the firewall rules and page rules
+**During an incident, making changes to the firewall rules and page rules
 is expected. But be certain you follow proper process afterwards to make
 certain that the changes are reflected in the right locations and follow the
-Cloudflare rules management processes. **
+Cloudflare rules management processes.**
 
 ### Adding firewall rules
+
 A firewall rule should be used for the following types of actions:
 
-* Blocking an IP address
-* Adding captcha challenges to a path
-* Prevent WAF rules from blocking legitimate traffic
+- Blocking an IP address
+- Adding captcha challenges to a path
+- Prevent WAF rules from blocking legitimate traffic
 
 Firewall rules can match against many types of request attributes.
 
@@ -32,10 +33,11 @@ The rule **must adhere to the description format of Cloudflare rules** described
 - [Manage firewall rules in the Cloudflare UI](https://developers.cloudflare.com/firewall/cf-dashboard)
 
 ### Adding page rules
+
 A page rule should be used for the following types of actions:
 
-* Redirecting requests of a certain URL to another location
-* Modifying cache policy for certain URL
+- Redirecting requests of a certain URL to another location
+- Modifying cache policy for certain URL
 
 Keep in mind that page rules can only match on request paths.
 

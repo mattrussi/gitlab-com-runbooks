@@ -1,6 +1,6 @@
 # Deleted Project Restoration
 
-# You should not perform this action!
+# You should not perform this action
 
 As a general policy, we do not perform these restores. You should refuse to perform this restore unless the request is escalated to an Infrastructure manager.
 
@@ -50,6 +50,7 @@ procedure.
 1. `ssh` to the delayed replica.
 1. In a `gitlab-psql` shell: `SELECT pg_wal_replay_pause();`
 1. `systemctl stop chef-client.service`
+1. In a `gitlab-psql` shell: `select now()-pg_last_xact_replay_timestamp() as replication_lag;` and replication lag should start increasing.
 
 Later, when you have extracted the project export:
 
@@ -117,25 +118,27 @@ ProjectTreeSaver needs to run "as a user", so we use an admin user to ensure
 that we have permissions.
 
 ```ruby
-Namespace.find_by_full_path('some-ns')
-=> #<Group id:1234 @myns>
-irb(main):027:0> Project.where(namespace_id: 1234, path: 'some-project')
-=> #<ActiveRecord::Relation [#<Project id:5678 myns/some-project>]>
-irb(main):028:0> proj = Project.find(5678)
-=> #<Project id:5678 myns/some-project>
+irb(main):001:0> user = User.find_by_username('an-admin')
+=> #<User id:1234 @an-admin>
+irb(main):002:0> project = Project.find_by_full_path('namespace/project-name')
+=> #<Project id:5678 namespace/project-name>
 
-irb(main):028:0> proj.repository_storage
+irb(main):003:0> project.repository_storage
 ... note down this output...
 
-irb(main):028:0> proj.disk_path
+irb(main):004:0> project.disk_path
 ... note down this output ...
 
-irb(main):023:0> admin_user = User.find_by_username('an-admin')
-=> #<User id:1234 @an-admin>
+irb(main):005:0> shared = Gitlab::ImportExport::Shared.new(project)
+irb(main):006:0> version_saver = Gitlab::ImportExport::VersionSaver.new(shared: shared)
+irb(main):007:0> tree_saver = Gitlab::ImportExport::Project::TreeSaver.new(project: project, current_user: user, shared: shared)
+irb(main):009:0> version_saver.save
+irb(main):010:0> tree_saver.save
 
-pts = Gitlab::ImportExport::Project::TreeSaver.new(project: proj, current_user: admin_user, shared: proj.import_export_shared)
+irb(main):011:0> include Gitlab::ImportExport::CommandLineUtil
+irb(main):012:0> archive_file = File.join(shared.archive_path, Gitlab::ImportExport.export_filename(exportable: project))
+irb(main):013:0> tar_czf(archive: archive_file, dir: shared.export_path)
 ... some output that includes the path to a project tree directory, which will be something like /var/opt/gitlab/gitlab-rails/shared/tmp/gitlab_exports/@hashed/. Note this down.
-pts.save
 ```
 
 We now have the Gitaly shard and path on persistent disk the project was stored
@@ -272,11 +275,14 @@ failed, we can't know whether the corruption predated the snapshot or not.
 # Troubleshooting
 
 ## Rails console errors out with a stacktrace
+
 You may need to copy the production `db_key_base` key into the restore node. You can find the key in `/etc/gitlab/gitlab-secrets.json`.
 
 ## Gitlab reconfigure fails
+
 You may need to edit the `/etc/gitlab/gitlab.rb` file and disable object_store like this: `gitlab_rails['object_store']['enabled'] = false`
 
 ## Copying the Git repository results in a bad fsck or non-working repository
+
 You may be recovering a repository with objects in a shared pool. Try to
 re-copy using [these instructions](../gitaly/git-copy-by-hand.md).

@@ -24,6 +24,7 @@ local gitalyApdexIgnoredMethods = [
   'FetchSourceBranch',
   'OptimizeRepository',
   'CommitStats',  // https://gitlab.com/gitlab-org/gitlab/-/issues/337080
+  'RepositorySize',
 
   // PackObjectsHookWithSidechannel, PostUploadPackWithSidechannel and
   // SSHUploadPackWithSidechannel are used to serve 'git fetch' traffic.
@@ -41,6 +42,17 @@ local gitalyApdexIgnoredMethods = [
   'UpdateHook',
 ];
 
+// Those methods can sometimes be slow under load, resulting in too many
+// short and most often unactionable alerts, but are still important to
+// monitor, so the requires a separate apdex with higher thresholds
+// https://gitlab.com/gitlab-com/gl-infra/reliability/-/issues/15525
+local gitalyApdexSlowMethods = [
+  'FindCommit',
+  'LastCommitForPath',
+  'GetArchive',
+  'RepositorySize',
+];
+
 // Ignored because of https://gitlab.com/gitlab-org/gitaly/-/issues/3441
 local gitalyRubyApdexIgnoredMethods = gitalyApdexIgnoredMethods + ['GetLFSPointers', 'GetAllLFSPointers'];
 
@@ -48,14 +60,14 @@ local gitalyRubyApdexIgnoredMethods = gitalyApdexIgnoredMethods + ['GetLFSPointe
 // GRPC service. Since this is an SLI only, not all operations are included,
 // only unary ones, and even then known slow operations are excluded from
 // the apdex calculation
-local grpcServiceApdex(baseSelector) =
+local grpcServiceApdex(baseSelector, satisfiedThreshold=0.5, toleratedThreshold=1) =
   histogramApdex(
     histogram='grpc_server_handling_seconds_bucket',
     selector=baseSelector {
       grpc_type: 'unary',
     },
-    satisfiedThreshold=0.5,
-    toleratedThreshold=1
+    satisfiedThreshold=satisfiedThreshold,
+    toleratedThreshold=toleratedThreshold
   );
 
 local gitalyGRPCErrorRate(baseSelector) =
@@ -63,14 +75,23 @@ local gitalyGRPCErrorRate(baseSelector) =
     rateMetric(
       counter='gitaly_service_client_requests_total',
       selector=baseSelector {
-        grpc_code: { noneOf: ['OK', 'NotFound', 'Unauthenticated', 'AlreadyExists', 'FailedPrecondition', 'DeadlineExceeded', 'Canceled', 'InvalidArgument', 'PermissionDenied'] },
+        grpc_code: { noneOf: ['OK', 'NotFound', 'Unauthenticated', 'AlreadyExists', 'FailedPrecondition', 'DeadlineExceeded', 'Canceled', 'InvalidArgument', 'PermissionDenied', 'Unavailable'] },
       }
     ),
+    // Include some errors for code `DeadlineExceeded`
     rateMetric(
       counter='gitaly_service_client_requests_total',
       selector=baseSelector {
         grpc_code: 'DeadlineExceeded',
         deadline_type: { ne: 'limited' },
+      }
+    ),
+    // Include some errors for code `Unavailable`, ignore SSH and HTTP uploads as they are often rate limited
+    rateMetric(
+      counter='gitaly_service_client_requests_total',
+      selector=baseSelector {
+        grpc_code: 'Unavailable',
+        grpc_method: { noneOf: ['SSHUploadPackWithSidechannel', 'PostUploadPackWithSidechannel'] },
       }
     ),
   ]);
@@ -79,6 +100,7 @@ local gitalyGRPCErrorRate(baseSelector) =
 {
   gitalyApdexIgnoredMethods:: gitalyApdexIgnoredMethods,
   gitalyRubyApdexIgnoredMethods:: gitalyRubyApdexIgnoredMethods,
+  gitalyApdexSlowMethods:: gitalyApdexSlowMethods,
 
   grpcServiceApdex:: grpcServiceApdex,
   gitalyGRPCErrorRate:: gitalyGRPCErrorRate,

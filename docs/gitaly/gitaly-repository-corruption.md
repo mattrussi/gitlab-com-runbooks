@@ -5,11 +5,11 @@
 For all we know commits and git objects themselves are not lost, but in some cases refs getting updated might result in them getting stored as an empty file.
 It is likely, that gitaly wants to update the ref, but did not sync the content to disk before having the host fail, so the file containing the ref was corrupted in the process.
 
-Objects are fine (with errors being detectable that is) as they are hashed, and `fsync()`ed by git (https://gitlab.com/gitlab-org/gitaly/-/issues/1727), but refs are not. Not even when updated via `git update-ref`.
+Objects are fine (with errors being detectable that is) as they are hashed, and `fsync()`ed by git (<https://gitlab.com/gitlab-org/gitaly/-/issues/1727>), but refs are not. Not even when updated via `git update-ref`.
 
 ## Detecting corruption
 
-When viewing a project's main site returns 5xx errors, it might have been a victim of corruption. To confirm, double check with [this dashboard](https://log.gprd.gitlab.net/goto/5d10a91b65b89df295d089f1bd5f8a52) (internal). If it appears there, it has at least parts of it's refs corrupted.  
+When viewing a project's main site returns 5xx errors, it might have been a victim of corruption. To confirm, double check with [this dashboard](https://log.gprd.gitlab.net/goto/5d10a91b65b89df295d089f1bd5f8a52) (internal). If it appears there, it has at least parts of it's refs corrupted.
 Any curruption will only surface here if there is traffic on that project. It might get picked up during housekeeping, but then additional damage is done.
 
 ## Before you start
@@ -19,6 +19,7 @@ Once you found the gitaly shard and location of the project on that shard (`/var
 Make a backup! Usually (once in the repo) `sudo tar cvf ~<your user>/<issue_id>.tar .` is enough.
 
 Example:
+
 ```
 sudo tar cvf ~t4cc0re/1234.tar .
 ```
@@ -49,9 +50,10 @@ Not all of those errors must appear, but this is what you may expect. Anything c
 
 Luckily, we have some redundancy in state, so we can manually piece together the state the project should have been in (for the most part).
 
-The portion on figuring out which hash should be restored follows below, but first how to restore a ref once you know the commit. 
+The portion on figuring out which hash should be restored follows below, but first how to restore a ref once you know the commit.
 
 To restore a ref you should first use `git update-ref`.
+
 ```bash
 sudo -u git git update-ref refs/keep-around/0123456789abcdef0123456789abcdef01234567 0123456789abcdef0123456789abcdef01234567
 ```
@@ -59,9 +61,11 @@ sudo -u git git update-ref refs/keep-around/0123456789abcdef0123456789abcdef0123
 If this fails for some reason, you can update the ref using an editor of your choice run `sudo -u git $EDITOR $REF` and replace all file content with the full commit hash and a trailing newline.
 
 Like this
+
 ```bash
 sudo -u git $EDITOR refs/keep-around/0123456789abcdef0123456789abcdef01234567
 ```
+
 ```
 0123456789abcdef0123456789abcdef01234567
 ```
@@ -97,7 +101,7 @@ Alternatively, if you saw dangling commits during `git fsck` it is very likely, 
 
 #### Finding root commits with broken refs
 
-**Regardless which approach you take** you might end up with multiple root commits (if there was an orphaned branch created for example). In those cases, you can use `git log <hash>` to see if there are any indicators for the commit belonging to another ref, that was not destroyed. 
+**Regardless which approach you take** you might end up with multiple root commits (if there was an orphaned branch created for example). In those cases, you can use `git log <hash>` to see if there are any indicators for the commit belonging to another ref, that was not destroyed.
 Once you restored the primary branch with the root commit, things will start working again, but you **must** to make an effort to find the latest commit for that branch, once context is available.
 
 ###### Approach 1
@@ -107,6 +111,7 @@ Git's fsck can probably find the root for us.
 ```bash
 git fsck --root
 ```
+
 ```
 root 17f4d6097a063c78f16e6a31e41e0e7ba753228e
 [...]
@@ -137,7 +142,7 @@ find objects/ -type f | tr -d '/' | sed 's/objects//g' | xargs -rn1 git rev-list
 
 ### `refs/keep-around/*`
 
-These refs are the easiest to repair, as they contain what they should point to right in their name.  
+These refs are the easiest to repair, as they contain what they should point to right in their name.
 For example, `refs/keep-around/0123456789abcdef0123456789abcdef01234567` should point to `0123456789abcdef0123456789abcdef01234567`.
 
 ### `refs/merge-requests/*/merge`
@@ -150,9 +155,9 @@ These refs are bound to tags. You probably want to use the project's tag list (v
 
 ### `refs/pipelines/123456789`
 
-These refs are bound to a pipeline. Look up the CI pipeline ID from the ref (`refs/pipelines/123456789` would be pipeline ID `123456789`). Then click any job, and on the right-hand side you will see the commit it is targeting.  
+These refs are bound to a pipeline. Look up the CI pipeline ID from the ref (`refs/pipelines/123456789` would be pipeline ID `123456789`). Then click any job, and on the right-hand side you will see the commit it is targeting.
 
-## Oh no! There are missing commits after a garbage collection!
+## Oh no! There are missing commits after a garbage collection
 
 First of all, keep calm. :) We **should** still have it in snapshots.
 
@@ -161,11 +166,13 @@ Running a garbage collection on git (as done by housekeeping) may remove `dangli
 This means you will need to find the disk-level snapshots as close to the point before and after the cause of the data corruption.
 
 Once those are identified:
+
 - create another VM and attach those snapshots to it
 - naviage to the repo on each of the snapshots
 - grab a copy of the contents of their `objects` directory. (*hint* on the earlier snapshot you can also see a vaild ref for the primary branch, if required)
 - merge the contents of both `objects` directories into the `objects` directory you want to restore. Do **not** overwrite files. If they are there, they are probably fine.
 
 ###### What did we just do?
-We supplied git with any object it had before. While this is inefficient, as the `.pack` files in the more recent repo have most of the objects packed into them, this also provides a fallback for git to retrieve the objects, that were previously lost.  
+
+We supplied git with any object it had before. While this is inefficient, as the `.pack` files in the more recent repo have most of the objects packed into them, this also provides a fallback for git to retrieve the objects, that were previously lost.
 This is fine, as a garbage collection run later on will just clean up anything that it does not need anymore.

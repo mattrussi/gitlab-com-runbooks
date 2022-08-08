@@ -23,7 +23,8 @@ local labelTaxonomy(labelset) =
   labelsFor(labels.service) +
   labelsFor(labels.stage) +
   labelsFor(labels.shard) +
-  labelsFor(labels.node);
+  labelsFor(labels.node) +
+  labelsFor(labels.sliComponent);
 
 // Returns a comma deliminated string of labels according to the provided hash
 local labelTaxonomySerialized(labelset) =
@@ -41,9 +42,18 @@ local getLabelFor(label, default='') =
   else
     error 'getLabelFor() expects a value from labelTaxonomy.labels as the first argument';
 
+// Returns true if a specific taxonomy label exists in the configuration
+local hasLabelFor(label) =
+  if std.isNumber(label) then
+    std.get(labelTaxonomyConfig, '' + label, null) != null
+  else
+    error 'hasLabelFor() expects a value from labelTaxonomy.labels as the first argument';
+
+
 {
   labels:: labels,
   getLabelFor:: getLabelFor,
+  hasLabelFor:: hasLabelFor,
   labelTaxonomy:: labelTaxonomy,
   labelTaxonomySerialized:: labelTaxonomySerialized,
 }

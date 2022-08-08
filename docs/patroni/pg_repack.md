@@ -5,6 +5,7 @@
 [gitlab-pgrepack](https://gitlab.com/gitlab-com/gl-infra/gitlab-pgrepack.git) is a helper tool for running pg_repack in GitLab environments. It is open source and works on top of the [pg_repack PostgreSQL](https://github.com/reorg/pg_repack) program.
 
 ## What is bloat?
+
 Bloat can be seen as the "remains" of UPDATE and DELETE activity. It is important to distinguish the concepts of "dead tuples" and "bloat". When a row is updated or deleted, PostgreSQL creates new physical versions of rows – called "tuples". After transaction finishes, old tuples are marked as "dead". Accumulation of dead tuples (caused by a massive operation or temporary autovacuum's inability to clean up dead tuples promptly) leads to the situation, when autovacuum cleans many dead tuples at once, leaving significant "gaps" in physical layout (empty space in pages) – these gaps is what we call "bloat".
 
 Both tables and indexes can be bloated. Two negative effects of the growing bloat are:
@@ -13,12 +14,13 @@ Both tables and indexes can be bloated. Two negative effects of the growing bloa
 1. performance degradation (usually, high levels of index bloat are more dangerous for performance).
 
 ## Why pg_repack?
+
 `VACUUM FULL` is a standard command that can be used to get rid of bloat. But, as opposed to regular `VACUUM` (executed either by autovacuum or manually), `VACUUM FULL` uses a long-lasting exclusive lock on the table (basically, recreating the table and its indexes), blocking all the queries to the table and impacting performance. `Pg_repack` uses an approach that requires short-lived locks, being obtained gracefully (with multiple attempts with `statement_timeout` gradually growing from `100ms` to `1000ms`), suitable for databases with high and concurrent activity.
 
 ## How to see estimated bloat for tables and indexes
 
 - In monitoring: [PostgreSQL Bloat Dashboard](https://dashboards.gitlab.net/d/000000224/postgresql-bloat?orgId=1)
-- [postgres-checkup reports](https://gitlab.com/gitlab-com/gl-infra/infrastructure/-/issues?label_name%5B%5D=postgres-checkup) – see reports `F004 Autovacuum: Heap Bloat (Estimated)` and `F005 Autovacuum: Btree Index Bloat (Estimated)`. See [Checking PostgreSQL health with postgres-checkup](docs/patroni/postgres-checkup.md) for more information.
+- [postgres-checkup reports](https://gitlab.com/gitlab-com/gl-infra/reliability/-/issues?label_name%5B%5D=postgres-checkup) – see reports `F004 Autovacuum: Heap Bloat (Estimated)` and `F005 Autovacuum: Btree Index Bloat (Estimated)`. See [Checking PostgreSQL health with postgres-checkup](docs/patroni/postgres-checkup.md) for more information.
 
 ## What to repack
 
@@ -179,7 +181,6 @@ sudo gitlab-psql -c "SELECT pg_reload_conf();"
 - Closely watch monitoring (see details below) and be ready to slow down the process, or postpone it.
 - Repacking of tables is beneficial but might be difficult (locking issues, a lot of IO). Consider skipping tables for which repacking fails due to locking issues and "downgrade" the operation to repacking only indexes of such tables.
 
-
 ### Disk IO
 
 This is a must-have to monitor – check disks activity (first of all, `sdb`, where PostgreSQL data directory is located) to watch read and write IOPS, throughput, and latency. Additionally, closely monitor the general system performance – first of all, database request latencies (SQL query duration).
@@ -205,8 +206,8 @@ The first can be OK in many cases (for example, `VACUUM` running in the "transac
 
 Pg_repack should never block regular database activity. In the case of normal queries being blocked by pg_repack activity, gitlab-repack should be canceled immediately!
 
-
 ### Activity
+
 Most of the activity of pg_repack is to build the temporary table that will, eventually, replace the original (meaning that 2x space is required – if we are processing  the table of 100 GiB, we need additional 100 GiB temporarily):
 
 ```

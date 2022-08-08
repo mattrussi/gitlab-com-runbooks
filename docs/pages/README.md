@@ -4,8 +4,9 @@
 
 [[_TOC_]]
 
-#  Pages Service
-* **Alerts**: https://alerts.gitlab.net/#/alerts?filter=%7Btype%3D%22pages%22%2C%20tier%3D%22lb%22%7D
+# Pages Service
+
+* **Alerts**: <https://alerts.gitlab.net/#/alerts?filter=%7Btype%3D%22pages%22%2C%20tier%3D%22lb%22%7D>
 * **Label**: gitlab-com/gl-infra/production~"Service:Pages"
 
 ## Logging
@@ -21,6 +22,7 @@
 * [HAProxy management at GitLab](../frontend/haproxy.md)
 * [../gitaly/git-high-cpu-and-memory-usage.md](../gitaly/git-high-cpu-and-memory-usage.md)
 * [Gitaly unusual activity alert](../gitaly/gitaly-unusual-activity.md)
+* [Service-Level Monitoring](../metrics-catalog/service-level-monitoring.md)
 * [Node memory alerts](../monitoring/node_memory_alerts.md)
 * [Diagnosis with Kibana](../onboarding/kibana-diagnosis.md)
 * [Block specific pages domains through HAproxy](block-pages-domain.md)
@@ -31,7 +33,6 @@
 * [PostgreSQL VACUUM](../patroni/postgresql-vacuum.md)
 * [Deploy Cmd for Chatops](../uncategorized/deploycmd.md)
 <!-- END_MARKER -->
-
 
 <!-- ## Summary -->
 

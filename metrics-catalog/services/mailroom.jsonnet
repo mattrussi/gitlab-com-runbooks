@@ -34,7 +34,7 @@ metricsCatalog.serviceDefinition({
   },
   serviceLevelIndicators: {
     emailsProcessed: {
-      local queueSelector = { queue: 'email_receiver' },
+      local queueSelector = { worker: 'EmailReceiverWorker' },
       userImpacting: true,
       featureCategory: 'not_owned',
 
@@ -42,7 +42,7 @@ metricsCatalog.serviceDefinition({
       upscaleLongerBurnRates: true,
 
       description: |||
-        Monitors incoming emails delivered from the imap inbox and processed through Sidekiq's `email_receiver` queue.
+        Monitors incoming emails delivered from the imap inbox and processed through Sidekiq's `EmailReceiverWorker`.
         Note that since Mailroom has poor observability, we use Sidekiq metrics for this, and this could lead to certain Sidekiq problems
         being attributed to Mailroom
       |||,

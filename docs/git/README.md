@@ -4,9 +4,10 @@
 
 [[_TOC_]]
 
-#  Git Service
+# Git Service
+
 * [Service Overview](https://dashboards.gitlab.net/d/git-main/git-overview)
-* **Alerts**: https://alerts.gitlab.net/#/alerts?filter=%7Btype%3D%22git%22%2C%20tier%3D%22sv%22%7D
+* **Alerts**: <https://alerts.gitlab.net/#/alerts?filter=%7Btype%3D%22git%22%2C%20tier%3D%22sv%22%7D>
 * **Label**: gitlab-com/gl-infra/production~"Service:Git"
 
 ## Logging
@@ -48,6 +49,7 @@
 * [Git Storage Servers](../gitaly/storage-servers.md)
 * [Managing GitLab Storage Shards (Gitaly)](../gitaly/storage-sharding.md)
 * [When GitLab.com is down](../incidents/when-gitlab-com-is-down.md)
+* [Ad hoc observability tools on Kubernetes nodes](../kube/k8s-adhoc-observability.md)
 * [../kube/k8s-oncall-setup.md](../kube/k8s-oncall-setup.md)
 * [Kubernetes](../kube/kubernetes.md)
 * [Alerting](../monitoring/alerts_manual.md)
@@ -55,6 +57,7 @@
 * [Session: Application architecture](../onboarding/architecture.md)
 * [Gitlab.com on Kubernetes](../onboarding/gitlab.com_on_k8s.md)
 * [Diagnosis with Kibana](../onboarding/kibana-diagnosis.md)
+* [Recovering from CI Patroni cluster lagging too much or becoming completely broken](../patroni-ci/recovering_patroni_ci_intense_lagging_or_replication_stopped.md)
 * [Custom PostgreSQL Package Build Process for Ubuntu Xenial 16.04](../patroni/custom_postgres_packages.md)
 * [Geo Patroni Cluster Management](../patroni/geo-patroni-cluster.md)
 * [Patroni](../patroni/patroni-management.md)
@@ -83,10 +86,8 @@
 * [How to upload a file to Google Cloud Storage from any system without a credentials configuration](../uncategorized/upload-file-to-gcs-using-signed-url.md)
 * [Workers under heavy load because of being used as a CDN](../uncategorized/workers-high-load.md)
 * [Configuring and Using the Yubikey](../uncategorized/yubikey.md)
-* [Gitlab Vault](../vault/vault.md)
 * [Gitaly version mismatch](../version/gitaly-version-mismatch.md)
 <!-- END_MARKER -->
-
 
 <!-- ## Summary -->
 

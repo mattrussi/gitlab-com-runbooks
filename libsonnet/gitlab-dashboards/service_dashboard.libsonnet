@@ -65,6 +65,7 @@ local overviewDashboard(
   type,
   title='Overview',
   uid=null,
+  startRow=0,
   environmentSelectorHash=defaultEnvironmentSelector,
   saturationEnvironmentSelectorHash=defaultEnvironmentSelector,
 
@@ -95,7 +96,7 @@ local overviewDashboard(
     .addPanels(
       headlineMetricsRow(
         type,
-        startRow=0,
+        startRow=startRow,
         metricsCatalogServiceInfo=metricsCatalogServiceInfo,
         selectorHash=selectorHash,
         showSaturationCell=std.length(saturationComponents) > 0

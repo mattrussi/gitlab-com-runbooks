@@ -3,6 +3,7 @@ local rateMetric = metricsCatalog.rateMetric;
 local toolingLinks = import 'toolinglinks/toolinglinks.libsonnet';
 local haproxyComponents = import './lib/haproxy_components.libsonnet';
 local kubeLabelSelectors = metricsCatalog.kubeLabelSelectors;
+local dependOnPatroni = import 'inhibit-rules/depend_on_patroni.libsonnet';
 
 metricsCatalog.serviceDefinition({
   type: 'websockets',
@@ -32,11 +33,6 @@ metricsCatalog.serviceDefinition({
     labelSelectors: kubeLabelSelectors(
       ingressSelector=null,  // Websockets does not have its own ingress
       nodeSelector={ type: 'websockets' },
-
-      // TODO: websockets nodes do not present a stage label at present
-      // See https://gitlab.com/gitlab-com/gl-infra/delivery/-/issues/2245
-      // We hard-code to main for now
-      nodeStaticLabels={ stage: 'main' },
     ),
   },
   kubeResources: {
@@ -58,6 +54,7 @@ metricsCatalog.serviceDefinition({
       },
       selector={ type: 'frontend' },
       regional=false,
+      dependsOn=dependOnPatroni.sqlComponents,
     ),
 
     workhorse: {
@@ -95,6 +92,7 @@ metricsCatalog.serviceDefinition({
         toolingLinks.sentry(slug='gitlab/gitlab-workhorse-gitlabcom'),
         toolingLinks.kibana(title='Workhorse', index='workhorse', type='websockets', slowRequestSeconds=10),
       ],
+      dependsOn: dependOnPatroni.sqlComponents,
     },
 
     puma: {
@@ -122,6 +120,7 @@ metricsCatalog.serviceDefinition({
         toolingLinks.sentry(slug='gitlab/gitlabcom', type='websockets', variables=['environment', 'stage']),
         toolingLinks.kibana(title='Rails', index='rails', type='websockets', slowRequestSeconds=10),
       ],
+      dependsOn: dependOnPatroni.sqlComponents,
     },
   },
 })

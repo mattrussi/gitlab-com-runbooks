@@ -4,9 +4,10 @@
 
 [[_TOC_]]
 
-#  Redis Service
+# Redis Service
+
 * [Service Overview](https://dashboards.gitlab.net/d/redis-main/redis-overview)
-* **Alerts**: https://alerts.gitlab.net/#/alerts?filter=%7Btype%3D%22redis%22%2C%20tier%3D%22db%22%7D
+* **Alerts**: <https://alerts.gitlab.net/#/alerts?filter=%7Btype%3D%22redis%22%2C%20tier%3D%22db%22%7D>
 * **Label**: gitlab-com/gl-infra/production~"Service:Redis"
 
 ## Logging
@@ -17,9 +18,10 @@
 ## Troubleshooting Pointers
 
 * [../ci-runners/ci_graphs.md](../ci-runners/ci_graphs.md)
-* [Chef Guidlines](../config_management/chef-guidelines.md)
+* [Chef Guidelines](../config_management/chef-guidelines.md)
 * [../elastic/elasticsearch-integration-in-gitlab.md](../elastic/elasticsearch-integration-in-gitlab.md)
 * [Kubernetes-Agent Disable Integrations](../kas/kubernetes-agent-disable-integrations.md)
+* [Ad hoc observability tools on Kubernetes nodes](../kube/k8s-adhoc-observability.md)
 * [How to take a snapshot of an application running in a StatefulSet](../kube/k8s-sts-snapshot.md)
 * [Service Apdex](../monitoring/definition-service-apdex.md)
 * [Session: Application architecture](../onboarding/architecture.md)
@@ -28,9 +30,11 @@
 * [Removing cache entries from Redis](../redis-cache/remove-cache-entries.md)
 * [Blocking individual IPs using Redis and Rack Attack](ban-an-IP-with-redis.md)
 * [Clearing sessions for anonymous users](clear_anonymous_sessions.md)
+* [Redis on Kubernetes](kubernetes.md)
 * [Redis-Sidekiq catchall workloads reduction](redis-sidekiq-catchall-workloads-reduction.md)
 * [A survival guide for SREs to working with Redis at GitLab](redis-survival-guide-for-sres.md)
 * [redis.md](redis.md)
+* [Container Registry Migration Phase 2](../registry/migration-phase2.md)
 * [Sentry is down and gives error 500](../sentry/sentry-is-down.md)
 * [Pull mirror overdue queue is too large](../sidekiq/large-pull-mirror-queue.md)
 * [Sidekiq queue migration](../sidekiq/queue-migration.md)
@@ -46,7 +50,6 @@
 * [GitLab staging environment](../uncategorized/staging-environment.md)
 * [Tweeting Guidelines](../uncategorized/tweeting-guidelines.md)
 <!-- END_MARKER -->
-
 
 <!-- ## Summary -->
 

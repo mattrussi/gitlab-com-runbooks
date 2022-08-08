@@ -1,11 +1,20 @@
 ## GSTG bastion hosts
 
 ##### How to start using them
+
 Add the following to your `~/.ssh/config` (specify your username and path to ssh private key):
+
+You can find your username in the [data_bags](https://gitlab.com/gitlab-com/gl-infra/chef-repo/-/tree/master/data_bags/users). It should
+be `YOUR_SSH_USERNAME.json`.
+
+The SSH Private Key `~/.ssh/id_rsa` should be changed if you have another key name. Or it can be skipped if you have the default one `~/.ssh/id_rsa`.
+
 ```
 # GCP staging bastion host
 Host lb-bastion.gstg.gitlab.com
         User                            YOUR_SSH_USERNAME
+        PreferredAuthentications        publickey
+        IdentityFile                    ~/.ssh/id_rsa_gitlab
 
 # gstg boxes
 Host *.gitlab-staging-1.internal
@@ -14,10 +23,12 @@ Host *.gitlab-staging-1.internal
 ```
 
 Testing (for example, if you have access to deploy node), output should be like this:
+
 ```bash
 $> be knife ssh 'roles:gstg-base-deploy-node' 'hostname'
 deploy-01-sv-gstg.c.gitlab-staging-1.internal deploy-01-sv-gstg
 ```
+
 ##### Console access
 
 There is a dedicated server for console access named
@@ -32,13 +43,18 @@ Host gstg-console
         HostName                console-01-sv-gstg.c.gitlab-staging-1.internal
         ProxyCommand            ssh lb-bastion.gstg.gitlab.com -W %h:%p
 ```
+
 where `SERVICE_NAME` is either `rails` or `db`.
+
+With this config, you can access the console using `ssh gstg-console`
 
 See [granting rails or db access](../uncategorized/granting-rails-or-db-access.md) for more
 information on how to request console access.
 
 ##### Host keys
+
 If you care about security enough to compare ssh host keys, here they are, both sha256 and md5 sums:
+
 ```
 $> ssh-keygen -lf <(ssh-keyscan lb-bastion.gstg.gitlab.com 2>/dev/null)
 256 SHA256:HAPLsO33HVEaV4LgRRD7SnhMQOwroBVOQvlaUFxzFsM lb-bastion.gstg.gitlab.com (ECDSA)
@@ -64,7 +80,7 @@ To set up such a tunnel:
     ssh -N -L 8443:fe-01-lb-gstg.c.gitlab-staging-1.internal:443 lb-bastion.gstg.gitlab.com
     ```
 
-    While you leave the SSH session open, this will make it possible to browse to https://localhost:8443/users/sign_in,
+    While you leave the SSH session open, this will make it possible to browse to <https://localhost:8443/users/sign_in>,
     although it'll cause a TLS certificate error due domain name mismatch.
 
 1. To be able to visit the server at the correct address, add the following line to `/etc/hosts`:
@@ -129,6 +145,18 @@ Although, you still need to run `socat` twice. But check out
 [bin/staging-tunnel.sh](https://gitlab.com/gitlab-com/migration/blob/master/bin/staging-tunnel.sh)
 in [gitlab-com/migration](https://gitlab.com/gitlab-com/migration/) for an automated script to set up the tunnels.
 
+##### IAP tunnel alternative
+
+If tunneling over `lb-bastion` is too slow due to high latency, [GCP Identity-Aware Proxy](https://cloud.google.com/iap/) can be used to tunnel TCP directly to the target VM (if allowed), this is faster than SSH over SSH.
+
+Connect directly to console:
+
+```
+Host console-01-sv-gstg.c.gitlab-staging-1.internal
+        ProxyCommand gcloud compute start-iap-tunnel console-01-sv-gstg 22 --listen-on-stdin --project=gitlab-staging-1 --zone=us-east1-c --verbosity=warning
+```
+
 ##### Links
+
  1. [Issue](https://gitlab.com/gitlab-com/migration/issues/299) describing what was done in scope of the migration project to quickly set them up.
- 1. [META](https://gitlab.com/gitlab-com/infrastructure/issues/3995) issue that is a source of truth regarding middleterm/longterm setup.
+ 1. [META](https://gitlab.com/gitlab-com/gl-infra/reliability/-/issues/3995) issue that is a source of truth regarding middleterm/longterm setup.

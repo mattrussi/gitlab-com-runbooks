@@ -5,6 +5,9 @@ local metricsCatalog = import 'servicemetrics/metrics.libsonnet';
 metricsCatalog.serviceDefinition(
   pgbouncerArchetype(
     type='pgbouncer-ci',
+    extraTags=[
+      'pgbouncer_async_primary',
+    ],
   )
   {
     serviceDependencies: {

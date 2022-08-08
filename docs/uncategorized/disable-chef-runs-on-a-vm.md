@@ -20,13 +20,13 @@ The disable script takes an optional comment.  Please use it to describe
 why chef is being disabled, and include an issue link if available.
 
 ```shell
-$ chef-client-disable 'Manual edits to foo.conf, see issue https://gitlab.com/gitlab-com/gl-infra/production/-/issues/1878'
+chef-client-disable 'Manual edits to foo.conf, see issue https://gitlab.com/gitlab-com/gl-infra/production/-/issues/1878'
 ```
 
 ### Enable Chef runs
 
 ```shell
-$ chef-client-enable
+chef-client-enable
 ```
 
 ### Historical procedure

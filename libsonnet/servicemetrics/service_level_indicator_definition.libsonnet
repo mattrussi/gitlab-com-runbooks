@@ -1,6 +1,8 @@
 local aggregations = import 'promql/aggregations.libsonnet';
 local selectors = import 'promql/selectors.libsonnet';
 local stages = import 'service-catalog/stages.libsonnet';
+local dependencies = import 'servicemetrics/dependencies_definition.libsonnet';
+local metricsCatalog = import 'servicemetrics/metrics-catalog.libsonnet';
 local toolingLinks = import 'toolinglinks/toolinglinks.libsonnet';
 local strings = import 'utils/strings.libsonnet';
 
@@ -15,9 +17,10 @@ local serviceLevelIndicatorDefaults = {
   description: '',
   staticLabels+: {},  // by default, no static labels
   serviceAggregation: true,  // by default, requestRate is aggregated up to the service level
-  ignoreTrafficCessation: false,  // Override to true to disable alerting when SLI is zero or absent
+  trafficCessationAlertConfig: true,  // Override to false to disable alerting when SLI is zero or absent
   upscaleLongerBurnRates: false,  // When true, long-term burn rates will be upscaled from shorter burn rates, to optimize for high cardinality metrics
   severity: 's2',
+  dependsOn: [],  // When an sli depends on another component, don't alert on this SLI if the downstream service is already firing. This is meant for hard dependencies managed by GitLab.
 };
 
 local validateHasField(object, field, message) =
@@ -45,7 +48,11 @@ local validateSeverity(object, message) =
     std.assertEqual(true, { __assert: message });
 
 local validateAndApplySLIDefaults(sliName, component, inheritedDefaults) =
-  local withDefaults = serviceLevelIndicatorDefaults + inheritedDefaults + component;
+  local withDefaults = serviceLevelIndicatorDefaults +
+                       inheritedDefaults +
+                       component +
+                       { dependencies: dependencies.new(withDefaults.type, sliName, withDefaults.dependsOn) };
+
   // All components must have a requestRate measurement, since
   // we filter out low-RPS alerts for apdex monitoring and require the RPS for error ratios
   validateHasField(withDefaults, 'requestRate', '%s component requires a requestRate measurement' % [sliName])
@@ -92,7 +99,7 @@ local serviceLevelIndicatorDefinition(sliName, serviceLevelIndicator) =
       // Only apdex SLIs using a histogram can generate a histogram_quantile graph
       // in alerts
       self.hasApdex() &&
-      std.objectHasAll(serviceLevelIndicator.apdex, 'percentileLatencyQuery'),
+      std.objectHasAll(serviceLevelIndicator.apdex, 'histogram'),
 
     hasRequestRate():: true,  // requestRate is mandatory
     hasAggregatableRequestRate():: std.objectHasAll(serviceLevelIndicator.requestRate, 'aggregatedRateQuery'),
@@ -124,6 +131,9 @@ local serviceLevelIndicatorDefinition(sliName, serviceLevelIndicator) =
 
     hasFeatureCategory()::
       self.hasStaticFeatureCategory() || self.hasFeatureCategoryFromSourceMetrics(),
+
+    hasDependencies()::
+      std.length(self.dependsOn) > 0,
 
     staticFeatureCategoryLabels()::
       if self.hasStaticFeatureCategory() then

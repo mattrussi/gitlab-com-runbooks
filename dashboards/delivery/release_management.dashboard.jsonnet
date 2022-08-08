@@ -124,7 +124,7 @@ local environmentPressurePanel(environment) =
   )
   .addTarget(
     prometheus.target(
-      'delivery_auto_deploy_pressure{job="auto-deploy-pressure", role="%(role)s"}' % { role: environment.id },
+      'delivery_auto_deploy_pressure{job="delivery-metrics", role="%(role)s"}' % { role: environment.id },
       legendFormat='Commits',
     )
   );
@@ -265,7 +265,7 @@ basic.dashboard(
       deliveryStatPanel(
         'Auto-deploy pressure',
         description='The number of commits in `master` not yet deployed to each environment.',
-        query='max(delivery_auto_deploy_pressure{role!=""}) by (role)',
+        query='max(delivery_auto_deploy_pressure{job="delivery-metrics"}) by (role)',
         legendFormat='{{role}}',
         thresholds=[
           { color: 'green', value: null },

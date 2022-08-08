@@ -1,6 +1,6 @@
 # Management for forum.gitlab.com
 
-The GitLab Community forum is hosted under https://forum.gitlab.com and is
+The GitLab Community forum is hosted under <https://forum.gitlab.com> and is
 powered by [Discourse](https://www.discourse.org).
 
 All commands are to be run with root privileges.
@@ -109,7 +109,6 @@ seven](https://forum.gitlab.com/admin/backups).
 Running low on disk space might affect backups among others. To clean up some
 space, run the `cleanup` command:
 
-
 ```sh
 ##
 ## Remove all containers that have stopped for more than 24 hours
@@ -127,7 +126,7 @@ apt-get autoremove
 
 ##
 ## In case NGINX logs take too much space
-## See https://gitlab.com/gitlab-com/gl-infra/infrastructure/issues/2429
+## See https://gitlab.com/gitlab-com/gl-infra/reliability/-/issues/2429
 ##
 ## This should have been fixed upstream, but in any case
 ## https://github.com/discourse/discourse_docker/commit/5d256035c6c2c8685b8735141539c7e3bf835a74
@@ -143,7 +142,7 @@ truncate -s 1 access.log
 
 We don't know why this occurs, and we don't know why restarting the process
 fixed it one time
-(https://gitlab.com/gitlab-com/gl-infra/production/issues/1438).
+(<https://gitlab.com/gitlab-com/gl-infra/production/issues/1438>).
 
 Stopping and restarting the application server results in a few minutes of
 downtime.

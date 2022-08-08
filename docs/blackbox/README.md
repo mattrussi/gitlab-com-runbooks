@@ -4,8 +4,9 @@
 
 [[_TOC_]]
 
-#  Blackbox Service
-* **Alerts**: https://alerts.gitlab.net/#/alerts?filter=%7Btype%3D%22blackbox%22%2C%20tier%3D%22inf%22%7D
+# Blackbox Service
+
+* **Alerts**: <https://alerts.gitlab.net/#/alerts?filter=%7Btype%3D%22blackbox%22%2C%20tier%3D%22inf%22%7D>
 * **Label**: gitlab-com/gl-infra/production~"Service:Blackbox"
 
 ## Logging
@@ -15,13 +16,14 @@
 ## Troubleshooting Pointers
 
 * [Blackbox git exporter is down](blackbox-git-exporter.md)
-* [license.gitlab.com Runbook](../license/license-gitlab-com.md)
+* [CustomersDot main troubleshoot documentation](../customersdot/overview.md)
+* [design.gitlab.com Runbook](../design/design-gitlab-com.md)
+* [Tuning and Modifying Alerts](../monitoring/alert_tuning.md)
+* [An impatient SRE's guide to deleting alerts](../monitoring/deleting-alerts.md)
 * [../patroni/postgres.md](../patroni/postgres.md)
 * [../patroni/postgresql-backups-wale-walg.md](../patroni/postgresql-backups-wale-walg.md)
 * [Container Registry CDN](../registry/cdn.md)
 * [../spamcheck/index.md](../spamcheck/index.md)
-* [Camoproxy troubleshooting](../uncategorized/camoproxy.md)
-* [An impatient SRE's guide to deleting alerts](../uncategorized/deleting-alerts.md)
 * [GitLab Job Completion](../uncategorized/job_completion.md)
 * [version.gitlab.com Runbook](../version/version-gitlab-com.md)
 <!-- END_MARKER -->

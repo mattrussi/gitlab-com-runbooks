@@ -7,7 +7,7 @@
 1. SSH into the machine having issues. For example:
 
     ```bash
-    $ ssh shared-runners-manager-1.gitlab.com
+    ssh shared-runners-manager-1.gitlab.com
     ```
 
 1. Check the status of machines:

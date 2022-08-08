@@ -2,7 +2,6 @@
 
 Link to the video of the [runbook simulation](https://youtu.be/-mrKyJuTd5w).
 
-
 A `lock` in PostgreSQL is a feature that allows transactions to _hold_ something. Usually, that _something_ is a table, an index, or a portion (row/s) of these.
 
 Locks are the way PostgreSQL ensure transactional data consistency, and this is specially handy when concurrent transactions tries to write the same data.
@@ -11,9 +10,9 @@ PostgreSQL implements several kinds and layers of locks, and even SELECT stateme
 
 Below is a comparison of the most commonly used SQL commands that can run concurrently with each other on the same table:
 
-| Runs concurrently with | SELECT | INSERT UPDATE DELETE    | CREATE INDEX (CONC) VACUUM ANALYZE	| CREATE INDEX	| CREATE TRIGGER | ALTER TABLE DROP TABLE TRUNCATE VACUUM (FULL)|
-| --- | --- | --- | --- | --- | --- | --- | 
-|SELECT| :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: | :x:| 
+| Runs concurrently with | SELECT | INSERT UPDATE DELETE    | CREATE INDEX (CONC) VACUUM ANALYZE | CREATE INDEX | CREATE TRIGGER | ALTER TABLE DROP TABLE TRUNCATE VACUUM (FULL)|
+| --- | --- | --- | --- | --- | --- | --- |
+|SELECT| :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: | :x:|
 | INSERT UPDATE DELETE | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: | :x: | :x: | :x:|
 | CREATE INDEX (CONC) VACUUM ANALYZE | :heavy_check_mark: | :heavy_check_mark: | :x: | :x: | :x: | :x: |
 |CREATE INDEX | :heavy_check_mark: | :x: | :x: | :heavy_check_mark: | :x: | :x: |
@@ -34,8 +33,6 @@ And here is a list of locks each statement implements at table and row level:
 
 `VACUUM FULL`, `REINDEX`, `TRUNCATE`: ACCESS EXCLUSIVE LOCK
 
-
-
 More information in the [Official docs](https://www.postgresql.org/docs/11/explicit-locking.html)
 
 ==================
@@ -47,7 +44,6 @@ When troubleshooting blocked queries, two internal sources of information comes 
 The [pg_stat_activity view](https://www.postgresql.org/docs/11/monitoring-stats.html#PG-STAT-ACTIVITY-VIEW), wich gives information about current activity, where is connected from, wich query is executing, and the
 
 [pg_locks system catalog](https://www.postgresql.org/docs/11/view-pg-locks.html), that provides information current locking activity, wich pid it belongs to, if the lock where granted (or is waiting), and so on.
-
 
 For demostration porpouses, we will create an artificial lock using the [LOCK](https://www.postgresql.org/docs/11/sql-lock.html) command:
 
@@ -62,6 +58,7 @@ LOCK TABLE
 ```
 
 Then session :two: try to access the same data:
+
 ```sql
 
 locktest=# select count(*) from mytable;
@@ -123,8 +120,9 @@ order by (now() - r.xact_start), path
 ```
 
 This will show a complete _tree_ of blocking and blocked queries:
+
 ```
- transaction_age | change_age | datname  | usename  | client_addr |  pid  | wait_event_type | wait_event | blocked_by_pids | state  | lvl | blocking_others |        latest_query_in_tx        
+ transaction_age | change_age | datname  | usename  | client_addr |  pid  | wait_event_type | wait_event | blocked_by_pids | state  | lvl | blocking_others |        latest_query_in_tx
 -----------------+------------+----------+----------+-------------+-------+-----------------+------------+-----------------+--------+-----+-----------------+----------------------------------
  00:10:25        | 00:10:18   | locktest | postgres | 127.0.0.1   | 20252 | Client          | ClientRead | {}              | idletx |   0 |               1 |  lock TABLE mytable ;
  00:09:14        | 00:09:14   | locktest | postgres | 127.0.0.1   | 20594 | Lock            | relation   | {20252}         | active |   1 |               0 |  . select count(*) from mytable;
@@ -138,16 +136,14 @@ Here, the _root_ of the blocking chain can be identified with a 0 (zero) in the 
 
 In practice, you will probably add a `\watch 2` in _gitlab-psql_ session, for automatically repeat and refresh the screen.
 
-
-
-
-
 ## How to cancel (or terminate) a blocking query
 
-If you decided to cancel the blocking query, you only need to take that from the `pid` column and execute a 
+If you decided to cancel the blocking query, you only need to take that from the `pid` column and execute a
+
 ```sql
 select pg_cancel_backend(<pid>);
 ```
+
 or
 
 ```sql
@@ -162,8 +158,8 @@ Other options would entail restarting the local Patroni connection to the DB; th
 
 A final option, in case pg_cancel_backend or pg_terminate_backend does not terminate the session, would be to execute a kill <pid> from the session that is generating the lock. However this could case instability in the Postgres main process so we could instead think of restarting the Postgres process entirely, for example if the node were out of rotation.
 
-
 ## How to check if queries are waiting to aquire locks from the logs
+
 If [log_lock_waits](https://postgresqlco.nf/en/doc/param/log_lock_waits/11/) is `on`, then every attempt to acquire a lock that has been waiting for more than [deadlock_timeout](https://postgresqlco.nf/en/doc/param/log_lock_waits/11/), a line will be printed to the logfile, similar to:
 
 ```
@@ -185,4 +181,5 @@ Similary, locks that took more than to be acquired will also log a message:
 That can be tracked down to see if there are queries that have been waiting for too long.
 
 ## Deadlocks
+
 A deadlock is a situation where two (or more) processes conflict on their use of resources, each one needing to lock to resource being already locked by the other one, hence blocking each other. PostgreSQL comes with an deadlock detection routine that will kill one of the process involved, allowing the other(s) to progress.

@@ -11,7 +11,7 @@ environment.  This includes what is necessary in terraform and GCP prior to
 starting up your first instance in that project.  Details of what is created
 inside of that project will not be discussed as that is implementation specific.
 
-1. Follow the documentation here: https://ops.gitlab.net/gitlab-com/gitlab-com-infrastructure/#creating-a-new-environment
+1. Follow the documentation here: <https://ops.gitlab.net/gitlab-com/gitlab-com-infrastructure/#creating-a-new-environment>
     * This will build out the framework for the project and it's requirements
 1. Create two service accounts in GCP:
     * `terraform`
@@ -85,11 +85,11 @@ inside of that project will not be discussed as that is implementation specific.
           gs://gitlab-<ENV>-chef-bootstrap/validation.enc`
 1. You may now proceed to creating instances in your new project
     * The project will be in a directory named the same as `<ENV>` at this path:
-      https://ops.gitlab.net/gitlab-com/gitlab-com-infrastructure/-/tree/master/environments
+      <https://ops.gitlab.net/gitlab-com/gitlab-com-infrastructure/-/tree/master/environments>
     * You'll also want the necessary chef-roles to go along with this
       environment, which will be placed at this path:
       `https://ops.gitlab.net/gitlab-cookbooks/chef-repo/-/tree/master/roles`
 
 ## Future Work
 
-* Some of the above will be removed with work to be completed here: https://gitlab.com/gitlab-com/gl-infra/infrastructure/-/issues/8165
+* Some of the above will be removed with work to be completed here: <https://gitlab.com/gitlab-com/gl-infra/reliability/-/issues/8165>

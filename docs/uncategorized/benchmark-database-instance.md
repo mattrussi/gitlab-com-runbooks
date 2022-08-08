@@ -1,25 +1,29 @@
 # Benchmarking Database Instances
 
 To properly analyze performance of a given cloud instance with Postgres, multiple benchmarking tools and approaches should be combined:
- - synthetic benchmarks for Postgres server ([pgbench](https://www.postgresql.org/docs/10/static/pgbench.html), [sysbench](https://github.com/akopytov/sysbench))
- - "real workload" benchmarks ([pgreplay](https://github.com/laurenz/pgreplay)), optionally with deep SQL query analysis ([nancy](https://github.com/postgres-ai/nancy))
- - disk IO benchmarks ([fio](https://github.com/axboe/fio), [bonnie++](https://en.wikipedia.org/wiki/Bonnie%2B%2B), [seek-scaling](https://github.com/gregs1104/seek-scaling))
- - network benchmark ([iperf3](https://iperf.fr/))
+
+- synthetic benchmarks for Postgres server ([pgbench](https://www.postgresql.org/docs/10/static/pgbench.html), [sysbench](https://github.com/akopytov/sysbench))
+- "real workload" benchmarks ([pgreplay](https://github.com/laurenz/pgreplay)), optionally with deep SQL query analysis ([nancy](https://github.com/postgres-ai/nancy))
+- disk IO benchmarks ([fio](https://github.com/axboe/fio), [bonnie++](https://en.wikipedia.org/wiki/Bonnie%2B%2B), [seek-scaling](https://github.com/gregs1104/seek-scaling))
+- network benchmark ([iperf3](https://iperf.fr/))
 
 During benchmarking, any heavy workload not related to the benchmark itself must be excluded (verify with `top`, `dstat -f`).
 
 # Synthetic benchmark using `pgbench`
 
 Running four synthetic benchmarks is recommended:
- - small-sized (less than `shared_buffers`), SELECTs only
- - small-sized, mixed workload
- - large scale (data valumes are larger than `shared_buffers` and RAM), SELECTs only
- - large scale, mixed workload
+
+- small-sized (less than `shared_buffers`), SELECTs only
+- small-sized, mixed workload
+- large scale (data valumes are larger than `shared_buffers` and RAM), SELECTs only
+- large scale, mixed workload
 
 In the first two cases, the data will remain in shared buffers, so disk reads are not supposed to be involved, so only CPU and RAM will be tested. In the latter two cases, the benchmark will inolve disk operations, so whole system (excluding network) will be analyzed.
 
 ## Small-sized, SELECTs only
+
 Example of running a series of `pgbench` benchmarks on an instance with Postgres installed:
+
 ```shell
 s=1700
 N=300
@@ -42,16 +46,18 @@ done
 ```
 
 Notes:
- - for N=300, whole run will take several hours, so it is recommended to use `tmux`
- - the scale in the code above is 1700 (`-s 1700`), this will give ~25GB of data in the `pgbench` database; compare it with the value `shared_buffers`
- - the code runs 300 tests, increasing the number of concurrent sessions from 1 to 300
- - each run lasts 30 seconds (`-T 30`)
- - in the code above, prepared statements are being used (`-M prepared`)
- - pgbench's output contains two TPS (transactions per second) numbers: "including connections establishing" and "excluding connections establishing"; since this benchmark is to be run without involving network, the numbers should be very close; only "excluding connections establishing" number is being saved to the `results_selects.bench` file (notice `| tail -n1`)
+
+- for N=300, whole run will take several hours, so it is recommended to use `tmux`
+- the scale in the code above is 1700 (`-s 1700`), this will give ~25GB of data in the `pgbench` database; compare it with the value `shared_buffers`
+- the code runs 300 tests, increasing the number of concurrent sessions from 1 to 300
+- each run lasts 30 seconds (`-T 30`)
+- in the code above, prepared statements are being used (`-M prepared`)
+- pgbench's output contains two TPS (transactions per second) numbers: "including connections establishing" and "excluding connections establishing"; since this benchmark is to be run without involving network, the numbers should be very close; only "excluding connections establishing" number is being saved to the `results_selects.bench` file (notice `| tail -n1`)
 
 ## Small-sized, mixed workload
 
 Given the initialized `pgbench` done in the previous step:
+
 ```shell
 rm "results_s${s}_mixed".bench
 for i in $(seq "$N"); do
@@ -67,8 +73,10 @@ for i in $(seq "$N"); do
   echo "-c $c -j $j --> $res"
 done
 ```
+
 Notes:
- - the only difference with the previous step is that `-S` option is excluded
+
+- the only difference with the previous step is that `-S` option is excluded
 
 ## Larger scale, SELECTs only
 
@@ -80,7 +88,8 @@ The code is the same as in step "Small-sized, mixed workload"
 
 ## Visualizing results with gnuplot
 
-In this example the benchmark results for two instances are combined in one picture: 
+In this example the benchmark results for two instances are combined in one picture:
+
 ```shell
 N=300
 for s in 1700 100000; do
@@ -110,7 +119,8 @@ done
 ```
 
 Notes:
- - if all files are present on remote hosts, 4 pictures will be created and opened
+
+- if all files are present on remote hosts, 4 pictures will be created and opened
 
 # File system benchmark
 

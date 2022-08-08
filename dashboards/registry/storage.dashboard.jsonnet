@@ -71,7 +71,8 @@ basic.dashboard(
   layout.grid([
     basic.timeseries(
       title='RPS (Overall)',
-      query='sum(rate(registry_storage_action_seconds_count{environment="$environment", cluster=~"$cluster", stage="$stage"}[$__interval]))'
+      query='sum(rate(registry_storage_action_seconds_count{environment="$environment", cluster=~"$cluster", stage="$stage"}[$__interval]))',
+      legend_show=false
     ),
     basic.timeseries(
       title='RPS (Per Action)',
@@ -92,7 +93,8 @@ basic.dashboard(
           )
         )
       |||,
-      format='s'
+      format='s',
+      legend_show=false
     ),
     basic.timeseries(
       title='Estimated p95 Latency (Per Action)',
@@ -107,7 +109,14 @@ basic.dashboard(
       format='s',
       legendFormat='{{ action }}'
     ),
-  ], cols=4, rowHeight=10, startRow=1001)
+    basic.timeseries(
+      title='Rate Limited Requests Rate',
+      description='Rate of 429 Too Many Requests responses received from GCS',
+      query='sum(rate(registry_storage_rate_limit_total{environment="$environment", cluster=~"$cluster", stage="$stage"}[$__interval]))',
+      legend_show=false,
+      format='ops'
+    ),
+  ], cols=3, rowHeight=10, startRow=1001)
 )
 .addPanel(
   row.new(title='Cloud CDN Requests'),
@@ -270,7 +279,7 @@ basic.dashboard(
       title='Percentage of Redirects to CDN Skipped',
       description=|||
         The percentage of blob HEAD/GET requests that were not redirected to Google Cloud CDN because of a given reason:
-          - `non_eligible`: This means that the request JWT token was not marked with the `cdn_redirect` flag by Rails. The number 
+          - `non_eligible`: This means that the request JWT token was not marked with the `cdn_redirect` flag by Rails. The number
           of JWT tokens marked as such is currently controlled by the `container_registry_cdn_redirect` feature flag (percentage of time).
 
           - `gcp`: This means that the request originates within GCP, and as such we redirected it to GCS and not CDN.
@@ -289,7 +298,7 @@ basic.dashboard(
       title='Number of Redirects to CDN Skipped (Per Reason)',
       description=|||
         The number of blob HEAD/GET requests that were not redirected to Google Cloud CDN because of a given reason:
-          - `non_eligible`: This means that the request JWT token was not marked with the `cdn_redirect` flag by Rails. The number 
+          - `non_eligible`: This means that the request JWT token was not marked with the `cdn_redirect` flag by Rails. The number
           of JWT tokens marked as such is currently controlled by the `container_registry_cdn_redirect` feature flag (percentage of time).
 
           - `gcp`: This means that the request originates within GCP, and as such we redirected it to GCS and not CDN.

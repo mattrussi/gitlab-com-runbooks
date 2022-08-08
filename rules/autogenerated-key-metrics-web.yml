@@ -6,18 +6,18 @@ groups:
   rules:
   - record: sli_aggregations:http_requests_total_rate1m
     expr: |
-      sum by (code,environment,feature_category,fqdn,job,method,shard,stage,status,tier,type) (
+      sum by (code,environment,feature_category,fqdn,job,method,pod,region,shard,stage,status,tier,type) (
         rate(http_requests_total[1m])
       )
-  - record: sli_aggregations:gitlab_sli:rails_request_apdex:total_rate1m
+  - record: sli_aggregations:gitlab_sli_rails_request_apdex_total_rate1m
     expr: |
       sum by (endpoint_id,environment,feature_category,job,request_urgency,shard,stage,tier,type) (
-        rate(gitlab_sli:rails_request_apdex:total[1m])
+        rate(gitlab_sli_rails_request_apdex_total[1m])
       )
-  - record: sli_aggregations:gitlab_sli:rails_request_apdex:success_total_rate1m
+  - record: sli_aggregations:gitlab_sli_rails_request_apdex_success_total_rate1m
     expr: |
       sum by (endpoint_id,environment,feature_category,job,request_urgency,shard,stage,tier,type) (
-        rate(gitlab_sli:rails_request_apdex:success_total[1m])
+        rate(gitlab_sli_rails_request_apdex_success_total[1m])
       )
   - record: gitlab_component_apdex:success:rate
     labels:
@@ -27,7 +27,7 @@ groups:
     expr: |
       (
         sum by (environment,stage) (
-          rate(gitlab_workhorse_image_resize_duration_seconds_bucket{job=~"gitlab-workhorse|gitlab-workhorse-web",le="0.2",type="web"}[1m])
+          rate(gitlab_workhorse_image_resize_duration_seconds_bucket{job=~"gitlab-workhorse|gitlab-workhorse-web",le="0.4",type="web"}[1m])
         )
         +
         sum by (environment,stage) (
@@ -143,7 +143,7 @@ groups:
       type: web
     expr: |
       sum by (environment,stage) (
-        sli_aggregations:gitlab_sli:rails_request_apdex:success_total_rate1m{job="gitlab-rails",type="web"}
+        sli_aggregations:gitlab_sli_rails_request_apdex_success_total_rate1m{job="gitlab-rails",type="web"}
       )
   - record: gitlab_component_apdex:weight:score
     labels:
@@ -152,7 +152,7 @@ groups:
       type: web
     expr: |
       sum by (environment,stage) (
-        sli_aggregations:gitlab_sli:rails_request_apdex:total_rate1m{job="gitlab-rails",type="web"}
+        sli_aggregations:gitlab_sli_rails_request_apdex_total_rate1m{job="gitlab-rails",type="web"}
       )
   - record: gitlab_component_ops:rate
     labels:
@@ -161,7 +161,7 @@ groups:
       type: web
     expr: |
       sum by (environment,stage) (
-        sli_aggregations:gitlab_sli:rails_request_apdex:total_rate1m{job="gitlab-rails",type="web"}
+        sli_aggregations:gitlab_sli_rails_request_apdex_total_rate1m{job="gitlab-rails",type="web"}
       )
   - record: gitlab_component_apdex:success:rate
     labels:
@@ -220,18 +220,18 @@ groups:
   rules:
   - record: sli_aggregations:http_requests_total_rate5m
     expr: |
-      sum by (code,environment,feature_category,fqdn,job,method,shard,stage,status,tier,type) (
+      sum by (code,environment,feature_category,fqdn,job,method,pod,region,shard,stage,status,tier,type) (
         rate(http_requests_total[5m])
       )
-  - record: sli_aggregations:gitlab_sli:rails_request_apdex:total_rate5m
+  - record: sli_aggregations:gitlab_sli_rails_request_apdex_total_rate5m
     expr: |
       sum by (endpoint_id,environment,feature_category,job,request_urgency,shard,stage,tier,type) (
-        rate(gitlab_sli:rails_request_apdex:total[5m])
+        rate(gitlab_sli_rails_request_apdex_total[5m])
       )
-  - record: sli_aggregations:gitlab_sli:rails_request_apdex:success_total_rate5m
+  - record: sli_aggregations:gitlab_sli_rails_request_apdex_success_total_rate5m
     expr: |
       sum by (endpoint_id,environment,feature_category,job,request_urgency,shard,stage,tier,type) (
-        rate(gitlab_sli:rails_request_apdex:success_total[5m])
+        rate(gitlab_sli_rails_request_apdex_success_total[5m])
       )
   - record: gitlab_component_apdex:success:rate_5m
     labels:
@@ -241,7 +241,7 @@ groups:
     expr: |
       (
         sum by (environment,stage) (
-          rate(gitlab_workhorse_image_resize_duration_seconds_bucket{job=~"gitlab-workhorse|gitlab-workhorse-web",le="0.2",type="web"}[5m])
+          rate(gitlab_workhorse_image_resize_duration_seconds_bucket{job=~"gitlab-workhorse|gitlab-workhorse-web",le="0.4",type="web"}[5m])
         )
         +
         sum by (environment,stage) (
@@ -357,7 +357,7 @@ groups:
       type: web
     expr: |
       sum by (environment,stage) (
-        sli_aggregations:gitlab_sli:rails_request_apdex:success_total_rate5m{job="gitlab-rails",type="web"}
+        sli_aggregations:gitlab_sli_rails_request_apdex_success_total_rate5m{job="gitlab-rails",type="web"}
       )
   - record: gitlab_component_apdex:weight:score_5m
     labels:
@@ -366,7 +366,7 @@ groups:
       type: web
     expr: |
       sum by (environment,stage) (
-        sli_aggregations:gitlab_sli:rails_request_apdex:total_rate5m{job="gitlab-rails",type="web"}
+        sli_aggregations:gitlab_sli_rails_request_apdex_total_rate5m{job="gitlab-rails",type="web"}
       )
   - record: gitlab_component_ops:rate_5m
     labels:
@@ -375,7 +375,7 @@ groups:
       type: web
     expr: |
       sum by (environment,stage) (
-        sli_aggregations:gitlab_sli:rails_request_apdex:total_rate5m{job="gitlab-rails",type="web"}
+        sli_aggregations:gitlab_sli_rails_request_apdex_total_rate5m{job="gitlab-rails",type="web"}
       )
   - record: gitlab_component_apdex:success:rate_5m
     labels:
@@ -434,18 +434,18 @@ groups:
   rules:
   - record: sli_aggregations:http_requests_total_rate30m
     expr: |
-      sum by (code,environment,feature_category,fqdn,job,method,shard,stage,status,tier,type) (
+      sum by (code,environment,feature_category,fqdn,job,method,pod,region,shard,stage,status,tier,type) (
         rate(http_requests_total[30m])
       )
-  - record: sli_aggregations:gitlab_sli:rails_request_apdex:total_rate30m
+  - record: sli_aggregations:gitlab_sli_rails_request_apdex_total_rate30m
     expr: |
       sum by (endpoint_id,environment,feature_category,job,request_urgency,shard,stage,tier,type) (
-        rate(gitlab_sli:rails_request_apdex:total[30m])
+        rate(gitlab_sli_rails_request_apdex_total[30m])
       )
-  - record: sli_aggregations:gitlab_sli:rails_request_apdex:success_total_rate30m
+  - record: sli_aggregations:gitlab_sli_rails_request_apdex_success_total_rate30m
     expr: |
       sum by (endpoint_id,environment,feature_category,job,request_urgency,shard,stage,tier,type) (
-        rate(gitlab_sli:rails_request_apdex:success_total[30m])
+        rate(gitlab_sli_rails_request_apdex_success_total[30m])
       )
   - record: gitlab_component_apdex:success:rate_30m
     labels:
@@ -455,7 +455,7 @@ groups:
     expr: |
       (
         sum by (environment,stage) (
-          rate(gitlab_workhorse_image_resize_duration_seconds_bucket{job=~"gitlab-workhorse|gitlab-workhorse-web",le="0.2",type="web"}[30m])
+          rate(gitlab_workhorse_image_resize_duration_seconds_bucket{job=~"gitlab-workhorse|gitlab-workhorse-web",le="0.4",type="web"}[30m])
         )
         +
         sum by (environment,stage) (
@@ -571,7 +571,7 @@ groups:
       type: web
     expr: |
       sum by (environment,stage) (
-        sli_aggregations:gitlab_sli:rails_request_apdex:success_total_rate30m{job="gitlab-rails",type="web"}
+        sli_aggregations:gitlab_sli_rails_request_apdex_success_total_rate30m{job="gitlab-rails",type="web"}
       )
   - record: gitlab_component_apdex:weight:score_30m
     labels:
@@ -580,7 +580,7 @@ groups:
       type: web
     expr: |
       sum by (environment,stage) (
-        sli_aggregations:gitlab_sli:rails_request_apdex:total_rate30m{job="gitlab-rails",type="web"}
+        sli_aggregations:gitlab_sli_rails_request_apdex_total_rate30m{job="gitlab-rails",type="web"}
       )
   - record: gitlab_component_ops:rate_30m
     labels:
@@ -589,7 +589,7 @@ groups:
       type: web
     expr: |
       sum by (environment,stage) (
-        sli_aggregations:gitlab_sli:rails_request_apdex:total_rate30m{job="gitlab-rails",type="web"}
+        sli_aggregations:gitlab_sli_rails_request_apdex_total_rate30m{job="gitlab-rails",type="web"}
       )
   - record: gitlab_component_apdex:success:rate_30m
     labels:
@@ -648,18 +648,18 @@ groups:
   rules:
   - record: sli_aggregations:http_requests_total_rate1h
     expr: |
-      sum by (code,environment,feature_category,fqdn,job,method,shard,stage,status,tier,type) (
+      sum by (code,environment,feature_category,fqdn,job,method,pod,region,shard,stage,status,tier,type) (
         rate(http_requests_total[1h])
       )
-  - record: sli_aggregations:gitlab_sli:rails_request_apdex:total_rate1h
+  - record: sli_aggregations:gitlab_sli_rails_request_apdex_total_rate1h
     expr: |
       sum by (endpoint_id,environment,feature_category,job,request_urgency,shard,stage,tier,type) (
-        rate(gitlab_sli:rails_request_apdex:total[1h])
+        rate(gitlab_sli_rails_request_apdex_total[1h])
       )
-  - record: sli_aggregations:gitlab_sli:rails_request_apdex:success_total_rate1h
+  - record: sli_aggregations:gitlab_sli_rails_request_apdex_success_total_rate1h
     expr: |
       sum by (endpoint_id,environment,feature_category,job,request_urgency,shard,stage,tier,type) (
-        rate(gitlab_sli:rails_request_apdex:success_total[1h])
+        rate(gitlab_sli_rails_request_apdex_success_total[1h])
       )
   - record: gitlab_component_apdex:success:rate_1h
     labels:
@@ -669,7 +669,7 @@ groups:
     expr: |
       (
         sum by (environment,stage) (
-          rate(gitlab_workhorse_image_resize_duration_seconds_bucket{job=~"gitlab-workhorse|gitlab-workhorse-web",le="0.2",type="web"}[1h])
+          rate(gitlab_workhorse_image_resize_duration_seconds_bucket{job=~"gitlab-workhorse|gitlab-workhorse-web",le="0.4",type="web"}[1h])
         )
         +
         sum by (environment,stage) (
@@ -785,7 +785,7 @@ groups:
       type: web
     expr: |
       sum by (environment,stage) (
-        sli_aggregations:gitlab_sli:rails_request_apdex:success_total_rate1h{job="gitlab-rails",type="web"}
+        sli_aggregations:gitlab_sli_rails_request_apdex_success_total_rate1h{job="gitlab-rails",type="web"}
       )
   - record: gitlab_component_apdex:weight:score_1h
     labels:
@@ -794,7 +794,7 @@ groups:
       type: web
     expr: |
       sum by (environment,stage) (
-        sli_aggregations:gitlab_sli:rails_request_apdex:total_rate1h{job="gitlab-rails",type="web"}
+        sli_aggregations:gitlab_sli_rails_request_apdex_total_rate1h{job="gitlab-rails",type="web"}
       )
   - record: gitlab_component_ops:rate_1h
     labels:
@@ -803,7 +803,7 @@ groups:
       type: web
     expr: |
       sum by (environment,stage) (
-        sli_aggregations:gitlab_sli:rails_request_apdex:total_rate1h{job="gitlab-rails",type="web"}
+        sli_aggregations:gitlab_sli_rails_request_apdex_total_rate1h{job="gitlab-rails",type="web"}
       )
   - record: gitlab_component_apdex:success:rate_1h
     labels:
@@ -862,18 +862,18 @@ groups:
   rules:
   - record: sli_aggregations:http_requests_total_rate6h
     expr: |
-      sum by (code,environment,feature_category,fqdn,job,method,shard,stage,status,tier,type) (
+      sum by (code,environment,feature_category,fqdn,job,method,pod,region,shard,stage,status,tier,type) (
         rate(http_requests_total[6h])
       )
-  - record: sli_aggregations:gitlab_sli:rails_request_apdex:total_rate6h
+  - record: sli_aggregations:gitlab_sli_rails_request_apdex_total_rate6h
     expr: |
       sum by (endpoint_id,environment,feature_category,job,request_urgency,shard,stage,tier,type) (
-        rate(gitlab_sli:rails_request_apdex:total[6h])
+        rate(gitlab_sli_rails_request_apdex_total[6h])
       )
-  - record: sli_aggregations:gitlab_sli:rails_request_apdex:success_total_rate6h
+  - record: sli_aggregations:gitlab_sli_rails_request_apdex_success_total_rate6h
     expr: |
       sum by (endpoint_id,environment,feature_category,job,request_urgency,shard,stage,tier,type) (
-        rate(gitlab_sli:rails_request_apdex:success_total[6h])
+        rate(gitlab_sli_rails_request_apdex_success_total[6h])
       )
   - record: gitlab_component_apdex:success:rate_6h
     labels:
@@ -883,7 +883,7 @@ groups:
     expr: |
       (
         sum by (environment,stage) (
-          rate(gitlab_workhorse_image_resize_duration_seconds_bucket{job=~"gitlab-workhorse|gitlab-workhorse-web",le="0.2",type="web"}[6h])
+          rate(gitlab_workhorse_image_resize_duration_seconds_bucket{job=~"gitlab-workhorse|gitlab-workhorse-web",le="0.4",type="web"}[6h])
         )
         +
         sum by (environment,stage) (
@@ -999,7 +999,7 @@ groups:
       type: web
     expr: |
       sum by (environment,stage) (
-        sli_aggregations:gitlab_sli:rails_request_apdex:success_total_rate6h{job="gitlab-rails",type="web"}
+        sli_aggregations:gitlab_sli_rails_request_apdex_success_total_rate6h{job="gitlab-rails",type="web"}
       )
   - record: gitlab_component_apdex:weight:score_6h
     labels:
@@ -1008,7 +1008,7 @@ groups:
       type: web
     expr: |
       sum by (environment,stage) (
-        sli_aggregations:gitlab_sli:rails_request_apdex:total_rate6h{job="gitlab-rails",type="web"}
+        sli_aggregations:gitlab_sli_rails_request_apdex_total_rate6h{job="gitlab-rails",type="web"}
       )
   - record: gitlab_component_ops:rate_6h
     labels:
@@ -1017,7 +1017,7 @@ groups:
       type: web
     expr: |
       sum by (environment,stage) (
-        sli_aggregations:gitlab_sli:rails_request_apdex:total_rate6h{job="gitlab-rails",type="web"}
+        sli_aggregations:gitlab_sli_rails_request_apdex_total_rate6h{job="gitlab-rails",type="web"}
       )
   - record: gitlab_component_apdex:success:rate_6h
     labels:

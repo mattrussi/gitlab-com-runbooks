@@ -10,17 +10,18 @@ local toolingLinks = import 'toolinglinks/toolinglinks.libsonnet';
   googleLoadBalancer(
     userImpacting,
     loadBalancerName,
-    targetProxyName=loadBalancerName,
     projectId,
     team=null,
-    ignoreTrafficCessation=false
+    trafficCessationAlertConfig=true,
+    additionalToolingLinks=[],
+    extra={},
   )::
-    local baseSelector = { target_proxy_name: targetProxyName, project_id: projectId };
+    local baseSelector = { url_map_name: loadBalancerName, project_id: projectId };
 
-    metricsCatalog.serviceLevelIndicatorDefinition({
+    metricsCatalog.serviceLevelIndicatorDefinition(extra {
       userImpacting: userImpacting,
       [if team != null then 'team']: team,
-      ignoreTrafficCessation: ignoreTrafficCessation,
+      trafficCessationAlertConfig: trafficCessationAlertConfig,
 
       staticLabels: {
         // TODO: In future, we may need to allow other stages here too
@@ -46,6 +47,6 @@ local toolingLinks = import 'toolinglinks/toolinglinks.libsonnet';
           instanceId=loadBalancerName,
           project=projectId
         ),
-      ],
+      ] + additionalToolingLinks,
     }),
 }

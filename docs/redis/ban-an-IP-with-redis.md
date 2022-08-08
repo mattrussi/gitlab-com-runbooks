@@ -67,7 +67,7 @@ repl_backlog_first_byte_offset:xxx
 repl_backlog_histlen:xxx
 ```
 
-Note that the Redis master node can move _while you are connected_ to it. So you
+Note that the Redis master node can move *while you are connected* to it. So you
 may find that you get an error when writing a new key saying you cannot write to
 a slave node. When this happens repeat the above process to find the new master.
 
@@ -92,6 +92,7 @@ key. Since this isn't a preferred method to blacklist a host it's best not to us
 
 DO NOT use `KEYS` for searching for keys on production, this will freeze the redis server for tens of seconds if not minutes.
 Instead use:
+
 ```
 /opt/gitlab/embedded/bin/redis-cli -a $REDIS_MASTER_AUTH -h 127.0.0.1 -p 6379 --scan --pattern 'cache:gitlab:rack::attack:allow2ban:ban:*'
 ```

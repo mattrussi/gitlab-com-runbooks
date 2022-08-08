@@ -2,6 +2,7 @@
 // This is probably not what you want. Avoid combining multiple signals into
 // a single SLI unless you are sure you know what you are doing
 
+local dependencies = import 'servicemetrics/dependencies_definition.libsonnet';
 local toolingLinks = import 'toolinglinks/toolinglinks.libsonnet';
 local misc = import 'utils/misc.libsonnet';
 
@@ -19,8 +20,9 @@ local combinedServiceLevelIndicatorDefinition(
   team=null,
   serviceAggregation=false,
   staticLabels={},
-  ignoreTrafficCessation=false,
+  trafficCessationAlertConfig=true,
   regional=null,
+  dependsOn=[],
       ) =
   {
     initServiceLevelIndicatorWithName(componentName, inheritedDefaults)::
@@ -33,9 +35,11 @@ local combinedServiceLevelIndicatorDefinition(
         featureCategory: featureCategory,
         description: description,
         team: team,
-        ignoreTrafficCessation: ignoreTrafficCessation,
+        trafficCessationAlertConfig: trafficCessationAlertConfig,
         regional: if regional != null then regional else inheritedDefaults.regional,
         severity: componentsInitialised[0].severity,
+        dependsOn: dependsOn,
+        dependencies: dependencies.new(inheritedDefaults.type, componentName, dependsOn),
 
         serviceAggregation: serviceAggregation,
 
@@ -62,6 +66,7 @@ local combinedServiceLevelIndicatorDefinition(
         hasAggregatableRequestRate():: componentsInitialised[0].hasAggregatableRequestRate(),
         hasErrorRateSLO():: std.objectHas(self.monitoringThresholds, 'errorRatio'),
         hasErrorRate():: componentsInitialised[0].hasErrorRate(),
+        hasDependencies():: std.length(self.dependsOn) > 0,
 
         hasToolingLinks()::
           std.length(self.getToolingLinks()) > 0,

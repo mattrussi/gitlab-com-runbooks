@@ -1,3 +1,4 @@
+---
 inherit_from: .rubocop_todo.yml
 
 # We can remove this section once this MR is merged and the new version
@@ -8,13 +9,16 @@ require:
 
 inherit_gem:
   gitlab-styles:
-  - rubocop-bundler.yml
-  - rubocop-gemspec.yml
-  - rubocop-layout.yml
-  - rubocop-lint.yml
-  - rubocop-metrics.yml
-  - rubocop-naming.yml
-  - rubocop-style.yml
+    - rubocop-bundler.yml
+    - rubocop-gemspec.yml
+    - rubocop-layout.yml
+    - rubocop-lint.yml
+    - rubocop-metrics.yml
+    - rubocop-naming.yml
+    - rubocop-style.yml
+
+AllCops:
+  TargetRubyVersion: 3.0
 
 # This project doesn't use ActiveRecord, so these will all be false
 # positives.
@@ -31,11 +35,11 @@ Layout/LineLength:
 Layout/FirstArgumentIndentation:
   Enabled: false
 
-Lint/HashCompareByIdentity: # (new in 0.93)
+Lint/HashCompareByIdentity:  # (new in 0.93)
   Enabled: true
-Lint/RedundantSafeNavigation: # (new in 0.93)
+Lint/RedundantSafeNavigation:  # (new in 0.93)
   Enabled: true
-Style/ClassEqualityComparison: # (new in 0.93)
+Style/ClassEqualityComparison:  # (new in 0.93)
   Enabled: true
-RSpec/StubbedMock: # (new in 1.44)
+RSpec/StubbedMock:  # (new in 1.44)
   Enabled: false

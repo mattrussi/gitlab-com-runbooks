@@ -4,8 +4,9 @@
 
 [[_TOC_]]
 
-#  Nginx Service
-* **Alerts**: https://alerts.gitlab.net/#/alerts?filter=%7Btype%3D%22nginx%22%2C%20tier%3D%22sv%22%7D
+# Nginx Service
+
+* **Alerts**: <https://alerts.gitlab.net/#/alerts?filter=%7Btype%3D%22nginx%22%2C%20tier%3D%22sv%22%7D>
 * **Label**: gitlab-com/gl-infra/production~"Service:NGINX"
 
 ## Logging
@@ -15,10 +16,11 @@
 
 ## Troubleshooting Pointers
 
-* [Disk space alerts (production)](../customers/disk-space.md)
+* [Disk space alerts (production)](../customersdot/disk-space.md)
+* [CustomersDot main troubleshoot documentation](../customersdot/overview.md)
+* [design.gitlab.com Runbook](../design/design-gitlab-com.md)
 * [Management for forum.gitlab.com](../forum/discourse-forum.md)
 * [HAProxy management at GitLab](../frontend/haproxy.md)
-* [license.gitlab.com Runbook](../license/license-gitlab-com.md)
 * [Service Error Rate](../monitoring/definition-service-error-rate.md)
 * [Service Operation Rate](../monitoring/definition-service-ops-rate.md)
 * [Filesystem errors are reported in LOG files](../monitoring/filesystem_alerts.md)
@@ -48,11 +50,11 @@ For Virtual Machines, this is deployed via our Omnibus package and runs as a
 service that recieves traffic.
 
 For Kubernetes, this is deployed using the NGINX Ingress controller managed by
-our helm chart.  https://docs.gitlab.com/charts/charts/nginx/
+our helm chart.  <https://docs.gitlab.com/charts/charts/nginx/>
 
 ### Configuration
 
-https://docs.gitlab.com/omnibus/settings/nginx.html
+<https://docs.gitlab.com/omnibus/settings/nginx.html>
 
 <!-- ## Performance -->
 

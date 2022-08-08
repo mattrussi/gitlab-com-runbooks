@@ -4,9 +4,10 @@
 
 [[_TOC_]]
 
-#  Camoproxy Service
+# Camoproxy Service
+
 * [Service Overview](https://dashboards.gitlab.net/d/camoproxy-main/camoproxy-overview)
-* **Alerts**: https://alerts.gitlab.net/#/alerts?filter=%7Btype%3D%22camoproxy%22%2C%20tier%3D%22sv%22%7D
+* **Alerts**: <https://alerts.gitlab.net/#/alerts?filter=%7Btype%3D%22camoproxy%22%2C%20tier%3D%22sv%22%7D>
 * **Label**: gitlab-com/gl-infra/production~"Service:Camoproxy"
 
 ## Logging
@@ -15,10 +16,10 @@
 
 ## Troubleshooting Pointers
 
-* [Camoproxy troubleshooting](../uncategorized/camoproxy.md)
-* [Upgrade camoproxy](../uncategorized/upgrade-camoproxy.md)
+* [Camoproxy troubleshooting](camoproxy.md)
+* [Upgrade camoproxy](upgrade-camoproxy.md)
+* [Tuning and Modifying Alerts](../monitoring/alert_tuning.md)
 <!-- END_MARKER -->
-
 
 <!-- ## Summary -->
 
@@ -35,5 +36,7 @@
 <!-- ## Security/Compliance -->
 
 <!-- ## Monitoring/Alerting -->
+
+* [Dashboard](https://dashboards.gitlab.net/d/camoproxy-main/camoproxy-overview?orgId=1)
 
 <!-- ## Links to further Documentation -->

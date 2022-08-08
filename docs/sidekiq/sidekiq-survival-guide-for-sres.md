@@ -38,6 +38,7 @@ serializes the job request to a JSON string which is added to a per-queue
 To decide on the queue name, the [Routing Rules](#routing-rules) are consulted in order until there is a match.
 
 Regarding the serialization:
+
 1. The job definition in Redis contains the class name as well as the arguments, and putting a job for
    `FooWorker` in the queue `bar` will execute correctly in any Sidekiq worker configured to look at the queue `bar` (assuming
    the code for FooWorker exists on that Sidekiq deployment)
@@ -50,10 +51,10 @@ Regarding the serialization:
 
 ## Routing rules
 
-* Syntax: https://docs.gitlab.com/ee/administration/operations/extra_sidekiq_routing.html
+* Syntax: <https://docs.gitlab.com/ee/administration/operations/extra_sidekiq_routing.html>
 * Current configuration (gprd):
-   * Search `routingRules` in https://gitlab.com/gitlab-com/gl-infra/k8s-workloads/gitlab-com/-/blob/master/releases/gitlab/values/gprd.yaml.gotmpl
-   * Search `routing_rules` in https://gitlab.com/gitlab-com/gl-infra/chef-repo/-/blob/master/roles/gprd-base.json
+  * Search `routingRules` in <https://gitlab.com/gitlab-com/gl-infra/k8s-workloads/gitlab-com/-/blob/master/releases/gitlab/values/gprd.yaml.gotmpl>
+  * Search `routing_rules` in <https://gitlab.com/gitlab-com/gl-infra/chef-repo/-/blob/master/roles/gprd-base.json>
 
 These should be configured identically in chef and helm but there are no technical controls ensuring they are kept the same.
 If they are not, then jobs *may* execute on the wrong shard, or not execute at all.  Divergence is only in exceptional
@@ -108,7 +109,7 @@ changed set of arguments, the workers may not be able to process them successful
 failure modes, and having a canary web/api fleet is related to these. Changes to existing jobs need to be managed in a
 similar way to how [DB migrations](https://docs.gitlab.com/ee/development/background_migrations.html) are, sometimes
 requiring multiple releases to safely migrate with zero-downtime. This is discussed at
-https://docs.gitlab.com/ee/development/sidekiq_style_guide.html#sidekiq-compatibility-across-updates
+<https://docs.gitlab.com/ee/development/sidekiq_style_guide.html#sidekiq-compatibility-across-updates>
 
 ## Sidekiq Cluster (historical)
 
@@ -194,6 +195,7 @@ workers in the code base and generates `app/workers/all_queues.yml` (and `ee/app
 jobs).
 
 The characteristics are well described in the Sidekiq style guide, but boil down to:
+
 * urgency: how quickly must this job be picked up; `high` typically means a user is sitting at a UI action waiting on
   this job (e.g. a merge, or many CI pipeline jobs) whereas low urgency can be dealt with 'eventually'.
 * resource-boundary: cpu, memory, or none: CPU implies it needs lower concurrency; memory means it needs to run in places
@@ -209,7 +211,7 @@ longer before alerts fire. These expectations are also manifested in apdex metri
 
 ### Sidekiq overview
 
-Start at https://dashboards.gitlab.net/d/sidekiq-main/sidekiq-overview?orgId=1. This gives a high level view of how
+Start at <https://dashboards.gitlab.net/d/sidekiq-main/sidekiq-overview?orgId=1>. This gives a high level view of how
 Sidekiq is doing overall. Apdex is at the top which will likely have clear signals if "something" is wrong, but to get
 quickly to useful information scroll down to the `Sidekiq Queues` section. The aggregated queue length is *one*
 possible indicator of issues, although in certain cases we expect queuing (particularly elasticsearch indexing, during
@@ -235,6 +237,7 @@ different patterns from graphs like 'throughput' which are only counting numbers
 job run time.
 
 #### Shard Utilization Panel
+
 Towards the bottom is a final slightly complicated panel: "Shard Utilization". This uses the same basic metric as
 "Total Execution Time", but presents it as a proportion of available Sidekiq threads across the given shard. It was
 empirically [found](https://gitlab.com/gitlab-com/runbooks/-/merge_requests/2027#note_306791919) that the sweet spot
@@ -256,17 +259,18 @@ dashboard can be opened.
 
 ### Worker Detail
 
-https://dashboards.gitlab.net/d/sidekiq-worker-detail/sidekiq-worker-detail is the lowest level of the
+<https://dashboards.gitlab.net/d/sidekiq-worker-detail/sidekiq-worker-detail> is the lowest level of the
 Sidekiq dashboards, and shows graphs specific to the selected worker. The graphs on this page are fairly
 self-explanatory. One neat feature is that it shows which shard this job is running on in the brightly colored boxes at
 the top (Queue Attribute: Shard), which can be a lot quicker than trying to find the job in the all_workers.yml file in
 the gitlab code base.
 
-
 ## Logs
 
 The Sidekiq logs have a wealth of additional metadata. In Kibana, change to the `pubsub-sidekiq-inf-gprd\*` index.
-Interesting fields to search or aggregate on: 1. queue: The lower-snake-case queue name
+Interesting fields to search or aggregate on:
+
+1. queue: The lower-snake-case queue name
 1. jid: An ID that is the unique to a job (allocated when the job is enqueued). Useful for tracking a job through the system
 1. job_status: start, fail, deduplicated, done (or empty for some ancillary cases)
    * In a debugging/incident, you *probably* want to filter for `done` so you get the timing information below.
@@ -277,10 +281,10 @@ Interesting fields to search or aggregate on: 1. queue: The lower-snake-case que
    * The "meta" fields are particularly useful when trying to find who is dumping a bunch of jobs on us and causing things to page
 1. {db_,cpu_,gitaly_,redis_,}duration_s: How long the job spent in each of those areas
    * Useful for guiding investigations into slow jobs; only logged on `done` job_status (for hopefully obvious reasons)
-1. error_message:
+1. exception.{class,message,backtrace}:
    * Mostly on 'fail' job_status, which is useful for debugging high error rates. You'll see lots of external calls failing (webhooks, mailers, etc) here, under normal circumstances
 1. retry/retry_count:
-   * See [Retries + Fails](#retries-fails) below
+   * See [Retries + Fails](#retries-and-fails) below
 
 There are a bunch of other fields too, so go exploring, but the above are a really good starting point.
 
@@ -300,11 +304,12 @@ In either case, when a sidekiq process is killed sidekiq-cluster sees this as a 
 all its other workers) entirely as a result. This is a safety-valve for run-away jobs eating all the RAM, but obviously
 needs careful tuning; we don't want to rely on this under normal circumstances.
 
-## Retries + Fails
+## Retries and Fails
 
 These can be a little counter-intuitive in implementation. The `retry` field in the logs indicates
 how many retries are *allowed* for this job; it will be the same for every log entry for a given job id. The
 `retry_count` field records how many times the job has actually been retried, but:
+
 1. On logs for the first attempt it will be missing (not logged)
 1. Assuming the job keeps failing, on the second attempt it will log "0" (even on the job_status=="fail" log entry for the second attempt), on the third attempt it will log "1", and so on.
 
@@ -315,16 +320,16 @@ The Dead Set is a set in Redis that records any jobs that completely failed all 
 10K entries (or 6 months), but in practice we experience sufficient failure-rate (either unexpected, or reasonably due
 to 3rd parties) that this set basically always has 9999 items in it. Do not be alarmed.
 
-See https://github.com/mperham/sidekiq/wiki/Error-Handling for a bit of additional discussion. In particular, you may
+See <https://github.com/mperham/sidekiq/wiki/Error-Handling> for a bit of additional discussion. In particular, you may
 wish to note the discussion on the *exponential + randomized backoff* of the retries. What may not be obvious however
 is that the Retry (and Dead) sets are a single Redis ZSET (an ordered set). The order is a unix epoch timestamp, which
 affords some efficiencies for Sidekiq polling. The downside is that all Sidekiq workers have a thread polling this set
-periodically and sort of randomly (see https://github.com/mperham/sidekiq/blob/master/lib/sidekiq/scheduled.rb) so if
+periodically and sort of randomly (see <https://github.com/mperham/sidekiq/blob/master/lib/sidekiq/scheduled.rb>) so if
 this set gets large it could cause some noticeable load on Redis. Thankfully in practice it stays fairly small. The
 Dead Set can be inspected and jobs retried if necessary. See [Dead Set inspection](#dead-set-inspection) for more
 details.
 
-Most of our jobs have a default retry of 3, defined in https://gitlab.com/gitlab-org/gitlab/-/blob/v13.1.0-ee/config/initializers_before_autoloader/002_sidekiq.rb#L15-16
+Most of our jobs have a default retry of 3, defined in <https://gitlab.com/gitlab-org/gitlab/-/blob/v13.1.0-ee/config/initializers_before_autoloader/002_sidekiq.rb#L15-16>
 You can see jobs with non-default settings by searching `app/workers` and `ee/app/workers` in the gitlab codebase for
 `sidekiq_options retry:`
 
@@ -345,7 +350,8 @@ are quick and will likely finish anyway before the timeout, but long running job
 
 It's also conceivable that jobs will be run more than once, or even potentially lost (although that's lower likelihood).
 See [https://gitlab.com/gitlab-org/sidekiq-reliable-fetch] for some more about that. Also as noted at
-https://github.com/mperham/sidekiq/wiki/Best-Practices#2-make-your-job-idempotent-and-transactional :
+<https://github.com/mperham/sidekiq/wiki/Best-Practices#2-make-your-job-idempotent-and-transactional> :
+
 ```
 Just remember that Sidekiq will execute your job at least once, not exactly once.
 ```
@@ -354,7 +360,7 @@ Just remember that Sidekiq will execute your job at least once, not exactly once
 
 As noted in [restarts](#restarts), it's important jobs are 'safe', but there is an additional possibility
 when they are strictly Idempotent, i.e. running the same job more than once would have no additional effect.
-https://gitlab.com/gitlab-org/gitlab/-/blob/master/doc/development/sidekiq_style_guide.md#idempotent-jobs describes this
+<https://gitlab.com/gitlab-org/gitlab/-/blob/master/doc/development/sidekiq_style_guide.md#idempotent-jobs> describes this
 in detail, and may be interesting to read, as a job properly marked can be de-duplicated from the queue, reducing the
 load on Sidekiq from running redundant jobs.
 
@@ -378,7 +384,7 @@ where the job then actually runs; that is subject to all the usual queue configu
 
 ## Inspecting/manipulating active state
 
-https://gitlab.com/admin/sidekiq/queues is always a starting point; our dashboards are better for inspecting (IMO), but
+<https://gitlab.com/admin/sidekiq/queues> is always a starting point; our dashboards are better for inspecting (IMO), but
 in the event you need to e.g. delete all the jobs in a given queue (reasons include: jobs orphaned by insufficient
 migration when being removed from the app, or perhaps causing incidents), this can be a quick way to achieve that.
 
@@ -386,9 +392,10 @@ For more detailed inspection, you will need a Rails console. [sidekiq-inspection
 place to start. Inspecting the 'args' attribute of the payload is also interesting, although it requires the Worker
 code to interpret the meaning of the arguments. From there it's entirely possible to analyze the jobs in the queue
 across various attributes (e.g. find the source of queued spam e-mails) and potentially delete them (See
-https://gitlab.com/gitlab-com/runbooks/snippets/1923045 for an example of that).
+<https://gitlab.com/gitlab-com/runbooks/snippets/1923045> for an example of that).
 
 ### Dead Set inspection
+
 Some starter examples.
 
 From a Rails console:
@@ -413,13 +420,14 @@ end
 ```
 
 Retries should likely only be attempted if:
+
 1. Any underlying reason why they have failed was temporary and has been fixed (e.g. deployed code or environment)
 1. Retrying them is known to be safe/idempotent
 
 Filtering on class name is likely a *minimum* condition, and other attributes likely need to be checked as well, e.g.
 created_at and perhaps other arguments.
 
-# Footnotes [^1]:
+# Footnotes [^1]
 
 [Middleware](https://github.com/mperham/sidekiq/wiki/Middleware) in Sidekiq is sort of a plugin
 architecture that lets you inject code into the enqueuing (client-side) and processing (server-side) of jobs. We use it

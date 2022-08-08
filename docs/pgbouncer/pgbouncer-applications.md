@@ -1,4 +1,4 @@
-### Applications can not log into pgbouncer.
+### Applications can not log into pgbouncer
 
 Pgbouncer does not know what users exist on the database. It accepts a new connection
 and executes the query configured under `auth_query`

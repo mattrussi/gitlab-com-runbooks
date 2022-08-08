@@ -16,7 +16,6 @@ demo results as new related content is progressively introduced).
 Ultimately the goal is to give participants exposure and retention to new skills and knowledge that aids them in practical ways.
 Enriching a tutorial with multiple ways of interacting with the content helps more participants synthesize the main take-aways.
 
-
 ## Tips for helping participants to engage with the content
 
 > We learn best as we seek solutions to problems. When you cover a particular topic, start with defining and describing

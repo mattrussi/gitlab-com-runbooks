@@ -1,25 +1,6 @@
 groups:
 - name: gitlab-com-ci.rules
   rules:
-  - alert: CICDRunnerMachineCreationRateHigh
-    expr: |
-      (
-        sum by(environment, tier, type, stage, shard) (gitlab_runner_autoscaling_machine_states{executor="docker+machine", state="creating"})
-        /
-        sum by(environment, tier, type, stage, shard) (gitlab_runner_autoscaling_machine_states{executor="docker+machine", state="idle"})
-      ) > 1
-    for: 5m
-    labels:
-      team: runner
-      severity: s3
-      alert_type: cause
-    annotations:
-      title: 'Machine creation rate for runners is too high: {{$value | printf "%.2f" }}'
-      description: 'Machine creation rate for the last 1 minute is at least {{$value}}
-        times greater than machines idle rate. This may by a symptom of problems with
-        the auto-scaling provider. Check https://dashboards.gitlab.net/d/ci-runners-incident-autoscaling/ci-runners-incident-support-autoscaling.'
-      runbook: docs/ci-runners/linux/autoscaling.md
-
   - record: quota_region:quota_usage:ratio
     expr: |
       max by (quota, region) (

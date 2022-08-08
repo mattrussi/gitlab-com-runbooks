@@ -11,10 +11,10 @@ node is busy (if its in the middle of a backup for example), so verify that erro
 Once sshed into the node, switch to the `packagecloud` user, navigate to the packagecloud rails service, and launch the rails console:
 
 ```sh
-$ sudo su - packagecloud
-$ bash
-$ cd /opt/packagecloud/embedded/service/packagecloud-rails/
-$ /opt/packagecloud/embedded/bin/bundle exec rails console -e onpremise
+sudo su - packagecloud
+bash
+cd /opt/packagecloud/embedded/service/packagecloud-rails/
+/opt/packagecloud/embedded/bin/bundle exec rails console -e onpremise
 ```
 
 Once the rails console has loaded, copy in this helper function to help re-indexing.

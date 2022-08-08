@@ -24,6 +24,7 @@
   import 'saturation-monitoring/kube_container_memory.libsonnet',
   import 'saturation-monitoring/kube_go_memory.libsonnet',
   import 'saturation-monitoring/kube_horizontalpodautoscaler_desired_replicas.libsonnet',
+  import 'saturation-monitoring/kube_node_ips.libsonnet',
   import 'saturation-monitoring/kube_persistent_volume_claim_disk_space.libsonnet',
   import 'saturation-monitoring/kube_persistent_volume_claim_inodes.libsonnet',
   import 'saturation-monitoring/kube_pool_cpu.libsonnet',

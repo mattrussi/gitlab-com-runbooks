@@ -18,7 +18,7 @@ local explainer = |||
   This section of the dashboard is governed by the `target SLO` variable.
 
   - __# deployments__ counts the number of deployments in the time range`
-  - __Target SLO__ is the amount of seconds we consider acceptable for a complete deployment from staging to production, it can be one of the following values:
+  - __Target SLO__ is the amount of seconds we consider acceptable for a complete deployment from gstg-cny (staging canary) to production (gprd post-deployment migrations), it can be one of the following values:
     - `12600`: 3.5h
     - `14400`: 4h
     - `16200`: 4.5h
@@ -139,28 +139,4 @@ basic.dashboard(
     ], startRow=200,
   ),
 )
-
-.addPanel(
-  grafana.row.new(title='⚙️ delivery-metrics service'),
-  gridPos={ x: 0, y: 300, w: 24, h: 1 },
-).addPanels(layout.singleRow([
-  basic.table(
-    'PODs',
-    description='This table shows the pods running delivery-metrics with their revision and build date, except during a deployment, we expect to see only one pod',
-    query='count(delivery_version_info) by (revision, build_date, pod)',
-    transformations=[
-      {
-        // Exclude timestamp and value, which aren't meaningful here
-        id: 'filterFieldsByName',
-        options: {
-          include: {
-            names: ['revision', 'build_date', 'pod'],
-          },
-        },
-      },
-    ],
-  ),
-], rowHeight=4, startRow=300))
-
-
 .trailer()

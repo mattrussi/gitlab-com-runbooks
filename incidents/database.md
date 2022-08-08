@@ -20,7 +20,7 @@ Each incident issue should have the following labels:
 * ~outage, or ~degradation (depending on the type of outage)
 
 You can [create a new issue with the right template by clicking this
-link](https://gitlab.com/gitlab-com/infrastructure/issues/new?issuable_template=database_incident).
+link](https://gitlab.com/gitlab-com/gl-infra/reliability/-/issues/new?issuable_template=database_incident).
 
-[new-infra-issue]: https://gitlab.com/gitlab-com/infrastructure/issues/new
+[new-infra-issue]: https://gitlab.com/gitlab-com/gl-infra/reliability/-/issues/new
 [new-dev-issue]: https://dev.gitlab.org/gitlab/organization/issues/new

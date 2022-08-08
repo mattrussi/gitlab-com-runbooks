@@ -7,7 +7,7 @@ local haproxyComponents = import './lib/haproxy_components.libsonnet';
 local sliLibrary = import 'gitlab-slis/library.libsonnet';
 local serviceLevelIndicatorDefinition = import 'servicemetrics/service_level_indicator_definition.libsonnet';
 local kubeLabelSelectors = metricsCatalog.kubeLabelSelectors;
-
+local dependOnPatroni = import 'inhibit-rules/depend_on_patroni.libsonnet';
 local gitWorkhorseJobNameSelector = { job: { re: 'gitlab-workhorse|gitlab-workhorse-git' } };
 
 metricsCatalog.serviceDefinition({
@@ -17,7 +17,7 @@ metricsCatalog.serviceDefinition({
   tags: ['golang'],
 
   contractualThresholds: {
-    apdexRatio: 0.95,
+    apdexRatio: 0.9,
     errorRatio: 0.005,
   },
   monitoringThresholds: {
@@ -52,6 +52,7 @@ metricsCatalog.serviceDefinition({
     praefect: true,
     pvs: true,
     consul: true,
+    'google-cloud-storage': true,
   },
   provisioning: {
     vms: false,
@@ -63,14 +64,7 @@ metricsCatalog.serviceDefinition({
   kubeConfig: {
     labelSelectors: kubeLabelSelectors(
       ingressSelector=null,
-      // TODO: Currently git nodes are incorrectly named
-      // See https://gitlab.com/gitlab-com/gl-infra/delivery/-/issues/2237
-      nodeSelector={ type: { oneOf: ['shell', 'git-https'] } },
-
-      // TODO: Currently git nodes to have a `shard` label
-      // Hardcoding git nodes to main stage for now
-      // See https://gitlab.com/gitlab-com/gl-infra/delivery/-/issues/2237
-      nodeStaticLabels={ stage: 'main' }
+      nodeSelector={ type: 'git' },
     ),
   },
 
@@ -103,7 +97,8 @@ metricsCatalog.serviceDefinition({
       },
       selector={ type: 'frontend' },
       // Load balancer is single region
-      regional=false
+      regional=false,
+      dependsOn=dependOnPatroni.sqlComponents
     ),
 
     loadbalancer_ssh: haproxyComponents.haproxyL4LoadBalancer(
@@ -120,7 +115,8 @@ metricsCatalog.serviceDefinition({
       },
       selector={ type: 'frontend' },
       // Load balancer is single region
-      regional=false
+      regional=false,
+      dependsOn=dependOnPatroni.sqlComponents
     ),
 
     workhorse: {
@@ -165,13 +161,14 @@ metricsCatalog.serviceDefinition({
         }
       ),
 
-      significantLabels: ['fqdn', 'route'],
+      significantLabels: ['region', 'route'],
 
       toolingLinks: [
         toolingLinks.continuousProfiler(service='workhorse-git'),
         toolingLinks.sentry(slug='gitlab/gitlab-workhorse-gitlabcom'),
         toolingLinks.kibana(title='Workhorse', index='workhorse', type='git', slowRequestSeconds=10),
       ],
+      dependsOn: dependOnPatroni.sqlComponents,
     },
 
     /**
@@ -213,7 +210,7 @@ metricsCatalog.serviceDefinition({
         }
       ),
 
-      significantLabels: ['fqdn'],
+      significantLabels: ['region'],
 
       toolingLinks: [
         toolingLinks.continuousProfiler(service='workhorse-git'),
@@ -221,6 +218,7 @@ metricsCatalog.serviceDefinition({
         // TODO: filter kibana query on route once https://gitlab.com/gitlab-org/gitlab-workhorse/-/merge_requests/624 arrives
         toolingLinks.kibana(title='Workhorse', index='workhorse', type='git', slowRequestSeconds=10),
       ],
+      dependsOn: dependOnPatroni.sqlComponents,
     },
 
     local railsSelector = { job: 'gitlab-rails', type: 'git' },
@@ -241,12 +239,14 @@ metricsCatalog.serviceDefinition({
         selector=railsSelector { status: { re: '5..' } }
       ),
 
-      significantLabels: ['fqdn', 'method', 'feature_category'],
+      significantLabels: ['region', 'method', 'feature_category'],
 
       toolingLinks: [
         // Improve sentry link once https://gitlab.com/gitlab-com/gl-infra/scalability/-/issues/532 arrives
         toolingLinks.sentry(slug='gitlab/gitlabcom', type='git', variables=['environment', 'stage']),
       ],
+
+      dependsOn: dependOnPatroni.sqlComponents,
     },
 
     gitlab_shell: {
@@ -272,9 +272,14 @@ metricsCatalog.serviceDefinition({
       toolingLinks: [
         toolingLinks.kibana(title='GitLab Shell', index='shell'),
       ],
+      dependsOn: dependOnPatroni.sqlComponents,
     },
 
     gitlab_sshd: {
+      // https://gitlab.com/gitlab-org/gitaly/-/issues/4331
+      monitoringThresholds+: {
+        errorRatio: 0.999,
+      },
       userImpacting: true,
       featureCategory: 'source_code_management',
       description: |||
@@ -286,14 +291,19 @@ metricsCatalog.serviceDefinition({
       },
 
       apdex: histogramApdex(
-        histogram='gitlab_shell_sshd_connection_duration_seconds_bucket',
+        histogram='gitlab_shell_sshd_session_established_duration_seconds_bucket',
         selector=baseSelector,
-        satisfiedThreshold=10,
-        toleratedThreshold=20
+        satisfiedThreshold=1,
+        toleratedThreshold=5
+      ),
+
+      errorRate: rateMetric(
+        counter='gitlab_sli:shell_sshd_sessions:errors_total',
+        selector=baseSelector
       ),
 
       requestRate: rateMetric(
-        counter='gitlab_shell_sshd_connection_duration_seconds_count',
+        counter='gitlab_sli:shell_sshd_sessions:total',
         selector=baseSelector
       ),
 
@@ -302,9 +312,10 @@ metricsCatalog.serviceDefinition({
       toolingLinks: [
         toolingLinks.kibana(title='GitLab Shell', index='shell'),
       ],
+      dependsOn: dependOnPatroni.sqlComponents,
     },
     rails_requests:
-      sliLibrary.get('rails_request_apdex').generateServiceLevelIndicator(railsSelector) {
+      sliLibrary.get('rails_request').generateServiceLevelIndicator(railsSelector) {
         monitoringThresholds+: {
           apdexScore: 0.997,
         },
@@ -312,6 +323,8 @@ metricsCatalog.serviceDefinition({
         toolingLinks: [
           toolingLinks.kibana(title='Rails', index='rails'),
         ],
+
+        dependsOn: dependOnPatroni.sqlComponents,
       },
   },
 })

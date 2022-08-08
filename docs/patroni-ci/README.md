@@ -4,9 +4,10 @@
 
 [[_TOC_]]
 
-#  Patroni-ci Service
-* [Service Overview](https://dashboards.gitlab.net/d/patroni-main/patroni-overview)
-* **Alerts**: https://alerts.gitlab.net/#/alerts?filter=%7Btype%3D%22patroni-ci%22%2C%20tier%3D%22db%22%7D
+# Patroni-ci Service
+
+* [Service Overview](https://dashboards.gitlab.net/d/patroni-ci-main/patroni-ci-overview)
+* **Alerts**: <https://alerts.gitlab.net/#/alerts?filter=%7Btype%3D%22patroni-ci%22%2C%20tier%3D%22db%22%7D>
 * **Label**: gitlab-com/gl-infra/production~"Service:Postgres"
 
 ## Logging
@@ -16,7 +17,9 @@
 
 ## Troubleshooting Pointers
 
-* [Patroni](../patroni/unhealthy_patroni_node_handling.md)
+* [Steps to Recreate/Rebuild the CI CLuster using a Snapshot from the Master cluster (instead of pg_basebackup)](rebuild_ci_cluster_from_prod.md)
+* [Recovering from CI Patroni cluster lagging too much or becoming completely broken](recovering_patroni_ci_intense_lagging_or_replication_stopped.md)
+* [OS Upgrade Reference Architecture](../patroni/os_upgrade_reference_architecture.md)
 <!-- END_MARKER -->
 
 <!-- ## Summary -->

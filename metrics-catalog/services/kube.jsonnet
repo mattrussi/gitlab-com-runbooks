@@ -11,7 +11,7 @@ metricsCatalog.serviceDefinition({
   tier: 'inf',
   serviceIsStageless: true,  // kube does not have a cny stage
   monitoringThresholds: {
-    apdexScore: 0.9995,
+    apdexScore: 0.999,
     errorRatio: 0.9995,
   },
   /*
@@ -32,10 +32,7 @@ metricsCatalog.serviceDefinition({
       hpaSelector=null,
       ingressSelector=null,
       deploymentSelector=null,
-      nodeSelector={ type: { oneOf: ['default', 'highmem', '' /* Unlabelled nodepools belong here */] } },
-
-      // TODO: fix the stage label for default and highmem nodes
-      // See https://gitlab.com/gitlab-com/gl-infra/delivery/-/issues/2238
+      nodeSelector={ type: 'kube' },
       nodeStaticLabels={ stage: 'main' },
     ),
   },
@@ -90,6 +87,7 @@ metricsCatalog.serviceDefinition({
             severity: { one_of: ['EMERGENCY', 'ALERT', 'CRITICAL', 'ERROR', 'WARNING'] },
           },
         ),
+        toolingLinks.kibana(title='Kubernetes Cluster Logs (Kibana)', index='gkeKube'),
       ],
     },
 
@@ -97,7 +95,7 @@ metricsCatalog.serviceDefinition({
       userImpacting: false,
       featureCategory: 'not_owned',
       team: 'sre_reliability',
-      ignoreTrafficCessation: true,
+      trafficCessationAlertConfig: false,
       description: |||
         We rely on the GKE Cluster Autoscaler (https://cloud.google.com/kubernetes-engine/docs/concepts/cluster-autoscaler) to
         automatically scale up and scale down our Kubernetes fleets.
@@ -109,6 +107,10 @@ metricsCatalog.serviceDefinition({
       staticLabels: {
         tier: 'inf',
         stage: 'main',
+      },
+
+      monitoringThresholds: {
+        errorRatio: 0.95,
       },
 
       // Unfortunately Log-Based Metrics aren't counters, so we need to fill-in-the-gaps when

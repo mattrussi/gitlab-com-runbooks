@@ -14,7 +14,6 @@
    software, set local configuration information, and deploy secret
    information from key management services into local configurations.
 
-
 ```mermaid
 sequenceDiagram
   participant TF as Terraform Project CI

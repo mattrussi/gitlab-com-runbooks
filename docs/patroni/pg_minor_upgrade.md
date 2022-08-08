@@ -1,8 +1,8 @@
-# Postgresql minor upgrade 
+# Postgresql minor upgrade
 
-This runbook describes all the steps to execute a Postgresql minor upgrade. 
+This runbook describes all the steps to execute a Postgresql minor upgrade.
 
-**Important!** Please read the release notes before getting started (for all minor versions after the current version of postgresql) - https://www.postgresql.org/docs/12/release.html
+**Important!** Please read the release notes before getting started (for all minor versions after the current version of postgresql) - <https://www.postgresql.org/docs/12/release.html>
 
 Considering the database, one of the most critical components from our infrastructure, we want to execute the upgrade node by node by executing tests, monitoring the performance and behavior after the upgrade in each node.
 
@@ -18,14 +18,15 @@ The main steps on the read-only replicas, are:
 
 * Disable chef-client.
 
- - Execute the command: `sudo chef-client-disable`
+* Execute the command: `sudo chef-client-disable`
 
 Add the `no-failover` and `no-loadbalance` tags in Patroni ( in the config file patroni.yml).
 
 * Reload patroni: `sudo systemctl reload patroni`
 
-### Pre checks:
-Wait until the traffic is drained. 
+### Pre checks
+
+Wait until the traffic is drained.
 
 * Verify the connection status with the commad on pg_stat_activity:
 `select count(*) from pg_stat_activity where backend_type = 'client backend' and state <> 'idle';`
@@ -34,7 +35,8 @@ Execute a checkpoint. Command: `gitlab-psql -c "checkpoint;"`
 
 Shutdown PostgreSQL. Command: `sudo systemctl stop patroni`
 
-### Main actions:
+### Main actions
+
 Update the binaries:
 
 ```shell
@@ -56,7 +58,7 @@ Update extensions, on the primary database node:
 ```shell
 `sudo gitlab-psql`
 ```sql
--- Get a list of installed and available versions of extensions in the current database: 
+-- Get a list of installed and available versions of extensions in the current database:
 select ae.name, installed_version, default_version,
 case when installed_version <> default_version then 'OLD' end as is_old
 from pg_extension e

@@ -2,35 +2,37 @@
 
 Database performance degradation may be due to several reasons. To search for the root cause, you can start digging by checking existing metrics.
 
-
 ### Check CPU utilization
+
 You can use [this metric](https://prometheus.gprd.gitlab.net/graph?g0.range_input=1h&g0.expr=instance%3Anode_cpu_utilization%3Aratio%7Benvironment%3D%22gprd%22%2C%20type%3D%22patroni%22%7D%20*%20100&g0.tab=0&g1.range_input=1h&g1.expr=instance_cpu%3Anode_cpu_seconds_not_idle%3Arate1m&g1.tab=0) to check CPU utilization over the patroni hosts:
 ![](img/patroni-cpu-usage.png)
 
 Check if values are getting close to `1`
 
-You can also take a look on [this graph](https://dashboards.gitlab.com/d/000000144/postgresql-overview?orgId=1&from=1594050133725&to=1594060933725&var-prometheus=Global&var-environment=gprd&var-type=patroni&viewPanel=9) - part of the [Patroni Overview](https://dashboards.gitlab.com/d/000000144/postgresql-overview?orgId=1) panel - to check the host load.
+You can also take a look on [this graph](https://dashboards.gitlab.net/d/000000144/postgresql-overview?orgId=1&from=1594050133725&to=1594060933725&var-prometheus=Global&var-environment=gprd&var-type=patroni&viewPanel=9) - part of the [Patroni Overview](https://dashboards.gitlab.net/d/000000144/postgresql-overview?orgId=1) panel - to check the host load.
 ![](img/patroni-load.png)
 
-
 ### Check for memory utilization
-Check [this graph](https://dashboards.gitlab.com/d/000000144/postgresql-overview?orgId=1&from=now-3h&to=now&var-prometheus=Global&var-environment=gprd&var-type=patroni&viewPanel=12) for an overview of memory utilization:
+
+Check [this graph](https://dashboards.gitlab.net/d/000000144/postgresql-overview?orgId=1&from=now-3h&to=now&var-prometheus=Global&var-environment=gprd&var-type=patroni&viewPanel=12) for an overview of memory utilization:
 ![](img/patroni-memory.png)
 
 ### Check for Context Switches anomalies
+
 A context switch is the process of storing the state of a process or thread, so that it can be restored and resume execution at a later point. It can be seen as a measure of total througput of the system. Check the [CS metric](https://prometheus.gprd.gitlab.net/graph?g0.range_input=12h&g0.expr=rate(node_context_switches_total%7Btype%3D%22patroni%22%7D%5B5m%5D)&g0.tab=0) for spikes or low peaks.
 
 ![](img/patroni-cs.png)
 
 ### Check for Buffer cache utilization
-Specially after a failover, a DB repair (indexing, repacking), the cache access pattern can change. With a "cold" cache, query performance may suffer. Check [this graph](https://prometheus-db.gprd.gitlab.net/new/graph?g0.expr=(pg_stat_database_blks_hit%7Benvironment%3D%22gprd%22%2Cdatname%3D%22gitlabhq_production%22%2C%20%7D%20%2F%20(%20pg_stat_database_blks_hit%7Benvironment%3D%22gprd%22%2Cdatname%3D%22gitlabhq_production%22%2C%20%7D%20%2B%20pg_stat_database_blks_read%7Benvironment%3D%22gprd%22%2Cdatname%3D%22gitlabhq_production%22%7D))%20*%20100&g0.tab=0&g0.stacked=0&g0.range_input=2h) to verify the cache hit/read percentaje. Under normal conditions, it should be close to 99%.
 
+Specially after a failover, a DB repair (indexing, repacking), the cache access pattern can change. With a "cold" cache, query performance may suffer. Check [this graph](https://prometheus-db.gprd.gitlab.net/new/graph?g0.expr=(pg_stat_database_blks_hit%7Benvironment%3D%22gprd%22%2Cdatname%3D%22gitlabhq_production%22%2C%20%7D%20%2F%20(%20pg_stat_database_blks_hit%7Benvironment%3D%22gprd%22%2Cdatname%3D%22gitlabhq_production%22%2C%20%7D%20%2B%20pg_stat_database_blks_read%7Benvironment%3D%22gprd%22%2Cdatname%3D%22gitlabhq_production%22%7D))%20*%20100&g0.tab=0&g0.stacked=0&g0.range_input=2h) to verify the cache hit/read percentaje. Under normal conditions, it should be close to 99%.
 
 ![](img/patroni-cache.png)
 
-
 ### Check for IO saturation
-Disk saturation can cause severe service degradation. Check the [PostgreSQL Overview](https://dashboards.gitlab.com/d/000000144/postgresql-overview?orgId=1) dashboard, specially at the following graphs:
+
+Disk saturation can cause severe service degradation. Check the [PostgreSQL Overview](https://dashboards.gitlab.net/d/000000144/postgresql-overview?orgId=1) dashboard, specially at the following graphs:
+
 - disk IO wait `sdb`
 - Disk IO utilization `sdb`
 - Retransmit rate (outbound only), resending possibly lost packets
@@ -38,7 +40,7 @@ Disk saturation can cause severe service degradation. Check the [PostgreSQL Over
 The `sdb` device is the most important to monitor, because it contains the $PGDATA space.
 
 If you need to go deeper, you can log in into the desired instance and use the `iotop` to find out wich process is using most IO:
-```sudo iotop -P -a ```
+```sudo iotop -P -a```
 
 ```
 Total DISK READ :       0.00 B/s | Total DISK WRITE :       0.00 B/s
@@ -75,7 +77,7 @@ Disk saturation may also be investigated using _iotop_ tool:
 
 ```
 # iostat -x 1 3
-Linux 4.15.0-1047-gcp (patroni-01-db-gprd) 	07/07/2020 	_x86_64_	(96 CPU)
+Linux 4.15.0-1047-gcp (patroni-01-db-gprd)  07/07/2020  _x86_64_ (96 CPU)
 
 avg-cpu:  %user   %nice %system %iowait  %steal   %idle
            5.09    0.03    1.83    0.55    0.00   92.51
@@ -105,10 +107,11 @@ sda               0.00     0.00    0.00    0.00     0.00     0.00     0.00     0
 sdb               0.00   133.00  903.00 1647.00  8180.00 22492.00    24.06     1.21    0.68    0.54    0.76   0.11  27.20
 ```
 
-
 ### Check for network anomalies
+
 Correct network traffic is critical in any cloud enviroment. Check the [Network utilization](https://prometheus.gprd.gitlab.net/new/graph?g0.expr=sum(rate(node_network_receive_bytes_total%7Btype%3D%22patroni%22%7D%5B5m%5D))%20by%20(instance)&g0.tab=0&g0.stacked=0&g0.range_input=2h&g1.expr=sum(rate(node_network_transmit_bytes_total%7Btype%3D%22patroni%22%7D%5B5m%5D))%20by%20(instance)&g1.tab=0&g1.stacked=0&g1.range_input=2h&g2.expr=rate(node_netstat_Tcp_RetransSegs%7Btype%3D%22patroni%22%7D%5B5m%5D)&g2.tab=0&g2.stacked=0&g2.range_input=2h) graph to check the network of patroni hosts.
 This panel includes (for patroni hosts):
+
 - Incoming traffic
 - Outbound traffic
 - Retransmition rate (high rate of retransmitions could be paired with higher IO utilization)
@@ -120,48 +123,47 @@ This panel includes (for patroni hosts):
 ![](img/patroni-network-retransmit.png)
 
 ### Check for differences in the graphs (same metric, different host)
+
 Load among RO patroni hosts is evenly distributed, so in average, you might expect every metric be similar for every patroni node in the RO ring. When that is not the case, it ussually means that there is some unknown problem with that particular instance, like:
+
 - one patroni instance with much higher replication lag than the rest
 - much higher IO usage / io wait than the rest
 
 In general, when those differences are not easy to explain, its because on some issue with GCP, and in most cases that instance/disk must be replaced.
 
-
-
-
 ### Check for slow queries
 
-[This board](https://dashboards.gitlab.com/d/000000278/postgresql-slow-queries?orgId=1) contains information about how many queries took more than 5 seconds.
+[This board](https://dashboards.gitlab.net/d/000000278/postgresql-slow-queries?orgId=1) contains information about how many queries took more than 5 seconds.
 ![](img/patroni-slow-queries.png)
 
-Check the [PostgreSQL queries](https://dashboards.gitlab.com/d/000000153/postgresql-queries?orgId=1&from=now-3h&to=now&var-environment=gprd&var-type=patroni&var-fqdn=patroni-01-db-gprd.c.gitlab-production.internal&var-prometheus=Global) board to check for an increasing rate of slow queries (`Slow queries` graph). You can also check for blocked queries (`Blocked Queries` graph).
+Check the [PostgreSQL queries](https://dashboards.gitlab.net/d/000000153/postgresql-queries?orgId=1&from=now-3h&to=now&var-environment=gprd&var-type=patroni&var-fqdn=patroni-01-db-gprd.c.gitlab-production.internal&var-prometheus=Global) board to check for an increasing rate of slow queries (`Slow queries` graph). You can also check for blocked queries (`Blocked Queries` graph).
 
 ![](img/patroni-postgresql-queries.png)
 
 For troubleshooting blocked queries, see [this runbook](postgresql-locking.md)
 
-
 ### Checkpoint activity
-Checkpoint is the act of pushing all the write buffers to disk. A sudden increase of write activity (like indexing, repacking, etc) may also increase the rate of checkpoints, and can cause the system to slow down. You can see [this graph](https://dashboards.gitlab.com/d/000000224/postgresql-bloat?viewPanel=35&orgId=1&from=now-1h&to=now) to see how often checkpoints are taking place. Focus on the current leader. If checkpoints do ocurr too often (more than [checkpoint_warning](https://postgresqlco.nf/en/doc/param/checkpoint_warning/11/)) you will see a message in the logs, similar to
+
+Checkpoint is the act of pushing all the write buffers to disk. A sudden increase of write activity (like indexing, repacking, etc) may also increase the rate of checkpoints, and can cause the system to slow down. You can see [this graph](https://dashboards.gitlab.net/d/000000224/postgresql-bloat?viewPanel=35&orgId=1&from=now-1h&to=now) to see how often checkpoints are taking place. Focus on the current leader. If checkpoints do ocurr too often (more than [checkpoint_warning](https://postgresqlco.nf/en/doc/param/checkpoint_warning/11/)) you will see a message in the logs, similar to
 
 ``` LOG:  checkpoints are occurring too frequently (8 seconds apart) ```
 
 Althoug this is more like a warning message, it can be OK under heavy write activity.
 
-
 ### Check the load from queries
+
 Too much concurrent activity can affect performance. Refer to [this runbook](postgresql-query-load-evaluation.md) to evaluate server activity.
-
-
 
 ### Checks for pgBouncer
 
 #### Waiting clients
-The [PgBouncer Overview](https://dashboards.gitlab.com/d/PwlB97Jmk/pgbouncer-overview?orgId=1&from=now-3h&to=now) shows pgBouncer related information.
+
+The [PgBouncer Overview](https://dashboards.gitlab.net/d/PwlB97Jmk/pgbouncer-overview?orgId=1&from=now-3h&to=now) shows pgBouncer related information.
 
 ![](img/pgbouncer-overview.png)
 
 When troubleshooting, check that:
+
 - if `Waiting Client Connections per Pool` is  consistenly high, it may be related to slow queries taking most available connections in the pool, so others have to wait. Refer to [this runbook](postgresql-query-load-evaluation.md) to evaluate server activity.
 
 - if `Connection Saturation per Pool` is consistenly close to 100%, probably the database is not able to keep up the requests. Refer to [this runbook](postgresql-query-load-evaluation.md) to evaluate server activity.

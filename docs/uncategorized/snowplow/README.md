@@ -11,9 +11,11 @@ All of the SnowPlow pipeline components live in AWS GPRD account: 855262394183
 * [CloudWatch Dashboard](https://console.aws.amazon.com/cloudwatch/home?region=us-east-1#dashboards:name=SnowPlow)
 
 ## The Pipeline Diagram
+
 ![SnowPlow Diagram](../img/snowplow/snowplowdiagram.png "SnowPlow Diagram")
 
 ## What is important?
+
 If you are reading this, most likely one of two things has gone wrong. Either
 the SnowPlow pipeline has stopped accepting events or it has stopped writing
 events to the S3 bucket. Not accepting requests is a big problem and it
@@ -26,9 +28,12 @@ written. The raw events Kinesis stream has a data retention period of 48 hours.
 This can be altered if needed in a dire situation. [Kinesis Stream Configuration](https://ops.gitlab.net/gitlab-com/gitlab-com-infrastructure/blob/master/environments/aws-snowplow/main.tf#L384-443)
 
 ## Not accepting requests
+
 1. A quick curl check should give you a good response of **OK**. This same URL
 is used for individual collector nodes to check health against port 8000.
-  - ```curl https://snowplow.trx.gitlab.net/health```
+
+* ```curl https://snowplow.trx.gitlab.net/health```
+
 1. Log into GPRD AWS and verify that there are collector nodes in the
   **SnowPlowNLBTargetGroup** target group. If not, something has gone wrong
   with the **SnowPlowCollector** auto scaling group.
@@ -41,6 +46,7 @@ is used for individual collector nodes to check health against port 8000.
   service in AWS and look at the stream monitoring tabs.
 
 ## Not writing events out
+
 1. First, make sure the collectors are working ok by looking over the steps
   above. It's possible that if nothing is getting collected, nothing is being
   written out.
@@ -67,5 +73,6 @@ is used for individual collector nodes to check health against port 8000.
   is on the [CloudWatch SnowPlow dashboard](https://console.aws.amazon.com/cloudwatch/home?region=us-east-1#dashboards:name=SnowPlow).
 
 ## SSH Access to nodes
+
 You will need the ```snowplow.pem``` file from 1Password and you will connect to
 the nodes as the ```ec2-user```.

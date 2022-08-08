@@ -5,6 +5,7 @@
 You're likely here because you saw a message saying "Really low disk space left on _path_ on _host_: _very low number_%".
 
 Not a big deal (well, usually). There are two possible causes:
+
 1. A volume got full and we need to figure out how to make some space.
 1. A process is leaking file handlers.
 
@@ -32,11 +33,13 @@ Take a look at [how to fix file handler leaks](#file-handler-leaks) later in thi
 ### Anything else
 
 Check out if kernel sources have been installed and remove them:
+
 ```
 sudo apt-get purge linux-headers-*
 ```
 
 You can also run an autoremove:
+
 ```
 sudo apt-get autoremove
 ```
@@ -50,7 +53,7 @@ sudo find /var/log/gitlab -mtime +2 -exec rm {} \;
 If that didn't work you can also remove temporary files:
 
 ```
-$ sudo find /tmp -type f -mtime +2 -delete
+sudo find /tmp -type f -mtime +2 -delete
 ```
 
 If you're still short of free space you can try to delete everything older than 10 minutes.
@@ -78,6 +81,7 @@ need to be done in the console manually, and then made in terraform.
   done while the instance is running.
 * run `sudo lsblk` to see that the new space is available:
 Example:
+
 ```
 sudo lsblk
 NAME   MAJ:MIN RM  SIZE RO TYPE MOUNTPOINT
@@ -85,6 +89,7 @@ sdb      8:16   0   50G  0 disk /var/log
 sda      8:0    0  100G  0 disk
 └─sda1   8:1    0   20G  0 part /
 ```
+
 * run `growpart <device> <partition number>` to increase the partition to the
   space available. **Note that there is a space between the device and the
   partition number.**.
@@ -93,8 +98,10 @@ sda      8:0    0  100G  0 disk
 ## Root volume example
 sudo growpart /dev/sda 1
 ```
+
 * confirm that the space is now taken with `sudo lsblk`.
 Example:
+
 ```
 $sudo lsblk
 NAME   MAJ:MIN RM  SIZE RO TYPE MOUNTPOINT
@@ -102,9 +109,10 @@ sdb      8:16   0   50G  0 disk /var/log
 sda      8:0    0  100G  0 disk
 └─sda1   8:1    0  100G  0 part /
 ```
+
 * Resize the filesystem to use the new space with `sudo resize2fs <partition>`.
 Example:
+
 ```
 resize2fs /dev/sda1
 ```
-

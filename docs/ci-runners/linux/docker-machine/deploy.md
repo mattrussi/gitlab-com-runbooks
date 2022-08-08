@@ -40,6 +40,7 @@ to specify a different version of `docker-machine`.
       }
     },
     ```
+
     </details>
 1. [ ] Merge the merge request.
 1. [ ] Run the `apply_to_prod` job on the merge commit.
@@ -75,6 +76,7 @@ to specify a different version of `docker-machine`.
           }
         },
         ```
+
         </details>
     1. [ ] Update `default_attributes.cookbook-gitlab-runner.docker-machine`
     inside of
@@ -97,6 +99,7 @@ to specify a different version of `docker-machine`.
           }
         },
         ```
+
         </details>
 1. [ ] Merge the merge request.
 1. [ ] Run the `apply_to_prod` job on the merge commit.

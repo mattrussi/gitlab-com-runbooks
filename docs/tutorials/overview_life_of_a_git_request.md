@@ -1,6 +1,5 @@
 # Life of a Git Request
 
-
 ## Learning objectives
 
 * Learn which application and infrastructure components are involved in handling `git` requests.
@@ -17,7 +16,6 @@ As an added benefit, learning how to observe these interactions via client-side 
 explore git protocol details, such as how `git clone` and `git fetch` work by asking the server for an inventory of refs,
 comparing that to what is already stored locally, and then asking the server to send whichever objects are locally missing.
 
-
 ## Introduction
 
 This tutorial traces a few common `git` commands (e.g. `git clone`) through the GitLab.com infrastructure, contrasting Git-over-SSH and Git-over-HTTP.
@@ -27,20 +25,21 @@ Depending on whether the client cloned the git repo using SSH or HTTPS, the subs
 the GitLab infrastructure but ultimately arrive at the same place (Gitaly) and produce the same outcome for the end-user's `git` client.
 
 By learning how to trace a single request, view what characteristics are logged, and filter to find other similar requests, we can:
+
 * troubleshoot unexpected behavior
 * identify abnormal changes in request or response characteristics (e.g. huge increase in git-fetch rate for a specific repo from a specific client IP)
 * be aware of what is and is not observable with existing metrics, logging, and instrumentation
-
 
 ## Call path between GitLab application components
 
 See the GitLab product documentation, which includes a concise sequence diagram and explanation for both Git-over-HTTP and Git-over-SSH,
 illustrating the differences and similarities in these two distinct call paths.
 
-https://docs.gitlab.com/ee/development/architecture.html#gitlab-git-request-cycle
+<https://docs.gitlab.com/ee/development/architecture.html#gitlab-git-request-cycle>
 
 The above product documentation covers the relevant application components and their interactions -- the behaviors
 that are typical of any GitLab deployment.  The following notes cover additional details specific to the GitLab.com environment:
+
 * The "Git on client" component is the host running the end-user's `git` command, typically a host somewhere on the Internet or in GitLab.com's pool of CI/CD job runners.
 * The Workhorse and Rails components run in Kubernetes pods.
   * The HAProxy backends named `https_git` and `ssh` respectively delegate git-over-http and git-over-ssh to autonomous Kubernetes clusters in several zones.
@@ -75,6 +74,7 @@ Note that this form of tracing is not required to see the server-side log events
 These client-side tracing options only affect the verbosity of the client-side output.
 
 Git's built-in tracing is controlled via environment variables.  Especially useful examples:
+
 * Setting `GIT_TRACE=/tmp/git-trace.log` enables general tracing messages, including local and remote execution of built-in git commands.
   * Must use an absolute path for the filename.
   * If the output file exists, new output is appended (not overwritten).
@@ -82,6 +82,7 @@ Git's built-in tracing is controlled via environment variables.  Especially usef
 * Setting `GIT_TRACE_CURL=/tmp/git-curl.log` and `GIT_TRACE_CURL_NO_DATA=1` enables logging HTTP request and response headers for a Git-over-HTTP command.
 
 These and more tracing options are documented in:
+
 * the [git manpage](https://git-scm.com/docs/git#Documentation/git.txt-codeGITTRACEcode) or `man git`
 * the [Git source code documentation](https://github.com/git/git/blob/master/Documentation/git.txt)
 
@@ -115,6 +116,7 @@ Resolving deltas: 100% (11179/11179), done.
 In addition to the normal output of `git clone`, we can see several interesting things in the trace output.
 
 In the `GIT_TRACE` output:
+
 * We see "built-in" git commands, including both the high-level "clone" and low-level "fetch-pack", "index-pack", and "rev-list".
   * Git implicitly runs the build-in subcommand "fetch-pack" to download a git packfile containing the requested git objects.
   * Then git locally runs "index-pack" to create an index of the objects in that local packfile, and as part of that subcommand,
@@ -137,6 +139,7 @@ $ cat /tmp/git-trace.log
 ```
 
 In the `GIT_TRACE_CURL` output:
+
 * We can see 2 HTTP requests and their responses, both of which were run by the above "git fetch-pack" subcommand.
 * The first request (an HTTP GET to the endpoint `info/refs?service=git-upload-pack`) is requesting a list of git refs (branches, etc.).
 * The second request (an HTTP POST to the endpoint `<namespace>/<project>.git/git-upload-pack`) is requesting a git packfile containing the
@@ -219,7 +222,6 @@ $ cat /tmp/git-trace-curl.log | grep 'header:'
 
 How do these compare to what the server-side logs show?  Let's find out.
 
-
 ### Server-side view
 
 In the above example, we saw our git client send 2 HTTP requests:
@@ -233,6 +235,7 @@ $ grep 'Send header: .*HTTP' /tmp/git-trace-curl.log
 We would like to find those specific requests in the server-side logs via Kibana.
 
 Tips for searching Kibana for your requests:
+
 * Select the appropriate timespan matching when you send the requests.
 * Pick the Elasticsearch index associated with the service layer you are interested in (e.g. workhorse, rails, gitaly).
 * Filter to some distinctive combination of one or more attributes, such as:
@@ -244,7 +247,7 @@ Tips for searching Kibana for your requests:
 Find your public IP.  For example:
 
 ```shell
-$ curl -s https://ifconfig.me ; echo
+curl -s https://ifconfig.me ; echo
 ```
 
 #### Example: Workhorse logs
@@ -260,10 +263,9 @@ How to find your specific request's log events from Workhorse:
   * `json.correlation_id: <your request's unique correlation id>`
     * Note: Once you find your request in one service's log events, you can copy the correlation id to easily find its associated calls in other services' logs.
 
-Example: https://log.gprd.gitlab.net/goto/2d888afb38a415a53527a776a2f1e1ad
+Example: <https://log.gprd.gitlab.net/goto/2d888afb38a415a53527a776a2f1e1ad>
 
 <img src="overview_life_of_a_git_request/kibana-example.workhorse-request-logs.png">
-
 
 #### Example: Rails logs
 
@@ -280,10 +282,9 @@ How to find your specific request's log events from Rails:
   * `json.correlation_id: <your request's unique correlation id>`
     * Note: Once you find your request in one service's log events, you can copy the correlation id to easily find its associated calls in other services' logs.
 
-Example: https://log.gprd.gitlab.net/goto/c5e05b4882e6c736b766ce88d1a2474a
+Example: <https://log.gprd.gitlab.net/goto/c5e05b4882e6c736b766ce88d1a2474a>
 
 <img src="overview_life_of_a_git_request/kibana-example.rails-request-logs.png">
-
 
 #### Example: Gitaly logs
 
@@ -302,10 +303,9 @@ How to find your specific request's log events from Gitaly:
   * `json.grpc.request.glProjectPath: <part or all of the namespace_name/project_name>`
   * `json.grpc.request.glRepository: project-<project_id>`
 
-Example: https://log.gprd.gitlab.net/goto/72cf2707b5512f75014f15b4039e581f
+Example: <https://log.gprd.gitlab.net/goto/72cf2707b5512f75014f15b4039e581f>
 
 <img src="overview_life_of_a_git_request/kibana-example.gitaly-request-logs.png">
-
 
 ## Exercises
 
@@ -316,10 +316,10 @@ Example: https://log.gprd.gitlab.net/goto/72cf2707b5512f75014f15b4039e581f
 * Make 2 local clones of a repo, one using git-over-http and the other using git-over-ssh.
   In Kibana, find the log events triggered by both of your `git clone` commands.  How do they differ?
 
-
 ## Summary
 
 In this tutorial, we:
+
 * Outlined the major GitLab components involved in handling Git requests from clients: HAProxy, Workhorse, Rails, Gitaly, and others.
 * Used client-side tracing can show us exactly which HTTP requests the `git` client is sending.
 * Used Kibana to see how various GitLab components participated in handling those HTTP requests from our `git` client.
@@ -334,7 +334,6 @@ Practicing exploring the log events in Kibana will generally help you with futur
 Gain more familiarity with the Git protocol -- what HTTP endpoints are used by various common `git` commands and how those translate into
 GitLab-specific Gitaly gRPC method calls -- will help you understand, interpret, and ask more targeted questions about unexpected workload changes,
 such as a spike in the call rate or response time of `PostUploadPack` gRPC calls.
-
 
 ## Learn more
 
@@ -352,6 +351,6 @@ such as a spike in the call rate or response time of `PostUploadPack` gRPC calls
   * Looking at the live file is easier than looking in Chef because chef composes the file from attributes that are spread across several places (recipe, role, secrets).
 * Dashboard and Kibana links:
   * To explore trends in live traffic and get a sense of what "normal" looks like for Gitaly and its callers, you can play with the service dashboards or browse log events in Kibana.
-  * Git fleet (Workhorse and Rails): https://dashboards.gitlab.net/d/git-main/git-overview
-  * Gitaly: https://dashboards.gitlab.net/d/gitaly-main/gitaly-overview
-  * Gitaly Host Details: https://dashboards.gitlab.net/d/gitaly-host-detail/gitaly-host-detail
+  * Git fleet (Workhorse and Rails): <https://dashboards.gitlab.net/d/git-main/git-overview>
+  * Gitaly: <https://dashboards.gitlab.net/d/gitaly-main/gitaly-overview>
+  * Gitaly Host Details: <https://dashboards.gitlab.net/d/gitaly-host-detail/gitaly-host-detail>

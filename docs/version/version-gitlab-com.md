@@ -53,10 +53,9 @@ work and display the nodes running on the cluster:
 
 ### Deployment
 
-The application is deployed using Auto DevOps from the [version-gitlab-com](https://gitlab.com/gitlab-services/version-gitlab-com/) project. It uses a Review/Staging/Production scheme with no `.gitlab-ci.yml` file. If deployment problems are suspected, check for [failed or incomplete jobs](https://gitlab.com/gitlab-services/version-gitlab-com/pipelines), and check the [Environments](https://gitlab.com/gitlab-services/version-gitlab-com/environments) page to make sure everything looks reasonable. 
+The application is deployed using Auto DevOps from the [version-gitlab-com](https://gitlab.com/gitlab-services/version-gitlab-com/) project. It uses a Review/Staging/Production scheme with no `.gitlab-ci.yml` file. If deployment problems are suspected, check for [failed or incomplete jobs](https://gitlab.com/gitlab-services/version-gitlab-com/pipelines), and check the [Environments](https://gitlab.com/gitlab-services/version-gitlab-com/environments) page to make sure everything looks reasonable.
 
-> Note that the `gitlab-services` project is outside of the `gitlab-org` and `gitlab-com` namespaces.  Everyone does not automatically have access to this project.  If the above URL's result in `404` errors, chances are the user needs to be added to the project or group. 
-
+> Note that the `gitlab-services` project is outside of the `gitlab-org` and `gitlab-com` namespaces.  Everyone does not automatically have access to this project.  If the above URL's result in `404` errors, chances are the user needs to be added to the project or group.
 
 ### Project
 
@@ -71,12 +70,23 @@ The review and staging deployments share the `gs-staging` GCP project. The Kuber
 
 ### Database
 
-The production database resides in a regional (`us-east1`) HA CloudSQL instance. Currently this is `cloudsql-411f` (but could change if it is rebuilt). 
+The production database resides in a regional (`us-east1`) HA CloudSQL instance. Currently this is `cloudsql-411f` (but could change if it is rebuilt).
 
 This instance is shared among the projects in the `gitlab-services` group. The database schema for the version application is `default`. The username and password can be found in the `DATABASE_URL` CI variable in the project settings.
 
 Database backups are handled automatically by CloudSQL, and can be restored from the `Backups` tab of the CloudSQL instance.  There are also occasional exports placed in the `gs-production-db-backups` bucket. These will not be as up to date, but they are easier to copy and move around.
 
+### Database access for developers
+
+To grant access to database for developers (Example ARs: [16606](https://gitlab.com/gitlab-com/team-member-epics/access-requests/-/issues/16606), [13560](https://gitlab.com/gitlab-com/team-member-epics/access-requests/-/issues/13560)), `Cloud SQL Viewer` and `Viewer` roles should be granted to requesting user on gcloud projects `gs-production` and `gs-staging` for production and staging respectively.
+
+In some cases, specially when connecting user has IPv6 address, use `beta` switch with gcloud command as follows:
+
+```shell
+gcloud --project gs-production-efd5e8 beta sql connect cloudsql-411f -u default
+```
+
+Password for `default` user can be found from `DATABASE_URL` CI variable in project settings as mentioned [above](#database)
 
 ### Terraform
 
@@ -88,7 +98,7 @@ This workflow is different from other areas of the infrastructure. `services-bas
 
 Monitoring is handled from within the GitLab application, using the [built in monitoring functionality](https://gitlab.com/gitlab-services/version-gitlab-com/environments/1089581/metrics).  This is done to dogfood the built in monitoring tools.  Any shortcomings should be pointed out using [GitLab Product issues](https://gitlab.com/gitlab-org/gitlab/issues) and labelled for the Monitor team.  The Prometheus instance used is deployed via the [Kubernetes Integration](https://gitlab.com/groups/gitlab-services/-/clusters/74458) page.
 
-The issue discussing setup of the monitoring dashboards is https://gitlab.com/gitlab-services/version-gitlab-com/issues/185
+The issue discussing setup of the monitoring dashboards is <https://gitlab.com/gitlab-services/version-gitlab-com/issues/185>
 
 ### Checking the Ingress
 
@@ -111,6 +121,7 @@ Check for Events:
 ```
 kubectl describe deployment -n gitlab-managed-apps ingress-nginx-ingress-controller
 ```
+
  The bottom of this output will show health check failures, pod migrations and restarts, and other events which might effect availability of the ingress. `Events: <none>` means the problem is probably elsewhere.
 
 After 1 hour, these events are removed from the output, so historical information can be found in the [stackdriver logs](https://console.cloud.google.com/logs/viewer?interval=NO_LIMIT&project=gs-production-efd5e8&minLogLevel=0&expandAll=false&timestamp=2019-11-08T21:11:39.147000000Z&customFacets=&limitCustomFacetWidth=true&advancedFilter=resource.type%3D%22k8s_container%22%0Aresource.labels.project_id%3D%22gs-production-efd5e8%22%0Aresource.labels.location%3D%22us-east1%22%0Aresource.labels.cluster_name%3D%22gs-production-gke%22%0Aresource.labels.namespace_name%3D%22gitlab-managed-apps%22%0Alabels.k8s-pod%2Fapp%3D%22nginx-ingress%22%0Alabels.k8s-pod%2Frelease%3D%22ingress%22&scrollTimestamp=2019-11-08T21:11:28.371054395Z)
@@ -122,11 +133,11 @@ Currently, the integration does not have a way to upgrade components. To upgrade
 1. Submit a [production change issue](https://gitlab.com/gitlab-com/gl-infra/production/issues/new?issue%5Bassignee_id%5D=&issue%5Bmilestone_id%5D=) to schedule a maintenance window
 2. Go to the Kubernetes integration page, and uninstall the ingress controller
 3. Once it finishes, click the install button
-4. The IP address will change.  Take this new IP address and replace the existing one in the DNS for the wildcard entry on that page, as well as any site specific entries (`version.gitlab.com` in this case).  
+4. The IP address will change.  Take this new IP address and replace the existing one in the DNS for the wildcard entry on that page, as well as any site specific entries (`version.gitlab.com` in this case).
 
 ### Certificates
 
-Certificates are managed by the `cert-manager` pod installed via the [Kubernetes Integration](https://gitlab.com/groups/gitlab-services/-/clusters/74458) page. This will handle automatic renewals. All of this only works if all DNS entries named in the certificate point to the ingress IP. 
+Certificates are managed by the `cert-manager` pod installed via the [Kubernetes Integration](https://gitlab.com/groups/gitlab-services/-/clusters/74458) page. This will handle automatic renewals. All of this only works if all DNS entries named in the certificate point to the ingress IP.
 
 ### DNS
 
@@ -139,7 +150,7 @@ Switch contexts to the `gs-production-gke` cluster in the `gs-production` namesp
 The overall usage can be checked like this:
 
 ```
-$ kubectl top nodes 
+$ kubectl top nodes
 NAME                                              CPU(cores)   CPU%   MEMORY(bytes)   MEMORY%
 gke-gs-production-gke-node-pool-0-08bfc75b-v8dk   132m         1%     3183Mi          11%
 gke-gs-production-gke-node-pool-0-a6855491-hrx5   125m         1%     2534Mi          9%
@@ -193,5 +204,4 @@ version-gitlab-com-6491770-production   production-65577f7bc4-fs7v6             
 
 Currently, the only alerting is the pingdom blackbox alerts.  This is the same as what was set up in the previous AWS environment, but probably needs to be improved.  The preference is to use built in GitLab functionality where possible.
 
-There is work to improve the current alerting mechanism inside of the GitLab product.  This work can be followed here: https://gitlab.com/gitlab-org/gitlab/issues/30832
-
+There is work to improve the current alerting mechanism inside of the GitLab product.  This work can be followed here: <https://gitlab.com/gitlab-org/gitlab/issues/30832>

@@ -4,9 +4,10 @@
 
 [[_TOC_]]
 
-#  Sidekiq Service
+# Sidekiq Service
+
 * [Service Overview](https://dashboards.gitlab.net/d/sidekiq-main/sidekiq-overview)
-* **Alerts**: https://alerts.gitlab.net/#/alerts?filter=%7Btype%3D%22sidekiq%22%2C%20tier%3D%22sv%22%7D
+* **Alerts**: <https://alerts.gitlab.net/#/alerts?filter=%7Btype%3D%22sidekiq%22%2C%20tier%3D%22sv%22%7D>
 * **Label**: gitlab-com/gl-infra/production~"Service:Sidekiq"
 
 ## Logging
@@ -29,6 +30,7 @@
 * [Diagnosis with Kibana](../onboarding/kibana-diagnosis.md)
 * [../patroni/database_peak_analysis.md](../patroni/database_peak_analysis.md)
 * [Geo Patroni Cluster Management](../patroni/geo-patroni-cluster.md)
+* [OS Upgrade Reference Architecture](../patroni/os_upgrade_reference_architecture.md)
 * [../patroni/pg_collect_query_data.md](../patroni/pg_collect_query_data.md)
 * [../patroni/postgresql-locking.md](../patroni/postgresql-locking.md)
 * [How to provision the benchmark environment](../patroni/provisioning_bench_env.md)
@@ -41,6 +43,7 @@
 * [Redis-Sidekiq catchall workloads reduction](../redis/redis-sidekiq-catchall-workloads-reduction.md)
 * [A survival guide for SREs to working with Redis at GitLab](../redis/redis-survival-guide-for-sres.md)
 * [../redis/redis.md](../redis/redis.md)
+* [Container Registry Migration Phase 2](../registry/migration-phase2.md)
 * [Creating a Sidekiq Shard](creating-a-shard.md)
 * [Disabling a Sidekiq queue](disabling-a-queue.md)
 * [Pull mirror overdue queue is too large](large-pull-mirror-queue.md)
@@ -57,7 +60,6 @@
 * [Application Database Queries](../uncategorized/tracing-app-db-queries.md)
 * [Tweeting Guidelines](../uncategorized/tweeting-guidelines.md)
 <!-- END_MARKER -->
-
 
 <!-- ## Summary -->
 

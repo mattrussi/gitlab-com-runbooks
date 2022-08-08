@@ -26,7 +26,7 @@ local upscaleRatioPromExpression = |||
   )
   /
   sum by (%(targetAggregationLabels)s) (
-    sum_over_time(%(denominatorMetricName)s{%(sourceSelectorWithExtras)s}[%(burnRate)s])%(aggregationFilterExpr)s
+    sum_over_time(%(denominatorMetricName)s{%(sourceSelectorWithExtras)s}[%(burnRate)s])%(aggregationFilterExpr)s%(accountForMissingNumerator)s
   )
 |||;
 
@@ -73,8 +73,24 @@ local aggregationFilterExpr(targetAggregationSet) =
     '';
 
 // Upscale a RATIO from source metrics to target at the given target burnRate
-local upscaledRatioExpression(sourceAggregationSet, targetAggregationSet, burnRate, numeratorMetricName, denominatorMetricName, extraSelectors={}) =
+local upscaledRatioExpression(
+  sourceAggregationSet,
+  targetAggregationSet,
+  burnRate,
+  numeratorMetricName,
+  denominatorMetricName,
+  extraSelectors={},
+  accountForMissingNumerator
+      ) =
   local sourceSelectorWithExtras = sourceAggregationSet.selector + extraSelectors;
+  local accountForMissingNumeratorExpr = |||
+
+    and
+    %(numeratorMetricName)s{%(sourceSelectorWithExtras)s} >= 0
+  ||| % {
+    numeratorMetricName: numeratorMetricName,
+    sourceSelectorWithExtras: selectors.serializeHash(sourceSelectorWithExtras),
+  };
 
   upscaleRatioPromExpression % {
     burnRate: burnRate,
@@ -83,6 +99,8 @@ local upscaledRatioExpression(sourceAggregationSet, targetAggregationSet, burnRa
     denominatorMetricName: denominatorMetricName,
     sourceSelectorWithExtras: selectors.serializeHash(sourceSelectorWithExtras),
     aggregationFilterExpr: aggregationFilterExpr(targetAggregationSet),
+    accountForMissingNumerator: if accountForMissingNumerator then strings.indent(accountForMissingNumeratorExpr, 2)
+    else '',
   };
 
 // Upscale a RATE from source metrics to target at the given target burnRate
@@ -106,6 +124,7 @@ local upscaledApdexRatioExpression(sourceAggregationSet, targetAggregationSet, b
     numeratorMetricName=sourceAggregationSet.getApdexSuccessRateMetricForBurnRate('1h', required=true),
     denominatorMetricName=sourceAggregationSet.getApdexWeightMetricForBurnRate('1h', required=true),
     extraSelectors=extraSelectors,
+    accountForMissingNumerator=false
   );
 
 // Upscale an error RATIO from source metrics to target at the given target burnRate
@@ -117,6 +136,7 @@ local upscaledErrorRatioExpression(sourceAggregationSet, targetAggregationSet, b
     numeratorMetricName=sourceAggregationSet.getErrorRateMetricForBurnRate('1h', required=true),
     denominatorMetricName=sourceAggregationSet.getOpsRateMetricForBurnRate('1h', required=true),
     extraSelectors=extraSelectors,
+    accountForMissingNumerator=true,
   );
 
 // Upscale an apdex success RATE from source metrics to target at the given target burnRate
@@ -158,45 +178,6 @@ local upscaledErrorRateExpression(sourceAggregationSet, targetAggregationSet, bu
     metricName=sourceAggregationSet.getErrorRateMetricForBurnRate('1h', required=true),
     extraSelectors=extraSelectors
   );
-
-local upscaledSuccessRateExpression(sourceAggregationSet, targetAggregationSet, burnRate, extraSelectors={}) =
-  local sourceMetricName = sourceAggregationSet.getSuccessRateMetricForBurnRate('1h', required=false);
-  if sourceMetricName != null then
-    upscaledRateExpression(
-      sourceAggregationSet,
-      targetAggregationSet,
-      burnRate,
-      metricName=sourceMetricName,
-      extraSelectors=extraSelectors
-    )
-  else
-    local upscaledOpsRate = strings.chomp(upscaledRateExpression(
-      sourceAggregationSet,
-      targetAggregationSet,
-      burnRate,
-      metricName=sourceAggregationSet.getOpsRateMetricForBurnRate('1h', required=true),
-      extraSelectors=extraSelectors,
-    ));
-    local upscaledErrorRate = strings.chomp(upscaledRateExpression(
-      sourceAggregationSet,
-      targetAggregationSet,
-      burnRate,
-      metricName=sourceAggregationSet.getErrorRateMetricForBurnRate('1h', required=true),
-      extraSelectors=extraSelectors,
-    ));
-    |||
-      %(upscaledOpsRate)s
-      -
-      (
-        %(upscaledErrorRate)s or (
-          0 * %(indentedUpscaledOpsRate)s
-        )
-      )
-    ||| % {
-      upscaledOpsRate: upscaledOpsRate,
-      upscaledErrorRate: strings.chomp(strings.indent(upscaledErrorRate, 2)),
-      indentedUpscaledOpsRate: strings.chomp(strings.indent(upscaledOpsRate, 4)),
-    };
 
 // Generates a transformation expression that either uses direct, upscaled or
 // or combines both in cases where the source expression contains a mixture
@@ -270,5 +251,4 @@ local curry(upscaledExprType, upscaleExpressionFn) =
   combinedApdexWeightExpression: curry('apdexWeight', upscaledApdexWeightExpression),
   combinedOpsRateExpression: curry('opsRate', upscaledOpsRateExpression),
   combinedErrorRateExpression: curry('errorRate', upscaledErrorRateExpression),
-  combinedSuccessRateExpression: curry('successRate', upscaledSuccessRateExpression),
 }

@@ -4,6 +4,7 @@ local rateMetric = metricsCatalog.rateMetric;
 local toolingLinks = import 'toolinglinks/toolinglinks.libsonnet';
 local haproxyComponents = import './lib/haproxy_components.libsonnet';
 local kubeLabelSelectors = metricsCatalog.kubeLabelSelectors;
+local dependOnApi = import 'inhibit-rules/depend_on_api.libsonnet';
 
 local baseSelector = { type: 'web-pages' };
 
@@ -28,8 +29,11 @@ metricsCatalog.serviceDefinition({
       errorRatio: 0.9999,
     },
   },
+  serviceDependencies: {
+    'google-cloud-storage': true,
+  },
   provisioning: {
-    vms: false,
+    vms: true,  // pages haproxy frontend still runs on vms
     kubernetes: true,
   },
 
@@ -61,7 +65,8 @@ metricsCatalog.serviceDefinition({
         main: { backends: ['pages_http'], toolingLinks: [] },
         // TODO: cny stage for pages?
       },
-      selector={ type: 'pages' },
+      selector={ type: { re: 'pages|web-pages' } },
+      dependsOn=dependOnApi.restComponents,
     ),
 
     loadbalancer_https: haproxyComponents.haproxyL4LoadBalancer(
@@ -71,7 +76,8 @@ metricsCatalog.serviceDefinition({
         main: { backends: ['pages_https'], toolingLinks: [] },
         // TODO: cny stage for pages?
       },
-      selector={ type: 'pages' },
+      selector={ type: { re: 'pages|web-pages' } },
+      dependsOn=dependOnApi.restComponents,
     ),
 
     server: {
@@ -105,6 +111,7 @@ metricsCatalog.serviceDefinition({
         toolingLinks.sentry(slug='gitlab/gitlab-pages'),
         toolingLinks.kibana(title='GitLab Pages', index='pages'),
       ],
+      dependsOn: dependOnApi.restComponents,
     },
 
     server_headers: {
@@ -129,6 +136,8 @@ metricsCatalog.serviceDefinition({
       ),
 
       significantLabels: ['fqdn'],
+
+      dependsOn: dependOnApi.restComponents,
     },
   },
 })

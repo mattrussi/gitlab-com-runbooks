@@ -54,11 +54,12 @@ def generate_header(service, tier)
 
 [[_TOC_]]
 
-#  <%= service["name"].capitalize %> Service
+# <%= service["name"].capitalize %> Service
+
 <% if service&.dig("observability", "monitors", "primary_grafana_dashboard") -%>
 * [Service Overview](https://dashboards.gitlab.net/d/<%=service["observability"]["monitors"]["primary_grafana_dashboard"]%>)
 <% end -%>
-* **Alerts**: https://alerts.gitlab.net/#/alerts?filter=%7Btype%3D%22<%= service_name %>%22%2C%20tier%3D%22<%= service["tier"] %>%22%7D
+* **Alerts**: <https://alerts.gitlab.net/#/alerts?filter=%7Btype%3D%22<%= service_name %>%22%2C%20tier%3D%22<%= service["tier"] %>%22%7D>
 <% if service["label"] -%>
 * **Label**: gitlab-com/gl-infra/production~"<%= service["label"] %>"
 <% end -%>

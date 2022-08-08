@@ -27,7 +27,7 @@ to install relevant software and connect to Windows.
 
 With GitLab Runner v13.10 we've added support for Graceful Shutdown for Windows runners. However, it still needs to be
 enabled for our Windows shared runners - by updating the runners to version 13.10 and updating our scripting around
-`wsrmX` runners management. This work is being tracked with the issue https://gitlab.com/gitlab-com/gl-infra/infrastructure/-/issues/12790.
+`wsrmX` runners management. This work is being tracked with the issue <https://gitlab.com/gitlab-com/gl-infra/reliability/-/issues/12790>.
 
 Until it's done, Graceful Shutdown needs to be considered as unsupported on our runner managers. Therefore to
 gracefully handle Runner shutdown on these managers, we need to work differently.
@@ -64,7 +64,7 @@ in reading Ryan Palo's [PowerShell Tutorial](https://simpleprogrammer.com/powers
 as it is written with those who hate PowerShell in mind and helps relate it to
 more familiar `bash` commands.
 
-1. `Get-Content` is a tool similar to `head`, `tail`, and `cat` on Linux. 
+1. `Get-Content` is a tool similar to `head`, `tail`, and `cat` on Linux.
    1. Ex. `Get-Content -Path .\logfile.log -TotalCount 5` will get the first 5 lines of a file.
    2. Ex. `Get-Content -Path .\logfile.log -Tail 5 -Wait` will get the last 5 lines of a file AND follow it for any changes.
    3. [`Get-Content` documentation](https://docs.microsoft.com/en-us/powershell/module/microsoft.powershell.management/get-content?view=powershell-7)
@@ -93,17 +93,20 @@ A simple pipeline is executed at the project [windows-srm-deadman-test](https://
 
 ### Shared Runners Manager Offline
 
-If a shared runners manager is [shown offline](https://gitlab.com/gitlab-com/gl-infra/infrastructure/issues/9186):
+If a shared runners manager is [shown offline](https://gitlab.com/gitlab-com/gl-infra/reliability/-/issues/9186):
 
 - If necessary, [download and install ScaleFT, AKA:- sft](https://gitlab.com/gitlab-com/runbooks/-/blob/master/docs/ci-runners/cicd/windows/connecting.md#required-software)
-   - [`macOS`](https://help.okta.com/en/prod/Content/Topics/Adv_Server_Access/docs/sft-osx.htm)
-   - [`debian/ubuntu`](https://help.okta.com/en/prod/Content/Topics/Adv_Server_Access/docs/sft-ubuntu.htm)
+  - [`macOS`](https://help.okta.com/en/prod/Content/Topics/Adv_Server_Access/docs/sft-osx.htm)
+  - [`debian/ubuntu`](https://help.okta.com/en/prod/Content/Topics/Adv_Server_Access/docs/sft-ubuntu.htm)
 - Connect to the windows runner manager by invoking this command from a terminal shell session on your workstation:
+
   ```
   sft rdp --via lb-bastion.windows-ci.gitlab.com windows-shared-runners-manager-1
   ```
+
 - Click Start Menu > Click Windows PowerShell > Right-click on Windows PowerShell sub-menu > Click Start as Administrator)
 - On the command-line in the PowerShell window invoke:
+
   ```
   C:\Gitlab-Runner\gitlab-runner.exe status
 
@@ -122,6 +125,7 @@ here if VM creation is failing or connections from the managers are failing. Thi
 the best first place to check when issues arise.
 
 - On the command-line in the PowerShell window invoke:
+
   ```
   Get-Content C:\Gitlab-Runner\autoscaler\autoscaler.log -tail 100 | Out-Host -Paging
   ```

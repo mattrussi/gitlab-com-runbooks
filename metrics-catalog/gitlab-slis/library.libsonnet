@@ -3,9 +3,9 @@ local aggregationSet = import 'servicemetrics/aggregation-set.libsonnet';
 
 local list = [
   sliDefinition.new({
-    name: 'rails_request_apdex',
+    name: 'rails_request',
     significantLabels: ['endpoint_id', 'feature_category', 'request_urgency'],
-    kind: sliDefinition.apdexKind,
+    kinds: [sliDefinition.apdexKind],
     description: |||
       The number of requests meeting their duration target based on the urgency
       of the endpoint. By default, a request should take no more than 1s. But
@@ -15,9 +15,9 @@ local list = [
     |||,
   }),
   sliDefinition.new({
-    name: 'graphql_query_apdex',
+    name: 'graphql_query',
     significantLabels: ['endpoint_id', 'feature_category', 'query_urgency'],
-    kind: sliDefinition.apdexKind,
+    kinds: [sliDefinition.apdexKind],
     description: |||
       The number of GraphQL queries meeting their duration target based on the urgency
       of the endpoint. By default, a query should take no more than 1s. We're working
@@ -25,7 +25,17 @@ local list = [
 
       Mutliple queries could be batched inside a single request.
     |||,
-
+  }),
+  sliDefinition.new({
+    name: 'customers_dot_requests',
+    significantLabels: ['endpoint_id'],
+    kinds: [sliDefinition.apdexKind, sliDefinition.errorRateKind],
+    featureCategory: 'fulfillment_platform',
+    description: |||
+      The number of CustomersDot requests meeting their duration target based on the urgency
+      of the endpoint. By default, a request should take no more than 0.4s. But
+      this can be adjusted by endpoint.
+    |||,
   }),
 ];
 

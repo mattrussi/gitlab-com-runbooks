@@ -7,8 +7,10 @@ local layout = import 'grafana/layout.libsonnet';
 local row = grafana.row;
 local selectors = import 'promql/selectors.libsonnet';
 local seriesOverrides = import 'grafana/series_overrides.libsonnet';
+local templates = import 'grafana/templates.libsonnet';
 local thresholds = import 'gitlab-dashboards/thresholds.libsonnet';
 local generalServicesDashboard = import 'general-services-dashboard.libsonnet';
+local template = grafana.template;
 
 // These charts have a very high interval factor, to create a wide trend line
 local INTERVAL = '1d';
@@ -57,7 +59,7 @@ local systemAvailabilityQuery(selectorHash, rangeInterval) =
   };
 
 // NB: this query takes into account values recorded in Prometheus prior to
-// https://gitlab.com/gitlab-com/gl-infra/infrastructure/-/issues/9689
+// https://gitlab.com/gitlab-com/gl-infra/reliability/-/issues/9689
 // Better fix proposed in https://gitlab.com/gitlab-com/gl-infra/scalability/-/issues/326
 // This is encoded in the `defaultSelector`
 local serviceAvailabilityQuery(selectorHash, metricName, rangeInterval) =
@@ -82,7 +84,7 @@ local serviceAvailabilityQuery(selectorHash, metricName, rangeInterval) =
   };
 
 // NB: this query takes into account values recorded in Prometheus prior to
-// https://gitlab.com/gitlab-com/gl-infra/infrastructure/-/issues/9689
+// https://gitlab.com/gitlab-com/gl-infra/reliability/-/issues/9689
 // Better fix proposed in https://gitlab.com/gitlab-com/gl-infra/scalability/-/issues/326
 // This is encoded in the `defaultSelector`
 local serviceAvailabilityMillisecondsQuery(selectorHash, metricName) =
@@ -160,6 +162,9 @@ basic.dashboard(
   time_from='now-1M/M',
   time_to='now-1d/d',
 )
+.addTemplate(
+  templates.slaType,
+)
 .addPanel(
   row.new(title='Overall System Availability'),
   gridPos={
@@ -170,14 +175,15 @@ basic.dashboard(
   }
 )
 .addPanels(
+  local systemSelector = { sla_type: '$sla_type' };
   layout.columnGrid([[
     basic.slaStats(
       title='GitLab.com Availability',
-      query=systemAvailabilityQuery({}, '$__range'),
+      query=systemAvailabilityQuery(systemSelector, '$__range'),
     ),
     basic.slaStats(
       title='',
-      query=serviceAvailabilityMillisecondsQuery({}, 'sla:gitlab:ratio'),
+      query=serviceAvailabilityMillisecondsQuery(systemSelector, 'sla:gitlab:ratio'),
       legendFormat='',
       displayName='Budget Spent',
       decimals=1,
@@ -187,7 +193,7 @@ basic.dashboard(
     ),
     grafanaCalHeatmap.heatmapCalendarPanel(
       'Calendar',
-      query=systemAvailabilityQuery({}, '1d'),
+      query=systemAvailabilityQuery(systemSelector, '1d'),
       legendFormat='',
       datasource='$PROMETHEUS_DS',
     ),
@@ -195,7 +201,7 @@ basic.dashboard(
       title='Overall SLA over time period - gitlab.com',
       description='Rolling average SLO adherence across all primary services. Higher is better.',
       yAxisLabel='SLA',
-      query=systemAvailabilityQuery({}, '1d'),
+      query=systemAvailabilityQuery(systemSelector, '1d'),
       legendFormat='gitlab.com SLA',
       interval=INTERVAL,
       points=true,

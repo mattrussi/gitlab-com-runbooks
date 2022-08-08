@@ -1,6 +1,7 @@
 local metricsCatalog = import 'servicemetrics/metrics.libsonnet';
-local rateMetric = metricsCatalog.rateMetric;
+local combined = metricsCatalog.combined;
 local customApdex = metricsCatalog.customApdex;
+local rateMetric = metricsCatalog.rateMetric;
 local gitalyHelper = import 'service-archetypes/helpers/gitaly.libsonnet';
 local toolingLinks = import 'toolinglinks/toolinglinks.libsonnet';
 
@@ -9,7 +10,7 @@ metricsCatalog.serviceDefinition({
   tier: 'stor',
 
   // disk_performance_monitoring requires disk utilisation metrics are currently reporting correctly for
-  // HDD volumes, see https://gitlab.com/gitlab-com/gl-infra/infrastructure/-/issues/10248
+  // HDD volumes, see https://gitlab.com/gitlab-com/gl-infra/reliability/-/issues/10248
   // as such, we only record this utilisation metric on IO subset of the fleet for now.
   tags: ['golang', 'disk_performance_monitoring'],
 
@@ -35,13 +36,21 @@ metricsCatalog.serviceDefinition({
 
       local baseSelector = {
         job: 'gitaly',
-        grpc_service: { ne: 'gitaly.OperationService' },
+        grpc_service: { ne: ['gitaly.OperationService'] },
       },
-      local baseSelectorApdex = baseSelector {
-        grpc_method: { noneOf: gitalyHelper.gitalyApdexIgnoredMethods },
+      local mainApdexSelector = baseSelector {
+        grpc_method: { noneOf: gitalyHelper.gitalyApdexIgnoredMethods + gitalyHelper.gitalyApdexSlowMethods },
+      },
+      local slowApdexSelector = baseSelector {
+        grpc_method: { oneOf: gitalyHelper.gitalyApdexSlowMethods },
       },
 
-      apdex: gitalyHelper.grpcServiceApdex(baseSelectorApdex),
+      apdex: combined(
+        [
+          gitalyHelper.grpcServiceApdex(mainApdexSelector),
+          gitalyHelper.grpcServiceApdex(slowApdexSelector, satisfiedThreshold=10, toleratedThreshold=30),
+        ]
+      ),
 
       requestRate: rateMetric(
         counter='gitaly_service_client_requests_total',
@@ -66,13 +75,17 @@ metricsCatalog.serviceDefinition({
     goserver_op_service: {
       userImpacting: true,
       featureCategory: 'gitaly',
+      trafficCessationAlertConfig: false,
       description: |||
         This SLI monitors requests to Gitaly's OperationService, via its GRPC endpoint.
         OperationService methods are generally expected to be slower than other Gitaly endpoints
         and this is reflected in the SLI.
       |||,
 
-      local baseSelector = { job: 'gitaly', grpc_service: 'gitaly.OperationService' },
+      local baseSelector = {
+        job: 'gitaly',
+        grpc_service: 'gitaly.OperationService',
+      },
       // The OperationService apdex is disabled primarily to deal with very slow
       // operations producing a lot of alerts.
       // Excluding those RPCs is not a very effective strategy, as OperationService
@@ -110,6 +123,9 @@ metricsCatalog.serviceDefinition({
     gitalyruby: {
       userImpacting: true,
       featureCategory: 'gitaly',
+      trafficCessationAlertConfig: {
+        component_node: false,  // No need to alert on GitalyRuby traffic on individual nodes
+      },
       description: |||
         This SLI monitors requests to Gitaly's Ruby sidecar, known as Gitaly-Ruby. All requests made to
         Gitaly-Ruby are monitored in aggregate, via its GRPC interface.

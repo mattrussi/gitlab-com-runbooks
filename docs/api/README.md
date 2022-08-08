@@ -4,9 +4,10 @@
 
 [[_TOC_]]
 
-#  Api Service
+# Api Service
+
 * [Service Overview](https://dashboards.gitlab.net/d/api-main/api-overview)
-* **Alerts**: https://alerts.gitlab.net/#/alerts?filter=%7Btype%3D%22api%22%2C%20tier%3D%22sv%22%7D
+* **Alerts**: <https://alerts.gitlab.net/#/alerts?filter=%7Btype%3D%22api%22%2C%20tier%3D%22sv%22%7D>
 * **Label**: gitlab-com/gl-infra/production~"Service:API"
 
 ## Logging
@@ -28,7 +29,8 @@
 * [Service Locations](../cloudflare/services-locations.md)
 * [Cloudflare: Terraform Configuration](../cloudflare/terraform.md)
 * [Chef Tips and Tools](../config_management/chef-workflow.md)
-* [customers.gitlab.com](../customers/api-key-rotation.md)
+* [customers.gitlab.com](../customersdot/api-key-rotation.md)
+* [CustomersDot main troubleshoot documentation](../customersdot/overview.md)
 * [../elastic/elastic-cloud.md](../elastic/elastic-cloud.md)
 * [../elastic/elasticsearch-integration-in-gitlab.md](../elastic/elasticsearch-integration-in-gitlab.md)
 * [Blocking and disabling things in the HAProxy load balancers](../frontend/block-things-in-haproxy.md)
@@ -40,6 +42,7 @@
 * [Git Storage Servers](../gitaly/storage-servers.md)
 * [Kubernetes-Agent Basic Troubleshooting](../kas/kubernetes-agent-basic-troubleshooting.md)
 * [Kubernetes-Agent Disable Integrations](../kas/kubernetes-agent-disable-integrations.md)
+* [Ad hoc observability tools on Kubernetes nodes](../kube/k8s-adhoc-observability.md)
 * [../kube/k8s-oncall-setup.md](../kube/k8s-oncall-setup.md)
 * [Kubernetes](../kube/kubernetes.md)
 * [Alertmanager Notification Failures](../monitoring/alertmanager-notification-failures.md)
@@ -60,6 +63,7 @@
 * [A survival guide for SREs to working with Redis at GitLab](../redis/redis-survival-guide-for-sres.md)
 * [Database Connection Pool Saturation](../registry/app-db-conn-pool-saturation.md)
 * [../registry/migration-failure-scenarios.md](../registry/migration-failure-scenarios.md)
+* [Container Registry Migration Phase 2](../registry/migration-phase2.md)
 * [High Number of Overdue Online GC Tasks](../registry/online-gc-high-overdue-tasks.md)
 * [Sidekiq Queue Out of Control](../sidekiq/large-sidekiq-queue.md)
 * [A survival guide for SREs to working with Sidekiq at GitLab](../sidekiq/sidekiq-survival-guide-for-sres.md)
@@ -74,9 +78,9 @@
 * [Ruby profiling](../uncategorized/ruby-profiling.md)
 * [Shared Configurations](../uncategorized/shared-configurations.md)
 * [Application Database Queries](../uncategorized/tracing-app-db-queries.md)
+* [Vault Secrets Management](../vault/vault.md)
 * [Static repository objects caching](../web/static-repository-objects-caching.md)
 <!-- END_MARKER -->
-
 
 ## Summary
 
@@ -94,9 +98,9 @@ Redis Sidekiq and Gitaly.
 
 ## Architecture
 
-* [Handbook architecture overview for GitLab.com][1]
-* [Handbook K8s Cluster configuration][2]
-* [Handbook K8s architecture overview][3]
+* [Handbook architecture overview for GitLab.com](https://about.gitlab.com/handbook/engineering/infrastructure/production/architecture/#gitlab-com-architecture)
+* [Handbook K8s Cluster configuration](https://about.gitlab.com/handbook/engineering/infrastructure/production/architecture/#cluster-configuration)
+* [Handbook K8s architecture overview](https://gitlab.com/gitlab-com/gl-infra/readiness/-/tree/master/library/kubernetes)
 
 ### Logical Architecture
 
@@ -172,7 +176,7 @@ traffic costs.  The API canary stage resides on the regional cluster.
 
 Most objects deployed are installed as part of the GitLab Helm Chart's Webservice
 Chart:
-https://gitlab.com/gitlab-org/charts/gitlab/-/tree/master/charts/gitlab/charts/webservice
+<https://gitlab.com/gitlab-org/charts/gitlab/-/tree/master/charts/gitlab/charts/webservice>
 
 This chart leverages multiple `webservice` deployments pending the configuration
 of the deployments key associated with the ingress path.  Currently we are
@@ -203,16 +207,16 @@ on a business day and 2.5k to 3.5k requests/s to
 Performance of the API service mainly depends on these factors:
 
 * Node Pool:
-  * https://ops.gitlab.net/gitlab-com/gitlab-com-infrastructure/-/blob/07a258b2420778c1f49839367ea9fb1b1ca13460/environments/gprd/gke-zonal.tf#L51-55
+  * <https://ops.gitlab.net/gitlab-com/gitlab-com-infrastructure/-/blob/07a258b2420778c1f49839367ea9fb1b1ca13460/environments/gprd/gke-zonal.tf#L51-55>
   * This configuration exists for EACH cluster
 * Node type:
-  https://ops.gitlab.net/gitlab-com/gitlab-com-infrastructure/-/blob/07a258b2420778c1f49839367ea9fb1b1ca13460/environments/gprd/variables.tf#L354
+  <https://ops.gitlab.net/gitlab-com/gitlab-com-infrastructure/-/blob/07a258b2420778c1f49839367ea9fb1b1ca13460/environments/gprd/variables.tf#L354>
 * Number of puma worker_processes: [`sum(puma_workers{env="gprd",
   type="api"})`](https://thanos-query.ops.gitlab.net/graph?g0.range_input=1h&g0.max_source_resolution=0s&g0.expr=sum(puma_workers%7Benv%3D%22gprd%22%2C%20type%3D%22api%22%7D)&g0.tab=0)
 * Number of puma threads: [`sum(puma_max_threads{env="gprd",
   type="api"})`](https://thanos-query.ops.gitlab.net/graph?g0.range_input=1h&g0.max_source_resolution=0s&g0.expr=sum(puma_max_threads%7Benv%3D%22gprd%22%2C%20type%3D%22api%22%7D)&g0.tab=0)
 
-See https://gitlab.com/gitlab-com/gl-infra/delivery/-/issues/1592 for a detailed
+See <https://gitlab.com/gitlab-com/gl-infra/delivery/-/issues/1592> for a detailed
 analysis.
 
 **It is important to always have enough API capacity so that rolling deployments
@@ -238,7 +242,6 @@ for published limits and
 [../rate-limiting/README.md](../rate-limiting/README.md]) for details of our
 rate limiting. A few customer IPs are still excluded from rate limiting.
 
-
 ## Scalability
 
 The API service is stateless and mostly CPU bound. Scaling can easily be done
@@ -250,17 +253,17 @@ forecast](https://gitlab-com.gitlab.io/gl-infra/tamland/saturation.html).
 
 Scaling is currently handled automatically by the Horizontal Pod Autoscaler.
 The configuration for such is defined here:
-https://gitlab.com/gitlab-com/gl-infra/k8s-workloads/gitlab-com/-/blob/8b9068833c57a1d986a6461e1f6b5aa61b79b7e4/releases/gitlab/values/gprd.yaml.gotmpl#L32-35
+<https://gitlab.com/gitlab-com/gl-infra/k8s-workloads/gitlab-com/-/blob/8b9068833c57a1d986a6461e1f6b5aa61b79b7e4/releases/gitlab/values/gprd.yaml.gotmpl#L32-35>
 
 Scaling vertically by using a more powerful machine type also can be considered.
 
 ## Availability
 
 Healthchecks are defined here:
-https://gitlab.com/gitlab-com/gl-infra/chef-repo/-/blob/1780142fd85f65e6599f94296f54df7da7346158/roles/gprd-base-lb-fe-config.json#L298
+<https://gitlab.com/gitlab-com/gl-infra/chef-repo/-/blob/1780142fd85f65e6599f94296f54df7da7346158/roles/gprd-base-lb-fe-config.json#L298>
 
 See our cookbook for how this configuration is built:
-https://gitlab.com/gitlab-cookbooks/gitlab-haproxy/
+<https://gitlab.com/gitlab-cookbooks/gitlab-haproxy/>
 
 ### Healthcheck Flow
 
@@ -305,7 +308,6 @@ removes the Pod from servicing any future requests.
 Workhorse uses a script embedded into it's container that is executed.  Should a
 liveness probe fail for any Pods, Kubernetes will eventually restart the Pod.
 
-
 ```mermaid
 sequenceDiagram
   participant a as Kubernetes
@@ -324,9 +326,9 @@ a special workhorse configuration to prevent unnecessary HTTP502 errors from
 occurring during deployments.
 
 1. We extend how long a Pod waits until it is `SIGKILL`'d by Kuberentes -
-   https://gitlab.com/gitlab-com/gl-infra/k8s-workloads/gitlab-com/-/blob/8b9068833c57a1d986a6461e1f6b5aa61b79b7e4/releases/gitlab/values/values.yaml.gotmpl#L664
+   <https://gitlab.com/gitlab-com/gl-infra/k8s-workloads/gitlab-com/-/blob/8b9068833c57a1d986a6461e1f6b5aa61b79b7e4/releases/gitlab/values/values.yaml.gotmpl#L664>
 1. We enable apiLong Polling
-https://gitlab.com/gitlab-com/gl-infra/k8s-workloads/gitlab-com/-/blob/8b9068833c57a1d986a6461e1f6b5aa61b79b7e4/releases/gitlab/values/values.yaml.gotmpl#L695
+<https://gitlab.com/gitlab-com/gl-infra/k8s-workloads/gitlab-com/-/blob/8b9068833c57a1d986a6461e1f6b5aa61b79b7e4/releases/gitlab/values/values.yaml.gotmpl#L695>
 
 With API Long Polling configured, we for requests that are destined for
 `/api/v4/jobs/request` to sit in a lengthy poll such that Runner clients are not
@@ -336,7 +338,7 @@ respond with a massive amount of HTTP502's as connections are severed when a Pod
 is removed prior to responding to the client.
 
 A plan of action to make this better:
-https://gitlab.com/gitlab-org/gitlab/-/issues/331460
+<https://gitlab.com/gitlab-org/gitlab/-/issues/331460>
 
 <!-- ## Security/Compliance -->
 
@@ -349,7 +351,7 @@ catalog](https://gitlab.com/gitlab-com/runbooks/-/blob/master/metrics-catalog/se
 
 ## Links to further Documentation
 
-[1]: https://about.gitlab.com/handbook/engineering/infrastructure/production/architecture/#gitlab-com-architecture "Handbook architecture overview for GitLab.com"
-[2]: https://about.gitlab.com/handbook/engineering/infrastructure/production/architecture/#cluster-configuration "Handbook K8s Cluster configuration"
-[3]: https://gitlab.com/gitlab-com/gl-infra/readiness/-/tree/master/library/kubernetes "General K8s design docs"
-[4]: https://gitlab.com/groups/gitlab-com/gl-infra/-/epics/271 "API K8s Migration Epic"
+1. [Handbook architecture overview for GitLab.com](https://about.gitlab.com/handbook/engineering/infrastructure/production/architecture/#gitlab-com-architecture)
+1. [Handbook K8s Cluster configuration](https://about.gitlab.com/handbook/engineering/infrastructure/production/architecture/#cluster-configuration)
+1. [General K8s design docs](https://gitlab.com/gitlab-com/gl-infra/readiness/-/tree/master/library/kubernetes)
+1. [API K8s Migration Epic](https://gitlab.com/groups/gitlab-com/gl-infra/-/epics/271)

@@ -29,13 +29,15 @@ console, or
 
 # Connecting to the Cloud SQL database
 
-
 1. Retrieve the user and password for the database from the application configuration (GKMS for Chef, Terraform state, other...)
 2. Find the instance you are targetting:
+
    ```
    gcloud --project gitlab-production sql instances list
    ```
+
 3. Connect to the instance using `gcloud` (paste in the password when prompted):
+
    ```
    gcloud --project gitlab-production sql connect <instance> -u <user>
    ```

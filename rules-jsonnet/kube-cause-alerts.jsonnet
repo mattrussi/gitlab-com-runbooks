@@ -40,7 +40,7 @@ local rules = {
             runbook: 'docs/kube/kubernetes.md#alerts',
           },
           annotations: {
-            title: 'Containers for the `{{ $labels.type }}` service, `{{ $labels.stage }}` are unable to unable to start.',
+            title: 'Containers for the `{{ $labels.type }}` service, `{{ $labels.stage }}` are unable to start.',
             description: |||
               More than 50% of the deployment's `maxSurge` setting consists of containers unable to start for reasons other than
               `ContainerCreating`.

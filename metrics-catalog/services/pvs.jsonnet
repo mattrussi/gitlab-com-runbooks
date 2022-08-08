@@ -19,7 +19,7 @@ metricsCatalog.serviceDefinition({
       configurationName='pipeline-validation-service',
       projectId='glsec-trust-safety-live',
       gcpRegion='us-central1',
-      ignoreTrafficCessation=false,
+      trafficCessationAlertConfig=true,
       apdexSatisfactoryLatency=1024,  // Latency, in milliseconds
       team='pipeline_validation',
       additionalToolingLinks=[

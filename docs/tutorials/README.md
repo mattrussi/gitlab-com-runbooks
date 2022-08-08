@@ -3,6 +3,7 @@
 ## Purpose
 
 This Tutorials section provides a public area for sharing knowledge with teammates related to operating GitLab at scale.  This helps supports:
+
 * **Onboarding new members of the infrastructure team:**
   This orientation style of tutorial progressively introduces topics along an orderly learning path to establish a broad baseline understanding
   of the major components and their purposes, their interactions and interfaces, their behaviors and ways to observe them.  This general base
@@ -20,7 +21,6 @@ This Tutorials section provides a public area for sharing knowledge with teammat
 Sharing reusable techniques through a curated set of overviews and demos helps us rely less on tribal knowledge.
 Asynchronous knowledge sharing is especially important in GitLab's globally distributed work model, where colleagues in widely separated time zones
 rarely have the chance to informally share tips and insights.
-
 
 ## Suggested guidelines for contributing tutorials
 
@@ -47,11 +47,11 @@ These tutorials tend to be more conceptual than hands-on but still aim to give p
   A high level introduction to the major frontend and backend components of GitLab.com
 * [Life of a git request](./overview_life_of_a_git_request.md)  Life of a git request:
   Tracing a git-fetch request through the gitlab.com infrastructure, contrasting git-over-ssh and git-over-http.
-* [IN PROGRESS](https://gitlab.com/gitlab-com/gl-infra/infrastructure/-/issues/10390)  Life of a sidekiq job:
+* [IN PROGRESS](https://gitlab.com/gitlab-com/gl-infra/reliability/-/issues/10390)  Life of a sidekiq job:
   A high level introduction to asynchronous background job processing, including job creation, scheduling, execution, and callbacks
-* [TODO](https://gitlab.com/gitlab-com/gl-infra/infrastructure/-/issues/10391)  Tour of Postgres HA:
+* [TODO](https://gitlab.com/gitlab-com/gl-infra/reliability/-/issues/10391)  Tour of Postgres HA:
   Walk through the high availability and load balancing mechanisms supporting the main relational database.
-* [TODO](https://gitlab.com/gitlab-com/gl-infra/infrastructure/-/issues/10400)  Tour of Redis at GitLab.com:
+* [TODO](https://gitlab.com/gitlab-com/gl-infra/reliability/-/issues/10400)  Tour of Redis at GitLab.com:
   Tour the Redis clusters, their distinct roles as shared caching and queuing datastores, their high availability mechanisms, and scaling constraints.
 
 ## How-to: Demos of analytical methods and exploratory tools
@@ -75,19 +75,20 @@ These tutorials demonstrate generalizable methods or tools for analyzing interes
 These tutorials focus on finding, understanding, and using the metrics collected by Prometheus from hosts and services.
 
 Tutorials list:
-* [TODO](https://gitlab.com/gitlab-com/gl-infra/infrastructure/-/issues/10392)  Intro to GitLab-specific metrics catalogue:
+
+* [TODO](https://gitlab.com/gitlab-com/gl-infra/reliability/-/issues/10392)  Intro to GitLab-specific metrics catalogue:
   A quick tour of what metrics are available and how to explore them using basic PromQL filtering and aggregation to answer common questions
-* [TODO](https://gitlab.com/gitlab-com/gl-infra/infrastructure/-/issues/10393)  What does this apdex metric mean?
+* [TODO](https://gitlab.com/gitlab-com/gl-infra/reliability/-/issues/10393)  What does this apdex metric mean?
   Tracing a composite metric back through its recording-rule transformations, down to the original underlying raw metrics exposed by the system component being measured
-* [TODO](https://gitlab.com/gitlab-com/gl-infra/infrastructure/-/issues/10394)  How are metrics collected by Prometheus?
+* [TODO](https://gitlab.com/gitlab-com/gl-infra/reliability/-/issues/10394)  How are metrics collected by Prometheus?
   A tour of the prometheus exporters we use and what sources of information they sample
-* [TODO](https://gitlab.com/gitlab-com/gl-infra/infrastructure/-/issues/10395)  How are metrics exposed by gitlab-rails?
+* [TODO](https://gitlab.com/gitlab-com/gl-infra/reliability/-/issues/10395)  How are metrics exposed by gitlab-rails?
   Learn how to see for yourself: What events increment that counter?  What points in the code start and end this latency measurement?
-* [TODO](https://gitlab.com/gitlab-com/gl-infra/infrastructure/-/issues/10396)  How are metrics exposed by gitlab-workhorse?
+* [TODO](https://gitlab.com/gitlab-com/gl-infra/reliability/-/issues/10396)  How are metrics exposed by gitlab-workhorse?
   Learn how to see for yourself: What events increment that counter?  What points in the code start and end this latency measurement?
-* [TODO](https://gitlab.com/gitlab-com/gl-infra/infrastructure/-/issues/10397)  How are metrics exposed by gitaly?
+* [TODO](https://gitlab.com/gitlab-com/gl-infra/reliability/-/issues/10397)  How are metrics exposed by gitaly?
   Learn how to see for yourself: What events increment that counter?  What points in the code start and end this latency measurement?
-* [TODO](https://gitlab.com/gitlab-com/gl-infra/infrastructure/-/issues/10398)  How are metrics exposed by gitlab-runners?
+* [TODO](https://gitlab.com/gitlab-com/gl-infra/reliability/-/issues/10398)  How are metrics exposed by gitlab-runners?
   Learn how to see for yourself: What events increment that counter? What points in the code start and end this latency measurement?
 
 ### Performance analysis and profiling
@@ -105,6 +106,7 @@ Understanding where a system spends its time, memory, I/O, and other resources h
 most relevant areas -- the places in the code or infrastructure that represent a capacity constraint, a tipping point, or a potentially large efficiency gain.
 
 Tutorials list:
+
 * [How to use flamegraphs for performance profiling](./how_to_use_flamegraphs_for_perf_profiling.md):
   Find what code paths we spend the most time in.
 * **(TODO)**  Demo: Profiling a process starved for disk I/O, including variants such as synchronous reads, synchronous writes, serial I/O, frequent fsyncs

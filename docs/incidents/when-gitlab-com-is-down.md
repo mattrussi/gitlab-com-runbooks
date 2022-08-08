@@ -20,8 +20,8 @@ Application configuration changes are made by applying changes in CI pipelines o
 When the canonical source of these projects are unavailable, it will be necessary to push and create MRs directly on the mirrors.
 
 - Ensure that MRs are enabled for the projects on `ops`:
-  -  https://ops.gitlab.net/gitlab-com/gl-infra/chef-repo
-  -  https://ops.gitlab.net/gitlab-com/gl-infra/k8s-workloads/gitlab-com
+  - <https://ops.gitlab.net/gitlab-com/gl-infra/chef-repo>
+  - <https://ops.gitlab.net/gitlab-com/gl-infra/k8s-workloads/gitlab-com>
 - Ensure that you have a remote for `ops`:
   - chef-repo: `git remote add ops git@ops.gitlab.net:gitlab-com/gl-infra/chef-repo`
   - k8s-workloads/gitlab-com: `git remote add ops git@ops.gitlab.net:gitlab-com/gl-infra/k8s-workloads/gitlab-com`

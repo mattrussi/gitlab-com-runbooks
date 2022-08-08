@@ -9,11 +9,11 @@ groups:
     for: 5m
     annotations:
       title: The primary_server SLI of the redis-cache service (`{{ $labels.stage
-        }}` stage) has not received any traffic in the past 30 minutes
+        }}` stage) has not received any traffic in the past 30m
       description: |
         Operations on the Redis primary for Redis Cache instance.
 
-        This alert signifies that the SLI is reporting a cessation of traffic, but the signal is not absent.
+        This alert signifies that the SLI is reporting a cessation of traffic; the signal is present, but is zero.
       grafana_dashboard_id: redis-cache-main/redis-cache-overview
       grafana_dashboard_link: https://dashboards.gitlab.net/d/redis-cache-main/redis-cache-overview?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-stage={{ $labels.stage }}
@@ -37,12 +37,14 @@ groups:
       slo_alert: "no"
       user_impacting: "yes"
     expr: |
-      gitlab_component_ops:rate_30m{type="redis-cache", component="primary_server", stage="main", monitor="global"} == 0
+      gitlab_component_ops:rate_30m{component="primary_server",monitor="global",stage="main",type="redis-cache"} == 0
+      and
+      gitlab_component_ops:rate_30m{component="primary_server",monitor="global",stage="main",type="redis-cache"} offset 1h >= 0.16666666666666666
   - alert: RedisCacheServicePrimaryServerTrafficAbsent
     for: 30m
     annotations:
       title: The primary_server SLI of the redis-cache service (`{{ $labels.stage
-        }}` stage) has not reported any traffic in the past 30 minutes
+        }}` stage) has not reported any traffic in the past 30m
       description: |
         Operations on the Redis primary for Redis Cache instance.
 
@@ -72,9 +74,9 @@ groups:
       slo_alert: "no"
       user_impacting: "yes"
     expr: |
-      gitlab_component_ops:rate_5m{type="redis-cache", component="primary_server", stage="main", monitor="global"} offset 1h
+      gitlab_component_ops:rate_5m{component="primary_server",monitor="global",stage="main",type="redis-cache"} offset 1h
       unless
-      gitlab_component_ops:rate_5m{type="redis-cache", component="primary_server", stage="main", monitor="global"}
+      gitlab_component_ops:rate_5m{component="primary_server",monitor="global",stage="main",type="redis-cache"}
   - alert: RedisCacheServiceRailsCacheApdexSLOViolation
     for: 2m
     annotations:
@@ -175,17 +177,17 @@ groups:
       )
       and on(env,environment,tier,type,stage,component)
       (
-        sum by(env,environment,tier,type,stage,component) (gitlab_component_ops:rate_6h{component="rails_cache",monitor="global",type="redis-cache"}) >= 1
+        sum by(env,environment,tier,type,stage,component) (gitlab_component_ops:rate_6h{component="rails_cache",monitor="global",type="redis-cache"}) >= 0.16667
       )
   - alert: RedisCacheServiceRailsCacheTrafficCessation
     for: 5m
     annotations:
       title: The rails_cache SLI of the redis-cache service (`{{ $labels.stage }}`
-        stage) has not received any traffic in the past 30 minutes
+        stage) has not received any traffic in the past 30m
       description: |
         Rails ActiveSupport Cache operations against the Redis Cache
 
-        This alert signifies that the SLI is reporting a cessation of traffic, but the signal is not absent.
+        This alert signifies that the SLI is reporting a cessation of traffic; the signal is present, but is zero.
       grafana_dashboard_id: redis-cache-main/redis-cache-overview
       grafana_dashboard_link: https://dashboards.gitlab.net/d/redis-cache-main/redis-cache-overview?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-stage={{ $labels.stage }}
@@ -209,12 +211,14 @@ groups:
       slo_alert: "no"
       user_impacting: "yes"
     expr: |
-      gitlab_component_ops:rate_30m{type="redis-cache", component="rails_cache", stage="main", monitor="global"} == 0
+      gitlab_component_ops:rate_30m{component="rails_cache",monitor="global",stage="main",type="redis-cache"} == 0
+      and
+      gitlab_component_ops:rate_30m{component="rails_cache",monitor="global",stage="main",type="redis-cache"} offset 1h >= 0.16666666666666666
   - alert: RedisCacheServiceRailsCacheTrafficAbsent
     for: 30m
     annotations:
       title: The rails_cache SLI of the redis-cache service (`{{ $labels.stage }}`
-        stage) has not reported any traffic in the past 30 minutes
+        stage) has not reported any traffic in the past 30m
       description: |
         Rails ActiveSupport Cache operations against the Redis Cache
 
@@ -244,9 +248,9 @@ groups:
       slo_alert: "no"
       user_impacting: "yes"
     expr: |
-      gitlab_component_ops:rate_5m{type="redis-cache", component="rails_cache", stage="main", monitor="global"} offset 1h
+      gitlab_component_ops:rate_5m{component="rails_cache",monitor="global",stage="main",type="redis-cache"} offset 1h
       unless
-      gitlab_component_ops:rate_5m{type="redis-cache", component="rails_cache", stage="main", monitor="global"}
+      gitlab_component_ops:rate_5m{component="rails_cache",monitor="global",stage="main",type="redis-cache"}
   - alert: RedisCacheServiceRailsRedisClientApdexSLOViolation
     for: 2m
     annotations:
@@ -347,7 +351,7 @@ groups:
       )
       and on(env,environment,tier,type,stage,component)
       (
-        sum by(env,environment,tier,type,stage,component) (gitlab_component_ops:rate_6h{component="rails_redis_client",monitor="global",type="redis-cache"}) >= 1
+        sum by(env,environment,tier,type,stage,component) (gitlab_component_ops:rate_6h{component="rails_redis_client",monitor="global",type="redis-cache"}) >= 0.16667
       )
   - alert: RedisCacheServiceRailsRedisClientErrorSLOViolation
     for: 2m
@@ -443,17 +447,17 @@ groups:
       )
       and on(env,environment,tier,type,stage,component)
       (
-        sum by(env,environment,tier,type,stage,component) (gitlab_component_ops:rate_6h{component="rails_redis_client",monitor="global",type="redis-cache"}) >= 1
+        sum by(env,environment,tier,type,stage,component) (gitlab_component_ops:rate_6h{component="rails_redis_client",monitor="global",type="redis-cache"}) >= 0.16667
       )
   - alert: RedisCacheServiceRailsRedisClientTrafficCessation
     for: 5m
     annotations:
       title: The rails_redis_client SLI of the redis-cache service (`{{ $labels.stage
-        }}` stage) has not received any traffic in the past 30 minutes
+        }}` stage) has not received any traffic in the past 30m
       description: |
         Aggregation of all Redis Cache operations issued from the Rails codebase.
 
-        This alert signifies that the SLI is reporting a cessation of traffic, but the signal is not absent.
+        This alert signifies that the SLI is reporting a cessation of traffic; the signal is present, but is zero.
       grafana_dashboard_id: redis-cache-main/redis-cache-overview
       grafana_dashboard_link: https://dashboards.gitlab.net/d/redis-cache-main/redis-cache-overview?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-stage={{ $labels.stage }}
@@ -477,12 +481,14 @@ groups:
       slo_alert: "no"
       user_impacting: "yes"
     expr: |
-      gitlab_component_ops:rate_30m{type="redis-cache", component="rails_redis_client", stage="main", monitor="global"} == 0
+      gitlab_component_ops:rate_30m{component="rails_redis_client",monitor="global",stage="main",type="redis-cache"} == 0
+      and
+      gitlab_component_ops:rate_30m{component="rails_redis_client",monitor="global",stage="main",type="redis-cache"} offset 1h >= 0.16666666666666666
   - alert: RedisCacheServiceRailsRedisClientTrafficAbsent
     for: 30m
     annotations:
       title: The rails_redis_client SLI of the redis-cache service (`{{ $labels.stage
-        }}` stage) has not reported any traffic in the past 30 minutes
+        }}` stage) has not reported any traffic in the past 30m
       description: |
         Aggregation of all Redis Cache operations issued from the Rails codebase.
 
@@ -512,18 +518,18 @@ groups:
       slo_alert: "no"
       user_impacting: "yes"
     expr: |
-      gitlab_component_ops:rate_5m{type="redis-cache", component="rails_redis_client", stage="main", monitor="global"} offset 1h
+      gitlab_component_ops:rate_5m{component="rails_redis_client",monitor="global",stage="main",type="redis-cache"} offset 1h
       unless
-      gitlab_component_ops:rate_5m{type="redis-cache", component="rails_redis_client", stage="main", monitor="global"}
+      gitlab_component_ops:rate_5m{component="rails_redis_client",monitor="global",stage="main",type="redis-cache"}
   - alert: RedisCacheServiceSecondaryServersTrafficCessation
     for: 5m
     annotations:
       title: The secondary_servers SLI of the redis-cache service (`{{ $labels.stage
-        }}` stage) has not received any traffic in the past 30 minutes
+        }}` stage) has not received any traffic in the past 30m
       description: |
         Operations on the Redis secondaries for the Redis Cache instance.
 
-        This alert signifies that the SLI is reporting a cessation of traffic, but the signal is not absent.
+        This alert signifies that the SLI is reporting a cessation of traffic; the signal is present, but is zero.
       grafana_dashboard_id: redis-cache-main/redis-cache-overview
       grafana_dashboard_link: https://dashboards.gitlab.net/d/redis-cache-main/redis-cache-overview?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-stage={{ $labels.stage }}
@@ -547,12 +553,14 @@ groups:
       slo_alert: "no"
       user_impacting: "yes"
     expr: |
-      gitlab_component_ops:rate_30m{type="redis-cache", component="secondary_servers", stage="main", monitor="global"} == 0
+      gitlab_component_ops:rate_30m{component="secondary_servers",monitor="global",stage="main",type="redis-cache"} == 0
+      and
+      gitlab_component_ops:rate_30m{component="secondary_servers",monitor="global",stage="main",type="redis-cache"} offset 1h >= 0.16666666666666666
   - alert: RedisCacheServiceSecondaryServersTrafficAbsent
     for: 30m
     annotations:
       title: The secondary_servers SLI of the redis-cache service (`{{ $labels.stage
-        }}` stage) has not reported any traffic in the past 30 minutes
+        }}` stage) has not reported any traffic in the past 30m
       description: |
         Operations on the Redis secondaries for the Redis Cache instance.
 
@@ -582,6 +590,6 @@ groups:
       slo_alert: "no"
       user_impacting: "yes"
     expr: |
-      gitlab_component_ops:rate_5m{type="redis-cache", component="secondary_servers", stage="main", monitor="global"} offset 1h
+      gitlab_component_ops:rate_5m{component="secondary_servers",monitor="global",stage="main",type="redis-cache"} offset 1h
       unless
-      gitlab_component_ops:rate_5m{type="redis-cache", component="secondary_servers", stage="main", monitor="global"}
+      gitlab_component_ops:rate_5m{component="secondary_servers",monitor="global",stage="main",type="redis-cache"}

@@ -4,9 +4,10 @@
 
 [[_TOC_]]
 
-#  Praefect Service
+# Praefect Service
+
 * [Service Overview](https://dashboards.gitlab.net/d/praefect-main/praefect-overview)
-* **Alerts**: https://alerts.gitlab.net/#/alerts?filter=%7Btype%3D%22praefect%22%2C%20tier%3D%22stor%22%7D
+* **Alerts**: <https://alerts.gitlab.net/#/alerts?filter=%7Btype%3D%22praefect%22%2C%20tier%3D%22stor%22%7D>
 * **Label**: gitlab-com/gl-infra/production~"Service:Praefect"
 
 ## Logging
@@ -16,6 +17,8 @@
 ## Troubleshooting Pointers
 
 * [Cloud SQL Troubleshooting](../cloud-sql/cloud-sql.md)
+* [Upgrading the OS of Gitaly VMs](../gitaly/gitaly-os-upgrade.md)
+* [Tuning and Modifying Alerts](../monitoring/alert_tuning.md)
 * [../monitoring/apdex-alerts-guide.md](../monitoring/apdex-alerts-guide.md)
 * [Diagnosis with Kibana](../onboarding/kibana-diagnosis.md)
 * [Bypass Praefect](praefect-bypass.md)
@@ -29,10 +32,9 @@
 * [Gitaly version mismatch](../version/gitaly-version-mismatch.md)
 <!-- END_MARKER -->
 
-## How To...
+## How To
 
 * [Add and remove file storages to praefect](praefect-file-storages.md)
-
 
 <!-- ## Summary -->
 
@@ -40,7 +42,7 @@
 
 ### File storage locations
 
-Praefect itself is a transparent proxy with no local storage. 
+Praefect itself is a transparent proxy with no local storage.
 
 The praefect nodes that run praefect are named in the format praefect-XX-stor-ENV.
 

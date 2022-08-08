@@ -1,39 +1,38 @@
+#!/bin/bash
 
-#!/bin/bash 
+# shellcheck disable=SC2220
+# shellcheck disable=SC2086
 
-###functions 
-quit () { exit; }
-help () {
-               echo "Script for check wraparound status and generate FREEZE command " 
-               echo "wraparound.sh  -m check -p 95"
-               echo "options"
-               echo " mode: -m check/generate (default check)"
-               echo " size: -s size threshold of tables to check/generate (default 10000000000 [10GB])"
-               echo " percent: -p % threshold of age (default 95 )"
-               quit
-           }
+###functions
+quit() { exit; }
+help() {
+  echo "Script for check wraparound status and generate FREEZE command "
+  echo "wraparound.sh  -m check -p 95"
+  echo "options"
+  echo " mode: -m check/generate (default check)"
+  echo " size: -s size threshold of tables to check/generate (default 10000000000 [10GB])"
+  echo " percent: -p % threshold of age (default 95 )"
+  quit
+}
 
 mode='check'
 size=10000000000
 percent=95
 
- 
-while getopts m:s:p:h option 
-do 
- case "${option}" 
- in 
- m) mode=${OPTARG};; #mode check/generate
- s) size=${OPTARG};; #size threshold of tables
- p) percent=${OPTARG};; #% of age 
- h) help
- esac 
-done 
- 
-echo "mode: "$mode, "size: "$size, "percent: "$percent 
+while getopts m:s:p:h option; do
+  case "${option}" in
 
-if [ $mode = 'check' ]
-then
-query="WITH tabfreeze AS (
+    m) mode=${OPTARG} ;;    #mode check/generate
+    s) size=${OPTARG} ;;    #size threshold of tables
+    p) percent=${OPTARG} ;; #% of age
+    h) help ;;
+  esac
+done
+
+echo "mode: "$mode, "size: "$size, "percent: "$percent
+
+if [ $mode = 'check' ]; then
+  query="WITH tabfreeze AS (
     SELECT pg_class.oid::regclass AS full_table_name,
     greatest(age(pg_class.relfrozenxid), age(toast.relfrozenxid)) as freeze_age,
     pg_total_relation_size(pg_class.oid),
@@ -48,19 +47,18 @@ WHERE nspname not in ('pg_catalog', 'information_schema')
     AND nspname NOT LIKE 'pg_temp%'
     AND pg_class.relkind = 'r'
 )
-SELECT full_table_name,  pg_size_pretty(pg_total_relation_size),freeze_age, (freeze_age*1)::bigint/(autovacuum_freeze_max_age/100) as "percent"
+SELECT full_table_name,  pg_size_pretty(pg_total_relation_size),freeze_age, (freeze_age*1)::bigint/(autovacuum_freeze_max_age/100) as \"percent\"
 FROM tabfreeze
 WHERE pg_total_relation_size >=  $size
 AND (freeze_age*1)::bigint/(autovacuum_freeze_max_age/100)>=$percent
 ORDER BY 4 DESC;
-" 
-sudo gitlab-psql -c "$query"
-quit
+"
+  sudo gitlab-psql -c "$query"
+  quit
 fi
 
-if [ $mode = 'generate' ]
-then
-query="WITH tabfreeze AS (
+if [ $mode = 'generate' ]; then
+  query="WITH tabfreeze AS (
     SELECT pg_class.oid::regclass AS full_table_name,
     greatest(age(pg_class.relfrozenxid), age(toast.relfrozenxid)) as freeze_age,
     pg_total_relation_size(pg_class.oid),
@@ -81,13 +79,8 @@ WHERE pg_total_relation_size >   $size
 AND (freeze_age*1)::bigint/(autovacuum_freeze_max_age/100)>= $percent
 ORDER BY (freeze_age*1)::bigint/(autovacuum_freeze_max_age/100) DESC;
 "
-sudo gitlab-psql -c "$query"
-quit
+  sudo gitlab-psql -c "$query"
+  quit
 fi
 
-help 
-
-
-
-
-
+help

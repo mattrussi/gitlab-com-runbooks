@@ -136,7 +136,7 @@
       "fillGradient": 0,
       "gridPos": {
         "h": 7,
-        "w": 8,
+        "w": 6,
         "x": 0,
         "y": 1
       },
@@ -248,7 +248,7 @@
           "refId": "A"
         },
         {
-          "expr": "(1 - 6 * (1 - avg(slo:min:events:gitlab_service_apdex:ratio{component=\"\",monitor=\"global\",type=\"webservice\"})\n))\n",
+          "expr": "(1 - 6 * (1 - avg(slo:min:events:gitlab_service_apdex:ratio{component=\"\",type=\"webservice\"})\n))\n",
           "format": "time_series",
           "interval": "5m",
           "intervalFactor": 3,
@@ -256,7 +256,7 @@
           "refId": "B"
         },
         {
-          "expr": "(1 - 14.4 * (1 - avg(slo:min:events:gitlab_service_apdex:ratio{component=\"\",monitor=\"global\",type=\"webservice\"})\n))\n",
+          "expr": "(1 - 14.4 * (1 - avg(slo:min:events:gitlab_service_apdex:ratio{component=\"\",type=\"webservice\"})\n))\n",
           "format": "time_series",
           "interval": "5m",
           "intervalFactor": 3,
@@ -272,7 +272,7 @@
           "refId": "D"
         },
         {
-          "expr": "clamp_min(\n  gitlab_service_apdex:ratio_5m{type=\"webservice\"} offset 1w\n,\n  scalar(min((1 - 14.4 * (1 - avg(slo:min:events:gitlab_service_apdex:ratio{component=\"\",monitor=\"global\",type=\"webservice\"})\n))\n))\n)\n",
+          "expr": "clamp_min(\n  gitlab_service_apdex:ratio_5m{type=\"webservice\"} offset 1w\n,\n  scalar(min((1 - 14.4 * (1 - avg(slo:min:events:gitlab_service_apdex:ratio{component=\"\",type=\"webservice\"})\n))\n))\n)\n",
           "format": "time_series",
           "interval": "1m",
           "intervalFactor": 3,
@@ -474,7 +474,7 @@
       },
       "gridPos": {
         "h": 1,
-        "w": 8,
+        "w": 6,
         "x": 0,
         "y": 8
       },
@@ -496,7 +496,7 @@
       "pluginVersion": "7",
       "targets": [
         {
-          "expr": "sum(\n  label_replace(\n    vector(0) and on() (gitlab_service_apdex:ratio_1h{type=\"webservice\"}),\n    \"period\", \"na\", \"\", \"\"\n  )\n  or\n  label_replace(\n    vector(1) and on () (gitlab_service_apdex:ratio_5m{type=\"webservice\"} \u003c on(tier, type) group_left() (1 - (14.4 * (1 - slo:min:events:gitlab_service_apdex:ratio{component=\"\",monitor=\"global\",type=\"webservice\"})))),\n    \"period\", \"5m\", \"\", \"\"\n  )\n  or\n  label_replace(\n    vector(2) and on () (gitlab_service_apdex:ratio_1h{type=\"webservice\"} \u003c on(tier, type) group_left() (1 - (14.4 * (1 - slo:min:events:gitlab_service_apdex:ratio{component=\"\",monitor=\"global\",type=\"webservice\"})))),\n    \"period\", \"1h\", \"\", \"\"\n  )\n  or\n  label_replace(\n    vector(4) and on () (gitlab_service_apdex:ratio_30m{type=\"webservice\"} \u003c on(tier, type) group_left() (1 - (6 * (1 - slo:min:events:gitlab_service_apdex:ratio{component=\"\",monitor=\"global\",type=\"webservice\"})))),\n    \"period\", \"30m\", \"\", \"\"\n  )\n  or\n  label_replace(\n    vector(8) and on () (gitlab_service_apdex:ratio_6h{type=\"webservice\"} \u003c on(tier, type) group_left() (1 - (6 * (1 - slo:min:events:gitlab_service_apdex:ratio{component=\"\",monitor=\"global\",type=\"webservice\"})))),\n    \"period\", \"6h\", \"\", \"\"\n  )\n)\n",
+          "expr": "sum(\n  label_replace(\n    vector(0) and on() (gitlab_service_apdex:ratio_1h{type=\"webservice\"}),\n    \"period\", \"na\", \"\", \"\"\n  )\n  or\n  label_replace(\n    vector(1) and on () (gitlab_service_apdex:ratio_5m{type=\"webservice\"} \u003c on(tier, type) group_left() (1 - (14.4 * (1 - slo:min:events:gitlab_service_apdex:ratio{component=\"\",type=\"webservice\"})))),\n    \"period\", \"5m\", \"\", \"\"\n  )\n  or\n  label_replace(\n    vector(2) and on () (gitlab_service_apdex:ratio_1h{type=\"webservice\"} \u003c on(tier, type) group_left() (1 - (14.4 * (1 - slo:min:events:gitlab_service_apdex:ratio{component=\"\",type=\"webservice\"})))),\n    \"period\", \"1h\", \"\", \"\"\n  )\n  or\n  label_replace(\n    vector(4) and on () (gitlab_service_apdex:ratio_30m{type=\"webservice\"} \u003c on(tier, type) group_left() (1 - (6 * (1 - slo:min:events:gitlab_service_apdex:ratio{component=\"\",type=\"webservice\"})))),\n    \"period\", \"30m\", \"\", \"\"\n  )\n  or\n  label_replace(\n    vector(8) and on () (gitlab_service_apdex:ratio_6h{type=\"webservice\"} \u003c on(tier, type) group_left() (1 - (6 * (1 - slo:min:events:gitlab_service_apdex:ratio{component=\"\",type=\"webservice\"})))),\n    \"period\", \"6h\", \"\", \"\"\n  )\n)\n",
           "format": "time_series",
           "instant": true,
           "interval": "1m",
@@ -520,8 +520,8 @@
       "fillGradient": 0,
       "gridPos": {
         "h": 7,
-        "w": 8,
-        "x": 8,
+        "w": 6,
+        "x": 6,
         "y": 1
       },
       "id": 1986258045,
@@ -621,7 +621,7 @@
           "refId": "A"
         },
         {
-          "expr": "(6 * avg(slo:max:events:gitlab_service_errors:ratio{component=\"\",monitor=\"global\",type=\"webservice\"})\n)\n",
+          "expr": "(6 * avg(slo:max:events:gitlab_service_errors:ratio{component=\"\",type=\"webservice\"})\n)\n",
           "format": "time_series",
           "interval": "5m",
           "intervalFactor": 3,
@@ -629,7 +629,7 @@
           "refId": "B"
         },
         {
-          "expr": "(14.4 * avg(slo:max:events:gitlab_service_errors:ratio{component=\"\",monitor=\"global\",type=\"webservice\"})\n)\n",
+          "expr": "(14.4 * avg(slo:max:events:gitlab_service_errors:ratio{component=\"\",type=\"webservice\"})\n)\n",
           "format": "time_series",
           "interval": "5m",
           "intervalFactor": 3,
@@ -645,7 +645,7 @@
           "refId": "D"
         },
         {
-          "expr": "clamp_max(\n  gitlab_service_errors:ratio_5m{type=\"webservice\"} offset 1w\n,\n  scalar(max((14.4 * avg(slo:max:events:gitlab_service_errors:ratio{component=\"\",monitor=\"global\",type=\"webservice\"})\n)\n))\n)\n",
+          "expr": "clamp_max(\n  gitlab_service_errors:ratio_5m{type=\"webservice\"} offset 1w\n,\n  scalar(max((14.4 * avg(slo:max:events:gitlab_service_errors:ratio{component=\"\",type=\"webservice\"})\n)\n))\n)\n",
           "format": "time_series",
           "interval": "1m",
           "intervalFactor": 3,
@@ -847,8 +847,8 @@
       },
       "gridPos": {
         "h": 1,
-        "w": 8,
-        "x": 8,
+        "w": 6,
+        "x": 6,
         "y": 8
       },
       "id": 6,
@@ -869,7 +869,7 @@
       "pluginVersion": "7",
       "targets": [
         {
-          "expr": "sum (\n  label_replace(\n    vector(0) and on() (gitlab_service_errors:ratio_1h{type=\"webservice\"}),\n    \"period\", \"na\", \"\", \"\"\n  )\n  or\n  label_replace(\n    vector(1) and on() (gitlab_service_errors:ratio_5m{type=\"webservice\"} \u003e on(tier, type) group_left() (14.4 * slo:max:events:gitlab_service_errors:ratio{component=\"\",monitor=\"global\",type=\"webservice\"})),\n    \"period\", \"5m\", \"\", \"\"\n  )\n  or\n  label_replace(\n    vector(2) and on() (gitlab_service_errors:ratio_1h{type=\"webservice\"} \u003e on(tier, type) group_left() (14.4 * slo:max:events:gitlab_service_errors:ratio{component=\"\",monitor=\"global\",type=\"webservice\"})),\n    \"period\", \"1h\", \"\", \"\"\n  )\n  or\n  label_replace(\n    vector(4) and on() (gitlab_service_errors:ratio_30m{type=\"webservice\"} \u003e on(tier, type) group_left() (6 * slo:max:events:gitlab_service_errors:ratio{component=\"\",monitor=\"global\",type=\"webservice\"})),\n    \"period\", \"30m\", \"\", \"\"\n  )\n  or\n  label_replace(\n    vector(8) and on() (gitlab_service_errors:ratio_6h{type=\"webservice\"} \u003e on(tier, type) group_left() (6 * slo:max:events:gitlab_service_errors:ratio{component=\"\",monitor=\"global\",type=\"webservice\"})),\n    \"period\", \"6h\", \"\", \"\"\n  )\n)\n",
+          "expr": "sum (\n  label_replace(\n    vector(0) and on() (gitlab_service_errors:ratio_1h{type=\"webservice\"}),\n    \"period\", \"na\", \"\", \"\"\n  )\n  or\n  label_replace(\n    vector(1) and on() (gitlab_service_errors:ratio_5m{type=\"webservice\"} \u003e on(tier, type) group_left() (14.4 * slo:max:events:gitlab_service_errors:ratio{component=\"\",type=\"webservice\"})),\n    \"period\", \"5m\", \"\", \"\"\n  )\n  or\n  label_replace(\n    vector(2) and on() (gitlab_service_errors:ratio_1h{type=\"webservice\"} \u003e on(tier, type) group_left() (14.4 * slo:max:events:gitlab_service_errors:ratio{component=\"\",type=\"webservice\"})),\n    \"period\", \"1h\", \"\", \"\"\n  )\n  or\n  label_replace(\n    vector(4) and on() (gitlab_service_errors:ratio_30m{type=\"webservice\"} \u003e on(tier, type) group_left() (6 * slo:max:events:gitlab_service_errors:ratio{component=\"\",type=\"webservice\"})),\n    \"period\", \"30m\", \"\", \"\"\n  )\n  or\n  label_replace(\n    vector(8) and on() (gitlab_service_errors:ratio_6h{type=\"webservice\"} \u003e on(tier, type) group_left() (6 * slo:max:events:gitlab_service_errors:ratio{component=\"\",type=\"webservice\"})),\n    \"period\", \"6h\", \"\", \"\"\n  )\n)\n",
           "format": "time_series",
           "instant": true,
           "interval": "1m",
@@ -893,8 +893,8 @@
       "fillGradient": 0,
       "gridPos": {
         "h": 8,
-        "w": 8,
-        "x": 16,
+        "w": 6,
+        "x": 12,
         "y": 1
       },
       "id": 3557202357,
@@ -984,7 +984,7 @@
           "refId": "B"
         },
         {
-          "expr": "clamp_min(\n  avg by (type) (\n    gitlab_service_ops:rate:prediction{monitor=\"global\",type=\"webservice\"}\n    + (1) *\n    gitlab_service_ops:rate:stddev_over_time_1w{monitor=\"global\",type=\"webservice\"}\n  ),\n  0\n)\n",
+          "expr": "clamp_min(\n  avg by (type) (\n    gitlab_service_ops:rate:prediction{type=\"webservice\"}\n    + (1) *\n    gitlab_service_ops:rate:stddev_over_time_1w{type=\"webservice\"}\n  ),\n  0\n)\n",
           "format": "time_series",
           "interval": "1m",
           "intervalFactor": 3,
@@ -992,7 +992,7 @@
           "refId": "C"
         },
         {
-          "expr": "clamp_min(\n  avg by (type) (\n    gitlab_service_ops:rate:prediction{monitor=\"global\",type=\"webservice\"}\n    + (-1) *\n    gitlab_service_ops:rate:stddev_over_time_1w{monitor=\"global\",type=\"webservice\"}\n  ),\n  0\n)\n",
+          "expr": "clamp_min(\n  avg by (type) (\n    gitlab_service_ops:rate:prediction{type=\"webservice\"}\n    + (-1) *\n    gitlab_service_ops:rate:stddev_over_time_1w{type=\"webservice\"}\n  ),\n  0\n)\n",
           "format": "time_series",
           "interval": "1m",
           "intervalFactor": 3,
@@ -1029,6 +1029,83 @@
       ]
     },
     {
+      "bars": false,
+      "dashLength": 10,
+      "dashes": false,
+      "datasource": "$PROMETHEUS_DS",
+      "decimals": 2,
+      "description": "Saturation is a measure of what ratio of a finite resource is currently being utilized. Lower is better.",
+      "fill": 0,
+      "fillGradient": 0,
+      "gridPos": {
+        "h": 8,
+        "w": 6,
+        "x": 18,
+        "y": 1
+      },
+      "id": 1217942947,
+      "legend": {
+        "alignAsTable": true,
+        "avg": true,
+        "current": true,
+        "hideEmpty": true,
+        "max": true,
+        "min": true,
+        "rightSide": false,
+        "show": false,
+        "total": false,
+        "values": true
+      },
+      "lines": true,
+      "linewidth": 1,
+      "nullPointMode": "null",
+      "percentage": false,
+      "pointradius": 5,
+      "points": false,
+      "renderer": "flot",
+      "spaceLength": 10,
+      "stableId": "service-utilization",
+      "stack": false,
+      "steppedLine": false,
+      "targets": [
+        {
+          "expr": "max(\n  max_over_time(\n    gitlab_component_saturation:ratio{type=\"webservice\"}[$__interval]\n  )\n) by (component)\n",
+          "format": "time_series",
+          "interval": "1m",
+          "intervalFactor": 3,
+          "legendFormat": "{{ component }} component",
+          "refId": "A"
+        }
+      ],
+      "title": "Saturation",
+      "tooltip": {
+        "shared": true,
+        "sort": 2,
+        "value_type": "individual"
+      },
+      "type": "graph",
+      "xaxis": {
+        "mode": "time",
+        "show": true
+      },
+      "yaxes": [
+        {
+          "format": "percentunit",
+          "label": "",
+          "logBase": 1,
+          "max": 1,
+          "show": true
+        },
+        {
+          "format": "short",
+          "logBase": 1,
+          "max": 1,
+          "min": 0,
+          "show": false
+        }
+      ]
+    },
+    {
       "collapse": false,
       "collapsed": false,
       "gridPos": {
@@ -1037,7 +1114,7 @@
         "x": 0,
         "y": 20
       },
-      "id": 8,
+      "id": 9,
       "panels": [],
       "repeat": null,
       "repeatIteration": null,
@@ -1170,7 +1247,7 @@
           "refId": "A"
         },
         {
-          "expr": "(1 - 6 * (1 - avg(slo:min:events:gitlab_service_apdex:ratio{component=\"puma\",monitor=\"global\",type=\"webservice\"})\n))\n",
+          "expr": "(1 - 6 * (1 - avg(slo:min:events:gitlab_service_apdex:ratio{component=\"puma\",type=\"webservice\"})\n))\n",
           "format": "time_series",
           "interval": "5m",
           "intervalFactor": 3,
@@ -1178,7 +1255,7 @@
           "refId": "B"
         },
         {
-          "expr": "(1 - 14.4 * (1 - avg(slo:min:events:gitlab_service_apdex:ratio{component=\"puma\",monitor=\"global\",type=\"webservice\"})\n))\n",
+          "expr": "(1 - 14.4 * (1 - avg(slo:min:events:gitlab_service_apdex:ratio{component=\"puma\",type=\"webservice\"})\n))\n",
           "format": "time_series",
           "interval": "5m",
           "intervalFactor": 3,
@@ -1194,7 +1271,7 @@
           "refId": "D"
         },
         {
-          "expr": "clamp_min(\n  gitlab_component_apdex:ratio_5m{component=\"puma\",type=\"webservice\"} offset 1w\n,\n  scalar(min((1 - 14.4 * (1 - avg(slo:min:events:gitlab_service_apdex:ratio{component=\"puma\",monitor=\"global\",type=\"webservice\"})\n))\n))\n)\n",
+          "expr": "clamp_min(\n  gitlab_component_apdex:ratio_5m{component=\"puma\",type=\"webservice\"} offset 1w\n,\n  scalar(min((1 - 14.4 * (1 - avg(slo:min:events:gitlab_service_apdex:ratio{component=\"puma\",type=\"webservice\"})\n))\n))\n)\n",
           "format": "time_series",
           "interval": "1m",
           "intervalFactor": 3,
@@ -1400,7 +1477,7 @@
         "x": 0,
         "y": 28
       },
-      "id": 10,
+      "id": 11,
       "options": {
         "colorMode": "background",
         "graphMode": "none",
@@ -1418,7 +1495,7 @@
       "pluginVersion": "7",
       "targets": [
         {
-          "expr": "sum(\n  label_replace(\n    vector(0) and on() (gitlab_component_apdex:ratio_1h{component=\"puma\",type=\"webservice\"}),\n    \"period\", \"na\", \"\", \"\"\n  )\n  or\n  label_replace(\n    vector(1) and on () (gitlab_component_apdex:ratio_5m{component=\"puma\",type=\"webservice\"} \u003c on(tier, type) group_left() (1 - (14.4 * (1 - slo:min:events:gitlab_service_apdex:ratio{component=\"puma\",monitor=\"global\",type=\"webservice\"})))),\n    \"period\", \"5m\", \"\", \"\"\n  )\n  or\n  label_replace(\n    vector(2) and on () (gitlab_component_apdex:ratio_1h{component=\"puma\",type=\"webservice\"} \u003c on(tier, type) group_left() (1 - (14.4 * (1 - slo:min:events:gitlab_service_apdex:ratio{component=\"puma\",monitor=\"global\",type=\"webservice\"})))),\n    \"period\", \"1h\", \"\", \"\"\n  )\n  or\n  label_replace(\n    vector(4) and on () (gitlab_component_apdex:ratio_30m{component=\"puma\",type=\"webservice\"} \u003c on(tier, type) group_left() (1 - (6 * (1 - slo:min:events:gitlab_service_apdex:ratio{component=\"puma\",monitor=\"global\",type=\"webservice\"})))),\n    \"period\", \"30m\", \"\", \"\"\n  )\n  or\n  label_replace(\n    vector(8) and on () (gitlab_component_apdex:ratio_6h{component=\"puma\",type=\"webservice\"} \u003c on(tier, type) group_left() (1 - (6 * (1 - slo:min:events:gitlab_service_apdex:ratio{component=\"puma\",monitor=\"global\",type=\"webservice\"})))),\n    \"period\", \"6h\", \"\", \"\"\n  )\n)\n",
+          "expr": "sum(\n  label_replace(\n    vector(0) and on() (gitlab_component_apdex:ratio_1h{component=\"puma\",type=\"webservice\"}),\n    \"period\", \"na\", \"\", \"\"\n  )\n  or\n  label_replace(\n    vector(1) and on () (gitlab_component_apdex:ratio_5m{component=\"puma\",type=\"webservice\"} \u003c on(tier, type) group_left() (1 - (14.4 * (1 - slo:min:events:gitlab_service_apdex:ratio{component=\"puma\",type=\"webservice\"})))),\n    \"period\", \"5m\", \"\", \"\"\n  )\n  or\n  label_replace(\n    vector(2) and on () (gitlab_component_apdex:ratio_1h{component=\"puma\",type=\"webservice\"} \u003c on(tier, type) group_left() (1 - (14.4 * (1 - slo:min:events:gitlab_service_apdex:ratio{component=\"puma\",type=\"webservice\"})))),\n    \"period\", \"1h\", \"\", \"\"\n  )\n  or\n  label_replace(\n    vector(4) and on () (gitlab_component_apdex:ratio_30m{component=\"puma\",type=\"webservice\"} \u003c on(tier, type) group_left() (1 - (6 * (1 - slo:min:events:gitlab_service_apdex:ratio{component=\"puma\",type=\"webservice\"})))),\n    \"period\", \"30m\", \"\", \"\"\n  )\n  or\n  label_replace(\n    vector(8) and on () (gitlab_component_apdex:ratio_6h{component=\"puma\",type=\"webservice\"} \u003c on(tier, type) group_left() (1 - (6 * (1 - slo:min:events:gitlab_service_apdex:ratio{component=\"puma\",type=\"webservice\"})))),\n    \"period\", \"6h\", \"\", \"\"\n  )\n)\n",
           "format": "time_series",
           "instant": true,
           "interval": "1m",
@@ -1543,7 +1620,7 @@
           "refId": "A"
         },
         {
-          "expr": "(6 * avg(slo:max:events:gitlab_service_errors:ratio{component=\"puma\",monitor=\"global\",type=\"webservice\"})\n)\n",
+          "expr": "(6 * avg(slo:max:events:gitlab_service_errors:ratio{component=\"puma\",type=\"webservice\"})\n)\n",
           "format": "time_series",
           "interval": "5m",
           "intervalFactor": 3,
@@ -1551,7 +1628,7 @@
           "refId": "B"
         },
         {
-          "expr": "(14.4 * avg(slo:max:events:gitlab_service_errors:ratio{component=\"puma\",monitor=\"global\",type=\"webservice\"})\n)\n",
+          "expr": "(14.4 * avg(slo:max:events:gitlab_service_errors:ratio{component=\"puma\",type=\"webservice\"})\n)\n",
           "format": "time_series",
           "interval": "5m",
           "intervalFactor": 3,
@@ -1567,7 +1644,7 @@
           "refId": "D"
         },
         {
-          "expr": "clamp_max(\n  gitlab_component_errors:ratio_5m{component=\"puma\",type=\"webservice\"} offset 1w\n,\n  scalar(max((14.4 * avg(slo:max:events:gitlab_service_errors:ratio{component=\"puma\",monitor=\"global\",type=\"webservice\"})\n)\n))\n)\n",
+          "expr": "clamp_max(\n  gitlab_component_errors:ratio_5m{component=\"puma\",type=\"webservice\"} offset 1w\n,\n  scalar(max((14.4 * avg(slo:max:events:gitlab_service_errors:ratio{component=\"puma\",type=\"webservice\"})\n)\n))\n)\n",
           "format": "time_series",
           "interval": "1m",
           "intervalFactor": 3,
@@ -1773,7 +1850,7 @@
         "x": 6,
         "y": 28
       },
-      "id": 12,
+      "id": 13,
       "options": {
         "colorMode": "background",
         "graphMode": "none",
@@ -1791,7 +1868,7 @@
       "pluginVersion": "7",
       "targets": [
         {
-          "expr": "sum (\n  label_replace(\n    vector(0) and on() (gitlab_component_errors:ratio_1h{component=\"puma\",type=\"webservice\"}),\n    \"period\", \"na\", \"\", \"\"\n  )\n  or\n  label_replace(\n    vector(1) and on() (gitlab_component_errors:ratio_5m{component=\"puma\",type=\"webservice\"} \u003e on(tier, type) group_left() (14.4 * slo:max:events:gitlab_service_errors:ratio{component=\"puma\",monitor=\"global\",type=\"webservice\"})),\n    \"period\", \"5m\", \"\", \"\"\n  )\n  or\n  label_replace(\n    vector(2) and on() (gitlab_component_errors:ratio_1h{component=\"puma\",type=\"webservice\"} \u003e on(tier, type) group_left() (14.4 * slo:max:events:gitlab_service_errors:ratio{component=\"puma\",monitor=\"global\",type=\"webservice\"})),\n    \"period\", \"1h\", \"\", \"\"\n  )\n  or\n  label_replace(\n    vector(4) and on() (gitlab_component_errors:ratio_30m{component=\"puma\",type=\"webservice\"} \u003e on(tier, type) group_left() (6 * slo:max:events:gitlab_service_errors:ratio{component=\"puma\",monitor=\"global\",type=\"webservice\"})),\n    \"period\", \"30m\", \"\", \"\"\n  )\n  or\n  label_replace(\n    vector(8) and on() (gitlab_component_errors:ratio_6h{component=\"puma\",type=\"webservice\"} \u003e on(tier, type) group_left() (6 * slo:max:events:gitlab_service_errors:ratio{component=\"puma\",monitor=\"global\",type=\"webservice\"})),\n    \"period\", \"6h\", \"\", \"\"\n  )\n)\n",
+          "expr": "sum (\n  label_replace(\n    vector(0) and on() (gitlab_component_errors:ratio_1h{component=\"puma\",type=\"webservice\"}),\n    \"period\", \"na\", \"\", \"\"\n  )\n  or\n  label_replace(\n    vector(1) and on() (gitlab_component_errors:ratio_5m{component=\"puma\",type=\"webservice\"} \u003e on(tier, type) group_left() (14.4 * slo:max:events:gitlab_service_errors:ratio{component=\"puma\",type=\"webservice\"})),\n    \"period\", \"5m\", \"\", \"\"\n  )\n  or\n  label_replace(\n    vector(2) and on() (gitlab_component_errors:ratio_1h{component=\"puma\",type=\"webservice\"} \u003e on(tier, type) group_left() (14.4 * slo:max:events:gitlab_service_errors:ratio{component=\"puma\",type=\"webservice\"})),\n    \"period\", \"1h\", \"\", \"\"\n  )\n  or\n  label_replace(\n    vector(4) and on() (gitlab_component_errors:ratio_30m{component=\"puma\",type=\"webservice\"} \u003e on(tier, type) group_left() (6 * slo:max:events:gitlab_service_errors:ratio{component=\"puma\",type=\"webservice\"})),\n    \"period\", \"30m\", \"\", \"\"\n  )\n  or\n  label_replace(\n    vector(8) and on() (gitlab_component_errors:ratio_6h{component=\"puma\",type=\"webservice\"} \u003e on(tier, type) group_left() (6 * slo:max:events:gitlab_service_errors:ratio{component=\"puma\",type=\"webservice\"})),\n    \"period\", \"6h\", \"\", \"\"\n  )\n)\n",
           "format": "time_series",
           "instant": true,
           "interval": "1m",
@@ -1917,7 +1994,7 @@
         "x": 18,
         "y": 21
       },
-      "id": 14,
+      "id": 15,
       "mode": "markdown",
       "title": "Details",
       "type": "text"
@@ -2045,7 +2122,7 @@
           "refId": "A"
         },
         {
-          "expr": "(1 - 6 * (1 - avg(slo:min:events:gitlab_service_apdex:ratio{component=\"workhorse\",monitor=\"global\",type=\"webservice\"})\n))\n",
+          "expr": "(1 - 6 * (1 - avg(slo:min:events:gitlab_service_apdex:ratio{component=\"workhorse\",type=\"webservice\"})\n))\n",
           "format": "time_series",
           "interval": "5m",
           "intervalFactor": 3,
@@ -2053,7 +2130,7 @@
           "refId": "B"
         },
         {
-          "expr": "(1 - 14.4 * (1 - avg(slo:min:events:gitlab_service_apdex:ratio{component=\"workhorse\",monitor=\"global\",type=\"webservice\"})\n))\n",
+          "expr": "(1 - 14.4 * (1 - avg(slo:min:events:gitlab_service_apdex:ratio{component=\"workhorse\",type=\"webservice\"})\n))\n",
           "format": "time_series",
           "interval": "5m",
           "intervalFactor": 3,
@@ -2069,7 +2146,7 @@
           "refId": "D"
         },
         {
-          "expr": "clamp_min(\n  gitlab_component_apdex:ratio_5m{component=\"workhorse\",type=\"webservice\"} offset 1w\n,\n  scalar(min((1 - 14.4 * (1 - avg(slo:min:events:gitlab_service_apdex:ratio{component=\"workhorse\",monitor=\"global\",type=\"webservice\"})\n))\n))\n)\n",
+          "expr": "clamp_min(\n  gitlab_component_apdex:ratio_5m{component=\"workhorse\",type=\"webservice\"} offset 1w\n,\n  scalar(min((1 - 14.4 * (1 - avg(slo:min:events:gitlab_service_apdex:ratio{component=\"workhorse\",type=\"webservice\"})\n))\n))\n)\n",
           "format": "time_series",
           "interval": "1m",
           "intervalFactor": 3,
@@ -2275,7 +2352,7 @@
         "x": 0,
         "y": 38
       },
-      "id": 16,
+      "id": 17,
       "options": {
         "colorMode": "background",
         "graphMode": "none",
@@ -2293,7 +2370,7 @@
       "pluginVersion": "7",
       "targets": [
         {
-          "expr": "sum(\n  label_replace(\n    vector(0) and on() (gitlab_component_apdex:ratio_1h{component=\"workhorse\",type=\"webservice\"}),\n    \"period\", \"na\", \"\", \"\"\n  )\n  or\n  label_replace(\n    vector(1) and on () (gitlab_component_apdex:ratio_5m{component=\"workhorse\",type=\"webservice\"} \u003c on(tier, type) group_left() (1 - (14.4 * (1 - slo:min:events:gitlab_service_apdex:ratio{component=\"workhorse\",monitor=\"global\",type=\"webservice\"})))),\n    \"period\", \"5m\", \"\", \"\"\n  )\n  or\n  label_replace(\n    vector(2) and on () (gitlab_component_apdex:ratio_1h{component=\"workhorse\",type=\"webservice\"} \u003c on(tier, type) group_left() (1 - (14.4 * (1 - slo:min:events:gitlab_service_apdex:ratio{component=\"workhorse\",monitor=\"global\",type=\"webservice\"})))),\n    \"period\", \"1h\", \"\", \"\"\n  )\n  or\n  label_replace(\n    vector(4) and on () (gitlab_component_apdex:ratio_30m{component=\"workhorse\",type=\"webservice\"} \u003c on(tier, type) group_left() (1 - (6 * (1 - slo:min:events:gitlab_service_apdex:ratio{component=\"workhorse\",monitor=\"global\",type=\"webservice\"})))),\n    \"period\", \"30m\", \"\", \"\"\n  )\n  or\n  label_replace(\n    vector(8) and on () (gitlab_component_apdex:ratio_6h{component=\"workhorse\",type=\"webservice\"} \u003c on(tier, type) group_left() (1 - (6 * (1 - slo:min:events:gitlab_service_apdex:ratio{component=\"workhorse\",monitor=\"global\",type=\"webservice\"})))),\n    \"period\", \"6h\", \"\", \"\"\n  )\n)\n",
+          "expr": "sum(\n  label_replace(\n    vector(0) and on() (gitlab_component_apdex:ratio_1h{component=\"workhorse\",type=\"webservice\"}),\n    \"period\", \"na\", \"\", \"\"\n  )\n  or\n  label_replace(\n    vector(1) and on () (gitlab_component_apdex:ratio_5m{component=\"workhorse\",type=\"webservice\"} \u003c on(tier, type) group_left() (1 - (14.4 * (1 - slo:min:events:gitlab_service_apdex:ratio{component=\"workhorse\",type=\"webservice\"})))),\n    \"period\", \"5m\", \"\", \"\"\n  )\n  or\n  label_replace(\n    vector(2) and on () (gitlab_component_apdex:ratio_1h{component=\"workhorse\",type=\"webservice\"} \u003c on(tier, type) group_left() (1 - (14.4 * (1 - slo:min:events:gitlab_service_apdex:ratio{component=\"workhorse\",type=\"webservice\"})))),\n    \"period\", \"1h\", \"\", \"\"\n  )\n  or\n  label_replace(\n    vector(4) and on () (gitlab_component_apdex:ratio_30m{component=\"workhorse\",type=\"webservice\"} \u003c on(tier, type) group_left() (1 - (6 * (1 - slo:min:events:gitlab_service_apdex:ratio{component=\"workhorse\",type=\"webservice\"})))),\n    \"period\", \"30m\", \"\", \"\"\n  )\n  or\n  label_replace(\n    vector(8) and on () (gitlab_component_apdex:ratio_6h{component=\"workhorse\",type=\"webservice\"} \u003c on(tier, type) group_left() (1 - (6 * (1 - slo:min:events:gitlab_service_apdex:ratio{component=\"workhorse\",type=\"webservice\"})))),\n    \"period\", \"6h\", \"\", \"\"\n  )\n)\n",
           "format": "time_series",
           "instant": true,
           "interval": "1m",
@@ -2418,7 +2495,7 @@
           "refId": "A"
         },
         {
-          "expr": "(6 * avg(slo:max:events:gitlab_service_errors:ratio{component=\"workhorse\",monitor=\"global\",type=\"webservice\"})\n)\n",
+          "expr": "(6 * avg(slo:max:events:gitlab_service_errors:ratio{component=\"workhorse\",type=\"webservice\"})\n)\n",
           "format": "time_series",
           "interval": "5m",
           "intervalFactor": 3,
@@ -2426,7 +2503,7 @@
           "refId": "B"
         },
         {
-          "expr": "(14.4 * avg(slo:max:events:gitlab_service_errors:ratio{component=\"workhorse\",monitor=\"global\",type=\"webservice\"})\n)\n",
+          "expr": "(14.4 * avg(slo:max:events:gitlab_service_errors:ratio{component=\"workhorse\",type=\"webservice\"})\n)\n",
           "format": "time_series",
           "interval": "5m",
           "intervalFactor": 3,
@@ -2442,7 +2519,7 @@
           "refId": "D"
         },
         {
-          "expr": "clamp_max(\n  gitlab_component_errors:ratio_5m{component=\"workhorse\",type=\"webservice\"} offset 1w\n,\n  scalar(max((14.4 * avg(slo:max:events:gitlab_service_errors:ratio{component=\"workhorse\",monitor=\"global\",type=\"webservice\"})\n)\n))\n)\n",
+          "expr": "clamp_max(\n  gitlab_component_errors:ratio_5m{component=\"workhorse\",type=\"webservice\"} offset 1w\n,\n  scalar(max((14.4 * avg(slo:max:events:gitlab_service_errors:ratio{component=\"workhorse\",type=\"webservice\"})\n)\n))\n)\n",
           "format": "time_series",
           "interval": "1m",
           "intervalFactor": 3,
@@ -2648,7 +2725,7 @@
         "x": 6,
         "y": 38
       },
-      "id": 18,
+      "id": 19,
       "options": {
         "colorMode": "background",
         "graphMode": "none",
@@ -2666,7 +2743,7 @@
       "pluginVersion": "7",
       "targets": [
         {
-          "expr": "sum (\n  label_replace(\n    vector(0) and on() (gitlab_component_errors:ratio_1h{component=\"workhorse\",type=\"webservice\"}),\n    \"period\", \"na\", \"\", \"\"\n  )\n  or\n  label_replace(\n    vector(1) and on() (gitlab_component_errors:ratio_5m{component=\"workhorse\",type=\"webservice\"} \u003e on(tier, type) group_left() (14.4 * slo:max:events:gitlab_service_errors:ratio{component=\"workhorse\",monitor=\"global\",type=\"webservice\"})),\n    \"period\", \"5m\", \"\", \"\"\n  )\n  or\n  label_replace(\n    vector(2) and on() (gitlab_component_errors:ratio_1h{component=\"workhorse\",type=\"webservice\"} \u003e on(tier, type) group_left() (14.4 * slo:max:events:gitlab_service_errors:ratio{component=\"workhorse\",monitor=\"global\",type=\"webservice\"})),\n    \"period\", \"1h\", \"\", \"\"\n  )\n  or\n  label_replace(\n    vector(4) and on() (gitlab_component_errors:ratio_30m{component=\"workhorse\",type=\"webservice\"} \u003e on(tier, type) group_left() (6 * slo:max:events:gitlab_service_errors:ratio{component=\"workhorse\",monitor=\"global\",type=\"webservice\"})),\n    \"period\", \"30m\", \"\", \"\"\n  )\n  or\n  label_replace(\n    vector(8) and on() (gitlab_component_errors:ratio_6h{component=\"workhorse\",type=\"webservice\"} \u003e on(tier, type) group_left() (6 * slo:max:events:gitlab_service_errors:ratio{component=\"workhorse\",monitor=\"global\",type=\"webservice\"})),\n    \"period\", \"6h\", \"\", \"\"\n  )\n)\n",
+          "expr": "sum (\n  label_replace(\n    vector(0) and on() (gitlab_component_errors:ratio_1h{component=\"workhorse\",type=\"webservice\"}),\n    \"period\", \"na\", \"\", \"\"\n  )\n  or\n  label_replace(\n    vector(1) and on() (gitlab_component_errors:ratio_5m{component=\"workhorse\",type=\"webservice\"} \u003e on(tier, type) group_left() (14.4 * slo:max:events:gitlab_service_errors:ratio{component=\"workhorse\",type=\"webservice\"})),\n    \"period\", \"5m\", \"\", \"\"\n  )\n  or\n  label_replace(\n    vector(2) and on() (gitlab_component_errors:ratio_1h{component=\"workhorse\",type=\"webservice\"} \u003e on(tier, type) group_left() (14.4 * slo:max:events:gitlab_service_errors:ratio{component=\"workhorse\",type=\"webservice\"})),\n    \"period\", \"1h\", \"\", \"\"\n  )\n  or\n  label_replace(\n    vector(4) and on() (gitlab_component_errors:ratio_30m{component=\"workhorse\",type=\"webservice\"} \u003e on(tier, type) group_left() (6 * slo:max:events:gitlab_service_errors:ratio{component=\"workhorse\",type=\"webservice\"})),\n    \"period\", \"30m\", \"\", \"\"\n  )\n  or\n  label_replace(\n    vector(8) and on() (gitlab_component_errors:ratio_6h{component=\"workhorse\",type=\"webservice\"} \u003e on(tier, type) group_left() (6 * slo:max:events:gitlab_service_errors:ratio{component=\"workhorse\",type=\"webservice\"})),\n    \"period\", \"6h\", \"\", \"\"\n  )\n)\n",
           "format": "time_series",
           "instant": true,
           "interval": "1m",
@@ -2792,7 +2869,7 @@
         "x": 18,
         "y": 31
       },
-      "id": 20,
+      "id": 21,
       "mode": "markdown",
       "title": "Details",
       "type": "text"
@@ -2806,7 +2883,7 @@
         "x": 0,
         "y": 100
       },
-      "id": 21,
+      "id": 22,
       "panels": [
         {
           "bars": false,
@@ -2823,7 +2900,7 @@
             "x": 0,
             "y": 0
           },
-          "id": 22,
+          "id": 23,
           "legend": {
             "alignAsTable": true,
             "avg": true,
@@ -2919,7 +2996,7 @@
             "x": 8,
             "y": 0
           },
-          "id": 23,
+          "id": 24,
           "legend": {
             "alignAsTable": true,
             "avg": true,
@@ -2995,7 +3072,7 @@
             "x": 16,
             "y": 0
           },
-          "id": 24,
+          "id": 25,
           "legend": {
             "alignAsTable": true,
             "avg": true,
@@ -3074,7 +3151,7 @@
         "x": 0,
         "y": 110
       },
-      "id": 25,
+      "id": 26,
       "panels": [
         {
           "bars": false,
@@ -3091,7 +3168,7 @@
             "x": 0,
             "y": 0
           },
-          "id": 26,
+          "id": 27,
           "legend": {
             "alignAsTable": true,
             "avg": true,
@@ -3187,7 +3264,7 @@
             "x": 8,
             "y": 0
           },
-          "id": 27,
+          "id": 28,
           "legend": {
             "alignAsTable": true,
             "avg": true,
@@ -3263,7 +3340,7 @@
             "x": 16,
             "y": 0
           },
-          "id": 28,
+          "id": 29,
           "legend": {
             "alignAsTable": true,
             "avg": true,
@@ -3339,7 +3416,7 @@
             "x": 0,
             "y": 10
           },
-          "id": 29,
+          "id": 30,
           "legend": {
             "alignAsTable": true,
             "avg": true,
@@ -3435,7 +3512,7 @@
             "x": 6,
             "y": 10
           },
-          "id": 30,
+          "id": 31,
           "legend": {
             "alignAsTable": true,
             "avg": true,
@@ -3516,7 +3593,7 @@
             "x": 12,
             "y": 10
           },
-          "id": 31,
+          "id": 32,
           "legend": {
             "alignAsTable": true,
             "avg": true,
@@ -3592,7 +3669,7 @@
             "x": 18,
             "y": 10
           },
-          "id": 32,
+          "id": 33,
           "legend": {
             "alignAsTable": true,
             "avg": true,
@@ -3663,6 +3740,581 @@
       "type": "row"
     },
     {
+      "collapse": true,
+      "collapsed": true,
+      "gridPos": {
+        "h": 1,
+        "w": 24,
+        "x": 0,
+        "y": 500
+      },
+      "id": 34,
+      "panels": [
+        {
+          "aliasColors": {},
+          "bars": false,
+          "dashLength": 10,
+          "dashes": false,
+          "datasource": "$PROMETHEUS_DS",
+          "decimals": 2,
+          "description": "Kubernetes containers are allocated a share of CPU. When this is exhausted, the container may be thottled.\n Lower is better.",
+          "fill": 0,
+          "fillGradient": 0,
+          "gridPos": {
+            "h": 10,
+            "w": 12,
+            "x": 0,
+            "y": 0
+          },
+          "id": 2713861591,
+          "legend": {
+            "alignAsTable": true,
+            "avg": true,
+            "current": true,
+            "hideEmpty": true,
+            "max": true,
+            "min": true,
+            "rightSide": false,
+            "show": true,
+            "sideWidth": null,
+            "total": false,
+            "values": true
+          },
+          "lines": true,
+          "linewidth": 1,
+          "links": [],
+          "nullPointMode": "null",
+          "percentage": false,
+          "pointradius": 5,
+          "points": false,
+          "renderer": "flot",
+          "repeat": null,
+          "seriesOverrides": [
+            {
+              "alias": "/^Soft SLO/",
+              "color": "#FF4500",
+              "dashLength": 4,
+              "dashes": true,
+              "legend": true,
+              "lines": true,
+              "linewidth": 2,
+              "nullPointMode": "connected",
+              "spaceLength": 10,
+              "zindex": -2
+            },
+            {
+              "alias": "/^Hard SLO/",
+              "color": "#F2495C",
+              "dashLength": 4,
+              "dashes": true,
+              "legend": true,
+              "lines": true,
+              "linewidth": 4,
+              "nullPointMode": "connected",
+              "spaceLength": 4,
+              "zindex": -2
+            },
+            {
+              "alias": "/aggregated /",
+              "color": "#E7D551",
+              "linewidth": 2,
+              "zindex": 3
+            },
+            {
+              "alias": "/^95th quantile for week/",
+              "color": "#37872D",
+              "dashLength": 4,
+              "dashes": true,
+              "legend": true,
+              "lines": true,
+              "linewidth": 1,
+              "nullPointMode": "connected",
+              "spaceLength": 10,
+              "zindex": -2
+            },
+            {
+              "alias": "/^99th quantile for week/",
+              "color": "#56A64B",
+              "dashLength": 4,
+              "dashes": true,
+              "legend": true,
+              "lines": true,
+              "linewidth": 2,
+              "nullPointMode": "connected",
+              "spaceLength": 4,
+              "zindex": -2
+            }
+          ],
+          "spaceLength": 10,
+          "stableId": "saturation-kube_container_cpu",
+          "stack": false,
+          "steppedLine": false,
+          "targets": [
+            {
+              "expr": "clamp_min(\n  clamp_max(\n    max by(type, pod, container) (\n  clamp_min(\n    clamp_max(\n      sum by (type, pod, container) (\n        rate(container_cpu_usage_seconds_total:labeled{container!=\"\", container!=\"POD\", type=\"webservice\"}[5m])\n      )\n      /\n      sum by(type, pod, container) (\n        container_spec_cpu_quota:labeled{container!=\"\", container!=\"POD\", type=\"webservice\"}\n        /\n        container_spec_cpu_period:labeled{container!=\"\", container!=\"POD\", type=\"webservice\"}\n      )\n      ,\n      1)\n  ,\n  0)\n)\n\n  ,1)\n,0)\n",
+              "format": "time_series",
+              "interval": "1m",
+              "intervalFactor": 3,
+              "legendFormat": "{{ pod }} {{ container }}",
+              "refId": "A"
+            },
+            {
+              "expr": "clamp_min(\n  clamp_max(\n    max(\n      max_over_time(gitlab_component_saturation:ratio{type=\"webservice\", component=\"kube_container_cpu\"}[$__interval])\n    ) by (component)\n  ,1)\n,0)\n",
+              "format": "time_series",
+              "interval": "1m",
+              "intervalFactor": 3,
+              "legendFormat": "aggregated {{ component }}",
+              "refId": "B"
+            },
+            {
+              "expr": "gitlab_component_saturation:ratio_quantile95_1w{type=\"webservice\", component=\"kube_container_cpu\"}\n",
+              "format": "time_series",
+              "interval": "1m",
+              "intervalFactor": 3,
+              "legendFormat": "95th quantile for week {{ component }}",
+              "refId": "C"
+            },
+            {
+              "expr": "gitlab_component_saturation:ratio_quantile99_1w{type=\"webservice\", component=\"kube_container_cpu\"}\n",
+              "format": "time_series",
+              "interval": "1m",
+              "intervalFactor": 3,
+              "legendFormat": "99th quantile for week {{ component }}",
+              "refId": "D"
+            },
+            {
+              "expr": "avg(slo:max:soft:gitlab_component_saturation:ratio{component=\"kube_container_cpu\"}) by (component)\n",
+              "format": "time_series",
+              "interval": "1m",
+              "intervalFactor": 3,
+              "legendFormat": "Soft SLO: {{ component }}",
+              "refId": "E"
+            },
+            {
+              "expr": "avg(slo:max:hard:gitlab_component_saturation:ratio{component=\"kube_container_cpu\"}) by (component)\n",
+              "format": "time_series",
+              "interval": "1m",
+              "intervalFactor": 3,
+              "legendFormat": "Hard SLO: {{ component }}",
+              "refId": "F"
+            }
+          ],
+          "thresholds": [],
+          "timeFrom": null,
+          "timeShift": null,
+          "title": "kube_container_cpu component saturation: Kube Container CPU Utilization",
+          "tooltip": {
+            "shared": true,
+            "sort": 2,
+            "value_type": "individual"
+          },
+          "type": "graph",
+          "xaxis": {
+            "buckets": null,
+            "mode": "time",
+            "name": null,
+            "show": true,
+            "values": []
+          },
+          "yaxes": [
+            {
+              "format": "percentunit",
+              "label": "Saturation %",
+              "logBase": 1,
+              "max": 1,
+              "min": null,
+              "show": true
+            },
+            {
+              "format": "short",
+              "label": null,
+              "logBase": 1,
+              "max": 1,
+              "min": 0,
+              "show": false
+            }
+          ]
+        },
+        {
+          "aliasColors": {},
+          "bars": false,
+          "dashLength": 10,
+          "dashes": false,
+          "datasource": "$PROMETHEUS_DS",
+          "decimals": 2,
+          "description": "Records the total memory utilization for containers for this service, as a percentage of\nthe memory limit as configured through Kubernetes.\n Lower is better.",
+          "fill": 0,
+          "fillGradient": 0,
+          "gridPos": {
+            "h": 10,
+            "w": 12,
+            "x": 12,
+            "y": 0
+          },
+          "id": 172578411,
+          "legend": {
+            "alignAsTable": true,
+            "avg": true,
+            "current": true,
+            "hideEmpty": true,
+            "max": true,
+            "min": true,
+            "rightSide": false,
+            "show": true,
+            "sideWidth": null,
+            "total": false,
+            "values": true
+          },
+          "lines": true,
+          "linewidth": 1,
+          "links": [],
+          "nullPointMode": "null",
+          "percentage": false,
+          "pointradius": 5,
+          "points": false,
+          "renderer": "flot",
+          "repeat": null,
+          "seriesOverrides": [
+            {
+              "alias": "/^Soft SLO/",
+              "color": "#FF4500",
+              "dashLength": 4,
+              "dashes": true,
+              "legend": true,
+              "lines": true,
+              "linewidth": 2,
+              "nullPointMode": "connected",
+              "spaceLength": 10,
+              "zindex": -2
+            },
+            {
+              "alias": "/^Hard SLO/",
+              "color": "#F2495C",
+              "dashLength": 4,
+              "dashes": true,
+              "legend": true,
+              "lines": true,
+              "linewidth": 4,
+              "nullPointMode": "connected",
+              "spaceLength": 4,
+              "zindex": -2
+            },
+            {
+              "alias": "/aggregated /",
+              "color": "#E7D551",
+              "linewidth": 2,
+              "zindex": 3
+            },
+            {
+              "alias": "/^95th quantile for week/",
+              "color": "#37872D",
+              "dashLength": 4,
+              "dashes": true,
+              "legend": true,
+              "lines": true,
+              "linewidth": 1,
+              "nullPointMode": "connected",
+              "spaceLength": 10,
+              "zindex": -2
+            },
+            {
+              "alias": "/^99th quantile for week/",
+              "color": "#56A64B",
+              "dashLength": 4,
+              "dashes": true,
+              "legend": true,
+              "lines": true,
+              "linewidth": 2,
+              "nullPointMode": "connected",
+              "spaceLength": 4,
+              "zindex": -2
+            }
+          ],
+          "spaceLength": 10,
+          "stableId": "saturation-kube_container_memory",
+          "stack": false,
+          "steppedLine": false,
+          "targets": [
+            {
+              "expr": "clamp_min(\n  clamp_max(\n    max by(type) (\n  clamp_min(\n    clamp_max(\n      container_memory_working_set_bytes:labeled{container!=\"\", container!=\"POD\", type=\"webservice\"}\n      /\n      (container_spec_memory_limit_bytes:labeled{container!=\"\", container!=\"POD\", type=\"webservice\"} \u003e 0)\n      ,\n      1)\n  ,\n  0)\n)\n\n  ,1)\n,0)\n",
+              "format": "time_series",
+              "interval": "1m",
+              "intervalFactor": 3,
+              "legendFormat": "{{ type }}",
+              "refId": "A"
+            },
+            {
+              "expr": "clamp_min(\n  clamp_max(\n    max(\n      max_over_time(gitlab_component_saturation:ratio{type=\"webservice\", component=\"kube_container_memory\"}[$__interval])\n    ) by (component)\n  ,1)\n,0)\n",
+              "format": "time_series",
+              "interval": "1m",
+              "intervalFactor": 3,
+              "legendFormat": "aggregated {{ component }}",
+              "refId": "B"
+            },
+            {
+              "expr": "gitlab_component_saturation:ratio_quantile95_1w{type=\"webservice\", component=\"kube_container_memory\"}\n",
+              "format": "time_series",
+              "interval": "1m",
+              "intervalFactor": 3,
+              "legendFormat": "95th quantile for week {{ component }}",
+              "refId": "C"
+            },
+            {
+              "expr": "gitlab_component_saturation:ratio_quantile99_1w{type=\"webservice\", component=\"kube_container_memory\"}\n",
+              "format": "time_series",
+              "interval": "1m",
+              "intervalFactor": 3,
+              "legendFormat": "99th quantile for week {{ component }}",
+              "refId": "D"
+            },
+            {
+              "expr": "avg(slo:max:soft:gitlab_component_saturation:ratio{component=\"kube_container_memory\"}) by (component)\n",
+              "format": "time_series",
+              "interval": "1m",
+              "intervalFactor": 3,
+              "legendFormat": "Soft SLO: {{ component }}",
+              "refId": "E"
+            },
+            {
+              "expr": "avg(slo:max:hard:gitlab_component_saturation:ratio{component=\"kube_container_memory\"}) by (component)\n",
+              "format": "time_series",
+              "interval": "1m",
+              "intervalFactor": 3,
+              "legendFormat": "Hard SLO: {{ component }}",
+              "refId": "F"
+            }
+          ],
+          "thresholds": [],
+          "timeFrom": null,
+          "timeShift": null,
+          "title": "kube_container_memory component saturation: Kube Container Memory Utilization",
+          "tooltip": {
+            "shared": true,
+            "sort": 2,
+            "value_type": "individual"
+          },
+          "type": "graph",
+          "xaxis": {
+            "buckets": null,
+            "mode": "time",
+            "name": null,
+            "show": true,
+            "values": []
+          },
+          "yaxes": [
+            {
+              "format": "percentunit",
+              "label": "Saturation %",
+              "logBase": 1,
+              "max": 1,
+              "min": null,
+              "show": true
+            },
+            {
+              "format": "short",
+              "label": null,
+              "logBase": 1,
+              "max": 1,
+              "min": 0,
+              "show": false
+            }
+          ]
+        },
+        {
+          "aliasColors": {},
+          "bars": false,
+          "dashLength": 10,
+          "dashes": false,
+          "datasource": "$PROMETHEUS_DS",
+          "decimals": 2,
+          "description": "This resource measures average CPU utilization across an all cores in the node pool for\na service fleet.\n\nIf it is becoming saturated, it may indicate that the fleet needs horizontal scaling.\n Lower is better.",
+          "fill": 0,
+          "fillGradient": 0,
+          "gridPos": {
+            "h": 10,
+            "w": 12,
+            "x": 0,
+            "y": 10
+          },
+          "id": 1839360107,
+          "legend": {
+            "alignAsTable": true,
+            "avg": true,
+            "current": true,
+            "hideEmpty": true,
+            "max": true,
+            "min": true,
+            "rightSide": false,
+            "show": true,
+            "sideWidth": null,
+            "total": false,
+            "values": true
+          },
+          "lines": true,
+          "linewidth": 1,
+          "links": [],
+          "nullPointMode": "null",
+          "percentage": false,
+          "pointradius": 5,
+          "points": false,
+          "renderer": "flot",
+          "repeat": null,
+          "seriesOverrides": [
+            {
+              "alias": "/^Soft SLO/",
+              "color": "#FF4500",
+              "dashLength": 4,
+              "dashes": true,
+              "legend": true,
+              "lines": true,
+              "linewidth": 2,
+              "nullPointMode": "connected",
+              "spaceLength": 10,
+              "zindex": -2
+            },
+            {
+              "alias": "/^Hard SLO/",
+              "color": "#F2495C",
+              "dashLength": 4,
+              "dashes": true,
+              "legend": true,
+              "lines": true,
+              "linewidth": 4,
+              "nullPointMode": "connected",
+              "spaceLength": 4,
+              "zindex": -2
+            },
+            {
+              "alias": "/aggregated /",
+              "color": "#E7D551",
+              "linewidth": 2,
+              "zindex": 3
+            },
+            {
+              "alias": "/^95th quantile for week/",
+              "color": "#37872D",
+              "dashLength": 4,
+              "dashes": true,
+              "legend": true,
+              "lines": true,
+              "linewidth": 1,
+              "nullPointMode": "connected",
+              "spaceLength": 10,
+              "zindex": -2
+            },
+            {
+              "alias": "/^99th quantile for week/",
+              "color": "#56A64B",
+              "dashLength": 4,
+              "dashes": true,
+              "legend": true,
+              "lines": true,
+              "linewidth": 2,
+              "nullPointMode": "connected",
+              "spaceLength": 4,
+              "zindex": -2
+            }
+          ],
+          "spaceLength": 10,
+          "stableId": "saturation-kube_pool_cpu",
+          "stack": false,
+          "steppedLine": false,
+          "targets": [
+            {
+              "expr": "clamp_min(\n  clamp_max(\n    max by(type) (\n  clamp_min(\n    clamp_max(\n      1 - avg by (type) (\n        rate(node_cpu_seconds_total:labeled{mode=\"idle\", type=\"webservice\"}[5m])\n      )\n      ,\n      1)\n  ,\n  0)\n)\n\n  ,1)\n,0)\n",
+              "format": "time_series",
+              "interval": "1m",
+              "intervalFactor": 3,
+              "legendFormat": "{{ type }}",
+              "refId": "A"
+            },
+            {
+              "expr": "clamp_min(\n  clamp_max(\n    max(\n      max_over_time(gitlab_component_saturation:ratio{type=\"webservice\", component=\"kube_pool_cpu\"}[$__interval])\n    ) by (component)\n  ,1)\n,0)\n",
+              "format": "time_series",
+              "interval": "1m",
+              "intervalFactor": 3,
+              "legendFormat": "aggregated {{ component }}",
+              "refId": "B"
+            },
+            {
+              "expr": "gitlab_component_saturation:ratio_quantile95_1w{type=\"webservice\", component=\"kube_pool_cpu\"}\n",
+              "format": "time_series",
+              "interval": "1m",
+              "intervalFactor": 3,
+              "legendFormat": "95th quantile for week {{ component }}",
+              "refId": "C"
+            },
+            {
+              "expr": "gitlab_component_saturation:ratio_quantile99_1w{type=\"webservice\", component=\"kube_pool_cpu\"}\n",
+              "format": "time_series",
+              "interval": "1m",
+              "intervalFactor": 3,
+              "legendFormat": "99th quantile for week {{ component }}",
+              "refId": "D"
+            },
+            {
+              "expr": "avg(slo:max:soft:gitlab_component_saturation:ratio{component=\"kube_pool_cpu\"}) by (component)\n",
+              "format": "time_series",
+              "interval": "1m",
+              "intervalFactor": 3,
+              "legendFormat": "Soft SLO: {{ component }}",
+              "refId": "E"
+            },
+            {
+              "expr": "avg(slo:max:hard:gitlab_component_saturation:ratio{component=\"kube_pool_cpu\"}) by (component)\n",
+              "format": "time_series",
+              "interval": "1m",
+              "intervalFactor": 3,
+              "legendFormat": "Hard SLO: {{ component }}",
+              "refId": "F"
+            }
+          ],
+          "thresholds": [],
+          "timeFrom": null,
+          "timeShift": null,
+          "title": "kube_pool_cpu component saturation: Average Node Pool CPU Utilization",
+          "tooltip": {
+            "shared": true,
+            "sort": 2,
+            "value_type": "individual"
+          },
+          "type": "graph",
+          "xaxis": {
+            "buckets": null,
+            "mode": "time",
+            "name": null,
+            "show": true,
+            "values": []
+          },
+          "yaxes": [
+            {
+              "format": "percentunit",
+              "label": "Saturation %",
+              "logBase": 1,
+              "max": 1,
+              "min": null,
+              "show": true
+            },
+            {
+              "format": "short",
+              "label": null,
+              "logBase": 1,
+              "max": 1,
+              "min": 0,
+              "show": false
+            }
+          ]
+        }
+      ],
+      "repeat": null,
+      "repeatIteration": null,
+      "repeatRowId": null,
+      "showTitle": true,
+      "title": "🌡 Saturation Details",
+      "titleSize": "h6",
+      "type": "row"
+    },
+    {
       "content": "Made with ❤️ and [Grafonnet](https://github.com/grafana/grafonnet-lib). [Contribute to this dashboard on GitLab.com](https://gitlab.com/gitlab-com/runbooks/blob/master/dashboards)\n",
       "datasource": null,
       "gridPos": {
@@ -3671,7 +4323,7 @@
         "x": 0,
         "y": 110000
       },
-      "id": 33,
+      "id": 38,
       "mode": "markdown",
       "title": "Source",
       "type": "text"

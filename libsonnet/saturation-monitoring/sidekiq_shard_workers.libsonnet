@@ -18,6 +18,7 @@ local sidekiqHelpers = import './services/lib/sidekiq-helpers.libsonnet';
     |||,
     grafana_dashboard_uid: 'sat_sidekiq_shard_workers',
     resourceLabels: ['shard'],
+    resourceAutoscalingRule: true,
     burnRatePeriod: '5m',
     query: |||
       sum by (%(aggregationLabels)s) (

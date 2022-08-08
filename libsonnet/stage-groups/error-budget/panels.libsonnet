@@ -1,7 +1,9 @@
 local sidekiqHelpers = import '../../../metrics-catalog/services/lib/sidekiq-helpers.libsonnet';
 local utils = import './utils.libsonnet';
 local elasticsearchLinks = import 'elasticlinkbuilder/elasticsearch_links.libsonnet';
+local matching = import 'elasticlinkbuilder/matching.libsonnet';
 local basic = import 'grafana/basic.libsonnet';
+local promQuery = import 'grafana/prom_query.libsonnet';
 local metricsCatalog = import 'servicemetrics/metrics-catalog.libsonnet';
 local durationParser = import 'utils/duration-parser.libsonnet';
 local strings = import 'utils/strings.libsonnet';
@@ -12,20 +14,58 @@ local baseSelector = {
   monitor: 'global',
 };
 
-local thresholds(slaTarget, range) =
-  local definitions = [
+// In prior versions of Grafana, threshold configuration is static only. It does
+// not support variables, nor dynamic value from any source. After Grafana v8.1,
+// the team introduces a new "Config From Query" transformation that allows us
+// to convert a result from a target to become panel configuration.
+//
+// dynamicThresholds sets a single threshold value based on the returned value
+// of the input query.
+local dynamicThresholds(panel, query) =
+  panel
+  .addTarget(
+    promQuery.target(
+      query,
+      legendFormat='budget',
+    )
+  ) + {
+    // TODO: this approach is not sustainable. Unfortunately, transformation
+    // support in grafonnet-lib is limited, only table panel is targeted:
+    // https://github.com/grafana/grafonnet-lib/pull/265
+    transformations+: [
+      {
+        id: 'configFromData',
+        options: {
+          configRefId: 'B',
+          mappings: [
+            {
+              fieldName: 'budget',
+              handlerKey: 'threshold1',
+            },
+          ],
+        },
+      },
+    ],
+  };
+
+// 10 years in seconds
+local staticThresholdDefinitions(slaTarget) =
+  local infinity = 315360000;
+  [
     {
       availability: {
         from: 0,
         to: slaTarget,
       },
+      // secondsRemaining heuristic is simple. It changes the appearance of the
+      // panel if the remaining seconds are below zero. Unfortunately, AFAIK,
+      // grafonnet-lib does not support one-ended range. Grafana doesn't support
+      // Infinity value either. Setting a too big value will make Grafana
+      // overflowed. So, I picked 10 years as Infinity. Who queries 10 years of
+      // data anyway.
       secondsRemaining: {
-        from: 0 - durationParser.toSeconds(range),
+        from: 0 - infinity,
         to: 0,
-      },
-      secondsSpent: {
-        from: utils.budgetSeconds(slaTarget, range),
-        to: durationParser.toSeconds(range),
       },
       color: 'red',
       text: '🥵 Unhealthy',
@@ -37,51 +77,61 @@ local thresholds(slaTarget, range) =
       },
       secondsRemaining: {
         from: 0,
-        to: utils.budgetSeconds(slaTarget, range),
-      },
-      secondsSpent: {
-        from: 0,
-        to: utils.budgetSeconds(slaTarget, range),
+        to: infinity,
       },
       color: 'green',
       text: '🥳 Healthy',
     },
   ];
+
+// staticThresholds setups the thresholds of panels based on a set of static
+// (server-generated) settings.
+local staticThresholds(slaTarget, range, type) =
+  local definitions = staticThresholdDefinitions(slaTarget);
   local thresholdStep(color, value) = { color: color, value: value };
-  local steps(type) =
-    std.map(
-      function(definition) thresholdStep(definition.color, definition[type].from),
-      std.sort(definitions, function(definition) definition[type].from)
-    );
-  local mapping(color, from, to, text, index) = {
-    type: 'range',
-    options: {
-      from: from,
-      to: to,
-      result: {
-        color: color,
-        index: index,
-        text: text,
+  std.map(
+    function(definition) thresholdStep(definition.color, definition[type].from),
+    std.sort(definitions, function(definition) definition[type].from)
+  );
+
+local errorBudgetStatusPanel(queries, slaTarget, range, groupSelectors) =
+  local definitions = staticThresholdDefinitions(slaTarget);
+  local mappings = std.mapWithIndex(
+    function(index, definition) {
+      type: 'range',
+      options: {
+        from: definition.availability.from,
+        to: definition.availability.to,
+        result: {
+          color: definition.color,
+          index: index,
+          text: definition.text,
+        },
       },
     },
-  };
-  local mappings(type) =
-    std.mapWithIndex(
-      function(index, definition) mapping(definition.color, definition[type].from, definition[type].to, definition.text, index),
-      definitions
-    );
-
-  {
-    stepsFor(type): steps(type),
-    mappingsFor(type): mappings(type),
-  };
-
+    definitions
+  );
+  basic.statPanel(
+    '',
+    '',
+    staticThresholds(slaTarget, range, 'availability'),
+    mappings=mappings,
+    query=queries.errorBudgetRatio(
+      baseSelector {
+        stage_group: groupSelectors,
+      },
+    ),
+    legendFormat='',
+    unit='none',
+    decimals='2',
+    textMode='value',
+  );
 
 local availabilityStatPanel(queries, slaTarget, range, groupSelectors) =
   basic.statPanel(
     '',
     'Availability',
-    thresholds(slaTarget, range).stepsFor('availability'),
+    staticThresholds(slaTarget, range, 'availability'),
     query=queries.errorBudgetRatio(
       baseSelector {
         stage_group: groupSelectors,
@@ -94,44 +144,35 @@ local availabilityStatPanel(queries, slaTarget, range, groupSelectors) =
 
 local availabilityTargetStatPanel(queries, slaTarget, range, groupSelectors) =
   basic.statPanel(
-    'Target: %(targetRatio).2f%%' % { targetRatio: slaTarget * 100.0 },
+    'Target:',
     '',
-    thresholds(slaTarget, range).stepsFor('availability'),
-    mappings=thresholds(slaTarget, range).mappingsFor('availability'),
-    query=queries.errorBudgetRatio(
-      baseSelector {
-        stage_group: groupSelectors,
-      },
-    ),
+    color='gray',
+    query='%(slaTarget).4f * 100.0' % slaTarget,
     legendFormat='',
-    unit='none',
+    unit='percent',
     decimals='2'
   );
 
 local timeRemainingTargetStatPanel(queries, slaTarget, range, groupSelectors) =
+  local title =
+    if utils.isDynamicRange(range) then
+      'Budget:'
+    else
+      '%(range)s budget:' % { range: range };
   basic.statPanel(
-    '%(range)s budget: %(budgetMinutes).0f minutes' % {
-      budgetMinutes: (utils.budgetSeconds(slaTarget, range) / 60.0),
-      range: range,
-    },
+    title,
     '',
-    thresholds(slaTarget, range).stepsFor('secondsRemaining'),
-    mappings=thresholds(slaTarget, range).mappingsFor('secondsRemaining'),
-    query=queries.errorBudgetTimeRemaining(
-      baseSelector {
-        stage_group: groupSelectors,
-      },
-    ),
+    color='gray',
+    query=queries.budgetSecondsForRange(),
     legendFormat='',
-    unit='none',
-    decimals='2'
+    unit='s',
   );
 
 local timeRemainingStatPanel(queries, slaTarget, range, groupSelectors) =
   basic.statPanel(
     '',
     'Budget remaining',
-    thresholds(slaTarget, range).stepsFor('secondsRemaining'),
+    staticThresholds(slaTarget, range, 'secondsRemaining'),
     query=queries.errorBudgetTimeRemaining(
       baseSelector {
         stage_group: groupSelectors,
@@ -142,10 +183,10 @@ local timeRemainingStatPanel(queries, slaTarget, range, groupSelectors) =
   );
 
 local timeSpentStatPanel(queries, slaTarget, range, groupSelectors) =
-  basic.statPanel(
+  local panel = basic.statPanel(
     '',
     'Budget spent',
-    thresholds(slaTarget, range).stepsFor('secondsSpent'),
+    [],
     query=queries.errorBudgetTimeSpent(
       baseSelector {
         stage_group: groupSelectors,
@@ -154,24 +195,22 @@ local timeSpentStatPanel(queries, slaTarget, range, groupSelectors) =
     legendFormat='',
     unit='s',
   );
+  // The threshold is the budget of the range.
+  dynamicThresholds(panel, queries.budgetSecondsForRange());
 
 local timeSpentTargetStatPanel(queries, slaTarget, range, groupSelectors) =
+  local title =
+    if utils.isDynamicRange(range) then
+      'Budget:'
+    else
+      '%(range)s budget:' % { range: range };
   basic.statPanel(
-    'Target: Less than %(budgetMinutes).0f minutes in %(range)s' % {
-      budgetMinutes: (utils.budgetSeconds(slaTarget, range) / 60.0),
-      range: range,
-    },
+    title,
     '',
-    thresholds(slaTarget, range).stepsFor('secondsSpent'),
-    mappings=thresholds(slaTarget, range).mappingsFor('secondsSpent'),
-    query=queries.errorBudgetTimeSpent(
-      baseSelector {
-        stage_group: groupSelectors,
-      },
-    ),
+    color='gray',
+    query=queries.budgetSecondsForRange(),
     legendFormat='',
-    unit='none',
-    decimals='2'
+    unit='s',
   );
 
 local explanationPanel(slaTarget, range, group) =
@@ -217,7 +256,7 @@ local explanationPanel(slaTarget, range, group) =
     ||| % {
       slaTarget: '%.2f%%' % (slaTarget * 100.0),
       budgetRatio: '%.2f%%' % ((1 - slaTarget) * 100.0),
-      budgetMinutes: '%i' % (utils.budgetSeconds(slaTarget, range) / 60),
+      budgetMinutes: '%s' % utils.budgetMinutes(slaTarget, range),
       group: group,
     },
   );
@@ -382,45 +421,81 @@ local sidekiqDurationTableFilters = std.map(
   std.objectFields(sidekiqDurationThresholdByFilter),
 );
 local logLinks(featureCategories) =
-  local featureCategoryFilters = elasticsearchLinks.matchers({
+  local featureCategoryFilters = matching.matchers({
     'json.meta.feature_category': featureCategories,
   });
+  local withDurationFilters = [matching.existsFilter('json.duration_s'), matching.existsFilter('json.target_duration_s')];
   local timeFrame = elasticsearchLinks.timeRange('now-7d', 'now');
 
-  local pumaSplitColumns = ['json.meta.caller_id.keyword'];
-  local pumaApdexTable = elasticsearchLinks.buildElasticTableCountVizURL(
+  local railsSplitColumns = [
+    'json.meta.caller_id.keyword',
+    'json.request_urgency.keyword',
+    'json.target_duration_s',
+  ];
+  local apdexAgg = {
+    enabled: true,
+    id: '3',
+    params: {
+      customLabel: 'Operations over specified threshold (apdex)',
+      field: 'json.duration_s',
+      json: '{"script": "doc[\'json.duration_s\'].value > doc[\'json.target_duration_s\'].value ? 1 : 0"}',
+    },
+    schema: 'metric',
+    type: 'sum',
+  };
+
+  local railsRequestsApdexTable = elasticsearchLinks.buildElasticTableCountVizURL(
     'rails',
-    featureCategoryFilters,
-    splitSeries=pumaSplitColumns,
+    featureCategoryFilters + withDurationFilters,
+    splitSeries=railsSplitColumns,
     timeRange=timeFrame,
     extraAggs=[
+      apdexAgg,
+    ],
+    orderById='3',
+  );
+
+  local pumaErrorsTable = elasticsearchLinks.buildElasticTableFailureCountVizURL(
+    'rails', featureCategoryFilters, splitSeries=railsSplitColumns, timeRange=timeFrame
+  );
+
+  local railsAllRequestsTable = elasticsearchLinks.buildElasticTableCountVizURL(
+    'rails',
+    featureCategoryFilters + withDurationFilters,
+    splitSeries=railsSplitColumns,
+    timeRange=timeFrame,
+    extraAggs=[
+      apdexAgg,
       {
         enabled: true,
-        id: '3',
+        id: '4',
         params: {
-          customLabel: 'Operations over threshold (1s)',
-          field: 'json.duration_s',
-          json: '{"script": "doc[\'json.duration_s\'].value >= 1 ? 1 : 0"}',
+          customLabel: 'Failing requests (error)',
+          field: 'json.status',
+          json: '{"script": "doc[\'json.status\'].value >= 500 ? 1 : 0"}',
         },
         schema: 'metric',
         type: 'sum',
       },
       {
         enabled: true,
-        id: '4',
+        id: '5',
         params: {
-          customLabel: 'Operations over error budget threshold (5s)',
+          customLabel: 'Total violations (apdex + error)',
           field: 'json.duration_s',
-          json: '{"script": "doc[\'json.duration_s\'].value >= 5 ? 1 : 0"}',
+          json: std.toString({
+            script: |||
+              int errors = doc['json.status'].value >= 500 ? 1 : 0;
+              int slowRequests = doc['json.duration_s'].value > doc['json.target_duration_s'].value ? 1 : 0;
+              return errors + slowRequests;
+            |||,
+          }),
         },
         schema: 'metric',
         type: 'sum',
       },
     ],
-    orderById='3',
-  );
-  local pumaErrorsTable = elasticsearchLinks.buildElasticTableFailureCountVizURL(
-    'rails', featureCategoryFilters, splitSeries=pumaSplitColumns, timeRange=timeFrame
+    orderById='5',
   );
 
   local sidekiqSplitColumns = ['json.class.keyword'];
@@ -436,7 +511,7 @@ local logLinks(featureCategories) =
       filters: sidekiqDurationTableFilters,
     },
   };
-  local doneFilter = elasticsearchLinks.matchers({
+  local doneFilter = matching.matchers({
     'json.job_status': 'done',
   });
 
@@ -448,19 +523,25 @@ local logLinks(featureCategories) =
     title='Failure log links',
     mode='markdown',
     content=|||
-      ##### [Puma Apdex](%(pumaApdexLink)s): slow requests
+      ##### [Rails Requests Apdex](%(railsRequestsApdexLink)s): slow requests
 
       This shows the number of requests exceeding the request duration thresholds
-      per endpoint over the past 7 days.
+      configured per endpoint over the past 7 days.
 
-      This shows all requests exceeding 1s and 5s durations. We will make this
-      take the configured [request urgency](%(requestUrgencyLink)s) into account in
-      [this issue](%(scalability1478)s).
+      The threshold depends on the [configurable request urgency](%(requestUrgencyLink)s).
 
       ##### [Puma Errors](%(pumaErrorsLink)s): failing requests
 
       This shows the number of Rails requests that failed per endpoint over
       the past 7 days.
+
+      ##### [All request violations](%(allRequestViolations)s): slow requests + failing requests
+
+      This slow loading table shows the endpoints that errored or where slow the most often
+      in the past 7 days.
+
+      If `rails_requests` or `puma` are at the top of the table on the left side, then
+      this will show you the top endpoints to look into.
 
       ##### [Sidekiq Execution Apdex](%(sidekiqApdexLink)s): slow jobs
 
@@ -475,10 +556,10 @@ local logLinks(featureCategories) =
       This includes retries: if a job with a was retried 3 times, before exhausting
       its retries, this counts as 3 failures towards the budget.
     ||| % {
-      pumaApdexLink: pumaApdexTable,
+      railsRequestsApdexLink: railsRequestsApdexTable,
       requestUrgencyLink: 'https://docs.gitlab.com/ee/development/application_slis/rails_request_apdex.html#adjusting-request-urgency',
-      scalability1478: 'https://gitlab.com/gitlab-com/gl-infra/scalability/-/issues/1478',
       pumaErrorsLink: pumaErrorsTable,
+      allRequestViolations: railsAllRequestsTable,
       sidekiqErrorsLink: sidekiqErrorsTable,
       sidekiqApdexLink: sidekiqApdexTables,
       sidekiqUrgentThreshold: sidekiqHelpers.slos.urgent.executionDurationSeconds,
@@ -490,6 +571,8 @@ local logLinks(featureCategories) =
   init(queries, slaTarget, range):: {
     availabilityStatPanel(group)::
       availabilityStatPanel(queries, slaTarget, range, group),
+    errorBudgetStatusPanel(group)::
+      errorBudgetStatusPanel(queries, slaTarget, range, group),
     availabilityTargetStatPanel(group)::
       availabilityTargetStatPanel(queries, slaTarget, range, group),
     timeSpentStatPanel(group)::

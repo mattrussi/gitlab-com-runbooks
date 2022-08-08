@@ -1,6 +1,6 @@
 # Google mtail for prometheus metrics
 
-https://github.com/google/mtail
+<https://github.com/google/mtail>
 
 This is a way of getting metrics out of logs.
 
@@ -11,12 +11,12 @@ written.
 ## Getting started
 
 1. Pick the log file you want to be parsing
-1. Code the `prog` you need for parsing this file referring to https://github.com/google/mtail/blob/master/docs/Programming-Guide.md
+1. Code the `prog` you need for parsing this file referring to <https://github.com/google/mtail/blob/master/docs/Programming-Guide.md>
 1. Configure the mtail prog files in [gitlab-prometheus](https://gitlab.com/gitlab-cookbooks/gitlab-prometheus), such that
-  1. There is a file that defines the parsing job stored in `files/default/mtail/<job_name>.mtail`
-  1. There is a recipe that configures mtail to copy this file into the progs folder, for ex: `recipes/mtail-nginx.rb` (check this file)
-  1. There is a spec file that checks that the file is correctly configured.
-  1. You bump the cookbook version and install
+1. There is a file that defines the parsing job stored in `files/default/mtail/<job_name>.mtail`
+1. There is a recipe that configures mtail to copy this file into the progs folder, for ex: `recipes/mtail-nginx.rb` (check this file)
+1. There is a spec file that checks that the file is correctly configured.
+1. You bump the cookbook version and install
 1. Deploy to production
 
 ## Testing the parsing locally

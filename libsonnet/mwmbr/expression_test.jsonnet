@@ -77,48 +77,11 @@ test.suite({
     |||,
   },
 
-  testErrorBurnWithMinimumRate: {
-    actual: expression.multiburnRateErrorExpression(
-      aggregationSet=testAggregationSet,
-      thresholdSLOValue=0.99,
-      metricSelectorHash={ type: 'web' },
-      minimumOperationRateForMonitoring=1,
-    ),
-    expect: |||
-      (
-        (
-          error:ratio_1h{monitor="global",type="web"}
-          > (14.4 * 0.990000)
-        )
-        and
-        (
-          error:ratio_5m{monitor="global",type="web"}
-          > (14.4 * 0.990000)
-        )
-        or
-        (
-          error:ratio_6h{monitor="global",type="web"}
-          > (6 * 0.990000)
-        )
-        and
-        (
-          error:ratio_30m{monitor="global",type="web"}
-          > (6 * 0.990000)
-        )
-      )
-      and on(environment,tier,type,stage)
-      (
-        sum by(environment,tier,type,stage) (operation:rate_1h{monitor="global",type="web"}) >= 1
-      )
-    |||,
-  },
-
-
   testErrorBurnWithThreshold: {
     actual: expression.multiburnRateErrorExpression(
       aggregationSet=testAggregationSet,
       metricSelectorHash={ type: 'web' },
-      minimumOperationRateForMonitoring=1,
+      requiredOpRate=10,
       thresholdSLOValue=0.01,
     ),
     expect: |||
@@ -145,7 +108,7 @@ test.suite({
       )
       and on(environment,tier,type,stage)
       (
-        sum by(environment,tier,type,stage) (operation:rate_1h{monitor="global",type="web"}) >= 1
+        sum by(environment,tier,type,stage) (operation:rate_1h{monitor="global",type="web"}) >= 10
       )
     |||,
   },
@@ -208,85 +171,13 @@ test.suite({
     |||,
   },
 
-  testApdexBurnWithMinimumRate: {
-    actual: expression.multiburnRateApdexExpression(
-      aggregationSet=testAggregationSet,
-      thresholdSLOValue=0.99,
-      metricSelectorHash={ type: 'web' },
-      minimumOperationRateForMonitoring=1,
-    ),
-    expect: |||
-      (
-        (
-          apdex:ratio_1h{monitor="global",type="web"}
-          < (1 - 14.4 * 0.010000)
-        )
-        and
-        (
-          apdex:ratio_5m{monitor="global",type="web"}
-          < (1 - 14.4 * 0.010000)
-        )
-        or
-        (
-          apdex:ratio_6h{monitor="global",type="web"}
-          < (1 - 6 * 0.010000)
-        )
-        and
-        (
-          apdex:ratio_30m{monitor="global",type="web"}
-          < (1 - 6 * 0.010000)
-        )
-      )
-      and on(environment,tier,type,stage)
-      (
-        sum by(environment,tier,type,stage) (operation:rate_1h{monitor="global",type="web"}) >= 1
-      )
-    |||,
-  },
-
-  testApdexBurnWithMinimumRateAndAggregation: {
-    actual: expression.multiburnRateApdexExpression(
-      aggregationSet=testAggregationSet,
-      metricSelectorHash={ type: 'web' },
-      thresholdSLOValue=0.99,
-      minimumOperationRateForMonitoring=1
-    ),
-    expect: |||
-      (
-        (
-          apdex:ratio_1h{monitor="global",type="web"}
-          < (1 - 14.4 * 0.010000)
-        )
-        and
-        (
-          apdex:ratio_5m{monitor="global",type="web"}
-          < (1 - 14.4 * 0.010000)
-        )
-        or
-        (
-          apdex:ratio_6h{monitor="global",type="web"}
-          < (1 - 6 * 0.010000)
-        )
-        and
-        (
-          apdex:ratio_30m{monitor="global",type="web"}
-          < (1 - 6 * 0.010000)
-        )
-      )
-      and on(environment,tier,type,stage)
-      (
-        sum by(environment,tier,type,stage) (operation:rate_1h{monitor="global",type="web"}) >= 1
-      )
-    |||,
-  },
-
   testApdexBurnWithMinimumSamples1h: {
     actual: expression.multiburnRateApdexExpression(
       aggregationSet=testAggregationSet,
       metricSelectorHash={ type: 'web' },
       thresholdSLOValue=0.99,
       windows=['1h'],
-      minimumSamplesForMonitoring=60,
+      requiredOpRate=0.01667,
       operationRateWindowDuration='1h',
     ),
     expect: |||
@@ -307,33 +198,4 @@ test.suite({
       )
     |||,
   },
-
-  testErrorBurnWithMinimumSamples3d: {
-    actual: expression.multiburnRateErrorExpression(
-      aggregationSet=testAggregationSet,
-      metricSelectorHash={ type: 'web' },
-      thresholdSLOValue=0.99,
-      windows=['3d'],
-      minimumSamplesForMonitoring=60,
-      operationRateWindowDuration='3d',
-    ),
-    expect: |||
-      (
-        (
-          error:ratio_3d{monitor="global",type="web"}
-          > (1 * 0.990000)
-        )
-        and
-        (
-          error:ratio_6h{monitor="global",type="web"}
-          > (1 * 0.990000)
-        )
-      )
-      and on(environment,tier,type,stage)
-      (
-        sum by(environment,tier,type,stage) (operation:rate_3d{monitor="global",type="web"}) >= 0.00023
-      )
-    |||,
-  },
-
 })

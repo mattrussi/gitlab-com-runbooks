@@ -91,17 +91,17 @@ groups:
       )
       and on(env,environment,tier,type,stage,component)
       (
-        sum by(env,environment,tier,type,stage,component) (gitlab_component_ops:rate_6h{component="loadbalancer",monitor="global",type="ci-runners"}) >= 1
+        sum by(env,environment,tier,type,stage,component) (gitlab_component_ops:rate_6h{component="loadbalancer",monitor="global",type="ci-runners"}) >= 0.16667
       )
   - alert: CiRunnersServiceLoadbalancerTrafficCessation
     for: 5m
     annotations:
       title: The loadbalancer SLI of the ci-runners service (`{{ $labels.stage }}`
-        stage) has not received any traffic in the past 30 minutes
+        stage) has not received any traffic in the past 30m
       description: |
         Measures aggregated HTTP request traffic through the HAProxy. 5xx responses are considered to be failures.
 
-        This alert signifies that the SLI is reporting a cessation of traffic, but the signal is not absent.
+        This alert signifies that the SLI is reporting a cessation of traffic; the signal is present, but is zero.
       grafana_dashboard_id: ci-runners-main/ci-runners-overview
       grafana_dashboard_link: https://dashboards.gitlab.net/d/ci-runners-main/ci-runners-overview?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-stage={{ $labels.stage }}
@@ -121,12 +121,14 @@ groups:
       slo_alert: "no"
       user_impacting: "yes"
     expr: |
-      gitlab_component_ops:rate_30m{type="ci-runners", component="loadbalancer", stage="main", monitor="global"} == 0
+      gitlab_component_ops:rate_30m{component="loadbalancer",monitor="global",stage="main",type="ci-runners"} == 0
+      and
+      gitlab_component_ops:rate_30m{component="loadbalancer",monitor="global",stage="main",type="ci-runners"} offset 1h >= 0.16666666666666666
   - alert: CiRunnersServiceLoadbalancerTrafficAbsent
     for: 30m
     annotations:
       title: The loadbalancer SLI of the ci-runners service (`{{ $labels.stage }}`
-        stage) has not reported any traffic in the past 30 minutes
+        stage) has not reported any traffic in the past 30m
       description: |
         Measures aggregated HTTP request traffic through the HAProxy. 5xx responses are considered to be failures.
 
@@ -152,9 +154,9 @@ groups:
       slo_alert: "no"
       user_impacting: "yes"
     expr: |
-      gitlab_component_ops:rate_5m{type="ci-runners", component="loadbalancer", stage="main", monitor="global"} offset 1h
+      gitlab_component_ops:rate_5m{component="loadbalancer",monitor="global",stage="main",type="ci-runners"} offset 1h
       unless
-      gitlab_component_ops:rate_5m{type="ci-runners", component="loadbalancer", stage="main", monitor="global"}
+      gitlab_component_ops:rate_5m{component="loadbalancer",monitor="global",stage="main",type="ci-runners"}
   - alert: CiRunnersServicePollingErrorSLOViolation
     for: 2m
     annotations:
@@ -253,19 +255,19 @@ groups:
       )
       and on(env,environment,tier,type,stage,component)
       (
-        sum by(env,environment,tier,type,stage,component) (gitlab_component_ops:rate_6h{component="polling",monitor="global",type="ci-runners"}) >= 1
+        sum by(env,environment,tier,type,stage,component) (gitlab_component_ops:rate_6h{component="polling",monitor="global",type="ci-runners"}) >= 0.16667
       )
   - alert: CiRunnersServicePollingTrafficCessation
     for: 5m
     annotations:
       title: The polling SLI of the ci-runners service (`{{ $labels.stage }}` stage)
-        has not received any traffic in the past 30 minutes
+        has not received any traffic in the past 30m
       description: |
         This SLI monitors job polling operations from runners, via Workhorse's `/api/v4/jobs/request` route.
 
         5xx responses are considered to be errors, and could indicate postgres timeouts (after 15s) on the main query used in assigning jobs to runners.
 
-        This alert signifies that the SLI is reporting a cessation of traffic, but the signal is not absent.
+        This alert signifies that the SLI is reporting a cessation of traffic; the signal is present, but is zero.
       grafana_dashboard_id: ci-runners-main/ci-runners-overview
       grafana_dashboard_link: https://dashboards.gitlab.net/d/ci-runners-main/ci-runners-overview?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-stage={{ $labels.stage }}
@@ -289,12 +291,14 @@ groups:
       slo_alert: "no"
       user_impacting: "yes"
     expr: |
-      gitlab_component_ops:rate_30m{type="ci-runners", component="polling", stage="main", monitor="global"} == 0
+      gitlab_component_ops:rate_30m{component="polling",monitor="global",stage="main",type="ci-runners"} == 0
+      and
+      gitlab_component_ops:rate_30m{component="polling",monitor="global",stage="main",type="ci-runners"} offset 1h >= 0.16666666666666666
   - alert: CiRunnersServicePollingTrafficAbsent
     for: 30m
     annotations:
       title: The polling SLI of the ci-runners service (`{{ $labels.stage }}` stage)
-        has not reported any traffic in the past 30 minutes
+        has not reported any traffic in the past 30m
       description: |
         This SLI monitors job polling operations from runners, via Workhorse's `/api/v4/jobs/request` route.
 
@@ -326,9 +330,9 @@ groups:
       slo_alert: "no"
       user_impacting: "yes"
     expr: |
-      gitlab_component_ops:rate_5m{type="ci-runners", component="polling", stage="main", monitor="global"} offset 1h
+      gitlab_component_ops:rate_5m{component="polling",monitor="global",stage="main",type="ci-runners"} offset 1h
       unless
-      gitlab_component_ops:rate_5m{type="ci-runners", component="polling", stage="main", monitor="global"}
+      gitlab_component_ops:rate_5m{component="polling",monitor="global",stage="main",type="ci-runners"}
   - alert: CiRunnersServiceQueuingQueriesDurationApdexSLOViolation
     for: 2m
     annotations:
@@ -435,19 +439,19 @@ groups:
       )
       and on(env,environment,tier,type,stage,component)
       (
-        sum by(env,environment,tier,type,stage,component) (gitlab_component_ops:rate_6h{component="queuing_queries_duration",monitor="global",type="ci-runners"}) >= 1
+        sum by(env,environment,tier,type,stage,component) (gitlab_component_ops:rate_6h{component="queuing_queries_duration",monitor="global",type="ci-runners"}) >= 0.16667
       )
   - alert: CiRunnersServiceQueuingQueriesDurationTrafficCessation
     for: 5m
     annotations:
       title: The queuing_queries_duration SLI of the ci-runners service (`{{ $labels.stage
-        }}` stage) has not received any traffic in the past 30 minutes
+        }}` stage) has not received any traffic in the past 30m
       description: |
         This SLI monitors the queuing queries duration. Everything above 1 second is considered to be unexpected and needs investigation.
 
         These database queries are executed in the Rails application when a runner requests a new build to process in `POST /api/v4/jobs/request`.
 
-        This alert signifies that the SLI is reporting a cessation of traffic, but the signal is not absent.
+        This alert signifies that the SLI is reporting a cessation of traffic; the signal is present, but is zero.
       grafana_dashboard_id: ci-runners-main/ci-runners-overview
       grafana_dashboard_link: https://dashboards.gitlab.net/d/ci-runners-main/ci-runners-overview?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-stage={{ $labels.stage }}
@@ -472,12 +476,14 @@ groups:
       team: pipeline_execution
       user_impacting: "no"
     expr: |
-      gitlab_component_ops:rate_30m{type="ci-runners", component="queuing_queries_duration", stage="main", monitor="global"} == 0
+      gitlab_component_ops:rate_30m{component="queuing_queries_duration",monitor="global",stage="main",type="ci-runners"} == 0
+      and
+      gitlab_component_ops:rate_30m{component="queuing_queries_duration",monitor="global",stage="main",type="ci-runners"} offset 1h >= 0.16666666666666666
   - alert: CiRunnersServiceQueuingQueriesDurationTrafficAbsent
     for: 30m
     annotations:
       title: The queuing_queries_duration SLI of the ci-runners service (`{{ $labels.stage
-        }}` stage) has not reported any traffic in the past 30 minutes
+        }}` stage) has not reported any traffic in the past 30m
       description: |
         This SLI monitors the queuing queries duration. Everything above 1 second is considered to be unexpected and needs investigation.
 
@@ -510,9 +516,9 @@ groups:
       team: pipeline_execution
       user_impacting: "no"
     expr: |
-      gitlab_component_ops:rate_5m{type="ci-runners", component="queuing_queries_duration", stage="main", monitor="global"} offset 1h
+      gitlab_component_ops:rate_5m{component="queuing_queries_duration",monitor="global",stage="main",type="ci-runners"} offset 1h
       unless
-      gitlab_component_ops:rate_5m{type="ci-runners", component="queuing_queries_duration", stage="main", monitor="global"}
+      gitlab_component_ops:rate_5m{component="queuing_queries_duration",monitor="global",stage="main",type="ci-runners"}
   - alert: CiRunnersServiceSharedRunnerQueuesApdexSLOViolation
     for: 2m
     annotations:
@@ -621,7 +627,7 @@ groups:
       )
       and on(env,environment,tier,type,stage,component)
       (
-        sum by(env,environment,tier,type,stage,component) (gitlab_component_ops:rate_6h{component="shared_runner_queues",monitor="global",type="ci-runners"}) >= 1
+        sum by(env,environment,tier,type,stage,component) (gitlab_component_ops:rate_6h{component="shared_runner_queues",monitor="global",type="ci-runners"}) >= 0.16667
       )
   - alert: CiRunnersServiceSharedRunnerQueuesErrorSLOViolation
     for: 2m
@@ -725,13 +731,13 @@ groups:
       )
       and on(env,environment,tier,type,stage,component)
       (
-        sum by(env,environment,tier,type,stage,component) (gitlab_component_ops:rate_6h{component="shared_runner_queues",monitor="global",type="ci-runners"}) >= 1
+        sum by(env,environment,tier,type,stage,component) (gitlab_component_ops:rate_6h{component="shared_runner_queues",monitor="global",type="ci-runners"}) >= 0.16667
       )
   - alert: CiRunnersServiceSharedRunnerQueuesTrafficCessation
     for: 5m
     annotations:
       title: The shared_runner_queues SLI of the ci-runners service (`{{ $labels.stage
-        }}` stage) has not received any traffic in the past 30 minutes
+        }}` stage) has not received any traffic in the past 30m
       description: |
         This SLI monitors the shared runner queues on GitLab.com. Each job is an operation.
 
@@ -739,7 +745,7 @@ groups:
 
         Jobs marked as failing with runner system failures are considered to be in error.
 
-        This alert signifies that the SLI is reporting a cessation of traffic, but the signal is not absent.
+        This alert signifies that the SLI is reporting a cessation of traffic; the signal is present, but is zero.
       grafana_dashboard_id: ci-runners-main/ci-runners-overview
       grafana_dashboard_link: https://dashboards.gitlab.net/d/ci-runners-main/ci-runners-overview?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-stage={{ $labels.stage }}
@@ -763,12 +769,14 @@ groups:
       slo_alert: "no"
       user_impacting: "yes"
     expr: |
-      gitlab_component_ops:rate_30m{type="ci-runners", component="shared_runner_queues", stage="main", monitor="global"} == 0
+      gitlab_component_ops:rate_30m{component="shared_runner_queues",monitor="global",stage="main",type="ci-runners"} == 0
+      and
+      gitlab_component_ops:rate_30m{component="shared_runner_queues",monitor="global",stage="main",type="ci-runners"} offset 1h >= 0.16666666666666666
   - alert: CiRunnersServiceSharedRunnerQueuesTrafficAbsent
     for: 30m
     annotations:
       title: The shared_runner_queues SLI of the ci-runners service (`{{ $labels.stage
-        }}` stage) has not reported any traffic in the past 30 minutes
+        }}` stage) has not reported any traffic in the past 30m
       description: |
         This SLI monitors the shared runner queues on GitLab.com. Each job is an operation.
 
@@ -802,9 +810,9 @@ groups:
       slo_alert: "no"
       user_impacting: "yes"
     expr: |
-      gitlab_component_ops:rate_5m{type="ci-runners", component="shared_runner_queues", stage="main", monitor="global"} offset 1h
+      gitlab_component_ops:rate_5m{component="shared_runner_queues",monitor="global",stage="main",type="ci-runners"} offset 1h
       unless
-      gitlab_component_ops:rate_5m{type="ci-runners", component="shared_runner_queues", stage="main", monitor="global"}
+      gitlab_component_ops:rate_5m{component="shared_runner_queues",monitor="global",stage="main",type="ci-runners"}
   - alert: CiRunnersServiceTraceArchivingCiJobsErrorSLOViolation
     for: 2m
     annotations:
@@ -899,17 +907,17 @@ groups:
       )
       and on(env,environment,tier,type,stage,component)
       (
-        sum by(env,environment,tier,type,stage,component) (gitlab_component_ops:rate_6h{component="trace_archiving_ci_jobs",monitor="global",type="ci-runners"}) >= 1
+        sum by(env,environment,tier,type,stage,component) (gitlab_component_ops:rate_6h{component="trace_archiving_ci_jobs",monitor="global",type="ci-runners"}) >= 0.16667
       )
   - alert: CiRunnersServiceTraceArchivingCiJobsTrafficCessation
     for: 5m
     annotations:
       title: The trace_archiving_ci_jobs SLI of the ci-runners service (`{{ $labels.stage
-        }}` stage) has not received any traffic in the past 30 minutes
+        }}` stage) has not received any traffic in the past 30m
       description: |
         This SLI monitors CI job archiving, via Sidekiq jobs.
 
-        This alert signifies that the SLI is reporting a cessation of traffic, but the signal is not absent.
+        This alert signifies that the SLI is reporting a cessation of traffic; the signal is present, but is zero.
       grafana_dashboard_id: ci-runners-main/ci-runners-overview
       grafana_dashboard_link: https://dashboards.gitlab.net/d/ci-runners-main/ci-runners-overview?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-stage={{ $labels.stage }}
@@ -933,12 +941,14 @@ groups:
       slo_alert: "no"
       user_impacting: "yes"
     expr: |
-      gitlab_component_ops:rate_30m{type="ci-runners", component="trace_archiving_ci_jobs", stage="main", monitor="global"} == 0
+      gitlab_component_ops:rate_30m{component="trace_archiving_ci_jobs",monitor="global",stage="main",type="ci-runners"} == 0
+      and
+      gitlab_component_ops:rate_30m{component="trace_archiving_ci_jobs",monitor="global",stage="main",type="ci-runners"} offset 1h >= 0.16666666666666666
   - alert: CiRunnersServiceTraceArchivingCiJobsTrafficAbsent
     for: 30m
     annotations:
       title: The trace_archiving_ci_jobs SLI of the ci-runners service (`{{ $labels.stage
-        }}` stage) has not reported any traffic in the past 30 minutes
+        }}` stage) has not reported any traffic in the past 30m
       description: |
         This SLI monitors CI job archiving, via Sidekiq jobs.
 
@@ -968,6 +978,6 @@ groups:
       slo_alert: "no"
       user_impacting: "yes"
     expr: |
-      gitlab_component_ops:rate_5m{type="ci-runners", component="trace_archiving_ci_jobs", stage="main", monitor="global"} offset 1h
+      gitlab_component_ops:rate_5m{component="trace_archiving_ci_jobs",monitor="global",stage="main",type="ci-runners"} offset 1h
       unless
-      gitlab_component_ops:rate_5m{type="ci-runners", component="trace_archiving_ci_jobs", stage="main", monitor="global"}
+      gitlab_component_ops:rate_5m{component="trace_archiving_ci_jobs",monitor="global",stage="main",type="ci-runners"}

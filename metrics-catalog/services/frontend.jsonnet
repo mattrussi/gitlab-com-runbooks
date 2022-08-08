@@ -2,6 +2,7 @@ local metricsCatalog = import 'servicemetrics/metrics.libsonnet';
 local histogramApdex = metricsCatalog.histogramApdex;
 local rateMetric = metricsCatalog.rateMetric;
 local toolingLinks = import 'toolinglinks/toolinglinks.libsonnet';
+local maturityLevels = import 'service-maturity/levels.libsonnet';
 
 /**
  * Deprecated. These haproxy backends have moved inline with the upstream services
@@ -29,18 +30,18 @@ metricsCatalog.serviceDefinition({
 
       apdex: histogramApdex(
         histogram='haproxy_http_response_duration_seconds_bucket',
-        selector='type="frontend", backend_name!~"canary_.*", backend_name!="api_rate_limit", backend_name!="websockets"',
+        selector='type="frontend", backend_name!~"canary_.*|api_rate_limit|websockets"',
         satisfiedThreshold=5
       ),
 
       requestRate: rateMetric(
         counter='haproxy_backend_http_responses_total',
-        selector='type="frontend", backend!~"canary_.*", backend_name!="api_rate_limit"'
+        selector='type="frontend", backend!~"canary_.*|api_rate_limit"'
       ),
 
       errorRate: rateMetric(
         counter='haproxy_backend_response_errors_total',
-        selector='type="frontend", backend!~"canary_.*", backend_name!="api_rate_limit"'
+        selector='type="frontend", backend!~"canary_.*|api_rate_limit"'
       ),
 
       significantLabels: ['fqdn'],
@@ -81,6 +82,7 @@ metricsCatalog.serviceDefinition({
 
     sshServices: {
       monitoringThresholds+: {
+        apdexScore: 0.995,
         errorRatio: 0.999,
       },
 
@@ -129,4 +131,7 @@ metricsCatalog.serviceDefinition({
       ],
     },
   },
+  skippedMaturityCriteria: maturityLevels.skip({
+    'Structured logs available in Kibana': 'Logs from HAProxy are available in BigQuery, and not ingested to ElasticSearch due to volume. Usually, workhorse logs will cover the same ground.',
+  }),
 })

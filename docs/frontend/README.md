@@ -4,9 +4,10 @@
 
 [[_TOC_]]
 
-#  Frontend Service
+# Frontend Service
+
 * [Service Overview](https://dashboards.gitlab.net/d/frontend-main/frontend-overview)
-* **Alerts**: https://alerts.gitlab.net/#/alerts?filter=%7Btype%3D%22frontend%22%2C%20tier%3D%22lb%22%7D
+* **Alerts**: <https://alerts.gitlab.net/#/alerts?filter=%7Btype%3D%22frontend%22%2C%20tier%3D%22lb%22%7D>
 * **Label**: gitlab-com/gl-infra/production~"Service:HAProxy"
 
 ## Logging
@@ -15,23 +16,23 @@
 
 ## Troubleshooting Pointers
 
-* [Chef Guidlines](../config_management/chef-guidelines.md)
-* [Disk space alerts (production)](../customers/disk-space.md)
+* [Chef Guidelines](../config_management/chef-guidelines.md)
+* [Disk space alerts (production)](../customersdot/disk-space.md)
 * [Frontend (HAProxy) Logging](haproxy-logging.md)
 * [HAProxy management at GitLab](haproxy.md)
 * [Deploying a change to gitlab.rb](../git/deploy-gitlab-rb-change.md)
 * [GitLab Hosted CodeSandbox](../git/gitlab-hosted-codesandbox.md)
 * [Gitaly latency is too high](../gitaly/gitaly-latency.md)
 * [Gitaly PermissionDenied alert](../gitaly/gitaly-permission-denied.md)
+* [Tuning and Modifying Alerts](../monitoring/alert_tuning.md)
+* [An impatient SRE's guide to deleting alerts](../monitoring/deleting-alerts.md)
 * [Block specific pages domains through HAproxy](../pages/block-pages-domain.md)
 * [../pgbouncer/service-pgbouncer.md](../pgbouncer/service-pgbouncer.md)
 * [../registry/gitlab-registry.md](../registry/gitlab-registry.md)
 * [Sentry is down and gives error 500](../sentry/sentry-is-down.md)
 * [Life of a Web Request](../tutorials/overview_life_of_a_web_request.md)
 * [Alert about SSL certificate expiration](../uncategorized/alert-for-ssl-certificate-expiration.md)
-* [An impatient SRE's guide to deleting alerts](../uncategorized/deleting-alerts.md)
 <!-- END_MARKER -->
-
 
 <!-- ## Summary -->
 

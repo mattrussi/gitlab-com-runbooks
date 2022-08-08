@@ -39,17 +39,17 @@ how to activate this.
 
 Logs for gprd & gstg:
 
-- https://log.gprd.gitlab.net ([read](../logging#searching-logs) on how to filter logs per environment)
+* <https://log.gprd.gitlab.net> ([read](../logging#searching-logs) on how to filter logs per environment)
 
 Grafana:
 
-- https://dashboards.gitlab.net/
+* <https://dashboards.gitlab.net/>
 
 Prometheus:
 
-- gprd: https://prometheus.gprd.gitlab.net/ and https://prometheus-app.gprd.gitlab.net/
-- gstg: https://prometheus.gstg.gitlab.net/ and https://prometheus-app.gstg.gitlab.net/
+* gprd: <https://prometheus.gprd.gitlab.net/> and <https://prometheus-app.gprd.gitlab.net/>
+* gstg: <https://prometheus.gstg.gitlab.net/> and <https://prometheus-app.gstg.gitlab.net/>
 
 Alerts:
 
-- https://alerts.gitlab.net/
+* <https://alerts.gitlab.net/>

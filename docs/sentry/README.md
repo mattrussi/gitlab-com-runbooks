@@ -4,9 +4,10 @@
 
 [[_TOC_]]
 
-#  Sentry Service
+# Sentry Service
+
 * [Service Overview](https://dashboards.gitlab.net/d/sentry-main/sentry-overview)
-* **Alerts**: https://alerts.gitlab.net/#/alerts?filter=%7Btype%3D%22sentry%22%2C%20tier%3D%22inf%22%7D
+* **Alerts**: <https://alerts.gitlab.net/#/alerts?filter=%7Btype%3D%22sentry%22%2C%20tier%3D%22inf%22%7D>
 * **Label**: gitlab-com/gl-infra/production~"Service:Sentry"
 
 ## Logging
@@ -17,7 +18,9 @@
 
 * [Increased Error Rate](../frontend/high-error-rate.md)
 * [Gitaly is down](../gitaly/gitaly-down.md)
+* [Tuning and Modifying Alerts](../monitoring/alert_tuning.md)
 * [`pg_xid_wraparound` Saturation Alert](../patroni/pg_xid_wraparound_alert.md)
+* [../patroni/postgres.md](../patroni/postgres.md)
 * [../patroni/postgresql-backups-wale-walg.md](../patroni/postgresql-backups-wale-walg.md)
 * [Rotating Rails' PostgreSQL password](../patroni/rotating-rails-postgresql-password.md)
 * [Praefect is down](../praefect/praefect-startup.md)
@@ -25,6 +28,7 @@
 * [../registry/migration-failure-scenarios.md](../registry/migration-failure-scenarios.md)
 * [High Number of Overdue Online GC Tasks](../registry/online-gc-high-overdue-tasks.md)
 * [Sentry is down and gives error 500](sentry-is-down.md)
+* [PostgreSQL PendingWALFilesTooHigh](sentry_pending_wal_files_too_high.md)
 * [Pull mirror overdue queue is too large](../sidekiq/large-pull-mirror-queue.md)
 * [../sidekiq/sidekiq_error_rate_high.md](../sidekiq/sidekiq_error_rate_high.md)
 * [Project exports](../uncategorized/project-export.md)

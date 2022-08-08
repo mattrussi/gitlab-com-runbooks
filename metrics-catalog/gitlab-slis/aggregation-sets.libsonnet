@@ -15,22 +15,45 @@ local resolvedRecording(metric, labels, burnRate) =
 local recordedBurnRatesForSLI(sli) =
   std.foldl(
     function(memo, burnRate)
-      memo {
-        [burnRate]: {
-          apdexSuccessRate: resolvedRecording(sli.successCounterName, sli.significantLabels, burnRate),
-          apdexWeight: resolvedRecording(sli.totalCounterName, sli.significantLabels, burnRate),
-        },
-      },
+      local apdex =
+        if sli.hasApdex() then
+          {
+            apdexSuccessRate: resolvedRecording(sli.apdexSuccessCounterName, sli.significantLabels, burnRate),
+            apdexWeight: resolvedRecording(sli.apdexTotalCounterName, sli.significantLabels, burnRate),
+          }
+        else {};
+
+      local errorRate =
+        if sli.hasErrorRate() then
+          {
+            errorRate: resolvedRecording(sli.errorCounterName, sli.significantLabels, burnRate),
+            opsRate: resolvedRecording(sli.errorTotalCounterName, sli.significantLabels, burnRate),
+          }
+        else {};
+
+      memo { [burnRate]: apdex + errorRate },
     supportedBurnRates,
     {}
   );
 
 local aggregationFormats(sli) =
   local format = { sliName: sli.name, burnRate: '%s' };
-  {
-    apdexSuccessRate: 'application_sli_aggregation:%(sliName)s:apdex:success:rate_%(burnRate)s' % format,
-    apdexWeight: 'application_sli_aggregation:%(sliName)s:apdex:weight:score_%(burnRate)s' % format,
-  };
+
+  local apdex = if sli.hasApdex() then
+    {
+      apdexSuccessRate: 'application_sli_aggregation:%(sliName)s:apdex:success:rate_%(burnRate)s' % format,
+      apdexWeight: 'application_sli_aggregation:%(sliName)s:apdex:weight:score_%(burnRate)s' % format,
+    }
+  else
+    {};
+
+  apdex + if sli.hasErrorRate() then
+    {
+      opsRate: 'application_sli_aggregation:%(sliName)s:ops:rate_%(burnRate)s' % format,
+      errorRate: 'application_sli_aggregation:%(sliName)s:error:rate_%(burnRate)s' % format,
+    }
+  else
+    {};
 
 local sourceAggregationSet(sli) =
   aggregationSet.AggregationSet(

@@ -43,23 +43,30 @@ configuration choices:
 
 * Modify the necessary items in [runbooks] to ensure the new shard will have it's
   own dedicated metrics.  Includes at least the following:
-    * Add an entry in `shards` in metrics-catalog/services/lib/sidekiq-helpers.libsonnet
-    * Add a line to `services` in dashboards/delivery/k8s_migration_overview.jsonnet
-* Modify the necessary items in [k8s-workloads/gitlab-helmfiles] such that we
-  get logs
-    * A new section in releases/fluentd/defaults.yaml
+  * Add an entry in `shards` in [metrics-catalog/services/lib/sidekiq-helpers.libsonnet](https://gitlab.com/gitlab-com/runbooks/-/blob/master/metrics-catalog/services/lib/sidekiq-helpers.libsonnet)
+  * Add a line to `services` in [dashboards/delivery/k8s_migration_overview.dashboard.jsonnet](https://gitlab.com/gitlab-com/runbooks/-/blob/master/dashboards/delivery/k8s_migration_overview.dashboard.jsonnet)
+  * Here is [an example of how to add a new service shard](https://gitlab.com/gitlab-com/runbooks/-/merge_requests/4773/diffs).
+* Modify the necessary items in [k8s-workloads/gitlab-helmfiles] such that logging is configured for the new shard.
+  * Add a new section in [`lib/fluentd/logging-config.yaml`](https://gitlab.com/gitlab-com/gl-infra/k8s-workloads/tanka-deployments/-/blob/master/lib/fluentd/logging-config.yaml).
+    * Here is [an example of how to add new logging configuration for a shard](https://gitlab.com/gitlab-com/gl-infra/k8s-workloads/tanka-deployments/-/merge_requests/440/diffs).
 * If necessary create a new dedicated node pool
-    * Add in terraform; currently in environments/ENV/gke-regional.tf; generally
+  * Add in terraform; currently in `environments/ENV/gke-regional.tf`; generally
       look for the other node pool definitions and duplicate/extend
-* Modify the necessary items in [k8s-workloads/gitlab-com] adding the new shard
-    * Another section in `gitlab.sidekiq.pods` with settings determined above
-* Stop the relevant workers running on their previous shard (usually)
-    * Add an expression to the selector (or routing config) for the old shard
-      to exclude the newly moved workers. Honestly, this is complicated as of
-      June 2021. Talk to Craig Miskell if you need help; he'll update these docs
-      when https://gitlab.com/groups/gitlab-com/gl-infra/-/epics/447 and
-      https://gitlab.com/groups/gitlab-com/gl-infra/-/epics/469 are done and
-      its all a lot simpler.
+* Modify [k8s-workloads/gitlab-com] adding the new sidekiq shard by adding a new section
+  in [`gitlab.sidekiq.pods`](https://gitlab.com/gitlab-com/gl-infra/k8s-workloads/gitlab-com/-/blob/master/releases/gitlab/values/gstg.yaml.gotmpl) with settings determined above
+  * This prepares a place for the jobs to run but does not cause anything to be routed
+    to them just yet. The  "queues" value is the list of queues (probably just one) that
+    this shard will listen on (used in the next step).
+    * Here is [an example of how to add a shard to a pod](https://gitlab.com/gitlab-com/gl-infra/k8s-workloads/gitlab-com/-/merge_requests/1938/diffs#21a2743843174713a5692d172e40c08ce3a80383_505_505).
+  * Also add a new entry in the [`auto-deploy-image-check` list](https://gitlab.com/gitlab-com/gl-infra/k8s-workloads/gitlab-com/-/blob/master/auto-deploy-image-check/gstg.json).
+    * Here is [an example of how to add a auto-deploy image definition](https://gitlab.com/gitlab-com/gl-infra/k8s-workloads/gitlab-com/-/merge_requests/1938/diffs#42cbaf891b66f60a3a592f89140cb1409607642f_61_61)
+* Modify [`global.appConfig.sidekiq.routingRules`](https://gitlab.com/gitlab-com/gl-infra/k8s-workloads/gitlab-com/-/blob/master/releases/gitlab/values/gstg.yaml.gotmpl) in [k8s-workloads/gitlab-com] to select
+  the jobs you want (by name or other characteristics) in the first array value, and
+  route them to the new queue (the second value in the array, being the name of the queue
+  that the new shard is listening on)
+  * When deployed, this is what will cause the jobs to be put into the named queue to be picked
+    up by the new shard
+    * Note: During the deploy, pods are slowly cycled over a period of time.  Due to this, there's a window of time for which the old and new shard will process the same work queue.
 
 [k8s-workloads/gitlab-helmfiles]: https://gitlab.com/gitlab-com/gl-infra/k8s-workloads/gitlab-helmfiles
 [k8s-workloads/gitlab-com]: https://gitlab.com/gitlab-com/gl-infra/k8s-workloads/gitlab-com

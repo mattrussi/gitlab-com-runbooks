@@ -19,7 +19,7 @@ Run the following command which will generate customized instructions
     export GITLAB_ENDPOINT=pre.gitlab.com
     export GITLAB_PROJECT=gitlab-pre
     ```
-    
+
 3. Run the following command to generate customized instructions for the
    instance
 

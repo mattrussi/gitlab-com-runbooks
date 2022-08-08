@@ -20,7 +20,7 @@ metricsCatalog.serviceDefinition({
   },
   serviceLevelIndicators: {
     gitlab_zone: {
-      userImpacting: false,  // Low until CF exporter metric quality increases https://gitlab.com/gitlab-com/gl-infra/infrastructure/-/issues/10294
+      userImpacting: false,  // Low until CF exporter metric quality increases https://gitlab.com/gitlab-com/gl-infra/reliability/-/issues/10294
       featureCategory: 'not_owned',
       description: |||
         Aggregation of all public traffic for GitLab.com passing through the WAF.
@@ -44,7 +44,7 @@ metricsCatalog.serviceDefinition({
     },
     // The "gitlab.net" zone
     gitlab_net_zone: {
-      userImpacting: false,  // Low until CF exporter metric quality increases https://gitlab.com/gitlab-com/gl-infra/infrastructure/-/issues/10294
+      userImpacting: false,  // Low until CF exporter metric quality increases https://gitlab.com/gitlab-com/gl-infra/reliability/-/issues/10294
       featureCategory: 'not_owned',
       description: |||
         Aggregation of all GitLab.net (non-pulic) traffic passing through the WAF.

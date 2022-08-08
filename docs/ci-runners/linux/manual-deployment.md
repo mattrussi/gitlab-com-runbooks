@@ -175,7 +175,7 @@ git push -u origin update-runners-fleet -o merge_request.create -o merge_request
 When the push will be finished - use the printed URL to open an MR. Double check if the
 changes are doing what it should be done for the deployment, and set 'Merge when pipeline succeeds'.
 After the branch will be merged, open the pipeline FOR THE MERGE COMMIT (search at
-https://ops.gitlab.net/gitlab-cookbooks/chef-repo/pipelines/) and check in the `apply_to_staging` job, if the
+<https://ops.gitlab.net/gitlab-cookbooks/chef-repo/pipelines/>) and check in the `apply_to_staging` job, if the
 dry-run tries to upload only the role file updated above.
 
 If yes - hit `play` on the `apply_to_prod` job and wait until the job on Chef Server will be updated.
@@ -197,5 +197,4 @@ time wait
 > anyone that needs to update/restart Runner on our CI fleet should expect, that the operation will be
 > **really long** and that during this time the networking connection can't be terminated.
 
-[gitlab-ce-new-mr]: https://gitlab.com/gitlab-org/gitlab-ce/merge_requests/new
-[k8s-deployment]: https://gitlab.com/gitlab-com/gl-infra/infrastructure/issues/4813
+[k8s-deployment]: https://gitlab.com/gitlab-com/gl-infra/reliability/-/issues/4813

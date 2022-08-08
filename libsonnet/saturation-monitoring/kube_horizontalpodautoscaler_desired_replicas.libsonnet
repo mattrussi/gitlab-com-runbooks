@@ -5,7 +5,7 @@ local sidekiqHelpers = import './services/lib/sidekiq-helpers.libsonnet';
 {
   kube_horizontalpodautoscaler_desired_replicas: resourceSaturationPoint({
     title: 'Horizontal Pod Autoscaler Desired Replicas',
-    severity: 's2',
+    severity: 's3',
     horizontallyScalable: true,
     appliesTo: metricsCatalog.findKubeProvisionedServices(first='web'),
     description: |||
@@ -29,8 +29,8 @@ local sidekiqHelpers = import './services/lib/sidekiq-helpers.libsonnet';
       ignored_sidekiq_shards: std.join('|', sidekiqHelpers.shards.listFiltered(function(shard) !shard.autoScaling || shard.urgency == 'throttled')),
     },
     slos: {
-      soft: 0.95,
-      hard: 0.90,
+      soft: 0.90,
+      hard: 0.95,
       alertTriggerDuration: '25m',
     },
   }),

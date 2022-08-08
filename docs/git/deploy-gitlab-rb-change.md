@@ -41,6 +41,7 @@ Refer to [../uncategorized/deploycmd.md](../uncategorized/deploycmd.md)
 ## Where can I find out more?
 
 In slack:
+
 1. [#g\_distribution](https://gitlab.slack.com/messages/g_distribution) are experts in omnibus packaging.
 1. [#infrastructure-lounge](https://gitlab.slack.com/messages/infrastructure-lounge) (just barely) contains the SRE's who between them have a fair amount of experience with doing these things for real, and are happy to help
 

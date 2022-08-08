@@ -13,7 +13,7 @@ local resourceSaturationPoint = metricsCatalog.resourceSaturationPoint;
     runbook: 'docs/kube/kubernetes.md',
     grafana_dashboard_uid: 'sat_kube_pvc_inodes',
     resourceLabels: ['persistentvolumeclaim'],
-    // TODO: keep these resources with the services they're managing, once https://gitlab.com/gitlab-com/gl-infra/infrastructure/-/issues/10249 is resolved
+    // TODO: keep these resources with the services they're managing, once https://gitlab.com/gitlab-com/gl-infra/reliability/-/issues/10249 is resolved
     // do not apply static labels
     staticLabels: {
       type: 'kube',

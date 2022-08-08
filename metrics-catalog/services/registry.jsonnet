@@ -128,6 +128,7 @@ metricsCatalog.serviceDefinition({
     },
 
     garbagecollector: {
+      severity: 's3',
       userImpacting: false,
       serviceAggregation: false,
       featureCategory: 'container_registry',
@@ -155,6 +156,14 @@ metricsCatalog.serviceDefinition({
       ),
 
       significantLabels: ['worker'],
+      toolingLinks: [
+        toolingLinks.kibana(
+          title='Garbage Collector',
+          index='registry_garbagecollection',
+          type='registry',
+          matches={ 'json.component': ['registry.gc.Agent', 'registry.gc.worker.ManifestWorker', 'registry.gc.worker.BlobWorker'] }
+        ),
+      ],
     },
   } + registryHelpers.apdexPerRoute,
 })

@@ -36,15 +36,12 @@ local pgbouncer_client_conn(maxClientConns, name, appliesToServiceTypes) =
       %(maxClientConns)g
     |||,
     slos: {
-      // in https://gitlab.com/gitlab-com/gl-infra/production/-/issues/4889 we found that
-      // saturation occurred at 90%, substantially lower than the expected ceiling.
-      // TODO: reconsider as part of https://gitlab.com/gitlab-com/gl-infra/infrastructure/-/issues/13556
       soft: 0.80,
       hard: 0.85,
     },
   });
 
 {
-  pgbouncer_client_conn_primary: pgbouncer_client_conn(maxClientConns=8192, name='Primary', appliesToServiceTypes=['pgbouncer', 'pgbouncer-registry', 'pgbouncer-ci']),
-  pgbouncer_client_conn_replicas: pgbouncer_client_conn(maxClientConns=16000, name='Replicas', appliesToServiceTypes=['patroni', 'patroni-registry', 'patroni-ci']),
+  pgbouncer_client_conn_primary: pgbouncer_client_conn(maxClientConns=10000, name='Primary', appliesToServiceTypes=['pgbouncer', 'pgbouncer-registry', 'pgbouncer-ci']),
+  pgbouncer_client_conn_replicas: pgbouncer_client_conn(maxClientConns=20000, name='Replicas', appliesToServiceTypes=['patroni', 'patroni-registry', 'patroni-ci']),
 }

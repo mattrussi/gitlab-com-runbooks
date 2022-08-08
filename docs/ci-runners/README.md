@@ -4,9 +4,10 @@
 
 [[_TOC_]]
 
-#  Ci-runners Service
+# Ci-runners Service
+
 * [Service Overview](https://dashboards.gitlab.net/d/ci-runners-main/ci-runners-overview)
-* **Alerts**: https://alerts.gitlab.net/#/alerts?filter=%7Btype%3D%22ci-runners%22%2C%20tier%3D%22sv%22%7D
+* **Alerts**: <https://alerts.gitlab.net/#/alerts?filter=%7Btype%3D%22ci-runners%22%2C%20tier%3D%22sv%22%7D>
 * **Label**: gitlab-com/gl-infra/production~"Service:CI Runner"
 
 ## Logging
@@ -26,19 +27,19 @@
 We have several different kind of runners. Below is a brief overview of each.
 They all have acronyms as well, which are indicated next to each name.
 
-- [Logging](#logging)
-- [Troubleshooting Pointers](#troubleshooting-pointers)
-- [Configuration management for the Linux based Runners fleet](linux/README.md)
-- [Runner Descriptions](#runner-descriptions)
-  - [shared-runners-manager (SRM)](#shared-runners-manager-srm)
-  - [gitlab-shared-runners-manager (GSRM)](#gitlab-shared-runners-manager-gsrm)
-  - [private-runners-manager (PRM)](#private-runners-manager-prm)
-  - [gitlab-docker-shared-runners-manager (GDSRM)](#gitlab-docker-shared-runners-manager-gdsrm)
-  - [windows-shared-runners-manager (WSRM)](#windows-shared-runners-manager-wsrm)
-- [Cost Factors](#cost-factors)
-- [Network Info](#network-info)
-- [Monitoring](#monitoring)
-- [Production Change Lock (PCL)](#production-change-lock-pcl)
+* [Logging](#logging)
+* [Troubleshooting Pointers](#troubleshooting-pointers)
+* [Configuration management for the Linux based Runners fleet](linux/README.md)
+* [Runner Descriptions](#runner-descriptions)
+  * [shared-runners-manager (SRM)](#shared-runners-manager-srm)
+  * [gitlab-shared-runners-manager (GSRM)](#gitlab-shared-runners-manager-gsrm)
+  * [private-runners-manager (PRM)](#private-runners-manager-prm)
+  * [gitlab-docker-shared-runners-manager (GDSRM)](#gitlab-docker-shared-runners-manager-gdsrm)
+  * [windows-shared-runners-manager (WSRM)](#windows-shared-runners-manager-wsrm)
+* [Cost Factors](#cost-factors)
+* [Network Info](#network-info)
+* [Monitoring](#monitoring)
+* [Production Change Lock (PCL)](#production-change-lock-pcl)
 
 ## Runner Descriptions
 
@@ -313,9 +314,9 @@ need to be able to communicate with ephemeral VMs created in the `gitlab-ci-plan
 
 Here we have a mix of direct peering and [peering with one hop](#peering-conflicting-networks-with-one-hop-between-them):
 
-- `gitlab-ci/ci` and `gitlab-ci-plan-free-3/ephemeral-runners` are peered directly, so their subnetworks
+* `gitlab-ci/ci` and `gitlab-ci-plan-free-3/ephemeral-runners` are peered directly, so their subnetworks
   can't have conflicting CIDRs.
-- `gitlab-ci/ci` and `gitlab-ci-plan-free-3/gke` are peered through `gitlab-ci-plan-free-3/ephemeral-runners`. Their
+* `gitlab-ci/ci` and `gitlab-ci-plan-free-3/gke` are peered through `gitlab-ci-plan-free-3/ephemeral-runners`. Their
   networks also can't have conflicting CIDRs, as this would create conflict in `gitlab-ci-plan-free-3/ephemeral-runners`.
 
 Also `gitlab-ci-plan-free-X/ephemeral-runners` are connected between each other with only one hop (`gitlab-ci/ci`),
@@ -341,7 +342,7 @@ Having the peering rules in minds we've designed such networking layout:
    As we will have just these two subnetworks only in `gitlab-ci/ci` network,
    [we've chosen static CIDRs](#gitlab-ci-project) for them and will not change that.
 
-1. Until we will [introduce dedicated Prometheus servers](https://gitlab.com/gitlab-com/gl-infra/infrastructure/-/issues/13886)
+1. Until we will [introduce dedicated Prometheus servers](https://gitlab.com/gitlab-com/gl-infra/reliability/-/issues/13886)
    for our CI projects and integrate them with our Thanos cluster, we need to use our main Prometheus server in
    `gitlab-production` project. For that we've created and need to maintain a temporary peering between `gitlab-ci/ci`
    and `gitlab-production/gprd` networks. When creating this peering we've resolved all CIDR conflicts, so all is good
@@ -363,15 +364,42 @@ Every new CIDR should start at directly after the previously reserved one ends.
 
 **Please consult every new range with it and keep this list up-to-date!**
 
-| GCP project             | Network "$VPC/$SUBNETWORK"               | CIDR            |
-| ----------------------- | ---------------------------------------- | --------------- |
-| `gitlab-ci-plan-free-7` | `ephemeral-runners/ephemeral-runners`    | `10.10.0.0/21`  |
-| `gitlab-ci-plan-free-6` | `ephemeral-runners/ephemeral-runners`    | `10.10.8.0/21`  |
-| `gitlab-ci-plan-free-5` | `ephemeral-runners/ephemeral-runners`    | `10.10.16.0/21` |
-| `gitlab-ci-plan-free-4` | `ephemeral-runners/ephemeral-runners`    | `10.10.24.0/21` |
-| `gitlab-ci-plan-free-3` | `ephemeral-runners/ephemeral-runners`    | `10.10.32.0/21` |
-| `gitlab-ci`             | `ci/ephemeral-runners-private`           | `10.10.40.0/21` |
-| `gitlab-ci`             | `ci/ephemeral-runners-shared-gitlab-org` | `10.10.48.0/21` |
+**When adding any new ephemeral-runners subnetwork don't forget to update the
+[`ci-gateway` firewall](#ci-gateway-ilb-firewall)!**
+
+| GCP project             | Network "$VPC/$SUBNETWORK"                 | CIDR             |
+| ----------------------- | ------------------------------------------ | ---------------- |
+| `gitlab-ci-plan-free-7` | `ephemeral-runners/ephemeral-runners`      | `10.10.0.0/21`   |
+| `gitlab-ci-plan-free-6` | `ephemeral-runners/ephemeral-runners`      | `10.10.8.0/21`   |
+| `gitlab-ci-plan-free-5` | `ephemeral-runners/ephemeral-runners`      | `10.10.16.0/21`  |
+| `gitlab-ci-plan-free-4` | `ephemeral-runners/ephemeral-runners`      | `10.10.24.0/21`  |
+| `gitlab-ci-plan-free-3` | `ephemeral-runners/ephemeral-runners`      | `10.10.32.0/21`  |
+| `gitlab-ci`             | `ci/ephemeral-runners-private`             | `10.10.40.0/21`  |
+| `gitlab-ci`             | `ci/ephemeral-runners-shared-gitlab-org`   | `10.10.48.0/21`  |
+| `gitlab-ci`             | `ci/ephemeral-runners-private-2`           | `10.10.56.0/21`  |
+| `gitlab-ci-private-1`   | `ephemeral-runners/ephemeral-runners`      | `10.10.64.0/21`  |
+| `gitlab-ci-private-2`   | `ephemeral-runners/ephemeral-runners`      | `10.10.72.0/21`  |
+| `gitlab-ci-private-3`   | `ephemeral-runners/ephemeral-runners`      | `10.10.80.0/21`  |
+| `gitlab-ci-private-4`   | `ephemeral-runners/ephemeral-runners`      | `10.10.88.0/21`  |
+| `gitlab-ci`             | `ci/ephemeral-runners-shared-gitlab-org-2` | `10.10.96.0/21`  |
+| `gitlab-ci`             | `ci/ephemeral-runners-shared-gitlab-org-3` | `10.10.104.0/21` |
+| `gitlab-ci`             | `ci/ephemeral-runners-shared-gitlab-org-4` | `10.10.112.0/21` |
+
+##### `ci-gateway` ILB firewall
+
+When updating the `ephemeral-runners` CIDRs please remember to update the firewall rules for
+the `ci-gateway` ILBs.
+
+The rules are managed with Terraform in GPRD and GSTG environments within the `google_compute_firewall` resource
+named `ci-gateway-allow-runners`.
+
+The GPRD (GitLab.com) definition can be found [here](https://ops.gitlab.net/gitlab-com/gl-infra/config-mgmt/-/blob/743cf13a31633a62f9e6e8b67abeee3d151792ed/environments/gprd/main.tf#L2960).
+
+The GSTG (staging.gitlab.com) definition can be found [here](https://ops.gitlab.net/gitlab-com/gl-infra/config-mgmt/-/blob/743cf13a31633a62f9e6e8b67abeee3d151792ed/environments/gstg/main.tf#L2957)
+
+When doing any changes related to ephemeral runners make sure to check which GitLab environments that runner
+supports (for example our `private` runners support both GPRD and GSTG while `shared` only GPRD) and update
+the firewall rules respectively.
 
 ### GCP projects
 
@@ -384,11 +412,15 @@ Here you can find details about networking in different projects used by CI Runn
 | `default`      | `default`                   | `10.142.0.0/20` | all non-runner machines (managers, prometheus, etc.). In `us-east1` - we don't use this subnetwork in any other region. |
 | `default`      | `shared-runners`            | `10.0.32.0/20`  | shared runner (SRM) machines                           |
 | `default`      | `private-runners`           | `10.0.0.0/20`   | private runner (PRM) machines                          |
-| `default`      | `gitlab-shared-runners `    | `10.0.16.0/20`  | gitlab shared runner (GSRM) machines                   |
+| `default`      | `gitlab-shared-runners`    | `10.0.16.0/20`  | gitlab shared runner (GSRM) machines                   |
 | `ci`           | `bastion-ci`                | `10.1.4.0/24`   | Bastion network                                        |
 | `ci`           | `runner-managers`           | `10.1.5.0/24`   | Network for Runner Managers ([new ones](https://gitlab.com/groups/gitlab-com/gl-infra/-/epics/456))                 |
 | `ci`           | `ephemeral-runners-private` | `10.10.40.0/21` | Ephemeral runner machines for the new `private` shard. See [`ephemeral-runnes` unique CIDRs list](#ephemeral-runners-unique-cidrs-list) above |
+| `ci`           | `ephemeral-runners-private-2` | `10.10.56.0/21` | Second range used by ephemeral runner machines for the new `private` shard. See [`ephemeral-runnes` unique CIDRs list](#ephemeral-runners-unique-cidrs-list) above |
 | `ci`           | `ephemeral-runners-shared-gitlab-org` | `10.10.48.0/21` | Ephemeral runner machines for the new `shared-gitlab-org` shard. See [`ephemeral-runners` unique CIDRs list](#ephemeral-runners-unique-cidrs-list) above |
+| `ci`           | `ephemeral-runners-shared-gitlab-org-2` | `10.10.96.0/21` | Second range for ephemeral runner machines for the new `shared-gitlab-org` shard. See [`ephemeral-runners` unique CIDRs list](#ephemeral-runners-unique-cidrs-list) above |
+| `ci`           | `ephemeral-runners-shared-gitlab-org-3` | `10.10.104.0/21` | Third range for ephemeral runner machines for the new `shared-gitlab-org` shard. See [`ephemeral-runners` unique CIDRs list](#ephemeral-runners-unique-cidrs-list) above |
+| `ci`           | `ephemeral-runners-shared-gitlab-org-4` | `10.10.112.0/21` | Fourth range for ephemeral runner machines for the new `shared-gitlab-org` shard. See [`ephemeral-runners` unique CIDRs list](#ephemeral-runners-unique-cidrs-list) above |
 | `runners-gke`  | `runners-gke`               | `10.9.4.0/24`   | Primary; GKE nodes range      |
 | `runners-gke`  | `runners-gke`               | `10.8.0.0/16`   | Secondary; GKE pods range     |
 | `runners-gke`  | `runners-gke`               | `10.9.0.0/22`   | secondary; GKE services range |
@@ -570,10 +602,10 @@ availability zone.
 
 For that, the following FQDNs were created:
 
-- `git-us-east1-c.ci-gateway.int.gstg.gitlab.net`
-- `git-us-east1-d.ci-gateway.int.gstg.gitlab.net`
-- `git-us-east1-c.ci-gateway.int.gprd.gitlab.net`
-- `git-us-east1-d.ci-gateway.int.gprd.gitlab.net`
+* `git-us-east1-c.ci-gateway.int.gstg.gitlab.net`
+* `git-us-east1-d.ci-gateway.int.gstg.gitlab.net`
+* `git-us-east1-c.ci-gateway.int.gprd.gitlab.net`
+* `git-us-east1-d.ci-gateway.int.gprd.gitlab.net`
 
 Runner nodes are configured to point the ILBs with the `url` and `clone_url` settings.
 As we set our runners to operate in a specific availability zone, each of them
@@ -629,13 +661,13 @@ and Let's Encrypt certificates are used for TLS.
 For external access each project where monitoring is deployed is using a reserved public IP address. This address
 is bound to two DNS A records:
 
-- `monitoring-lb.[ENVIRONMENT].ci-runners.gitlab.net` - which is used for Thanos Query store DNS discovery and
+* `monitoring-lb.[ENVIRONMENT].ci-runners.gitlab.net` - which is used for Thanos Query store DNS discovery and
   to access Traefik dashboard in the browser. Access to the Dashboard is limited by oAuth, using Google as the Identity
   Provider allowing `@gitlab.com` accounts. Consent screen and oAuth2 secrets are defined in the `gitlab-ci-155816`
   project and should be used for all deployments of this monitoring stack (**remember:** new deploys will use new
   domains for the redirection URLs, which should be added to the oAuth2 credentials configuration; unfortunately this
   can't be managed by terraform).
-- `prometheus.[ENVIRONMENT].ci-runners.gitlab.net` - which is used to access directly the Prometheus deployment. As with
+* `prometheus.[ENVIRONMENT].ci-runners.gitlab.net` - which is used to access directly the Prometheus deployment. As with
   the Traefik dashboard, access is limited by oAuth2 with the same configuration.
 
 K8S deployment configuration is managed fully from CI. [A dedicated

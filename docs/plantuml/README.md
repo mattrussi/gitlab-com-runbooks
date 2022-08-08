@@ -4,9 +4,10 @@
 
 [[_TOC_]]
 
-#  Plantuml Service
+# Plantuml Service
+
 * [Service Overview](https://dashboards.gitlab.net/d/plantuml-main/plantuml-overview)
-* **Alerts**: https://alerts.gitlab.net/#/alerts?filter=%7Btype%3D%22plantuml%22%2C%20tier%3D%22sv%22%7D
+* **Alerts**: <https://alerts.gitlab.net/#/alerts?filter=%7Btype%3D%22plantuml%22%2C%20tier%3D%22sv%22%7D>
 * **Label**: gitlab-com/gl-infra/production~"Service:PlantUML"
 
 ## Logging

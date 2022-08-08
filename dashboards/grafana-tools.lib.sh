@@ -135,7 +135,7 @@ prepare_dashboard_requests() {
   local folderId=$1
 
   jq -c --arg folderId "$folderId" '
- {
+  {
     dashboard: .,
     folderId: $folderId | tonumber,
     overwrite: true

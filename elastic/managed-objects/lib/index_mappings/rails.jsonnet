@@ -320,6 +320,9 @@
         duration_s: {
           type: 'float',
         },
+        target_duration_s: {
+          type: 'float',
+        },
         elasticsearch_calls: {
           type: 'long',
         },
@@ -868,30 +871,34 @@
                 enqueued_at: {
                   type: 'float',
                 },
-                error_backtrace: {
-                  type: 'text',
-                  fields: {
-                    keyword: {
-                      type: 'keyword',
-                      ignore_above: 256,
+                exception: {
+                  properties: {
+                    backtrace: {
+                      type: 'text',
+                      fields: {
+                        keyword: {
+                          type: 'keyword',
+                          ignore_above: 256,
+                        },
+                      },
                     },
-                  },
-                },
-                error_class: {
-                  type: 'text',
-                  fields: {
-                    keyword: {
-                      type: 'keyword',
-                      ignore_above: 256,
+                    class: {
+                      type: 'text',
+                      fields: {
+                        keyword: {
+                          type: 'keyword',
+                          ignore_above: 256,
+                        },
+                      },
                     },
-                  },
-                },
-                error_message: {
-                  type: 'text',
-                  fields: {
-                    keyword: {
-                      type: 'keyword',
-                      ignore_above: 256,
+                    message: {
+                      type: 'text',
+                      fields: {
+                        keyword: {
+                          type: 'keyword',
+                          ignore_above: 256,
+                        },
+                      },
                     },
                   },
                 },

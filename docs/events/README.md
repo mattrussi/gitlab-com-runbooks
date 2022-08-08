@@ -7,14 +7,14 @@ Infrastructure events are log messages that helpful for [incident management](ht
 
 We log events for the following actions:
 
-- All infrastructure and deployment pipelines for the staging (`gstg`) and production (`gprd`) environments.
-  - https://ops.gitlab.net/gitlab-cookbooks/chef-repo/
-  - https://ops.gitlab.net/gitlab-com/gitlab-com-infrastructure/
-  - https://gitlab.com/gitlab-com/gl-infra/k8s-workloads
-- Chatops commands for Feature Flags and Canary
-- PagerDuty events via a webhook listener https://gitlab.com/gitlab-com/gl-infra/pd-event-logger
+* All infrastructure and deployment pipelines for the staging (`gstg`) and production (`gprd`) environments.
+  * <https://ops.gitlab.net/gitlab-cookbooks/chef-repo/>
+  * <https://ops.gitlab.net/gitlab-com/gitlab-com-infrastructure/>
+  * <https://gitlab.com/gitlab-com/gl-infra/k8s-workloads>
+* Chatops commands for Feature Flags and Canary
+* PagerDuty events via a webhook listener <https://gitlab.com/gitlab-com/gl-infra/pd-event-logger>
 
-Note that we do not currently differentiate between successful and failed deployments, tracked in https://gitlab.com/gitlab-com/gl-infra/infrastructure/-/issues/12685.
+Note that we do not currently differentiate between successful and failed deployments, tracked in <https://gitlab.com/gitlab-com/gl-infra/reliability/-/issues/12685>.
 Other environments like `pre`, `release`, etc. are not included because they are not part of incident management.
 
 There are two ElasticSearch indexes that are used for events, `events-gstg` and `events-gprd`.

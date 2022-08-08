@@ -30,9 +30,8 @@ groups:
       alert_class: slo_violation
       alert_type: symptom
       feature_category: not_owned
-      pager: pagerduty
       rules_domain: general
-      severity: s2
+      severity: s3
       sli_type: error
       slo_alert: "yes"
       user_impacting: "no"
@@ -78,9 +77,8 @@ groups:
       alert_class: slo_violation
       alert_type: symptom
       feature_category: not_owned
-      pager: pagerduty
       rules_domain: general
-      severity: s2
+      severity: s3
       sli_type: error
       slo_alert: "yes"
       user_impacting: "no"
@@ -99,17 +97,17 @@ groups:
       )
       and on(env,environment,tier,type,stage,component)
       (
-        sum by(env,environment,tier,type,stage,component) (gitlab_component_ops:rate_6h{component="pg_transactions",monitor="global",type="sentry"}) >= 1
+        sum by(env,environment,tier,type,stage,component) (gitlab_component_ops:rate_6h{component="pg_transactions",monitor="global",type="sentry"}) >= 0.16667
       )
   - alert: SentryServicePgTransactionsTrafficCessation
     for: 5m
     annotations:
       title: The pg_transactions SLI of the sentry service (`{{ $labels.stage }}`
-        stage) has not received any traffic in the past 30 minutes
+        stage) has not received any traffic in the past 30m
       description: |
         Represents all SQL transactions issued to the sentry Postgres instance. Errors represent transaction rollbacks.
 
-        This alert signifies that the SLI is reporting a cessation of traffic, but the signal is not absent.
+        This alert signifies that the SLI is reporting a cessation of traffic; the signal is present, but is zero.
       grafana_dashboard_id: sentry-main/sentry-overview
       grafana_dashboard_link: https://dashboards.gitlab.net/d/sentry-main/sentry-overview?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-stage={{ $labels.stage }}
@@ -128,19 +126,20 @@ groups:
       alert_class: traffic_cessation
       alert_type: cause
       feature_category: not_owned
-      pager: pagerduty
       rules_domain: general
-      severity: s2
+      severity: s3
       sli_type: ops
       slo_alert: "no"
       user_impacting: "no"
     expr: |
-      gitlab_component_ops:rate_30m{type="sentry", component="pg_transactions", stage="main", monitor="global"} == 0
+      gitlab_component_ops:rate_30m{component="pg_transactions",monitor="global",stage="main",type="sentry"} == 0
+      and
+      gitlab_component_ops:rate_30m{component="pg_transactions",monitor="global",stage="main",type="sentry"} offset 1h >= 0.16666666666666666
   - alert: SentryServicePgTransactionsTrafficAbsent
     for: 30m
     annotations:
       title: The pg_transactions SLI of the sentry service (`{{ $labels.stage }}`
-        stage) has not reported any traffic in the past 30 minutes
+        stage) has not reported any traffic in the past 30m
       description: |
         Represents all SQL transactions issued to the sentry Postgres instance. Errors represent transaction rollbacks.
 
@@ -165,16 +164,15 @@ groups:
       alert_class: traffic_cessation
       alert_type: cause
       feature_category: not_owned
-      pager: pagerduty
       rules_domain: general
-      severity: s2
+      severity: s3
       sli_type: ops
       slo_alert: "no"
       user_impacting: "no"
     expr: |
-      gitlab_component_ops:rate_5m{type="sentry", component="pg_transactions", stage="main", monitor="global"} offset 1h
+      gitlab_component_ops:rate_5m{component="pg_transactions",monitor="global",stage="main",type="sentry"} offset 1h
       unless
-      gitlab_component_ops:rate_5m{type="sentry", component="pg_transactions", stage="main", monitor="global"}
+      gitlab_component_ops:rate_5m{component="pg_transactions",monitor="global",stage="main",type="sentry"}
   - alert: SentryServiceSentryEventsApdexSLOViolation
     for: 2m
     annotations:
@@ -203,9 +201,8 @@ groups:
       alert_class: slo_violation
       alert_type: symptom
       feature_category: not_owned
-      pager: pagerduty
       rules_domain: general
-      severity: s2
+      severity: s3
       sli_type: apdex
       slo_alert: "yes"
       user_impacting: "no"
@@ -254,9 +251,8 @@ groups:
       alert_class: slo_violation
       alert_type: symptom
       feature_category: not_owned
-      pager: pagerduty
       rules_domain: general
-      severity: s2
+      severity: s3
       sli_type: apdex
       slo_alert: "yes"
       user_impacting: "no"
@@ -275,7 +271,7 @@ groups:
       )
       and on(env,environment,tier,type,stage,component)
       (
-        sum by(env,environment,tier,type,stage,component) (gitlab_component_ops:rate_6h{component="sentry_events",monitor="global",type="sentry"}) >= 1
+        sum by(env,environment,tier,type,stage,component) (gitlab_component_ops:rate_6h{component="sentry_events",monitor="global",type="sentry"}) >= 0.16667
       )
   - alert: SentryServiceSentryEventsErrorSLOViolation
     for: 2m
@@ -302,9 +298,8 @@ groups:
       alert_class: slo_violation
       alert_type: symptom
       feature_category: not_owned
-      pager: pagerduty
       rules_domain: general
-      severity: s2
+      severity: s3
       sli_type: error
       slo_alert: "yes"
       user_impacting: "no"
@@ -350,9 +345,8 @@ groups:
       alert_class: slo_violation
       alert_type: symptom
       feature_category: not_owned
-      pager: pagerduty
       rules_domain: general
-      severity: s2
+      severity: s3
       sli_type: error
       slo_alert: "yes"
       user_impacting: "no"
@@ -371,17 +365,17 @@ groups:
       )
       and on(env,environment,tier,type,stage,component)
       (
-        sum by(env,environment,tier,type,stage,component) (gitlab_component_ops:rate_6h{component="sentry_events",monitor="global",type="sentry"}) >= 1
+        sum by(env,environment,tier,type,stage,component) (gitlab_component_ops:rate_6h{component="sentry_events",monitor="global",type="sentry"}) >= 0.16667
       )
   - alert: SentryServiceSentryEventsTrafficCessation
     for: 5m
     annotations:
       title: The sentry_events SLI of the sentry service (`{{ $labels.stage }}` stage)
-        has not received any traffic in the past 30 minutes
+        has not received any traffic in the past 30m
       description: |
         Sentry is an application monitoring platform.  This SLI monitors the sentry API. 5xx responses are considered failures.
 
-        This alert signifies that the SLI is reporting a cessation of traffic, but the signal is not absent.
+        This alert signifies that the SLI is reporting a cessation of traffic; the signal is present, but is zero.
       grafana_dashboard_id: sentry-main/sentry-overview
       grafana_dashboard_link: https://dashboards.gitlab.net/d/sentry-main/sentry-overview?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-stage={{ $labels.stage }}
@@ -398,19 +392,20 @@ groups:
       alert_class: traffic_cessation
       alert_type: cause
       feature_category: not_owned
-      pager: pagerduty
       rules_domain: general
-      severity: s2
+      severity: s3
       sli_type: ops
       slo_alert: "no"
       user_impacting: "no"
     expr: |
-      gitlab_component_ops:rate_30m{type="sentry", component="sentry_events", stage="main", monitor="global"} == 0
+      gitlab_component_ops:rate_30m{component="sentry_events",monitor="global",stage="main",type="sentry"} == 0
+      and
+      gitlab_component_ops:rate_30m{component="sentry_events",monitor="global",stage="main",type="sentry"} offset 1h >= 0.16666666666666666
   - alert: SentryServiceSentryEventsTrafficAbsent
     for: 30m
     annotations:
       title: The sentry_events SLI of the sentry service (`{{ $labels.stage }}` stage)
-        has not reported any traffic in the past 30 minutes
+        has not reported any traffic in the past 30m
       description: |
         Sentry is an application monitoring platform.  This SLI monitors the sentry API. 5xx responses are considered failures.
 
@@ -433,13 +428,12 @@ groups:
       alert_class: traffic_cessation
       alert_type: cause
       feature_category: not_owned
-      pager: pagerduty
       rules_domain: general
-      severity: s2
+      severity: s3
       sli_type: ops
       slo_alert: "no"
       user_impacting: "no"
     expr: |
-      gitlab_component_ops:rate_5m{type="sentry", component="sentry_events", stage="main", monitor="global"} offset 1h
+      gitlab_component_ops:rate_5m{component="sentry_events",monitor="global",stage="main",type="sentry"} offset 1h
       unless
-      gitlab_component_ops:rate_5m{type="sentry", component="sentry_events", stage="main", monitor="global"}
+      gitlab_component_ops:rate_5m{component="sentry_events",monitor="global",stage="main",type="sentry"}

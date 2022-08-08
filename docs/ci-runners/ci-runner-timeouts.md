@@ -5,6 +5,7 @@ The shared runner managers have timeouts that can restrict the time a CI job is 
 Manually changing this can be done per shared runner manager in the GitLab admin interface under ```Admin Area -> Overview -> Runners```. Select, or search for the runner managers you want to increase (or decrease) the runtime timeout for.
 
 API bulk update idea:
+
 ``` bash
 for runner in 157328 157329 380989 380990; do
   curl -sL \
@@ -15,4 +16,4 @@ for runner in 157328 157329 380989 380990; do
 done
 ```
 
-Example Issue: https://gitlab.com/gitlab-com/gl-infra/infrastructure/issues/6547
+Example Issue: <https://gitlab.com/gitlab-com/gl-infra/reliability/-/issues/6547>

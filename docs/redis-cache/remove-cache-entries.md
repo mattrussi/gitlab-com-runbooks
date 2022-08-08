@@ -28,7 +28,7 @@ By doing this, we gain a few benefits:
 this will be simpler. One example is the way it's possible to [invalidate the
 Markdown cache] - which is in Postgres, not Redis - via the API.)
 
-[version-based cache invalidation]: https://gitlab.com/gitlab-com/gl-infra/infrastructure/-/issues/9815
+[version-based cache invalidation]: https://gitlab.com/gitlab-com/gl-infra/reliability/-/issues/9815
 [invalidate the Markdown cache]: https://docs.gitlab.com/ee/administration/invalidate_markdown_cache.html
 
 ## Step 1: obtain the keys to be deleted

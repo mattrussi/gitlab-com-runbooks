@@ -1,0 +1,8 @@
+{
+  "scripts": {
+    "markdownlint": "markdownlint --config .markdownlint.yml"
+  },
+  "dependencies": {
+    "markdownlint-cli": "0.32.1"
+  }
+}

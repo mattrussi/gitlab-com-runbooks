@@ -12,7 +12,7 @@ groups:
       type: web-pages
     expr: |
       sum by (env,environment) (
-        rate(haproxy_backend_http_responses_total{backend="pages_http",type="pages"}[5m])
+        rate(haproxy_backend_http_responses_total{backend="pages_http",type=~"pages|web-pages"}[5m])
       )
   - record: gitlab:component:feature_category:execution:error:rate_5m
     labels:
@@ -24,7 +24,7 @@ groups:
     expr: |
       (
         sum by (env,environment) (
-          rate(haproxy_backend_http_responses_total{backend="pages_http",code="5xx",type="pages"}[5m])
+          rate(haproxy_backend_http_responses_total{backend="pages_http",code="5xx",type=~"pages|web-pages"}[5m])
         )
       )
       or
@@ -42,7 +42,7 @@ groups:
       type: web-pages
     expr: |
       sum by (env,environment) (
-        rate(haproxy_server_sessions_total{backend="pages_https",type="pages"}[5m])
+        rate(haproxy_server_sessions_total{backend="pages_https",type=~"pages|web-pages"}[5m])
       )
   - record: gitlab:component:feature_category:execution:error:rate_5m
     labels:
@@ -54,7 +54,7 @@ groups:
     expr: |
       (
         sum by (env,environment) (
-          rate(haproxy_server_connection_errors_total{backend="pages_https",type="pages"}[5m])
+          rate(haproxy_server_connection_errors_total{backend="pages_https",type=~"pages|web-pages"}[5m])
         )
       )
       or
@@ -152,7 +152,7 @@ groups:
       type: web-pages
     expr: |
       sum by (env,environment) (
-        rate(haproxy_backend_http_responses_total{backend="pages_http",type="pages"}[30m])
+        rate(haproxy_backend_http_responses_total{backend="pages_http",type=~"pages|web-pages"}[30m])
       )
   - record: gitlab:component:feature_category:execution:error:rate_30m
     labels:
@@ -164,7 +164,7 @@ groups:
     expr: |
       (
         sum by (env,environment) (
-          rate(haproxy_backend_http_responses_total{backend="pages_http",code="5xx",type="pages"}[30m])
+          rate(haproxy_backend_http_responses_total{backend="pages_http",code="5xx",type=~"pages|web-pages"}[30m])
         )
       )
       or
@@ -182,7 +182,7 @@ groups:
       type: web-pages
     expr: |
       sum by (env,environment) (
-        rate(haproxy_server_sessions_total{backend="pages_https",type="pages"}[30m])
+        rate(haproxy_server_sessions_total{backend="pages_https",type=~"pages|web-pages"}[30m])
       )
   - record: gitlab:component:feature_category:execution:error:rate_30m
     labels:
@@ -194,7 +194,7 @@ groups:
     expr: |
       (
         sum by (env,environment) (
-          rate(haproxy_server_connection_errors_total{backend="pages_https",type="pages"}[30m])
+          rate(haproxy_server_connection_errors_total{backend="pages_https",type=~"pages|web-pages"}[30m])
         )
       )
       or
@@ -292,7 +292,7 @@ groups:
       type: web-pages
     expr: |
       sum by (env,environment) (
-        rate(haproxy_backend_http_responses_total{backend="pages_http",type="pages"}[1h])
+        rate(haproxy_backend_http_responses_total{backend="pages_http",type=~"pages|web-pages"}[1h])
       )
   - record: gitlab:component:feature_category:execution:error:rate_1h
     labels:
@@ -304,7 +304,7 @@ groups:
     expr: |
       (
         sum by (env,environment) (
-          rate(haproxy_backend_http_responses_total{backend="pages_http",code="5xx",type="pages"}[1h])
+          rate(haproxy_backend_http_responses_total{backend="pages_http",code="5xx",type=~"pages|web-pages"}[1h])
         )
       )
       or
@@ -322,7 +322,7 @@ groups:
       type: web-pages
     expr: |
       sum by (env,environment) (
-        rate(haproxy_server_sessions_total{backend="pages_https",type="pages"}[1h])
+        rate(haproxy_server_sessions_total{backend="pages_https",type=~"pages|web-pages"}[1h])
       )
   - record: gitlab:component:feature_category:execution:error:rate_1h
     labels:
@@ -334,7 +334,7 @@ groups:
     expr: |
       (
         sum by (env,environment) (
-          rate(haproxy_server_connection_errors_total{backend="pages_https",type="pages"}[1h])
+          rate(haproxy_server_connection_errors_total{backend="pages_https",type=~"pages|web-pages"}[1h])
         )
       )
       or

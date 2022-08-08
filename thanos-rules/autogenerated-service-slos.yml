@@ -126,7 +126,7 @@ groups:
     labels:
       tier: sv
       type: camoproxy
-    expr: "0.010000"
+    expr: "0.200000"
   - record: slo:min:events:gitlab_service_apdex:ratio
     labels:
       component: loadbalancer
@@ -138,7 +138,7 @@ groups:
       component: loadbalancer
       tier: sv
       type: camoproxy
-    expr: "0.010000"
+    expr: "0.200000"
   - record: slo:min:events:gitlab_service_apdex:ratio
     labels:
       component: server
@@ -150,7 +150,7 @@ groups:
       component: server
       tier: sv
       type: camoproxy
-    expr: "0.010000"
+    expr: "0.200000"
   - record: slo:min:gitlab_service_apdex:ratio
     labels:
       tier: runners
@@ -253,16 +253,26 @@ groups:
     expr: "0.000100"
   - record: slo:min:events:gitlab_service_apdex:ratio
     labels:
-      component: cloudsql_transactions
-      tier: db
-      type: cloud-sql
-    expr: "0.995000"
+      tier: sv
+      type: customersdot
+    expr: "0.900000"
   - record: slo:max:events:gitlab_service_errors:ratio
     labels:
-      component: cloudsql_transactions
-      tier: db
-      type: cloud-sql
-    expr: "0.000100"
+      tier: sv
+      type: customersdot
+    expr: "0.050000"
+  - record: slo:min:events:gitlab_service_apdex:ratio
+    labels:
+      component: rails_requests
+      tier: sv
+      type: customersdot
+    expr: "0.900000"
+  - record: slo:max:events:gitlab_service_errors:ratio
+    labels:
+      component: rails_requests
+      tier: sv
+      type: customersdot
+    expr: "0.050000"
   - record: slo:min:events:gitlab_service_apdex:ratio
     labels:
       tier: lb
@@ -302,7 +312,7 @@ groups:
       component: sshServices
       tier: lb
       type: frontend
-    expr: "0.999000"
+    expr: "0.995000"
   - record: slo:max:events:gitlab_service_errors:ratio
     labels:
       component: sshServices
@@ -383,7 +393,7 @@ groups:
     labels:
       tier: sv
       type: git
-    expr: "0.950000"
+    expr: "0.900000"
   - record: slo:max:gitlab_service_errors:ratio
     labels:
       tier: sv
@@ -422,7 +432,7 @@ groups:
       component: gitlab_sshd
       tier: sv
       type: git
-    expr: "0.000500"
+    expr: "0.001000"
   - record: slo:min:events:gitlab_service_apdex:ratio
     labels:
       component: loadbalancer
@@ -599,7 +609,7 @@ groups:
     labels:
       tier: inf
       type: kube
-    expr: "0.999500"
+    expr: "0.999000"
   - record: slo:max:events:gitlab_service_errors:ratio
     labels:
       tier: inf
@@ -610,25 +620,19 @@ groups:
       component: apiserver
       tier: inf
       type: kube
-    expr: "0.999500"
+    expr: "0.999000"
   - record: slo:max:events:gitlab_service_errors:ratio
     labels:
       component: apiserver
       tier: inf
       type: kube
     expr: "0.000500"
-  - record: slo:min:events:gitlab_service_apdex:ratio
-    labels:
-      component: cluster_scaleups
-      tier: inf
-      type: kube
-    expr: "0.999500"
   - record: slo:max:events:gitlab_service_errors:ratio
     labels:
       component: cluster_scaleups
       tier: inf
       type: kube
-    expr: "0.000500"
+    expr: "0.050000"
   - record: slo:max:events:gitlab_service_errors:ratio
     labels:
       tier: inf
@@ -669,7 +673,7 @@ groups:
       component: kibana_googlelb
       tier: inf
       type: logging
-    expr: "0.001000"
+    expr: "0.005000"
   - record: slo:max:events:gitlab_service_errors:ratio
     labels:
       component: pubsub_subscriptions
@@ -717,13 +721,25 @@ groups:
     expr: "0.001000"
   - record: slo:min:events:gitlab_service_apdex:ratio
     labels:
-      component: grafana_cloudsql
+      component: grafana
+      tier: inf
+      type: monitoring
+    expr: "0.920000"
+  - record: slo:max:events:gitlab_service_errors:ratio
+    labels:
+      component: grafana
+      tier: inf
+      type: monitoring
+    expr: "0.001000"
+  - record: slo:min:events:gitlab_service_apdex:ratio
+    labels:
+      component: grafana_datasources
       tier: inf
       type: monitoring
     expr: "0.999000"
   - record: slo:max:events:gitlab_service_errors:ratio
     labels:
-      component: grafana_cloudsql
+      component: grafana_datasources
       tier: inf
       type: monitoring
     expr: "0.001000"
@@ -736,6 +752,18 @@ groups:
   - record: slo:max:events:gitlab_service_errors:ratio
     labels:
       component: grafana_google_lb
+      tier: inf
+      type: monitoring
+    expr: "0.001000"
+  - record: slo:min:events:gitlab_service_apdex:ratio
+    labels:
+      component: grafana_image_renderer
+      tier: inf
+      type: monitoring
+    expr: "0.920000"
+  - record: slo:max:events:gitlab_service_errors:ratio
+    labels:
+      component: grafana_image_renderer
       tier: inf
       type: monitoring
     expr: "0.001000"
@@ -859,17 +887,6 @@ groups:
       tier: inf
       type: monitoring
     expr: "0.050000"
-  - record: slo:max:events:gitlab_service_errors:ratio
-    labels:
-      tier: lb
-      type: pages
-    expr: "0.000100"
-  - record: slo:max:events:gitlab_service_errors:ratio
-    labels:
-      component: loadbalancer
-      tier: lb
-      type: pages
-    expr: "0.000100"
   - record: slo:min:events:gitlab_service_apdex:ratio
     labels:
       tier: db
@@ -1644,7 +1661,7 @@ groups:
       component: shard_memory_bound
       tier: sv
       type: sidekiq
-    expr: "0.995000"
+    expr: "0.920000"
   - record: slo:max:events:gitlab_service_errors:ratio
     labels:
       component: shard_memory_bound
@@ -1660,6 +1677,18 @@ groups:
   - record: slo:max:events:gitlab_service_errors:ratio
     labels:
       component: shard_quarantine
+      tier: sv
+      type: sidekiq
+    expr: "0.005000"
+  - record: slo:min:events:gitlab_service_apdex:ratio
+    labels:
+      component: shard_urgent_authorized_projects
+      tier: sv
+      type: sidekiq
+    expr: "0.995000"
+  - record: slo:max:events:gitlab_service_errors:ratio
+    labels:
+      component: shard_urgent_authorized_projects
       tier: sv
       type: sidekiq
     expr: "0.005000"
@@ -1697,6 +1726,40 @@ groups:
       tier: sv
       type: sidekiq
     expr: "0.005000"
+  - record: slo:min:events:gitlab_service_apdex:ratio
+    labels:
+      tier: inf
+      type: vault
+    expr: "0.999000"
+  - record: slo:max:events:gitlab_service_errors:ratio
+    labels:
+      tier: inf
+      type: vault
+    expr: "0.001000"
+  - record: slo:min:events:gitlab_service_apdex:ratio
+    labels:
+      component: vault
+      tier: inf
+      type: vault
+    expr: "0.999000"
+  - record: slo:max:events:gitlab_service_errors:ratio
+    labels:
+      component: vault
+      tier: inf
+      type: vault
+    expr: "0.001000"
+  - record: slo:min:events:gitlab_service_apdex:ratio
+    labels:
+      component: vault_google_lb
+      tier: inf
+      type: vault
+    expr: "0.999000"
+  - record: slo:max:events:gitlab_service_errors:ratio
+    labels:
+      component: vault_google_lb
+      tier: inf
+      type: vault
+    expr: "0.001000"
   - record: slo:min:gitlab_service_apdex:ratio
     labels:
       tier: sv
@@ -1779,7 +1842,7 @@ groups:
     labels:
       tier: sv
       type: web
-    expr: "0.950000"
+    expr: "0.900000"
   - record: slo:max:gitlab_service_errors:ratio
     labels:
       tier: sv
@@ -1944,11 +2007,6 @@ groups:
     expr: "1"
   - record: gitlab_service:mapping:disable_ops_rate_prediction
     labels:
-      tier: lb
-      type: pages
-    expr: "1"
-  - record: gitlab_service:mapping:disable_ops_rate_prediction
-    labels:
       tier: inf
       type: search
     expr: "1"
@@ -2004,7 +2062,7 @@ groups:
     labels:
       component: loadbalancer
       regional_aggregation: "no"
-      service_aggregation: "no"
+      service_aggregation: "yes"
       tier: sv
       type: camoproxy
     expr: "1"
@@ -2058,19 +2116,19 @@ groups:
     expr: "1"
   - record: gitlab_component_service:mapping
     labels:
-      component: cloudsql_transactions
-      regional_aggregation: "no"
-      service_aggregation: "yes"
-      tier: db
-      type: cloud-sql
-    expr: "1"
-  - record: gitlab_component_service:mapping
-    labels:
       component: consul
       regional_aggregation: "yes"
       service_aggregation: "yes"
       tier: sv
       type: consul
+    expr: "1"
+  - record: gitlab_component_service:mapping
+    labels:
+      component: rails_requests
+      regional_aggregation: "no"
+      service_aggregation: "yes"
+      tier: sv
+      type: customersdot
     expr: "1"
   - record: gitlab_component_service:mapping
     labels:
@@ -2362,15 +2420,31 @@ groups:
     expr: "1"
   - record: gitlab_component_service:mapping
     labels:
-      component: grafana_cloudsql
+      component: grafana
       regional_aggregation: "no"
-      service_aggregation: "no"
+      service_aggregation: "yes"
+      tier: inf
+      type: monitoring
+    expr: "1"
+  - record: gitlab_component_service:mapping
+    labels:
+      component: grafana_datasources
+      regional_aggregation: "no"
+      service_aggregation: "yes"
       tier: inf
       type: monitoring
     expr: "1"
   - record: gitlab_component_service:mapping
     labels:
       component: grafana_google_lb
+      regional_aggregation: "no"
+      service_aggregation: "yes"
+      tier: inf
+      type: monitoring
+    expr: "1"
+  - record: gitlab_component_service:mapping
+    labels:
+      component: grafana_image_renderer
       regional_aggregation: "no"
       service_aggregation: "yes"
       tier: inf
@@ -2479,14 +2553,6 @@ groups:
       service_aggregation: "yes"
       tier: sv
       type: nginx
-    expr: "1"
-  - record: gitlab_component_service:mapping
-    labels:
-      component: loadbalancer
-      regional_aggregation: "no"
-      service_aggregation: "yes"
-      tier: lb
-      type: pages
     expr: "1"
   - record: gitlab_component_service:mapping
     labels:
@@ -2954,6 +3020,14 @@ groups:
     expr: "1"
   - record: gitlab_component_service:mapping
     labels:
+      component: shard_urgent_authorized_projects
+      regional_aggregation: "no"
+      service_aggregation: "yes"
+      tier: sv
+      type: sidekiq
+    expr: "1"
+  - record: gitlab_component_service:mapping
+    labels:
       component: shard_urgent_cpu_bound
       regional_aggregation: "no"
       service_aggregation: "yes"
@@ -2967,6 +3041,22 @@ groups:
       service_aggregation: "yes"
       tier: sv
       type: sidekiq
+    expr: "1"
+  - record: gitlab_component_service:mapping
+    labels:
+      component: vault
+      regional_aggregation: "no"
+      service_aggregation: "yes"
+      tier: inf
+      type: vault
+    expr: "1"
+  - record: gitlab_component_service:mapping
+    labels:
+      component: vault_google_lb
+      regional_aggregation: "no"
+      service_aggregation: "yes"
+      tier: inf
+      type: vault
     expr: "1"
   - record: gitlab_component_service:mapping
     labels:

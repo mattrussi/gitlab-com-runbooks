@@ -24,4 +24,7 @@
 
   // The node name, eg `fqdn`
   node: 1 << 6,
+
+  // A single SLI component of a service
+  sliComponent: 1 << 7,
 }

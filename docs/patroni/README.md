@@ -4,9 +4,10 @@
 
 [[_TOC_]]
 
-#  Patroni Service
+# Patroni Service
+
 * [Service Overview](https://dashboards.gitlab.net/d/patroni-main/patroni-overview)
-* **Alerts**: https://alerts.gitlab.net/#/alerts?filter=%7Btype%3D%22patroni%22%2C%20tier%3D%22db%22%7D
+* **Alerts**: <https://alerts.gitlab.net/#/alerts?filter=%7Btype%3D%22patroni%22%2C%20tier%3D%22db%22%7D>
 * **Label**: gitlab-com/gl-infra/production~"Service:Postgres"
 
 ## Logging
@@ -19,9 +20,12 @@
 * [../ci-runners/ci-apdex-violating-slo.md](../ci-runners/ci-apdex-violating-slo.md)
 * [../ci-runners/service-ci-runners.md](../ci-runners/service-ci-runners.md)
 * [Interacting with Consul](../consul/interaction.md)
-* [Backups](../customers/backups.md)
+* [Backups](../customersdot/backups.md)
 * [../monitoring/prometheus-failing-rule-evaluations.md](../monitoring/prometheus-failing-rule-evaluations.md)
 * [Diagnosis with Kibana](../onboarding/kibana-diagnosis.md)
+* [Steps to Recreate/Rebuild the CI CLuster using a Snapshot from the Master cluster (instead of pg_basebackup)](../patroni-ci/rebuild_ci_cluster_from_prod.md)
+* [Recovering from CI Patroni cluster lagging too much or becoming completely broken](../patroni-ci/recovering_patroni_ci_intense_lagging_or_replication_stopped.md)
+* [Steps to Create a Standby Patroni CLuster using a Snapshot from the Primary cluster (instead of pg_basebackup)](build_cluster_from_snapshot.md)
 * [Check the status of transaction wraparound Runbook](check_wraparound.md)
 * [Custom PostgreSQL Package Build Process for Ubuntu Xenial 16.04](custom_postgres_packages.md)
 * [database_peak_analysis.md](database_peak_analysis.md)
@@ -30,7 +34,9 @@
 * [gitlab-com-wale-backups.md](gitlab-com-wale-backups.md)
 * [gitlab-com-walg-backups.md](gitlab-com-walg-backups.md)
 * [Log analysis on PostgreSQL, Pgbouncer, Patroni and consul Runbook](log_analysis.md)
+* [Making a manual clone of the DB for the data team](manual_data_team_clone.md)
 * [Mapping Postgres Statements, Slowlogs, Activity Monitoring and Traces](mapping_statements.md)
+* [OS Upgrade Reference Architecture](os_upgrade_reference_architecture.md)
 * [Patroni](patroni-management.md)
 * [performance-degradation-troubleshooting.md](performance-degradation-troubleshooting.md)
 * [PostgreSQL HA](pg-ha.md)
@@ -67,7 +73,6 @@
 * [How to use flamegraphs for performance profiling](../tutorials/how_to_use_flamegraphs_for_perf_profiling.md)
 * [Application Database Queries](../uncategorized/tracing-app-db-queries.md)
 <!-- END_MARKER -->
-
 
 <!-- ## Summary -->
 

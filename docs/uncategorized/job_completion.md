@@ -45,6 +45,7 @@ PROM
 ```
 
 `report_success.sh`:
+
 ```bash
 cat <<PROM | curl -iv --data-binary @- "http://${PUSH_GATEWAY}:9091/metrics/job/${JOB}/tier/${TIER}/type/${TYPE}"
 # HELP gitlab_job_success_timestamp_seconds The time the job succeeded.
@@ -54,6 +55,7 @@ PROM
 ```
 
 `report_failed.sh`:
+
 ```bash
 cat <<PROM | curl -iv --data-binary @- "http://${PUSH_GATEWAY}:9091/metrics/job/${JOB}/tier/${TIER}/type/${TYPE}"
 # HELP gitlab_job_failed Boolean status of the job.

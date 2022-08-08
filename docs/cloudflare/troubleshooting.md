@@ -5,6 +5,7 @@
 - [Cloudflare Grafana Dashboard](https://dashboards.gitlab.net/d/sPqgMv9Zk/cloudflare-traffic-overview?orgId=1)
 - [Cloudflare Dashboard](https://dash.cloudflare.net)
 - [GitLab.com Firewall Overview](https://dash.cloudflare.com/852e9d53d0f8adbd9205389356f2303d/gitlab.com/firewall)
+- [GitLab.com Traceback Tool](https://gitlab.com/cdn-cgi/trace)
 
 ## Symptoms
 
@@ -36,13 +37,13 @@ on GitLab.com while still getting some benefit from the Cloudflare WAF product.
 ### Supporting Artifacts to Collect
 
 - If an incident has already been created due to a large number of reports:
-    - Copy the [generic trace template](#generic-trace-template) below and
+  - Copy the [generic trace template](#generic-trace-template) below and
       ask users to report their results.
-    - If further details are required, direct users to create confidential
+  - If further details are required, direct users to create confidential
       [Cloudflare Troubleshooting Issue](https://gitlab.com/gitlab-com/gl-infra/-/issues/new?issuable_template=Cloudflare%20Troubleshooting.md) and link it to the
       incident issue.
 - If the problem is a specific URI or request:
-    - Direct them to create a [Cloudflare Troubleshooting Issue](https://gitlab.com/gitlab-com/gl-infra/-/issues/new?issuable_template=Cloudflare%20Troubleshooting.md), making it confidential if necessary.
+  - Direct them to create a [Cloudflare Troubleshooting Issue](https://gitlab.com/gitlab-com/gl-infra/-/issues/new?issuable_template=Cloudflare%20Troubleshooting.md), making it confidential if necessary.
 
 ### Confirming Cloudflare and other service Connectivity
 
@@ -60,7 +61,6 @@ on GitLab.com while still getting some benefit from the Cloudflare WAF product.
    1. Attempt the same connections using both the DNS supplied addresses for `gitlab.com`
       and the hardcoded origin addresses from different GCP regions and/or other
       cloud providers to further narrow down specific paths exhibiting problems.
-
 
 ### Generic trace template
 
@@ -92,4 +92,6 @@ on GitLab.com while still getting some benefit from the Cloudflare WAF product.
 </details>
 </p>
 
-```
+## GeoIP Troubleshooting
+
+We use CloudFlare rules to block access to gitlab.com from various locations.  When we need to torubleshoot these rules with CloudFlare support they will ask for a trace from the user being blocked.  The user simply has to visit https://gitlab.com/cdn-cgi/trace and then we provide the output in the support ticket.

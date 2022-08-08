@@ -2,7 +2,7 @@
 
 Whenever we need to use enviornment variables in a local shell, it is good practice to avoid writing them anywhere on disk, be it on shell initialization files, configuration files or even ephemeral files. Cutting and pasting is also cumbersome and prone to error.
 
-The following method allows you to set environment variables safely (where *safe* in this context means "*as much as you trust 1Password*") on local shells (i.e., your laptop), possibly on demand, through the use of 3 utilities: 
+The following method allows you to set environment variables safely (where *safe* in this context means "*as much as you trust 1Password*") on local shells (i.e., your laptop), possibly on demand, through the use of 3 utilities:
 
 * [`op`](https://1password.com/downloads/command-line/), the official 1Password CLI tool
 * [`jq`](https://stedolan.github.io/jq/download/), a lightweight and flexible command-line JSON processor
@@ -229,7 +229,7 @@ Following up on the example for `staging.gitlab.com`, a `.envrc` in `staging.git
 #
 GITLAB_BOT_FQDN_1PUUID="5r4j2rlgdbbsrbxifm5gcebai4"     # The executor's UUID in 1Password
 GITLAB_REPOSET_FQDN="staging.gitlab.com"                # The target's FQDN
-# 
+#
 
 # Validate there's a valid 1Password session
 if [ -z "${OP_SESSION_gitlab}" ]                        # validate 1Password session
@@ -270,7 +270,7 @@ CIREPOM_CRI_GITLAB_PRIVATE_TOKEN=<PRIVATE_TOKEN_SCRUBBED>
 CIREPOM_BOT_GITLAB_PRIVATE_TOKEN=<PRIVATE_TOKEN_SCRUBBED>
 
 gerir@beirut:~/Work/Infra/Bots/cirepom-bot/staging.gitlab.com:cirepom botload staging.gitlab.com ${csv}
-2020-05-14 06:21:10 W [128:145877] main -- cirepom 0.10.1 takeoff 
+2020-05-14 06:21:10 W [128:145877] main -- cirepom 0.10.1 takeoff
 2020-05-14 06:21:10 I [128:145877] botload -- running
 [...]
 2020-05-14 06:23:19 I [128:145877] botload -- shutting down

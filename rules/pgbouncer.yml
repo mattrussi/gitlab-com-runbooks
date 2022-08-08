@@ -21,7 +21,7 @@ groups:
       ) >= 0.5
     for: 1m
     labels:
-      severity: s3 # S1 or S2 must have pager label, we don't want to page at this stage
+      severity: s3  # S1 or S2 must have pager label, we don't want to page at this stage
       alert_type: cause
     annotations:
       title: 'PGBouncer cannot process client queries'

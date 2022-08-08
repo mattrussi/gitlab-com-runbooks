@@ -4,9 +4,10 @@
 
 PostgreSQL maintains data consistency using a [Multiversion Concurrency Control (MVCC)](https://www.postgresql.org/docs/current/mvcc-intro.html).
 
->  This means that each SQL statement sees a snapshot of data (a database version) as it was some time ago, regardless of the current state of the underlying data. This prevents statements from viewing inconsistent data produced by concurrent transactions performing updates on the same data rows, providing transaction isolation for each database session. MVCC, by eschewing the locking methodologies of traditional database systems, minimizes lock contention in order to allow for reasonable performance in multiuser environments.
+> This means that each SQL statement sees a snapshot of data (a database version) as it was some time ago, regardless of the current state of the underlying data. This prevents statements from viewing inconsistent data produced by concurrent transactions performing updates on the same data rows, providing transaction isolation for each database session. MVCC, by eschewing the locking methodologies of traditional database systems, minimizes lock contention in order to allow for reasonable performance in multiuser environments.
 
 As a result of this method we have multiple side effects, some of them are:
+
 - Different version of tuples need to be stored (for different transactions)
 - Information about which transaction can and can't see a version of a tuple need to be stored
 - No longer needed versions (bloat) must be removed from tables and indexes via [`VACUUM`](https://www.postgresql.org/docs/current/sql-vacuum.html)
@@ -18,6 +19,7 @@ As a result of this method we have multiple side effects, some of them are:
 It can be used for complete databases or just single tables.
 
 The most important options are
+
 - FULL
 - FREEZE
 - ANALYZE
@@ -38,7 +40,7 @@ The general settings of our PostgreSQL clusters are managed by Chef and can be f
 "autovacuum_vacuum_cost_limit": 6000,
 "autovacuum_vacuum_scale_factor": "0.005",
 ...
-"log_autovacuum_min_duration": "0", 
+"log_autovacuum_min_duration": "0",
 ```
 
 ## Per table settings
@@ -84,7 +86,6 @@ Beside the problem of resource consumption caused by  AUTOVACUUM, we also see ne
 
 ## Strategies and solutions - [Optimize PostgreSQL AUTOVACUUM - 2021](https://gitlab.com/groups/gitlab-com/gl-infra/-/epics/413#note_820480832)
 
-
 ### Current State
 
 Currently, our AUTOVACUUM setup is really aggressive. During our peak times, we see present a percentage of CPU utilization and IO on the primary database. (links)
@@ -92,18 +93,18 @@ The goal of this epic is reduce the resource consumption from autovacuum, and ke
 
 Currently, we are reaching the `autovacuum_freeze_max_age` threshold of `200000000` in less than 3 days on average.
 
-Having this configuration so low for our environment forces the execution of `AUTOVACUUM TO PREVENT WRAPAROUND` in less than 3 days. 
+Having this configuration so low for our environment forces the execution of `AUTOVACUUM TO PREVENT WRAPAROUND` in less than 3 days.
 
 ### Desired State
 
 We would like to monitor and evaluate if we can optimize the process.
 
-* Create a “mechanism” (I am thinking even a CI pipeline) to execute `VACUUM FREEZE` when the database is idle of the tables that are 80% or 90% of start the AUTOVACUUM WRAPAROUND.
-* Change the autovacuum_freeze_max_age and monitor the impact: `Increase autovacuum_freeze_max_age from 200000000 to 400000000`
-* After 2 weeks of analyzing the impact: `Increase autovacuum_freeze_max_age from 400000000 to 600000000`
-* After 2 weeks of analyzing the impact: `Increase autovacuum_freeze_max_age from 600000000 to 800000000`
-* After 2 weeks of analyzing the impact: `Increase autovacuum_freeze_max_age from 800000000 to 1000000000`
-* Change our monitoring to be more efficient
+- Create a “mechanism” (I am thinking even a CI pipeline) to execute `VACUUM FREEZE` when the database is idle of the tables that are 80% or 90% of start the AUTOVACUUM WRAPAROUND.
+- Change the autovacuum_freeze_max_age and monitor the impact: `Increase autovacuum_freeze_max_age from 200000000 to 400000000`
+- After 2 weeks of analyzing the impact: `Increase autovacuum_freeze_max_age from 400000000 to 600000000`
+- After 2 weeks of analyzing the impact: `Increase autovacuum_freeze_max_age from 600000000 to 800000000`
+- After 2 weeks of analyzing the impact: `Increase autovacuum_freeze_max_age from 800000000 to 1000000000`
+- Change our monitoring to be more efficient
 
 @alexander-sosna: In general, it is recommended not to increase `autovacuum_freeze_max_age`, “If cleaning your house hurts and takes forever, do it more often, not less”.  Regarding GitLab's workload from all around the world, it might be worth a try to shift the VACUUM load to a low load time window.  We should have short low load windows on a daily basis and longer ones on weekends. Most of the freezing VACUUM could to be scheduled during these times.
 Before approaching this we should have confidence in the fact that these windows are sufficient to finish all the work we will delay. We also need an understanding which `autovacuum_freeze_max_age` is needed as a reasonable upper limit.
@@ -111,7 +112,7 @@ The mechanism to reliably orchestrate VACUUM should be in place before any signi
 
 ### Major upgrade to PostgreSQL 13
 
-The benchmarked in [Benchmark of VACUUM PostgreSQL 12 vs. 13 (btree deduplication)](https://gitlab.com/gitlab-com/gl-infra/infrastructure/-/issues/14723#note_761520231) hints us that btree deduplication, introduced in PostgreSQL 13, can help with multiple problems at once.
+The benchmarked in [Benchmark of VACUUM PostgreSQL 12 vs. 13 (btree deduplication)](https://gitlab.com/gitlab-com/gl-infra/reliability/-/issues/14723#note_761520231) hints us that btree deduplication, introduced in PostgreSQL 13, can help with multiple problems at once.
 
 - Index size
 - Index performance
@@ -135,17 +136,16 @@ The benchmarked in [Benchmark of VACUUM PostgreSQL 12 vs. 13 (btree deduplicatio
 | vacuuming heap | < 1 sec | 1 sec | < 1 sec | < 1 sec |
 | total vacuum time | 10 min 44 sec | 10 min 36 sec | 6 min 15 sec | 2 min 24 sec |
 
-
 ## Incidents and issues involving VACUUM
 
-- [[Design Document] Configure properly Autovacuum for postgresql](https://gitlab.com/gitlab-com/gl-infra/infrastructure/-/issues/5024)
-- [Review Autovacuum Strategy for all high traffic tables](https://gitlab.com/gitlab-com/gl-infra/infrastructure/-/issues/14811)
-- [Infra review of Autovacuum historical comments and decisions](https://gitlab.com/gitlab-com/gl-infra/infrastructure/-/issues/15050)
+- [[Design Document] Configure properly Autovacuum for postgresql](https://gitlab.com/gitlab-com/gl-infra/reliability/-/issues/5024)
+- [Review Autovacuum Strategy for all high traffic tables](https://gitlab.com/gitlab-com/gl-infra/reliability/-/issues/14811)
+- [Infra review of Autovacuum historical comments and decisions](https://gitlab.com/gitlab-com/gl-infra/reliability/-/issues/15050)
 - [Optimize PostgreSQL AUTOVACUUM - 2021](https://gitlab.com/groups/gitlab-com/gl-infra/-/epics/413#note_820480832)
-- [Lower autovacuuming settings for ci_job_artifacts table](https://gitlab.com/gitlab-com/gl-infra/infrastructure/-/issues/14723)
-- [Benchmark of different VACUUM settings](https://gitlab.com/gitlab-com/gl-infra/infrastructure/-/issues/14723#note_758526535)
-- [Benchmark of VACUUM PostgreSQL 12 vs. 13 (btree deduplication)](https://gitlab.com/gitlab-com/gl-infra/infrastructure/-/issues/14723#note_761520231)
-- [Reduce database index bloat regularly](https://gitlab.com/gitlab-com/gl-infra/infrastructure/-/issues/9563)
+- [Lower autovacuuming settings for ci_job_artifacts table](https://gitlab.com/gitlab-com/gl-infra/reliability/-/issues/14723)
+- [Benchmark of different VACUUM settings](https://gitlab.com/gitlab-com/gl-infra/reliability/-/issues/14723#note_758526535)
+- [Benchmark of VACUUM PostgreSQL 12 vs. 13 (btree deduplication)](https://gitlab.com/gitlab-com/gl-infra/reliability/-/issues/14723#note_761520231)
+- [Reduce database index bloat regularly](https://gitlab.com/gitlab-com/gl-infra/reliability/-/issues/9563)
 
 ## Other related runbook pages and documents
 
@@ -155,6 +155,6 @@ The benchmarked in [Benchmark of VACUUM PostgreSQL 12 vs. 13 (btree deduplicatio
 
 ## Literature
 
-- https://www.postgresql.org/docs/current/mvcc-intro.html
-- https://www.postgresql.org/docs/current/sql-vacuum.html
-- https://www.postgresql.org/docs/current/runtime-config-autovacuum.html
+- <https://www.postgresql.org/docs/current/mvcc-intro.html>
+- <https://www.postgresql.org/docs/current/sql-vacuum.html>
+- <https://www.postgresql.org/docs/current/runtime-config-autovacuum.html>

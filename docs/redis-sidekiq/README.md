@@ -4,9 +4,10 @@
 
 [[_TOC_]]
 
-#  Redis-sidekiq Service
+# Redis-sidekiq Service
+
 * [Service Overview](https://dashboards.gitlab.net/d/redis-sidekiq-main/redis-sidekiq-overview)
-* **Alerts**: https://alerts.gitlab.net/#/alerts?filter=%7Btype%3D%22redis-sidekiq%22%2C%20tier%3D%22db%22%7D
+* **Alerts**: <https://alerts.gitlab.net/#/alerts?filter=%7Btype%3D%22redis-sidekiq%22%2C%20tier%3D%22db%22%7D>
 * **Label**: gitlab-com/gl-infra/production~"Service:RedisSidekiq"
 
 ## Logging
@@ -21,7 +22,6 @@
 * [Sidekiq queue migration](../sidekiq/queue-migration.md)
 * [A survival guide for SREs to working with Sidekiq at GitLab](../sidekiq/sidekiq-survival-guide-for-sres.md)
 <!-- END_MARKER -->
-
 
 <!-- ## Summary -->
 

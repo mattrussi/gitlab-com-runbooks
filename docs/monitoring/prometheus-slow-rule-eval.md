@@ -19,6 +19,7 @@ The rules are expensive, and look over a large number of metrics and/or samples.
 ## Resolution
 
 Reduce the load on the Prometheus server by:
+
 * Reduce the number of executed rules in a rule group so that they can be executed in parallel.
 * Reduce the number of series, or amount of samples required to evaluate a rule.
 * Increase the memory or other node resources to speed up evaluations.

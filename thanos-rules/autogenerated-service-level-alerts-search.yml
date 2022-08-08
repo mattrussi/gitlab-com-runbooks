@@ -9,11 +9,11 @@ groups:
     for: 5m
     annotations:
       title: The elasticsearch_indexing SLI of the search service (`{{ $labels.stage
-        }}` stage) has not received any traffic in the past 30 minutes
+        }}` stage) has not received any traffic in the past 30m
       description: |
         Aggregation of all document indexing requests on GitLab.com, as measured from ElasticSearch.
 
-        This alert signifies that the SLI is reporting a cessation of traffic, but the signal is not absent.
+        This alert signifies that the SLI is reporting a cessation of traffic; the signal is present, but is zero.
       grafana_dashboard_id: search-main/search-overview
       grafana_dashboard_link: https://dashboards.gitlab.net/d/search-main/search-overview?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-stage={{ $labels.stage }}
@@ -37,12 +37,14 @@ groups:
       slo_alert: "no"
       user_impacting: "no"
     expr: |
-      gitlab_component_ops:rate_30m{type="search", component="elasticsearch_indexing", stage="main", monitor="global"} == 0
+      gitlab_component_ops:rate_30m{component="elasticsearch_indexing",monitor="global",stage="main",type="search"} == 0
+      and
+      gitlab_component_ops:rate_30m{component="elasticsearch_indexing",monitor="global",stage="main",type="search"} offset 1h >= 0.16666666666666666
   - alert: SearchServiceElasticsearchIndexingTrafficAbsent
     for: 30m
     annotations:
       title: The elasticsearch_indexing SLI of the search service (`{{ $labels.stage
-        }}` stage) has not reported any traffic in the past 30 minutes
+        }}` stage) has not reported any traffic in the past 30m
       description: |
         Aggregation of all document indexing requests on GitLab.com, as measured from ElasticSearch.
 
@@ -72,18 +74,18 @@ groups:
       slo_alert: "no"
       user_impacting: "no"
     expr: |
-      gitlab_component_ops:rate_5m{type="search", component="elasticsearch_indexing", stage="main", monitor="global"} offset 1h
+      gitlab_component_ops:rate_5m{component="elasticsearch_indexing",monitor="global",stage="main",type="search"} offset 1h
       unless
-      gitlab_component_ops:rate_5m{type="search", component="elasticsearch_indexing", stage="main", monitor="global"}
+      gitlab_component_ops:rate_5m{component="elasticsearch_indexing",monitor="global",stage="main",type="search"}
   - alert: SearchServiceElasticsearchSearchingTrafficCessation
     for: 5m
     annotations:
       title: The elasticsearch_searching SLI of the search service (`{{ $labels.stage
-        }}` stage) has not received any traffic in the past 30 minutes
+        }}` stage) has not received any traffic in the past 30m
       description: |
         Aggregation of all search queries on GitLab.com, as measured from ElasticSearch.
 
-        This alert signifies that the SLI is reporting a cessation of traffic, but the signal is not absent.
+        This alert signifies that the SLI is reporting a cessation of traffic; the signal is present, but is zero.
       grafana_dashboard_id: search-main/search-overview
       grafana_dashboard_link: https://dashboards.gitlab.net/d/search-main/search-overview?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-stage={{ $labels.stage }}
@@ -107,12 +109,14 @@ groups:
       slo_alert: "no"
       user_impacting: "no"
     expr: |
-      gitlab_component_ops:rate_30m{type="search", component="elasticsearch_searching", stage="main", monitor="global"} == 0
+      gitlab_component_ops:rate_30m{component="elasticsearch_searching",monitor="global",stage="main",type="search"} == 0
+      and
+      gitlab_component_ops:rate_30m{component="elasticsearch_searching",monitor="global",stage="main",type="search"} offset 1h >= 0.16666666666666666
   - alert: SearchServiceElasticsearchSearchingTrafficAbsent
     for: 30m
     annotations:
       title: The elasticsearch_searching SLI of the search service (`{{ $labels.stage
-        }}` stage) has not reported any traffic in the past 30 minutes
+        }}` stage) has not reported any traffic in the past 30m
       description: |
         Aggregation of all search queries on GitLab.com, as measured from ElasticSearch.
 
@@ -142,6 +146,6 @@ groups:
       slo_alert: "no"
       user_impacting: "no"
     expr: |
-      gitlab_component_ops:rate_5m{type="search", component="elasticsearch_searching", stage="main", monitor="global"} offset 1h
+      gitlab_component_ops:rate_5m{component="elasticsearch_searching",monitor="global",stage="main",type="search"} offset 1h
       unless
-      gitlab_component_ops:rate_5m{type="search", component="elasticsearch_searching", stage="main", monitor="global"}
+      gitlab_component_ops:rate_5m{component="elasticsearch_searching",monitor="global",stage="main",type="search"}

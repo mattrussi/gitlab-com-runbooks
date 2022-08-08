@@ -1,10 +1,11 @@
 ## Large CI pending builds
+
 Alert Name: CICDTooManyPendingJobsPerNamespace or CICDTooManyRunningJobsPerNamespaceOnSharedRunnersGitLabOrg
 
 The most comment problem is that we get a report that we have a large number of CI pending builds.
 
 1. Check `CI dashboard` and verify that we have a large number of CI builds,
-2. Verify graphs and potential outcomes out of the graphs as described in (CI graphs)[ci_graphs.md],
+2. Verify graphs and potential outcomes out of the graphs as described in [CI graphs](ci_graphs.md),
 3. Verify the number of errors [the high number of errors](ci_runner_manager_errors.md),
 4. Verify that machines are created on `shared-runners-manager-X.gitlab.com`,
 5. Verify that docker machine valid operation,
@@ -14,7 +15,7 @@ The most comment problem is that we get a report that we have a large number of 
 Look at the graph with number of CI builds:
 ![](../img/jobs_graph.png)
 
-## 2. Verify graphs and potential outcomes out of the graphs as described in (CI graphs)[ci_graphs.md],
+## 2. Verify graphs and potential outcomes out of the graphs as described in [CI graphs](ci_graphs.md)
 
 To understand what can be wrong, you need to find a cause.
 
@@ -25,7 +26,7 @@ To understand what can be wrong, you need to find a cause.
 3. Verify long polling behavior (we are not yet aware of potential problems as of now),
 4. Verify workhorse queueing: [Workhorse queueing graphs](ci_graphs.md#workhorse-queueing).
    If you see a large number of requests ending up in the queue it may indicate that CI API is degraded.
-   Verify the performance of `builds/register` endpoint: https://dashboards.gitlab.net/dashboard/db/grape-endpoints?var-action=Grape%23POST%20%2Fbuilds%2Fregister&var-database=Production,
+   Verify the performance of `builds/register` endpoint: <https://dashboards.gitlab.net/dashboard/db/grape-endpoints?var-action=Grape%23POST%20%2Fbuilds%2Fregister&var-database=Production>,
 5. Verify runners uptime. If you see that runners uptime is varying it does indicate that most likely Runners Manager does die, because of the crash. It will be shown in runners manager logs: `grep panic /var/log/messages`.
 
 ## 3. Verify the number of errors [the high number of errors](ci_runner_manager_errors.md)
@@ -33,14 +34,14 @@ To understand what can be wrong, you need to find a cause.
 Generally, it is not a big problem, but it generates a lot of noise in logs. It is safe to run that runbook.
 
 You should also be aware that you should then cross-check state between digital ocean and runners manager as described in
-that issue: https://gitlab.com/gitlab-com/infrastructure/issues/921 (this should be moved to script and runbook).
+that issue: <https://gitlab.com/gitlab-com/gl-infra/reliability/-/issues/921> (this should be moved to script and runbook).
 
 ## 5. Verify that machines are created on `shared-runners-manager-X.gitlab.com`
 
 Login to runners manager and execute:
 
 ```bash
-$ journalctl -xef | grep "Machine created"
+journalctl -xef | grep "Machine created"
 ```
 
 You should see a constant stream of machines being created:
@@ -72,7 +73,7 @@ If it fails to create you will see a message here.
 You should try to create machine manually:
 
 ```bash
-$ docker-machine create -d google test-machine --google-project=gitlab-ci-155816 --google-disk-size=25 --google-machine-type=n1-standard-1 --google-username=core --google-operation-backoff-initial-interval=2 --google-subnetwork=shared-runners --google-zone=us-east1-d --engine-opt=mtu=1460 --engine-opt=ipv6 --engine-opt=fixed-cidr-v6=fc00::/7 --google-scopes=https://www.googleapis.com/auth/logging.write,https://www.googleapis.com/auth/monitoring.write --google-machine-image=gitlab-ci-155816/global/images/runners-coreos-stable-v20190822-0
+docker-machine create -d google test-machine --google-project=gitlab-ci-155816 --google-disk-size=25 --google-machine-type=n1-standard-1 --google-username=core --google-operation-backoff-initial-interval=2 --google-subnetwork=shared-runners --google-zone=us-east1-d --engine-opt=mtu=1460 --engine-opt=ipv6 --engine-opt=fixed-cidr-v6=fc00::/7 --google-scopes=https://www.googleapis.com/auth/logging.write,https://www.googleapis.com/auth/monitoring.write --google-machine-image=gitlab-ci-155816/global/images/runners-coreos-stable-v20190822-0
 ```
 
 This method should succeed. If it does not. You have to verify it.
@@ -80,7 +81,7 @@ This method should succeed. If it does not. You have to verify it.
 Once it is created you can log in to this created machine:
 
 ```bash
-$ docker-machine ssh test-machine
+docker-machine ssh test-machine
 ```
 
 And try to run some docker containers, to verify that networking, DNS does work properly.
@@ -91,16 +92,19 @@ $ docker run -it docker:git /bin/sh
 ```
 
 Afterward tear down the machine:
+
 ```bash
-$ docker-machine rm test-machine
+docker-machine rm test-machine
 ```
 
 If it fails at any of the commands it can mean any of that:
+
 1. there's a problem with docker-machine creating machine,
 2. there's a problem with docker-engine on machine,
 3. there's a problem with connectivity from docker-machine.
 
 You may need to:
+
 1. verify if it's a problem of `docker version`,
 1. verify if it's a problem of `coreos-stable`,
 2. verify if it's a problem of networking out of the container: DNS?

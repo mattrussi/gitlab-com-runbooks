@@ -6,6 +6,10 @@
     stage: 'manage',
     feature_categories: [
       'authentication_and_authorization',
+      'permissions',
+      'user_management',
+      'credential_management',
+      'system_access',
     ],
   },
   workspace: {
@@ -88,9 +92,10 @@
     feature_categories: [
       'web_ide',
       'snippets',
-      'live_preview',
       'wiki',
       'static_site_editor',
+      'pages',
+      'remote_development',
     ],
   },
   gitaly: {
@@ -131,6 +136,7 @@
     feature_categories: [
       'pipeline_authoring',
       'jenkins_importer',
+      'secrets_management',
     ],
   },
   runner: {
@@ -142,8 +148,8 @@
       'runner_fleet',
     ],
   },
-  testing: {
-    name: 'Testing',
+  pipeline_insights: {
+    name: 'Pipeline Insights',
     stage: 'verify',
     feature_categories: [
       'code_testing',
@@ -207,6 +213,14 @@
       'security_benchmarking',
     ],
   },
+  'anti-abuse': {
+    name: 'Anti-Abuse',
+    stage: 'anti-abuse',
+    feature_categories: [
+      'instance_resiliency',
+      'insider_threat',
+    ],
+  },
   release: {
     name: 'Release',
     stage: 'release',
@@ -216,7 +230,6 @@
       'feature_flags',
       'release_orchestration',
       'release_evidence',
-      'pages',
       'environment_management',
     ],
   },
@@ -229,7 +242,6 @@
       'kubernetes_management',
       'cluster_cost_management',
       'chatops',
-      'secrets_management',
       'deployment_management',
     ],
   },
@@ -237,15 +249,20 @@
     name: 'Respond',
     stage: 'monitor',
     feature_categories: [
-      'error_tracking',
       'incident_management',
       'on_call_schedule_management',
+      'runbooks',
+      'continuous_verification',
+    ],
+  },
+  observability: {
+    name: 'Observability',
+    stage: 'monitor',
+    feature_categories: [
       'metrics',
       'tracing',
       'logging',
-      'synthetic_monitoring',
-      'self_monitoring',
-      'runbooks',
+      'error_tracking',
     ],
   },
   container_security: {
@@ -253,8 +270,6 @@
     stage: 'protect',
     feature_categories: [
       'security_orchestration',
-      'container_network_security',
-      'container_host_security',
       'container_scanning',
     ],
   },
@@ -265,11 +280,11 @@
       'purchase',
     ],
   },
-  license: {
-    name: 'License',
+  provision: {
+    name: 'Provision',
     stage: 'fulfillment',
     feature_categories: [
-      'license',
+      'provision',
     ],
   },
   utilization: {
@@ -279,12 +294,11 @@
       'utilization',
     ],
   },
-  activation: {
-    name: 'Activation',
-    stage: 'growth',
+  fulfillment_platform: {
+    name: 'Fulfillment Platform',
+    stage: 'fulfillment',
     feature_categories: [
-      'experimentation_activation',
-      'onboarding',
+      'fulfillment_platform',
     ],
   },
   conversion: {
@@ -292,6 +306,7 @@
     stage: 'growth',
     feature_categories: [
       'experimentation_conversion',
+      'onboarding',
     ],
   },
   expansion: {
@@ -306,6 +321,7 @@
     stage: 'growth',
     feature_categories: [
       'experimentation_adoption',
+      'experimentation_activation',
     ],
   },
   product_intelligence: {
@@ -313,21 +329,20 @@
     stage: 'growth',
     feature_categories: [
       'product_analytics',
-      'usage_ping',
       'service_ping',
       'privacy_control_center',
     ],
   },
   distribution_build: {
     name: 'Distribution:Build',
-    stage: 'enablement',
+    stage: 'systems',
     feature_categories: [
       'build',
     ],
   },
   distribution_deploy: {
     name: 'Distribution:Deploy',
-    stage: 'enablement',
+    stage: 'systems',
     feature_categories: [
       'omnibus_package',
       'cloud_native_installation',
@@ -335,7 +350,7 @@
   },
   geo: {
     name: 'Geo',
-    stage: 'enablement',
+    stage: 'systems',
     feature_categories: [
       'geo_replication',
       'disaster_recovery',
@@ -344,7 +359,7 @@
   },
   memory: {
     name: 'Memory',
-    stage: 'enablement',
+    stage: 'data_stores',
     feature_categories: [
       'memory',
       'redis',
@@ -352,21 +367,21 @@
   },
   global_search: {
     name: 'Global Search',
-    stage: 'enablement',
+    stage: 'data_stores',
     feature_categories: [
       'global_search',
     ],
   },
   database: {
     name: 'Database',
-    stage: 'enablement',
+    stage: 'data_stores',
     feature_categories: [
       'database',
     ],
   },
   sharding: {
     name: 'Sharding',
-    stage: 'enablement',
+    stage: 'data_stores',
     feature_categories: [
       'sharding',
     ],
@@ -386,39 +401,31 @@
       'error_budgets',
     ],
   },
-  horse: {
-    name: 'Project Horse',
+  dedicated: {
+    name: 'GitLab Dedicated',
     stage: 'platforms',
     feature_categories: [
-      'horse',
+      'dedicated',
     ],
   },
   applied_ml: {
     name: 'Applied Machine Learning',
-    stage: 'ModelOps',
+    stage: 'modelops',
     feature_categories: [
       'workflow_automation',
       'intel_code_security',
     ],
   },
-  anti_abuse: {
-    name: 'Anti-Abuse',
-    stage: 'ModelOps',
-    feature_categories: [
-      'instance_resiliency',
-      'insider_threat',
-    ],
-  },
   mlops: {
     name: 'MLOps',
-    stage: 'ModelOps',
+    stage: 'modelops',
     feature_categories: [
       'mlops',
     ],
   },
   dataops: {
     name: 'DataOps',
-    stage: 'ModelOps',
+    stage: 'modelops',
     feature_categories: [
       'dataops',
     ],

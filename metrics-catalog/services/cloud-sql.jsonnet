@@ -1,5 +1,7 @@
 local metricsCatalog = import 'servicemetrics/metrics.libsonnet';
+local toolingLinks = import 'toolinglinks/toolinglinks.libsonnet';
 local gaugeMetric = metricsCatalog.gaugeMetric;
+local maturityLevels = import 'service-maturity/levels.libsonnet';
 
 metricsCatalog.serviceDefinition({
   type: 'cloud-sql',
@@ -18,30 +20,9 @@ metricsCatalog.serviceDefinition({
     kubernetes: false,
   },
 
-  serviceLevelIndicators: {
-    cloudsql_transactions: {
-      userImpacting: true,
-      description: |||
-        This SLI represents SQL transactions in Cloud SQL databases.
-      |||,
+  serviceLevelIndicators: {},
 
-      local baseSelector = {
-        database: { nre: 'postgres|template[0-9]+|default|cloudsqladmin' },
-      },
-
-      requestRate: gaugeMetric(
-        gauge='stackdriver_cloudsql_database_cloudsql_googleapis_com_database_postgresql_transaction_count',
-        selector=baseSelector
-      ),
-
-      errorRate: gaugeMetric(
-        gauge='stackdriver_cloudsql_database_cloudsql_googleapis_com_database_postgresql_transaction_count',
-        selector=baseSelector {
-          transaction_type: 'rollback',
-        }
-      ),
-
-      significantLabels: ['database_id'],
-    },
-  },
+  skippedMaturityCriteria: maturityLevels.skip({
+    'Structured logs available in Kibana': 'Cloud SQL is a managed service of GCP. The logs are available in Stackdriver.',
+  }),
 })

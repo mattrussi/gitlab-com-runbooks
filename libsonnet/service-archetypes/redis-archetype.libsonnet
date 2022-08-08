@@ -1,6 +1,7 @@
 local metricsCatalog = import 'servicemetrics/metrics.libsonnet';
 local histogramApdex = metricsCatalog.histogramApdex;
 local rateMetric = metricsCatalog.rateMetric;
+local kubeLabelSelectors = metricsCatalog.kubeLabelSelectors;
 
 function(
   type,
@@ -16,6 +17,10 @@ function(
   {
     type: type,
     tier: 'db',
+    provisioning: {
+      vms: true,
+      kubernetes: true,
+    },
     serviceIsStageless: true,  // We don't have cny stage for Redis instances
 
     tags: [
@@ -28,6 +33,21 @@ function(
       errorRatio: 0.999,
     },
 
+
+    kubeConfig: {
+      labelSelectors: kubeLabelSelectors(
+        ingressSelector=null,
+        nodeSelector=baseSelector,
+      ),
+    },
+    kubeResources: {
+      redis: {
+        kind: 'Deployment',
+        containers: [
+          type,
+        ],
+      },
+    },
     serviceLevelIndicators: {
       rails_redis_client: {
         userImpacting: true,

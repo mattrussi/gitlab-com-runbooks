@@ -37,11 +37,11 @@ local nodeLoadForDuration(duration, nodeSelector) =
   );
 
 {
-  nodeMetricsDetailRow(nodeSelector)::
+  nodeMetricsDetailRow(nodeSelector, title='🖥️ Node Metrics')::
     local formatConfig = {
       nodeSelector: selectors.serializeHash(nodeSelector),
     };
-    row.new(title='🖥️ Node Metrics', collapse=true)
+    row.new(title, collapse=true)
     .addPanels(layout.grid([
       graphPanel.new(
         'Node CPU',

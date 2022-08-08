@@ -15,7 +15,7 @@ groups:
 
         This could be due to vacuum and analyze commands (issued either automatically or manually) against this table or closely related table. As a new step, check which tables were analyzed and vacuumed immediately prior to this incident.
 
-        <https://log.gprd.gitlab.net/app/kibana#/discover?_a=(columns:!(json.hostname,json.endpoint_id,json.error_severity,json.message,json.session_start_time,json.sql_state_code,json.duration_s,json.sql),filters:!((query:(match:(json.sql:(query:'{{$labels.relname}}',type:phrase)))),(query:(match:(json.fqdn:(query:'{{$labels.fqdn}}',type:phrase))))),index:'97f04200-024b-11eb-81e5-155ba78758d4')|postgres slowlog in Kibana>
+        <https://log.gprd.gitlab.net/app/kibana#/discover?_a=(columns:!(json.hostname,json.endpoint_id,json.error_severity,json.message,json.session_start_time,json.sql_state_code,json.duration_s,json.sql),filters:!((meta:(key:json.sql,params:'{{$labels.relname}}',type:phrase),query:(match:(json.sql:(query:'{{$labels.relname}}',type:phrase)))),(meta:(key:json.fqdn,params:'{{$labels.fqdn}}',type:phrase),query:(match:(json.fqdn:(query:'{{$labels.fqdn}}',type:phrase))))),index:'97f04200-024b-11eb-81e5-155ba78758d4')|postgres slowlog in Kibana>
 
         Previous incidents of this type include <https://gitlab.com/gitlab-com/gl-infra/production/-/issues/2885> and <https://gitlab.com/gitlab-com/gl-infra/production/-/issues/3875>.
       grafana_dashboard_id: alerts-pg_user_tables_primary/alerts-pg-user-table-alerts-primary
@@ -56,7 +56,7 @@ groups:
 
         This could be due to vacuum and analyze commands (issued either automatically or manually) against this table or closely related table. As a new step, check which tables were analyzed and vacuumed immediately prior to this incident.
 
-        <https://log.gprd.gitlab.net/app/kibana#/discover?_a=(columns:!(json.hostname,json.endpoint_id,json.error_severity,json.message,json.session_start_time,json.sql_state_code,json.duration_s,json.sql),filters:!((query:(match:(json.sql:(query:'{{$labels.relname}}',type:phrase))))),index:'97f04200-024b-11eb-81e5-155ba78758d4')|postgres slowlog in Kibana>
+        <https://log.gprd.gitlab.net/app/kibana#/discover?_a=(columns:!(json.hostname,json.endpoint_id,json.error_severity,json.message,json.session_start_time,json.sql_state_code,json.duration_s,json.sql),filters:!((meta:(key:json.sql,params:'{{$labels.relname}}',type:phrase),query:(match:(json.sql:(query:'{{$labels.relname}}',type:phrase))))),index:'97f04200-024b-11eb-81e5-155ba78758d4')|postgres slowlog in Kibana>
 
         Previous incidents of this type include <https://gitlab.com/gitlab-com/gl-infra/production/-/issues/2885> and <https://gitlab.com/gitlab-com/gl-infra/production/-/issues/3875>.
       grafana_dashboard_id: alerts-pg_user_tables_replica/alerts-pg-user-table-alerts-replicas
@@ -172,6 +172,7 @@ groups:
             command!~"[aA][nN][aA][lL][yY][zZ][eE]",
             command!~"[rR][eE][iI][nN][dD][eE][xX]",
             command!~"[aA][lL][tT][eE][rR]",
+            command!~"[dD][rR][oO][pP]",
           }
         )
         > 540

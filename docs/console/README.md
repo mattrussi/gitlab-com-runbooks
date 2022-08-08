@@ -4,8 +4,9 @@
 
 [[_TOC_]]
 
-#  Console Service
-* **Alerts**: https://alerts.gitlab.net/#/alerts?filter=%7Btype%3D%22console%22%2C%20tier%3D%22sv%22%7D
+# Console Service
+
+* **Alerts**: <https://alerts.gitlab.net/#/alerts?filter=%7Btype%3D%22console%22%2C%20tier%3D%22sv%22%7D>
 * **Label**: gitlab-com/gl-infra/production~"Service:Console"
 
 ## Logging
@@ -29,7 +30,7 @@
 * [../ci-runners/service-ci-runners.md](../ci-runners/service-ci-runners.md)
 * [Cloud SQL Troubleshooting](../cloud-sql/cloud-sql.md)
 * [Cloudflare Logs](../cloudflare/logging.md)
-* [customers.gitlab.com](../customers/api-key-rotation.md)
+* [customers.gitlab.com](../customersdot/api-key-rotation.md)
 * [../elastic/elasticsearch-integration-in-gitlab.md](../elastic/elasticsearch-integration-in-gitlab.md)
 * [Frontend (HAProxy) Logging](../frontend/haproxy-logging.md)
 * [HAProxy management at GitLab](../frontend/haproxy.md)
@@ -45,15 +46,17 @@
 * [How to resize Persistent Volumes in Kubernetes](../kube/k8s-pvc-resize.md)
 * [How to take a snapshot of an application running in a StatefulSet](../kube/k8s-sts-snapshot.md)
 * [Kubernetes](../kube/kubernetes.md)
-* [license.gitlab.com Runbook](../license/license-gitlab-com.md)
 * [../logging/logging_gcs_archive_bigquery.md](../logging/logging_gcs_archive_bigquery.md)
 * [Alertmanager Notification Failures](../monitoring/alertmanager-notification-failures.md)
 * [Accessing a GKE Alertmanager](../monitoring/alerts_gke.md)
 * [Filesystem errors are reported in LOG files](../monitoring/filesystem_alerts.md)
+* [Stackdriver tracing for the Thanos stack](../monitoring/thanos-tracing.md)
 * [Session: Application architecture](../onboarding/architecture.md)
 * [Gitlab.com on Kubernetes](../onboarding/gitlab.com_on_k8s.md)
 * [Determine The GitLab Project Associated with a Domain](../pages/pages-domain-lookup.md)
 * [Troubleshooting LetsEncrypt for Pages](../pages/pages-letsencrypt.md)
+* [Steps to Recreate/Rebuild the CI CLuster using a Snapshot from the Master cluster (instead of pg_basebackup)](../patroni-ci/rebuild_ci_cluster_from_prod.md)
+* [Steps to Create a Standby Patroni CLuster using a Snapshot from the Primary cluster (instead of pg_basebackup)](../patroni/build_cluster_from_snapshot.md)
 * [Patroni](../patroni/patroni-management.md)
 * [../patroni/performance-degradation-troubleshooting.md](../patroni/performance-degradation-troubleshooting.md)
 * [PostgreSQL HA](../patroni/pg-ha.md)
@@ -68,13 +71,13 @@
 * [PgBouncer connection management and troubleshooting](../pgbouncer/pgbouncer-connections.md)
 * [Removing a PgBouncer instance](../pgbouncer/pgbouncer-remove-instance.md)
 * [Sidekiq or Web/API is using most of its PgBouncer connections](../pgbouncer/pgbouncer-saturation.md)
-* [Postgres Replicas](../postgres-dr-delayed/postgres-dr-replicas.md)
 * [Praefect Database](../praefect/praefect-database.md)
 * [Removing cache entries from Redis](../redis-cache/remove-cache-entries.md)
 * [Clearing sessions for anonymous users](../redis/clear_anonymous_sessions.md)
 * [Redis-Sidekiq catchall workloads reduction](../redis/redis-sidekiq-catchall-workloads-reduction.md)
 * [../redis/redis.md](../redis/redis.md)
 * [../registry/gitlab-registry.md](../registry/gitlab-registry.md)
+* [Container Registry Migration Phase 2](../registry/migration-phase2.md)
 * [Sentry is down and gives error 500](../sentry/sentry-is-down.md)
 * [Sidekiq Queue Out of Control](../sidekiq/large-sidekiq-queue.md)
 * [Poking around at sidekiq's running state](../sidekiq/sidekiq-inspection.md)
@@ -106,10 +109,10 @@
 * [GitLab staging environment](../uncategorized/staging-environment.md)
 * [Uploads](../uncategorized/uploads.md)
 * [Workers under heavy load because of being used as a CDN](../uncategorized/workers-high-load.md)
-* [Gitlab Vault](../vault/vault.md)
+* [Troubleshooting Hashicorp Vault](../vault/troubleshooting.md)
+* [Vault Secrets Management](../vault/vault.md)
 * [version.gitlab.com Runbook](../version/version-gitlab-com.md)
 <!-- END_MARKER -->
-
 
 <!-- ## Summary -->
 

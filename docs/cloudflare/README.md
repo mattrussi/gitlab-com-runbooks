@@ -16,18 +16,19 @@ Cloudflare provides a web application firewall (WAF), domain name system
 
 ## [False Positive Triage Process](troubleshooting.md#false-positive-triage-process)
 
-## [Change Workflow](https://gitlab.com/gitlab-com/gl-infra/infrastructure/-/issues/10993)
+## [Change Workflow](https://gitlab.com/gitlab-com/gl-infra/reliability/-/issues/10993)
 
 ## When to use a Page Rule vs WAF Rules vs [cf_allowlists]
 
 Whatever it is. Create an issue [**in the Firewall tracker**](https://gitlab.com/gitlab-com/gl-infra/cloudflare-firewall/-/issues) first and link it to the relevant issues. This firewall tracker is used to keep track of existing rules. This applies to all rules, regardless of how they are managed.
 
 Next decide whether:
-* Is it a redirect or changing a caching policy? Use page rules. Afterwards add an entry in the [`page_rules.json`](https://ops.gitlab.net/gitlab-com/gl-infra/cloudflare-audit-log/-/blob/cloudflare_import/page_rules.json) in the `cloudflare_import` and MR it as described [here](https://ops.gitlab.net/gitlab-com/gl-infra/cloudflare-audit-log#how-do-i-apply-a-cloudflare-change-then)
-* Is it a bulk allow of IP addresses for internal customers? Use [cf_allowlists].
-* Is it anything else? Use WAF Rules added via the firwall tracker and web UI.
 
-### Quick reference: WAF Rules:
+- Is it a redirect or changing a caching policy? Use page rules. Afterwards add an entry in the [`page_rules.json`](https://ops.gitlab.net/gitlab-com/gl-infra/cloudflare-audit-log/-/blob/cloudflare_import/page_rules.json) in the `cloudflare_import` and MR it as described [here](https://ops.gitlab.net/gitlab-com/gl-infra/cloudflare-audit-log#how-do-i-apply-a-cloudflare-change-then)
+- Is it a bulk allow of IP addresses for internal customers? Use [cf_allowlists].
+- Is it anything else? Use WAF Rules added via the firwall tracker and web UI.
+
+### Quick reference: WAF Rules
 
 **Temporary rules are subject to automatic expiration!** See [managing traffic](managing-traffic.md) for details.
 
@@ -43,23 +44,26 @@ Then add the firewall tracker issue ID to the range. For example an attack, that
 
 [cf_allowlists]: https://ops.gitlab.net/gitlab-com/gl-infra/terraform-modules/cf_allowlists
 
-## [How we use Page Rules and WAF Rules to Counter Abuse and Attacks](https://gitlab.com/gitlab-com/gl-infra/infrastructure/-/issues/10277)
+## [How we use Page Rules and WAF Rules to Counter Abuse and Attacks](https://gitlab.com/gitlab-com/gl-infra/reliability/-/issues/10277)
 
 ## Updating the WAF and Page Rules in Cloudflare
 
 ### Adding Page Rules Using Terraform
+
 The page rules are managed via Terraform. While changes can be made via the
 Cloudflare Web UI, that is not the preferred method to manage rules.
 
 #### Where to make changes
+
 The three zones that use Cloudflare each have a dedicated
 `cloudflare-pagerules.tf` file in its Terraform environment.
 
-* [gitlab.net](https://ops.gitlab.net/gitlab-com/gitlab-com-infrastructure/-/blob/master/environments/ops/cloudflare-pagerules.tf)
-* [gitlab.com](https://ops.gitlab.net/gitlab-com/gitlab-com-infrastructure/-/blob/master/environments/gprd/cloudflare-pagerules.tf)
-* [staging.gitlab.com](https://ops.gitlab.net/gitlab-com/gitlab-com-infrastructure/-/blob/master/environments/gstg/cloudflare-pagerules.tf)
+- [gitlab.net](https://ops.gitlab.net/gitlab-com/gitlab-com-infrastructure/-/blob/master/environments/ops/cloudflare-pagerules.tf)
+- [gitlab.com](https://ops.gitlab.net/gitlab-com/gitlab-com-infrastructure/-/blob/master/environments/gprd/cloudflare-pagerules.tf)
+- [staging.gitlab.com](https://ops.gitlab.net/gitlab-com/gitlab-com-infrastructure/-/blob/master/environments/gstg/cloudflare-pagerules.tf)
 
 #### How to make changes
+
 The Cloudflare provider for Terraform will not adhere to the `priority` value
 set in a page rule's resource. All but the lowest priority rule will need a
 `depends_on` section to point to the rule just below it in priority. And the
@@ -119,17 +123,18 @@ If you'd like to watch a more detailed video about its inner workings, you can
 view [this demonstration video](https://youtu.be/vTKyf-PS7Lo) which goes into
 much more detail.
 
-### [How Page Rules work](https://gitlab.com/gitlab-com/gl-infra/infrastructure/-/issues/10989)
+### [How Page Rules work](https://gitlab.com/gitlab-com/gl-infra/reliability/-/issues/10989)
 
 ## General Information
-* [Vendor Info](./vendor.md)
-* [Services Locations](./services-locations.md)
-* [WAF Service Information](../waf/README.md)
+
+- [Vendor Info](./vendor.md)
+- [Services Locations](./services-locations.md)
+- [WAF Service Information](../waf/README.md)
 
 ## Domain Name System (DNS)
-* For the zones listed above, Cloudflare is the DNS resolver.
-* [DNS in Terraform](https://ops.gitlab.net/gitlab-com/gitlab-com-infrastructure/-/tree/master/environments/dns) is used to manage Cloudflare DNS entries.
 
+- For the zones listed above, Cloudflare is the DNS resolver.
+- [DNS in Terraform](https://ops.gitlab.net/gitlab-com/gitlab-com-infrastructure/-/tree/master/environments/dns) is used to manage Cloudflare DNS entries.
 
 <!-- ## Summary -->
 

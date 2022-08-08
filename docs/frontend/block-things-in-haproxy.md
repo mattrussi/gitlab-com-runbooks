@@ -3,19 +3,18 @@
 ## First and foremost
 
 * *Don't Panic*
+* Blocking should be in Cloudflare, not at HAProxy. For a general guide on blocking see [the Cloudflare runbook](../cloudflare/managing-traffic.md#when-to-block-and-how-to-block)
 * Make a plan for how to test your change - breaking things at the front door would be bad:
   * Test things in a local LB when possible
   * Get a second set of eyes to look at your change / MR
 
-## Examples - how we have blocked before:
+## Examples - how we have blocked before
 
-* https://ops.gitlab.net/gitlab-cookbooks/chef-repo/commit/30744f5b8fce05acf1f13e813526b3d5b3512cd0
+* <https://ops.gitlab.net/gitlab-cookbooks/chef-repo/commit/30744f5b8fce05acf1f13e813526b3d5b3512cd0>
 
 ## Background
 
-HAPRoxy is the main load balancer we use, it is configured first in the
-[NFS cluster cookbook](https://dev.gitlab.org/cookbooks/gitlab-nfs-cluster/blob/master/templates/default/haproxy.cfg.erb)
-and then there an [lb role in the chef repo](https://ops.gitlab.net/gitlab-cookbooks/chef-repo/blob/master/roles/gitlab-cluster-lb.json)
+HAPRoxy is the main load balancer we use, it is configured via the [`gprd-base-lb-fe-config.json`](https://gitlab.com/gitlab-com/gl-infra/chef-repo/-/blob/master/roles/gprd-base-lb-fe-config.json).
 
 ## How do I
 
@@ -27,6 +26,7 @@ to do so you will need to issue the command `bundle exec rake "edit_role[gitlab-
 chef-repo folder with knife properly configured.
 
 The value to change is "https_custom_config", be careful to respect spaces and to keep previous values:
+
 ``` json
   "override_attributes": {
     "gitlab-nfs-cluster": {
@@ -38,7 +38,7 @@ The value to change is "https_custom_config", be careful to respect spaces and t
     }
 ```
 
-#### Samples of configurations:
+#### Samples of configurations
 
 ##### Deny a path with the DELETE http method
 
@@ -50,7 +50,7 @@ http-request deny if is_delete is_stop_impersonation
 
 ##### Block project imports using blacklist
 
-[Example MR for Production](https://ops.gitlab.net/gitlab-cookbooks/chef-repo/-/merge_requests/5222)
+[Example](https://gitlab.com/gitlab-com/gl-infra/chef-repo/-/commit/c8ebc721f17c4cf85a4971de00e1fa655fadb42a)
 
 ```
         "blacklist": {

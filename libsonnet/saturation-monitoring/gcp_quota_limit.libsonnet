@@ -26,7 +26,7 @@ local resourceSaturationPoint = metricsCatalog.resourceSaturationPoint;
     |||,
     slos: {
       soft: 0.85,
-      hard: 0.95,
+      hard: 0.90,
       alertTriggerDuration: '15m',
     },
   }),

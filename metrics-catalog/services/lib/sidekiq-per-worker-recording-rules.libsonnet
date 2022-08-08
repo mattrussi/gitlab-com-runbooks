@@ -1,5 +1,5 @@
 local sidekiqHelpers = import './sidekiq-helpers.libsonnet';
-local aggregationSets = import 'aggregation-sets.libsonnet';
+local aggregationSets = (import 'gitlab-metrics-config.libsonnet').aggregationSets;
 local aggregations = import 'promql/aggregations.libsonnet';
 local selectors = import 'promql/selectors.libsonnet';
 local metricsCatalog = import 'servicemetrics/metrics.libsonnet';

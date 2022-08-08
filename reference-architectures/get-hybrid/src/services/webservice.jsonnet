@@ -5,7 +5,7 @@ local kubeLabelSelectors = metricsCatalog.kubeLabelSelectors;
 
 metricsCatalog.serviceDefinition({
   type: 'webservice',
-  tier: 'app',
+  tier: 'sv',
 
   tags: ['golang'],
 
@@ -29,7 +29,7 @@ metricsCatalog.serviceDefinition({
     labelSelectors: kubeLabelSelectors(
       podSelector=kubeSelector,
       hpaSelector=kubeSelector,
-      nodeSelector=null,
+      nodeSelector={ eks_amazonaws_com_nodegroup: 'gitlab_webservice_pool' },
       ingressSelector=kubeSelector,
       deploymentSelector=kubeSelector
     ),

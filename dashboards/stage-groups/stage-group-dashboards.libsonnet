@@ -7,6 +7,7 @@ local layout = import 'grafana/layout.libsonnet';
 local toolingLinks = import 'toolinglinks/toolinglinks.libsonnet';
 local platformLinks = import 'gitlab-dashboards/platform_links.libsonnet';
 local errorBudget = import 'stage-groups/error_budget.libsonnet';
+local errorBudgetUtils = import 'stage-groups/error-budget/utils.libsonnet';
 local sidekiqHelpers = import 'services/lib/sidekiq-helpers.libsonnet';
 local thresholds = import 'gitlab-dashboards/thresholds.libsonnet';
 local metricsCatalogDashboards = import 'gitlab-dashboards/metrics_catalog_dashboards.libsonnet';
@@ -51,30 +52,33 @@ local actionFilter(featureCategoriesSelector) =
     allValues='.*'
   );
 
-local errorBudgetPanels(group) =
+local errorBudgetPanels(group, budget) =
   [
     [
-      errorBudget.panels.availabilityStatPanel(group.key),
-      errorBudget.panels.availabilityTargetStatPanel(group.key),
+      budget.panels.availabilityStatPanel(group.key),
+      budget.panels.errorBudgetStatusPanel(group.key),
+      budget.panels.availabilityTargetStatPanel(group.key),
     ],
     [
-      errorBudget.panels.timeRemainingStatPanel(group.key),
-      errorBudget.panels.timeRemainingTargetStatPanel(group.key),
+      budget.panels.timeRemainingStatPanel(group.key),
+      budget.panels.errorBudgetStatusPanel(group.key),
+      budget.panels.timeRemainingTargetStatPanel(group.key),
     ],
     [
-      errorBudget.panels.timeSpentStatPanel(group.key),
-      errorBudget.panels.timeSpentTargetStatPanel(group.key),
+      budget.panels.timeSpentStatPanel(group.key),
+      budget.panels.errorBudgetStatusPanel(group.key),
+      budget.panels.timeSpentTargetStatPanel(group.key),
     ],
     [
-      errorBudget.panels.explanationPanel(group.name),
+      budget.panels.explanationPanel(group.name),
     ],
   ];
 
-local errorBudgetAttribution(group, featureCategories) =
+local errorBudgetAttribution(group, budget, featureCategories) =
   [
-    errorBudget.panels.violationRatePanel(group.key),
-    errorBudget.panels.violationRateExplanation,
-    errorBudget.panels.logLinks(featureCategories),
+    budget.panels.violationRatePanel(group.key),
+    budget.panels.violationRateExplanation,
+    budget.panels.logLinks(featureCategories),
   ];
 
 local railsRequestRate(type, featureCategories, featureCategoriesSelector) =
@@ -378,6 +382,9 @@ local commonHeader(
   displayEmptyGuidance,
   displayBudget,
   title,
+  budget,
+  time_from='now-6h/m',
+  time_to='now/m'
       ) =
   basic
   .dashboard(
@@ -386,8 +393,8 @@ local commonHeader(
       'feature_category',
       groupTag(group),
     ] + extraTags,
-    time_from='now-6h/m',
-    time_to='now/m'
+    time_from=time_from,
+    time_to=time_to,
   )
   .addTemplate(prebuiltTemplates.stage)
   .addTemplates(
@@ -424,9 +431,13 @@ local commonHeader(
     if displayBudget then
       // Errorbudgets are always viewed over a 28d rolling average, regardles of the
       // selected range see the configuration in `libsonnet/stage-groups/error_budget.libsonnet`
-      local title = 'Error Budget (past 28 days)';
-      layout.splitColumnGrid(errorBudgetPanels(group), startRow=100, cellHeights=[4, 2], title=title) +
-      layout.rowGrid('Budget spend attribution', errorBudgetAttribution(group, featureCategories), startRow=110, collapse=true)
+      local title =
+        if budget.isDynamicRange then
+          'Error Budget (From ${__from:date:YYYY-MM-DD HHːmm} to ${__to:date:YYYY-MM-DD HHːmm})'
+        else
+          'Error Budget (past 28 days)';
+      layout.splitColumnGrid(errorBudgetPanels(group, budget), startRow=100, cellHeights=[4, 1.5, 1.5], title=title) +
+      layout.rowGrid('Budget spend attribution', errorBudgetAttribution(group, budget, featureCategories), startRow=150, collapse=true)
     else
       []
   ) {
@@ -462,6 +473,7 @@ local dashboard(groupKey, components=defaultComponents, displayEmptyGuidance=fal
       displayEmptyGuidance=displayEmptyGuidance,
       displayBudget=displayBudget,
       title='%s: Group dashboard' % [group.name],
+      budget=errorBudget(),
     )
     .addPanels(
       if std.length(enabledRequestComponents) != 0 then
@@ -608,6 +620,8 @@ local errorBudgetDetailDashboard(stageGroup) =
       sli.hasStaticFeatureCategory() && std.member(stageGroup.feature_categories, sli.featureCategory)
     );
 
+  local budget = errorBudget(errorBudgetUtils.dynamicRange);
+
   local dashboard =
     commonHeader(
       group=stageGroup,
@@ -619,6 +633,8 @@ local errorBudgetDetailDashboard(stageGroup) =
       displayEmptyGuidance=false,
       displayBudget=true,
       title='%s: group error budget detail' % [stageGroup.name],
+      budget=budget,
+      time_from='now-28d/m',
     )
     .addPanels(
       keyMetrics.headlineMetricsRow(
@@ -639,7 +655,7 @@ local errorBudgetDetailDashboard(stageGroup) =
         includeLastWeek=false,
         compact=true,
         rowHeight=8,
-        fixedThreshold=errorBudget.slaTarget
+        fixedThreshold=budget.slaTarget
       )
     )
     .addPanels(

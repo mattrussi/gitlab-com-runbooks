@@ -1,0 +1,48 @@
+groups:
+- name: Container Registry Migration Phase 2
+  rules:
+  - alert: ContainerRegistryPhase2RailsStalledPreImporting
+    expr: >
+      avg (
+        gitlab_database_rows{query_name="container_repositories_stalled_pre_importing"}
+      ) > 18
+    for: 30m
+    labels:
+      severity: s4
+      alert_type: symptom
+      team: package
+    annotations:
+      title: 'The number of potentially stalled imports in the Rails pre_importing state is too high'
+      description: 'There have been over 18 potentially stalled imports in the Rails pre_importing state in env {{ $labels.environment }} {{ $labels.stage }} stage for the last 30 minutes.'
+      grafana_dashboard_id: registry-migration/registry-migration-detail
+      runbook: docs/registry/migration-phase2.md
+  - alert: ContainerRegistryPhase2RailsStalledPreImportDone
+    expr: >
+      avg (
+        gitlab_database_rows{query_name="container_repositories_stalled_pre_import_done"}
+      ) > 10
+    for: 1h
+    labels:
+      severity: s4
+      alert_type: symptom
+      team: package
+    annotations:
+      title: 'The number of potentially stalled imports in the Rails pre_import_done state is too high'
+      description: 'There have been over 10 potentially stalled imports in the Rails pre_import_done state in env {{ $labels.environment }} {{ $labels.team }} stage for the last 1 hour.'
+      grafana_dashboard_id: registry-migration/registry-migration-detail
+      runbook: docs/registry/migration-phase2.md
+  - alert: ContainerRegistryPhase2RailsStalledImporting
+    expr: >
+      avg (
+        gitlab_database_rows{query_name="container_repositories_stalled_importing"}
+      ) > 5
+    for: 5m
+    labels:
+      severity: s4
+      alert_type: symptom
+      team: package
+    annotations:
+      title: 'The number of potentially stalled imports in the Rails importing state is too high'
+      description: 'There have been over 5 potentially stalled imports in the Rails importing state in env {{ $labels.environment }} {{ $labels.stage }} stage for the last 5 minutes.'
+      grafana_dashboard_id: registry-migration/registry-migration-detail
+      runbook: docs/registry/migration-phase2.md

@@ -1,9 +1,10 @@
 # A survival guide for SREs to working with Redis at GitLab
 
-See also https://docs.gitlab.com/ee/development/redis.html which covers some of the same
+See also <https://docs.gitlab.com/ee/development/redis.html> which covers some of the same
 ground, but with a developer orientation and the SRE-oriented [runbook](https://gitlab.com/gitlab-com/runbooks/-/blob/master/docs/redis/redis.md)
 
 ## What is Redis
+
 Redis is a fast in-memory key-value store.   It offers a number of data types, from simple strings to sets, hashes,
 or complex data types like HyperLogLog.  It is fundamentally single-threaded in its core loop, which keeps the
 implementation simple and robust (e.g. tasks execute serially with no lock contention).  However, that means it is
@@ -12,6 +13,7 @@ scaling problems in the past on GitLab.com where the single CPU became the bottl
 has evolved to take that into account.
 
 ## Why do we use it?
+
 We use it both as a cache (for performance savings) and to store various types of persistent data, either directly and
 explicitly (typically from Rails), or implicitly by using Sidekiq or `Rails.cache`
 
@@ -20,6 +22,7 @@ bottlenecks (or single points of failure)  This can also save time in the web ti
 as a side-effect than the direct reason.
 
 ## Architecture
+
 For gitlab.com, as at September 2021, we have 5 sets of Redis instances, each handling a distinct use case:
 
 | Role                    | Nodes                | Clients                                  | Sentinel?                     | Persistence?               |
@@ -29,7 +32,7 @@ For gitlab.com, as at September 2021, we have 5 sets of Redis instances, each ha
 | Persistent shared state | redis-XX             | Puma workers, Sidekiq workers, Workhorse | Yes (localhost)               | RDB dump every 900 seconds |
 | CI build trace chunks   | redis-tracechunks-XX | Puma workers (API), Sidekiq workers      | Yes (localhost)               | RDB dump every 900 seconds |
 | Ratelimiting (RackAttack/App) | redis-ratelimiting-XX | Puma workers                      | Yes (localhost)               | None |
-| Sessions        |       | redis-sessions-XX    | Puma workers                             | Yes (localhost)               | RDB dump every 900 seconds, but also an eviction policy |
+| Sessions                | redis-sessions-XX    | Puma workers                             | Yes (localhost)               | RDB dump every 900 seconds, but also an eviction policy |
 
 We do not yet have a separate actioncable instance.
 
@@ -44,7 +47,7 @@ in unlikely circumstances (all 3 nodes die at once, which would probably mean al
 infrastructure is also down or badly affected).
 
 At the time (mid 2021) we chose to split CI build trace chunks into it's own instance, CI trace chunks were responsible for roughly 60% of the
-data throughput into/out of the shared state redis, and 16% of Redis calls (see https://gitlab.com/gitlab-org/gitlab/-/issues/327469#note_556531587)
+data throughput into/out of the shared state redis, and 16% of Redis calls (see <https://gitlab.com/gitlab-org/gitlab/-/issues/327469#note_556531587>)
 which was sufficient reason for the split, along with the distinctive usage profile (transient data on its way to permanent storage).
 
 When we split out Ratelimiting (latter-half of 2021) this was for CPU saturation; the cache instance was peaking at a little over
@@ -57,9 +60,10 @@ and also to separate a workload that may be problematic for Redis Cluster, unblo
 to Cluster in the future.
 
 ### CPUs
+
 Redis VMs were the first nodes we switched to from N1 to '[C2](https://cloud.google.com/compute/docs/machine-types#c2_machine_types)'
 node types for the best raw single-threaded CPU performance.  This [halved](https://gitlab.com/gitlab-com/gl-infra/scalability/-/issues/230#note_312403063)
-the CPU usage on our sidekiq cluster, and [almost the same](https://gitlab.com/gitlab-com/gl-infra/infrastructure/-/issues/9636)
+the CPU usage on our sidekiq cluster, and [almost the same](https://gitlab.com/gitlab-com/gl-infra/reliability/-/issues/9636)
 on the cache cluster.   Just in case you were in any doubt as to how important the single-threaded CPU performance was
 to redis.
 
@@ -68,6 +72,7 @@ some network I/O work to non-core threads, but the core work must still occur on
 mitigation.
 
 ## High Availability
+
 For each cluster we run 3 nodes, using [Redis Sentinel](https://redis.io/topics/sentinel) to manage failover.  All
 traffic goes through the currently active primary, and writes are replicated to the two replicas asynchronously.  If the
 primary fails (as determined by Sentinel), one of the replicas is promoted to primary.
@@ -78,9 +83,10 @@ from the primary and then reconnecting via the sentinels again.  It requires no 
 
 The configuration is subtly different across the clusters, for historical reasons; the persistent and sidekiq clusters
 have sentinel running on the VMs alongside redis, whereas the cache cluster uses a distinct set of sentinel VMs.
-https://gitlab.com/gitlab-com/gl-infra/infrastructure/-/issues/11389 records the desire to clean this up.
+<https://gitlab.com/gitlab-com/gl-infra/reliability/-/issues/11389> records the desire to clean this up.
 
 ### Node failure
+
 If one or more replicas fail, nothing of note occurs to Redis availability.  The primary continues to be the primary,
 and any remaining replicas continue to replicate.  We might receive various alerts (depending on the means of failure)
 but gitlab.com will remain operational.  When the replicas come back online, they will be resynchronized with the primary
@@ -116,6 +122,7 @@ rapid succession.
 
 For reference, historically we have observed a few patterns of client behavior that can lead to severe spikes
 in Redis response time:
+
 * *Periodic microbursts:* Large spikes of concurrent requests from many clients can induce CPU saturation.
   When thousands of clients participate in such microbursts, the unlucky clients at the tail of the queue can
   stall for several thousand of milliseconds.  For example, this can happen when many clients synchronously expire
@@ -126,6 +133,7 @@ in Redis response time:
   for other clients that have to wait in the queue.
 
 ### Network partition
+
 For the clusters with sentinel on the VM alongside redis, a simple network partition results in 2 nodes thinking the 3rd
 is down, and the 3rd node thinking the other 2 are down.
 
@@ -135,7 +143,7 @@ alone will resynchronize replication.
 If the primary is on the 1-node side, then Sentinel on the two-node side will retain quorum and initiate a failover
 to one of the nodes on the 2-node side.  The old primary will *continue* to be a primary for any clients that can talk
 to it, but when the network partition heals it will be demoted to a replica and any writes to it during the partition
-will be lost.  See https://redis.io/topics/sentinel#example-2-basic-setup-with-three-boxes, in particular
+will be lost.  See <https://redis.io/topics/sentinel#example-2-basic-setup-with-three-boxes>, in particular
 `min-replicas-to-write` for more depth on this and the related tradeoffs
 
 A 3-way partition will result in no changes; no sentinel will have quorum to force a failover, one primary will remain
@@ -171,7 +179,7 @@ acceptable as it will be refilled on demand.  For ratelimiting, the data has onl
 
 ## What do we store?
 
-https://gitlab.com/gitlab-com/gl-infra/scalability/-/issues/419 contains some summary analysis of the keyspace across
+<https://gitlab.com/gitlab-com/gl-infra/scalability/-/issues/419> contains some summary analysis of the keyspace across
 the persistent and cache instances, as at July 2020.  This will change over time as the code base evolves, but the link
 provides some indication what we're storing (it's not as wide a range of things as you might expect in the
 persistent instance).
@@ -206,6 +214,7 @@ very fast and low latency.
 See [High Availability](#high-availability) for some comments regarding connections via sentinels.
 
 ## What about redis cluster?
+
 [Redis Cluster](https://redis.io/topics/cluster-spec) is a Redis feature that lets you horizontally shard data across
 multiple machines. If any one of our Redis clusters grows too large to fit in memory on a single machine or such that
 the single-threaded CPU becomes a hard limit, then Redis Cluster is a possible mitigation.   Manually sharding the data
@@ -217,20 +226,39 @@ ensure we do not run into CROSSSLOT (cross slot) hashing problems.  At this time
 manage the performance of the existing redis clusters sufficiently that there is no urgent need.
 
 See:
-1. https://gitlab.com/gitlab-com/gl-infra/infrastructure/-/issues/9788
-1. https://gitlab.com/gitlab-com/gl-infra/scalability/-/issues/305
+
+1. <https://gitlab.com/gitlab-com/gl-infra/reliability/-/issues/9788>
+1. <https://gitlab.com/gitlab-com/gl-infra/scalability/-/issues/305>
+
+## Maintanence
+
+### Reconfigure
+
+In order to apply config changes, we need to run a `sudo gitlab-ctl reconfigure`. However, this operation requires coordination, since it will usually restart the redis process.
+
+In order to ensure we remain highly available, this operation should only be applied to redis replicas. In order to apply it to a primary, a failover should first be performed, turning it into a replica.
+
+This process is automated via a script in the `runbooks` repository:
+
+```
+scripts/redis-reconfigure.sh gstg redis-cache
+```
 
 ## Debugging and Diagnosis
+
 So you think something is wrong with Redis, either as a cause or a symptom.  What can you do to find out more?
 
 ### Identifying the primary
+
 While the shell prompt on the servers tells you if it is the primary or a replica, you have to potentially shell into
 multiple nodes to find the primary.
 
 Thankfully, Prometheus/Thanos has this information already, and you can find the current primary for all 3 clusters [here](https://thanos.gitlab.net/graph?g0.range_input=1h&g0.max_source_resolution=0s&g0.expr=sum%28redis_instance_info%7Brole%3D%22master%22%2C%20type%3D~%22redis.*%22%2C%20environment%3D%22gprd%22%7D%29%20by%20%28fqdn%29&g0.tab=1)
 
 ### Basic stats
+
 There is 1 core dashboard for redis, with a variant for each cluster:
+
 * [Persistent/shared](https://dashboards.gitlab.net/d/redis-main/redis-overview?orgId=1)
 * [Cache](https://dashboards.gitlab.net/d/redis-cache-main/redis-cache-overview?orgId=1)
 * [Sidekiq](https://dashboards.gitlab.net/d/redis-sidekiq-main/redis-sidekiq-overview?orgId=1)
@@ -245,15 +273,17 @@ operations; see [Bigkeys](#bigkeys)).  High activity on the secondaries shouldn'
 Assuming "look for changes" is something you'll do anyway, the following are some particularly critical details:
 
 #### Redis Primary CPU
+
 Given the single-threaded CPU nature, the 'Saturation' panel (rightmost of the first row, at this writing) has one
-critical line: `redis_primary_cpu_component `.  This is the CPU used by the redis process, and 100% is the absolute
+critical line: `redis_primary_cpu_component`.  This is the CPU used by the redis process, and 100% is the absolute
 hard limit, so if this is 'high' we may have a problem.  Some gut feel numbers: above 50% is currently ok but interesting,
 75% is getting a little worrisome if it's sustained and time we should be thinking about sharding or other approaches,
 and above 85% it may be too late or else something weird and transient is going on (that could be what you're looking for)
 
 #### Operation Rates
+
 Thankfully we can get metrics per-command (operation), so you can see which specific commands are being called the most.
-https://redis.io/commands provides excellent documentation of those commands, including time complexity (Big-O notation)
+<https://redis.io/commands> provides excellent documentation of those commands, including time complexity (Big-O notation)
 for the operation, so you can evaluate if it's one of the simple quick ones like GET (O(1)) or something a little more
 complicated like LREM (O(N+M)).
 
@@ -274,26 +304,32 @@ at any point in time, waiting for work to be dispatched.  They're not 'Blocked' 
 have lots of blocked clients on a regular basis.
 
 ### Slowlogs
+
 Any requests taking longer than a configurable limit (10ms as currently configured) are logged to the rotating slowlog
 buffer within redis (128 entries, currently configured).  You can view these by in two ways
 
 #### Elasticsearch
-Slowlogs are captured using a fluentd plugin and ingested into ELK.  This link may work: https://log.gprd.gitlab.net/goto/954807baeadd9bccd997cb95d3d33fcc
+
+Slowlogs are captured using a fluentd plugin and ingested into ELK.  This link may work: <https://log.gprd.gitlab.net/goto/954807baeadd9bccd997cb95d3d33fcc>
 but if not, in the redis index (`pubsub-redis-inf-gprd`) search for `json.tag: "redis.slowlog"`.  Normally we see only
 a handful of these entries, often in small batches of related commands + keys, and at a rate of maybe 20 an hour on
 average.  An increase in these would be very interesting, particularly if it was a specific command or set of keys.
 
 #### CLI
+
 You can obtain the 10 most recent entries:
 
-```REDISCLI_AUTH=$(sudo grep ^masterauth /var/opt/gitlab/redis/redis.conf|cut -d\" -f2) /opt/gitlab/embedded/bin/redis-cli
+```sudo gitlab-redis-cli
 127.0.0.1:6379> SLOWLOG GET 10
 ```
-See https://redis.io/commands/slowlog for details of the output format.
+
+See <https://redis.io/commands/slowlog> for details of the output format.
 
 ### ElasticSearch analysis
+
 Rails request logs in ElasticSearch (I want to say "all", but I'm not sure that's the case) will have fields relating
 to redis usage.  These are:
+
 * calls
 * duration_s
 * read_bytes
@@ -309,17 +345,19 @@ our log retention (7 days) you can only really reason about the current state (l
 the usefulness.
 
 ### Monitor commands
-It might be useful to observe live traffic.  SSH to the primary redis node (see [ Identifying the primary](#identifying-the-primary) for
+
+It might be useful to observe live traffic.  SSH to the primary redis node (see [Identifying the primary](#identifying-the-primary) for
 a quick way to do that) and run:
 
 ```
-REDISCLI_AUTH=$(sudo grep ^masterauth /var/opt/gitlab/redis/redis.conf|cut -d\" -f2) /opt/gitlab/embedded/bin/redis-cli monitor
+sudo gitlab-redis-cli monitor
 ```
 
 This will show you not only the commands (including keys + values) being run, but also which client they are from.  Use
 the usual linux tools like grep and awk to further analyze the traffic on demand.
 
 ### Flamegraphs
+
 Every hour, on all redis nodes, we capture a perf trace of the redis server for 5 minutes, and put that, along with a
 pre-generated stack flamegraph generated from the profile, into a GCS bucket, retaining them for 30 days.
 
@@ -329,7 +367,7 @@ by default), or more likely if you are looking at changes in behavior over time.
 
 The bucket is `gitlab-ENV-redis-analysis`
 
-Reference: https://gitlab.com/gitlab-com/gl-infra/scalability/-/issues/321
+Reference: <https://gitlab.com/gitlab-com/gl-infra/scalability/-/issues/321>
 
 ### Bigkeys
 
@@ -344,7 +382,7 @@ using the arrow keys.  See the README in the project for how to run that; it ass
 set of GCP read access with your GCP credentials set up, i.e. if you can do `gsutil ls gs://gitlab-gprd-redis-analysis/bigkeys`
 and it shows the files, then the reporting tool should Just Work™.
 
-Reference: https://gitlab.com/gitlab-com/gl-infra/redis_bigkeys
+Reference: <https://gitlab.com/gitlab-com/gl-infra/redis_bigkeys>
 
 #### Running on demand
 
@@ -368,6 +406,6 @@ less than 10% runtime to the memkeys invocation
 
 Here's how to run them directly:
 
-```REDISCLI_AUTH=$(sudo grep ^masterauth /var/opt/gitlab/redis/redis.conf|cut -d\" -f2) /opt/gitlab/embedded/bin/redis-cli --bigkeys```
+```sudo gitlab-redis-cli --bigkeys```
 
-```REDISCLI_AUTH=$(sudo grep ^masterauth /var/opt/gitlab/redis/redis.conf|cut -d\" -f2) /opt/gitlab/embedded/bin/redis-cli --memkeys --memkeys-samples -1```
+```sudo gitlab-redis-cli --memkeys --memkeys-samples -1```

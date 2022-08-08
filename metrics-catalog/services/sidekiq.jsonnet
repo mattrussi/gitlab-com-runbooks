@@ -41,6 +41,7 @@ metricsCatalog.serviceDefinition({
     pvs: true,
     search: true,
     consul: true,
+    'google-cloud-storage': true,
   },
   provisioning: {
     kubernetes: true,
@@ -56,18 +57,9 @@ metricsCatalog.serviceDefinition({
     'sidekiq_jobs_failed_total',
   ],
   kubeConfig: {
-    // TODO: currently sidekiq node_pools are incorrectly labelled with the shard label
-    // See https://gitlab.com/gitlab-com/gl-infra/delivery/-/issues/2243
-    local shardNames = std.map(function(f) f.name, sidekiqHelpers.shards.listAll()),
     labelSelectors: kubeLabelSelectors(
       ingressSelector=null,  // no ingress for sidekiq
-      nodeSelector={ type: { oneOf: shardNames } },
-
-      // sidekiq pods have incorrect labels, so until
-      // https://gitlab.com/gitlab-com/gl-infra/delivery/-/issues/2243
-      // is addressed, we treat them all as being part of the first defined
-      // shard. Remove this once correctly labeled.
-      podStaticLabels={ stage: sidekiqHelpers.shards.listAll()[0].name },
+      nodeSelector={ type: 'sidekiq' },
       // Sidekiq nodes don't present a stage label at present, so\
       // we hardcode to main stage
       nodeStaticLabels={ stage: 'main' },
@@ -94,72 +86,42 @@ metricsCatalog.serviceDefinition({
       userImpacting: shard.userImpacting,
       featureCategory: 'not_owned',
       team: 'scalability',
-      ignoreTrafficCessation: shard.ignoreTrafficCessation,
+      trafficCessationAlertConfig: shard.trafficCessationAlertConfig,
       upscaleLongerBurnRates: true,
+      monitoringThresholds+: shard.monitoringThresholds,
 
       description: |||
         Aggregation of all jobs for the %(shard)s Sidekiq shard.
       ||| % shardSelector,
       apdex: combined(
-        (
-          if shard.urgency == null || shard.urgency == 'high' then
-            [
-              histogramApdex(
-                histogram='sidekiq_jobs_completion_seconds_bucket',
-                selector=highUrgencySelector + shardSelector,
-                satisfiedThreshold=sidekiqHelpers.slos.urgent.executionDurationSeconds,
-              ),
-              histogramApdex(
-                histogram='sidekiq_jobs_queue_duration_seconds_bucket',
-                selector=highUrgencySelector + shardSelector,
-                satisfiedThreshold=sidekiqHelpers.slos.urgent.queueingDurationSeconds,
-              ),
-            ] else []
-        )
-        +
-        (
-          if shard.urgency == null || shard.urgency == 'low' then
-            [
-              histogramApdex(
-                histogram='sidekiq_jobs_completion_seconds_bucket',
-                selector=lowUrgencySelector + shardSelector,
-                satisfiedThreshold=sidekiqHelpers.slos.lowUrgency.executionDurationSeconds,
-              ),
-              histogramApdex(
-                histogram='sidekiq_jobs_queue_duration_seconds_bucket',
-                selector=lowUrgencySelector + shardSelector,
-                satisfiedThreshold=sidekiqHelpers.slos.lowUrgency.queueingDurationSeconds,
-              ),
-            ] else []
-        )
-        +
-        (
-          if shard.urgency == null || shard.urgency == 'throttled' then
-            [
-              histogramApdex(
-                histogram='sidekiq_jobs_completion_seconds_bucket',
-                selector=throttledUrgencySelector + shardSelector,
-                satisfiedThreshold=sidekiqHelpers.slos.throttled.executionDurationSeconds,
-              ),
-            ] else []
-        ) +
-        (
-          if shard.urgency == null then
-            [
-              // TODO: remove this once all unattribute jobs are removed
-              // Treat `urgency=""` as low urgency jobs.
-              histogramApdex(
-                histogram='sidekiq_jobs_completion_seconds_bucket',
-                selector=noUrgencySelector + shardSelector,
-                satisfiedThreshold=sidekiqHelpers.slos.lowUrgency.executionDurationSeconds,
-              ),
-              histogramApdex(
-                histogram='sidekiq_jobs_queue_duration_seconds_bucket',
-                selector=noUrgencySelector + shardSelector,
-                satisfiedThreshold=sidekiqHelpers.slos.lowUrgency.queueingDurationSeconds,
-              ),
-            ] else []
-        )
+        [
+          histogramApdex(
+            histogram='sidekiq_jobs_completion_seconds_bucket',
+            selector=highUrgencySelector + shardSelector,
+            satisfiedThreshold=sidekiqHelpers.slos.urgent.executionDurationSeconds,
+          ),
+          histogramApdex(
+            histogram='sidekiq_jobs_queue_duration_seconds_bucket',
+            selector=highUrgencySelector + shardSelector,
+            satisfiedThreshold=sidekiqHelpers.slos.urgent.queueingDurationSeconds,
+          ),
+          histogramApdex(
+            histogram='sidekiq_jobs_completion_seconds_bucket',
+            selector=lowUrgencySelector + shardSelector,
+            satisfiedThreshold=sidekiqHelpers.slos.lowUrgency.executionDurationSeconds,
+          ),
+          histogramApdex(
+            histogram='sidekiq_jobs_queue_duration_seconds_bucket',
+            selector=lowUrgencySelector + shardSelector,
+            satisfiedThreshold=sidekiqHelpers.slos.lowUrgency.queueingDurationSeconds,
+          ),
+          histogramApdex(
+            histogram='sidekiq_jobs_completion_seconds_bucket',
+            selector=throttledUrgencySelector + shardSelector,
+            satisfiedThreshold=sidekiqHelpers.slos.throttled.executionDurationSeconds,
+          ),
+          // No queueing apdex for throttled jobs
+        ]
       ),
 
       requestRate: rateMetric(
@@ -177,6 +139,8 @@ metricsCatalog.serviceDefinition({
       // `recordingRuleMetrics` stanza above
       significantLabels: ['feature_category', 'queue', 'urgency', 'worker'],
 
+      // We don't have an `urgency` field in Sidekiq logs. Improve this in
+      // https://gitlab.com/groups/gitlab-com/gl-infra/-/epics/700
       local slowRequestSeconds =
         if shard.urgency == 'high' then
           sidekiqHelpers.slos.urgent.executionDurationSeconds

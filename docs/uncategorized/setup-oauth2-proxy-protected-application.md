@@ -1,7 +1,7 @@
 # Setup oauth2-proxy protection for web based application
 
 This runbook  describes how to setup new application that is protected with `oauth2-proxy` which uses
-https://dev.gitlab.org/ as access provider.
+<https://dev.gitlab.org/> as access provider.
 
 `oauth2-proxy` is a simple application that prepares a HTTP proxy to any web-based application
 that doesn't have own access management mechanism. Using `oauh2-proxy` we can protect such application
@@ -11,7 +11,7 @@ from unauthorized access.
 
 To configure new application with oauth2-proxy you need to:
 
-- have admin access to https://dev.gitlab.org/,
+- have admin access to <https://dev.gitlab.org/>,
 - have write access to ops.gitlab.net/gitlab-cookbooks/chef-repo,
 - have write access to chef.gitlab.com,
 - have configured knife environment,
@@ -30,7 +30,8 @@ files:
 - `client_id` value,
 - `client_secret` value.
 
-To get `client_id` and `client_secret` go to https://dev.gitlab.org/admin/applications and create a new application:
+To get `client_id` and `client_secret` go to <https://dev.gitlab.org/admin/applications> and create a new application:
+
 - set application's FQDN as `Name`,
 - set redirect URL using application's FQDN and `/oauth2/callback` as path, e.g.
   `https://prometheus.gitlab.com/oauth2/callback`,
@@ -49,7 +50,7 @@ for each used FQDN.
 When we have all roles created, we first need to prepare secrets for the role:
 
 ```bash
-$ rake edit_role_secrets[specific_role_name,_default]
+rake edit_role_secrets[specific_role_name,_default]
 ```
 
 where the content is:
@@ -71,7 +72,7 @@ where the content is:
 Having this we can then edit the specific role itself:
 
 ```bash
-$ rake edit_role[specific_role_name]
+rake edit_role[specific_role_name]
 ```
 
 where we need update `"default_attributes"` hash with:
@@ -90,8 +91,9 @@ where we need update `"default_attributes"` hash with:
 ```
 
 Notice that:
+
 - `upstream` should be set to an internal URL accessible on the server, e.g. `http://127.0.0.1:9090/`,
-- `redirect_url` should be set to the URL configured on https://dev.gitlab.org/admin/applications during
+- `redirect_url` should be set to the URL configured on <https://dev.gitlab.org/admin/applications> during
   [gather data](#gather-data) step, e.g. `https://prometheus.gitlab.com/oauth2/callback`,
 - the `NAME` in `cookie_name`'s value should be set to something specific to that FQDN, e.g. `_oauth2_proxy_prometheus`,
 - `fqdn` should contain only a domain name (without scheme, port or path parts that are present in URL) and be set
@@ -127,9 +129,8 @@ update the configuration.
 If you don't want to wait, you can execute:
 
 ```bash
-$ knife ssh -C1 -aipaddress 'roles:general_role_here' -- sudo chef-client
+knife ssh -C1 -aipaddress 'roles:general_role_here' -- sudo chef-client
 ```
 
 This command will update chef managed configuration on all nodes connected to `general_role_here` role, in one-by-one
 mode.
-

@@ -4,9 +4,10 @@
 
 [[_TOC_]]
 
-#  Postgres-archive Service
+# Postgres-archive Service
+
 * [Service Overview](https://dashboards.gitlab.net/d/000000144/postgresql-overview)
-* **Alerts**: https://alerts.gitlab.net/#/alerts?filter=%7Btype%3D%22postgres-archive%22%2C%20tier%3D%22db%22%7D
+* **Alerts**: <https://alerts.gitlab.net/#/alerts?filter=%7Btype%3D%22postgres-archive%22%2C%20tier%3D%22db%22%7D>
 * **Label**: gitlab-com/gl-infra/production~"Service:PostgresArchive"
 
 ## Logging
@@ -18,7 +19,6 @@
 
 * [Postgres Replicas](../postgres-dr-delayed/postgres-dr-replicas.md)
 <!-- END_MARKER -->
-
 
 <!-- ## Summary -->
 

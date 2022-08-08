@@ -1,6 +1,7 @@
 // Generate Alertmanager configurations
 local secrets = std.extVar('secrets_file');
 local serviceCatalog = import 'service-catalog/service-catalog.libsonnet';
+local metricsCatalog = import 'servicemetrics/metrics-catalog.libsonnet';
 local selectors = import 'promql/selectors.libsonnet';
 local stages = import 'service-catalog/stages.libsonnet';
 
@@ -48,20 +49,24 @@ local slackChannels = [
 
 local snitchReceiverChannelName(channel) =
   local env = channel.name;
-  local cluster = channel.cluster;
-  local receiver_name = if cluster == '' then env else env + '_' + cluster;
+  local cluster = if channel.cluster != '' then channel.cluster;
+  local instance = if std.objectHas(channel, 'instance') then std.strReplace(channel.instance, '/', '_');
+  local receiver_name = std.join('_', std.prune([env, cluster, instance]));
   'dead_mans_snitch_' + receiver_name;
+
+local sendResolved(channel, default) =
+  if std.objectHas(channel, 'sendResolved') then channel.sendResolved else default;
 
 local webhookChannels =
   [
-    { name: snitchReceiverChannelName(s), url: 'https://nosnch.in/' + s.apiKey, sendResolved: false }
+    { name: snitchReceiverChannelName(s), url: 'https://nosnch.in/' + s.apiKey, sendResolved: sendResolved(s, default=false) }
     for s in secrets.snitchChannels
   ] +
   [
     {
       name: w.name,
       url: w.url,
-      sendResolved: true,
+      sendResolved: sendResolved(w, default=true),
       httpConfig: {
         bearer_token: w.token,
       },
@@ -72,7 +77,7 @@ local webhookChannels =
     {
       name: 'issue:' + s.name,
       url: 'https://' + s.name + '/alerts/notify.json',
-      sendResolved: true,
+      sendResolved: sendResolved(s, default=true),
       httpConfig: {
         bearer_token: s.token,
       },
@@ -88,7 +93,7 @@ local PagerDutyReceiver(channel) = {
       description: '{{ template "slack.title" . }}',
       client: 'GitLab Alertmanager',
       details: {
-        note: '{{ template "slack.text" . }}',
+        firing: '{{ template "slack.text" . }}',
         alertname: '{{ .CommonLabels.alertname }}',
         component: '{{ .CommonLabels.component }}',
         feature_category: '{{ .CommonLabels.feature_category }}',
@@ -98,6 +103,11 @@ local PagerDutyReceiver(channel) = {
         tier: '{{ .CommonLabels.tier }}',
         type: '{{ .CommonLabels.type }}',
         user_impacting: '{{ .CommonLabels.user_impacting }}',
+        env: '{{ .CommonLabels.env }}',
+        fqdn: '{{ .CommonLabels.fqdn }}',
+        node: '{{ .CommonLabels.node }}',
+        pod: '{{ .CommonLabels.pod }}',
+        region: '{{ .CommonLabels.region }}',
       },
       send_resolved: true,
     },
@@ -177,7 +187,12 @@ local RealSlackReceiver(channelWithDefaults) =
                       {{- .Name }}%3D%22{{- reReplaceAll " +" "%20" .Value -}}%22%2C%20
                   {{- end -}}
               {{- end -}}
-              alertname%3D%22{{ reReplaceAll " +" "%20" .CommonLabels.alertname }}%22%7D
+              alertname%3D%7E%22
+              {{- range $index, $alert := .Alerts -}}
+                {{- if $index -}}%7C{{- end -}}
+                {{- $alert.Labels.alertname -}}
+              {{- end -}}
+              %22%7D
             |||,
           ),
         ],
@@ -262,6 +277,12 @@ local defaultGroupBy = [
   'component',
 ];
 
+local groupByType = [
+  'type',
+  'env',
+  'environment',
+];
+
 local Route(
   receiver,
   matchers=null,
@@ -283,44 +304,13 @@ local Route(
     [if continue != null then 'continue']: continue,
   };
 
-local RouteCase(
-  matchers=null,
-  group_by=null,
-  group_wait=null,
-  group_interval=null,
-  repeat_interval=null,
-  continue=true,
-  defaultReceiver=null,
-  when=null,
-      ) =
-  Route(
-    receiver=defaultReceiver,
-    matchers=matchers,
-    group_by=group_by,
-    group_wait=group_wait,
-    group_interval=group_interval,
-    repeat_interval=repeat_interval,
-    continue=continue,
-    routes=[
-      (
-        local c = { matchers: null } + case;
-        Route(
-          receiver=c.receiver,
-          matchers=c.matchers,
-          group_by=null,
-          continue=false
-        )
-      )
-      for case in when
-    ],
-  );
-
 local SnitchRoute(channel) =
   Route(
     receiver=snitchReceiverChannelName(channel),
     matchers={
       alertname: 'SnitchHeartBeat',
       cluster: channel.cluster,
+      [if std.objectHas(channel, 'instance') then 'prometheus']: channel.instance,
       env: channel.name,
     },
     group_by=null,
@@ -360,21 +350,16 @@ local routingTree = Route(
     for issueChannel in secrets.issueChannels
     for env in ['gprd', 'ops']
   ] + [
-    /* pager=pagerduty alerts do continue */
-    RouteCase(
+    Route(
+      receiver='prod_pagerduty',
       matchers={
         pager: 'pagerduty',
         env: { re: 'gprd|ops' },
       },
+      group_by=groupByType,
       continue=true,
       /* must be less than the 6h auto-resolve in PagerDuty */
       repeat_interval='2h',
-      when=[
-        { matchers: { slo_alert: 'yes', env: 'gprd', stage: 'cny' }, receiver: 'slo_gprd_cny' },
-        { matchers: { slo_alert: 'yes', env: 'gprd', stage: 'main' }, receiver: 'slo_gprd_main' },
-        { matchers: { slo_alert: 'yes', env: 'gprd', stage: 'main' }, receiver: 'slo_gprd_main' },
-      ],
-      defaultReceiver='prod_pagerduty',
     ),
     /*
      * Send ops/gprd slackline alerts to production slackline
@@ -454,7 +439,7 @@ local routingTree = Route(
       matchers={
         env: { re: 'gstg(-ref)?' },
         slo_alert: 'yes',
-        type: { re: 'api|web|git' },
+        type: { re: 'api|web|git|registry|web-pages' },
 
         // Traffic volumes in staging are very low, and even lower in
         // the regional clusters. Since SLO alerting requires reasonable
@@ -476,23 +461,14 @@ local routingTree = Route(
     // Terminators go last
     Route(
       receiver='blackhole',
-      matchers={ env: 'pre' },
-      continue=false,
-    ),
-    Route(
-      receiver='blackhole',
-      matchers={ env: 'dr' },
-      continue=false,
-    ),
-    Route(
-      receiver='blackhole',
-      matchers={ env: { re: 'gstg(-ref)?' } },
+      matchers={ env: { re: 'db-(benchmarking|integration)|dr|gstg(-ref)?|pre|testbed' } },
       continue=false,
     ),
     // Pager alerts should appear in the production channel
     Route(
       receiver='production_slack_channel',
       matchers={ pager: 'pagerduty' },
+      group_by=groupByType,
       continue=false,
     ),
     // All else to #alerts
@@ -537,7 +513,15 @@ local receivers =
     },
   ];
 
-//
+local inhibitRules() = std.flattenArrays(
+  [
+    sli.dependencies.generateInhibitionRules()
+    for service in metricsCatalog.services
+    for sli in service.listServiceLevelIndicators()
+    if sli.hasDependencies()
+  ]
+);
+
 // Generate the whole alertmanager config.
 local alertmanager = {
   global: {
@@ -548,6 +532,7 @@ local alertmanager = {
   templates: [
     templateDir + '/*.tmpl',
   ],
+  inhibit_rules: inhibitRules(),
 };
 
 local k8sAlertmanagerSecret = {

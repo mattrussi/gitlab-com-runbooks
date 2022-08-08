@@ -21,7 +21,7 @@ Currently we have multiple ways of deploying certificates. Please see the `Manag
 ## General info
 
 - COMODO has renamed to Sectigo, those names might get used interchangeably in this document. Any Certificate that is listed as issued by COMODO will in the future be issued by Sectigo.
-- Our primary certificate source is [SSMLate](https://sslmate.com/console/orders/).
+- Our primary certificate source is [SSLMate](https://sslmate.com/console/orders/).
   - Using the above link it is possible to retrieve the current certificate file for each CN listed there.
   - Those files are permanent links to the public chain of the certificate. The key is *not* part of that chain.
   - Some tasks require the commandline tool (available via https://sslmate.com/help/install and `brew install sslmate`).
@@ -140,7 +140,6 @@ By editing list inside `prometheus.jobs.blackbox-ssl.target` attribute in the ro
 | chef.gitlab.com | COMODO RSA Domain Validation Secure Server CA | Chef server | [Chef Server][cs] | - |
 | contributors.gitlab.com | GlobalSign CloudSSL CA - SHA256 - G3 | Redirect to gitlab.biterg.io, hosted on fastly | [Fastly][f] | Auto-renewed shared certificate |
 | customers.gitlab.com | Sectigo RSA Domain Validation Secure Server CA | Customer management | [Chef Vault][cv] | data bag: `customers-gitlab-com`, item: `_default`, fields: `ssl_certificate`, `ssl_key` |
-| dashboards.gitlab.com | Let's Encrypt Authority X3 | Public grafana | automated [GCP Load Balancer][gcp] | project: `gitlab-ops` |
 | dashboards.gitlab.net | Let's Encrypt Authority X3 | Internal grafana | automated [GCP Load Balancer][gcp] | project: `gitlab-ops`|
 | dev.gitlab.org | COMODO RSA Domain Validation Secure Server CA | dev instance | [Chef Vault][cv] | data bag: `dev-gitlab-org`, item: `_default`, fields: `ssl.certificate`, `ssl.private_key` |
 | docs.gitlab.com | Let's Encrypt Authority X3 | - | automated (GitLab Pages managed) | |
@@ -149,7 +148,7 @@ By editing list inside `prometheus.jobs.blackbox-ssl.target` attribute in the ro
 | forum.gitlab.com | Let's Encrypt Authority X3 | Hosted by discourse.com | [Forum][fo] | |
 | gitlab.com | Sectigo RSA Domain Validation Secure Server CA | Duh | [GKMS][gkms] & [manual Cloudflare][manual_cf] | item: `frontend-loadbalancer gprd`, fields: `gitlab-haproxy.ssl.gitlab_crt`,  `gitlab-haproxy.ssl.gitlab_key` |
 | gitlab.org | GlobalSign CloudSSL CA - SHA256 - G3 | Redirect to about.gitlab.com, hosted on fastly | [Fastly][f] | Auto-renewed shared certificate |
-| hub.gitlab.com | Sectigo RSA Domain Validation Secure Server CA | redirects to https://lab.github.com/ (https://gitlab.com/gitlab-com/gl-infra/infrastructure/issues/6667), hosted on about-src, no CDN | [Chef Vault][cv] | data bag: `about-gitlab-com`, item: `_default`, fields: `[hub.gitlab.com][ssl_certificate]`, `[hub.gitlab.com][ssl_key]` |
+| hub.gitlab.com | Sectigo RSA Domain Validation Secure Server CA | redirects to https://lab.github.com/ (https://gitlab.com/gitlab-com/gl-infra/reliability/-/issues/6667), hosted on about-src, no CDN | [Chef Vault][cv] | data bag: `about-gitlab-com`, item: `_default`, fields: `[hub.gitlab.com][ssl_certificate]`, `[hub.gitlab.com][ssl_key]` |
 | jobs.gitlab.com | Sectigo RSA Domain Validation Secure Server CA | redirects to https://about.gitlab.com/jobs/, Hosted on about-src | [Fastly][f] & [Chef Vault][cv] | data bag: `about-gitlab-com`, item: `_default`, fields: `[jobs.gitlab.com][ssl_certificate]`, `[jobs.gitlab.com][ssl_key]` |
 | license.gitlab.com | Sectigo RSA Domain Validation Secure Server CA | | [Chef Vault][cv] | data bag: `license-gitlab-com`, item: `_default`, fields: `[gitlab-packagecloud][ssl_certificate]`, `[gitlab-packagecloud][ssl_key]` |
 | log.gprd.gitlab.net | Let's Encrypt Authority X3 | | automated [GCP Load Balancer][gcp] | project: `gitlab-ops` ops-proxy |

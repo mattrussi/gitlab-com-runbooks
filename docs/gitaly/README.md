@@ -4,9 +4,10 @@
 
 [[_TOC_]]
 
-#  Gitaly Service
+# Gitaly Service
+
 * [Service Overview](https://dashboards.gitlab.net/d/gitaly-main/gitaly-overview)
-* **Alerts**: https://alerts.gitlab.net/#/alerts?filter=%7Btype%3D%22gitaly%22%2C%20tier%3D%22stor%22%7D
+* **Alerts**: <https://alerts.gitlab.net/#/alerts?filter=%7Btype%3D%22gitaly%22%2C%20tier%3D%22stor%22%7D>
 * **Label**: gitlab-com/gl-infra/production~"Service:Gitaly"
 
 ## Logging
@@ -28,6 +29,7 @@
 * [Gitaly is down](gitaly-down.md)
 * [Gitaly error rate is too high](gitaly-error-rate.md)
 * [Gitaly latency is too high](gitaly-latency.md)
+* [Upgrading the OS of Gitaly VMs](gitaly-os-upgrade.md)
 * [Gitaly PermissionDenied alert](gitaly-permission-denied.md)
 * [Gitaly profiling](gitaly-profiling.md)
 * [Gitaly Queuing](gitaly-rate-limiting.md)
@@ -39,8 +41,11 @@
 * [Git Storage Servers](storage-servers.md)
 * [Managing GitLab Storage Shards (Gitaly)](storage-sharding.md)
 * [Kubernetes-Agent Disable Integrations](../kas/kubernetes-agent-disable-integrations.md)
+* [Service-Level Monitoring](../metrics-catalog/service-level-monitoring.md)
+* [Tuning and Modifying Alerts](../monitoring/alert_tuning.md)
 * [../monitoring/apdex-alerts-guide.md](../monitoring/apdex-alerts-guide.md)
 * [Service Apdex](../monitoring/definition-service-apdex.md)
+* [An impatient SRE's guide to deleting alerts](../monitoring/deleting-alerts.md)
 * [Session: Application architecture](../onboarding/architecture.md)
 * [Gitlab.com on Kubernetes](../onboarding/gitlab.com_on_k8s.md)
 * [Diagnosis with Kibana](../onboarding/kibana-diagnosis.md)
@@ -51,7 +56,6 @@
 * [Life of a Git Request](../tutorials/overview_life_of_a_git_request.md)
 * [Life of a Web Request](../tutorials/overview_life_of_a_web_request.md)
 * [Deleted Project Restoration](../uncategorized/deleted-project-restore.md)
-* [An impatient SRE's guide to deleting alerts](../uncategorized/deleting-alerts.md)
 * [../uncategorized/namespace-restore.md](../uncategorized/namespace-restore.md)
 * [Pingdom](../uncategorized/pingdom.md)
 * [Project exports](../uncategorized/project-export.md)
@@ -59,7 +63,6 @@
 * [How to upload a file to Google Cloud Storage from any system without a credentials configuration](../uncategorized/upload-file-to-gcs-using-signed-url.md)
 * [Gitaly version mismatch](../version/gitaly-version-mismatch.md)
 <!-- END_MARKER -->
-
 
 <!-- ## Summary -->
 

@@ -1,4 +1,5 @@
 local metricsCatalog = import 'servicemetrics/metrics.libsonnet';
+local toolingLinks = import 'toolinglinks/toolinglinks.libsonnet';
 local histogramApdex = metricsCatalog.histogramApdex;
 local rateMetric = metricsCatalog.rateMetric;
 local combined = metricsCatalog.combined;
@@ -36,6 +37,7 @@ metricsCatalog.serviceDefinition({
   serviceLevelIndicators: {
 
     sentry_events: {
+      severity: 's3',
       userImpacting: false,
       featureCategory: 'not_owned',
       description: |||
@@ -68,6 +70,7 @@ metricsCatalog.serviceDefinition({
     },
 
     pg_transactions: {
+      severity: 's3',
       userImpacting: false,
       serviceAggregation: false,
       featureCategory: 'not_owned',
@@ -95,11 +98,21 @@ metricsCatalog.serviceDefinition({
       ),
 
       significantLabels: [],
-      toolingLinks: [],
+      toolingLinks: [
+        toolingLinks.stackdriverLogs(
+          title='Stackdriver Logs: Sentry',
+          project='gitlab-ops',
+          queryHash={
+            'resource.type': 'gce_instance',
+            'labels."compute.googleapis.com/resource_name"': { contains: 'sentry' },
+          },
+        ),
+      ],
     },
 
   },
   skippedMaturityCriteria: maturityLevels.skip({
+    'Structured logs available in Kibana': 'We are migrating our self-managed Sentry instance to the hosted one. For more information: https://gitlab.com/gitlab-com/gl-infra/reliability/-/issues/13963. Besides, Sentry logs are also available in Stackdriver.',
     'Service exists in the dependency graph': 'Sentry is an independent internal observability tool',
   }),
 })

@@ -1,5 +1,5 @@
 # See ../docs/uncategorized/pingdom.md for details of how to use this
-unique_tag: "pingdom-automated"
+unique_tag: pingdom-automated
 defaults:
   timeout_ms: 2000
 integrations:
@@ -11,281 +11,280 @@ checks:
     resolution_minutes: 5
     notify_when_restored: true
     tags:
-    - web
-    - gitaly
-    - patroni
-    - sla
+      - web
+      - gitaly
+      - patroni
+      - sla
     teams:
-    - Infrastructure
+      - Infrastructure
     integrations:
-    - pagerduty
+      - pagerduty
 
   - url: https://gitlab.com/gitlab-org/gitlab-foss/merge_requests/
     timeout_ms: 20000
     resolution_minutes: 5
     notify_when_restored: true
     tags:
-    - web
-    - gitaly
-    - patroni
-    - sla
+      - web
+      - gitaly
+      - patroni
+      - sla
     teams:
-    - Infrastructure
+      - Infrastructure
     integrations:
-    - pagerduty
+      - pagerduty
 
   - url: https://gitlab.com/gitlab-org/gitlab-foss/tree/master
     timeout_ms: 20000
     resolution_minutes: 5
     notify_when_restored: true
     tags:
-    - web
-    - gitaly
-    - sla
+      - web
+      - gitaly
+      - sla
     teams:
-    - Infrastructure
+      - Infrastructure
     integrations:
-    - pagerduty
+      - pagerduty
 
   - url: https://gitlab.com/gitlab-org/gitlab-foss/issues
     timeout_ms: 20000
     resolution_minutes: 5
     notify_when_restored: true
     tags:
-    - web
-    - patroni
-    - sla
+      - web
+      - patroni
+      - sla
     teams:
-    - Infrastructure
+      - Infrastructure
     integrations:
-    - pagerduty
+      - pagerduty
 
-  - url: 'https://gitlab.com/api/v4/projects/13083' # GitLab-CE / GitLab-FOSS
+  - url: https://gitlab.com/api/v4/projects/13083  # GitLab-CE / GitLab-FOSS
     timeout_ms: 20000
     resolution_minutes: 5
     notify_when_restored: true
     tags:
-    - api
-    - patroni
-    - sla
+      - api
+      - patroni
+      - sla
     teams:
-    - Infrastructure
+      - Infrastructure
     integrations:
-    - pagerduty
+      - pagerduty
 
   - url: https://gitlab.com/
     timeout_ms: 30000
     resolution_minutes: 5
     notify_when_restored: true
     tags:
-    - web
-    - sla
+      - web
+      - sla
     teams:
-    - Infrastructure
+      - Infrastructure
     integrations:
-    - pagerduty
+      - pagerduty
 
   - url: https://gitlab.com/projects/new
     timeout_ms: 30000
     resolution_minutes: 5
     notify_when_restored: true
     tags:
-    - web
-    - patroni
-    - sla
+      - web
+      - patroni
+      - sla
     teams:
-    - Infrastructure
+      - Infrastructure
     integrations:
-    - pagerduty
+      - pagerduty
 
   - url: https://gitlab.com/gitlab-com/gitlab-com-infrastructure/tree/master
     timeout_ms: 30000
     resolution_minutes: 5
     notify_when_restored: true
     tags:
-    - web
-    - gitaly
-    - sla
+      - web
+      - gitaly
+      - sla
     teams:
-    - Infrastructure
+      - Infrastructure
     integrations:
-    - pagerduty
+      - pagerduty
 
   - url: https://gitlab.com/gitlab-org/gitlab-foss/issues/1
     timeout_ms: 30000
     resolution_minutes: 5
     notify_when_restored: true
     tags:
-    - web
-    - patroni
-    - sla
+      - web
+      - patroni
+      - sla
     teams:
-    - Infrastructure
+      - Infrastructure
     integrations:
-    - pagerduty
+      - pagerduty
 
   - url: http://gitlab.org/
     timeout_ms: 30000
     resolution_minutes: 5
     notify_when_restored: true
     tags:
-    - haproxy
+      - haproxy
     teams:
-    - Infrastructure
+      - Infrastructure
     integrations:
-    - pagerduty
+      - pagerduty
 
-#######################################
-# registry.gitlab.com
-#######################################
-# Registry root URL will always return 200
-# if health check succeeds
-# https://github.com/docker/distribution/pull/874
-#######################################
+  #######################################
+  # registry.gitlab.com
+  #######################################
+  # Registry root URL will always return 200
+  # if health check succeeds
+  # https://github.com/docker/distribution/pull/874
+  #######################################
 
   - url: https://registry.gitlab.com/
     timeout_ms: 5000
     resolution_minutes: 5
     notify_when_restored: true
     tags:
-    - registry
-    - sla
+      - registry
+      - sla
     teams:
-    - Infrastructure
+      - Infrastructure
     integrations:
-    - pagerduty
+      - pagerduty
 
-#######################################
-# about.gitlab.com
-#######################################
+  #######################################
+  # about.gitlab.com
+  #######################################
 
   - url: https://about.gitlab.com/
     timeout_ms: 30000
     resolution_minutes: 5
     notify_when_restored: true
     tags:
-    - about-gitlab
+      - about-gitlab
     teams:
-    - Infrastructure
+      - Infrastructure
     integrations:
-    - pagerduty
+      - pagerduty
 
   - url: http://about.gitlab.com/
     timeout_ms: 30000
     resolution_minutes: 5
     notify_when_restored: true
     tags:
-    - about-gitlab
+      - about-gitlab
     teams:
-    - Infrastructure
+      - Infrastructure
     integrations:
-    - pagerduty
+      - pagerduty
 
-#######################################
-# Cloudflare monitoring
-#######################################
+  #######################################
+  # Cloudflare monitoring
+  #######################################
 
-# Integrations disabled before rollout
+  # Integrations disabled before rollout
 
   - url: https://gitlab.com/cdn-cgi/trace
     timeout_ms: 30000
     resolution_minutes: 5
     notify_when_restored: true
     tags:
-    - cloudflare
+      - cloudflare
     teams:
-    - Infrastructure
-#    integrations:
-#    - pagerduty
+      - Infrastructure
+  # integrations:
+  #   - pagerduty
 
   - url: https://staging.gitlab.com/cdn-cgi/trace
     timeout_ms: 30000
     resolution_minutes: 5
     notify_when_restored: true
     tags:
-    - cloudflare
+      - cloudflare
     teams:
-    - Infrastructure
-#    integrations:
-#    - pagerduty
+      - Infrastructure
+  # integrations:
+  #   - pagerduty
 
-#######################################
-# Ancillary Properties
-#######################################
+  #######################################
+  # Ancillary Properties
+  #######################################
 
   - url: https://version.gitlab.com/
     timeout_ms: 30000
     resolution_minutes: 5
     notify_when_restored: true
     tags:
-    - version-gitlab
+      - version-gitlab
     teams:
-    - Infrastructure
+      - Infrastructure
     integrations:
-    - pagerduty
+      - pagerduty
 
   - url: https://snowplow.trx.gitlab.net/health
     timeout_ms: 30000
     resolution_minutes: 5
     notify_when_restored: true
     tags:
-    - snowplow
+      - snowplow
     teams:
-    - Infrastructure
+      - Infrastructure
     integrations:
-    - pagerduty
+      - pagerduty
 
   - url: https://gitlab-examples.gitlab.io/
     timeout_ms: 30000
     resolution_minutes: 5
     notify_when_restored: true
     tags:
-    - pages
-    - sla
+      - pages
+      - sla
     teams:
-    - Infrastructure
+      - Infrastructure
     integrations:
-    - pagerduty
+      - pagerduty
 
   - url: https://forum.gitlab.com/srv/status
     timeout_ms: 30000
     resolution_minutes: 5
     notify_when_restored: true
     tags:
-    - forum-gitlab
+      - forum-gitlab
     teams:
-    - Infrastructure
-    - Community Relations
+      - Infrastructure
+      - Community Relations
 
   - url: https://deps.sec.gitlab.com/api/ping
     timeout_ms: 30000
     resolution_minutes: 5
     notify_when_restored: true
     tags:
-    - gemnasium
+      - gemnasium
     teams:
-    - Infrastructure
+      - Infrastructure
     integrations:
-    - pagerduty
+      - pagerduty
 
-#######################################
-# People Group Engineering Projects
-#######################################
+  #######################################
+  # People Group Engineering Projects
+  #######################################
   - url: https://comp-calculator.gitlab.net/users/sign_in
     timeout_ms: 30000
     resolution_minutes: 5
     notify_when_restored: true
     tags:
-    - people-engineering
+      - people-engineering
     teams:
-    - People Group Engineering
+      - People Group Engineering
 
   - url: https://nominatorbot.gitlab.net/health
     timeout_ms: 30000
     resolution_minutes: 5
     notify_when_restored: true
     tags:
-    - people-engineering
+      - people-engineering
     teams:
-    - People Group Engineering
-
+      - People Group Engineering

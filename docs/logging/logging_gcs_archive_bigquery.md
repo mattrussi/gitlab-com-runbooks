@@ -27,9 +27,9 @@ In order to load a BQ table from a SD produced log archive stored in GCS a datas
 
 ### Why
 
- * You need to query logs older than 7 days and thus are no longer in our [ELK](https://log.gprd.gitlab.net) instance.
- * You need to query logs older than 30 days and thus are no longer in our SD.
- * You need aggregate operators, summarized reports or output visualizations.
+- You need to query logs older than 7 days and thus are no longer in our [ELK](https://log.gprd.gitlab.net) instance.
+- You need to query logs older than 30 days and thus are no longer in our SD.
+- You need aggregate operators, summarized reports or output visualizations.
 
 ### What
 
@@ -53,8 +53,8 @@ and the old style (external page), but the screenshots may appear with
 differing styles.
 
 1. Create a dataset if necessary to group related tables.
-1. Click on a control to "Add a new table".
-1. Choose "Google Cloud Storage" with "JSON (Newline Delimted)" as the `Source data`.
+1. Click on the dataset's `...` menu to "Create table".
+1. Choose "Google Cloud Storage" with "JSONL (Newline delimited JSON)" as the `Source data`.
 1. Using the browse functionality to find an appropriate bucket is not always
    an option, as only buckets in the same project are listed and data is
    usually imported from, for example, `gitlab-production` or
@@ -65,7 +65,7 @@ differing styles.
      - for GKE container logs, look under the `gke/` folder
      - for any other logs, look under the other folders
 
-1. Insert the bucket URI as follows: `bucket/folder/folder/myfile.json` for a
+1. Insert the bucket path as follows: `bucket/folder/folder/myfile.json` for a
    single file or `bucket/folder/folder/*.json` for all files in that folder
    and its subfolders. When using hive partitioning with GKE container logs
    (see next step), add `dt=` to the prefix to filter out older path that don't
@@ -93,11 +93,10 @@ differing styles.
 
    ![record type](./img/bigquery_schema_record.png)
 
-1. In `Advanced options`, check `Ignore unknown values`
+1. In `Advanced options`, check `Unknown values`
 1. If the data to be imported is large, consider whether partioning will be necessary.
-
-   1. Add `timestamp` field of type `TIMESTAMP`
-   1. In `Advanced options`, select it as the partitioning field:
+   In `Partitioning`, select the field on which to partition the data (a `TIMESTAMP`, typically).
+   Only fields from the schema will be considered.
 
       ![partition by timestamp](./img/bigquery_table_partition.png)
 
@@ -111,7 +110,7 @@ To save time and increase usability, the text version of a table schema can be
 dumped with the `bq` command-line tool as follows:
 
 ```
-  $ bq show --schema --format=prettyjson myproject:myhaproxy.haproxy > haproxy_schema.json
+  bq show --schema --format=prettyjson myproject:myhaproxy.haproxy > haproxy_schema.json
 ```
 
 The result can be copied and pasted into BQ by selecting `Edit as text` when creating a table that relies on a similar schema.
@@ -141,6 +140,7 @@ do the following:
       gs://gitlab-gprd-logging-archive/${DIRECTORY}/* \
       json:STRING
     ```
+
 2. Transform that data and load into the desired table using
    [`JSON_EXTRACT`](https://cloud.google.com/bigquery/docs/reference/standard-sql/json_functions#json_extract):
 
@@ -158,6 +158,7 @@ do the following:
 
     bq --project_id "$GCP_PROJECT" query --nouse_legacy_sql "$query"
     ```
+
 3. The table with the `_pre` suffix can now be deleted.
 
 ## Example Queries
@@ -184,4 +185,4 @@ select count(jsonPayload.path) as count from dataset.table where jsonPayload.use
 
 # TODO
 
- * It's probably possible to perform the above tasks with the `bq` command line.
+- It's probably possible to perform the above tasks with the `bq` command line.

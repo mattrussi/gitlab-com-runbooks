@@ -1,13 +1,13 @@
 {
-   "index_patterns": [
-      "release_tools-*"
-   ],
-   "settings": {
-      "index": {
-         "lifecycle": {
-            "name": "gitlab-release-tools-ilm-policy"
-         }
-      },
-      "number_of_shards": 1
-   }
+  "index_patterns": [
+    "release_tools-*"
+  ],
+  "settings": {
+    "index": {
+        "lifecycle": {
+          "name": "gitlab-release-tools-ilm-policy"
+        }
+    },
+    "number_of_shards": 1
+  }
 }

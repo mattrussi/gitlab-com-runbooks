@@ -2,7 +2,7 @@ local basic = import 'grafana/basic.libsonnet';
 local layout = import 'grafana/layout.libsonnet';
 
 // TECHNICAL DEBT:
-// Before https://gitlab.com/gitlab-com/gl-infra/infrastructure/-/issues/9981 was rolled out
+// Before https://gitlab.com/gitlab-com/gl-infra/reliability/-/issues/9981 was rolled out
 // our metrics were off by a factor of 1 million.
 // This was fixed on 30 April 2020 at 08h00 (1588233600 in unix time)
 //
@@ -249,14 +249,14 @@ local saturationQuery(aggregationLabels, nodeSelector, poolSelector) =
         legendFormat='{{ user }}',
         intervalFactor=5,
       ),
-      // This requires https://gitlab.com/gitlab-com/gl-infra/infrastructure/-/issues/9980
+      // This requires https://gitlab.com/gitlab-com/gl-infra/reliability/-/issues/9980
       // for pgbouncer nodes
       basic.saturationTimeseries(
         title='pgbouncer Single Threaded CPU Saturation per Node',
         description=|||
           pgbouncer is single-threaded. This graph shows maximum utilization across all cores on each host. Lower is better.
 
-          Missing data? [https://gitlab.com/gitlab-com/gl-infra/infrastructure/-/issues/9980](https://gitlab.com/gitlab-com/gl-infra/infrastructure/-/issues/9980)
+          Missing data? [https://gitlab.com/gitlab-com/gl-infra/reliability/-/issues/9980](https://gitlab.com/gitlab-com/gl-infra/reliability/-/issues/9980)
         |||,
         query=|||
           sum(

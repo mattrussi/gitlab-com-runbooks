@@ -1,0 +1,19 @@
+groups:
+- name: vault.rules
+  rules:
+  - alert: VaultAuditLogRequestFailure
+    expr: |
+      increase(vault_audit_log_request_failure[30m]) > 0
+      or
+      increase(vault_audit_log_response_failure[30m]) > 0
+    for: 1m
+    labels:
+      severity: s2
+      pager: pagerduty
+      alert_type: symptom
+    annotations:
+      title: Vault audit log request failure
+      description: >
+        Vault failed to make an audit log request to any of the configured
+        audit log devices, ceasing all user operations.
+      runbook: docs/vault/troubleshooting.md

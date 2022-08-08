@@ -4,9 +4,10 @@
 
 [[_TOC_]]
 
-#  Kube Service
+# Kube Service
+
 * [Service Overview](https://dashboards.gitlab.net/d/kube-main/kube-overview)
-* **Alerts**: https://alerts.gitlab.net/#/alerts?filter=%7Btype%3D%22kube%22%2C%20tier%3D%22inf%22%7D
+* **Alerts**: <https://alerts.gitlab.net/#/alerts?filter=%7Btype%3D%22kube%22%2C%20tier%3D%22inf%22%7D>
 * **Label**: gitlab-com/gl-infra/production~"Service:Kubernetes"
 
 ## Logging
@@ -23,8 +24,8 @@
 * [How to resize Persistent Volumes in Kubernetes](k8s-pvc-resize.md)
 * [How to take a snapshot of an application running in a StatefulSet](k8s-sts-snapshot.md)
 * [Kubernetes](kubernetes.md)
-* [license.gitlab.com Runbook](../license/license-gitlab-com.md)
 * [Prometheus pod crashlooping](../monitoring/prometheus-pod-crashlooping.md)
+* [Redis on Kubernetes](../redis/kubernetes.md)
 * [../registry/gitlab-registry.md](../registry/gitlab-registry.md)
 * [version.gitlab.com Runbook](../version/version-gitlab-com.md)
 <!-- END_MARKER -->

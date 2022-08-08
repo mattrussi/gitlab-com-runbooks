@@ -46,12 +46,12 @@ groups:
       (
         (
           gitlab_component_apdex:ratio_1h{component="apiserver",monitor="global",type="kube"}
-          < (1 - 14.4 * 0.000500)
+          < (1 - 14.4 * 0.001000)
         )
         and
         (
           gitlab_component_apdex:ratio_5m{component="apiserver",monitor="global",type="kube"}
-          < (1 - 14.4 * 0.000500)
+          < (1 - 14.4 * 0.001000)
         )
       )
       and on(env,environment,tier,type,stage,component)
@@ -99,17 +99,17 @@ groups:
       (
         (
           gitlab_component_apdex:ratio_6h{component="apiserver",monitor="global",type="kube"}
-          < (1 - 6 * 0.000500)
+          < (1 - 6 * 0.001000)
         )
         and
         (
           gitlab_component_apdex:ratio_30m{component="apiserver",monitor="global",type="kube"}
-          < (1 - 6 * 0.000500)
+          < (1 - 6 * 0.001000)
         )
       )
       and on(env,environment,tier,type,stage,component)
       (
-        sum by(env,environment,tier,type,stage,component) (gitlab_component_ops:rate_6h{component="apiserver",monitor="global",type="kube"}) >= 1
+        sum by(env,environment,tier,type,stage,component) (gitlab_component_ops:rate_6h{component="apiserver",monitor="global",type="kube"}) >= 0.16667
       )
   - alert: KubeServiceApiserverErrorSLOViolation
     for: 2m
@@ -209,19 +209,19 @@ groups:
       )
       and on(env,environment,tier,type,stage,component)
       (
-        sum by(env,environment,tier,type,stage,component) (gitlab_component_ops:rate_6h{component="apiserver",monitor="global",type="kube"}) >= 1
+        sum by(env,environment,tier,type,stage,component) (gitlab_component_ops:rate_6h{component="apiserver",monitor="global",type="kube"}) >= 0.16667
       )
   - alert: KubeServiceApiserverTrafficCessation
     for: 5m
     annotations:
       title: The apiserver SLI of the kube service (`{{ $labels.stage }}` stage) has
-        not received any traffic in the past 30 minutes
+        not received any traffic in the past 30m
       description: |
         The Kubernetes API server validates and configures data for the api objects which include pods, services, and others. The API Server services REST operations and provides the frontend to the cluster's shared state through which all other components interact.
 
         This SLI measures all non-health-check endpoints. Long-polling endpoints are excluded from apdex scores.
 
-        This alert signifies that the SLI is reporting a cessation of traffic, but the signal is not absent.
+        This alert signifies that the SLI is reporting a cessation of traffic; the signal is present, but is zero.
       grafana_dashboard_id: kube-main/kube-overview
       grafana_dashboard_link: https://dashboards.gitlab.net/d/kube-main/kube-overview?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-stage={{ $labels.stage }}
@@ -245,12 +245,14 @@ groups:
       slo_alert: "no"
       user_impacting: "no"
     expr: |
-      gitlab_component_ops:rate_30m{type="kube", component="apiserver", stage="main", monitor="global"} == 0
+      gitlab_component_ops:rate_30m{component="apiserver",monitor="global",stage="main",type="kube"} == 0
+      and
+      gitlab_component_ops:rate_30m{component="apiserver",monitor="global",stage="main",type="kube"} offset 1h >= 0.16666666666666666
   - alert: KubeServiceApiserverTrafficAbsent
     for: 30m
     annotations:
       title: The apiserver SLI of the kube service (`{{ $labels.stage }}` stage) has
-        not reported any traffic in the past 30 minutes
+        not reported any traffic in the past 30m
       description: |
         The Kubernetes API server validates and configures data for the api objects which include pods, services, and others. The API Server services REST operations and provides the frontend to the cluster's shared state through which all other components interact.
 
@@ -282,9 +284,9 @@ groups:
       slo_alert: "no"
       user_impacting: "no"
     expr: |
-      gitlab_component_ops:rate_5m{type="kube", component="apiserver", stage="main", monitor="global"} offset 1h
+      gitlab_component_ops:rate_5m{component="apiserver",monitor="global",stage="main",type="kube"} offset 1h
       unless
-      gitlab_component_ops:rate_5m{type="kube", component="apiserver", stage="main", monitor="global"}
+      gitlab_component_ops:rate_5m{component="apiserver",monitor="global",stage="main",type="kube"}
   - alert: KubeServiceClusterScaleupsErrorSLOViolation
     for: 2m
     annotations:
@@ -325,12 +327,12 @@ groups:
       (
         (
           gitlab_component_errors:ratio_1h{component="cluster_scaleups",monitor="global",type="kube"}
-          > (14.4 * 0.000500)
+          > (14.4 * 0.050000)
         )
         and
         (
           gitlab_component_errors:ratio_5m{component="cluster_scaleups",monitor="global",type="kube"}
-          > (14.4 * 0.000500)
+          > (14.4 * 0.050000)
         )
       )
       and on(env,environment,tier,type,stage,component)
@@ -377,15 +379,15 @@ groups:
       (
         (
           gitlab_component_errors:ratio_6h{component="cluster_scaleups",monitor="global",type="kube"}
-          > (6 * 0.000500)
+          > (6 * 0.050000)
         )
         and
         (
           gitlab_component_errors:ratio_30m{component="cluster_scaleups",monitor="global",type="kube"}
-          > (6 * 0.000500)
+          > (6 * 0.050000)
         )
       )
       and on(env,environment,tier,type,stage,component)
       (
-        sum by(env,environment,tier,type,stage,component) (gitlab_component_ops:rate_6h{component="cluster_scaleups",monitor="global",type="kube"}) >= 1
+        sum by(env,environment,tier,type,stage,component) (gitlab_component_ops:rate_6h{component="cluster_scaleups",monitor="global",type="kube"}) >= 0.16667
       )

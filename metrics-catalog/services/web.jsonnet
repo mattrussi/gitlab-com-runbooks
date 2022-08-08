@@ -6,6 +6,7 @@ local haproxyComponents = import './lib/haproxy_components.libsonnet';
 local sliLibrary = import 'gitlab-slis/library.libsonnet';
 local serviceLevelIndicatorDefinition = import 'servicemetrics/service_level_indicator_definition.libsonnet';
 local kubeLabelSelectors = metricsCatalog.kubeLabelSelectors;
+local dependOnPatroni = import 'inhibit-rules/depend_on_patroni.libsonnet';
 
 metricsCatalog.serviceDefinition({
   type: 'web',
@@ -14,7 +15,7 @@ metricsCatalog.serviceDefinition({
   tags: ['golang'],
 
   contractualThresholds: {
-    apdexRatio: 0.95,
+    apdexRatio: 0.9,
     errorRatio: 0.005,
   },
   monitoringThresholds: {
@@ -41,6 +42,7 @@ metricsCatalog.serviceDefinition({
     'redis-ratelimiting': true,
     'redis-sidekiq': true,
     'redis-cache': true,
+    'redis-sessions': true,
     redis: true,
     patroni: true,
     pgbouncer: true,
@@ -48,10 +50,11 @@ metricsCatalog.serviceDefinition({
     pvs: true,
     search: true,
     consul: true,
+    'google-cloud-storage': true,
   },
   recordingRuleMetrics: [
     'http_requests_total',
-  ] + sliLibrary.get('rails_request_apdex').recordingRuleMetrics,
+  ] + sliLibrary.get('rails_request').recordingRuleMetrics,
   provisioning: {
     vms: false,
     kubernetes: true,
@@ -59,11 +62,7 @@ metricsCatalog.serviceDefinition({
   regional: true,
   kubeConfig: {
     labelSelectors: kubeLabelSelectors(
-      nodeSelector={ type: 'web' },
-
-      // TODO: at present, web nodepools do not have the correct stage, shard labels
-      // see https://gitlab.com/gitlab-com/gl-infra/delivery/-/issues/2247
-      nodeStaticLabels={ stage: 'main' },
+      nodeSelector={ type: 'web' }
     ),
   },
 
@@ -86,6 +85,7 @@ metricsCatalog.serviceDefinition({
       },
       selector={ type: 'frontend' },
       regional=false,
+      dependsOn=dependOnPatroni.sqlComponents,
     ),
 
     local workhorseWebSelector = { job: { re: 'gitlab-workhorse|gitlab-workhorse-web' }, type: 'web' },
@@ -133,13 +133,15 @@ metricsCatalog.serviceDefinition({
         },
       ),
 
-      significantLabels: ['fqdn', 'route'],
+      significantLabels: ['region', 'route'],
 
       toolingLinks: [
         toolingLinks.continuousProfiler(service='workhorse-web'),
         toolingLinks.sentry(slug='gitlab/gitlab-workhorse-gitlabcom'),
         toolingLinks.kibana(title='Workhorse', index='workhorse', type='web', slowRequestSeconds=10),
       ],
+
+      dependsOn: dependOnPatroni.sqlComponents,
     },
 
     imagescaler: {
@@ -153,7 +155,7 @@ metricsCatalog.serviceDefinition({
       apdex: histogramApdex(
         histogram='gitlab_workhorse_image_resize_duration_seconds_bucket',
         selector=workhorseWebSelector,
-        satisfiedThreshold=0.2,
+        satisfiedThreshold=0.4,
         toleratedThreshold=0.8
       ),
 
@@ -162,7 +164,7 @@ metricsCatalog.serviceDefinition({
         selector=workhorseWebSelector,
       ),
 
-      significantLabels: ['fqdn'],
+      significantLabels: ['region'],
 
       toolingLinks: [
         toolingLinks.kibana(title='Image Resizer', index='workhorse_imageresizer', type='web'),
@@ -188,18 +190,20 @@ metricsCatalog.serviceDefinition({
         selector=railsSelector { status: { re: '5..' } }
       ),
 
-      significantLabels: ['fqdn', 'method', 'feature_category'],
+      significantLabels: ['region', 'method', 'feature_category'],
 
       toolingLinks: [
         toolingLinks.sentry(slug='gitlab/gitlabcom', type='web', variables=['environment', 'stage']),
       ],
+      dependsOn: dependOnPatroni.sqlComponents,
     },
 
     rails_requests:
-      sliLibrary.get('rails_request_apdex').generateServiceLevelIndicator(railsSelector) {
+      sliLibrary.get('rails_request').generateServiceLevelIndicator(railsSelector) {
         toolingLinks: [
           toolingLinks.kibana(title='Rails', index='rails'),
         ],
+        dependsOn: dependOnPatroni.sqlComponents,
       },
   },
 })

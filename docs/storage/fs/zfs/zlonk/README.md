@@ -2,16 +2,17 @@
 
 [[_TOC_]]
 
-#  Zlonk Service
-* **Alerts**: https://alerts.gitlab.net/#/alerts?filter={type%3D%22zlonk.postgres%22}
+# Zlonk Service
+
+* **Alerts**: <https://alerts.gitlab.net/#/alerts?filter={type%3D%22zlonk.postgres%22>}
 * **Label**: None at this time.
 * **Logging**: `/var/log/gitlab/zlonk/<project>/<instance>/zlonk.log`
 
 ## Overview
 
-Zlonk creates, prepares for use, and destroys ZFS clones. 
+Zlonk creates, prepares for use, and destroys ZFS clones.
 
-In its [first iteration](https://gitlab.com/gitlab-com/gl-infra/zlonk/-/blob/master/bin/zlonk.sh), it is a simple shell script that is customized for *cloned Postgres replicas*. It was initially written to address the [long data extraction outage](https://gitlab.com/gitlab-data/analytics/-/issues/8576) we experienced around March - May 2021. Other uses uses include the generation of ad-hoc replicas for [testing and clean-up purposes](https://gitlab.com/gitlab-com/gl-infra/production/-/issues/4591).
+In its [first iteration](https://gitlab.com/gitlab-com/gl-infra/zlonk/-/blob/master/bin/zlonk.sh), it is a simple shell script that is customized for _cloned Postgres replicas_. It was initially written to address the [long data extraction outage](https://gitlab.com/gitlab-data/analytics/-/issues/8576) we experienced around March - May 2021. Other uses uses include the generation of ad-hoc replicas for [testing and clean-up purposes](https://gitlab.com/gitlab-com/gl-infra/production/-/issues/4591).
 
 It currently only runs from `cron` on `patroni-v12-zfs-01-db-grpd`.
 
@@ -29,7 +30,7 @@ The current version of Zlonks acts like a switch: when a clone is not present, i
 
 ##### ZFS datasets and file systems
 
-The `zpool0/pg_datasets/data12` dataset is under Zlonk control. This dataset is mounted as a file system for use by the *cascaded Postgres replica* under `/var/opt/gitlab/postgresql/data12` much like any other database replica. Clones are created in `zpool0/pg_datasets` and are named with the project and instance.
+The `zpool0/pg_datasets/data12` dataset is under Zlonk control. This dataset is mounted as a file system for use by the _cascaded Postgres replica_ under `/var/opt/gitlab/postgresql/data12` much like any other database replica. Clones are created in `zpool0/pg_datasets` and are named with the project and instance.
 
 ```
 zpool0/pg_datasets/data12
@@ -47,7 +48,7 @@ bin/zlonk.sh <project> <instance>
 Once invoked, it will behave in one of two ways:
 
 * If the `project:instance` clone **does not exist**, Zlonk will checkpoint postgres, snapshot the file system, create and mount a clone, and start Postgres, which will attempt recovery. Clones are mounted under  `/var/opt/gitlab/postgresql/zlonk/`. At that point, the cloned replica, which is completely indepdendent of the cascaded replica, will be available on an alternate port.
-* If the `project:instance` clone **does exist**, Zlonk will fast-stop the *cloned Postgres instance*and and destroy the clone.
+* If the `project:instance` clone **does exist**, Zlonk will fast-stop the _cloned Postgres instance_and and destroy the clone.
 
 ## Performance
 

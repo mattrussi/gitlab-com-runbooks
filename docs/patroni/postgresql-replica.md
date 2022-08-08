@@ -44,6 +44,7 @@ After having started PostgreSQL again, there are the following phases:
 1. Catchup with upstream (secondary is accessible but lags behind)
 
 Useful things to look at:
+
 1. `/var/log/gitlab/postgresql/current`
 1. `select * from pg_stat_replication` on `$upstream`
 

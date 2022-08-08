@@ -64,17 +64,17 @@ VM_IP=$(az vm create --verbose \
 echo "Creating VM disks"
 seq 0 15 | xargs -n1 -P1 -I{} sh -c \
   "az disk create --verbose \
-		--resource-group '${RG_NAME}' \
-		--name '${RESTORE}-restore-{}' \
-		--source '/subscriptions/${SUB}/resourceGroups/snapshots-${RDATE}/providers/Microsoft.Compute/snapshots/${RESTORE}-datadisk-{}-snap-${RDATE}'"
+    --resource-group '${RG_NAME}' \
+    --name '${RESTORE}-restore-{}' \
+    --source '/subscriptions/${SUB}/resourceGroups/snapshots-${RDATE}/providers/Microsoft.Compute/snapshots/${RESTORE}-datadisk-{}-snap-${RDATE}'"
 
 echo "Attaching VM disks"
 seq 0 15 | xargs -n1 -P1 -I{} sh -c \
   "az vm disk attach --verbose \
-		--resource-group '${RG_NAME}' \
-		--disk '${RESTORE}-restore-{}' \
-		--vm-name '${VM_NAME}' \
-		--lun '{}'"
+    --resource-group '${RG_NAME}' \
+    --disk '${RESTORE}-restore-{}' \
+    --vm-name '${VM_NAME}' \
+    --lun '{}'"
 
 echo "All done, please proceed:"
 echo ssh "${VM_USERNAME}@${VM_IP}" -i "./${RG_NAME}_rsa4096" -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null

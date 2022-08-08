@@ -1,7 +1,7 @@
 local metricsCatalog = import 'servicemetrics/metrics.libsonnet';
 local histogramApdex = metricsCatalog.histogramApdex;
 local rateMetric = metricsCatalog.rateMetric;
-local haproxyComponents = import './lib/haproxy_components.libsonnet';
+local googleLoadBalancerComponents = import './lib/google_load_balancer_components.libsonnet';
 local toolingLinks = import 'toolinglinks/toolinglinks.libsonnet';
 local maturityLevels = import 'service-maturity/levels.libsonnet';
 
@@ -10,19 +10,22 @@ metricsCatalog.serviceDefinition({
   tier: 'sv',
   monitoringThresholds: {
     apdexScore: 0.999,
-    errorRatio: 0.99,
+    errorRatio: 0.8,
   },
   serviceDependencies: {
     // If Camoproxy has any dependencies, we should add them here
   },
+  provisioning: {
+    vms: false,
+    kubernetes: true,
+  },
   serviceLevelIndicators: {
-    loadbalancer: haproxyComponents.haproxyHTTPLoadBalancer(
+    loadbalancer: googleLoadBalancerComponents.googleLoadBalancer(
       userImpacting=true,
-      featureCategory='not_owned',
-      stageMappings={
-        main: { backends: ['camoproxy'], toolingLinks: [] },
-      },
-      selector={ type: 'camoproxy' },
+      // LB automatically created by the k8s ingress
+      // https://console.cloud.google.com/net-services/loadbalancing/details/http/k8s2-um-8kvupfyn-camoproxy-camoproxy-6ygs428t?project=gitlab-production
+      loadBalancerName='k8s2-um-8kvupfyn-camoproxy-camoproxy-6ygs428t',
+      projectId='gitlab-production'
     ),
 
     server: {

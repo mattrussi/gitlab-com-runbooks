@@ -101,7 +101,7 @@ groups:
       )
       and on(env,environment,tier,type,stage,component)
       (
-        sum by(env,environment,tier,type,stage,component) (gitlab_component_ops:rate_6h{component="cnyHttpServices",monitor="global",type="frontend"}) >= 1
+        sum by(env,environment,tier,type,stage,component) (gitlab_component_ops:rate_6h{component="cnyHttpServices",monitor="global",type="frontend"}) >= 0.16667
       )
   - alert: FrontendServiceCnyHttpServicesErrorSLOViolation
     for: 2m
@@ -193,17 +193,15 @@ groups:
       )
       and on(env,environment,tier,type,stage,component)
       (
-        sum by(env,environment,tier,type,stage,component) (gitlab_component_ops:rate_6h{component="cnyHttpServices",monitor="global",type="frontend"}) >= 1
+        sum by(env,environment,tier,type,stage,component) (gitlab_component_ops:rate_6h{component="cnyHttpServices",monitor="global",type="frontend"}) >= 0.16667
       )
   - alert: FrontendServiceCnyHttpServicesTrafficCessation
     for: 5m
     annotations:
       title: The cnyHttpServices SLI of the frontend service (`{{ $labels.stage }}`
-        stage) has not received any traffic in the past 30 minutes
-      description: |2
-
-
-        This alert signifies that the SLI is reporting a cessation of traffic, but the signal is not absent.
+        stage) has not received any traffic in the past 30m
+      description: |
+        This alert signifies that the SLI is reporting a cessation of traffic; the signal is present, but is zero.
       grafana_dashboard_id: frontend-main/frontend-overview
       grafana_dashboard_link: https://dashboards.gitlab.net/d/frontend-main/frontend-overview?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-stage={{ $labels.stage }}
@@ -227,15 +225,15 @@ groups:
       slo_alert: "no"
       user_impacting: "no"
     expr: |
-      gitlab_component_ops:rate_30m{type="frontend", component="cnyHttpServices", stage="main", monitor="global"} == 0
+      gitlab_component_ops:rate_30m{component="cnyHttpServices",monitor="global",stage="main",type="frontend"} == 0
+      and
+      gitlab_component_ops:rate_30m{component="cnyHttpServices",monitor="global",stage="main",type="frontend"} offset 1h >= 0.16666666666666666
   - alert: FrontendServiceCnyHttpServicesTrafficAbsent
     for: 30m
     annotations:
       title: The cnyHttpServices SLI of the frontend service (`{{ $labels.stage }}`
-        stage) has not reported any traffic in the past 30 minutes
-      description: |2
-
-
+        stage) has not reported any traffic in the past 30m
+      description: |
         This alert signifies that the SLI was previously reporting traffic, but is no longer - the signal is absent.
 
         This could be caused by a change to the metrics used in the SLI, or by the service not receiving traffic.
@@ -262,9 +260,9 @@ groups:
       slo_alert: "no"
       user_impacting: "no"
     expr: |
-      gitlab_component_ops:rate_5m{type="frontend", component="cnyHttpServices", stage="main", monitor="global"} offset 1h
+      gitlab_component_ops:rate_5m{component="cnyHttpServices",monitor="global",stage="main",type="frontend"} offset 1h
       unless
-      gitlab_component_ops:rate_5m{type="frontend", component="cnyHttpServices", stage="main", monitor="global"}
+      gitlab_component_ops:rate_5m{component="cnyHttpServices",monitor="global",stage="main",type="frontend"}
   - alert: FrontendServiceMainHttpServicesApdexSLOViolation
     for: 2m
     annotations:
@@ -282,7 +280,7 @@ groups:
         histogram_quantile(
           0.950000,
           sum by (env,environment,tier,stage,le) (
-            rate(haproxy_http_response_duration_seconds_bucket{type="frontend", backend_name!~"canary_.*", backend_name!="api_rate_limit", backend_name!="websockets", environment="{{ $labels.environment }}",stage="{{ $labels.stage }}"}[5m])
+            rate(haproxy_http_response_duration_seconds_bucket{type="frontend", backend_name!~"canary_.*|api_rate_limit|websockets", environment="{{ $labels.environment }}",stage="{{ $labels.stage }}"}[5m])
           )
         )
       runbook: docs/frontend/README.md
@@ -331,7 +329,7 @@ groups:
         histogram_quantile(
           0.950000,
           sum by (env,environment,tier,stage,le) (
-            rate(haproxy_http_response_duration_seconds_bucket{type="frontend", backend_name!~"canary_.*", backend_name!="api_rate_limit", backend_name!="websockets", environment="{{ $labels.environment }}",stage="{{ $labels.stage }}"}[5m])
+            rate(haproxy_http_response_duration_seconds_bucket{type="frontend", backend_name!~"canary_.*|api_rate_limit|websockets", environment="{{ $labels.environment }}",stage="{{ $labels.stage }}"}[5m])
           )
         )
       runbook: docs/frontend/README.md
@@ -361,7 +359,7 @@ groups:
       )
       and on(env,environment,tier,type,stage,component)
       (
-        sum by(env,environment,tier,type,stage,component) (gitlab_component_ops:rate_6h{component="mainHttpServices",monitor="global",type="frontend"}) >= 1
+        sum by(env,environment,tier,type,stage,component) (gitlab_component_ops:rate_6h{component="mainHttpServices",monitor="global",type="frontend"}) >= 0.16667
       )
   - alert: FrontendServiceMainHttpServicesErrorSLOViolation
     for: 2m
@@ -378,7 +376,7 @@ groups:
       grafana_variables: environment,stage
       promql_template_1: |
         sum by (env,environment,tier,stage) (
-          rate(haproxy_backend_response_errors_total{type="frontend", backend!~"canary_.*", backend_name!="api_rate_limit", environment="{{ $labels.environment }}",stage="{{ $labels.stage }}"}[5m])
+          rate(haproxy_backend_response_errors_total{type="frontend", backend!~"canary_.*|api_rate_limit", environment="{{ $labels.environment }}",stage="{{ $labels.stage }}"}[5m])
         )
       runbook: docs/frontend/README.md
     labels:
@@ -424,7 +422,7 @@ groups:
       grafana_variables: environment,stage
       promql_template_1: |
         sum by (env,environment,tier,stage) (
-          rate(haproxy_backend_response_errors_total{type="frontend", backend!~"canary_.*", backend_name!="api_rate_limit", environment="{{ $labels.environment }}",stage="{{ $labels.stage }}"}[5m])
+          rate(haproxy_backend_response_errors_total{type="frontend", backend!~"canary_.*|api_rate_limit", environment="{{ $labels.environment }}",stage="{{ $labels.stage }}"}[5m])
         )
       runbook: docs/frontend/README.md
     labels:
@@ -453,17 +451,15 @@ groups:
       )
       and on(env,environment,tier,type,stage,component)
       (
-        sum by(env,environment,tier,type,stage,component) (gitlab_component_ops:rate_6h{component="mainHttpServices",monitor="global",type="frontend"}) >= 1
+        sum by(env,environment,tier,type,stage,component) (gitlab_component_ops:rate_6h{component="mainHttpServices",monitor="global",type="frontend"}) >= 0.16667
       )
   - alert: FrontendServiceMainHttpServicesTrafficCessation
     for: 5m
     annotations:
       title: The mainHttpServices SLI of the frontend service (`{{ $labels.stage }}`
-        stage) has not received any traffic in the past 30 minutes
-      description: |2
-
-
-        This alert signifies that the SLI is reporting a cessation of traffic, but the signal is not absent.
+        stage) has not received any traffic in the past 30m
+      description: |
+        This alert signifies that the SLI is reporting a cessation of traffic; the signal is present, but is zero.
       grafana_dashboard_id: frontend-main/frontend-overview
       grafana_dashboard_link: https://dashboards.gitlab.net/d/frontend-main/frontend-overview?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-stage={{ $labels.stage }}
@@ -472,7 +468,7 @@ groups:
       grafana_variables: environment,stage
       promql_template_1: |
         sum by (env,environment,tier,stage) (
-          rate(haproxy_backend_http_responses_total{type="frontend", backend!~"canary_.*", backend_name!="api_rate_limit", environment="{{ $labels.environment }}",stage="{{ $labels.stage }}"}[5m])
+          rate(haproxy_backend_http_responses_total{type="frontend", backend!~"canary_.*|api_rate_limit", environment="{{ $labels.environment }}",stage="{{ $labels.stage }}"}[5m])
         )
       runbook: docs/frontend/README.md
     labels:
@@ -487,15 +483,15 @@ groups:
       slo_alert: "no"
       user_impacting: "no"
     expr: |
-      gitlab_component_ops:rate_30m{type="frontend", component="mainHttpServices", stage="main", monitor="global"} == 0
+      gitlab_component_ops:rate_30m{component="mainHttpServices",monitor="global",stage="main",type="frontend"} == 0
+      and
+      gitlab_component_ops:rate_30m{component="mainHttpServices",monitor="global",stage="main",type="frontend"} offset 1h >= 0.16666666666666666
   - alert: FrontendServiceMainHttpServicesTrafficAbsent
     for: 30m
     annotations:
       title: The mainHttpServices SLI of the frontend service (`{{ $labels.stage }}`
-        stage) has not reported any traffic in the past 30 minutes
-      description: |2
-
-
+        stage) has not reported any traffic in the past 30m
+      description: |
         This alert signifies that the SLI was previously reporting traffic, but is no longer - the signal is absent.
 
         This could be caused by a change to the metrics used in the SLI, or by the service not receiving traffic.
@@ -507,7 +503,7 @@ groups:
       grafana_variables: environment,stage
       promql_template_1: |
         sum by (env,environment,tier,stage) (
-          rate(haproxy_backend_http_responses_total{type="frontend", backend!~"canary_.*", backend_name!="api_rate_limit", environment="{{ $labels.environment }}",stage="{{ $labels.stage }}"}[5m])
+          rate(haproxy_backend_http_responses_total{type="frontend", backend!~"canary_.*|api_rate_limit", environment="{{ $labels.environment }}",stage="{{ $labels.stage }}"}[5m])
         )
       runbook: docs/frontend/README.md
     labels:
@@ -522,9 +518,9 @@ groups:
       slo_alert: "no"
       user_impacting: "no"
     expr: |
-      gitlab_component_ops:rate_5m{type="frontend", component="mainHttpServices", stage="main", monitor="global"} offset 1h
+      gitlab_component_ops:rate_5m{component="mainHttpServices",monitor="global",stage="main",type="frontend"} offset 1h
       unless
-      gitlab_component_ops:rate_5m{type="frontend", component="mainHttpServices", stage="main", monitor="global"}
+      gitlab_component_ops:rate_5m{component="mainHttpServices",monitor="global",stage="main",type="frontend"}
   - alert: FrontendServiceSshServicesApdexSLOViolation
     for: 2m
     annotations:
@@ -562,12 +558,12 @@ groups:
       (
         (
           gitlab_component_apdex:ratio_1h{component="sshServices",monitor="global",type="frontend"}
-          < (1 - 14.4 * 0.001000)
+          < (1 - 14.4 * 0.005000)
         )
         and
         (
           gitlab_component_apdex:ratio_5m{component="sshServices",monitor="global",type="frontend"}
-          < (1 - 14.4 * 0.001000)
+          < (1 - 14.4 * 0.005000)
         )
       )
       and on(env,environment,tier,type,stage,component)
@@ -611,17 +607,17 @@ groups:
       (
         (
           gitlab_component_apdex:ratio_6h{component="sshServices",monitor="global",type="frontend"}
-          < (1 - 6 * 0.001000)
+          < (1 - 6 * 0.005000)
         )
         and
         (
           gitlab_component_apdex:ratio_30m{component="sshServices",monitor="global",type="frontend"}
-          < (1 - 6 * 0.001000)
+          < (1 - 6 * 0.005000)
         )
       )
       and on(env,environment,tier,type,stage,component)
       (
-        sum by(env,environment,tier,type,stage,component) (gitlab_component_ops:rate_6h{component="sshServices",monitor="global",type="frontend"}) >= 1
+        sum by(env,environment,tier,type,stage,component) (gitlab_component_ops:rate_6h{component="sshServices",monitor="global",type="frontend"}) >= 0.16667
       )
   - alert: FrontendServiceSshServicesErrorSLOViolation
     for: 2m
@@ -713,17 +709,15 @@ groups:
       )
       and on(env,environment,tier,type,stage,component)
       (
-        sum by(env,environment,tier,type,stage,component) (gitlab_component_ops:rate_6h{component="sshServices",monitor="global",type="frontend"}) >= 1
+        sum by(env,environment,tier,type,stage,component) (gitlab_component_ops:rate_6h{component="sshServices",monitor="global",type="frontend"}) >= 0.16667
       )
   - alert: FrontendServiceSshServicesTrafficCessation
     for: 5m
     annotations:
       title: The sshServices SLI of the frontend service (`{{ $labels.stage }}` stage)
-        has not received any traffic in the past 30 minutes
-      description: |2
-
-
-        This alert signifies that the SLI is reporting a cessation of traffic, but the signal is not absent.
+        has not received any traffic in the past 30m
+      description: |
+        This alert signifies that the SLI is reporting a cessation of traffic; the signal is present, but is zero.
       grafana_dashboard_id: frontend-main/frontend-overview
       grafana_dashboard_link: https://dashboards.gitlab.net/d/frontend-main/frontend-overview?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-stage={{ $labels.stage }}
@@ -747,15 +741,15 @@ groups:
       slo_alert: "no"
       user_impacting: "no"
     expr: |
-      gitlab_component_ops:rate_30m{type="frontend", component="sshServices", stage="main", monitor="global"} == 0
+      gitlab_component_ops:rate_30m{component="sshServices",monitor="global",stage="main",type="frontend"} == 0
+      and
+      gitlab_component_ops:rate_30m{component="sshServices",monitor="global",stage="main",type="frontend"} offset 1h >= 0.16666666666666666
   - alert: FrontendServiceSshServicesTrafficAbsent
     for: 30m
     annotations:
       title: The sshServices SLI of the frontend service (`{{ $labels.stage }}` stage)
-        has not reported any traffic in the past 30 minutes
-      description: |2
-
-
+        has not reported any traffic in the past 30m
+      description: |
         This alert signifies that the SLI was previously reporting traffic, but is no longer - the signal is absent.
 
         This could be caused by a change to the metrics used in the SLI, or by the service not receiving traffic.
@@ -782,6 +776,6 @@ groups:
       slo_alert: "no"
       user_impacting: "no"
     expr: |
-      gitlab_component_ops:rate_5m{type="frontend", component="sshServices", stage="main", monitor="global"} offset 1h
+      gitlab_component_ops:rate_5m{component="sshServices",monitor="global",stage="main",type="frontend"} offset 1h
       unless
-      gitlab_component_ops:rate_5m{type="frontend", component="sshServices", stage="main", monitor="global"}
+      gitlab_component_ops:rate_5m{component="sshServices",monitor="global",stage="main",type="frontend"}

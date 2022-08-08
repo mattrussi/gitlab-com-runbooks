@@ -101,74 +101,11 @@ local generateAnomalyPanel(title, query, minY=6, maxY=6, errorThreshold=8, warni
     show=false
   );
 
-local activeAlertsPanel =
-  grafana.tablePanel.new(
-    'Active Alerts',
-    datasource='$PROMETHEUS_DS',
-    styles=[
-      {
-        type: 'hidden',
-        pattern: 'Time',
-        alias: 'Time',
-      },
-      {
-        unit: 'short',
-        type: 'string',
-        alias: 'Service',
-        decimals: 2,
-        pattern: 'type',
-        dateFormat: 'YYYY-MM-DD HH:mm:ss',
-        mappingType: 2,
-        link: true,
-        linkUrl: 'https://dashboards.gitlab.net/d/general-service/service-platform-metrics?orgId=1&var-type=${__cell}&var-environment=$environment',
-        linkTooltip: 'Open dashboard',
-      },
-      {
-        unit: 'short',
-        type: 'number',
-        alias: 'Score',
-        decimals: 0,
-        colors: [
-          colorScheme.warningColor,
-          colorScheme.errorColor,
-          colorScheme.criticalColor,
-        ],
-        colorMode: 'row',
-        pattern: 'Value',
-        thresholds: [
-          '100',
-          '10000',
-        ],
-        mappingType: 1,
-      },
-    ],
-  )
-  .addTarget(  // Alert scoring
-    promQuery.target(
-      |||
-        sort(
-          sum(
-            ALERTS{environment="$environment", type!="", severity="s1", alertstate="firing"} * 1000000
-            or
-            ALERTS{environment="$environment", type!="", severity="s2", alertstate="firing"} * 10000
-            or
-            ALERTS{environment="$environment", type!="", severity="s3", alertstate="firing"} * 100
-            or
-            ALERTS{environment="$environment", type!="", severity="s4", alertstate="firing"}
-          ) by (type)
-        )
-      |||,
-      format='table',
-      instant=true
-    )
-  );
-
 basic.dashboard(
   'Platform Triage',
   tags=['general'],
 )
 .addTemplate(templates.stage)
-.addPanel(activeAlertsPanel, gridPos=genGridPos(0, 0, w=2, h=0.5))
 .addPanel(
   generalGraphPanel(
     'Latency: Apdex',

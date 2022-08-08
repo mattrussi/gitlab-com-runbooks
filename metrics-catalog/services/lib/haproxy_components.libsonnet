@@ -51,7 +51,7 @@ local singleL4Component(stage, selector, definition, userImpacting) =
 
   metricsCatalog.serviceLevelIndicatorDefinition({
     userImpacting: userImpacting,
-    ignoreTrafficCessation: true,  // Only monitor this at the combined level
+    trafficCessationAlertConfig: false,  // Only monitor this at the combined level
     staticLabels: {
       stage: stage,
     },
@@ -71,21 +71,22 @@ local singleL4Component(stage, selector, definition, userImpacting) =
     toolingLinks: toolingLinks,
   });
 
-local combinedBackendCurry(generator, defaultSLIDescription, ignoreTrafficCessation) =
-  function(userImpacting, stageMappings, selector, featureCategory, team=null, description=defaultSLIDescription, regional=null)
+local combinedBackendCurry(generator, defaultSLIDescription, trafficCessationAlertConfig) =
+  function(userImpacting, stageMappings, selector, featureCategory, team=null, description=defaultSLIDescription, regional=null, dependsOn=[])
     metricsCatalog.combinedServiceLevelIndicatorDefinition(
       userImpacting=userImpacting,
       featureCategory=featureCategory,
       team=team,
       description=description,
-      ignoreTrafficCessation=ignoreTrafficCessation,
+      trafficCessationAlertConfig=trafficCessationAlertConfig,
       components=[
         generator(stage=stage, selector=selector, definition=stageMappings[stage], userImpacting=userImpacting)
         for stage in std.objectFields(stageMappings)
       ],
       // Don't double-up RPS by including loadbalancer again
       serviceAggregation=false,
-      regional=regional
+      regional=regional,
+      dependsOn=dependsOn
     );
 
 
@@ -96,7 +97,7 @@ local combinedBackendCurry(generator, defaultSLIDescription, ignoreTrafficCessat
   //   main: { backends: ["backend_1", "backend_2"], toolingLinks: [...] },
   //   cny: { backends: ["backend_3", "backend_4"], toolingLinks: [...] },
   // },
-  haproxyHTTPLoadBalancer:: combinedBackendCurry(singleHTTPComponent, defaultSLIDescription=defaultHTTPSLIDescription, ignoreTrafficCessation=false),
+  haproxyHTTPLoadBalancer:: combinedBackendCurry(singleHTTPComponent, defaultSLIDescription=defaultHTTPSLIDescription, trafficCessationAlertConfig=true),
 
   // This returns a combined component mapping, one for each stage (main, cny etc)
   // The mapping is as follows:
@@ -104,5 +105,5 @@ local combinedBackendCurry(generator, defaultSLIDescription, ignoreTrafficCessat
   //   main: { backends: ["backend_1", "backend_2"], toolingLinks: [...] },
   //   cny: { backends: ["backend_3", "backend_4"], toolingLinks: [...] },
   // },
-  haproxyL4LoadBalancer:: combinedBackendCurry(singleL4Component, defaultSLIDescription=defaultL4SLIDescription, ignoreTrafficCessation=false),
+  haproxyL4LoadBalancer:: combinedBackendCurry(singleL4Component, defaultSLIDescription=defaultL4SLIDescription, trafficCessationAlertConfig=true),
 }

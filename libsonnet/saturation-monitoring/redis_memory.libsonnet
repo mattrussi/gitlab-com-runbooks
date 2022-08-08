@@ -42,30 +42,48 @@ local maxMemoryDefinition = {
   |||,
 };
 
+local redisMemoryDefinition = commonDefinition {
+  description: |||
+    Redis memory utilization per node.
+
+    As Redis memory saturates node memory, the likelyhood of OOM kills, possibly to the Redis process,
+    become more likely.
+
+    For caches, consider lowering the `maxmemory` setting in Redis. For non-caching Redis instances,
+    this has been caused in the past by credential stuffing, leading to large numbers of web sessions.
+
+    This threshold is kept deliberately low, since Redis RDB snapshots could consume a significant amount of memory,
+    especially when the rate of change in Redis is high, leading to copy-on-write consuming more memory than when the
+    rate-of-change is low.
+  |||,
+  grafana_dashboard_uid: 'sat_redis_memory',
+  slos: {
+    soft: 0.65,
+    // Keep this low, since processes like the Redis RDB snapshot can put sort-term memory pressure
+    // Ideally we don't want to go over 75%, so alerting at 70% gives us due warning before we hit
+    //
+    hard: 0.70,
+  },
+};
+
+// All the redis except redis-tracechunks and redis-cache;
+// includes sessions as well as the other sessions-specific metric
+// below, as this measures something subtly different and
+// distinctly valid
+local excludedRedisInstances = ['redis-cache', 'redis-tracechunks'];
+
 {
-  redis_memory: resourceSaturationPoint(commonDefinition {
-    appliesTo: std.filter(function(s) s != 'redis-tracechunks', metricsCatalog.findServicesWithTag(tag='redis')),  // All the redis except redis-tracechunks; includes sessions as well as the other sessions-specific metric below, as this measures something subtly different and distinctly valid
-    description: |||
-      Redis memory utilization per node.
+  redis_memory: resourceSaturationPoint(redisMemoryDefinition {
+    appliesTo: std.filter(function(s) !std.member(excludedRedisInstances, s), metricsCatalog.findServicesWithTag(tag='redis')),
+  }),
 
-      As Redis memory saturates node memory, the likelyhood of OOM kills, possibly to the Redis process,
-      become more likely.
-
-      For caches, consider lowering the `maxmemory` setting in Redis. For non-caching Redis instances,
-      this has been caused in the past by credential stuffing, leading to large numbers of web sessions.
-
-      This threshold is kept deliberately low, since Redis RDB snapshots could consume a significant amount of memory,
-      especially when the rate of change in Redis is high, leading to copy-on-write consuming more memory than when the
-      rate-of-change is low.
-    |||,
-    grafana_dashboard_uid: 'sat_redis_memory',
-    slos: {
-      soft: 0.65,
-      // Keep this low, since processes like the Redis RDB snapshot can put sort-term memory pressure
-      // Ideally we don't want to go over 75%, so alerting at 70% gives us due warning before we hit
-      //
-      hard: 0.70,
-    },
+  // Exclude redis-cache from capacity planning reports as it has
+  // maxmemory and an eviction policy defined, and is always at
+  // maxmemory
+  redis_memory_cache: resourceSaturationPoint(redisMemoryDefinition {
+    appliesTo: ['redis-cache'],
+    capacityPlanningStrategy: 'exclude',
+    grafana_dashboard_uid: 'sat_redis_memory_cache',
   }),
 
   redis_memory_tracechunks: resourceSaturationPoint(commonDefinition {

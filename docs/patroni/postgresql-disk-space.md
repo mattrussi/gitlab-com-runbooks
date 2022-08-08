@@ -1,6 +1,6 @@
 # PostgreSQL
 
-## So your Postgres server has run out of disk space....
+## So your Postgres server has run out of disk space
 
 * Don't panic -- Postgres should handle the situation cleanly
 
@@ -83,7 +83,7 @@ work.
 * Ensure you're on the correct replica host!
 * Ensure the database (patroni service) is shut down on the replica
 * `watch du -sh /var/opt/gitlab/postgresql/data`
-* `tail -f /var/log/gitlab/postgresql/current `
+* `tail -f /var/log/gitlab/postgresql/current`
 * `rm -r /var/opt/gitlab/postgresql/data/*`
 * Follow [patroni-management.md](patroni-management.md) to bootstrap the replica
 

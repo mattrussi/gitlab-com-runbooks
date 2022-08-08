@@ -4,39 +4,14 @@ local generator = import 'slo_expression_generator.libsonnet';
 local durationParser = import 'utils/duration-parser.libsonnet';
 local strings = import 'utils/strings.libsonnet';
 
-// Given minimumOperationRateForMonitoring xor minimumSamplesForMonitoring,
-// returns an actual minimumOperationRateForMonitoring.
-// For minimumSamplesForMonitoring, calculates what the minimum sample rate per second,
-// over the longWindow needs to be.
-local calculateMinimumOperationRateForMonitoring(
-  operationRateWindowDuration,
-  minimumOperationRateForMonitoring,
-  minimumSamplesForMonitoring,
-      ) =
-  if minimumOperationRateForMonitoring == null && minimumSamplesForMonitoring == null then
-    null
-  else if minimumOperationRateForMonitoring != null && minimumSamplesForMonitoring != null then
-    std.assertEqual('', { __assert: 'minimumOperationRateForMonitoring and minimumSamplesForMonitoring are exclusive. Please set at most one.' })
-  else if minimumOperationRateForMonitoring != null then
-    minimumOperationRateForMonitoring
-  else
-    minimumSamplesForMonitoring / durationParser.toSeconds(operationRateWindowDuration);
-
 local operationRateFilter(
   expression,
   operationRateMetric,
   operationRateAggregationLabels,
   operationRateSelectorHash,
   operationRateWindowDuration,
-  minimumOperationRateForMonitoring,
-  minimumSamplesForMonitoring
+  requiredOpRate
       ) =
-
-  local requiredOpRate = calculateMinimumOperationRateForMonitoring(
-    operationRateWindowDuration=operationRateWindowDuration,
-    minimumOperationRateForMonitoring=minimumOperationRateForMonitoring,
-    minimumSamplesForMonitoring=minimumSamplesForMonitoring,
-  );
 
   if requiredOpRate == null then
     expression
@@ -78,8 +53,7 @@ local defaultWindows = ['1h', '6h'];
     metricSelectorHash,  // Selectors for the error rate metrics
     windows=defaultWindows,  // Sets of windows in this SLO expression, identified by longWindow duration
     thresholdSLOValue,  // Error budget float value (between 0 and 1)
-    minimumOperationRateForMonitoring=null,  // minium operation rate vaue (in request-per-second)
-    minimumSamplesForMonitoring=null,  // minimum number of operations recorded, over the longWindow period, for monitoring
+    requiredOpRate=null,  // minimum operation rate recorded, over the longWindow period, for monitoring
     operationRateWindowDuration='1h',  // Window over which to evaluate operation rate
   )::
     local mergedMetricSelectors = selectors.merge(aggregationSet.selector, metricSelectorHash);
@@ -99,8 +73,7 @@ local defaultWindows = ['1h', '6h'];
       aggregationSet.labels,
       mergedMetricSelectors,
       operationRateWindowDuration=operationRateWindowDuration,
-      minimumOperationRateForMonitoring=minimumOperationRateForMonitoring,
-      minimumSamplesForMonitoring=minimumSamplesForMonitoring,
+      requiredOpRate=requiredOpRate,
     ),
 
   // Generates a multi-window, multi-burn-rate apdex score expression
@@ -109,8 +82,7 @@ local defaultWindows = ['1h', '6h'];
     metricSelectorHash,  // Selectors for the error rate metrics
     thresholdSLOValue,  // Error budget float value (between 0 and 1)
     windows=['1h', '6h'],  // Sets of windows in this SLO expression, identified by longWindow duration
-    minimumOperationRateForMonitoring=null,  // minium operation rate vaue (in request-per-second)
-    minimumSamplesForMonitoring=null,  // minimum number of operations recorded, over the longWindow period, for monitoring
+    requiredOpRate=null,  // minimum operation-rate, over the longWindow period, for monitoring
     operationRateWindowDuration='1h',  // Window over which to evaluate operation rate
   )::
     local mergedMetricSelectors = selectors.merge(aggregationSet.selector, metricSelectorHash);
@@ -130,8 +102,7 @@ local defaultWindows = ['1h', '6h'];
       aggregationSet.labels,
       mergedMetricSelectors,
       operationRateWindowDuration=operationRateWindowDuration,
-      minimumOperationRateForMonitoring=minimumOperationRateForMonitoring,
-      minimumSamplesForMonitoring=minimumSamplesForMonitoring,
+      requiredOpRate=requiredOpRate,
     ),
 
   errorHealthExpression(

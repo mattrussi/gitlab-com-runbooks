@@ -70,5 +70,6 @@ metricsCatalog.serviceDefinition({
   },
   skippedMaturityCriteria: maturityLevels.skip({
     'Service exists in the dependency graph': 'Jaeger is an independent internal observability tool',
+    'Structured logs available in Kibana': 'Jaeger service is not deployed in production',
   }),
 })

@@ -7,11 +7,9 @@ details on using GKMS in favor of Chef Vault. :warning:
 ---
 
 [Chef vault](https://github.com/chef-cookbooks/chef-vault) has alot of information
-but sometimes, not everything is as it seems. 
+but sometimes, not everything is as it seems.
 
-In general, `vaults` are data bag items which have been encrypted. 
-
-
+In general, `vaults` are data bag items which have been encrypted.
 
 Given vault `public-grafana`
 
@@ -25,7 +23,7 @@ It contains one item: `_default` which can be viewed like this:
     ```
     ~ knife vault show public-grafana _default
     grafana:
-      api_key:     super-secret-key 
+      api_key:     super-secret-key
       external_url: http://random-url.net
     ```
 
@@ -34,14 +32,14 @@ values:
 
     ```
     ~ knife data bagshow public-grafana _default
-		grafana:
-			auth_tag:       GwOf7d7uDTEY0xkz9/XDyg==
+  grafana:
+   auth_tag:       GwOf7d7uDTEY0xkz9/XDyg==
 
-			cipher:         aes-256-gcm
-			encrypted_data: LOTS-OF-LETTERS
+   cipher:         aes-256-gcm
+   encrypted_data: LOTS-OF-LETTERS
 
-			version:        3
-		id:      _default
+   version:        3
+  id:      _default
     ```
 
 You can see the keys in clear text, but not the values.
@@ -54,8 +52,8 @@ Digging a bit further, we can see how the access is configured:
     _default_keys
     ```
 
-Vault access is granted either to a user, a role or a client. 
-Who has access can be seen by checking the data bag item with 
+Vault access is granted either to a user, a role or a client.
+Who has access can be seen by checking the data bag item with
 the same name, with `_key` appended:
 
     ```
@@ -95,8 +93,8 @@ This means when we access attributes such as:
     node['server']['password']
     ```
 
-the value may not actually be on the node, but be mixed in if the 
-vault contains that path. (ask @jtevnan) for an nice example from the 
+the value may not actually be on the node, but be mixed in if the
+vault contains that path. (ask @jtevnan) for an nice example from the
 omnibus-cookbook.
 
 ## Vault Name
@@ -117,7 +115,7 @@ attributes for the vaule of:
     ```
 
 to determine which vault should be used. If this is missing, then only the node's
-original values are returned. This is done transparently, so it may be 
+original values are returned. This is done transparently, so it may be
 hard to debug where values are coming from.
 
 ## Vault item Name

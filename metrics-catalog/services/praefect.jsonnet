@@ -17,6 +17,7 @@ metricsCatalog.serviceDefinition({
   },
   serviceDependencies: {
     gitaly: true,
+    'cloud-sql': true,
   },
   serviceLevelIndicators: {
     proxy: {
@@ -54,9 +55,10 @@ metricsCatalog.serviceDefinition({
     // The replicator_queue handles replication jobs from Praefect to secondaries
     // the apdex measures the percentage of jobs that dequeue within the SLO
     // See:
-    // * https://gitlab.com/gitlab-com/gl-infra/infrastructure/-/issues/11027
+    // * https://gitlab.com/gitlab-com/gl-infra/reliability/-/issues/11027
     // * https://gitlab.com/gitlab-org/gitaly/-/issues/2915
     replicator_queue: {
+      trafficCessationAlertConfig: false,
       userImpacting: false,
       featureCategory: 'gitaly',
       description: |||

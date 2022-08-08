@@ -23,55 +23,27 @@ local es_query = {
           },
           {
             bool: {
-              minimum_should_match: 1,
               should: [
                 {
-                  bool: {
-                    should: [
-                      {
-                        match_phrase: {
-                          'json.exception.message': 'undefined method',
-                        },
-                      },
-                      {
-                        match_phrase: {
-                          'json.exception.message': 'undefined local variable',
-                        },
-                      },
-                    ],
-                    must_not: [
-                      {
-                        match_phrase: {
-                          'json.exception.message': '"nil:NilClass"',
-                        },
-                      },
-                      {
-                        match_phrase: {
-                          'json.exception.message': 'project_vulnerability_url',
-                        },
-                      },
-                    ],
+                  match_phrase: {
+                    'json.exception.message': 'undefined method',
                   },
                 },
                 {
-                  bool: {
-                    should: [
-                      {
-                        match_phrase: {
-                          'json.error_message': 'undefined method',
-                        },
-                      },
-                      {
-                        match_phrase: {
-                          'json.error_message': 'undefined local variable',
-                        },
-                      },
-                    ],
-                    must_not: {
-                      match_phrase: {
-                        'json.error_message': '"nil:NilClass"',
-                      },
-                    },
+                  match_phrase: {
+                    'json.exception.message': 'undefined local variable',
+                  },
+                },
+              ],
+              must_not: [
+                {
+                  match_phrase: {
+                    'json.exception.message': '"nil:NilClass"',
+                  },
+                },
+                {
+                  match_phrase: {
+                    'json.exception.message': 'project_vulnerability_url',
                   },
                 },
               ],

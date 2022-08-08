@@ -43,7 +43,10 @@ local validateAndApplyServiceDefaults(service) =
     serviceWithProvisioningDefaults;
 
   local sliInheritedDefaults =
-    { regional: serviceWithDefaults.regional }
+    {
+      regional: serviceWithDefaults.regional,
+      type: serviceWithDefaults.type,
+    }
     +
     (
       // When stage labels are disabled, we default all SLI recording rules
@@ -89,7 +92,7 @@ local serviceDefinition(service) =
 
   service {
     hasApdex():: private.serviceHasComponentWith('apdex'),
-    hasRequestRate():: true,  // requestRate is mandatory
+    hasRequestRate():: std.length(std.objectFields(service.serviceLevelIndicators)) > 0,
     hasErrorRate():: private.serviceHasComponentWith('errorRate'),
     hasFeatureCatogorySLIs():: private.serviceHasComponentWithFeatureCategory(),
 

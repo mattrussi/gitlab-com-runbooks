@@ -4,6 +4,7 @@ local derivMetric = metricsCatalog.derivMetric;
 local googleLoadBalancerComponents = import './lib/google_load_balancer_components.libsonnet';
 local maturityLevels = import 'service-maturity/levels.libsonnet';
 local kubeLabelSelectors = metricsCatalog.kubeLabelSelectors;
+local toolingLinks = import 'toolinglinks/toolinglinks.libsonnet';
 
 metricsCatalog.serviceDefinition({
   type: 'logging',
@@ -25,8 +26,6 @@ metricsCatalog.serviceDefinition({
       ingressSelector=null,  // no ingress for logging
       deploymentSelector=null,  // no deployment for logging
 
-      // TODO: fix the stage label for default and highmem nodes
-      // See https://gitlab.com/gitlab-com/gl-infra/delivery/-/issues/2239
       podStaticLabels={ stage: 'main' },
     ),
   },
@@ -65,6 +64,10 @@ metricsCatalog.serviceDefinition({
       ),
 
       significantLabels: ['name'],
+
+      toolingLinks: [
+        toolingLinks.kibana(title='Monitoring Cluster', index='logging'),
+      ],
     },
 
     elasticsearch_indexing_cluster: {
@@ -81,6 +84,10 @@ metricsCatalog.serviceDefinition({
       ),
 
       significantLabels: ['name'],
+
+      toolingLinks: [
+        toolingLinks.kibana(title='Monitoring Cluster', index='logging'),
+      ],
     },
 
     elasticsearch_searching_index: {
@@ -97,6 +104,10 @@ metricsCatalog.serviceDefinition({
       ),
 
       significantLabels: ['index'],
+
+      toolingLinks: [
+        toolingLinks.kibana(title='Monitoring Cluster', index='logging'),
+      ],
     },
 
     elasticsearch_indexing_index: {
@@ -113,6 +124,10 @@ metricsCatalog.serviceDefinition({
       ),
 
       significantLabels: ['index'],
+
+      toolingLinks: [
+        toolingLinks.kibana(title='Monitoring Cluster', index='logging'),
+      ],
     },
 
     // This component represents the Google Load Balancer in front
@@ -123,7 +138,12 @@ metricsCatalog.serviceDefinition({
       projectId='gitlab-ops',
 
       // No need to alert if Kibana isn't receiving traffic
-      ignoreTrafficCessation=true
+      trafficCessationAlertConfig=false,
+      extra={
+        monitoringThresholds+: {
+          errorRatio: 0.995,
+        },
+      }
     ),
 
     // Stackdriver component represents log messages
@@ -131,7 +151,7 @@ metricsCatalog.serviceDefinition({
     stackdriver: {
       userImpacting: false,
       featureCategory: 'not_owned',
-      ignoreTrafficCessation: true,
+      trafficCessationAlertConfig: false,
 
       description: |||
         This SLI monitors the total number of logs sent to GCP StackDriver logging.
@@ -157,6 +177,10 @@ metricsCatalog.serviceDefinition({
       ),
 
       significantLabels: ['topic_id'],
+
+      toolingLinks: [
+        toolingLinks.kibana(title='Pubsubbeat', index='pubsubbeat'),
+      ],
     },
 
     pubsub_subscriptions: {
@@ -172,6 +196,10 @@ metricsCatalog.serviceDefinition({
       ),
 
       significantLabels: ['subscription_id'],
+
+      toolingLinks: [
+        toolingLinks.kibana(title='Pubsubbeat', index='pubsubbeat'),
+      ],
     },
 
     // This component tracks fluentd log output
@@ -193,6 +221,10 @@ metricsCatalog.serviceDefinition({
 
       significantLabels: ['fqdn', 'pod', 'type'],
       serviceAggregation: false,
+
+      toolingLinks: [
+        toolingLinks.kibana(title='Fluentd', index='fluentd'),
+      ],
     },
 
     // This components tracks pubsubbeat errors and outputs

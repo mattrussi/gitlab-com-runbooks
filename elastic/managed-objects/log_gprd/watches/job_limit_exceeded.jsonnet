@@ -29,13 +29,24 @@ local es_query = {
                     'json.exception.class': 'Gitlab::SidekiqMiddleware::SizeLimiter::ExceedLimitError',
                   },
                 },
+              ],
+            },
+          },
+          {
+            // Exclude: https://gitlab.com/gitlab-org/gitlab/-/issues/340186
+            bool: {
+              must_not: [
                 {
                   match_phrase: {
-                    'json.error_class': 'Gitlab::SidekiqMiddleware::SizeLimiter::ExceedLimitError',
+                    'json.exception.message': 'WebHookWorker job exceeds payload size limit',
+                  },
+                },
+                {
+                  match_phrase: {
+                    'json.class': 'PostReceive',
                   },
                 },
               ],
-              minimum_should_match: 1,
             },
           },
         ],
@@ -71,7 +82,7 @@ local es_query = {
           to: [
             '#g_scalability',
           ],
-          text: 'Sidekiq jobs with a compressed payload > 5MB are being rejected. Please investigate this further. See https://gitlab.com/gitlab-com/gl-infra/scalability/-/issues/1349 and https://log.gprd.gitlab.net/goto/558fbc0dd1e5c53b69f9e95c542b36b1',
+          text: 'Sidekiq jobs with a compressed payload > 5MB are being rejected. Please investigate this further. See https://gitlab.com/gitlab-com/gl-infra/scalability/-/issues/1349 and https://log.gprd.gitlab.net/goto/c1f7d840-ae68-11ec-b73f-692cc1ae8214',
         },
       },
     },

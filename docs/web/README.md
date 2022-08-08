@@ -4,9 +4,10 @@
 
 [[_TOC_]]
 
-#  Web Service
+# Web Service
+
 * [Service Overview](https://dashboards.gitlab.net/d/web-main/web-overview)
-* **Alerts**: https://alerts.gitlab.net/#/alerts?filter=%7Btype%3D%22web%22%2C%20tier%3D%22sv%22%7D
+* **Alerts**: <https://alerts.gitlab.net/#/alerts?filter=%7Btype%3D%22web%22%2C%20tier%3D%22sv%22%7D>
 * **Label**: gitlab-com/gl-infra/production~"Service:Web"
 
 ## Logging
@@ -25,9 +26,10 @@
 * [Cloudflare for the on-call](../cloudflare/oncall.md)
 * [Service Locations](../cloudflare/services-locations.md)
 * [CloudFlare Troubleshooting](../cloudflare/troubleshooting.md)
-* [Chef Guidlines](../config_management/chef-guidelines.md)
+* [Chef Guidelines](../config_management/chef-guidelines.md)
 * [Chef Tips and Tools](../config_management/chef-workflow.md)
 * [Interacting with Consul](../consul/interaction.md)
+* [CustomersDot main troubleshoot documentation](../customersdot/overview.md)
 * [../elastic/elastic-cloud.md](../elastic/elastic-cloud.md)
 * [../elastic/kibana.md](../elastic/kibana.md)
 * [Management for forum.gitlab.com](../forum/discourse-forum.md)
@@ -77,9 +79,9 @@
 * [Project exports](../uncategorized/project-export.md)
 * [Ruby profiling](../uncategorized/ruby-profiling.md)
 * [Setup oauth2-proxy protection for web based application](../uncategorized/setup-oauth2-proxy-protected-application.md)
+* [Vault Secrets Management](../vault/vault.md)
 * [Workhorse Image Scaler](workhorse-image-scaler.md)
 <!-- END_MARKER -->
-
 
 <!-- ## Summary -->
 

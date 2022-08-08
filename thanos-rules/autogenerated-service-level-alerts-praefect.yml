@@ -99,17 +99,17 @@ groups:
       )
       and on(env,environment,tier,type,stage,component)
       (
-        sum by(env,environment,tier,type,stage,component) (gitlab_component_ops:rate_6h{component="praefect_cloudsql",monitor="global",type="praefect"}) >= 1
+        sum by(env,environment,tier,type,stage,component) (gitlab_component_ops:rate_6h{component="praefect_cloudsql",monitor="global",type="praefect"}) >= 0.16667
       )
   - alert: PraefectServicePraefectCloudsqlTrafficCessation
     for: 5m
     annotations:
       title: The praefect_cloudsql SLI of the praefect service (`{{ $labels.stage
-        }}` stage) has not received any traffic in the past 30 minutes
+        }}` stage) has not received any traffic in the past 30m
       description: |
         Praefect uses a GCP CloudSQL instance. This SLI represents SQL transactions to that service.
 
-        This alert signifies that the SLI is reporting a cessation of traffic, but the signal is not absent.
+        This alert signifies that the SLI is reporting a cessation of traffic; the signal is present, but is zero.
       grafana_dashboard_id: praefect-main/praefect-overview
       grafana_dashboard_link: https://dashboards.gitlab.net/d/praefect-main/praefect-overview?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-stage={{ $labels.stage }}
@@ -133,12 +133,14 @@ groups:
       slo_alert: "no"
       user_impacting: "yes"
     expr: |
-      gitlab_component_ops:rate_30m{type="praefect", component="praefect_cloudsql", stage="main", monitor="global"} == 0
+      gitlab_component_ops:rate_30m{component="praefect_cloudsql",monitor="global",stage="main",type="praefect"} == 0
+      and
+      gitlab_component_ops:rate_30m{component="praefect_cloudsql",monitor="global",stage="main",type="praefect"} offset 1h >= 0.16666666666666666
   - alert: PraefectServicePraefectCloudsqlTrafficAbsent
     for: 30m
     annotations:
       title: The praefect_cloudsql SLI of the praefect service (`{{ $labels.stage
-        }}` stage) has not reported any traffic in the past 30 minutes
+        }}` stage) has not reported any traffic in the past 30m
       description: |
         Praefect uses a GCP CloudSQL instance. This SLI represents SQL transactions to that service.
 
@@ -168,9 +170,9 @@ groups:
       slo_alert: "no"
       user_impacting: "yes"
     expr: |
-      gitlab_component_ops:rate_5m{type="praefect", component="praefect_cloudsql", stage="main", monitor="global"} offset 1h
+      gitlab_component_ops:rate_5m{component="praefect_cloudsql",monitor="global",stage="main",type="praefect"} offset 1h
       unless
-      gitlab_component_ops:rate_5m{type="praefect", component="praefect_cloudsql", stage="main", monitor="global"}
+      gitlab_component_ops:rate_5m{component="praefect_cloudsql",monitor="global",stage="main",type="praefect"}
   - alert: PraefectServiceProxyApdexSLOViolation
     for: 2m
     annotations:
@@ -271,7 +273,7 @@ groups:
       )
       and on(env,environment,tier,type,stage,component)
       (
-        sum by(env,environment,tier,type,stage,component) (gitlab_component_ops:rate_6h{component="proxy",monitor="global",type="praefect"}) >= 1
+        sum by(env,environment,tier,type,stage,component) (gitlab_component_ops:rate_6h{component="proxy",monitor="global",type="praefect"}) >= 0.16667
       )
   - alert: PraefectServiceProxyErrorSLOViolation
     for: 2m
@@ -367,17 +369,17 @@ groups:
       )
       and on(env,environment,tier,type,stage,component)
       (
-        sum by(env,environment,tier,type,stage,component) (gitlab_component_ops:rate_6h{component="proxy",monitor="global",type="praefect"}) >= 1
+        sum by(env,environment,tier,type,stage,component) (gitlab_component_ops:rate_6h{component="proxy",monitor="global",type="praefect"}) >= 0.16667
       )
   - alert: PraefectServiceProxyTrafficCessation
     for: 5m
     annotations:
       title: The proxy SLI of the praefect service (`{{ $labels.stage }}` stage) has
-        not received any traffic in the past 30 minutes
+        not received any traffic in the past 30m
       description: |
         All Gitaly operations pass through the Praefect proxy on the way to a Gitaly instance. This SLI monitors those operations in aggregate.
 
-        This alert signifies that the SLI is reporting a cessation of traffic, but the signal is not absent.
+        This alert signifies that the SLI is reporting a cessation of traffic; the signal is present, but is zero.
       grafana_dashboard_id: praefect-main/praefect-overview
       grafana_dashboard_link: https://dashboards.gitlab.net/d/praefect-main/praefect-overview?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-stage={{ $labels.stage }}
@@ -401,12 +403,14 @@ groups:
       slo_alert: "no"
       user_impacting: "yes"
     expr: |
-      gitlab_component_ops:rate_30m{type="praefect", component="proxy", stage="main", monitor="global"} == 0
+      gitlab_component_ops:rate_30m{component="proxy",monitor="global",stage="main",type="praefect"} == 0
+      and
+      gitlab_component_ops:rate_30m{component="proxy",monitor="global",stage="main",type="praefect"} offset 1h >= 0.16666666666666666
   - alert: PraefectServiceProxyTrafficAbsent
     for: 30m
     annotations:
       title: The proxy SLI of the praefect service (`{{ $labels.stage }}` stage) has
-        not reported any traffic in the past 30 minutes
+        not reported any traffic in the past 30m
       description: |
         All Gitaly operations pass through the Praefect proxy on the way to a Gitaly instance. This SLI monitors those operations in aggregate.
 
@@ -436,9 +440,9 @@ groups:
       slo_alert: "no"
       user_impacting: "yes"
     expr: |
-      gitlab_component_ops:rate_5m{type="praefect", component="proxy", stage="main", monitor="global"} offset 1h
+      gitlab_component_ops:rate_5m{component="proxy",monitor="global",stage="main",type="praefect"} offset 1h
       unless
-      gitlab_component_ops:rate_5m{type="praefect", component="proxy", stage="main", monitor="global"}
+      gitlab_component_ops:rate_5m{component="proxy",monitor="global",stage="main",type="praefect"}
   - alert: PraefectServiceReplicatorQueueApdexSLOViolation
     for: 2m
     annotations:
@@ -539,75 +543,5 @@ groups:
       )
       and on(env,environment,tier,type,stage,component)
       (
-        sum by(env,environment,tier,type,stage,component) (gitlab_component_ops:rate_6h{component="replicator_queue",monitor="global",type="praefect"}) >= 1
+        sum by(env,environment,tier,type,stage,component) (gitlab_component_ops:rate_6h{component="replicator_queue",monitor="global",type="praefect"}) >= 0.16667
       )
-  - alert: PraefectServiceReplicatorQueueTrafficCessation
-    for: 5m
-    annotations:
-      title: The replicator_queue SLI of the praefect service (`{{ $labels.stage }}`
-        stage) has not received any traffic in the past 30 minutes
-      description: |
-        Praefect replication operations. Latency represents the queuing delay before replication is carried out.
-
-        This alert signifies that the SLI is reporting a cessation of traffic, but the signal is not absent.
-      grafana_dashboard_id: praefect-main/praefect-overview
-      grafana_dashboard_link: https://dashboards.gitlab.net/d/praefect-main/praefect-overview?from=now-6h/m&to=now-1m/m&var-environment={{
-        $labels.environment }}&var-stage={{ $labels.stage }}
-      grafana_min_zoom_hours: "6"
-      grafana_panel_id: "1815534001"
-      grafana_variables: environment,stage
-      promql_template_1: |
-        sum by (env,environment,tier,stage) (
-          rate(gitaly_praefect_replication_delay_bucket{environment="{{ $labels.environment }}",job="praefect",le="+Inf",stage="{{ $labels.stage }}"}[5m])
-        )
-      runbook: docs/praefect/README.md
-    labels:
-      aggregation: component
-      alert_class: traffic_cessation
-      alert_type: cause
-      feature_category: gitaly
-      pager: pagerduty
-      rules_domain: general
-      severity: s2
-      sli_type: ops
-      slo_alert: "no"
-      user_impacting: "no"
-    expr: |
-      gitlab_component_ops:rate_30m{type="praefect", component="replicator_queue", stage="main", monitor="global"} == 0
-  - alert: PraefectServiceReplicatorQueueTrafficAbsent
-    for: 30m
-    annotations:
-      title: The replicator_queue SLI of the praefect service (`{{ $labels.stage }}`
-        stage) has not reported any traffic in the past 30 minutes
-      description: |
-        Praefect replication operations. Latency represents the queuing delay before replication is carried out.
-
-        This alert signifies that the SLI was previously reporting traffic, but is no longer - the signal is absent.
-
-        This could be caused by a change to the metrics used in the SLI, or by the service not receiving traffic.
-      grafana_dashboard_id: praefect-main/praefect-overview
-      grafana_dashboard_link: https://dashboards.gitlab.net/d/praefect-main/praefect-overview?from=now-6h/m&to=now-1m/m&var-environment={{
-        $labels.environment }}&var-stage={{ $labels.stage }}
-      grafana_min_zoom_hours: "6"
-      grafana_panel_id: "1815534001"
-      grafana_variables: environment,stage
-      promql_template_1: |
-        sum by (env,environment,tier,stage) (
-          rate(gitaly_praefect_replication_delay_bucket{environment="{{ $labels.environment }}",job="praefect",le="+Inf",stage="{{ $labels.stage }}"}[5m])
-        )
-      runbook: docs/praefect/README.md
-    labels:
-      aggregation: component
-      alert_class: traffic_cessation
-      alert_type: cause
-      feature_category: gitaly
-      pager: pagerduty
-      rules_domain: general
-      severity: s2
-      sli_type: ops
-      slo_alert: "no"
-      user_impacting: "no"
-    expr: |
-      gitlab_component_ops:rate_5m{type="praefect", component="replicator_queue", stage="main", monitor="global"} offset 1h
-      unless
-      gitlab_component_ops:rate_5m{type="praefect", component="replicator_queue", stage="main", monitor="global"}

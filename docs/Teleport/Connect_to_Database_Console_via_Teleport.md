@@ -6,7 +6,7 @@ Database consoles in Staging/Production are accessed via Gravitational [Teleport
 
 - The main reasons for this change are security and compliance: With Teleport we'll have fully flexible, on-demand, and audited access to our Database consoles and to some other terminal/CLI tools, like `kubectl`, [Rails Console](Connect_to_Rails_Console_via_Teleport.md), and more.
 - Teleport's goal is to provide a Unified Access Plane for all of our infrastructure. [Here](https://goteleport.com/teleport/docs/#why-use-teleport) you can find some of the most popular use cases for Teleport.
-- We evaluated Teleport thoroughly (see this [issue](https://gitlab.com/gitlab-com/gl-infra/infrastructure/-/issues/11568)) and found it to comply with most of our infrastructure access requirements, unlike some of its competitors ([Okta-ASA](https://gitlab.com/gitlab-com/gl-infra/infrastructure/-/issues/12042), [Hashicorp Boundary](https://gitlab.com/gitlab-com/gl-infra/infrastructure/-/issues/11666) and others).
+- We evaluated Teleport thoroughly (see this [issue](https://gitlab.com/gitlab-com/gl-infra/reliability/-/issues/11568)) and found it to comply with most of our infrastructure access requirements, unlike some of its competitors ([Okta-ASA](https://gitlab.com/gitlab-com/gl-infra/reliability/-/issues/12042), [Hashicorp Boundary](https://gitlab.com/gitlab-com/gl-infra/reliability/-/issues/11666) and others).
 
 ## Access Requests
 
@@ -27,6 +27,12 @@ On MacOS, It is as simple as running, from your laptop's console:
 brew install teleport
 ```
 
+However, the database console requires `psql` so if it is not already installed on your machine, you'll also have to run:
+
+```shell
+brew install postgres
+```
+
 Linux install instructions are [also available on the Teleport site](https://goteleport.com/docs/installation/#linux)
 
 ### Accessing the Database console via Teleport
@@ -34,11 +40,11 @@ Linux install instructions are [also available on the Teleport site](https://got
 > Note: It is not required, but it is easier to be logged in to Okta already before starting
 
 1. Authenticate to the Teleport server
-2. Request approval for the database role that you need
+2. Unless using read only access in staging, request approval for the database role that you need
 3. Log in to the database with the appropriate database user
 4. Connect the database console
 
-The access will be temporary (`24h` max) and can be approved by any SRE or Reliability Manager.  The `@sre-oncall` can help if it's urgent, but if you can wait it is considerate to spread the load out by asking the wider SRE team in `#infrastructure-lounge`. Access can be extended before or after expiration using the same process.
+The access will be temporary (`12h` max) and can be approved by any SRE or Reliability Manager.  The `@sre-oncall` can help if it's urgent, but if you can wait it is considerate to spread the load out by asking the wider SRE team in `#infrastructure-lounge`. Access can be extended before or after expiration using the same process.
 
 > Tip: As long as you understand that two separate things are happening in the second command below, you can skip the first and just use the second.
 
@@ -48,10 +54,12 @@ Authenticate to the Teleport proxy/server. This command opens Okta in a browser 
 tsh login --proxy=teleport.gstg.gitlab.net
 ```
 
-Then request a role which includes permissions for the staging Database console (for production, see the note below)
+> Note: The `database-ro` role in the `gstg` environment does not require a request or approval, so you can skip the next step. Use the `database-ro` role unless you know for sure that you need something else.
+
+If you need to request a role which includes elevated permissions for the Database console. Request either `database`, `database-ro`, or `database-admin`, for `gstg` or `gprd`, using the following format.
 
 ```shell
-tsh login --proxy=teleport.gstg.gitlab.net --request-roles=database-ro --request-reason="Issue-URL or explanation"
+tsh login --proxy=teleport.gstg.gitlab.net --request-roles=database --request-reason="Issue-URL or explanation"
 ```
 
 This command will pause while it waits for the approver to approve the request.  It may appear to hang, but it is waiting for someone to approve it.  The command will return as soon as the request is approved, denied, or times out.
@@ -81,18 +89,34 @@ Approvers will review the issue URL in the request and if database access seems 
 
 Once an approval is issued, the next step is to log in to the database. Note that the `--db-name` option refers to the internal database schema name.  The database name at the end of the line refers to the database host that Teleport is pointing to (which you can see with `tsh db ls`):
 
+For the Main Database:
+
 ```shell
 tsh db login --db-user=console-ro --db-name=gitlabhq_production db-secondary
 ```
 
-Remember that your access request, its approval, and any associated database logins will expire in `24h` maximum unless renewed.
+For the CI Database:
 
-> Tip: The above command connects to a secondary database (`db-secondary`).  Secondaries are always read only.  If you need write access, you will have to log in to `db-primary` in addition to connecting as a database user with write permissions. Once logged in to teleport, you can view the databases available to your role with `tsh db ls`
+```shell
+tsh db login --db-user=console-ro --db-name=gitlabhq_production db-secondary-ci
+```
+
+Remember that your access request, its approval, and any associated database logins will expire in `12h` maximum unless renewed.
+
+> Tip: The above command connects to a secondary database (`db-secondary`).  Secondaries are always read only.  If you need write access, you will have to log in to `db-primary` in addition to connecting as a database user with write permissions. The `console-rw` user is allowed to write and permission is granted as part of the `database` role. Once logged in to teleport, you can view the databases available to your role with `tsh db ls`
 
 The database login command only needs to be executed once per day, unless you manually log out or need to change something.  Once logged in, you can connect and disconnect from the console as many times as needed.
 
+For the Main Database:
+
 ```shell
 tsh db connect db-secondary
+```
+
+For the CI Database:
+
+```shell
+tsh db connect db-secondary-ci
 ```
 
 > Tip: use the `tsh status` command to show which logins you are currently approved for.
@@ -121,7 +145,7 @@ $ tsh status
   Extensions:         permit-pty
 ```
 
-Note that the default certificate does not have the `databae-ro` role assigned. The default certificate allows you to interact with the Teleport server, and to request more roles, but does not allow connecting to any other services.
+Note that the default certificate does not have the `database-ro` role assigned. The default certificate allows you to interact with the Teleport server, and to request more roles, but does not allow connecting to any other services.
 
 To request permission to connect to a service, you must use the `--request-roles` flag.  You can request a role after already having a valid certificate, or simply by adding the flag to your initial login. Each `--request-roles` requires a `--request-reason`. It's best to use the URL of the issue or incident that this activity relates to.
 

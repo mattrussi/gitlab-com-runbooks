@@ -95,17 +95,15 @@ groups:
       )
       and on(env,environment,tier,type,stage,component)
       (
-        sum by(env,environment,tier,type,stage,component) (gitlab_component_ops:rate_6h{component="jaeger_agent",monitor="global",type="jaeger"}) >= 1
+        sum by(env,environment,tier,type,stage,component) (gitlab_component_ops:rate_6h{component="jaeger_agent",monitor="global",type="jaeger"}) >= 0.16667
       )
   - alert: JaegerServiceJaegerAgentTrafficCessation
     for: 5m
     annotations:
       title: The jaeger_agent SLI of the jaeger service (`{{ $labels.stage }}` stage)
-        has not received any traffic in the past 30 minutes
-      description: |2
-
-
-        This alert signifies that the SLI is reporting a cessation of traffic, but the signal is not absent.
+        has not received any traffic in the past 30m
+      description: |
+        This alert signifies that the SLI is reporting a cessation of traffic; the signal is present, but is zero.
       grafana_dashboard_id: jaeger-main/jaeger-overview
       grafana_dashboard_link: https://dashboards.gitlab.net/d/jaeger-main/jaeger-overview?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-stage={{ $labels.stage }}
@@ -129,15 +127,15 @@ groups:
       slo_alert: "no"
       user_impacting: "no"
     expr: |
-      gitlab_component_ops:rate_30m{type="jaeger", component="jaeger_agent", stage="main", monitor="global"} == 0
+      gitlab_component_ops:rate_30m{component="jaeger_agent",monitor="global",stage="main",type="jaeger"} == 0
+      and
+      gitlab_component_ops:rate_30m{component="jaeger_agent",monitor="global",stage="main",type="jaeger"} offset 1h >= 0.16666666666666666
   - alert: JaegerServiceJaegerAgentTrafficAbsent
     for: 30m
     annotations:
       title: The jaeger_agent SLI of the jaeger service (`{{ $labels.stage }}` stage)
-        has not reported any traffic in the past 30 minutes
-      description: |2
-
-
+        has not reported any traffic in the past 30m
+      description: |
         This alert signifies that the SLI was previously reporting traffic, but is no longer - the signal is absent.
 
         This could be caused by a change to the metrics used in the SLI, or by the service not receiving traffic.
@@ -164,9 +162,9 @@ groups:
       slo_alert: "no"
       user_impacting: "no"
     expr: |
-      gitlab_component_ops:rate_5m{type="jaeger", component="jaeger_agent", stage="main", monitor="global"} offset 1h
+      gitlab_component_ops:rate_5m{component="jaeger_agent",monitor="global",stage="main",type="jaeger"} offset 1h
       unless
-      gitlab_component_ops:rate_5m{type="jaeger", component="jaeger_agent", stage="main", monitor="global"}
+      gitlab_component_ops:rate_5m{component="jaeger_agent",monitor="global",stage="main",type="jaeger"}
   - alert: JaegerServiceJaegerCollectorErrorSLOViolation
     for: 2m
     annotations:
@@ -257,17 +255,15 @@ groups:
       )
       and on(env,environment,tier,type,stage,component)
       (
-        sum by(env,environment,tier,type,stage,component) (gitlab_component_ops:rate_6h{component="jaeger_collector",monitor="global",type="jaeger"}) >= 1
+        sum by(env,environment,tier,type,stage,component) (gitlab_component_ops:rate_6h{component="jaeger_collector",monitor="global",type="jaeger"}) >= 0.16667
       )
   - alert: JaegerServiceJaegerCollectorTrafficCessation
     for: 5m
     annotations:
       title: The jaeger_collector SLI of the jaeger service (`{{ $labels.stage }}`
-        stage) has not received any traffic in the past 30 minutes
-      description: |2
-
-
-        This alert signifies that the SLI is reporting a cessation of traffic, but the signal is not absent.
+        stage) has not received any traffic in the past 30m
+      description: |
+        This alert signifies that the SLI is reporting a cessation of traffic; the signal is present, but is zero.
       grafana_dashboard_id: jaeger-main/jaeger-overview
       grafana_dashboard_link: https://dashboards.gitlab.net/d/jaeger-main/jaeger-overview?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-stage={{ $labels.stage }}
@@ -291,15 +287,15 @@ groups:
       slo_alert: "no"
       user_impacting: "no"
     expr: |
-      gitlab_component_ops:rate_30m{type="jaeger", component="jaeger_collector", stage="main", monitor="global"} == 0
+      gitlab_component_ops:rate_30m{component="jaeger_collector",monitor="global",stage="main",type="jaeger"} == 0
+      and
+      gitlab_component_ops:rate_30m{component="jaeger_collector",monitor="global",stage="main",type="jaeger"} offset 1h >= 0.16666666666666666
   - alert: JaegerServiceJaegerCollectorTrafficAbsent
     for: 30m
     annotations:
       title: The jaeger_collector SLI of the jaeger service (`{{ $labels.stage }}`
-        stage) has not reported any traffic in the past 30 minutes
-      description: |2
-
-
+        stage) has not reported any traffic in the past 30m
+      description: |
         This alert signifies that the SLI was previously reporting traffic, but is no longer - the signal is absent.
 
         This could be caused by a change to the metrics used in the SLI, or by the service not receiving traffic.
@@ -326,9 +322,9 @@ groups:
       slo_alert: "no"
       user_impacting: "no"
     expr: |
-      gitlab_component_ops:rate_5m{type="jaeger", component="jaeger_collector", stage="main", monitor="global"} offset 1h
+      gitlab_component_ops:rate_5m{component="jaeger_collector",monitor="global",stage="main",type="jaeger"} offset 1h
       unless
-      gitlab_component_ops:rate_5m{type="jaeger", component="jaeger_collector", stage="main", monitor="global"}
+      gitlab_component_ops:rate_5m{component="jaeger_collector",monitor="global",stage="main",type="jaeger"}
   - alert: JaegerServiceJaegerQueryErrorSLOViolation
     for: 2m
     annotations:
@@ -419,17 +415,15 @@ groups:
       )
       and on(env,environment,tier,type,stage,component)
       (
-        sum by(env,environment,tier,type,stage,component) (gitlab_component_ops:rate_6h{component="jaeger_query",monitor="global",type="jaeger"}) >= 1
+        sum by(env,environment,tier,type,stage,component) (gitlab_component_ops:rate_6h{component="jaeger_query",monitor="global",type="jaeger"}) >= 0.16667
       )
   - alert: JaegerServiceJaegerQueryTrafficCessation
     for: 5m
     annotations:
       title: The jaeger_query SLI of the jaeger service (`{{ $labels.stage }}` stage)
-        has not received any traffic in the past 30 minutes
-      description: |2
-
-
-        This alert signifies that the SLI is reporting a cessation of traffic, but the signal is not absent.
+        has not received any traffic in the past 30m
+      description: |
+        This alert signifies that the SLI is reporting a cessation of traffic; the signal is present, but is zero.
       grafana_dashboard_id: jaeger-main/jaeger-overview
       grafana_dashboard_link: https://dashboards.gitlab.net/d/jaeger-main/jaeger-overview?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-stage={{ $labels.stage }}
@@ -453,15 +447,15 @@ groups:
       slo_alert: "no"
       user_impacting: "no"
     expr: |
-      gitlab_component_ops:rate_30m{type="jaeger", component="jaeger_query", stage="main", monitor="global"} == 0
+      gitlab_component_ops:rate_30m{component="jaeger_query",monitor="global",stage="main",type="jaeger"} == 0
+      and
+      gitlab_component_ops:rate_30m{component="jaeger_query",monitor="global",stage="main",type="jaeger"} offset 1h >= 0.16666666666666666
   - alert: JaegerServiceJaegerQueryTrafficAbsent
     for: 30m
     annotations:
       title: The jaeger_query SLI of the jaeger service (`{{ $labels.stage }}` stage)
-        has not reported any traffic in the past 30 minutes
-      description: |2
-
-
+        has not reported any traffic in the past 30m
+      description: |
         This alert signifies that the SLI was previously reporting traffic, but is no longer - the signal is absent.
 
         This could be caused by a change to the metrics used in the SLI, or by the service not receiving traffic.
@@ -488,6 +482,6 @@ groups:
       slo_alert: "no"
       user_impacting: "no"
     expr: |
-      gitlab_component_ops:rate_5m{type="jaeger", component="jaeger_query", stage="main", monitor="global"} offset 1h
+      gitlab_component_ops:rate_5m{component="jaeger_query",monitor="global",stage="main",type="jaeger"} offset 1h
       unless
-      gitlab_component_ops:rate_5m{type="jaeger", component="jaeger_query", stage="main", monitor="global"}
+      gitlab_component_ops:rate_5m{component="jaeger_query",monitor="global",stage="main",type="jaeger"}

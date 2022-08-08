@@ -2,9 +2,11 @@
 
 set -efo pipefail
 
-trap ctl_c INT
+CLUSTERS_JSON="${RUNBOOKS_PATH:?}/kubernetes/clusters.json"
 
-ctl_c() {
+trap ctrl_c INT
+
+ctrl_c() {
   echo "Tunnel is now closed, switching to empty context..."
   kubectl config use-context empty
 }
@@ -15,171 +17,96 @@ notify_shell() {
 
 print_help() {
   echo >&2 "\"kube\" is used to help you setup and interect with our kubernetes clusters"
-  echo >&2 "USAGE:"
+  echo >&2 "USAGE: "
   echo >&2 "    glsh kube [SUBCOMMAND]"
   echo >&2
-  echo >&2 "SUBCOMMANDS:"
+  echo >&2 "SUBCOMMANDS: "
   echo >&2 "    setup: Configure the local machine with all cluster contexts"
   echo >&2 "    use-cluster: Specify which cluster to use"
 }
 
 print_use_cluster_help() {
   echo >&2 "Choose one of the following clusters:"
-  echo >&2 "    gstg"
-  echo >&2 "    gstg-us-east1-b"
-  echo >&2 "    gstg-us-east1-c"
-  echo >&2 "    gstg-us-east1-d"
-  echo >&2 "    gprd"
-  echo >&2 "    gprd-us-east1-b"
-  echo >&2 "    gprd-us-east1-c"
-  echo >&2 "    gprd-us-east1-d"
-  echo >&2 "    pre"
-  echo >&2 "    ops"
-  echo >&2 "    org-ci"
-  echo >&2 "    stgsub"
-  echo >&2 "    prdsub"
+  for cluster in $(all_clusters); do
+    echo >&2 "    ${cluster}"
+  done
 }
 
 setup() {
   echo "Running gcloud commands to create kube contexts"
-  gcloud container clusters get-credentials gstg-gitlab-gke --region us-east1 --project gitlab-staging-1
-  gcloud container clusters get-credentials gstg-us-east1-b --region us-east1-b --project gitlab-staging-1
-  gcloud container clusters get-credentials gstg-us-east1-c --region us-east1-c --project gitlab-staging-1
-  gcloud container clusters get-credentials gstg-us-east1-d --region us-east1-d --project gitlab-staging-1
+  jq -r '.[] | "\(.name) --project \(.project) --region \(.region)"' "${CLUSTERS_JSON}" | while read -r cluster_params; do
+    # shellcheck disable=SC2086
+    gcloud container clusters get-credentials ${cluster_params}
+  done
 
-  gcloud container clusters get-credentials gprd-gitlab-gke --region us-east1 --project gitlab-production
-  gcloud container clusters get-credentials gprd-us-east1-b --region us-east1-b --project gitlab-production
-  gcloud container clusters get-credentials gprd-us-east1-c --region us-east1-c --project gitlab-production
-  gcloud container clusters get-credentials gprd-us-east1-d --region us-east1-d --project gitlab-production
+  socks_port=1080
+  echo "Setting up SOCKS5 Proxy"
+  for cluster in $(all_clusters); do
+    context="$(get_kube_context "${cluster}")"
 
-  gcloud container clusters get-credentials stgsub-customers-gke --region us-east1 --project gitlab-subscriptions-staging
-  gcloud container clusters get-credentials prdsub-customers-gke --region us-east1 --project gitlab-subscriptions-prod
-
-  gcloud container clusters get-credentials pre-gitlab-gke --region us-east1 --project gitlab-pre
-  gcloud container clusters get-credentials ops-gitlab-gke --region us-east1 --project gitlab-ops
-  gcloud container clusters get-credentials org-ci-gitlab-gke --region us-east1 --project gitlab-org-ci-0d24e2
+    kubectl config set "clusters.${context}.proxy-url" "socks5://localhost:${socks_port}"
+    ((socks_port = socks_port + 1))
+  done
 
   echo "Creating empty cluster context for fallback purposes"
   kubectl config set-context empty
 }
 
 use_cluster() {
-  if [[ -z "$1" ]]; then
-    print_use_cluster_help
+  context="$(get_kube_context "$1")"
+
+  proxy_url="$(kubectl config view -o jsonpath="{.clusters[?(@.name == \"${context}\")].cluster.proxy-url}")"
+  if [ -z "$proxy_url" ]; then
+    echo >&2 "glsh: proxy-url not set in \$KUBECONFIG, run glsh kube setup"
     exit 1
   fi
 
-  case $1 in
-    gstg)
-      kubectx gke_gitlab-staging-1_us-east1_gstg-gitlab-gke
-      api_ip=$(get_cluster_ip gke_gitlab-staging-1_us-east1_gstg-gitlab-gke)
-      notify_shell
-      sshuttle -r console-01-sv-gstg.c.gitlab-staging-1.internal "${api_ip}/32"
-      ;;
-    gstg-us-east1-b)
-      kubectx gke_gitlab-staging-1_us-east1-b_gstg-us-east1-b
-      api_ip=$(get_cluster_ip gke_gitlab-staging-1_us-east1-b_gstg-us-east1-b)
-      notify_shell
-      sshuttle -r console-01-sv-gstg.c.gitlab-staging-1.internal "${api_ip}/32"
-      ;;
-    gstg-us-east1-c)
-      kubectx gke_gitlab-staging-1_us-east1-c_gstg-us-east1-c
-      api_ip=$(get_cluster_ip gke_gitlab-staging-1_us-east1-c_gstg-us-east1-c)
-      notify_shell
-      sshuttle -r console-01-sv-gstg.c.gitlab-staging-1.internal "${api_ip}/32"
-      ;;
-    gstg-us-east1-d)
-      kubectx gke_gitlab-staging-1_us-east1-d_gstg-us-east1-d
-      api_ip=$(get_cluster_ip gke_gitlab-staging-1_us-east1-d_gstg-us-east1-d)
-      notify_shell
-      sshuttle -r console-01-sv-gstg.c.gitlab-staging-1.internal "${api_ip}/32"
-      ;;
-    gprd)
-      kubectx gke_gitlab-production_us-east1_gprd-gitlab-gke
-      api_ip=$(get_cluster_ip gke_gitlab-production_us-east1_gprd-gitlab-gke)
-      notify_shell
-      sshuttle -r console-01-sv-gprd.c.gitlab-production.internal "${api_ip}/32"
-      ;;
-    gprd-us-east1-b)
-      kubectx gke_gitlab-production_us-east1-b_gprd-us-east1-b
-      api_ip=$(get_cluster_ip gke_gitlab-production_us-east1-b_gprd-us-east1-b)
-      notify_shell
-      sshuttle -r console-01-sv-gprd.c.gitlab-production.internal "${api_ip}/32"
-      ;;
-    gprd-us-east1-c)
-      kubectx gke_gitlab-production_us-east1-c_gprd-us-east1-c
-      api_ip=$(get_cluster_ip gke_gitlab-production_us-east1-c_gprd-us-east1-c)
-      notify_shell
-      sshuttle -r console-01-sv-gprd.c.gitlab-production.internal "${api_ip}/32"
-      ;;
-    gprd-us-east1-d)
-      kubectx gke_gitlab-production_us-east1-d_gprd-us-east1-d
-      api_ip=$(get_cluster_ip gke_gitlab-production_us-east1-d_gprd-us-east1-d)
-      notify_shell
-      sshuttle -r console-01-sv-gprd.c.gitlab-production.internal "${api_ip}/32"
-      ;;
-    stgsub)
-      kubectx gke_gitlab-subscriptions-staging_us-east1_stgsub-customers-gke
-      api_ip=$(get_cluster_ip gke_gitlab-subscriptions-staging_us-east1_stgsub-customers-gke)
-      notify_shell
-      sshuttle -r bastion-01-inf-stgsub.c.gitlab-subscriptions-staging.internal "${api_ip}/32"
-      ;;
-    prdsub)
-      kubectx gke_gitlab-subscriptions-prod_us-east1_prdsub-customers-gke
-      api_ip=$(get_cluster_ip gke_gitlab-subscriptions-prod_us-east1_prdsub-customers-gke)
-      notify_shell
-      sshuttle -r bastion-01-inf-prdsub.c.gitlab-subscriptions-prod.internal "${api_ip}/32"
-      ;;
-    pre)
-      kubectx gke_gitlab-pre_us-east1_pre-gitlab-gke
-      api_ip=$(get_cluster_ip gke_gitlab-pre_us-east1_pre-gitlab-gke)
-      notify_shell
-      sshuttle -r console-01-sv-pre.c.gitlab-pre.internal "${api_ip}/32"
-      ;;
-    ops)
-      kubectx gke_gitlab-ops_us-east1_ops-gitlab-gke
-      api_ip=$(get_cluster_ip gke_gitlab-ops_us-east1_ops-gitlab-gke)
-      notify_shell
-      sshuttle -r bastion-01-inf-ops.c.gitlab-ops.internal "${api_ip}/32"
-      ;;
-    org-ci)
-      kubectx gke_gitlab-org-ci-0d24e2_us-east1_org-ci-gitlab-gke
-      api_ip=$(get_cluster_ip gke_gitlab-org-ci-0d24e2_us-east1_org-ci-gitlab-gke)
-      notify_shell
-      sshuttle -r bastion-01-inf-org-ci.c.gitlab-org-ci-0d24e2.internal "${api_ip}/32"
-      ;;
-    *)
-      print_use_cluster_help
-      exit 1
-      ;;
-  esac
+  kubectx "${context}"
+
+  ssh_proxy="$(get_ssh_proxy "$1")"
+
+  notify_shell
+
+  proxy_port=$(echo "${proxy_url}" | awk -F: '{print $3}')
+
+  # shellcheck disable=SC2029
+  ssh -D "${proxy_port}" -q -N "${ssh_proxy}"
 }
 
-get_cluster_ip() {
-  kubectl config view -o jsonpath="{.clusters[?(@.name == \"$1\")].cluster.server}" | sed 's/https:\/\///g'
+all_clusters() {
+  jq -r 'keys[]' "${CLUSTERS_JSON}"
 }
 
-if [[ ! $(command -v kubectl) ]]; then
-  echo >&2 "glsh: \"kubectl\" could not be found follow https://kubernetes.io/docs/tasks/tools/"
+has_cluster() {
+  jq --arg cluster "$1" -e 'has($cluster)' "${CLUSTERS_JSON}" >/dev/null
+}
+
+get_kube_context() {
+  jq --arg cluster "$1" -r '.[$cluster] | "gke_\(.project)_\(.region)_\(.name)"' "${CLUSTERS_JSON}"
+}
+
+get_ssh_proxy() {
+  jq --arg cluster "$1" -r '.[$cluster].ssh_proxy' "${CLUSTERS_JSON}"
+}
+
+check_command() {
+  if ! command -v "$1" >/dev/null; then
+    echo >&2 "glsh: \"$1\" could not be found, please follow $2"
+    exit 1
+  fi
+}
+
+check_command "gcloud" "https://cloud.google.com/sdk/docs/install"
+check_command "jq" "https://stedolan.github.io/jq/download/"
+check_command "kubectl" "https://kubernetes.io/docs/tasks/tools/"
+check_command "kubectx" "https://github.com/ahmetb/kubectx#installation"
+
+if (("$(kubectl version --client -o json | jq -r '.clientVersion.minor')" < "24")); then
+  echo >&2 "glsh: kubectl 1.24 or higher is required"
   exit 1
 fi
 
-if [[ ! $(command -v kubectx) ]]; then
-  echo >&2 "glsh: \"kubectx\" could not be found follow https://github.com/ahmetb/kubectx#installation"
-  exit 1
-fi
-
-if [[ ! $(command -v gcloud) ]]; then
-  echo >&2 "glsh: \"gcloud\" could not be found follow https://cloud.google.com/sdk/docs/install"
-  exit 1
-fi
-
-if [[ ! $(command -v sshuttle) ]]; then
-  echo >&2 "glsh: \"sshuttle\" could not be found follow https://github.com/sshuttle/sshuttle#obtaining-sshuttle"
-  exit 1
-fi
-
-if [[ -z "$1" ]]; then
+if [[ $# -eq 0 ]]; then
   print_help
   exit 1
 fi
@@ -189,6 +116,11 @@ case $1 in
     setup
     ;;
   use-cluster)
+    if [[ $# -ne 2 ]] || ! has_cluster "$2"; then
+      print_use_cluster_help
+      exit 1
+    fi
+
     use_cluster "$2"
     ;;
   *)

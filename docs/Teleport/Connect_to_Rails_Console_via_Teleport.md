@@ -6,7 +6,7 @@ Rails consoles in Staging/Production are accessed via Gravitational [Teleport](h
 
 - The main reasons for this change are security and compliance: With Teleport we'll have fully flexible, on-demand, and audited access to our Rails consoles and to some other terminal/CLI tools, like `kubectl`, [Database access via psql](Connect_to_Database_Console_via_Teleport.md) and more.
 - Teleport's goal is to provide a Unified Access Plane for all our infrastructure. [Here](https://goteleport.com/teleport/docs/#why-use-teleport) you can find some of the most popular use cases for Teleport.
-- We evaluated Teleport thoroughly (see this [issue](https://gitlab.com/gitlab-com/gl-infra/infrastructure/-/issues/11568)) and found it to comply with most of our infrastructure access requirements, unlike some of its competitors ([Okta-ASA](https://gitlab.com/gitlab-com/gl-infra/infrastructure/-/issues/12042), [Hashicorp Boundary](https://gitlab.com/gitlab-com/gl-infra/infrastructure/-/issues/11666) and others).
+- We evaluated Teleport thoroughly (see this [issue](https://gitlab.com/gitlab-com/gl-infra/reliability/-/issues/11568)) and found it to comply with most of our infrastructure access requirements, unlike some of its competitors ([Okta-ASA](https://gitlab.com/gitlab-com/gl-infra/reliability/-/issues/12042), [Hashicorp Boundary](https://gitlab.com/gitlab-com/gl-infra/reliability/-/issues/11666) and others).
 
 ## Access Request
 
@@ -31,31 +31,42 @@ Linux install instructions are [also available on the Teleport site](https://got
 
 #### Accessing the Rails console via Teleport
 
+##### Staging
+
+The `rails-ro` role in the `gstg` environment does not require a request or approval, use this unless you require production
+
+```shell
+tsh login --proxy=teleport.gstg.gitlab.net
+tsh ssh rails-ro@console-ro-01-sv-gstg
+```
+
+> Tip: The syntax and options for `tsh ssh` are very similar to `ssh` (with some additional options), so it's possible to do something like `alias ssh="tsh ssh"`
+
+##### Production
+
 > Note: It is not required, but it is easier to be logged in to Okta already before this step
 
 1. Authenticate to the Teleport server
-2. Request approval for the rails console role that you need
+2. Unless using read only access in staging, request approval for the rails console role that you need
 3. Connect the Rails Console
 
-The access will be temporary (`24h` max) and can be approved by any SRE or Reliability Manager.  The `@sre-oncall` can help if it's urgent, but if you can wait it is considerate to spread the load out by asking the wider SRE team in `#infrastructure-lounge`. Access can be extended before or after expiration using the same process.
+The access will be temporary (`12h` max) and can be approved by any SRE or Reliability Manager.  The `@sre-oncall` can help if it's urgent, but if you can wait it is considerate to spread the load out by asking the wider SRE team in `#infrastructure-lounge`. Access can be extended before or after expiration using the same process.
 
 > Tip: As long as you understand that two separate things are happening in the second command below, you can skip the first and just use the second.
 
 Authenticate to the Teleport proxy/server. This command opens Okta in a browser window:
 
 ```shell
-tsh login --proxy=teleport.gstg.gitlab.net
+tsh login --proxy=teleport.gprd.gitlab.net
 ```
 
-Then request a role which includes permissions for the staging Rails console (for production, see the note below)
+If you need to request a role which includes elevated permissions for the Rails console.  Currently only `rails-ro` is implemented, and is only required in `gprd`
 
 ```shell
-tsh login --proxy=teleport.gstg.gitlab.net --request-roles=rails-ro --request-reason="Issue-URL or explanation"
+tsh login --proxy=teleport.gprd.gitlab.net --request-roles=rails-ro --request-reason="Issue-URL or explanation"
 ```
 
 This command will pause while it waits for the approver to approve the request.  It may appear to hang, but it is waiting for someone to approve it.  The command will return as soon as the request is approved, denied, or times out.
-
-> Note: All examples are for the **staging environment** only! This is to limit the consequences of unintended copy/paste errors.  To connect to the production environment, change `gstg` to `gprd`
 
 If the command is stopped or times out, but the request is approved, you don't need to request another approval.  Simply login and provide the approved request ID (output by the previous command, or find it in the web interface):
 
@@ -81,10 +92,10 @@ Approvers will review the issue URL in the request and if Rails Console access s
 Once an approval is issued, access the Rails console via:
 
 ```shell
-tsh ssh rails-ro@console-ro-01-sv-gstg
+tsh ssh rails-ro@console-ro-01-sv-gprd
 ```
 
-Remember that your access request, its approval, and any associated sessions will expire in `24h` maximum unless renewed.
+Remember that your access request, its approval, and any associated sessions will expire in `12h` maximum unless renewed.
 
 > Tip: The syntax and options for `tsh ssh` are very similar to `ssh` (with some additional options), so it's possible to do something like `alias ssh="tsh ssh"`
 

@@ -3,26 +3,25 @@
 **Table of Contents**  *generated with [DocToc](https://github.com/thlorenz/doctoc)*
 
 - [Postgresql troubleshooting](#postgresql-troubleshooting)
-    - [First and foremost](#first-and-foremost)
-    - [Dashboards](#dashboards)
-    - [Availability](#availability)
-    - [Errors](#errors)
-    - [Locks](#locks)
-    - [Load](#load)
-    - [High (and similar) load on multiple hosts](#high-and-similar-load-on-multiple-hosts)
-    - [Replication is lagging or has stopped](#replication-is-lagging-or-has-stopped)
-        - [Symptoms](#symptoms)
-        - [Possible checks](#possible-checks)
-        - [Resolution](#resolution)
-    - [Replication Slots](#replication-slots)
-        - [Symptoms](#symptoms-1)
-        - [Possible checks](#possible-checks-1)
-        - [Resolution](#resolution-1)
-    - [Tables with a large amount of dead tuples](#tables-with-a-large-amount-of-dead-tuples)
-        - [Symptoms](#symptoms-2)
-        - [Possible Checks](#possible-checks)
-    - [Connections](#connections)
-    - [PGBouncer Errors](#pgbouncer-errors)
+  - [Dashboards](#dashboards)
+  - [Availability](#availability)
+  - [Errors](#errors)
+  - [Locks](#locks)
+  - [Load](#load)
+  - [High (and similar) load on multiple hosts](#high-and-similar-load-on-multiple-hosts)
+  - [Replication is lagging or has stopped](#replication-is-lagging-or-has-stopped)
+    - [Symptoms](#symptoms)
+    - [Possible checks](#possible-checks)
+    - [Resolution](#resolution)
+  - [Replication Slots](#replication-slots)
+    - [Symptoms](#symptoms-1)
+    - [Possible checks](#possible-checks-1)
+    - [Resolution](#resolution-1)
+  - [Tables with a large amount of dead tuples](#tables-with-a-large-amount-of-dead-tuples)
+    - [Symptoms](#symptoms-2)
+    - [Possible Checks](#possible-checks)
+  - [Connections](#connections)
+  - [PGBouncer Errors](#pgbouncer-errors)
 
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
 
@@ -34,11 +33,11 @@ All PostgreSQL dashboards can be found in the [PostgreSQL Grafana Folder](https:
 
 Some relevant dashboards:
 
-* [PostgreSQL Overview](https://dashboards.gitlab.net/d/000000144/postgresql-overview?orgId=1&var-environment=gprd&var-prometheus=prometheus-01-inf-gprd&var-type=patroni)
+- [PostgreSQL Overview](https://dashboards.gitlab.net/d/000000144/postgresql-overview?orgId=1&var-environment=gprd&var-prometheus=prometheus-01-inf-gprd&var-type=patroni)
 
-* [Tuple Statistics](https://dashboards.gitlab.net/d/000000167/postgresql-tuple-statistics?orgId=1&var-environment=gprd&var-prometheus=prometheus-01-inf-gprd&var-instance=patroni-01-db-gprd.c.gitlab-production.internal)
+- [Tuple Statistics](https://dashboards.gitlab.net/d/000000167/postgresql-tuple-statistics?orgId=1&var-environment=gprd&var-prometheus=prometheus-01-inf-gprd&var-instance=patroni-01-db-gprd.c.gitlab-production.internal)
 
-* [Postgres Queries](https://dashboards.gitlab.net/d/000000153/postgresql-queries?orgId=1&var-environment=gprd&var-type=patroni&var-fqdn=patroni-01-db-gprd.c.gitlab-production.internal&var-prometheus=prometheus-01-inf-gprd)
+- [Postgres Queries](https://dashboards.gitlab.net/d/000000153/postgresql-queries?orgId=1&var-environment=gprd&var-type=patroni&var-fqdn=patroni-01-db-gprd.c.gitlab-production.internal&var-prometheus=prometheus-01-inf-gprd)
 
 ## Availability
 
@@ -56,21 +55,21 @@ Keep in mind that
 
 Check:
 
-* Postgres error logs (full disk or other I/O errors will normally not
+- Postgres error logs (full disk or other I/O errors will normally not
   cause Postgres to shut down and may even allow read-only queries but
   will cause all read-write queries to generate errors).
 
-* Check that you can connect to the database from a psql prompt.
+- Check that you can connect to the database from a psql prompt.
 
-* Check that you can connect to the database from the Rails
+- Check that you can connect to the database from the Rails
   console.
 
-* Check that you can make a database modification. Run `select
+- Check that you can make a database modification. Run `select
   txid_current()` is handy for this as it does require disk i/o to
   record the transaction. You could also try creating and dropping a
   dummy table.
 
-* Check other triage dashboards such as the cpu load and I/O metrics
+- Check other triage dashboards such as the cpu load and I/O metrics
   on the database host in question.
 
 ## Errors
@@ -79,12 +78,12 @@ The RollbackRateTooHigh alert measures the ratio of rollbacks to
 commits. It may not indicate a database problem since the errors may
 be caused by an application issue.
 
-* Check the database error logs (full disk, out of memory, no more
+- Check the database error logs (full disk, out of memory, no more
   file descriptors, or other resource starvation issues could cause
   all read-write transactions to fail while Postgres limps along
   completing read-only transactions for example).
 
-* Check that the host in question is under normal load -- if the usage
+- Check that the host in question is under normal load -- if the usage
   is extremely low due to replication lag or network issues then this
   may be a false positive.
 
@@ -119,7 +118,7 @@ child processes.
 ## High (and similar) load on multiple hosts
 
 It's also possible for high load to be caused by out of date query statistics.
-For example, in <https://gitlab.com/gitlab-com/infrastructure/issues/4429> we
+For example, in <https://gitlab.com/gitlab-com/gl-infra/reliability/-/issues/4429> we
 discovered that incorrect statistics for the "namespaces" table lead to an
 increase in sequential scans on the "issues" table.
 
@@ -132,17 +131,17 @@ Typically problems like this will produce graphs like the following:
 ![High database load](img/high_load.png)
 
 If you happen to know which table has out-of-date or incorrect statistics, you
-can run the following _on the primary_ to resolve this:
+can run the following *on the primary* to resolve this:
 
 ```sql
 ANALYZE VERBOSE table_name_here;
 ```
 
-However, it's not unlikely that _other_ tables are affected as well, which may
+However, it's not unlikely that *other* tables are affected as well, which may
 lead one to believe the problem lies elsewhere. To figure this out you will need
 a few query plans of (now) badly behaving queries, then look at the tables these
 queries use. Once you have identified potential candidates, you can `ANALYZE`
-those tables. Alternative, you can run the following SQL query _on the primary_:
+those tables. Alternative, you can run the following SQL query *on the primary*:
 
 (run inside `sudo gitlab-psql`)
 
@@ -159,7 +158,7 @@ not updated very frequently. In other words, a high `last_analyze` or
 `last_autoanalyze` value is not a guarantee that the table has incorrect
 statistics.
 
-A more drastic and easier approach is to simply re-analyze _all_ tables. This
+A more drastic and easier approach is to simply re-analyze *all* tables. This
 won't impact a running system, but this can take around 15 minutes to complete,
 depending on the table sizes. To perform this operation, run the following _on
 the primary_:
@@ -177,25 +176,25 @@ ANALYZE VERBOSE;
 
 We have several alerts that detect replication problems:
 
-* Alert that replication is stopped
-* Alert that replication lag is over 2min (over 120m on archive and delayed
+- Alert that replication is stopped
+- Alert that replication lag is over 2min (over 120m on archive and delayed
   replica)
-* Alert that replication lag is over 200MB
+- Alert that replication lag is over 200MB
 
 As well there are a few alerts that are intended to detect problems that could *lead* to replication problems:
 
-* Alert for disk utilization maxed out
-* Alert for XLOG consumption is high
+- Alert for disk utilization maxed out
+- Alert for XLOG consumption is high
 
 ### Possible checks
 
-* [replication lag in Thanos](https://thanos.gitlab.net/graph?g0.range_input=2h&g0.max_source_resolution=0s&g0.expr=pg_replication_lag%7Benv%3D%22gprd%22%2C%20type%3D%22patroni%22%7D%20AND%20pg_replication_is_replica%20%3D%3D%201&g0.tab=0)
+- [replication lag in Thanos](https://thanos.gitlab.net/graph?g0.range_input=2h&g0.max_source_resolution=0s&g0.expr=pg_replication_lag%7Benv%3D%22gprd%22%2C%20type%3D%22patroni%22%7D%20AND%20pg_replication_is_replica%20%3D%3D%201&g0.tab=0)
 
-* Also check for bloat (see the section "Tables with a large amount of
+- Also check for bloat (see the section "Tables with a large amount of
   dead tuples" below). Replication lag can cause bloat on the primary
   due to "vacuum feedback" which we have enabled.
 
-* If a replica is falling behind, the primary might keep WAL files around that
+- If a replica is falling behind, the primary might keep WAL files around that
   are needed to catch up. This can lead to running out of disk space pretty
   fast! If things don't resolve, remove the replication slot on the primary (see
   [below](#replication-slots))
@@ -233,7 +232,7 @@ low disk space free alerts and even an outage.
 
 ### Possible checks
 
-* Look in `select * from pg_replication_slots where NOT active`, for both the
+- Look in `select * from pg_replication_slots where NOT active`, for both the
   primary and the secondaries.
 
 ### Resolution
@@ -246,21 +245,21 @@ have to be resynced using wal-e/wal-g or recreated from scratch.
 Drop the replication slot with `SELECT pg_drop_replication_slot('slot_name');`
 
 It's possible for a secondary to have one or more inactive replication slots. In
-this case the `xmin` value in `pg_replication_slots` _on the primary_ may start
+this case the `xmin` value in `pg_replication_slots` *on the primary* may start
 lagging behind. This in turn can prevent vacuuming from removing dead tuples.
-This can be solved by dropping the replication slots _on the secondaries_.
+This can be solved by dropping the replication slots *on the secondaries*.
 
 ## Tables with a large amount of dead tuples
 
 ### Symptoms
 
-* Alert that there is a table with too many dead tuples
+- Alert that there is a table with too many dead tuples
 
 Also a number of other alerts which link here because they detect
 conditions which will lead to dead tuple bloat:
 
-* Alert on "replication slot with a stale xmin"
-* Alert on "long-lived transaction"
+- Alert on "replication slot with a stale xmin"
+- Alert on "long-lived transaction"
 
 ### Possible Checks
 
@@ -363,10 +362,10 @@ e.g.:
 ```SQL
 SELECT pid,
        age(backend_start) AS backend_age,
-	   age(xact_start) AS xact_age,
-	   age(query_start) AS query_age,
-	   state,
-	   query
+    age(xact_start) AS xact_age,
+    age(query_start) AS query_age,
+    state,
+    query
   FROM pg_stat_activity
  WHERE pid <> pg_backend_pid()
 ```
@@ -428,3 +427,7 @@ If this is an alert for any other error you're on your own. But be
 aware that it could be caused by something mundane such as an admin
 typing commands at the console generating "invalid command" errors or
 the database server restarting or clients dying.
+
+## Sentry - Postgres pending WAL files on primary is high
+
+Check the Runbook [sentry_pending_wal_files_too_high.md](../../sentry/sentry_pending_wal_files_too_high.md).

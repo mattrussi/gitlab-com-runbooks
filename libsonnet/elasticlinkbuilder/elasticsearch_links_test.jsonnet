@@ -6,89 +6,7 @@ local joinMulti(string) =
   local stripLines = std.map(function(l) std.stripChars(l, ' \t'), lines);
   std.join('', stripLines);
 
-
 test.suite({
-  testMatcherFilter: {
-    actual: elastic.matcher('fieldName', 'test'),
-    expect: {
-      query: {
-        match: {
-          fieldName: {
-            query: 'test',
-            type: 'phrase',
-          },
-        },
-      },
-    },
-  },
-  testMatcherFilterIn: {
-    actual: elastic.matcher('fieldName', ['hello', 'world']),
-    expect: {
-      meta: {
-        key: 'query',
-        type: 'custom',
-        value: '{"bool": {"minimum_should_match": 1, "should": [{"match_phrase": {"fieldName": "hello"}}, {"match_phrase": {"fieldName": "world"}}]}}',
-      },
-      query: {
-        bool: {
-          should: [
-            { match_phrase: { fieldName: 'hello' } },
-            { match_phrase: { fieldName: 'world' } },
-          ],
-          minimum_should_match: 1,
-        },
-      },
-    },
-  },
-  testMatchers: {
-    actual: elastic.matchers({
-      fieldName: ['hello', 'world'],
-      rangeTest: { gte: 1, lte: 10 },
-      equalMatch: 'match the exact thing',
-      anyScript: ["doc['json.duration_s'].value > doc['json.target_duration_s'].value", 'script 2'],
-    }),
-    expect: [
-      {
-        query: {
-          bool: {
-            minimum_should_match: 1,
-            should: [
-              { script: { script: { source: "doc['json.duration_s'].value > doc['json.target_duration_s'].value" } } },
-              { script: { script: { source: 'script 2' } } },
-            ],
-          },
-        },
-      },
-      {
-        query: {
-          match: {
-            equalMatch: {
-              query: 'match the exact thing',
-              type: 'phrase',
-            },
-          },
-        },
-      },
-      {
-        meta: {
-          key: 'query',
-          type: 'custom',
-          value: '{"bool": {"minimum_should_match": 1, "should": [{"match_phrase": {"fieldName": "hello"}}, {"match_phrase": {"fieldName": "world"}}]}}',
-        },
-        query:
-          {
-            bool: {
-              minimum_should_match: 1,
-              should: [
-                { match_phrase: { fieldName: 'hello' } },
-                { match_phrase: { fieldName: 'world' } },
-              ],
-            },
-          },
-      },
-      { query: { range: { rangeTest: { gte: 1, lte: 10 } } } },
-    ],
-  },
   testBuildElasticDiscoverSearchQueryURL: {
     actual: elastic.buildElasticDiscoverSearchQueryURL(
       index='sidekiq',
@@ -205,7 +123,10 @@ test.suite({
       }
     ),
     expect: [
-      { meta: { key: 'query', type: 'custom', value: '{"bool": {"minimum_should_match": 1, "should": [{"match_phrase": {"json.meta.feature_category": "source_code_management"}}]}}' }, query: { bool: { minimum_should_match: 1, should: [{ match_phrase: { 'json.meta.feature_category': 'source_code_management' } }] } } },
+      {
+        meta: { key: 'json.meta.feature_category', type: 'phrases', params: ['source_code_management'] },
+        query: { bool: { minimum_should_match: 1, should: [{ match_phrase: { 'json.meta.feature_category': 'source_code_management' } }] } },
+      },
     ],
   },
   testGetMatchersForPrometheusSelectorHashTranslationEq: {
@@ -220,9 +141,18 @@ test.suite({
       }
     ),
     expect: [
-      { query: { match: { 'json.meta.feature_category': { query: 'pipeline_.*', type: 'phrase' } } } },
-      { query: { match: { 'json.stage': { query: 'cny', type: 'phrase' } } } },
-      { query: { match: { 'json.type': { query: 'web', type: 'phrase' } } } },
+      {
+        meta: { key: 'json.meta.feature_category', type: 'phrase', params: 'pipeline_.*' },
+        query: { match: { 'json.meta.feature_category': { query: 'pipeline_.*', type: 'phrase' } } },
+      },
+      {
+        meta: { key: 'json.stage', type: 'phrase', params: 'cny' },
+        query: { match: { 'json.stage': { query: 'cny', type: 'phrase' } } },
+      },
+      {
+        meta: { key: 'json.type', type: 'phrase', params: 'web' },
+        query: { match: { 'json.type': { query: 'web', type: 'phrase' } } },
+      },
     ],
   },
   testGetMatchersForPrometheusSelectorHashTranslationNe: {
@@ -233,7 +163,10 @@ test.suite({
       }
     ),
     expect: [
-      { meta: { negate: true }, query: { match: { 'json.stage': { query: 'cny', type: 'phrase' } } } },
+      {
+        meta: { negate: true, key: 'json.stage', type: 'phrase', params: 'cny' },
+        query: { match: { 'json.stage': { query: 'cny', type: 'phrase' } } },
+      },
     ],
   },
   testGetMatchersForPrometheusSelectorHashTranslationArrays: {
@@ -245,8 +178,14 @@ test.suite({
       }
     ),
     expect: [
-      { meta: { key: 'query', negate: true, type: 'custom', value: '{"bool": {"minimum_should_match": 1, "should": [{"match_phrase": {"json.stage": "cny"}}]}}' }, query: { bool: { minimum_should_match: 1, should: [{ match_phrase: { 'json.stage': 'cny' } }] } } },
-      { meta: { key: 'query', type: 'custom', value: '{"bool": {"minimum_should_match": 1, "should": [{"match_phrase": {"json.type": "web"}}, {"match_phrase": {"json.type": "api"}}]}}' }, query: { bool: { minimum_should_match: 1, should: [{ match_phrase: { 'json.type': 'web' } }, { match_phrase: { 'json.type': 'api' } }] } } },
+      {
+        meta: { key: 'json.stage', negate: true, type: 'phrases', params: ['cny'] },
+        query: { bool: { minimum_should_match: 1, should: [{ match_phrase: { 'json.stage': 'cny' } }] } },
+      },
+      {
+        meta: { key: 'json.type', type: 'phrases', params: ['web', 'api'] },
+        query: { bool: { minimum_should_match: 1, should: [{ match_phrase: { 'json.type': 'web' } }, { match_phrase: { 'json.type': 'api' } }] } },
+      },
     ],
   },
 })

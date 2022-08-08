@@ -18,13 +18,12 @@ df -hi
 
 ## Likely suspects
 
-
 #### Linux kernels and headers
 
 We have `unattended-upgrades` enabled, which install the kernel updates.
 
 But we don't automatically reboot into those, so they accumulate with
-time. Relevant infrastructure [issue](https://gitlab.com/gitlab-com/infrastructure/issues/2435).
+time. Relevant infrastructure [issue](https://gitlab.com/gitlab-com/gl-infra/reliability/-/issues/2435).
 
 Since each `linux-kernel-X` package contains ~10^3 files, and each
 `linux-headers-X` package contains ~10^4 files, they can eat up all the

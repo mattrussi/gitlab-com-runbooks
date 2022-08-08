@@ -4,9 +4,10 @@
 
 [[_TOC_]]
 
-#  Stackdriver Service
+# Stackdriver Service
+
 * [Service Overview](https://dashboards.gitlab.net/d/USVj3qHmk/logging)
-* **Alerts**: https://alerts.gitlab.net/#/alerts?filter=%7Btype%3D%22stackdriver%22%2C%20tier%3D%22inf%22%7D
+* **Alerts**: <https://alerts.gitlab.net/#/alerts?filter=%7Btype%3D%22stackdriver%22%2C%20tier%3D%22inf%22%7D>
 * **Label**: gitlab-com/gl-infra/production~"Service:Stackdriver"
 
 ## Logging
@@ -15,11 +16,12 @@
 
 ## Troubleshooting Pointers
 
+* [CustomersDot main troubleshoot documentation](../customersdot/overview.md)
 * [Gitaly is down](../gitaly/gitaly-down.md)
 * [../kube/k8s-operations.md](../kube/k8s-operations.md)
 * [Kubernetes](../kube/kubernetes.md)
-* [license.gitlab.com Runbook](../license/license-gitlab-com.md)
 * [../logging/logging_gcs_archive_bigquery.md](../logging/logging_gcs_archive_bigquery.md)
+* [Stackdriver tracing for the Thanos stack](../monitoring/thanos-tracing.md)
 * [Diagnosis with Kibana](../onboarding/kibana-diagnosis.md)
 * [Sidekiq or Web/API is using most of its PgBouncer connections](../pgbouncer/pgbouncer-saturation.md)
 * [PubSub Queuing Rate Increasing](../pubsub/pubsub-queing.md)
@@ -28,7 +30,6 @@
 * [Node Reboots](../uncategorized/node-reboots.md)
 * [version.gitlab.com Runbook](../version/version-gitlab-com.md)
 <!-- END_MARKER -->
-
 
 <!-- ## Summary -->
 
