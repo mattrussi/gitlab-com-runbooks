@@ -400,7 +400,7 @@ Metric (via mtail): [gitlab_com:last_walg_backup_age_in_seconds
 metric](https://thanos.gitlab.net/graph?g0.range_input=2h&g0.max_source_resolution=0s&g0.expr=gitlab_com%3Alast_walg_backup_age_in_seconds&g0.tab=0)
 
 *Attention*: If WAL shipping (`archive_command`) fails for some reason, WAL
-files will be kept on the server until the disk is running full! [Check disk available space of Prod Patroni servers](<https://thanos-query.ops.gitlab.net/graph?g0.expr=node_filesystem_avail_bytes%7Benv%3D%22gprd%22%2Ctype%3D%22patroni%22%2Cmountpoint%3D%22%2Fvar%2Fopt%2Fgitlab%22%2Cshard%3D%22default%22%7D&g0.tab=0&g0.stacked=0&g0.range_input=2w&g0.max_source_resolution=0s&g0.deduplicate=1&g0.partial_response=0&g0.store_matches=%5B%5D>)
+files will be kept on the server until the disk is running full! [Check disk available space of Prod Patroni servers](<https://thanos.gitlab.net/graph?g0.expr=node_filesystem_avail_bytes%7Benv%3D%22gprd%22%2Ctype%3D%22patroni%22%2Cmountpoint%3D%22%2Fvar%2Fopt%2Fgitlab%22%2Cshard%3D%22default%22%7D&g0.tab=0&g0.stacked=0&g0.range_input=2w&g0.max_source_resolution=0s&g0.deduplicate=1&g0.partial_response=0&g0.store_matches=%5B%5D>)
 
 #### WAL-G `wal-push` process stuck
 
