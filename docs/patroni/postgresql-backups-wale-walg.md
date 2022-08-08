@@ -330,7 +330,7 @@ You can check WAL-G `backup-push` in several ways:
   - ssh to the patroni master
   - logs are located in `/var/log/wal-g/wal-g_backup_push.log`, the file is
     under rotation, so check also `/var/log/wal-g/wal-g_backup_push.log.1`, etc
- 
+
 As WAL-G `backup-push` only executes in one of the replicas, you should observe the following logs:
 
 `backup-push` on the Primary: example of log entries on the primary
@@ -377,10 +377,10 @@ As described in the previous chapter, the base backups are taken in one of the r
 
 In order to find out which machine is the primary, go to the [relevant Grafana dashboard](https://dashboards.gitlab.net/d/000000244/postgresql-replication-overview?orgId=1) or execute `sudo gitlab-patronictl list` on one of the nodes.
 
-WAL-G `wal-push` works by uploading WAL files to a GCS bucket whenever a wal file is completed (which happens every few seconds in gprd). The wal-g `wal-push` command is configured as postgresql `archive_command` and run by a PostgreSQL [background worker](https://www.postgresql.org/docs/12/bgworker.html). The worker can run custom code, in our case, it's running the WAL-G `/opt/wal-g/bin/wal-g wal-push` binary. The background worker is a process that is forked from the main postgres process. In case of WAL-G `wal-push` it lives only a few seconds. 
+WAL-G `wal-push` works by uploading WAL files to a GCS bucket whenever a wal file is completed (which happens every few seconds in gprd). The wal-g `wal-push` command is configured as postgresql `archive_command` and run by a PostgreSQL [background worker](https://www.postgresql.org/docs/12/bgworker.html). The worker can run custom code, in our case, it's running the WAL-G `/opt/wal-g/bin/wal-g wal-push` binary. The background worker is a process that is forked from the main postgres process. In case of WAL-G `wal-push` it lives only a few seconds.
 
 Any relevant information will be logged into `/var/log/wal-g/wal-g.log` file, including pushed files and errors.
-> *See more at:* https://gitlab.com/gitlab-com/runbooks/-/blob/master/docs/patroni/postgresql-backups-wale-walg.md#how-to-check-wal-archiving 
+> *See more at:* https://gitlab.com/gitlab-com/runbooks/-/blob/master/docs/patroni/postgresql-backups-wale-walg.md#how-to-check-wal-archiving
 
 In the PostgreSQL logs we found just the errors of the `archive_command`, and you can check them with the following:
 
