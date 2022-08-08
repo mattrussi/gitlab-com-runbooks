@@ -30,28 +30,6 @@ metricsCatalog.serviceDefinition({
   serviceDependencies: {
     'cloud-sql': true,
   },
-  kubeConfig: {
-    // TODO: monitoring doesn't have very good labelling.
-    // See https://gitlab.com/gitlab-com/gl-infra/delivery/-/issues/2240
-    // For now, we base our resource matching on namespace only and assume
-    // everything is in the main stage
-    local kubeSelector = { namespace: 'monitoring' },
-    local staticLabels = { stage: 'main' },
-
-    labelSelectors: kubeLabelSelectors(
-      podSelector=kubeSelector,
-      hpaSelector=kubeSelector,
-      nodeSelector=null,
-      ingressSelector=kubeSelector,
-      deploymentSelector=kubeSelector,
-
-      podStaticLabels=staticLabels,
-      hpaStaticLabels=staticLabels,
-      nodeStaticLabels=staticLabels,
-      ingressStaticLabels=staticLabels,
-      deploymentStaticLabels=staticLabels,
-    ),
-  },
   kubeResources: {
     grafana: {
       kind: 'Deployment',
