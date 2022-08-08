@@ -15,6 +15,7 @@ metricsCatalog.serviceDefinition({
   serviceDependencies: {
     // If Camoproxy has any dependencies, we should add them here
   },
+  serviceIsStageless: true,
   provisioning: {
     vms: false,
     kubernetes: true,
