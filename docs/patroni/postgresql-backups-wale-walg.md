@@ -146,8 +146,7 @@ INFO: 2021/09/02 15:57:44.189580 FILE PATH: 000000050005E5750000001D.br
 INFO: 2021/09/02 15:57:44.482529 FILE PATH: 000000050005E5750000001E.br
 ```
 
-> See also: [How to check if WAL-G backups are
-> running](#how-to-check-if-wal-e-backups-are-running).
+> See also: [How to check if WAL-G backups are running](postgresql-backups-wale-walg.md#how-to-check-if-wal-e-backups-are-running).
 
 #### How to check the full backups (basebackups) creation
 
@@ -323,12 +322,15 @@ You can check WAL-G `backup-push` in several ways:
 1. Metric (injected via prometheus push-gateway from the backup script):
 [gitlab_com:last_walg_successful_basebackup_age_in_hours](https://thanos.gitlab.net/graph?g0.range_input=1d&g0.max_source_resolution=0s&g0.expr=gitlab_com%3Alast_walg_successful_basebackup_age_in_hours&g0.tab=0)
 1. using Kibana (not valid while wal-g logs are not yet shipped to Elastic Search): <!-- TODO: implement redirect of wal-g output to syslog similar to https://gitlab.com/gitlab-com/gl-infra/infrastructure/-/issues/10499 -->
-  - [`log.gprd.gitlab.net`](https://log.gprd.gitlab.net)
-  - index: `pubsub-system-inf-gprd`
-  - document field: `json.ident` with value `wal_g.worker.upload`
+
+- [`log.gprd.gitlab.net`](https://log.gprd.gitlab.net)
+- index: `pubsub-system-inf-gprd`
+- document field: `json.ident` with value `wal_g.worker.upload`
+
 1. by logging directly into the VM:
-  - ssh to the patroni master
-  - logs are located in `/var/log/wal-g/wal-g_backup_push.log`, the file is
+
+- ssh to the patroni master
+- logs are located in `/var/log/wal-g/wal-g_backup_push.log`, the file is
     under rotation, so check also `/var/log/wal-g/wal-g_backup_push.log.1`, etc
 
 As WAL-G `backup-push` only executes in one of the replicas, you should observe the following logs:
@@ -369,9 +371,7 @@ As WAL-G `backup-push` only executes in one of the replicas, you should observe 
 <DATE> backup.sh: Could not acquire walg-basebackup-patroni lock. Will not run backup.
 ```
 
-
 #### Continuous Shipping of WAL Files ("wal-push")
-
 
 As described in the previous chapter, the base backups are taken in one of the replicas, however, the WAL (transaction log files) are continuously generated and shiped into the cloud storage from the Primary node (only node accepting writes).
 
@@ -380,12 +380,12 @@ In order to find out which machine is the primary, go to the [relevant Grafana d
 WAL-G `wal-push` works by uploading WAL files to a GCS bucket whenever a wal file is completed (which happens every few seconds in gprd). The wal-g `wal-push` command is configured as postgresql `archive_command` and run by a PostgreSQL [background worker](https://www.postgresql.org/docs/12/bgworker.html). The worker can run custom code, in our case, it's running the WAL-G `/opt/wal-g/bin/wal-g wal-push` binary. The background worker is a process that is forked from the main postgres process. In case of WAL-G `wal-push` it lives only a few seconds.
 
 Any relevant information will be logged into `/var/log/wal-g/wal-g.log` file, including pushed files and errors.
-> *See more at:* https://gitlab.com/gitlab-com/runbooks/-/blob/master/docs/patroni/postgresql-backups-wale-walg.md#how-to-check-wal-archiving
+> *See more at:* <https://gitlab.com/gitlab-com/runbooks/-/blob/master/docs/patroni/postgresql-backups-wale-walg.md#how-to-check-wal-archiving>
 
 In the PostgreSQL logs we found just the errors of the `archive_command`, and you can check them with the following:
 
 ```
-$ grep "wal-g" /var/log/gitlab/postgresql/postgresql.csv
+grep "wal-g" /var/log/gitlab/postgresql/postgresql.csv
 ```
 
 For each failed attempt to archive a wal file, there would be an entry like the following:
@@ -394,17 +394,15 @@ For each failed attempt to archive a wal file, there would be an entry like the 
 "archive command failed with exit code 1","The failed archive command was: /opt/wal-g/bin/archive-walg.sh pg_wal/<file_name>"
 ```
 
-
-
 ### Continuous Shipping of WAL Files (wal-push) is not working
 
 Metric (via mtail): [gitlab_com:last_walg_backup_age_in_seconds
 metric](https://thanos.gitlab.net/graph?g0.range_input=2h&g0.max_source_resolution=0s&g0.expr=gitlab_com%3Alast_walg_backup_age_in_seconds&g0.tab=0)
 
 *Attention*: If WAL shipping (`archive_command`) fails for some reason, WAL
-files will be kept on the server until the disk is running full! [Check disk available space of Prod Patroni servers] (https://thanos-query.ops.gitlab.net/graph?g0.expr=node_filesystem_avail_bytes%7Benv%3D%22gprd%22%2Ctype%3D%22patroni%22%2Cmountpoint%3D%22%2Fvar%2Fopt%2Fgitlab%22%2Cshard%3D%22default%22%7D&g0.tab=0&g0.stacked=0&g0.range_input=2w&g0.max_source_resolution=0s&g0.deduplicate=1&g0.partial_response=0&g0.store_matches=%5B%5D)
+files will be kept on the server until the disk is running full! [Check disk available space of Prod Patroni servers](<https://thanos-query.ops.gitlab.net/graph?g0.expr=node_filesystem_avail_bytes%7Benv%3D%22gprd%22%2Ctype%3D%22patroni%22%2Cmountpoint%3D%22%2Fvar%2Fopt%2Fgitlab%22%2Cshard%3D%22default%22%7D&g0.tab=0&g0.stacked=0&g0.range_input=2w&g0.max_source_resolution=0s&g0.deduplicate=1&g0.partial_response=0&g0.store_matches=%5B%5D>)
 
-#### WAL-G `wal-push` process stuck ####
+#### WAL-G `wal-push` process stuck
 
 If you're not seeing logs for successfull `wal-push` uploads (e.g. nothing
 writes to the log file or there are only entries with `state=begin` but not with
