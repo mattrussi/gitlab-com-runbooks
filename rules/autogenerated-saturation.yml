@@ -200,11 +200,11 @@ groups:
       max by(environment, tier, type, stage) (
         clamp_min(
           clamp_max(
-            sum by (environment, tier, type, stage) (
+            sum by (environment, tier, type, stage, host) (
               (elasticsearch_filesystem_data_size_bytes{type=~"logging|search"} - elasticsearch_filesystem_data_free_bytes{type=~"logging|search"})
             )
             /
-            sum by (environment, tier, type, stage) (
+            sum by (environment, tier, type, stage, host) (
               elasticsearch_filesystem_data_size_bytes{type=~"logging|search"}
             )
             ,
@@ -2795,14 +2795,14 @@ groups:
       grafana_panel_id: "2419103084"
       grafana_variables: environment,type,stage
       promql_query: |
-        max by(environment, tier, type, stage) (
+        max by(environment, tier, type, stage, host) (
           clamp_min(
             clamp_max(
-              sum by (environment, tier, type, stage) (
+              sum by (environment, tier, type, stage, host) (
                 (elasticsearch_filesystem_data_size_bytes{environment="{{ $labels.environment }}",stage="{{ $labels.stage }}",type="{{ $labels.type }}"} - elasticsearch_filesystem_data_free_bytes{environment="{{ $labels.environment }}",stage="{{ $labels.stage }}",type="{{ $labels.type }}"})
               )
               /
-              sum by (environment, tier, type, stage) (
+              sum by (environment, tier, type, stage, host) (
                 elasticsearch_filesystem_data_size_bytes{environment="{{ $labels.environment }}",stage="{{ $labels.stage }}",type="{{ $labels.type }}"}
               )
               ,

@@ -11,7 +11,7 @@ local resourceSaturationPoint = metricsCatalog.resourceSaturationPoint;
       Disk utilization per device per node.
     |||,
     grafana_dashboard_uid: 'sat_elastic_disk_space',
-    resourceLabels: [],
+    resourceLabels: ['host'],
     query: |||
       sum by (%(aggregationLabels)s) (
         (elasticsearch_filesystem_data_size_bytes{%(selector)s} - elasticsearch_filesystem_data_free_bytes{%(selector)s})
