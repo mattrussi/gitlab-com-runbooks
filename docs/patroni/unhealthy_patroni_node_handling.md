@@ -21,7 +21,6 @@ Use this runbook as a guidance on how to diangnose if the Replica is considered 
 - Terraform
   You are expected to know what Terraform is, how we use it and how we make change safely (`tf plan` first).
 
-
 ### Scope
 
 This runbook is intended only for one or more `read` replica node(s) of Patroni cluster.
@@ -55,8 +54,9 @@ What this means is that we need to be aware of and think of:
 The main reason that an instance is unhealthy is if it's considered unavailable.
 
 The 3 evidences that point if a Patroni instance is unavailable are:
+
 - If you can't log/ssh into the node;
-- If the Thanos/Graphana metrics are missing for the instance - https://dashboards.gitlab.net/d/bd2Kl9Imk/host-stats;
+- If the Thanos/Graphana metrics are missing for the instance - <https://dashboards.gitlab.net/d/bd2Kl9Imk/host-stats>;
 - Execute `gitlab-patronictl list` from any other node in the cluster and check if the instance is not listed;
 
 Beside unavailability, a Patroni instance can be considered available but unhealthy for other reasons like Replication Lagging and Resource Contention.
@@ -68,7 +68,6 @@ If just one or a few Replicas are lagging in relation with the Primary/Writer no
 **Note 1:** lag spikes of a few seconds are common; up to `max_standby_stream_delay` (default to 30 seconds) are allowed;
 
 **Note 2:** if the lag is building up in all nodes, it's more likely that the issue is related with the Writer or the workload and not the case of an unhealthy replica;
-
 
 - Execute `gitlab-patronictl list` to get the amount of Lag, in MBytes, for each Replica
 
@@ -93,10 +92,10 @@ If just one or a few Replicas are lagging in relation with the Primary/Writer no
 
 - Or you can look into the `Lag time` or `Lag size` Graphana dashboards, or `pg_replication_lag` or `pg_stat_replication_pg_wal_lsn_diff` Thanos metrics.
 
-
 ### Resource Contention
 
 If there is intense resource contention a resource can become unhealthy and get stuck/unavailable, check for:
+
 - CPU usage stuck close to 100%
 - Disk Metrics (eg. I/O wait per operation)
 - Look for Stuck I/O and Disk Failure in syslog
@@ -166,7 +165,6 @@ If there is intense resource contention a resource can become unhealthy and get 
 
 You can see an example of taking a node out of service in [this issue](https://gitlab.com/gitlab-com/gl-infra/production/-/issues/1061).
 
-
 ### Step 3 - Decide if you will remove the node or wait for it to recover
 
 This is a critical decision because replacing a Patroni Replica can take a couple of hours, but letting it to recover without intervention can take up to several days deppending on lag size and write workload.
@@ -175,9 +173,7 @@ If you decide to relpace the unhealthy replica proceed to the next chapter.
 
 ## Removing an unhealty replica from the Patroni cluster
 
-
 **IMPORTANT:** make sure that the connections that the workload is drained from the unhealthy replica (link to previous chapter)
-
 
 ### Step 1 - Stop patroni service on the node
 
@@ -187,10 +183,10 @@ We have alerts that fire when patroni is deemed to be down. Since this is an int
 
 1. Stop the patroni service on the unhealthy node
 
-	```
-	sudo systemctl stop patroni
-	sudo systemctl disable patroni.service
-	```
+ ```
+ sudo systemctl stop patroni
+ sudo systemctl disable patroni.service
+ ```
 
 1. Check that patroni service is stopped in the host
 
@@ -202,14 +198,14 @@ We have alerts that fire when patroni is deemed to be down. Since this is an int
 
 1. Find the instance name in GCloud
 
-  1. You can use `gcloud compute instances list | grep <name>` to search for the instances, or get it using GCP console https://console.cloud.google.com/compute/instances;
-  1. Define the `INSTANCE_NAME=<name>` variable with the proper instance name
+1. You can use `gcloud compute instances list | grep <name>` to search for the instances, or get it using GCP console <https://console.cloud.google.com/compute/instances>;
+1. Define the `INSTANCE_NAME=<name>` variable with the proper instance name
 
 1. Stop the VM
-	
-	```
-	gcloud compute instances stop $INSTANCE_NAME
-	```
+
+ ```
+ gcloud compute instances stop $INSTANCE_NAME
+ ```
 
 ### Step 3 - Delete the VM and disks
 
@@ -229,19 +225,19 @@ We have alerts that fire when patroni is deemed to be down. Since this is an int
     ```
 
 1. Delete the VM
-	
-  - Execute the following command:
+
+- Execute the following command:
 
     ```
     gcloud compute instances delete $INSTANCE_NAME
     ```
 
-  - Take note of the zone where the instance is hosted, you will need to delete the instance disks;
+- Take note of the zone where the instance is hosted, you will need to delete the instance disks;
 
 1. Delete the Disks
-	- Execute the delete disks command listed in the "List VM Disks" step. You would need to delete only the `data` disk and the `log` disk of the Patroni node as the instance disk is automatically deleted with the instance.
 
-  - If you didn't took note of the delete disk commands above, execute the following commands to delete the `data` and `log` disks:
+- Execute the delete disks command listed in the "List VM Disks" step. You would need to delete only the `data` disk and the `log` disk of the Patroni node as the instance disk is automatically deleted with the instance.
+- If you didn't took note of the delete disk commands above, execute the following commands to delete the `data` and `log` disks:
 
     ```
     gcloud compute disks delete $INSTANCE_NAME-data --zone <zone_name>
@@ -250,13 +246,12 @@ We have alerts that fire when patroni is deemed to be down. Since this is an int
 
 1. Confirm that Compute instances and disks were deleted in the GCP console:
 
-	- https://console.cloud.google.com/compute/instances
-	- https://console.cloud.google.com/compute/disks
-
+- <https://console.cloud.google.com/compute/instances>
+- <https://console.cloud.google.com/compute/disks>
 
 1. Check if the instance nodes still exist in Chef and delete them if necessary
 
-  - Execute the following command:
+- Execute the following command:
 
     ```
     ENVIRONMENT=<enter the environment, eg. gstg or gprd>
@@ -265,7 +260,7 @@ We have alerts that fire when patroni is deemed to be down. Since this is an int
     knife client list | grep $ENVIRONMENT | grep $INSTANCE_NAME
     ```
 
-  - If the node still is listed delete the node from Chef server with:
+- If the node still is listed delete the node from Chef server with:
 
     ```
     knife node delete <NODE_NAME>
@@ -278,10 +273,10 @@ We have alerts that fire when patroni is deemed to be down. Since this is an int
 
 1. Find which instance is the database cluster Backup Node
 
-  - GSTG Main: `knife search 'roles:gstg-base-db-patroni-backup-replica AND roles:gstg-base-db-patroni-main' --id-only`
-  - GSTG CI: `knife search 'roles:gstg-base-db-patroni-ci-backup-replica AND roles:gstg-base-db-patroni-ci' --id-only`
-  - GPRD Main: `knife search 'roles:gprd-base-db-patroni-backup-replica AND roles:gprd-base-db-patroni-v12' --id-only`
-  - GPRD CI: `knife search 'roles:gprd-base-db-patroni-ci-backup-replica AND roles:gprd-base-db-patroni-ci' --id-only`
+- GSTG Main: `knife search 'roles:gstg-base-db-patroni-backup-replica AND roles:gstg-base-db-patroni-main' --id-only`
+- GSTG CI: `knife search 'roles:gstg-base-db-patroni-ci-backup-replica AND roles:gstg-base-db-patroni-ci' --id-only`
+- GPRD Main: `knife search 'roles:gprd-base-db-patroni-backup-replica AND roles:gprd-base-db-patroni-v12' --id-only`
+- GPRD CI: `knife search 'roles:gprd-base-db-patroni-ci-backup-replica AND roles:gprd-base-db-patroni-ci' --id-only`
 
 2. Log into the Backup Node and execute a gcs-snapshot:
 
@@ -296,33 +291,35 @@ We have alerts that fire when patroni is deemed to be down. Since this is an int
 You can use the following steps to create all or a subset of the patroni CI instances, just depending on how many instances were previously destroyed.
 
 1. Change Terraform environment
-  - Execute the following `gcloud` command to get the name of the most recent GCS snapshot from the patroni backup data disk, but **DO NOT SIMPLY COPY/PASTE IT**, set the `--project` and `--filter` accordingly with the environment you are performing the restore:
+
+- Execute the following `gcloud` command to get the name of the most recent GCS snapshot from the patroni backup data disk, but **DO NOT SIMPLY COPY/PASTE IT**, set the `--project` and `--filter` accordingly with the environment you are performing the restore:
 
     ```
     gcloud compute snapshots list --project [gitlab-staging-1|gitlab-production] --limit=1 --uri --sort-by=~creationTimestamp --filter=status~READY --filter=sourceDisk~patroni-[06-db-gstg|ci-03-db-gstg|v12-10-db-gprd|ci-03-db-gprd]-data
     ```
 
-  - Remove the `https://www.googleapis.com/compute/v1/` prefix of the snapshot name
+- Remove the `https://www.googleapis.com/compute/v1/` prefix of the snapshot name
 
-    - For example: `https://www.googleapis.com/compute/v1/projects/gitlab-production/global/snapshots/nukw46z00o90` will turn into `projects/gitlab-production/global/snapshots/nukw46z00o90`
+  - For example: `https://www.googleapis.com/compute/v1/projects/gitlab-production/global/snapshots/nukw46z00o90` will turn into `projects/gitlab-production/global/snapshots/nukw46z00o90`
 
-  - Add the following line into the proper `patroni-*` module at `main.tf`
+- Add the following line into the proper `patroni-*` module at `main.tf`
 
     ```
       data_disk_snapshot   = "<snapshot_name>"
       data_disk_create_timeout = "180m"
     ```
+
 1. Check the resources that will be created on the plan
 
   ```
   tf plan -out resync-tf.plan
   ```
 
-  - Check the Terraform change before applying, TF should create 3 resources for each removed Patroni Replica: 2 disks and 1 VM/instance
+- Check the Terraform change before applying, TF should create 3 resources for each removed Patroni Replica: 2 disks and 1 VM/instance
 
-    - module.patroni.google_compute_disk.data_disk
-    - module.patroni.google_compute_disk.log_disk
-    - module.patroni.google_compute_instance.instance_with_attached_disk
+  - module.patroni.google_compute_disk.data_disk
+  - module.patroni.google_compute_disk.log_disk
+  - module.patroni.google_compute_instance.instance_with_attached_disk
 
 1. Re-create the unhealthy patroni node
 
