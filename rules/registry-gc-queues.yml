@@ -9,7 +9,6 @@ groups:
     for: 30m
     labels:
       severity: s4
-      pager: pagerduty
       alert_type: symptom
       team: package
     annotations:
@@ -25,7 +24,6 @@ groups:
     for: 30m
     labels:
       severity: s4
-      pager: pagerduty
       alert_type: symptom
       team: package
     annotations:
