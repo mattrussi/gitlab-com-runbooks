@@ -96,6 +96,19 @@ The desired event data for this style of search will exist in `json.textPayload`
 
 # Alerts
 
+## GitLabZonalCompomentVersionsOutOfSync
+
+We want to ensure that we do not suffer drift for GitLab components across all
+of our clusters for a lengthy period of time.  If this alert triggers this means
+that there is a chance that at least 1 cluster may have at least 1 component out
+of sync with the rest of the clusters.  Check the following items:
+
+1. Verify there is no active maintenance occurring on any given cluster
+1. Verify Auto-Deploy is not stuck or has failed recently
+1. Begin troubleshooting by determining which cluster may be running an
+   incorrect version of any GitLab component.  Utilize the chart provided on the
+   alert as a starting point
+
 ## HighThrottleRate
 
 This is triggered when a container is surpassing the CPU limits governed by the

@@ -156,8 +156,8 @@ teams:
   product_stage_group: 5-min-app
   ignored_components:
   - graphql_queries
-- name: adoption
-  product_stage_group: adoption
+- name: activation
+  product_stage_group: activation
   ignored_components:
   - graphql_queries
 - name: applied_ml
@@ -185,8 +185,8 @@ teams:
   - graphql_queries
 - name: container_security
   product_stage_group: container_security
-- name: conversion
-  product_stage_group: conversion
+- name: acquisition
+  product_stage_group: acquisition
   ignored_components:
   - graphql_queries
 - name: database
@@ -203,10 +203,6 @@ teams:
   - graphql_queries
 - name: editor
   product_stage_group: editor
-  ignored_components:
-  - graphql_queries
-- name: expansion
-  product_stage_group: expansion
   ignored_components:
   - graphql_queries
 - name: foundations
@@ -281,8 +277,8 @@ teams:
   product_stage_group: purchase
   ignored_components:
   - graphql_queries
-- name: sharding
-  product_stage_group: sharding
+- name: pods
+  product_stage_group: pods
   ignored_components:
   - graphql_queries
 - name: source_code

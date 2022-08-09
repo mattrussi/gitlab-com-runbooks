@@ -91,3 +91,24 @@ devin@teleport-01-inf-gstg.c.gitlab-staging-1.internal:~$ sudo openssl x509 -end
 ```
 
 Then follow the Teleport documentation for [generating a new cert](https://goteleport.com/docs/enterprise/workflow/ssh-approval-slack/#export-the-access-plugin-certificate) (you can't yet renew the existing one, but a new one works fine)
+
+## teleport-slack.service restarting every 10-15seconds
+
+If slack integration certificate gets expired then `teleport-slack` service may go into infinite restart loop due to failure to connect to authentication proxy. In such cases, teleport log can provide hints:
+
+Check `teleport` logs as follows on the teleport bastion server:
+
+```shell
+journalctl -u teleport -f
+```
+
+In such cases teleport will repeatedly log ssl Handshake failures as below:
+
+```
+Aug  2 19:15:33 teleport-01-inf-gstg teleport[772]: 2022-08-02T19:15:33Z WARN [MXTLS:1]   Handshake failed. error:[tls: failed to verify client certificate: x509: certificate has expired or is not yet valid: current time 2022-08-02T19:15:33Z is after 2022-07-27T03:58:24Z] multiplexer/tls.go:146
+Aug  2 19:15:34 teleport-01-inf-gstg teleport[772]: 2022-08-02T19:15:34Z WARN [MXTLS:1]   Handshake failed. error:[tls: failed to verify client certificate: x509: certificate has expired or is not yet valid: current time 2022-08-02T19:15:34Z is after 2022-07-27T03:58:24Z] multiplexer/tls.go:146
+Aug  2 19:15:35 teleport-01-inf-gstg teleport[772]: 2022-08-02T19:15:35Z WARN [MXTLS:1]   Handshake failed. error:[tls: failed to verify client certificate: x509: certificate has expired or is not yet valid: current time 2022-08-02T19:15:35Z is after 2022-07-27T03:58:24Z] multiplexer/tls.go:146
+Aug  2 19:15:36 teleport-01-inf-gstg teleport[772]: 2022-08-02T19:15:36Z INFO [DB:SERVIC] Connected. addr:34.75.5.75:53528 remote-addr:34.75.5.75:3024 leaseID:105 target:teleport.gstg.gitlab.net:3024 reversetunnel/agent.go:393
+```
+
+For such cases, you can follow the steps in [Slack integration](#slack-integration) to check and renew ssl certs for teleport slack process.

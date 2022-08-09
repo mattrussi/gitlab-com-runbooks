@@ -431,14 +431,16 @@ groups:
   rules:
   - record: kube_pod_labels:labeled
     labels:
-      stage: main
       tier: inf
       type: monitoring
     expr: |
-      group without(label_shard,label_deployment) (
+      group without(label_stage,label_shard,label_deployment) (
         label_replace(
           label_replace(
-            topk by(environment,cluster,pod) (1, kube_pod_labels{namespace="monitoring"}),
+            label_replace(
+              topk by(environment,cluster,pod) (1, kube_pod_labels{label_type="monitoring"}),
+              "stage", "$0", "label_stage", ".*"
+            ),
             "shard", "$0", "label_shard", ".*"
           ),
           "deployment", "$0", "label_deployment", ".*"
@@ -446,37 +448,43 @@ groups:
       )
   - record: kube_horizontalpodautoscaler_labels:labeled
     labels:
-      stage: main
       tier: inf
       type: monitoring
     expr: |
-      group without(label_shard) (
+      group without(label_stage,label_shard) (
         label_replace(
-          topk by(environment,cluster,horizontalpodautoscaler) (1, kube_horizontalpodautoscaler_labels{namespace="monitoring"}),
+          label_replace(
+            topk by(environment,cluster,horizontalpodautoscaler) (1, kube_horizontalpodautoscaler_labels{label_type="monitoring"}),
+            "stage", "$0", "label_stage", ".*"
+          ),
           "shard", "$0", "label_shard", ".*"
         )
       )
   - record: kube_ingress_labels:labeled
     labels:
-      stage: main
       tier: inf
       type: monitoring
     expr: |
-      group without(label_shard) (
+      group without(label_stage,label_shard) (
         label_replace(
-          topk by(environment,cluster,ingress) (1, kube_ingress_labels{namespace="monitoring"}),
+          label_replace(
+            topk by(environment,cluster,ingress) (1, kube_ingress_labels{label_type="monitoring"}),
+            "stage", "$0", "label_stage", ".*"
+          ),
           "shard", "$0", "label_shard", ".*"
         )
       )
   - record: kube_deployment_labels:labeled
     labels:
-      stage: main
       tier: inf
       type: monitoring
     expr: |
-      group without(label_shard) (
+      group without(label_stage,label_shard) (
         label_replace(
-          topk by(environment,cluster,deployment) (1, kube_deployment_labels{namespace="monitoring"}),
+          label_replace(
+            topk by(environment,cluster,deployment) (1, kube_deployment_labels{label_type="monitoring"}),
+            "stage", "$0", "label_stage", ".*"
+          ),
           "shard", "$0", "label_shard", ".*"
         )
       )

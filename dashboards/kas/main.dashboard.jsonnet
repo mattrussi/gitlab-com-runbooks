@@ -16,16 +16,20 @@ serviceDashboard.overview('kas')
 )
 .addPanels(
   layout.grid([
-    basic.timeseries(
-      title='Number of connected agentk Pods',
-      description='Number of connected agentk from user Kubernetes clusters',
-      query='sum(grpc_server_requests_in_flight{app="kas",env=~"$environment", grpc_method="GetConfiguration"})',
-      interval='1m',
-      intervalFactor=2,
-      legendFormat='Count',
-      yAxisLabel='',
+    basic.multiTimeseries(
+      title='Number of connected agents and agentk Pods',
+      queries=[
+        {
+          legendFormat: 'Number of connected agentk Pods',
+          query: 'sum(grpc_server_requests_in_flight{app="kas", stage="$stage", env="$environment", grpc_service="gitlab.agent.agent_configuration.rpc.AgentConfiguration", grpc_method="GetConfiguration"})',
+        },
+        {
+          legendFormat: 'Number of connected agents',
+          query: 'avg(connected_agents_count{app="kas", stage="$stage", env="$environment"})',
+        },
+      ],
+      yAxisLabel='Count',
       legend_show=true,
-      linewidth=2
     ),
   ], cols=1, rowHeight=10, startRow=1001)
 )

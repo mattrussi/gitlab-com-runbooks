@@ -2,6 +2,25 @@ groups:
   - name: kubernetes.rules
     rules:
 
+      - alert: GitLabZonalComponentVersionsOutOfSync
+        expr: |-
+          sum by (image, env) (
+            group by (image, cluster, env) (kube_pod_container_info{env=~"gprd|gstg", cluster=~".*-us-east1-.*", container_id!="", namespace=~"gitlab", image=~"dev.gitlab.org.*"})
+          ) != 3
+        for: 3h
+        labels:
+          severity: s3
+          alert_type: symptom
+          team: delivery
+        annotations:
+          description: Versions of GitLab components in {{ $labels.env }} have differed across our clusters for greater than 3 hours.
+          runbook: docs/kube/kubernetes.md#gitlabcomponentversionoutofsync
+          title: GitLab Versions differ across our zonal clusters.
+          promql_template_1: |-
+            sum by (image, env) (
+              group by (image, cluster, env) (kube_pod_container_info{env=~"gprd|gstg", cluster=~".*-us-east1-.*", container_id!="", namespace=~"gitlab", image=~"dev.gitlab.org.*"})
+            )
+
       - alert: KubeReplicasSetPodMismatch
         annotations:
           title: Deployment Replicas Mismatch

@@ -56,6 +56,7 @@
 * [Determine The GitLab Project Associated with a Domain](../pages/pages-domain-lookup.md)
 * [Troubleshooting LetsEncrypt for Pages](../pages/pages-letsencrypt.md)
 * [Steps to Recreate/Rebuild the CI CLuster using a Snapshot from the Master cluster (instead of pg_basebackup)](../patroni-ci/rebuild_ci_cluster_from_prod.md)
+* [Steps to Create a Standby Patroni CLuster using a Snapshot from the Primary cluster (instead of pg_basebackup)](../patroni/build_cluster_from_snapshot.md)
 * [Patroni](../patroni/patroni-management.md)
 * [../patroni/performance-degradation-troubleshooting.md](../patroni/performance-degradation-troubleshooting.md)
 * [PostgreSQL HA](../patroni/pg-ha.md)
@@ -64,6 +65,7 @@
 * [How to provision the benchmark environment](../patroni/provisioning_bench_env.md)
 * [Rotating Rails' PostgreSQL password](../patroni/rotating-rails-postgresql-password.md)
 * [Patroni](../patroni/scale-down-patroni.md)
+* [Patroni](../patroni/unhealthy_patroni_node_handling.md)
 * [../pgbouncer/patroni-consul-postgres-pgbouncer-interactions.md](../pgbouncer/patroni-consul-postgres-pgbouncer-interactions.md)
 * [Add a new PgBouncer instance](../pgbouncer/pgbouncer-add-instance.md)
 * [PgBouncer connection management and troubleshooting](../pgbouncer/pgbouncer-connections.md)
@@ -108,7 +110,7 @@
 * [Uploads](../uncategorized/uploads.md)
 * [Workers under heavy load because of being used as a CDN](../uncategorized/workers-high-load.md)
 * [Troubleshooting Hashicorp Vault](../vault/troubleshooting.md)
-* [Gitlab Vault](../vault/vault.md)
+* [Vault Secrets Management](../vault/vault.md)
 * [version.gitlab.com Runbook](../version/version-gitlab-com.md)
 <!-- END_MARKER -->
 

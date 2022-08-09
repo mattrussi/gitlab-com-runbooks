@@ -76,6 +76,18 @@ This instance is shared among the projects in the `gitlab-services` group. The d
 
 Database backups are handled automatically by CloudSQL, and can be restored from the `Backups` tab of the CloudSQL instance.  There are also occasional exports placed in the `gs-production-db-backups` bucket. These will not be as up to date, but they are easier to copy and move around.
 
+### Database access for developers
+
+To grant access to database for developers (Example ARs: [16606](https://gitlab.com/gitlab-com/team-member-epics/access-requests/-/issues/16606), [13560](https://gitlab.com/gitlab-com/team-member-epics/access-requests/-/issues/13560)), `Cloud SQL Viewer` and `Viewer` roles should be granted to requesting user on gcloud projects `gs-production` and `gs-staging` for production and staging respectively.
+
+In some cases, specially when connecting user has IPv6 address, use `beta` switch with gcloud command as follows:
+
+```shell
+gcloud --project gs-production-efd5e8 beta sql connect cloudsql-411f -u default
+```
+
+Password for `default` user can be found from `DATABASE_URL` CI variable in project settings as mentioned [above](#database)
+
 ### Terraform
 
 This GCP project and the infrastructure components in it are managed by the [services-base](https://ops.gitlab.net/gitlab-com/services-base) project.  Any infrastructure changes to the environment or K8s cluster should be made as an MR there.  Changes will be applied automatically via CI jobs when the MR is merged.  `gs-production` and `gs-staging` are represented as [Environments](https://ops.gitlab.net/gitlab-com/services-base/environments) in that project.

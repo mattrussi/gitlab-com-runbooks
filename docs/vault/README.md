@@ -15,7 +15,6 @@
 
 ## Troubleshooting Pointers
 
-* [Camoproxy troubleshooting](../camoproxy/camoproxy.md)
 * [Cloudflare for the on-call](../cloudflare/oncall.md)
 * [VM Build Process with Terraform and Chef](../config_management/chef-process-overview.md)
 * [Chef Vault Basics](../config_management/chef-vault.md)
@@ -41,7 +40,7 @@
 * [../uncategorized/subnet-allocations.md](../uncategorized/subnet-allocations.md)
 * [Configuring and Using the Yubikey](../uncategorized/yubikey.md)
 * [Troubleshooting Hashicorp Vault](troubleshooting.md)
-* [Gitlab Vault](vault.md)
+* [Vault Secrets Management](vault.md)
 <!-- END_MARKER -->
 
 <!-- ## Summary -->
