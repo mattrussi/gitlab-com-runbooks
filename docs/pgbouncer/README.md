@@ -30,6 +30,7 @@
 * [How to evaluate load from queries](../patroni/postgresql-query-load-evaluation.md)
 * [How to provision the benchmark environment](../patroni/provisioning_bench_env.md)
 * [Rotating Rails' PostgreSQL password](../patroni/rotating-rails-postgresql-password.md)
+* [Patroni](../patroni/unhealthy_patroni_node_handling.md)
 * [Roles/Users grants and permission Runbook](../patroni/user_grants_permission.md)
 * [patroni-consul-postgres-pgbouncer-interactions.md](patroni-consul-postgres-pgbouncer-interactions.md)
 * [Add a new PgBouncer instance](pgbouncer-add-instance.md)

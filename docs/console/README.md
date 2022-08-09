@@ -65,6 +65,7 @@
 * [How to provision the benchmark environment](../patroni/provisioning_bench_env.md)
 * [Rotating Rails' PostgreSQL password](../patroni/rotating-rails-postgresql-password.md)
 * [Patroni](../patroni/scale-down-patroni.md)
+* [Patroni](../patroni/unhealthy_patroni_node_handling.md)
 * [../pgbouncer/patroni-consul-postgres-pgbouncer-interactions.md](../pgbouncer/patroni-consul-postgres-pgbouncer-interactions.md)
 * [Add a new PgBouncer instance](../pgbouncer/pgbouncer-add-instance.md)
 * [PgBouncer connection management and troubleshooting](../pgbouncer/pgbouncer-connections.md)
