@@ -1,6 +1,6 @@
 # Patroni Cluster Management
 
-[[TOC]]
+[[_TOC_]]
 
 ## About
 
@@ -604,11 +604,11 @@ by running `sudo chef-client` across the cluster.
 
 ## Scaling the cluster up
 
-Here the link to the [Scale Up Patroni runbook](runbooks/docs/patroni/scale-up-patroni.md).
+Here the link to the [Scale Up Patroni runbook](scale-up-patroni.md).
 
 ## Scaling the cluster down
 
-Here the link to the [Scale Down Patroni runbook](runbooks/docs/patroni/scale-down-patroni.md).
+Here the link to the [Scale Down Patroni runbook](scale-down-patroni.md).
 
 ## Auditing patroni
 
