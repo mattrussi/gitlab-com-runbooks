@@ -1,4 +1,6 @@
-# Patroni
+# Patroni Cluster Management
+
+[[TOC]]
 
 ## About
 
@@ -7,33 +9,6 @@ Here the link to the video of the [runbook simulation](https://youtu.be/QZO7ba_8
 [Patroni](https://github.com/zalando/patroni) is an open source project for providing automatic HA solution for PostgreSQL databases. It also has centralized configuration managment capabilities and it fully integrated with [Consul](https://www.consul.io/) to provide _consensus_, and dns services. Each patroni instance have a `consul` agent, who act as a proxy for the GitLab Consul fleet.
 
 Patroni binaries runs in the same host as the PostgreSQL database. In a sense, Patroni can be seen as a way of manage a PostgreSQL instance. Configuration and general operations of PostgreSQL instances is now achieved by using the corresponding Patroni command to do so.
-
-## Scaling the cluster up
-
-Here the link to the video of the [runbook simulation](https://youtu.be/smTxWP9q3EQ).
-
-1. Increase the node count of `patroni` in [terraform][environment-variables].
-1. Apply the terraform and wait for chef to converge.
-1. On the new box, `gitlab-patronictl list` and ensure that the other cluster
-   members are identical to those seen by running the same command on another
-   cluster member.
-1. `systemctl enable patroni && systemctl start patroni` (for some reason we do
-   not automate this yet, but this operation is rare).
-1. Follow the patroni logs. Current implementation for bootstraping new nodes implies taking a `pg_basebackup` from the leader. This will take several hours, after which
-   point streaming replication will begin. Silence alerts as necessary.
-
-## Scaling the cluster down
-
-Here the link to the video of the [runbook simulation](https://youtu.be/smTxWP9q3EQ).
-
-1. Using this method, we can only delete the highest index of patroni. Make sure
-   it isn't the primary!
-1. Take the replica out of the read replica pool, and ensure it doesn't become
-   the primary if we are unlucky enough to suffer a failover while scaling the
-   cluster down: follow the [replica maintenance](#replica-maintenance)
-   instructions.
-1. Decrease the node count of `patroni` in [terraform][environment-variables].
-   Review the terraform plan carefully, and then apply it.
 
 ## Patroni basics
 
@@ -626,6 +601,14 @@ by running `sudo chef-client` across the cluster.
 [patroni-is-postmaster]: https://github.com/zalando/patroni/blob/13c88e8b7a27b68e5c554d83d14e5cf640871ccc/patroni/postmaster.py#L55-L58
 [upgrade-patroni-ansible]: https://gitlab.com/gitlab-com/gl-infra/ansible-migrations/blob/master/production-1172
 [chef-repo]: https://ops.gitlab.net/gitlab-cookbooks/chef-repo/
+
+## Scaling the cluster up
+
+Here the link to the [Scale Up Patroni runbook](runbooks/docs/patroni/scale-up-patroni.md).
+
+## Scaling the cluster down
+
+Here the link to the [Scale Down Patroni runbook](runbooks/docs/patroni/scale-down-patroni.md).
 
 ## Auditing patroni
 

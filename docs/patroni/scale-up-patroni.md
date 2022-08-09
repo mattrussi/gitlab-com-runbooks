@@ -1,4 +1,4 @@
-# Patroni
+# Scale Up Patroni
 
 ## Scale Up
 
