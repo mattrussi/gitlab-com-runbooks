@@ -1,16 +1,14 @@
-# Patroni
+# Handling Unhealthy Patroni Replica
 
 [[_TOC_]]
 
-## Handling Unhealthy Patroni Replica
-
-### Overview
+## Overview
 
 This runbook goal is to guide you on the evaulation of one ore more unhealthy Patroni replica node that could be causing searious application response time impact, and the steps necessary to remove the unhealthy replica if necessary.
 
 Use this runbook as a guidance on how to diangnose if the Replica is considered Unhealthy and how to safely remove a random node from the Patroni cluster, which is not the same process as scaling down the cluster (that only removes the last nodes of the cluster).
 
-### Pre-requisite
+## Pre-requisite
 
 - Patroni
   This runbook assumes that you know what Patroni is, what and how we use it for and possible consequences that might come up if we do not approach this operation carefully. This is not to scare you away, but in the worst case: Patroni going down means we will lose our ability to preserve HA (High Availability) on Postgres. Postgres not being HA means if there is an issue with the primary node Postgres wouldn't be able to do a failover and GitLab would shut down to the world. Thus, this runbook assumes you know this ahead of time before you execute this runbook.
@@ -21,11 +19,11 @@ Use this runbook as a guidance on how to diangnose if the Replica is considered 
 - Terraform
   You are expected to know what Terraform is, how we use it and how we make change safely (`tf plan` first).
 
-### Scope
+## Scope
 
 This runbook is intended only for one or more `read` replica node(s) of Patroni cluster.
 
-### Mental Model
+## Mental Model
 
 There was an incident but you should not panic, take a deep breath before moving into the steps of this runbook.
 
@@ -47,9 +45,9 @@ What this means is that we need to be aware of and think of:
 - Let Terraform replace the instance
 - Initialize the Patroni service in the replaced instance to re-build it back as a PostgreSQL Replica
 
-## Diagnose
+# Diagnose
 
-### Node availability
+## Node availability
 
 The main reason that an instance is unhealthy is if it's considered unavailable.
 
@@ -61,7 +59,7 @@ The 3 evidences that point if a Patroni instance is unavailable are:
 
 Beside unavailability, a Patroni instance can be considered available but unhealthy for other reasons like Replication Lagging and Resource Contention.
 
-### Replication Lagging
+## Replication Lagging
 
 If just one or a few Replicas are lagging in relation with the Primary/Writer node there is a great chance that the issue is on the Replica side, so the first evidence of an available but unhealthy replica is replication lag.
 
@@ -92,7 +90,7 @@ If just one or a few Replicas are lagging in relation with the Primary/Writer no
 
 - Or you can look into the `Lag time` or `Lag size` Graphana dashboards, or `pg_replication_lag` or `pg_stat_replication_pg_wal_lsn_diff` Thanos metrics.
 
-### Resource Contention
+## Resource Contention
 
 If there is intense resource contention a resource can become unhealthy and get stuck/unavailable, check for:
 
@@ -102,19 +100,19 @@ If there is intense resource contention a resource can become unhealthy and get 
 - Memory Swapping (ocasional swapping can happen, intense swapping can cause PostgreSQL to hang)
 - OOM Kill messages in syslog or VM serial console
 
-## Draining Workload from the Unhealty Patroni replica
+# Draining Workload from the Unhealty Patroni replica
 
-### Preparation
+## Preparation
 
 - You should do this activity in a CR (thus, allowing you to practice all of it in staging first)
 - Make sure the replica you are trying to remove is NOT the primary, by running `gitlab-patronictl list` on a patroni node
 - Pull up the [Host Stats](https://dashboards.gitlab.net/d/bd2Kl9Imk) Grafana dashboard and switch to the target replica host to be removed. This will help you monitor the host.
 
-### Step 1 - Stop chef-client
+## Step 1 - Stop chef-client
 
 1. On the replica node run: `sudo chef-client-disable "Removing patroni node: Ref issue prod#xyz"`
 
-### Step 2 - Take the replicate node out of load balancing
+## Step 2 - Take the replicate node out of load balancing
 
  If clients are connecting to replicas by means of [service discovery](https://docs.gitlab.com/ee/administration/database_load_balancing.html#service-discovery) (as opposed to hard-coded list of hosts), you can remove a replica from the list of hosts used by the clients by tagging it as not suitable for failing over (`nofailover: true`) and load balancing (`noloadbalance: true`). (If clients are configured with `replica.patroni.service.consul. DNS record` look at [this legacy method](https://gitlab.com/gitlab-com/runbooks/-/blob/master/docs/patroni/patroni-management.md#legacy-method-consul-maintenance))
 
@@ -165,17 +163,17 @@ If there is intense resource contention a resource can become unhealthy and get 
 
 You can see an example of taking a node out of service in [this issue](https://gitlab.com/gitlab-com/gl-infra/production/-/issues/1061).
 
-### Step 3 - Decide if you will remove the node or wait for it to recover
+## Step 3 - Decide if you will remove the node or wait for it to recover
 
 This is a critical decision because replacing a Patroni Replica can take a couple of hours, but letting it to recover without intervention can take up to several days deppending on lag size and write workload.
 
 If you decide to relpace the unhealthy replica proceed to the next chapter.
 
-## Removing an unhealty replica from the Patroni cluster
+# Removing an unhealty replica from the Patroni cluster
 
 **IMPORTANT:** make sure that the connections that the workload is drained from the unhealthy replica (link to previous chapter)
 
-### Step 1 - Stop patroni service on the node
+## Step 1 - Stop patroni service on the node
 
 Now it is safe to stop the patroni service on this node. This will also stop postgres and thus terminate all remaining db connections if there are still some. With the patroni service stopped, you should see this node vanish from the cluster after a while when you run `gitlab-patronictl list` on any of the other nodes.
 
@@ -194,7 +192,7 @@ We have alerts that fire when patroni is deemed to be down. Since this is an int
    sudo gitlab-patronictl list
    ```
 
-### Step 2 - Shutdown the node
+## Step 2 - Shutdown the node
 
 1. Find the instance name in GCloud
 
@@ -207,7 +205,7 @@ We have alerts that fire when patroni is deemed to be down. Since this is an int
  gcloud compute instances stop $INSTANCE_NAME
  ```
 
-### Step 3 - Delete the VM and disks
+## Step 3 - Delete the VM and disks
 
 1. List the VM Disks
 
@@ -215,9 +213,9 @@ We have alerts that fire when patroni is deemed to be down. Since this is an int
 
     ```
     IFS=","
-    echo "#### List disks:"
+    echo "## List disks:"
     gcloud compute instances describe $INSTANCE_NAME --format="value(disks.source.list())"
-    echo "#### Delete Disks Commands - TAKE NOTE of them:"
+    echo "## Delete Disks Commands - TAKE NOTE of them:"
     for disk in $(gcloud compute instances describe $INSTANCE_NAME --format="value(disks.source.basename().list())")
     do
       echo "Run: gcloud compute disks delete $disk --zone <zone_name>"
@@ -267,9 +265,9 @@ We have alerts that fire when patroni is deemed to be down. Since this is an int
     knife client delete <NODE_NAME>
     ```
 
-## Replacing the removed replica
+# Replacing the removed replica
 
-### Step 1 - Take a Disk Snapshot of the backup node, to recreate the replica
+## Step 1 - Take a Disk Snapshot of the backup node, to recreate the replica
 
 1. Find which instance is the database cluster Backup Node
 
@@ -286,7 +284,7 @@ We have alerts that fire when patroni is deemed to be down. Since this is an int
   /usr/local/bin/gcs-snapshot.sh
   ```
 
-### Step 2 - Recreate the removed node
+## Step 2 - Recreate the removed node
 
 You can use the following steps to create all or a subset of the patroni CI instances, just depending on how many instances were previously destroyed.
 
@@ -353,7 +351,7 @@ You can use the following steps to create all or a subset of the patroni CI inst
   ssh <node_fqdn> "systemctl enable patroni && systemctl start patroni"
   ```
 
-### Step 3 - Check Patroni, PGBouncer and PostgreSQL
+## Step 3 - Check Patroni, PGBouncer and PostgreSQL
 
 - Login into the node and check if Patroni is running and in sync with Writer/Primary
 
@@ -393,6 +391,6 @@ You can use the following steps to create all or a subset of the patroni CI inst
     and datname <> 'postgres'"
   ```
 
-## Reference
+# Reference
 
 [Patroni Management Internal Doc](https://gitlab.com/gitlab-com/runbooks/-/blob/master/docs/patroni/patroni-management.md).
