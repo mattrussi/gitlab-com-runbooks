@@ -607,7 +607,6 @@ chef-repo $ knife ssh roles:gstg-base-db-patroni 'sudo systemctl start patroni'
 You may need to adjust the Patroni Chef role before restarting the `patroni` service, like adding the standby config followed
 by running `sudo chef-client` across the cluster.
 
-[environment-variables]: https://ops.gitlab.net/gitlab-com/gitlab-com-infrastructure/blob/989d22c9d15b75812d3d116a94513d34428c021e/environments/gstg/variables.tf#L382
 [pause-docs]: https://github.com/zalando/patroni/blob/v1.5.0/docs/pause.rst
 [service-discovery]: https://docs.gitlab.com/ee/administration/database_load_balancing.html#service-discovery
 [patroni-is-postmaster]: https://github.com/zalando/patroni/blob/13c88e8b7a27b68e5c554d83d14e5cf640871ccc/patroni/postmaster.py#L55-L58
