@@ -610,6 +610,11 @@ Here the link to the [Scale Up Patroni runbook](scale-up-patroni.md).
 
 Here the link to the [Scale Down Patroni runbook](scale-down-patroni.md).
 
+
+## Replacing a cluster node
+
+The process and steps to diagnose and replace an unhealthy Patroni node are detailed in the [Handling Unhealthy Patroni Replica runbook](unhealthy_patroni_node_handling.md).
+
 ## Auditing patroni
 
 Patroni holds a log file under `/var/log/gitlab/patroni/patroni.log` where patroni activity and messages can be found:
