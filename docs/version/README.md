@@ -45,7 +45,7 @@
 * [Custom PostgreSQL Package Build Process for Ubuntu Xenial 16.04](../patroni/custom_postgres_packages.md)
 * [../patroni/database_peak_analysis.md](../patroni/database_peak_analysis.md)
 * [Geo Patroni Cluster Management](../patroni/geo-patroni-cluster.md)
-* [Patroni](../patroni/patroni-management.md)
+* [Patroni Cluster Management](../patroni/patroni-management.md)
 * [Postgresql minor upgrade](../patroni/pg_minor_upgrade.md)
 * [../patroni/postgres-checkup.md](../patroni/postgres-checkup.md)
 * [postgres_exporter](../patroni/postgres_exporter.md)
