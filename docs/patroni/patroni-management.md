@@ -577,7 +577,19 @@ earlier state:
 This procedure is rather manual and lengthy, but this does not happen often and
 has no directly user-facing impact.
 
-## Replacing a cluster with a new one
+## Replacing a cluster node
+
+The process and steps to diagnose and replace an unhealthy Patroni node are detailed in the [Handling Unhealthy Patroni Replica runbook](unhealthy_patroni_node_handling.md).
+
+## Scaling the cluster up
+
+Here the link to the [Scale Up Patroni runbook](scale-up-patroni.md).
+
+## Scaling the cluster down
+
+Here the link to the [Scale Down Patroni runbook](scale-down-patroni.md).
+
+## Replacing the whole cluster (with a new one)
 
 **Take care when doing these steps, results can be catastrophic**
 
@@ -601,19 +613,6 @@ by running `sudo chef-client` across the cluster.
 [patroni-is-postmaster]: https://github.com/zalando/patroni/blob/13c88e8b7a27b68e5c554d83d14e5cf640871ccc/patroni/postmaster.py#L55-L58
 [upgrade-patroni-ansible]: https://gitlab.com/gitlab-com/gl-infra/ansible-migrations/blob/master/production-1172
 [chef-repo]: https://ops.gitlab.net/gitlab-cookbooks/chef-repo/
-
-## Scaling the cluster up
-
-Here the link to the [Scale Up Patroni runbook](scale-up-patroni.md).
-
-## Scaling the cluster down
-
-Here the link to the [Scale Down Patroni runbook](scale-down-patroni.md).
-
-
-## Replacing a cluster node
-
-The process and steps to diagnose and replace an unhealthy Patroni node are detailed in the [Handling Unhealthy Patroni Replica runbook](unhealthy_patroni_node_handling.md).
 
 ## Auditing patroni
 
