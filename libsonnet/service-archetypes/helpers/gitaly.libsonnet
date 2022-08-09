@@ -53,9 +53,6 @@ local gitalyApdexSlowMethods = [
   'RepositorySize',
 ];
 
-// Ignored because of https://gitlab.com/gitlab-org/gitaly/-/issues/3441
-local gitalyRubyApdexIgnoredMethods = gitalyApdexIgnoredMethods + ['GetLFSPointers', 'GetAllLFSPointers'];
-
 // This calculates the apdex score for a Gitaly-like (Gitaly/Praefect)
 // GRPC service. Since this is an SLI only, not all operations are included,
 // only unary ones, and even then known slow operations are excluded from
@@ -99,7 +96,6 @@ local gitalyGRPCErrorRate(baseSelector) =
 
 {
   gitalyApdexIgnoredMethods:: gitalyApdexIgnoredMethods,
-  gitalyRubyApdexIgnoredMethods:: gitalyRubyApdexIgnoredMethods,
   gitalyApdexSlowMethods:: gitalyApdexSlowMethods,
 
   grpcServiceApdex:: grpcServiceApdex,

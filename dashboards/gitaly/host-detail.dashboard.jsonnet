@@ -169,16 +169,6 @@ basic.dashboard(
   ), gridPos={ x: 0, y: 7000 }
 )
 .addPanel(
-  metricsCatalogDashboards.sliDetailMatrix(
-    'gitaly',
-    'gitalyruby',
-    selectorHash,
-    [
-      { title: 'Overall', aggregationLabels: '', selector: {}, legendFormat: 'gitalyruby' },
-    ],
-  ), gridPos={ x: 0, y: 7100 }
-)
-.addPanel(
   row.new(title='gitaly process activity'),
   gridPos={
     x: 0,
