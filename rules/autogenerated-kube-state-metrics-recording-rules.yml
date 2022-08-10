@@ -516,7 +516,7 @@ groups:
       group without(label_stage,label_shard) (
         label_replace(
           label_replace(
-            topk by(environment,cluster,horizontalpodautoscaler) (1, kube_horizontalpodautoscaler_labels{label_app="nginx-ingress"}),
+            topk by(environment,cluster,horizontalpodautoscaler) (1, kube_horizontalpodautoscaler_labels{label_type="nginx"}),
             "stage", "$0", "label_stage", ".*"
           ),
           "shard", "$0", "label_shard", ".*"
