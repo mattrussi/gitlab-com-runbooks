@@ -20,6 +20,14 @@ metricsCatalog.serviceDefinition({
     vms: false,
     kubernetes: true,
   },
+  kubeResources: {
+    camoproxy: {
+      kind: 'Deployment',
+      containers: [
+        'camoproxy',
+      ],
+    },
+  },
   serviceLevelIndicators: {
     loadbalancer: googleLoadBalancerComponents.googleLoadBalancer(
       userImpacting=true,

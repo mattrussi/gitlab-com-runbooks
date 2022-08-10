@@ -350,6 +350,7 @@ local dashboardsForService(type) =
 local deploymentOverview(type, selector, startRow=1) =
   local serviceInfo = metricsCatalog.getService(type);
   local deployments = std.objectFields(serviceInfo.kubeResources);
+  local serviceHasDedicatedKubeNodePool = serviceInfo.hasDedicatedKubeNodePool();
 
   // Add links to direct users to kubernetes specific dashboards
   local links = [{
@@ -371,11 +372,12 @@ local deploymentOverview(type, selector, startRow=1) =
           panelsForDeployment(type, deployment, selector)
         ),
       deployments
-    )
-    +
-    [
-      panelsForRequestsUtilization(type, selector),
-    ],
+    ) + (
+      if serviceHasDedicatedKubeNodePool then
+        [panelsForRequestsUtilization(type, selector)]
+      else
+        []
+    ),
     rowHeight=8,
     startRow=startRow
   );
