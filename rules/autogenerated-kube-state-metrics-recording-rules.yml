@@ -1376,7 +1376,7 @@ groups:
         label_replace(
           label_replace(
             label_replace(
-              topk by(environment,cluster,pod) (1, kube_pod_labels{namespace="woodhouse"}),
+              topk by(environment,cluster,pod) (1, kube_pod_labels{label_stage="main",label_type="woodhouse"}),
               "stage", "$0", "label_stage", ".*"
             ),
             "shard", "$0", "label_shard", ".*"
@@ -1392,7 +1392,7 @@ groups:
       group without(label_stage,label_shard) (
         label_replace(
           label_replace(
-            topk by(environment,cluster,ingress) (1, kube_ingress_labels{namespace="woodhouse"}),
+            topk by(environment,cluster,ingress) (1, kube_ingress_labels{label_stage="main",label_type="woodhouse"}),
             "stage", "$0", "label_stage", ".*"
           ),
           "shard", "$0", "label_shard", ".*"
@@ -1406,7 +1406,7 @@ groups:
       group without(label_stage,label_shard) (
         label_replace(
           label_replace(
-            topk by(environment,cluster,deployment) (1, kube_deployment_labels{namespace="woodhouse"}),
+            topk by(environment,cluster,deployment) (1, kube_deployment_labels{label_stage="main",label_type="woodhouse"}),
             "stage", "$0", "label_stage", ".*"
           ),
           "shard", "$0", "label_shard", ".*"
