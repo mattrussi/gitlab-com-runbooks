@@ -60,7 +60,7 @@
 * [Recovering from CI Patroni cluster lagging too much or becoming completely broken](../patroni-ci/recovering_patroni_ci_intense_lagging_or_replication_stopped.md)
 * [Custom PostgreSQL Package Build Process for Ubuntu Xenial 16.04](../patroni/custom_postgres_packages.md)
 * [Geo Patroni Cluster Management](../patroni/geo-patroni-cluster.md)
-* [Patroni](../patroni/patroni-management.md)
+* [Patroni Cluster Management](../patroni/patroni-management.md)
 * [Pg_repack using gitlab-pgrepack](../patroni/pg_repack.md)
 * [How to provision the benchmark environment](../patroni/provisioning_bench_env.md)
 * [PgBouncer connection management and troubleshooting](../pgbouncer/pgbouncer-connections.md)

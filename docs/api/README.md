@@ -52,7 +52,7 @@
 * [Gitlab.com on Kubernetes](../onboarding/gitlab.com_on_k8s.md)
 * [Diagnosis with Kibana](../onboarding/kibana-diagnosis.md)
 * [../patroni/database_peak_analysis.md](../patroni/database_peak_analysis.md)
-* [Patroni](../patroni/patroni-management.md)
+* [Patroni Cluster Management](../patroni/patroni-management.md)
 * [../patroni/pg_collect_query_data.md](../patroni/pg_collect_query_data.md)
 * [Pg_repack using gitlab-pgrepack](../patroni/pg_repack.md)
 * [../patroni/postgres.md](../patroni/postgres.md)

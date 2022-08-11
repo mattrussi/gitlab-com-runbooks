@@ -42,7 +42,7 @@
 * [../patroni/postgresql-backups-wale-walg.md](../patroni/postgresql-backups-wale-walg.md)
 * [Credential rotation](../patroni/postgresql-role-credential-rotation.md)
 * [Rails SQL Apdex alerts](../patroni/rails-sql-apdex-slow.md)
-* [Patroni](../patroni/unhealthy_patroni_node_handling.md)
+* [Handling Unhealthy Patroni Replica](../patroni/unhealthy_patroni_node_handling.md)
 * [Praefect error rate is too high](../praefect/praefect-error-rate.md)
 * [A survival guide for SREs to working with Redis at GitLab](../redis/redis-survival-guide-for-sres.md)
 * [A survival guide for SREs to working with Sidekiq at GitLab](../sidekiq/sidekiq-survival-guide-for-sres.md)
