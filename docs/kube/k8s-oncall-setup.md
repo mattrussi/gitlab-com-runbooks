@@ -35,7 +35,6 @@ through a proxy.
 1. Setup bastion for clusters: <https://gitlab.com/gitlab-com/runbooks/-/tree/master/docs/bastions>
 1. Install `gcloud`: <https://cloud.google.com/sdk/docs/install>
 1. Install `kubectl`: <https://kubernetes.io/docs/tasks/tools/install-kubectl-windows/>
-1. Install `sshuttle`: <https://github.com/sshuttle/sshuttle#obtaining-sshuttle>
 1. Run `gcloud auth login`: The browser will open to choose with google email
    address to use to allow for oauth.
 
