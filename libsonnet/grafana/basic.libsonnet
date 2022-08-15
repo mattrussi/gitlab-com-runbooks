@@ -309,6 +309,7 @@ local validateTags(tags) =
     yAxis_format='s',
     stableId=null,
     dataFormat='timeseries',
+    color_cardColor='#b4ff00',
     hideZeroBuckets=true
   )::
     heatmapPanel.new(
@@ -318,6 +319,7 @@ local validateTags(tags) =
       legend_show=legend_show,
       yAxis_format=yAxis_format,
       color_mode='opacity',
+      color_cardColor=color_cardColor,
       dataFormat=dataFormat,
       hideZeroBuckets=hideZeroBuckets
     )
