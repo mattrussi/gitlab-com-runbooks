@@ -25,6 +25,12 @@ groups:
     expr: "1"
   - record: gitlab:feature_category:stage_group:mapping
     labels:
+      feature_category: application_performance
+      product_stage: data_stores
+      stage_group: application_performance
+    expr: "1"
+  - record: gitlab:feature_category:stage_group:mapping
+    labels:
       feature_category: attack_emulation
       product_stage: secure
       stage_group: dynamic_analysis
@@ -58,6 +64,12 @@ groups:
       feature_category: backup_restore
       product_stage: systems
       stage_group: geo
+    expr: "1"
+  - record: gitlab:feature_category:stage_group:mapping
+    labels:
+      feature_category: billing_and_subscription_management
+      product_stage: fulfillment
+      stage_group: billing_and_subscription_management
     expr: "1"
   - record: gitlab:feature_category:stage_group:mapping
     labels:
@@ -427,12 +439,6 @@ groups:
     expr: "1"
   - record: gitlab:feature_category:stage_group:mapping
     labels:
-      feature_category: memory
-      product_stage: data_stores
-      stage_group: memory
-    expr: "1"
-  - record: gitlab:feature_category:stage_group:mapping
-    labels:
       feature_category: merge_trains
       product_stage: verify
       stage_group: pipeline_execution
@@ -579,7 +585,7 @@ groups:
     labels:
       feature_category: redis
       product_stage: data_stores
-      stage_group: memory
+      stage_group: application_performance
     expr: "1"
   - record: gitlab:feature_category:stage_group:mapping
     labels:

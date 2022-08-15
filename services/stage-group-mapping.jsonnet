@@ -302,6 +302,13 @@
       'fulfillment_platform',
     ],
   },
+  billing_and_subscription_management: {
+    name: 'Billing and Subscription Management',
+    stage: 'fulfillment',
+    feature_categories: [
+      'billing_and_subscription_management',
+    ],
+  },
   acquisition: {
     name: 'Acquisition',
     stage: 'growth',
@@ -350,11 +357,11 @@
       'backup_restore',
     ],
   },
-  memory: {
-    name: 'Memory',
+  application_performance: {
+    name: 'Application Performance',
     stage: 'data_stores',
     feature_categories: [
-      'memory',
+      'application_performance',
       'redis',
     ],
   },
