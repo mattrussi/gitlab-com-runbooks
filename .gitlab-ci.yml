@@ -646,9 +646,8 @@ check-stage-groups:
       allow_failure: true
   stage: test
   script:
-    - scripts/update_stage_groups_feature_categories.rb
-    - scripts/update_stage_groups_dashboards.rb
-    - scripts/update_stage_error_budget_dashboards.rb
+    - ./scripts/bundler.sh  # Install jsonnet bundles, required for make generate
+    - make update-feature-categories
     - git diff --exit-code
 
 generate_service_maturity_manifest:

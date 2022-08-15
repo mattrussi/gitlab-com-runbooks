@@ -31,6 +31,16 @@ groups:
       product_stage: growth
       stage_group: activation
     expr: "1"
+- name: 'Stage group Ignored components: data_stores - Application Performance'
+  interval: 1m
+  partial_response_strategy: warn
+  rules:
+  - record: gitlab:ignored_component:stage_group
+    labels:
+      component: graphql_queries
+      product_stage: data_stores
+      stage_group: application_performance
+    expr: "1"
 - name: 'Stage group Ignored components: modelops - Applied Machine Learning'
   interval: 1m
   partial_response_strategy: warn
@@ -240,16 +250,6 @@ groups:
       component: graphql_queries
       product_stage: ecosystem
       stage_group: integrations
-    expr: "1"
-- name: 'Stage group Ignored components: data_stores - Memory'
-  interval: 1m
-  partial_response_strategy: warn
-  rules:
-  - record: gitlab:ignored_component:stage_group
-    labels:
-      component: graphql_queries
-      product_stage: data_stores
-      stage_group: memory
     expr: "1"
 - name: 'Stage group Ignored components: modelops - MLOps'
   interval: 1m

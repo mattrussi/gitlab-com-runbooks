@@ -112,6 +112,13 @@ ensure-generated-content-up-to-date: generate
 		[[ "$$(git ls-files -o --directory --exclude-standard | sed q | wc -l)" == "0" ]]) || \
 	(echo "Please run 'make generate'" && exit 1)
 
+.PHONY: .update-feature-categories
+.update-feature-categories:
+	./scripts/update_stage_groups_feature_categories.rb && ./scripts/update_stage_groups_dashboards.rb && ./scripts/update_stage_error_budget_dashboards.rb
+
+.PHONY: update-feature-categories
+update-feature-categories: .update-feature-categories generate
+
 # Ensure that you have Graphviz and Python installed
 # Instructions at https://diagrams.mingrammer.com/docs/getting-started/installation
 # then install `pip install diagrams`
