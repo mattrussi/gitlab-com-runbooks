@@ -7,8 +7,8 @@ Whoever is in that role can help you get other people to help with whatever is n
 
 Roles for an incident can be found in the [incident management section of the handbook](https://about.gitlab.com/handbook/engineering/infrastructure/incident-management/)
 
-If you need to start an incident, you can post in the #incident channel(https://gitlab.slack.com/messages/CB7P5CJS1)
-If you use /start-incident - a bot will make and issue/google doc and zoom link for you.
+If you need to [report an incident](https://about.gitlab.com/handbook/engineering/infrastructure/incident-management/#reporting-an-incident), you can post in the [#incident-management channel](https://gitlab.slack.com/messages/CB7P5CJS1) or [#production channel](https://gitlab.slack.com/archives/C101F3796).
+If you use `/incident` - a bot will make and issue/google doc and zoom link for you.
 
 ## Communication Tools
 
@@ -54,7 +54,7 @@ During a high-profile and high-impact incident (e.g severity 1), one of your pri
 
 See the guidance from the IMOC onboarding:
 
-- [How does an Incident Manager effectively engage with the Engineer On-Call?](https://gitlab.com/gitlab-com/gl-infra/infrastructure/-/blob/master/.gitlab/issue_templates/onboarding-im.md#how-does-an-incident-manager-effectively-engage-with-the-engineer-on-call).
+- [How does an Incident Manager effectively engage with the Engineer On-Call?](https://gitlab.com/gitlab-com/gl-infra/reliability/-/blob/master/.gitlab/issue_templates/onboarding-im.md#how-does-an-incident-manager-effectively-engage-with-the-engineer-on-call).
 
 ### Estimate the Severity of the issue
 
