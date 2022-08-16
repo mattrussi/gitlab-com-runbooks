@@ -13,6 +13,7 @@
         },
       },
       warm: {
+        min_age: '2d',
         actions: {
           allocate: {
             require: {
