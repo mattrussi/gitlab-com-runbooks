@@ -774,7 +774,7 @@ groups:
           clamp_max(
             avg_over_time(pgbouncer_used_clients{type=~"pgbouncer|pgbouncer-registry|pgbouncer-ci"}[5m])
             /
-            10000
+            12000
             ,
             1)
         ,
@@ -4263,7 +4263,7 @@ groups:
             clamp_max(
               avg_over_time(pgbouncer_used_clients{environment="{{ $labels.environment }}",stage="{{ $labels.stage }}",type="{{ $labels.type }}"}[5m])
               /
-              10000
+              12000
               ,
               1)
           ,
