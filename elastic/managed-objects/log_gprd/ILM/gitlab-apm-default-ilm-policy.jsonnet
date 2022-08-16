@@ -19,6 +19,9 @@
             require: {
               data: 'warm',
             },
+            include: {
+              _tier_preference: 'data_warm,data_hot',
+            },
           },
           readonly: {},
           set_priority: {
