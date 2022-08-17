@@ -48,6 +48,32 @@ groups:
           gitlab_component_ops:rate{component="rails_requests",tier="sv",type="customersdot"}
         )
       )
+  - record: gitlab_component_ops:rate
+    labels:
+      component: sidekiq_jobs
+      tier: sv
+      type: customersdot
+    expr: |
+      sum by (environment,stage) (
+        rate(sidekiq_processed_jobs_total{type="customersdot"}[1m])
+      )
+  - record: gitlab_component_errors:rate
+    labels:
+      component: sidekiq_jobs
+      tier: sv
+      type: customersdot
+    expr: |
+      (
+        sum by (environment,stage) (
+          rate(sidekiq_failed_jobs_total{type="customersdot"}[1m])
+        )
+      )
+      or
+      (
+        0 * group by(environment,stage) (
+          gitlab_component_ops:rate{component="sidekiq_jobs",tier="sv",type="customersdot"}
+        )
+      )
 - name: 'Component-Level SLIs: customersdot - 5m burn-rate'
   interval: 1m
   rules:
@@ -93,6 +119,32 @@ groups:
       (
         0 * group by(environment,stage) (
           gitlab_component_ops:rate_5m{component="rails_requests",tier="sv",type="customersdot"}
+        )
+      )
+  - record: gitlab_component_ops:rate_5m
+    labels:
+      component: sidekiq_jobs
+      tier: sv
+      type: customersdot
+    expr: |
+      sum by (environment,stage) (
+        rate(sidekiq_processed_jobs_total{type="customersdot"}[5m])
+      )
+  - record: gitlab_component_errors:rate_5m
+    labels:
+      component: sidekiq_jobs
+      tier: sv
+      type: customersdot
+    expr: |
+      (
+        sum by (environment,stage) (
+          rate(sidekiq_failed_jobs_total{type="customersdot"}[5m])
+        )
+      )
+      or
+      (
+        0 * group by(environment,stage) (
+          gitlab_component_ops:rate_5m{component="sidekiq_jobs",tier="sv",type="customersdot"}
         )
       )
 - name: 'Component-Level SLIs: customersdot - 30m burn-rate'
@@ -142,6 +194,32 @@ groups:
           gitlab_component_ops:rate_30m{component="rails_requests",tier="sv",type="customersdot"}
         )
       )
+  - record: gitlab_component_ops:rate_30m
+    labels:
+      component: sidekiq_jobs
+      tier: sv
+      type: customersdot
+    expr: |
+      sum by (environment,stage) (
+        rate(sidekiq_processed_jobs_total{type="customersdot"}[30m])
+      )
+  - record: gitlab_component_errors:rate_30m
+    labels:
+      component: sidekiq_jobs
+      tier: sv
+      type: customersdot
+    expr: |
+      (
+        sum by (environment,stage) (
+          rate(sidekiq_failed_jobs_total{type="customersdot"}[30m])
+        )
+      )
+      or
+      (
+        0 * group by(environment,stage) (
+          gitlab_component_ops:rate_30m{component="sidekiq_jobs",tier="sv",type="customersdot"}
+        )
+      )
 - name: 'Component-Level SLIs: customersdot - 1h burn-rate'
   interval: 1m
   rules:
@@ -187,6 +265,32 @@ groups:
       (
         0 * group by(environment,stage) (
           gitlab_component_ops:rate_1h{component="rails_requests",tier="sv",type="customersdot"}
+        )
+      )
+  - record: gitlab_component_ops:rate_1h
+    labels:
+      component: sidekiq_jobs
+      tier: sv
+      type: customersdot
+    expr: |
+      sum by (environment,stage) (
+        rate(sidekiq_processed_jobs_total{type="customersdot"}[1h])
+      )
+  - record: gitlab_component_errors:rate_1h
+    labels:
+      component: sidekiq_jobs
+      tier: sv
+      type: customersdot
+    expr: |
+      (
+        sum by (environment,stage) (
+          rate(sidekiq_failed_jobs_total{type="customersdot"}[1h])
+        )
+      )
+      or
+      (
+        0 * group by(environment,stage) (
+          gitlab_component_ops:rate_1h{component="sidekiq_jobs",tier="sv",type="customersdot"}
         )
       )
 - name: 'Component-Level SLIs: customersdot - 6h burn-rate'
@@ -236,6 +340,32 @@ groups:
           gitlab_component_ops:rate_6h{component="rails_requests",tier="sv",type="customersdot"}
         )
       )
+  - record: gitlab_component_ops:rate_6h
+    labels:
+      component: sidekiq_jobs
+      tier: sv
+      type: customersdot
+    expr: |
+      sum by (environment,stage) (
+        rate(sidekiq_processed_jobs_total{type="customersdot"}[6h])
+      )
+  - record: gitlab_component_errors:rate_6h
+    labels:
+      component: sidekiq_jobs
+      tier: sv
+      type: customersdot
+    expr: |
+      (
+        sum by (environment,stage) (
+          rate(sidekiq_failed_jobs_total{type="customersdot"}[6h])
+        )
+      )
+      or
+      (
+        0 * group by(environment,stage) (
+          gitlab_component_ops:rate_6h{component="sidekiq_jobs",tier="sv",type="customersdot"}
+        )
+      )
 - name: 'Component mapping: customersdot'
   interval: 1m
   rules:
@@ -244,6 +374,14 @@ groups:
       component: rails_requests
       regional_aggregation: "no"
       service_aggregation: "yes"
+      tier: sv
+      type: customersdot
+    expr: "1"
+  - record: gitlab_component_service:mapping
+    labels:
+      component: sidekiq_jobs
+      regional_aggregation: "no"
+      service_aggregation: "no"
       tier: sv
       type: customersdot
     expr: "1"

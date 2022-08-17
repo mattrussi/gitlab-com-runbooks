@@ -1,7 +1,9 @@
 local sliLibrary = import 'gitlab-slis/library.libsonnet';
 local maturityLevels = import 'service-maturity/levels.libsonnet';
 local metricsCatalog = import 'servicemetrics/metrics.libsonnet';
+local serviceLevelIndicatorDefinition = import 'servicemetrics/service_level_indicator_definition.libsonnet';
 local toolingLinks = import 'toolinglinks/toolinglinks.libsonnet';
+local rateMetric = metricsCatalog.rateMetric;
 
 metricsCatalog.serviceDefinition({
   type: 'customersdot',
@@ -39,6 +41,28 @@ metricsCatalog.serviceDefinition({
           ),
         ],
       },
+
+    sidekiq_jobs: {
+      local baseSelector = {
+        type: 'customersdot',
+      },
+
+      requestRate: rateMetric(
+        counter='sidekiq_processed_jobs_total',
+        selector=baseSelector
+      ),
+
+      errorRate: rateMetric(
+        counter='sidekiq_failed_jobs_total',
+        selector=baseSelector
+      ),
+
+      userImpacting: true,
+      severity: 's3',
+      serviceAggregation: false,
+      significantLabels: ['feature_category', 'endpoint_id'],
+      featureCategory: serviceLevelIndicatorDefinition.featureCategoryFromSourceMetrics,
+    },
   },
   skippedMaturityCriteria: maturityLevels.skip({
     'Structured logs available in Kibana': 'All logs are available in Stackdriver',
