@@ -205,7 +205,6 @@ test.suite({
       '🔬 SLI Detail: graphql_queries',
       '🔬 SLI Detail: puma',
       '🔬 SLI Detail: rails_requests',
-      '🔬 SLI Detail: sidekiq_jobs',
     ],
   },
 

@@ -1,7 +1,6 @@
 local sliLibrary = import 'gitlab-slis/library.libsonnet';
 local maturityLevels = import 'service-maturity/levels.libsonnet';
 local metricsCatalog = import 'servicemetrics/metrics.libsonnet';
-local serviceLevelIndicatorDefinition = import 'servicemetrics/service_level_indicator_definition.libsonnet';
 local toolingLinks = import 'toolinglinks/toolinglinks.libsonnet';
 local rateMetric = metricsCatalog.rateMetric;
 
@@ -47,6 +46,12 @@ metricsCatalog.serviceDefinition({
         type: 'customersdot',
       },
 
+      description: |||
+        This SLI monitors all Sidekiq jobs requests triggered in CustomersDot.
+        We're displaying the aggregation by endpoint and feature category of
+        the total number of processed request and of all the failed requests.
+      |||,
+
       requestRate: rateMetric(
         counter='sidekiq_processed_jobs_total',
         selector=baseSelector
@@ -61,7 +66,7 @@ metricsCatalog.serviceDefinition({
       severity: 's3',
       serviceAggregation: false,
       significantLabels: ['feature_category', 'endpoint_id'],
-      featureCategory: serviceLevelIndicatorDefinition.featureCategoryFromSourceMetrics,
+      featureCategory: 'fulfillment_platform',
     },
   },
   skippedMaturityCriteria: maturityLevels.skip({
