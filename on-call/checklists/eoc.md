@@ -103,6 +103,31 @@ This [pagerduty forum post][pagerduty-shadow-schedule] was referenced when setti
 shadow schedule][pagerduty-blank-schedule] and initial [overrides][pagerduty-overrides] for
 on-boarding new team members.
 
+### Creating temporary PagerDuty maintenance windows
+
+A temporary maintenance window may be created at any time using the `/chatops run pager pause`
+command in the [`#production` slack channel](https://gitlab.slack.com/archives/C101F3796). The
+default window duration is `1 hour`. To schedule a window for another duration a
+[`ruby chronic`-compatible time specification](https://github.com/mojombo/chronic#examples) can be used like so: `--duration="2 hours"`.
+
+For more options, use `/chatops run pager --help`:
+
+```
+Pause or resume pages.
+
+Usage: pager <pause|resume> [options]
+
+Options:
+
+  -h, --help           Shows this help message
+  --duration           Duration of window; default: 1 hour
+  --environment        Environment [production,staging,test]; default: production
+  --filter-by-creator  Filter maintenance windows by creator; default: false
+```
+
+Currently a maintenance window cannot be created for a duration smaller than 1 minute, according
+to undocumented implementation in the PagerDuty API.
+
 
 [on-call-issues]:                   https://gitlab.com/gitlab-com/gl-infra/reliability/-/issues?scope=all&utf8=%E2%9C%93&&state=all&label_name[]=oncall
 [active-production-incident-issues]:https://gitlab.com/gitlab-com/gl-infra/production/issues?state=open&label_name[]=Incident::Active
