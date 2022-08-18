@@ -31,7 +31,7 @@ A good mental model to have for this exercise is that we have a Patroni cluster 
 
 ## Step 1
 
-Increase the node count of patroni in [terraform](https://ops.gitlab.net/gitlab-com/gitlab-com-infrastructure/-/blob/master/environments/gstg/variables.tf). Scroll down, find the `variable "node_count"` section, `patroni` and bump up the corresponding number.
+Add a node to the `nodes` of the relevant cluster in [terraform](https://ops.gitlab.net/gitlab-com/gl-infra/config-mgmt/-/blob/master/environments/gstg/main.tf#L917). A new read-only replica is just `<NUMBER> => {}`. You should choose `<NUMBER>` to be 1 higher than the current largest number. You typically won't add anything to the options `{}` for a read-only replica as these options are used to configure special nodes that don't act as read-only replicas.
 
 ## Step 2
 

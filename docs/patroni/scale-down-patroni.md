@@ -27,24 +27,36 @@ Let's build a mental model of what all are at play before you scale down Patroni
 
 - We have a Patroni cluster up and running in production
 - The replica nodes are taking read requests and processing them
-- The fact that we have a cluster, it means the cluster might decide to promote any replica to primary (can be the target replica node you are trying to remove)
+- The fact that we have a cluster, it means the cluster might decide to promote any replica (except those with the tag `nofailover: true`) to primary (can be the target replica node you are trying to remove)
 - There is chef-client running regularly to enforce consistency
-- The cluster size is Terraform'd via [this](https://ops.gitlab.net/gitlab-com/gitlab-com-infrastructure/-/blob/989d22c9d15b75812d3d116a94513d34428c021e/shared/gstg-gprd/main.tf#L505-533)
+- The cluster size is Terraform'd via [this](https://ops.gitlab.net/gitlab-com/gl-infra/config-mgmt/-/blob/8457f47b65dd424127122e35acffd0948b346738/environments/gprd/main.tf#L1129-L1182)
 
 What this means is that we need to be aware of and think of:
 
-- Prevent the target replica node from getting promoted to primary
-- Stop chef-client so that any change we make to the replica node and patroni doesn't get overwritten
-- Take the node out of loadbalancing to drain all connections and then take the replica node out of the cluster
-- Make a Terraform change and merge. Given this is Terraform, what this means is that Terraform starts removing nodes from the highest ordered/numbered node. For example, if you are trying to remove a `patroni-56` but there is a `patroni-57` also then you cannot remove `patroni-56` itself. You would have to work with `patroni-57` (assuming `57` is the highest number)
+1. Choose a node that is not already the primary or specially configured.
+   1. You can determine the current primary by running `gitlab-patronictl list` on any Patroni node in the cluster
+   1. It should have `{}` for options (e.g., `1 = {}`), meaning that it's just a regular replica.
+   1. It's OK to take nodes from the middle as our terraform module is designed to handle gaps in the numbering.
+1. Prevent the target replica node from getting promoted to primary
+1. Stop chef-client so that any change we make to the replica node and Patroni doesn't get overwritten
+1. Prevent the target replica node from getting promoted to primary
+1. Take the node out of loadbalancing to drain all connections and then take the replica node out of the cluster
+   1. There is a [known issue with the Rails processes not refreshing their load balancer DNS cache](https://gitlab.com/gitlab-org/gitlab/-/issues/364370) and this may account for delays in draining connections. You may need to wait until the next deployment for all Rails processes to be restarted to see all connections drained from the replica. The rails processes should technically be resilient to replicas going down but waiting until connections drain would be the safest option.
+1. Make a Terraform change and merge.
 
 # Execution
 
 ## Preparation
 
-- You should do this activity in a CR (thus, allowing you to practice all of it in staging first)
-- Make sure the replica you are trying to remove is NOT the primary, by running `gitlab-patronictl list` on a patroni node
-- Pull up the [Host Stats](https://dashboards.gitlab.net/d/bd2Kl9Imk) Grafana dashboard and switch to the target replica host to be removed. This will help you monitor the host.
+1. You should do this activity in a CR (thus, allowing you to practice all of it in staging first). Here are examples of past change requests to scale down replicas:
+   1. Patroni Main:
+      1. [GSTG](https://gitlab.com/gitlab-com/gl-infra/production/-/issues/7529)
+      1. [GPRD](https://gitlab.com/gitlab-com/gl-infra/production/-/issues/7531)
+   1. Patroni CI:
+      1. [GSTG](https://gitlab.com/gitlab-com/gl-infra/production/-/issues/7528)
+      1. [GPRD](https://gitlab.com/gitlab-com/gl-infra/production/-/issues/7530)
+1. Make sure the replica you are trying to remove is NOT the primary, by running `gitlab-patronictl list` on a patroni node
+1. Pull up the [Host Stats](https://dashboards.gitlab.net/d/bd2Kl9Imk) Grafana dashboard and switch to the target replica host to be removed. This will help you monitor the host.
 
 ## Step 1 - Stop chef-client
 
@@ -52,9 +64,9 @@ What this means is that we need to be aware of and think of:
 
 ## Step 2 - Take the replicate node out of load balancing
 
- If clients are connecting to replicas by means of [service discovery](https://docs.gitlab.com/ee/administration/database_load_balancing.html#service-discovery) (as opposed to hard-coded list of hosts), you can remove a replica from the list of hosts used by the clients by tagging it as not suitable for failing over (`nofailover: true`) and load balancing (`noloadbalance: true`). (If clients are configured with `replica.patroni.service.consul. DNS record` look at [this legacy method](https://gitlab.com/gitlab-com/runbooks/-/blob/master/docs/patroni/patroni-management.md#legacy-method-consul-maintenance))
+ If clients are connecting to replicas by means of [service discovery](https://docs.gitlab.com/ee/administration/database_load_balancing.html#service-discovery) (as opposed to hard-coded list of hosts), which is the case for all Rails processes connecting to Patroni Main and Patroni CI, you can remove a replica from the list of hosts used by the clients by tagging it as not suitable for failing over (`nofailover: true`) and load balancing (`noloadbalance: true`). (If clients are configured with `replica.patroni.service.consul. DNS record` look at [this legacy method](https://gitlab.com/gitlab-com/runbooks/-/blob/master/docs/patroni/patroni-management.md#legacy-method-consul-maintenance))
 
-- Add a tags section to /var/opt/gitlab/patroni/patroni.yml on the node:
+1. Add a tags section to /var/opt/gitlab/patroni/patroni.yml on the node:
 
     ```
     tags:
@@ -62,8 +74,8 @@ What this means is that we need to be aware of and think of:
       noloadbalance: true
     ```
 
-- sudo systemctl reload patroni
-- Test the efficacy of that reload by checking for the node name in the list of replicas:
+1. sudo systemctl reload patroni
+1. Test the efficacy of that reload by checking for the node name in the list of replicas:
 
     ```
     dig @127.0.0.1 -p 8600 db-replica.service.consul. SRV
@@ -71,7 +83,7 @@ What this means is that we need to be aware of and think of:
 
     If the name is absent, then the reload worked.
 
-- Wait until all client connections are drained from the replica (it depends on the interval value set for the clients), use this command to track number of client connections:
+1. Wait until all client connections are drained from the replica (it depends on the interval value set for the clients), use this command to track number of client connections:
 
     ```
     for c in /usr/local/bin/pgb-console*; do $c -c 'SHOW CLIENTS;' | grep gitlabhq_production | grep -v gitlab-monitor; done | wc -l
@@ -88,20 +100,32 @@ What this means is that we need to be aware of and think of:
     AND usename <> 'postgres_exporter';"
     ```
 
+   NOTE: There is a [known issue with the Rails processes not refreshing their load balancer DNS cache](https://gitlab.com/gitlab-org/gitlab/-/issues/364370) and this may account for delays in draining connections. If this still isn't fixed, you may need to wait until the next deployment for all Rails processes to be restarted to see all connections drained from the replica. The rails processes should technically be resilient to replicas going down but waiting until connections drain would be the safest option.
+
 You can see an example of taking a node out of service in [this issue](https://gitlab.com/gitlab-com/gl-infra/production/-/issues/1061).
 
 ## Step 3 - Stop patroni service on the node
 
-Now it is save to stop the patroni service on this node. This will also stop postgres and thus terminate all remaining db connections if there are still some. With the patroni service stopped, you should see this node vanish from the cluster after a while when you run `gitlab-patronictl list` on any of the other nodes. We have alerts that fire when patroni is deemed to be down. Since this is an intentional change - either silence the alarm in advance and/or give a heads up to the EOC.
+Now it is safe to stop the Patroni service on this node:
+
+```
+sudo systemctl stop patroni
+```
+
+This will also stop Postgres and thus terminate all remaining db connections if there are still some. With the Patroni service stopped, you should see this node vanish from the cluster after a while when you run `gitlab-patronictl list` on any of the other nodes. We have alerts that fire when Patroni is deemed to be down. Since this is an intentional change - either silence the alarm in advance and/or give a heads up to the EOC.
 
 ## Step 4 - Terraform change to decrease the count
 
-- Decrease the count for `patroni` under the `node_count` variable (In the respective environment `variables.tf` in [the terraform code](https://ops.gitlab.net/gitlab-com/gitlab-com-infrastructure/-/blob/master/environments))
-- `tf plan -target=module.patroni` to make sure the plan output looks what you expect
-- MR it, merge it and `tf apply -target=module.patroni` it -- which would actually do the change
-- Wait until the node gets removed and torn down. (Validate it in GCP)
+1. Choose a node that is not already the primary or specially configured.
+   1. You can determine the current primary by running `gitlab-patronictl list` on any Patroni node in the cluster
+   1. It should have `{}` for options, meaning that it's just a regular replica.
+   1. It's OK to take nodes from the middle as our terraform module is designed to handle gaps in the numbering.
+1. Remove the `nodes` entry for the relevant node in the relavent cluster in [terraform](https://ops.gitlab.net/gitlab-com/gl-infra/config-mgmt/-/blob/master/environments/gstg/main.tf#L917).
+1. `tf plan` to make sure the plan output looks what you expect
+1. File an MR, get it reviewed/merged then monitor the `ops.gitlab.net` pipeline to review the plan and apply it (apply job will be in blocked state).
+1. Wait until the node gets removed and torn down. (Validate it in GCP)
 
-Take a look at a sample [code change](https://ops.gitlab.net/gitlab-com/gitlab-com-infrastructure/-/merge_requests/1828).
+Take a look at a sample [code change](https://ops.gitlab.net/gitlab-com/gl-infra/config-mgmt/-/merge_requests/4090).
 
 # Automation Thoughts
 
