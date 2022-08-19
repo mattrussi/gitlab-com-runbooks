@@ -37,7 +37,6 @@ What this means is that we need to be aware of and think of:
    1. You can determine the current primary by running `gitlab-patronictl list` on any Patroni node in the cluster
    1. It should have `{}` for options (e.g., `1 = {}`), meaning that it's just a regular replica.
    1. It's OK to take nodes from the middle as our terraform module is designed to handle gaps in the numbering.
-1. Prevent the target replica node from getting promoted to primary
 1. Stop chef-client so that any change we make to the replica node and Patroni doesn't get overwritten
 1. Prevent the target replica node from getting promoted to primary
 1. Take the node out of loadbalancing to drain all connections and then take the replica node out of the cluster
