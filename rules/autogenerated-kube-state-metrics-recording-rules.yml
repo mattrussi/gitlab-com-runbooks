@@ -1006,13 +1006,15 @@ groups:
       )
   - record: kube_node_labels:labeled
     labels:
-      stage: main
       tier: sv
       type: registry
     expr: |
-      group without(label_shard) (
+      group without(label_stage,label_shard) (
         label_replace(
-          topk by(environment,cluster,node) (1, kube_node_labels{label_type="registry"}),
+          label_replace(
+            topk by(environment,cluster,node) (1, kube_node_labels{label_stage=~"cny|main",label_type="registry"}),
+            "stage", "$0", "label_stage", ".*"
+          ),
           "shard", "$0", "label_shard", ".*"
         )
       )
