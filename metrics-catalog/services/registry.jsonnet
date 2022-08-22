@@ -49,12 +49,7 @@ metricsCatalog.serviceDefinition({
   kubeConfig: {
     labelSelectors: kubeLabelSelectors(
       ingressSelector=null,  // no ingress for registry
-      nodeSelector={ type: 'registry' },
-
-      // TODO: at present the registry nodes do not present a stage label
-      // assume they are all main stage
-      // See https://gitlab.com/gitlab-com/gl-infra/delivery/-/issues/2242
-      nodeStaticLabels={ stage: 'main' },
+      nodeSelector={ type: 'registry', stage: { oneOf: ['main', 'cny'] } },
     ),
   },
   kubeResources: {
