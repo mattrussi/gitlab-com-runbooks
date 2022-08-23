@@ -119,56 +119,5 @@ metricsCatalog.serviceDefinition({
         toolingLinks.kibana(title='Gitaly OperationService', index='gitaly', slowRequestSeconds=30, matches={ 'json.grpc.service': 'gitaly.OperationService' }),
       ],
     },
-
-    gitalyruby: {
-      userImpacting: true,
-      featureCategory: 'gitaly',
-      trafficCessationAlertConfig: {
-        component_node: false,  // No need to alert on GitalyRuby traffic on individual nodes
-      },
-      description: |||
-        This SLI monitors requests to Gitaly's Ruby sidecar, known as Gitaly-Ruby. All requests made to
-        Gitaly-Ruby are monitored in aggregate, via its GRPC interface.
-      |||,
-
-      local baseSelector = { job: 'gitaly' },
-
-      // Uses the goservers histogram, but only selects client unary calls: this is an effective proxy
-      // go gitaly-ruby client call times
-      apdex: customApdex(
-        rateQueryTemplate=|||
-          rate(grpc_server_handling_seconds_bucket{%(selector)s}[%(rangeInterval)s]) and on(grpc_service,grpc_method) grpc_client_handled_total{job="gitaly"}
-        |||,
-        selector=baseSelector {
-          grpc_type: 'unary',
-          grpc_service: { ne: 'gitaly.OperationService' },
-          grpc_method: {
-            noneOf: gitalyHelper.gitalyRubyApdexIgnoredMethods,
-          },
-        },
-        satisfiedThreshold=10,
-        toleratedThreshold=30
-      ),
-
-      requestRate: rateMetric(
-        counter='grpc_client_handled_total',
-        selector=baseSelector
-      ),
-
-      errorRate: rateMetric(
-        counter='grpc_client_handled_total',
-        selector=baseSelector {
-          grpc_method: { noneOf: ['UpdateRemoteMirror', 'AddRemote'] },  // Ignore these calls until https://gitlab.com/gitlab-org/gitlab/-/issues/300884 is fixed
-          grpc_code: { noneOf: ['OK', 'NotFound', 'Unauthenticated', 'AlreadyExists', 'FailedPrecondition', 'DeadlineExceeded'] },
-        }
-      ),
-
-      significantLabels: ['fqdn', 'grpc_method'],
-
-      toolingLinks: [
-        toolingLinks.sentry(slug='gitlab/gitlabcom-gitaly-ruby'),
-        toolingLinks.kibana(title='Gitaly Ruby', index='gitaly', tag='gitaly.ruby'),
-      ],
-    },
   },
 })

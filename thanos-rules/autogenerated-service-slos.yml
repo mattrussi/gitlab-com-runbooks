@@ -549,18 +549,6 @@ groups:
     expr: "0.000500"
   - record: slo:min:events:gitlab_service_apdex:ratio
     labels:
-      component: gitalyruby
-      tier: stor
-      type: gitaly
-    expr: "0.999000"
-  - record: slo:max:events:gitlab_service_errors:ratio
-    labels:
-      component: gitalyruby
-      tier: stor
-      type: gitaly
-    expr: "0.000500"
-  - record: slo:min:events:gitlab_service_apdex:ratio
-    labels:
       component: goserver
       tier: stor
       type: gitaly
@@ -2277,14 +2265,6 @@ groups:
       service_aggregation: "yes"
       tier: sv
       type: git
-    expr: "1"
-  - record: gitlab_component_service:mapping
-    labels:
-      component: gitalyruby
-      regional_aggregation: "no"
-      service_aggregation: "yes"
-      tier: stor
-      type: gitaly
     expr: "1"
   - record: gitlab_component_service:mapping
     labels:
