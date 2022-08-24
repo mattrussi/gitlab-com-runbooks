@@ -139,6 +139,9 @@ Admin commands are allowed
 gpg/card> kdf-setup
 
 # Change the PIN and Admin PINs
+# The ADMIN PIN must be at least 8 characters in length otherwise it'll silently fail, and you'll need to reset your yubikey
+# The USER PIN presumably has similar restrictions, so make sure it's at least 6 characters in length
+
 gpg/card> passwd
 gpg: OpenPGP card no. D2760001240102000006123482780000 detected
 
