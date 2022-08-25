@@ -15,6 +15,12 @@ Host *.gitlab-ops.internal
         ProxyCommand                    ssh lb-bastion.ops.gitlab.com -W %h:%p
 ```
 
+##### Console node
+
+You can use the following node to run rails and other app specific commands:
+
+`gitlab-01-inf-ops.c.gitlab-ops.internal`
+
 ##### Host keys
 
 If you care about security enough to compare ssh host keys, here they are, both sha256 and md5 sums:
