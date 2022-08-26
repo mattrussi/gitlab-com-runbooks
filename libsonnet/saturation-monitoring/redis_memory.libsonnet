@@ -66,24 +66,33 @@ local redisMemoryDefinition = commonDefinition {
   },
 };
 
-// All the redis except redis-tracechunks and redis-cache;
-// includes sessions as well as the other sessions-specific metric
-// below, as this measures something subtly different and
-// distinctly valid
-local excludedRedisInstances = ['redis-cache', 'redis-tracechunks'];
+// All the redis except redis-tracechunks; includes sessions as well as
+// the other sessions-specific metric below, as this measures something
+// subtly different and distinctly valid
+local excludedRedisInstances = ['redis-tracechunks'];
 
 {
   redis_memory: resourceSaturationPoint(redisMemoryDefinition {
     appliesTo: std.filter(function(s) !std.member(excludedRedisInstances, s), metricsCatalog.findServicesWithTag(tag='redis')),
   }),
 
-  // Exclude redis-cache from capacity planning reports as it has
-  // maxmemory and an eviction policy defined, and is always at
-  // maxmemory
-  redis_memory_cache: resourceSaturationPoint(redisMemoryDefinition {
+
+  redis_memory_cache: resourceSaturationPoint(maxMemoryDefinition {
     appliesTo: ['redis-cache'],
-    capacityPlanningStrategy: 'exclude',
+    description: |||
+      Redis maxmemory utilization per node
+
+      On the cache Redis we have maxmemory and an eviction policy as a
+      safety-valve, but do not want or expect to reach that limit under
+      normal circumstances; if we start evicting we will experience
+      performance problems , so we want to be alerted some time before
+      that happens.
+    |||,
     grafana_dashboard_uid: 'sat_redis_memory_cache',
+    slos: {
+      soft: 0.70,
+      hard: 0.75,
+    },
   }),
 
   redis_memory_tracechunks: resourceSaturationPoint(commonDefinition {

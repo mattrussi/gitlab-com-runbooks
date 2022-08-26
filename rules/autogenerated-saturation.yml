@@ -928,13 +928,13 @@ groups:
         clamp_min(
           clamp_max(
             max by (environment, tier, type, stage, fqdn) (
-              label_replace(redis_memory_used_rss_bytes{type=~"redis-sidekiq|redis-ratelimiting|redis-sessions|redis"}, "memtype", "rss","","")
+              label_replace(redis_memory_used_rss_bytes{type=~"redis-cache|redis-sidekiq|redis-ratelimiting|redis-sessions|redis"}, "memtype", "rss","","")
               or
-              label_replace(redis_memory_used_bytes{type=~"redis-sidekiq|redis-ratelimiting|redis-sessions|redis"}, "memtype", "used","","")
+              label_replace(redis_memory_used_bytes{type=~"redis-cache|redis-sidekiq|redis-ratelimiting|redis-sessions|redis"}, "memtype", "used","","")
             )
             /
             avg by (environment, tier, type, stage, fqdn) (
-              node_memory_MemTotal_bytes{type=~"redis-sidekiq|redis-ratelimiting|redis-sessions|redis"}
+              node_memory_MemTotal_bytes{type=~"redis-cache|redis-sidekiq|redis-ratelimiting|redis-sessions|redis"}
             )
             ,
             1)
@@ -948,15 +948,15 @@ groups:
       max by(environment, tier, type, stage) (
         clamp_min(
           clamp_max(
-            max by (environment, tier, type, stage, fqdn) (
-              label_replace(redis_memory_used_rss_bytes{type="redis-cache"}, "memtype", "rss","","")
-              or
-              label_replace(redis_memory_used_bytes{type="redis-cache"}, "memtype", "used","","")
-            )
-            /
-            avg by (environment, tier, type, stage, fqdn) (
-              node_memory_MemTotal_bytes{type="redis-cache"}
-            )
+            (
+              max by (environment, tier, type, stage, fqdn) (
+                redis_memory_used_bytes{type="redis-cache"}
+              )
+              /
+              avg by (environment, tier, type, stage, fqdn) (
+                redis_memory_max_bytes{type="redis-cache"}
+              )
+            ) and on (fqdn) redis_memory_max_bytes{type="redis-cache"} != 0
             ,
             1)
         ,
@@ -1627,11 +1627,11 @@ groups:
   - record: slo:max:soft:gitlab_component_saturation:ratio
     labels:
       component: redis_memory_cache
-    expr: "0.65"
+    expr: "0.7"
   - record: slo:max:hard:gitlab_component_saturation:ratio
     labels:
       component: redis_memory_cache
-    expr: "0.7"
+    expr: "0.75"
   - record: slo:max:soft:gitlab_component_saturation:ratio
     labels:
       component: redis_memory_sessions
@@ -2165,7 +2165,7 @@ groups:
     expr: "1"
   - record: gitlab_component_saturation_info
     labels:
-      capacity_planning_strategy: exclude
+      capacity_planning_strategy: quantile95_1h
       component: redis_memory_cache
       horiz_scaling: "no"
       quantile: max
@@ -4704,21 +4704,17 @@ groups:
   - alert: component_saturation_slo_out_of_bounds
     for: 5m
     annotations:
-      title: The Redis Memory Utilization per Node resource of the {{ $labels.type
+      title: The Redis Memory Utilization of Max Memory resource of the {{ $labels.type
         }} service ({{ $labels.stage }} stage) has a saturation exceeding SLO and
         is close to its capacity limit.
       description: |
         This means that this resource is running close to capacity and is at risk of exceeding its current capacity limit.
 
-        Details of the Redis Memory Utilization per Node resource:
+        Details of the Redis Memory Utilization of Max Memory resource:
 
-        Redis memory utilization per node.
+        Redis maxmemory utilization per node
 
-        As Redis memory saturates node memory, the likelyhood of OOM kills, possibly to the Redis process, become more likely.
-
-        For caches, consider lowering the `maxmemory` setting in Redis. For non-caching Redis instances, this has been caused in the past by credential stuffing, leading to large numbers of web sessions.
-
-        This threshold is kept deliberately low, since Redis RDB snapshots could consume a significant amount of memory, especially when the rate of change in Redis is high, leading to copy-on-write consuming more memory than when the rate-of-change is low.
+        On the cache Redis we have maxmemory and an eviction policy as a safety-valve, but do not want or expect to reach that limit under normal circumstances; if we start evicting we will experience performance problems , so we want to be alerted some time before that happens.
       grafana_dashboard_id: alerts-sat_redis_memory_cache
       grafana_dashboard_link: https://dashboards.gitlab.net/d/alerts-sat_redis_memory_cache?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-type={{ $labels.type }}&var-stage={{ $labels.stage
@@ -4730,15 +4726,15 @@ groups:
         max by(environment, tier, type, stage, fqdn) (
           clamp_min(
             clamp_max(
-              max by (environment, tier, type, stage, fqdn) (
-                label_replace(redis_memory_used_rss_bytes{environment="{{ $labels.environment }}",stage="{{ $labels.stage }}",type="{{ $labels.type }}"}, "memtype", "rss","","")
-                or
-                label_replace(redis_memory_used_bytes{environment="{{ $labels.environment }}",stage="{{ $labels.stage }}",type="{{ $labels.type }}"}, "memtype", "used","","")
-              )
-              /
-              avg by (environment, tier, type, stage, fqdn) (
-                node_memory_MemTotal_bytes{environment="{{ $labels.environment }}",stage="{{ $labels.stage }}",type="{{ $labels.type }}"}
-              )
+              (
+                max by (environment, tier, type, stage, fqdn) (
+                  redis_memory_used_bytes{environment="{{ $labels.environment }}",stage="{{ $labels.stage }}",type="{{ $labels.type }}"}
+                )
+                /
+                avg by (environment, tier, type, stage, fqdn) (
+                  redis_memory_max_bytes{environment="{{ $labels.environment }}",stage="{{ $labels.stage }}",type="{{ $labels.type }}"}
+                )
+              ) and on (fqdn) redis_memory_max_bytes{environment="{{ $labels.environment }}",stage="{{ $labels.stage }}",type="{{ $labels.type }}"} != 0
               ,
               1)
           ,
