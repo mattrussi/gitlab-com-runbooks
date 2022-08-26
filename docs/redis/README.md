@@ -23,6 +23,7 @@
 * [Kubernetes-Agent Disable Integrations](../kas/kubernetes-agent-disable-integrations.md)
 * [Ad hoc observability tools on Kubernetes nodes](../kube/k8s-adhoc-observability.md)
 * [How to take a snapshot of an application running in a StatefulSet](../kube/k8s-sts-snapshot.md)
+* [Statefulset Guidelines](../kube/sts-guidelines.md)
 * [Service Apdex](../monitoring/definition-service-apdex.md)
 * [Session: Application architecture](../onboarding/architecture.md)
 * [Diagnosis with Kibana](../onboarding/kibana-diagnosis.md)

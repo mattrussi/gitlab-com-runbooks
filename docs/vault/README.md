@@ -30,6 +30,7 @@
 * [../elastic/elastic-cloud.md](../elastic/elastic-cloud.md)
 * [HAProxy management at GitLab](../frontend/haproxy.md)
 * [Gitaly token rotation](../gitaly/gitaly-token-rotation.md)
+* [Statefulset Guidelines](../kube/sts-guidelines.md)
 * [GPG Keys for Package Signing](../packaging/manage-package-signing-keys.md)
 * [Credential rotation](../patroni/postgresql-role-credential-rotation.md)
 * [Rotating Rails' PostgreSQL password](../patroni/rotating-rails-postgresql-password.md)
