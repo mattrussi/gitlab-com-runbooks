@@ -9,10 +9,15 @@ Add the following to your `~/.ssh/config` (specify your username and path to ssh
 Host lb-bastion.ops.gitlab.com
         User                            YOUR_SSH_USERNAME
 
-# gstg boxes
+# ops boxes
 Host *.gitlab-ops.internal
         PreferredAuthentications        publickey
         ProxyCommand                    ssh lb-bastion.ops.gitlab.com -W %h:%p
+
+# ops Console
+Host ops-console
+  HostName     gitlab-01-inf-ops.c.gitlab-ops.internal
+  ProxyCommand ssh lb-bastion.ops.gitlab.com -W %h:%p
 ```
 
 ##### Host keys

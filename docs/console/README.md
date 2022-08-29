@@ -22,6 +22,7 @@
 * [Teleport Approver Workflow](../Teleport/teleport_approval_workflow.md)
 * [../bastions/gprd-bastions.md](../bastions/gprd-bastions.md)
 * [../bastions/gstg-bastions.md](../bastions/gstg-bastions.md)
+* [../bastions/ops-bastions.md](../bastions/ops-bastions.md)
 * [../bastions/pre-bastions.md](../bastions/pre-bastions.md)
 * [Set up bastions for Release managers](../bastions/rm-bastion-access.md)
 * [../bastions/testbed-bastion.md](../bastions/testbed-bastion.md)
