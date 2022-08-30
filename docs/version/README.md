@@ -53,7 +53,7 @@
 * [PostgreSQL VACUUM](../patroni/postgresql-vacuum.md)
 * [../pgbouncer/patroni-consul-postgres-pgbouncer-interactions.md](../pgbouncer/patroni-consul-postgres-pgbouncer-interactions.md)
 * [Postgres Replicas](../postgres-dr-delayed/postgres-dr-replicas.md)
-* [Praefect has read-only repositories](../praefect/praefect-read-only.md)
+* [Praefect has unavailable repositories](../praefect/praefect-unavailable-repo.md)
 * [Removing cache entries from Redis](../redis-cache/remove-cache-entries.md)
 * [Redis-Sidekiq catchall workloads reduction](../redis/redis-sidekiq-catchall-workloads-reduction.md)
 * [../redis/redis.md](../redis/redis.md)

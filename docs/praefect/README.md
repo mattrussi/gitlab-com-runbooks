@@ -25,9 +25,9 @@
 * [Praefect Database](praefect-database.md)
 * [Praefect error rate is too high](praefect-error-rate.md)
 * [Add and remove file storages to praefect](praefect-file-storages.md)
-* [Praefect has read-only repositories](praefect-read-only.md)
 * [Praefect replication is lagging or has stopped](praefect-replication.md)
 * [Praefect is down](praefect-startup.md)
+* [Praefect has unavailable repositories](praefect-unavailable-repo.md)
 * [Life of a Git Request](../tutorials/overview_life_of_a_git_request.md)
 * [Gitaly version mismatch](../version/gitaly-version-mismatch.md)
 <!-- END_MARKER -->
