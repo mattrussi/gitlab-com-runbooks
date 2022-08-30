@@ -122,7 +122,7 @@ basic.dashboard(
   }
 )
 .addPanels(
-  layout.grid([
+  layout.rows([
     inflightGitalyCommandsPerNode(selectorSerialized),
   ], startRow=2001)
 )
