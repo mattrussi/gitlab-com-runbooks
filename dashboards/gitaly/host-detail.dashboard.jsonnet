@@ -113,34 +113,16 @@ basic.dashboard(
   )
 )
 .addPanel(
-  row.new(title='Node Performance', collapse=true).addPanels(
-    layout.rows([
-      inflightGitalyCommandsPerNode(selectorSerialized),
-    ], startRow=2001),
-  ),
-  gridPos={
-    x: 0,
-    y: 2000,
-    w: 24,
-    h: 1,
-  },
+  metricsCatalogDashboards.sliDetailMatrix(
+    'gitaly',
+    'goserver',
+    selectorHash,
+    [
+      { title: 'Overall', aggregationLabels: '', selector: {}, legendFormat: 'goserver' },
+    ],
+  ), gridPos={ x: 0, y: 2000 }
 )
-.addPanel(
-  row.new(title='Gitaly Safety Mechanisms', collapse=true)
-  .addPanels(
-    layout.grid([
-      gitalySpawnTimeoutsPerNode(selectorSerialized),
-      ratelimitLockPercentage(selectorSerialized),
-    ], startRow=3001)
-  ),
-  gridPos={
-    x: 0,
-    y: 3000,
-    w: 24,
-    h: 1,
-  }
-)
-.addPanel(nodeMetrics.nodeMetricsDetailRow(selectorHash), gridPos={ x: 0, y: 6000 })
+.addPanel(nodeMetrics.nodeMetricsDetailRow(selectorHash), gridPos={ x: 0, y: 3000 })
 .addPanel(
   saturationDetail.saturationDetailPanels(selectorHash, components=[
     'cgroup_memory',
@@ -155,17 +137,35 @@ basic.dashboard(
     'single_node_cpu',
     'go_memory',
   ]),
-  gridPos={ x: 0, y: 6000, w: 24, h: 1 }
+  gridPos={ x: 0, y: 4000, w: 24, h: 1 }
 )
 .addPanel(
-  metricsCatalogDashboards.sliDetailMatrix(
-    'gitaly',
-    'goserver',
-    selectorHash,
-    [
-      { title: 'Overall', aggregationLabels: '', selector: {}, legendFormat: 'goserver' },
-    ],
-  ), gridPos={ x: 0, y: 7000 }
+  row.new(title='Node Performance', collapse=true).addPanels(
+    layout.rows([
+      inflightGitalyCommandsPerNode(selectorSerialized),
+    ], startRow=5001),
+  ),
+  gridPos={
+    x: 0,
+    y: 5000,
+    w: 24,
+    h: 1,
+  },
+)
+.addPanel(
+  row.new(title='Gitaly Safety Mechanisms', collapse=true)
+  .addPanels(
+    layout.grid([
+      gitalySpawnTimeoutsPerNode(selectorSerialized),
+      ratelimitLockPercentage(selectorSerialized),
+    ], startRow=5101)
+  ),
+  gridPos={
+    x: 0,
+    y: 5100,
+    w: 24,
+    h: 1,
+  }
 )
 .addPanel(
   row.new(title='gitaly process activity', collapse=true)
@@ -177,12 +177,12 @@ basic.dashboard(
         groupname: { re: 'gitaly' },
       },
       aggregationLabels=[],
-      startRow=8001
+      startRow=5201
     )
   ),
   gridPos={
     x: 0,
-    y: 8000,
+    y: 5200,
     w: 24,
     h: 1,
   }
@@ -197,12 +197,12 @@ basic.dashboard(
         groupname: { re: 'git.*' },
       },
       aggregationLabels=['groupname'],
-      startRow=8101
+      startRow=5301
     )
   ),
   gridPos={
     x: 0,
-    y: 8100,
+    y: 5300,
     w: 24,
     h: 1,
   }
@@ -217,12 +217,12 @@ basic.dashboard(
         groupname: 'gitaly-ruby',
       },
       aggregationLabels=[],
-      startRow=8201
+      startRow=5401
     )
   ),
   gridPos={
     x: 0,
-    y: 8200,
+    y: 5400,
     w: 24,
     h: 1,
   }
@@ -234,12 +234,12 @@ basic.dashboard(
       selectorHash,
       includeDetails=false,
       aggregationLabels=['cmd', 'subcmd'],
-      startRow=8301
+      startRow=5501
     )
   ),
   gridPos={
     x: 0,
-    y: 8300,
+    y: 5500,
     w: 24,
     h: 1,
   }
@@ -251,12 +251,12 @@ basic.dashboard(
       selectorHash,
       includeDetails=false,
       aggregationLabels=['grpc_service', 'grpc_method'],
-      startRow=8401
+      startRow=5601
     )
   ),
   gridPos={
     x: 0,
-    y: 8400,
+    y: 5600,
     w: 24,
     h: 1,
   }
@@ -267,12 +267,12 @@ basic.dashboard(
     gitalyCommandStats.metricsForNode(
       selectorHash,
       aggregationLabels=['grpc_method', 'cmd', 'subcmd'],
-      startRow=8501
+      startRow=5701
     )
   ),
   gridPos={
     x: 0,
-    y: 8500,
+    y: 5700,
     w: 24,
     h: 1,
   }
