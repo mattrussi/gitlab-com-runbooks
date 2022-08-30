@@ -20,7 +20,7 @@ local selectors = import 'promql/selectors.libsonnet';
       To make sure we always have enough shards receiving new repositories, we want
       to have at least 10% of the total storage to be available for new projects.
       When this resource gets saturated, we could be creating to many projects on
-      a limited set of nodes, which could cause these nodes to be busier then usual.
+      a limited set of nodes, which could cause these nodes to be busier than usual.
 
       When this alert fires, consider adding new gitaly nodes when the
       gitaly_total_disk_space component is also close to saturation. Or
