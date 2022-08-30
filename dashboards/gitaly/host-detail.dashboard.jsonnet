@@ -113,33 +113,32 @@ basic.dashboard(
   )
 )
 .addPanel(
-  row.new(title='Node Performance'),
+  row.new(title='Node Performance', collapse=true).addPanels(
+    layout.rows([
+      inflightGitalyCommandsPerNode(selectorSerialized),
+    ], startRow=2001),
+  ),
   gridPos={
     x: 0,
     y: 2000,
     w: 24,
     h: 1,
-  }
-)
-.addPanels(
-  layout.rows([
-    inflightGitalyCommandsPerNode(selectorSerialized),
-  ], startRow=2001)
+  },
 )
 .addPanel(
-  row.new(title='Gitaly Safety Mechanisms'),
+  row.new(title='Gitaly Safety Mechanisms', collapse=true)
+  .addPanels(
+    layout.grid([
+      gitalySpawnTimeoutsPerNode(selectorSerialized),
+      ratelimitLockPercentage(selectorSerialized),
+    ], startRow=3001)
+  ),
   gridPos={
     x: 0,
     y: 3000,
     w: 24,
     h: 1,
   }
-)
-.addPanels(
-  layout.grid([
-    gitalySpawnTimeoutsPerNode(selectorSerialized),
-    ratelimitLockPercentage(selectorSerialized),
-  ], startRow=3001)
 )
 .addPanel(nodeMetrics.nodeMetricsDetailRow(selectorHash), gridPos={ x: 0, y: 6000 })
 .addPanel(
@@ -169,7 +168,18 @@ basic.dashboard(
   ), gridPos={ x: 0, y: 7000 }
 )
 .addPanel(
-  row.new(title='gitaly process activity'),
+  row.new(title='gitaly process activity', collapse=true)
+  .addPanels(
+    processExporter.namedGroup(
+      'gitaly processes',
+      selectorHash
+      {
+        groupname: { re: 'gitaly' },
+      },
+      aggregationLabels=[],
+      startRow=8001
+    )
+  ),
   gridPos={
     x: 0,
     y: 8000,
@@ -177,19 +187,19 @@ basic.dashboard(
     h: 1,
   }
 )
-.addPanels(
-  processExporter.namedGroup(
-    'gitaly processes',
-    selectorHash
-    {
-      groupname: { re: 'gitaly' },
-    },
-    aggregationLabels=[],
-    startRow=8001
-  )
-)
 .addPanel(
-  row.new(title='git process activity'),
+  row.new(title='git process activity', collapse=true)
+  .addPanels(
+    processExporter.namedGroup(
+      'git processes',
+      selectorHash
+      {
+        groupname: { re: 'git.*' },
+      },
+      aggregationLabels=['groupname'],
+      startRow=8101
+    )
+  ),
   gridPos={
     x: 0,
     y: 8100,
@@ -197,19 +207,19 @@ basic.dashboard(
     h: 1,
   }
 )
-.addPanels(
-  processExporter.namedGroup(
-    'git processes',
-    selectorHash
-    {
-      groupname: { re: 'git.*' },
-    },
-    aggregationLabels=['groupname'],
-    startRow=8101
-  )
-)
 .addPanel(
-  row.new(title='gitaly-ruby process activity'),
+  row.new(title='gitaly-ruby process activity', collapse=true)
+  .addPanels(
+    processExporter.namedGroup(
+      'gitaly-ruby processes',
+      selectorHash
+      {
+        groupname: 'gitaly-ruby',
+      },
+      aggregationLabels=[],
+      startRow=8201
+    )
+  ),
   gridPos={
     x: 0,
     y: 8200,
@@ -217,19 +227,16 @@ basic.dashboard(
     h: 1,
   }
 )
-.addPanels(
-  processExporter.namedGroup(
-    'gitaly-ruby processes',
-    selectorHash
-    {
-      groupname: 'gitaly-ruby',
-    },
-    aggregationLabels=[],
-    startRow=8201
-  )
-)
 .addPanel(
-  row.new(title='gitaly command stats by command'),
+  row.new(title='gitaly command stats by command', collapse=true)
+  .addPanels(
+    gitalyCommandStats.metricsForNode(
+      selectorHash,
+      includeDetails=false,
+      aggregationLabels=['cmd', 'subcmd'],
+      startRow=8301
+    )
+  ),
   gridPos={
     x: 0,
     y: 8300,
@@ -237,16 +244,16 @@ basic.dashboard(
     h: 1,
   }
 )
-.addPanels(
-  gitalyCommandStats.metricsForNode(
-    selectorHash,
-    includeDetails=false,
-    aggregationLabels=['cmd', 'subcmd'],
-    startRow=8301
-  )
-)
 .addPanel(
-  row.new(title='gitaly command stats by RPC'),
+  row.new(title='gitaly command stats by RPC', collapse=true)
+  .addPanels(
+    gitalyCommandStats.metricsForNode(
+      selectorHash,
+      includeDetails=false,
+      aggregationLabels=['grpc_service', 'grpc_method'],
+      startRow=8401
+    )
+  ),
   gridPos={
     x: 0,
     y: 8400,
@@ -254,16 +261,15 @@ basic.dashboard(
     h: 1,
   }
 )
-.addPanels(
-  gitalyCommandStats.metricsForNode(
-    selectorHash,
-    includeDetails=false,
-    aggregationLabels=['grpc_service', 'grpc_method'],
-    startRow=8401
-  )
-)
 .addPanel(
-  row.new(title='gitaly command stats by commands per RPC'),
+  row.new(title='gitaly command stats by commands per RPC', collapse=true)
+  .addPanels(
+    gitalyCommandStats.metricsForNode(
+      selectorHash,
+      aggregationLabels=['grpc_method', 'cmd', 'subcmd'],
+      startRow=8501
+    )
+  ),
   gridPos={
     x: 0,
     y: 8500,
@@ -271,14 +277,6 @@ basic.dashboard(
     h: 1,
   }
 )
-.addPanels(
-  gitalyCommandStats.metricsForNode(
-    selectorHash,
-    aggregationLabels=['grpc_method', 'cmd', 'subcmd'],
-    startRow=8501
-  )
-)
-
 .trailer()
 + {
   links+: platformLinks.triage + platformLinks.services +
