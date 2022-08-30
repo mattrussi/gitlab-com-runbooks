@@ -14,7 +14,7 @@ In almost all cases, when the service is not responding, the safest and most eff
 
 Access is configured in the [Teleport Chef Cookbook](https://gitlab.com/gitlab-cookbooks/gitlab-teleport)
 
-- Associations between Okta groups and Teleport roles are fairly straightforward, and can be edited in the [okta-connector.yaml.erb](https://gitlab.com/gitlab-cookbooks/gitlab-teleport/-/blob/master/templates/default/okta-connector.yaml.erb) template
+- Associations between Okta groups and Teleport roles are fairly straightforward, and can be edited in the [okta-connector.yaml-gstg.erb](https://gitlab.com/gitlab-cookbooks/gitlab-teleport/-/blob/master/templates/default/okta-connector-gstg.yaml.erb) and [okta-connector.yaml-gprd.erb](https://gitlab.com/gitlab-cookbooks/gitlab-teleport/-/blob/master/templates/default/okta-connector-gprd.yaml.erb) templates
 - Modifications to role permissions and settings are made in the [role-* files](https://gitlab.com/gitlab-cookbooks/gitlab-teleport/-/tree/master/files/default)
 
 ## If Approvals appear to be working, but user doesn't receive the cert
