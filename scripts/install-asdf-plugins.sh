@@ -105,4 +105,3 @@ install_plugin nodejs
 install_plugin yq
 install_plugin pre-commit
 install_plugin python
-
