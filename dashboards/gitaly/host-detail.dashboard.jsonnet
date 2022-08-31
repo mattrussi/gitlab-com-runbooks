@@ -45,12 +45,24 @@ local ratelimitLockPercentage(selector) =
 
 local inflightGitalyCommandsPerNode(selector) =
   basic.timeseries(
-    title='Inflight Git Commands per Server',
+    title='Inflight Git Commands on Node',
     description='Number of Git commands running concurrently per node. Lower is better.',
     query=|||
       avg_over_time(gitaly_commands_running{%(selector)s}[$__interval])
     ||| % { selector: selector },
     legendFormat='{{ fqdn }}',
+    interval='1m',
+    linewidth=1,
+    legend_show=false,
+  );
+
+local oomKillsPerNode(selector) =
+  basic.timeseries(
+    title='OOM Kills on Node',
+    description='Number of OOM Kills per server.',
+    query=|||
+      increase(node_vmstat_oom_kill{%(selector)s}[$__interval])
+    ||| % { selector: selector },
     interval='1m',
     linewidth=1,
     legend_show=false,
@@ -200,8 +212,9 @@ basic.dashboard(
 )
 .addPanel(
   row.new(title='Node Performance', collapse=true).addPanels(
-    layout.rows([
+    layout.grid([
       inflightGitalyCommandsPerNode(selectorSerialized),
+      oomKillsPerNode(selectorSerialized),
     ], startRow=5001),
   ),
   gridPos={
