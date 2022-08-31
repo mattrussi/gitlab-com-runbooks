@@ -103,3 +103,5 @@ install_plugin jsonnet-tool https://gitlab.com/gitlab-com/gl-infra/asdf-gl-infra
 install_plugin ruby
 install_plugin nodejs
 install_plugin yq
+install_plugin pre-commit
+install_plugin python
