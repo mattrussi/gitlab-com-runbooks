@@ -29,12 +29,12 @@ special knowledge, tooling, and new learnings on a differing Infrastructure.
 
 Statefulsets at `$currentCommit` include the following workloads:
 
-* `fluentd-archvier` - https://gitlab.com/gitlab-com/gl-infra/k8s-workloads/tanka-deployments/-/tree/f106d7b79520582c3ce17ea034eab367f4c63716/lib/fluentd
-* Memcached for Thanos - https://gitlab.com/gitlab-com/gl-infra/k8s-workloads/tanka-deployments/-/tree/f106d7b79520582c3ce17ea034eab367f4c63716/lib/memcached
-* Prometheus -  https://gitlab.com/gitlab-com/gl-infra/k8s-workloads/gitlab-helmfiles/-/tree/70ccfc6960b9799bde660c5d7546b237971ddfa2/releases/30-gitlab-monitoring
-* Thanos Store - https://gitlab.com/gitlab-com/gl-infra/k8s-workloads/tanka-deployments/-/tree/f106d7b79520582c3ce17ea034eab367f4c63716/lib/thanos
-* Some Redis - https://gitlab.com/gitlab-com/gl-infra/k8s-workloads/tanka-deployments/-/tree/f106d7b79520582c3ce17ea034eab367f4c63716/lib/redis
-* Vault - https://gitlab.com/gitlab-com/gl-infra/k8s-workloads/gitlab-helmfiles/-/tree/70ccfc6960b9799bde660c5d7546b237971ddfa2/releases/vault
+* [`fluentd-archvier`](https://gitlab.com/gitlab-com/gl-infra/k8s-workloads/tanka-deployments/-/tree/f106d7b79520582c3ce17ea034eab367f4c63716/lib/fluentd)
+* [Memcached for Thanos](https://gitlab.com/gitlab-com/gl-infra/k8s-workloads/tanka-deployments/-/tree/f106d7b79520582c3ce17ea034eab367f4c63716/lib/memcached)
+* [Prometheus](https://gitlab.com/gitlab-com/gl-infra/k8s-workloads/gitlab-helmfiles/-/tree/70ccfc6960b9799bde660c5d7546b237971ddfa2/releases/30-gitlab-monitoring)
+* [Thanos Store](https://gitlab.com/gitlab-com/gl-infra/k8s-workloads/tanka-deployments/-/tree/f106d7b79520582c3ce17ea034eab367f4c63716/lib/thanos)
+* [Some Redis](https://gitlab.com/gitlab-com/gl-infra/k8s-workloads/tanka-deployments/-/tree/f106d7b79520582c3ce17ea034eab367f4c63716/lib/redis)
+* [Vault](https://gitlab.com/gitlab-com/gl-infra/k8s-workloads/gitlab-helmfiles/-/tree/70ccfc6960b9799bde660c5d7546b237971ddfa2/releases/vault)
 
 ### Purpose of Stored Data
 
@@ -92,6 +92,5 @@ Consider the following items when thinking of spinning up a Statefulset.
   directly.
 * As always, a [readiness-review] is always highly encouraged to help tease out
   any use case and answer some of the above questions.
-
 
 [readiness-review]: https://about.gitlab.com/handbook/engineering/infrastructure/production/readiness/
