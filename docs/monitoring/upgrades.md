@@ -55,9 +55,9 @@ The issue should detail:
 
 Prepare upgrade MRs
 
-* [ ] [Prometheus/Thanos/Trickster/Pushgateway in Chef](https://gitlab.com/gitlab-cookbooks/gitlab-prometheus)
-* [ ] [Prometheus/Thanos in Helmfiles](https://ops.gitlab.net/gitlab-com/gl-infra/k8s-workloads/gitlab-helmfiles/)
-* [ ] [Thanos in Tanka](https://ops.gitlab.net/gitlab-com/gl-infra/k8s-workloads/tanka-deployments/)
+* [ ] [Prometheus/Thanos/Pushgateway in Chef](https://gitlab.com/gitlab-cookbooks/gitlab-prometheus)
+* [ ] [Prometheus in Helmfiles](https://ops.gitlab.net/gitlab-com/gl-infra/k8s-workloads/gitlab-helmfiles/)
+* [ ] [Grafana/Thanos in Tanka](https://ops.gitlab.net/gitlab-com/gl-infra/k8s-workloads/tanka-deployments/)
 * [ ] [Various Exporters](https://ops.gitlab.net/gitlab-cookbooks/gitlab-exporters)
 * [ ] [mtail in Chef](https://gitlab.com/gitlab-cookbooks/gitlab-mtail)
 * [ ] [mtail docker image for GKE](https://ops.gitlab.net/gitlab-com/gl-infra/docker-mtail)

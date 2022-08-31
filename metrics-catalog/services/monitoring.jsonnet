@@ -43,12 +43,6 @@ metricsCatalog.serviceDefinition({
         'grafana-image-renderer',
       ],
     },
-    'grafana-trickster': {
-      kind: 'Deployment',
-      containers: [
-        'grafana-trickster',
-      ],
-    },
     'thanos-query': {
       kind: 'Deployment',
       containers: [
@@ -479,35 +473,6 @@ metricsCatalog.serviceDefinition({
       errorRate: rateMetric(
         counter='grafana_image_renderer_service_http_request_duration_seconds_bucket',
         selector=grafanaSelector { le: '+Inf', status_code: { re: '^5.*' } }
-      ),
-
-      significantLabels: ['pod'],
-    },
-
-    // Trickster is a prometheus caching layer that serves requests to our
-    // Grafana instances
-    grafana_trickster: {
-      userImpacting: false,
-      featureCategory: 'not_owned',
-      trafficCessationAlertConfig: false,
-
-      description: |||
-        This SLI monitors the Trickster HTTP interface.
-      |||,
-
-      apdex: histogramApdex(
-        histogram='trickster_frontend_requests_duration_seconds_bucket',
-        satisfiedThreshold=5,
-        toleratedThreshold=20
-      ),
-
-      requestRate: rateMetric(
-        counter='trickster_frontend_requests_total'
-      ),
-
-      errorRate: rateMetric(
-        counter='trickster_frontend_requests_total',
-        selector={ http_status: { re: '5.*' } }
       ),
 
       significantLabels: ['pod'],
