@@ -20,7 +20,6 @@
   import 'saturation-monitoring/gitaly_total_disk_space.libsonnet',
   import 'saturation-monitoring/gitaly_active_node_available_space.libsonnet',
   import 'saturation-monitoring/go_memory.libsonnet',
-  import 'saturation-monitoring/grafana_trickster.libsonnet',
   import 'saturation-monitoring/kube_container_cpu.libsonnet',
   import 'saturation-monitoring/kube_container_memory.libsonnet',
   import 'saturation-monitoring/kube_go_memory.libsonnet',

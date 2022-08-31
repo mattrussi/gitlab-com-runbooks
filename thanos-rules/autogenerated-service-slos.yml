@@ -757,18 +757,6 @@ groups:
     expr: "0.001000"
   - record: slo:min:events:gitlab_service_apdex:ratio
     labels:
-      component: grafana_trickster
-      tier: inf
-      type: monitoring
-    expr: "0.999000"
-  - record: slo:max:events:gitlab_service_errors:ratio
-    labels:
-      component: grafana_trickster
-      tier: inf
-      type: monitoring
-    expr: "0.001000"
-  - record: slo:min:events:gitlab_service_apdex:ratio
-    labels:
       component: prometheus
       tier: inf
       type: monitoring
@@ -2425,14 +2413,6 @@ groups:
   - record: gitlab_component_service:mapping
     labels:
       component: grafana_image_renderer
-      regional_aggregation: "no"
-      service_aggregation: "yes"
-      tier: inf
-      type: monitoring
-    expr: "1"
-  - record: gitlab_component_service:mapping
-    labels:
-      component: grafana_trickster
       regional_aggregation: "no"
       service_aggregation: "yes"
       tier: inf
