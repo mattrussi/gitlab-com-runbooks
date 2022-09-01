@@ -3,7 +3,7 @@ package main
 import (
 	"encoding/json"
 	"fmt"
-	"io/ioutil"
+	"io"
 	"log"
 	"net/http"
 	"net/url"
@@ -13,7 +13,7 @@ import (
 	"strings"
 	"time"
 
-	"github.com/prometheus/prometheus/pkg/rulefmt"
+	"github.com/prometheus/prometheus/model/rulefmt"
 	"github.com/prometheus/prometheus/promql/parser"
 )
 
@@ -168,7 +168,7 @@ func selectorHasResults(selector string) (bool, error) {
 		return false, fmt.Errorf("Status code = %d", response.StatusCode)
 	}
 
-	body, err := ioutil.ReadAll(response.Body)
+	body, err := io.ReadAll(response.Body)
 	if err != nil {
 		return false, fmt.Errorf("Error reading response body: %v", err)
 	}
