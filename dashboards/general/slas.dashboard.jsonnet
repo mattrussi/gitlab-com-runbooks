@@ -119,7 +119,8 @@ local serviceRow(service) =
       legendFormat='{{ type }}',
       displayName=service.friendly_name,
       links=links,
-    ),
+    )
+    .statPanel(intervalFactor, 1),
     basic.slaStats(
       title='',
       query=serviceAvailabilityMillisecondsQuery({ type: service.name }, 'slo_observation_status'),
@@ -181,7 +182,8 @@ basic.dashboard(
     basic.slaStats(
       title='GitLab.com Availability',
       query=systemAvailabilityQuery(systemSelector, '$__range'),
-    ),
+    )
+    .statPanel(intervalFactor, 1),
     basic.slaStats(
       title='',
       query=serviceAvailabilityMillisecondsQuery(systemSelector, 'sla:gitlab:ratio'),
@@ -190,7 +192,7 @@ basic.dashboard(
       decimals=1,
       unit='ms',
       colors=[budgetMinutesColor],
-      colorMode='value'
+      colorMode='value',
     ),
     grafanaCalHeatmap.heatmapCalendarPanel(
       'Calendar',
