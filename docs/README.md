@@ -74,7 +74,8 @@ General principles: runbooks should be
 * as short and concise as possible
 * avoid duplication of information - link to README.md for general information
 * complete enough to be executed without further research
-* all structured in the same way, to make it easy to navigate
+* service runbook structured using the [service overview template](template-service-overview.md), to make it easy to navigate
+* alert playbook structured using the [alert playbook template](template-alert-playbook.md), to make it easy to navigate
 
 #### Suggested Runbook Layout
 
