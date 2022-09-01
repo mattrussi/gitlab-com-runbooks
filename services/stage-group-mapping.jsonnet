@@ -26,7 +26,6 @@
     stage: 'manage',
     feature_categories: [
       'audit_events',
-      'audit_reports',
       'compliance_management',
     ],
   },
@@ -76,6 +75,7 @@
     stage: 'create',
     feature_categories: [
       'source_code_management',
+      'git_lfs',
     ],
   },
   code_review: {
@@ -159,7 +159,6 @@
       'helm_chart_registry',
       'dependency_proxy',
       'dependency_firewall',
-      'git_lfs',
     ],
   },
   static_analysis: {
@@ -269,9 +268,15 @@
     name: 'Product Intelligence',
     stage: 'analytics',
     feature_categories: [
-      'product_analytics',
       'service_ping',
       'privacy_control_center',
+    ],
+  },
+  product_analytics: {
+    name: 'Product Analytics',
+    stage: 'analytics',
+    feature_categories: [
+      'product_analytics',
     ],
   },
   purchase: {
