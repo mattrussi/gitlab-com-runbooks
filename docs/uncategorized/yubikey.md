@@ -745,6 +745,33 @@ Connection to gitlab.com closed.
 </details>
 </p>
 
+## Cleanup
+
+* Unmount the encrypted GPG master volume.
+
+<p>
+<details>
+<summary>Linux</summary>
+
+`sudo veracrypt -d ~/gitlab_secrets`
+
+</details>
+</p>
+
+<p>
+<details>
+<summary>MacOS</summary>
+
+`hdiutil detach /Volumes/GitLab`
+
+</details>
+</p>
+
+* Ensure that the backing file for the GPG master volume is backed up, e.g. copy
+  it to a USB drive.
+* If you have anything that starts up the `gpg-agent`, ensure the options reflect
+  the work we've accomplished above
+
 ## Maintenance
 
 ### Renew expiring subkeys
@@ -875,15 +902,6 @@ add `disable-ccid` to `~/.gnupg/scdaemon.conf` and use the restart script to res
 ### Unable to sign commits with backup YubiKey
 
 If you have configured subkeys on a second, backup YubiKey, you must append a `!` after the `keyid` specified for the `user.signingkey` config attribute in `~/.gitconfig`, before git will use the new signing key. Otherwise git will continue to prompt for the last written YubiKey, regardless of which `keyid` is specified. For additional context, see [this github issue comment](https://github.com/drduh/YubiKey-Guide/issues/19#issuecomment-1143557632).
-
-## Cleanup
-
-* Unmount the encrypted GPG master volume. Linux: `sudo veracrypt -d
-  ~/gitlab_secrets`. Macos: `umount /Volume/Gitlab`.
-* Ensure that the backing file for the GPG master volume is backed up, e.g. copy
-  it to a USB drive.
-* If you have anything that starts up the `gpg-agent`, ensure the options reflect
-  the work we've accomplished above
 
 ## Linux tips
 
