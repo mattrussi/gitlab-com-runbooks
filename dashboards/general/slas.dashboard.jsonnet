@@ -144,6 +144,7 @@ local serviceRow(service) =
       query=serviceAvailabilityQuery({ type: service.name }, 'slo_observation_status', '1d'),
       legendFormat='{{ type }}',
       interval=INTERVAL,
+      intervalFactor=1,
       points=true,
       legend_show=false
     )
@@ -204,6 +205,7 @@ basic.dashboard(
       query=systemAvailabilityQuery(systemSelector, '1d'),
       legendFormat='gitlab.com SLA',
       interval=INTERVAL,
+      intervalFactor=1,
       points=true,
       legend_show=false
     )
