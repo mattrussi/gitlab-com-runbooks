@@ -18,17 +18,8 @@ stageGroupDashboards.dashboard('fulfillment_platform')
     refresh='load',
   )
 )
-.addPanel(
-  row.new(title='⏱️  Stack Component Uptime'),
-  gridPos={
-    x: 0,
-    y: 1000,
-    w: 24,
-    h: 8,
-  }
-)
 .addPanels(
-  layout.columnGrid([[
+  layout.rowGrid('⏱️  Stack Component Uptime', [
     basic.slaStats(
       title='CustomersDot probe result',
       query='avg(avg_over_time(probe_success{instance="$instance", environment="$environment", type="blackbox"}[$__interval]))'
@@ -37,5 +28,5 @@ stageGroupDashboards.dashboard('fulfillment_platform')
       title='Puma uptime',
       query='1-(avg(avg_over_time(last_scrape_error{environment="$environment", type="customersdot"}[$__interval])))',
     ),
-  ]], [4, 4], rowHeight=8, startRow=1001)
+  ], startRow=1001, rowHeight=8)
 )
