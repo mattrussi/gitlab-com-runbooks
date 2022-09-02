@@ -9,6 +9,7 @@ local goContainers = ['gitlab-pages', 'gitlab-workhorse', 'kas', 'registry', 'th
   kube_go_memory: resourceSaturationPoint({
     title: 'Go Memory Utilization per Node',
     severity: 's4',
+    dangerouslyThanosEvaluated: true,
     horizontallyScalable: true,
     appliesTo: std.setInter(
       std.set(metricsCatalog.findServicesWithTag(tag='golang')),

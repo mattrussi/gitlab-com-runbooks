@@ -7,6 +7,52 @@ groups:
   rules:
   - record: gitlab_component_saturation:ratio
     labels:
+      component: go_memory
+    expr: |
+      max by(env, environment, tier, type, stage) (
+        clamp_min(
+          clamp_max(
+            sum by (env, environment, tier, type, stage, fqdn) (
+              go_memstats_alloc_bytes{type=~"gitaly|monitoring|praefect|registry|web-pages"}
+            )
+            /
+            sum by (env, environment, tier, type, stage, fqdn) (
+              node_memory_MemTotal_bytes{type=~"gitaly|monitoring|praefect|registry|web-pages"}
+            )
+            ,
+            1)
+        ,
+        0)
+      )
+  - record: gitlab_component_saturation:ratio
+    labels:
+      component: kube_go_memory
+    expr: |
+      max by(env, environment, tier, type, stage) (
+        clamp_min(
+          clamp_max(
+            (
+              go_memstats_alloc_bytes{type=~"api|git|kas|monitoring|registry|vault|web|web-pages|websockets"}
+              / on(env, environment, tier, type, stage, cluster, pod) group_left()
+              topk by(env, environment, tier, type, stage, cluster, pod) (1,
+                container_spec_memory_limit_bytes:labeled{container=~"gitlab-pages|gitlab-workhorse|kas|registry|thanos-store",type=~"api|git|kas|monitoring|registry|vault|web|web-pages|websockets"}
+              )
+            )
+            or
+            (
+              go_memstats_alloc_bytes{type="monitoring", type=~"api|git|kas|monitoring|registry|vault|web|web-pages|websockets"}
+              / on(environment, tier, type, cluster, pod) group_left()
+              topk by (environment, tier, type, cluster, pod) (1,
+                container_spec_memory_limit_bytes:labeled{type="monitoring", container=~"gitlab-pages|gitlab-workhorse|kas|registry|thanos-store"}
+              )
+            )
+            ,
+            1)
+        ,
+        0)
+      )
+  - record: gitlab_component_saturation:ratio
+    labels:
       component: kube_node_ips
       stage: main
       tier: inf
@@ -126,6 +172,22 @@ groups:
   rules:
   - record: slo:max:soft:gitlab_component_saturation:ratio
     labels:
+      component: go_memory
+    expr: "0.9"
+  - record: slo:max:hard:gitlab_component_saturation:ratio
+    labels:
+      component: go_memory
+    expr: "0.98"
+  - record: slo:max:soft:gitlab_component_saturation:ratio
+    labels:
+      component: kube_go_memory
+    expr: "0.9"
+  - record: slo:max:hard:gitlab_component_saturation:ratio
+    labels:
+      component: kube_go_memory
+    expr: "0.98"
+  - record: slo:max:soft:gitlab_component_saturation:ratio
+    labels:
       component: kube_node_ips
     expr: "0.8"
   - record: slo:max:hard:gitlab_component_saturation:ratio
@@ -168,6 +230,22 @@ groups:
   interval: 5m
   partial_response_strategy: warn
   rules:
+  - record: gitlab_component_saturation_info
+    labels:
+      capacity_planning_strategy: quantile95_1h
+      component: go_memory
+      horiz_scaling: "yes"
+      quantile: max
+      severity: s4
+    expr: "1"
+  - record: gitlab_component_saturation_info
+    labels:
+      capacity_planning_strategy: quantile95_1h
+      component: kube_go_memory
+      horiz_scaling: "yes"
+      quantile: max
+      severity: s4
+    expr: "1"
   - record: gitlab_component_saturation_info
     labels:
       capacity_planning_strategy: quantile95_1h
@@ -226,6 +304,100 @@ groups:
   interval: 1m
   partial_response_strategy: warn
   rules:
+  - alert: component_saturation_slo_out_of_bounds
+    for: 5m
+    annotations:
+      title: The Go Memory Utilization per Node resource of the {{ $labels.type }}
+        service ({{ $labels.stage }} stage) has a saturation exceeding SLO and is
+        close to its capacity limit.
+      description: |
+        This means that this resource is running close to capacity and is at risk of exceeding its current capacity limit.
+
+        Details of the Go Memory Utilization per Node resource:
+
+        Go's memory allocation strategy can make it look like a Go process is saturating memory when measured using RSS, when in fact the process is not at risk of memory saturation. For this reason, we measure Go processes using the `go_memstat_alloc_bytes` metric instead of RSS.
+      grafana_dashboard_id: alerts-sat_go_memory
+      grafana_dashboard_link: https://dashboards.gitlab.net/d/alerts-sat_go_memory?from=now-6h/m&to=now-1m/m&var-environment={{
+        $labels.environment }}&var-type={{ $labels.type }}&var-stage={{ $labels.stage
+        }}
+      grafana_min_zoom_hours: "6"
+      grafana_panel_id: "3631721613"
+      grafana_variables: environment,type,stage
+      promql_query: |
+        max by(env, environment, tier, type, stage, fqdn) (
+          clamp_min(
+            clamp_max(
+              sum by (env, environment, tier, type, stage, fqdn) (
+                go_memstats_alloc_bytes{environment="{{ $labels.environment }}",stage="{{ $labels.stage }}",type="{{ $labels.type }}"}
+              )
+              /
+              sum by (env, environment, tier, type, stage, fqdn) (
+                node_memory_MemTotal_bytes{environment="{{ $labels.environment }}",stage="{{ $labels.stage }}",type="{{ $labels.type }}"}
+              )
+              ,
+              1)
+          ,
+          0)
+        )
+      runbook: docs/{{ $labels.type }}/README.md
+    labels:
+      alert_type: cause
+      rules_domain: general
+      severity: s4
+    expr: |
+      gitlab_component_saturation:ratio{component="go_memory",monitor="global"} > on(component) group_left
+      slo:max:hard:gitlab_component_saturation:ratio{component="go_memory",monitor="global"}
+  - alert: component_saturation_slo_out_of_bounds
+    for: 5m
+    annotations:
+      title: The Go Memory Utilization per Node resource of the {{ $labels.type }}
+        service ({{ $labels.stage }} stage) has a saturation exceeding SLO and is
+        close to its capacity limit.
+      description: |
+        This means that this resource is running close to capacity and is at risk of exceeding its current capacity limit.
+
+        Details of the Go Memory Utilization per Node resource:
+
+        Measures Go memory usage as a percentage of container memory limit
+      grafana_dashboard_id: alerts-sat_kube_go_memory
+      grafana_dashboard_link: https://dashboards.gitlab.net/d/alerts-sat_kube_go_memory?from=now-6h/m&to=now-1m/m&var-environment={{
+        $labels.environment }}&var-type={{ $labels.type }}&var-stage={{ $labels.stage
+        }}
+      grafana_min_zoom_hours: "6"
+      grafana_panel_id: "4163523952"
+      grafana_variables: environment,type,stage
+      promql_query: |
+        max by(env, environment, tier, type, stage, cluster, pod) (
+          clamp_min(
+            clamp_max(
+              (
+                go_memstats_alloc_bytes{environment="{{ $labels.environment }}",stage="{{ $labels.stage }}",type="{{ $labels.type }}"}
+                / on(env, environment, tier, type, stage, cluster, pod) group_left()
+                topk by(env, environment, tier, type, stage, cluster, pod) (1,
+                  container_spec_memory_limit_bytes:labeled{container=~"gitlab-pages|gitlab-workhorse|kas|registry|thanos-store",environment="{{ $labels.environment }}",stage="{{ $labels.stage }}",type="{{ $labels.type }}"}
+                )
+              )
+              or
+              (
+                go_memstats_alloc_bytes{type="monitoring", environment="{{ $labels.environment }}",stage="{{ $labels.stage }}",type="{{ $labels.type }}"}
+                / on(environment, tier, type, cluster, pod) group_left()
+                topk by (environment, tier, type, cluster, pod) (1,
+                  container_spec_memory_limit_bytes:labeled{type="monitoring", container=~"gitlab-pages|gitlab-workhorse|kas|registry|thanos-store"}
+                )
+              )
+              ,
+              1)
+          ,
+          0)
+        )
+      runbook: docs/{{ $labels.type }}/README.md
+    labels:
+      alert_type: cause
+      rules_domain: general
+      severity: s4
+    expr: |
+      gitlab_component_saturation:ratio{component="kube_go_memory",monitor="global"} > on(component) group_left
+      slo:max:hard:gitlab_component_saturation:ratio{component="kube_go_memory",monitor="global"}
   - alert: component_saturation_slo_out_of_bounds
     for: 5m
     annotations:

@@ -5,6 +5,7 @@ local resourceSaturationPoint = (import 'servicemetrics/resource_saturation_poin
   go_memory: resourceSaturationPoint({
     title: 'Go Memory Utilization per Node',
     severity: 's4',
+    dangerouslyThanosEvaluated: true,
     horizontallyScalable: true,
     appliesTo: std.setInter(
       std.set(metricsCatalog.findServicesWithTag(tag='golang')),
