@@ -16,6 +16,27 @@
 
 <!-- END_MARKER -->
 
+## Operations
+
+ExternalDNS allows us to generate DNS records for k8s resources, simplifying
+references to them across our infrastructure
+
+### Infrastructure
+
+ExternalDNS is deployed as a k8s workload [configured in the gitlab-helmfiles repo](https://gitlab.com/gitlab-com/gl-infra/k8s-workloads/gitlab-helmfiles/-/tree/master/releases/external-dns).
+At the configured interval, it queries the Kubernetes API to retrieve
+resources with the relevant annotations and creates or updates DNS records for them.
+[A Terraform module](https://ops.gitlab.net/gitlab-com/gl-infra/config-mgmt/-/tree/master/modules/gke-external-dns)
+configures the GCP DNS zone and a service account with access to it.
+
+### Configuration
+
+To instruct ExternalDNS to maintain a DNS record for a given k8s resource, annotate it with the key `external-dns.alpha.kubernetes.io/hostname`; the value is the address you want to associate with that
+resource. To avoid the risk of stale records (given propagation delay), stable IPs should be used. In GKE we can accomplish this by using `Services` of type `LoadBalancer`, and adding the ExternalDNS
+annotation to that resource.
+
+See <https://github.com/kubernetes-sigs/external-dns/> for more details
+
 <!-- ## Summary -->
 
 <!-- ## Architecture -->
