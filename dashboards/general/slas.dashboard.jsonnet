@@ -119,6 +119,7 @@ local serviceRow(service) =
       legendFormat='{{ type }}',
       displayName=service.friendly_name,
       links=links,
+      intervalFactor=1,
     ),
     basic.slaStats(
       title='',
@@ -130,12 +131,14 @@ local serviceRow(service) =
       unit='ms',
       colors=[budgetMinutesColor],
       colorMode='value',
+      intervalFactor=1,
     ),
     grafanaCalHeatmap.heatmapCalendarPanel(
       '',
       query=serviceAvailabilityQuery({ type: service.name }, 'slo_observation_status', '1d'),
       legendFormat='',
       datasource='$PROMETHEUS_DS',
+      intervalFactor=1,
     ),
     basic.slaTimeseries(
       title='%s: SLA Trends ' % [service.friendly_name],
@@ -181,6 +184,7 @@ basic.dashboard(
     basic.slaStats(
       title='GitLab.com Availability',
       query=systemAvailabilityQuery(systemSelector, '$__range'),
+      intervalFactor=1,
     ),
     basic.slaStats(
       title='',
@@ -190,13 +194,15 @@ basic.dashboard(
       decimals=1,
       unit='ms',
       colors=[budgetMinutesColor],
-      colorMode='value'
+      colorMode='value',
+      intervalFactor=1,
     ),
     grafanaCalHeatmap.heatmapCalendarPanel(
       'Calendar',
       query=systemAvailabilityQuery(systemSelector, '1d'),
       legendFormat='',
       datasource='$PROMETHEUS_DS',
+      intervalFactor=1,
     ),
     basic.slaTimeseries(
       title='Overall SLA over time period - gitlab.com',

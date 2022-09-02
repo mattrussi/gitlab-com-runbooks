@@ -857,6 +857,7 @@ local validateTags(tags) =
     unit='percentunit',
     colors=getDefaultAvailabilityColorScale(invertColors, if unit == 'percentunit' then 1 else 100),
     colorMode='background',
+    intervalFactor=3,
   )::
     statPanel.new(
       title,
@@ -881,7 +882,8 @@ local validateTags(tags) =
       promQuery.target(
         query,
         legendFormat=legendFormat,
-        instant=true
+        instant=true,
+        intervalFactor=intervalFactor,
       )
     )
     + panelOverrides(stableId),

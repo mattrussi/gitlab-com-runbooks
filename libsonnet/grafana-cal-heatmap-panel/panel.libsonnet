@@ -5,6 +5,7 @@ local heatmapCalendarPanel(
   query,
   legendFormat='',
   datasource='$PROMETHEUS_DS',
+  intervalFactor=3,
       ) =
   {
     type: 'neocat-cal-heatmap-panel',
@@ -14,7 +15,8 @@ local heatmapCalendarPanel(
         query,
         legendFormat=legendFormat,
         interval='1d',
-        instant=false
+        instant=false,
+        intervalFactor=intervalFactor,
       ),
     ],
     fieldConfig: {
