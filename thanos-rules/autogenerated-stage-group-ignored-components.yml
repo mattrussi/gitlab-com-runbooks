@@ -261,7 +261,7 @@ groups:
       product_stage: modelops
       stage_group: mlops
     expr: "1"
-- name: 'Stage group Ignored components: mobile - DevOps for Mobile Apps'
+- name: 'Stage group Ignored components: mobile - Mobile DevOps'
   interval: 1m
   partial_response_strategy: warn
   rules:
@@ -441,14 +441,14 @@ groups:
       product_stage: create
       stage_group: source_code
     expr: "1"
-- name: 'Stage group Ignored components: secure - Threat Insights'
+- name: 'Stage group Ignored components: govern - Threat Insights'
   interval: 1m
   partial_response_strategy: warn
   rules:
   - record: gitlab:ignored_component:stage_group
     labels:
       component: graphql_queries
-      product_stage: secure
+      product_stage: govern
       stage_group: threat_insights
     expr: "1"
 - name: 'Stage group Ignored components: fulfillment - Utilization'

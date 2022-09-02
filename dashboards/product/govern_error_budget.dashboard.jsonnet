@@ -3,5 +3,5 @@
 local errorBudgetsDashboards = import './error_budget_dashboards.libsonnet';
 
 errorBudgetsDashboards
-.dashboard('protect')
+.dashboard('govern')
 .trailer()

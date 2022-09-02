@@ -186,14 +186,8 @@
     stage: 'secure',
     feature_categories: [
       'dependency_scanning',
+      'container_scanning',
       'license_compliance',
-    ],
-  },
-  threat_insights: {
-    name: 'Threat Insights',
-    stage: 'secure',
-    feature_categories: [
-      'vulnerability_management',
     ],
   },
   vulnerability_research: {
@@ -256,12 +250,18 @@
       'error_tracking',
     ],
   },
-  container_security: {
-    name: 'Container Security',
-    stage: 'protect',
+  security_policies: {
+    name: 'Security Policies',
+    stage: 'govern',
     feature_categories: [
-      'security_orchestration',
-      'container_scanning',
+      'security_policy_management',
+    ],
+  },
+  threat_insights: {
+    name: 'Threat Insights',
+    stage: 'govern',
+    feature_categories: [
+      'vulnerability_management',
     ],
   },
   product_intelligence: {
@@ -444,7 +444,7 @@
     ],
   },
   moble_devops: {
-    name: 'DevOps for Mobile Apps',
+    name: 'Mobile DevOps',
     stage: 'mobile',
     feature_categories: [
       'mobile_signing_deployment',

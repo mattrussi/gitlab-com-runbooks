@@ -127,8 +127,8 @@ groups:
   - record: gitlab:feature_category:stage_group:mapping
     labels:
       feature_category: container_scanning
-      product_stage: protect
-      stage_group: container_security
+      product_stage: secure
+      stage_group: composition_analysis
     expr: "1"
   - record: gitlab:feature_category:stage_group:mapping
     labels:
@@ -660,9 +660,9 @@ groups:
     expr: "1"
   - record: gitlab:feature_category:stage_group:mapping
     labels:
-      feature_category: security_orchestration
-      product_stage: protect
-      stage_group: container_security
+      feature_category: security_policy_management
+      product_stage: govern
+      stage_group: security_policies
     expr: "1"
   - record: gitlab:feature_category:stage_group:mapping
     labels:
@@ -745,7 +745,7 @@ groups:
   - record: gitlab:feature_category:stage_group:mapping
     labels:
       feature_category: vulnerability_management
-      product_stage: secure
+      product_stage: govern
       stage_group: threat_insights
     expr: "1"
   - record: gitlab:feature_category:stage_group:mapping
