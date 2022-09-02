@@ -124,8 +124,8 @@ test.suite({
     ),
     expect: [
       {
-        meta: { key: 'json.meta.feature_category', type: 'phrases', params: ['source_code_management'] },
-        query: { bool: { minimum_should_match: 1, should: [{ match_phrase: { 'json.meta.feature_category': 'source_code_management' } }] } },
+        meta: { key: 'json.meta.feature_category', type: 'phrases', params: ['source_code_management', 'git_lfs'] },
+        query: { bool: { minimum_should_match: 1, should: [{ match_phrase: { 'json.meta.feature_category': 'source_code_management' } }, { match_phrase: { 'json.meta.feature_category': 'git_lfs' } }] } },
       },
     ],
   },

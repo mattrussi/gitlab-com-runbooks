@@ -26,7 +26,6 @@
     stage: 'manage',
     feature_categories: [
       'audit_events',
-      'audit_reports',
       'compliance_management',
     ],
   },
@@ -76,6 +75,7 @@
     stage: 'create',
     feature_categories: [
       'source_code_management',
+      'git_lfs',
     ],
   },
   code_review: {
@@ -159,7 +159,6 @@
       'helm_chart_registry',
       'dependency_proxy',
       'dependency_firewall',
-      'git_lfs',
     ],
   },
   static_analysis: {
@@ -187,14 +186,8 @@
     stage: 'secure',
     feature_categories: [
       'dependency_scanning',
+      'container_scanning',
       'license_compliance',
-    ],
-  },
-  threat_insights: {
-    name: 'Threat Insights',
-    stage: 'secure',
-    feature_categories: [
-      'vulnerability_management',
     ],
   },
   vulnerability_research: {
@@ -257,21 +250,33 @@
       'error_tracking',
     ],
   },
-  container_security: {
-    name: 'Container Security',
-    stage: 'protect',
+  security_policies: {
+    name: 'Security Policies',
+    stage: 'govern',
     feature_categories: [
-      'security_orchestration',
-      'container_scanning',
+      'security_policy_management',
+    ],
+  },
+  threat_insights: {
+    name: 'Threat Insights',
+    stage: 'govern',
+    feature_categories: [
+      'vulnerability_management',
     ],
   },
   product_intelligence: {
     name: 'Product Intelligence',
     stage: 'analytics',
     feature_categories: [
-      'product_analytics',
       'service_ping',
       'privacy_control_center',
+    ],
+  },
+  product_analytics: {
+    name: 'Product Analytics',
+    stage: 'analytics',
+    feature_categories: [
+      'product_analytics',
     ],
   },
   purchase: {
@@ -439,7 +444,7 @@
     ],
   },
   moble_devops: {
-    name: 'DevOps for Mobile Apps',
+    name: 'Mobile DevOps',
     stage: 'mobile',
     feature_categories: [
       'mobile_signing_deployment',

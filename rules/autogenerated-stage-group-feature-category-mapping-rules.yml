@@ -42,12 +42,6 @@ groups:
     expr: "1"
   - record: gitlab:feature_category:stage_group:mapping
     labels:
-      feature_category: audit_reports
-      product_stage: manage
-      stage_group: compliance
-    expr: "1"
-  - record: gitlab:feature_category:stage_group:mapping
-    labels:
       feature_category: authentication_and_authorization
       product_stage: manage
       stage_group: authentication_and_authorization
@@ -133,8 +127,8 @@ groups:
   - record: gitlab:feature_category:stage_group:mapping
     labels:
       feature_category: container_scanning
-      product_stage: protect
-      stage_group: container_security
+      product_stage: secure
+      stage_group: composition_analysis
     expr: "1"
   - record: gitlab:feature_category:stage_group:mapping
     labels:
@@ -325,8 +319,8 @@ groups:
   - record: gitlab:feature_category:stage_group:mapping
     labels:
       feature_category: git_lfs
-      product_stage: package
-      stage_group: package
+      product_stage: create
+      stage_group: source_code
     expr: "1"
   - record: gitlab:feature_category:stage_group:mapping
     labels:
@@ -548,7 +542,7 @@ groups:
     labels:
       feature_category: product_analytics
       product_stage: analytics
-      stage_group: product_intelligence
+      stage_group: product_analytics
     expr: "1"
   - record: gitlab:feature_category:stage_group:mapping
     labels:
@@ -666,9 +660,9 @@ groups:
     expr: "1"
   - record: gitlab:feature_category:stage_group:mapping
     labels:
-      feature_category: security_orchestration
-      product_stage: protect
-      stage_group: container_security
+      feature_category: security_policy_management
+      product_stage: govern
+      stage_group: security_policies
     expr: "1"
   - record: gitlab:feature_category:stage_group:mapping
     labels:
@@ -751,7 +745,7 @@ groups:
   - record: gitlab:feature_category:stage_group:mapping
     labels:
       feature_category: vulnerability_management
-      product_stage: secure
+      product_stage: govern
       stage_group: threat_insights
     expr: "1"
   - record: gitlab:feature_category:stage_group:mapping

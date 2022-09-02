@@ -183,8 +183,6 @@ teams:
   product_stage_group: composition_analysis
   ignored_components:
   - graphql_queries
-- name: container_security
-  product_stage_group: container_security
 - name: acquisition
   product_stage_group: acquisition
   ignored_components:
