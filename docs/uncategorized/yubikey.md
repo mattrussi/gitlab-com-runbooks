@@ -1,6 +1,6 @@
 # Configuring and Using the Yubikey
 
-The following setup enables us to use the YubiKey with OpenPGP, and the Authentication subkey [as an SSH key](https://developers.yubico.com/PGP/SSH_authentication/).
+The following setup enables us to use the YubiKey with OpenPGP, the Authentication subkey [as an SSH key](https://developers.yubico.com/PGP/SSH_authentication/) and the Encryption subkey to sign Git commits.
 
 ## Initial configuration
 
@@ -39,7 +39,7 @@ of this document.
 
       Yubikey 4 does not come with all modules enabled. This setting lets us use the Yubikey as both a SmartCard and an OTP device at the same time.
 
-      ```bash
+      ```shell
       ykpersonalize -m86
       ```
 
@@ -75,7 +75,7 @@ of this document.
 
       Yubikey 4 does not come with all modules enabled. This setting lets us use the Yubikey as both a SmartCard and an OTP device at the same time.
 
-      ```bash
+      ```shell
       ykpersonalize -m86
       ```
 
@@ -92,7 +92,7 @@ of this document.
 
 * For graphical pin-entry on MacOS install the brew package `pinentry-mac`
 
-    ```bash
+    ```shell
     brew install pinentry-mac
     ```
 
@@ -109,7 +109,7 @@ The yubikey comes pre-configured with a set of default PINs that we need to chan
 
 The `unlock pin` is what you will use most of the time for confirming access via the keys stored on the Yubikey.
 
-```bash
+```shell
 
 > gpg --card-edit
 
@@ -201,13 +201,13 @@ To do that:
 
       Create an encrypted sparse bundle using MacOS' `hdiutil`:
 
-      ```bash
+      ```shell
       hdiutil create -fs HFS+ -layout GPTSPUD -type SPARSEBUNDLE -encryption AES-256 -volname "GitLab" -size 100m -stdinpass ~/gitlab.sparsebundle
       ```
 
       Mount it up:
 
-      ```bash
+      ```shell
       hdiutil attach -encryption -stdinpass -mountpoint /Volumes/GitLab ~/gitlab.sparsebundle
       ```
 
@@ -226,7 +226,7 @@ To do that:
 
       Create volume file
 
-      ```bash
+      ```shell
       veracrypt --text --create --encryption AES --hash SHA-512 --size 100M --volume-type normal --filesystem FAT --keyfiles "" $HOME/gitlab_secrets
 
       Enter password:
@@ -241,7 +241,7 @@ To do that:
 
       Mount the volume
 
-      ```bash
+      ```shell
       [sudo] mkdir -m 755 /media/GitLab
       veracrypt --text --keyfiles "" --protect-hidden no $HOME/gitlab_secrets /media/GitLab
 
@@ -260,26 +260,26 @@ To do that:
 
       Set the mountpoint
 
-      ```bash
+      ```shell
       export MOUNTPOINT=[According to the OS e.g. /media]/GitLab
       ```
 
       Create the configuration directory where our GnuPG key rings will live:
 
-      ```bash
+      ```shell
       mkdir $MOUNTPOINT/gpg_config
       chmod 700 $MOUNTPOINT/gpg_config
       ```
 
       Export the configuration directory for GnuPG usage:
 
-      ```bash
+      ```shell
       export GNUPGHOME=$MOUNTPOINT/gpg_config
       ```
 
       Setup the `gpg.conf` before we create things:
 
-      ```bash
+      ```shell
       echo default-preference-list SHA512 SHA384 SHA256 SHA224 AES256 AES192 AES CAMELLIA256 CAMELLIA192 CAMELLIA128 TWOFISH > $MOUNTPOINT/gpg_config/gpg.conf
       echo cert-digest-algo SHA512 >> $MOUNTPOINT/gpg_config/gpg.conf
       echo use-agent >> $MOUNTPOINT/gpg_config/gpg.conf
@@ -298,7 +298,7 @@ only the certify capability.
     <details>
     <summary>How to create a master key using gpg</summary>
 
-    ```bash
+    ```shell
     > gpg --expert --full-generate-key
     Please select what kind of key you want:
       (1) RSA and RSA (default)
@@ -365,7 +365,7 @@ mean key rotation.
 <details>
 <summary>How to create a subkeys using gpg</summary>
 
-  ```bash
+  ```shell
 
   > gpg --edit-key FAEFD83E
 
@@ -487,7 +487,7 @@ Usually, there will be one running with `$HOME/.gnupg` that is the culprit.
 
 If your gpg version does not output the **master** key id you should use the full fingerprint instead.
 
-```bash
+```shell
 # To obtain your key fingerprint
 gpg --list-key
 # example output
@@ -513,7 +513,7 @@ you've imported.
 
 In a fresh terminal (i.e. with the default GNUPGHOME env var, not the veracrypt mounted one) we can:
 
-  ```bash
+  ```shell
   > gpg --import $MOUNTPOINT/gpg_config/FAEFD83E.asc
   gpg: key FAEFD83E: public key imported
   gpg: Total number processed: 1
@@ -559,7 +559,7 @@ In a fresh terminal (i.e. with the default GNUPGHOME env var, not the veracrypt 
 
 Earlier in this howto, you edited a gpg.conf file in your mounted encrypted drive. You should copy that file (or it's contents) into the gpg.conf file in your ~/.gnupg directory.
 
-```bash
+```shell
 cp $MOUNTPOINT/gpg_config/gpg.conf ~/.gnupg/
 ```
 
@@ -571,7 +571,7 @@ Ensure proper options are set in `gpg-agent.conf`
 <details>
 <summary>Linux</summary>
 
-  ```bash
+  ```shell
   cat << EOF > ~/.gnupg/gpg-agent.conf
   default-cache-ttl 600
   max-cache-ttl 7200
@@ -587,7 +587,7 @@ Ensure proper options are set in `gpg-agent.conf`
 <details>
 <summary>MacOS</summary>
 
-  ```bash
+  ```shell
   cat << EOF > ~/.gnupg/gpg-agent.conf
   default-cache-ttl 600
   max-cache-ttl 7200
@@ -605,7 +605,7 @@ Ensure proper options are set in `scdaemon.conf`
 <details>
 <summary>Linux & MacOS</summary>
 
-```bash
+```shell
 cat << EOF > ~/.gnupg/scdaemon.conf
 reader-port Yubico Yubi
 disable-ccid
@@ -621,7 +621,7 @@ Ensure your environment knows how to authenticate SSH
 <details>
 <summary>MacOS</summary>
 
-```bash
+```shell
 export SSH_AUTH_SOCK=$HOME/.gnupg/S.gpg-agent.ssh
 ```
 
@@ -632,7 +632,7 @@ export SSH_AUTH_SOCK=$HOME/.gnupg/S.gpg-agent.ssh
 <details>
 <summary>Linux</summary>
 
-```bash
+```shell
 unset SSH_AGENT_PID
 if [ "${gnupg_SSH_AUTH_SOCK_by:-0}" -ne $$ ]; then
   export SSH_AUTH_SOCK="$(gpgconf --list-dirs agent-ssh-socket)"
@@ -657,7 +657,7 @@ After all the files are changed:
   This script will reset `gpg-agent` and `ssh-agent` after you make the
   above updates to `gpg-agent.conf`.
 
-  ```bash
+  ```shell
   #!/bin/bash
 
   echo "kill gpg-agent"
@@ -704,7 +704,7 @@ This generates a public key that you can paste into GitLab or use as a public ke
 <details>
 <summary>How to export the SSH public key</summary>
 
-  ```bash
+  ```shell
   > gpg --export-ssh-key FAEFD87E
   ssh-rsa AAAAB3NzaC1yc2EAAAADAQABA ... COMMENT
   ```
@@ -712,9 +712,50 @@ This generates a public key that you can paste into GitLab or use as a public ke
 </details>
 </p>
 
-### 14. Testing
+### 14. Use your GPG Public Key to Sign Git Commits
 
-Try to sign a message and connect to gitlab to check if everything is working.
+By telling Git and GitLab about your GPG public key, you can sign your Git commits with your Encryption subkey.
+
+First, follow the instructions [here](https://docs.gitlab.com/ee/user/project/repository/gpg_signed_commits/index.html#associate-your-gpg-key-with-git) to tell Git to sign your commits with your key.
+
+Next, we'll associate the key with our GitLab profile.
+
+<p>
+<details>
+<summary>How to export the GPG public key</summary>
+
+  ```shell
+  > gpg --armor --export FAEFD87E
+  -----BEGIN PGP PUBLIC KEY BLOCK-----
+
+  mQINBGMFt1wBEADOZNs6tW...
+  -----END PGP PUBLIC KEY BLOCK-----
+  ```
+
+  Alternatively, if you recall, we had earlier backed this up to our encrypted volume, you can just view the contents of the file you had backed up.
+
+  ```shell
+  > cat $MOUNTPOINT/gpg_config/FAEFD83E.asc
+  -----BEGIN PGP PUBLIC KEY BLOCK-----
+
+  mQINBGMFt1wBEADOZNs6tW...
+  -----END PGP PUBLIC KEY BLOCK-----
+  ```
+
+</details>
+</p>
+
+Copy the entire key block including the `BEGIN PGP PUBLIC KEY BLOCK` and `END PGP PUBLIC KEY BLOCK` lines.
+
+Go to your GitLab.com profile and click on GPG keys in the sidebar. Paste the key block into the input box.
+
+Note that this is the **entire** key, including all subkeys, so after submitting the key you should see the key ID of the master key as well as the all key IDs of the signing, encryption and authentication subkeys you made. This is expected.
+
+Remember to do this for other GitLab instances too (ops and staging).
+
+### 15. Testing
+
+Try to sign a message, open an SSH connection to gitlab, and sign an empty commit to check if everything is working.
 
 <p>
 <details>
@@ -722,7 +763,7 @@ Try to sign a message and connect to gitlab to check if everything is working.
 
 Try encrypting and signing a message, e.g. to yourself:
 
-```
+```shell
 $ echo foo | gpg --encrypt --armor --sign --recipient <keyid from `gpg --list-keys`>
 -----BEGIN PGP MESSAGE-----
 ...
@@ -731,7 +772,7 @@ $ echo foo | gpg --encrypt --armor --sign --recipient <keyid from `gpg --list-ke
 
 Exercise the ssh authentication functionality:
 
-```
+```shell
 $ ssh-add -l
 ... your public key ...
 
@@ -740,6 +781,12 @@ $ ssh git@gitlab.com
 PTY allocation request failed on channel 0
 Welcome to GitLab, @user!
 Connection to gitlab.com closed.
+```
+
+Exercise the git commit signing functionality on a throwaway branch:
+
+```shell
+git commit --allow-empty -m "Test signing"
 ```
 
 </details>
@@ -786,7 +833,7 @@ export GNUPGHOME=$MOUNTPOINT/gpg_config/
 
 Optionally take a backup of the original gpg\_config, inside your encrypted volume (size is tiny, it's a small price to pay)
 
-```bash
+```shell
 cp -r $MOUNTPOINT/gpg_config $MOUNTPOINT/gpg_config.$(date +%Y-%m-%d).bak
 ```
 
@@ -796,7 +843,7 @@ cp -r $MOUNTPOINT/gpg_config $MOUNTPOINT/gpg_config.$(date +%Y-%m-%d).bak
 
 Edit the key:
 
-```bash
+```shell
 $ gpg --edit-key <youremail>
 # Ensure that after the boilerplate license it reports "Secret key is available",
 # and not "Secret subkeys are available".  The former means you correctly have access
@@ -909,7 +956,7 @@ If you have configured subkeys on a second, backup YubiKey, you must append a `!
 
 On recent Ubuntu/Mint releases (18.04+), GPG has a lot of quality-of-life enhancements, which have just bit you in the butt.   When you run gpg with a 'new' GNUPGHOME value, a dir is created in /run/user/<uid>/gnupg/, based in what looks to be a hash of the value of GNUPGHOME, and agents stated (gpg-agent, scdaemon, at least) with sockets in that directory, so there can be multiple running at once.  You've got this message because the scdaemon that you're accessing (via its socket) is not the one that has ownership of the Yubikey right now.  You can release the other one by executing
 
-```bash
+```shell
 gpg-connect-agent "SCD KILLSCD" "SCD BYE" /bye
 ```
 
@@ -921,7 +968,7 @@ with GNUPGHOME set to the path of the instance that currently owns the card that
 
 Noted on Mint 19 Mate edition, because it's GTK2 and the default pinentry install was for GNOME3, but may apply elsewhere:
 
-```bash
+```shell
 sudo apt install pinentry-gtk2
 sudo update-alternatives --set pinentry /usr/bin/pinentry-gtk-2
 ```
