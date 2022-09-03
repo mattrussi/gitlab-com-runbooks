@@ -28,7 +28,7 @@ groups:
       runbook: docs/patroni/postgres.md#replication-is-lagging-or-has-stopped
       title: WAL-G replication has stopped
   - alert: PostgreSQL_CommitRateTooLow
-    expr: rate(pg_stat_database_xact_commit{datname="gitlabhq_production", type =~"postgres|patroni", environment!="gstg", shard="default"}[1m])
+    expr: rate(pg_stat_database_xact_commit{datname="gitlabhq_production", type =~"postgres|patroni", environment!="gstg", shard="default", , fqdn!~"patroni-v12.*|patroni-ci-[0-9]+-db-.*"}[1m])
       < 1000
     for: 5m
     labels:
@@ -266,7 +266,7 @@ groups:
       title: "Split Brain: too many postgres databases in environment {{$labels.environment}}
         of type {{$labels.type}} in read-write (primary) mode"
   - alert: PostgreSQL_SplitBrain_Replicas
-    expr: count(count(pg_stat_wal_receiver_status{type=~"postgres|patroni", shard!="zfs"} >= 0) BY (environment, upstream_host))
+    expr: count(count(pg_stat_wal_receiver_status{type=~"postgres|patroni", shard!="zfs", fqdn!~"patroni-v12.*|patroni-ci-[0-9]+-db-.*"} >= 0) BY (environment, upstream_host))
       BY (environment) > 1
     for: 1m
     labels:
