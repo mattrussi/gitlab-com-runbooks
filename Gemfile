@@ -15,7 +15,7 @@ group :development, :test do
   gem 'rspec'
   gem 'rspec-parameterized'
   gem 'rubocop'
-  gem 'gitlab-styles', '~> 6.2', require: false
+  gem 'gitlab-styles', '~> 8.0', require: false
   gem 'bigdecimal'
   gem 'webmock'
   gem 'super_diff'
