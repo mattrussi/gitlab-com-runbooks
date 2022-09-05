@@ -12,12 +12,12 @@ groups:
         clamp_min(
           clamp_max(
             (
-              container_memory_usage_bytes{id="/system.slice/gitlab-runsvdir.service", type=~"gitaly|praefect"} -
-              container_memory_cache{id="/system.slice/gitlab-runsvdir.service", type=~"gitaly|praefect"} -
-              container_memory_swap{id="/system.slice/gitlab-runsvdir.service", type=~"gitaly|praefect"}
+              container_memory_usage_bytes{id=~"/system.slice/gitlab-runsvdir.service|/gitaly/gitaly-pid.*", type=~"gitaly|praefect"} -
+              container_memory_cache{id=~"/system.slice/gitlab-runsvdir.service|/gitaly/gitaly-pid.*", type=~"gitaly|praefect"} -
+              container_memory_swap{id=~"/system.slice/gitlab-runsvdir.service|/gitaly/gitaly-pid.*", type=~"gitaly|praefect"}
             )
             /
-            container_spec_memory_limit_bytes{id="/system.slice/gitlab-runsvdir.service", type=~"gitaly|praefect"}
+            container_spec_memory_limit_bytes{id=~"/system.slice/gitlab-runsvdir.service|/gitaly/gitaly-pid.*", type=~"gitaly|praefect"}
             ,
             1)
         ,
@@ -2222,9 +2222,9 @@ groups:
 
         Details of the Cgroup Memory Utilization per Node resource:
 
-        Cgroup memory utilization per node.
+        Cgroup memory utilization per node and per repository cgroup.
 
-        Some services, notably Gitaly, are configured to run within a cgroup with a memory limit lower than the memory limit for the node. This ensures that a traffic spike to Gitaly does not affect other services on the node.
+        Some services, notably Gitaly, are configured to run within a cgroup with a memory limit lower than the memory limit for the node. This ensures that a traffic spike to Gitaly does not affect other services on the node, and a specific repository doesn't use all the memory effecting the rest of the repositories.
 
         If this resource is becoming saturated, this may indicate traffic spikes to Gitaly, abuse or possibly resource leaks in the application. Gitaly or other git processes may be killed by the OOM killer when this resource is saturated.
       grafana_dashboard_id: alerts-sat_cgroup_memory
@@ -2235,16 +2235,16 @@ groups:
       grafana_panel_id: "2265664609"
       grafana_variables: environment,type,stage
       promql_query: |
-        max by(environment, tier, type, stage, fqdn) (
+        max by(environment, tier, type, stage, fqdn, id) (
           clamp_min(
             clamp_max(
               (
-                container_memory_usage_bytes{id="/system.slice/gitlab-runsvdir.service", environment="{{ $labels.environment }}",stage="{{ $labels.stage }}",type="{{ $labels.type }}"} -
-                container_memory_cache{id="/system.slice/gitlab-runsvdir.service", environment="{{ $labels.environment }}",stage="{{ $labels.stage }}",type="{{ $labels.type }}"} -
-                container_memory_swap{id="/system.slice/gitlab-runsvdir.service", environment="{{ $labels.environment }}",stage="{{ $labels.stage }}",type="{{ $labels.type }}"}
+                container_memory_usage_bytes{id=~"/system.slice/gitlab-runsvdir.service|/gitaly/gitaly-pid.*", environment="{{ $labels.environment }}",stage="{{ $labels.stage }}",type="{{ $labels.type }}"} -
+                container_memory_cache{id=~"/system.slice/gitlab-runsvdir.service|/gitaly/gitaly-pid.*", environment="{{ $labels.environment }}",stage="{{ $labels.stage }}",type="{{ $labels.type }}"} -
+                container_memory_swap{id=~"/system.slice/gitlab-runsvdir.service|/gitaly/gitaly-pid.*", environment="{{ $labels.environment }}",stage="{{ $labels.stage }}",type="{{ $labels.type }}"}
               )
               /
-              container_spec_memory_limit_bytes{id="/system.slice/gitlab-runsvdir.service", environment="{{ $labels.environment }}",stage="{{ $labels.stage }}",type="{{ $labels.type }}"}
+              container_spec_memory_limit_bytes{id=~"/system.slice/gitlab-runsvdir.service|/gitaly/gitaly-pid.*", environment="{{ $labels.environment }}",stage="{{ $labels.stage }}",type="{{ $labels.type }}"}
               ,
               1)
           ,
