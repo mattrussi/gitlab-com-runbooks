@@ -115,7 +115,7 @@ local gitalyCGroupMemoryUsagePerCGroup(selector) =
     title='cgroup: Memory per cgroup',
     description='RSS usage on every cgroup available on the Gitaly node.',
     query=|||
-      sum by (id) (rate(container_memory_usage_bytes{%(selector)s}[$__interval]))
+      sum by (id) (container_memory_usage_bytes{%(selector)s})
     ||| % { selector: selector },
     format='bytes',
     interval='1m',
@@ -129,9 +129,7 @@ local gitalyCGroupMemoryQuantile(selector) =
     title='cgroup: Memory',
     description='P99/PX RRS usage of all cgroups available on the Gitaly node.',
     query=|||
-      rate(
-        container_memory_usage_bytes{%(selector)s}[$__interval]
-      )
+      container_memory_usage_bytes{%(selector)s}
     ||| % { selector: selector },
     format='bytes',
     interval='1m',
