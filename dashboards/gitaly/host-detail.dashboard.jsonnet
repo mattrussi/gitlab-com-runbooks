@@ -86,7 +86,7 @@ local gitalyCGroupCPUUsagePerCGroup(selector) =
     title='cgroup: CPU per cgroup',
     description='Rate of CPU usage on every cgroup available on the Gitaly node.',
     query=|||
-      sum by (id) (rate(container_cpu_usage_seconds_total{%(selector)s}[$__interval]))
+      topk(20, sum by (id) (rate(container_cpu_usage_seconds_total{%(selector)s}[$__interval])))
     ||| % { selector: selector },
     format='percentunit',
     interval='1m',
@@ -115,7 +115,7 @@ local gitalyCGroupMemoryUsagePerCGroup(selector) =
     title='cgroup: Memory per cgroup',
     description='RSS usage on every cgroup available on the Gitaly node.',
     query=|||
-      sum by (id) (container_memory_usage_bytes{%(selector)s})
+      topk(20, sum by (id) (container_memory_usage_bytes{%(selector)s}))
     ||| % { selector: selector },
     format='bytes',
     interval='1m',
