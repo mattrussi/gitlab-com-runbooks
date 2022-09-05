@@ -339,7 +339,7 @@ module Storage
 
     def to_filesize(bytes)
       BYTES_CONVERSIONS.each_pair do |denomination, threshold|
-        return "#{(bytes.to_f / (threshold / 1024)).round(2)} #{denomination}" if bytes < threshold
+        break "#{(bytes.to_f / (threshold / 1024)).round(2)} #{denomination}" if bytes < threshold
       end
     end
 

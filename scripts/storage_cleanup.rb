@@ -231,7 +231,7 @@ module Helpers
 
   def human_friendly_filesize(bytes)
     DENOMINATION_CONVERSIONS.each_pair do |e, s|
-      return [(bytes.to_f / (s / 1024)).round(2), e].join(' ') if bytes < s
+      break [(bytes.to_f / (s / 1024)).round(2), e].join(' ') if bytes < s
     end
   end
 
