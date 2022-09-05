@@ -53,6 +53,10 @@ local gitalyApdexSlowMethods = [
   'RepositorySize',
 ];
 
+local praefectApdexSlowMethods = [
+  'VoteTransaction',  // https://gitlab.com/gitlab-org/gitaly/-/issues/4456
+];
+
 // This calculates the apdex score for a Gitaly-like (Gitaly/Praefect)
 // GRPC service. Since this is an SLI only, not all operations are included,
 // only unary ones, and even then known slow operations are excluded from
@@ -97,6 +101,7 @@ local gitalyGRPCErrorRate(baseSelector) =
 {
   gitalyApdexIgnoredMethods:: gitalyApdexIgnoredMethods,
   gitalyApdexSlowMethods:: gitalyApdexSlowMethods,
+  praefectApdexSlowMethods:: praefectApdexSlowMethods,
 
   grpcServiceApdex:: grpcServiceApdex,
   gitalyGRPCErrorRate:: gitalyGRPCErrorRate,

@@ -36,17 +36,33 @@ groups:
       tier: stor
       type: praefect
     expr: |
-      (
-        sum by (environment,stage) (
-          rate(grpc_server_handling_seconds_bucket{grpc_type="unary",job="praefect",le="0.5"}[1m])
+      sum by (environment,stage) (
+        label_replace((
+          sum by (environment,stage) (
+            rate(grpc_server_handling_seconds_bucket{grpc_method!~"VoteTransaction",grpc_type="unary",job="praefect",le="0.5"}[1m])
+          )
+          +
+          sum by (environment,stage) (
+            rate(grpc_server_handling_seconds_bucket{grpc_method!~"VoteTransaction",grpc_type="unary",job="praefect",le="1"}[1m])
+          )
         )
-        +
-        sum by (environment,stage) (
-          rate(grpc_server_handling_seconds_bucket{grpc_type="unary",job="praefect",le="1"}[1m])
+        /
+        2
+        , "_c", "0", "", "")
+        or
+        label_replace((
+          sum by (environment,stage) (
+            rate(grpc_server_handling_seconds_bucket{grpc_method=~"VoteTransaction",grpc_type="unary",job="praefect",le="10"}[1m])
+          )
+          +
+          sum by (environment,stage) (
+            rate(grpc_server_handling_seconds_bucket{grpc_method=~"VoteTransaction",grpc_type="unary",job="praefect",le="30"}[1m])
+          )
         )
+        /
+        2
+        , "_c", "1", "", "")
       )
-      /
-      2
   - record: gitlab_component_apdex:weight:score
     labels:
       component: proxy
@@ -54,7 +70,15 @@ groups:
       type: praefect
     expr: |
       sum by (environment,stage) (
-        rate(grpc_server_handling_seconds_bucket{grpc_type="unary",job="praefect",le="+Inf"}[1m])
+        label_replace(sum by (environment,stage) (
+          rate(grpc_server_handling_seconds_bucket{grpc_method!~"VoteTransaction",grpc_type="unary",job="praefect",le="+Inf"}[1m])
+        )
+        , "_c", "0", "", "")
+        or
+        label_replace(sum by (environment,stage) (
+          rate(grpc_server_handling_seconds_bucket{grpc_method=~"VoteTransaction",grpc_type="unary",job="praefect",le="+Inf"}[1m])
+        )
+        , "_c", "1", "", "")
       )
   - record: gitlab_component_ops:rate
     labels:
@@ -144,17 +168,33 @@ groups:
       tier: stor
       type: praefect
     expr: |
-      (
-        sum by (environment,stage) (
-          rate(grpc_server_handling_seconds_bucket{grpc_type="unary",job="praefect",le="0.5"}[5m])
+      sum by (environment,stage) (
+        label_replace((
+          sum by (environment,stage) (
+            rate(grpc_server_handling_seconds_bucket{grpc_method!~"VoteTransaction",grpc_type="unary",job="praefect",le="0.5"}[5m])
+          )
+          +
+          sum by (environment,stage) (
+            rate(grpc_server_handling_seconds_bucket{grpc_method!~"VoteTransaction",grpc_type="unary",job="praefect",le="1"}[5m])
+          )
         )
-        +
-        sum by (environment,stage) (
-          rate(grpc_server_handling_seconds_bucket{grpc_type="unary",job="praefect",le="1"}[5m])
+        /
+        2
+        , "_c", "0", "", "")
+        or
+        label_replace((
+          sum by (environment,stage) (
+            rate(grpc_server_handling_seconds_bucket{grpc_method=~"VoteTransaction",grpc_type="unary",job="praefect",le="10"}[5m])
+          )
+          +
+          sum by (environment,stage) (
+            rate(grpc_server_handling_seconds_bucket{grpc_method=~"VoteTransaction",grpc_type="unary",job="praefect",le="30"}[5m])
+          )
         )
+        /
+        2
+        , "_c", "1", "", "")
       )
-      /
-      2
   - record: gitlab_component_apdex:weight:score_5m
     labels:
       component: proxy
@@ -162,7 +202,15 @@ groups:
       type: praefect
     expr: |
       sum by (environment,stage) (
-        rate(grpc_server_handling_seconds_bucket{grpc_type="unary",job="praefect",le="+Inf"}[5m])
+        label_replace(sum by (environment,stage) (
+          rate(grpc_server_handling_seconds_bucket{grpc_method!~"VoteTransaction",grpc_type="unary",job="praefect",le="+Inf"}[5m])
+        )
+        , "_c", "0", "", "")
+        or
+        label_replace(sum by (environment,stage) (
+          rate(grpc_server_handling_seconds_bucket{grpc_method=~"VoteTransaction",grpc_type="unary",job="praefect",le="+Inf"}[5m])
+        )
+        , "_c", "1", "", "")
       )
   - record: gitlab_component_ops:rate_5m
     labels:
@@ -252,17 +300,33 @@ groups:
       tier: stor
       type: praefect
     expr: |
-      (
-        sum by (environment,stage) (
-          rate(grpc_server_handling_seconds_bucket{grpc_type="unary",job="praefect",le="0.5"}[30m])
+      sum by (environment,stage) (
+        label_replace((
+          sum by (environment,stage) (
+            rate(grpc_server_handling_seconds_bucket{grpc_method!~"VoteTransaction",grpc_type="unary",job="praefect",le="0.5"}[30m])
+          )
+          +
+          sum by (environment,stage) (
+            rate(grpc_server_handling_seconds_bucket{grpc_method!~"VoteTransaction",grpc_type="unary",job="praefect",le="1"}[30m])
+          )
         )
-        +
-        sum by (environment,stage) (
-          rate(grpc_server_handling_seconds_bucket{grpc_type="unary",job="praefect",le="1"}[30m])
+        /
+        2
+        , "_c", "0", "", "")
+        or
+        label_replace((
+          sum by (environment,stage) (
+            rate(grpc_server_handling_seconds_bucket{grpc_method=~"VoteTransaction",grpc_type="unary",job="praefect",le="10"}[30m])
+          )
+          +
+          sum by (environment,stage) (
+            rate(grpc_server_handling_seconds_bucket{grpc_method=~"VoteTransaction",grpc_type="unary",job="praefect",le="30"}[30m])
+          )
         )
+        /
+        2
+        , "_c", "1", "", "")
       )
-      /
-      2
   - record: gitlab_component_apdex:weight:score_30m
     labels:
       component: proxy
@@ -270,7 +334,15 @@ groups:
       type: praefect
     expr: |
       sum by (environment,stage) (
-        rate(grpc_server_handling_seconds_bucket{grpc_type="unary",job="praefect",le="+Inf"}[30m])
+        label_replace(sum by (environment,stage) (
+          rate(grpc_server_handling_seconds_bucket{grpc_method!~"VoteTransaction",grpc_type="unary",job="praefect",le="+Inf"}[30m])
+        )
+        , "_c", "0", "", "")
+        or
+        label_replace(sum by (environment,stage) (
+          rate(grpc_server_handling_seconds_bucket{grpc_method=~"VoteTransaction",grpc_type="unary",job="praefect",le="+Inf"}[30m])
+        )
+        , "_c", "1", "", "")
       )
   - record: gitlab_component_ops:rate_30m
     labels:
@@ -360,17 +432,33 @@ groups:
       tier: stor
       type: praefect
     expr: |
-      (
-        sum by (environment,stage) (
-          rate(grpc_server_handling_seconds_bucket{grpc_type="unary",job="praefect",le="0.5"}[1h])
+      sum by (environment,stage) (
+        label_replace((
+          sum by (environment,stage) (
+            rate(grpc_server_handling_seconds_bucket{grpc_method!~"VoteTransaction",grpc_type="unary",job="praefect",le="0.5"}[1h])
+          )
+          +
+          sum by (environment,stage) (
+            rate(grpc_server_handling_seconds_bucket{grpc_method!~"VoteTransaction",grpc_type="unary",job="praefect",le="1"}[1h])
+          )
         )
-        +
-        sum by (environment,stage) (
-          rate(grpc_server_handling_seconds_bucket{grpc_type="unary",job="praefect",le="1"}[1h])
+        /
+        2
+        , "_c", "0", "", "")
+        or
+        label_replace((
+          sum by (environment,stage) (
+            rate(grpc_server_handling_seconds_bucket{grpc_method=~"VoteTransaction",grpc_type="unary",job="praefect",le="10"}[1h])
+          )
+          +
+          sum by (environment,stage) (
+            rate(grpc_server_handling_seconds_bucket{grpc_method=~"VoteTransaction",grpc_type="unary",job="praefect",le="30"}[1h])
+          )
         )
+        /
+        2
+        , "_c", "1", "", "")
       )
-      /
-      2
   - record: gitlab_component_apdex:weight:score_1h
     labels:
       component: proxy
@@ -378,7 +466,15 @@ groups:
       type: praefect
     expr: |
       sum by (environment,stage) (
-        rate(grpc_server_handling_seconds_bucket{grpc_type="unary",job="praefect",le="+Inf"}[1h])
+        label_replace(sum by (environment,stage) (
+          rate(grpc_server_handling_seconds_bucket{grpc_method!~"VoteTransaction",grpc_type="unary",job="praefect",le="+Inf"}[1h])
+        )
+        , "_c", "0", "", "")
+        or
+        label_replace(sum by (environment,stage) (
+          rate(grpc_server_handling_seconds_bucket{grpc_method=~"VoteTransaction",grpc_type="unary",job="praefect",le="+Inf"}[1h])
+        )
+        , "_c", "1", "", "")
       )
   - record: gitlab_component_ops:rate_1h
     labels:
@@ -468,17 +564,33 @@ groups:
       tier: stor
       type: praefect
     expr: |
-      (
-        sum by (environment,stage) (
-          rate(grpc_server_handling_seconds_bucket{grpc_type="unary",job="praefect",le="0.5"}[6h])
+      sum by (environment,stage) (
+        label_replace((
+          sum by (environment,stage) (
+            rate(grpc_server_handling_seconds_bucket{grpc_method!~"VoteTransaction",grpc_type="unary",job="praefect",le="0.5"}[6h])
+          )
+          +
+          sum by (environment,stage) (
+            rate(grpc_server_handling_seconds_bucket{grpc_method!~"VoteTransaction",grpc_type="unary",job="praefect",le="1"}[6h])
+          )
         )
-        +
-        sum by (environment,stage) (
-          rate(grpc_server_handling_seconds_bucket{grpc_type="unary",job="praefect",le="1"}[6h])
+        /
+        2
+        , "_c", "0", "", "")
+        or
+        label_replace((
+          sum by (environment,stage) (
+            rate(grpc_server_handling_seconds_bucket{grpc_method=~"VoteTransaction",grpc_type="unary",job="praefect",le="10"}[6h])
+          )
+          +
+          sum by (environment,stage) (
+            rate(grpc_server_handling_seconds_bucket{grpc_method=~"VoteTransaction",grpc_type="unary",job="praefect",le="30"}[6h])
+          )
         )
+        /
+        2
+        , "_c", "1", "", "")
       )
-      /
-      2
   - record: gitlab_component_apdex:weight:score_6h
     labels:
       component: proxy
@@ -486,7 +598,15 @@ groups:
       type: praefect
     expr: |
       sum by (environment,stage) (
-        rate(grpc_server_handling_seconds_bucket{grpc_type="unary",job="praefect",le="+Inf"}[6h])
+        label_replace(sum by (environment,stage) (
+          rate(grpc_server_handling_seconds_bucket{grpc_method!~"VoteTransaction",grpc_type="unary",job="praefect",le="+Inf"}[6h])
+        )
+        , "_c", "0", "", "")
+        or
+        label_replace(sum by (environment,stage) (
+          rate(grpc_server_handling_seconds_bucket{grpc_method=~"VoteTransaction",grpc_type="unary",job="praefect",le="+Inf"}[6h])
+        )
+        , "_c", "1", "", "")
       )
   - record: gitlab_component_ops:rate_6h
     labels:
