@@ -1,4 +1,5 @@
 local metricsCatalog = import 'servicemetrics/metrics.libsonnet';
+local combined = metricsCatalog.combined;
 local rateMetric = metricsCatalog.rateMetric;
 local gaugeMetric = metricsCatalog.gaugeMetric;
 local histogramApdex = metricsCatalog.histogramApdex;
@@ -29,7 +30,18 @@ metricsCatalog.serviceDefinition({
       |||,
 
       local baseSelector = { job: 'praefect' },
-      apdex: gitalyHelper.grpcServiceApdex(baseSelector),
+      local mainApdexSelector = baseSelector {
+        grpc_method: { noneOf: gitalyHelper.praefectApdexSlowMethods },
+      },
+      local slowMethodApdexSelector = baseSelector {
+        grpc_method: { oneOf: gitalyHelper.praefectApdexSlowMethods },
+      },
+      apdex: combined(
+        [
+          gitalyHelper.grpcServiceApdex(mainApdexSelector),
+          gitalyHelper.grpcServiceApdex(slowMethodApdexSelector, satisfiedThreshold=10, toleratedThreshold=30),
+        ]
+      ),
 
       requestRate: rateMetric(
         counter='grpc_server_handled_total',
