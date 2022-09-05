@@ -448,22 +448,29 @@ cat trace.txt | awk '{ print $5 } | sort -n | uniq -c | sort -nr'
 
 ##### key size estimation
 
-The following commands are meant to be run on a replica instance.
+The following commands are meant to be run on a replica instance, for example `redis-cache-01-db-gprd`.
 
 In this example, we're filtering the dump output for `Class:merge_requests`, replace this with your keyname.
 
 ```shell
 $ sudo gitlab-redis-cli bgsave
 
-# Get the `dump` binary via docker
-$ docker run -it -v $(pwd)/redis-data:/mnt:ro igorwgitlab/cupcake-rdb:latest /mnt/dump.rdb
+# Monitor the file on disk, once it stops increasing in size, it's ready to be used!
+$ sudo ls -lta /var/opt/gitlab/redis/dump.rdb
 
-# Alternatively you can build the `dump` binary yourself by
-###  1. Clone https://github.com/igorwwwwwwwwwwwwwwwwwwww/rdb/tree/version-9
-###  2. Checkout `version-9` branch
-###  3. GOOS=linux GOARCH=amd64 go build
+# Once the file is ready, move it to a safe-er location, for example
+$ sudo mv /var/opt/gitlab/redis/dump.rdb /var/log/redis-data/
+$ RDB_FILE_PATH=/var/log/redis-data
 
-$ sudo ./dump /var/opt/gitlab/redis/dump.rdb | awk -F'\t' '$1 ~ /Class:merge_requests/ { sum1 += $3; sum2 += $4 } END { print sum1, sum2 }'
+# build the `dump` binary in your local machine (https://github.com/igorwwwwwwwwwwwwwwwwwwww/rdb/tree/version-9)
+###  $ git clone https://github.com/igorwwwwwwwwwwwwwwwwwwww/rdb
+###  $ cd rdb
+###  $ git checkout version-9
+###  $ GOOS=linux GOARCH=amd64 go build ./cmd/dump
+###  $ scp dump redis-cache-01-db-gprd:
+
+# Now we'll use the `dump` binary to analyze `dump.rdb`
+$ sudo ./dump $RDB_FILE_PATH/dump.rdb | awk -F'\t' '$1 ~ /Class:merge_requests/ { sum1 += $3; sum2 += $4 } END { print sum1, sum2 }'
 # The two values you get from this represent estimates in bytes used for values and keys+values respectively.
 6039116565 6549803309
 
@@ -475,6 +482,12 @@ $ echo $((6039116565.0/(1024.0**3.0)))
 The values presented are an optimistic estimate, as redis will require some more memory for its datastructures. Generally, the key size will be on that order of magnitude.
 
 The current `maxmemory` in Redis-cache is set to `60 GiB`. Depending on the numbers you get, the ratio of each compared to the `maxmemory` can give you an idea of how significant of an impact your change might introduce.
+
+**Please remember to delete the RDB file once you're done!**
+
+```bash
+rm $RDB_FILE_PATH/dump.rdb
+```
 
 #### Please remember to delete the `pcap` file immediately after performing the analysis
 
