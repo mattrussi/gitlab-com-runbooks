@@ -4,6 +4,7 @@ local platformLinks = import 'gitlab-dashboards/platform_links.libsonnet';
 local saturationDetail = import 'gitlab-dashboards/saturation_detail.libsonnet';
 local basic = import 'grafana/basic.libsonnet';
 local layout = import 'grafana/layout.libsonnet';
+local quantilePanel = import 'grafana/quantile_panel.libsonnet';
 local templates = import 'grafana/templates.libsonnet';
 local row = grafana.row;
 local metricsCatalogDashboards = import 'gitlab-dashboards/metrics_catalog_dashboards.libsonnet';
@@ -44,12 +45,24 @@ local ratelimitLockPercentage(selector) =
 
 local inflightGitalyCommandsPerNode(selector) =
   basic.timeseries(
-    title='Inflight Git Commands per Server',
+    title='Inflight Git Commands on Node',
     description='Number of Git commands running concurrently per node. Lower is better.',
     query=|||
       avg_over_time(gitaly_commands_running{%(selector)s}[$__interval])
     ||| % { selector: selector },
     legendFormat='{{ fqdn }}',
+    interval='1m',
+    linewidth=1,
+    legend_show=false,
+  );
+
+local oomKillsPerNode(selector) =
+  basic.timeseries(
+    title='OOM Kills on Node',
+    description='Number of OOM Kills per server.',
+    query=|||
+      increase(node_vmstat_oom_kill{%(selector)s}[$__interval])
+    ||| % { selector: selector },
     interval='1m',
     linewidth=1,
     legend_show=false,
@@ -66,6 +79,64 @@ local gitalySpawnTimeoutsPerNode(selector) =
     interval='1m',
     linewidth=1,
     legend_show=false,
+  );
+
+local gitalyCGroupCPUUsagePerCGroup(selector) =
+  basic.timeseries(
+    title='cgroup: CPU per cgroup',
+    description='Rate of CPU usage on every cgroup available on the Gitaly node.',
+    query=|||
+      sum by (id) (rate(container_cpu_usage_seconds_total{%(selector)s}[$__interval]))
+    ||| % { selector: selector },
+    format='percentunit',
+    interval='1m',
+    linewidth=1,
+    legend_show=false,
+    legendFormat='{{ id }}',
+  );
+
+local gitalyCGroupCPUQuantile(selector) =
+  quantilePanel.timeseries(
+    title='cgroup: CPU',
+    description='P99/PX CPU usage of all cgroups available on the Gitaly node.',
+    query=|||
+      rate(
+        container_cpu_usage_seconds_total{%(selector)s}[$__interval]
+      )
+    ||| % { selector: selector },
+    format='percentunit',
+    interval='1m',
+    linewidth=1,
+    legendFormat='cgroup: CPU',
+  );
+
+local gitalyCGroupMemoryUsagePerCGroup(selector) =
+  basic.timeseries(
+    title='cgroup: Memory per cgroup',
+    description='RSS usage on every cgroup available on the Gitaly node.',
+    query=|||
+      sum by (id) (rate(container_memory_usage_bytes{%(selector)s}[$__interval]))
+    ||| % { selector: selector },
+    format='bytes',
+    interval='1m',
+    linewidth=1,
+    legend_show=false,
+    legendFormat='{{ id }}',
+  );
+
+local gitalyCGroupMemoryQuantile(selector) =
+  quantilePanel.timeseries(
+    title='cgroup: Memory',
+    description='P99/PX RRS usage of all cgroups available on the Gitaly node.',
+    query=|||
+      rate(
+        container_memory_usage_bytes{%(selector)s}[$__interval]
+      )
+    ||| % { selector: selector },
+    format='bytes',
+    interval='1m',
+    linewidth=1,
+    legendFormat='cgroup: Memory',
   );
 
 local selectorHash = {
@@ -141,8 +212,9 @@ basic.dashboard(
 )
 .addPanel(
   row.new(title='Node Performance', collapse=true).addPanels(
-    layout.rows([
+    layout.grid([
       inflightGitalyCommandsPerNode(selectorSerialized),
+      oomKillsPerNode(selectorSerialized),
     ], startRow=5001),
   ),
   gridPos={
@@ -273,6 +345,23 @@ basic.dashboard(
   gridPos={
     x: 0,
     y: 5700,
+    w: 24,
+    h: 1,
+  }
+)
+.addPanel(
+  row.new(title='cgroup', collapse=true)
+  .addPanels(
+    layout.grid([
+      gitalyCGroupCPUUsagePerCGroup(selectorSerialized),
+      gitalyCGroupCPUQuantile(selectorSerialized),
+      gitalyCGroupMemoryUsagePerCGroup(selectorSerialized),
+      gitalyCGroupMemoryQuantile(selectorSerialized),
+    ], startRow=5801)
+  ),
+  gridPos={
+    x: 0,
+    y: 5800,
     w: 24,
     h: 1,
   }
