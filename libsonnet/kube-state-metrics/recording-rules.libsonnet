@@ -301,28 +301,17 @@ local generateEnrichedLabelsForType(descriptorType) =
 
 local kubeServices = std.filter(function(s) s.provisioning.kubernetes, metricsCatalog.services);
 
-{
-  all: $.prometheus + $.thanos,
-  prometheus:
-    [
-      generateKubeSelectorRulesForService(service)
-      for service in kubeServices
-    ] + [{
-      name: 'kube-state-metrics-recording-rules: enriched label recording rules',
-      interval: '1m',
-      rules:
-        generateEnrichedLabelsForType('container') +
-        generateEnrichedLabelsForType('pod') +
-        generateEnrichedLabelsForType('hpa') +
-        generateEnrichedLabelsForType('node') +
-        generateEnrichedLabelsForType('deployment'),
-    }],
-  thanos:
-    [
-      {
-        name: 'kube-state-metrics-recording-rules: enriched label recording rules',
-        interval: '1m',
-        rules: generateEnrichedLabelsForType('ingress'),
-      },
-    ],
-}
+[
+  generateKubeSelectorRulesForService(service)
+  for service in kubeServices
+] + [{
+  name: 'kube-state-metrics-recording-rules: enriched label recording rules',
+  interval: '1m',
+  rules:
+    generateEnrichedLabelsForType('container') +
+    generateEnrichedLabelsForType('pod') +
+    generateEnrichedLabelsForType('hpa') +
+    generateEnrichedLabelsForType('node') +
+    generateEnrichedLabelsForType('ingress') +
+    generateEnrichedLabelsForType('deployment'),
+}]
