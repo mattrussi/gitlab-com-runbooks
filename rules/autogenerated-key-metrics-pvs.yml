@@ -12,7 +12,7 @@ groups:
       type: pvs
     expr: |
       sum by (environment) (
-        rate(stackdriver_cloud_run_revision_run_googleapis_com_request_latencies_bucket{configuration_name="pipeline-validation-service",le="1024",project_id="glsec-trust-safety-live"}[1m])
+        rate(stackdriver_cloud_run_revision_run_googleapis_com_request_latencies_bucket{configuration_name="pipeline-validation-service",le="4096",project_id="glsec-trust-safety-live"}[1m])
       )
   - record: gitlab_component_apdex:weight:score
     labels:
@@ -63,7 +63,7 @@ groups:
       type: pvs
     expr: |
       sum by (environment) (
-        rate(stackdriver_cloud_run_revision_run_googleapis_com_request_latencies_bucket{configuration_name="pipeline-validation-service",le="1024",project_id="glsec-trust-safety-live"}[5m])
+        rate(stackdriver_cloud_run_revision_run_googleapis_com_request_latencies_bucket{configuration_name="pipeline-validation-service",le="4096",project_id="glsec-trust-safety-live"}[5m])
       )
   - record: gitlab_component_apdex:weight:score_5m
     labels:
@@ -114,7 +114,7 @@ groups:
       type: pvs
     expr: |
       sum by (environment) (
-        rate(stackdriver_cloud_run_revision_run_googleapis_com_request_latencies_bucket{configuration_name="pipeline-validation-service",le="1024",project_id="glsec-trust-safety-live"}[30m])
+        rate(stackdriver_cloud_run_revision_run_googleapis_com_request_latencies_bucket{configuration_name="pipeline-validation-service",le="4096",project_id="glsec-trust-safety-live"}[30m])
       )
   - record: gitlab_component_apdex:weight:score_30m
     labels:
@@ -165,7 +165,7 @@ groups:
       type: pvs
     expr: |
       sum by (environment) (
-        rate(stackdriver_cloud_run_revision_run_googleapis_com_request_latencies_bucket{configuration_name="pipeline-validation-service",le="1024",project_id="glsec-trust-safety-live"}[1h])
+        rate(stackdriver_cloud_run_revision_run_googleapis_com_request_latencies_bucket{configuration_name="pipeline-validation-service",le="4096",project_id="glsec-trust-safety-live"}[1h])
       )
   - record: gitlab_component_apdex:weight:score_1h
     labels:
@@ -216,7 +216,7 @@ groups:
       type: pvs
     expr: |
       sum by (environment) (
-        rate(stackdriver_cloud_run_revision_run_googleapis_com_request_latencies_bucket{configuration_name="pipeline-validation-service",le="1024",project_id="glsec-trust-safety-live"}[6h])
+        rate(stackdriver_cloud_run_revision_run_googleapis_com_request_latencies_bucket{configuration_name="pipeline-validation-service",le="4096",project_id="glsec-trust-safety-live"}[6h])
       )
   - record: gitlab_component_apdex:weight:score_6h
     labels:
