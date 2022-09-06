@@ -65,7 +65,7 @@ local saturationGroup = saturationRules.generateSaturationRulesGroup(
       serviceSLISGroups +
       serviceSLOsGroups +
       saturationGroup +
-      kubeStateMetricsGroups +
+      kubeStateMetricsGroups.all +
       sloAlertingRulesGroup,
   },
 }
