@@ -3875,81 +3875,6 @@ groups:
       topk by (cluster,node) (1, kube_node_labels:labeled{type!=""})
     record: node_vmstat_oom_kill:labeled
   - expr: |
-      kube_deployment_status_replicas_unavailable
-      *
-      on(cluster,deployment) group_left(type)
-      topk by (cluster,deployment) (1, kube_deployment_labels:labeled{type!=""})
-    record: kube_deployment_status_replicas_unavailable:labeled
-  - expr: |
-      kube_deployment_status_replicas_updated
-      *
-      on(cluster,deployment) group_left(type)
-      topk by (cluster,deployment) (1, kube_deployment_labels:labeled{type!=""})
-    record: kube_deployment_status_replicas_updated:labeled
-  - expr: |
-      kube_deployment_spec_paused
-      *
-      on(cluster,deployment) group_left(type)
-      topk by (cluster,deployment) (1, kube_deployment_labels:labeled{type!=""})
-    record: kube_deployment_spec_paused:labeled
-  - expr: |
-      kube_deployment_spec_replicas
-      *
-      on(cluster,deployment) group_left(type)
-      topk by (cluster,deployment) (1, kube_deployment_labels:labeled{type!=""})
-    record: kube_deployment_spec_replicas:labeled
-  - expr: |
-      kube_deployment_spec_strategy_rollingupdate_max_surge
-      *
-      on(cluster,deployment) group_left(type)
-      topk by (cluster,deployment) (1, kube_deployment_labels:labeled{type!=""})
-    record: kube_deployment_spec_strategy_rollingupdate_max_surge:labeled
-  - expr: |
-      kube_deployment_spec_strategy_rollingupdate_max_unavailable
-      *
-      on(cluster,deployment) group_left(type)
-      topk by (cluster,deployment) (1, kube_deployment_labels:labeled{type!=""})
-    record: kube_deployment_spec_strategy_rollingupdate_max_unavailable:labeled
-  - expr: |
-      kube_deployment_status_condition
-      *
-      on(cluster,deployment) group_left(type)
-      topk by (cluster,deployment) (1, kube_deployment_labels:labeled{type!=""})
-    record: kube_deployment_status_condition:labeled
-  - expr: |
-      kube_deployment_status_replicas_available
-      *
-      on(cluster,deployment) group_left(type)
-      topk by (cluster,deployment) (1, kube_deployment_labels:labeled{type!=""})
-    record: kube_deployment_status_replicas_available:labeled
-  - expr: |
-      kube_deployment_created
-      *
-      on(cluster,deployment) group_left(type)
-      topk by (cluster,deployment) (1, kube_deployment_labels:labeled{type!=""})
-    record: kube_deployment_created:labeled
-  - expr: |
-      kube_deployment_metadata_generation
-      *
-      on(cluster,deployment) group_left(type)
-      topk by (cluster,deployment) (1, kube_deployment_labels:labeled{type!=""})
-    record: kube_deployment_metadata_generation:labeled
-  - expr: |
-      kube_deployment_status_observed_generation
-      *
-      on(cluster,deployment) group_left(type)
-      topk by (cluster,deployment) (1, kube_deployment_labels:labeled{type!=""})
-    record: kube_deployment_status_observed_generation:labeled
-  - expr: |
-      kube_deployment_status_replicas
-      *
-      on(cluster,deployment) group_left(type)
-      topk by (cluster,deployment) (1, kube_deployment_labels:labeled{type!=""})
-    record: kube_deployment_status_replicas:labeled
-- interval: 1m
-  name: 'kube-state-metrics-recording-rules: enriched label recording rules'
-  rules:
-  - expr: |
       nginx_ingress_controller_bytes_sent_count
       *
       on(cluster,ingress) group_left(type)
@@ -4063,6 +3988,78 @@ groups:
       on(cluster,ingress) group_left(type)
       topk by (cluster,ingress) (1, kube_ingress_labels:labeled{type!=""})
     record: nginx_ingress_controller_response_size_sum:labeled
+  - expr: |
+      kube_deployment_status_replicas_unavailable
+      *
+      on(cluster,deployment) group_left(type)
+      topk by (cluster,deployment) (1, kube_deployment_labels:labeled{type!=""})
+    record: kube_deployment_status_replicas_unavailable:labeled
+  - expr: |
+      kube_deployment_status_replicas_updated
+      *
+      on(cluster,deployment) group_left(type)
+      topk by (cluster,deployment) (1, kube_deployment_labels:labeled{type!=""})
+    record: kube_deployment_status_replicas_updated:labeled
+  - expr: |
+      kube_deployment_spec_paused
+      *
+      on(cluster,deployment) group_left(type)
+      topk by (cluster,deployment) (1, kube_deployment_labels:labeled{type!=""})
+    record: kube_deployment_spec_paused:labeled
+  - expr: |
+      kube_deployment_spec_replicas
+      *
+      on(cluster,deployment) group_left(type)
+      topk by (cluster,deployment) (1, kube_deployment_labels:labeled{type!=""})
+    record: kube_deployment_spec_replicas:labeled
+  - expr: |
+      kube_deployment_spec_strategy_rollingupdate_max_surge
+      *
+      on(cluster,deployment) group_left(type)
+      topk by (cluster,deployment) (1, kube_deployment_labels:labeled{type!=""})
+    record: kube_deployment_spec_strategy_rollingupdate_max_surge:labeled
+  - expr: |
+      kube_deployment_spec_strategy_rollingupdate_max_unavailable
+      *
+      on(cluster,deployment) group_left(type)
+      topk by (cluster,deployment) (1, kube_deployment_labels:labeled{type!=""})
+    record: kube_deployment_spec_strategy_rollingupdate_max_unavailable:labeled
+  - expr: |
+      kube_deployment_status_condition
+      *
+      on(cluster,deployment) group_left(type)
+      topk by (cluster,deployment) (1, kube_deployment_labels:labeled{type!=""})
+    record: kube_deployment_status_condition:labeled
+  - expr: |
+      kube_deployment_status_replicas_available
+      *
+      on(cluster,deployment) group_left(type)
+      topk by (cluster,deployment) (1, kube_deployment_labels:labeled{type!=""})
+    record: kube_deployment_status_replicas_available:labeled
+  - expr: |
+      kube_deployment_created
+      *
+      on(cluster,deployment) group_left(type)
+      topk by (cluster,deployment) (1, kube_deployment_labels:labeled{type!=""})
+    record: kube_deployment_created:labeled
+  - expr: |
+      kube_deployment_metadata_generation
+      *
+      on(cluster,deployment) group_left(type)
+      topk by (cluster,deployment) (1, kube_deployment_labels:labeled{type!=""})
+    record: kube_deployment_metadata_generation:labeled
+  - expr: |
+      kube_deployment_status_observed_generation
+      *
+      on(cluster,deployment) group_left(type)
+      topk by (cluster,deployment) (1, kube_deployment_labels:labeled{type!=""})
+    record: kube_deployment_status_observed_generation:labeled
+  - expr: |
+      kube_deployment_status_replicas
+      *
+      on(cluster,deployment) group_left(type)
+      topk by (cluster,deployment) (1, kube_deployment_labels:labeled{type!=""})
+    record: kube_deployment_status_replicas:labeled
 - interval: 1m
   name: 'Service Component Alerts: consul'
   rules: []
