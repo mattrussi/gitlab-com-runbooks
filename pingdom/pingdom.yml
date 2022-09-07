@@ -213,6 +213,17 @@ checks:
   # Ancillary Properties
   #######################################
 
+  - url: https://ir.gitlab.com/
+    timeout_ms: 30000
+    resolution_minutes: 5
+    notify_when_restored: true
+    tags:
+      - ir-gitlab
+    teams:
+      - Infrastructure
+    integrations:
+      - pagerduty
+
   - url: https://version.gitlab.com/
     timeout_ms: 30000
     resolution_minutes: 5
