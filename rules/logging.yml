@@ -11,6 +11,7 @@ groups:
     labels:
       severity: s4
       alert_type: cause
+      type: logging
     annotations:
       title: Cluster is refusing to process logs sent to it by pubsubbeat
       description: >
@@ -29,6 +30,7 @@ groups:
     labels:
       severity: s3
       alert_type: cause
+      type: logging
     annotations:
       description: >
         Logs send rate is lower than usual.
@@ -43,6 +45,7 @@ groups:
       severity: s2
       pager: 'pagerduty'
       alert_type: symptom
+      type: logging
     annotations:
       description: >
         PubSub messages are queuing up.  Messages in {{ $labels.subscription_id }} have been
