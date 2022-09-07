@@ -25,7 +25,7 @@ groups:
       aggregation: component
       alert_class: slo_violation
       alert_type: symptom
-      feature_category: fulfillment_platform
+      feature_category: in_source_metrics
       rules_domain: general
       severity: s3
       sli_type: apdex
@@ -68,7 +68,7 @@ groups:
       aggregation: component
       alert_class: slo_violation
       alert_type: symptom
-      feature_category: fulfillment_platform
+      feature_category: in_source_metrics
       rules_domain: general
       severity: s3
       sli_type: apdex
@@ -115,7 +115,7 @@ groups:
       aggregation: component
       alert_class: slo_violation
       alert_type: symptom
-      feature_category: fulfillment_platform
+      feature_category: in_source_metrics
       rules_domain: general
       severity: s3
       sli_type: error
@@ -162,7 +162,7 @@ groups:
       aggregation: component
       alert_class: slo_violation
       alert_type: symptom
-      feature_category: fulfillment_platform
+      feature_category: in_source_metrics
       rules_domain: general
       severity: s3
       sli_type: error
@@ -209,7 +209,7 @@ groups:
       aggregation: component
       alert_class: traffic_cessation
       alert_type: cause
-      feature_category: fulfillment_platform
+      feature_category: in_source_metrics
       rules_domain: general
       severity: s3
       sli_type: ops
@@ -245,7 +245,7 @@ groups:
       aggregation: component
       alert_class: traffic_cessation
       alert_type: cause
-      feature_category: fulfillment_platform
+      feature_category: in_source_metrics
       rules_domain: general
       severity: s3
       sli_type: ops
