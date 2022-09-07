@@ -69,6 +69,16 @@ system to another.
 
 1. If needed, check logs for the sidekiq job in Kibana: <https://log.gprd.gitlab.net/goto/35c31768d3be0137be06e562422ffba0>
 
+### Multiple repo automated selection
+
+Through the [Balancer](https://ops.gitlab.net/gitlab-com/gl-infra/balancer/) project, you can trigger a pipeline to automatically balance the gitaly shards with the highest amount of disk space. You can do this by triggering a pipeline with the following environment variables:
+
+- `ENVIRONMENT`: Default is staging, set this to `production`.
+- `DRY_RUN`: Defaults to true. Set this as `false` or `no`.
+- `SLACK_NOTIFY`: Notify the #production channel. Set this to `true`.
+
+The migration logs will be saved as an artifact that you can download in the `move_projects` job.
+
 ### Slightly automated selection
 
 A script exists in this repo:
