@@ -6,41 +6,41 @@ groups:
   rules:
   - record: application_sli_aggregation:customers_dot_requests:apdex:weight:score_5m
     expr: |
-      sum by (endpoint_id,environment,stage,tier,type) (
+      sum by (endpoint_id,environment,feature_category,stage,tier,type) (
         rate(gitlab_sli_customers_dot_requests_apdex_total{monitor!="global"}[5m])
       )
   - record: application_sli_aggregation:customers_dot_requests:apdex:success:rate_5m
     expr: |
-      sum by (endpoint_id,environment,stage,tier,type) (
+      sum by (endpoint_id,environment,feature_category,stage,tier,type) (
         rate(gitlab_sli_customers_dot_requests_apdex_success_total{monitor!="global"}[5m])
       )
   - record: application_sli_aggregation:customers_dot_requests:ops:rate_5m
     expr: |
-      sum by (endpoint_id,environment,stage,tier,type) (
+      sum by (endpoint_id,environment,feature_category,stage,tier,type) (
         rate(gitlab_sli_customers_dot_requests_total{monitor!="global"}[5m])
       )
   - record: application_sli_aggregation:customers_dot_requests:error:rate_5m
     expr: |
-      sum by (endpoint_id,environment,stage,tier,type) (
+      sum by (endpoint_id,environment,feature_category,stage,tier,type) (
         rate(gitlab_sli_customers_dot_requests_error_total{monitor!="global"}[5m])
       )
   - record: application_sli_aggregation:customers_dot_requests:apdex:weight:score_1h
     expr: |
-      sum by (endpoint_id,environment,stage,tier,type) (
+      sum by (endpoint_id,environment,feature_category,stage,tier,type) (
         rate(gitlab_sli_customers_dot_requests_apdex_total{monitor!="global"}[1h])
       )
   - record: application_sli_aggregation:customers_dot_requests:apdex:success:rate_1h
     expr: |
-      sum by (endpoint_id,environment,stage,tier,type) (
+      sum by (endpoint_id,environment,feature_category,stage,tier,type) (
         rate(gitlab_sli_customers_dot_requests_apdex_success_total{monitor!="global"}[1h])
       )
   - record: application_sli_aggregation:customers_dot_requests:ops:rate_1h
     expr: |
-      sum by (endpoint_id,environment,stage,tier,type) (
+      sum by (endpoint_id,environment,feature_category,stage,tier,type) (
         rate(gitlab_sli_customers_dot_requests_total{monitor!="global"}[1h])
       )
   - record: application_sli_aggregation:customers_dot_requests:error:rate_1h
     expr: |
-      sum by (endpoint_id,environment,stage,tier,type) (
+      sum by (endpoint_id,environment,feature_category,stage,tier,type) (
         rate(gitlab_sli_customers_dot_requests_error_total{monitor!="global"}[1h])
       )

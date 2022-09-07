@@ -28,9 +28,8 @@ local list = [
   }),
   sliDefinition.new({
     name: 'customers_dot_requests',
-    significantLabels: ['endpoint_id'],
+    significantLabels: ['endpoint_id', 'feature_category'],
     kinds: [sliDefinition.apdexKind, sliDefinition.errorRateKind],
-    featureCategory: 'fulfillment_platform',
     description: |||
       The number of CustomersDot requests meeting their duration target based on the urgency
       of the endpoint. By default, a request should take no more than 0.4s. But

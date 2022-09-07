@@ -65,8 +65,8 @@ metricsCatalog.serviceDefinition({
       userImpacting: true,
       severity: 's3',
       serviceAggregation: false,
-      significantLabels: ['feature_category', 'endpoint_id'],
       featureCategory: 'fulfillment_platform',
+      significantLabels: ['feature_category', 'endpoint_id'],
     },
   },
   skippedMaturityCriteria: maturityLevels.skip({

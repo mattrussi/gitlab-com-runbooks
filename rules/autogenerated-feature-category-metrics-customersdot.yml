@@ -6,49 +6,45 @@ groups:
   - record: gitlab:component:feature_category:execution:apdex:success:rate_5m
     labels:
       component: rails_requests
-      feature_category: fulfillment_platform
       tier: sv
       type: customersdot
     expr: |
-      sum by (env,environment,stage) (
+      sum by (env,environment,stage,feature_category) (
         rate(gitlab_sli_customers_dot_requests_apdex_success_total{}[5m])
       )
   - record: gitlab:component:feature_category:execution:apdex:weight:score_5m
     labels:
       component: rails_requests
-      feature_category: fulfillment_platform
       tier: sv
       type: customersdot
     expr: |
-      sum by (env,environment,stage) (
+      sum by (env,environment,stage,feature_category) (
         rate(gitlab_sli_customers_dot_requests_apdex_total{}[5m])
       )
   - record: gitlab:component:feature_category:execution:ops:rate_5m
     labels:
       component: rails_requests
-      feature_category: fulfillment_platform
       tier: sv
       type: customersdot
     expr: |
-      sum by (env,environment,stage) (
+      sum by (env,environment,stage,feature_category) (
         rate(gitlab_sli_customers_dot_requests_total{}[5m])
       )
   - record: gitlab:component:feature_category:execution:error:rate_5m
     labels:
       component: rails_requests
-      feature_category: fulfillment_platform
       tier: sv
       type: customersdot
     expr: |
       (
-        sum by (env,environment,stage) (
+        sum by (env,environment,stage,feature_category) (
           rate(gitlab_sli_customers_dot_requests_error_total{}[5m])
         )
       )
       or
       (
-        0 * group by(env,environment,stage) (
-          gitlab:component:feature_category:execution:ops:rate_5m{component="rails_requests",feature_category="fulfillment_platform",tier="sv",type="customersdot"}
+        0 * group by(env,environment,stage,feature_category) (
+          gitlab:component:feature_category:execution:ops:rate_5m{component="rails_requests",tier="sv",type="customersdot"}
         )
       )
   - record: gitlab:component:feature_category:execution:ops:rate_5m
@@ -84,49 +80,45 @@ groups:
   - record: gitlab:component:feature_category:execution:apdex:success:rate_30m
     labels:
       component: rails_requests
-      feature_category: fulfillment_platform
       tier: sv
       type: customersdot
     expr: |
-      sum by (env,environment,stage) (
+      sum by (env,environment,stage,feature_category) (
         rate(gitlab_sli_customers_dot_requests_apdex_success_total{}[30m])
       )
   - record: gitlab:component:feature_category:execution:apdex:weight:score_30m
     labels:
       component: rails_requests
-      feature_category: fulfillment_platform
       tier: sv
       type: customersdot
     expr: |
-      sum by (env,environment,stage) (
+      sum by (env,environment,stage,feature_category) (
         rate(gitlab_sli_customers_dot_requests_apdex_total{}[30m])
       )
   - record: gitlab:component:feature_category:execution:ops:rate_30m
     labels:
       component: rails_requests
-      feature_category: fulfillment_platform
       tier: sv
       type: customersdot
     expr: |
-      sum by (env,environment,stage) (
+      sum by (env,environment,stage,feature_category) (
         rate(gitlab_sli_customers_dot_requests_total{}[30m])
       )
   - record: gitlab:component:feature_category:execution:error:rate_30m
     labels:
       component: rails_requests
-      feature_category: fulfillment_platform
       tier: sv
       type: customersdot
     expr: |
       (
-        sum by (env,environment,stage) (
+        sum by (env,environment,stage,feature_category) (
           rate(gitlab_sli_customers_dot_requests_error_total{}[30m])
         )
       )
       or
       (
-        0 * group by(env,environment,stage) (
-          gitlab:component:feature_category:execution:ops:rate_30m{component="rails_requests",feature_category="fulfillment_platform",tier="sv",type="customersdot"}
+        0 * group by(env,environment,stage,feature_category) (
+          gitlab:component:feature_category:execution:ops:rate_30m{component="rails_requests",tier="sv",type="customersdot"}
         )
       )
   - record: gitlab:component:feature_category:execution:ops:rate_30m
@@ -162,49 +154,45 @@ groups:
   - record: gitlab:component:feature_category:execution:apdex:success:rate_1h
     labels:
       component: rails_requests
-      feature_category: fulfillment_platform
       tier: sv
       type: customersdot
     expr: |
-      sum by (env,environment,stage) (
+      sum by (env,environment,stage,feature_category) (
         rate(gitlab_sli_customers_dot_requests_apdex_success_total{}[1h])
       )
   - record: gitlab:component:feature_category:execution:apdex:weight:score_1h
     labels:
       component: rails_requests
-      feature_category: fulfillment_platform
       tier: sv
       type: customersdot
     expr: |
-      sum by (env,environment,stage) (
+      sum by (env,environment,stage,feature_category) (
         rate(gitlab_sli_customers_dot_requests_apdex_total{}[1h])
       )
   - record: gitlab:component:feature_category:execution:ops:rate_1h
     labels:
       component: rails_requests
-      feature_category: fulfillment_platform
       tier: sv
       type: customersdot
     expr: |
-      sum by (env,environment,stage) (
+      sum by (env,environment,stage,feature_category) (
         rate(gitlab_sli_customers_dot_requests_total{}[1h])
       )
   - record: gitlab:component:feature_category:execution:error:rate_1h
     labels:
       component: rails_requests
-      feature_category: fulfillment_platform
       tier: sv
       type: customersdot
     expr: |
       (
-        sum by (env,environment,stage) (
+        sum by (env,environment,stage,feature_category) (
           rate(gitlab_sli_customers_dot_requests_error_total{}[1h])
         )
       )
       or
       (
-        0 * group by(env,environment,stage) (
-          gitlab:component:feature_category:execution:ops:rate_1h{component="rails_requests",feature_category="fulfillment_platform",tier="sv",type="customersdot"}
+        0 * group by(env,environment,stage,feature_category) (
+          gitlab:component:feature_category:execution:ops:rate_1h{component="rails_requests",tier="sv",type="customersdot"}
         )
       )
   - record: gitlab:component:feature_category:execution:ops:rate_1h

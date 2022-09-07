@@ -61,6 +61,16 @@ groups:
       product_stage: manage
       stage_group: authentication_and_authorization
     expr: "1"
+- name: 'Stage group Ignored components: fulfillment - Billing and Subscription Management'
+  interval: 1m
+  partial_response_strategy: warn
+  rules:
+  - record: gitlab:ignored_component:stage_group
+    labels:
+      component: graphql_queries
+      product_stage: fulfillment
+      stage_group: billing_and_subscription_management
+    expr: "1"
 - name: 'Stage group Ignored components: plan - Certify'
   interval: 1m
   partial_response_strategy: warn
