@@ -37,6 +37,16 @@ local list = [
       this can be adjusted by endpoint.
     |||,
   }),
+  sliDefinition.new({
+    name: 'global_search',
+    significantLabels: ['endpoint_id', 'search_level', 'search_scope', 'search_type'],
+    kinds: [sliDefinition.apdexKind],
+    featureCategory: 'global_search',
+    description: |||
+      The number of Global Search search requests meeting their duration target based on the 99.95th percentile of
+      the search with the same parameters.
+    |||,
+  }),
 ];
 
 local definitionsByName = std.foldl(
