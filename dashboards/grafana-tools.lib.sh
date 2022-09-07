@@ -124,6 +124,7 @@ prepare_snapshot_requests() {
   expires: 259200
 } * {
   dashboard: {
+    id: -1,
     editable: true,
     tags: ["playground"]
   }
