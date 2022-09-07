@@ -7,17 +7,19 @@ documentation](https://kubernetes.io/docs/concepts/workloads/controllers/statefu
 
 ## Guidelines for future use
 
-* Managing a deployment should ideally be handled via an operator if possible.
-  We already have exceptions to this rule in various locations.  An operator is
-  usually build by the Maintainers of a project whom have a deep understanding
-  of how the service should operate inside of Kubernetes.  If this is not
-  achievable, then we should have thorough runbooks indicating how we handle
-  various failure scenarios.  The readiness review should indicate why we are
-  unable to leverage an operator and how we remediate the lack of one.
+* Managing a deployment should ideally be handled via an
+  [operator](https://kubernetes.io/docs/concepts/extend-kubernetes/operator/) if
+  possible. We already have exceptions to this rule in various locations.  An
+  operator is usually build by the Maintainers of a project whom have a deep
+  understanding of how the service should operate inside of Kubernetes.  If this
+  is not achievable, then we should have thorough runbooks indicating how we
+  handle various failure scenarios.  The readiness review should indicate why we
+  are unable to leverage an operator and how we remediate the lack of one.
 * We should understand the performance requirements of disk IO for a given
-  service.  GKE provides us with multiple types of storage with varying degrees
-  of performance.  We'll want to ensure we choose the correct disk type given
-  the requirements of the service.
+  service.  GKE provides us with multiple [Storage
+  Classes](https://kubernetes.io/docs/concepts/storage/storage-classes/) with
+  varying degrees of performance.  We'll want to ensure we choose the correct
+  disk type given the requirements of the service.
 * We should understand the resource demands of the Pods that provide the
   service.  This will help us determine if we should have a dedicated node pool
   for the given service, or leverage bin packing with minimal interruption to
@@ -40,6 +42,10 @@ documentation](https://kubernetes.io/docs/concepts/workloads/controllers/statefu
   without fear of interruption of the service itself.  In the former case, we'll
   want to ensure we fully understand how the service behaves and have runbooks
   that lead us down a path to successful recovery of the data.
+* Maintenance tasks associated with [Persistent
+  Volumes](https://kubernetes.io/docs/concepts/storage/persistent-volumes/)
+  shall be fully understood.  Runbooks associated with the data and or volumes
+  necessary for appropriate management of the service shall be created.
 * A [readiness-review] is always required to help tease out any use case and
   more thoroughly discuss the above guidelines.
 
@@ -89,7 +95,7 @@ deployment may not be healthy.
   deployment because the Statefulset was in a bad state.  Manual interaction was
   the only course of action of remediation.  We should attempt to avoid this or
   understand this as much as possible such that we have appropriate CI
-  notfications or alerts and runbooks in place to fix incident inducing
+  notifications or alerts and runbooks in place to fix incident inducing
   situations.
 * Consider the tooling that is built on top of existing services.  Accessing
   services through a VM will vary significantly when inside of Kubernetes.
