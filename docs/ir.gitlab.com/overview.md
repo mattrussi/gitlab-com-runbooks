@@ -10,4 +10,4 @@ If there is any interruption, reach out to our service manager `RonKevin.Mansia@
 
 ### Alerting
 
-Currently, the only alerting is a blackbox probe.
+Currently, the only alerting is a blackbox probe and pingdom
