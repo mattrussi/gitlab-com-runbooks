@@ -19,19 +19,6 @@
         },
       },
     },
-    ecs: {
-      properties: {
-        version: {
-          type: 'text',
-          fields: {
-            keyword: {
-              type: 'keyword',
-              ignore_above: 256,
-            },
-          },
-        },
-      },
-    },
     host: {
       properties: {
         name: {
@@ -58,6 +45,49 @@
         },
         labels: {
           properties: {
+            audit: {
+              properties: {
+                k8s: {
+                  properties: {
+                    'io/truncated': {
+                      type: 'text',
+                      fields: {
+                        keyword: {
+                          type: 'keyword',
+                          ignore_above: 256,
+                        },
+                      },
+                    },
+                  },
+                },
+              },
+            },
+            authentication: {
+              properties: {
+                k8s: {
+                  properties: {
+                    'io/legacy-token': {
+                      type: 'text',
+                      fields: {
+                        keyword: {
+                          type: 'keyword',
+                          ignore_above: 256,
+                        },
+                      },
+                    },
+                    'io/stale-token': {
+                      type: 'text',
+                      fields: {
+                        keyword: {
+                          type: 'keyword',
+                          ignore_above: 256,
+                        },
+                      },
+                    },
+                  },
+                },
+              },
+            },
             authorization: {
               properties: {
                 k8s: {
@@ -79,6 +109,28 @@
                           ignore_above: 256,
                         },
                       },
+                    },
+                  },
+                },
+              },
+            },
+            k8s: {
+              properties: {
+                'io/deprecated': {
+                  type: 'text',
+                  fields: {
+                    keyword: {
+                      type: 'keyword',
+                      ignore_above: 256,
+                    },
+                  },
+                },
+                'io/removed-release': {
+                  type: 'text',
+                  fields: {
+                    keyword: {
+                      type: 'keyword',
+                      ignore_above: 256,
                     },
                   },
                 },
@@ -145,6 +197,50 @@
                     },
                   },
                 },
+                principalSubject: {
+                  type: 'text',
+                  fields: {
+                    keyword: {
+                      type: 'keyword',
+                      ignore_above: 256,
+                    },
+                  },
+                },
+                serviceAccountDelegationInfo: {
+                  properties: {
+                    firstPartyPrincipal: {
+                      properties: {
+                        principalEmail: {
+                          type: 'text',
+                          fields: {
+                            keyword: {
+                              type: 'keyword',
+                              ignore_above: 256,
+                            },
+                          },
+                        },
+                      },
+                    },
+                    principalSubject: {
+                      type: 'text',
+                      fields: {
+                        keyword: {
+                          type: 'keyword',
+                          ignore_above: 256,
+                        },
+                      },
+                    },
+                  },
+                },
+                serviceAccountKeyName: {
+                  type: 'text',
+                  fields: {
+                    keyword: {
+                      type: 'keyword',
+                      ignore_above: 256,
+                    },
+                  },
+                },
               },
             },
             authorizationInfo: {
@@ -170,6 +266,104 @@
                     },
                   },
                 },
+                resourceAttributes: {
+                  properties: {
+                    name: {
+                      type: 'text',
+                      fields: {
+                        keyword: {
+                          type: 'keyword',
+                          ignore_above: 256,
+                        },
+                      },
+                    },
+                    service: {
+                      type: 'text',
+                      fields: {
+                        keyword: {
+                          type: 'keyword',
+                          ignore_above: 256,
+                        },
+                      },
+                    },
+                    type: {
+                      type: 'text',
+                      fields: {
+                        keyword: {
+                          type: 'keyword',
+                          ignore_above: 256,
+                        },
+                      },
+                    },
+                  },
+                },
+              },
+            },
+            metadata: {
+              properties: {
+                '@type': {
+                  type: 'text',
+                  fields: {
+                    keyword: {
+                      type: 'keyword',
+                      ignore_above: 256,
+                    },
+                  },
+                },
+                device_id: {
+                  type: 'text',
+                  fields: {
+                    keyword: {
+                      type: 'keyword',
+                      ignore_above: 256,
+                    },
+                  },
+                },
+                device_state: {
+                  type: 'text',
+                  fields: {
+                    keyword: {
+                      type: 'keyword',
+                      ignore_above: 256,
+                    },
+                  },
+                },
+                identityDelegationChain: {
+                  type: 'text',
+                  fields: {
+                    keyword: {
+                      type: 'keyword',
+                      ignore_above: 256,
+                    },
+                  },
+                },
+                mapped_principal: {
+                  type: 'text',
+                  fields: {
+                    keyword: {
+                      type: 'keyword',
+                      ignore_above: 256,
+                    },
+                  },
+                },
+                oauth_client_id: {
+                  type: 'text',
+                  fields: {
+                    keyword: {
+                      type: 'keyword',
+                      ignore_above: 256,
+                    },
+                  },
+                },
+                request_id: {
+                  type: 'text',
+                  fields: {
+                    keyword: {
+                      type: 'keyword',
+                      ignore_above: 256,
+                    },
+                  },
+                },
               },
             },
             methodName: {
@@ -178,6 +372,22 @@
                 keyword: {
                   type: 'keyword',
                   ignore_above: 256,
+                },
+              },
+            },
+            numResponseItems: {
+              type: 'text',
+              fields: {
+                keyword: {
+                  type: 'keyword',
+                  ignore_above: 256,
+                },
+              },
+            },
+            policyViolationInfo: {
+              properties: {
+                orgPolicyViolationInfo: {
+                  type: 'object',
                 },
               },
             },
@@ -192,836 +402,8 @@
                     },
                   },
                 },
-                apiVersion: {
-                  type: 'text',
-                  fields: {
-                    keyword: {
-                      type: 'keyword',
-                      ignore_above: 256,
-                    },
-                  },
-                },
-                kind: {
-                  type: 'text',
-                  fields: {
-                    keyword: {
-                      type: 'keyword',
-                      ignore_above: 256,
-                    },
-                  },
-                },
-                metadata: {
-                  properties: {
-                    annotations: {
-                      properties: {
-                        app: {
-                          properties: {
-                            gitlab: {
-                              properties: {
-                                'com/app': {
-                                  type: 'text',
-                                  fields: {
-                                    keyword: {
-                                      type: 'keyword',
-                                      ignore_above: 256,
-                                    },
-                                  },
-                                },
-                                'com/env': {
-                                  type: 'text',
-                                  fields: {
-                                    keyword: {
-                                      type: 'keyword',
-                                      ignore_above: 256,
-                                    },
-                                  },
-                                },
-                              },
-                            },
-                          },
-                        },
-                        'control-plane': {
-                          properties: {
-                            alpha: {
-                              properties: {
-                                kubernetes: {
-                                  properties: {
-                                    'io/leader': {
-                                      type: 'text',
-                                      fields: {
-                                        keyword: {
-                                          type: 'keyword',
-                                          ignore_above: 256,
-                                        },
-                                      },
-                                    },
-                                  },
-                                },
-                              },
-                            },
-                          },
-                        },
-                        deployment: {
-                          properties: {
-                            kubernetes: {
-                              properties: {
-                                'io/desired-replicas': {
-                                  type: 'text',
-                                  fields: {
-                                    keyword: {
-                                      type: 'keyword',
-                                      ignore_above: 256,
-                                    },
-                                  },
-                                },
-                                'io/max-replicas': {
-                                  type: 'text',
-                                  fields: {
-                                    keyword: {
-                                      type: 'keyword',
-                                      ignore_above: 256,
-                                    },
-                                  },
-                                },
-                                'io/revision': {
-                                  type: 'text',
-                                  fields: {
-                                    keyword: {
-                                      type: 'keyword',
-                                      ignore_above: 256,
-                                    },
-                                  },
-                                },
-                              },
-                            },
-                          },
-                        },
-                        endpoints: {
-                          properties: {
-                            kubernetes: {
-                              properties: {
-                                'io/last-change-trigger-time': {
-                                  type: 'date',
-                                },
-                              },
-                            },
-                          },
-                        },
-                      },
-                    },
-                    creationTimestamp: {
-                      type: 'date',
-                    },
-                    generation: {
-                      type: 'long',
-                    },
-                    labels: {
-                      properties: {
-                        app: {
-                          type: 'text',
-                          fields: {
-                            keyword: {
-                              type: 'keyword',
-                              ignore_above: 256,
-                            },
-                          },
-                        },
-                        chart: {
-                          type: 'text',
-                          fields: {
-                            keyword: {
-                              type: 'keyword',
-                              ignore_above: 256,
-                            },
-                          },
-                        },
-                        component: {
-                          type: 'text',
-                          fields: {
-                            keyword: {
-                              type: 'keyword',
-                              ignore_above: 256,
-                            },
-                          },
-                        },
-                        heritage: {
-                          type: 'text',
-                          fields: {
-                            keyword: {
-                              type: 'keyword',
-                              ignore_above: 256,
-                            },
-                          },
-                        },
-                        'k8s-app': {
-                          type: 'text',
-                          fields: {
-                            keyword: {
-                              type: 'keyword',
-                              ignore_above: 256,
-                            },
-                          },
-                        },
-                        'pod-template-hash': {
-                          type: 'text',
-                          fields: {
-                            keyword: {
-                              type: 'keyword',
-                              ignore_above: 256,
-                            },
-                          },
-                        },
-                        'queue-pod-name': {
-                          type: 'text',
-                          fields: {
-                            keyword: {
-                              type: 'keyword',
-                              ignore_above: 256,
-                            },
-                          },
-                        },
-                        release: {
-                          type: 'text',
-                          fields: {
-                            keyword: {
-                              type: 'keyword',
-                              ignore_above: 256,
-                            },
-                          },
-                        },
-                        shard: {
-                          type: 'text',
-                          fields: {
-                            keyword: {
-                              type: 'keyword',
-                              ignore_above: 256,
-                            },
-                          },
-                        },
-                        stage: {
-                          type: 'text',
-                          fields: {
-                            keyword: {
-                              type: 'keyword',
-                              ignore_above: 256,
-                            },
-                          },
-                        },
-                        tier: {
-                          type: 'text',
-                          fields: {
-                            keyword: {
-                              type: 'keyword',
-                              ignore_above: 256,
-                            },
-                          },
-                        },
-                        type: {
-                          type: 'text',
-                          fields: {
-                            keyword: {
-                              type: 'keyword',
-                              ignore_above: 256,
-                            },
-                          },
-                        },
-                      },
-                    },
-                    name: {
-                      type: 'text',
-                      fields: {
-                        keyword: {
-                          type: 'keyword',
-                          ignore_above: 256,
-                        },
-                      },
-                    },
-                    namespace: {
-                      type: 'text',
-                      fields: {
-                        keyword: {
-                          type: 'keyword',
-                          ignore_above: 256,
-                        },
-                      },
-                    },
-                    ownerReferences: {
-                      properties: {
-                        apiVersion: {
-                          type: 'text',
-                          fields: {
-                            keyword: {
-                              type: 'keyword',
-                              ignore_above: 256,
-                            },
-                          },
-                        },
-                        blockOwnerDeletion: {
-                          type: 'boolean',
-                        },
-                        controller: {
-                          type: 'boolean',
-                        },
-                        kind: {
-                          type: 'text',
-                          fields: {
-                            keyword: {
-                              type: 'keyword',
-                              ignore_above: 256,
-                            },
-                          },
-                        },
-                        name: {
-                          type: 'text',
-                          fields: {
-                            keyword: {
-                              type: 'keyword',
-                              ignore_above: 256,
-                            },
-                          },
-                        },
-                        uid: {
-                          type: 'text',
-                          fields: {
-                            keyword: {
-                              type: 'keyword',
-                              ignore_above: 256,
-                            },
-                          },
-                        },
-                      },
-                    },
-                    resourceVersion: {
-                      type: 'text',
-                      fields: {
-                        keyword: {
-                          type: 'keyword',
-                          ignore_above: 256,
-                        },
-                      },
-                    },
-                    selfLink: {
-                      type: 'text',
-                      fields: {
-                        keyword: {
-                          type: 'keyword',
-                          ignore_above: 256,
-                        },
-                      },
-                    },
-                    uid: {
-                      type: 'text',
-                      fields: {
-                        keyword: {
-                          type: 'keyword',
-                          ignore_above: 256,
-                        },
-                      },
-                    },
-                  },
-                },
-                spec: {
-                  properties: {
-                    clusterIP: {
-                      type: 'text',
-                      fields: {
-                        keyword: {
-                          type: 'keyword',
-                          ignore_above: 256,
-                        },
-                      },
-                    },
-                    hostIPC: {
-                      type: 'boolean',
-                    },
-                    hostPID: {
-                      type: 'boolean',
-                    },
-                    ports: {
-                      properties: {
-                        name: {
-                          type: 'text',
-                          fields: {
-                            keyword: {
-                              type: 'keyword',
-                              ignore_above: 256,
-                            },
-                          },
-                        },
-                        port: {
-                          type: 'long',
-                        },
-                        protocol: {
-                          type: 'text',
-                          fields: {
-                            keyword: {
-                              type: 'keyword',
-                              ignore_above: 256,
-                            },
-                          },
-                        },
-                        targetPort: {
-                          type: 'long',
-                        },
-                      },
-                    },
-                    privileged: {
-                      type: 'boolean',
-                    },
-                    readOnlyRootFilesystem: {
-                      type: 'boolean',
-                    },
-                    replicas: {
-                      type: 'long',
-                    },
-                    selector: {
-                      properties: {
-                        matchLabels: {
-                          properties: {
-                            app: {
-                              type: 'text',
-                              fields: {
-                                keyword: {
-                                  type: 'keyword',
-                                  ignore_above: 256,
-                                },
-                              },
-                            },
-                            'pod-template-hash': {
-                              type: 'text',
-                              fields: {
-                                keyword: {
-                                  type: 'keyword',
-                                  ignore_above: 256,
-                                },
-                              },
-                            },
-                            'queue-pod-name': {
-                              type: 'text',
-                              fields: {
-                                keyword: {
-                                  type: 'keyword',
-                                  ignore_above: 256,
-                                },
-                              },
-                            },
-                            release: {
-                              type: 'text',
-                              fields: {
-                                keyword: {
-                                  type: 'keyword',
-                                  ignore_above: 256,
-                                },
-                              },
-                            },
-                          },
-                        },
-                      },
-                    },
-                    sessionAffinity: {
-                      type: 'text',
-                      fields: {
-                        keyword: {
-                          type: 'keyword',
-                          ignore_above: 256,
-                        },
-                      },
-                    },
-                    template: {
-                      properties: {
-                        metadata: {
-                          properties: {
-                            annotations: {
-                              properties: {
-                                'checksum/configmap': {
-                                  type: 'text',
-                                  fields: {
-                                    keyword: {
-                                      type: 'keyword',
-                                      ignore_above: 256,
-                                    },
-                                  },
-                                },
-                                'checksum/configmap-pod': {
-                                  type: 'text',
-                                  fields: {
-                                    keyword: {
-                                      type: 'keyword',
-                                      ignore_above: 256,
-                                    },
-                                  },
-                                },
-                                'cluster-autoscaler': {
-                                  properties: {
-                                    kubernetes: {
-                                      properties: {
-                                        'io/safe-to-evict': {
-                                          type: 'text',
-                                          fields: {
-                                            keyword: {
-                                              type: 'keyword',
-                                              ignore_above: 256,
-                                            },
-                                          },
-                                        },
-                                      },
-                                    },
-                                  },
-                                },
-                                gitlab: {
-                                  properties: {
-                                    'com/prometheus_port': {
-                                      type: 'text',
-                                      fields: {
-                                        keyword: {
-                                          type: 'keyword',
-                                          ignore_above: 256,
-                                        },
-                                      },
-                                    },
-                                    'com/prometheus_scrape': {
-                                      type: 'text',
-                                      fields: {
-                                        keyword: {
-                                          type: 'keyword',
-                                          ignore_above: 256,
-                                        },
-                                      },
-                                    },
-                                  },
-                                },
-                                prometheus: {
-                                  properties: {
-                                    'io/port': {
-                                      type: 'text',
-                                      fields: {
-                                        keyword: {
-                                          type: 'keyword',
-                                          ignore_above: 256,
-                                        },
-                                      },
-                                    },
-                                    'io/scrape': {
-                                      type: 'text',
-                                      fields: {
-                                        keyword: {
-                                          type: 'keyword',
-                                          ignore_above: 256,
-                                        },
-                                      },
-                                    },
-                                  },
-                                },
-                              },
-                            },
-                            labels: {
-                              properties: {
-                                app: {
-                                  type: 'text',
-                                  fields: {
-                                    keyword: {
-                                      type: 'keyword',
-                                      ignore_above: 256,
-                                    },
-                                  },
-                                },
-                                'pod-template-hash': {
-                                  type: 'text',
-                                  fields: {
-                                    keyword: {
-                                      type: 'keyword',
-                                      ignore_above: 256,
-                                    },
-                                  },
-                                },
-                                'queue-pod-name': {
-                                  type: 'text',
-                                  fields: {
-                                    keyword: {
-                                      type: 'keyword',
-                                      ignore_above: 256,
-                                    },
-                                  },
-                                },
-                                release: {
-                                  type: 'text',
-                                  fields: {
-                                    keyword: {
-                                      type: 'keyword',
-                                      ignore_above: 256,
-                                    },
-                                  },
-                                },
-                                shard: {
-                                  type: 'text',
-                                  fields: {
-                                    keyword: {
-                                      type: 'keyword',
-                                      ignore_above: 256,
-                                    },
-                                  },
-                                },
-                                stage: {
-                                  type: 'text',
-                                  fields: {
-                                    keyword: {
-                                      type: 'keyword',
-                                      ignore_above: 256,
-                                    },
-                                  },
-                                },
-                                tier: {
-                                  type: 'text',
-                                  fields: {
-                                    keyword: {
-                                      type: 'keyword',
-                                      ignore_above: 256,
-                                    },
-                                  },
-                                },
-                                type: {
-                                  type: 'text',
-                                  fields: {
-                                    keyword: {
-                                      type: 'keyword',
-                                      ignore_above: 256,
-                                    },
-                                  },
-                                },
-                              },
-                            },
-                          },
-                        },
-                      },
-                    },
-                    type: {
-                      type: 'text',
-                      fields: {
-                        keyword: {
-                          type: 'keyword',
-                          ignore_above: 256,
-                        },
-                      },
-                    },
-                    validation: {
-                      properties: {
-                        openAPIV3Schema: {
-                          properties: {
-                            properties: {
-                              properties: {
-                                spec: {
-                                  type: 'object',
-                                },
-                              },
-                            },
-                          },
-                        },
-                      },
-                    },
-                  },
-                },
-                status: {
-                  properties: {
-                    availableReplicas: {
-                      type: 'long',
-                    },
-                    fullyLabeledReplicas: {
-                      type: 'long',
-                    },
-                    loadBalancer: {
-                      type: 'object',
-                    },
-                    observedGeneration: {
-                      type: 'long',
-                    },
-                    readyReplicas: {
-                      type: 'long',
-                    },
-                    replicas: {
-                      type: 'long',
-                    },
-                  },
-                },
-                subjects: {
-                  properties: {
-                    kind: {
-                      type: 'text',
-                      fields: {
-                        keyword: {
-                          type: 'keyword',
-                          ignore_above: 256,
-                        },
-                      },
-                    },
-                    name: {
-                      type: 'text',
-                      fields: {
-                        keyword: {
-                          type: 'keyword',
-                          ignore_above: 256,
-                        },
-                      },
-                    },
-                    namespace: {
-                      type: 'text',
-                      fields: {
-                        keyword: {
-                          type: 'keyword',
-                          ignore_above: 256,
-                        },
-                      },
-                    },
-                  },
-                },
-                subsets: {
-                  properties: {
-                    addresses: {
-                      properties: {
-                        ip: {
-                          type: 'text',
-                          fields: {
-                            keyword: {
-                              type: 'keyword',
-                              ignore_above: 256,
-                            },
-                          },
-                        },
-                        nodeName: {
-                          type: 'text',
-                          fields: {
-                            keyword: {
-                              type: 'keyword',
-                              ignore_above: 256,
-                            },
-                          },
-                        },
-                        targetRef: {
-                          properties: {
-                            kind: {
-                              type: 'text',
-                              fields: {
-                                keyword: {
-                                  type: 'keyword',
-                                  ignore_above: 256,
-                                },
-                              },
-                            },
-                            name: {
-                              type: 'text',
-                              fields: {
-                                keyword: {
-                                  type: 'keyword',
-                                  ignore_above: 256,
-                                },
-                              },
-                            },
-                            namespace: {
-                              type: 'text',
-                              fields: {
-                                keyword: {
-                                  type: 'keyword',
-                                  ignore_above: 256,
-                                },
-                              },
-                            },
-                            resourceVersion: {
-                              type: 'text',
-                              fields: {
-                                keyword: {
-                                  type: 'keyword',
-                                  ignore_above: 256,
-                                },
-                              },
-                            },
-                            uid: {
-                              type: 'text',
-                              fields: {
-                                keyword: {
-                                  type: 'keyword',
-                                  ignore_above: 256,
-                                },
-                              },
-                            },
-                          },
-                        },
-                      },
-                    },
-                    ports: {
-                      properties: {
-                        name: {
-                          type: 'text',
-                          fields: {
-                            keyword: {
-                              type: 'keyword',
-                              ignore_above: 256,
-                            },
-                          },
-                        },
-                        port: {
-                          type: 'long',
-                        },
-                        protocol: {
-                          type: 'text',
-                          fields: {
-                            keyword: {
-                              type: 'keyword',
-                              ignore_above: 256,
-                            },
-                          },
-                        },
-                      },
-                    },
-                  },
-                },
-              },
-            },
-            requestMetadata: {
-              properties: {
-                callerIp: {
-                  type: 'text',
-                  fields: {
-                    keyword: {
-                      type: 'keyword',
-                      ignore_above: 256,
-                    },
-                  },
-                },
-                callerSuppliedUserAgent: {
-                  type: 'text',
-                  fields: {
-                    keyword: {
-                      type: 'keyword',
-                      ignore_above: 256,
-                    },
-                  },
-                },
-                destinationAttributes: {
-                  type: 'object',
-                },
-                requestAttributes: {
-                  type: 'object',
-                },
-              },
-            },
-            resourceName: {
-              type: 'text',
-              fields: {
-                keyword: {
-                  type: 'keyword',
-                  ignore_above: 256,
-                },
-              },
-            },
-            response: {
-              properties: {
-                '@type': {
-                  type: 'text',
-                  fields: {
-                    keyword: {
-                      type: 'keyword',
-                      ignore_above: 256,
-                    },
-                  },
+                ackDeadlineSeconds: {
+                  type: 'long',
                 },
                 apiVersion: {
                   type: 'text',
@@ -1032,7 +414,7 @@
                     },
                   },
                 },
-                kind: {
+                audience: {
                   type: 'text',
                   fields: {
                     keyword: {
@@ -1041,399 +423,9 @@
                     },
                   },
                 },
-                metadata: {
+                backends: {
                   properties: {
-                    annotations: {
-                      properties: {
-                        app: {
-                          properties: {
-                            gitlab: {
-                              properties: {
-                                'com/app': {
-                                  type: 'text',
-                                  fields: {
-                                    keyword: {
-                                      type: 'keyword',
-                                      ignore_above: 256,
-                                    },
-                                  },
-                                },
-                                'com/env': {
-                                  type: 'text',
-                                  fields: {
-                                    keyword: {
-                                      type: 'keyword',
-                                      ignore_above: 256,
-                                    },
-                                  },
-                                },
-                              },
-                            },
-                          },
-                        },
-                        apparmor: {
-                          properties: {
-                            security: {
-                              properties: {
-                                beta: {
-                                  properties: {
-                                    kubernetes: {
-                                      properties: {
-                                        'io/allowedProfileNames': {
-                                          type: 'text',
-                                          fields: {
-                                            keyword: {
-                                              type: 'keyword',
-                                              ignore_above: 256,
-                                            },
-                                          },
-                                        },
-                                        'io/defaultProfileName': {
-                                          type: 'text',
-                                          fields: {
-                                            keyword: {
-                                              type: 'keyword',
-                                              ignore_above: 256,
-                                            },
-                                          },
-                                        },
-                                      },
-                                    },
-                                  },
-                                },
-                              },
-                            },
-                          },
-                        },
-                        components: {
-                          properties: {
-                            gke: {
-                              properties: {
-                                'io/component-name': {
-                                  type: 'text',
-                                  fields: {
-                                    keyword: {
-                                      type: 'keyword',
-                                      ignore_above: 256,
-                                    },
-                                  },
-                                },
-                                'io/component-version': {
-                                  type: 'text',
-                                  fields: {
-                                    keyword: {
-                                      type: 'keyword',
-                                      ignore_above: 256,
-                                    },
-                                  },
-                                },
-                              },
-                            },
-                          },
-                        },
-                        'control-plane': {
-                          properties: {
-                            alpha: {
-                              properties: {
-                                kubernetes: {
-                                  properties: {
-                                    'io/leader': {
-                                      type: 'text',
-                                      fields: {
-                                        keyword: {
-                                          type: 'keyword',
-                                          ignore_above: 256,
-                                        },
-                                      },
-                                    },
-                                  },
-                                },
-                              },
-                            },
-                          },
-                        },
-                        deployment: {
-                          properties: {
-                            kubernetes: {
-                              properties: {
-                                'io/desired-replicas': {
-                                  type: 'text',
-                                  fields: {
-                                    keyword: {
-                                      type: 'keyword',
-                                      ignore_above: 256,
-                                    },
-                                  },
-                                },
-                                'io/max-replicas': {
-                                  type: 'text',
-                                  fields: {
-                                    keyword: {
-                                      type: 'keyword',
-                                      ignore_above: 256,
-                                    },
-                                  },
-                                },
-                                'io/revision': {
-                                  type: 'text',
-                                  fields: {
-                                    keyword: {
-                                      type: 'keyword',
-                                      ignore_above: 256,
-                                    },
-                                  },
-                                },
-                              },
-                            },
-                          },
-                        },
-                        deprecated: {
-                          properties: {
-                            daemonset: {
-                              properties: {
-                                template: {
-                                  properties: {
-                                    generation: {
-                                      type: 'text',
-                                      fields: {
-                                        keyword: {
-                                          type: 'keyword',
-                                          ignore_above: 256,
-                                        },
-                                      },
-                                    },
-                                  },
-                                },
-                              },
-                            },
-                          },
-                        },
-                        endpoints: {
-                          properties: {
-                            kubernetes: {
-                              properties: {
-                                'io/last-change-trigger-time': {
-                                  type: 'date',
-                                },
-                              },
-                            },
-                          },
-                        },
-                        kubectl: {
-                          properties: {
-                            kubernetes: {
-                              properties: {
-                                'io/last-applied-configuration': {
-                                  type: 'text',
-                                  fields: {
-                                    keyword: {
-                                      type: 'keyword',
-                                      ignore_above: 256,
-                                    },
-                                  },
-                                },
-                              },
-                            },
-                          },
-                        },
-                        kubernetes: {
-                          properties: {
-                            'io/description': {
-                              type: 'text',
-                              fields: {
-                                keyword: {
-                                  type: 'keyword',
-                                  ignore_above: 256,
-                                },
-                              },
-                            },
-                          },
-                        },
-                        seccomp: {
-                          properties: {
-                            security: {
-                              properties: {
-                                alpha: {
-                                  properties: {
-                                    kubernetes: {
-                                      properties: {
-                                        'io/allowedProfileNames': {
-                                          type: 'text',
-                                          fields: {
-                                            keyword: {
-                                              type: 'keyword',
-                                              ignore_above: 256,
-                                            },
-                                          },
-                                        },
-                                        'io/defaultProfileName': {
-                                          type: 'text',
-                                          fields: {
-                                            keyword: {
-                                              type: 'keyword',
-                                              ignore_above: 256,
-                                            },
-                                          },
-                                        },
-                                      },
-                                    },
-                                  },
-                                },
-                              },
-                            },
-                          },
-                        },
-                      },
-                    },
-                    creationTimestamp: {
-                      type: 'date',
-                    },
-                    generation: {
-                      type: 'long',
-                    },
-                    labels: {
-                      properties: {
-                        addonmanager: {
-                          properties: {
-                            kubernetes: {
-                              properties: {
-                                'io/mode': {
-                                  type: 'text',
-                                  fields: {
-                                    keyword: {
-                                      type: 'keyword',
-                                      ignore_above: 256,
-                                    },
-                                  },
-                                },
-                              },
-                            },
-                          },
-                        },
-                        app: {
-                          type: 'text',
-                          fields: {
-                            keyword: {
-                              type: 'keyword',
-                              ignore_above: 256,
-                            },
-                          },
-                        },
-                        chart: {
-                          type: 'text',
-                          fields: {
-                            keyword: {
-                              type: 'keyword',
-                              ignore_above: 256,
-                            },
-                          },
-                        },
-                        component: {
-                          type: 'text',
-                          fields: {
-                            keyword: {
-                              type: 'keyword',
-                              ignore_above: 256,
-                            },
-                          },
-                        },
-                        heritage: {
-                          type: 'text',
-                          fields: {
-                            keyword: {
-                              type: 'keyword',
-                              ignore_above: 256,
-                            },
-                          },
-                        },
-                        'k8s-app': {
-                          type: 'text',
-                          fields: {
-                            keyword: {
-                              type: 'keyword',
-                              ignore_above: 256,
-                            },
-                          },
-                        },
-                        kubernetes: {
-                          properties: {
-                            'io/cluster-service': {
-                              type: 'text',
-                              fields: {
-                                keyword: {
-                                  type: 'keyword',
-                                  ignore_above: 256,
-                                },
-                              },
-                            },
-                          },
-                        },
-                        'pod-template-hash': {
-                          type: 'text',
-                          fields: {
-                            keyword: {
-                              type: 'keyword',
-                              ignore_above: 256,
-                            },
-                          },
-                        },
-                        'queue-pod-name': {
-                          type: 'text',
-                          fields: {
-                            keyword: {
-                              type: 'keyword',
-                              ignore_above: 256,
-                            },
-                          },
-                        },
-                        release: {
-                          type: 'text',
-                          fields: {
-                            keyword: {
-                              type: 'keyword',
-                              ignore_above: 256,
-                            },
-                          },
-                        },
-                        shard: {
-                          type: 'text',
-                          fields: {
-                            keyword: {
-                              type: 'keyword',
-                              ignore_above: 256,
-                            },
-                          },
-                        },
-                        stage: {
-                          type: 'text',
-                          fields: {
-                            keyword: {
-                              type: 'keyword',
-                              ignore_above: 256,
-                            },
-                          },
-                        },
-                        tier: {
-                          type: 'text',
-                          fields: {
-                            keyword: {
-                              type: 'keyword',
-                              ignore_above: 256,
-                            },
-                          },
-                        },
-                        type: {
-                          type: 'text',
-                          fields: {
-                            keyword: {
-                              type: 'keyword',
-                              ignore_above: 256,
-                            },
-                          },
-                        },
-                      },
-                    },
-                    name: {
+                    balancingMode: {
                       type: 'text',
                       fields: {
                         keyword: {
@@ -1442,171 +434,12 @@
                         },
                       },
                     },
-                    namespace: {
+                    capacityScaler: {
                       type: 'text',
                       fields: {
                         keyword: {
                           type: 'keyword',
                           ignore_above: 256,
-                        },
-                      },
-                    },
-                    ownerReferences: {
-                      properties: {
-                        apiVersion: {
-                          type: 'text',
-                          fields: {
-                            keyword: {
-                              type: 'keyword',
-                              ignore_above: 256,
-                            },
-                          },
-                        },
-                        blockOwnerDeletion: {
-                          type: 'boolean',
-                        },
-                        controller: {
-                          type: 'boolean',
-                        },
-                        kind: {
-                          type: 'text',
-                          fields: {
-                            keyword: {
-                              type: 'keyword',
-                              ignore_above: 256,
-                            },
-                          },
-                        },
-                        name: {
-                          type: 'text',
-                          fields: {
-                            keyword: {
-                              type: 'keyword',
-                              ignore_above: 256,
-                            },
-                          },
-                        },
-                        uid: {
-                          type: 'text',
-                          fields: {
-                            keyword: {
-                              type: 'keyword',
-                              ignore_above: 256,
-                            },
-                          },
-                        },
-                      },
-                    },
-                    resourceVersion: {
-                      type: 'text',
-                      fields: {
-                        keyword: {
-                          type: 'keyword',
-                          ignore_above: 256,
-                        },
-                      },
-                    },
-                    selfLink: {
-                      type: 'text',
-                      fields: {
-                        keyword: {
-                          type: 'keyword',
-                          ignore_above: 256,
-                        },
-                      },
-                    },
-                    uid: {
-                      type: 'text',
-                      fields: {
-                        keyword: {
-                          type: 'keyword',
-                          ignore_above: 256,
-                        },
-                      },
-                    },
-                  },
-                },
-                roleRef: {
-                  properties: {
-                    apiGroup: {
-                      type: 'text',
-                      fields: {
-                        keyword: {
-                          type: 'keyword',
-                          ignore_above: 256,
-                        },
-                      },
-                    },
-                    kind: {
-                      type: 'text',
-                      fields: {
-                        keyword: {
-                          type: 'keyword',
-                          ignore_above: 256,
-                        },
-                      },
-                    },
-                    name: {
-                      type: 'text',
-                      fields: {
-                        keyword: {
-                          type: 'keyword',
-                          ignore_above: 256,
-                        },
-                      },
-                    },
-                  },
-                },
-                spec: {
-                  properties: {
-                    allowPrivilegeEscalation: {
-                      type: 'boolean',
-                    },
-                    allowedHostPaths: {
-                      properties: {
-                        pathPrefix: {
-                          type: 'text',
-                          fields: {
-                            keyword: {
-                              type: 'keyword',
-                              ignore_above: 256,
-                            },
-                          },
-                        },
-                      },
-                    },
-                    clusterIP: {
-                      type: 'text',
-                      fields: {
-                        keyword: {
-                          type: 'keyword',
-                          ignore_above: 256,
-                        },
-                      },
-                    },
-                    conversion: {
-                      properties: {
-                        strategy: {
-                          type: 'text',
-                          fields: {
-                            keyword: {
-                              type: 'keyword',
-                              ignore_above: 256,
-                            },
-                          },
-                        },
-                      },
-                    },
-                    fsGroup: {
-                      properties: {
-                        rule: {
-                          type: 'text',
-                          fields: {
-                            keyword: {
-                              type: 'keyword',
-                              ignore_above: 256,
-                            },
-                          },
                         },
                       },
                     },
@@ -1619,12 +452,56 @@
                         },
                       },
                     },
-                    hostNetwork: {
+                    maxRatePerInstance: {
+                      type: 'text',
+                      fields: {
+                        keyword: {
+                          type: 'keyword',
+                          ignore_above: 256,
+                        },
+                      },
+                    },
+                  },
+                },
+                billingInfoOptions: {
+                  properties: {
+                    queryUnscopedBillingState: {
                       type: 'boolean',
                     },
-                    names: {
+                  },
+                },
+                cdnPolicy: {
+                  properties: {
+                    cacheKeyPolicy: {
                       properties: {
-                        kind: {
+                        includeHost: {
+                          type: 'boolean',
+                        },
+                        includeProtocol: {
+                          type: 'boolean',
+                        },
+                        includeQueryString: {
+                          type: 'boolean',
+                        },
+                      },
+                    },
+                  },
+                },
+                creationTimestamp: {
+                  type: 'date',
+                },
+                deleteOptions: {
+                  properties: {
+                    gracePeriodSeconds: {
+                      type: 'long',
+                    },
+                  },
+                },
+                deployment: {
+                  properties: {
+                    labels: {
+                      properties: {
+                        language: {
                           type: 'text',
                           fields: {
                             keyword: {
@@ -1633,7 +510,7 @@
                             },
                           },
                         },
-                        listKind: {
+                        version: {
                           type: 'text',
                           fields: {
                             keyword: {
@@ -1642,25 +519,7 @@
                             },
                           },
                         },
-                        plural: {
-                          type: 'text',
-                          fields: {
-                            keyword: {
-                              type: 'keyword',
-                              ignore_above: 256,
-                            },
-                          },
-                        },
-                        shortNames: {
-                          type: 'text',
-                          fields: {
-                            keyword: {
-                              type: 'keyword',
-                              ignore_above: 256,
-                            },
-                          },
-                        },
-                        singular: {
+                        zone: {
                           type: 'text',
                           fields: {
                             keyword: {
@@ -1671,57 +530,154 @@
                         },
                       },
                     },
-                    ports: {
-                      properties: {
-                        name: {
-                          type: 'text',
-                          fields: {
-                            keyword: {
-                              type: 'keyword',
-                              ignore_above: 256,
-                            },
-                          },
-                        },
-                        port: {
-                          type: 'long',
-                        },
-                        protocol: {
-                          type: 'text',
-                          fields: {
-                            keyword: {
-                              type: 'keyword',
-                              ignore_above: 256,
-                            },
-                          },
-                        },
-                        targetPort: {
-                          type: 'long',
+                    projectId: {
+                      type: 'text',
+                      fields: {
+                        keyword: {
+                          type: 'keyword',
+                          ignore_above: 256,
                         },
                       },
                     },
-                    preserveUnknownFields: {
+                    target: {
+                      type: 'text',
+                      fields: {
+                        keyword: {
+                          type: 'keyword',
+                          ignore_above: 256,
+                        },
+                      },
+                    },
+                  },
+                },
+                description: {
+                  type: 'text',
+                  fields: {
+                    keyword: {
+                      type: 'keyword',
+                      ignore_above: 256,
+                    },
+                  },
+                },
+                enableCDN: {
+                  type: 'boolean',
+                },
+                filter: {
+                  type: 'text',
+                  fields: {
+                    keyword: {
+                      type: 'keyword',
+                      ignore_above: 256,
+                    },
+                  },
+                },
+                fingerprint: {
+                  type: 'text',
+                  fields: {
+                    keyword: {
+                      type: 'keyword',
+                      ignore_above: 256,
+                    },
+                  },
+                },
+                grantType: {
+                  type: 'text',
+                  fields: {
+                    keyword: {
+                      type: 'keyword',
+                      ignore_above: 256,
+                    },
+                  },
+                },
+                group: {
+                  type: 'text',
+                  fields: {
+                    keyword: {
+                      type: 'keyword',
+                      ignore_above: 256,
+                    },
+                  },
+                },
+                guestFlush: {
+                  type: 'boolean',
+                },
+                healthChecks: {
+                  type: 'text',
+                  fields: {
+                    keyword: {
+                      type: 'keyword',
+                      ignore_above: 256,
+                    },
+                  },
+                },
+                httpRequest: {
+                  properties: {
+                    url: {
+                      type: 'text',
+                      fields: {
+                        keyword: {
+                          type: 'keyword',
+                          ignore_above: 256,
+                        },
+                      },
+                    },
+                  },
+                },
+                id: {
+                  type: 'text',
+                  fields: {
+                    keyword: {
+                      type: 'keyword',
+                      ignore_above: 256,
+                    },
+                  },
+                },
+                instanceState: {
+                  type: 'text',
+                  fields: {
+                    keyword: {
+                      type: 'keyword',
+                      ignore_above: 256,
+                    },
+                  },
+                },
+                instances: {
+                  properties: {
+                    instance: {
+                      type: 'text',
+                      fields: {
+                        keyword: {
+                          type: 'keyword',
+                          ignore_above: 256,
+                        },
+                      },
+                    },
+                  },
+                },
+                kind: {
+                  type: 'text',
+                  fields: {
+                    keyword: {
+                      type: 'keyword',
+                      ignore_above: 256,
+                    },
+                  },
+                },
+                loadBalancingScheme: {
+                  type: 'text',
+                  fields: {
+                    keyword: {
+                      type: 'keyword',
+                      ignore_above: 256,
+                    },
+                  },
+                },
+                logConfig: {
+                  properties: {
+                    enable: {
                       type: 'boolean',
                     },
-                    replicas: {
-                      type: 'long',
-                    },
-                    revisionHistoryLimit: {
-                      type: 'long',
-                    },
-                    runAsUser: {
-                      properties: {
-                        rule: {
-                          type: 'text',
-                          fields: {
-                            keyword: {
-                              type: 'keyword',
-                              ignore_above: 256,
-                            },
-                          },
-                        },
-                      },
-                    },
-                    scope: {
+                    sampleRate: {
                       type: 'text',
                       fields: {
                         keyword: {
@@ -1730,238 +686,42 @@
                         },
                       },
                     },
-                    seLinux: {
-                      properties: {
-                        rule: {
-                          type: 'text',
-                          fields: {
-                            keyword: {
-                              type: 'keyword',
-                              ignore_above: 256,
-                            },
-                          },
-                        },
-                      },
+                  },
+                },
+                managedZone: {
+                  type: 'text',
+                  fields: {
+                    keyword: {
+                      type: 'keyword',
+                      ignore_above: 256,
                     },
-                    selector: {
+                  },
+                },
+                messageRetentionDuration: {
+                  type: 'text',
+                  fields: {
+                    keyword: {
+                      type: 'keyword',
+                      ignore_above: 256,
+                    },
+                  },
+                },
+                metadata: {
+                  properties: {
+                    annotations: {
                       properties: {
-                        matchLabels: {
+                        'control-plane': {
                           properties: {
-                            app: {
-                              type: 'text',
-                              fields: {
-                                keyword: {
-                                  type: 'keyword',
-                                  ignore_above: 256,
-                                },
-                              },
-                            },
-                            'k8s-app': {
-                              type: 'text',
-                              fields: {
-                                keyword: {
-                                  type: 'keyword',
-                                  ignore_above: 256,
-                                },
-                              },
-                            },
-                            'pod-template-hash': {
-                              type: 'text',
-                              fields: {
-                                keyword: {
-                                  type: 'keyword',
-                                  ignore_above: 256,
-                                },
-                              },
-                            },
-                            'queue-pod-name': {
-                              type: 'text',
-                              fields: {
-                                keyword: {
-                                  type: 'keyword',
-                                  ignore_above: 256,
-                                },
-                              },
-                            },
-                            release: {
-                              type: 'text',
-                              fields: {
-                                keyword: {
-                                  type: 'keyword',
-                                  ignore_above: 256,
-                                },
-                              },
-                            },
-                          },
-                        },
-                      },
-                    },
-                    sessionAffinity: {
-                      type: 'text',
-                      fields: {
-                        keyword: {
-                          type: 'keyword',
-                          ignore_above: 256,
-                        },
-                      },
-                    },
-                    supplementalGroups: {
-                      properties: {
-                        rule: {
-                          type: 'text',
-                          fields: {
-                            keyword: {
-                              type: 'keyword',
-                              ignore_above: 256,
-                            },
-                          },
-                        },
-                      },
-                    },
-                    template: {
-                      properties: {
-                        metadata: {
-                          properties: {
-                            annotations: {
+                            alpha: {
                               properties: {
-                                'checksum/configmap': {
-                                  type: 'text',
-                                  fields: {
-                                    keyword: {
-                                      type: 'keyword',
-                                      ignore_above: 256,
-                                    },
-                                  },
-                                },
-                                'checksum/configmap-pod': {
-                                  type: 'text',
-                                  fields: {
-                                    keyword: {
-                                      type: 'keyword',
-                                      ignore_above: 256,
-                                    },
-                                  },
-                                },
-                                'cluster-autoscaler': {
+                                kubernetes: {
                                   properties: {
-                                    kubernetes: {
-                                      properties: {
-                                        'io/safe-to-evict': {
-                                          type: 'text',
-                                          fields: {
-                                            keyword: {
-                                              type: 'keyword',
-                                              ignore_above: 256,
-                                            },
-                                          },
-                                        },
-                                      },
-                                    },
-                                  },
-                                },
-                                components: {
-                                  properties: {
-                                    gke: {
-                                      properties: {
-                                        'io/component-name': {
-                                          type: 'text',
-                                          fields: {
-                                            keyword: {
-                                              type: 'keyword',
-                                              ignore_above: 256,
-                                            },
-                                          },
-                                        },
-                                        'io/component-version': {
-                                          type: 'text',
-                                          fields: {
-                                            keyword: {
-                                              type: 'keyword',
-                                              ignore_above: 256,
-                                            },
-                                          },
-                                        },
-                                      },
-                                    },
-                                  },
-                                },
-                                gitlab: {
-                                  properties: {
-                                    'com/prometheus_port': {
+                                    'io/leader': {
                                       type: 'text',
                                       fields: {
                                         keyword: {
                                           type: 'keyword',
                                           ignore_above: 256,
-                                        },
-                                      },
-                                    },
-                                    'com/prometheus_scrape': {
-                                      type: 'text',
-                                      fields: {
-                                        keyword: {
-                                          type: 'keyword',
-                                          ignore_above: 256,
-                                        },
-                                      },
-                                    },
-                                  },
-                                },
-                                monitoring: {
-                                  properties: {
-                                    gke: {
-                                      properties: {
-                                        'io/path': {
-                                          type: 'text',
-                                          fields: {
-                                            keyword: {
-                                              type: 'keyword',
-                                              ignore_above: 256,
-                                            },
-                                          },
-                                        },
-                                      },
-                                    },
-                                  },
-                                },
-                                prometheus: {
-                                  properties: {
-                                    'io/port': {
-                                      type: 'text',
-                                      fields: {
-                                        keyword: {
-                                          type: 'keyword',
-                                          ignore_above: 256,
-                                        },
-                                      },
-                                    },
-                                    'io/scrape': {
-                                      type: 'text',
-                                      fields: {
-                                        keyword: {
-                                          type: 'keyword',
-                                          ignore_above: 256,
-                                        },
-                                      },
-                                    },
-                                  },
-                                },
-                                scheduler: {
-                                  properties: {
-                                    alpha: {
-                                      properties: {
-                                        kubernetes: {
-                                          properties: {
-                                            'io/critical-pod': {
-                                              type: 'text',
-                                              fields: {
-                                                keyword: {
-                                                  type: 'keyword',
-                                                  ignore_above: 256,
-                                                },
-                                              },
-                                            },
-                                          },
                                         },
                                       },
                                     },
@@ -1969,26 +729,31 @@
                                 },
                               },
                             },
-                            labels: {
+                          },
+                        },
+                        endpoints: {
+                          properties: {
+                            kubernetes: {
                               properties: {
-                                addonmanager: {
-                                  properties: {
-                                    kubernetes: {
-                                      properties: {
-                                        'io/mode': {
-                                          type: 'text',
-                                          fields: {
-                                            keyword: {
-                                              type: 'keyword',
-                                              ignore_above: 256,
-                                            },
-                                          },
-                                        },
-                                      },
-                                    },
-                                  },
+                                'io/last-change-trigger-time': {
+                                  type: 'date',
                                 },
-                                app: {
+                              },
+                            },
+                          },
+                        },
+                      },
+                    },
+                    creationTimestamp: {
+                      type: 'date',
+                    },
+                    labels: {
+                      properties: {
+                        app: {
+                          properties: {
+                            kubernetes: {
+                              properties: {
+                                'io/instance': {
                                   type: 'text',
                                   fields: {
                                     keyword: {
@@ -1997,7 +762,7 @@
                                     },
                                   },
                                 },
-                                'k8s-app': {
+                                'io/managed-by': {
                                   type: 'text',
                                   fields: {
                                     keyword: {
@@ -2006,7 +771,7 @@
                                     },
                                   },
                                 },
-                                'pod-template-hash': {
+                                'io/name': {
                                   type: 'text',
                                   fields: {
                                     keyword: {
@@ -2015,52 +780,7 @@
                                     },
                                   },
                                 },
-                                'queue-pod-name': {
-                                  type: 'text',
-                                  fields: {
-                                    keyword: {
-                                      type: 'keyword',
-                                      ignore_above: 256,
-                                    },
-                                  },
-                                },
-                                release: {
-                                  type: 'text',
-                                  fields: {
-                                    keyword: {
-                                      type: 'keyword',
-                                      ignore_above: 256,
-                                    },
-                                  },
-                                },
-                                shard: {
-                                  type: 'text',
-                                  fields: {
-                                    keyword: {
-                                      type: 'keyword',
-                                      ignore_above: 256,
-                                    },
-                                  },
-                                },
-                                stage: {
-                                  type: 'text',
-                                  fields: {
-                                    keyword: {
-                                      type: 'keyword',
-                                      ignore_above: 256,
-                                    },
-                                  },
-                                },
-                                tier: {
-                                  type: 'text',
-                                  fields: {
-                                    keyword: {
-                                      type: 'keyword',
-                                      ignore_above: 256,
-                                    },
-                                  },
-                                },
-                                type: {
+                                'io/version': {
                                   type: 'text',
                                   fields: {
                                     keyword: {
@@ -2073,23 +793,73 @@
                             },
                           },
                         },
-                      },
-                    },
-                    type: {
-                      type: 'text',
-                      fields: {
-                        keyword: {
-                          type: 'keyword',
-                          ignore_above: 256,
+                        deployment: {
+                          type: 'text',
+                          fields: {
+                            keyword: {
+                              type: 'keyword',
+                              ignore_above: 256,
+                            },
+                          },
                         },
-                      },
-                    },
-                    updateStrategy: {
-                      properties: {
-                        rollingUpdate: {
+                        helm: {
                           properties: {
-                            maxUnavailable: {
-                              type: 'long',
+                            'sh/chart': {
+                              type: 'text',
+                              fields: {
+                                keyword: {
+                                  type: 'keyword',
+                                  ignore_above: 256,
+                                },
+                              },
+                            },
+                          },
+                        },
+                        'k8s-app': {
+                          type: 'text',
+                          fields: {
+                            keyword: {
+                              type: 'keyword',
+                              ignore_above: 256,
+                            },
+                          },
+                        },
+                        service: {
+                          properties: {
+                            kubernetes: {
+                              properties: {
+                                'io/headless': {
+                                  type: 'text',
+                                  fields: {
+                                    keyword: {
+                                      type: 'keyword',
+                                      ignore_above: 256,
+                                    },
+                                  },
+                                },
+                              },
+                            },
+                          },
+                        },
+                        stage: {
+                          type: 'text',
+                          fields: {
+                            keyword: {
+                              type: 'keyword',
+                              ignore_above: 256,
+                            },
+                          },
+                        },
+                        tanka: {
+                          properties: {
+                            'dev/environment': {
+                              type: 'text',
+                              fields: {
+                                keyword: {
+                                  type: 'keyword',
+                                  ignore_above: 256,
+                                },
+                              },
                             },
                           },
                         },
@@ -2104,122 +874,7 @@
                         },
                       },
                     },
-                    validation: {
-                      properties: {
-                        openAPIV3Schema: {
-                          properties: {
-                            properties: {
-                              properties: {
-                                spec: {
-                                  properties: {
-                                    properties: {
-                                      properties: {
-                                        resourcePolicy: {
-                                          properties: {
-                                            properties: {
-                                              properties: {
-                                                containerPolicies: {
-                                                  properties: {
-                                                    items: {
-                                                      properties: {
-                                                        type: {
-                                                          type: 'text',
-                                                          fields: {
-                                                            keyword: {
-                                                              type: 'keyword',
-                                                              ignore_above: 256,
-                                                            },
-                                                          },
-                                                        },
-                                                      },
-                                                    },
-                                                    type: {
-                                                      type: 'text',
-                                                      fields: {
-                                                        keyword: {
-                                                          type: 'keyword',
-                                                          ignore_above: 256,
-                                                        },
-                                                      },
-                                                    },
-                                                  },
-                                                },
-                                              },
-                                            },
-                                            type: {
-                                              type: 'text',
-                                              fields: {
-                                                keyword: {
-                                                  type: 'keyword',
-                                                  ignore_above: 256,
-                                                },
-                                              },
-                                            },
-                                          },
-                                        },
-                                        targetRef: {
-                                          properties: {
-                                            type: {
-                                              type: 'text',
-                                              fields: {
-                                                keyword: {
-                                                  type: 'keyword',
-                                                  ignore_above: 256,
-                                                },
-                                              },
-                                            },
-                                          },
-                                        },
-                                        updatePolicy: {
-                                          properties: {
-                                            properties: {
-                                              properties: {
-                                                updateMode: {
-                                                  properties: {
-                                                    type: {
-                                                      type: 'text',
-                                                      fields: {
-                                                        keyword: {
-                                                          type: 'keyword',
-                                                          ignore_above: 256,
-                                                        },
-                                                      },
-                                                    },
-                                                  },
-                                                },
-                                              },
-                                            },
-                                            type: {
-                                              type: 'text',
-                                              fields: {
-                                                keyword: {
-                                                  type: 'keyword',
-                                                  ignore_above: 256,
-                                                },
-                                              },
-                                            },
-                                          },
-                                        },
-                                      },
-                                    },
-                                    type: {
-                                      type: 'text',
-                                      fields: {
-                                        keyword: {
-                                          type: 'keyword',
-                                          ignore_above: 256,
-                                        },
-                                      },
-                                    },
-                                  },
-                                },
-                              },
-                            },
-                          },
-                        },
-                      },
-                    },
-                    version: {
+                    name: {
                       type: 'text',
                       fields: {
                         keyword: {
@@ -2228,26 +883,25 @@
                         },
                       },
                     },
-                    versions: {
-                      properties: {
-                        name: {
-                          type: 'text',
-                          fields: {
-                            keyword: {
-                              type: 'keyword',
-                              ignore_above: 256,
-                            },
-                          },
-                        },
-                        served: {
-                          type: 'boolean',
-                        },
-                        storage: {
-                          type: 'boolean',
+                    namespace: {
+                      type: 'text',
+                      fields: {
+                        keyword: {
+                          type: 'keyword',
+                          ignore_above: 256,
                         },
                       },
                     },
-                    volumes: {
+                    resourceVersion: {
+                      type: 'text',
+                      fields: {
+                        keyword: {
+                          type: 'keyword',
+                          ignore_above: 256,
+                        },
+                      },
+                    },
+                    uid: {
                       type: 'text',
                       fields: {
                         keyword: {
@@ -2258,11 +912,78 @@
                     },
                   },
                 },
-                status: {
+                name: {
+                  type: 'text',
+                  fields: {
+                    keyword: {
+                      type: 'keyword',
+                      ignore_above: 256,
+                    },
+                  },
+                },
+                parent: {
+                  type: 'text',
+                  fields: {
+                    keyword: {
+                      type: 'keyword',
+                      ignore_above: 256,
+                    },
+                  },
+                },
+                port: {
+                  type: 'text',
+                  fields: {
+                    keyword: {
+                      type: 'keyword',
+                      ignore_above: 256,
+                    },
+                  },
+                },
+                portName: {
+                  type: 'text',
+                  fields: {
+                    keyword: {
+                      type: 'keyword',
+                      ignore_above: 256,
+                    },
+                  },
+                },
+                profile: {
                   properties: {
-                    acceptedNames: {
+                    deployment: {
                       properties: {
-                        kind: {
+                        labels: {
+                          properties: {
+                            language: {
+                              type: 'text',
+                              fields: {
+                                keyword: {
+                                  type: 'keyword',
+                                  ignore_above: 256,
+                                },
+                              },
+                            },
+                            version: {
+                              type: 'text',
+                              fields: {
+                                keyword: {
+                                  type: 'keyword',
+                                  ignore_above: 256,
+                                },
+                              },
+                            },
+                            zone: {
+                              type: 'text',
+                              fields: {
+                                keyword: {
+                                  type: 'keyword',
+                                  ignore_above: 256,
+                                },
+                              },
+                            },
+                          },
+                        },
+                        projectId: {
                           type: 'text',
                           fields: {
                             keyword: {
@@ -2271,34 +992,7 @@
                             },
                           },
                         },
-                        listKind: {
-                          type: 'text',
-                          fields: {
-                            keyword: {
-                              type: 'keyword',
-                              ignore_above: 256,
-                            },
-                          },
-                        },
-                        plural: {
-                          type: 'text',
-                          fields: {
-                            keyword: {
-                              type: 'keyword',
-                              ignore_above: 256,
-                            },
-                          },
-                        },
-                        shortNames: {
-                          type: 'text',
-                          fields: {
-                            keyword: {
-                              type: 'keyword',
-                              ignore_above: 256,
-                            },
-                          },
-                        },
-                        singular: {
+                        target: {
                           type: 'text',
                           fields: {
                             keyword: {
@@ -2309,11 +1003,167 @@
                         },
                       },
                     },
-                    availableReplicas: {
-                      type: 'long',
+                    duration: {
+                      type: 'text',
+                      fields: {
+                        keyword: {
+                          type: 'keyword',
+                          ignore_above: 256,
+                        },
+                      },
+                    },
+                    labels: {
+                      properties: {
+                        instance: {
+                          type: 'text',
+                          fields: {
+                            keyword: {
+                              type: 'keyword',
+                              ignore_above: 256,
+                            },
+                          },
+                        },
+                      },
+                    },
+                    name: {
+                      type: 'text',
+                      fields: {
+                        keyword: {
+                          type: 'keyword',
+                          ignore_above: 256,
+                        },
+                      },
+                    },
+                    profileType: {
+                      type: 'text',
+                      fields: {
+                        keyword: {
+                          type: 'keyword',
+                          ignore_above: 256,
+                        },
+                      },
+                    },
+                  },
+                },
+                profileType: {
+                  type: 'text',
+                  fields: {
+                    keyword: {
+                      type: 'keyword',
+                      ignore_above: 256,
+                    },
+                  },
+                },
+                project: {
+                  type: 'text',
+                  fields: {
+                    keyword: {
+                      type: 'keyword',
+                      ignore_above: 256,
+                    },
+                  },
+                },
+                projectId: {
+                  type: 'text',
+                  fields: {
+                    keyword: {
+                      type: 'keyword',
+                      ignore_above: 256,
+                    },
+                  },
+                },
+                propagationPolicy: {
+                  type: 'text',
+                  fields: {
+                    keyword: {
+                      type: 'keyword',
+                      ignore_above: 256,
+                    },
+                  },
+                },
+                protocol: {
+                  type: 'text',
+                  fields: {
+                    keyword: {
+                      type: 'keyword',
+                      ignore_above: 256,
+                    },
+                  },
+                },
+                query: {
+                  type: 'text',
+                  fields: {
+                    keyword: {
+                      type: 'keyword',
+                      ignore_above: 256,
+                    },
+                  },
+                },
+                requestId: {
+                  type: 'text',
+                  fields: {
+                    keyword: {
+                      type: 'keyword',
+                      ignore_above: 256,
+                    },
+                  },
+                },
+                requestedTokenType: {
+                  type: 'text',
+                  fields: {
+                    keyword: {
+                      type: 'keyword',
+                      ignore_above: 256,
+                    },
+                  },
+                },
+                resourceName: {
+                  type: 'text',
+                  fields: {
+                    keyword: {
+                      type: 'keyword',
+                      ignore_above: 256,
+                    },
+                  },
+                },
+                selfLink: {
+                  type: 'text',
+                  fields: {
+                    keyword: {
+                      type: 'keyword',
+                      ignore_above: 256,
+                    },
+                  },
+                },
+                sessionAffinity: {
+                  type: 'text',
+                  fields: {
+                    keyword: {
+                      type: 'keyword',
+                      ignore_above: 256,
+                    },
+                  },
+                },
+                status: {
+                  properties: {
+                    '$setElementOrder/conditions': {
+                      properties: {
+                        type: {
+                          type: 'text',
+                          fields: {
+                            keyword: {
+                              type: 'keyword',
+                              ignore_above: 256,
+                            },
+                          },
+                        },
+                      },
                     },
                     conditions: {
                       properties: {
+                        lastHeartbeatTime: {
+                          type: 'date',
+                        },
                         lastTransitionTime: {
                           type: 'date',
                         },
@@ -2355,37 +1205,164 @@
                         },
                       },
                     },
-                    currentNumberScheduled: {
-                      type: 'long',
+                    containerStatuses: {
+                      properties: {
+                        containerID: {
+                          type: 'text',
+                          fields: {
+                            keyword: {
+                              type: 'keyword',
+                              ignore_above: 256,
+                            },
+                          },
+                        },
+                        image: {
+                          type: 'text',
+                          fields: {
+                            keyword: {
+                              type: 'keyword',
+                              ignore_above: 256,
+                            },
+                          },
+                        },
+                        imageID: {
+                          type: 'text',
+                          fields: {
+                            keyword: {
+                              type: 'keyword',
+                              ignore_above: 256,
+                            },
+                          },
+                        },
+                        lastState: {
+                          properties: {
+                            terminated: {
+                              properties: {
+                                containerID: {
+                                  type: 'text',
+                                  fields: {
+                                    keyword: {
+                                      type: 'keyword',
+                                      ignore_above: 256,
+                                    },
+                                  },
+                                },
+                                exitCode: {
+                                  type: 'long',
+                                },
+                                finishedAt: {
+                                  type: 'date',
+                                },
+                                message: {
+                                  type: 'text',
+                                  fields: {
+                                    keyword: {
+                                      type: 'keyword',
+                                      ignore_above: 256,
+                                    },
+                                  },
+                                },
+                                reason: {
+                                  type: 'text',
+                                  fields: {
+                                    keyword: {
+                                      type: 'keyword',
+                                      ignore_above: 256,
+                                    },
+                                  },
+                                },
+                                startedAt: {
+                                  type: 'date',
+                                },
+                              },
+                            },
+                          },
+                        },
+                        name: {
+                          type: 'text',
+                          fields: {
+                            keyword: {
+                              type: 'keyword',
+                              ignore_above: 256,
+                            },
+                          },
+                        },
+                        ready: {
+                          type: 'boolean',
+                        },
+                        restartCount: {
+                          type: 'long',
+                        },
+                        started: {
+                          type: 'boolean',
+                        },
+                        state: {
+                          properties: {
+                            running: {
+                              properties: {
+                                startedAt: {
+                                  type: 'date',
+                                },
+                              },
+                            },
+                            terminated: {
+                              properties: {
+                                containerID: {
+                                  type: 'text',
+                                  fields: {
+                                    keyword: {
+                                      type: 'keyword',
+                                      ignore_above: 256,
+                                    },
+                                  },
+                                },
+                                exitCode: {
+                                  type: 'long',
+                                },
+                                finishedAt: {
+                                  type: 'date',
+                                },
+                                message: {
+                                  type: 'text',
+                                  fields: {
+                                    keyword: {
+                                      type: 'keyword',
+                                      ignore_above: 256,
+                                    },
+                                  },
+                                },
+                                reason: {
+                                  type: 'text',
+                                  fields: {
+                                    keyword: {
+                                      type: 'keyword',
+                                      ignore_above: 256,
+                                    },
+                                  },
+                                },
+                                startedAt: {
+                                  type: 'date',
+                                },
+                              },
+                            },
+                            waiting: {
+                              properties: {
+                                reason: {
+                                  type: 'text',
+                                  fields: {
+                                    keyword: {
+                                      type: 'keyword',
+                                      ignore_above: 256,
+                                    },
+                                  },
+                                },
+                              },
+                            },
+                          },
+                        },
+                      },
                     },
-                    desiredNumberScheduled: {
-                      type: 'long',
-                    },
-                    fullyLabeledReplicas: {
-                      type: 'long',
-                    },
-                    loadBalancer: {
-                      type: 'object',
-                    },
-                    numberAvailable: {
-                      type: 'long',
-                    },
-                    numberMisscheduled: {
-                      type: 'long',
-                    },
-                    numberReady: {
-                      type: 'long',
-                    },
-                    observedGeneration: {
-                      type: 'long',
-                    },
-                    readyReplicas: {
-                      type: 'long',
-                    },
-                    replicas: {
-                      type: 'long',
-                    },
-                    selector: {
+                    hostIP: {
                       type: 'text',
                       fields: {
                         keyword: {
@@ -2394,7 +1371,111 @@
                         },
                       },
                     },
-                    storedVersions: {
+                    initContainerStatuses: {
+                      properties: {
+                        containerID: {
+                          type: 'text',
+                          fields: {
+                            keyword: {
+                              type: 'keyword',
+                              ignore_above: 256,
+                            },
+                          },
+                        },
+                        image: {
+                          type: 'text',
+                          fields: {
+                            keyword: {
+                              type: 'keyword',
+                              ignore_above: 256,
+                            },
+                          },
+                        },
+                        imageID: {
+                          type: 'text',
+                          fields: {
+                            keyword: {
+                              type: 'keyword',
+                              ignore_above: 256,
+                            },
+                          },
+                        },
+                        lastState: {
+                          type: 'object',
+                        },
+                        name: {
+                          type: 'text',
+                          fields: {
+                            keyword: {
+                              type: 'keyword',
+                              ignore_above: 256,
+                            },
+                          },
+                        },
+                        ready: {
+                          type: 'boolean',
+                        },
+                        restartCount: {
+                          type: 'long',
+                        },
+                        state: {
+                          properties: {
+                            running: {
+                              properties: {
+                                startedAt: {
+                                  type: 'date',
+                                },
+                              },
+                            },
+                            terminated: {
+                              properties: {
+                                containerID: {
+                                  type: 'text',
+                                  fields: {
+                                    keyword: {
+                                      type: 'keyword',
+                                      ignore_above: 256,
+                                    },
+                                  },
+                                },
+                                exitCode: {
+                                  type: 'long',
+                                },
+                                finishedAt: {
+                                  type: 'date',
+                                },
+                                reason: {
+                                  type: 'text',
+                                  fields: {
+                                    keyword: {
+                                      type: 'keyword',
+                                      ignore_above: 256,
+                                    },
+                                  },
+                                },
+                                startedAt: {
+                                  type: 'date',
+                                },
+                              },
+                            },
+                            waiting: {
+                              properties: {
+                                reason: {
+                                  type: 'text',
+                                  fields: {
+                                    keyword: {
+                                      type: 'keyword',
+                                      ignore_above: 256,
+                                    },
+                                  },
+                                },
+                              },
+                            },
+                          },
+                        },
+                      },
+                    },
+                    phase: {
                       type: 'text',
                       fields: {
                         keyword: {
@@ -2403,54 +1484,116 @@
                         },
                       },
                     },
-                    updatedNumberScheduled: {
-                      type: 'long',
+                    podIP: {
+                      type: 'text',
+                      fields: {
+                        keyword: {
+                          type: 'keyword',
+                          ignore_above: 256,
+                        },
+                      },
+                    },
+                    podIPs: {
+                      properties: {
+                        ip: {
+                          type: 'text',
+                          fields: {
+                            keyword: {
+                              type: 'keyword',
+                              ignore_above: 256,
+                            },
+                          },
+                        },
+                      },
+                    },
+                    startTime: {
+                      type: 'date',
                     },
                   },
                 },
-                subjects: {
-                  properties: {
-                    apiGroup: {
-                      type: 'text',
-                      fields: {
-                        keyword: {
-                          type: 'keyword',
-                          ignore_above: 256,
-                        },
-                      },
-                    },
-                    kind: {
-                      type: 'text',
-                      fields: {
-                        keyword: {
-                          type: 'keyword',
-                          ignore_above: 256,
-                        },
-                      },
-                    },
-                    name: {
-                      type: 'text',
-                      fields: {
-                        keyword: {
-                          type: 'keyword',
-                          ignore_above: 256,
-                        },
-                      },
-                    },
-                    namespace: {
-                      type: 'text',
-                      fields: {
-                        keyword: {
-                          type: 'keyword',
-                          ignore_above: 256,
-                        },
-                      },
+                subjectTokenType: {
+                  type: 'text',
+                  fields: {
+                    keyword: {
+                      type: 'keyword',
+                      ignore_above: 256,
                     },
                   },
                 },
                 subsets: {
                   properties: {
                     addresses: {
+                      properties: {
+                        ip: {
+                          type: 'text',
+                          fields: {
+                            keyword: {
+                              type: 'keyword',
+                              ignore_above: 256,
+                            },
+                          },
+                        },
+                        nodeName: {
+                          type: 'text',
+                          fields: {
+                            keyword: {
+                              type: 'keyword',
+                              ignore_above: 256,
+                            },
+                          },
+                        },
+                        targetRef: {
+                          properties: {
+                            kind: {
+                              type: 'text',
+                              fields: {
+                                keyword: {
+                                  type: 'keyword',
+                                  ignore_above: 256,
+                                },
+                              },
+                            },
+                            name: {
+                              type: 'text',
+                              fields: {
+                                keyword: {
+                                  type: 'keyword',
+                                  ignore_above: 256,
+                                },
+                              },
+                            },
+                            namespace: {
+                              type: 'text',
+                              fields: {
+                                keyword: {
+                                  type: 'keyword',
+                                  ignore_above: 256,
+                                },
+                              },
+                            },
+                            resourceVersion: {
+                              type: 'text',
+                              fields: {
+                                keyword: {
+                                  type: 'keyword',
+                                  ignore_above: 256,
+                                },
+                              },
+                            },
+                            uid: {
+                              type: 'text',
+                              fields: {
+                                keyword: {
+                                  type: 'keyword',
+                                  ignore_above: 256,
+                                },
+                              },
+                            },
+                          },
+                        },
+                      },
+                    },
+                    notReadyAddresses: {
                       properties: {
                         ip: {
                           type: 'text',
@@ -2548,6 +1691,976 @@
                     },
                   },
                 },
+                target: {
+                  properties: {
+                    kind: {
+                      type: 'text',
+                      fields: {
+                        keyword: {
+                          type: 'keyword',
+                          ignore_above: 256,
+                        },
+                      },
+                    },
+                    name: {
+                      type: 'text',
+                      fields: {
+                        keyword: {
+                          type: 'keyword',
+                          ignore_above: 256,
+                        },
+                      },
+                    },
+                  },
+                },
+                timeoutSec: {
+                  type: 'text',
+                  fields: {
+                    keyword: {
+                      type: 'keyword',
+                      ignore_above: 256,
+                    },
+                  },
+                },
+                topic: {
+                  type: 'text',
+                  fields: {
+                    keyword: {
+                      type: 'keyword',
+                      ignore_above: 256,
+                    },
+                  },
+                },
+              },
+            },
+            requestMetadata: {
+              properties: {
+                callerIp: {
+                  type: 'text',
+                  fields: {
+                    keyword: {
+                      type: 'keyword',
+                      ignore_above: 256,
+                    },
+                  },
+                },
+                callerNetwork: {
+                  type: 'text',
+                  fields: {
+                    keyword: {
+                      type: 'keyword',
+                      ignore_above: 256,
+                    },
+                  },
+                },
+                callerSuppliedUserAgent: {
+                  type: 'text',
+                  fields: {
+                    keyword: {
+                      type: 'keyword',
+                      ignore_above: 256,
+                    },
+                  },
+                },
+                destinationAttributes: {
+                  type: 'object',
+                },
+                requestAttributes: {
+                  properties: {
+                    auth: {
+                      type: 'object',
+                    },
+                    host: {
+                      type: 'text',
+                      fields: {
+                        keyword: {
+                          type: 'keyword',
+                          ignore_above: 256,
+                        },
+                      },
+                    },
+                    path: {
+                      type: 'text',
+                      fields: {
+                        keyword: {
+                          type: 'keyword',
+                          ignore_above: 256,
+                        },
+                      },
+                    },
+                    time: {
+                      type: 'date',
+                    },
+                  },
+                },
+              },
+            },
+            resourceLocation: {
+              properties: {
+                currentLocations: {
+                  type: 'text',
+                  fields: {
+                    keyword: {
+                      type: 'keyword',
+                      ignore_above: 256,
+                    },
+                  },
+                },
+              },
+            },
+            resourceName: {
+              type: 'text',
+              fields: {
+                keyword: {
+                  type: 'keyword',
+                  ignore_above: 256,
+                },
+              },
+            },
+            response: {
+              properties: {
+                '@type': {
+                  type: 'text',
+                  fields: {
+                    keyword: {
+                      type: 'keyword',
+                      ignore_above: 256,
+                    },
+                  },
+                },
+                apiVersion: {
+                  type: 'text',
+                  fields: {
+                    keyword: {
+                      type: 'keyword',
+                      ignore_above: 256,
+                    },
+                  },
+                },
+                clientOperationId: {
+                  type: 'text',
+                  fields: {
+                    keyword: {
+                      type: 'keyword',
+                      ignore_above: 256,
+                    },
+                  },
+                },
+                code: {
+                  type: 'long',
+                },
+                deployment: {
+                  properties: {
+                    labels: {
+                      properties: {
+                        language: {
+                          type: 'text',
+                          fields: {
+                            keyword: {
+                              type: 'keyword',
+                              ignore_above: 256,
+                            },
+                          },
+                        },
+                        version: {
+                          type: 'text',
+                          fields: {
+                            keyword: {
+                              type: 'keyword',
+                              ignore_above: 256,
+                            },
+                          },
+                        },
+                        zone: {
+                          type: 'text',
+                          fields: {
+                            keyword: {
+                              type: 'keyword',
+                              ignore_above: 256,
+                            },
+                          },
+                        },
+                      },
+                    },
+                    projectId: {
+                      type: 'text',
+                      fields: {
+                        keyword: {
+                          type: 'keyword',
+                          ignore_above: 256,
+                        },
+                      },
+                    },
+                    target: {
+                      type: 'text',
+                      fields: {
+                        keyword: {
+                          type: 'keyword',
+                          ignore_above: 256,
+                        },
+                      },
+                    },
+                  },
+                },
+                details: {
+                  properties: {
+                    causes: {
+                      properties: {
+                        message: {
+                          type: 'text',
+                          fields: {
+                            keyword: {
+                              type: 'keyword',
+                              ignore_above: 256,
+                            },
+                          },
+                        },
+                        reason: {
+                          type: 'text',
+                          fields: {
+                            keyword: {
+                              type: 'keyword',
+                              ignore_above: 256,
+                            },
+                          },
+                        },
+                      },
+                    },
+                    group: {
+                      type: 'text',
+                      fields: {
+                        keyword: {
+                          type: 'keyword',
+                          ignore_above: 256,
+                        },
+                      },
+                    },
+                    kind: {
+                      type: 'text',
+                      fields: {
+                        keyword: {
+                          type: 'keyword',
+                          ignore_above: 256,
+                        },
+                      },
+                    },
+                    name: {
+                      type: 'text',
+                      fields: {
+                        keyword: {
+                          type: 'keyword',
+                          ignore_above: 256,
+                        },
+                      },
+                    },
+                    uid: {
+                      type: 'text',
+                      fields: {
+                        keyword: {
+                          type: 'keyword',
+                          ignore_above: 256,
+                        },
+                      },
+                    },
+                  },
+                },
+                duration: {
+                  type: 'text',
+                  fields: {
+                    keyword: {
+                      type: 'keyword',
+                      ignore_above: 256,
+                    },
+                  },
+                },
+                endTime: {
+                  type: 'date',
+                },
+                'error': {
+                  properties: {
+                    code: {
+                      type: 'long',
+                    },
+                    errors: {
+                      properties: {
+                        domain: {
+                          type: 'text',
+                          fields: {
+                            keyword: {
+                              type: 'keyword',
+                              ignore_above: 256,
+                            },
+                          },
+                        },
+                        message: {
+                          type: 'text',
+                          fields: {
+                            keyword: {
+                              type: 'keyword',
+                              ignore_above: 256,
+                            },
+                          },
+                        },
+                        reason: {
+                          type: 'text',
+                          fields: {
+                            keyword: {
+                              type: 'keyword',
+                              ignore_above: 256,
+                            },
+                          },
+                        },
+                      },
+                    },
+                    message: {
+                      type: 'text',
+                      fields: {
+                        keyword: {
+                          type: 'keyword',
+                          ignore_above: 256,
+                        },
+                      },
+                    },
+                  },
+                },
+                id: {
+                  type: 'text',
+                  fields: {
+                    keyword: {
+                      type: 'keyword',
+                      ignore_above: 256,
+                    },
+                  },
+                },
+                insertTime: {
+                  type: 'date',
+                },
+                kind: {
+                  type: 'text',
+                  fields: {
+                    keyword: {
+                      type: 'keyword',
+                      ignore_above: 256,
+                    },
+                  },
+                },
+                message: {
+                  type: 'text',
+                  fields: {
+                    keyword: {
+                      type: 'keyword',
+                      ignore_above: 256,
+                    },
+                  },
+                },
+                metadata: {
+                  properties: {
+                    annotations: {
+                      properties: {
+                        'control-plane': {
+                          properties: {
+                            alpha: {
+                              properties: {
+                                kubernetes: {
+                                  properties: {
+                                    'io/leader': {
+                                      type: 'text',
+                                      fields: {
+                                        keyword: {
+                                          type: 'keyword',
+                                          ignore_above: 256,
+                                        },
+                                      },
+                                    },
+                                  },
+                                },
+                              },
+                            },
+                          },
+                        },
+                        endpoints: {
+                          properties: {
+                            kubernetes: {
+                              properties: {
+                                'io/last-change-trigger-time': {
+                                  type: 'date',
+                                },
+                              },
+                            },
+                          },
+                        },
+                      },
+                    },
+                    creationTimestamp: {
+                      type: 'date',
+                    },
+                    labels: {
+                      properties: {
+                        app: {
+                          properties: {
+                            kubernetes: {
+                              properties: {
+                                'io/instance': {
+                                  type: 'text',
+                                  fields: {
+                                    keyword: {
+                                      type: 'keyword',
+                                      ignore_above: 256,
+                                    },
+                                  },
+                                },
+                                'io/managed-by': {
+                                  type: 'text',
+                                  fields: {
+                                    keyword: {
+                                      type: 'keyword',
+                                      ignore_above: 256,
+                                    },
+                                  },
+                                },
+                                'io/name': {
+                                  type: 'text',
+                                  fields: {
+                                    keyword: {
+                                      type: 'keyword',
+                                      ignore_above: 256,
+                                    },
+                                  },
+                                },
+                                'io/version': {
+                                  type: 'text',
+                                  fields: {
+                                    keyword: {
+                                      type: 'keyword',
+                                      ignore_above: 256,
+                                    },
+                                  },
+                                },
+                              },
+                            },
+                          },
+                        },
+                        deployment: {
+                          type: 'text',
+                          fields: {
+                            keyword: {
+                              type: 'keyword',
+                              ignore_above: 256,
+                            },
+                          },
+                        },
+                        helm: {
+                          properties: {
+                            'sh/chart': {
+                              type: 'text',
+                              fields: {
+                                keyword: {
+                                  type: 'keyword',
+                                  ignore_above: 256,
+                                },
+                              },
+                            },
+                          },
+                        },
+                        'k8s-app': {
+                          type: 'text',
+                          fields: {
+                            keyword: {
+                              type: 'keyword',
+                              ignore_above: 256,
+                            },
+                          },
+                        },
+                        service: {
+                          properties: {
+                            kubernetes: {
+                              properties: {
+                                'io/headless': {
+                                  type: 'text',
+                                  fields: {
+                                    keyword: {
+                                      type: 'keyword',
+                                      ignore_above: 256,
+                                    },
+                                  },
+                                },
+                              },
+                            },
+                          },
+                        },
+                        stage: {
+                          type: 'text',
+                          fields: {
+                            keyword: {
+                              type: 'keyword',
+                              ignore_above: 256,
+                            },
+                          },
+                        },
+                        tanka: {
+                          properties: {
+                            'dev/environment': {
+                              type: 'text',
+                              fields: {
+                                keyword: {
+                                  type: 'keyword',
+                                  ignore_above: 256,
+                                },
+                              },
+                            },
+                          },
+                        },
+                        type: {
+                          type: 'text',
+                          fields: {
+                            keyword: {
+                              type: 'keyword',
+                              ignore_above: 256,
+                            },
+                          },
+                        },
+                      },
+                    },
+                    name: {
+                      type: 'text',
+                      fields: {
+                        keyword: {
+                          type: 'keyword',
+                          ignore_above: 256,
+                        },
+                      },
+                    },
+                    namespace: {
+                      type: 'text',
+                      fields: {
+                        keyword: {
+                          type: 'keyword',
+                          ignore_above: 256,
+                        },
+                      },
+                    },
+                    resourceVersion: {
+                      type: 'text',
+                      fields: {
+                        keyword: {
+                          type: 'keyword',
+                          ignore_above: 256,
+                        },
+                      },
+                    },
+                    uid: {
+                      type: 'text',
+                      fields: {
+                        keyword: {
+                          type: 'keyword',
+                          ignore_above: 256,
+                        },
+                      },
+                    },
+                  },
+                },
+                name: {
+                  type: 'text',
+                  fields: {
+                    keyword: {
+                      type: 'keyword',
+                      ignore_above: 256,
+                    },
+                  },
+                },
+                operationType: {
+                  type: 'text',
+                  fields: {
+                    keyword: {
+                      type: 'keyword',
+                      ignore_above: 256,
+                    },
+                  },
+                },
+                profileType: {
+                  type: 'text',
+                  fields: {
+                    keyword: {
+                      type: 'keyword',
+                      ignore_above: 256,
+                    },
+                  },
+                },
+                progress: {
+                  type: 'text',
+                  fields: {
+                    keyword: {
+                      type: 'keyword',
+                      ignore_above: 256,
+                    },
+                  },
+                },
+                reason: {
+                  type: 'text',
+                  fields: {
+                    keyword: {
+                      type: 'keyword',
+                      ignore_above: 256,
+                    },
+                  },
+                },
+                selfLink: {
+                  type: 'text',
+                  fields: {
+                    keyword: {
+                      type: 'keyword',
+                      ignore_above: 256,
+                    },
+                  },
+                },
+                selfLinkWithId: {
+                  type: 'text',
+                  fields: {
+                    keyword: {
+                      type: 'keyword',
+                      ignore_above: 256,
+                    },
+                  },
+                },
+                startTime: {
+                  type: 'date',
+                },
+                status: {
+                  type: 'text',
+                  fields: {
+                    keyword: {
+                      type: 'keyword',
+                      ignore_above: 256,
+                    },
+                  },
+                },
+                subsets: {
+                  properties: {
+                    addresses: {
+                      properties: {
+                        ip: {
+                          type: 'text',
+                          fields: {
+                            keyword: {
+                              type: 'keyword',
+                              ignore_above: 256,
+                            },
+                          },
+                        },
+                        nodeName: {
+                          type: 'text',
+                          fields: {
+                            keyword: {
+                              type: 'keyword',
+                              ignore_above: 256,
+                            },
+                          },
+                        },
+                        targetRef: {
+                          properties: {
+                            kind: {
+                              type: 'text',
+                              fields: {
+                                keyword: {
+                                  type: 'keyword',
+                                  ignore_above: 256,
+                                },
+                              },
+                            },
+                            name: {
+                              type: 'text',
+                              fields: {
+                                keyword: {
+                                  type: 'keyword',
+                                  ignore_above: 256,
+                                },
+                              },
+                            },
+                            namespace: {
+                              type: 'text',
+                              fields: {
+                                keyword: {
+                                  type: 'keyword',
+                                  ignore_above: 256,
+                                },
+                              },
+                            },
+                            resourceVersion: {
+                              type: 'text',
+                              fields: {
+                                keyword: {
+                                  type: 'keyword',
+                                  ignore_above: 256,
+                                },
+                              },
+                            },
+                            uid: {
+                              type: 'text',
+                              fields: {
+                                keyword: {
+                                  type: 'keyword',
+                                  ignore_above: 256,
+                                },
+                              },
+                            },
+                          },
+                        },
+                      },
+                    },
+                    notReadyAddresses: {
+                      properties: {
+                        ip: {
+                          type: 'text',
+                          fields: {
+                            keyword: {
+                              type: 'keyword',
+                              ignore_above: 256,
+                            },
+                          },
+                        },
+                        nodeName: {
+                          type: 'text',
+                          fields: {
+                            keyword: {
+                              type: 'keyword',
+                              ignore_above: 256,
+                            },
+                          },
+                        },
+                        targetRef: {
+                          properties: {
+                            kind: {
+                              type: 'text',
+                              fields: {
+                                keyword: {
+                                  type: 'keyword',
+                                  ignore_above: 256,
+                                },
+                              },
+                            },
+                            name: {
+                              type: 'text',
+                              fields: {
+                                keyword: {
+                                  type: 'keyword',
+                                  ignore_above: 256,
+                                },
+                              },
+                            },
+                            namespace: {
+                              type: 'text',
+                              fields: {
+                                keyword: {
+                                  type: 'keyword',
+                                  ignore_above: 256,
+                                },
+                              },
+                            },
+                            resourceVersion: {
+                              type: 'text',
+                              fields: {
+                                keyword: {
+                                  type: 'keyword',
+                                  ignore_above: 256,
+                                },
+                              },
+                            },
+                            uid: {
+                              type: 'text',
+                              fields: {
+                                keyword: {
+                                  type: 'keyword',
+                                  ignore_above: 256,
+                                },
+                              },
+                            },
+                          },
+                        },
+                      },
+                    },
+                    ports: {
+                      properties: {
+                        name: {
+                          type: 'text',
+                          fields: {
+                            keyword: {
+                              type: 'keyword',
+                              ignore_above: 256,
+                            },
+                          },
+                        },
+                        port: {
+                          type: 'long',
+                        },
+                        protocol: {
+                          type: 'text',
+                          fields: {
+                            keyword: {
+                              type: 'keyword',
+                              ignore_above: 256,
+                            },
+                          },
+                        },
+                      },
+                    },
+                  },
+                },
+                targetId: {
+                  type: 'text',
+                  fields: {
+                    keyword: {
+                      type: 'keyword',
+                      ignore_above: 256,
+                    },
+                  },
+                },
+                targetLink: {
+                  type: 'text',
+                  fields: {
+                    keyword: {
+                      type: 'keyword',
+                      ignore_above: 256,
+                    },
+                  },
+                },
+                user: {
+                  type: 'text',
+                  fields: {
+                    keyword: {
+                      type: 'keyword',
+                      ignore_above: 256,
+                    },
+                  },
+                },
+                zone: {
+                  type: 'text',
+                  fields: {
+                    keyword: {
+                      type: 'keyword',
+                      ignore_above: 256,
+                    },
+                  },
+                },
+              },
+            },
+            serviceData: {
+              properties: {
+                '@type': {
+                  type: 'text',
+                  fields: {
+                    keyword: {
+                      type: 'keyword',
+                      ignore_above: 256,
+                    },
+                  },
+                },
+                jobInsertRequest: {
+                  properties: {
+                    resource: {
+                      properties: {
+                        jobConfiguration: {
+                          properties: {
+                            dryRun: {
+                              type: 'boolean',
+                            },
+                            query: {
+                              properties: {
+                                createDisposition: {
+                                  type: 'text',
+                                  fields: {
+                                    keyword: {
+                                      type: 'keyword',
+                                      ignore_above: 256,
+                                    },
+                                  },
+                                },
+                                defaultDataset: {
+                                  type: 'object',
+                                },
+                                destinationTable: {
+                                  type: 'object',
+                                },
+                                query: {
+                                  type: 'text',
+                                  fields: {
+                                    keyword: {
+                                      type: 'keyword',
+                                      ignore_above: 256,
+                                    },
+                                  },
+                                },
+                                queryPriority: {
+                                  type: 'text',
+                                  fields: {
+                                    keyword: {
+                                      type: 'keyword',
+                                      ignore_above: 256,
+                                    },
+                                  },
+                                },
+                                writeDisposition: {
+                                  type: 'text',
+                                  fields: {
+                                    keyword: {
+                                      type: 'keyword',
+                                      ignore_above: 256,
+                                    },
+                                  },
+                                },
+                              },
+                            },
+                          },
+                        },
+                        jobName: {
+                          properties: {
+                            projectId: {
+                              type: 'text',
+                              fields: {
+                                keyword: {
+                                  type: 'keyword',
+                                  ignore_above: 256,
+                                },
+                              },
+                            },
+                          },
+                        },
+                      },
+                    },
+                  },
+                },
+                jobInsertResponse: {
+                  properties: {
+                    resource: {
+                      properties: {
+                        jobConfiguration: {
+                          type: 'object',
+                        },
+                        jobName: {
+                          type: 'object',
+                        },
+                        jobStatistics: {
+                          type: 'object',
+                        },
+                        jobStatus: {
+                          properties: {
+                            'error': {
+                              type: 'object',
+                            },
+                            state: {
+                              type: 'text',
+                              fields: {
+                                keyword: {
+                                  type: 'keyword',
+                                  ignore_above: 256,
+                                },
+                              },
+                            },
+                          },
+                        },
+                      },
+                    },
+                  },
+                },
               },
             },
             serviceName: {
@@ -2560,7 +2673,20 @@
               },
             },
             status: {
-              type: 'object',
+              properties: {
+                code: {
+                  type: 'long',
+                },
+                message: {
+                  type: 'text',
+                  fields: {
+                    keyword: {
+                      type: 'keyword',
+                      ignore_above: 256,
+                    },
+                  },
+                },
+              },
             },
           },
         },
@@ -2571,7 +2697,88 @@
           properties: {
             labels: {
               properties: {
+                backend_service_id: {
+                  type: 'text',
+                  fields: {
+                    keyword: {
+                      type: 'keyword',
+                      ignore_above: 256,
+                    },
+                  },
+                },
                 cluster_name: {
+                  type: 'text',
+                  fields: {
+                    keyword: {
+                      type: 'keyword',
+                      ignore_above: 256,
+                    },
+                  },
+                },
+                crypto_key_id: {
+                  type: 'text',
+                  fields: {
+                    keyword: {
+                      type: 'keyword',
+                      ignore_above: 256,
+                    },
+                  },
+                },
+                disk_id: {
+                  type: 'text',
+                  fields: {
+                    keyword: {
+                      type: 'keyword',
+                      ignore_above: 256,
+                    },
+                  },
+                },
+                email_id: {
+                  type: 'text',
+                  fields: {
+                    keyword: {
+                      type: 'keyword',
+                      ignore_above: 256,
+                    },
+                  },
+                },
+                firewall_rule_id: {
+                  type: 'text',
+                  fields: {
+                    keyword: {
+                      type: 'keyword',
+                      ignore_above: 256,
+                    },
+                  },
+                },
+                forwarding_rule_id: {
+                  type: 'text',
+                  fields: {
+                    keyword: {
+                      type: 'keyword',
+                      ignore_above: 256,
+                    },
+                  },
+                },
+                health_check_id: {
+                  type: 'text',
+                  fields: {
+                    keyword: {
+                      type: 'keyword',
+                      ignore_above: 256,
+                    },
+                  },
+                },
+                image_id: {
+                  type: 'text',
+                  fields: {
+                    keyword: {
+                      type: 'keyword',
+                      ignore_above: 256,
+                    },
+                  },
+                },
+                instance_group_id: {
                   type: 'text',
                   fields: {
                     keyword: {
@@ -2598,6 +2805,33 @@
                     },
                   },
                 },
+                instance_group_name: {
+                  type: 'text',
+                  fields: {
+                    keyword: {
+                      type: 'keyword',
+                      ignore_above: 256,
+                    },
+                  },
+                },
+                instance_id: {
+                  type: 'text',
+                  fields: {
+                    keyword: {
+                      type: 'keyword',
+                      ignore_above: 256,
+                    },
+                  },
+                },
+                key_ring_id: {
+                  type: 'text',
+                  fields: {
+                    keyword: {
+                      type: 'keyword',
+                      ignore_above: 256,
+                    },
+                  },
+                },
                 location: {
                   type: 'text',
                   fields: {
@@ -2607,7 +2841,178 @@
                     },
                   },
                 },
+                method: {
+                  type: 'text',
+                  fields: {
+                    keyword: {
+                      type: 'keyword',
+                      ignore_above: 256,
+                    },
+                  },
+                },
+                network_id: {
+                  type: 'text',
+                  fields: {
+                    keyword: {
+                      type: 'keyword',
+                      ignore_above: 256,
+                    },
+                  },
+                },
+                operation_name: {
+                  type: 'text',
+                  fields: {
+                    keyword: {
+                      type: 'keyword',
+                      ignore_above: 256,
+                    },
+                  },
+                },
                 project_id: {
+                  type: 'text',
+                  fields: {
+                    keyword: {
+                      type: 'keyword',
+                      ignore_above: 256,
+                    },
+                  },
+                },
+                region: {
+                  type: 'text',
+                  fields: {
+                    keyword: {
+                      type: 'keyword',
+                      ignore_above: 256,
+                    },
+                  },
+                },
+                reserved_address_id: {
+                  type: 'text',
+                  fields: {
+                    keyword: {
+                      type: 'keyword',
+                      ignore_above: 256,
+                    },
+                  },
+                },
+                router_id: {
+                  type: 'text',
+                  fields: {
+                    keyword: {
+                      type: 'keyword',
+                      ignore_above: 256,
+                    },
+                  },
+                },
+                service: {
+                  type: 'text',
+                  fields: {
+                    keyword: {
+                      type: 'keyword',
+                      ignore_above: 256,
+                    },
+                  },
+                },
+                snapshot_id: {
+                  type: 'text',
+                  fields: {
+                    keyword: {
+                      type: 'keyword',
+                      ignore_above: 256,
+                    },
+                  },
+                },
+                ssl_certificate_id: {
+                  type: 'text',
+                  fields: {
+                    keyword: {
+                      type: 'keyword',
+                      ignore_above: 256,
+                    },
+                  },
+                },
+                ssl_certificate_name: {
+                  type: 'text',
+                  fields: {
+                    keyword: {
+                      type: 'keyword',
+                      ignore_above: 256,
+                    },
+                  },
+                },
+                subscription_id: {
+                  type: 'text',
+                  fields: {
+                    keyword: {
+                      type: 'keyword',
+                      ignore_above: 256,
+                    },
+                  },
+                },
+                target_http_proxy_id: {
+                  type: 'text',
+                  fields: {
+                    keyword: {
+                      type: 'keyword',
+                      ignore_above: 256,
+                    },
+                  },
+                },
+                target_https_proxy_id: {
+                  type: 'text',
+                  fields: {
+                    keyword: {
+                      type: 'keyword',
+                      ignore_above: 256,
+                    },
+                  },
+                },
+                topic_id: {
+                  type: 'text',
+                  fields: {
+                    keyword: {
+                      type: 'keyword',
+                      ignore_above: 256,
+                    },
+                  },
+                },
+                unique_id: {
+                  type: 'text',
+                  fields: {
+                    keyword: {
+                      type: 'keyword',
+                      ignore_above: 256,
+                    },
+                  },
+                },
+                url_map_id: {
+                  type: 'text',
+                  fields: {
+                    keyword: {
+                      type: 'keyword',
+                      ignore_above: 256,
+                    },
+                  },
+                },
+                version: {
+                  type: 'text',
+                  fields: {
+                    keyword: {
+                      type: 'keyword',
+                      ignore_above: 256,
+                    },
+                  },
+                },
+                zone: {
+                  type: 'text',
+                  fields: {
+                    keyword: {
+                      type: 'keyword',
+                      ignore_above: 256,
+                    },
+                  },
+                },
+                zone_name: {
                   type: 'text',
                   fields: {
                     keyword: {
@@ -2640,15 +3045,6 @@
         },
         timestamp: {
           type: 'date',
-        },
-      },
-    },
-    message_id: {
-      type: 'text',
-      fields: {
-        keyword: {
-          type: 'keyword',
-          ignore_above: 256,
         },
       },
     },
