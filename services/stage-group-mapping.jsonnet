@@ -21,14 +21,6 @@
       'projects',
     ],
   },
-  compliance: {
-    name: 'Compliance',
-    stage: 'manage',
-    feature_categories: [
-      'audit_events',
-      'compliance_management',
-    ],
-  },
   'import': {
     name: 'Import',
     stage: 'manage',
@@ -262,6 +254,14 @@
     stage: 'govern',
     feature_categories: [
       'vulnerability_management',
+    ],
+  },
+  compliance: {
+    name: 'Compliance',
+    stage: 'govern',
+    feature_categories: [
+      'audit_events',
+      'compliance_management',
     ],
   },
   product_intelligence: {
