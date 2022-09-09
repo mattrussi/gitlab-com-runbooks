@@ -21,7 +21,7 @@
             include: {
               _tier_preference: 'data_warm,data_hot',
             },
-            total_shards_per_node: '3',
+            total_shards_per_node: 3,
           },
           set_priority: {
             priority: 50,
