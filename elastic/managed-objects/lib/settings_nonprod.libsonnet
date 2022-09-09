@@ -15,12 +15,6 @@ local setting(index, env) = if std.member(HIGH_THROUHGPUT, index) then {
     },
     routing: {
       allocation: {
-        include: {
-          _tier_preference: null,
-        },
-        require: {
-          data: 'hot',
-        },
         total_shards_per_node: 2,
       },
     },
@@ -43,16 +37,6 @@ else if std.member(MEDIUM_THROUGHPUT, index) then {
     mapping: {
       ignore_malformed: true,
     },
-    routing: {
-      allocation: {
-        include: {
-          _tier_preference: null,
-        },
-        require: {
-          data: 'hot',
-        },
-      },
-    },
     search: {
       idle: {
         after: '30s',
@@ -70,16 +54,6 @@ else if std.member(MEDIUM_THROUGHPUT, index) then {
     },
     mapping: {
       ignore_malformed: true,
-    },
-    routing: {
-      allocation: {
-        include: {
-          _tier_preference: null,
-        },
-        require: {
-          data: 'hot',
-        },
-      },
     },
     search: {
       idle: {
