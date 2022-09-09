@@ -12,7 +12,7 @@ groups:
       type: vault
     expr: |
       sum by (environment) (
-        rate(vault_core_handle_request_count{job="vault/vault"}[1m])
+        rate(vault_core_handle_request_count{job="vault-active"}[1m])
       )
   - record: gitlab_component_ops:rate
     labels:
@@ -53,7 +53,7 @@ groups:
       type: vault
     expr: |
       sum by (environment) (
-        rate(vault_core_handle_request_count{job="vault/vault"}[5m])
+        rate(vault_core_handle_request_count{job="vault-active"}[5m])
       )
   - record: gitlab_component_ops:rate_5m
     labels:
@@ -94,7 +94,7 @@ groups:
       type: vault
     expr: |
       sum by (environment) (
-        rate(vault_core_handle_request_count{job="vault/vault"}[30m])
+        rate(vault_core_handle_request_count{job="vault-active"}[30m])
       )
   - record: gitlab_component_ops:rate_30m
     labels:
@@ -135,7 +135,7 @@ groups:
       type: vault
     expr: |
       sum by (environment) (
-        rate(vault_core_handle_request_count{job="vault/vault"}[1h])
+        rate(vault_core_handle_request_count{job="vault-active"}[1h])
       )
   - record: gitlab_component_ops:rate_1h
     labels:
@@ -176,7 +176,7 @@ groups:
       type: vault
     expr: |
       sum by (environment) (
-        rate(vault_core_handle_request_count{job="vault/vault"}[6h])
+        rate(vault_core_handle_request_count{job="vault-active"}[6h])
       )
   - record: gitlab_component_ops:rate_6h
     labels:

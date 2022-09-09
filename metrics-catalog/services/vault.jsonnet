@@ -62,7 +62,7 @@ metricsCatalog.serviceDefinition({
       |||,
 
       local vaultSelector = {
-        job: 'vault/vault',
+        job: 'vault-active',
       },
 
       requestRate: rateMetric(
