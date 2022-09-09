@@ -15,8 +15,8 @@
       warm: {
         actions: {
           allocate: {
-            include: {
-              _tier_preference: 'data_warm,data_hot',
+            require: {
+              data: null,
             },
             total_shards_per_node: 3,
           },

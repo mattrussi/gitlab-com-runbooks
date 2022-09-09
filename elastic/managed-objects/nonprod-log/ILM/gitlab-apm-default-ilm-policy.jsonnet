@@ -15,11 +15,6 @@
       warm: {
         min_age: '2d',
         actions: {
-          allocate: {
-            include: {
-              _tier_preference: 'data_warm,data_hot',
-            },
-          },
           readonly: {},
           set_priority: {
             priority: 50,
