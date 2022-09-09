@@ -19,6 +19,7 @@
 ## Troubleshooting Pointers
 
 * [Cloudflare: Managing Traffic](../cloudflare/managing-traffic.md)
+* [Elastic Nodes Disk Space Saturation](../elastic/disk_space_saturation.md)
 * [../elastic/elasticsearch-integration-in-gitlab.md](../elastic/elasticsearch-integration-in-gitlab.md)
 * [Deploying a change to gitlab.rb](../git/deploy-gitlab-rb-change.md)
 * [Workhorse Session Alerts](../git/workhorse-git-session-alerts.md)

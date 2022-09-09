@@ -18,6 +18,7 @@
 ## Troubleshooting Pointers
 
 * [Camoproxy troubleshooting](../camoproxy/camoproxy.md)
+* [Elastic Nodes Disk Space Saturation](../elastic/disk_space_saturation.md)
 * [Find a project from its hashed storage path](../gitaly/find-project-from-hashed-storage.md)
 * [../kube/k8s-operations.md](../kube/k8s-operations.md)
 * [../logging/logging_gcs_archive_bigquery.md](../logging/logging_gcs_archive_bigquery.md)

@@ -17,7 +17,6 @@
       - [high CPU load on a single node](#high-cpu-load-on-a-single-node)
       - [cluster lags behind with logs after a node was added](#cluster-lags-behind-with-logs-after-a-node-was-added)
       - [too many active shards on a single node](#too-many-active-shards-on-a-single-node)
-      - [running out of disk space](#running-out-of-disk-space)
     - [Cluster unhealthy](#cluster-unhealthy)
     - [Shard Allocation Failure](#shard-allocation-failure)
       - [shards unassigned](#shards-unassigned)
@@ -124,17 +123,6 @@ an indicator, but it was based on a guess (there was no hard evidence showing
 the cpu was used by processes related to shards).
 
 Solution:  See [retry shard allocation](#retry-shard-allocation)
-
-#### running out of disk space
-
-for different reasons:
-
-- too much data
-- rebalancing taking place
-
-storage usage in the web UI was in red and the absolute value was high (e.g. 99%)
-
-We plan to alert on that: <https://gitlab.com/gitlab-com/gl-infra/reliability/-/issues/8548>
 
 ### Cluster unhealthy
 

@@ -31,6 +31,7 @@
 * [Chef Tips and Tools](../config_management/chef-workflow.md)
 * [customers.gitlab.com](../customersdot/api-key-rotation.md)
 * [CustomersDot main troubleshoot documentation](../customersdot/overview.md)
+* [Elastic Nodes Disk Space Saturation](../elastic/disk_space_saturation.md)
 * [../elastic/elastic-cloud.md](../elastic/elastic-cloud.md)
 * [../elastic/elasticsearch-integration-in-gitlab.md](../elastic/elasticsearch-integration-in-gitlab.md)
 * [Blocking and disabling things in the HAProxy load balancers](../frontend/block-things-in-haproxy.md)
