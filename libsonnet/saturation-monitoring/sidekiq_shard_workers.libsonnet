@@ -17,7 +17,7 @@ local sidekiqHelpers = import './services/lib/sidekiq-helpers.libsonnet';
       this could impact user experience.
     |||,
     grafana_dashboard_uid: 'sat_sidekiq_shard_workers',
-    resourceLabels: ['shard'],
+    resourceLabels: ['shard', 'region'],
     resourceAutoscalingRule: true,
     burnRatePeriod: '5m',
     query: |||

@@ -1072,11 +1072,11 @@ groups:
       max by(environment, tier, type, stage) (
         clamp_min(
           clamp_max(
-            sum by (environment, tier, type, stage, shard) (
+            sum by (environment, tier, type, stage, shard, region) (
               avg_over_time(sidekiq_running_jobs{shard!~"database-throttled|elasticsearch|gitaly-throttled|urgent-authorized-projects", type="sidekiq"}[5m])
             )
             /
-            sum by (environment, tier, type, stage, shard) (
+            sum by (environment, tier, type, stage, shard, region) (
               avg_over_time(sidekiq_concurrency{shard!~"database-throttled|elasticsearch|gitaly-throttled|urgent-authorized-projects", type="sidekiq"}[5m])
             )
             ,
@@ -1134,14 +1134,14 @@ groups:
     labels:
       component: sidekiq_shard_workers
     expr: |
-      max by(environment, tier, type, stage, shard) (
+      max by(environment, tier, type, stage, shard, region) (
         clamp_min(
           clamp_max(
-            sum by (environment, tier, type, stage, shard) (
+            sum by (environment, tier, type, stage, shard, region) (
               avg_over_time(sidekiq_running_jobs{shard!~"database-throttled|elasticsearch|gitaly-throttled|urgent-authorized-projects", type="sidekiq"}[5m])
             )
             /
-            sum by (environment, tier, type, stage, shard) (
+            sum by (environment, tier, type, stage, shard, region) (
               avg_over_time(sidekiq_concurrency{shard!~"database-throttled|elasticsearch|gitaly-throttled|urgent-authorized-projects", type="sidekiq"}[5m])
             )
             ,
@@ -4976,14 +4976,14 @@ groups:
       grafana_panel_id: "836813313"
       grafana_variables: environment,type,stage
       promql_query: |
-        max by(environment, tier, type, stage, shard) (
+        max by(environment, tier, type, stage, shard, region) (
           clamp_min(
             clamp_max(
-              sum by (environment, tier, type, stage, shard) (
+              sum by (environment, tier, type, stage, shard, region) (
                 avg_over_time(sidekiq_running_jobs{shard!~"database-throttled|elasticsearch|gitaly-throttled|urgent-authorized-projects", environment="{{ $labels.environment }}",stage="{{ $labels.stage }}",type="{{ $labels.type }}"}[5m])
               )
               /
-              sum by (environment, tier, type, stage, shard) (
+              sum by (environment, tier, type, stage, shard, region) (
                 avg_over_time(sidekiq_concurrency{shard!~"database-throttled|elasticsearch|gitaly-throttled|urgent-authorized-projects", environment="{{ $labels.environment }}",stage="{{ $labels.stage }}",type="{{ $labels.type }}"}[5m])
               )
               ,

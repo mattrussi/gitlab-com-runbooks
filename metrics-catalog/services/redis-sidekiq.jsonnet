@@ -20,6 +20,13 @@ metricsCatalog.serviceDefinition(
 
           Reviewing Sidekiq job logs may help the investigation.
         |||,
+        regional: true,
+      },
+      primary_server+: {
+        regional: true,
+      },
+      secondary_servers+: {
+        regional: true,
       },
     },
   }

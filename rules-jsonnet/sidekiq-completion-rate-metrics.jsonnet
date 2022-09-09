@@ -1,6 +1,6 @@
 local executionTime(window) = {
   record: 'sidekiq_jobs_execution_time:%s' % [window],
-  expr: 'sum by (environment, stage, shard) (rate(sidekiq_jobs_completion_seconds_sum[%s]))' % [window],
+  expr: 'sum by (environment, region, stage, shard) (rate(sidekiq_jobs_completion_seconds_sum[%s]))' % [window],
 };
 
 local executionTimeWindows = ['1m', '10m', '1h'];

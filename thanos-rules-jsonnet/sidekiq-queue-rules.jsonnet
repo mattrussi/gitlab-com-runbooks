@@ -33,13 +33,13 @@ local sidekiqThanosAlerts() =
       alert: 'sidekiq_throttled_jobs_enqueued_without_dequeuing',
       expr: |||
         (
-          sum by (environment, queue, feature_category, worker) (
+          sum by (environment, region, queue, feature_category, worker) (
             gitlab_background_jobs:queue:ops:rate_1h{urgency="throttled"}
           ) > 0
         )
         unless
         (
-          sum by (environment, queue, feature_category, worker) (
+          sum by (environment, region, queue, feature_category, worker) (
             gitlab_background_jobs:execution:ops:rate_1h{urgency="throttled"}
           ) > 0
         )

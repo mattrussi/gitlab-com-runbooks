@@ -137,7 +137,7 @@ metricsCatalog.serviceDefinition({
       // Note: these labels will also be included in the
       // intermediate recording rules specified in the
       // `recordingRuleMetrics` stanza above
-      significantLabels: ['feature_category', 'queue', 'urgency', 'worker'],
+      significantLabels: ['feature_category', 'queue', 'urgency', 'worker', 'region'],
 
       // We don't have an `urgency` field in Sidekiq logs. Improve this in
       // https://gitlab.com/groups/gitlab-com/gl-infra/-/epics/700
@@ -164,6 +164,7 @@ metricsCatalog.serviceDefinition({
         else
           []
       ),
+      regional: true,
     }
     for shard in sidekiqHelpers.shards.listAll()
   } + {

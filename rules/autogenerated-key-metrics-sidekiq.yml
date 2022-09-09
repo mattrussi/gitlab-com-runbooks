@@ -6,17 +6,17 @@ groups:
   rules:
   - record: sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate1m
     expr: |
-      sum by (environment,feature_category,le,queue,shard,stage,tier,type,urgency,worker) (
+      sum by (environment,feature_category,le,queue,region,shard,stage,tier,type,urgency,worker) (
         rate(sidekiq_jobs_completion_seconds_bucket[1m])
       )
   - record: sli_aggregations:sidekiq_jobs_queue_duration_seconds_bucket_rate1m
     expr: |
-      sum by (environment,feature_category,le,queue,shard,stage,tier,type,urgency,worker) (
+      sum by (environment,feature_category,le,queue,region,shard,stage,tier,type,urgency,worker) (
         rate(sidekiq_jobs_queue_duration_seconds_bucket[1m])
       )
   - record: sli_aggregations:sidekiq_jobs_failed_total_rate1m
     expr: |
-      sum by (environment,feature_category,queue,shard,stage,tier,type,urgency,worker) (
+      sum by (environment,feature_category,queue,region,shard,stage,tier,type,urgency,worker) (
         rate(sidekiq_jobs_failed_total[1m])
       )
   - record: gitlab_component_ops:rate
@@ -1040,17 +1040,17 @@ groups:
   rules:
   - record: sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate5m
     expr: |
-      sum by (environment,feature_category,le,queue,shard,stage,tier,type,urgency,worker) (
+      sum by (environment,feature_category,le,queue,region,shard,stage,tier,type,urgency,worker) (
         rate(sidekiq_jobs_completion_seconds_bucket[5m])
       )
   - record: sli_aggregations:sidekiq_jobs_queue_duration_seconds_bucket_rate5m
     expr: |
-      sum by (environment,feature_category,le,queue,shard,stage,tier,type,urgency,worker) (
+      sum by (environment,feature_category,le,queue,region,shard,stage,tier,type,urgency,worker) (
         rate(sidekiq_jobs_queue_duration_seconds_bucket[5m])
       )
   - record: sli_aggregations:sidekiq_jobs_failed_total_rate5m
     expr: |
-      sum by (environment,feature_category,queue,shard,stage,tier,type,urgency,worker) (
+      sum by (environment,feature_category,queue,region,shard,stage,tier,type,urgency,worker) (
         rate(sidekiq_jobs_failed_total[5m])
       )
   - record: gitlab_component_ops:rate_5m
@@ -2071,84 +2071,84 @@ groups:
       )
   - record: gitlab_background_jobs:queue:apdex:success:rate_5m
     expr: |
-      sum by (environment,tier,type,stage,shard,queue,feature_category,urgency,worker) (
-        label_replace(sum by (environment,tier,type,stage,shard,queue,feature_category,urgency,worker) (
+      sum by (environment,tier,type,stage,shard,queue,feature_category,urgency,worker,region) (
+        label_replace(sum by (environment,tier,type,stage,shard,queue,feature_category,urgency,worker,region) (
           sli_aggregations:sidekiq_jobs_queue_duration_seconds_bucket_rate5m{le="10",urgency="high"}
         )
         , "_c", "0", "", "")
         or
-        label_replace(sum by (environment,tier,type,stage,shard,queue,feature_category,urgency,worker) (
+        label_replace(sum by (environment,tier,type,stage,shard,queue,feature_category,urgency,worker,region) (
           sli_aggregations:sidekiq_jobs_queue_duration_seconds_bucket_rate5m{le="60",urgency="low"}
         )
         , "_c", "1", "", "")
       )
   - record: gitlab_background_jobs:queue:apdex:weight:score_5m
     expr: |
-      sum by (environment,tier,type,stage,shard,queue,feature_category,urgency,worker) (
-        label_replace(sum by (environment,tier,type,stage,shard,queue,feature_category,urgency,worker) (
+      sum by (environment,tier,type,stage,shard,queue,feature_category,urgency,worker,region) (
+        label_replace(sum by (environment,tier,type,stage,shard,queue,feature_category,urgency,worker,region) (
           sli_aggregations:sidekiq_jobs_queue_duration_seconds_bucket_rate5m{le="+Inf",urgency="high"}
         )
         , "_c", "0", "", "")
         or
-        label_replace(sum by (environment,tier,type,stage,shard,queue,feature_category,urgency,worker) (
+        label_replace(sum by (environment,tier,type,stage,shard,queue,feature_category,urgency,worker,region) (
           sli_aggregations:sidekiq_jobs_queue_duration_seconds_bucket_rate5m{le="+Inf",urgency="low"}
         )
         , "_c", "1", "", "")
       )
   - record: gitlab_background_jobs:queue:ops:rate_5m
     expr: |
-      sum by (environment,tier,type,stage,shard,queue,feature_category,urgency,worker) (
+      sum by (environment,tier,type,stage,shard,queue,feature_category,urgency,worker,region) (
         rate(sidekiq_enqueued_jobs_total{}[5m])
       )
   - record: gitlab_background_jobs:execution:apdex:success:rate_5m
     expr: |
-      sum by (environment,tier,type,stage,shard,queue,feature_category,urgency,worker) (
-        label_replace(sum by (environment,tier,type,stage,shard,queue,feature_category,urgency,worker) (
+      sum by (environment,tier,type,stage,shard,queue,feature_category,urgency,worker,region) (
+        label_replace(sum by (environment,tier,type,stage,shard,queue,feature_category,urgency,worker,region) (
           sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate5m{le="10",urgency="high"}
         )
         , "_c", "0", "", "")
         or
-        label_replace(sum by (environment,tier,type,stage,shard,queue,feature_category,urgency,worker) (
+        label_replace(sum by (environment,tier,type,stage,shard,queue,feature_category,urgency,worker,region) (
           sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate5m{le="300",urgency="low"}
         )
         , "_c", "1", "", "")
         or
-        label_replace(sum by (environment,tier,type,stage,shard,queue,feature_category,urgency,worker) (
+        label_replace(sum by (environment,tier,type,stage,shard,queue,feature_category,urgency,worker,region) (
           sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate5m{le="300",urgency="throttled"}
         )
         , "_c", "2", "", "")
       )
   - record: gitlab_background_jobs:execution:apdex:weight:score_5m
     expr: |
-      sum by (environment,tier,type,stage,shard,queue,feature_category,urgency,worker) (
-        label_replace(sum by (environment,tier,type,stage,shard,queue,feature_category,urgency,worker) (
+      sum by (environment,tier,type,stage,shard,queue,feature_category,urgency,worker,region) (
+        label_replace(sum by (environment,tier,type,stage,shard,queue,feature_category,urgency,worker,region) (
           sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate5m{le="+Inf",urgency="high"}
         )
         , "_c", "0", "", "")
         or
-        label_replace(sum by (environment,tier,type,stage,shard,queue,feature_category,urgency,worker) (
+        label_replace(sum by (environment,tier,type,stage,shard,queue,feature_category,urgency,worker,region) (
           sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate5m{le="+Inf",urgency="low"}
         )
         , "_c", "1", "", "")
         or
-        label_replace(sum by (environment,tier,type,stage,shard,queue,feature_category,urgency,worker) (
+        label_replace(sum by (environment,tier,type,stage,shard,queue,feature_category,urgency,worker,region) (
           sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate5m{le="+Inf",urgency="throttled"}
         )
         , "_c", "2", "", "")
       )
   - record: gitlab_background_jobs:execution:ops:rate_5m
     expr: |
-      sum by (environment,tier,type,stage,shard,queue,feature_category,urgency,worker) (
+      sum by (environment,tier,type,stage,shard,queue,feature_category,urgency,worker,region) (
         sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate5m{le="+Inf"}
       )
   - record: gitlab_background_jobs:execution:error:rate_5m
     expr: |
-      sum by (environment,tier,type,stage,shard,queue,feature_category,urgency,worker) (
+      sum by (environment,tier,type,stage,shard,queue,feature_category,urgency,worker,region) (
         sli_aggregations:sidekiq_jobs_failed_total_rate5m{}
       )
       or
       (
-        0 * group by (environment,tier,type,stage,shard,queue,feature_category,urgency,worker) (
+        0 * group by (environment,tier,type,stage,shard,queue,feature_category,urgency,worker,region) (
           gitlab_background_jobs:execution:ops:rate_5m{}
         )
       )
@@ -2157,17 +2157,17 @@ groups:
   rules:
   - record: sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate30m
     expr: |
-      sum by (environment,feature_category,le,queue,shard,stage,tier,type,urgency,worker) (
+      sum by (environment,feature_category,le,queue,region,shard,stage,tier,type,urgency,worker) (
         rate(sidekiq_jobs_completion_seconds_bucket[30m])
       )
   - record: sli_aggregations:sidekiq_jobs_queue_duration_seconds_bucket_rate30m
     expr: |
-      sum by (environment,feature_category,le,queue,shard,stage,tier,type,urgency,worker) (
+      sum by (environment,feature_category,le,queue,region,shard,stage,tier,type,urgency,worker) (
         rate(sidekiq_jobs_queue_duration_seconds_bucket[30m])
       )
   - record: sli_aggregations:sidekiq_jobs_failed_total_rate30m
     expr: |
-      sum by (environment,feature_category,queue,shard,stage,tier,type,urgency,worker) (
+      sum by (environment,feature_category,queue,region,shard,stage,tier,type,urgency,worker) (
         rate(sidekiq_jobs_failed_total[30m])
       )
   - record: gitlab_component_ops:rate_30m
@@ -3188,84 +3188,84 @@ groups:
       )
   - record: gitlab_background_jobs:queue:apdex:success:rate_30m
     expr: |
-      sum by (environment,tier,type,stage,shard,queue,feature_category,urgency,worker) (
-        label_replace(sum by (environment,tier,type,stage,shard,queue,feature_category,urgency,worker) (
+      sum by (environment,tier,type,stage,shard,queue,feature_category,urgency,worker,region) (
+        label_replace(sum by (environment,tier,type,stage,shard,queue,feature_category,urgency,worker,region) (
           sli_aggregations:sidekiq_jobs_queue_duration_seconds_bucket_rate30m{le="10",urgency="high"}
         )
         , "_c", "0", "", "")
         or
-        label_replace(sum by (environment,tier,type,stage,shard,queue,feature_category,urgency,worker) (
+        label_replace(sum by (environment,tier,type,stage,shard,queue,feature_category,urgency,worker,region) (
           sli_aggregations:sidekiq_jobs_queue_duration_seconds_bucket_rate30m{le="60",urgency="low"}
         )
         , "_c", "1", "", "")
       )
   - record: gitlab_background_jobs:queue:apdex:weight:score_30m
     expr: |
-      sum by (environment,tier,type,stage,shard,queue,feature_category,urgency,worker) (
-        label_replace(sum by (environment,tier,type,stage,shard,queue,feature_category,urgency,worker) (
+      sum by (environment,tier,type,stage,shard,queue,feature_category,urgency,worker,region) (
+        label_replace(sum by (environment,tier,type,stage,shard,queue,feature_category,urgency,worker,region) (
           sli_aggregations:sidekiq_jobs_queue_duration_seconds_bucket_rate30m{le="+Inf",urgency="high"}
         )
         , "_c", "0", "", "")
         or
-        label_replace(sum by (environment,tier,type,stage,shard,queue,feature_category,urgency,worker) (
+        label_replace(sum by (environment,tier,type,stage,shard,queue,feature_category,urgency,worker,region) (
           sli_aggregations:sidekiq_jobs_queue_duration_seconds_bucket_rate30m{le="+Inf",urgency="low"}
         )
         , "_c", "1", "", "")
       )
   - record: gitlab_background_jobs:queue:ops:rate_30m
     expr: |
-      sum by (environment,tier,type,stage,shard,queue,feature_category,urgency,worker) (
+      sum by (environment,tier,type,stage,shard,queue,feature_category,urgency,worker,region) (
         rate(sidekiq_enqueued_jobs_total{}[30m])
       )
   - record: gitlab_background_jobs:execution:apdex:success:rate_30m
     expr: |
-      sum by (environment,tier,type,stage,shard,queue,feature_category,urgency,worker) (
-        label_replace(sum by (environment,tier,type,stage,shard,queue,feature_category,urgency,worker) (
+      sum by (environment,tier,type,stage,shard,queue,feature_category,urgency,worker,region) (
+        label_replace(sum by (environment,tier,type,stage,shard,queue,feature_category,urgency,worker,region) (
           sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate30m{le="10",urgency="high"}
         )
         , "_c", "0", "", "")
         or
-        label_replace(sum by (environment,tier,type,stage,shard,queue,feature_category,urgency,worker) (
+        label_replace(sum by (environment,tier,type,stage,shard,queue,feature_category,urgency,worker,region) (
           sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate30m{le="300",urgency="low"}
         )
         , "_c", "1", "", "")
         or
-        label_replace(sum by (environment,tier,type,stage,shard,queue,feature_category,urgency,worker) (
+        label_replace(sum by (environment,tier,type,stage,shard,queue,feature_category,urgency,worker,region) (
           sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate30m{le="300",urgency="throttled"}
         )
         , "_c", "2", "", "")
       )
   - record: gitlab_background_jobs:execution:apdex:weight:score_30m
     expr: |
-      sum by (environment,tier,type,stage,shard,queue,feature_category,urgency,worker) (
-        label_replace(sum by (environment,tier,type,stage,shard,queue,feature_category,urgency,worker) (
+      sum by (environment,tier,type,stage,shard,queue,feature_category,urgency,worker,region) (
+        label_replace(sum by (environment,tier,type,stage,shard,queue,feature_category,urgency,worker,region) (
           sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate30m{le="+Inf",urgency="high"}
         )
         , "_c", "0", "", "")
         or
-        label_replace(sum by (environment,tier,type,stage,shard,queue,feature_category,urgency,worker) (
+        label_replace(sum by (environment,tier,type,stage,shard,queue,feature_category,urgency,worker,region) (
           sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate30m{le="+Inf",urgency="low"}
         )
         , "_c", "1", "", "")
         or
-        label_replace(sum by (environment,tier,type,stage,shard,queue,feature_category,urgency,worker) (
+        label_replace(sum by (environment,tier,type,stage,shard,queue,feature_category,urgency,worker,region) (
           sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate30m{le="+Inf",urgency="throttled"}
         )
         , "_c", "2", "", "")
       )
   - record: gitlab_background_jobs:execution:ops:rate_30m
     expr: |
-      sum by (environment,tier,type,stage,shard,queue,feature_category,urgency,worker) (
+      sum by (environment,tier,type,stage,shard,queue,feature_category,urgency,worker,region) (
         sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate30m{le="+Inf"}
       )
   - record: gitlab_background_jobs:execution:error:rate_30m
     expr: |
-      sum by (environment,tier,type,stage,shard,queue,feature_category,urgency,worker) (
+      sum by (environment,tier,type,stage,shard,queue,feature_category,urgency,worker,region) (
         sli_aggregations:sidekiq_jobs_failed_total_rate30m{}
       )
       or
       (
-        0 * group by (environment,tier,type,stage,shard,queue,feature_category,urgency,worker) (
+        0 * group by (environment,tier,type,stage,shard,queue,feature_category,urgency,worker,region) (
           gitlab_background_jobs:execution:ops:rate_30m{}
         )
       )
@@ -3274,17 +3274,17 @@ groups:
   rules:
   - record: sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate1h
     expr: |
-      sum by (environment,feature_category,le,queue,shard,stage,tier,type,urgency,worker) (
+      sum by (environment,feature_category,le,queue,region,shard,stage,tier,type,urgency,worker) (
         rate(sidekiq_jobs_completion_seconds_bucket[1h])
       )
   - record: sli_aggregations:sidekiq_jobs_queue_duration_seconds_bucket_rate1h
     expr: |
-      sum by (environment,feature_category,le,queue,shard,stage,tier,type,urgency,worker) (
+      sum by (environment,feature_category,le,queue,region,shard,stage,tier,type,urgency,worker) (
         rate(sidekiq_jobs_queue_duration_seconds_bucket[1h])
       )
   - record: sli_aggregations:sidekiq_jobs_failed_total_rate1h
     expr: |
-      sum by (environment,feature_category,queue,shard,stage,tier,type,urgency,worker) (
+      sum by (environment,feature_category,queue,region,shard,stage,tier,type,urgency,worker) (
         rate(sidekiq_jobs_failed_total[1h])
       )
   - record: gitlab_component_ops:rate_1h
@@ -4349,84 +4349,84 @@ groups:
       )
   - record: gitlab_background_jobs:queue:apdex:success:rate_1h
     expr: |
-      sum by (environment,tier,type,stage,shard,queue,feature_category,urgency,worker) (
-        label_replace(sum by (environment,tier,type,stage,shard,queue,feature_category,urgency,worker) (
+      sum by (environment,tier,type,stage,shard,queue,feature_category,urgency,worker,region) (
+        label_replace(sum by (environment,tier,type,stage,shard,queue,feature_category,urgency,worker,region) (
           sli_aggregations:sidekiq_jobs_queue_duration_seconds_bucket_rate1h{le="10",urgency="high"}
         )
         , "_c", "0", "", "")
         or
-        label_replace(sum by (environment,tier,type,stage,shard,queue,feature_category,urgency,worker) (
+        label_replace(sum by (environment,tier,type,stage,shard,queue,feature_category,urgency,worker,region) (
           sli_aggregations:sidekiq_jobs_queue_duration_seconds_bucket_rate1h{le="60",urgency="low"}
         )
         , "_c", "1", "", "")
       )
   - record: gitlab_background_jobs:queue:apdex:weight:score_1h
     expr: |
-      sum by (environment,tier,type,stage,shard,queue,feature_category,urgency,worker) (
-        label_replace(sum by (environment,tier,type,stage,shard,queue,feature_category,urgency,worker) (
+      sum by (environment,tier,type,stage,shard,queue,feature_category,urgency,worker,region) (
+        label_replace(sum by (environment,tier,type,stage,shard,queue,feature_category,urgency,worker,region) (
           sli_aggregations:sidekiq_jobs_queue_duration_seconds_bucket_rate1h{le="+Inf",urgency="high"}
         )
         , "_c", "0", "", "")
         or
-        label_replace(sum by (environment,tier,type,stage,shard,queue,feature_category,urgency,worker) (
+        label_replace(sum by (environment,tier,type,stage,shard,queue,feature_category,urgency,worker,region) (
           sli_aggregations:sidekiq_jobs_queue_duration_seconds_bucket_rate1h{le="+Inf",urgency="low"}
         )
         , "_c", "1", "", "")
       )
   - record: gitlab_background_jobs:queue:ops:rate_1h
     expr: |
-      sum by (environment,tier,type,stage,shard,queue,feature_category,urgency,worker) (
+      sum by (environment,tier,type,stage,shard,queue,feature_category,urgency,worker,region) (
         rate(sidekiq_enqueued_jobs_total{}[1h])
       )
   - record: gitlab_background_jobs:execution:apdex:success:rate_1h
     expr: |
-      sum by (environment,tier,type,stage,shard,queue,feature_category,urgency,worker) (
-        label_replace(sum by (environment,tier,type,stage,shard,queue,feature_category,urgency,worker) (
+      sum by (environment,tier,type,stage,shard,queue,feature_category,urgency,worker,region) (
+        label_replace(sum by (environment,tier,type,stage,shard,queue,feature_category,urgency,worker,region) (
           sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate1h{le="10",urgency="high"}
         )
         , "_c", "0", "", "")
         or
-        label_replace(sum by (environment,tier,type,stage,shard,queue,feature_category,urgency,worker) (
+        label_replace(sum by (environment,tier,type,stage,shard,queue,feature_category,urgency,worker,region) (
           sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate1h{le="300",urgency="low"}
         )
         , "_c", "1", "", "")
         or
-        label_replace(sum by (environment,tier,type,stage,shard,queue,feature_category,urgency,worker) (
+        label_replace(sum by (environment,tier,type,stage,shard,queue,feature_category,urgency,worker,region) (
           sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate1h{le="300",urgency="throttled"}
         )
         , "_c", "2", "", "")
       )
   - record: gitlab_background_jobs:execution:apdex:weight:score_1h
     expr: |
-      sum by (environment,tier,type,stage,shard,queue,feature_category,urgency,worker) (
-        label_replace(sum by (environment,tier,type,stage,shard,queue,feature_category,urgency,worker) (
+      sum by (environment,tier,type,stage,shard,queue,feature_category,urgency,worker,region) (
+        label_replace(sum by (environment,tier,type,stage,shard,queue,feature_category,urgency,worker,region) (
           sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate1h{le="+Inf",urgency="high"}
         )
         , "_c", "0", "", "")
         or
-        label_replace(sum by (environment,tier,type,stage,shard,queue,feature_category,urgency,worker) (
+        label_replace(sum by (environment,tier,type,stage,shard,queue,feature_category,urgency,worker,region) (
           sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate1h{le="+Inf",urgency="low"}
         )
         , "_c", "1", "", "")
         or
-        label_replace(sum by (environment,tier,type,stage,shard,queue,feature_category,urgency,worker) (
+        label_replace(sum by (environment,tier,type,stage,shard,queue,feature_category,urgency,worker,region) (
           sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate1h{le="+Inf",urgency="throttled"}
         )
         , "_c", "2", "", "")
       )
   - record: gitlab_background_jobs:execution:ops:rate_1h
     expr: |
-      sum by (environment,tier,type,stage,shard,queue,feature_category,urgency,worker) (
+      sum by (environment,tier,type,stage,shard,queue,feature_category,urgency,worker,region) (
         sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate1h{le="+Inf"}
       )
   - record: gitlab_background_jobs:execution:error:rate_1h
     expr: |
-      sum by (environment,tier,type,stage,shard,queue,feature_category,urgency,worker) (
+      sum by (environment,tier,type,stage,shard,queue,feature_category,urgency,worker,region) (
         sli_aggregations:sidekiq_jobs_failed_total_rate1h{}
       )
       or
       (
-        0 * group by (environment,tier,type,stage,shard,queue,feature_category,urgency,worker) (
+        0 * group by (environment,tier,type,stage,shard,queue,feature_category,urgency,worker,region) (
           gitlab_background_jobs:execution:ops:rate_1h{}
         )
       )
@@ -4473,7 +4473,7 @@ groups:
   - record: gitlab_component_service:mapping
     labels:
       component: shard_catchall
-      regional_aggregation: "no"
+      regional_aggregation: "yes"
       service_aggregation: "yes"
       tier: sv
       type: sidekiq
@@ -4481,7 +4481,7 @@ groups:
   - record: gitlab_component_service:mapping
     labels:
       component: shard_database_throttled
-      regional_aggregation: "no"
+      regional_aggregation: "yes"
       service_aggregation: "yes"
       tier: sv
       type: sidekiq
@@ -4489,7 +4489,7 @@ groups:
   - record: gitlab_component_service:mapping
     labels:
       component: shard_elasticsearch
-      regional_aggregation: "no"
+      regional_aggregation: "yes"
       service_aggregation: "yes"
       tier: sv
       type: sidekiq
@@ -4497,7 +4497,7 @@ groups:
   - record: gitlab_component_service:mapping
     labels:
       component: shard_gitaly_throttled
-      regional_aggregation: "no"
+      regional_aggregation: "yes"
       service_aggregation: "yes"
       tier: sv
       type: sidekiq
@@ -4505,7 +4505,7 @@ groups:
   - record: gitlab_component_service:mapping
     labels:
       component: shard_imports
-      regional_aggregation: "no"
+      regional_aggregation: "yes"
       service_aggregation: "yes"
       tier: sv
       type: sidekiq
@@ -4513,7 +4513,7 @@ groups:
   - record: gitlab_component_service:mapping
     labels:
       component: shard_low_urgency_cpu_bound
-      regional_aggregation: "no"
+      regional_aggregation: "yes"
       service_aggregation: "yes"
       tier: sv
       type: sidekiq
@@ -4521,7 +4521,7 @@ groups:
   - record: gitlab_component_service:mapping
     labels:
       component: shard_memory_bound
-      regional_aggregation: "no"
+      regional_aggregation: "yes"
       service_aggregation: "yes"
       tier: sv
       type: sidekiq
@@ -4529,7 +4529,7 @@ groups:
   - record: gitlab_component_service:mapping
     labels:
       component: shard_quarantine
-      regional_aggregation: "no"
+      regional_aggregation: "yes"
       service_aggregation: "yes"
       tier: sv
       type: sidekiq
@@ -4537,7 +4537,7 @@ groups:
   - record: gitlab_component_service:mapping
     labels:
       component: shard_urgent_authorized_projects
-      regional_aggregation: "no"
+      regional_aggregation: "yes"
       service_aggregation: "yes"
       tier: sv
       type: sidekiq
@@ -4545,7 +4545,7 @@ groups:
   - record: gitlab_component_service:mapping
     labels:
       component: shard_urgent_cpu_bound
-      regional_aggregation: "no"
+      regional_aggregation: "yes"
       service_aggregation: "yes"
       tier: sv
       type: sidekiq
@@ -4553,7 +4553,7 @@ groups:
   - record: gitlab_component_service:mapping
     labels:
       component: shard_urgent_other
-      regional_aggregation: "no"
+      regional_aggregation: "yes"
       service_aggregation: "yes"
       tier: sv
       type: sidekiq

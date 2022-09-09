@@ -275,6 +275,7 @@ local aggregationSet = import 'servicemetrics/aggregation-set.libsonnet';
       'feature_category',
       'urgency',
       'worker',
+      'region',
     ],
     metricFormats: {
       apdexSuccessRate: 'gitlab_background_jobs:execution:apdex:success:rate_%s',
@@ -300,6 +301,7 @@ local aggregationSet = import 'servicemetrics/aggregation-set.libsonnet';
       'feature_category',
       'urgency',
       'worker',
+      'region',
     ],
     metricFormats: {
       apdexWeight: 'gitlab_background_jobs:execution:apdex:weight:score_%s',
@@ -342,6 +344,7 @@ local aggregationSet = import 'servicemetrics/aggregation-set.libsonnet';
       'feature_category',
       'urgency',
       'worker',
+      'region',
     ],
     metricFormats: {
       apdexSuccessRate: 'gitlab_background_jobs:queue:apdex:success:rate_%s',
@@ -368,6 +371,7 @@ local aggregationSet = import 'servicemetrics/aggregation-set.libsonnet';
       'feature_category',
       'urgency',
       'worker',
+      'region',
     ],
     metricFormats: {
       apdexRatio: 'gitlab_background_jobs:queue:apdex:ratio_%s',

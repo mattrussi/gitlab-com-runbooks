@@ -5,8 +5,8 @@ groups:
   interval: 1m
   rules:
   - record: sidekiq_jobs_execution_time:1m
-    expr: sum by (environment, stage, shard) (rate(sidekiq_jobs_completion_seconds_sum[1m]))
+    expr: sum by (environment, region, stage, shard) (rate(sidekiq_jobs_completion_seconds_sum[1m]))
   - record: sidekiq_jobs_execution_time:10m
-    expr: sum by (environment, stage, shard) (rate(sidekiq_jobs_completion_seconds_sum[10m]))
+    expr: sum by (environment, region, stage, shard) (rate(sidekiq_jobs_completion_seconds_sum[10m]))
   - record: sidekiq_jobs_execution_time:1h
-    expr: sum by (environment, stage, shard) (rate(sidekiq_jobs_completion_seconds_sum[1h]))
+    expr: sum by (environment, region, stage, shard) (rate(sidekiq_jobs_completion_seconds_sum[1h]))
