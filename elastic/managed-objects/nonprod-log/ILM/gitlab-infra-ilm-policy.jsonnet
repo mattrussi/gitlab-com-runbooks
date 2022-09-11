@@ -15,10 +15,7 @@
       warm: {
         actions: {
           allocate: {
-            require: {
-              data: null,
-            },
-            total_shards_per_node: 3,
+            total_shards_per_node: '3',
           },
           set_priority: {
             priority: 50,
