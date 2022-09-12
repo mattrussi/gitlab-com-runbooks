@@ -1385,6 +1385,8 @@ services:
 
   - name: web-pages
     tier: sv
+    teams:
+      - gitlab-pages
     friendly_name: GitLab Pages
     label: Service:Pages
     business:
