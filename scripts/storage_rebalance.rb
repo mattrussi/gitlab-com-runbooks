@@ -56,7 +56,7 @@ module Storage
       id name full_path disk_path repository_storage destination_repository_storage
       size repository_size_bytes
     ].freeze
-    INTEGER_PATTERN = /\A\d+\Z/.freeze
+    INTEGER_PATTERN = /\A\d+\Z/
     SEPARATOR = ('=' * DISPLAY_WIDTH).freeze
     PROGRESS_BRAILLES = [
       "\u28F7", "\u28EF", "\u28DF", "\u287F", "\u28BF", "\u28FB", "\u28FD", "\u28FE"
@@ -223,7 +223,7 @@ module Storage
       log.warn "Skipping migration"
     end
 
-    PRIVATE_TOKEN_HEADER_PATTERN = /Private-Token/i.freeze
+    PRIVATE_TOKEN_HEADER_PATTERN = /Private-Token/i
 
     def get_request_headers(request)
       request.instance_variable_get('@header'.to_sym) || []
@@ -351,7 +351,7 @@ module Storage
       $stdin.echo = true
       # $stdout.flush
       $stdout.ioflush
-      $stdout.write "\r#{(' ' * prompt.length)}\n"
+      $stdout.write "\r#{' ' * prompt.length}\n"
       $stdout.flush
     end
 

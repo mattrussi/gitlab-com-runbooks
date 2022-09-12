@@ -40,7 +40,7 @@ module Storage
   module ProjectSelectorScript
     LOG_TIMESTAMP_FORMAT = '%Y-%m-%d %H:%M:%S'
     DEFAULT_NODE_CONFIG = {}.freeze
-    INTEGER_PATTERN = /\A\d+\Z/.freeze
+    INTEGER_PATTERN = /\A\d+\Z/
   end
 
   def self.get_node_configuration
