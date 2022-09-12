@@ -874,6 +874,8 @@ services:
 
   - name: frontend
     tier: lb
+    teams:
+      - sre_reliability
     friendly_name: HAProxy Frontend
     label: Service:HAProxy
     business:
