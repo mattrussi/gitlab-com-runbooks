@@ -3570,6 +3570,8 @@ services:
 
   - name: kas
     tier: sv
+    teams:
+      - configure
     friendly_name: Kubernetes Agent
     label: Service:kas
     business:
