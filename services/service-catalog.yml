@@ -2880,6 +2880,8 @@ services:
 
   - name: sentry
     tier: inf
+    teams:
+      - observability
     friendly_name: Monitoring
     label: Service:Sentry
     business:
