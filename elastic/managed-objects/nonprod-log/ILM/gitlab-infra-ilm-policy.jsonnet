@@ -5,7 +5,7 @@
         actions: {
           rollover: {
             max_age: '6d',
-            max_primary_shard_size: '5gb',
+            max_primary_shard_size: '10gb',
           },
           set_priority: {
             priority: 100,
