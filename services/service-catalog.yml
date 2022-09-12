@@ -2532,7 +2532,6 @@ services:
   - name: redis-sessions
     tier: db
     friendly_name: Redis Sessions
-    infra_owner: sre_observability
     label: Service:Redis
     business:
       requirement: |
