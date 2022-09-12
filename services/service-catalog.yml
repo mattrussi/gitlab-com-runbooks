@@ -541,6 +541,8 @@ services:
 
   - name: kube
     tier: inf
+    teams:
+      - sre_reliability
     friendly_name: Kubernetes
     label: Service:Kubernetes
     technical:
