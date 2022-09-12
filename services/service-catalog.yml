@@ -97,6 +97,8 @@ services:
 
   - name: blackbox
     tier: inf
+    teams:
+      - sre_reliability
     friendly_name: Blackbox Exporters
     label: Service:Blackbox
     business:
@@ -214,6 +216,8 @@ services:
 
   - name: console
     tier: sv
+    teams:
+      - sre_reliability
     friendly_name: Console Access
     label: Service:Console
     business:
@@ -292,6 +296,8 @@ services:
 
   - name: consul
     tier: inf
+    teams:
+      - sre_reliability
     friendly_name: Consul
     label: Service:Consul
     business:
@@ -572,6 +578,8 @@ services:
 
   - name: logging
     tier: inf
+    teams:
+      - sre_reliability
     friendly_name: Logging
     label: Service:Logging
     business:
@@ -931,6 +939,8 @@ services:
 
   - name: google-cloud-storage
     tier: inf
+    teams:
+      - sre_reliability
     friendly_name: Google Cloud Storage
     label: Service:GoogleCloudStorage
     infrastructure:
@@ -2189,6 +2199,8 @@ services:
 
   - name: monitoring
     tier: inf
+    teams:
+      - sre_reliability
     friendly_name: Monitoring
     label: Service:Prometheus
     business:
@@ -2799,6 +2811,8 @@ services:
 
   - name: nat
     tier: inf
+    teams:
+      - sre_reliability
     friendly_name: NAT
     label: Service:NAT
     business:
@@ -3065,6 +3079,8 @@ services:
 
   - name: pubsub
     tier: inf
+    teams:
+      - sre_reliability
     friendly_name: Pubsub for Logging
     label: Service:PubSub
     business:
@@ -3232,6 +3248,8 @@ services:
 
   - name: stackdriver
     tier: inf
+    teams:
+      - sre_reliability
     friendly_name: Stackdriver Metrics
     label: Service:Stackdriver
     business:
@@ -3292,6 +3310,8 @@ services:
 
   - name: waf
     tier: lb
+    teams:
+      - sre_reliability
     friendly_name: Cloudflare Web Application Firewall
     label: Service:WAF
     business:
@@ -3402,15 +3422,15 @@ services:
 
   - name: jaeger
     tier: inf
-    friendly_name: Jaeger
+    friendly_name: Jaeger (deprecated)
     label: Service:Jaeger
     business:
       requirement: |
-        Jaeger is a distributed tracing system that allows us to understand interactions between components and diagnose performance issues.
+        Jaeger is a distributed tracing system that allows us to understand interactions between components and diagnose performance issues. (JAEGER HAS BEEN DECOMISSSIONED)
       customers:
         - Engineering dept
       business_value: |
-        In order to meet our SLOs, we need the ability to understand system behaviour and sources of latency.
+        In order to meet our SLOs, we need the ability to understand system behaviour and sources of latency. (JAEGER HAS BEEN DECOMISSSIONED)
       SLA:
         availability:
         response_time:
@@ -3464,6 +3484,8 @@ services:
 
   - name: woodhouse
     tier: sv
+    teams:
+      - sre_reliability
     friendly_name: Woodhouse
     label: Service:Woodhouse
     business:
@@ -3647,6 +3669,8 @@ services:
 
   - name: cloud-sql
     tier: inf
+    teams:
+      - sre_reliability
     friendly_name: Google Cloud SQL
     label: Service:CloudSQL
     business:
@@ -3693,6 +3717,8 @@ services:
 
   - name: external-dns
     tier: sv
+    teams:
+      - sre_reliability
     friendly_name: ExternalDNS
     label: Service:ExternalDNS
     business:
