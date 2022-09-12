@@ -189,6 +189,7 @@ teams:
   - graphql_queries
 - name: database
   product_stage_group: database
+  slack_channel: db_squad
   ignored_components:
   - graphql_queries
 - name: dataops

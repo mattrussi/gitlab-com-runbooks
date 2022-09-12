@@ -1449,6 +1449,8 @@ services:
 
   - name: pgbouncer
     tier: db
+    teams:
+      - database
     friendly_name: PGBouncer Primary Database Pool
     label: Service:pgbouncer
     business:
@@ -1516,6 +1518,8 @@ services:
 
   - name: pgbouncer-registry
     tier: db
+    teams:
+      - database
     friendly_name: Registry PGBouncer Primary Database Pool
     label: Service:pgbouncer
     business:
@@ -1585,6 +1589,8 @@ services:
 
   - name: pgbouncer-ci
     tier: db
+    teams:
+      - database
     friendly_name: CI PGBouncer Primary Database Pool
     label: Service:pgbouncer
     business:
@@ -1654,6 +1660,8 @@ services:
 
   - name: patroni
     tier: db
+    teams:
+      - database
     friendly_name: Postgres (Patroni)
     label: Service:Postgres
     business:
@@ -1741,6 +1749,8 @@ services:
 
   - name: patroni-registry
     tier: db
+    teams:
+      - database
     friendly_name: Registry Postgres (Patroni)
     label: Service:Postgres
     business:
@@ -1828,6 +1838,8 @@ services:
 
   - name: patroni-ci
     tier: db
+    teams:
+      - database
     friendly_name: CI Postgres (Patroni)
     label: Service:Postgres
     business:
@@ -1969,6 +1981,8 @@ services:
 
   - name: postgres-archive
     tier: db
+    teams:
+      - database
     friendly_name: Postgres DR Archive
     label: Service:PostgresArchive
     business:
@@ -2055,6 +2069,8 @@ services:
 
   - name: postgres-dr-delayed
     tier: db
+    teams:
+      - database
     friendly_name: Postgres DR Delayed Replica
     label: Service:PostgresDelayed
     business:
@@ -2135,6 +2151,8 @@ services:
 
   - name: psql-timings
     tier: inf
+    teams:
+      - database
     friendly_name: PSQL Timings
     label: Service:PsqlTimings
     business:
