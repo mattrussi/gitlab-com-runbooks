@@ -317,3 +317,7 @@ teams:
   send_slo_alerts_to_team_slack_channel: true
   ignored_components:
   - graphql_queries
+- name: engineering_productivity
+  slack_channel: g_engineering_productivity
+  ignored_components:
+  - graphql_queries

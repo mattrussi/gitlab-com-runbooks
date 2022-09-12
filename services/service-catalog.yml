@@ -3036,6 +3036,8 @@ services:
 
   - name: version
     tier: sv
+    teams:
+      - engineering_productivity
     friendly_name: version.gitlab.com
     label: Service:Version
     business:
