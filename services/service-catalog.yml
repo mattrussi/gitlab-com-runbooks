@@ -3385,6 +3385,8 @@ services:
 
   - name: vault
     tier: inf
+    teams:
+      - sre_reliability
     friendly_name: Infrastructure Vault
     label: Service:Vault
     business:
