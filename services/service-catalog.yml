@@ -2279,6 +2279,8 @@ services:
 
   - name: redis
     tier: db
+    teams:
+      - scalability
     friendly_name: Persistent Redis
     label: Service:Redis
     business:
@@ -2345,6 +2347,8 @@ services:
 
   - name: redis-cache
     tier: db
+    teams:
+      - scalability
     friendly_name: Redis Cache
     label: Service:RedisCache
     business:
@@ -2407,6 +2411,8 @@ services:
 
   - name: redis-cache-sentinel
     tier: db
+    teams:
+      - scalability
     friendly_name: Redis Cache Sentinel
     label: Service:RedisCacheSentinel
     business:
@@ -2469,6 +2475,8 @@ services:
 
   - name: redis-ratelimiting
     tier: db
+    teams:
+      - scalability
     friendly_name: Redis RateLimiting
     label: Service:Redis
     business:
@@ -2531,6 +2539,8 @@ services:
 
   - name: redis-sessions
     tier: db
+    teams:
+      - scalability
     friendly_name: Redis Sessions
     label: Service:Redis
     business:
@@ -2593,6 +2603,8 @@ services:
 
   - name: redis-sidekiq
     tier: db
+    teams:
+      - scalability
     friendly_name: Redis Sidekiq
     label: Service:RedisSidekiq
     business:
@@ -2655,6 +2667,8 @@ services:
 
   - name: redis-tracechunks
     tier: db
+    teams:
+      - scalability
     friendly_name: Redis TraceChunks
     label: Service:Redis
     business:
