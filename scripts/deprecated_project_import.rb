@@ -46,7 +46,7 @@ class SlackWebhook
   CouldNotPostError = Class.new(StandardError)
 
   CHANNEL = '#announcements'
-  WEBHOOK_URL = "https://hooks.slack.com/services/#{ENV['SLACK_TOKEN']}"
+  WEBHOOK_URL = "https://hooks.slack.com/services/#{ENV['SLACK_TOKEN']}".freeze
 
   def self.start(project)
     fire_hook("#{username} started a foreground import of *#{project}*")
