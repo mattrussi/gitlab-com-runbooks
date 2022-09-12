@@ -738,6 +738,8 @@ services:
 
   - name: search
     tier: inf
+    teams:
+      - global_search
     friendly_name: Global Search
     label: Service:Elasticsearch
     business:
