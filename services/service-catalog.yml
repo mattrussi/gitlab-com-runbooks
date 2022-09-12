@@ -3188,6 +3188,8 @@ services:
 
   - name: ci-runners
     tier: sv
+    teams:
+      - runner
     friendly_name: CI Runners
     label: Service:CI Runner
     business:
