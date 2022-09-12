@@ -3637,6 +3637,8 @@ services:
 
   - name: websockets
     tier: sv
+    teams:
+      - plan
     friendly_name: Websockets
     label: Service:Websockets
     business:
