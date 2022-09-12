@@ -161,6 +161,8 @@ services:
 
   - name: camoproxy
     tier: sv
+    teams:
+      - sre_reliability
     friendly_name: Camoproxy
     label: Service:Camoproxy
     business:
@@ -1935,6 +1937,8 @@ services:
 
   - name: plantuml
     tier: sv
+    teams:
+      - sre_reliability
     friendly_name: PlantUML
     label: Service:PlantUML
     business:
