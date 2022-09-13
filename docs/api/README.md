@@ -78,6 +78,7 @@
 * [Ruby profiling](../uncategorized/ruby-profiling.md)
 * [Shared Configurations](../uncategorized/shared-configurations.md)
 * [Application Database Queries](../uncategorized/tracing-app-db-queries.md)
+* [How to Use Vault for Secrets Management in Infrastructure](../vault/usage.md)
 * [Vault Secrets Management](../vault/vault.md)
 * [Static repository objects caching](../web/static-repository-objects-caching.md)
 <!-- END_MARKER -->

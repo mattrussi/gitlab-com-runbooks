@@ -72,6 +72,7 @@
 * [Removing kernels from fleet](../uncategorized/remove-kernels.md)
 * [Tweeting Guidelines](../uncategorized/tweeting-guidelines.md)
 * [Configuring and Using the Yubikey](../uncategorized/yubikey.md)
+* [How to Use Vault for Secrets Management in Infrastructure](../vault/usage.md)
 * [Vault Secrets Management](../vault/vault.md)
 * [Gitaly version mismatch](gitaly-version-mismatch.md)
 * [version.gitlab.com Runbook](version-gitlab-com.md)

@@ -1,5 +1,7 @@
 # Vault Secrets Management
 
+**Table of Contents**
+
 [[_TOC_]]
 
 ## Summary
@@ -62,6 +64,8 @@ Raft storage is configured with regional SSD persistent disks which provide dura
 
 Additionally, we have multi-region backups we can restore as disaster recovery (in case of full region failure) (see [storage section below](#storage)).
 
+In short, we have redundancy across zones in the `us-east1` region, but not across different regions. However we are able to easily and rapidly restore the service in a different region when needed.
+
 #### Ingress
 
 We have one internal and one external endpoint, keeping the service from being directly exposed to the internet.
@@ -119,7 +123,7 @@ Vault data is encrypted at all times. When Vault is started, it is always starte
 
 To [unseal](https://www.vaultproject.io/docs/concepts/seal) Vault, a root key is needed to decrypt the Vault data encryption key.
 
-To ensure that the root key is never known or leaked, we have configured auto-unseal using [`GCP KMS`](https://www.vaultproject.io/docs/configuration/seal/gcpckms) which lets us leverage GCP KMS to encrypt and decrypt the root key. Only the KMS key is able to decrypt the root key in our configuration. There is no other method possible to decrypt the root key. You can [view the configuration in terraform](https://ops.gitlab.net/gitlab-com/gl-infra/config-mgmt/-/blob/master/modules/vault-project/kms.tf).
+To ensure that the root key is never known or leaked, we have configured auto-unseal using [`GCP KMS`](https://www.vaultproject.io/docs/configuration/seal/gcpckms) which lets us leverage GCP KMS to encrypt and decrypt the root key. Only the KMS key is able to decrypt the root key in our configuration. There is no other method possible to decrypt the root key. The Terraform configuration can [be found here](https://ops.gitlab.net/gitlab-com/gl-infra/config-mgmt/-/blob/master/modules/vault-project/kms.tf).
 
 ```mermaid
 graph TD
@@ -169,57 +173,15 @@ A [service overview dashboard](https://dashboards.gitlab.net/d/vault-main/vault-
 
 ### Logs
 
-We've configured audit logging to output to STDOUT which forwards logs to Kibana. You can [view Vault logs here](https://nonprod-log.gitlab.net/goto/bf582b40-097a-11ed-af31-918941b0065a).
+We've configured audit logging to output to STDOUT which forwards logs to Kibana. The Vault logs can be viewed [here](https://nonprod-log.gitlab.net/goto/bf582b40-097a-11ed-af31-918941b0065a).
+
+## Administration
+
+See [Vault Administration](administration.md).
 
 ## Usage
 
-### Web UI
-
-* Go to <https://vault.gitlab.net/>
-* Select `oidc`, leave `Role` empty and click `Sign in with Google`
-* Your session is valid for 24 hours, renewable for up to 7 days (for every consecutive day it is used)
-
-Members of the Reliability team can also login with admin privileges by entering `admin` in the `Role` input. The admin session is valid for a maximum of 1 hour, as its usage should be limited to troubleshooting.
-
-### CLI
-
-*Access via Teleport is not implemented yet at the time of this writing (see <https://gitlab.com/gitlab-com/gl-infra/reliability/-/issues/15898>) but will eventually be the prefered method for accessing Vault from CLI.*
-
-You will need to forward Vault's port 8200 locally by one of 2 ways:
-
-* SOCKS5 proxy via SSH:
-
-  ```shell
-  # In a separate shell session
-  ssh -D 9000 bastion-01-inf-ops.c.gitlab-ops.internal
-  # In your first session
-  export VAULT_ADDR=https://vault.ops.gke.gitlab.net
-  export VAULT_PROXY_ADDR=socks5://localhost:9000
-  ```
-
-* Port-forwarding via `kubectl`:
-
-  ```shell
-  # In a separate shell session
-  kubectl -n vault port-forward svc/vault-active 8200
-  # In your first session
-  export VAULT_ADDR=https://localhost:8200
-  export VAULT_TLS_SERVER_NAME=vault.ops.gke.gitlab.net
-  ```
-
-Then you can login via the OIDC method:
-
-```shell
-vault login -method oidc
-```
-
-Members of the Reliability team can also login with admin privileges (session TTL max of 1 hour) with the following:
-
-```shell
-vault login -method oidc role=admin
-```
-
-After logging in, your Vault token is stored in `~/.vault-token` by default. Alternatively it can be set with the environment variable `VAULT_TOKEN`.
+See [How to use Vault for Secrets Management in Infrastructure](usage.md).
 
 ## Troubleshooting
 
@@ -240,28 +202,14 @@ kubectl -n vault get pods -l app.kubernetes.io/name=vault -l vault-active=true
 
 ### Determining status of Vault from Vault itself
 
-Connect to one of the Vault pods and run:
-
-```shell
-kubectl -n vault exec -it vault-0 sh
-$ vault status
-$ export VAULT_SKIP_VERIFY=true
-# Ensure `Initialized` is `true` and `Sealed` is `false`
-$ vault login
-# enter root token
-$ vault operator peers
-$ vault operator raft list-peers
-# Ensure all Vault pods are listed and their `State` is either `leader` or `follower`
-```
-
-Alternatively you can use a SOCKS5 proxy or forward the port `8200` and run Vault locally (see [CLI](#cli) above):
+You can use a SOCKS5 proxy or forward the port `8200` and run Vault locally (see [CLI](usage.md#cli)):
 
 ```shell
 # In a separate shell session
-ssh -D 9000 bastion-01-inf-ops.c.gitlab-ops.internal
+ssh -D 18200 bastion-01-inf-ops.c.gitlab-ops.internal
 # In your first session
 export VAULT_ADDR=https://vault.ops.gke.gitlab.net
-export VAULT_PROXY_ADDR=socks5://localhost:9000
+export VAULT_PROXY_ADDR=socks5://localhost:18200
 vault login -method oidc role=admin
 vault operator peers
 vault operator raft list-peers
@@ -280,6 +228,20 @@ vault operator raft list-peers
 # Ensure all Vault pods are listed and their `State` is either `leader` or `follower`
 ```
 
+Alternatively, you can connect to one of the Vault pods and run:
+
+```shell
+kubectl -n vault exec -it vault-0 sh
+$ vault status
+$ export VAULT_SKIP_VERIFY=true
+# Ensure `Initialized` is `true` and `Sealed` is `false`
+$ vault login
+# enter root token
+$ vault operator peers
+$ vault operator raft list-peers
+# Ensure all Vault pods are listed and their `State` is either `leader` or `follower`
+```
+
 ## Generating a root token
 
 Official documentation: <https://learn.hashicorp.com/tutorials/vault/generate-root>
@@ -288,7 +250,7 @@ When `admin` access is not sufficient or broken, a root token can be generated u
 
 **:warning: Root tokens are dangerous as they allow to do anything in the cluster and don't expire. For this reason, please remember to revoke it using `vault token revoke -self` once you are done using it! :warning:**
 
-* First, setup CLI access by following the steps in the [CLI section](#cli) above
+* First, setup CLI access by following the steps described [here](usage.md#cli)
 * Verify that Vault is unsealed:
 
   ```shell
@@ -357,7 +319,7 @@ Note that doing this restores everything entirely back to the state it was at th
   gsutil cp gs://gitlab-vault-production-vault-raft-snapshots/2022/07/22/raft-20220722-120000+0000.snap .
   ```
 
-* First, setup CLI access by following the steps in the [CLI section](#cli) above.
+* Then, setup CLI access by following the steps described [here](usage.md#cli)
 * Then [generate a root token](#generating-a-root-token)
 * Restore the snapshot:
 

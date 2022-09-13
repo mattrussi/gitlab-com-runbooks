@@ -3334,7 +3334,7 @@ services:
 
   - name: vault
     tier: inf
-    friendly_name: Infrastructure Vault
+    friendly_name: Hashicorp Vault for Infrastructure
     label: Service:Vault
     business:
       requirement: |
@@ -3366,8 +3366,8 @@ services:
         data_classification:
         security_incidents:
       logging:
-        - name:
-          permalink:
+        - name: Vault
+          permalink: https://nonprod-log.gitlab.net/goto/331c9c10-21df-11ed-af31-918941b0065a
     infrastructure:
       provider: gcp
       architecture: gke
@@ -3379,13 +3379,12 @@ services:
     operations:
       maintenance:
       runbooks:
-        - https://gitlab.com/gitlab-com/runbooks/blob/master/docs/vault/vault.md
+        - https://gitlab.com/gitlab-com/runbooks/blob/master/docs/vault/README.md
       playbooks:
       error_budget:
     observability:
       monitors:
-        primary_grafana_dashboard:
-        sentry_slug:
+        primary_grafana_dashboard: vault-main/vault-overview
 
   - name: jaeger
     tier: inf

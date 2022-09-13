@@ -79,6 +79,7 @@
 * [Project exports](../uncategorized/project-export.md)
 * [Ruby profiling](../uncategorized/ruby-profiling.md)
 * [Setup oauth2-proxy protection for web based application](../uncategorized/setup-oauth2-proxy-protected-application.md)
+* [How to Use Vault for Secrets Management in Infrastructure](../vault/usage.md)
 * [Vault Secrets Management](../vault/vault.md)
 * [Workhorse Image Scaler](workhorse-image-scaler.md)
 <!-- END_MARKER -->

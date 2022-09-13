@@ -37,6 +37,7 @@
 * [High Number of Overdue Online GC Tasks](online-gc-high-overdue-tasks.md)
 * [Deleting a project manually](../uncategorized/delete-projects-manually.md)
 * [Tweeting Guidelines](../uncategorized/tweeting-guidelines.md)
+* [How to Use Vault for Secrets Management in Infrastructure](../vault/usage.md)
 * [Vault Secrets Management](../vault/vault.md)
 <!-- END_MARKER -->
 

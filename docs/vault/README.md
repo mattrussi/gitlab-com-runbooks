@@ -1,3 +1,9 @@
+# Vault Secrets Management
+
+* [Vault Secrets Management](vault.md)
+* [How to use Vault for Secrets Management in Infrastructure](usage.md).
+* [Vault Administration](administration.md).
+
 <!-- MARKER: do not edit this section directly. Edit services/service-catalog.yml then run scripts/generate-docs -->
 
 **Table of Contents**
@@ -6,12 +12,13 @@
 
 # Vault Service
 
+* [Service Overview](https://dashboards.gitlab.net/d/vault-main/vault-overview)
 * **Alerts**: <https://alerts.gitlab.net/#/alerts?filter=%7Btype%3D%22vault%22%2C%20tier%3D%22inf%22%7D>
 * **Label**: gitlab-com/gl-infra/production~"Service:Vault"
 
 ## Logging
 
-* []()
+* [Vault](https://nonprod-log.gitlab.net/goto/331c9c10-21df-11ed-af31-918941b0065a)
 
 ## Troubleshooting Pointers
 
@@ -39,24 +46,8 @@
 * [Shared Configurations](../uncategorized/shared-configurations.md)
 * [../uncategorized/subnet-allocations.md](../uncategorized/subnet-allocations.md)
 * [Configuring and Using the Yubikey](../uncategorized/yubikey.md)
+* [Vault Administration](administration.md)
 * [Troubleshooting Hashicorp Vault](troubleshooting.md)
+* [How to Use Vault for Secrets Management in Infrastructure](usage.md)
 * [Vault Secrets Management](vault.md)
 <!-- END_MARKER -->
-
-<!-- ## Summary -->
-
-<!-- ## Architecture -->
-
-<!-- ## Performance -->
-
-<!-- ## Scalability -->
-
-<!-- ## Availability -->
-
-<!-- ## Durability -->
-
-<!-- ## Security/Compliance -->
-
-<!-- ## Monitoring/Alerting -->
-
-<!-- ## Links to further Documentation -->
