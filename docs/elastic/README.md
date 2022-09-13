@@ -30,6 +30,10 @@ TODO: link here design docs once they are ready
 
 # How-to guides
 
+## Disaster recovery
+
+1. [Recovering lost Advanced Search updates](disaster_recovery/)
+
 ## Upgrade checklist
 
 ### Pre-flight
