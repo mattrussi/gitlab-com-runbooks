@@ -950,6 +950,10 @@ add `disable-ccid` to `~/.gnupg/scdaemon.conf` and use the restart script to res
 
 If you have configured subkeys on a second, backup YubiKey, you must append a `!` after the `keyid` specified for the `user.signingkey` config attribute in `~/.gitconfig`, before git will use the new signing key. Otherwise git will continue to prompt for the last written YubiKey, regardless of which `keyid` is specified. For additional context, see [this github issue comment](https://github.com/drduh/YubiKey-Guide/issues/19#issuecomment-1143557632).
 
+### Resetting your yubikey
+
+If you run into an issue (such as entering the wrong PIN too many times) you can hard reset your key using `gpg --card-edit`. More information at [Yubico docs](https://support.yubico.com/hc/en-us/articles/360013761339-Resetting-the-OpenPGP-Application-on-the-YubiKey), option #2 is recommended.
+
 ## Linux tips
 
 ### gpg: selecting openpgp failed: No such device
