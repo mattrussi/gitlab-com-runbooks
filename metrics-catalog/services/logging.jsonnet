@@ -22,9 +22,7 @@ metricsCatalog.serviceDefinition({
   },
   kubeConfig: {
     labelSelectors: kubeLabelSelectors(
-      hpaSelector=null,  // no hpas for logging,
       ingressSelector=null,  // no ingress for logging
-      deploymentSelector=null,  // no deployment for logging
 
       podStaticLabels={ stage: 'main' },
     ),
