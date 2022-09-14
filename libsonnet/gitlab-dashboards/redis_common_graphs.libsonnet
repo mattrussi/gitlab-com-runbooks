@@ -13,9 +13,9 @@ local seriesOverrides = import 'grafana/series_overrides.libsonnet';
         title='Connected Clients',
         yAxisLabel='Clients',
         query=|||
-          sum(avg_over_time(redis_connected_clients{environment="$environment", type="%(serviceType)s"}[$__interval])) by (fqdn)
+          sum(avg_over_time(redis_connected_clients{environment="$environment", type="%(serviceType)s"}[$__interval])) by (instance, pod)
         ||| % formatConfig,
-        legendFormat='{{ fqdn }}',
+        legendFormat='{{ pod }} {{ instance }}',
         intervalFactor=2,
       ),
       basic.timeseries(
@@ -23,18 +23,18 @@ local seriesOverrides = import 'grafana/series_overrides.libsonnet';
         description='Blocked clients are waiting for a state change event using commands such as BLPOP. Blocked clients are not a sign of an issue on their own.',
         yAxisLabel='Blocked Clients',
         query=|||
-          sum(avg_over_time(redis_blocked_clients{environment="$environment", type="%(serviceType)s"}[$__interval])) by (fqdn)
+          sum(avg_over_time(redis_blocked_clients{environment="$environment", type="%(serviceType)s"}[$__interval])) by (instance, pod)
         ||| % formatConfig,
-        legendFormat='{{ fqdn }}',
+        legendFormat='{{ pod }} {{ instance }}',
         intervalFactor=2,
       ),
       basic.timeseries(
         title='Connections Received',
         yAxisLabel='Connections',
         query=|||
-          sum(rate(redis_connections_received_total{environment="$environment", type="%(serviceType)s"}[$__interval])) by (fqdn)
+          sum(rate(redis_connections_received_total{environment="$environment", type="%(serviceType)s"}[$__interval])) by (instance, pod)
         ||| % formatConfig,
-        legendFormat='{{ fqdn }}',
+        legendFormat='{{ pod }} {{ instance }}',
         intervalFactor=2,
       ),
     ], cols=2, rowHeight=10, startRow=startRow),
@@ -42,26 +42,26 @@ local seriesOverrides = import 'grafana/series_overrides.libsonnet';
   workload(serviceType, startRow)::
     local formatConfig = {
       serviceType: serviceType,
-      primarySelectorSnippet: 'and on (fqdn) redis_instance_info{role="master"}',
-      replicaSelectorSnippet: 'and on (fqdn) redis_instance_info{role="slave"}',
+      primarySelectorSnippet: 'and on (pod, fqdn) redis_instance_info{role="master"}',
+      replicaSelectorSnippet: 'and on (pod, fqdn) redis_instance_info{role="slave"}',
     };
     layout.grid([
       basic.timeseries(
         title='Operation Rate - Primary',
         yAxisLabel='Operations/sec',
         query=|||
-          sum(rate(redis_commands_total{environment="$environment", type="%(serviceType)s"}[$__interval]) %(primarySelectorSnippet)s ) by (fqdn)
+          sum(rate(redis_commands_total{environment="$environment", type="%(serviceType)s"}[$__interval]) %(primarySelectorSnippet)s ) by (instance, pod)
         ||| % formatConfig,
-        legendFormat='{{ fqdn }}',
+        legendFormat='{{ pod }} {{ instance }}',
         intervalFactor=1,
       ),
       basic.timeseries(
         title='Operation Rate - Replicas',
         yAxisLabel='Operations/sec',
         query=|||
-          sum(rate(redis_commands_total{environment="$environment", type="%(serviceType)s"}[$__interval]) %(replicaSelectorSnippet)s ) by (fqdn)
+          sum(rate(redis_commands_total{environment="$environment", type="%(serviceType)s"}[$__interval]) %(replicaSelectorSnippet)s ) by (instance, pod)
         ||| % formatConfig,
-        legendFormat='{{ fqdn }}',
+        legendFormat='{{ pod }} {{ instance }}',
         intervalFactor=1,
       ),
       basic.saturationTimeseries(
@@ -69,11 +69,11 @@ local seriesOverrides = import 'grafana/series_overrides.libsonnet';
         description='redis is single-threaded. This graph shows maximum utilization across all cores on each host. Lower is better.',
         query=|||
           max(
-            max_over_time(instance:redis_cpu_usage:rate1m{environment="$environment", type="%(serviceType)s", fqdn=~"%(serviceType)s-\\d\\d.*"}[$__interval])
+            max_over_time(instance:redis_cpu_usage:rate1m{environment="$environment", type="%(serviceType)s"}[$__interval])
               %(primarySelectorSnippet)s
-          ) by (fqdn)
+          ) by (instance, pod)
         ||| % formatConfig,
-        legendFormat='{{ fqdn }}',
+        legendFormat='{{ pod }} {{ instance }}',
         interval='30s',
         intervalFactor=1,
       ),
@@ -82,11 +82,11 @@ local seriesOverrides = import 'grafana/series_overrides.libsonnet';
         description='redis is single-threaded. This graph shows maximum utilization across all cores on each host. Lower is better.',
         query=|||
           max(
-            max_over_time(instance:redis_cpu_usage:rate1m{environment="$environment", type="%(serviceType)s", fqdn=~"%(serviceType)s-\\d\\d.*"}[$__interval])
+            max_over_time(instance:redis_cpu_usage:rate1m{environment="$environment", type="%(serviceType)s"}[$__interval])
               %(replicaSelectorSnippet)s
-          ) by (fqdn)
+          ) by (instance, pod)
         ||| % formatConfig,
-        legendFormat='{{ fqdn }}',
+        legendFormat='{{ pod }} {{ instance }}',
         interval='30s',
         intervalFactor=1,
       ),
@@ -96,9 +96,9 @@ local seriesOverrides = import 'grafana/series_overrides.libsonnet';
         query=|||
           sum(rate(redis_net_output_bytes_total{environment="$environment", type="%(serviceType)s"}[$__interval])
            %(primarySelectorSnippet)s
-          ) by (fqdn)
+          ) by (instance, pod)
         ||| % formatConfig,
-        legendFormat='{{ fqdn }}',
+        legendFormat='{{ pod }} {{ instance }}',
         intervalFactor=2,
       ),
       basic.timeseries(
@@ -107,9 +107,9 @@ local seriesOverrides = import 'grafana/series_overrides.libsonnet';
         query=|||
           sum(rate(redis_net_output_bytes_total{environment="$environment", type="%(serviceType)s"}[$__interval])
            %(replicaSelectorSnippet)s
-          ) by (fqdn)
+          ) by (instance, pod)
         ||| % formatConfig,
-        legendFormat='{{ fqdn }}',
+        legendFormat='{{ pod }} {{ instance }}',
         intervalFactor=2,
       ),
       basic.timeseries(
@@ -118,9 +118,9 @@ local seriesOverrides = import 'grafana/series_overrides.libsonnet';
         query=|||
           sum(rate(redis_net_input_bytes_total{environment="$environment", type="%(serviceType)s"}[$__interval])
             %(primarySelectorSnippet)s
-          ) by (fqdn)
+          ) by (instance, pod)
         ||| % formatConfig,
-        legendFormat='{{ fqdn }}',
+        legendFormat='{{ pod }} {{ instance }}',
         intervalFactor=2,
       ),
       basic.timeseries(
@@ -129,9 +129,9 @@ local seriesOverrides = import 'grafana/series_overrides.libsonnet';
         query=|||
           sum(rate(redis_net_input_bytes_total{environment="$environment", type="%(serviceType)s"}[$__interval])
             %(replicaSelectorSnippet)s
-          ) by (fqdn)
+          ) by (instance, pod)
         ||| % formatConfig,
-        legendFormat='{{ fqdn }}',
+        legendFormat='{{ pod }} {{ instance }}',
         intervalFactor=2,
       ),
       basic.timeseries(
@@ -140,9 +140,9 @@ local seriesOverrides = import 'grafana/series_overrides.libsonnet';
         query=|||
           sum(changes(redis_slowlog_last_id{environment="$environment", type="%(serviceType)s"}[$__interval])
             %(primarySelectorSnippet)s
-          ) by (fqdn)
+          ) by (instance, pod)
         ||| % formatConfig,
-        legendFormat='{{ fqdn }}',
+        legendFormat='{{ pod }} {{ instance }}',
         intervalFactor=10,
       ),
       basic.timeseries(
@@ -151,9 +151,9 @@ local seriesOverrides = import 'grafana/series_overrides.libsonnet';
         query=|||
           sum(changes(redis_slowlog_last_id{environment="$environment", type="%(serviceType)s"}[$__interval])
             %(replicaSelectorSnippet)s
-          ) by (fqdn)
+          ) by (instance, pod)
         ||| % formatConfig,
-        legendFormat='{{ fqdn }}',
+        legendFormat='{{ pod }} {{ instance }}',
         intervalFactor=10,
       ),
       basic.timeseries(
@@ -247,11 +247,11 @@ local seriesOverrides = import 'grafana/series_overrides.libsonnet';
                            label_replace(redis_memory_used_rss_bytes{environment="$environment", type="%(serviceType)s"}, "memtype", "rss","","")
                            or
                            label_replace(redis_memory_used_bytes{environment="$environment", type="%(serviceType)s"}, "memtype", "used","","")
-                         ) by (type, stage, environment, fqdn)
-                         / on(fqdn) group_left
+                         ) by (type, stage, environment, instance)
+                         / on(instance) group_left
                          node_memory_MemTotal_bytes{environment="$environment", type="%(serviceType)s"}
                        ||| % formatConfig,
-                       legendFormat='{{ fqdn }}',
+                       legendFormat='{{ pod }} {{ instance }}',
                        interval='30s',
                        intervalFactor=1,
                      )
@@ -281,7 +281,7 @@ local seriesOverrides = import 'grafana/series_overrides.libsonnet';
                        query=|||
                          max_over_time(redis_memory_used_bytes{environment="$environment", type="%(serviceType)s"}[$__interval])
                        ||| % formatConfig,
-                       legendFormat='{{ fqdn }}',
+                       legendFormat='{{ pod }} {{ instance }}',
                        intervalFactor=2,
                      ),
                      basic.timeseries(
@@ -289,9 +289,9 @@ local seriesOverrides = import 'grafana/series_overrides.libsonnet';
                        yAxisLabel='Bytes/sec',
                        format='Bps',
                        query=|||
-                         sum(rate(redis_memory_used_bytes{environment="$environment", type="%(serviceType)s"}[$__interval])) by (fqdn)
+                         sum(rate(redis_memory_used_bytes{environment="$environment", type="%(serviceType)s"}[$__interval])) by (instance, pod)
                        ||| % formatConfig,
-                       legendFormat='{{ fqdn }}',
+                       legendFormat='{{ pod }} {{ instance }}',
                        intervalFactor=2,
                      ),
                      basic.timeseries(
@@ -301,7 +301,7 @@ local seriesOverrides = import 'grafana/series_overrides.libsonnet';
                        query=|||
                          max_over_time(redis_memory_used_rss_bytes{environment="$environment", type="%(serviceType)s"}[$__interval])
                        ||| % formatConfig,
-                       legendFormat='{{ fqdn }}',
+                       legendFormat='{{ pod }} {{ instance }}',
                        intervalFactor=2,
                      ),
                      basic.timeseries(
@@ -310,25 +310,25 @@ local seriesOverrides = import 'grafana/series_overrides.libsonnet';
                        query=|||
                          redis_memory_used_rss_bytes{environment="$environment", type="%(serviceType)s"} / redis_memory_used_bytes{environment="$environment", type="%(serviceType)s"}
                        ||| % formatConfig,
-                       legendFormat='{{ fqdn }}',
+                       legendFormat='{{ pod }} {{ instance }}',
                        intervalFactor=2,
                      ),
                      basic.timeseries(
                        title='Expired Keys',
                        yAxisLabel='Keys',
                        query=|||
-                         sum(rate(redis_expired_keys_total{environment="$environment", type="%(serviceType)s"}[$__interval])) by (fqdn)
+                         sum(rate(redis_expired_keys_total{environment="$environment", type="%(serviceType)s"}[$__interval])) by (instance, pod)
                        ||| % formatConfig,
-                       legendFormat='{{ fqdn }}',
+                       legendFormat='{{ pod }} {{ instance }}',
                        intervalFactor=2,
                      ),
                      basic.timeseries(
                        title='Keys Rate of Change',
                        yAxisLabel='Keys/sec',
                        query=|||
-                         sum(rate(redis_db_keys{environment="$environment", type="%(serviceType)s"}[$__interval])) by (fqdn)
+                         sum(rate(redis_db_keys{environment="$environment", type="%(serviceType)s"}[$__interval])) by (instance, pod)
                        ||| % formatConfig,
-                       legendFormat='{{ fqdn }}',
+                       legendFormat='{{ pod }} {{ instance }}',
                        intervalFactor=2,
                      ),
                    ] +
@@ -347,7 +347,7 @@ local seriesOverrides = import 'grafana/series_overrides.libsonnet';
                            sum(redis:keyspace_misses:irate1m{environment="$environment", type="%(serviceType)s"} and on (instance) redis_instance_info{role="master"})
                            )
                          ||| % formatConfig,
-                         legendFormat='{{ fqdn }}',
+                         legendFormat='{{ pod }} {{ instance }}',
                          intervalFactor=2,
                        ),
                      ]
@@ -366,9 +366,9 @@ local seriesOverrides = import 'grafana/series_overrides.libsonnet';
         title='Connected Secondaries',
         yAxisLabel='Secondaries',
         query=|||
-          sum(avg_over_time(redis_connected_slaves{environment="$environment", type="%(serviceType)s"}[$__interval])) by (fqdn)
+          sum(avg_over_time(redis_connected_slaves{environment="$environment", type="%(serviceType)s"}[$__interval])) by (instance, pod)
         ||| % formatConfig,
-        legendFormat='{{ fqdn }}',
+        legendFormat='{{ pod }} {{ instance }}',
         intervalFactor=2,
       ),
       basic.timeseries(
@@ -377,7 +377,7 @@ local seriesOverrides = import 'grafana/series_overrides.libsonnet';
         format='bytes',
         query=|||
           redis_master_repl_offset{environment="$environment", type="%(serviceType)s"}
-          - on(fqdn) group_right
+          - on(instance) group_right
           redis_connected_slave_offset_bytes{environment="$environment", type="%(serviceType)s"}
         ||| % formatConfig,
         legendFormat='secondary {{ slave_ip }}',
@@ -387,9 +387,9 @@ local seriesOverrides = import 'grafana/series_overrides.libsonnet';
         title='Resync Events',
         yAxisLabel='Events',
         query=|||
-          sum(increase(redis_slave_resync_total{environment="$environment", type="%(serviceType)s", fqdn=~"%(serviceType)s-\\\\d\\\\d.*"}[$__interval])) by (fqdn)
+          sum(increase(redis_slave_resync_total{environment="$environment", type="%(serviceType)s"}[$__interval])) by (instance, pod)
         ||| % formatConfig,
-        legendFormat='{{ fqdn }}',
+        legendFormat='{{ pod }} {{ instance }}',
         intervalFactor=2,
       ),
     ], cols=2, rowHeight=10, startRow=startRow),
