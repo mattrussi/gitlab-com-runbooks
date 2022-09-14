@@ -2583,6 +2583,7 @@ services:
     tier: db
     teams:
       - scalability
+      - authentication_and_authorization
     friendly_name: Redis Sessions
     label: Service:Redis
     business:
@@ -2711,6 +2712,7 @@ services:
     tier: db
     teams:
       - scalability
+      - pipeline_execution
     friendly_name: Redis TraceChunks
     label: Service:Redis
     business:
