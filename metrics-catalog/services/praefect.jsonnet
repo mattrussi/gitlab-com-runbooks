@@ -16,6 +16,16 @@ metricsCatalog.serviceDefinition({
     apdexScore: 0.995,
     errorRatio: 0.9995,  // 99.95% of Praefect requests should succeed, over multiple window periods
   },
+  otherThresholds: {
+    // Deployment thresholds are optional, and when they are specified, they are
+    // measured against the same multi-burn-rates as the monitoring indicators.
+    // When a service is in violation, deployments may be blocked or may be rolled
+    // back.
+    deployment: {
+      apdexScore: 0.995,
+      errorRatio: 0.9995,
+    },
+  },
   serviceDependencies: {
     gitaly: true,
     'cloud-sql': true,

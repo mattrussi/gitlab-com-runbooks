@@ -559,6 +559,16 @@ groups:
       tier: stor
       type: gitaly
     expr: "0.000500"
+  - record: slo:min:deployment:gitlab_service_apdex:ratio
+    labels:
+      tier: stor
+      type: gitaly
+    expr: "0.999000"
+  - record: slo:max:deployment:gitlab_service_errors:ratio
+    labels:
+      tier: stor
+      type: gitaly
+    expr: "0.000500"
   - record: slo:max:events:gitlab_service_errors:ratio
     labels:
       tier: inf
@@ -590,6 +600,16 @@ groups:
   - record: slo:max:events:gitlab_service_errors:ratio
     labels:
       component: grpc_requests
+      tier: sv
+      type: kas
+    expr: "0.000500"
+  - record: slo:min:deployment:gitlab_service_apdex:ratio
+    labels:
+      tier: sv
+      type: kas
+    expr: "0.950000"
+  - record: slo:max:deployment:gitlab_service_errors:ratio
+    labels:
       tier: sv
       type: kas
     expr: "0.000500"
@@ -1082,6 +1102,16 @@ groups:
       tier: stor
       type: praefect
     expr: "0.000500"
+  - record: slo:min:deployment:gitlab_service_apdex:ratio
+    labels:
+      tier: stor
+      type: praefect
+    expr: "0.995000"
+  - record: slo:max:deployment:gitlab_service_errors:ratio
+    labels:
+      tier: stor
+      type: praefect
+    expr: "0.000500"
   - record: slo:min:events:gitlab_service_apdex:ratio
     labels:
       tier: sv
@@ -1504,6 +1534,16 @@ groups:
       tier: sv
       type: registry
     expr: "0.000050"
+  - record: slo:min:deployment:gitlab_service_apdex:ratio
+    labels:
+      tier: inf
+      type: search
+    expr: "0.900000"
+  - record: slo:max:deployment:gitlab_service_errors:ratio
+    labels:
+      tier: inf
+      type: search
+    expr: "0.100000"
   - record: slo:min:events:gitlab_service_apdex:ratio
     labels:
       tier: inf
@@ -1804,6 +1844,16 @@ groups:
       tier: sv
       type: web-pages
     expr: "0.000500"
+  - record: slo:min:deployment:gitlab_service_apdex:ratio
+    labels:
+      tier: sv
+      type: web-pages
+    expr: "0.995000"
+  - record: slo:max:deployment:gitlab_service_errors:ratio
+    labels:
+      tier: sv
+      type: web-pages
+    expr: "0.000500"
   - record: slo:min:mtbf:gitlab_service_apdex:ratio
     labels:
       tier: sv
@@ -1934,6 +1984,16 @@ groups:
   - record: slo:max:events:gitlab_service_errors:ratio
     labels:
       component: workhorse
+      tier: sv
+      type: websockets
+    expr: "0.000500"
+  - record: slo:min:deployment:gitlab_service_apdex:ratio
+    labels:
+      tier: sv
+      type: websockets
+    expr: "0.900000"
+  - record: slo:max:deployment:gitlab_service_errors:ratio
+    labels:
       tier: sv
       type: websockets
     expr: "0.000500"
