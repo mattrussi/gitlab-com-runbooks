@@ -33,8 +33,8 @@ groups:
     expr: redis_connected_slaves > 1
   - record: instance:redis_cpu_usage:rate1m
     expr: >
-      sum by (environment, type, fqdn)(
-        rate(namedprocess_namegroup_thread_cpu_seconds_total{type=~"redis.*", groupname="redis-server", threadname="redis-server"}[1m])
+      sum by (environment, type, fqdn, instance) (
+        rate(namedprocess_namegroup_thread_cpu_seconds_total{type=~"redis.*", groupname="redis-server", threadname="redis-server"}[1m]) or rate(container_cpu_usage_seconds_total:labeled{type=~"redis.*"}[1m])
       )
 - name: Redis Alerts
   rules:
