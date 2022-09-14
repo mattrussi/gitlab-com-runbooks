@@ -30,7 +30,7 @@ local definitionValidor = validator.new({
   title: validator.string,
   severity: validator.setMember(severities),
   horizontallyScalable: validator.boolean,
-  appliesTo: validator.or(validator.array, validator.object),
+  appliesTo: validator.array,
   description: validator.string,
   grafana_dashboard_uid: validator.string,
   resourceLabels: validator.array,
@@ -42,23 +42,6 @@ local definitionValidor = validator.new({
     hard: sloValidator,
   },
 });
-
-
-local getAllowedServiceApplicator(allowedList) =
-  local allowedSet = std.set(allowedList);
-  function(type) std.setMember(type, allowedSet);
-
-local getDisallowedServiceApplicator(disallowedList) =
-  local disallowedSet = std.set(disallowedList);
-  function(type) !std.setMember(type, disallowedSet);
-
-// Returns a function that returns a boolean to indicate whether a service
-// applies for the provided definition
-local getServiceApplicator(appliesTo) =
-  if std.isArray(appliesTo) then
-    getAllowedServiceApplicator(appliesTo)
-  else
-    getDisallowedServiceApplicator(appliesTo.allExcept);
 
 local defaults = {
   queryFormatConfig: {},
@@ -77,21 +60,15 @@ local validateAndApplyDefaults(definition) =
 
 local typeFilter(definition) =
   (
-    if std.isArray(definition.appliesTo) then
-      if std.length(definition.appliesTo) > 1 then
-        { type: { re: std.join('|', definition.appliesTo) } }
-      else
-        { type: definition.appliesTo[0] }
+    if std.length(definition.appliesTo) > 1 then
+      { type: { re: std.join('|', definition.appliesTo) } }
     else
-      if std.length(definition.appliesTo.allExcept) > 0 then
-        { type: [{ ne: '' }, { nre: std.join('|', definition.appliesTo.allExcept) }] }
-      else
-        { type: { ne: '' } }
+      { type: definition.appliesTo[0] }
   );
 
 local resourceSaturationPoint = function(options)
   local definition = validateAndApplyDefaults(options);
-  local serviceApplicator = getServiceApplicator(definition.appliesTo);
+  local serviceApplicator = function(type) std.setMember(type, std.set(definition.appliesTo));
 
   definition {
     getQuery(selectorHash, rangeInterval, maxAggregationLabels=[])::
@@ -295,13 +272,7 @@ local resourceSaturationPoint = function(options)
     // For allowLists: always use the first item
     // For blockLists: use the default or web
     getDefaultGrafanaType()::
-      if std.isArray(definition.appliesTo) then
-        definition.appliesTo[0]
-      else
-        if std.objectHas(definition.appliesTo, 'default') then
-          definition.appliesTo.default
-        else
-          'web',
+      definition.appliesTo[0],
   };
 
 {

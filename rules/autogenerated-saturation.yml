@@ -531,15 +531,15 @@ groups:
         clamp_min(
           clamp_max(
             (
-              process_open_fds{type!="",type!~"cloud-sql|nat|waf|kube"}
+              process_open_fds{type=~"api|camoproxy|ci-runners|consul|customersdot|external-dns|frontend|google-cloud-storage|git|gitaly|jaeger|kas|kube|logging|mailroom|monitoring|nginx|patroni|patroni-registry|patroni-ci|postgres-archive|pgbouncer|pgbouncer-registry|pgbouncer-ci|plantuml|praefect|pvs|redis-cache|redis-sidekiq|redis-tracechunks|redis-ratelimiting|redis-sessions|redis|registry|search|sentry|sidekiq|vault|web-pages|web|websockets|woodhouse"}
               /
-              process_max_fds{type!="",type!~"cloud-sql|nat|waf|kube"}
+              process_max_fds{type=~"api|camoproxy|ci-runners|consul|customersdot|external-dns|frontend|google-cloud-storage|git|gitaly|jaeger|kas|kube|logging|mailroom|monitoring|nginx|patroni|patroni-registry|patroni-ci|postgres-archive|pgbouncer|pgbouncer-registry|pgbouncer-ci|plantuml|praefect|pvs|redis-cache|redis-sidekiq|redis-tracechunks|redis-ratelimiting|redis-sessions|redis|registry|search|sentry|sidekiq|vault|web-pages|web|websockets|woodhouse"}
             )
             or
             (
-              ruby_file_descriptors{type!="",type!~"cloud-sql|nat|waf|kube"}
+              ruby_file_descriptors{type=~"api|camoproxy|ci-runners|consul|customersdot|external-dns|frontend|google-cloud-storage|git|gitaly|jaeger|kas|kube|logging|mailroom|monitoring|nginx|patroni|patroni-registry|patroni-ci|postgres-archive|pgbouncer|pgbouncer-registry|pgbouncer-ci|plantuml|praefect|pvs|redis-cache|redis-sidekiq|redis-tracechunks|redis-ratelimiting|redis-sessions|redis|registry|search|sentry|sidekiq|vault|web-pages|web|websockets|woodhouse"}
               /
-              ruby_process_max_fds{type!="",type!~"cloud-sql|nat|waf|kube"}
+              ruby_process_max_fds{type=~"api|camoproxy|ci-runners|consul|customersdot|external-dns|frontend|google-cloud-storage|git|gitaly|jaeger|kas|kube|logging|mailroom|monitoring|nginx|patroni|patroni-registry|patroni-ci|postgres-archive|pgbouncer|pgbouncer-registry|pgbouncer-ci|plantuml|praefect|pvs|redis-cache|redis-sidekiq|redis-tracechunks|redis-ratelimiting|redis-sessions|redis|registry|search|sentry|sidekiq|vault|web-pages|web|websockets|woodhouse"}
             )
             ,
             1)

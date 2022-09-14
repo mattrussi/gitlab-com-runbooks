@@ -34,6 +34,9 @@ local serviceApplicableSaturationTypes(service)
       applicableSaturationTypes():: serviceApplicableSaturationTypes(service),
     },
 
+  findServicesExcluding(first=null, excluding)::
+    findServiceTypesWithFirst(first, function(s) !std.setMember(s.type, excluding)),
+
   findServicesWithTag(first=null, tag)::
     findServiceTypesWithFirst(first, function(s) std.setMember(tag, s.tags)),
 
