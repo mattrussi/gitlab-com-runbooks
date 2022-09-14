@@ -3041,7 +3041,7 @@ services:
   - name: version
     tier: sv
     teams:
-      - engineering_productivity
+      - product_intelligence
     friendly_name: version.gitlab.com
     label: Service:Version
     business:
