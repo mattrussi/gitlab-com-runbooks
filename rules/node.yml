@@ -65,13 +65,6 @@ groups:
     expr: avg_over_time(instance:node_memory_utilization:ratio[300s])
   - record: instance:memory_utilization:ratio_q95
     expr: quantile_over_time(0.95, instance:node_memory_utilization:ratio[300s])
-# TODO(bjk): This is a proposal for an alert. We should send this to a webhook that opens an issue.
-#  - alert: NodeUnderUtilized
-#    expr: >
-#      (quantile_over_time(0.95, instance:cpu_utilization:ratio_q95[1d]) * 100 < 10)
-#        and
-#      (quantile_over_time(0.95, instance:memory_utilization:ratio_q95[1d]) * 100 < 10)
-#    for: 7d
 
 - name: Node memory
   rules:
