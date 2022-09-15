@@ -4,7 +4,7 @@ local resourceSaturationPoint = metricsCatalog.resourceSaturationPoint;
 {
   elastic_disk_space: resourceSaturationPoint({
     title: 'Disk Utilization Overall',
-    severity: 's3',
+    severity: 's2',
     horizontallyScalable: true,
     appliesTo: ['logging', 'search'],
     description: |||
@@ -22,8 +22,8 @@ local resourceSaturationPoint = metricsCatalog.resourceSaturationPoint;
       )
     |||,
     slos: {
-      soft: 0.80,
-      hard: 0.90,
+      soft: 0.70,
+      hard: 0.85,
     },
   }),
 }

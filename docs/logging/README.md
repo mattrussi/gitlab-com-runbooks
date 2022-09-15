@@ -21,6 +21,7 @@
 * [../ci-runners/ci_pending_builds.md](../ci-runners/ci_pending_builds.md)
 * [Cloudflare Logs](../cloudflare/logging.md)
 * [Cloudflare: Managing Traffic](../cloudflare/managing-traffic.md)
+* [Elastic Nodes Disk Space Saturation](../elastic/disk_space_saturation.md)
 * [../elastic/elastic-cloud.md](../elastic/elastic-cloud.md)
 * [../elastic/elasticsearch-integration-in-gitlab.md](../elastic/elasticsearch-integration-in-gitlab.md)
 * [../elastic/kibana.md](../elastic/kibana.md)

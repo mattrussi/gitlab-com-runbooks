@@ -1251,11 +1251,11 @@ groups:
   - record: slo:max:soft:gitlab_component_saturation:ratio
     labels:
       component: elastic_disk_space
-    expr: "0.8"
+    expr: "0.7"
   - record: slo:max:hard:gitlab_component_saturation:ratio
     labels:
       component: elastic_disk_space
-    expr: "0.9"
+    expr: "0.85"
   - record: slo:max:soft:gitlab_component_saturation:ratio
     labels:
       component: elastic_jvm_heap_memory
@@ -1777,7 +1777,7 @@ groups:
       component: elastic_disk_space
       horiz_scaling: "yes"
       quantile: max
-      severity: s3
+      severity: s2
     expr: "1"
   - record: gitlab_component_saturation_info
     labels:
@@ -2741,8 +2741,9 @@ groups:
       runbook: docs/{{ $labels.type }}/README.md
     labels:
       alert_type: cause
+      pager: pagerduty
       rules_domain: general
-      severity: s3
+      severity: s2
     expr: |
       gitlab_component_saturation:ratio{component="elastic_disk_space"} > on(component) group_left
       slo:max:hard:gitlab_component_saturation:ratio{component="elastic_disk_space"}
