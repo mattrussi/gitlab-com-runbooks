@@ -147,12 +147,12 @@ groups:
 
   - alert: PrometheusTSDBReloadsFailing
     expr: increase(prometheus_tsdb_reloads_failures_total[2h]) > 0
-    for: 12h
+    for: 6h
     labels:
       severity: s4
       alert_type: cause
     annotations:
-      description: 'Prometheus {{$labels.pod}} {{$labels.fqdn}} had {{$value | humanize}} reload failures over the last four hours.'
+      description: 'Prometheus {{$labels.pod}} {{$labels.fqdn}} has {{$value | humanize}} reload failures.'
       title: Prometheus has issues reloading data blocks from disk
 
   - alert: PrometheusNotIngestingSamples

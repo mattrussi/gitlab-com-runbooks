@@ -120,7 +120,7 @@ groups:
           kube_statefulset_status_replicas_ready{job="kube-state-metrics"}
             !=
           kube_statefulset_status_replicas{job="kube-state-metrics"}
-        for: 12h
+        for: 6h
         labels:
           tier: inf
           type: kube
