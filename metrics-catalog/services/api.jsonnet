@@ -211,5 +211,11 @@ metricsCatalog.serviceDefinition({
         ],
         dependsOn: dependOnPatroni.sqlComponents,
       },
+
+    global_search:
+      sliLibrary.get('global_search').generateServiceLevelIndicator(railsSelector) {
+        serviceAggregation: false,  // Don't add this to the request rate of the service
+        severity: 's3',  // Don't page SREs for this SLI
+      },
   },
 })

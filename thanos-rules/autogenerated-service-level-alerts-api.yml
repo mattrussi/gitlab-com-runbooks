@@ -5,6 +5,326 @@ groups:
   interval: 1m
   partial_response_strategy: warn
   rules:
+  - alert: ApiServiceGlobalSearchApdexSLOViolation
+    for: 2m
+    annotations:
+      title: The global_search SLI of the api service (`{{ $labels.stage }}` stage)
+        has an apdex violating SLO
+      description: |
+        The number of Global Search search requests meeting their duration target based on the 99.95th percentile of the search with the same parameters.
+
+        Currently the apdex value is {{ $value | humanizePercentage }}.
+      grafana_dashboard_id: api-main/api-overview
+      grafana_dashboard_link: https://dashboards.gitlab.net/d/api-main/api-overview?from=now-6h/m&to=now-1m/m&var-environment={{
+        $labels.environment }}&var-stage={{ $labels.stage }}
+      grafana_min_zoom_hours: "6"
+      grafana_panel_id: "4181740019"
+      grafana_variables: environment,stage
+      runbook: docs/api/README.md
+    labels:
+      aggregation: component
+      alert_class: slo_violation
+      alert_type: symptom
+      feature_category: global_search
+      rules_domain: general
+      severity: s3
+      sli_type: apdex
+      slo_alert: "yes"
+      user_impacting: "yes"
+      window: 1h
+    expr: |
+      (
+        (
+          gitlab_component_apdex:ratio_1h{component="global_search",monitor="global",type="api"}
+          < (1 - 14.4 * 0.005000)
+        )
+        and
+        (
+          gitlab_component_apdex:ratio_5m{component="global_search",monitor="global",type="api"}
+          < (1 - 14.4 * 0.005000)
+        )
+      )
+      and on(env,environment,tier,type,stage,component)
+      (
+        sum by(env,environment,tier,type,stage,component) (gitlab_component_ops:rate_1h{component="global_search",monitor="global",type="api"}) >= 1
+      )
+  - alert: ApiServiceGlobalSearchApdexSLOViolation
+    for: 2m
+    annotations:
+      title: The global_search SLI of the api service (`{{ $labels.stage }}` stage)
+        has an apdex violating SLO
+      description: |
+        The number of Global Search search requests meeting their duration target based on the 99.95th percentile of the search with the same parameters.
+
+        Currently the apdex value is {{ $value | humanizePercentage }}.
+      grafana_dashboard_id: api-main/api-overview
+      grafana_dashboard_link: https://dashboards.gitlab.net/d/api-main/api-overview?from=now-6h/m&to=now-1m/m&var-environment={{
+        $labels.environment }}&var-stage={{ $labels.stage }}
+      grafana_min_zoom_hours: "6"
+      grafana_panel_id: "4181740019"
+      grafana_variables: environment,stage
+      runbook: docs/api/README.md
+    labels:
+      aggregation: component
+      alert_class: slo_violation
+      alert_type: symptom
+      feature_category: global_search
+      rules_domain: general
+      severity: s3
+      sli_type: apdex
+      slo_alert: "yes"
+      user_impacting: "yes"
+      window: 6h
+    expr: |
+      (
+        (
+          gitlab_component_apdex:ratio_6h{component="global_search",monitor="global",type="api"}
+          < (1 - 6 * 0.005000)
+        )
+        and
+        (
+          gitlab_component_apdex:ratio_30m{component="global_search",monitor="global",type="api"}
+          < (1 - 6 * 0.005000)
+        )
+      )
+      and on(env,environment,tier,type,stage,component)
+      (
+        sum by(env,environment,tier,type,stage,component) (gitlab_component_ops:rate_6h{component="global_search",monitor="global",type="api"}) >= 0.16667
+      )
+  - alert: ApiServiceGlobalSearchApdexSLOViolationRegional
+    for: 2m
+    annotations:
+      title: The global_search SLI of the api service in region `{{ $labels.region
+        }}` has an apdex violating SLO
+      description: |
+        The number of Global Search search requests meeting their duration target based on the 99.95th percentile of the search with the same parameters.
+
+        Note that this alert is specific to the `{{ $labels.region }}` region.
+
+        Currently the apdex value is {{ $value | humanizePercentage }}.
+      grafana_dashboard_id: api-main/api-overview
+      grafana_dashboard_link: https://dashboards.gitlab.net/d/api-main/api-overview?from=now-6h/m&to=now-1m/m&var-environment={{
+        $labels.environment }}&var-stage={{ $labels.stage }}
+      grafana_min_zoom_hours: "6"
+      grafana_panel_id: "4181740019"
+      grafana_variables: environment,stage
+      runbook: docs/api/README.md
+    labels:
+      aggregation: regional_component
+      alert_class: slo_violation
+      alert_type: symptom
+      feature_category: global_search
+      rules_domain: general
+      severity: s3
+      sli_type: apdex
+      slo_alert: "yes"
+      user_impacting: "yes"
+      window: 1h
+    expr: |
+      (
+        (
+          gitlab_regional_sli_apdex:ratio_1h{component="global_search",monitor="global",type="api"}
+          < (1 - 14.4 * 0.005000)
+        )
+        and
+        (
+          gitlab_regional_sli_apdex:ratio_5m{component="global_search",monitor="global",type="api"}
+          < (1 - 14.4 * 0.005000)
+        )
+      )
+      and on(env,environment,tier,type,stage,region,component)
+      (
+        sum by(env,environment,tier,type,stage,region,component) (gitlab_regional_sli_ops:rate_1h{component="global_search",monitor="global",type="api"}) >= 1
+      )
+  - alert: ApiServiceGlobalSearchApdexSLOViolationRegional
+    for: 2m
+    annotations:
+      title: The global_search SLI of the api service in region `{{ $labels.region
+        }}` has an apdex violating SLO
+      description: |
+        The number of Global Search search requests meeting their duration target based on the 99.95th percentile of the search with the same parameters.
+
+        Note that this alert is specific to the `{{ $labels.region }}` region.
+
+        Currently the apdex value is {{ $value | humanizePercentage }}.
+      grafana_dashboard_id: api-main/api-overview
+      grafana_dashboard_link: https://dashboards.gitlab.net/d/api-main/api-overview?from=now-6h/m&to=now-1m/m&var-environment={{
+        $labels.environment }}&var-stage={{ $labels.stage }}
+      grafana_min_zoom_hours: "6"
+      grafana_panel_id: "4181740019"
+      grafana_variables: environment,stage
+      runbook: docs/api/README.md
+    labels:
+      aggregation: regional_component
+      alert_class: slo_violation
+      alert_type: symptom
+      feature_category: global_search
+      rules_domain: general
+      severity: s3
+      sli_type: apdex
+      slo_alert: "yes"
+      user_impacting: "yes"
+      window: 6h
+    expr: |
+      (
+        (
+          gitlab_regional_sli_apdex:ratio_6h{component="global_search",monitor="global",type="api"}
+          < (1 - 6 * 0.005000)
+        )
+        and
+        (
+          gitlab_regional_sli_apdex:ratio_30m{component="global_search",monitor="global",type="api"}
+          < (1 - 6 * 0.005000)
+        )
+      )
+      and on(env,environment,tier,type,stage,region,component)
+      (
+        sum by(env,environment,tier,type,stage,region,component) (gitlab_regional_sli_ops:rate_6h{component="global_search",monitor="global",type="api"}) >= 0.16667
+      )
+  - alert: ApiServiceGlobalSearchTrafficCessation
+    for: 5m
+    annotations:
+      title: The global_search SLI of the api service (`{{ $labels.stage }}` stage)
+        has not received any traffic in the past 30m
+      description: |
+        The number of Global Search search requests meeting their duration target based on the 99.95th percentile of the search with the same parameters.
+
+        This alert signifies that the SLI is reporting a cessation of traffic; the signal is present, but is zero.
+      grafana_dashboard_id: api-main/api-overview
+      grafana_dashboard_link: https://dashboards.gitlab.net/d/api-main/api-overview?from=now-6h/m&to=now-1m/m&var-environment={{
+        $labels.environment }}&var-stage={{ $labels.stage }}
+      grafana_min_zoom_hours: "6"
+      grafana_panel_id: "3070581511"
+      grafana_variables: environment,stage
+      promql_template_1: |
+        sum by (env,environment,tier,stage) (
+          rate(gitlab_sli_global_search_apdex_total{environment="{{ $labels.environment }}",job="gitlab-rails",stage="{{ $labels.stage }}",type="api"}[5m])
+        )
+      runbook: docs/api/README.md
+    labels:
+      aggregation: component
+      alert_class: traffic_cessation
+      alert_type: cause
+      feature_category: global_search
+      rules_domain: general
+      severity: s3
+      sli_type: ops
+      slo_alert: "no"
+      user_impacting: "yes"
+    expr: |
+      gitlab_component_ops:rate_30m{component="global_search",monitor="global",stage="main",type="api"} == 0
+      and
+      gitlab_component_ops:rate_30m{component="global_search",monitor="global",stage="main",type="api"} offset 1h >= 0.16666666666666666
+  - alert: ApiServiceGlobalSearchTrafficAbsent
+    for: 30m
+    annotations:
+      title: The global_search SLI of the api service (`{{ $labels.stage }}` stage)
+        has not reported any traffic in the past 30m
+      description: |
+        The number of Global Search search requests meeting their duration target based on the 99.95th percentile of the search with the same parameters.
+
+        This alert signifies that the SLI was previously reporting traffic, but is no longer - the signal is absent.
+
+        This could be caused by a change to the metrics used in the SLI, or by the service not receiving traffic.
+      grafana_dashboard_id: api-main/api-overview
+      grafana_dashboard_link: https://dashboards.gitlab.net/d/api-main/api-overview?from=now-6h/m&to=now-1m/m&var-environment={{
+        $labels.environment }}&var-stage={{ $labels.stage }}
+      grafana_min_zoom_hours: "6"
+      grafana_panel_id: "3070581511"
+      grafana_variables: environment,stage
+      promql_template_1: |
+        sum by (env,environment,tier,stage) (
+          rate(gitlab_sli_global_search_apdex_total{environment="{{ $labels.environment }}",job="gitlab-rails",stage="{{ $labels.stage }}",type="api"}[5m])
+        )
+      runbook: docs/api/README.md
+    labels:
+      aggregation: component
+      alert_class: traffic_cessation
+      alert_type: cause
+      feature_category: global_search
+      rules_domain: general
+      severity: s3
+      sli_type: ops
+      slo_alert: "no"
+      user_impacting: "yes"
+    expr: |
+      gitlab_component_ops:rate_5m{component="global_search",monitor="global",stage="main",type="api"} offset 1h
+      unless
+      gitlab_component_ops:rate_5m{component="global_search",monitor="global",stage="main",type="api"}
+  - alert: ApiServiceGlobalSearchTrafficCessationRegional
+    for: 5m
+    annotations:
+      title: The global_search SLI of the api service in region `{{ $labels.region
+        }}` has not received any traffic in the past 30m
+      description: |
+        The number of Global Search search requests meeting their duration target based on the 99.95th percentile of the search with the same parameters.
+
+        This alert signifies that the SLI is reporting a cessation of traffic; the signal is present, but is zero.
+
+        Note that this alert is specific to the `{{ $labels.region }}` region.
+      grafana_dashboard_id: api-main/api-overview
+      grafana_dashboard_link: https://dashboards.gitlab.net/d/api-main/api-overview?from=now-6h/m&to=now-1m/m&var-environment={{
+        $labels.environment }}&var-stage={{ $labels.stage }}
+      grafana_min_zoom_hours: "6"
+      grafana_panel_id: "3070581511"
+      grafana_variables: environment,stage
+      promql_template_1: |
+        sum by (env,environment,tier,stage,region) (
+          rate(gitlab_sli_global_search_apdex_total{environment="{{ $labels.environment }}",job="gitlab-rails",region="{{ $labels.region }}",stage="{{ $labels.stage }}",type="api"}[5m])
+        )
+      runbook: docs/api/README.md
+    labels:
+      aggregation: regional_component
+      alert_class: traffic_cessation
+      alert_type: cause
+      feature_category: global_search
+      rules_domain: general
+      severity: s3
+      sli_type: ops
+      slo_alert: "no"
+      user_impacting: "yes"
+    expr: |
+      gitlab_regional_sli_ops:rate_30m{component="global_search",monitor="global",stage="main",type="api"} == 0
+      and
+      gitlab_regional_sli_ops:rate_30m{component="global_search",monitor="global",stage="main",type="api"} offset 1h >= 0.16666666666666666
+  - alert: ApiServiceGlobalSearchTrafficAbsentRegional
+    for: 30m
+    annotations:
+      title: The global_search SLI of the api service in region `{{ $labels.region
+        }}` has not reported any traffic in the past 30m
+      description: |
+        The number of Global Search search requests meeting their duration target based on the 99.95th percentile of the search with the same parameters.
+
+        This alert signifies that the SLI was previously reporting traffic, but is no longer - the signal is absent.
+
+        This could be caused by a change to the metrics used in the SLI, or by the service not receiving traffic.
+
+        Note that this alert is specific to the `{{ $labels.region }}` region.
+      grafana_dashboard_id: api-main/api-overview
+      grafana_dashboard_link: https://dashboards.gitlab.net/d/api-main/api-overview?from=now-6h/m&to=now-1m/m&var-environment={{
+        $labels.environment }}&var-stage={{ $labels.stage }}
+      grafana_min_zoom_hours: "6"
+      grafana_panel_id: "3070581511"
+      grafana_variables: environment,stage
+      promql_template_1: |
+        sum by (env,environment,tier,stage,region) (
+          rate(gitlab_sli_global_search_apdex_total{environment="{{ $labels.environment }}",job="gitlab-rails",region="{{ $labels.region }}",stage="{{ $labels.stage }}",type="api"}[5m])
+        )
+      runbook: docs/api/README.md
+    labels:
+      aggregation: regional_component
+      alert_class: traffic_cessation
+      alert_type: cause
+      feature_category: global_search
+      rules_domain: general
+      severity: s3
+      sli_type: ops
+      slo_alert: "no"
+      user_impacting: "yes"
+    expr: |
+      gitlab_regional_sli_ops:rate_5m{component="global_search",monitor="global",stage="main",type="api"} offset 1h
+      unless
+      gitlab_regional_sli_ops:rate_5m{component="global_search",monitor="global",stage="main",type="api"}
   - alert: ApiServiceGraphqlQueriesApdexSLOViolation
     for: 2m
     annotations:
