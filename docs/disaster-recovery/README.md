@@ -4,7 +4,7 @@ This contains the relevant information for Disaster Recovery on GitLab.com as it
 
 ### Recovery from a zonal outage
 
-The Reliability team validates the ability recovery from a disaster that impacts a single availability zone.
+The Reliability team validates the ability of recovery from a disaster that impacts a single availability zone.
 
 GitLab.com is deployed in single region, [us-east1 in GCP](https://about.gitlab.com/handbook/engineering/infrastructure/production/architecture/), a regional outage is not currently in scope for Infrastructure disaster recovery validation; for more information, see the [discovery issue for regional recovery](https://gitlab.com/gitlab-com/gl-infra/reliability/-/issues/16250).
 
