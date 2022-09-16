@@ -213,7 +213,7 @@ main() {
     gcloudCmd="echo -e ${_YEL}Would run:${_BBLK} $gcloudCmd"
   fi
 
-  if [[ $($gcloudCmd config get-value project) == *production* ]]; then
+  if [[ $($gcloudCmdNoDryRun config get-value project) == *production* ]]; then
     echo -e "${_BRED}!! This script is not meant to be used against Production !!${_NORM}"
     exit 1
   fi
