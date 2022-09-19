@@ -210,7 +210,7 @@ main() {
   gcloudCmd="gcloud --quiet --project $project"
   gcloudCmdNoDryRun="$gcloudCmd"
   if [[ ${dryRun:-} == true ]]; then
-    gcloudCmd="echo -e ${_YEL}Would run:${_BBLK} $gcloudCmd"
+    gcloudCmd="echo -e ${_YEL}Would run:${_NORM} $gcloudCmd"
   fi
 
   if [[ $($gcloudCmdNoDryRun config get-value project) == *production* ]]; then
