@@ -75,6 +75,7 @@
 * [Blocked user login attempts are high](../uncategorized/blocked-user-logins.md)
 * [Gemnasium is down](../uncategorized/gemnasium_is_down.md)
 * [../uncategorized/namespace-restore.md](../uncategorized/namespace-restore.md)
+* [OPS-GITLAB-NET Users and Access Tokens](../uncategorized/ops-gitlab-net-pat.md)
 * [Pingdom](../uncategorized/pingdom.md)
 * [Ruby profiling](../uncategorized/ruby-profiling.md)
 * [Shared Configurations](../uncategorized/shared-configurations.md)
