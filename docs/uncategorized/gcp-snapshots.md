@@ -1,15 +1,22 @@
 # Google Cloud Snapshots
 
-We take snapshots of each disk with the label `do_snapshots=true`.
-We use the [gitlab-production-snapshots](https://gitlab.com/gitlab-restore/gitlab-production-snapshots)
-project to take snapshots daily using a scheduled CI job. We keep 14 days worth of snapshots.
+We utilize GCP [Scheduled Snapshots](https://cloud.google.com/compute/docs/disks/scheduled-snapshots) to
+automate the creation and the cleaning-up of disk snapshots. The schedule policy is created in Terraform
+([example in staging](https://gitlab.com/gitlab-com/gl-infra/config-mgmt/-/blob/d7287a47adfdca6cce76ca455e0684863f248e57/environments/gstg/main.tf#L262)),
+currently is configured to take a snapshot every hour and keep all snapshots for 14 days. Individual modules (e.g. `postgres-dr-delayed`)
+has to be configured to attach its disk to the snapshot policy, usually by specifying the `data_disk_snapshot_policy` variable, but this
+could be different depending on the underlying module provision the resource.
 
-Currently all snapshot restores are manual. We will be creating a script
-to automate this, but until then the manual steps are recorded here. Once
-the script exists, this runbook should be updated to include info on how
-to use that script.
+Previously, we used to take snapshots of each disk with the label `do_snapshots=true` by means of scheduled CI job
+([example in production](https://gitlab.com/gitlab-restore/gitlab-production-snapshots)).
 
-The first test of these snapshots can be found in [this issue](https://gitlab.com/gitlab-com/migration/issues/560).
+## Alerting
+
+We have an alert to check if snapshots are being created every hour as expected. In the event of this alert being triggered,
+we need to check the existence of the snapshot policy ([example](https://gitlab.com/gitlab-com/gl-infra/config-mgmt/-/blob/d7287a47adfdca6cce76ca455e0684863f248e57/environments/gstg/main.tf#L262))
+and that there are disks attached to it. This can be viewed quickly from the GCP dashboard (Compute Engine > Storage > Snapshots > Snapshot Schedules).
+
+If the resources are there as expected, we can check Stackdriver logs for errors.
 
 ## Manual Restore Procedure
 

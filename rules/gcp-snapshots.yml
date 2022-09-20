@@ -1,0 +1,14 @@
+groups:
+- name: gcp-snapshots.rules
+  rules:
+  - alert: GCPScheduledSnapshotsDelayed
+    expr: absent_over_time(stackdriver_gce_disk_logging_googleapis_com_user_scheduled_snapshots[1h]) == 1
+    for: 1h
+    labels:
+      pager: pagerduty
+      severity: s1
+      alert_type: cause
+    annotations:
+      description: GCP scheduled snapshot does seem to have been run successfully. Please follow the runbook to review the problem.
+      runbook: docs/uncategorized/gcp-snapshots.md
+      title: GCP scheduled snapshots are delayed
