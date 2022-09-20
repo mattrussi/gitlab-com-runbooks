@@ -107,9 +107,23 @@ ARGV.each do |idx_filename|
           keys = [args[1]]
         when "hdel"
           keys = [args[1]]
+        when "lpush"
+          keys = [args[1]]
+        when "lpop"
+          keys = args[1..]
+        when "lrem"
+          keys = [args[1]]
+        when "lindex"
+          keys = [args[1]]
+        when "rpop"
+          keys = args[1..]
+        when "brpop"
+          keys = args[1..]
         when "setex"
           keys = [args[1]]
         when "hmget"
+          keys = [args[1]]
+        when "sscan"
           keys = [args[1]]
         when "hmset"
           keys = [args[1]]
@@ -134,6 +148,8 @@ ARGV.each do |idx_filename|
         when "srem"
           keys = [args[1]]
         when "hget"
+          keys = [args[1]]
+        when "hgetall"
           keys = [args[1]]
         when "zadd"
           keys = [args[1]]
