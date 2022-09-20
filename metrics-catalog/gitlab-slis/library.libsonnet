@@ -46,6 +46,16 @@ local list = [
       the search with the same parameters.
     |||,
   }),
+  sliDefinition.new({
+    name: 'global_search_indexing',
+    significantLabels: ['exported_type'],
+    kinds: [sliDefinition.apdexKind],
+    featureCategory: 'global_search',
+    description: |||
+      The number of Global Search indexing calls meeting their duration target based on the 99.95th percentile of
+      indexing.
+    |||,
+  }),
 ];
 
 local definitionsByName = std.foldl(
