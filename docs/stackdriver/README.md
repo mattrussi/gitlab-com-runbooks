@@ -27,6 +27,7 @@
 * [PubSub Queuing Rate Increasing](../pubsub/pubsub-queing.md)
 * [Example Tutorial Template](../tutorials/example_tutorial_template.md)
 * [Life of a Web Request](../tutorials/overview_life_of_a_web_request.md)
+* [Google Cloud Snapshots](../uncategorized/gcp-snapshots.md)
 * [Node Reboots](../uncategorized/node-reboots.md)
 * [version.gitlab.com Runbook](../version/version-gitlab-com.md)
 <!-- END_MARKER -->
