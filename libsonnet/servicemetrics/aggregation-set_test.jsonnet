@@ -197,4 +197,20 @@ test.suite({
       slow: ['30m', '6h', '3d'],
     },
   },
+
+  testGetAllMetricNames: {
+    actual: fixture1.getAllMetricNames(),
+    expect: [
+      'target_1m_apdex_ratio',
+      'target_1m_apdex_weight',
+      'target_1m_error_rate',
+      'target_1m_error_ratio',
+      'target_1m_ops_rate',
+      'target_5m_apdex_ratio',
+      'target_30m_apdex_ratio',
+      'target_1h_apdex_ratio',
+      'target_6h_apdex_ratio',
+      'target_3d_apdex_ratio',
+    ],
+  },
 })
