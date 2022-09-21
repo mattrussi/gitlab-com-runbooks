@@ -85,6 +85,9 @@ teams:
   product_stage_group: package
   ignored_components:
   - graphql_queries
+  # Registry's database component is ignored until we have a way to properly
+  # weight it: https://gitlab.com/gitlab-com/gl-infra/scalability/-/issues/1586#note_1106556391
+  - database
 
 - name: runner
   product_stage_group: runner
