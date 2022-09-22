@@ -164,7 +164,11 @@ config:
 ➜  ~ thanos tools bucket rewrite --objstore.config-file=objstore.yml --rewrite.to-delete-config-file=thanos.rewrite.to-delete.yml --id=01GD4Z87286SVT6V06FVDNCTV0 --rewrite.add-change-log --no-dry-run
 
 ➜  ~ ls -lah gitlab-ops-prometheus
+```
 
+Note that prometheus will not start if there are overlapping blocks. While thanos marks the old block for deletion, it does not actively delete it. Because of this, the old block needs to be renamed or removed after the rewrite operation.
+
+```
 ➜  ~ mv gitlab-ops-prometheus/01GD4Z87286SVT6V06FVDNCTV0 gitlab-ops-prometheus/01GD4Z87286SVT6V06FVDNCTV0.bak
 ```
 
