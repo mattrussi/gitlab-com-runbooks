@@ -105,7 +105,7 @@ Now that we have the blocks, we need to prepare the config file describing what 
 
 That can be done by adapting [`metrics-catalog/deletion-config-for-aggregation-sets.jsonnet`](https://gitlab.com/gitlab-com/runbooks/-/merge_requests/5001), and substituting or otherwise generating a config file that `thanos tools bucket rewrite` expects.
 
-The format is documented [here](https://thanos.io/tip/operating/modify-objstore-data.md/), but this documentation omits the `intervals` key that allows a time range to be specified.
+The format is documented [here](https://thanos.io/tip/operating/modify-objstore-data.md/), but this documentation omits [the `intervals` key](https://github.com/thanos-io/thanos/blob/043c5bfcc2464d3ae7af82a1428f6e0d6510f020/pkg/block/metadata/meta.go#L116) that allows a time range to be specified.
 
 The `thanos.rewrite.to-delete.yml` file should look something like this:
 
