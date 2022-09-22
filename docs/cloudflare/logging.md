@@ -8,6 +8,9 @@ currently happening.
 Starting 2022-04-14 we enabled Logpush v2. These logs will be shipped to a distinct `v2` subdirectory in that GCS bucket.
 
 Logpush v2 allows us to also access logs for Firewall events, DNS and NELs. These are not configured at the moment, but can be enabled if the need arises.
+
+At least READ access to GCS in the `Production` project in GCP is required to be able to view these logs.
+
 NELs are also already available as metrics [here](https://dashboards.gitlab.net/d/sPqgMv9Zk/cloudflare-traffic-overview?orgId=1&refresh=5m)
 
 ## BigQuery (to be validated for Logpush v2)
