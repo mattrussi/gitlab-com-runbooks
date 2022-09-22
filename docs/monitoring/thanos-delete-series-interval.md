@@ -56,6 +56,8 @@ config:
 
 This output is not very machine friendly though. So an alternative method to get the same information is to query the bucket directly. This also enables filtering the blocks for the time range you care about.
 
+<!-- markdownlint-disable MD010 -->
+
 ```
 ➜  ~ echo "$(gdate --date='2022-09-15 22:00:00 UTC' '+%s')000"
 1663279200000
@@ -74,6 +76,8 @@ This output is not very machine friendly though. So an alternative method to get
 01GD4ZN8Q4KSJ75HTBJ0VNY7RB	1663200000200	1663372800000	2022-09-15 00:00:00	2022-09-17 00:00:00	compactor	300000	monitor=global,replica=01
 01GD4ZXHHWMGXTGPE8CSKF1F2F	1663200000200	1663372800000	2022-09-15 00:00:00	2022-09-17 00:00:00	compactor	300000	monitor=global,replica=02
 ```
+
+<!-- markdownlint-enable MD010 -->
 
 This will give you block IDs (ULID), timestamps, and block-level labels.
 
