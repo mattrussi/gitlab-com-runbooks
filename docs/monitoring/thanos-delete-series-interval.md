@@ -52,19 +52,27 @@ config:
   bucket: gitlab-ops-prometheus
 
 ➜  ~ thanos tools bucket inspect --objstore.config-file=objstore.yml
-|            ULID            |        FROM         |        UNTIL        |     RANGE      |   UNTIL-DOWN    |  #SERIES   |    #SAMPLES    |   #CHUNKS   | COMP-LEVEL | COMP-FAILED |                                                                                                            LABELS                                                                                                             | RESOLUTION |  SOURCE   |
-|----------------------------|---------------------|---------------------|----------------|-----------------|------------|----------------|-------------|------------|-------------|-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|------------|-----------|
-| 01D72TVFTD8YYEJ1QQ1M7AFEAA | 16-08-2018 00:00:00 | 23-08-2018 02:00:00 | 170h0m0s       | 70h0m0s         | 8,020      | 8,864,613      | 68,306      | 6          | false       | env=ops,monitor=default,provider=gcp,region=us-east,replica=01                                                                                                                                                                | 5m0s       | compactor |
-| 01D72TW3PC54BMHWDN4NBBAHN2 | 23-08-2018 02:00:00 | 05-09-2018 14:00:00 | 324h0m0s       | -84h0m0s        | 7,561      | 19,301,847     | 141,610     | 6          | false       | env=ops,monitor=default,provider=gcp,region=us-east,replica=01                                                                                                                                                                | 5m0s       | compactor |
-| 01D72Y2E6QBE0BK0M6SRV5RPSH | 23-08-2018 02:00:00 | 05-09-2018 14:00:00 | 324h0m0s       | -               | 7,561      | 1,625,516      | 22,421      | 6          | false       | env=ops,monitor=default,provider=gcp,region=us-east,replica=01                                                                                                                                                                | 1h0m0s     | compactor |
+```
 
-...
+This output is not very machine friendly though. So an alternative method to get the same information is to query the bucket directly. This also enables filtering the blocks for the time range you care about.
 
-| 01E0GBFWWXM0MEH3FKP7N94RCG | 27-01-2020 14:21:00 | 30-01-2020 17:00:00 | 74h38m59.315s  | 165h21m0.685s   | 694        | 593,852        | 4,804       | 4          | false       | monitor=global,replica=01                                                                                                                                                                                                     | 5m0s       | compactor |
-| 01E0GBFY67H5PH0DAZF419XQ1T | 27-01-2020 16:05:00 | 30-01-2020 17:00:00 | 72h54m59.315s  | 167h5m0.685s    | 694        | 574,708        | 4,121       | 4          | false       | monitor=global,replica=02                                                                                                                                                                                                     | 5m0s       | compactor |
-| 01E0CFW974STXQ06S6W82HNB3R | 30-01-2020 16:04:00 | 06-02-2020 01:00:00 | 152h55m59.315s | 87h4m0.685s     | 693        | 1,253,497      | 9,466       | 4          | false       | monitor=global,replica=03                                                                                                                                                                                                     | 5m0s       | compactor |
+```
+➜  ~ echo "$(gdate --date='2022-09-15 22:00:00 UTC' '+%s')000"
+1663279200000
 
-...
+➜  ~ echo "$(gdate --date='2022-09-16 01:36:00 UTC' '+%s')000"
+1663292160000
+
+➜  ~ gsutil ls gs://gitlab-ops-prometheus | parallel -X -n 10 "gsutil cat {}meta.json | jq -cr '[.ulid, .minTime, .maxTime, (.minTime/1000|strftime(\"%Y-%m-%d %H:%M:%S\")), (.maxTime/1000|strftime(\"%Y-%m-%d %H:%M:%S\")), .thanos.source, .thanos.downsample.resolution, (.thanos.labels|to_entries|map(.key + \"=\" + .value)|join(\",\"))]|@tsv'" > gitlab-ops-prometheus.blocks.out
+
+➜  ~ sort -o gitlab-ops-prometheus.blocks.out gitlab-ops-prometheus.blocks.out
+
+➜  ~ cat gitlab-ops-prometheus.blocks.out | awk '$2 <= 1663279200000 && $3 >= 1663292160000' | grep monitor=global
+
+01GD4Z87286SVT6V06FVDNCTV0	1663200000200	1663372800000	2022-09-15 00:00:00	2022-09-17 00:00:00	compactor	0	monitor=global,replica=01
+01GD4ZEEGZ074E4FA84YT877KF	1663200000200	1663372800000	2022-09-15 00:00:00	2022-09-17 00:00:00	compactor	0	monitor=global,replica=02
+01GD4ZN8Q4KSJ75HTBJ0VNY7RB	1663200000200	1663372800000	2022-09-15 00:00:00	2022-09-17 00:00:00	compactor	300000	monitor=global,replica=01
+01GD4ZXHHWMGXTGPE8CSKF1F2F	1663200000200	1663372800000	2022-09-15 00:00:00	2022-09-17 00:00:00	compactor	300000	monitor=global,replica=02
 ```
 
 This will give you block IDs (ULID), timestamps, and block-level labels.
