@@ -5,7 +5,7 @@
         actions: {
           rollover: {
             max_age: '7d',
-            max_primary_shard_size: '30gb',
+            max_size: '30gb',
           },
           set_priority: {
             priority: 100,
@@ -15,6 +15,14 @@
       warm: {
         min_age: '2d',
         actions: {
+          allocate: {
+            require: {
+              data: 'warm',
+            },
+            include: {
+              _tier_preference: 'data_warm,data_hot',
+            },
+          },
           readonly: {},
           set_priority: {
             priority: 50,
