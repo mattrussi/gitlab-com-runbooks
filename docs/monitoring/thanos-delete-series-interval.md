@@ -2,7 +2,7 @@
 
 It may happen that some bad data lands in prometheus and subsequently thanos.
 
-Since we rely heavily on monitoring data for all kinds of processes, including availability reporting, error budgets, capacity planning, we may have an interest in purging that bad data.
+Since we rely heavily on monitoring data for all kinds of processes, including availability reporting, error budgets for stage groups, capacity planning, we may have an interest in purging that bad data.
 
 This can be done in 3 steps:
 
