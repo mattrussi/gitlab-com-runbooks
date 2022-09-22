@@ -16,12 +16,6 @@ local setting(index, env) = if std.member(VERY_HIGH_THROUGHPUT, index) then {
     },
     routing: {
       allocation: {
-        include: {
-          _tier_preference: null,
-        },
-        require: {
-          data: 'hot',
-        },
         total_shards_per_node: 1,
       },
     },
@@ -66,12 +60,6 @@ else if std.member(HIGH_THROUGHPUT, index) then {
     },
     routing: {
       allocation: {
-        include: {
-          _tier_preference: null,
-        },
-        require: {
-          data: 'hot',
-        },
         total_shards_per_node: 1,
       },
     },
@@ -113,12 +101,6 @@ else if std.member(MEDIUM_THROUGHPUT, index) then {
     },
     routing: {
       allocation: {
-        include: {
-          _tier_preference: null,
-        },
-        require: {
-          data: 'hot',
-        },
         total_shards_per_node: 1,
       },
     },
@@ -156,16 +138,6 @@ else if std.member(MEDIUM_THROUGHPUT, index) then {
     },
     mapping: {
       ignore_malformed: true,
-    },
-    routing: {
-      allocation: {
-        include: {
-          _tier_preference: null,
-        },
-        require: {
-          data: 'hot',
-        },
-      },
     },
     search: {
       idle: {

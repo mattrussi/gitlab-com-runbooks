@@ -5,7 +5,7 @@
         actions: {
           rollover: {
             max_age: '7d',
-            max_size: '20gb',
+            max_primary_shard_size: '20gb',
           },
           set_priority: {
             priority: 100,
@@ -20,14 +20,6 @@
           // forcemerge: {
           //   max_num_segments: 1,
           // },
-          allocate: {
-            require: {
-              data: 'warm',
-            },
-            include: {
-              _tier_preference: 'data_warm,data_hot',
-            },
-          },
           set_priority: {
             priority: 50,
           },
