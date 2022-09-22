@@ -54,6 +54,7 @@
 * [Kubernetes](../kube/kubernetes.md)
 * [Alerting](../monitoring/alerts_manual.md)
 * [../monitoring/apdex-alerts-guide.md](../monitoring/apdex-alerts-guide.md)
+* [Deleting series over a given interval from thanos](../monitoring/thanos-delete-series-interval.md)
 * [Session: Application architecture](../onboarding/architecture.md)
 * [Gitlab.com on Kubernetes](../onboarding/gitlab.com_on_k8s.md)
 * [Diagnosis with Kibana](../onboarding/kibana-diagnosis.md)

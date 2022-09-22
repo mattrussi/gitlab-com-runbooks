@@ -34,6 +34,7 @@
 * [prometheus-failed-compactions.md](prometheus-failed-compactions.md)
 * [Prometheus pod crashlooping](prometheus-pod-crashlooping.md)
 * [Thanos Compact](thanos-compact.md)
+* [Deleting series over a given interval from thanos](thanos-delete-series-interval.md)
 * [Upgrading Monitoring Components](upgrades.md)
 * [Diagnosis with Kibana](../onboarding/kibana-diagnosis.md)
 * [Check the status of transaction wraparound Runbook](../patroni/check_wraparound.md)
