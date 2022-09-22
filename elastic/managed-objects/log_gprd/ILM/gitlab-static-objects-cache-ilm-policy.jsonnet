@@ -5,7 +5,7 @@
         actions: {
           rollover: {
             max_age: '7d',  // try to pack a few days worth per index
-            max_primary_shard_size: '20gb',
+            max_size: '20gb',
           },
           set_priority: {
             priority: 100,
@@ -15,6 +15,11 @@
       warm: {
         min_age: '1d',
         actions: {
+          allocate: {
+            require: {
+              data: 'warm',
+            },
+          },
           set_priority: {
             priority: 50,
           },
