@@ -16,7 +16,8 @@ We have an alert to check if snapshots are being created every hour as expected.
 we need to check the existence of the snapshot policy ([example](https://gitlab.com/gitlab-com/gl-infra/config-mgmt/-/blob/d7287a47adfdca6cce76ca455e0684863f248e57/environments/gstg/main.tf#L262))
 and that there are disks attached to it. This can be viewed quickly from the GCP dashboard (Compute Engine > Storage > Snapshots > Snapshot Schedules).
 
-If the resources are there as expected, we can check Stackdriver logs for errors.
+If the resources are there as expected, we can check Stackdriver logs for errors. One reason for errors could be hitting the quota for number of snapshots, in which case
+consider either removing old ones, increasing the quota for snapshots or decreasing the interval at which we take snapshots.
 
 ## Manual Restore Procedure
 
