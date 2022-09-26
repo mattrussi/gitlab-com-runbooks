@@ -88,7 +88,7 @@ function(
           instanceFilter='redis_instance_info{role="master"}'
         ),
 
-        significantLabels: ['fqdn'],
+        significantLabels: ['instance'],
 
         toolingLinks: [],
       },
@@ -106,7 +106,7 @@ function(
           instanceFilter='redis_instance_info{role="slave"}'
         ),
 
-        significantLabels: ['fqdn'],
+        significantLabels: ['instance'],
         serviceAggregation: false,
       },
     },
