@@ -72,21 +72,21 @@ groups:
   rules:
   - record: application_sli_aggregation:global_search_indexing:apdex:weight:score_5m
     expr: |
-      sum by (environment,exported_type,stage,tier,type) (
+      sum by (document_type,environment,stage,tier,type) (
         rate(gitlab_sli_global_search_indexing_apdex_total{monitor!="global"}[5m])
       )
   - record: application_sli_aggregation:global_search_indexing:apdex:success:rate_5m
     expr: |
-      sum by (environment,exported_type,stage,tier,type) (
+      sum by (document_type,environment,stage,tier,type) (
         rate(gitlab_sli_global_search_indexing_apdex_success_total{monitor!="global"}[5m])
       )
   - record: application_sli_aggregation:global_search_indexing:apdex:weight:score_1h
     expr: |
-      sum by (environment,exported_type,stage,tier,type) (
+      sum by (document_type,environment,stage,tier,type) (
         rate(gitlab_sli_global_search_indexing_apdex_total{monitor!="global"}[1h])
       )
   - record: application_sli_aggregation:global_search_indexing:apdex:success:rate_1h
     expr: |
-      sum by (environment,exported_type,stage,tier,type) (
+      sum by (document_type,environment,stage,tier,type) (
         rate(gitlab_sli_global_search_indexing_apdex_success_total{monitor!="global"}[1h])
       )

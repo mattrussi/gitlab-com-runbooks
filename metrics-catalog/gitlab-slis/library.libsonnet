@@ -48,12 +48,15 @@ local list = [
   }),
   sliDefinition.new({
     name: 'global_search_indexing',
-    significantLabels: ['exported_type'],
+    significantLabels: ['document_type'],
     kinds: [sliDefinition.apdexKind],
     featureCategory: 'global_search',
     description: |||
       The number of Global Search indexing calls meeting their duration target based on the 99.95th percentile of
-      indexing.
+      indexing. This indicates the duration between when an item was changed and when it became available in Elasticsearch.
+
+      The target duration can be found here:
+      https://gitlab.com/gitlab-org/gitlab/-/blob/master/ee/lib/gitlab/metrics/global_search_indexing_slis.rb#L14-L15
     |||,
   }),
 ];
