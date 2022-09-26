@@ -34,6 +34,7 @@
 * [Gitaly PermissionDenied alert](gitaly-permission-denied.md)
 * [Gitaly profiling](gitaly-profiling.md)
 * [Gitaly Queuing](gitaly-rate-limiting.md)
+* [Gitaly repository cgroups](gitaly-repos-cgroup.md)
 * [Restoring gitaly data corruption on a project after an unclean shutdown](gitaly-repository-corruption.md)
 * [Gitaly token rotation](gitaly-token-rotation.md)
 * [Gitaly unusual activity alert](gitaly-unusual-activity.md)
