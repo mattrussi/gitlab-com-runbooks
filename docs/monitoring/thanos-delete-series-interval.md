@@ -79,7 +79,7 @@ This output is not very machine friendly though. So an alternative method to get
 
 <!-- markdownlint-enable MD010 -->
 
-This will give you block IDs (ULID), timestamps, and block-level labels.
+This will give you block IDs (ULID), timestamps, and block-level labels. Note that the blocks with downsampled data (`.thanos.downsample.resolution > 0`) can't be rewritten in this way. We will manually remove these so the compactor can regenerate downsampled blocks from raw data on it's next run.
 
 ### Correlating with series
 
@@ -107,15 +107,19 @@ In our case, they are:
 ```
 01GD4Z87286SVT6V06FVDNCTV0
 01GD4ZEEGZ074E4FA84YT877KF
-01GD4ZN8Q4KSJ75HTBJ0VNY7RB
-01GD4ZXHHWMGXTGPE8CSKF1F2F
 ```
 
 ## 2. Configure the series and intervals to be deleted
 
 Now that we have the blocks, we need to prepare the config file describing what needs to be deleted.
 
-That can be done by adapting [`metrics-catalog/deletion-config-for-aggregation-sets.jsonnet`](https://gitlab.com/gitlab-com/runbooks/-/merge_requests/5001), and substituting or otherwise generating a config file that `thanos tools bucket rewrite` expects.
+That can be done by adapting [`metrics-catalog/deletion-config-for-aggregation-sets.jsonnet`](https://gitlab.com/gitlab-com/runbooks/blob/master/metrics-catalog/deletion-config-for-aggregation-sets.jsonnet#L1), fill in the timestamps for the range of time that needs to be removed. The timestamps are unix timestamps in milliseconds.
+
+Then generate the config as follows:
+
+```sh
+scripts/compile_jsonnet.rb metrics-catalog/deletion-config-for-aggregation-sets.jsonnet | yq -P > thanos.rewrite.to-delete.yml
+```
 
 The format is documented [here](https://thanos.io/tip/operating/modify-objstore-data.md/), but this documentation omits [the `intervals` key](https://github.com/thanos-io/thanos/blob/043c5bfcc2464d3ae7af82a1428f6e0d6510f020/pkg/block/metadata/meta.go#L116) that allows a time range to be specified.
 
@@ -149,10 +153,34 @@ This can be done by invoking `thanos tools bucket rewrite` as follows for a dry-
 And if that looks reasonable, perform the actual rewrite:
 
 ```
-➜  ~ thanos tools bucket rewrite --objstore.config-file=objstore.yml --rewrite.to-delete-config-file=thanos.rewrite.to-delete.yml --id=01GD4Z87286SVT6V06FVDNCTV0 --rewrite.add-change-log --no-dry-run
+➜  ~ thanos tools bucket rewrite --objstore.config-file=objstore.yml --rewrite.to-delete-config-file=thanos.rewrite.to-delete.yml --id=01GD4Z87286SVT6V06FVDNCTV0 --rewrite.add-change-log --no-dry-run --delete-blocks
 ```
 
-This will write out a new block and mark the old one for deletion.
+This will write out a new block and mark the old one for deletion. By default, the [`--delete-delay`](https://thanos.io/tip/components/compact.md/#flags) for Thanos compact is set to 48 hours. To make the compactor remove them immediately, we can change the `deletion_time` inside the marker:
+
+```
+echo '{"id":"TBD","version":1,"details":"block rewritten","deletion_time":1663932016}' | jq -c --arg id 01GD4Z87286SVT6V06FVDNCTV0 --arg time "$(gdate --date='2022-09-15 22:00:00 UTC' '+%s')" '.id = $id | .deletion_time = ($time|tonumber)' | gsutil cp - gs://gitlab-ops-prometheus/01GD4Z87286SVT6V06FVDNCTV0/deletion-mark.json
+```
+
+## Remove the downsampled blocks
+
+The reason Thanos can't rewrite these blocks is because they were written by Thanos with an encoding marker that [avoids conflicts with the Prometheus encodings](https://github.com/thanos-io/thanos/blob/deb599814af8c93fb29efb80d3c42ec88e530938/pkg/compact/downsample/aggr.go#L13-L15). When the rewriting tool initializes the buckets, it calls directly into the Prometheus code to do so, Prometheus doesn't support the encoding written by Thanos.
+
+We're contributing support for this upstream in: <https://github.com/thanos-io/thanos/pull/5725>.
+
+To get around this, we'll remove the chunks manually. In our example the chunks with a resolution of 3000 are the ones we need to remove:
+
+```
+01GD4ZN8Q4KSJ75HTBJ0VNY7RB
+01GD4ZXHHWMGXTGPE8CSKF1F2F
+```
+
+To do this, we use the following commands:
+
+```sh
+gsutil rm -r gs://gitlab-ops-prometheus/01GD4ZN8Q4KSJ75HTBJ0VNY7RB
+gsutil rm -r gs://gitlab-ops-prometheus/01GD4ZXHHWMGXTGPE8CSKF1F2F
+```
 
 ## Local testing
 

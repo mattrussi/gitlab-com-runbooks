@@ -161,6 +161,14 @@ local buildValidator(definition) =
         else [];
         std.set(definedBurnRates + supportedBurnRates, durationParser.toSeconds),
 
+      getAllMetricNames()::
+        std.flatMap(
+          function(burnRate)
+            local metricsByType = getBurnRateMetrics(burnRate);
+            std.objectValues(metricsByType),
+          self.getBurnRates()
+        ),
+
       getBurnRatesByType()::
         std.foldl(
           function(memo, burnRate)

@@ -38,6 +38,7 @@
 * [../monitoring/apdex-alerts-guide.md](../monitoring/apdex-alerts-guide.md)
 * [../monitoring/filesystem_alerts_inodes.md](../monitoring/filesystem_alerts_inodes.md)
 * [Thanos Compact](../monitoring/thanos-compact.md)
+* [Deleting series over a given interval from thanos](../monitoring/thanos-delete-series-interval.md)
 * [Session: Application architecture](../onboarding/architecture.md)
 * [GPG Keys for Package Signing](../packaging/manage-package-signing-keys.md)
 * [Steps to Recreate/Rebuild the CI CLuster using a Snapshot from the Master cluster (instead of pg_basebackup)](../patroni-ci/rebuild_ci_cluster_from_prod.md)
