@@ -24,6 +24,12 @@ groups:
     expr: "1"
   - record: gitlab:feature_category:stage_group:mapping
     labels:
+      feature_category: application_instrumentation
+      product_stage: analytics
+      stage_group: product_intelligence
+    expr: "1"
+  - record: gitlab:feature_category:stage_group:mapping
+    labels:
       feature_category: application_performance
       product_stage: data_stores
       stage_group: application_performance
@@ -114,6 +120,12 @@ groups:
     expr: "1"
   - record: gitlab:feature_category:stage_group:mapping
     labels:
+      feature_category: commerce_integrations
+      product_stage: fulfillment
+      stage_group: commerce_integrations
+    expr: "1"
+  - record: gitlab:feature_category:stage_group:mapping
+    labels:
       feature_category: compliance_management
       product_stage: govern
       stage_group: compliance
@@ -189,6 +201,12 @@ groups:
       feature_category: dependency_firewall
       product_stage: package
       stage_group: package
+    expr: "1"
+  - record: gitlab:feature_category:stage_group:mapping
+    labels:
+      feature_category: dependency_management
+      product_stage: govern
+      stage_group: threat_insights
     expr: "1"
   - record: gitlab:feature_category:stage_group:mapping
     labels:
