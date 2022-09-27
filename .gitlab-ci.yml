@@ -661,7 +661,6 @@ generate_service_maturity_manifest:
   script:
     - ./scripts/bundler.sh  # Install jsonnet bundles
     - ./scripts/generate-jsonnet-rules.sh
-    - ./dashboards/generate-service-health-dashboards-metadata-json.sh
     - mkdir -p service-maturity-manifest
     - ./scripts/compile_jsonnet.rb ./service-maturity/maturity.jsonnet > ./service-maturity-manifest/service_maturity.yml
   artifacts:
