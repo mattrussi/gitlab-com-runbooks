@@ -32,13 +32,13 @@ local selectors = import 'promql/selectors.libsonnet';
     resourceLabels: ['shard'],
     query: |||
       1 - (
-        sum by (env, type) (
+        sum by (%(aggregationLabels)s) (
           node_filesystem_avail_bytes{%(selector)s, %(gitalyDiskSelector)s}
           and
           (instance:node_filesystem_avail:ratio{%(selector)s, %(gitalyDiskSelector)s} > 0.2)
         )
         /
-        sum by (env, type)(
+        sum by (%(aggregationLabels)s)(
           node_filesystem_size_bytes{%(selector)s, %(gitalyDiskSelector)s}
         )
       )
