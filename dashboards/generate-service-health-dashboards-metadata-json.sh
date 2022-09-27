@@ -9,6 +9,7 @@ cd "${SCRIPT_DIR}" || exit
 source "grafana-tools.lib.sh"
 
 TEMPFILE="tempfile.json"
+BUFFERFILE="buffer.json"
 FILE="${SCRIPT_DIR}/service_health_dashboards.json"
 
 usage() {
@@ -70,7 +71,7 @@ find_dashboards | while read -r line; do
     fullurl="https://dashboards.gitlab.net$url"
 
     if test -f "$TEMPFILE"; then
-      cat <<<"$(jq ".\"$folder\" |= .+ [\"$fullurl\"]" $TEMPFILE)" >$TEMPFILE
+      cat <<<"$(jq ".\"$folder\" |= .+ [\"$fullurl\"]" $TEMPFILE)" >$BUFFERFILE && mv $BUFFERFILE $TEMPFILE && rm -rf $BUFFERFILE
     else
       echo "{\"$folder\": [\"$fullurl\"]}" >$TEMPFILE
     fi
