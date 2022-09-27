@@ -166,7 +166,7 @@ echo '{"id":"TBD","version":1,"details":"block rewritten","deletion_time":166393
 
 The reason Thanos can't rewrite these blocks is because they were written by Thanos with an encoding marker that [avoids conflicts with the Prometheus encodings](https://github.com/thanos-io/thanos/blob/deb599814af8c93fb29efb80d3c42ec88e530938/pkg/compact/downsample/aggr.go#L13-L15). When the rewriting tool initializes the buckets, it calls directly into the Prometheus code to do so, Prometheus doesn't support the encoding written by Thanos.
 
-We're contributing support for this upstream in: https://github.com/thanos-io/thanos/pull/5725
+We're contributing support for this upstream in: <https://github.com/thanos-io/thanos/pull/5725>.
 
 To get around this, we'll remove the chunks manually. In our example the chunks with a resolution of 3000 are the ones we need to remove:
 
