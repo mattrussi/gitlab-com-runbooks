@@ -112,8 +112,11 @@ local levels = [
       {
         name: 'SRE guides exist in runbooks',
         evidence: function(service)
-          // TODO: https://gitlab.com/gitlab-com/gl-infra/scalability/-/issues/857
-          'https://gitlab.com/gitlab-com/runbooks/-/tree/master/docs/%s' % service.type,
+          local docs = serviceCatalog.lookupService(service.type).technical.documents;
+          if std.objectHas(docs, 'sre_guide') then
+            docs.sre_guide
+          else
+            false,
       },
       {
         // TODO: https://gitlab.com/gitlab-com/gl-infra/scalability/-/issues/829
