@@ -4,7 +4,6 @@
 .vscode
 /dashboards/.env.sh
 /dashboards/vendor
-/dashboards/service_health_dashboards.json
 /periodic-query-results
 /services/service_catalog.json
 /vendor
