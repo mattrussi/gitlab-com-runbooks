@@ -73,7 +73,7 @@ echo 'us-east-1' > /etc/wal-e.d/env/AWS_REGION
 
 # precreate recovery.conf
 cat > /var/lib/postgresql/${RESTORE_PG_VER}/main/recovery.conf <<RECOVERY
-restore_command = '/usr/bin/envdir /etc/wal-e.d/env /opt/wal-e/bin/wal-e wal-fetch --turbo "%f" "%p"'
+restore_command = '/usr/bin/envdir /etc/wal-e.d/env /opt/wal-e/bin/wal-e wal-fetch "%f" "%p"'
 recovery_target_time = '2017-XX-YY 06:00:00'
 # disabled on secondary
 # recovery_target_action = 'promote'
