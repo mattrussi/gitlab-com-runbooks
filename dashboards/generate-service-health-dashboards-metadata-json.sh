@@ -79,8 +79,8 @@ find_dashboards | while read -r line; do
 done
 
 if [[ -n $dry_run ]]; then
-  cat $TEMPFILE | jq '.'
+  cat $TEMPFILE | jq --sort-keys | jq -S '.[] |= sort'
   rm $TEMPFILE
 else
-  cat <<<"$(jq '.' $TEMPFILE)" >"$FILE"
+  cat $TEMPFILE | jq --sort-keys | jq -S '.[] |= sort' >"$FILE"
 fi
