@@ -1611,11 +1611,11 @@ groups:
   - record: slo:max:soft:gitlab_component_saturation:ratio
     labels:
       component: ruby_thread_contention
-    expr: "0.7"
+    expr: "0.75"
   - record: slo:max:hard:gitlab_component_saturation:ratio
     labels:
       component: ruby_thread_contention
-    expr: "0.75"
+    expr: "0.85"
   - record: slo:max:soft:gitlab_component_saturation:ratio
     labels:
       component: shard_cpu

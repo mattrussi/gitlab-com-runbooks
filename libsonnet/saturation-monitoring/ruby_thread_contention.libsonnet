@@ -27,8 +27,8 @@ local resourceSaturationPoint = metricsCatalog.resourceSaturationPoint;
       rate(ruby_process_cpu_seconds_total{%(selector)s}[%(rangeInterval)s])
     |||,
     slos: {
-      soft: 0.70,
-      hard: 0.75,
+      soft: 0.75,
+      hard: 0.85,
     },
   }),
 }
