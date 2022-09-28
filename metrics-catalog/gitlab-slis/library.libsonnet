@@ -39,11 +39,14 @@ local list = [
   sliDefinition.new({
     name: 'global_search',
     significantLabels: ['endpoint_id', 'search_level', 'search_scope', 'search_type'],
-    kinds: [sliDefinition.apdexKind],
+    kinds: [sliDefinition.apdexKind, sliDefinition.errorRateKind],
     featureCategory: 'global_search',
     description: |||
       The number of Global Search search requests meeting their duration target based on the 99.95th percentile of
       the search with the same parameters.
+
+      The target duration can be found here:
+      https://gitlab.com/gitlab-org/gitlab/-/blob/master/lib/gitlab/metrics/global_search_slis.rb#L10-L13
     |||,
   }),
   sliDefinition.new({

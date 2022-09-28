@@ -44,7 +44,24 @@ groups:
       type: web
     expr: |
       sum by (environment,stage) (
-        rate(gitlab_sli_global_search_apdex_total{job="gitlab-rails",type="web"}[1m])
+        rate(gitlab_sli_global_search_total{job="gitlab-rails",type="web"}[1m])
+      )
+  - record: gitlab_component_errors:rate
+    labels:
+      component: global_search
+      tier: sv
+      type: web
+    expr: |
+      (
+        sum by (environment,stage) (
+          rate(gitlab_sli_global_search_error_total{job="gitlab-rails",type="web"}[1m])
+        )
+      )
+      or
+      (
+        0 * group by(environment,stage) (
+          gitlab_component_ops:rate{component="global_search",tier="sv",type="web"}
+        )
       )
   - record: gitlab_component_apdex:success:rate
     labels:
@@ -285,7 +302,24 @@ groups:
       type: web
     expr: |
       sum by (environment,stage) (
-        rate(gitlab_sli_global_search_apdex_total{job="gitlab-rails",type="web"}[5m])
+        rate(gitlab_sli_global_search_total{job="gitlab-rails",type="web"}[5m])
+      )
+  - record: gitlab_component_errors:rate_5m
+    labels:
+      component: global_search
+      tier: sv
+      type: web
+    expr: |
+      (
+        sum by (environment,stage) (
+          rate(gitlab_sli_global_search_error_total{job="gitlab-rails",type="web"}[5m])
+        )
+      )
+      or
+      (
+        0 * group by(environment,stage) (
+          gitlab_component_ops:rate_5m{component="global_search",tier="sv",type="web"}
+        )
       )
   - record: gitlab_component_apdex:success:rate_5m
     labels:
@@ -526,7 +560,24 @@ groups:
       type: web
     expr: |
       sum by (environment,stage) (
-        rate(gitlab_sli_global_search_apdex_total{job="gitlab-rails",type="web"}[30m])
+        rate(gitlab_sli_global_search_total{job="gitlab-rails",type="web"}[30m])
+      )
+  - record: gitlab_component_errors:rate_30m
+    labels:
+      component: global_search
+      tier: sv
+      type: web
+    expr: |
+      (
+        sum by (environment,stage) (
+          rate(gitlab_sli_global_search_error_total{job="gitlab-rails",type="web"}[30m])
+        )
+      )
+      or
+      (
+        0 * group by(environment,stage) (
+          gitlab_component_ops:rate_30m{component="global_search",tier="sv",type="web"}
+        )
       )
   - record: gitlab_component_apdex:success:rate_30m
     labels:
@@ -767,7 +818,24 @@ groups:
       type: web
     expr: |
       sum by (environment,stage) (
-        rate(gitlab_sli_global_search_apdex_total{job="gitlab-rails",type="web"}[1h])
+        rate(gitlab_sli_global_search_total{job="gitlab-rails",type="web"}[1h])
+      )
+  - record: gitlab_component_errors:rate_1h
+    labels:
+      component: global_search
+      tier: sv
+      type: web
+    expr: |
+      (
+        sum by (environment,stage) (
+          rate(gitlab_sli_global_search_error_total{job="gitlab-rails",type="web"}[1h])
+        )
+      )
+      or
+      (
+        0 * group by(environment,stage) (
+          gitlab_component_ops:rate_1h{component="global_search",tier="sv",type="web"}
+        )
       )
   - record: gitlab_component_apdex:success:rate_1h
     labels:
@@ -1008,7 +1076,24 @@ groups:
       type: web
     expr: |
       sum by (environment,stage) (
-        rate(gitlab_sli_global_search_apdex_total{job="gitlab-rails",type="web"}[6h])
+        rate(gitlab_sli_global_search_total{job="gitlab-rails",type="web"}[6h])
+      )
+  - record: gitlab_component_errors:rate_6h
+    labels:
+      component: global_search
+      tier: sv
+      type: web
+    expr: |
+      (
+        sum by (environment,stage) (
+          rate(gitlab_sli_global_search_error_total{job="gitlab-rails",type="web"}[6h])
+        )
+      )
+      or
+      (
+        0 * group by(environment,stage) (
+          gitlab_component_ops:rate_6h{component="global_search",tier="sv",type="web"}
+        )
       )
   - record: gitlab_component_apdex:success:rate_6h
     labels:
