@@ -47,6 +47,50 @@ groups:
           gitlab:component:feature_category:execution:ops:rate_5m{component="rails_requests",tier="sv",type="customersdot"}
         )
       )
+  - record: gitlab:component:feature_category:execution:apdex:success:rate_5m
+    labels:
+      component: sidekiq_execution
+      tier: sv
+      type: customersdot
+    expr: |
+      sum by (env,environment,stage,feature_category) (
+        rate(gitlab_sli_sidekiq_jobs_apdex_success_total{type="customersdot"}[5m])
+      )
+  - record: gitlab:component:feature_category:execution:apdex:weight:score_5m
+    labels:
+      component: sidekiq_execution
+      tier: sv
+      type: customersdot
+    expr: |
+      sum by (env,environment,stage,feature_category) (
+        rate(gitlab_sli_sidekiq_jobs_apdex_total{type="customersdot"}[5m])
+      )
+  - record: gitlab:component:feature_category:execution:ops:rate_5m
+    labels:
+      component: sidekiq_execution
+      tier: sv
+      type: customersdot
+    expr: |
+      sum by (env,environment,stage,feature_category) (
+        rate(gitlab_sli_sidekiq_jobs_total{type="customersdot"}[5m])
+      )
+  - record: gitlab:component:feature_category:execution:error:rate_5m
+    labels:
+      component: sidekiq_execution
+      tier: sv
+      type: customersdot
+    expr: |
+      (
+        sum by (env,environment,stage,feature_category) (
+          rate(gitlab_sli_sidekiq_jobs_error_total{type="customersdot"}[5m])
+        )
+      )
+      or
+      (
+        0 * group by(env,environment,stage,feature_category) (
+          gitlab:component:feature_category:execution:ops:rate_5m{component="sidekiq_execution",tier="sv",type="customersdot"}
+        )
+      )
   - record: gitlab:component:feature_category:execution:ops:rate_5m
     labels:
       component: sidekiq_jobs
@@ -121,6 +165,50 @@ groups:
           gitlab:component:feature_category:execution:ops:rate_30m{component="rails_requests",tier="sv",type="customersdot"}
         )
       )
+  - record: gitlab:component:feature_category:execution:apdex:success:rate_30m
+    labels:
+      component: sidekiq_execution
+      tier: sv
+      type: customersdot
+    expr: |
+      sum by (env,environment,stage,feature_category) (
+        rate(gitlab_sli_sidekiq_jobs_apdex_success_total{type="customersdot"}[30m])
+      )
+  - record: gitlab:component:feature_category:execution:apdex:weight:score_30m
+    labels:
+      component: sidekiq_execution
+      tier: sv
+      type: customersdot
+    expr: |
+      sum by (env,environment,stage,feature_category) (
+        rate(gitlab_sli_sidekiq_jobs_apdex_total{type="customersdot"}[30m])
+      )
+  - record: gitlab:component:feature_category:execution:ops:rate_30m
+    labels:
+      component: sidekiq_execution
+      tier: sv
+      type: customersdot
+    expr: |
+      sum by (env,environment,stage,feature_category) (
+        rate(gitlab_sli_sidekiq_jobs_total{type="customersdot"}[30m])
+      )
+  - record: gitlab:component:feature_category:execution:error:rate_30m
+    labels:
+      component: sidekiq_execution
+      tier: sv
+      type: customersdot
+    expr: |
+      (
+        sum by (env,environment,stage,feature_category) (
+          rate(gitlab_sli_sidekiq_jobs_error_total{type="customersdot"}[30m])
+        )
+      )
+      or
+      (
+        0 * group by(env,environment,stage,feature_category) (
+          gitlab:component:feature_category:execution:ops:rate_30m{component="sidekiq_execution",tier="sv",type="customersdot"}
+        )
+      )
   - record: gitlab:component:feature_category:execution:ops:rate_30m
     labels:
       component: sidekiq_jobs
@@ -193,6 +281,50 @@ groups:
       (
         0 * group by(env,environment,stage,feature_category) (
           gitlab:component:feature_category:execution:ops:rate_1h{component="rails_requests",tier="sv",type="customersdot"}
+        )
+      )
+  - record: gitlab:component:feature_category:execution:apdex:success:rate_1h
+    labels:
+      component: sidekiq_execution
+      tier: sv
+      type: customersdot
+    expr: |
+      sum by (env,environment,stage,feature_category) (
+        rate(gitlab_sli_sidekiq_jobs_apdex_success_total{type="customersdot"}[1h])
+      )
+  - record: gitlab:component:feature_category:execution:apdex:weight:score_1h
+    labels:
+      component: sidekiq_execution
+      tier: sv
+      type: customersdot
+    expr: |
+      sum by (env,environment,stage,feature_category) (
+        rate(gitlab_sli_sidekiq_jobs_apdex_total{type="customersdot"}[1h])
+      )
+  - record: gitlab:component:feature_category:execution:ops:rate_1h
+    labels:
+      component: sidekiq_execution
+      tier: sv
+      type: customersdot
+    expr: |
+      sum by (env,environment,stage,feature_category) (
+        rate(gitlab_sli_sidekiq_jobs_total{type="customersdot"}[1h])
+      )
+  - record: gitlab:component:feature_category:execution:error:rate_1h
+    labels:
+      component: sidekiq_execution
+      tier: sv
+      type: customersdot
+    expr: |
+      (
+        sum by (env,environment,stage,feature_category) (
+          rate(gitlab_sli_sidekiq_jobs_error_total{type="customersdot"}[1h])
+        )
+      )
+      or
+      (
+        0 * group by(env,environment,stage,feature_category) (
+          gitlab:component:feature_category:execution:ops:rate_1h{component="sidekiq_execution",tier="sv",type="customersdot"}
         )
       )
   - record: gitlab:component:feature_category:execution:ops:rate_1h

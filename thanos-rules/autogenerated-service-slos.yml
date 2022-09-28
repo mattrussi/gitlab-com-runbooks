@@ -287,6 +287,18 @@ groups:
     expr: "0.050000"
   - record: slo:min:events:gitlab_service_apdex:ratio
     labels:
+      component: sidekiq_execution
+      tier: sv
+      type: customersdot
+    expr: "0.900000"
+  - record: slo:max:events:gitlab_service_errors:ratio
+    labels:
+      component: sidekiq_execution
+      tier: sv
+      type: customersdot
+    expr: "0.050000"
+  - record: slo:min:events:gitlab_service_apdex:ratio
+    labels:
       component: sidekiq_jobs
       tier: sv
       type: customersdot
@@ -2193,6 +2205,14 @@ groups:
   - record: gitlab_component_service:mapping
     labels:
       component: rails_requests
+      regional_aggregation: "no"
+      service_aggregation: "yes"
+      tier: sv
+      type: customersdot
+    expr: "1"
+  - record: gitlab_component_service:mapping
+    labels:
+      component: sidekiq_execution
       regional_aggregation: "no"
       service_aggregation: "yes"
       tier: sv
