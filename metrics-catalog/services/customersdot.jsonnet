@@ -45,34 +45,6 @@ metricsCatalog.serviceDefinition({
       sliLibrary.get('sidekiq_jobs').generateServiceLevelIndicator({ type: 'customersdot' }) {
         severity: 's3',
       },
-
-    sidekiq_jobs: {
-      local baseSelector = {
-        type: 'customersdot',
-      },
-
-      description: |||
-        This SLI monitors all Sidekiq jobs requests triggered in CustomersDot.
-        We're displaying the aggregation by endpoint and feature category of
-        the total number of processed request and of all the failed requests.
-      |||,
-
-      requestRate: rateMetric(
-        counter='sidekiq_processed_jobs_total',
-        selector=baseSelector
-      ),
-
-      errorRate: rateMetric(
-        counter='sidekiq_failed_jobs_total',
-        selector=baseSelector
-      ),
-
-      userImpacting: true,
-      severity: 's3',
-      serviceAggregation: false,
-      featureCategory: 'fulfillment_platform',
-      significantLabels: ['feature_category', 'endpoint_id'],
-    },
   },
   skippedMaturityCriteria: maturityLevels.skip({
     'Structured logs available in Kibana': 'All logs are available in Stackdriver',
