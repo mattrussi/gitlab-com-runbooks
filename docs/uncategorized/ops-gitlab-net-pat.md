@@ -28,6 +28,8 @@ project `Bar`.
 A default expiration of one year is ideal. If you need a token for testing,
 consider a shorter term like three months.
 
+[Setting an expiration will become a default in GitLab 16.](https://docs.gitlab.com/ee/user/profile/personal_access_tokens.html)
+
 ### Minimum Access Required
 
 Only select the access required for all functionality the token will be
