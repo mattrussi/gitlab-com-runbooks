@@ -42,11 +42,14 @@ local list = [
     kinds: [sliDefinition.apdexKind, sliDefinition.errorRateKind],
     featureCategory: 'global_search',
     description: |||
-      The number of Global Search search requests meeting their duration target based on the 99.95th percentile of
+      For apdex, the number of Global Search search requests meeting their duration target based on the 99.95th percentile of
       the search with the same parameters.
 
       The target duration can be found here:
       https://gitlab.com/gitlab-org/gitlab/-/blob/master/lib/gitlab/metrics/global_search_slis.rb#L10-L13
+
+      For error rate, the number of GLobal Search search requests that result in an erroneous status code or
+      raise an error during the search request.
     |||,
   }),
   sliDefinition.new({

@@ -11,9 +11,11 @@ groups:
       title: The global_search SLI of the api service (`{{ $labels.stage }}` stage)
         has an apdex violating SLO
       description: |
-        The number of Global Search search requests meeting their duration target based on the 99.95th percentile of the search with the same parameters.
+        For apdex, the number of Global Search search requests meeting their duration target based on the 99.95th percentile of the search with the same parameters.
 
         The target duration can be found here: https://gitlab.com/gitlab-org/gitlab/-/blob/master/lib/gitlab/metrics/global_search_slis.rb#L10-L13
+
+        For error rate, the number of GLobal Search search requests that result in an erroneous status code or raise an error during the search request.
 
         Currently the apdex value is {{ $value | humanizePercentage }}.
       grafana_dashboard_id: api-main/api-overview
@@ -56,9 +58,11 @@ groups:
       title: The global_search SLI of the api service (`{{ $labels.stage }}` stage)
         has an apdex violating SLO
       description: |
-        The number of Global Search search requests meeting their duration target based on the 99.95th percentile of the search with the same parameters.
+        For apdex, the number of Global Search search requests meeting their duration target based on the 99.95th percentile of the search with the same parameters.
 
         The target duration can be found here: https://gitlab.com/gitlab-org/gitlab/-/blob/master/lib/gitlab/metrics/global_search_slis.rb#L10-L13
+
+        For error rate, the number of GLobal Search search requests that result in an erroneous status code or raise an error during the search request.
 
         Currently the apdex value is {{ $value | humanizePercentage }}.
       grafana_dashboard_id: api-main/api-overview
@@ -101,9 +105,11 @@ groups:
       title: The global_search SLI of the api service in region `{{ $labels.region
         }}` has an apdex violating SLO
       description: |
-        The number of Global Search search requests meeting their duration target based on the 99.95th percentile of the search with the same parameters.
+        For apdex, the number of Global Search search requests meeting their duration target based on the 99.95th percentile of the search with the same parameters.
 
         The target duration can be found here: https://gitlab.com/gitlab-org/gitlab/-/blob/master/lib/gitlab/metrics/global_search_slis.rb#L10-L13
+
+        For error rate, the number of GLobal Search search requests that result in an erroneous status code or raise an error during the search request.
 
         Note that this alert is specific to the `{{ $labels.region }}` region.
 
@@ -148,9 +154,11 @@ groups:
       title: The global_search SLI of the api service in region `{{ $labels.region
         }}` has an apdex violating SLO
       description: |
-        The number of Global Search search requests meeting their duration target based on the 99.95th percentile of the search with the same parameters.
+        For apdex, the number of Global Search search requests meeting their duration target based on the 99.95th percentile of the search with the same parameters.
 
         The target duration can be found here: https://gitlab.com/gitlab-org/gitlab/-/blob/master/lib/gitlab/metrics/global_search_slis.rb#L10-L13
+
+        For error rate, the number of GLobal Search search requests that result in an erroneous status code or raise an error during the search request.
 
         Note that this alert is specific to the `{{ $labels.region }}` region.
 
@@ -195,9 +203,11 @@ groups:
       title: The global_search SLI of the api service (`{{ $labels.stage }}` stage)
         has an error rate violating SLO
       description: |
-        The number of Global Search search requests meeting their duration target based on the 99.95th percentile of the search with the same parameters.
+        For apdex, the number of Global Search search requests meeting their duration target based on the 99.95th percentile of the search with the same parameters.
 
         The target duration can be found here: https://gitlab.com/gitlab-org/gitlab/-/blob/master/lib/gitlab/metrics/global_search_slis.rb#L10-L13
+
+        For error rate, the number of GLobal Search search requests that result in an erroneous status code or raise an error during the search request.
 
         Currently the error-rate is {{ $value | humanizePercentage }}.
       grafana_dashboard_id: api-main/api-overview
@@ -244,9 +254,11 @@ groups:
       title: The global_search SLI of the api service (`{{ $labels.stage }}` stage)
         has an error rate violating SLO
       description: |
-        The number of Global Search search requests meeting their duration target based on the 99.95th percentile of the search with the same parameters.
+        For apdex, the number of Global Search search requests meeting their duration target based on the 99.95th percentile of the search with the same parameters.
 
         The target duration can be found here: https://gitlab.com/gitlab-org/gitlab/-/blob/master/lib/gitlab/metrics/global_search_slis.rb#L10-L13
+
+        For error rate, the number of GLobal Search search requests that result in an erroneous status code or raise an error during the search request.
 
         Currently the error-rate is {{ $value | humanizePercentage }}.
       grafana_dashboard_id: api-main/api-overview
@@ -293,9 +305,11 @@ groups:
       title: The global_search SLI of the api service in region `{{ $labels.region
         }}` has an error rate violating SLO
       description: |
-        The number of Global Search search requests meeting their duration target based on the 99.95th percentile of the search with the same parameters.
+        For apdex, the number of Global Search search requests meeting their duration target based on the 99.95th percentile of the search with the same parameters.
 
         The target duration can be found here: https://gitlab.com/gitlab-org/gitlab/-/blob/master/lib/gitlab/metrics/global_search_slis.rb#L10-L13
+
+        For error rate, the number of GLobal Search search requests that result in an erroneous status code or raise an error during the search request.
 
         Note that this alert is specific to the `{{ $labels.region }}` region.
 
@@ -344,9 +358,11 @@ groups:
       title: The global_search SLI of the api service in region `{{ $labels.region
         }}` has an error rate violating SLO
       description: |
-        The number of Global Search search requests meeting their duration target based on the 99.95th percentile of the search with the same parameters.
+        For apdex, the number of Global Search search requests meeting their duration target based on the 99.95th percentile of the search with the same parameters.
 
         The target duration can be found here: https://gitlab.com/gitlab-org/gitlab/-/blob/master/lib/gitlab/metrics/global_search_slis.rb#L10-L13
+
+        For error rate, the number of GLobal Search search requests that result in an erroneous status code or raise an error during the search request.
 
         Note that this alert is specific to the `{{ $labels.region }}` region.
 
@@ -395,9 +411,11 @@ groups:
       title: The global_search SLI of the api service (`{{ $labels.stage }}` stage)
         has not received any traffic in the past 30m
       description: |
-        The number of Global Search search requests meeting their duration target based on the 99.95th percentile of the search with the same parameters.
+        For apdex, the number of Global Search search requests meeting their duration target based on the 99.95th percentile of the search with the same parameters.
 
         The target duration can be found here: https://gitlab.com/gitlab-org/gitlab/-/blob/master/lib/gitlab/metrics/global_search_slis.rb#L10-L13
+
+        For error rate, the number of GLobal Search search requests that result in an erroneous status code or raise an error during the search request.
 
         This alert signifies that the SLI is reporting a cessation of traffic; the signal is present, but is zero.
       grafana_dashboard_id: api-main/api-overview
@@ -431,9 +449,11 @@ groups:
       title: The global_search SLI of the api service (`{{ $labels.stage }}` stage)
         has not reported any traffic in the past 30m
       description: |
-        The number of Global Search search requests meeting their duration target based on the 99.95th percentile of the search with the same parameters.
+        For apdex, the number of Global Search search requests meeting their duration target based on the 99.95th percentile of the search with the same parameters.
 
         The target duration can be found here: https://gitlab.com/gitlab-org/gitlab/-/blob/master/lib/gitlab/metrics/global_search_slis.rb#L10-L13
+
+        For error rate, the number of GLobal Search search requests that result in an erroneous status code or raise an error during the search request.
 
         This alert signifies that the SLI was previously reporting traffic, but is no longer - the signal is absent.
 
@@ -469,9 +489,11 @@ groups:
       title: The global_search SLI of the api service in region `{{ $labels.region
         }}` has not received any traffic in the past 30m
       description: |
-        The number of Global Search search requests meeting their duration target based on the 99.95th percentile of the search with the same parameters.
+        For apdex, the number of Global Search search requests meeting their duration target based on the 99.95th percentile of the search with the same parameters.
 
         The target duration can be found here: https://gitlab.com/gitlab-org/gitlab/-/blob/master/lib/gitlab/metrics/global_search_slis.rb#L10-L13
+
+        For error rate, the number of GLobal Search search requests that result in an erroneous status code or raise an error during the search request.
 
         This alert signifies that the SLI is reporting a cessation of traffic; the signal is present, but is zero.
 
@@ -507,9 +529,11 @@ groups:
       title: The global_search SLI of the api service in region `{{ $labels.region
         }}` has not reported any traffic in the past 30m
       description: |
-        The number of Global Search search requests meeting their duration target based on the 99.95th percentile of the search with the same parameters.
+        For apdex, the number of Global Search search requests meeting their duration target based on the 99.95th percentile of the search with the same parameters.
 
         The target duration can be found here: https://gitlab.com/gitlab-org/gitlab/-/blob/master/lib/gitlab/metrics/global_search_slis.rb#L10-L13
+
+        For error rate, the number of GLobal Search search requests that result in an erroneous status code or raise an error during the search request.
 
         This alert signifies that the SLI was previously reporting traffic, but is no longer - the signal is absent.
 
