@@ -340,6 +340,7 @@ ensure_generated_content_up_to_date:
   extends: .default-job-rules
   stage: test
   script:
+    - rm -rf service-health-dashboard-manifest/ # Rm artifacts to pass git diff
     - ./scripts/bundler.sh  # Install jsonnet bundles
     - make ensure-generated-content-up-to-date
 
