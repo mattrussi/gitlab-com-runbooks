@@ -24,5 +24,6 @@ metricsCatalog.serviceDefinition({
 
   skippedMaturityCriteria: maturityLevels.skip({
     'Structured logs available in Kibana': 'Cloud SQL is a managed service of GCP. The logs are available in Stackdriver.',
+    'Developer guides exist in developer documentation': 'Cloud SQL is an infrastructure component, powered by GCP',
   }),
 })

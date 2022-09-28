@@ -103,6 +103,7 @@ metricsCatalog.serviceDefinition({
     },
   },
   skippedMaturityCriteria: maturityLevels.skip({
+    'Developer guides exist in developer documentation': 'NAT is an infrastructure component, developers do not interact with it',
     'Structured logs available in Kibana': 'NAT is managed by GCP, thus the logs are avaiable in Stackdriver.',
   }),
 })

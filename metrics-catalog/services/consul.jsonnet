@@ -1,6 +1,7 @@
 local metricsCatalog = import 'servicemetrics/metrics.libsonnet';
 local toolingLinks = import 'toolinglinks/toolinglinks.libsonnet';
 local kubeLabelSelectors = metricsCatalog.kubeLabelSelectors;
+local maturityLevels = import 'service-maturity/levels.libsonnet';
 
 metricsCatalog.serviceDefinition({
   type: 'consul',
@@ -49,4 +50,7 @@ metricsCatalog.serviceDefinition({
       ],
     },
   },
+  skippedMaturityCriteria: maturityLevels.skip({
+    'Developer guides exist in developer documentation': 'Consul is an infrastructure component, developers do not interact with it',
+  }),
 })

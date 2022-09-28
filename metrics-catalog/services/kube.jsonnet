@@ -153,6 +153,7 @@ metricsCatalog.serviceDefinition({
     },
   },
   skippedMaturityCriteria: maturityLevels.skip({
+    'Developer guides exist in developer documentation': 'Application logic does not interact with kube',
     'Service exists in the dependency graph': 'This service is managed by GKE at the moment. It does not interfact directly with any other services',
   }),
 })

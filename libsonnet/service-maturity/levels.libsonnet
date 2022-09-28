@@ -105,18 +105,16 @@ local levels = [
         evidence: function(service) null,
       },
       {
-        // TODO: https://gitlab.com/gitlab-com/gl-infra/scalability/-/issues/833
         name: 'Developer guides exist in developer documentation',
-        evidence: function(service) null,
+        evidence: function(service)
+          local docs = serviceCatalog.lookupService(service.type).technical.documents;
+          std.get(docs, 'developer_guide', false),
       },
       {
         name: 'SRE guides exist in runbooks',
         evidence: function(service)
           local docs = serviceCatalog.lookupService(service.type).technical.documents;
-          if std.objectHas(docs, 'sre_guide') then
-            docs.sre_guide
-          else
-            false,
+          std.get(docs, 'sre_guide', false),
       },
       {
         // TODO: https://gitlab.com/gitlab-com/gl-infra/scalability/-/issues/829
