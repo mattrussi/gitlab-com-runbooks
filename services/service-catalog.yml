@@ -425,6 +425,33 @@ services:
         primary_grafana_dashboard:
         sentry_slug:
 
+  - name: errortracking
+    tier: sv
+    friendly_name: ErrorTracking
+    teams:
+      - observability
+    label: Service:ErrorTracking
+    business:
+      requirement: |
+        This service allows customers to connect their projects to a GitLab managed Sentry clone so that they can view errors for their application.
+      customers:
+        - GitLab.com customers
+      SLA:
+        overall_sal_weighting:
+        availability:
+        response_time:
+      business_value: |
+        Customers can view error events in GitLab and connect those errors to GitLab issues.
+    technical:
+      documents:
+        architecture: https://gitlab.com/gitlab-org/opstrace/runbooks/#architecture
+        readiness_review: https://gitlab.com/gitlab-com/gl-infra/readiness/-/tree/master/library/database/clickhouse
+      logging:
+        - name: Rails
+          permalink: None
+    infrastructure:
+      provider: gcp
+
   - name: customersdot
     tier: sv
     friendly_name: CustomersDot

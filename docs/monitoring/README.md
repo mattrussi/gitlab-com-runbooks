@@ -21,6 +21,7 @@
 * [../ci-runners/ci_pending_builds.md](../ci-runners/ci_pending_builds.md)
 * [design.gitlab.com Runbook](../design/design-gitlab-com.md)
 * [../elastic/elasticsearch-integration-in-gitlab.md](../elastic/elasticsearch-integration-in-gitlab.md)
+* [ErrorTracking main troubleshooting document](../errortracking/overview.md)
 * [Upgrading the OS of Gitaly VMs](../gitaly/gitaly-os-upgrade.md)
 * [Gitaly repository cgroups](../gitaly/gitaly-repos-cgroup.md)
 * [GitLab.com on Kubernetes](../kube/k8s-new-cluster.md)
