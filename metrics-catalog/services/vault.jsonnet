@@ -76,5 +76,6 @@ metricsCatalog.serviceDefinition({
   skippedMaturityCriteria: maturityLevels.skip({
     'Structured logs available in Kibana': "Vault is a pending project at the moment. There is no traffic at the moment. We'll add logs and metrics in https://gitlab.com/groups/gitlab-com/gl-infra/-/epics/739",
     'Service exists in the dependency graph': 'Vault is a pending project at the moment. There is no traffic at the moment. The progress can be tracked at https://gitlab.com/groups/gitlab-com/gl-infra/-/epics/739',
+    'Developer guides exist in developer documentation': 'Vault is an infrastructure component, developers do not interact with it',
   }),
 })

@@ -43,6 +43,7 @@ services:
         architecture: https://about.gitlab.com/handbook/engineering/infrastructure/production-architecture/#service-architecture
         readiness_review: https://gitlab.com/gitlab-com/gl-infra/readiness/-/tree/master/api-k8s-migration
         sre_guide: https://gitlab.com/gitlab-com/runbooks/-/tree/master/docs/api
+        developer_guide: https://docs.gitlab.com/ee/development/api_styleguide.html
         service:
           - https://docs.gitlab.com/ce/api/
           - https://docs.gitlab.com/ee/api/
@@ -182,6 +183,7 @@ services:
         architecture:
         readiness_review:
         sre_guide: https://gitlab.com/gitlab-com/runbooks/-/tree/master/docs/camoproxy
+        developer_guide: https://docs.gitlab.com/ee/security/asset_proxy.html
         service:
         security:
       dependencies:
@@ -323,6 +325,7 @@ services:
         architecture: https://www.consul.io/docs/internals/architecture.html
         readiness_review: https://gitlab.com/gitlab-com/gl-infra/readiness/-/merge_requests/80
         sre_guide: https://gitlab.com/gitlab-com/runbooks/-/tree/master/docs/consul
+        developer_guide:
         service:
           - https://github.com/hashicorp/consul/blob/master/README.md
         security: https://www.consul.io/docs/internals/security.html
@@ -448,6 +451,7 @@ services:
         architecture: https://gitlab.com/gitlab-org/customers-gitlab-com/-/blob/main/doc/architecture/index.md
         readiness_review:
         sre_guide: https://gitlab.com/gitlab-com/runbooks/-/tree/master/docs/customersdot
+        developer_guide: https://docs.gitlab.com/ee/development/product_qualified_lead_guide/#hand-raise-flow-on-customersdot
         service:
           - https://gitlab.com/gitlab-org/customers-gitlab-com/-/tree/main/doc
         security:
@@ -554,6 +558,7 @@ services:
         architecture:
         readiness_review:
         sre_guide: https://gitlab.com/gitlab-com/runbooks/-/tree/master/docs/kube
+        developer_guide:
         service:
         security:
       logging:
@@ -598,6 +603,7 @@ services:
         architecture: https://gitlab.com/gitlab-com/runbooks/raw/master/img/logging-infr.png
         readiness_review: https://gitlab.com/gitlab-com/gl-infra/readiness/-/blob/master/es-logging-cluster/index.md
         sre_guide: https://gitlab.com/gitlab-com/runbooks/-/tree/master/docs/logging
+        developer_guide: https://docs.gitlab.com/ee/development/logging.html#gitlab-developers-guide-to-logging
         service:
           - https://gitlab.com/gitlab-com/runbooks/blob/master/howto/logging.md
           - https://gitlab.com/gitlab-com/gl-infra/readiness/-/blob/master/es-logging-cluster/index.md
@@ -698,6 +704,7 @@ services:
         architecture:
         readiness_review:
         sre_guide: https://gitlab.com/gitlab-com/runbooks/-/tree/master/docs/nginx
+        developer_guide:
         service:
         security:
       dependencies:
@@ -757,6 +764,7 @@ services:
         architecture:
         readiness_review:
         sre_guide: https://gitlab.com/gitlab-com/runbooks/-/tree/master/docs/search
+        developer_guide: https://docs.gitlab.com/ee/development/elasticsearch.html
         service: []
         security:
       dependencies:
@@ -824,6 +832,7 @@ services:
         architecture: https://about.gitlab.com/handbook/engineering/infrastructure/production-architecture/#service-architecture
         readiness_review:
         sre_guide: https://gitlab.com/gitlab-com/runbooks/-/tree/master/docs/web
+        developer_guide: https://docs.gitlab.com/ee/development/architecture.html
         service:
           - https://docs.gitlab.com/ce/
           - https://docs.gitlab.com/ee/
@@ -897,6 +906,7 @@ services:
         architecture: https://about.gitlab.com/handbook/engineering/infrastructure/production-architecture/#infra-current-archi-diagram
         readiness_review:
         sre_guide: https://gitlab.com/gitlab-com/runbooks/-/tree/master/docs/frontend
+        developer_guide: https://docs.gitlab.com/ee/development/fe_guide/#frontend-development-guidelines
         service:
           - https://cbonte.github.io/haproxy-dconv/1.7/intro.html
         security:
@@ -948,6 +958,7 @@ services:
     technical:
       documents:
         sre_guide: https://gitlab.com/gitlab-com/runbooks/-/tree/master/docs/google-cloud-storage
+        developer_guide: https://docs.gitlab.com/ee/administration/object_storage.html
       logging:
         - name: Admin Activity
           permalink: https://cloudlogging.app.goo.gl/Htfsfyye1PeAfc1r6
@@ -990,6 +1001,7 @@ services:
         architecture: https://about.gitlab.com/handbook/engineering/infrastructure/production-architecture/#infra-current-archi-diagram
         readiness_review:
         sre_guide: https://gitlab.com/gitlab-com/runbooks/-/tree/master/docs/git
+        developer_guide: https://docs.gitlab.com/ee/topics/git/#git
         service:
           - https://about.gitlab.com/handbook/engineering/infrastructure/production-architecture/#service-architecture
         security:
@@ -1077,6 +1089,7 @@ services:
         architecture: https://about.gitlab.com/handbook/engineering/infrastructure/production-architecture/#service-architecture
         readiness_review:
         sre_guide: https://gitlab.com/gitlab-com/runbooks/-/tree/master/docs/gitaly
+        developer_guide: https://docs.gitlab.com/ee/development/gitaly.html#gitaly-developers-guide
         service:
           - https://gitlab.com/gitlab-org/gitaly/blob/master/README.md
         security:
@@ -1224,6 +1237,7 @@ services:
         design: https://gitlab.com/gitlab-org/gitaly/blob/master/doc/design_ha.md
         architecture: https://about.gitlab.com/handbook/engineering/infrastructure/production-architecture/#service-architecture
         sre_guide: https://gitlab.com/gitlab-com/runbooks/-/tree/master/docs/praefect
+        developer_guide: https://docs.gitlab.com/ee/development/gitaly.html#gitaly-developers-guide
         readiness_review:
         service:
           - https://gitlab.com/gitlab-org/gitaly/blob/master/README.md
@@ -1292,6 +1306,7 @@ services:
         architecture:
         readiness_review: https://gitlab.com/gitlab-com/gl-infra/readiness/-/issues/17
         sre_guide: https://gitlab.com/gitlab-com/runbooks/-/tree/master/docs/pvs
+        developer_guide: https://docs.gitlab.com/ee/administration/external_pipeline_validation.html
         service:
         security:
       dependencies:
@@ -1352,6 +1367,7 @@ services:
         architecture:
         readiness_review: https://gitlab.com/gitlab-com/gl-infra/readiness/-/blob/master/mailroom/overview.md
         sre_guide: https://gitlab.com/gitlab-com/runbooks/-/tree/master/docs/mailroom
+        developer_guide: https://docs.gitlab.com/ee/development/emails.html#mailroom-gem-updates
         service:
           - https://github.com/tpitale/mail_room/blob/master/README.md
         security:
@@ -1415,6 +1431,7 @@ services:
         architecture:
         readiness_review:
         sre_guide: https://gitlab.com/gitlab-com/runbooks/-/tree/master/docs/web-pages
+        developer_guide: https://docs.gitlab.com/ee/development/pages/
         service:
           - https://gitlab.com/gitlab-org/gitlab-pages/blob/master/README.md
         security:
@@ -1477,6 +1494,7 @@ services:
         architecture: https://about.gitlab.com/handbook/engineering/infrastructure/production-architecture/#database-architecture
         readiness_review:
         sre_guide: https://gitlab.com/gitlab-com/runbooks/-/tree/master/docs/pgbouncer
+        developer_guide:
         service:
           - https://pgbouncer.github.io/features.html
         security:
@@ -1544,6 +1562,7 @@ services:
         design:
         architecture: https://about.gitlab.com/handbook/engineering/infrastructure/production-architecture/#database-architecture
         sre_guide: https://gitlab.com/gitlab-com/runbooks/-/tree/master/docs/pgbouncer-registry
+        developer_guide:
         readiness_review:
         service:
           - https://pgbouncer.github.io/features.html
@@ -1615,6 +1634,7 @@ services:
         architecture: https://about.gitlab.com/handbook/engineering/infrastructure/production-architecture/#database-architecture
         readiness_review:
         sre_guide: https://gitlab.com/gitlab-com/runbooks/-/tree/master/docs/pgbouncer-ci
+        developer_guide:
         service:
           - https://pgbouncer.github.io/features.html
         security:
@@ -1689,6 +1709,7 @@ services:
         architecture: https://about.gitlab.com/handbook/engineering/infrastructure/production-architecture/#database-architecture
         readiness_review:
         sre_guide: https://gitlab.com/gitlab-com/runbooks/-/tree/master/docs/patroni
+        developer_guide:
         service:
           - https://www.postgresql.org/docs/9.6/index.html
         security: https://www.postgresql.org/support/security/
@@ -1777,6 +1798,7 @@ services:
         architecture: https://about.gitlab.com/handbook/engineering/infrastructure/production-architecture/#database-architecture
         readiness_review:
         sre_guide: https://gitlab.com/gitlab-com/runbooks/-/tree/master/docs/patroni-registry
+        developer_guide:
         service:
           - https://www.postgresql.org/docs/9.6/index.html
         security: https://www.postgresql.org/support/security/
@@ -1865,6 +1887,7 @@ services:
         architecture: https://about.gitlab.com/handbook/engineering/infrastructure/production-architecture/#database-architecture
         readiness_review:
         sre_guide: https://gitlab.com/gitlab-com/runbooks/-/tree/master/docs/patroni-ci
+        developer_guide:
         service:
           - https://www.postgresql.org/docs/9.6/index.html
         security: https://www.postgresql.org/support/security/
@@ -1948,6 +1971,7 @@ services:
         architecture: https://docs.gitlab.com/ee/administration/integration/plantuml.html
         readiness_review: https://gitlab.com/gitlab-com/gl-infra/readiness/-/blob/master/plantuml/overview.md
         sre_guide: https://gitlab.com/gitlab-com/runbooks/-/tree/master/docs/plantuml
+        developer_guide: https://docs.gitlab.com/ee/administration/integration/plantuml.html#enable-plantuml-integration
         service:
         security: https://www.postgresql.org/support/security/
       dependencies:
@@ -2014,6 +2038,7 @@ services:
         architecture: https://about.gitlab.com/handbook/engineering/infrastructure/production-architecture/#database-architecture
         readiness_review:
         sre_guide: https://gitlab.com/gitlab-com/runbooks/-/tree/master/docs/postgres-archive
+        developer_guide:
         service:
           - https://www.postgresql.org/docs/9.6/index.html
         security: https://www.postgresql.org/support/security/
@@ -2239,6 +2264,7 @@ services:
         architecture: https://github.com/prometheus/prometheus/blob/7632e976c0617f6206565541c6d91c02c6e12ed5/README.md#architecture-overview
         readiness_review:
         sre_guide: https://gitlab.com/gitlab-com/runbooks/-/tree/master/docs/monitoring
+        developer_guide: https://docs.gitlab.com/ee/development/prometheus_metrics
         service:
           - https://github.com/prometheus/prometheus/blob/7632e976c0617f6206565541c6d91c02c6e12ed5/README.md
         security:
@@ -2327,6 +2353,7 @@ services:
         architecture:
         readiness_review:
         sre_guide: https://gitlab.com/gitlab-com/runbooks/-/tree/master/docs/redis
+        developer_guide: https://docs.gitlab.com/ee/development/redis.html#redis-guidelines
         service:
           - https://redis.io/documentation
           - https://docs.gitlab.com/omnibus/settings/redis.html
@@ -2394,6 +2421,7 @@ services:
         architecture:
         readiness_review:
         sre_guide: https://gitlab.com/gitlab-com/runbooks/-/tree/master/docs/redis-cache
+        developer_guide: https://docs.gitlab.com/ee/development/redis.html#redis-guidelines
         service:
           - https://redis.io/documentation
           - https://docs.gitlab.com/omnibus/settings/redis.html
@@ -2519,6 +2547,7 @@ services:
         architecture:
         readiness_review:
         sre_guide: https://gitlab.com/gitlab-com/runbooks/-/tree/master/docs/redis-ratelimiting
+        developer_guide: https://docs.gitlab.com/ee/development/redis.html#redis-guidelines
         service:
           - https://redis.io/documentation
           - https://docs.gitlab.com/omnibus/settings/redis.html
@@ -2583,6 +2612,7 @@ services:
         architecture:
         readiness_review:
         sre_guide: https://gitlab.com/gitlab-com/runbooks/-/tree/master/docs/redis-sessions
+        developer_guide: https://docs.gitlab.com/ee/development/redis.html#redis-guidelines
         service:
           - https://redis.io/documentation
           - https://docs.gitlab.com/omnibus/settings/redis.html
@@ -2646,6 +2676,7 @@ services:
         architecture:
         readiness_review:
         sre_guide: https://gitlab.com/gitlab-com/runbooks/-/tree/master/docs/redis-sidekiq
+        developer_guide: https://docs.gitlab.com/ee/development/redis.html#redis-guidelines
         service:
           - https://redis.io/documentation
           - https://docs.gitlab.com/omnibus/settings/redis.html
@@ -2709,6 +2740,7 @@ services:
         architecture:
         readiness_review:
         sre_guide: https://gitlab.com/gitlab-com/runbooks/-/tree/master/docs/redis-tracechunks
+        developer_guide: https://docs.gitlab.com/ee/development/redis.html#redis-guidelines
         service:
           - https://redis.io/documentation
           - https://docs.gitlab.com/omnibus/settings/redis.html
@@ -2777,6 +2809,7 @@ services:
         architecture:
         readiness_review: https://gitlab.com/gitlab-com/gl-infra/readiness/-/blob/master/registry-gke/overview.md
         sre_guide: https://gitlab.com/gitlab-com/runbooks/-/tree/master/docs/registry
+        developer_guide: https://docs.gitlab.com/ee/development/packages/#package-registry-development
         service:
           - https://github.com/docker/distribution/blob/364d2e4a5bed94e9393dd88232ea3be29ca8f27a/README.md
         security:
@@ -2840,6 +2873,7 @@ services:
         architecture:
         readiness_review:
         sre_guide: https://gitlab.com/gitlab-com/runbooks/-/tree/master/docs/nat
+        developer_guide:
         service:
         security:
       security:
@@ -2888,6 +2922,7 @@ services:
         architecture: A single VM node running the services needed for Sentry, mainly PostgreSQL, Redis Server, and Prometheus for monitoring.
         readiness_review:
         sre_guide: https://gitlab.com/gitlab-com/runbooks/-/tree/master/docs/sentry
+        developer_guide: https://docs.gitlab.com/ee/operations/error_tracking.html
         service:
         security:
       dependencies:
@@ -2963,6 +2998,7 @@ services:
         architecture: https://about.gitlab.com/handbook/engineering/infrastructure/production-architecture/#service-architecture
         readiness_review: https://gitlab.com/gitlab-com/gl-infra/readiness/-/blob/master/sidekiq/index.md
         sre_guide: https://gitlab.com/gitlab-com/runbooks/-/tree/master/docs/sidekiq
+        developer_guide: https://docs.gitlab.com/ee/development/sidekiq/#sidekiq-guides
         service:
           - https://github.com/mperham/sidekiq/blob/master/README.md
         security:
@@ -3200,6 +3236,7 @@ services:
         architecture:
         readiness_review:
         sre_guide: https://gitlab.com/gitlab-com/runbooks/-/tree/master/docs/ci-runners
+        developer_guide: https://docs.gitlab.com/runner/development/#contribute-to-gitlab-runner-development
         service:
           - https://gitlab.com/gitlab-org/gitlab-runner/blob/master/README.md
         security: https://gitlab.com/gitlab-org/gitlab-runner/blob/master/docs/security/index.md
@@ -3337,6 +3374,7 @@ services:
         architecture:
         readiness_review: https://gitlab.com/gitlab-com/gl-infra/readiness/-/tree/master/cloudflare
         sre_guide: https://gitlab.com/gitlab-com/runbooks/-/tree/master/docs/waf
+        developer_guide:
         service:
         security:
       dependencies:
@@ -3393,6 +3431,7 @@ services:
         design:
         architecture:
         sre_guide: https://gitlab.com/gitlab-com/runbooks/-/tree/master/docs/vault
+        developer_guide:
         service:
         security:
       dependencies:
@@ -3452,6 +3491,7 @@ services:
         architecture: https://www.jaegertracing.io/docs/latest/architecture/
         readiness_review: TBD
         sre_guide: https://gitlab.com/gitlab-com/runbooks/-/tree/master/docs/jaeger
+        developer_guide: https://docs.gitlab.com/ee/development/distributed_tracing.html
         service:
           - https://www.jaegertracing.io/docs/latest/
         security: https://www.jaegertracing.io/docs/latest/security/
@@ -3512,6 +3552,7 @@ services:
         architecture:
         readiness_review:
         sre_guide: https://gitlab.com/gitlab-com/runbooks/-/tree/master/docs/woodhouse
+        developer_guide: https://gitlab.com/gitlab-com/gl-infra/woodhouse/-/blob/master/README.md
         service:
         security:
       dependencies:
@@ -3573,6 +3614,7 @@ services:
         architecture: https://gitlab.com/gitlab-org/cluster-integration/gitlab-agent/-/blob/master/doc/architecture.md#high-level-architecture
         readiness_review: https://gitlab.com/gitlab-com/gl-infra/readiness/-/tree/master/kubernetes-agent
         sre_guide: https://gitlab.com/gitlab-com/runbooks/-/tree/master/docs/kas
+        developer_guide: https://gitlab.com/gitlab-org/cluster-integration/gitlab-agent/-/blob/master/doc/developing.md
         service:
           - https://docs.gitlab.com/ee/user/clusters/agent/
         security:
@@ -3639,6 +3681,7 @@ services:
         architecture: TBD
         readiness_review: TBD
         sre_guide: https://gitlab.com/gitlab-com/runbooks/-/tree/master/docs/websockets
+        developer_guide: https://docs.gitlab.com/ee/development/workhorse/channel.html#introduction-to-websockets
         service:
           - TBD
         security:
@@ -3698,6 +3741,7 @@ services:
         architecture:
         readiness_review:
         sre_guide: https://gitlab.com/gitlab-com/runbooks/-/tree/master/docs/cloud-sql
+        developer_guide:
         service:
         security:
       security:
@@ -3746,6 +3790,7 @@ services:
         architecture:
         readiness_review:
         sre_guide: https://gitlab.com/gitlab-com/runbooks/-/tree/master/docs/external-dns
+        developer_guide:
         service:
         security:
       dependencies:

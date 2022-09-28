@@ -74,6 +74,7 @@ metricsCatalog.serviceDefinition({
     },
   },
   skippedMaturityCriteria: maturityLevels.skip({
+    'Developer guides exist in developer documentation': 'Application logic does not interact with nginx',
     'Structured logs available in Kibana': 'Logs from nginx are not ingested to ElasticSearch due to volume. Usually, workhorse logs will cover the same ground. Besides, the logs are also available in Stackdriver',
   }),
 })
