@@ -254,6 +254,7 @@
     stage: 'govern',
     feature_categories: [
       'vulnerability_management',
+      'dependency_management',
     ],
   },
   compliance: {
@@ -270,6 +271,7 @@
     feature_categories: [
       'service_ping',
       'privacy_control_center',
+      'application_instrumentation',
     ],
   },
   product_analytics: {
@@ -312,6 +314,13 @@
     stage: 'fulfillment',
     feature_categories: [
       'billing_and_subscription_management',
+    ],
+  },
+  commerce_integrations: {
+    name: 'Commerce Integrations',
+    stage: 'fulfillment',
+    feature_categories: [
+      'commerce_integrations',
     ],
   },
   acquisition: {
