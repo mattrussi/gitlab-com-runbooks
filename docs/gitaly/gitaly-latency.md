@@ -14,6 +14,7 @@ This runbook will be deprecated in favor of the [gitaly pprof runbook](https://g
 
 * Visit the **[Triage Dashboard](https://dashboards.gitlab.net/d/RZmbBr7mk/gitlab-triage)**.
 * Check the **Gitaly p95 latency** graph and identify the offending server or servers.
+* Check repository CPU [cgroup](./gitaly-repos-cgroup.md)
 
 ## 2. Drill down
 
