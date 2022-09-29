@@ -58,7 +58,7 @@ metricsCatalog.serviceDefinition({
       apdex: histogramApdex(
         histogram='apiserver_request_duration_seconds_bucket',
         selector=baseSelector { verb: { ne: 'WATCH' } },  // Exclude long-polling
-        satisfiedThreshold=0.5,
+        satisfiedThreshold=0.4,
       ),
 
       requestRate: rateMetric(
