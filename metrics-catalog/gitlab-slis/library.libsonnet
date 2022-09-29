@@ -27,6 +27,16 @@ local list = [
     |||,
   }),
   sliDefinition.new({
+    name: 'sidekiq_jobs',
+    significantLabels: ['endpoint_id', 'feature_category'],
+    kinds: [sliDefinition.apdexKind, sliDefinition.errorRateKind],
+    description: |||
+      The number of CustomersDot jobs meeting their duration target for their execution.
+      By default, a Sidekiq job should take no more than 5 seconds. But
+      this can be adjusted by endpoint.
+    |||,
+  }),
+  sliDefinition.new({
     name: 'customers_dot_requests',
     significantLabels: ['endpoint_id', 'feature_category'],
     kinds: [sliDefinition.apdexKind, sliDefinition.errorRateKind],
