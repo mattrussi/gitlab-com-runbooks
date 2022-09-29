@@ -268,17 +268,6 @@ checks:
       - Infrastructure
       - Community Relations
 
-  - url: https://deps.sec.gitlab.com/api/ping
-    timeout_ms: 30000
-    resolution_minutes: 5
-    notify_when_restored: true
-    tags:
-      - gemnasium
-    teams:
-      - Infrastructure
-    integrations:
-      - pagerduty
-
   #######################################
   # People Group Engineering Projects
   #######################################
