@@ -16,6 +16,7 @@
 
 ## Troubleshooting Pointers
 
+* [ErrorTracking main troubleshooting document](../errortracking/overview.md)
 * [Increased Error Rate](../frontend/high-error-rate.md)
 * [Gitaly is down](../gitaly/gitaly-down.md)
 * [Tuning and Modifying Alerts](../monitoring/alert_tuning.md)

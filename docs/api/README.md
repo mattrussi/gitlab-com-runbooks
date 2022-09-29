@@ -34,6 +34,7 @@
 * [Elastic Nodes Disk Space Saturation](../elastic/disk_space_saturation.md)
 * [../elastic/elastic-cloud.md](../elastic/elastic-cloud.md)
 * [../elastic/elasticsearch-integration-in-gitlab.md](../elastic/elasticsearch-integration-in-gitlab.md)
+* [ErrorTracking main troubleshooting document](../errortracking/overview.md)
 * [Blocking and disabling things in the HAProxy load balancers](../frontend/block-things-in-haproxy.md)
 * [HAProxy management at GitLab](../frontend/haproxy.md)
 * [Possible breach of SSH MaxStartups](../frontend/ssh-maxstartups-breach.md)
