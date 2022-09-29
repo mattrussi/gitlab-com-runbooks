@@ -68,12 +68,12 @@ find_dashboards | while read -r line; do
   if response=$(call_grafana_api "https://dashboards.gitlab.net/api/dashboards/uid/$uid"); then
     url=$(echo "${response}" | jq '.meta.url' | tr -d '"')
     fullurl="https://dashboards.gitlab.net$url"
-    echo "${folder},${fullurl}" >> $TEMPFILE
+    echo "${folder},${fullurl}" >>$TEMPFILE
   fi
 done
 
 if [[ -n $dry_run ]]; then
   jq -R -n '[inputs|split(",")]| group_by(.[0]) | map({(.[0][0]): [.[][1]]}) | add | .[]|=sort' $TEMPFILE
 else
-  jq -R -n '[inputs|split(",")]| group_by(.[0]) | map({(.[0][0]): [.[][1]]}) | add | .[]|=sort' $TEMPFILE > "$FILE"
+  jq -R -n '[inputs|split(",")]| group_by(.[0]) | map({(.[0][0]): [.[][1]]}) | add | .[]|=sort' $TEMPFILE >"$FILE"
 fi
