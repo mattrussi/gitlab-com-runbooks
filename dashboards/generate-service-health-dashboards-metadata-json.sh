@@ -71,9 +71,9 @@ find_dashboards | while read -r line; do
     fullurl="https://dashboards.gitlab.net$url"
 
     if test -f "$TEMPFILE"; then
-      cat <<<"$(jq ".\"$folder\" |= .+ [\"$fullurl\"]" $TEMPFILE)" >$BUFFERFILE && mv $BUFFERFILE $TEMPFILE && rm -rf $BUFFERFILE
+      cat <<<"$(jq --arg folder "$folder" --arg fullurl "$fullurl" '.[$folder] |= .+ [$fullurl]' $TEMPFILE)" >$BUFFERFILE && mv $BUFFERFILE $TEMPFILE && rm -rf $BUFFERFILE
     else
-      echo "{\"$folder\": [\"$fullurl\"]}" >$TEMPFILE
+      echo '{}' | jq --arg folder "$folder" --arg fullurl "$fullurl" '.[$folder] = [$fullurl]' >$TEMPFILE
     fi
   fi
 done
