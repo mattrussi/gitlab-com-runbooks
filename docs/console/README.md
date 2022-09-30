@@ -32,6 +32,7 @@
 * [Cloud SQL Troubleshooting](../cloud-sql/cloud-sql.md)
 * [Cloudflare Logs](../cloudflare/logging.md)
 * [customers.gitlab.com](../customersdot/api-key-rotation.md)
+* [CustomersDot main troubleshoot documentation](../customersdot/overview.md)
 * [Elastic Nodes Disk Space Saturation](../elastic/disk_space_saturation.md)
 * [../elastic/elasticsearch-integration-in-gitlab.md](../elastic/elasticsearch-integration-in-gitlab.md)
 * [Frontend (HAProxy) Logging](../frontend/haproxy-logging.md)

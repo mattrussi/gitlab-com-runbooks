@@ -20,6 +20,7 @@
 
 ## Troubleshooting Pointers
 
+* [CustomersDot main troubleshoot documentation](../customersdot/overview.md)
 * [../elastic/elasticsearch-integration-in-gitlab.md](../elastic/elasticsearch-integration-in-gitlab.md)
 * [GitLab Storage Re-balancing](../gitaly/storage-rebalancing.md)
 * [GKE Cluster Upgrade Procedure](../kube/k8s-cluster-upgrade.md)

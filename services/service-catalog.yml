@@ -490,7 +490,7 @@ services:
           permalink: https://console.cloud.google.com/logs/query;query=resource.type%3D%22gce_instance%22%0Alog_name%3D%22projects%2Fgitlab-subscriptions-prod%2Flogs%2Fsidekiq.production%22;cursorTimestamp=2022-06-08T08:34:39.368440702Z?referrer=search&project=gitlab-subscriptions-prod/
     infrastructure:
       provider: gcp
-      architecture:
+      architecture: https://gitlab.com/gitlab-org/customers-gitlab-com/blob/main/doc/architecture/index.md
       provisioning: terraform
       accesses:
         - account_name:  # User or system account that has access to the service components in the infra provider

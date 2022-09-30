@@ -11,8 +11,9 @@ For all availability issues see the **[escalation process for incidents or outag
 
 The production and staging environments reside in Google Cloud projects.
 
-* Staging: gitlab-subscriptions-staging
-* Production: gitlab-subscriptions-prod
+* Staging: [gitlab-subscriptions-staging](https://console.cloud.google.com/home/dashboard?project=gitlab-subscriptions-staging)
+* Production:
+  [gitlab-subscriptions-prod](https://console.cloud.google.com/home/dashboard?project=gitlab-subscriptions-prod)
 
 #### SSH
 
@@ -36,7 +37,8 @@ and is is managed in
 * Local Logs
   * NGINX Logs: `/var/log/nginx`
   * PostgreSQL Logs: `/var/log/postgresql`
-  * CustomersDot Logs: `/home/customersdot/CustomersDot/current/log`
+  * Application Logs (Rails, Puma): `/home/customersdot/CustomersDot/current/log`
+  * Sidekiq Logs: `/home/customersdot/CustomersDot/current/log`
 * Stackdriver Logs
   * Application Logs from the VM are shipped into Stackdriver in GCP.
   * <https://cloudlogging.app.goo.gl/Jew7kUFaW8SUgeew9>
@@ -45,24 +47,46 @@ and is is managed in
 
 Specifications for a Customersdot metric catalog is available at [`metrics-catalog/services/customersdot.jsonnet`](../../metrics-catalog/services/customersdot.jsonnet).
 
-This catalog references the `customers_dot_requests_apdex` SLI, introduced as a
-[Rails application SLI](https://docs.gitlab.com/ee/development/application_slis/#gitlab-application-service-level-indicators-slis) for CustomersDot (see [Collector class](https://gitlab.com/gitlab-org/customers-gitlab-com/-/blob/main/lib/metrics/collector.rb) for more details).
+This catalog references the following SLIs:
+
+* `gitlab_sli_customers_dot_requests_total`
+* `gitlab_sli_customers_dot_requests_error_total`
+* `gitlab_sli_customers_dot_requests_error_apdex_total`
+* `gitlab_sli_customers_dot_requests_error_apdex_success_total`
+* `gitlab_sli_customers_dot_sidekiq_jobs_total`
+* `gitlab_sli_customers_dot_sidekiq_jobs_error_total`
+* `gitlab_sli_customers_dot_sidekiq_jobs_error_apdex_total`
+* `gitlab_sli_customers_dot_sidekiq_jobs_error_apdex_success_total`
+
+These SLIs were introduced as a [Rails application SLI](https://docs.gitlab.com/ee/development/application_slis/#gitlab-application-service-level-indicators-slis) for CustomersDot (see the [Collector class](https://gitlab.com/gitlab-org/customers-gitlab-com/-/blob/main/lib/metrics/collector.rb) and the [Metrics::Slis class](https://gitlab.com/gitlab-org/customers-gitlab-com/-/blob/main/lib/metrics/slis.rb) for more details).
 
 Two Prometheus instances have been set up for CustomersDot:
 
 * [Prometheus instance for Staging](https://prometheus-gke.stgsub.gitlab.net/graph)
 * [Prometheus instance for Production](https://prometheus-gke.prdsub.gitlab.net/graph)
 
-#### Database Access
+Here is [the main Grafana page for CustomersDot](https://dashboards.gitlab.net/d/customersdot-main/customersdot-overview?orgId=1)
 
-Once you have logged into a VM, if you have the rights you can connect to the
-Postgres database via:
+#### Database and Rails console access
+
+Once you have logged into the Staging or the Production VM, run one of these
+commands to open the database or the Rails console:
 
 ```bash
-sudo su - postgres -c psql
+gitlab-db # opens the PSQL console.
+gitlab-rails-console # opens the Rails console.
 ```
 
-(only superusers have access to the DB. We are improving this soon)
+These scripts can be found in `/usr/local/bin/`.
+
+#### Application provisioning
+
+The provisioning of the CustomersDot application stack is done through the
+[CustomersDot Ansible project](https://gitlab.com/gitlab-com/gl-infra/customersdot-ansible).
+
+To provision CustomersDot in staging and production manually, please refer to [this documentation](https://gitlab.com/gitlab-com/gl-infra/customersdot-ansible/-/blob/master/doc/readme.md#manual-provisioning).
+
+Alerts related to provisioning are sent to the `#s_fulfillment_status` Slack channel.
 
 #### Deployments
 
@@ -73,6 +97,8 @@ the application is first deployed to Staging then to Production after a delay of
 That being said, it is possible to trigger a manual pipeline to deploy to
 production right away, should the need to do so arise. To do so, please refer to
 [this documentation](https://gitlab.com/gitlab-com/gl-infra/customersdot-ansible/-/blob/master/doc/readme.md#manual-deployment-to-production).
+
+Alerts related to deployments are sent to the `#s_fulfillment_status` Slack channel.
 
 ### Change Management
 
@@ -91,4 +117,4 @@ Chef is used essentially to bootstrap user access for users and Ansible.
 
 ### Alerting
 
-Currently, the only alerting is a blackbox probe.
+At the moment, we rely on [this Uptime Kuma instance for CustomersDot production](https://customersdot.cloudwatch.net/status/customersdot-production) for stack monitoring. When an Uptime Kuma alert is created from this instance, it is sent to the `#s_fulfillment_status` Slack channel.
