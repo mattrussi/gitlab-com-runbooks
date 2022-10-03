@@ -34,6 +34,7 @@ through a proxy.
 1. Setup Yubikey SSH keys: <https://gitlab.com/gitlab-com/runbooks/-/blob/master/docs/uncategorized/yubikey.md>
 1. Setup bastion for clusters: <https://gitlab.com/gitlab-com/runbooks/-/tree/master/docs/bastions>
 1. Install `gcloud`: <https://cloud.google.com/sdk/docs/install>
+1. Install [`gke-gcloud-auth-plugin`](https://cloud.google.com/blog/products/containers-kubernetes/kubectl-auth-changes-in-gke): `gcloud components install gke-gcloud-auth-plugin`.
 1. Install `kubectl`: <https://kubernetes.io/docs/tasks/tools/install-kubectl-windows/>
 1. Run `gcloud auth login`: The browser will open to choose with google email
    address to use to allow for oauth.
@@ -42,9 +43,9 @@ through a proxy.
     check the permissions of this directory.  Simply change it to your user if
     necessary: `sudo chown -R $(whoami) ~/.config`* 💡
 1. Run `glsh kube setup`: Use [`glsh`](../../README.md#running-helper-scripts-from-runbook) to set up `kubectl` configuration to be to talk to all clusters.
-1. Run `glsh kube use-cluster`: This will print all the avilable clusters.
+1. Run `glsh kube use-cluster`: This will print all the available clusters.
 1. Run `glsh kube use-cluster gstg`: This will connect you to the `gstg`
-   regional clutser.
+   regional cluster.
 1. In a new window run `kubectl get nodes`: This will list all the nodes
    available in cluster.
 
@@ -71,13 +72,13 @@ kubectl get pods -o wide  # find the name of the node that you want to access
 gcloud compute --project "gitlab-production" ssh <node name> --tunnel-through-iap
 ```
 
-This will create an ssh key that is propogated to the GCP project to allow access.  You may receive a message from SIRTBot afterwards.
+This will create an ssh key that is propagated to the GCP project to allow access.  You may receive a message from SIRTBot afterwards.
 
 * [ ] From the node you can list containers, and get shell access to a pod as root.  At this writing our nodepools run a mix of docker and containerd, but eventually we expect them to be all containerd.
 
 When using the code snippets below on docker nodes, change `crictl` to `docker`; they are functionally mostly equivalent for common basic tasks.
 
-To quickly see if a node is running docker without explicitly looking it up, run `docker ps`; any containers listed in the outpu means it is a docker node, and empty output means containerd
+To quickly see if a node is running docker without explicitly looking it up, run `docker ps`; any containers listed in the output means it is a docker node, and empty output means containerd
 
 ```bash
 crictl ps
