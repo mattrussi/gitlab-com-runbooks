@@ -27,7 +27,7 @@ local list = [
     |||,
   }),
   sliDefinition.new({
-    name: 'sidekiq_jobs',
+    name: 'customers_dot_sidekiq_jobs',
     significantLabels: ['endpoint_id', 'feature_category'],
     kinds: [sliDefinition.apdexKind, sliDefinition.errorRateKind],
     description: |||

@@ -42,7 +42,7 @@ metricsCatalog.serviceDefinition({
       },
 
     sidekiq_execution:
-      sliLibrary.get('sidekiq_jobs').generateServiceLevelIndicator({ type: 'customersdot' }) {
+      sliLibrary.get('customers_dot_sidekiq_jobs').generateServiceLevelIndicator({ type: 'customersdot' }) {
         severity: 's3',
       },
   },

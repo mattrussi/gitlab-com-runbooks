@@ -49,49 +49,50 @@ groups:
       sum by (env,environment,tier,type,stage,endpoint_id,feature_category,query_urgency) (
         (sli_aggregations:gitlab_sli_graphql_query_apdex_success_total_rate1h{monitor!="global"} >= 0)
       )
-- name: 'Application Defined SLI Global metrics: sidekiq_jobs (fast burn)'
+- name: 'Application Defined SLI Global metrics: customers_dot_sidekiq_jobs (fast
+    burn)'
   interval: 1m
   partial_response_strategy: warn
   rules:
-  - record: application_sli_aggregation:sidekiq_jobs:error:rate_5m
+  - record: application_sli_aggregation:customers_dot_sidekiq_jobs:error:rate_5m
     expr: |
       sum by (env,environment,tier,type,stage,endpoint_id,feature_category) (
-        (application_sli_aggregation:sidekiq_jobs:error:rate_5m{monitor!="global"} >= 0)
+        (application_sli_aggregation:customers_dot_sidekiq_jobs:error:rate_5m{monitor!="global"} >= 0)
       )
-  - record: application_sli_aggregation:sidekiq_jobs:ops:rate_5m
+  - record: application_sli_aggregation:customers_dot_sidekiq_jobs:ops:rate_5m
     expr: |
       sum by (env,environment,tier,type,stage,endpoint_id,feature_category) (
-        (application_sli_aggregation:sidekiq_jobs:ops:rate_5m{monitor!="global"} >= 0)
+        (application_sli_aggregation:customers_dot_sidekiq_jobs:ops:rate_5m{monitor!="global"} >= 0)
       )
-  - record: application_sli_aggregation:sidekiq_jobs:apdex:weight:score_5m
+  - record: application_sli_aggregation:customers_dot_sidekiq_jobs:apdex:weight:score_5m
     expr: |
       sum by (env,environment,tier,type,stage,endpoint_id,feature_category) (
-        (application_sli_aggregation:sidekiq_jobs:apdex:weight:score_5m{monitor!="global"} >= 0)
+        (application_sli_aggregation:customers_dot_sidekiq_jobs:apdex:weight:score_5m{monitor!="global"} >= 0)
       )
-  - record: application_sli_aggregation:sidekiq_jobs:apdex:success:rate_5m
+  - record: application_sli_aggregation:customers_dot_sidekiq_jobs:apdex:success:rate_5m
     expr: |
       sum by (env,environment,tier,type,stage,endpoint_id,feature_category) (
-        (application_sli_aggregation:sidekiq_jobs:apdex:success:rate_5m{monitor!="global"} >= 0)
+        (application_sli_aggregation:customers_dot_sidekiq_jobs:apdex:success:rate_5m{monitor!="global"} >= 0)
       )
-  - record: application_sli_aggregation:sidekiq_jobs:error:rate_1h
+  - record: application_sli_aggregation:customers_dot_sidekiq_jobs:error:rate_1h
     expr: |
       sum by (env,environment,tier,type,stage,endpoint_id,feature_category) (
-        (application_sli_aggregation:sidekiq_jobs:error:rate_1h{monitor!="global"} >= 0)
+        (application_sli_aggregation:customers_dot_sidekiq_jobs:error:rate_1h{monitor!="global"} >= 0)
       )
-  - record: application_sli_aggregation:sidekiq_jobs:ops:rate_1h
+  - record: application_sli_aggregation:customers_dot_sidekiq_jobs:ops:rate_1h
     expr: |
       sum by (env,environment,tier,type,stage,endpoint_id,feature_category) (
-        (application_sli_aggregation:sidekiq_jobs:ops:rate_1h{monitor!="global"} >= 0)
+        (application_sli_aggregation:customers_dot_sidekiq_jobs:ops:rate_1h{monitor!="global"} >= 0)
       )
-  - record: application_sli_aggregation:sidekiq_jobs:apdex:weight:score_1h
+  - record: application_sli_aggregation:customers_dot_sidekiq_jobs:apdex:weight:score_1h
     expr: |
       sum by (env,environment,tier,type,stage,endpoint_id,feature_category) (
-        (application_sli_aggregation:sidekiq_jobs:apdex:weight:score_1h{monitor!="global"} >= 0)
+        (application_sli_aggregation:customers_dot_sidekiq_jobs:apdex:weight:score_1h{monitor!="global"} >= 0)
       )
-  - record: application_sli_aggregation:sidekiq_jobs:apdex:success:rate_1h
+  - record: application_sli_aggregation:customers_dot_sidekiq_jobs:apdex:success:rate_1h
     expr: |
       sum by (env,environment,tier,type,stage,endpoint_id,feature_category) (
-        (application_sli_aggregation:sidekiq_jobs:apdex:success:rate_1h{monitor!="global"} >= 0)
+        (application_sli_aggregation:customers_dot_sidekiq_jobs:apdex:success:rate_1h{monitor!="global"} >= 0)
       )
 - name: 'Application Defined SLI Global metrics: customers_dot_requests (fast burn)'
   interval: 1m

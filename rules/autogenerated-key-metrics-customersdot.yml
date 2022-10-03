@@ -55,7 +55,7 @@ groups:
       type: customersdot
     expr: |
       sum by (environment,stage) (
-        rate(gitlab_sli_sidekiq_jobs_apdex_success_total{type="customersdot"}[1m])
+        rate(gitlab_sli_customers_dot_sidekiq_jobs_apdex_success_total{type="customersdot"}[1m])
       )
   - record: gitlab_component_apdex:weight:score
     labels:
@@ -64,7 +64,7 @@ groups:
       type: customersdot
     expr: |
       sum by (environment,stage) (
-        rate(gitlab_sli_sidekiq_jobs_apdex_total{type="customersdot"}[1m])
+        rate(gitlab_sli_customers_dot_sidekiq_jobs_apdex_total{type="customersdot"}[1m])
       )
   - record: gitlab_component_ops:rate
     labels:
@@ -73,7 +73,7 @@ groups:
       type: customersdot
     expr: |
       sum by (environment,stage) (
-        rate(gitlab_sli_sidekiq_jobs_total{type="customersdot"}[1m])
+        rate(gitlab_sli_customers_dot_sidekiq_jobs_total{type="customersdot"}[1m])
       )
   - record: gitlab_component_errors:rate
     labels:
@@ -83,7 +83,7 @@ groups:
     expr: |
       (
         sum by (environment,stage) (
-          rate(gitlab_sli_sidekiq_jobs_error_total{type="customersdot"}[1m])
+          rate(gitlab_sli_customers_dot_sidekiq_jobs_error_total{type="customersdot"}[1m])
         )
       )
       or
@@ -146,7 +146,7 @@ groups:
       type: customersdot
     expr: |
       sum by (environment,stage) (
-        rate(gitlab_sli_sidekiq_jobs_apdex_success_total{type="customersdot"}[5m])
+        rate(gitlab_sli_customers_dot_sidekiq_jobs_apdex_success_total{type="customersdot"}[5m])
       )
   - record: gitlab_component_apdex:weight:score_5m
     labels:
@@ -155,7 +155,7 @@ groups:
       type: customersdot
     expr: |
       sum by (environment,stage) (
-        rate(gitlab_sli_sidekiq_jobs_apdex_total{type="customersdot"}[5m])
+        rate(gitlab_sli_customers_dot_sidekiq_jobs_apdex_total{type="customersdot"}[5m])
       )
   - record: gitlab_component_ops:rate_5m
     labels:
@@ -164,7 +164,7 @@ groups:
       type: customersdot
     expr: |
       sum by (environment,stage) (
-        rate(gitlab_sli_sidekiq_jobs_total{type="customersdot"}[5m])
+        rate(gitlab_sli_customers_dot_sidekiq_jobs_total{type="customersdot"}[5m])
       )
   - record: gitlab_component_errors:rate_5m
     labels:
@@ -174,7 +174,7 @@ groups:
     expr: |
       (
         sum by (environment,stage) (
-          rate(gitlab_sli_sidekiq_jobs_error_total{type="customersdot"}[5m])
+          rate(gitlab_sli_customers_dot_sidekiq_jobs_error_total{type="customersdot"}[5m])
         )
       )
       or
@@ -237,7 +237,7 @@ groups:
       type: customersdot
     expr: |
       sum by (environment,stage) (
-        rate(gitlab_sli_sidekiq_jobs_apdex_success_total{type="customersdot"}[30m])
+        rate(gitlab_sli_customers_dot_sidekiq_jobs_apdex_success_total{type="customersdot"}[30m])
       )
   - record: gitlab_component_apdex:weight:score_30m
     labels:
@@ -246,7 +246,7 @@ groups:
       type: customersdot
     expr: |
       sum by (environment,stage) (
-        rate(gitlab_sli_sidekiq_jobs_apdex_total{type="customersdot"}[30m])
+        rate(gitlab_sli_customers_dot_sidekiq_jobs_apdex_total{type="customersdot"}[30m])
       )
   - record: gitlab_component_ops:rate_30m
     labels:
@@ -255,7 +255,7 @@ groups:
       type: customersdot
     expr: |
       sum by (environment,stage) (
-        rate(gitlab_sli_sidekiq_jobs_total{type="customersdot"}[30m])
+        rate(gitlab_sli_customers_dot_sidekiq_jobs_total{type="customersdot"}[30m])
       )
   - record: gitlab_component_errors:rate_30m
     labels:
@@ -265,7 +265,7 @@ groups:
     expr: |
       (
         sum by (environment,stage) (
-          rate(gitlab_sli_sidekiq_jobs_error_total{type="customersdot"}[30m])
+          rate(gitlab_sli_customers_dot_sidekiq_jobs_error_total{type="customersdot"}[30m])
         )
       )
       or
@@ -328,7 +328,7 @@ groups:
       type: customersdot
     expr: |
       sum by (environment,stage) (
-        rate(gitlab_sli_sidekiq_jobs_apdex_success_total{type="customersdot"}[1h])
+        rate(gitlab_sli_customers_dot_sidekiq_jobs_apdex_success_total{type="customersdot"}[1h])
       )
   - record: gitlab_component_apdex:weight:score_1h
     labels:
@@ -337,7 +337,7 @@ groups:
       type: customersdot
     expr: |
       sum by (environment,stage) (
-        rate(gitlab_sli_sidekiq_jobs_apdex_total{type="customersdot"}[1h])
+        rate(gitlab_sli_customers_dot_sidekiq_jobs_apdex_total{type="customersdot"}[1h])
       )
   - record: gitlab_component_ops:rate_1h
     labels:
@@ -346,7 +346,7 @@ groups:
       type: customersdot
     expr: |
       sum by (environment,stage) (
-        rate(gitlab_sli_sidekiq_jobs_total{type="customersdot"}[1h])
+        rate(gitlab_sli_customers_dot_sidekiq_jobs_total{type="customersdot"}[1h])
       )
   - record: gitlab_component_errors:rate_1h
     labels:
@@ -356,7 +356,7 @@ groups:
     expr: |
       (
         sum by (environment,stage) (
-          rate(gitlab_sli_sidekiq_jobs_error_total{type="customersdot"}[1h])
+          rate(gitlab_sli_customers_dot_sidekiq_jobs_error_total{type="customersdot"}[1h])
         )
       )
       or
@@ -419,7 +419,7 @@ groups:
       type: customersdot
     expr: |
       sum by (environment,stage) (
-        rate(gitlab_sli_sidekiq_jobs_apdex_success_total{type="customersdot"}[6h])
+        rate(gitlab_sli_customers_dot_sidekiq_jobs_apdex_success_total{type="customersdot"}[6h])
       )
   - record: gitlab_component_apdex:weight:score_6h
     labels:
@@ -428,7 +428,7 @@ groups:
       type: customersdot
     expr: |
       sum by (environment,stage) (
-        rate(gitlab_sli_sidekiq_jobs_apdex_total{type="customersdot"}[6h])
+        rate(gitlab_sli_customers_dot_sidekiq_jobs_apdex_total{type="customersdot"}[6h])
       )
   - record: gitlab_component_ops:rate_6h
     labels:
@@ -437,7 +437,7 @@ groups:
       type: customersdot
     expr: |
       sum by (environment,stage) (
-        rate(gitlab_sli_sidekiq_jobs_total{type="customersdot"}[6h])
+        rate(gitlab_sli_customers_dot_sidekiq_jobs_total{type="customersdot"}[6h])
       )
   - record: gitlab_component_errors:rate_6h
     labels:
@@ -447,7 +447,7 @@ groups:
     expr: |
       (
         sum by (environment,stage) (
-          rate(gitlab_sli_sidekiq_jobs_error_total{type="customersdot"}[6h])
+          rate(gitlab_sli_customers_dot_sidekiq_jobs_error_total{type="customersdot"}[6h])
         )
       )
       or

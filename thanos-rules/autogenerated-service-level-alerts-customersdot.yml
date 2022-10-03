@@ -358,7 +358,7 @@ groups:
       grafana_variables: environment,stage
       promql_template_1: |
         sum by (env,environment,tier,stage) (
-          rate(gitlab_sli_sidekiq_jobs_error_total{environment="{{ $labels.environment }}",stage="{{ $labels.stage }}",type="customersdot"}[5m])
+          rate(gitlab_sli_customers_dot_sidekiq_jobs_error_total{environment="{{ $labels.environment }}",stage="{{ $labels.stage }}",type="customersdot"}[5m])
         )
       runbook: docs/customersdot/README.md
     labels:
@@ -405,7 +405,7 @@ groups:
       grafana_variables: environment,stage
       promql_template_1: |
         sum by (env,environment,tier,stage) (
-          rate(gitlab_sli_sidekiq_jobs_error_total{environment="{{ $labels.environment }}",stage="{{ $labels.stage }}",type="customersdot"}[5m])
+          rate(gitlab_sli_customers_dot_sidekiq_jobs_error_total{environment="{{ $labels.environment }}",stage="{{ $labels.stage }}",type="customersdot"}[5m])
         )
       runbook: docs/customersdot/README.md
     labels:
@@ -452,7 +452,7 @@ groups:
       grafana_variables: environment,stage
       promql_template_1: |
         sum by (env,environment,tier,stage) (
-          rate(gitlab_sli_sidekiq_jobs_total{environment="{{ $labels.environment }}",stage="{{ $labels.stage }}",type="customersdot"}[5m])
+          rate(gitlab_sli_customers_dot_sidekiq_jobs_total{environment="{{ $labels.environment }}",stage="{{ $labels.stage }}",type="customersdot"}[5m])
         )
       runbook: docs/customersdot/README.md
     labels:
@@ -488,7 +488,7 @@ groups:
       grafana_variables: environment,stage
       promql_template_1: |
         sum by (env,environment,tier,stage) (
-          rate(gitlab_sli_sidekiq_jobs_total{environment="{{ $labels.environment }}",stage="{{ $labels.stage }}",type="customersdot"}[5m])
+          rate(gitlab_sli_customers_dot_sidekiq_jobs_total{environment="{{ $labels.environment }}",stage="{{ $labels.stage }}",type="customersdot"}[5m])
         )
       runbook: docs/customersdot/README.md
     labels:
