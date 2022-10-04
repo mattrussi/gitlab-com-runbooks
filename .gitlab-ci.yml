@@ -572,6 +572,8 @@ test_dashboards:
 
 deploy_dashboards:
   extends: .dashboards
+  dependencies:
+    - prepare-service-health-dashboard-json
   rules:
     # This will override all the rules from .dashboards, we only want to run this on master
     - *avoid-stage-group-check-rule
