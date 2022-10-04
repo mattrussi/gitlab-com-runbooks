@@ -1492,6 +1492,18 @@ groups:
     expr: "0.000100"
   - record: slo:min:events:gitlab_service_apdex:ratio
     labels:
+      component: redis
+      tier: sv
+      type: registry
+    expr: "0.997000"
+  - record: slo:max:events:gitlab_service_errors:ratio
+    labels:
+      component: redis
+      tier: sv
+      type: registry
+    expr: "0.000100"
+  - record: slo:min:events:gitlab_service_apdex:ratio
+    labels:
       component: server
       tier: sv
       type: registry
@@ -2939,6 +2951,14 @@ groups:
       component: loadbalancer
       regional_aggregation: "no"
       service_aggregation: "no"
+      tier: sv
+      type: registry
+    expr: "1"
+  - record: gitlab_component_service:mapping
+    labels:
+      component: redis
+      regional_aggregation: "yes"
+      service_aggregation: "yes"
       tier: sv
       type: registry
     expr: "1"
