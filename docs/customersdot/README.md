@@ -25,11 +25,15 @@
 
 <!-- ## Architecture -->
 
+[CustomersDot Architecture](https://gitlab.com/gitlab-org/customers-gitlab-com/blob/main/doc/architecture/index.md)
+
 <!-- ## Performance -->
 
 <!-- ## Scalability -->
 
 <!-- ## Availability -->
+
+[Group-based error budgets](https://dashboards.gitlab.net/d/product-fulfillment/product-error-budgets-fulfillment?orgId=1) for the Fulfillment team.
 
 <!-- ## Durability -->
 

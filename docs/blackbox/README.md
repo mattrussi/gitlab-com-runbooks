@@ -16,7 +16,6 @@
 ## Troubleshooting Pointers
 
 * [Blackbox git exporter is down](blackbox-git-exporter.md)
-* [CustomersDot main troubleshoot documentation](../customersdot/overview.md)
 * [design.gitlab.com Runbook](../design/design-gitlab-com.md)
 * [Investors Relations (ir.gitlab.com) main troubleshoot documentation](../ir.gitlab.com/overview.md)
 * [Tuning and Modifying Alerts](../monitoring/alert_tuning.md)
