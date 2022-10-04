@@ -160,5 +160,32 @@ metricsCatalog.serviceDefinition({
         ),
       ],
     },
+
+    redis: {
+      userImpacting: true,
+      featureCategory: 'container_registry',
+      description: |||
+        Aggregation of all container registry Redis operations.
+      |||,
+
+      apdex: histogramApdex(
+        histogram='registry_redis_single_commands_bucket',
+        selector=registryBaseSelector,
+        satisfiedThreshold=0.25,
+        toleratedThreshold=0.5
+      ),
+
+      requestRate: rateMetric(
+        counter='registry_redis_single_commands_count',
+        selector=registryBaseSelector
+      ),
+
+      errorRate: rateMetric(
+        counter='registry_redis_single_errors_count',
+        selector=registryBaseSelector
+      ),
+
+      significantLabels: ['instance', 'command'],
+    },
   } + registryHelpers.apdexPerRoute,
 })

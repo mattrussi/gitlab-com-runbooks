@@ -159,6 +159,62 @@ groups:
       )
   - record: gitlab:component:feature_category:execution:apdex:success:rate_5m
     labels:
+      component: redis
+      feature_category: container_registry
+      tier: sv
+      type: registry
+    expr: |
+      (
+        sum by (env,environment,stage) (
+          rate(registry_redis_single_commands_bucket{le="0.25",type="registry"}[5m])
+        )
+        +
+        sum by (env,environment,stage) (
+          rate(registry_redis_single_commands_bucket{le="0.5",type="registry"}[5m])
+        )
+      )
+      /
+      2
+  - record: gitlab:component:feature_category:execution:apdex:weight:score_5m
+    labels:
+      component: redis
+      feature_category: container_registry
+      tier: sv
+      type: registry
+    expr: |
+      sum by (env,environment,stage) (
+        rate(registry_redis_single_commands_bucket{le="+Inf",type="registry"}[5m])
+      )
+  - record: gitlab:component:feature_category:execution:ops:rate_5m
+    labels:
+      component: redis
+      feature_category: container_registry
+      tier: sv
+      type: registry
+    expr: |
+      sum by (env,environment,stage) (
+        rate(registry_redis_single_commands_count{type="registry"}[5m])
+      )
+  - record: gitlab:component:feature_category:execution:error:rate_5m
+    labels:
+      component: redis
+      feature_category: container_registry
+      tier: sv
+      type: registry
+    expr: |
+      (
+        sum by (env,environment,stage) (
+          rate(registry_redis_single_errors_count{type="registry"}[5m])
+        )
+      )
+      or
+      (
+        0 * group by(env,environment,stage) (
+          gitlab:component:feature_category:execution:ops:rate_5m{component="redis",feature_category="container_registry",tier="sv",type="registry"}
+        )
+      )
+  - record: gitlab:component:feature_category:execution:apdex:success:rate_5m
+    labels:
       component: server
       feature_category: container_registry
       tier: sv
@@ -447,6 +503,62 @@ groups:
       )
   - record: gitlab:component:feature_category:execution:apdex:success:rate_30m
     labels:
+      component: redis
+      feature_category: container_registry
+      tier: sv
+      type: registry
+    expr: |
+      (
+        sum by (env,environment,stage) (
+          rate(registry_redis_single_commands_bucket{le="0.25",type="registry"}[30m])
+        )
+        +
+        sum by (env,environment,stage) (
+          rate(registry_redis_single_commands_bucket{le="0.5",type="registry"}[30m])
+        )
+      )
+      /
+      2
+  - record: gitlab:component:feature_category:execution:apdex:weight:score_30m
+    labels:
+      component: redis
+      feature_category: container_registry
+      tier: sv
+      type: registry
+    expr: |
+      sum by (env,environment,stage) (
+        rate(registry_redis_single_commands_bucket{le="+Inf",type="registry"}[30m])
+      )
+  - record: gitlab:component:feature_category:execution:ops:rate_30m
+    labels:
+      component: redis
+      feature_category: container_registry
+      tier: sv
+      type: registry
+    expr: |
+      sum by (env,environment,stage) (
+        rate(registry_redis_single_commands_count{type="registry"}[30m])
+      )
+  - record: gitlab:component:feature_category:execution:error:rate_30m
+    labels:
+      component: redis
+      feature_category: container_registry
+      tier: sv
+      type: registry
+    expr: |
+      (
+        sum by (env,environment,stage) (
+          rate(registry_redis_single_errors_count{type="registry"}[30m])
+        )
+      )
+      or
+      (
+        0 * group by(env,environment,stage) (
+          gitlab:component:feature_category:execution:ops:rate_30m{component="redis",feature_category="container_registry",tier="sv",type="registry"}
+        )
+      )
+  - record: gitlab:component:feature_category:execution:apdex:success:rate_30m
+    labels:
       component: server
       feature_category: container_registry
       tier: sv
@@ -731,6 +843,62 @@ groups:
       (
         0 * group by(env,environment) (
           gitlab:component:feature_category:execution:ops:rate_1h{component="loadbalancer",feature_category="container_registry",stage="main",tier="sv",type="registry"}
+        )
+      )
+  - record: gitlab:component:feature_category:execution:apdex:success:rate_1h
+    labels:
+      component: redis
+      feature_category: container_registry
+      tier: sv
+      type: registry
+    expr: |
+      (
+        sum by (env,environment,stage) (
+          rate(registry_redis_single_commands_bucket{le="0.25",type="registry"}[1h])
+        )
+        +
+        sum by (env,environment,stage) (
+          rate(registry_redis_single_commands_bucket{le="0.5",type="registry"}[1h])
+        )
+      )
+      /
+      2
+  - record: gitlab:component:feature_category:execution:apdex:weight:score_1h
+    labels:
+      component: redis
+      feature_category: container_registry
+      tier: sv
+      type: registry
+    expr: |
+      sum by (env,environment,stage) (
+        rate(registry_redis_single_commands_bucket{le="+Inf",type="registry"}[1h])
+      )
+  - record: gitlab:component:feature_category:execution:ops:rate_1h
+    labels:
+      component: redis
+      feature_category: container_registry
+      tier: sv
+      type: registry
+    expr: |
+      sum by (env,environment,stage) (
+        rate(registry_redis_single_commands_count{type="registry"}[1h])
+      )
+  - record: gitlab:component:feature_category:execution:error:rate_1h
+    labels:
+      component: redis
+      feature_category: container_registry
+      tier: sv
+      type: registry
+    expr: |
+      (
+        sum by (env,environment,stage) (
+          rate(registry_redis_single_errors_count{type="registry"}[1h])
+        )
+      )
+      or
+      (
+        0 * group by(env,environment,stage) (
+          gitlab:component:feature_category:execution:ops:rate_1h{component="redis",feature_category="container_registry",tier="sv",type="registry"}
         )
       )
   - record: gitlab:component:feature_category:execution:apdex:success:rate_1h
