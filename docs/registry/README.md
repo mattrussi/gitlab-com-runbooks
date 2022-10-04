@@ -18,6 +18,7 @@
 
 ## Troubleshooting Pointers
 
+* [How to connect to a Database console using Teleport](../Teleport/Connect_to_Database_Console_via_Teleport.md)
 * [Cloud SQL Troubleshooting](../cloud-sql/cloud-sql.md)
 * [Cloudflare: Managing Traffic](../cloudflare/managing-traffic.md)
 * [Interacting with Consul](../consul/interaction.md)

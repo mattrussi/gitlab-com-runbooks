@@ -54,9 +54,25 @@ Authenticate to the Teleport proxy/server. This command opens Okta in a browser 
 tsh login --proxy=teleport.gstg.gitlab.net
 ```
 
-> Note: The `database-ro` role in the `gstg` environment does not require a request or approval, so you can skip the next step. Use the `database-ro` role unless you know for sure that you need something else.
+> Note: The `database-ro` role in the `gstg` environment does not require a request or approval, so you can skip the next step. Use the `database-ro` role unless you know for sure that you need something else. For Package Team members, they additionaly have `registry-database-ro` role in the `gstg`, which gives them access to registry database without approval.
 
-If you need to request a role which includes elevated permissions for the Database console. Request either `database`, `database-ro`, or `database-admin`, for `gstg` or `gprd`, using the following format.
+If you need to request a role which includes elevated permissions for the Database console. Request any of the following roles in either `gstg` or `gprd`:
+
+#### For `main` and `CI` databases
+
+- `database`
+- `database-ro`
+
+#### For `registry` database
+
+- `registry-database`
+- `registry-database-ro`
+
+#### For all databases to request superuser priveleges (DBREs only)
+
+- `database-admin`
+
+using the following format.
 
 ```shell
 tsh login --proxy=teleport.gstg.gitlab.net --request-roles=database --request-reason="Issue-URL or explanation"
@@ -101,6 +117,12 @@ For the CI Database:
 tsh db login --db-user=console-ro --db-name=gitlabhq_production db-secondary-ci
 ```
 
+For the Registry Database:
+
+```shell
+tsh db login --db-user=console-ro --db-name=gitlabhq_registry db-secondary-registry
+```
+
 Remember that your access request, its approval, and any associated database logins will expire in `12h` maximum unless renewed.
 
 > Tip: The above command connects to a secondary database (`db-secondary`).  Secondaries are always read only.  If you need write access, you will have to log in to `db-primary` in addition to connecting as a database user with write permissions. The `console-rw` user is allowed to write and permission is granted as part of the `database` role. Once logged in to teleport, you can view the databases available to your role with `tsh db ls`
@@ -117,6 +139,12 @@ For the CI Database:
 
 ```shell
 tsh db connect db-secondary-ci
+```
+
+For the Registry Database:
+
+```shell
+tsh db connect db-secondary-registry
 ```
 
 > Tip: use the `tsh status` command to show which logins you are currently approved for.
