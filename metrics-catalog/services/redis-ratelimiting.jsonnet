@@ -1,5 +1,5 @@
 local redisHelpers = import './lib/redis-helpers.libsonnet';
-local redisArchetype = import 'service-archetypes/redis-archetype.libsonnet';
+local redisArchetype = import 'service-archetypes/redis-rails-archetype.libsonnet';
 local metricsCatalog = import 'servicemetrics/metrics.libsonnet';
 
 metricsCatalog.serviceDefinition(
