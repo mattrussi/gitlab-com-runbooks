@@ -23,6 +23,7 @@ function call_grafana_api() {
 
   echo >&2 "API call to $1 failed with $status_code:"
   cat >&2 "$response_file"
+  echo >&2
   rm -f "$response_file"
   return 1
 }
