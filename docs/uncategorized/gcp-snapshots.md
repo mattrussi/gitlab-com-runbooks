@@ -3,7 +3,7 @@
 We utilize GCP [Scheduled Snapshots](https://cloud.google.com/compute/docs/disks/scheduled-snapshots) to
 automate the creation and the cleaning-up of disk snapshots. The schedule policy is created in Terraform
 ([example in staging](https://gitlab.com/gitlab-com/gl-infra/config-mgmt/-/blob/d7287a47adfdca6cce76ca455e0684863f248e57/environments/gstg/main.tf#L262)),
-currently is configured to take a snapshot every hour and keep all snapshots for 7 days. Individual modules (e.g. `postgres-dr-delayed`)
+currently is configured to take a snapshot every 4 hours and keep all snapshots for 14 days. Individual modules (e.g. `postgres-dr-delayed`)
 has to be configured to attach its disk to the snapshot policy, usually by specifying the `data_disk_snapshot_policy` variable, but this
 could be different depending on the underlying module provision the resource.
 
