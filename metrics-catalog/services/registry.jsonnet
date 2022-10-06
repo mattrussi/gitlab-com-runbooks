@@ -39,6 +39,7 @@ metricsCatalog.serviceDefinition({
   },
   serviceDependencies: {
     api: true,
+    'redis-registry-cache': true,
   },
   provisioning: {
     kubernetes: true,

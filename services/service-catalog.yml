@@ -2808,6 +2808,64 @@ services:
       monitors:
         primary_grafana_dashboard: redis-tracechunks-main/redis-tracechunks-overview
 
+  - name: redis-registry-cache
+    tier: db
+    friendly_name: Redis Registry Cache
+    label: Service:Redis
+    business:
+      requirement: |
+        Cache database repository objects in Registry
+      customers:
+        - GitLab.com customers
+      business_value: |
+        Increase performance in our Registry app.
+      SLA:
+        availability:
+        response_time:
+    technical:
+      project:
+        - https://github.com/antirez/redis/
+      slx:
+      documents:
+        design:
+        architecture:
+        readiness_review:
+        service:
+          - https://redis.io/documentation
+          - https://docs.gitlab.com/omnibus/settings/redis.html
+        security:
+      dependencies:
+        - service:
+      configurations:
+      chef_roles:
+      scalability:
+        bound: memory
+        scalable: vertical
+      security:
+        security_reviewed:
+        data_classification: yellow
+        security_incidents:
+      logging:
+        - name: Redis
+          permalink: https://log.gprd.gitlab.net/goto/04b1f050-44d0-11ed-8d37-e9a2f393ea2a
+    infrastructure:
+      provider: gcp
+      architecture:
+      provisioning: tanka
+      accesses:
+        - account_name:
+          access_type:
+          reviewed:
+    operations:
+      maintenance:
+      runbooks:
+      playbooks:
+        - https://gitlab.com/gitlab-com/runbooks/blob/master/docs/redis/README.md
+      error_budget:
+    observability:
+      monitors:
+        primary_grafana_dashboard: redis-registry-cache-main/redis-registry-cache-overview
+
   - name: registry
     tier: sv
     friendly_name: Container Registry

@@ -5,7 +5,6 @@ local kubeLabelSelectors = metricsCatalog.kubeLabelSelectors;
 
 function(
   type,
-  railsStorageSelector,
   descriptiveName,
   featureCategory='not_owned',
 )
@@ -49,32 +48,6 @@ function(
       },
     },
     serviceLevelIndicators: {
-      rails_redis_client: {
-        userImpacting: true,
-        featureCategory: featureCategory,
-        description: |||
-          Aggregation of all %(descriptiveName)s operations issued from the Rails codebase.
-        ||| % formatConfig,
-        significantLabels: ['type'],
-
-        apdex: histogramApdex(
-          histogram='gitlab_redis_client_requests_duration_seconds_bucket',
-          selector=railsStorageSelector,
-          satisfiedThreshold=0.5,
-          toleratedThreshold=0.75,
-        ),
-
-        requestRate: rateMetric(
-          counter='gitlab_redis_client_requests_total',
-          selector=railsStorageSelector,
-        ),
-
-        errorRate: rateMetric(
-          counter='gitlab_redis_client_exceptions_total',
-          selector=railsStorageSelector,
-        ),
-      },
-
       primary_server: {
         userImpacting: true,
         featureCategory: featureCategory,
