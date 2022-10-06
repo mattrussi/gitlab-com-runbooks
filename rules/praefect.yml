@@ -5,7 +5,7 @@ groups:
     expr: max without (fqdn, instance) (gitaly_praefect_unavailable_repositories) > 0
     for: 15m
     labels:
-      team: gitaly
+      team: gitaly_cluster
       pager: pagerduty
       severity: s1
       alert_type: symptom

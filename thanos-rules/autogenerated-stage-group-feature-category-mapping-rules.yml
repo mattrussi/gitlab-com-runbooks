@@ -236,14 +236,8 @@ groups:
   - record: gitlab:feature_category:stage_group:mapping
     labels:
       feature_category: design_system
-      product_stage: ecosystem
-      stage_group: foundations
-    expr: "1"
-  - record: gitlab:feature_category:stage_group:mapping
-    labels:
-      feature_category: devops_reports
       product_stage: manage
-      stage_group: optimize
+      stage_group: foundations
     expr: "1"
   - record: gitlab:feature_category:stage_group:mapping
     labels:
@@ -345,12 +339,12 @@ groups:
     labels:
       feature_category: gitaly
       product_stage: systems
-      stage_group: gitaly
+      stage_group: gitaly_cluster
     expr: "1"
   - record: gitlab:feature_category:stage_group:mapping
     labels:
       feature_category: gitlab_docs
-      product_stage: ecosystem
+      product_stage: manage
       stage_group: foundations
     expr: "1"
   - record: gitlab:feature_category:stage_group:mapping
@@ -404,7 +398,7 @@ groups:
   - record: gitlab:feature_category:stage_group:mapping
     labels:
       feature_category: integrations
-      product_stage: ecosystem
+      product_stage: manage
       stage_group: integrations
     expr: "1"
   - record: gitlab:feature_category:stage_group:mapping
@@ -476,7 +470,7 @@ groups:
   - record: gitlab:feature_category:stage_group:mapping
     labels:
       feature_category: navigation
-      product_stage: ecosystem
+      product_stage: manage
       stage_group: foundations
     expr: "1"
   - record: gitlab:feature_category:stage_group:mapping
@@ -754,12 +748,6 @@ groups:
       feature_category: utilization
       product_stage: fulfillment
       stage_group: utilization
-    expr: "1"
-  - record: gitlab:feature_category:stage_group:mapping
-    labels:
-      feature_category: value_stream_management
-      product_stage: manage
-      stage_group: optimize
     expr: "1"
   - record: gitlab:feature_category:stage_group:mapping
     labels:
