@@ -12,9 +12,6 @@ local thresholds = import 'gitlab-dashboards/thresholds.libsonnet';
 local generalServicesDashboard = import 'general-services-dashboard.libsonnet';
 local template = grafana.template;
 
-// These charts have a very high interval factor, to create a wide trend line
-local INTERVAL = '1d';
-
 local overviewDashboardLinks(type) =
   local formatConfig = { type: type };
   [
@@ -144,11 +141,9 @@ local serviceRow(service) =
       title='%s: SLA Trends ' % [service.friendly_name],
       description='Rolling average SLO adherence for primary services. Higher is better.',
       yAxisLabel='SLA',
-      query=serviceAvailabilityQuery({ type: service.name }, 'slo_observation_status', '1d'),
+      query=serviceAvailabilityQuery({ type: service.name }, 'slo_observation_status', '$__interval'),
       legendFormat='{{ type }}',
-      interval=INTERVAL,
       intervalFactor=1,
-      points=true,
       legend_show=false
     )
     .addDataLink(links) + thresholdsValues +
@@ -208,11 +203,9 @@ basic.dashboard(
       title='Overall SLA over time period - gitlab.com',
       description='Rolling average SLO adherence across all primary services. Higher is better.',
       yAxisLabel='SLA',
-      query=systemAvailabilityQuery(systemSelector, '1d'),
+      query=systemAvailabilityQuery(systemSelector, '$__interval'),
       legendFormat='gitlab.com SLA',
-      interval=INTERVAL,
       intervalFactor=1,
-      points=true,
       legend_show=false
     )
     .addSeriesOverride(seriesOverrides.goldenMetric('gitlab.com SLA'))
