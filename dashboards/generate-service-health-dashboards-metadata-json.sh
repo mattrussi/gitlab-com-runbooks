@@ -61,12 +61,11 @@ prepare
 trap 'rm -rf "${TEMPFILE}"' EXIT
 
 # some $FILE needs to exist to avoid jsonnet error in libsonnet/service-maturity/levels.libsonnet
-if [ ! -f $FILE ]; then
-    echo "{}" > $FILE
+if [ ! -f "$FILE" ]; then
+  echo "{}" >"$FILE"
 fi
 
 find_dashboards | while read -r line; do
-  basename=$(basename "$line")
   relative=${line#"./"}
   folder=${GRAFANA_FOLDER:-$(dirname "$relative")}
 
