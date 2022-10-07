@@ -56,7 +56,7 @@ generate:
 	./scripts/generate-jsonnet-rules.sh
 	./scripts/generate-docs
 	./scripts/generate-all-reference-architecture-configs.sh
-	cd dashboards && ./generate-service-health-dashboards-metadata-json.sh
+	cd dashboards && ./generate-service-health-dashboards-metadata-json.sh -P
 
 alertmanager/alertmanager.yml: alertmanager/alertmanager.jsonnet
 	./alertmanager/generate.sh

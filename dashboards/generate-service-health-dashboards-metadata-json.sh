@@ -27,15 +27,19 @@ usage() {
 
   FLAGS
     -D  run in Dry-run
+    -P  generates an incomplete manifest more quickly by using filenames directly
     -h  help
 
 EOF
 }
 
-while getopts ":Dh" o; do
+while getopts ":DPh" o; do
   case "${o}" in
     D)
       dry_run="true"
+      ;;
+    P)
+      partial="true"
       ;;
     h)
       usage
@@ -49,6 +53,7 @@ done
 shift $((OPTIND - 1))
 
 dry_run=${dry_run:-}
+partial=${partial:-}
 
 if [[ -z $dry_run && -z ${GRAFANA_API_TOKEN:-} ]]; then
   echo "You must set GRAFANA_API_TOKEN to use this script, or run in dry run mode"
@@ -66,22 +71,32 @@ if [ ! -f "$FILE" ]; then
 fi
 
 find_dashboards | while read -r line; do
+  basename=$(basename "$line")
   relative=${line#"./"}
   folder=${GRAFANA_FOLDER:-$(dirname "$relative")}
 
-  dashboard_json=$(generate_dashboards_for_file "${line}")
-
-  echo "${dashboard_json}" | jq -c | while IFS= read -r dashboard; do
-    # Use http1.1 and gzip compression to workaround unexplainable random errors that
-    # occur when uploading some dashboards
-    uid=$(echo "${dashboard}" | jq -r '.uid')
+  if [[ -n $partial ]]; then
+    uid="${folder}-${basename%%.*}"
     if response=$(call_grafana_api "https://dashboards.gitlab.net/api/dashboards/uid/$uid"); then
       url=$(echo "${response}" | jq '.meta.url' | tr -d '"')
       fullurl="https://dashboards.gitlab.net$url"
       echo "${folder},${fullurl}" >>$TEMPFILE
     fi
     echo "Processed dashboards for $uid"
-  done
+  else
+    dashboard_json=$(generate_dashboards_for_file "${line}")
+    echo "${dashboard_json}" | jq -c | while IFS= read -r dashboard; do
+      # Use http1.1 and gzip compression to workaround unexplainable random errors that
+      # occur when uploading some dashboards
+      uid=$(echo "${dashboard}" | jq -r '.uid')
+      if response=$(call_grafana_api "https://dashboards.gitlab.net/api/dashboards/uid/$uid"); then
+        url=$(echo "${response}" | jq '.meta.url' | tr -d '"')
+        fullurl="https://dashboards.gitlab.net$url"
+        echo "${folder},${fullurl}" >>$TEMPFILE
+      fi
+      echo "Processed dashboards for $uid"
+    done
+  fi
 done
 
 if [[ -n $dry_run ]]; then
