@@ -31,10 +31,25 @@
   },
   optimize: {
     name: 'Optimize',
+    stage: 'plan',
+    feature_categories: [
+
+    ],
+  },
+  integrations: {
+    name: 'Integrations',
     stage: 'manage',
     feature_categories: [
-      'devops_reports',
-      'value_stream_management',
+      'integrations',
+    ],
+  },
+  foundations: {
+    name: 'Foundations',
+    stage: 'manage',
+    feature_categories: [
+      'design_system',
+      'navigation',
+      'gitlab_docs',
     ],
   },
   project_management: {
@@ -87,22 +102,6 @@
       'wiki',
       'pages',
       'remote_development',
-    ],
-  },
-  integrations: {
-    name: 'Integrations',
-    stage: 'ecosystem',
-    feature_categories: [
-      'integrations',
-    ],
-  },
-  foundations: {
-    name: 'Foundations',
-    stage: 'ecosystem',
-    feature_categories: [
-      'design_system',
-      'navigation',
-      'gitlab_docs',
     ],
   },
   pipeline_execution: {
@@ -355,11 +354,18 @@
       'cloud_native_installation',
     ],
   },
-  gitaly: {
-    name: 'Gitaly',
+  gitaly_cluster: {
+    name: 'Gitaly:Cluster',
     stage: 'systems',
     feature_categories: [
       'gitaly',
+    ],
+  },
+  gitaly_git: {
+    name: 'Gitaly:Git',
+    stage: 'systems',
+    feature_categories: [
+
     ],
   },
   geo: {

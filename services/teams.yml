@@ -30,11 +30,18 @@ teams:
   ignored_components:
   - graphql_queries
 
-- name: gitaly
+- name: gitaly_cluster
   url: https://about.gitlab.com/handbook/engineering/dev-backend/gitaly/
   slack_alerts_channel: gitaly-alerts
-  product_stage_group: gitaly
+  product_stage_group: gitaly_cluster
   send_slo_alerts_to_team_slack_channel: true
+  ignored_components:
+  - graphql_queries
+
+- name: gitaly_git
+  url: https://about.gitlab.com/handbook/engineering/dev-backend/gitaly/
+  slack_alerts_channel: gitaly-alerts
+  product_stage_group: gitaly_git
   ignored_components:
   - graphql_queries
 
