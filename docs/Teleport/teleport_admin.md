@@ -67,10 +67,43 @@ Get the key from the auth server:
 tctl status
 ```
 
-And paste it in to the `ca_pin`  field in the`gkms` teleport secrets for the environment.
+And paste it in to the `ca_pin`  field in the `gkms` teleport secrets for the environment.
 
 ```json
     "ca_pin": "sha256:XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX"
+```
+
+To set the `ca_pin`:
+
+```shell
+chef-repo/bin$ ./gkms-vault-edit teleport gstg
+```
+
+Also, if the teleport server has been rebuilt, a new CA cert needs to be retrieved for database servers and update it on all of the database servers in this environment. It is separate from slack CA cert.To get the new CA certificate for database, run this on newly (re)built teleport server:
+
+```shell
+cd /etc/teleport/ssl/
+tctl auth sign --format=db --host=master.patroni.service.consul --out=server --ttl=2190h
+```
+
+This will generate 3 files namely `server.cas` (CA Cert), `server.crt` (Server cert) and `server.key` (Server key).
+
+To get the CA cert in the right format, run this on the teleport server:
+
+```shell
+sed -E ':a;N;$!ba;s/\r{0,1}\n/\\n/g' /etc/teleport/ssl/server.cas
+```
+
+And then set the `postgresql.ssh_ca` secret in `gkms` vault for `gitlab-patroni`:
+
+```shell
+chef-repo/bin$ ./gkms-vault-edit gitlab-patroni gstg
+```
+
+Once the key is in the GKMS vault, chef will copy it to the database server on the next run.  However, it will not currently reload the service to pick up the new key.  It doesn't have to be restarted, but it has to be manually reloaded with:
+
+```shell
+gitlab-patronictl reload <DB cluster name> <DB server hostname>
 ```
 
 ### Chef

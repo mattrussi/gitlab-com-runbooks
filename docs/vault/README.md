@@ -22,6 +22,7 @@
 
 ## Troubleshooting Pointers
 
+* [Teleport Administration](../Teleport/teleport_admin.md)
 * [Cloudflare for the on-call](../cloudflare/oncall.md)
 * [VM Build Process with Terraform and Chef](../config_management/chef-process-overview.md)
 * [Chef Vault Basics](../config_management/chef-vault.md)
