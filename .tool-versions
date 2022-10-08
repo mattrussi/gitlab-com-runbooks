@@ -4,7 +4,7 @@
 
 amtool 0.22.2 # datasource=github-releases depName=prometheus/alertmanager
 go-jsonnet 0.18.0 # datasource=github-releases depName=google/go-jsonnet
-golang 1.19.1 # datasource=golang-version depName=go
+golang 1.19.2 # datasource=golang-version depName=go
 jb 0.5.1 # datasource=github-releases depName=jsonnet-bundler/jsonnet-bundler
 jsonnet-tool 1.7.0 # datasource=gitlab-releases depName=gitlab-com/gl-infra/jsonnet-tool
 nodejs 16.17.0 # datasource=node depName=nodejs/node
