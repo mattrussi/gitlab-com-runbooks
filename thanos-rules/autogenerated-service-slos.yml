@@ -432,7 +432,7 @@ groups:
     labels:
       tier: sv
       type: git
-    expr: "0.000500"
+    expr: "0.000100"
   - record: slo:min:events:gitlab_service_apdex:ratio
     labels:
       component: gitlab_shell
@@ -444,7 +444,7 @@ groups:
       component: gitlab_shell
       tier: sv
       type: git
-    expr: "0.000500"
+    expr: "0.000100"
   - record: slo:min:events:gitlab_service_apdex:ratio
     labels:
       component: gitlab_sshd
@@ -468,7 +468,7 @@ groups:
       component: loadbalancer
       tier: sv
       type: git
-    expr: "0.000500"
+    expr: "0.000100"
   - record: slo:min:events:gitlab_service_apdex:ratio
     labels:
       component: loadbalancer_ssh
@@ -480,7 +480,7 @@ groups:
       component: loadbalancer_ssh
       tier: sv
       type: git
-    expr: "0.000500"
+    expr: "0.000100"
   - record: slo:min:events:gitlab_service_apdex:ratio
     labels:
       component: puma
@@ -492,7 +492,7 @@ groups:
       component: puma
       tier: sv
       type: git
-    expr: "0.000500"
+    expr: "0.000100"
   - record: slo:min:events:gitlab_service_apdex:ratio
     labels:
       component: rails_requests
@@ -504,7 +504,7 @@ groups:
       component: rails_requests
       tier: sv
       type: git
-    expr: "0.000500"
+    expr: "0.000100"
   - record: slo:min:events:gitlab_service_apdex:ratio
     labels:
       component: workhorse
@@ -516,7 +516,7 @@ groups:
       component: workhorse
       tier: sv
       type: git
-    expr: "0.000500"
+    expr: "0.000100"
   - record: slo:min:events:gitlab_service_apdex:ratio
     labels:
       component: workhorse_auth_api
@@ -528,7 +528,7 @@ groups:
       component: workhorse_auth_api
       tier: sv
       type: git
-    expr: "0.000500"
+    expr: "0.000100"
   - record: slo:min:deployment:gitlab_service_apdex:ratio
     labels:
       tier: sv
