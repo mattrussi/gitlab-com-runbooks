@@ -85,11 +85,34 @@ inside of that project will not be discussed as that is implementation specific.
           gs://gitlab-<ENV>-chef-bootstrap/validation.enc`
 1. You may now proceed to creating instances in your new project
     * The project will be in a directory named the same as `<ENV>` at this path:
-      <https://ops.gitlab.net/gitlab-com/gitlab-com-infrastructure/-/tree/master/environments>
+      <https://ops.gitlab.net/gitlab-com/gl-infra/config-mgmt/-/tree/master/environments>
     * You'll also want the necessary chef-roles to go along with this
       environment, which will be placed at this path:
       `https://ops.gitlab.net/gitlab-cookbooks/chef-repo/-/tree/master/roles`
 
-## Future Work
+### Future Work
 
 * Some of the above will be removed with work to be completed here: <https://gitlab.com/gitlab-com/gl-infra/reliability/-/issues/8165>
+
+## Project Deletion
+
+Assuming you followed the instructions above to create the project and used Terraform to create resources in it, deleting/decommissioning the project should be a simple matter of deleting the Terraformed infrastructure first, then removing the project itself.
+
+1. Ensure you've run the `config-mgmt/bin/tf-get-secrets` script.
+1. Navigate to the directory in `config-mgmt/environments` that contains the resource definitions for infrastructure in the project and make sure you've initialised Terraform by running `tf init`.
+1. To see a list of everything Terraform manages in the environment (project), run `tf state list`.
+1. Pick something innocuous from the list (something that shouldn't cause too much harm if it got into a bad state) and try destroying it using `tf destroy -target <thing to destroy>`.
+    * For example, if you have a bunch of resources under `module.prometheus-app`, run `tf destroy -target module.prometheus-app`.
+    * Don't forget the `-target` option!
+    * You're likely to run into errors when destroying things, which is why we're destroying only one resource to begin with. If you get errors where resources require `force_destroy = true` (for example when trying to delete a non-empty storage bucket), if the module doesn't allow changing this as a variable, you might need to go into the module code in `.terraform/modules` and change `force_destroy` there.
+    * If there are retention policies stopping you from deleting buckets, we'll deal with them later when we delete the project.
+    * Don't delete the bucket named `<env>-secrets` otherwise you're gonna have a bad time later (Terraform needs those secrets).
+1. Eventually you should be able to destroy everything in one go by targeting the environment: `tf destroy -target module.<env>`. Once this is done, remove the directory containing the TF resource definitions and commit your changes to a new branch.
+1. We'll deal with the Chef nodes next. In `chef-repo`, run `knife status` to get a list of all the Chef nodes in the project.
+    * You'll need to run `knife client delete` and `knife node delete` on all of them.
+    * Use the `-y` flag to auto confirm deletion if there are a lot of nodes to get through.
+1. Remove the Chef roles for the environment in `chef-repo`, commit and raise an MR for your changes.
+1. Next, move to `config-mgmt/environments/env-projects`. Run `tf init` again if you need to, then run `tf destroy -target module.<env>`. This will hopefully delete the entire project. Then remove the environment from the definition files and commit your changes.
+    * If you get an error about liens preventing the deletion, remove the offending lien by following the instructions [here](https://cloud.google.com/resource-manager/docs/project-liens#removing_liens_from_a_project).
+1. Remove the environment from the CI pipelines otherwise they'll error out trying to initialise state for something that doesn't exist. Look for occurrences of the environment name in `.gitlab/ci` and remove them all. Commit your changes.
+1. If the project no longer shows up in the UI, you're almost done! **Remember to raise MRs for your changes and get them merged.**
