@@ -90,6 +90,10 @@ local union(sets) = std.foldl(function(memo, a) std.setUnion(std.set(a), memo), 
         'F2W0LV5Wk',
         '99GH9R8Wk',
       ],
+      // SRE Personal Dashboards
+      [
+        'kQX9udS4z',
+      ],
     ]),
 
   folderTitles: [
