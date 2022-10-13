@@ -148,7 +148,7 @@ groups:
     annotations:
       title: 'GKE node filesystem is over 90% full'
       description: >
-        The GKE node filesystem is over 90% full. Garbage collection may have nothing left it can clean up.
+        Node reaching capacity, garbage collection may have nothing left it can clean up, and may run out of space creating new containers.
       runbook: docs/monitoring/filesystem_alerts.md
       node: '{{ $labels.node }}'
       cluster: '{{ $labels.cluster }}'
