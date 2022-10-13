@@ -4,6 +4,34 @@ groups:
 - name: 'Component-Level SLIs: google-cloud-storage - 1m burn-rate'
   interval: 1m
   rules:
+  - record: gitlab_component_ops:rate
+    labels:
+      component: artifacts_cdn
+      stage: main
+      tier: stor
+      type: google-cloud-storage
+    expr: |
+      sum by (environment) (
+        rate(stackdriver_https_lb_rule_loadbalancing_googleapis_com_https_request_count{project_id="gitlab-production",url_map_name="gprd-artifacts-cdn"}[1m])
+      )
+  - record: gitlab_component_errors:rate
+    labels:
+      component: artifacts_cdn
+      stage: main
+      tier: stor
+      type: google-cloud-storage
+    expr: |
+      (
+        sum by (environment) (
+          rate(stackdriver_https_lb_rule_loadbalancing_googleapis_com_https_request_count{project_id="gitlab-production",response_code_class="500",url_map_name="gprd-artifacts-cdn"}[1m])
+        )
+      )
+      or
+      (
+        0 * group by(environment) (
+          gitlab_component_ops:rate{component="artifacts_cdn",stage="main",tier="stor",type="google-cloud-storage"}
+        )
+      )
   - record: gitlab_component_apdex:success:rate
     labels:
       component: pages_range_requests
@@ -141,6 +169,34 @@ groups:
 - name: 'Component-Level SLIs: google-cloud-storage - 5m burn-rate'
   interval: 1m
   rules:
+  - record: gitlab_component_ops:rate_5m
+    labels:
+      component: artifacts_cdn
+      stage: main
+      tier: stor
+      type: google-cloud-storage
+    expr: |
+      sum by (environment) (
+        rate(stackdriver_https_lb_rule_loadbalancing_googleapis_com_https_request_count{project_id="gitlab-production",url_map_name="gprd-artifacts-cdn"}[5m])
+      )
+  - record: gitlab_component_errors:rate_5m
+    labels:
+      component: artifacts_cdn
+      stage: main
+      tier: stor
+      type: google-cloud-storage
+    expr: |
+      (
+        sum by (environment) (
+          rate(stackdriver_https_lb_rule_loadbalancing_googleapis_com_https_request_count{project_id="gitlab-production",response_code_class="500",url_map_name="gprd-artifacts-cdn"}[5m])
+        )
+      )
+      or
+      (
+        0 * group by(environment) (
+          gitlab_component_ops:rate_5m{component="artifacts_cdn",stage="main",tier="stor",type="google-cloud-storage"}
+        )
+      )
   - record: gitlab_component_apdex:success:rate_5m
     labels:
       component: pages_range_requests
@@ -278,6 +334,34 @@ groups:
 - name: 'Component-Level SLIs: google-cloud-storage - 30m burn-rate'
   interval: 2m
   rules:
+  - record: gitlab_component_ops:rate_30m
+    labels:
+      component: artifacts_cdn
+      stage: main
+      tier: stor
+      type: google-cloud-storage
+    expr: |
+      sum by (environment) (
+        rate(stackdriver_https_lb_rule_loadbalancing_googleapis_com_https_request_count{project_id="gitlab-production",url_map_name="gprd-artifacts-cdn"}[30m])
+      )
+  - record: gitlab_component_errors:rate_30m
+    labels:
+      component: artifacts_cdn
+      stage: main
+      tier: stor
+      type: google-cloud-storage
+    expr: |
+      (
+        sum by (environment) (
+          rate(stackdriver_https_lb_rule_loadbalancing_googleapis_com_https_request_count{project_id="gitlab-production",response_code_class="500",url_map_name="gprd-artifacts-cdn"}[30m])
+        )
+      )
+      or
+      (
+        0 * group by(environment) (
+          gitlab_component_ops:rate_30m{component="artifacts_cdn",stage="main",tier="stor",type="google-cloud-storage"}
+        )
+      )
   - record: gitlab_component_apdex:success:rate_30m
     labels:
       component: pages_range_requests
@@ -415,6 +499,34 @@ groups:
 - name: 'Component-Level SLIs: google-cloud-storage - 1h burn-rate'
   interval: 1m
   rules:
+  - record: gitlab_component_ops:rate_1h
+    labels:
+      component: artifacts_cdn
+      stage: main
+      tier: stor
+      type: google-cloud-storage
+    expr: |
+      sum by (environment) (
+        rate(stackdriver_https_lb_rule_loadbalancing_googleapis_com_https_request_count{project_id="gitlab-production",url_map_name="gprd-artifacts-cdn"}[1h])
+      )
+  - record: gitlab_component_errors:rate_1h
+    labels:
+      component: artifacts_cdn
+      stage: main
+      tier: stor
+      type: google-cloud-storage
+    expr: |
+      (
+        sum by (environment) (
+          rate(stackdriver_https_lb_rule_loadbalancing_googleapis_com_https_request_count{project_id="gitlab-production",response_code_class="500",url_map_name="gprd-artifacts-cdn"}[1h])
+        )
+      )
+      or
+      (
+        0 * group by(environment) (
+          gitlab_component_ops:rate_1h{component="artifacts_cdn",stage="main",tier="stor",type="google-cloud-storage"}
+        )
+      )
   - record: gitlab_component_apdex:success:rate_1h
     labels:
       component: pages_range_requests
@@ -552,6 +664,34 @@ groups:
 - name: 'Component-Level SLIs: google-cloud-storage - 6h burn-rate'
   interval: 2m
   rules:
+  - record: gitlab_component_ops:rate_6h
+    labels:
+      component: artifacts_cdn
+      stage: main
+      tier: stor
+      type: google-cloud-storage
+    expr: |
+      sum by (environment) (
+        rate(stackdriver_https_lb_rule_loadbalancing_googleapis_com_https_request_count{project_id="gitlab-production",url_map_name="gprd-artifacts-cdn"}[6h])
+      )
+  - record: gitlab_component_errors:rate_6h
+    labels:
+      component: artifacts_cdn
+      stage: main
+      tier: stor
+      type: google-cloud-storage
+    expr: |
+      (
+        sum by (environment) (
+          rate(stackdriver_https_lb_rule_loadbalancing_googleapis_com_https_request_count{project_id="gitlab-production",response_code_class="500",url_map_name="gprd-artifacts-cdn"}[6h])
+        )
+      )
+      or
+      (
+        0 * group by(environment) (
+          gitlab_component_ops:rate_6h{component="artifacts_cdn",stage="main",tier="stor",type="google-cloud-storage"}
+        )
+      )
   - record: gitlab_component_apdex:success:rate_6h
     labels:
       component: pages_range_requests
@@ -689,6 +829,14 @@ groups:
 - name: 'Component mapping: google-cloud-storage'
   interval: 1m
   rules:
+  - record: gitlab_component_service:mapping
+    labels:
+      component: artifacts_cdn
+      regional_aggregation: "no"
+      service_aggregation: "yes"
+      tier: stor
+      type: google-cloud-storage
+    expr: "1"
   - record: gitlab_component_service:mapping
     labels:
       component: pages_range_requests
