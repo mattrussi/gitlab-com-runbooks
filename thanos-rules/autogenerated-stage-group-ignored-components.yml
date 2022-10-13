@@ -51,7 +51,7 @@ groups:
       product_stage: modelops
       stage_group: applied_ml
     expr: "1"
-- name: 'Stage group Ignored components: manage - Authentication & Authorization'
+- name: 'Stage group Ignored components: manage - Authentication and Authorization'
   interval: 1m
   partial_response_strategy: warn
   rules:

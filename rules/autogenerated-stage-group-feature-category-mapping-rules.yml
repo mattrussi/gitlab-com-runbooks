@@ -66,7 +66,7 @@ groups:
     expr: "1"
   - record: gitlab:feature_category:stage_group:mapping
     labels:
-      feature_category: billing_and_subscription_management
+      feature_category: billing_and_payments
       product_stage: fulfillment
       stage_group: billing_and_subscription_management
     expr: "1"
@@ -174,6 +174,12 @@ groups:
     expr: "1"
   - record: gitlab:feature_category:stage_group:mapping
     labels:
+      feature_category: customersdot_application
+      product_stage: fulfillment
+      stage_group: fulfillment_platform
+    expr: "1"
+  - record: gitlab:feature_category:stage_group:mapping
+    labels:
       feature_category: database
       product_stage: data_stores
       stage_group: database
@@ -237,6 +243,12 @@ groups:
       feature_category: design_system
       product_stage: manage
       stage_group: foundations
+    expr: "1"
+  - record: gitlab:feature_category:stage_group:mapping
+    labels:
+      feature_category: devops_reports
+      product_stage: plan
+      stage_group: optimize
     expr: "1"
   - record: gitlab:feature_category:stage_group:mapping
     labels:
@@ -312,7 +324,19 @@ groups:
     expr: "1"
   - record: gitlab:feature_category:stage_group:mapping
     labels:
-      feature_category: fulfillment_platform
+      feature_category: fulfillment_admin_tooling
+      product_stage: fulfillment
+      stage_group: fulfillment_admin_tooling
+    expr: "1"
+  - record: gitlab:feature_category:stage_group:mapping
+    labels:
+      feature_category: fulfillment_developer_productivity
+      product_stage: fulfillment
+      stage_group: fulfillment_platform
+    expr: "1"
+  - record: gitlab:feature_category:stage_group:mapping
+    labels:
+      feature_category: fulfillment_infrastructure
       product_stage: fulfillment
       stage_group: fulfillment_platform
     expr: "1"
@@ -564,12 +588,6 @@ groups:
     expr: "1"
   - record: gitlab:feature_category:stage_group:mapping
     labels:
-      feature_category: provision
-      product_stage: fulfillment
-      stage_group: provision
-    expr: "1"
-  - record: gitlab:feature_category:stage_group:mapping
-    labels:
       feature_category: pubsec_services
       product_stage: platforms
       stage_group: pubsec_services
@@ -648,6 +666,12 @@ groups:
     expr: "1"
   - record: gitlab:feature_category:stage_group:mapping
     labels:
+      feature_category: saas_provisioning
+      product_stage: fulfillment
+      stage_group: provision
+    expr: "1"
+  - record: gitlab:feature_category:stage_group:mapping
+    labels:
       feature_category: scalability
       product_stage: platforms
       stage_group: scalability
@@ -690,6 +714,12 @@ groups:
     expr: "1"
   - record: gitlab:feature_category:stage_group:mapping
     labels:
+      feature_category: sm_provisioning
+      product_stage: fulfillment
+      stage_group: provision
+    expr: "1"
+  - record: gitlab:feature_category:stage_group:mapping
+    labels:
       feature_category: snippets
       product_stage: create
       stage_group: editor
@@ -711,6 +741,24 @@ groups:
       feature_category: subgroups
       product_stage: manage
       stage_group: workspace
+    expr: "1"
+  - record: gitlab:feature_category:stage_group:mapping
+    labels:
+      feature_category: subscription_cost_management
+      product_stage: fulfillment
+      stage_group: utilization
+    expr: "1"
+  - record: gitlab:feature_category:stage_group:mapping
+    labels:
+      feature_category: subscription_management
+      product_stage: fulfillment
+      stage_group: billing_and_subscription_management
+    expr: "1"
+  - record: gitlab:feature_category:stage_group:mapping
+    labels:
+      feature_category: subscription_usage_reports
+      product_stage: fulfillment
+      stage_group: utilization
     expr: "1"
   - record: gitlab:feature_category:stage_group:mapping
     labels:
@@ -744,9 +792,9 @@ groups:
     expr: "1"
   - record: gitlab:feature_category:stage_group:mapping
     labels:
-      feature_category: utilization
-      product_stage: fulfillment
-      stage_group: utilization
+      feature_category: value_stream_management
+      product_stage: plan
+      stage_group: optimize
     expr: "1"
   - record: gitlab:feature_category:stage_group:mapping
     labels:
