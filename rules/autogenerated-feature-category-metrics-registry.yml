@@ -213,6 +213,36 @@ groups:
           gitlab:component:feature_category:execution:ops:rate_5m{component="redis",feature_category="container_registry",tier="sv",type="registry"}
         )
       )
+  - record: gitlab:component:feature_category:execution:ops:rate_5m
+    labels:
+      component: registry_cdn
+      feature_category: container_registry
+      stage: main
+      tier: sv
+      type: registry
+    expr: |
+      sum by (env,environment) (
+        rate(stackdriver_https_lb_rule_loadbalancing_googleapis_com_https_request_count{project_id="gitlab-production",url_map_name="gprd-registry-cdn"}[5m])
+      )
+  - record: gitlab:component:feature_category:execution:error:rate_5m
+    labels:
+      component: registry_cdn
+      feature_category: container_registry
+      stage: main
+      tier: sv
+      type: registry
+    expr: |
+      (
+        sum by (env,environment) (
+          rate(stackdriver_https_lb_rule_loadbalancing_googleapis_com_https_request_count{project_id="gitlab-production",response_code_class="500",url_map_name="gprd-registry-cdn"}[5m])
+        )
+      )
+      or
+      (
+        0 * group by(env,environment) (
+          gitlab:component:feature_category:execution:ops:rate_5m{component="registry_cdn",feature_category="container_registry",stage="main",tier="sv",type="registry"}
+        )
+      )
   - record: gitlab:component:feature_category:execution:apdex:success:rate_5m
     labels:
       component: server
@@ -557,6 +587,36 @@ groups:
           gitlab:component:feature_category:execution:ops:rate_30m{component="redis",feature_category="container_registry",tier="sv",type="registry"}
         )
       )
+  - record: gitlab:component:feature_category:execution:ops:rate_30m
+    labels:
+      component: registry_cdn
+      feature_category: container_registry
+      stage: main
+      tier: sv
+      type: registry
+    expr: |
+      sum by (env,environment) (
+        rate(stackdriver_https_lb_rule_loadbalancing_googleapis_com_https_request_count{project_id="gitlab-production",url_map_name="gprd-registry-cdn"}[30m])
+      )
+  - record: gitlab:component:feature_category:execution:error:rate_30m
+    labels:
+      component: registry_cdn
+      feature_category: container_registry
+      stage: main
+      tier: sv
+      type: registry
+    expr: |
+      (
+        sum by (env,environment) (
+          rate(stackdriver_https_lb_rule_loadbalancing_googleapis_com_https_request_count{project_id="gitlab-production",response_code_class="500",url_map_name="gprd-registry-cdn"}[30m])
+        )
+      )
+      or
+      (
+        0 * group by(env,environment) (
+          gitlab:component:feature_category:execution:ops:rate_30m{component="registry_cdn",feature_category="container_registry",stage="main",tier="sv",type="registry"}
+        )
+      )
   - record: gitlab:component:feature_category:execution:apdex:success:rate_30m
     labels:
       component: server
@@ -899,6 +959,36 @@ groups:
       (
         0 * group by(env,environment,stage) (
           gitlab:component:feature_category:execution:ops:rate_1h{component="redis",feature_category="container_registry",tier="sv",type="registry"}
+        )
+      )
+  - record: gitlab:component:feature_category:execution:ops:rate_1h
+    labels:
+      component: registry_cdn
+      feature_category: container_registry
+      stage: main
+      tier: sv
+      type: registry
+    expr: |
+      sum by (env,environment) (
+        rate(stackdriver_https_lb_rule_loadbalancing_googleapis_com_https_request_count{project_id="gitlab-production",url_map_name="gprd-registry-cdn"}[1h])
+      )
+  - record: gitlab:component:feature_category:execution:error:rate_1h
+    labels:
+      component: registry_cdn
+      feature_category: container_registry
+      stage: main
+      tier: sv
+      type: registry
+    expr: |
+      (
+        sum by (env,environment) (
+          rate(stackdriver_https_lb_rule_loadbalancing_googleapis_com_https_request_count{project_id="gitlab-production",response_code_class="500",url_map_name="gprd-registry-cdn"}[1h])
+        )
+      )
+      or
+      (
+        0 * group by(env,environment) (
+          gitlab:component:feature_category:execution:ops:rate_1h{component="registry_cdn",feature_category="container_registry",stage="main",tier="sv",type="registry"}
         )
       )
   - record: gitlab:component:feature_category:execution:apdex:success:rate_1h

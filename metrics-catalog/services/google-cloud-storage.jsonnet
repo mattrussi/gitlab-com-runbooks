@@ -24,6 +24,7 @@ metricsCatalog.serviceDefinition({
       userImpacting=true,
       loadBalancerName='gprd-artifacts-cdn',
       projectId='gitlab-production',
+      featureCategory='build_artifacts',
     ),
     registry_storage: {
       userImpacting: true,

@@ -11,6 +11,7 @@ local toolingLinks = import 'toolinglinks/toolinglinks.libsonnet';
     userImpacting,
     loadBalancerName,
     projectId,
+    featureCategory='not_owned',
     team=null,
     trafficCessationAlertConfig=true,
     additionalToolingLinks=[],
@@ -20,6 +21,7 @@ local toolingLinks = import 'toolinglinks/toolinglinks.libsonnet';
 
     metricsCatalog.serviceLevelIndicatorDefinition(extra {
       userImpacting: userImpacting,
+      featureCategory: featureCategory,
       [if team != null then 'team']: team,
       trafficCessationAlertConfig: trafficCessationAlertConfig,
 

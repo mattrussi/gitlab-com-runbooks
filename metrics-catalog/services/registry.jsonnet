@@ -67,6 +67,7 @@ metricsCatalog.serviceDefinition({
       userImpacting=true,
       loadBalancerName='gprd-registry-cdn',
       projectId='gitlab-production',
+      featureCategory='container_registry',
     ),
     loadbalancer: haproxyComponents.haproxyHTTPLoadBalancer(
       userImpacting=true,
