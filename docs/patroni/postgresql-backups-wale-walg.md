@@ -445,7 +445,7 @@ execute some manual clean on the blackbox node:
 ```bash
 $ ssh blackbox-01-inf-gprd.c.gitlab-production.internal
 $ curl -s localhost:9091/api/v1/metrics | jq '.data[].gitlab_job_success_timestamp_seconds'
-## Find the type you'll need to alert, for example: `patroni-v12`.
+## Find the type you'll need to delete, for example: `patroni-v12`.
 $ curl -X DELETE localhost:9091/metrics/job/walg-basebackup/shard/default/tier/db/type/patroni-v12
 ```
 

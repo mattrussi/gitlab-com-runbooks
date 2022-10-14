@@ -58,6 +58,7 @@
 * [../patroni/pg_collect_query_data.md](../patroni/pg_collect_query_data.md)
 * [Pg_repack using gitlab-pgrepack](../patroni/pg_repack.md)
 * [../patroni/postgres.md](../patroni/postgres.md)
+* [../patroni/postgresql-backups-wale-walg.md](../patroni/postgresql-backups-wale-walg.md)
 * [../pgbouncer/patroni-consul-postgres-pgbouncer-interactions.md](../pgbouncer/patroni-consul-postgres-pgbouncer-interactions.md)
 * [PgBouncer connection management and troubleshooting](../pgbouncer/pgbouncer-connections.md)
 * [Sidekiq or Web/API is using most of its PgBouncer connections](../pgbouncer/pgbouncer-saturation.md)
