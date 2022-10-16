@@ -5,7 +5,7 @@ groups:
     expr: >
       (
         (
-          sum by (env, cluster, pod) (rate(pubsubbeat_libbeat_output_events{type=~"dropped|failed"}[5m])) 
+          sum by (env, cluster, pod) (rate(pubsubbeat_libbeat_output_events{type=~"dropped|failed"}[5m]))
           / sum by (env, cluster, pod) (rate(pubsubbeat_libbeat_output_events[5m]))
         ) > 0
       ) * 100 > 5
