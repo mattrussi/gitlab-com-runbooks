@@ -3,11 +3,13 @@ groups:
   rules:
   - alert: DroppedLogs
     expr: >
-      (rate(pubsubbeat_libbeat_output_events{type="dropped"}[5m]))
-      / ignoring (type) group_left
-      sum without (type) (rate(pubsubbeat_libbeat_output_events[5m]))
-      > 0.005
-    for: 1m
+      (
+        (
+          sum by (env, cluster, pod) (rate(pubsubbeat_libbeat_output_events{type=~"dropped|failed"}[5m])) 
+          / sum by (env, cluster, pod) (rate(pubsubbeat_libbeat_output_events[5m]))
+        ) > 0
+      ) * 100 > 5
+    for: 30m
     labels:
       severity: s4
       alert_type: cause
@@ -15,7 +17,7 @@ groups:
     annotations:
       title: Cluster is refusing to process logs sent to it by pubsubbeat
       description: >
-        pubsubbeat internal metric is reporting logs being dropped by the cluster.
+        pubsubbeat output error rate has been greated than 5% for 30 mintutes.
         Consider checking /var/log/pubsubbeat/current on the affected
         host and see what's the cause of the errors. One potential source of the problem are conflicting mappings in the index.
 
