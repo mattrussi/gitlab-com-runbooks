@@ -9,7 +9,7 @@ groups:
           / sum by (env, cluster, pod) (rate(pubsubbeat_libbeat_output_events[5m]))
         ) > 0
       ) * 100 > 5
-    for: 30m
+    for: 10m
     labels:
       severity: s4
       alert_type: cause
