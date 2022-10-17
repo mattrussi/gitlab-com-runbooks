@@ -68,9 +68,6 @@ variables:
       - DEPLOY_ENV: gprd-us-east1-d
         CLUSTER: gprd-us-east1-d
         REGION: us-east1-d
-      - DEPLOY_ENV: org-ci
-        CLUSTER: org-ci-gitlab-gke
-        REGION: us-east1
       - DEPLOY_ENV: prdsub
         CLUSTER: prdsub-customers-gke
         REGION: us-east1
