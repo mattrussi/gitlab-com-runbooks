@@ -131,6 +131,16 @@ groups:
       product_stage: configure
       stage_group: configure
     expr: "1"
+- name: 'Stage group Ignored components: package - Container Registry'
+  interval: 1m
+  partial_response_strategy: warn
+  rules:
+  - record: gitlab:ignored_component:stage_group
+    labels:
+      component: graphql_queries
+      product_stage: package
+      stage_group: container_registry
+    expr: "1"
 - name: 'Stage group Ignored components: data_stores - Database'
   interval: 1m
   partial_response_strategy: warn
@@ -321,7 +331,7 @@ groups:
       product_stage: plan
       stage_group: optimize
     expr: "1"
-- name: 'Stage group Ignored components: package - Package'
+- name: 'Stage group Ignored components: package - Package Registry'
   interval: 1m
   partial_response_strategy: warn
   rules:
@@ -329,7 +339,7 @@ groups:
     labels:
       component: graphql_queries
       product_stage: package
-      stage_group: package
+      stage_group: package_registry
     expr: "1"
 - name: 'Stage group Ignored components: verify - Pipeline Authoring'
   interval: 1m
