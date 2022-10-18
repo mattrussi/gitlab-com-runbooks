@@ -10,7 +10,7 @@ groups:
     labels:
       severity: s4
       alert_type: symptom
-      team: package
+      team: container_registry
     annotations:
       title: 'The number of potentially stalled imports in the Rails pre_importing state is too high'
       description: 'There have been over 18 potentially stalled imports in the Rails pre_importing state in env {{ $labels.environment }} {{ $labels.stage }} stage for the last 30 minutes.'
@@ -25,7 +25,7 @@ groups:
     labels:
       severity: s4
       alert_type: symptom
-      team: package
+      team: container_registry
     annotations:
       title: 'The number of potentially stalled imports in the Rails pre_import_done state is too high'
       description: 'There have been over 10 potentially stalled imports in the Rails pre_import_done state in env {{ $labels.environment }} {{ $labels.team }} stage for the last 1 hour.'
@@ -40,7 +40,7 @@ groups:
     labels:
       severity: s4
       alert_type: symptom
-      team: package
+      team: container_registry
     annotations:
       title: 'The number of potentially stalled imports in the Rails importing state is too high'
       description: 'There have been over 5 potentially stalled imports in the Rails importing state in env {{ $labels.environment }} {{ $labels.stage }} stage for the last 5 minutes.'

@@ -82,14 +82,21 @@ teams:
   engagement_policy:  # Link to doc that talks about engagement and escalation policy
   oncall_schedule: https://gitlab.pagerduty.com/schedules#PIQ317K
 
-- name: package
-  url: https://about.gitlab.com/handbook/engineering/development/ops/package/
-  slack_channel: s_package
-  slack_alerts_channel: s_package_alerts
+- name: container_registry
+  url: https://about.gitlab.com/handbook/engineering/development/ops/package/container-registry/
+  slack_channel: g_container-registry
+  slack_alerts_channel: g_container-registry_alerts
   send_slo_alerts_to_team_slack_channel: true
-  engagement_policy:  # Link to doc that talks about engagement and escalation policy
-  oncall_schedule:    # Link to pagerduty oncall schedule
-  product_stage_group: package
+  product_stage_group: container_registry
+  ignored_components:
+  - graphql_queries
+
+- name: package_registry
+  url: https://about.gitlab.com/handbook/engineering/development/ops/package/package-registry/
+  slack_channel: g_package-registry
+  slack_alerts_channel: g_package-registry_alerts
+  send_slo_alerts_to_team_slack_channel: true
+  product_stage_group: package_registry
   ignored_components:
   - graphql_queries
 

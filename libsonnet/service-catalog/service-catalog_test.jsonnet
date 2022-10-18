@@ -85,12 +85,12 @@ test.suite({
     // a team
     actual: std.set(
       std.filterMap(
-        function(team) team.name == 'package' || team.name == 'scalability',
+        function(team) team.name == 'package_registry' || team.name == 'scalability',
         function(team) team.name,
         serviceCatalog.getTeams()
       )
     ),
-    expect: std.set(['package', 'scalability']),
+    expect: std.set(['package_registry', 'scalability']),
   },
   testLookupExistingTeamForStageGroup: {
     actual: serviceCatalog.lookupTeamForStageGroup('authentication_and_authorization'),

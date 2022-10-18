@@ -134,7 +134,7 @@ groups:
     labels:
       feature_category: container_registry
       product_stage: package
-      stage_group: package
+      stage_group: container_registry
     expr: "1"
   - record: gitlab:feature_category:stage_group:mapping
     labels:
@@ -206,7 +206,7 @@ groups:
     labels:
       feature_category: dependency_firewall
       product_stage: package
-      stage_group: package
+      stage_group: container_registry
     expr: "1"
   - record: gitlab:feature_category:stage_group:mapping
     labels:
@@ -218,7 +218,7 @@ groups:
     labels:
       feature_category: dependency_proxy
       product_stage: package
-      stage_group: package
+      stage_group: container_registry
     expr: "1"
   - record: gitlab:feature_category:stage_group:mapping
     labels:
@@ -380,7 +380,7 @@ groups:
     labels:
       feature_category: helm_chart_registry
       product_stage: package
-      stage_group: package
+      stage_group: package_registry
     expr: "1"
   - record: gitlab:feature_category:stage_group:mapping
     labels:
@@ -524,7 +524,7 @@ groups:
     labels:
       feature_category: package_registry
       product_stage: package
-      stage_group: package
+      stage_group: package_registry
     expr: "1"
   - record: gitlab:feature_category:stage_group:mapping
     labels:

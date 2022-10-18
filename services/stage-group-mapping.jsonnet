@@ -142,13 +142,19 @@
       'review_apps',
     ],
   },
-  package: {
-    name: 'Package',
+  package_registry: {
+    name: 'Package Registry',
+    stage: 'package',
+    feature_categories: [
+      'package_registry',
+      'helm_chart_registry',
+    ],
+  },
+  container_registry: {
+    name: 'Container Registry',
     stage: 'package',
     feature_categories: [
       'container_registry',
-      'package_registry',
-      'helm_chart_registry',
       'dependency_proxy',
       'dependency_firewall',
     ],
