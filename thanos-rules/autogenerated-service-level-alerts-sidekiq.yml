@@ -169,6 +169,170 @@ groups:
       gitlab_component_ops:rate_5m{component="email_receiver",monitor="global",stage="main",type="sidekiq"} offset 1h
       unless
       gitlab_component_ops:rate_5m{component="email_receiver",monitor="global",stage="main",type="sidekiq"}
+  - alert: SidekiqServiceGlobalSearchIndexingApdexSLOViolation
+    for: 2m
+    annotations:
+      title: The global_search_indexing SLI of the sidekiq service (`{{ $labels.stage
+        }}` stage) has an apdex violating SLO
+      description: |
+        The number of Global Search indexing calls meeting their duration target based on the 99.95th percentile of indexing. This indicates the duration between when an item was changed and when it became available in Elasticsearch.
+
+        The target duration can be found here: https://gitlab.com/gitlab-org/gitlab/-/blob/master/ee/lib/gitlab/metrics/global_search_indexing_slis.rb#L14-L15
+
+        Currently the apdex value is {{ $value | humanizePercentage }}.
+      grafana_dashboard_id: sidekiq-main/sidekiq-overview
+      grafana_dashboard_link: https://dashboards.gitlab.net/d/sidekiq-main/sidekiq-overview?from=now-6h/m&to=now-1m/m&var-environment={{
+        $labels.environment }}&var-stage={{ $labels.stage }}
+      grafana_min_zoom_hours: "6"
+      grafana_panel_id: "4092777115"
+      grafana_variables: environment,stage
+      runbook: docs/sidekiq/README.md
+    labels:
+      aggregation: component
+      alert_class: slo_violation
+      alert_type: symptom
+      feature_category: global_search
+      rules_domain: general
+      severity: s3
+      sli_type: apdex
+      slo_alert: "yes"
+      user_impacting: "yes"
+      window: 1h
+    expr: |
+      (
+        (
+          gitlab_component_apdex:ratio_1h{component="global_search_indexing",monitor="global",type="sidekiq"}
+          < (1 - 14.4 * 0.005000)
+        )
+        and
+        (
+          gitlab_component_apdex:ratio_5m{component="global_search_indexing",monitor="global",type="sidekiq"}
+          < (1 - 14.4 * 0.005000)
+        )
+      )
+      and on(env,environment,tier,type,stage,component)
+      (
+        sum by(env,environment,tier,type,stage,component) (gitlab_component_ops:rate_1h{component="global_search_indexing",monitor="global",type="sidekiq"}) >= 1
+      )
+  - alert: SidekiqServiceGlobalSearchIndexingApdexSLOViolation
+    for: 2m
+    annotations:
+      title: The global_search_indexing SLI of the sidekiq service (`{{ $labels.stage
+        }}` stage) has an apdex violating SLO
+      description: |
+        The number of Global Search indexing calls meeting their duration target based on the 99.95th percentile of indexing. This indicates the duration between when an item was changed and when it became available in Elasticsearch.
+
+        The target duration can be found here: https://gitlab.com/gitlab-org/gitlab/-/blob/master/ee/lib/gitlab/metrics/global_search_indexing_slis.rb#L14-L15
+
+        Currently the apdex value is {{ $value | humanizePercentage }}.
+      grafana_dashboard_id: sidekiq-main/sidekiq-overview
+      grafana_dashboard_link: https://dashboards.gitlab.net/d/sidekiq-main/sidekiq-overview?from=now-6h/m&to=now-1m/m&var-environment={{
+        $labels.environment }}&var-stage={{ $labels.stage }}
+      grafana_min_zoom_hours: "6"
+      grafana_panel_id: "4092777115"
+      grafana_variables: environment,stage
+      runbook: docs/sidekiq/README.md
+    labels:
+      aggregation: component
+      alert_class: slo_violation
+      alert_type: symptom
+      feature_category: global_search
+      rules_domain: general
+      severity: s3
+      sli_type: apdex
+      slo_alert: "yes"
+      user_impacting: "yes"
+      window: 6h
+    expr: |
+      (
+        (
+          gitlab_component_apdex:ratio_6h{component="global_search_indexing",monitor="global",type="sidekiq"}
+          < (1 - 6 * 0.005000)
+        )
+        and
+        (
+          gitlab_component_apdex:ratio_30m{component="global_search_indexing",monitor="global",type="sidekiq"}
+          < (1 - 6 * 0.005000)
+        )
+      )
+      and on(env,environment,tier,type,stage,component)
+      (
+        sum by(env,environment,tier,type,stage,component) (gitlab_component_ops:rate_6h{component="global_search_indexing",monitor="global",type="sidekiq"}) >= 0.16667
+      )
+  - alert: SidekiqServiceGlobalSearchIndexingTrafficCessation
+    for: 5m
+    annotations:
+      title: The global_search_indexing SLI of the sidekiq service (`{{ $labels.stage
+        }}` stage) has not received any traffic in the past 30m
+      description: |
+        The number of Global Search indexing calls meeting their duration target based on the 99.95th percentile of indexing. This indicates the duration between when an item was changed and when it became available in Elasticsearch.
+
+        The target duration can be found here: https://gitlab.com/gitlab-org/gitlab/-/blob/master/ee/lib/gitlab/metrics/global_search_indexing_slis.rb#L14-L15
+
+        This alert signifies that the SLI is reporting a cessation of traffic; the signal is present, but is zero.
+      grafana_dashboard_id: sidekiq-main/sidekiq-overview
+      grafana_dashboard_link: https://dashboards.gitlab.net/d/sidekiq-main/sidekiq-overview?from=now-6h/m&to=now-1m/m&var-environment={{
+        $labels.environment }}&var-stage={{ $labels.stage }}
+      grafana_min_zoom_hours: "6"
+      grafana_panel_id: "2184528438"
+      grafana_variables: environment,stage
+      promql_template_1: |
+        sum by (env,environment,tier,stage) (
+          rate(gitlab_sli_global_search_indexing_apdex_total{environment="{{ $labels.environment }}",stage="{{ $labels.stage }}",type="sidekiq"}[5m])
+        )
+      runbook: docs/sidekiq/README.md
+    labels:
+      aggregation: component
+      alert_class: traffic_cessation
+      alert_type: cause
+      feature_category: global_search
+      rules_domain: general
+      severity: s3
+      sli_type: ops
+      slo_alert: "no"
+      user_impacting: "yes"
+    expr: |
+      gitlab_component_ops:rate_30m{component="global_search_indexing",monitor="global",stage="main",type="sidekiq"} == 0
+      and
+      gitlab_component_ops:rate_30m{component="global_search_indexing",monitor="global",stage="main",type="sidekiq"} offset 1h >= 0.16666666666666666
+  - alert: SidekiqServiceGlobalSearchIndexingTrafficAbsent
+    for: 30m
+    annotations:
+      title: The global_search_indexing SLI of the sidekiq service (`{{ $labels.stage
+        }}` stage) has not reported any traffic in the past 30m
+      description: |
+        The number of Global Search indexing calls meeting their duration target based on the 99.95th percentile of indexing. This indicates the duration between when an item was changed and when it became available in Elasticsearch.
+
+        The target duration can be found here: https://gitlab.com/gitlab-org/gitlab/-/blob/master/ee/lib/gitlab/metrics/global_search_indexing_slis.rb#L14-L15
+
+        This alert signifies that the SLI was previously reporting traffic, but is no longer - the signal is absent.
+
+        This could be caused by a change to the metrics used in the SLI, or by the service not receiving traffic.
+      grafana_dashboard_id: sidekiq-main/sidekiq-overview
+      grafana_dashboard_link: https://dashboards.gitlab.net/d/sidekiq-main/sidekiq-overview?from=now-6h/m&to=now-1m/m&var-environment={{
+        $labels.environment }}&var-stage={{ $labels.stage }}
+      grafana_min_zoom_hours: "6"
+      grafana_panel_id: "2184528438"
+      grafana_variables: environment,stage
+      promql_template_1: |
+        sum by (env,environment,tier,stage) (
+          rate(gitlab_sli_global_search_indexing_apdex_total{environment="{{ $labels.environment }}",stage="{{ $labels.stage }}",type="sidekiq"}[5m])
+        )
+      runbook: docs/sidekiq/README.md
+    labels:
+      aggregation: component
+      alert_class: traffic_cessation
+      alert_type: cause
+      feature_category: global_search
+      rules_domain: general
+      severity: s3
+      sli_type: ops
+      slo_alert: "no"
+      user_impacting: "yes"
+    expr: |
+      gitlab_component_ops:rate_5m{component="global_search_indexing",monitor="global",stage="main",type="sidekiq"} offset 1h
+      unless
+      gitlab_component_ops:rate_5m{component="global_search_indexing",monitor="global",stage="main",type="sidekiq"}
   - alert: SidekiqServiceShardCatchallApdexSLOViolation
     for: 2m
     annotations:

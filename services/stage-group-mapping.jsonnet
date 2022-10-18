@@ -2,7 +2,7 @@
 // Please don't update manually
 {
   authentication_and_authorization: {
-    name: 'Authentication & Authorization',
+    name: 'Authentication and Authorization',
     stage: 'manage',
     feature_categories: [
       'authentication_and_authorization',
@@ -29,12 +29,20 @@
       'internationalization',
     ],
   },
-  optimize: {
-    name: 'Optimize',
+  integrations: {
+    name: 'Integrations',
     stage: 'manage',
     feature_categories: [
-      'devops_reports',
-      'value_stream_management',
+      'integrations',
+    ],
+  },
+  foundations: {
+    name: 'Foundations',
+    stage: 'manage',
+    feature_categories: [
+      'design_system',
+      'navigation',
+      'gitlab_docs',
     ],
   },
   project_management: {
@@ -62,6 +70,14 @@
       'service_desk',
     ],
   },
+  optimize: {
+    name: 'Optimize',
+    stage: 'plan',
+    feature_categories: [
+      'devops_reports',
+      'value_stream_management',
+    ],
+  },
   source_code: {
     name: 'Source Code',
     stage: 'create',
@@ -87,22 +103,6 @@
       'wiki',
       'pages',
       'remote_development',
-    ],
-  },
-  integrations: {
-    name: 'Integrations',
-    stage: 'ecosystem',
-    feature_categories: [
-      'integrations',
-    ],
-  },
-  foundations: {
-    name: 'Foundations',
-    stage: 'ecosystem',
-    feature_categories: [
-      'design_system',
-      'navigation',
-      'gitlab_docs',
     ],
   },
   pipeline_execution: {
@@ -142,13 +142,19 @@
       'review_apps',
     ],
   },
-  package: {
-    name: 'Package',
+  package_registry: {
+    name: 'Package Registry',
+    stage: 'package',
+    feature_categories: [
+      'package_registry',
+      'helm_chart_registry',
+    ],
+  },
+  container_registry: {
+    name: 'Container Registry',
     stage: 'package',
     feature_categories: [
       'container_registry',
-      'package_registry',
-      'helm_chart_registry',
       'dependency_proxy',
       'dependency_firewall',
     ],
@@ -292,28 +298,33 @@
     name: 'Provision',
     stage: 'fulfillment',
     feature_categories: [
-      'provision',
+      'sm_provisioning',
+      'saas_provisioning',
     ],
   },
   utilization: {
     name: 'Utilization',
     stage: 'fulfillment',
     feature_categories: [
-      'utilization',
+      'subscription_usage_reports',
+      'subscription_cost_management',
     ],
   },
   fulfillment_platform: {
     name: 'Fulfillment Platform',
     stage: 'fulfillment',
     feature_categories: [
-      'fulfillment_platform',
+      'fulfillment_infrastructure',
+      'fulfillment_developer_productivity',
+      'customersdot_application',
     ],
   },
   billing_and_subscription_management: {
     name: 'Billing and Subscription Management',
     stage: 'fulfillment',
     feature_categories: [
-      'billing_and_subscription_management',
+      'billing_and_payments',
+      'subscription_management',
     ],
   },
   commerce_integrations: {
@@ -321,6 +332,13 @@
     stage: 'fulfillment',
     feature_categories: [
       'commerce_integrations',
+    ],
+  },
+  fulfillment_admin_tooling: {
+    name: 'Fulfillment Admin Tooling',
+    stage: 'fulfillment',
+    feature_categories: [
+      'fulfillment_admin_tooling',
     ],
   },
   acquisition: {
@@ -355,11 +373,18 @@
       'cloud_native_installation',
     ],
   },
-  gitaly: {
-    name: 'Gitaly',
+  gitaly_cluster: {
+    name: 'Gitaly:Cluster',
     stage: 'systems',
     feature_categories: [
       'gitaly',
+    ],
+  },
+  gitaly_git: {
+    name: 'Gitaly:Git',
+    stage: 'systems',
+    feature_categories: [
+
     ],
   },
   geo: {

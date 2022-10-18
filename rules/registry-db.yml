@@ -12,7 +12,7 @@ groups:
     labels:
       severity: s3
       alert_type: symptom
-      team: package
+      team: container_registry
     annotations:
       title: 'The Container Registry database connection pool saturation is too high'
       description: 'The average application-side database connection pool saturation in env {{ $labels.environment }} {{ $labels.stage }} stage has been above 70% for the last 30 minutes.'

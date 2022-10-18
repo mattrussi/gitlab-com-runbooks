@@ -432,7 +432,7 @@ groups:
     labels:
       tier: sv
       type: git
-    expr: "0.000500"
+    expr: "0.000100"
   - record: slo:min:events:gitlab_service_apdex:ratio
     labels:
       component: gitlab_shell
@@ -444,7 +444,7 @@ groups:
       component: gitlab_shell
       tier: sv
       type: git
-    expr: "0.000500"
+    expr: "0.000100"
   - record: slo:min:events:gitlab_service_apdex:ratio
     labels:
       component: gitlab_sshd
@@ -468,7 +468,7 @@ groups:
       component: loadbalancer
       tier: sv
       type: git
-    expr: "0.000500"
+    expr: "0.000100"
   - record: slo:min:events:gitlab_service_apdex:ratio
     labels:
       component: loadbalancer_ssh
@@ -480,7 +480,7 @@ groups:
       component: loadbalancer_ssh
       tier: sv
       type: git
-    expr: "0.000500"
+    expr: "0.000100"
   - record: slo:min:events:gitlab_service_apdex:ratio
     labels:
       component: puma
@@ -492,7 +492,7 @@ groups:
       component: puma
       tier: sv
       type: git
-    expr: "0.000500"
+    expr: "0.000100"
   - record: slo:min:events:gitlab_service_apdex:ratio
     labels:
       component: rails_requests
@@ -504,7 +504,7 @@ groups:
       component: rails_requests
       tier: sv
       type: git
-    expr: "0.000500"
+    expr: "0.000100"
   - record: slo:min:events:gitlab_service_apdex:ratio
     labels:
       component: workhorse
@@ -516,7 +516,7 @@ groups:
       component: workhorse
       tier: sv
       type: git
-    expr: "0.000500"
+    expr: "0.000100"
   - record: slo:min:events:gitlab_service_apdex:ratio
     labels:
       component: workhorse_auth_api
@@ -528,7 +528,7 @@ groups:
       component: workhorse_auth_api
       tier: sv
       type: git
-    expr: "0.000500"
+    expr: "0.000100"
   - record: slo:min:deployment:gitlab_service_apdex:ratio
     labels:
       tier: sv
@@ -1670,6 +1670,18 @@ groups:
       tier: sv
       type: sidekiq
     expr: "0.300000"
+  - record: slo:min:events:gitlab_service_apdex:ratio
+    labels:
+      component: global_search_indexing
+      tier: sv
+      type: sidekiq
+    expr: "0.995000"
+  - record: slo:max:events:gitlab_service_errors:ratio
+    labels:
+      component: global_search_indexing
+      tier: sv
+      type: sidekiq
+    expr: "0.005000"
   - record: slo:min:events:gitlab_service_apdex:ratio
     labels:
       component: shard_catchall
@@ -3093,6 +3105,14 @@ groups:
       component: email_receiver
       regional_aggregation: "no"
       service_aggregation: "yes"
+      tier: sv
+      type: sidekiq
+    expr: "1"
+  - record: gitlab_component_service:mapping
+    labels:
+      component: global_search_indexing
+      regional_aggregation: "no"
+      service_aggregation: "no"
       tier: sv
       type: sidekiq
     expr: "1"

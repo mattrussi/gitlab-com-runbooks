@@ -228,16 +228,13 @@ This Vault provider configuration allows using Vault in Terraform both from CI a
 provider "vault" {
   // address = "${VAULT_ADDR}"
 
-  dynamic "auth_login" {
+  dynamic "auth_login_jwt" {
     for_each = var.vault_jwt != "" && var.vault_auth_path != "" ? [var.vault_auth_path] : []
 
     content {
-      path = "auth/${var.vault_auth_path}/login"
-
-      parameters = {
-        role = var.vault_auth_role
-        jwt  = var.vault_jwt
-      }
+      mount = var.vault_auth_path
+      role  = var.vault_auth_role
+      jwt   = var.vault_jwt
     }
   }
 }

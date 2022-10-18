@@ -22,7 +22,7 @@ metricsCatalog.serviceDefinition({
   },
   monitoringThresholds: {
     apdexScore: 0.998,
-    errorRatio: 0.9995,
+    errorRatio: 0.9999,
   },
   otherThresholds: {
     // Deployment thresholds are optional, and when they are specified, they are

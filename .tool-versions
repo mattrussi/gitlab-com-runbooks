@@ -4,16 +4,16 @@
 
 amtool 0.22.2 # datasource=github-releases depName=prometheus/alertmanager
 go-jsonnet 0.18.0 # datasource=github-releases depName=google/go-jsonnet
-golang 1.19.1 # datasource=golang-version depName=go
+golang 1.19.2 # datasource=golang-version depName=go
 jb 0.5.1 # datasource=github-releases depName=jsonnet-bundler/jsonnet-bundler
 jsonnet-tool 1.7.0 # datasource=gitlab-releases depName=gitlab-com/gl-infra/jsonnet-tool
-nodejs 16.17.0 # datasource=node depName=nodejs/node
+nodejs 16.18.0 # datasource=node depName=nodejs/node
 pre-commit 2.20.0 # datasource=github-releases depName=pre-commit/pre-commit
 promtool 2.34.0 # datasource=github-releases depName=prometheus/prometheus
 python system
 ruby 3.1.2 # datasource=ruby-version depName=ruby/ruby
 shellcheck 0.8.0 # datasource=github-releases depName=koalaman/shellcheck
 shfmt 3.5.1 # datasource=github-releases depName=mvdan/sh
-terraform 1.3.1 # datasource=github-releases depName=hashicorp/terraform
+terraform 1.3.2 # datasource=github-releases depName=hashicorp/terraform
 thanos 0.26.0 # datasource=github-releases depName=thanos-io/thanos
-yq 4.27.5 # datasource=github-releases depName=mikefarah/yq
+yq 4.28.1 # datasource=github-releases depName=mikefarah/yq

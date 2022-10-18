@@ -67,7 +67,7 @@ groups:
     expr: "1"
   - record: gitlab:feature_category:stage_group:mapping
     labels:
-      feature_category: billing_and_subscription_management
+      feature_category: billing_and_payments
       product_stage: fulfillment
       stage_group: billing_and_subscription_management
     expr: "1"
@@ -135,7 +135,7 @@ groups:
     labels:
       feature_category: container_registry
       product_stage: package
-      stage_group: package
+      stage_group: container_registry
     expr: "1"
   - record: gitlab:feature_category:stage_group:mapping
     labels:
@@ -175,6 +175,12 @@ groups:
     expr: "1"
   - record: gitlab:feature_category:stage_group:mapping
     labels:
+      feature_category: customersdot_application
+      product_stage: fulfillment
+      stage_group: fulfillment_platform
+    expr: "1"
+  - record: gitlab:feature_category:stage_group:mapping
+    labels:
       feature_category: database
       product_stage: data_stores
       stage_group: database
@@ -201,7 +207,7 @@ groups:
     labels:
       feature_category: dependency_firewall
       product_stage: package
-      stage_group: package
+      stage_group: container_registry
     expr: "1"
   - record: gitlab:feature_category:stage_group:mapping
     labels:
@@ -213,7 +219,7 @@ groups:
     labels:
       feature_category: dependency_proxy
       product_stage: package
-      stage_group: package
+      stage_group: container_registry
     expr: "1"
   - record: gitlab:feature_category:stage_group:mapping
     labels:
@@ -236,13 +242,13 @@ groups:
   - record: gitlab:feature_category:stage_group:mapping
     labels:
       feature_category: design_system
-      product_stage: ecosystem
+      product_stage: manage
       stage_group: foundations
     expr: "1"
   - record: gitlab:feature_category:stage_group:mapping
     labels:
       feature_category: devops_reports
-      product_stage: manage
+      product_stage: plan
       stage_group: optimize
     expr: "1"
   - record: gitlab:feature_category:stage_group:mapping
@@ -319,7 +325,19 @@ groups:
     expr: "1"
   - record: gitlab:feature_category:stage_group:mapping
     labels:
-      feature_category: fulfillment_platform
+      feature_category: fulfillment_admin_tooling
+      product_stage: fulfillment
+      stage_group: fulfillment_admin_tooling
+    expr: "1"
+  - record: gitlab:feature_category:stage_group:mapping
+    labels:
+      feature_category: fulfillment_developer_productivity
+      product_stage: fulfillment
+      stage_group: fulfillment_platform
+    expr: "1"
+  - record: gitlab:feature_category:stage_group:mapping
+    labels:
+      feature_category: fulfillment_infrastructure
       product_stage: fulfillment
       stage_group: fulfillment_platform
     expr: "1"
@@ -345,12 +363,12 @@ groups:
     labels:
       feature_category: gitaly
       product_stage: systems
-      stage_group: gitaly
+      stage_group: gitaly_cluster
     expr: "1"
   - record: gitlab:feature_category:stage_group:mapping
     labels:
       feature_category: gitlab_docs
-      product_stage: ecosystem
+      product_stage: manage
       stage_group: foundations
     expr: "1"
   - record: gitlab:feature_category:stage_group:mapping
@@ -363,7 +381,7 @@ groups:
     labels:
       feature_category: helm_chart_registry
       product_stage: package
-      stage_group: package
+      stage_group: package_registry
     expr: "1"
   - record: gitlab:feature_category:stage_group:mapping
     labels:
@@ -404,7 +422,7 @@ groups:
   - record: gitlab:feature_category:stage_group:mapping
     labels:
       feature_category: integrations
-      product_stage: ecosystem
+      product_stage: manage
       stage_group: integrations
     expr: "1"
   - record: gitlab:feature_category:stage_group:mapping
@@ -476,7 +494,7 @@ groups:
   - record: gitlab:feature_category:stage_group:mapping
     labels:
       feature_category: navigation
-      product_stage: ecosystem
+      product_stage: manage
       stage_group: foundations
     expr: "1"
   - record: gitlab:feature_category:stage_group:mapping
@@ -507,7 +525,7 @@ groups:
     labels:
       feature_category: package_registry
       product_stage: package
-      stage_group: package
+      stage_group: package_registry
     expr: "1"
   - record: gitlab:feature_category:stage_group:mapping
     labels:
@@ -568,12 +586,6 @@ groups:
       feature_category: projects
       product_stage: manage
       stage_group: workspace
-    expr: "1"
-  - record: gitlab:feature_category:stage_group:mapping
-    labels:
-      feature_category: provision
-      product_stage: fulfillment
-      stage_group: provision
     expr: "1"
   - record: gitlab:feature_category:stage_group:mapping
     labels:
@@ -655,6 +667,12 @@ groups:
     expr: "1"
   - record: gitlab:feature_category:stage_group:mapping
     labels:
+      feature_category: saas_provisioning
+      product_stage: fulfillment
+      stage_group: provision
+    expr: "1"
+  - record: gitlab:feature_category:stage_group:mapping
+    labels:
       feature_category: scalability
       product_stage: platforms
       stage_group: scalability
@@ -697,6 +715,12 @@ groups:
     expr: "1"
   - record: gitlab:feature_category:stage_group:mapping
     labels:
+      feature_category: sm_provisioning
+      product_stage: fulfillment
+      stage_group: provision
+    expr: "1"
+  - record: gitlab:feature_category:stage_group:mapping
+    labels:
       feature_category: snippets
       product_stage: create
       stage_group: editor
@@ -718,6 +742,24 @@ groups:
       feature_category: subgroups
       product_stage: manage
       stage_group: workspace
+    expr: "1"
+  - record: gitlab:feature_category:stage_group:mapping
+    labels:
+      feature_category: subscription_cost_management
+      product_stage: fulfillment
+      stage_group: utilization
+    expr: "1"
+  - record: gitlab:feature_category:stage_group:mapping
+    labels:
+      feature_category: subscription_management
+      product_stage: fulfillment
+      stage_group: billing_and_subscription_management
+    expr: "1"
+  - record: gitlab:feature_category:stage_group:mapping
+    labels:
+      feature_category: subscription_usage_reports
+      product_stage: fulfillment
+      stage_group: utilization
     expr: "1"
   - record: gitlab:feature_category:stage_group:mapping
     labels:
@@ -751,14 +793,8 @@ groups:
     expr: "1"
   - record: gitlab:feature_category:stage_group:mapping
     labels:
-      feature_category: utilization
-      product_stage: fulfillment
-      stage_group: utilization
-    expr: "1"
-  - record: gitlab:feature_category:stage_group:mapping
-    labels:
       feature_category: value_stream_management
-      product_stage: manage
+      product_stage: plan
       stage_group: optimize
     expr: "1"
   - record: gitlab:feature_category:stage_group:mapping

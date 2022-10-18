@@ -51,7 +51,7 @@ groups:
       product_stage: modelops
       stage_group: applied_ml
     expr: "1"
-- name: 'Stage group Ignored components: manage - Authentication & Authorization'
+- name: 'Stage group Ignored components: manage - Authentication and Authorization'
   interval: 1m
   partial_response_strategy: warn
   rules:
@@ -131,6 +131,16 @@ groups:
       product_stage: configure
       stage_group: configure
     expr: "1"
+- name: 'Stage group Ignored components: package - Container Registry'
+  interval: 1m
+  partial_response_strategy: warn
+  rules:
+  - record: gitlab:ignored_component:stage_group
+    labels:
+      component: graphql_queries
+      product_stage: package
+      stage_group: container_registry
+    expr: "1"
 - name: 'Stage group Ignored components: data_stores - Database'
   interval: 1m
   partial_response_strategy: warn
@@ -201,14 +211,14 @@ groups:
       product_stage: create
       stage_group: editor
     expr: "1"
-- name: 'Stage group Ignored components: ecosystem - Foundations'
+- name: 'Stage group Ignored components: manage - Foundations'
   interval: 1m
   partial_response_strategy: warn
   rules:
   - record: gitlab:ignored_component:stage_group
     labels:
       component: graphql_queries
-      product_stage: ecosystem
+      product_stage: manage
       stage_group: foundations
     expr: "1"
 - name: 'Stage group Ignored components: fulfillment - Fulfillment Platform'
@@ -231,7 +241,7 @@ groups:
       product_stage: systems
       stage_group: geo
     expr: "1"
-- name: 'Stage group Ignored components: systems - Gitaly'
+- name: 'Stage group Ignored components: systems - Gitaly:Cluster'
   interval: 1m
   partial_response_strategy: warn
   rules:
@@ -239,7 +249,17 @@ groups:
     labels:
       component: graphql_queries
       product_stage: systems
-      stage_group: gitaly
+      stage_group: gitaly_cluster
+    expr: "1"
+- name: 'Stage group Ignored components: systems - Gitaly:Git'
+  interval: 1m
+  partial_response_strategy: warn
+  rules:
+  - record: gitlab:ignored_component:stage_group
+    labels:
+      component: graphql_queries
+      product_stage: systems
+      stage_group: gitaly_git
     expr: "1"
 - name: 'Stage group Ignored components: data_stores - Global Search'
   interval: 1m
@@ -261,14 +281,14 @@ groups:
       product_stage: manage
       stage_group: import
     expr: "1"
-- name: 'Stage group Ignored components: ecosystem - Integrations'
+- name: 'Stage group Ignored components: manage - Integrations'
   interval: 1m
   partial_response_strategy: warn
   rules:
   - record: gitlab:ignored_component:stage_group
     labels:
       component: graphql_queries
-      product_stage: ecosystem
+      product_stage: manage
       stage_group: integrations
     expr: "1"
 - name: 'Stage group Ignored components: modelops - MLOps'
@@ -301,17 +321,17 @@ groups:
       product_stage: monitor
       stage_group: observability
     expr: "1"
-- name: 'Stage group Ignored components: manage - Optimize'
+- name: 'Stage group Ignored components: plan - Optimize'
   interval: 1m
   partial_response_strategy: warn
   rules:
   - record: gitlab:ignored_component:stage_group
     labels:
       component: graphql_queries
-      product_stage: manage
+      product_stage: plan
       stage_group: optimize
     expr: "1"
-- name: 'Stage group Ignored components: package - Package'
+- name: 'Stage group Ignored components: package - Package Registry'
   interval: 1m
   partial_response_strategy: warn
   rules:
@@ -319,7 +339,7 @@ groups:
     labels:
       component: graphql_queries
       product_stage: package
-      stage_group: package
+      stage_group: package_registry
     expr: "1"
 - name: 'Stage group Ignored components: verify - Pipeline Authoring'
   interval: 1m

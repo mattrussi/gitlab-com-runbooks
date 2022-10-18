@@ -11,7 +11,6 @@ groups:
           severity: s4
           alert_type: symptom
           feature_category: "global_search"
-          team: global_search
         annotations:
           title: 'Large number of documents waiting to be indexed by ElasticSearch'
           environment: "{{ $labels.environment }}"

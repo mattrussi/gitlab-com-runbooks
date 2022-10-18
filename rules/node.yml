@@ -117,9 +117,9 @@ groups:
   - alert: FilesystemFullSoon
     # Ignore ci-runners with no fqdn field (ephemeral runners)
     expr: |-
-      predict_linear(node_filesystem_avail_bytes{fstype=~"(ext.|xfs|zfs)", type!="ci-runners"}[6h], 24 * 3600) < 0
+      predict_linear(node_filesystem_avail_bytes{fstype=~"(ext.|xfs|zfs)", type!="ci-runners", node!~"gke-.+"}[6h], 24 * 3600) < 0
       or
-      predict_linear(node_filesystem_avail_bytes{fstype=~"(ext.|xfs|zfs)", type="ci-runners", fqdn!=""}[6h], 24 * 3600) < 0
+      predict_linear(node_filesystem_avail_bytes{fstype=~"(ext.|xfs|zfs)", type="ci-runners", fqdn!="", node!~"gke-.+"}[6h], 24 * 3600) < 0
     for: 2h
     labels:
       severity: s4
@@ -131,6 +131,27 @@ groups:
       runbook: docs/monitoring/filesystem_alerts.md
       instance: '{{ $labels.instance }}'
       device: '{{ $labels.device }}'
+      mountpoint: '{{ $labels.mountpoint }}'
+  # GKE Node Filesystem check.
+  - alert: GKEFilesystemFullSoon
+    # We use a static threshold check here, rather than a predict_linear, as we expect the kubernetes garbage collection to kick in.
+    expr: |-
+      100 - (
+        100 * (
+          (node_filesystem_avail_bytes{fstype=~"(ext.|xfs|zfs)", type!="ci-runners", node=~"gke-.+"}) / (node_filesystem_size_bytes{fstype=~"(ext.|xfs|zfs)", type!="ci-runners", node=~"gke-.+"})
+        )
+      ) > 90
+    for: 1h
+    labels:
+      severity: s4
+      alert_type: cause
+    annotations:
+      title: 'GKE node filesystem is over 90% full'
+      description: >
+        Node reaching capacity, garbage collection may have nothing left it can clean up, and may run out of space creating new containers.
+      runbook: docs/monitoring/filesystem_alerts.md
+      node: '{{ $labels.node }}'
+      cluster: '{{ $labels.cluster }}'
       mountpoint: '{{ $labels.mountpoint }}'
 
 - name: Misc rules

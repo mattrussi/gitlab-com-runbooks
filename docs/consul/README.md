@@ -17,6 +17,7 @@
 
 ## Troubleshooting Pointers
 
+* [Teleport Administration](../Teleport/teleport_admin.md)
 * [Interacting with Consul](interaction.md)
 * [Diagnosis with Kibana](../onboarding/kibana-diagnosis.md)
 * [Recovering from CI Patroni cluster lagging too much or becoming completely broken](../patroni-ci/recovering_patroni_ci_intense_lagging_or_replication_stopped.md)
