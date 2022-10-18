@@ -16,6 +16,7 @@
 
 ## Troubleshooting Pointers
 
+* [CI Artifacts CDN](artifacts-cdn.md)
 * [../logging/logging_gcs_archive_bigquery.md](../logging/logging_gcs_archive_bigquery.md)
 <!-- END_MARKER -->
 
