@@ -14,6 +14,24 @@ Your session token is valid for 24 hours, renewable for up to 7 days and automat
 
 Members of the Infrastructure team can also login with admin privileges by entering `admin` in the `Role` input. The admin session token is valid for a maximum of 1 hour (non renewable), as its usage should be limited to troubleshooting.
 
+#### Authentication alternative
+
+If OIDC authentication [fails due to Identity-Aware Proxy (IAP) redirects](https://gitlab.com/gitlab-com/gl-infra/reliability/-/issues/16242), the CLI token (using the method below) can be reused to login in the UI.
+
+* Execute `vault token lookup`
+
+```
+Key                            Value
+---                            -----
+...
+id                             <mytoken>
+...
+ttl                            21h39m34s
+```
+
+* Copy the `id` key value, which is the session token
+* In the UI, select `Other`, Method `Token`, paste the above token and `Sign In`
+
 ### CLI
 
 #### Installing the client
