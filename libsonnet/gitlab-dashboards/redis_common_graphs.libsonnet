@@ -42,8 +42,8 @@ local seriesOverrides = import 'grafana/series_overrides.libsonnet';
   workload(serviceType, startRow)::
     local formatConfig = {
       serviceType: serviceType,
-      primarySelectorSnippet: 'and on (pod, fqdn) redis_instance_info{role="master"}',
-      replicaSelectorSnippet: 'and on (pod, fqdn) redis_instance_info{role="slave"}',
+      primarySelectorSnippet: 'and on (instance) redis_instance_info{role="master"}',
+      replicaSelectorSnippet: 'and on (instance) redis_instance_info{role="slave"}',
     };
     layout.grid([
       basic.timeseries(
