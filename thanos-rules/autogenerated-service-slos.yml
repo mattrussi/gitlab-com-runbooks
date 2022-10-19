@@ -355,6 +355,18 @@ groups:
     expr: "0.000100"
   - record: slo:min:events:gitlab_service_apdex:ratio
     labels:
+      component: artifacts_cdn
+      tier: stor
+      type: google-cloud-storage
+    expr: "0.997000"
+  - record: slo:max:events:gitlab_service_errors:ratio
+    labels:
+      component: artifacts_cdn
+      tier: stor
+      type: google-cloud-storage
+    expr: "0.000100"
+  - record: slo:min:events:gitlab_service_apdex:ratio
+    labels:
       component: pages_range_requests
       tier: stor
       type: google-cloud-storage
@@ -1550,6 +1562,18 @@ groups:
     expr: "0.000100"
   - record: slo:min:events:gitlab_service_apdex:ratio
     labels:
+      component: registry_cdn
+      tier: sv
+      type: registry
+    expr: "0.997000"
+  - record: slo:max:events:gitlab_service_errors:ratio
+    labels:
+      component: registry_cdn
+      tier: sv
+      type: registry
+    expr: "0.000100"
+  - record: slo:min:events:gitlab_service_apdex:ratio
+    labels:
       component: server
       tier: sv
       type: registry
@@ -2302,6 +2326,14 @@ groups:
     expr: "1"
   - record: gitlab_component_service:mapping
     labels:
+      component: artifacts_cdn
+      regional_aggregation: "no"
+      service_aggregation: "yes"
+      tier: stor
+      type: google-cloud-storage
+    expr: "1"
+  - record: gitlab_component_service:mapping
+    labels:
       component: pages_range_requests
       regional_aggregation: "no"
       service_aggregation: "yes"
@@ -3039,6 +3071,14 @@ groups:
   - record: gitlab_component_service:mapping
     labels:
       component: redis
+      regional_aggregation: "yes"
+      service_aggregation: "yes"
+      tier: sv
+      type: registry
+    expr: "1"
+  - record: gitlab_component_service:mapping
+    labels:
+      component: registry_cdn
       regional_aggregation: "yes"
       service_aggregation: "yes"
       tier: sv

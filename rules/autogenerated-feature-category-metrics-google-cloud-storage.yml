@@ -4,6 +4,36 @@ groups:
 - name: 'Prometheus Intermediate Metrics per feature: google-cloud-storage - burn-rate
     5m'
   rules:
+  - record: gitlab:component:feature_category:execution:ops:rate_5m
+    labels:
+      component: artifacts_cdn
+      feature_category: build_artifacts
+      stage: main
+      tier: stor
+      type: google-cloud-storage
+    expr: |
+      sum by (env,environment) (
+        rate(stackdriver_https_lb_rule_loadbalancing_googleapis_com_https_request_count{project_id="gitlab-production",url_map_name="gprd-artifacts-cdn"}[5m])
+      )
+  - record: gitlab:component:feature_category:execution:error:rate_5m
+    labels:
+      component: artifacts_cdn
+      feature_category: build_artifacts
+      stage: main
+      tier: stor
+      type: google-cloud-storage
+    expr: |
+      (
+        sum by (env,environment) (
+          rate(stackdriver_https_lb_rule_loadbalancing_googleapis_com_https_request_count{project_id="gitlab-production",response_code_class="500",url_map_name="gprd-artifacts-cdn"}[5m])
+        )
+      )
+      or
+      (
+        0 * group by(env,environment) (
+          gitlab:component:feature_category:execution:ops:rate_5m{component="artifacts_cdn",feature_category="build_artifacts",stage="main",tier="stor",type="google-cloud-storage"}
+        )
+      )
   - record: gitlab:component:feature_category:execution:apdex:success:rate_5m
     labels:
       component: registry_storage
@@ -37,6 +67,36 @@ groups:
 - name: 'Prometheus Intermediate Metrics per feature: google-cloud-storage - burn-rate
     30m'
   rules:
+  - record: gitlab:component:feature_category:execution:ops:rate_30m
+    labels:
+      component: artifacts_cdn
+      feature_category: build_artifacts
+      stage: main
+      tier: stor
+      type: google-cloud-storage
+    expr: |
+      sum by (env,environment) (
+        rate(stackdriver_https_lb_rule_loadbalancing_googleapis_com_https_request_count{project_id="gitlab-production",url_map_name="gprd-artifacts-cdn"}[30m])
+      )
+  - record: gitlab:component:feature_category:execution:error:rate_30m
+    labels:
+      component: artifacts_cdn
+      feature_category: build_artifacts
+      stage: main
+      tier: stor
+      type: google-cloud-storage
+    expr: |
+      (
+        sum by (env,environment) (
+          rate(stackdriver_https_lb_rule_loadbalancing_googleapis_com_https_request_count{project_id="gitlab-production",response_code_class="500",url_map_name="gprd-artifacts-cdn"}[30m])
+        )
+      )
+      or
+      (
+        0 * group by(env,environment) (
+          gitlab:component:feature_category:execution:ops:rate_30m{component="artifacts_cdn",feature_category="build_artifacts",stage="main",tier="stor",type="google-cloud-storage"}
+        )
+      )
   - record: gitlab:component:feature_category:execution:apdex:success:rate_30m
     labels:
       component: registry_storage
@@ -70,6 +130,36 @@ groups:
 - name: 'Prometheus Intermediate Metrics per feature: google-cloud-storage - burn-rate
     1h'
   rules:
+  - record: gitlab:component:feature_category:execution:ops:rate_1h
+    labels:
+      component: artifacts_cdn
+      feature_category: build_artifacts
+      stage: main
+      tier: stor
+      type: google-cloud-storage
+    expr: |
+      sum by (env,environment) (
+        rate(stackdriver_https_lb_rule_loadbalancing_googleapis_com_https_request_count{project_id="gitlab-production",url_map_name="gprd-artifacts-cdn"}[1h])
+      )
+  - record: gitlab:component:feature_category:execution:error:rate_1h
+    labels:
+      component: artifacts_cdn
+      feature_category: build_artifacts
+      stage: main
+      tier: stor
+      type: google-cloud-storage
+    expr: |
+      (
+        sum by (env,environment) (
+          rate(stackdriver_https_lb_rule_loadbalancing_googleapis_com_https_request_count{project_id="gitlab-production",response_code_class="500",url_map_name="gprd-artifacts-cdn"}[1h])
+        )
+      )
+      or
+      (
+        0 * group by(env,environment) (
+          gitlab:component:feature_category:execution:ops:rate_1h{component="artifacts_cdn",feature_category="build_artifacts",stage="main",tier="stor",type="google-cloud-storage"}
+        )
+      )
   - record: gitlab:component:feature_category:execution:apdex:success:rate_1h
     labels:
       component: registry_storage

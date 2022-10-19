@@ -1,3 +1,4 @@
+local googleLoadBalancerComponents = import './lib/google_load_balancer_components.libsonnet';
 local metricsCatalog = import 'servicemetrics/metrics.libsonnet';
 local histogramApdex = metricsCatalog.histogramApdex;
 local rateMetric = metricsCatalog.rateMetric;
@@ -19,6 +20,12 @@ metricsCatalog.serviceDefinition({
   },
 
   serviceLevelIndicators: {
+    artifacts_cdn: googleLoadBalancerComponents.googleLoadBalancer(
+      userImpacting=true,
+      loadBalancerName='gprd-artifacts-cdn',
+      projectId='gitlab-production',
+      featureCategory='build_artifacts',
+    ),
     registry_storage: {
       userImpacting: true,
       featureCategory: 'container_registry',
