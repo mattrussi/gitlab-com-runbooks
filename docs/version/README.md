@@ -29,6 +29,7 @@
 * [Gitaly error rate is too high](../gitaly/gitaly-error-rate.md)
 * [Upgrading the OS of Gitaly VMs](../gitaly/gitaly-os-upgrade.md)
 * [Managing GitLab Storage Shards (Gitaly)](../gitaly/storage-sharding.md)
+* [CI Artifacts CDN](../google-cloud-storage/artifacts-cdn.md)
 * [Ad hoc observability tools on Kubernetes nodes](../kube/k8s-adhoc-observability.md)
 * [GKE Cluster Upgrade Procedure](../kube/k8s-cluster-upgrade.md)
 * [../kube/k8s-oncall-setup.md](../kube/k8s-oncall-setup.md)
