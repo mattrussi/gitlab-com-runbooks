@@ -225,9 +225,9 @@ groups:
   rules:
   - alert: TooManyOOMKills
     expr: >
-      increase(node_vmstat_oom_kill[1h]) > 2
+      increase(node_vmstat_oom_kill{node!~"gke-.+"}[1h]) > 2
       or
-      increase(syslog_oom_kills_total[1h]) > 2
+      increase(syslog_oom_kills_total{node!~"gke-.+"}[1h]) > 2
     labels:
       severity: s3
       alert_type: cause
