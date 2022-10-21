@@ -59,7 +59,7 @@ find_dashboards "$@" | while read -r line; do
   generate_dashboards_for_file "${line}" | while IFS= read -r manifest; do
     uid=$(echo "$manifest" | jq '.uid' | tr -d '"')
     if [ -z "$uid" ]; then
-      echo "Dry Run: empty dashboard for $line"
+      echo "Warning: empty dashboard for $line"
       continue
     fi
 
