@@ -54,12 +54,11 @@ find_dashboards "$@" | while read -r line; do
   relative=${line#"./"}
   folder=${GRAFANA_FOLDER:-$(dirname "$relative")}
 
-  echo $folder
   mkdir -p "generated/${folder}"
 
   generate_dashboards_for_file "${line}" | while IFS= read -r manifest; do
-    uid=$(echo $manifest | jq '.uid' | tr -d '"')
-    if [ -z $uid ]; then
+    uid=$(echo "$manifest" | jq '.uid' | tr -d '"')
+    if [ -z "$uid" ]; then
       echo "Dry Run: empty dashboard for $line"
       continue
     fi
@@ -67,7 +66,7 @@ find_dashboards "$@" | while read -r line; do
     if [[ -n $dry_run ]]; then
       echo "Dry Run: Would have written generated manifest for ${uid} in dashboards/generated/$folder/$uid.json"
     else
-      echo $manifest >"generated/${folder}/${uid}.json"
+      echo "$manifest" >"generated/${folder}/${uid}.json"
       echo "Wrote generated manifest for ${uid} in dashboards/generated/$folder/$uid.json"
     fi
   done

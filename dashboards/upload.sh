@@ -91,7 +91,7 @@ function generate_dashboard_requests() {
       folderId=$(resolve_folder_id "${folder}")
     fi
 
-    dashboard_json=$(cat generated/$line)
+    dashboard_json=$(cat "generated/$line")
     if [[ -z "$dashboard_json" ]]; then
       if [[ -n $dry_run ]]; then
         echo "Running in dry run mode, ignored empty dashboard $line!"

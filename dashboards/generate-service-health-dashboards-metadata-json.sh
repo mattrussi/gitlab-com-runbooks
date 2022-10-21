@@ -80,7 +80,7 @@ find -P generated -name '*.json' | sed 's/generated\///' | while read -r line; d
   relative=${line#"./"}
   folder=${GRAFANA_FOLDER:-$(dirname "$relative")}
 
-  cat generated/$line | jq -c | while IFS= read -r dashboard; do
+  cat "generated/$line" | jq -c | while IFS= read -r dashboard; do
     # Use http1.1 and gzip compression to workaround unexplainable random errors that
     # occur when uploading some dashboards
     uid=$(echo "${dashboard}" | jq -r '.uid')
