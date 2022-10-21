@@ -3611,6 +3611,12 @@ groups:
       topk by (cluster,pod) (1, kube_pod_labels:labeled{type!=""})
     record: container_memory_cache:labeled
   - expr: |
+      container_memory_rss{metrics_path="/metrics/cadvisor"}
+      *
+      on(cluster,pod) group_left(type,deployment)
+      topk by (cluster,pod) (1, kube_pod_labels:labeled{type!=""})
+    record: container_memory_rss:labeled
+  - expr: |
       container_memory_swap{metrics_path="/metrics/cadvisor"}
       *
       on(cluster,pod) group_left(type,deployment)
