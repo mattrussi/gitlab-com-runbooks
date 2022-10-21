@@ -167,6 +167,7 @@ find_dashboards() {
     -not -name '*_test.jsonnet' # Exclude test files
     -not -path "**/.*"          # Exclude dot dirs
     -not -path "./vendor/*"     # Exclude vendored files
+    -not -path "**/generated/*" # Exclude generated files
     -mindepth 2                 # Exclude files in the root folder
   )
 
