@@ -30,7 +30,7 @@ EOF
 
 while getopts ":Dh" o; do
   case "${o}" in
-    d)
+    D)
       dry_run="true"
       ;;
     h)
