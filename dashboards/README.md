@@ -48,10 +48,6 @@ In order to modify a dashboard you will need to write code using [Grafonnet libr
 
 **Note that the playground and the snapshots are transient. By default, the snapshots will be deleted after 24 hours and the links will expire. Do not include links to playground dashboards in the handbook or other permanent content.**
 
-## Generating dashboards
-
-To create dashboard JSONs, run `./dashboards/generate-dashboards.sh`. The generated manifests will be in the `/dashboards/generated` folder.
-
 # Editing Files
 
 * Dashboards should be kept in files with the following name: `/dashboards/[grafana_folder_name]/[name].dashboard.jsonnet`
