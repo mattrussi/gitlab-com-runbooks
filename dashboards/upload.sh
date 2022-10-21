@@ -11,6 +11,10 @@ SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 cd "${SCRIPT_DIR}"
 
 source "grafana-tools.lib.sh"
+if ! [ -d generated ]; then
+  echo "No dashboards, generating..."
+  bash generate-dashboards.sh
+fi
 
 usage() {
   cat <<-EOF
@@ -75,7 +79,7 @@ function validate_dashboard_requests() {
 }
 
 function generate_dashboard_requests() {
-  find_dashboards "$@" | while read -r line; do
+  find -P generated -name '*.json' | sed 's/generated\///' | while read -r line; do
     relative=${line#"./"}
     folder=${GRAFANA_FOLDER:-$(dirname "$relative")}
 
@@ -87,7 +91,7 @@ function generate_dashboard_requests() {
       folderId=$(resolve_folder_id "${folder}")
     fi
 
-    dashboard_json=$(generate_dashboards_for_file "${line}")
+    dashboard_json=$(cat generated/$line)
     if [[ -z "$dashboard_json" ]]; then
       if [[ -n $dry_run ]]; then
         echo "Running in dry run mode, ignored empty dashboard $line!"

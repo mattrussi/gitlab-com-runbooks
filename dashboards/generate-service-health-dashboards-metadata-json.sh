@@ -12,6 +12,12 @@ if [[ -e .env.sh ]]; then
   source ".env.sh"
 fi
 
+if ! [ -d generated ]; then
+  echo "No dashboards, generating..."
+  # we dont source the file as it would mess up `dry_run` flag
+  bash generate-dashboards.sh
+fi
+
 IFS=$'\n\t'
 TEMPFILE="tempfile"
 
@@ -37,7 +43,7 @@ usage() {
 EOF
 }
 
-while getopts ":DPh" o; do
+while getopts ":Dh" o; do
   case "${o}" in
     D)
       dry_run="true"
@@ -70,12 +76,11 @@ if [ ! -f "$FILE" ]; then
   echo "{}" >"$FILE"
 fi
 
-find_dashboards | while read -r line; do
+find -P generated -name '*.json' | sed 's/generated\///' | while read -r line; do
   relative=${line#"./"}
   folder=${GRAFANA_FOLDER:-$(dirname "$relative")}
 
-  dashboard_json=$(generate_dashboards_for_file "${line}")
-  echo "${dashboard_json}" | jq -c | while IFS= read -r dashboard; do
+  cat generated/$line | jq -c | while IFS= read -r dashboard; do
     # Use http1.1 and gzip compression to workaround unexplainable random errors that
     # occur when uploading some dashboards
     uid=$(echo "${dashboard}" | jq -r '.uid')

@@ -4,6 +4,7 @@
 .vscode
 /dashboards/.env.sh
 /dashboards/vendor
+/dashboards/generated
 /periodic-query-results
 /services/service_catalog.json
 /vendor
