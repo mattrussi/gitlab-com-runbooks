@@ -588,11 +588,11 @@ deploy_dashboards:
     - dashboards/tag-unmanaged-dashboards.sh
 
 .docker_image_template:
-  image: docker:20.10.19
+  image: docker:20.10.20
   tags:
     - gitlab-org-docker
   services:
-    - docker:20.10.19-dind
+    - docker:20.10.20-dind
   retry: 2
   variables:
     DOCKER_TLS_CERTDIR: ""
