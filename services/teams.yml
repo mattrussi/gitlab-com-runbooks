@@ -130,6 +130,7 @@ teams:
 
 - name: scalability-619-redis-k8s
   slack_alerts_channel: scalability-619-redis-k8s
+  send_slo_alerts_to_team_slack_channel: true
 
 # Workhorse is a virtual team
 - name: workhorse
