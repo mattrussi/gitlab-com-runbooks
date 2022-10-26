@@ -6,7 +6,7 @@ source "${SCRIPT_DIR}"/../../lib/update-scripts-functions.sh
 source "${SCRIPT_DIR}"/../../indices/indices-array.sh
 template_name='log_gprd_index_template.libsonnet'
 
-envs=(gprd db-benchmarking)
+envs=(gprd db-benchmarking prdsub)
 for env in "${envs[@]}"; do
   # shellcheck disable=SC2154
   for index in "${indices[@]}"; do
