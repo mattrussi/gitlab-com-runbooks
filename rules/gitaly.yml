@@ -125,23 +125,3 @@ groups:
       description: Gitaly authention failing, authentication tokens might be misconfigured, or severe clockdrift is occurring.
       runbook: docs/gitaly/gitaly-permission-denied.md
       title: 'Gitaly: Auth-tokens are invalid, failing RPCs'
-
-  # Temporarily lowered to 8 while we work on freeing up space in Gitaly
-  # https://gitlab.com/gitlab-com/gl-infra/capacity-planning/-/issues/40
-  # This will be part of capacity planning in the future
-  # https://gitlab.com/gitlab-com/gl-infra/scalability/-/issues/1727
-  - alert: LowCountOfActiveGitalyShards
-    expr: count by (env) (gitaly_shard_weight_total > 0) < 8
-    for: 1h
-    labels:
-      severity: s2
-      alert_type: cause
-      pager: pagerduty
-      type: gitaly
-    annotations:
-      title: Number of active Gitaly shards is low
-      description: >
-        There are less than 8 Gitaly shards that actively receive new project, this could cause them to fill up quickly and put more
-        stress on them. Consider adding a new Gitaly shard https://gitlab.com/gitlab-com/gl-infra/production/-/issues/new?issuable_template=storage_shard_creation.
-        The gitaly-shard-weights assigner (https://gitlab.com/gitlab-com/gl-infra/gitaly-shard-weights-assigner) will cut off gitaly nodes
-        that are above 80% disk space utilization.
