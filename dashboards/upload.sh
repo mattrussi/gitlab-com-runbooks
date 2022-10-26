@@ -86,7 +86,8 @@ function generate_dashboard_requests() {
     # No need to resolve actual folderId in dry-run mode,
     # since it may not yet exist
     if [[ -n $dry_run ]]; then
-      folderId=1
+      #folderId=1
+      folderId=$(resolve_folder_id "${folder}")
     else
       folderId=$(resolve_folder_id "${folder}")
     fi
@@ -112,6 +113,7 @@ function generate_dashboard_requests() {
 }
 
 if [[ -n $dry_run ]]; then
+  ls -R1 generated/
   generate_dashboard_requests "$@"
 else
   tmpfile=$(mktemp)
