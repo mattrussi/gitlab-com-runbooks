@@ -25,32 +25,9 @@ to install relevant software and connect to Windows.
 
 ## Graceful Shutdown and Windows Runner Managers
 
-With GitLab Runner v13.10 we've added support for Graceful Shutdown for Windows runners. However, it still needs to be
-enabled for our Windows shared runners - by updating the runners to version 13.10 and updating our scripting around
-`wsrmX` runners management. This work is being tracked with the issue <https://gitlab.com/gitlab-com/gl-infra/reliability/-/issues/12790>.
-
-Until it's done, Graceful Shutdown needs to be considered as unsupported on our runner managers. Therefore to
-gracefully handle Runner shutdown on these managers, we need to work differently.
-
-Because we can't force Runner to stop requesting new jobs, we need to go to the Runner's configuration
-form **at GitLab side**. In case of `windows-shared-runners-manager-X.gitlab.com` runner managers, we need
-to go to the **GitLab.com admin area!**. Therefore the operation must be performed or at least supported
-by someone with GitLab.com admin access.
-
-At the Runner's settings page we need to **pause the first runner selected for graceful shutdown**. From that moment
-on GitLab will stop assigning jobs to this Runner, even if it requests them. However, currently running jobs will be
-still processed without interruption.
-
-From this moment on we need to observe the number of jobs that are being executed by the runner manager. For that
-we can follow [this panel](https://dashboards.gitlab.net/d/000000159/ci?viewPanel=28&orgId=1&var-shard=windows-shared&var-runner_type=All&var-runner_managers=All&var-gitlab_env=gprd&var-gl_monitor_fqdn=All&var-has_minutes=yes&var-runner_job_failure_reason=All&var-jobs_running_for_project=0&var-runner_request_endpoint_status=All)
-with the shard set to `windows-shared`. When the job will reach `0` it means that Runner finished processing the last
-job. At this moment we can terminate the process manually in a Windows specific way.
-
-After updating the configuration or restarting the VM or doing whatever else we needed the Graceful Shutdown for
-(for example: applying ansible change to update GitLab Runner version), we can start again the Runner process. Having
-this done we can go again to the GitLab.com Runner's admin page and unpause the runner.
-
-Next we need to repeat the step for any other Windows Runner Manager that we need to handle.
+Graceful shutdown is built into the `gitlab-runner.exe`. In order to start a shutdown, you need to open a PowerShell as an admin,
+navigate to `C:\GitLab-Runner`, and execute `.\gitlab-runner.exe stop`. This will take up to an hour to finally stop.
+Once it is stopped you can proceed with any maintenance you need to run.
 
 ## Tools
 
