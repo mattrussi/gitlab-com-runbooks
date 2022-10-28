@@ -1,33 +1,10 @@
-<!-- START doctoc generated TOC please keep comment here to allow auto update -->
-<!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
-**Table of Contents**  *generated with [DocToc](https://github.com/thlorenz/doctoc)*
-
-- [Postgresql troubleshooting](#postgresql-troubleshooting)
-  - [Dashboards](#dashboards)
-  - [Availability](#availability)
-  - [Errors](#errors)
-  - [Locks](#locks)
-  - [Load](#load)
-  - [High (and similar) load on multiple hosts](#high-and-similar-load-on-multiple-hosts)
-  - [Replication is lagging or has stopped](#replication-is-lagging-or-has-stopped)
-    - [Symptoms](#symptoms)
-    - [Possible checks](#possible-checks)
-    - [Resolution](#resolution)
-  - [Replication Slots](#replication-slots)
-    - [Symptoms](#symptoms-1)
-    - [Possible checks](#possible-checks-1)
-    - [Resolution](#resolution-1)
-  - [Tables with a large amount of dead tuples](#tables-with-a-large-amount-of-dead-tuples)
-    - [Symptoms](#symptoms-2)
-    - [Possible Checks](#possible-checks)
-  - [Connections](#connections)
-  - [PGBouncer Errors](#pgbouncer-errors)
-
-<!-- END doctoc generated TOC please keep comment here to allow auto update -->
-
 # Diagnosing long running transactions
 
 This runbook documents the methodology for diagnosing `PatroniLongRunningTransactionDetected` alerts.
+
+## Background
+
+Long-running transactions are one of the main drivers for [`pg_txid_xmin_age`](pg_xid_xmin_age_alert.md), and can result in severe performance degradation if left unaddressed.
 
 ## Getting the current query
 
@@ -123,3 +100,23 @@ systemd(1)───sshd(1369)───sshd(3225836)───sshd(3226021,arihant
 ```
 
 In this case it was user `arihant-rails` who was running a script via rails console.
+
+## Cancelling the query
+
+In most cases, we will want to cancel the query. If it's a single long-running query, this can be done via `pg_cancel_backend` (passing in the `pid`):
+
+```
+gitlabhq_production=# select pg_cancel_backend(<pid>);
+ pg_cancel_backend
+-------------------
+ t
+```
+
+However, if we are dealing with a long-running transaction consisting of many short-lived queries, it may be necessary to terminate the backend instead:
+
+```
+gitlabhq_production=# select pg_terminate_backend(<pid>);
+ pg_terminate_backend
+----------------------
+ t
+```
