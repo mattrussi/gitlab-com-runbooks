@@ -213,7 +213,7 @@ local rules = {
             grafana_dashboard_id: 'alerts-long_running_transactions/alerts-long-running-transactions',
             grafana_min_zoom_hours: '6',
             grafana_variables: 'environment',
-            runbook: 'docs/patroni/postgres.md#tables-with-a-large-amount-of-dead-tuples',
+            runbook: 'docs/patroni/postgres-long-running-transaction.md',
           },
         }),
       ],

@@ -63,6 +63,7 @@
 * [Patroni Cluster Management](../patroni/patroni-management.md)
 * [../patroni/performance-degradation-troubleshooting.md](../patroni/performance-degradation-troubleshooting.md)
 * [PostgreSQL HA](../patroni/pg-ha.md)
+* [Diagnosing long running transactions](../patroni/postgres-long-running-transaction.md)
 * [../patroni/postgres.md](../patroni/postgres.md)
 * [../patroni/postgresql-backups-wale-walg.md](../patroni/postgresql-backups-wale-walg.md)
 * [How to provision the benchmark environment](../patroni/provisioning_bench_env.md)

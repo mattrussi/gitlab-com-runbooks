@@ -49,6 +49,7 @@
 * [postgres-backups-verification-failures.md](postgres-backups-verification-failures.md)
 * [postgres-checkup.md](postgres-checkup.md)
 * [Dealing with Data Corruption in PostgreSQL](postgres-data-corruption.md)
+* [Diagnosing long running transactions](postgres-long-running-transaction.md)
 * [postgres.md](postgres.md)
 * [postgresql-backups-wale-walg.md](postgresql-backups-wale-walg.md)
 * [PostgreSQL](postgresql-disk-space.md)
