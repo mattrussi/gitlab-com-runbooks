@@ -58,7 +58,9 @@ are updated.
 If you are updating the autoscaler, change the version and be sure to also update checksum.
 
 After merging, the CI pipeline will kick off. This is gated by a manual action.
-In this case, you should not run the automatically created Ansible apply job, but instead create your own. While it is not dangerous to run the apply job, it will fail because the runner process is still running. 
+In this case, you should not run the automatically created Ansible apply
+job, but instead create your own. While it is not dangerous to run the
+apply job, it will fail because the runner process is still running.
 
 ### Applying The Upgrade
 
@@ -73,7 +75,7 @@ You will need to define the `ANSIBLE_HOST_LIMIT` and set it to the name
 of the runner manager that is currently stopped (either `windows-shared-runners-manager-1` or `2`). This ensures that ansible only runs on the server that is ready for the upgrade.
 This is also manually gated, so you'll need to go start the apply job after
 the plan is run. Keep in mind this could take some time as Ansible on
-Windows can be exceedingly slow. 
+Windows can be exceedingly slow.
 
 When the Ansible run is completed, you can verify that the runner is
 upgraded by running `gitlab-runner.exe version` in PowerShell.
