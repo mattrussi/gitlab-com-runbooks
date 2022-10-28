@@ -25,9 +25,9 @@ groups:
       grafana_min_zoom_hours: "6"
       grafana_panel_id: "2"
       grafana_variables: environment,tier,type,fqdn,relname
+      runbook: docs/patroni/rails-sql-apdex-slow.md
     labels:
       alert_type: cause
-      runbook: docs/patroni/rails-sql-apdex-slow.md
       severity: s4
       team: rapid-action-intercom
     expr: |
@@ -66,9 +66,9 @@ groups:
       grafana_min_zoom_hours: "6"
       grafana_panel_id: "2"
       grafana_variables: environment,tier,type,relname
+      runbook: docs/patroni/rails-sql-apdex-slow.md
     labels:
       alert_type: cause
-      runbook: docs/patroni/rails-sql-apdex-slow.md
       severity: s4
       team: rapid-action-intercom
     expr: |
@@ -103,9 +103,9 @@ groups:
       grafana_min_zoom_hours: "24"
       grafana_panel_id: "2"
       grafana_variables: environment,tier,type,fqdn,relname
+      runbook: docs/patroni/rails-sql-apdex-slow.md
     labels:
       alert_type: cause
-      runbook: docs/patroni/rails-sql-apdex-slow.md
       severity: s4
       team: authentication_and_authorization
     expr: |
@@ -131,9 +131,9 @@ groups:
         Wait events related to subtransactions locking have been detected in the database in the last 5 minutes.
 
         This can eventually saturate entire database cluster if this sitation continues for a longer period of time.
+      runbook: docs/patroni/postgresql-subtransactions.md
     labels:
       alert_type: cause
-      runbook: docs/patroni/postgresql-subtransactions.md
       severity: s3
       team: subtransaction_troubleshooting
     expr: |
@@ -156,10 +156,10 @@ groups:
         $labels.environment }}
       grafana_min_zoom_hours: "6"
       grafana_variables: environment
+      runbook: docs/patroni/postgres.md#tables-with-a-large-amount-of-dead-tuples
     labels:
       alert_type: cause
       pager: pagerduty
-      runbook: docs/patroni/postgres.md#tables-with-a-large-amount-of-dead-tuples
       severity: s2
     expr: |
       topk by (environment, type, stage, shard) (1,

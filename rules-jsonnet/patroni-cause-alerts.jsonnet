@@ -70,7 +70,6 @@ local hotspotTupleAlert(alertName, periodFor, warning, replica) =
       severity: if warning then 's4' else 's1',
       alert_type: 'cause',
       [if !warning then 'pager']: 'pagerduty',
-      runbook: 'docs/patroni/rails-sql-apdex-slow.md',
     },
     annotations: {
       title: 'Hot spot tuple fetches on the postgres %(postgresLocation)s in the `{{ $labels.relname }}` table, `{{ $labels.relname }}`.' % formatConfig,
@@ -91,6 +90,7 @@ local hotspotTupleAlert(alertName, periodFor, warning, replica) =
       grafana_min_zoom_hours: '6',
       grafana_panel_id: '2',
       grafana_variables: aggregations.serialize(aggregationLabels + ['relname']),
+      runbook: 'docs/patroni/rails-sql-apdex-slow.md',
     },
   });
 
@@ -129,7 +129,6 @@ local rules = {
             team: 'authentication_and_authorization',
             severity: 's4',
             alert_type: 'cause',
-            runbook: 'docs/patroni/rails-sql-apdex-slow.md',
           },
           annotations: {
             title: 'Average fetches on the postgres primary in the project_authorizations table exceeds 5% of total',
@@ -144,6 +143,7 @@ local rules = {
             grafana_min_zoom_hours: '24',
             grafana_panel_id: '2',
             grafana_variables: aggregations.serialize(aggregationLabelsForPrimary + ['relname']),
+            runbook: 'docs/patroni/rails-sql-apdex-slow.md',
           },
         }),
 
@@ -160,7 +160,6 @@ local rules = {
             team: 'subtransaction_troubleshooting',
             severity: 's3',
             alert_type: 'cause',
-            runbook: 'docs/patroni/postgresql-subtransactions.md',
           },
           annotations: {
             title: 'Subtransactions wait events have been detected in the database in the last 5 minutes',
@@ -169,6 +168,7 @@ local rules = {
 
               This can eventually saturate entire database cluster if this sitation continues for a longer period of time.
             |||,
+            runbook: 'docs/patroni/postgresql-subtransactions.md',
           },
         }),
 
@@ -197,7 +197,6 @@ local rules = {
             severity: 's2',
             alert_type: 'cause',
             pager: 'pagerduty',
-            runbook: 'docs/patroni/postgres.md#tables-with-a-large-amount-of-dead-tuples',
           },
           annotations: {
             title: 'Transactions detected that have been running on `{{ $labels.fqdn }}` for more than 10m',
@@ -214,6 +213,7 @@ local rules = {
             grafana_dashboard_id: 'alerts-long_running_transactions/alerts-long-running-transactions',
             grafana_min_zoom_hours: '6',
             grafana_variables: 'environment',
+            runbook: 'docs/patroni/postgres.md#tables-with-a-large-amount-of-dead-tuples',
           },
         }),
       ],
