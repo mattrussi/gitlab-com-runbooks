@@ -64,7 +64,7 @@
 * [Geo Patroni Cluster Management](../patroni/geo-patroni-cluster.md)
 * [Patroni Cluster Management](../patroni/patroni-management.md)
 * [Pg_repack using gitlab-pgrepack](../patroni/pg_repack.md)
-* [../patroni/postgres-long-running-transaction.md](../patroni/postgres-long-running-transaction.md)
+* [Diagnosing long running transactions](../patroni/postgres-long-running-transaction.md)
 * [How to provision the benchmark environment](../patroni/provisioning_bench_env.md)
 * [PgBouncer connection management and troubleshooting](../pgbouncer/pgbouncer-connections.md)
 * [Bypass Praefect](../praefect/praefect-bypass.md)

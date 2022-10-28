@@ -26,7 +26,7 @@
 * [../patroni/performance-degradation-troubleshooting.md](../patroni/performance-degradation-troubleshooting.md)
 * [PostgreSQL HA](../patroni/pg-ha.md)
 * [Pg_repack using gitlab-pgrepack](../patroni/pg_repack.md)
-* [../patroni/postgres-long-running-transaction.md](../patroni/postgres-long-running-transaction.md)
+* [Diagnosing long running transactions](../patroni/postgres-long-running-transaction.md)
 * [../patroni/postgres.md](../patroni/postgres.md)
 * [How to evaluate load from queries](../patroni/postgresql-query-load-evaluation.md)
 * [How to provision the benchmark environment](../patroni/provisioning_bench_env.md)
