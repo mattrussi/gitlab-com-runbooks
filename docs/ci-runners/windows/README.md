@@ -23,11 +23,65 @@ built with Packer to build the machines that execute jobs.
 Please read the [connecting to Windows](./connecting.md) documentation
 to install relevant software and connect to Windows.
 
-## Graceful Shutdown and Windows Runner Managers
+## Graceful Shutdown of Windows Runner Managers
 
 Graceful shutdown is built into the `gitlab-runner.exe`. In order to start a shutdown, you need to open a PowerShell as an admin,
-navigate to `C:\GitLab-Runner`, and execute `.\gitlab-runner.exe stop`. This will take up to an hour to finally stop.
+navigate to `C:\GitLab-Runner`, and execute `.\gitlab-runner.exe stop`.
+This will take up to an hour to finish running jobs and finally stop.
+
 Once it is stopped you can proceed with any maintenance you need to run.
+
+Keep in mind that we only have two runner managers, so to avoid downtime
+you should only stop the runner on only one of the managers at a time.
+
+## Upgrading the Runner
+
+Updating the Windows runner is a multi-step, but straightforward process.
+
+### Updating the Windows ephemeral container image
+
+Prepare an MR to the [windows-containers](https://gitlab.com/gitlab-org/ci-cd/shared-runners/images/gcp/windows-containers)
+project that updates the runner version and checksum in the [gitlab-runner-dependencies attributes file](https://gitlab.com/gitlab-org/ci-cd/shared-runners/images/gcp/windows-containers/-/blob/main/cookbooks/gitlab-runner-dependencies/attributes/default.rb#L1-6).
+Once this is merged, the container should build and publish itself.
+After merging and the CI pipelines complete, verify that the image is created and available which can be done using either the GCP console or `gcloud` tool.
+After you've verified that the image is available, you can proceed to
+updating Ansible.
+
+### Updating Ansible
+
+Create an MR that [updates Ansible](https://ops.gitlab.net/gitlab-com/gl-infra/ci-infrastructure-windows/) with the new runner version value
+and new autoscaler image created above.
+Both of these are declared in the [`gcp_role_runner_manager.yml` file](https://ops.gitlab.net/gitlab-com/gl-infra/ci-infrastructure-windows/-/blob/master/ansible/group_vars/gcp_role_runner_manager.yml).
+Be sure to update each autoscaler section to ensure all versions of Windows
+are updated.
+
+If you are updating the autoscaler, change the version and be sure to also update checksum.
+
+After merging, the CI pipeline will kick off. This is gated by a manual action.
+In this case, you should not run the automatically created Ansible apply job, but instead create your own. While it is not dangerous to run the apply job, it will fail because the runner process is still running. 
+
+### Applying The Upgrade
+
+Now that the images are recreated and Ansible is updated,
+it is time to execute the upgrade.
+
+Firstly, you'll want to stop the runner gracefully on only one runner at a time. The instructions for doing so are earlier in this document.
+
+After the runner process is fully stopped, you'll [create a new CI pipeline](https://ops.gitlab.net/gitlab-com/gl-infra/ci-infrastructure-windows/-/pipelines/new)
+in the [ci-infrastructure-windows](https://ops.gitlab.net/gitlab-com/gl-infra/ci-infrastructure-windows/) project.
+You will need to define the `ANSIBLE_HOST_LIMIT` and set it to the name
+of the runner manager that is currently stopped (either `windows-shared-runners-manager-1` or `2`). This ensures that ansible only runs on the server that is ready for the upgrade.
+This is also manually gated, so you'll need to go start the apply job after
+the plan is run. Keep in mind this could take some time as Ansible on
+Windows can be exceedingly slow. 
+
+When the Ansible run is completed, you can verify that the runner is
+upgraded by running `gitlab-runner.exe version` in PowerShell.
+Ansible should start the runner process automatically after it is done
+running, but you should also verify that the runner process has started.
+
+Finally, you can repeat the above process for the other manager that
+needs an upgrade.
 
 ## Tools
 
