@@ -156,7 +156,7 @@ groups:
         $labels.environment }}
       grafana_min_zoom_hours: "6"
       grafana_variables: environment
-      runbook: docs/patroni/postgres-long-running-transactions.md
+      runbook: docs/patroni/postgres-long-running-transaction.md
     labels:
       alert_type: cause
       pager: pagerduty
