@@ -36,7 +36,7 @@ order by now() - xact_start desc nulls last
 
 Usually postgres connections go through a pgbouncer. The `client_addr` and `client_port` will tell you which one.
 
-In this case it was `pgbouncer-01-db-gprd`:
+In this case it was `pgbouncer-01-db-gprd` as discovered via the `client_port` of `42792`:
 
 ```
 iwiedler@patroni-main-2004-01-db-gprd.c.gitlab-production.internal:~$ sudo netstat -tp | grep 42792
