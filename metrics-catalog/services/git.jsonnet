@@ -54,6 +54,7 @@ metricsCatalog.serviceDefinition({
     consul: true,
     'google-cloud-storage': true,
   },
+  recordingRuleMetrics: sliLibrary.get('global_search').recordingRuleMetrics,
   provisioning: {
     vms: false,
     kubernetes: true,

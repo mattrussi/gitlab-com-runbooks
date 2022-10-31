@@ -19,6 +19,16 @@ groups:
       sum by (endpoint_id,environment,feature_category,job,request_urgency,shard,stage,tier,type) (
         rate(gitlab_sli_rails_request_apdex_success_total[1m])
       )
+  - record: sli_aggregations:gitlab_sli_global_search_apdex_total_rate1m
+    expr: |
+      sum by (endpoint_id,environment,job,search_level,search_scope,search_type,shard,stage,tier,type) (
+        rate(gitlab_sli_global_search_apdex_total[1m])
+      )
+  - record: sli_aggregations:gitlab_sli_global_search_apdex_success_total_rate1m
+    expr: |
+      sum by (endpoint_id,environment,job,search_level,search_scope,search_type,shard,stage,tier,type) (
+        rate(gitlab_sli_global_search_apdex_success_total[1m])
+      )
   - record: gitlab_component_apdex:success:rate
     labels:
       component: global_search
@@ -26,7 +36,7 @@ groups:
       type: web
     expr: |
       sum by (environment,stage) (
-        rate(gitlab_sli_global_search_apdex_success_total{job="gitlab-rails",type="web"}[1m])
+        sli_aggregations:gitlab_sli_global_search_apdex_success_total_rate1m{job="gitlab-rails",type="web"}
       )
   - record: gitlab_component_apdex:weight:score
     labels:
@@ -35,7 +45,7 @@ groups:
       type: web
     expr: |
       sum by (environment,stage) (
-        rate(gitlab_sli_global_search_apdex_total{job="gitlab-rails",type="web"}[1m])
+        sli_aggregations:gitlab_sli_global_search_apdex_total_rate1m{job="gitlab-rails",type="web"}
       )
   - record: gitlab_component_ops:rate
     labels:
@@ -44,7 +54,7 @@ groups:
       type: web
     expr: |
       sum by (environment,stage) (
-        rate(gitlab_sli_global_search_apdex_total{job="gitlab-rails",type="web"}[1m])
+        sli_aggregations:gitlab_sli_global_search_apdex_total_rate1m{job="gitlab-rails",type="web"}
       )
   - record: gitlab_component_apdex:success:rate
     labels:
@@ -260,6 +270,16 @@ groups:
       sum by (endpoint_id,environment,feature_category,job,request_urgency,shard,stage,tier,type) (
         rate(gitlab_sli_rails_request_apdex_success_total[5m])
       )
+  - record: sli_aggregations:gitlab_sli_global_search_apdex_total_rate5m
+    expr: |
+      sum by (endpoint_id,environment,job,search_level,search_scope,search_type,shard,stage,tier,type) (
+        rate(gitlab_sli_global_search_apdex_total[5m])
+      )
+  - record: sli_aggregations:gitlab_sli_global_search_apdex_success_total_rate5m
+    expr: |
+      sum by (endpoint_id,environment,job,search_level,search_scope,search_type,shard,stage,tier,type) (
+        rate(gitlab_sli_global_search_apdex_success_total[5m])
+      )
   - record: gitlab_component_apdex:success:rate_5m
     labels:
       component: global_search
@@ -267,7 +287,7 @@ groups:
       type: web
     expr: |
       sum by (environment,stage) (
-        rate(gitlab_sli_global_search_apdex_success_total{job="gitlab-rails",type="web"}[5m])
+        sli_aggregations:gitlab_sli_global_search_apdex_success_total_rate5m{job="gitlab-rails",type="web"}
       )
   - record: gitlab_component_apdex:weight:score_5m
     labels:
@@ -276,7 +296,7 @@ groups:
       type: web
     expr: |
       sum by (environment,stage) (
-        rate(gitlab_sli_global_search_apdex_total{job="gitlab-rails",type="web"}[5m])
+        sli_aggregations:gitlab_sli_global_search_apdex_total_rate5m{job="gitlab-rails",type="web"}
       )
   - record: gitlab_component_ops:rate_5m
     labels:
@@ -285,7 +305,7 @@ groups:
       type: web
     expr: |
       sum by (environment,stage) (
-        rate(gitlab_sli_global_search_apdex_total{job="gitlab-rails",type="web"}[5m])
+        sli_aggregations:gitlab_sli_global_search_apdex_total_rate5m{job="gitlab-rails",type="web"}
       )
   - record: gitlab_component_apdex:success:rate_5m
     labels:
@@ -501,6 +521,16 @@ groups:
       sum by (endpoint_id,environment,feature_category,job,request_urgency,shard,stage,tier,type) (
         rate(gitlab_sli_rails_request_apdex_success_total[30m])
       )
+  - record: sli_aggregations:gitlab_sli_global_search_apdex_total_rate30m
+    expr: |
+      sum by (endpoint_id,environment,job,search_level,search_scope,search_type,shard,stage,tier,type) (
+        rate(gitlab_sli_global_search_apdex_total[30m])
+      )
+  - record: sli_aggregations:gitlab_sli_global_search_apdex_success_total_rate30m
+    expr: |
+      sum by (endpoint_id,environment,job,search_level,search_scope,search_type,shard,stage,tier,type) (
+        rate(gitlab_sli_global_search_apdex_success_total[30m])
+      )
   - record: gitlab_component_apdex:success:rate_30m
     labels:
       component: global_search
@@ -508,7 +538,7 @@ groups:
       type: web
     expr: |
       sum by (environment,stage) (
-        rate(gitlab_sli_global_search_apdex_success_total{job="gitlab-rails",type="web"}[30m])
+        sli_aggregations:gitlab_sli_global_search_apdex_success_total_rate30m{job="gitlab-rails",type="web"}
       )
   - record: gitlab_component_apdex:weight:score_30m
     labels:
@@ -517,7 +547,7 @@ groups:
       type: web
     expr: |
       sum by (environment,stage) (
-        rate(gitlab_sli_global_search_apdex_total{job="gitlab-rails",type="web"}[30m])
+        sli_aggregations:gitlab_sli_global_search_apdex_total_rate30m{job="gitlab-rails",type="web"}
       )
   - record: gitlab_component_ops:rate_30m
     labels:
@@ -526,7 +556,7 @@ groups:
       type: web
     expr: |
       sum by (environment,stage) (
-        rate(gitlab_sli_global_search_apdex_total{job="gitlab-rails",type="web"}[30m])
+        sli_aggregations:gitlab_sli_global_search_apdex_total_rate30m{job="gitlab-rails",type="web"}
       )
   - record: gitlab_component_apdex:success:rate_30m
     labels:
@@ -742,6 +772,16 @@ groups:
       sum by (endpoint_id,environment,feature_category,job,request_urgency,shard,stage,tier,type) (
         rate(gitlab_sli_rails_request_apdex_success_total[1h])
       )
+  - record: sli_aggregations:gitlab_sli_global_search_apdex_total_rate1h
+    expr: |
+      sum by (endpoint_id,environment,job,search_level,search_scope,search_type,shard,stage,tier,type) (
+        rate(gitlab_sli_global_search_apdex_total[1h])
+      )
+  - record: sli_aggregations:gitlab_sli_global_search_apdex_success_total_rate1h
+    expr: |
+      sum by (endpoint_id,environment,job,search_level,search_scope,search_type,shard,stage,tier,type) (
+        rate(gitlab_sli_global_search_apdex_success_total[1h])
+      )
   - record: gitlab_component_apdex:success:rate_1h
     labels:
       component: global_search
@@ -749,7 +789,7 @@ groups:
       type: web
     expr: |
       sum by (environment,stage) (
-        rate(gitlab_sli_global_search_apdex_success_total{job="gitlab-rails",type="web"}[1h])
+        sli_aggregations:gitlab_sli_global_search_apdex_success_total_rate1h{job="gitlab-rails",type="web"}
       )
   - record: gitlab_component_apdex:weight:score_1h
     labels:
@@ -758,7 +798,7 @@ groups:
       type: web
     expr: |
       sum by (environment,stage) (
-        rate(gitlab_sli_global_search_apdex_total{job="gitlab-rails",type="web"}[1h])
+        sli_aggregations:gitlab_sli_global_search_apdex_total_rate1h{job="gitlab-rails",type="web"}
       )
   - record: gitlab_component_ops:rate_1h
     labels:
@@ -767,7 +807,7 @@ groups:
       type: web
     expr: |
       sum by (environment,stage) (
-        rate(gitlab_sli_global_search_apdex_total{job="gitlab-rails",type="web"}[1h])
+        sli_aggregations:gitlab_sli_global_search_apdex_total_rate1h{job="gitlab-rails",type="web"}
       )
   - record: gitlab_component_apdex:success:rate_1h
     labels:
@@ -983,6 +1023,16 @@ groups:
       sum by (endpoint_id,environment,feature_category,job,request_urgency,shard,stage,tier,type) (
         rate(gitlab_sli_rails_request_apdex_success_total[6h])
       )
+  - record: sli_aggregations:gitlab_sli_global_search_apdex_total_rate6h
+    expr: |
+      sum by (endpoint_id,environment,job,search_level,search_scope,search_type,shard,stage,tier,type) (
+        rate(gitlab_sli_global_search_apdex_total[6h])
+      )
+  - record: sli_aggregations:gitlab_sli_global_search_apdex_success_total_rate6h
+    expr: |
+      sum by (endpoint_id,environment,job,search_level,search_scope,search_type,shard,stage,tier,type) (
+        rate(gitlab_sli_global_search_apdex_success_total[6h])
+      )
   - record: gitlab_component_apdex:success:rate_6h
     labels:
       component: global_search
@@ -990,7 +1040,7 @@ groups:
       type: web
     expr: |
       sum by (environment,stage) (
-        rate(gitlab_sli_global_search_apdex_success_total{job="gitlab-rails",type="web"}[6h])
+        sli_aggregations:gitlab_sli_global_search_apdex_success_total_rate6h{job="gitlab-rails",type="web"}
       )
   - record: gitlab_component_apdex:weight:score_6h
     labels:
@@ -999,7 +1049,7 @@ groups:
       type: web
     expr: |
       sum by (environment,stage) (
-        rate(gitlab_sli_global_search_apdex_total{job="gitlab-rails",type="web"}[6h])
+        sli_aggregations:gitlab_sli_global_search_apdex_total_rate6h{job="gitlab-rails",type="web"}
       )
   - record: gitlab_component_ops:rate_6h
     labels:
@@ -1008,7 +1058,7 @@ groups:
       type: web
     expr: |
       sum by (environment,stage) (
-        rate(gitlab_sli_global_search_apdex_total{job="gitlab-rails",type="web"}[6h])
+        sli_aggregations:gitlab_sli_global_search_apdex_total_rate6h{job="gitlab-rails",type="web"}
       )
   - record: gitlab_component_apdex:success:rate_6h
     labels:
