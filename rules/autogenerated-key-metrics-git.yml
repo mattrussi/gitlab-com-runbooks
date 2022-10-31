@@ -4,16 +4,6 @@ groups:
 - name: 'Component-Level SLIs: git - 1m burn-rate'
   interval: 1m
   rules:
-  - record: sli_aggregations:gitlab_sli_global_search_apdex_total_rate1m
-    expr: |
-      sum by (endpoint_id,environment,job,search_level,search_scope,search_type,shard,stage,tier,type) (
-        rate(gitlab_sli_global_search_apdex_total[1m])
-      )
-  - record: sli_aggregations:gitlab_sli_global_search_apdex_success_total_rate1m
-    expr: |
-      sum by (endpoint_id,environment,job,search_level,search_scope,search_type,shard,stage,tier,type) (
-        rate(gitlab_sli_global_search_apdex_success_total[1m])
-      )
   - record: gitlab_component_ops:rate
     labels:
       component: gitlab_shell
@@ -312,16 +302,6 @@ groups:
 - name: 'Component-Level SLIs: git - 5m burn-rate'
   interval: 1m
   rules:
-  - record: sli_aggregations:gitlab_sli_global_search_apdex_total_rate5m
-    expr: |
-      sum by (endpoint_id,environment,job,search_level,search_scope,search_type,shard,stage,tier,type) (
-        rate(gitlab_sli_global_search_apdex_total[5m])
-      )
-  - record: sli_aggregations:gitlab_sli_global_search_apdex_success_total_rate5m
-    expr: |
-      sum by (endpoint_id,environment,job,search_level,search_scope,search_type,shard,stage,tier,type) (
-        rate(gitlab_sli_global_search_apdex_success_total[5m])
-      )
   - record: gitlab_component_ops:rate_5m
     labels:
       component: gitlab_shell
@@ -620,16 +600,6 @@ groups:
 - name: 'Component-Level SLIs: git - 30m burn-rate'
   interval: 2m
   rules:
-  - record: sli_aggregations:gitlab_sli_global_search_apdex_total_rate30m
-    expr: |
-      sum by (endpoint_id,environment,job,search_level,search_scope,search_type,shard,stage,tier,type) (
-        rate(gitlab_sli_global_search_apdex_total[30m])
-      )
-  - record: sli_aggregations:gitlab_sli_global_search_apdex_success_total_rate30m
-    expr: |
-      sum by (endpoint_id,environment,job,search_level,search_scope,search_type,shard,stage,tier,type) (
-        rate(gitlab_sli_global_search_apdex_success_total[30m])
-      )
   - record: gitlab_component_ops:rate_30m
     labels:
       component: gitlab_shell
@@ -928,16 +898,6 @@ groups:
 - name: 'Component-Level SLIs: git - 1h burn-rate'
   interval: 1m
   rules:
-  - record: sli_aggregations:gitlab_sli_global_search_apdex_total_rate1h
-    expr: |
-      sum by (endpoint_id,environment,job,search_level,search_scope,search_type,shard,stage,tier,type) (
-        rate(gitlab_sli_global_search_apdex_total[1h])
-      )
-  - record: sli_aggregations:gitlab_sli_global_search_apdex_success_total_rate1h
-    expr: |
-      sum by (endpoint_id,environment,job,search_level,search_scope,search_type,shard,stage,tier,type) (
-        rate(gitlab_sli_global_search_apdex_success_total[1h])
-      )
   - record: gitlab_component_ops:rate_1h
     labels:
       component: gitlab_shell
@@ -1236,16 +1196,6 @@ groups:
 - name: 'Component-Level SLIs: git - 6h burn-rate'
   interval: 2m
   rules:
-  - record: sli_aggregations:gitlab_sli_global_search_apdex_total_rate6h
-    expr: |
-      sum by (endpoint_id,environment,job,search_level,search_scope,search_type,shard,stage,tier,type) (
-        rate(gitlab_sli_global_search_apdex_total[6h])
-      )
-  - record: sli_aggregations:gitlab_sli_global_search_apdex_success_total_rate6h
-    expr: |
-      sum by (endpoint_id,environment,job,search_level,search_scope,search_type,shard,stage,tier,type) (
-        rate(gitlab_sli_global_search_apdex_success_total[6h])
-      )
   - record: gitlab_component_ops:rate_6h
     labels:
       component: gitlab_shell
