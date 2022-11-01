@@ -276,7 +276,6 @@
     stage: 'analytics',
     feature_categories: [
       'service_ping',
-      'privacy_control_center',
       'application_instrumentation',
     ],
   },

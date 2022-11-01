@@ -571,12 +571,6 @@ groups:
     expr: "1"
   - record: gitlab:feature_category:stage_group:mapping
     labels:
-      feature_category: privacy_control_center
-      product_stage: analytics
-      stage_group: product_intelligence
-    expr: "1"
-  - record: gitlab:feature_category:stage_group:mapping
-    labels:
       feature_category: product_analytics
       product_stage: analytics
       stage_group: product_analytics
