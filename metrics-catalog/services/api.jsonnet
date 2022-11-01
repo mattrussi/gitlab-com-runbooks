@@ -58,7 +58,10 @@ metricsCatalog.serviceDefinition({
     vms: false,
     kubernetes: true,
   },
-  recordingRuleMetrics: sliLibrary.get('graphql_query').recordingRuleMetrics,
+  recordingRuleMetrics: (
+    sliLibrary.get('graphql_query').recordingRuleMetrics
+    + sliLibrary.get('global_search').recordingRuleMetrics
+  ),
   regional: true,
   kubeConfig: {
     labelSelectors: kubeLabelSelectors(

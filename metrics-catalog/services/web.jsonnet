@@ -54,7 +54,10 @@ metricsCatalog.serviceDefinition({
   },
   recordingRuleMetrics: [
     'http_requests_total',
-  ] + sliLibrary.get('rails_request').recordingRuleMetrics,
+  ] + (
+    sliLibrary.get('rails_request').recordingRuleMetrics
+    + sliLibrary.get('global_search').recordingRuleMetrics
+  ),
   provisioning: {
     vms: false,
     kubernetes: true,
