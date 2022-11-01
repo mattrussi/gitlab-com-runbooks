@@ -68,7 +68,51 @@
 
 <!-- ## Summary -->
 
-<!-- ## Architecture -->
+## Architecture
+
+### Chef
+
+#### `gprd`
+
+```mermaid
+graph TD
+    gprd-base-stor-gitaly-common-->gprd-base-stor-gitaly-cny
+    gprd-base-stor-gitaly-common-->gprd-base-stor-gitaly
+    gprd-base-stor-gitaly-->gprd-base-stor-gitaly-hdd
+    gprd-base-stor-gitaly-->gprd-base-stor-gitaly-praefect
+    gprd-base-stor-gitaly-->gprd-base-stor-gitaly-marquee
+
+    gprd-base-stor-praefect
+```
+
+* `gprd-base-stor-gitaly-common`: The base configuration which is common for all Gitaly shards and stages.
+* `gprd-base-stor-gitaly-cny`: Any extra configuration we might want to add for Gitaly `shard=default, stage=cny`.
+* `gprd-base-stor-gitaly`: Any extra configuration we might want to add for Gitaly `shard=default, stage=main`.
+* `gprd-base-stor-gitaly-hdd`: Any extra configuration we might want to add for Gitaly `shard=hdd, stage=main`.
+* `gprd-base-stor-gitaly-marquee`: Any extra configuration we might want to add for Gitaly `shard=marquee, stage=main`.
+* `gprd-base-stor-gitaly-praefect`: Any extra configuration we might want to add for Gitaly `shard=praefect, stage=main`.
+* `gprd-base-stor-praefect`: Configuration for the praefect servers.
+
+#### `gstg`
+
+```mermaid
+graph TD
+    gstg-base-stor-gitaly-->gstg-base-stor-gitaly-cny
+    gstg-base-stor-gitaly-->gstg-base-stor-gitaly-hdd
+    gstg-base-stor-gitaly-->gstg-base-stor-gitaly-zfs
+    gstg-base-stor-gitaly-->gstg-base-stor-gitaly-praefect-cny
+
+    gstg-base-stor-praefect
+    gstg-base-stor-praefect-cny
+```
+
+* `gstg-base-stor-gitaly`: The base configuration which is common for all Gitaly shards and stages.
+* `gstg-base-stor-gitaly-cny`: Any extra configuration we might want to add for Gitaly `shard=default, stage=cny`.
+* `gstg-base-stor-gitaly-hdd`: Any extra configuration we might want to add for Gitaly `shard=main, stage=main`.
+* `gstg-base-stor-gitaly-zfs`: Any extra configuration for `file-zfs-01-stor-gstg.c.gitlab-staging-1.internal`.
+* `gstg-base-stor-gitaly-praefect-cny`: Any extra configuration we might want to add for Gitaly `shard=praefect, stage=cny`.
+* `gstg-base-stor-praefect`: Configuration for the praefect server for `stage=main`.
+* `gstg-base-stor-praefect-cny`: Any extra configuration we might want to add for Gitaly `shard=default, stage=cny`.
 
 <!-- ## Performance -->
 
