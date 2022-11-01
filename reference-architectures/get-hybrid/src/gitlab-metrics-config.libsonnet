@@ -26,6 +26,7 @@ local options = validateReferenceArchitectureOptions(import 'gitlab-metrics-opti
     import 'saturation-monitoring/go_memory.libsonnet',
     import 'saturation-monitoring/kube_container_cpu.libsonnet',
     import 'saturation-monitoring/kube_container_memory.libsonnet',
+    import 'saturation-monitoring/kube_container_rss.libsonnet',
     import 'saturation-monitoring/kube_pool_cpu.libsonnet',
     import 'saturation-monitoring/opensearch_cpu.libsonnet',
     import 'saturation-monitoring/opensearch_disk_space.libsonnet',

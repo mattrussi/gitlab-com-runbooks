@@ -14,7 +14,7 @@ metricsCatalog.serviceDefinition({
   type: 'internal-api',
   tier: 'sv',
 
-  tags: ['golang'],
+  tags: ['golang', 'rails'],
 
   contractualThresholds: {
     apdexRatio: 0.9,

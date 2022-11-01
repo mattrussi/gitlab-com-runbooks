@@ -987,7 +987,7 @@
           "dashes": false,
           "datasource": "$PROMETHEUS_DS",
           "decimals": 2,
-          "description": "Records the total memory utilization for containers for this service, as a percentage of\nthe memory limit as configured through Kubernetes.\n Lower is better.",
+          "description": "This uses the working set size from cAdvisor for the cgroup's memory usage. That may\nnot be a good measure as it includes filesystem cache pages that are not necessarily\nattributable to the application inside the cgroup, and are permitted to be evicted\ninstead of being OOM killed.\n Lower is better.",
           "fill": 0,
           "fillGradient": 0,
           "gridPos": {

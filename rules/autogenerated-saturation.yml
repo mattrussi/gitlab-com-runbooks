@@ -377,6 +377,21 @@ groups:
       )
   - record: gitlab_component_saturation:ratio
     labels:
+      component: kube_container_rss
+    expr: |
+      max by(environment, tier, type, stage, shard) (
+        clamp_min(
+          clamp_max(
+            container_memory_rss:labeled{container!="", container!="POD", type=~"api|internal-api|git|sidekiq|web"}
+            /
+            (container_spec_memory_limit_bytes:labeled{container!="", container!="POD", type=~"api|internal-api|git|sidekiq|web"} > 0)
+            ,
+            1)
+        ,
+        0)
+      )
+  - record: gitlab_component_saturation:ratio
+    labels:
       component: kube_horizontalpodautoscaler_desired_replicas
     expr: |
       max by(environment, tier, type, stage, shard) (
@@ -1330,6 +1345,14 @@ groups:
     expr: "0.9"
   - record: slo:max:soft:gitlab_component_saturation:ratio
     labels:
+      component: kube_container_rss
+    expr: "0.8"
+  - record: slo:max:hard:gitlab_component_saturation:ratio
+    labels:
+      component: kube_container_rss
+    expr: "0.9"
+  - record: slo:max:soft:gitlab_component_saturation:ratio
+    labels:
       component: kube_horizontalpodautoscaler_desired_replicas
     expr: "0.9"
   - record: slo:max:hard:gitlab_component_saturation:ratio
@@ -1847,6 +1870,14 @@ groups:
     labels:
       capacity_planning_strategy: quantile95_1h
       component: kube_container_memory
+      horiz_scaling: "yes"
+      quantile: max
+      severity: s4
+    expr: "1"
+  - record: gitlab_component_saturation_info
+    labels:
+      capacity_planning_strategy: quantile95_1h
+      component: kube_container_rss
       horiz_scaling: "yes"
       quantile: max
       severity: s4
@@ -3119,7 +3150,7 @@ groups:
 
         Details of the Kube Container Memory Utilization resource:
 
-        Records the total memory utilization for containers for this service, as a percentage of the memory limit as configured through Kubernetes.
+        This uses the working set size from cAdvisor for the cgroup's memory usage. That may not be a good measure as it includes filesystem cache pages that are not necessarily attributable to the application inside the cgroup, and are permitted to be evicted instead of being OOM killed.
       grafana_dashboard_id: alerts-sat_kube_container_memory
       grafana_dashboard_link: https://dashboards.gitlab.net/d/alerts-sat_kube_container_memory?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-type={{ $labels.type }}&var-stage={{ $labels.stage
@@ -3147,6 +3178,53 @@ groups:
     expr: |
       gitlab_component_saturation:ratio{component="kube_container_memory"} > on(component) group_left
       slo:max:hard:gitlab_component_saturation:ratio{component="kube_container_memory"}
+  - alert: component_saturation_slo_out_of_bounds
+    for: 15m
+    annotations:
+      title: The Kube Container Memory Utilization (RSS) resource of the {{ $labels.type
+        }} service ({{ $labels.stage }} stage) has a saturation exceeding SLO and
+        is close to its capacity limit.
+      description: |
+        This means that this resource is running close to capacity and is at risk of exceeding its current capacity limit.
+
+        Details of the Kube Container Memory Utilization (RSS) resource:
+
+        Records the total anonymous (unevictable) memory utilization for containers for this service, as a percentage of the memory limit as configured through Kubernetes.
+
+        This is computed using the container's resident set size (RSS), as opposed to kube_container_memory which uses the working set size. For our purposes, RSS is the better metric as cAdvisor's working set calculation includes pages from the filesystem cache that can (and will) be evicted before the OOM killer kills the cgroup.
+
+        A container's RSS (anonymous memory usage) is still not precisely what the OOM killer will use, but it's a better approximation of what the container's workload is actually using. RSS metrics can, however, be dramatically inflated if a process in the container uses MADV_FREE (lazy-free) memory. RSS will include the memory that is available to be reclaimed without a page fault, but not currently in use.
+
+        The most common case of OOM kills is for anonymous memory demand to overwhelm the container's memory limit. On swapless hosts, anonymous memory cannot be evicted from the page cache, so when a container's memory usage is mostly anonymous pages, the only remaining option to relieve memory pressure may be the OOM killer.
+
+        As container RSS approaches container memory limit, OOM kills become much more likely. Consequently, this ratio is a good leading indicator of memory saturation and OOM risk.
+      grafana_dashboard_id: alerts-sat_kube_container_rss
+      grafana_dashboard_link: https://dashboards.gitlab.net/d/alerts-sat_kube_container_rss?from=now-6h/m&to=now-1m/m&var-environment={{
+        $labels.environment }}&var-type={{ $labels.type }}&var-stage={{ $labels.stage
+        }}
+      grafana_min_zoom_hours: "6"
+      grafana_panel_id: "2875690100"
+      grafana_variables: environment,type,stage
+      promql_query: |
+        max by(environment, tier, type, stage, shard) (
+          clamp_min(
+            clamp_max(
+              container_memory_rss:labeled{container!="", container!="POD", environment="{{ $labels.environment }}",stage="{{ $labels.stage }}",type="{{ $labels.type }}"}
+              /
+              (container_spec_memory_limit_bytes:labeled{container!="", container!="POD", environment="{{ $labels.environment }}",stage="{{ $labels.stage }}",type="{{ $labels.type }}"} > 0)
+              ,
+              1)
+          ,
+          0)
+        )
+      runbook: docs/{{ $labels.type }}/README.md
+    labels:
+      alert_type: cause
+      rules_domain: general
+      severity: s4
+    expr: |
+      gitlab_component_saturation:ratio{component="kube_container_rss"} > on(component) group_left
+      slo:max:hard:gitlab_component_saturation:ratio{component="kube_container_rss"}
   - alert: component_saturation_slo_out_of_bounds
     for: 25m
     annotations:
