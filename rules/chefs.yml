@@ -37,14 +37,14 @@ groups:
       runbook: docs/config_management/chef-troubleshooting.md
       title: Chef client hasn't run for longer than expected
   - alert: ChefClientDisabled
-    expr: sum by (env, type) (chef_client_enabled{type!="sentry"} == 0)
+    expr: sum by (environment, type) (chef_client_enabled{type!="sentry"} == 0)
     for: 24h
     labels:
       severity: s4
       alert_type: cause
       incident_project: gitlab.com/gitlab-com/gl-infra/production
     annotations:
-      description: Last Chef run for type {{ $labels.type }} in env {{ $labels.env }} was over {{ $value | humanizeDuration }} ago
+      description: Last Chef run for type {{ $labels.type }} in env {{ $labels.environment }} was over {{ $value | humanizeDuration }} ago
       grafana_dashboard_id: "000000231/chef-client"
       runbook: docs/config_management/chef-troubleshooting.md
-      title: Chef client has been disabled for a long time for type {{ $labels.type }} in env {{ $labels.env }}
+      title: Chef client has been disabled for a long time for type {{ $labels.type }} in env {{ $labels.environment }}
