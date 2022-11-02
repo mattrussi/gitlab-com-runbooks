@@ -2,7 +2,7 @@
 
 <!-- vim-markdown-toc GitLab -->
 
-- [Postgres Replicas](#postgres-replicas)
+- [Postgres Replicas](#overview)
   - [Overview](#overview)
   - [Setup](#setup)
     - [Setup Replication](#setup-replication)
