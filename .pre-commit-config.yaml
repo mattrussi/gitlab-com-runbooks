@@ -25,7 +25,7 @@ repos:
       - id: conventional-pre-commit
         stages: [commit-msg]
   - repo: https://github.com/google/go-jsonnet
-    rev: v0.18.0
+    rev: v0.19.1
     hooks:
       - id: jsonnet-format
         args: [-i, --string-style, s, -n, "2"]
