@@ -355,6 +355,7 @@ basic.dashboard(
       gitalyCGroupCPUQuantile(selectorSerialized),
       gitalyCGroupMemoryUsagePerCGroup(selectorSerialized),
       gitalyCGroupMemoryQuantile(selectorSerialized),
+      oomKillsPerNode(selectorSerialized),
     ], startRow=5801)
   ),
   gridPos={
