@@ -19,15 +19,19 @@
 
 ## Overview
 
-Besides our Patroni-managed databases we also have 2 single Postgresql instances
+Besides our Patroni-managed databases we also have 4 single Postgresql instances
 for disaster recovery and WAL archive testing purposes:
 
 - gprd:
-  - postgres-dr-archive-01-db-gprd.c.gitlab-production.internal
-  - postgres-dr-delayed-01-db-gprd.c.gitlab-production.internal
+  - postgres-ci-dr-archive-2004-01-db-gprd.c.gitlab-production.internal
+  - postgres-ci-dr-delayed-2004-01-db-gprd.c.gitlab-production.internal
+  - postgres-dr-main-archive-2004-01-db-gprd.c.gitlab-production.internal
+  - postgres-dr-main-delayed-2004-01-db-gprd.c.gitlab-production.internal
 - gstg:
-  - postgres-dr-archive-01-db-gstg.c.gitlab-staging-1.internal
-  - postgres-dr-delayed-01-db-gstg.c.gitlab-staging-1.internal
+  - postgres-ci-dr-archive-2004-01-db-gstg.c.gitlab-staging-1.internal
+  - postgres-ci-dr-delayed-2004-01-db-gstg.c.gitlab-staging-1.internal
+  - postgres-dr-archive-2004-01-db-gstg.c.gitlab-staging-1.internal
+  - postgres-dr-delayed-2004-01-db-gstg.c.gitlab-staging-1.internal
 
 Archive and delayed replica both are replaying WAL archive files from GCS via
 wal-g which are sent to GCS by the Patroni primary (with a [retention
@@ -47,8 +51,10 @@ to).
 
 Both instances are setup using terraform and Chef:
 
-- [gprd-base-db-postgres-archive role](https://ops.gitlab.net/gitlab-cookbooks/chef-repo/-/blob/master/roles/gprd-base-db-postgres-archive.json)
-- [gprd-base-db-postgres-delayed role](https://ops.gitlab.net/gitlab-cookbooks/chef-repo/-/blob/master/roles/gprd-base-db-postgres-delayed.json)
+- [gprd-base-db-postgres-ci-archive-2004 role](https://gitlab.com/gitlab-com/gl-infra/chef-repo/-/blob/master/roles/gprd-base-db-postgres-ci-archive-2004.json)
+- [gprd-base-db-postgres-ci-delayed-2004 role](https://gitlab.com/gitlab-com/gl-infra/chef-repo/-/blob/master/roles/gprd-base-db-postgres-ci-delayed-2004.json)
+- [gprd-base-db-postgres-main-archive-2004 role](https://gitlab.com/gitlab-com/gl-infra/chef-repo/-/blob/master/roles/gprd-base-db-postgres-main-archive-2004.json)
+- [gprd-base-db-postgres-main-delayed-2004 role](https://gitlab.com/gitlab-com/gl-infra/chef-repo/-/blob/master/roles/gprd-base-db-postgres-main-delayed-2004.json)
 
 They use the postgresql version coming with omnibus.
 
