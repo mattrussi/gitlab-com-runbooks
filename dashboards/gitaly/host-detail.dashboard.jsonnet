@@ -14,6 +14,7 @@ local gitalyCommandStats = import 'gitlab-dashboards/gitaly_command_stats.libson
 local metricsCatalog = import 'servicemetrics/metrics-catalog.libsonnet';
 local aggregationSets = (import 'gitlab-metrics-config.libsonnet').aggregationSets;
 local singleMetricRow = import 'key-metric-panels/single-metric-row.libsonnet';
+local textPanel = grafana.text;
 
 local serviceType = 'gitaly';
 
@@ -355,6 +356,20 @@ basic.dashboard(
       gitalyCGroupCPUQuantile(selectorSerialized),
       gitalyCGroupMemoryUsagePerCGroup(selectorSerialized),
       gitalyCGroupMemoryQuantile(selectorSerialized),
+      oomKillsPerNode(selectorSerialized),
+      textPanel.new(
+        title='cgroup runbook',
+        content=|||
+          Gitaly spawns git processes into cgroups to limit their cpu and memory
+          usage. This is to cap the maximum amount of cpu/memory used by a single
+          git process and hence affecting other processes on the same host.
+          This helps in fair usage of system resources among all
+          the repositories hosted by a single Gitaly storage server.
+
+          Here is the runbook to debug issues related to Gitaly cgroups:
+          https://gitlab.com/gitlab-com/runbooks/-/blob/master/docs/gitaly/gitaly-repos-cgroup.md
+        |||
+      ),
     ], startRow=5801)
   ),
   gridPos={
