@@ -10,6 +10,7 @@ local aggregations = import 'promql/aggregations.libsonnet';
 local selectors = import 'promql/selectors.libsonnet';
 local metricsLabelRegistry = import 'servicemetrics/metric-label-registry.libsonnet';
 local metricsCatalog = import 'servicemetrics/metrics-catalog.libsonnet';
+local misc = import 'utils/misc.libsonnet';
 
 local standardEnvironmentLabels = std.set(['environment', 'type', 'tier', 'stage', 'shard']);
 
@@ -33,6 +34,11 @@ local metricsWithRecordingRules = std.foldl(
   []
 );
 
+local missingFeatureCategoryWithEmptyFeatureCategorySelector(missingLabels, selector) =
+  local featureCategoryRe = misc.dig(selector, ['feature_category', 're']);
+
+  (missingLabels == ['feature_category']) && std.isString(featureCategoryRe) && std.member(std.split(featureCategoryRe, '|'), '');
+
 local supportsLabelsBurnRateAndSelector(metricName, requiredAggregationLabels, burnRate, selector) =
   if std.setMember(metricName, metricsWithRecordingRules) then
     if std.type(selector) == 'object' then
@@ -49,6 +55,8 @@ local supportsLabelsBurnRateAndSelector(metricName, requiredAggregationLabels, b
 
         // Check that allRequiredLabels is a subset of recordingRuleLabels
         if missingLabels == [] then
+          true
+        else if missingFeatureCategoryWithEmptyFeatureCategorySelector(missingLabels, selector) then
           true
         else
           std.trace('Unable to use recording rule for ' + metricName + '. Missing labels: ' + missingLabels + ', requiredAggregationLabels=' + requiredAggregationLabels + ', selector=' + selector, false)
