@@ -31,8 +31,8 @@ local resourceSaturationPoint = (import 'servicemetrics/resource_saturation_poin
       )
     |||,
     slos: {
-      soft: 0.69,
-      hard: 0.70,
+      soft: 0.8,
+      hard: 0.85,
     },
   }),
 }
