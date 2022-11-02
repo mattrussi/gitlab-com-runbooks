@@ -15,9 +15,6 @@
 * [postgres](https://log.gprd.gitlab.net/goto/0b7a4ff726bfd3e4eb4b51da82979efc)
 * [system](https://log.gprd.gitlab.net/goto/4a5ab78f128dcf1b40ad16b75e521609)
 
-## Troubleshooting Pointers
-
-* [Postgres Replicas](../postgres-dr-delayed/postgres-dr-replicas.md)
 <!-- END_MARKER -->
 
 <!-- ## Summary -->
