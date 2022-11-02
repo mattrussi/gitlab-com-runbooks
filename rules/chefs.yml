@@ -37,7 +37,7 @@ groups:
       runbook: docs/config_management/chef-troubleshooting.md
       title: Chef client hasn't run for longer than expected
   - alert: ChefClientDisabled
-    expr: sum by (environment, type) (chef_client_enabled{type!="sentry"} == 0)
+    expr: sum by (environment, type) (chef_client_enabled{type!~"sentry|ci-runners"} == 0)
     for: 24h
     labels:
       severity: s4
