@@ -76,6 +76,7 @@ In order to restore from a database backup, we leverage the backup restore pipel
 1. By default, an instance of `n1-standard-16` type will be used. Such instances have "good enough" IO throughput and IOPS quotas [Google throttles disk IO based on the disk size and the number of vCPUs](https://cloud.google.com/compute/docs/disks/performance#ssd-pd-performance)). In the case of urgency, to get the best performance possible on GCP, consider using `n1-highcpu-32`, specifying CI/CD variable `GCE_INSTANCE_TYPE` in the CI/CD pipeline launch interface. It is highly recommended to check the current resource consumption (total vCPUs, RAM, disk space, IP addresses, and the number of instances and disks in general) in the [GCP quotas interfaces of the "gitlab-restore" project](https://console.cloud.google.com/iam-admin/quotas?project=gitlab-restore).
 1. It is recommended (although not required) to specify the instance name using CI/CD variable `INSTANCE_NAME`. Custom names help distinguish GCE instances from auto-provisioned and from provisioned by someone else. An excellent example of custom name: `nik-gprd-infrastructure-issue-1234` (means: requested by `nik`, for environment `gprd`, for the the `infrastructure` issue `1234`). If the custom name is not set, your instance gets a name like `restore-postgres-gprd-XXXXX`, where `XXXXX` is the CI/CD pipeline ID.
 1. As mentioned above, by default, WAL-G will be used to restore from a backup. It is controlled by CI variable `WAL_E_OR_WAL_G` (default value: `wal-g`). If WAL-E is needed, set CI variable `WAL_E_OR_WAL_G` to `wal-e`, but expect that restoring will take much more time. For the "restore basebackup" phase, on `n1-standard-16`, the expected speed of filling the PGDATA directory is 0.5 TiB per hour for WAL-E and 2 TiB per hour for WAL-G.
+1. The default WAL source path, `BACKUP_PATH`, will most likely be different from what is defined as a default pipeline. You will need to examine a production Patroni Main VM to determine the WAL bucket. It's most likely found in `/etc/wal-g.d/env/WALG_GS_PREFIX`. The `BACKUP_PATH` is just the section after the `gs://gitlab-gprd-postgres-backup/` part of the storage path.
 1. To control the process, SSH to the instance. The main items to check:
     - `df -hT /var/opt/gitlab` to ensure that the disk is not full (if it hits 100%, it won't be noticeable in the CI/CD interfaces, unfortunately),
     - `sudo journalctl -f` to see basebackup fetching and, later, WAL fetching/replaying happening.
@@ -174,7 +175,7 @@ chmod -R 644 /tmp/project
 ```
 
 Download the file, replacing the project and instance name in this example as
-appropriate: `gcloud --project gitlab-restore compute scp -r
+appropriate: `gcloud --project gitlab-restore compute scp --recurse
 restore-postgres-gprd-88895:/tmp/project ./`
 
 Download [a
@@ -186,7 +187,7 @@ real one:
 
 ```
 mkdir repack
-tar -xf test_project_export.tar.gz -C repack
+tar -xf blank_export.tar.gz -C repack
 cd repack
 cp ../project.json ./
 tar -czf ../repacked.tar.gz ./
@@ -277,6 +278,8 @@ failed, we can't know whether the corruption predated the snapshot or not.
 ## Rails console errors out with a stacktrace
 
 You may need to copy the production `db_key_base` key into the restore node. You can find the key in `/etc/gitlab/gitlab-secrets.json`.
+
+Once you've added this key, you will need to run `gitlab-ctl reconfigure` to get the changes working and a working console.
 
 ## Gitlab reconfigure fails
 
