@@ -625,6 +625,7 @@ docker_image_test:
       - Dockerfile
       - .tool-versions
       - .gitlab-ci-asdf-versions.yml
+      - .gitlab-ci.yml
     refs:
       - merge_requests
       - tags
