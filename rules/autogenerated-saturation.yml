@@ -1307,11 +1307,11 @@ groups:
   - record: slo:max:soft:gitlab_component_saturation:ratio
     labels:
       component: gitaly_total_disk_space
-    expr: "0.69"
+    expr: "0.8"
   - record: slo:max:hard:gitlab_component_saturation:ratio
     labels:
       component: gitaly_total_disk_space
-    expr: "0.7"
+    expr: "0.85"
   - record: slo:max:soft:gitlab_component_saturation:ratio
     labels:
       component: kube_container_cpu
