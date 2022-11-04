@@ -25,7 +25,7 @@ groups:
       title: Last Patroni GCS snapshot did not run successfully
   - alert: PatroniGCSSnapshotFailed
     expr: gitlab_job_failed{resource="patroni-gcs-snapshot"} == 1
-    for: 5m
+    for: 6h
     labels:
       pager: pagerduty
       severity: s1
