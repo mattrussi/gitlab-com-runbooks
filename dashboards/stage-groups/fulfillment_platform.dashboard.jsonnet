@@ -8,7 +8,6 @@ local template = grafana.template;
 local row = grafana.row;
 
 stageGroupDashboards.dashboard('fulfillment_platform')
-.stageGroupDashboardTrailer()
 .addTemplate(
   template.new(
     'instance',
@@ -22,11 +21,12 @@ stageGroupDashboards.dashboard('fulfillment_platform')
   layout.rowGrid('⏱️  Stack Component Uptime', [
     basic.slaStats(
       title='CustomersDot probe result',
-      query='avg(avg_over_time(probe_success{instance="$instance", environment="$environment", type="blackbox"}[$__interval]))'
+      query='avg_over_time(probe_success{instance="$instance", environment="$environment", job="blackbox"}[$__interval])'
     ),
     basic.slaStats(
       title='Puma uptime',
-      query='1-(avg(avg_over_time(last_scrape_error{environment="$environment", type="customersdot"}[$__interval])))',
+      query='1-(avg_over_time(last_scrape_error{environment="$environment", type="customersdot", job="prometheus-puma-exporter"}[$__interval]))',
     ),
   ], startRow=1001, rowHeight=8)
 )
+.stageGroupDashboardTrailer()
