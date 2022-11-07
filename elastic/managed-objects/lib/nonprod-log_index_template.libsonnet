@@ -15,6 +15,7 @@ local mappings = {
   redis: import './index_mappings/redis.jsonnet',
   registry: import './index_mappings/registry.jsonnet',
   runner: import './index_mappings/runner.jsonnet',
+  sentry: import './index_mappings/sentry.jsonnet',
   shell: import './index_mappings/shell.jsonnet',
   sidekiq: import './index_mappings/sidekiq.jsonnet',
   system: import './index_mappings/system.jsonnet',
