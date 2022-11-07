@@ -27,6 +27,7 @@ export indices=(
   redis
   registry
   runner
+  sentry
   shell
   sidekiq
   system
