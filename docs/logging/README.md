@@ -204,46 +204,47 @@ Adding a logfile and using an existing ES index
 
 ##### Kubernetes infrastructure
 
-* Update config of the Gitlab managed Fluentd DaemonSet here: <https://gitlab.com/gitlab-com/gl-infra/k8s-workloads/tanka-deployments/-/tree/master/environments/fluentd-elasticsearch>
+* Update config of the [Gitlab managed Fluentd DaemonSet](https://gitlab.com/gitlab-com/gl-infra/k8s-workloads/tanka-deployments/-/tree/master/environments/fluentd-elasticsearch). You will need to add a new entry in [logging-config.yaml](https://gitlab.com/gitlab-com/gl-infra/k8s-workloads/tanka-deployments/-/blob/master/lib/fluentd/logging-config.yaml).
 
 #### Adding a logfile and creating a dedicated index for it
 
-* Adding a logfile and creating a dedicated index for it
-  * Configure Elastic
-    * Add and modify the following and once merged, wait for the CI job to update ES config. An example of these changes is in this commit <https://gitlab.com/gitlab-com/runbooks/-/commit/2b1c86471cfb3c792137c746613838d34d223e59>
-    * Add the index name to the [indices array file](elastic/managed-objects/indices/indices-array.sh)
-    * Add a new file with your index name with empty index mapping (such as `{}`) in the [index mapping directory](http://gitlab.com/gitlab-com/runbooks/elastic/managed-objects/lib/index_mappings). This will need to be modified later with the log mappings.
-    * Add the index to prod and non-prod index template files
-      * Initialize the alias and create the first index using an api call. You can do it in Kibana UI with:
+* Configure Elastic
+  * Add and modify the following and once merged, wait for the CI job to update ES config. An example of these changes is in this commit <https://gitlab.com/gitlab-com/runbooks/-/commit/2b1c86471cfb3c792137c746613838d34d223e59>
+  * Add the index name to the [indices array file](elastic/managed-objects/indices/indices-array.sh)
+  * Add a new file with your index name with empty index mapping (such as `{}`) in the [index mapping directory](http://gitlab.com/gitlab-com/runbooks/elastic/managed-objects/lib/index_mappings). This will need to be modified later with the log mappings.
+  * Add the index to prod and non-prod index template files
+    * Initialize the alias and create the first index using an api call. You can do it in Kibana UI with:
 
-        ```
-        PUT /pubsub-<index_name>-inf-<env_name>-000001
-        {
-            "aliases":
-                {
-                    "pubsub-<index_name>-inf-<env_name>":
-                        {
-                            "is_write_index": true
-                        }
-                }
+      ```
+      PUT /pubsub-<index_name>-inf-<env_name>-000001
+      {
+          "aliases":
+              {
+                  "pubsub-<index_name>-inf-<env_name>":
+                      {
+                          "is_write_index": true
+                      }
+              }
 
-        }
-        ```
+      }
+      ```
 
-        or using a script documented here: <https://gitlab.com/gitlab-com/runbooks/blob/master/elastic/api_calls/single/initialize-alias-create-index.sh>
-      * Make sure that all three exist in the relevant cluster: alias, index template, first index and that the index has an ILM policy assigned to it.
-      * Index patterns in Kibana can only be created once there are documents in indices.
-  * Create a PubSub topic
-    * Add your topic to the list of pubsubbeat topics in `variables.tf` file of the environment where you want to make the change, e.g. for gstg: <https://ops.gitlab.net/gitlab-com/gitlab-com-infrastructure/-/blob/master/environments/gstg/variables.tf> .
-  * Create a beat that will forward logs from PubSub to ES (this step should only be performed after the topic was created)
-    * Add a beat for your topic to the list of beats in the relevant environment: <https://gitlab.com/gitlab-com/gl-infra/k8s-workloads/gitlab-helmfiles/-/tree/master/releases/pubsubbeat>
-  * For log files on the GCE VMs infrastructure
-    * Add a new recipe in the `gitlab_fluentd` cookbook for your log file, for example: <https://gitlab.com/gitlab-cookbooks/gitlab_fluentd/merge_requests/99/diffs>
-    * Edit the relevant roles in the chef repo to apply the new recipe to VMs managed with that role, for example: <https://ops.gitlab.net/gitlab-cookbooks/chef-repo/merge_requests/2367/diffs>
-    * follow the chef roll out process
-  * For log files in GKE
-    * Update config of the Gitlab managed Fluentd DaemonSet here: <https://gitlab.com/gitlab-com/gl-infra/k8s-workloads/tanka-deployments/-/tree/master/environments/fluentd-elasticsearch>
-  * To view the logs in kibana you'll need to create an index pattern. You can do this by going to Management > Stack Management > Kibana > Index Patterns and click on the "Create index pattern" button.
+      or using a script documented here: <https://gitlab.com/gitlab-com/runbooks/blob/master/elastic/api_calls/single/initialize-alias-create-index.sh>
+  * Make sure that all three exist in the relevant cluster: alias, index template, first index and that the index has an ILM policy assigned to it.
+    * If you're not sure which policy to use, `gitlab-infra-ilm-policy` is a sensible default.
+    * You can assign an ILM policy using the Kibana UI, or add the following JSON to the index settings: `"index.lifecycle.name": "gitlab-infra-ilm-policy",`
+  * Index patterns in Kibana can only be created once there are documents in indices.
+* Create a PubSub topic
+  * Add your topic to the list of pubsubbeat topics in `variables.tf` file of the environment where you want to make the change, e.g. for gstg: <https://ops.gitlab.net/gitlab-com/gitlab-com-infrastructure/-/blob/master/environments/gstg/variables.tf> .
+* Create a beat that will forward logs from PubSub to ES (this step should only be performed after the topic was created)
+  * Add a beat for your topic to the list of beats in the relevant environment: <https://gitlab.com/gitlab-com/gl-infra/k8s-workloads/gitlab-helmfiles/-/tree/master/releases/pubsubbeat>
+* For log files on the GCE VMs infrastructure
+  * Add a new recipe in the `gitlab_fluentd` cookbook for your log file, for example: <https://gitlab.com/gitlab-cookbooks/gitlab_fluentd/merge_requests/99/diffs>
+  * Edit the relevant roles in the chef repo to apply the new recipe to VMs managed with that role, for example: <https://ops.gitlab.net/gitlab-cookbooks/chef-repo/merge_requests/2367/diffs>
+  * follow the chef roll out process
+* For log files in GKE
+  * Update config of the [Gitlab managed Fluentd DaemonSet](https://gitlab.com/gitlab-com/gl-infra/k8s-workloads/tanka-deployments/-/tree/master/environments/fluentd-elasticsearch). You will need to add a new entry in [logging-config.yaml](https://gitlab.com/gitlab-com/gl-infra/k8s-workloads/tanka-deployments/-/blob/master/lib/fluentd/logging-config.yaml) and add your topic to [pubsub-topics.libsonnet](https://gitlab.com/gitlab-com/gl-infra/k8s-workloads/tanka-deployments/-/blob/master/lib/gitlab/pubsub-topics.libsonnet).
+* To view the logs in kibana you'll need to create an index pattern. You can do this by going to Management > Stack Management > Kibana > Index Patterns and click on the "Create index pattern" button.
 
 <!-- ## Architecture -->
 
