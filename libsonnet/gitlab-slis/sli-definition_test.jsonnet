@@ -69,7 +69,6 @@ test.suite({
     expectValid: sliDefinition._sliValidator,
   },
 
-  /* test cases below commented out because they are broken
 
   testValidateFeatureCategoryUnknown: {
     local sli = validSLI { featureCategory: 'not a feature' },
@@ -113,5 +112,4 @@ test.suite({
       message: 'field kinds',
     },
   },
-  */
 })
