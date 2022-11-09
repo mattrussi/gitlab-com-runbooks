@@ -484,6 +484,11 @@ metricsCatalog.serviceDefinition({
       featureCategory: 'not_owned',
       trafficCessationAlertConfig: false,
 
+      monitoringThresholds: {
+        apdexScore: 0.999,
+        errorRatio: 0.95,
+      },
+
       description: |||
         Various memcached instances support our thanos infrastructure, for the
         store and query-frontend components.
