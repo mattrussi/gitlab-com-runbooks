@@ -21,7 +21,7 @@
           //   max_num_segments: 1,
           // },
           allocate: {
-            total_shards_per_node: 3,
+            total_shards_per_node: 4,
           },
           set_priority: {
             priority: 50,
