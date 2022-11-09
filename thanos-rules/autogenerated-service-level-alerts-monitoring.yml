@@ -1429,12 +1429,12 @@ groups:
       (
         (
           gitlab_component_errors:ratio_1h{component="thanos_memcached",monitor="global",type="monitoring"}
-          > (14.4 * 0.001000)
+          > (14.4 * 0.050000)
         )
         and
         (
           gitlab_component_errors:ratio_5m{component="thanos_memcached",monitor="global",type="monitoring"}
-          > (14.4 * 0.001000)
+          > (14.4 * 0.050000)
         )
       )
       and on(env,environment,tier,type,stage,component)
@@ -1477,12 +1477,12 @@ groups:
       (
         (
           gitlab_component_errors:ratio_6h{component="thanos_memcached",monitor="global",type="monitoring"}
-          > (6 * 0.001000)
+          > (6 * 0.050000)
         )
         and
         (
           gitlab_component_errors:ratio_30m{component="thanos_memcached",monitor="global",type="monitoring"}
-          > (6 * 0.001000)
+          > (6 * 0.050000)
         )
       )
       and on(env,environment,tier,type,stage,component)
