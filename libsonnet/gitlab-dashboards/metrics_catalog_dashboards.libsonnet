@@ -475,8 +475,7 @@ local sliDetailErrorRatePanel(
     sliFilter=function(x) x,
   )::
     local s = self;
-    local slis = objects.fromPairs(
-      std.filter(
+    local slis = std.filter(
         function(pair) pair[1].supportsDetails() && sliFilter(pair[1]),
         std.flattenArrays(
           std.map(
@@ -484,13 +483,13 @@ local sliDetailErrorRatePanel(
             serviceTypes
           ),
         ),
-      ),
     );
 
     layout.grid(
       std.mapWithIndex(
-        function(i, sliName)
-          local sli = slis[sliName];
+        function(i, sliPair)
+          local sliName = sliPair[0];
+          local sli = sliPair[1];
 
           local aggregationSets =
             [
@@ -499,7 +498,7 @@ local sliDetailErrorRatePanel(
             std.map(function(c) { title: 'per ' + c, aggregationLabels: c, selector: { [c]: { ne: '' } }, legendFormat: '{{' + c + '}}' }, sli.significantLabels);
 
           s.sliDetailMatrixAcrossServices(sli, selectorHash, aggregationSets),
-        std.objectFields(slis)
+        slis
       )
       , cols=1, startRow=startRow
     ),
