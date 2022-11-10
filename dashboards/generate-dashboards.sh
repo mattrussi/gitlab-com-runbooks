@@ -28,7 +28,7 @@ usage() {
 EOF
 }
 
-args="$@"
+args="$*"
 
 while getopts ":Dh" o; do
   case "${o}" in

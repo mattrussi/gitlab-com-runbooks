@@ -48,7 +48,7 @@ prepare
 
 mkdir -p 'generated'
 
-line="$@"
+line="$*"
 relative=${line#"./"}
 folder=${GRAFANA_FOLDER:-$(dirname "$relative")}
 
