@@ -80,15 +80,13 @@ you should consider increasing those as well.
 
 Once the indexes are migrated from the hot data tier to warm, the number of
 shards for an index will not change, but the warm data tier (probably) has less
-instances. We define a lifecycle that rolls over from hot to warm and defines
-how many 
-
-MORE QUESTIONS
+instances. We need to update the lifecycle policy for the right template level
+to make sure we allow enough shards per instance to fit the new index size.
 
 Create an MR to update these values:
 
-`number_of_shards` in elastic/managed-objects/lib/settings_gprd.libsonnet
-`total_shards_per_node` in elastic/managed-objects/log_gprd/ILM/gitlab-infra-high-ilm-policy.jsonnet
+* `number_of_shards` in elastic/managed-objects/lib/settings_gprd.libsonnet
+* `total_shards_per_node` in elastic/managed-objects/log_gprd/ILM/gitlab-infra-high-ilm-policy.jsonnet
 
 ## Verifying Changes
 
