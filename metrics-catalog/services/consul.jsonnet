@@ -1,12 +1,15 @@
 local metricsCatalog = import 'servicemetrics/metrics.libsonnet';
-local toolingLinks = import 'toolinglinks/toolinglinks.libsonnet';
 local kubeLabelSelectors = metricsCatalog.kubeLabelSelectors;
+local rateMetric = metricsCatalog.rateMetric;
 local maturityLevels = import 'service-maturity/levels.libsonnet';
+local toolingLinks = import 'toolinglinks/toolinglinks.libsonnet';
 
 metricsCatalog.serviceDefinition({
   type: 'consul',
   tier: 'sv',
   monitoringThresholds: {
+    apdexScore: 0.999,
+    errorRatio: 0.999,
   },
   serviceDependencies: {
   },
@@ -16,15 +19,24 @@ metricsCatalog.serviceDefinition({
   },
   regional: true,
   kubeConfig: {
+    local kubeSelector = { namespace: 'consul' },
+
     labelSelectors: kubeLabelSelectors(
       hpaSelector=null,  // no hpas for consul
       ingressSelector=null,  // no ingress for consul
       deploymentSelector=null,  // no deployments for consul
+      nodeSelector={ type: 'kube' }
     ),
   },
   kubeResources: {
-    consul: {
+    'consul-client': {
       kind: 'Daemonset',
+      containers: [
+        'consul',
+      ],
+    },
+    'consul-server': {
+      kind: 'StatefulSet',
       containers: [
         'consul',
       ],
@@ -35,19 +47,23 @@ metricsCatalog.serviceDefinition({
       userImpacting: false,
       featureCategory: 'not_owned',
       description: |||
-        HTTP GET requests handled by the Consul agent.
+        Increments whenever a Consul agent in client mode makes an RPC request to a Consul server
       |||,
 
-      requestRate: metricsCatalog.derivMetric(
-        counter='consul_http_GET_v1_agent_metrics_count',
-        clampMinZero=true,
+      local ConsulSelector = {
+        job: 'consul',
+      },
+      requestRate: rateMetric(
+        counter='consul_client_rpc',
+        selector=ConsulSelector,
       ),
 
-      significantLabels: ['type'],
+      errorRate: rateMetric(
+        counter='consul_client_rpc_failed',
+        selector=ConsulSelector,
+      ),
 
-      toolingLinks: [
-        toolingLinks.kibana(title='Consul', index='consul', includeMatchersForPrometheusSelector=false),
-      ],
+      significantLabels: ['pod'],
     },
   },
   skippedMaturityCriteria: maturityLevels.skip({
