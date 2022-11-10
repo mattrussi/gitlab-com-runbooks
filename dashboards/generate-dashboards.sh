@@ -50,4 +50,4 @@ dry_run=${dry_run:-}
 
 prepare
 
-./find-dashboards.sh | xargs -n1 -P "$(nproc)" ./generate-dashboard.sh $args
+./find-dashboards.sh | xargs -n1 -P "$(nproc)" ./generate-dashboard.sh "$args"
