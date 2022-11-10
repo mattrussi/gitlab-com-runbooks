@@ -47,6 +47,7 @@
 * [Ad hoc observability tools on Kubernetes nodes](../kube/k8s-adhoc-observability.md)
 * [../kube/k8s-oncall-setup.md](../kube/k8s-oncall-setup.md)
 * [Kubernetes](../kube/kubernetes.md)
+* [Scaling Elastic Cloud instances](../logging/scaling.md)
 * [Alertmanager Notification Failures](../monitoring/alertmanager-notification-failures.md)
 * [Alerting](../monitoring/alerts_manual.md)
 * [../monitoring/apdex-alerts-guide.md](../monitoring/apdex-alerts-guide.md)
