@@ -1,4 +1,4 @@
-# Scaling Elastic Cloud instances
+# Scaling Elastic Cloud Clusters
 
 You are most likely re-sizing the hot data tier in Elasticsearch since all
 ingestion takes place through that tier before being migrated to the warm tier.
@@ -55,11 +55,14 @@ the menu on the right.
 
 ## Taking advantage of the new instances
 
-Addind more instances will help as Elasticsearch will start to move some shards
+Adding more instances will help as Elasticsearch will start to move some shards
 on to the new instances. But, the number of instances being leveraged to ingest
 data will still be bottlenecked by the number of shards for indices. Therefore
 the indices need their shard value increased to match the number of instances in
 a zone.
+
+Even after these changes are made, it will take hours (if not a day or so) to
+have the cluster fully using the new resources.
 
 ### Increase Index Template number_of_shards
 
