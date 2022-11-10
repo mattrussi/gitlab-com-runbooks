@@ -28,6 +28,8 @@ usage() {
 EOF
 }
 
+args="$@"
+
 while getopts ":Dh" o; do
   case "${o}" in
     D)
@@ -48,26 +50,4 @@ dry_run=${dry_run:-}
 
 prepare
 
-mkdir -p 'generated'
-
-find_dashboards "$@" | while read -r line; do
-  relative=${line#"./"}
-  folder=${GRAFANA_FOLDER:-$(dirname "$relative")}
-
-  mkdir -p "generated/${folder}"
-
-  generate_dashboards_for_file "${line}" | while IFS= read -r manifest; do
-    uid=$(echo "$manifest" | jq '.uid' | tr -d '"')
-    if [ -z "$uid" ]; then
-      echo "Warning: empty dashboard for $line"
-      continue
-    fi
-
-    if [[ -n $dry_run ]]; then
-      echo "Dry Run: Would have written generated manifest for ${uid} in dashboards/generated/$folder/$uid.json"
-    else
-      echo "$manifest" >"generated/${folder}/${uid}.json"
-      echo "Wrote generated manifest for ${uid} in dashboards/generated/$folder/$uid.json"
-    fi
-  done
-done
+./find-dashboards.sh | xargs -n1 -P "$(nproc)" ./generate-dashboard.sh $args
