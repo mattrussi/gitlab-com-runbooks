@@ -86,6 +86,12 @@ shards for an index will not change, but the warm data tier (probably) has less
 instances. We need to update the lifecycle policy for the right template level
 to make sure we allow enough shards per instance to fit the new index size.
 
+We can determine how many `total_shards_per_node` to set for the warm data tier
+to accomodate the new number of shards by dividing the number of shards by the
+number of instances in a zone in the warm tier. Right now, the warm tier has 5
+instances per zone, so growing to a size of 19 (for example), would require a
+warm tier instance to be able to host 3.8 shards. We round up to 4.
+
 Create an MR to update these values:
 
 * `number_of_shards` in elastic/managed-objects/lib/settings_gprd.libsonnet
