@@ -32,6 +32,7 @@
 * [Kubernetes-Agent Basic Troubleshooting](../kas/kubernetes-agent-basic-troubleshooting.md)
 * [Kubernetes](../kube/kubernetes.md)
 * [logging_gcs_archive_bigquery.md](logging_gcs_archive_bigquery.md)
+* [Scaling Elastic Cloud Clusters](scaling.md)
 * [Diagnosis with Kibana](../onboarding/kibana-diagnosis.md)
 * [GitLab Pages returning 404](../pages/gitlab-pages.md)
 * [Troubleshooting LetsEncrypt for Pages](../pages/pages-letsencrypt.md)
