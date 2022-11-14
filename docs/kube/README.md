@@ -16,6 +16,7 @@
 
 ## Troubleshooting Pointers
 
+* [Interacting with Consul](../consul/interaction.md)
 * [../elastic/kibana.md](../elastic/kibana.md)
 * [../git/gitlab-review-app-certs.md](../git/gitlab-review-app-certs.md)
 * [Kubernetes-Agent Basic Troubleshooting](../kas/kubernetes-agent-basic-troubleshooting.md)
