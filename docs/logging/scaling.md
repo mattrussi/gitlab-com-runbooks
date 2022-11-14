@@ -99,8 +99,8 @@ Create an MR to update these values:
 
 ## Verifying Changes
 
-You can make these API calls with curl or similar, or you can use the
-`API Console` in the Elastic Cloud Web UI for the deployment.
+You can make these API calls using the `API Console` in the Elastic Cloud Web
+UI, inside the Kibana interface Management Dev Tools, or with curl.
 
 ### Index Template Shard Number
 
