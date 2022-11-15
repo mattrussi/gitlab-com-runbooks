@@ -64,21 +64,29 @@ We enable the web UI, but do not easily expose it.  Follow the instructions
 below to access the full catalog of consul using their UI:
 
 1. Connect to the GKE cluster where Consul is hosted:
-```
-glsh kube use gprd
-```
+
+    ```
+    glsh kube use gprd
+    ```
+
 2. On a separate terminal, forward the Consul Server service port:
-```
-kubeclt port-forward service/consul-gl-consul-expose-servers 8500:8500 -n consul
-```
+
+    ```
+    kubeclt port-forward service/consul-gl-consul-expose-servers 8500:8500 -n consul
+    ```
+
 3. Open a browser and point it to `http://localhost:8500`
 4. You can also use the `consul` command on a terminal. Eg:
-```
-consul members
-```
+
+    ```
+    consul members
+    ```
+
 5. Enjoy
 
 ## Consul Server Maintenance
+
+TODO: this only applies to Consul running on VMs and we are not doing that anymore. Do we need this?
 
 When needing to perform maintenance on consul, it would be wise to gracefully
 remove the node from the cluster to prevent as much disruption as possible.
@@ -89,5 +97,5 @@ brings down the service preventing failover to that node.
    the consul service
 1. Prior to starting consul, one may need to remove any snapshots located inside
    of the data directory
-+1. Start consul - `systemctl start consul`
-+1. Validate that it is has joined the cluster as a follower
+1. Start consul - `systemctl start consul`
+1. Validate that it is has joined the cluster as a follower
