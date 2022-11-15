@@ -43,7 +43,7 @@ local setting(index, env) = if std.member(VERY_HIGH_THROUGHPUT, index) then {
     },
     refresh_interval: '10s',  // see: https://gitlab.com/gitlab-com/gl-infra/production/-/issues/3006#note_445081437
   },
-  number_of_shards: 17,
+  number_of_shards: 19,
   // number_of_replicas: 1,
 }
 else if std.member(HIGH_THROUGHPUT, index) then {
