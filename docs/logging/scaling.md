@@ -3,8 +3,6 @@
 You are most likely re-sizing the hot data tier in Elasticsearch since all
 ingestion takes place through that tier before being migrated to the warm tier.
 
-Pricing considerations?
-
 ## Logging into Elastic Cloud to manage deployments
 
 * Log into the [Elastic Cloud Log In](https://cloud.elastic.co/) using the
