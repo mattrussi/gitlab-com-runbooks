@@ -42,16 +42,15 @@
 
 ## Architecture
 
-Consul Server Cluster is a k8s StatefulSet deployed in the regional GKE cluster (ENV-gitlab-gke) with at least 5 total Pods. 
+Consul Server Cluster is a k8s StatefulSet deployed in the regional GKE cluster (ENV-gitlab-gke) with at least 5 total Pods.
 The StatefulSet is managed and deployed by the [gl-consul helm release](https://gitlab.com/gitlab-com/gl-infra/k8s-workloads/gitlab-helmfiles/-/blob/master/releases/consul/helmfile.yaml).
 
 The servers have one "leader" which serves as the primary server, and all others will be
 noted as "followers". We utilize 5 nodes as consul uses a quorum to ensure the data to be returned to clients is a state that all members of the consul cluster
-agree too. This also allows for at most 2 followers to be down before our consul cluster would be considered faulty. 
+agree too. This also allows for at most 2 followers to be down before our consul cluster would be considered faulty.
 
 Consul Server cluster ports are exposed by a `Loadbalancer` Service and can be reached by Consul clients from outside the k8s Cluster.
 Consul DNS is being exposed by a k8s Service as well and uses each local Consul Client to provide DNS resolution to the Rails workloads to be able to discover what is the Patroni primary and replica nodes.
-
 
 Reference: [Consul Architecture Overview](https://www.consul.io/docs/architecture)
 
@@ -66,7 +65,7 @@ changes to infrastructure topology.
 
 ### Physical Architecture
 
-Consul Server ports are exposed by a `Loadbalancer` Service and can be reached by Consul clients from outside the k8s Cluster. 
+Consul Server ports are exposed by a `Loadbalancer` Service and can be reached by Consul clients from outside the k8s Cluster.
 All firewall ports are open as necessary such that all components that will have consul deployed will be able to
 successfully talk to each other.
 
@@ -84,12 +83,12 @@ package "GCP" {
       [consul-client-n]
     }
   }
-  
+
   package "all-other-networks" {
     package "VM Fleets" {
       [consul agent]
     }
-    package "GKE <env>-useast1-[b,c,d]" {
+    package "GKE <env>-us-east-1[b,c,d]" {
       [consul-client - DaemonSet 2]
     }
   }
@@ -139,12 +138,11 @@ package "GCP" {
 ### Kubernetes
 
 * Kubernetes deploys the Consul Server Cluster as a StatefulSet with a minimum replica count of 5.
-* Kubernetes deploys the Consul Client agent as a DaemonSet such that it gets deployed
-  onto all nodes
-  * This provides any service which requires access to the service to be able to
-    speak to the local node on port `8600` for any inquiry.
+* Kubernetes deploys the Consul Client agent as a DaemonSet such that it gets deployed onto all nodes
+* The Consul Helm chart also provides a DNS service (`consul-gl-consul-dns.consul.svc.cluster.local:53`) and
+  this service is configured with `internalTrafficPolicy: local`. This means that any DNS queries from
+  web/api/git/etc pods that use the above endpoint should end up using their local Consul agent.
 * Both k8s Clients and Servers are configured via [`k8s-workloads/gitlab-helmfiles`](https://gitlab.com/gitlab-com/gl-infra/k8s-workloads/gitlab-helmfiles/-/tree/master/releases/consul)
-
 
 ### Consul VM Agents
 
@@ -159,7 +157,7 @@ document.
 ### Environment Specific
 
 In general, the configurations look nearly identical between production and
-staging.  Items that differ include the certificates, they keys, hostnames, and
+staging. Items that differ include the certificates, they keys, hostnames, and
 the environment metadata.
 
 ## Performance
@@ -317,5 +315,48 @@ All Gossip Protocol traffic is encrypted.  This key is stored in Vault under the
 * We only appear to alert on specific services and saturation of our nodes.  We
   do not appear to have any health metrics that are specific to the consul
   service
+
+## Deployments in k8s
+
+This section is about the deployment process of Consul server changes as Consul client deployments are low-risk
+and each pod in the deamonset will simply get terminated and replaced. The only gotcha is that _some_ DNS queries may
+fail as a result while the pod is being recreated.
+
+In gstg and gprd, we use a setting called `server.updatePartition`. This setting allows us to carefully control a
+rolling update of Consul server agents. With the default setting of `0`, k8s would simply replace each pod and wait
+for the health check to pass before moving onto the next pod. This _may_ be OK, but we could run into a situation
+where the pod passes health check, but then becomes unhealthy, and k8s has already moved onto the next pod. Since Consul is
+a critical service, we decided the human intervention to deploying changes was worth the pain to have control over the process.
+
+This setting `updatePartition` controls **how many instances of the server cluster are updated** when the `.spec.template` is updated.
+Only instances with an index greater than or equal to `updatePartition` (zero-indexed) are updated. So by setting this value to `4`,
+we're effectively saying only recreate the last pod (`...-consul-server-4`) but leave all other pods untouched.
+
+So how do you make a change and deploy it to **all** Consul server pods?
+
+1. MR/merge your change to [gitlab-helmfiles](https://gitlab.com/gitlab-com/gl-infra/k8s-workloads/gitlab-helmfiles)
+1. Once Helm starts to apply the change, you should see the `...-consul-server-4` pod get recreated, but the rest will remain unchanged.
+1. Helm will hang waiting for all pods to be recreated, so this is where you need to take action.
+1. Ensure you're pointing at the right env for kubectl
+1. Run:
+
+    ```
+    kubectl -n consul patch statefulset consul-gl-consul-server -p '{"spec":{"updateStrategy":{"rollingUpdate":{"partition":2}}}}'
+    ```
+
+1. You should now see 2 more pods get recreated. Wait until the Consul cluster is healthy (should only take a few secs to a minute) and do the last 2 pods:
+
+    ```
+    kubectl -n consul patch statefulset consul-gl-consul-server -p '{"spec":{"updateStrategy":{"rollingUpdate":{"partition":0}}}}'
+    ```
+
+1. You should now see the remaining 2 pods get recreated. You can now put the setting back to `4`:
+
+    ```
+    kubectl -n consul patch statefulset consul-gl-consul-server -p '{"spec":{"updateStrategy":{"rollingUpdate":{"partition":4}}}}'
+    ```
+
+1. You should now see the Helm apply job complete successfully. If your change affected both `gstg` and `gprd`, you'll need to do the
+   `updateStrategy.rollingUpdate.partition` dance for both environments.
 
 <!-- ## Links to further Documentation -->
