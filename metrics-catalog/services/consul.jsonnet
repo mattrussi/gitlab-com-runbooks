@@ -62,7 +62,9 @@ metricsCatalog.serviceDefinition({
         counter='consul_client_rpc_failed',
         selector=ConsulSelector,
       ),
-
+      toolingLinks: [
+        toolingLinks.kibana(title='Consul', index='consul', includeMatchersForPrometheusSelector=false),
+      ],
       significantLabels: ['pod'],
     },
   },
