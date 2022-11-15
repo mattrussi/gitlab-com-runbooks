@@ -1337,10 +1337,10 @@ groups:
       gitlab_regional_sli_ops:rate_5m{component="puma",monitor="global",stage="main",type="web"} offset 1h
       unless
       gitlab_regional_sli_ops:rate_5m{component="puma",monitor="global",stage="main",type="web"}
-  - alert: WebServiceRailsRequestsApdexSLOViolation
+  - alert: WebServiceRailsRequestApdexSLOViolation
     for: 2m
     annotations:
-      title: The rails_requests SLI of the web service (`{{ $labels.stage }}` stage)
+      title: The rails_request SLI of the web service (`{{ $labels.stage }}` stage)
         has an apdex violating SLO
       description: |
         The number of requests meeting their duration target based on the urgency of the endpoint. By default, a request should take no more than 1s. But this can be adjusted by endpoint.
@@ -1352,7 +1352,7 @@ groups:
       grafana_dashboard_link: https://dashboards.gitlab.net/d/web-main/web-overview?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-stage={{ $labels.stage }}
       grafana_min_zoom_hours: "6"
-      grafana_panel_id: "3831968369"
+      grafana_panel_id: "495984175"
       grafana_variables: environment,stage
       runbook: docs/web/README.md
     labels:
@@ -1370,23 +1370,23 @@ groups:
     expr: |
       (
         (
-          gitlab_component_apdex:ratio_1h{component="rails_requests",monitor="global",type="web"}
+          gitlab_component_apdex:ratio_1h{component="rails_request",monitor="global",type="web"}
           < (1 - 14.4 * 0.002000)
         )
         and
         (
-          gitlab_component_apdex:ratio_5m{component="rails_requests",monitor="global",type="web"}
+          gitlab_component_apdex:ratio_5m{component="rails_request",monitor="global",type="web"}
           < (1 - 14.4 * 0.002000)
         )
       )
       and on(env,environment,tier,type,stage,component)
       (
-        sum by(env,environment,tier,type,stage,component) (gitlab_component_ops:rate_1h{component="rails_requests",monitor="global",type="web"}) >= 1
+        sum by(env,environment,tier,type,stage,component) (gitlab_component_ops:rate_1h{component="rails_request",monitor="global",type="web"}) >= 1
       )
-  - alert: WebServiceRailsRequestsApdexSLOViolation
+  - alert: WebServiceRailsRequestApdexSLOViolation
     for: 2m
     annotations:
-      title: The rails_requests SLI of the web service (`{{ $labels.stage }}` stage)
+      title: The rails_request SLI of the web service (`{{ $labels.stage }}` stage)
         has an apdex violating SLO
       description: |
         The number of requests meeting their duration target based on the urgency of the endpoint. By default, a request should take no more than 1s. But this can be adjusted by endpoint.
@@ -1398,7 +1398,7 @@ groups:
       grafana_dashboard_link: https://dashboards.gitlab.net/d/web-main/web-overview?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-stage={{ $labels.stage }}
       grafana_min_zoom_hours: "6"
-      grafana_panel_id: "3831968369"
+      grafana_panel_id: "495984175"
       grafana_variables: environment,stage
       runbook: docs/web/README.md
     labels:
@@ -1416,23 +1416,23 @@ groups:
     expr: |
       (
         (
-          gitlab_component_apdex:ratio_6h{component="rails_requests",monitor="global",type="web"}
+          gitlab_component_apdex:ratio_6h{component="rails_request",monitor="global",type="web"}
           < (1 - 6 * 0.002000)
         )
         and
         (
-          gitlab_component_apdex:ratio_30m{component="rails_requests",monitor="global",type="web"}
+          gitlab_component_apdex:ratio_30m{component="rails_request",monitor="global",type="web"}
           < (1 - 6 * 0.002000)
         )
       )
       and on(env,environment,tier,type,stage,component)
       (
-        sum by(env,environment,tier,type,stage,component) (gitlab_component_ops:rate_6h{component="rails_requests",monitor="global",type="web"}) >= 0.16667
+        sum by(env,environment,tier,type,stage,component) (gitlab_component_ops:rate_6h{component="rails_request",monitor="global",type="web"}) >= 0.16667
       )
-  - alert: WebServiceRailsRequestsApdexSLOViolationRegional
+  - alert: WebServiceRailsRequestApdexSLOViolationRegional
     for: 2m
     annotations:
-      title: The rails_requests SLI of the web service in region `{{ $labels.region
+      title: The rails_request SLI of the web service in region `{{ $labels.region
         }}` has an apdex violating SLO
       description: |
         The number of requests meeting their duration target based on the urgency of the endpoint. By default, a request should take no more than 1s. But this can be adjusted by endpoint.
@@ -1446,7 +1446,7 @@ groups:
       grafana_dashboard_link: https://dashboards.gitlab.net/d/web-main/web-overview?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-stage={{ $labels.stage }}
       grafana_min_zoom_hours: "6"
-      grafana_panel_id: "3831968369"
+      grafana_panel_id: "495984175"
       grafana_variables: environment,stage
       runbook: docs/web/README.md
     labels:
@@ -1464,23 +1464,23 @@ groups:
     expr: |
       (
         (
-          gitlab_regional_sli_apdex:ratio_1h{component="rails_requests",monitor="global",type="web"}
+          gitlab_regional_sli_apdex:ratio_1h{component="rails_request",monitor="global",type="web"}
           < (1 - 14.4 * 0.002000)
         )
         and
         (
-          gitlab_regional_sli_apdex:ratio_5m{component="rails_requests",monitor="global",type="web"}
+          gitlab_regional_sli_apdex:ratio_5m{component="rails_request",monitor="global",type="web"}
           < (1 - 14.4 * 0.002000)
         )
       )
       and on(env,environment,tier,type,stage,region,component)
       (
-        sum by(env,environment,tier,type,stage,region,component) (gitlab_regional_sli_ops:rate_1h{component="rails_requests",monitor="global",type="web"}) >= 1
+        sum by(env,environment,tier,type,stage,region,component) (gitlab_regional_sli_ops:rate_1h{component="rails_request",monitor="global",type="web"}) >= 1
       )
-  - alert: WebServiceRailsRequestsApdexSLOViolationRegional
+  - alert: WebServiceRailsRequestApdexSLOViolationRegional
     for: 2m
     annotations:
-      title: The rails_requests SLI of the web service in region `{{ $labels.region
+      title: The rails_request SLI of the web service in region `{{ $labels.region
         }}` has an apdex violating SLO
       description: |
         The number of requests meeting their duration target based on the urgency of the endpoint. By default, a request should take no more than 1s. But this can be adjusted by endpoint.
@@ -1494,7 +1494,7 @@ groups:
       grafana_dashboard_link: https://dashboards.gitlab.net/d/web-main/web-overview?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-stage={{ $labels.stage }}
       grafana_min_zoom_hours: "6"
-      grafana_panel_id: "3831968369"
+      grafana_panel_id: "495984175"
       grafana_variables: environment,stage
       runbook: docs/web/README.md
     labels:
@@ -1512,23 +1512,23 @@ groups:
     expr: |
       (
         (
-          gitlab_regional_sli_apdex:ratio_6h{component="rails_requests",monitor="global",type="web"}
+          gitlab_regional_sli_apdex:ratio_6h{component="rails_request",monitor="global",type="web"}
           < (1 - 6 * 0.002000)
         )
         and
         (
-          gitlab_regional_sli_apdex:ratio_30m{component="rails_requests",monitor="global",type="web"}
+          gitlab_regional_sli_apdex:ratio_30m{component="rails_request",monitor="global",type="web"}
           < (1 - 6 * 0.002000)
         )
       )
       and on(env,environment,tier,type,stage,region,component)
       (
-        sum by(env,environment,tier,type,stage,region,component) (gitlab_regional_sli_ops:rate_6h{component="rails_requests",monitor="global",type="web"}) >= 0.16667
+        sum by(env,environment,tier,type,stage,region,component) (gitlab_regional_sli_ops:rate_6h{component="rails_request",monitor="global",type="web"}) >= 0.16667
       )
-  - alert: WebServiceRailsRequestsTrafficCessation
+  - alert: WebServiceRailsRequestTrafficCessation
     for: 5m
     annotations:
-      title: The rails_requests SLI of the web service (`{{ $labels.stage }}` stage)
+      title: The rails_request SLI of the web service (`{{ $labels.stage }}` stage)
         has not received any traffic in the past 30m
       description: |
         The number of requests meeting their duration target based on the urgency of the endpoint. By default, a request should take no more than 1s. But this can be adjusted by endpoint.
@@ -1540,7 +1540,7 @@ groups:
       grafana_dashboard_link: https://dashboards.gitlab.net/d/web-main/web-overview?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-stage={{ $labels.stage }}
       grafana_min_zoom_hours: "6"
-      grafana_panel_id: "164190586"
+      grafana_panel_id: "538903447"
       grafana_variables: environment,stage
       promql_template_1: |
         sum by (env,environment,tier,stage) (
@@ -1559,13 +1559,13 @@ groups:
       slo_alert: "no"
       user_impacting: "yes"
     expr: |
-      gitlab_component_ops:rate_30m{component="rails_requests",monitor="global",stage="main",type="web"} == 0
+      gitlab_component_ops:rate_30m{component="rails_request",monitor="global",stage="main",type="web"} == 0
       and
-      gitlab_component_ops:rate_30m{component="rails_requests",monitor="global",stage="main",type="web"} offset 1h >= 0.16666666666666666
-  - alert: WebServiceRailsRequestsTrafficAbsent
+      gitlab_component_ops:rate_30m{component="rails_request",monitor="global",stage="main",type="web"} offset 1h >= 0.16666666666666666
+  - alert: WebServiceRailsRequestTrafficAbsent
     for: 30m
     annotations:
-      title: The rails_requests SLI of the web service (`{{ $labels.stage }}` stage)
+      title: The rails_request SLI of the web service (`{{ $labels.stage }}` stage)
         has not reported any traffic in the past 30m
       description: |
         The number of requests meeting their duration target based on the urgency of the endpoint. By default, a request should take no more than 1s. But this can be adjusted by endpoint.
@@ -1579,7 +1579,7 @@ groups:
       grafana_dashboard_link: https://dashboards.gitlab.net/d/web-main/web-overview?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-stage={{ $labels.stage }}
       grafana_min_zoom_hours: "6"
-      grafana_panel_id: "164190586"
+      grafana_panel_id: "538903447"
       grafana_variables: environment,stage
       promql_template_1: |
         sum by (env,environment,tier,stage) (
@@ -1598,13 +1598,13 @@ groups:
       slo_alert: "no"
       user_impacting: "yes"
     expr: |
-      gitlab_component_ops:rate_5m{component="rails_requests",monitor="global",stage="main",type="web"} offset 1h
+      gitlab_component_ops:rate_5m{component="rails_request",monitor="global",stage="main",type="web"} offset 1h
       unless
-      gitlab_component_ops:rate_5m{component="rails_requests",monitor="global",stage="main",type="web"}
-  - alert: WebServiceRailsRequestsTrafficCessationRegional
+      gitlab_component_ops:rate_5m{component="rails_request",monitor="global",stage="main",type="web"}
+  - alert: WebServiceRailsRequestTrafficCessationRegional
     for: 5m
     annotations:
-      title: The rails_requests SLI of the web service in region `{{ $labels.region
+      title: The rails_request SLI of the web service in region `{{ $labels.region
         }}` has not received any traffic in the past 30m
       description: |
         The number of requests meeting their duration target based on the urgency of the endpoint. By default, a request should take no more than 1s. But this can be adjusted by endpoint.
@@ -1618,7 +1618,7 @@ groups:
       grafana_dashboard_link: https://dashboards.gitlab.net/d/web-main/web-overview?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-stage={{ $labels.stage }}
       grafana_min_zoom_hours: "6"
-      grafana_panel_id: "164190586"
+      grafana_panel_id: "538903447"
       grafana_variables: environment,stage
       promql_template_1: |
         sum by (env,environment,tier,stage,region) (
@@ -1637,13 +1637,13 @@ groups:
       slo_alert: "no"
       user_impacting: "yes"
     expr: |
-      gitlab_regional_sli_ops:rate_30m{component="rails_requests",monitor="global",stage="main",type="web"} == 0
+      gitlab_regional_sli_ops:rate_30m{component="rails_request",monitor="global",stage="main",type="web"} == 0
       and
-      gitlab_regional_sli_ops:rate_30m{component="rails_requests",monitor="global",stage="main",type="web"} offset 1h >= 0.16666666666666666
-  - alert: WebServiceRailsRequestsTrafficAbsentRegional
+      gitlab_regional_sli_ops:rate_30m{component="rails_request",monitor="global",stage="main",type="web"} offset 1h >= 0.16666666666666666
+  - alert: WebServiceRailsRequestTrafficAbsentRegional
     for: 30m
     annotations:
-      title: The rails_requests SLI of the web service in region `{{ $labels.region
+      title: The rails_request SLI of the web service in region `{{ $labels.region
         }}` has not reported any traffic in the past 30m
       description: |
         The number of requests meeting their duration target based on the urgency of the endpoint. By default, a request should take no more than 1s. But this can be adjusted by endpoint.
@@ -1659,7 +1659,7 @@ groups:
       grafana_dashboard_link: https://dashboards.gitlab.net/d/web-main/web-overview?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-stage={{ $labels.stage }}
       grafana_min_zoom_hours: "6"
-      grafana_panel_id: "164190586"
+      grafana_panel_id: "538903447"
       grafana_variables: environment,stage
       promql_template_1: |
         sum by (env,environment,tier,stage,region) (
@@ -1678,9 +1678,9 @@ groups:
       slo_alert: "no"
       user_impacting: "yes"
     expr: |
-      gitlab_regional_sli_ops:rate_5m{component="rails_requests",monitor="global",stage="main",type="web"} offset 1h
+      gitlab_regional_sli_ops:rate_5m{component="rails_request",monitor="global",stage="main",type="web"} offset 1h
       unless
-      gitlab_regional_sli_ops:rate_5m{component="rails_requests",monitor="global",stage="main",type="web"}
+      gitlab_regional_sli_ops:rate_5m{component="rails_request",monitor="global",stage="main",type="web"}
   - alert: WebServiceWorkhorseApdexSLOViolation
     for: 2m
     annotations:

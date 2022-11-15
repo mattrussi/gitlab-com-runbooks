@@ -178,7 +178,7 @@ groups:
       )
   - record: gitlab_component_apdex:success:rate
     labels:
-      component: rails_requests
+      component: rails_request
       tier: sv
       type: git
     expr: |
@@ -187,7 +187,7 @@ groups:
       )
   - record: gitlab_component_apdex:weight:score
     labels:
-      component: rails_requests
+      component: rails_request
       tier: sv
       type: git
     expr: |
@@ -196,7 +196,7 @@ groups:
       )
   - record: gitlab_component_ops:rate
     labels:
-      component: rails_requests
+      component: rails_request
       tier: sv
       type: git
     expr: |
@@ -476,7 +476,7 @@ groups:
       )
   - record: gitlab_component_apdex:success:rate_5m
     labels:
-      component: rails_requests
+      component: rails_request
       tier: sv
       type: git
     expr: |
@@ -485,7 +485,7 @@ groups:
       )
   - record: gitlab_component_apdex:weight:score_5m
     labels:
-      component: rails_requests
+      component: rails_request
       tier: sv
       type: git
     expr: |
@@ -494,7 +494,7 @@ groups:
       )
   - record: gitlab_component_ops:rate_5m
     labels:
-      component: rails_requests
+      component: rails_request
       tier: sv
       type: git
     expr: |
@@ -774,7 +774,7 @@ groups:
       )
   - record: gitlab_component_apdex:success:rate_30m
     labels:
-      component: rails_requests
+      component: rails_request
       tier: sv
       type: git
     expr: |
@@ -783,7 +783,7 @@ groups:
       )
   - record: gitlab_component_apdex:weight:score_30m
     labels:
-      component: rails_requests
+      component: rails_request
       tier: sv
       type: git
     expr: |
@@ -792,7 +792,7 @@ groups:
       )
   - record: gitlab_component_ops:rate_30m
     labels:
-      component: rails_requests
+      component: rails_request
       tier: sv
       type: git
     expr: |
@@ -1072,7 +1072,7 @@ groups:
       )
   - record: gitlab_component_apdex:success:rate_1h
     labels:
-      component: rails_requests
+      component: rails_request
       tier: sv
       type: git
     expr: |
@@ -1081,7 +1081,7 @@ groups:
       )
   - record: gitlab_component_apdex:weight:score_1h
     labels:
-      component: rails_requests
+      component: rails_request
       tier: sv
       type: git
     expr: |
@@ -1090,7 +1090,7 @@ groups:
       )
   - record: gitlab_component_ops:rate_1h
     labels:
-      component: rails_requests
+      component: rails_request
       tier: sv
       type: git
     expr: |
@@ -1370,7 +1370,7 @@ groups:
       )
   - record: gitlab_component_apdex:success:rate_6h
     labels:
-      component: rails_requests
+      component: rails_request
       tier: sv
       type: git
     expr: |
@@ -1379,7 +1379,7 @@ groups:
       )
   - record: gitlab_component_apdex:weight:score_6h
     labels:
-      component: rails_requests
+      component: rails_request
       tier: sv
       type: git
     expr: |
@@ -1388,7 +1388,7 @@ groups:
       )
   - record: gitlab_component_ops:rate_6h
     labels:
-      component: rails_requests
+      component: rails_request
       tier: sv
       type: git
     expr: |
@@ -1536,7 +1536,7 @@ groups:
     expr: "1"
   - record: gitlab_component_service:mapping
     labels:
-      component: rails_requests
+      component: rails_request
       regional_aggregation: "yes"
       service_aggregation: "yes"
       tier: sv

@@ -325,10 +325,10 @@ groups:
       gitlab_regional_sli_ops:rate_5m{component="global_search",monitor="global",stage="main",type="api"} offset 1h
       unless
       gitlab_regional_sli_ops:rate_5m{component="global_search",monitor="global",stage="main",type="api"}
-  - alert: ApiServiceGraphqlQueriesApdexSLOViolation
+  - alert: ApiServiceGraphqlQueryApdexSLOViolation
     for: 2m
     annotations:
-      title: The graphql_queries SLI of the api service (`{{ $labels.stage }}` stage)
+      title: The graphql_query SLI of the api service (`{{ $labels.stage }}` stage)
         has an apdex violating SLO
       description: |
         The number of GraphQL queries meeting their duration target based on the urgency of the endpoint. By default, a query should take no more than 1s. We're working on making the urgency customizable in [this epic](https://gitlab.com/groups/gitlab-org/-/epics/5841).
@@ -340,7 +340,7 @@ groups:
       grafana_dashboard_link: https://dashboards.gitlab.net/d/api-main/api-overview?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-stage={{ $labels.stage }}
       grafana_min_zoom_hours: "6"
-      grafana_panel_id: "2613733144"
+      grafana_panel_id: "3837080777"
       grafana_variables: environment,stage
       runbook: docs/api/README.md
     labels:
@@ -358,23 +358,23 @@ groups:
     expr: |
       (
         (
-          gitlab_component_apdex:ratio_1h{component="graphql_queries",monitor="global",type="api"}
+          gitlab_component_apdex:ratio_1h{component="graphql_query",monitor="global",type="api"}
           < (1 - 14.4 * 0.005000)
         )
         and
         (
-          gitlab_component_apdex:ratio_5m{component="graphql_queries",monitor="global",type="api"}
+          gitlab_component_apdex:ratio_5m{component="graphql_query",monitor="global",type="api"}
           < (1 - 14.4 * 0.005000)
         )
       )
       and on(env,environment,tier,type,stage,component)
       (
-        sum by(env,environment,tier,type,stage,component) (gitlab_component_ops:rate_1h{component="graphql_queries",monitor="global",type="api"}) >= 1
+        sum by(env,environment,tier,type,stage,component) (gitlab_component_ops:rate_1h{component="graphql_query",monitor="global",type="api"}) >= 1
       )
-  - alert: ApiServiceGraphqlQueriesApdexSLOViolation
+  - alert: ApiServiceGraphqlQueryApdexSLOViolation
     for: 2m
     annotations:
-      title: The graphql_queries SLI of the api service (`{{ $labels.stage }}` stage)
+      title: The graphql_query SLI of the api service (`{{ $labels.stage }}` stage)
         has an apdex violating SLO
       description: |
         The number of GraphQL queries meeting their duration target based on the urgency of the endpoint. By default, a query should take no more than 1s. We're working on making the urgency customizable in [this epic](https://gitlab.com/groups/gitlab-org/-/epics/5841).
@@ -386,7 +386,7 @@ groups:
       grafana_dashboard_link: https://dashboards.gitlab.net/d/api-main/api-overview?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-stage={{ $labels.stage }}
       grafana_min_zoom_hours: "6"
-      grafana_panel_id: "2613733144"
+      grafana_panel_id: "3837080777"
       grafana_variables: environment,stage
       runbook: docs/api/README.md
     labels:
@@ -404,23 +404,23 @@ groups:
     expr: |
       (
         (
-          gitlab_component_apdex:ratio_6h{component="graphql_queries",monitor="global",type="api"}
+          gitlab_component_apdex:ratio_6h{component="graphql_query",monitor="global",type="api"}
           < (1 - 6 * 0.005000)
         )
         and
         (
-          gitlab_component_apdex:ratio_30m{component="graphql_queries",monitor="global",type="api"}
+          gitlab_component_apdex:ratio_30m{component="graphql_query",monitor="global",type="api"}
           < (1 - 6 * 0.005000)
         )
       )
       and on(env,environment,tier,type,stage,component)
       (
-        sum by(env,environment,tier,type,stage,component) (gitlab_component_ops:rate_6h{component="graphql_queries",monitor="global",type="api"}) >= 0.16667
+        sum by(env,environment,tier,type,stage,component) (gitlab_component_ops:rate_6h{component="graphql_query",monitor="global",type="api"}) >= 0.16667
       )
-  - alert: ApiServiceGraphqlQueriesApdexSLOViolationRegional
+  - alert: ApiServiceGraphqlQueryApdexSLOViolationRegional
     for: 2m
     annotations:
-      title: The graphql_queries SLI of the api service in region `{{ $labels.region
+      title: The graphql_query SLI of the api service in region `{{ $labels.region
         }}` has an apdex violating SLO
       description: |
         The number of GraphQL queries meeting their duration target based on the urgency of the endpoint. By default, a query should take no more than 1s. We're working on making the urgency customizable in [this epic](https://gitlab.com/groups/gitlab-org/-/epics/5841).
@@ -434,7 +434,7 @@ groups:
       grafana_dashboard_link: https://dashboards.gitlab.net/d/api-main/api-overview?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-stage={{ $labels.stage }}
       grafana_min_zoom_hours: "6"
-      grafana_panel_id: "2613733144"
+      grafana_panel_id: "3837080777"
       grafana_variables: environment,stage
       runbook: docs/api/README.md
     labels:
@@ -452,23 +452,23 @@ groups:
     expr: |
       (
         (
-          gitlab_regional_sli_apdex:ratio_1h{component="graphql_queries",monitor="global",type="api"}
+          gitlab_regional_sli_apdex:ratio_1h{component="graphql_query",monitor="global",type="api"}
           < (1 - 14.4 * 0.005000)
         )
         and
         (
-          gitlab_regional_sli_apdex:ratio_5m{component="graphql_queries",monitor="global",type="api"}
+          gitlab_regional_sli_apdex:ratio_5m{component="graphql_query",monitor="global",type="api"}
           < (1 - 14.4 * 0.005000)
         )
       )
       and on(env,environment,tier,type,stage,region,component)
       (
-        sum by(env,environment,tier,type,stage,region,component) (gitlab_regional_sli_ops:rate_1h{component="graphql_queries",monitor="global",type="api"}) >= 1
+        sum by(env,environment,tier,type,stage,region,component) (gitlab_regional_sli_ops:rate_1h{component="graphql_query",monitor="global",type="api"}) >= 1
       )
-  - alert: ApiServiceGraphqlQueriesApdexSLOViolationRegional
+  - alert: ApiServiceGraphqlQueryApdexSLOViolationRegional
     for: 2m
     annotations:
-      title: The graphql_queries SLI of the api service in region `{{ $labels.region
+      title: The graphql_query SLI of the api service in region `{{ $labels.region
         }}` has an apdex violating SLO
       description: |
         The number of GraphQL queries meeting their duration target based on the urgency of the endpoint. By default, a query should take no more than 1s. We're working on making the urgency customizable in [this epic](https://gitlab.com/groups/gitlab-org/-/epics/5841).
@@ -482,7 +482,7 @@ groups:
       grafana_dashboard_link: https://dashboards.gitlab.net/d/api-main/api-overview?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-stage={{ $labels.stage }}
       grafana_min_zoom_hours: "6"
-      grafana_panel_id: "2613733144"
+      grafana_panel_id: "3837080777"
       grafana_variables: environment,stage
       runbook: docs/api/README.md
     labels:
@@ -500,23 +500,23 @@ groups:
     expr: |
       (
         (
-          gitlab_regional_sli_apdex:ratio_6h{component="graphql_queries",monitor="global",type="api"}
+          gitlab_regional_sli_apdex:ratio_6h{component="graphql_query",monitor="global",type="api"}
           < (1 - 6 * 0.005000)
         )
         and
         (
-          gitlab_regional_sli_apdex:ratio_30m{component="graphql_queries",monitor="global",type="api"}
+          gitlab_regional_sli_apdex:ratio_30m{component="graphql_query",monitor="global",type="api"}
           < (1 - 6 * 0.005000)
         )
       )
       and on(env,environment,tier,type,stage,region,component)
       (
-        sum by(env,environment,tier,type,stage,region,component) (gitlab_regional_sli_ops:rate_6h{component="graphql_queries",monitor="global",type="api"}) >= 0.16667
+        sum by(env,environment,tier,type,stage,region,component) (gitlab_regional_sli_ops:rate_6h{component="graphql_query",monitor="global",type="api"}) >= 0.16667
       )
-  - alert: ApiServiceGraphqlQueriesTrafficCessation
+  - alert: ApiServiceGraphqlQueryTrafficCessation
     for: 5m
     annotations:
-      title: The graphql_queries SLI of the api service (`{{ $labels.stage }}` stage)
+      title: The graphql_query SLI of the api service (`{{ $labels.stage }}` stage)
         has not received any traffic in the past 30m
       description: |
         The number of GraphQL queries meeting their duration target based on the urgency of the endpoint. By default, a query should take no more than 1s. We're working on making the urgency customizable in [this epic](https://gitlab.com/groups/gitlab-org/-/epics/5841).
@@ -528,7 +528,7 @@ groups:
       grafana_dashboard_link: https://dashboards.gitlab.net/d/api-main/api-overview?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-stage={{ $labels.stage }}
       grafana_min_zoom_hours: "6"
-      grafana_panel_id: "1423714754"
+      grafana_panel_id: "1872300215"
       grafana_variables: environment,stage
       promql_template_1: |
         sum by (env,environment,tier,stage) (
@@ -547,13 +547,13 @@ groups:
       slo_alert: "no"
       user_impacting: "yes"
     expr: |
-      gitlab_component_ops:rate_30m{component="graphql_queries",monitor="global",stage="main",type="api"} == 0
+      gitlab_component_ops:rate_30m{component="graphql_query",monitor="global",stage="main",type="api"} == 0
       and
-      gitlab_component_ops:rate_30m{component="graphql_queries",monitor="global",stage="main",type="api"} offset 1h >= 0.16666666666666666
-  - alert: ApiServiceGraphqlQueriesTrafficAbsent
+      gitlab_component_ops:rate_30m{component="graphql_query",monitor="global",stage="main",type="api"} offset 1h >= 0.16666666666666666
+  - alert: ApiServiceGraphqlQueryTrafficAbsent
     for: 30m
     annotations:
-      title: The graphql_queries SLI of the api service (`{{ $labels.stage }}` stage)
+      title: The graphql_query SLI of the api service (`{{ $labels.stage }}` stage)
         has not reported any traffic in the past 30m
       description: |
         The number of GraphQL queries meeting their duration target based on the urgency of the endpoint. By default, a query should take no more than 1s. We're working on making the urgency customizable in [this epic](https://gitlab.com/groups/gitlab-org/-/epics/5841).
@@ -567,7 +567,7 @@ groups:
       grafana_dashboard_link: https://dashboards.gitlab.net/d/api-main/api-overview?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-stage={{ $labels.stage }}
       grafana_min_zoom_hours: "6"
-      grafana_panel_id: "1423714754"
+      grafana_panel_id: "1872300215"
       grafana_variables: environment,stage
       promql_template_1: |
         sum by (env,environment,tier,stage) (
@@ -586,13 +586,13 @@ groups:
       slo_alert: "no"
       user_impacting: "yes"
     expr: |
-      gitlab_component_ops:rate_5m{component="graphql_queries",monitor="global",stage="main",type="api"} offset 1h
+      gitlab_component_ops:rate_5m{component="graphql_query",monitor="global",stage="main",type="api"} offset 1h
       unless
-      gitlab_component_ops:rate_5m{component="graphql_queries",monitor="global",stage="main",type="api"}
-  - alert: ApiServiceGraphqlQueriesTrafficCessationRegional
+      gitlab_component_ops:rate_5m{component="graphql_query",monitor="global",stage="main",type="api"}
+  - alert: ApiServiceGraphqlQueryTrafficCessationRegional
     for: 5m
     annotations:
-      title: The graphql_queries SLI of the api service in region `{{ $labels.region
+      title: The graphql_query SLI of the api service in region `{{ $labels.region
         }}` has not received any traffic in the past 30m
       description: |
         The number of GraphQL queries meeting their duration target based on the urgency of the endpoint. By default, a query should take no more than 1s. We're working on making the urgency customizable in [this epic](https://gitlab.com/groups/gitlab-org/-/epics/5841).
@@ -606,7 +606,7 @@ groups:
       grafana_dashboard_link: https://dashboards.gitlab.net/d/api-main/api-overview?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-stage={{ $labels.stage }}
       grafana_min_zoom_hours: "6"
-      grafana_panel_id: "1423714754"
+      grafana_panel_id: "1872300215"
       grafana_variables: environment,stage
       promql_template_1: |
         sum by (env,environment,tier,stage,region) (
@@ -625,13 +625,13 @@ groups:
       slo_alert: "no"
       user_impacting: "yes"
     expr: |
-      gitlab_regional_sli_ops:rate_30m{component="graphql_queries",monitor="global",stage="main",type="api"} == 0
+      gitlab_regional_sli_ops:rate_30m{component="graphql_query",monitor="global",stage="main",type="api"} == 0
       and
-      gitlab_regional_sli_ops:rate_30m{component="graphql_queries",monitor="global",stage="main",type="api"} offset 1h >= 0.16666666666666666
-  - alert: ApiServiceGraphqlQueriesTrafficAbsentRegional
+      gitlab_regional_sli_ops:rate_30m{component="graphql_query",monitor="global",stage="main",type="api"} offset 1h >= 0.16666666666666666
+  - alert: ApiServiceGraphqlQueryTrafficAbsentRegional
     for: 30m
     annotations:
-      title: The graphql_queries SLI of the api service in region `{{ $labels.region
+      title: The graphql_query SLI of the api service in region `{{ $labels.region
         }}` has not reported any traffic in the past 30m
       description: |
         The number of GraphQL queries meeting their duration target based on the urgency of the endpoint. By default, a query should take no more than 1s. We're working on making the urgency customizable in [this epic](https://gitlab.com/groups/gitlab-org/-/epics/5841).
@@ -647,7 +647,7 @@ groups:
       grafana_dashboard_link: https://dashboards.gitlab.net/d/api-main/api-overview?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-stage={{ $labels.stage }}
       grafana_min_zoom_hours: "6"
-      grafana_panel_id: "1423714754"
+      grafana_panel_id: "1872300215"
       grafana_variables: environment,stage
       promql_template_1: |
         sum by (env,environment,tier,stage,region) (
@@ -666,9 +666,9 @@ groups:
       slo_alert: "no"
       user_impacting: "yes"
     expr: |
-      gitlab_regional_sli_ops:rate_5m{component="graphql_queries",monitor="global",stage="main",type="api"} offset 1h
+      gitlab_regional_sli_ops:rate_5m{component="graphql_query",monitor="global",stage="main",type="api"} offset 1h
       unless
-      gitlab_regional_sli_ops:rate_5m{component="graphql_queries",monitor="global",stage="main",type="api"}
+      gitlab_regional_sli_ops:rate_5m{component="graphql_query",monitor="global",stage="main",type="api"}
   - alert: ApiServiceLoadbalancerErrorSLOViolation
     for: 2m
     annotations:
@@ -1669,10 +1669,10 @@ groups:
       gitlab_regional_sli_ops:rate_5m{component="puma",monitor="global",stage="main",type="api"} offset 1h
       unless
       gitlab_regional_sli_ops:rate_5m{component="puma",monitor="global",stage="main",type="api"}
-  - alert: ApiServiceRailsRequestsApdexSLOViolation
+  - alert: ApiServiceRailsRequestApdexSLOViolation
     for: 2m
     annotations:
-      title: The rails_requests SLI of the api service (`{{ $labels.stage }}` stage)
+      title: The rails_request SLI of the api service (`{{ $labels.stage }}` stage)
         has an apdex violating SLO
       description: |
         The number of requests meeting their duration target based on the urgency of the endpoint. By default, a request should take no more than 1s. But this can be adjusted by endpoint.
@@ -1684,7 +1684,7 @@ groups:
       grafana_dashboard_link: https://dashboards.gitlab.net/d/api-main/api-overview?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-stage={{ $labels.stage }}
       grafana_min_zoom_hours: "6"
-      grafana_panel_id: "3831968369"
+      grafana_panel_id: "495984175"
       grafana_variables: environment,stage
       runbook: docs/api/README.md
     labels:
@@ -1702,23 +1702,23 @@ groups:
     expr: |
       (
         (
-          gitlab_component_apdex:ratio_1h{component="rails_requests",monitor="global",type="api"}
+          gitlab_component_apdex:ratio_1h{component="rails_request",monitor="global",type="api"}
           < (1 - 14.4 * 0.010000)
         )
         and
         (
-          gitlab_component_apdex:ratio_5m{component="rails_requests",monitor="global",type="api"}
+          gitlab_component_apdex:ratio_5m{component="rails_request",monitor="global",type="api"}
           < (1 - 14.4 * 0.010000)
         )
       )
       and on(env,environment,tier,type,stage,component)
       (
-        sum by(env,environment,tier,type,stage,component) (gitlab_component_ops:rate_1h{component="rails_requests",monitor="global",type="api"}) >= 1
+        sum by(env,environment,tier,type,stage,component) (gitlab_component_ops:rate_1h{component="rails_request",monitor="global",type="api"}) >= 1
       )
-  - alert: ApiServiceRailsRequestsApdexSLOViolation
+  - alert: ApiServiceRailsRequestApdexSLOViolation
     for: 2m
     annotations:
-      title: The rails_requests SLI of the api service (`{{ $labels.stage }}` stage)
+      title: The rails_request SLI of the api service (`{{ $labels.stage }}` stage)
         has an apdex violating SLO
       description: |
         The number of requests meeting their duration target based on the urgency of the endpoint. By default, a request should take no more than 1s. But this can be adjusted by endpoint.
@@ -1730,7 +1730,7 @@ groups:
       grafana_dashboard_link: https://dashboards.gitlab.net/d/api-main/api-overview?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-stage={{ $labels.stage }}
       grafana_min_zoom_hours: "6"
-      grafana_panel_id: "3831968369"
+      grafana_panel_id: "495984175"
       grafana_variables: environment,stage
       runbook: docs/api/README.md
     labels:
@@ -1748,23 +1748,23 @@ groups:
     expr: |
       (
         (
-          gitlab_component_apdex:ratio_6h{component="rails_requests",monitor="global",type="api"}
+          gitlab_component_apdex:ratio_6h{component="rails_request",monitor="global",type="api"}
           < (1 - 6 * 0.010000)
         )
         and
         (
-          gitlab_component_apdex:ratio_30m{component="rails_requests",monitor="global",type="api"}
+          gitlab_component_apdex:ratio_30m{component="rails_request",monitor="global",type="api"}
           < (1 - 6 * 0.010000)
         )
       )
       and on(env,environment,tier,type,stage,component)
       (
-        sum by(env,environment,tier,type,stage,component) (gitlab_component_ops:rate_6h{component="rails_requests",monitor="global",type="api"}) >= 0.16667
+        sum by(env,environment,tier,type,stage,component) (gitlab_component_ops:rate_6h{component="rails_request",monitor="global",type="api"}) >= 0.16667
       )
-  - alert: ApiServiceRailsRequestsApdexSLOViolationRegional
+  - alert: ApiServiceRailsRequestApdexSLOViolationRegional
     for: 2m
     annotations:
-      title: The rails_requests SLI of the api service in region `{{ $labels.region
+      title: The rails_request SLI of the api service in region `{{ $labels.region
         }}` has an apdex violating SLO
       description: |
         The number of requests meeting their duration target based on the urgency of the endpoint. By default, a request should take no more than 1s. But this can be adjusted by endpoint.
@@ -1778,7 +1778,7 @@ groups:
       grafana_dashboard_link: https://dashboards.gitlab.net/d/api-main/api-overview?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-stage={{ $labels.stage }}
       grafana_min_zoom_hours: "6"
-      grafana_panel_id: "3831968369"
+      grafana_panel_id: "495984175"
       grafana_variables: environment,stage
       runbook: docs/api/README.md
     labels:
@@ -1796,23 +1796,23 @@ groups:
     expr: |
       (
         (
-          gitlab_regional_sli_apdex:ratio_1h{component="rails_requests",monitor="global",type="api"}
+          gitlab_regional_sli_apdex:ratio_1h{component="rails_request",monitor="global",type="api"}
           < (1 - 14.4 * 0.010000)
         )
         and
         (
-          gitlab_regional_sli_apdex:ratio_5m{component="rails_requests",monitor="global",type="api"}
+          gitlab_regional_sli_apdex:ratio_5m{component="rails_request",monitor="global",type="api"}
           < (1 - 14.4 * 0.010000)
         )
       )
       and on(env,environment,tier,type,stage,region,component)
       (
-        sum by(env,environment,tier,type,stage,region,component) (gitlab_regional_sli_ops:rate_1h{component="rails_requests",monitor="global",type="api"}) >= 1
+        sum by(env,environment,tier,type,stage,region,component) (gitlab_regional_sli_ops:rate_1h{component="rails_request",monitor="global",type="api"}) >= 1
       )
-  - alert: ApiServiceRailsRequestsApdexSLOViolationRegional
+  - alert: ApiServiceRailsRequestApdexSLOViolationRegional
     for: 2m
     annotations:
-      title: The rails_requests SLI of the api service in region `{{ $labels.region
+      title: The rails_request SLI of the api service in region `{{ $labels.region
         }}` has an apdex violating SLO
       description: |
         The number of requests meeting their duration target based on the urgency of the endpoint. By default, a request should take no more than 1s. But this can be adjusted by endpoint.
@@ -1826,7 +1826,7 @@ groups:
       grafana_dashboard_link: https://dashboards.gitlab.net/d/api-main/api-overview?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-stage={{ $labels.stage }}
       grafana_min_zoom_hours: "6"
-      grafana_panel_id: "3831968369"
+      grafana_panel_id: "495984175"
       grafana_variables: environment,stage
       runbook: docs/api/README.md
     labels:
@@ -1844,23 +1844,23 @@ groups:
     expr: |
       (
         (
-          gitlab_regional_sli_apdex:ratio_6h{component="rails_requests",monitor="global",type="api"}
+          gitlab_regional_sli_apdex:ratio_6h{component="rails_request",monitor="global",type="api"}
           < (1 - 6 * 0.010000)
         )
         and
         (
-          gitlab_regional_sli_apdex:ratio_30m{component="rails_requests",monitor="global",type="api"}
+          gitlab_regional_sli_apdex:ratio_30m{component="rails_request",monitor="global",type="api"}
           < (1 - 6 * 0.010000)
         )
       )
       and on(env,environment,tier,type,stage,region,component)
       (
-        sum by(env,environment,tier,type,stage,region,component) (gitlab_regional_sli_ops:rate_6h{component="rails_requests",monitor="global",type="api"}) >= 0.16667
+        sum by(env,environment,tier,type,stage,region,component) (gitlab_regional_sli_ops:rate_6h{component="rails_request",monitor="global",type="api"}) >= 0.16667
       )
-  - alert: ApiServiceRailsRequestsTrafficCessation
+  - alert: ApiServiceRailsRequestTrafficCessation
     for: 5m
     annotations:
-      title: The rails_requests SLI of the api service (`{{ $labels.stage }}` stage)
+      title: The rails_request SLI of the api service (`{{ $labels.stage }}` stage)
         has not received any traffic in the past 30m
       description: |
         The number of requests meeting their duration target based on the urgency of the endpoint. By default, a request should take no more than 1s. But this can be adjusted by endpoint.
@@ -1872,7 +1872,7 @@ groups:
       grafana_dashboard_link: https://dashboards.gitlab.net/d/api-main/api-overview?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-stage={{ $labels.stage }}
       grafana_min_zoom_hours: "6"
-      grafana_panel_id: "164190586"
+      grafana_panel_id: "538903447"
       grafana_variables: environment,stage
       promql_template_1: |
         sum by (env,environment,tier,stage) (
@@ -1891,13 +1891,13 @@ groups:
       slo_alert: "no"
       user_impacting: "yes"
     expr: |
-      gitlab_component_ops:rate_30m{component="rails_requests",monitor="global",stage="main",type="api"} == 0
+      gitlab_component_ops:rate_30m{component="rails_request",monitor="global",stage="main",type="api"} == 0
       and
-      gitlab_component_ops:rate_30m{component="rails_requests",monitor="global",stage="main",type="api"} offset 1h >= 0.16666666666666666
-  - alert: ApiServiceRailsRequestsTrafficAbsent
+      gitlab_component_ops:rate_30m{component="rails_request",monitor="global",stage="main",type="api"} offset 1h >= 0.16666666666666666
+  - alert: ApiServiceRailsRequestTrafficAbsent
     for: 30m
     annotations:
-      title: The rails_requests SLI of the api service (`{{ $labels.stage }}` stage)
+      title: The rails_request SLI of the api service (`{{ $labels.stage }}` stage)
         has not reported any traffic in the past 30m
       description: |
         The number of requests meeting their duration target based on the urgency of the endpoint. By default, a request should take no more than 1s. But this can be adjusted by endpoint.
@@ -1911,7 +1911,7 @@ groups:
       grafana_dashboard_link: https://dashboards.gitlab.net/d/api-main/api-overview?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-stage={{ $labels.stage }}
       grafana_min_zoom_hours: "6"
-      grafana_panel_id: "164190586"
+      grafana_panel_id: "538903447"
       grafana_variables: environment,stage
       promql_template_1: |
         sum by (env,environment,tier,stage) (
@@ -1930,13 +1930,13 @@ groups:
       slo_alert: "no"
       user_impacting: "yes"
     expr: |
-      gitlab_component_ops:rate_5m{component="rails_requests",monitor="global",stage="main",type="api"} offset 1h
+      gitlab_component_ops:rate_5m{component="rails_request",monitor="global",stage="main",type="api"} offset 1h
       unless
-      gitlab_component_ops:rate_5m{component="rails_requests",monitor="global",stage="main",type="api"}
-  - alert: ApiServiceRailsRequestsTrafficCessationRegional
+      gitlab_component_ops:rate_5m{component="rails_request",monitor="global",stage="main",type="api"}
+  - alert: ApiServiceRailsRequestTrafficCessationRegional
     for: 5m
     annotations:
-      title: The rails_requests SLI of the api service in region `{{ $labels.region
+      title: The rails_request SLI of the api service in region `{{ $labels.region
         }}` has not received any traffic in the past 30m
       description: |
         The number of requests meeting their duration target based on the urgency of the endpoint. By default, a request should take no more than 1s. But this can be adjusted by endpoint.
@@ -1950,7 +1950,7 @@ groups:
       grafana_dashboard_link: https://dashboards.gitlab.net/d/api-main/api-overview?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-stage={{ $labels.stage }}
       grafana_min_zoom_hours: "6"
-      grafana_panel_id: "164190586"
+      grafana_panel_id: "538903447"
       grafana_variables: environment,stage
       promql_template_1: |
         sum by (env,environment,tier,stage,region) (
@@ -1969,13 +1969,13 @@ groups:
       slo_alert: "no"
       user_impacting: "yes"
     expr: |
-      gitlab_regional_sli_ops:rate_30m{component="rails_requests",monitor="global",stage="main",type="api"} == 0
+      gitlab_regional_sli_ops:rate_30m{component="rails_request",monitor="global",stage="main",type="api"} == 0
       and
-      gitlab_regional_sli_ops:rate_30m{component="rails_requests",monitor="global",stage="main",type="api"} offset 1h >= 0.16666666666666666
-  - alert: ApiServiceRailsRequestsTrafficAbsentRegional
+      gitlab_regional_sli_ops:rate_30m{component="rails_request",monitor="global",stage="main",type="api"} offset 1h >= 0.16666666666666666
+  - alert: ApiServiceRailsRequestTrafficAbsentRegional
     for: 30m
     annotations:
-      title: The rails_requests SLI of the api service in region `{{ $labels.region
+      title: The rails_request SLI of the api service in region `{{ $labels.region
         }}` has not reported any traffic in the past 30m
       description: |
         The number of requests meeting their duration target based on the urgency of the endpoint. By default, a request should take no more than 1s. But this can be adjusted by endpoint.
@@ -1991,7 +1991,7 @@ groups:
       grafana_dashboard_link: https://dashboards.gitlab.net/d/api-main/api-overview?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-stage={{ $labels.stage }}
       grafana_min_zoom_hours: "6"
-      grafana_panel_id: "164190586"
+      grafana_panel_id: "538903447"
       grafana_variables: environment,stage
       promql_template_1: |
         sum by (env,environment,tier,stage,region) (
@@ -2010,9 +2010,9 @@ groups:
       slo_alert: "no"
       user_impacting: "yes"
     expr: |
-      gitlab_regional_sli_ops:rate_5m{component="rails_requests",monitor="global",stage="main",type="api"} offset 1h
+      gitlab_regional_sli_ops:rate_5m{component="rails_request",monitor="global",stage="main",type="api"} offset 1h
       unless
-      gitlab_regional_sli_ops:rate_5m{component="rails_requests",monitor="global",stage="main",type="api"}
+      gitlab_regional_sli_ops:rate_5m{component="rails_request",monitor="global",stage="main",type="api"}
   - alert: ApiServiceWorkhorseApdexSLOViolation
     for: 2m
     annotations:

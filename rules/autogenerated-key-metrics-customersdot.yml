@@ -6,7 +6,7 @@ groups:
   rules:
   - record: gitlab_component_apdex:success:rate
     labels:
-      component: rails_requests
+      component: customers_dot_requests
       tier: sv
       type: customersdot
     expr: |
@@ -15,7 +15,7 @@ groups:
       )
   - record: gitlab_component_apdex:weight:score
     labels:
-      component: rails_requests
+      component: customers_dot_requests
       tier: sv
       type: customersdot
     expr: |
@@ -24,7 +24,7 @@ groups:
       )
   - record: gitlab_component_ops:rate
     labels:
-      component: rails_requests
+      component: customers_dot_requests
       tier: sv
       type: customersdot
     expr: |
@@ -33,7 +33,7 @@ groups:
       )
   - record: gitlab_component_errors:rate
     labels:
-      component: rails_requests
+      component: customers_dot_requests
       tier: sv
       type: customersdot
     expr: |
@@ -45,12 +45,12 @@ groups:
       or
       (
         0 * group by(environment,stage) (
-          gitlab_component_ops:rate{component="rails_requests",tier="sv",type="customersdot"}
+          gitlab_component_ops:rate{component="customers_dot_requests",tier="sv",type="customersdot"}
         )
       )
   - record: gitlab_component_apdex:success:rate
     labels:
-      component: sidekiq_execution
+      component: customers_dot_sidekiq_jobs
       tier: sv
       type: customersdot
     expr: |
@@ -59,7 +59,7 @@ groups:
       )
   - record: gitlab_component_apdex:weight:score
     labels:
-      component: sidekiq_execution
+      component: customers_dot_sidekiq_jobs
       tier: sv
       type: customersdot
     expr: |
@@ -68,7 +68,7 @@ groups:
       )
   - record: gitlab_component_ops:rate
     labels:
-      component: sidekiq_execution
+      component: customers_dot_sidekiq_jobs
       tier: sv
       type: customersdot
     expr: |
@@ -77,7 +77,7 @@ groups:
       )
   - record: gitlab_component_errors:rate
     labels:
-      component: sidekiq_execution
+      component: customers_dot_sidekiq_jobs
       tier: sv
       type: customersdot
     expr: |
@@ -89,7 +89,7 @@ groups:
       or
       (
         0 * group by(environment,stage) (
-          gitlab_component_ops:rate{component="sidekiq_execution",tier="sv",type="customersdot"}
+          gitlab_component_ops:rate{component="customers_dot_sidekiq_jobs",tier="sv",type="customersdot"}
         )
       )
 - name: 'Component-Level SLIs: customersdot - 5m burn-rate'
@@ -97,7 +97,7 @@ groups:
   rules:
   - record: gitlab_component_apdex:success:rate_5m
     labels:
-      component: rails_requests
+      component: customers_dot_requests
       tier: sv
       type: customersdot
     expr: |
@@ -106,7 +106,7 @@ groups:
       )
   - record: gitlab_component_apdex:weight:score_5m
     labels:
-      component: rails_requests
+      component: customers_dot_requests
       tier: sv
       type: customersdot
     expr: |
@@ -115,7 +115,7 @@ groups:
       )
   - record: gitlab_component_ops:rate_5m
     labels:
-      component: rails_requests
+      component: customers_dot_requests
       tier: sv
       type: customersdot
     expr: |
@@ -124,7 +124,7 @@ groups:
       )
   - record: gitlab_component_errors:rate_5m
     labels:
-      component: rails_requests
+      component: customers_dot_requests
       tier: sv
       type: customersdot
     expr: |
@@ -136,12 +136,12 @@ groups:
       or
       (
         0 * group by(environment,stage) (
-          gitlab_component_ops:rate_5m{component="rails_requests",tier="sv",type="customersdot"}
+          gitlab_component_ops:rate_5m{component="customers_dot_requests",tier="sv",type="customersdot"}
         )
       )
   - record: gitlab_component_apdex:success:rate_5m
     labels:
-      component: sidekiq_execution
+      component: customers_dot_sidekiq_jobs
       tier: sv
       type: customersdot
     expr: |
@@ -150,7 +150,7 @@ groups:
       )
   - record: gitlab_component_apdex:weight:score_5m
     labels:
-      component: sidekiq_execution
+      component: customers_dot_sidekiq_jobs
       tier: sv
       type: customersdot
     expr: |
@@ -159,7 +159,7 @@ groups:
       )
   - record: gitlab_component_ops:rate_5m
     labels:
-      component: sidekiq_execution
+      component: customers_dot_sidekiq_jobs
       tier: sv
       type: customersdot
     expr: |
@@ -168,7 +168,7 @@ groups:
       )
   - record: gitlab_component_errors:rate_5m
     labels:
-      component: sidekiq_execution
+      component: customers_dot_sidekiq_jobs
       tier: sv
       type: customersdot
     expr: |
@@ -180,7 +180,7 @@ groups:
       or
       (
         0 * group by(environment,stage) (
-          gitlab_component_ops:rate_5m{component="sidekiq_execution",tier="sv",type="customersdot"}
+          gitlab_component_ops:rate_5m{component="customers_dot_sidekiq_jobs",tier="sv",type="customersdot"}
         )
       )
 - name: 'Component-Level SLIs: customersdot - 30m burn-rate'
@@ -188,7 +188,7 @@ groups:
   rules:
   - record: gitlab_component_apdex:success:rate_30m
     labels:
-      component: rails_requests
+      component: customers_dot_requests
       tier: sv
       type: customersdot
     expr: |
@@ -197,7 +197,7 @@ groups:
       )
   - record: gitlab_component_apdex:weight:score_30m
     labels:
-      component: rails_requests
+      component: customers_dot_requests
       tier: sv
       type: customersdot
     expr: |
@@ -206,7 +206,7 @@ groups:
       )
   - record: gitlab_component_ops:rate_30m
     labels:
-      component: rails_requests
+      component: customers_dot_requests
       tier: sv
       type: customersdot
     expr: |
@@ -215,7 +215,7 @@ groups:
       )
   - record: gitlab_component_errors:rate_30m
     labels:
-      component: rails_requests
+      component: customers_dot_requests
       tier: sv
       type: customersdot
     expr: |
@@ -227,12 +227,12 @@ groups:
       or
       (
         0 * group by(environment,stage) (
-          gitlab_component_ops:rate_30m{component="rails_requests",tier="sv",type="customersdot"}
+          gitlab_component_ops:rate_30m{component="customers_dot_requests",tier="sv",type="customersdot"}
         )
       )
   - record: gitlab_component_apdex:success:rate_30m
     labels:
-      component: sidekiq_execution
+      component: customers_dot_sidekiq_jobs
       tier: sv
       type: customersdot
     expr: |
@@ -241,7 +241,7 @@ groups:
       )
   - record: gitlab_component_apdex:weight:score_30m
     labels:
-      component: sidekiq_execution
+      component: customers_dot_sidekiq_jobs
       tier: sv
       type: customersdot
     expr: |
@@ -250,7 +250,7 @@ groups:
       )
   - record: gitlab_component_ops:rate_30m
     labels:
-      component: sidekiq_execution
+      component: customers_dot_sidekiq_jobs
       tier: sv
       type: customersdot
     expr: |
@@ -259,7 +259,7 @@ groups:
       )
   - record: gitlab_component_errors:rate_30m
     labels:
-      component: sidekiq_execution
+      component: customers_dot_sidekiq_jobs
       tier: sv
       type: customersdot
     expr: |
@@ -271,7 +271,7 @@ groups:
       or
       (
         0 * group by(environment,stage) (
-          gitlab_component_ops:rate_30m{component="sidekiq_execution",tier="sv",type="customersdot"}
+          gitlab_component_ops:rate_30m{component="customers_dot_sidekiq_jobs",tier="sv",type="customersdot"}
         )
       )
 - name: 'Component-Level SLIs: customersdot - 1h burn-rate'
@@ -279,7 +279,7 @@ groups:
   rules:
   - record: gitlab_component_apdex:success:rate_1h
     labels:
-      component: rails_requests
+      component: customers_dot_requests
       tier: sv
       type: customersdot
     expr: |
@@ -288,7 +288,7 @@ groups:
       )
   - record: gitlab_component_apdex:weight:score_1h
     labels:
-      component: rails_requests
+      component: customers_dot_requests
       tier: sv
       type: customersdot
     expr: |
@@ -297,7 +297,7 @@ groups:
       )
   - record: gitlab_component_ops:rate_1h
     labels:
-      component: rails_requests
+      component: customers_dot_requests
       tier: sv
       type: customersdot
     expr: |
@@ -306,7 +306,7 @@ groups:
       )
   - record: gitlab_component_errors:rate_1h
     labels:
-      component: rails_requests
+      component: customers_dot_requests
       tier: sv
       type: customersdot
     expr: |
@@ -318,12 +318,12 @@ groups:
       or
       (
         0 * group by(environment,stage) (
-          gitlab_component_ops:rate_1h{component="rails_requests",tier="sv",type="customersdot"}
+          gitlab_component_ops:rate_1h{component="customers_dot_requests",tier="sv",type="customersdot"}
         )
       )
   - record: gitlab_component_apdex:success:rate_1h
     labels:
-      component: sidekiq_execution
+      component: customers_dot_sidekiq_jobs
       tier: sv
       type: customersdot
     expr: |
@@ -332,7 +332,7 @@ groups:
       )
   - record: gitlab_component_apdex:weight:score_1h
     labels:
-      component: sidekiq_execution
+      component: customers_dot_sidekiq_jobs
       tier: sv
       type: customersdot
     expr: |
@@ -341,7 +341,7 @@ groups:
       )
   - record: gitlab_component_ops:rate_1h
     labels:
-      component: sidekiq_execution
+      component: customers_dot_sidekiq_jobs
       tier: sv
       type: customersdot
     expr: |
@@ -350,7 +350,7 @@ groups:
       )
   - record: gitlab_component_errors:rate_1h
     labels:
-      component: sidekiq_execution
+      component: customers_dot_sidekiq_jobs
       tier: sv
       type: customersdot
     expr: |
@@ -362,7 +362,7 @@ groups:
       or
       (
         0 * group by(environment,stage) (
-          gitlab_component_ops:rate_1h{component="sidekiq_execution",tier="sv",type="customersdot"}
+          gitlab_component_ops:rate_1h{component="customers_dot_sidekiq_jobs",tier="sv",type="customersdot"}
         )
       )
 - name: 'Component-Level SLIs: customersdot - 6h burn-rate'
@@ -370,7 +370,7 @@ groups:
   rules:
   - record: gitlab_component_apdex:success:rate_6h
     labels:
-      component: rails_requests
+      component: customers_dot_requests
       tier: sv
       type: customersdot
     expr: |
@@ -379,7 +379,7 @@ groups:
       )
   - record: gitlab_component_apdex:weight:score_6h
     labels:
-      component: rails_requests
+      component: customers_dot_requests
       tier: sv
       type: customersdot
     expr: |
@@ -388,7 +388,7 @@ groups:
       )
   - record: gitlab_component_ops:rate_6h
     labels:
-      component: rails_requests
+      component: customers_dot_requests
       tier: sv
       type: customersdot
     expr: |
@@ -397,7 +397,7 @@ groups:
       )
   - record: gitlab_component_errors:rate_6h
     labels:
-      component: rails_requests
+      component: customers_dot_requests
       tier: sv
       type: customersdot
     expr: |
@@ -409,12 +409,12 @@ groups:
       or
       (
         0 * group by(environment,stage) (
-          gitlab_component_ops:rate_6h{component="rails_requests",tier="sv",type="customersdot"}
+          gitlab_component_ops:rate_6h{component="customers_dot_requests",tier="sv",type="customersdot"}
         )
       )
   - record: gitlab_component_apdex:success:rate_6h
     labels:
-      component: sidekiq_execution
+      component: customers_dot_sidekiq_jobs
       tier: sv
       type: customersdot
     expr: |
@@ -423,7 +423,7 @@ groups:
       )
   - record: gitlab_component_apdex:weight:score_6h
     labels:
-      component: sidekiq_execution
+      component: customers_dot_sidekiq_jobs
       tier: sv
       type: customersdot
     expr: |
@@ -432,7 +432,7 @@ groups:
       )
   - record: gitlab_component_ops:rate_6h
     labels:
-      component: sidekiq_execution
+      component: customers_dot_sidekiq_jobs
       tier: sv
       type: customersdot
     expr: |
@@ -441,7 +441,7 @@ groups:
       )
   - record: gitlab_component_errors:rate_6h
     labels:
-      component: sidekiq_execution
+      component: customers_dot_sidekiq_jobs
       tier: sv
       type: customersdot
     expr: |
@@ -453,7 +453,7 @@ groups:
       or
       (
         0 * group by(environment,stage) (
-          gitlab_component_ops:rate_6h{component="sidekiq_execution",tier="sv",type="customersdot"}
+          gitlab_component_ops:rate_6h{component="customers_dot_sidekiq_jobs",tier="sv",type="customersdot"}
         )
       )
 - name: 'Component mapping: customersdot'
@@ -461,7 +461,7 @@ groups:
   rules:
   - record: gitlab_component_service:mapping
     labels:
-      component: rails_requests
+      component: customers_dot_requests
       regional_aggregation: "no"
       service_aggregation: "yes"
       tier: sv
@@ -469,7 +469,7 @@ groups:
     expr: "1"
   - record: gitlab_component_service:mapping
     labels:
-      component: sidekiq_execution
+      component: customers_dot_sidekiq_jobs
       regional_aggregation: "no"
       service_aggregation: "yes"
       tier: sv

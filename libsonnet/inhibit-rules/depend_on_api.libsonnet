@@ -13,7 +13,7 @@
       type: 'api',
     },
     {
-      component: 'rails_requests',
+      component: 'rails_request',
       type: 'api',
     },
   ],

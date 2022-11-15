@@ -8,6 +8,8 @@ local serviceLevelIndicatorDefinition = import 'servicemetrics/service_level_ind
 local kubeLabelSelectors = metricsCatalog.kubeLabelSelectors;
 local dependOnPatroni = import 'inhibit-rules/depend_on_patroni.libsonnet';
 
+local railsSelector = { job: 'gitlab-rails', type: 'api' };
+
 metricsCatalog.serviceDefinition({
   type: 'api',
   tier: 'sv',
@@ -165,8 +167,6 @@ metricsCatalog.serviceDefinition({
 
       dependsOn: dependOnPatroni.sqlComponents,
     },
-
-    local railsSelector = { job: 'gitlab-rails', type: 'api' },
     puma: {
       userImpacting: true,
       featureCategory: serviceLevelIndicatorDefinition.featureCategoryFromSourceMetrics,
@@ -194,31 +194,22 @@ metricsCatalog.serviceDefinition({
 
       dependsOn: dependOnPatroni.sqlComponents,
     },
+  } + sliLibrary.get('rails_request').generateServiceLevelIndicator(railsSelector, {
+    monitoringThresholds+: {
+      apdexScore: 0.99,
+    },
 
-    rails_requests:
-      sliLibrary.get('rails_request').generateServiceLevelIndicator(railsSelector) {
-        monitoringThresholds+: {
-          apdexScore: 0.99,
-        },
-
-        toolingLinks: [
-          toolingLinks.kibana(title='Rails', index='rails'),
-        ],
-        dependsOn: dependOnPatroni.sqlComponents,
-      },
-
-    graphql_queries:
-      sliLibrary.get('graphql_query').generateServiceLevelIndicator(railsSelector) {
-        toolingLinks: [
-          toolingLinks.kibana(title='Rails', index='rails_graphql'),
-        ],
-        dependsOn: dependOnPatroni.sqlComponents,
-      },
-
-    global_search:
-      sliLibrary.get('global_search').generateServiceLevelIndicator(railsSelector) {
-        serviceAggregation: false,  // Don't add this to the request rate of the service
-        severity: 's3',  // Don't page SREs for this SLI
-      },
-  },
+    toolingLinks: [
+      toolingLinks.kibana(title='Rails', index='rails'),
+    ],
+    dependsOn: dependOnPatroni.sqlComponents,
+  }) + sliLibrary.get('graphql_query').generateServiceLevelIndicator(railsSelector, {
+    toolingLinks: [
+      toolingLinks.kibana(title='Rails', index='rails_graphql'),
+    ],
+    dependsOn: dependOnPatroni.sqlComponents,
+  }) + sliLibrary.get('global_search').generateServiceLevelIndicator(railsSelector, {
+    serviceAggregation: false,  // Don't add this to the request rate of the service
+    severity: 's3',  // Don't page SREs for this SLI
+  }),
 })

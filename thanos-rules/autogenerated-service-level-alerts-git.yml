@@ -1673,10 +1673,10 @@ groups:
       gitlab_regional_sli_ops:rate_5m{component="puma",monitor="global",stage="main",type="git"} offset 1h
       unless
       gitlab_regional_sli_ops:rate_5m{component="puma",monitor="global",stage="main",type="git"}
-  - alert: GitServiceRailsRequestsApdexSLOViolation
+  - alert: GitServiceRailsRequestApdexSLOViolation
     for: 2m
     annotations:
-      title: The rails_requests SLI of the git service (`{{ $labels.stage }}` stage)
+      title: The rails_request SLI of the git service (`{{ $labels.stage }}` stage)
         has an apdex violating SLO
       description: |
         The number of requests meeting their duration target based on the urgency of the endpoint. By default, a request should take no more than 1s. But this can be adjusted by endpoint.
@@ -1688,7 +1688,7 @@ groups:
       grafana_dashboard_link: https://dashboards.gitlab.net/d/git-main/git-overview?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-stage={{ $labels.stage }}
       grafana_min_zoom_hours: "6"
-      grafana_panel_id: "3831968369"
+      grafana_panel_id: "495984175"
       grafana_variables: environment,stage
       runbook: docs/git/README.md
     labels:
@@ -1706,23 +1706,23 @@ groups:
     expr: |
       (
         (
-          gitlab_component_apdex:ratio_1h{component="rails_requests",monitor="global",type="git"}
+          gitlab_component_apdex:ratio_1h{component="rails_request",monitor="global",type="git"}
           < (1 - 14.4 * 0.003000)
         )
         and
         (
-          gitlab_component_apdex:ratio_5m{component="rails_requests",monitor="global",type="git"}
+          gitlab_component_apdex:ratio_5m{component="rails_request",monitor="global",type="git"}
           < (1 - 14.4 * 0.003000)
         )
       )
       and on(env,environment,tier,type,stage,component)
       (
-        sum by(env,environment,tier,type,stage,component) (gitlab_component_ops:rate_1h{component="rails_requests",monitor="global",type="git"}) >= 1
+        sum by(env,environment,tier,type,stage,component) (gitlab_component_ops:rate_1h{component="rails_request",monitor="global",type="git"}) >= 1
       )
-  - alert: GitServiceRailsRequestsApdexSLOViolation
+  - alert: GitServiceRailsRequestApdexSLOViolation
     for: 2m
     annotations:
-      title: The rails_requests SLI of the git service (`{{ $labels.stage }}` stage)
+      title: The rails_request SLI of the git service (`{{ $labels.stage }}` stage)
         has an apdex violating SLO
       description: |
         The number of requests meeting their duration target based on the urgency of the endpoint. By default, a request should take no more than 1s. But this can be adjusted by endpoint.
@@ -1734,7 +1734,7 @@ groups:
       grafana_dashboard_link: https://dashboards.gitlab.net/d/git-main/git-overview?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-stage={{ $labels.stage }}
       grafana_min_zoom_hours: "6"
-      grafana_panel_id: "3831968369"
+      grafana_panel_id: "495984175"
       grafana_variables: environment,stage
       runbook: docs/git/README.md
     labels:
@@ -1752,23 +1752,23 @@ groups:
     expr: |
       (
         (
-          gitlab_component_apdex:ratio_6h{component="rails_requests",monitor="global",type="git"}
+          gitlab_component_apdex:ratio_6h{component="rails_request",monitor="global",type="git"}
           < (1 - 6 * 0.003000)
         )
         and
         (
-          gitlab_component_apdex:ratio_30m{component="rails_requests",monitor="global",type="git"}
+          gitlab_component_apdex:ratio_30m{component="rails_request",monitor="global",type="git"}
           < (1 - 6 * 0.003000)
         )
       )
       and on(env,environment,tier,type,stage,component)
       (
-        sum by(env,environment,tier,type,stage,component) (gitlab_component_ops:rate_6h{component="rails_requests",monitor="global",type="git"}) >= 0.16667
+        sum by(env,environment,tier,type,stage,component) (gitlab_component_ops:rate_6h{component="rails_request",monitor="global",type="git"}) >= 0.16667
       )
-  - alert: GitServiceRailsRequestsApdexSLOViolationRegional
+  - alert: GitServiceRailsRequestApdexSLOViolationRegional
     for: 2m
     annotations:
-      title: The rails_requests SLI of the git service in region `{{ $labels.region
+      title: The rails_request SLI of the git service in region `{{ $labels.region
         }}` has an apdex violating SLO
       description: |
         The number of requests meeting their duration target based on the urgency of the endpoint. By default, a request should take no more than 1s. But this can be adjusted by endpoint.
@@ -1782,7 +1782,7 @@ groups:
       grafana_dashboard_link: https://dashboards.gitlab.net/d/git-main/git-overview?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-stage={{ $labels.stage }}
       grafana_min_zoom_hours: "6"
-      grafana_panel_id: "3831968369"
+      grafana_panel_id: "495984175"
       grafana_variables: environment,stage
       runbook: docs/git/README.md
     labels:
@@ -1800,23 +1800,23 @@ groups:
     expr: |
       (
         (
-          gitlab_regional_sli_apdex:ratio_1h{component="rails_requests",monitor="global",type="git"}
+          gitlab_regional_sli_apdex:ratio_1h{component="rails_request",monitor="global",type="git"}
           < (1 - 14.4 * 0.003000)
         )
         and
         (
-          gitlab_regional_sli_apdex:ratio_5m{component="rails_requests",monitor="global",type="git"}
+          gitlab_regional_sli_apdex:ratio_5m{component="rails_request",monitor="global",type="git"}
           < (1 - 14.4 * 0.003000)
         )
       )
       and on(env,environment,tier,type,stage,region,component)
       (
-        sum by(env,environment,tier,type,stage,region,component) (gitlab_regional_sli_ops:rate_1h{component="rails_requests",monitor="global",type="git"}) >= 1
+        sum by(env,environment,tier,type,stage,region,component) (gitlab_regional_sli_ops:rate_1h{component="rails_request",monitor="global",type="git"}) >= 1
       )
-  - alert: GitServiceRailsRequestsApdexSLOViolationRegional
+  - alert: GitServiceRailsRequestApdexSLOViolationRegional
     for: 2m
     annotations:
-      title: The rails_requests SLI of the git service in region `{{ $labels.region
+      title: The rails_request SLI of the git service in region `{{ $labels.region
         }}` has an apdex violating SLO
       description: |
         The number of requests meeting their duration target based on the urgency of the endpoint. By default, a request should take no more than 1s. But this can be adjusted by endpoint.
@@ -1830,7 +1830,7 @@ groups:
       grafana_dashboard_link: https://dashboards.gitlab.net/d/git-main/git-overview?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-stage={{ $labels.stage }}
       grafana_min_zoom_hours: "6"
-      grafana_panel_id: "3831968369"
+      grafana_panel_id: "495984175"
       grafana_variables: environment,stage
       runbook: docs/git/README.md
     labels:
@@ -1848,23 +1848,23 @@ groups:
     expr: |
       (
         (
-          gitlab_regional_sli_apdex:ratio_6h{component="rails_requests",monitor="global",type="git"}
+          gitlab_regional_sli_apdex:ratio_6h{component="rails_request",monitor="global",type="git"}
           < (1 - 6 * 0.003000)
         )
         and
         (
-          gitlab_regional_sli_apdex:ratio_30m{component="rails_requests",monitor="global",type="git"}
+          gitlab_regional_sli_apdex:ratio_30m{component="rails_request",monitor="global",type="git"}
           < (1 - 6 * 0.003000)
         )
       )
       and on(env,environment,tier,type,stage,region,component)
       (
-        sum by(env,environment,tier,type,stage,region,component) (gitlab_regional_sli_ops:rate_6h{component="rails_requests",monitor="global",type="git"}) >= 0.16667
+        sum by(env,environment,tier,type,stage,region,component) (gitlab_regional_sli_ops:rate_6h{component="rails_request",monitor="global",type="git"}) >= 0.16667
       )
-  - alert: GitServiceRailsRequestsTrafficCessation
+  - alert: GitServiceRailsRequestTrafficCessation
     for: 5m
     annotations:
-      title: The rails_requests SLI of the git service (`{{ $labels.stage }}` stage)
+      title: The rails_request SLI of the git service (`{{ $labels.stage }}` stage)
         has not received any traffic in the past 30m
       description: |
         The number of requests meeting their duration target based on the urgency of the endpoint. By default, a request should take no more than 1s. But this can be adjusted by endpoint.
@@ -1876,7 +1876,7 @@ groups:
       grafana_dashboard_link: https://dashboards.gitlab.net/d/git-main/git-overview?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-stage={{ $labels.stage }}
       grafana_min_zoom_hours: "6"
-      grafana_panel_id: "164190586"
+      grafana_panel_id: "538903447"
       grafana_variables: environment,stage
       promql_template_1: |
         sum by (env,environment,tier,stage) (
@@ -1895,13 +1895,13 @@ groups:
       slo_alert: "no"
       user_impacting: "yes"
     expr: |
-      gitlab_component_ops:rate_30m{component="rails_requests",monitor="global",stage="main",type="git"} == 0
+      gitlab_component_ops:rate_30m{component="rails_request",monitor="global",stage="main",type="git"} == 0
       and
-      gitlab_component_ops:rate_30m{component="rails_requests",monitor="global",stage="main",type="git"} offset 1h >= 0.16666666666666666
-  - alert: GitServiceRailsRequestsTrafficAbsent
+      gitlab_component_ops:rate_30m{component="rails_request",monitor="global",stage="main",type="git"} offset 1h >= 0.16666666666666666
+  - alert: GitServiceRailsRequestTrafficAbsent
     for: 30m
     annotations:
-      title: The rails_requests SLI of the git service (`{{ $labels.stage }}` stage)
+      title: The rails_request SLI of the git service (`{{ $labels.stage }}` stage)
         has not reported any traffic in the past 30m
       description: |
         The number of requests meeting their duration target based on the urgency of the endpoint. By default, a request should take no more than 1s. But this can be adjusted by endpoint.
@@ -1915,7 +1915,7 @@ groups:
       grafana_dashboard_link: https://dashboards.gitlab.net/d/git-main/git-overview?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-stage={{ $labels.stage }}
       grafana_min_zoom_hours: "6"
-      grafana_panel_id: "164190586"
+      grafana_panel_id: "538903447"
       grafana_variables: environment,stage
       promql_template_1: |
         sum by (env,environment,tier,stage) (
@@ -1934,13 +1934,13 @@ groups:
       slo_alert: "no"
       user_impacting: "yes"
     expr: |
-      gitlab_component_ops:rate_5m{component="rails_requests",monitor="global",stage="main",type="git"} offset 1h
+      gitlab_component_ops:rate_5m{component="rails_request",monitor="global",stage="main",type="git"} offset 1h
       unless
-      gitlab_component_ops:rate_5m{component="rails_requests",monitor="global",stage="main",type="git"}
-  - alert: GitServiceRailsRequestsTrafficCessationRegional
+      gitlab_component_ops:rate_5m{component="rails_request",monitor="global",stage="main",type="git"}
+  - alert: GitServiceRailsRequestTrafficCessationRegional
     for: 5m
     annotations:
-      title: The rails_requests SLI of the git service in region `{{ $labels.region
+      title: The rails_request SLI of the git service in region `{{ $labels.region
         }}` has not received any traffic in the past 30m
       description: |
         The number of requests meeting their duration target based on the urgency of the endpoint. By default, a request should take no more than 1s. But this can be adjusted by endpoint.
@@ -1954,7 +1954,7 @@ groups:
       grafana_dashboard_link: https://dashboards.gitlab.net/d/git-main/git-overview?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-stage={{ $labels.stage }}
       grafana_min_zoom_hours: "6"
-      grafana_panel_id: "164190586"
+      grafana_panel_id: "538903447"
       grafana_variables: environment,stage
       promql_template_1: |
         sum by (env,environment,tier,stage,region) (
@@ -1973,13 +1973,13 @@ groups:
       slo_alert: "no"
       user_impacting: "yes"
     expr: |
-      gitlab_regional_sli_ops:rate_30m{component="rails_requests",monitor="global",stage="main",type="git"} == 0
+      gitlab_regional_sli_ops:rate_30m{component="rails_request",monitor="global",stage="main",type="git"} == 0
       and
-      gitlab_regional_sli_ops:rate_30m{component="rails_requests",monitor="global",stage="main",type="git"} offset 1h >= 0.16666666666666666
-  - alert: GitServiceRailsRequestsTrafficAbsentRegional
+      gitlab_regional_sli_ops:rate_30m{component="rails_request",monitor="global",stage="main",type="git"} offset 1h >= 0.16666666666666666
+  - alert: GitServiceRailsRequestTrafficAbsentRegional
     for: 30m
     annotations:
-      title: The rails_requests SLI of the git service in region `{{ $labels.region
+      title: The rails_request SLI of the git service in region `{{ $labels.region
         }}` has not reported any traffic in the past 30m
       description: |
         The number of requests meeting their duration target based on the urgency of the endpoint. By default, a request should take no more than 1s. But this can be adjusted by endpoint.
@@ -1995,7 +1995,7 @@ groups:
       grafana_dashboard_link: https://dashboards.gitlab.net/d/git-main/git-overview?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-stage={{ $labels.stage }}
       grafana_min_zoom_hours: "6"
-      grafana_panel_id: "164190586"
+      grafana_panel_id: "538903447"
       grafana_variables: environment,stage
       promql_template_1: |
         sum by (env,environment,tier,stage,region) (
@@ -2014,9 +2014,9 @@ groups:
       slo_alert: "no"
       user_impacting: "yes"
     expr: |
-      gitlab_regional_sli_ops:rate_5m{component="rails_requests",monitor="global",stage="main",type="git"} offset 1h
+      gitlab_regional_sli_ops:rate_5m{component="rails_request",monitor="global",stage="main",type="git"} offset 1h
       unless
-      gitlab_regional_sli_ops:rate_5m{component="rails_requests",monitor="global",stage="main",type="git"}
+      gitlab_regional_sli_ops:rate_5m{component="rails_request",monitor="global",stage="main",type="git"}
   - alert: GitServiceWorkhorseApdexSLOViolation
     for: 2m
     annotations:

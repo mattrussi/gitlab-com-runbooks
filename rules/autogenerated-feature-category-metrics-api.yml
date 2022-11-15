@@ -35,7 +35,7 @@ groups:
       )
   - record: gitlab:component:feature_category:execution:apdex:success:rate_5m
     labels:
-      component: graphql_queries
+      component: graphql_query
       tier: sv
       type: api
     expr: |
@@ -44,7 +44,7 @@ groups:
       )
   - record: gitlab:component:feature_category:execution:apdex:weight:score_5m
     labels:
-      component: graphql_queries
+      component: graphql_query
       tier: sv
       type: api
     expr: |
@@ -53,7 +53,7 @@ groups:
       )
   - record: gitlab:component:feature_category:execution:ops:rate_5m
     labels:
-      component: graphql_queries
+      component: graphql_query
       tier: sv
       type: api
     expr: |
@@ -88,7 +88,7 @@ groups:
       )
   - record: gitlab:component:feature_category:execution:apdex:success:rate_5m
     labels:
-      component: rails_requests
+      component: rails_request
       tier: sv
       type: api
     expr: |
@@ -97,7 +97,7 @@ groups:
       )
   - record: gitlab:component:feature_category:execution:apdex:weight:score_5m
     labels:
-      component: rails_requests
+      component: rails_request
       tier: sv
       type: api
     expr: |
@@ -106,7 +106,7 @@ groups:
       )
   - record: gitlab:component:feature_category:execution:ops:rate_5m
     labels:
-      component: rails_requests
+      component: rails_request
       tier: sv
       type: api
     expr: |
@@ -147,7 +147,7 @@ groups:
       )
   - record: gitlab:component:feature_category:execution:apdex:success:rate_30m
     labels:
-      component: graphql_queries
+      component: graphql_query
       tier: sv
       type: api
     expr: |
@@ -156,7 +156,7 @@ groups:
       )
   - record: gitlab:component:feature_category:execution:apdex:weight:score_30m
     labels:
-      component: graphql_queries
+      component: graphql_query
       tier: sv
       type: api
     expr: |
@@ -165,7 +165,7 @@ groups:
       )
   - record: gitlab:component:feature_category:execution:ops:rate_30m
     labels:
-      component: graphql_queries
+      component: graphql_query
       tier: sv
       type: api
     expr: |
@@ -200,7 +200,7 @@ groups:
       )
   - record: gitlab:component:feature_category:execution:apdex:success:rate_30m
     labels:
-      component: rails_requests
+      component: rails_request
       tier: sv
       type: api
     expr: |
@@ -209,7 +209,7 @@ groups:
       )
   - record: gitlab:component:feature_category:execution:apdex:weight:score_30m
     labels:
-      component: rails_requests
+      component: rails_request
       tier: sv
       type: api
     expr: |
@@ -218,7 +218,7 @@ groups:
       )
   - record: gitlab:component:feature_category:execution:ops:rate_30m
     labels:
-      component: rails_requests
+      component: rails_request
       tier: sv
       type: api
     expr: |
@@ -259,7 +259,7 @@ groups:
       )
   - record: gitlab:component:feature_category:execution:apdex:success:rate_1h
     labels:
-      component: graphql_queries
+      component: graphql_query
       tier: sv
       type: api
     expr: |
@@ -268,7 +268,7 @@ groups:
       )
   - record: gitlab:component:feature_category:execution:apdex:weight:score_1h
     labels:
-      component: graphql_queries
+      component: graphql_query
       tier: sv
       type: api
     expr: |
@@ -277,7 +277,7 @@ groups:
       )
   - record: gitlab:component:feature_category:execution:ops:rate_1h
     labels:
-      component: graphql_queries
+      component: graphql_query
       tier: sv
       type: api
     expr: |
@@ -312,7 +312,7 @@ groups:
       )
   - record: gitlab:component:feature_category:execution:apdex:success:rate_1h
     labels:
-      component: rails_requests
+      component: rails_request
       tier: sv
       type: api
     expr: |
@@ -321,7 +321,7 @@ groups:
       )
   - record: gitlab:component:feature_category:execution:apdex:weight:score_1h
     labels:
-      component: rails_requests
+      component: rails_request
       tier: sv
       type: api
     expr: |
@@ -330,7 +330,7 @@ groups:
       )
   - record: gitlab:component:feature_category:execution:ops:rate_1h
     labels:
-      component: rails_requests
+      component: rails_request
       tier: sv
       type: api
     expr: |

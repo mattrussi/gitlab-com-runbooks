@@ -20,7 +20,7 @@ local mappingSelector = {
 };
 
 local knownEndpointsSelector = { endpoint_id: { ne: 'unknown' } };
-local componentSelector = { component: 'rails_requests' };
+local componentSelector = { component: 'rails_request' };
 local stageGroupAggregationLabels = ['product_stage', 'stage_group'];
 local knownUrgencies = ['high', 'medium', 'default', 'low'];
 

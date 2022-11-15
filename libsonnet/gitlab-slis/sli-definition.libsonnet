@@ -75,17 +75,19 @@ local validateAndApplyDefaults(definition) =
 
     local parent = self,
 
-    generateServiceLevelIndicator(extraSelector):: {
-      userImpacting: true,
-      featureCategory: sli.featureCategory,
+    generateServiceLevelIndicator(extraSelector, extraFields={}):: {
+      [sli.name]: {
+        userImpacting: true,
+        featureCategory: sli.featureCategory,
 
-      description: parent.description,
+        description: parent.description,
 
-      requestRate: rateMetric(parent.totalCounterName, extraSelector),
-      significantLabels: parent.significantLabels,
+        requestRate: rateMetric(parent.totalCounterName, extraSelector),
+        significantLabels: parent.significantLabels,
 
-      [if parent.hasApdex() then 'apdex']: rateApdex(parent.apdexSuccessCounterName, parent.apdexTotalCounterName, extraSelector),
-      [if parent.hasErrorRate() then 'errorRate']: rateMetric(parent.errorCounterName, extraSelector),
+        [if parent.hasApdex() then 'apdex']: rateApdex(parent.apdexSuccessCounterName, parent.apdexTotalCounterName, extraSelector),
+        [if parent.hasErrorRate() then 'errorRate']: rateMetric(parent.errorCounterName, extraSelector),
+      } + extraFields,
     },
   };
 

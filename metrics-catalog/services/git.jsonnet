@@ -8,7 +8,9 @@ local sliLibrary = import 'gitlab-slis/library.libsonnet';
 local serviceLevelIndicatorDefinition = import 'servicemetrics/service_level_indicator_definition.libsonnet';
 local kubeLabelSelectors = metricsCatalog.kubeLabelSelectors;
 local dependOnPatroni = import 'inhibit-rules/depend_on_patroni.libsonnet';
+
 local gitWorkhorseJobNameSelector = { job: { re: 'gitlab-workhorse|gitlab-workhorse-git' } };
+local railsSelector = { job: 'gitlab-rails', type: 'git' };
 
 metricsCatalog.serviceDefinition({
   type: 'git',
@@ -220,8 +222,6 @@ metricsCatalog.serviceDefinition({
       ],
       dependsOn: dependOnPatroni.sqlComponents,
     },
-
-    local railsSelector = { job: 'gitlab-rails', type: 'git' },
     puma: {
       userImpacting: true,
       featureCategory: serviceLevelIndicatorDefinition.featureCategoryFromSourceMetrics,
@@ -314,17 +314,15 @@ metricsCatalog.serviceDefinition({
       ],
       dependsOn: dependOnPatroni.sqlComponents,
     },
-    rails_requests:
-      sliLibrary.get('rails_request').generateServiceLevelIndicator(railsSelector) {
-        monitoringThresholds+: {
-          apdexScore: 0.997,
-        },
+  } + sliLibrary.get('rails_request').generateServiceLevelIndicator(railsSelector, {
+    monitoringThresholds+: {
+      apdexScore: 0.997,
+    },
 
-        toolingLinks: [
-          toolingLinks.kibana(title='Rails', index='rails'),
-        ],
+    toolingLinks: [
+      toolingLinks.kibana(title='Rails', index='rails'),
+    ],
 
-        dependsOn: dependOnPatroni.sqlComponents,
-      },
-  },
+    dependsOn: dependOnPatroni.sqlComponents,
+  }),
 })

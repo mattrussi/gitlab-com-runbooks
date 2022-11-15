@@ -24,28 +24,25 @@ metricsCatalog.serviceDefinition({
 
   regional: false,
 
-  serviceLevelIndicators: {
-    rails_requests:
-      sliLibrary.get('customers_dot_requests').generateServiceLevelIndicator(extraSelector={}) {
-        severity: 's3',
-        toolingLinks: [
-          toolingLinks.stackdriverLogs(
-            'Stackdriver Logs: CustomersDot',
-            queryHash={
-              'resource.type': 'gce_instance',
-              'jsonPayload.controller': { exists: true },
-              'jsonPayload.duration': { exists: true },
-            },
-            project='gitlab-subscriptions-prod',
-          ),
-        ],
-      },
-
-    sidekiq_execution:
-      sliLibrary.get('customers_dot_sidekiq_jobs').generateServiceLevelIndicator({ type: 'customersdot' }) {
-        severity: 's3',
-      },
-  },
+  serviceLevelIndicators:
+    sliLibrary.get('customers_dot_requests').generateServiceLevelIndicator({}, {
+      severity: 's3',
+      toolingLinks: [
+        toolingLinks.stackdriverLogs(
+          'Stackdriver Logs: CustomersDot',
+          queryHash={
+            'resource.type': 'gce_instance',
+            'jsonPayload.controller': { exists: true },
+            'jsonPayload.duration': { exists: true },
+          },
+          project='gitlab-subscriptions-prod',
+        ),
+      ],
+    })
+    +
+    sliLibrary.get('customers_dot_sidekiq_jobs').generateServiceLevelIndicator({ type: 'customersdot' }, {
+      severity: 's3',
+    }),
   skippedMaturityCriteria: maturityLevels.skip({
     'Structured logs available in Kibana': 'All logs are available in Stackdriver',
   }),
