@@ -12,8 +12,8 @@ local customRouteSLIs = [
       a tag or digest. A HEAD request can also be issued to this endpoint to
       obtain resource information without receiving all data.
     |||,
-    satisfiedThreshold: 0.5,
-    toleratedThreshold: 1,
+    satisfiedThreshold: 0.1,
+    toleratedThreshold: 0.25,
     route: '/v2/{name}/manifests/{reference}',
     methods: ['get', 'head'],
   },
@@ -29,8 +29,8 @@ local customRouteSLIs = [
       Delete the manifest identified by name and reference. Note that a manifest
       can only be deleted by digest.
     |||,
-    satisfiedThreshold: 10,
-    toleratedThreshold: 25,
+    satisfiedThreshold: 1,
+    toleratedThreshold: 2.5,
     route: '/v2/{name}/manifests/{reference}',
     // POST and PATCH are currently unused, but to avoid ignoring them if they
     // were introduced, we include them here.
