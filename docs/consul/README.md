@@ -43,13 +43,13 @@
 ## Architecture
 
 Consul Server Cluster is a k8s StatefulSet deployed in the regional GKE cluster (ENV-gitlab-gke) with at least 5 total Pods.
-The StatefulSet is managed and deployed by the [gl-consul helm release](https://gitlab.com/gitlab-com/gl-infra/k8s-workloads/gitlab-helmfiles/-/blob/master/releases/consul/helmfile.yaml).
+The StatefulSet is managed and deployed by the [consul-gl helm release](https://gitlab.com/gitlab-com/gl-infra/k8s-workloads/gitlab-helmfiles/-/blob/master/releases/consul/helmfile.yaml).
 
 The servers have one "leader" which serves as the primary server, and all others will be
 noted as "followers". We utilize 5 nodes as consul uses a quorum to ensure the data to be returned to clients is a state that all members of the consul cluster
 agree too. This also allows for at most 2 followers to be down before our consul cluster would be considered faulty.
 
-Consul Server cluster ports are exposed by a `Loadbalancer` Service and can be reached by Consul clients from outside the k8s Cluster.
+Consul Server cluster ports are exposed by an internal `Loadbalancer` Service and can be reached by Consul clients from outside the k8s Cluster (`consul-internal.<env>.gke.gitlab.net`).
 Consul DNS is being exposed by a k8s Service as well and uses each local Consul Client to provide DNS resolution to the Rails workloads to be able to discover what is the Patroni primary and replica nodes.
 
 Reference: [Consul Architecture Overview](https://www.consul.io/docs/architecture)
@@ -167,7 +167,7 @@ service was pushed into place prior to recognition for the need to test this.
 
 ## Scalability
 
-The consul cluster is currently managed using helm.  Any additional
+The Consul cluster is currently managed using Helm.  Any additional
 nodes can be added by modifying the `server:replica` count for the specific environment.
 
 Agents can come and go as they please.  On Kubernetes, this is very important as
@@ -300,12 +300,12 @@ seconds.
 ### Secrets
 
 Consul utilizes a secret key pair to prevent intrusion of rogue clients.  This key is
-stored in Vault under the path: `"env/{{ .Environment.Name }}/ns/consul/tls"`.  The values of these are
+stored in Vault under the path: `"k8s/env/{{ .Environment.Name }}/ns/consul/tls"`.  The values of these are
 dropped on the servers in `/etc/consul/ssl/certs` and are populated in consul
 configuration file to enable TLS verification of clients.
 
 All Gossip Protocol traffic is encrypted.  This key is stored in Vault under the path:
-`"env/{{ .Environment.Name }}/ns/consul/gossip"`.
+`"k8s/env/{{ .Environment.Name }}/ns/consul/gossip"`.
 
 ## Monitoring/Alerting
 
