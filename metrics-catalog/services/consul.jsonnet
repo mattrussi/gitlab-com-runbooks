@@ -51,7 +51,7 @@ metricsCatalog.serviceDefinition({
       |||,
 
       local ConsulSelector = {
-        job: 'consul',
+        job: 'consul-gl-consul-ui',
       },
       requestRate: rateMetric(
         counter='consul_client_rpc',

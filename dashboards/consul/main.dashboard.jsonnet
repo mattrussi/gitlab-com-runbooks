@@ -154,7 +154,8 @@ serviceDashboard.overview('consul', startRow=1)
         format='ms'
       ),
     ], cols=4, rowHeight=10, startRow=4),
-  )
+  ),
+  gridPos={ x: 0, y: 200, w: 24, h: 1 },
 )
 .addPanel(
   row.new(title='Consul Integrated Storage (Raft) Leadership Changes', collapse=true)
@@ -196,6 +197,7 @@ serviceDashboard.overview('consul', startRow=1)
       ),
     ], cols=2, rowHeight=10, startRow=0),
   ),
+  gridPos={ x: 0, y: 200, w: 24, h: 1 }
 )
 .addPanel(
   row.new(title='Consul KV and Transaction Latency', collapse=true)
@@ -221,6 +223,7 @@ serviceDashboard.overview('consul', startRow=1)
       ),
     ], cols=2, rowHeight=10, startRow=0),
   ),
+  gridPos={ x: 0, y: 200, w: 24, h: 1 }
 )
 .addPanel(
   row.new(title='Garbage Collection', collapse=true)
@@ -239,6 +242,7 @@ serviceDashboard.overview('consul', startRow=1)
         format='ns'
       ),
     ], cols=1, rowHeight=10, startRow=0),
-  )
+  ),
+  gridPos={ x: 0, y: 200, w: 24, h: 1 }
 )
 .overviewTrailer()
