@@ -898,13 +898,13 @@ groups:
       component: thanos_query_frontend
       tier: inf
       type: monitoring
-    expr: "0.999000"
+    expr: "0.950000"
   - record: slo:max:events:gitlab_service_errors:ratio
     labels:
       component: thanos_query_frontend
       tier: inf
       type: monitoring
-    expr: "0.001000"
+    expr: "0.050000"
   - record: slo:min:events:gitlab_service_apdex:ratio
     labels:
       component: thanos_rule_alert_sender
