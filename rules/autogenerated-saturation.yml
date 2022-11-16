@@ -1599,7 +1599,7 @@ groups:
   - record: slo:max:hard:gitlab_component_saturation:ratio
     labels:
       component: redis_primary_cpu
-    expr: "0.95"
+    expr: "0.8"
   - record: slo:max:soft:gitlab_component_saturation:ratio
     labels:
       component: redis_secondary_cpu
