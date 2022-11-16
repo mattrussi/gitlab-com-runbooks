@@ -66,7 +66,7 @@ below to access the full catalog of consul using their UI:
 1. Connect to the GKE cluster where Consul is hosted:
 
     ```
-    glsh kube use gprd
+    glsh kube use-cluster gprd
     ```
 
 2. On a separate terminal, forward the Consul Server service port:
