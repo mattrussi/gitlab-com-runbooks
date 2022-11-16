@@ -4,7 +4,7 @@ groups:
   - alert: AlertmanagerNotificationsFailing
     expr: >
       sum by (integration) (
-        increase(alertmanager_notifications_failed_total[5m])
+        increase(alertmanager_notifications_failed_total{integration!="webhook"}[5m])
       ) > 4
     labels:
       pager: pagerduty
@@ -15,6 +15,21 @@ groups:
       title: Alertmanager is failing sending notifications
       runbook: docs/monitoring/alertmanager-notification-failures.md
       description: Alertmanager is seeing errors for the {{$labels.integration}} integration.
+  - alert: AlertmanagerWebhookNotificationsFailing
+    expr: >
+      sum by (integration) (
+        increase(alertmanager_notifications_failed_total{integration="webhook"}[5m])
+      ) > 10
+    for: 10m
+    labels:
+      pager: pagerduty
+      service: alertmanager
+      severity: s2
+      alert_type: cause
+    annotations:
+      title: Alertmanager is failing sending notifications for the webhook integration
+      runbook: docs/monitoring/alertmanager-notification-failures.md
+      description: Alertmanager is seeing errors for the webhook integration, check https://console.cloud.google.com/functions/details/us-central1/alertManagerBridge?env=gen1&project=gitlab-infra-automation
   - alert: AlertmanagerNotificationsFailing
     expr: >
       sum by (integration) (
