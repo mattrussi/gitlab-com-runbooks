@@ -11,6 +11,7 @@ groups:
       service: alertmanager
       severity: s1
       alert_type: cause
+      type: monitoring
     annotations:
       title: Alertmanager is failing sending notifications
       runbook: docs/monitoring/alertmanager-notification-failures.md
@@ -26,6 +27,7 @@ groups:
       service: alertmanager
       severity: s2
       alert_type: cause
+      type: monitoring
     annotations:
       title: Alertmanager is failing sending notifications for the webhook integration
       runbook: docs/monitoring/alertmanager-notification-failures.md
@@ -41,6 +43,7 @@ groups:
       service: alertmanager
       severity: s1
       alert_type: cause
+      type: monitoring
     annotations:
       title: Alertmanager is failing sending notifications
       runbook: docs/monitoring/alertmanager-notification-failures.md
