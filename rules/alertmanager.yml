@@ -4,7 +4,7 @@ groups:
   - alert: AlertmanagerNotificationsFailing
     expr: >
       sum by (integration) (
-        increase(alertmanager_notifications_failed_total[1h])
+        increase(alertmanager_notifications_failed_total[5m])
       ) > 4
     labels:
       pager: pagerduty
@@ -18,7 +18,7 @@ groups:
   - alert: AlertmanagerNotificationsFailing
     expr: >
       sum by (integration) (
-        increase(alertmanager_notifications_failed_total[1h])
+        increase(alertmanager_notifications_failed_total[5m])
       ) > 0
     for: 3h
     labels:
