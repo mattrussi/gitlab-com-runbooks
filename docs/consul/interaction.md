@@ -10,12 +10,12 @@ To [identify the current server](https://www.consul.io/commands/operator/raft) w
 
 ```
 $ consul operator raft list-peers
-Node                ID                                    Address          State     Voter  RaftProtocol
-consul-01-inf-gstg  2c3cf733-0f27-982e-a53c-1447409c161d  10.224.4.2:8300  follower  true   3
-consul-03-inf-gstg  28580308-0012-eac2-85e8-22e2d1f25d16  10.224.4.4:8300  leader    true   3
-consul-04-inf-gstg  2abc4eaa-e906-ca41-925b-2a3b85405fd5  10.224.4.5:8300  follower  true   3
-consul-05-inf-gstg  7386d511-4acc-ef91-b5e3-a000fffa4eb6  10.224.4.6:8300  follower  true   3
-consul-02-inf-gstg  dd04fcd5-7c30-a3b8-b351-daed6c80a692  10.224.4.3:8300  follower  true   3
+Node                       ID                                    Address             State     Voter  RaftProtocol
+consul-gl-consul-server-3  c929bb0e-0263-c870-4b7e-1ea7a25a39a2  10.227.16.79:8300   leader    true   3
+consul-gl-consul-server-2  e607642d-a79c-838a-31bd-da25a2c77bfd  10.227.11.13:8300   follower  true   3
+consul-gl-consul-server-1  5d947b27-ef5f-f3c6-17b1-bd93b19e3fc0  10.227.22.175:8300  follower  true   3
+consul-gl-consul-server-0  5342d066-32b5-29cb-7c10-51aa5c89e23c  10.227.2.236:8300   follower  true   3
+consul-gl-consul-server-4  2e3075d9-f13f-429d-0010-d2190a40bc31  10.227.5.16:8300    follower  true   3
 ```
 
 To [follow the debug logs](https://www.consul.io/commands/monitor) of a consul agent:
@@ -58,16 +58,35 @@ service you intend on querying, you can perform a lookup to the agent locally:
 dig @127.0.0.1 -p 8600 <service_name>
 ```
 
-## Web UI
+## Web UI and local Consul CMD
 
 We enable the web UI, but do not easily expose it.  Follow the instructions
 below to access the full catalog of consul using their UI:
 
-1. `ssh -L 8500:localhost:8500 <consul_hostname>`
-1. Open a browser and point it to `http://localhost:8500`
-1. Enjoy
+1. Connect to the GKE cluster where Consul is hosted:
+
+    ```
+    glsh kube use gprd
+    ```
+
+2. On a separate terminal, forward the Consul Server service port:
+
+    ```
+    kubeclt port-forward service/consul-gl-consul-expose-servers 8500:8500 -n consul
+    ```
+
+3. Open a browser and point it to `http://localhost:8500`
+4. You can also use the `consul` command on a terminal. Eg:
+
+    ```
+    consul members
+    ```
+
+5. Enjoy
 
 ## Consul Server Maintenance
+
+TODO: this only applies to Consul running on VMs and we are not doing that anymore. Do we need this?
 
 When needing to perform maintenance on consul, it would be wise to gracefully
 remove the node from the cluster to prevent as much disruption as possible.
@@ -78,5 +97,5 @@ brings down the service preventing failover to that node.
    the consul service
 1. Prior to starting consul, one may need to remove any snapshots located inside
    of the data directory
-+1. Start consul - `systemctl start consul`
-+1. Validate that it is has joined the cluster as a follower
+1. Start consul - `systemctl start consul`
+1. Validate that it is has joined the cluster as a follower
