@@ -31,6 +31,7 @@
 * [Managing GitLab Storage Shards (Gitaly)](../gitaly/storage-sharding.md)
 * [CI Artifacts CDN](../google-cloud-storage/artifacts-cdn.md)
 * [Ad hoc observability tools on Kubernetes nodes](../kube/k8s-adhoc-observability.md)
+* [Rebuilding a kubernetes cluster](../kube/k8s-cluster-rebuild.md)
 * [GKE Cluster Upgrade Procedure](../kube/k8s-cluster-upgrade.md)
 * [../kube/k8s-oncall-setup.md](../kube/k8s-oncall-setup.md)
 * [../kube/k8s-operations.md](../kube/k8s-operations.md)

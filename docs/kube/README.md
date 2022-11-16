@@ -20,6 +20,7 @@
 * [../elastic/kibana.md](../elastic/kibana.md)
 * [../git/gitlab-review-app-certs.md](../git/gitlab-review-app-certs.md)
 * [Kubernetes-Agent Basic Troubleshooting](../kas/kubernetes-agent-basic-troubleshooting.md)
+* [Rebuilding a kubernetes cluster](k8s-cluster-rebuild.md)
 * [k8s-oncall-setup.md](k8s-oncall-setup.md)
 * [k8s-operations.md](k8s-operations.md)
 * [How to resize Persistent Volumes in Kubernetes](k8s-pvc-resize.md)

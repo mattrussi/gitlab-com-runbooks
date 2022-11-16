@@ -5,7 +5,6 @@ bits for adding GKE and bringing over components of GitLab into Kubernetes.
 
 Our current application configuration components:
 
-* <https://gitlab.com/gitlab-com/gl-infra/k8s-workloads/common>
 * <https://gitlab.com/gitlab-com/gl-infra/k8s-workloads/gitlab-com>
 * <https://gitlab.com/gitlab-com/gl-infra/k8s-workloads/gitlab-helmfiles>
 

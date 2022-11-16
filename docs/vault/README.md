@@ -32,6 +32,7 @@
 * [HAProxy management at GitLab](../frontend/haproxy.md)
 * [Gitaly token rotation](../gitaly/gitaly-token-rotation.md)
 * [CI Artifacts CDN](../google-cloud-storage/artifacts-cdn.md)
+* [Rebuilding a kubernetes cluster](../kube/k8s-cluster-rebuild.md)
 * [StatefulSet Guidelines](../kube/sts-guidelines.md)
 * [GPG Keys for Package Signing](../packaging/manage-package-signing-keys.md)
 * [Credential rotation](../patroni/postgresql-role-credential-rotation.md)
