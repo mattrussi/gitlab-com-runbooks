@@ -1,5 +1,12 @@
 local sliDefinition = import 'gitlab-slis/sli-definition.libsonnet';
+local stages = import 'service-catalog/stages.libsonnet';
 local aggregationSet = import 'servicemetrics/aggregation-set.libsonnet';
+
+local customersDotCategories = std.foldl(
+  function(memo, group) memo + group.feature_categories,
+  stages.groupsForStage('fulfillment'),
+  []
+);
 
 local list = [
   sliDefinition.new({
@@ -29,6 +36,7 @@ local list = [
   sliDefinition.new({
     name: 'customers_dot_sidekiq_jobs',
     significantLabels: ['endpoint_id', 'feature_category'],
+    dashboardFeatureCategories: customersDotCategories,
     kinds: [sliDefinition.apdexKind, sliDefinition.errorRateKind],
     description: |||
       The number of CustomersDot jobs meeting their duration target for their execution.
@@ -39,6 +47,7 @@ local list = [
   sliDefinition.new({
     name: 'customers_dot_requests',
     significantLabels: ['endpoint_id', 'feature_category'],
+    dashboardFeatureCategories: customersDotCategories,
     kinds: [sliDefinition.apdexKind, sliDefinition.errorRateKind],
     description: |||
       The number of CustomersDot requests meeting their duration target based on the urgency

@@ -97,6 +97,21 @@ test.suite({
     },
   },
 
+  testValidateValidDashboardFeatureCategories: {
+    local sli = validSLI { dashboardFeatureCategories: ['not_owned'] },
+    actual: sli,
+    expectValid: sliDefinition._sliValidator,
+  },
+
+  testValidateInvalidDashboardFeatureCategories: {
+    local sli = validSLI { dashboardFeatureCategories: ['foo'] },
+    actual: sli,
+    expectMatchingValidationError: {
+      validator: sliDefinition._sliValidator,
+      message: 'field dashboardFeatureCategories',
+    },
+  },
+
   testValidateInvalidKind: {
     actual: validSLI { kinds: ['foo_rate'] },
     expectMatchingValidationError: {

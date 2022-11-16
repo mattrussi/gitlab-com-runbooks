@@ -30,6 +30,10 @@ local sliValidator = validator.new({
     validator.validator(function(values) misc.all(function(v) std.member(validKinds, v), values), 'only %s are supported' % [std.join(', ', validKinds)])
   ),
   featureCategory: validator.validator(validateFeatureCategory, 'please specify a known feature category or include `feature_category` as a significant label'),
+  dashboardFeatureCategories: validator.validator(
+    function(values) misc.all(function(v) std.objectHas(stages.featureCategoryMap, v), values),
+    'contains unknown feature categories'
+  ),
 });
 
 local rateQueryFunction(sli, counter) =
@@ -42,11 +46,20 @@ local applyDefaults(definition) = {
     serviceLevelIndicatorDefinition.featureCategoryFromSourceMetrics,
   hasApdex():: std.member(definition.kinds, apdexKind),
   hasErrorRate():: std.member(definition.kinds, errorRateKind),
+  dashboardFeatureCategories: [],
 } + definition;
+
+local validateDashboardFeatureCategories(definition) =
+  if std.length(definition.dashboardFeatureCategories) > 0 &&
+     definition.featureCategory != serviceLevelIndicatorDefinition.featureCategoryFromSourceMetrics then
+    std.assertEqual(definition.dashboardFeatureCategories,
+                    { __assert__: 'dashboardFeatureCategories can only be set when feature categories come from source metrics' })
+  else
+    definition;
 
 local validateAndApplyDefaults(definition) =
   local definitionWithDefaults = applyDefaults(definition);
-  local sli = sliValidator.assertValid(definitionWithDefaults);
+  local sli = validateDashboardFeatureCategories(sliValidator.assertValid(definitionWithDefaults));
 
   sli {
     [if sli.hasApdex() then 'apdexTotalCounterName']: 'gitlab_sli_%s_apdex_total' % [self.name],
@@ -80,6 +93,7 @@ local validateAndApplyDefaults(definition) =
         userImpacting: true,
         featureCategory: sli.featureCategory,
 
+        dashboardFeatureCategories: parent.dashboardFeatureCategories,
         description: parent.description,
 
         requestRate: rateMetric(parent.totalCounterName, extraSelector),
