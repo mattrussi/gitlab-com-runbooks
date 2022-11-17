@@ -29,6 +29,7 @@
 * [../registry/migration-failure-scenarios.md](../registry/migration-failure-scenarios.md)
 * [High Number of Overdue Online GC Tasks](../registry/online-gc-high-overdue-tasks.md)
 * [Sentry general admin troubleshooting](sentry-admin.md)
+* [Managing Sentry in Kubernetes](sentry-in-kube.md)
 * [Sentry is down and gives error 500](sentry-is-down.md)
 * [PostgreSQL PendingWALFilesTooHigh](sentry_pending_wal_files_too_high.md)
 * [Pull mirror overdue queue is too large](../sidekiq/large-pull-mirror-queue.md)
