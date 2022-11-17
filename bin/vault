@@ -1,0 +1,78 @@
+#!/bin/sh
+
+set -e
+
+VAULT_ADDR="https://vault.ops.gke.gitlab.net"
+BASTION_HOST="lb-bastion.ops.gitlab.com"
+
+usage() {
+  echo >&2 "USAGE:"
+  echo >&2 "    glsh vault [SUBCOMMAND]"
+  echo >&2
+  echo >&2 "SUBCOMMANDS: "
+  echo >&2 "    init    Initialize the shell environment for Vault"
+  echo >&2 "    login   Login into Vault"
+  echo >&2 "    proxy   Start a SOCKS5 proxy for Vault through the ops bastion"
+}
+
+init() {
+  if [ "$1" = '-' ];then
+      cat <<EOF
+VAULT_ADDR="${VAULT_ADDR}"; export VAULT_ADDR
+vault-proxy() { eval "\$(glsh vault proxy "\$@")" }
+EOF
+  else
+      cat >&2 <<'EOF'
+# Initialize your Vault environment automatically by appending the following
+# to ~/.bashrc or ~/.zshrc:
+
+eval "$(glsh vault init -)"
+
+# Restart your shell for the changes to take effect.
+EOF
+  fi
+}
+
+login() {
+  role="${1:-user}"
+
+  echo "[vault] Logging into Vault at ${VAULT_ADDR} with role \"${role}\"..."
+  vault login -no-print -method=oidc role="${role}"
+}
+
+proxy() {
+  port="${1:-18200}"
+  proxy_addr="socks5://localhost:${port}"
+
+  msg="[vault] Starting SOCKS5 proxy on port ${port} through ${BASTION_HOST}..."
+
+  if [ -n "${TMUX}" ]; then
+    echo "VAULT_PROXY_ADDR=\"${proxy_addr}\"; export VAULT_PROXY_ADDR"
+    tmux split-pane -d -v -l 3 "echo \"${msg}\"; exec ssh -D \"${port}\" \"${BASTION_HOST}\" 'echo \"Connected! Press Enter to disconnect.\"; read disconnect'"
+  else
+    echo >&2 "Open a new shell and run the following before using Vault:"
+    echo >&2
+    echo >&2 "export VAULT_PROXY_ADDR=\"${proxy_addr}\""
+    echo >&2
+    echo >&2 "${msg}"
+    ssh -D "${port}" "${BASTION_HOST}" 'echo "Connected! Press Enter to disconnect."; read disconnect' >&2
+  fi
+}
+
+case $1 in
+    init)
+        shift
+        init "$@"
+        ;;
+    login)
+        shift
+        login "$@"
+        ;;
+    proxy)
+        shift
+        proxy "$@"
+        ;;
+    *)
+        usage
+        exit 2
+esac
