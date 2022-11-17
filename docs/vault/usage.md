@@ -44,34 +44,50 @@ The non-official client [`safe`](https://github.com/starkandwayne/safe) is also 
 
 *Access via Teleport is not implemented yet at the time of this writing (see <https://gitlab.com/gitlab-com/gl-infra/reliability/-/issues/15898>) but will eventually be the prefered method for accessing Vault from CLI.*
 
-You will have to forward Vault's port 8200 locally by one of these ways:
+```shell
+eval "$(glsh vault init -)"
+glsh vault proxy
 
-* SOCKS5 proxy via SSH:
+# In a new shell
+export VAULT_PROXY_ADDR="socks5://localhost:18200"
+glsh vault login
+```
 
-  ```shell
-  # In a separate shell session
-  ssh -D 18200 bastion-01-inf-ops.c.gitlab-ops.internal
-  # In your first session
-  export VAULT_ADDR=https://vault.ops.gke.gitlab.net
-  export VAULT_PROXY_ADDR=socks5://localhost:18200
-  # If using safe:
-  alias safe='HTTPS_PROXY="${VAULT_PROXY_ADDR}" safe'
-  safe target ${VAULT_ADDR} ops
-  ```
+There are alternative ways for you to connect as well if `glsh` doesn't work for you:
 
-* Port-forwarding via `kubectl`:
+<details>
+<summary> SOCKS5 proxy via SSH </summary>
 
-  ```shell
-  # In a separate shell session
-  kubectl -n vault port-forward svc/vault-active 8200
-  # In your first session
-  export VAULT_ADDR=https://localhost:8200
-  export VAULT_TLS_SERVER_NAME=vault.ops.gke.gitlab.net
-  # If using safe:
-  safe target ${VAULT_ADDR} ops
-  ```
+```shell
+# In a separate shell session
+ssh -D 18200 bastion-01-inf-ops.c.gitlab-ops.internal
+# In your first session
+export VAULT_ADDR=https://vault.ops.gke.gitlab.net
+export VAULT_PROXY_ADDR=socks5://localhost:18200
+# If using safe:
+alias safe='HTTPS_PROXY="${VAULT_PROXY_ADDR}" safe'
+safe target ${VAULT_ADDR} ops
+```
 
-* Users of fish shell can use this function:
+</details>
+
+<details>
+<summary> port-forwarding via `kubectl` </summary>
+
+```shell
+# In a separate shell session
+kubectl -n vault port-forward svc/vault-active 8200
+# In your first session
+export VAULT_ADDR=https://localhost:8200
+export VAULT_TLS_SERVER_NAME=vault.ops.gke.gitlab.net
+# If using safe:
+safe target ${VAULT_ADDR} ops
+```
+
+</details>
+
+<details>
+<summary> Users of fish shell can use this function </summary>
 
 ```shell
 # Copy to ~/.config/fish/functions/vault-proxy.fish
@@ -91,6 +107,8 @@ function vault-proxy -d 'Set up a proxy to run vault commands'
  end
 end
 ```
+
+</details>
 
 Then you can login via the OIDC method:
 
