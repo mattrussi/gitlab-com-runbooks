@@ -17,6 +17,20 @@ local elasticQueueSize(title, metric) =
     ||| % { metric: metric },
   );
 
+local searchErrorRate(title, request_type, search_type) =
+  basic.timeseries(
+    title=title,
+    yAxisLabel='Global Search Errors',
+    stableId='global-search-error-rate-%s-%s' % [std.asciiLower(request_type), std.asciiLower(search_type)],
+    description=|||
+      The number of Global Search search requests that result in an erroneous status code or
+      raise an error during the search request.
+    |||,
+    query=|||
+      sum by (search_scope) (rate(gitlab_sli_global_search_error_total{environment="$environment", stage="$stage" ,search_type="%(search_type)s", type="%(request_type)s"}[$__interval]))
+    ||| % { request_type: request_type, search_type: search_type },
+  );
+
 stageGroupDashboards.dashboard('global_search', ['api', 'sidekiq', 'web'])
 .addPanels(
   layout.rowGrid(
@@ -26,6 +40,26 @@ stageGroupDashboards.dashboard('global_search', ['api', 'sidekiq', 'web'])
       elasticQueueSize('Initial', 'global_search_bulk_cron_initial_queue_size'),
     ],
     startRow=1000,
+  ),
+)
+.addPanels(
+  layout.rowGrid(
+    'Global Search Error Rate - Web',
+    [
+      searchErrorRate('Advanced Search Error Rate', 'web', 'advanced'),
+      searchErrorRate('Basic Search Error', 'web', 'basic'),
+    ],
+    startRow=2000,
+  ),
+)
+.addPanels(
+  layout.rowGrid(
+    'Global Search Error Rate - API',
+    [
+      searchErrorRate('Advanced Search Error Rate', 'api', 'advanced'),
+      searchErrorRate('Basic Search Error Rate', 'api', 'basic'),
+    ],
+    startRow=4000,
   ),
 )
 .stageGroupDashboardTrailer()
