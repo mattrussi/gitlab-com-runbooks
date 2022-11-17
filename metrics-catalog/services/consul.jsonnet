@@ -29,13 +29,7 @@ metricsCatalog.serviceDefinition({
     ),
   },
   kubeResources: {
-    'consul-client': {
-      kind: 'Daemonset',
-      containers: [
-        'consul',
-      ],
-    },
-    'consul-server': {
+    consul: {
       kind: 'StatefulSet',
       containers: [
         'consul',
