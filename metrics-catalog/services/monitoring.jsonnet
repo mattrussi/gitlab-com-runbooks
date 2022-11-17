@@ -126,6 +126,10 @@ metricsCatalog.serviceDefinition({
     },
 
     thanos_query_frontend: {
+      monitoringThresholds: {
+        apdexScore: 0.95,
+        errorRatio: 0.95,
+      },
       userImpacting: false,
       featureCategory: 'not_owned',
       description: |||
