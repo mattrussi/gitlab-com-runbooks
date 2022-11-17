@@ -44,7 +44,7 @@ The non-official client [`safe`](https://github.com/starkandwayne/safe) is also 
 
 *Access via Teleport is not implemented yet at the time of this writing (see <https://gitlab.com/gitlab-com/gl-infra/reliability/-/issues/15898>) but will eventually be the prefered method for accessing Vault from CLI.*
 
-You will have to forward Vault's port 8200 locally by one of 2 ways:
+You will have to forward Vault's port 8200 locally by one of these ways:
 
 * SOCKS5 proxy via SSH:
 
@@ -70,6 +70,27 @@ You will have to forward Vault's port 8200 locally by one of 2 ways:
   # If using safe:
   safe target ${VAULT_ADDR} ops
   ```
+
+* Users of fish shell can use this function:
+
+```shell
+# Copy to ~/.config/fish/functions/vault-proxy.fish
+function vault-proxy -d 'Set up a proxy to run vault commands'
+ set -f BASTION_HOST "lb-bastion.ops.gitlab.com"
+ set -Ux VAULT_ADDR "https://vault.ops.gke.gitlab.net"
+ set -f VAULT_PROXY_PORT "18200"
+ set -Ux VAULT_PROXY_ADDR "socks5://localhost:$VAULT_PROXY_PORT"
+ set msg "[vault] Starting SOCKS5 proxy on $BASTION_HOST via $VAULT_PROXY_ADDR"
+ if test -n "$TMUX"
+  tmux split-pane -d -v -l 3 "echo \"$msg\"; ssh -D \"$VAULT_PROXY_PORT\" \"$BASTION_HOST\" 'echo \"Connected! Press Enter to disconnect.\"; read disconnect'; set -e VAULT_PROXY_ADDR VAULT_ADDR; echo Disconnected ; sleep 3"
+ else
+  echo >&2 "Open a new shell before using Vault:"
+  echo >&2 "$msg"
+  ssh -D "$VAULT_PROXY_PORT" "$BASTION_HOST" 'echo "Connected! Press Enter to disconnect."; read disconnect' >&2
+  set -e VAULT_PROXY_ADDR VAULT_ADDR
+ end
+end
+```
 
 Then you can login via the OIDC method:
 
