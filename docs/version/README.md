@@ -62,6 +62,7 @@
 * [../redis/redis.md](../redis/redis.md)
 * [../registry/migration-failure-scenarios.md](../registry/migration-failure-scenarios.md)
 * [High Number of Overdue Online GC Tasks](../registry/online-gc-high-overdue-tasks.md)
+* [Managing Sentry in Kubernetes](../sentry/sentry-in-kube.md)
 * [../uncategorized/about-gitlab-com.md](../uncategorized/about-gitlab-com.md)
 * [Aptly](../uncategorized/aptly.md)
 * [Auto DevOps](../uncategorized/auto-devops.md)

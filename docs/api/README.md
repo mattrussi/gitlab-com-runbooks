@@ -70,6 +70,7 @@
 * [Container Registry Migration Phase 2](../registry/migration-phase2.md)
 * [High Number of Overdue Online GC Tasks](../registry/online-gc-high-overdue-tasks.md)
 * [Sentry general admin troubleshooting](../sentry/sentry-admin.md)
+* [Managing Sentry in Kubernetes](../sentry/sentry-in-kube.md)
 * [Sidekiq Queue Out of Control](../sidekiq/large-sidekiq-queue.md)
 * [A survival guide for SREs to working with Sidekiq at GitLab](../sidekiq/sidekiq-survival-guide-for-sres.md)
 * [../spamcheck/index.md](../spamcheck/index.md)
