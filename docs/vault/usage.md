@@ -44,7 +44,7 @@ The non-official client [`safe`](https://github.com/starkandwayne/safe) is also 
 
 *Access via Teleport is not implemented yet at the time of this writing (see <https://gitlab.com/gitlab-com/gl-infra/reliability/-/issues/15898>) but will eventually be the prefered method for accessing Vault from CLI.*
 
-You will have to forward Vault's port 8200 locally by one of 2 ways:
+You will have to forward Vault's port 8200 locally by one of 3 ways:
 
 * SOCKS5 proxy via SSH:
 
@@ -69,6 +69,19 @@ You will have to forward Vault's port 8200 locally by one of 2 ways:
   export VAULT_TLS_SERVER_NAME=vault.ops.gke.gitlab.net
   # If using safe:
   safe target ${VAULT_ADDR} ops
+  ```
+
+* GLSH to start a SOCKS Proxy and Vault Login (Preferred):
+  ```shell
+  # Add eval "$(glsh vault init -)" in .bashrc or .zshrc
+  glsh vault init
+  # Start a SOCKS5 proxy for Vault through the ops bastion
+  # splits into a new window if running in tmux 
+  glsh vault proxy
+  # Open a new tab and export the VAULT_PROXY_ADDR variable
+  export VAULT_PROXY_ADDR="socks5://localhost:18200"
+  # Login to Vault via OIDC
+  glsh vault login
   ```
 
 Then you can login via the OIDC method:
