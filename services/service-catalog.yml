@@ -500,7 +500,7 @@ services:
       maintenance:  # Link to maintenance procedures document
       runbooks:
       playbooks:
-        - https://gitlab.com/gitlab-com/gl-infra/customersdot-ansible
+        - https://gitlab.com/gitlab-org/customersdot-ansible
     observability:
       monitors:
         sentry_slug: gitlab/customersgitlabcom/

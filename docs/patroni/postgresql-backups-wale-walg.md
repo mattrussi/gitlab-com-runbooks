@@ -104,7 +104,7 @@ Backups are kept for 14 days, moved to the Nearline storage class after 14 days,
     ```
 
 - `prdsub`/`stgsub`:
-  [walg](https://gitlab.com/gitlab-com/gl-infra/customersdot-ansible-poc/-/blob/74856576703c8caad8e354bdffce9d70665cea7f/roles/walg/tasks/main.yml)
+  [walg](https://gitlab.com/gitlab-org/customersdot-ansible/-/blob/74856576703c8caad8e354bdffce9d70665cea7f/roles/walg/tasks/main.yml)
   ansible role installs WAL-G and a cron job to run every day.
 
   ```shell

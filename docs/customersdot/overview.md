@@ -30,7 +30,7 @@ the section for NGINX below for rate limit information.
 The web server on the VM has a rate limit set that should return a 429
 when the rate is exceeded. This rate limit is specific to API Seat Requests
 and is is managed in
-[Ansible](https://gitlab.com/gitlab-com/gl-infra/customersdot-ansible).
+[Ansible](https://gitlab.com/gitlab-org/customersdot-ansible).
 
 #### Logs
 
@@ -96,7 +96,7 @@ the application is first deployed to Staging then to Production after a delay of
 
 That being said, it is possible to trigger a manual pipeline to deploy to
 production right away, should the need to do so arise. To do so, please refer to
-[this documentation](https://gitlab.com/gitlab-com/gl-infra/customersdot-ansible/-/blob/master/doc/readme.md#manual-deployment-to-production).
+[this documentation](https://gitlab.com/gitlab-org/customersdot-ansible/-/blob/master/doc/readme.md#manual-deployment-to-production).
 
 Alerts related to deployments are sent to the `#s_fulfillment_status` Slack channel.
 
@@ -113,7 +113,7 @@ Chef is used essentially to bootstrap user access for users and Ansible.
 * [Staging Base](https://gitlab.com/gitlab-com/gl-infra/chef-repo/-/blob/master/roles/stgsub-base.json)
 * [Production Base](https://gitlab.com/gitlab-com/gl-infra/chef-repo/-/blob/master/roles/prdsub-base.json)
 
-[Ansible](https://gitlab.com/gitlab-com/gl-infra/customersdot-ansible) is used to deploy the latest code to staging.
+[Ansible](https://gitlab.com/gitlab-org/customersdot-ansible) is used to deploy the latest code to staging.
 
 ### Alerting
 
