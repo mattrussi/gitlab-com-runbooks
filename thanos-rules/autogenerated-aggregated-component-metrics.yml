@@ -5,36 +5,6 @@ groups:
   interval: 1m
   partial_response_strategy: warn
   rules:
-  - record: gitlab_component_errors:rate
-    expr: |
-      sum by (env,environment,tier,type,stage,component) (
-        (gitlab_component_errors:rate{monitor!="global"} >= 0)
-      )
-  - record: gitlab_component_ops:rate
-    expr: |
-      sum by (env,environment,tier,type,stage,component) (
-        (gitlab_component_ops:rate{monitor!="global"} >= 0)
-      )
-  - record: gitlab_component_errors:ratio
-    expr: |
-      sum by (env,environment,tier,type,stage,component)(
-        (gitlab_component_errors:rate{monitor!="global"} >= 0)
-      )
-      /
-      sum by (env,environment,tier,type,stage,component)(
-        (gitlab_component_ops:rate{monitor!="global"} >= 0)
-        and
-        (gitlab_component_errors:rate{monitor!="global"} >= 0)
-      )
-  - record: gitlab_component_apdex:ratio
-    expr: |
-      sum by (env,environment,tier,type,stage,component) (
-        (gitlab_component_apdex:success:rate{monitor!="global"} >= 0)
-      )
-      /
-      sum by (env,environment,tier,type,stage,component) (
-        (gitlab_component_apdex:weight:score{monitor!="global"} >= 0)
-      )
   - record: gitlab_component_errors:rate_5m
     expr: |
       sum by (env,environment,tier,type,stage,component) (

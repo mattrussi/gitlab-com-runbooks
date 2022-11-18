@@ -18,21 +18,12 @@ local aggregationSet = import 'servicemetrics/aggregation-set.libsonnet';
     intermediateSource: true,  // Not intended for consumption in dashboards or alerts
     selector: { monitor: { ne: 'global' } },  // Not Thanos Ruler
     labels: ['environment', 'tier', 'type', 'stage'],
-    supportedBurnRates: ['1m', '5m', '30m', '1h', '6h'],  // Including 1m & 6h
+    supportedBurnRates: ['5m', '30m', '1h', '6h'],  // Including 6h
     metricFormats: {
       apdexSuccessRate: 'gitlab_component_apdex:success:rate_%s',
       apdexWeight: 'gitlab_component_apdex:weight:score_%s',
       opsRate: 'gitlab_component_ops:rate_%s',
       errorRate: 'gitlab_component_errors:rate_%s',
-    },
-    burnRates: {
-      '1m': {
-        // TODO: drop the 1m burn rate entirely
-        apdexSuccessRate: 'gitlab_component_apdex:success:rate',
-        apdexWeight: 'gitlab_component_apdex:weight:score',
-        opsRate: 'gitlab_component_ops:rate',
-        errorRate: 'gitlab_component_errors:rate',
-      },
     },
   }),
 
@@ -46,21 +37,11 @@ local aggregationSet = import 'servicemetrics/aggregation-set.libsonnet';
     intermediateSource: false,  // Used in dashboards and alerts
     selector: { monitor: 'global' },  // Thanos Ruler
     labels: ['env', 'environment', 'tier', 'type', 'stage', 'component'],
-    supportedBurnRates: ['1m', '5m', '30m', '1h', '6h', '3d'],  // Including 1m
     metricFormats: {
       apdexRatio: 'gitlab_component_apdex:ratio_%s',
       opsRate: 'gitlab_component_ops:rate_%s',
       errorRate: 'gitlab_component_errors:rate_%s',
       errorRatio: 'gitlab_component_errors:ratio_%s',
-    },
-    burnRates: {
-      '1m': {
-        // TODO: drop the 1m burn rate entirely
-        apdexRatio: 'gitlab_component_apdex:ratio',
-        opsRate: 'gitlab_component_ops:rate',
-        errorRate: 'gitlab_component_errors:rate',
-        errorRatio: 'gitlab_component_errors:ratio',
-      },
     },
   }),
 
@@ -174,12 +155,6 @@ local aggregationSet = import 'servicemetrics/aggregation-set.libsonnet';
       errorRatio: 'gitlab_service_errors:ratio_%s',
     },
     burnRates: {
-      '1m': {
-        apdexRatio: 'gitlab_service_apdex:ratio',
-        opsRate: 'gitlab_service_ops:rate',
-        errorRate: 'gitlab_service_errors:rate',
-        errorRatio: 'gitlab_service_errors:ratio',
-      },
       '6h': {
         apdexRatio: 'gitlab_service_apdex:ratio_6h',
         opsRate: 'gitlab_service_ops:rate_6h',
