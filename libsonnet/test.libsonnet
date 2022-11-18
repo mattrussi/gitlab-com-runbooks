@@ -56,7 +56,7 @@ local matchers = {
       matcher {
         local messages = validation.validator._validationMessages(o),
         satisfied: misc.any(
-          function(message) std.member(message, validation.message),
+          function(message) std.length(std.findSubstr(validation.message, message)) > 0,
           messages,
         ),
         positiveMessage: 'Expected %s validation errors but only had %s' % [validation.message, messages],
