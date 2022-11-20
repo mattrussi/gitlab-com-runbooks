@@ -12,8 +12,11 @@ local customRouteSLIs = [
       a tag or digest. A HEAD request can also be issued to this endpoint to
       obtain resource information without receiving all data.
     |||,
-    satisfiedThreshold: 0.1,
-    toleratedThreshold: 0.25,
+    monitoringThresholds: {
+      apdexScore: 0.999,
+    },
+    satisfiedThreshold: 0.25,
+    toleratedThreshold: 0.5,
     route: '/v2/{name}/manifests/{reference}',
     methods: ['get', 'head'],
   },
@@ -29,6 +32,9 @@ local customRouteSLIs = [
       Delete the manifest identified by name and reference. Note that a manifest
       can only be deleted by digest.
     |||,
+    monitoringThresholds: {
+      apdexScore: 0.999,
+    },
     satisfiedThreshold: 1,
     toleratedThreshold: 2.5,
     route: '/v2/{name}/manifests/{reference}',
@@ -73,7 +79,11 @@ local sliFromConfig(config) =
       config.toleratedThreshold
     else
       null;
-
+  local monitoringThresholds =
+    if std.objectHas(config, 'monitoringThresholds') then
+      config.monitoringThresholds
+    else
+      {};
   defaultRegistrySLIProperties {
     description: config.description,
     apdex: registryApdex(selector, config.satisfiedThreshold, toleratedThreshold),
@@ -82,6 +92,7 @@ local sliFromConfig(config) =
       selector=selector
     ),
     significantLabels: ['method', 'migration_path'],
+    monitoringThresholds+: monitoringThresholds,
   };
 
 local customRouteApdexes =
