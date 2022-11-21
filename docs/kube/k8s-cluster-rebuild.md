@@ -3,8 +3,6 @@
 This page is for replacing a zonal cluster, if you seek creating a new cluster on a different region/zone,
 please refer to the [create new kubernetes cluster page](/k8s-new-cluster.md)
 
-[[_TOC_]]
-
 ## 1- Skipping cluster deployment
 
 It's necessary to skip deploying to the cluster when replacing it, this way we don't disrupt the Auto Deploy.
