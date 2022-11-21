@@ -3,6 +3,7 @@
 set -e
 
 VAULT_ADDR="https://vault.ops.gke.gitlab.net"
+VAULT_PROXY_ADDR="socks5://localhost:18200"
 BASTION_HOST="lb-bastion.ops.gitlab.com"
 
 usage() {
@@ -19,6 +20,7 @@ init() {
   if [ "$1" = '-' ];then
       cat <<EOF
 VAULT_ADDR="${VAULT_ADDR}"; export VAULT_ADDR
+VAULT_PROXY_ADDR="${VAULT_PROXY_ADD}; export VAULT_PROXY_ADDR
 vault-proxy() { eval "\$(glsh vault proxy "\$@")" }
 EOF
   else
