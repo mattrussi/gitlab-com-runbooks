@@ -1,13 +1,18 @@
 # frozen_string_literal: true
 require 'time'
+require 'json'
 require_relative '../lib/redis_trace/key_pattern'
 
 raise 'no input file provided' if ARGV.empty?
 
+# generated via: redis-cli --json command | jq 'sort_by(.[0])|map({ key: .[0], value: [.[3], .[4]]})|from_entries'
+# see: https://redis.io/commands/command/
+command_key_mappings = JSON.parse(File.read(__dir__ + "/../lib/redis_trace/command_key_mappings.json"))
+
 ARGV.each do |idx_filename|
   filename = idx_filename.gsub(/\.findx$/, "")
 
-  warn filename
+  # warn filename
 
   index_keys = []
   index_vals = []
@@ -58,125 +63,26 @@ ARGV.each do |idx_filename|
         # dst_host = Regexp.last_match(3).split('.').map(&:to_i).join('.')
         # dst_port = Regexp.last_match(4).to_i
 
-        case cmd
-        when "blpop"
-          keys = [args[1..-2]]
-        when "get"
-          keys = [args[1]]
-        when "exists"
-          keys = args[1..]
-        when "expire"
-          keys = [args[1]]
-        when "del"
-          keys = args[1..]
-        when "mget"
-          keys = args[1..]
-        when "set"
-          keys = [args[1]]
-        when "smembers"
-          keys = [args[1]]
-        when "multi"
-          keys = []
-        when "exec"
-          keys = []
-        when "auth"
-          keys = []
-        when "role"
-          keys = []
-        when "info"
-          keys = []
-        when "memory"
-          keys = []
-        when "replconf"
-          keys = []
-        when "ping"
-          keys = []
-        when "client"
-          keys = []
-        when "sismember"
-          keys = [args[1]]
-        when "incr"
-          keys = [args[1]]
-        when "incrby"
-          keys = [args[1]]
-        when "incrbyfloat"
-          keys = [args[1]]
-        when "hincrby"
-          keys = [args[1]]
-        when "hscan"
-          keys = [args[1]]
-        when "hdel"
-          keys = [args[1]]
-        when "lpush"
-          keys = [args[1]]
-        when "lpop"
-          keys = args[1..]
-        when "lrem"
-          keys = [args[1]]
-        when "lindex"
-          keys = [args[1]]
-        when "rpop"
-          keys = args[1..]
-        when "brpop"
-          keys = args[1..]
-        when "setex"
-          keys = [args[1]]
-        when "hmget"
-          keys = [args[1]]
-        when "sscan"
-          keys = [args[1]]
-        when "hmset"
-          keys = [args[1]]
-        when "unlink"
-          keys = args[1..]
-        when "ttl"
-          keys = [args[1]]
-        when "sadd"
-          keys = [args[1]]
-        when "hset"
-          keys = [args[1]]
-        when "publish"
-          keys = [args[1]]
-        when "eval"
-          keys = []
-        when "strlen"
-          keys = [args[1]]
-        when "pfadd"
-          keys = [args[1]]
-        when "pexpire"
-          keys = [args[1]]
-        when "srem"
-          keys = [args[1]]
-        when "hget"
-          keys = [args[1]]
-        when "hgetall"
-          keys = [args[1]]
-        when "zadd"
-          keys = [args[1]]
-        when "zcard"
-          keys = [args[1]]
-        when "decr"
-          keys = [args[1]]
-        when "scard"
-          keys = [args[1]]
-        when "subscribe"
-          keys = args[1..]
-        when "unsubscribe"
-          keys = args[1..]
-        when "zrangebyscore"
-          keys = [args[1]]
-        when "zrevrange"
-          keys = [args[1]]
-        when "zremrangebyrank"
-          keys = [args[1]]
-        when "zremrangebyscore"
-          keys = [args[1]]
-        else
-          raise "unknown command #{cmd}"
-        end
+        raise "unknown command #{cmd}" if command_key_mappings[cmd].nil?
 
-        keys.each do |key|
-          puts "#{ts.iso8601(9)} #{ts.to_time.to_i % 60} #{cmd} #{src_host} #{RedisTrace::KeyPattern.filter_key(key).gsub(' ', '_').inspect} #{key.gsub(' ', '_').inspect}"
+        first_key, last_key = command_key_mappings[cmd]
+        keys = args[first_key..last_key]
+        keys = [] if first_key == 0 && last_key == 0
+
+        if ENV['OUTPUT_FORMAT'] == 'json'
+          data = {
+            time: ts.iso8601(9),
+            cmd: cmd,
+            src_host: src_host,
+            keys: keys,
+            patterns: keys.map { |key| RedisTrace::KeyPattern.filter_key(key).gsub(' ', '_') },
+            patterns_uniq: keys.map { |key| RedisTrace::KeyPattern.filter_key(key).gsub(' ', '_') }.sort.uniq,
+          }
+          puts data.to_json
+        else
+          keys.each do |key|
+            puts "#{ts.iso8601(9)} #{ts.to_time.to_i % 60} #{cmd} #{src_host} #{RedisTrace::KeyPattern.filter_key(key).gsub(' ', '_').inspect} #{key.gsub(' ', '_').inspect}"
+          end
         end
       rescue EOFError
       end
