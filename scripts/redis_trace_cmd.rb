@@ -7,7 +7,7 @@ raise 'no input file provided' if ARGV.empty?
 
 # generated via: redis-cli --json command | jq 'sort_by(.[0])|map({ key: .[0], value: [.[3], .[4]]})|from_entries'
 # see: https://redis.io/commands/command/
-command_key_mappings = JSON.parse(File.read(__dir__ + "/../lib/redis_trace/command_key_mappings.json"))
+command_key_mappings = JSON.parse(File.read("#{__dir__}/../lib/redis_trace/command_key_mappings.json"))
 
 ARGV.each do |idx_filename|
   filename = idx_filename.gsub(/\.findx$/, "")
@@ -67,7 +67,7 @@ ARGV.each do |idx_filename|
 
         first_key, last_key = command_key_mappings[cmd]
         keys = args[first_key..last_key]
-        keys = [] if first_key == 0 && last_key == 0
+        keys = [] if first_key.zero? && last_key.zero?
 
         if ENV['OUTPUT_FORMAT'] == 'json'
           data = {
@@ -76,7 +76,7 @@ ARGV.each do |idx_filename|
             src_host: src_host,
             keys: keys,
             patterns: keys.map { |key| RedisTrace::KeyPattern.filter_key(key).gsub(' ', '_') },
-            patterns_uniq: keys.map { |key| RedisTrace::KeyPattern.filter_key(key).gsub(' ', '_') }.sort.uniq,
+            patterns_uniq: keys.map { |key| RedisTrace::KeyPattern.filter_key(key).gsub(' ', '_') }.sort.uniq
           }
           puts data.to_json
         else
