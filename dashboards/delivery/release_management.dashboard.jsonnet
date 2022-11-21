@@ -337,7 +337,7 @@ basic.dashboard(
       deliveryStatPanel(
         'Pending migrations',
         description='The number of migrations pending execution in each environment.',
-        query='sum(delivery_metrics_pending_migrations_total{env=~"gstg|gprd",stage="main"}) by (env)',
+        query='ceil((sum(delivery_metrics_pending_migrations_total{env=~"gstg|gprd",stage="main"}) by (env))/2)',
         legendFormat='{{env}}',
         thresholds=[
           { color: 'green', value: null },
