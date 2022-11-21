@@ -175,18 +175,30 @@ basic.dashboard(
       legendFormat='{{object_type}}',
     ),
     basic.heatmap(
-      title='GET time',
+      title='Redis GET time',
       query='sum by(le) (increase(cache_get_time_bucket{env="$environment", cluster=~"$cluster", pod=~"$gatekeeperPods"}[$__rate_interval]))',
       dataFormat='tsbuckets',
       color_cardColor='#ff0000',
       legendFormat='__auto',
     ),
     basic.heatmap(
-      title='SET time',
+      title='Redis SET time',
       query='sum by(le) (increase(cache_set_time_bucket{env="$environment", cluster=~"$cluster", pod=~"$gatekeeperPods"}[$__rate_interval]))',
       dataFormat='tsbuckets',
       color_cardColor='#ff0000',
       legendFormat='__auto',
+    ),
+    basic.heatmap(
+      title='Redis Master PING time',
+      query='sum by(le) (increase(master_ping_time_bucket{env="$environment", cluster=~"$cluster", pod=~"$gatekeeperPods"}[$__rate_interval]))',
+      dataFormat='tsbuckets',
+      color_cardColor='#ff0000',
+      legendFormat='__auto',
+    ),
+    basic.timeseries(
+      title='Redis Master failovers',
+      query='sum (rate(master_failovers{env="$environment", cluster=~"$cluster", pod=~"$gatekeeperPods"}[$__rate_interval]))',
+      legendFormat='{{object_type}}',
     ),
   ], cols=2, rowHeight=10, startRow=601)
 )
