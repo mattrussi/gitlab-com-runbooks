@@ -149,6 +149,8 @@ local aggregationSet = import 'servicemetrics/aggregation-set.libsonnet';
     selector: { monitor: 'global' },  // Thanos Ruler
     labels: ['env', 'environment', 'tier', 'type', 'stage'],
     metricFormats: {
+      apdexSuccessRate: 'gitlab_service_apdex:success:rate_%s',
+      apdexWeight: 'gitlab_service_apdex:weight:score_%s',
       apdexRatio: 'gitlab_service_apdex:ratio_%s',
       opsRate: 'gitlab_service_ops:rate_%s',
       errorRate: 'gitlab_service_errors:rate_%s',
