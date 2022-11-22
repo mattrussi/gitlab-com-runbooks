@@ -56,7 +56,7 @@ Start by checking how many alerts are in flight right now
     - [azure][prometheus-azure]
     - [gprd prometheus][prometheus-gprd]
     - [gprd prometheus-app][prometheus-app-gprd]
-  - watch the [#alerts][slack-alerts] and [#feed_alerts-general][slack-alerts-general] channels for alert notifications; each alert here should point you to the right [runbook][runbook-repo] to fix it.
+  - watch the [#production][production] channel or [Pagerduty](https://gitlab.pagerduty.com) for alert notifications; each alert here should point you to the right [runbook][runbook-repo] to fix it.
   - if they don't, you have more work to do.
   - be sure to create an issue, particularly to declare toil so we can work on it and suppress it.
 

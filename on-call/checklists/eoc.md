@@ -15,9 +15,6 @@ Here is a suggested checklist of things to do at the start of an on-call shift:
   Type `:pagerduty:`. Set `Clear after` to end of on-call shift. Click `Save`
 - *Join alert slack channels if not already a member*:
   - `#production`
-  - `#alerts`
-  - `#alerts-nonprod`
-  - `#feed_alerts-general`
   - `#alerts-prod-abuse`
   - `#tenable-notifications`
   - `#marquee_account_alrts`
