@@ -3,6 +3,7 @@ local allServices = import './services/all.jsonnet';
 local objects = import 'utils/objects.libsonnet';
 local labelSet = (import 'label-taxonomy/label-set.libsonnet');
 local validateReferenceArchitectureOptions = (import 'reference-architecture-options/validate.libsonnet');
+local misc = import 'utils/misc.libsonnet';
 
 local options = validateReferenceArchitectureOptions(import 'gitlab-metrics-options.libsonnet');
 
@@ -52,6 +53,12 @@ local options = validateReferenceArchitectureOptions(import 'gitlab-metrics-opti
       for service in allServices
     ],
   },
+
+  keyServices:
+    local keyServices = ['webservice', 'registry'];
+    local allServiceTypes = std.map(function(service) service.type, allServices);
+    assert misc.all(function(service) std.member(allServiceTypes, service), keyServices) : 'not all keyservices are in the service catalog';
+    keyServices,
 
   stageGroupMapping:: {},
 

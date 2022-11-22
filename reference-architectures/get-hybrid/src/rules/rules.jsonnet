@@ -7,6 +7,7 @@ local saturationResources = import 'servicemetrics/saturation-resources.libsonne
 local saturationRules = import 'servicemetrics/saturation_rules.libsonnet';
 local kubeStateMetricsGroups = import 'kube-state-metrics/recording-rules.libsonnet';
 local sloAlertingRulesGroup = import './slo-alerting-rules.libsonnet';
+local availabilityRateRuleGroups = import './availability-rate-rules.libsonnet';
 
 local serviceSLOsRulesetGenerator = recordingRules.serviceSLORuleSetGenerator();
 local serviceMappingRulesetGenerator = recordingRules.serviceMappingRuleSetGenerator();
@@ -66,6 +67,7 @@ local saturationGroup = saturationRules.generateSaturationRulesGroup(
       serviceSLOsGroups +
       saturationGroup +
       kubeStateMetricsGroups +
-      sloAlertingRulesGroup,
+      sloAlertingRulesGroup +
+      availabilityRateRuleGroups,
   },
 }
