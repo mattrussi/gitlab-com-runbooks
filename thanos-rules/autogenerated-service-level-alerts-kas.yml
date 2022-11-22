@@ -20,7 +20,7 @@ groups:
       grafana_variables: environment,stage
       promql_template_1: |
         sum by (env,environment,tier,stage) (
-          rate(grpc_server_handled_total{environment="{{ $labels.environment }}",grpc_code!~"^(OK|NotFound|FailedPrecondition|Unauthenticated|PermissionDenied|Canceled|DeadlineExceeded|ResourceExhausted)$",grpc_service!="gitlab.agent.kubernetes_api.rpc.KubernetesApi",job="gitlab-kas",stage="{{ $labels.stage }}"}[5m])
+          rate(grpc_server_handled_total{environment="{{ $labels.environment }}",grpc_code!~"^(OK|NotFound|FailedPrecondition|Unauthenticated|PermissionDenied|Canceled|DeadlineExceeded|ResourceExhausted)$",grpc_service!="gitlab.agent.kubernetes_api.rpc.KubernetesApi",stage="{{ $labels.stage }}",type="kas"}[5m])
         )
       runbook: docs/kas/README.md
     labels:
@@ -66,7 +66,7 @@ groups:
       grafana_variables: environment,stage
       promql_template_1: |
         sum by (env,environment,tier,stage) (
-          rate(grpc_server_handled_total{environment="{{ $labels.environment }}",grpc_code!~"^(OK|NotFound|FailedPrecondition|Unauthenticated|PermissionDenied|Canceled|DeadlineExceeded|ResourceExhausted)$",grpc_service!="gitlab.agent.kubernetes_api.rpc.KubernetesApi",job="gitlab-kas",stage="{{ $labels.stage }}"}[5m])
+          rate(grpc_server_handled_total{environment="{{ $labels.environment }}",grpc_code!~"^(OK|NotFound|FailedPrecondition|Unauthenticated|PermissionDenied|Canceled|DeadlineExceeded|ResourceExhausted)$",grpc_service!="gitlab.agent.kubernetes_api.rpc.KubernetesApi",stage="{{ $labels.stage }}",type="kas"}[5m])
         )
       runbook: docs/kas/README.md
     labels:
@@ -112,7 +112,7 @@ groups:
       grafana_variables: environment,stage
       promql_template_1: |
         sum by (env,environment,tier,stage) (
-          rate(grpc_server_handled_total{environment="{{ $labels.environment }}",job="gitlab-kas",stage="{{ $labels.stage }}"}[5m])
+          rate(grpc_server_handled_total{environment="{{ $labels.environment }}",stage="{{ $labels.stage }}",type="kas"}[5m])
         )
       runbook: docs/kas/README.md
     labels:
@@ -147,7 +147,7 @@ groups:
       grafana_variables: environment,stage
       promql_template_1: |
         sum by (env,environment,tier,stage) (
-          rate(grpc_server_handled_total{environment="{{ $labels.environment }}",job="gitlab-kas",stage="{{ $labels.stage }}"}[5m])
+          rate(grpc_server_handled_total{environment="{{ $labels.environment }}",stage="{{ $labels.stage }}",type="kas"}[5m])
         )
       runbook: docs/kas/README.md
     labels:

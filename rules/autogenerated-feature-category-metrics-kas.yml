@@ -11,7 +11,7 @@ groups:
       type: kas
     expr: |
       sum by (env,environment,stage) (
-        rate(grpc_server_handled_total{job="gitlab-kas"}[5m])
+        rate(grpc_server_handled_total{type="kas"}[5m])
       )
   - record: gitlab:component:feature_category:execution:error:rate_5m
     labels:
@@ -22,7 +22,7 @@ groups:
     expr: |
       (
         sum by (env,environment,stage) (
-          rate(grpc_server_handled_total{grpc_code!~"^(OK|NotFound|FailedPrecondition|Unauthenticated|PermissionDenied|Canceled|DeadlineExceeded|ResourceExhausted)$",grpc_service!="gitlab.agent.kubernetes_api.rpc.KubernetesApi",job="gitlab-kas"}[5m])
+          rate(grpc_server_handled_total{grpc_code!~"^(OK|NotFound|FailedPrecondition|Unauthenticated|PermissionDenied|Canceled|DeadlineExceeded|ResourceExhausted)$",grpc_service!="gitlab.agent.kubernetes_api.rpc.KubernetesApi",type="kas"}[5m])
         )
       )
       or
@@ -41,7 +41,7 @@ groups:
       type: kas
     expr: |
       sum by (env,environment,stage) (
-        rate(grpc_server_handled_total{job="gitlab-kas"}[30m])
+        rate(grpc_server_handled_total{type="kas"}[30m])
       )
   - record: gitlab:component:feature_category:execution:error:rate_30m
     labels:
@@ -52,7 +52,7 @@ groups:
     expr: |
       (
         sum by (env,environment,stage) (
-          rate(grpc_server_handled_total{grpc_code!~"^(OK|NotFound|FailedPrecondition|Unauthenticated|PermissionDenied|Canceled|DeadlineExceeded|ResourceExhausted)$",grpc_service!="gitlab.agent.kubernetes_api.rpc.KubernetesApi",job="gitlab-kas"}[30m])
+          rate(grpc_server_handled_total{grpc_code!~"^(OK|NotFound|FailedPrecondition|Unauthenticated|PermissionDenied|Canceled|DeadlineExceeded|ResourceExhausted)$",grpc_service!="gitlab.agent.kubernetes_api.rpc.KubernetesApi",type="kas"}[30m])
         )
       )
       or
@@ -71,7 +71,7 @@ groups:
       type: kas
     expr: |
       sum by (env,environment,stage) (
-        rate(grpc_server_handled_total{job="gitlab-kas"}[1h])
+        rate(grpc_server_handled_total{type="kas"}[1h])
       )
   - record: gitlab:component:feature_category:execution:error:rate_1h
     labels:
@@ -82,7 +82,7 @@ groups:
     expr: |
       (
         sum by (env,environment,stage) (
-          rate(grpc_server_handled_total{grpc_code!~"^(OK|NotFound|FailedPrecondition|Unauthenticated|PermissionDenied|Canceled|DeadlineExceeded|ResourceExhausted)$",grpc_service!="gitlab.agent.kubernetes_api.rpc.KubernetesApi",job="gitlab-kas"}[1h])
+          rate(grpc_server_handled_total{grpc_code!~"^(OK|NotFound|FailedPrecondition|Unauthenticated|PermissionDenied|Canceled|DeadlineExceeded|ResourceExhausted)$",grpc_service!="gitlab.agent.kubernetes_api.rpc.KubernetesApi",type="kas"}[1h])
         )
       )
       or
