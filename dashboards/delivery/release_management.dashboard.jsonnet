@@ -129,23 +129,7 @@ local environmentPressurePanel(environment) =
     )
   );
 
-local environmentIssuesPanel(environment) =
-  graphPanel.new(
-    '%s New Sentry issues' % [environment.icon],
-    aliasColors={ Issues: 'dark-orange' },
-    decimals=0,
-    labelY1='Issues',
-    legend_show=false,
-    min=0,
-  )
-  .addTarget(
-    prometheus.target(
-      'delivery_sentry_issues{job="sentry-issues", role="%(role)s"}' % { role: environment.id },
-      legendFormat='Issues',
-    )
-  );
-
-// Stat panel used by top-level Auto-deploy Pressure and New Sentry issues
+// Stat panel used by top-level Auto-deploy Pressure
 local
   deliveryStatPanel(
     title,
@@ -282,30 +266,7 @@ basic.dashboard(
         ],
       ),
     ],
-    // Column 4: new sentry issues
-    [
-      // New Sentry issues
-      deliveryStatPanel(
-        'New Sentry issues',
-        description='The number of new Sentry issues for each environment.',
-        query='max(delivery_sentry_issues{role!=""}) by (role)',
-        legendFormat='{{role}}',
-        thresholds=[
-          { color: 'green', value: null },
-          { color: '#EAB839', value: 50 },
-          { color: '#EF843C', value: 100 },
-          { color: 'red', value: 150 },
-        ],
-        links=[
-          {
-            targetBlank: true,
-            title: 'Sentry releases',
-            url: 'https://sentry.gitlab.net/gitlab/gitlabcom/releases/',
-          },
-        ],
-      ),
-    ],
-    // Column 5: release pressure
+    // Column 4: release pressure
     [
       bargaugePanel(
         'Release pressure',
@@ -332,7 +293,7 @@ basic.dashboard(
         },
       ),
     ],
-    // Column 6: Post deploy migration pressure
+    // Column 5: Post deploy migration pressure
     [
       deliveryStatPanel(
         'Pending migrations',
@@ -364,7 +325,6 @@ basic.dashboard(
         layout.grid(
           [
             environmentPressurePanel(environment),
-            environmentIssuesPanel(environment),
           ],
           cols=2,
           startRow=y + 1
