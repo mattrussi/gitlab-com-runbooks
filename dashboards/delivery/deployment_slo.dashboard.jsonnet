@@ -18,7 +18,7 @@ local explainer = |||
   This section of the dashboard is governed by the `target SLO` variable.
 
   - __# deployments__ counts the number of deployments in the time range`
-  - __Target SLO__ is the amount of seconds we consider acceptable for a complete deployment from gstg-cny (staging canary) to production (gprd post-deployment migrations), it can be one of the following values:
+  - __Target SLO__ is the amount of seconds we consider acceptable for a complete deployment from gstg-cny (staging canary) to production (gprd), it can be one of the following values:
     - `12600`: 3.5h
     - `14400`: 4h
     - `16200`: 4.5h
