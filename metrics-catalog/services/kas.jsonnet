@@ -46,7 +46,7 @@ metricsCatalog.serviceDefinition({
       userImpacting: true,
       featureCategory: 'kubernetes_management',
       local baseSelector = {
-        job: 'gitlab-kas',
+        type: 'kas',
       },
 
       requestRate: rateMetric(
