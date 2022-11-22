@@ -782,6 +782,7 @@ local validateTags(tags) =
     bucketMetric='',
     aggregators='',
     percentiles=[50, 90, 95, 99],
+    legend_rightSide=false,
   )::
     local queries = std.map(
       function(p) {
@@ -791,7 +792,7 @@ local validateTags(tags) =
       percentiles
     );
 
-    self.multiTimeseries(title=title, decimals=2, queries=queries, yAxisLabel='Duration', format='s'),
+    self.multiTimeseries(title=title, decimals=2, queries=queries, yAxisLabel='Duration', format='s', legend_rightSide=legend_rightSide),
 
   networkTrafficGraph(
     title='Node Network Utilization',
