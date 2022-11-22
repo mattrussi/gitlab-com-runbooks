@@ -287,11 +287,11 @@ groups:
     expr: |
       (
         sum by (environment,stage) (
-          rate(registry_http_request_duration_seconds_bucket{le="0.5",method=~"get|head",route="/v2/{name}/manifests/{reference}",type="registry"}[1m])
+          rate(registry_http_request_duration_seconds_bucket{le="0.25",method=~"get|head",route="/v2/{name}/manifests/{reference}",type="registry"}[1m])
         )
         +
         sum by (environment,stage) (
-          rate(registry_http_request_duration_seconds_bucket{le="1",method=~"get|head",route="/v2/{name}/manifests/{reference}",type="registry"}[1m])
+          rate(registry_http_request_duration_seconds_bucket{le="0.5",method=~"get|head",route="/v2/{name}/manifests/{reference}",type="registry"}[1m])
         )
       )
       /
@@ -322,11 +322,11 @@ groups:
     expr: |
       (
         sum by (environment,stage) (
-          rate(registry_http_request_duration_seconds_bucket{le="10",method=~"put|delete|post|patch",route="/v2/{name}/manifests/{reference}",type="registry"}[1m])
+          rate(registry_http_request_duration_seconds_bucket{le="1",method=~"put|delete|post|patch",route="/v2/{name}/manifests/{reference}",type="registry"}[1m])
         )
         +
         sum by (environment,stage) (
-          rate(registry_http_request_duration_seconds_bucket{le="25",method=~"put|delete|post|patch",route="/v2/{name}/manifests/{reference}",type="registry"}[1m])
+          rate(registry_http_request_duration_seconds_bucket{le="2.5",method=~"put|delete|post|patch",route="/v2/{name}/manifests/{reference}",type="registry"}[1m])
         )
       )
       /
@@ -635,11 +635,11 @@ groups:
     expr: |
       (
         sum by (environment,stage) (
-          rate(registry_http_request_duration_seconds_bucket{le="0.5",method=~"get|head",route="/v2/{name}/manifests/{reference}",type="registry"}[5m])
+          rate(registry_http_request_duration_seconds_bucket{le="0.25",method=~"get|head",route="/v2/{name}/manifests/{reference}",type="registry"}[5m])
         )
         +
         sum by (environment,stage) (
-          rate(registry_http_request_duration_seconds_bucket{le="1",method=~"get|head",route="/v2/{name}/manifests/{reference}",type="registry"}[5m])
+          rate(registry_http_request_duration_seconds_bucket{le="0.5",method=~"get|head",route="/v2/{name}/manifests/{reference}",type="registry"}[5m])
         )
       )
       /
@@ -670,11 +670,11 @@ groups:
     expr: |
       (
         sum by (environment,stage) (
-          rate(registry_http_request_duration_seconds_bucket{le="10",method=~"put|delete|post|patch",route="/v2/{name}/manifests/{reference}",type="registry"}[5m])
+          rate(registry_http_request_duration_seconds_bucket{le="1",method=~"put|delete|post|patch",route="/v2/{name}/manifests/{reference}",type="registry"}[5m])
         )
         +
         sum by (environment,stage) (
-          rate(registry_http_request_duration_seconds_bucket{le="25",method=~"put|delete|post|patch",route="/v2/{name}/manifests/{reference}",type="registry"}[5m])
+          rate(registry_http_request_duration_seconds_bucket{le="2.5",method=~"put|delete|post|patch",route="/v2/{name}/manifests/{reference}",type="registry"}[5m])
         )
       )
       /
@@ -983,11 +983,11 @@ groups:
     expr: |
       (
         sum by (environment,stage) (
-          rate(registry_http_request_duration_seconds_bucket{le="0.5",method=~"get|head",route="/v2/{name}/manifests/{reference}",type="registry"}[30m])
+          rate(registry_http_request_duration_seconds_bucket{le="0.25",method=~"get|head",route="/v2/{name}/manifests/{reference}",type="registry"}[30m])
         )
         +
         sum by (environment,stage) (
-          rate(registry_http_request_duration_seconds_bucket{le="1",method=~"get|head",route="/v2/{name}/manifests/{reference}",type="registry"}[30m])
+          rate(registry_http_request_duration_seconds_bucket{le="0.5",method=~"get|head",route="/v2/{name}/manifests/{reference}",type="registry"}[30m])
         )
       )
       /
@@ -1018,11 +1018,11 @@ groups:
     expr: |
       (
         sum by (environment,stage) (
-          rate(registry_http_request_duration_seconds_bucket{le="10",method=~"put|delete|post|patch",route="/v2/{name}/manifests/{reference}",type="registry"}[30m])
+          rate(registry_http_request_duration_seconds_bucket{le="1",method=~"put|delete|post|patch",route="/v2/{name}/manifests/{reference}",type="registry"}[30m])
         )
         +
         sum by (environment,stage) (
-          rate(registry_http_request_duration_seconds_bucket{le="25",method=~"put|delete|post|patch",route="/v2/{name}/manifests/{reference}",type="registry"}[30m])
+          rate(registry_http_request_duration_seconds_bucket{le="2.5",method=~"put|delete|post|patch",route="/v2/{name}/manifests/{reference}",type="registry"}[30m])
         )
       )
       /
@@ -1331,11 +1331,11 @@ groups:
     expr: |
       (
         sum by (environment,stage) (
-          rate(registry_http_request_duration_seconds_bucket{le="0.5",method=~"get|head",route="/v2/{name}/manifests/{reference}",type="registry"}[1h])
+          rate(registry_http_request_duration_seconds_bucket{le="0.25",method=~"get|head",route="/v2/{name}/manifests/{reference}",type="registry"}[1h])
         )
         +
         sum by (environment,stage) (
-          rate(registry_http_request_duration_seconds_bucket{le="1",method=~"get|head",route="/v2/{name}/manifests/{reference}",type="registry"}[1h])
+          rate(registry_http_request_duration_seconds_bucket{le="0.5",method=~"get|head",route="/v2/{name}/manifests/{reference}",type="registry"}[1h])
         )
       )
       /
@@ -1366,11 +1366,11 @@ groups:
     expr: |
       (
         sum by (environment,stage) (
-          rate(registry_http_request_duration_seconds_bucket{le="10",method=~"put|delete|post|patch",route="/v2/{name}/manifests/{reference}",type="registry"}[1h])
+          rate(registry_http_request_duration_seconds_bucket{le="1",method=~"put|delete|post|patch",route="/v2/{name}/manifests/{reference}",type="registry"}[1h])
         )
         +
         sum by (environment,stage) (
-          rate(registry_http_request_duration_seconds_bucket{le="25",method=~"put|delete|post|patch",route="/v2/{name}/manifests/{reference}",type="registry"}[1h])
+          rate(registry_http_request_duration_seconds_bucket{le="2.5",method=~"put|delete|post|patch",route="/v2/{name}/manifests/{reference}",type="registry"}[1h])
         )
       )
       /
@@ -1679,11 +1679,11 @@ groups:
     expr: |
       (
         sum by (environment,stage) (
-          rate(registry_http_request_duration_seconds_bucket{le="0.5",method=~"get|head",route="/v2/{name}/manifests/{reference}",type="registry"}[6h])
+          rate(registry_http_request_duration_seconds_bucket{le="0.25",method=~"get|head",route="/v2/{name}/manifests/{reference}",type="registry"}[6h])
         )
         +
         sum by (environment,stage) (
-          rate(registry_http_request_duration_seconds_bucket{le="1",method=~"get|head",route="/v2/{name}/manifests/{reference}",type="registry"}[6h])
+          rate(registry_http_request_duration_seconds_bucket{le="0.5",method=~"get|head",route="/v2/{name}/manifests/{reference}",type="registry"}[6h])
         )
       )
       /
@@ -1714,11 +1714,11 @@ groups:
     expr: |
       (
         sum by (environment,stage) (
-          rate(registry_http_request_duration_seconds_bucket{le="10",method=~"put|delete|post|patch",route="/v2/{name}/manifests/{reference}",type="registry"}[6h])
+          rate(registry_http_request_duration_seconds_bucket{le="1",method=~"put|delete|post|patch",route="/v2/{name}/manifests/{reference}",type="registry"}[6h])
         )
         +
         sum by (environment,stage) (
-          rate(registry_http_request_duration_seconds_bucket{le="25",method=~"put|delete|post|patch",route="/v2/{name}/manifests/{reference}",type="registry"}[6h])
+          rate(registry_http_request_duration_seconds_bucket{le="2.5",method=~"put|delete|post|patch",route="/v2/{name}/manifests/{reference}",type="registry"}[6h])
         )
       )
       /

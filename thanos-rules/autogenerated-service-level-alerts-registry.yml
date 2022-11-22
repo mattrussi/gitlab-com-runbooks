@@ -2684,12 +2684,12 @@ groups:
       (
         (
           gitlab_component_apdex:ratio_1h{component="server_route_manifest_reads",monitor="global",type="registry"}
-          < (1 - 14.4 * 0.003000)
+          < (1 - 14.4 * 0.001000)
         )
         and
         (
           gitlab_component_apdex:ratio_5m{component="server_route_manifest_reads",monitor="global",type="registry"}
-          < (1 - 14.4 * 0.003000)
+          < (1 - 14.4 * 0.001000)
         )
       )
       and on(env,environment,tier,type,stage,component)
@@ -2735,12 +2735,12 @@ groups:
       (
         (
           gitlab_component_apdex:ratio_6h{component="server_route_manifest_reads",monitor="global",type="registry"}
-          < (1 - 6 * 0.003000)
+          < (1 - 6 * 0.001000)
         )
         and
         (
           gitlab_component_apdex:ratio_30m{component="server_route_manifest_reads",monitor="global",type="registry"}
-          < (1 - 6 * 0.003000)
+          < (1 - 6 * 0.001000)
         )
       )
       and on(env,environment,tier,type,stage,component)
@@ -2788,12 +2788,12 @@ groups:
       (
         (
           gitlab_regional_sli_apdex:ratio_1h{component="server_route_manifest_reads",monitor="global",type="registry"}
-          < (1 - 14.4 * 0.003000)
+          < (1 - 14.4 * 0.001000)
         )
         and
         (
           gitlab_regional_sli_apdex:ratio_5m{component="server_route_manifest_reads",monitor="global",type="registry"}
-          < (1 - 14.4 * 0.003000)
+          < (1 - 14.4 * 0.001000)
         )
       )
       and on(env,environment,tier,type,stage,region,component)
@@ -2841,12 +2841,12 @@ groups:
       (
         (
           gitlab_regional_sli_apdex:ratio_6h{component="server_route_manifest_reads",monitor="global",type="registry"}
-          < (1 - 6 * 0.003000)
+          < (1 - 6 * 0.001000)
         )
         and
         (
           gitlab_regional_sli_apdex:ratio_30m{component="server_route_manifest_reads",monitor="global",type="registry"}
-          < (1 - 6 * 0.003000)
+          < (1 - 6 * 0.001000)
         )
       )
       and on(env,environment,tier,type,stage,region,component)
@@ -3044,12 +3044,12 @@ groups:
       (
         (
           gitlab_component_apdex:ratio_1h{component="server_route_manifest_writes",monitor="global",type="registry"}
-          < (1 - 14.4 * 0.003000)
+          < (1 - 14.4 * 0.001000)
         )
         and
         (
           gitlab_component_apdex:ratio_5m{component="server_route_manifest_writes",monitor="global",type="registry"}
-          < (1 - 14.4 * 0.003000)
+          < (1 - 14.4 * 0.001000)
         )
       )
       and on(env,environment,tier,type,stage,component)
@@ -3099,12 +3099,12 @@ groups:
       (
         (
           gitlab_component_apdex:ratio_6h{component="server_route_manifest_writes",monitor="global",type="registry"}
-          < (1 - 6 * 0.003000)
+          < (1 - 6 * 0.001000)
         )
         and
         (
           gitlab_component_apdex:ratio_30m{component="server_route_manifest_writes",monitor="global",type="registry"}
-          < (1 - 6 * 0.003000)
+          < (1 - 6 * 0.001000)
         )
       )
       and on(env,environment,tier,type,stage,component)
@@ -3156,12 +3156,12 @@ groups:
       (
         (
           gitlab_regional_sli_apdex:ratio_1h{component="server_route_manifest_writes",monitor="global",type="registry"}
-          < (1 - 14.4 * 0.003000)
+          < (1 - 14.4 * 0.001000)
         )
         and
         (
           gitlab_regional_sli_apdex:ratio_5m{component="server_route_manifest_writes",monitor="global",type="registry"}
-          < (1 - 14.4 * 0.003000)
+          < (1 - 14.4 * 0.001000)
         )
       )
       and on(env,environment,tier,type,stage,region,component)
@@ -3213,12 +3213,12 @@ groups:
       (
         (
           gitlab_regional_sli_apdex:ratio_6h{component="server_route_manifest_writes",monitor="global",type="registry"}
-          < (1 - 6 * 0.003000)
+          < (1 - 6 * 0.001000)
         )
         and
         (
           gitlab_regional_sli_apdex:ratio_30m{component="server_route_manifest_writes",monitor="global",type="registry"}
-          < (1 - 6 * 0.003000)
+          < (1 - 6 * 0.001000)
         )
       )
       and on(env,environment,tier,type,stage,region,component)
