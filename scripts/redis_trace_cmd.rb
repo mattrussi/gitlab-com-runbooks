@@ -5,7 +5,8 @@ require_relative '../lib/redis_trace/key_pattern'
 
 raise 'no input file provided' if ARGV.empty?
 
-# generated via: redis-cli --json command | jq 'sort_by(.[0])|map({ key: .[0], value: [.[3], .[4]]})|from_entries'
+# The key mapping file can be generated with redis-cli (>= 7.0)
+# redis-cli --json command | jq 'sort_by(.[0])|map({ key: .[0], value: [.[3], .[4]]})|from_entries'
 # see: https://redis.io/commands/command/
 command_key_mappings = JSON.parse(File.read("#{__dir__}/../lib/redis_trace/command_key_mappings.json"))
 
@@ -66,17 +67,17 @@ ARGV.each do |idx_filename|
         raise "unknown command #{cmd}" if command_key_mappings[cmd].nil?
 
         first_key, last_key = command_key_mappings[cmd]
-        keys = args[first_key..last_key]
-        keys = [] if first_key.zero? && last_key.zero?
+        keys = first_key.zero? && last_key.zero? ? [] : args[first_key..last_key]
 
         if ENV['OUTPUT_FORMAT'] == 'json'
+          patterns = keys.map { |key| RedisTrace::KeyPattern.filter_key(key).gsub(' ', '_') }
           data = {
             time: ts.iso8601(9),
             cmd: cmd,
             src_host: src_host,
             keys: keys,
-            patterns: keys.map { |key| RedisTrace::KeyPattern.filter_key(key).gsub(' ', '_') },
-            patterns_uniq: keys.map { |key| RedisTrace::KeyPattern.filter_key(key).gsub(' ', '_') }.sort.uniq
+            patterns: patterns,
+            patterns_uniq: patterns.sort.uniq
           }
           puts data.to_json
         else
