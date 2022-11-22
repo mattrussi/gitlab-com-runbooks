@@ -2,12 +2,10 @@ local metricsConfig = import 'gitlab-metrics-config.libsonnet';
 local selectors = import 'promql/selectors.libsonnet';
 local serviceCatalog = import 'service-catalog/service-catalog.libsonnet';
 
-local keyServices = serviceCatalog.findKeyBusinessServices();
-
 local keyServiceWeights = std.foldl(
   function(memo, item) memo {
     [item.name]: item.business.SLA.overall_sla_weighting,
-  }, keyServices, {}
+  }, serviceCatalog.findKeyBusinessServices(), {}
 );
 
 local getScoreQuery(weights, interval) =
