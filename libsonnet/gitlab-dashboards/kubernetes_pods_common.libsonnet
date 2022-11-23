@@ -125,6 +125,7 @@ local env_cluster_ns = 'env=~"$environment", cluster="$cluster", namespace="$nam
         query='sum (rate (container_cpu_usage_seconds_total{' + env_cluster_node_ns + ', pod=~"^$' + deploymentKind + '.*$"}[1m]))',
         instant=false,
         unit='none',
+        decimals=2,
         colorMode='none'
       ),
       basic.statPanel(
