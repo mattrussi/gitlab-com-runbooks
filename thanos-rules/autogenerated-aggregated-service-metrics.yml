@@ -5,6 +5,36 @@ groups:
   interval: 1m
   partial_response_strategy: warn
   rules:
+  - record: gitlab_service_errors:rate
+    expr: |
+      sum by (env,environment,tier,type,stage) (
+        (gitlab_component_errors:rate{monitor!="global"} >= 0) and on(component, type) (gitlab_component_service:mapping{monitor="global",service_aggregation="yes"})
+      )
+  - record: gitlab_service_ops:rate
+    expr: |
+      sum by (env,environment,tier,type,stage) (
+        (gitlab_component_ops:rate{monitor!="global"} >= 0) and on(component, type) (gitlab_component_service:mapping{monitor="global",service_aggregation="yes"})
+      )
+  - record: gitlab_service_errors:ratio
+    expr: |
+      sum by (env,environment,tier,type,stage)(
+        (gitlab_component_errors:rate{monitor!="global"} >= 0) and on(component, type) (gitlab_component_service:mapping{monitor="global",service_aggregation="yes"})
+      )
+      /
+      sum by (env,environment,tier,type,stage)(
+        (gitlab_component_ops:rate{monitor!="global"} >= 0) and on(component, type) (gitlab_component_service:mapping{monitor="global",service_aggregation="yes"})
+        and
+        (gitlab_component_errors:rate{monitor!="global"} >= 0) and on(component, type) (gitlab_component_service:mapping{monitor="global",service_aggregation="yes"})
+      )
+  - record: gitlab_service_apdex:ratio
+    expr: |
+      sum by (env,environment,tier,type,stage) (
+        (gitlab_component_apdex:success:rate{monitor!="global"} >= 0) and on(component, type) (gitlab_component_service:mapping{monitor="global",service_aggregation="yes"})
+      )
+      /
+      sum by (env,environment,tier,type,stage) (
+        (gitlab_component_apdex:weight:score{monitor!="global"} >= 0) and on(component, type) (gitlab_component_service:mapping{monitor="global",service_aggregation="yes"})
+      )
   - record: gitlab_service_errors:rate_5m
     expr: |
       sum by (env,environment,tier,type,stage) (
