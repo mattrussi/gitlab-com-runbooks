@@ -33,7 +33,7 @@ Follow the guidelines for setting up your development environment with `asdf` an
 
 ## Obtain the Grafana Playground API Key
 
-1. In the 1password Engineering Vault, lookup the API key stored in `dashboards.gitlab.net Grafana Playground API Key`
+1. In the 1password Engineering Vault, lookup the API key stored in `Grafana Playground API token` under the `developer-playground-key API-key` section.
 1. Edit the `dashboards/.env.sh` file and add the following content: `export GRAFANA_API_TOKEN=<1PASSWORD API KEY VALUE>`
 1. In your shell, in the `dashboards` directory, run `source .env.sh` to load it.
 

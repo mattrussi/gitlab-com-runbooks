@@ -11,7 +11,7 @@ if (! command -v jb && command -v go) >/dev/null; then
 fi
 
 if ! command -v jb >/dev/null; then
-  echo >&2 "jsonnet-bundler not installed. Please follow the instructions in https://gitlab.com/gitlab-com/runbooks/-/blob/master/README.md#required-tooling to install asdf and jsonnet-bundler."
+  echo >&2 "jsonnet-bundler not installed. Please follow the instructions in https://gitlab.com/gitlab-com/runbooks/-/blob/master/README.md#dependencies-and-required-tooling to install asdf and jsonnet-bundler."
   exit 1
 fi
 
