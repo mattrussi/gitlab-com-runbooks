@@ -92,7 +92,7 @@ local gitalyGRPCErrorRate(baseSelector) =
       counter='gitaly_service_client_requests_total',
       selector=baseSelector {
         grpc_code: 'Unavailable',
-        grpc_method: { noneOf: ['SSHUploadPackWithSidechannel', 'PostUploadPackWithSidechannel'] },
+        grpc_method: { noneOf: ['SSHUploadPackWithSidechannel', 'PostUploadPackWithSidechannel', 'ListBranchNamesContainingCommit'] },
       }
     ),
   ]);

@@ -93,7 +93,7 @@ groups:
           or
           label_replace(rate(gitaly_service_client_requests_total{deadline_type!="limited",grpc_code="DeadlineExceeded",job="gitaly"}[1m]), "_c", "1", "", "")
           or
-          label_replace(rate(gitaly_service_client_requests_total{grpc_code="Unavailable",grpc_method!~"PostUploadPackWithSidechannel|SSHUploadPackWithSidechannel",job="gitaly"}[1m]), "_c", "2", "", "")
+          label_replace(rate(gitaly_service_client_requests_total{grpc_code="Unavailable",grpc_method!~"ListBranchNamesContainingCommit|PostUploadPackWithSidechannel|SSHUploadPackWithSidechannel",job="gitaly"}[1m]), "_c", "2", "", "")
         )
       )
       or
@@ -194,7 +194,7 @@ groups:
           or
           label_replace(rate(gitaly_service_client_requests_total{deadline_type!="limited",grpc_code="DeadlineExceeded",job="gitaly"}[5m]), "_c", "1", "", "")
           or
-          label_replace(rate(gitaly_service_client_requests_total{grpc_code="Unavailable",grpc_method!~"PostUploadPackWithSidechannel|SSHUploadPackWithSidechannel",job="gitaly"}[5m]), "_c", "2", "", "")
+          label_replace(rate(gitaly_service_client_requests_total{grpc_code="Unavailable",grpc_method!~"ListBranchNamesContainingCommit|PostUploadPackWithSidechannel|SSHUploadPackWithSidechannel",job="gitaly"}[5m]), "_c", "2", "", "")
         )
       )
       or
@@ -292,7 +292,7 @@ groups:
           or
           label_replace(rate(gitaly_service_client_requests_total{deadline_type!="limited",grpc_code="DeadlineExceeded",job="gitaly"}[5m]), "_c", "1", "", "")
           or
-          label_replace(rate(gitaly_service_client_requests_total{grpc_code="Unavailable",grpc_method!~"PostUploadPackWithSidechannel|SSHUploadPackWithSidechannel",job="gitaly"}[5m]), "_c", "2", "", "")
+          label_replace(rate(gitaly_service_client_requests_total{grpc_code="Unavailable",grpc_method!~"ListBranchNamesContainingCommit|PostUploadPackWithSidechannel|SSHUploadPackWithSidechannel",job="gitaly"}[5m]), "_c", "2", "", "")
         )
       )
       or
@@ -393,7 +393,7 @@ groups:
           or
           label_replace(rate(gitaly_service_client_requests_total{deadline_type!="limited",grpc_code="DeadlineExceeded",job="gitaly"}[30m]), "_c", "1", "", "")
           or
-          label_replace(rate(gitaly_service_client_requests_total{grpc_code="Unavailable",grpc_method!~"PostUploadPackWithSidechannel|SSHUploadPackWithSidechannel",job="gitaly"}[30m]), "_c", "2", "", "")
+          label_replace(rate(gitaly_service_client_requests_total{grpc_code="Unavailable",grpc_method!~"ListBranchNamesContainingCommit|PostUploadPackWithSidechannel|SSHUploadPackWithSidechannel",job="gitaly"}[30m]), "_c", "2", "", "")
         )
       )
       or
@@ -491,7 +491,7 @@ groups:
           or
           label_replace(rate(gitaly_service_client_requests_total{deadline_type!="limited",grpc_code="DeadlineExceeded",job="gitaly"}[30m]), "_c", "1", "", "")
           or
-          label_replace(rate(gitaly_service_client_requests_total{grpc_code="Unavailable",grpc_method!~"PostUploadPackWithSidechannel|SSHUploadPackWithSidechannel",job="gitaly"}[30m]), "_c", "2", "", "")
+          label_replace(rate(gitaly_service_client_requests_total{grpc_code="Unavailable",grpc_method!~"ListBranchNamesContainingCommit|PostUploadPackWithSidechannel|SSHUploadPackWithSidechannel",job="gitaly"}[30m]), "_c", "2", "", "")
         )
       )
       or
@@ -592,7 +592,7 @@ groups:
           or
           label_replace(rate(gitaly_service_client_requests_total{deadline_type!="limited",grpc_code="DeadlineExceeded",job="gitaly"}[1h]), "_c", "1", "", "")
           or
-          label_replace(rate(gitaly_service_client_requests_total{grpc_code="Unavailable",grpc_method!~"PostUploadPackWithSidechannel|SSHUploadPackWithSidechannel",job="gitaly"}[1h]), "_c", "2", "", "")
+          label_replace(rate(gitaly_service_client_requests_total{grpc_code="Unavailable",grpc_method!~"ListBranchNamesContainingCommit|PostUploadPackWithSidechannel|SSHUploadPackWithSidechannel",job="gitaly"}[1h]), "_c", "2", "", "")
         )
       )
       or
@@ -690,7 +690,7 @@ groups:
           or
           label_replace(rate(gitaly_service_client_requests_total{deadline_type!="limited",grpc_code="DeadlineExceeded",job="gitaly"}[1h]), "_c", "1", "", "")
           or
-          label_replace(rate(gitaly_service_client_requests_total{grpc_code="Unavailable",grpc_method!~"PostUploadPackWithSidechannel|SSHUploadPackWithSidechannel",job="gitaly"}[1h]), "_c", "2", "", "")
+          label_replace(rate(gitaly_service_client_requests_total{grpc_code="Unavailable",grpc_method!~"ListBranchNamesContainingCommit|PostUploadPackWithSidechannel|SSHUploadPackWithSidechannel",job="gitaly"}[1h]), "_c", "2", "", "")
         )
       )
       or
@@ -791,7 +791,7 @@ groups:
           or
           label_replace(rate(gitaly_service_client_requests_total{deadline_type!="limited",grpc_code="DeadlineExceeded",job="gitaly"}[6h]), "_c", "1", "", "")
           or
-          label_replace(rate(gitaly_service_client_requests_total{grpc_code="Unavailable",grpc_method!~"PostUploadPackWithSidechannel|SSHUploadPackWithSidechannel",job="gitaly"}[6h]), "_c", "2", "", "")
+          label_replace(rate(gitaly_service_client_requests_total{grpc_code="Unavailable",grpc_method!~"ListBranchNamesContainingCommit|PostUploadPackWithSidechannel|SSHUploadPackWithSidechannel",job="gitaly"}[6h]), "_c", "2", "", "")
         )
       )
       or
@@ -889,7 +889,7 @@ groups:
           or
           label_replace(rate(gitaly_service_client_requests_total{deadline_type!="limited",grpc_code="DeadlineExceeded",job="gitaly"}[6h]), "_c", "1", "", "")
           or
-          label_replace(rate(gitaly_service_client_requests_total{grpc_code="Unavailable",grpc_method!~"PostUploadPackWithSidechannel|SSHUploadPackWithSidechannel",job="gitaly"}[6h]), "_c", "2", "", "")
+          label_replace(rate(gitaly_service_client_requests_total{grpc_code="Unavailable",grpc_method!~"ListBranchNamesContainingCommit|PostUploadPackWithSidechannel|SSHUploadPackWithSidechannel",job="gitaly"}[6h]), "_c", "2", "", "")
         )
       )
       or

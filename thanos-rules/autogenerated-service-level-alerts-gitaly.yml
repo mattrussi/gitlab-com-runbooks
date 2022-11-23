@@ -250,7 +250,7 @@ groups:
           or
           label_replace(rate(gitaly_service_client_requests_total{deadline_type!="limited",environment="{{ $labels.environment }}",grpc_code="DeadlineExceeded",job="gitaly",stage="{{ $labels.stage }}"}[5m]), "_c", "1", "", "")
           or
-          label_replace(rate(gitaly_service_client_requests_total{environment="{{ $labels.environment }}",grpc_code="Unavailable",grpc_method!~"PostUploadPackWithSidechannel|SSHUploadPackWithSidechannel",job="gitaly",stage="{{ $labels.stage }}"}[5m]), "_c", "2", "", "")
+          label_replace(rate(gitaly_service_client_requests_total{environment="{{ $labels.environment }}",grpc_code="Unavailable",grpc_method!~"ListBranchNamesContainingCommit|PostUploadPackWithSidechannel|SSHUploadPackWithSidechannel",job="gitaly",stage="{{ $labels.stage }}"}[5m]), "_c", "2", "", "")
         )
       runbook: docs/gitaly/README.md
     labels:
@@ -302,7 +302,7 @@ groups:
           or
           label_replace(rate(gitaly_service_client_requests_total{deadline_type!="limited",environment="{{ $labels.environment }}",grpc_code="DeadlineExceeded",job="gitaly",stage="{{ $labels.stage }}"}[5m]), "_c", "1", "", "")
           or
-          label_replace(rate(gitaly_service_client_requests_total{environment="{{ $labels.environment }}",grpc_code="Unavailable",grpc_method!~"PostUploadPackWithSidechannel|SSHUploadPackWithSidechannel",job="gitaly",stage="{{ $labels.stage }}"}[5m]), "_c", "2", "", "")
+          label_replace(rate(gitaly_service_client_requests_total{environment="{{ $labels.environment }}",grpc_code="Unavailable",grpc_method!~"ListBranchNamesContainingCommit|PostUploadPackWithSidechannel|SSHUploadPackWithSidechannel",job="gitaly",stage="{{ $labels.stage }}"}[5m]), "_c", "2", "", "")
         )
       runbook: docs/gitaly/README.md
     labels:
@@ -356,7 +356,7 @@ groups:
           or
           label_replace(rate(gitaly_service_client_requests_total{deadline_type!="limited",environment="{{ $labels.environment }}",fqdn="{{ $labels.fqdn }}",grpc_code="DeadlineExceeded",job="gitaly",shard="{{ $labels.shard }}",stage="{{ $labels.stage }}"}[5m]), "_c", "1", "", "")
           or
-          label_replace(rate(gitaly_service_client_requests_total{environment="{{ $labels.environment }}",fqdn="{{ $labels.fqdn }}",grpc_code="Unavailable",grpc_method!~"PostUploadPackWithSidechannel|SSHUploadPackWithSidechannel",job="gitaly",shard="{{ $labels.shard }}",stage="{{ $labels.stage }}"}[5m]), "_c", "2", "", "")
+          label_replace(rate(gitaly_service_client_requests_total{environment="{{ $labels.environment }}",fqdn="{{ $labels.fqdn }}",grpc_code="Unavailable",grpc_method!~"ListBranchNamesContainingCommit|PostUploadPackWithSidechannel|SSHUploadPackWithSidechannel",job="gitaly",shard="{{ $labels.shard }}",stage="{{ $labels.stage }}"}[5m]), "_c", "2", "", "")
         )
       runbook: docs/gitaly/README.md
     labels:
@@ -410,7 +410,7 @@ groups:
           or
           label_replace(rate(gitaly_service_client_requests_total{deadline_type!="limited",environment="{{ $labels.environment }}",fqdn="{{ $labels.fqdn }}",grpc_code="DeadlineExceeded",job="gitaly",shard="{{ $labels.shard }}",stage="{{ $labels.stage }}"}[5m]), "_c", "1", "", "")
           or
-          label_replace(rate(gitaly_service_client_requests_total{environment="{{ $labels.environment }}",fqdn="{{ $labels.fqdn }}",grpc_code="Unavailable",grpc_method!~"PostUploadPackWithSidechannel|SSHUploadPackWithSidechannel",job="gitaly",shard="{{ $labels.shard }}",stage="{{ $labels.stage }}"}[5m]), "_c", "2", "", "")
+          label_replace(rate(gitaly_service_client_requests_total{environment="{{ $labels.environment }}",fqdn="{{ $labels.fqdn }}",grpc_code="Unavailable",grpc_method!~"ListBranchNamesContainingCommit|PostUploadPackWithSidechannel|SSHUploadPackWithSidechannel",job="gitaly",shard="{{ $labels.shard }}",stage="{{ $labels.stage }}"}[5m]), "_c", "2", "", "")
         )
       runbook: docs/gitaly/README.md
     labels:
