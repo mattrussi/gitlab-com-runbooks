@@ -83,7 +83,7 @@ basic.dashboard(
       )
     ),
     statPanel.new(
-      title='Pending Events',
+      title='Pending events',
       description='The number of pending events that need to be sent.',
       reducerFunction='last',
       decimals=0,
@@ -93,7 +93,7 @@ basic.dashboard(
       promQuery.target(
         |||
           sum(
-            rate(registry_notifications_pending_total{environment="$environment", cluster=~"$cluster", stage="$stage"}[$__interval])
+            registry_notifications_pending_total{environment="$environment", cluster=~"$cluster", stage="$stage"}
           )
         |||
       )
