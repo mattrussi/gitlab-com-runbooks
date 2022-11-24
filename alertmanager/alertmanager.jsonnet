@@ -45,6 +45,7 @@ local slackChannels = [
   { name: 'production_slack_channel', channel: 'production', sendResolved: false },
   { name: 'nonprod_alerts_slack_channel', channel: 'alerts-nonprod' },
   { name: 'feed_alerts_staging', channel: 'feed_alerts_staging', useSlackLine: slacklineWebhookConfigurations.staging },
+  { name: 'observability_alerts_channel', channel: 'g_observability_alerts' },
 ];
 
 local snitchReceiverChannelName(channel) =
@@ -430,6 +431,15 @@ local routingTree = Route(
       },
     )
     for team in teamsWithAlertingSlackChannels()
+  ] + [
+    Route(
+      receiver='observability_alerts_channel',
+      continue=true,
+      group_by=groupByType,
+      matchers={
+        team: 'observability',
+      },
+    ),
   ] +
   [
     // Route SLO alerts for staging to `feed_alerts_staging`
