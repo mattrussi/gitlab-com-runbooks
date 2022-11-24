@@ -1,4 +1,4 @@
-# Gitlab On-call Run Books
+# GitLab On-call Run Books
 
 This project provides a guidance for Infrastructure Reliability Engineers and Managers who are starting an on-call shift or responding to an incident. If you haven't yet, review the [Incident Management](https://about.gitlab.com/handbook/engineering/infrastructure/incident-management/index.html) page in the handbook before reading on.
 
