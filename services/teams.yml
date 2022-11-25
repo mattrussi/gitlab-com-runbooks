@@ -261,6 +261,7 @@ teams:
   - graphql_queries
 - name: observability
   product_stage_group: observability
+  slack_alerts_channel: g_observability_alerts
   ignored_components:
   - graphql_queries
 - name: optimize

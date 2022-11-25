@@ -430,6 +430,15 @@ local routingTree = Route(
       },
     )
     for team in teamsWithAlertingSlackChannels()
+  ] + [
+    Route(
+      receiver='team_observability_alerts_channel',
+      continue=true,
+      matchers={
+        env: 'gstg',
+        team: 'observability',
+      },
+    ),
   ] +
   [
     // Route SLO alerts for staging to `feed_alerts_staging`
