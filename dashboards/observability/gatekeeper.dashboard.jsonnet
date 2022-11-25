@@ -16,18 +16,18 @@ basic.dashboard(
   ],
 )
 .addTemplate(templates.Node)
-.addTemplate(template.new(
-  'environment',
-  '$PROMETHEUS_DS',
-  'label_values(kube_pod_container_info{cluster=~"opstrace-.*"}, env)',
-  label='Environment',
-  refresh='load',
-  sort=1,
-))
+.addTemplate(
+  template.custom(
+    name='environment',
+    label='Environment',
+    query='gstg,gprd',
+    current='gprd',
+  )
+)
 .addTemplate(template.new(
   'cluster',
   '$PROMETHEUS_DS',
-  'label_values(kube_pod_container_info{cluster=~"opstrace-.*"}, cluster)',
+  'label_values(kube_pod_container_info{env="$environment",cluster=~"opstrace-.*"}, cluster)',
   label='Cluster',
   refresh='load',
   sort=1,
@@ -35,9 +35,9 @@ basic.dashboard(
 .addTemplate(template.new(
   'gatekeeperPods',
   '$PROMETHEUS_DS',
-  'label_values(kube_pod_container_info{cluster=~"opstrace-.*", container="gatekeeper"}, pod)',
+  'label_values(kube_pod_container_info{env="$environment",cluster=~"opstrace-.*", container="gatekeeper"}, pod)',
   label='Gatekeeper pods',
-  refresh='load',
+  refresh='time',
   sort=1,
   multi=true,
   includeAll=true,
