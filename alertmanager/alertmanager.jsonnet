@@ -323,6 +323,11 @@ local SnitchRoute(channel) =
 local receiverNameForTeamSlackChannel(teamName) =
   'team_' + std.strReplace(teamName, '-', '_') + '_alerts_channel';
 
+// envForTeams will check if the team is opting-in any aother environment apart
+// from the required `gprd` environment.
+local envForTeams(team) =
+  if std.objectHas(team, 'alerts') then { re: std.join('|', ['gprd'] + team.alerts) } else 'gprd';
+
 local routingTree = Route(
   continue=null,
   group_by=defaultGroupBy,
@@ -425,22 +430,12 @@ local routingTree = Route(
       receiver=receiverNameForTeamSlackChannel(team.name),
       continue=true,
       matchers={
-        env: 'gprd',  // For now we only send production channel alerts to teams
+        env: envForTeams(team),
         team: team.name,
       },
     )
     for team in teamsWithAlertingSlackChannels()
   ] + [
-    Route(
-      receiver='team_observability_alerts_channel',
-      continue=true,
-      matchers={
-        env: 'gstg',
-        team: 'observability',
-      },
-    ),
-  ] +
-  [
     // Route SLO alerts for staging to `feed_alerts_staging`
     Route(
       receiver='feed_alerts_staging',
