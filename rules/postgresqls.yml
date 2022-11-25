@@ -156,6 +156,19 @@ groups:
         $value | humanize1024}}B behind {{$labels.primary}}
       runbook: docs/patroni/postgres.md#replication-is-lagging-or-has-stopped
       title: Postgres Replication lag (in bytes) is high
+  - alert: PostgreSQL_ReplicationSlotLagInBytesTooLarge
+    expr: confirmed_flush_lsn_bytes{fqdn=~"postgres-.*-2004-.*"} > 1e+09*10
+    for: 5m
+    labels:
+      pager: pagerduty
+      severity: s1
+      alert_type: cause
+      type: patroni
+    annotations:
+      description: Replication slot {{$labels.slot_name}} ({{$labels.slot_type}}) on source server {{$labels.instance}} has accumulated lag {{
+        $value | humanizeDuration }}
+      runbook: docs/patroni/postgres.md#replication-is-lagging-or-has-stopped
+      title: Postgres replication lag accumulated in a replication slot is too large
   - alert: PostgreSQL_PendingWALFilesTooHigh
     expr: pg_archiver_pending_wal_count > 5000
     for: 5m
