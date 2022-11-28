@@ -39,17 +39,9 @@ groups:
       tier: sv
       type: camoproxy
     expr: |
-      (
-        sum by (environment) (
-          rate(camo_response_duration_seconds_bucket{le="5"}[1m])
-        )
-        +
-        sum by (environment) (
-          rate(camo_response_duration_seconds_bucket{le="10"}[1m])
-        )
+      sum by (environment) (
+        rate(camo_response_duration_seconds_bucket{le="10"}[1m])
       )
-      /
-      2
   - record: gitlab_component_apdex:weight:score
     labels:
       component: server
@@ -126,17 +118,9 @@ groups:
       tier: sv
       type: camoproxy
     expr: |
-      (
-        sum by (environment) (
-          rate(camo_response_duration_seconds_bucket{le="5"}[5m])
-        )
-        +
-        sum by (environment) (
-          rate(camo_response_duration_seconds_bucket{le="10"}[5m])
-        )
+      sum by (environment) (
+        rate(camo_response_duration_seconds_bucket{le="10"}[5m])
       )
-      /
-      2
   - record: gitlab_component_apdex:weight:score_5m
     labels:
       component: server
@@ -213,17 +197,9 @@ groups:
       tier: sv
       type: camoproxy
     expr: |
-      (
-        sum by (environment) (
-          rate(camo_response_duration_seconds_bucket{le="5"}[30m])
-        )
-        +
-        sum by (environment) (
-          rate(camo_response_duration_seconds_bucket{le="10"}[30m])
-        )
+      sum by (environment) (
+        rate(camo_response_duration_seconds_bucket{le="10"}[30m])
       )
-      /
-      2
   - record: gitlab_component_apdex:weight:score_30m
     labels:
       component: server
@@ -301,17 +277,9 @@ groups:
       type: camoproxy
       upscale_source: "yes"
     expr: |
-      (
-        sum by (environment) (
-          rate(camo_response_duration_seconds_bucket{le="5"}[1h])
-        )
-        +
-        sum by (environment) (
-          rate(camo_response_duration_seconds_bucket{le="10"}[1h])
-        )
+      sum by (environment) (
+        rate(camo_response_duration_seconds_bucket{le="10"}[1h])
       )
-      /
-      2
   - record: gitlab_component_apdex:weight:score_1h
     labels:
       component: server
