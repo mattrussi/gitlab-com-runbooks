@@ -308,6 +308,8 @@ teams:
   product_stage_group: static_analysis
 - name: pipeline_insights
   product_stage_group: pipeline_insights
+  slack_channel: g_pipeline-insights
+  slack_alerts_channel: g_pipeline-insights
   ignored_components:
   - graphql_queries
 - name: threat_insights
