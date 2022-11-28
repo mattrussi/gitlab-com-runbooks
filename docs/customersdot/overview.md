@@ -100,6 +100,9 @@ production right away, should the need to do so arise. To do so, please refer to
 
 Alerts related to deployments are sent to the `#s_fulfillment_status` Slack channel.
 
+If there's a need to restart services, pelase refer to this
+[restart documentation](https://gitlab.com/gitlab-org/customers-gitlab-com#restart-some-services).
+
 ### Change Management
 
 Terraform is used to provision the virtual infrastructure for staging and
