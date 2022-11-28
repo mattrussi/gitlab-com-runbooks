@@ -14,7 +14,7 @@ discussion to clarify questions.
 - [Exploration: Diagnosis with Kibana](kibana-diagnosis.md)
 - [Apdex alerts](../monitoring/apdex-alerts-guide.md)
 - [Incident management](https://about.gitlab.com/handbook/engineering/infrastructure/incident-management/)
-- [An impatient SRE's guide to deleting alerts](../uncategorized/deleting-alerts.md)
+- [An impatient SRE's guide to deleting alerts](../monitoring/deleting-alerts.md)
 
 ## Tutorials
 

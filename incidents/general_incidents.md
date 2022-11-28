@@ -96,4 +96,4 @@ If not on full alert, now in the realm of judgement related to next steps
     * Are the right people involved to fix the problem? Ask for help if not.
   2. You can click the runbooks links from the alerts in #production
     * Are we doing / have we done the things listed there?
-  3. If the alert is not actionable, review the [alert deletion guide](https://gitlab.com/gitlab-com/runbooks/-/blob/master/docs/uncategorized/deleting-alerts.md#an-impatient-sres-guide-to-deleting-alerts).
+  3. If the alert is not actionable, review the [alert deletion guide](https://gitlab.com/gitlab-com/runbooks/-/blob/master/docs/monitoring/deleting-alerts.md#an-impatient-sres-guide-to-deleting-alerts).
