@@ -18,7 +18,8 @@ NELs are also already available as metrics [here](https://dashboards.gitlab.net/
 The logs for a particular day can be imported into BigQuery by using the `bq` tool:
 
 ```bash
-bq load --project_id gitlab-production --source_format NEWLINE_DELIMITED_JSON cloudflare.logpush_20200610 'gs://gitlab-gprd-cloudflare-logpush/v2/http/20200610/*.log.gz' <(curl -s https://raw.githubusercontent.com/cloudflare/cloudflare-gcp/master/logpush-to-bigquery/schema-http.json)
+curl -s https://raw.githubusercontent.com/cloudflare/cloudflare-gcp/master/logpush-to-bigquery/schema-http.json | jq '. += [{"name": "RequestHeaders","type": "JSON","mode": "NULLABLE"}, {"name": "ResponseHeaders","type": "JSON","mode": "NULLABLE"}]' > schema-http.json
+bq load --project_id gitlab-production --source_format NEWLINE_DELIMITED_JSON cloudflare.logpush_20200610 'gs://gitlab-gprd-cloudflare-logpush/v2/http/20200610/*.log.gz' schema-http.json
 ```
 
 This will make the logs for that particular day available for querying with SQL
