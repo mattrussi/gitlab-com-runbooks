@@ -5,7 +5,7 @@ The following setup enables us to use the YubiKey with OpenPGP, the Authenticati
 ## Initial configuration
 
 If you find any problems during the setup, take a look at the [troubleshooting](#troubleshooting) section at the end
-of this document.
+of this document or check this [Okta Developers Guide to GPG and YubiKey](https://developer.okta.com/blog/2021/07/07/developers-guide-to-gpg).
 
 ### 1. Requirements
 
@@ -174,6 +174,11 @@ Your selection? q
 # Make sure the PIN is entered before signing
 gpg/card> forcesig
 
+# (Optional) If you would like to add your name as a card holder
+gpg/card> name
+Cardholder's surname: Hamda
+Cardholder's given name: Mohamed
+
 gpg/card> quit
 ```
 
@@ -256,12 +261,12 @@ To do that:
 
     <p>
     <details>
-    <summary>MacOS</summary>
+    <summary>MacOS/Linux</summary>
 
       Set the mountpoint
 
       ```shell
-      export MOUNTPOINT=[According to the OS e.g. /media]/GitLab
+      export MOUNTPOINT=[/media/GitLab for linux or /Volumes/GitLab for MacOS]
       ```
 
       Create the configuration directory where our GnuPG key rings will live:
@@ -345,7 +350,7 @@ only the certify capability.
     Change (N)ame, (C)omment, (E)mail or (O)kay/(Q)uit? o
 
     public and secret key created and signed.
-    pub   4096R/FAEFD83E 2017-08-25 [expires: 2021-08-25]
+    pub   4096R/[YOUR_KEY] 2017-08-25 [expires: 2021-08-25]
           Key fingerprint = 856B 1E1C FAD0 1FE4 5C4C  4E97 961F 703D B8EF B59D
     uid                  John Rando <rando@gitlab.com>
     ```
@@ -367,7 +372,7 @@ mean key rotation.
 
   ```shell
 
-  > gpg --edit-key FAEFD83E
+  > gpg --edit-key [YOUR_KEY]
 
   # Let's add the SIGNING subkey
   gpg> addcardkey
@@ -393,7 +398,7 @@ mean key rotation.
   Is this correct? (y/N) y
   Really create? (y/N) y
 
-  pub  3072R/FAEFD83E  created: 2017-08-25  expires: 2018-08-25  usage: C
+  pub  3072R/[YOUR_KEY]  created: 2017-08-25  expires: 2018-08-25  usage: C
                       trust: ultimate      validity: ultimate
   sub  4096R/79BF274F  created: 2017-08-25  expires: 2018-08-25  usage: S
   [ultimate] (1). John Rando <rando@gitlab.com>
@@ -422,7 +427,7 @@ mean key rotation.
   Is this correct? (y/N) y
   Really create? (y/N) y
 
-  pub  4096R/FAEFD83E  created: 2017-08-25  expires: 2018-08-25  usage: C
+  pub  4096R/[YOUR_KEY]  created: 2017-08-25  expires: 2018-08-25  usage: C
                       trust: ultimate      validity: ultimate
   sub  4096R/AE86E89B  created: 2017-08-25  expires: 2018-08-25  usage: E
   sub  4096R/79BF274F  created: 2017-08-25  expires: 2018-08-25  usage: S
@@ -452,7 +457,7 @@ mean key rotation.
   Is this correct? (y/N) y
   Really create? (y/N) y
 
-  pub  4096R/FAEFD83E  created: 2017-08-25  expires: 2018-08-25  usage: C
+  pub  4096R/[YOUR_KEY]  created: 2017-08-25  expires: 2018-08-25  usage: C
                       trust: ultimate      validity: ultimate
   sub  4096R/AE86E89B  created: 2017-08-25  expires: 2018-08-25  usage: E
   sub  4096R/79BF274F  created: 2017-08-25  expires: 2018-08-25  usage: S
@@ -467,7 +472,7 @@ mean key rotation.
   /home/rehab/.gnupg/pubring.kbx
 ------------------------------
 sec#  rsa4096 2021-04-09 [C] [expires: 2025-04-08]
-      3FCA9E1453C08NO887297DBDE61B3B56057B132D
+      [YOUR_KEY]
 uid           [ultimate] Rehab Hassanein <rhassanein@gitlab.com>
 ssb>  rsa2048 2021-04-09 [S] [expires: 2022-04-09]
 ssb>  rsa2048 2021-04-09 [E] [expires: 2022-04-09]
@@ -483,6 +488,14 @@ This can cause the `addcardkey` command to fail. If you run into this problem, k
 processes with a different `--homedir` flag value to your current $GNUPGHOME.
 Usually, there will be one running with `$HOME/.gnupg` that is the culprit.
 
+Kill the old agent as so:
+
+$ `GNUPGHOME="${GNUPGHOME:-$HOME/.gnupg}" gpgconf --kill gpg-agent`
+
+Start the new one:
+
+$ `gpg-agent --homedir "${GNUPGHOME:-$HOME/.gnupg}" --daemon`
+
 ### 6. Backup your Public Key
 
 If your gpg version does not output the **master** key id you should use the full fingerprint instead.
@@ -492,13 +505,9 @@ If your gpg version does not output the **master** key id you should use the ful
 gpg --list-key
 # example output
 #pub   rsa4096 2021-04-09 [C] [expires: 2025-04-08]
-#     3FCA9E1453C08NO887297DBDE61B3B56057B132D
+#     [YOUR_KEY]
 
-gpg --armor --export FAEFD83E > $MOUNTPOINT/gpg_config/FAEFD83E.asc
-
-#OR
-
-gpg --armor --export 3FCA9E1453C08NO887297DBDE61B3B56057B132D > $MOUNTPOINT/gpg_config/3FCA9E1453C08NO887297DBDE61B3B56057B132D.asc
+gpg --armor --export [YOUR_KEY] > $MOUNTPOINT/gpg_config/[YOUR_KEY].asc
 ```
 
 ### 7. Import Public Key to Regular Keychain
@@ -514,15 +523,15 @@ you've imported.
 In a fresh terminal (i.e. with the default GNUPGHOME env var, not the veracrypt mounted one) we can:
 
   ```shell
-  > gpg --import $MOUNTPOINT/gpg_config/FAEFD83E.asc
-  gpg: key FAEFD83E: public key imported
+  > gpg --import $MOUNTPOINT/gpg_config/[YOUR_KEY].asc
+  gpg: key [YOUR_KEY]: public key imported
   gpg: Total number processed: 1
   gpg:               imported: 1
 
-  > gpg --edit-key FAEFD83E
+  > gpg --edit-key [YOUR_KEY]
   Secret subkeys are available.
 
-  pub  4096R/FAEFD83E  created: 2017-08-25  expires: 2018-08-25  usage: C
+  pub  4096R/[YOUR_KEY]  created: 2017-08-25  expires: 2018-08-25  usage: C
                       trust: ultimate      validity: ultimate
   sub  4096R/AE86E89B  created: 2017-08-25  expires: 2018-08-25  usage: E
   sub  4096R/79BF274F  created: 2017-08-25  expires: 2018-08-25  usage: S
@@ -530,7 +539,7 @@ In a fresh terminal (i.e. with the default GNUPGHOME env var, not the veracrypt 
   [ultimate] (1). John Rando <rando@gitlab.com>
 
   gpg> trust
-  pub  4096R/FAEFD83E  created: 2017-08-25  expires: 2018-08-25  usage: C
+  pub  4096R/[YOUR_KEY]  created: 2017-08-25  expires: 2018-08-25  usage: C
                       trust: ultimate      validity: ultimate
   sub  4096R/AE86E89B  created: 2017-08-25  expires: 2018-08-25  usage: E
   sub  4096R/79BF274F  created: 2017-08-25  expires: 2018-08-25  usage: S
@@ -591,7 +600,7 @@ Ensure proper options are set in `gpg-agent.conf`
   cat << EOF > ~/.gnupg/gpg-agent.conf
   default-cache-ttl 600
   max-cache-ttl 7200
-  pinentry-program /usr/local/bin/pinentry-mac
+  pinentry-program [OUTPUT OF `which pinentry-mac`]
   enable-ssh-support
   EOF
   ```
@@ -644,7 +653,7 @@ fi
 
 After all the files are changed:
 
-1. Source the `rc`
+1. Source the `rc` (commonly `source ~/.bashrc` or `source ~/.zshrc`)
 
 1. Remove any automation you might have that starts `ssh-agent`.
 
@@ -735,7 +744,7 @@ Next, we'll associate the key with our GitLab profile.
   Alternatively, if you recall, we had earlier backed this up to our encrypted volume, you can just view the contents of the file you had backed up.
 
   ```shell
-  > cat $MOUNTPOINT/gpg_config/FAEFD83E.asc
+  > cat $MOUNTPOINT/gpg_config/[YOUR_KEY].asc
   -----BEGIN PGP PUBLIC KEY BLOCK-----
 
   mQINBGMFt1wBEADOZNs6tW...
@@ -781,6 +790,12 @@ $ ssh git@gitlab.com
 PTY allocation request failed on channel 0
 Welcome to GitLab, @user!
 Connection to gitlab.com closed.
+```
+
+You might need to restart your gpg-agent
+
+```shell
+gpg-connect-agent reloadagent /bye
 ```
 
 Exercise the git commit signing functionality on a throwaway branch:
@@ -854,7 +869,7 @@ $ gpg --edit-key <youremail>
 
 gpg> key 1
 
-pub  4096R/FAEFD83E  created: 2017-08-25  expires: 2023-08-25  usage: C
+pub  4096R/[YOUR_KEY]  created: 2017-08-25  expires: 2023-08-25  usage: C
                      trust: ultimate      validity: ultimate
 sub* 4096R/AE86E89B  created: 2017-08-25  expires: 2018-08-25  usage: E
 sub  4096R/79BF274F  created: 2017-08-25  expires: 2018-08-25  usage: S
@@ -862,7 +877,7 @@ sub  4096R/DE86E396  created: 2017-08-25  expires: 2018-08-25  usage: A
 
 gpg> key 2
 
-pub  4096R/FAEFD83E  created: 2017-08-25  expires: 2023-08-25  usage: C
+pub  4096R/[YOUR_KEY]  created: 2017-08-25  expires: 2023-08-25  usage: C
                      trust: ultimate      validity: ultimate
 sub* 4096R/AE86E89B  created: 2017-08-25  expires: 2018-08-25  usage: E
 sub* 4096R/79BF274F  created: 2017-08-25  expires: 2018-08-25  usage: S
@@ -870,7 +885,7 @@ sub  4096R/DE86E396  created: 2017-08-25  expires: 2018-08-25  usage: A
 
 gpg> key 3
 
-pub  4096R/FAEFD83E  created: 2017-08-25  expires: 2023-08-25  usage: C
+pub  4096R/[YOUR_KEY]  created: 2017-08-25  expires: 2023-08-25  usage: C
                      trust: ultimate      validity: ultimate
 sub* 4096R/AE86E89B  created: 2017-08-25  expires: 2018-08-25  usage: E
 sub* 4096R/79BF274F  created: 2017-08-25  expires: 2018-08-25  usage: S
@@ -895,7 +910,7 @@ Key expires at Sun Aug  25 01:21:41 2019 CST
 Is this correct? (y/N) y
 # Verify the expiry date is what you expect, and if so, type 'y'
 
-pub  4096R/FAEFD83E  created: 2017-08-25  expires: 2023-08-25  usage: C
+pub  4096R/[YOUR_KEY]  created: 2017-08-25  expires: 2023-08-25  usage: C
                      trust: ultimate      validity: ultimate
 sub* 4096R/AE86E89B  created: 2017-08-25  expires: 2019-08-25  usage: E
 sub* 4096R/79BF274F  created: 2017-08-25  expires: 2019-08-25  usage: S
@@ -908,13 +923,13 @@ gpg> quit
 Export the updated key information:
 
 ```
-gpg --armor --export FAEFD83E > $MOUNTPOINT/gpg_config/FAEFD83E.asc
+gpg --armor --export [YOUR_KEY] > $MOUNTPOINT/gpg_config/[YOUR_KEY].asc
 ```
 
 From a fresh terminal (using your normal ~/.gnupg GPG directory:
 
 ```
-gpg --import $MOUNTPOINT/gpg_config/FAEFD83E.asc
+gpg --import $MOUNTPOINT/gpg_config/[YOUR_KEY].asc
 ```
 
 Unmount your encrypted volume, re-copy the image file to your external safe storage (e.g. USB flash drive)
@@ -986,3 +1001,4 @@ can help too, but only temporarily (it'll set the TTY to the terminal where this
 
 * <https://github.com/drduh/YubiKey-Guide#21-install---linux>
 * <https://wiki.archlinux.org/index.php/GnuPG>
+* <https://developer.okta.com/blog/2021/07/07/developers-guide-to-gpg>
