@@ -76,7 +76,7 @@ local gitalyGRPCErrorRate(baseSelector) =
     rateMetric(
       counter='gitaly_service_client_requests_total',
       selector=baseSelector {
-        grpc_code: { noneOf: ['OK', 'NotFound', 'Unauthenticated', 'AlreadyExists', 'FailedPrecondition', 'DeadlineExceeded', 'Canceled', 'InvalidArgument', 'PermissionDenied', 'Unavailable'] },
+        grpc_code: { noneOf: ['OK', 'NotFound', 'Unauthenticated', 'AlreadyExists', 'FailedPrecondition', 'DeadlineExceeded', 'Canceled', 'InvalidArgument', 'PermissionDenied', 'Unavailable', 'ResourceExhausted'] },
       }
     ),
     // Include some errors for code `DeadlineExceeded`
