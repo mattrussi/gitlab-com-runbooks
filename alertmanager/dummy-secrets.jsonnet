@@ -14,6 +14,7 @@
     { name: 'slo_gprd_cny', serviceKey: 'secret' },
     { name: 'slo_gprd_main', serviceKey: 'secret' },
     { name: 'slo_non_prod', serviceKey: 'secret' },
+    { name: 'observability', serviceKey: 'secret' },
   ],
   // GitLab Slack.
   slackAPIURL: 'https://example.com/secret',

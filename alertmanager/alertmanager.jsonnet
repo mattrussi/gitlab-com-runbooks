@@ -355,6 +355,8 @@ local routingTree = Route(
       matchers={
         pager: 'pagerduty',
         env: { re: 'gprd|ops' },
+        // Observability team has its own PD schedule
+        team: { ne: 'observability' },
       },
       group_by=groupByType,
       continue=true,
@@ -438,6 +440,19 @@ local routingTree = Route(
         env: 'gstg',
         team: 'observability',
       },
+    ),
+  ] + [
+    Route(
+      receiver='observability',
+      matchers={
+        pager: 'pagerduty',
+        env: { re: 'gprd|gstg' },
+        team: 'observability',
+      },
+      group_by=groupByType,
+      continue=false,
+      /* must be less than the 6h auto-resolve in PagerDuty */
+      repeat_interval='2h',
     ),
   ] +
   [
