@@ -201,30 +201,6 @@ basic.dashboard(
       )
     ),
     graphPanel.new(
-      'Events per second (by Event Type)',
-      description='Successes: Count of events that were delivered.\nEvents: Total number of events that have been queued for sending.\nErrors: events that could not be processed, including timeouts.\nFailures: bad responses from the event consumer (stauts codes >= 400).',
-      format='ops',
-      linewidth=1,
-      fill=0,
-      legend_alignAsTable=true,
-      legend_values=true,
-      legend_min=true,
-      legend_max=true,
-      legend_current=true,
-      legend_sort='current',
-      legend_sortDesc=true,
-    )
-    .addTarget(
-      promQuery.target(
-        |||
-          sum by (exported_type) (
-            rate(registry_notifications_events_total{environment="$environment", cluster=~"$cluster", stage="$stage"}[$__interval])
-          )
-        |||,
-        legendFormat='{{ command }}',
-      )
-    ),
-    graphPanel.new(
       'Events per second (by Status Code)',
       description='The per-second rate of response status codes for all events.',
       format='ops',
