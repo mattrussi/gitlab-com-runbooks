@@ -249,6 +249,9 @@
             },
           },
         },
+        cost_factor: {
+          type: 'float',
+        },
         count: {
           type: 'long',
         },
