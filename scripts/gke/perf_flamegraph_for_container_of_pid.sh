@@ -65,8 +65,9 @@ function main() {
   sudo perf record --freq "$SAMPLES_PER_SECOND" -g --all-cpus -e cpu-cycles --cgroup "$CONTAINER_CGROUP" -- sleep "$DURATION_SECONDS"
   sudo perf script --header | gzip >"$OUTFILE_PERF_SCRIPT"
 
+  echo "Generating flamegraph."
   if is_gke; then
-    zcat "$OUTFILE_PERF_SCRIPT" | toolbox bash -c 'stackcollapse-perf.pl --kernel | flamegraph.pl --hash --colors=perl' >"$OUTFILE_FLAMEGRAPH"
+    toolbox bash -c "zcat /media/root/$OUTDIR/$OUTFILE_PERF_SCRIPT | stackcollapse-perf.pl --kernel | flamegraph.pl --hash --colors=perl" >"$OUTFILE_FLAMEGRAPH"
   else
     zcat "$OUTFILE_PERF_SCRIPT" | stackcollapse-perf.pl --kernel | flamegraph.pl --hash --colors=perl >"$OUTFILE_FLAMEGRAPH"
   fi
