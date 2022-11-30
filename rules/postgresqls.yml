@@ -12,7 +12,7 @@ groups:
       )
 
   - alert: PostgreSQL_WALGReplicationStopped
-    expr: rate(pg_xlog_position_bytes{fqdn=~"patroni-.*-2004-.*",type=~"postgres-(archive|delayed)"}[1m]) == 0
+    expr: rate(pg_xlog_position_bytes{fqdn=~"postgres-.*-2004-.*",type=~"postgres-(archive|delayed)"}[1m]) == 0
     # Given that long running queries can't temporarily halt replication,
     # we're setting the "for" value to the value of statement_timeout + a small margin
     for: 125m
