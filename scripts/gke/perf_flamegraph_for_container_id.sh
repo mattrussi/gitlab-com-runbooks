@@ -70,7 +70,7 @@ function main() {
 
   echo "Generating flamegraph."
   if is_gke; then
-    toolbox bash -c "zcat /media/root/$OUTDIR/$OUTFILE_PERF_SCRIPT | stackcollapse-perf.pl --kernel | flamegraph.pl --hash --colors=perl" >"$OUTFILE_FLAMEGRAPH"
+    toolbox bash -c "cd /media/root/$OUTDIR && zcat $OUTFILE_PERF_SCRIPT | stackcollapse-perf.pl --kernel | flamegraph.pl --hash --colors=perl >$OUTFILE_FLAMEGRAPH"
   else
     zcat "$OUTFILE_PERF_SCRIPT" | stackcollapse-perf.pl --kernel | flamegraph.pl --hash --colors=perl >"$OUTFILE_FLAMEGRAPH"
   fi
