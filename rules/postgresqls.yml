@@ -157,7 +157,7 @@ groups:
       runbook: docs/patroni/postgres.md#replication-is-lagging-or-has-stopped
       title: Postgres Replication lag (in bytes) is high
   - alert: PostgreSQL_LogicalReplicationSlotLagInBytesTooLarge
-    expr: pg_replication_slots_confirmed_flush_lsn_bytes{fqdn=~"patroni-.*-2004-.*"} > 1e+09*10
+    expr: pg_replication_slots_confirmed_flush_lsn_bytes{fqdn=~"patroni-.*-2004-.*",slot_type="logical"} > 1e+09*10
     for: 5m
     labels:
       pager: pagerduty
