@@ -4,9 +4,9 @@ set -efo pipefail
 
 CLUSTERS_JSON="${RUNBOOKS_PATH:?}/kubernetes/clusters.json"
 
-trap ctrl_c INT
+trap close_tunnel INT
 
-ctrl_c() {
+close_tunnel() {
   echo "Tunnel is now closed, switching to empty context..."
   kubectl config use-context empty
 }
@@ -65,12 +65,17 @@ use_cluster() {
 
   ssh_proxy="$(get_ssh_proxy "$1")"
 
-  notify_shell
-
   proxy_port=$(echo "${proxy_url}" | awk -F: '{print $3}')
 
-  # shellcheck disable=SC2029
-  ssh -D "${proxy_port}" -q -N "${ssh_proxy}"
+  msg="[kube] Starting SOCKS5 proxy on port ${proxy_port} through ${ssh_proxy}..."
+
+  if [ -n "${TMUX}" ]; then
+    tmux split-pane -d -v -l 3 "echo \"${msg}\"; exec ssh -D \"${proxy_port}\" \"${ssh_proxy}\" 'echo \"Connected! Press Enter to disconnect.\"; read disconnect'"
+  else
+    notify_shell
+    ssh -D "${proxy_port}" "${ssh_proxy}" 'echo "Connected! Press Enter to disconnect."; read disconnect' >&2
+    close_tunnel
+  fi
 }
 
 all_clusters() {
