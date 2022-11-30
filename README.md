@@ -145,7 +145,7 @@ During an incident, we have [roles defined in the handbook](https://about.gitlab
 ### Supporting Services
 
 - [Redis](docs/redis/redis.md)
-- [Sentry is down](docs/monitoring/sentry-is-down.md)
+- [Sentry is down](docs/sentry/sentry-is-down.md)
 
 ### Gitaly
 
@@ -195,12 +195,10 @@ During an incident, we have [roles defined in the handbook](https://about.gitlab
 
 ### Alerting and monitoring
 
-- [GitLab monitoring overview](docs/monitoring/monitoring-overview.md)
 - [How to add alerts: Alerts manual](docs/monitoring/alerts_manual.md)
 - [How to add/update deadman switches](docs/uncategorized/deadman-switches.md)
 - [How to silence alerts](howto/silence-alerts.md)
 - [Alert for SSL certificate expiration](docs/uncategorized/alert-for-ssl-certificate-expiration.md)
-- [Working with Grafana](monitoring/grafana.md)
 - [Working with Prometheus](monitoring/prometheus.md)
 - [Upgrade Prometheus and exporters](docs/monitoring/upgrades.md)
 - [Use mtail to capture metrics from logs](docs/uncategorized/mtail.md)
