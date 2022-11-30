@@ -2,8 +2,10 @@ local aggregationSets = import './aggregation-sets.libsonnet';
 local allSaturationTypes = import './saturation/all.libsonnet';
 local allServices = import './services/all.jsonnet';
 local allUtilizationMetrics = import './utilization/all.libsonnet';
+local labelSet = import 'label-taxonomy/label-set.libsonnet';
+local rawServiceCatalog = import 'raw-catalog.jsonnet';
+local serviceCatalog = import 'service-catalog/service-catalog.libsonnet';
 local objects = import 'utils/objects.libsonnet';
-local labelSet = (import 'label-taxonomy/label-set.libsonnet');
 
 // Site-wide configuration options
 {
@@ -22,7 +24,11 @@ local labelSet = (import 'label-taxonomy/label-set.libsonnet');
   // Hash of all utilization metric types that are monitored on gitlab.com
   utilizationMonitoring:: objects.mergeAll(allUtilizationMetrics),
 
-  serviceCatalog:: (import 'service-catalog.jsonnet'),
+  serviceCatalog:: rawServiceCatalog,
+
+  keyServices::
+    local keyServices = serviceCatalog.findKeyBusinessServices();
+    std.map(function(service) service.name, keyServices),
 
   // stage-group-mapping.jsonnet is generated file, stored in the `services` directory
   stageGroupMapping:: import 'stage-group-mapping.jsonnet',

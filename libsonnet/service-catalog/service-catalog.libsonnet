@@ -1,12 +1,12 @@
 local metricsConfig = import 'gitlab-metrics-config.libsonnet';
-local serviceCatalog = metricsConfig.serviceCatalog;
+local rawCatalog = metricsConfig.serviceCatalog;
 local allServices = metricsConfig.monitoredServices;
 local stageGroupMapping = metricsConfig.stageGroupMapping;
 local miscUtils = import 'utils/misc.libsonnet';
 
 local serviceMap = {
   [x.name]: x
-  for x in serviceCatalog.services
+  for x in rawCatalog.services
 };
 
 local teamDefaults = {
@@ -19,7 +19,7 @@ local teamMap = std.foldl(
   function(result, team)
     assert !std.objectHas(result, team.name) : 'Duplicate definition for team: %s' % [team.name];
     result { [team.name]: teamDefaults + team },
-  serviceCatalog.teams,
+  rawCatalog.teams,
   {}
 );
 
@@ -83,7 +83,7 @@ local buildServiceGraph(services) =
     teamMap[teamName],
 
   findServices(filterFunc)::
-    std.filter(filterFunc, serviceCatalog.services),
+    std.filter(filterFunc, rawCatalog.services),
 
   findKeyBusinessServices(includeZeroScore=false)::
     std.filter(
@@ -91,6 +91,6 @@ local buildServiceGraph(services) =
         std.objectHas(service, 'business') &&
         std.objectHas(service.business.SLA, 'overall_sla_weighting') &&
         (if includeZeroScore then service.business.SLA.overall_sla_weighting >= 0 else service.business.SLA.overall_sla_weighting > 0),
-      serviceCatalog.services
+      rawCatalog.services
     ),
 }

@@ -11,7 +11,7 @@ class Validator
     @context = []
     @failures = []
 
-    @service_catalog = JsonnetWrapper.new.parse(File.join(__dir__, "..", "services", "service-catalog.jsonnet"))
+    @service_catalog = JsonnetWrapper.new.parse(File.join(__dir__, "..", "services", "raw-catalog.jsonnet"))
     @service_catalog_teams = @service_catalog["teams"].to_h { |team| [team["name"], team] }
   end
 

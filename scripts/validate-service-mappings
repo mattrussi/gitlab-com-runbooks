@@ -7,7 +7,7 @@ require_relative '../lib/jsonnet_wrapper'
 # rubocop:disable Metrics/CyclomaticComplexity
 # rubocop:disable Metrics/AbcSize
 def validate(known_stage_groups)
-  service_catalog = JsonnetWrapper.new.parse(File.join(__dir__, "..", "services", "service-catalog.jsonnet"))
+  service_catalog = JsonnetWrapper.new.parse(File.join(__dir__, "..", "services", "raw-catalog.jsonnet"))
 
   teams = service_catalog["teams"]
   tiers = service_catalog["tiers"]
