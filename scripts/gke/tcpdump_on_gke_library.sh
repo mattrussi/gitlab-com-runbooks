@@ -21,7 +21,7 @@ function setup_toolbox() {
 }
 
 function update_apt_cache() {
-  toolbox apt update -y
+  toolbox apt update -y -qq
 }
 
 function install_tcpdump_in_toolbox() {
