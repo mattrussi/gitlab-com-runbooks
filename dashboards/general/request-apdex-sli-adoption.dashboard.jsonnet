@@ -29,12 +29,12 @@ local percentageOfTrafficByUrgency(urgencySelector) =
     (
       sum by (request_urgency) (
         sum by (request_urgency, feature_category)(
-          sum_over_time(application_sli_aggregation:rails_request_apdex:apdex:weight:score_1h{%(numeratorSelector)s}[6h]) > 0
+          sum_over_time(application_sli_aggregation:rails_request:apdex:weight:score_1h{%(numeratorSelector)s}[6h]) > 0
         ) * on (feature_category) group by (stage_group,product_stage,feature_category) (gitlab:feature_category:stage_group:mapping{%(stageGroupSelector)s})
       )
       / ignoring(request_urgency) group_left() sum(
         sum by (feature_category)(
-          sum_over_time(application_sli_aggregation:rails_request_apdex:apdex:weight:score_1h{%(denominatorSelector)s}[6h]) > 0
+          sum_over_time(application_sli_aggregation:rails_request:apdex:weight:score_1h{%(denominatorSelector)s}[6h]) > 0
         ) * on (feature_category) group by (stage_group,product_stage,feature_category) (gitlab:feature_category:stage_group:mapping{%(stageGroupSelector)s})
       )
     )
@@ -47,7 +47,7 @@ local percentageOfTrafficByUrgency(urgencySelector) =
 local numberOfEndpointsPromQL(selector) = |||
   count(
     count by (endpoint_id, feature_category) (
-      count_over_time(application_sli_aggregation:rails_request_apdex:apdex:weight:score_1h{%(selector)s}[6h]) > 0
+      count_over_time(application_sli_aggregation:rails_request:apdex:weight:score_1h{%(selector)s}[6h]) > 0
     ) * on (feature_category) group_left() group by (stage_group,product_stage,feature_category) (gitlab:feature_category:stage_group:mapping{%(stageGroupSelector)s})
   )
 ||| % {
@@ -58,7 +58,7 @@ local numberOfEndpointsPromQL(selector) = |||
 local topEndpoints(selector) = |||
   sort_desc(
     sum by (feature_category, endpoint_id)(
-      sum_over_time(application_sli_aggregation:rails_request_apdex:apdex:weight:score_1h{%(selector)s}[6h])
+      sum_over_time(application_sli_aggregation:rails_request:apdex:weight:score_1h{%(selector)s}[6h])
     ) * on (feature_category) group_left(stage_group, product_stage) group by (stage_group,product_stage,feature_category) (gitlab:feature_category:stage_group:mapping{%(stageGroupSelector)s})
   )
 ||| % {
