@@ -164,15 +164,23 @@ basic.dashboard(
       format='ops'
     ),
     basic.timeseries(
-      title='Event delivery error rate',
+      title='Event delivery failure rate',
+      description='The per-second rate of events that failed to be delivered due to response status code >= 400',
       query=|||
-        (
-          sum (registry_notifications_events_total{environment="$environment", cluster=~"$cluster", stage="$stage", exported_type="Errors"})
-          +
-          sum (registry_notifications_events_total{environment="$environment", cluster=~"$cluster", stage="$stage", exported_type="Failures"})
-        )
+        sum ( rate(registry_notifications_events_total{environment="$environment", cluster=~"$cluster", stage="$stage", exported_type="Failures"}[$__interval]))
         /
-        sum (registry_notifications_events_total{environment="$environment", cluster=~"$cluster", stage="$stage", exported_type="Events"})
+        sum ( rate(registry_notifications_events_total{environment="$environment", cluster=~"$cluster", stage="$stage", exported_type="Events"}[$__interval]))
+      |||,
+      legend_show=false,
+      format='ops'
+    ),
+    basic.timeseries(
+      title='Event delivery error rate',
+      description='The per-second rate of events that were not sent due to registry internal errors or timeouts',
+      query=|||
+        sum ( rate(registry_notifications_events_total{environment="$environment", cluster=~"$cluster", stage="$stage", exported_type="Errors"}[$__interval]))
+        /
+        sum ( rate(registry_notifications_events_total{environment="$environment", cluster=~"$cluster", stage="$stage", exported_type="Events"}[$__interval]))
       |||,
       legend_show=false,
       format='ops'
