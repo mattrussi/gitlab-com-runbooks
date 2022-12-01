@@ -5,7 +5,7 @@ groups:
   rules:
   - record: gitlab:component:feature_category:execution:apdex:success:rate_5m
     labels:
-      component: rails_requests
+      component: customers_dot_requests
       tier: sv
       type: customersdot
     expr: |
@@ -14,7 +14,7 @@ groups:
       )
   - record: gitlab:component:feature_category:execution:apdex:weight:score_5m
     labels:
-      component: rails_requests
+      component: customers_dot_requests
       tier: sv
       type: customersdot
     expr: |
@@ -23,7 +23,7 @@ groups:
       )
   - record: gitlab:component:feature_category:execution:ops:rate_5m
     labels:
-      component: rails_requests
+      component: customers_dot_requests
       tier: sv
       type: customersdot
     expr: |
@@ -32,7 +32,7 @@ groups:
       )
   - record: gitlab:component:feature_category:execution:error:rate_5m
     labels:
-      component: rails_requests
+      component: customers_dot_requests
       tier: sv
       type: customersdot
     expr: |
@@ -44,12 +44,12 @@ groups:
       or
       (
         0 * group by(env,environment,stage,feature_category) (
-          gitlab:component:feature_category:execution:ops:rate_5m{component="rails_requests",tier="sv",type="customersdot"}
+          gitlab:component:feature_category:execution:ops:rate_5m{component="customers_dot_requests",tier="sv",type="customersdot"}
         )
       )
   - record: gitlab:component:feature_category:execution:apdex:success:rate_5m
     labels:
-      component: sidekiq_execution
+      component: customers_dot_sidekiq_jobs
       tier: sv
       type: customersdot
     expr: |
@@ -58,7 +58,7 @@ groups:
       )
   - record: gitlab:component:feature_category:execution:apdex:weight:score_5m
     labels:
-      component: sidekiq_execution
+      component: customers_dot_sidekiq_jobs
       tier: sv
       type: customersdot
     expr: |
@@ -67,7 +67,7 @@ groups:
       )
   - record: gitlab:component:feature_category:execution:ops:rate_5m
     labels:
-      component: sidekiq_execution
+      component: customers_dot_sidekiq_jobs
       tier: sv
       type: customersdot
     expr: |
@@ -76,7 +76,7 @@ groups:
       )
   - record: gitlab:component:feature_category:execution:error:rate_5m
     labels:
-      component: sidekiq_execution
+      component: customers_dot_sidekiq_jobs
       tier: sv
       type: customersdot
     expr: |
@@ -88,14 +88,14 @@ groups:
       or
       (
         0 * group by(env,environment,stage,feature_category) (
-          gitlab:component:feature_category:execution:ops:rate_5m{component="sidekiq_execution",tier="sv",type="customersdot"}
+          gitlab:component:feature_category:execution:ops:rate_5m{component="customers_dot_sidekiq_jobs",tier="sv",type="customersdot"}
         )
       )
 - name: 'Prometheus Intermediate Metrics per feature: customersdot - burn-rate 30m'
   rules:
   - record: gitlab:component:feature_category:execution:apdex:success:rate_30m
     labels:
-      component: rails_requests
+      component: customers_dot_requests
       tier: sv
       type: customersdot
     expr: |
@@ -104,7 +104,7 @@ groups:
       )
   - record: gitlab:component:feature_category:execution:apdex:weight:score_30m
     labels:
-      component: rails_requests
+      component: customers_dot_requests
       tier: sv
       type: customersdot
     expr: |
@@ -113,7 +113,7 @@ groups:
       )
   - record: gitlab:component:feature_category:execution:ops:rate_30m
     labels:
-      component: rails_requests
+      component: customers_dot_requests
       tier: sv
       type: customersdot
     expr: |
@@ -122,7 +122,7 @@ groups:
       )
   - record: gitlab:component:feature_category:execution:error:rate_30m
     labels:
-      component: rails_requests
+      component: customers_dot_requests
       tier: sv
       type: customersdot
     expr: |
@@ -134,12 +134,12 @@ groups:
       or
       (
         0 * group by(env,environment,stage,feature_category) (
-          gitlab:component:feature_category:execution:ops:rate_30m{component="rails_requests",tier="sv",type="customersdot"}
+          gitlab:component:feature_category:execution:ops:rate_30m{component="customers_dot_requests",tier="sv",type="customersdot"}
         )
       )
   - record: gitlab:component:feature_category:execution:apdex:success:rate_30m
     labels:
-      component: sidekiq_execution
+      component: customers_dot_sidekiq_jobs
       tier: sv
       type: customersdot
     expr: |
@@ -148,7 +148,7 @@ groups:
       )
   - record: gitlab:component:feature_category:execution:apdex:weight:score_30m
     labels:
-      component: sidekiq_execution
+      component: customers_dot_sidekiq_jobs
       tier: sv
       type: customersdot
     expr: |
@@ -157,7 +157,7 @@ groups:
       )
   - record: gitlab:component:feature_category:execution:ops:rate_30m
     labels:
-      component: sidekiq_execution
+      component: customers_dot_sidekiq_jobs
       tier: sv
       type: customersdot
     expr: |
@@ -166,7 +166,7 @@ groups:
       )
   - record: gitlab:component:feature_category:execution:error:rate_30m
     labels:
-      component: sidekiq_execution
+      component: customers_dot_sidekiq_jobs
       tier: sv
       type: customersdot
     expr: |
@@ -178,14 +178,14 @@ groups:
       or
       (
         0 * group by(env,environment,stage,feature_category) (
-          gitlab:component:feature_category:execution:ops:rate_30m{component="sidekiq_execution",tier="sv",type="customersdot"}
+          gitlab:component:feature_category:execution:ops:rate_30m{component="customers_dot_sidekiq_jobs",tier="sv",type="customersdot"}
         )
       )
 - name: 'Prometheus Intermediate Metrics per feature: customersdot - burn-rate 1h'
   rules:
   - record: gitlab:component:feature_category:execution:apdex:success:rate_1h
     labels:
-      component: rails_requests
+      component: customers_dot_requests
       tier: sv
       type: customersdot
     expr: |
@@ -194,7 +194,7 @@ groups:
       )
   - record: gitlab:component:feature_category:execution:apdex:weight:score_1h
     labels:
-      component: rails_requests
+      component: customers_dot_requests
       tier: sv
       type: customersdot
     expr: |
@@ -203,7 +203,7 @@ groups:
       )
   - record: gitlab:component:feature_category:execution:ops:rate_1h
     labels:
-      component: rails_requests
+      component: customers_dot_requests
       tier: sv
       type: customersdot
     expr: |
@@ -212,7 +212,7 @@ groups:
       )
   - record: gitlab:component:feature_category:execution:error:rate_1h
     labels:
-      component: rails_requests
+      component: customers_dot_requests
       tier: sv
       type: customersdot
     expr: |
@@ -224,12 +224,12 @@ groups:
       or
       (
         0 * group by(env,environment,stage,feature_category) (
-          gitlab:component:feature_category:execution:ops:rate_1h{component="rails_requests",tier="sv",type="customersdot"}
+          gitlab:component:feature_category:execution:ops:rate_1h{component="customers_dot_requests",tier="sv",type="customersdot"}
         )
       )
   - record: gitlab:component:feature_category:execution:apdex:success:rate_1h
     labels:
-      component: sidekiq_execution
+      component: customers_dot_sidekiq_jobs
       tier: sv
       type: customersdot
     expr: |
@@ -238,7 +238,7 @@ groups:
       )
   - record: gitlab:component:feature_category:execution:apdex:weight:score_1h
     labels:
-      component: sidekiq_execution
+      component: customers_dot_sidekiq_jobs
       tier: sv
       type: customersdot
     expr: |
@@ -247,7 +247,7 @@ groups:
       )
   - record: gitlab:component:feature_category:execution:ops:rate_1h
     labels:
-      component: sidekiq_execution
+      component: customers_dot_sidekiq_jobs
       tier: sv
       type: customersdot
     expr: |
@@ -256,7 +256,7 @@ groups:
       )
   - record: gitlab:component:feature_category:execution:error:rate_1h
     labels:
-      component: sidekiq_execution
+      component: customers_dot_sidekiq_jobs
       tier: sv
       type: customersdot
     expr: |
@@ -268,6 +268,6 @@ groups:
       or
       (
         0 * group by(env,environment,stage,feature_category) (
-          gitlab:component:feature_category:execution:ops:rate_1h{component="sidekiq_execution",tier="sv",type="customersdot"}
+          gitlab:component:feature_category:execution:ops:rate_1h{component="customers_dot_sidekiq_jobs",tier="sv",type="customersdot"}
         )
       )

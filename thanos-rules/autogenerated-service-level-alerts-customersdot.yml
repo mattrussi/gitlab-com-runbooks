@@ -5,10 +5,10 @@ groups:
   interval: 1m
   partial_response_strategy: warn
   rules:
-  - alert: CustomersdotServiceRailsRequestsApdexSLOViolation
+  - alert: CustomersdotServiceCustomersDotRequestsApdexSLOViolation
     for: 2m
     annotations:
-      title: The rails_requests SLI of the customersdot service (`{{ $labels.stage
+      title: The customers_dot_requests SLI of the customersdot service (`{{ $labels.stage
         }}` stage) has an apdex violating SLO
       description: |
         The number of CustomersDot requests meeting their duration target based on the urgency of the endpoint. By default, a request should take no more than 0.4s. But this can be adjusted by endpoint.
@@ -18,7 +18,7 @@ groups:
       grafana_dashboard_link: https://dashboards.gitlab.net/d/customersdot-main/customersdot-overview?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-stage={{ $labels.stage }}
       grafana_min_zoom_hours: "6"
-      grafana_panel_id: "3831968369"
+      grafana_panel_id: "1773645961"
       grafana_variables: environment,stage
       runbook: docs/customersdot/README.md
     labels:
@@ -35,23 +35,23 @@ groups:
     expr: |
       (
         (
-          gitlab_component_apdex:ratio_1h{component="rails_requests",monitor="global",type="customersdot"}
+          gitlab_component_apdex:ratio_1h{component="customers_dot_requests",monitor="global",type="customersdot"}
           < (1 - 14.4 * 0.100000)
         )
         and
         (
-          gitlab_component_apdex:ratio_5m{component="rails_requests",monitor="global",type="customersdot"}
+          gitlab_component_apdex:ratio_5m{component="customers_dot_requests",monitor="global",type="customersdot"}
           < (1 - 14.4 * 0.100000)
         )
       )
       and on(env,environment,tier,type,stage,component)
       (
-        sum by(env,environment,tier,type,stage,component) (gitlab_component_ops:rate_1h{component="rails_requests",monitor="global",type="customersdot"}) >= 1
+        sum by(env,environment,tier,type,stage,component) (gitlab_component_ops:rate_1h{component="customers_dot_requests",monitor="global",type="customersdot"}) >= 1
       )
-  - alert: CustomersdotServiceRailsRequestsApdexSLOViolation
+  - alert: CustomersdotServiceCustomersDotRequestsApdexSLOViolation
     for: 2m
     annotations:
-      title: The rails_requests SLI of the customersdot service (`{{ $labels.stage
+      title: The customers_dot_requests SLI of the customersdot service (`{{ $labels.stage
         }}` stage) has an apdex violating SLO
       description: |
         The number of CustomersDot requests meeting their duration target based on the urgency of the endpoint. By default, a request should take no more than 0.4s. But this can be adjusted by endpoint.
@@ -61,7 +61,7 @@ groups:
       grafana_dashboard_link: https://dashboards.gitlab.net/d/customersdot-main/customersdot-overview?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-stage={{ $labels.stage }}
       grafana_min_zoom_hours: "6"
-      grafana_panel_id: "3831968369"
+      grafana_panel_id: "1773645961"
       grafana_variables: environment,stage
       runbook: docs/customersdot/README.md
     labels:
@@ -78,23 +78,23 @@ groups:
     expr: |
       (
         (
-          gitlab_component_apdex:ratio_6h{component="rails_requests",monitor="global",type="customersdot"}
+          gitlab_component_apdex:ratio_6h{component="customers_dot_requests",monitor="global",type="customersdot"}
           < (1 - 6 * 0.100000)
         )
         and
         (
-          gitlab_component_apdex:ratio_30m{component="rails_requests",monitor="global",type="customersdot"}
+          gitlab_component_apdex:ratio_30m{component="customers_dot_requests",monitor="global",type="customersdot"}
           < (1 - 6 * 0.100000)
         )
       )
       and on(env,environment,tier,type,stage,component)
       (
-        sum by(env,environment,tier,type,stage,component) (gitlab_component_ops:rate_6h{component="rails_requests",monitor="global",type="customersdot"}) >= 0.16667
+        sum by(env,environment,tier,type,stage,component) (gitlab_component_ops:rate_6h{component="customers_dot_requests",monitor="global",type="customersdot"}) >= 0.16667
       )
-  - alert: CustomersdotServiceRailsRequestsErrorSLOViolation
+  - alert: CustomersdotServiceCustomersDotRequestsErrorSLOViolation
     for: 2m
     annotations:
-      title: The rails_requests SLI of the customersdot service (`{{ $labels.stage
+      title: The customers_dot_requests SLI of the customersdot service (`{{ $labels.stage
         }}` stage) has an error rate violating SLO
       description: |
         The number of CustomersDot requests meeting their duration target based on the urgency of the endpoint. By default, a request should take no more than 0.4s. But this can be adjusted by endpoint.
@@ -104,7 +104,7 @@ groups:
       grafana_dashboard_link: https://dashboards.gitlab.net/d/customersdot-main/customersdot-overview?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-stage={{ $labels.stage }}
       grafana_min_zoom_hours: "6"
-      grafana_panel_id: "953948858"
+      grafana_panel_id: "2871402489"
       grafana_variables: environment,stage
       promql_template_1: |
         sum by (env,environment,tier,stage) (
@@ -125,23 +125,23 @@ groups:
     expr: |
       (
         (
-          gitlab_component_errors:ratio_1h{component="rails_requests",monitor="global",type="customersdot"}
+          gitlab_component_errors:ratio_1h{component="customers_dot_requests",monitor="global",type="customersdot"}
           > (14.4 * 0.050000)
         )
         and
         (
-          gitlab_component_errors:ratio_5m{component="rails_requests",monitor="global",type="customersdot"}
+          gitlab_component_errors:ratio_5m{component="customers_dot_requests",monitor="global",type="customersdot"}
           > (14.4 * 0.050000)
         )
       )
       and on(env,environment,tier,type,stage,component)
       (
-        sum by(env,environment,tier,type,stage,component) (gitlab_component_ops:rate_1h{component="rails_requests",monitor="global",type="customersdot"}) >= 1
+        sum by(env,environment,tier,type,stage,component) (gitlab_component_ops:rate_1h{component="customers_dot_requests",monitor="global",type="customersdot"}) >= 1
       )
-  - alert: CustomersdotServiceRailsRequestsErrorSLOViolation
+  - alert: CustomersdotServiceCustomersDotRequestsErrorSLOViolation
     for: 2m
     annotations:
-      title: The rails_requests SLI of the customersdot service (`{{ $labels.stage
+      title: The customers_dot_requests SLI of the customersdot service (`{{ $labels.stage
         }}` stage) has an error rate violating SLO
       description: |
         The number of CustomersDot requests meeting their duration target based on the urgency of the endpoint. By default, a request should take no more than 0.4s. But this can be adjusted by endpoint.
@@ -151,7 +151,7 @@ groups:
       grafana_dashboard_link: https://dashboards.gitlab.net/d/customersdot-main/customersdot-overview?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-stage={{ $labels.stage }}
       grafana_min_zoom_hours: "6"
-      grafana_panel_id: "953948858"
+      grafana_panel_id: "2871402489"
       grafana_variables: environment,stage
       promql_template_1: |
         sum by (env,environment,tier,stage) (
@@ -172,23 +172,23 @@ groups:
     expr: |
       (
         (
-          gitlab_component_errors:ratio_6h{component="rails_requests",monitor="global",type="customersdot"}
+          gitlab_component_errors:ratio_6h{component="customers_dot_requests",monitor="global",type="customersdot"}
           > (6 * 0.050000)
         )
         and
         (
-          gitlab_component_errors:ratio_30m{component="rails_requests",monitor="global",type="customersdot"}
+          gitlab_component_errors:ratio_30m{component="customers_dot_requests",monitor="global",type="customersdot"}
           > (6 * 0.050000)
         )
       )
       and on(env,environment,tier,type,stage,component)
       (
-        sum by(env,environment,tier,type,stage,component) (gitlab_component_ops:rate_6h{component="rails_requests",monitor="global",type="customersdot"}) >= 0.16667
+        sum by(env,environment,tier,type,stage,component) (gitlab_component_ops:rate_6h{component="customers_dot_requests",monitor="global",type="customersdot"}) >= 0.16667
       )
-  - alert: CustomersdotServiceRailsRequestsTrafficCessation
+  - alert: CustomersdotServiceCustomersDotRequestsTrafficCessation
     for: 5m
     annotations:
-      title: The rails_requests SLI of the customersdot service (`{{ $labels.stage
+      title: The customers_dot_requests SLI of the customersdot service (`{{ $labels.stage
         }}` stage) has not received any traffic in the past 30m
       description: |
         The number of CustomersDot requests meeting their duration target based on the urgency of the endpoint. By default, a request should take no more than 0.4s. But this can be adjusted by endpoint.
@@ -198,7 +198,7 @@ groups:
       grafana_dashboard_link: https://dashboards.gitlab.net/d/customersdot-main/customersdot-overview?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-stage={{ $labels.stage }}
       grafana_min_zoom_hours: "6"
-      grafana_panel_id: "164190586"
+      grafana_panel_id: "3104934119"
       grafana_variables: environment,stage
       promql_template_1: |
         sum by (env,environment,tier,stage) (
@@ -216,13 +216,13 @@ groups:
       slo_alert: "no"
       user_impacting: "yes"
     expr: |
-      gitlab_component_ops:rate_30m{component="rails_requests",monitor="global",stage="main",type="customersdot"} == 0
+      gitlab_component_ops:rate_30m{component="customers_dot_requests",monitor="global",stage="main",type="customersdot"} == 0
       and
-      gitlab_component_ops:rate_30m{component="rails_requests",monitor="global",stage="main",type="customersdot"} offset 1h >= 0.16666666666666666
-  - alert: CustomersdotServiceRailsRequestsTrafficAbsent
+      gitlab_component_ops:rate_30m{component="customers_dot_requests",monitor="global",stage="main",type="customersdot"} offset 1h >= 0.16666666666666666
+  - alert: CustomersdotServiceCustomersDotRequestsTrafficAbsent
     for: 30m
     annotations:
-      title: The rails_requests SLI of the customersdot service (`{{ $labels.stage
+      title: The customers_dot_requests SLI of the customersdot service (`{{ $labels.stage
         }}` stage) has not reported any traffic in the past 30m
       description: |
         The number of CustomersDot requests meeting their duration target based on the urgency of the endpoint. By default, a request should take no more than 0.4s. But this can be adjusted by endpoint.
@@ -234,7 +234,7 @@ groups:
       grafana_dashboard_link: https://dashboards.gitlab.net/d/customersdot-main/customersdot-overview?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-stage={{ $labels.stage }}
       grafana_min_zoom_hours: "6"
-      grafana_panel_id: "164190586"
+      grafana_panel_id: "3104934119"
       grafana_variables: environment,stage
       promql_template_1: |
         sum by (env,environment,tier,stage) (
@@ -252,13 +252,13 @@ groups:
       slo_alert: "no"
       user_impacting: "yes"
     expr: |
-      gitlab_component_ops:rate_5m{component="rails_requests",monitor="global",stage="main",type="customersdot"} offset 1h
+      gitlab_component_ops:rate_5m{component="customers_dot_requests",monitor="global",stage="main",type="customersdot"} offset 1h
       unless
-      gitlab_component_ops:rate_5m{component="rails_requests",monitor="global",stage="main",type="customersdot"}
-  - alert: CustomersdotServiceSidekiqExecutionApdexSLOViolation
+      gitlab_component_ops:rate_5m{component="customers_dot_requests",monitor="global",stage="main",type="customersdot"}
+  - alert: CustomersdotServiceCustomersDotSidekiqJobsApdexSLOViolation
     for: 2m
     annotations:
-      title: The sidekiq_execution SLI of the customersdot service (`{{ $labels.stage
+      title: The customers_dot_sidekiq_jobs SLI of the customersdot service (`{{ $labels.stage
         }}` stage) has an apdex violating SLO
       description: |
         The number of CustomersDot jobs meeting their duration target for their execution. By default, a Sidekiq job should take no more than 5 seconds. But this can be adjusted by endpoint.
@@ -268,7 +268,7 @@ groups:
       grafana_dashboard_link: https://dashboards.gitlab.net/d/customersdot-main/customersdot-overview?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-stage={{ $labels.stage }}
       grafana_min_zoom_hours: "6"
-      grafana_panel_id: "1200908149"
+      grafana_panel_id: "2519680602"
       grafana_variables: environment,stage
       runbook: docs/customersdot/README.md
     labels:
@@ -285,23 +285,23 @@ groups:
     expr: |
       (
         (
-          gitlab_component_apdex:ratio_1h{component="sidekiq_execution",monitor="global",type="customersdot"}
+          gitlab_component_apdex:ratio_1h{component="customers_dot_sidekiq_jobs",monitor="global",type="customersdot"}
           < (1 - 14.4 * 0.100000)
         )
         and
         (
-          gitlab_component_apdex:ratio_5m{component="sidekiq_execution",monitor="global",type="customersdot"}
+          gitlab_component_apdex:ratio_5m{component="customers_dot_sidekiq_jobs",monitor="global",type="customersdot"}
           < (1 - 14.4 * 0.100000)
         )
       )
       and on(env,environment,tier,type,stage,component)
       (
-        sum by(env,environment,tier,type,stage,component) (gitlab_component_ops:rate_1h{component="sidekiq_execution",monitor="global",type="customersdot"}) >= 1
+        sum by(env,environment,tier,type,stage,component) (gitlab_component_ops:rate_1h{component="customers_dot_sidekiq_jobs",monitor="global",type="customersdot"}) >= 1
       )
-  - alert: CustomersdotServiceSidekiqExecutionApdexSLOViolation
+  - alert: CustomersdotServiceCustomersDotSidekiqJobsApdexSLOViolation
     for: 2m
     annotations:
-      title: The sidekiq_execution SLI of the customersdot service (`{{ $labels.stage
+      title: The customers_dot_sidekiq_jobs SLI of the customersdot service (`{{ $labels.stage
         }}` stage) has an apdex violating SLO
       description: |
         The number of CustomersDot jobs meeting their duration target for their execution. By default, a Sidekiq job should take no more than 5 seconds. But this can be adjusted by endpoint.
@@ -311,7 +311,7 @@ groups:
       grafana_dashboard_link: https://dashboards.gitlab.net/d/customersdot-main/customersdot-overview?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-stage={{ $labels.stage }}
       grafana_min_zoom_hours: "6"
-      grafana_panel_id: "1200908149"
+      grafana_panel_id: "2519680602"
       grafana_variables: environment,stage
       runbook: docs/customersdot/README.md
     labels:
@@ -328,23 +328,23 @@ groups:
     expr: |
       (
         (
-          gitlab_component_apdex:ratio_6h{component="sidekiq_execution",monitor="global",type="customersdot"}
+          gitlab_component_apdex:ratio_6h{component="customers_dot_sidekiq_jobs",monitor="global",type="customersdot"}
           < (1 - 6 * 0.100000)
         )
         and
         (
-          gitlab_component_apdex:ratio_30m{component="sidekiq_execution",monitor="global",type="customersdot"}
+          gitlab_component_apdex:ratio_30m{component="customers_dot_sidekiq_jobs",monitor="global",type="customersdot"}
           < (1 - 6 * 0.100000)
         )
       )
       and on(env,environment,tier,type,stage,component)
       (
-        sum by(env,environment,tier,type,stage,component) (gitlab_component_ops:rate_6h{component="sidekiq_execution",monitor="global",type="customersdot"}) >= 0.16667
+        sum by(env,environment,tier,type,stage,component) (gitlab_component_ops:rate_6h{component="customers_dot_sidekiq_jobs",monitor="global",type="customersdot"}) >= 0.16667
       )
-  - alert: CustomersdotServiceSidekiqExecutionErrorSLOViolation
+  - alert: CustomersdotServiceCustomersDotSidekiqJobsErrorSLOViolation
     for: 2m
     annotations:
-      title: The sidekiq_execution SLI of the customersdot service (`{{ $labels.stage
+      title: The customers_dot_sidekiq_jobs SLI of the customersdot service (`{{ $labels.stage
         }}` stage) has an error rate violating SLO
       description: |
         The number of CustomersDot jobs meeting their duration target for their execution. By default, a Sidekiq job should take no more than 5 seconds. But this can be adjusted by endpoint.
@@ -354,7 +354,7 @@ groups:
       grafana_dashboard_link: https://dashboards.gitlab.net/d/customersdot-main/customersdot-overview?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-stage={{ $labels.stage }}
       grafana_min_zoom_hours: "6"
-      grafana_panel_id: "4267233911"
+      grafana_panel_id: "889369649"
       grafana_variables: environment,stage
       promql_template_1: |
         sum by (env,environment,tier,stage) (
@@ -375,23 +375,23 @@ groups:
     expr: |
       (
         (
-          gitlab_component_errors:ratio_1h{component="sidekiq_execution",monitor="global",type="customersdot"}
+          gitlab_component_errors:ratio_1h{component="customers_dot_sidekiq_jobs",monitor="global",type="customersdot"}
           > (14.4 * 0.050000)
         )
         and
         (
-          gitlab_component_errors:ratio_5m{component="sidekiq_execution",monitor="global",type="customersdot"}
+          gitlab_component_errors:ratio_5m{component="customers_dot_sidekiq_jobs",monitor="global",type="customersdot"}
           > (14.4 * 0.050000)
         )
       )
       and on(env,environment,tier,type,stage,component)
       (
-        sum by(env,environment,tier,type,stage,component) (gitlab_component_ops:rate_1h{component="sidekiq_execution",monitor="global",type="customersdot"}) >= 1
+        sum by(env,environment,tier,type,stage,component) (gitlab_component_ops:rate_1h{component="customers_dot_sidekiq_jobs",monitor="global",type="customersdot"}) >= 1
       )
-  - alert: CustomersdotServiceSidekiqExecutionErrorSLOViolation
+  - alert: CustomersdotServiceCustomersDotSidekiqJobsErrorSLOViolation
     for: 2m
     annotations:
-      title: The sidekiq_execution SLI of the customersdot service (`{{ $labels.stage
+      title: The customers_dot_sidekiq_jobs SLI of the customersdot service (`{{ $labels.stage
         }}` stage) has an error rate violating SLO
       description: |
         The number of CustomersDot jobs meeting their duration target for their execution. By default, a Sidekiq job should take no more than 5 seconds. But this can be adjusted by endpoint.
@@ -401,7 +401,7 @@ groups:
       grafana_dashboard_link: https://dashboards.gitlab.net/d/customersdot-main/customersdot-overview?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-stage={{ $labels.stage }}
       grafana_min_zoom_hours: "6"
-      grafana_panel_id: "4267233911"
+      grafana_panel_id: "889369649"
       grafana_variables: environment,stage
       promql_template_1: |
         sum by (env,environment,tier,stage) (
@@ -422,23 +422,23 @@ groups:
     expr: |
       (
         (
-          gitlab_component_errors:ratio_6h{component="sidekiq_execution",monitor="global",type="customersdot"}
+          gitlab_component_errors:ratio_6h{component="customers_dot_sidekiq_jobs",monitor="global",type="customersdot"}
           > (6 * 0.050000)
         )
         and
         (
-          gitlab_component_errors:ratio_30m{component="sidekiq_execution",monitor="global",type="customersdot"}
+          gitlab_component_errors:ratio_30m{component="customers_dot_sidekiq_jobs",monitor="global",type="customersdot"}
           > (6 * 0.050000)
         )
       )
       and on(env,environment,tier,type,stage,component)
       (
-        sum by(env,environment,tier,type,stage,component) (gitlab_component_ops:rate_6h{component="sidekiq_execution",monitor="global",type="customersdot"}) >= 0.16667
+        sum by(env,environment,tier,type,stage,component) (gitlab_component_ops:rate_6h{component="customers_dot_sidekiq_jobs",monitor="global",type="customersdot"}) >= 0.16667
       )
-  - alert: CustomersdotServiceSidekiqExecutionTrafficCessation
+  - alert: CustomersdotServiceCustomersDotSidekiqJobsTrafficCessation
     for: 5m
     annotations:
-      title: The sidekiq_execution SLI of the customersdot service (`{{ $labels.stage
+      title: The customers_dot_sidekiq_jobs SLI of the customersdot service (`{{ $labels.stage
         }}` stage) has not received any traffic in the past 30m
       description: |
         The number of CustomersDot jobs meeting their duration target for their execution. By default, a Sidekiq job should take no more than 5 seconds. But this can be adjusted by endpoint.
@@ -448,7 +448,7 @@ groups:
       grafana_dashboard_link: https://dashboards.gitlab.net/d/customersdot-main/customersdot-overview?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-stage={{ $labels.stage }}
       grafana_min_zoom_hours: "6"
-      grafana_panel_id: "597131258"
+      grafana_panel_id: "809412225"
       grafana_variables: environment,stage
       promql_template_1: |
         sum by (env,environment,tier,stage) (
@@ -466,13 +466,13 @@ groups:
       slo_alert: "no"
       user_impacting: "yes"
     expr: |
-      gitlab_component_ops:rate_30m{component="sidekiq_execution",monitor="global",stage="main",type="customersdot"} == 0
+      gitlab_component_ops:rate_30m{component="customers_dot_sidekiq_jobs",monitor="global",stage="main",type="customersdot"} == 0
       and
-      gitlab_component_ops:rate_30m{component="sidekiq_execution",monitor="global",stage="main",type="customersdot"} offset 1h >= 0.16666666666666666
-  - alert: CustomersdotServiceSidekiqExecutionTrafficAbsent
+      gitlab_component_ops:rate_30m{component="customers_dot_sidekiq_jobs",monitor="global",stage="main",type="customersdot"} offset 1h >= 0.16666666666666666
+  - alert: CustomersdotServiceCustomersDotSidekiqJobsTrafficAbsent
     for: 30m
     annotations:
-      title: The sidekiq_execution SLI of the customersdot service (`{{ $labels.stage
+      title: The customers_dot_sidekiq_jobs SLI of the customersdot service (`{{ $labels.stage
         }}` stage) has not reported any traffic in the past 30m
       description: |
         The number of CustomersDot jobs meeting their duration target for their execution. By default, a Sidekiq job should take no more than 5 seconds. But this can be adjusted by endpoint.
@@ -484,7 +484,7 @@ groups:
       grafana_dashboard_link: https://dashboards.gitlab.net/d/customersdot-main/customersdot-overview?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-stage={{ $labels.stage }}
       grafana_min_zoom_hours: "6"
-      grafana_panel_id: "597131258"
+      grafana_panel_id: "809412225"
       grafana_variables: environment,stage
       promql_template_1: |
         sum by (env,environment,tier,stage) (
@@ -502,6 +502,6 @@ groups:
       slo_alert: "no"
       user_impacting: "yes"
     expr: |
-      gitlab_component_ops:rate_5m{component="sidekiq_execution",monitor="global",stage="main",type="customersdot"} offset 1h
+      gitlab_component_ops:rate_5m{component="customers_dot_sidekiq_jobs",monitor="global",stage="main",type="customersdot"} offset 1h
       unless
-      gitlab_component_ops:rate_5m{component="sidekiq_execution",monitor="global",stage="main",type="customersdot"}
+      gitlab_component_ops:rate_5m{component="customers_dot_sidekiq_jobs",monitor="global",stage="main",type="customersdot"}

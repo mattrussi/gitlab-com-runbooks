@@ -39,13 +39,13 @@ groups:
     expr: "0.001000"
   - record: slo:min:events:gitlab_service_apdex:ratio
     labels:
-      component: graphql_queries
+      component: graphql_query
       tier: sv
       type: api
     expr: "0.995000"
   - record: slo:max:events:gitlab_service_errors:ratio
     labels:
-      component: graphql_queries
+      component: graphql_query
       tier: sv
       type: api
     expr: "0.001000"
@@ -87,13 +87,13 @@ groups:
     expr: "0.001000"
   - record: slo:min:events:gitlab_service_apdex:ratio
     labels:
-      component: rails_requests
+      component: rails_request
       tier: sv
       type: api
     expr: "0.990000"
   - record: slo:max:events:gitlab_service_errors:ratio
     labels:
-      component: rails_requests
+      component: rails_request
       tier: sv
       type: api
     expr: "0.001000"
@@ -297,25 +297,25 @@ groups:
     expr: "0.050000"
   - record: slo:min:events:gitlab_service_apdex:ratio
     labels:
-      component: rails_requests
+      component: customers_dot_requests
       tier: sv
       type: customersdot
     expr: "0.900000"
   - record: slo:max:events:gitlab_service_errors:ratio
     labels:
-      component: rails_requests
+      component: customers_dot_requests
       tier: sv
       type: customersdot
     expr: "0.050000"
   - record: slo:min:events:gitlab_service_apdex:ratio
     labels:
-      component: sidekiq_execution
+      component: customers_dot_sidekiq_jobs
       tier: sv
       type: customersdot
     expr: "0.900000"
   - record: slo:max:events:gitlab_service_errors:ratio
     labels:
-      component: sidekiq_execution
+      component: customers_dot_sidekiq_jobs
       tier: sv
       type: customersdot
     expr: "0.050000"
@@ -529,13 +529,13 @@ groups:
     expr: "0.000100"
   - record: slo:min:events:gitlab_service_apdex:ratio
     labels:
-      component: rails_requests
+      component: rails_request
       tier: sv
       type: git
     expr: "0.997000"
   - record: slo:max:events:gitlab_service_errors:ratio
     labels:
-      component: rails_requests
+      component: rails_request
       tier: sv
       type: git
     expr: "0.000100"
@@ -2062,13 +2062,13 @@ groups:
     expr: "0.000100"
   - record: slo:min:events:gitlab_service_apdex:ratio
     labels:
-      component: rails_requests
+      component: rails_request
       tier: sv
       type: web
     expr: "0.998000"
   - record: slo:max:events:gitlab_service_errors:ratio
     labels:
-      component: rails_requests
+      component: rails_request
       tier: sv
       type: web
     expr: "0.000100"
@@ -2196,7 +2196,7 @@ groups:
     expr: "1"
   - record: gitlab_component_service:mapping
     labels:
-      component: graphql_queries
+      component: graphql_query
       regional_aggregation: "yes"
       service_aggregation: "yes"
       tier: sv
@@ -2228,7 +2228,7 @@ groups:
     expr: "1"
   - record: gitlab_component_service:mapping
     labels:
-      component: rails_requests
+      component: rails_request
       regional_aggregation: "yes"
       service_aggregation: "yes"
       tier: sv
@@ -2308,7 +2308,7 @@ groups:
     expr: "1"
   - record: gitlab_component_service:mapping
     labels:
-      component: rails_requests
+      component: customers_dot_requests
       regional_aggregation: "no"
       service_aggregation: "yes"
       tier: sv
@@ -2316,7 +2316,7 @@ groups:
     expr: "1"
   - record: gitlab_component_service:mapping
     labels:
-      component: sidekiq_execution
+      component: customers_dot_sidekiq_jobs
       regional_aggregation: "no"
       service_aggregation: "yes"
       tier: sv
@@ -2436,7 +2436,7 @@ groups:
     expr: "1"
   - record: gitlab_component_service:mapping
     labels:
-      component: rails_requests
+      component: rails_request
       regional_aggregation: "yes"
       service_aggregation: "yes"
       tier: sv
@@ -3364,7 +3364,7 @@ groups:
     expr: "1"
   - record: gitlab_component_service:mapping
     labels:
-      component: rails_requests
+      component: rails_request
       regional_aggregation: "yes"
       service_aggregation: "yes"
       tier: sv

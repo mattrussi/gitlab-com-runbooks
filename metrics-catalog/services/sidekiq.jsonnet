@@ -198,13 +198,10 @@ metricsCatalog.serviceDefinition({
         toolingLinks.kibana(title='Email receiver errors', index='sidekiq', type='sidekiq', message='Error processing message'),
       ],
     },
-
-    global_search_indexing:
-      sliLibrary.get('global_search_indexing').generateServiceLevelIndicator({ type: 'sidekiq' }) {
-        serviceAggregation: false,  // Don't add this to the request rate of the service
-        severity: 's3',  // Don't page SREs for this SLI
-      },
-  },
+  } + sliLibrary.get('global_search_indexing').generateServiceLevelIndicator({ type: 'sidekiq' }, {
+    serviceAggregation: false,  // Don't add this to the request rate of the service
+    severity: 's3',  // Don't page SREs for this SLI
+  }),
 
   // Special per-worker recording rules
   extraRecordingRulesPerBurnRate: [

@@ -616,9 +616,15 @@ local errorBudgetDetailDashboard(stageGroup) =
   local serviceTypes = std.map(function(service) service.type, gitlabMetricsConfig.monitoredServices);
 
   local sliFilter = function(sli)
-    sli.hasFeatureCategoryFromSourceMetrics() || (
-      sli.hasStaticFeatureCategory() && std.member(stageGroup.feature_categories, sli.featureCategory)
-    );
+    (
+      sli.hasFeatureCategoryFromSourceMetrics() &&
+      (!sli.hasDashboardFeatureCategories() || std.length(std.setInter(
+         std.set(stageGroup.feature_categories),
+         std.set(sli.dashboardFeatureCategories)
+       )) > 0)
+    )
+    ||
+    (sli.hasStaticFeatureCategory() && std.member(stageGroup.feature_categories, sli.featureCategory));
 
   local budget = errorBudget(errorBudgetUtils.dynamicRange);
 

@@ -8,6 +8,8 @@ local serviceLevelIndicatorDefinition = import 'servicemetrics/service_level_ind
 local kubeLabelSelectors = metricsCatalog.kubeLabelSelectors;
 local dependOnPatroni = import 'inhibit-rules/depend_on_patroni.libsonnet';
 
+local railsSelector = { job: 'gitlab-rails', type: 'web' };
+
 metricsCatalog.serviceDefinition({
   type: 'web',
   tier: 'sv',
@@ -173,8 +175,6 @@ metricsCatalog.serviceDefinition({
         toolingLinks.kibana(title='Image Resizer', index='workhorse_imageresizer', type='web'),
       ],
     },
-
-    local railsSelector = { job: 'gitlab-rails', type: 'web' },
     puma: {
       userImpacting: true,
       featureCategory: serviceLevelIndicatorDefinition.featureCategoryFromSourceMetrics,
@@ -200,19 +200,13 @@ metricsCatalog.serviceDefinition({
       ],
       dependsOn: dependOnPatroni.sqlComponents,
     },
-
-    rails_requests:
-      sliLibrary.get('rails_request').generateServiceLevelIndicator(railsSelector) {
-        toolingLinks: [
-          toolingLinks.kibana(title='Rails', index='rails'),
-        ],
-        dependsOn: dependOnPatroni.sqlComponents,
-      },
-
-    global_search:
-      sliLibrary.get('global_search').generateServiceLevelIndicator(railsSelector) {
-        serviceAggregation: false,  // Don't add this to the request rate of the service
-        severity: 's3',  // Don't page SREs for this SLI
-      },
-  },
+  } + sliLibrary.get('rails_request').generateServiceLevelIndicator(railsSelector, {
+    toolingLinks: [
+      toolingLinks.kibana(title='Rails', index='rails'),
+    ],
+    dependsOn: dependOnPatroni.sqlComponents,
+  }) + sliLibrary.get('global_search').generateServiceLevelIndicator(railsSelector, {
+    serviceAggregation: false,  // Don't add this to the request rate of the service
+    severity: 's3',  // Don't page SREs for this SLI
+  }),
 })
