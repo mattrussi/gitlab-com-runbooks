@@ -329,22 +329,6 @@ You can use the following steps to create all or a subset of the patroni CI inst
    - GSTG Main: instance [patroni-01-db-gstg/console?port=1&project=gitlab-staging-1](https://console.cloud.google.com/compute/instancesDetail/zones/us-east1-c/instances/patroni-ci-01-db-gstg/console?port=1&project=gitlab-staging-1)
    - GPRD Main: instance [patroni-v12-01-db-gprd/console?port=1&project=gitlab-production](https://console.cloud.google.com/compute/instancesDetail/zones/us-east1-c/instances/patroni-ci-01-db-gprd/console?port=1&project=gitlab-production)
    - Or you can execute `gcloud compute instances get-serial-port-output <instance_name>`
-1. Look into the instance Serial Console, or `/var/log/syslog` log file, if the Chef bootstrap has failed. Any kind of error needs to be addressed, except for while performing `usermod: directory /var/opt/gitlab/postgresql`, which is a known issue that can be ignored. Therefore if you observe the following message in `/var/log/syslog` or the instance serial port/console, you can start executing the pg-replica-rebuild Ansible playbook.
-
-  ```
-  $ sudo cat /var/log/syslog | grep "STDERR: usermod: directory /var/opt/gitlab/postgresql exists"
-
-  ??? ??? GCEMetadataScripts[1935]: ??? GCEMetadataScripts: startup-script: #033[0m  STDERR: usermod: directory /var/opt/gitlab/postgresql exists
-  ??? ??? GCEMetadataScripts[1935]: ??? GCEMetadataScripts: startup-script: STDERR: usermod: directory /var/opt/gitlab/postgresql exists
-  ```
-
-1. Force run of Chef-Client in the nodes to let all configuration files in sync with the repo
-
-  ```
-  ssh <node_fqdn> "sudo chef-client"
-  ssh <node_fqdn> "sudo chown -R gitlab-psql.gitlab-psql /var/opt/gitlab"
-  ```
-
 1. Start patroni service on the node
 
   ```
