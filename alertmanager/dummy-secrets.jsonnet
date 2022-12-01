@@ -14,6 +14,7 @@
     { name: 'slo_gprd_cny', serviceKey: 'secret' },
     { name: 'slo_gprd_main', serviceKey: 'secret' },
     { name: 'slo_non_prod', serviceKey: 'secret' },
+    { name: 'observability_pagerduty', serviceKey: 'secret' },
   ],
   // GitLab Slack.
   slackAPIURL: 'https://example.com/secret',
@@ -25,6 +26,8 @@
     { name: 'gprd', apiKey: 'secret', cluster: '' },
     { name: 'gprd', apiKey: 'secret', cluster: 'gprd-gitlab-gke', instance: 'monitoring/gitlab-monitoring-promethe-prometheus' },
     { name: 'gprd', apiKey: 'secret', cluster: 'gprd-gitlab-gke', instance: 'monitoring/prometheus-gitlab-app-1-pr-prometheus' },
+    { name: 'gstg', apiKey: 'secret', cluster: 'opstrace-staging' },
+    { name: 'gprd', apiKey: 'secret', cluster: 'opstrace-prod' },
     { name: 'gstg', apiKey: 'secret', cluster: '' },
     { name: 'gstg-ref', apiKey: 'secret', cluster: 'staging-ref-10k-hybrid' },
     { name: 'pre', apiKey: 'secret', cluster: '' },

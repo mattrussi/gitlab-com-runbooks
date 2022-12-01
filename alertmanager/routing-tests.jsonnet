@@ -382,6 +382,54 @@ generateTests([
       'production_slack_channel',
     ],
   },
+  {
+    name: 'pages, observability team, gstg env -> observability pagerduty, observability slack',
+    labels: {
+      env: 'gstg',
+      team: 'observability',
+      pager: 'observability_pagerduty',
+    },
+    receivers: [
+      'team_observability_alerts_channel',
+      'observability_pagerduty',
+    ],
+  },
+  {
+    name: 'pages, observability team, gprd env -> observability pagerduty, observability slack',
+    labels: {
+      env: 'gprd',
+      team: 'observability',
+      pager: 'observability_pagerduty',
+    },
+    receivers: [
+      'team_observability_alerts_channel',
+      'observability_pagerduty',
+    ],
+  },
+  {
+    name: 'observability team, gstg env -> observability slack',
+    labels: {
+      env: 'gstg',
+      team: 'observability',
+    },
+    receivers: [
+      'team_observability_alerts_channel',
+      'blackhole',
+    ],
+  },
+  {
+    name: 'observability team, gprd env -> observability slack',
+    labels: {
+      env: 'gprd',
+      team: 'observability',
+    },
+    receivers: [
+      'team_observability_alerts_channel',
+      // We are ok with #alerts channel getting notifications for services that
+      // SREs are not responsible ATM.
+      'prod_alerts_slack_channel',
+    ],
+  },
   // t4cc0re pointed out that this alert did not page
   // so we added a test case
   {

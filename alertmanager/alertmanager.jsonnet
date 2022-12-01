@@ -469,6 +469,16 @@ local routingTree = Route(
   + [
     // Terminators go last
     Route(
+      receiver='observability_pagerduty',
+      matchers={
+        pager: 'observability_pagerduty',
+        env: { re: 'gprd|gstg' },
+        team: 'observability',
+      },
+      group_by=groupByType,
+      continue=false,
+    ),
+    Route(
       receiver='blackhole',
       matchers={ env: { re: 'db-(benchmarking|integration)|dr|gstg(-ref)?|pre|testbed' } },
       continue=false,
