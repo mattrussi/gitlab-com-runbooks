@@ -469,7 +469,7 @@ local routingTree = Route(
   + [
     // Terminators go last
     Route(
-      receiver='observability',
+      receiver='observability_pagerduty',
       matchers={
         pager: 'observability_pagerduty',
         env: { re: 'gprd|gstg' },

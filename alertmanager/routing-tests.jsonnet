@@ -391,7 +391,7 @@ generateTests([
     },
     receivers: [
       'team_observability_alerts_channel',
-      'observability',
+      'observability_pagerduty',
     ],
   },
   {
@@ -403,7 +403,7 @@ generateTests([
     },
     receivers: [
       'team_observability_alerts_channel',
-      'observability',
+      'observability_pagerduty',
     ],
   },
   {
