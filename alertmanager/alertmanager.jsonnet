@@ -355,8 +355,6 @@ local routingTree = Route(
       matchers={
         pager: 'pagerduty',
         env: { re: 'gprd|ops' },
-        // Observability team has its own PD schedule
-        team: { ne: 'observability' },
       },
       group_by=groupByType,
       continue=true,
@@ -441,19 +439,6 @@ local routingTree = Route(
         team: 'observability',
       },
     ),
-  ] + [
-    Route(
-      receiver='observability',
-      matchers={
-        pager: 'pagerduty',
-        env: { re: 'gprd|gstg' },
-        team: 'observability',
-      },
-      group_by=groupByType,
-      continue=false,
-      /* must be less than the 6h auto-resolve in PagerDuty */
-      repeat_interval='2h',
-    ),
   ] +
   [
     // Route SLO alerts for staging to `feed_alerts_staging`
@@ -483,6 +468,16 @@ local routingTree = Route(
   ]
   + [
     // Terminators go last
+    Route(
+      receiver='observability',
+      matchers={
+        pager: 'observability_pagerduty',
+        env: { re: 'gprd|gstg' },
+        team: 'observability',
+      },
+      group_by=groupByType,
+      continue=false,
+    ),
     Route(
       receiver='blackhole',
       matchers={ env: { re: 'db-(benchmarking|integration)|dr|gstg(-ref)?|pre|testbed' } },
