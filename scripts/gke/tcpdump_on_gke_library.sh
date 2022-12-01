@@ -14,9 +14,14 @@ OUTPUT_DIR_INSIDE_TOOLBOX="${TOOLBOX_ROOT_BIND_DIR}${OUTPUT_DIR_OUTSIDE_TOOLBOX}
 
 function setup_toolbox() {
   echo "Setting up toolbox.  (May take up to a minute during first run.)"
+  update_apt_cache
   install_tcpdump_in_toolbox
   install_jq_in_toolbox
   make_output_dir_in_toolbox
+}
+
+function update_apt_cache() {
+  toolbox apt update -y
 }
 
 function install_tcpdump_in_toolbox() {
