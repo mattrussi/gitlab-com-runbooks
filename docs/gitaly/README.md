@@ -26,6 +26,7 @@
 * [Find a project from its hashed storage path](find-project-from-hashed-storage.md)
 * [Copying or moving a Git repository by hand](git-copy-by-hand.md)
 * [git-high-cpu-and-memory-usage.md](git-high-cpu-and-memory-usage.md)
+* [Gitaly Balancer Project](gitaly-balancer.md)
 * [Debugging gitaly with gitaly-debug](gitaly-debugging-tool.md)
 * [Gitaly is down](gitaly-down.md)
 * [Gitaly error rate is too high](gitaly-error-rate.md)
