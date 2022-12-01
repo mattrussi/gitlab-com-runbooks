@@ -144,7 +144,7 @@ groups:
       runbook: docs/patroni/postgres.md#replication-is-lagging-or-has-stopped
       title: Postgres Replication lag is over 12 hours on delayed replica (normal is 8 hours)
   - alert: PostgreSQL_ReplicationLagBytesTooLarge
-    expr: postgres:pg_replication_lag_bytes{fqdn=~"postgres-.*-2004-.*"} > 1e+09*10
+    expr: postgres:pg_replication_lag_bytes{fqdn=~"patroni-.*-2004-.*"} > 1e+09*10
     for: 5m
     labels:
       pager: pagerduty
@@ -156,6 +156,19 @@ groups:
         $value | humanize1024}}B behind {{$labels.primary}}
       runbook: docs/patroni/postgres.md#replication-is-lagging-or-has-stopped
       title: Postgres Replication lag (in bytes) is high
+  - alert: PostgreSQL_LogicalReplicationSlotLagInBytesTooLarge
+    expr: pg_replication_slots_confirmed_flush_lsn_bytes{fqdn=~"patroni-.*-2004-.*",slot_type="logical"} > 1e+09*10
+    for: 5m
+    labels:
+      pager: pagerduty
+      severity: s1
+      alert_type: cause
+      type: patroni
+    annotations:
+      description: Logical replication slot {{$labels.slot_name}} on source server {{$labels.instance}} has accumulated lag {{
+        $value | humanizeDuration }}
+      runbook: docs/patroni/postgres.md#replication-is-lagging-or-has-stopped
+      title: Postgres replication lag accumulated in a logical replication slot is too large
   - alert: PostgreSQL_PendingWALFilesTooHigh
     expr: pg_archiver_pending_wal_count > 5000
     for: 5m
