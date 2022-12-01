@@ -338,7 +338,7 @@ data "vault_kv_secret_v2" "some-secret" {
 }
 
 resource "google_some_service" "foo" {
-    token = data.vault_kv_secret_v2.some-secret.data.token
+  token = data.vault_kv_secret_v2.some-secret.data.token
 }
 ```
 
@@ -522,15 +522,23 @@ See [the External Secrets documentation](https://external-secrets.io/v0.5.9/api-
 
 To help with this, some helpers exist in the `gitlab-helmfiles` and `tanka-deployments` repositories.
 
-##### `gitlab-helmfiles`
+##### `gitlab-helmfiles` and `gitlab-com`
 
-The chart [`vault-secrets`](https://gitlab.com/gitlab-com/gl-infra/k8s-workloads/gitlab-helmfiles/-/tree/master/charts/vault-secrets) can be used to create the Secrets Store(s) and External Secrets together:
+The chart [`vault-secrets`](https://gitlab.com/gitlab-com/gl-infra/charts/-/tree/main/gitlab/vault-secrets) can be used to create the Secrets Store(s) and External Secrets together:
 
 ```yaml
 # helmfile.yaml
 
+
+repositories:
+  - name: registry-ops-gl
+    url: registry.ops.gitlab.net
+    oci: true
+
+releases:
   - name: my-app-secrets
-    chart: ../../charts/vault-secrets
+    chart: registry-ops-gl/gitlab-com/gl-infra/charts/vault-secrets
+    version: 1.0.0
     namespace: my-app
     installed: {{ .Values | getOrNil "my-app.installed" | default false }}
     values:
@@ -544,7 +552,7 @@ The chart [`vault-secrets`](https://gitlab.com/gitlab-com/gl-infra/k8s-workloads
 clusterName: {{ .Environment.Values.cluster }}
 
 externalSecrets:
-  - name: some-secret-v1
+  some-secret-v1:
     refreshInterval: 0
     secretStoreName: my-app-secrets
     target:
@@ -635,18 +643,18 @@ See [`lib/gitlab/external-secrets.libsonnet`](https://gitlab.com/gitlab-com/gl-i
 
 For a safe and controlled rollout and to ensure that the pods are rotated each time a secret is updated, the secret's name should preferably be prefixed with the version, for example `my-secret-v1`, incrementing the version with each update.
 
-The following instructions are for rotating secrets managed in the `gitlab-helmfiles` repository based on the examples from the [section above](#gitlab-helmfiles), but the same principle can be followed in the other repositories:
+The following instructions are for rotating secrets managed in the `gitlab-helmfiles` repository based on the examples from the [section above](#gitlab-helmfiles-and-gitlab-com), but the same principle can be followed in the other repositories:
 
 * update the secret in place in Vault, creating a new version:
 
   ```shell
-  vault kv patch k8s/pre-gitlab-gke/my-app/some-secret password=foobar
+  vault kv patch k8s/my-cluster/my-app/some-secret password=foobar
   ```
 
 * this will display the version number for the new secret, but it can also be retrieved it with:
 
   ```shell
-  vault kv metadata get k8s/pre-gitlab-gke/my-app/some-secret
+  vault kv metadata get k8s/my-cluster/my-app/some-secret
   ```
 
 * duplicate the external secret definition, bumping the version number in the name and the specification:
@@ -655,7 +663,7 @@ The following instructions are for rotating secrets managed in the `gitlab-helmf
    # secrets-values.yaml.gotmpl
 
    externalSecrets:
-     - name: some-secret-v1
+     some-secret-v1:
        refreshInterval: 0
        secretStoreName: my-app-secrets
        target:
@@ -672,7 +680,7 @@ The following instructions are for rotating secrets managed in the `gitlab-helmf
              property: password
              version: "1"
            secretKey: password
-  +  - name: some-secret-v2
+  +  some-secret-v2:
   +    refreshInterval: 0
   +    secretStoreName: my-app-secrets
   +    target:
@@ -691,21 +699,30 @@ The following instructions are for rotating secrets managed in the `gitlab-helmf
   +        secretKey: password
   ```
 
-* update any reference to this secret in the rest of the application deployment configuration to target the new name `some-secret-v2`
 * commit, open a merge request, merge and deploy
 * ensure that the new secret has been created:
 
   ```shell
-  kubectl --namespace my-namespace get externalsecrets
-  kubectl --namespace my-namespace get secret some-secret-v2
+  kubectl --context my-cluster --namespace my-namespace get externalsecrets
+  kubectl --context my-cluster --namespace my-namespace get secret some-secret-v2
   ```
+
+* ensure that the new secret data matches its value in Vault:
+
+  ```shell
+  vault kv get -format json -field data k8s/my-cluster/my-app/some-secret | jq -c
+  kubectl --context my-cluster --namespace my-namespace get secret some-secret-v2 -o jsonpath='{.data}' | jq '.[] |= @base64d'
+  ```
+
+* update any reference to this secret in the rest of the application deployment configuration to target the new name `some-secret-v2`
+* commit, open a merge request, merge and deploy
 
 * ensure that the pods have been rotated and are all using the new secret
 
   ```shell
-  kubectl --namespace my-namespace get deployments
-  kubectl --namespace my-namespace get pods
-  kubectl --namespace my-namespace describe pod my-app-1ab2c3d4f5-g6h7i
+  kubectl --context my-cluster --namespace my-namespace get deployments
+  kubectl --context my-cluster --namespace my-namespace get pods
+  kubectl --context my-cluster --namespace my-namespace describe pod my-app-1ab2c3d4f5-g6h7i
   ```
 
 * remove the old external secret definition:
@@ -714,7 +731,7 @@ The following instructions are for rotating secrets managed in the `gitlab-helmf
    # secrets-values.yaml.gotmpl
 
    externalSecrets:
-  -  - name: some-secret-v1
+  -  some-secret-v1:
   -    refreshInterval: 0
   -    secretStoreName: my-app-secrets
   -    target:
@@ -731,7 +748,7 @@ The following instructions are for rotating secrets managed in the `gitlab-helmf
   -          property: password
   -          version: "1"
   -        secretKey: password
-     - name: some-secret-v2
+     some-secret-v2:
        refreshInterval: 0
        secretStoreName: my-app-secrets
        target:
@@ -754,5 +771,121 @@ The following instructions are for rotating secrets managed in the `gitlab-helmf
 * ensure that the old secret has been deleted:
 
   ```shell
-  kubectl --namespace my-namespace get secret some-secret-v1
+  kubectl --context my-cluster --namespace my-namespace get secret some-secret-v1
+  ```
+
+### Migrating existing Kubernetes secrets to External Secrets
+
+An existing Kubernetes secret deployed by an older method (helmfile+GKMS, manual, ...) needs to be stored in Vault and be deployed with External Secrets.
+
+⚠️ Consider opening a [Change Request](https://gitlab.com/gitlab-com/gl-infra/production/-/issues/new?issuable_template=change_management) with the instructions below when migrating a secret in production.
+
+The following instructions are for migrating a secrets managed in the `gitlab-helmfiles` repository based on the examples from the [section above](#gitlab-helmfiles-and-gitlab-com), but the same principle can be followed in the other repositories:
+
+* fetch the existing secret value from Kubernetes and store it in to Vault:
+
+  ```shell
+  kubectl --context my-cluster --namespace my-namespace get secret some-secret-v1 -o jsonpath='{.data.password}' \
+    | base64 -d \
+    | vault kv put k8s/my-cluster/my-app/some-secret password=-
+  ```
+
+* this will display the version number for the new secret, but it can also be retrieved it with:
+
+  ```shell
+  vault kv metadata get k8s/my-cluster/my-app/some-secret
+  ```
+
+* duplicate the external secret definition, bumping the version number in the name and the specification:
+
+  ```diff
+   # secrets-values.yaml.gotmpl
+
+   externalSecrets:
+  +  some-secret-v2:
+  +    refreshInterval: 0
+  +    secretStoreName: my-app-secrets
+  +    target:
+  +      creationPolicy: Owner
+  +      deletionPolicy: Delete
+  +    data:
+  +      - remoteRef:
+  +          key: "{{ .Environment.Values.cluster }}/my-app/some-secret"
+  +          property: password
+  +          version: "2"
+  +        secretKey: password
+  ```
+
+* commit, open a merge request, merge and deploy
+* ensure that the new secret has been created:
+
+  ```shell
+  kubectl --context my-cluster --namespace my-namespace get externalsecrets
+  kubectl --context my-cluster --namespace my-namespace get secret some-secret-v2
+  ```
+
+* ensure that the new secret data matches its value in Vault:
+
+  ```shell
+  vault kv get -format json -field data k8s/my-cluster/my-app/some-secret
+  kubectl --context my-cluster --namespace my-namespace get secret some-secret-v2 -o jsonpath='{.data}' | jq '.[] |= @base64d'
+  ```
+
+* ensure that the new secret data matches the old one:
+
+  ```shell
+  kubectl --context my-cluster --namespace my-namespace get secret some-secret-v1 -o jsonpath='{.data}' | jq '.[] |= @base64d' | sha256sum
+  kubectl --context my-cluster --namespace my-namespace get secret some-secret-v2 -o jsonpath='{.data}' | jq '.[] |= @base64d' | sha256sum
+  ```
+
+* if this is a production secret, post the checksum results above as proof in the associated issue or merge request
+
+* update any reference to this secret in the rest of the application deployment configuration to target the new name `some-secret-v2`
+* commit, open a merge request, merge and deploy
+
+* ensure that the pods have been rotated and are all using the new secret
+
+  ```shell
+  kubectl --context my-cluster --namespace my-namespace get deployments
+  kubectl --context my-cluster --namespace my-namespace get pods
+  kubectl --context my-cluster --namespace my-namespace describe pod my-app-1ab2c3d4f5-g6h7i
+  ```
+
+* remove the old external secret definition:
+
+  ```diff
+   # secrets-values.yaml.gotmpl
+
+   externalSecrets:
+  -  some-secret-v1:
+  -    refreshInterval: 0
+  -    secretStoreName: my-app-secrets
+  -    target:
+  -      creationPolicy: Owner
+  -      deletionPolicy: Delete
+  -    data:
+  -      - remoteRef:
+  -          key: "{{ .Environment.Values.cluster }}/my-app/some-secret"
+  -          property: password
+  -          version: "1"
+  -        secretKey: password
+     some-secret-v2:
+       refreshInterval: 0
+       secretStoreName: my-app-secrets
+       target:
+         creationPolicy: Owner
+         deletionPolicy: Delete
+       data:
+         - remoteRef:
+             key: "{{ .Environment.Values.cluster }}/my-app/some-secret"
+             property: password
+             version: "2"
+           secretKey: password
+  ```
+
+* commit, open a merge request, merge and deploy
+* ensure that the old secret has been deleted:
+
+  ```shell
+  kubectl --context my-cluster --namespace my-namespace get secret some-secret-v1
   ```
