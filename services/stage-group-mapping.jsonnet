@@ -42,7 +42,6 @@
     feature_categories: [
       'design_system',
       'navigation',
-      'gitlab_docs',
     ],
   },
   project_management: {
@@ -74,8 +73,8 @@
     name: 'Optimize',
     stage: 'plan',
     feature_categories: [
-      'devops_reports',
       'value_stream_management',
+      'devops_reports',
     ],
   },
   source_code: {
@@ -99,7 +98,6 @@
     stage: 'create',
     feature_categories: [
       'web_ide',
-      'snippets',
       'wiki',
       'pages',
       'remote_development',
@@ -130,6 +128,13 @@
       'runner',
       'runner_saas',
       'runner_fleet',
+    ],
+  },
+  runner_saas: {
+    name: 'Runner SaaS',
+    stage: 'verify',
+    feature_categories: [
+
     ],
   },
   pipeline_insights: {
@@ -261,6 +266,7 @@
     feature_categories: [
       'vulnerability_management',
       'dependency_management',
+      'sbom',
     ],
   },
   compliance: {
@@ -401,6 +407,7 @@
     feature_categories: [
       'application_performance',
       'redis',
+      'rate_limiting',
     ],
   },
   global_search: {
@@ -454,12 +461,13 @@
       'pubsec_services',
     ],
   },
-  applied_ml: {
-    name: 'Applied Machine Learning',
+  ai_assisted: {
+    name: 'AI Assisted',
     stage: 'modelops',
     feature_categories: [
       'workflow_automation',
       'intel_code_security',
+      'code_suggestions',
     ],
   },
   mlops: {
@@ -476,7 +484,7 @@
       'dataops',
     ],
   },
-  moble_devops: {
+  mobile_devops: {
     name: 'Mobile DevOps',
     stage: 'mobile',
     feature_categories: [
