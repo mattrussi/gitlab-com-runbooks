@@ -114,6 +114,12 @@ groups:
     expr: "1"
   - record: gitlab:feature_category:stage_group:mapping
     labels:
+      feature_category: code_suggestions
+      product_stage: modelops
+      stage_group: ai_assisted
+    expr: "1"
+  - record: gitlab:feature_category:stage_group:mapping
+    labels:
       feature_category: code_testing
       product_stage: verify
       stage_group: pipeline_insights
@@ -366,12 +372,6 @@ groups:
     expr: "1"
   - record: gitlab:feature_category:stage_group:mapping
     labels:
-      feature_category: gitlab_docs
-      product_stage: manage
-      stage_group: foundations
-    expr: "1"
-  - record: gitlab:feature_category:stage_group:mapping
-    labels:
       feature_category: global_search
       product_stage: data_stores
       stage_group: global_search
@@ -428,7 +428,7 @@ groups:
     labels:
       feature_category: intel_code_security
       product_stage: modelops
-      stage_group: applied_ml
+      stage_group: ai_assisted
     expr: "1"
   - record: gitlab:feature_category:stage_group:mapping
     labels:
@@ -488,7 +488,7 @@ groups:
     labels:
       feature_category: mobile_signing_deployment
       product_stage: mobile
-      stage_group: moble_devops
+      stage_group: mobile_devops
     expr: "1"
   - record: gitlab:feature_category:stage_group:mapping
     labels:
@@ -600,6 +600,12 @@ groups:
     expr: "1"
   - record: gitlab:feature_category:stage_group:mapping
     labels:
+      feature_category: rate_limiting
+      product_stage: data_stores
+      stage_group: application_performance
+    expr: "1"
+  - record: gitlab:feature_category:stage_group:mapping
+    labels:
       feature_category: redis
       product_stage: data_stores
       stage_group: application_performance
@@ -666,6 +672,12 @@ groups:
     expr: "1"
   - record: gitlab:feature_category:stage_group:mapping
     labels:
+      feature_category: sbom
+      product_stage: govern
+      stage_group: threat_insights
+    expr: "1"
+  - record: gitlab:feature_category:stage_group:mapping
+    labels:
       feature_category: scalability
       product_stage: platforms
       stage_group: scalability
@@ -711,12 +723,6 @@ groups:
       feature_category: sm_provisioning
       product_stage: fulfillment
       stage_group: provision
-    expr: "1"
-  - record: gitlab:feature_category:stage_group:mapping
-    labels:
-      feature_category: snippets
-      product_stage: create
-      stage_group: editor
     expr: "1"
   - record: gitlab:feature_category:stage_group:mapping
     labels:
@@ -812,5 +818,5 @@ groups:
     labels:
       feature_category: workflow_automation
       product_stage: modelops
-      stage_group: applied_ml
+      stage_group: ai_assisted
     expr: "1"

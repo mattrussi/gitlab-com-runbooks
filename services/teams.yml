@@ -180,8 +180,8 @@ teams:
   product_stage_group: activation
   ignored_components:
   - graphql_queries
-- name: applied_ml
-  product_stage_group: applied_ml
+- name: ai_assisted
+  product_stage_group: ai_assisted
   ignored_components:
   - graphql_queries
 - name: certify
@@ -251,8 +251,8 @@ teams:
   product_stage_group: mlops
   ignored_components:
   - graphql_queries
-- name: moble_devops
-  product_stage_group: moble_devops
+- name: mobile_devops
+  product_stage_group: mobile_devops
   ignored_components:
   - graphql_queries
 - name: respond

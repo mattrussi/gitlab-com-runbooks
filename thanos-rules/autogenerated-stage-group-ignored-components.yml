@@ -31,6 +31,16 @@ groups:
       product_stage: growth
       stage_group: activation
     expr: "1"
+- name: 'Stage group Ignored components: modelops - AI Assisted'
+  interval: 1m
+  partial_response_strategy: warn
+  rules:
+  - record: gitlab:ignored_component:stage_group
+    labels:
+      component: graphql_queries
+      product_stage: modelops
+      stage_group: ai_assisted
+    expr: "1"
 - name: 'Stage group Ignored components: data_stores - Application Performance'
   interval: 1m
   partial_response_strategy: warn
@@ -40,16 +50,6 @@ groups:
       component: graphql_queries
       product_stage: data_stores
       stage_group: application_performance
-    expr: "1"
-- name: 'Stage group Ignored components: modelops - Applied Machine Learning'
-  interval: 1m
-  partial_response_strategy: warn
-  rules:
-  - record: gitlab:ignored_component:stage_group
-    labels:
-      component: graphql_queries
-      product_stage: modelops
-      stage_group: applied_ml
     expr: "1"
 - name: 'Stage group Ignored components: manage - Authentication and Authorization'
   interval: 1m
@@ -309,7 +309,7 @@ groups:
     labels:
       component: graphql_queries
       product_stage: mobile
-      stage_group: moble_devops
+      stage_group: mobile_devops
     expr: "1"
 - name: 'Stage group Ignored components: monitor - Observability'
   interval: 1m
