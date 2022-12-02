@@ -249,8 +249,6 @@ groups:
           label_replace(rate(gitaly_service_client_requests_total{environment="{{ $labels.environment }}",grpc_code!~"AlreadyExists|Canceled|DeadlineExceeded|FailedPrecondition|InvalidArgument|NotFound|OK|PermissionDenied|ResourceExhausted|Unauthenticated|Unavailable",job="gitaly",stage="{{ $labels.stage }}"}[5m]), "_c", "0", "", "")
           or
           label_replace(rate(gitaly_service_client_requests_total{deadline_type!="limited",environment="{{ $labels.environment }}",grpc_code="DeadlineExceeded",job="gitaly",stage="{{ $labels.stage }}"}[5m]), "_c", "1", "", "")
-          or
-          label_replace(rate(gitaly_service_client_requests_total{environment="{{ $labels.environment }}",grpc_code="Unavailable",grpc_method!~"ListBranchNamesContainingCommit|PostUploadPackWithSidechannel|SSHUploadPackWithSidechannel",job="gitaly",stage="{{ $labels.stage }}"}[5m]), "_c", "2", "", "")
         )
       runbook: docs/gitaly/README.md
     labels:
@@ -301,8 +299,6 @@ groups:
           label_replace(rate(gitaly_service_client_requests_total{environment="{{ $labels.environment }}",grpc_code!~"AlreadyExists|Canceled|DeadlineExceeded|FailedPrecondition|InvalidArgument|NotFound|OK|PermissionDenied|ResourceExhausted|Unauthenticated|Unavailable",job="gitaly",stage="{{ $labels.stage }}"}[5m]), "_c", "0", "", "")
           or
           label_replace(rate(gitaly_service_client_requests_total{deadline_type!="limited",environment="{{ $labels.environment }}",grpc_code="DeadlineExceeded",job="gitaly",stage="{{ $labels.stage }}"}[5m]), "_c", "1", "", "")
-          or
-          label_replace(rate(gitaly_service_client_requests_total{environment="{{ $labels.environment }}",grpc_code="Unavailable",grpc_method!~"ListBranchNamesContainingCommit|PostUploadPackWithSidechannel|SSHUploadPackWithSidechannel",job="gitaly",stage="{{ $labels.stage }}"}[5m]), "_c", "2", "", "")
         )
       runbook: docs/gitaly/README.md
     labels:
@@ -355,8 +351,6 @@ groups:
           label_replace(rate(gitaly_service_client_requests_total{environment="{{ $labels.environment }}",fqdn="{{ $labels.fqdn }}",grpc_code!~"AlreadyExists|Canceled|DeadlineExceeded|FailedPrecondition|InvalidArgument|NotFound|OK|PermissionDenied|ResourceExhausted|Unauthenticated|Unavailable",job="gitaly",shard="{{ $labels.shard }}",stage="{{ $labels.stage }}"}[5m]), "_c", "0", "", "")
           or
           label_replace(rate(gitaly_service_client_requests_total{deadline_type!="limited",environment="{{ $labels.environment }}",fqdn="{{ $labels.fqdn }}",grpc_code="DeadlineExceeded",job="gitaly",shard="{{ $labels.shard }}",stage="{{ $labels.stage }}"}[5m]), "_c", "1", "", "")
-          or
-          label_replace(rate(gitaly_service_client_requests_total{environment="{{ $labels.environment }}",fqdn="{{ $labels.fqdn }}",grpc_code="Unavailable",grpc_method!~"ListBranchNamesContainingCommit|PostUploadPackWithSidechannel|SSHUploadPackWithSidechannel",job="gitaly",shard="{{ $labels.shard }}",stage="{{ $labels.stage }}"}[5m]), "_c", "2", "", "")
         )
       runbook: docs/gitaly/README.md
     labels:
@@ -409,8 +403,6 @@ groups:
           label_replace(rate(gitaly_service_client_requests_total{environment="{{ $labels.environment }}",fqdn="{{ $labels.fqdn }}",grpc_code!~"AlreadyExists|Canceled|DeadlineExceeded|FailedPrecondition|InvalidArgument|NotFound|OK|PermissionDenied|ResourceExhausted|Unauthenticated|Unavailable",job="gitaly",shard="{{ $labels.shard }}",stage="{{ $labels.stage }}"}[5m]), "_c", "0", "", "")
           or
           label_replace(rate(gitaly_service_client_requests_total{deadline_type!="limited",environment="{{ $labels.environment }}",fqdn="{{ $labels.fqdn }}",grpc_code="DeadlineExceeded",job="gitaly",shard="{{ $labels.shard }}",stage="{{ $labels.stage }}"}[5m]), "_c", "1", "", "")
-          or
-          label_replace(rate(gitaly_service_client_requests_total{environment="{{ $labels.environment }}",fqdn="{{ $labels.fqdn }}",grpc_code="Unavailable",grpc_method!~"ListBranchNamesContainingCommit|PostUploadPackWithSidechannel|SSHUploadPackWithSidechannel",job="gitaly",shard="{{ $labels.shard }}",stage="{{ $labels.stage }}"}[5m]), "_c", "2", "", "")
         )
       runbook: docs/gitaly/README.md
     labels:

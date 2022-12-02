@@ -87,14 +87,6 @@ local gitalyGRPCErrorRate(baseSelector) =
         deadline_type: { ne: 'limited' },
       }
     ),
-    // Include some errors for code `Unavailable`, ignore SSH and HTTP uploads as they are often rate limited
-    rateMetric(
-      counter='gitaly_service_client_requests_total',
-      selector=baseSelector {
-        grpc_code: 'Unavailable',
-        grpc_method: { noneOf: ['SSHUploadPackWithSidechannel', 'PostUploadPackWithSidechannel', 'ListBranchNamesContainingCommit'] },
-      }
-    ),
   ]);
 
 
