@@ -95,7 +95,7 @@ generateTests([
     ],
   },
   {
-    name: 'team alerts for non-prod productions should not go to team channels',
+    name: 'team alerts for non-prod productions should not go to team channels by default',
     labels: {
       pager: 'pagerduty',
       rules_domain: 'general',
