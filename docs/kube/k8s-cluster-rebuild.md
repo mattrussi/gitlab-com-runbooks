@@ -143,7 +143,7 @@ $> kubectl get pods --all-namespaces
 ```
 CONTEXT_NAME=$(kubectl config current-context)
 KUBERNETES_HOST=$(kubectl config view -o jsonpath='{.clusters[?(@.name == "$CONTEXT_NAME")].cluster.server}')
-SA_SECRET=$(kubectl --namespace external-secrets get serviceaccount external-secrets-vault-auth -o jsonpath='{.secrets[0].name}')
+SA_SECRET="external-secrets-vault-auth"
 SA_TOKEN=$(kubectl --namespace external-secrets get secret ${SA_SECRET} -o jsonpath='{.data.token}' | base64 -d)
 CA_CERT=$(kubectl --namespace external-secrets get secret ${SA_SECRET} -o jsonpath='{.data.ca\.crt}' | base64 -d)
 
