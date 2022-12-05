@@ -49,7 +49,7 @@ Then this reviewer Service account's token has to be saved in a Vault secret tha
 
 ```sh
 KUBERNETES_HOST=$(kubectl config view -o jsonpath='{.clusters[?(@.name == "gke_gitlab-pre_us-east1_pre-gitlab-gke")].cluster.server}')
-SA_SECRET=$(kubectl --namespace external-secrets get serviceaccount external-secrets-vault-auth -o jsonpath='{.secrets[0].name}')
+SA_SECRET="external-secrets-vault-auth"
 SA_TOKEN=$(kubectl --namespace external-secrets get secret ${SA_SECRET} -o jsonpath='{.data.token}' | base64 -d)
 CA_CERT=$(kubectl --namespace external-secrets get secret ${SA_SECRET} -o jsonpath='{.data.ca\.crt}' | base64 -d)
 
