@@ -443,7 +443,7 @@ gsort --parallel=8 trace.txt -o trace.txt
 For example, count per key pattern:
 
 ```shell
-cat trace.txt | awk '{ print $5 } | sort -n | uniq -c | sort -nr'
+cat trace.txt | awk '{ print $5 }' | sort -n | uniq -c | sort -nr
 ```
 
 ##### key size estimation
