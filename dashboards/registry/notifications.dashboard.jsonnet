@@ -181,7 +181,7 @@ basic.dashboard(
       title='Event delivery failure rate',
       description='The per-second rate of events that failed to be delivered due to response status code >= 400',
       query=|||
-        sum( 
+        sum(
           rate(
             registry_notifications_events_total{environment="$environment", cluster=~"$cluster", stage="$stage", exported_type="Failures"}[$__interval]
           )
