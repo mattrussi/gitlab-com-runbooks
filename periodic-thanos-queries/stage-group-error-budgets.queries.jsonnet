@@ -23,6 +23,15 @@ local ratioQuery = |||
   selector: selectors.serializeHash(selector),
 };
 
+local trafficShareQuery = |||
+  max by (%(aggregations)s) (
+    last_over_time(gitlab:stage_group:traffic_share:ratio_28d{%(selector)s}[2h])
+  )
+||| % {
+  aggregations: aggregations.join(aggregationLabels),
+  selector: selectors.serializeHash(selector),
+};
+
 {
   stage_group_error_budget_availability: periodicQuery.new({
     query: ratioQuery,
@@ -56,4 +65,9 @@ local ratioQuery = |||
       },
       time: midnight,
     }),
+
+  stage_group_traffic_share: periodicQuery.new({
+    query: trafficShareQuery,
+    time: midnight,
+  }),
 }
