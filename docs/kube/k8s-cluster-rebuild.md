@@ -17,8 +17,10 @@ placed on the ops instance where [the pipelines run](https://ops.gitlab.net/gitl
 ## 2- Removing traffic
 
 1. Create a silence on [alerts.gitlab.net](https://alerts.gitlab.net/) using the following example filter:
-    - `alertname=SnitchHeartBeat`
     - `cluster=gstg-us-east1-b`
+2. Pause alerts from [Dead Mans Snitch](deadmanssnitch.com)
+   - Find the alert named `Prometheus - GKE <cluster_name>` and hit the pause
+     button
 
 ### 2.a Removing traffic from canary
 
@@ -76,7 +78,10 @@ any command.
 
 ### 3.c Executing terraform
 
-1. Please consider changing the zone in the next command to the one you are targeting, we used zone `b` as an example.
+This is a two step process, 1 to replace the cluster, the next to recreate the
+node pools that were removed.
+
+1. Perform a `terraform plan` to validate cluster recreation:
 
 **Executer should perform a `plan` and validate the changes before running the `apply`**
 
@@ -92,13 +97,33 @@ Terraform will perform the following actions:
   # module.gke-us-east1-b.google_container_cluster.cluster will be replaced, as requested
 ```
 
-2. Then we `apply` the change
+2. Then `apply` the cluster recreation change:
 
 ```
 tf apply -replace="module.gke-us-east1-b.google_container_cluster.cluster"
 ```
 
-### 3.d New cluster config setup
+3. Perform an unconstrained `terraform plan` to validate the creation of the
+   node pools.
+
+```
+tf plan
+```
+
+We should see the addition of various node pools.  Refer to the
+[`config-mgmt`](https://ops.gitlab.net/gitlab-com/gl-infra/config-mgmt/) repository for details on the node pools we configure at that
+moment in time.
+
+If the plan is dirty consider writing a targeted apply as necessary to avoid
+change outside of the Change Request related to the cluster rebuild work.
+
+4. Perform a `terraform apply`, leveraging a `target` if required.
+
+```
+tf apply [-target=<path/to/node_pool{s}>]
+```
+
+### 3.d New cluster configuration setup
 
 After terraform command is executed we will have a brand new cluster, we need to orient our tooling to use
 the new cluster.
@@ -142,10 +167,18 @@ First we bootstrap our cluster with required CI configurations:
     1. `cd releases/00-gitlab-ci-accounts`
     1. `helmfile -e gstg-us-east1-b apply`
 
+1. We then need to tend to our Calico management.  Execute the following on the
+   new cluster;
+
+```
+kubectl -n kube-system annotate cm calico-node-vertical-autoscaler meta.helm.sh/release-name=calico-node-autoscaler
+kubectl -n kube-system annotate cm calico-node-vertical-autoscaler meta.helm.sh/release-namespace=kube-system
+kubectl -n kube-system label cm calico-node-vertical-autoscaler app.kubernetes.io/managed-by=Helm
+```
+
 Then we can complete setup via our existing CI pipelines:
 
 1. From [gitlab-helmfiles](https://gitlab.com/gitlab-com/gl-infra/k8s-workloads/gitlab-helmfiles) CI Pipelines, find the latest default branch pipeline, and rerun the job associated with the cluster rebuild
-1. From [gitlab-secrets](https://ops.gitlab.net/gitlab-com/gl-infra/k8s-workloads/gitlab-secrets) CI Pipelines, find the latest default branch pipeline, and rerun the job associated with the cluster rebuild
 1. From [tanka-deployments](https://gitlab.com/gitlab-com/gl-infra/k8s-workloads/tanka-deployments) CI Pipelines, find the latest default branch pipeline, and rerun the job associated with the cluster rebuild
 1. After installing the workloads, run `kubectl get pods --all-namespaces` and check if all workloads are working correctly before going to the next step.
 
@@ -160,9 +193,16 @@ otherwise we may fly blind with some of our metrics.
 
 ### 4.c Deploying gitlab-com
 
-- We start with removing the `CLUSTER_SKIP` variable from [ops instance](https://ops.gitlab.net/gitlab-com/gl-infra/k8s-workloads/gitlab-com/-/settings/ci_cd)
-- In order to deploy [gitlab-com](https://gitlab.com/gitlab-com/gl-infra/k8s-workloads/gitlab-com), simply we need to run the latest successful
-`auto-deploy` job. Go to the [announcements channel](https://gitlab.slack.com/archives/C8PKBH3M5) and check latest successful job, and re-run the Kubernetes job for the targeted cluster.
+- Remove the `CLUSTER_SKIP` variable from [ops instance](https://ops.gitlab.net/gitlab-com/gl-infra/k8s-workloads/gitlab-com/-/settings/ci_cd)
+- Find the latest pipeline which performed a configuration change to the staging
+  environment and replace the job associated with this cluster
+  - Note that this will install all releases and configurations but will not
+    deploy the correct version of GitLab, that comes in the following step
+  - It'll be easiest to find a pipeline from the most recent MR merge vs surfing
+    through the Pipeline pages
+  - MR's are on: [gitlab-com](https://gitlab.com/gitlab-com/gl-infra/k8s-workloads/gitlab-com)
+- Deploy the correct version of GitLab
+  - Run the latest successful `auto-deploy` job. Go to the [announcements channel](https://gitlab.slack.com/archives/C8PKBH3M5) and check latest successful job, and re-run the Kubernetes job for the targeted cluster.
 - Spot check the cluster to validate the Pods are coming online and remain in a
   Running state
   - Connect to our replaced cluster `glsh kube use-cluster gstg-us-east1-b`
@@ -181,6 +221,7 @@ otherwise we may fly blind with some of our metrics.
 1. In [this dashboard](https://dashboards.gitlab.net/d/kubernetes-kubelet/kubernetes-kubelet?orgId=1&refresh=5m&var-datasource=default&var-cluster=gstg-us-east1-b&var-instance=All)
 we should see the numbers of the pods and containers of the cluster.
 1. Remove any silences that were created earlier
+1. Unpause any alerts from Dead Mans Snitch
 1. Validate no alerts are firing related to this replacement cluster on the [Alertmanager](https://alerts.gitlab.net)
 
 ## 5- Pushing traffic back to the cluster
