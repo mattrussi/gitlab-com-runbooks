@@ -56,4 +56,17 @@ local ratioQuery = |||
       },
       time: midnight,
     }),
+
+  stage_group_error_budget_traffic_share: periodicQuery.new({
+    query: |||
+      max by (%(aggregations)s) (
+        last_over_time(gitlab:stage_group:traffic_share:ratio_28d{%(selector)s}[2h])
+      )
+    ||| % {
+      aggregations: aggregations.join(aggregationLabels),
+      selector: selectors.serializeHash(selector),
+    },
+    time: midnight,
+  }),
+
 }
