@@ -154,8 +154,6 @@ There is also another secret engine named `cubbyhole`, this is a temporary secre
 
 ### GitLab CI Secrets
 
-⚠️ `vault.ops.gke.gitlab.net` is an internal endpoint, making it only accessible from the `ops` runners at this stage, which are not currently configured on `gitlab.com`. Because of this, retrieving CI secrets from Vault is only possible from `ops.gitlab.net` at the moment. See [this issue](https://gitlab.com/gitlab-com/gl-infra/reliability/-/issues/16235) for the investigation on how to enable access to Vault from CI on `gitlab.com`.
-
 #### Structure
 
 CI secrets are available under the following paths:
