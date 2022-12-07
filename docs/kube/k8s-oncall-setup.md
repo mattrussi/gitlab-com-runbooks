@@ -9,11 +9,11 @@ instructions_
 
 Majority of our Kubernetes configuration is managed using these projects:
 
-* <https://gitlab.com/gitlab-com/gl-infra/k8s-workloads/gitlab-com>
-* <https://gitlab.com/gitlab-com/gl-infra/k8s-workloads/gitlab-helmfiles>
-* <https://gitlab.com/gitlab-com/gl-infra/k8s-workloads/common>
-  * A dependency of the helmfile repositories above.
-* <https://gitlab.com/gitlab-com/gl-infra/k8s-workloads/tanka-deployments>
+- <https://gitlab.com/gitlab-com/gl-infra/k8s-workloads/gitlab-com>
+- <https://gitlab.com/gitlab-com/gl-infra/k8s-workloads/gitlab-helmfiles>
+- <https://gitlab.com/gitlab-com/gl-infra/k8s-workloads/common>
+  - A dependency of the helmfile repositories above.
+- <https://gitlab.com/gitlab-com/gl-infra/k8s-workloads/tanka-deployments>
 
 :warning: CI jobs are executed on the ops instance. :warning:
 
@@ -35,13 +35,15 @@ through a proxy.
 1. Setup bastion for clusters: <https://gitlab.com/gitlab-com/runbooks/-/tree/master/docs/bastions>
 1. Install `gcloud`: <https://cloud.google.com/sdk/docs/install>
 1. Install [`gke-gcloud-auth-plugin`](https://cloud.google.com/blog/products/containers-kubernetes/kubectl-auth-changes-in-gke): `gcloud components install gke-gcloud-auth-plugin`.
-1. Install `kubectl`: <https://kubernetes.io/docs/tasks/tools/install-kubectl-windows/>
+1. Install `kubectl`:
+   - [MacOS](https://kubernetes.io/docs/tasks/tools/install-kubectl-macos/)
+   - [Linux](https://kubernetes.io/docs/tasks/tools/install-kubectl-linux/)
 1. Run `gcloud auth login`: The browser will open to choose with google email
    address to use to allow for oauth.
 
-    💡 *If you see warnings about permissions issues related to `~/.config/gcloud/*`
-    check the permissions of this directory.  Simply change it to your user if
-    necessary: `sudo chown -R $(whoami) ~/.config`* 💡
+   💡 _If you see warnings about permissions issues related to `~/.config/gcloud/_` check the permissions of this directory.  Simply change it to your user if
+necessary:`sudo chown -R $(whoami) ~/.config`\* 💡
+
 1. Run `glsh kube setup`: Use [`glsh`](../../README.md#running-helper-scripts-from-runbook) to set up `kubectl` configuration to be to talk to all clusters.
 1. Run `glsh kube use-cluster`: This will print all the available clusters.
 1. Run `glsh kube use-cluster gstg`: This will connect you to the `gstg`
@@ -52,12 +54,12 @@ through a proxy.
 ### GUI consoles and metrics
 
 When troubleshooting issues, it can often be helpful to have a graphical
-overview of resources within the cluster, and basic metric data.  For more
+overview of resources within the cluster, and basic metric data. For more
 detailed and expansive metric data, we have a number of [dashboards within
 Grafana](https://dashboards.gitlab.net/dashboards/f/kubernetes/kubernetes).
 For tunneling mechanism above `glsh kube use-cluster $CLUSTER`, one excellent
 option for a local graphical view into the clusters that works with both is the
-[Lens IDE](https://k8slens.dev/).  Alternatively, the [GKE
+[Lens IDE](https://k8slens.dev/). Alternatively, the [GKE
 console](https://console.cloud.google.com/kubernetes) provides access to much
 of the same information via a web browser, as well.
 
@@ -65,16 +67,16 @@ of the same information via a web browser, as well.
 
 ## Accessing a node
 
-* [ ] Initiate an SSH connection to one of the production nodes, this requires a fairly recent version of gsuite
+- [ ] Initiate an SSH connection to one of the production nodes, this requires a fairly recent version of gsuite
 
 ```bash
 kubectl get pods -o wide  # find the name of the node that you want to access
 gcloud compute --project "gitlab-production" ssh <node name> --tunnel-through-iap
 ```
 
-This will create an ssh key that is propagated to the GCP project to allow access.  You may receive a message from SIRTBot afterwards.
+This will create an ssh key that is propagated to the GCP project to allow access. You may receive a message from SIRTBot afterwards.
 
-* [ ] From the node you can list containers, and get shell access to a pod as root.  At this writing our nodepools run a mix of docker and containerd, but eventually we expect them to be all containerd.
+- [ ] From the node you can list containers, and get shell access to a pod as root. At this writing our nodepools run a mix of docker and containerd, but eventually we expect them to be all containerd.
 
 When using the code snippets below on docker nodes, change `crictl` to `docker`; they are functionally mostly equivalent for common basic tasks.
 
@@ -85,7 +87,7 @@ crictl ps
 crictl exec -u root -it <container> /bin/bash
 ```
 
-* [ ] You shouldn't install anything on the GKE nodes. Instead, use toolbox to troubleshoot problems, for example run strace on a process running in one of the GitLab containers. You can install anything you want in the toolbox container.
+- [ ] You shouldn't install anything on the GKE nodes. Instead, use toolbox to troubleshoot problems, for example run strace on a process running in one of the GitLab containers. You can install anything you want in the toolbox container.
 
 ```bash
 gcloud compute --project "gitlab-production" ssh <node name>
@@ -98,7 +100,7 @@ For more troubleshooting tips see also: [attach to a running container](./k8s-op
 
 ## Accessing a pod
 
-* [ ] Initiate an interactive shell session in one of the pods. Bear in mind, that many containers do not include a shell which means you won't be able to access them in this way.
+- [ ] Initiate an interactive shell session in one of the pods. Bear in mind, that many containers do not include a shell which means you won't be able to access them in this way.
 
 ```bash
 kubectl exec -it <pod_name> -- sh
@@ -112,22 +114,22 @@ In order to be able to run config locally, you need to install tools from the pr
 
 ## Install tools
 
-* [ ] Checkout repos from all projects
-* [ ] Install tools from them. They contain `.tool-versions` files which should be used with `asdf`, for example: `cd gitlab-helmfiles; asdf install`
-* [ ] Install helm plugins by running the script <https://gitlab.com/gitlab-com/gl-infra/k8s-workloads/common/-/blob/master/bin/install-helm-plugins.sh>
-  * You'll want to run this with the version of helm used by gitlab-com /
-     gitlab-helmfiles "active". If you're using asdf, you can achieve this by
-     running the script from inside one of the helmfile repos.
+- [ ] Checkout repos from all projects
+- [ ] Install tools from them. They contain `.tool-versions` files which should be used with `asdf`, for example: `cd gitlab-helmfiles; asdf install`
+- [ ] Install helm plugins by running the script <https://gitlab.com/gitlab-com/gl-infra/k8s-workloads/common/-/blob/master/bin/install-helm-plugins.sh>
+  - You'll want to run this with the version of helm used by gitlab-com /
+    gitlab-helmfiles "active". If you're using asdf, you can achieve this by
+    running the script from inside one of the helmfile repos.
 
 ## Workstation setup for k-ctl
 
-* [ ] Get the credentials for the pre-prod cluster:
+- [ ] Get the credentials for the pre-prod cluster:
 
 ```bash
 gcloud container clusters get-credentials pre-gitlab-gke --region us-east1 --project gitlab-pre
 ```
 
-* [ ] Setup local environment for `k-ctl`
+- [ ] Setup local environment for `k-ctl`
 
 These steps walk through running `k-ctl` against the preprod cluster but can also be used to connect to any of the staging or production clusters using sshuttle above.
 It is probably very unlikely you will need to make a configuration change to the clusters outside of CI, follow these instructions for the rare case this is necessary.
@@ -151,7 +153,7 @@ kubectl config use-context pre
 FORCE_KUBE_CONTEXT=1 ./bin/k-ctl -e pre list
 ```
 
-* [ ] Make a change to the preprod configuration and execute a dry-run
+- [ ] Make a change to the preprod configuration and execute a dry-run
 
 ```bash
 $ vi releases/gitlab/values/pre.yaml.gotmpl
@@ -164,7 +166,7 @@ $ vi releases/gitlab/values/pre.yaml.gotmpl
 It's possible to drain and stop connections to an entire zonal cluster.
 This should be only done in extreme circumstances where you want to stop traffic to an entire availability zone.
 
-* [ ] Get the server state for the production `us-east1-b` zone
+- [ ] Get the server state for the production `us-east1-b` zone
 
 _Use the `bin/get-server-state` script in [chef-repo](https://ops.gitlab.net/gitlab-cookbooks/chef-repo/)_
 
