@@ -12,6 +12,8 @@ Rails consoles in Staging/Production are accessed via Gravitational [Teleport](h
 
 Before you start using Teleport, you must be assigned the app in Okta.  This should be a part of your role's baseline group assignment. In most cases there should be no additional action required to gain access to the services appropriate to your role. If your onboarding is complete and you still do not have access to the Teleport app in Okta, open an [access request](https://about.gitlab.com/handbook/business-technology/team-member-enablement/onboarding-access-requests/access-requests/) and follow the appropriate approval methods.
 
+It is worth noting that the current access granted is a read-only access, if you need to perform write operations to the production environment, then declare a change in `#production` slack channel using the `/change declare` command, after filling the steps and other details, an SRE should be able to execute the change for you.
+
 ## How to use Teleport to connect to Rails console
 
 There are two ways to use to Teleport to connect to a Rails console:
@@ -73,7 +75,7 @@ tsh login --request-id=<request-id>
 
 The request ID is shown in the output of `tsh login` when making the initial request, and can also be found attached to your request notification in `#infrastructure-lounge`.
 
-> Note: These examples assume you are requesting read-only access.  For read-write, simply `--request-roles=rails` rather than `--request-roles=rails-ro`.  Please default to read-only though, since we will have stricter requirements for approving read-write access.
+> Note: These examples assume you are requesting read-only access. **read-write access via teleport isn't supported yet**, when that is added, one could use `--request-roles=rails` rather than `--request-roles=rails-ro`.  Please default to read-only though, since we will have stricter requirements for approving read-write access.
 
 ### Access approval
 
