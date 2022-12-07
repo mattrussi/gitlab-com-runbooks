@@ -73,7 +73,7 @@ tsh login --request-id=<request-id>
 
 The request ID is shown in the output of `tsh login` when making the initial request, and can also be found attached to your request notification in `#infrastructure-lounge`.
 
-> Note: These examples assume you are requesting read-only access.  For read-write, simply `--request-roles=rails` rather than `--request-roles=rails-ro`.  Please default to read-only though, since we will have stricter requirements for approving read-write access.
+> Note: These examples assume you are requesting read-only access. **read-write access via teleport isn't supported yet**, when that is added, one could use `--request-roles=rails` rather than `--request-roles=rails-ro`.  Please default to read-only though, since we will have stricter requirements for approving read-write access.
 
 ### Access approval
 
