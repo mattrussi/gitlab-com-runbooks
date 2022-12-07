@@ -21,8 +21,9 @@ local urlFromUidAndVars(dashboardUid, vars) =
            "Invalid dashboard path: '%s'. Valid path syntax: folder/dashboard-name.jsonnet";
 
     local folder = parts[0];
+    local maxLength = 40 - std.length(folder) - 1;
     local names = std.split(parts[1], '.');
-    local basename = names[0];
+    local basename = std.substr(names[0], 0, maxLength);
 
     '%(folder)s-%(basename)s' % {
       folder: folder,

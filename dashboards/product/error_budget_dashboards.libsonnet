@@ -14,6 +14,14 @@ local groupDashboardLink(group) =
     ),
   ]);
 
+local groupDetailDashboardLink(group) =
+  toolingLinks.generateMarkdown([
+    toolingLinks.grafana(
+      "%(group)s's error budget detail dashboard" % group.name,
+      toolingLinks.grafanaUid('stage-groups/detail-%s.jsonnet' % group.key),
+    ),
+  ]);
+
 local normalizeUrl(url) = std.strReplace(url, '_', '-');
 
 local groupHandbookLink = function(group)
@@ -43,9 +51,11 @@ local errorBudgetPanels(group) =
         content=|||
           - [%(group)s's handbook page](%(handbookLink)s)
           %(groupDashboardLink)s
+          %(groupDetailDashboardLink)s
         ||| % {
           group: group.name,
           groupDashboardLink: groupDashboardLink(group),
+          groupDetailDashboardLink: groupDetailDashboardLink(group),
           handbookLink: groupHandbookLink(group),
         }
       ),
