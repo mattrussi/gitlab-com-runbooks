@@ -18,10 +18,7 @@ local objects = import 'utils/objects.libsonnet';
 local aggregationSets = gitlabMetricsConfig.aggregationSets;
 
 local dashboardUid(identifier) =
-  local dirname = 'stage-groups';
-  // All dashboards are prefixed with their dirname joined by a `-`
-  local maxLength = 40 - std.length(dirname) - 1;
-  std.substr(identifier, 0, maxLength);
+  std.strReplace(toolingLinks.grafanaUid('stage-groups/%s.jsonnet' % [identifier]), 'stage-groups-', '');
 
 local actionLegend(type) =
   if type == 'api' then '{{action}}' else '{{controller}}#{{action}}';

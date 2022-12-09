@@ -10,6 +10,7 @@ test.suite({
         'product/plan-error-budget.jsonnet',
         'stage-groups/access.dashboard.jsonnet',
         'stage-groups/code_review.dashboard.jsonnet',
+        'stage-groups/a_really_super_duper_long_name.dashboard.jsonnet',
       ]
     ),
     expect: [
@@ -18,6 +19,7 @@ test.suite({
       'product-plan-error-budget',
       'stage-groups-access',
       'stage-groups-code_review',
+      'stage-groups-a_really_super_duper_long_n',
     ],
   },
   testGenerateMarkdownBlank: {
