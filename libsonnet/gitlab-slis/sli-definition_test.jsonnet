@@ -127,4 +127,37 @@ test.suite({
       message: 'field kinds',
     },
   },
+
+  testInValidExcludeKindsFromSLI: {
+    actual: validSLI { excludeKindsFromSLI: 'bogus' },
+    expectMatchingValidationError: {
+      validator: sliDefinition._sliValidator,
+      message: 'field excludeKindsFromSLI',
+    },
+  },
+
+  testValidExcludeKindsFromSLI: {
+    actual: validSLI { excludeKindsFromSLI: [sliDefinition.apdexKind] },
+    expectValid: sliDefinition._sliValidator,
+  },
+
+  local sliWithBothKinds = validDefinition { kinds+: [sliDefinition.errorRateKind] },
+  testGenerateServiceLevelIndicator: {
+    actual: sliDefinition.new(sliWithBothKinds).generateServiceLevelIndicator({}).hello_sli,
+    expectContains: {
+      requestRate: { counter: 'gitlab_sli_hello_sli_total', instanceFilter: '', selector: {} },
+      apdex: { operationRateMetric: 'gitlab_sli_hello_sli_apdex_total', selector: {}, successRateMetric: 'gitlab_sli_hello_sli_apdex_success_total' },
+      errorRate: { counter: 'gitlab_sli_hello_sli_error_total', instanceFilter: '', selector: {} },
+    },
+  },
+
+  testGenerateServiceLevelIndicatorExcludingKind: {
+    local excludeApdex = sliWithBothKinds { excludeKindsFromSLI: [sliDefinition.apdexKind] },
+    actual: sliDefinition.new(excludeApdex).generateServiceLevelIndicator({}).hello_sli,
+    expectThat: {
+      actual: error 'overridden',
+      result: !std.member(std.objectFields(self.actual), 'apdex'),
+      description: "expected 'apdex' to be excluded from the SLIs: %s" % [std.objectFields(self.actual)],
+    },
+  },
 })
