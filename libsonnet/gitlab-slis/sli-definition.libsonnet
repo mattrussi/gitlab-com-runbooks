@@ -13,6 +13,7 @@ local apdexKind = 'apdex';
 local errorRateKind = 'error_rate';
 local validKinds = [apdexKind, errorRateKind];
 
+local validKindsValidator = validator.validator(function(values) misc.all(function(v) std.member(validKinds, v), values), 'only %s are supported' % [std.join(', ', validKinds)]);
 local validateFeatureCategory(value) =
   if value == serviceLevelIndicatorDefinition.featureCategoryFromSourceMetrics then
     true
@@ -27,7 +28,11 @@ local sliValidator = validator.new({
   description: validator.string,
   kinds: validator.and(
     validator.validator(function(values) std.isArray(values) && std.length(values) > 0, 'must be present'),
-    validator.validator(function(values) misc.all(function(v) std.member(validKinds, v), values), 'only %s are supported' % [std.join(', ', validKinds)])
+    validKindsValidator
+  ),
+  excludeKindsFromSLI: validator.or(
+    validator.validator(function(values) std.isArray(values) && std.length(values) == 0, 'can be an empty array'),
+    validKindsValidator
   ),
   featureCategory: validator.validator(validateFeatureCategory, 'please specify a known feature category or include `feature_category` as a significant label'),
   dashboardFeatureCategories: validator.validator(
@@ -47,6 +52,7 @@ local applyDefaults(definition) = {
   hasApdex():: std.member(definition.kinds, apdexKind),
   hasErrorRate():: std.member(definition.kinds, errorRateKind),
   dashboardFeatureCategories: [],
+  excludeKindsFromSLI: [],
 } + definition;
 
 local validateDashboardFeatureCategories(definition) =
@@ -66,8 +72,11 @@ local validateAndApplyDefaults(definition) =
     [if sli.hasApdex() then 'apdexSuccessCounterName']: 'gitlab_sli_%s_apdex_success_total' % [self.name],
     [if sli.hasErrorRate() then 'errorTotalCounterName']: 'gitlab_sli_%s_total' % [self.name],
     [if sli.hasErrorRate() then 'errorCounterName']: 'gitlab_sli_%s_error_total' % [self.name],
-    totalCounterName: if sli.hasErrorRate() then self.errorTotalCounterName else self.apdexTotalCounterName,
-
+    totalCounterName:
+      if sli.hasErrorRate() && !std.member(parent.excludeKindsFromSLI, errorRateKind) then
+        self.errorTotalCounterName
+      else
+        self.apdexTotalCounterName,
     [if sli.hasApdex() then 'aggregatedApdexOperationRateQuery']:: rateQueryFunction(self, 'apdexTotalCounterName'),
     [if sli.hasApdex() then 'aggregatedApdexSuccessRateQuery']:: rateQueryFunction(self, 'apdexSuccessCounterName'),
     [if sli.hasErrorRate() then 'aggregatedOperationRateQuery']:: rateQueryFunction(self, 'errorTotalCounterName'),
@@ -99,8 +108,10 @@ local validateAndApplyDefaults(definition) =
         requestRate: rateMetric(parent.totalCounterName, extraSelector),
         significantLabels: parent.significantLabels,
 
-        [if parent.hasApdex() then 'apdex']: rateApdex(parent.apdexSuccessCounterName, parent.apdexTotalCounterName, extraSelector),
-        [if parent.hasErrorRate() then 'errorRate']: rateMetric(parent.errorCounterName, extraSelector),
+        [if parent.hasApdex() && !std.member(parent.excludeKindsFromSLI, apdexKind) then 'apdex']:
+          rateApdex(parent.apdexSuccessCounterName, parent.apdexTotalCounterName, extraSelector),
+        [if parent.hasErrorRate() && !std.member(parent.excludeKindsFromSLI, errorRateKind) then 'errorRate']:
+          rateMetric(parent.errorCounterName, extraSelector),
       } + extraFields,
     },
   };

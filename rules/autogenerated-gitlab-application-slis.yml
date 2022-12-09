@@ -87,6 +87,49 @@ groups:
       sum by (endpoint_id,environment,feature_category,stage,tier,type) (
         rate(gitlab_sli_customers_dot_requests_error_total{monitor!="global"}[1h])
       )
+- name: 'Application Defined SLI Rules: global_search'
+  interval: 1m
+  rules:
+  - record: application_sli_aggregation:global_search:apdex:weight:score_5m
+    expr: |
+      sum by (endpoint_id,environment,search_level,search_scope,search_type,stage,tier,type) (
+        sli_aggregations:gitlab_sli_global_search_apdex_total_rate5m{monitor!="global"}
+      )
+  - record: application_sli_aggregation:global_search:apdex:success:rate_5m
+    expr: |
+      sum by (endpoint_id,environment,search_level,search_scope,search_type,stage,tier,type) (
+        sli_aggregations:gitlab_sli_global_search_apdex_success_total_rate5m{monitor!="global"}
+      )
+  - record: application_sli_aggregation:global_search:ops:rate_5m
+    expr: |
+      sum by (endpoint_id,environment,search_level,search_scope,search_type,stage,tier,type) (
+        rate(gitlab_sli_global_search_total{monitor!="global"}[5m])
+      )
+  - record: application_sli_aggregation:global_search:error:rate_5m
+    expr: |
+      sum by (endpoint_id,environment,search_level,search_scope,search_type,stage,tier,type) (
+        rate(gitlab_sli_global_search_error_total{monitor!="global"}[5m])
+      )
+  - record: application_sli_aggregation:global_search:apdex:weight:score_1h
+    expr: |
+      sum by (endpoint_id,environment,search_level,search_scope,search_type,stage,tier,type) (
+        sli_aggregations:gitlab_sli_global_search_apdex_total_rate1h{monitor!="global"}
+      )
+  - record: application_sli_aggregation:global_search:apdex:success:rate_1h
+    expr: |
+      sum by (endpoint_id,environment,search_level,search_scope,search_type,stage,tier,type) (
+        sli_aggregations:gitlab_sli_global_search_apdex_success_total_rate1h{monitor!="global"}
+      )
+  - record: application_sli_aggregation:global_search:ops:rate_1h
+    expr: |
+      sum by (endpoint_id,environment,search_level,search_scope,search_type,stage,tier,type) (
+        rate(gitlab_sli_global_search_total{monitor!="global"}[1h])
+      )
+  - record: application_sli_aggregation:global_search:error:rate_1h
+    expr: |
+      sum by (endpoint_id,environment,search_level,search_scope,search_type,stage,tier,type) (
+        rate(gitlab_sli_global_search_error_total{monitor!="global"}[1h])
+      )
 - name: 'Application Defined SLI Rules: global_search_indexing'
   interval: 1m
   rules:
