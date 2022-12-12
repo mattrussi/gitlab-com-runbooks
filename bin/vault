@@ -3,6 +3,10 @@
 set -e
 
 VAULT_ADDR="https://vault.ops.gke.gitlab.net"
+if [ -z "$VAULT_PROXY_ADDR" ]; then
+  VAULT_PROXY_ADDR="socks5://localhost:18200"
+  export VAULT_PROXY_ADDR
+fi
 BASTION_HOST="lb-bastion.ops.gitlab.com"
 
 usage() {
