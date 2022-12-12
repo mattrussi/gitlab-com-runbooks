@@ -15,7 +15,7 @@ local metricsCatalog = import 'servicemetrics/metrics-catalog.libsonnet';
       replication delays.
     |||,
     grafana_dashboard_uid: 'sat_redis_secondary_cpu',
-    resourceLabels: ['fqdn'],
+    resourceLabels: ['fqdn', 'instance'],
     burnRate: '5m',
     query: |||
       (

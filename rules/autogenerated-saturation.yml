@@ -887,13 +887,13 @@ groups:
       max by(environment, tier, type, stage) (
         clamp_min(
           clamp_max(
-            max by (environment, tier, type, stage, fqdn) (
+            max by (environment, tier, type, stage, fqdn, instance) (
               label_replace(redis_memory_used_rss_bytes{type=~"redis-cache|redis-sidekiq|redis-ratelimiting|redis-sessions|redis-registry-cache|redis"}, "memtype", "rss","","")
               or
               label_replace(redis_memory_used_bytes{type=~"redis-cache|redis-sidekiq|redis-ratelimiting|redis-sessions|redis-registry-cache|redis"}, "memtype", "used","","")
             )
             /
-            avg by (environment, tier, type, stage, fqdn) (
+            avg by (environment, tier, type, stage, fqdn, instance) (
               node_memory_MemTotal_bytes{type=~"redis-cache|redis-sidekiq|redis-ratelimiting|redis-sessions|redis-registry-cache|redis"}
             )
             ,
@@ -909,11 +909,11 @@ groups:
         clamp_min(
           clamp_max(
             (
-              max by (environment, tier, type, stage, fqdn) (
+              max by (environment, tier, type, stage, fqdn, instance) (
                 redis_memory_used_bytes{type="redis-cache"}
               )
               /
-              avg by (environment, tier, type, stage, fqdn) (
+              avg by (environment, tier, type, stage, fqdn, instance) (
                 redis_memory_max_bytes{type="redis-cache"}
               )
             ) and on (fqdn) redis_memory_max_bytes{type="redis-cache"} != 0
@@ -930,11 +930,11 @@ groups:
         clamp_min(
           clamp_max(
             (
-              max by (environment, tier, type, stage, fqdn) (
+              max by (environment, tier, type, stage, fqdn, instance) (
                 redis_memory_used_bytes{type="redis-sessions"}
               )
               /
-              avg by (environment, tier, type, stage, fqdn) (
+              avg by (environment, tier, type, stage, fqdn, instance) (
                 redis_memory_max_bytes{type="redis-sessions"}
               )
             ) and on (fqdn) redis_memory_max_bytes{type="redis-sessions"} != 0
@@ -950,13 +950,13 @@ groups:
       max by(environment, tier, type, stage) (
         clamp_min(
           clamp_max(
-            max by (environment, tier, type, stage, fqdn) (
+            max by (environment, tier, type, stage, fqdn, instance) (
               label_replace(redis_memory_used_rss_bytes{type="redis-tracechunks"}, "memtype", "rss","","")
               or
               label_replace(redis_memory_used_bytes{type="redis-tracechunks"}, "memtype", "used","","")
             )
             /
-            avg by (environment, tier, type, stage, fqdn) (
+            avg by (environment, tier, type, stage, fqdn, instance) (
               node_memory_MemTotal_bytes{type="redis-tracechunks"}
             )
             ,
@@ -971,7 +971,7 @@ groups:
       max by(environment, tier, type, stage) (
         clamp_min(
           clamp_max(
-            sum by (environment, tier, type, stage, fqdn) (
+            sum by (environment, tier, type, stage, fqdn, instance) (
               rate(
                 namedprocess_namegroup_thread_cpu_seconds_total{type=~"redis-cache|redis-sidekiq|redis-tracechunks|redis-ratelimiting|redis-sessions|redis-registry-cache|redis", groupname="redis-server", threadname="redis-server"}[1m])
             )
@@ -4475,7 +4475,7 @@ groups:
       grafana_panel_id: "127397613"
       grafana_variables: environment,type,stage
       promql_query: |
-        max by(environment, tier, type, stage, fqdn) (
+        max by(environment, tier, type, stage, fqdn, instance) (
           clamp_min(
             clamp_max(
               max_over_time(redis_connected_clients{environment="{{ $labels.environment }}",stage="{{ $labels.stage }}",type="{{ $labels.type }}"}[1m])
@@ -4520,16 +4520,16 @@ groups:
       grafana_panel_id: "1855027052"
       grafana_variables: environment,type,stage
       promql_query: |
-        max by(environment, tier, type, stage, fqdn) (
+        max by(environment, tier, type, stage, fqdn, instance) (
           clamp_min(
             clamp_max(
-              max by (environment, tier, type, stage, fqdn) (
+              max by (environment, tier, type, stage, fqdn, instance) (
                 label_replace(redis_memory_used_rss_bytes{environment="{{ $labels.environment }}",stage="{{ $labels.stage }}",type="{{ $labels.type }}"}, "memtype", "rss","","")
                 or
                 label_replace(redis_memory_used_bytes{environment="{{ $labels.environment }}",stage="{{ $labels.stage }}",type="{{ $labels.type }}"}, "memtype", "used","","")
               )
               /
-              avg by (environment, tier, type, stage, fqdn) (
+              avg by (environment, tier, type, stage, fqdn, instance) (
                 node_memory_MemTotal_bytes{environment="{{ $labels.environment }}",stage="{{ $labels.stage }}",type="{{ $labels.type }}"}
               )
               ,
@@ -4568,15 +4568,15 @@ groups:
       grafana_panel_id: "19142171"
       grafana_variables: environment,type,stage
       promql_query: |
-        max by(environment, tier, type, stage, fqdn) (
+        max by(environment, tier, type, stage, fqdn, instance) (
           clamp_min(
             clamp_max(
               (
-                max by (environment, tier, type, stage, fqdn) (
+                max by (environment, tier, type, stage, fqdn, instance) (
                   redis_memory_used_bytes{environment="{{ $labels.environment }}",stage="{{ $labels.stage }}",type="{{ $labels.type }}"}
                 )
                 /
-                avg by (environment, tier, type, stage, fqdn) (
+                avg by (environment, tier, type, stage, fqdn, instance) (
                   redis_memory_max_bytes{environment="{{ $labels.environment }}",stage="{{ $labels.stage }}",type="{{ $labels.type }}"}
                 )
               ) and on (fqdn) redis_memory_max_bytes{environment="{{ $labels.environment }}",stage="{{ $labels.stage }}",type="{{ $labels.type }}"} != 0
@@ -4616,15 +4616,15 @@ groups:
       grafana_panel_id: "4256988953"
       grafana_variables: environment,type,stage
       promql_query: |
-        max by(environment, tier, type, stage, fqdn) (
+        max by(environment, tier, type, stage, fqdn, instance) (
           clamp_min(
             clamp_max(
               (
-                max by (environment, tier, type, stage, fqdn) (
+                max by (environment, tier, type, stage, fqdn, instance) (
                   redis_memory_used_bytes{environment="{{ $labels.environment }}",stage="{{ $labels.stage }}",type="{{ $labels.type }}"}
                 )
                 /
-                avg by (environment, tier, type, stage, fqdn) (
+                avg by (environment, tier, type, stage, fqdn, instance) (
                   redis_memory_max_bytes{environment="{{ $labels.environment }}",stage="{{ $labels.stage }}",type="{{ $labels.type }}"}
                 )
               ) and on (fqdn) redis_memory_max_bytes{environment="{{ $labels.environment }}",stage="{{ $labels.stage }}",type="{{ $labels.type }}"} != 0
@@ -4668,16 +4668,16 @@ groups:
       grafana_panel_id: "3185191014"
       grafana_variables: environment,type,stage
       promql_query: |
-        max by(environment, tier, type, stage, fqdn) (
+        max by(environment, tier, type, stage, fqdn, instance) (
           clamp_min(
             clamp_max(
-              max by (environment, tier, type, stage, fqdn) (
+              max by (environment, tier, type, stage, fqdn, instance) (
                 label_replace(redis_memory_used_rss_bytes{environment="{{ $labels.environment }}",stage="{{ $labels.stage }}",type="{{ $labels.type }}"}, "memtype", "rss","","")
                 or
                 label_replace(redis_memory_used_bytes{environment="{{ $labels.environment }}",stage="{{ $labels.stage }}",type="{{ $labels.type }}"}, "memtype", "used","","")
               )
               /
-              avg by (environment, tier, type, stage, fqdn) (
+              avg by (environment, tier, type, stage, fqdn, instance) (
                 node_memory_MemTotal_bytes{environment="{{ $labels.environment }}",stage="{{ $labels.stage }}",type="{{ $labels.type }}"}
               )
               ,
@@ -4716,10 +4716,10 @@ groups:
       grafana_panel_id: "4143300761"
       grafana_variables: environment,type,stage
       promql_query: |
-        max by(environment, tier, type, stage, fqdn) (
+        max by(environment, tier, type, stage, fqdn, instance) (
           clamp_min(
             clamp_max(
-              sum by (environment, tier, type, stage, fqdn) (
+              sum by (environment, tier, type, stage, fqdn, instance) (
                 rate(
                   namedprocess_namegroup_thread_cpu_seconds_total{environment="{{ $labels.environment }}",stage="{{ $labels.stage }}",type="{{ $labels.type }}", groupname="redis-server", threadname="redis-server"}[1m])
               )
@@ -4760,7 +4760,7 @@ groups:
       grafana_panel_id: "577905942"
       grafana_variables: environment,type,stage
       promql_query: |
-        max by(environment, tier, type, stage, fqdn) (
+        max by(environment, tier, type, stage, fqdn, instance) (
           clamp_min(
             clamp_max(
               (
