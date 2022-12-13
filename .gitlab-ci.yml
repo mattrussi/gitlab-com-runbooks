@@ -761,3 +761,23 @@ publish-periodic-queries:
       - periodic-query-results/
   tags:
     - k8s-workloads
+
+.deploy-thanos-rules:
+  image: google/cloud-sdk:alpine
+  rules:
+    - *avoid-stage-group-check-rule
+    - *avoid-downstream-generation-pipelines-rule
+    - *avoid-schedule-rule
+    - if: '$CI_API_V4_URL == "https://ops.gitlab.net/api/v4" && $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH'
+  script:
+    - gcloud auth activate-service-account --key-file ${THANOS_RULES_BUCKET_SERVICE_KEY}
+    - gcloud config set project ${PROJECT}
+    - gsutil rsync -r -d thanos-rules gs://${THANOS_RULES_BUCKET}/thanos-rules
+
+deploy-thanos-rules-staging:
+  stage: deploy
+  environment: pre
+  variables:
+    THANOS_RULES_BUCKET: gitlab-pre-thanos-rules
+  extends:
+    - .deploy-thanos-rules
