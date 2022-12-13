@@ -79,7 +79,7 @@ groups:
         clamp_min(
           clamp_max(
             count by (cluster, env, environment, label_pool, tier, type, stage, shard) (
-              kube_node_labels:labeled{type=~"api|consul|git|kube|redis-cache|redis-sidekiq|redis-tracechunks|redis-ratelimiting|redis-sessions|redis-registry-cache|redis|registry|sidekiq|vault|web-pages|web|websockets"}
+              kube_node_labels:labeled{type=~"api|consul|git|kube|redis-cache|redis-sidekiq|redis-tracechunks|redis-ratelimiting|redis-cluster-ratelimiting|redis-sessions|redis-registry-cache|redis|registry|sidekiq|vault|web-pages|web|websockets"}
             )
             / on(cluster, env, environment, label_pool) group_left() (
               label_replace(
@@ -89,7 +89,7 @@ groups:
               * on(cluster, env, environment) group_left()
               count by (cluster, env, environment) (
                 group by (cluster, env, environment, label_topology_kubernetes_io_zone) (
-                  kube_node_labels:labeled{type=~"api|consul|git|kube|redis-cache|redis-sidekiq|redis-tracechunks|redis-ratelimiting|redis-sessions|redis-registry-cache|redis|registry|sidekiq|vault|web-pages|web|websockets"}
+                  kube_node_labels:labeled{type=~"api|consul|git|kube|redis-cache|redis-sidekiq|redis-tracechunks|redis-ratelimiting|redis-cluster-ratelimiting|redis-sessions|redis-registry-cache|redis|registry|sidekiq|vault|web-pages|web|websockets"}
                 )
               )
             )

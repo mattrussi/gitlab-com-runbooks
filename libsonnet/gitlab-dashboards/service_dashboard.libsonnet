@@ -93,6 +93,7 @@ local overviewDashboard(
       tags=['gitlab', 'type:' + type, type, 'service overview'],
       includeEnvironmentTemplate=std.objectHas(environmentStageSelectorHash, 'environment'),
     )
+    .addTemplate(templates.shard)
     .addPanels(
       headlineMetricsRow(
         type,

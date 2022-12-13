@@ -236,6 +236,11 @@
     "https://dashboards.gitlab.net/d/nginx-pod/nginx-pod-info",
     "https://dashboards.gitlab.net/d/nginx-regional/nginx-regional-detail"
   ],
+  "observability": [
+    "https://dashboards.gitlab.net/d/observability-errortracking/observability-errortracking-api",
+    "https://dashboards.gitlab.net/d/observability-gatekeeper/observability-gatekeeper",
+    "https://dashboards.gitlab.net/d/observability-ingress-nginx/observability-ingress-nginx"
+  ],
   "patroni": [
     "https://dashboards.gitlab.net/d/patroni-capacity-review/patroni-capacity-review",
     "https://dashboards.gitlab.net/d/patroni-main/patroni-overview",
@@ -330,6 +335,7 @@
     "https://dashboards.gitlab.net/d/registry-kube-deployments/registry-kube-deployment-detail",
     "https://dashboards.gitlab.net/d/registry-main/registry-overview",
     "https://dashboards.gitlab.net/d/registry-migration/registry-migration-detail",
+    "https://dashboards.gitlab.net/d/registry-notifications/registry-webhook-notifications-detail",
     "https://dashboards.gitlab.net/d/registry-pod/registry-pod-info",
     "https://dashboards.gitlab.net/d/registry-redis/registry-redis-detail",
     "https://dashboards.gitlab.net/d/registry-regional/registry-regional-detail",
@@ -372,8 +378,8 @@
     "https://dashboards.gitlab.net/d/stage-groups-detail-5-min-app/stage-groups-five-minute-production-app-group-error-budget-detail",
     "https://dashboards.gitlab.net/d/stage-groups-detail-acquisition/stage-groups-acquisition-group-error-budget-detail",
     "https://dashboards.gitlab.net/d/stage-groups-detail-activation/stage-groups-activation-group-error-budget-detail",
+    "https://dashboards.gitlab.net/d/stage-groups-detail-ai_assisted/stage-groups-ai-assisted-group-error-budget-detail",
     "https://dashboards.gitlab.net/d/stage-groups-detail-application_performa/stage-groups-application-performance-group-error-budget-detail",
-    "https://dashboards.gitlab.net/d/stage-groups-detail-applied_ml/stage-groups-applied-machine-learning-group-error-budget-detail",
     "https://dashboards.gitlab.net/d/stage-groups-detail-authentication_and_a/stage-groups-authentication-and-authorization-group-error-budget-detail",
     "https://dashboards.gitlab.net/d/stage-groups-detail-billing_and_subscrip/stage-groups-billing-and-subscription-management-group-error-budget-detail",
     "https://dashboards.gitlab.net/d/stage-groups-detail-certify/stage-groups-certify-group-error-budget-detail",
@@ -419,6 +425,7 @@
     "https://dashboards.gitlab.net/d/stage-groups-detail-release/stage-groups-release-group-error-budget-detail",
     "https://dashboards.gitlab.net/d/stage-groups-detail-respond/stage-groups-respond-group-error-budget-detail",
     "https://dashboards.gitlab.net/d/stage-groups-detail-runner/stage-groups-runner-group-error-budget-detail",
+    "https://dashboards.gitlab.net/d/stage-groups-detail-runner_saas/stage-groups-runner-saas-group-error-budget-detail",
     "https://dashboards.gitlab.net/d/stage-groups-detail-scalability/stage-groups-scalability-group-error-budget-detail",
     "https://dashboards.gitlab.net/d/stage-groups-detail-security_policies/stage-groups-security-policies-group-error-budget-detail",
     "https://dashboards.gitlab.net/d/stage-groups-detail-source_code/stage-groups-source-code-group-error-budget-detail",

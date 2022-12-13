@@ -95,6 +95,15 @@ local defaultPrometheusDatasource = (import 'gitlab-metrics-config.libsonnet').d
       refresh='load',
       sort=1,
     ),
+  shard::
+    template.new(
+      'shard',
+      '$PROMETHEUS_DS',
+      'label_values(gitlab:redis_cluster_nodes:count{environment="$environment"}, shard)',
+      current='default',
+      refresh='load',
+      sort=1,
+    ),
   sigma::
     template.custom(
       'sigma',

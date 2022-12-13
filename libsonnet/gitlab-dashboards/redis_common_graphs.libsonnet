@@ -394,4 +394,64 @@ local seriesOverrides = import 'grafana/series_overrides.libsonnet';
       ),
     ], cols=2, rowHeight=10, startRow=startRow),
 
+  cluster(serviceType, startRow)::
+    local formatConfig = {
+      serviceType: serviceType,
+    };
+
+    layout.singleRow([
+      basic.statPanel(
+        title='Slots OK',
+        panelTitle='Redis Cluster Slots OK',
+        color='light-green',
+        query=|||
+          max(redis_cluster_slots_ok{environment="$environment", type="%(serviceType)s"})
+        ||| % formatConfig,
+      ),
+      basic.statPanel(
+        title='Slots Assigned',
+        panelTitle='Redis Cluster Slots Assigned',
+        color='light-green',
+        query=|||
+          max(redis_cluster_slots_assigned{environment="$environment", type="%(serviceType)s"})
+        ||| % formatConfig,
+      ),
+      basic.statPanel(
+        title='Slots pfail',
+        panelTitle='Redis Cluster Slots pfailed',
+        color='light-orange',
+        query=|||
+          max(redis_cluster_slots_pfail{environment="$environment", type="%(serviceType)s"})
+        ||| % formatConfig,
+      ),
+      basic.statPanel(
+        title='Slots fail',
+        panelTitle='Redis Cluster Slots failed',
+        color='light-red',
+        query=|||
+          max(redis_cluster_slots_fail{environment="$environment", type="%(serviceType)s"})
+        ||| % formatConfig,
+      ),
+    ], rowHeight=4, startRow=startRow)
+    +
+    layout.grid([
+      basic.timeseries(
+        title='Shard Count',
+        yAxisLabel='Number of shards',
+        query=|||
+          sum(avg_over_time(redis_cluster_size{environment="$environment", type="%(serviceType)s"}[$__interval])) by (instance, pod)
+        ||| % formatConfig,
+        legendFormat='{{ pod }} {{ instance }}',
+        intervalFactor=2,
+      ),
+      basic.timeseries(
+        title='Shard size',
+        yAxisLabel='Node count',
+        query=|||
+          count(rate(redis_cluster_size{environment="$environment", type="%(serviceType)s"}[$__interval])) by (shard)
+        ||| % formatConfig,
+        legendFormat='{{ shard }}',
+        intervalFactor=2,
+      ),
+    ], cols=2, rowHeight=10, startRow=startRow + 4),
 }
