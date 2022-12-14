@@ -6,6 +6,7 @@ local heatmapCalendarPanel(
   legendFormat='',
   datasource='$PROMETHEUS_DS',
   intervalFactor=3,
+  threshold='0.995'
       ) =
   {
     type: 'neocat-cal-heatmap-panel',
@@ -41,7 +42,7 @@ local heatmapCalendarPanel(
         rotate: 'null',
         width: 60,
       },
-      legendStr: '0.995',
+      legendStr: threshold,
       legendColors: {
         min: '#F2495C',
         max: '#73BF69',
