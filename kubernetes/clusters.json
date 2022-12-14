@@ -55,6 +55,12 @@
     "region": "us-east1",
     "ssh_proxy": "bastion-01-inf-stgsub.c.gitlab-subscriptions-staging.internal"
   },
+  "stgsub-ref": {
+    "name": "stgsub-ref-customers-gke",
+    "project": "gitlab-subscriptions-stg-ref",
+    "region": "us-east1",
+    "ssh_proxy": "bastion-01-inf-stgsub-ref.c.gitlab-subscriptions-stg-ref.internal"
+  },
   "prdsub": {
     "name": "prdsub-customers-gke",
     "project": "gitlab-subscriptions-prod",
