@@ -152,7 +152,7 @@ local serviceRow(service) =
     },
   ];
 
-local primaryServiceRows = std.map(serviceRow, generalServicesDashboard.sortedKeyServices);
+local primaryServiceRows = std.map(serviceRow, generalServicesDashboard.sortedKeyServices());
 
 basic.dashboard(
   'SLAs',

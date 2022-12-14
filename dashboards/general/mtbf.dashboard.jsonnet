@@ -51,7 +51,7 @@ local serviceColumns(service='', title='') =
 local serviceRow(service) =
   serviceColumns(service.name, service.friendly_name);
 
-local primaryServiceRows = std.map(serviceRow, generalServicesDashboard.sortedKeyServices);
+local primaryServiceRows = std.map(serviceRow, generalServicesDashboard.sortedKeyServices());
 
 local rollupDisclaimer() =
   grafana.text.new(

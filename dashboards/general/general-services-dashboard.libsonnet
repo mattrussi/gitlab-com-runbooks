@@ -20,9 +20,9 @@ local keyServiceSorter(service) =
 {
   // Note, by having a overall_sla_weighting value, even if it is zero, the service will
   // be included on the SLA and MTBF dashboards. To remove it, delete the key
-  keyServices::
-    serviceCatalog.findKeyBusinessServices(includeZeroScore=true),
+  keyServices(includeZeroScore=true)::
+    serviceCatalog.findKeyBusinessServices(includeZeroScore),
 
-  sortedKeyServices::
-    std.sort(self.keyServices, keyServiceSorter),
+  sortedKeyServices(includeZeroScore=true)::
+    std.sort(self.keyServices(includeZeroScore), keyServiceSorter),
 }
