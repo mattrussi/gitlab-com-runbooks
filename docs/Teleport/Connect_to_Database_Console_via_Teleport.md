@@ -123,6 +123,24 @@ For the Registry Database:
 tsh db login --db-user=console-ro --db-name=gitlabhq_registry db-secondary-registry
 ```
 
+For the Delayed Replica (DR) archive of main Database:
+
+```shell
+tsh db login --db-user=console-ro --db-name=gitlabhq_production db-dr-archive
+```
+
+For the Delayed Replica (DR) archive of CI Database:
+
+```shell
+tsh db login --db-user=console-ro --db-name=gitlabhq_production db-ci-dr-archive
+```
+
+For the Delayed Replica (DR) archive of registry Database:
+
+```shell
+tsh db login --db-user=console-ro --db-name=gitlabhq_registry db-registry-dr-archive
+```
+
 Remember that your access request, its approval, and any associated database logins will expire in `12h` maximum unless renewed.
 
 > Tip: The above command connects to a secondary database (`db-secondary`).  Secondaries are always read only.  If you need write access, you will have to log in to `db-primary` in addition to connecting as a database user with write permissions. The `console-rw` user is allowed to write and permission is granted as part of the `database` role. Once logged in to teleport, you can view the databases available to your role with `tsh db ls`
@@ -145,6 +163,24 @@ For the Registry Database:
 
 ```shell
 tsh db connect db-secondary-registry
+```
+
+For the Delayed Replica (DR) archive of main Database:
+
+```shell
+tsh db connect db-dr-archive
+```
+
+For the Delayed Replica (DR) archive of CI Database:
+
+```shell
+tsh db connect db-ci-dr-archive
+```
+
+For the Delayed Replica (DR) archive of registry Database:
+
+```shell
+tsh db connect db-registry-dr-archive
 ```
 
 > Tip: use the `tsh status` command to show which logins you are currently approved for.
