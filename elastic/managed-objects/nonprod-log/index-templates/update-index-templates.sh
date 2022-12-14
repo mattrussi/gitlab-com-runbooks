@@ -6,7 +6,7 @@ source "${SCRIPT_DIR}"/../../lib/update-scripts-functions.sh
 source "${SCRIPT_DIR}"/../../indices/indices-array.sh
 template_name='nonprod-log_index_template.libsonnet'
 
-envs=(gstg ops pre stgsub)
+envs=(gstg ops pre stgsub stgsub-ref)
 for env in "${envs[@]}"; do
   # shellcheck disable=SC2154
   for index in "${indices[@]}"; do
