@@ -72,7 +72,7 @@ below to access the full catalog of consul using their UI:
 2. On a separate terminal, forward the Consul Server service port:
 
     ```
-    kubeclt port-forward service/consul-gl-consul-expose-servers 8500:8500 -n consul
+    kubectl port-forward service/consul-gl-consul-expose-servers 8500:8500 -n consul
     ```
 
 3. Open a browser and point it to `http://localhost:8500`
