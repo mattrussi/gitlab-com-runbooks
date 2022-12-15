@@ -28,6 +28,7 @@
 * [Kubernetes](kubernetes.md)
 * [Prometheus pod crashlooping](../monitoring/prometheus-pod-crashlooping.md)
 * [Redis on Kubernetes](../redis/kubernetes.md)
+* [../registry/db-post-deployment-migrations.md](../registry/db-post-deployment-migrations.md)
 * [../registry/gitlab-registry.md](../registry/gitlab-registry.md)
 * [version.gitlab.com Runbook](../version/version-gitlab-com.md)
 <!-- END_MARKER -->
