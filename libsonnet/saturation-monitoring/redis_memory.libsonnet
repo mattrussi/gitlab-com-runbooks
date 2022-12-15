@@ -7,7 +7,7 @@ local commonDefinition = {
   title: 'Redis Memory Utilization per Node',
   severity: 's2',
   horizontallyScalable: false,
-  resourceLabels: ['fqdn'],
+  resourceLabels: ['fqdn', 'instance'],
   query: |||
     max by (%(aggregationLabels)s) (
       label_replace(redis_memory_used_rss_bytes{%(selector)s}, "memtype", "rss","","")
@@ -24,11 +24,8 @@ local commonDefinition = {
 // How much of maxmemory (if configured) Redis is using; relevant
 // for special cases like sessions which have both maxmemory and eviction, but
 // don't want to actually reach that and start evicting under normal circumstances
-local maxMemoryDefinition = {
+local maxMemoryDefinition = commonDefinition {
   title: 'Redis Memory Utilization of Max Memory',
-  severity: 's2',
-  horizontallyScalable: false,
-  resourceLabels: ['fqdn'],
   query: |||
     (
       max by (%(aggregationLabels)s) (

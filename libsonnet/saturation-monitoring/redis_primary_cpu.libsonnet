@@ -15,7 +15,7 @@ local metricsCatalog = import 'servicemetrics/metrics-catalog.libsonnet';
       possible.
     |||,
     grafana_dashboard_uid: 'sat_redis_primary_cpu',
-    resourceLabels: ['fqdn'],
+    resourceLabels: ['fqdn', 'instance'],
     burnRate: '5m',
     query: |||
       sum by (%(aggregationLabels)s) (
