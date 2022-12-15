@@ -125,36 +125,35 @@ tf apply [-target=<path/to/node_pool{s}>]
 
 ### 3.d New cluster configuration setup
 
-After terraform command is executed we will have a brand new cluster, we need to orient our tooling to use
+After the Terraform command is executed we will have a brand new cluster, we need to orient our tooling to use
 the new cluster.
 
 1. We start with `glsh` we need to run `glsh kube setup` to fetch the cluster configs.
 2. Validate we can use the new context and `kubectl` works with the cluster:
 
-```
-$> glsh kube setup
-$> glsh kube use-cluster gstg-us-east1-b
-$> kubectl get pods --all-namespaces
+```shell
+glsh kube setup
+glsh kube use-cluster gstg-us-east1-b
+kubectl get pods --all-namespaces
 ```
 
-3. Update the new cluster's `apiServer` IP to the [tanka repository](https://gitlab.com/gitlab-com/gl-infra/k8s-workloads/tanka-deployments/-/blob/master/lib/gitlab/clusters.libsonnet)
+3. Update the new cluster's `apiServer` IP to the [Tanka repository](https://gitlab.com/gitlab-com/gl-infra/k8s-workloads/tanka-deployments/-/blob/master/lib/gitlab/clusters.libsonnet)
 4. Configure Vault Secrets responsible for CI configurations within `config-mgmt`:
 
-```
-CONTEXT_NAME=$(kubectl config current-context)
-KUBERNETES_HOST=$(kubectl config view -o jsonpath='{.clusters[?(@.name == "$CONTEXT_NAME")].cluster.server}')
-SA_SECRET="external-secrets-vault-auth"
-SA_TOKEN=$(kubectl --namespace external-secrets get secret ${SA_SECRET} -o jsonpath='{.data.token}' | base64 -d)
-CA_CERT=$(kubectl --namespace external-secrets get secret ${SA_SECRET} -o jsonpath='{.data.ca\.crt}' | base64 -d)
+```shell
+CONTEXT_NAME="$(kubectl config current-context)"
+KUBERNETES_HOST="$(kubectl config view -o jsonpath="{.clusters[?(@.name == \"${CONTEXT_NAME}\")].cluster.server}")"
+CA_CERT="$(kubectl config view --raw -o jsonpath="{.clusters[?(@.name == \"${CONTEXT_NAME}\")].cluster.certificate-authority-data}" | base64 -d)"
 
-vault kv put ci/ops-gitlab-net/config-mgmt/vault-production/kubernetes/CLUSTER host="${KUBERNETES_HOST}" ca_cert="${CA_CERT}" token="${SA_TOKEN}"
+vault kv put ci/ops-gitlab-net/config-mgmt/vault-production/kubernetes/${CONTEXT_NAME##*_} host="${KUBERNETES_HOST}" ca_cert="${CA_CERT}"
 ```
 
-5- From the `config-mgmt/environments/vault-production` repo, we need to run `tf apply` it will show us
-that there's config change for the cluster we replaced, then we apply this change so vault knows of the new cluster.
+5- From the `config-mgmt/environments/vault-production` repo, we need to run `tf apply`, it will show us
+that there's config change for the cluster we replaced, then we apply this change so Vault knows of the new cluster.
 
-```
+```shell
 cd config-mgmt/environments/vault-production
+tf init -upgrade
 tf apply
 ```
 

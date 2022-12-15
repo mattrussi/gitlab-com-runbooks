@@ -554,7 +554,7 @@ repositories:
 releases:
   - name: my-app-secrets
     chart: registry-ops-gl/gitlab-com/gl-infra/charts/vault-secrets
-    version: 1.0.0
+    version: 1.1.0
     namespace: my-app
     installed: {{ .Values | getOrNil "my-app.installed" | default false }}
     values:
