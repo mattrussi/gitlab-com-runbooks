@@ -772,7 +772,8 @@ publish-periodic-queries:
   script:
     - gcloud auth activate-service-account --key-file ${THANOS_RULES_BUCKET_SERVICE_KEY}
     - gcloud config set project ${PROJECT}
-    - gsutil rsync -r -d thanos-rules gs://${THANOS_RULES_BUCKET}/thanos-rules
+    - tar -czvf thanos-rules.tar.gz thanos-rules
+    - gsutil rsync -r -d thanos-rules.tar.gz gs://${THANOS_RULES_BUCKET}
 
 deploy-thanos-rules-staging:
   stage: deploy
