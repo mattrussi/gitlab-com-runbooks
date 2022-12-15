@@ -38,22 +38,18 @@ environments:
         external_secrets:
           installed: true
           # renovate: datasource=helm depName=external-secrets registryUrl=https://charts.external-secrets.io versioning=helm depType=pre
-          chart_version: 0.5.9
+          chart_version: 0.7.0
 ```
-
-This will install the External Secret operator itself and a "reviewer Service Account" used by Vault to verify the Service Accounts used by the operator's secret stores when authenticating to Vault.
 
 ⚠️ The `ops-gitlab-gke` cluster (which is hosting the Vault service) has to be allowed to connect to the target cluster to be able to do the Service Account verification. This can be done by adding the named IP addresses `gitlab-gke-01` and `gitlab-gke-02` from the `gitlab-ops` project to the `authorized_master_access` parameter of the GKE cluster module, see [this merge request](https://ops.gitlab.net/gitlab-com/gl-infra/config-mgmt/-/merge_requests/4057) for an example.
 
-Then this reviewer Service account's token has to be saved in a Vault secret that will be used by Terraform next to configuration the Kubernetes authentication for this cluster:
+Then the cluster information must be saved in a Vault secret that will be used by Terraform to configure the Kubernetes authentication for this cluster:
 
 ```sh
-KUBERNETES_HOST=$(kubectl config view -o jsonpath='{.clusters[?(@.name == "gke_gitlab-pre_us-east1_pre-gitlab-gke")].cluster.server}')
-SA_SECRET="external-secrets-vault-auth"
-SA_TOKEN=$(kubectl --namespace external-secrets get secret ${SA_SECRET} -o jsonpath='{.data.token}' | base64 -d)
-CA_CERT=$(kubectl --namespace external-secrets get secret ${SA_SECRET} -o jsonpath='{.data.ca\.crt}' | base64 -d)
+KUBERNETES_HOST="$(kubectl config view -o jsonpath='{.clusters[?(@.name == "gke_gitlab-pre_us-east1_pre-gitlab-gke")].cluster.server}')"
+CA_CERT="$(kubectl config view --raw -o jsonpath='{.clusters[?(@.name == "gke_gitlab-pre_us-east1_pre-gitlab-gke")].cluster.certificate-authority-data}' | base64 -d)"
 
-vault kv put ci/ops-gitlab-net/config-mgmt/vault-production/kubernetes/pre-gitlab-gke host="${KUBERNETES_HOST}" ca_cert="${CA_CERT}" token="${SA_TOKEN}"
+vault kv put ci/ops-gitlab-net/config-mgmt/vault-production/kubernetes/pre-gitlab-gke host="${KUBERNETES_HOST}" ca_cert="${CA_CERT}"
 ```
 
 Finally, the cluster has to be added in [`environments/vault-production/kubernetes.tf`](https://ops.gitlab.net/gitlab-com/gl-infra/config-mgmt/-/blob/master/environments/vault-production/kubernetes.tf):
