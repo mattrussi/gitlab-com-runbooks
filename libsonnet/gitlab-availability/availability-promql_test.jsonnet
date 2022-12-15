@@ -54,4 +54,17 @@ test.suite({
     actual: std.map(function(rule) rule.record, testPromql.rateRules),
     expect: ['gitlab:availability:ops:rate_1h', 'gitlab:availability:success:rate_1h'],
   },
+
+  testAvailabilityRatio: {
+    actual: testPromql.availabilityRatio(['type'], { environment: 'gprd' }, '30d', ['api', 'web']),
+    expect: |||
+      sum by (type) (
+        sum_over_time(gitlab:availability:success:rate_1h{environment="gprd",type=~"api|web"}[30d])
+      )
+      /
+      sum by (type) (
+        sum_over_time(gitlab:availability:ops:rate_1h{environment="gprd",type=~"api|web"}[30d])
+      )
+    |||,
+  },
 })

@@ -45,9 +45,24 @@ local misc = import 'utils/misc.libsonnet';
     opsRate: opsRate,
 
     local availabilityOpsRate = 'gitlab:availability:ops:rate_%s' % [burnRate],
-    availabilityOpsRate: availabilityOpsRate,
     local availabilitySuccessRate = 'gitlab:availability:success:rate_%s' % [burnRate],
-    availabilitySuccessRate: availabilitySuccessRate,
+    availabilityRatio(aggregationLabels, selector, range, services):
+      local selectorIncludingServices = selector { type: { oneOf: services } };
+      |||
+        sum by (%(aggregationLabels)s) (
+          sum_over_time(%(availabilitySuccessRate)s{%(selector)s}[%(range)s])
+        )
+        /
+        sum by (%(aggregationLabels)s) (
+          sum_over_time(%(availabilityOpsRate)s{%(selector)s}[%(range)s])
+        )
+      ||| % {
+        aggregationLabels: aggregations.join(aggregationLabels),
+        selector: selectors.serializeHash(selectorIncludingServices),
+        range: range,
+        availabilitySuccessRate: availabilitySuccessRate,
+        availabilityOpsRate: availabilityOpsRate,
+      },
 
     rateRules: [
       {

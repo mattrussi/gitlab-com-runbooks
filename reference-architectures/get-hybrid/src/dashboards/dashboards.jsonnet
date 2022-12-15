@@ -17,5 +17,6 @@ std.foldl(
   services,
   {
     'dashboards/triage.json': import 'triage.libsonnet',
+    'dashboards/occurence-slas.json': import 'occurence-slas.libsonnet',
   }
 )
