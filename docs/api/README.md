@@ -66,6 +66,7 @@
 * [Removing cache entries from Redis](../redis-cache/remove-cache-entries.md)
 * [A survival guide for SREs to working with Redis at GitLab](../redis/redis-survival-guide-for-sres.md)
 * [Database Connection Pool Saturation](../registry/app-db-conn-pool-saturation.md)
+* [../registry/db-post-deployment-migrations.md](../registry/db-post-deployment-migrations.md)
 * [../registry/migration-failure-scenarios.md](../registry/migration-failure-scenarios.md)
 * [Container Registry Migration Phase 2](../registry/migration-phase2.md)
 * [High Number of Overdue Online GC Tasks](../registry/online-gc-high-overdue-tasks.md)
