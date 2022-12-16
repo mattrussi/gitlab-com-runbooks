@@ -53,6 +53,7 @@
 * [How to Use Vault for Secrets Management in Infrastructure](../vault/usage.md)
 * [Vault Secrets Management](../vault/vault.md)
 * [version.gitlab.com Runbook](../version/version-gitlab-com.md)
+* [Diagnostic Reports](../web/diagnostic-reports.md)
 * [Static repository objects caching](../web/static-repository-objects-caching.md)
 <!-- END_MARKER -->
 
