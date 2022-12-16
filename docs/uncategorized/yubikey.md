@@ -594,16 +594,19 @@ Ensure proper options are set in `gpg-agent.conf`
 
 <p>
 <details>
+
 <summary>MacOS</summary>
 
   ```shell
   cat << EOF > ~/.gnupg/gpg-agent.conf
   default-cache-ttl 600
   max-cache-ttl 7200
-  pinentry-program [OUTPUT OF `which pinentry-mac`]
+  pinentry-program `which pinentry-mac`
   enable-ssh-support
   EOF
   ```
+
+  **Note**: Ensure that `pinentry-program` is set correctly.
 
 </details>
 </p>
