@@ -71,7 +71,7 @@ local slaRow(availability, services, selector) =
 
 local dashboard(availability, keyServices, selector) =
   basic.dashboard(
-    'SLAs',
+    'Occurence SLAs',
     tags=['general', 'slas', 'service-levels'],
     includeStandardEnvironmentAnnotations=false,
     time_from='now-1M/M',
