@@ -132,6 +132,10 @@ teams:
   slack_alerts_channel: scalability-619-redis-k8s
   send_slo_alerts_to_team_slack_channel: true
 
+- name: scalability-823-introduce-redis-cluster
+  slack_alerts_channel: scalability-823-introduce-redis-cluster
+  send_slo_alerts_to_team_slack_channel: true
+
 # Workhorse is a virtual team
 - name: workhorse
   slack_alerts_channel: workhorse

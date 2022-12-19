@@ -43,6 +43,7 @@ metricsCatalog.serviceDefinition({
     gitaly: true,
     kas: true,
     'redis-ratelimiting': true,
+    'redis-cluster-ratelimiting': true,
     'redis-tracechunks': true,
     'redis-sidekiq': true,
     'redis-cache': true,

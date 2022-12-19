@@ -16,7 +16,7 @@ local metricsCatalog = import 'servicemetrics/metrics-catalog.libsonnet';
       More details at https://redis.io/topics/clients#maximum-number-of-clients
     |||,
     grafana_dashboard_uid: 'sat_redis_clients',
-    resourceLabels: ['fqdn', 'instance'],
+    resourceLabels: ['fqdn', 'instance', 'shard'],
     query: |||
       max_over_time(redis_connected_clients{%(selector)s}[%(rangeInterval)s])
       /
