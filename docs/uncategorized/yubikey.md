@@ -717,7 +717,7 @@ This generates a public key that you can paste into GitLab or use as a public ke
 <summary>How to export the SSH public key</summary>
 
   ```shell
-  > gpg --export-ssh-key FAEFD87E
+  > gpg --export-ssh-key [YOUR_KEY]
   ssh-rsa AAAAB3NzaC1yc2EAAAADAQABA ... COMMENT
   ```
 
@@ -737,7 +737,7 @@ Next, we'll associate the key with our GitLab profile.
 <summary>How to export the GPG public key</summary>
 
   ```shell
-  > gpg --armor --export FAEFD87E
+  > gpg --armor --export [YOUR_KEY]
   -----BEGIN PGP PUBLIC KEY BLOCK-----
 
   mQINBGMFt1wBEADOZNs6tW...
