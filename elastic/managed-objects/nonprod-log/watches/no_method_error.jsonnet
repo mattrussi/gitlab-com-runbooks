@@ -87,11 +87,11 @@ local es_query = {
           attachments: [
             {
               title: ':spiral_note_pad: NoMethodError in Rails logs:',
-              text: 'https://nonprod-log.gitlab.net/goto/28345690-61e0-11ec-aec7-f387696fcb42',
+              text: 'https://nonprod-log.gitlab.net/goto/2a923d00-7f33-11ed-9af2-6131f0ee4ce6',
             },
             {
               title: ':spiral_note_pad: NoMethodError in Sidekiq logs:',
-              text: 'https://nonprod-log.gitlab.net/goto/3e0b0180-61e0-11ec-aec7-f387696fcb42',
+              text: 'https://nonprod-log.gitlab.net/goto/239c7830-7f33-11ed-9af2-6131f0ee4ce6',
             },
             {
               title: ':runbooks: Runbook:',
