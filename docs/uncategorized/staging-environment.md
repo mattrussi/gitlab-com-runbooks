@@ -80,7 +80,7 @@ Past related issues have :
 
 ## ElasticCloud Watcher: Segmentation faults
 
-In February 2022, we added an [Elastic watcher](https://gitlab.com/gitlab-com/runbooks/-/merge_requests/4136)
+In February 2022, we added an [Elastic watcher](https://gitlab.com/gitlab-com/runbooks/-/merge_requests/4316)
 to warn developers of segmentation faults. Such an error probably means a significant bug that causes
 a process to crash. This is usually due to a memory error in a Ruby C extension or some
 other library linked with the interpreter.
