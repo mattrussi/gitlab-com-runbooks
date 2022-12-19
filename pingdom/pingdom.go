@@ -12,7 +12,7 @@ import (
 	"strings"
 
 	pingdom "github.com/russellcardullo/go-pingdom/pingdom"
-	yaml "gopkg.in/yaml.v2"
+	yaml "gopkg.in/yaml.v3"
 )
 
 // PingdomCheckDefaults represents the default values
