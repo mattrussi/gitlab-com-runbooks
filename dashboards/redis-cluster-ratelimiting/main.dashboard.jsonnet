@@ -2,7 +2,6 @@ local grafana = import 'github.com/grafana/grafonnet-lib/grafonnet/grafana.libso
 local redisCommon = import 'gitlab-dashboards/redis_common_graphs.libsonnet';
 local row = grafana.row;
 local serviceDashboard = import 'gitlab-dashboards/service_dashboard.libsonnet';
-local processExporter = import 'gitlab-dashboards/process_exporter.libsonnet';
 local templates = import 'grafana/templates.libsonnet';
 
 local serviceName = 'redis-cluster-ratelimiting';
