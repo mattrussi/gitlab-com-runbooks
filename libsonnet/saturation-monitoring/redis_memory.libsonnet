@@ -7,7 +7,7 @@ local commonDefinition = {
   title: 'Redis Memory Utilization per Node',
   severity: 's2',
   horizontallyScalable: false,
-  resourceLabels: ['fqdn', 'instance'],
+  resourceLabels: ['fqdn', 'instance', 'shard'],
   query: |||
     max by (%(aggregationLabels)s) (
       label_replace(redis_memory_used_rss_bytes{%(selector)s}, "memtype", "rss","","")
