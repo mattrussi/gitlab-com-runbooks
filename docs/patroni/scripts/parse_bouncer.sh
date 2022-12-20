@@ -49,13 +49,14 @@ if test -f "$log_file"; then
 
   echo "* Conexions by DB"
   awk '{ $1="";print}' $log_file | grep "] LOG" | grep "closing because:" | awk '{ $1="";print}' | awk '{ print $1 ","  $2 " " $3 "," $8 "," $14 }' | awk -F ',' '{ print $1 ","  $2 "," $3 "," gsub(/[A-Za-z=()]/,"",$4); print $1 "," $2 "," $3 "," $4 "," "my_l1n3" }' | grep "my_l1n3" | awk -F ',' '{ print $3}' | awk -F ':' '{print $1}' | awk -F '@' '{print $1}' | awk -F '/' '{print $2}' | awk '{arr[$1]++} END {for (a in arr) print a "->" arr[a]}'
+
+  echo "* Error by type"
+  awk '{ $1="";print}' $log_file | grep "WARNING" | grep "pooler error" | awk '{ $1="";print}' | awk -F ':' '{print $1 "->"$5 "," $7}' | awk -F ',' '{print $1 "," $2}' | awk -F ',' '{arr[$2]++} END {for (a in arr) print a ": " arr[a]}'
+
+  echo "* Error by pgbouncer/IP"
+  awk '{ $1="";print}' $log_file | grep "WARNING" | grep "pooler error" | awk '{ $1="";print}' | awk -F ':' '{print $1 "->"$5 "," $7}' | awk -F ',' '{print $1 "," $2}' | awk -F ',' '{arr[$1]++} END {for (a in arr) print a ": " arr[a]}'
+
+  quit
 fi
-
-echo "* Error by type"
-awk '{ $1="";print}' $log_file | grep "WARNING" | grep "pooler error" | awk '{ $1="";print}' | awk -F ':' '{print $1 "->"$5 "," $7}' | awk -F ',' '{print $1 "," $2}' | awk -F ',' '{arr[$2]++} END {for (a in arr) print a ": " arr[a]}'
-
-echo "* Error by pgbouncer/IP"
-awk '{ $1="";print}' $log_file | grep "WARNING" | grep "pooler error" | awk '{ $1="";print}' | awk -F ':' '{print $1 "->"$5 "," $7}' | awk -F ',' '{print $1 "," $2}' | awk -F ',' '{arr[$1]++} END {for (a in arr) print a ": " arr[a]}'
-quit
 
 help
