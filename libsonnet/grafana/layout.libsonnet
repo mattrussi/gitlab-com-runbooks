@@ -145,9 +145,10 @@ local titleRowWithPanels(title, panels, collapse, startRow) =
                       h: height,
                     };
 
-                    cell {
+                    cell
+                    {
                       gridPos: gridPos,
-                    },
+                    } + cell,
                 columnOfPanels
               )
             else
