@@ -127,7 +127,7 @@ echo "Showing '${TYPE}'-logs at $($DATE_CMD --utc --iso-8601=minutes --date "@${
 
 OFFSET=0
 URLS=""
-while [ $OFFSET -le ${LOOKBACK} ]; do
+while [ $OFFSET -le "${LOOKBACK}" ]; do
   OFFSET_DATE=$(echo "${DATE} - (${OFFSET} * 60)" | bc)
   QUERY_DATE=$($DATE_CMD --utc --iso-8601=minutes --date "@${OFFSET_DATE}" | cut -d+ -f1 | sed 's/[-:]//g')
   QUERY_DAY=$(echo "$QUERY_DATE" | cut -dT -f1)
