@@ -23,7 +23,6 @@
 * [Deploying a change to gitlab.rb](../git/deploy-gitlab-rb-change.md)
 * [GitLab Hosted CodeSandbox](../git/gitlab-hosted-codesandbox.md)
 * [Gitaly latency is too high](../gitaly/gitaly-latency.md)
-* [Gitaly PermissionDenied alert](../gitaly/gitaly-permission-denied.md)
 * [Tuning and Modifying Alerts](../monitoring/alert_tuning.md)
 * [An impatient SRE's guide to deleting alerts](../monitoring/deleting-alerts.md)
 * [Block specific pages domains through HAproxy](../pages/block-pages-domain.md)
