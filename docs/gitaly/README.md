@@ -31,7 +31,6 @@
 * [Gitaly error rate is too high](gitaly-error-rate.md)
 * [Gitaly latency is too high](gitaly-latency.md)
 * [Upgrading the OS of Gitaly VMs](gitaly-os-upgrade.md)
-* [Gitaly PermissionDenied alert](gitaly-permission-denied.md)
 * [Gitaly profiling](gitaly-profiling.md)
 * [Gitaly Queuing](gitaly-rate-limiting.md)
 * [Gitaly repository cgroups](gitaly-repos-cgroup.md)

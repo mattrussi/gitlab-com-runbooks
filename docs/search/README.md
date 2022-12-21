@@ -26,7 +26,6 @@
 * [../elastic/elasticsearch-integration-in-gitlab.md](../elastic/elasticsearch-integration-in-gitlab.md)
 * [Frontend (HAProxy) Logging](../frontend/haproxy-logging.md)
 * [Find a project from its hashed storage path](../gitaly/find-project-from-hashed-storage.md)
-* [Gitaly PermissionDenied alert](../gitaly/gitaly-permission-denied.md)
 * [Gitaly unusual activity alert](../gitaly/gitaly-unusual-activity.md)
 * [../kube/k8s-operations.md](../kube/k8s-operations.md)
 * [Kubernetes](../kube/kubernetes.md)

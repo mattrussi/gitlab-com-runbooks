@@ -113,15 +113,3 @@ groups:
         for details of versions deployed across the fleet.
       runbook: docs/version/gitaly-version-mismatch.md
       title: 'Multiple versions of Gitaly have been running alongside one another'
-  - alert: GitalyPermissionDenied
-    expr: sum(gitaly_grpc:grpc_server_handled_total:rate1m{grpc_code="PermissionDenied"}) > 10
-    for: 10s
-    labels:
-      team: gitaly_git
-      pager: pagerduty
-      severity: s1
-      alert_type: cause
-    annotations:
-      description: Gitaly authention failing, authentication tokens might be misconfigured, or severe clockdrift is occurring.
-      runbook: docs/gitaly/gitaly-permission-denied.md
-      title: 'Gitaly: Auth-tokens are invalid, failing RPCs'
