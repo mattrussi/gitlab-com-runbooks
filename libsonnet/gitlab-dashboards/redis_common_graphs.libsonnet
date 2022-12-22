@@ -458,7 +458,7 @@ local processExporter = import 'gitlab-dashboards/process_exporter.libsonnet';
       ),
       basic.statPanel(
         title='pfail',
-        panelTitle='Redis Cluster Slots Rfailed',
+        panelTitle='Redis Cluster Slots Pfailed',
         color='light-orange',
         query=|||
           max(redis_cluster_slots_pfail{environment="$environment", shard=~"$shard", type="%(serviceType)s"})
