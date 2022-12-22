@@ -1827,7 +1827,7 @@ groups:
       component: shard_imports
       tier: sv
       type: sidekiq
-    expr: "0.950000"
+    expr: "0.900000"
   - record: slo:max:events:gitlab_service_errors:ratio
     labels:
       component: shard_imports
