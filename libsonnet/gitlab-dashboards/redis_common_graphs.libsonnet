@@ -19,7 +19,7 @@ local processExporter = import 'gitlab-dashboards/process_exporter.libsonnet';
       }),
     };
 
-    layout.grid([
+    local panels = layout.grid([
       basic.timeseries(
         title='Connected Clients',
         yAxisLabel='Clients',
@@ -48,7 +48,15 @@ local processExporter = import 'gitlab-dashboards/process_exporter.libsonnet';
         legendFormat='{{ pod }} {{ instance }}',
         intervalFactor=2,
       ),
-    ], cols=2, rowHeight=10, startRow=startRow),
+    ], cols=2, rowHeight=10, startRow=startRow + 1);
+
+    layout.titleRowWithPanels(
+      title='Clients',
+      collapse=false,
+      startRow=startRow,
+      panels=panels,
+    ),
+
 
   workload(serviceType, startRow, cluster=false)::
     local formatConfig = {
@@ -61,7 +69,7 @@ local processExporter = import 'gitlab-dashboards/process_exporter.libsonnet';
         [if cluster then 'shard']: { re: '$shard' },
       }),
     };
-    layout.grid([
+    local panels = layout.grid([
       basic.timeseries(
         title='Operation Rate - Primary',
         yAxisLabel='Operations/sec',
@@ -245,7 +253,14 @@ local processExporter = import 'gitlab-dashboards/process_exporter.libsonnet';
         intervalFactor=2,
       ),
 
-    ], cols=2, rowHeight=10, startRow=startRow),
+    ], cols=2, rowHeight=10, startRow=startRow + 1);
+
+    layout.titleRowWithPanels(
+      title='Workload',
+      collapse=false,
+      startRow=startRow,
+      panels=panels,
+    ),
 
   data(serviceType, startRow, hitRatio=false, cluster=false)::
     local formatConfig = {
@@ -375,7 +390,13 @@ local processExporter = import 'gitlab-dashboards/process_exporter.libsonnet';
                      []
     ;
 
-    layout.grid(charts, cols=2, rowHeight=10, startRow=startRow),
+
+    layout.titleRowWithPanels(
+      title='Redis Data',
+      collapse=false,
+      startRow=startRow,
+      panels=layout.grid(charts, cols=2, rowHeight=10, startRow=startRow + 1),
+    ),
 
   replication(serviceType, startRow, cluster=false)::
     local formatConfig = {
@@ -385,7 +406,7 @@ local processExporter = import 'gitlab-dashboards/process_exporter.libsonnet';
         [if cluster then 'shard']: { re: '$shard' },
       }),
     };
-    layout.grid([
+    local panels = layout.grid([
       basic.timeseries(
         title='Connected Secondaries',
         yAxisLabel='Secondaries',
@@ -416,137 +437,112 @@ local processExporter = import 'gitlab-dashboards/process_exporter.libsonnet';
         legendFormat='{{ pod }} {{ instance }}',
         intervalFactor=2,
       ),
-    ], cols=2, rowHeight=10, startRow=startRow),
+    ], cols=2, rowHeight=10, startRow=startRow + 1);
+
+    layout.titleRowWithPanels(
+      title='Replication',
+      collapse=false,
+      startRow=startRow,
+      panels=panels,
+    ),
 
   cluster(serviceType, startRow)::
     local formatConfig = {
       serviceType: serviceType,
     };
 
-    layout.singleRow([
-      basic.statPanel(
-        title='Shard Count',
-        panelTitle='Number of Shards',
-        color='light-green',
-        query=|||
-          count(count by (shard) (redis_cluster_size{environment="$environment", shard=~"$shard", type="%(serviceType)s"}))
-        ||| % formatConfig,
-      ),
-      basic.statPanel(
-        title='Nodes',
-        panelTitle='Redis Cluster Node Count',
-        color='light-green',
-        query=|||
-          max(redis_cluster_known_nodes{environment="$environment", type="%(serviceType)s"})
-        ||| % formatConfig,
-      ),
-      basic.statPanel(
-        title='OK',
-        panelTitle='Redis Cluster Slots OK',
-        color='light-green',
-        query=|||
-          max(redis_cluster_slots_ok{environment="$environment", shard=~"$shard", type="%(serviceType)s"})
-        ||| % formatConfig,
-      ),
-      basic.statPanel(
-        title='assigned',
-        panelTitle='Redis Cluster Slots Assigned',
-        color='light-green',
-        query=|||
-          max(redis_cluster_slots_assigned{environment="$environment", shard=~"$shard", type="%(serviceType)s"})
-        ||| % formatConfig,
-      ),
-      basic.statPanel(
-        title='pfail',
-        panelTitle='Redis Cluster Slots Pfailed',
-        color='light-orange',
-        query=|||
-          max(redis_cluster_slots_pfail{environment="$environment", shard=~"$shard", type="%(serviceType)s"})
-        ||| % formatConfig,
-      ),
-      basic.statPanel(
-        title='failed',
-        panelTitle='Redis Cluster Slots Failed',
-        color='light-red',
-        query=|||
-          max(redis_cluster_slots_fail{environment="$environment", shard=~"$shard", type="%(serviceType)s"})
-        ||| % formatConfig,
-      ),
-    ], rowHeight=4, startRow=startRow)
-    +
-    layout.grid([
-      basic.statPanel(
-        panelTitle='Shard Sizes',
-        title='Shard ${__series.name} size',
-        color='light-green',
-        query=|||
-          count(rate(redis_cluster_size{environment="$environment", shard=~"$shard", type="%(serviceType)s"}[$__interval])) by (shard)
-        ||| % formatConfig,
-        legendFormat='{{ shard }}',
-      ),
-    ], cols=1, rowHeight=4, startRow=startRow + 4),
+    local panels =
+      layout.singleRow([
+        basic.statPanel(
+          title='Shard Count',
+          panelTitle='Number of Shards',
+          color='light-green',
+          query=|||
+            count(count by (shard) (redis_cluster_size{environment="$environment", shard=~"$shard", type="%(serviceType)s"}))
+          ||| % formatConfig,
+        ),
+        basic.statPanel(
+          title='Nodes',
+          panelTitle='Redis Cluster Node Count',
+          color='light-green',
+          query=|||
+            max(redis_cluster_known_nodes{environment="$environment", type="%(serviceType)s"})
+          ||| % formatConfig,
+        ),
+        basic.statPanel(
+          title='OK',
+          panelTitle='Redis Cluster Slots OK',
+          color='light-green',
+          query=|||
+            max(redis_cluster_slots_ok{environment="$environment", shard=~"$shard", type="%(serviceType)s"})
+          ||| % formatConfig,
+        ),
+        basic.statPanel(
+          title='assigned',
+          panelTitle='Redis Cluster Slots Assigned',
+          color='light-green',
+          query=|||
+            max(redis_cluster_slots_assigned{environment="$environment", shard=~"$shard", type="%(serviceType)s"})
+          ||| % formatConfig,
+        ),
+        basic.statPanel(
+          title='pfail',
+          panelTitle='Redis Cluster Slots Pfailed',
+          color='light-orange',
+          query=|||
+            max(redis_cluster_slots_pfail{environment="$environment", shard=~"$shard", type="%(serviceType)s"})
+          ||| % formatConfig,
+        ),
+        basic.statPanel(
+          title='failed',
+          panelTitle='Redis Cluster Slots Failed',
+          color='light-red',
+          query=|||
+            max(redis_cluster_slots_fail{environment="$environment", shard=~"$shard", type="%(serviceType)s"})
+          ||| % formatConfig,
+        ),
+      ], rowHeight=4, startRow=startRow)
+      +
+      layout.grid([
+        basic.statPanel(
+          panelTitle='Shard Sizes',
+          title='Shard ${__series.name} size',
+          color='light-green',
+          query=|||
+            count(rate(redis_cluster_size{environment="$environment", shard=~"$shard", type="%(serviceType)s"}[$__interval])) by (shard)
+          ||| % formatConfig,
+          legendFormat='{{ shard }}',
+        ),
+      ], cols=1, rowHeight=4, startRow=startRow + 4);
+
+    layout.titleRowWithPanels(
+      title='Cluster Data',
+      collapse=false,
+      startRow=startRow,
+      panels=panels,
+    ),
+
 
   redisDashboard(service, cluster=false, hitRatio=false)::
-    local dashboard = serviceDashboard.overview(service)
-                      .addPanel(
-      row.new(title='Clients'),
-      gridPos={
-        x: 0,
-        y: 1000,
-        w: 24,
-        h: 1,
-      }
-    )
-                      .addPanels(self.clientPanels(serviceType=service, startRow=1001, cluster=cluster))
-                      .addPanel(
-      row.new(title='Workload'),
-      gridPos={
-        x: 0,
-        y: 2000,
-        w: 24,
-        h: 1,
-      }
-    )
-                      .addPanels(self.workload(serviceType=service, startRow=2001, cluster=cluster))
-                      .addPanel(
-      row.new(title='Redis Data'),
-      gridPos={
-        x: 0,
-        y: 3000,
-        w: 24,
-        h: 1,
-      }
-    )
-                      .addPanels(self.data(serviceType=service, startRow=3001, hitRatio=hitRatio, cluster=cluster))
-                      .addPanel(
-      row.new(title='Replication'),
-      gridPos={
-        x: 0,
-        y: 4000,
-        w: 24,
-        h: 1,
-      }
-    )
-                      .addPanels(self.replication(serviceType=service, startRow=4001, cluster=cluster));
+    local dashboard =
+      serviceDashboard.overview(service)
+      .addPanels(self.clientPanels(serviceType=service, startRow=1000, cluster=cluster))
+      .addPanels(self.workload(serviceType=service, startRow=2000, cluster=cluster))
+      .addPanels(self.data(serviceType=service, startRow=3000, hitRatio=hitRatio, cluster=cluster))
+      .addPanels(self.replication(serviceType=service, startRow=4000, cluster=cluster));
 
     if cluster then
       dashboard
       .addTemplate(templates.shard)
-      .addPanel(
-        row.new(title='Cluster Data'),
-        gridPos={
-          x: 0,
-          y: 5000,
-          w: 24,
-          h: 1,
-        }
-      )
-      .addPanels(self.cluster(serviceType=service, startRow=5001))
+      .addPanels(self.cluster(serviceType=service, startRow=5000))
     else
-      dashboard.addPanel(
-        row.new(title='Sentinel Processes', collapse=true)
-        .addPanels(
-          processExporter.namedGroup(
+      dashboard
+      .addPanels(
+        layout.titleRowWithPanels(
+          title='Sentinel Processes',
+          collapse=false,
+          startRow=5000,
+          panels=processExporter.namedGroup(
             'sentinel',
             {
               environment: '$environment',
@@ -554,14 +550,8 @@ local processExporter = import 'gitlab-dashboards/process_exporter.libsonnet';
               type: service,
               stage: '$stage',
             },
-            startRow=1
-          )
-        ),
-        gridPos={
-          x: 0,
-          y: 5000,
-          w: 24,
-          h: 1,
-        },
+            startRow=5000
+          ),
+        )
       ),
 }
