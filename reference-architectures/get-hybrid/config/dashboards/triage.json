@@ -129,6 +129,11 @@
             "targetBlank": true,
             "title": "gitlab-shell Service Apdex SLO Analysis",
             "url": "/d/alerts-service_slo_apdex?${__url_time_range}\u0026${__all_variables}\u0026var-type=gitlab-shell"
+          },
+          {
+            "targetBlank": true,
+            "title": "gitlab-shell Service Apdex SLO Analysis",
+            "url": "/d/alerts-service_slo_apdex?${__url_time_range}\u0026${__all_variables}\u0026var-type=gitlab-shell"
           }
         ]
       },
@@ -509,6 +514,11 @@
       "nullPointMode": "null",
       "options": {
         "dataLinks": [
+          {
+            "targetBlank": true,
+            "title": "gitlab-shell Service Error-Rate SLO Analysis",
+            "url": "/d/alerts-service_slo_error?${__url_time_range}\u0026${__all_variables}\u0026var-type=gitlab-shell"
+          },
           {
             "targetBlank": true,
             "title": "gitlab-shell Service Error-Rate SLO Analysis",
@@ -1075,10 +1085,10 @@
     {
       "description": "",
       "gridPos": {
-        "h": 7,
-        "w": 3,
-        "x": 21,
-        "y": 1101
+        "h": 3,
+        "w": 7,
+        "x": 17,
+        "y": 0
       },
       "headings": false,
       "id": 10,
@@ -1146,6 +1156,11 @@
       "nullPointMode": "null",
       "options": {
         "dataLinks": [
+          {
+            "targetBlank": true,
+            "title": "registry Service Apdex SLO Analysis",
+            "url": "/d/alerts-service_slo_apdex?${__url_time_range}\u0026${__all_variables}\u0026var-type=registry"
+          },
           {
             "targetBlank": true,
             "title": "registry Service Apdex SLO Analysis",
@@ -1530,6 +1545,11 @@
       "nullPointMode": "null",
       "options": {
         "dataLinks": [
+          {
+            "targetBlank": true,
+            "title": "registry Service Error-Rate SLO Analysis",
+            "url": "/d/alerts-service_slo_error?${__url_time_range}\u0026${__all_variables}\u0026var-type=registry"
+          },
           {
             "targetBlank": true,
             "title": "registry Service Error-Rate SLO Analysis",
@@ -2096,10 +2116,10 @@
     {
       "description": "",
       "gridPos": {
-        "h": 7,
-        "w": 3,
-        "x": 21,
-        "y": 1901
+        "h": 3,
+        "w": 7,
+        "x": 17,
+        "y": 0
       },
       "headings": false,
       "id": 18,
@@ -2167,6 +2187,11 @@
       "nullPointMode": "null",
       "options": {
         "dataLinks": [
+          {
+            "targetBlank": true,
+            "title": "sidekiq Service Apdex SLO Analysis",
+            "url": "/d/alerts-service_slo_apdex?${__url_time_range}\u0026${__all_variables}\u0026var-type=sidekiq"
+          },
           {
             "targetBlank": true,
             "title": "sidekiq Service Apdex SLO Analysis",
@@ -2551,6 +2576,11 @@
       "nullPointMode": "null",
       "options": {
         "dataLinks": [
+          {
+            "targetBlank": true,
+            "title": "sidekiq Service Error-Rate SLO Analysis",
+            "url": "/d/alerts-service_slo_error?${__url_time_range}\u0026${__all_variables}\u0026var-type=sidekiq"
+          },
           {
             "targetBlank": true,
             "title": "sidekiq Service Error-Rate SLO Analysis",
@@ -3117,10 +3147,10 @@
     {
       "description": "",
       "gridPos": {
-        "h": 7,
-        "w": 3,
-        "x": 21,
-        "y": 2701
+        "h": 3,
+        "w": 7,
+        "x": 17,
+        "y": 0
       },
       "headings": false,
       "id": 26,
@@ -3188,6 +3218,11 @@
       "nullPointMode": "null",
       "options": {
         "dataLinks": [
+          {
+            "targetBlank": true,
+            "title": "webservice Service Apdex SLO Analysis",
+            "url": "/d/alerts-service_slo_apdex?${__url_time_range}\u0026${__all_variables}\u0026var-type=webservice"
+          },
           {
             "targetBlank": true,
             "title": "webservice Service Apdex SLO Analysis",
@@ -3572,6 +3607,11 @@
       "nullPointMode": "null",
       "options": {
         "dataLinks": [
+          {
+            "targetBlank": true,
+            "title": "webservice Service Error-Rate SLO Analysis",
+            "url": "/d/alerts-service_slo_error?${__url_time_range}\u0026${__all_variables}\u0026var-type=webservice"
+          },
           {
             "targetBlank": true,
             "title": "webservice Service Error-Rate SLO Analysis",
@@ -4138,10 +4178,10 @@
     {
       "description": "",
       "gridPos": {
-        "h": 7,
-        "w": 3,
-        "x": 21,
-        "y": 3501
+        "h": 3,
+        "w": 7,
+        "x": 17,
+        "y": 0
       },
       "headings": false,
       "id": 34,
@@ -4209,6 +4249,11 @@
       "nullPointMode": "null",
       "options": {
         "dataLinks": [
+          {
+            "targetBlank": true,
+            "title": "gitaly Service Apdex SLO Analysis",
+            "url": "/d/alerts-service_slo_apdex?${__url_time_range}\u0026${__all_variables}\u0026var-type=gitaly"
+          },
           {
             "targetBlank": true,
             "title": "gitaly Service Apdex SLO Analysis",
@@ -4593,6 +4638,11 @@
       "nullPointMode": "null",
       "options": {
         "dataLinks": [
+          {
+            "targetBlank": true,
+            "title": "gitaly Service Error-Rate SLO Analysis",
+            "url": "/d/alerts-service_slo_error?${__url_time_range}\u0026${__all_variables}\u0026var-type=gitaly"
+          },
           {
             "targetBlank": true,
             "title": "gitaly Service Error-Rate SLO Analysis",
@@ -5159,10 +5209,10 @@
     {
       "description": "",
       "gridPos": {
-        "h": 7,
-        "w": 3,
-        "x": 21,
-        "y": 4301
+        "h": 3,
+        "w": 7,
+        "x": 17,
+        "y": 0
       },
       "headings": false,
       "id": 42,
@@ -5230,6 +5280,11 @@
       "nullPointMode": "null",
       "options": {
         "dataLinks": [
+          {
+            "targetBlank": true,
+            "title": "praefect Service Apdex SLO Analysis",
+            "url": "/d/alerts-service_slo_apdex?${__url_time_range}\u0026${__all_variables}\u0026var-type=praefect"
+          },
           {
             "targetBlank": true,
             "title": "praefect Service Apdex SLO Analysis",
@@ -5614,6 +5669,11 @@
       "nullPointMode": "null",
       "options": {
         "dataLinks": [
+          {
+            "targetBlank": true,
+            "title": "praefect Service Error-Rate SLO Analysis",
+            "url": "/d/alerts-service_slo_error?${__url_time_range}\u0026${__all_variables}\u0026var-type=praefect"
+          },
           {
             "targetBlank": true,
             "title": "praefect Service Error-Rate SLO Analysis",
@@ -6180,10 +6240,10 @@
     {
       "description": "",
       "gridPos": {
-        "h": 7,
-        "w": 3,
-        "x": 21,
-        "y": 5101
+        "h": 3,
+        "w": 7,
+        "x": 17,
+        "y": 0
       },
       "headings": false,
       "id": 50,
@@ -6298,10 +6358,10 @@
     {
       "description": "",
       "gridPos": {
-        "h": 7,
-        "w": 3,
-        "x": 21,
-        "y": 5901
+        "h": 3,
+        "w": 7,
+        "x": 17,
+        "y": 0
       },
       "headings": false,
       "id": 53,
