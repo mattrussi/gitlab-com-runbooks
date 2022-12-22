@@ -24,7 +24,7 @@ local shardDefinitions = {
     trafficCessationAlertConfig: false,
     autoScaling: false,
     monitoringThresholds+: {
-      apdexScore: 0.95,
+      apdexScore: 0.90,
     },
   },
   'low-urgency-cpu-bound': { urgency: 'low', gkeDeployment: 'gitlab-sidekiq-low-urgency-cpu-bound-v1', userImpacting: true, trafficCessationAlertConfig: true },

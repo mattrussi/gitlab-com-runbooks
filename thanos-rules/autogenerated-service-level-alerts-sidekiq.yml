@@ -1308,12 +1308,12 @@ groups:
       (
         (
           gitlab_component_apdex:ratio_1h{component="shard_imports",monitor="global",type="sidekiq"}
-          < (1 - 14.4 * 0.050000)
+          < (1 - 14.4 * 0.100000)
         )
         and
         (
           gitlab_component_apdex:ratio_5m{component="shard_imports",monitor="global",type="sidekiq"}
-          < (1 - 14.4 * 0.050000)
+          < (1 - 14.4 * 0.100000)
         )
       )
       and on(env,environment,tier,type,stage,component)
@@ -1367,12 +1367,12 @@ groups:
       (
         (
           gitlab_component_apdex:ratio_6h{component="shard_imports",monitor="global",type="sidekiq"}
-          < (1 - 6 * 0.050000)
+          < (1 - 6 * 0.100000)
         )
         and
         (
           gitlab_component_apdex:ratio_30m{component="shard_imports",monitor="global",type="sidekiq"}
-          < (1 - 6 * 0.050000)
+          < (1 - 6 * 0.100000)
         )
       )
       and on(env,environment,tier,type,stage,component)
