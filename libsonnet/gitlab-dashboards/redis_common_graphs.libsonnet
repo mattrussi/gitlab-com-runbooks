@@ -486,7 +486,7 @@ local processExporter = import 'gitlab-dashboards/process_exporter.libsonnet';
       ),
     ], cols=1, rowHeight=4, startRow=startRow + 4),
 
-  redisDashboard(service, cluster=false)::
+  redisDashboard(service, cluster=false, hitRatio=false)::
     local dashboard = serviceDashboard.overview(service)
                       .addPanel(
       row.new(title='Clients'),
@@ -517,7 +517,7 @@ local processExporter = import 'gitlab-dashboards/process_exporter.libsonnet';
         h: 1,
       }
     )
-                      .addPanels(self.data(serviceType=service, startRow=3001, hitRatio=true, cluster=cluster))
+                      .addPanels(self.data(serviceType=service, startRow=3001, hitRatio=hitRatio, cluster=cluster))
                       .addPanel(
       row.new(title='Replication'),
       gridPos={
