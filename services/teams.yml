@@ -188,6 +188,10 @@ teams:
   product_stage_group: ai_assisted
   ignored_components:
   - graphql_queries
+- name: billing_and_subscription_management
+  product_stage_group: billing_and_subscription_management
+  ignored_components:
+    - graphql_queries
 - name: certify
   url: https://about.gitlab.com/handbook/engineering/development/dev/plan-product-planning-certify-be/
   product_stage_group: certify
