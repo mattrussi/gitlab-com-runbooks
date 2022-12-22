@@ -425,6 +425,14 @@ local processExporter = import 'gitlab-dashboards/process_exporter.libsonnet';
 
     layout.singleRow([
       basic.statPanel(
+        title='Shard Count',
+        panelTitle='Number of Shards',
+        color='light-green',
+        query=|||
+          count(count by (shard) (redis_cluster_size{environment="$environment", shard=~"$shard", type="%(serviceType)s"}))
+        ||| % formatConfig,
+      ),
+      basic.statPanel(
         title='Nodes',
         panelTitle='Redis Cluster Node Count',
         color='light-green',
@@ -467,25 +475,16 @@ local processExporter = import 'gitlab-dashboards/process_exporter.libsonnet';
     ], rowHeight=4, startRow=startRow)
     +
     layout.grid([
-      basic.timeseries(
-        title='Shard Count',
-        yAxisLabel='Number of Shards',
-        query=|||
-          sum(avg_over_time(redis_cluster_size{environment="$environment", shard=~"$shard", type="%(serviceType)s"}[$__interval])) by (instance, pod)
-        ||| % formatConfig,
-        legendFormat='{{ pod }} {{ instance }}',
-        intervalFactor=2,
-      ),
-      basic.timeseries(
-        title='Shard Size',
-        yAxisLabel='Node Count',
+      basic.statPanel(
+        panelTitle='Shard Sizes',
+        title='Shard ${__series.name} size',
+        color='light-green',
         query=|||
           count(rate(redis_cluster_size{environment="$environment", shard=~"$shard", type="%(serviceType)s"}[$__interval])) by (shard)
         ||| % formatConfig,
         legendFormat='{{ shard }}',
-        intervalFactor=2,
       ),
-    ], cols=2, rowHeight=10, startRow=startRow + 4),
+    ], cols=1, rowHeight=4, startRow=startRow + 4),
 
   redisDashboard(service, cluster=false)::
     local dashboard = serviceDashboard.overview(service)
