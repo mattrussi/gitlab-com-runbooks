@@ -66,7 +66,7 @@ test-alertmanager: alertmanager/alertmanager.yml
 	PATH=$(AMTOOL_PATH):$(PATH) alertmanager/test-routing.sh alertmanager/alertmanager.yml
 
 .PHONY: test
-test: validate-service-dashboards validate-service-mappings validate-prom-rules validate-kibana-urls validate-alerts validate-yaml jsonnet-bundle test-jsonnet test-shunit
+test: validate-service-dashboards validate-service-mappings validate-prom-rules validate-kibana-urls validate-alerts validate-yaml jsonnet-bundle test-jsonnet lint-jsonnet test-shunit
 
 .PHONY: validate-service-mappings
 validate-service-mappings:
@@ -101,6 +101,12 @@ validate-yaml:
 .PHONY: test-jsonnet
 test-jsonnet:
 	./scripts/jsonnet_test.sh
+
+.PHONY: lint-jsonnet
+lint-jsonnet:
+	cat <(git diff --name-only HEAD) <(git diff --name-only HEAD origin/master) \
+	| grep -e jsonnet -e libsonnet \
+	| xargs jsonnet-lint
 
 .PHONY: test-shunit
 test-shunit:
