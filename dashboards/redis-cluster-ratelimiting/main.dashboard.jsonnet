@@ -1,4 +1,4 @@
 local redisCommon = import 'gitlab-dashboards/redis_common_graphs.libsonnet';
 
-redisCommon.redisDashboard('redis-sidekiq', cluster=false)
+redisCommon.redisDashboard('redis-cluster-ratelimiting', cluster=true)
 .overviewTrailer()
