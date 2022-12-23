@@ -8,6 +8,7 @@ local annotation = grafana.annotation;
 local graphPanel = grafana.graphPanel;
 local statPanel = grafana.statPanel;
 local row = grafana.row;
+local colorScheme = import 'grafana/color_scheme.libsonnet';
 
 local environments = [
   {
@@ -162,7 +163,7 @@ local
       )
     );
 
-// Bar Gauge panel used by top-level Release pressure
+// Bar Gauge panel used by top-level Release pressure (deprecated)
 local bargaugePanel(
   title,
   description='',
@@ -266,10 +267,10 @@ basic.dashboard(
         ],
       ),
     ],
-    // Column 4: release pressure
+    // Column 4: release pressure (Deprecated)
     [
       bargaugePanel(
-        'Release pressure',
+        'Release pressure (deprecated)',
         description='Number of `Pick into` merge requests for previous releases.',
         query=|||
           sum(delivery_release_pressure{state="merged"}) by (state, version)
@@ -293,7 +294,52 @@ basic.dashboard(
         },
       ),
     ],
-    // Column 5: Post deploy migration pressure
+    // Column 5: Patch release pressure
+    [
+      statPanel.new(
+        'Patch release pressure',
+        description='Total of unreleased S1/S2 commits merged into stable branches',
+        reducerFunction='lastNotNull',
+        colorMode='value',
+        graphMode='area',
+        textMode='value_and_name',
+        displayName='S1/S2',
+      )
+      .addTarget(
+        prometheus.target(
+          'sum(delivery_release_pressure{severity=~"severity::1|severity::2",job="delivery-metrics"})',
+        )
+      )
+      .addThresholds([
+        { color: colorScheme.criticalColor, value: 1 },
+      ]) {
+        gridPos+: {
+          h: 8,
+        },
+      },
+      statPanel.new(
+        'Patch release pressure',
+        description='Total of unreleased commits merged into stable branches',
+        reducerFunction='lastNotNull',
+        colorMode='value',
+        graphMode='area',
+        textMode='value_and_name',
+        displayName='Total',
+      )
+      .addTarget(
+        prometheus.target(
+          'sum(delivery_release_pressure{job="delivery-metrics"})',
+        )
+      )
+      .addThresholds([
+        { color: colorScheme.warningColor, value: 1 },
+      ]) {
+        gridPos+: {
+          h: 7,
+        },
+      },
+    ],
+    // column 6: Post deploy migration pressure
     [
       deliveryStatPanel(
         'Pending migrations',

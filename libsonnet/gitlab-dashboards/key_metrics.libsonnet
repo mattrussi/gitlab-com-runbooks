@@ -8,12 +8,6 @@ local row = grafana.row;
 local managedDashboardsForService(serviceType) =
   {
     type: 'dashlist',
-    gridPos: {
-      x: 17,
-      y: 0,
-      w: 7,
-      h: 3,
-    },
     pluginVersion: '7.2.0',
     limit: 10,
     tags: [
