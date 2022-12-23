@@ -56,6 +56,7 @@ generate:
 	./scripts/generate-jsonnet-rules.sh
 	./scripts/generate-docs
 	./scripts/generate-all-reference-architecture-configs.sh
+	./scripts/generate-service-dashboards
 
 alertmanager/alertmanager.yml: alertmanager/alertmanager.jsonnet
 	./alertmanager/generate.sh
@@ -65,11 +66,15 @@ test-alertmanager: alertmanager/alertmanager.yml
 	PATH=$(AMTOOL_PATH):$(PATH) alertmanager/test-routing.sh alertmanager/alertmanager.yml
 
 .PHONY: test
-test: validate-service-mappings validate-prom-rules validate-kibana-urls validate-alerts validate-yaml jsonnet-bundle test-jsonnet test-shunit
+test: validate-service-dashboards validate-service-mappings validate-prom-rules validate-kibana-urls validate-alerts validate-yaml jsonnet-bundle test-jsonnet test-shunit
 
 .PHONY: validate-service-mappings
 validate-service-mappings:
 	./scripts/validate-service-mappings
+
+.PHONY: validate-service-dashboards
+validate-service-dashboards:
+	./scripts/validate-service-dashboards
 
 .PHONY: validate-prom-rules
 validate-prom-rules:
