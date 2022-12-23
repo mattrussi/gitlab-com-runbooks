@@ -162,11 +162,6 @@
             "targetBlank": true,
             "title": "gitaly Service Apdex SLO Analysis",
             "url": "/d/alerts-service_slo_apdex?${__url_time_range}\u0026${__all_variables}\u0026var-type=gitaly"
-          },
-          {
-            "targetBlank": true,
-            "title": "gitaly Service Apdex SLO Analysis",
-            "url": "/d/alerts-service_slo_apdex?${__url_time_range}\u0026${__all_variables}\u0026var-type=gitaly"
           }
         ]
       },
@@ -547,11 +542,6 @@
       "nullPointMode": "null",
       "options": {
         "dataLinks": [
-          {
-            "targetBlank": true,
-            "title": "gitaly Service Error-Rate SLO Analysis",
-            "url": "/d/alerts-service_slo_error?${__url_time_range}\u0026${__all_variables}\u0026var-type=gitaly"
-          },
           {
             "targetBlank": true,
             "title": "gitaly Service Error-Rate SLO Analysis",
@@ -1171,11 +1161,6 @@
             "targetBlank": true,
             "title": "goserver SLI Apdex SLO Analysis",
             "url": "/d/alerts-component_slo_apdex?${__url_time_range}\u0026${__all_variables}\u0026var-component=goserver\u0026var-type=gitaly"
-          },
-          {
-            "targetBlank": true,
-            "title": "goserver SLI Apdex SLO Analysis",
-            "url": "/d/alerts-component_slo_apdex?${__url_time_range}\u0026${__all_variables}\u0026var-component=goserver\u0026var-type=gitaly"
           }
         ]
       },
@@ -1556,11 +1541,6 @@
       "nullPointMode": "null",
       "options": {
         "dataLinks": [
-          {
-            "targetBlank": true,
-            "title": "goserver SLI Error-Rate SLO Analysis",
-            "url": "/d/alerts-component_slo_error?${__url_time_range}\u0026${__all_variables}\u0026var-component=goserver\u0026var-type=gitaly"
-          },
           {
             "targetBlank": true,
             "title": "goserver SLI Error-Rate SLO Analysis",

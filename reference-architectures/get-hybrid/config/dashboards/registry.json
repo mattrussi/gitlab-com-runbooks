@@ -162,11 +162,6 @@
             "targetBlank": true,
             "title": "registry Service Apdex SLO Analysis",
             "url": "/d/alerts-service_slo_apdex?${__url_time_range}\u0026${__all_variables}\u0026var-type=registry"
-          },
-          {
-            "targetBlank": true,
-            "title": "registry Service Apdex SLO Analysis",
-            "url": "/d/alerts-service_slo_apdex?${__url_time_range}\u0026${__all_variables}\u0026var-type=registry"
           }
         ]
       },
@@ -547,11 +542,6 @@
       "nullPointMode": "null",
       "options": {
         "dataLinks": [
-          {
-            "targetBlank": true,
-            "title": "registry Service Error-Rate SLO Analysis",
-            "url": "/d/alerts-service_slo_error?${__url_time_range}\u0026${__all_variables}\u0026var-type=registry"
-          },
           {
             "targetBlank": true,
             "title": "registry Service Error-Rate SLO Analysis",
@@ -1171,11 +1161,6 @@
             "targetBlank": true,
             "title": "server SLI Apdex SLO Analysis",
             "url": "/d/alerts-component_slo_apdex?${__url_time_range}\u0026${__all_variables}\u0026var-component=server\u0026var-type=registry"
-          },
-          {
-            "targetBlank": true,
-            "title": "server SLI Apdex SLO Analysis",
-            "url": "/d/alerts-component_slo_apdex?${__url_time_range}\u0026${__all_variables}\u0026var-component=server\u0026var-type=registry"
           }
         ]
       },
@@ -1556,11 +1541,6 @@
       "nullPointMode": "null",
       "options": {
         "dataLinks": [
-          {
-            "targetBlank": true,
-            "title": "server SLI Error-Rate SLO Analysis",
-            "url": "/d/alerts-component_slo_error?${__url_time_range}\u0026${__all_variables}\u0026var-component=server\u0026var-type=registry"
-          },
           {
             "targetBlank": true,
             "title": "server SLI Error-Rate SLO Analysis",

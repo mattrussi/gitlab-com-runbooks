@@ -162,11 +162,6 @@
             "targetBlank": true,
             "title": "webservice Service Apdex SLO Analysis",
             "url": "/d/alerts-service_slo_apdex?${__url_time_range}\u0026${__all_variables}\u0026var-type=webservice"
-          },
-          {
-            "targetBlank": true,
-            "title": "webservice Service Apdex SLO Analysis",
-            "url": "/d/alerts-service_slo_apdex?${__url_time_range}\u0026${__all_variables}\u0026var-type=webservice"
           }
         ]
       },
@@ -547,11 +542,6 @@
       "nullPointMode": "null",
       "options": {
         "dataLinks": [
-          {
-            "targetBlank": true,
-            "title": "webservice Service Error-Rate SLO Analysis",
-            "url": "/d/alerts-service_slo_error?${__url_time_range}\u0026${__all_variables}\u0026var-type=webservice"
-          },
           {
             "targetBlank": true,
             "title": "webservice Service Error-Rate SLO Analysis",
@@ -1171,11 +1161,6 @@
             "targetBlank": true,
             "title": "puma SLI Apdex SLO Analysis",
             "url": "/d/alerts-component_slo_apdex?${__url_time_range}\u0026${__all_variables}\u0026var-component=puma\u0026var-type=webservice"
-          },
-          {
-            "targetBlank": true,
-            "title": "puma SLI Apdex SLO Analysis",
-            "url": "/d/alerts-component_slo_apdex?${__url_time_range}\u0026${__all_variables}\u0026var-component=puma\u0026var-type=webservice"
           }
         ]
       },
@@ -1556,11 +1541,6 @@
       "nullPointMode": "null",
       "options": {
         "dataLinks": [
-          {
-            "targetBlank": true,
-            "title": "puma SLI Error-Rate SLO Analysis",
-            "url": "/d/alerts-component_slo_error?${__url_time_range}\u0026${__all_variables}\u0026var-component=puma\u0026var-type=webservice"
-          },
           {
             "targetBlank": true,
             "title": "puma SLI Error-Rate SLO Analysis",
@@ -2056,11 +2036,6 @@
             "targetBlank": true,
             "title": "workhorse SLI Apdex SLO Analysis",
             "url": "/d/alerts-component_slo_apdex?${__url_time_range}\u0026${__all_variables}\u0026var-component=workhorse\u0026var-type=webservice"
-          },
-          {
-            "targetBlank": true,
-            "title": "workhorse SLI Apdex SLO Analysis",
-            "url": "/d/alerts-component_slo_apdex?${__url_time_range}\u0026${__all_variables}\u0026var-component=workhorse\u0026var-type=webservice"
           }
         ]
       },
@@ -2441,11 +2416,6 @@
       "nullPointMode": "null",
       "options": {
         "dataLinks": [
-          {
-            "targetBlank": true,
-            "title": "workhorse SLI Error-Rate SLO Analysis",
-            "url": "/d/alerts-component_slo_error?${__url_time_range}\u0026${__all_variables}\u0026var-component=workhorse\u0026var-type=webservice"
-          },
           {
             "targetBlank": true,
             "title": "workhorse SLI Error-Rate SLO Analysis",
