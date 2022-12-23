@@ -252,7 +252,7 @@ local teamsWithAlertingSlackChannels() =
 // Returns a list of stage group teams wiht slack channels for alerting
 local teamsWithProductStageGroups() =
   std.filter(
-    function(team) std.objectHas(team, 'product_stage_group'),
+    function(team) team.product_stage_group != null,
     teamsWithAlertingSlackChannels()
   );
 

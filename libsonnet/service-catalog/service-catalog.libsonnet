@@ -3,30 +3,24 @@ local rawCatalog = metricsConfig.serviceCatalog;
 local allServices = metricsConfig.monitoredServices;
 local stageGroupMapping = metricsConfig.stageGroupMapping;
 local miscUtils = import 'utils/misc.libsonnet';
+local teamDefinition = import 'team-definition.libsonnet';
 
 local serviceMap = {
   [x.name]: x
   for x in rawCatalog.services
 };
 
-local teamDefaults = {
-  issue_tracker: null,
-  send_slo_alerts_to_team_slack_channel: false,
-  ignored_components: [],
-};
-
 local teamMap = std.foldl(
   function(result, team)
     assert !std.objectHas(result, team.name) : 'Duplicate definition for team: %s' % [team.name];
-    result { [team.name]: teamDefaults + team },
+    result { [team.name]: teamDefinition.defaults + team },
   rawCatalog.teams,
   {}
 );
 
 local teamGroupMap = std.foldl(
   function(result, team)
-    if std.objectHas(team, 'product_stage_group') && team.product_stage_group != null then
-      assert std.objectHas(stageGroupMapping, team.product_stage_group) : 'team %s has an unknown stage group %s' % [team.name, team.product_stage_group];
+    if team.product_stage_group != null then
       assert !std.objectHas(result, team.product_stage_group) : 'team %s already has a team with stage group %s' % [team.name, team.product_stage_group];
       result { [team.product_stage_group]: team }
     else
@@ -77,7 +71,7 @@ local buildServiceGraph(services) =
     std.objectValues(teamMap),
 
   lookupTeamForStageGroup(name)::
-    if std.objectHas(teamGroupMap, name) then teamGroupMap[name] else teamDefaults,
+    if std.objectHas(teamGroupMap, name) then teamGroupMap[name] else teamDefinition.defaults,
 
   getTeam(teamName)::
     teamMap[teamName],
