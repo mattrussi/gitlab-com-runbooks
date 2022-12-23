@@ -152,7 +152,12 @@ local maxOverTime(query) =
       spaceLength: 4,
       nullPointMode: 'connected',
       zindex: -2,
-    }),
+    }) {
+      legend+: {
+        sort: 'max',
+        sortDesc: true,
+      },
+    },
 
 
   componentSaturationPanel(component, selectorHash)::
