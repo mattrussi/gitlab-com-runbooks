@@ -80,7 +80,9 @@ local maxOverTime(query) =
     .addTarget(  // 95th quantile for week
       promQuery.target(
         |||
-          gitlab_component_saturation:ratio_quantile95_1w{%(selector)s, component="%(component)s"}
+          max(
+            gitlab_component_saturation:ratio_quantile95_1w{%(selector)s, component="%(component)s"}
+          )
         ||| % formatConfig,
         legendFormat='95th quantile for week {{ component }}',
       )
@@ -88,7 +90,9 @@ local maxOverTime(query) =
     .addTarget(  // 99th quantile for week
       promQuery.target(
         |||
-          gitlab_component_saturation:ratio_quantile99_1w{%(selector)s, component="%(component)s"}
+          max(
+            gitlab_component_saturation:ratio_quantile99_1w{%(selector)s, component="%(component)s"}
+          )
         ||| % formatConfig,
         legendFormat='99th quantile for week {{ component }}',
       )
@@ -148,7 +152,12 @@ local maxOverTime(query) =
       spaceLength: 4,
       nullPointMode: 'connected',
       zindex: -2,
-    }),
+    }) {
+      legend+: {
+        sort: 'max',
+        sortDesc: true,
+      },
+    },
 
 
   componentSaturationPanel(component, selectorHash)::

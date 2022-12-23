@@ -259,6 +259,8 @@
             "rightSide": false,
             "show": true,
             "sideWidth": null,
+            "sort": "max",
+            "sortDesc": true,
             "total": false,
             "values": true
           },
@@ -349,7 +351,7 @@
               "refId": "B"
             },
             {
-              "expr": "gitlab_component_saturation:ratio_quantile95_1w{type=\"consul\", component=\"cpu\"}\n",
+              "expr": "max(\n  gitlab_component_saturation:ratio_quantile95_1w{type=\"consul\", component=\"cpu\"}\n)\n",
               "format": "time_series",
               "interval": "1m",
               "intervalFactor": 3,
@@ -357,7 +359,7 @@
               "refId": "C"
             },
             {
-              "expr": "gitlab_component_saturation:ratio_quantile99_1w{type=\"consul\", component=\"cpu\"}\n",
+              "expr": "max(\n  gitlab_component_saturation:ratio_quantile99_1w{type=\"consul\", component=\"cpu\"}\n)\n",
               "format": "time_series",
               "interval": "1m",
               "intervalFactor": 3,
@@ -444,6 +446,8 @@
             "rightSide": false,
             "show": true,
             "sideWidth": null,
+            "sort": "max",
+            "sortDesc": true,
             "total": false,
             "values": true
           },
@@ -534,7 +538,7 @@
               "refId": "B"
             },
             {
-              "expr": "gitlab_component_saturation:ratio_quantile95_1w{type=\"consul\", component=\"disk_inodes\"}\n",
+              "expr": "max(\n  gitlab_component_saturation:ratio_quantile95_1w{type=\"consul\", component=\"disk_inodes\"}\n)\n",
               "format": "time_series",
               "interval": "1m",
               "intervalFactor": 3,
@@ -542,7 +546,7 @@
               "refId": "C"
             },
             {
-              "expr": "gitlab_component_saturation:ratio_quantile99_1w{type=\"consul\", component=\"disk_inodes\"}\n",
+              "expr": "max(\n  gitlab_component_saturation:ratio_quantile99_1w{type=\"consul\", component=\"disk_inodes\"}\n)\n",
               "format": "time_series",
               "interval": "1m",
               "intervalFactor": 3,
@@ -629,6 +633,8 @@
             "rightSide": false,
             "show": true,
             "sideWidth": null,
+            "sort": "max",
+            "sortDesc": true,
             "total": false,
             "values": true
           },
@@ -719,7 +725,7 @@
               "refId": "B"
             },
             {
-              "expr": "gitlab_component_saturation:ratio_quantile95_1w{type=\"consul\", component=\"disk_space\"}\n",
+              "expr": "max(\n  gitlab_component_saturation:ratio_quantile95_1w{type=\"consul\", component=\"disk_space\"}\n)\n",
               "format": "time_series",
               "interval": "1m",
               "intervalFactor": 3,
@@ -727,7 +733,7 @@
               "refId": "C"
             },
             {
-              "expr": "gitlab_component_saturation:ratio_quantile99_1w{type=\"consul\", component=\"disk_space\"}\n",
+              "expr": "max(\n  gitlab_component_saturation:ratio_quantile99_1w{type=\"consul\", component=\"disk_space\"}\n)\n",
               "format": "time_series",
               "interval": "1m",
               "intervalFactor": 3,
@@ -814,6 +820,8 @@
             "rightSide": false,
             "show": true,
             "sideWidth": null,
+            "sort": "max",
+            "sortDesc": true,
             "total": false,
             "values": true
           },
@@ -904,7 +912,7 @@
               "refId": "B"
             },
             {
-              "expr": "gitlab_component_saturation:ratio_quantile95_1w{type=\"consul\", component=\"kube_container_cpu\"}\n",
+              "expr": "max(\n  gitlab_component_saturation:ratio_quantile95_1w{type=\"consul\", component=\"kube_container_cpu\"}\n)\n",
               "format": "time_series",
               "interval": "1m",
               "intervalFactor": 3,
@@ -912,7 +920,7 @@
               "refId": "C"
             },
             {
-              "expr": "gitlab_component_saturation:ratio_quantile99_1w{type=\"consul\", component=\"kube_container_cpu\"}\n",
+              "expr": "max(\n  gitlab_component_saturation:ratio_quantile99_1w{type=\"consul\", component=\"kube_container_cpu\"}\n)\n",
               "format": "time_series",
               "interval": "1m",
               "intervalFactor": 3,
@@ -999,6 +1007,8 @@
             "rightSide": false,
             "show": true,
             "sideWidth": null,
+            "sort": "max",
+            "sortDesc": true,
             "total": false,
             "values": true
           },
@@ -1089,7 +1099,7 @@
               "refId": "B"
             },
             {
-              "expr": "gitlab_component_saturation:ratio_quantile95_1w{type=\"consul\", component=\"kube_container_memory\"}\n",
+              "expr": "max(\n  gitlab_component_saturation:ratio_quantile95_1w{type=\"consul\", component=\"kube_container_memory\"}\n)\n",
               "format": "time_series",
               "interval": "1m",
               "intervalFactor": 3,
@@ -1097,7 +1107,7 @@
               "refId": "C"
             },
             {
-              "expr": "gitlab_component_saturation:ratio_quantile99_1w{type=\"consul\", component=\"kube_container_memory\"}\n",
+              "expr": "max(\n  gitlab_component_saturation:ratio_quantile99_1w{type=\"consul\", component=\"kube_container_memory\"}\n)\n",
               "format": "time_series",
               "interval": "1m",
               "intervalFactor": 3,
@@ -1184,6 +1194,8 @@
             "rightSide": false,
             "show": true,
             "sideWidth": null,
+            "sort": "max",
+            "sortDesc": true,
             "total": false,
             "values": true
           },
@@ -1274,7 +1286,7 @@
               "refId": "B"
             },
             {
-              "expr": "gitlab_component_saturation:ratio_quantile95_1w{type=\"consul\", component=\"memory\"}\n",
+              "expr": "max(\n  gitlab_component_saturation:ratio_quantile95_1w{type=\"consul\", component=\"memory\"}\n)\n",
               "format": "time_series",
               "interval": "1m",
               "intervalFactor": 3,
@@ -1282,7 +1294,7 @@
               "refId": "C"
             },
             {
-              "expr": "gitlab_component_saturation:ratio_quantile99_1w{type=\"consul\", component=\"memory\"}\n",
+              "expr": "max(\n  gitlab_component_saturation:ratio_quantile99_1w{type=\"consul\", component=\"memory\"}\n)\n",
               "format": "time_series",
               "interval": "1m",
               "intervalFactor": 3,
@@ -1369,6 +1381,8 @@
             "rightSide": false,
             "show": true,
             "sideWidth": null,
+            "sort": "max",
+            "sortDesc": true,
             "total": false,
             "values": true
           },
@@ -1459,7 +1473,7 @@
               "refId": "B"
             },
             {
-              "expr": "gitlab_component_saturation:ratio_quantile95_1w{type=\"consul\", component=\"node_schedstat_waiting\"}\n",
+              "expr": "max(\n  gitlab_component_saturation:ratio_quantile95_1w{type=\"consul\", component=\"node_schedstat_waiting\"}\n)\n",
               "format": "time_series",
               "interval": "1m",
               "intervalFactor": 3,
@@ -1467,7 +1481,7 @@
               "refId": "C"
             },
             {
-              "expr": "gitlab_component_saturation:ratio_quantile99_1w{type=\"consul\", component=\"node_schedstat_waiting\"}\n",
+              "expr": "max(\n  gitlab_component_saturation:ratio_quantile99_1w{type=\"consul\", component=\"node_schedstat_waiting\"}\n)\n",
               "format": "time_series",
               "interval": "1m",
               "intervalFactor": 3,
@@ -1554,6 +1568,8 @@
             "rightSide": false,
             "show": true,
             "sideWidth": null,
+            "sort": "max",
+            "sortDesc": true,
             "total": false,
             "values": true
           },
@@ -1644,7 +1660,7 @@
               "refId": "B"
             },
             {
-              "expr": "gitlab_component_saturation:ratio_quantile95_1w{type=\"consul\", component=\"single_node_cpu\"}\n",
+              "expr": "max(\n  gitlab_component_saturation:ratio_quantile95_1w{type=\"consul\", component=\"single_node_cpu\"}\n)\n",
               "format": "time_series",
               "interval": "1m",
               "intervalFactor": 3,
@@ -1652,7 +1668,7 @@
               "refId": "C"
             },
             {
-              "expr": "gitlab_component_saturation:ratio_quantile99_1w{type=\"consul\", component=\"single_node_cpu\"}\n",
+              "expr": "max(\n  gitlab_component_saturation:ratio_quantile99_1w{type=\"consul\", component=\"single_node_cpu\"}\n)\n",
               "format": "time_series",
               "interval": "1m",
               "intervalFactor": 3,

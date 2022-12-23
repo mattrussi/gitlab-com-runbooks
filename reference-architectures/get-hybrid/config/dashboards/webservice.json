@@ -3777,6 +3777,8 @@
             "rightSide": false,
             "show": true,
             "sideWidth": null,
+            "sort": "max",
+            "sortDesc": true,
             "total": false,
             "values": true
           },
@@ -3867,7 +3869,7 @@
               "refId": "B"
             },
             {
-              "expr": "gitlab_component_saturation:ratio_quantile95_1w{type=\"webservice\", component=\"kube_container_cpu\"}\n",
+              "expr": "max(\n  gitlab_component_saturation:ratio_quantile95_1w{type=\"webservice\", component=\"kube_container_cpu\"}\n)\n",
               "format": "time_series",
               "interval": "1m",
               "intervalFactor": 3,
@@ -3875,7 +3877,7 @@
               "refId": "C"
             },
             {
-              "expr": "gitlab_component_saturation:ratio_quantile99_1w{type=\"webservice\", component=\"kube_container_cpu\"}\n",
+              "expr": "max(\n  gitlab_component_saturation:ratio_quantile99_1w{type=\"webservice\", component=\"kube_container_cpu\"}\n)\n",
               "format": "time_series",
               "interval": "1m",
               "intervalFactor": 3,
@@ -3962,6 +3964,8 @@
             "rightSide": false,
             "show": true,
             "sideWidth": null,
+            "sort": "max",
+            "sortDesc": true,
             "total": false,
             "values": true
           },
@@ -4052,7 +4056,7 @@
               "refId": "B"
             },
             {
-              "expr": "gitlab_component_saturation:ratio_quantile95_1w{type=\"webservice\", component=\"kube_container_memory\"}\n",
+              "expr": "max(\n  gitlab_component_saturation:ratio_quantile95_1w{type=\"webservice\", component=\"kube_container_memory\"}\n)\n",
               "format": "time_series",
               "interval": "1m",
               "intervalFactor": 3,
@@ -4060,7 +4064,7 @@
               "refId": "C"
             },
             {
-              "expr": "gitlab_component_saturation:ratio_quantile99_1w{type=\"webservice\", component=\"kube_container_memory\"}\n",
+              "expr": "max(\n  gitlab_component_saturation:ratio_quantile99_1w{type=\"webservice\", component=\"kube_container_memory\"}\n)\n",
               "format": "time_series",
               "interval": "1m",
               "intervalFactor": 3,
@@ -4147,6 +4151,8 @@
             "rightSide": false,
             "show": true,
             "sideWidth": null,
+            "sort": "max",
+            "sortDesc": true,
             "total": false,
             "values": true
           },
@@ -4237,7 +4243,7 @@
               "refId": "B"
             },
             {
-              "expr": "gitlab_component_saturation:ratio_quantile95_1w{type=\"webservice\", component=\"kube_pool_cpu\"}\n",
+              "expr": "max(\n  gitlab_component_saturation:ratio_quantile95_1w{type=\"webservice\", component=\"kube_pool_cpu\"}\n)\n",
               "format": "time_series",
               "interval": "1m",
               "intervalFactor": 3,
@@ -4245,7 +4251,7 @@
               "refId": "C"
             },
             {
-              "expr": "gitlab_component_saturation:ratio_quantile99_1w{type=\"webservice\", component=\"kube_pool_cpu\"}\n",
+              "expr": "max(\n  gitlab_component_saturation:ratio_quantile99_1w{type=\"webservice\", component=\"kube_pool_cpu\"}\n)\n",
               "format": "time_series",
               "interval": "1m",
               "intervalFactor": 3,
