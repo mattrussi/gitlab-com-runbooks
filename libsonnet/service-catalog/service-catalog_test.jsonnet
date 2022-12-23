@@ -1,5 +1,6 @@
-local test = import 'github.com/yugui/jsonnetunit/jsonnetunit/test.libsonnet';
 local serviceCatalog = import 'service-catalog/service-catalog.libsonnet';
+local teamDefinition = import 'team-definition.libsonnet';
+local test = import 'test.libsonnet';
 
 local services = [
   {
@@ -72,7 +73,7 @@ test.suite({
   testGetTeam: {
     actual: serviceCatalog.getTeam('scalability'),
     expect: {
-      ignored_components: ['graphql_queries'],
+      ignored_components: ['graphql_query'],
       issue_tracker: null,
       name: 'scalability',
       product_stage_group: 'scalability',
@@ -100,11 +101,15 @@ test.suite({
       product_stage_group: 'authentication_and_authorization',
       send_slo_alerts_to_team_slack_channel: true,
       slack_alerts_channel: 'feed_alerts_access',
-      ignored_components: ['graphql_queries'],
+      ignored_components: ['graphql_query'],
     },
     testLookupNonExistingTeamForStageGroup: {
       actual: serviceCatalog.lookupTeamForStageGroup('huzzah'),
       expect: {},
     },
+  },
+  testAllTeamsValidness: {
+    actual: serviceCatalog.getTeams(),
+    expectAll: teamDefinition._validator.isValid,
   },
 })
