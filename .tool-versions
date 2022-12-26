@@ -8,7 +8,7 @@ golang 1.19.4 # datasource=golang-version depName=go
 jb 0.5.1 # datasource=github-releases depName=jsonnet-bundler/jsonnet-bundler
 jsonnet-tool 1.7.0 # datasource=gitlab-releases depName=gitlab-com/gl-infra/jsonnet-tool
 nodejs 18.12.1 # datasource=node depName=nodejs/node
-pre-commit 2.20.0 # datasource=github-releases depName=pre-commit/pre-commit
+pre-commit 2.21.0 # datasource=github-releases depName=pre-commit/pre-commit
 promtool 2.34.0 # datasource=github-releases depName=prometheus/prometheus
 python system
 ruby 3.1.3 # datasource=ruby-version depName=ruby/ruby
