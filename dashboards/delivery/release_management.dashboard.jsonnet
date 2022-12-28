@@ -253,10 +253,10 @@ basic.dashboard(
         query='max(delivery_auto_deploy_pressure{job="delivery-metrics"}) by (role)',
         legendFormat='{{role}}',
         thresholds=[
-          { color: 'green', value: null },
-          { color: '#EAB839', value: 50 },
-          { color: '#EF843C', value: 100 },
-          { color: 'red', value: 150 },
+          { color: colorScheme.normalRangeColor, value: null },
+          { color: colorScheme.warningColor, value: 50 },
+          { color: colorScheme.errorColor, value: 100 },
+          { color: colorScheme.criticalColor, value: 150 },
         ],
         links=[
           {
@@ -286,10 +286,10 @@ basic.dashboard(
         thresholds={
           mode: 'absolute',
           steps: [
-            { color: 'green', value: null },
-            { color: '#EAB839', value: 5 },
-            { color: '#EF843C', value: 10 },
-            { color: 'red', value: 15 },
+            { color: colorScheme.normalRangeColor, value: null },
+            { color: colorScheme.warningColor, value: 5 },
+            { color: colorScheme.errorColor, value: 10 },
+            { color: colorScheme.criticalColor, value: 15 },
           ],
         },
       ),
@@ -298,7 +298,7 @@ basic.dashboard(
     [
       statPanel.new(
         'Patch release pressure',
-        description='Total of unreleased S1/S2 commits merged into stable branches',
+        description='Total of unreleased S1/S2 merge requests merged into stable branches',
         reducerFunction='lastNotNull',
         colorMode='value',
         graphMode='area',
@@ -319,7 +319,7 @@ basic.dashboard(
       },
       statPanel.new(
         'Patch release pressure',
-        description='Total of unreleased commits merged into stable branches',
+        description='Total of unreleased merge requests merged into stable branches',
         reducerFunction='lastNotNull',
         colorMode='value',
         graphMode='area',
@@ -347,20 +347,64 @@ basic.dashboard(
         query='ceil((sum(delivery_metrics_pending_migrations_total{env=~"gstg|gprd",stage="main"}) by (env))/2)',
         legendFormat='{{env}}',
         thresholds=[
-          { color: 'green', value: null },
-          { color: '#EAB839', value: 3 },
-          { color: '#EF843C', value: 4 },
-          { color: 'red', value: 5 },
+          { color: colorScheme.normalRangeColor, value: null },
+          { color: colorScheme.warningColor, value: 3 },
+          { color: colorScheme.errorColor, value: 4 },
+          { color: colorScheme.criticalColor, value: 5 },
         ],
       ),
     ],
   ], cellHeights=[3 for x in environments], startRow=1)
 )
+.addPanel(
+  row.new(title='Patch release pressure'),
+  gridPos={ x: 0, y: 1000, w: 24, h: 12 },
+)
+.addPanels(
+  layout.grid(
+    [
+      bargaugePanel(
+        'S1/S2 MR Pressure',
+        description='Number of S1/S2 merge requests merged in previous releases.',
+        query=|||
+          sum by (version) (delivery_release_pressure{severity=~"severity::1|severity::2",job="delivery-metrics"})
+        |||,
+        legendFormat='{{version}}',
+        thresholds={
+          mode: 'absolute',
+          steps: [
+            { color: colorScheme.normalRangeColor, value: 0 },
+            { color: colorScheme.criticalColor, value: 1 },
+          ],
+        },
+      ),
+      bargaugePanel(
+        'Total MR Pressure',
+        description='Number of merge requests merged in previous releases.',
+        query=|||
+          sum by (version) (delivery_release_pressure{job="delivery-metrics"})
+        |||,
+        legendFormat='{{version}}',
+        thresholds={
+          mode: 'absolute',
+          steps: [
+            { color: colorScheme.normalRangeColor, value: null },
+            { color: colorScheme.warningColor, value: 5 },
+            { color: colorScheme.errorColor, value: 10 },
+            { color: colorScheme.criticalColor, value: 15 },
+          ],
+        },
+      ),
+    ],
+    cols=3,
+    startRow=1000
+  )
+)
 .addPanels(
   std.flattenArrays(
     std.mapWithIndex(
       function(index, environment)
-        local y = 1000 * (index + 1);
+        local y = 2000 * (index + 1);
         [
           row.new(
             title='%s %s' % [environment.icon, environment.id]
@@ -373,7 +417,7 @@ basic.dashboard(
             environmentPressurePanel(environment),
           ],
           cols=2,
-          startRow=y + 1
+          startRow=y + 2
         ),
       environments
     )
