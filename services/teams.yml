@@ -277,6 +277,7 @@ teams:
 - name: pipeline_authoring
   product_stage_group: pipeline_authoring
   send_slo_alerts_to_team_slack_channel: true
+  send_error_budget_weekly_to_slack: true
   slack_channel: g_pipeline-authoring_alerts
   ignored_components:
   - graphql_query
@@ -285,6 +286,7 @@ teams:
   slack_channel: g_pipeline-execution
   slack_alerts_channel: g_pipeline-execution_alerts
   send_slo_alerts_to_team_slack_channel: true
+  send_error_budget_weekly_to_slack: true
   ignored_components:
   - graphql_query
 - name: product_intelligence
@@ -317,6 +319,7 @@ teams:
   product_stage_group: pipeline_insights
   slack_channel: g_pipeline-insights
   slack_alerts_channel: g_pipeline-insights
+  send_error_budget_weekly_to_slack: true
   ignored_components:
   - graphql_query
 - name: threat_insights
