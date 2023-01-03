@@ -33,4 +33,4 @@ Step 3: Profit! Once a week, on Monday, the error budget report for the past sev
 
 ## I have questions or feature requests
 
-This feature is owned by the Scalability team, and the best way to get our attention is to create an issue in https://gitlab.com/gitlab-com/gl-infra/scalability/-/issues.
+This feature is owned by the Scalability team, and the best way to get our attention is to create an issue in <https://gitlab.com/gitlab-com/gl-infra/scalability/-/issues>.
