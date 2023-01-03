@@ -87,5 +87,11 @@
     "project": "gitlab-db-benchmarking",
     "region": "us-east1",
     "ssh_proxy": "bastion-01-inf-db-benchmarking.c.gitlab-db-benchmarking.internal"
+  },
+  "release": {
+    "name": "release-gitlab-gke",
+    "project": "gitlab-release",
+    "region": "us-east1",
+    "ssh_proxy": "bastion-01-inf-release.c.gitlab-release.internal"
   }
 }
