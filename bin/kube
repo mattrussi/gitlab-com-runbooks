@@ -44,6 +44,13 @@ setup() {
   for cluster in $(all_clusters); do
     context="$(get_kube_context "${cluster}")"
 
+    proxy_set=$(jq -r .[\""${cluster}\""].ssh_proxy "${CLUSTERS_JSON}")
+    if [[ "${proxy_set}" == "null" ]]; then
+      echo "WARNING: Proxy is not configured for ${cluster}, skipping..."
+      kubectl config unset "clusters.${context}.proxy-url"
+      continue
+    fi
+
     kubectl config set "clusters.${context}.proxy-url" "socks5://localhost:${socks_port}"
     ((socks_port = socks_port + 1))
   done
@@ -55,13 +62,18 @@ setup() {
 use_cluster() {
   context="$(get_kube_context "$1")"
 
+  proxy_set=$(jq -r .[\""${cluster}\""].ssh_proxy "${CLUSTERS_JSON}")
   proxy_url="$(kubectl config view -o jsonpath="{.clusters[?(@.name == \"${context}\")].cluster.proxy-url}")"
-  if [ -z "$proxy_url" ]; then
+  if [ -z "$proxy_url" ] && [ "${proxy_set}" != "null" ]; then
     echo >&2 "glsh: proxy-url not set in \$KUBECONFIG, run glsh kube setup"
     exit 1
   fi
 
   kubectx "${context}"
+
+  if [ "${proxy_set}" == "null" ]; then
+    exit 0
+  fi
 
   ssh_proxy="$(get_ssh_proxy "$1")"
 
