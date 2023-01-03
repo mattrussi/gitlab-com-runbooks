@@ -72,7 +72,7 @@
     "name": "pre-gitlab-gke",
     "project": "gitlab-pre",
     "region": "us-east1",
-    "ssh_proxy": "console-01-sv-pre.c.gitlab-pre.internal"
+    "ssh_proxy": null
   },
 
   "ops": {
