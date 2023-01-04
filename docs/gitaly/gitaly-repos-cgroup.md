@@ -131,6 +131,12 @@ Inside [Gitaly: Host Detail](https://dashboards.gitlab.net/d/gitaly-host-detail/
 When a cgroup reaches it quota on memory usage the kernel will OOM kill that
 process, which we can see in the [kernel logs](https://log.gprd.gitlab.net/goto/aeea55c0-3d7e-11ed-8d37-e9a2f393ea2ahttps://log.gprd.gitlab.net/goto/aeea55c0-3d7e-11ed-8d37-e9a2f393ea2a).
 
+To find out which `cgroup` was used for the commands that run for a specific RPC you can look at the `json.command.cgroup_path` field.
+
+![json.command.cgroup_path logs](./img/cgroup-logs.png)
+
+[source](https://log.gprd.gitlab.net/goto/444e8580-8c37-11ed-85ed-e7557b0a598c)
+
 ## Useful debugging commands
 
 1. Find out which cgroups are being used
