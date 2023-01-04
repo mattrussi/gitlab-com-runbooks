@@ -60,7 +60,8 @@ setup() {
 }
 
 use_cluster() {
-  context="$(get_kube_context "$1")"
+  cluster="$1"
+  context="$(get_kube_context "$cluster")"
 
   proxy_set=$(jq -r .[\""${cluster}\""].ssh_proxy "${CLUSTERS_JSON}")
   proxy_url="$(kubectl config view -o jsonpath="{.clusters[?(@.name == \"${context}\")].cluster.proxy-url}")"
