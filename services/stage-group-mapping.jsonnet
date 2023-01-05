@@ -33,7 +33,9 @@
     name: 'Integrations',
     stage: 'manage',
     feature_categories: [
+      'api',
       'integrations',
+      'webhooks',
     ],
   },
   foundations: {
@@ -66,7 +68,6 @@
     feature_categories: [
       'requirements_management',
       'quality_management',
-      'service_desk',
     ],
   },
   optimize: {
@@ -74,6 +75,7 @@
     stage: 'plan',
     feature_categories: [
       'value_stream_management',
+      'dora_metrics',
       'devops_reports',
     ],
   },
@@ -82,15 +84,14 @@
     stage: 'create',
     feature_categories: [
       'source_code_management',
-      'git_lfs',
     ],
   },
   code_review: {
     name: 'Code Review',
     stage: 'create',
     feature_categories: [
-      'code_review',
-      'editor_extension',
+      'code_review_workflow',
+      'gitlab_cli',
     ],
   },
   editor: {
@@ -117,7 +118,6 @@
     stage: 'verify',
     feature_categories: [
       'pipeline_authoring',
-      'jenkins_importer',
       'secrets_management',
     ],
   },
@@ -126,7 +126,6 @@
     stage: 'verify',
     feature_categories: [
       'runner',
-      'runner_saas',
       'runner_fleet',
     ],
   },
@@ -134,7 +133,7 @@
     name: 'Runner SaaS',
     stage: 'verify',
     feature_categories: [
-
+      'runner_saas',
     ],
   },
   pipeline_insights: {
@@ -241,6 +240,7 @@
       'on_call_schedule_management',
       'runbooks',
       'continuous_verification',
+      'service_desk',
     ],
   },
   observability: {
@@ -311,7 +311,6 @@
     name: 'Utilization',
     stage: 'fulfillment',
     feature_categories: [
-      'subscription_usage_reports',
       'subscription_cost_management',
     ],
   },
@@ -320,7 +319,6 @@
     stage: 'fulfillment',
     feature_categories: [
       'fulfillment_infrastructure',
-      'fulfillment_developer_productivity',
       'customersdot_application',
     ],
   },
@@ -415,6 +413,7 @@
     stage: 'data_stores',
     feature_categories: [
       'global_search',
+      'code_search',
     ],
   },
   database: {
