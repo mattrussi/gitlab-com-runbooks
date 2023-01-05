@@ -1,6 +1,7 @@
 local grafana = import 'github.com/grafana/grafonnet-lib/grafonnet/grafana.libsonnet';
 local serviceDashboard = import 'gitlab-dashboards/service_dashboard.libsonnet';
 local basic = import 'grafana/basic.libsonnet';
+local colorScheme = import 'grafana/color_scheme.libsonnet';
 local layout = import 'grafana/layout.libsonnet';
 local selectors = import 'promql/selectors.libsonnet';
 
@@ -27,6 +28,24 @@ serviceDashboard.overview('praefect')
 )
 .addPanels(
   layout.grid([
+    basic.statPanel(
+      title='Unavailable Repositories',
+      panelTitle='Unavailable Repositories',
+      description=|||
+        Number of repositories that don't have any up to date replicas available.
+      |||,
+      query=|||
+        max(gitaly_praefect_unavailable_repositories{%(selector)s}) by (virtual_storage)
+      ||| % formatConfig,
+      color='light-green',
+      justifyMode='center',
+      colorMode='value',
+      textMode='value',
+    )
+    .addThresholds([
+      { color: colorScheme.normalRangeColor, value: 0 }
+      { color: colorScheme.criticalColor, value: 1 },
+    ]),
     basic.timeseries(
       title='Praefect Replications by Reason',
       description=|||
