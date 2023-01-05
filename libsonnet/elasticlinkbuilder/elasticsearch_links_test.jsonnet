@@ -119,13 +119,13 @@ test.suite({
     actual: elastic.getMatchersForPrometheusSelectorHash(
       'rails',
       {
-        stage_group: 'source_code',
+        stage_group: 'package_registry',
       }
     ),
     expect: [
       {
-        meta: { key: 'json.meta.feature_category', type: 'phrases', params: ['source_code_management', 'git_lfs'] },
-        query: { bool: { minimum_should_match: 1, should: [{ match_phrase: { 'json.meta.feature_category': 'source_code_management' } }, { match_phrase: { 'json.meta.feature_category': 'git_lfs' } }] } },
+        meta: { key: 'json.meta.feature_category', type: 'phrases', params: ['package_registry', 'helm_chart_registry'] },
+        query: { bool: { minimum_should_match: 1, should: [{ match_phrase: { 'json.meta.feature_category': 'package_registry' } }, { match_phrase: { 'json.meta.feature_category': 'helm_chart_registry' } }] } },
       },
     ],
   },

@@ -29,7 +29,7 @@ test.suite({
   testFeatureCategoryMapCategories: {
     actual: std.objectFields(stages.featureCategoryMap),
     expectThat: {
-      knownCategories: std.set(['source_code_management', 'code_review']),
+      knownCategories: std.set(['source_code_management', 'code_review_workflow']),
       result:
         local intersection = std.setInter(self.knownCategories, self.actual);
         intersection == self.knownCategories,
