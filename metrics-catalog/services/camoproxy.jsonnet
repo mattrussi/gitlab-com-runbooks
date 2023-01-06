@@ -51,8 +51,7 @@ metricsCatalog.serviceDefinition({
 
       apdex: histogramApdex(
         histogram='camo_response_duration_seconds_bucket',
-        satisfiedThreshold=5,
-        toleratedThreshold=10
+        satisfiedThreshold=10
       ),
 
       requestRate: rateMetric(
