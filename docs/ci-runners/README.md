@@ -444,7 +444,7 @@ The `default` network will be removed once we will move all of the runner manage
 infrastructure, which is being tracked [by this epic](https://gitlab.com/groups/gitlab-com/gl-infra/-/epics/456).
 
 The `ci` network will be getting new subnetworks for `ephemeral-runners-X` while working on
-[this epic]((https://gitlab.com/groups/gitlab-com/gl-infra/-/epics/456)).
+[this epic](https://gitlab.com/groups/gitlab-com/gl-infra/-/epics/456).
 
 The `runners-gke` network, at least for now, is in the expected state.
 

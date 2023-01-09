@@ -94,4 +94,5 @@ on GitLab.com while still getting some benefit from the Cloudflare WAF product.
 
 ## GeoIP Troubleshooting
 
-We use CloudFlare rules to block access to gitlab.com from various locations.  When we need to torubleshoot these rules with CloudFlare support they will ask for a trace from the user being blocked.  The user simply has to visit https://gitlab.com/cdn-cgi/trace and then we provide the output in the support ticket.
+We use CloudFlare rules to block access to gitlab.com from various locations.  When we need to torubleshoot these rules with CloudFlare support they will ask for a trace from the user being blocked.  The user simply has to visit [`/cdn-cgi/trace`](https://gitlab.com/cdn-cgi/trace) and then we provide the output in the support ticket.
+```
