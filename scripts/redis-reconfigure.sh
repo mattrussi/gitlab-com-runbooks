@@ -5,8 +5,8 @@
 
 set -euo pipefail
 
-if [[ $# -ne 2 ]]; then
-  echo >&2 "usage: redis-reconfigure.sh env cluster"
+if [[ $# -lt 2 ]]; then
+  echo >&2 "usage: redis-reconfigure.sh env cluster [bootstrap]"
   echo >&2 ""
   echo >&2 "  e.g. redis-reconfigure.sh gstg redis-cache"
   echo >&2 ""
@@ -15,6 +15,12 @@ fi
 
 export gitlab_env=$1
 export gitlab_redis_cluster=$2
+
+if [[ $# -eq 3 && $3 == "bootstrap" ]]; then
+  export bootstrap="yes"
+else
+  export bootstrap="no"
+fi
 
 case $gitlab_env in
   pre)
@@ -190,12 +196,45 @@ reconfigure_sentinel() {
   echo "< reconfigure $fqdn"
 }
 
-for i in 01 02 03; do
-  failover_if_master $i
-  reconfigure $i
+bootstrap() {
+  export i=$1
+  export fqdn="${gitlab_redis_cluster}-$i-db-${gitlab_env}.c.${gitlab_project}.internal"
+  export primary="${gitlab_redis_cluster}-01-db-${gitlab_env}.c.${gitlab_project}.internal"
 
-  if [[ "$gitlab_redis_cluster" = "redis-cache" ]]; then
-    reconfigure_sentinel $i
+  echo "> bootstrapping $fqdn"
+
+  # verify that the host doesn't have a functional redis
+
+  if ssh $fqdn "test -e /opt/gitlab/etc/gitlab-redis-cli-rc"; then
+    echo "Redis is already bootstrapped on this node, skipping bootstrap."
+    return
+  fi
+
+  # Make everything work
+
+  run_chef_client
+
+  gitlab_ctl_reconfigure
+
+  if [ $i != 01 ]; then
+    echo "> setting $fqdn as replica of $primary"
+    ssh $fqdn "$redis_cli replicaof $primary 6379"
+  fi
+
+}
+
+for i in 01 02 03; do
+
+  if [[ $bootstrap == "yes" ]]; then
+    bootstrap $i
+  else
+    failover_if_master $i
+    reconfigure $i
+
+    if [[ "$gitlab_redis_cluster" = "redis-cache" ]]; then
+      reconfigure_sentinel $i
+    fi
+
   fi
 
   echo
