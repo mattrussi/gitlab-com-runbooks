@@ -82,6 +82,28 @@ local gitalySpawnTimeoutsPerNode(selector) =
     legend_show=false,
   );
 
+local gitalyRPCRequestRateByMethod(selector) =
+  basic.timeseries(
+    title='Request rate by grpc_method',
+    description='Request rate for the Gitaly server',
+    query=|||
+      sum by (grpc_method, grpc_service) (rate(grpc_server_handled_total{%(selector)s}[$__rate_interval]))
+    ||| % { selector: selector },
+    interval='1m',
+    legendFormat='/{{ grpc_service}}/{{ grpc_method }}'
+  );
+
+local gitalyRPCRequestRateByCode(selector) =
+  basic.timeseries(
+    title='Response rate by grpc_code',
+    description='Response rate for the Gitaly server',
+    query=|||
+      sum by (grpc_code) (rate(grpc_server_handled_total{%(selector)s}[$__rate_interval]))
+    ||| % { selector: selector },
+    interval='1m',
+    legendFormat='{{grpc_cdoe}}',
+  );
+
 local gitalyCGroupCPUUsagePerCGroup(selector) =
   basic.timeseries(
     title='cgroup: CPU per cgroup',
@@ -349,6 +371,21 @@ basic.dashboard(
   }
 )
 .addPanel(
+  row.new(title='gitaly RPC request rate', collapse=true)
+  .addPanels(
+    layout.grid([
+      gitalyRPCRequestRateByMethod(selectorSerialized),
+      gitalyRPCRequestRateByCode(selectorSerialized),
+    ], startRow=5802)
+  ),
+  gridPos={
+    x: 0,
+    y: 5800,
+    w: 24,
+    h: 1,
+  }
+)
+.addPanel(
   row.new(title='cgroup', collapse=true)
   .addPanels(
     layout.grid([
@@ -370,11 +407,11 @@ basic.dashboard(
           https://gitlab.com/gitlab-com/runbooks/-/blob/master/docs/gitaly/gitaly-repos-cgroup.md
         |||
       ),
-    ], startRow=5801)
+    ], startRow=5901)
   ),
   gridPos={
     x: 0,
-    y: 5800,
+    y: 5900,
     w: 24,
     h: 1,
   }
