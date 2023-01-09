@@ -783,3 +783,11 @@ deploy-thanos-rules-staging:
     THANOS_RULES_BUCKET: gitlab-pre-thanos-rules
   extends:
     - .deploy-thanos-rules
+
+deploy-thanos-rules-produciton:
+  stage: deploy-rules-production
+  environment: ops
+  variables:
+    THANOS_RULES_BUCKET: gitlab-ops-thanos-rules
+  extends:
+    - .deploy-thanos-rules
