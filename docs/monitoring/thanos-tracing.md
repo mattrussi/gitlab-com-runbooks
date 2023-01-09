@@ -16,7 +16,7 @@ The graph labeled **Select a trace** displays a dot for each request in your sel
 
 ![image trace-list](./img/trace-list.png)
 
-* Click [Trace > Trace List]((https://console.cloud.google.com/traces/list?project=gitlab-ops)) in the Cloud Console navigation menu.
+* Click [Trace > Trace List](https://console.cloud.google.com/traces/list?project=gitlab-ops) in the Cloud Console navigation menu.
 * On the left panel is a timeline (x-axis) of all the sampled requests and their request duration (y-axis)
 * Clicking on one them will expand the trace with more information.
 * In the **Select a trace** section of the **Trace list page**, click the blue dot, which represents a captured trace. When you hold the pointer over a dot, a tooltip appears that includes the date, time, URI, and latency. The **Latency** column displays the latency for the captured traces. For our case, we can use the `x-thanos-trace-id` we got earlier to filter the trace span and you can also view trace data in the following sections of the Trace list page:
