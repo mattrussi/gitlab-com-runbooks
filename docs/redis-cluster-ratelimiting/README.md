@@ -23,14 +23,18 @@ to store the transient rate-limiting counts (almost exclusively a one minute per
 the relevant period is actually stored as part of the keyname (`epoch_time / period`), and it uses Redis TTLs to
 manage the data/expiry (no client activity required; old data just ages out)
 
-It is _not_ a service to implement rate-limiting on Redis itself.
+It is _not_ a service to rate limit requests to Redis itself.
 
-This was split because as found in <https://gitlab.com/gitlab-com/gl-infra/production/-/issues/3034#note_460538394> RackAttack
+This Redis instance was split off from `redis-cache` because as found in <https://gitlab.com/gitlab-com/gl-infra/production/-/issues/3034#note_460538394> RackAttack
 alone accounted for somewhere in the order of 25% (absolute) CPU usage on the redis-cache instance in Nov 2020, and that will
 only have grown with traffic.
 
 As the cache cluster approached 95% saturation it was determined the best short-term approach was to split out the rate-limiting
 data storage to its own cluster before we go further with more horizontal scalability.
+
+The `redis-cluster-ratelimiting` instance is the horizontally scalable
+counterpart of `redis-ratelimiting` whichs runs in Sentinel mode. More
+information on efforts to horizontally scale Redis instances can be found [here](https://gitlab.com/groups/gitlab-com/gl-infra/-/epics/823).
 
 ## Architecture
 
