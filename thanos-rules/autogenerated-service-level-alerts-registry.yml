@@ -2093,11 +2093,11 @@ groups:
       gitlab_regional_sli_ops:rate_5m{component="registry_cdn",monitor="global",stage="main",type="registry"} offset 1h
       unless
       gitlab_regional_sli_ops:rate_5m{component="registry_cdn",monitor="global",stage="main",type="registry"}
-  - alert: RegistryServiceServerApdexSLOViolation
+  - alert: RegistryServiceRegistryServerApdexSLOViolation
     for: 2m
     annotations:
-      title: The server SLI of the registry service (`{{ $labels.stage }}` stage)
-        has an apdex violating SLO
+      title: The registry_server SLI of the registry service (`{{ $labels.stage }}`
+        stage) has an apdex violating SLO
       description: |
         Aggregation of all registry requests.
 
@@ -2106,7 +2106,7 @@ groups:
       grafana_dashboard_link: https://dashboards.gitlab.net/d/registry-main/registry-overview?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-stage={{ $labels.stage }}
       grafana_min_zoom_hours: "6"
-      grafana_panel_id: "2863319079"
+      grafana_panel_id: "2595080210"
       grafana_variables: environment,stage
       promql_template_1: |
         histogram_quantile(
@@ -2131,24 +2131,24 @@ groups:
     expr: |
       (
         (
-          gitlab_component_apdex:ratio_1h{component="server",monitor="global",type="registry"}
+          gitlab_component_apdex:ratio_1h{component="registry_server",monitor="global",type="registry"}
           < (1 - 14.4 * 0.003000)
         )
         and
         (
-          gitlab_component_apdex:ratio_5m{component="server",monitor="global",type="registry"}
+          gitlab_component_apdex:ratio_5m{component="registry_server",monitor="global",type="registry"}
           < (1 - 14.4 * 0.003000)
         )
       )
       and on(env,environment,tier,type,stage,component)
       (
-        sum by(env,environment,tier,type,stage,component) (gitlab_component_ops:rate_1h{component="server",monitor="global",type="registry"}) >= 1
+        sum by(env,environment,tier,type,stage,component) (gitlab_component_ops:rate_1h{component="registry_server",monitor="global",type="registry"}) >= 1
       )
-  - alert: RegistryServiceServerApdexSLOViolation
+  - alert: RegistryServiceRegistryServerApdexSLOViolation
     for: 2m
     annotations:
-      title: The server SLI of the registry service (`{{ $labels.stage }}` stage)
-        has an apdex violating SLO
+      title: The registry_server SLI of the registry service (`{{ $labels.stage }}`
+        stage) has an apdex violating SLO
       description: |
         Aggregation of all registry requests.
 
@@ -2157,7 +2157,7 @@ groups:
       grafana_dashboard_link: https://dashboards.gitlab.net/d/registry-main/registry-overview?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-stage={{ $labels.stage }}
       grafana_min_zoom_hours: "6"
-      grafana_panel_id: "2863319079"
+      grafana_panel_id: "2595080210"
       grafana_variables: environment,stage
       promql_template_1: |
         histogram_quantile(
@@ -2182,24 +2182,24 @@ groups:
     expr: |
       (
         (
-          gitlab_component_apdex:ratio_6h{component="server",monitor="global",type="registry"}
+          gitlab_component_apdex:ratio_6h{component="registry_server",monitor="global",type="registry"}
           < (1 - 6 * 0.003000)
         )
         and
         (
-          gitlab_component_apdex:ratio_30m{component="server",monitor="global",type="registry"}
+          gitlab_component_apdex:ratio_30m{component="registry_server",monitor="global",type="registry"}
           < (1 - 6 * 0.003000)
         )
       )
       and on(env,environment,tier,type,stage,component)
       (
-        sum by(env,environment,tier,type,stage,component) (gitlab_component_ops:rate_6h{component="server",monitor="global",type="registry"}) >= 0.16667
+        sum by(env,environment,tier,type,stage,component) (gitlab_component_ops:rate_6h{component="registry_server",monitor="global",type="registry"}) >= 0.16667
       )
-  - alert: RegistryServiceServerApdexSLOViolationRegional
+  - alert: RegistryServiceRegistryServerApdexSLOViolationRegional
     for: 2m
     annotations:
-      title: The server SLI of the registry service in region `{{ $labels.region }}`
-        has an apdex violating SLO
+      title: The registry_server SLI of the registry service in region `{{ $labels.region
+        }}` has an apdex violating SLO
       description: |
         Aggregation of all registry requests.
 
@@ -2210,7 +2210,7 @@ groups:
       grafana_dashboard_link: https://dashboards.gitlab.net/d/registry-main/registry-overview?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-stage={{ $labels.stage }}
       grafana_min_zoom_hours: "6"
-      grafana_panel_id: "2863319079"
+      grafana_panel_id: "2595080210"
       grafana_variables: environment,stage
       promql_template_1: |
         histogram_quantile(
@@ -2235,24 +2235,24 @@ groups:
     expr: |
       (
         (
-          gitlab_regional_sli_apdex:ratio_1h{component="server",monitor="global",type="registry"}
+          gitlab_regional_sli_apdex:ratio_1h{component="registry_server",monitor="global",type="registry"}
           < (1 - 14.4 * 0.003000)
         )
         and
         (
-          gitlab_regional_sli_apdex:ratio_5m{component="server",monitor="global",type="registry"}
+          gitlab_regional_sli_apdex:ratio_5m{component="registry_server",monitor="global",type="registry"}
           < (1 - 14.4 * 0.003000)
         )
       )
       and on(env,environment,tier,type,stage,region,component)
       (
-        sum by(env,environment,tier,type,stage,region,component) (gitlab_regional_sli_ops:rate_1h{component="server",monitor="global",type="registry"}) >= 1
+        sum by(env,environment,tier,type,stage,region,component) (gitlab_regional_sli_ops:rate_1h{component="registry_server",monitor="global",type="registry"}) >= 1
       )
-  - alert: RegistryServiceServerApdexSLOViolationRegional
+  - alert: RegistryServiceRegistryServerApdexSLOViolationRegional
     for: 2m
     annotations:
-      title: The server SLI of the registry service in region `{{ $labels.region }}`
-        has an apdex violating SLO
+      title: The registry_server SLI of the registry service in region `{{ $labels.region
+        }}` has an apdex violating SLO
       description: |
         Aggregation of all registry requests.
 
@@ -2263,7 +2263,7 @@ groups:
       grafana_dashboard_link: https://dashboards.gitlab.net/d/registry-main/registry-overview?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-stage={{ $labels.stage }}
       grafana_min_zoom_hours: "6"
-      grafana_panel_id: "2863319079"
+      grafana_panel_id: "2595080210"
       grafana_variables: environment,stage
       promql_template_1: |
         histogram_quantile(
@@ -2288,24 +2288,24 @@ groups:
     expr: |
       (
         (
-          gitlab_regional_sli_apdex:ratio_6h{component="server",monitor="global",type="registry"}
+          gitlab_regional_sli_apdex:ratio_6h{component="registry_server",monitor="global",type="registry"}
           < (1 - 6 * 0.003000)
         )
         and
         (
-          gitlab_regional_sli_apdex:ratio_30m{component="server",monitor="global",type="registry"}
+          gitlab_regional_sli_apdex:ratio_30m{component="registry_server",monitor="global",type="registry"}
           < (1 - 6 * 0.003000)
         )
       )
       and on(env,environment,tier,type,stage,region,component)
       (
-        sum by(env,environment,tier,type,stage,region,component) (gitlab_regional_sli_ops:rate_6h{component="server",monitor="global",type="registry"}) >= 0.16667
+        sum by(env,environment,tier,type,stage,region,component) (gitlab_regional_sli_ops:rate_6h{component="registry_server",monitor="global",type="registry"}) >= 0.16667
       )
-  - alert: RegistryServiceServerErrorSLOViolation
+  - alert: RegistryServiceRegistryServerErrorSLOViolation
     for: 2m
     annotations:
-      title: The server SLI of the registry service (`{{ $labels.stage }}` stage)
-        has an error rate violating SLO
+      title: The registry_server SLI of the registry service (`{{ $labels.stage }}`
+        stage) has an error rate violating SLO
       description: |
         Aggregation of all registry requests.
 
@@ -2314,7 +2314,7 @@ groups:
       grafana_dashboard_link: https://dashboards.gitlab.net/d/registry-main/registry-overview?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-stage={{ $labels.stage }}
       grafana_min_zoom_hours: "6"
-      grafana_panel_id: "1631973137"
+      grafana_panel_id: "1063087290"
       grafana_variables: environment,stage
       promql_template_1: |
         sum by (env,environment,tier,stage) (
@@ -2336,24 +2336,24 @@ groups:
     expr: |
       (
         (
-          gitlab_component_errors:ratio_1h{component="server",monitor="global",type="registry"}
+          gitlab_component_errors:ratio_1h{component="registry_server",monitor="global",type="registry"}
           > (14.4 * 0.000100)
         )
         and
         (
-          gitlab_component_errors:ratio_5m{component="server",monitor="global",type="registry"}
+          gitlab_component_errors:ratio_5m{component="registry_server",monitor="global",type="registry"}
           > (14.4 * 0.000100)
         )
       )
       and on(env,environment,tier,type,stage,component)
       (
-        sum by(env,environment,tier,type,stage,component) (gitlab_component_ops:rate_1h{component="server",monitor="global",type="registry"}) >= 1
+        sum by(env,environment,tier,type,stage,component) (gitlab_component_ops:rate_1h{component="registry_server",monitor="global",type="registry"}) >= 1
       )
-  - alert: RegistryServiceServerErrorSLOViolation
+  - alert: RegistryServiceRegistryServerErrorSLOViolation
     for: 2m
     annotations:
-      title: The server SLI of the registry service (`{{ $labels.stage }}` stage)
-        has an error rate violating SLO
+      title: The registry_server SLI of the registry service (`{{ $labels.stage }}`
+        stage) has an error rate violating SLO
       description: |
         Aggregation of all registry requests.
 
@@ -2362,7 +2362,7 @@ groups:
       grafana_dashboard_link: https://dashboards.gitlab.net/d/registry-main/registry-overview?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-stage={{ $labels.stage }}
       grafana_min_zoom_hours: "6"
-      grafana_panel_id: "1631973137"
+      grafana_panel_id: "1063087290"
       grafana_variables: environment,stage
       promql_template_1: |
         sum by (env,environment,tier,stage) (
@@ -2384,24 +2384,24 @@ groups:
     expr: |
       (
         (
-          gitlab_component_errors:ratio_6h{component="server",monitor="global",type="registry"}
+          gitlab_component_errors:ratio_6h{component="registry_server",monitor="global",type="registry"}
           > (6 * 0.000100)
         )
         and
         (
-          gitlab_component_errors:ratio_30m{component="server",monitor="global",type="registry"}
+          gitlab_component_errors:ratio_30m{component="registry_server",monitor="global",type="registry"}
           > (6 * 0.000100)
         )
       )
       and on(env,environment,tier,type,stage,component)
       (
-        sum by(env,environment,tier,type,stage,component) (gitlab_component_ops:rate_6h{component="server",monitor="global",type="registry"}) >= 0.16667
+        sum by(env,environment,tier,type,stage,component) (gitlab_component_ops:rate_6h{component="registry_server",monitor="global",type="registry"}) >= 0.16667
       )
-  - alert: RegistryServiceServerErrorSLOViolationRegional
+  - alert: RegistryServiceRegistryServerErrorSLOViolationRegional
     for: 2m
     annotations:
-      title: The server SLI of the registry service in region `{{ $labels.region }}`
-        has an error rate violating SLO
+      title: The registry_server SLI of the registry service in region `{{ $labels.region
+        }}` has an error rate violating SLO
       description: |
         Aggregation of all registry requests.
 
@@ -2412,7 +2412,7 @@ groups:
       grafana_dashboard_link: https://dashboards.gitlab.net/d/registry-main/registry-overview?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-stage={{ $labels.stage }}
       grafana_min_zoom_hours: "6"
-      grafana_panel_id: "1631973137"
+      grafana_panel_id: "1063087290"
       grafana_variables: environment,stage
       promql_template_1: |
         sum by (env,environment,tier,stage,region) (
@@ -2434,24 +2434,24 @@ groups:
     expr: |
       (
         (
-          gitlab_regional_sli_errors:ratio_1h{component="server",monitor="global",type="registry"}
+          gitlab_regional_sli_errors:ratio_1h{component="registry_server",monitor="global",type="registry"}
           > (14.4 * 0.000100)
         )
         and
         (
-          gitlab_regional_sli_errors:ratio_5m{component="server",monitor="global",type="registry"}
+          gitlab_regional_sli_errors:ratio_5m{component="registry_server",monitor="global",type="registry"}
           > (14.4 * 0.000100)
         )
       )
       and on(env,environment,tier,type,stage,region,component)
       (
-        sum by(env,environment,tier,type,stage,region,component) (gitlab_regional_sli_ops:rate_1h{component="server",monitor="global",type="registry"}) >= 1
+        sum by(env,environment,tier,type,stage,region,component) (gitlab_regional_sli_ops:rate_1h{component="registry_server",monitor="global",type="registry"}) >= 1
       )
-  - alert: RegistryServiceServerErrorSLOViolationRegional
+  - alert: RegistryServiceRegistryServerErrorSLOViolationRegional
     for: 2m
     annotations:
-      title: The server SLI of the registry service in region `{{ $labels.region }}`
-        has an error rate violating SLO
+      title: The registry_server SLI of the registry service in region `{{ $labels.region
+        }}` has an error rate violating SLO
       description: |
         Aggregation of all registry requests.
 
@@ -2462,7 +2462,7 @@ groups:
       grafana_dashboard_link: https://dashboards.gitlab.net/d/registry-main/registry-overview?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-stage={{ $labels.stage }}
       grafana_min_zoom_hours: "6"
-      grafana_panel_id: "1631973137"
+      grafana_panel_id: "1063087290"
       grafana_variables: environment,stage
       promql_template_1: |
         sum by (env,environment,tier,stage,region) (
@@ -2484,24 +2484,24 @@ groups:
     expr: |
       (
         (
-          gitlab_regional_sli_errors:ratio_6h{component="server",monitor="global",type="registry"}
+          gitlab_regional_sli_errors:ratio_6h{component="registry_server",monitor="global",type="registry"}
           > (6 * 0.000100)
         )
         and
         (
-          gitlab_regional_sli_errors:ratio_30m{component="server",monitor="global",type="registry"}
+          gitlab_regional_sli_errors:ratio_30m{component="registry_server",monitor="global",type="registry"}
           > (6 * 0.000100)
         )
       )
       and on(env,environment,tier,type,stage,region,component)
       (
-        sum by(env,environment,tier,type,stage,region,component) (gitlab_regional_sli_ops:rate_6h{component="server",monitor="global",type="registry"}) >= 0.16667
+        sum by(env,environment,tier,type,stage,region,component) (gitlab_regional_sli_ops:rate_6h{component="registry_server",monitor="global",type="registry"}) >= 0.16667
       )
-  - alert: RegistryServiceServerTrafficCessation
+  - alert: RegistryServiceRegistryServerTrafficCessation
     for: 5m
     annotations:
-      title: The server SLI of the registry service (`{{ $labels.stage }}` stage)
-        has not received any traffic in the past 30m
+      title: The registry_server SLI of the registry service (`{{ $labels.stage }}`
+        stage) has not received any traffic in the past 30m
       description: |
         Aggregation of all registry requests.
 
@@ -2510,7 +2510,7 @@ groups:
       grafana_dashboard_link: https://dashboards.gitlab.net/d/registry-main/registry-overview?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-stage={{ $labels.stage }}
       grafana_min_zoom_hours: "6"
-      grafana_panel_id: "2414183688"
+      grafana_panel_id: "1064354686"
       grafana_variables: environment,stage
       promql_template_1: |
         sum by (env,environment,tier,stage) (
@@ -2529,14 +2529,14 @@ groups:
       slo_alert: "no"
       user_impacting: "yes"
     expr: |
-      gitlab_component_ops:rate_30m{component="server",monitor="global",stage="main",type="registry"} == 0
+      gitlab_component_ops:rate_30m{component="registry_server",monitor="global",stage="main",type="registry"} == 0
       and
-      gitlab_component_ops:rate_30m{component="server",monitor="global",stage="main",type="registry"} offset 1h >= 0.16666666666666666
-  - alert: RegistryServiceServerTrafficAbsent
+      gitlab_component_ops:rate_30m{component="registry_server",monitor="global",stage="main",type="registry"} offset 1h >= 0.16666666666666666
+  - alert: RegistryServiceRegistryServerTrafficAbsent
     for: 30m
     annotations:
-      title: The server SLI of the registry service (`{{ $labels.stage }}` stage)
-        has not reported any traffic in the past 30m
+      title: The registry_server SLI of the registry service (`{{ $labels.stage }}`
+        stage) has not reported any traffic in the past 30m
       description: |
         Aggregation of all registry requests.
 
@@ -2547,7 +2547,7 @@ groups:
       grafana_dashboard_link: https://dashboards.gitlab.net/d/registry-main/registry-overview?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-stage={{ $labels.stage }}
       grafana_min_zoom_hours: "6"
-      grafana_panel_id: "2414183688"
+      grafana_panel_id: "1064354686"
       grafana_variables: environment,stage
       promql_template_1: |
         sum by (env,environment,tier,stage) (
@@ -2566,14 +2566,14 @@ groups:
       slo_alert: "no"
       user_impacting: "yes"
     expr: |
-      gitlab_component_ops:rate_5m{component="server",monitor="global",stage="main",type="registry"} offset 1h
+      gitlab_component_ops:rate_5m{component="registry_server",monitor="global",stage="main",type="registry"} offset 1h
       unless
-      gitlab_component_ops:rate_5m{component="server",monitor="global",stage="main",type="registry"}
-  - alert: RegistryServiceServerTrafficCessationRegional
+      gitlab_component_ops:rate_5m{component="registry_server",monitor="global",stage="main",type="registry"}
+  - alert: RegistryServiceRegistryServerTrafficCessationRegional
     for: 5m
     annotations:
-      title: The server SLI of the registry service in region `{{ $labels.region }}`
-        has not received any traffic in the past 30m
+      title: The registry_server SLI of the registry service in region `{{ $labels.region
+        }}` has not received any traffic in the past 30m
       description: |
         Aggregation of all registry requests.
 
@@ -2584,7 +2584,7 @@ groups:
       grafana_dashboard_link: https://dashboards.gitlab.net/d/registry-main/registry-overview?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-stage={{ $labels.stage }}
       grafana_min_zoom_hours: "6"
-      grafana_panel_id: "2414183688"
+      grafana_panel_id: "1064354686"
       grafana_variables: environment,stage
       promql_template_1: |
         sum by (env,environment,tier,stage,region) (
@@ -2603,14 +2603,14 @@ groups:
       slo_alert: "no"
       user_impacting: "yes"
     expr: |
-      gitlab_regional_sli_ops:rate_30m{component="server",monitor="global",stage="main",type="registry"} == 0
+      gitlab_regional_sli_ops:rate_30m{component="registry_server",monitor="global",stage="main",type="registry"} == 0
       and
-      gitlab_regional_sli_ops:rate_30m{component="server",monitor="global",stage="main",type="registry"} offset 1h >= 0.16666666666666666
-  - alert: RegistryServiceServerTrafficAbsentRegional
+      gitlab_regional_sli_ops:rate_30m{component="registry_server",monitor="global",stage="main",type="registry"} offset 1h >= 0.16666666666666666
+  - alert: RegistryServiceRegistryServerTrafficAbsentRegional
     for: 30m
     annotations:
-      title: The server SLI of the registry service in region `{{ $labels.region }}`
-        has not reported any traffic in the past 30m
+      title: The registry_server SLI of the registry service in region `{{ $labels.region
+        }}` has not reported any traffic in the past 30m
       description: |
         Aggregation of all registry requests.
 
@@ -2623,7 +2623,7 @@ groups:
       grafana_dashboard_link: https://dashboards.gitlab.net/d/registry-main/registry-overview?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-stage={{ $labels.stage }}
       grafana_min_zoom_hours: "6"
-      grafana_panel_id: "2414183688"
+      grafana_panel_id: "1064354686"
       grafana_variables: environment,stage
       promql_template_1: |
         sum by (env,environment,tier,stage,region) (
@@ -2642,9 +2642,9 @@ groups:
       slo_alert: "no"
       user_impacting: "yes"
     expr: |
-      gitlab_regional_sli_ops:rate_5m{component="server",monitor="global",stage="main",type="registry"} offset 1h
+      gitlab_regional_sli_ops:rate_5m{component="registry_server",monitor="global",stage="main",type="registry"} offset 1h
       unless
-      gitlab_regional_sli_ops:rate_5m{component="server",monitor="global",stage="main",type="registry"}
+      gitlab_regional_sli_ops:rate_5m{component="registry_server",monitor="global",stage="main",type="registry"}
   - alert: RegistryServiceServerRouteManifestReadsApdexSLOViolation
     for: 2m
     annotations:

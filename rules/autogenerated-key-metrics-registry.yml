@@ -229,7 +229,7 @@ groups:
       )
   - record: gitlab_component_apdex:success:rate
     labels:
-      component: server
+      component: registry_server
       tier: sv
       type: registry
     expr: |
@@ -246,7 +246,7 @@ groups:
       2
   - record: gitlab_component_apdex:weight:score
     labels:
-      component: server
+      component: registry_server
       tier: sv
       type: registry
     expr: |
@@ -255,7 +255,7 @@ groups:
       )
   - record: gitlab_component_ops:rate
     labels:
-      component: server
+      component: registry_server
       tier: sv
       type: registry
     expr: |
@@ -264,7 +264,7 @@ groups:
       )
   - record: gitlab_component_errors:rate
     labels:
-      component: server
+      component: registry_server
       tier: sv
       type: registry
     expr: |
@@ -276,7 +276,7 @@ groups:
       or
       (
         0 * group by(environment,stage) (
-          gitlab_component_ops:rate{component="server",tier="sv",type="registry"}
+          gitlab_component_ops:rate{component="registry_server",tier="sv",type="registry"}
         )
       )
   - record: gitlab_component_apdex:success:rate
@@ -577,7 +577,7 @@ groups:
       )
   - record: gitlab_component_apdex:success:rate_5m
     labels:
-      component: server
+      component: registry_server
       tier: sv
       type: registry
     expr: |
@@ -594,7 +594,7 @@ groups:
       2
   - record: gitlab_component_apdex:weight:score_5m
     labels:
-      component: server
+      component: registry_server
       tier: sv
       type: registry
     expr: |
@@ -603,7 +603,7 @@ groups:
       )
   - record: gitlab_component_ops:rate_5m
     labels:
-      component: server
+      component: registry_server
       tier: sv
       type: registry
     expr: |
@@ -612,7 +612,7 @@ groups:
       )
   - record: gitlab_component_errors:rate_5m
     labels:
-      component: server
+      component: registry_server
       tier: sv
       type: registry
     expr: |
@@ -624,7 +624,7 @@ groups:
       or
       (
         0 * group by(environment,stage) (
-          gitlab_component_ops:rate_5m{component="server",tier="sv",type="registry"}
+          gitlab_component_ops:rate_5m{component="registry_server",tier="sv",type="registry"}
         )
       )
   - record: gitlab_component_apdex:success:rate_5m
@@ -925,7 +925,7 @@ groups:
       )
   - record: gitlab_component_apdex:success:rate_30m
     labels:
-      component: server
+      component: registry_server
       tier: sv
       type: registry
     expr: |
@@ -942,7 +942,7 @@ groups:
       2
   - record: gitlab_component_apdex:weight:score_30m
     labels:
-      component: server
+      component: registry_server
       tier: sv
       type: registry
     expr: |
@@ -951,7 +951,7 @@ groups:
       )
   - record: gitlab_component_ops:rate_30m
     labels:
-      component: server
+      component: registry_server
       tier: sv
       type: registry
     expr: |
@@ -960,7 +960,7 @@ groups:
       )
   - record: gitlab_component_errors:rate_30m
     labels:
-      component: server
+      component: registry_server
       tier: sv
       type: registry
     expr: |
@@ -972,7 +972,7 @@ groups:
       or
       (
         0 * group by(environment,stage) (
-          gitlab_component_ops:rate_30m{component="server",tier="sv",type="registry"}
+          gitlab_component_ops:rate_30m{component="registry_server",tier="sv",type="registry"}
         )
       )
   - record: gitlab_component_apdex:success:rate_30m
@@ -1273,7 +1273,7 @@ groups:
       )
   - record: gitlab_component_apdex:success:rate_1h
     labels:
-      component: server
+      component: registry_server
       tier: sv
       type: registry
     expr: |
@@ -1290,7 +1290,7 @@ groups:
       2
   - record: gitlab_component_apdex:weight:score_1h
     labels:
-      component: server
+      component: registry_server
       tier: sv
       type: registry
     expr: |
@@ -1299,7 +1299,7 @@ groups:
       )
   - record: gitlab_component_ops:rate_1h
     labels:
-      component: server
+      component: registry_server
       tier: sv
       type: registry
     expr: |
@@ -1308,7 +1308,7 @@ groups:
       )
   - record: gitlab_component_errors:rate_1h
     labels:
-      component: server
+      component: registry_server
       tier: sv
       type: registry
     expr: |
@@ -1320,7 +1320,7 @@ groups:
       or
       (
         0 * group by(environment,stage) (
-          gitlab_component_ops:rate_1h{component="server",tier="sv",type="registry"}
+          gitlab_component_ops:rate_1h{component="registry_server",tier="sv",type="registry"}
         )
       )
   - record: gitlab_component_apdex:success:rate_1h
@@ -1621,7 +1621,7 @@ groups:
       )
   - record: gitlab_component_apdex:success:rate_6h
     labels:
-      component: server
+      component: registry_server
       tier: sv
       type: registry
     expr: |
@@ -1638,7 +1638,7 @@ groups:
       2
   - record: gitlab_component_apdex:weight:score_6h
     labels:
-      component: server
+      component: registry_server
       tier: sv
       type: registry
     expr: |
@@ -1647,7 +1647,7 @@ groups:
       )
   - record: gitlab_component_ops:rate_6h
     labels:
-      component: server
+      component: registry_server
       tier: sv
       type: registry
     expr: |
@@ -1656,7 +1656,7 @@ groups:
       )
   - record: gitlab_component_errors:rate_6h
     labels:
-      component: server
+      component: registry_server
       tier: sv
       type: registry
     expr: |
@@ -1668,7 +1668,7 @@ groups:
       or
       (
         0 * group by(environment,stage) (
-          gitlab_component_ops:rate_6h{component="server",tier="sv",type="registry"}
+          gitlab_component_ops:rate_6h{component="registry_server",tier="sv",type="registry"}
         )
       )
   - record: gitlab_component_apdex:success:rate_6h
@@ -1786,7 +1786,7 @@ groups:
     expr: "1"
   - record: gitlab_component_service:mapping
     labels:
-      component: server
+      component: registry_server
       regional_aggregation: "yes"
       service_aggregation: "yes"
       tier: sv

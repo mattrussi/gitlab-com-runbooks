@@ -80,7 +80,7 @@ metricsCatalog.serviceDefinition({
       regional=false
     ),
 
-    server: defaultRegistrySLIProperties {
+    registry_server: defaultRegistrySLIProperties {
       description: |||
         Aggregation of all registry requests.
       |||,
