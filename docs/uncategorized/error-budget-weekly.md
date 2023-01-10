@@ -16,18 +16,18 @@ file, with a new `team` entry or update an existing team entry, as follows:
 teams:
 - name: runner
   product_stage_group: runner
-  slack_channel: alerts-ci-cd
+  slack_error_budget_channel: alerts-ci-cd
   send_error_budget_weekly_to_slack: true
 ```
 
 1. `name` is name, using alphanumeric characters only
 1. `product_stage_group` should match the `group` key in <https://gitlab.com/gitlab-com/www-gitlab-com/blob/master/data/stages.yml>
-1. The `slack_channel` is the channel in Slack that the team would like to use for alerts (without the initial '#')
+1. The `slack_error_budget_channel` is the channel in Slack that the team would like to use for alerts (without the initial '#')
 1. `send_error_budget_weekly_to_slack` send regular error budget reports to the slack channel.
 
 Step 2: Invite the Error Budget Report slack app to your slack channel
 
-In the channel you have configured as slack_channel above, type `/invite @error_budget_report`.
+In the channel you have configured as slack_error_budget_channel above, type `/invite @error_budget_report`.
 
 Step 3: Profit! Once a week, on Monday, the error budget report for the past seven days will be posted to your slack channel.
 
