@@ -8,6 +8,7 @@ local sliLibrary = import 'gitlab-slis/library.libsonnet';
 local serviceLevelIndicatorDefinition = import 'servicemetrics/service_level_indicator_definition.libsonnet';
 local kubeLabelSelectors = metricsCatalog.kubeLabelSelectors;
 local dependOnPatroni = import 'inhibit-rules/depend_on_patroni.libsonnet';
+local dependOnRedisSidekiq = import 'inhibit-rules/depend_on_redis_sidekiq.libsonnet';
 
 local gitWorkhorseJobNameSelector = { job: { re: 'gitlab-workhorse|gitlab-workhorse-git' } };
 local railsSelector = { job: 'gitlab-rails', type: 'git' };
@@ -220,7 +221,7 @@ metricsCatalog.serviceDefinition({
         // TODO: filter kibana query on route once https://gitlab.com/gitlab-org/gitlab-workhorse/-/merge_requests/624 arrives
         toolingLinks.kibana(title='Workhorse', index='workhorse', type='git', slowRequestSeconds=10),
       ],
-      dependsOn: dependOnPatroni.sqlComponents,
+      dependsOn: dependOnPatroni.sqlComponents + dependOnRedisSidekiq.railsClientComponents,
     },
     puma: {
       userImpacting: true,

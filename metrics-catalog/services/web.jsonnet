@@ -7,6 +7,7 @@ local sliLibrary = import 'gitlab-slis/library.libsonnet';
 local serviceLevelIndicatorDefinition = import 'servicemetrics/service_level_indicator_definition.libsonnet';
 local kubeLabelSelectors = metricsCatalog.kubeLabelSelectors;
 local dependOnPatroni = import 'inhibit-rules/depend_on_patroni.libsonnet';
+local dependOnRedisSidekiq = import 'inhibit-rules/depend_on_redis_sidekiq.libsonnet';
 
 local railsSelector = { job: 'gitlab-rails', type: 'web' };
 
@@ -91,7 +92,7 @@ metricsCatalog.serviceDefinition({
       },
       selector={ type: 'frontend' },
       regional=false,
-      dependsOn=dependOnPatroni.sqlComponents,
+      dependsOn=dependOnPatroni.sqlComponents + dependOnRedisSidekiq.railsClientComponents,
     ),
 
     local workhorseWebSelector = { job: { re: 'gitlab-workhorse|gitlab-workhorse-web' }, type: 'web' },
