@@ -3,6 +3,7 @@ local histogramApdex = metricsCatalog.histogramApdex;
 local rateMetric = metricsCatalog.rateMetric;
 local toolingLinks = import 'toolinglinks/toolinglinks.libsonnet';
 local haproxyComponents = import './lib/haproxy_components.libsonnet';
+local dependOnRedisSidekiq = import 'inhibit-rules/depend_on_redis_sidekiq.libsonnet';
 
 metricsCatalog.serviceDefinition({
   type: 'ci-runners',
@@ -32,6 +33,7 @@ metricsCatalog.serviceDefinition({
       stageMappings={
         main: { backends: ['https_git', 'api', 'ci_gateway_catch_all'], toolingLinks: [] },
       },
+      dependsOn=dependOnRedisSidekiq.railsClientComponents,
     ),
     polling: {
       userImpacting: true,
