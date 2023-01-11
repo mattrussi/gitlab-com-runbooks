@@ -17,6 +17,45 @@ local sastArtifactBuildsCompleted() =
     query=|||
       sum by (status) (
         increase(
+          artifact_report_sast_builds_completed_total{
+            env="$environment"
+          }[$__interval])
+      )
+    |||,
+  );
+
+local secretDetectionArtifactBuildsCompleted() =
+  basic.timeseries(
+    stableId='secret_detection_artifact_builds_completed',
+    title='Secret Detection Artifact Builds Completed',
+    decimals=2,
+    yAxisLabel='Count',
+    description=|||
+      Number of CI Builds completed with Secret Detection report artifacts
+    |||,
+    query=|||
+      sum by (status) (
+        increase(
+          artifact_report_secret_detection_builds_completed_total{
+            env="$environment"
+          }[$__interval])
+      )
+    |||,
+  );
+
+
+local codeQualityArtifactBuildsCompleted() =
+  basic.timeseries(
+    stableId='code_quality_artifact_builds_completed',
+    title='Code Quality Artifact Builds Completed',
+    decimals=2,
+    yAxisLabel='Count',
+    description=|||
+      Number of CI Builds completed with Code Quality report artifacts
+    |||,
+    query=|||
+      sum by (status) (
+        increase(
           artifact_report_codequality_builds_completed_total{
             env="$environment"
           }[$__interval])
@@ -33,6 +72,24 @@ stageGroupDashboards
       sastArtifactBuildsCompleted(),
     ],
     startRow=1001,
+  )
+)
+.addPanels(
+  layout.rowGrid(
+    'Secret Detection Artifact Builds Completed',
+    [
+      secretDetectionArtifactBuildsCompleted(),
+    ],
+    startRow=2001,
+  )
+)
+.addPanels(
+  layout.rowGrid(
+    'Code Quality Artifact Builds Completed',
+    [
+      codeQualityArtifactBuildsCompleted(),
+    ],
+    startRow=3001,
   )
 )
 .stageGroupDashboardTrailer()
