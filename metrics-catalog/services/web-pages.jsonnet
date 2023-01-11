@@ -88,7 +88,7 @@ metricsCatalog.serviceDefinition({
       dependsOn=dependOnApi.restComponents,
     ),
 
-    server: {
+    web_pages_server: {
       userImpacting: true,
       featureCategory: 'pages',
       description: |||

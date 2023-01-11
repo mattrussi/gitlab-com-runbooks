@@ -65,54 +65,6 @@ groups:
       )
   - record: gitlab:component:feature_category:execution:apdex:success:rate_5m
     labels:
-      component: server
-      feature_category: pages
-      tier: sv
-      type: web-pages
-    expr: |
-      sum by (env,environment,stage) (
-        rate(gitlab_pages_http_request_duration_seconds_bucket{le="10",type="web-pages"}[5m])
-      )
-  - record: gitlab:component:feature_category:execution:apdex:weight:score_5m
-    labels:
-      component: server
-      feature_category: pages
-      tier: sv
-      type: web-pages
-    expr: |
-      sum by (env,environment,stage) (
-        rate(gitlab_pages_http_request_duration_seconds_bucket{le="+Inf",type="web-pages"}[5m])
-      )
-  - record: gitlab:component:feature_category:execution:ops:rate_5m
-    labels:
-      component: server
-      feature_category: pages
-      tier: sv
-      type: web-pages
-    expr: |
-      sum by (env,environment,stage) (
-        rate(gitlab_pages_http_requests_total{}[5m])
-      )
-  - record: gitlab:component:feature_category:execution:error:rate_5m
-    labels:
-      component: server
-      feature_category: pages
-      tier: sv
-      type: web-pages
-    expr: |
-      (
-        sum by (env,environment,stage) (
-          rate(gitlab_pages_http_requests_total{code=~"5.."}[5m])
-        )
-      )
-      or
-      (
-        0 * group by(env,environment,stage) (
-          gitlab:component:feature_category:execution:ops:rate_5m{component="server",feature_category="pages",tier="sv",type="web-pages"}
-        )
-      )
-  - record: gitlab:component:feature_category:execution:apdex:success:rate_5m
-    labels:
       component: server_headers
       feature_category: pages
       tier: sv
@@ -140,6 +92,54 @@ groups:
     expr: |
       sum by (env,environment,stage) (
         rate(gitlab_pages_http_time_to_write_header_seconds_count{type="web-pages"}[5m])
+      )
+  - record: gitlab:component:feature_category:execution:apdex:success:rate_5m
+    labels:
+      component: web_pages_server
+      feature_category: pages
+      tier: sv
+      type: web-pages
+    expr: |
+      sum by (env,environment,stage) (
+        rate(gitlab_pages_http_request_duration_seconds_bucket{le="10",type="web-pages"}[5m])
+      )
+  - record: gitlab:component:feature_category:execution:apdex:weight:score_5m
+    labels:
+      component: web_pages_server
+      feature_category: pages
+      tier: sv
+      type: web-pages
+    expr: |
+      sum by (env,environment,stage) (
+        rate(gitlab_pages_http_request_duration_seconds_bucket{le="+Inf",type="web-pages"}[5m])
+      )
+  - record: gitlab:component:feature_category:execution:ops:rate_5m
+    labels:
+      component: web_pages_server
+      feature_category: pages
+      tier: sv
+      type: web-pages
+    expr: |
+      sum by (env,environment,stage) (
+        rate(gitlab_pages_http_requests_total{}[5m])
+      )
+  - record: gitlab:component:feature_category:execution:error:rate_5m
+    labels:
+      component: web_pages_server
+      feature_category: pages
+      tier: sv
+      type: web-pages
+    expr: |
+      (
+        sum by (env,environment,stage) (
+          rate(gitlab_pages_http_requests_total{code=~"5.."}[5m])
+        )
+      )
+      or
+      (
+        0 * group by(env,environment,stage) (
+          gitlab:component:feature_category:execution:ops:rate_5m{component="web_pages_server",feature_category="pages",tier="sv",type="web-pages"}
+        )
       )
 - name: 'Prometheus Intermediate Metrics per feature: web-pages - burn-rate 30m'
   rules:
@@ -205,54 +205,6 @@ groups:
       )
   - record: gitlab:component:feature_category:execution:apdex:success:rate_30m
     labels:
-      component: server
-      feature_category: pages
-      tier: sv
-      type: web-pages
-    expr: |
-      sum by (env,environment,stage) (
-        rate(gitlab_pages_http_request_duration_seconds_bucket{le="10",type="web-pages"}[30m])
-      )
-  - record: gitlab:component:feature_category:execution:apdex:weight:score_30m
-    labels:
-      component: server
-      feature_category: pages
-      tier: sv
-      type: web-pages
-    expr: |
-      sum by (env,environment,stage) (
-        rate(gitlab_pages_http_request_duration_seconds_bucket{le="+Inf",type="web-pages"}[30m])
-      )
-  - record: gitlab:component:feature_category:execution:ops:rate_30m
-    labels:
-      component: server
-      feature_category: pages
-      tier: sv
-      type: web-pages
-    expr: |
-      sum by (env,environment,stage) (
-        rate(gitlab_pages_http_requests_total{}[30m])
-      )
-  - record: gitlab:component:feature_category:execution:error:rate_30m
-    labels:
-      component: server
-      feature_category: pages
-      tier: sv
-      type: web-pages
-    expr: |
-      (
-        sum by (env,environment,stage) (
-          rate(gitlab_pages_http_requests_total{code=~"5.."}[30m])
-        )
-      )
-      or
-      (
-        0 * group by(env,environment,stage) (
-          gitlab:component:feature_category:execution:ops:rate_30m{component="server",feature_category="pages",tier="sv",type="web-pages"}
-        )
-      )
-  - record: gitlab:component:feature_category:execution:apdex:success:rate_30m
-    labels:
       component: server_headers
       feature_category: pages
       tier: sv
@@ -280,6 +232,54 @@ groups:
     expr: |
       sum by (env,environment,stage) (
         rate(gitlab_pages_http_time_to_write_header_seconds_count{type="web-pages"}[30m])
+      )
+  - record: gitlab:component:feature_category:execution:apdex:success:rate_30m
+    labels:
+      component: web_pages_server
+      feature_category: pages
+      tier: sv
+      type: web-pages
+    expr: |
+      sum by (env,environment,stage) (
+        rate(gitlab_pages_http_request_duration_seconds_bucket{le="10",type="web-pages"}[30m])
+      )
+  - record: gitlab:component:feature_category:execution:apdex:weight:score_30m
+    labels:
+      component: web_pages_server
+      feature_category: pages
+      tier: sv
+      type: web-pages
+    expr: |
+      sum by (env,environment,stage) (
+        rate(gitlab_pages_http_request_duration_seconds_bucket{le="+Inf",type="web-pages"}[30m])
+      )
+  - record: gitlab:component:feature_category:execution:ops:rate_30m
+    labels:
+      component: web_pages_server
+      feature_category: pages
+      tier: sv
+      type: web-pages
+    expr: |
+      sum by (env,environment,stage) (
+        rate(gitlab_pages_http_requests_total{}[30m])
+      )
+  - record: gitlab:component:feature_category:execution:error:rate_30m
+    labels:
+      component: web_pages_server
+      feature_category: pages
+      tier: sv
+      type: web-pages
+    expr: |
+      (
+        sum by (env,environment,stage) (
+          rate(gitlab_pages_http_requests_total{code=~"5.."}[30m])
+        )
+      )
+      or
+      (
+        0 * group by(env,environment,stage) (
+          gitlab:component:feature_category:execution:ops:rate_30m{component="web_pages_server",feature_category="pages",tier="sv",type="web-pages"}
+        )
       )
 - name: 'Prometheus Intermediate Metrics per feature: web-pages - burn-rate 1h'
   rules:
@@ -345,54 +345,6 @@ groups:
       )
   - record: gitlab:component:feature_category:execution:apdex:success:rate_1h
     labels:
-      component: server
-      feature_category: pages
-      tier: sv
-      type: web-pages
-    expr: |
-      sum by (env,environment,stage) (
-        rate(gitlab_pages_http_request_duration_seconds_bucket{le="10",type="web-pages"}[1h])
-      )
-  - record: gitlab:component:feature_category:execution:apdex:weight:score_1h
-    labels:
-      component: server
-      feature_category: pages
-      tier: sv
-      type: web-pages
-    expr: |
-      sum by (env,environment,stage) (
-        rate(gitlab_pages_http_request_duration_seconds_bucket{le="+Inf",type="web-pages"}[1h])
-      )
-  - record: gitlab:component:feature_category:execution:ops:rate_1h
-    labels:
-      component: server
-      feature_category: pages
-      tier: sv
-      type: web-pages
-    expr: |
-      sum by (env,environment,stage) (
-        rate(gitlab_pages_http_requests_total{}[1h])
-      )
-  - record: gitlab:component:feature_category:execution:error:rate_1h
-    labels:
-      component: server
-      feature_category: pages
-      tier: sv
-      type: web-pages
-    expr: |
-      (
-        sum by (env,environment,stage) (
-          rate(gitlab_pages_http_requests_total{code=~"5.."}[1h])
-        )
-      )
-      or
-      (
-        0 * group by(env,environment,stage) (
-          gitlab:component:feature_category:execution:ops:rate_1h{component="server",feature_category="pages",tier="sv",type="web-pages"}
-        )
-      )
-  - record: gitlab:component:feature_category:execution:apdex:success:rate_1h
-    labels:
       component: server_headers
       feature_category: pages
       tier: sv
@@ -420,4 +372,52 @@ groups:
     expr: |
       sum by (env,environment,stage) (
         rate(gitlab_pages_http_time_to_write_header_seconds_count{type="web-pages"}[1h])
+      )
+  - record: gitlab:component:feature_category:execution:apdex:success:rate_1h
+    labels:
+      component: web_pages_server
+      feature_category: pages
+      tier: sv
+      type: web-pages
+    expr: |
+      sum by (env,environment,stage) (
+        rate(gitlab_pages_http_request_duration_seconds_bucket{le="10",type="web-pages"}[1h])
+      )
+  - record: gitlab:component:feature_category:execution:apdex:weight:score_1h
+    labels:
+      component: web_pages_server
+      feature_category: pages
+      tier: sv
+      type: web-pages
+    expr: |
+      sum by (env,environment,stage) (
+        rate(gitlab_pages_http_request_duration_seconds_bucket{le="+Inf",type="web-pages"}[1h])
+      )
+  - record: gitlab:component:feature_category:execution:ops:rate_1h
+    labels:
+      component: web_pages_server
+      feature_category: pages
+      tier: sv
+      type: web-pages
+    expr: |
+      sum by (env,environment,stage) (
+        rate(gitlab_pages_http_requests_total{}[1h])
+      )
+  - record: gitlab:component:feature_category:execution:error:rate_1h
+    labels:
+      component: web_pages_server
+      feature_category: pages
+      tier: sv
+      type: web-pages
+    expr: |
+      (
+        sum by (env,environment,stage) (
+          rate(gitlab_pages_http_requests_total{code=~"5.."}[1h])
+        )
+      )
+      or
+      (
+        0 * group by(env,environment,stage) (
+          gitlab:component:feature_category:execution:ops:rate_1h{component="web_pages_server",feature_category="pages",tier="sv",type="web-pages"}
+        )
       )

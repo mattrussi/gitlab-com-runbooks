@@ -1642,13 +1642,13 @@ groups:
     expr: "0.000100"
   - record: slo:min:events:gitlab_service_apdex:ratio
     labels:
-      component: server
+      component: registry_server
       tier: sv
       type: registry
     expr: "0.997000"
   - record: slo:max:events:gitlab_service_errors:ratio
     labels:
-      component: server
+      component: registry_server
       tier: sv
       type: registry
     expr: "0.000100"
@@ -1996,25 +1996,25 @@ groups:
     expr: "0.000500"
   - record: slo:min:events:gitlab_service_apdex:ratio
     labels:
-      component: server
+      component: server_headers
       tier: sv
       type: web-pages
     expr: "0.995000"
   - record: slo:max:events:gitlab_service_errors:ratio
     labels:
-      component: server
+      component: server_headers
       tier: sv
       type: web-pages
     expr: "0.000500"
   - record: slo:min:events:gitlab_service_apdex:ratio
     labels:
-      component: server_headers
+      component: web_pages_server
       tier: sv
       type: web-pages
     expr: "0.995000"
   - record: slo:max:events:gitlab_service_errors:ratio
     labels:
-      component: server_headers
+      component: web_pages_server
       tier: sv
       type: web-pages
     expr: "0.000500"
@@ -3178,7 +3178,7 @@ groups:
     expr: "1"
   - record: gitlab_component_service:mapping
     labels:
-      component: server
+      component: registry_server
       regional_aggregation: "yes"
       service_aggregation: "yes"
       tier: sv
@@ -3386,7 +3386,7 @@ groups:
     expr: "1"
   - record: gitlab_component_service:mapping
     labels:
-      component: server
+      component: server_headers
       regional_aggregation: "yes"
       service_aggregation: "yes"
       tier: sv
@@ -3394,7 +3394,7 @@ groups:
     expr: "1"
   - record: gitlab_component_service:mapping
     labels:
-      component: server_headers
+      component: web_pages_server
       regional_aggregation: "yes"
       service_aggregation: "yes"
       tier: sv
