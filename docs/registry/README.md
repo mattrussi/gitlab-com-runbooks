@@ -24,6 +24,7 @@
 * [Interacting with Consul](../consul/interaction.md)
 * [Blocking individual IPs and Net Blocks on HA Proxy](../frontend/ban-netblocks-on-haproxy.md)
 * [HAProxy management at GitLab](../frontend/haproxy.md)
+* [../gitlab-com-artifact-registry/overview.md](../gitlab-com-artifact-registry/overview.md)
 * [CI Artifacts CDN](../google-cloud-storage/artifacts-cdn.md)
 * [../kube/k8s-operations.md](../kube/k8s-operations.md)
 * [Kubernetes](../kube/kubernetes.md)

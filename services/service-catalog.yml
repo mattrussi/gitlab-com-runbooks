@@ -3969,3 +3969,95 @@ services:
     observability:
       monitors:
         primary_grafana_dashboard: external-dns-main/external-dns-overview
+  - name: gitlab-com-artifact-registry
+    tier: inf
+    friendly_name: Artifact Registry
+    label: Service:ArtifactRegistry
+    business:
+      requirement: |
+        Container images for GitLab.com Kubernetes clusters
+      customers:
+        - GitLab Employees
+      business_value: |
+        Provides a reliable alternative to GitLab registeries for the infrastructure that runs GitLab.com
+      SLA:
+        availability:
+        response_time:
+    technical:
+      project:
+      slx:
+      documents:
+        design:
+        architecture:
+        readiness_review:
+        sre_guide: https://gitlab.com/gitlab-com/runbooks/-/tree/master/docs/gitlab-com-artifact-registry
+        developer_guide:
+        service:
+        security:
+      security:
+        security_reviewed:
+        data_classification: orange
+        security_incidents:
+      logging:
+        - name:
+          permalink:
+    infrastructure:
+      provider: gcp
+      architecture:
+      provisioning: terraform
+    operations:
+      maintenance:
+      runbooks:
+        - https://gitlab.com/gitlab-com/runbooks/blob/master/docs/gitlab-com-artifact-registry/overview.md
+      playbooks:
+      error_budget:
+    observability:
+      monitors:
+        grafana_folder:
+        primary_grafana_dashboard:
+  - name: gitlab-com-pkgs
+    tier: inf
+    friendly_name: Package GCS Bucket
+    label: Service:PackageGCSBucket
+    business:
+      requirement: |
+        Container images for GitLab.com Kubernetes clusters
+      customers:
+        - GitLab Employees
+      business_value: |
+        GCS bucket that mirrors Omnibus packages for GitLab.com deployments
+      SLA:
+        availability:
+        response_time:
+    technical:
+      project:
+      slx:
+      documents:
+        design:
+        architecture:
+        readiness_review:
+        sre_guide: https://gitlab.com/gitlab-com/runbooks/-/tree/master/docs/gitlab-com-pkgs
+        developer_guide:
+        service:
+        security:
+      security:
+        security_reviewed:
+        data_classification: red
+        security_incidents:
+      logging:
+        - name:
+          permalink:
+    infrastructure:
+      provider: gcp
+      architecture:
+      provisioning: terraform
+    operations:
+      maintenance:
+      runbooks:
+        - https://gitlab.com/gitlab-com/runbooks/blob/master/docs/gitlab-com-pkgs/overview.md
+      playbooks:
+      error_budget:
+    observability:
+      monitors:
+        grafana_folder:
+        primary_grafana_dashboard:
