@@ -22,7 +22,6 @@
 
 ## Troubleshooting Pointers
 
-* [Teleport Administration](../Teleport/teleport_admin.md)
 * [Cloudflare for the on-call](../cloudflare/oncall.md)
 * [VM Build Process with Terraform and Chef](../config_management/chef-process-overview.md)
 * [Chef Vault Basics](../config_management/chef-vault.md)
@@ -40,6 +39,7 @@
 * [Praefect Database](../praefect/praefect-database.md)
 * [Add and remove file storages to praefect](../praefect/praefect-file-storages.md)
 * [Container Registry CDN](../registry/cdn.md)
+* [Teleport Administration](../Teleport/teleport_admin.md)
 * [../uncategorized/about-gitlab-com.md](../uncategorized/about-gitlab-com.md)
 * [Aptly](../uncategorized/aptly.md)
 * [Chef secrets using GKMS](../uncategorized/gkms-chef-secrets.md)
