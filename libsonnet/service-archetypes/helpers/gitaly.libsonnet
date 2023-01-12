@@ -51,6 +51,7 @@ local gitalyApdexSlowMethods = [
   'LastCommitForPath',
   'GetArchive',
   'RepositorySize',
+  'WriteRef',
 ];
 
 local praefectApdexSlowMethods = [
