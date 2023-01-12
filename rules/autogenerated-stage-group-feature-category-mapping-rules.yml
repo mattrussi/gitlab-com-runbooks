@@ -90,12 +90,6 @@ groups:
     expr: "1"
   - record: gitlab:feature_category:stage_group:mapping
     labels:
-      feature_category: chatops
-      product_stage: configure
-      stage_group: configure
-    expr: "1"
-  - record: gitlab:feature_category:stage_group:mapping
-    labels:
       feature_category: cloud_native_installation
       product_stage: systems
       stage_group: distribution_deploy
@@ -169,12 +163,6 @@ groups:
   - record: gitlab:feature_category:stage_group:mapping
     labels:
       feature_category: continuous_integration
-      product_stage: verify
-      stage_group: pipeline_execution
-    expr: "1"
-  - record: gitlab:feature_category:stage_group:mapping
-    labels:
-      feature_category: continuous_integration_scaling
       product_stage: verify
       stage_group: pipeline_execution
     expr: "1"
@@ -578,7 +566,7 @@ groups:
     labels:
       feature_category: projects
       product_stage: manage
-      stage_group: workspace
+      stage_group: organization
     expr: "1"
   - record: gitlab:feature_category:stage_group:mapping
     labels:
@@ -740,7 +728,7 @@ groups:
     labels:
       feature_category: subgroups
       product_stage: manage
-      stage_group: workspace
+      stage_group: organization
     expr: "1"
   - record: gitlab:feature_category:stage_group:mapping
     labels:
@@ -782,7 +770,7 @@ groups:
     labels:
       feature_category: users
       product_stage: manage
-      stage_group: workspace
+      stage_group: organization
     expr: "1"
   - record: gitlab:feature_category:stage_group:mapping
     labels:

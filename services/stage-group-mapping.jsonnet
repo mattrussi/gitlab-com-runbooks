@@ -12,8 +12,8 @@
       'system_access',
     ],
   },
-  workspace: {
-    name: 'Workspace',
+  organization: {
+    name: 'Organization',
     stage: 'manage',
     feature_categories: [
       'subgroups',
@@ -110,7 +110,6 @@
     feature_categories: [
       'continuous_integration',
       'merge_trains',
-      'continuous_integration_scaling',
     ],
   },
   pipeline_authoring: {
@@ -228,7 +227,6 @@
       'infrastructure_as_code',
       'kubernetes_management',
       'cluster_cost_management',
-      'chatops',
       'deployment_management',
     ],
   },

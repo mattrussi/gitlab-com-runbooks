@@ -11,7 +11,7 @@ std.foldl(
   // To test on a subset of stages, do something like:
   // stages.groupsForStage('manage'),
   // or
-  // std.map(stages.stageGroup, ['global_search', 'package', 'workspace']),
+  // std.map(stages.stageGroup, ['global_search', 'package', 'organization']),
   stages.stageGroupsWithoutNotOwned,
   {}
 )

@@ -122,7 +122,7 @@ metricsCatalog.serviceDefinition({
 
     queuing_queries_duration: {
       userImpacting: false,
-      featureCategory: 'continuous_integration_scaling',
+      featureCategory: 'continuous_integration',
       team: 'pipeline_execution',
       description: |||
         This SLI monitors the queuing queries duration. Everything above 1
