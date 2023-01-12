@@ -18,8 +18,9 @@
 
 ## Troubleshooting Pointers
 
-* [Cloudflare: Managing Traffic](../cloudflare/managing-traffic.md)
+* [How to connect to a Database console using Teleport](../Teleport/Connect_to_Database_Console_via_Teleport.md)
 * [Cloud SQL Troubleshooting](../cloud-sql/cloud-sql.md)
+* [Cloudflare: Managing Traffic](../cloudflare/managing-traffic.md)
 * [Interacting with Consul](../consul/interaction.md)
 * [Blocking individual IPs and Net Blocks on HA Proxy](../frontend/ban-netblocks-on-haproxy.md)
 * [HAProxy management at GitLab](../frontend/haproxy.md)
@@ -38,7 +39,6 @@
 * [migration-failure-scenarios.md](migration-failure-scenarios.md)
 * [Container Registry Migration Phase 2](migration-phase2.md)
 * [High Number of Overdue Online GC Tasks](online-gc-high-overdue-tasks.md)
-* [How to connect to a Database console using Teleport](../Teleport/Connect_to_Database_Console_via_Teleport.md)
 * [Deleting a project manually](../uncategorized/delete-projects-manually.md)
 * [Tweeting Guidelines](../uncategorized/tweeting-guidelines.md)
 * [How to Use Vault for Secrets Management in Infrastructure](../vault/usage.md)

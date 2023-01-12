@@ -16,9 +16,9 @@
 
 ## Troubleshooting Pointers
 
-* [../redis/redis.md](../redis/redis.md)
 * [Redis-Sidekiq catchall workloads reduction](../redis/redis-sidekiq-catchall-workloads-reduction.md)
 * [A survival guide for SREs to working with Redis at GitLab](../redis/redis-survival-guide-for-sres.md)
+* [../redis/redis.md](../redis/redis.md)
 * [Sidekiq queue migration](../sidekiq/queue-migration.md)
 * [A survival guide for SREs to working with Sidekiq at GitLab](../sidekiq/sidekiq-survival-guide-for-sres.md)
 <!-- END_MARKER -->
