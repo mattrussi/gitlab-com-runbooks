@@ -331,6 +331,16 @@ groups:
       product_stage: plan
       stage_group: optimize
     expr: "1"
+- name: 'Stage group Ignored components: manage - Organization'
+  interval: 1m
+  partial_response_strategy: warn
+  rules:
+  - record: gitlab:ignored_component:stage_group
+    labels:
+      component: graphql_query
+      product_stage: manage
+      stage_group: organization
+    expr: "1"
 - name: 'Stage group Ignored components: package - Package Registry'
   interval: 1m
   partial_response_strategy: warn
@@ -510,14 +520,4 @@ groups:
       component: graphql_query
       product_stage: secure
       stage_group: vulnerability_research
-    expr: "1"
-- name: 'Stage group Ignored components: manage - Workspace'
-  interval: 1m
-  partial_response_strategy: warn
-  rules:
-  - record: gitlab:ignored_component:stage_group
-    labels:
-      component: graphql_query
-      product_stage: manage
-      stage_group: workspace
     expr: "1"

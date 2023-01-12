@@ -345,8 +345,8 @@ teams:
   product_stage_group: vulnerability_research
   ignored_components:
   - graphql_query
-- name: workspace
-  product_stage_group: workspace
+- name: organization
+  product_stage_group: organization
   ignored_components:
   - graphql_query
 - name: fulfillment_platform
