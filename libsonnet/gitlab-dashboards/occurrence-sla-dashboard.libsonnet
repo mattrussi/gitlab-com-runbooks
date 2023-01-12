@@ -17,12 +17,25 @@ local budgetMinutesColor = {
   value: null,
 };
 
+local clampRatio(ratioQuery) =
+  |||
+    clamp_max(
+      clamp_min(
+        %s,
+        0
+      ),
+      1
+    )
+  ||| % [strings.indent(ratioQuery, 4)];
+
 local slaRow(availability, services, selector) =
-  local overallAvailabilitRatio = availability.availabilityRatio(
-    aggregationLabels=[],
-    selector=selector,
-    services=services,
-    range='$__range',
+  local overallAvailabilitRatio = clampRatio(
+    availability.availabilityRatio(
+      aggregationLabels=[],
+      selector=selector,
+      services=services,
+      range='$__range',
+    )
   );
   local serviceName = if std.length(services) == 1 then services[0] else 'Overall';
   [
@@ -57,12 +70,12 @@ local slaRow(availability, services, selector) =
       title='%s SLA over time period' % [serviceName],
       description='Availability over time, higher is better.',
       yAxisLabel='SLA',
-      query=availability.availabilityRatio(
+      query=clampRatio(availability.availabilityRatio(
         aggregationLabels=[],
         selector=selector,
         services=services,
         range='$__interval',
-      ),
+      )),
       legendFormat='%s SLA' % [serviceName],
       intervalFactor=1,
       legend_show=false

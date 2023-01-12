@@ -101,7 +101,7 @@
       "pluginVersion": "7",
       "targets": [
         {
-          "expr": "sum by () (\n  sum_over_time(gitlab:availability:success:rate_1h{type=~\"registry|webservice\"}[$__range])\n)\n/\nsum by () (\n  sum_over_time(gitlab:availability:ops:rate_1h{type=~\"registry|webservice\"}[$__range])\n)\n",
+          "expr": "clamp_max(\n  clamp_min(\n    sum by () (\n      sum_over_time(gitlab:availability:success:rate_1h{type=~\"registry|webservice\"}[$__range])\n    )\n    /\n    sum by () (\n      sum_over_time(gitlab:availability:ops:rate_1h{type=~\"registry|webservice\"}[$__range])\n    ),\n    0\n  ),\n  1\n)\n",
           "format": "time_series",
           "instant": true,
           "interval": "1m",
@@ -162,7 +162,7 @@
       "pluginVersion": "7",
       "targets": [
         {
-          "expr": "(\n  1 - (\n    sum by () (\n      sum_over_time(gitlab:availability:success:rate_1h{type=~\"registry|webservice\"}[$__range])\n    )\n    /\n    sum by () (\n      sum_over_time(gitlab:availability:ops:rate_1h{type=~\"registry|webservice\"}[$__range])\n    )\n  )\n) * $__range_ms\n",
+          "expr": "(\n  1 - (\n    clamp_max(\n      clamp_min(\n        sum by () (\n          sum_over_time(gitlab:availability:success:rate_1h{type=~\"registry|webservice\"}[$__range])\n        )\n        /\n        sum by () (\n          sum_over_time(gitlab:availability:ops:rate_1h{type=~\"registry|webservice\"}[$__range])\n        ),\n        0\n      ),\n      1\n    )\n  )\n) * $__range_ms\n",
           "format": "time_series",
           "instant": true,
           "interval": "1m",
@@ -288,7 +288,7 @@
       "steppedLine": false,
       "targets": [
         {
-          "expr": "clamp_min(clamp_max(sum by () (\n  sum_over_time(gitlab:availability:success:rate_1h{type=~\"registry|webservice\"}[$__interval])\n)\n/\nsum by () (\n  sum_over_time(gitlab:availability:ops:rate_1h{type=~\"registry|webservice\"}[$__interval])\n)\n,1),0)\n",
+          "expr": "clamp_min(clamp_max(clamp_max(\n  clamp_min(\n    sum by () (\n      sum_over_time(gitlab:availability:success:rate_1h{type=~\"registry|webservice\"}[$__interval])\n    )\n    /\n    sum by () (\n      sum_over_time(gitlab:availability:ops:rate_1h{type=~\"registry|webservice\"}[$__interval])\n    ),\n    0\n  ),\n  1\n)\n,1),0)\n",
           "format": "time_series",
           "interval": "1m",
           "intervalFactor": 1,
@@ -422,7 +422,7 @@
       "pluginVersion": "7",
       "targets": [
         {
-          "expr": "sum by () (\n  sum_over_time(gitlab:availability:success:rate_1h{type=~\"webservice\"}[$__range])\n)\n/\nsum by () (\n  sum_over_time(gitlab:availability:ops:rate_1h{type=~\"webservice\"}[$__range])\n)\n",
+          "expr": "clamp_max(\n  clamp_min(\n    sum by () (\n      sum_over_time(gitlab:availability:success:rate_1h{type=~\"webservice\"}[$__range])\n    )\n    /\n    sum by () (\n      sum_over_time(gitlab:availability:ops:rate_1h{type=~\"webservice\"}[$__range])\n    ),\n    0\n  ),\n  1\n)\n",
           "format": "time_series",
           "instant": true,
           "interval": "1m",
@@ -483,7 +483,7 @@
       "pluginVersion": "7",
       "targets": [
         {
-          "expr": "(\n  1 - (\n    sum by () (\n      sum_over_time(gitlab:availability:success:rate_1h{type=~\"webservice\"}[$__range])\n    )\n    /\n    sum by () (\n      sum_over_time(gitlab:availability:ops:rate_1h{type=~\"webservice\"}[$__range])\n    )\n  )\n) * $__range_ms\n",
+          "expr": "(\n  1 - (\n    clamp_max(\n      clamp_min(\n        sum by () (\n          sum_over_time(gitlab:availability:success:rate_1h{type=~\"webservice\"}[$__range])\n        )\n        /\n        sum by () (\n          sum_over_time(gitlab:availability:ops:rate_1h{type=~\"webservice\"}[$__range])\n        ),\n        0\n      ),\n      1\n    )\n  )\n) * $__range_ms\n",
           "format": "time_series",
           "instant": true,
           "interval": "1m",
@@ -609,7 +609,7 @@
       "steppedLine": false,
       "targets": [
         {
-          "expr": "clamp_min(clamp_max(sum by () (\n  sum_over_time(gitlab:availability:success:rate_1h{type=~\"webservice\"}[$__interval])\n)\n/\nsum by () (\n  sum_over_time(gitlab:availability:ops:rate_1h{type=~\"webservice\"}[$__interval])\n)\n,1),0)\n",
+          "expr": "clamp_min(clamp_max(clamp_max(\n  clamp_min(\n    sum by () (\n      sum_over_time(gitlab:availability:success:rate_1h{type=~\"webservice\"}[$__interval])\n    )\n    /\n    sum by () (\n      sum_over_time(gitlab:availability:ops:rate_1h{type=~\"webservice\"}[$__interval])\n    ),\n    0\n  ),\n  1\n)\n,1),0)\n",
           "format": "time_series",
           "interval": "1m",
           "intervalFactor": 1,
@@ -724,7 +724,7 @@
       "pluginVersion": "7",
       "targets": [
         {
-          "expr": "sum by () (\n  sum_over_time(gitlab:availability:success:rate_1h{type=~\"registry\"}[$__range])\n)\n/\nsum by () (\n  sum_over_time(gitlab:availability:ops:rate_1h{type=~\"registry\"}[$__range])\n)\n",
+          "expr": "clamp_max(\n  clamp_min(\n    sum by () (\n      sum_over_time(gitlab:availability:success:rate_1h{type=~\"registry\"}[$__range])\n    )\n    /\n    sum by () (\n      sum_over_time(gitlab:availability:ops:rate_1h{type=~\"registry\"}[$__range])\n    ),\n    0\n  ),\n  1\n)\n",
           "format": "time_series",
           "instant": true,
           "interval": "1m",
@@ -785,7 +785,7 @@
       "pluginVersion": "7",
       "targets": [
         {
-          "expr": "(\n  1 - (\n    sum by () (\n      sum_over_time(gitlab:availability:success:rate_1h{type=~\"registry\"}[$__range])\n    )\n    /\n    sum by () (\n      sum_over_time(gitlab:availability:ops:rate_1h{type=~\"registry\"}[$__range])\n    )\n  )\n) * $__range_ms\n",
+          "expr": "(\n  1 - (\n    clamp_max(\n      clamp_min(\n        sum by () (\n          sum_over_time(gitlab:availability:success:rate_1h{type=~\"registry\"}[$__range])\n        )\n        /\n        sum by () (\n          sum_over_time(gitlab:availability:ops:rate_1h{type=~\"registry\"}[$__range])\n        ),\n        0\n      ),\n      1\n    )\n  )\n) * $__range_ms\n",
           "format": "time_series",
           "instant": true,
           "interval": "1m",
@@ -911,7 +911,7 @@
       "steppedLine": false,
       "targets": [
         {
-          "expr": "clamp_min(clamp_max(sum by () (\n  sum_over_time(gitlab:availability:success:rate_1h{type=~\"registry\"}[$__interval])\n)\n/\nsum by () (\n  sum_over_time(gitlab:availability:ops:rate_1h{type=~\"registry\"}[$__interval])\n)\n,1),0)\n",
+          "expr": "clamp_min(clamp_max(clamp_max(\n  clamp_min(\n    sum by () (\n      sum_over_time(gitlab:availability:success:rate_1h{type=~\"registry\"}[$__interval])\n    )\n    /\n    sum by () (\n      sum_over_time(gitlab:availability:ops:rate_1h{type=~\"registry\"}[$__interval])\n    ),\n    0\n  ),\n  1\n)\n,1),0)\n",
           "format": "time_series",
           "interval": "1m",
           "intervalFactor": 1,
