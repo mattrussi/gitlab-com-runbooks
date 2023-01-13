@@ -28,7 +28,7 @@ local clampRatio(ratioQuery) =
     )
   ||| % [strings.indent(ratioQuery, 4)];
 
-local slaRow(availability, services, selector) =
+local slaRow(availability, services, sloThreshold, selector) =
   local overallAvailabilitRatio = clampRatio(
     availability.availabilityRatio(
       aggregationLabels=[],
@@ -64,7 +64,7 @@ local slaRow(availability, services, selector) =
       legendFormat='',
       datasource='$PROMETHEUS_DS',
       intervalFactor=1,
-      threshold='0.9995'
+      threshold=sloThreshold
     ),
     basic.slaTimeseries(
       title='%s SLA over time period' % [serviceName],
@@ -82,7 +82,7 @@ local slaRow(availability, services, selector) =
     ),
   ];
 
-local dashboard(availability, keyServices, selector) =
+local dashboard(availability, keyServices, slo, selector) =
   basic.dashboard(
     'Occurence SLAs',
     tags=['general', 'slas', 'service-levels'],
@@ -95,7 +95,7 @@ local dashboard(availability, keyServices, selector) =
       collapse=false,
       startRow=5,
       panels=layout.columnGrid(
-        rowsOfPanels=[slaRow(availability, keyServices, selector)],
+        rowsOfPanels=[slaRow(availability, keyServices, slo, selector)],
         columnWidths=[4, 4, 4, 12],
         rowHeight=5,
         startRow=10
@@ -108,7 +108,7 @@ local dashboard(availability, keyServices, selector) =
       startRow=15,
       panels=layout.columnGrid(
         rowsOfPanels=[
-          slaRow(availability, [service], selector)
+          slaRow(availability, [service], slo, selector)
           for service in keyServices
         ],
         columnWidths=[4, 4, 4, 12],
@@ -119,7 +119,7 @@ local dashboard(availability, keyServices, selector) =
   );
 
 {
-  dashboard(keyServices, aggregationSet, extraSelector={}):
+  dashboard(keyServices, aggregationSet, slo, extraSelector={}):
     local availability = availabilityPromql.new(keyServices, aggregationSet);
-    dashboard(availability, keyServices, extraSelector),
+    dashboard(availability, keyServices, slo, extraSelector),
 }

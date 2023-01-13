@@ -202,7 +202,7 @@
           "max": "#73BF69",
           "min": "#F2495C"
         },
-        "legendStr": "0.9995",
+        "legendStr": 0.995,
         "legendTitleFormat": {
           "inner": {},
           "lower": {},
@@ -523,7 +523,7 @@
           "max": "#73BF69",
           "min": "#F2495C"
         },
-        "legendStr": "0.9995",
+        "legendStr": 0.995,
         "legendTitleFormat": {
           "inner": {},
           "lower": {},
@@ -825,7 +825,7 @@
           "max": "#73BF69",
           "min": "#F2495C"
         },
-        "legendStr": "0.9995",
+        "legendStr": 0.995,
         "legendTitleFormat": {
           "inner": {},
           "lower": {},
