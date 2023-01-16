@@ -308,7 +308,10 @@ metricsCatalog.serviceDefinition({
       // LB automatically created by the k8s ingress
       loadBalancerName='k8s2-um-4zodnh0s-monitoring-grafana-lhbkv8d3',
       projectId='gitlab-ops',
-      trafficCessationAlertConfig=false
+      trafficCessationAlertConfig=false,
+      extra={
+        severity: 's3',
+      },
     ),
 
     prometheus: {
