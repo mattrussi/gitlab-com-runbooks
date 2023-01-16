@@ -314,7 +314,7 @@ module Storage
       opt.options[:destination_shard] = args.shift
       opt.options
     rescue OptionParser::InvalidArgument, OptionParser::InvalidOption,
-           OptionParser::MissingArgument, OptionParser::NeedlessArgument => e
+      OptionParser::MissingArgument, OptionParser::NeedlessArgument => e
       puts e.message
       puts opt.parser
       exit

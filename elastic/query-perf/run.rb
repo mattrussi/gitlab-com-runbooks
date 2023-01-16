@@ -104,15 +104,15 @@ raise "expected status 200, got #{resp.status.code}, response #{resp}" unless re
 body = JSON.parse(resp.body)
 
 req = JSON.generate({
-                      "_source": ["json.correlation_id"],
-                      "query": {
-                        "bool": {"must": [
-                          {"exists": {"field": "json.correlation_id"}},
-                          {"range":{"json.time":{"gte":timestamp_yesterday,"lte":timestamp_until,"format":"epoch_millis"}}},
-                        ]}
-                      },
-                      "size": options[:num_correlation_ids],
-                    })
+  "_source": ["json.correlation_id"],
+  "query": {
+    "bool": {"must": [
+      {"exists": {"field": "json.correlation_id"}},
+      {"range":{"json.time":{"gte":timestamp_yesterday,"lte":timestamp_until,"format":"epoch_millis"}}},
+    ]}
+  },
+  "size": options[:num_correlation_ids],
+})
 resp = client.post(
   '/pubsub-rails-inf-gprd-*/_search',
   headers: { 'Content-Type': 'application/json; charset=utf-8' },

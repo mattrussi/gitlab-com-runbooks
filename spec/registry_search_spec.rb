@@ -84,7 +84,7 @@ describe ::Registry::SearchScript do
         expect(storage).to receive(:filter_by_age).and_yield(gcs_file)
         expect(storage).to receive(:safely_invoke_operation).with(gcs_file).and_return nil
         expect(subject.log).to receive(:info).with("[Dry-run] This is only a dry-run -- write " \
-          "operations will be logged but not executed")
+                                                   "operations will be logged but not executed")
         expect(subject.log).to receive(:info).with(JSON.pretty_generate(gcs_file_fields))
         expect(subject.main).to be_nil
       end

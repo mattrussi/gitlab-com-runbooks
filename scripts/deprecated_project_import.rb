@@ -143,10 +143,10 @@ class GitlabProjectImport
     upload = ImportExportUpload.new(import_file: File.open(@file_path))
 
     @project = LocalProjectService.new(@current_user,
-                                       namespace_id: namespace.id,
-                                       path: name,
-                                       import_type: 'gitlab_project',
-                                       import_export_upload: upload).execute
+      namespace_id: namespace.id,
+      path: name,
+      import_type: 'gitlab_project',
+      import_export_upload: upload).execute
   end
 end
 

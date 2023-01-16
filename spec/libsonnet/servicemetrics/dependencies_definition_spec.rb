@@ -13,10 +13,10 @@ describe 'libsonnet/servicemetrics/dependencies_definition.libsonnet' do
             dependencies.new("web", "workhorse", [{ component: 'rails_primary_sql', type: 'patroni'}]).generateInhibitionRules()
           JSONNET
         ).to render_jsonnet([
-                              'equal' => %w[env environment pager],
-                              'source_matchers' => ['component="rails_primary_sql"', 'type="patroni"'],
-                              'target_matchers' => ['component="workhorse"', 'type="web"']
-                            ])
+          'equal' => %w[env environment pager],
+          'source_matchers' => ['component="rails_primary_sql"', 'type="patroni"'],
+          'target_matchers' => ['component="workhorse"', 'type="web"']
+        ])
       end
     end
 

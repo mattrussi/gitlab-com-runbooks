@@ -140,16 +140,16 @@ describe ::Storage::Rebalancer do
           'Option --move-amount not specified, will only move 1 project...')
         expect(subject.log).to receive(:info).with('Fetching largest projects')
         expect(subject.log).to receive(:info).with("Filtering #{test_migration_failures.length} " \
-          "known failed project repositories")
+                                                   "known failed project repositories")
         expect(subject.log).to receive(:info).with(::Storage::RebalanceScript::SEPARATOR)
         expect(subject.log).to receive(:info).with("Scheduling repository replication to " \
-          "#{test_node_02} for project id: #{test_project_id}")
+                                                   "#{test_node_02} for project id: #{test_project_id}")
         expect(subject.log).to receive(:info).with("  Project path: #{test_project_path_with_namespace}")
         expect(subject.log).to receive(:info).with("  Current shard name: #{test_node_01}")
         expect(subject.log).to receive(:info).with("  Disk path: #{test_project_disk_path}")
         expect(subject.log).to receive(:info).with("  Repository size: 1.0 GB")
         expect(subject.log).to receive(:info).with("[Dry-run] Would have scheduled repository " \
-          "replication for project id: #{test_project_id}")
+                                                   "replication for project id: #{test_project_id}")
         expect(subject.log).to receive(:info).with(::Storage::RebalanceScript::SEPARATOR)
         expect(subject.log).to receive(:info).with('[Dry-run] Would have processed 1.0 GB of data')
         expect(subject.log).to receive(:info).with('Done')
@@ -163,16 +163,16 @@ describe ::Storage::Rebalancer do
             .with('Option --move-amount not specified, will only move 1 project...')
           expect(subject.log).to receive(:info).with('Fetching largest projects')
           expect(subject.log).to receive(:info).with("Filtering #{test_migration_failures.length} " \
-            "known failed project repositories")
+                                                     "known failed project repositories")
           expect(subject.log).to receive(:info).with(::Storage::RebalanceScript::SEPARATOR)
           expect(subject.log).to receive(:info).with("Scheduling repository replication to " \
-            "#{test_node_02} for project id: #{test_project_id}")
+                                                     "#{test_node_02} for project id: #{test_project_id}")
           expect(subject.log).to receive(:info).with("  Project path: #{test_project_path_with_namespace}")
           expect(subject.log).to receive(:info).with("  Current shard name: #{test_node_01}")
           expect(subject.log).to receive(:info).with("  Disk path: #{test_project_disk_path}")
           expect(subject.log).to receive(:info).with("  Repository size: 1.0 GB")
           expect(subject.log).to receive(:info).with("[Dry-run] Would have scheduled repository " \
-            "replication for project id: #{test_project_id}")
+                                                     "replication for project id: #{test_project_id}")
           expect(subject.log).to receive(:info).with(::Storage::RebalanceScript::SEPARATOR)
           expect(subject.log).to receive(:info).with('[Dry-run] Would have processed 1.0 GB of data')
           expect(subject.log).to receive(:info).with('Done')
@@ -190,16 +190,16 @@ describe ::Storage::Rebalancer do
             .with('Option --move-amount not specified, will only move 1 project...')
           expect(subject.log).to receive(:info).with('Fetching largest projects')
           expect(subject.log).to receive(:info).with("Filtering #{test_migration_failures.length} " \
-            "known failed project repositories")
+                                                     "known failed project repositories")
           expect(subject.log).to receive(:info).with(::Storage::RebalanceScript::SEPARATOR)
           expect(subject.log).to receive(:info).with("Scheduling repository replication to " \
-            "application-selected shard for project id: #{test_project_id}")
+                                                     "application-selected shard for project id: #{test_project_id}")
           expect(subject.log).to receive(:info).with("  Project path: #{test_project_path_with_namespace}")
           expect(subject.log).to receive(:info).with("  Current shard name: #{test_node_01}")
           expect(subject.log).to receive(:info).with("  Disk path: #{test_project_disk_path}")
           expect(subject.log).to receive(:info).with("  Repository size: 1.0 GB")
           expect(subject.log).to receive(:info).with("[Dry-run] Would have scheduled repository " \
-            "replication for project id: #{test_project_id}")
+                                                     "replication for project id: #{test_project_id}")
           expect(subject.log).to receive(:info).with(::Storage::RebalanceScript::SEPARATOR)
           expect(subject.log).to receive(:info).with('[Dry-run] Would have processed 1.0 GB of data')
           expect(subject.log).to receive(:info).with('Done')
@@ -228,10 +228,10 @@ describe ::Storage::Rebalancer do
           .with('Option --move-amount not specified, will only move 1 project...')
         expect(subject.log).to receive(:info).with('Fetching largest projects')
         expect(subject.log).to receive(:info).with("Filtering #{test_migration_failures.length} " \
-          "known failed project repositories")
+                                                   "known failed project repositories")
         expect(subject.log).to receive(:info).with(::Storage::RebalanceScript::SEPARATOR)
         expect(subject.log).to receive(:info).with("Scheduling repository replication to " \
-          "#{test_node_02} for project id: #{test_project_id}")
+                                                   "#{test_node_02} for project id: #{test_project_id}")
         expect(subject.log).to receive(:info).with("  Project path: #{test_project_path_with_namespace}")
         expect(subject.log).to receive(:info).with("  Current shard name: #{test_node_01}")
         expect(subject.log).to receive(:info).with("  Disk path: #{test_project_disk_path}")
@@ -260,10 +260,10 @@ describe ::Storage::Rebalancer do
             .with('Option --move-amount not specified, will only move 1 project...')
           expect(subject.log).to receive(:info).with('Fetching largest projects')
           expect(subject.log).to receive(:info).with("Filtering #{test_migration_failures.length} " \
-            "known failed project repositories")
+                                                     "known failed project repositories")
           expect(subject.log).to receive(:info).with(::Storage::RebalanceScript::SEPARATOR)
           expect(subject.log).to receive(:info).with("Scheduling repository replication to " \
-            "#{test_node_02} for project id: #{test_project_id}")
+                                                     "#{test_node_02} for project id: #{test_project_id}")
           expect(subject.log).to receive(:info).with("  Project path: #{test_project_path_with_namespace}")
           expect(subject.log).to receive(:info).with("  Current shard name: #{test_node_01}")
           expect(subject.log).to receive(:info).with("  Disk path: #{test_project_disk_path}")
@@ -298,10 +298,10 @@ describe ::Storage::Rebalancer do
             .with('Option --move-amount not specified, will only move 1 project...')
           expect(subject.log).to receive(:info).with('Fetching largest projects')
           expect(subject.log).to receive(:info).with("Filtering #{test_migration_failures.length} " \
-            "known failed project repositories")
+                                                     "known failed project repositories")
           expect(subject.log).to receive(:info).with(::Storage::RebalanceScript::SEPARATOR)
           expect(subject.log).to receive(:info).with("Scheduling repository replication to " \
-            "application-selected shard for project id: #{test_project_id}")
+                                                     "application-selected shard for project id: #{test_project_id}")
           expect(subject.log).to receive(:info).with("  Project path: #{test_project_path_with_namespace}")
           expect(subject.log).to receive(:info).with("  Current shard name: #{test_node_01}")
           expect(subject.log).to receive(:info).with("  Disk path: #{test_project_disk_path}")
@@ -364,7 +364,7 @@ describe ::Storage::RebalanceScript do
 
       it 'aborts and whines about it' do
         expect(subject.log).to receive(:info).with('[Dry-run] This is only a dry-run -- write ' \
-          'operations will be logged but not executed')
+                                                   'operations will be logged but not executed')
         expect(subject).to receive(:set_api_token_or_else).and_yield
         expect { subject.main }.to raise_error(SystemExit, no_token_message).and output(Regexp.new(no_token_message)).to_stderr
       end
@@ -375,7 +375,7 @@ describe ::Storage::RebalanceScript do
     context 'when the dry-run option is true' do
       it 'logs the given operation' do
         expect(subject.log).to receive(:info).with('[Dry-run] This is only a dry-run -- write ' \
-          'operations will be logged but not executed')
+                                                   'operations will be logged but not executed')
         expect(subject).to receive(:rebalance)
         expect(subject.main).to be_nil
       end
