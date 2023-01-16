@@ -89,7 +89,7 @@ module Storage
         projects_repository_api_uri: 'projects/%<project_id>s/repository',
         projects_by_id_api_uri: 'projects/%<project_id>s',
         projects_repository_storage_move_api_uri: 'projects/%<project_id>s/' \
-          'repository_storage_moves/%<repository_storage_move_id>s',
+                                                  'repository_storage_moves/%<repository_storage_move_id>s',
         projects_repository_storage_moves_api_uri: 'projects/%<project_id>s/repository_storage_moves',
         projects_statistics_api_uri: 'projects/%<project_id>s/statistics',
         project_repository_move_states: {
@@ -105,8 +105,8 @@ module Storage
         },
         project_selector_script_path: '/var/opt/gitlab/scripts/storage_project_selector.rb',
         project_selector_command: 'sudo gitlab-rails runner ' \
-          '%<project_selector_script_path>s ' \
-          '%<source_shard>s %<destination_shard>s',
+                                  '%<project_selector_script_path>s ' \
+                                  '%<source_shard>s %<destination_shard>s',
         ssh_command: 'ssh %<hostname>s -- %<command>s',
         move_amount: 0,
         repository_storage_update_timeout: 10800,
@@ -193,7 +193,7 @@ module Storage
 
     def dry_run_notice
       log.info '[Dry-run] This is only a dry-run -- write operations will be logged but not ' \
-        'executed'
+               'executed'
     end
 
     def debug_command(cmd)
@@ -576,7 +576,7 @@ module Storage
 
       def define_move_amount_option
         description = "Gigabytes of repo data to move; default: #{@options[:move_amount]}, or " \
-          'largest single repo if 0'
+                      'largest single repo if 0'
         @parser.on('-m', '--move-amount=<n>', Integer, description) do |move_amount|
           abort 'Size too large' if move_amount > 16_000
           # Convert given gigabytes to bytes
@@ -609,7 +609,7 @@ module Storage
 
       def define_wait_option
         description = "Timeout in seconds for migration completion; default: " \
-          "#{@options[:repository_storage_update_timeout]}"
+                      "#{@options[:repository_storage_update_timeout]}"
         @parser.on('-w', '--wait=<n>', Integer, description) do |wait|
           @options[:repository_storage_update_timeout] = wait
         end
@@ -694,7 +694,7 @@ module Storage
 
       opt.options
     rescue OptionParser::InvalidArgument, OptionParser::InvalidOption,
-           OptionParser::MissingArgument, OptionParser::NeedlessArgument => e
+      OptionParser::MissingArgument, OptionParser::NeedlessArgument => e
       puts e.message
       puts opt.parser
       exit
@@ -1015,7 +1015,7 @@ module Storage
       return if project[:repository_storage] == options[:source_shard]
 
       raise ShardMismatch, "Repository for project id: #{project[:id]} is on shard: " \
-        "#{project[:repository_storage]} not #{options[:source_shard]}"
+                           "#{project[:repository_storage]} not #{options[:source_shard]}"
     end
 
     def summarize(total)
@@ -1088,7 +1088,7 @@ module Storage
         log.info "Success moving project id: #{project[:id]}"
       else
         raise MigrationTimeout, "Timed out waiting for migration of " \
-          "project id: #{post_migration_project[:id]}"
+                                "project id: #{post_migration_project[:id]}"
       end
 
       log.info "Migrated project id: #{post_migration_project[:id]}"
@@ -1193,7 +1193,7 @@ module Storage
 
     def move_projects(min_amount = options[:move_amount], limit = options[:limit])
       log.debug "Project migration validation timeout: " \
-        "#{options[:repository_storage_update_timeout]} seconds"
+                "#{options[:repository_storage_update_timeout]} seconds"
 
       moved_projects_count = 0
       total_bytes_moved = 0

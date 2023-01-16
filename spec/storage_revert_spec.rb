@@ -44,9 +44,9 @@ describe ::Storage::Reverter do
         allow(Project).to receive(:find_by).with(id: test_project_id).and_return(project)
         expect(subject.log).to receive(:info).with("Project id: #{test_project_id}")
         expect(subject.log).to receive(:info).with("Current repository " \
-          "storage: test")
+                                                   "storage: test")
         expect(subject.log).to receive(:info).with("[Dry-run] Would have set repository_storage " \
-          "field of project id: #{test_project_id} to nfs-file03")
+                                                   "field of project id: #{test_project_id} to nfs-file03")
         expect(subject.revert).to be_nil
       end
     end
@@ -63,9 +63,9 @@ describe ::Storage::Reverter do
         allow(Project).to receive(:find_by).with(id: test_project_id).and_return(project)
         expect(subject.log).to receive(:info).with("Project id: #{test_project_id}")
         expect(subject.log).to receive(:info).with("Current repository " \
-          "storage: test")
+                                                   "storage: test")
         expect(subject.log).to receive(:info).with("Reverted repository_storage field of " \
-          "project id: #{test_project_id} to test")
+                                                   "project id: #{test_project_id} to test")
         expect(subject.revert).to be_nil
       end
     end

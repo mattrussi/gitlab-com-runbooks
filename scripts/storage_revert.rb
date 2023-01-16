@@ -70,7 +70,7 @@ module Storage
 
     def dry_run_notice
       log.info '[Dry-run] This is only a dry-run -- write operations will be logged but not ' \
-        'executed'
+               'executed'
     end
   end
 end
@@ -199,13 +199,13 @@ module Storage
 
       if @options[:dry_run]
         log.info "[Dry-run] Would have set repository_storage field of project " \
-          "id: #{project.id} to #{@options[:original_file_server]}"
+                 "id: #{project.id} to #{@options[:original_file_server]}"
       else
         project.repository_storage = @options[:original_file_server]
         project.repository_read_only = false
         project.save
         log.info "Reverted repository_storage field of project id: #{project.id} " \
-          "to #{project.repository_storage}"
+                 "to #{project.repository_storage}"
       end
     end
   end

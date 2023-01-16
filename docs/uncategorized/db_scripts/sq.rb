@@ -109,7 +109,7 @@ module Runbooks
 
       def dry_run_notice
         log.info '[Dry-run] This is only a dry-run -- write operations will be logged but not ' \
-          'executed'
+                 'executed'
       end
     end
     # module CommandLineSupport
@@ -353,7 +353,7 @@ module Runbooks
           job_type = options.job_type
           if worker_name.nil? || worker_name.empty?
             abort 'Specify a job/worker name to kill (e.g. ' \
-              'RepositoryUpdateMirrorWorker)'
+                  'RepositoryUpdateMirrorWorker)'
           end
 
           count = kill_jobs_by_worker_name(worker_name: worker_name, job_type: job_type)

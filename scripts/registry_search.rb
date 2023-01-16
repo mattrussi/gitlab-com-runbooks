@@ -59,7 +59,7 @@ module Registry
 
     def dry_run_notice
       log.info '[Dry-run] This is only a dry-run -- write operations will be logged but not ' \
-        'executed'
+               'executed'
     end
 
     def debug_command(cmd)
@@ -183,7 +183,7 @@ module Registry
       opt.parser.parse!(opt.parser.order!(args) {})
       opt.options
     rescue OptionParser::InvalidArgument, OptionParser::InvalidOption,
-           OptionParser::MissingArgument => e
+      OptionParser::MissingArgument => e
       puts e.message
       puts opt.parser
       exit

@@ -83,8 +83,8 @@ module Storage
         leftovers_dir_name: 'leftovers.d',
         leftovers_file_name: 'leftover-git-repositories-%<date>s.txt',
         inventory_find_command: 'find %<path>s -mindepth 2 -maxdepth 3 ' \
-          '-type d -name "*.git" -not -name "*.wiki.git" -not -name "*.design.git" ' \
-          '-not -name "*+moved+*.git" -not -name "*+deleted*.git"',
+                                '-type d -name "*.git" -not -name "*.wiki.git" -not -name "*.design.git" ' \
+                                '-not -name "*+moved+*.git" -not -name "*+deleted*.git"',
         reset: false,
         rescan: false,
         log_level: Logger::INFO,
@@ -237,7 +237,7 @@ module Storage
       opt.parser.parse!(args)
       opt.options
     rescue OptionParser::InvalidArgument, OptionParser::InvalidOption,
-           OptionParser::MissingArgument, OptionParser::NeedlessArgument => e
+      OptionParser::MissingArgument, OptionParser::NeedlessArgument => e
       puts e.message
       puts opt.parser
       exit
