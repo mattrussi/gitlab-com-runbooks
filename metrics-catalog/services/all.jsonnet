@@ -39,6 +39,7 @@
   import 'redis-cluster-ratelimiting.jsonnet',
   import 'redis-sessions.jsonnet',
   import 'redis-registry-cache.jsonnet',
+  import 'redis-repository-cache.jsonnet',
   import 'redis.jsonnet',
   import 'registry.jsonnet',
   import 'search.jsonnet',

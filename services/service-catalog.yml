@@ -2677,6 +2677,68 @@ services:
       monitors:
         primary_grafana_dashboard: redis-cluster-ratelimiting-main/redis-cluster-ratelimiting-overview
 
+  - name: redis-repository-cache
+    tier: db
+    friendly_name: Redis Repository Cache
+    label: Service:Redis
+    business:
+      requirement: |
+        Redis-Repository-Cache is used as a fast persistent key-value store for repository-related data.
+      customers:
+        - GitLab.com customers
+      business_value: |
+        Redis-Repository-Cache delivers us performance and optimization in our Rails app.
+      SLA:
+        availability:
+        response_time:
+    technical:
+      project:
+        - https://github.com/redis/redis
+      slx:
+      documents:
+        design:
+        architecture:
+        readiness_review:
+        sre_guide: https://gitlab.com/gitlab-com/runbooks/-/tree/master/docs/redis-cache
+        developer_guide: https://docs.gitlab.com/ee/development/redis.html#redis-guidelines
+        service:
+          - https://redis.io/documentation
+          - https://docs.gitlab.com/omnibus/settings/redis.html
+        security:
+      dependencies:
+        - service:
+      configurations:
+        - config_name: redis.conf
+          location: /var/opt/gitlab/redis/redis.conf
+      chef_roles:
+      scalability:
+        bound: cpu
+        scalable: vertical
+      security:
+        security_reviewed:
+        data_classification: re
+        security_incidents:
+      logging:
+        - name: system
+          permalink: https://log.gprd.gitlab.net/goto/3f634380-9547-11ed-9f43-e3784d7fe3ca
+    infrastructure:
+      provider: gcp
+      architecture:
+      provisioning: terraform
+      accesses:
+        - account_name:
+          access_type:
+          reviewed:
+    operations:
+      maintenance:
+      runbooks:
+      playbooks:
+        - https://gitlab.com/gitlab-com/runbooks/blob/master/docs/redis/README.md
+      error_budget:
+    observability:
+      monitors:
+        primary_grafana_dashboard: redis-repository-cache-main/redis-repository-cache-overview
+
   - name: redis-sessions
     tier: db
     friendly_name: Redis Sessions
