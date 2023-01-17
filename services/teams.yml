@@ -286,7 +286,7 @@ teams:
   product_stage_group: pipeline_execution
   slack_channel: g_pipeline-execution
   slack_alerts_channel: g_pipeline-execution_alerts
-  slack_error_budget_channel: g_pipeline-execution_alerts
+  slack_error_budget_channel: g_pipeline-execution
   send_slo_alerts_to_team_slack_channel: true
   send_error_budget_weekly_to_slack: true
   ignored_components:
