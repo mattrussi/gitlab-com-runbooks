@@ -11,9 +11,9 @@ local options = validateReferenceArchitectureOptions(import 'gitlab-metrics-opti
 {
   options:: options,
 
-  // In accordance with Infra OKR: https://gitlab.com/gitlab-com/www-gitlab-com/-/issues/8024
-  // Do we need this?
-  slaTarget:: 0.9995,
+  // In accordance with the initial target in
+  // https://gitlab.com/groups/gitlab-com/gl-infra/gitlab-dedicated/-/epics/55
+  slaTarget:: 0.995,
 
   // List of services with SLI/SLO monitoring
   monitoredServices:: allServices,

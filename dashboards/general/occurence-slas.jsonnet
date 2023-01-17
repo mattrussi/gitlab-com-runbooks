@@ -7,5 +7,6 @@ local sortedServices = std.map(function(service) service.name, generalServicesDa
 occurenceSLADashboard.dashboard(
   sortedServices,
   metricsConfig.aggregationSets.serviceSLIs,
+  metricsConfig.slaTarget,
   { stage: 'main', environment: '$environment', monitor: 'global' }
 )
