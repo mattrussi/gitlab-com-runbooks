@@ -54,7 +54,7 @@ The application is deployed in Kubernetes using the official [Vault Helm chart](
 
 #### Availability
 
-We run Vault in [High Availability mode](https://www.vaultproject.io/docs/concepts/ha). This consists of one active Vault server and several standby servers. Since we're using the community version, standby instances are not unsealed and are only replicating the data but are not able to read it, and they will forward all requests to the leader instance. The standby instances only unseal when being promoted to leader.
+We run Vault in [High Availability mode](https://developer.hashicorp.com/vault/docs/concepts/ha). This consists of one active Vault server and several standby servers. Since we're using the community version, standby instances are not unsealed and are only replicating the data but are not able to read it, and they will forward all requests to the leader instance. The standby instances only unseal when being promoted to leader.
 
 We have enabled [automatic unseal with GKMS](https://learn.hashicorp.com/tutorials/vault/autounseal-gcp-kms?in=vault/auto-unseal). The unsealing process is delegated to Google KMS in the event of a failure. The Vault cluster will coordinate leader elections and failovers internally.
 
@@ -78,7 +78,7 @@ We have one internal and one external endpoint, keeping the service from being d
 
 #### Storage
 
-Vault's Integrated Storage engine [Raft](https://www.vaultproject.io/docs/concepts/integrated-storage) is used for storage. This allows all the nodes in a Vault cluster to have a replicated copy of Vault's data locally. It is also used as the HA backend.
+Vault's Integrated Storage engine [Raft](https://developer.hashicorp.com/vault/docs/concepts/integrated-storage) is used for storage. This allows all the nodes in a Vault cluster to have a replicated copy of Vault's data locally. It is also used as the HA backend.
 
 ![storage](img/storage.png)
 
@@ -105,15 +105,15 @@ Snapshot backups are saved [across multiple regions in the United States](https:
 
 #### User authentication
 
-We're using [Google Identity-Aware Proxy](https://cloud.google.com/iap/) for the external load balancer and [Google OIDC](https://www.vaultproject.io/docs/auth/jwt/oidc_providers#google) is required to log into the Vault web interface.
+We're using [Google Identity-Aware Proxy](https://cloud.google.com/iap/) for the external load balancer and [Okta OIDC](https://developer.hashicorp.com/vault/docs/auth/jwt/oidc-providers/okta) is required to log into the Vault web interface.
 
 #### API authentication
 
-* CI runners can be authenticated with [JWT](https://www.vaultproject.io/docs/auth/jwt) using [JWKS](https://docs.gitlab.com/ee/ci/secrets/#configure-your-vault-server)
-* GCP servers (chef client, ansible, etc) can be authenticated with [Google Cloud auth](https://www.vaultproject.io/docs/auth/gcp) (service accounts or instance service accounts)
-* Kubernetes can be authenticated with [Kubernetes Service Account Tokens](https://www.vaultproject.io/docs/auth/kubernetes)
+* CI runners can be authenticated with [JWT](https://developer.hashicorp.com/vault/docs/auth/jwt) using [JWKS](https://docs.gitlab.com/ee/ci/secrets/#configure-your-vault-server)
+* GCP servers (chef client, ansible, etc) can be authenticated with [Google Cloud auth](https://developer.hashicorp.com/vault/docs/auth/gcp) (service accounts or instance service accounts)
+* Kubernetes can be authenticated with [Kubernetes Service Account Tokens](https://developer.hashicorp.com/vault/docs/auth/kubernetes)
 
-[Identities/Roles](https://www.vaultproject.io/docs/concepts/identity) and [Policies](https://www.vaultproject.io/docs/concepts/policies) are used to enforce RBAC and limit scope of access to necessary secrets. See the [Secret Access](#secret-access) section for more information.
+[Identities/Roles](https://developer.hashicorp.com/vault/docs/concepts/identity) and [Policies](https://developer.hashicorp.com/vault/docs/concepts/policies) are used to enforce RBAC and limit scope of access to necessary secrets. See the [Secret Access](#secret-access) section for more information.
 
 ## Security Considerations
 
@@ -121,9 +121,9 @@ We're using [Google Identity-Aware Proxy](https://cloud.google.com/iap/) for the
 
 Vault data is encrypted at all times. When Vault is started, it is always started in a sealed state and will not be able to decrypt data until it is unsealed.
 
-To [unseal](https://www.vaultproject.io/docs/concepts/seal) Vault, a root key is needed to decrypt the Vault data encryption key.
+To [unseal](https://developer.hashicorp.com/vault/docs/concepts/seal) Vault, a root key is needed to decrypt the Vault data encryption key.
 
-To ensure that the root key is never known or leaked, we have configured auto-unseal using [`GCP KMS`](https://www.vaultproject.io/docs/configuration/seal/gcpckms) which lets us leverage GCP KMS to encrypt and decrypt the root key. Only the KMS key is able to decrypt the root key in our configuration. There is no other method possible to decrypt the root key. The Terraform configuration can [be found here](https://ops.gitlab.net/gitlab-com/gl-infra/config-mgmt/-/blob/master/modules/vault-project/kms.tf).
+To ensure that the root key is never known or leaked, we have configured auto-unseal using [`GCP KMS`](https://developer.hashicorp.com/vault/docs/configuration/seal/gcpckms) which lets us leverage GCP KMS to encrypt and decrypt the root key. Only the KMS key is able to decrypt the root key in our configuration. There is no other method possible to decrypt the root key. The Terraform configuration can [be found here](https://ops.gitlab.net/gitlab-com/gl-infra/config-mgmt/-/blob/master/modules/vault-project/kms.tf).
 
 ```mermaid
 graph TD
@@ -148,7 +148,7 @@ Additionally, we're also using end-to-end TLS encryption for Vault.
 
 Vault uses policies to govern the behavior of clients and instrument Role-Based Access Control (RBAC). A policy defines a list of paths. Each path declares the capabilities (e.g. "create", "read", "update", "delete", "list", etc) that are allowed. Vault's denies capabilities by default unless explicitly stated other wise.
 
-There are some [built in policies](https://www.vaultproject.io/docs/concepts/policies#built-in-policies) generated by Vault and we've currently configured the following policies:
+There are some [built in policies](https://developer.hashicorp.com/vault/docs/concepts/policies#built-in-policies) generated by Vault and we've currently configured the following policies:
 
 * [General usage policies](https://ops.gitlab.net/gitlab-com/gl-infra/terraform-modules/vault-configuration/-/blob/master/policies.tf)
 * [GitLab CI policies](https://ops.gitlab.net/gitlab-com/gl-infra/terraform-modules/vault-configuration/-/blob/master/policies_gitlab.tf)
@@ -159,9 +159,9 @@ There are some [built in policies](https://www.vaultproject.io/docs/concepts/pol
 
 The JSON Web Token (JWT) method can be used to authenticate with Vault by a JWT authentication method or an OIDC. These JWTs can contain claims or a key/value pair. These can be used by Vault to validate that any configured "bound" parameters match which provide more granularity to authentication permissions.
 
-For an example, see the [the bounds claims](https://ops.gitlab.net/gitlab-com/gl-infra/config-mgmt/-/blob/f3a02f1df3901361b2031bf04b110b82af1d3eee/environments/vault-staging/roles_oidc.tf#L45-47) configured for OIDC users based on Google group memberships.
+For an example, see the [the bounds claims](https://ops.gitlab.net/gitlab-com/gl-infra/terraform-modules/vault-configuration/-/blob/76f9a9027326b1d12eda129b4df113451d3d84ea/roles_oidc.tf#L44) configured for OIDC users based on Okta group memberships.
 
-More details and specifications can be found in [the Vault documentation](https://www.vaultproject.io/docs/auth/jwt#bound-claims).
+More details and specifications can be found in [the Vault documentation](https://developer.hashicorp.com/vault/docs/auth/jwt#bound-claims).
 
 ## Observability
 
@@ -303,7 +303,7 @@ When `admin` access is not sufficient or broken, a root token can be generated u
 
 ## Backing up and restoring Vault
 
-Vault Raft snapshots are taken hourly. They are created by a Kubernetes [CronJob](https://kubernetes.io/docs/concepts/workloads/controllers/cron-jobs/) that runs inside the GKE cluster that runs Vault. It uses [vault operator raft snapshot save](https://www.vaultproject.io/docs/commands/operator/raft#snapshot-save) to create an encrypted copy of all Vault data, and then uploads to it to a GCS bucket inside a separate GCP project:
+Vault Raft snapshots are taken hourly. They are created by a Kubernetes [CronJob](https://kubernetes.io/docs/concepts/workloads/controllers/cron-jobs/) that runs inside the GKE cluster that runs Vault. It uses [vault operator raft snapshot save](https://developer.hashicorp.com/vault/docs/commands/operator/raft#snapshot-save) to create an encrypted copy of all Vault data, and then uploads to it to a GCS bucket inside a separate GCP project:
 
 * Production: [`gitlab-vault-production-vault-raft-snapshots`](https://console.cloud.google.com/storage/browser/gitlab-vault-production-vault-raft-snapshots?project=gitlab-vault-production) in `gitlab-vault-production`
 * Staging: [`gitlab-vault-staging-vault-raft-snapshots`](https://console.cloud.google.com/storage/browser/gitlab-vault-staging-vault-raft-snapshots?project=gitlab-vault-staging) in `gitlab-vault-staging`

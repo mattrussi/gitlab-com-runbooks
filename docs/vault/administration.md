@@ -73,4 +73,4 @@ locals {
 
 Terraform will then configure Vault with the Kubernetes/JWT authentication method and some default policies for this cluster.
 
-See the [Vault documentation about Kubernetes authentication](https://www.vaultproject.io/docs/auth/kubernetes) for more information.
+See the [Vault documentation about Kubernetes authentication](https://developer.hashicorp.com/vault/docs/auth/kubernetes) for more information.

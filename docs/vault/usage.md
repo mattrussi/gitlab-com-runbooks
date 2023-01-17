@@ -7,7 +7,7 @@
 ### Web UI
 
 * Go to <https://vault.gitlab.net/>
-* Select `oidc`, leave `Role` empty and click `Sign in with Google`
+* Select `oidc`, leave `Role` empty and click `Sign in with GitLab`
 * You should now be logged in
 
 Your session token is valid for 24 hours, renewable for up to 7 days and automatically renewed when you use the Web UI before the 24 hours TTL runs out.
@@ -16,7 +16,7 @@ Members of the Infrastructure team can also login with admin privileges by enter
 
 #### Authentication alternative
 
-If OIDC authentication [fails due to Identity-Aware Proxy (IAP) redirects](https://gitlab.com/gitlab-com/gl-infra/reliability/-/issues/16242), the CLI token (using the method below) can be reused to login in the UI.
+If the OIDC authentication fails for any reason, the CLI token (using the method below) can be reused to login in the UI.
 
 * Execute `vault token lookup`
 
@@ -36,7 +36,7 @@ ttl                            21h39m34s
 
 #### Installing the client
 
-The Hashicorp Vault client is available for most OSes and package managers, see <https://www.vaultproject.io/downloads> for more information.
+The Hashicorp Vault client is available for most OSes and package managers, see <https://developer.hashicorp.com/vault/downloads> for more information.
 
 The non-official client [`safe`](https://github.com/starkandwayne/safe) is also more user-friendly and convenient for key/value secrets operations, however you will still need the official client above to be able to login. See the [releases](https://github.com/starkandwayne/safe/releases) for prebuilt binaries, and MacOS users will want to read <https://github.com/starkandwayne/safe#attention-homebrew-users> for installing via Homebrew.
 
@@ -136,7 +136,7 @@ Your token is valid for 24 hours, renewable for up to 7 days using `vault token 
 
 ### Secrets Engines
 
-There are currently 3 [KV Secrets Engine](https://www.vaultproject.io/docs/secrets/kv/kv-v2) configured in Vault:
+There are currently 3 [KV Secrets Engine](https://developer.hashicorp.com/vault/docs/secrets/kv/kv-v2) configured in Vault:
 
 * `ci`: secrets accessed from GitLab CI
 * `k8s`: secrets accessed by the [External Secrets operator](https://external-secrets.io/) from the GKE clusters
@@ -148,9 +148,9 @@ The `shared` secrets don't have a well-defined structure at the time of this wri
 
 We are using the `kv` secret store version 2, which has secret versioning enabled. This means that when updating a secret, any previous secret versions can be retrieved by its version number until it is deleted (⚠️  deleting the last version does not delete the previous ones), and they can be undeleted as well. On the other hand, *destroying* a secret will effectively delete it permanently.
 
-See [the Vault documentation about KV version 2](https://www.vaultproject.io/docs/secrets/kv/kv-v2#usage) to learn how to create/read/update/delete secrets and manage their versions.
+See [the Vault documentation about KV version 2](https://developer.hashicorp.com/vault/docs/secrets/kv/kv-v2#usage) to learn how to create/read/update/delete secrets and manage their versions.
 
-There is also another secret engine named `cubbyhole`, this is a temporary secret engine scoped to a token, and destroyed when the token expires. It is especially useful for response wrapping, see the Vault documentation about [Cubbyhole](https://www.vaultproject.io/docs/secrets/cubbyhole) and [response wrapping](https://www.vaultproject.io/docs/concepts/response-wrapping) for more information.
+There is also another secret engine named `cubbyhole`, this is a temporary secret engine scoped to a token, and destroyed when the token expires. It is especially useful for response wrapping, see the Vault documentation about [Cubbyhole](https://developer.hashicorp.com/vault/docs/secrets/cubbyhole) and [response wrapping](https://developer.hashicorp.com/vault/docs/concepts/response-wrapping) for more information.
 
 ### GitLab CI Secrets
 
