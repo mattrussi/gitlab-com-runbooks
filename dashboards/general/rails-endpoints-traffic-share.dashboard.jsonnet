@@ -1,7 +1,6 @@
 local basic = import 'grafana/basic.libsonnet';
 local layout = import 'grafana/layout.libsonnet';
 local prebuiltTemplates = import 'grafana/templates.libsonnet';
-local aggregations = import 'promql/aggregations.libsonnet';
 local selectors = import 'promql/selectors.libsonnet';
 
 local baseSelector = {
@@ -20,8 +19,6 @@ local mappingSelector = {
 };
 
 local knownEndpointsSelector = { endpoint_id: { ne: 'unknown' } };
-local componentSelector = { component: 'rails_request' };
-local stageGroupAggregationLabels = ['product_stage', 'stage_group'];
 local knownUrgencies = ['high', 'medium', 'default', 'low'];
 
 local percentageOfTrafficByUrgency(urgencySelector) =
@@ -154,144 +151,72 @@ local trafficForUrgencyPanels(urgency) =
     endpointCountForUrgency(urgency),
   ];
 
-local groupOptedOut = |||
-  (
-    sum by(%(aggregationLabels)s)(gitlab:ignored_component:stage_group{%(selector)s})
-    or
-    sum by (%(aggregationLabels)s)(0 * gitlab:feature_category:stage_group:mapping{%(stageGroupSelector)s})
-  ) and sum by (%(aggregationLabels)s) (sum_over_time(gitlab:component:stage_group:execution:ops:rate_6h{%(selector)s}[$__range])) > 0
-||| % {
-  stageGroupSelector: selectors.serializeHash(groupSelector),
-  selector: selectors.serializeHash(componentSelector + groupSelector),
-  aggregationLabels: aggregations.serialize(stageGroupAggregationLabels),
-};
 
-local percentageOfTrafficForComponent(aggregationLabels) = |||
-  sum by (%(aggregationLabels)s)(
-    sum_over_time(gitlab:component:stage_group:execution:ops:rate_6h{%(selector)s}[$__range]) > 0
-  )
-  / ignoring(%(totalAggregationLabels)s) group_left() sum(
-      sum_over_time(gitlab:component:stage_group:execution:ops:rate_6h{%(selector)s}[$__range]) > 0
-  )
-||| % {
-  selector: selectors.serializeHash(baseSelector + groupSelector + componentSelector),
-  aggregationLabels: aggregations.serialize(aggregationLabels),
-  totalAggregationLabels: aggregations.serialize(aggregationLabels),
-};
-
-local apdexRatioPromql(selector) = |||
-  clamp_max(
-    sum by (%(aggregationLabels)s)(
-      sum_over_time(gitlab:component:stage_group:execution:apdex:success:rate_6h{%(selector)s}[$__range]) > 0
-    )
-    /
-    sum by (%(aggregationLabels)s)(
-      sum_over_time(gitlab:component:stage_group:execution:apdex:weight:score_6h{%(selector)s}[$__range]) > 0
-    ),
-    1
-  )
-||| % {
-  selector: selectors.serializeHash(baseSelector + groupSelector + selector),
-  aggregationLabels: aggregations.serialize(stageGroupAggregationLabels),
-};
-
-local optOutTraffic =
-  local aggregationLabels = stageGroupAggregationLabels + ['component'];
+local endpointsSortedByTraffic =
   |||
-    sum (
-      sum by (%(aggregationLabels)s) (gitlab:ignored_component:stage_group{%(selector)s})
-      * (
-        %(percentageOfTrafficByGroup)s
+    sort_desc(
+      sum by(endpoint_id, request_urgency, feature_category, env) (
+        sum_over_time(application_sli_aggregation:rails_request:apdex:weight:score_1h{%(numeratorSelector)s}[$__range]) > 0
       )
+      / ignoring(endpoint_id, feature_category, request_urgency) group_left
+      sum by(env) (
+        sum_over_time(application_sli_aggregation:rails_request:apdex:weight:score_1h{%(numeratorSelector)s}[$__range]) > 0
+      )
+    ) * on(feature_category) group_left(stage_group)
+    sum by(feature_category, stage_group) (
+      gitlab:feature_category:stage_group:mapping{%(mappingSelector)s}
     )
   ||| % {
-    aggregationLabels: aggregations.serialize(aggregationLabels),
-    selector: selectors.serializeHash(groupSelector + componentSelector),
-    percentageOfTrafficByGroup: percentageOfTrafficForComponent(aggregationLabels),
-  };
-
-local optInTraffic =
-  local aggregationLabels = stageGroupAggregationLabels + ['component'];
-  |||
-    sum(
-      (
-        %(percentageOfTrafficByGroup)s
-      ) unless on (%(aggregationLabels)s) (gitlab:ignored_component:stage_group{%(selector)s})
-    )
-  ||| % {
-    aggregationLabels: aggregations.serialize(aggregationLabels),
-    selector: selectors.serializeHash(groupSelector + componentSelector),
-    percentageOfTrafficByGroup: percentageOfTrafficForComponent(aggregationLabels),
+    numeratorSelector: selectors.serializeHash(baseSelector),
+    mappingSelector: selectors.serializeHash(mappingSelector),
   }
 ;
 
-local optOutTrafficShare =
-  basic.multiTimeseries(
-    title='Traffic opted in',
-    format='percentunit',
-    fill=1,
-    queries=[
-      {
-        query: optInTraffic,
-        legendFormat: 'opted in',
-      },
-      {
-        query: optOutTraffic,
-        legendFormat: 'opted out',
-      },
-    ],
-    stack=true,
-  );
-
-local optOutGroupsTable =
+local endpointsSortedByTrafficTable =
   basic.table(
-    title='groups opted in to the rails_request component',
+    title='Endpoints by traffic %',
     styles=null,
-    queries=[
-      groupOptedOut,
-      percentageOfTrafficForComponent(stageGroupAggregationLabels),
-      apdexRatioPromql(componentSelector),
-      apdexRatioPromql({ component: 'puma' }),
-    ],
+    query=endpointsSortedByTraffic,
     transformations=[
-      { id: 'merge' },
+      {
+        id: 'renameByRegex',
+        options: {
+          regex: 'Value',
+          renamePattern: 'Traffic %',
+        },
+      },
+      {
+        id: 'renameByRegex',
+        options: {
+          regex: 'request_urgency',
+          renamePattern: 'Urgency',
+        },
+      },
+      {
+        id: 'renameByRegex',
+        options: {
+          regex: 'stage_group',
+          renamePattern: 'Group',
+        },
+      },
       {
         id: 'organize',
         options: {
           excludeByName: {
             Time: true,
-          },
-          indexByName: {
-            product_stage: 0,
-            stage_group: 1,
-            'Value #A': 2,
-            'Value #B': 3,
-            'Value #C': 4,
-          },
-          renameByName: {
-            product_stage: 'Stage',
-            stage_group: 'Group',
-            'Value #A': 'Opted in',
-            'Value #B': 'Percentage of traffic',
-            'Value #C': 'New apdex ratio',
-            'Value #D': 'Old apdex ratio',
+            env: true,
+            feature_category: true,
           },
         },
       },
     ],
   ) {
-    options: {
-      sortBy: [{
-        displayName: 'Percentage of traffic',
-        desc: true,
-      }],
-    },
     fieldConfig+: {
       overrides: [
         {
           matcher: {
             id: 'byName',
-            options: 'Opted in',
+            options: 'Urgency',
           },
           properties: [
             {
@@ -300,66 +225,63 @@ local optOutGroupsTable =
                 {
                   type: 'value',
                   options: {
-                    '0': {
-                      text: '💚',
-                      index: 1,
+                    low: {
+                      text: '🔴 low',
                     },
-                    '1': {
-                      text: '⏳',
-                      index: 0,
+                    default: {
+                      text: '🟠 default',
+                    },
+                    medium: {
+                      text: '🟡 medium',
+                    },
+                    high: {
+                      text: '🟢 high',
                     },
                   },
                 },
               ],
             },
+            {
+              id: 'custom.width',
+              value: 160,
+            },
           ],
         },
         {
           matcher: {
-            id: 'byRegexp',
-            options: '(Percentage of traffic)|(ratio)',
+            id: 'byName',
+            options: 'Group',
           },
           properties: [
             {
-              id: 'unit',
-              value: 'percentunit',
-            },
-            {
-              id: 'decimals',
-              value: 2,
-            },
-            {
               id: 'custom.width',
-              value: 130,
+              value: 360,
             },
           ],
         },
         {
           matcher: {
             id: 'byName',
-            options: 'Stage',
+            options: 'Traffic %',
           },
-          properties: [{
-            id: 'custom.width',
-            value: 80,
-          }],
-        },
-        {
-          matcher: {
-            id: 'byName',
-            options: 'Opted in',
-          },
-          properties: [{
-            id: 'custom.width',
-            value: 80,
-          }],
+          properties: [
+            {
+              id: 'custom.width',
+              value: 80,
+            },
+            {
+              id: 'unit',
+              decimals: 3,
+              value: 'percentunit',
+            },
+          ],
         },
       ],
     },
   };
 
 basic.dashboard(
-  'Request apdex participation',
+  'Rails Endpoints Traffic Share',
   tags=[],
   time_from='now-7d/m',
   time_to='now/m',
@@ -385,16 +307,10 @@ basic.dashboard(
 )
 .addPanels(
   layout.rowGrid(
-    'Opted in groups',
-    [optOutGroupsTable],
+    'Endpoints by traffic %',
+    [endpointsSortedByTrafficTable],
+    collapse=true,
     rowHeight=10,
-    startRow=200,
-  )
-).addPanels(
-  layout.rowGrid(
-    'Opted in traffic over time',
-    [optOutTrafficShare],
-    rowHeight=10,
-    startRow=300,
+    startRow=400,
   )
 )
