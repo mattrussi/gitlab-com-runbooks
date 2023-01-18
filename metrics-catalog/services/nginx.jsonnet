@@ -39,6 +39,7 @@ metricsCatalog.serviceDefinition({
   serviceLevelIndicators: {
     nginx_ingress: {
       userImpacting: true,
+      trafficCessationAlertConfig: false,
       featureCategory: 'not_owned',
       team: 'sre_reliability',
       description: |||
