@@ -1517,6 +1517,52 @@ groups:
   - record: slo:min:events:gitlab_service_apdex:ratio
     labels:
       tier: db
+      type: redis-repository-cache
+    expr: "0.999500"
+  - record: slo:max:events:gitlab_service_errors:ratio
+    labels:
+      tier: db
+      type: redis-repository-cache
+    expr: "0.001000"
+  - record: slo:min:events:gitlab_service_apdex:ratio
+    labels:
+      component: primary_server
+      tier: db
+      type: redis-repository-cache
+    expr: "0.999500"
+  - record: slo:max:events:gitlab_service_errors:ratio
+    labels:
+      component: primary_server
+      tier: db
+      type: redis-repository-cache
+    expr: "0.001000"
+  - record: slo:min:events:gitlab_service_apdex:ratio
+    labels:
+      component: rails_redis_client
+      tier: db
+      type: redis-repository-cache
+    expr: "0.999500"
+  - record: slo:max:events:gitlab_service_errors:ratio
+    labels:
+      component: rails_redis_client
+      tier: db
+      type: redis-repository-cache
+    expr: "0.001000"
+  - record: slo:min:events:gitlab_service_apdex:ratio
+    labels:
+      component: secondary_servers
+      tier: db
+      type: redis-repository-cache
+    expr: "0.999500"
+  - record: slo:max:events:gitlab_service_errors:ratio
+    labels:
+      component: secondary_servers
+      tier: db
+      type: redis-repository-cache
+    expr: "0.001000"
+  - record: slo:min:events:gitlab_service_apdex:ratio
+    labels:
+      tier: db
       type: redis
     expr: "0.999900"
   - record: slo:max:events:gitlab_service_errors:ratio
@@ -3111,6 +3157,30 @@ groups:
       service_aggregation: "no"
       tier: db
       type: redis-registry-cache
+    expr: "1"
+  - record: gitlab_component_service:mapping
+    labels:
+      component: primary_server
+      regional_aggregation: "no"
+      service_aggregation: "yes"
+      tier: db
+      type: redis-repository-cache
+    expr: "1"
+  - record: gitlab_component_service:mapping
+    labels:
+      component: rails_redis_client
+      regional_aggregation: "no"
+      service_aggregation: "yes"
+      tier: db
+      type: redis-repository-cache
+    expr: "1"
+  - record: gitlab_component_service:mapping
+    labels:
+      component: secondary_servers
+      regional_aggregation: "no"
+      service_aggregation: "no"
+      tier: db
+      type: redis-repository-cache
     expr: "1"
   - record: gitlab_component_service:mapping
     labels:
