@@ -3,7 +3,7 @@ local stages = import 'service-catalog/stages.libsonnet';
 
 test.suite({
   testBlank: {
-    actual: stages.findStageGroupForFeatureCategory('users').name,
+    actual: stages.findStageGroupForFeatureCategory('user_profile').name,
     expect: 'Organization',
   },
   testNotOwnedStageGroupForFeatureCategory: {

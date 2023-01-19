@@ -36,7 +36,7 @@ groups:
   - record: gitlab:component:feature_category:execution:apdex:success:rate_5m
     labels:
       component: imagescaler
-      feature_category: users
+      feature_category: user_profile
       tier: sv
       type: web
     expr: |
@@ -54,7 +54,7 @@ groups:
   - record: gitlab:component:feature_category:execution:apdex:weight:score_5m
     labels:
       component: imagescaler
-      feature_category: users
+      feature_category: user_profile
       tier: sv
       type: web
     expr: |
@@ -64,7 +64,7 @@ groups:
   - record: gitlab:component:feature_category:execution:ops:rate_5m
     labels:
       component: imagescaler
-      feature_category: users
+      feature_category: user_profile
       tier: sv
       type: web
     expr: |
@@ -159,7 +159,7 @@ groups:
   - record: gitlab:component:feature_category:execution:apdex:success:rate_30m
     labels:
       component: imagescaler
-      feature_category: users
+      feature_category: user_profile
       tier: sv
       type: web
     expr: |
@@ -177,7 +177,7 @@ groups:
   - record: gitlab:component:feature_category:execution:apdex:weight:score_30m
     labels:
       component: imagescaler
-      feature_category: users
+      feature_category: user_profile
       tier: sv
       type: web
     expr: |
@@ -187,7 +187,7 @@ groups:
   - record: gitlab:component:feature_category:execution:ops:rate_30m
     labels:
       component: imagescaler
-      feature_category: users
+      feature_category: user_profile
       tier: sv
       type: web
     expr: |
@@ -282,7 +282,7 @@ groups:
   - record: gitlab:component:feature_category:execution:apdex:success:rate_1h
     labels:
       component: imagescaler
-      feature_category: users
+      feature_category: user_profile
       tier: sv
       type: web
     expr: |
@@ -300,7 +300,7 @@ groups:
   - record: gitlab:component:feature_category:execution:apdex:weight:score_1h
     labels:
       component: imagescaler
-      feature_category: users
+      feature_category: user_profile
       tier: sv
       type: web
     expr: |
@@ -310,7 +310,7 @@ groups:
   - record: gitlab:component:feature_category:execution:ops:rate_1h
     labels:
       component: imagescaler
-      feature_category: users
+      feature_category: user_profile
       tier: sv
       type: web
     expr: |

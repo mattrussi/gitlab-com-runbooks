@@ -352,7 +352,7 @@ groups:
       aggregation: component
       alert_class: slo_violation
       alert_type: symptom
-      feature_category: users
+      feature_category: user_profile
       pager: pagerduty
       rules_domain: general
       severity: s2
@@ -403,7 +403,7 @@ groups:
       aggregation: component
       alert_class: slo_violation
       alert_type: symptom
-      feature_category: users
+      feature_category: user_profile
       pager: pagerduty
       rules_domain: general
       severity: s2
@@ -456,7 +456,7 @@ groups:
       aggregation: regional_component
       alert_class: slo_violation
       alert_type: symptom
-      feature_category: users
+      feature_category: user_profile
       pager: pagerduty
       rules_domain: general
       severity: s2
@@ -509,7 +509,7 @@ groups:
       aggregation: regional_component
       alert_class: slo_violation
       alert_type: symptom
-      feature_category: users
+      feature_category: user_profile
       pager: pagerduty
       rules_domain: general
       severity: s2
@@ -557,7 +557,7 @@ groups:
       aggregation: component
       alert_class: traffic_cessation
       alert_type: cause
-      feature_category: users
+      feature_category: user_profile
       pager: pagerduty
       rules_domain: general
       severity: s2
@@ -594,7 +594,7 @@ groups:
       aggregation: component
       alert_class: traffic_cessation
       alert_type: cause
-      feature_category: users
+      feature_category: user_profile
       pager: pagerduty
       rules_domain: general
       severity: s2
@@ -631,7 +631,7 @@ groups:
       aggregation: regional_component
       alert_class: traffic_cessation
       alert_type: cause
-      feature_category: users
+      feature_category: user_profile
       pager: pagerduty
       rules_domain: general
       severity: s2
@@ -670,7 +670,7 @@ groups:
       aggregation: regional_component
       alert_class: traffic_cessation
       alert_type: cause
-      feature_category: users
+      feature_category: user_profile
       pager: pagerduty
       rules_domain: general
       severity: s2
