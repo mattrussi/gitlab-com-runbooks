@@ -283,7 +283,7 @@ local endpointsSortedByTrafficTable =
 basic.dashboard(
   'Rails Endpoints Traffic Share',
   tags=[],
-  time_from='now-7d/m',
+  time_from='now-2d/m',
   time_to='now/m',
 ).addTemplate(prebuiltTemplates.environment)
 .addTemplate(prebuiltTemplates.stage)
@@ -314,3 +314,4 @@ basic.dashboard(
     startRow=400,
   )
 )
+.trailer()
