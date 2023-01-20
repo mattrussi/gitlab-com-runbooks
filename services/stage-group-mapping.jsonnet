@@ -17,7 +17,7 @@
     stage: 'manage',
     feature_categories: [
       'subgroups',
-      'users',
+      'user_profile',
       'projects',
     ],
   },

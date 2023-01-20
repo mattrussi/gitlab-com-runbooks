@@ -769,7 +769,7 @@ groups:
     expr: "1"
   - record: gitlab:feature_category:stage_group:mapping
     labels:
-      feature_category: users
+      feature_category: user_profile
       product_stage: manage
       stage_group: organization
     expr: "1"

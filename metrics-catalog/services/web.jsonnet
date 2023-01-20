@@ -154,7 +154,7 @@ metricsCatalog.serviceDefinition({
 
     imagescaler: {
       userImpacting: false,
-      featureCategory: 'users',
+      featureCategory: 'user_profile',
       description: |||
         The imagescaler rescales images before sending them to clients. This allows faster transmission of
         images and faster rendering of web pages.
