@@ -52,7 +52,7 @@ groups:
       runbook: docs/patroni/postgresql-backups-wale-walg.md
       title: Last successful WAL-G basebackup was seen {{ $value }} hours ago for env {{ $labels.environment }}.
   - alert: WALGBaseBackupFailed
-    expr: gitlab_job_failed{resource="walg-basebackup"} == 1
+    expr: gitlab_job_failed{resource="walg-basebackup", type!~".+logical.+"} == 1
     for: 5m
     labels:
       pager: pagerduty
