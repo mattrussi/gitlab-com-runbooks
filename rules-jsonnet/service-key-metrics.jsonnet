@@ -8,7 +8,7 @@ local outputPromYaml(groups) =
   });
 
 local featureCategoryFileForService(service) =
-  if service.hasFeatureCatogorySLIs() then
+  if service.hasFeatureCategorySLIs() then
     {
       ['feature-category-metrics-%s.yml' % [service.type]]:
         outputPromYaml(

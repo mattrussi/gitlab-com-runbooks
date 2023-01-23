@@ -12,7 +12,8 @@ local list = [
   sliDefinition.new({
     name: 'rails_request',
     significantLabels: ['endpoint_id', 'feature_category', 'request_urgency'],
-    kinds: [sliDefinition.apdexKind],
+    kinds: [sliDefinition.apdexKind, sliDefinition.errorRateKind],
+    excludeKindsFromSLI: [sliDefinition.errorRateKind],
     description: |||
       The number of requests meeting their duration target based on the urgency
       of the endpoint. By default, a request should take no more than 1s. But
