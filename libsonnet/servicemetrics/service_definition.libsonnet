@@ -94,7 +94,7 @@ local serviceDefinition(service) =
     hasApdex():: private.serviceHasComponentWith('apdex'),
     hasRequestRate():: std.length(std.objectFields(service.serviceLevelIndicators)) > 0,
     hasErrorRate():: private.serviceHasComponentWith('errorRate'),
-    hasFeatureCatogorySLIs():: private.serviceHasComponentWithFeatureCategory(),
+    hasFeatureCategorySLIs():: private.serviceHasComponentWithFeatureCategory(),
 
     getProvisioning()::
       service.provisioning,
