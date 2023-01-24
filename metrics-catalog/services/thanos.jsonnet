@@ -27,9 +27,6 @@ metricsCatalog.serviceDefinition({
     kubernetes: true,
     vms: true,
   },
-  serviceDependencies: {
-    'cloud-sql': true,
-  },
   kubeResources: {
     'thanos-query': {
       kind: 'Deployment',
