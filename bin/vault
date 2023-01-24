@@ -23,7 +23,7 @@ init() {
   if [ "$1" = '-' ];then
       cat <<EOF
 VAULT_ADDR="${VAULT_ADDR}"; export VAULT_ADDR
-vault-proxy() { eval "\$(glsh vault proxy "\$@")" }
+vault-proxy() { eval "\$(glsh vault proxy "\$@")"; }
 EOF
   else
       cat >&2 <<'EOF'
