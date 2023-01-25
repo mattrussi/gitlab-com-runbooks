@@ -41,7 +41,7 @@ groups:
   - alert: RedisLossOfRedundancy
     for: 2h
     expr: |
-      sum by (env, type, shard) (redis_instance_info{role="slave"}) < 2
+      sum by (environment, tier, type, stage, shard) (redis_instance_info{role="slave"}) < 2
     labels:
       pager: pagerduty
       severity: s2
