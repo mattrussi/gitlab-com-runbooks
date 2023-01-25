@@ -64,7 +64,7 @@ local slaRow(availability, services, sloThreshold, selector) =
       legendFormat='',
       datasource='$PROMETHEUS_DS',
       intervalFactor=1,
-      threshold=sloThreshold
+      threshold='%f' % [sloThreshold]
     ),
     basic.slaTimeseries(
       title='%s SLA over time period' % [serviceName],
