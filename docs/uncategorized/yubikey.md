@@ -789,10 +789,8 @@ $ ssh-add -l
 ... your public key ...
 
 # Assuming you have added your new public key to your gitlab.com profile
-$ ssh git@gitlab.com
-PTY allocation request failed on channel 0
+$ ssh -T git@gitlab.com
 Welcome to GitLab, @user!
-Connection to gitlab.com closed.
 ```
 
 You might need to restart your gpg-agent
