@@ -82,7 +82,7 @@ groups:
       type: monitoring
     expr: |
       sum by (environment) (
-        rate(stackdriver_https_lb_rule_loadbalancing_googleapis_com_https_request_count{project_id="gitlab-ops",url_map_name="k8s2-um-4zodnh0s-monitoring-grafana-lhbkv8d3"}[1m])
+        rate(stackdriver_https_lb_rule_loadbalancing_googleapis_com_https_request_count{project_id="gitlab-ops",url_map_name="k8s2-um-4zodnh0s-grafana-grafana-cfagrqyu"}[1m])
       )
   - record: gitlab_component_errors:rate
     labels:
@@ -93,7 +93,7 @@ groups:
     expr: |
       (
         sum by (environment) (
-          rate(stackdriver_https_lb_rule_loadbalancing_googleapis_com_https_request_count{project_id="gitlab-ops",response_code_class="500",url_map_name="k8s2-um-4zodnh0s-monitoring-grafana-lhbkv8d3"}[1m])
+          rate(stackdriver_https_lb_rule_loadbalancing_googleapis_com_https_request_count{project_id="gitlab-ops",response_code_class="500",url_map_name="k8s2-um-4zodnh0s-grafana-grafana-cfagrqyu"}[1m])
         )
       )
       or
@@ -567,7 +567,7 @@ groups:
       type: monitoring
     expr: |
       sum by (environment) (
-        rate(stackdriver_https_lb_rule_loadbalancing_googleapis_com_https_request_count{project_id="gitlab-ops",url_map_name="k8s2-um-4zodnh0s-monitoring-grafana-lhbkv8d3"}[5m])
+        rate(stackdriver_https_lb_rule_loadbalancing_googleapis_com_https_request_count{project_id="gitlab-ops",url_map_name="k8s2-um-4zodnh0s-grafana-grafana-cfagrqyu"}[5m])
       )
   - record: gitlab_component_errors:rate_5m
     labels:
@@ -578,7 +578,7 @@ groups:
     expr: |
       (
         sum by (environment) (
-          rate(stackdriver_https_lb_rule_loadbalancing_googleapis_com_https_request_count{project_id="gitlab-ops",response_code_class="500",url_map_name="k8s2-um-4zodnh0s-monitoring-grafana-lhbkv8d3"}[5m])
+          rate(stackdriver_https_lb_rule_loadbalancing_googleapis_com_https_request_count{project_id="gitlab-ops",response_code_class="500",url_map_name="k8s2-um-4zodnh0s-grafana-grafana-cfagrqyu"}[5m])
         )
       )
       or
@@ -1052,7 +1052,7 @@ groups:
       type: monitoring
     expr: |
       sum by (environment) (
-        rate(stackdriver_https_lb_rule_loadbalancing_googleapis_com_https_request_count{project_id="gitlab-ops",url_map_name="k8s2-um-4zodnh0s-monitoring-grafana-lhbkv8d3"}[30m])
+        rate(stackdriver_https_lb_rule_loadbalancing_googleapis_com_https_request_count{project_id="gitlab-ops",url_map_name="k8s2-um-4zodnh0s-grafana-grafana-cfagrqyu"}[30m])
       )
   - record: gitlab_component_errors:rate_30m
     labels:
@@ -1063,7 +1063,7 @@ groups:
     expr: |
       (
         sum by (environment) (
-          rate(stackdriver_https_lb_rule_loadbalancing_googleapis_com_https_request_count{project_id="gitlab-ops",response_code_class="500",url_map_name="k8s2-um-4zodnh0s-monitoring-grafana-lhbkv8d3"}[30m])
+          rate(stackdriver_https_lb_rule_loadbalancing_googleapis_com_https_request_count{project_id="gitlab-ops",response_code_class="500",url_map_name="k8s2-um-4zodnh0s-grafana-grafana-cfagrqyu"}[30m])
         )
       )
       or
@@ -1537,7 +1537,7 @@ groups:
       type: monitoring
     expr: |
       sum by (environment) (
-        rate(stackdriver_https_lb_rule_loadbalancing_googleapis_com_https_request_count{project_id="gitlab-ops",url_map_name="k8s2-um-4zodnh0s-monitoring-grafana-lhbkv8d3"}[1h])
+        rate(stackdriver_https_lb_rule_loadbalancing_googleapis_com_https_request_count{project_id="gitlab-ops",url_map_name="k8s2-um-4zodnh0s-grafana-grafana-cfagrqyu"}[1h])
       )
   - record: gitlab_component_errors:rate_1h
     labels:
@@ -1548,7 +1548,7 @@ groups:
     expr: |
       (
         sum by (environment) (
-          rate(stackdriver_https_lb_rule_loadbalancing_googleapis_com_https_request_count{project_id="gitlab-ops",response_code_class="500",url_map_name="k8s2-um-4zodnh0s-monitoring-grafana-lhbkv8d3"}[1h])
+          rate(stackdriver_https_lb_rule_loadbalancing_googleapis_com_https_request_count{project_id="gitlab-ops",response_code_class="500",url_map_name="k8s2-um-4zodnh0s-grafana-grafana-cfagrqyu"}[1h])
         )
       )
       or
@@ -2022,7 +2022,7 @@ groups:
       type: monitoring
     expr: |
       sum by (environment) (
-        rate(stackdriver_https_lb_rule_loadbalancing_googleapis_com_https_request_count{project_id="gitlab-ops",url_map_name="k8s2-um-4zodnh0s-monitoring-grafana-lhbkv8d3"}[6h])
+        rate(stackdriver_https_lb_rule_loadbalancing_googleapis_com_https_request_count{project_id="gitlab-ops",url_map_name="k8s2-um-4zodnh0s-grafana-grafana-cfagrqyu"}[6h])
       )
   - record: gitlab_component_errors:rate_6h
     labels:
@@ -2033,7 +2033,7 @@ groups:
     expr: |
       (
         sum by (environment) (
-          rate(stackdriver_https_lb_rule_loadbalancing_googleapis_com_https_request_count{project_id="gitlab-ops",response_code_class="500",url_map_name="k8s2-um-4zodnh0s-monitoring-grafana-lhbkv8d3"}[6h])
+          rate(stackdriver_https_lb_rule_loadbalancing_googleapis_com_https_request_count{project_id="gitlab-ops",response_code_class="500",url_map_name="k8s2-um-4zodnh0s-grafana-grafana-cfagrqyu"}[6h])
         )
       )
       or

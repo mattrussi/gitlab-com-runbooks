@@ -314,7 +314,7 @@ groups:
       grafana_variables: environment,stage
       promql_template_1: |
         sum by (env,environment,tier,stage) (
-          rate(stackdriver_https_lb_rule_loadbalancing_googleapis_com_https_request_count{environment="{{ $labels.environment }}",project_id="gitlab-ops",response_code_class="500",stage="{{ $labels.stage }}",url_map_name="k8s2-um-4zodnh0s-monitoring-grafana-lhbkv8d3"}[5m])
+          rate(stackdriver_https_lb_rule_loadbalancing_googleapis_com_https_request_count{environment="{{ $labels.environment }}",project_id="gitlab-ops",response_code_class="500",stage="{{ $labels.stage }}",url_map_name="k8s2-um-4zodnh0s-grafana-grafana-cfagrqyu"}[5m])
         )
       runbook: docs/monitoring/README.md
     labels:
@@ -359,7 +359,7 @@ groups:
       grafana_variables: environment,stage
       promql_template_1: |
         sum by (env,environment,tier,stage) (
-          rate(stackdriver_https_lb_rule_loadbalancing_googleapis_com_https_request_count{environment="{{ $labels.environment }}",project_id="gitlab-ops",response_code_class="500",stage="{{ $labels.stage }}",url_map_name="k8s2-um-4zodnh0s-monitoring-grafana-lhbkv8d3"}[5m])
+          rate(stackdriver_https_lb_rule_loadbalancing_googleapis_com_https_request_count{environment="{{ $labels.environment }}",project_id="gitlab-ops",response_code_class="500",stage="{{ $labels.stage }}",url_map_name="k8s2-um-4zodnh0s-grafana-grafana-cfagrqyu"}[5m])
         )
       runbook: docs/monitoring/README.md
     labels:
