@@ -306,7 +306,7 @@ metricsCatalog.serviceDefinition({
     grafana_google_lb: googleLoadBalancerComponents.googleLoadBalancer(
       userImpacting=false,
       // LB automatically created by the k8s ingress
-      loadBalancerName='k8s2-um-4zodnh0s-monitoring-grafana-lhbkv8d3',
+      loadBalancerName='k8s2-um-4zodnh0s-grafana-grafana-cfagrqyu',
       projectId='gitlab-ops',
       trafficCessationAlertConfig=false,
       extra={
