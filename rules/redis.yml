@@ -39,13 +39,9 @@ groups:
 - name: redis.alerts
   rules:
   - alert: SentinelLossOfRedundancy
-    for: 15m
+    for: 2h
     expr: |
-      (
-      sum by (environment, tier, type, stage, shard) (namedprocess_namegroup_num_procs{groupname="redis-sentinel"})
-      /
-      count by (environment, tier, type, stage, shard)       (max_over_time(namedprocess_namegroup_num_procs{groupname="redis-sentinel"}[1h]))
-      ) < 1
+      (sum by (environment, tier, type, stage, shard) (namedprocess_namegroup_num_procs{groupname="redis-sentinel"})) < 3
     labels:
       pager: pagerduty
       severity: s2
