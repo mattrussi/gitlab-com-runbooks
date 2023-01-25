@@ -1,260 +1,111 @@
-local grafana = import 'github.com/grafana/grafonnet-lib/grafonnet/grafana.libsonnet';
 local basic = import 'grafana/basic.libsonnet';
 local layout = import 'grafana/layout.libsonnet';
-local row = grafana.row;
 
 local stageGroupDashboards = import './stage-group-dashboards.libsonnet';
 
-local diffsAvgRenderingDuration() =
+local diffsDurations(title, description, metricName) =
+  local quantileQuery(quantile) = |||
+    histogram_quantile(
+          %(quantile)f,
+          sum(
+            rate(%(metricName)s{environment="$environment", stage="$stage"}[$__interval])
+          ) by (le)
+        )
+  ||| % {
+    quantile: quantile,
+    metricName: metricName,
+  };
   basic.multiTimeseries(
-    title='Rendering Time',
+    title=title,
     decimals=2,
     format='s',
     yAxisLabel='',
-    description=|||
-      Duration spent on serializing and rendering diffs on diffs batch request
-    |||,
+    description=description,
     queries=[{
-      query: |||
-        sum(rate(gitlab_diffs_render_real_duration_seconds_sum[1m]))
-        /
-        sum(rate(gitlab_diffs_render_real_duration_seconds_count[1m]))
-      |||,
+      query: quantileQuery(0.50),
       legendFormat: 'Average',
     }, {
-      query: |||
-        histogram_quantile(
-          0.90,
-          sum(
-            rate(gitlab_diffs_render_real_duration_seconds_bucket[1m])
-          ) by (le)
-        )
-      |||,
+      query: quantileQuery(0.90),
       legendFormat: '90th Percentile',
     }]
+  );
+
+local diffsAvgRenderingDuration() =
+  diffsDurations(
+    'Rendering Time',
+    'Duration spent on serializing and rendering diffs on diffs batch request',
+    'gitlab_diffs_render_real_duration_seconds_bucket'
   );
 
 local diffsAvgReorderDuration() =
-  basic.multiTimeseries(
-    title='Reordering Time',
-    decimals=2,
-    format='s',
-    yAxisLabel='',
-    description=|||
-      Duration spent on reordering of diff files on diffs batch request
-    |||,
-    queries=[{
-      query: |||
-        sum(rate(gitlab_diffs_reorder_real_duration_seconds_sum[1m]))
-        /
-        sum(rate(gitlab_diffs_reorder_real_duration_seconds_count[1m]))
-      |||,
-      legendFormat: 'Average',
-    }, {
-      query: |||
-        histogram_quantile(
-          0.90,
-          sum(
-            rate(gitlab_diffs_reorder_real_duration_seconds_bucket[1m])
-          ) by (le)
-        )
-      |||,
-      legendFormat: '90th Percentile',
-    }]
+  diffsDurations(
+    'Reordering Time',
+    'Duration spent on reordering of diff files on diffs batch request',
+    'gitlab_diffs_reorder_real_duration_seconds_bucket'
   );
 
 local diffsAvgCollectionDuration() =
-  basic.multiTimeseries(
-    title='Collection Time',
-    decimals=2,
-    format='s',
-    yAxisLabel='',
-    description=|||
-      Duration spent on querying merge request diff files on diffs batch request
-    |||,
-    queries=[{
-      query: |||
-        sum(rate(gitlab_diffs_collection_real_duration_seconds_sum[1m]))
-        /
-        sum(rate(gitlab_diffs_collection_real_duration_seconds_count[1m]))
-      |||,
-      legendFormat: 'Average',
-    }, {
-      query: |||
-        histogram_quantile(
-          0.90,
-          sum(
-            rate(gitlab_diffs_collection_real_duration_seconds_bucket[1m])
-          ) by (le)
-        )
-      |||,
-      legendFormat: '90th Percentile',
-    }]
+  diffsDurations(
+    'Collection Time',
+    'Duration spent on querying merge request diff files on diffs batch request',
+    'gitlab_diffs_collection_real_duration_seconds_bucket'
   );
 
 local diffsAvgComparisonDuration() =
-  basic.multiTimeseries(
-    title='Comparison Time',
-    decimals=2,
-    format='s',
-    yAxisLabel='',
-    description=|||
-      Duration spent on getting comparison data on diffs batch request
-    |||,
-    queries=[{
-      query: |||
-        sum(rate(gitlab_diffs_comparison_real_duration_seconds_sum[1m]))
-        /
-        sum(rate(gitlab_diffs_comparison_real_duration_seconds_count[1m]))
-      |||,
-      legendFormat: 'Average',
-    }, {
-      query: |||
-        histogram_quantile(
-          0.90,
-          sum(
-            rate(gitlab_diffs_comparison_real_duration_seconds_bucket[1m])
-          ) by (le)
-        )
-      |||,
-      legendFormat: '90th Percentile',
-    }]
+  diffsDurations(
+    'Comparison Time',
+    'Duration spent on getting comparison data on diffs batch request',
+    'gitlab_diffs_comparison_real_duration_seconds_bucket'
   );
 
 local diffsAvgUnfoldablePositionsDuration() =
-  basic.multiTimeseries(
-    title='Unfoldable Positions Time',
-    decimals=2,
-    format='s',
-    yAxisLabel='',
-    description=|||
-      Duration spent on getting unfoldable note positions on diffs batch request
-    |||,
-    queries=[{
-      query: |||
-        sum(rate(gitlab_diffs_unfoldable_positions_real_duration_seconds_sum[1m]))
-        /
-        sum(rate(gitlab_diffs_unfoldable_positions_real_duration_seconds_count[1m]))
-      |||,
-      legendFormat: 'Average',
-    }, {
-      query: |||
-        histogram_quantile(
-          0.90,
-          sum(
-            rate(gitlab_diffs_unfoldable_positions_real_duration_seconds_bucket[1m])
-          ) by (le)
-        )
-      |||,
-      legendFormat: '90th Percentile',
-    }]
+  diffsDurations(
+    'Unfoldable Positions Time',
+    'Duration spent on getting unfoldable note positions on diffs batch request',
+    'gitlab_diffs_unfoldable_positions_real_duration_seconds_bucket'
   );
 
 local diffsAvgUnfoldDuration() =
-  basic.multiTimeseries(
-    title='Unfold Time',
-    decimals=2,
-    format='s',
-    yAxisLabel='',
-    description=|||
-      Duration spent on unfolding positions on diffs batch request
-    |||,
-    queries=[{
-      query: |||
-        sum(rate(gitlab_diffs_unfold_real_duration_seconds_sum[1m]))
-        /
-        sum(rate(gitlab_diffs_unfold_real_duration_seconds_count[1m]))
-      |||,
-      legendFormat: 'Average',
-    }, {
-      query: |||
-        histogram_quantile(
-          0.90,
-          sum(
-            rate(gitlab_diffs_unfold_real_duration_seconds_bucket[1m])
-          ) by (le)
-        )
-      |||,
-      legendFormat: '90th Percentile',
-    }]
+  diffsDurations(
+    'Unfold Time',
+    'Duration spent on unfolding positions on diffs batch request',
+    'gitlab_diffs_unfold_real_duration_seconds_bucket'
   );
 
 local diffsAvgWriteCacheDuration() =
-  basic.multiTimeseries(
-    title='Write Cache Time',
-    decimals=2,
-    format='s',
-    yAxisLabel='',
-    description=|||
-      Duration spent on caching highlighted lines and stats on diffs batch request
-    |||,
-    queries=[{
-      query: |||
-        sum(rate(gitlab_diffs_write_cache_real_duration_seconds_sum[1m]))
-        /
-        sum(rate(gitlab_diffs_write_cache_real_duration_seconds_count[1m]))
-      |||,
-      legendFormat: 'Average',
-    }, {
-      query: |||
-        histogram_quantile(
-          0.90,
-          sum(
-            rate(gitlab_diffs_write_cache_real_duration_seconds_bucket[1m])
-          ) by (le)
-        )
-      |||,
-      legendFormat: '90th Percentile',
-    }]
+  diffsDurations(
+    'Write Cache Time',
+    'Duration spent on caching highlighted lines and stats on diffs batch request',
+    'gitlab_diffs_write_cache_real_duration_seconds_bucket'
   );
 
 local diffsAvgHighlightCacheDecorateDuration() =
-  basic.multiTimeseries(
-    title='Highlight Cache Decorate Time',
-    decimals=2,
-    format='s',
-    yAxisLabel='',
-    description=|||
-      Duration spent on setting highlighted lines from cache on diffs batch request
-    |||,
-    queries=[{
-      query: |||
-        sum(rate(gitlab_diffs_highlight_cache_decorate_real_duration_seconds_sum[1m]))
-        /
-        sum(rate(gitlab_diffs_highlight_cache_decorate_real_duration_seconds_count[1m]))
-      |||,
-      legendFormat: 'Average',
-    }, {
-      query: |||
-        histogram_quantile(
-          0.90,
-          sum(
-            rate(gitlab_diffs_highlight_cache_decorate_real_duration_seconds_bucket[1m])
-          ) by (le)
-        )
-      |||,
-      legendFormat: '90th Percentile',
-    }]
+  diffsDurations(
+    'Highlight Cache Decorate Time',
+    'Duration spent on setting highlighted lines from cache on diffs batch request',
+    'gitlab_diffs_highlight_cache_decorate_real_duration_seconds_bucket'
   );
 
 stageGroupDashboards.dashboard('code_review')
 .addPanels(
-  [
-    row.new(title='diffs_batch.json Metrics') { gridPos: { x: 0, y: 1001, w: 24, h: 1 } },
-  ] +
-  layout.grid(
-    [
-      diffsAvgRenderingDuration(),
-      diffsAvgReorderDuration(),
-      diffsAvgCollectionDuration(),
-      diffsAvgComparisonDuration(),
-      diffsAvgUnfoldablePositionsDuration(),
-      diffsAvgUnfoldDuration(),
-      diffsAvgWriteCacheDuration(),
-      diffsAvgHighlightCacheDecorateDuration(),
-    ],
-    cols=4,
-    startRow=1002
+  layout.titleRowWithPanels(
+    'diffs_batch.json Metrics',
+    layout.grid(
+      [
+        diffsAvgRenderingDuration(),
+        diffsAvgReorderDuration(),
+        diffsAvgCollectionDuration(),
+        diffsAvgComparisonDuration(),
+        diffsAvgUnfoldablePositionsDuration(),
+        diffsAvgUnfoldDuration(),
+        diffsAvgWriteCacheDuration(),
+        diffsAvgHighlightCacheDecorateDuration(),
+      ],
+      cols=4,
+      startRow=1002
+    ),
+    collapse=false,
+    startRow=1001
   ),
 )
 .stageGroupDashboardTrailer()
