@@ -51,3 +51,16 @@ groups:
       description: |
         There should be at least 2 redis agents per cluster in the {{ $labels.type }} cluster.
         This likely means that we've lost a redis agent for some reason.
+  - alert: SentinelLossOfRedundancy
+    for: 2h
+    expr: |
+      (sum by (environment, tier, type, stage, shard) (namedprocess_namegroup_num_procs{groupname="redis-sentinel"})) < 3
+    labels:
+      pager: pagerduty
+      severity: s2
+      alert_type: cause
+    annotations:
+      title: Less than 100% of sentinel processes running in the {{ $labels.type }} cluster
+      description: |
+        There should be a single sentinel process per VM in the {{ $labels.type }} cluster.
+        This likely means that sentinel has stopped on one of the {{ .Labels.type }} sentinel nodes.
