@@ -38,6 +38,19 @@ groups:
       )
 - name: redis.alerts
   rules:
+  - alert: RedisLossOfRedundancy
+    for: 2h
+    expr: |
+      sum by (environment, tier, type, stage, shard) (redis_instance_info{role="slave"}) < 2
+    labels:
+      pager: pagerduty
+      severity: s2
+      alert_type: cause
+    annotations:
+      title: Less than 2 agents in {{ $labels.type }} cluster
+      description: |
+        There should be at least 2 redis agents per cluster in the {{ $labels.type }} cluster.
+        This likely means that we've lost a redis agent for some reason.
   - alert: SentinelLossOfRedundancy
     for: 2h
     expr: |
