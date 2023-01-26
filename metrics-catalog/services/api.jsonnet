@@ -169,33 +169,6 @@ metricsCatalog.serviceDefinition({
 
       dependsOn: dependOnPatroni.sqlComponents,
     },
-    puma: {
-      userImpacting: true,
-      featureCategory: serviceLevelIndicatorDefinition.featureCategoryFromSourceMetrics,
-      description: |||
-        This SLI monitors API traffic in aggregate, in the GitLab rails monolith, via its
-        HTTP interface. 5xx responses are treated as failures.
-      |||,
-
-      requestRate: rateMetric(
-        counter='http_requests_total',
-        selector=railsSelector,
-      ),
-
-      errorRate: rateMetric(
-        counter='http_requests_total',
-        selector=railsSelector { status: { re: '5..' } }
-      ),
-
-      significantLabels: ['region', 'method', 'feature_category'],
-
-      toolingLinks: [
-        toolingLinks.sentry(slug='gitlab/gitlabcom', type='api', variables=['environment', 'stage']),
-        toolingLinks.kibana(title='Rails', index='rails'),
-      ],
-
-      dependsOn: dependOnPatroni.sqlComponents,
-    },
   } + sliLibrary.get('rails_request').generateServiceLevelIndicator(railsSelector, {
     monitoringThresholds+: {
       apdexScore: 0.99,
