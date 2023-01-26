@@ -65,10 +65,12 @@ failover_if_master() {
   export fqdn="${gitlab_redis_cluster}-$i-db-${gitlab_env}.c.${gitlab_project}.internal"
 
   echo "> failover_if_master $fqdn"
-  ssh "$fqdn" "$redis_cli role | head -n1"
+
+  role=$(ssh "$fqdn" "$redis_cli role | head -n1")
+  echo $role
 
   # if role is master, perform failover
-  if [[ "$(ssh "$fqdn" "$redis_cli role | head -n1")" = "master" ]]; then
+  if [[ "$role" = "master" ]]; then
     echo failing over
     wait_for_input
     ssh "$sentinel" "/opt/gitlab/embedded/bin/redis-cli -p 26379 sentinel failover ${gitlab_env}-${gitlab_redis_cluster}"
@@ -96,9 +98,11 @@ failover_if_master() {
 check_sentinel_quorum() {
   # check sentinel quorum
   echo sentinel ckquorum
-  ssh "$sentinel" "hostname; /opt/gitlab/embedded/bin/redis-cli -p 26379 sentinel ckquorum ${gitlab_env}-${gitlab_redis_cluster}"
 
-  if [[ "$(ssh "$sentinel" "/opt/gitlab/embedded/bin/redis-cli -p 26379 sentinel ckquorum ${gitlab_env}-${gitlab_redis_cluster}")" != "OK 3 usable Sentinels. Quorum and failover authorization can be reached" ]]; then
+  quorum=$(ssh "$sentinel" "/opt/gitlab/embedded/bin/redis-cli -p 26379 sentinel ckquorum ${gitlab_env}-${gitlab_redis_cluster}")
+  echo $quorum
+
+  if [[ "$quorum" != "OK 3 usable Sentinels. Quorum and failover authorization can be reached" ]]; then
     echo >&2 "error: sentinel quorum to be ok"
     exit 1
   fi
