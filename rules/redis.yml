@@ -36,6 +36,8 @@ groups:
       sum by (environment, type, fqdn, instance, pod) (
         rate(namedprocess_namegroup_thread_cpu_seconds_total{type=~"redis.*", groupname="redis-server", threadname="redis-server"}[1m]) or rate(container_cpu_usage_seconds_total:labeled{type=~"redis.*"}[1m])
       )
+  - record: gitlab:redis_rdb_last_save_in_seconds
+    expr: min(time() - redis_rdb_last_save_timestamp_seconds) by (environment,type)
 - name: redis.alerts
   rules:
   - alert: RedisLossOfRedundancy
@@ -64,3 +66,14 @@ groups:
       description: |
         There should be a single sentinel process per VM in the {{ $labels.type }} cluster.
         This likely means that sentinel has stopped on one of the {{ .Labels.type }} sentinel nodes.
+  - alert: redisRdbSaveDelayed
+    expr: gitlab:redis_rdb_last_save_in_seconds{type=~"redis|redis-sessions|redis-sidekiq|redis-tracechunks"} >= 3600
+    for: 5m
+    labels:
+      pager: pagerduty
+      severity: s1
+      alert_type: symptom
+    annotations:
+      description: Redis RDB snapshots might not be working
+      runbook: docs/redis/redis-rdb-snapshots.md
+      title: Last Redis RDB snapshot was {{ .Value | humanizeDuration }} ago for env {{ $labels.environment }}.
