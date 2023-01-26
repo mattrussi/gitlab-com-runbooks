@@ -178,31 +178,6 @@ metricsCatalog.serviceDefinition({
         toolingLinks.kibana(title='Image Resizer', index='workhorse_imageresizer', type='web'),
       ],
     },
-    puma: {
-      userImpacting: true,
-      featureCategory: serviceLevelIndicatorDefinition.featureCategoryFromSourceMetrics,
-      description: |||
-        Aggregation of most web requests that pass through the puma to the GitLab rails monolith.
-        Healthchecks are excluded.
-      |||,
-
-      requestRate: rateMetric(
-        counter='http_requests_total',
-        selector=railsSelector,
-      ),
-
-      errorRate: rateMetric(
-        counter='http_requests_total',
-        selector=railsSelector { status: { re: '5..' } }
-      ),
-
-      significantLabels: ['region', 'method', 'feature_category'],
-
-      toolingLinks: [
-        toolingLinks.sentry(slug='gitlab/gitlabcom', type='web', variables=['environment', 'stage']),
-      ],
-      dependsOn: dependOnPatroni.sqlComponents,
-    },
   } + sliLibrary.get('rails_request').generateServiceLevelIndicator(railsSelector, {
     toolingLinks: [
       toolingLinks.kibana(title='Rails', index='rails'),

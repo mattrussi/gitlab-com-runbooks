@@ -32,7 +32,7 @@ local styles = [
   },
 ];
 
-local pumaByFeatureCategoryForService(type, startRow) =
+local railsRequestByFeatureCategoryForService(type, startRow) =
   [row.new(title=type) { gridPos: { x: 0, y: startRow, w: 24, h: 1 } }] +
   layout.grid([
     grafana.text.new(
@@ -52,7 +52,7 @@ local pumaByFeatureCategoryForService(type, startRow) =
       query=|||
         sort(clamp_max(
           sum by (feature_category) (
-            avg_over_time(gitlab:component:feature_category:execution:error:ratio_6h{environment="$environment", env="$environment", component="puma", type="%(type)s"}[$__range])
+            avg_over_time(gitlab:component:feature_category:execution:error:ratio_6h{environment="$environment", env="$environment", component="rails_request", type="%(type)s"}[$__range])
           ), 1
         ))
       ||| % { type: std.asciiLower(type) },
@@ -285,11 +285,11 @@ basic.dashboard(
 
   ], cols=1, rowHeight=12, startRow=500)
   +
-  pumaByFeatureCategoryForService('API', 600)
+  railsRequestByFeatureCategoryForService('API', 600)
   +
-  pumaByFeatureCategoryForService('Git', 900)
+  railsRequestByFeatureCategoryForService('Git', 900)
   +
-  pumaByFeatureCategoryForService('Web', 1200)
+  railsRequestByFeatureCategoryForService('Web', 1200)
 )
 + {
   links+: platformLinks.services + platformLinks.triage,

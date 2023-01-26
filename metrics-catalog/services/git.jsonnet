@@ -223,32 +223,6 @@ metricsCatalog.serviceDefinition({
       ],
       dependsOn: dependOnPatroni.sqlComponents + dependOnRedisSidekiq.railsClientComponents,
     },
-    puma: {
-      userImpacting: true,
-      featureCategory: serviceLevelIndicatorDefinition.featureCategoryFromSourceMetrics,
-      description: |||
-        Monitors Rails endpoints, running in the Git fleet, via the HTTP interface.
-      |||,
-
-      requestRate: rateMetric(
-        counter='http_requests_total',
-        selector=railsSelector,
-      ),
-
-      errorRate: rateMetric(
-        counter='http_requests_total',
-        selector=railsSelector { status: { re: '5..' } }
-      ),
-
-      significantLabels: ['region', 'method', 'feature_category'],
-
-      toolingLinks: [
-        // Improve sentry link once https://gitlab.com/gitlab-com/gl-infra/scalability/-/issues/532 arrives
-        toolingLinks.sentry(slug='gitlab/gitlabcom', type='git', variables=['environment', 'stage']),
-      ],
-
-      dependsOn: dependOnPatroni.sqlComponents,
-    },
 
     gitlab_shell: {
       userImpacting: true,

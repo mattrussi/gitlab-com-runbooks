@@ -993,350 +993,6 @@ groups:
       gitlab_regional_sli_ops:rate_5m{component="loadbalancer",monitor="global",stage="main",type="web"} offset 1h
       unless
       gitlab_regional_sli_ops:rate_5m{component="loadbalancer",monitor="global",stage="main",type="web"}
-  - alert: WebServicePumaErrorSLOViolation
-    for: 2m
-    annotations:
-      title: The puma SLI of the web service (`{{ $labels.stage }}` stage) has an
-        error rate violating SLO
-      description: |
-        Aggregation of most web requests that pass through the puma to the GitLab rails monolith. Healthchecks are excluded.
-
-        Currently the error-rate is {{ $value | humanizePercentage }}.
-      grafana_dashboard_id: web-main/web-overview
-      grafana_dashboard_link: https://dashboards.gitlab.net/d/web-main/web-overview?from=now-6h/m&to=now-1m/m&var-environment={{
-        $labels.environment }}&var-stage={{ $labels.stage }}
-      grafana_min_zoom_hours: "6"
-      grafana_panel_id: "2425637513"
-      grafana_variables: environment,stage
-      promql_template_1: |
-        sum by (env,environment,tier,stage) (
-          sli_aggregations:http_requests_total_rate5m{environment="{{ $labels.environment }}",job="gitlab-rails",stage="{{ $labels.stage }}",status=~"5..",type="web"}
-        )
-      runbook: docs/web/README.md
-    labels:
-      aggregation: component
-      alert_class: slo_violation
-      alert_type: symptom
-      feature_category: in_source_metrics
-      pager: pagerduty
-      rules_domain: general
-      severity: s2
-      sli_type: error
-      slo_alert: "yes"
-      user_impacting: "yes"
-      window: 1h
-    expr: |
-      (
-        (
-          gitlab_component_errors:ratio_1h{component="puma",monitor="global",type="web"}
-          > (14.4 * 0.000100)
-        )
-        and
-        (
-          gitlab_component_errors:ratio_5m{component="puma",monitor="global",type="web"}
-          > (14.4 * 0.000100)
-        )
-      )
-      and on(env,environment,tier,type,stage,component)
-      (
-        sum by(env,environment,tier,type,stage,component) (gitlab_component_ops:rate_1h{component="puma",monitor="global",type="web"}) >= 1
-      )
-  - alert: WebServicePumaErrorSLOViolation
-    for: 2m
-    annotations:
-      title: The puma SLI of the web service (`{{ $labels.stage }}` stage) has an
-        error rate violating SLO
-      description: |
-        Aggregation of most web requests that pass through the puma to the GitLab rails monolith. Healthchecks are excluded.
-
-        Currently the error-rate is {{ $value | humanizePercentage }}.
-      grafana_dashboard_id: web-main/web-overview
-      grafana_dashboard_link: https://dashboards.gitlab.net/d/web-main/web-overview?from=now-6h/m&to=now-1m/m&var-environment={{
-        $labels.environment }}&var-stage={{ $labels.stage }}
-      grafana_min_zoom_hours: "6"
-      grafana_panel_id: "2425637513"
-      grafana_variables: environment,stage
-      promql_template_1: |
-        sum by (env,environment,tier,stage) (
-          sli_aggregations:http_requests_total_rate5m{environment="{{ $labels.environment }}",job="gitlab-rails",stage="{{ $labels.stage }}",status=~"5..",type="web"}
-        )
-      runbook: docs/web/README.md
-    labels:
-      aggregation: component
-      alert_class: slo_violation
-      alert_type: symptom
-      feature_category: in_source_metrics
-      pager: pagerduty
-      rules_domain: general
-      severity: s2
-      sli_type: error
-      slo_alert: "yes"
-      user_impacting: "yes"
-      window: 6h
-    expr: |
-      (
-        (
-          gitlab_component_errors:ratio_6h{component="puma",monitor="global",type="web"}
-          > (6 * 0.000100)
-        )
-        and
-        (
-          gitlab_component_errors:ratio_30m{component="puma",monitor="global",type="web"}
-          > (6 * 0.000100)
-        )
-      )
-      and on(env,environment,tier,type,stage,component)
-      (
-        sum by(env,environment,tier,type,stage,component) (gitlab_component_ops:rate_6h{component="puma",monitor="global",type="web"}) >= 0.16667
-      )
-  - alert: WebServicePumaErrorSLOViolationRegional
-    for: 2m
-    annotations:
-      title: The puma SLI of the web service in region `{{ $labels.region }}` has
-        an error rate violating SLO
-      description: |
-        Aggregation of most web requests that pass through the puma to the GitLab rails monolith. Healthchecks are excluded.
-
-        Note that this alert is specific to the `{{ $labels.region }}` region.
-
-        Currently the error-rate is {{ $value | humanizePercentage }}.
-      grafana_dashboard_id: web-main/web-overview
-      grafana_dashboard_link: https://dashboards.gitlab.net/d/web-main/web-overview?from=now-6h/m&to=now-1m/m&var-environment={{
-        $labels.environment }}&var-stage={{ $labels.stage }}
-      grafana_min_zoom_hours: "6"
-      grafana_panel_id: "2425637513"
-      grafana_variables: environment,stage
-      promql_template_1: |
-        sum by (env,environment,tier,stage,region) (
-          sli_aggregations:http_requests_total_rate5m{environment="{{ $labels.environment }}",job="gitlab-rails",region="{{ $labels.region }}",stage="{{ $labels.stage }}",status=~"5..",type="web"}
-        )
-      runbook: docs/web/README.md
-    labels:
-      aggregation: regional_component
-      alert_class: slo_violation
-      alert_type: symptom
-      feature_category: in_source_metrics
-      pager: pagerduty
-      rules_domain: general
-      severity: s2
-      sli_type: error
-      slo_alert: "yes"
-      user_impacting: "yes"
-      window: 1h
-    expr: |
-      (
-        (
-          gitlab_regional_sli_errors:ratio_1h{component="puma",monitor="global",type="web"}
-          > (14.4 * 0.000100)
-        )
-        and
-        (
-          gitlab_regional_sli_errors:ratio_5m{component="puma",monitor="global",type="web"}
-          > (14.4 * 0.000100)
-        )
-      )
-      and on(env,environment,tier,type,stage,region,component)
-      (
-        sum by(env,environment,tier,type,stage,region,component) (gitlab_regional_sli_ops:rate_1h{component="puma",monitor="global",type="web"}) >= 1
-      )
-  - alert: WebServicePumaErrorSLOViolationRegional
-    for: 2m
-    annotations:
-      title: The puma SLI of the web service in region `{{ $labels.region }}` has
-        an error rate violating SLO
-      description: |
-        Aggregation of most web requests that pass through the puma to the GitLab rails monolith. Healthchecks are excluded.
-
-        Note that this alert is specific to the `{{ $labels.region }}` region.
-
-        Currently the error-rate is {{ $value | humanizePercentage }}.
-      grafana_dashboard_id: web-main/web-overview
-      grafana_dashboard_link: https://dashboards.gitlab.net/d/web-main/web-overview?from=now-6h/m&to=now-1m/m&var-environment={{
-        $labels.environment }}&var-stage={{ $labels.stage }}
-      grafana_min_zoom_hours: "6"
-      grafana_panel_id: "2425637513"
-      grafana_variables: environment,stage
-      promql_template_1: |
-        sum by (env,environment,tier,stage,region) (
-          sli_aggregations:http_requests_total_rate5m{environment="{{ $labels.environment }}",job="gitlab-rails",region="{{ $labels.region }}",stage="{{ $labels.stage }}",status=~"5..",type="web"}
-        )
-      runbook: docs/web/README.md
-    labels:
-      aggregation: regional_component
-      alert_class: slo_violation
-      alert_type: symptom
-      feature_category: in_source_metrics
-      pager: pagerduty
-      rules_domain: general
-      severity: s2
-      sli_type: error
-      slo_alert: "yes"
-      user_impacting: "yes"
-      window: 6h
-    expr: |
-      (
-        (
-          gitlab_regional_sli_errors:ratio_6h{component="puma",monitor="global",type="web"}
-          > (6 * 0.000100)
-        )
-        and
-        (
-          gitlab_regional_sli_errors:ratio_30m{component="puma",monitor="global",type="web"}
-          > (6 * 0.000100)
-        )
-      )
-      and on(env,environment,tier,type,stage,region,component)
-      (
-        sum by(env,environment,tier,type,stage,region,component) (gitlab_regional_sli_ops:rate_6h{component="puma",monitor="global",type="web"}) >= 0.16667
-      )
-  - alert: WebServicePumaTrafficCessation
-    for: 5m
-    annotations:
-      title: The puma SLI of the web service (`{{ $labels.stage }}` stage) has not
-        received any traffic in the past 30m
-      description: |
-        Aggregation of most web requests that pass through the puma to the GitLab rails monolith. Healthchecks are excluded.
-
-        This alert signifies that the SLI is reporting a cessation of traffic; the signal is present, but is zero.
-      grafana_dashboard_id: web-main/web-overview
-      grafana_dashboard_link: https://dashboards.gitlab.net/d/web-main/web-overview?from=now-6h/m&to=now-1m/m&var-environment={{
-        $labels.environment }}&var-stage={{ $labels.stage }}
-      grafana_min_zoom_hours: "6"
-      grafana_panel_id: "110019945"
-      grafana_variables: environment,stage
-      promql_template_1: |
-        sum by (env,environment,tier,stage) (
-          sli_aggregations:http_requests_total_rate5m{environment="{{ $labels.environment }}",job="gitlab-rails",stage="{{ $labels.stage }}",type="web"}
-        )
-      runbook: docs/web/README.md
-    labels:
-      aggregation: component
-      alert_class: traffic_cessation
-      alert_type: cause
-      feature_category: in_source_metrics
-      pager: pagerduty
-      rules_domain: general
-      severity: s2
-      sli_type: ops
-      slo_alert: "no"
-      user_impacting: "yes"
-    expr: |
-      gitlab_component_ops:rate_30m{component="puma",monitor="global",stage="main",type="web"} == 0
-      and
-      gitlab_component_ops:rate_30m{component="puma",monitor="global",stage="main",type="web"} offset 1h >= 0.16666666666666666
-  - alert: WebServicePumaTrafficAbsent
-    for: 30m
-    annotations:
-      title: The puma SLI of the web service (`{{ $labels.stage }}` stage) has not
-        reported any traffic in the past 30m
-      description: |
-        Aggregation of most web requests that pass through the puma to the GitLab rails monolith. Healthchecks are excluded.
-
-        This alert signifies that the SLI was previously reporting traffic, but is no longer - the signal is absent.
-
-        This could be caused by a change to the metrics used in the SLI, or by the service not receiving traffic.
-      grafana_dashboard_id: web-main/web-overview
-      grafana_dashboard_link: https://dashboards.gitlab.net/d/web-main/web-overview?from=now-6h/m&to=now-1m/m&var-environment={{
-        $labels.environment }}&var-stage={{ $labels.stage }}
-      grafana_min_zoom_hours: "6"
-      grafana_panel_id: "110019945"
-      grafana_variables: environment,stage
-      promql_template_1: |
-        sum by (env,environment,tier,stage) (
-          sli_aggregations:http_requests_total_rate5m{environment="{{ $labels.environment }}",job="gitlab-rails",stage="{{ $labels.stage }}",type="web"}
-        )
-      runbook: docs/web/README.md
-    labels:
-      aggregation: component
-      alert_class: traffic_cessation
-      alert_type: cause
-      feature_category: in_source_metrics
-      pager: pagerduty
-      rules_domain: general
-      severity: s2
-      sli_type: ops
-      slo_alert: "no"
-      user_impacting: "yes"
-    expr: |
-      gitlab_component_ops:rate_5m{component="puma",monitor="global",stage="main",type="web"} offset 1h
-      unless
-      gitlab_component_ops:rate_5m{component="puma",monitor="global",stage="main",type="web"}
-  - alert: WebServicePumaTrafficCessationRegional
-    for: 5m
-    annotations:
-      title: The puma SLI of the web service in region `{{ $labels.region }}` has
-        not received any traffic in the past 30m
-      description: |
-        Aggregation of most web requests that pass through the puma to the GitLab rails monolith. Healthchecks are excluded.
-
-        This alert signifies that the SLI is reporting a cessation of traffic; the signal is present, but is zero.
-
-        Note that this alert is specific to the `{{ $labels.region }}` region.
-      grafana_dashboard_id: web-main/web-overview
-      grafana_dashboard_link: https://dashboards.gitlab.net/d/web-main/web-overview?from=now-6h/m&to=now-1m/m&var-environment={{
-        $labels.environment }}&var-stage={{ $labels.stage }}
-      grafana_min_zoom_hours: "6"
-      grafana_panel_id: "110019945"
-      grafana_variables: environment,stage
-      promql_template_1: |
-        sum by (env,environment,tier,stage,region) (
-          sli_aggregations:http_requests_total_rate5m{environment="{{ $labels.environment }}",job="gitlab-rails",region="{{ $labels.region }}",stage="{{ $labels.stage }}",type="web"}
-        )
-      runbook: docs/web/README.md
-    labels:
-      aggregation: regional_component
-      alert_class: traffic_cessation
-      alert_type: cause
-      feature_category: in_source_metrics
-      pager: pagerduty
-      rules_domain: general
-      severity: s2
-      sli_type: ops
-      slo_alert: "no"
-      user_impacting: "yes"
-    expr: |
-      gitlab_regional_sli_ops:rate_30m{component="puma",monitor="global",stage="main",type="web"} == 0
-      and
-      gitlab_regional_sli_ops:rate_30m{component="puma",monitor="global",stage="main",type="web"} offset 1h >= 0.16666666666666666
-  - alert: WebServicePumaTrafficAbsentRegional
-    for: 30m
-    annotations:
-      title: The puma SLI of the web service in region `{{ $labels.region }}` has
-        not reported any traffic in the past 30m
-      description: |
-        Aggregation of most web requests that pass through the puma to the GitLab rails monolith. Healthchecks are excluded.
-
-        This alert signifies that the SLI was previously reporting traffic, but is no longer - the signal is absent.
-
-        This could be caused by a change to the metrics used in the SLI, or by the service not receiving traffic.
-
-        Note that this alert is specific to the `{{ $labels.region }}` region.
-      grafana_dashboard_id: web-main/web-overview
-      grafana_dashboard_link: https://dashboards.gitlab.net/d/web-main/web-overview?from=now-6h/m&to=now-1m/m&var-environment={{
-        $labels.environment }}&var-stage={{ $labels.stage }}
-      grafana_min_zoom_hours: "6"
-      grafana_panel_id: "110019945"
-      grafana_variables: environment,stage
-      promql_template_1: |
-        sum by (env,environment,tier,stage,region) (
-          sli_aggregations:http_requests_total_rate5m{environment="{{ $labels.environment }}",job="gitlab-rails",region="{{ $labels.region }}",stage="{{ $labels.stage }}",type="web"}
-        )
-      runbook: docs/web/README.md
-    labels:
-      aggregation: regional_component
-      alert_class: traffic_cessation
-      alert_type: cause
-      feature_category: in_source_metrics
-      pager: pagerduty
-      rules_domain: general
-      severity: s2
-      sli_type: ops
-      slo_alert: "no"
-      user_impacting: "yes"
-    expr: |
-      gitlab_regional_sli_ops:rate_5m{component="puma",monitor="global",stage="main",type="web"} offset 1h
-      unless
-      gitlab_regional_sli_ops:rate_5m{component="puma",monitor="global",stage="main",type="web"}
   - alert: WebServiceRailsRequestApdexSLOViolation
     for: 2m
     annotations:
@@ -1525,6 +1181,210 @@ groups:
       (
         sum by(env,environment,tier,type,stage,region,component) (gitlab_regional_sli_ops:rate_6h{component="rails_request",monitor="global",type="web"}) >= 0.16667
       )
+  - alert: WebServiceRailsRequestErrorSLOViolation
+    for: 2m
+    annotations:
+      title: The rails_request SLI of the web service (`{{ $labels.stage }}` stage)
+        has an error rate violating SLO
+      description: |
+        The number of requests meeting their duration target based on the urgency of the endpoint. By default, a request should take no more than 1s. But this can be adjusted by endpoint.
+
+        Read more about this in the [documentation](https://docs.gitlab.com/ee/development/application_slis/rails_request_apdex.html).
+
+        Currently the error-rate is {{ $value | humanizePercentage }}.
+      grafana_dashboard_id: web-main/web-overview
+      grafana_dashboard_link: https://dashboards.gitlab.net/d/web-main/web-overview?from=now-6h/m&to=now-1m/m&var-environment={{
+        $labels.environment }}&var-stage={{ $labels.stage }}
+      grafana_min_zoom_hours: "6"
+      grafana_panel_id: "387946920"
+      grafana_variables: environment,stage
+      promql_template_1: |
+        sum by (env,environment,tier,stage) (
+          sli_aggregations:gitlab_sli_rails_request_error_total_rate5m{environment="{{ $labels.environment }}",job="gitlab-rails",stage="{{ $labels.stage }}",type="web"}
+        )
+      runbook: docs/web/README.md
+    labels:
+      aggregation: component
+      alert_class: slo_violation
+      alert_type: symptom
+      feature_category: in_source_metrics
+      pager: pagerduty
+      rules_domain: general
+      severity: s2
+      sli_type: error
+      slo_alert: "yes"
+      user_impacting: "yes"
+      window: 1h
+    expr: |
+      (
+        (
+          gitlab_component_errors:ratio_1h{component="rails_request",monitor="global",type="web"}
+          > (14.4 * 0.000100)
+        )
+        and
+        (
+          gitlab_component_errors:ratio_5m{component="rails_request",monitor="global",type="web"}
+          > (14.4 * 0.000100)
+        )
+      )
+      and on(env,environment,tier,type,stage,component)
+      (
+        sum by(env,environment,tier,type,stage,component) (gitlab_component_ops:rate_1h{component="rails_request",monitor="global",type="web"}) >= 1
+      )
+  - alert: WebServiceRailsRequestErrorSLOViolation
+    for: 2m
+    annotations:
+      title: The rails_request SLI of the web service (`{{ $labels.stage }}` stage)
+        has an error rate violating SLO
+      description: |
+        The number of requests meeting their duration target based on the urgency of the endpoint. By default, a request should take no more than 1s. But this can be adjusted by endpoint.
+
+        Read more about this in the [documentation](https://docs.gitlab.com/ee/development/application_slis/rails_request_apdex.html).
+
+        Currently the error-rate is {{ $value | humanizePercentage }}.
+      grafana_dashboard_id: web-main/web-overview
+      grafana_dashboard_link: https://dashboards.gitlab.net/d/web-main/web-overview?from=now-6h/m&to=now-1m/m&var-environment={{
+        $labels.environment }}&var-stage={{ $labels.stage }}
+      grafana_min_zoom_hours: "6"
+      grafana_panel_id: "387946920"
+      grafana_variables: environment,stage
+      promql_template_1: |
+        sum by (env,environment,tier,stage) (
+          sli_aggregations:gitlab_sli_rails_request_error_total_rate5m{environment="{{ $labels.environment }}",job="gitlab-rails",stage="{{ $labels.stage }}",type="web"}
+        )
+      runbook: docs/web/README.md
+    labels:
+      aggregation: component
+      alert_class: slo_violation
+      alert_type: symptom
+      feature_category: in_source_metrics
+      pager: pagerduty
+      rules_domain: general
+      severity: s2
+      sli_type: error
+      slo_alert: "yes"
+      user_impacting: "yes"
+      window: 6h
+    expr: |
+      (
+        (
+          gitlab_component_errors:ratio_6h{component="rails_request",monitor="global",type="web"}
+          > (6 * 0.000100)
+        )
+        and
+        (
+          gitlab_component_errors:ratio_30m{component="rails_request",monitor="global",type="web"}
+          > (6 * 0.000100)
+        )
+      )
+      and on(env,environment,tier,type,stage,component)
+      (
+        sum by(env,environment,tier,type,stage,component) (gitlab_component_ops:rate_6h{component="rails_request",monitor="global",type="web"}) >= 0.16667
+      )
+  - alert: WebServiceRailsRequestErrorSLOViolationRegional
+    for: 2m
+    annotations:
+      title: The rails_request SLI of the web service in region `{{ $labels.region
+        }}` has an error rate violating SLO
+      description: |
+        The number of requests meeting their duration target based on the urgency of the endpoint. By default, a request should take no more than 1s. But this can be adjusted by endpoint.
+
+        Read more about this in the [documentation](https://docs.gitlab.com/ee/development/application_slis/rails_request_apdex.html).
+
+        Note that this alert is specific to the `{{ $labels.region }}` region.
+
+        Currently the error-rate is {{ $value | humanizePercentage }}.
+      grafana_dashboard_id: web-main/web-overview
+      grafana_dashboard_link: https://dashboards.gitlab.net/d/web-main/web-overview?from=now-6h/m&to=now-1m/m&var-environment={{
+        $labels.environment }}&var-stage={{ $labels.stage }}
+      grafana_min_zoom_hours: "6"
+      grafana_panel_id: "387946920"
+      grafana_variables: environment,stage
+      promql_template_1: |
+        sum by (env,environment,tier,stage,region) (
+          rate(gitlab_sli_rails_request_error_total{environment="{{ $labels.environment }}",job="gitlab-rails",region="{{ $labels.region }}",stage="{{ $labels.stage }}",type="web"}[5m])
+        )
+      runbook: docs/web/README.md
+    labels:
+      aggregation: regional_component
+      alert_class: slo_violation
+      alert_type: symptom
+      feature_category: in_source_metrics
+      pager: pagerduty
+      rules_domain: general
+      severity: s2
+      sli_type: error
+      slo_alert: "yes"
+      user_impacting: "yes"
+      window: 1h
+    expr: |
+      (
+        (
+          gitlab_regional_sli_errors:ratio_1h{component="rails_request",monitor="global",type="web"}
+          > (14.4 * 0.000100)
+        )
+        and
+        (
+          gitlab_regional_sli_errors:ratio_5m{component="rails_request",monitor="global",type="web"}
+          > (14.4 * 0.000100)
+        )
+      )
+      and on(env,environment,tier,type,stage,region,component)
+      (
+        sum by(env,environment,tier,type,stage,region,component) (gitlab_regional_sli_ops:rate_1h{component="rails_request",monitor="global",type="web"}) >= 1
+      )
+  - alert: WebServiceRailsRequestErrorSLOViolationRegional
+    for: 2m
+    annotations:
+      title: The rails_request SLI of the web service in region `{{ $labels.region
+        }}` has an error rate violating SLO
+      description: |
+        The number of requests meeting their duration target based on the urgency of the endpoint. By default, a request should take no more than 1s. But this can be adjusted by endpoint.
+
+        Read more about this in the [documentation](https://docs.gitlab.com/ee/development/application_slis/rails_request_apdex.html).
+
+        Note that this alert is specific to the `{{ $labels.region }}` region.
+
+        Currently the error-rate is {{ $value | humanizePercentage }}.
+      grafana_dashboard_id: web-main/web-overview
+      grafana_dashboard_link: https://dashboards.gitlab.net/d/web-main/web-overview?from=now-6h/m&to=now-1m/m&var-environment={{
+        $labels.environment }}&var-stage={{ $labels.stage }}
+      grafana_min_zoom_hours: "6"
+      grafana_panel_id: "387946920"
+      grafana_variables: environment,stage
+      promql_template_1: |
+        sum by (env,environment,tier,stage,region) (
+          rate(gitlab_sli_rails_request_error_total{environment="{{ $labels.environment }}",job="gitlab-rails",region="{{ $labels.region }}",stage="{{ $labels.stage }}",type="web"}[5m])
+        )
+      runbook: docs/web/README.md
+    labels:
+      aggregation: regional_component
+      alert_class: slo_violation
+      alert_type: symptom
+      feature_category: in_source_metrics
+      pager: pagerduty
+      rules_domain: general
+      severity: s2
+      sli_type: error
+      slo_alert: "yes"
+      user_impacting: "yes"
+      window: 6h
+    expr: |
+      (
+        (
+          gitlab_regional_sli_errors:ratio_6h{component="rails_request",monitor="global",type="web"}
+          > (6 * 0.000100)
+        )
+        and
+        (
+          gitlab_regional_sli_errors:ratio_30m{component="rails_request",monitor="global",type="web"}
+          > (6 * 0.000100)
+        )
+      )
+      and on(env,environment,tier,type,stage,region,component)
+      (
+        sum by(env,environment,tier,type,stage,region,component) (gitlab_regional_sli_ops:rate_6h{component="rails_request",monitor="global",type="web"}) >= 0.16667
+      )
   - alert: WebServiceRailsRequestTrafficCessation
     for: 5m
     annotations:
@@ -1544,7 +1404,7 @@ groups:
       grafana_variables: environment,stage
       promql_template_1: |
         sum by (env,environment,tier,stage) (
-          sli_aggregations:gitlab_sli_rails_request_apdex_total_rate5m{environment="{{ $labels.environment }}",job="gitlab-rails",stage="{{ $labels.stage }}",type="web"}
+          sli_aggregations:gitlab_sli_rails_request_total_rate5m{environment="{{ $labels.environment }}",job="gitlab-rails",stage="{{ $labels.stage }}",type="web"}
         )
       runbook: docs/web/README.md
     labels:
@@ -1583,7 +1443,7 @@ groups:
       grafana_variables: environment,stage
       promql_template_1: |
         sum by (env,environment,tier,stage) (
-          sli_aggregations:gitlab_sli_rails_request_apdex_total_rate5m{environment="{{ $labels.environment }}",job="gitlab-rails",stage="{{ $labels.stage }}",type="web"}
+          sli_aggregations:gitlab_sli_rails_request_total_rate5m{environment="{{ $labels.environment }}",job="gitlab-rails",stage="{{ $labels.stage }}",type="web"}
         )
       runbook: docs/web/README.md
     labels:
@@ -1622,7 +1482,7 @@ groups:
       grafana_variables: environment,stage
       promql_template_1: |
         sum by (env,environment,tier,stage,region) (
-          rate(gitlab_sli_rails_request_apdex_total{environment="{{ $labels.environment }}",job="gitlab-rails",region="{{ $labels.region }}",stage="{{ $labels.stage }}",type="web"}[5m])
+          rate(gitlab_sli_rails_request_total{environment="{{ $labels.environment }}",job="gitlab-rails",region="{{ $labels.region }}",stage="{{ $labels.stage }}",type="web"}[5m])
         )
       runbook: docs/web/README.md
     labels:
@@ -1663,7 +1523,7 @@ groups:
       grafana_variables: environment,stage
       promql_template_1: |
         sum by (env,environment,tier,stage,region) (
-          rate(gitlab_sli_rails_request_apdex_total{environment="{{ $labels.environment }}",job="gitlab-rails",region="{{ $labels.region }}",stage="{{ $labels.stage }}",type="web"}[5m])
+          rate(gitlab_sli_rails_request_total{environment="{{ $labels.environment }}",job="gitlab-rails",region="{{ $labels.region }}",stage="{{ $labels.stage }}",type="web"}[5m])
         )
       runbook: docs/web/README.md
     labels:
