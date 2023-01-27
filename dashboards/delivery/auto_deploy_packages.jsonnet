@@ -74,6 +74,12 @@ basic.dashboard(
         , 0)
       |||, legendFormat='Not promoted'
     )
+  )
+  .addTarget(
+    prometheus.target(
+      'sum(increase(delivery_auto_deploy_picks_total[1h])) by (status)',
+      legendFormat='Pick into Auto-Deploy - {{status}}',
+    ),
   ), gridPos={ x: 0, y: 0, w: 24, h: 10 }
 )
 .addPanel(
