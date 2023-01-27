@@ -1,0 +1,170 @@
+#!/usr/bin/env bash
+
+set -efo pipefail
+
+IFS=$'\n'
+
+# check if gcloud is installed
+command -v gcloud >/dev/null 2>&1 || {
+  echo >&2 "❌ This script requires gcloud but it's not installed: https://cloud.google.com/sdk/docs/install"
+  exit 1
+}
+
+# check to ensure we have GNU date
+for dateBin in gdate date; do
+  command -v $dateBin >/dev/null 2>&1 && break
+done
+
+if [[ "$($dateBin --version 2>/dev/null)" != *GNU* ]]; then
+  echo "❌ This script requires a GNU version of the cmdline date utility. If on OSX, 'brew install coreutils'"
+fi
+
+usage() {
+  local cmd="glsh list-disk-snapshots"
+  cat <<EOF 1>&2
+Usage: $cmd [-t] [-e <environment> (gprd|gstg|pre)] [-z <zone>] [<filter>]
+
+  -e : Environment to target (defaults to gprd)
+  -z : Availability zone to target (defaults to all zones)
+  -t : Output Terraform per_node_data_disk_snapshot variable block
+  <filter> : pattern to filter on the disk to limit results, defaults to 'file-\\d+-stor'
+
+Examples:
+  $cmd 'file-\\d+-stor'               # list all snapshots for Gitaly data disks
+  $cmd -e gstg 'file-\\d+-stor'       # list all snapshots for Gitaly data disks in staging
+  $cmd -t 'file-\\d+-stor' -t         # list all snapshots for Gitaly data disks, in all zones and output terraform "per_node_data_disk_snapshot" config
+  $cmd -z us-east1-b 'file-\\d+-stor' # list all snapshots for Gitaly data disks, in us-east1-b
+  $cmd patroni-                       # list all snapshots for patroni servers, in all zones
+EOF
+}
+
+dispDelta() {
+  local secs="$1"
+  printf '%dh%dm' $((secs / 3600)) $((secs % 3600 / 60))
+}
+
+dispTerraformOutput() {
+  # Outputs Terraform config that can be copied into the file module
+  # to use the latest snapshot for corresponding file nodes.
+  #
+  # Example MR: https://ops.gitlab.net/gitlab-com/gl-infra/config-mgmt/-/merge_requests/4863
+  #
+  #   per_node_data_disk_snapshot = {
+  #     1 = "https://www.google.../snapshots/file-01-stor...wmcs9" # file-01-stor-gstg-data
+  #     2 = "https://www.google.../snapshots/file-02-stor...hdd10" # file-02-stor-gstg-data
+  #     3 = "https://www.google.../snapshots/file-03-stor...kfe8b" # file-03-stor-gstg-data
+  #   }
+
+  lines=("$@")
+  echo "per_node_data_disk_snapshot = {"
+  indexCnt=1
+  for line in "${lines[@]}"; do
+    echo "  $indexCnt = \"$(echo "$line" | cut -f3)\" # $(echo "$line" | cut -f2)"
+    indexCnt=$((indexCnt + 1))
+  done
+  echo "}"
+}
+
+dispSnapshots() {
+  # Outputs disk snapshot links for the latest snapshot taken for each disk
+  #
+  # Example:
+  #   2023-01-24 12:06:38 (-1h23m)	file-01-stor-gstg-data  https://www.google.../snapshots/file-01-stor...wmcs9
+  #   2023-01-24 12:06:38 (-1h23m)	file-02-stor-gstg-data  https://www.google.../snapshots/file-02-stor...hdd10
+  #   2023-01-24 12:06:37 (-1h23m)	file-03-stor-gstg-data  https://www.google.../snapshots/file-03-stor...kfe8b
+
+  local diskFilter="sourceDisk~'$filter'"
+  if [[ $zone != any ]]; then
+    diskFilter+=" AND sourceDisk~'$zone'"
+  fi
+
+  local gcloudOpts=(
+    --project "$project" compute snapshots list
+    --filter="$diskFilter"
+    --format="json"
+    --sort-by=~creationTimestamp
+  )
+
+  echo "Searching for snapshots filter=$filter env=$env zone=$zone project=$project" 1>&2
+  local spin='-\|/'
+  local i=0
+
+  seenDiskIds=()
+  dispLines=()
+  now=$($dateBin +%s)
+  for s in $(gcloud "${gcloudOpts[@]}" | jq -cr '.[]'); do
+    i=$(((i + 1) % 4))
+    printf "\r%s" ${spin:$i:1} 1>&2
+
+    sourceDiskId=$(echo "$s" | jq -r '.sourceDiskId')
+    if [[ ${seenDiskIds[*]} == *"$sourceDiskId"* ]]; then
+      break
+    fi
+
+    sourceDisk=$(basename "$(echo "$s" | jq -r '.sourceDisk')")
+    selfLink=$(echo "$s" | jq -r '.selfLink')
+
+    creationTimestamp=$(echo "$s" | jq -r '.creationTimestamp')
+    creationTimestampUTC=$($dateBin -u -d "$creationTimestamp" +"%Y-%m-%d %H:%M:%S")
+    unixTimestamp=$($dateBin -u -d "$creationTimestamp" +"%s")
+    delta=$(dispDelta "$((now - unixTimestamp))")
+
+    dispLines+=("$(echo -e "$creationTimestampUTC (-$delta)\t$sourceDisk\t$selfLink")")
+    seenDiskIds+=("$sourceDiskId")
+  done
+
+  echo ""
+  # shellcheck disable=SC2207
+  sortedDispLines=($(sort -k4 <<<"${dispLines[*]}"))
+  echo "${sortedDispLines[*]}"
+
+  if [[ -n ${tfOutput:-} ]]; then
+    echo ""
+    dispTerraformOutput "${sortedDispLines[@]}"
+  fi
+}
+
+## Main
+
+while getopts "h?te:z:" opt; do
+  case "$opt" in
+    h | \?)
+      usage
+      exit 0
+      ;;
+    e)
+      env=${OPTARG}
+      ;;
+    z)
+      zone=${OPTARG}
+      ;;
+    t)
+      tfOutput=true
+      ;;
+  esac
+done
+shift $((OPTIND - 1))
+
+filter="${*:-}"
+
+if [[ -z $filter ]]; then
+  usage
+  exit 0
+fi
+
+env=${env:-gprd}
+zone=${zone:-any}
+
+case "${env:-}" in
+  gstg)
+    project="gitlab-staging-1"
+    ;;
+  pre)
+    project="gitlab-pre"
+    ;;
+  *)
+    project="gitlab-production"
+    ;;
+esac
+
+dispSnapshots "$@"
