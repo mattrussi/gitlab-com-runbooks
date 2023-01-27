@@ -1443,11 +1443,11 @@ groups:
   - record: slo:max:soft:gitlab_component_saturation:ratio
     labels:
       component: pg_int4_id
-    expr: "0.7"
+    expr: "0.5"
   - record: slo:max:hard:gitlab_component_saturation:ratio
     labels:
       component: pg_int4_id
-    expr: "0.8"
+    expr: "0.75"
   - record: slo:max:soft:gitlab_component_saturation:ratio
     labels:
       component: pg_table_bloat
