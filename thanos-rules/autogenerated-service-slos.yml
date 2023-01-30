@@ -2173,7 +2173,7 @@ groups:
     expr: "0.000500"
   - record: slo:max:events:gitlab_service_errors:ratio
     labels:
-      component: puma
+      component: rails_request
       tier: sv
       type: websockets
     expr: "0.000500"
@@ -3468,7 +3468,7 @@ groups:
     expr: "1"
   - record: gitlab_component_service:mapping
     labels:
-      component: puma
+      component: rails_request
       regional_aggregation: "yes"
       service_aggregation: "yes"
       tier: sv
