@@ -4,6 +4,9 @@ local toolingLinks = import 'toolinglinks/toolinglinks.libsonnet';
 local haproxyComponents = import './lib/haproxy_components.libsonnet';
 local kubeLabelSelectors = metricsCatalog.kubeLabelSelectors;
 local dependOnPatroni = import 'inhibit-rules/depend_on_patroni.libsonnet';
+local sliLibrary = import 'gitlab-slis/library.libsonnet';
+
+local railsSelector = { job: 'gitlab-rails', type: 'websockets' };
 
 metricsCatalog.serviceDefinition({
   type: 'websockets',
@@ -104,33 +107,10 @@ metricsCatalog.serviceDefinition({
       ],
       dependsOn: dependOnPatroni.sqlComponents,
     },
-
-    puma: {
-      userImpacting: true,
-      featureCategory: 'not_owned',
-      description: |||
-        Monitors Rails endpoints, running in the Git fleet, via the HTTP interface.
-      |||,
-
-      local baseSelector = { job: 'gitlab-rails', type: 'websockets' },
-      requestRate: rateMetric(
-        counter='http_requests_total',
-        selector=baseSelector,
-      ),
-
-      errorRate: rateMetric(
-        counter='http_requests_total',
-        selector=baseSelector { status: { re: '5..' } }
-      ),
-
-      significantLabels: ['fqdn', 'method', 'feature_category'],
-
-      toolingLinks: [
-        // Improve sentry link once https://gitlab.com/gitlab-com/gl-infra/scalability/-/issues/532 arrives
-        toolingLinks.sentry(slug='gitlab/gitlabcom', type='websockets', variables=['environment', 'stage']),
-        toolingLinks.kibana(title='Rails', index='rails', type='websockets', slowRequestSeconds=10),
-      ],
-      dependsOn: dependOnPatroni.sqlComponents,
-    },
-  },
+  } + sliLibrary.get('rails_request').generateServiceLevelIndicator(railsSelector, {
+    toolingLinks: [
+      toolingLinks.kibana(title='Rails', index='rails'),
+    ],
+    dependsOn: dependOnPatroni.sqlComponents,
+  }),
 })

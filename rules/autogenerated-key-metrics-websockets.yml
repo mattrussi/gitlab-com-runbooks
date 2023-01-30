@@ -60,30 +60,48 @@ groups:
           gitlab_component_ops:rate{component="loadbalancer",stage="main",tier="sv",type="websockets"}
         )
       )
-  - record: gitlab_component_ops:rate
+  - record: gitlab_component_apdex:success:rate
     labels:
-      component: puma
+      component: rails_request
       tier: sv
       type: websockets
     expr: |
       sum by (environment,stage) (
-        sli_aggregations:http_requests_total_rate1m{job="gitlab-rails",type="websockets"}
+        sli_aggregations:gitlab_sli_rails_request_apdex_success_total_rate1m{job="gitlab-rails",type="websockets"}
+      )
+  - record: gitlab_component_apdex:weight:score
+    labels:
+      component: rails_request
+      tier: sv
+      type: websockets
+    expr: |
+      sum by (environment,stage) (
+        sli_aggregations:gitlab_sli_rails_request_apdex_total_rate1m{job="gitlab-rails",type="websockets"}
+      )
+  - record: gitlab_component_ops:rate
+    labels:
+      component: rails_request
+      tier: sv
+      type: websockets
+    expr: |
+      sum by (environment,stage) (
+        sli_aggregations:gitlab_sli_rails_request_total_rate1m{job="gitlab-rails",type="websockets"}
       )
   - record: gitlab_component_errors:rate
     labels:
-      component: puma
+      component: rails_request
       tier: sv
       type: websockets
     expr: |
       (
         sum by (environment,stage) (
-          sli_aggregations:http_requests_total_rate1m{job="gitlab-rails",status=~"5..",type="websockets"}
+          sli_aggregations:gitlab_sli_rails_request_error_total_rate1m{job="gitlab-rails",type="websockets"}
         )
       )
       or
       (
         0 * group by(environment,stage) (
-          gitlab_component_ops:rate{component="puma",tier="sv",type="websockets"}
+          gitlab_component_ops:rate{component="rails_request",tier="sv",type="websockets"}
         )
       )
   - record: gitlab_component_ops:rate
@@ -171,30 +189,48 @@ groups:
           gitlab_component_ops:rate_5m{component="loadbalancer",stage="main",tier="sv",type="websockets"}
         )
       )
-  - record: gitlab_component_ops:rate_5m
+  - record: gitlab_component_apdex:success:rate_5m
     labels:
-      component: puma
+      component: rails_request
       tier: sv
       type: websockets
     expr: |
       sum by (environment,stage) (
-        sli_aggregations:http_requests_total_rate5m{job="gitlab-rails",type="websockets"}
+        sli_aggregations:gitlab_sli_rails_request_apdex_success_total_rate5m{job="gitlab-rails",type="websockets"}
+      )
+  - record: gitlab_component_apdex:weight:score_5m
+    labels:
+      component: rails_request
+      tier: sv
+      type: websockets
+    expr: |
+      sum by (environment,stage) (
+        sli_aggregations:gitlab_sli_rails_request_apdex_total_rate5m{job="gitlab-rails",type="websockets"}
+      )
+  - record: gitlab_component_ops:rate_5m
+    labels:
+      component: rails_request
+      tier: sv
+      type: websockets
+    expr: |
+      sum by (environment,stage) (
+        sli_aggregations:gitlab_sli_rails_request_total_rate5m{job="gitlab-rails",type="websockets"}
       )
   - record: gitlab_component_errors:rate_5m
     labels:
-      component: puma
+      component: rails_request
       tier: sv
       type: websockets
     expr: |
       (
         sum by (environment,stage) (
-          sli_aggregations:http_requests_total_rate5m{job="gitlab-rails",status=~"5..",type="websockets"}
+          sli_aggregations:gitlab_sli_rails_request_error_total_rate5m{job="gitlab-rails",type="websockets"}
         )
       )
       or
       (
         0 * group by(environment,stage) (
-          gitlab_component_ops:rate_5m{component="puma",tier="sv",type="websockets"}
+          gitlab_component_ops:rate_5m{component="rails_request",tier="sv",type="websockets"}
         )
       )
   - record: gitlab_component_ops:rate_5m
@@ -282,30 +318,48 @@ groups:
           gitlab_component_ops:rate_30m{component="loadbalancer",stage="main",tier="sv",type="websockets"}
         )
       )
-  - record: gitlab_component_ops:rate_30m
+  - record: gitlab_component_apdex:success:rate_30m
     labels:
-      component: puma
+      component: rails_request
       tier: sv
       type: websockets
     expr: |
       sum by (environment,stage) (
-        sli_aggregations:http_requests_total_rate30m{job="gitlab-rails",type="websockets"}
+        sli_aggregations:gitlab_sli_rails_request_apdex_success_total_rate30m{job="gitlab-rails",type="websockets"}
+      )
+  - record: gitlab_component_apdex:weight:score_30m
+    labels:
+      component: rails_request
+      tier: sv
+      type: websockets
+    expr: |
+      sum by (environment,stage) (
+        sli_aggregations:gitlab_sli_rails_request_apdex_total_rate30m{job="gitlab-rails",type="websockets"}
+      )
+  - record: gitlab_component_ops:rate_30m
+    labels:
+      component: rails_request
+      tier: sv
+      type: websockets
+    expr: |
+      sum by (environment,stage) (
+        sli_aggregations:gitlab_sli_rails_request_total_rate30m{job="gitlab-rails",type="websockets"}
       )
   - record: gitlab_component_errors:rate_30m
     labels:
-      component: puma
+      component: rails_request
       tier: sv
       type: websockets
     expr: |
       (
         sum by (environment,stage) (
-          sli_aggregations:http_requests_total_rate30m{job="gitlab-rails",status=~"5..",type="websockets"}
+          sli_aggregations:gitlab_sli_rails_request_error_total_rate30m{job="gitlab-rails",type="websockets"}
         )
       )
       or
       (
         0 * group by(environment,stage) (
-          gitlab_component_ops:rate_30m{component="puma",tier="sv",type="websockets"}
+          gitlab_component_ops:rate_30m{component="rails_request",tier="sv",type="websockets"}
         )
       )
   - record: gitlab_component_ops:rate_30m
@@ -393,30 +447,48 @@ groups:
           gitlab_component_ops:rate_1h{component="loadbalancer",stage="main",tier="sv",type="websockets"}
         )
       )
-  - record: gitlab_component_ops:rate_1h
+  - record: gitlab_component_apdex:success:rate_1h
     labels:
-      component: puma
+      component: rails_request
       tier: sv
       type: websockets
     expr: |
       sum by (environment,stage) (
-        sli_aggregations:http_requests_total_rate1h{job="gitlab-rails",type="websockets"}
+        sli_aggregations:gitlab_sli_rails_request_apdex_success_total_rate1h{job="gitlab-rails",type="websockets"}
+      )
+  - record: gitlab_component_apdex:weight:score_1h
+    labels:
+      component: rails_request
+      tier: sv
+      type: websockets
+    expr: |
+      sum by (environment,stage) (
+        sli_aggregations:gitlab_sli_rails_request_apdex_total_rate1h{job="gitlab-rails",type="websockets"}
+      )
+  - record: gitlab_component_ops:rate_1h
+    labels:
+      component: rails_request
+      tier: sv
+      type: websockets
+    expr: |
+      sum by (environment,stage) (
+        sli_aggregations:gitlab_sli_rails_request_total_rate1h{job="gitlab-rails",type="websockets"}
       )
   - record: gitlab_component_errors:rate_1h
     labels:
-      component: puma
+      component: rails_request
       tier: sv
       type: websockets
     expr: |
       (
         sum by (environment,stage) (
-          sli_aggregations:http_requests_total_rate1h{job="gitlab-rails",status=~"5..",type="websockets"}
+          sli_aggregations:gitlab_sli_rails_request_error_total_rate1h{job="gitlab-rails",type="websockets"}
         )
       )
       or
       (
         0 * group by(environment,stage) (
-          gitlab_component_ops:rate_1h{component="puma",tier="sv",type="websockets"}
+          gitlab_component_ops:rate_1h{component="rails_request",tier="sv",type="websockets"}
         )
       )
   - record: gitlab_component_ops:rate_1h
@@ -504,30 +576,48 @@ groups:
           gitlab_component_ops:rate_6h{component="loadbalancer",stage="main",tier="sv",type="websockets"}
         )
       )
-  - record: gitlab_component_ops:rate_6h
+  - record: gitlab_component_apdex:success:rate_6h
     labels:
-      component: puma
+      component: rails_request
       tier: sv
       type: websockets
     expr: |
       sum by (environment,stage) (
-        sli_aggregations:http_requests_total_rate6h{job="gitlab-rails",type="websockets"}
+        sli_aggregations:gitlab_sli_rails_request_apdex_success_total_rate6h{job="gitlab-rails",type="websockets"}
+      )
+  - record: gitlab_component_apdex:weight:score_6h
+    labels:
+      component: rails_request
+      tier: sv
+      type: websockets
+    expr: |
+      sum by (environment,stage) (
+        sli_aggregations:gitlab_sli_rails_request_apdex_total_rate6h{job="gitlab-rails",type="websockets"}
+      )
+  - record: gitlab_component_ops:rate_6h
+    labels:
+      component: rails_request
+      tier: sv
+      type: websockets
+    expr: |
+      sum by (environment,stage) (
+        sli_aggregations:gitlab_sli_rails_request_total_rate6h{job="gitlab-rails",type="websockets"}
       )
   - record: gitlab_component_errors:rate_6h
     labels:
-      component: puma
+      component: rails_request
       tier: sv
       type: websockets
     expr: |
       (
         sum by (environment,stage) (
-          sli_aggregations:http_requests_total_rate6h{job="gitlab-rails",status=~"5..",type="websockets"}
+          sli_aggregations:gitlab_sli_rails_request_error_total_rate6h{job="gitlab-rails",type="websockets"}
         )
       )
       or
       (
         0 * group by(environment,stage) (
-          gitlab_component_ops:rate_6h{component="puma",tier="sv",type="websockets"}
+          gitlab_component_ops:rate_6h{component="rails_request",tier="sv",type="websockets"}
         )
       )
   - record: gitlab_component_ops:rate_6h
@@ -569,7 +659,7 @@ groups:
     expr: "1"
   - record: gitlab_component_service:mapping
     labels:
-      component: puma
+      component: rails_request
       regional_aggregation: "yes"
       service_aggregation: "yes"
       tier: sv
