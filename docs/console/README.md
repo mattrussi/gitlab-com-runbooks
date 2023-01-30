@@ -82,7 +82,7 @@
 * [Clearing sessions for anonymous users](../redis/clear_anonymous_sessions.md)
 * [Redis-Sidekiq catchall workloads reduction](../redis/redis-sidekiq-catchall-workloads-reduction.md)
 * [../redis/redis.md](../redis/redis.md)
-* [../registry/db-post-deployment-migrations.md](../registry/db-post-deployment-migrations.md)
+* [Container Registry database post-deployment migrations](../registry/db-post-deployment-migrations.md)
 * [../registry/gitlab-registry.md](../registry/gitlab-registry.md)
 * [Container Registry Migration Phase 2](../registry/migration-phase2.md)
 * [Sentry is down and gives error 500](../sentry/sentry-is-down.md)

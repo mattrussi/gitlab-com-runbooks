@@ -61,7 +61,7 @@
 * [Removing cache entries from Redis](../redis-cache/remove-cache-entries.md)
 * [Redis-Sidekiq catchall workloads reduction](../redis/redis-sidekiq-catchall-workloads-reduction.md)
 * [../redis/redis.md](../redis/redis.md)
-* [../registry/db-post-deployment-migrations.md](../registry/db-post-deployment-migrations.md)
+* [Container Registry database post-deployment migrations](../registry/db-post-deployment-migrations.md)
 * [../registry/migration-failure-scenarios.md](../registry/migration-failure-scenarios.md)
 * [High Number of Overdue Online GC Tasks](../registry/online-gc-high-overdue-tasks.md)
 * [Managing Sentry in Kubernetes](../sentry/sentry-in-kube.md)
