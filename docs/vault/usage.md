@@ -8,6 +8,7 @@
 
 * Go to <https://vault.gitlab.net/>
 * Select `oidc`, leave `Role` empty and click `Sign in with GitLab`
+* Don't forget to allow pop-ups for this site in your browser.
 * You should now be logged in
 
 Your session token is valid for 24 hours, renewable for up to 7 days and automatically renewed when you use the Web UI before the 24 hours TTL runs out.
