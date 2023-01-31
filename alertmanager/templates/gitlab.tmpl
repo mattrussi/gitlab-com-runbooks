@@ -1,8 +1,8 @@
 {{ define "gitlab.title" }}
     {{- if .GroupLabels.type -}}
-        {{- printf "%s - Service %s" (.Status | title) .GroupLabels.type -}}
+        {{- printf "%s - Service %s" .Status .GroupLabels.type -}}
     {{- else -}}
-        {{- printf "%s - %s" (.Status | title) .CommonAnnotations.title -}}
+        {{- printf "%s - %s" .Status .CommonAnnotations.title -}}
     {{- end -}}
 {{ end }}
 
@@ -34,7 +34,7 @@
             {{- printf "\n:label: Labels :label:\n" -}}
 
             {{- range $filteredLabels.SortedPairs -}}
-                {{- printf "*%s*: %s\n" (.Name | title) .Value -}}
+                {{- printf "*%s*: %s\n" .Name .Value -}}
             {{- end -}}
         {{- end -}}
     {{- end -}}
