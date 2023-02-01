@@ -66,6 +66,8 @@ teams:
   engagement_policy:  # Link to doc that talks about engagement and escalation policy
   oncall_schedule:    # Link to pagerduty oncall schedule
   product_stage_group: release
+  send_error_budget_weekly_to_slack: true
+  slack_error_budget_channel: ops-section
   ignored_components:
   - graphql_query
 
@@ -88,6 +90,8 @@ teams:
   slack_alerts_channel: g_container-registry_alerts
   send_slo_alerts_to_team_slack_channel: true
   product_stage_group: container_registry
+  send_error_budget_weekly_to_slack: true
+  slack_error_budget_channel: ops-section
   ignored_components:
   - graphql_query
 
@@ -97,12 +101,16 @@ teams:
   slack_alerts_channel: g_package-registry_alerts
   send_slo_alerts_to_team_slack_channel: true
   product_stage_group: package_registry
+  send_error_budget_weekly_to_slack: true
+  slack_error_budget_channel: ops-section
   ignored_components:
   - graphql_query
 
 - name: runner
   product_stage_group: runner
   slack_alerts_channel: alerts-ci-cd
+  send_error_budget_weekly_to_slack: true
+  slack_error_budget_channel: ops-section
   ignored_components:
   - graphql_query
 
@@ -164,6 +172,8 @@ teams:
   product_stage_group: configure
   slack_alerts_channel: feed_alerts_configure
   send_slo_alerts_to_team_slack_channel: true
+  send_error_budget_weekly_to_slack: true
+  slack_error_budget_channel: ops-section
   ignored_components:
   - graphql_query
 
@@ -265,11 +275,15 @@ teams:
   - graphql_query
 - name: respond
   product_stage_group: respond
+  send_error_budget_weekly_to_slack: true
+  slack_error_budget_channel: ops-section
   ignored_components:
   - graphql_query
 - name: observability
   product_stage_group: observability
   slack_alerts_channel: g_observability_alerts
+  send_error_budget_weekly_to_slack: true
+  slack_error_budget_channel: ops-section
   alerts:
   - gstg
   ignored_components:
@@ -283,14 +297,14 @@ teams:
   send_slo_alerts_to_team_slack_channel: true
   send_error_budget_weekly_to_slack: true
   slack_channel: g_pipeline-authoring_alerts
-  slack_error_budget_channel: g_pipeline-authoring
+  slack_error_budget_channel: ops-section
   ignored_components:
   - graphql_query
 - name: pipeline_execution
   product_stage_group: pipeline_execution
   slack_channel: g_pipeline-execution
   slack_alerts_channel: g_pipeline-execution_alerts
-  slack_error_budget_channel: g_pipeline-execution
+  slack_error_budget_channel: ops-section
   send_slo_alerts_to_team_slack_channel: true
   send_error_budget_weekly_to_slack: true
   ignored_components:
@@ -325,7 +339,7 @@ teams:
   product_stage_group: pipeline_insights
   slack_channel: g_pipeline-insights
   slack_alerts_channel: g_pipeline-insights
-  slack_error_budget_channel: g_pipeline-insights
+  slack_error_budget_channel: ops-section
   send_error_budget_weekly_to_slack: true
   ignored_components:
   - graphql_query
