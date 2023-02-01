@@ -6,13 +6,23 @@ groups:
   rules:
   - record: sli_aggregations:gitlab_sli_graphql_query_apdex_total_rate1m
     expr: |
-      sum by (endpoint_id,environment,feature_category,job,query_urgency,region,shard,stage,tier,type) (
+      sum by (endpoint_id,environment,feature_category,job,query_urgency,shard,stage,tier,type) (
         rate(gitlab_sli_graphql_query_apdex_total[1m])
       )
   - record: sli_aggregations:gitlab_sli_graphql_query_apdex_success_total_rate1m
     expr: |
-      sum by (endpoint_id,environment,feature_category,job,query_urgency,region,shard,stage,tier,type) (
+      sum by (endpoint_id,environment,feature_category,job,query_urgency,shard,stage,tier,type) (
         rate(gitlab_sli_graphql_query_apdex_success_total[1m])
+      )
+  - record: sli_aggregations:gitlab_sli_global_search_apdex_total_rate1m
+    expr: |
+      sum by (endpoint_id,environment,job,search_level,search_scope,search_type,shard,stage,tier,type) (
+        rate(gitlab_sli_global_search_apdex_total[1m])
+      )
+  - record: sli_aggregations:gitlab_sli_global_search_apdex_success_total_rate1m
+    expr: |
+      sum by (endpoint_id,environment,job,search_level,search_scope,search_type,shard,stage,tier,type) (
+        rate(gitlab_sli_global_search_apdex_success_total[1m])
       )
   - record: gitlab_component_apdex:success:rate
     labels:
@@ -251,13 +261,23 @@ groups:
   rules:
   - record: sli_aggregations:gitlab_sli_graphql_query_apdex_total_rate5m
     expr: |
-      sum by (endpoint_id,environment,feature_category,job,query_urgency,region,shard,stage,tier,type) (
+      sum by (endpoint_id,environment,feature_category,job,query_urgency,shard,stage,tier,type) (
         rate(gitlab_sli_graphql_query_apdex_total[5m])
       )
   - record: sli_aggregations:gitlab_sli_graphql_query_apdex_success_total_rate5m
     expr: |
-      sum by (endpoint_id,environment,feature_category,job,query_urgency,region,shard,stage,tier,type) (
+      sum by (endpoint_id,environment,feature_category,job,query_urgency,shard,stage,tier,type) (
         rate(gitlab_sli_graphql_query_apdex_success_total[5m])
+      )
+  - record: sli_aggregations:gitlab_sli_global_search_apdex_total_rate5m
+    expr: |
+      sum by (endpoint_id,environment,job,search_level,search_scope,search_type,shard,stage,tier,type) (
+        rate(gitlab_sli_global_search_apdex_total[5m])
+      )
+  - record: sli_aggregations:gitlab_sli_global_search_apdex_success_total_rate5m
+    expr: |
+      sum by (endpoint_id,environment,job,search_level,search_scope,search_type,shard,stage,tier,type) (
+        rate(gitlab_sli_global_search_apdex_success_total[5m])
       )
   - record: gitlab_component_apdex:success:rate_5m
     labels:
@@ -496,13 +516,23 @@ groups:
   rules:
   - record: sli_aggregations:gitlab_sli_graphql_query_apdex_total_rate30m
     expr: |
-      sum by (endpoint_id,environment,feature_category,job,query_urgency,region,shard,stage,tier,type) (
+      sum by (endpoint_id,environment,feature_category,job,query_urgency,shard,stage,tier,type) (
         rate(gitlab_sli_graphql_query_apdex_total[30m])
       )
   - record: sli_aggregations:gitlab_sli_graphql_query_apdex_success_total_rate30m
     expr: |
-      sum by (endpoint_id,environment,feature_category,job,query_urgency,region,shard,stage,tier,type) (
+      sum by (endpoint_id,environment,feature_category,job,query_urgency,shard,stage,tier,type) (
         rate(gitlab_sli_graphql_query_apdex_success_total[30m])
+      )
+  - record: sli_aggregations:gitlab_sli_global_search_apdex_total_rate30m
+    expr: |
+      sum by (endpoint_id,environment,job,search_level,search_scope,search_type,shard,stage,tier,type) (
+        rate(gitlab_sli_global_search_apdex_total[30m])
+      )
+  - record: sli_aggregations:gitlab_sli_global_search_apdex_success_total_rate30m
+    expr: |
+      sum by (endpoint_id,environment,job,search_level,search_scope,search_type,shard,stage,tier,type) (
+        rate(gitlab_sli_global_search_apdex_success_total[30m])
       )
   - record: gitlab_component_apdex:success:rate_30m
     labels:
@@ -741,13 +771,23 @@ groups:
   rules:
   - record: sli_aggregations:gitlab_sli_graphql_query_apdex_total_rate1h
     expr: |
-      sum by (endpoint_id,environment,feature_category,job,query_urgency,region,shard,stage,tier,type) (
+      sum by (endpoint_id,environment,feature_category,job,query_urgency,shard,stage,tier,type) (
         rate(gitlab_sli_graphql_query_apdex_total[1h])
       )
   - record: sli_aggregations:gitlab_sli_graphql_query_apdex_success_total_rate1h
     expr: |
-      sum by (endpoint_id,environment,feature_category,job,query_urgency,region,shard,stage,tier,type) (
+      sum by (endpoint_id,environment,feature_category,job,query_urgency,shard,stage,tier,type) (
         rate(gitlab_sli_graphql_query_apdex_success_total[1h])
+      )
+  - record: sli_aggregations:gitlab_sli_global_search_apdex_total_rate1h
+    expr: |
+      sum by (endpoint_id,environment,job,search_level,search_scope,search_type,shard,stage,tier,type) (
+        rate(gitlab_sli_global_search_apdex_total[1h])
+      )
+  - record: sli_aggregations:gitlab_sli_global_search_apdex_success_total_rate1h
+    expr: |
+      sum by (endpoint_id,environment,job,search_level,search_scope,search_type,shard,stage,tier,type) (
+        rate(gitlab_sli_global_search_apdex_success_total[1h])
       )
   - record: gitlab_component_apdex:success:rate_1h
     labels:
@@ -986,13 +1026,23 @@ groups:
   rules:
   - record: sli_aggregations:gitlab_sli_graphql_query_apdex_total_rate6h
     expr: |
-      sum by (endpoint_id,environment,feature_category,job,query_urgency,region,shard,stage,tier,type) (
+      sum by (endpoint_id,environment,feature_category,job,query_urgency,shard,stage,tier,type) (
         rate(gitlab_sli_graphql_query_apdex_total[6h])
       )
   - record: sli_aggregations:gitlab_sli_graphql_query_apdex_success_total_rate6h
     expr: |
-      sum by (endpoint_id,environment,feature_category,job,query_urgency,region,shard,stage,tier,type) (
+      sum by (endpoint_id,environment,feature_category,job,query_urgency,shard,stage,tier,type) (
         rate(gitlab_sli_graphql_query_apdex_success_total[6h])
+      )
+  - record: sli_aggregations:gitlab_sli_global_search_apdex_total_rate6h
+    expr: |
+      sum by (endpoint_id,environment,job,search_level,search_scope,search_type,shard,stage,tier,type) (
+        rate(gitlab_sli_global_search_apdex_total[6h])
+      )
+  - record: sli_aggregations:gitlab_sli_global_search_apdex_success_total_rate6h
+    expr: |
+      sum by (endpoint_id,environment,job,search_level,search_scope,search_type,shard,stage,tier,type) (
+        rate(gitlab_sli_global_search_apdex_success_total[6h])
       )
   - record: gitlab_component_apdex:success:rate_6h
     labels:
