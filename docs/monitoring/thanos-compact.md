@@ -80,15 +80,46 @@ timestamps minTime and maxTime, and follow one of the scenarios below.
 
 #### Partially overlapping blocks
 
-We have observed this scenario less often, and are not yet sure why it occurs.
-When it has occurred, it has been for compact-sourced (as opposed to
-sidecar-sourced) blocks with level > 1.
+This can occur for [numerous
+reasons](https://thanos.io/tip/operating/troubleshooting.md/#overlaps), more
+commonly originated by old Thanos versions (<=0.13) and crashes, leading to
+partial block uploads.
 
-The current mitigation is to mark all blocks involved as "no-compact":
+```
+ulid: 01ES3V7FHMGK9RHQPB4YM35A47, mint: 1600300800000, maxt: 1601337600000, range: 288h0m0s
+ulid: 01GMSASJSQWZE51B2X1KG18TZ7, mint: 1600300800000, maxt: 1601510400000, range: 336h0m0s
+```
+
+`mint` and `maxt` represent the timerange in epoch time (remove last 3 `0`s),
+here we can see that `1600300800` is `Thu Sep 17 2020 12:00:00`.
+
+##### If the blocks are older than 6 months
+
+It is safe to delete the smallest one, we downsample after 6 months and are not
+worried about resolution at that point.
+
+1. Find the smallest block, usually this is the block with the smallest time
+   range, but its good to confirm in term of size:
+
+* `gsutil ls -lh gs://gitlab-gprd-prometheus/01ES3V7FHMGK9RHQPB4YM35A47`
+* `gsutil ls -lh gs://gitlab-gprd-prometheus/01GMSASJSQWZE51B2X1KG18TZ7`
+
+2. Delete the smallest block
+
+* `gsutil rm -r gs://gitlab-gprd-prometheus/01ES3V7FHMGK9RHQPB4YM35A47`
+
+3. Restart thanos-compact, or wait for it to start again (service automatically
+   restarts on crash/error).
+
+##### If the blocks are within the last 6 months
+
+1. The current mitigation is to mark all blocks involved as "no-compact", keep
+   in mind however that there are potential cases where it could be ignored
+   ([example](https://github.com/thanos-io/thanos/issues/5603)):
 
 ```
 export GOOGLE_APPLICATION_CREDENTIALS=/opt/prometheus/thanos/gcs-creds.json
-block_list='01EJQ1JVX2RYAVAVBC1CJCESJD 01EJR6MVVKPKQ781VFYKHSH5Z0 01EJXNXJ9NRKESZ7GQT6JXZNNW 01EK36WZ2W5HJKXC1D7S8HFY4H 01ERY52QYS0TXXSRAP14N6NJH5'
+block_list='01ES3V7FHMGK9RHQPB4YM35A47 01GMSASJSQWZE51B2X1KG18TZ7'
 for id in ${block_list} ; do
   /opt/prometheus/thanos/thanos tools bucket mark \
     --objstore.config-file=/opt/prometheus/thanos/objstore.yml \
@@ -98,7 +129,13 @@ for id in ${block_list} ; do
 done
 ```
 
-Then restart thanos-compact.
+2. Restart thanos-compact, or wait for it to start again (service automatically
+   restarts on crash/error).
+
+If the block is still being processed by Thanos, [further
+troubleshooting](https://thanos.io/tip/operating/troubleshooting.md/#overlaps)
+will be required. Alternatively make a decision on whether the loss of
+resolution/metrics is acceptable and delete the smallest block.
 
 #### Totally overlapping blocks
 
