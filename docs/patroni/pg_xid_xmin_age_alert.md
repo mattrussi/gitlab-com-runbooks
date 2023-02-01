@@ -43,14 +43,25 @@ The spike of `pg_txid_xmin_age` can be caused by one of the following 3 reasons:
 
     ```sql
     select
-      clock_timestamp() - xact_start as xact_duration,
-      age(backend_xmin) as xmin_age,
-      *
+      now(),
+      now() - query_start as query_age,
+      now() - xact_start as xact_age,
+      pid,
+      backend_type,
+      state,
+      client_addr,
+      wait_event_type,
+      wait_event,
+      xact_start,
+      query_start,
+      state_change,
+      query
     from pg_stat_activity
     where
-      clock_timestamp() - xact_start > interval '30 second'
-      and query !~ '^autovacuum'
-    order by 1 desc nulls last;
+      state != 'idle'
+      and backend_type != 'autovacuum worker'
+      and xact_start < now() - '60 seconds'::interval
+    order by xact_age desc nulls last;
     ```
 
     Since we have very low values of `statement_timeout` (15s for application sessions; but 0 for `gitlab-superuser`) and `idle_in_transaction_session_timeout` (30s), in most cases (not all though!) such transaction will consist of many brief queries with brief pauses between them – so you may want to collect sampled data to understand the transaction behavior – in this case, use a shell snippet like this one, collecting samples to a CSV file (replace `XXX` in the filename with issue number like `production-1234`):
@@ -59,15 +70,25 @@ The spike of `pg_txid_xmin_age` can be caused by one of the following 3 reasons:
     while sleep 1; do
       sudo gitlab-psql -taX -c "
         copy(select
-          clock_timestamp(),
-          clock_timestamp() - xact_start as xact_duration,
-          age(backend_xmin) as xmin_age,
-          *
+          now(),
+          now() - query_start as query_age,
+          now() - xact_start as xact_age,
+          pid,
+          backend_type,
+          state,
+          client_addr,
+          wait_event_type,
+          wait_event,
+          xact_start,
+          query_start,
+          state_change,
+          query
         from pg_stat_activity
         where
-          clock_timestamp() - xact_start > interval '30 second'
-          and query not like 'autovacuum:%'
-        order by 1 desc nulls last) to stdout csv" \
+          state != 'idle'
+          and backend_type != 'autovacuum worker'
+          and xact_start < now() - '60 seconds'::interval
+        order by xact_age desc nulls last) to stdout csv" \
       | tee -a issue_XXX_long_tx_sampling.csv
     done
     ```
@@ -87,6 +108,10 @@ Once the root cause of the `pg_txid_xmin_age` spike is identified, consider inte
 
 - for autoANALYZE, it won't cause issue (but recommended to run a manual `analyze (verbose, skip_locked) {table_name}` right after interrupting, ensuring that autoANALYZE didn't start to compete with our manual attempt);
 - for a regular long-running transcactions – it is a business decision. Consequences of transaction being interrupted need to be analyzed. Interruption can be done using `pg_terminate_backend({PID})` as well. In any case, consider opening a <https://gitlab.com/gitlab-org/gitlab> issue so that product development teams can look into potential underlying problems.
+
+    ```
+    select pg_terminate_backend(1451058);
+    ```
 
 ## Post-checks
 
