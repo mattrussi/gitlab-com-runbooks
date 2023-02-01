@@ -1638,7 +1638,7 @@ groups:
       grafana_variables: environment,stage
       promql_template_1: |
         sum by (env,environment,tier,stage,region) (
-          sli_aggregations:gitlab_sli_rails_request_error_total_rate5m{environment="{{ $labels.environment }}",job="gitlab-rails",region="{{ $labels.region }}",stage="{{ $labels.stage }}",type="git"}
+          rate(gitlab_sli_rails_request_error_total{environment="{{ $labels.environment }}",job="gitlab-rails",region="{{ $labels.region }}",stage="{{ $labels.stage }}",type="git"}[5m])
         )
       runbook: docs/git/README.md
     labels:
@@ -1690,7 +1690,7 @@ groups:
       grafana_variables: environment,stage
       promql_template_1: |
         sum by (env,environment,tier,stage,region) (
-          sli_aggregations:gitlab_sli_rails_request_error_total_rate5m{environment="{{ $labels.environment }}",job="gitlab-rails",region="{{ $labels.region }}",stage="{{ $labels.stage }}",type="git"}
+          rate(gitlab_sli_rails_request_error_total{environment="{{ $labels.environment }}",job="gitlab-rails",region="{{ $labels.region }}",stage="{{ $labels.stage }}",type="git"}[5m])
         )
       runbook: docs/git/README.md
     labels:
@@ -1818,7 +1818,7 @@ groups:
       grafana_variables: environment,stage
       promql_template_1: |
         sum by (env,environment,tier,stage,region) (
-          sli_aggregations:gitlab_sli_rails_request_total_rate5m{environment="{{ $labels.environment }}",job="gitlab-rails",region="{{ $labels.region }}",stage="{{ $labels.stage }}",type="git"}
+          rate(gitlab_sli_rails_request_total{environment="{{ $labels.environment }}",job="gitlab-rails",region="{{ $labels.region }}",stage="{{ $labels.stage }}",type="git"}[5m])
         )
       runbook: docs/git/README.md
     labels:
@@ -1859,7 +1859,7 @@ groups:
       grafana_variables: environment,stage
       promql_template_1: |
         sum by (env,environment,tier,stage,region) (
-          sli_aggregations:gitlab_sli_rails_request_total_rate5m{environment="{{ $labels.environment }}",job="gitlab-rails",region="{{ $labels.region }}",stage="{{ $labels.stage }}",type="git"}
+          rate(gitlab_sli_rails_request_total{environment="{{ $labels.environment }}",job="gitlab-rails",region="{{ $labels.region }}",stage="{{ $labels.stage }}",type="git"}[5m])
         )
       runbook: docs/git/README.md
     labels:
