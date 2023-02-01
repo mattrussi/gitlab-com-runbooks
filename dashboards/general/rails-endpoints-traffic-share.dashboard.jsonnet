@@ -162,13 +162,13 @@ local endpointsSortedByTraffic =
       sum by(env) (
         sum_over_time(application_sli_aggregation:rails_request:apdex:weight:score_1h{%(numeratorSelector)s}[$__range]) > 0
       )
-    ) * on(feature_category) group_left(stage_group)
-    sum by(feature_category, stage_group) (
-      gitlab:feature_category:stage_group:mapping{%(mappingSelector)s}
+    ) * on(feature_category) group_left(stage_group, product_stage)
+    sum by(feature_category, stage_group, product_stage) (
+      gitlab:feature_category:stage_group:mapping{%(stageGroupSelector)s}
     )
   ||| % {
     numeratorSelector: selectors.serializeHash(baseSelector),
-    mappingSelector: selectors.serializeHash(mappingSelector),
+    stageGroupSelector: selectors.serializeHash(groupSelector + mappingSelector),
   }
 ;
 
@@ -196,7 +196,14 @@ local endpointsSortedByTrafficTable =
         id: 'renameByRegex',
         options: {
           regex: 'stage_group',
-          renamePattern: 'Group',
+          renamePattern: 'Stage Group',
+        },
+      },
+      {
+        id: 'renameByRegex',
+        options: {
+          regex: 'product_stage',
+          renamePattern: 'Product Stage',
         },
       },
       {
@@ -206,6 +213,13 @@ local endpointsSortedByTrafficTable =
             Time: true,
             env: true,
             feature_category: true,
+          },
+          indexByName: {
+            endpoint_id: 1,
+            'Stage Group': 2,
+            'Product Stage': 3,
+            Urgency: 4,
+            'Traffic %': 5,
           },
         },
       },
@@ -250,12 +264,24 @@ local endpointsSortedByTrafficTable =
         {
           matcher: {
             id: 'byName',
-            options: 'Group',
+            options: 'Stage Group',
           },
           properties: [
             {
               id: 'custom.width',
               value: 360,
+            },
+          ],
+        },
+        {
+          matcher: {
+            id: 'byName',
+            options: 'Product Stage',
+          },
+          properties: [
+            {
+              id: 'custom.width',
+              value: 200,
             },
           ],
         },
