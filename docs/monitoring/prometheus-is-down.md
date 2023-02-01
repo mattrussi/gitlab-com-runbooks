@@ -32,7 +32,7 @@ The rest of the message is a bit hard to read, but the interesting facts are
 In this situation there does not appear to be any reasonable way to recover the data in those chunks, and we should count the data as lost.  Having extracted the chunk names from the logs, the following will delete them:
 
 ```bash
-for i in $CHUNK1 $CHUNK2 $CHUNK3 $CHUNK4; do gsutil rm -r gs://gitlab-$ENV-prometheus/$i/; done
+for i in $CHUNK1 $CHUNK2 $CHUNK3 $CHUNK4; do gsutil -m rm -r gs://gitlab-$ENV-prometheus/$i/; done
 ```
 
 (NB: the trailing / after $i prevents accidents if $i is accidentally empty)
