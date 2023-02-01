@@ -7,42 +7,42 @@ groups:
   rules:
   - record: application_sli_aggregation:rails_request:error:rate_5m
     expr: |
-      sum by (env,environment,tier,type,stage,endpoint_id,feature_category,request_urgency) (
+      sum by (env,environment,tier,type,stage,endpoint_id,feature_category,request_urgency,region) (
         (sli_aggregations:gitlab_sli_rails_request_error_total_rate5m{monitor!="global"} >= 0)
       )
   - record: application_sli_aggregation:rails_request:ops:rate_5m
     expr: |
-      sum by (env,environment,tier,type,stage,endpoint_id,feature_category,request_urgency) (
+      sum by (env,environment,tier,type,stage,endpoint_id,feature_category,request_urgency,region) (
         (sli_aggregations:gitlab_sli_rails_request_total_rate5m{monitor!="global"} >= 0)
       )
   - record: application_sli_aggregation:rails_request:apdex:weight:score_5m
     expr: |
-      sum by (env,environment,tier,type,stage,endpoint_id,feature_category,request_urgency) (
+      sum by (env,environment,tier,type,stage,endpoint_id,feature_category,request_urgency,region) (
         (sli_aggregations:gitlab_sli_rails_request_apdex_total_rate5m{monitor!="global"} >= 0)
       )
   - record: application_sli_aggregation:rails_request:apdex:success:rate_5m
     expr: |
-      sum by (env,environment,tier,type,stage,endpoint_id,feature_category,request_urgency) (
+      sum by (env,environment,tier,type,stage,endpoint_id,feature_category,request_urgency,region) (
         (sli_aggregations:gitlab_sli_rails_request_apdex_success_total_rate5m{monitor!="global"} >= 0)
       )
   - record: application_sli_aggregation:rails_request:error:rate_1h
     expr: |
-      sum by (env,environment,tier,type,stage,endpoint_id,feature_category,request_urgency) (
+      sum by (env,environment,tier,type,stage,endpoint_id,feature_category,request_urgency,region) (
         (sli_aggregations:gitlab_sli_rails_request_error_total_rate1h{monitor!="global"} >= 0)
       )
   - record: application_sli_aggregation:rails_request:ops:rate_1h
     expr: |
-      sum by (env,environment,tier,type,stage,endpoint_id,feature_category,request_urgency) (
+      sum by (env,environment,tier,type,stage,endpoint_id,feature_category,request_urgency,region) (
         (sli_aggregations:gitlab_sli_rails_request_total_rate1h{monitor!="global"} >= 0)
       )
   - record: application_sli_aggregation:rails_request:apdex:weight:score_1h
     expr: |
-      sum by (env,environment,tier,type,stage,endpoint_id,feature_category,request_urgency) (
+      sum by (env,environment,tier,type,stage,endpoint_id,feature_category,request_urgency,region) (
         (sli_aggregations:gitlab_sli_rails_request_apdex_total_rate1h{monitor!="global"} >= 0)
       )
   - record: application_sli_aggregation:rails_request:apdex:success:rate_1h
     expr: |
-      sum by (env,environment,tier,type,stage,endpoint_id,feature_category,request_urgency) (
+      sum by (env,environment,tier,type,stage,endpoint_id,feature_category,request_urgency,region) (
         (sli_aggregations:gitlab_sli_rails_request_apdex_success_total_rate1h{monitor!="global"} >= 0)
       )
 - name: 'Application Defined SLI Global metrics: graphql_query (fast burn)'
@@ -51,22 +51,22 @@ groups:
   rules:
   - record: application_sli_aggregation:graphql_query:apdex:weight:score_5m
     expr: |
-      sum by (env,environment,tier,type,stage,endpoint_id,feature_category,query_urgency) (
+      sum by (env,environment,tier,type,stage,endpoint_id,feature_category,query_urgency,region) (
         (sli_aggregations:gitlab_sli_graphql_query_apdex_total_rate5m{monitor!="global"} >= 0)
       )
   - record: application_sli_aggregation:graphql_query:apdex:success:rate_5m
     expr: |
-      sum by (env,environment,tier,type,stage,endpoint_id,feature_category,query_urgency) (
+      sum by (env,environment,tier,type,stage,endpoint_id,feature_category,query_urgency,region) (
         (sli_aggregations:gitlab_sli_graphql_query_apdex_success_total_rate5m{monitor!="global"} >= 0)
       )
   - record: application_sli_aggregation:graphql_query:apdex:weight:score_1h
     expr: |
-      sum by (env,environment,tier,type,stage,endpoint_id,feature_category,query_urgency) (
+      sum by (env,environment,tier,type,stage,endpoint_id,feature_category,query_urgency,region) (
         (sli_aggregations:gitlab_sli_graphql_query_apdex_total_rate1h{monitor!="global"} >= 0)
       )
   - record: application_sli_aggregation:graphql_query:apdex:success:rate_1h
     expr: |
-      sum by (env,environment,tier,type,stage,endpoint_id,feature_category,query_urgency) (
+      sum by (env,environment,tier,type,stage,endpoint_id,feature_category,query_urgency,region) (
         (sli_aggregations:gitlab_sli_graphql_query_apdex_success_total_rate1h{monitor!="global"} >= 0)
       )
 - name: 'Application Defined SLI Global metrics: customers_dot_sidekiq_jobs (fast
@@ -164,42 +164,42 @@ groups:
   rules:
   - record: application_sli_aggregation:global_search:error:rate_5m
     expr: |
-      sum by (env,environment,tier,type,stage,endpoint_id,search_level,search_scope,search_type) (
+      sum by (env,environment,tier,type,stage,endpoint_id,search_level,search_scope,search_type,region) (
         (application_sli_aggregation:global_search:error:rate_5m{monitor!="global"} >= 0)
       )
   - record: application_sli_aggregation:global_search:ops:rate_5m
     expr: |
-      sum by (env,environment,tier,type,stage,endpoint_id,search_level,search_scope,search_type) (
+      sum by (env,environment,tier,type,stage,endpoint_id,search_level,search_scope,search_type,region) (
         (application_sli_aggregation:global_search:ops:rate_5m{monitor!="global"} >= 0)
       )
   - record: application_sli_aggregation:global_search:apdex:weight:score_5m
     expr: |
-      sum by (env,environment,tier,type,stage,endpoint_id,search_level,search_scope,search_type) (
+      sum by (env,environment,tier,type,stage,endpoint_id,search_level,search_scope,search_type,region) (
         (application_sli_aggregation:global_search:apdex:weight:score_5m{monitor!="global"} >= 0)
       )
   - record: application_sli_aggregation:global_search:apdex:success:rate_5m
     expr: |
-      sum by (env,environment,tier,type,stage,endpoint_id,search_level,search_scope,search_type) (
+      sum by (env,environment,tier,type,stage,endpoint_id,search_level,search_scope,search_type,region) (
         (application_sli_aggregation:global_search:apdex:success:rate_5m{monitor!="global"} >= 0)
       )
   - record: application_sli_aggregation:global_search:error:rate_1h
     expr: |
-      sum by (env,environment,tier,type,stage,endpoint_id,search_level,search_scope,search_type) (
+      sum by (env,environment,tier,type,stage,endpoint_id,search_level,search_scope,search_type,region) (
         (application_sli_aggregation:global_search:error:rate_1h{monitor!="global"} >= 0)
       )
   - record: application_sli_aggregation:global_search:ops:rate_1h
     expr: |
-      sum by (env,environment,tier,type,stage,endpoint_id,search_level,search_scope,search_type) (
+      sum by (env,environment,tier,type,stage,endpoint_id,search_level,search_scope,search_type,region) (
         (application_sli_aggregation:global_search:ops:rate_1h{monitor!="global"} >= 0)
       )
   - record: application_sli_aggregation:global_search:apdex:weight:score_1h
     expr: |
-      sum by (env,environment,tier,type,stage,endpoint_id,search_level,search_scope,search_type) (
+      sum by (env,environment,tier,type,stage,endpoint_id,search_level,search_scope,search_type,region) (
         (application_sli_aggregation:global_search:apdex:weight:score_1h{monitor!="global"} >= 0)
       )
   - record: application_sli_aggregation:global_search:apdex:success:rate_1h
     expr: |
-      sum by (env,environment,tier,type,stage,endpoint_id,search_level,search_scope,search_type) (
+      sum by (env,environment,tier,type,stage,endpoint_id,search_level,search_scope,search_type,region) (
         (application_sli_aggregation:global_search:apdex:success:rate_1h{monitor!="global"} >= 0)
       )
 - name: 'Application Defined SLI Global metrics: global_search_indexing (fast burn)'

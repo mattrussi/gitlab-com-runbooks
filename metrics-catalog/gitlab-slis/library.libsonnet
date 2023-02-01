@@ -11,7 +11,7 @@ local customersDotCategories = std.foldl(
 local list = [
   sliDefinition.new({
     name: 'rails_request',
-    significantLabels: ['endpoint_id', 'feature_category', 'request_urgency'],
+    significantLabels: ['endpoint_id', 'feature_category', 'request_urgency', 'region'],
     kinds: [sliDefinition.apdexKind, sliDefinition.errorRateKind],
     description: |||
       The number of requests meeting their duration target based on the urgency
@@ -23,7 +23,7 @@ local list = [
   }),
   sliDefinition.new({
     name: 'graphql_query',
-    significantLabels: ['endpoint_id', 'feature_category', 'query_urgency'],
+    significantLabels: ['endpoint_id', 'feature_category', 'query_urgency', 'region'],
     kinds: [sliDefinition.apdexKind],
     description: |||
       The number of GraphQL queries meeting their duration target based on the urgency
@@ -57,7 +57,7 @@ local list = [
   }),
   sliDefinition.new({
     name: 'global_search',
-    significantLabels: ['endpoint_id', 'search_level', 'search_scope', 'search_type'],
+    significantLabels: ['endpoint_id', 'search_level', 'search_scope', 'search_type', 'region'],
     kinds: [sliDefinition.apdexKind, sliDefinition.errorRateKind],
     excludeKindsFromSLI: [sliDefinition.errorRateKind],
     featureCategory: 'global_search',
