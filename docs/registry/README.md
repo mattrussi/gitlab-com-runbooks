@@ -34,6 +34,7 @@
 * [../patroni/postgresql-backups-wale-walg.md](../patroni/postgresql-backups-wale-walg.md)
 * [Database Connection Pool Saturation](app-db-conn-pool-saturation.md)
 * [Container Registry CDN](cdn.md)
+* [Container Registry Database Index Bloat](db-index-bloat.md)
 * [Container Registry database post-deployment migrations](db-post-deployment-migrations.md)
 * [gitlab-registry.md](gitlab-registry.md)
 * [migration-failure-scenarios.md](migration-failure-scenarios.md)
