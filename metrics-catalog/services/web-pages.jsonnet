@@ -92,40 +92,6 @@ metricsCatalog.serviceDefinition({
       userImpacting: true,
       featureCategory: 'pages',
       description: |||
-        Aggregation of most web requests into the GitLab Pages process.
-      |||,
-      // GitLab Pages sometimes serves very large files which takes some reasonable time
-      // we have stricter server_headers SLI, so this threshold can be set higher
-      apdex: histogramApdex(
-        histogram='gitlab_pages_http_request_duration_seconds_bucket',
-        selector=baseSelector,
-        satisfiedThreshold=10
-      ),
-
-      requestRate: rateMetric(
-        counter='gitlab_pages_http_requests_total',
-        selector={}
-      ),
-
-      errorRate: rateMetric(
-        counter='gitlab_pages_http_requests_total',
-        selector={ code: { re: '5..' } }
-      ),
-
-      significantLabels: ['fqdn'],
-
-      toolingLinks: [
-        toolingLinks.continuousProfiler(service='gitlab-pages'),
-        toolingLinks.sentry(slug='gitlab/gitlab-pages'),
-        toolingLinks.kibana(title='GitLab Pages', index='pages'),
-      ],
-      dependsOn: dependOnApi.restComponents,
-    },
-
-    server_headers: {
-      userImpacting: true,
-      featureCategory: 'pages',
-      description: |||
         Response time can be slow due to large files served by pages.
         This SLI tracks only time needed to finish writing headers.
         It includes API requests to GitLab instance, scanning ZIP archive
@@ -143,8 +109,18 @@ metricsCatalog.serviceDefinition({
         selector=baseSelector
       ),
 
+      errorRate: rateMetric(
+        counter='gitlab_pages_http_requests_total',
+        selector={ code: { re: '5..' } }
+      ),
+
       significantLabels: ['fqdn'],
 
+      toolingLinks: [
+        toolingLinks.continuousProfiler(service='gitlab-pages'),
+        toolingLinks.sentry(slug='gitlab/gitlab-pages'),
+        toolingLinks.kibana(title='GitLab Pages', index='pages'),
+      ],
       dependsOn: dependOnApi.restComponents,
     },
   },
