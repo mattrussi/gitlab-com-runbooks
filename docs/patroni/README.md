@@ -71,6 +71,7 @@
 * [Removing a PgBouncer instance](../pgbouncer/pgbouncer-remove-instance.md)
 * [../pgbouncer/service-pgbouncer.md](../pgbouncer/service-pgbouncer.md)
 * [Postgres Replicas](../postgres-dr-delayed/postgres-dr-replicas.md)
+* [Container Registry Database Index Bloat](../registry/db-index-bloat.md)
 * [Container Registry database post-deployment migrations](../registry/db-post-deployment-migrations.md)
 * [How to use flamegraphs for performance profiling](../tutorials/how_to_use_flamegraphs_for_perf_profiling.md)
 * [Deleted Project Restoration](../uncategorized/deleted-project-restore.md)

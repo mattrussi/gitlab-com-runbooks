@@ -18,6 +18,7 @@
 ## Troubleshooting Pointers
 
 * [Interacting with Consul](../consul/interaction.md)
+* [Container Registry Database Index Bloat](../registry/db-index-bloat.md)
 <!-- END_MARKER -->
 
 <!-- ## Summary -->
