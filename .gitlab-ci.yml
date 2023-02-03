@@ -291,6 +291,7 @@ update-alertmanager:
 prepare-service-health-dashboard-json:
   rules:
     - *avoid-stage-group-check-rule
+    - *avoid-schedule-rule
     - if: '$GENERATE_SERVICE_MATURITY_MANIFEST == "1"'
       when: always
     - if: '$CI_PIPELINE_SOURCE == "merge_request_event"'
