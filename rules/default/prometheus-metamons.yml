@@ -316,13 +316,13 @@ groups:
       description: Thanos compact {{ $labels.instance }} has failed compactions.
       runbook: docs/monitoring/thanos-compact.md
   - alert: ThanosCompactNotRunIn24Hours
-    expr: (time() - (thanos_objstore_bucket_last_successful_upload_time > 0)) > 86400
+    expr: (time() - max by (env, instance) (max_over_time(thanos_objstore_bucket_last_successful_upload_time{job="thanos", instance=~".+compact.*"}[24h]))) / 3600 > 24
     labels:
-      severity: s4
+      severity: s2
       alert_type: cause
     annotations:
       title: Thanos compaction has not run in 24 hours.
-      description: Thanos compact {{ $labels.instance }} has not uploaded any blocks in 24 hours.
+      description: Thanos Compact {{$labels.instance}} has not uploaded anything for 24 hours.
       runbook: docs/monitoring/thanos-compact.md
 
 - name: Thanos Rule Metamon
