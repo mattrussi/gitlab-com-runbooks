@@ -434,7 +434,7 @@ groups:
         clamp_min(
           clamp_max(
             1 - avg by (environment, tier, type, stage) (
-              rate(node_cpu_seconds_total:labeled{mode="idle", type=~"api|consul|git|kube|redis-cache|redis-sidekiq|redis-tracechunks|redis-ratelimiting|redis-cluster-ratelimiting|redis-sessions|redis-registry-cache|redis-repository-cache|redis|registry|sidekiq|vault|web-pages|web|websockets"}[5m])
+              rate(node_cpu_seconds_total:labeled{mode="idle", type=~"api|git|kube|redis-cache|redis-sidekiq|redis-tracechunks|redis-ratelimiting|redis-cluster-ratelimiting|redis-sessions|redis-registry-cache|redis-repository-cache|redis|registry|sidekiq|vault|web-pages|web|websockets"}[5m])
             )
             ,
             1)

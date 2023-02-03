@@ -25,7 +25,7 @@ metricsCatalog.serviceDefinition({
       hpaSelector=null,  // no hpas for consul
       ingressSelector=null,  // no ingress for consul
       deploymentSelector=null,  // no deployments for consul
-      nodeSelector={ type: 'kube' }
+      nodeSelector=null  // running on generic nodepools
     ),
   },
   kubeResources: {
