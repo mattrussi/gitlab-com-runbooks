@@ -73,9 +73,9 @@ groups:
     expr: rate(postgresql_errors_total{error="statement_timeout"}[5m]) > 3
     for: 5m
     labels:
-      severity: s1
-      pager: pagerduty
+      severity: s3
       alert_type: cause
+      incident_project: gitlab.com/gitlab-com/gl-infra/production
       type: patroni
     annotations:
       descrition: Database {{$labels.fqdn}} has {{ $value | printf "%.1f" }} statement
