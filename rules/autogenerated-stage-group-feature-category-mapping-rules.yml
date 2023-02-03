@@ -486,6 +486,12 @@ groups:
     expr: "1"
   - record: gitlab:feature_category:stage_group:mapping
     labels:
+      feature_category: no_code_automation
+      product_stage: no_code
+      stage_group: no_code_automation
+    expr: "1"
+  - record: gitlab:feature_category:stage_group:mapping
+    labels:
       feature_category: not_owned
       product_stage: not_owned
       stage_group: not_owned

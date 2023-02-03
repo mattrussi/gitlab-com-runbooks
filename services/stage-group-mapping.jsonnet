@@ -495,4 +495,11 @@
       'five_minute_production_app',
     ],
   },
+  no_code_automation: {
+    name: 'No-code Automation',
+    stage: 'no_code',
+    feature_categories: [
+      'no_code_automation',
+    ],
+  },
 }
