@@ -318,30 +318,57 @@ All Gossip Protocol traffic is encrypted.  This key is stored in Vault under the
 
 ## Deployments in k8s
 
-This section is about the deployment process of Consul server changes as Consul client deployments are low-risk
-and each pod in the deamonset will simply get terminated and replaced. The only gotcha is that _some_ DNS queries may
-fail as a result while the pod is being recreated.
+When we bump the `chart_version` for Consul (`consul_gl`) in the [`bases/environments.yaml`](https://gitlab.com/gitlab-com/gl-infra/k8s-workloads/gitlab-helmfiles/-/blob/037013a6ec2e8a89d2222163b95f9703042949b7/bases/environments.yaml) file,
+this actually bumps the Consul version for servers **and** clients. In all non-production environments, this will trigger an upgrade
+of the servers and clients and there is no manual intervention required. Server pods will be rotated one-by-one, and simultaneously client
+pods will get rotated. So you might have clients that are temporarily on a newer version than the server, but this is usually fine as Hashicorp
+have a [protocol compatibility promise](https://developer.hashicorp.com/consul/docs/upgrading/compatibility).
 
-In gstg and gprd, we use a setting called `server.updatePartition`. This setting allows us to carefully control a
-rolling update of Consul server agents. With the default setting of `0`, k8s would simply replace each pod and wait
-for the health check to pass before moving onto the next pod. This _may_ be OK, but we could run into a situation
-where the pod passes health check, but then becomes unhealthy, and k8s has already moved onto the next pod. Since Consul is
-a critical service, we decided the human intervention to deploying changes was worth the pain to have control over the process.
+Nevertheless, in production we want to be more cautious and thus we make use of two guard rails for the sake of reliability:
 
-This setting `updatePartition` controls **how many instances of the server cluster are updated** when the `.spec.template` is updated.
+1. For servers, we set `server.updatePartition` to the number of replicas minus 1 (i.e., currently in `gprd` this is set to `4`).
+
+    This setting allows us to carefully control a rolling update of Consul server agents. With the default setting of `0`, k8s would simply rotate
+    each pod and wait for the health check to pass before moving onto the next pod. This _may_ be OK, but we could run into a situation
+    where the pod passes health check, but then becomes unhealthy, and k8s has already moved onto the next pod. This could potentially result
+    in an unhealthy Consul cluster, which would impact critical components like Patroni. Given the importance of a healthy Consul cluster, we
+    decided the inconvenience of human intervention to occasionally upgrade Consul was justified to minimize the risk of an outage.
+
+1. For clients, we set the `client.updateStrategy.type` to `OnDelete` so we can wait until we're done upgrading the server cluster before we upgrade clients.
+
+The following instructions describe the upgrade process for servers and clients **for production only**. As abovementioned, all other environments will
+upgrade servers and clients automatically once the `chart_version` is bumped.
+
+### Servers
+
+The `server.updatePartition` setting controls **how many instances of the server cluster are updated** when the `.spec.template` is updated.
 Only instances with an index greater than or equal to `updatePartition` (zero-indexed) are updated. So by setting this value to `4`,
-we're effectively saying only recreate the last pod (`...-consul-server-4`) but leave all other pods untouched.
+we're effectively saying only recreate the last pod (`...-consul-server-4`) but **leave all other pods untouched**.
 
-So how do you make a change and deploy it to **all** Consul server pods?
+The upgrade process is as follows:
 
-1. MR/merge your change to [gitlab-helmfiles](https://gitlab.com/gitlab-com/gl-infra/k8s-workloads/gitlab-helmfiles)
-1. Once Helm starts to apply the change, you should see the `...-consul-server-4` pod get recreated, but the rest will remain unchanged.
+1. Bump `chart_version` in the [`bases/environments.yaml`](https://gitlab.com/gitlab-com/gl-infra/k8s-workloads/gitlab-helmfiles/-/blob/037013a6ec2e8a89d2222163b95f9703042949b7/bases/environments.yaml#L373) file
+1. Create your MR, get it reviewed and merged
+1. Once Helm starts to apply the change, you should see the `...-consul-server-4` pod get recreated, but the rest will remain unchanged. No client pods will get rotated at this stage.
 1. Helm will hang waiting for all pods to be recreated, so this is where you need to take action.
-1. Ensure you're pointing at the right env for kubectl
-1. Run:
+1. SSH to one of the Consul members and keep an eye on the servers:
+
+    ```sh
+    watch -n 2 consul operator raft list-peers
+    ```
+
+1. Bring up your tunnel to talk to the `gprd` regional k8s cluster (e.g., `glsh kube use-cluster gprd`)
+1. Confirm that the Consul cluster looks healthy:
+
+    ```sh
+    kubectl --context gke_gitlab-production_us-east1_gprd-gitlab-gke -n consul get pods -o wide -l component=server`
+    ```
+
+    The pod `consul-gl-consul-server-4` should only show minutes in the `AGE` column. All pods should be `Running`.
+1. Rotate 2 more pods:
 
     ```
-    kubectl -n consul patch statefulset consul-gl-consul-server -p '{"spec":{"updateStrategy":{"rollingUpdate":{"partition":2}}}}'
+    kubectl --context gke_gitlab-production_us-east1_gprd-gitlab-gke -n consul patch statefulset consul-gl-consul-server -p '{"spec":{"updateStrategy":{"rollingUpdate":{"partition":2}}}}'
     ```
 
 1. You should now see 2 more pods get recreated. Wait until the Consul cluster is healthy (should only take a few secs to a minute) and do the last 2 pods:
@@ -356,7 +383,28 @@ So how do you make a change and deploy it to **all** Consul server pods?
     kubectl -n consul patch statefulset consul-gl-consul-server -p '{"spec":{"updateStrategy":{"rollingUpdate":{"partition":4}}}}'
     ```
 
-1. You should now see the Helm apply job complete successfully. If your change affected both `gstg` and `gprd`, you'll need to do the
-   `updateStrategy.rollingUpdate.partition` dance for both environments.
+1. You should now see the Helm apply job complete successfully.
+
+### Clients
+
+To upgrade the clients, you have two choices:
+
+1. Do nothing and let the clients get upgraded organically as servers come and go due to autoscaling. This is an acceptable approach if there is no rush on upgrading clients.
+1. Rotate the pods by doing the `updateStrategy` dance as follows.
+
+    For each of the 4x production k8s clusters (regional + zonals):
+
+      1. Change `updateStrategy.type` to `RollingUpdate`:
+
+          ```sh
+          kubectl --context <cluster> -n consul patch daemonset consul-gl-consul-client -p '{"spec":{"updateStrategy":{"type":"RollingUpdate"}}}'
+          ```
+
+      1. Wait until all client pods have been rotated.
+      1. Revert change to `updateStrategy.type`:
+
+          ```sh
+          kubectl --context <cluster> -n consul patch daemonset consul-gl-consul-client -p '{"spec":{"updateStrategy":{"type":"OnDelete"}}}'
+          ```
 
 <!-- ## Links to further Documentation -->
