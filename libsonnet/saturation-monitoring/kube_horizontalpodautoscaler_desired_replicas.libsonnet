@@ -20,13 +20,14 @@ local sidekiqHelpers = import './services/lib/sidekiq-helpers.libsonnet';
     grafana_dashboard_uid: 'sat_kube_horizontalpodautoscaler',
     resourceLabels: ['horizontalpodautoscaler', 'shard'],
     query: |||
-      kube_horizontalpodautoscaler_status_desired_replicas:labeled{%(selector)s, shard!~"%(ignored_sidekiq_shards)s"}
+      kube_horizontalpodautoscaler_status_desired_replicas:labeled{%(selector)s, shard!~"%(ignored_sidekiq_shards)s", namespace!~"%(ignored_namespaces)s"}
       /
-      kube_horizontalpodautoscaler_spec_max_replicas:labeled{%(selector)s, shard!~"%(ignored_sidekiq_shards)s"}
+      kube_horizontalpodautoscaler_spec_max_replicas:labeled{%(selector)s, shard!~"%(ignored_sidekiq_shards)s", namespace!~"%(ignored_namespaces)s"}
     |||,
     queryFormatConfig: {
       // Ignore non-autoscaled shards and throttled shards
       ignored_sidekiq_shards: std.join('|', sidekiqHelpers.shards.listFiltered(function(shard) !shard.autoScaling || shard.urgency == 'throttled')),
+      ignored_namespaces: 'pubsubbeat',
     },
     slos: {
       soft: 0.90,
