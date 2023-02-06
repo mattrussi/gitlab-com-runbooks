@@ -25,7 +25,7 @@ local metricsCatalog = import 'servicemetrics/metrics-catalog.libsonnet';
       and on (fqdn) redis_instance_info{role="master"}
     |||,
     slos: {
-      soft: 0.70,
+      soft: 0.85,
       hard: 0.95,
     },
   }),
