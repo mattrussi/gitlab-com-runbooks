@@ -30,7 +30,7 @@ groups:
       sum without (fqdn,instance,pod) (
         prometheus_notifications_alertmanagers_discovered
       ) < 1
-    for: 15m
+    for: 30m
     labels:
       pager: pagerduty
       severity: s1
