@@ -44,6 +44,16 @@
     {
       "source": {
         "git": {
+          "remote": "https://github.com/thanos-io/thanos.git",
+          "subdir": "mixin"
+        }
+      },
+      "version": "1839858fca674f83177c7dd53b08e4d812637c05",
+      "sum": "md/PebXzwkmmAY2sJCNNRZ6YXcRwFwDFzZlpbGgWxNY="
+    },
+    {
+      "source": {
+        "git": {
           "remote": "https://github.com/yugui/jsonnetunit.git",
           "subdir": "jsonnetunit"
         }
