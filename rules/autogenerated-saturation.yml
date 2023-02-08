@@ -347,13 +347,13 @@ groups:
         clamp_min(
           clamp_max(
             sum by (environment, tier, type, stage, pod, container) (
-              rate(container_cpu_usage_seconds_total:labeled{container!="", container!="POD", type=~"web|api|camoproxy|consul|external-dns|git|kas|kube|logging|mailroom|monitoring|nginx|plantuml|redis-cache|redis-sidekiq|redis-tracechunks|redis-ratelimiting|redis-cluster-ratelimiting|redis-sessions|redis-registry-cache|redis-repository-cache|redis|registry|sidekiq|vault|web-pages|websockets|woodhouse"}[5m])
+              rate(container_cpu_usage_seconds_total:labeled{container!="", container!="POD", type=~"web|api|internal-api|camoproxy|consul|external-dns|git|kas|kube|logging|mailroom|monitoring|nginx|plantuml|redis-cache|redis-sidekiq|redis-tracechunks|redis-ratelimiting|redis-cluster-ratelimiting|redis-sessions|redis-registry-cache|redis-repository-cache|redis|registry|sidekiq|vault|web-pages|websockets|woodhouse"}[5m])
             )
             /
             sum by(environment, tier, type, stage, pod, container) (
-              container_spec_cpu_quota:labeled{container!="", container!="POD", type=~"web|api|camoproxy|consul|external-dns|git|kas|kube|logging|mailroom|monitoring|nginx|plantuml|redis-cache|redis-sidekiq|redis-tracechunks|redis-ratelimiting|redis-cluster-ratelimiting|redis-sessions|redis-registry-cache|redis-repository-cache|redis|registry|sidekiq|vault|web-pages|websockets|woodhouse"}
+              container_spec_cpu_quota:labeled{container!="", container!="POD", type=~"web|api|internal-api|camoproxy|consul|external-dns|git|kas|kube|logging|mailroom|monitoring|nginx|plantuml|redis-cache|redis-sidekiq|redis-tracechunks|redis-ratelimiting|redis-cluster-ratelimiting|redis-sessions|redis-registry-cache|redis-repository-cache|redis|registry|sidekiq|vault|web-pages|websockets|woodhouse"}
               /
-              container_spec_cpu_period:labeled{container!="", container!="POD", type=~"web|api|camoproxy|consul|external-dns|git|kas|kube|logging|mailroom|monitoring|nginx|plantuml|redis-cache|redis-sidekiq|redis-tracechunks|redis-ratelimiting|redis-cluster-ratelimiting|redis-sessions|redis-registry-cache|redis-repository-cache|redis|registry|sidekiq|vault|web-pages|websockets|woodhouse"}
+              container_spec_cpu_period:labeled{container!="", container!="POD", type=~"web|api|internal-api|camoproxy|consul|external-dns|git|kas|kube|logging|mailroom|monitoring|nginx|plantuml|redis-cache|redis-sidekiq|redis-tracechunks|redis-ratelimiting|redis-cluster-ratelimiting|redis-sessions|redis-registry-cache|redis-repository-cache|redis|registry|sidekiq|vault|web-pages|websockets|woodhouse"}
             )
             ,
             1)
@@ -367,9 +367,9 @@ groups:
       max by(environment, tier, type, stage) (
         clamp_min(
           clamp_max(
-            container_memory_working_set_bytes:labeled{container!="", container!="POD", type=~"web|api|camoproxy|consul|external-dns|git|kas|kube|logging|mailroom|monitoring|nginx|plantuml|redis-cache|redis-sidekiq|redis-tracechunks|redis-ratelimiting|redis-cluster-ratelimiting|redis-sessions|redis-registry-cache|redis-repository-cache|redis|registry|sidekiq|vault|web-pages|websockets|woodhouse"}
+            container_memory_working_set_bytes:labeled{container!="", container!="POD", type=~"web|api|internal-api|camoproxy|consul|external-dns|git|kas|kube|logging|mailroom|monitoring|nginx|plantuml|redis-cache|redis-sidekiq|redis-tracechunks|redis-ratelimiting|redis-cluster-ratelimiting|redis-sessions|redis-registry-cache|redis-repository-cache|redis|registry|sidekiq|vault|web-pages|websockets|woodhouse"}
             /
-            (container_spec_memory_limit_bytes:labeled{container!="", container!="POD", type=~"web|api|camoproxy|consul|external-dns|git|kas|kube|logging|mailroom|monitoring|nginx|plantuml|redis-cache|redis-sidekiq|redis-tracechunks|redis-ratelimiting|redis-cluster-ratelimiting|redis-sessions|redis-registry-cache|redis-repository-cache|redis|registry|sidekiq|vault|web-pages|websockets|woodhouse"} > 0)
+            (container_spec_memory_limit_bytes:labeled{container!="", container!="POD", type=~"web|api|internal-api|camoproxy|consul|external-dns|git|kas|kube|logging|mailroom|monitoring|nginx|plantuml|redis-cache|redis-sidekiq|redis-tracechunks|redis-ratelimiting|redis-cluster-ratelimiting|redis-sessions|redis-registry-cache|redis-repository-cache|redis|registry|sidekiq|vault|web-pages|websockets|woodhouse"} > 0)
             ,
             1)
         ,
@@ -382,9 +382,9 @@ groups:
       max by(environment, tier, type, stage) (
         clamp_min(
           clamp_max(
-            kube_horizontalpodautoscaler_status_desired_replicas:labeled{type=~"web|api|camoproxy|consul|external-dns|git|kas|kube|logging|mailroom|monitoring|nginx|plantuml|redis-cache|redis-sidekiq|redis-tracechunks|redis-ratelimiting|redis-cluster-ratelimiting|redis-sessions|redis-registry-cache|redis-repository-cache|redis|registry|sidekiq|vault|web-pages|websockets|woodhouse", shard!~"database-throttled|elasticsearch|gitaly-throttled|imports|urgent-authorized-projects|urgent-other", namespace!~"pubsubbeat"}
+            kube_horizontalpodautoscaler_status_desired_replicas:labeled{type=~"web|api|internal-api|camoproxy|consul|external-dns|git|kas|kube|logging|mailroom|monitoring|nginx|plantuml|redis-cache|redis-sidekiq|redis-tracechunks|redis-ratelimiting|redis-cluster-ratelimiting|redis-sessions|redis-registry-cache|redis-repository-cache|redis|registry|sidekiq|vault|web-pages|websockets|woodhouse", shard!~"database-throttled|elasticsearch|gitaly-throttled|imports|urgent-authorized-projects|urgent-other", namespace!~"pubsubbeat"}
             /
-            kube_horizontalpodautoscaler_spec_max_replicas:labeled{type=~"web|api|camoproxy|consul|external-dns|git|kas|kube|logging|mailroom|monitoring|nginx|plantuml|redis-cache|redis-sidekiq|redis-tracechunks|redis-ratelimiting|redis-cluster-ratelimiting|redis-sessions|redis-registry-cache|redis-repository-cache|redis|registry|sidekiq|vault|web-pages|websockets|woodhouse", shard!~"database-throttled|elasticsearch|gitaly-throttled|imports|urgent-authorized-projects|urgent-other", namespace!~"pubsubbeat"}
+            kube_horizontalpodautoscaler_spec_max_replicas:labeled{type=~"web|api|internal-api|camoproxy|consul|external-dns|git|kas|kube|logging|mailroom|monitoring|nginx|plantuml|redis-cache|redis-sidekiq|redis-tracechunks|redis-ratelimiting|redis-cluster-ratelimiting|redis-sessions|redis-registry-cache|redis-repository-cache|redis|registry|sidekiq|vault|web-pages|websockets|woodhouse", shard!~"database-throttled|elasticsearch|gitaly-throttled|imports|urgent-authorized-projects|urgent-other", namespace!~"pubsubbeat"}
             ,
             1)
         ,
@@ -434,7 +434,7 @@ groups:
         clamp_min(
           clamp_max(
             1 - avg by (environment, tier, type, stage) (
-              rate(node_cpu_seconds_total:labeled{mode="idle", type=~"api|git|kube|redis-cache|redis-sidekiq|redis-tracechunks|redis-ratelimiting|redis-cluster-ratelimiting|redis-sessions|redis-registry-cache|redis-repository-cache|redis|registry|sidekiq|vault|web-pages|web|websockets"}[5m])
+              rate(node_cpu_seconds_total:labeled{mode="idle", type=~"api|internal-api|git|kube|redis-cache|redis-sidekiq|redis-tracechunks|redis-ratelimiting|redis-cluster-ratelimiting|redis-sessions|redis-registry-cache|redis-repository-cache|redis|registry|sidekiq|vault|web-pages|web|websockets"}[5m])
             )
             ,
             1)
@@ -531,15 +531,15 @@ groups:
         clamp_min(
           clamp_max(
             (
-              process_open_fds{type=~"api|camoproxy|ci-runners|consul|customersdot|external-dns|frontend|google-cloud-storage|git|gitaly|jaeger|kas|kube|logging|mailroom|monitoring|nginx|patroni|patroni-registry|patroni-ci|postgres-archive|pgbouncer|pgbouncer-registry|pgbouncer-ci|plantuml|praefect|pvs|redis-cache|redis-sidekiq|redis-tracechunks|redis-ratelimiting|redis-cluster-ratelimiting|redis-sessions|redis-registry-cache|redis-repository-cache|redis|registry|search|sentry|sidekiq|vault|web-pages|web|websockets|woodhouse"}
+              process_open_fds{type=~"api|internal-api|camoproxy|ci-runners|consul|customersdot|external-dns|frontend|google-cloud-storage|git|gitaly|jaeger|kas|kube|logging|mailroom|monitoring|nginx|patroni|patroni-registry|patroni-ci|postgres-archive|pgbouncer|pgbouncer-registry|pgbouncer-ci|plantuml|praefect|pvs|redis-cache|redis-sidekiq|redis-tracechunks|redis-ratelimiting|redis-cluster-ratelimiting|redis-sessions|redis-registry-cache|redis-repository-cache|redis|registry|search|sentry|sidekiq|vault|web-pages|web|websockets|woodhouse"}
               /
-              process_max_fds{type=~"api|camoproxy|ci-runners|consul|customersdot|external-dns|frontend|google-cloud-storage|git|gitaly|jaeger|kas|kube|logging|mailroom|monitoring|nginx|patroni|patroni-registry|patroni-ci|postgres-archive|pgbouncer|pgbouncer-registry|pgbouncer-ci|plantuml|praefect|pvs|redis-cache|redis-sidekiq|redis-tracechunks|redis-ratelimiting|redis-cluster-ratelimiting|redis-sessions|redis-registry-cache|redis-repository-cache|redis|registry|search|sentry|sidekiq|vault|web-pages|web|websockets|woodhouse"}
+              process_max_fds{type=~"api|internal-api|camoproxy|ci-runners|consul|customersdot|external-dns|frontend|google-cloud-storage|git|gitaly|jaeger|kas|kube|logging|mailroom|monitoring|nginx|patroni|patroni-registry|patroni-ci|postgres-archive|pgbouncer|pgbouncer-registry|pgbouncer-ci|plantuml|praefect|pvs|redis-cache|redis-sidekiq|redis-tracechunks|redis-ratelimiting|redis-cluster-ratelimiting|redis-sessions|redis-registry-cache|redis-repository-cache|redis|registry|search|sentry|sidekiq|vault|web-pages|web|websockets|woodhouse"}
             )
             or
             (
-              ruby_file_descriptors{type=~"api|camoproxy|ci-runners|consul|customersdot|external-dns|frontend|google-cloud-storage|git|gitaly|jaeger|kas|kube|logging|mailroom|monitoring|nginx|patroni|patroni-registry|patroni-ci|postgres-archive|pgbouncer|pgbouncer-registry|pgbouncer-ci|plantuml|praefect|pvs|redis-cache|redis-sidekiq|redis-tracechunks|redis-ratelimiting|redis-cluster-ratelimiting|redis-sessions|redis-registry-cache|redis-repository-cache|redis|registry|search|sentry|sidekiq|vault|web-pages|web|websockets|woodhouse"}
+              ruby_file_descriptors{type=~"api|internal-api|camoproxy|ci-runners|consul|customersdot|external-dns|frontend|google-cloud-storage|git|gitaly|jaeger|kas|kube|logging|mailroom|monitoring|nginx|patroni|patroni-registry|patroni-ci|postgres-archive|pgbouncer|pgbouncer-registry|pgbouncer-ci|plantuml|praefect|pvs|redis-cache|redis-sidekiq|redis-tracechunks|redis-ratelimiting|redis-cluster-ratelimiting|redis-sessions|redis-registry-cache|redis-repository-cache|redis|registry|search|sentry|sidekiq|vault|web-pages|web|websockets|woodhouse"}
               /
-              ruby_process_max_fds{type=~"api|camoproxy|ci-runners|consul|customersdot|external-dns|frontend|google-cloud-storage|git|gitaly|jaeger|kas|kube|logging|mailroom|monitoring|nginx|patroni|patroni-registry|patroni-ci|postgres-archive|pgbouncer|pgbouncer-registry|pgbouncer-ci|plantuml|praefect|pvs|redis-cache|redis-sidekiq|redis-tracechunks|redis-ratelimiting|redis-cluster-ratelimiting|redis-sessions|redis-registry-cache|redis-repository-cache|redis|registry|search|sentry|sidekiq|vault|web-pages|web|websockets|woodhouse"}
+              ruby_process_max_fds{type=~"api|internal-api|camoproxy|ci-runners|consul|customersdot|external-dns|frontend|google-cloud-storage|git|gitaly|jaeger|kas|kube|logging|mailroom|monitoring|nginx|patroni|patroni-registry|patroni-ci|postgres-archive|pgbouncer|pgbouncer-registry|pgbouncer-ci|plantuml|praefect|pvs|redis-cache|redis-sidekiq|redis-tracechunks|redis-ratelimiting|redis-cluster-ratelimiting|redis-sessions|redis-registry-cache|redis-repository-cache|redis|registry|search|sentry|sidekiq|vault|web-pages|web|websockets|woodhouse"}
             )
             ,
             1)

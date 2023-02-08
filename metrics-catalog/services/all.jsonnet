@@ -4,6 +4,7 @@
 //
 [
   import 'api.jsonnet',
+  import 'internal-api.jsonnet',
   import 'camoproxy.jsonnet',
   import 'ci-runners.jsonnet',
   import 'cloud-sql.jsonnet',
