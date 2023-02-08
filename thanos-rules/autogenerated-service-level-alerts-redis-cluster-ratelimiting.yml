@@ -34,7 +34,6 @@ groups:
       severity: s4
       sli_type: ops
       slo_alert: "no"
-      team: scalability-823-introduce-redis-cluster
       user_impacting: "no"
     expr: |
       gitlab_component_ops:rate_30m{component="primary_server",monitor="global",stage="main",type="redis-cluster-ratelimiting"} == 0
@@ -71,7 +70,6 @@ groups:
       severity: s4
       sli_type: ops
       slo_alert: "no"
-      team: scalability-823-introduce-redis-cluster
       user_impacting: "no"
     expr: |
       gitlab_component_ops:rate_5m{component="primary_server",monitor="global",stage="main",type="redis-cluster-ratelimiting"} offset 1h
@@ -109,7 +107,6 @@ groups:
       severity: s4
       sli_type: apdex
       slo_alert: "yes"
-      team: scalability-823-introduce-redis-cluster
       user_impacting: "no"
       window: 1h
     expr: |
@@ -160,7 +157,6 @@ groups:
       severity: s4
       sli_type: apdex
       slo_alert: "yes"
-      team: scalability-823-introduce-redis-cluster
       user_impacting: "no"
       window: 6h
     expr: |
@@ -208,7 +204,6 @@ groups:
       severity: s4
       sli_type: error
       slo_alert: "yes"
-      team: scalability-823-introduce-redis-cluster
       user_impacting: "no"
       window: 1h
     expr: |
@@ -256,7 +251,6 @@ groups:
       severity: s4
       sli_type: error
       slo_alert: "yes"
-      team: scalability-823-introduce-redis-cluster
       user_impacting: "no"
       window: 6h
     expr: |
@@ -304,7 +298,6 @@ groups:
       severity: s4
       sli_type: ops
       slo_alert: "no"
-      team: scalability-823-introduce-redis-cluster
       user_impacting: "no"
     expr: |
       gitlab_component_ops:rate_30m{component="rails_redis_client",monitor="global",stage="main",type="redis-cluster-ratelimiting"} == 0
@@ -341,7 +334,6 @@ groups:
       severity: s4
       sli_type: ops
       slo_alert: "no"
-      team: scalability-823-introduce-redis-cluster
       user_impacting: "no"
     expr: |
       gitlab_component_ops:rate_5m{component="rails_redis_client",monitor="global",stage="main",type="redis-cluster-ratelimiting"} offset 1h
@@ -376,7 +368,6 @@ groups:
       severity: s4
       sli_type: ops
       slo_alert: "no"
-      team: scalability-823-introduce-redis-cluster
       user_impacting: "no"
     expr: |
       gitlab_component_ops:rate_30m{component="secondary_servers",monitor="global",stage="main",type="redis-cluster-ratelimiting"} == 0
@@ -413,7 +404,6 @@ groups:
       severity: s4
       sli_type: ops
       slo_alert: "no"
-      team: scalability-823-introduce-redis-cluster
       user_impacting: "no"
     expr: |
       gitlab_component_ops:rate_5m{component="secondary_servers",monitor="global",stage="main",type="redis-cluster-ratelimiting"} offset 1h

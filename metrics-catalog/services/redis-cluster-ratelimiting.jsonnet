@@ -13,21 +13,19 @@ metricsCatalog.serviceDefinition(
     monitoringThresholds+: {
       apdexScore: 0.9995,
     },
+    // disable alerts until we are receiving production traffic
     serviceLevelIndicators+: {
       rails_redis_client+: {
         userImpacting: false,
         severity: 's4',
-        team: 'scalability-823-introduce-redis-cluster',
       },
       primary_server+: {
         userImpacting: false,
         severity: 's4',
-        team: 'scalability-823-introduce-redis-cluster',
       },
       secondary_servers+: {
         userImpacting: false,
         severity: 's4',
-        team: 'scalability-823-introduce-redis-cluster',
       },
     },
 
