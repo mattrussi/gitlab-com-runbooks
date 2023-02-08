@@ -117,6 +117,70 @@ groups:
       tier: sv
       type: api
     expr: "0.000200"
+  - record: slo:min:gitlab_service_apdex:ratio
+    labels:
+      tier: sv
+      type: internal-api
+    expr: "0.900000"
+  - record: slo:max:gitlab_service_errors:ratio
+    labels:
+      tier: sv
+      type: internal-api
+    expr: "0.005000"
+  - record: slo:min:events:gitlab_service_apdex:ratio
+    labels:
+      tier: sv
+      type: internal-api
+    expr: "0.995000"
+  - record: slo:max:events:gitlab_service_errors:ratio
+    labels:
+      tier: sv
+      type: internal-api
+    expr: "0.001000"
+  - record: slo:min:events:gitlab_service_apdex:ratio
+    labels:
+      component: rails_request
+      tier: sv
+      type: internal-api
+    expr: "0.990000"
+  - record: slo:max:events:gitlab_service_errors:ratio
+    labels:
+      component: rails_request
+      tier: sv
+      type: internal-api
+    expr: "0.001000"
+  - record: slo:min:events:gitlab_service_apdex:ratio
+    labels:
+      component: workhorse
+      tier: sv
+      type: internal-api
+    expr: "0.995000"
+  - record: slo:max:events:gitlab_service_errors:ratio
+    labels:
+      component: workhorse
+      tier: sv
+      type: internal-api
+    expr: "0.001000"
+  - record: slo:min:deployment:gitlab_service_apdex:ratio
+    labels:
+      tier: sv
+      type: internal-api
+    expr: "0.995000"
+  - record: slo:max:deployment:gitlab_service_errors:ratio
+    labels:
+      tier: sv
+      type: internal-api
+    expr: "0.001000"
+  - record: slo:min:mtbf:gitlab_service_apdex:ratio
+    labels:
+      tier: sv
+      type: internal-api
+    expr: "0.998500"
+  - record: slo:max:mtbf:gitlab_service_errors:ratio
+    labels:
+      tier: sv
+      type: internal-api
+    expr: "0.000200"
   - record: slo:min:events:gitlab_service_apdex:ratio
     labels:
       tier: sv
@@ -2277,6 +2341,22 @@ groups:
       service_aggregation: "yes"
       tier: sv
       type: api
+    expr: "1"
+  - record: gitlab_component_service:mapping
+    labels:
+      component: rails_request
+      regional_aggregation: "yes"
+      service_aggregation: "yes"
+      tier: sv
+      type: internal-api
+    expr: "1"
+  - record: gitlab_component_service:mapping
+    labels:
+      component: workhorse
+      regional_aggregation: "yes"
+      service_aggregation: "yes"
+      tier: sv
+      type: internal-api
     expr: "1"
   - record: gitlab_component_service:mapping
     labels:

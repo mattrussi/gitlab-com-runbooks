@@ -30,7 +30,7 @@ services:
         Allows GitLab.com customers to interact with GitLab.com programmatically
         through a uniform interface
       SLA:
-        overall_sla_weighting: 5  # If this exists, this service will be included in the overall SLA, using this value as a weighted average
+        overall_sla_weighting: 5 # If this exists, this service will be included in the overall SLA, using this value as a weighted average
         availability:
         response_time:
     technical:
@@ -164,11 +164,13 @@ services:
     friendly_name: Camoproxy
     label: Service:Camoproxy
     business:
-      requirement: Camo is an SSL image proxy to prevent mixed content warnings on
+      requirement:
+        Camo is an SSL image proxy to prevent mixed content warnings on
         secure pages.
       customers:
         - GitLab.com customers
-      business_value: Prevents insecure user content on TLS-encrypted pages, by proxying
+      business_value:
+        Prevents insecure user content on TLS-encrypted pages, by proxying
         the content through the camoproxy.
       SLA:
         availability:
@@ -370,7 +372,7 @@ services:
     tier: sv
     friendly_name: contributors.gitlab.com
     teams:
-      - verify  # The service is maintained by Matija Čupić who is part of the Verify team
+      - verify # The service is maintained by Matija Čupić who is part of the Verify team
     label: Service:Contributors
     business:
       requirement: It allows giving credits to GitLab CE contributors.
@@ -493,11 +495,11 @@ services:
       architecture: https://gitlab.com/gitlab-org/customers-gitlab-com/blob/main/doc/architecture/index.md
       provisioning: terraform
       accesses:
-        - account_name:  # User or system account that has access to the service components in the infra provider
-          access_type:   # Level of access
-          reviewed:      # Is it reviewed and approved?
+        - account_name: # User or system account that has access to the service components in the infra provider
+          access_type: # Level of access
+          reviewed: # Is it reviewed and approved?
     operations:
-      maintenance:  # Link to maintenance procedures document
+      maintenance: # Link to maintenance procedures document
       runbooks:
       playbooks:
         - https://gitlab.com/gitlab-org/customersdot-ansible
@@ -612,16 +614,19 @@ services:
     friendly_name: Logging
     label: Service:Logging
     business:
-      requirement: We are required to keep logs, both on legal terms as well as for
+      requirement:
+        We are required to keep logs, both on legal terms as well as for
         debugging production issues
       customers:
         - infrastructure, security, engineering
-      business_value: Without logging we might not be able to comply with legal requirements
+      business_value:
+        Without logging we might not be able to comply with legal requirements
         and are unable to debug production issues.
       SLA:
         availability:
-        response_time: 'Elastic Support SLA: L1 - 4 business hours, L2 - 1 business
-          day, L3 - 2 business days'
+        response_time:
+          "Elastic Support SLA: L1 - 4 business hours, L2 - 1 business
+          day, L3 - 2 business days"
     technical:
       project:
       slx:
@@ -673,7 +678,8 @@ services:
         - gstg-infra-sd-exporter
         - ops-infra-sd-exporter
       scalability:
-        note: We run fluentd for logs on each host; Google PubSub topics and stackdriver
+        note:
+          We run fluentd for logs on each host; Google PubSub topics and stackdriver
           are cloud services; We can only sensibly scale out pubsubbeats. ELK can
           be scaled horizontally.
         bound: cpu, memory, storage
@@ -846,7 +852,7 @@ services:
       business_value: |
         Allows GitLab.com customers to interact with GitLab.com through web-based interface.
       SLA:
-        overall_sla_weighting: 5  # If this exists, this service will be included in the overall SLA, using this value as a weighted average
+        overall_sla_weighting: 5 # If this exists, this service will be included in the overall SLA, using this value as a weighted average
         availability:
         response_time:
     technical:
@@ -1013,16 +1019,17 @@ services:
       customers:
         - GitLab.com customers
         - GitLab Employees
-      business_value: This is the standard way of working with and managing remote
+      business_value:
+        This is the standard way of working with and managing remote
         repositories.
       SLA:
-        overall_sla_weighting: 5  # If this exists, this service will be included in the overall SLA, using this value as a weighted average
+        overall_sla_weighting: 5 # If this exists, this service will be included in the overall SLA, using this value as a weighted average
         availability:
         response_time:
     technical:
       project:
-        - https://gitlab.com/gitlab-org/gitlab-shell  # SSH
-        - https://gitlab.com/gitlab-org/gitlab-workhorse  # HTTP
+        - https://gitlab.com/gitlab-org/gitlab-shell # SSH
+        - https://gitlab.com/gitlab-org/gitlab-workhorse # HTTP
       documents:
         design:
         architecture: https://about.gitlab.com/handbook/engineering/infrastructure/production-architecture/#infra-current-archi-diagram
@@ -1122,8 +1129,8 @@ services:
         security:
       dependencies:
         - service: gitaly
-        - service: frontend  # through gitlab-shell
-        - service: redis  # through gitlab-shell
+        - service: frontend # through gitlab-shell
+        - service: redis # through gitlab-shell
       configurations:
         - config_name: Gitaly config
           location: /var/opt/gitlab/gitaly/config.toml
@@ -1379,7 +1386,8 @@ services:
       requirement: It is needed to allow responding to issues/MR through email replies.
       customers:
         - GitLab.com customers
-      business_value: It is convenient to users to respond to issues/MRs through email
+      business_value:
+        It is convenient to users to respond to issues/MRs through email
         replies.
 
       SLA:
@@ -1446,7 +1454,7 @@ services:
         It allows hosting static websites on GitLab.com for free, which can be an incentive
         for new users to join and use GitLab.com.
       SLA:
-        overall_sla_weighting: 0  # Treated as a primary service, but with a zero weight for now
+        overall_sla_weighting: 0 # Treated as a primary service, but with a zero weight for now
         availability:
         response_time:
     technical:
@@ -1510,8 +1518,8 @@ services:
       business_value: |
         It allows pooling and reusing server connections to reduce the number of database conections.
       SLA:
-        availability:   # Availability SLA promised to customers
-        response_time:  # Response time for inquiries or issues relating this service
+        availability: # Availability SLA promised to customers
+        response_time: # Response time for inquiries or issues relating this service
     technical:
       project:
         - https://github.com/pgbouncer/pgbouncer
@@ -1527,7 +1535,7 @@ services:
         security:
       dependencies:
         - service: postgres
-      configurations:  # A service might have one or more configs
+      configurations: # A service might have one or more configs
         - config_name: pgbouncer.ini
           location: /var/opt/gitlab/pgbouncer/pgbouncer.ini
       chef_roles:
@@ -1552,11 +1560,11 @@ services:
       architecture: https://about.gitlab.com/handbook/engineering/infrastructure/production-architecture/#database-architecture
       provisioning: terraform
       accesses:
-        - account_name:  # User or system account that has access to the service components in the infra provider
-          access_type:   # Level of access
-          reviewed:      # Is it reviewed and approved?
+        - account_name: # User or system account that has access to the service components in the infra provider
+          access_type: # Level of access
+          reviewed: # Is it reviewed and approved?
     operations:
-      maintenance:  # Link to maintenance procedures document
+      maintenance: # Link to maintenance procedures document
       runbooks:
         - https://gitlab.com/gitlab-com/runbooks/blob/master/docs/pgbouncer/pgbouncer.md
       playbooks:
@@ -1579,8 +1587,8 @@ services:
       business_value: |
         It allows pooling and reusing server connections to reduce the number of database conections.
       SLA:
-        availability:   # Availability SLA promised to customers
-        response_time:  # Response time for inquiries or issues relating this service
+        availability: # Availability SLA promised to customers
+        response_time: # Response time for inquiries or issues relating this service
     technical:
       project:
         - https://github.com/pgbouncer/pgbouncer
@@ -1596,7 +1604,7 @@ services:
         security:
       dependencies:
         - service: postgres
-      configurations:  # A service might have one or more configs
+      configurations: # A service might have one or more configs
         - config_name: pgbouncer.ini
           location: /var/opt/gitlab/pgbouncer/pgbouncer.ini
       chef_roles:
@@ -1623,11 +1631,11 @@ services:
       architecture: https://about.gitlab.com/handbook/engineering/infrastructure/production-architecture/#database-architecture
       provisioning: terraform
       accesses:
-        - account_name:  # User or system account that has access to the service components in the infra provider
-          access_type:   # Level of access
-          reviewed:      # Is it reviewed and approved?
+        - account_name: # User or system account that has access to the service components in the infra provider
+          access_type: # Level of access
+          reviewed: # Is it reviewed and approved?
     operations:
-      maintenance:  # Link to maintenance procedures document
+      maintenance: # Link to maintenance procedures document
       runbooks:
         - https://gitlab.com/gitlab-com/runbooks/blob/master/docs/pgbouncer/pgbouncer.md
       playbooks:
@@ -1650,8 +1658,8 @@ services:
       business_value: |
         It allows pooling and reusing server connections to reduce the number of database conections.
       SLA:
-        availability:   # Availability SLA promised to customers
-        response_time:  # Response time for inquiries or issues relating this service
+        availability: # Availability SLA promised to customers
+        response_time: # Response time for inquiries or issues relating this service
     technical:
       project:
         - https://github.com/pgbouncer/pgbouncer
@@ -1667,7 +1675,7 @@ services:
         security:
       dependencies:
         - service: postgres
-      configurations:  # A service might have one or more configs
+      configurations: # A service might have one or more configs
         - config_name: pgbouncer.ini
           location: /var/opt/gitlab/pgbouncer/pgbouncer.ini
       chef_roles:
@@ -1694,11 +1702,11 @@ services:
       architecture: https://about.gitlab.com/handbook/engineering/infrastructure/production-architecture/#database-architecture
       provisioning: terraform
       accesses:
-        - account_name:  # User or system account that has access to the service components in the infra provider
-          access_type:   # Level of access
-          reviewed:      # Is it reviewed and approved?
+        - account_name: # User or system account that has access to the service components in the infra provider
+          access_type: # Level of access
+          reviewed: # Is it reviewed and approved?
     operations:
-      maintenance:  # Link to maintenance procedures document
+      maintenance: # Link to maintenance procedures document
       runbooks:
         - https://gitlab.com/gitlab-com/runbooks/blob/master/docs/pgbouncer/pgbouncer.md
       playbooks:
@@ -1725,8 +1733,8 @@ services:
         We use Patroni as the high-availability solution, PGBouncer as the pooling solution, and WAL-G as the backup solution.
 
       SLA:
-        availability:   # Availability SLA promised to customers
-        response_time:  # Response time for inquiries or issues relating this service
+        availability: # Availability SLA promised to customers
+        response_time: # Response time for inquiries or issues relating this service
     technical:
       project:
         - https://github.com/postgres/postgres
@@ -1760,7 +1768,8 @@ services:
         - gprd-base-db-patroni
       scalability:
         bound: cpu, memory, disk
-        scalable: horizontal or vertical. We can horizontally scale by adding more
+        scalable:
+          horizontal or vertical. We can horizontally scale by adding more
           read only replicas to serve read oprations. However, for serving read/write
           operations we may need to scale vertically.
       security:
@@ -1814,8 +1823,8 @@ services:
         We use Patroni as the high-availability solution, PGBouncer as the pooling solution, and WAL-G as the backup solution.
 
       SLA:
-        availability:   # Availability SLA promised to customers
-        response_time:  # Response time for inquiries or issues relating this service
+        availability: # Availability SLA promised to customers
+        response_time: # Response time for inquiries or issues relating this service
     technical:
       project:
         - https://github.com/postgres/postgres
@@ -1849,7 +1858,8 @@ services:
         - gprd-base-db-patroni-registry
       scalability:
         bound: cpu, memory, disk
-        scalable: horizontal or vertical. We can horizontally scale by adding more
+        scalable:
+          horizontal or vertical. We can horizontally scale by adding more
           read only replicas to serve read oprations. However, for serving read/write
           operations we may need to scale vertically.
       security:
@@ -1858,9 +1868,9 @@ services:
         security_incidents:
       logging:
         - name: Postgres
-          permalink: https://log.gprd.gitlab.net/goto/d0f8993486c9007a69d85e3a08f1ea7c  # TODO: Update when provisioned in gprd
+          permalink: https://log.gprd.gitlab.net/goto/d0f8993486c9007a69d85e3a08f1ea7c # TODO: Update when provisioned in gprd
         - name: system
-          permalink: https://log.gprd.gitlab.net/goto/3669d551a595a3a5cf1e9318b74e6c22  # TODO: Update when provisioned in gprd
+          permalink: https://log.gprd.gitlab.net/goto/3669d551a595a3a5cf1e9318b74e6c22 # TODO: Update when provisioned in gprd
     infrastructure:
       provider: gcp
       architecture: https://about.gitlab.com/handbook/engineering/infrastructure/production-architecture/#database-architecture
@@ -1885,7 +1895,7 @@ services:
       error_budget: https://docs.google.com/spreadsheets/d/1wkK2n5EAvoVXwQZrVoCDsvkYTb1BftL56EzsFW_IA-w/edit
     observability:
       monitors:
-        grafana_folder: RNfEDpLmz  # TODO: Update when provisioned
+        grafana_folder: RNfEDpLmz # TODO: Update when provisioned
         primary_grafana_dashboard: patroni-main/patroni-overview
 
   - name: patroni-ci
@@ -1903,8 +1913,8 @@ services:
         We use Patroni as the high-availability solution, PGBouncer as the pooling solution, and WAL-G as the backup solution.
 
       SLA:
-        availability:   # Availability SLA promised to customers
-        response_time:  # Response time for inquiries or issues relating this service
+        availability: # Availability SLA promised to customers
+        response_time: # Response time for inquiries or issues relating this service
     technical:
       project:
         - https://github.com/postgres/postgres
@@ -1938,7 +1948,8 @@ services:
         - gprd-base-db-patroni-ci
       scalability:
         bound: cpu, memory, disk
-        scalable: horizontal or vertical. We can horizontally scale by adding more
+        scalable:
+          horizontal or vertical. We can horizontally scale by adding more
           read only replicas to serve read oprations. However, for serving read/write
           operations we may need to scale vertically.
       security:
@@ -1947,9 +1958,9 @@ services:
         security_incidents:
       logging:
         - name: Postgres
-          permalink: https://log.gprd.gitlab.net/goto/d0f8993486c9007a69d85e3a08f1ea7c  # TODO: Update when provisioned in gprd
+          permalink: https://log.gprd.gitlab.net/goto/d0f8993486c9007a69d85e3a08f1ea7c # TODO: Update when provisioned in gprd
         - name: system
-          permalink: https://log.gprd.gitlab.net/goto/3669d551a595a3a5cf1e9318b74e6c22  # TODO: Update when provisioned in gprd
+          permalink: https://log.gprd.gitlab.net/goto/3669d551a595a3a5cf1e9318b74e6c22 # TODO: Update when provisioned in gprd
     infrastructure:
       provider: gcp
       architecture: https://about.gitlab.com/handbook/engineering/infrastructure/production-architecture/#database-architecture
@@ -1974,7 +1985,7 @@ services:
       error_budget: https://docs.google.com/spreadsheets/d/1wkK2n5EAvoVXwQZrVoCDsvkYTb1BftL56EzsFW_IA-w/edit
     observability:
       monitors:
-        grafana_folder: RNfEDpLmz  # TODO: Update when provisioned
+        grafana_folder: RNfEDpLmz # TODO: Update when provisioned
         primary_grafana_dashboard: patroni-ci-main/patroni-ci-overview
 
   - name: plantuml
@@ -1986,8 +1997,8 @@ services:
       customers:
         - GitLab.com customers
       SLA:
-        availability:   # Availability SLA promised to customers
-        response_time:  # Response time for inquiries or issues relating this service
+        availability: # Availability SLA promised to customers
+        response_time: # Response time for inquiries or issues relating this service
       business_value: PlantUML is used to render unified modeling language (UML) diagrams.
     technical:
       project:
@@ -3006,7 +3017,7 @@ services:
         GitLab is all about having a single, integrated experience and registry is no exception.
         Customers can easily use their images for GitLab CI, create images specific for tags or branches and much more.
       SLA:
-        overall_sla_weighting: 1  # If this exists, this service will be included in the overall SLA, using this value as a weighted average
+        overall_sla_weighting: 1 # If this exists, this service will be included in the overall SLA, using this value as a weighted average
         availability:
         response_time:
     technical:
@@ -3023,7 +3034,7 @@ services:
           - https://github.com/docker/distribution/blob/364d2e4a5bed94e9393dd88232ea3be29ca8f27a/README.md
         security:
       dependencies:
-        - service: web  # For JWT authentication
+        - service: web # For JWT authentication
       configurations:
         - config_name: Registry
           location: /etc/docker/registry/config.yml
@@ -3300,7 +3311,8 @@ services:
         - version-gitlab-com
         - version-gitlab-walg
       scalability:
-        note: Per unit work is CPU bound. Therefore, scaling the service horizontally
+        note:
+          Per unit work is CPU bound. Therefore, scaling the service horizontally
           would be the right thing to do. However, Version is a self-contained app
           and its DB runs locally on the same host. Therefore, horizontal scaling
           wouldn't work. Our option for now is to scale up the service vertically.
@@ -3433,7 +3445,7 @@ services:
         account up to 2000 minutes, but more can be purchased by upgrading
         to a higher plan.
       SLA:
-        overall_sla_weighting: 0  # Treated as a primary service, but with a zero weight for now
+        overall_sla_weighting: 0 # Treated as a primary service, but with a zero weight for now
         availability:
         response_time: p95 of 60 second job pick up latency
     technical:
@@ -4123,3 +4135,75 @@ services:
       monitors:
         grafana_folder:
         primary_grafana_dashboard:
+  - name: internal-api
+    friendly_name: GitLab Internal API
+    tier: sv
+    teams:
+      - create
+      - distribution_deploy
+      - geo
+      - manage
+      - plan
+    label: Service:Internal-API
+    business:
+      requirement: |
+        GitLab services use internal API for requests routed to /api/v4/internal endpoint.
+      customers:
+        - Internally used by multiple services for requests routed to /api/v4/internal endpoint.
+      business_value: |
+        Separate internal requests routed to /api/v4/internal endpoint from the rest of the traffic
+      SLA:
+        overall_sla_weighting: 5 # If this exists, this service will be included in the overall SLA, using this value as a weighted average
+        availability:
+        response_time:
+    technical:
+      project:
+        - https://gitlab.com/gitlab-org/gitlab
+      slx:
+      documents:
+        design: https://gitlab.com/groups/gitlab-com/gl-infra/-/epics/879
+        architecture: https://about.gitlab.com/handbook/engineering/infrastructure/production-architecture/#service-architecture
+        readiness_review: https://gitlab.com/gitlab-com/gl-infra/delivery/-/issues/2787
+        sre_guide: https://gitlab.com/gitlab-com/runbooks/-/tree/master/docs/internal-api
+        developer_guide: https://docs.gitlab.com/ee/development/internal_api
+        service:
+          - https://docs.gitlab.com/ce/api/
+          - https://docs.gitlab.com/ee/api/
+        security:
+      dependencies:
+        - service: consul
+        - service: postgres
+        - service: gitaly
+        - service: redis
+      configurations:
+        - location: /srv/gitlab/config
+          name: webservice
+        - location: /srv/gitlab/config
+          name: workhorse-config.toml
+      scalability:
+        bound: cpu
+        scalable: horizontal
+      security:
+        security_reviewed:
+        data_classification:
+        security_incidents: []
+      logging:
+        - name: Rails
+          permalink: https://log.gprd.gitlab.net/goto/82dff8e0-a6d3-11ed-9f43-e3784d7fe3ca
+        - name: Workhorse
+          permalink: https://log.gprd.gitlab.net/goto/624babb0-a6d3-11ed-9f43-e3784d7fe3ca
+        - name: Kubernetes
+          permalink: https://log.gprd.gitlab.net/goto/ecea3b70-a6d2-11ed-85ed-e7557b0a598c
+    infrastructure:
+      provider: gcp
+      architecture: gke
+      provisioning: kubernetes
+    operations:
+      runbooks:
+        - https://gitlab.com/gitlab-com/runbooks/-/tree/master/docs/internal-api
+      playbooks:
+      error_budget: https://gitlab.com/gitlab-com/gl-infra/delivery/-/issues/2838
+    observability:
+      monitors:
+        primary_grafana_dashboard: internal-api-main/internal-api-overview
+        sentry_slug: gitlab/gitlabcom/?query=program%3A%22rails%22
