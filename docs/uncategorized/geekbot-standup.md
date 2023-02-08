@@ -7,7 +7,7 @@
 
 ## Managing/Creating Standups
 
-You can login to Geekbot with your Slack Credentials and go to https://app.geekbot.com/dashboard/home.
+You can login to Geekbot with your Slack Credentials and go to [the dashboard](https://app.geekbot.com/dashboard/home).
 All standups that you are a part of will be listed there.  There should also be a `+New Standup` in the uppper right if you wish to create
 a new standup for a team or other purpose.  They have many helpful templates if you wish to have a starting point.
 
