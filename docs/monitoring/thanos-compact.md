@@ -16,6 +16,8 @@ close attention to the alert's metadata to determine where to look.
 * Storage, Large compactions may trigger a full filesystem. Restart of `thanos-compact` will clear the compaction cache.
 * Halted compaction (ThanosCompactHalted alerts). See various scenarios below.
 
+Dashboard of Thanos [compaction/downsample activity](https://dashboards.gitlab.net/d/kQX9udS4z/thanos-compactor?orgId=1&refresh=5m)
+
 ### Overlapping TSDB blocks
 
 If you see log lines similar to this:
