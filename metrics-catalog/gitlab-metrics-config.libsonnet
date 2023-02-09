@@ -33,6 +33,9 @@ local objects = import 'utils/objects.libsonnet';
   // stage-group-mapping.jsonnet is generated file, stored in the `services` directory
   stageGroupMapping:: import 'stage-group-mapping.jsonnet',
 
+  // stage-group-mapping-crossover.jsonnet is generated file, stored in the `services` directory
+  stageGroupMappingCrossover:: import 'stage-group-mapping-crossover.jsonnet',
+
   // The base selector for the environment, as configured in Grafana dashboards
   grafanaEnvironmentSelector:: { environment: '$environment', env: '$environment' },
 

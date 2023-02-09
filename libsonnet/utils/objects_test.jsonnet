@@ -68,4 +68,12 @@ test.suite({
     expect: {},
   },
 
+  testInvert: {
+    actual: objects.invert({ a: 1, b: 2 }),
+    expect: { '1': 'a', '2': 'b' },
+  },
+  testInvertDuplicates: {
+    actual: objects.invert({ a: '', b: '', c: 3 }),
+    expect: { '': 'a', '3': 'c' },
+  },
 })
