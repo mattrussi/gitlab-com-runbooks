@@ -3001,6 +3001,32 @@ services:
       monitors:
         primary_grafana_dashboard: redis-registry-cache-main/redis-registry-cache-overview
 
+  - name: redis-db-load-balancing
+    tier: db
+    friendly_name: Redis Database Load Balancing
+    label: Service:Redis
+    technical:
+      project:
+        - https://github.com/redis/redis
+      documents:
+        design:
+        architecture:
+        readiness_review:
+        sre_guide: https://gitlab.com/gitlab-com/runbooks/-/tree/master/docs/redis-cache
+        developer_guide: https://docs.gitlab.com/ee/development/redis.html#redis-guidelines
+        service:
+          - https://redis.io/documentation
+          - https://docs.gitlab.com/omnibus/settings/redis.html
+        security:
+      dependencies:
+        - service:
+      logging:
+        - name: system
+          permalink: https://log.gprd.gitlab.net/goto/e6a0f170-a8ce-11ed-85ed-e7557b0a598c
+    observability:
+      monitors:
+        primary_grafana_dashboard: redis-db-load-balancing-main/redis-db-load-balancing-overview
+
   - name: registry
     tier: sv
     friendly_name: Container Registry
