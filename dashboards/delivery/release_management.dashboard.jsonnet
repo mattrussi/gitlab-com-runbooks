@@ -163,7 +163,7 @@ local
       )
     );
 
-// Bar Gauge panel used by top-level Release pressure (deprecated)
+// Bar Gauge panel used by top-level Release pressure (based on pick labels)
 local bargaugePanel(
   title,
   description='',
@@ -267,10 +267,10 @@ basic.dashboard(
         ],
       ),
     ],
-    // Column 4: release pressure (Deprecated)
+    // Column 4: release pressure (based on pick labels)
     [
       bargaugePanel(
-        'Release pressure (deprecated)',
+        'Release pressure',
         description='Number of `Pick into` merge requests for previous releases.',
         query=|||
           sum(delivery_release_pressure{state="merged"}) by (state, version)
@@ -297,7 +297,7 @@ basic.dashboard(
     // Column 5: Patch release pressure
     [
       statPanel.new(
-        'Patch release pressure',
+        'Patch release pressure (not ready for use)',
         description='Total of unreleased S1/S2 merge requests merged into stable branches',
         reducerFunction='lastNotNull',
         colorMode='value',
@@ -318,7 +318,7 @@ basic.dashboard(
         },
       },
       statPanel.new(
-        'Patch release pressure',
+        'Patch release pressure (not ready for use)',
         description='Total of unreleased merge requests merged into stable branches',
         reducerFunction='lastNotNull',
         colorMode='value',
@@ -357,14 +357,14 @@ basic.dashboard(
   ], cellHeights=[3 for x in environments], startRow=1)
 )
 .addPanel(
-  row.new(title='Patch release pressure'),
+  row.new(title='Patch release pressure (not ready for use)'),
   gridPos={ x: 0, y: 1000, w: 24, h: 12 },
 )
 .addPanels(
   layout.grid(
     [
       bargaugePanel(
-        'S1/S2 MR Pressure',
+        'S1/S2 MR Pressure (not ready for use)',
         description='Number of S1/S2 merge requests merged in previous releases.',
         query=|||
           sum by (version) (delivery_release_pressure{severity=~"severity::1|severity::2",job="delivery-metrics"})
@@ -379,7 +379,7 @@ basic.dashboard(
         },
       ),
       bargaugePanel(
-        'Total MR Pressure',
+        'Total MR Pressure (not ready for use)',
         description='Number of merge requests merged in previous releases.',
         query=|||
           sum by (version) (delivery_release_pressure{job="delivery-metrics"})
