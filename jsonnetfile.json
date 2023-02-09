@@ -22,6 +22,15 @@
     {
       "source": {
         "git": {
+          "remote": "https://github.com/grafana/jsonnet-libs.git",
+          "subdir": "memcached-mixin"
+        }
+      },
+      "version": "master"
+    },
+    {
+      "source": {
+        "git": {
           "remote": "https://github.com/jsonnet-libs/xtd.git",
           "subdir": ""
         }
