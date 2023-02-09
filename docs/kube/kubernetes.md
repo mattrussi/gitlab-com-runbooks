@@ -203,3 +203,14 @@ There are many reasons why containers will fail to start, but some include:
 1. A configuration error has been pushed to the application, resulting in a termination during startup and a `CrashLoopBackOff`.
 1. Kubernetes is unable to pull the required image from the registry
 1. An increase in the amount of containers that need to be created during a deployment.
+1. Calico-typha pods have undergone a recent migration/failure (see below)
+
+### Calico Related Failures
+
+To check if a calico related migration or failure is the cause, follow the steps:
+
+```bash
+1. kubectl get pods -n kube-system | grep calico-typha
+    1. # Have any of the pods restarted recently around the time of the incident?
+1. kubectl logs calico-typha-XXX-YYY -n kube-system
+```
