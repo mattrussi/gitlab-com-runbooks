@@ -119,7 +119,7 @@ ensure-generated-content-up-to-date: generate
 
 .PHONY: .update-feature-categories
 .update-feature-categories:
-	./scripts/update_stage_groups_feature_categories.rb && ./scripts/update_stage_groups_dashboards.rb && ./scripts/update_stage_error_budget_dashboards.rb
+	./scripts/update_stage_groups_feature_categories.rb && ./scripts/update_stage_groups_dashboards.rb && ./scripts/update_stage_error_budget_dashboards.rb && ./scripts/generate_crossover_stage_group_mappings.rb
 
 .PHONY: update-feature-categories
 update-feature-categories: .update-feature-categories generate
