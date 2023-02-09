@@ -347,6 +347,8 @@ teams:
   product_stage_group: threat_insights
   ignored_components:
   - graphql_query
+  slack_error_budget_channel: g_govern_threat_insights
+  send_error_budget_weekly_to_slack: true
 - name: billing_and_subscription_management
   product_stage_group: billing_and_subscription_management
   ignored_components:
