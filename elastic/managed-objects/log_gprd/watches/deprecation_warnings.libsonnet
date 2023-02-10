@@ -70,7 +70,7 @@ local es_query = function(index)
           throttle_period: query_period + 'm',
           slack: {
             message: {
-              from: 'ElasticCloud Watcher: :%(titleLower)s: %(title)s deprecation warnings' % {
+              from: 'ElasticCloud Watcher: %(title)s deprecations' % {
                 title: title,
                 titleLower: std.asciiLower(title),
               },
@@ -80,7 +80,7 @@ local es_query = function(index)
               text: '{{ctx.payload.hits.total}} deprecation warnings detected. These can turn into hard failures if a library is upgraded.',
               attachments: [
                 {
-                  title: ':eyes: Latest warnings:',
+                  title: ':warning: Latest warnings:',
                   text: link,
                 },
               ],
