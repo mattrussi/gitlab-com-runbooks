@@ -61,30 +61,11 @@ def validate(known_stage_groups)
 
     # Business
     # =========
-    business = service["business"]
 
     # Business requirements are optional for purely technical services
-    if business
-      # requirement
-      requirement = business["requirement"]
-      raise "'#{service_name}' | requirement field must be string" unless requirement.is_a? String
-
-      # customers
-      requirement = business["customers"]
-      raise "'#{service_name}' | customers field must be list" unless requirement.is_a? Array
-
-      # business_value
-      value = business["business_value"]
-      raise "'#{service_name}' | business_value field must be string" unless value.is_a? String
-
-      # availability
-      availability = business["SLA"]["availability"]
-      raise "'#{service_name}' | availability field must be string" unless availability.is_a?(String) || availability.nil?
-
-      # response_time
-      response_time = business["SLA"]["response_time"]
-      raise "'#{service_name}' | response_time field must be string" unless response_time.is_a?(String) || response_time.nil?
-    end
+    # overall_sla_weighting
+    overall_sla_weighting = service.dig("business", "SLA", "overall_sla_weighting")
+    raise "'#{service_name}' | overall_sla_weighting field must be integer" unless overall_sla_weighting.is_a?(Integer) || overall_sla_weighting.nil?
 
     # Technical
     # =========
@@ -92,10 +73,6 @@ def validate(known_stage_groups)
     # project
     project = service.dig("technical", "project")
     raise "'#{service_name}' | project field must be list" unless project.is_a?(Array) || project.nil?
-
-    # slx
-    slx = service.dig("technical", "slx")
-    raise "'#{service_name}' | slx field must be string" unless slx.is_a?(String) || slx.nil?
 
     # design
     design_doc = service.dig("technical", "documents", "design")
@@ -121,52 +98,6 @@ def validate(known_stage_groups)
       raise "'#{service_name}' | dependency value must be string" unless dependency["service"].is_a?(String) || dependency["service"].nil?
     end
 
-    # configurations
-    configurations = service.dig("technical", "configurations")
-    raise "'#{service_name}' | configurations field must be list" unless configurations.is_a?(Array) || configurations.nil?
-
-    configurations&.each do |configuration|
-      raise "'#{service_name}' | config_name value must be string" unless configuration["config_name"].is_a?(String) || configuration["config_name"].nil?
-      raise "'#{service_name}' | location value must be string" unless configuration["location"].is_a?(String) || configuration["location"].nil?
-    end
-
-    # chef_roles
-    chef_roles = service.dig("technical", "chef_roles")
-    raise "'#{service_name}' | chef_roles field must be list" unless chef_roles.is_a?(Array) || chef_roles.nil?
-
-    # scalability
-    scalability = service.dig("technical", "scalability")
-
-    if scalability
-      # node
-      node = scalability["note"]
-      raise "'#{service_name}' | node field must be string" unless node.is_a?(String) || node.nil?
-
-      # bound
-      bound = scalability["bound"]
-      raise "'#{service_name}' | bound field must be string" unless bound.is_a?(String) || bound.nil?
-
-      # scalable
-      scalable = scalability["scalable"]
-      raise "'#{service_name}' | scalable field must be string" unless scalable.is_a?(String) || scalable.nil?
-    end
-
-    # security_reviewed
-    security = service.dig("technical", "security")
-
-    if security
-      security_reviewed = security["security_reviewed"]
-      raise "'#{service_name}' | security_reviewed field must be string" unless security_reviewed.is_a?(String) || security_reviewed.nil?
-
-      # data_classification
-      data_classification = security["data_classification"]
-      raise "'#{service_name}' | data_classification field must be string" unless data_classification.is_a?(String) || data_classification.nil?
-
-      # security_incidents
-      security_incidents = security["security_incidents"]
-      raise "'#{service_name}' | security_incidents field must be list" unless security_incidents.is_a?(Array) || security_incidents.nil?
-    end
-
     # logging
     logging = service.dig("technical", "logging")
     if logging
@@ -178,44 +109,6 @@ def validate(known_stage_groups)
         raise "'#{service_name}' | log permalink field must be string" unless log["permalink"].is_a?(String) || log["permalink"].nil?
       end
     end
-
-    # provider
-    provider = service.dig("infrastructure", "provider")
-    raise "'#{service_name}' | provider field must be string" unless provider.is_a? String
-
-    # architecture
-    architecture = service.dig("infrastructure", "architecture")
-    raise "'#{service_name}' | architecture field must be string" unless architecture.is_a?(String) || architecture.nil?
-
-    # provisioning
-    provisioning = service.dig("infrastructure", "provisioning")
-    raise "'#{service_name}' | provisioning field must be string" unless provisioning.is_a?(String) || provisioning.nil?
-
-    # accesses
-    accesses = service.dig("infrastructure", "accesses")
-    raise "'#{service_name}' | accesses field must be list" unless accesses.is_a?(Array) || accesses.nil?
-
-    accesses&.each do |access|
-      raise "'#{service_name}' | access account_name field must be string" unless access["account_name"].is_a?(Array) || access["account_name"].nil?
-      raise "'#{service_name}' | access access_type field must be string" unless access["access_type"].is_a?(Array) || access["access_type"].nil?
-      raise "'#{service_name}' | access reviewed field must be string" unless access["reviewed"].is_a?(Array) || access["reviewed"].nil?
-    end
-
-    # maintenance
-    maintenance = service.dig("operations", "maintenance")
-    raise "'#{service_name}' | maintenance field must be string" unless maintenance.is_a?(String) || maintenance.nil?
-
-    # runbooks
-    runbooks = service.dig("operations", "runbooks")
-    raise "'#{service_name}' | runbooks field must be list" unless runbooks.is_a?(Array) || runbooks.nil?
-
-    # playbooks
-    playbooks = service.dig("operations", "playbooks")
-    raise "'#{service_name}' | playbooks field must be list" unless playbooks.is_a?(Array) || playbooks.nil?
-
-    # error_budget
-    error_budget = service.dig("operations", "error_budget")
-    raise "'#{service_name}' | error_budget field must be string" unless error_budget.is_a?(String) || error_budget.nil?
 
     # observability
     # monitors
