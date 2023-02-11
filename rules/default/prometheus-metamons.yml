@@ -42,12 +42,26 @@ groups:
       title: 'Prometheus not connected to any Alertmanagers'
 
   - alert: PrometheusManyRestarts
-    expr: round(changes(process_start_time_seconds{job=~"(alertmanager|prometheus|thanos)"}[1h])) > 2
+    expr: round(changes(process_start_time_seconds{job=~"(alertmanager|prometheus|thanos)",fqdn!~"thanos-compact-.+"}[1h])) > 2
     for: 30m
     labels:
       pager: pagerduty
       severity: s1
       alert_type: cause
+    annotations:
+      description: '{{$labels.job}} at {{$labels.instance}} {{$labels.pod}} has restarted more than
+        {{ $value }} times in the last hour. It may be crashlooping.'
+      runbook: docs/monitoring/prometheus-is-down.md#thanos-compact
+      title: '{{$labels.job}} is restarting frequently'
+
+  - alert: ThanosCompactManyRestarts
+    expr: round(changes(process_start_time_seconds{job="thanos",fqdn=~"thanos-compact-.+"}[1h])) > 2
+    for: 30m
+    labels:
+      pager: pagerduty
+      severity: s3
+      alert_type: cause
+      incident_project: gitlab.com/gitlab-com/gl-infra/production
     annotations:
       description: '{{$labels.job}} at {{$labels.instance}} {{$labels.pod}} has restarted more than
         {{ $value }} times in the last hour. It may be crashlooping.'
