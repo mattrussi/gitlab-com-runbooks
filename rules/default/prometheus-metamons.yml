@@ -58,7 +58,6 @@ groups:
     expr: round(changes(process_start_time_seconds{job="thanos",fqdn=~"thanos-compact-.+"}[1h])) > 2
     for: 30m
     labels:
-      pager: pagerduty
       severity: s3
       alert_type: cause
       incident_project: gitlab.com/gitlab-com/gl-infra/production
