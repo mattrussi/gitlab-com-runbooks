@@ -18,7 +18,7 @@
           "subdir": "grafana-builder"
         }
       },
-      "version": "b1101499858d67e95bcc6f0250a63834617ba117",
+      "version": "5a7193731c96c8f82a4bd105de2537d7622e5bb1",
       "sum": "tDR6yT2GVfw0wTU12iZH+m01HrbIr6g/xN+/8nzNkU0="
     },
     {
@@ -28,7 +28,7 @@
           "subdir": "memcached-mixin"
         }
       },
-      "version": "673cc7c8e735a9e2b5b69836038260b18fe39c82",
+      "version": "5a7193731c96c8f82a4bd105de2537d7622e5bb1",
       "sum": "n5ytoFqSa4AFMUooHz04Tk1dPx8cHZiNfr79JgQ7UCE="
     },
     {
@@ -48,8 +48,8 @@
           "subdir": ""
         }
       },
-      "version": "05ca993f01ee4dada3ea4d2afd51693784c6d858",
-      "sum": "SqrljHWptkp0AT2w5/+n1KdE8EWzr3KydvW2DCltKnA="
+      "version": "07ee0700006ecbc8704ff0b2790fccac18c36c6d",
+      "sum": "lKvjoL0XAZa7+qswrvdV4TzoTiE2KRB73GNyduq/Ygg="
     },
     {
       "source": {
@@ -58,7 +58,7 @@
           "subdir": "mixin"
         }
       },
-      "version": "1839858fca674f83177c7dd53b08e4d812637c05",
+      "version": "28c0347e4e08d17f0b0f67b0c99f91f2a7711f71",
       "sum": "md/PebXzwkmmAY2sJCNNRZ6YXcRwFwDFzZlpbGgWxNY="
     },
     {
