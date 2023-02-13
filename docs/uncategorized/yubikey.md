@@ -825,7 +825,7 @@ git commit --allow-empty -m "Test signing"
 </details>
 </p>
 
-## Cleanup
+### Cleanup
 
 * Unmount the encrypted GPG master volume.
 
@@ -852,9 +852,9 @@ git commit --allow-empty -m "Test signing"
 * If you have anything that starts up the `gpg-agent`, ensure the options reflect
   the work we've accomplished above
 
-## Maintenance
+### Maintenance
 
-### Renew expiring subkeys
+#### Renew expiring subkeys
 
 Remount your encrypted secrets image using the `veracrypt mount` or `hdiutil attach` commands
 Setup env vars:
@@ -955,9 +955,9 @@ Unmount your encrypted volume, re-copy the image file to your external safe stor
 </details>
 </p>
 
-## Troubleshooting
+### Troubleshooting
 
-### GPG cannot find the Yubikey
+#### GPG cannot find the Yubikey
 
 This problem can manifest itself in a few ways:
 
@@ -975,11 +975,11 @@ If you run gpg --card-status with the YubiKey plugged in and GPG does not detect
   * On macOS and Linux it is at: ~/.gnupg/scdaemon.conf
   * On macOS or Linux, you may need to add "reader-port Yubico Yubikey" (with a lowercase K) instead of what is above if you are using a YubiKey 4 Series or NEO
 
-### ssh connections hang
+#### ssh connections hang
 
 add `disable-ccid` to `~/.gnupg/scdaemon.conf` and use the restart script to restart `gpg-agent` (which manages scdaemon)
 
-### Unable to sign commits with backup YubiKey
+#### Unable to sign commits with backup YubiKey
 
 If you have configured subkeys on a second, backup YubiKey, you must append a `!` after the `keyid` specified for the `user.signingkey` config attribute in `~/.gitconfig`, before git will use the new signing key. Otherwise git will continue to prompt for the last written YubiKey, regardless of which `keyid` is specified. For additional context, see [this github issue comment](https://github.com/drduh/YubiKey-Guide/issues/19#issuecomment-1143557632).
 
@@ -987,9 +987,9 @@ If you have configured subkeys on a second, backup YubiKey, you must append a `!
 
 If you run into an issue (such as entering the wrong PIN too many times) you can hard reset your key using `gpg --card-edit`. More information at [Yubico docs](https://support.yubico.com/hc/en-us/articles/360013761339-Resetting-the-OpenPGP-Application-on-the-YubiKey), option #2 is recommended.
 
-## Linux tips
+### Linux tips
 
-### gpg: selecting openpgp failed: No such device
+#### gpg: selecting openpgp failed: No such device
 
 On recent Ubuntu/Mint releases (18.04+), GPG has a lot of quality-of-life enhancements, which have just bit you in the butt.   When you run gpg with a 'new' GNUPGHOME value, a dir is created in /run/user/<uid>/gnupg/, based in what looks to be a hash of the value of GNUPGHOME, and agents stated (gpg-agent, scdaemon, at least) with sockets in that directory, so there can be multiple running at once.  You've got this message because the scdaemon that you're accessing (via its socket) is not the one that has ownership of the Yubikey right now.  You can release the other one by executing
 
@@ -1001,7 +1001,7 @@ with GNUPGHOME set to the path of the instance that currently owns the card that
 
 **Note** GPG does *not* normalize the value of $GNUPGHOME to a path, so /media/Gitlab/gpg_config is not the same as /media/Gitlab//gpg_config (two slashes) and each will have its own directory and set of agents/sockets.  This is lightly surprising, and can be very confusing.
 
-### Linux Mint (GTK2) + Pinentry
+#### Linux Mint (GTK2) + Pinentry
 
 Noted on Mint 19 Mate edition, because it's GTK2 and the default pinentry install was for GNOME3, but may apply elsewhere:
 
@@ -1015,7 +1015,7 @@ Otherwise it falls back to curses, and picks whichever terminal/PTY it thinks is
 ```gpg-connect-agent updatestartuptty /bye```
 can help too, but only temporarily (it'll set the TTY to the terminal where this command is run).  You could do this if you like the TTY/curses pin prompt, perhaps in an alias
 
-## Reference Material
+### Reference Material
 
 * <https://github.com/drduh/YubiKey-Guide#21-install---linux>
 * <https://wiki.archlinux.org/index.php/GnuPG>
