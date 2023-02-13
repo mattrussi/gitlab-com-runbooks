@@ -49,7 +49,6 @@
 * [Reprovisioning nodes](../uncategorized/reprovisioning-nodes.md)
 * [Shared Configurations](../uncategorized/shared-configurations.md)
 * [../uncategorized/subnet-allocations.md](../uncategorized/subnet-allocations.md)
-* [Configuring and Using the Yubikey](../uncategorized/yubikey.md)
 * [Vault Administration](administration.md)
 * [Troubleshooting Hashicorp Vault](troubleshooting.md)
 * [How to Use Vault for Secrets Management in Infrastructure](usage.md)
