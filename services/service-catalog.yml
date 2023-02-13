@@ -983,6 +983,40 @@ services:
         grafana_folder: monitoring
         primary_grafana_dashboard: monitoring-main/monitoring-overview
 
+  - name: thanos
+    tier: inf
+    friendly_name: thanos
+    label: Service:Thanos
+    technical:
+      project:
+        - https://gitlab.com/gitlab-com/gl-infra/k8s-workloads/tanka-deployments
+        - https://gitlab.com/gitlab-com/gl-infra/k8s-workloads/gitlab-helmfiles
+      documents:
+        design:
+        architecture: https://thanos.io/tip/thanos/design.md/#architecture
+        readiness_review:
+        sre_guide: https://gitlab.com/gitlab-com/runbooks/-/tree/master/docs/thanos
+        developer_guide:
+        service:
+          - https://thanos.io/tip/thanos/design.md/#architecture
+        security:
+      dependencies:
+        - service: prometheus
+        - service: google-cloud-storage
+      logging:
+        - name: system
+          permalink: https://log.gprd.gitlab.net/goto/3a0b51d10d33c9558765e97640acb325
+        - name: gstg
+          permalink: https://nonprod-log.gitlab.net/goto/73178d30-ab9a-11ed-9af2-6131f0ee4ce6
+        - name: ops
+          permalink: https://nonprod-log.gitlab.net/goto/c3052140-ab9a-11ed-9af2-6131f0ee4ce6
+        - name: pre
+          permalink: https://nonprod-log.gitlab.net/goto/f5420010-ab9a-11ed-9af2-6131f0ee4ce6
+    observability:
+      monitors:
+        grafana_folder: thanos
+        primary_grafana_dashboard: thanos-main/thanos-overview
+
   - name: redis
     tier: db
     friendly_name: Persistent Redis

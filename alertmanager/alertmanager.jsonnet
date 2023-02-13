@@ -353,13 +353,13 @@ local routingTree = Route(
       repeat_interval='3d',
     )
     for issueChannel in secrets.issueChannels
-    for env in ['gprd', 'ops']
+    for env in ['gprd', 'ops', 'thanos']
   ] + [
     Route(
       receiver='prod_pagerduty',
       matchers={
         pager: 'pagerduty',
-        env: { re: 'gprd|ops' },
+        env: { re: 'gprd|ops|thanos' },
       },
       group_by=groupByType,
       continue=true,
@@ -392,6 +392,16 @@ local routingTree = Route(
       group_by=['...']
     ),
     Route(
+      receiver=SLACKLINE_PRODUCTION_RECEIVER,
+      matchers={
+        rules_domain: 'general',
+        env: 'thanos',
+      },
+      continue=true,
+      // rules_domain='general' should be preaggregated so no need for additional groupBy keys
+      group_by=['...']
+    ),
+    Route(
       receiver=SLACKLINE_STAGING_RECEIVER,
       matchers={
         rules_domain: 'general',
@@ -410,7 +420,7 @@ local routingTree = Route(
       receiver=receiverNameForTeamSlackChannel(featureCategoryTeam.teamName),
       continue=true,
       matchers={
-        env: 'gprd',  // For now we only send production channel alerts to teams
+        env: { re: 'gprd|thanos' },  // For now we only send production channel alerts to teams
         feature_category: featureCategoryTeam.featureCategory,
       },
     )
@@ -420,7 +430,7 @@ local routingTree = Route(
       receiver=receiverNameForTeamSlackChannel(team.name),
       continue=true,
       matchers={
-        env: 'gprd',  // For now we only send production channel alerts to teams
+        env: { re: 'gprd|thanos' },  // For now we only send production channel alerts to teams
         product_stage_group: team.name,
       },
     )
@@ -467,7 +477,7 @@ local routingTree = Route(
       receiver='observability_pagerduty',
       matchers={
         pager: 'observability_pagerduty',
-        env: { re: 'gprd|gstg' },
+        env: { re: 'gprd|gstg|thanos' },
         team: 'observability',
       },
       group_by=groupByType,

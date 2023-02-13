@@ -5,7 +5,7 @@ local dashboards = (
 
 std.foldl(
   function(memo, name)
-    local uid = 'thanos-' + std.strReplace(name, '.json', '');
+    local uid = std.strReplace(name, '.json', '');
 
     memo {
       [uid]: dashboards[name],
