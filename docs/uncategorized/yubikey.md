@@ -11,7 +11,7 @@ The following setup enables us to use the YubiKey with OpenPGP, the Authenticati
 1. Follow the instructions for [installing yubikey-agent](https://github.com/FiloSottile/yubikey-agent#installation).
 2. Add the public key to your [GitLab account](https://gitlab.com/-/profile/keys) for authentication and signing.
 3. Copy the public key that was created in (1) to a file (e.g.: `~/.ssh/yubikey.pub`).
-4. Follow the instructions to use your ssh key for signing https://docs.gitlab.com/ee/user/project/repository/ssh_signed_commits/#configure-git-to-sign-commits-with-your-ssh-key .
+4. Follow the instructions to [use your ssh key for signing](https://docs.gitlab.com/ee/user/project/repository/ssh_signed_commits/#configure-git-to-sign-commits-with-your-ssh-key).
 
 ### Notes
 
@@ -28,7 +28,7 @@ of this document or check this [Okta Developers Guide to GPG and YubiKey](https:
 <details>
 <summary>Linux</summary>
 
-* `gpg2`
+- `gpg2`
 
       ```
       sudo apt-get install gnupg2
@@ -40,13 +40,13 @@ of this document or check this [Okta Developers Guide to GPG and YubiKey](https:
       echo "alias gpg='gpg2'" >> ~/.bashrc
       ```
 
-* `scdaemon`
+- `scdaemon`
 
       ```
       sudo apt-get install scdaemon
       ```
 
-* For Yubikey 4 **only** -> `yubikey-personalization`
+- For Yubikey 4 **only** -> `yubikey-personalization`
 
       ```
       sudo apt-get install yubikey-personalization
@@ -61,7 +61,7 @@ of this document or check this [Okta Developers Guide to GPG and YubiKey](https:
       This setting lets us use the Yubikey as both a SmartCard and an OTP device
       at the same time.
 
-* For Yubikey 5 **only** -> ykman. On Linux the pkg name is `yubikey-manager`.
+- For Yubikey 5 **only** -> ykman. On Linux the pkg name is `yubikey-manager`.
 
       ```
       sudo apt-get install yubikey-manager
@@ -76,13 +76,13 @@ of this document or check this [Okta Developers Guide to GPG and YubiKey](https:
 <details>
 <summary>MacOS</summary>
 
-* `gpg2`
+- `gpg2`
 
       ```
       brew install gnupg
       ```
 
-* For Yubikey 4 **only** -> `yubikey-personalization`
+- For Yubikey 4 **only** -> `yubikey-personalization`
 
       ```
       brew install yubikey-personalization
@@ -97,7 +97,7 @@ of this document or check this [Okta Developers Guide to GPG and YubiKey](https:
       This setting lets us use the Yubikey as both a SmartCard and an OTP device
       at the same time.
 
-* For Yubikey 5 **only** -> `ykman`
+- For Yubikey 5 **only** -> `ykman`
 
       ```
       brew install ykman
@@ -105,7 +105,7 @@ of this document or check this [Okta Developers Guide to GPG and YubiKey](https:
 
       `ykman` manual can be found [online](https://support.yubico.com/hc/en-us/articles/360016614940-YubiKey-Manager-CLI-ykman-User-Manual)
 
-* For graphical pin-entry on MacOS install the brew package `pinentry-mac`
+- For graphical pin-entry on MacOS install the brew package `pinentry-mac`
 
     ```shell
     brew install pinentry-mac
@@ -206,9 +206,9 @@ We want to be able to keep a backup of the GPG master key offline, encrypted,
 and stored in a super-secret-hiding-place. We do this by creating the `gpg_config` location
 on a virtual disk that we mount locally. Using this approach:
 
-* The virtual disk can be copied to a secure location for recovery (such as on
+- The virtual disk can be copied to a secure location for recovery (such as on
   a USB key).
-* The virtual disk has a password and must be mounted locally for access to
+- The virtual disk has a password and must be mounted locally for access to
   the gpg_config location by gpg.
 
 To do that:
@@ -827,7 +827,7 @@ git commit --allow-empty -m "Test signing"
 
 ### Cleanup
 
-* Unmount the encrypted GPG master volume.
+- Unmount the encrypted GPG master volume.
 
 <p>
 <details>
@@ -847,9 +847,9 @@ git commit --allow-empty -m "Test signing"
 </details>
 </p>
 
-* Ensure that the backing file for the GPG master volume is backed up, e.g. copy
+- Ensure that the backing file for the GPG master volume is backed up, e.g. copy
   it to a USB drive.
-* If you have anything that starts up the `gpg-agent`, ensure the options reflect
+- If you have anything that starts up the `gpg-agent`, ensure the options reflect
   the work we've accomplished above
 
 ### Maintenance
@@ -961,19 +961,19 @@ Unmount your encrypted volume, re-copy the image file to your external safe stor
 
 This problem can manifest itself in a few ways:
 
-* Pinentry asking you to insert a SmartCard when it is already inserted
-* GPG failing to encrypt or sign messages
-* SSH failing to authenticate
-* No SSH keys visible with `ssh-add -l`
+- Pinentry asking you to insert a SmartCard when it is already inserted
+- GPG failing to encrypt or sign messages
+- SSH failing to authenticate
+- No SSH keys visible with `ssh-add -l`
 
 The solution is to "kick" gpg-agent into checking for a SmartCard by running
 `gpg --card-status`.
 
 If you run gpg --card-status with the YubiKey plugged in and GPG does not detect the YubiKey, try the steps below:
 
-* Specify the smart card reader GPG uses by adding the line `reader-port Yubico Yubi` to the scdaemon.conf file; create the file if it does not exist. After making this change, reboot your computer to ensure it takes affect.
-  * On macOS and Linux it is at: ~/.gnupg/scdaemon.conf
-  * On macOS or Linux, you may need to add "reader-port Yubico Yubikey" (with a lowercase K) instead of what is above if you are using a YubiKey 4 Series or NEO
+- Specify the smart card reader GPG uses by adding the line `reader-port Yubico Yubi` to the scdaemon.conf file; create the file if it does not exist. After making this change, reboot your computer to ensure it takes affect.
+  - On macOS and Linux it is at: ~/.gnupg/scdaemon.conf
+  - On macOS or Linux, you may need to add "reader-port Yubico Yubikey" (with a lowercase K) instead of what is above if you are using a YubiKey 4 Series or NEO
 
 #### ssh connections hang
 
@@ -1017,6 +1017,6 @@ can help too, but only temporarily (it'll set the TTY to the terminal where this
 
 ### Reference Material
 
-* <https://github.com/drduh/YubiKey-Guide#21-install---linux>
-* <https://wiki.archlinux.org/index.php/GnuPG>
-* <https://developer.okta.com/blog/2021/07/07/developers-guide-to-gpg>
+- <https://github.com/drduh/YubiKey-Guide#21-install---linux>
+- <https://wiki.archlinux.org/index.php/GnuPG>
+- <https://developer.okta.com/blog/2021/07/07/developers-guide-to-gpg>
