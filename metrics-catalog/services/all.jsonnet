@@ -2,6 +2,7 @@
 // This library contains a list of all services in the application.
 // When adding a new library, add it here...
 //
+// NOTE: PLEASE KEEP THIS FILE IN ALPHABETICAL ORDER
 [
   import 'api.jsonnet',
   import 'internal-api.jsonnet',
@@ -47,6 +48,7 @@
   import 'search.jsonnet',
   import 'sentry.jsonnet',
   import 'sidekiq.jsonnet',
+  import 'thanos.jsonnet',
   import 'vault.jsonnet',
   import 'waf.jsonnet',
   import 'web-pages.jsonnet',

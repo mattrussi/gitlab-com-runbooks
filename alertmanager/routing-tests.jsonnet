@@ -58,6 +58,19 @@ generateTests([
     ],
   },
   {
+    name: 'env=thanos, production pagerduty and rules_domain=general',
+    labels: {
+      pager: 'pagerduty',
+      rules_domain: 'general',
+      env: 'thanos',
+    },
+    receivers: [
+      'prod_pagerduty',
+      'slack_bridge-prod',
+      'production_slack_channel',
+    ],
+  },
+  {
     name: 'gstg pagerduty and rules_domain=general',
     labels: {
       pager: 'pagerduty',
@@ -242,6 +255,17 @@ generateTests([
     receivers: [
       'prod_pagerduty',
       'team_runner_alerts_channel',
+      'production_slack_channel',
+    ],
+  },
+  {
+    name: 'pager=pagerduty, env=thanos',
+    labels: {
+      pager: 'pagerduty',
+      env: 'thanos',
+    },
+    receivers: [
+      'prod_pagerduty',
       'production_slack_channel',
     ],
   },

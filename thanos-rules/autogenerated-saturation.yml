@@ -13,11 +13,11 @@ groups:
         clamp_min(
           clamp_max(
             sum by (env, environment, tier, type, stage, fqdn) (
-              go_memstats_alloc_bytes{type=~"gitaly|monitoring|praefect|registry|web-pages"}
+              go_memstats_alloc_bytes{type=~"gitaly|monitoring|praefect|registry|thanos|web-pages"}
             )
             /
             sum by (env, environment, tier, type, stage, fqdn) (
-              node_memory_MemTotal_bytes{type=~"gitaly|monitoring|praefect|registry|web-pages"}
+              node_memory_MemTotal_bytes{type=~"gitaly|monitoring|praefect|registry|thanos|web-pages"}
             )
             ,
             1)
@@ -32,15 +32,15 @@ groups:
         clamp_min(
           clamp_max(
             (
-              go_memstats_alloc_bytes{type=~"api|git|internal-api|kas|monitoring|registry|vault|web|web-pages|websockets"}
+              go_memstats_alloc_bytes{type=~"api|git|internal-api|kas|monitoring|registry|thanos|vault|web|web-pages|websockets"}
               / on(env, environment, tier, type, stage, cluster, pod) group_left()
               topk by(env, environment, tier, type, stage, cluster, pod) (1,
-                container_spec_memory_limit_bytes:labeled{container=~"gitlab-pages|gitlab-workhorse|kas|registry|thanos-store",type=~"api|git|internal-api|kas|monitoring|registry|vault|web|web-pages|websockets"}
+                container_spec_memory_limit_bytes:labeled{container=~"gitlab-pages|gitlab-workhorse|kas|registry|thanos-store",type=~"api|git|internal-api|kas|monitoring|registry|thanos|vault|web|web-pages|websockets"}
               )
             )
             or
             (
-              go_memstats_alloc_bytes{type="monitoring", type=~"api|git|internal-api|kas|monitoring|registry|vault|web|web-pages|websockets"}
+              go_memstats_alloc_bytes{type="monitoring", type=~"api|git|internal-api|kas|monitoring|registry|thanos|vault|web|web-pages|websockets"}
               / on(environment, tier, type, cluster, pod) group_left()
               topk by (environment, tier, type, cluster, pod) (1,
                 container_spec_memory_limit_bytes:labeled{type="monitoring", container=~"gitlab-pages|gitlab-workhorse|kas|registry|thanos-store"}

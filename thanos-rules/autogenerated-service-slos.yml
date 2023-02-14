@@ -899,78 +899,6 @@ groups:
     expr: "0.001000"
   - record: slo:min:events:gitlab_service_apdex:ratio
     labels:
-      component: thanos_compactor
-      tier: inf
-      type: monitoring
-    expr: "0.999000"
-  - record: slo:max:events:gitlab_service_errors:ratio
-    labels:
-      component: thanos_compactor
-      tier: inf
-      type: monitoring
-    expr: "0.001000"
-  - record: slo:min:events:gitlab_service_apdex:ratio
-    labels:
-      component: thanos_memcached
-      tier: inf
-      type: monitoring
-    expr: "0.999000"
-  - record: slo:max:events:gitlab_service_errors:ratio
-    labels:
-      component: thanos_memcached
-      tier: inf
-      type: monitoring
-    expr: "0.050000"
-  - record: slo:min:events:gitlab_service_apdex:ratio
-    labels:
-      component: thanos_query
-      tier: inf
-      type: monitoring
-    expr: "0.950000"
-  - record: slo:max:events:gitlab_service_errors:ratio
-    labels:
-      component: thanos_query
-      tier: inf
-      type: monitoring
-    expr: "0.050000"
-  - record: slo:min:events:gitlab_service_apdex:ratio
-    labels:
-      component: thanos_query_frontend
-      tier: inf
-      type: monitoring
-    expr: "0.950000"
-  - record: slo:max:events:gitlab_service_errors:ratio
-    labels:
-      component: thanos_query_frontend
-      tier: inf
-      type: monitoring
-    expr: "0.050000"
-  - record: slo:min:events:gitlab_service_apdex:ratio
-    labels:
-      component: thanos_rule_alert_sender
-      tier: inf
-      type: monitoring
-    expr: "0.999000"
-  - record: slo:max:events:gitlab_service_errors:ratio
-    labels:
-      component: thanos_rule_alert_sender
-      tier: inf
-      type: monitoring
-    expr: "0.001000"
-  - record: slo:min:events:gitlab_service_apdex:ratio
-    labels:
-      component: thanos_store
-      tier: inf
-      type: monitoring
-    expr: "0.950000"
-  - record: slo:max:events:gitlab_service_errors:ratio
-    labels:
-      component: thanos_store
-      tier: inf
-      type: monitoring
-    expr: "0.050000"
-  - record: slo:min:events:gitlab_service_apdex:ratio
-    labels:
       tier: db
       type: patroni
     expr: "0.999000"
@@ -2051,6 +1979,100 @@ groups:
   - record: slo:min:events:gitlab_service_apdex:ratio
     labels:
       tier: inf
+      type: thanos
+    expr: "0.999000"
+  - record: slo:max:events:gitlab_service_errors:ratio
+    labels:
+      tier: inf
+      type: thanos
+    expr: "0.001000"
+  - record: slo:min:events:gitlab_service_apdex:ratio
+    labels:
+      component: rule_evaluation
+      tier: inf
+      type: thanos
+    expr: "0.999000"
+  - record: slo:max:events:gitlab_service_errors:ratio
+    labels:
+      component: rule_evaluation
+      tier: inf
+      type: thanos
+    expr: "0.001000"
+  - record: slo:min:events:gitlab_service_apdex:ratio
+    labels:
+      component: thanos_compactor
+      tier: inf
+      type: thanos
+    expr: "0.999000"
+  - record: slo:max:events:gitlab_service_errors:ratio
+    labels:
+      component: thanos_compactor
+      tier: inf
+      type: thanos
+    expr: "0.001000"
+  - record: slo:min:events:gitlab_service_apdex:ratio
+    labels:
+      component: thanos_memcached
+      tier: inf
+      type: thanos
+    expr: "0.999000"
+  - record: slo:max:events:gitlab_service_errors:ratio
+    labels:
+      component: thanos_memcached
+      tier: inf
+      type: thanos
+    expr: "0.050000"
+  - record: slo:min:events:gitlab_service_apdex:ratio
+    labels:
+      component: thanos_query
+      tier: inf
+      type: thanos
+    expr: "0.950000"
+  - record: slo:max:events:gitlab_service_errors:ratio
+    labels:
+      component: thanos_query
+      tier: inf
+      type: thanos
+    expr: "0.050000"
+  - record: slo:min:events:gitlab_service_apdex:ratio
+    labels:
+      component: thanos_query_frontend
+      tier: inf
+      type: thanos
+    expr: "0.950000"
+  - record: slo:max:events:gitlab_service_errors:ratio
+    labels:
+      component: thanos_query_frontend
+      tier: inf
+      type: thanos
+    expr: "0.050000"
+  - record: slo:min:events:gitlab_service_apdex:ratio
+    labels:
+      component: thanos_rule_alert_sender
+      tier: inf
+      type: thanos
+    expr: "0.999000"
+  - record: slo:max:events:gitlab_service_errors:ratio
+    labels:
+      component: thanos_rule_alert_sender
+      tier: inf
+      type: thanos
+    expr: "0.001000"
+  - record: slo:min:events:gitlab_service_apdex:ratio
+    labels:
+      component: thanos_store
+      tier: inf
+      type: thanos
+    expr: "0.950000"
+  - record: slo:max:events:gitlab_service_errors:ratio
+    labels:
+      component: thanos_store
+      tier: inf
+      type: thanos
+    expr: "0.050000"
+  - record: slo:min:events:gitlab_service_apdex:ratio
+    labels:
+      tier: inf
       type: vault
     expr: "0.999000"
   - record: slo:max:events:gitlab_service_errors:ratio
@@ -2339,6 +2361,11 @@ groups:
     labels:
       tier: inf
       type: search
+    expr: "1"
+  - record: gitlab_service:mapping:disable_ops_rate_prediction
+    labels:
+      tier: inf
+      type: thanos
     expr: "1"
   - record: gitlab_component_service:mapping
     labels:
@@ -2807,54 +2834,6 @@ groups:
   - record: gitlab_component_service:mapping
     labels:
       component: rule_evaluation
-      regional_aggregation: "no"
-      service_aggregation: "yes"
-      tier: inf
-      type: monitoring
-    expr: "1"
-  - record: gitlab_component_service:mapping
-    labels:
-      component: thanos_compactor
-      regional_aggregation: "no"
-      service_aggregation: "yes"
-      tier: inf
-      type: monitoring
-    expr: "1"
-  - record: gitlab_component_service:mapping
-    labels:
-      component: thanos_memcached
-      regional_aggregation: "no"
-      service_aggregation: "no"
-      tier: inf
-      type: monitoring
-    expr: "1"
-  - record: gitlab_component_service:mapping
-    labels:
-      component: thanos_query
-      regional_aggregation: "no"
-      service_aggregation: "yes"
-      tier: inf
-      type: monitoring
-    expr: "1"
-  - record: gitlab_component_service:mapping
-    labels:
-      component: thanos_query_frontend
-      regional_aggregation: "no"
-      service_aggregation: "yes"
-      tier: inf
-      type: monitoring
-    expr: "1"
-  - record: gitlab_component_service:mapping
-    labels:
-      component: thanos_rule_alert_sender
-      regional_aggregation: "no"
-      service_aggregation: "yes"
-      tier: inf
-      type: monitoring
-    expr: "1"
-  - record: gitlab_component_service:mapping
-    labels:
-      component: thanos_store
       regional_aggregation: "no"
       service_aggregation: "yes"
       tier: inf
@@ -3491,6 +3470,62 @@ groups:
       service_aggregation: "yes"
       tier: sv
       type: sidekiq
+    expr: "1"
+  - record: gitlab_component_service:mapping
+    labels:
+      component: rule_evaluation
+      regional_aggregation: "no"
+      service_aggregation: "yes"
+      tier: inf
+      type: thanos
+    expr: "1"
+  - record: gitlab_component_service:mapping
+    labels:
+      component: thanos_compactor
+      regional_aggregation: "no"
+      service_aggregation: "yes"
+      tier: inf
+      type: thanos
+    expr: "1"
+  - record: gitlab_component_service:mapping
+    labels:
+      component: thanos_memcached
+      regional_aggregation: "no"
+      service_aggregation: "no"
+      tier: inf
+      type: thanos
+    expr: "1"
+  - record: gitlab_component_service:mapping
+    labels:
+      component: thanos_query
+      regional_aggregation: "no"
+      service_aggregation: "yes"
+      tier: inf
+      type: thanos
+    expr: "1"
+  - record: gitlab_component_service:mapping
+    labels:
+      component: thanos_query_frontend
+      regional_aggregation: "no"
+      service_aggregation: "yes"
+      tier: inf
+      type: thanos
+    expr: "1"
+  - record: gitlab_component_service:mapping
+    labels:
+      component: thanos_rule_alert_sender
+      regional_aggregation: "no"
+      service_aggregation: "yes"
+      tier: inf
+      type: thanos
+    expr: "1"
+  - record: gitlab_component_service:mapping
+    labels:
+      component: thanos_store
+      regional_aggregation: "no"
+      service_aggregation: "yes"
+      tier: inf
+      type: thanos
     expr: "1"
   - record: gitlab_component_service:mapping
     labels:
