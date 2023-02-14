@@ -12,24 +12,6 @@ metricsCatalog.serviceDefinition(
     monitoringThresholds+: {
       apdexScore: 0.9995,
     },
-    serviceLevelIndicators+: {
-      rails_redis_client+: {
-        userImpacting: false,
-        severity: 's4',
-        team: 'scalability-857-redis-functional-partitioning',
-      },
-      primary_server+: {
-        userImpacting: false,
-        severity: 's4',
-        team: 'scalability-857-redis-functional-partitioning',
-      },
-      secondary_servers+: {
-        userImpacting: false,
-        severity: 's4',
-        team: 'scalability-857-redis-functional-partitioning',
-      },
-    },
-
   }
   + redisHelpers.gitlabcomObservabilityToolingForRedis('redis-repository-cache')
 )
