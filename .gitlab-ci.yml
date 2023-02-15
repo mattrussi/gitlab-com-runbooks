@@ -168,7 +168,17 @@ workflow:
   tags:
     - k8s-workloads
 
+# Cache the jsonnet vendor bundle for faster builds
+.jsonnet-cache: &jsonnet-cache
+  cache:
+    - key:
+        files:
+          - jsonnetfile.lock.json
+      paths:
+        - vendor
+
 .dashboards:
+  <<: *jsonnet-cache
   rules:
     - *avoid-stage-group-check-rule
     - *avoid-downstream-generation-pipelines-rule
@@ -354,7 +364,7 @@ ensure_generated_content_up_to_date:
   extends: .default-job-rules
   stage: test
   script:
-    - rm -rf service-health-dashboard-manifest/ # Rm artifacts to pass git diff
+    - rm -rf service-health-dashboard-manifest/  # Rm artifacts to pass git diff
     - ./scripts/bundler.sh  # Install jsonnet bundles
     - make ensure-generated-content-up-to-date
 
@@ -692,6 +702,8 @@ check-stage-groups:
       when: manual
       allow_failure: true
   stage: test
+  extends:
+    - .jsonnet-cache
   script:
     - ./scripts/bundler.sh  # Install jsonnet bundles, required for make generate
     - make update-feature-categories
@@ -707,6 +719,8 @@ generate_service_maturity_manifest:
       when: always
   dependencies:
     - prepare-service-health-dashboard-json
+  extends:
+    - .jsonnet-cache
   script:
     - ./scripts/bundler.sh  # Install jsonnet bundles
     - ./scripts/generate-jsonnet-rules.sh
@@ -727,6 +741,8 @@ generate_tamland_saturation_manifest:
       when: always
     - if: '$CI_PIPELINE_SOURCE == "merge_request_event"'
       when: always
+  extends:
+    - .jsonnet-cache
   script:
     - ./scripts/bundler.sh  # Install jsonnet bundles
     - ./scripts/generate-jsonnet-rules.sh
