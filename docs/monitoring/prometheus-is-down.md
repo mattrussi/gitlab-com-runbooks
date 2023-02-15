@@ -38,3 +38,18 @@ for i in $CHUNK1 $CHUNK2 $CHUNK3 $CHUNK4; do gsutil -m rm -r gs://gitlab-$ENV-pr
 (NB: the trailing / after $i prevents accidents if $i is accidentally empty)
 Adjust the `$ENV` component of the bucket name based on which environment you're working on.
 You may have to do this multiple times as thanos-compact finds new corrupted chunks; keep a tail on the logs until the restarts cease and all corrupted blocks are removed.
+
+#### Example: overlap in blocks
+
+1. Get overlaping blocks
+
+    ```shell
+    sudo journalctl -u thanos-compact --since '5 minutes ago' --output json | jq -r 'select(._COMM == "thanos").MESSAGE' | jq -c 'select(.err and (.err|contains("pre compaction overlap check")))' | tail -n 1 | jq -r '.err' | grep -Eo 'ulid: ([^,]+)' | sed 's/^ulid: //' | awk 'NR % 2 == 0' | paste -sd' '
+    01GRD8X5H5SVGEWMCMVNC2CYC3 01GRDB3QJZHV8JW7XP6TM04BVJ 01GRFM82QG7ZESZHREP4V5VNBX 01GRJVN89FG85550QQ0GXXMANT 01GRCCGKVXK72T94Z5PSBTWZVC 01GRCQNJ4YKSG4Y114EBNC55C1 01GRCZJ9DR4MR641X29ARYN09E 01GRG4VN3D2YNACR59V34A5T3F 01GRC8W59VYWFDX9D6VWWQBQ5N 01GRD4Q6HBMB0TYQ0CANB3YM3J 01GREJH27NQCNHV5654B1TWQM9
+    ```
+
+2. Delete the blocks
+
+    ```shell
+    for i in 01GRD8X5H5SVGEWMCMVNC2CYC3 01GRDB3QJZHV8JW7XP6TM04BVJ 01GRFM82QG7ZESZHREP4V5VNBX 01GRJVN89FG85550QQ0GXXMANT 01GRCCGKVXK72T94Z5PSBTWZVC 01GRCQNJ4YKSG4Y114EBNC55C1 01GRCZJ9DR4MR641X29ARYN09E 01GRG4VN3D2YNACR59V34A5T3F 01GRC8W59VYWFDX9D6VWWQBQ5N 01GRD4Q6HBMB0TYQ0CANB3YM3J 01GREJH27NQCNHV5654B1TWQM9; do gsutil -m rm -r gs://gitlab-gprd-prometheus/$i/; done
+    ```
