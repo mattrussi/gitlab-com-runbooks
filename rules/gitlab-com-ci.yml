@@ -80,9 +80,9 @@ groups:
   - alert: CICDSidekiqQueuesTooBig
     expr: |
       sum by (environment, tier, type, stage, shard, worker) (
-        sidekiq_jobs_inflight:irate1m{feature_category=~"(continuous_integration|runner)"}
+        ci_sidekiq_jobs_inflight:rate_5m
       ) > 100
-    for: 5m
+    for: 15m
     labels:
       team: runner
       severity: s3
@@ -90,8 +90,8 @@ groups:
     annotations:
       title: 'Sidekiq queues for CI/CD are growing: {{$value}}'
       description: |
-        Sidekiq queues for CI/CD are growing and are over 1000 for
-        more than last 5 minutes.
+        Sidekiq queues for CI/CD are growing and are over 100 for
+        more than last 15 minutes.
         Please check https://dashboards.gitlab.net/d/ci-runners-incident-gitlab-application/ci-runners-incident-support-gitlab-application?viewPanel=20&orgId=1&from=now-3h&to=now
 
   - alert: CICDJobsStuckInDockerPull
