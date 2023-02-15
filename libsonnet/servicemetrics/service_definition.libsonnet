@@ -15,6 +15,7 @@ local serviceDefaults = {
   regional: false,  // By default we don't support regional monitoring for services
   alertWindows: multiburnExpression.defaultWindows,
   skippedMaturityCriteria: {},
+  dangerouslyThanosEvaluated: false,  // This is only used for thanos self-monitoring
 };
 
 // Convience method, will wrap a raw definition in a serviceLevelIndicatorDefinition if needed

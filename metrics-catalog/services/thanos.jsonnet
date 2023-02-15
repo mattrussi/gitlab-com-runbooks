@@ -12,7 +12,10 @@ local combined = metricsCatalog.combined;
 // so we use special labels to merge environments and stages...
 local staticLabels = {
   environment: 'thanos',
+  env: 'thanos',
   stage: 'main',
+  // This will be included by Thanos Ruler, but having it here helps with the labels on absent values
+  monitor: 'global',
 };
 
 local thanosServiceSelector = {
@@ -39,6 +42,10 @@ metricsCatalog.serviceDefinition({
    * disable ops-rate anomaly detection on this service.
    */
   disableOpsRatePrediction: true,
+
+  // Thanos needs to self-monitor in Thanos
+  // this should not be required for other services.
+  dangerouslyThanosEvaluated: true,
 
   // No stages for Thanos
   serviceIsStageless: true,
