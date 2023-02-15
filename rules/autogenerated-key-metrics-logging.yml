@@ -792,6 +792,7 @@ groups:
   - record: gitlab_component_service:mapping
     labels:
       component: elasticsearch_indexing_cluster
+      global_aggregation: "no"
       regional_aggregation: "no"
       service_aggregation: "yes"
       tier: inf
@@ -800,6 +801,7 @@ groups:
   - record: gitlab_component_service:mapping
     labels:
       component: elasticsearch_indexing_index
+      global_aggregation: "no"
       regional_aggregation: "no"
       service_aggregation: "yes"
       tier: inf
@@ -808,6 +810,7 @@ groups:
   - record: gitlab_component_service:mapping
     labels:
       component: elasticsearch_searching_cluster
+      global_aggregation: "no"
       regional_aggregation: "no"
       service_aggregation: "yes"
       tier: inf
@@ -816,6 +819,7 @@ groups:
   - record: gitlab_component_service:mapping
     labels:
       component: elasticsearch_searching_index
+      global_aggregation: "no"
       regional_aggregation: "no"
       service_aggregation: "yes"
       tier: inf
@@ -824,6 +828,7 @@ groups:
   - record: gitlab_component_service:mapping
     labels:
       component: fluentd_log_output
+      global_aggregation: "no"
       regional_aggregation: "no"
       service_aggregation: "no"
       tier: inf
@@ -832,6 +837,7 @@ groups:
   - record: gitlab_component_service:mapping
     labels:
       component: kibana_googlelb
+      global_aggregation: "no"
       regional_aggregation: "no"
       service_aggregation: "yes"
       tier: inf
@@ -840,6 +846,7 @@ groups:
   - record: gitlab_component_service:mapping
     labels:
       component: pubsub_subscriptions
+      global_aggregation: "no"
       regional_aggregation: "no"
       service_aggregation: "yes"
       tier: inf
@@ -848,6 +855,7 @@ groups:
   - record: gitlab_component_service:mapping
     labels:
       component: pubsub_topics
+      global_aggregation: "no"
       regional_aggregation: "no"
       service_aggregation: "yes"
       tier: inf
@@ -856,6 +864,7 @@ groups:
   - record: gitlab_component_service:mapping
     labels:
       component: pubsubbeat
+      global_aggregation: "no"
       regional_aggregation: "no"
       service_aggregation: "no"
       tier: inf
@@ -864,6 +873,7 @@ groups:
   - record: gitlab_component_service:mapping
     labels:
       component: stackdriver
+      global_aggregation: "no"
       regional_aggregation: "no"
       service_aggregation: "yes"
       tier: inf

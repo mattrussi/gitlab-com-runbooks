@@ -152,6 +152,7 @@ groups:
   - record: gitlab_component_service:mapping
     labels:
       component: consul
+      global_aggregation: "no"
       regional_aggregation: "yes"
       service_aggregation: "yes"
       tier: sv

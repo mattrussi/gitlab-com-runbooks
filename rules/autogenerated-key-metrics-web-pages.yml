@@ -522,6 +522,7 @@ groups:
   - record: gitlab_component_service:mapping
     labels:
       component: loadbalancer
+      global_aggregation: "no"
       regional_aggregation: "yes"
       service_aggregation: "no"
       tier: sv
@@ -530,6 +531,7 @@ groups:
   - record: gitlab_component_service:mapping
     labels:
       component: loadbalancer_https
+      global_aggregation: "no"
       regional_aggregation: "yes"
       service_aggregation: "no"
       tier: sv
@@ -538,6 +540,7 @@ groups:
   - record: gitlab_component_service:mapping
     labels:
       component: web_pages_server
+      global_aggregation: "no"
       regional_aggregation: "yes"
       service_aggregation: "yes"
       tier: sv

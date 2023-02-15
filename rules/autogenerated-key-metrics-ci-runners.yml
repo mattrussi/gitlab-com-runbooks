@@ -777,6 +777,7 @@ groups:
   - record: gitlab_component_service:mapping
     labels:
       component: loadbalancer
+      global_aggregation: "no"
       regional_aggregation: "no"
       service_aggregation: "no"
       tier: runners
@@ -785,6 +786,7 @@ groups:
   - record: gitlab_component_service:mapping
     labels:
       component: polling
+      global_aggregation: "no"
       regional_aggregation: "no"
       service_aggregation: "yes"
       tier: runners
@@ -793,6 +795,7 @@ groups:
   - record: gitlab_component_service:mapping
     labels:
       component: queuing_queries_duration
+      global_aggregation: "no"
       regional_aggregation: "no"
       service_aggregation: "yes"
       tier: runners
@@ -801,6 +804,7 @@ groups:
   - record: gitlab_component_service:mapping
     labels:
       component: shared_runner_queues
+      global_aggregation: "no"
       regional_aggregation: "no"
       service_aggregation: "yes"
       tier: runners
@@ -809,6 +813,7 @@ groups:
   - record: gitlab_component_service:mapping
     labels:
       component: trace_archiving_ci_jobs
+      global_aggregation: "no"
       regional_aggregation: "no"
       service_aggregation: "yes"
       tier: runners

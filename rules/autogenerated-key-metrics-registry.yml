@@ -1747,6 +1747,7 @@ groups:
   - record: gitlab_component_service:mapping
     labels:
       component: database
+      global_aggregation: "no"
       regional_aggregation: "yes"
       service_aggregation: "yes"
       tier: sv
@@ -1755,6 +1756,7 @@ groups:
   - record: gitlab_component_service:mapping
     labels:
       component: garbagecollector
+      global_aggregation: "no"
       regional_aggregation: "yes"
       service_aggregation: "no"
       tier: sv
@@ -1763,6 +1765,7 @@ groups:
   - record: gitlab_component_service:mapping
     labels:
       component: loadbalancer
+      global_aggregation: "no"
       regional_aggregation: "no"
       service_aggregation: "no"
       tier: sv
@@ -1771,6 +1774,7 @@ groups:
   - record: gitlab_component_service:mapping
     labels:
       component: redis
+      global_aggregation: "no"
       regional_aggregation: "yes"
       service_aggregation: "yes"
       tier: sv
@@ -1779,6 +1783,7 @@ groups:
   - record: gitlab_component_service:mapping
     labels:
       component: registry_cdn
+      global_aggregation: "no"
       regional_aggregation: "yes"
       service_aggregation: "yes"
       tier: sv
@@ -1787,6 +1792,7 @@ groups:
   - record: gitlab_component_service:mapping
     labels:
       component: registry_server
+      global_aggregation: "no"
       regional_aggregation: "yes"
       service_aggregation: "yes"
       tier: sv
@@ -1795,6 +1801,7 @@ groups:
   - record: gitlab_component_service:mapping
     labels:
       component: server_route_manifest_reads
+      global_aggregation: "no"
       regional_aggregation: "yes"
       service_aggregation: "yes"
       tier: sv
@@ -1803,6 +1810,7 @@ groups:
   - record: gitlab_component_service:mapping
     labels:
       component: server_route_manifest_writes
+      global_aggregation: "no"
       regional_aggregation: "yes"
       service_aggregation: "yes"
       tier: sv

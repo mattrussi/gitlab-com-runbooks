@@ -512,6 +512,7 @@ groups:
   - record: gitlab_component_service:mapping
     labels:
       component: pgbouncer
+      global_aggregation: "no"
       regional_aggregation: "no"
       service_aggregation: "yes"
       tier: db
@@ -520,6 +521,7 @@ groups:
   - record: gitlab_component_service:mapping
     labels:
       component: transactions_primary
+      global_aggregation: "no"
       regional_aggregation: "no"
       service_aggregation: "yes"
       tier: db
@@ -528,6 +530,7 @@ groups:
   - record: gitlab_component_service:mapping
     labels:
       component: transactions_replica
+      global_aggregation: "no"
       regional_aggregation: "no"
       service_aggregation: "yes"
       tier: db

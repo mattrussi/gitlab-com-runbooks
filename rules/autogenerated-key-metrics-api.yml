@@ -1232,6 +1232,7 @@ groups:
   - record: gitlab_component_service:mapping
     labels:
       component: global_search
+      global_aggregation: "no"
       regional_aggregation: "yes"
       service_aggregation: "no"
       tier: sv
@@ -1240,6 +1241,7 @@ groups:
   - record: gitlab_component_service:mapping
     labels:
       component: graphql_query
+      global_aggregation: "no"
       regional_aggregation: "yes"
       service_aggregation: "yes"
       tier: sv
@@ -1248,6 +1250,7 @@ groups:
   - record: gitlab_component_service:mapping
     labels:
       component: loadbalancer
+      global_aggregation: "no"
       regional_aggregation: "no"
       service_aggregation: "no"
       tier: sv
@@ -1256,6 +1259,7 @@ groups:
   - record: gitlab_component_service:mapping
     labels:
       component: nginx_ingress
+      global_aggregation: "no"
       regional_aggregation: "yes"
       service_aggregation: "no"
       tier: sv
@@ -1264,6 +1268,7 @@ groups:
   - record: gitlab_component_service:mapping
     labels:
       component: rails_request
+      global_aggregation: "no"
       regional_aggregation: "yes"
       service_aggregation: "yes"
       tier: sv
@@ -1272,6 +1277,7 @@ groups:
   - record: gitlab_component_service:mapping
     labels:
       component: workhorse
+      global_aggregation: "no"
       regional_aggregation: "yes"
       service_aggregation: "yes"
       tier: sv

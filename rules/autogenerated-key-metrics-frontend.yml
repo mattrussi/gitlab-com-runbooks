@@ -762,6 +762,7 @@ groups:
   - record: gitlab_component_service:mapping
     labels:
       component: cnyHttpServices
+      global_aggregation: "no"
       regional_aggregation: "no"
       service_aggregation: "yes"
       tier: lb
@@ -770,6 +771,7 @@ groups:
   - record: gitlab_component_service:mapping
     labels:
       component: mainHttpServices
+      global_aggregation: "no"
       regional_aggregation: "no"
       service_aggregation: "yes"
       tier: lb
@@ -778,6 +780,7 @@ groups:
   - record: gitlab_component_service:mapping
     labels:
       component: sshServices
+      global_aggregation: "no"
       regional_aggregation: "no"
       service_aggregation: "yes"
       tier: lb
