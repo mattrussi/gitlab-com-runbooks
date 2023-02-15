@@ -62,6 +62,8 @@ fi
 
 prepare
 
+check_duplicates
+
 function validate_dashboard_requests() {
   jq -r '
     if (.uid|length) > 40 then

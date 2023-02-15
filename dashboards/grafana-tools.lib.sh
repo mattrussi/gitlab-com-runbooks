@@ -179,3 +179,22 @@ find_dashboards() {
     done
   fi
 }
+
+# dashboards within a folder cannot have the same title
+check_duplicates() {
+  find -P generated -name '*.json' | sed 's/generated\///' | awk -F'/' '{print $1}' | uniq | while read -r folder; do
+    local duplicates=$(find "generated/$folder" -name "*.json" | xargs cat  | jq '.title' | sort | uniq -d)
+    if [[ -n $duplicates ]]; then
+      echo "Duplicate dashboard titles in same folder '${folder}' exists! Check these titles:"
+      echo "${duplicates}"
+      exit 1
+    fi
+
+    local duplicates=$(find "generated/$folder" -name "*.json" | xargs cat  | jq '.uid' | sort | uniq -d)
+    if [[ -n $duplicates ]]; then
+      echo "Duplicate dashboard uid in same folder '${folder}' exists! Check these uid:"
+      echo "${duplicates}"
+      exit 1
+    fi
+  done
+}
