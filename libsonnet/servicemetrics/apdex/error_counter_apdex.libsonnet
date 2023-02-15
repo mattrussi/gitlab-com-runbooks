@@ -1,5 +1,5 @@
 local resolveRateQuery = (import './lib/resolve-rate-query.libsonnet').resolveRateQuery;
-local generateApdexAttributionQuery = (import './lib/success-rate-apdex-attribution-query.libsonnet').attributionQuery;
+local generateApdexAttributionQuery = (import './lib/counter-apdex-attribution-query.libsonnet').attributionQuery;
 local aggregations = import 'promql/aggregations.libsonnet';
 local selectors = import 'promql/selectors.libsonnet';
 local strings = import 'utils/strings.libsonnet';
@@ -24,6 +24,9 @@ local transformErrorRateToSuccessRate(errorRateMetric, operationRateMetric, sele
 
 
 {
+  // errorCounterApdex constructs an apdex score (ie, successes/total) from an error score (ie, errors/total).
+  // This can be useful for latency metrics that count latencies that exceed threshold, instead of the more
+  // common form of latencies that are within threshold.
   errorCounterApdex(errorRateMetric, operationRateMetric, selector):: {
     errorRateMetric: errorRateMetric,
     operationRateMetric: operationRateMetric,
