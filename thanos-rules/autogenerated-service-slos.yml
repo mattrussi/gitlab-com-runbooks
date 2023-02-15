@@ -2370,6 +2370,7 @@ groups:
   - record: gitlab_component_service:mapping
     labels:
       component: global_search
+      global_aggregation: "no"
       regional_aggregation: "yes"
       service_aggregation: "no"
       tier: sv
@@ -2378,6 +2379,7 @@ groups:
   - record: gitlab_component_service:mapping
     labels:
       component: graphql_query
+      global_aggregation: "no"
       regional_aggregation: "yes"
       service_aggregation: "yes"
       tier: sv
@@ -2386,6 +2388,7 @@ groups:
   - record: gitlab_component_service:mapping
     labels:
       component: loadbalancer
+      global_aggregation: "no"
       regional_aggregation: "no"
       service_aggregation: "no"
       tier: sv
@@ -2394,6 +2397,7 @@ groups:
   - record: gitlab_component_service:mapping
     labels:
       component: nginx_ingress
+      global_aggregation: "no"
       regional_aggregation: "yes"
       service_aggregation: "no"
       tier: sv
@@ -2402,6 +2406,7 @@ groups:
   - record: gitlab_component_service:mapping
     labels:
       component: rails_request
+      global_aggregation: "no"
       regional_aggregation: "yes"
       service_aggregation: "yes"
       tier: sv
@@ -2410,6 +2415,7 @@ groups:
   - record: gitlab_component_service:mapping
     labels:
       component: workhorse
+      global_aggregation: "no"
       regional_aggregation: "yes"
       service_aggregation: "yes"
       tier: sv
@@ -2418,6 +2424,7 @@ groups:
   - record: gitlab_component_service:mapping
     labels:
       component: rails_request
+      global_aggregation: "no"
       regional_aggregation: "yes"
       service_aggregation: "yes"
       tier: sv
@@ -2426,6 +2433,7 @@ groups:
   - record: gitlab_component_service:mapping
     labels:
       component: workhorse
+      global_aggregation: "no"
       regional_aggregation: "yes"
       service_aggregation: "yes"
       tier: sv
@@ -2434,6 +2442,7 @@ groups:
   - record: gitlab_component_service:mapping
     labels:
       component: loadbalancer
+      global_aggregation: "no"
       regional_aggregation: "no"
       service_aggregation: "yes"
       tier: sv
@@ -2442,6 +2451,7 @@ groups:
   - record: gitlab_component_service:mapping
     labels:
       component: server
+      global_aggregation: "no"
       regional_aggregation: "no"
       service_aggregation: "yes"
       tier: sv
@@ -2450,6 +2460,7 @@ groups:
   - record: gitlab_component_service:mapping
     labels:
       component: loadbalancer
+      global_aggregation: "no"
       regional_aggregation: "no"
       service_aggregation: "no"
       tier: runners
@@ -2458,6 +2469,7 @@ groups:
   - record: gitlab_component_service:mapping
     labels:
       component: polling
+      global_aggregation: "no"
       regional_aggregation: "no"
       service_aggregation: "yes"
       tier: runners
@@ -2466,6 +2478,7 @@ groups:
   - record: gitlab_component_service:mapping
     labels:
       component: queuing_queries_duration
+      global_aggregation: "no"
       regional_aggregation: "no"
       service_aggregation: "yes"
       tier: runners
@@ -2474,6 +2487,7 @@ groups:
   - record: gitlab_component_service:mapping
     labels:
       component: shared_runner_queues
+      global_aggregation: "no"
       regional_aggregation: "no"
       service_aggregation: "yes"
       tier: runners
@@ -2482,6 +2496,7 @@ groups:
   - record: gitlab_component_service:mapping
     labels:
       component: trace_archiving_ci_jobs
+      global_aggregation: "no"
       regional_aggregation: "no"
       service_aggregation: "yes"
       tier: runners
@@ -2490,6 +2505,7 @@ groups:
   - record: gitlab_component_service:mapping
     labels:
       component: consul
+      global_aggregation: "no"
       regional_aggregation: "yes"
       service_aggregation: "yes"
       tier: sv
@@ -2498,6 +2514,7 @@ groups:
   - record: gitlab_component_service:mapping
     labels:
       component: customers_dot_requests
+      global_aggregation: "no"
       regional_aggregation: "no"
       service_aggregation: "yes"
       tier: sv
@@ -2506,6 +2523,7 @@ groups:
   - record: gitlab_component_service:mapping
     labels:
       component: customers_dot_sidekiq_jobs
+      global_aggregation: "no"
       regional_aggregation: "no"
       service_aggregation: "yes"
       tier: sv
@@ -2514,6 +2532,7 @@ groups:
   - record: gitlab_component_service:mapping
     labels:
       component: cnyHttpServices
+      global_aggregation: "no"
       regional_aggregation: "no"
       service_aggregation: "yes"
       tier: lb
@@ -2522,6 +2541,7 @@ groups:
   - record: gitlab_component_service:mapping
     labels:
       component: mainHttpServices
+      global_aggregation: "no"
       regional_aggregation: "no"
       service_aggregation: "yes"
       tier: lb
@@ -2530,6 +2550,7 @@ groups:
   - record: gitlab_component_service:mapping
     labels:
       component: sshServices
+      global_aggregation: "no"
       regional_aggregation: "no"
       service_aggregation: "yes"
       tier: lb
@@ -2538,6 +2559,7 @@ groups:
   - record: gitlab_component_service:mapping
     labels:
       component: artifacts_cdn
+      global_aggregation: "no"
       regional_aggregation: "no"
       service_aggregation: "yes"
       tier: stor
@@ -2546,6 +2568,7 @@ groups:
   - record: gitlab_component_service:mapping
     labels:
       component: pages_range_requests
+      global_aggregation: "no"
       regional_aggregation: "no"
       service_aggregation: "yes"
       tier: stor
@@ -2554,6 +2577,7 @@ groups:
   - record: gitlab_component_service:mapping
     labels:
       component: pages_request_duration
+      global_aggregation: "no"
       regional_aggregation: "no"
       service_aggregation: "yes"
       tier: stor
@@ -2562,6 +2586,7 @@ groups:
   - record: gitlab_component_service:mapping
     labels:
       component: pages_total_requests
+      global_aggregation: "no"
       regional_aggregation: "no"
       service_aggregation: "yes"
       tier: stor
@@ -2570,6 +2595,7 @@ groups:
   - record: gitlab_component_service:mapping
     labels:
       component: registry_storage
+      global_aggregation: "no"
       regional_aggregation: "no"
       service_aggregation: "yes"
       tier: stor
@@ -2578,6 +2604,7 @@ groups:
   - record: gitlab_component_service:mapping
     labels:
       component: workhorse_upload
+      global_aggregation: "no"
       regional_aggregation: "no"
       service_aggregation: "yes"
       tier: stor
@@ -2586,6 +2613,7 @@ groups:
   - record: gitlab_component_service:mapping
     labels:
       component: gitlab_shell
+      global_aggregation: "no"
       regional_aggregation: "yes"
       service_aggregation: "yes"
       tier: sv
@@ -2594,6 +2622,7 @@ groups:
   - record: gitlab_component_service:mapping
     labels:
       component: gitlab_sshd
+      global_aggregation: "no"
       regional_aggregation: "yes"
       service_aggregation: "yes"
       tier: sv
@@ -2602,6 +2631,7 @@ groups:
   - record: gitlab_component_service:mapping
     labels:
       component: loadbalancer
+      global_aggregation: "no"
       regional_aggregation: "no"
       service_aggregation: "no"
       tier: sv
@@ -2610,6 +2640,7 @@ groups:
   - record: gitlab_component_service:mapping
     labels:
       component: loadbalancer_ssh
+      global_aggregation: "no"
       regional_aggregation: "no"
       service_aggregation: "no"
       tier: sv
@@ -2618,6 +2649,7 @@ groups:
   - record: gitlab_component_service:mapping
     labels:
       component: rails_request
+      global_aggregation: "no"
       regional_aggregation: "yes"
       service_aggregation: "yes"
       tier: sv
@@ -2626,6 +2658,7 @@ groups:
   - record: gitlab_component_service:mapping
     labels:
       component: workhorse
+      global_aggregation: "no"
       regional_aggregation: "yes"
       service_aggregation: "yes"
       tier: sv
@@ -2634,6 +2667,7 @@ groups:
   - record: gitlab_component_service:mapping
     labels:
       component: workhorse_auth_api
+      global_aggregation: "no"
       regional_aggregation: "yes"
       service_aggregation: "yes"
       tier: sv
@@ -2642,6 +2676,7 @@ groups:
   - record: gitlab_component_service:mapping
     labels:
       component: goserver
+      global_aggregation: "no"
       regional_aggregation: "no"
       service_aggregation: "yes"
       tier: stor
@@ -2650,6 +2685,7 @@ groups:
   - record: gitlab_component_service:mapping
     labels:
       component: jaeger_agent
+      global_aggregation: "no"
       regional_aggregation: "no"
       service_aggregation: "yes"
       tier: inf
@@ -2658,6 +2694,7 @@ groups:
   - record: gitlab_component_service:mapping
     labels:
       component: jaeger_collector
+      global_aggregation: "no"
       regional_aggregation: "no"
       service_aggregation: "yes"
       tier: inf
@@ -2666,6 +2703,7 @@ groups:
   - record: gitlab_component_service:mapping
     labels:
       component: jaeger_query
+      global_aggregation: "no"
       regional_aggregation: "no"
       service_aggregation: "yes"
       tier: inf
@@ -2674,6 +2712,7 @@ groups:
   - record: gitlab_component_service:mapping
     labels:
       component: grpc_requests
+      global_aggregation: "no"
       regional_aggregation: "no"
       service_aggregation: "yes"
       tier: sv
@@ -2682,6 +2721,7 @@ groups:
   - record: gitlab_component_service:mapping
     labels:
       component: apiserver
+      global_aggregation: "no"
       regional_aggregation: "no"
       service_aggregation: "yes"
       tier: inf
@@ -2690,6 +2730,7 @@ groups:
   - record: gitlab_component_service:mapping
     labels:
       component: cluster_scaleups
+      global_aggregation: "no"
       regional_aggregation: "no"
       service_aggregation: "yes"
       tier: inf
@@ -2698,6 +2739,7 @@ groups:
   - record: gitlab_component_service:mapping
     labels:
       component: elasticsearch_indexing_cluster
+      global_aggregation: "no"
       regional_aggregation: "no"
       service_aggregation: "yes"
       tier: inf
@@ -2706,6 +2748,7 @@ groups:
   - record: gitlab_component_service:mapping
     labels:
       component: elasticsearch_indexing_index
+      global_aggregation: "no"
       regional_aggregation: "no"
       service_aggregation: "yes"
       tier: inf
@@ -2714,6 +2757,7 @@ groups:
   - record: gitlab_component_service:mapping
     labels:
       component: elasticsearch_searching_cluster
+      global_aggregation: "no"
       regional_aggregation: "no"
       service_aggregation: "yes"
       tier: inf
@@ -2722,6 +2766,7 @@ groups:
   - record: gitlab_component_service:mapping
     labels:
       component: elasticsearch_searching_index
+      global_aggregation: "no"
       regional_aggregation: "no"
       service_aggregation: "yes"
       tier: inf
@@ -2730,6 +2775,7 @@ groups:
   - record: gitlab_component_service:mapping
     labels:
       component: fluentd_log_output
+      global_aggregation: "no"
       regional_aggregation: "no"
       service_aggregation: "no"
       tier: inf
@@ -2738,6 +2784,7 @@ groups:
   - record: gitlab_component_service:mapping
     labels:
       component: kibana_googlelb
+      global_aggregation: "no"
       regional_aggregation: "no"
       service_aggregation: "yes"
       tier: inf
@@ -2746,6 +2793,7 @@ groups:
   - record: gitlab_component_service:mapping
     labels:
       component: pubsub_subscriptions
+      global_aggregation: "no"
       regional_aggregation: "no"
       service_aggregation: "yes"
       tier: inf
@@ -2754,6 +2802,7 @@ groups:
   - record: gitlab_component_service:mapping
     labels:
       component: pubsub_topics
+      global_aggregation: "no"
       regional_aggregation: "no"
       service_aggregation: "yes"
       tier: inf
@@ -2762,6 +2811,7 @@ groups:
   - record: gitlab_component_service:mapping
     labels:
       component: pubsubbeat
+      global_aggregation: "no"
       regional_aggregation: "no"
       service_aggregation: "no"
       tier: inf
@@ -2770,6 +2820,7 @@ groups:
   - record: gitlab_component_service:mapping
     labels:
       component: stackdriver
+      global_aggregation: "no"
       regional_aggregation: "no"
       service_aggregation: "yes"
       tier: inf
@@ -2778,6 +2829,7 @@ groups:
   - record: gitlab_component_service:mapping
     labels:
       component: emailsProcessed
+      global_aggregation: "no"
       regional_aggregation: "no"
       service_aggregation: "yes"
       tier: sv
@@ -2786,6 +2838,7 @@ groups:
   - record: gitlab_component_service:mapping
     labels:
       component: grafana
+      global_aggregation: "no"
       regional_aggregation: "no"
       service_aggregation: "yes"
       tier: inf
@@ -2794,6 +2847,7 @@ groups:
   - record: gitlab_component_service:mapping
     labels:
       component: grafana_datasources
+      global_aggregation: "no"
       regional_aggregation: "no"
       service_aggregation: "yes"
       tier: inf
@@ -2802,6 +2856,7 @@ groups:
   - record: gitlab_component_service:mapping
     labels:
       component: grafana_google_lb
+      global_aggregation: "no"
       regional_aggregation: "no"
       service_aggregation: "yes"
       tier: inf
@@ -2810,6 +2865,7 @@ groups:
   - record: gitlab_component_service:mapping
     labels:
       component: grafana_image_renderer
+      global_aggregation: "no"
       regional_aggregation: "no"
       service_aggregation: "yes"
       tier: inf
@@ -2818,6 +2874,7 @@ groups:
   - record: gitlab_component_service:mapping
     labels:
       component: prometheus
+      global_aggregation: "no"
       regional_aggregation: "no"
       service_aggregation: "yes"
       tier: inf
@@ -2826,6 +2883,7 @@ groups:
   - record: gitlab_component_service:mapping
     labels:
       component: prometheus_alert_sender
+      global_aggregation: "no"
       regional_aggregation: "no"
       service_aggregation: "yes"
       tier: inf
@@ -2834,6 +2892,7 @@ groups:
   - record: gitlab_component_service:mapping
     labels:
       component: rule_evaluation
+      global_aggregation: "no"
       regional_aggregation: "no"
       service_aggregation: "yes"
       tier: inf
@@ -2842,6 +2901,7 @@ groups:
   - record: gitlab_component_service:mapping
     labels:
       component: received_tcp_packets
+      global_aggregation: "no"
       regional_aggregation: "no"
       service_aggregation: "yes"
       tier: inf
@@ -2850,6 +2910,7 @@ groups:
   - record: gitlab_component_service:mapping
     labels:
       component: sent_tcp_packets
+      global_aggregation: "no"
       regional_aggregation: "no"
       service_aggregation: "yes"
       tier: inf
@@ -2858,6 +2919,7 @@ groups:
   - record: gitlab_component_service:mapping
     labels:
       component: nginx_ingress
+      global_aggregation: "no"
       regional_aggregation: "yes"
       service_aggregation: "yes"
       tier: sv
@@ -2866,6 +2928,7 @@ groups:
   - record: gitlab_component_service:mapping
     labels:
       component: pgbouncer
+      global_aggregation: "no"
       regional_aggregation: "no"
       service_aggregation: "yes"
       tier: db
@@ -2874,6 +2937,7 @@ groups:
   - record: gitlab_component_service:mapping
     labels:
       component: rails_primary_sql
+      global_aggregation: "no"
       regional_aggregation: "no"
       service_aggregation: "yes"
       tier: db
@@ -2882,6 +2946,7 @@ groups:
   - record: gitlab_component_service:mapping
     labels:
       component: rails_replica_sql
+      global_aggregation: "no"
       regional_aggregation: "no"
       service_aggregation: "yes"
       tier: db
@@ -2890,6 +2955,7 @@ groups:
   - record: gitlab_component_service:mapping
     labels:
       component: transactions_primary
+      global_aggregation: "no"
       regional_aggregation: "no"
       service_aggregation: "yes"
       tier: db
@@ -2898,6 +2964,7 @@ groups:
   - record: gitlab_component_service:mapping
     labels:
       component: transactions_replica
+      global_aggregation: "no"
       regional_aggregation: "no"
       service_aggregation: "yes"
       tier: db
@@ -2906,6 +2973,7 @@ groups:
   - record: gitlab_component_service:mapping
     labels:
       component: pgbouncer
+      global_aggregation: "no"
       regional_aggregation: "no"
       service_aggregation: "yes"
       tier: db
@@ -2914,6 +2982,7 @@ groups:
   - record: gitlab_component_service:mapping
     labels:
       component: transactions_primary
+      global_aggregation: "no"
       regional_aggregation: "no"
       service_aggregation: "yes"
       tier: db
@@ -2922,6 +2991,7 @@ groups:
   - record: gitlab_component_service:mapping
     labels:
       component: transactions_replica
+      global_aggregation: "no"
       regional_aggregation: "no"
       service_aggregation: "yes"
       tier: db
@@ -2930,6 +3000,7 @@ groups:
   - record: gitlab_component_service:mapping
     labels:
       component: pgbouncer
+      global_aggregation: "no"
       regional_aggregation: "no"
       service_aggregation: "yes"
       tier: db
@@ -2938,6 +3009,7 @@ groups:
   - record: gitlab_component_service:mapping
     labels:
       component: transactions_primary
+      global_aggregation: "no"
       regional_aggregation: "no"
       service_aggregation: "yes"
       tier: db
@@ -2946,6 +3018,7 @@ groups:
   - record: gitlab_component_service:mapping
     labels:
       component: transactions_replica
+      global_aggregation: "no"
       regional_aggregation: "no"
       service_aggregation: "yes"
       tier: db
@@ -2954,6 +3027,7 @@ groups:
   - record: gitlab_component_service:mapping
     labels:
       component: transactions
+      global_aggregation: "no"
       regional_aggregation: "no"
       service_aggregation: "yes"
       tier: db
@@ -2962,6 +3036,7 @@ groups:
   - record: gitlab_component_service:mapping
     labels:
       component: service
+      global_aggregation: "no"
       regional_aggregation: "no"
       service_aggregation: "yes"
       tier: db
@@ -2970,6 +3045,7 @@ groups:
   - record: gitlab_component_service:mapping
     labels:
       component: service
+      global_aggregation: "no"
       regional_aggregation: "no"
       service_aggregation: "yes"
       tier: db
@@ -2978,6 +3054,7 @@ groups:
   - record: gitlab_component_service:mapping
     labels:
       component: service
+      global_aggregation: "no"
       regional_aggregation: "no"
       service_aggregation: "yes"
       tier: db
@@ -2986,6 +3063,7 @@ groups:
   - record: gitlab_component_service:mapping
     labels:
       component: loadbalancer
+      global_aggregation: "no"
       regional_aggregation: "no"
       service_aggregation: "yes"
       tier: sv
@@ -2994,6 +3072,7 @@ groups:
   - record: gitlab_component_service:mapping
     labels:
       component: praefect_cloudsql
+      global_aggregation: "no"
       regional_aggregation: "no"
       service_aggregation: "no"
       tier: stor
@@ -3002,6 +3081,7 @@ groups:
   - record: gitlab_component_service:mapping
     labels:
       component: proxy
+      global_aggregation: "no"
       regional_aggregation: "no"
       service_aggregation: "yes"
       tier: stor
@@ -3010,6 +3090,7 @@ groups:
   - record: gitlab_component_service:mapping
     labels:
       component: replicator_queue
+      global_aggregation: "no"
       regional_aggregation: "no"
       service_aggregation: "yes"
       tier: stor
@@ -3018,6 +3099,7 @@ groups:
   - record: gitlab_component_service:mapping
     labels:
       component: http
+      global_aggregation: "no"
       regional_aggregation: "no"
       service_aggregation: "yes"
       tier: sv
@@ -3026,6 +3108,7 @@ groups:
   - record: gitlab_component_service:mapping
     labels:
       component: primary_server
+      global_aggregation: "no"
       regional_aggregation: "no"
       service_aggregation: "yes"
       tier: db
@@ -3034,6 +3117,7 @@ groups:
   - record: gitlab_component_service:mapping
     labels:
       component: rails_cache
+      global_aggregation: "no"
       regional_aggregation: "no"
       service_aggregation: "yes"
       tier: db
@@ -3042,6 +3126,7 @@ groups:
   - record: gitlab_component_service:mapping
     labels:
       component: rails_redis_client
+      global_aggregation: "no"
       regional_aggregation: "no"
       service_aggregation: "yes"
       tier: db
@@ -3050,6 +3135,7 @@ groups:
   - record: gitlab_component_service:mapping
     labels:
       component: secondary_servers
+      global_aggregation: "no"
       regional_aggregation: "no"
       service_aggregation: "no"
       tier: db
@@ -3058,6 +3144,7 @@ groups:
   - record: gitlab_component_service:mapping
     labels:
       component: primary_server
+      global_aggregation: "no"
       regional_aggregation: "no"
       service_aggregation: "yes"
       tier: db
@@ -3066,6 +3153,7 @@ groups:
   - record: gitlab_component_service:mapping
     labels:
       component: rails_redis_client
+      global_aggregation: "no"
       regional_aggregation: "no"
       service_aggregation: "yes"
       tier: db
@@ -3074,6 +3162,7 @@ groups:
   - record: gitlab_component_service:mapping
     labels:
       component: secondary_servers
+      global_aggregation: "no"
       regional_aggregation: "no"
       service_aggregation: "no"
       tier: db
@@ -3082,6 +3171,7 @@ groups:
   - record: gitlab_component_service:mapping
     labels:
       component: primary_server
+      global_aggregation: "no"
       regional_aggregation: "no"
       service_aggregation: "yes"
       tier: db
@@ -3090,6 +3180,7 @@ groups:
   - record: gitlab_component_service:mapping
     labels:
       component: rails_redis_client
+      global_aggregation: "no"
       regional_aggregation: "no"
       service_aggregation: "yes"
       tier: db
@@ -3098,6 +3189,7 @@ groups:
   - record: gitlab_component_service:mapping
     labels:
       component: secondary_servers
+      global_aggregation: "no"
       regional_aggregation: "no"
       service_aggregation: "no"
       tier: db
@@ -3106,6 +3198,7 @@ groups:
   - record: gitlab_component_service:mapping
     labels:
       component: primary_server
+      global_aggregation: "no"
       regional_aggregation: "no"
       service_aggregation: "yes"
       tier: db
@@ -3114,6 +3207,7 @@ groups:
   - record: gitlab_component_service:mapping
     labels:
       component: rails_redis_client
+      global_aggregation: "no"
       regional_aggregation: "no"
       service_aggregation: "yes"
       tier: db
@@ -3122,6 +3216,7 @@ groups:
   - record: gitlab_component_service:mapping
     labels:
       component: secondary_servers
+      global_aggregation: "no"
       regional_aggregation: "no"
       service_aggregation: "no"
       tier: db
@@ -3130,6 +3225,7 @@ groups:
   - record: gitlab_component_service:mapping
     labels:
       component: primary_server
+      global_aggregation: "no"
       regional_aggregation: "no"
       service_aggregation: "yes"
       tier: db
@@ -3138,6 +3234,7 @@ groups:
   - record: gitlab_component_service:mapping
     labels:
       component: rails_redis_client
+      global_aggregation: "no"
       regional_aggregation: "no"
       service_aggregation: "yes"
       tier: db
@@ -3146,6 +3243,7 @@ groups:
   - record: gitlab_component_service:mapping
     labels:
       component: secondary_servers
+      global_aggregation: "no"
       regional_aggregation: "no"
       service_aggregation: "no"
       tier: db
@@ -3154,6 +3252,7 @@ groups:
   - record: gitlab_component_service:mapping
     labels:
       component: primary_server
+      global_aggregation: "no"
       regional_aggregation: "no"
       service_aggregation: "yes"
       tier: db
@@ -3162,6 +3261,7 @@ groups:
   - record: gitlab_component_service:mapping
     labels:
       component: rails_redis_client
+      global_aggregation: "no"
       regional_aggregation: "no"
       service_aggregation: "yes"
       tier: db
@@ -3170,6 +3270,7 @@ groups:
   - record: gitlab_component_service:mapping
     labels:
       component: secondary_servers
+      global_aggregation: "no"
       regional_aggregation: "no"
       service_aggregation: "no"
       tier: db
@@ -3178,6 +3279,7 @@ groups:
   - record: gitlab_component_service:mapping
     labels:
       component: primary_server
+      global_aggregation: "no"
       regional_aggregation: "no"
       service_aggregation: "yes"
       tier: db
@@ -3186,6 +3288,7 @@ groups:
   - record: gitlab_component_service:mapping
     labels:
       component: registry_redis_client
+      global_aggregation: "no"
       regional_aggregation: "no"
       service_aggregation: "yes"
       tier: db
@@ -3194,6 +3297,7 @@ groups:
   - record: gitlab_component_service:mapping
     labels:
       component: secondary_servers
+      global_aggregation: "no"
       regional_aggregation: "no"
       service_aggregation: "no"
       tier: db
@@ -3202,6 +3306,7 @@ groups:
   - record: gitlab_component_service:mapping
     labels:
       component: primary_server
+      global_aggregation: "no"
       regional_aggregation: "no"
       service_aggregation: "yes"
       tier: db
@@ -3210,6 +3315,7 @@ groups:
   - record: gitlab_component_service:mapping
     labels:
       component: rails_redis_client
+      global_aggregation: "no"
       regional_aggregation: "no"
       service_aggregation: "yes"
       tier: db
@@ -3218,6 +3324,7 @@ groups:
   - record: gitlab_component_service:mapping
     labels:
       component: secondary_servers
+      global_aggregation: "no"
       regional_aggregation: "no"
       service_aggregation: "no"
       tier: db
@@ -3226,6 +3333,7 @@ groups:
   - record: gitlab_component_service:mapping
     labels:
       component: primary_server
+      global_aggregation: "no"
       regional_aggregation: "no"
       service_aggregation: "yes"
       tier: db
@@ -3234,6 +3342,7 @@ groups:
   - record: gitlab_component_service:mapping
     labels:
       component: rails_redis_client
+      global_aggregation: "no"
       regional_aggregation: "no"
       service_aggregation: "yes"
       tier: db
@@ -3242,6 +3351,7 @@ groups:
   - record: gitlab_component_service:mapping
     labels:
       component: secondary_servers
+      global_aggregation: "no"
       regional_aggregation: "no"
       service_aggregation: "no"
       tier: db
@@ -3250,6 +3360,7 @@ groups:
   - record: gitlab_component_service:mapping
     labels:
       component: primary_server
+      global_aggregation: "no"
       regional_aggregation: "no"
       service_aggregation: "yes"
       tier: db
@@ -3258,6 +3369,7 @@ groups:
   - record: gitlab_component_service:mapping
     labels:
       component: rails_redis_client
+      global_aggregation: "no"
       regional_aggregation: "no"
       service_aggregation: "yes"
       tier: db
@@ -3266,6 +3378,7 @@ groups:
   - record: gitlab_component_service:mapping
     labels:
       component: secondary_servers
+      global_aggregation: "no"
       regional_aggregation: "no"
       service_aggregation: "no"
       tier: db
@@ -3274,6 +3387,7 @@ groups:
   - record: gitlab_component_service:mapping
     labels:
       component: database
+      global_aggregation: "no"
       regional_aggregation: "yes"
       service_aggregation: "yes"
       tier: sv
@@ -3282,6 +3396,7 @@ groups:
   - record: gitlab_component_service:mapping
     labels:
       component: garbagecollector
+      global_aggregation: "no"
       regional_aggregation: "yes"
       service_aggregation: "no"
       tier: sv
@@ -3290,6 +3405,7 @@ groups:
   - record: gitlab_component_service:mapping
     labels:
       component: loadbalancer
+      global_aggregation: "no"
       regional_aggregation: "no"
       service_aggregation: "no"
       tier: sv
@@ -3298,6 +3414,7 @@ groups:
   - record: gitlab_component_service:mapping
     labels:
       component: redis
+      global_aggregation: "no"
       regional_aggregation: "yes"
       service_aggregation: "yes"
       tier: sv
@@ -3306,6 +3423,7 @@ groups:
   - record: gitlab_component_service:mapping
     labels:
       component: registry_cdn
+      global_aggregation: "no"
       regional_aggregation: "yes"
       service_aggregation: "yes"
       tier: sv
@@ -3314,6 +3432,7 @@ groups:
   - record: gitlab_component_service:mapping
     labels:
       component: registry_server
+      global_aggregation: "no"
       regional_aggregation: "yes"
       service_aggregation: "yes"
       tier: sv
@@ -3322,6 +3441,7 @@ groups:
   - record: gitlab_component_service:mapping
     labels:
       component: server_route_manifest_reads
+      global_aggregation: "no"
       regional_aggregation: "yes"
       service_aggregation: "yes"
       tier: sv
@@ -3330,6 +3450,7 @@ groups:
   - record: gitlab_component_service:mapping
     labels:
       component: server_route_manifest_writes
+      global_aggregation: "no"
       regional_aggregation: "yes"
       service_aggregation: "yes"
       tier: sv
@@ -3338,6 +3459,7 @@ groups:
   - record: gitlab_component_service:mapping
     labels:
       component: elasticsearch_indexing
+      global_aggregation: "no"
       regional_aggregation: "no"
       service_aggregation: "yes"
       tier: inf
@@ -3346,6 +3468,7 @@ groups:
   - record: gitlab_component_service:mapping
     labels:
       component: elasticsearch_searching
+      global_aggregation: "no"
       regional_aggregation: "no"
       service_aggregation: "yes"
       tier: inf
@@ -3354,6 +3477,7 @@ groups:
   - record: gitlab_component_service:mapping
     labels:
       component: pg_transactions
+      global_aggregation: "no"
       regional_aggregation: "no"
       service_aggregation: "no"
       tier: inf
@@ -3362,6 +3486,7 @@ groups:
   - record: gitlab_component_service:mapping
     labels:
       component: sentry_events
+      global_aggregation: "no"
       regional_aggregation: "no"
       service_aggregation: "yes"
       tier: inf
@@ -3370,6 +3495,7 @@ groups:
   - record: gitlab_component_service:mapping
     labels:
       component: email_receiver
+      global_aggregation: "no"
       regional_aggregation: "no"
       service_aggregation: "yes"
       tier: sv
@@ -3378,6 +3504,7 @@ groups:
   - record: gitlab_component_service:mapping
     labels:
       component: global_search_indexing
+      global_aggregation: "no"
       regional_aggregation: "no"
       service_aggregation: "no"
       tier: sv
@@ -3386,6 +3513,7 @@ groups:
   - record: gitlab_component_service:mapping
     labels:
       component: shard_catchall
+      global_aggregation: "no"
       regional_aggregation: "no"
       service_aggregation: "yes"
       tier: sv
@@ -3394,6 +3522,7 @@ groups:
   - record: gitlab_component_service:mapping
     labels:
       component: shard_database_throttled
+      global_aggregation: "no"
       regional_aggregation: "no"
       service_aggregation: "yes"
       tier: sv
@@ -3402,6 +3531,7 @@ groups:
   - record: gitlab_component_service:mapping
     labels:
       component: shard_elasticsearch
+      global_aggregation: "no"
       regional_aggregation: "no"
       service_aggregation: "yes"
       tier: sv
@@ -3410,6 +3540,7 @@ groups:
   - record: gitlab_component_service:mapping
     labels:
       component: shard_gitaly_throttled
+      global_aggregation: "no"
       regional_aggregation: "no"
       service_aggregation: "yes"
       tier: sv
@@ -3418,6 +3549,7 @@ groups:
   - record: gitlab_component_service:mapping
     labels:
       component: shard_imports
+      global_aggregation: "no"
       regional_aggregation: "no"
       service_aggregation: "yes"
       tier: sv
@@ -3426,6 +3558,7 @@ groups:
   - record: gitlab_component_service:mapping
     labels:
       component: shard_low_urgency_cpu_bound
+      global_aggregation: "no"
       regional_aggregation: "no"
       service_aggregation: "yes"
       tier: sv
@@ -3434,6 +3567,7 @@ groups:
   - record: gitlab_component_service:mapping
     labels:
       component: shard_memory_bound
+      global_aggregation: "no"
       regional_aggregation: "no"
       service_aggregation: "yes"
       tier: sv
@@ -3442,6 +3576,7 @@ groups:
   - record: gitlab_component_service:mapping
     labels:
       component: shard_quarantine
+      global_aggregation: "no"
       regional_aggregation: "no"
       service_aggregation: "yes"
       tier: sv
@@ -3450,6 +3585,7 @@ groups:
   - record: gitlab_component_service:mapping
     labels:
       component: shard_urgent_authorized_projects
+      global_aggregation: "no"
       regional_aggregation: "no"
       service_aggregation: "yes"
       tier: sv
@@ -3458,6 +3594,7 @@ groups:
   - record: gitlab_component_service:mapping
     labels:
       component: shard_urgent_cpu_bound
+      global_aggregation: "no"
       regional_aggregation: "no"
       service_aggregation: "yes"
       tier: sv
@@ -3466,6 +3603,7 @@ groups:
   - record: gitlab_component_service:mapping
     labels:
       component: shard_urgent_other
+      global_aggregation: "no"
       regional_aggregation: "no"
       service_aggregation: "yes"
       tier: sv
@@ -3473,63 +3611,8 @@ groups:
     expr: "1"
   - record: gitlab_component_service:mapping
     labels:
-      component: rule_evaluation
-      regional_aggregation: "no"
-      service_aggregation: "yes"
-      tier: inf
-      type: thanos
-    expr: "1"
-  - record: gitlab_component_service:mapping
-    labels:
-      component: thanos_compactor
-      regional_aggregation: "no"
-      service_aggregation: "yes"
-      tier: inf
-      type: thanos
-    expr: "1"
-  - record: gitlab_component_service:mapping
-    labels:
-      component: thanos_memcached
-      regional_aggregation: "no"
-      service_aggregation: "no"
-      tier: inf
-      type: thanos
-    expr: "1"
-  - record: gitlab_component_service:mapping
-    labels:
-      component: thanos_query
-      regional_aggregation: "no"
-      service_aggregation: "yes"
-      tier: inf
-      type: thanos
-    expr: "1"
-  - record: gitlab_component_service:mapping
-    labels:
-      component: thanos_query_frontend
-      regional_aggregation: "no"
-      service_aggregation: "yes"
-      tier: inf
-      type: thanos
-    expr: "1"
-  - record: gitlab_component_service:mapping
-    labels:
-      component: thanos_rule_alert_sender
-      regional_aggregation: "no"
-      service_aggregation: "yes"
-      tier: inf
-      type: thanos
-    expr: "1"
-  - record: gitlab_component_service:mapping
-    labels:
-      component: thanos_store
-      regional_aggregation: "no"
-      service_aggregation: "yes"
-      tier: inf
-      type: thanos
-    expr: "1"
-  - record: gitlab_component_service:mapping
-    labels:
       component: vault
+      global_aggregation: "no"
       regional_aggregation: "no"
       service_aggregation: "yes"
       tier: inf
@@ -3538,6 +3621,7 @@ groups:
   - record: gitlab_component_service:mapping
     labels:
       component: vault_google_lb
+      global_aggregation: "no"
       regional_aggregation: "no"
       service_aggregation: "yes"
       tier: inf
@@ -3546,6 +3630,7 @@ groups:
   - record: gitlab_component_service:mapping
     labels:
       component: gitlab_net_zone
+      global_aggregation: "no"
       regional_aggregation: "no"
       service_aggregation: "yes"
       tier: lb
@@ -3554,6 +3639,7 @@ groups:
   - record: gitlab_component_service:mapping
     labels:
       component: gitlab_zone
+      global_aggregation: "no"
       regional_aggregation: "no"
       service_aggregation: "yes"
       tier: lb
@@ -3562,6 +3648,7 @@ groups:
   - record: gitlab_component_service:mapping
     labels:
       component: loadbalancer
+      global_aggregation: "no"
       regional_aggregation: "yes"
       service_aggregation: "no"
       tier: sv
@@ -3570,6 +3657,7 @@ groups:
   - record: gitlab_component_service:mapping
     labels:
       component: loadbalancer_https
+      global_aggregation: "no"
       regional_aggregation: "yes"
       service_aggregation: "no"
       tier: sv
@@ -3578,6 +3666,7 @@ groups:
   - record: gitlab_component_service:mapping
     labels:
       component: web_pages_server
+      global_aggregation: "no"
       regional_aggregation: "yes"
       service_aggregation: "yes"
       tier: sv
@@ -3586,6 +3675,7 @@ groups:
   - record: gitlab_component_service:mapping
     labels:
       component: global_search
+      global_aggregation: "no"
       regional_aggregation: "yes"
       service_aggregation: "no"
       tier: sv
@@ -3594,6 +3684,7 @@ groups:
   - record: gitlab_component_service:mapping
     labels:
       component: imagescaler
+      global_aggregation: "no"
       regional_aggregation: "yes"
       service_aggregation: "yes"
       tier: sv
@@ -3602,6 +3693,7 @@ groups:
   - record: gitlab_component_service:mapping
     labels:
       component: loadbalancer
+      global_aggregation: "no"
       regional_aggregation: "no"
       service_aggregation: "no"
       tier: sv
@@ -3610,6 +3702,7 @@ groups:
   - record: gitlab_component_service:mapping
     labels:
       component: rails_request
+      global_aggregation: "no"
       regional_aggregation: "yes"
       service_aggregation: "yes"
       tier: sv
@@ -3618,6 +3711,7 @@ groups:
   - record: gitlab_component_service:mapping
     labels:
       component: workhorse
+      global_aggregation: "no"
       regional_aggregation: "yes"
       service_aggregation: "yes"
       tier: sv
@@ -3626,6 +3720,7 @@ groups:
   - record: gitlab_component_service:mapping
     labels:
       component: loadbalancer
+      global_aggregation: "no"
       regional_aggregation: "no"
       service_aggregation: "no"
       tier: sv
@@ -3634,6 +3729,7 @@ groups:
   - record: gitlab_component_service:mapping
     labels:
       component: rails_request
+      global_aggregation: "no"
       regional_aggregation: "yes"
       service_aggregation: "yes"
       tier: sv
@@ -3642,6 +3738,7 @@ groups:
   - record: gitlab_component_service:mapping
     labels:
       component: workhorse
+      global_aggregation: "no"
       regional_aggregation: "yes"
       service_aggregation: "yes"
       tier: sv
@@ -3650,6 +3747,7 @@ groups:
   - record: gitlab_component_service:mapping
     labels:
       component: async_jobs
+      global_aggregation: "no"
       regional_aggregation: "no"
       service_aggregation: "yes"
       tier: sv
@@ -3658,6 +3756,7 @@ groups:
   - record: gitlab_component_service:mapping
     labels:
       component: http
+      global_aggregation: "no"
       regional_aggregation: "no"
       service_aggregation: "yes"
       tier: sv

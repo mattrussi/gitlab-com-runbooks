@@ -39,6 +39,9 @@ local objects = import 'utils/objects.libsonnet';
   // Signifies that a stage is partitioned into canary, main stage etc
   useEnvironmentStages:: true,
 
+  // This metrics setup does use Thanos to create a global view
+  usesThanos:: true,
+
   // Name of the default Prometheus datasource to use
   defaultPrometheusDatasource: 'Global',
 

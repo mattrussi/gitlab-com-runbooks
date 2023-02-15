@@ -33,7 +33,6 @@ local groupsForApplicationSli(sli) =
         sourceAggregationSet=aggregationSets.promSourceSLIs,
         targetAggregationSet=aggregationSets.componentSLIs,
         extrasForGroup=defaultsForRecordingRuleGroup
-
       )
     ),
 
@@ -83,7 +82,6 @@ local groupsForApplicationSli(sli) =
         sourceAggregationSet=aggregationSets.promSourceSLIs,
         targetAggregationSet=aggregationSets.regionalComponentSLIs,
         extrasForGroup=defaultsForRecordingRuleGroup
-
       ),
     ),
 
@@ -96,7 +94,6 @@ local groupsForApplicationSli(sli) =
         sourceAggregationSet=aggregationSets.promSourceSLIs,
         targetAggregationSet=aggregationSets.regionalServiceSLIs,
         extrasForGroup=defaultsForRecordingRuleGroup
-
       ),
     ),
 
@@ -106,7 +103,6 @@ local groupsForApplicationSli(sli) =
         sourceAggregationSet=aggregationSets.featureCategorySourceSLIs,
         targetAggregationSet=aggregationSets.featureCategorySLIs,
         extrasForGroup=defaultsForRecordingRuleGroup
-
       ),
     ),
 
@@ -116,7 +112,6 @@ local groupsForApplicationSli(sli) =
         sourceAggregationSet=aggregationSets.featureCategorySourceSLIs,
         targetAggregationSet=aggregationSets.serviceComponentStageGroupSLIs,
         extrasForGroup=defaultsForRecordingRuleGroup
-
       ),
     ),
 
@@ -142,4 +137,33 @@ local groupsForApplicationSli(sli) =
         applicationSlis
       ),
     ),
+
+  /**
+   * Aggregates component SLIs that are evaluated only in Thanos
+   * Used for Thanos self-monitoring
+   */
+  'aggregated-global-component-slis.yml':
+    outputPromYaml(
+      aggregationSetTransformer.generateRecordingRuleGroups(
+        sourceAggregationSet=aggregationSets.globallyEvaluatedSourceSLIs,
+        targetAggregationSet=aggregationSets.globallyEvaluatedSLIs,
+        extrasForGroup=defaultsForRecordingRuleGroup
+      ),
+    ),
+
+
+  /**
+   * Aggregates component SLIs to service level that are evaluated only in Thanos
+   * Used for Thanos self-monitoring
+   */
+  'aggregated-global-service-slis.yml':
+    outputPromYaml(
+      aggregationSetTransformer.generateRecordingRuleGroups(
+        sourceAggregationSet=aggregationSets.globallyEvaluatedSourceSLIs,
+        targetAggregationSet=aggregationSets.globallyEvaluatedServiceSLIs,
+        extrasForGroup=defaultsForRecordingRuleGroup
+      ),
+    ),
+
+
 }

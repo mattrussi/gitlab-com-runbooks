@@ -592,6 +592,7 @@ groups:
   - record: gitlab_component_service:mapping
     labels:
       component: primary_server
+      global_aggregation: "no"
       regional_aggregation: "no"
       service_aggregation: "yes"
       tier: db
@@ -600,6 +601,7 @@ groups:
   - record: gitlab_component_service:mapping
     labels:
       component: rails_cache
+      global_aggregation: "no"
       regional_aggregation: "no"
       service_aggregation: "yes"
       tier: db
@@ -608,6 +610,7 @@ groups:
   - record: gitlab_component_service:mapping
     labels:
       component: rails_redis_client
+      global_aggregation: "no"
       regional_aggregation: "no"
       service_aggregation: "yes"
       tier: db
@@ -616,6 +619,7 @@ groups:
   - record: gitlab_component_service:mapping
     labels:
       component: secondary_servers
+      global_aggregation: "no"
       regional_aggregation: "no"
       service_aggregation: "no"
       tier: db

@@ -502,6 +502,7 @@ groups:
   - record: gitlab_component_service:mapping
     labels:
       component: rails_request
+      global_aggregation: "no"
       regional_aggregation: "yes"
       service_aggregation: "yes"
       tier: sv
@@ -510,6 +511,7 @@ groups:
   - record: gitlab_component_service:mapping
     labels:
       component: workhorse
+      global_aggregation: "no"
       regional_aggregation: "yes"
       service_aggregation: "yes"
       tier: sv

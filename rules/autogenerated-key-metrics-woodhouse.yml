@@ -462,6 +462,7 @@ groups:
   - record: gitlab_component_service:mapping
     labels:
       component: async_jobs
+      global_aggregation: "no"
       regional_aggregation: "no"
       service_aggregation: "yes"
       tier: sv
@@ -470,6 +471,7 @@ groups:
   - record: gitlab_component_service:mapping
     labels:
       component: http
+      global_aggregation: "no"
       regional_aggregation: "no"
       service_aggregation: "yes"
       tier: sv

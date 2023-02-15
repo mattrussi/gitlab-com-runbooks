@@ -1788,6 +1788,7 @@ groups:
   - record: gitlab_component_service:mapping
     labels:
       component: rule_evaluation
+      global_aggregation: "yes"
       regional_aggregation: "no"
       service_aggregation: "yes"
       tier: inf
@@ -1796,6 +1797,7 @@ groups:
   - record: gitlab_component_service:mapping
     labels:
       component: thanos_compactor
+      global_aggregation: "yes"
       regional_aggregation: "no"
       service_aggregation: "yes"
       tier: inf
@@ -1804,6 +1806,7 @@ groups:
   - record: gitlab_component_service:mapping
     labels:
       component: thanos_memcached
+      global_aggregation: "yes"
       regional_aggregation: "no"
       service_aggregation: "no"
       tier: inf
@@ -1812,6 +1815,7 @@ groups:
   - record: gitlab_component_service:mapping
     labels:
       component: thanos_query
+      global_aggregation: "yes"
       regional_aggregation: "no"
       service_aggregation: "yes"
       tier: inf
@@ -1820,6 +1824,7 @@ groups:
   - record: gitlab_component_service:mapping
     labels:
       component: thanos_query_frontend
+      global_aggregation: "yes"
       regional_aggregation: "no"
       service_aggregation: "yes"
       tier: inf
@@ -1828,6 +1833,7 @@ groups:
   - record: gitlab_component_service:mapping
     labels:
       component: thanos_rule_alert_sender
+      global_aggregation: "yes"
       regional_aggregation: "no"
       service_aggregation: "yes"
       tier: inf
@@ -1836,6 +1842,7 @@ groups:
   - record: gitlab_component_service:mapping
     labels:
       component: thanos_store
+      global_aggregation: "yes"
       regional_aggregation: "no"
       service_aggregation: "yes"
       tier: inf

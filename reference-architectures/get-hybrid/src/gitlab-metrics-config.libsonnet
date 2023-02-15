@@ -68,6 +68,9 @@ local options = validateReferenceArchitectureOptions(import 'gitlab-metrics-opti
   // Signifies that a stage is partitioned into canary, main stage etc
   useEnvironmentStages:: false,
 
+  // This metrics setup does not use Thanos to create a global view
+  usesThanos:: false,
+
   // Name of the default Prometheus datasource to use
   defaultPrometheusDatasource: 'default',
 

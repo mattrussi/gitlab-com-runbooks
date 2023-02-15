@@ -63,10 +63,13 @@ local aggregationFilterExpr(targetAggregationSet) =
   // For service level aggregations, we need to filter out any SLIs which we don't want to include
   // in the service level aggregation.
   // These are defined in the SLI with `aggregateToService:false`
+
+  // If multiple aggregation filters are defined, they are ANDed together
   joinExpr(targetAggregationSet) + if aggregationFilter != null then
     ' and on(component, type) (gitlab_component_service:mapping{%(selector)s})' % {
       selector: selectors.serializeHash(targetAggregationSet.selector {
-        [aggregationFilter + '_aggregation']: 'yes',
+        [f + '_aggregation']: 'yes'
+        for f in if std.isArray(aggregationFilter) then aggregationFilter else [aggregationFilter]
       }),
     }
   else

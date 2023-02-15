@@ -152,6 +152,7 @@ groups:
   - record: gitlab_component_service:mapping
     labels:
       component: grpc_requests
+      global_aggregation: "no"
       regional_aggregation: "no"
       service_aggregation: "yes"
       tier: sv

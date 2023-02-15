@@ -454,4 +454,58 @@ local aggregationSet = import 'servicemetrics/aggregation-set.libsonnet';
       errorRatio: 'gitlab:stage_group:execution:error:ratio_%s',
     },
   }),
+
+
+  /**
+   * componentSLIs consumes promSourceSLIs and is the primary
+   * aggregation used for alerting, monitoring, visualizations, etc.
+   */
+  globallyEvaluatedSourceSLIs: aggregationSet.AggregationSet({
+    id: 'globeval_source',
+    name: 'Global SLI Source Metrics',
+    intermediateSource: true,
+    selector: { monitor: 'global' },  // Thanos Ruler
+    labels: ['env', 'environment', 'tier', 'type', 'stage', 'component'],
+    supportedBurnRates: ['5m', '30m', '1h', '6h', '3d'],
+    metricFormats: {
+      apdexSuccessRate: 'gitlab_component_apdex:success:rate_%s',
+      apdexWeight: 'gitlab_component_apdex:weight:score_%s',
+      opsRate: 'gitlab_component_ops:rate_%s',
+      errorRate: 'gitlab_component_errors:rate_%s',
+    },
+  }),
+
+  /**
+   * This is a special aggregation set, only used with dangerouslyThanosEvaluated services
+   * for thanos self monitoring.
+   */
+  globallyEvaluatedSLIs: aggregationSet.AggregationSet({
+    id: 'globeval_component',
+    name: 'Globally evaluated SLI Metrics',
+    intermediateSource: false,  // Used in dashboards and alerts
+    selector: { monitor: 'global' },  // Thanos Ruler
+    labels: ['env', 'environment', 'tier', 'type', 'stage', 'component'],
+    supportedBurnRates: ['5m', '30m', '1h', '6h', '3d'],
+    metricFormats: {
+      apdexRatio: 'gitlab_component_apdex:ratio_%s',
+      errorRatio: 'gitlab_component_errors:ratio_%s',
+    },
+    aggregationFilter: 'global',
+  }),
+
+  globallyEvaluatedServiceSLIs: aggregationSet.AggregationSet({
+    id: 'globeval_service',
+    name: 'Global evaluated Service-Aggregated Metrics',
+    intermediateSource: false,  // Used in dashboards and alerts
+    selector: { monitor: 'global' },  // Thanos Ruler
+    labels: ['env', 'environment', 'tier', 'type', 'stage'],
+    supportedBurnRates: ['5m', '30m', '1h', '6h', '3d'],
+    metricFormats: {
+      apdexRatio: 'gitlab_service_apdex:ratio_%s',
+      opsRate: 'gitlab_service_ops:rate_%s',
+      errorRatio: 'gitlab_service_errors:ratio_%s',
+    },
+    // Only include components (SLIs) with service_aggregation="yes" and global_aggregation="yes"
+    aggregationFilter: ['service', 'global'],
+  }),
 }
