@@ -11,5 +11,6 @@ local environmentSelector = {};
 serviceDashboard.overview(
   'thanos',
   environmentSelectorHash=environmentSelector,
+  saturationEnvironmentSelectorHash=environmentSelector,
 )
 .overviewTrailer()
