@@ -268,7 +268,7 @@ basic.dashboard(
       title='Sidekiq Aggregated Throughput for $shard Shard',
       description='The total number of jobs being completed',
       query=|||
-        sum(queue:sidekiq_jobs_completion:rate1m{environment="$environment", shard=~"$shard"}) by (shard)
+        sum(gitlab_background_jobs:execution:ops:rate_5m{monitor="global", environment="$environment", shard=~"$shard"}) by (shard)
       |||,
       legendFormat='{{ shard }}',
       interval='1m',
@@ -280,7 +280,7 @@ basic.dashboard(
       title='Sidekiq Throughput per Queue for $shard Shard',
       description='The total number of jobs being completed per queue for shard',
       query=|||
-        sum(queue:sidekiq_jobs_completion:rate1m{environment="$environment", shard=~"$shard"}) by (queue)
+        sum(gitlab_background_jobs:execution:ops:rate_5m{monitor="global", environment="$environment", shard=~"$shard"}) by (queue)
       |||,
       legendFormat='{{ queue }}',
       interval='1m',
@@ -293,7 +293,7 @@ basic.dashboard(
       title='Sidekiq Throughput per Worker for $shard Shard',
       description='The total number of jobs being completed per worker for shard',
       query=|||
-        sum(queue:sidekiq_jobs_completion:rate1m{environment="$environment", shard=~"$shard"}) by (worker)
+        sum(gitlab_background_jobs:execution:ops:rate_5m{monitor="global", environment="$environment", shard=~"$shard"}) by (worker)
       |||,
       legendFormat='{{ worker }}',
       interval='1m',

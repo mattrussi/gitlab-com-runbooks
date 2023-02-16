@@ -13,7 +13,7 @@ local pipelineQueues =
     query=|||
       (
         sum by (worker) (
-          sidekiq_jobs_inflight:irate1m{environment="$environment", stage="$stage", feature_category=~"(continuous_integration|runner)"}
+          ci_sidekiq_jobs_inflight:rate_5m{environment="$environment", stage="$stage"}
         )
       )
     |||,

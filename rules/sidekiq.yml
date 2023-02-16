@@ -1,19 +1,14 @@
 groups:
 - name: sidekiq.rules
   rules:
-  - record: queue:sidekiq_jobs_completion:rate1m
-    expr: >
-      sum without (fqdn,instance,node,pod,pod_template_hash) (
-        rate(sidekiq_jobs_completion_seconds_count[1m])
-      )
-  - record: sidekiq_jobs_inflight:irate1m
+  - record: ci_sidekiq_jobs_inflight:rate_5m
     expr: >
       (
         sum by (environment, stage, feature_category, worker) (
-          irate(sidekiq_enqueued_jobs_total[1m])
+          gitlab_background_jobs:queue:ops:rate_5m{feature_category=~"continuous_integration|runner"}
         )
         -
         sum by (environment, stage, feature_category, worker) (
-          irate(sidekiq_jobs_completion_seconds_count[1m])
+          gitlab_background_jobs:execution:ops:rate_5m{feature_category=~"continuous_integration|runner"}
         )
       )
