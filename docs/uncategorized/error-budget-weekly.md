@@ -22,7 +22,18 @@ teams:
 
 1. `name` is name, using alphanumeric characters only
 1. `product_stage_group` should match the `group` key in <https://gitlab.com/gitlab-com/www-gitlab-com/blob/master/data/stages.yml>
-1. The `slack_error_budget_channel` is the channel in Slack that the team would like to use for alerts (without the initial '#')
+1. The `slack_error_budget_channel` is the channel in Slack that the team would like to use for alerts (without the initial '#')  If you wish the alert to go to multiple channels, just add more than one.  Example:
+
+```yaml
+teams:
+- name: pipeline_insights
+  product_stage_group: pipeline_insights
+  slack_error_budget_channel:
+  - ops-section
+  - g_pipeline-insights
+  send_error_budget_weekly_to_slack: true
+```
+
 1. `send_error_budget_weekly_to_slack` send regular error budget reports to the slack channel.
 
 Step 2: Invite the Error Budget Report slack app to your slack channel

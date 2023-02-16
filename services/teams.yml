@@ -339,7 +339,9 @@ teams:
   product_stage_group: pipeline_insights
   slack_channel: g_pipeline-insights
   slack_alerts_channel: g_pipeline-insights
-  slack_error_budget_channel: ops-section
+  slack_error_budget_channel:
+  - ops-section
+  - g_pipeline-insights
   send_error_budget_weekly_to_slack: true
   ignored_components:
   - graphql_query
