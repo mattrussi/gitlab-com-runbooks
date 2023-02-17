@@ -186,7 +186,7 @@ check_duplicates() {
     local duplicates
     duplicates=$(find -P "generated/$folder" -name "*.json" -exec cat {} + |
       jq '"UID: \(.uid)|TITLE: \(.title)"' | # use jq to output both uid and title with labels
-      tr '|' '\n' | # split UID and TITLE
+      tr '|' '\n' |                          # split UID and TITLE
       tr -d '"' |
       sort |
       uniq -d)
