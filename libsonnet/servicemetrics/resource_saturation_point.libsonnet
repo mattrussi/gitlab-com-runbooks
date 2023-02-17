@@ -68,21 +68,29 @@ local validateAndApplyDefaults(definition) =
 
   };
 
-local typeFilter(definition) =
-  (
-    if std.length(definition.appliesTo) > 1 then
-      { type: { re: std.join('|', definition.appliesTo) } }
-    else
-      { type: definition.appliesTo[0] }
+local filterServicesForResource(definition, thanosSelfMonitoring) =
+  std.filter(
+    function(type)
+      local service = metricsCatalog.getServiceOptional(type);
+      service != null && (thanosSelfMonitoring == service.dangerouslyThanosEvaluated),
+    definition.appliesTo
   );
+
+// TODO: replace this with oneOf and make oneOf smarter
+// with single values
+local oneOfType(appliesTo) =
+  if std.length(appliesTo) > 1 then
+    { type: { re: std.join('|', appliesTo) } }
+  else
+    { type: appliesTo[0] };
 
 local resourceSaturationPoint = function(options)
   local definition = validateAndApplyDefaults(options);
   local serviceApplicator = function(type) std.setMember(type, std.set(definition.appliesTo));
 
   definition {
-    getQuery(selectorHash, rangeInterval, maxAggregationLabels=[])::
-      local staticLabels = self.getStaticLabels();
+    getQuery(selectorHash, rangeInterval, maxAggregationLabels=[], extraStaticLabels={})::
+      local staticLabels = self.getStaticLabels() + extraStaticLabels;
       local environmentLabelsLocal = (if self.dangerouslyThanosEvaluated == true then labelTaxonomy.labelTaxonomy(labelTaxonomy.labels.environmentThanos) else []) + environmentLabels;
       local queryAggregationLabels = environmentLabelsLocal + self.resourceLabels;
       local allMaxAggregationLabels = environmentLabelsLocal + maxAggregationLabels;
@@ -147,31 +155,45 @@ local resourceSaturationPoint = function(options)
     getBurnRatePeriod()::
       ({ burnRatePeriod: '1m' } + self).burnRatePeriod,
 
-    getRecordingRuleDefinition(componentName)::
+    getRecordingRuleDefinition(componentName, thanosSelfMonitoring, staticLabels)::
       local definition = self;
 
-      local query = definition.getQuery(typeFilter(definition), definition.getBurnRatePeriod());
+      local services = filterServicesForResource(definition, thanosSelfMonitoring);
 
-      {
-        record: 'gitlab_component_saturation:ratio',
-        labels: {
-          component: componentName,
-        } + definition.getStaticLabels(),
-        expr: query,
-      },
+      if std.length(services) > 0 then
+        local selectorHash = oneOfType(services);
+        local query = definition.getQuery(selectorHash, definition.getBurnRatePeriod(), extraStaticLabels=staticLabels);
 
-    getResourceAutoscalingRecordingRuleDefinition(componentName)::
+        {
+          record: 'gitlab_component_saturation:ratio',
+          labels: {
+                    component: componentName,
+                  } +
+                  definition.getStaticLabels() +
+                  staticLabels,
+          expr: query,
+        }
+      else null,
+
+    getResourceAutoscalingRecordingRuleDefinition(componentName, thanosSelfMonitoring, staticLabels)::
       local definition = self;
+      local services = filterServicesForResource(definition, thanosSelfMonitoring);
 
-      local query = definition.getQuery(typeFilter(definition), definition.getBurnRatePeriod(), definition.resourceLabels);
+      if std.length(services) > 0 then
+        local selectorHash = oneOfType(services);
 
-      {
-        record: 'gitlab_component_resource_saturation:ratio',
-        labels: {
-          component: componentName,
-        } + definition.getStaticLabels(),
-        expr: query,
-      },
+        local query = definition.getQuery(selectorHash, definition.getBurnRatePeriod(), definition.resourceLabels);
+
+        {
+          record: 'gitlab_component_resource_saturation:ratio',
+          labels: {
+                    component: componentName,
+                  } +
+                  definition.getStaticLabels() +
+                  staticLabels,
+          expr: query,
+        }
+      else null,
 
     getSLORecordingRuleDefinition(componentName)::
       local definition = self;

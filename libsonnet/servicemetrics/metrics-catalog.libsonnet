@@ -29,10 +29,20 @@ local serviceApplicableSaturationTypes(service)
 
   // Find a service for the given service type
   getService(serviceType)::
-    local service = serviceMap[serviceType];
+    local service = if std.objectHas(serviceMap, serviceType) then
+      serviceMap[serviceType]
+    else
+      error 'Requested service %s does not exist.' % [serviceType];
+
     service {
       applicableSaturationTypes():: serviceApplicableSaturationTypes(service),
     },
+
+  getServiceOptional(serviceType)::
+    if std.objectHas(serviceMap, serviceType) then
+      self.getService(serviceType)
+    else
+      null,
 
   findServicesExcluding(first=null, excluding)::
     findServiceTypesWithFirst(first, function(s) !std.setMember(s.type, excluding)),
