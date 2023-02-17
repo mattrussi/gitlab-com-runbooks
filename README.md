@@ -450,6 +450,13 @@ Then, regenerate the rules using:
 make generate
 ```
 
+If you have made changes related to groups and/or feature categories, run the
+following:
+
+```shell
+make update-feature-categories
+```
+
 If you get errors while doing any of these steps, then read on for more details on how to set up your local environment.
 
 ## Generating a new runbooks image
