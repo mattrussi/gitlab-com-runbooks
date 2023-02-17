@@ -14,6 +14,9 @@
 
 * [system](https://log.gprd.gitlab.net/goto/e6a0f170-a8ce-11ed-85ed-e7557b0a598c)
 
+## Troubleshooting Pointers
+
+* [../redis/redis-functional-partitioning.md](../redis/redis-functional-partitioning.md)
 <!-- END_MARKER -->
 
 <!-- ## Summary -->
