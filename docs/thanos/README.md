@@ -54,6 +54,7 @@
 * [Handling Unhealthy Patroni Replica](../patroni/unhealthy_patroni_node_handling.md)
 * [Postgres Replicas](../postgres-dr-delayed/postgres-dr-replicas.md)
 * [Praefect replication is lagging or has stopped](../praefect/praefect-replication.md)
+* [../redis/redis-functional-partitioning.md](../redis/redis-functional-partitioning.md)
 * [A survival guide for SREs to working with Redis at GitLab](../redis/redis-survival-guide-for-sres.md)
 * [../redis/redis.md](../redis/redis.md)
 * [Container Registry Database Index Bloat](../registry/db-index-bloat.md)

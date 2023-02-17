@@ -32,6 +32,7 @@
 * [Blocking individual IPs using Redis and Rack Attack](ban-an-IP-with-redis.md)
 * [Clearing sessions for anonymous users](clear_anonymous_sessions.md)
 * [Redis on Kubernetes](kubernetes.md)
+* [redis-functional-partitioning.md](redis-functional-partitioning.md)
 * [Redis RDB Snapshots](redis-rdb-snapshots.md)
 * [Redis-Sidekiq catchall workloads reduction](redis-sidekiq-catchall-workloads-reduction.md)
 * [A survival guide for SREs to working with Redis at GitLab](redis-survival-guide-for-sres.md)
