@@ -444,6 +444,30 @@ groups:
   rules:
   - record: slo:max:soft:gitlab_component_saturation:ratio
     labels:
+      component: cpu
+    expr: "0.8"
+  - record: slo:max:hard:gitlab_component_saturation:ratio
+    labels:
+      component: cpu
+    expr: "0.9"
+  - record: slo:max:soft:gitlab_component_saturation:ratio
+    labels:
+      component: disk_inodes
+    expr: "0.75"
+  - record: slo:max:hard:gitlab_component_saturation:ratio
+    labels:
+      component: disk_inodes
+    expr: "0.8"
+  - record: slo:max:soft:gitlab_component_saturation:ratio
+    labels:
+      component: disk_space
+    expr: "0.85"
+  - record: slo:max:hard:gitlab_component_saturation:ratio
+    labels:
+      component: disk_space
+    expr: "0.9"
+  - record: slo:max:soft:gitlab_component_saturation:ratio
+    labels:
       component: go_memory
     expr: "0.9"
   - record: slo:max:hard:gitlab_component_saturation:ratio
@@ -452,12 +476,36 @@ groups:
     expr: "0.98"
   - record: slo:max:soft:gitlab_component_saturation:ratio
     labels:
+      component: kube_container_cpu
+    expr: "0.9"
+  - record: slo:max:hard:gitlab_component_saturation:ratio
+    labels:
+      component: kube_container_cpu
+    expr: "0.99"
+  - record: slo:max:soft:gitlab_component_saturation:ratio
+    labels:
+      component: kube_container_memory
+    expr: "0.8"
+  - record: slo:max:hard:gitlab_component_saturation:ratio
+    labels:
+      component: kube_container_memory
+    expr: "0.9"
+  - record: slo:max:soft:gitlab_component_saturation:ratio
+    labels:
       component: kube_go_memory
     expr: "0.9"
   - record: slo:max:hard:gitlab_component_saturation:ratio
     labels:
       component: kube_go_memory
     expr: "0.98"
+  - record: slo:max:soft:gitlab_component_saturation:ratio
+    labels:
+      component: kube_horizontalpodautoscaler_desired_replicas
+    expr: "0.9"
+  - record: slo:max:hard:gitlab_component_saturation:ratio
+    labels:
+      component: kube_horizontalpodautoscaler_desired_replicas
+    expr: "0.95"
   - record: slo:max:soft:gitlab_component_saturation:ratio
     labels:
       component: kube_node_ips
@@ -474,6 +522,38 @@ groups:
     labels:
       component: kube_pool_max_nodes
     expr: "0.95"
+  - record: slo:max:soft:gitlab_component_saturation:ratio
+    labels:
+      component: memory
+    expr: "0.9"
+  - record: slo:max:hard:gitlab_component_saturation:ratio
+    labels:
+      component: memory
+    expr: "0.98"
+  - record: slo:max:soft:gitlab_component_saturation:ratio
+    labels:
+      component: nf_conntrack_entries
+    expr: "0.95"
+  - record: slo:max:hard:gitlab_component_saturation:ratio
+    labels:
+      component: nf_conntrack_entries
+    expr: "0.98"
+  - record: slo:max:soft:gitlab_component_saturation:ratio
+    labels:
+      component: node_schedstat_waiting
+    expr: "0.1"
+  - record: slo:max:hard:gitlab_component_saturation:ratio
+    labels:
+      component: node_schedstat_waiting
+    expr: "0.15"
+  - record: slo:max:soft:gitlab_component_saturation:ratio
+    labels:
+      component: open_fds
+    expr: "0.8"
+  - record: slo:max:hard:gitlab_component_saturation:ratio
+    labels:
+      component: open_fds
+    expr: "0.9"
   - record: slo:max:soft:gitlab_component_saturation:ratio
     labels:
       component: pg_primary_cpu
@@ -498,10 +578,50 @@ groups:
     labels:
       component: pg_walsender_cpu
     expr: "0.2"
+  - record: slo:max:soft:gitlab_component_saturation:ratio
+    labels:
+      component: shard_cpu
+    expr: "0.85"
+  - record: slo:max:hard:gitlab_component_saturation:ratio
+    labels:
+      component: shard_cpu
+    expr: "0.95"
+  - record: slo:max:soft:gitlab_component_saturation:ratio
+    labels:
+      component: single_node_cpu
+    expr: "0.9"
+  - record: slo:max:hard:gitlab_component_saturation:ratio
+    labels:
+      component: single_node_cpu
+    expr: "0.95"
 - name: GitLab Component Saturation Metadata
   interval: 5m
   partial_response_strategy: warn
   rules:
+  - record: gitlab_component_saturation_info
+    labels:
+      capacity_planning_strategy: quantile95_1h
+      component: cpu
+      horiz_scaling: "yes"
+      quantile: max
+      severity: s3
+    expr: "1"
+  - record: gitlab_component_saturation_info
+    labels:
+      capacity_planning_strategy: quantile95_1h
+      component: disk_inodes
+      horiz_scaling: "yes"
+      quantile: max
+      severity: s2
+    expr: "1"
+  - record: gitlab_component_saturation_info
+    labels:
+      capacity_planning_strategy: quantile95_1h
+      component: disk_space
+      horiz_scaling: "yes"
+      quantile: max
+      severity: s2
+    expr: "1"
   - record: gitlab_component_saturation_info
     labels:
       capacity_planning_strategy: quantile95_1h
@@ -513,10 +633,34 @@ groups:
   - record: gitlab_component_saturation_info
     labels:
       capacity_planning_strategy: quantile95_1h
+      component: kube_container_cpu
+      horiz_scaling: "yes"
+      quantile: max
+      severity: s4
+    expr: "1"
+  - record: gitlab_component_saturation_info
+    labels:
+      capacity_planning_strategy: quantile95_1h
+      component: kube_container_memory
+      horiz_scaling: "yes"
+      quantile: max
+      severity: s4
+    expr: "1"
+  - record: gitlab_component_saturation_info
+    labels:
+      capacity_planning_strategy: quantile95_1h
       component: kube_go_memory
       horiz_scaling: "yes"
       quantile: max
       severity: s4
+    expr: "1"
+  - record: gitlab_component_saturation_info
+    labels:
+      capacity_planning_strategy: quantile95_1h
+      component: kube_horizontalpodautoscaler_desired_replicas
+      horiz_scaling: "yes"
+      quantile: max
+      severity: s3
     expr: "1"
   - record: gitlab_component_saturation_info
     labels:
@@ -533,6 +677,38 @@ groups:
       horiz_scaling: "yes"
       quantile: max
       severity: s3
+    expr: "1"
+  - record: gitlab_component_saturation_info
+    labels:
+      capacity_planning_strategy: quantile95_1h
+      component: memory
+      horiz_scaling: "yes"
+      quantile: max
+      severity: s4
+    expr: "1"
+  - record: gitlab_component_saturation_info
+    labels:
+      capacity_planning_strategy: quantile95_1h
+      component: nf_conntrack_entries
+      horiz_scaling: "yes"
+      quantile: max
+      severity: s3
+    expr: "1"
+  - record: gitlab_component_saturation_info
+    labels:
+      capacity_planning_strategy: quantile95_1h
+      component: node_schedstat_waiting
+      horiz_scaling: "yes"
+      quantile: max
+      severity: s4
+    expr: "1"
+  - record: gitlab_component_saturation_info
+    labels:
+      capacity_planning_strategy: quantile95_1h
+      component: open_fds
+      horiz_scaling: "yes"
+      quantile: max
+      severity: s2
     expr: "1"
   - record: gitlab_component_saturation_info
     labels:
@@ -558,6 +734,22 @@ groups:
       quantile: max
       severity: s3
     expr: "1"
+  - record: gitlab_component_saturation_info
+    labels:
+      capacity_planning_strategy: quantile95_1h
+      component: shard_cpu
+      horiz_scaling: "yes"
+      quantile: max
+      severity: s3
+    expr: "1"
+  - record: gitlab_component_saturation_info
+    labels:
+      capacity_planning_strategy: quantile95_1h
+      component: single_node_cpu
+      horiz_scaling: "yes"
+      quantile: max
+      severity: s4
+    expr: "1"
 - name: GitLab Component Saturation Statistics
   interval: 5m
   partial_response_strategy: warn
@@ -576,6 +768,129 @@ groups:
   interval: 1m
   partial_response_strategy: warn
   rules:
+  - alert: component_saturation_slo_out_of_bounds
+    for: 5m
+    annotations:
+      title: The Average Service CPU Utilization resource of the {{ $labels.type }}
+        service ({{ $labels.stage }} stage) has a saturation exceeding SLO and is
+        close to its capacity limit.
+      description: |
+        This means that this resource is running close to capacity and is at risk of exceeding its current capacity limit.
+
+        Details of the Average Service CPU Utilization resource:
+
+        This resource measures average CPU utilization across an all cores in a service fleet. If it is becoming saturated, it may indicate that the fleet needs horizontal or vertical scaling.
+      grafana_dashboard_id: alerts-sat_cpu
+      grafana_dashboard_link: https://dashboards.gitlab.net/d/alerts-sat_cpu?from=now-6h/m&to=now-1m/m&var-environment={{
+        $labels.environment }}&var-type={{ $labels.type }}&var-stage={{ $labels.stage
+        }}
+      grafana_min_zoom_hours: "6"
+      grafana_panel_id: "1465724101"
+      grafana_variables: environment,type,stage
+      promql_query: |
+        max by(environment, tier, type, stage) (
+          clamp_min(
+            clamp_max(
+              1 - avg by (environment, tier, type, stage) (
+                rate(node_cpu_seconds_total{mode="idle", environment="{{ $labels.environment }}",stage="{{ $labels.stage }}",type="{{ $labels.type }}"}[5m])
+              )
+              ,
+              1)
+          ,
+          0)
+        )
+      runbook: docs/{{ $labels.type }}/README.md
+    labels:
+      alert_type: cause
+      rules_domain: general
+      severity: s3
+    expr: |
+      gitlab_component_saturation:ratio{component="cpu",monitor="global"} > on(component) group_left
+      slo:max:hard:gitlab_component_saturation:ratio{component="cpu",monitor="global"}
+  - alert: component_saturation_slo_out_of_bounds
+    for: 15m
+    annotations:
+      title: The Disk inode Utilization per Device per Node resource of the {{ $labels.type
+        }} service ({{ $labels.stage }} stage) has a saturation exceeding SLO and
+        is close to its capacity limit.
+      description: |
+        This means that this resource is running close to capacity and is at risk of exceeding its current capacity limit.
+
+        Details of the Disk inode Utilization per Device per Node resource:
+
+        Disk inode utilization per device per node.
+
+        If this is too high, its possible that a directory is filling up with files. Consider logging in an checking temp directories for large numbers of files
+      grafana_dashboard_id: alerts-sat_disk_inodes
+      grafana_dashboard_link: https://dashboards.gitlab.net/d/alerts-sat_disk_inodes?from=now-6h/m&to=now-1m/m&var-environment={{
+        $labels.environment }}&var-type={{ $labels.type }}&var-stage={{ $labels.stage
+        }}
+      grafana_min_zoom_hours: "6"
+      grafana_panel_id: "39965907"
+      grafana_variables: environment,type,stage
+      promql_query: |
+        max by(environment, tier, type, stage, fqdn, device) (
+          clamp_min(
+            clamp_max(
+              1 - (
+                node_filesystem_files_free{fstype=~"(ext.|xfs)", environment="{{ $labels.environment }}",stage="{{ $labels.stage }}",type="{{ $labels.type }}"}
+                /
+                node_filesystem_files{fstype=~"(ext.|xfs)", environment="{{ $labels.environment }}",stage="{{ $labels.stage }}",type="{{ $labels.type }}"}
+              )
+              ,
+              1)
+          ,
+          0)
+        )
+      runbook: docs/{{ $labels.type }}/README.md
+    labels:
+      alert_type: cause
+      pager: pagerduty
+      rules_domain: general
+      severity: s2
+    expr: |
+      gitlab_component_saturation:ratio{component="disk_inodes",monitor="global"} > on(component) group_left
+      slo:max:hard:gitlab_component_saturation:ratio{component="disk_inodes",monitor="global"}
+  - alert: component_saturation_slo_out_of_bounds
+    for: 15m
+    annotations:
+      title: The Disk Space Utilization per Device per Node resource of the {{ $labels.type
+        }} service ({{ $labels.stage }} stage) has a saturation exceeding SLO and
+        is close to its capacity limit.
+      description: |
+        This means that this resource is running close to capacity and is at risk of exceeding its current capacity limit.
+
+        Details of the Disk Space Utilization per Device per Node resource:
+
+        Disk space utilization per device per node.
+      grafana_dashboard_id: alerts-sat_disk_space
+      grafana_dashboard_link: https://dashboards.gitlab.net/d/alerts-sat_disk_space?from=now-6h/m&to=now-1m/m&var-environment={{
+        $labels.environment }}&var-type={{ $labels.type }}&var-stage={{ $labels.stage
+        }}
+      grafana_min_zoom_hours: "6"
+      grafana_panel_id: "2661375984"
+      grafana_variables: environment,type,stage
+      promql_query: |
+        max by(environment, tier, type, stage, fqdn, device) (
+          clamp_min(
+            clamp_max(
+              (
+                1 - node_filesystem_avail_bytes{fstype=~"ext.|xfs", environment="{{ $labels.environment }}",stage="{{ $labels.stage }}",type="{{ $labels.type }}"} / node_filesystem_size_bytes{fstype=~"ext.|xfs", environment="{{ $labels.environment }}",stage="{{ $labels.stage }}",type="{{ $labels.type }}"}
+              )
+              ,
+              1)
+          ,
+          0)
+        )
+      runbook: docs/{{ $labels.type }}/README.md
+    labels:
+      alert_type: cause
+      pager: pagerduty
+      rules_domain: general
+      severity: s2
+    expr: |
+      gitlab_component_saturation:ratio{component="disk_space",monitor="global"} > on(component) group_left
+      slo:max:hard:gitlab_component_saturation:ratio{component="disk_space",monitor="global"}
   - alert: component_saturation_slo_out_of_bounds
     for: 5m
     annotations:
@@ -620,6 +935,90 @@ groups:
       gitlab_component_saturation:ratio{component="go_memory",monitor="global"} > on(component) group_left
       slo:max:hard:gitlab_component_saturation:ratio{component="go_memory",monitor="global"}
   - alert: component_saturation_slo_out_of_bounds
+    for: 15m
+    annotations:
+      title: The Kube Container CPU Utilization resource of the {{ $labels.type }}
+        service ({{ $labels.stage }} stage) has a saturation exceeding SLO and is
+        close to its capacity limit.
+      description: |
+        This means that this resource is running close to capacity and is at risk of exceeding its current capacity limit.
+
+        Details of the Kube Container CPU Utilization resource:
+
+        Kubernetes containers are allocated a share of CPU. When this is exhausted, the container may be thottled.
+      grafana_dashboard_id: alerts-sat_kube_container_cpu
+      grafana_dashboard_link: https://dashboards.gitlab.net/d/alerts-sat_kube_container_cpu?from=now-6h/m&to=now-1m/m&var-environment={{
+        $labels.environment }}&var-type={{ $labels.type }}&var-stage={{ $labels.stage
+        }}
+      grafana_min_zoom_hours: "6"
+      grafana_panel_id: "2713861591"
+      grafana_variables: environment,type,stage
+      promql_query: |
+        max by(environment, tier, type, stage, pod, container) (
+          clamp_min(
+            clamp_max(
+              sum by (environment, tier, type, stage, pod, container) (
+                rate(container_cpu_usage_seconds_total:labeled{container!="", container!="POD", environment="{{ $labels.environment }}",stage="{{ $labels.stage }}",type="{{ $labels.type }}"}[5m])
+              )
+              /
+              sum by(environment, tier, type, stage, pod, container) (
+                container_spec_cpu_quota:labeled{container!="", container!="POD", environment="{{ $labels.environment }}",stage="{{ $labels.stage }}",type="{{ $labels.type }}"}
+                /
+                container_spec_cpu_period:labeled{container!="", container!="POD", environment="{{ $labels.environment }}",stage="{{ $labels.stage }}",type="{{ $labels.type }}"}
+              )
+              ,
+              1)
+          ,
+          0)
+        )
+      runbook: docs/{{ $labels.type }}/README.md
+    labels:
+      alert_type: cause
+      rules_domain: general
+      severity: s4
+    expr: |
+      gitlab_component_saturation:ratio{component="kube_container_cpu",monitor="global"} > on(component) group_left
+      slo:max:hard:gitlab_component_saturation:ratio{component="kube_container_cpu",monitor="global"}
+  - alert: component_saturation_slo_out_of_bounds
+    for: 15m
+    annotations:
+      title: The Kube Container Memory Utilization resource of the {{ $labels.type
+        }} service ({{ $labels.stage }} stage) has a saturation exceeding SLO and
+        is close to its capacity limit.
+      description: |
+        This means that this resource is running close to capacity and is at risk of exceeding its current capacity limit.
+
+        Details of the Kube Container Memory Utilization resource:
+
+        Records the total memory utilization for containers for this service, as a percentage of the memory limit as configured through Kubernetes.
+      grafana_dashboard_id: alerts-sat_kube_container_memory
+      grafana_dashboard_link: https://dashboards.gitlab.net/d/alerts-sat_kube_container_memory?from=now-6h/m&to=now-1m/m&var-environment={{
+        $labels.environment }}&var-type={{ $labels.type }}&var-stage={{ $labels.stage
+        }}
+      grafana_min_zoom_hours: "6"
+      grafana_panel_id: "172578411"
+      grafana_variables: environment,type,stage
+      promql_query: |
+        max by(environment, tier, type, stage) (
+          clamp_min(
+            clamp_max(
+              container_memory_working_set_bytes:labeled{container!="", container!="POD", environment="{{ $labels.environment }}",stage="{{ $labels.stage }}",type="{{ $labels.type }}"}
+              /
+              (container_spec_memory_limit_bytes:labeled{container!="", container!="POD", environment="{{ $labels.environment }}",stage="{{ $labels.stage }}",type="{{ $labels.type }}"} > 0)
+              ,
+              1)
+          ,
+          0)
+        )
+      runbook: docs/{{ $labels.type }}/README.md
+    labels:
+      alert_type: cause
+      rules_domain: general
+      severity: s4
+    expr: |
+      gitlab_component_saturation:ratio{component="kube_container_memory",monitor="global"} > on(component) group_left
+      slo:max:hard:gitlab_component_saturation:ratio{component="kube_container_memory",monitor="global"}
+  - alert: component_saturation_slo_out_of_bounds
     for: 5m
     annotations:
       title: The Go Memory Utilization per Node resource of the {{ $labels.type }}
@@ -660,6 +1059,47 @@ groups:
     expr: |
       gitlab_component_saturation:ratio{component="kube_go_memory",monitor="global"} > on(component) group_left
       slo:max:hard:gitlab_component_saturation:ratio{component="kube_go_memory",monitor="global"}
+  - alert: component_saturation_slo_out_of_bounds
+    for: 25m
+    annotations:
+      title: The Horizontal Pod Autoscaler Desired Replicas resource of the {{ $labels.type
+        }} service ({{ $labels.stage }} stage) has a saturation exceeding SLO and
+        is close to its capacity limit.
+      description: |
+        This means that this resource is running close to capacity and is at risk of exceeding its current capacity limit.
+
+        Details of the Horizontal Pod Autoscaler Desired Replicas resource:
+
+        The [Horizontal Pod Autoscaler](https://kubernetes.io/docs/tasks/run-application/horizontal-pod-autoscale/) automatically scales the number of Pods in a deployment based on metrics.
+
+        The Horizontal Pod Autoscaler has a configured upper maximum. When this limit is reached, the HPA will not increase the number of pods and other resource saturation (eg, CPU, memory) may occur.
+      grafana_dashboard_id: alerts-sat_kube_horizontalpodautoscaler
+      grafana_dashboard_link: https://dashboards.gitlab.net/d/alerts-sat_kube_horizontalpodautoscaler?from=now-6h/m&to=now-1m/m&var-environment={{
+        $labels.environment }}&var-type={{ $labels.type }}&var-stage={{ $labels.stage
+        }}
+      grafana_min_zoom_hours: "6"
+      grafana_panel_id: "351198712"
+      grafana_variables: environment,type,stage
+      promql_query: |
+        max by(environment, tier, type, stage, horizontalpodautoscaler, shard) (
+          clamp_min(
+            clamp_max(
+              kube_horizontalpodautoscaler_status_desired_replicas:labeled{environment="{{ $labels.environment }}",stage="{{ $labels.stage }}",type="{{ $labels.type }}", shard!~"database-throttled|elasticsearch|gitaly-throttled|imports|urgent-authorized-projects|urgent-other", namespace!~"pubsubbeat"}
+              /
+              kube_horizontalpodautoscaler_spec_max_replicas:labeled{environment="{{ $labels.environment }}",stage="{{ $labels.stage }}",type="{{ $labels.type }}", shard!~"database-throttled|elasticsearch|gitaly-throttled|imports|urgent-authorized-projects|urgent-other", namespace!~"pubsubbeat"}
+              ,
+              1)
+          ,
+          0)
+        )
+      runbook: docs/kube/kubernetes.md#hpascalecapability
+    labels:
+      alert_type: cause
+      rules_domain: general
+      severity: s3
+    expr: |
+      gitlab_component_saturation:ratio{component="kube_horizontalpodautoscaler_desired_replicas",monitor="global"} > on(component) group_left
+      slo:max:hard:gitlab_component_saturation:ratio{component="kube_horizontalpodautoscaler_desired_replicas",monitor="global"}
   - alert: component_saturation_slo_out_of_bounds
     for: 5m
     annotations:
@@ -756,6 +1196,177 @@ groups:
     expr: |
       gitlab_component_saturation:ratio{component="kube_pool_max_nodes",monitor="global"} > on(component) group_left
       slo:max:hard:gitlab_component_saturation:ratio{component="kube_pool_max_nodes",monitor="global"}
+  - alert: component_saturation_slo_out_of_bounds
+    for: 5m
+    annotations:
+      title: The Memory Utilization per Node resource of the {{ $labels.type }} service
+        ({{ $labels.stage }} stage) has a saturation exceeding SLO and is close to
+        its capacity limit.
+      description: |
+        This means that this resource is running close to capacity and is at risk of exceeding its current capacity limit.
+
+        Details of the Memory Utilization per Node resource:
+
+        Memory utilization per device per node.
+      grafana_dashboard_id: alerts-sat_memory
+      grafana_dashboard_link: https://dashboards.gitlab.net/d/alerts-sat_memory?from=now-6h/m&to=now-1m/m&var-environment={{
+        $labels.environment }}&var-type={{ $labels.type }}&var-stage={{ $labels.stage
+        }}
+      grafana_min_zoom_hours: "6"
+      grafana_panel_id: "1955556769"
+      grafana_variables: environment,type,stage
+      promql_query: |
+        max by(environment, tier, type, stage, fqdn) (
+          clamp_min(
+            clamp_max(
+              instance:node_memory_utilization:ratio{environment="{{ $labels.environment }}",stage="{{ $labels.stage }}",type="{{ $labels.type }}"} or instance:node_memory_utilisation:ratio{environment="{{ $labels.environment }}",stage="{{ $labels.stage }}",type="{{ $labels.type }}"}
+              ,
+              1)
+          ,
+          0)
+        )
+      runbook: docs/{{ $labels.type }}/README.md
+    labels:
+      alert_type: cause
+      rules_domain: general
+      severity: s4
+    expr: |
+      gitlab_component_saturation:ratio{component="memory",monitor="global"} > on(component) group_left
+      slo:max:hard:gitlab_component_saturation:ratio{component="memory",monitor="global"}
+  - alert: component_saturation_slo_out_of_bounds
+    for: 5m
+    annotations:
+      title: The conntrack Entries per Node resource of the {{ $labels.type }} service
+        ({{ $labels.stage }} stage) has a saturation exceeding SLO and is close to
+        its capacity limit.
+      description: |
+        This means that this resource is running close to capacity and is at risk of exceeding its current capacity limit.
+
+        Details of the conntrack Entries per Node resource:
+
+        Netfilter connection tracking table utilization per node.
+
+        When saturated, new connection attempts (incoming SYN packets) are dropped with no reply, leaving clients to slowly retry (and typically fail again) over the next several seconds.  When packets are being dropped due to this condition, kernel will log the event as: "nf_conntrack: table full, dropping packet".
+      grafana_dashboard_id: alerts-sat_conntrack
+      grafana_dashboard_link: https://dashboards.gitlab.net/d/alerts-sat_conntrack?from=now-6h/m&to=now-1m/m&var-environment={{
+        $labels.environment }}&var-type={{ $labels.type }}&var-stage={{ $labels.stage
+        }}
+      grafana_min_zoom_hours: "6"
+      grafana_panel_id: "503581002"
+      grafana_variables: environment,type,stage
+      promql_query: |
+        max by(environment, tier, type, stage, fqdn, instance) (
+          clamp_min(
+            clamp_max(
+              max_over_time(node_nf_conntrack_entries{environment="{{ $labels.environment }}",stage="{{ $labels.stage }}",type="{{ $labels.type }}"}[1m])
+              /
+              node_nf_conntrack_entries_limit{environment="{{ $labels.environment }}",stage="{{ $labels.stage }}",type="{{ $labels.type }}"}
+              ,
+              1)
+          ,
+          0)
+        )
+      runbook: docs/{{ $labels.type }}/README.md
+    labels:
+      alert_type: cause
+      rules_domain: general
+      severity: s3
+    expr: |
+      gitlab_component_saturation:ratio{component="nf_conntrack_entries",monitor="global"} > on(component) group_left
+      slo:max:hard:gitlab_component_saturation:ratio{component="nf_conntrack_entries",monitor="global"}
+  - alert: component_saturation_slo_out_of_bounds
+    for: 90m
+    annotations:
+      title: The Node Scheduler Waiting Time resource of the {{ $labels.type }} service
+        ({{ $labels.stage }} stage) has a saturation exceeding SLO and is close to
+        its capacity limit.
+      description: |
+        This means that this resource is running close to capacity and is at risk of exceeding its current capacity limit.
+
+        Details of the Node Scheduler Waiting Time resource:
+
+        Measures the amount of scheduler waiting time that processes are waiting to be scheduled, according to [`CPU Scheduling Metrics`](https://www.robustperception.io/cpu-scheduling-metrics-from-the-node-exporter).
+
+        A high value indicates that a node has more processes to be run than CPU time available to handle them, and may lead to degraded responsiveness and performance from the application.
+
+        Additionally, it may indicate that the fleet is under-provisioned.
+      grafana_dashboard_id: alerts-sat_node_schedstat_waiting
+      grafana_dashboard_link: https://dashboards.gitlab.net/d/alerts-sat_node_schedstat_waiting?from=now-6h/m&to=now-1m/m&var-environment={{
+        $labels.environment }}&var-type={{ $labels.type }}&var-stage={{ $labels.stage
+        }}
+      grafana_min_zoom_hours: "6"
+      grafana_panel_id: "1415313189"
+      grafana_variables: environment,type,stage
+      promql_query: |
+        max by(environment, tier, type, stage, fqdn, shard) (
+          clamp_min(
+            clamp_max(
+              avg without (cpu) (rate(node_schedstat_waiting_seconds_total{environment="{{ $labels.environment }}",stage="{{ $labels.stage }}",type="{{ $labels.type }}"}[1h]))
+              ,
+              1)
+          ,
+          0)
+        )
+      runbook: docs/{{ $labels.type }}/README.md
+    labels:
+      alert_type: cause
+      rules_domain: general
+      severity: s4
+    expr: |
+      gitlab_component_saturation:ratio{component="node_schedstat_waiting",monitor="global"} > on(component) group_left
+      slo:max:hard:gitlab_component_saturation:ratio{component="node_schedstat_waiting",monitor="global"}
+  - alert: component_saturation_slo_out_of_bounds
+    for: 5m
+    annotations:
+      title: The Open file descriptor utilization per instance resource of the {{
+        $labels.type }} service ({{ $labels.stage }} stage) has a saturation exceeding
+        SLO and is close to its capacity limit.
+      description: |
+        This means that this resource is running close to capacity and is at risk of exceeding its current capacity limit.
+
+        Details of the Open file descriptor utilization per instance resource:
+
+        Open file descriptor utilization per instance.
+
+        Saturation on file descriptor limits may indicate a resource-descriptor leak in the application.
+
+        As a temporary fix, you may want to consider restarting the affected process.
+      grafana_dashboard_id: alerts-sat_open_fds
+      grafana_dashboard_link: https://dashboards.gitlab.net/d/alerts-sat_open_fds?from=now-6h/m&to=now-1m/m&var-environment={{
+        $labels.environment }}&var-type={{ $labels.type }}&var-stage={{ $labels.stage
+        }}
+      grafana_min_zoom_hours: "6"
+      grafana_panel_id: "1001792825"
+      grafana_variables: environment,type,stage
+      promql_query: |
+        max by(environment, tier, type, stage, job, instance) (
+          clamp_min(
+            clamp_max(
+              (
+                process_open_fds{environment="{{ $labels.environment }}",stage="{{ $labels.stage }}",type="{{ $labels.type }}"}
+                /
+                process_max_fds{environment="{{ $labels.environment }}",stage="{{ $labels.stage }}",type="{{ $labels.type }}"}
+              )
+              or
+              (
+                ruby_file_descriptors{environment="{{ $labels.environment }}",stage="{{ $labels.stage }}",type="{{ $labels.type }}"}
+                /
+                ruby_process_max_fds{environment="{{ $labels.environment }}",stage="{{ $labels.stage }}",type="{{ $labels.type }}"}
+              )
+              ,
+              1)
+          ,
+          0)
+        )
+      runbook: docs/{{ $labels.type }}/README.md
+    labels:
+      alert_type: cause
+      pager: pagerduty
+      rules_domain: general
+      severity: s2
+    expr: |
+      gitlab_component_saturation:ratio{component="open_fds",monitor="global"} > on(component) group_left
+      slo:max:hard:gitlab_component_saturation:ratio{component="open_fds",monitor="global"}
   - alert: component_saturation_slo_out_of_bounds
     for: 5m
     annotations:
@@ -903,3 +1514,81 @@ groups:
     expr: |
       gitlab_component_saturation:ratio{component="pg_walsender_cpu",monitor="global"} > on(component) group_left
       slo:max:hard:gitlab_component_saturation:ratio{component="pg_walsender_cpu",monitor="global"}
+  - alert: component_saturation_slo_out_of_bounds
+    for: 5m
+    annotations:
+      title: The Average CPU Utilization per Shard resource of the {{ $labels.type
+        }} service ({{ $labels.stage }} stage) has a saturation exceeding SLO and
+        is close to its capacity limit.
+      description: |
+        This means that this resource is running close to capacity and is at risk of exceeding its current capacity limit.
+
+        Details of the Average CPU Utilization per Shard resource:
+
+        This resource measures average CPU utilization across an all cores in a shard of a service fleet. If it is becoming saturated, it may indicate that the shard needs horizontal or vertical scaling.
+      grafana_dashboard_id: alerts-sat_shard_cpu
+      grafana_dashboard_link: https://dashboards.gitlab.net/d/alerts-sat_shard_cpu?from=now-6h/m&to=now-1m/m&var-environment={{
+        $labels.environment }}&var-type={{ $labels.type }}&var-stage={{ $labels.stage
+        }}
+      grafana_min_zoom_hours: "6"
+      grafana_panel_id: "1472933476"
+      grafana_variables: environment,type,stage
+      promql_query: |
+        max by(environment, tier, type, stage, shard) (
+          clamp_min(
+            clamp_max(
+              1 - avg by (environment, tier, type, stage, shard) (
+                rate(node_cpu_seconds_total{mode="idle", environment="{{ $labels.environment }}",stage="{{ $labels.stage }}",type="{{ $labels.type }}"}[5m])
+              )
+              ,
+              1)
+          ,
+          0)
+        )
+      runbook: docs/{{ $labels.type }}/README.md
+    labels:
+      alert_type: cause
+      rules_domain: general
+      severity: s3
+    expr: |
+      gitlab_component_saturation:ratio{component="shard_cpu",monitor="global"} > on(component) group_left
+      slo:max:hard:gitlab_component_saturation:ratio{component="shard_cpu",monitor="global"}
+  - alert: component_saturation_slo_out_of_bounds
+    for: 10m
+    annotations:
+      title: The Average CPU Utilization per Node resource of the {{ $labels.type
+        }} service ({{ $labels.stage }} stage) has a saturation exceeding SLO and
+        is close to its capacity limit.
+      description: |
+        This means that this resource is running close to capacity and is at risk of exceeding its current capacity limit.
+
+        Details of the Average CPU Utilization per Node resource:
+
+        Average CPU utilization per Node.
+
+        If average CPU is saturated, it may indicate that a fleet is in need to horizontal or vertical scaling. It may also indicate imbalances in load in a fleet.
+      grafana_dashboard_id: alerts-sat_single_node_cpu
+      grafana_dashboard_link: https://dashboards.gitlab.net/d/alerts-sat_single_node_cpu?from=now-6h/m&to=now-1m/m&var-environment={{
+        $labels.environment }}&var-type={{ $labels.type }}&var-stage={{ $labels.stage
+        }}
+      grafana_min_zoom_hours: "6"
+      grafana_panel_id: "3372411356"
+      grafana_variables: environment,type,stage
+      promql_query: |
+        max by(environment, tier, type, stage, fqdn) (
+          clamp_min(
+            clamp_max(
+              avg without(cpu, mode) (1 - rate(node_cpu_seconds_total{mode="idle", environment="{{ $labels.environment }}",stage="{{ $labels.stage }}",type="{{ $labels.type }}"}[5m]))
+              ,
+              1)
+          ,
+          0)
+        )
+      runbook: docs/{{ $labels.type }}/README.md
+    labels:
+      alert_type: cause
+      rules_domain: general
+      severity: s4
+    expr: |
+      gitlab_component_saturation:ratio{component="single_node_cpu",monitor="global"} > on(component) group_left
+      slo:max:hard:gitlab_component_saturation:ratio{component="single_node_cpu",monitor="global"}

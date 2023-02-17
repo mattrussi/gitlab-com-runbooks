@@ -1,4 +1,6 @@
 local selectors = import 'promql/selectors.libsonnet';
+local metricsCatalog = import 'servicemetrics/metrics-catalog.libsonnet';
+local misc = import 'utils/misc.libsonnet';
 
 local getSelectorHash(
   includePrometheusEvaluated,
@@ -9,6 +11,15 @@ local getSelectorHash(
   else
     {};
 
+// Returns true if at least one of the services in the list has
+// dangerouslyThanosEvaluated true
+local appliesToAnyThanosEvaluatedService(serviceTypes) =
+  misc.any(
+    function(serviceType)
+      local s = metricsCatalog.getServiceOptional(serviceType);
+      s != null && s.dangerouslyThanosEvaluated,
+    serviceTypes
+  );
 
 local filterSaturationDefinitions(
   saturationResources,
@@ -24,7 +35,7 @@ local filterSaturationDefinitions(
       (std.length(definition.appliesTo) > 0)
       &&
       (
-        thanosSelfMonitoring
+        (thanosSelfMonitoring && appliesToAnyThanosEvaluatedService(definition.appliesTo))
         ||
         (includePrometheusEvaluated && !definition.dangerouslyThanosEvaluated)
         ||
@@ -63,11 +74,12 @@ local generateSaturationAuxRulesGroup(
   saturationResources,
   includePrometheusEvaluated,
   includeDangerouslyThanosEvaluated,
+  thanosSelfMonitoring=false,  // Include Thanos self-monitor saturation rules in the alert groups
       ) =
   local selectorHash = getSelectorHash(includePrometheusEvaluated, includeDangerouslyThanosEvaluated);
   local selector = selectors.serializeHash(selectorHash);
 
-  local filtered = filterSaturationDefinitions(saturationResources, includePrometheusEvaluated, includeDangerouslyThanosEvaluated, false);
+  local filtered = filterSaturationDefinitions(saturationResources, includePrometheusEvaluated, includeDangerouslyThanosEvaluated, thanosSelfMonitoring);
 
   local sloThresholdRecordingRules = std.flatMap(function(key) saturationResources[key].getSLORecordingRuleDefinition(key), filtered);
   local saturationMetadataRecordingRules = std.map(function(key) saturationResources[key].getMetadataRecordingRuleDefinition(key), filtered);
