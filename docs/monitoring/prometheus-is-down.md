@@ -41,12 +41,12 @@ You may have to do this multiple times as thanos-compact finds new corrupted chu
 
 #### Example: overlap in blocks
 
-1. Get overlaping blocks
+1. Get overlaping blocks by checking mint and maxt of overlapping blocks and determining, which one has larger set of metrics e.g.
 
-    ```shell
-    sudo journalctl -u thanos-compact --since '5 minutes ago' --output json | jq -r 'select(._COMM == "thanos").MESSAGE' | jq -c 'select(.err and (.err|contains("pre compaction overlap check")))' | tail -n 1 | jq -r '.err' | grep -Eo 'ulid: ([^,]+)' | sed 's/^ulid: //' | awk 'NR % 2 == 0' | paste -sd' '
-    01GRD8X5H5SVGEWMCMVNC2CYC3 01GRDB3QJZHV8JW7XP6TM04BVJ 01GRFM82QG7ZESZHREP4V5VNBX 01GRJVN89FG85550QQ0GXXMANT 01GRCCGKVXK72T94Z5PSBTWZVC 01GRCQNJ4YKSG4Y114EBNC55C1 01GRCZJ9DR4MR641X29ARYN09E 01GRG4VN3D2YNACR59V34A5T3F 01GRC8W59VYWFDX9D6VWWQBQ5N 01GRD4Q6HBMB0TYQ0CANB3YM3J 01GREJH27NQCNHV5654B1TWQM9
     ```
+    {"caller":"main.go:161","err":"group 3600000@1852658181705106333: pre compaction overlap check: overlaps found while gathering blocks. [mint: 1600300800000, maxt: 1601337600000, range: 288h0m0s, blocks: 2]: <ulid: 01GRR0B5T56JH0199S5RYW448M, mint: 1600300800000, maxt: 1601510400000, range: 336h0m0s>, <ulid: 01GMR2RSSHRVJJCK14CV6CQ1WV, mint: 1600300800000, maxt: 1601337600000, range: 288h0m0s>\ncompaction\nmain.runCompact.func7\n\t/app/cmd/thanos/compact.go:423\nmain.runCompact.func8.1\n\t/app/cmd/thanos/compact.go:477\ngithub.com/thanos-io/thanos/pkg/runutil.Repeat\n\t/app/pkg/runutil/runutil.go:74\nmain.runCompact.func8\n\t/app/cmd/thanos/compact.go:476\ngithub.com/oklog/run.(*Group).Run.func1\n\t/go/pkg/mod/github.com/oklog/run@v1.1.0/group.go:38\nruntime.goexit\n\t/usr/local/go/src/runtime/asm_amd64.s:1594\ncritical error detected\nmain.runCompact.func8.1\n\t/app/cmd/thanos/compact.go:491\ngithub.com/thanos-io/thanos/pkg/runutil.Repeat\n\t/app/pkg/runutil/runutil.go:74\nmain.runCompact.func8\n\t/app/cmd/thanos/compact.go:476\ngithub.com/oklog/run.(*Group).Run.func1\n\t/go/pkg/mod/github.com/oklog/run@v1.1.0/group.go:38\nruntime.goexit\n\t/usr/local/go/src/runtime/asm_amd64.s:1594\ncompact command failed\nmain.main\n\t/app/cmd/thanos/main.go:161\nruntime.main\n\t/usr/local/go/src/runtime/proc.go:250\nruntime.goexit\n\t/usr/local/go/src/runtime/asm_amd64.s:1594","level":"error","ts":"2023-02-17T00:45:58.257320608Z"}
+    ```
+    In this case, both blocks have same mint `1600300800000` but block `01GRR0B5T56JH0199S5RYW448M` has larger maxt (`1601510400000`), meaning that it encompasses metrics from time range of the other block `01GMR2RSSHRVJJCK14CV6CQ1WV` and therefore `01GMR2RSSHRVJJCK14CV6CQ1WV` can be deleted. Use batch converter of epoch timestamps for comparing timestamps: https://epochconverter.com/batch
 
 2. Delete the blocks
 
