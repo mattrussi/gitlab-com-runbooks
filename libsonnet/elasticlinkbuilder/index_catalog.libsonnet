@@ -110,7 +110,7 @@ local indexDefaults = {
 
   monitoring_ops: indexDefaults {
     timestamp: '@timestamp',
-    indexPattern: 'pubsub-monitoring-inf-ops',
+    indexPattern: '0931f630-582b-11ec-87e2-4f63f28291d2',
     defaultColumns: ['json.hostname', 'json.msg', 'json.level'],
     defaultSeriesSplitField: 'json.hostname.keyword',
     failureFilter: [matchFilter('json.level', 'error')],
