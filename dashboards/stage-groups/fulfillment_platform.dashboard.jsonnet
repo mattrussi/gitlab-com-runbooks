@@ -13,7 +13,7 @@ stageGroupDashboards.dashboard('fulfillment_platform')
     'instance',
     '$PROMETHEUS_DS',
     'label_values(probe_success{environment="$environment", type="blackbox"}, instance)',
-    current='https://customers.gitlab.com',
+    current='https://customers.gitlab.com/-/liveness/database,migrations,cache',
     refresh='load',
   )
 )
