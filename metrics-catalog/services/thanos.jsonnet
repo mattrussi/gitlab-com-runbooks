@@ -178,7 +178,7 @@ metricsCatalog.serviceDefinition({
       significantLabels: ['pod'],
 
       toolingLinks: [
-        toolingLinks.kibana(title='Thanos Query', index='monitoring_ops', tag='monitoring.systemd.thanos-query'),
+        toolingLinks.kibana(title='Thanos Query', index='monitoring_ops', matches={ 'kubernetes.container_name': 'thanos-query-frontend' }),
       ],
     },
 
