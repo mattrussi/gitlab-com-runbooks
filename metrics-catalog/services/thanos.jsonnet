@@ -18,13 +18,7 @@ local staticLabels = {
   monitor: 'global',
 };
 
-local thanosServiceSelector = {
-  // TODO: once https://gitlab.com/gitlab-com/gl-infra/reliability/-/issues/14644
-  // is completed, remove `type=monitoring` from the thanosServiceSelector.
-  // This is only required during the intermediate phase while the issue is being
-  // worked on.
-  type: { oneOf: ['monitoring', 'thanos'] },
-};
+local thanosServiceSelector = { type: 'thanos' };
 
 metricsCatalog.serviceDefinition({
   type: 'thanos',
