@@ -19,7 +19,7 @@ services:
     label: Service:API
     business:
       SLA:
-        overall_sla_weighting: 5  # If this exists, this service will be included in the overall SLA, using this value as a weighted average
+        overall_sla_weighting: 5 # If this exists, this service will be included in the overall SLA, using this value as a weighted average
     technical:
       project:
         - https://gitlab.com/gitlab-org/gitlab-ce
@@ -372,7 +372,7 @@ services:
     label: Service:Web
     business:
       SLA:
-        overall_sla_weighting: 5  # If this exists, this service will be included in the overall SLA, using this value as a weighted average
+        overall_sla_weighting: 5 # If this exists, this service will be included in the overall SLA, using this value as a weighted average
     technical:
       project:
         - https://gitlab.com/gitlab-org/gitlab-ce
@@ -464,7 +464,7 @@ services:
     label: Service:Git
     business:
       SLA:
-        overall_sla_weighting: 5  # If this exists, this service will be included in the overall SLA, using this value as a weighted average
+        overall_sla_weighting: 5 # If this exists, this service will be included in the overall SLA, using this value as a weighted average
     technical:
       project:
         - https://gitlab.com/gitlab-org/gitlab-shell # SSH
@@ -653,7 +653,7 @@ services:
     label: Service:Pages
     business:
       SLA:
-        overall_sla_weighting: 0  # Treated as a primary service, but with a zero weight for now
+        overall_sla_weighting: 0 # Treated as a primary service, but with a zero weight for now
     technical:
       project:
         - https://gitlab.com/gitlab-org/gitlab-pages
@@ -1311,7 +1311,7 @@ services:
     label: Service:Registry
     business:
       SLA:
-        overall_sla_weighting: 1  # If this exists, this service will be included in the overall SLA, using this value as a weighted average
+        overall_sla_weighting: 1 # If this exists, this service will be included in the overall SLA, using this value as a weighted average
     technical:
       project:
         - https://github.com/docker/distribution
@@ -1493,7 +1493,7 @@ services:
     label: Service:CI Runner
     business:
       SLA:
-        overall_sla_weighting: 0  # Treated as a primary service, but with a zero weight for now
+        overall_sla_weighting: 0 # Treated as a primary service, but with a zero weight for now
     technical:
       project:
         - https://gitlab.com/gitlab-org/gitlab-runner
@@ -1782,9 +1782,10 @@ services:
       - manage
       - plan
     label: Service:Internal-API
-    business:
-      SLA:
-        overall_sla_weighting: 5 # If this exists, this service will be included in the overall SLA, using this value as a weighted average
+    # business:
+    #   SLA:
+    #     overall_sla_weighting: 5 # If this exists, this service will be included in the overall SLA, using this value as a weighted average
+    # TODO: Reenable it as per: https://gitlab.com/gitlab-com/gl-infra/delivery/-/issues/2859
     technical:
       project:
         - https://gitlab.com/gitlab-org/gitlab
