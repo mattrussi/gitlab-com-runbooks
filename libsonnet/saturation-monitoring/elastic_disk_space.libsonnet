@@ -23,7 +23,7 @@ local resourceSaturationPoint = metricsCatalog.resourceSaturationPoint;
     |||,
     slos: {
       soft: 0.70,
-      hard: 0.85,
+      hard: 0.90,  // Temporarily increased SLO to 90% to wait for index rollover deletion after spikes. Incident issue: https://gitlab.com/gitlab-com/gl-infra/production/-/issues/8422
     },
   }),
 }
