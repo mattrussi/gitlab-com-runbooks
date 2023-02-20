@@ -330,6 +330,14 @@ validate-service-mappings:
   script:
     - make validate-service-mappings
 
+validate-service-catalog-schema:
+  extends: .default-job-rules
+  stage: validate
+  script:
+    - npm install
+    - ./scripts/compile_jsonnet.rb ./services/raw-catalog.jsonnet > ./services/service_catalog.json
+    - npm run validate-service-catalog-schema -- -s ./services/service-catalog-schema.json -d ./services/service_catalog.json
+
 validate-prom-rules:
   extends: .default-job-rules
   stage: validate
