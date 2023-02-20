@@ -34,6 +34,7 @@ local includeDangerouslyThanosEvaluated = true;
           saturationResources=saturationResources,
           includePrometheusEvaluated=includePrometheusEvaluated,
           includeDangerouslyThanosEvaluated=includeDangerouslyThanosEvaluated,
+          thanosSelfMonitoring=true,
         ),
     }),
 }
