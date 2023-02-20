@@ -14,8 +14,6 @@ groups:
         or
         min without(slo) (avg_over_time(slo_observation_status{type="git", monitor="global"}[5m])) * 5
         or
-        min without(slo) (avg_over_time(slo_observation_status{type="internal-api", monitor="global"}[5m])) * 5
-        or
         min without(slo) (avg_over_time(slo_observation_status{type="registry", monitor="global"}[5m])) * 1
         or
         min without(slo) (avg_over_time(slo_observation_status{type="web", monitor="global"}[5m])) * 5
@@ -28,8 +26,6 @@ groups:
         group without(slo) (avg_over_time(slo_observation_status{type="api", monitor="global"}[5m])) * 5
         or
         group without(slo) (avg_over_time(slo_observation_status{type="git", monitor="global"}[5m])) * 5
-        or
-        group without(slo) (avg_over_time(slo_observation_status{type="internal-api", monitor="global"}[5m])) * 5
         or
         group without(slo) (avg_over_time(slo_observation_status{type="registry", monitor="global"}[5m])) * 1
         or
@@ -52,11 +48,11 @@ groups:
       sum by (env,environment,tier,type,stage) (
         (
           sum by(env,environment,tier,type,stage) (
-            gitlab_service_ops:rate_1h{type=~"api|git|internal-api|registry|web"}
+            gitlab_service_ops:rate_1h{type=~"api|git|registry|web"}
           )
           +
           sum by (env,environment,tier,type,stage) (
-            gitlab_service_apdex:weight:score_1h{type=~"api|git|internal-api|registry|web"}
+            gitlab_service_apdex:weight:score_1h{type=~"api|git|registry|web"}
           )
         )
       )
@@ -65,11 +61,11 @@ groups:
       sum by (env,environment,tier,type,stage) (
         (
           sum by(env,environment,tier,type,stage) (
-            gitlab_service_apdex:success:rate_1h{type=~"api|git|internal-api|registry|web"}
+            gitlab_service_apdex:success:rate_1h{type=~"api|git|registry|web"}
           )
           +
           sum by (env,environment,tier,type,stage)(
-            gitlab_service_ops:rate_1h{type=~"api|git|internal-api|registry|web"} - gitlab_service_errors:rate_1h{type=~"api|git|internal-api|registry|web"}
+            gitlab_service_ops:rate_1h{type=~"api|git|registry|web"} - gitlab_service_errors:rate_1h{type=~"api|git|registry|web"}
           )
         )
       )
