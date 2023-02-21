@@ -90,6 +90,12 @@ groups:
     expr: "1"
   - record: gitlab:feature_category:stage_group:mapping
     labels:
+      feature_category: capacity_planning
+      product_stage: platforms
+      stage_group: scalability
+    expr: "1"
+  - record: gitlab:feature_category:stage_group:mapping
+    labels:
       feature_category: cloud_native_installation
       product_stage: systems
       stage_group: distribution_deploy
@@ -134,7 +140,7 @@ groups:
     labels:
       feature_category: commerce_integrations
       product_stage: fulfillment
-      stage_group: commerce_integrations
+      stage_group: provision
     expr: "1"
   - record: gitlab:feature_category:stage_group:mapping
     labels:
@@ -332,7 +338,7 @@ groups:
     labels:
       feature_category: fulfillment_admin_tooling
       product_stage: fulfillment
-      stage_group: fulfillment_admin_tooling
+      stage_group: fulfillment_platform
     expr: "1"
   - record: gitlab:feature_category:stage_group:mapping
     labels:
@@ -363,6 +369,12 @@ groups:
       feature_category: gitlab_cli
       product_stage: create
       stage_group: code_review
+    expr: "1"
+  - record: gitlab:feature_category:stage_group:mapping
+    labels:
+      feature_category: gitlab_docs
+      product_stage: manage
+      stage_group: foundations
     expr: "1"
   - record: gitlab:feature_category:stage_group:mapping
     labels:
@@ -474,7 +486,7 @@ groups:
     expr: "1"
   - record: gitlab:feature_category:stage_group:mapping
     labels:
-      feature_category: mobile_signing_deployment
+      feature_category: mobile_devops
       product_stage: mobile
       stage_group: mobile_devops
     expr: "1"
@@ -528,19 +540,13 @@ groups:
     expr: "1"
   - record: gitlab:feature_category:stage_group:mapping
     labels:
-      feature_category: performance_testing
-      product_stage: verify
-      stage_group: pipeline_insights
-    expr: "1"
-  - record: gitlab:feature_category:stage_group:mapping
-    labels:
       feature_category: permissions
       product_stage: manage
       stage_group: authentication_and_authorization
     expr: "1"
   - record: gitlab:feature_category:stage_group:mapping
     labels:
-      feature_category: pipeline_authoring
+      feature_category: pipeline_composition
       product_stage: verify
       stage_group: pipeline_authoring
     expr: "1"
