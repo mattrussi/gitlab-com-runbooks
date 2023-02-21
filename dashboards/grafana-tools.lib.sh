@@ -184,12 +184,7 @@ find_dashboards() {
 check_duplicates() {
   find -P generated -name '*.json' | sed 's/generated\///' | awk -F'/' '{print $1}' | uniq | while read -r folder; do
     local duplicates
-    duplicates=$(find -P "generated/$folder" -name "*.json" -exec cat {} + |
-      jq '"UID: \(.uid)|TITLE: \(.title)"' | # use jq to output both uid and title with labels
-      tr '|' '\n' |                          # split UID and TITLE
-      tr -d '"' |
-      sort |
-      uniq -d)
+    duplicates=$(cat "generated/$folder/summary.txt" | sort | uniq -d)
 
     if [[ -n $duplicates ]]; then
       echo "Duplicate dashboards in same folder '${folder}' exists! Check for these properties:"
