@@ -7,7 +7,6 @@ tiers:
 
 services:
   - name: api
-    friendly_name: GitLab API
     tier: sv
     teams:
       - create
