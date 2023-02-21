@@ -15,6 +15,7 @@
 
 ## Troubleshooting Pointers
 
+* [How to connect to a Rails Console using Teleport](../Teleport/Connect_to_Rails_Console_via_Teleport.md)
 * [Teleport Approver Workflow](../Teleport/teleport_approval_workflow.md)
 * [Upgrade camoproxy](../camoproxy/upgrade-camoproxy.md)
 * [../ci-runners/ci_pending_builds.md](../ci-runners/ci_pending_builds.md)

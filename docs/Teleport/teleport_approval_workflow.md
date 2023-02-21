@@ -81,14 +81,6 @@ Many user issues can be corrected by removing their local `~/.tsh` directory.  I
 
 There are also times when restarting the Teleport service has resolved user issues. Read about that in the [teleport_admin](teleport_admin.md) runbook.
 
-Newer version of `tsh` (v12.x and above) seems to be probing for `Device Trust` configs on the teleport server side, resulting in errors like this one:
-
-```
-ERROR: failed to get cluster details
-```
-
-To get around this issue, please downgrade version of teleport client to v11.2.3. For further details, please see [this incident issue](https://gitlab.com/gitlab-com/gl-infra/production/-/issues/8395)
-
 ## Workarounds
 
 Last resort solutions if UI and tctl from your machine don't work.

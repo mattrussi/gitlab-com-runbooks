@@ -26,7 +26,11 @@ There are two ways to use to Teleport to connect to a Rails console:
 Official packages for [macOS](https://goteleport.com/docs/installation/#macos) and [Linux](https://goteleport.com/docs/installation/#linux)
 can be found at Teleport's website.
 
-**Note: The Teleport package in Homebrew is not maintained by Teleport and they can't guarantee its reliability or security.**
+**Note:**
+
+- The Teleport package in Homebrew is not maintained by Teleport and they can't guarantee its reliability or security.
+- Newer version of `tsh` (v12.x and above) seems to be probing for `Device Trust` configs on the teleport server side, resulting in errors like `ERROR: failed to get cluster details`.
+  - To get around this issue, please downgrade version of teleport client to v11.2.3. For further details, please see [this incident issue](https://gitlab.com/gitlab-com/gl-infra/production/-/issues/8395).
 
 #### Accessing the Rails console via Teleport
 
