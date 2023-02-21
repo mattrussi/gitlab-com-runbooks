@@ -355,10 +355,6 @@ teams:
   product_stage_group: billing_and_subscription_management
   ignored_components:
   - graphql_query
-- name: commerce_integrations
-  product_stage_group: commerce_integrations
-  ignored_components:
-  - graphql_query
 - name: utilization
   product_stage_group: utilization
   ignored_components:

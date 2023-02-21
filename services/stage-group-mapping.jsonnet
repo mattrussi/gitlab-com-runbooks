@@ -43,6 +43,7 @@
     stage: 'manage',
     feature_categories: [
       'design_system',
+      'gitlab_docs',
       'navigation',
     ],
   },
@@ -116,7 +117,7 @@
     name: 'Pipeline Authoring',
     stage: 'verify',
     feature_categories: [
-      'pipeline_authoring',
+      'pipeline_composition',
       'secrets_management',
     ],
   },
@@ -140,7 +141,6 @@
     stage: 'verify',
     feature_categories: [
       'code_testing',
-      'performance_testing',
       'build_artifacts',
       'review_apps',
     ],
@@ -303,6 +303,7 @@
     feature_categories: [
       'sm_provisioning',
       'saas_provisioning',
+      'commerce_integrations',
     ],
   },
   utilization: {
@@ -318,6 +319,7 @@
     feature_categories: [
       'fulfillment_infrastructure',
       'customersdot_application',
+      'fulfillment_admin_tooling',
     ],
   },
   billing_and_subscription_management: {
@@ -326,20 +328,6 @@
     feature_categories: [
       'billing_and_payments',
       'subscription_management',
-    ],
-  },
-  commerce_integrations: {
-    name: 'Commerce Integrations',
-    stage: 'fulfillment',
-    feature_categories: [
-      'commerce_integrations',
-    ],
-  },
-  fulfillment_admin_tooling: {
-    name: 'Fulfillment Admin Tooling',
-    stage: 'fulfillment',
-    feature_categories: [
-      'fulfillment_admin_tooling',
     ],
   },
   acquisition: {
@@ -442,6 +430,7 @@
       'scalability',
       'error_budgets',
       'infrastructure_cost_data',
+      'capacity_planning',
     ],
   },
   dedicated: {
@@ -485,7 +474,7 @@
     name: 'Mobile DevOps',
     stage: 'mobile',
     feature_categories: [
-      'mobile_signing_deployment',
+      'mobile_devops',
     ],
   },
   '5-min-app': {
