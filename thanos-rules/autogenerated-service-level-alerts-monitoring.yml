@@ -893,12 +893,12 @@ groups:
       (
         (
           gitlab_component_errors:ratio_1h{component="prometheus_alert_sender",monitor="global",type="monitoring"}
-          > (14.4 * 0.001000)
+          > (14.4 * 0.005000)
         )
         and
         (
           gitlab_component_errors:ratio_5m{component="prometheus_alert_sender",monitor="global",type="monitoring"}
-          > (14.4 * 0.001000)
+          > (14.4 * 0.005000)
         )
       )
       and on(env,environment,tier,type,stage,component)
@@ -941,12 +941,12 @@ groups:
       (
         (
           gitlab_component_errors:ratio_6h{component="prometheus_alert_sender",monitor="global",type="monitoring"}
-          > (6 * 0.001000)
+          > (6 * 0.005000)
         )
         and
         (
           gitlab_component_errors:ratio_30m{component="prometheus_alert_sender",monitor="global",type="monitoring"}
-          > (6 * 0.001000)
+          > (6 * 0.005000)
         )
       )
       and on(env,environment,tier,type,stage,component)

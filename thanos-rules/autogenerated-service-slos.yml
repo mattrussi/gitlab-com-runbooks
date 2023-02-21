@@ -884,7 +884,7 @@ groups:
       component: prometheus_alert_sender
       tier: inf
       type: monitoring
-    expr: "0.001000"
+    expr: "0.005000"
   - record: slo:min:events:gitlab_service_apdex:ratio
     labels:
       component: rule_evaluation
