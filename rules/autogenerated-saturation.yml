@@ -1219,7 +1219,7 @@ groups:
   - record: slo:max:soft:gitlab_component_saturation:ratio
     labels:
       component: disk_sustained_read_throughput
-    expr: "0.7"
+    expr: "0.75"
   - record: slo:max:hard:gitlab_component_saturation:ratio
     labels:
       component: disk_sustained_read_throughput

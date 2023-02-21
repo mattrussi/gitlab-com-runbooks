@@ -19,7 +19,7 @@ local resourceSaturationPoint = (import 'servicemetrics/resource_saturation_poin
     |||,
     burnRatePeriod: '20m',
     slos: {
-      soft: 0.70,
+      soft: 0.75,
       hard: 0.80,
       alertTriggerDuration: '25m',
     },
