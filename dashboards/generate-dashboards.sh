@@ -52,4 +52,7 @@ prepare
 
 rm -f generated/*/summary.txt
 
-./find-dashboards.sh | xargs -n1 -P "$(nproc)" ./generate-dashboard.sh "${args[@]}"
+./find-dashboards.sh | while read -r line; do
+  echo "Generating dashboard for $line"
+  ./generate-dashboard.sh "${line}"
+done
