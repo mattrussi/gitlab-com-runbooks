@@ -55,6 +55,12 @@ metricsCatalog.serviceDefinition({
         Alert delivery failure is considered a service-level failure.
       |||,
 
+      // There are >=3 alertmanagers, Prometheus sends alerts to all 3,
+      // we can tolerate some errors for pod rotation etc.
+      monitoringThresholds+: {
+        errorRatio: 0.995,
+      },
+
       local prometheusAlertsSelector = {
         job: 'prometheus',
         type: 'monitoring',
