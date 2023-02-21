@@ -55,8 +55,13 @@ folder=${GRAFANA_FOLDER:-$(dirname "$relative")}
 mkdir -p "generated/${folder}"
 
 generate_dashboards_for_file "${line}" | while IFS= read -r manifest; do
+  if [ -z "$manifest" ]; then
+    echo "warning: empty dashboard for $line"
+    continue
+  fi
+
   IFS='|' read -r uid title < <(echo "$manifest" | jq -r '[.uid, .title] | join("|")')
-  if [ -z "$uid" ]; then
+  if [ -z "$uid" ] || [ -z "$title" ]; then
     echo "Warning: empty dashboard for $line"
     continue
   fi
