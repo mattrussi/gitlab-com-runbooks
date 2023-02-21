@@ -1,7 +1,8 @@
 {
   "scripts": {
     "markdownlint": "markdownlint --config .markdownlint.yml",
-    "validate-service-catalog-schema": "ajv validate --spec draft7 --errors=json"
+    "validate-service-catalog-schema": "ajv validate --spec draft7 --errors=json",
+    "test-service-catalog-schema": "ajv test --spec draft7 --errors=json --valid"
   },
   "dependencies": {
     "ajv-cli": "^5.0.0",
