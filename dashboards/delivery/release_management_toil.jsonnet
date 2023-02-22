@@ -3,8 +3,8 @@ local basic = import 'grafana/basic.libsonnet';
 local layout = import 'grafana/layout.libsonnet';
 local template = grafana.template;
 
-local numberOfAutoDeployJobRetriesQuery = 'sort_desc(sum(increase(delivery_webhooks_auto_deploy_job_retries[$timeframe])) by (project) != 0)';
-local numberOfAutoDeployJobRetriesByJobQuery = 'sort_desc(sum(increase(delivery_webhooks_auto_deploy_job_retries[$timeframe])) by (project, job_name) != 0)';
+local numberOfAutoDeployJobRetriesQuery = 'sort_desc(sum(increase(delivery_webhooks_auto_deploy_job_retries[$__range])) by (project) != 0)';
+local numberOfAutoDeployJobRetriesByJobQuery = 'sort_desc(sum(increase(delivery_webhooks_auto_deploy_job_retries[$__range])) by (project, job_name) != 0)';
 
 local styles = [
   {  // remove decimal points
@@ -19,18 +19,11 @@ basic.dashboard(
   'Release Management Toil',
   tags=['release'],
   editable=true,
-  time_from='now-30d',
+  time_from='now-7d',
   time_to='now',
   includeStandardEnvironmentAnnotations=false,
   includeEnvironmentTemplate=false,
 )
-.addTemplate(template.new(
-  current='1w',
-  datasource='Global',
-  label='Timeframe',
-  name='timeframe',
-  query='1d, 1w, 4w',
-))
 
 .addPanels(layout.singleRow([
   basic.table(
