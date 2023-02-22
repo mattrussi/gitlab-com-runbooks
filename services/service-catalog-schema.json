@@ -347,10 +347,15 @@
                   "type": "object",
                   "properties": {
                     "primary_grafana_dashboard": {
-                      "description": "The primary Grafana dashboard for the service",
-                      "type": [
-                        "string",
-                        "null"
+                      "description": "The primary Grafana dashboard for the service. Must be relative for appending to Grafana base URL",
+                      "anyOf": [
+                        {
+                          "type": "string",
+                          "pattern": "^(?!https?:\/\/)"
+                        },
+                        {
+                          "type":  "null"
+                        }
                       ]
                     },
                     "grafana_folder": {
