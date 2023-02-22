@@ -123,15 +123,7 @@
           "type": "string"
         },
         "tier": {
-          "description": "The tier of the service",
-          "type": "string",
-          "enum": [
-            "sv",
-            "lb",
-            "stor",
-            "db",
-            "inf"
-          ]
+          "$ref": "#/definitions/TierEnumDefinition"
         },
         "owner": {
           "description": "The owner of the service",
@@ -441,21 +433,24 @@
       "type": "object",
       "properties": {
         "name": {
-          "description": "The unique name of the service tier",
-          "type": "string",
-          "enum": [
-            "sv",
-            "lb",
-            "stor",
-            "db",
-            "inf"
-          ]
+          "$ref": "#/definitions/TierEnumDefinition"
         }
       },
       "required": [
         "name"
       ],
       "additionalProperties": false
+    },
+    "TierEnumDefinition": {
+      "description": "The unique name of the service tier",
+      "type": "string",
+      "enum": [
+        "sv",
+        "lb",
+        "stor",
+        "db",
+        "inf"
+      ]
     }
   },
   "properties": {
