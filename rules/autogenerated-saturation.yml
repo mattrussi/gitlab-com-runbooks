@@ -1255,7 +1255,7 @@ groups:
   - record: slo:max:hard:gitlab_component_saturation:ratio
     labels:
       component: elastic_disk_space
-    expr: "0.9"
+    expr: "0.85"
   - record: slo:max:soft:gitlab_component_saturation:ratio
     labels:
       component: elastic_jvm_heap_memory
