@@ -55,14 +55,22 @@ folder=${GRAFANA_FOLDER:-$(dirname "$relative")}
 mkdir -p "generated/${folder}"
 
 generate_dashboards_for_file "${line}" | while IFS= read -r manifest; do
-  uid=$(echo "$manifest" | jq '.uid' | tr -d '"')
-  if [ -z "$uid" ]; then
+  if [ -z "$manifest" ]; then
+    echo "warning: empty dashboard for $line"
+    continue
+  fi
+
+  IFS='|' read -r uid title < <(echo "$manifest" | jq -r '[.uid, .title] | join("|")')
+  if [ -z "$uid" ] || [ -z "$title" ]; then
     echo "Warning: empty dashboard for $line"
     continue
   fi
 
+  echo "title: $title" >>"generated/${folder}/summary.txt"
+  echo "uid: $uid" >>"generated/${folder}/summary.txt"
+
   if [[ -n $dry_run ]]; then
-    echo "Dry Run: Would have written generated manifest for ${uid} in dashboards/generated/$folder/$uid.json"
+    echo "Dry Run: Would have written generated manifest for ${uid} with title ${title} in dashboards/generated/$folder/$uid.json"
   else
     echo "$manifest" >"generated/${folder}/${uid}.json"
     echo "Wrote generated manifest for ${uid} in dashboards/generated/$folder/$uid.json"

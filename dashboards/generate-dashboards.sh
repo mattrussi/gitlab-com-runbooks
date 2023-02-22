@@ -50,4 +50,6 @@ dry_run=${dry_run:-}
 
 prepare
 
+rm -f generated/*/summary.txt
+
 ./find-dashboards.sh | xargs -n1 -P "$(nproc)" ./generate-dashboard.sh "${args[@]}"
