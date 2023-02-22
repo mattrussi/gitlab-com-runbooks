@@ -2,6 +2,7 @@
   // Metric definitions
   histogramApdex:: (import './apdex/histogram.libsonnet').histogramApdex,
   successCounterApdex:: (import './apdex/success_counter.libsonnet').successCounterApdex,
+  errorCounterApdex:: (import './apdex/error_rate_apdex.libsonnet').errorCounterApdex,
   combined:: (import './combined.libsonnet').combined,
   rateMetric:: (import './rate.libsonnet').rateMetric,
   derivMetric:: (import './rate.libsonnet').derivMetric,
