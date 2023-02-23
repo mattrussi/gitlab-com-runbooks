@@ -155,18 +155,14 @@
           "properties": {
             "project": {
               "description": "The list of project links for the service",
-              "anyOf": [
-                {
-                  "type": "array",
-                  "items": {
-                    "type": "string"
-                  },
-                  "uniqueItems": true
-                },
-                {
-                  "type": "null"
-                }
-              ]
+              "type": [
+                "array",
+                "null"
+              ],
+              "items": {
+                "type": "string"
+              },
+              "uniqueItems": true
             },
             "documents": {
               "type": "object",
@@ -208,18 +204,14 @@
                 },
                 "service": {
                   "description": "The list of links for the service",
-                  "anyOf": [
-                    {
-                      "type": "array",
-                      "items": {
-                        "type": "string"
-                      },
-                      "uniqueItems": true
-                    },
-                    {
-                      "type": "null"
-                    }
-                  ]
+                  "type": [
+                    "array",
+                    "null"
+                  ],
+                  "items": {
+                    "type": "string"
+                  },
+                  "uniqueItems": true
                 },
                 "security": {
                   "description": "The link to security document for the service",
@@ -344,10 +336,10 @@
                       "anyOf": [
                         {
                           "type": "string",
-                          "pattern": "^(?!https?:\/\/)"
+                          "pattern": "^(?!https?://)"
                         },
                         {
-                          "type":  "null"
+                          "type": "null"
                         }
                       ]
                     },
