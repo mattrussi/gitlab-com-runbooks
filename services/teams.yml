@@ -373,3 +373,25 @@ teams:
   send_slo_alerts_to_team_slack_channel: true
   ignored_components:
   - graphql_query
+
+# Infrastructure Reliability
+
+- name: reliability_general
+  url: https://about.gitlab.com/handbook/engineering/infrastructure/team/reliability/general.html
+
+- name: reliability_observability
+  url: https://about.gitlab.com/handbook/engineering/infrastructure/team/reliability/observability.html
+
+- name: reliability_foundations
+  url: https://about.gitlab.com/handbook/engineering/infrastructure/team/reliability/foundations.html
+
+- name: reliability_practices
+  url: https://about.gitlab.com/handbook/engineering/infrastructure/team/reliability/practices.html
+
+- name: reliability_database_reliability
+  url: https://about.gitlab.com/handbook/engineering/infrastructure/team/reliability/database-reliability.html#ownership
+
+# Security
+
+- name: trust_and_safety
+  url: https://about.gitlab.com/handbook/security/security-operations/trustandsafety/
