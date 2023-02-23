@@ -1782,9 +1782,9 @@ services:
       - manage
       - plan
     label: Service:Internal-API
-    # business:
-    #   SLA:
-    #     overall_sla_weighting: 5 # If this exists, this service will be included in the overall SLA, using this value as a weighted average
+    business:
+      SLA:
+        overall_sla_weighting: 0 # Treated as a primary service, but with a zero weight for now
     # TODO: Reenable it as per: https://gitlab.com/gitlab-com/gl-infra/delivery/-/issues/2859
     technical:
       project:

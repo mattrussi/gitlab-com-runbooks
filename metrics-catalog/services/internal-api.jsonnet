@@ -70,7 +70,7 @@ metricsCatalog.serviceDefinition({
   },
   serviceLevelIndicators: {
     workhorse: {
-      userImpacting: true,
+      userImpacting: false,
       featureCategory: 'not_owned',
       team: 'workhorse',
       description: |||
