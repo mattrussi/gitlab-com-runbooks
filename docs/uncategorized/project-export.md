@@ -1,7 +1,7 @@
 # Project exports
 
 We sometimes need to manually export a project. This mostly is necessary when
-exporting via UI fails for some reason.
+exporting via UI fails for some reason. Are you looking for [Exporting a Gitaly Repository](https://gitlab.com/gitlab-com/runbooks/-/blob/master/docs/gitaly/gitaly-repositry-export.md) instead?
 
 <!-- vim-markdown-toc GitLab -->
 
@@ -37,10 +37,14 @@ the Gitaly storage name and relative path of the project in the Admin UI or via
 rails console:
 
 ```ruby
-p = Project.find_by_full_path('some/project')
-
-storage = p.repository_storage
-path = p.disk_path
+ssh $USER-rails@console-01-sv-gprd.c.gitlab-production.internal
+[ gprd ] production> p = Project.find_by_full_path('some/project')
+[ gprd ] production> p.repository.storage
+=> "nfs-file-cny01"
+[ gprd ] production> p.repository.disk_path
+=> "@hashed/a6/80/a68072e80f075e89bc74a300101a9e71e8363bdb542182580162553462480a52"
+[ gprd ] production> p.pool_repository.disk_path # When a project gets forked, a pool repository is created we need to export it as well
+=> "@pools/b4/3e/b43ef5538f2e6167fdc8852badbe497b50d4cfd4ed7e1b033068f1a296ee57d2"
 ```
 
 # Export a project via rails-console
