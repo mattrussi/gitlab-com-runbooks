@@ -4,7 +4,7 @@ This document is a condensed summary of the troubleshooting and corrective steps
 
 ## Metrics
 
-The Prometheus base query used for database index bloat forecasts is `gitlab_component_saturation:ratio{type="patroni-registry", component="pg_btree_bloat"}`. We can easily visualize the overall bloat trend in Thanos using [this query](https://thanos-query.ops.gitlab.net/graph?g0.expr=max_over_time(%0A%20%20gitlab_component_saturation%3Aratio%7Btype%3D%22patroni-registry%22%2C%20environment%3D%22gprd%22%2C%20component%3D%22pg_btree_bloat%22%7D%5B1h%5D%0A)&g0.tab=0&g0.stacked=0&g0.range_input=1w&g0.max_source_resolution=0s&g0.deduplicate=1&g0.partial_response=0&g0.store_matches=%5B%5D).
+The Prometheus base query used for database index bloat forecasts is `gitlab_component_saturation:ratio{type="patroni-registry", component="pg_btree_bloat"}`. We can easily visualize the overall bloat trend in Thanos using [this query](https://thanos.gitlab.net/graph?g0.expr=max_over_time(%0A%20%20gitlab_component_saturation%3Aratio%7Btype%3D%22patroni-registry%22%2C%20environment%3D%22gprd%22%2C%20component%3D%22pg_btree_bloat%22%7D%5B1h%5D%0A)&g0.tab=0&g0.stacked=0&g0.range_input=1w&g0.max_source_resolution=0s&g0.deduplicate=1&g0.partial_response=0&g0.store_matches=%5B%5D).
 
 The query above can be used to identify the overall bloat. To see the estimated bloat for individual indexes, we can use the `gitlab_database_bloat_btree_bloat_size` metric.
 
@@ -12,7 +12,7 @@ The above metrics are fed by the bloat estimation queries from [github.com/iogui
 
 ## Identifying Top Bloated Indexes
 
-We can see the top 100 most bloated indexes using [this query](https://thanos-query.ops.gitlab.net/graph?g0.expr=topk(100%2C%20sum%20by%20(query_name)%20(avg_over_time(gitlab_database_bloat_btree_bloat_size%7Bjob%3D%22gitlab-monitor-database-bloat%22%2C%20env%3D%22gprd%22%2Cstage%3D%22main%22%2Ctype%3D%22patroni-registry%22%7D%5B58m%5D)))&g0.tab=1&g0.stacked=0&g0.range_input=1w&g0.max_source_resolution=0s&g0.deduplicate=1&g0.partial_response=0&g0.store_matches=%5B%5D).
+We can see the top 100 most bloated indexes using [this query](https://thanos.gitlab.net/graph?g0.expr=topk(100%2C%20sum%20by%20(query_name)%20(avg_over_time(gitlab_database_bloat_btree_bloat_size%7Bjob%3D%22gitlab-monitor-database-bloat%22%2C%20env%3D%22gprd%22%2Cstage%3D%22main%22%2Ctype%3D%22patroni-registry%22%7D%5B58m%5D)))&g0.tab=1&g0.stacked=0&g0.range_input=1w&g0.max_source_resolution=0s&g0.deduplicate=1&g0.partial_response=0&g0.store_matches=%5B%5D).
 
 ## Fixing Index Bloat
 

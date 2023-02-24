@@ -2,7 +2,7 @@
 
 ## Symptoms – how `pg_txid_xmin_age` may be associated with various issues
 
-First of all, understand if there are ongoing issues that may be associated to the ongoing `pg_txid_xmin_age` spike ([an example for one of past incidents](https://thanos-query.ops.gitlab.net/graph?g0.expr=%20%20sum%20by%20(fqdn)%20(avg_over_time(pg_stat_activity_marginalia_sampler_active_count%7Benv%3D%22gprd%22%2C%20wait_event%3D~%22%5BSs%5Dubtrans.*%22%7D%5B5m%5D))&g0.tab=0&g0.stacked=0&g0.range_input=2h&g0.max_source_resolution=0s&g0.deduplicate=1&g0.partial_response=0&g0.store_matches=%5B%5D&g0.end_input=2021-10-18%2016%3A53%3A58&g0.moment_input=2021-10-18%2016%3A53%3A58)):
+First of all, understand if there are ongoing issues that may be associated to the ongoing `pg_txid_xmin_age` spike ([an example for one of past incidents](https://thanos.gitlab.net/graph?g0.expr=%20%20sum%20by%20(fqdn)%20(avg_over_time(pg_stat_activity_marginalia_sampler_active_count%7Benv%3D%22gprd%22%2C%20wait_event%3D~%22%5BSs%5Dubtrans.*%22%7D%5B5m%5D))&g0.tab=0&g0.stacked=0&g0.range_input=2h&g0.max_source_resolution=0s&g0.deduplicate=1&g0.partial_response=0&g0.store_matches=%5B%5D&g0.end_input=2021-10-18%2016%3A53%3A58&g0.moment_input=2021-10-18%2016%3A53%3A58)):
 
 - SubtransControlLock spikes on standby nodes – check Thanos, using this query:
 
@@ -98,7 +98,7 @@ The spike of `pg_txid_xmin_age` can be caused by one of the following 3 reasons:
 
 Other interesting related metrics that are available:
 
-- [Long running transactions in prometheus](https://thanos-query.ops.gitlab.net/graph?g0.expr=pg_long_running_transactions_marginalia_max_age_in_seconds%7Benv%3D%22gprd%22%7D&g0.tab=0&g0.stacked=0&g0.range_input=1d&g0.max_source_resolution=0s&g0.deduplicate=1&g0.partial_response=0&g0.store_matches=%5B%5D&g0.end_input=2021-10-18%2022%3A20%3A28&g0.moment_input=2021-10-18%2022%3A20%3A28)
+- [Long running transactions in prometheus](https://thanos.gitlab.net/graph?g0.expr=pg_long_running_transactions_marginalia_max_age_in_seconds%7Benv%3D%22gprd%22%7D&g0.tab=0&g0.stacked=0&g0.range_input=1d&g0.max_source_resolution=0s&g0.deduplicate=1&g0.partial_response=0&g0.store_matches=%5B%5D&g0.end_input=2021-10-18%2022%3A20%3A28&g0.moment_input=2021-10-18%2022%3A20%3A28)
 
 - [Checking Logs with Gitlab::Database::Transaction::Context class](https://log.gprd.gitlab.net/goto/d9cc2db2b160a786fe883d24922793ce)
 

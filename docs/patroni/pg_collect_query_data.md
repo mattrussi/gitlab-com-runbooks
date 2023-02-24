@@ -184,7 +184,7 @@ plots this field over time.
 
 QPS: to gather the QPS we need to execute the following thanos query:
 
-<https://thanos-query.ops.gitlab.net/graph?g0.range_input=6h&g0.end_input=2021-02-17%2013%3A36&g0.step_input=3&g0.moment_input=2021-02-01%2011%3A00%3A00&g0.max_source_resolution=0s&g0.expr=sum(rate(%20pg_stat_statements_calls%7Bqueryid%3D%22-6386890822646776524%22%2C%20env%3D%22gprd%22%2C%20monitor%3D%22db%22%2C%20type%3D%22patroni%22%2Cinstance%3D%22patroni-03-db-gprd.c.gitlab-production.internal%3A9187%22%7D%5B5m%5D))&g0.tab=0>
+<https://thanos.gitlab.net/graph?g0.range_input=6h&g0.end_input=2021-02-17%2013%3A36&g0.step_input=3&g0.moment_input=2021-02-01%2011%3A00%3A00&g0.max_source_resolution=0s&g0.expr=sum(rate(%20pg_stat_statements_calls%7Bqueryid%3D%22-6386890822646776524%22%2C%20env%3D%22gprd%22%2C%20monitor%3D%22db%22%2C%20type%3D%22patroni%22%2Cinstance%3D%22patroni-03-db-gprd.c.gitlab-production.internal%3A9187%22%7D%5B5m%5D))&g0.tab=0>
 
 Please remember to change the queryId and update the timeframe:
 
