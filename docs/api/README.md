@@ -209,9 +209,9 @@ i --> e
 ## Performance
 
 We currently (Feb 2021) serve between 4k to 5k API requests/s to
-[workhorse](https://thanos-query.ops.gitlab.net/graph?g0.range_input=1w&g0.max_source_resolution=0s&g0.expr=avg_over_time(gitlab_component_ops%3Arate_5m%7Bcomponent%3D%22workhorse%22%2Cenv%3D%22gprd%22%2Cenvironment%3D%22gprd%22%2Cmonitor%3D%22global%22%2Cstage%3D%22main%22%2Ctype%3D%22api%22%7D%5B5m%5D)&g0.tab=0)
+[workhorse](https://thanos.gitlab.net/graph?g0.range_input=1w&g0.max_source_resolution=0s&g0.expr=avg_over_time(gitlab_component_ops%3Arate_5m%7Bcomponent%3D%22workhorse%22%2Cenv%3D%22gprd%22%2Cenvironment%3D%22gprd%22%2Cmonitor%3D%22global%22%2Cstage%3D%22main%22%2Ctype%3D%22api%22%7D%5B5m%5D)&g0.tab=0)
 on a business day and 2.5k to 3.5k requests/s to
-[puma](https://thanos-query.ops.gitlab.net/graph?g0.range_input=1w&g0.max_source_resolution=0s&g0.expr=avg_over_time(gitlab_component_ops%3Arate_5m%7Bcomponent%3D%22puma%22%2Cenv%3D%22gprd%22%2Cenvironment%3D%22gprd%22%2Cmonitor%3D%22global%22%2Cstage%3D%22main%22%2Ctype%3D%22api%22%7D%5B5m%5D)&g0.tab=0).
+[puma](https://thanos.gitlab.net/graph?g0.range_input=1w&g0.max_source_resolution=0s&g0.expr=avg_over_time(gitlab_component_ops%3Arate_5m%7Bcomponent%3D%22puma%22%2Cenv%3D%22gprd%22%2Cenvironment%3D%22gprd%22%2Cmonitor%3D%22global%22%2Cstage%3D%22main%22%2Ctype%3D%22api%22%7D%5B5m%5D)&g0.tab=0).
 
 Performance of the API service mainly depends on these factors:
 
@@ -221,9 +221,9 @@ Performance of the API service mainly depends on these factors:
 * Node type:
   <https://ops.gitlab.net/gitlab-com/gitlab-com-infrastructure/-/blob/07a258b2420778c1f49839367ea9fb1b1ca13460/environments/gprd/variables.tf#L354>
 * Number of puma worker_processes: [`sum(puma_workers{env="gprd",
-  type="api"})`](https://thanos-query.ops.gitlab.net/graph?g0.range_input=1h&g0.max_source_resolution=0s&g0.expr=sum(puma_workers%7Benv%3D%22gprd%22%2C%20type%3D%22api%22%7D)&g0.tab=0)
+  type="api"})`](https://thanos.gitlab.net/graph?g0.range_input=1h&g0.max_source_resolution=0s&g0.expr=sum(puma_workers%7Benv%3D%22gprd%22%2C%20type%3D%22api%22%7D)&g0.tab=0)
 * Number of puma threads: [`sum(puma_max_threads{env="gprd",
-  type="api"})`](https://thanos-query.ops.gitlab.net/graph?g0.range_input=1h&g0.max_source_resolution=0s&g0.expr=sum(puma_max_threads%7Benv%3D%22gprd%22%2C%20type%3D%22api%22%7D)&g0.tab=0)
+  type="api"})`](https://thanos.gitlab.net/graph?g0.range_input=1h&g0.max_source_resolution=0s&g0.expr=sum(puma_max_threads%7Benv%3D%22gprd%22%2C%20type%3D%22api%22%7D)&g0.tab=0)
 
 See <https://gitlab.com/gitlab-com/gl-infra/delivery/-/issues/1592> for a detailed
 analysis.
