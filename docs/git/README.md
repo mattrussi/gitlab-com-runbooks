@@ -45,6 +45,7 @@
 * [Gitaly Queuing](../gitaly/gitaly-rate-limiting.md)
 * [Gitaly repository cgroups](../gitaly/gitaly-repos-cgroup.md)
 * [Restoring gitaly data corruption on a project after an unclean shutdown](../gitaly/gitaly-repository-corruption.md)
+* [Gitaly Repository Export](../gitaly/gitaly-repositry-export.md)
 * [Gitaly unusual activity alert](../gitaly/gitaly-unusual-activity.md)
 * [Moving repositories from one Gitaly node to another](../gitaly/move-repositories.md)
 * [GitLab Storage Re-balancing](../gitaly/storage-rebalancing.md)
