@@ -337,11 +337,11 @@ teams:
   product_stage_group: static_analysis
 - name: pipeline_insights
   product_stage_group: pipeline_insights
-  slack_channel: g_pipeline-insights
-  slack_alerts_channel: g_pipeline-insights
+  slack_channel: g_pipeline-security
+  slack_alerts_channel: g_pipeline-security
   slack_error_budget_channel:
   - ops-section
-  - g_pipeline-insights
+  - g_pipeline-security
   send_error_budget_weekly_to_slack: true
   ignored_components:
   - graphql_query
