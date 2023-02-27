@@ -361,7 +361,7 @@ groups:
       product_stage: verify
       stage_group: pipeline_execution
     expr: "1"
-- name: 'Stage group Ignored components: verify - Pipeline Insights'
+- name: 'Stage group Ignored components: verify - Pipeline Security'
   interval: 1m
   partial_response_strategy: warn
   rules:
@@ -369,7 +369,7 @@ groups:
     labels:
       component: graphql_query
       product_stage: verify
-      stage_group: pipeline_insights
+      stage_group: pipeline_security
     expr: "1"
 - name: 'Stage group Ignored components: data_stores - Pods'
   interval: 1m
