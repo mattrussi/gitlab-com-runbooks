@@ -55,12 +55,6 @@ groups:
     expr: "1"
   - record: gitlab:feature_category:stage_group:mapping
     labels:
-      feature_category: authentication_and_authorization
-      product_stage: manage
-      stage_group: authentication_and_authorization
-    expr: "1"
-  - record: gitlab:feature_category:stage_group:mapping
-    labels:
       feature_category: auto_devops
       product_stage: configure
       stage_group: configure
@@ -87,7 +81,7 @@ groups:
     labels:
       feature_category: build_artifacts
       product_stage: verify
-      stage_group: pipeline_insights
+      stage_group: pipeline_security
     expr: "1"
   - record: gitlab:feature_category:stage_group:mapping
     labels:
@@ -135,7 +129,7 @@ groups:
     labels:
       feature_category: code_testing
       product_stage: verify
-      stage_group: pipeline_insights
+      stage_group: pipeline_execution
     expr: "1"
   - record: gitlab:feature_category:stage_group:mapping
     labels:
@@ -178,12 +172,6 @@ groups:
       feature_category: continuous_verification
       product_stage: monitor
       stage_group: respond
-    expr: "1"
-  - record: gitlab:feature_category:stage_group:mapping
-    labels:
-      feature_category: credential_management
-      product_stage: manage
-      stage_group: authentication_and_authorization
     expr: "1"
   - record: gitlab:feature_category:stage_group:mapping
     labels:
@@ -541,12 +529,6 @@ groups:
     expr: "1"
   - record: gitlab:feature_category:stage_group:mapping
     labels:
-      feature_category: permissions
-      product_stage: manage
-      stage_group: authentication_and_authorization
-    expr: "1"
-  - record: gitlab:feature_category:stage_group:mapping
-    labels:
       feature_category: pipeline_composition
       product_stage: verify
       stage_group: pipeline_authoring
@@ -639,7 +621,7 @@ groups:
     labels:
       feature_category: review_apps
       product_stage: verify
-      stage_group: pipeline_insights
+      stage_group: pipeline_execution
     expr: "1"
   - record: gitlab:feature_category:stage_group:mapping
     labels:
@@ -693,7 +675,7 @@ groups:
     labels:
       feature_category: secrets_management
       product_stage: verify
-      stage_group: pipeline_authoring
+      stage_group: pipeline_security
     expr: "1"
   - record: gitlab:feature_category:stage_group:mapping
     labels:

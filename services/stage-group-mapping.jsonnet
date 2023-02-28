@@ -5,10 +5,7 @@
     name: 'Authentication and Authorization',
     stage: 'manage',
     feature_categories: [
-      'authentication_and_authorization',
-      'permissions',
       'user_management',
-      'credential_management',
       'system_access',
     ],
   },
@@ -111,6 +108,8 @@
     feature_categories: [
       'continuous_integration',
       'merge_trains',
+      'code_testing',
+      'review_apps',
     ],
   },
   pipeline_authoring: {
@@ -118,7 +117,6 @@
     stage: 'verify',
     feature_categories: [
       'pipeline_composition',
-      'secrets_management',
     ],
   },
   runner: {
@@ -136,13 +134,12 @@
       'runner_saas',
     ],
   },
-  pipeline_insights: {
-    name: 'Pipeline Insights',
+  pipeline_security: {
+    name: 'Pipeline Security',
     stage: 'verify',
     feature_categories: [
-      'code_testing',
       'build_artifacts',
-      'review_apps',
+      'secrets_management',
     ],
   },
   package_registry: {

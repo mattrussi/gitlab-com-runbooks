@@ -26,11 +26,11 @@ teams:
 
 ```yaml
 teams:
-- name: pipeline_insights
-  product_stage_group: pipeline_insights
+- name: pipeline_security
+  product_stage_group: pipeline_security
   slack_error_budget_channel:
   - ops-section
-  - g_pipeline-insights
+  - g_pipeline-security
   send_error_budget_weekly_to_slack: true
 ```
 

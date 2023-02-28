@@ -335,8 +335,8 @@ teams:
   - graphql_query
 - name: static_analysis
   product_stage_group: static_analysis
-- name: pipeline_insights
-  product_stage_group: pipeline_insights
+- name: pipeline_security
+  product_stage_group: pipeline_security
   slack_channel: g_pipeline-security
   slack_alerts_channel: g_pipeline-security
   slack_error_budget_channel:
