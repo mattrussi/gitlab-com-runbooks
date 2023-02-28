@@ -6,4 +6,7 @@
 //
 // Blank values will be ignored.
 {
+  "wiki": "",
+  "api": "",
+  "subgroups": ""
 }
