@@ -5,10 +5,7 @@
     name: 'Authentication and Authorization',
     stage: 'manage',
     feature_categories: [
-      'authentication_and_authorization',
-      'permissions',
       'user_management',
-      'credential_management',
       'system_access',
     ],
   },
