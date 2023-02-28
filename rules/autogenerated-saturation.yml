@@ -1038,11 +1038,11 @@ groups:
       max by(environment) (
         clamp_min(
           clamp_max(
-            sum without(executor_stage, exported_stage, state, runner) (
-              max_over_time(gitlab_runner_jobs{job="runners-manager",shard="shared"}[1m])
+            sum without(executor_stage, exported_stage, state) (
+              max_over_time(gitlab_runner_jobs{job="runners-manager",shard!~"macos-shared|private|shared-gitlab-org|windows-shared"}[1m])
             )
             /
-            gitlab_runner_concurrent{job="runners-manager",shard="shared"} > 0
+            gitlab_runner_limit{job="runners-manager",shard!~"macos-shared|private|shared-gitlab-org|windows-shared"} > 0
             ,
             1)
         ,
@@ -4316,15 +4316,15 @@ groups:
   - alert: component_saturation_slo_out_of_bounds
     for: 5m
     annotations:
-      title: The Private Runners utilization resource of the {{ $labels.type }} service
+      title: The Private Runner utilization resource of the {{ $labels.type }} service
         ({{ $labels.stage }} stage) has a saturation exceeding SLO and is close to
         its capacity limit.
       description: |
         This means that this resource is running close to capacity and is at risk of exceeding its current capacity limit.
 
-        Details of the Private Runners utilization resource:
+        Details of the Private Runner utilization resource:
 
-        Private runners utilization per instance.
+        Private runner utilization per instance.
 
         Each runner manager has a maximum number of runners that it can coordinate at any single moment.
 
@@ -4337,7 +4337,7 @@ groups:
       grafana_panel_id: "204635596"
       grafana_variables: environment,type,stage
       promql_query: |
-        max by(environment, instance) (
+        max by(environment, instance, shard) (
           clamp_min(
             clamp_max(
               sum without(executor_stage, exported_stage, state) (
@@ -4887,14 +4887,14 @@ groups:
       grafana_panel_id: "2853615952"
       grafana_variables: environment,type,stage
       promql_query: |
-        max by(environment, instance) (
+        max by(environment, instance, shard) (
           clamp_min(
             clamp_max(
-              sum without(executor_stage, exported_stage, state, runner) (
-                max_over_time(gitlab_runner_jobs{job="runners-manager",shard="shared"}[1m])
+              sum without(executor_stage, exported_stage, state) (
+                max_over_time(gitlab_runner_jobs{job="runners-manager",shard!~"macos-shared|private|shared-gitlab-org|windows-shared"}[1m])
               )
               /
-              gitlab_runner_concurrent{job="runners-manager",shard="shared"} > 0
+              gitlab_runner_limit{job="runners-manager",shard!~"macos-shared|private|shared-gitlab-org|windows-shared"} > 0
               ,
               1)
           ,
@@ -4911,28 +4911,28 @@ groups:
   - alert: component_saturation_slo_out_of_bounds
     for: 5m
     annotations:
-      title: The Shared Runner GitLab Utilization resource of the {{ $labels.type
+      title: The Shared GitLab Runner utilization resource of the {{ $labels.type
         }} service ({{ $labels.stage }} stage) has a saturation exceeding SLO and
         is close to its capacity limit.
       description: |
         This means that this resource is running close to capacity and is at risk of exceeding its current capacity limit.
 
-        Details of the Shared Runner GitLab Utilization resource:
+        Details of the Shared GitLab Runner utilization resource:
 
-        Shared runners utilization per instance.
+        Shared GitLab runner utilization per instance.
 
         Each runner manager has a maximum number of runners that it can coordinate at any single moment.
 
         When this metric is saturated, new CI jobs will queue. When this occurs we should consider adding more runner managers, or scaling the runner managers vertically and increasing their maximum runner capacity.
-      grafana_dashboard_id: alerts-sat_shared_runners_gitlab
-      grafana_dashboard_link: https://dashboards.gitlab.net/d/alerts-sat_shared_runners_gitlab?from=now-6h/m&to=now-1m/m&var-environment={{
+      grafana_dashboard_id: alerts-sat_shared_gitlab_runners
+      grafana_dashboard_link: https://dashboards.gitlab.net/d/alerts-sat_shared_gitlab_runners?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-type={{ $labels.type }}&var-stage={{ $labels.stage
         }}
       grafana_min_zoom_hours: "6"
       grafana_panel_id: "3295582630"
       grafana_variables: environment,type,stage
       promql_query: |
-        max by(environment, tier, type, stage, instance) (
+        max by(environment, tier, type, stage, instance, shard) (
           clamp_min(
             clamp_max(
               sum without(executor_stage, exported_stage, state) (
