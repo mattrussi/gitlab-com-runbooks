@@ -222,7 +222,7 @@ groups:
       sum by (env,environment,tier,type,stage,shard,queue,feature_category,urgency,worker) (
         sum_over_time(gitlab_background_jobs:execution:apdex:weight:score_1h{monitor!="global"}[6h])
       )
-  - record: gitlab_background_jobs:execution:error:rate_6h
+  - record: gitlab_background_jobs:execution:error:rate_3d
     expr: |
       sum by (env,environment,tier,type,stage,shard,queue,feature_category,urgency,worker) (
         avg_over_time(gitlab_background_jobs:execution:error:rate_1h{monitor!="global"}[3d])

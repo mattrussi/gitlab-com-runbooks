@@ -322,7 +322,7 @@ local aggregationSet = import 'servicemetrics/aggregation-set.libsonnet';
         /* Upscaled */
         apdexRatio: 'gitlab_background_jobs:execution:apdex:ratio_3d',
         opsRate: 'gitlab_background_jobs:execution:ops:rate_3d',
-        errorRate: 'gitlab_background_jobs:execution:error:rate_6h',
+        errorRate: 'gitlab_background_jobs:execution:error:rate_3d',
         errorRatio: 'gitlab_background_jobs:execution:error:ratio_3d',
       },
     },
