@@ -19,12 +19,6 @@ groups:
     expr: "1"
   - record: gitlab:feature_category:stage_group:mapping
     labels:
-      feature_category: api
-      product_stage: manage
-      stage_group: integrations
-    expr: "1"
-  - record: gitlab:feature_category:stage_group:mapping
-    labels:
       feature_category: api_security
       product_stage: secure
       stage_group: dynamic_analysis
@@ -370,6 +364,18 @@ groups:
       feature_category: global_search
       product_stage: data_stores
       stage_group: global_search
+    expr: "1"
+  - record: gitlab:feature_category:stage_group:mapping
+    labels:
+      feature_category: groups
+      product_stage: manage
+      stage_group: organization
+    expr: "1"
+  - record: gitlab:feature_category:stage_group:mapping
+    labels:
+      feature_category: subgroups
+      product_stage: manage
+      stage_group: organization
     expr: "1"
   - record: gitlab:feature_category:stage_group:mapping
     labels:
@@ -721,12 +727,6 @@ groups:
     expr: "1"
   - record: gitlab:feature_category:stage_group:mapping
     labels:
-      feature_category: subgroups
-      product_stage: manage
-      stage_group: organization
-    expr: "1"
-  - record: gitlab:feature_category:stage_group:mapping
-    labels:
       feature_category: subscription_cost_management
       product_stage: fulfillment
       stage_group: utilization
@@ -793,13 +793,19 @@ groups:
     expr: "1"
   - record: gitlab:feature_category:stage_group:mapping
     labels:
-      feature_category: wiki
-      product_stage: create
-      stage_group: editor
-    expr: "1"
-  - record: gitlab:feature_category:stage_group:mapping
-    labels:
       feature_category: workflow_automation
       product_stage: modelops
       stage_group: ai_assisted
+    expr: "1"
+  - record: gitlab:feature_category:stage_group:mapping
+    labels:
+      feature_category: yay_p_i
+      product_stage: manage
+      stage_group: integrations
+    expr: "1"
+  - record: gitlab:feature_category:stage_group:mapping
+    labels:
+      feature_category: api
+      product_stage: manage
+      stage_group: integrations
     expr: "1"
