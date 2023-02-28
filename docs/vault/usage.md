@@ -159,87 +159,82 @@ There is also another secret engine named `cubbyhole`, this is a temporary secre
 
 CI secrets are available under the following paths:
 
-* `ci/<gitlab-instance>/<project>/<environment>/...`: to be used for secrets scoped to an environment (when the `environment` attribute is set for a CI job), which are only accessible for this particular environment and none other;
-* `ci/<gitlab-instance>/<project>/<environment>/outputs/...`: to be used for *writing* secrets to Vault scoped to an environment (primarily from Terraform but it can be from other tools), this path is only readable/writable by CI jobs running from protected branches.
-* `ci/<gitlab-instance>/<project>/shared/...`: to be used for secrets shared for all environments or when no environments are defined in the pipeline;
-* `ci/<gitlab-instance>/<project>/outputs/...`: to be used for *writing* secrets to Vault (primarily from Terraform but it can be from other tools), this path is only readable/writable by CI jobs running from protected branches.
+* `ci/<gitlab-instance>/<project-full-path>/<environment>/...`: to be used for secrets scoped to an environment (when the `environment` attribute is set for a CI job), which are only accessible for this particular environment and none other;
+* `ci/<gitlab-instance>/<project-full-path>/<environment>/outputs/...`: to be used for *writing* secrets to Vault scoped to an environment (primarily from Terraform but it can be from other tools), this path is only readable/writable from CI jobs running for protected branches/environments;
+* `ci/<gitlab-instance>/<project-full-path>/<environment>/protected/...`: to be used for protected secrets scoped to an environment, this path is only readable from CI jobs running for protected branches/environments;
+* `ci/<gitlab-instance>/<project-full-path>/shared/...`: to be used for secrets shared for all environments or when no environments are defined in the pipeline;
+* `ci/<gitlab-instance>/<project-full-path>/outputs/...`: to be used for *writing* secrets to Vault (primarily from Terraform but it can be from other tools), this path is only readable/writable by CI jobs running from protected branches;
+* `ci/<gitlab-instance>/<project-full-path>/protected/...`: to be used for protected secrets for all environments, this path is only readable from CI jobs running for protected branches/environments.
+
+Additional, a Transit key is created under `transit/ci/<gitlab-instance>-<project-full-path>`, which can be used for encryption, decryption and signing of CI artifacts and anything else. Decryption and signing is restricted to the project, while encryption and signature verification is allowed for all, this can be useful for sharing artifacts securirely between projects. See [the Vault documentation about the Transit secrets engine](https://developer.hashicorp.com/vault/docs/secrets/transit) to learn more about it.
 
 _Terminology:_
 
-* `gitlab-instance`: the GitLab instance using Vault secrets in CI
+* `gitlab instance`: the GitLab instance using Vault secrets in CI
   * `gitlab-com`: our primary `GitLab.com` SaaS environment
   * `ops-gitlab-net`: our ops instance `ops.gitlab.net`
-* `project`: the name of a project hosted on a GitLab instance, can be the full path of the project, slashes are replaced with underscores in the role name and policy names
-* `enviroment`: the short name of the environment the CI job fetching the secrets is running for: `gprd`, `gstg`, `ops`, ...
+* `project-full-path`: the full path of a project hosted on a GitLab instance, slashes are replaced with underscores in the transit key, role and policy names
+* `environment`: the short name of the environment the CI job fetching the secrets is running for: `gprd`, `gstg`, `ops`, ...
 
 Examples:
 
-* `ci/ops-gitlab-net/my-project/gprd/foo` is a secret named `foo` for the environment `gprd` only from the project `my-project` on `ops.gitlab.net`
-* `ci/gitlab-com/some-group/my-other-project/shared/bar` is a secret named `bar` for all environments from the project `some-group/my-other-project` on `gitlab.com`
-* `ci/ops-gitlab-net/my-project/outputs/baz` is a secret named `baz` created by Terraform in a CI job from a protected branch from the project `my-project` on `ops.gitlab.net`
+* `ci/ops-gitlab-net/gitlab-com/gl-infra/my-project/gprd/foo` is a secret named `foo` for the environment `gprd` only from the project `gitlab-com/gl-infra/my-project` on `ops.gitlab.net`
+* `ci/gitlab-com/gitlab-com/gl-infra/some-group/my-other-project/shared/bar` is a secret named `bar` for all environments from the project `gitlab-com/gl-infra/some-group/my-other-project` on `gitlab.com`
+* `ci/ops-gitlab-net/gitlab-com/gl-infra/my-project/outputs/qux` is a secret named `qux` created by Terraform in a CI job from a protected branch or environment from the project `gitlab-com/gl-infra/my-project` on `ops.gitlab.net`
 
 #### Authorizing a GitLab Project
 
-To enable a GitLab project to access Vault from CI, grab its project ID and add it to the `gitlab_project` map in  [`environments/vault-productiongitlab_projects.tf`](https://ops.gitlab.net/gitlab-com/gl-infra/config-mgmt/-/blob/master/environments/vault-production/gitlab_projects.tf):
+To enable a GitLab project to access Vault from CI, add the following to its project definition in [`infra-mgmt`](https://gitlab.com/gitlab-com/gl-infra/infra-mgmt):
 
 ```terraform
-locals {
-    ops-gitlab-net = {
-      [...]
+module "project_my-project" {
+  ...
 
-      my-project = {
-        project_id = 987
-      }
-
-      "some-group/my-other-project" = {
-        project_id = 654
-      }
-    }
+  vault = {
+    enabled   = true
+    auth_path = local.vault_auth_path
   }
 }
 ```
 
-The name can be anything but should ideally match the actual name and path of the project.
+⚠️ Note: if your project doesn't exist yet in `infra-mgmt`, you will need to add and import it (documentation for this to be added later at the time of this writing).
 
-⚠️ Slashes `/` in the name are replaced with underscores `_` in the role name and policies, but are kept as-is in the secrets path.
+There are additional attributes that you can set to allow access to more secrets paths and policies, see [the project module documentation](https://gitlab.com/gitlab-com/gl-infra/infra-mgmt/-/tree/main/modules/project#input_vault) to learn more about those.
 
-The attributes `shared_secret_paths_ro` and `shared_secret_paths_rw` can also be set to allow respectively readonly and read/write (from protected branches only) access to shared secrets in the `shared` secret engine.
-
-Terraform will then create 2 JWT roles in Vault named `my-project` for read-only access and `my-project-rw` for read/write access from protected branches, along with their associated policies:
+Terraform will then create 2 JWT roles in Vault named `<project-full-path>` for read-only access and `<project-full-path>-rw` for read/write access from protected branches/environments, along with their associated policies:
 
 ```
-❯ vault read auth/ops-gitlab-net/role/tanka-deployments
+❯ vault read auth/ops-gitlab-net/role/gitlab-com_gl-infra_k8s-workloads_tanka-deployments
 Key                        Value
 ---                        -----
 [...]
 bound_claims               map[project_id:[401]]
 claim_mappings             map[environment:environment]
-token_policies             [ops-gitlab-net-project-tanka-deployments]
+token_policies             [ops-gitlab-net-project-gitlab-com_gl-infra_k8s-workloads_tanka-deployments]
 [...]
-❯ vault read auth/ops-gitlab-net/role/tanka-deployments-rw
+❯ vault read auth/ops-gitlab-net/role/gitlab-com_gl-infra_k8s-workloads_tanka-deployments-rw
 Key                        Value
 ---                        -----
 [...]
 bound_claims               map[project_id:[401] ref_protected:[true]]
 claim_mappings             map[environment:environment]
-token_policies             [ops-gitlab-net-project-tanka-deployments ops-gitlab-net-project-tanka-deployments-rw]
+token_policies             [ops-gitlab-net-project-gitlab-com_gl-infra_k8s-workloads_tanka-deployments-rw ops-gitlab-net-project-gitlab-com_gl-infra_k8s-workloads_tanka-deployments]
 [...]
 ```
 
-See the [input variable definition](https://ops.gitlab.net/gitlab-com/gl-infra/terraform-modules/vault-configuration#input_gitlab_projects) a list of all attributes.
+It will also create the following CI variables in the project:
+
+* `VAULT_AUTH_ROLE:` read-only role name, and read-write role name for each defined protected environment if any
+* `VAULT_SECRETS_PATH`: the secrets base path (`ci/<gitlab-instance>/<project-full-path>`)
+* `VAULT_TRANSIT_KEY_NAME`: the transit key name relative to `transit/ci`
+
+The following variables are also set at the group level:
+
+* `VAULT_ADDR` / `VAULT_SERVER_URL`: `https://vault.ops.gke.gitlab.net`
+* `VAULT_AUTH_PATH`: authentication method path relative to `auth/`, for instance `gitlab-com` or `ops-gitlab-net`
+* `VAULT_TRANSIT_PATH`: `transit/ci`
 
 #### Using Vault secrets in CI
-
-First, those variables have to be set in `.gitlab-ci.yml` to provide the details about the Vault server and authentication:
-
-```yaml
-variables:
-  VAULT_AUTH_PATH: ops-gitlab-net
-  VAULT_AUTH_ROLE: my-project
-  VAULT_SERVER_URL: https://vault.ops.gke.gitlab.net
-```
-
-`VAULT_AUTH_ROLE` should match the project name defined in Vault [above](#authorizing-a-gitlab-project).
 
 Then in a CI job, a secret can be configured like so:
 
@@ -247,10 +242,11 @@ Then in a CI job, a secret can be configured like so:
 my-job:
   secrets:
     TOKEN:
-      vault: ops-gitlab-net/${CI_PROJECT_PATH}/${ENVIRONMENT}/some-service/token@ci
+      file: false
+      vault: ${VAULT_SECRETS_PATH}/${ENVIRONMENT}/some-service/token@ci
 ```
 
-This will set the variable `TOKEN` to the value of the key `token` from the secret `some-service` for the current environment for the project `my-project`.
+This will set the variable `TOKEN` to the value of the key `token` from the secret `some-service` for the current environment.
 
 Note that the name of the KV mount is set at the end of the path with `@ci` here, and `token` is a key from the secret and not part of the actual path of the secret.
 
@@ -261,7 +257,7 @@ my-other-job:
   secrets:
     GOOGLE_APPLICATION_CREDENTIALS:
       file: true
-      vault: ops-gitlab-net/${CI_PROJECT_PATH}/${ENVIRONMENT}/service-account/key@ci
+      vault: ${VAULT_SECRETS_PATH}/${ENVIRONMENT}/service-account/key@ci
 ```
 
 Something like this should appear at the beginning of the CI job output:
@@ -316,7 +312,7 @@ variable "vault_auth_role" {
 variable "vault_secrets_path" {
   type        = string
   description = "Vault secrets path"
-  default     = "ops-gitlab-net/my-project/some-env"
+  default     = "ops-gitlab-net/gitlab-com/gl-infra/my-project/some-env"
 }
 
 // versions.tf
@@ -325,7 +321,7 @@ terraform {
   required_providers {
     vault = {
       source  = "hashicorp/vault"
-      version = "~> 3.8.0"
+      version = "~> 3.9.0"
     }
   }
 }
@@ -335,15 +331,10 @@ And the following has to be added on `.gitlab-ci.yml` to provide the Terraform v
 
 ```yaml
 variables:
-  VAULT_ADDR: https://vault.ops.gke.gitlab.net
-  VAULT_AUTH_PATH: ops-gitlab-net
-  VAULT_AUTH_ROLE: my-project
-  VAULT_SERVER_URL: ${VAULT_ADDR}
-
   TF_VAR_vault_jwt: ${CI_JOB_JWT}
   TF_VAR_vault_auth_path: ${VAULT_AUTH_PATH}
   TF_VAR_vault_auth_role: ${VAULT_AUTH_ROLE}
-  TF_VAR_vault_auth_secrets_path: ops-gitlab-net/my-project/${CI_ENVIRONMENT_NAME}
+  TF_VAR_vault_auth_secrets_path: ${VAULT_SECRETS_PATH}/${CI_ENVIRONMENT_NAME}
 ```
 
 Then a secret can be fetched using the [`vault_kv_secret_v2` data source](https://registry.terraform.io/providers/hashicorp/vault/latest/docs/data-sources/kv_secret_v2), and its content can be retrieved from the [`data`](https://registry.terraform.io/providers/hashicorp/vault/latest/docs/data-sources/kv_secret_v2#data) attribute:
@@ -391,13 +382,13 @@ This allows rotating secrets safely in a controlled manner:
 * update the secret in place in Vault, creating a new version:
 
   ```shell
-  vault kv patch ci/ops-gitlab-net/my-project/pre/some-secret foo=bar
+  vault kv patch ci/ops-gitlab-net/gitlab-com/gl-infra/my-project/pre/some-secret foo=bar
   ```
 
 * this will display the version number for the new secret, but it can also be retrieved it with:
 
   ```shell
-  vault kv metadata get ci/ops-gitlab-net/my-project/pre/some-secret
+  vault kv metadata get ci/ops-gitlab-net/gitlab-com/gl-infra/my-project/pre/some-secret
   ```
 
 * bump the version in Terraform:
@@ -414,7 +405,7 @@ This allows rotating secrets safely in a controlled manner:
 * if for any reason the previous version of the secret needs to be deleted permanently:
 
   ```
-  vault kv delete -versions 3 ci/ops-gitlab-net/my-project/pre/some-secret
+  vault kv delete -versions 3 ci/ops-gitlab-net/gitlab-com/gl-infra/my-project/pre/some-secret
   ```
 
 ### External Secrets in Kubernetes
@@ -429,7 +420,7 @@ Kubernetes secrets are available under the following paths:
 _Terminology:_
 
 * `cluster`: the name of the GKE cluster the External Secrets are created in
-* `enviroment`: the short name of the environment the Kubernetes clusters fetching the secrets runs in: `gprd`, `gstg`, `ops`, ...
+* `environment`: the short name of the environment the Kubernetes clusters fetching the secrets runs in: `gprd`, `gstg`, `ops`, ...
 * `namespace`: the namespace the External Secrets are created in
 
 Examples:
