@@ -587,9 +587,9 @@ groups:
       max by(environment, tier, type, stage) (
         clamp_min(
           clamp_max(
-            sum by (environment, tier, type, stage, fqdn) (avg_over_time(gitlab_database_bloat_btree_bloat_size{job="gitlab-monitor-database-bloat", type=~"patroni|patroni-registry|patroni-ci|postgres-archive"}[58m]))
+            sum by (environment, tier, type, stage, fqdn) (last_over_time(gitlab_database_bloat_btree_bloat_size{job="gitlab-monitor-database-bloat", type=~"patroni|patroni-registry|patroni-ci|postgres-archive"}[1h]))
             /
-            sum by (environment, tier, type, stage, fqdn) (avg_over_time(gitlab_database_bloat_btree_real_size{job="gitlab-monitor-database-bloat", type=~"patroni|patroni-registry|patroni-ci|postgres-archive"}[58m]))
+            sum by (environment, tier, type, stage, fqdn) (last_over_time(gitlab_database_bloat_btree_real_size{job="gitlab-monitor-database-bloat", type=~"patroni|patroni-registry|patroni-ci|postgres-archive"}[1h]))
             ,
             1)
         ,
@@ -1435,11 +1435,11 @@ groups:
   - record: slo:max:soft:gitlab_component_saturation:ratio
     labels:
       component: pg_btree_bloat
-    expr: "0.3"
+    expr: "0.5"
   - record: slo:max:hard:gitlab_component_saturation:ratio
     labels:
       component: pg_btree_bloat
-    expr: "0.4"
+    expr: "0.7"
   - record: slo:max:soft:gitlab_component_saturation:ratio
     labels:
       component: pg_int4_id
@@ -3738,7 +3738,9 @@ groups:
 
         Details of the Postgres btree bloat resource:
 
-        This measures the total bloat in Postgres Btree indexes, as a percentage of total index size.
+        This estimates the total bloat in Postgres Btree indexes, as a percentage of total index size.
+
+        IMPORTANT: bloat estimates are rough and depending on table/index structure, can be off for individual indexes, in some cases significantly (10-50%).
 
         The larger this measure, the more pages will unnecessarily be retrieved during index scans.
       grafana_dashboard_id: alerts-sat_pg_btree_bloat
@@ -3752,9 +3754,9 @@ groups:
         max by(environment, tier, type, stage, fqdn) (
           clamp_min(
             clamp_max(
-              sum by (environment, tier, type, stage, fqdn) (avg_over_time(gitlab_database_bloat_btree_bloat_size{job="gitlab-monitor-database-bloat", environment="{{ $labels.environment }}",stage="{{ $labels.stage }}",type="{{ $labels.type }}"}[58m]))
+              sum by (environment, tier, type, stage, fqdn) (last_over_time(gitlab_database_bloat_btree_bloat_size{job="gitlab-monitor-database-bloat", environment="{{ $labels.environment }}",stage="{{ $labels.stage }}",type="{{ $labels.type }}"}[1h]))
               /
-              sum by (environment, tier, type, stage, fqdn) (avg_over_time(gitlab_database_bloat_btree_real_size{job="gitlab-monitor-database-bloat", environment="{{ $labels.environment }}",stage="{{ $labels.stage }}",type="{{ $labels.type }}"}[58m]))
+              sum by (environment, tier, type, stage, fqdn) (last_over_time(gitlab_database_bloat_btree_real_size{job="gitlab-monitor-database-bloat", environment="{{ $labels.environment }}",stage="{{ $labels.stage }}",type="{{ $labels.type }}"}[1h]))
               ,
               1)
           ,
