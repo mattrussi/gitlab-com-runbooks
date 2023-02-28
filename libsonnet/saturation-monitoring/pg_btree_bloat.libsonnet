@@ -16,13 +16,10 @@ local metricsCatalog = import 'servicemetrics/metrics-catalog.libsonnet';
     resourceLabels: ['fqdn'],
     burnRatePeriod: '5m',
 
-    // Note that we only measure bloat once every 60 minutes but the prometheus series will expire after
-    // 5 minutes. For this reason, we use `avg_over_time(...[58m])`. Once we upgrade to
-    // at least 2.26 of Prometheus, we can switch this to `last_over_time(...[1h])` function instead.
     query: |||
-      sum by (%(aggregationLabels)s) (avg_over_time(gitlab_database_bloat_btree_bloat_size{job="gitlab-monitor-database-bloat", %(selector)s}[58m]))
+      sum by (%(aggregationLabels)s) (last_over_time(gitlab_database_bloat_btree_bloat_size{job="gitlab-monitor-database-bloat", %(selector)s}[1h]))
       /
-      sum by (%(aggregationLabels)s) (avg_over_time(gitlab_database_bloat_btree_real_size{job="gitlab-monitor-database-bloat", %(selector)s}[58m]))
+      sum by (%(aggregationLabels)s) (last_over_time(gitlab_database_bloat_btree_real_size{job="gitlab-monitor-database-bloat", %(selector)s}[1h]))
     |||,
     slos: {
       soft: 0.30,
