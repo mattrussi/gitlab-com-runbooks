@@ -22,7 +22,7 @@ groups:
       grafana_variables: environment,stage
       promql_template_1: |
         sum by (env,environment,tier,stage) (
-          label_replace(rate(prometheus_rule_evaluation_failures_total{environment="{{ $labels.environment }}",job=~"^thanos.*",stage="{{ $labels.stage }}",type="thanos"}[5m]), "_c", "0", "", "")
+          label_replace(rate(prometheus_rule_evaluation_failures_total{environment="{{ $labels.environment }}",job="thanos-ruler",stage="{{ $labels.stage }}",type="thanos"}[5m]), "_c", "0", "", "")
           or
           label_replace(rate(thanos_rule_evaluation_with_warnings_total{environment="{{ $labels.environment }}",stage="{{ $labels.stage }}"}[5m]), "_c", "1", "", "")
         )
@@ -72,7 +72,7 @@ groups:
       grafana_variables: environment,stage
       promql_template_1: |
         sum by (env,environment,tier,stage) (
-          label_replace(rate(prometheus_rule_evaluation_failures_total{environment="{{ $labels.environment }}",job=~"^thanos.*",stage="{{ $labels.stage }}",type="thanos"}[5m]), "_c", "0", "", "")
+          label_replace(rate(prometheus_rule_evaluation_failures_total{environment="{{ $labels.environment }}",job="thanos-ruler",stage="{{ $labels.stage }}",type="thanos"}[5m]), "_c", "0", "", "")
           or
           label_replace(rate(thanos_rule_evaluation_with_warnings_total{environment="{{ $labels.environment }}",stage="{{ $labels.stage }}"}[5m]), "_c", "1", "", "")
         )
@@ -122,7 +122,7 @@ groups:
       grafana_variables: environment,stage
       promql_template_1: |
         sum by (env,environment,tier,stage) (
-          rate(prometheus_rule_evaluations_total{environment="{{ $labels.environment }}",job=~"^thanos.*",stage="{{ $labels.stage }}",type="thanos"}[5m])
+          rate(prometheus_rule_evaluations_total{environment="{{ $labels.environment }}",job="thanos-ruler",stage="{{ $labels.stage }}",type="thanos"}[5m])
         )
       runbook: docs/thanos/README.md
     labels:
@@ -159,7 +159,7 @@ groups:
       grafana_variables: environment,stage
       promql_template_1: |
         sum by (env,environment,tier,stage) (
-          rate(prometheus_rule_evaluations_total{environment="{{ $labels.environment }}",job=~"^thanos.*",stage="{{ $labels.stage }}",type="thanos"}[5m])
+          rate(prometheus_rule_evaluations_total{environment="{{ $labels.environment }}",job="thanos-ruler",stage="{{ $labels.stage }}",type="thanos"}[5m])
         )
       runbook: docs/thanos/README.md
     labels:
@@ -194,7 +194,7 @@ groups:
       grafana_variables: environment,stage
       promql_template_1: |
         sum by (env,environment,tier,stage) (
-          rate(thanos_compact_group_compactions_failures_total{environment="{{ $labels.environment }}",job="thanos",stage="{{ $labels.stage }}",type="thanos"}[5m])
+          rate(thanos_compact_group_compactions_failures_total{environment="{{ $labels.environment }}",job=~"thanos-(.+)-compactor",stage="{{ $labels.stage }}",type="thanos"}[5m])
         )
       runbook: docs/thanos/README.md
     labels:
@@ -242,7 +242,7 @@ groups:
       grafana_variables: environment,stage
       promql_template_1: |
         sum by (env,environment,tier,stage) (
-          rate(thanos_compact_group_compactions_failures_total{environment="{{ $labels.environment }}",job="thanos",stage="{{ $labels.stage }}",type="thanos"}[5m])
+          rate(thanos_compact_group_compactions_failures_total{environment="{{ $labels.environment }}",job=~"thanos-(.+)-compactor",stage="{{ $labels.stage }}",type="thanos"}[5m])
         )
       runbook: docs/thanos/README.md
     labels:
@@ -292,7 +292,7 @@ groups:
         histogram_quantile(
           0.950000,
           sum by (env,environment,tier,stage,le) (
-            rate(thanos_memcached_operation_duration_seconds_bucket{environment="{{ $labels.environment }}",stage="{{ $labels.stage }}",type="thanos"}[5m])
+            rate(thanos_memcached_operation_duration_seconds_bucket{environment="{{ $labels.environment }}",grpc_type="unary",job=~"thanos-(labels|querier)-metrics|thanos-(.+)-(bucket|index)-metrics",stage="{{ $labels.stage }}",type="thanos"}[5m])
           )
         )
       runbook: docs/thanos/README.md
@@ -343,7 +343,7 @@ groups:
         histogram_quantile(
           0.950000,
           sum by (env,environment,tier,stage,le) (
-            rate(thanos_memcached_operation_duration_seconds_bucket{environment="{{ $labels.environment }}",stage="{{ $labels.stage }}",type="thanos"}[5m])
+            rate(thanos_memcached_operation_duration_seconds_bucket{environment="{{ $labels.environment }}",grpc_type="unary",job=~"thanos-(labels|querier)-metrics|thanos-(.+)-(bucket|index)-metrics",stage="{{ $labels.stage }}",type="thanos"}[5m])
           )
         )
       runbook: docs/thanos/README.md
@@ -392,7 +392,7 @@ groups:
       grafana_variables: environment,stage
       promql_template_1: |
         sum by (env,environment,tier,stage) (
-          rate(thanos_memcached_operation_failures_total{environment="{{ $labels.environment }}",stage="{{ $labels.stage }}",type="thanos"}[5m])
+          rate(thanos_memcached_operation_failures_total{environment="{{ $labels.environment }}",grpc_type="unary",job=~"thanos-(labels|querier)-metrics|thanos-(.+)-(bucket|index)-metrics",stage="{{ $labels.stage }}",type="thanos"}[5m])
         )
       runbook: docs/thanos/README.md
     labels:
@@ -440,7 +440,7 @@ groups:
       grafana_variables: environment,stage
       promql_template_1: |
         sum by (env,environment,tier,stage) (
-          rate(thanos_memcached_operation_failures_total{environment="{{ $labels.environment }}",stage="{{ $labels.stage }}",type="thanos"}[5m])
+          rate(thanos_memcached_operation_failures_total{environment="{{ $labels.environment }}",grpc_type="unary",job=~"thanos-(labels|querier)-metrics|thanos-(.+)-(bucket|index)-metrics",stage="{{ $labels.stage }}",type="thanos"}[5m])
         )
       runbook: docs/thanos/README.md
     labels:
@@ -1028,7 +1028,7 @@ groups:
       grafana_variables: environment,stage
       promql_template_1: |
         sum by (env,environment,tier,stage) (
-          rate(thanos_alert_sender_alerts_dropped_total{environment="{{ $labels.environment }}",job="thanos",stage="{{ $labels.stage }}",type="thanos"}[5m])
+          rate(thanos_alert_sender_alerts_dropped_total{environment="{{ $labels.environment }}",job="thanos-ruler",stage="{{ $labels.stage }}",type="thanos"}[5m])
         )
       runbook: docs/thanos/README.md
     labels:
@@ -1076,7 +1076,7 @@ groups:
       grafana_variables: environment,stage
       promql_template_1: |
         sum by (env,environment,tier,stage) (
-          rate(thanos_alert_sender_alerts_dropped_total{environment="{{ $labels.environment }}",job="thanos",stage="{{ $labels.stage }}",type="thanos"}[5m])
+          rate(thanos_alert_sender_alerts_dropped_total{environment="{{ $labels.environment }}",job="thanos-ruler",stage="{{ $labels.stage }}",type="thanos"}[5m])
         )
       runbook: docs/thanos/README.md
     labels:
@@ -1124,7 +1124,7 @@ groups:
       grafana_variables: environment,stage
       promql_template_1: |
         sum by (env,environment,tier,stage) (
-          rate(thanos_alert_sender_alerts_sent_total{environment="{{ $labels.environment }}",job="thanos",stage="{{ $labels.stage }}",type="thanos"}[5m])
+          rate(thanos_alert_sender_alerts_sent_total{environment="{{ $labels.environment }}",job="thanos-ruler",stage="{{ $labels.stage }}",type="thanos"}[5m])
         )
       runbook: docs/thanos/README.md
     labels:
@@ -1161,7 +1161,7 @@ groups:
       grafana_variables: environment,stage
       promql_template_1: |
         sum by (env,environment,tier,stage) (
-          rate(thanos_alert_sender_alerts_sent_total{environment="{{ $labels.environment }}",job="thanos",stage="{{ $labels.stage }}",type="thanos"}[5m])
+          rate(thanos_alert_sender_alerts_sent_total{environment="{{ $labels.environment }}",job="thanos-ruler",stage="{{ $labels.stage }}",type="thanos"}[5m])
         )
       runbook: docs/thanos/README.md
     labels:
@@ -1198,7 +1198,7 @@ groups:
         histogram_quantile(
           0.950000,
           sum by (env,environment,tier,stage,le) (
-            rate(grpc_server_handling_seconds_bucket{environment="{{ $labels.environment }}",grpc_type="unary",job=~"thanos-store(-[0-9]+)?",stage="{{ $labels.stage }}",type="thanos"}[5m])
+            rate(grpc_server_handling_seconds_bucket{environment="{{ $labels.environment }}",grpc_type="unary",job=~"thanos-(.+)-storegateway-(.+)",stage="{{ $labels.stage }}",type="thanos"}[5m])
           )
         )
       runbook: docs/thanos/README.md
@@ -1249,7 +1249,7 @@ groups:
         histogram_quantile(
           0.950000,
           sum by (env,environment,tier,stage,le) (
-            rate(grpc_server_handling_seconds_bucket{environment="{{ $labels.environment }}",grpc_type="unary",job=~"thanos-store(-[0-9]+)?",stage="{{ $labels.stage }}",type="thanos"}[5m])
+            rate(grpc_server_handling_seconds_bucket{environment="{{ $labels.environment }}",grpc_type="unary",job=~"thanos-(.+)-storegateway-(.+)",stage="{{ $labels.stage }}",type="thanos"}[5m])
           )
         )
       runbook: docs/thanos/README.md
@@ -1298,7 +1298,7 @@ groups:
       grafana_variables: environment,stage
       promql_template_1: |
         sum by (env,environment,tier,stage) (
-          rate(grpc_server_handled_total{environment="{{ $labels.environment }}",grpc_code!="OK",grpc_type="unary",job=~"thanos-store(-[0-9]+)?",stage="{{ $labels.stage }}",type="thanos"}[5m])
+          rate(grpc_server_handled_total{environment="{{ $labels.environment }}",grpc_code!="OK",grpc_type="unary",job=~"thanos-(.+)-storegateway-(.+)",stage="{{ $labels.stage }}",type="thanos"}[5m])
         )
       runbook: docs/thanos/README.md
     labels:
@@ -1346,7 +1346,7 @@ groups:
       grafana_variables: environment,stage
       promql_template_1: |
         sum by (env,environment,tier,stage) (
-          rate(grpc_server_handled_total{environment="{{ $labels.environment }}",grpc_code!="OK",grpc_type="unary",job=~"thanos-store(-[0-9]+)?",stage="{{ $labels.stage }}",type="thanos"}[5m])
+          rate(grpc_server_handled_total{environment="{{ $labels.environment }}",grpc_code!="OK",grpc_type="unary",job=~"thanos-(.+)-storegateway-(.+)",stage="{{ $labels.stage }}",type="thanos"}[5m])
         )
       runbook: docs/thanos/README.md
     labels:
@@ -1394,7 +1394,7 @@ groups:
       grafana_variables: environment,stage
       promql_template_1: |
         sum by (env,environment,tier,stage) (
-          rate(grpc_server_handled_total{environment="{{ $labels.environment }}",grpc_type="unary",job=~"thanos-store(-[0-9]+)?",stage="{{ $labels.stage }}",type="thanos"}[5m])
+          rate(grpc_server_handled_total{environment="{{ $labels.environment }}",grpc_type="unary",job=~"thanos-(.+)-storegateway-(.+)",stage="{{ $labels.stage }}",type="thanos"}[5m])
         )
       runbook: docs/thanos/README.md
     labels:
@@ -1431,7 +1431,7 @@ groups:
       grafana_variables: environment,stage
       promql_template_1: |
         sum by (env,environment,tier,stage) (
-          rate(grpc_server_handled_total{environment="{{ $labels.environment }}",grpc_type="unary",job=~"thanos-store(-[0-9]+)?",stage="{{ $labels.stage }}",type="thanos"}[5m])
+          rate(grpc_server_handled_total{environment="{{ $labels.environment }}",grpc_type="unary",job=~"thanos-(.+)-storegateway-(.+)",stage="{{ $labels.stage }}",type="thanos"}[5m])
         )
       runbook: docs/thanos/README.md
     labels:

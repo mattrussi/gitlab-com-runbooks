@@ -190,7 +190,7 @@ metricsCatalog.serviceDefinition({
       |||,
 
       local thanosStoreSelector = thanosServiceSelector {
-        job: { re: 'thanos-store(-[0-9]+)?' },  // TODO: FIXME: https://gitlab.com/gitlab-com/gl-infra/reliability/-/issues/17377
+        job: { re: 'thanos-(.+)-storegateway-(.+)' },  // TODO: FIXME: https://gitlab.com/gitlab-com/gl-infra/reliability/-/issues/17377
         grpc_type: 'unary',
       },
 
@@ -232,7 +232,7 @@ metricsCatalog.serviceDefinition({
       |||,
 
       local thanosCompactorSelector = thanosServiceSelector {
-        job: 'thanos',
+        job: { re: 'thanos-(.+)-compactor' },
       },
 
       requestRate: rateMetric(
@@ -263,7 +263,7 @@ metricsCatalog.serviceDefinition({
       |||,
 
       local thanosRuleAlertsSelector = thanosServiceSelector {
-        job: 'thanos',  // TODO: FIXME: https://gitlab.com/gitlab-com/gl-infra/reliability/-/issues/17377
+        job: 'thanos-ruler',  // TODO: FIXME: https://gitlab.com/gitlab-com/gl-infra/reliability/-/issues/17377
       },
 
       requestRate: rateMetric(
@@ -295,7 +295,7 @@ metricsCatalog.serviceDefinition({
       |||,
 
       local selector = thanosServiceSelector {
-        job: { re: '^thanos.*' },  // TODO: FIXME: https://gitlab.com/gitlab-com/gl-infra/reliability/-/issues/17377
+        job: 'thanos-ruler',  // TODO: FIXME: https://gitlab.com/gitlab-com/gl-infra/reliability/-/issues/17377
       },
 
       requestRate: rateMetric(
@@ -337,21 +337,27 @@ metricsCatalog.serviceDefinition({
         store and query-frontend components.
       |||,
 
+      local thanosMemcachedSelector = thanosServiceSelector {
+        job: { re: 'thanos-(labels|querier)-metrics|thanos-(.+)-(bucket|index)-metrics' },
+        grpc_type: 'unary',
+      },
+
+
       apdex: histogramApdex(
         histogram='thanos_memcached_operation_duration_seconds_bucket',
         satisfiedThreshold=0.1,
-        selector=thanosServiceSelector,
+        selector=thanosMemcachedSelector,
         metricsFormat='openmetrics'
       ),
 
       requestRate: rateMetric(
         counter='thanos_memcached_operations_total',
-        selector=thanosServiceSelector,
+        selector=thanosMemcachedSelector,
       ),
 
       errorRate: rateMetric(
         counter='thanos_memcached_operation_failures_total',
-        selector=thanosServiceSelector,
+        selector=thanosMemcachedSelector,
       ),
 
       significantLabels: ['operation', 'reason'],
