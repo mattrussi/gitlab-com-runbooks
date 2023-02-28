@@ -405,20 +405,14 @@
             "type": "string"
           },
           "uniqueItems": true
-        },
-        "infra_owner": {
-          "description": "DEPRECATED: The Infrastructure owner of the service",
-          "type": [
-            "string",
-            "null"
-          ]
         }
       },
       "required": [
         "name",
         "friendly_name",
         "tier",
-        "label"
+        "label",
+        "owner"
       ],
       "additionalProperties": false
     },
