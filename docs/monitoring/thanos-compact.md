@@ -4,7 +4,8 @@
 
 Thanos compact failures are almost always discoverable in the logs.
 
-In GCE: `journalctl -eu thanos-compact`
+In Elastic - look in the pubsub-monitoring-inf-ops* index for kubernetes.container_name:compactor, NOT json.level:info
+Dashboard: Coming
 
 Note that due to cross-environment monitoring, the env of the alert may not
 correspond to the environment whose thanos-compact singleton is broken. Pay
