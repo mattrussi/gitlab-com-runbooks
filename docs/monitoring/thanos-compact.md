@@ -4,7 +4,7 @@
 
 Thanos compact failures are almost always discoverable in the logs.
 
-In Elastic - look in the pubsub-monitoring-inf-ops* index for kubernetes.container_name:compactor, NOT json.level:info
+[Elasticsearch](https://nonprod-log.gitlab.net/goto/5253fd00-b7ab-11ed-9af2-6131f0ee4ce6) - Saved query params: pubsub-monitoring-inf-ops* index for kubernetes.container_name:compactor, NOT json.level:info
 Dashboard: Coming
 
 Note that due to cross-environment monitoring, the env of the alert may not
