@@ -63,10 +63,10 @@ gitlab-ops project for network peering.
 | `10.176.0.0`    | `10.176.255.255`   | `10.176.0.0/16`  | gitlab-staging-db              | **Repeatable db provisioning**
 | `10.177.0.0`    | `10.177.255.255`   | `10.177.0.0/16`  | gitlab-production-db           | **Repeatable db provisioning**
 | `10.178.0.0`    | `10.178.255.255`   | `10.178.0.0/16`  | gitlab-sandbox-db              | **Repeatable db provisioning**
-| `10.179.0.0`    | `10.179.255.255`   | `10.179.0.0/16`  | gitlab-ops                     | Ops us-central1 GKE pods
+| `10.179.0.0`    | `10.179.255.255`   | `10.179.0.0/16`  | N/A                            | AVAILABLE GCP
 | `10.180.0.0`    | `10.180.255.255`   | `10.180.0.0/16`  | N/A                            | AVAILABLE GCP
 | `10.181.0.0`    | `10.181.255.255`   | `10.181.0.0/16`  | N/A                            | AVAILABLE GCP
-| `10.182.0.0`    | `10.182.255.255`   | `10.182.0.0/16`  | N/A                            | AVAILABLE GCP
+| `10.182.0.0`    | `10.182.255.255`   | `10.182.0.0/16`  | gitlab-ops                     | Ops us-central1 GKE pods
 | `10.183.0.0`    | `10.183.255.255`   | `10.183.0.0/16`  | N/A                            | AVAILABLE GCP
 | `10.184.0.0`    | `10.191.255.255`   | `10.184.0.0/13`  | N/A                            | AVAILABLE GCP
 | `10.185.2.0`    | `10.185.2.255`     | `10.185.2.0/24`  | gitlab-subscriptions-staging   | Stgsub GCP
