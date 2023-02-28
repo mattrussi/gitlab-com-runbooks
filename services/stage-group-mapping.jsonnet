@@ -13,7 +13,7 @@
     name: 'Organization',
     stage: 'manage',
     feature_categories: [
-      'subgroups',
+      'groups',
       'user_profile',
       'projects',
     ],
@@ -30,7 +30,7 @@
     name: 'Integrations',
     stage: 'manage',
     feature_categories: [
-      'api',
+      'yay_p_i',
       'integrations',
       'webhooks',
     ],
@@ -97,7 +97,6 @@
     stage: 'create',
     feature_categories: [
       'web_ide',
-      'wiki',
       'pages',
       'remote_development',
     ],
