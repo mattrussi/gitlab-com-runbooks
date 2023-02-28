@@ -383,19 +383,6 @@ generateTests([
     ],
   },
   {
-    name: 'high severity alerts should be routed to infrastructure and the appropriate team feature_category="authentication_and_authorization" alerts should be routed to team_authentication_and_authorization_alerts_channel',
-    labels: {
-      feature_category: 'authentication_and_authorization',
-      env: 'gprd',
-      pager: 'pagerduty',
-    },
-    receivers: [
-      'prod_pagerduty',
-      'team_authentication_and_authorization_alerts_channel',
-      'production_slack_channel',
-    ],
-  },
-  {
     name: 'pages, observability team, gstg env -> observability pagerduty, observability slack',
     labels: {
       env: 'gstg',
