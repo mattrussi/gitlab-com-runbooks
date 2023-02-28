@@ -1581,17 +1581,9 @@ groups:
   name: 'Component-Level SLIs: webservice - 5m burn-rate'
   rules:
   - expr: |
-      (
-        sum by () (
-          rate(http_request_duration_seconds_bucket{job="gitlab-rails",le="1"}[5m])
-        )
-        +
-        sum by () (
-          rate(http_request_duration_seconds_bucket{job="gitlab-rails",le="10"}[5m])
-        )
+      sum by () (
+        rate(gitlab_sli_rails_request_apdex_success_total{job="gitlab-rails"}[5m])
       )
-      /
-      2
     labels:
       component: puma
       tier: sv
@@ -1599,7 +1591,7 @@ groups:
     record: gitlab_component_apdex:success:rate_5m
   - expr: |
       sum by () (
-        rate(http_request_duration_seconds_bucket{job="gitlab-rails",le="+Inf"}[5m])
+        rate(gitlab_sli_rails_request_apdex_total{job="gitlab-rails"}[5m])
       )
     labels:
       component: puma
@@ -1688,17 +1680,9 @@ groups:
   name: 'Component-Level SLIs: webservice - 30m burn-rate'
   rules:
   - expr: |
-      (
-        sum by () (
-          rate(http_request_duration_seconds_bucket{job="gitlab-rails",le="1"}[30m])
-        )
-        +
-        sum by () (
-          rate(http_request_duration_seconds_bucket{job="gitlab-rails",le="10"}[30m])
-        )
+      sum by () (
+        rate(gitlab_sli_rails_request_apdex_success_total{job="gitlab-rails"}[30m])
       )
-      /
-      2
     labels:
       component: puma
       tier: sv
@@ -1706,7 +1690,7 @@ groups:
     record: gitlab_component_apdex:success:rate_30m
   - expr: |
       sum by () (
-        rate(http_request_duration_seconds_bucket{job="gitlab-rails",le="+Inf"}[30m])
+        rate(gitlab_sli_rails_request_apdex_total{job="gitlab-rails"}[30m])
       )
     labels:
       component: puma
@@ -1795,17 +1779,9 @@ groups:
   name: 'Component-Level SLIs: webservice - 1h burn-rate'
   rules:
   - expr: |
-      (
-        sum by () (
-          rate(http_request_duration_seconds_bucket{job="gitlab-rails",le="1"}[1h])
-        )
-        +
-        sum by () (
-          rate(http_request_duration_seconds_bucket{job="gitlab-rails",le="10"}[1h])
-        )
+      sum by () (
+        rate(gitlab_sli_rails_request_apdex_success_total{job="gitlab-rails"}[1h])
       )
-      /
-      2
     labels:
       component: puma
       tier: sv
@@ -1813,7 +1789,7 @@ groups:
     record: gitlab_component_apdex:success:rate_1h
   - expr: |
       sum by () (
-        rate(http_request_duration_seconds_bucket{job="gitlab-rails",le="+Inf"}[1h])
+        rate(gitlab_sli_rails_request_apdex_total{job="gitlab-rails"}[1h])
       )
     labels:
       component: puma
@@ -1902,17 +1878,9 @@ groups:
   name: 'Component-Level SLIs: webservice - 6h burn-rate'
   rules:
   - expr: |
-      (
-        sum by () (
-          rate(http_request_duration_seconds_bucket{job="gitlab-rails",le="1"}[6h])
-        )
-        +
-        sum by () (
-          rate(http_request_duration_seconds_bucket{job="gitlab-rails",le="10"}[6h])
-        )
+      sum by () (
+        rate(gitlab_sli_rails_request_apdex_success_total{job="gitlab-rails"}[6h])
       )
-      /
-      2
     labels:
       component: puma
       tier: sv
@@ -1920,7 +1888,7 @@ groups:
     record: gitlab_component_apdex:success:rate_6h
   - expr: |
       sum by () (
-        rate(http_request_duration_seconds_bucket{job="gitlab-rails",le="+Inf"}[6h])
+        rate(gitlab_sli_rails_request_apdex_total{job="gitlab-rails"}[6h])
       )
     labels:
       component: puma
@@ -5765,13 +5733,6 @@ groups:
       grafana_min_zoom_hours: "6"
       grafana_panel_id: "561966508"
       grafana_variables: environment,stage
-      promql_template_1: |
-        histogram_quantile(
-          0.950000,
-          sum by (le) (
-            rate(http_request_duration_seconds_bucket{job="gitlab-rails"}[5m])
-          )
-        )
       runbook: docs/webservice/README.md
       title: The puma SLI of the webservice service has an apdex violating SLO
     expr: |
@@ -5815,13 +5776,6 @@ groups:
       grafana_min_zoom_hours: "6"
       grafana_panel_id: "561966508"
       grafana_variables: environment,stage
-      promql_template_1: |
-        histogram_quantile(
-          0.950000,
-          sum by (le) (
-            rate(http_request_duration_seconds_bucket{job="gitlab-rails"}[5m])
-          )
-        )
       runbook: docs/webservice/README.md
       title: The puma SLI of the webservice service has an apdex violating SLO
     expr: |

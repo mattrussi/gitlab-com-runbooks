@@ -2896,107 +2896,11 @@
           "fillGradient": 0,
           "gridPos": {
             "h": 10,
-            "w": 8,
+            "w": 12,
             "x": 0,
             "y": 0
           },
           "id": 23,
-          "legend": {
-            "alignAsTable": true,
-            "avg": true,
-            "current": true,
-            "hideEmpty": true,
-            "max": true,
-            "min": true,
-            "rightSide": false,
-            "show": true,
-            "total": false,
-            "values": true
-          },
-          "lines": true,
-          "linewidth": 2,
-          "nullPointMode": "null",
-          "percentage": false,
-          "pointradius": 5,
-          "points": false,
-          "renderer": "flot",
-          "spaceLength": 10,
-          "stack": false,
-          "steppedLine": false,
-          "targets": [
-            {
-              "expr": "histogram_quantile(\n  0.950000,\n  sum by (le) (\n    rate(http_request_duration_seconds_bucket{job=\"gitlab-rails\"}[$__interval])\n  )\n)\n \u003e 0",
-              "format": "time_series",
-              "interval": "1m",
-              "intervalFactor": 2,
-              "legendFormat": "p95 overall",
-              "refId": "A"
-            }
-          ],
-          "thresholds": [
-            {
-              "colorMode": "custom",
-              "fill": true,
-              "fillColor": "rgba(242, 73, 92, 0.5)",
-              "line": false,
-              "op": "gt",
-              "value": 10,
-              "yaxis": "left"
-            },
-            {
-              "colorMode": "custom",
-              "fill": true,
-              "fillColor": "rgba(242, 73, 92, 0.25)",
-              "line": false,
-              "op": "gt",
-              "value": 1,
-              "yaxis": "left"
-            }
-          ],
-          "title": "Estimated p95 puma Latency - Overall",
-          "tooltip": {
-            "shared": true,
-            "sort": 2,
-            "value_type": "individual"
-          },
-          "type": "graph",
-          "xaxis": {
-            "mode": "time",
-            "show": true
-          },
-          "yaxes": [
-            {
-              "format": "s",
-              "label": "Duration",
-              "logBase": 10,
-              "min": 0.01,
-              "show": true
-            },
-            {
-              "format": "short",
-              "logBase": 1,
-              "max": 1,
-              "min": 0,
-              "show": false
-            }
-          ]
-        },
-        {
-          "bars": false,
-          "dashLength": 10,
-          "dashes": false,
-          "datasource": "$PROMETHEUS_DS",
-          "decimals": 2,
-          "description": "",
-          "fill": 0,
-          "fillGradient": 0,
-          "gridPos": {
-            "h": 10,
-            "w": 8,
-            "x": 8,
-            "y": 0
-          },
-          "id": 24,
           "legend": {
             "alignAsTable": true,
             "avg": true,
@@ -3068,11 +2972,11 @@
           "fillGradient": 0,
           "gridPos": {
             "h": 10,
-            "w": 8,
-            "x": 16,
+            "w": 12,
+            "x": 12,
             "y": 0
           },
-          "id": 25,
+          "id": 24,
           "legend": {
             "alignAsTable": true,
             "avg": true,
@@ -3151,7 +3055,7 @@
         "x": 0,
         "y": 110
       },
-      "id": 26,
+      "id": 25,
       "panels": [
         {
           "bars": false,
@@ -3168,7 +3072,7 @@
             "x": 0,
             "y": 0
           },
-          "id": 27,
+          "id": 26,
           "legend": {
             "alignAsTable": true,
             "avg": true,
@@ -3264,7 +3168,7 @@
             "x": 8,
             "y": 0
           },
-          "id": 28,
+          "id": 27,
           "legend": {
             "alignAsTable": true,
             "avg": true,
@@ -3340,7 +3244,7 @@
             "x": 16,
             "y": 0
           },
-          "id": 29,
+          "id": 28,
           "legend": {
             "alignAsTable": true,
             "avg": true,
@@ -3416,7 +3320,7 @@
             "x": 0,
             "y": 10
           },
-          "id": 30,
+          "id": 29,
           "legend": {
             "alignAsTable": true,
             "avg": true,
@@ -3512,7 +3416,7 @@
             "x": 6,
             "y": 10
           },
-          "id": 31,
+          "id": 30,
           "legend": {
             "alignAsTable": true,
             "avg": true,
@@ -3593,7 +3497,7 @@
             "x": 12,
             "y": 10
           },
-          "id": 32,
+          "id": 31,
           "legend": {
             "alignAsTable": true,
             "avg": true,
@@ -3669,7 +3573,7 @@
             "x": 18,
             "y": 10
           },
-          "id": 33,
+          "id": 32,
           "legend": {
             "alignAsTable": true,
             "avg": true,
@@ -3748,7 +3652,7 @@
         "x": 0,
         "y": 500
       },
-      "id": 34,
+      "id": 33,
       "panels": [
         {
           "aliasColors": {},
@@ -4329,7 +4233,7 @@
         "x": 0,
         "y": 110000
       },
-      "id": 38,
+      "id": 37,
       "mode": "markdown",
       "title": "Source",
       "type": "text"

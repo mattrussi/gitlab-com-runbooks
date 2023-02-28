@@ -1,6 +1,5 @@
 local metricsCatalog = import 'servicemetrics/metrics.libsonnet';
 local combined = metricsCatalog.combined;
-local customApdex = metricsCatalog.customApdex;
 local rateMetric = metricsCatalog.rateMetric;
 local gitalyHelper = import 'service-archetypes/helpers/gitaly.libsonnet';
 local toolingLinks = import 'toolinglinks/toolinglinks.libsonnet';
