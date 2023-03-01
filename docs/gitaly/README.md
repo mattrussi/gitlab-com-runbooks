@@ -8,7 +8,7 @@
 
 * [Service Overview](https://dashboards.gitlab.net/d/gitaly-main/gitaly-overview)
 * **Alerts**: <https://alerts.gitlab.net/#/alerts?filter=%7Btype%3D%22gitaly%22%2C%20tier%3D%22stor%22%7D>
-* **Label**: gitlab-com/gl-infra/production~"Service:Gitaly"
+* **Label**: gitlab-com/gl-infra/production~"Service::Gitaly"
 
 ## Logging
 

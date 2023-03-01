@@ -14,7 +14,7 @@
 
 * [Service Overview](https://dashboards.gitlab.net/d/vault-main/vault-overview)
 * **Alerts**: <https://alerts.gitlab.net/#/alerts?filter=%7Btype%3D%22vault%22%2C%20tier%3D%22inf%22%7D>
-* **Label**: gitlab-com/gl-infra/production~"Service:Vault"
+* **Label**: gitlab-com/gl-infra/production~"Service::Vault"
 
 ## Logging
 

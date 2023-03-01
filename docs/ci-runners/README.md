@@ -8,7 +8,7 @@
 
 * [Service Overview](https://dashboards.gitlab.net/d/ci-runners-main/ci-runners-overview)
 * **Alerts**: <https://alerts.gitlab.net/#/alerts?filter=%7Btype%3D%22ci-runners%22%2C%20tier%3D%22sv%22%7D>
-* **Label**: gitlab-com/gl-infra/production~"Service:CI Runner"
+* **Label**: gitlab-com/gl-infra/production~"Service::CI Runners"
 
 ## Logging
 
