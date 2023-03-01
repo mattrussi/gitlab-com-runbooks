@@ -81,6 +81,12 @@
     "region": "us-east1",
     "ssh_proxy": "bastion-01-inf-ops.c.gitlab-ops.internal"
   },
+  "ops-central": {
+    "name": "ops-central",
+    "project": "gitlab-ops",
+    "region": "us-central1",
+    "ssh_proxy": "bastion-01-inf-ops.c.gitlab-ops.internal"
+  },
 
   "db-benchmarking": {
     "name": "db-benchmarking-gitlab-gke",
