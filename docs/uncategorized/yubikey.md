@@ -35,7 +35,7 @@ set -e
 
 PIN=${PIN:-000000}
 
-read -rp "THIS WILL RESET YOUR YUBIKEY WITH PIN=$PIN"
+read -rp "THIS WILL RESET YOUR YUBIKEY WITH PIN=$PIN, type "CTRL+C" to cancel"
 
 # Reset PIV module
 ykman piv reset -f
