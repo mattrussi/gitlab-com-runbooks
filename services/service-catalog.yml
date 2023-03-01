@@ -17,6 +17,7 @@ services:
       - manage
       - plan
     label: Service:API
+    owner: reliability_general
     business:
       SLA:
         overall_sla_weighting: 5 # If this exists, this service will be included in the overall SLA, using this value as a weighted average
@@ -55,6 +56,7 @@ services:
     tier: inf
     friendly_name: Blackbox Exporters
     label: Service:Blackbox
+    owner: reliability_observability
     technical:
       project:
         - https://gitlab.com/gitlab-cookbooks/gitlab-exporters
@@ -77,6 +79,7 @@ services:
     tier: sv
     friendly_name: Camoproxy
     label: Service:Camoproxy
+    owner: reliability_general
     technical:
       project:
         - https://github.com/cactus/go-camo
@@ -101,6 +104,7 @@ services:
     tier: sv
     friendly_name: Console Access
     label: Service:Console
+    owner: reliability_foundations
     technical:
       project:
         - https://gitlab.com/gitlab-cookbooks/gitlab_users
@@ -125,6 +129,7 @@ services:
     tier: inf
     friendly_name: Consul
     label: Service:Consul
+    owner: reliability_foundations
     technical:
       project:
         - https://github.com/hashicorp/consul
@@ -154,6 +159,7 @@ services:
     teams:
       - verify
     label: Service:Contributors
+    owner: reliability_general
     technical:
       project:
         - https://gitlab.com/gitlab-com/gitlab-contributors
@@ -179,6 +185,7 @@ services:
     teams:
       - observability
     label: Service:ErrorTracking
+    owner: reliability_observability
     technical:
       documents:
         architecture: https://gitlab.com/gitlab-org/opstrace/runbooks/#architecture
@@ -193,6 +200,7 @@ services:
     teams:
       - fulfillment
     label: Service:Customersdot
+    owner: fulfillment_platform
     technical:
       project:
         - https://gitlab.com/gitlab-org/customers-gitlab-com
@@ -222,6 +230,7 @@ services:
     teams:
       - support
     label: forum.gitlab.com
+    owner: reliability_general
     technical:
       project:
       documents:
@@ -245,6 +254,7 @@ services:
     tier: inf
     friendly_name: Kubernetes
     label: Service:Kubernetes
+    owner: reliability_foundations
     technical:
       project:
         - https://gitlab.com/gitlab-com/gitlab-com-infrastructure
@@ -272,6 +282,7 @@ services:
     tier: inf
     friendly_name: Logging
     label: Service:Logging
+    owner: reliability_observability
     technical:
       project:
       documents:
@@ -311,6 +322,7 @@ services:
     teams:
       - distribution_deploy
     label: Service:NGINX
+    owner: reliability_general
     technical:
       project:
         - https://gitlab.com/gitlab-org/omnibus-gitlab
@@ -337,6 +349,7 @@ services:
     tier: inf
     friendly_name: Global Search
     label: Service:Elasticsearch
+    owner: global_search
     technical:
       project:
       documents:
@@ -370,6 +383,7 @@ services:
       - manage
       - plan
     label: Service:Web
+    owner: reliability_general
     business:
       SLA:
         overall_sla_weighting: 5 # If this exists, this service will be included in the overall SLA, using this value as a weighted average
@@ -409,6 +423,7 @@ services:
     tier: lb
     friendly_name: HAProxy Frontend
     label: Service:HAProxy
+    owner: reliability_foundations
     technical:
       project:
         - https://gitlab.com/gitlab-cookbooks/gitlab-haproxy
@@ -437,6 +452,7 @@ services:
     tier: inf
     friendly_name: Google Cloud Storage
     label: Service:GoogleCloudStorage
+    owner: reliability_foundations
     technical:
       documents:
         sre_guide: https://gitlab.com/gitlab-com/runbooks/-/tree/master/docs/google-cloud-storage
@@ -462,6 +478,7 @@ services:
       - manage
       - plan
     label: Service:Git
+    owner: reliability_general
     business:
       SLA:
         overall_sla_weighting: 5 # If this exists, this service will be included in the overall SLA, using this value as a weighted average
@@ -507,6 +524,7 @@ services:
     teams:
       - gitaly
     label: Service:Gitaly
+    owner: reliability_practices
     technical:
       project:
         - https://gitlab.com/gitlab-org/gitaly
@@ -540,6 +558,7 @@ services:
     tier: inf
     friendly_name: InfluxDB (deprecated)
     label: Service:Influxdb
+    owner: reliability_observability
     technical:
       project:
         - https://github.com/influxdata/influxdb
@@ -565,6 +584,7 @@ services:
     teams:
       - gitaly
     label: Service:Praefect
+    owner: reliability_practices
     technical:
       project:
         - https://gitlab.com/gitlab-org/gitaly
@@ -594,6 +614,7 @@ services:
     teams:
       - trust_and_safety
     label: Service:PVS
+    owner: trust_and_safety
     technical:
       project:
         - https://gitlab.com/gitlab-com/gl-security/security-operations/trust-and-safety/pipeline-validation-service
@@ -625,6 +646,7 @@ services:
       - manage
       - plan
     label: Service:Mailroom
+    owner: reliability_general
     technical:
       project:
         - https://github.com/tpitale/mail_room
@@ -651,6 +673,7 @@ services:
     tier: sv
     friendly_name: GitLab Pages
     label: Service:Pages
+    owner: reliability_general
     business:
       SLA:
         overall_sla_weighting: 0 # Treated as a primary service, but with a zero weight for now
@@ -685,6 +708,7 @@ services:
     tier: db
     friendly_name: PGBouncer Primary Database Pool
     label: Service:pgbouncer
+    owner: reliability_database_reliability
     technical:
       project:
         - https://github.com/pgbouncer/pgbouncer
@@ -713,6 +737,7 @@ services:
     tier: db
     friendly_name: Registry PGBouncer Primary Database Pool
     label: Service:pgbouncer
+    owner: reliability_database_reliability
     technical:
       project:
         - https://github.com/pgbouncer/pgbouncer
@@ -741,6 +766,7 @@ services:
     tier: db
     friendly_name: CI PGBouncer Primary Database Pool
     label: Service:pgbouncer
+    owner: reliability_database_reliability
     technical:
       project:
         - https://github.com/pgbouncer/pgbouncer
@@ -769,6 +795,7 @@ services:
     tier: db
     friendly_name: Postgres (Patroni)
     label: Service:Postgres
+    owner: reliability_database_reliability
     technical:
       project:
         - https://github.com/postgres/postgres
@@ -799,6 +826,7 @@ services:
     tier: db
     friendly_name: Registry Postgres (Patroni)
     label: Service:Postgres
+    owner: reliability_database_reliability
     technical:
       project:
         - https://github.com/postgres/postgres
@@ -829,6 +857,7 @@ services:
     tier: db
     friendly_name: CI Postgres (Patroni)
     label: Service:Postgres
+    owner: reliability_database_reliability
     technical:
       project:
         - https://github.com/postgres/postgres
@@ -859,6 +888,7 @@ services:
     tier: sv
     friendly_name: PlantUML
     label: Service:PlantUML
+    owner: reliability_general
     technical:
       project:
         - https://plantuml.com/
@@ -884,6 +914,7 @@ services:
     tier: db
     friendly_name: Postgres DR Archive
     label: Service:PostgresArchive
+    owner: reliability_database_reliability
     technical:
       project:
         - https://github.com/postgres/postgres
@@ -911,6 +942,7 @@ services:
     tier: db
     friendly_name: Postgres DR Delayed Replica
     label: Service:PostgresDelayed
+    owner: reliability_database_reliability
     technical:
       project:
         - https://github.com/postgres/postgres
@@ -934,6 +966,7 @@ services:
     tier: inf
     friendly_name: PSQL Timings
     label: Service:PsqlTimings
+    owner: reliability_database_reliability
     technical:
       project:
       documents:
@@ -959,6 +992,7 @@ services:
     tier: inf
     friendly_name: Monitoring
     label: Service:Prometheus
+    owner: reliability_observability
     technical:
       project:
         - https://gitlab.com/gitlab-com/gl-infra/k8s-workloads/tanka-deployments
@@ -987,6 +1021,7 @@ services:
     tier: inf
     friendly_name: thanos
     label: Service:Thanos
+    owner: reliability_observability
     technical:
       project:
         - https://gitlab.com/gitlab-com/gl-infra/k8s-workloads/tanka-deployments
@@ -1021,6 +1056,7 @@ services:
     tier: db
     friendly_name: Persistent Redis
     label: Service:Redis
+    owner: scalability
     technical:
       project:
         - https://github.com/antirez/redis/
@@ -1050,6 +1086,7 @@ services:
     tier: db
     friendly_name: Redis Cache
     label: Service:RedisCache
+    owner: scalability
     technical:
       project:
         - https://github.com/antirez/redis/
@@ -1076,6 +1113,7 @@ services:
     tier: db
     friendly_name: Redis Cache Sentinel
     label: Service:RedisCacheSentinel
+    owner: scalability
     technical:
       project:
         - https://github.com/antirez/redis/
@@ -1100,6 +1138,7 @@ services:
     tier: db
     friendly_name: Redis RateLimiting
     label: Service:Redis
+    owner: scalability
     technical:
       project:
         - https://github.com/antirez/redis/
@@ -1126,6 +1165,7 @@ services:
     tier: db
     friendly_name: Redis Cluster RateLimiting
     label: Service:Redis
+    owner: scalability
     technical:
       project:
         - https://github.com/redis/redis
@@ -1152,6 +1192,7 @@ services:
     tier: db
     friendly_name: Redis Repository Cache
     label: Service:Redis
+    owner: scalability
     technical:
       project:
         - https://github.com/redis/redis
@@ -1177,8 +1218,8 @@ services:
   - name: redis-sessions
     tier: db
     friendly_name: Redis Sessions
-    infra_owner: sre_observability
     label: Service:Redis
+    owner: scalability
     technical:
       project:
         - https://github.com/antirez/redis/
@@ -1205,6 +1246,7 @@ services:
     tier: db
     friendly_name: Redis Sidekiq
     label: Service:RedisSidekiq
+    owner: scalability
     technical:
       project:
         - https://github.com/antirez/redis/
@@ -1231,6 +1273,7 @@ services:
     tier: db
     friendly_name: Redis TraceChunks
     label: Service:Redis
+    owner: scalability
     technical:
       project:
         - https://github.com/antirez/redis/
@@ -1257,6 +1300,7 @@ services:
     tier: db
     friendly_name: Redis Registry Cache
     label: Service:Redis
+    owner: scalability
     technical:
       project:
         - https://github.com/antirez/redis/
@@ -1281,6 +1325,7 @@ services:
     tier: db
     friendly_name: Redis Database Load Balancing
     label: Service:Redis
+    owner: scalability
     technical:
       project:
         - https://github.com/redis/redis
@@ -1309,6 +1354,7 @@ services:
     teams:
       - package
     label: Service:Registry
+    owner: reliability_general
     business:
       SLA:
         overall_sla_weighting: 1 # If this exists, this service will be included in the overall SLA, using this value as a weighted average
@@ -1342,6 +1388,7 @@ services:
     tier: inf
     friendly_name: NAT
     label: Service:NAT
+    owner: reliability_foundations
     technical:
       project:
       documents:
@@ -1364,6 +1411,7 @@ services:
     tier: inf
     friendly_name: Monitoring
     label: Service:Sentry
+    owner: reliability_observability
     technical:
       project:
         - https://github.com/getsentry/sentry
@@ -1396,6 +1444,7 @@ services:
       - manage
       - plan
     label: Service:Sidekiq
+    owner: reliability_general
     technical:
       project:
         - https://gitlab.com/gitlab-org/gitlab-ce
@@ -1434,6 +1483,7 @@ services:
     tier: sv
     friendly_name: version.gitlab.com
     label: Service:Version
+    owner: reliability_general
     technical:
       project:
         - https://gitlab.com/gitlab-com/version-gitlab-com
@@ -1458,6 +1508,7 @@ services:
     tier: inf
     friendly_name: Pubsub for Logging
     label: Service:PubSub
+    owner: reliability_observability
     technical:
       project:
         - https://cloud.google.com/pubsub/docs/overview
@@ -1491,6 +1542,7 @@ services:
     tier: sv
     friendly_name: CI Runners
     label: Service:CI Runner
+    owner: reliability_practices
     business:
       SLA:
         overall_sla_weighting: 0 # Treated as a primary service, but with a zero weight for now
@@ -1521,6 +1573,7 @@ services:
     tier: inf
     friendly_name: Stackdriver Metrics
     label: Service:Stackdriver
+    owner: reliability_observability
     technical:
       project:
       documents:
@@ -1542,6 +1595,7 @@ services:
     tier: lb
     friendly_name: Cloudflare Web Application Firewall
     label: Service:WAF
+    owner: reliability_foundations
     technical:
       project:
       documents:
@@ -1565,6 +1619,7 @@ services:
     tier: inf
     friendly_name: Hashicorp Vault for Infrastructure
     label: Service:Vault
+    owner: reliability_foundations
     technical:
       project:
       documents:
@@ -1586,6 +1641,7 @@ services:
     tier: inf
     friendly_name: Jaeger
     label: Service:Jaeger
+    owner: reliability_observability
     technical:
       project:
         - https://www.jaegertracing.io/
@@ -1614,6 +1670,7 @@ services:
     tier: sv
     friendly_name: Woodhouse
     label: Service:Woodhouse
+    owner: reliability_general
     technical:
       project:
         - https://gitlab.com/gitlab-com/gl-infra/woodhouse
@@ -1637,6 +1694,7 @@ services:
     tier: sv
     friendly_name: Kubernetes Agent
     label: Service:kas
+    owner: reliability_general
     technical:
       project:
         - https://gitlab.com/gitlab-org/cluster-integration/gitlab-agent
@@ -1664,6 +1722,7 @@ services:
     tier: sv
     friendly_name: Websockets
     label: Service:Websockets
+    owner: reliability_general
     technical:
       project:
         - https://gitlab.com/gitlab-org/gitlab
@@ -1689,6 +1748,7 @@ services:
     tier: inf
     friendly_name: Google Cloud SQL
     label: Service:CloudSQL
+    owner: reliability_database_reliability
     technical:
       project:
       documents:
@@ -1711,6 +1771,7 @@ services:
     tier: sv
     friendly_name: ExternalDNS
     label: Service:ExternalDNS
+    owner: reliability_foundations
     technical:
       project:
         - https://github.com/kubernetes-sigs/external-dns
@@ -1730,10 +1791,12 @@ services:
     observability:
       monitors:
         primary_grafana_dashboard: external-dns-main/external-dns-overview
+
   - name: gitlab-com-artifact-registry
     tier: inf
     friendly_name: Artifact Registry
     label: Service:ArtifactRegistry
+    owner: reliability_general
     technical:
       project:
       documents:
@@ -1751,10 +1814,12 @@ services:
       monitors:
         grafana_folder:
         primary_grafana_dashboard:
+
   - name: gitlab-com-pkgs
     tier: inf
     friendly_name: Package GCS Bucket
     label: Service:PackageGCSBucket
+    owner: reliability_general
     technical:
       project:
       documents:
@@ -1772,6 +1837,7 @@ services:
       monitors:
         grafana_folder:
         primary_grafana_dashboard:
+
   - name: internal-api
     friendly_name: GitLab Internal API
     tier: sv
@@ -1782,6 +1848,7 @@ services:
       - manage
       - plan
     label: Service:Internal-API
+    owner: reliability_general
     business:
       SLA:
         overall_sla_weighting: 0 # Treated as a primary service, but with a zero weight for now
