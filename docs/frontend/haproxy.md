@@ -157,6 +157,14 @@ Un-draining is executed as part of the HAProxy systemd unit start process. It ca
 sudo /usr/local/sbin/drain_haproxy.sh -u
 ```
 
+### Canary
+
+Canary can be drained directly using chatops in the #production Slack channel, examples:
+
+* Drain cny in staging `/chatops run canary --disable --staging`
+* Drain cny in production `/chatops run canary --disable --production`
+* Enable cny in production `/chatops run canary --enable --production`
+
 ## Tooling
 
 * There are helper scripts in [chef-repo](https://ops.gitlab.net/gitlab-com/gl-infra/chef-repo) to assist setting server statuses. In general, it is advised to always drain active connections from a server before rebooting.
