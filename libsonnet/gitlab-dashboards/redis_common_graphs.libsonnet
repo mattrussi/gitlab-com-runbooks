@@ -524,7 +524,7 @@ local processExporter = import 'gitlab-dashboards/process_exporter.libsonnet';
           ||| % formatConfig,
           legendFormat='{{ redirection_type }}',
           intervalFactor=2,
-        )
+        ),
       ], cols=2, rowHeight=10, startRow=startRow + 8);
 
     layout.titleRowWithPanels(
