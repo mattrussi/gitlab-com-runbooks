@@ -8,7 +8,7 @@
 
 * [Service Overview](https://dashboards.gitlab.net/d/pvs-main/pvs-overview)
 * **Alerts**: <https://alerts.gitlab.net/#/alerts?filter=%7Btype%3D%22pvs%22%2C%20tier%3D%22inf%22%7D>
-* **Label**: gitlab-com/gl-infra/production~"Service:PVS"
+* **Label**: gitlab-com/gl-infra/production~"Service::PVS"
 
 ## Logging
 

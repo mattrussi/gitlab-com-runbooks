@@ -8,7 +8,7 @@
 
 * [Service Overview](https://dashboards.gitlab.net/d/frontend-main/frontend-overview)
 * **Alerts**: <https://alerts.gitlab.net/#/alerts?filter=%7Btype%3D%22frontend%22%2C%20tier%3D%22lb%22%7D>
-* **Label**: gitlab-com/gl-infra/production~"Service:HAProxy"
+* **Label**: gitlab-com/gl-infra/production~"Service::HAProxy"
 
 ## Logging
 

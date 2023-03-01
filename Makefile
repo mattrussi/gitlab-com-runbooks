@@ -70,7 +70,7 @@ test: validate-service-dashboards validate-service-mappings validate-prom-rules 
 
 .PHONY: validate-service-mappings
 validate-service-mappings:
-	./scripts/validate-service-mappings
+	./scripts/validate-service-mappings.rb
 
 .PHONY: validate-service-dashboards
 validate-service-dashboards:

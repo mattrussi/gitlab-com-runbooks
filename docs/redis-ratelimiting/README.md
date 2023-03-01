@@ -8,7 +8,7 @@
 
 * [Service Overview](https://dashboards.gitlab.net/d/redis-ratelimiting-main/redis-ratelimiting-overview)
 * **Alerts**: <https://alerts.gitlab.net/#/alerts?filter=%7Btype%3D%22redis-ratelimiting%22%2C%20tier%3D%22db%22%7D>
-* **Label**: gitlab-com/gl-infra/production~"Service:Redis"
+* **Label**: gitlab-com/gl-infra/production~"Service::RedisRateLimiting"
 
 ## Logging
 

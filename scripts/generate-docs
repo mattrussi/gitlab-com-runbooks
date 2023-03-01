@@ -6,6 +6,7 @@ require 'ostruct'
 require 'open3'
 require 'pathname'
 require 'fileutils'
+require_relative 'reconcile_service_catalog_labels'
 
 START_MARKER = "<!-- MARKER: do not edit this section directly. Edit services/service-catalog.yml then run scripts/generate-docs -->"
 STOP_MARKER = "<!-- END_MARKER -->"
@@ -61,7 +62,7 @@ def generate_header(service, tier)
 <% end -%>
 * **Alerts**: <https://alerts.gitlab.net/#/alerts?filter=%7Btype%3D%22<%= service_name %>%22%2C%20tier%3D%22<%= service["tier"] %>%22%7D>
 <% if service["label"] -%>
-* **Label**: gitlab-com/gl-infra/production~"<%= service["label"] %>"
+* **Label**: gitlab-com/gl-infra/production~"<%= ReconcileServiceCatalogLabels::SERVICE_LABEL_SCOPE + service["label"] %>"
 <% end -%>
 <% if service["sentry_slug"] -%>
 * **Sentry**: https://sentry.gitlab.net/<%= service["sentry_slug"] %>

@@ -8,7 +8,7 @@
 
 * [Service Overview](https://dashboards.gitlab.net/d/api-main/api-overview)
 * **Alerts**: <https://alerts.gitlab.net/#/alerts?filter=%7Btype%3D%22api%22%2C%20tier%3D%22sv%22%7D>
-* **Label**: gitlab-com/gl-infra/production~"Service:API"
+* **Label**: gitlab-com/gl-infra/production~"Service::API"
 
 ## Logging
 
