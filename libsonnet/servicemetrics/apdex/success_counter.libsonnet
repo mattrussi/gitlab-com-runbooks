@@ -1,6 +1,6 @@
+local recordingRuleRegistry = import '../recording-rule-registry.libsonnet';
 local aggregations = import 'promql/aggregations.libsonnet';
 local selectors = import 'promql/selectors.libsonnet';
-local recordingRuleRegistry = import 'recording-rule-registry.libsonnet';
 local strings = import 'utils/strings.libsonnet';
 
 local resolveRateQuery(metricName, selector, rangeInterval, aggregationFunction=null, aggregationLabels=[]) =
@@ -26,17 +26,17 @@ local resolveRateQuery(metricName, selector, rangeInterval, aggregationFunction=
     else
       aggregations.aggregateOverQuery(aggregationFunction, aggregationLabels, query);
 
-local generateApdexRatio(rateApdex, aggregationLabels, additionalSelectors, rangeInterval, withoutLabels=[]) =
+local generateApdexRatio(successCounterApdex, aggregationLabels, additionalSelectors, rangeInterval, withoutLabels=[]) =
   |||
     %(successRateQuery)s
     /
     %(weightQuery)s
   ||| % {
-    successRateQuery: rateApdex.successRateQuery(aggregationLabels, additionalSelectors, rangeInterval, withoutLabels=withoutLabels),
-    weightQuery: rateApdex.apdexWeightQuery(aggregationLabels, additionalSelectors, rangeInterval, withoutLabels=withoutLabels),
+    successRateQuery: successCounterApdex.successRateQuery(aggregationLabels, additionalSelectors, rangeInterval, withoutLabels=withoutLabels),
+    weightQuery: successCounterApdex.apdexWeightQuery(aggregationLabels, additionalSelectors, rangeInterval, withoutLabels=withoutLabels),
   };
 
-local generateApdexAttributionQuery(rateApdex, aggregationLabel, selector, rangeInterval, withoutLabels) =
+local generateApdexAttributionQuery(successCounterApdex, aggregationLabel, selector, rangeInterval, withoutLabels) =
   |||
     (
       (
@@ -50,13 +50,13 @@ local generateApdexAttributionQuery(rateApdex, aggregationLabel, selector, range
       )
     ) > 0
   ||| % {
-    splitTotalQuery: strings.indent(rateApdex.apdexWeightQuery([aggregationLabel], selector, rangeInterval, withoutLabels=withoutLabels), 4),
-    splitSuccessRateQuery: strings.indent(rateApdex.apdexSuccessRateQuery([aggregationLabel], selector, rangeInterval, withoutLabels=withoutLabels), 4),
+    splitTotalQuery: strings.indent(successCounterApdex.apdexWeightQuery([aggregationLabel], selector, rangeInterval, withoutLabels=withoutLabels), 4),
+    splitSuccessRateQuery: strings.indent(successCounterApdex.apdexSuccessRateQuery([aggregationLabel], selector, rangeInterval, withoutLabels=withoutLabels), 4),
     aggregationLabel: aggregationLabel,
-    aggregatedTotalQuery: strings.indent(rateApdex.apdexWeightQuery([], selector, rangeInterval, withoutLabels=withoutLabels), 4),
+    aggregatedTotalQuery: strings.indent(successCounterApdex.apdexWeightQuery([], selector, rangeInterval, withoutLabels=withoutLabels), 4),
   };
 {
-  rateApdex(successRateMetric, operationRateMetric, selector=''):: {
+  successCounterApdex(successRateMetric, operationRateMetric, selector=''):: {
     successRateMetric: successRateMetric,
     operationRateMetric: operationRateMetric,
     selector: selector,

@@ -2,7 +2,7 @@ local metricsCatalog = import 'servicemetrics/metrics.libsonnet';
 local histogramApdex = metricsCatalog.histogramApdex;
 local rateMetric = metricsCatalog.rateMetric;
 local kubeLabelSelectors = metricsCatalog.kubeLabelSelectors;
-local rateApdex = metricsCatalog.rateApdex;
+local successCounterApdex = metricsCatalog.successCounterApdex;
 
 metricsCatalog.serviceDefinition({
   type: 'webservice',
@@ -55,7 +55,7 @@ metricsCatalog.serviceDefinition({
 
         local baseSelector = { job: 'gitlab-rails' },
 
-        apdex: rateApdex(
+        apdex: successCounterApdex(
           successRateMetric='gitlab_sli_rails_request_apdex_success_total',
           operationRateMetric='gitlab_sli_rails_request_apdex_total',
           selector=baseSelector,
