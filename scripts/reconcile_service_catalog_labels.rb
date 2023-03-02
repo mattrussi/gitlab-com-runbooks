@@ -2,6 +2,7 @@
 # frozen_string_literal: true
 
 require 'yaml'
+require 'json'
 require 'set'
 require 'net/http'
 require 'logger'
