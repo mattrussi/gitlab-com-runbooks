@@ -35,7 +35,8 @@ Here are some examples of the dashboards generated for this reference architectu
 | `sidekiq` | `email_receiver` | Monitors ratio between all received emails and received emails which could not be processed for some reason.  | - | ✅ SLO: 70% | ✅ |
 | `sidekiq` | `shard_catchall` | All Sidekiq jobs  | ✅ SLO: 99.5% | ✅ SLO: 99.5% | ✅ |
 | `webservice` | `puma` | Aggregation of most web requests that pass through the puma to the GitLab rails monolith. Healthchecks are excluded.  | ✅ SLO: 99.8% | ✅ SLO: 99.99% | ✅ |
-| `webservice` | `workhorse` | Aggregation of most web requests that pass through workhorse, monitored via the HTTP interface. Excludes health, readiness and liveness requests. Some known slow requests, such as HTTP uploads, are excluded from the apdex score.  | ✅ SLO: 99.8% | ✅ SLO: 99.99% | ✅ |
+| `webservice` | `workhorse` | Aggregation of most rails requests that pass through workhorse, monitored via the HTTP interface. Excludes API requests health, readiness and liveness requests. Some known slow requests, such as HTTP uploads, are excluded from the apdex score.  | ✅ SLO: 99.8% | ✅ SLO: 99.99% | ✅ |
+| `webservice` | `workhorse_api` | Aggregation of most API requests that pass through workhorse, monitored via the HTTP interface.  The workhorse API apdex has a longer apdex latency than the web to allow for slow API requests.  | ✅ SLO: 99.8% | ✅ SLO: 99.99% | ✅ |
 <!-- END_MARKER:slis -->
 
 ## Saturation Monitoring

@@ -1627,11 +1627,11 @@ groups:
   - expr: |
       (
         sum by () (
-          rate(gitlab_workhorse_http_request_duration_seconds_bucket{le="1",route!="^/-/health$",route!="^/-/(readiness|liveness)$",route!="^/([^/]+/){1,}[^/]+/uploads\\z",route!="^/([^/]+/){1,}[^/]+\\.git/git-receive-pack\\z",route!="^/([^/]+/){1,}[^/]+\\.git/git-upload-pack\\z",route!="^/([^/]+/){1,}[^/]+\\.git/info/refs\\z",route!="^/([^/]+/){1,}[^/]+\\.git/gitlab-lfs/objects/([0-9a-f]{64})/([0-9]+)\\z"}[5m])
+          rate(gitlab_workhorse_http_request_duration_seconds_bucket{le="1",route!="^/-/health$",route!="^/-/(readiness|liveness)$",route!="^/([^/]+/){1,}[^/]+/uploads\\z",route!="^/([^/]+/){1,}[^/]+\\.git/git-receive-pack\\z",route!="^/([^/]+/){1,}[^/]+\\.git/git-upload-pack\\z",route!="^/([^/]+/){1,}[^/]+\\.git/info/refs\\z",route!="^/([^/]+/){1,}[^/]+\\.git/gitlab-lfs/objects/([0-9a-f]{64})/([0-9]+)\\z",route!~"^\\^/api/.*"}[5m])
         )
         +
         sum by () (
-          rate(gitlab_workhorse_http_request_duration_seconds_bucket{le="10",route!="^/-/health$",route!="^/-/(readiness|liveness)$",route!="^/([^/]+/){1,}[^/]+/uploads\\z",route!="^/([^/]+/){1,}[^/]+\\.git/git-receive-pack\\z",route!="^/([^/]+/){1,}[^/]+\\.git/git-upload-pack\\z",route!="^/([^/]+/){1,}[^/]+\\.git/info/refs\\z",route!="^/([^/]+/){1,}[^/]+\\.git/gitlab-lfs/objects/([0-9a-f]{64})/([0-9]+)\\z"}[5m])
+          rate(gitlab_workhorse_http_request_duration_seconds_bucket{le="10",route!="^/-/health$",route!="^/-/(readiness|liveness)$",route!="^/([^/]+/){1,}[^/]+/uploads\\z",route!="^/([^/]+/){1,}[^/]+\\.git/git-receive-pack\\z",route!="^/([^/]+/){1,}[^/]+\\.git/git-upload-pack\\z",route!="^/([^/]+/){1,}[^/]+\\.git/info/refs\\z",route!="^/([^/]+/){1,}[^/]+\\.git/gitlab-lfs/objects/([0-9a-f]{64})/([0-9]+)\\z",route!~"^\\^/api/.*"}[5m])
         )
       )
       /
@@ -1643,7 +1643,7 @@ groups:
     record: gitlab_component_apdex:success:rate_5m
   - expr: |
       sum by () (
-        rate(gitlab_workhorse_http_request_duration_seconds_bucket{le="+Inf",route!="^/-/health$",route!="^/-/(readiness|liveness)$",route!="^/([^/]+/){1,}[^/]+/uploads\\z",route!="^/([^/]+/){1,}[^/]+\\.git/git-receive-pack\\z",route!="^/([^/]+/){1,}[^/]+\\.git/git-upload-pack\\z",route!="^/([^/]+/){1,}[^/]+\\.git/info/refs\\z",route!="^/([^/]+/){1,}[^/]+\\.git/gitlab-lfs/objects/([0-9a-f]{64})/([0-9]+)\\z"}[5m])
+        rate(gitlab_workhorse_http_request_duration_seconds_bucket{le="+Inf",route!="^/-/health$",route!="^/-/(readiness|liveness)$",route!="^/([^/]+/){1,}[^/]+/uploads\\z",route!="^/([^/]+/){1,}[^/]+\\.git/git-receive-pack\\z",route!="^/([^/]+/){1,}[^/]+\\.git/git-upload-pack\\z",route!="^/([^/]+/){1,}[^/]+\\.git/info/refs\\z",route!="^/([^/]+/){1,}[^/]+\\.git/gitlab-lfs/objects/([0-9a-f]{64})/([0-9]+)\\z",route!~"^\\^/api/.*"}[5m])
       )
     labels:
       component: workhorse
@@ -1652,7 +1652,7 @@ groups:
     record: gitlab_component_apdex:weight:score_5m
   - expr: |
       sum by () (
-        rate(gitlab_workhorse_http_requests_total{route!="^/-/health$",route!="^/-/(readiness|liveness)$"}[5m])
+        rate(gitlab_workhorse_http_requests_total{route!="^/-/health$",route!="^/-/(readiness|liveness)$",route!~"^\\^/api/.*"}[5m])
       )
     labels:
       component: workhorse
@@ -1662,7 +1662,7 @@ groups:
   - expr: |
       (
         sum by () (
-          rate(gitlab_workhorse_http_requests_total{code=~"^5.*",route!="^/-/health$",route!="^/-/(readiness|liveness)$"}[5m])
+          rate(gitlab_workhorse_http_requests_total{code=~"^5.*",route!="^/-/health$",route!="^/-/(readiness|liveness)$",route!~"^\\^/api/.*"}[5m])
         )
       )
       or
@@ -1673,6 +1673,50 @@ groups:
       )
     labels:
       component: workhorse
+      tier: sv
+      type: webservice
+    record: gitlab_component_errors:rate_5m
+  - expr: |
+      sum by () (
+        rate(gitlab_workhorse_http_request_duration_seconds_bucket{le="10",route!="^/-/health$",route!="^/-/(readiness|liveness)$",route=~"^\\^/api/.*"}[5m])
+      )
+    labels:
+      component: workhorse_api
+      tier: sv
+      type: webservice
+    record: gitlab_component_apdex:success:rate_5m
+  - expr: |
+      sum by () (
+        rate(gitlab_workhorse_http_request_duration_seconds_bucket{le="+Inf",route!="^/-/health$",route!="^/-/(readiness|liveness)$",route=~"^\\^/api/.*"}[5m])
+      )
+    labels:
+      component: workhorse_api
+      tier: sv
+      type: webservice
+    record: gitlab_component_apdex:weight:score_5m
+  - expr: |
+      sum by () (
+        rate(gitlab_workhorse_http_requests_total{route!="^/-/health$",route!="^/-/(readiness|liveness)$",route=~"^\\^/api/.*"}[5m])
+      )
+    labels:
+      component: workhorse_api
+      tier: sv
+      type: webservice
+    record: gitlab_component_ops:rate_5m
+  - expr: |
+      (
+        sum by () (
+          rate(gitlab_workhorse_http_requests_total{code=~"^5.*",route!="^/-/health$",route!="^/-/(readiness|liveness)$",route=~"^\\^/api/.*"}[5m])
+        )
+      )
+      or
+      (
+        0 * group by() (
+          gitlab_component_ops:rate_5m{component="workhorse_api",tier="sv",type="webservice"}
+        )
+      )
+    labels:
+      component: workhorse_api
       tier: sv
       type: webservice
     record: gitlab_component_errors:rate_5m
@@ -1726,11 +1770,11 @@ groups:
   - expr: |
       (
         sum by () (
-          rate(gitlab_workhorse_http_request_duration_seconds_bucket{le="1",route!="^/-/health$",route!="^/-/(readiness|liveness)$",route!="^/([^/]+/){1,}[^/]+/uploads\\z",route!="^/([^/]+/){1,}[^/]+\\.git/git-receive-pack\\z",route!="^/([^/]+/){1,}[^/]+\\.git/git-upload-pack\\z",route!="^/([^/]+/){1,}[^/]+\\.git/info/refs\\z",route!="^/([^/]+/){1,}[^/]+\\.git/gitlab-lfs/objects/([0-9a-f]{64})/([0-9]+)\\z"}[30m])
+          rate(gitlab_workhorse_http_request_duration_seconds_bucket{le="1",route!="^/-/health$",route!="^/-/(readiness|liveness)$",route!="^/([^/]+/){1,}[^/]+/uploads\\z",route!="^/([^/]+/){1,}[^/]+\\.git/git-receive-pack\\z",route!="^/([^/]+/){1,}[^/]+\\.git/git-upload-pack\\z",route!="^/([^/]+/){1,}[^/]+\\.git/info/refs\\z",route!="^/([^/]+/){1,}[^/]+\\.git/gitlab-lfs/objects/([0-9a-f]{64})/([0-9]+)\\z",route!~"^\\^/api/.*"}[30m])
         )
         +
         sum by () (
-          rate(gitlab_workhorse_http_request_duration_seconds_bucket{le="10",route!="^/-/health$",route!="^/-/(readiness|liveness)$",route!="^/([^/]+/){1,}[^/]+/uploads\\z",route!="^/([^/]+/){1,}[^/]+\\.git/git-receive-pack\\z",route!="^/([^/]+/){1,}[^/]+\\.git/git-upload-pack\\z",route!="^/([^/]+/){1,}[^/]+\\.git/info/refs\\z",route!="^/([^/]+/){1,}[^/]+\\.git/gitlab-lfs/objects/([0-9a-f]{64})/([0-9]+)\\z"}[30m])
+          rate(gitlab_workhorse_http_request_duration_seconds_bucket{le="10",route!="^/-/health$",route!="^/-/(readiness|liveness)$",route!="^/([^/]+/){1,}[^/]+/uploads\\z",route!="^/([^/]+/){1,}[^/]+\\.git/git-receive-pack\\z",route!="^/([^/]+/){1,}[^/]+\\.git/git-upload-pack\\z",route!="^/([^/]+/){1,}[^/]+\\.git/info/refs\\z",route!="^/([^/]+/){1,}[^/]+\\.git/gitlab-lfs/objects/([0-9a-f]{64})/([0-9]+)\\z",route!~"^\\^/api/.*"}[30m])
         )
       )
       /
@@ -1742,7 +1786,7 @@ groups:
     record: gitlab_component_apdex:success:rate_30m
   - expr: |
       sum by () (
-        rate(gitlab_workhorse_http_request_duration_seconds_bucket{le="+Inf",route!="^/-/health$",route!="^/-/(readiness|liveness)$",route!="^/([^/]+/){1,}[^/]+/uploads\\z",route!="^/([^/]+/){1,}[^/]+\\.git/git-receive-pack\\z",route!="^/([^/]+/){1,}[^/]+\\.git/git-upload-pack\\z",route!="^/([^/]+/){1,}[^/]+\\.git/info/refs\\z",route!="^/([^/]+/){1,}[^/]+\\.git/gitlab-lfs/objects/([0-9a-f]{64})/([0-9]+)\\z"}[30m])
+        rate(gitlab_workhorse_http_request_duration_seconds_bucket{le="+Inf",route!="^/-/health$",route!="^/-/(readiness|liveness)$",route!="^/([^/]+/){1,}[^/]+/uploads\\z",route!="^/([^/]+/){1,}[^/]+\\.git/git-receive-pack\\z",route!="^/([^/]+/){1,}[^/]+\\.git/git-upload-pack\\z",route!="^/([^/]+/){1,}[^/]+\\.git/info/refs\\z",route!="^/([^/]+/){1,}[^/]+\\.git/gitlab-lfs/objects/([0-9a-f]{64})/([0-9]+)\\z",route!~"^\\^/api/.*"}[30m])
       )
     labels:
       component: workhorse
@@ -1751,7 +1795,7 @@ groups:
     record: gitlab_component_apdex:weight:score_30m
   - expr: |
       sum by () (
-        rate(gitlab_workhorse_http_requests_total{route!="^/-/health$",route!="^/-/(readiness|liveness)$"}[30m])
+        rate(gitlab_workhorse_http_requests_total{route!="^/-/health$",route!="^/-/(readiness|liveness)$",route!~"^\\^/api/.*"}[30m])
       )
     labels:
       component: workhorse
@@ -1761,7 +1805,7 @@ groups:
   - expr: |
       (
         sum by () (
-          rate(gitlab_workhorse_http_requests_total{code=~"^5.*",route!="^/-/health$",route!="^/-/(readiness|liveness)$"}[30m])
+          rate(gitlab_workhorse_http_requests_total{code=~"^5.*",route!="^/-/health$",route!="^/-/(readiness|liveness)$",route!~"^\\^/api/.*"}[30m])
         )
       )
       or
@@ -1772,6 +1816,50 @@ groups:
       )
     labels:
       component: workhorse
+      tier: sv
+      type: webservice
+    record: gitlab_component_errors:rate_30m
+  - expr: |
+      sum by () (
+        rate(gitlab_workhorse_http_request_duration_seconds_bucket{le="10",route!="^/-/health$",route!="^/-/(readiness|liveness)$",route=~"^\\^/api/.*"}[30m])
+      )
+    labels:
+      component: workhorse_api
+      tier: sv
+      type: webservice
+    record: gitlab_component_apdex:success:rate_30m
+  - expr: |
+      sum by () (
+        rate(gitlab_workhorse_http_request_duration_seconds_bucket{le="+Inf",route!="^/-/health$",route!="^/-/(readiness|liveness)$",route=~"^\\^/api/.*"}[30m])
+      )
+    labels:
+      component: workhorse_api
+      tier: sv
+      type: webservice
+    record: gitlab_component_apdex:weight:score_30m
+  - expr: |
+      sum by () (
+        rate(gitlab_workhorse_http_requests_total{route!="^/-/health$",route!="^/-/(readiness|liveness)$",route=~"^\\^/api/.*"}[30m])
+      )
+    labels:
+      component: workhorse_api
+      tier: sv
+      type: webservice
+    record: gitlab_component_ops:rate_30m
+  - expr: |
+      (
+        sum by () (
+          rate(gitlab_workhorse_http_requests_total{code=~"^5.*",route!="^/-/health$",route!="^/-/(readiness|liveness)$",route=~"^\\^/api/.*"}[30m])
+        )
+      )
+      or
+      (
+        0 * group by() (
+          gitlab_component_ops:rate_30m{component="workhorse_api",tier="sv",type="webservice"}
+        )
+      )
+    labels:
+      component: workhorse_api
       tier: sv
       type: webservice
     record: gitlab_component_errors:rate_30m
@@ -1825,11 +1913,11 @@ groups:
   - expr: |
       (
         sum by () (
-          rate(gitlab_workhorse_http_request_duration_seconds_bucket{le="1",route!="^/-/health$",route!="^/-/(readiness|liveness)$",route!="^/([^/]+/){1,}[^/]+/uploads\\z",route!="^/([^/]+/){1,}[^/]+\\.git/git-receive-pack\\z",route!="^/([^/]+/){1,}[^/]+\\.git/git-upload-pack\\z",route!="^/([^/]+/){1,}[^/]+\\.git/info/refs\\z",route!="^/([^/]+/){1,}[^/]+\\.git/gitlab-lfs/objects/([0-9a-f]{64})/([0-9]+)\\z"}[1h])
+          rate(gitlab_workhorse_http_request_duration_seconds_bucket{le="1",route!="^/-/health$",route!="^/-/(readiness|liveness)$",route!="^/([^/]+/){1,}[^/]+/uploads\\z",route!="^/([^/]+/){1,}[^/]+\\.git/git-receive-pack\\z",route!="^/([^/]+/){1,}[^/]+\\.git/git-upload-pack\\z",route!="^/([^/]+/){1,}[^/]+\\.git/info/refs\\z",route!="^/([^/]+/){1,}[^/]+\\.git/gitlab-lfs/objects/([0-9a-f]{64})/([0-9]+)\\z",route!~"^\\^/api/.*"}[1h])
         )
         +
         sum by () (
-          rate(gitlab_workhorse_http_request_duration_seconds_bucket{le="10",route!="^/-/health$",route!="^/-/(readiness|liveness)$",route!="^/([^/]+/){1,}[^/]+/uploads\\z",route!="^/([^/]+/){1,}[^/]+\\.git/git-receive-pack\\z",route!="^/([^/]+/){1,}[^/]+\\.git/git-upload-pack\\z",route!="^/([^/]+/){1,}[^/]+\\.git/info/refs\\z",route!="^/([^/]+/){1,}[^/]+\\.git/gitlab-lfs/objects/([0-9a-f]{64})/([0-9]+)\\z"}[1h])
+          rate(gitlab_workhorse_http_request_duration_seconds_bucket{le="10",route!="^/-/health$",route!="^/-/(readiness|liveness)$",route!="^/([^/]+/){1,}[^/]+/uploads\\z",route!="^/([^/]+/){1,}[^/]+\\.git/git-receive-pack\\z",route!="^/([^/]+/){1,}[^/]+\\.git/git-upload-pack\\z",route!="^/([^/]+/){1,}[^/]+\\.git/info/refs\\z",route!="^/([^/]+/){1,}[^/]+\\.git/gitlab-lfs/objects/([0-9a-f]{64})/([0-9]+)\\z",route!~"^\\^/api/.*"}[1h])
         )
       )
       /
@@ -1841,7 +1929,7 @@ groups:
     record: gitlab_component_apdex:success:rate_1h
   - expr: |
       sum by () (
-        rate(gitlab_workhorse_http_request_duration_seconds_bucket{le="+Inf",route!="^/-/health$",route!="^/-/(readiness|liveness)$",route!="^/([^/]+/){1,}[^/]+/uploads\\z",route!="^/([^/]+/){1,}[^/]+\\.git/git-receive-pack\\z",route!="^/([^/]+/){1,}[^/]+\\.git/git-upload-pack\\z",route!="^/([^/]+/){1,}[^/]+\\.git/info/refs\\z",route!="^/([^/]+/){1,}[^/]+\\.git/gitlab-lfs/objects/([0-9a-f]{64})/([0-9]+)\\z"}[1h])
+        rate(gitlab_workhorse_http_request_duration_seconds_bucket{le="+Inf",route!="^/-/health$",route!="^/-/(readiness|liveness)$",route!="^/([^/]+/){1,}[^/]+/uploads\\z",route!="^/([^/]+/){1,}[^/]+\\.git/git-receive-pack\\z",route!="^/([^/]+/){1,}[^/]+\\.git/git-upload-pack\\z",route!="^/([^/]+/){1,}[^/]+\\.git/info/refs\\z",route!="^/([^/]+/){1,}[^/]+\\.git/gitlab-lfs/objects/([0-9a-f]{64})/([0-9]+)\\z",route!~"^\\^/api/.*"}[1h])
       )
     labels:
       component: workhorse
@@ -1850,7 +1938,7 @@ groups:
     record: gitlab_component_apdex:weight:score_1h
   - expr: |
       sum by () (
-        rate(gitlab_workhorse_http_requests_total{route!="^/-/health$",route!="^/-/(readiness|liveness)$"}[1h])
+        rate(gitlab_workhorse_http_requests_total{route!="^/-/health$",route!="^/-/(readiness|liveness)$",route!~"^\\^/api/.*"}[1h])
       )
     labels:
       component: workhorse
@@ -1860,7 +1948,7 @@ groups:
   - expr: |
       (
         sum by () (
-          rate(gitlab_workhorse_http_requests_total{code=~"^5.*",route!="^/-/health$",route!="^/-/(readiness|liveness)$"}[1h])
+          rate(gitlab_workhorse_http_requests_total{code=~"^5.*",route!="^/-/health$",route!="^/-/(readiness|liveness)$",route!~"^\\^/api/.*"}[1h])
         )
       )
       or
@@ -1871,6 +1959,50 @@ groups:
       )
     labels:
       component: workhorse
+      tier: sv
+      type: webservice
+    record: gitlab_component_errors:rate_1h
+  - expr: |
+      sum by () (
+        rate(gitlab_workhorse_http_request_duration_seconds_bucket{le="10",route!="^/-/health$",route!="^/-/(readiness|liveness)$",route=~"^\\^/api/.*"}[1h])
+      )
+    labels:
+      component: workhorse_api
+      tier: sv
+      type: webservice
+    record: gitlab_component_apdex:success:rate_1h
+  - expr: |
+      sum by () (
+        rate(gitlab_workhorse_http_request_duration_seconds_bucket{le="+Inf",route!="^/-/health$",route!="^/-/(readiness|liveness)$",route=~"^\\^/api/.*"}[1h])
+      )
+    labels:
+      component: workhorse_api
+      tier: sv
+      type: webservice
+    record: gitlab_component_apdex:weight:score_1h
+  - expr: |
+      sum by () (
+        rate(gitlab_workhorse_http_requests_total{route!="^/-/health$",route!="^/-/(readiness|liveness)$",route=~"^\\^/api/.*"}[1h])
+      )
+    labels:
+      component: workhorse_api
+      tier: sv
+      type: webservice
+    record: gitlab_component_ops:rate_1h
+  - expr: |
+      (
+        sum by () (
+          rate(gitlab_workhorse_http_requests_total{code=~"^5.*",route!="^/-/health$",route!="^/-/(readiness|liveness)$",route=~"^\\^/api/.*"}[1h])
+        )
+      )
+      or
+      (
+        0 * group by() (
+          gitlab_component_ops:rate_1h{component="workhorse_api",tier="sv",type="webservice"}
+        )
+      )
+    labels:
+      component: workhorse_api
       tier: sv
       type: webservice
     record: gitlab_component_errors:rate_1h
@@ -1924,11 +2056,11 @@ groups:
   - expr: |
       (
         sum by () (
-          rate(gitlab_workhorse_http_request_duration_seconds_bucket{le="1",route!="^/-/health$",route!="^/-/(readiness|liveness)$",route!="^/([^/]+/){1,}[^/]+/uploads\\z",route!="^/([^/]+/){1,}[^/]+\\.git/git-receive-pack\\z",route!="^/([^/]+/){1,}[^/]+\\.git/git-upload-pack\\z",route!="^/([^/]+/){1,}[^/]+\\.git/info/refs\\z",route!="^/([^/]+/){1,}[^/]+\\.git/gitlab-lfs/objects/([0-9a-f]{64})/([0-9]+)\\z"}[6h])
+          rate(gitlab_workhorse_http_request_duration_seconds_bucket{le="1",route!="^/-/health$",route!="^/-/(readiness|liveness)$",route!="^/([^/]+/){1,}[^/]+/uploads\\z",route!="^/([^/]+/){1,}[^/]+\\.git/git-receive-pack\\z",route!="^/([^/]+/){1,}[^/]+\\.git/git-upload-pack\\z",route!="^/([^/]+/){1,}[^/]+\\.git/info/refs\\z",route!="^/([^/]+/){1,}[^/]+\\.git/gitlab-lfs/objects/([0-9a-f]{64})/([0-9]+)\\z",route!~"^\\^/api/.*"}[6h])
         )
         +
         sum by () (
-          rate(gitlab_workhorse_http_request_duration_seconds_bucket{le="10",route!="^/-/health$",route!="^/-/(readiness|liveness)$",route!="^/([^/]+/){1,}[^/]+/uploads\\z",route!="^/([^/]+/){1,}[^/]+\\.git/git-receive-pack\\z",route!="^/([^/]+/){1,}[^/]+\\.git/git-upload-pack\\z",route!="^/([^/]+/){1,}[^/]+\\.git/info/refs\\z",route!="^/([^/]+/){1,}[^/]+\\.git/gitlab-lfs/objects/([0-9a-f]{64})/([0-9]+)\\z"}[6h])
+          rate(gitlab_workhorse_http_request_duration_seconds_bucket{le="10",route!="^/-/health$",route!="^/-/(readiness|liveness)$",route!="^/([^/]+/){1,}[^/]+/uploads\\z",route!="^/([^/]+/){1,}[^/]+\\.git/git-receive-pack\\z",route!="^/([^/]+/){1,}[^/]+\\.git/git-upload-pack\\z",route!="^/([^/]+/){1,}[^/]+\\.git/info/refs\\z",route!="^/([^/]+/){1,}[^/]+\\.git/gitlab-lfs/objects/([0-9a-f]{64})/([0-9]+)\\z",route!~"^\\^/api/.*"}[6h])
         )
       )
       /
@@ -1940,7 +2072,7 @@ groups:
     record: gitlab_component_apdex:success:rate_6h
   - expr: |
       sum by () (
-        rate(gitlab_workhorse_http_request_duration_seconds_bucket{le="+Inf",route!="^/-/health$",route!="^/-/(readiness|liveness)$",route!="^/([^/]+/){1,}[^/]+/uploads\\z",route!="^/([^/]+/){1,}[^/]+\\.git/git-receive-pack\\z",route!="^/([^/]+/){1,}[^/]+\\.git/git-upload-pack\\z",route!="^/([^/]+/){1,}[^/]+\\.git/info/refs\\z",route!="^/([^/]+/){1,}[^/]+\\.git/gitlab-lfs/objects/([0-9a-f]{64})/([0-9]+)\\z"}[6h])
+        rate(gitlab_workhorse_http_request_duration_seconds_bucket{le="+Inf",route!="^/-/health$",route!="^/-/(readiness|liveness)$",route!="^/([^/]+/){1,}[^/]+/uploads\\z",route!="^/([^/]+/){1,}[^/]+\\.git/git-receive-pack\\z",route!="^/([^/]+/){1,}[^/]+\\.git/git-upload-pack\\z",route!="^/([^/]+/){1,}[^/]+\\.git/info/refs\\z",route!="^/([^/]+/){1,}[^/]+\\.git/gitlab-lfs/objects/([0-9a-f]{64})/([0-9]+)\\z",route!~"^\\^/api/.*"}[6h])
       )
     labels:
       component: workhorse
@@ -1949,7 +2081,7 @@ groups:
     record: gitlab_component_apdex:weight:score_6h
   - expr: |
       sum by () (
-        rate(gitlab_workhorse_http_requests_total{route!="^/-/health$",route!="^/-/(readiness|liveness)$"}[6h])
+        rate(gitlab_workhorse_http_requests_total{route!="^/-/health$",route!="^/-/(readiness|liveness)$",route!~"^\\^/api/.*"}[6h])
       )
     labels:
       component: workhorse
@@ -1959,7 +2091,7 @@ groups:
   - expr: |
       (
         sum by () (
-          rate(gitlab_workhorse_http_requests_total{code=~"^5.*",route!="^/-/health$",route!="^/-/(readiness|liveness)$"}[6h])
+          rate(gitlab_workhorse_http_requests_total{code=~"^5.*",route!="^/-/health$",route!="^/-/(readiness|liveness)$",route!~"^\\^/api/.*"}[6h])
         )
       )
       or
@@ -1970,6 +2102,50 @@ groups:
       )
     labels:
       component: workhorse
+      tier: sv
+      type: webservice
+    record: gitlab_component_errors:rate_6h
+  - expr: |
+      sum by () (
+        rate(gitlab_workhorse_http_request_duration_seconds_bucket{le="10",route!="^/-/health$",route!="^/-/(readiness|liveness)$",route=~"^\\^/api/.*"}[6h])
+      )
+    labels:
+      component: workhorse_api
+      tier: sv
+      type: webservice
+    record: gitlab_component_apdex:success:rate_6h
+  - expr: |
+      sum by () (
+        rate(gitlab_workhorse_http_request_duration_seconds_bucket{le="+Inf",route!="^/-/health$",route!="^/-/(readiness|liveness)$",route=~"^\\^/api/.*"}[6h])
+      )
+    labels:
+      component: workhorse_api
+      tier: sv
+      type: webservice
+    record: gitlab_component_apdex:weight:score_6h
+  - expr: |
+      sum by () (
+        rate(gitlab_workhorse_http_requests_total{route!="^/-/health$",route!="^/-/(readiness|liveness)$",route=~"^\\^/api/.*"}[6h])
+      )
+    labels:
+      component: workhorse_api
+      tier: sv
+      type: webservice
+    record: gitlab_component_ops:rate_6h
+  - expr: |
+      (
+        sum by () (
+          rate(gitlab_workhorse_http_requests_total{code=~"^5.*",route!="^/-/health$",route!="^/-/(readiness|liveness)$",route=~"^\\^/api/.*"}[6h])
+        )
+      )
+      or
+      (
+        0 * group by() (
+          gitlab_component_ops:rate_6h{component="workhorse_api",tier="sv",type="webservice"}
+        )
+      )
+    labels:
+      component: workhorse_api
       tier: sv
       type: webservice
     record: gitlab_component_errors:rate_6h
@@ -1987,6 +2163,14 @@ groups:
   - expr: "1"
     labels:
       component: workhorse
+      regional_aggregation: "no"
+      service_aggregation: "yes"
+      tier: sv
+      type: webservice
+    record: gitlab_component_service:mapping
+  - expr: "1"
+    labels:
+      component: workhorse_api
       regional_aggregation: "no"
       service_aggregation: "yes"
       tier: sv
@@ -2462,6 +2646,18 @@ groups:
   - expr: "0.000100"
     labels:
       component: workhorse
+      tier: sv
+      type: webservice
+    record: slo:max:events:gitlab_service_errors:ratio
+  - expr: "0.998000"
+    labels:
+      component: workhorse_api
+      tier: sv
+      type: webservice
+    record: slo:min:events:gitlab_service_apdex:ratio
+  - expr: "0.000100"
+    labels:
+      component: workhorse_api
       tier: sv
       type: webservice
     record: slo:max:events:gitlab_service_errors:ratio
@@ -5976,7 +6172,7 @@ groups:
   - alert: WebserviceServiceWorkhorseApdexSLOViolation
     annotations:
       description: |
-        Aggregation of most web requests that pass through workhorse, monitored via the HTTP interface. Excludes health, readiness and liveness requests. Some known slow requests, such as HTTP uploads, are excluded from the apdex score.
+        Aggregation of most rails requests that pass through workhorse, monitored via the HTTP interface. Excludes API requests health, readiness and liveness requests. Some known slow requests, such as HTTP uploads, are excluded from the apdex score.
 
         Currently the apdex value is {{ $value | humanizePercentage }}.
       grafana_dashboard_id: webservice-main/webservice-overview
@@ -5989,7 +6185,7 @@ groups:
         histogram_quantile(
           0.950000,
           sum by (le) (
-            rate(gitlab_workhorse_http_request_duration_seconds_bucket{route!="^/-/health$",route!="^/-/(readiness|liveness)$",route!="^/([^/]+/){1,}[^/]+/uploads\\z",route!="^/([^/]+/){1,}[^/]+\\.git/git-receive-pack\\z",route!="^/([^/]+/){1,}[^/]+\\.git/git-upload-pack\\z",route!="^/([^/]+/){1,}[^/]+\\.git/info/refs\\z",route!="^/([^/]+/){1,}[^/]+\\.git/gitlab-lfs/objects/([0-9a-f]{64})/([0-9]+)\\z"}[5m])
+            rate(gitlab_workhorse_http_request_duration_seconds_bucket{route!="^/-/health$",route!="^/-/(readiness|liveness)$",route!="^/([^/]+/){1,}[^/]+/uploads\\z",route!="^/([^/]+/){1,}[^/]+\\.git/git-receive-pack\\z",route!="^/([^/]+/){1,}[^/]+\\.git/git-upload-pack\\z",route!="^/([^/]+/){1,}[^/]+\\.git/info/refs\\z",route!="^/([^/]+/){1,}[^/]+\\.git/gitlab-lfs/objects/([0-9a-f]{64})/([0-9]+)\\z",route!~"^\\^/api/.*"}[5m])
           )
         )
       runbook: docs/webservice/README.md
@@ -6026,7 +6222,7 @@ groups:
   - alert: WebserviceServiceWorkhorseApdexSLOViolation
     annotations:
       description: |
-        Aggregation of most web requests that pass through workhorse, monitored via the HTTP interface. Excludes health, readiness and liveness requests. Some known slow requests, such as HTTP uploads, are excluded from the apdex score.
+        Aggregation of most rails requests that pass through workhorse, monitored via the HTTP interface. Excludes API requests health, readiness and liveness requests. Some known slow requests, such as HTTP uploads, are excluded from the apdex score.
 
         Currently the apdex value is {{ $value | humanizePercentage }}.
       grafana_dashboard_id: webservice-main/webservice-overview
@@ -6039,7 +6235,7 @@ groups:
         histogram_quantile(
           0.950000,
           sum by (le) (
-            rate(gitlab_workhorse_http_request_duration_seconds_bucket{route!="^/-/health$",route!="^/-/(readiness|liveness)$",route!="^/([^/]+/){1,}[^/]+/uploads\\z",route!="^/([^/]+/){1,}[^/]+\\.git/git-receive-pack\\z",route!="^/([^/]+/){1,}[^/]+\\.git/git-upload-pack\\z",route!="^/([^/]+/){1,}[^/]+\\.git/info/refs\\z",route!="^/([^/]+/){1,}[^/]+\\.git/gitlab-lfs/objects/([0-9a-f]{64})/([0-9]+)\\z"}[5m])
+            rate(gitlab_workhorse_http_request_duration_seconds_bucket{route!="^/-/health$",route!="^/-/(readiness|liveness)$",route!="^/([^/]+/){1,}[^/]+/uploads\\z",route!="^/([^/]+/){1,}[^/]+\\.git/git-receive-pack\\z",route!="^/([^/]+/){1,}[^/]+\\.git/git-upload-pack\\z",route!="^/([^/]+/){1,}[^/]+\\.git/info/refs\\z",route!="^/([^/]+/){1,}[^/]+\\.git/gitlab-lfs/objects/([0-9a-f]{64})/([0-9]+)\\z",route!~"^\\^/api/.*"}[5m])
           )
         )
       runbook: docs/webservice/README.md
@@ -6076,7 +6272,7 @@ groups:
   - alert: WebserviceServiceWorkhorseErrorSLOViolation
     annotations:
       description: |
-        Aggregation of most web requests that pass through workhorse, monitored via the HTTP interface. Excludes health, readiness and liveness requests. Some known slow requests, such as HTTP uploads, are excluded from the apdex score.
+        Aggregation of most rails requests that pass through workhorse, monitored via the HTTP interface. Excludes API requests health, readiness and liveness requests. Some known slow requests, such as HTTP uploads, are excluded from the apdex score.
 
         Currently the error-rate is {{ $value | humanizePercentage }}.
       grafana_dashboard_id: webservice-main/webservice-overview
@@ -6087,7 +6283,7 @@ groups:
       grafana_variables: environment,stage
       promql_template_1: |
         sum by () (
-          rate(gitlab_workhorse_http_requests_total{code=~"^5.*",route!="^/-/health$",route!="^/-/(readiness|liveness)$"}[5m])
+          rate(gitlab_workhorse_http_requests_total{code=~"^5.*",route!="^/-/health$",route!="^/-/(readiness|liveness)$",route!~"^\\^/api/.*"}[5m])
         )
       runbook: docs/webservice/README.md
       title: The workhorse SLI of the webservice service has an error rate violating
@@ -6124,7 +6320,7 @@ groups:
   - alert: WebserviceServiceWorkhorseErrorSLOViolation
     annotations:
       description: |
-        Aggregation of most web requests that pass through workhorse, monitored via the HTTP interface. Excludes health, readiness and liveness requests. Some known slow requests, such as HTTP uploads, are excluded from the apdex score.
+        Aggregation of most rails requests that pass through workhorse, monitored via the HTTP interface. Excludes API requests health, readiness and liveness requests. Some known slow requests, such as HTTP uploads, are excluded from the apdex score.
 
         Currently the error-rate is {{ $value | humanizePercentage }}.
       grafana_dashboard_id: webservice-main/webservice-overview
@@ -6135,7 +6331,7 @@ groups:
       grafana_variables: environment,stage
       promql_template_1: |
         sum by () (
-          rate(gitlab_workhorse_http_requests_total{code=~"^5.*",route!="^/-/health$",route!="^/-/(readiness|liveness)$"}[5m])
+          rate(gitlab_workhorse_http_requests_total{code=~"^5.*",route!="^/-/health$",route!="^/-/(readiness|liveness)$",route!~"^\\^/api/.*"}[5m])
         )
       runbook: docs/webservice/README.md
       title: The workhorse SLI of the webservice service has an error rate violating
@@ -6172,7 +6368,7 @@ groups:
   - alert: WebserviceServiceWorkhorseTrafficCessation
     annotations:
       description: |
-        Aggregation of most web requests that pass through workhorse, monitored via the HTTP interface. Excludes health, readiness and liveness requests. Some known slow requests, such as HTTP uploads, are excluded from the apdex score.
+        Aggregation of most rails requests that pass through workhorse, monitored via the HTTP interface. Excludes API requests health, readiness and liveness requests. Some known slow requests, such as HTTP uploads, are excluded from the apdex score.
 
         This alert signifies that the SLI is reporting a cessation of traffic; the signal is present, but is zero.
       grafana_dashboard_id: webservice-main/webservice-overview
@@ -6183,7 +6379,7 @@ groups:
       grafana_variables: environment,stage
       promql_template_1: |
         sum by () (
-          rate(gitlab_workhorse_http_requests_total{route!="^/-/health$",route!="^/-/(readiness|liveness)$"}[5m])
+          rate(gitlab_workhorse_http_requests_total{route!="^/-/health$",route!="^/-/(readiness|liveness)$",route!~"^\\^/api/.*"}[5m])
         )
       runbook: docs/webservice/README.md
       title: The workhorse SLI of the webservice service has not received any traffic
@@ -6207,7 +6403,7 @@ groups:
   - alert: WebserviceServiceWorkhorseTrafficAbsent
     annotations:
       description: |
-        Aggregation of most web requests that pass through workhorse, monitored via the HTTP interface. Excludes health, readiness and liveness requests. Some known slow requests, such as HTTP uploads, are excluded from the apdex score.
+        Aggregation of most rails requests that pass through workhorse, monitored via the HTTP interface. Excludes API requests health, readiness and liveness requests. Some known slow requests, such as HTTP uploads, are excluded from the apdex score.
 
         This alert signifies that the SLI was previously reporting traffic, but is no longer - the signal is absent.
 
@@ -6220,7 +6416,7 @@ groups:
       grafana_variables: environment,stage
       promql_template_1: |
         sum by () (
-          rate(gitlab_workhorse_http_requests_total{route!="^/-/health$",route!="^/-/(readiness|liveness)$"}[5m])
+          rate(gitlab_workhorse_http_requests_total{route!="^/-/health$",route!="^/-/(readiness|liveness)$",route!~"^\\^/api/.*"}[5m])
         )
       runbook: docs/webservice/README.md
       title: The workhorse SLI of the webservice service has not reported any traffic
@@ -6229,6 +6425,288 @@ groups:
       gitlab_component_ops:rate_5m{component="workhorse",type="webservice"} offset 1h
       unless
       gitlab_component_ops:rate_5m{component="workhorse",type="webservice"}
+    for: 30m
+    labels:
+      aggregation: component
+      alert_class: traffic_cessation
+      alert_type: cause
+      feature_category: not_owned
+      pager: pagerduty
+      rules_domain: general
+      severity: s2
+      sli_type: ops
+      slo_alert: "no"
+      user_impacting: "yes"
+  - alert: WebserviceServiceWorkhorseApiApdexSLOViolation
+    annotations:
+      description: |
+        Aggregation of most API requests that pass through workhorse, monitored via the HTTP interface.
+
+        The workhorse API apdex has a longer apdex latency than the web to allow for slow API requests.
+
+        Currently the apdex value is {{ $value | humanizePercentage }}.
+      grafana_dashboard_id: webservice-main/webservice-overview
+      grafana_dashboard_link: https://dashboards.gitlab.net/d/webservice-main/webservice-overview?from=now-6h/m&to=now-1m/m&var-environment={{
+        $labels.environment }}&var-stage={{ $labels.stage }}
+      grafana_min_zoom_hours: "6"
+      grafana_panel_id: "1061500963"
+      grafana_variables: environment,stage
+      promql_template_1: |
+        histogram_quantile(
+          0.950000,
+          sum by (le) (
+            rate(gitlab_workhorse_http_request_duration_seconds_bucket{route!="^/-/health$",route!="^/-/(readiness|liveness)$",route=~"^\\^/api/.*"}[5m])
+          )
+        )
+      runbook: docs/webservice/README.md
+      title: The workhorse_api SLI of the webservice service has an apdex violating
+        SLO
+    expr: |
+      (
+        (
+          gitlab_component_apdex:ratio_1h{component="workhorse_api",type="webservice"}
+          < (1 - 14.4 * 0.002000)
+        )
+        and
+        (
+          gitlab_component_apdex:ratio_5m{component="workhorse_api",type="webservice"}
+          < (1 - 14.4 * 0.002000)
+        )
+      )
+      and on(type,component)
+      (
+        sum by(type,component) (gitlab_component_ops:rate_1h{component="workhorse_api",type="webservice"}) >= 1
+      )
+    for: 2m
+    labels:
+      aggregation: component
+      alert_class: slo_violation
+      alert_type: symptom
+      feature_category: not_owned
+      pager: pagerduty
+      rules_domain: general
+      severity: s2
+      sli_type: apdex
+      slo_alert: "yes"
+      user_impacting: "yes"
+      window: 1h
+  - alert: WebserviceServiceWorkhorseApiApdexSLOViolation
+    annotations:
+      description: |
+        Aggregation of most API requests that pass through workhorse, monitored via the HTTP interface.
+
+        The workhorse API apdex has a longer apdex latency than the web to allow for slow API requests.
+
+        Currently the apdex value is {{ $value | humanizePercentage }}.
+      grafana_dashboard_id: webservice-main/webservice-overview
+      grafana_dashboard_link: https://dashboards.gitlab.net/d/webservice-main/webservice-overview?from=now-6h/m&to=now-1m/m&var-environment={{
+        $labels.environment }}&var-stage={{ $labels.stage }}
+      grafana_min_zoom_hours: "6"
+      grafana_panel_id: "1061500963"
+      grafana_variables: environment,stage
+      promql_template_1: |
+        histogram_quantile(
+          0.950000,
+          sum by (le) (
+            rate(gitlab_workhorse_http_request_duration_seconds_bucket{route!="^/-/health$",route!="^/-/(readiness|liveness)$",route=~"^\\^/api/.*"}[5m])
+          )
+        )
+      runbook: docs/webservice/README.md
+      title: The workhorse_api SLI of the webservice service has an apdex violating
+        SLO
+    expr: |
+      (
+        (
+          gitlab_component_apdex:ratio_6h{component="workhorse_api",type="webservice"}
+          < (1 - 6 * 0.002000)
+        )
+        and
+        (
+          gitlab_component_apdex:ratio_30m{component="workhorse_api",type="webservice"}
+          < (1 - 6 * 0.002000)
+        )
+      )
+      and on(type,component)
+      (
+        sum by(type,component) (gitlab_component_ops:rate_6h{component="workhorse_api",type="webservice"}) >= 0.16667
+      )
+    for: 2m
+    labels:
+      aggregation: component
+      alert_class: slo_violation
+      alert_type: symptom
+      feature_category: not_owned
+      pager: pagerduty
+      rules_domain: general
+      severity: s2
+      sli_type: apdex
+      slo_alert: "yes"
+      user_impacting: "yes"
+      window: 6h
+  - alert: WebserviceServiceWorkhorseApiErrorSLOViolation
+    annotations:
+      description: |
+        Aggregation of most API requests that pass through workhorse, monitored via the HTTP interface.
+
+        The workhorse API apdex has a longer apdex latency than the web to allow for slow API requests.
+
+        Currently the error-rate is {{ $value | humanizePercentage }}.
+      grafana_dashboard_id: webservice-main/webservice-overview
+      grafana_dashboard_link: https://dashboards.gitlab.net/d/webservice-main/webservice-overview?from=now-6h/m&to=now-1m/m&var-environment={{
+        $labels.environment }}&var-stage={{ $labels.stage }}
+      grafana_min_zoom_hours: "6"
+      grafana_panel_id: "1957610638"
+      grafana_variables: environment,stage
+      promql_template_1: |
+        sum by () (
+          rate(gitlab_workhorse_http_requests_total{code=~"^5.*",route!="^/-/health$",route!="^/-/(readiness|liveness)$",route=~"^\\^/api/.*"}[5m])
+        )
+      runbook: docs/webservice/README.md
+      title: The workhorse_api SLI of the webservice service has an error rate violating
+        SLO
+    expr: |
+      (
+        (
+          gitlab_component_errors:ratio_1h{component="workhorse_api",type="webservice"}
+          > (14.4 * 0.000100)
+        )
+        and
+        (
+          gitlab_component_errors:ratio_5m{component="workhorse_api",type="webservice"}
+          > (14.4 * 0.000100)
+        )
+      )
+      and on(type,component)
+      (
+        sum by(type,component) (gitlab_component_ops:rate_1h{component="workhorse_api",type="webservice"}) >= 1
+      )
+    for: 2m
+    labels:
+      aggregation: component
+      alert_class: slo_violation
+      alert_type: symptom
+      feature_category: not_owned
+      pager: pagerduty
+      rules_domain: general
+      severity: s2
+      sli_type: error
+      slo_alert: "yes"
+      user_impacting: "yes"
+      window: 1h
+  - alert: WebserviceServiceWorkhorseApiErrorSLOViolation
+    annotations:
+      description: |
+        Aggregation of most API requests that pass through workhorse, monitored via the HTTP interface.
+
+        The workhorse API apdex has a longer apdex latency than the web to allow for slow API requests.
+
+        Currently the error-rate is {{ $value | humanizePercentage }}.
+      grafana_dashboard_id: webservice-main/webservice-overview
+      grafana_dashboard_link: https://dashboards.gitlab.net/d/webservice-main/webservice-overview?from=now-6h/m&to=now-1m/m&var-environment={{
+        $labels.environment }}&var-stage={{ $labels.stage }}
+      grafana_min_zoom_hours: "6"
+      grafana_panel_id: "1957610638"
+      grafana_variables: environment,stage
+      promql_template_1: |
+        sum by () (
+          rate(gitlab_workhorse_http_requests_total{code=~"^5.*",route!="^/-/health$",route!="^/-/(readiness|liveness)$",route=~"^\\^/api/.*"}[5m])
+        )
+      runbook: docs/webservice/README.md
+      title: The workhorse_api SLI of the webservice service has an error rate violating
+        SLO
+    expr: |
+      (
+        (
+          gitlab_component_errors:ratio_6h{component="workhorse_api",type="webservice"}
+          > (6 * 0.000100)
+        )
+        and
+        (
+          gitlab_component_errors:ratio_30m{component="workhorse_api",type="webservice"}
+          > (6 * 0.000100)
+        )
+      )
+      and on(type,component)
+      (
+        sum by(type,component) (gitlab_component_ops:rate_6h{component="workhorse_api",type="webservice"}) >= 0.16667
+      )
+    for: 2m
+    labels:
+      aggregation: component
+      alert_class: slo_violation
+      alert_type: symptom
+      feature_category: not_owned
+      pager: pagerduty
+      rules_domain: general
+      severity: s2
+      sli_type: error
+      slo_alert: "yes"
+      user_impacting: "yes"
+      window: 6h
+  - alert: WebserviceServiceWorkhorseApiTrafficCessation
+    annotations:
+      description: |
+        Aggregation of most API requests that pass through workhorse, monitored via the HTTP interface.
+
+        The workhorse API apdex has a longer apdex latency than the web to allow for slow API requests.
+
+        This alert signifies that the SLI is reporting a cessation of traffic; the signal is present, but is zero.
+      grafana_dashboard_id: webservice-main/webservice-overview
+      grafana_dashboard_link: https://dashboards.gitlab.net/d/webservice-main/webservice-overview?from=now-6h/m&to=now-1m/m&var-environment={{
+        $labels.environment }}&var-stage={{ $labels.stage }}
+      grafana_min_zoom_hours: "6"
+      grafana_panel_id: "3800674929"
+      grafana_variables: environment,stage
+      promql_template_1: |
+        sum by () (
+          rate(gitlab_workhorse_http_requests_total{route!="^/-/health$",route!="^/-/(readiness|liveness)$",route=~"^\\^/api/.*"}[5m])
+        )
+      runbook: docs/webservice/README.md
+      title: The workhorse_api SLI of the webservice service has not received any
+        traffic in the past 30m
+    expr: |
+      gitlab_component_ops:rate_30m{component="workhorse_api",type="webservice"} == 0
+      and
+      gitlab_component_ops:rate_30m{component="workhorse_api",type="webservice"} offset 1h >= 0.16666666666666666
+    for: 5m
+    labels:
+      aggregation: component
+      alert_class: traffic_cessation
+      alert_type: cause
+      feature_category: not_owned
+      pager: pagerduty
+      rules_domain: general
+      severity: s2
+      sli_type: ops
+      slo_alert: "no"
+      user_impacting: "yes"
+  - alert: WebserviceServiceWorkhorseApiTrafficAbsent
+    annotations:
+      description: |
+        Aggregation of most API requests that pass through workhorse, monitored via the HTTP interface.
+
+        The workhorse API apdex has a longer apdex latency than the web to allow for slow API requests.
+
+        This alert signifies that the SLI was previously reporting traffic, but is no longer - the signal is absent.
+
+        This could be caused by a change to the metrics used in the SLI, or by the service not receiving traffic.
+      grafana_dashboard_id: webservice-main/webservice-overview
+      grafana_dashboard_link: https://dashboards.gitlab.net/d/webservice-main/webservice-overview?from=now-6h/m&to=now-1m/m&var-environment={{
+        $labels.environment }}&var-stage={{ $labels.stage }}
+      grafana_min_zoom_hours: "6"
+      grafana_panel_id: "3800674929"
+      grafana_variables: environment,stage
+      promql_template_1: |
+        sum by () (
+          rate(gitlab_workhorse_http_requests_total{route!="^/-/health$",route!="^/-/(readiness|liveness)$",route=~"^\\^/api/.*"}[5m])
+        )
+      runbook: docs/webservice/README.md
+      title: The workhorse_api SLI of the webservice service has not reported any
+        traffic in the past 30m
+    expr: |
+      gitlab_component_ops:rate_5m{component="workhorse_api",type="webservice"} offset 1h
+      unless
+      gitlab_component_ops:rate_5m{component="workhorse_api",type="webservice"}
     for: 30m
     labels:
       aggregation: component
