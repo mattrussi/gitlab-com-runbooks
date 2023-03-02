@@ -840,8 +840,10 @@ deploy-thanos-rules-produciton:
     - .deploy-thanos-rules
 
 reconcile_service_catalog_labels:
-  extends: .default-job-rules
   rules:
+    - *avoid-stage-group-check-rule
+    - *avoid-downstream-generation-pipelines-rule
+    - *avoid-schedule-rule
     - if: '$CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH'
       changes:
         - "services/service-catalog.yml"
