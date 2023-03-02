@@ -1,0 +1,2 @@
+formats: ["json-schema-draft7"]
+extends: ["spectral:oas", "spectral:asyncapi"]

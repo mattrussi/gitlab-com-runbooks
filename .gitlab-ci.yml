@@ -231,6 +231,13 @@ markdownlint:
     - npm install
     - npm run markdownlint docs README.md
 
+lint-service-catalog-schema:
+  extends: .default-job-rules
+  stage: validate
+  script:
+    - npm install
+    - npm run lint-service-catalog-schema -- ./services/service-catalog-schema.json
+
 rspec:
   extends: .default-job-rules
   stage: test
