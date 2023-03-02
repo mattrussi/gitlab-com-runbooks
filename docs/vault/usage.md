@@ -160,11 +160,11 @@ There is also another secret engine named `cubbyhole`, this is a temporary secre
 CI secrets are available under the following paths:
 
 * `ci/<gitlab-instance>/<project-full-path>/<environment>/...`: to be used for secrets scoped to an environment (when the `environment` attribute is set for a CI job), which are only accessible for this particular environment and none other;
-* `ci/<gitlab-instance>/<project-full-path>/<environment>/outputs/...`: to be used for *writing* secrets to Vault scoped to an environment (primarily from Terraform but it can be from other tools), this path is only readable/writable from CI jobs running for protected branches/environments;
-* `ci/<gitlab-instance>/<project-full-path>/<environment>/protected/...`: to be used for protected secrets scoped to an environment, this path is only readable from CI jobs running for protected branches/environments;
 * `ci/<gitlab-instance>/<project-full-path>/shared/...`: to be used for secrets shared for all environments or when no environments are defined in the pipeline;
+* `ci/<gitlab-instance>/<project-full-path>/protected/<environment>/...`: to be used for protected secrets scoped to an environment, this path is only readable from CI jobs running for protected branches/environments;
+* `ci/<gitlab-instance>/<project-full-path>/protected/shared/...`: to be used for protected secrets shared for all environments or when no environments are defined in the pipeline, this path is only readable from CI jobs running for protected branches/environments.
+* `ci/<gitlab-instance>/<project-full-path>/<environment>/outputs/...`: to be used for *writing* secrets to Vault scoped to an environment (primarily from Terraform but it can be from other tools), this path is only readable/writable from CI jobs running for protected branches/environments;
 * `ci/<gitlab-instance>/<project-full-path>/outputs/...`: to be used for *writing* secrets to Vault (primarily from Terraform but it can be from other tools), this path is only readable/writable by CI jobs running from protected branches;
-* `ci/<gitlab-instance>/<project-full-path>/protected/...`: to be used for protected secrets for all environments, this path is only readable from CI jobs running for protected branches/environments.
 
 Additional, a Transit key is created under `transit/ci/<gitlab-instance>-<project-full-path>`, which can be used for encryption, decryption and signing of CI artifacts and anything else. Decryption and signing is restricted to the project, while encryption and signature verification is allowed for all, this can be useful for sharing artifacts securirely between projects. See [the Vault documentation about the Transit secrets engine](https://developer.hashicorp.com/vault/docs/secrets/transit) to learn more about it.
 
