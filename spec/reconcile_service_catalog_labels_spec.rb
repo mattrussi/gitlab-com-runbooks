@@ -112,7 +112,7 @@ describe ReconcileServiceCatalogLabels do
 
   context 'when GITLAB_RECONCILE_SERVICE_LABELS_TOKEN is not provided' do
     before do
-      allow(ENV).to receive(:[]).with("GITLAB_RECONCILE_SERVICE_LABELS_TOKEN").and_call_original
+      allow(ENV).to receive(:[]).with("GITLAB_RECONCILE_SERVICE_LABELS_TOKEN").and_return(nil)
     end
 
     it 'logs an error without exception' do
