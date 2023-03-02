@@ -6,4 +6,5 @@
 //
 // Blank values will be ignored.
 {
+  authentication_and_authorization: 'system_access',
 }
