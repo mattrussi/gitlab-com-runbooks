@@ -1,5 +1,7 @@
 local resolveRateQuery = (import './lib/resolve-rate-query.libsonnet').resolveRateQuery;
 local aggregations = import 'promql/aggregations.libsonnet';
+local generateApdexAttributionQuery = (import './lib/counter-apdex-attribution-query.libsonnet').attributionQuery;
+
 local selectors = import 'promql/selectors.libsonnet';
 local strings = import 'utils/strings.libsonnet';
 
@@ -13,25 +15,6 @@ local generateApdexRatio(successCounterApdex, aggregationLabels, additionalSelec
     weightQuery: successCounterApdex.apdexWeightQuery(aggregationLabels, additionalSelectors, rangeInterval, withoutLabels=withoutLabels),
   };
 
-local generateApdexAttributionQuery(successCounterApdex, aggregationLabel, selector, rangeInterval, withoutLabels) =
-  |||
-    (
-      (
-        %(splitTotalQuery)s
-        -
-        %(splitSuccessRateQuery)s
-      )
-      / ignoring (%(aggregationLabel)s) group_left()
-      (
-        %(aggregatedTotalQuery)s
-      )
-    ) > 0
-  ||| % {
-    splitTotalQuery: strings.indent(successCounterApdex.apdexWeightQuery([aggregationLabel], selector, rangeInterval, withoutLabels=withoutLabels), 4),
-    splitSuccessRateQuery: strings.indent(successCounterApdex.apdexSuccessRateQuery([aggregationLabel], selector, rangeInterval, withoutLabels=withoutLabels), 4),
-    aggregationLabel: aggregationLabel,
-    aggregatedTotalQuery: strings.indent(successCounterApdex.apdexWeightQuery([], selector, rangeInterval, withoutLabels=withoutLabels), 4),
-  };
 {
   successCounterApdex(successRateMetric, operationRateMetric, selector=''):: {
     successRateMetric: successRateMetric,
