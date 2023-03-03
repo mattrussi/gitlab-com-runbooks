@@ -8,7 +8,10 @@ local metricsCatalog = import 'servicemetrics/metrics-catalog.libsonnet';
     horizontallyScalable: false,
     appliesTo: metricsCatalog.findServicesWithTag(tag='gitlab_monitor_bloat'),
     description: |||
-      This measures the total bloat in Postgres Btree indexes, as a percentage of total index size.
+      This estimates the total bloat in Postgres Btree indexes, as a percentage of total index size.
+
+      IMPORTANT: bloat estimates are rough and depending on table/index structure, can be off for individual indexes,
+      in some cases significantly (10-50%).
 
       The larger this measure, the more pages will unnecessarily be retrieved during index scans.
     |||,
@@ -16,17 +19,14 @@ local metricsCatalog = import 'servicemetrics/metrics-catalog.libsonnet';
     resourceLabels: ['fqdn'],
     burnRatePeriod: '5m',
 
-    // Note that we only measure bloat once every 60 minutes but the prometheus series will expire after
-    // 5 minutes. For this reason, we use `avg_over_time(...[58m])`. Once we upgrade to
-    // at least 2.26 of Prometheus, we can switch this to `last_over_time(...[1h])` function instead.
     query: |||
-      sum by (%(aggregationLabels)s) (avg_over_time(gitlab_database_bloat_btree_bloat_size{job="gitlab-monitor-database-bloat", %(selector)s}[58m]))
+      sum by (%(aggregationLabels)s) (last_over_time(gitlab_database_bloat_btree_bloat_size{job="gitlab-monitor-database-bloat", %(selector)s}[1h]))
       /
-      sum by (%(aggregationLabels)s) (avg_over_time(gitlab_database_bloat_btree_real_size{job="gitlab-monitor-database-bloat", %(selector)s}[58m]))
+      sum by (%(aggregationLabels)s) (last_over_time(gitlab_database_bloat_btree_real_size{job="gitlab-monitor-database-bloat", %(selector)s}[1h]))
     |||,
     slos: {
-      soft: 0.30,
-      hard: 0.40,
+      soft: 0.50,
+      hard: 0.70,
     },
   }),
 }
