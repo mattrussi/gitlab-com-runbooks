@@ -21,9 +21,16 @@ local ignoredComponentsValidator = validator.validator(
   'only components %s are supported' % [std.join(', ', serviceComponents)]
 );
 
+local productStageGroupValidator = validator.validator(
+  function(stageGroup)
+    std.prune(stageGroup) == null || std.objectHas(stageGroupMapping, stageGroup),
+  'unknown stage group'
+);
+
 // For basic type validations, use JSON Schema in https://gitlab.com/gitlab-com/runbooks/-/blob/master/services/service-catalog-schema.json
 local teamValidator = validator.new({
   ignored_components: ignoredComponentsValidator,
+  product_stage_group: productStageGroupValidator,
 });
 
 local teamDefaults = {

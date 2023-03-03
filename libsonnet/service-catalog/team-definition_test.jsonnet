@@ -26,4 +26,11 @@ test.suite({
       message: 'field ignored_components: only components %s are supported' % [std.join(', ', teamDefinition._serviceComponents)],
     },
   },
+  testTeamUnknownProductStage: {
+    actual: validTeam { product_stage_group: 'skalability' },
+    expectMatchingValidationError: {
+      validator: teamDefinition._validator,
+      message: 'field product_stage_group: unknown stage group',
+    },
+  },
 })
