@@ -333,6 +333,14 @@ validate-service-mappings:
 validate-service-catalog-schema:
   extends: .default-job-rules
   stage: validate
+  rules:
+    - *avoid-stage-group-check-rule
+    - *avoid-downstream-generation-pipelines-rule
+    - *avoid-schedule-rule
+    - if: '($CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH) || $CI_MERGE_REQUEST_IID'
+      changes:
+        - "services/service-catalog.yml"
+        - "services/teams.yml"
   script:
     - npm install
     - ./scripts/compile_jsonnet.rb ./services/raw-catalog.jsonnet > ./services/service_catalog.json
