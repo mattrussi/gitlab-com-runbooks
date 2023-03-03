@@ -34,6 +34,7 @@
 * [PgBouncer connection management and troubleshooting](../pgbouncer/pgbouncer-connections.md)
 * [Removing a PgBouncer instance](../pgbouncer/pgbouncer-remove-instance.md)
 * [../pgbouncer/service-pgbouncer.md](../pgbouncer/service-pgbouncer.md)
+* [How to Use Vault for Secrets Management in Infrastructure](../vault/usage.md)
 <!-- END_MARKER -->
 
 ## Summary
