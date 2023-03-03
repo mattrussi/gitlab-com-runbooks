@@ -7,7 +7,8 @@ metricsCatalog.serviceDefinition(
     type='redis-cluster-ratelimiting',
     // TODO: switch to `rate_limiting` after Rails app drops ClusterRateLimiting class
     railsStorageSelector={ storage: 'cluster_rate_limiting' },
-    descriptiveName='Redis Cluster Rate-Limiting'
+    descriptiveName='Redis Cluster Rate-Limiting',
+    redisCluster=true
   )
   {
     monitoringThresholds+: {
@@ -27,8 +28,11 @@ metricsCatalog.serviceDefinition(
         userImpacting: false,
         severity: 's4',
       },
+      cluster_servers+: {
+        userImpacting: false,
+        severity: 's4',
+      },
     },
-
   }
   + redisHelpers.gitlabcomObservabilityToolingForRedis('redis-cluster-ratelimiting')
 )

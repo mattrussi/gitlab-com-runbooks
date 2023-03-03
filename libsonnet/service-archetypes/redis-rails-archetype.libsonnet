@@ -8,6 +8,7 @@ function(
   railsStorageSelector,
   descriptiveName,
   featureCategory='not_owned',
+  redisCluster=false,
 )
   redisArchetype(type, descriptiveName, featureCategory)
   {
@@ -37,5 +38,26 @@ function(
           selector=railsStorageSelector,
         ),
       },
-    },
+    } + (
+      if redisCluster then {
+        cluster_servers: {
+          userImpacting: true,  // userImpacting for data redundancy reasons
+          featureCategory: featureCategory,
+          description: |||
+            Redirections on the Redis Cluster nodes for the %(descriptiveName)s instance.
+          ||| % { descriptiveName: descriptiveName },
+          significantLabels: ['type'],
+
+          requestRate: rateMetric(
+            counter='gitlab_redis_client_requests_total',
+            selector=railsStorageSelector,
+          ),
+
+          errorRate: rateMetric(
+            counter='gitlab_redis_client_redirections_total',
+            selector=railsStorageSelector,
+          ),
+        },
+      } else {}
+    ),
   }
