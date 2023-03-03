@@ -1,0 +1,18 @@
+#!/usr/bin/env node
+
+const JsonSchemaStaticDocs = require("json-schema-static-docs");
+
+(async () => {
+  let jsonSchemaStaticDocs = new JsonSchemaStaticDocs({
+    inputPath: "services",
+    inputFileGlob: "*service-catalog-schema.json",
+    outputPath: "docs/uncategorized",
+    createIndex: false,
+    displaySchema: false,
+    ajvOptions: {
+      allowUnionTypes: true,
+    },
+  });
+  await jsonSchemaStaticDocs.generate();
+  console.log("Generated service catalog schema docs");
+})();

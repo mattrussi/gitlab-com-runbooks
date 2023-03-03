@@ -41,7 +41,7 @@ indent_size = unset
 indent_size = unset
 
 # Ignored
-[{spec/fixtures/redis_trace/**,**/*.afdesign,**/*.excalidraw,**/*.drawio,**/*.html,**/*.graphml,reference-architectures/get-hybrid/config/dashboards/**}]
+[{spec/fixtures/redis_trace/**,**/*.afdesign,**/*.excalidraw,**/*.drawio,**/*.html,**/*.graphml,docs/uncategorized/service-catalog-schema.md,reference-architectures/get-hybrid/config/dashboards/**}]
 charset = unset
 end_of_line = unset
 indent_size = unset

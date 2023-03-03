@@ -390,6 +390,7 @@ ensure_generated_content_up_to_date:
   script:
     - rm -rf service-health-dashboard-manifest/  # Rm artifacts to pass git diff
     - ./scripts/bundler.sh  # Install jsonnet bundles
+    - npm install
     - make ensure-generated-content-up-to-date
 
 ensure_maturity_model_minimum_level:

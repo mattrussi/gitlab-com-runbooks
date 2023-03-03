@@ -35,6 +35,7 @@
 * [Pull mirror overdue queue is too large](../sidekiq/large-pull-mirror-queue.md)
 * [../sidekiq/sidekiq_error_rate_high.md](../sidekiq/sidekiq_error_rate_high.md)
 * [Project exports](../uncategorized/project-export.md)
+* [GitLab Service Catalog Schema](../uncategorized/service-catalog-schema.md)
 * [Static objects caching](../web/static-objects-caching.md)
 <!-- END_MARKER -->
 

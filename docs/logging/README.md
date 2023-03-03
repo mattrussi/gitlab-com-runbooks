@@ -50,6 +50,7 @@
 * [Life of a Web Request](../tutorials/overview_life_of_a_web_request.md)
 * [Azure Test Subscription](../uncategorized/access-azure-test-subscription.md)
 * [../uncategorized/access-gcp-hosts.md](../uncategorized/access-gcp-hosts.md)
+* [GitLab Service Catalog Schema](../uncategorized/service-catalog-schema.md)
 * [How to Use Vault for Secrets Management in Infrastructure](../vault/usage.md)
 * [Vault Secrets Management](../vault/vault.md)
 * [version.gitlab.com Runbook](../version/version-gitlab-com.md)

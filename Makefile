@@ -57,9 +57,13 @@ generate:
 	./scripts/generate-docs
 	./scripts/generate-all-reference-architecture-configs.sh
 	./scripts/generate-service-dashboards
+	make docs/uncategorized/service-catalog-schema.md
 
 alertmanager/alertmanager.yml: alertmanager/alertmanager.jsonnet
 	./alertmanager/generate.sh
+
+docs/uncategorized/service-catalog-schema.md: services/service-catalog-schema.json
+	./scripts/generate-service-catalog-schema-docs
 
 test-alertmanager: alertmanager/alertmanager.yml
 	$(AMTOOL) check-config alertmanager/alertmanager.yml
