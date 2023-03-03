@@ -1,6 +1,7 @@
+local metricsCatalog = import 'servicemetrics/metrics.libsonnet';
 local validator = import 'utils/validator.libsonnet';
-local rateMetric = (import 'servicemetrics/rate.libsonnet').rateMetric;
-local rateApdex = (import 'servicemetrics/rate_apdex.libsonnet').rateApdex;
+local rateMetric = metricsCatalog.rateMetric;
+local successCounterApdex = metricsCatalog.successCounterApdex;
 local recordingRuleRegistry = import 'servicemetrics/recording-rule-registry.libsonnet';
 local serviceLevelIndicatorDefinition = import 'servicemetrics/service_level_indicator_definition.libsonnet';
 local misc = import 'utils/misc.libsonnet';
@@ -109,7 +110,7 @@ local validateAndApplyDefaults(definition) =
         significantLabels: parent.significantLabels,
 
         [if parent.hasApdex() && !std.member(parent.excludeKindsFromSLI, apdexKind) then 'apdex']:
-          rateApdex(parent.apdexSuccessCounterName, parent.apdexTotalCounterName, extraSelector),
+          successCounterApdex(parent.apdexSuccessCounterName, parent.apdexTotalCounterName, extraSelector),
         [if parent.hasErrorRate() && !std.member(parent.excludeKindsFromSLI, errorRateKind) then 'errorRate']:
           rateMetric(parent.errorCounterName, extraSelector),
       } + extraFields,

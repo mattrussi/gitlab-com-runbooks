@@ -1,9 +1,8 @@
 {
   // Metric definitions
-  histogramApdex:: (import './histogram_apdex.libsonnet').histogramApdex,
-  rateApdex:: (import './rate_apdex.libsonnet').rateApdex,
+  histogramApdex:: (import './apdex/histogram.libsonnet').histogramApdex,
+  successCounterApdex:: (import './apdex/success_counter.libsonnet').successCounterApdex,
   combined:: (import './combined.libsonnet').combined,
-  customApdex:: (import './custom_apdex.libsonnet').customApdex,
   rateMetric:: (import './rate.libsonnet').rateMetric,
   derivMetric:: (import './rate.libsonnet').derivMetric,
   customRateQuery:: (import './custom_rate_query.libsonnet').customRateQuery,
