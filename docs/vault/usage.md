@@ -905,10 +905,11 @@ The following instructions are for migrating a secrets managed in the `gitlab-he
 
 Chef secrets are available under the following paths:
 
-* `chef/env/<environment>/cookbook/<cookbook-name>/...`: to be used for secrets scoped to a cookbook, which are only accessible for this particular environment. 
+* `chef/env/<environment>/cookbook/<cookbook-name>/...`: to be used for secrets scoped to a cookbook, which are only accessible for this particular environment.
 * `chef/env/<environment>/shared/...`: to be used by secrets shared for all instances on the environment, or when the secret is shared between several cookbooks.
 
 _Terminology:_
+
 * `environment`: The GCP project for the instance accessing Vault Secrets.
 * `cookbook-name`: Name of the cookbook that will be accessing the secrets.
 
@@ -919,7 +920,7 @@ Examples:
 
 #### Authorizing a GCP Project and Cookbooks
 
-We use the [GCP authentication method](https://developer.hashicorp.com/vault/docs/auth/gcp) for GCE instancess to authenticate to Vault. 
+We use the [GCP authentication method](https://developer.hashicorp.com/vault/docs/auth/gcp) for GCE instancess to authenticate to Vault.
 To enable instances on a GCP Project to access Vault, add the project and roles for each cookbook, to the `chef_environments` locals at the [Chef Vault Configuration on Terraform](https://ops.gitlab.net/gitlab-com/gl-infra/config-mgmt/-/blob/master/environments/vault-production/chef.tf)
 
 Example of Vault Config for allowing Chef access:
@@ -951,8 +952,10 @@ locals {
 }
 ```
 
-On this example we have allowed access for instances on the GCP Project `gitlab-db-benchmarking`. 
+On this example we have allowed access for instances on the GCP Project `gitlab-db-benchmarking`.
+
 We have created three Vault roles:
+
 * `base` - Will have access to secrets on the following paths:
   * `chef/env/db-benchmarking/shared/...`
   * `chef/env/db-benchmarking/cookbook/gitlab-consul/...`
@@ -965,15 +968,19 @@ We have created three Vault roles:
   * `chef/env/db-benchmarking/cookbook/gitlab-foobar/...`
 
 #### Using Vault secrets in Chef
-Cookbooks using Vault as secrets backend have a dependency on the [gitlab_secrets cookbook](https://gitlab.com/gitlab-cookbooks/gitlab_secrets).
+
+Cookbooks using Vault as secrets backend have a dependency on the [gitlab_secrets cookbook](https://gitlab.com/gitlab-cookbooks/gitlab_secrets) version `>=1.0.0`.
+
 This cookbook provides two functions that can be used for retrieving secrets from Vault:
+
 * [get_secrets()](https://gitlab.com/gitlab-cookbooks/gitlab_secrets/-/blob/master/libraries/secrets.rb#L161)
 * [merge_secrets()](https://gitlab.com/gitlab-cookbooks/gitlab_secrets/-/blob/master/libraries/secrets.rb#L172)
 
-#### Cookbook and Role Setup:
+#### Cookbook and Role Setup
+
 We will use the `gitlab-monitor` cookbook as an example. This cookbook uses the [get_secrets()](https://gitlab.com/gitlab-cookbooks/gitlab-monitor/-/blob/master/recipes/database.rb#L14) function for accessing secrets.
 
-This cookbook secrets are stored on the shared path `env/<environment>/shared/gitlab-omnibus-secrets` since is used across all instances on the environment. 
+This cookbook secrets are stored on the shared path `env/<environment>/shared/gitlab-omnibus-secrets` since is used across all instances on the environment.
 
 On `chef-repo` we define it's default attributes on the `env-base.json` role as follows:
 
@@ -991,5 +998,3 @@ On `chef-repo` we define it's default attributes on the `env-base.json` role as 
 ```
 
 Example of the attribute definition on [db-benchmarking-base.json role](https://gitlab.com/gitlab-com/gl-infra/chef-repo/-/blob/master/roles/db-benchmarking-base.json#L65-73)
-
-
