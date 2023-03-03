@@ -23,6 +23,7 @@
 * [../kube/k8s-operations.md](../kube/k8s-operations.md)
 * [../logging/logging_gcs_archive_bigquery.md](../logging/logging_gcs_archive_bigquery.md)
 * [Scaling Elastic Cloud Clusters](../logging/scaling.md)
+* [Thanos Compact](../monitoring/thanos-compact.md)
 * [Diagnosis with Kibana](../onboarding/kibana-diagnosis.md)
 * [../patroni/pg_collect_query_data.md](../patroni/pg_collect_query_data.md)
 * [../patroni/postgresql-backups-wale-walg.md](../patroni/postgresql-backups-wale-walg.md)
