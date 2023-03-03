@@ -137,13 +137,14 @@ Your token is valid for 24 hours, renewable for up to 7 days using `vault token 
 
 ### Secrets Engines
 
-There are currently 3 [KV Secrets Engine](https://developer.hashicorp.com/vault/docs/secrets/kv/kv-v2) configured in Vault:
+There are currently 4 [KV Secrets Engine](https://developer.hashicorp.com/vault/docs/secrets/kv/kv-v2) configured in Vault:
 
 * `ci`: secrets accessed from GitLab CI
 * `k8s`: secrets accessed by the [External Secrets operator](https://external-secrets.io/) from the GKE clusters
 * `shared`: secrets that can be accessed from both GitLab CI and the External Secrets operator on a case by case basis
+* `chef`: secrets accessed by Chef Client on VM instances.
 
-The structure of the `ci` and `k8s` secrets is described in their respective sections below.
+The structure of the `ci`, `k8s` and `chef` secrets is described in their respective sections below.
 
 The `shared` secrets don't have a well-defined structure at the time of this writing.
 
@@ -897,3 +898,103 @@ The following instructions are for migrating a secrets managed in the `gitlab-he
   ```shell
   kubectl --context my-cluster --namespace my-namespace get secret some-secret-v1
   ```
+
+### Chef Secrets
+
+#### Structure
+
+Chef secrets are available under the following paths:
+
+* `chef/env/<environment>/cookbook/<cookbook-name>/...`: to be used for secrets scoped to a cookbook, which are only accessible for this particular environment.
+* `chef/env/<environment>/shared/...`: to be used by secrets shared for all instances on the environment, or when the secret is shared between several cookbooks.
+
+_Terminology:_
+
+* `environment`: The GCP project for the instance accessing Vault Secrets.
+* `cookbook-name`: Name of the cookbook that will be accessing the secrets.
+
+Examples:
+
+* `chef/env/db-benchmarking/cookbook/gitlab-foo/foo`: is a secret named `foo` for the `db-benchmarking` environment and only to be accessed by instances that use the `gitlab-foo` cookbook.
+* `chef/env/db-benchmarking/shared/foo-shared`: is a secret named `foo-shared` that is accessible by all instances and cookbooks on the `db-benchmarking` environment.
+
+#### Authorizing a GCP Project and Cookbooks
+
+We use the [GCP authentication method](https://developer.hashicorp.com/vault/docs/auth/gcp) for GCE instancess to authenticate to Vault.
+To enable instances on a GCP Project to access Vault, add the project and roles for each cookbook, to the `chef_environments` locals at the [Chef Vault Configuration on Terraform](https://ops.gitlab.net/gitlab-com/gl-infra/config-mgmt/-/blob/master/environments/vault-production/chef.tf)
+
+Example of Vault Config for allowing Chef access:
+
+```
+locals {
+  chef_common_cookbooks = [
+    "gitlab-consul",
+  ]
+
+  chef_environments = {
+    db-benchmarking = {
+      gcp_projects = ["gitlab-db-benchmarking"]
+      roles = {
+        base = {
+          cookbooks = local.chef_common_cookbooks
+        }
+        foo = {
+          cookbooks = concat(local.chef_common_cookbooks, [
+            "gitlab-foo",
+          ])
+        }
+        foobar = {
+          cookbooks = ["gitlab-foobar"]
+        }
+      }
+    }
+  }
+}
+```
+
+On this example we have allowed access for instances on the GCP Project `gitlab-db-benchmarking`.
+
+We have created three Vault roles:
+
+* `base` - Will have access to secrets on the following paths:
+  * `chef/env/db-benchmarking/shared/...`
+  * `chef/env/db-benchmarking/cookbook/gitlab-consul/...`
+* `foo` - Will have access to secrets on the following paths:
+  * `chef/env/db-benchmarking/shared/...`
+  * `chef/env/db-benchmarking/cookbook/gitlab-consul/...`
+  * `chef/env/db-benchmarking/cookbook/gitlab-foo/...`
+* `foobar` - Will have access to secrets on the following paths:
+  * `chef/env/db-benchmarking/shared/...`
+  * `chef/env/db-benchmarking/cookbook/gitlab-foobar/...`
+
+#### Using Vault secrets in Chef
+
+Cookbooks using Vault as secrets backend have a dependency on the [gitlab_secrets cookbook](https://gitlab.com/gitlab-cookbooks/gitlab_secrets) version `>=1.0.0`.
+
+This cookbook provides two functions that can be used for retrieving secrets from Vault:
+
+* [get_secrets()](https://gitlab.com/gitlab-cookbooks/gitlab_secrets/-/blob/master/libraries/secrets.rb#L161)
+* [merge_secrets()](https://gitlab.com/gitlab-cookbooks/gitlab_secrets/-/blob/master/libraries/secrets.rb#L172)
+
+#### Cookbook and Role Setup
+
+We will use the `gitlab-monitor` cookbook as an example. This cookbook uses the [get_secrets()](https://gitlab.com/gitlab-cookbooks/gitlab-monitor/-/blob/master/recipes/database.rb#L14) function for accessing secrets.
+
+This cookbook secrets are stored on the shared path `env/<environment>/shared/gitlab-omnibus-secrets` since is used across all instances on the environment.
+
+On `chef-repo` we define it's default attributes on the `env-base.json` role as follows:
+
+```
+"gitlab_monitor": {
+  "secrets": {
+    "backend": "hashicorp_vault",
+    "path": {
+      "path": "env/<env>/shared/gitlab-omnibus-secrets",
+      "mount": "chef"
+      }
+    }
+  }
+}
+```
+
+Example of the attribute definition on [db-benchmarking-base.json role](https://gitlab.com/gitlab-com/gl-infra/chef-repo/-/blob/master/roles/db-benchmarking-base.json#L65-73)
