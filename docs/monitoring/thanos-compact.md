@@ -4,7 +4,11 @@
 
 Thanos compact failures are almost always discoverable in the logs.
 
-In GCE: `journalctl -eu thanos-compact`
+[Elasticsearch](https://nonprod-log.gitlab.net/goto/5253fd00-b7ab-11ed-9af2-6131f0ee4ce6) - Saved query params: pubsub-monitoring-inf-ops* index for kubernetes.container_name:compactor, NOT json.level:info
+
+Logs can also be found in the [GCP console](https://console.cloud.google.com/kubernetes/deployment/us-east1/ops-gitlab-gke/thanos/thanos-gprd-compactor/logs?project=gitlab-ops)
+
+Dashboards for Compact and other components can be found in the [Thanos folder in dashboards](https://dashboards.gitlab.net/dashboards/f/thanos/thanos)
 
 Note that due to cross-environment monitoring, the env of the alert may not
 correspond to the environment whose thanos-compact singleton is broken. Pay
