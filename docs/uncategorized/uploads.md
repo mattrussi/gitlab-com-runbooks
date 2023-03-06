@@ -28,6 +28,7 @@ Do this instead:
 full_path = 'full/project/path'
 project_or_group = Project.find_by_full_path(full_path) || Group.find_by_full_path(full_path)
 ```
+
 Project is for uploads attached to issues, Group is for uploads attached to epics.
 
 And now that the search scope has been narrowed down to a single project or group:
