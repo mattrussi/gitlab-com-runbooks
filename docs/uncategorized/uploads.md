@@ -32,7 +32,7 @@ project_or_group = Project.find_by_full_path(full_path) || Group.find_by_full_pa
 And now that the search scope has been narrowed down to a single project:
 
 ```rb
-upload = project.uploads.find_by_secret('<secret>')
+upload = project_or_group.uploads.find_by_secret('<secret>')
 upload.path
 ```
 
