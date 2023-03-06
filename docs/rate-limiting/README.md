@@ -13,8 +13,8 @@ answer.  Please consider strongly reading the relevant context before using thos
 
 Not the actual numbers, but links to where to find the current active values:
 
-1. CloudFlare: <https://dash.cloudflare.com/852e9d53d0f8adbd9205389356f2303d/gitlab.com/firewall/tools>
-   * Source at <https://ops.gitlab.net/gitlab-com/gitlab-com-infrastructure/-/blob/master/environments/gprd/cloudflare-waf.tf>
+1. CloudFlare: <https://dash.cloudflare.com/852e9d53d0f8adbd9205389356f2303d/gitlab.com/security/waf/rate-limiting-rules>
+   * Source at <https://ops.gitlab.net/gitlab-com/gl-infra/config-mgmt/-/blob/master/environments/gprd/cloudflare-rate-limits-waf-and-rules.tf>
 1. HAProxy: Basic per-IP API rate-limit: `knife node show fe-01-lb-gprd.c.gitlab-production.internal -a gitlab-haproxy.frontend.api.rate_limit_http_rate_per_minute`
    * There are exceptions, but this is the key one.
 1. RackAttack: <https://gitlab.com/admin/application_settings/network> (admin access only)
@@ -25,7 +25,7 @@ Not the actual numbers, but links to where to find the current active values:
 
 #### CloudFlare
 
-Cloudflare serves as our "outer-most" layer of protection.   We use Cloudflare's standard DDOS protection plus
+Cloudflare serves as our "outer-most" layer of protection.  We use Cloudflare's standard DDOS protection plus
 [Spectrum](https://www.cloudflare.com/products/cloudflare-spectrum/) to protect git over ssh.
 
 Our [CloudFlare documentation](https://gitlab.com/gitlab-com/runbooks/-/blob/master/docs/cloudflare/) contains a lot of
@@ -35,16 +35,18 @@ to rate-limiting are:
 * Page Rules - URL pattern matches, controlling CloudFlare's DDoS interventions and caching (e.g. bypasses, security
 levels etc).  These may kick in various CloudFlare level rate-limits, in response to traffic, based on the chosen
 settings per rule.
-* Rate Limiting - Specific rate-limits mostly on specific URLs, configured by terraform at
-<https://ops.gitlab.net/gitlab-com/gitlab-com-infrastructure/-/blob/master/environments/gprd/cloudflare-waf.tf>.  These
-are per-IP address and have no knowledge of whether the requests are authenticated or not.  Occasionally used to provide
-very specific limits (e.g. on a specific project/group/URL rather than a pattern)
+* Rate Limiting - Configured by Terraform [here](https://ops.gitlab.net/gitlab-com/gl-infra/config-mgmt/-/blob/master/environments/gprd/cloudflare-rate-limits-waf-and-rules.tf).  These cover a wide range of cases, from global limits (per IP/session)
+to specific endpoints that prevent denial of service (DoS) events either due to application concerns (bugs/scaling constraints)
+or sheer volume of traffic.
+The rules can use `session` (cookies) and `tokens` (headers) as counters for the rates, to avoid IP scope false positives
+(e.g. many users behind a single IP, VPN).
+This works independently of the application context.
 
 While CloudFlare terminates the client's TLS connection and inspects the URLs and content, it is *not* application aware
 and does not know how to map to our users and groups.
 
-Changes to either of these (additions, deletions, or modifications) must be very carefully considered indeed, and should
-be discussed with the wider SRE team before implementing.
+Changes to either of these (additions, deletions, or modifications) must be very carefully considered and tested, and should
+be discussed with the [Infrastructure Foundations SRE team](https://gitlab.slack.com/archives/C0313V3L5T6) before implementing.
 
 #### HAProxy
 
