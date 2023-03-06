@@ -25,13 +25,16 @@ upload = Upload.find_by_secret('<secret>')
 Do this instead:
 
 ```rb
-project = Project.find_by_full_path('full/project/path')
+full_path = 'full/project/path'
+project_or_group = Project.find_by_full_path(full_path) || Group.find_by_full_path(full_path)
 ```
 
-And now that the search scope has been narrowed down to a single project:
+Project is for uploads attached to issues, Group is for uploads attached to epics.
+
+And now that the search scope has been narrowed down to a single project or group:
 
 ```rb
-upload = project.uploads.find_by_secret('<secret>')
+upload = project_or_group.uploads.find_by_secret('<secret>')
 upload.path
 ```
 
