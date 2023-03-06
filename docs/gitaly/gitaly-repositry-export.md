@@ -15,6 +15,8 @@ Previous examples:
 
     ```shell
     ssh $USER-rails@console-01-sv-gprd.c.gitlab-production.internal
+    [ gprd ] production> p = Project.find_by_full_path("gitlab-org/gitlab")
+    => #<Project id:278964 gitlab-org/gitlab>>
     [ gprd ] production> p.repository.storage
     => "nfs-file-cny01"
     [ gprd ] production> p.repository.disk_path
