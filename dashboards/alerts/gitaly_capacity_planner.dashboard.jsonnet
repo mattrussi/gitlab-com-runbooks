@@ -13,7 +13,7 @@ basic.dashboard(
 .addTemplate(template.new(
   'shard',
   '$PROMETHEUS_DS',
-  'label_values(node_filesystem_size_bytes{type="gitaly", device="/dev/sdb", env="$environment"}, shard)',
+  'label_values(node_filesystem_size_bytes{type="gitaly", mountpoint="/var/opt/gitlab", env="$environment"}, shard)',
   current='default',
   refresh='load',
   sort=1,
@@ -21,7 +21,7 @@ basic.dashboard(
 .addTemplate(template.new(
   'stage',
   '$PROMETHEUS_DS',
-  'label_values(node_filesystem_size_bytes{type="gitaly", device="/dev/sdb", env="$environment", shard="$shard"}, stage)',
+  'label_values(node_filesystem_size_bytes{type="gitaly", mountpoint="/var/opt/gitlab", env="$environment", shard="$shard"}, stage)',
   current='main',
   refresh='load',
   sort=1,
@@ -65,13 +65,13 @@ basic.dashboard(
         ceil(
           (
             (sum  by (environment, tier, type, stage, shard) (
-              node_filesystem_size_bytes{type="gitaly", device="/dev/sdb", env="$environment", shard="$shard", stage="$stage"}
+              node_filesystem_size_bytes{type="gitaly", mountpoint="/var/opt/gitlab", env="$environment", shard="$shard", stage="$stage"}
               -
-              node_filesystem_free_bytes{type="gitaly", device="/dev/sdb", env="$environment", shard="$shard", stage="$stage"}
+              node_filesystem_free_bytes{type="gitaly", mountpoint="/var/opt/gitlab", env="$environment", shard="$shard", stage="$stage"}
             )
             /
             avg by (environment, tier, type, stage, shard) (
-              node_filesystem_size_bytes{type="gitaly", device="/dev/sdb", env="$environment", shard="$shard", stage="$stage"}
+              node_filesystem_size_bytes{type="gitaly", mountpoint="/var/opt/gitlab", env="$environment", shard="$shard", stage="$stage"}
             )
           )
           /
@@ -79,7 +79,7 @@ basic.dashboard(
           )
           -
           count by (environment, tier, type, stage, shard) (
-            node_filesystem_size_bytes{type="gitaly", device="/dev/sdb", env="$environment", shard="$shard", stage="$stage"}
+            node_filesystem_size_bytes{type="gitaly", mountpoint="/var/opt/gitlab", env="$environment", shard="$shard", stage="$stage"}
           )
         ), 0
       )

@@ -87,9 +87,9 @@ basic.dashboard(
 
           +
 
-          avg(instance:node_filesystem_avail:ratio{environment="gprd", type="gitaly",device="/dev/sdb"}) by (fqdn)
+          avg(instance:node_filesystem_avail:ratio{environment="gprd", type="gitaly", mountpoint="/var/opt/gitlab"}) by (fqdn)
           / ignoring(fqdn) group_left
-          sum(avg(instance:node_filesystem_avail:ratio{environment="gprd", type="gitaly",device="/dev/sdb"}) by (fqdn))
+          sum(avg(instance:node_filesystem_avail:ratio{environment="gprd", type="gitaly", mountpoint="/var/opt/gitlab"}) by (fqdn))
         )
       |||,
       legendFormat='{{ fqdn }}',
@@ -158,7 +158,7 @@ basic.dashboard(
       format='percentunit',
       query=|||
         sort_desc(
-          instance:node_filesystem_avail:ratio{environment="$environment", type="gitaly",device="/dev/sdb"}
+          instance:node_filesystem_avail:ratio{environment="$environment", type="gitaly", mountpoint="/var/opt/gitlab"}
         )
       |||,
       legendFormat='{{ fqdn }}',

@@ -22,11 +22,11 @@ local resourceSaturationPoint = (import 'servicemetrics/resource_saturation_poin
     query: |||
       1 - (
         sum by (%(aggregationLabels)s) (
-          node_filesystem_avail_bytes{%(selector)s, device="/dev/sdb"}
+          node_filesystem_avail_bytes{%(selector)s, mountpoint="/var/opt/gitlab"}
         )
         /
         sum by (%(aggregationLabels)s) (
-          node_filesystem_size_bytes{%(selector)s, device="/dev/sdb"}
+          node_filesystem_size_bytes{%(selector)s, mountpoint="/var/opt/gitlab"}
         )
       )
     |||,
