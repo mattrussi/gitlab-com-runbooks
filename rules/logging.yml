@@ -41,7 +41,7 @@ groups:
 
   - alert: LoggingVisibilityDiminished
     expr: |
-      avg_over_time(stackdriver_pubsub_subscription_pubsub_googleapis_com_subscription_oldest_unacked_message_age[30m]) > 300
+      avg_over_time(stackdriver_pubsub_subscription_pubsub_googleapis_com_subscription_oldest_unacked_message_age[30m]) > 1000
     for: 1h
     labels:
       severity: s2
