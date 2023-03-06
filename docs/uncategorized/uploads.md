@@ -26,7 +26,7 @@ Do this instead:
 
 ```rb
 full_path = 'full/project/path'
-project = Project.find_by_full_path(full_path) || Group.find_by_full_path(full_path)
+project_or_group = Project.find_by_full_path(full_path) || Group.find_by_full_path(full_path)
 ```
 
 And now that the search scope has been narrowed down to a single project:
