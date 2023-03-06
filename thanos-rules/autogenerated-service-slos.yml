@@ -1714,6 +1714,42 @@ groups:
     expr: "0.000100"
   - record: slo:min:events:gitlab_service_apdex:ratio
     labels:
+      component: server_route_blob_upload_uuid_deletes
+      tier: sv
+      type: registry
+    expr: "0.997000"
+  - record: slo:max:events:gitlab_service_errors:ratio
+    labels:
+      component: server_route_blob_upload_uuid_deletes
+      tier: sv
+      type: registry
+    expr: "0.000100"
+  - record: slo:min:events:gitlab_service_apdex:ratio
+    labels:
+      component: server_route_blob_upload_uuid_reads
+      tier: sv
+      type: registry
+    expr: "0.997000"
+  - record: slo:max:events:gitlab_service_errors:ratio
+    labels:
+      component: server_route_blob_upload_uuid_reads
+      tier: sv
+      type: registry
+    expr: "0.000100"
+  - record: slo:min:events:gitlab_service_apdex:ratio
+    labels:
+      component: server_route_blob_upload_uuid_writes
+      tier: sv
+      type: registry
+    expr: "0.970000"
+  - record: slo:max:events:gitlab_service_errors:ratio
+    labels:
+      component: server_route_blob_upload_uuid_writes
+      tier: sv
+      type: registry
+    expr: "0.000100"
+  - record: slo:min:events:gitlab_service_apdex:ratio
+    labels:
       component: server_route_manifest_reads
       tier: sv
       type: registry
@@ -3432,6 +3468,33 @@ groups:
   - record: gitlab_component_service:mapping
     labels:
       component: registry_server
+      global_aggregation: "no"
+      regional_aggregation: "yes"
+      service_aggregation: "yes"
+      tier: sv
+      type: registry
+    expr: "1"
+  - record: gitlab_component_service:mapping
+    labels:
+      component: server_route_blob_upload_uuid_deletes
+      global_aggregation: "no"
+      regional_aggregation: "yes"
+      service_aggregation: "yes"
+      tier: sv
+      type: registry
+    expr: "1"
+  - record: gitlab_component_service:mapping
+    labels:
+      component: server_route_blob_upload_uuid_reads
+      global_aggregation: "no"
+      regional_aggregation: "yes"
+      service_aggregation: "yes"
+      tier: sv
+      type: registry
+    expr: "1"
+  - record: gitlab_component_service:mapping
+    labels:
+      component: server_route_blob_upload_uuid_writes
       global_aggregation: "no"
       regional_aggregation: "yes"
       service_aggregation: "yes"

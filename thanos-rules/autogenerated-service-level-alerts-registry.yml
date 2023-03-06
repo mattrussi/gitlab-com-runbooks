@@ -2112,7 +2112,7 @@ groups:
         histogram_quantile(
           0.950000,
           sum by (env,environment,tier,stage,le) (
-            rate(registry_http_request_duration_seconds_bucket{environment="{{ $labels.environment }}",route!~"/v2/{name}/manifests/{reference}",stage="{{ $labels.stage }}",type="registry"}[5m])
+            rate(registry_http_request_duration_seconds_bucket{environment="{{ $labels.environment }}",route!~"/v2/{name}/blobs/uploads/{uuid}|/v2/{name}/manifests/{reference}",stage="{{ $labels.stage }}",type="registry"}[5m])
           )
         )
       runbook: docs/registry/README.md
@@ -2163,7 +2163,7 @@ groups:
         histogram_quantile(
           0.950000,
           sum by (env,environment,tier,stage,le) (
-            rate(registry_http_request_duration_seconds_bucket{environment="{{ $labels.environment }}",route!~"/v2/{name}/manifests/{reference}",stage="{{ $labels.stage }}",type="registry"}[5m])
+            rate(registry_http_request_duration_seconds_bucket{environment="{{ $labels.environment }}",route!~"/v2/{name}/blobs/uploads/{uuid}|/v2/{name}/manifests/{reference}",stage="{{ $labels.stage }}",type="registry"}[5m])
           )
         )
       runbook: docs/registry/README.md
@@ -2216,7 +2216,7 @@ groups:
         histogram_quantile(
           0.950000,
           sum by (env,environment,tier,stage,region,le) (
-            rate(registry_http_request_duration_seconds_bucket{environment="{{ $labels.environment }}",region="{{ $labels.region }}",route!~"/v2/{name}/manifests/{reference}",stage="{{ $labels.stage }}",type="registry"}[5m])
+            rate(registry_http_request_duration_seconds_bucket{environment="{{ $labels.environment }}",region="{{ $labels.region }}",route!~"/v2/{name}/blobs/uploads/{uuid}|/v2/{name}/manifests/{reference}",stage="{{ $labels.stage }}",type="registry"}[5m])
           )
         )
       runbook: docs/registry/README.md
@@ -2269,7 +2269,7 @@ groups:
         histogram_quantile(
           0.950000,
           sum by (env,environment,tier,stage,region,le) (
-            rate(registry_http_request_duration_seconds_bucket{environment="{{ $labels.environment }}",region="{{ $labels.region }}",route!~"/v2/{name}/manifests/{reference}",stage="{{ $labels.stage }}",type="registry"}[5m])
+            rate(registry_http_request_duration_seconds_bucket{environment="{{ $labels.environment }}",region="{{ $labels.region }}",route!~"/v2/{name}/blobs/uploads/{uuid}|/v2/{name}/manifests/{reference}",stage="{{ $labels.stage }}",type="registry"}[5m])
           )
         )
       runbook: docs/registry/README.md
@@ -2645,6 +2645,1158 @@ groups:
       gitlab_regional_sli_ops:rate_5m{component="registry_server",monitor="global",stage="main",type="registry"} offset 1h
       unless
       gitlab_regional_sli_ops:rate_5m{component="registry_server",monitor="global",stage="main",type="registry"}
+  - alert: RegistryServiceServerRouteBlobUploadUuidDeletesApdexSLOViolation
+    for: 2m
+    annotations:
+      title: The server_route_blob_upload_uuid_deletes SLI of the registry service
+        (`{{ $labels.stage }}` stage) has an apdex violating SLO
+      description: |
+        Delete requests for the registry blob upload endpoints.
+
+        Used to cancel outstanding upload processes, releasing associated resources.
+
+        Currently the apdex value is {{ $value | humanizePercentage }}.
+      grafana_dashboard_id: registry-main/registry-overview
+      grafana_dashboard_link: https://dashboards.gitlab.net/d/registry-main/registry-overview?from=now-6h/m&to=now-1m/m&var-environment={{
+        $labels.environment }}&var-stage={{ $labels.stage }}
+      grafana_min_zoom_hours: "6"
+      grafana_panel_id: "2147876809"
+      grafana_variables: environment,stage
+      promql_template_1: |
+        histogram_quantile(
+          0.950000,
+          sum by (env,environment,tier,stage,le) (
+            rate(registry_http_request_duration_seconds_bucket{environment="{{ $labels.environment }}",method=~"delete",route="/v2/{name}/blobs/uploads/{uuid}",stage="{{ $labels.stage }}",type="registry"}[5m])
+          )
+        )
+      runbook: docs/registry/README.md
+    labels:
+      aggregation: component
+      alert_class: slo_violation
+      alert_type: symptom
+      feature_category: container_registry
+      pager: pagerduty
+      rules_domain: general
+      severity: s2
+      sli_type: apdex
+      slo_alert: "yes"
+      user_impacting: "yes"
+      window: 1h
+    expr: |
+      (
+        (
+          gitlab_component_apdex:ratio_1h{component="server_route_blob_upload_uuid_deletes",monitor="global",type="registry"}
+          < (1 - 14.4 * 0.003000)
+        )
+        and
+        (
+          gitlab_component_apdex:ratio_5m{component="server_route_blob_upload_uuid_deletes",monitor="global",type="registry"}
+          < (1 - 14.4 * 0.003000)
+        )
+      )
+      and on(env,environment,tier,type,stage,component)
+      (
+        sum by(env,environment,tier,type,stage,component) (gitlab_component_ops:rate_1h{component="server_route_blob_upload_uuid_deletes",monitor="global",type="registry"}) >= 1
+      )
+  - alert: RegistryServiceServerRouteBlobUploadUuidDeletesApdexSLOViolation
+    for: 2m
+    annotations:
+      title: The server_route_blob_upload_uuid_deletes SLI of the registry service
+        (`{{ $labels.stage }}` stage) has an apdex violating SLO
+      description: |
+        Delete requests for the registry blob upload endpoints.
+
+        Used to cancel outstanding upload processes, releasing associated resources.
+
+        Currently the apdex value is {{ $value | humanizePercentage }}.
+      grafana_dashboard_id: registry-main/registry-overview
+      grafana_dashboard_link: https://dashboards.gitlab.net/d/registry-main/registry-overview?from=now-6h/m&to=now-1m/m&var-environment={{
+        $labels.environment }}&var-stage={{ $labels.stage }}
+      grafana_min_zoom_hours: "6"
+      grafana_panel_id: "2147876809"
+      grafana_variables: environment,stage
+      promql_template_1: |
+        histogram_quantile(
+          0.950000,
+          sum by (env,environment,tier,stage,le) (
+            rate(registry_http_request_duration_seconds_bucket{environment="{{ $labels.environment }}",method=~"delete",route="/v2/{name}/blobs/uploads/{uuid}",stage="{{ $labels.stage }}",type="registry"}[5m])
+          )
+        )
+      runbook: docs/registry/README.md
+    labels:
+      aggregation: component
+      alert_class: slo_violation
+      alert_type: symptom
+      feature_category: container_registry
+      pager: pagerduty
+      rules_domain: general
+      severity: s2
+      sli_type: apdex
+      slo_alert: "yes"
+      user_impacting: "yes"
+      window: 6h
+    expr: |
+      (
+        (
+          gitlab_component_apdex:ratio_6h{component="server_route_blob_upload_uuid_deletes",monitor="global",type="registry"}
+          < (1 - 6 * 0.003000)
+        )
+        and
+        (
+          gitlab_component_apdex:ratio_30m{component="server_route_blob_upload_uuid_deletes",monitor="global",type="registry"}
+          < (1 - 6 * 0.003000)
+        )
+      )
+      and on(env,environment,tier,type,stage,component)
+      (
+        sum by(env,environment,tier,type,stage,component) (gitlab_component_ops:rate_6h{component="server_route_blob_upload_uuid_deletes",monitor="global",type="registry"}) >= 0.16667
+      )
+  - alert: RegistryServiceServerRouteBlobUploadUuidDeletesApdexSLOViolationRegional
+    for: 2m
+    annotations:
+      title: The server_route_blob_upload_uuid_deletes SLI of the registry service
+        in region `{{ $labels.region }}` has an apdex violating SLO
+      description: |
+        Delete requests for the registry blob upload endpoints.
+
+        Used to cancel outstanding upload processes, releasing associated resources.
+
+        Note that this alert is specific to the `{{ $labels.region }}` region.
+
+        Currently the apdex value is {{ $value | humanizePercentage }}.
+      grafana_dashboard_id: registry-main/registry-overview
+      grafana_dashboard_link: https://dashboards.gitlab.net/d/registry-main/registry-overview?from=now-6h/m&to=now-1m/m&var-environment={{
+        $labels.environment }}&var-stage={{ $labels.stage }}
+      grafana_min_zoom_hours: "6"
+      grafana_panel_id: "2147876809"
+      grafana_variables: environment,stage
+      promql_template_1: |
+        histogram_quantile(
+          0.950000,
+          sum by (env,environment,tier,stage,region,le) (
+            rate(registry_http_request_duration_seconds_bucket{environment="{{ $labels.environment }}",method=~"delete",region="{{ $labels.region }}",route="/v2/{name}/blobs/uploads/{uuid}",stage="{{ $labels.stage }}",type="registry"}[5m])
+          )
+        )
+      runbook: docs/registry/README.md
+    labels:
+      aggregation: regional_component
+      alert_class: slo_violation
+      alert_type: symptom
+      feature_category: container_registry
+      pager: pagerduty
+      rules_domain: general
+      severity: s2
+      sli_type: apdex
+      slo_alert: "yes"
+      user_impacting: "yes"
+      window: 1h
+    expr: |
+      (
+        (
+          gitlab_regional_sli_apdex:ratio_1h{component="server_route_blob_upload_uuid_deletes",monitor="global",type="registry"}
+          < (1 - 14.4 * 0.003000)
+        )
+        and
+        (
+          gitlab_regional_sli_apdex:ratio_5m{component="server_route_blob_upload_uuid_deletes",monitor="global",type="registry"}
+          < (1 - 14.4 * 0.003000)
+        )
+      )
+      and on(env,environment,tier,type,stage,region,component)
+      (
+        sum by(env,environment,tier,type,stage,region,component) (gitlab_regional_sli_ops:rate_1h{component="server_route_blob_upload_uuid_deletes",monitor="global",type="registry"}) >= 1
+      )
+  - alert: RegistryServiceServerRouteBlobUploadUuidDeletesApdexSLOViolationRegional
+    for: 2m
+    annotations:
+      title: The server_route_blob_upload_uuid_deletes SLI of the registry service
+        in region `{{ $labels.region }}` has an apdex violating SLO
+      description: |
+        Delete requests for the registry blob upload endpoints.
+
+        Used to cancel outstanding upload processes, releasing associated resources.
+
+        Note that this alert is specific to the `{{ $labels.region }}` region.
+
+        Currently the apdex value is {{ $value | humanizePercentage }}.
+      grafana_dashboard_id: registry-main/registry-overview
+      grafana_dashboard_link: https://dashboards.gitlab.net/d/registry-main/registry-overview?from=now-6h/m&to=now-1m/m&var-environment={{
+        $labels.environment }}&var-stage={{ $labels.stage }}
+      grafana_min_zoom_hours: "6"
+      grafana_panel_id: "2147876809"
+      grafana_variables: environment,stage
+      promql_template_1: |
+        histogram_quantile(
+          0.950000,
+          sum by (env,environment,tier,stage,region,le) (
+            rate(registry_http_request_duration_seconds_bucket{environment="{{ $labels.environment }}",method=~"delete",region="{{ $labels.region }}",route="/v2/{name}/blobs/uploads/{uuid}",stage="{{ $labels.stage }}",type="registry"}[5m])
+          )
+        )
+      runbook: docs/registry/README.md
+    labels:
+      aggregation: regional_component
+      alert_class: slo_violation
+      alert_type: symptom
+      feature_category: container_registry
+      pager: pagerduty
+      rules_domain: general
+      severity: s2
+      sli_type: apdex
+      slo_alert: "yes"
+      user_impacting: "yes"
+      window: 6h
+    expr: |
+      (
+        (
+          gitlab_regional_sli_apdex:ratio_6h{component="server_route_blob_upload_uuid_deletes",monitor="global",type="registry"}
+          < (1 - 6 * 0.003000)
+        )
+        and
+        (
+          gitlab_regional_sli_apdex:ratio_30m{component="server_route_blob_upload_uuid_deletes",monitor="global",type="registry"}
+          < (1 - 6 * 0.003000)
+        )
+      )
+      and on(env,environment,tier,type,stage,region,component)
+      (
+        sum by(env,environment,tier,type,stage,region,component) (gitlab_regional_sli_ops:rate_6h{component="server_route_blob_upload_uuid_deletes",monitor="global",type="registry"}) >= 0.16667
+      )
+  - alert: RegistryServiceServerRouteBlobUploadUuidDeletesTrafficCessation
+    for: 5m
+    annotations:
+      title: The server_route_blob_upload_uuid_deletes SLI of the registry service
+        (`{{ $labels.stage }}` stage) has not received any traffic in the past 30m
+      description: |
+        Delete requests for the registry blob upload endpoints.
+
+        Used to cancel outstanding upload processes, releasing associated resources.
+
+        This alert signifies that the SLI is reporting a cessation of traffic; the signal is present, but is zero.
+      grafana_dashboard_id: registry-main/registry-overview
+      grafana_dashboard_link: https://dashboards.gitlab.net/d/registry-main/registry-overview?from=now-6h/m&to=now-1m/m&var-environment={{
+        $labels.environment }}&var-stage={{ $labels.stage }}
+      grafana_min_zoom_hours: "6"
+      grafana_panel_id: "714276442"
+      grafana_variables: environment,stage
+      promql_template_1: |
+        sum by (env,environment,tier,stage) (
+          rate(registry_http_request_duration_seconds_count{environment="{{ $labels.environment }}",method=~"delete",route="/v2/{name}/blobs/uploads/{uuid}",stage="{{ $labels.stage }}"}[5m])
+        )
+      runbook: docs/registry/README.md
+    labels:
+      aggregation: component
+      alert_class: traffic_cessation
+      alert_type: cause
+      feature_category: container_registry
+      pager: pagerduty
+      rules_domain: general
+      severity: s2
+      sli_type: ops
+      slo_alert: "no"
+      user_impacting: "yes"
+    expr: |
+      gitlab_component_ops:rate_30m{component="server_route_blob_upload_uuid_deletes",monitor="global",stage="main",type="registry"} == 0
+      and
+      gitlab_component_ops:rate_30m{component="server_route_blob_upload_uuid_deletes",monitor="global",stage="main",type="registry"} offset 1h >= 0.16666666666666666
+  - alert: RegistryServiceServerRouteBlobUploadUuidDeletesTrafficAbsent
+    for: 30m
+    annotations:
+      title: The server_route_blob_upload_uuid_deletes SLI of the registry service
+        (`{{ $labels.stage }}` stage) has not reported any traffic in the past 30m
+      description: |
+        Delete requests for the registry blob upload endpoints.
+
+        Used to cancel outstanding upload processes, releasing associated resources.
+
+        This alert signifies that the SLI was previously reporting traffic, but is no longer - the signal is absent.
+
+        This could be caused by a change to the metrics used in the SLI, or by the service not receiving traffic.
+      grafana_dashboard_id: registry-main/registry-overview
+      grafana_dashboard_link: https://dashboards.gitlab.net/d/registry-main/registry-overview?from=now-6h/m&to=now-1m/m&var-environment={{
+        $labels.environment }}&var-stage={{ $labels.stage }}
+      grafana_min_zoom_hours: "6"
+      grafana_panel_id: "714276442"
+      grafana_variables: environment,stage
+      promql_template_1: |
+        sum by (env,environment,tier,stage) (
+          rate(registry_http_request_duration_seconds_count{environment="{{ $labels.environment }}",method=~"delete",route="/v2/{name}/blobs/uploads/{uuid}",stage="{{ $labels.stage }}"}[5m])
+        )
+      runbook: docs/registry/README.md
+    labels:
+      aggregation: component
+      alert_class: traffic_cessation
+      alert_type: cause
+      feature_category: container_registry
+      pager: pagerduty
+      rules_domain: general
+      severity: s2
+      sli_type: ops
+      slo_alert: "no"
+      user_impacting: "yes"
+    expr: |
+      gitlab_component_ops:rate_5m{component="server_route_blob_upload_uuid_deletes",monitor="global",stage="main",type="registry"} offset 1h
+      unless
+      gitlab_component_ops:rate_5m{component="server_route_blob_upload_uuid_deletes",monitor="global",stage="main",type="registry"}
+  - alert: RegistryServiceServerRouteBlobUploadUuidDeletesTrafficCessationRegional
+    for: 5m
+    annotations:
+      title: The server_route_blob_upload_uuid_deletes SLI of the registry service
+        in region `{{ $labels.region }}` has not received any traffic in the past
+        30m
+      description: |
+        Delete requests for the registry blob upload endpoints.
+
+        Used to cancel outstanding upload processes, releasing associated resources.
+
+        This alert signifies that the SLI is reporting a cessation of traffic; the signal is present, but is zero.
+
+        Note that this alert is specific to the `{{ $labels.region }}` region.
+      grafana_dashboard_id: registry-main/registry-overview
+      grafana_dashboard_link: https://dashboards.gitlab.net/d/registry-main/registry-overview?from=now-6h/m&to=now-1m/m&var-environment={{
+        $labels.environment }}&var-stage={{ $labels.stage }}
+      grafana_min_zoom_hours: "6"
+      grafana_panel_id: "714276442"
+      grafana_variables: environment,stage
+      promql_template_1: |
+        sum by (env,environment,tier,stage,region) (
+          rate(registry_http_request_duration_seconds_count{environment="{{ $labels.environment }}",method=~"delete",region="{{ $labels.region }}",route="/v2/{name}/blobs/uploads/{uuid}",stage="{{ $labels.stage }}"}[5m])
+        )
+      runbook: docs/registry/README.md
+    labels:
+      aggregation: regional_component
+      alert_class: traffic_cessation
+      alert_type: cause
+      feature_category: container_registry
+      pager: pagerduty
+      rules_domain: general
+      severity: s2
+      sli_type: ops
+      slo_alert: "no"
+      user_impacting: "yes"
+    expr: |
+      gitlab_regional_sli_ops:rate_30m{component="server_route_blob_upload_uuid_deletes",monitor="global",stage="main",type="registry"} == 0
+      and
+      gitlab_regional_sli_ops:rate_30m{component="server_route_blob_upload_uuid_deletes",monitor="global",stage="main",type="registry"} offset 1h >= 0.16666666666666666
+  - alert: RegistryServiceServerRouteBlobUploadUuidDeletesTrafficAbsentRegional
+    for: 30m
+    annotations:
+      title: The server_route_blob_upload_uuid_deletes SLI of the registry service
+        in region `{{ $labels.region }}` has not reported any traffic in the past
+        30m
+      description: |
+        Delete requests for the registry blob upload endpoints.
+
+        Used to cancel outstanding upload processes, releasing associated resources.
+
+        This alert signifies that the SLI was previously reporting traffic, but is no longer - the signal is absent.
+
+        This could be caused by a change to the metrics used in the SLI, or by the service not receiving traffic.
+
+        Note that this alert is specific to the `{{ $labels.region }}` region.
+      grafana_dashboard_id: registry-main/registry-overview
+      grafana_dashboard_link: https://dashboards.gitlab.net/d/registry-main/registry-overview?from=now-6h/m&to=now-1m/m&var-environment={{
+        $labels.environment }}&var-stage={{ $labels.stage }}
+      grafana_min_zoom_hours: "6"
+      grafana_panel_id: "714276442"
+      grafana_variables: environment,stage
+      promql_template_1: |
+        sum by (env,environment,tier,stage,region) (
+          rate(registry_http_request_duration_seconds_count{environment="{{ $labels.environment }}",method=~"delete",region="{{ $labels.region }}",route="/v2/{name}/blobs/uploads/{uuid}",stage="{{ $labels.stage }}"}[5m])
+        )
+      runbook: docs/registry/README.md
+    labels:
+      aggregation: regional_component
+      alert_class: traffic_cessation
+      alert_type: cause
+      feature_category: container_registry
+      pager: pagerduty
+      rules_domain: general
+      severity: s2
+      sli_type: ops
+      slo_alert: "no"
+      user_impacting: "yes"
+    expr: |
+      gitlab_regional_sli_ops:rate_5m{component="server_route_blob_upload_uuid_deletes",monitor="global",stage="main",type="registry"} offset 1h
+      unless
+      gitlab_regional_sli_ops:rate_5m{component="server_route_blob_upload_uuid_deletes",monitor="global",stage="main",type="registry"}
+  - alert: RegistryServiceServerRouteBlobUploadUuidReadsApdexSLOViolation
+    for: 2m
+    annotations:
+      title: The server_route_blob_upload_uuid_reads SLI of the registry service (`{{
+        $labels.stage }}` stage) has an apdex violating SLO
+      description: |
+        Read requests (GET) for the registry blob upload endpoints.
+
+        GET is used to retrieve the current status of a resumable upload.
+
+        This is currently not used on GitLab.com.
+
+        Currently the apdex value is {{ $value | humanizePercentage }}.
+      grafana_dashboard_id: registry-main/registry-overview
+      grafana_dashboard_link: https://dashboards.gitlab.net/d/registry-main/registry-overview?from=now-6h/m&to=now-1m/m&var-environment={{
+        $labels.environment }}&var-stage={{ $labels.stage }}
+      grafana_min_zoom_hours: "6"
+      grafana_panel_id: "41208249"
+      grafana_variables: environment,stage
+      promql_template_1: |
+        histogram_quantile(
+          0.950000,
+          sum by (env,environment,tier,stage,le) (
+            rate(registry_http_request_duration_seconds_bucket{environment="{{ $labels.environment }}",method=~"get|head",route="/v2/{name}/blobs/uploads/{uuid}",stage="{{ $labels.stage }}",type="registry"}[5m])
+          )
+        )
+      runbook: docs/registry/README.md
+    labels:
+      aggregation: component
+      alert_class: slo_violation
+      alert_type: symptom
+      feature_category: container_registry
+      pager: pagerduty
+      rules_domain: general
+      severity: s2
+      sli_type: apdex
+      slo_alert: "yes"
+      user_impacting: "yes"
+      window: 1h
+    expr: |
+      (
+        (
+          gitlab_component_apdex:ratio_1h{component="server_route_blob_upload_uuid_reads",monitor="global",type="registry"}
+          < (1 - 14.4 * 0.003000)
+        )
+        and
+        (
+          gitlab_component_apdex:ratio_5m{component="server_route_blob_upload_uuid_reads",monitor="global",type="registry"}
+          < (1 - 14.4 * 0.003000)
+        )
+      )
+      and on(env,environment,tier,type,stage,component)
+      (
+        sum by(env,environment,tier,type,stage,component) (gitlab_component_ops:rate_1h{component="server_route_blob_upload_uuid_reads",monitor="global",type="registry"}) >= 1
+      )
+  - alert: RegistryServiceServerRouteBlobUploadUuidReadsApdexSLOViolation
+    for: 2m
+    annotations:
+      title: The server_route_blob_upload_uuid_reads SLI of the registry service (`{{
+        $labels.stage }}` stage) has an apdex violating SLO
+      description: |
+        Read requests (GET) for the registry blob upload endpoints.
+
+        GET is used to retrieve the current status of a resumable upload.
+
+        This is currently not used on GitLab.com.
+
+        Currently the apdex value is {{ $value | humanizePercentage }}.
+      grafana_dashboard_id: registry-main/registry-overview
+      grafana_dashboard_link: https://dashboards.gitlab.net/d/registry-main/registry-overview?from=now-6h/m&to=now-1m/m&var-environment={{
+        $labels.environment }}&var-stage={{ $labels.stage }}
+      grafana_min_zoom_hours: "6"
+      grafana_panel_id: "41208249"
+      grafana_variables: environment,stage
+      promql_template_1: |
+        histogram_quantile(
+          0.950000,
+          sum by (env,environment,tier,stage,le) (
+            rate(registry_http_request_duration_seconds_bucket{environment="{{ $labels.environment }}",method=~"get|head",route="/v2/{name}/blobs/uploads/{uuid}",stage="{{ $labels.stage }}",type="registry"}[5m])
+          )
+        )
+      runbook: docs/registry/README.md
+    labels:
+      aggregation: component
+      alert_class: slo_violation
+      alert_type: symptom
+      feature_category: container_registry
+      pager: pagerduty
+      rules_domain: general
+      severity: s2
+      sli_type: apdex
+      slo_alert: "yes"
+      user_impacting: "yes"
+      window: 6h
+    expr: |
+      (
+        (
+          gitlab_component_apdex:ratio_6h{component="server_route_blob_upload_uuid_reads",monitor="global",type="registry"}
+          < (1 - 6 * 0.003000)
+        )
+        and
+        (
+          gitlab_component_apdex:ratio_30m{component="server_route_blob_upload_uuid_reads",monitor="global",type="registry"}
+          < (1 - 6 * 0.003000)
+        )
+      )
+      and on(env,environment,tier,type,stage,component)
+      (
+        sum by(env,environment,tier,type,stage,component) (gitlab_component_ops:rate_6h{component="server_route_blob_upload_uuid_reads",monitor="global",type="registry"}) >= 0.16667
+      )
+  - alert: RegistryServiceServerRouteBlobUploadUuidReadsApdexSLOViolationRegional
+    for: 2m
+    annotations:
+      title: The server_route_blob_upload_uuid_reads SLI of the registry service in
+        region `{{ $labels.region }}` has an apdex violating SLO
+      description: |
+        Read requests (GET) for the registry blob upload endpoints.
+
+        GET is used to retrieve the current status of a resumable upload.
+
+        This is currently not used on GitLab.com.
+
+        Note that this alert is specific to the `{{ $labels.region }}` region.
+
+        Currently the apdex value is {{ $value | humanizePercentage }}.
+      grafana_dashboard_id: registry-main/registry-overview
+      grafana_dashboard_link: https://dashboards.gitlab.net/d/registry-main/registry-overview?from=now-6h/m&to=now-1m/m&var-environment={{
+        $labels.environment }}&var-stage={{ $labels.stage }}
+      grafana_min_zoom_hours: "6"
+      grafana_panel_id: "41208249"
+      grafana_variables: environment,stage
+      promql_template_1: |
+        histogram_quantile(
+          0.950000,
+          sum by (env,environment,tier,stage,region,le) (
+            rate(registry_http_request_duration_seconds_bucket{environment="{{ $labels.environment }}",method=~"get|head",region="{{ $labels.region }}",route="/v2/{name}/blobs/uploads/{uuid}",stage="{{ $labels.stage }}",type="registry"}[5m])
+          )
+        )
+      runbook: docs/registry/README.md
+    labels:
+      aggregation: regional_component
+      alert_class: slo_violation
+      alert_type: symptom
+      feature_category: container_registry
+      pager: pagerduty
+      rules_domain: general
+      severity: s2
+      sli_type: apdex
+      slo_alert: "yes"
+      user_impacting: "yes"
+      window: 1h
+    expr: |
+      (
+        (
+          gitlab_regional_sli_apdex:ratio_1h{component="server_route_blob_upload_uuid_reads",monitor="global",type="registry"}
+          < (1 - 14.4 * 0.003000)
+        )
+        and
+        (
+          gitlab_regional_sli_apdex:ratio_5m{component="server_route_blob_upload_uuid_reads",monitor="global",type="registry"}
+          < (1 - 14.4 * 0.003000)
+        )
+      )
+      and on(env,environment,tier,type,stage,region,component)
+      (
+        sum by(env,environment,tier,type,stage,region,component) (gitlab_regional_sli_ops:rate_1h{component="server_route_blob_upload_uuid_reads",monitor="global",type="registry"}) >= 1
+      )
+  - alert: RegistryServiceServerRouteBlobUploadUuidReadsApdexSLOViolationRegional
+    for: 2m
+    annotations:
+      title: The server_route_blob_upload_uuid_reads SLI of the registry service in
+        region `{{ $labels.region }}` has an apdex violating SLO
+      description: |
+        Read requests (GET) for the registry blob upload endpoints.
+
+        GET is used to retrieve the current status of a resumable upload.
+
+        This is currently not used on GitLab.com.
+
+        Note that this alert is specific to the `{{ $labels.region }}` region.
+
+        Currently the apdex value is {{ $value | humanizePercentage }}.
+      grafana_dashboard_id: registry-main/registry-overview
+      grafana_dashboard_link: https://dashboards.gitlab.net/d/registry-main/registry-overview?from=now-6h/m&to=now-1m/m&var-environment={{
+        $labels.environment }}&var-stage={{ $labels.stage }}
+      grafana_min_zoom_hours: "6"
+      grafana_panel_id: "41208249"
+      grafana_variables: environment,stage
+      promql_template_1: |
+        histogram_quantile(
+          0.950000,
+          sum by (env,environment,tier,stage,region,le) (
+            rate(registry_http_request_duration_seconds_bucket{environment="{{ $labels.environment }}",method=~"get|head",region="{{ $labels.region }}",route="/v2/{name}/blobs/uploads/{uuid}",stage="{{ $labels.stage }}",type="registry"}[5m])
+          )
+        )
+      runbook: docs/registry/README.md
+    labels:
+      aggregation: regional_component
+      alert_class: slo_violation
+      alert_type: symptom
+      feature_category: container_registry
+      pager: pagerduty
+      rules_domain: general
+      severity: s2
+      sli_type: apdex
+      slo_alert: "yes"
+      user_impacting: "yes"
+      window: 6h
+    expr: |
+      (
+        (
+          gitlab_regional_sli_apdex:ratio_6h{component="server_route_blob_upload_uuid_reads",monitor="global",type="registry"}
+          < (1 - 6 * 0.003000)
+        )
+        and
+        (
+          gitlab_regional_sli_apdex:ratio_30m{component="server_route_blob_upload_uuid_reads",monitor="global",type="registry"}
+          < (1 - 6 * 0.003000)
+        )
+      )
+      and on(env,environment,tier,type,stage,region,component)
+      (
+        sum by(env,environment,tier,type,stage,region,component) (gitlab_regional_sli_ops:rate_6h{component="server_route_blob_upload_uuid_reads",monitor="global",type="registry"}) >= 0.16667
+      )
+  - alert: RegistryServiceServerRouteBlobUploadUuidReadsTrafficCessation
+    for: 5m
+    annotations:
+      title: The server_route_blob_upload_uuid_reads SLI of the registry service (`{{
+        $labels.stage }}` stage) has not received any traffic in the past 30m
+      description: |
+        Read requests (GET) for the registry blob upload endpoints.
+
+        GET is used to retrieve the current status of a resumable upload.
+
+        This is currently not used on GitLab.com.
+
+        This alert signifies that the SLI is reporting a cessation of traffic; the signal is present, but is zero.
+      grafana_dashboard_id: registry-main/registry-overview
+      grafana_dashboard_link: https://dashboards.gitlab.net/d/registry-main/registry-overview?from=now-6h/m&to=now-1m/m&var-environment={{
+        $labels.environment }}&var-stage={{ $labels.stage }}
+      grafana_min_zoom_hours: "6"
+      grafana_panel_id: "3653213972"
+      grafana_variables: environment,stage
+      promql_template_1: |
+        sum by (env,environment,tier,stage) (
+          rate(registry_http_request_duration_seconds_count{environment="{{ $labels.environment }}",method=~"get|head",route="/v2/{name}/blobs/uploads/{uuid}",stage="{{ $labels.stage }}"}[5m])
+        )
+      runbook: docs/registry/README.md
+    labels:
+      aggregation: component
+      alert_class: traffic_cessation
+      alert_type: cause
+      feature_category: container_registry
+      pager: pagerduty
+      rules_domain: general
+      severity: s2
+      sli_type: ops
+      slo_alert: "no"
+      user_impacting: "yes"
+    expr: |
+      gitlab_component_ops:rate_30m{component="server_route_blob_upload_uuid_reads",monitor="global",stage="main",type="registry"} == 0
+      and
+      gitlab_component_ops:rate_30m{component="server_route_blob_upload_uuid_reads",monitor="global",stage="main",type="registry"} offset 1h >= 0.16666666666666666
+  - alert: RegistryServiceServerRouteBlobUploadUuidReadsTrafficAbsent
+    for: 30m
+    annotations:
+      title: The server_route_blob_upload_uuid_reads SLI of the registry service (`{{
+        $labels.stage }}` stage) has not reported any traffic in the past 30m
+      description: |
+        Read requests (GET) for the registry blob upload endpoints.
+
+        GET is used to retrieve the current status of a resumable upload.
+
+        This is currently not used on GitLab.com.
+
+        This alert signifies that the SLI was previously reporting traffic, but is no longer - the signal is absent.
+
+        This could be caused by a change to the metrics used in the SLI, or by the service not receiving traffic.
+      grafana_dashboard_id: registry-main/registry-overview
+      grafana_dashboard_link: https://dashboards.gitlab.net/d/registry-main/registry-overview?from=now-6h/m&to=now-1m/m&var-environment={{
+        $labels.environment }}&var-stage={{ $labels.stage }}
+      grafana_min_zoom_hours: "6"
+      grafana_panel_id: "3653213972"
+      grafana_variables: environment,stage
+      promql_template_1: |
+        sum by (env,environment,tier,stage) (
+          rate(registry_http_request_duration_seconds_count{environment="{{ $labels.environment }}",method=~"get|head",route="/v2/{name}/blobs/uploads/{uuid}",stage="{{ $labels.stage }}"}[5m])
+        )
+      runbook: docs/registry/README.md
+    labels:
+      aggregation: component
+      alert_class: traffic_cessation
+      alert_type: cause
+      feature_category: container_registry
+      pager: pagerduty
+      rules_domain: general
+      severity: s2
+      sli_type: ops
+      slo_alert: "no"
+      user_impacting: "yes"
+    expr: |
+      gitlab_component_ops:rate_5m{component="server_route_blob_upload_uuid_reads",monitor="global",stage="main",type="registry"} offset 1h
+      unless
+      gitlab_component_ops:rate_5m{component="server_route_blob_upload_uuid_reads",monitor="global",stage="main",type="registry"}
+  - alert: RegistryServiceServerRouteBlobUploadUuidReadsTrafficCessationRegional
+    for: 5m
+    annotations:
+      title: The server_route_blob_upload_uuid_reads SLI of the registry service in
+        region `{{ $labels.region }}` has not received any traffic in the past 30m
+      description: |
+        Read requests (GET) for the registry blob upload endpoints.
+
+        GET is used to retrieve the current status of a resumable upload.
+
+        This is currently not used on GitLab.com.
+
+        This alert signifies that the SLI is reporting a cessation of traffic; the signal is present, but is zero.
+
+        Note that this alert is specific to the `{{ $labels.region }}` region.
+      grafana_dashboard_id: registry-main/registry-overview
+      grafana_dashboard_link: https://dashboards.gitlab.net/d/registry-main/registry-overview?from=now-6h/m&to=now-1m/m&var-environment={{
+        $labels.environment }}&var-stage={{ $labels.stage }}
+      grafana_min_zoom_hours: "6"
+      grafana_panel_id: "3653213972"
+      grafana_variables: environment,stage
+      promql_template_1: |
+        sum by (env,environment,tier,stage,region) (
+          rate(registry_http_request_duration_seconds_count{environment="{{ $labels.environment }}",method=~"get|head",region="{{ $labels.region }}",route="/v2/{name}/blobs/uploads/{uuid}",stage="{{ $labels.stage }}"}[5m])
+        )
+      runbook: docs/registry/README.md
+    labels:
+      aggregation: regional_component
+      alert_class: traffic_cessation
+      alert_type: cause
+      feature_category: container_registry
+      pager: pagerduty
+      rules_domain: general
+      severity: s2
+      sli_type: ops
+      slo_alert: "no"
+      user_impacting: "yes"
+    expr: |
+      gitlab_regional_sli_ops:rate_30m{component="server_route_blob_upload_uuid_reads",monitor="global",stage="main",type="registry"} == 0
+      and
+      gitlab_regional_sli_ops:rate_30m{component="server_route_blob_upload_uuid_reads",monitor="global",stage="main",type="registry"} offset 1h >= 0.16666666666666666
+  - alert: RegistryServiceServerRouteBlobUploadUuidReadsTrafficAbsentRegional
+    for: 30m
+    annotations:
+      title: The server_route_blob_upload_uuid_reads SLI of the registry service in
+        region `{{ $labels.region }}` has not reported any traffic in the past 30m
+      description: |
+        Read requests (GET) for the registry blob upload endpoints.
+
+        GET is used to retrieve the current status of a resumable upload.
+
+        This is currently not used on GitLab.com.
+
+        This alert signifies that the SLI was previously reporting traffic, but is no longer - the signal is absent.
+
+        This could be caused by a change to the metrics used in the SLI, or by the service not receiving traffic.
+
+        Note that this alert is specific to the `{{ $labels.region }}` region.
+      grafana_dashboard_id: registry-main/registry-overview
+      grafana_dashboard_link: https://dashboards.gitlab.net/d/registry-main/registry-overview?from=now-6h/m&to=now-1m/m&var-environment={{
+        $labels.environment }}&var-stage={{ $labels.stage }}
+      grafana_min_zoom_hours: "6"
+      grafana_panel_id: "3653213972"
+      grafana_variables: environment,stage
+      promql_template_1: |
+        sum by (env,environment,tier,stage,region) (
+          rate(registry_http_request_duration_seconds_count{environment="{{ $labels.environment }}",method=~"get|head",region="{{ $labels.region }}",route="/v2/{name}/blobs/uploads/{uuid}",stage="{{ $labels.stage }}"}[5m])
+        )
+      runbook: docs/registry/README.md
+    labels:
+      aggregation: regional_component
+      alert_class: traffic_cessation
+      alert_type: cause
+      feature_category: container_registry
+      pager: pagerduty
+      rules_domain: general
+      severity: s2
+      sli_type: ops
+      slo_alert: "no"
+      user_impacting: "yes"
+    expr: |
+      gitlab_regional_sli_ops:rate_5m{component="server_route_blob_upload_uuid_reads",monitor="global",stage="main",type="registry"} offset 1h
+      unless
+      gitlab_regional_sli_ops:rate_5m{component="server_route_blob_upload_uuid_reads",monitor="global",stage="main",type="registry"}
+  - alert: RegistryServiceServerRouteBlobUploadUuidWritesApdexSLOViolation
+    for: 2m
+    annotations:
+      title: The server_route_blob_upload_uuid_writes SLI of the registry service
+        (`{{ $labels.stage }}` stage) has an apdex violating SLO
+      description: |
+        Write requests (PUT or PATCH) for the registry blob upload endpoints.
+
+        PUT is used to complete the upload specified by uuid, optionally appending the body as the final chunk.
+
+        PATCH is used to upload a chunk of data for the specified upload.
+
+        Currently the apdex value is {{ $value | humanizePercentage }}.
+      grafana_dashboard_id: registry-main/registry-overview
+      grafana_dashboard_link: https://dashboards.gitlab.net/d/registry-main/registry-overview?from=now-6h/m&to=now-1m/m&var-environment={{
+        $labels.environment }}&var-stage={{ $labels.stage }}
+      grafana_min_zoom_hours: "6"
+      grafana_panel_id: "2199109348"
+      grafana_variables: environment,stage
+      promql_template_1: |
+        histogram_quantile(
+          0.950000,
+          sum by (env,environment,tier,stage,le) (
+            rate(registry_http_request_duration_seconds_bucket{environment="{{ $labels.environment }}",method=~"put|patch|post",route="/v2/{name}/blobs/uploads/{uuid}",stage="{{ $labels.stage }}",type="registry"}[5m])
+          )
+        )
+      runbook: docs/registry/README.md
+    labels:
+      aggregation: component
+      alert_class: slo_violation
+      alert_type: symptom
+      feature_category: container_registry
+      pager: pagerduty
+      rules_domain: general
+      severity: s2
+      sli_type: apdex
+      slo_alert: "yes"
+      user_impacting: "yes"
+      window: 1h
+    expr: |
+      (
+        (
+          gitlab_component_apdex:ratio_1h{component="server_route_blob_upload_uuid_writes",monitor="global",type="registry"}
+          < (1 - 14.4 * 0.030000)
+        )
+        and
+        (
+          gitlab_component_apdex:ratio_5m{component="server_route_blob_upload_uuid_writes",monitor="global",type="registry"}
+          < (1 - 14.4 * 0.030000)
+        )
+      )
+      and on(env,environment,tier,type,stage,component)
+      (
+        sum by(env,environment,tier,type,stage,component) (gitlab_component_ops:rate_1h{component="server_route_blob_upload_uuid_writes",monitor="global",type="registry"}) >= 1
+      )
+  - alert: RegistryServiceServerRouteBlobUploadUuidWritesApdexSLOViolation
+    for: 2m
+    annotations:
+      title: The server_route_blob_upload_uuid_writes SLI of the registry service
+        (`{{ $labels.stage }}` stage) has an apdex violating SLO
+      description: |
+        Write requests (PUT or PATCH) for the registry blob upload endpoints.
+
+        PUT is used to complete the upload specified by uuid, optionally appending the body as the final chunk.
+
+        PATCH is used to upload a chunk of data for the specified upload.
+
+        Currently the apdex value is {{ $value | humanizePercentage }}.
+      grafana_dashboard_id: registry-main/registry-overview
+      grafana_dashboard_link: https://dashboards.gitlab.net/d/registry-main/registry-overview?from=now-6h/m&to=now-1m/m&var-environment={{
+        $labels.environment }}&var-stage={{ $labels.stage }}
+      grafana_min_zoom_hours: "6"
+      grafana_panel_id: "2199109348"
+      grafana_variables: environment,stage
+      promql_template_1: |
+        histogram_quantile(
+          0.950000,
+          sum by (env,environment,tier,stage,le) (
+            rate(registry_http_request_duration_seconds_bucket{environment="{{ $labels.environment }}",method=~"put|patch|post",route="/v2/{name}/blobs/uploads/{uuid}",stage="{{ $labels.stage }}",type="registry"}[5m])
+          )
+        )
+      runbook: docs/registry/README.md
+    labels:
+      aggregation: component
+      alert_class: slo_violation
+      alert_type: symptom
+      feature_category: container_registry
+      pager: pagerduty
+      rules_domain: general
+      severity: s2
+      sli_type: apdex
+      slo_alert: "yes"
+      user_impacting: "yes"
+      window: 6h
+    expr: |
+      (
+        (
+          gitlab_component_apdex:ratio_6h{component="server_route_blob_upload_uuid_writes",monitor="global",type="registry"}
+          < (1 - 6 * 0.030000)
+        )
+        and
+        (
+          gitlab_component_apdex:ratio_30m{component="server_route_blob_upload_uuid_writes",monitor="global",type="registry"}
+          < (1 - 6 * 0.030000)
+        )
+      )
+      and on(env,environment,tier,type,stage,component)
+      (
+        sum by(env,environment,tier,type,stage,component) (gitlab_component_ops:rate_6h{component="server_route_blob_upload_uuid_writes",monitor="global",type="registry"}) >= 0.16667
+      )
+  - alert: RegistryServiceServerRouteBlobUploadUuidWritesApdexSLOViolationRegional
+    for: 2m
+    annotations:
+      title: The server_route_blob_upload_uuid_writes SLI of the registry service
+        in region `{{ $labels.region }}` has an apdex violating SLO
+      description: |
+        Write requests (PUT or PATCH) for the registry blob upload endpoints.
+
+        PUT is used to complete the upload specified by uuid, optionally appending the body as the final chunk.
+
+        PATCH is used to upload a chunk of data for the specified upload.
+
+        Note that this alert is specific to the `{{ $labels.region }}` region.
+
+        Currently the apdex value is {{ $value | humanizePercentage }}.
+      grafana_dashboard_id: registry-main/registry-overview
+      grafana_dashboard_link: https://dashboards.gitlab.net/d/registry-main/registry-overview?from=now-6h/m&to=now-1m/m&var-environment={{
+        $labels.environment }}&var-stage={{ $labels.stage }}
+      grafana_min_zoom_hours: "6"
+      grafana_panel_id: "2199109348"
+      grafana_variables: environment,stage
+      promql_template_1: |
+        histogram_quantile(
+          0.950000,
+          sum by (env,environment,tier,stage,region,le) (
+            rate(registry_http_request_duration_seconds_bucket{environment="{{ $labels.environment }}",method=~"put|patch|post",region="{{ $labels.region }}",route="/v2/{name}/blobs/uploads/{uuid}",stage="{{ $labels.stage }}",type="registry"}[5m])
+          )
+        )
+      runbook: docs/registry/README.md
+    labels:
+      aggregation: regional_component
+      alert_class: slo_violation
+      alert_type: symptom
+      feature_category: container_registry
+      pager: pagerduty
+      rules_domain: general
+      severity: s2
+      sli_type: apdex
+      slo_alert: "yes"
+      user_impacting: "yes"
+      window: 1h
+    expr: |
+      (
+        (
+          gitlab_regional_sli_apdex:ratio_1h{component="server_route_blob_upload_uuid_writes",monitor="global",type="registry"}
+          < (1 - 14.4 * 0.030000)
+        )
+        and
+        (
+          gitlab_regional_sli_apdex:ratio_5m{component="server_route_blob_upload_uuid_writes",monitor="global",type="registry"}
+          < (1 - 14.4 * 0.030000)
+        )
+      )
+      and on(env,environment,tier,type,stage,region,component)
+      (
+        sum by(env,environment,tier,type,stage,region,component) (gitlab_regional_sli_ops:rate_1h{component="server_route_blob_upload_uuid_writes",monitor="global",type="registry"}) >= 1
+      )
+  - alert: RegistryServiceServerRouteBlobUploadUuidWritesApdexSLOViolationRegional
+    for: 2m
+    annotations:
+      title: The server_route_blob_upload_uuid_writes SLI of the registry service
+        in region `{{ $labels.region }}` has an apdex violating SLO
+      description: |
+        Write requests (PUT or PATCH) for the registry blob upload endpoints.
+
+        PUT is used to complete the upload specified by uuid, optionally appending the body as the final chunk.
+
+        PATCH is used to upload a chunk of data for the specified upload.
+
+        Note that this alert is specific to the `{{ $labels.region }}` region.
+
+        Currently the apdex value is {{ $value | humanizePercentage }}.
+      grafana_dashboard_id: registry-main/registry-overview
+      grafana_dashboard_link: https://dashboards.gitlab.net/d/registry-main/registry-overview?from=now-6h/m&to=now-1m/m&var-environment={{
+        $labels.environment }}&var-stage={{ $labels.stage }}
+      grafana_min_zoom_hours: "6"
+      grafana_panel_id: "2199109348"
+      grafana_variables: environment,stage
+      promql_template_1: |
+        histogram_quantile(
+          0.950000,
+          sum by (env,environment,tier,stage,region,le) (
+            rate(registry_http_request_duration_seconds_bucket{environment="{{ $labels.environment }}",method=~"put|patch|post",region="{{ $labels.region }}",route="/v2/{name}/blobs/uploads/{uuid}",stage="{{ $labels.stage }}",type="registry"}[5m])
+          )
+        )
+      runbook: docs/registry/README.md
+    labels:
+      aggregation: regional_component
+      alert_class: slo_violation
+      alert_type: symptom
+      feature_category: container_registry
+      pager: pagerduty
+      rules_domain: general
+      severity: s2
+      sli_type: apdex
+      slo_alert: "yes"
+      user_impacting: "yes"
+      window: 6h
+    expr: |
+      (
+        (
+          gitlab_regional_sli_apdex:ratio_6h{component="server_route_blob_upload_uuid_writes",monitor="global",type="registry"}
+          < (1 - 6 * 0.030000)
+        )
+        and
+        (
+          gitlab_regional_sli_apdex:ratio_30m{component="server_route_blob_upload_uuid_writes",monitor="global",type="registry"}
+          < (1 - 6 * 0.030000)
+        )
+      )
+      and on(env,environment,tier,type,stage,region,component)
+      (
+        sum by(env,environment,tier,type,stage,region,component) (gitlab_regional_sli_ops:rate_6h{component="server_route_blob_upload_uuid_writes",monitor="global",type="registry"}) >= 0.16667
+      )
+  - alert: RegistryServiceServerRouteBlobUploadUuidWritesTrafficCessation
+    for: 5m
+    annotations:
+      title: The server_route_blob_upload_uuid_writes SLI of the registry service
+        (`{{ $labels.stage }}` stage) has not received any traffic in the past 30m
+      description: |
+        Write requests (PUT or PATCH) for the registry blob upload endpoints.
+
+        PUT is used to complete the upload specified by uuid, optionally appending the body as the final chunk.
+
+        PATCH is used to upload a chunk of data for the specified upload.
+
+        This alert signifies that the SLI is reporting a cessation of traffic; the signal is present, but is zero.
+      grafana_dashboard_id: registry-main/registry-overview
+      grafana_dashboard_link: https://dashboards.gitlab.net/d/registry-main/registry-overview?from=now-6h/m&to=now-1m/m&var-environment={{
+        $labels.environment }}&var-stage={{ $labels.stage }}
+      grafana_min_zoom_hours: "6"
+      grafana_panel_id: "3946104260"
+      grafana_variables: environment,stage
+      promql_template_1: |
+        sum by (env,environment,tier,stage) (
+          rate(registry_http_request_duration_seconds_count{environment="{{ $labels.environment }}",method=~"put|patch|post",route="/v2/{name}/blobs/uploads/{uuid}",stage="{{ $labels.stage }}"}[5m])
+        )
+      runbook: docs/registry/README.md
+    labels:
+      aggregation: component
+      alert_class: traffic_cessation
+      alert_type: cause
+      feature_category: container_registry
+      pager: pagerduty
+      rules_domain: general
+      severity: s2
+      sli_type: ops
+      slo_alert: "no"
+      user_impacting: "yes"
+    expr: |
+      gitlab_component_ops:rate_30m{component="server_route_blob_upload_uuid_writes",monitor="global",stage="main",type="registry"} == 0
+      and
+      gitlab_component_ops:rate_30m{component="server_route_blob_upload_uuid_writes",monitor="global",stage="main",type="registry"} offset 1h >= 0.16666666666666666
+  - alert: RegistryServiceServerRouteBlobUploadUuidWritesTrafficAbsent
+    for: 30m
+    annotations:
+      title: The server_route_blob_upload_uuid_writes SLI of the registry service
+        (`{{ $labels.stage }}` stage) has not reported any traffic in the past 30m
+      description: |
+        Write requests (PUT or PATCH) for the registry blob upload endpoints.
+
+        PUT is used to complete the upload specified by uuid, optionally appending the body as the final chunk.
+
+        PATCH is used to upload a chunk of data for the specified upload.
+
+        This alert signifies that the SLI was previously reporting traffic, but is no longer - the signal is absent.
+
+        This could be caused by a change to the metrics used in the SLI, or by the service not receiving traffic.
+      grafana_dashboard_id: registry-main/registry-overview
+      grafana_dashboard_link: https://dashboards.gitlab.net/d/registry-main/registry-overview?from=now-6h/m&to=now-1m/m&var-environment={{
+        $labels.environment }}&var-stage={{ $labels.stage }}
+      grafana_min_zoom_hours: "6"
+      grafana_panel_id: "3946104260"
+      grafana_variables: environment,stage
+      promql_template_1: |
+        sum by (env,environment,tier,stage) (
+          rate(registry_http_request_duration_seconds_count{environment="{{ $labels.environment }}",method=~"put|patch|post",route="/v2/{name}/blobs/uploads/{uuid}",stage="{{ $labels.stage }}"}[5m])
+        )
+      runbook: docs/registry/README.md
+    labels:
+      aggregation: component
+      alert_class: traffic_cessation
+      alert_type: cause
+      feature_category: container_registry
+      pager: pagerduty
+      rules_domain: general
+      severity: s2
+      sli_type: ops
+      slo_alert: "no"
+      user_impacting: "yes"
+    expr: |
+      gitlab_component_ops:rate_5m{component="server_route_blob_upload_uuid_writes",monitor="global",stage="main",type="registry"} offset 1h
+      unless
+      gitlab_component_ops:rate_5m{component="server_route_blob_upload_uuid_writes",monitor="global",stage="main",type="registry"}
+  - alert: RegistryServiceServerRouteBlobUploadUuidWritesTrafficCessationRegional
+    for: 5m
+    annotations:
+      title: The server_route_blob_upload_uuid_writes SLI of the registry service
+        in region `{{ $labels.region }}` has not received any traffic in the past
+        30m
+      description: |
+        Write requests (PUT or PATCH) for the registry blob upload endpoints.
+
+        PUT is used to complete the upload specified by uuid, optionally appending the body as the final chunk.
+
+        PATCH is used to upload a chunk of data for the specified upload.
+
+        This alert signifies that the SLI is reporting a cessation of traffic; the signal is present, but is zero.
+
+        Note that this alert is specific to the `{{ $labels.region }}` region.
+      grafana_dashboard_id: registry-main/registry-overview
+      grafana_dashboard_link: https://dashboards.gitlab.net/d/registry-main/registry-overview?from=now-6h/m&to=now-1m/m&var-environment={{
+        $labels.environment }}&var-stage={{ $labels.stage }}
+      grafana_min_zoom_hours: "6"
+      grafana_panel_id: "3946104260"
+      grafana_variables: environment,stage
+      promql_template_1: |
+        sum by (env,environment,tier,stage,region) (
+          rate(registry_http_request_duration_seconds_count{environment="{{ $labels.environment }}",method=~"put|patch|post",region="{{ $labels.region }}",route="/v2/{name}/blobs/uploads/{uuid}",stage="{{ $labels.stage }}"}[5m])
+        )
+      runbook: docs/registry/README.md
+    labels:
+      aggregation: regional_component
+      alert_class: traffic_cessation
+      alert_type: cause
+      feature_category: container_registry
+      pager: pagerduty
+      rules_domain: general
+      severity: s2
+      sli_type: ops
+      slo_alert: "no"
+      user_impacting: "yes"
+    expr: |
+      gitlab_regional_sli_ops:rate_30m{component="server_route_blob_upload_uuid_writes",monitor="global",stage="main",type="registry"} == 0
+      and
+      gitlab_regional_sli_ops:rate_30m{component="server_route_blob_upload_uuid_writes",monitor="global",stage="main",type="registry"} offset 1h >= 0.16666666666666666
+  - alert: RegistryServiceServerRouteBlobUploadUuidWritesTrafficAbsentRegional
+    for: 30m
+    annotations:
+      title: The server_route_blob_upload_uuid_writes SLI of the registry service
+        in region `{{ $labels.region }}` has not reported any traffic in the past
+        30m
+      description: |
+        Write requests (PUT or PATCH) for the registry blob upload endpoints.
+
+        PUT is used to complete the upload specified by uuid, optionally appending the body as the final chunk.
+
+        PATCH is used to upload a chunk of data for the specified upload.
+
+        This alert signifies that the SLI was previously reporting traffic, but is no longer - the signal is absent.
+
+        This could be caused by a change to the metrics used in the SLI, or by the service not receiving traffic.
+
+        Note that this alert is specific to the `{{ $labels.region }}` region.
+      grafana_dashboard_id: registry-main/registry-overview
+      grafana_dashboard_link: https://dashboards.gitlab.net/d/registry-main/registry-overview?from=now-6h/m&to=now-1m/m&var-environment={{
+        $labels.environment }}&var-stage={{ $labels.stage }}
+      grafana_min_zoom_hours: "6"
+      grafana_panel_id: "3946104260"
+      grafana_variables: environment,stage
+      promql_template_1: |
+        sum by (env,environment,tier,stage,region) (
+          rate(registry_http_request_duration_seconds_count{environment="{{ $labels.environment }}",method=~"put|patch|post",region="{{ $labels.region }}",route="/v2/{name}/blobs/uploads/{uuid}",stage="{{ $labels.stage }}"}[5m])
+        )
+      runbook: docs/registry/README.md
+    labels:
+      aggregation: regional_component
+      alert_class: traffic_cessation
+      alert_type: cause
+      feature_category: container_registry
+      pager: pagerduty
+      rules_domain: general
+      severity: s2
+      sli_type: ops
+      slo_alert: "no"
+      user_impacting: "yes"
+    expr: |
+      gitlab_regional_sli_ops:rate_5m{component="server_route_blob_upload_uuid_writes",monitor="global",stage="main",type="registry"} offset 1h
+      unless
+      gitlab_regional_sli_ops:rate_5m{component="server_route_blob_upload_uuid_writes",monitor="global",stage="main",type="registry"}
   - alert: RegistryServiceServerRouteManifestReadsApdexSLOViolation
     for: 2m
     annotations:
