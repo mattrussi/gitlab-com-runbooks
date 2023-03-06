@@ -34,7 +34,7 @@ metricsCatalog.serviceDefinition(
         severity: 's4',
       },
       cluster_redirections: {
-        userImpacting: false,  // userImpacting for data redundancy reasons
+        userImpacting: false,  // set as true with above after prod traffic is received
         severity: 's4',
 
         featureCategory: 'not_owned',
