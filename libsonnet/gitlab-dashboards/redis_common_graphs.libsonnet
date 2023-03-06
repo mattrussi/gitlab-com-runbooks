@@ -513,19 +513,7 @@ local processExporter = import 'gitlab-dashboards/process_exporter.libsonnet';
           ||| % formatConfig,
           legendFormat='{{ shard }}',
         ),
-      ], cols=1, rowHeight=4, startRow=startRow + 4)
-      +
-      layout.grid([
-        basic.timeseries(
-          title='Redis Cluster Redirection',
-          yAxisLabel='Redirections',
-          query=|||
-            sum(gitlab:redis_cluster_redirections:irate1m{environment=$"environment", type="%(serviceType)s}) by (redirection_type)
-          ||| % formatConfig,
-          legendFormat='{{ redirection_type }}',
-          intervalFactor=2,
-        ),
-      ], cols=2, rowHeight=10, startRow=startRow + 8);
+      ], cols=1, rowHeight=4, startRow=startRow + 4);
 
     layout.titleRowWithPanels(
       title='Cluster Data',

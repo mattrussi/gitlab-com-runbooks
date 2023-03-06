@@ -38,13 +38,6 @@ groups:
       )
   - record: gitlab:redis_rdb_last_save_in_seconds
     expr: min(time() - redis_rdb_last_save_timestamp_seconds) by (environment,type)
-  - record: gitlab:redis_cluster_redirections:irate1m
-    labels:
-      type: redis_cluster_ratelimiting
-    expr: >
-      sum by (environment, redirection_type) (
-        rate(gitlab_redis_client_redirections_total{storage="cluster_rate_limiting"}[1m])
-      )
 - name: redis.alerts
   rules:
   - alert: RedisLossOfRedundancy
