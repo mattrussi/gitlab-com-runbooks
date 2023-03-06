@@ -235,11 +235,11 @@ groups:
     expr: |
       (
         sum by (environment,stage) (
-          rate(registry_http_request_duration_seconds_bucket{le="2.5",route!~"/v2/{name}/manifests/{reference}",type="registry"}[1m])
+          rate(registry_http_request_duration_seconds_bucket{le="2.5",route!~"/v2/{name}/blobs/uploads/{uuid}|/v2/{name}/manifests/{reference}",type="registry"}[1m])
         )
         +
         sum by (environment,stage) (
-          rate(registry_http_request_duration_seconds_bucket{le="25",route!~"/v2/{name}/manifests/{reference}",type="registry"}[1m])
+          rate(registry_http_request_duration_seconds_bucket{le="25",route!~"/v2/{name}/blobs/uploads/{uuid}|/v2/{name}/manifests/{reference}",type="registry"}[1m])
         )
       )
       /
@@ -251,7 +251,7 @@ groups:
       type: registry
     expr: |
       sum by (environment,stage) (
-        rate(registry_http_request_duration_seconds_bucket{le="+Inf",route!~"/v2/{name}/manifests/{reference}",type="registry"}[1m])
+        rate(registry_http_request_duration_seconds_bucket{le="+Inf",route!~"/v2/{name}/blobs/uploads/{uuid}|/v2/{name}/manifests/{reference}",type="registry"}[1m])
       )
   - record: gitlab_component_ops:rate
     labels:
@@ -278,6 +278,111 @@ groups:
         0 * group by(environment,stage) (
           gitlab_component_ops:rate{component="registry_server",tier="sv",type="registry"}
         )
+      )
+  - record: gitlab_component_apdex:success:rate
+    labels:
+      component: server_route_blob_upload_uuid_deletes
+      tier: sv
+      type: registry
+    expr: |
+      (
+        sum by (environment,stage) (
+          rate(registry_http_request_duration_seconds_bucket{le="2.5",method=~"delete",route="/v2/{name}/blobs/uploads/{uuid}",type="registry"}[1m])
+        )
+        +
+        sum by (environment,stage) (
+          rate(registry_http_request_duration_seconds_bucket{le="5",method=~"delete",route="/v2/{name}/blobs/uploads/{uuid}",type="registry"}[1m])
+        )
+      )
+      /
+      2
+  - record: gitlab_component_apdex:weight:score
+    labels:
+      component: server_route_blob_upload_uuid_deletes
+      tier: sv
+      type: registry
+    expr: |
+      sum by (environment,stage) (
+        rate(registry_http_request_duration_seconds_bucket{le="+Inf",method=~"delete",route="/v2/{name}/blobs/uploads/{uuid}",type="registry"}[1m])
+      )
+  - record: gitlab_component_ops:rate
+    labels:
+      component: server_route_blob_upload_uuid_deletes
+      tier: sv
+      type: registry
+    expr: |
+      sum by (environment,stage) (
+        rate(registry_http_request_duration_seconds_count{method=~"delete",route="/v2/{name}/blobs/uploads/{uuid}"}[1m])
+      )
+  - record: gitlab_component_apdex:success:rate
+    labels:
+      component: server_route_blob_upload_uuid_reads
+      tier: sv
+      type: registry
+    expr: |
+      (
+        sum by (environment,stage) (
+          rate(registry_http_request_duration_seconds_bucket{le="1",method=~"get|head",route="/v2/{name}/blobs/uploads/{uuid}",type="registry"}[1m])
+        )
+        +
+        sum by (environment,stage) (
+          rate(registry_http_request_duration_seconds_bucket{le="2.5",method=~"get|head",route="/v2/{name}/blobs/uploads/{uuid}",type="registry"}[1m])
+        )
+      )
+      /
+      2
+  - record: gitlab_component_apdex:weight:score
+    labels:
+      component: server_route_blob_upload_uuid_reads
+      tier: sv
+      type: registry
+    expr: |
+      sum by (environment,stage) (
+        rate(registry_http_request_duration_seconds_bucket{le="+Inf",method=~"get|head",route="/v2/{name}/blobs/uploads/{uuid}",type="registry"}[1m])
+      )
+  - record: gitlab_component_ops:rate
+    labels:
+      component: server_route_blob_upload_uuid_reads
+      tier: sv
+      type: registry
+    expr: |
+      sum by (environment,stage) (
+        rate(registry_http_request_duration_seconds_count{method=~"get|head",route="/v2/{name}/blobs/uploads/{uuid}"}[1m])
+      )
+  - record: gitlab_component_apdex:success:rate
+    labels:
+      component: server_route_blob_upload_uuid_writes
+      tier: sv
+      type: registry
+    expr: |
+      (
+        sum by (environment,stage) (
+          rate(registry_http_request_duration_seconds_bucket{le="25",method=~"put|patch|post",route="/v2/{name}/blobs/uploads/{uuid}",type="registry"}[1m])
+        )
+        +
+        sum by (environment,stage) (
+          rate(registry_http_request_duration_seconds_bucket{le="60",method=~"put|patch|post",route="/v2/{name}/blobs/uploads/{uuid}",type="registry"}[1m])
+        )
+      )
+      /
+      2
+  - record: gitlab_component_apdex:weight:score
+    labels:
+      component: server_route_blob_upload_uuid_writes
+      tier: sv
+      type: registry
+    expr: |
+      sum by (environment,stage) (
+        rate(registry_http_request_duration_seconds_bucket{le="+Inf",method=~"put|patch|post",route="/v2/{name}/blobs/uploads/{uuid}",type="registry"}[1m])
+      )
+  - record: gitlab_component_ops:rate
+    labels:
+      component: server_route_blob_upload_uuid_writes
+      tier: sv
+      type: registry
+    expr: |
+      sum by (environment,stage) (
+        rate(registry_http_request_duration_seconds_count{method=~"put|patch|post",route="/v2/{name}/blobs/uploads/{uuid}"}[1m])
       )
   - record: gitlab_component_apdex:success:rate
     labels:
@@ -583,11 +688,11 @@ groups:
     expr: |
       (
         sum by (environment,stage) (
-          rate(registry_http_request_duration_seconds_bucket{le="2.5",route!~"/v2/{name}/manifests/{reference}",type="registry"}[5m])
+          rate(registry_http_request_duration_seconds_bucket{le="2.5",route!~"/v2/{name}/blobs/uploads/{uuid}|/v2/{name}/manifests/{reference}",type="registry"}[5m])
         )
         +
         sum by (environment,stage) (
-          rate(registry_http_request_duration_seconds_bucket{le="25",route!~"/v2/{name}/manifests/{reference}",type="registry"}[5m])
+          rate(registry_http_request_duration_seconds_bucket{le="25",route!~"/v2/{name}/blobs/uploads/{uuid}|/v2/{name}/manifests/{reference}",type="registry"}[5m])
         )
       )
       /
@@ -599,7 +704,7 @@ groups:
       type: registry
     expr: |
       sum by (environment,stage) (
-        rate(registry_http_request_duration_seconds_bucket{le="+Inf",route!~"/v2/{name}/manifests/{reference}",type="registry"}[5m])
+        rate(registry_http_request_duration_seconds_bucket{le="+Inf",route!~"/v2/{name}/blobs/uploads/{uuid}|/v2/{name}/manifests/{reference}",type="registry"}[5m])
       )
   - record: gitlab_component_ops:rate_5m
     labels:
@@ -626,6 +731,111 @@ groups:
         0 * group by(environment,stage) (
           gitlab_component_ops:rate_5m{component="registry_server",tier="sv",type="registry"}
         )
+      )
+  - record: gitlab_component_apdex:success:rate_5m
+    labels:
+      component: server_route_blob_upload_uuid_deletes
+      tier: sv
+      type: registry
+    expr: |
+      (
+        sum by (environment,stage) (
+          rate(registry_http_request_duration_seconds_bucket{le="2.5",method=~"delete",route="/v2/{name}/blobs/uploads/{uuid}",type="registry"}[5m])
+        )
+        +
+        sum by (environment,stage) (
+          rate(registry_http_request_duration_seconds_bucket{le="5",method=~"delete",route="/v2/{name}/blobs/uploads/{uuid}",type="registry"}[5m])
+        )
+      )
+      /
+      2
+  - record: gitlab_component_apdex:weight:score_5m
+    labels:
+      component: server_route_blob_upload_uuid_deletes
+      tier: sv
+      type: registry
+    expr: |
+      sum by (environment,stage) (
+        rate(registry_http_request_duration_seconds_bucket{le="+Inf",method=~"delete",route="/v2/{name}/blobs/uploads/{uuid}",type="registry"}[5m])
+      )
+  - record: gitlab_component_ops:rate_5m
+    labels:
+      component: server_route_blob_upload_uuid_deletes
+      tier: sv
+      type: registry
+    expr: |
+      sum by (environment,stage) (
+        rate(registry_http_request_duration_seconds_count{method=~"delete",route="/v2/{name}/blobs/uploads/{uuid}"}[5m])
+      )
+  - record: gitlab_component_apdex:success:rate_5m
+    labels:
+      component: server_route_blob_upload_uuid_reads
+      tier: sv
+      type: registry
+    expr: |
+      (
+        sum by (environment,stage) (
+          rate(registry_http_request_duration_seconds_bucket{le="1",method=~"get|head",route="/v2/{name}/blobs/uploads/{uuid}",type="registry"}[5m])
+        )
+        +
+        sum by (environment,stage) (
+          rate(registry_http_request_duration_seconds_bucket{le="2.5",method=~"get|head",route="/v2/{name}/blobs/uploads/{uuid}",type="registry"}[5m])
+        )
+      )
+      /
+      2
+  - record: gitlab_component_apdex:weight:score_5m
+    labels:
+      component: server_route_blob_upload_uuid_reads
+      tier: sv
+      type: registry
+    expr: |
+      sum by (environment,stage) (
+        rate(registry_http_request_duration_seconds_bucket{le="+Inf",method=~"get|head",route="/v2/{name}/blobs/uploads/{uuid}",type="registry"}[5m])
+      )
+  - record: gitlab_component_ops:rate_5m
+    labels:
+      component: server_route_blob_upload_uuid_reads
+      tier: sv
+      type: registry
+    expr: |
+      sum by (environment,stage) (
+        rate(registry_http_request_duration_seconds_count{method=~"get|head",route="/v2/{name}/blobs/uploads/{uuid}"}[5m])
+      )
+  - record: gitlab_component_apdex:success:rate_5m
+    labels:
+      component: server_route_blob_upload_uuid_writes
+      tier: sv
+      type: registry
+    expr: |
+      (
+        sum by (environment,stage) (
+          rate(registry_http_request_duration_seconds_bucket{le="25",method=~"put|patch|post",route="/v2/{name}/blobs/uploads/{uuid}",type="registry"}[5m])
+        )
+        +
+        sum by (environment,stage) (
+          rate(registry_http_request_duration_seconds_bucket{le="60",method=~"put|patch|post",route="/v2/{name}/blobs/uploads/{uuid}",type="registry"}[5m])
+        )
+      )
+      /
+      2
+  - record: gitlab_component_apdex:weight:score_5m
+    labels:
+      component: server_route_blob_upload_uuid_writes
+      tier: sv
+      type: registry
+    expr: |
+      sum by (environment,stage) (
+        rate(registry_http_request_duration_seconds_bucket{le="+Inf",method=~"put|patch|post",route="/v2/{name}/blobs/uploads/{uuid}",type="registry"}[5m])
+      )
+  - record: gitlab_component_ops:rate_5m
+    labels:
+      component: server_route_blob_upload_uuid_writes
+      tier: sv
+      type: registry
+    expr: |
+      sum by (environment,stage) (
+        rate(registry_http_request_duration_seconds_count{method=~"put|patch|post",route="/v2/{name}/blobs/uploads/{uuid}"}[5m])
       )
   - record: gitlab_component_apdex:success:rate_5m
     labels:
@@ -931,11 +1141,11 @@ groups:
     expr: |
       (
         sum by (environment,stage) (
-          rate(registry_http_request_duration_seconds_bucket{le="2.5",route!~"/v2/{name}/manifests/{reference}",type="registry"}[30m])
+          rate(registry_http_request_duration_seconds_bucket{le="2.5",route!~"/v2/{name}/blobs/uploads/{uuid}|/v2/{name}/manifests/{reference}",type="registry"}[30m])
         )
         +
         sum by (environment,stage) (
-          rate(registry_http_request_duration_seconds_bucket{le="25",route!~"/v2/{name}/manifests/{reference}",type="registry"}[30m])
+          rate(registry_http_request_duration_seconds_bucket{le="25",route!~"/v2/{name}/blobs/uploads/{uuid}|/v2/{name}/manifests/{reference}",type="registry"}[30m])
         )
       )
       /
@@ -947,7 +1157,7 @@ groups:
       type: registry
     expr: |
       sum by (environment,stage) (
-        rate(registry_http_request_duration_seconds_bucket{le="+Inf",route!~"/v2/{name}/manifests/{reference}",type="registry"}[30m])
+        rate(registry_http_request_duration_seconds_bucket{le="+Inf",route!~"/v2/{name}/blobs/uploads/{uuid}|/v2/{name}/manifests/{reference}",type="registry"}[30m])
       )
   - record: gitlab_component_ops:rate_30m
     labels:
@@ -974,6 +1184,111 @@ groups:
         0 * group by(environment,stage) (
           gitlab_component_ops:rate_30m{component="registry_server",tier="sv",type="registry"}
         )
+      )
+  - record: gitlab_component_apdex:success:rate_30m
+    labels:
+      component: server_route_blob_upload_uuid_deletes
+      tier: sv
+      type: registry
+    expr: |
+      (
+        sum by (environment,stage) (
+          rate(registry_http_request_duration_seconds_bucket{le="2.5",method=~"delete",route="/v2/{name}/blobs/uploads/{uuid}",type="registry"}[30m])
+        )
+        +
+        sum by (environment,stage) (
+          rate(registry_http_request_duration_seconds_bucket{le="5",method=~"delete",route="/v2/{name}/blobs/uploads/{uuid}",type="registry"}[30m])
+        )
+      )
+      /
+      2
+  - record: gitlab_component_apdex:weight:score_30m
+    labels:
+      component: server_route_blob_upload_uuid_deletes
+      tier: sv
+      type: registry
+    expr: |
+      sum by (environment,stage) (
+        rate(registry_http_request_duration_seconds_bucket{le="+Inf",method=~"delete",route="/v2/{name}/blobs/uploads/{uuid}",type="registry"}[30m])
+      )
+  - record: gitlab_component_ops:rate_30m
+    labels:
+      component: server_route_blob_upload_uuid_deletes
+      tier: sv
+      type: registry
+    expr: |
+      sum by (environment,stage) (
+        rate(registry_http_request_duration_seconds_count{method=~"delete",route="/v2/{name}/blobs/uploads/{uuid}"}[30m])
+      )
+  - record: gitlab_component_apdex:success:rate_30m
+    labels:
+      component: server_route_blob_upload_uuid_reads
+      tier: sv
+      type: registry
+    expr: |
+      (
+        sum by (environment,stage) (
+          rate(registry_http_request_duration_seconds_bucket{le="1",method=~"get|head",route="/v2/{name}/blobs/uploads/{uuid}",type="registry"}[30m])
+        )
+        +
+        sum by (environment,stage) (
+          rate(registry_http_request_duration_seconds_bucket{le="2.5",method=~"get|head",route="/v2/{name}/blobs/uploads/{uuid}",type="registry"}[30m])
+        )
+      )
+      /
+      2
+  - record: gitlab_component_apdex:weight:score_30m
+    labels:
+      component: server_route_blob_upload_uuid_reads
+      tier: sv
+      type: registry
+    expr: |
+      sum by (environment,stage) (
+        rate(registry_http_request_duration_seconds_bucket{le="+Inf",method=~"get|head",route="/v2/{name}/blobs/uploads/{uuid}",type="registry"}[30m])
+      )
+  - record: gitlab_component_ops:rate_30m
+    labels:
+      component: server_route_blob_upload_uuid_reads
+      tier: sv
+      type: registry
+    expr: |
+      sum by (environment,stage) (
+        rate(registry_http_request_duration_seconds_count{method=~"get|head",route="/v2/{name}/blobs/uploads/{uuid}"}[30m])
+      )
+  - record: gitlab_component_apdex:success:rate_30m
+    labels:
+      component: server_route_blob_upload_uuid_writes
+      tier: sv
+      type: registry
+    expr: |
+      (
+        sum by (environment,stage) (
+          rate(registry_http_request_duration_seconds_bucket{le="25",method=~"put|patch|post",route="/v2/{name}/blobs/uploads/{uuid}",type="registry"}[30m])
+        )
+        +
+        sum by (environment,stage) (
+          rate(registry_http_request_duration_seconds_bucket{le="60",method=~"put|patch|post",route="/v2/{name}/blobs/uploads/{uuid}",type="registry"}[30m])
+        )
+      )
+      /
+      2
+  - record: gitlab_component_apdex:weight:score_30m
+    labels:
+      component: server_route_blob_upload_uuid_writes
+      tier: sv
+      type: registry
+    expr: |
+      sum by (environment,stage) (
+        rate(registry_http_request_duration_seconds_bucket{le="+Inf",method=~"put|patch|post",route="/v2/{name}/blobs/uploads/{uuid}",type="registry"}[30m])
+      )
+  - record: gitlab_component_ops:rate_30m
+    labels:
+      component: server_route_blob_upload_uuid_writes
+      tier: sv
+      type: registry
+    expr: |
+      sum by (environment,stage) (
+        rate(registry_http_request_duration_seconds_count{method=~"put|patch|post",route="/v2/{name}/blobs/uploads/{uuid}"}[30m])
       )
   - record: gitlab_component_apdex:success:rate_30m
     labels:
@@ -1279,11 +1594,11 @@ groups:
     expr: |
       (
         sum by (environment,stage) (
-          rate(registry_http_request_duration_seconds_bucket{le="2.5",route!~"/v2/{name}/manifests/{reference}",type="registry"}[1h])
+          rate(registry_http_request_duration_seconds_bucket{le="2.5",route!~"/v2/{name}/blobs/uploads/{uuid}|/v2/{name}/manifests/{reference}",type="registry"}[1h])
         )
         +
         sum by (environment,stage) (
-          rate(registry_http_request_duration_seconds_bucket{le="25",route!~"/v2/{name}/manifests/{reference}",type="registry"}[1h])
+          rate(registry_http_request_duration_seconds_bucket{le="25",route!~"/v2/{name}/blobs/uploads/{uuid}|/v2/{name}/manifests/{reference}",type="registry"}[1h])
         )
       )
       /
@@ -1295,7 +1610,7 @@ groups:
       type: registry
     expr: |
       sum by (environment,stage) (
-        rate(registry_http_request_duration_seconds_bucket{le="+Inf",route!~"/v2/{name}/manifests/{reference}",type="registry"}[1h])
+        rate(registry_http_request_duration_seconds_bucket{le="+Inf",route!~"/v2/{name}/blobs/uploads/{uuid}|/v2/{name}/manifests/{reference}",type="registry"}[1h])
       )
   - record: gitlab_component_ops:rate_1h
     labels:
@@ -1322,6 +1637,111 @@ groups:
         0 * group by(environment,stage) (
           gitlab_component_ops:rate_1h{component="registry_server",tier="sv",type="registry"}
         )
+      )
+  - record: gitlab_component_apdex:success:rate_1h
+    labels:
+      component: server_route_blob_upload_uuid_deletes
+      tier: sv
+      type: registry
+    expr: |
+      (
+        sum by (environment,stage) (
+          rate(registry_http_request_duration_seconds_bucket{le="2.5",method=~"delete",route="/v2/{name}/blobs/uploads/{uuid}",type="registry"}[1h])
+        )
+        +
+        sum by (environment,stage) (
+          rate(registry_http_request_duration_seconds_bucket{le="5",method=~"delete",route="/v2/{name}/blobs/uploads/{uuid}",type="registry"}[1h])
+        )
+      )
+      /
+      2
+  - record: gitlab_component_apdex:weight:score_1h
+    labels:
+      component: server_route_blob_upload_uuid_deletes
+      tier: sv
+      type: registry
+    expr: |
+      sum by (environment,stage) (
+        rate(registry_http_request_duration_seconds_bucket{le="+Inf",method=~"delete",route="/v2/{name}/blobs/uploads/{uuid}",type="registry"}[1h])
+      )
+  - record: gitlab_component_ops:rate_1h
+    labels:
+      component: server_route_blob_upload_uuid_deletes
+      tier: sv
+      type: registry
+    expr: |
+      sum by (environment,stage) (
+        rate(registry_http_request_duration_seconds_count{method=~"delete",route="/v2/{name}/blobs/uploads/{uuid}"}[1h])
+      )
+  - record: gitlab_component_apdex:success:rate_1h
+    labels:
+      component: server_route_blob_upload_uuid_reads
+      tier: sv
+      type: registry
+    expr: |
+      (
+        sum by (environment,stage) (
+          rate(registry_http_request_duration_seconds_bucket{le="1",method=~"get|head",route="/v2/{name}/blobs/uploads/{uuid}",type="registry"}[1h])
+        )
+        +
+        sum by (environment,stage) (
+          rate(registry_http_request_duration_seconds_bucket{le="2.5",method=~"get|head",route="/v2/{name}/blobs/uploads/{uuid}",type="registry"}[1h])
+        )
+      )
+      /
+      2
+  - record: gitlab_component_apdex:weight:score_1h
+    labels:
+      component: server_route_blob_upload_uuid_reads
+      tier: sv
+      type: registry
+    expr: |
+      sum by (environment,stage) (
+        rate(registry_http_request_duration_seconds_bucket{le="+Inf",method=~"get|head",route="/v2/{name}/blobs/uploads/{uuid}",type="registry"}[1h])
+      )
+  - record: gitlab_component_ops:rate_1h
+    labels:
+      component: server_route_blob_upload_uuid_reads
+      tier: sv
+      type: registry
+    expr: |
+      sum by (environment,stage) (
+        rate(registry_http_request_duration_seconds_count{method=~"get|head",route="/v2/{name}/blobs/uploads/{uuid}"}[1h])
+      )
+  - record: gitlab_component_apdex:success:rate_1h
+    labels:
+      component: server_route_blob_upload_uuid_writes
+      tier: sv
+      type: registry
+    expr: |
+      (
+        sum by (environment,stage) (
+          rate(registry_http_request_duration_seconds_bucket{le="25",method=~"put|patch|post",route="/v2/{name}/blobs/uploads/{uuid}",type="registry"}[1h])
+        )
+        +
+        sum by (environment,stage) (
+          rate(registry_http_request_duration_seconds_bucket{le="60",method=~"put|patch|post",route="/v2/{name}/blobs/uploads/{uuid}",type="registry"}[1h])
+        )
+      )
+      /
+      2
+  - record: gitlab_component_apdex:weight:score_1h
+    labels:
+      component: server_route_blob_upload_uuid_writes
+      tier: sv
+      type: registry
+    expr: |
+      sum by (environment,stage) (
+        rate(registry_http_request_duration_seconds_bucket{le="+Inf",method=~"put|patch|post",route="/v2/{name}/blobs/uploads/{uuid}",type="registry"}[1h])
+      )
+  - record: gitlab_component_ops:rate_1h
+    labels:
+      component: server_route_blob_upload_uuid_writes
+      tier: sv
+      type: registry
+    expr: |
+      sum by (environment,stage) (
+        rate(registry_http_request_duration_seconds_count{method=~"put|patch|post",route="/v2/{name}/blobs/uploads/{uuid}"}[1h])
       )
   - record: gitlab_component_apdex:success:rate_1h
     labels:
@@ -1627,11 +2047,11 @@ groups:
     expr: |
       (
         sum by (environment,stage) (
-          rate(registry_http_request_duration_seconds_bucket{le="2.5",route!~"/v2/{name}/manifests/{reference}",type="registry"}[6h])
+          rate(registry_http_request_duration_seconds_bucket{le="2.5",route!~"/v2/{name}/blobs/uploads/{uuid}|/v2/{name}/manifests/{reference}",type="registry"}[6h])
         )
         +
         sum by (environment,stage) (
-          rate(registry_http_request_duration_seconds_bucket{le="25",route!~"/v2/{name}/manifests/{reference}",type="registry"}[6h])
+          rate(registry_http_request_duration_seconds_bucket{le="25",route!~"/v2/{name}/blobs/uploads/{uuid}|/v2/{name}/manifests/{reference}",type="registry"}[6h])
         )
       )
       /
@@ -1643,7 +2063,7 @@ groups:
       type: registry
     expr: |
       sum by (environment,stage) (
-        rate(registry_http_request_duration_seconds_bucket{le="+Inf",route!~"/v2/{name}/manifests/{reference}",type="registry"}[6h])
+        rate(registry_http_request_duration_seconds_bucket{le="+Inf",route!~"/v2/{name}/blobs/uploads/{uuid}|/v2/{name}/manifests/{reference}",type="registry"}[6h])
       )
   - record: gitlab_component_ops:rate_6h
     labels:
@@ -1670,6 +2090,111 @@ groups:
         0 * group by(environment,stage) (
           gitlab_component_ops:rate_6h{component="registry_server",tier="sv",type="registry"}
         )
+      )
+  - record: gitlab_component_apdex:success:rate_6h
+    labels:
+      component: server_route_blob_upload_uuid_deletes
+      tier: sv
+      type: registry
+    expr: |
+      (
+        sum by (environment,stage) (
+          rate(registry_http_request_duration_seconds_bucket{le="2.5",method=~"delete",route="/v2/{name}/blobs/uploads/{uuid}",type="registry"}[6h])
+        )
+        +
+        sum by (environment,stage) (
+          rate(registry_http_request_duration_seconds_bucket{le="5",method=~"delete",route="/v2/{name}/blobs/uploads/{uuid}",type="registry"}[6h])
+        )
+      )
+      /
+      2
+  - record: gitlab_component_apdex:weight:score_6h
+    labels:
+      component: server_route_blob_upload_uuid_deletes
+      tier: sv
+      type: registry
+    expr: |
+      sum by (environment,stage) (
+        rate(registry_http_request_duration_seconds_bucket{le="+Inf",method=~"delete",route="/v2/{name}/blobs/uploads/{uuid}",type="registry"}[6h])
+      )
+  - record: gitlab_component_ops:rate_6h
+    labels:
+      component: server_route_blob_upload_uuid_deletes
+      tier: sv
+      type: registry
+    expr: |
+      sum by (environment,stage) (
+        rate(registry_http_request_duration_seconds_count{method=~"delete",route="/v2/{name}/blobs/uploads/{uuid}"}[6h])
+      )
+  - record: gitlab_component_apdex:success:rate_6h
+    labels:
+      component: server_route_blob_upload_uuid_reads
+      tier: sv
+      type: registry
+    expr: |
+      (
+        sum by (environment,stage) (
+          rate(registry_http_request_duration_seconds_bucket{le="1",method=~"get|head",route="/v2/{name}/blobs/uploads/{uuid}",type="registry"}[6h])
+        )
+        +
+        sum by (environment,stage) (
+          rate(registry_http_request_duration_seconds_bucket{le="2.5",method=~"get|head",route="/v2/{name}/blobs/uploads/{uuid}",type="registry"}[6h])
+        )
+      )
+      /
+      2
+  - record: gitlab_component_apdex:weight:score_6h
+    labels:
+      component: server_route_blob_upload_uuid_reads
+      tier: sv
+      type: registry
+    expr: |
+      sum by (environment,stage) (
+        rate(registry_http_request_duration_seconds_bucket{le="+Inf",method=~"get|head",route="/v2/{name}/blobs/uploads/{uuid}",type="registry"}[6h])
+      )
+  - record: gitlab_component_ops:rate_6h
+    labels:
+      component: server_route_blob_upload_uuid_reads
+      tier: sv
+      type: registry
+    expr: |
+      sum by (environment,stage) (
+        rate(registry_http_request_duration_seconds_count{method=~"get|head",route="/v2/{name}/blobs/uploads/{uuid}"}[6h])
+      )
+  - record: gitlab_component_apdex:success:rate_6h
+    labels:
+      component: server_route_blob_upload_uuid_writes
+      tier: sv
+      type: registry
+    expr: |
+      (
+        sum by (environment,stage) (
+          rate(registry_http_request_duration_seconds_bucket{le="25",method=~"put|patch|post",route="/v2/{name}/blobs/uploads/{uuid}",type="registry"}[6h])
+        )
+        +
+        sum by (environment,stage) (
+          rate(registry_http_request_duration_seconds_bucket{le="60",method=~"put|patch|post",route="/v2/{name}/blobs/uploads/{uuid}",type="registry"}[6h])
+        )
+      )
+      /
+      2
+  - record: gitlab_component_apdex:weight:score_6h
+    labels:
+      component: server_route_blob_upload_uuid_writes
+      tier: sv
+      type: registry
+    expr: |
+      sum by (environment,stage) (
+        rate(registry_http_request_duration_seconds_bucket{le="+Inf",method=~"put|patch|post",route="/v2/{name}/blobs/uploads/{uuid}",type="registry"}[6h])
+      )
+  - record: gitlab_component_ops:rate_6h
+    labels:
+      component: server_route_blob_upload_uuid_writes
+      tier: sv
+      type: registry
+    expr: |
+      sum by (environment,stage) (
+        rate(registry_http_request_duration_seconds_count{method=~"put|patch|post",route="/v2/{name}/blobs/uploads/{uuid}"}[6h])
       )
   - record: gitlab_component_apdex:success:rate_6h
     labels:
@@ -1792,6 +2317,33 @@ groups:
   - record: gitlab_component_service:mapping
     labels:
       component: registry_server
+      global_aggregation: "no"
+      regional_aggregation: "yes"
+      service_aggregation: "yes"
+      tier: sv
+      type: registry
+    expr: "1"
+  - record: gitlab_component_service:mapping
+    labels:
+      component: server_route_blob_upload_uuid_deletes
+      global_aggregation: "no"
+      regional_aggregation: "yes"
+      service_aggregation: "yes"
+      tier: sv
+      type: registry
+    expr: "1"
+  - record: gitlab_component_service:mapping
+    labels:
+      component: server_route_blob_upload_uuid_reads
+      global_aggregation: "no"
+      regional_aggregation: "yes"
+      service_aggregation: "yes"
+      tier: sv
+      type: registry
+    expr: "1"
+  - record: gitlab_component_service:mapping
+    labels:
+      component: server_route_blob_upload_uuid_writes
       global_aggregation: "no"
       regional_aggregation: "yes"
       service_aggregation: "yes"

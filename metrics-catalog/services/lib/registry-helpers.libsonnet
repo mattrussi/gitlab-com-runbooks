@@ -38,9 +38,64 @@ local customRouteSLIs = [
     satisfiedThreshold: 1,
     toleratedThreshold: 2.5,
     route: '/v2/{name}/manifests/{reference}',
-    // POST and PATCH are currently unused, but to avoid ignoring them if they
-    // were introduced, we include them here.
+    // POST and PATCH are currently not part of the spec, but to avoid ignoring
+    // them if they were introduced, we include them here.
     methods: ['put', 'delete', 'post', 'patch'],
+  },
+  {
+    name: 'server_route_blob_upload_uuid_writes',
+    description: |||
+      Write requests (PUT or PATCH) for the registry blob upload endpoints.
+
+      PUT is used to complete the upload specified by uuid, optionally appending
+      the body as the final chunk.
+
+      PATCH is used to upload a chunk of data for the specified upload.
+    |||,
+    monitoringThresholds: {
+      apdexScore: 0.97,
+    },
+    satisfiedThreshold: 25,
+    toleratedThreshold: 60,
+    route: '/v2/{name}/blobs/uploads/{uuid}',
+    // POST is currently not part of the spec, but to avoid ignoring it if it was
+    // introduced, we include it here.
+    methods: ['put', 'patch', 'post'],
+  },
+  {
+    name: 'server_route_blob_upload_uuid_deletes',
+    description: |||
+      Delete requests for the registry blob upload endpoints.
+
+      Used to cancel outstanding upload processes, releasing associated
+      resources.
+    |||,
+    monitoringThresholds: {
+      apdexScore: 0.997,
+    },
+    satisfiedThreshold: 2.5,
+    toleratedThreshold: 5,
+    route: '/v2/{name}/blobs/uploads/{uuid}',
+    methods: ['delete'],
+  },
+  {
+    name: 'server_route_blob_upload_uuid_reads',
+    description: |||
+      Read requests (GET) for the registry blob upload endpoints.
+
+      GET is used to retrieve the current status of a resumable upload.
+
+      This is currently not used on GitLab.com.
+    |||,
+    monitoringThresholds: {
+      apdexScore: 0.997,
+    },
+    satisfiedThreshold: 1,
+    toleratedThreshold: 2.5,
+    route: '/v2/{name}/blobs/uploads/{uuid}',
+    // HEAD is currently not part of the spec, but to avoid ignoring it
+    // if it was introduced, we include it here.
+    methods: ['get', 'head'],
   },
 ];
 
