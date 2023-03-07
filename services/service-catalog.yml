@@ -1882,3 +1882,19 @@ services:
       monitors:
         primary_grafana_dashboard: internal-api-main/internal-api-overview
         sentry_slug: gitlab/gitlabcom/?query=program%3A%22rails%22
+
+  - name: switchboard
+    friendly_name: Switchboard
+    tier: sv
+    teams:
+      - dedicated
+    label: Switchboard
+    owner: dedicated
+    technical:
+      project:
+        - https://gitlab.com/gitlab-com/gl-infra/gitlab-dedicated/switchboard
+      documents:
+        architecture: https://gitlab.com/gitlab-com/gl-infra/gitlab-dedicated/team/-/blob/main/architecture/Architecture.md#managing-gitlab-dedicated
+      logging:
+        - name: Rails
+          permalink: https://eu-central-1.console.aws.amazon.com/cloudwatch/home?region=eu-central-1#logsV2:log-groups/log-group/production-switchboard
