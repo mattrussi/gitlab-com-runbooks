@@ -139,6 +139,7 @@ metricsCatalog.serviceDefinition({
 
     rule_evaluation: {
       userImpacting: false,
+      severity: 's3',
       featureCategory: 'not_owned',
       description: |||
         This SLI monitors Prometheus recording rule evaluations. Recording rule evalution failures are considered to be
