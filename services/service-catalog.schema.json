@@ -1,6 +1,6 @@
 {
   "$schema": "http://json-schema.org/draft-07/schema#",
-  "$id": "https://gitlab.com/gitlab-com/runbooks/-/blob/master/services/service-catalog-schema.json",
+  "$id": "https://gitlab.com/gitlab-com/runbooks/-/blob/master/services/service-catalog.schema.json",
   "title": "GitLab Service Catalog Schema",
   "description": "A catalog of services and teams for GitLab SaaS platforms",
   "type": "object",

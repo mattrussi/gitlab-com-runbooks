@@ -3,7 +3,7 @@
 require 'yaml'
 require_relative '../lib/jsonnet_wrapper'
 
-# For basic type validations, use JSON Schema in https://gitlab.com/gitlab-com/runbooks/-/blob/master/services/service-catalog-schema.json
+# For basic type validations, use JSON Schema in https://gitlab.com/gitlab-com/runbooks/-/blob/master/services/service-catalog.schema.json
 class ValidateServiceMappings
   DEFAULT_RAW_CATALOG_PATH = File.join(__dir__, "..", "services", "raw-catalog.jsonnet")
 

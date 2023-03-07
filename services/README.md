@@ -33,7 +33,7 @@ The service catalog adheres to [JSON Schema](https://json-schema.org/) specifica
 
 ### Modification
 
-To modify the service catalog format, edit [schema](service-catalog-schema.json) directly. Additional properties are disabled by default, please add new properties sparingly. For dynamic data, consider linking to single source of truth instead.
+To modify the service catalog format, edit [schema](service-catalog.schema.json) directly. Additional properties are disabled by default, please add new properties sparingly. For dynamic data, consider linking to single source of truth instead.
 
 Right now, versioning is not required. To avoid breaking changes, consider only adding new properties in a backwards compatible manner similar to semantic versioning specification. If a property is no longer needed, please add `DEPRECATED:` prefix to `description` annotation.
 

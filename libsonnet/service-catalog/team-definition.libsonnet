@@ -27,7 +27,7 @@ local productStageGroupValidator = validator.validator(
   'unknown stage group'
 );
 
-// For basic type validations, use JSON Schema in https://gitlab.com/gitlab-com/runbooks/-/blob/master/services/service-catalog-schema.json
+// For basic type validations, use JSON Schema in https://gitlab.com/gitlab-com/runbooks/-/blob/master/services/service-catalog.schema.json
 local teamValidator = validator.new({
   ignored_components: ignoredComponentsValidator,
   product_stage_group: productStageGroupValidator,

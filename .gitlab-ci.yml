@@ -344,7 +344,7 @@ validate-service-catalog-schema:
   script:
     - npm install
     - ./scripts/compile_jsonnet.rb ./services/raw-catalog.jsonnet > ./services/service_catalog.json
-    - npm run validate-service-catalog-schema -- -s ./services/service-catalog-schema.json -d ./services/service_catalog.json
+    - npm run validate-service-catalog-schema -- -s ./services/service-catalog.schema.json -d ./services/service_catalog.json
 
 validate-prom-rules:
   extends: .default-job-rules
@@ -382,7 +382,7 @@ test-service-catalog-schema:
   script:
     - npm install
     - ./scripts/compile_jsonnet.rb ./services/raw-catalog.jsonnet > ./services/service_catalog.json
-    - npm run test-service-catalog-schema -- -s ./services/service-catalog-schema.json -d ./services/service_catalog.json
+    - npm run test-service-catalog-schema -- -s ./services/service-catalog.schema.json -d ./services/service_catalog.json
 
 ensure_generated_content_up_to_date:
   extends: .default-job-rules
