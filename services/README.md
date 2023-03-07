@@ -62,3 +62,11 @@ When a failure occurs, address any error messages and push up changes to re-run 
 One of the benefits of JSON Schema is **optional support** for multiple [editors](https://json-schema.org/implementations.html#editors). If your preferred IDE is supported, follow setup instructions and edit `service-catalog.yml` and/or `teams.yml` as you normally would.
 
 After successful setup, the developer experience should be greatly improved with features such as code completion for properties, hover for annotations, and highlighting for validations. 🚀
+
+## Service Labels
+
+For each entry in the service catalog, a label is automatically created by the `reconcile_service_catalog_labels` job in CI when a service label does not already exist.
+
+The label name can be customized using the `label` field in the service catalog, which will automatically convert to scoped label, e.g. `Service::my-service`.
+
+The full list of service labels can be viewed under [group labels](https://gitlab.com/groups/gitlab-com/gl-infra/-/labels?search=Service%3A%3A&sort=created_desc).
