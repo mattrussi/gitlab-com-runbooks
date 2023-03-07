@@ -156,6 +156,7 @@ There are many entries missing from this list:
 | rails.mail_room               | /var/log/gitlab/mailroom/mail_room_json.log      | JSON             | pubsub-rails-inf        |
 | history.psql                  | /home/*-db/.psql_history                         |                  |                         |
 | history.irb                   | /var/log/irb_history/*.log                       |                  |                         |
+| migration.log                 | Sidekiq BatchedBackgroundMigration worker        | JSON.            | pubsub-sidekiq-inf      |
 
 ## How-to guides
 
