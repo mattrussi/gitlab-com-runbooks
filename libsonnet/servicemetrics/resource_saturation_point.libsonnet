@@ -13,7 +13,8 @@ local environmentLabels = labelTaxonomy.labelTaxonomy(
   labelTaxonomy.labels.environment |
   labelTaxonomy.labels.tier |
   labelTaxonomy.labels.service |
-  labelTaxonomy.labels.stage
+  labelTaxonomy.labels.stage |
+  labelTaxonomy.labels.shard
 );
 
 local defaultAlertingLabels =
