@@ -5,6 +5,16 @@ teams:
   engagement_policy:
   oncall_schedule: https://gitlab.pagerduty.com/schedules#P22HQSG
 
+# Infra Reliability Teams
+- name: infra_observability
+  url: https://about.gitlab.com/handbook/engineering/infrastructure/team/reliability/observability.html
+  slack_alerts_channel: g_infra_observability_alerts
+  alerts:
+  - thanos
+- name: infra_foundations
+  url: https://about.gitlab.com/handbook/engineering/infrastructure/team/reliability/foundations.html
+  slack_alerts_channel: g_infra_foundations_alerts
+
 - name: create
   url: https://about.gitlab.com/handbook/engineering/development/dev/create/
   manager_slug: dsatcher
