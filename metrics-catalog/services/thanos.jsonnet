@@ -287,10 +287,11 @@ metricsCatalog.serviceDefinition({
     // This component represents rule evaluations in
     // Prometheus and thanos ruler
     local rulerSelector = thanosServiceSelector {
-      job: 'thanos-ruler',  // TODO: FIXME: https://gitlab.com/gitlab-com/gl-infra/reliability/-/issues/17377
+      job: 'thanos-ruler',
     },
     rule_evaluation: {
       staticLabels: staticLabels,
+      severity: 's3',
       userImpacting: false,
       featureCategory: 'not_owned',
       description: |||
@@ -332,7 +333,7 @@ metricsCatalog.serviceDefinition({
         selector=rulerSelector,
       ),
 
-      significantLabels: ['fqdn', 'pod', 'rule_group'],
+      significantLabels: ['pod', 'rule_group'],
     },
 
     thanos_memcached: {
