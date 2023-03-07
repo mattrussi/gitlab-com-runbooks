@@ -202,13 +202,7 @@ basic.dashboard(
       query=|||
         sum(
           rate(
-            registry_notifications_events_total{environment="$environment", cluster=~"$cluster", stage="$stage", exported_type="Errors"}[$__interval]
-          )
-        )
-        /
-        sum(
-          rate(
-            registry_notifications_events_total{environment="$environment", cluster=~"$cluster", stage="$stage", exported_type="Events"}[$__interval]
+            registry_notifications_errors_total{environment="$environment", cluster=~"$cluster", stage="$stage"}[$__interval]
           )
         )
       |||,
