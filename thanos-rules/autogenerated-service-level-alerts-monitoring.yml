@@ -1025,6 +1025,106 @@ groups:
       gitlab_component_ops:rate_5m{component="prometheus_alert_sender",monitor="global",stage="main",type="monitoring"} offset 1h
       unless
       gitlab_component_ops:rate_5m{component="prometheus_alert_sender",monitor="global",stage="main",type="monitoring"}
+  - alert: MonitoringServiceRuleEvaluationApdexSLOViolation
+    for: 2m
+    annotations:
+      title: The rule_evaluation SLI of the monitoring service (`{{ $labels.stage
+        }}` stage) has an apdex violating SLO
+      description: |
+        This SLI monitors Prometheus recording rule evaluations. Recording rule evalution failures are considered to be service failures.
+
+        Prometheus rule groups are evaluating recording rules in a group in sequence at an interval. If the recording of all rules in a groups exceeds the interval for the group, we could be missing data points in the group.
+
+        If a group fails often, we should split it up or improve query performance.
+
+        To see which rules are often not meeting their target. Look at the SLI-details. The `rule_group` label will contain information about the slow group.
+
+        Currently the apdex value is {{ $value | humanizePercentage }}.
+      grafana_dashboard_id: monitoring-main/monitoring-overview
+      grafana_dashboard_link: https://dashboards.gitlab.net/d/monitoring-main/monitoring-overview?from=now-6h/m&to=now-1m/m&var-environment={{
+        $labels.environment }}&var-stage={{ $labels.stage }}
+      grafana_min_zoom_hours: "6"
+      grafana_panel_id: "2667244350"
+      grafana_variables: environment,stage
+      runbook: docs/monitoring/README.md
+    labels:
+      aggregation: component
+      alert_class: slo_violation
+      alert_type: symptom
+      feature_category: not_owned
+      pager: pagerduty
+      rules_domain: general
+      severity: s2
+      sli_type: apdex
+      slo_alert: "yes"
+      user_impacting: "no"
+      window: 1h
+    expr: |
+      (
+        (
+          gitlab_component_apdex:ratio_1h{component="rule_evaluation",monitor="global",type="monitoring"}
+          < (1 - 14.4 * 0.001000)
+        )
+        and
+        (
+          gitlab_component_apdex:ratio_5m{component="rule_evaluation",monitor="global",type="monitoring"}
+          < (1 - 14.4 * 0.001000)
+        )
+      )
+      and on(env,environment,tier,type,stage,component)
+      (
+        sum by(env,environment,tier,type,stage,component) (gitlab_component_ops:rate_1h{component="rule_evaluation",monitor="global",type="monitoring"}) >= 1
+      )
+  - alert: MonitoringServiceRuleEvaluationApdexSLOViolation
+    for: 2m
+    annotations:
+      title: The rule_evaluation SLI of the monitoring service (`{{ $labels.stage
+        }}` stage) has an apdex violating SLO
+      description: |
+        This SLI monitors Prometheus recording rule evaluations. Recording rule evalution failures are considered to be service failures.
+
+        Prometheus rule groups are evaluating recording rules in a group in sequence at an interval. If the recording of all rules in a groups exceeds the interval for the group, we could be missing data points in the group.
+
+        If a group fails often, we should split it up or improve query performance.
+
+        To see which rules are often not meeting their target. Look at the SLI-details. The `rule_group` label will contain information about the slow group.
+
+        Currently the apdex value is {{ $value | humanizePercentage }}.
+      grafana_dashboard_id: monitoring-main/monitoring-overview
+      grafana_dashboard_link: https://dashboards.gitlab.net/d/monitoring-main/monitoring-overview?from=now-6h/m&to=now-1m/m&var-environment={{
+        $labels.environment }}&var-stage={{ $labels.stage }}
+      grafana_min_zoom_hours: "6"
+      grafana_panel_id: "2667244350"
+      grafana_variables: environment,stage
+      runbook: docs/monitoring/README.md
+    labels:
+      aggregation: component
+      alert_class: slo_violation
+      alert_type: symptom
+      feature_category: not_owned
+      pager: pagerduty
+      rules_domain: general
+      severity: s2
+      sli_type: apdex
+      slo_alert: "yes"
+      user_impacting: "no"
+      window: 6h
+    expr: |
+      (
+        (
+          gitlab_component_apdex:ratio_6h{component="rule_evaluation",monitor="global",type="monitoring"}
+          < (1 - 6 * 0.001000)
+        )
+        and
+        (
+          gitlab_component_apdex:ratio_30m{component="rule_evaluation",monitor="global",type="monitoring"}
+          < (1 - 6 * 0.001000)
+        )
+      )
+      and on(env,environment,tier,type,stage,component)
+      (
+        sum by(env,environment,tier,type,stage,component) (gitlab_component_ops:rate_6h{component="rule_evaluation",monitor="global",type="monitoring"}) >= 0.16667
+      )
   - alert: MonitoringServiceRuleEvaluationErrorSLOViolation
     for: 2m
     annotations:
@@ -1032,6 +1132,12 @@ groups:
         }}` stage) has an error rate violating SLO
       description: |
         This SLI monitors Prometheus recording rule evaluations. Recording rule evalution failures are considered to be service failures.
+
+        Prometheus rule groups are evaluating recording rules in a group in sequence at an interval. If the recording of all rules in a groups exceeds the interval for the group, we could be missing data points in the group.
+
+        If a group fails often, we should split it up or improve query performance.
+
+        To see which rules are often not meeting their target. Look at the SLI-details. The `rule_group` label will contain information about the slow group.
 
         Currently the error-rate is {{ $value | humanizePercentage }}.
       grafana_dashboard_id: monitoring-main/monitoring-overview
@@ -1055,7 +1161,7 @@ groups:
       severity: s2
       sli_type: error
       slo_alert: "yes"
-      user_impacting: "yes"
+      user_impacting: "no"
       window: 1h
     expr: |
       (
@@ -1081,6 +1187,12 @@ groups:
       description: |
         This SLI monitors Prometheus recording rule evaluations. Recording rule evalution failures are considered to be service failures.
 
+        Prometheus rule groups are evaluating recording rules in a group in sequence at an interval. If the recording of all rules in a groups exceeds the interval for the group, we could be missing data points in the group.
+
+        If a group fails often, we should split it up or improve query performance.
+
+        To see which rules are often not meeting their target. Look at the SLI-details. The `rule_group` label will contain information about the slow group.
+
         Currently the error-rate is {{ $value | humanizePercentage }}.
       grafana_dashboard_id: monitoring-main/monitoring-overview
       grafana_dashboard_link: https://dashboards.gitlab.net/d/monitoring-main/monitoring-overview?from=now-6h/m&to=now-1m/m&var-environment={{
@@ -1103,7 +1215,7 @@ groups:
       severity: s2
       sli_type: error
       slo_alert: "yes"
-      user_impacting: "yes"
+      user_impacting: "no"
       window: 6h
     expr: |
       (
@@ -1129,6 +1241,12 @@ groups:
       description: |
         This SLI monitors Prometheus recording rule evaluations. Recording rule evalution failures are considered to be service failures.
 
+        Prometheus rule groups are evaluating recording rules in a group in sequence at an interval. If the recording of all rules in a groups exceeds the interval for the group, we could be missing data points in the group.
+
+        If a group fails often, we should split it up or improve query performance.
+
+        To see which rules are often not meeting their target. Look at the SLI-details. The `rule_group` label will contain information about the slow group.
+
         This alert signifies that the SLI is reporting a cessation of traffic; the signal is present, but is zero.
       grafana_dashboard_id: monitoring-main/monitoring-overview
       grafana_dashboard_link: https://dashboards.gitlab.net/d/monitoring-main/monitoring-overview?from=now-6h/m&to=now-1m/m&var-environment={{
@@ -1151,7 +1269,7 @@ groups:
       severity: s2
       sli_type: ops
       slo_alert: "no"
-      user_impacting: "yes"
+      user_impacting: "no"
     expr: |
       gitlab_component_ops:rate_30m{component="rule_evaluation",monitor="global",stage="main",type="monitoring"} == 0
       and
@@ -1163,6 +1281,12 @@ groups:
         }}` stage) has not reported any traffic in the past 30m
       description: |
         This SLI monitors Prometheus recording rule evaluations. Recording rule evalution failures are considered to be service failures.
+
+        Prometheus rule groups are evaluating recording rules in a group in sequence at an interval. If the recording of all rules in a groups exceeds the interval for the group, we could be missing data points in the group.
+
+        If a group fails often, we should split it up or improve query performance.
+
+        To see which rules are often not meeting their target. Look at the SLI-details. The `rule_group` label will contain information about the slow group.
 
         This alert signifies that the SLI was previously reporting traffic, but is no longer - the signal is absent.
 
@@ -1188,7 +1312,7 @@ groups:
       severity: s2
       sli_type: ops
       slo_alert: "no"
-      user_impacting: "yes"
+      user_impacting: "no"
     expr: |
       gitlab_component_ops:rate_5m{component="rule_evaluation",monitor="global",stage="main",type="monitoring"} offset 1h
       unless

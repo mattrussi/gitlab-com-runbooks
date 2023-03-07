@@ -2,6 +2,7 @@ local metricsCatalog = import 'servicemetrics/metrics.libsonnet';
 local histogramApdex = metricsCatalog.histogramApdex;
 local gaugeMetric = metricsCatalog.gaugeMetric;
 local rateMetric = metricsCatalog.rateMetric;
+local errorCounterApdex = metricsCatalog.errorCounterApdex;
 local toolingLinks = import 'toolinglinks/toolinglinks.libsonnet';
 local googleLoadBalancerComponents = import './lib/google_load_balancer_components.libsonnet';
 local maturityLevels = import 'service-maturity/levels.libsonnet';
@@ -285,22 +286,30 @@ metricsCatalog.serviceDefinition({
 
     // This component represents rule evaluations in
     // Prometheus and thanos ruler
+    local rulerSelector = thanosServiceSelector {
+      job: 'thanos-ruler',  // TODO: FIXME: https://gitlab.com/gitlab-com/gl-infra/reliability/-/issues/17377
+    },
     rule_evaluation: {
       staticLabels: staticLabels,
-      userImpacting: true,
+      userImpacting: false,
       featureCategory: 'not_owned',
       description: |||
         This SLI monitors Prometheus recording rule evaluations. Recording rule evalution failures are considered to be
-        service failures.
-      |||,
+        service failures. Warnings are also considered failures.
 
-      local selector = thanosServiceSelector {
-        job: 'thanos-ruler',  // TODO: FIXME: https://gitlab.com/gitlab-com/gl-infra/reliability/-/issues/17377
-      },
+        Rule groups are evaluating recording rules in a group in sequence at an interval.
+        If the recording of all rules in a groups exceeds the interval for the group, we could be
+        missing data points in the group.
+
+        If a group is slow often, we should split it up or improve query performance
+
+        To see which rules are often not meeting their target. Look at the SLI-details. The `rule_group` label will contain
+        information about the slow group.
+      |||,
 
       requestRate: rateMetric(
         counter='prometheus_rule_evaluations_total',
-        selector=selector
+        selector=rulerSelector
       ),
 
       // Importantly for thanos, we include Thanos Warnings as errors
@@ -310,14 +319,20 @@ metricsCatalog.serviceDefinition({
       errorRate: combined([
         rateMetric(
           counter='prometheus_rule_evaluation_failures_total',
-          selector=selector
+          selector=rulerSelector
         ),
         rateMetric(
           counter='thanos_rule_evaluation_with_warnings_total'
         ),
       ]),
 
-      significantLabels: ['fqdn', 'pod'],
+      apdex: errorCounterApdex(
+        'prometheus_rule_group_iterations_missed_total',
+        'prometheus_rule_group_iterations_total',
+        selector=rulerSelector,
+      ),
+
+      significantLabels: ['fqdn', 'pod', 'rule_group'],
     },
 
     thanos_memcached: {
