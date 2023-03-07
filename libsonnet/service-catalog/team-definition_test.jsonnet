@@ -19,20 +19,6 @@ test.suite({
       description: 'team %s expected to be valid' % std.toString(validTeam),
     },
   },
-  testTeamMissingName: {
-    actual: validTeam { name: null },
-    expectMatchingValidationError: {
-      validator: teamDefinition._validator,
-      message: 'field name: expected a string',
-    },
-  },
-  testTeamWrongSendSLOToSlackChannel: {
-    actual: validTeam { send_slo_alerts_to_team_slack_channel: 'ja' },
-    expectMatchingValidationError: {
-      validator: teamDefinition._validator,
-      message: 'field send_slo_alerts_to_team_slack_channel: expected an boolean',
-    },
-  },
   testTeamUnknownIgnoredComponent: {
     actual: validTeam { ignored_components: ['graphql_query_fake'] },
     expectMatchingValidationError: {

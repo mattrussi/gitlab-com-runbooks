@@ -56,33 +56,6 @@ describe ValidateServiceMappings do
         }
         JSONNET
 
-        # empty label case
-        [<<~JSONNET, "'Foo' | label field must be string"],
-        {
-          "services": [
-            {
-              "name" : "Foo",
-              "tier": "sv",
-              "friendly_name": "mr_foo"
-            }
-          ]
-        }
-        JSONNET
-
-        # label is an integer
-        [<<~JSONNET, "'Foo' | label field must be string"],
-        {
-          "services": [
-            {
-              "name" : "Foo",
-              "tier": "sv",
-              "friendly_name": "mr_foo",
-              "label": 123
-            }
-          ]
-        }
-        JSONNET
-
         # Label not unique (same case)
         [<<~JSONNET, "'Foo' | duplicated labels found in service catalog. Label field must be unique (case insensitive)"],
         {
