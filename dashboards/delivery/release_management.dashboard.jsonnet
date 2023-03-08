@@ -303,7 +303,7 @@ basic.dashboard(
         colorMode='value',
         graphMode='area',
         textMode='value_and_name',
-        displayName='S1/S2',
+        displayName='S1/S2 pressure',
       )
       .addTarget(
         prometheus.target(
@@ -324,7 +324,7 @@ basic.dashboard(
         colorMode='value',
         graphMode='area',
         textMode='value_and_name',
-        displayName='Total',
+        displayName='Total pressure',
       )
       .addTarget(
         prometheus.target(
