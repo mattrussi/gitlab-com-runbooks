@@ -12,4 +12,3 @@ All standups that you are a part of will be listed there.  There should also be 
 a new standup for a team or other purpose.  They have many helpful templates if you wish to have a starting point.
 
 The existing Geekbot [SRE Daily standup](https://app.geekbot.com/dashboard/standup/25831/view) as of February 2023 that goes to [#sre_standup](https://gitlab.slack.com/archives/C027DF6UCSJ) is managed by the infra managers.
-
