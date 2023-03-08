@@ -2,9 +2,11 @@
   "scripts": {
     "markdownlint": "markdownlint --config .markdownlint.yml",
     "validate-service-catalog-schema": "ajv validate --spec draft7 --errors=json",
-    "test-service-catalog-schema": "ajv test --spec draft7 --errors=json --valid"
+    "test-service-catalog-schema": "ajv test --spec draft7 --errors=json --valid",
+    "generate-service-catalog-schema-docs": "jsonschema2md -d services -o services/docs -n -x - -h false"
   },
   "dependencies": {
+    "@adobe/jsonschema2md": "^7.1.5",
     "ajv-cli": "^5.0.0",
     "markdownlint-cli": "0.33.0"
   },
