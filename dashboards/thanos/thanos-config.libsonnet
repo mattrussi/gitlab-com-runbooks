@@ -40,7 +40,7 @@
   },
   receive:: null,  // We don't handle receive endpoints yet. Fix in https://gitlab.com/gitlab-com/gl-infra/reliability/-/issues/17115
   rule+:: {
-    selector: 'job=~"thanos"',  // Fix: see https://gitlab.com/gitlab-com/gl-infra/reliability/-/issues/17377
+    selector: 'job="thanos-rule"',  // Fix: see https://gitlab.com/gitlab-com/gl-infra/reliability/-/issues/17377
     title: '%(prefix)sRule' % $.dashboard.prefix,
   },
   compact+:: {
