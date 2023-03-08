@@ -74,7 +74,7 @@ This command will pause while it waits for the approver to approve the request. 
 If the command is stopped or times out, but the request is approved, you don't need to request another approval.  Simply login and provide the approved request ID (output by the previous command, or find it in the web interface):
 
 ```shell
-tsh login --request-id=<request-id>
+tsh login --proxy=teleport.gprd.gitlab.net --request-id=<request-id>
 ```
 
 The request ID is shown in the output of `tsh login` when making the initial request, and can also be found attached to your request notification in `#infrastructure-lounge`.
