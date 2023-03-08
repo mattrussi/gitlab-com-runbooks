@@ -1311,7 +1311,7 @@ groups:
   - record: slo:max:hard:gitlab_component_saturation:ratio
     labels:
       component: gitaly_total_disk_space
-    expr: "0.85"
+    expr: "0.95"
   - record: slo:max:soft:gitlab_component_saturation:ratio
     labels:
       component: kube_container_cpu
@@ -1829,7 +1829,7 @@ groups:
     expr: "1"
   - record: gitlab_component_saturation_info
     labels:
-      capacity_planning_strategy: quantile95_1h
+      capacity_planning_strategy: exclude
       component: gitaly_total_disk_space
       horiz_scaling: "yes"
       quantile: max
