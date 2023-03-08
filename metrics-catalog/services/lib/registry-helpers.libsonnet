@@ -12,7 +12,7 @@ local customRouteSLIs = [
       a tag or digest. A HEAD request can also be issued to this endpoint to
       obtain resource information without receiving all data.
     |||,
-    monitoringThresholds: {
+    monitoringThresholds+: {
       apdexScore: 0.999,
     },
     satisfiedThreshold: 0.25,
@@ -32,7 +32,7 @@ local customRouteSLIs = [
       Delete the manifest identified by name and reference. Note that a manifest
       can only be deleted by digest.
     |||,
-    monitoringThresholds: {
+    monitoringThresholds+: {
       apdexScore: 0.999,
     },
     satisfiedThreshold: 1,
@@ -52,7 +52,7 @@ local customRouteSLIs = [
 
       PATCH is used to upload a chunk of data for the specified upload.
     |||,
-    monitoringThresholds: {
+    monitoringThresholds+: {
       apdexScore: 0.97,
     },
     satisfiedThreshold: 25,
@@ -70,7 +70,7 @@ local customRouteSLIs = [
       Used to cancel outstanding upload processes, releasing associated
       resources.
     |||,
-    monitoringThresholds: {
+    monitoringThresholds+: {
       apdexScore: 0.997,
     },
     satisfiedThreshold: 2.5,
@@ -87,7 +87,7 @@ local customRouteSLIs = [
 
       This is currently not used on GitLab.com.
     |||,
-    monitoringThresholds: {
+    monitoringThresholds+: {
       apdexScore: 0.997,
     },
     satisfiedThreshold: 1,
@@ -96,6 +96,7 @@ local customRouteSLIs = [
     // HEAD is currently not part of the spec, but to avoid ignoring it
     // if it was introduced, we include it here.
     methods: ['get', 'head'],
+    trafficCessationAlertConfig: false,
   },
 ];
 
@@ -134,20 +135,13 @@ local sliFromConfig(config) =
       config.toleratedThreshold
     else
       null;
-  local monitoringThresholds =
-    if std.objectHas(config, 'monitoringThresholds') then
-      config.monitoringThresholds
-    else
-      {};
-  defaultRegistrySLIProperties {
-    description: config.description,
+  defaultRegistrySLIProperties + config {
     apdex: registryApdex(selector, config.satisfiedThreshold, toleratedThreshold),
     requestRate: rateMetric(
       counter='registry_http_request_duration_seconds_count',
       selector=selector
     ),
     significantLabels: ['method', 'migration_path'],
-    monitoringThresholds+: monitoringThresholds,
   };
 
 local customRouteApdexes =
