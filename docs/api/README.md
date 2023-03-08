@@ -44,6 +44,7 @@
 * [Git Storage Servers](../gitaly/storage-servers.md)
 * [Kubernetes-Agent Basic Troubleshooting](../kas/kubernetes-agent-basic-troubleshooting.md)
 * [Kubernetes-Agent Disable Integrations](../kas/kubernetes-agent-disable-integrations.md)
+* [Helm Upgrade is Stuck](../kube/helm-upgrade-stuck.md)
 * [Ad hoc observability tools on Kubernetes nodes](../kube/k8s-adhoc-observability.md)
 * [../kube/k8s-oncall-setup.md](../kube/k8s-oncall-setup.md)
 * [Kubernetes](../kube/kubernetes.md)
