@@ -5,6 +5,15 @@ tiers:
   - name: db
   - name: inf
 
+# For each entry in services, a label is automatically created by the
+# `reconcile_service_catalog_labels` job in CI when a service label does not
+# already exist.
+#
+# The label name can be customized using the `label` field, which will
+# automatically convert to scoped label, e.g. `Service::my-service`.
+#
+# The full list of service labels can be viewed under
+# https://gitlab.com/groups/gitlab-com/gl-infra/-/labels?search=Service%3A%3A&sort=created_desc.
 services:
   - name: api
     friendly_name: GitLab API
