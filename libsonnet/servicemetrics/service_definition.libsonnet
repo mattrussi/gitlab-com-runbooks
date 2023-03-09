@@ -1,7 +1,7 @@
 local kubeLabelSelectors = import 'kube_label_selectors.libsonnet';
 local multiburnExpression = import 'mwmbr/expression.libsonnet';
-local serviceLevelIndicatorDefinition = import 'service_level_indicator_definition.libsonnet';
 local maturityLevels = import 'service-maturity/levels.libsonnet';
+local serviceLevelIndicatorDefinition = import 'service_level_indicator_definition.libsonnet';
 
 // For now we assume that services are provisioned on vms and not kubernetes
 local provisioningDefaults = { vms: true, kubernetes: false };
