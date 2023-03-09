@@ -20,18 +20,58 @@ case with resource locking and two CI jobs started executing against the same
 cluster at the same time.  Remember that the jobs that run are located on our
 ops instance.
 
-Ensure that the last pipeline that failed contained sensible changes that are
-safe to be rolled back.  This is highly dependent on the change itself and what
-may go wrong if we rollback.  Example, if an Auto-Deploy failed, it's likely
-that the rollout did complete, but Helm could not update it's state.  In
-situations like this, rolling back is safe.  To reconcile the production
-environment, we'd then need to retry the deployment job after remediation.  If,
-for example, a configuration change was the result, validate that it is safe to
-roll the config change back.
+Ensure that all deployments or objects have reconciled and that the cluster
+isn't suffering some other failure.  What we want to avoid is attempting to fix
+a problem that we make worse because the root cause is falsely identified.  The
+easiest way to check for this is to ensure that all Deployments are up-to-date.
+This can be done by printing the `.status` object of the Deployment, example,
+`kubectl get deploy gitlab-gitlab-pages -o json | jq .status`.  Observe the
+following:
+
+* Conditions `Available` and `Progressing` to ensure their status is `True`.
+* Ensure the number of `updatedReplicas` and `availableReplicas` matches or is
+  at least very close
+  * Mind that with HPA's these values may differ by a tiny amount (usually
+    within 10% of the `replicas` value.
+
+If any of the above look suspicious considering a differing remediation option
+pending the investigation into the target Deployment that appears unhealthy.
 
 ## Remediation
 
+1. Validate that no deployments or configuration changes are attempting to be
+   rolled out
+   * Check for any running CI jobs that are targeting this cluster
 1. Log into the cluster
-1. Rollback the stuck release: `helm rollback -n gitlab gitlab`
-1. Validate that the next `helm status` indicates the deploy is complete
+   * Ensure all Deployments indicate they are not stuck (as described above)
+1. Identify the "failed" release `helm list --all --namespace gitlab`
+   * Replace the appropriate namespace as needed
+   * Document the noted Revision Number
+1. Find the secret object associated with the failed release and delete it
+   * Example: The `gitlab-cny` release with revision `1234` is stuck, we'd run
+     the following command: `kubectl delete secret --namespace gitlab-cny
+     sh.helm.release.v1.gitlab-cny.v1234`
+   * Replace the namespace and target secret as necessary
+1. Validate that the `helm status` indicates the deploy is complete
 1. Continue remediation pending the situation that brought you here
+
+## Post Remediation
+
+**Note:** Deleting the secret will not impact what is running on the cluster.
+Instead this only impacts Helm state.  In this case, we are removing what Helm
+thought the cluster should be running and instead Helm will think we're minus 1
+revision.  Thus it is important to understand what Helm will show the next time
+a configuration change or Auto-Deploy may look like in the eyes of Helm come
+around the next attempted Dry Run.  For example:
+
+* If a configuration change was rolled back, that config change will remain on
+  the cluster, but the next Dry Run execute by Helm will think that config
+  change may need to be rolled out again.
+* If an auto-deploy got stuck, the next time a Helm Dry Run executes, it'll
+  think that GitLab may need to be upgraded
+
+In all situations, we can observe the actual deployment objects that need to be
+questioned for validation.  It is recommended to try to see that Helm is in a
+safe place prior to ending calling a situation remediated.  This may mean
+rerunning the latest failed CI job.  This will usually detect a "change," but
+upon closer inspection, no changes end up deployed.
