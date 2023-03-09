@@ -78,7 +78,7 @@ local validateAndApplyServiceDefaults(service) =
       if std.objectHas(service, 'contractualThresholds') then
         serviceWithDefaults.skippedMaturityCriteria
       else
-        serviceWithDefaults.skippedMaturityCriteria + ({'SLA calculations driven from SLO metrics': 'Service is not user facing'})
+        serviceWithDefaults.skippedMaturityCriteria + ({ 'SLA calculations driven from SLO metrics': 'Service is not user facing' })
     ),
   };
 
