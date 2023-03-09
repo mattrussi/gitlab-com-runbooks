@@ -5,7 +5,6 @@ local rateMetric = metricsCatalog.rateMetric;
 local errorCounterApdex = metricsCatalog.errorCounterApdex;
 local toolingLinks = import 'toolinglinks/toolinglinks.libsonnet';
 local googleLoadBalancerComponents = import './lib/google_load_balancer_components.libsonnet';
-local maturityLevels = import 'service-maturity/levels.libsonnet';
 local kubeLabelSelectors = metricsCatalog.kubeLabelSelectors;
 
 metricsCatalog.serviceDefinition({

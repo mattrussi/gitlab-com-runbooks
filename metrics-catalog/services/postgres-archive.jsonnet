@@ -2,8 +2,6 @@ local metricsCatalog = import 'servicemetrics/metrics.libsonnet';
 local rateMetric = metricsCatalog.rateMetric;
 local combined = metricsCatalog.combined;
 local toolingLinks = import 'toolinglinks/toolinglinks.libsonnet';
-local maturityLevels = import 'service-maturity/levels.libsonnet';
-
 
 local selector = { type: 'postgres-archive', tier: 'db' };
 
@@ -61,7 +59,7 @@ metricsCatalog.serviceDefinition({
       ],
     },
   },
-  skippedMaturityCriteria: maturityLevels.skip({
+  skippedMaturityCriteria: {
     'Developer guides exist in developer documentation': 'postgres-archive is an infrastructure component, developers do not interact with it',
-  }),
+  },
 })

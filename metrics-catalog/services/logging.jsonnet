@@ -2,7 +2,6 @@ local metricsCatalog = import 'servicemetrics/metrics.libsonnet';
 local rateMetric = metricsCatalog.rateMetric;
 local derivMetric = metricsCatalog.derivMetric;
 local googleLoadBalancerComponents = import './lib/google_load_balancer_components.libsonnet';
-local maturityLevels = import 'service-maturity/levels.libsonnet';
 local kubeLabelSelectors = metricsCatalog.kubeLabelSelectors;
 local toolingLinks = import 'toolinglinks/toolinglinks.libsonnet';
 
@@ -245,7 +244,7 @@ metricsCatalog.serviceDefinition({
       serviceAggregation: false,
     },
   },
-  skippedMaturityCriteria: maturityLevels.skip({
+  skippedMaturityCriteria: {
     'Service exists in the dependency graph': 'The logging platform consumes logs via fluentd, but does not interact directly with any other services',
-  }),
+  },
 })

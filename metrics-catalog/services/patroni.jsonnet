@@ -3,7 +3,6 @@ local rateMetric = metricsCatalog.rateMetric;
 local histogramApdex = metricsCatalog.histogramApdex;
 local patroniHelpers = import './lib/patroni-helpers.libsonnet';
 local patroniArchetype = import 'service-archetypes/patroni-archetype.libsonnet';
-local maturityLevels = import 'service-maturity/levels.libsonnet';
 
 metricsCatalog.serviceDefinition(
   patroniArchetype(
@@ -86,9 +85,9 @@ metricsCatalog.serviceDefinition(
     },
   )
   {
-    skippedMaturityCriteria: maturityLevels.skip({
+    skippedMaturityCriteria: {
       'Developer guides exist in developer documentation': 'patroni is an infrastructure component, developers do not interact with it',
-    }),
+    },
   }
   + patroniHelpers.gitlabcomObservabilityToolingForPatroni('patroni')
 )

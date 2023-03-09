@@ -2,7 +2,6 @@ local metricsCatalog = import 'servicemetrics/metrics.libsonnet';
 local rateMetric = metricsCatalog.rateMetric;
 local toolingLinks = import 'toolinglinks/toolinglinks.libsonnet';
 local kubeLabelSelectors = metricsCatalog.kubeLabelSelectors;
-local maturityLevels = import 'service-maturity/levels.libsonnet';
 
 metricsCatalog.serviceDefinition({
   type: 'nginx',
@@ -74,8 +73,8 @@ metricsCatalog.serviceDefinition({
       ],
     },
   },
-  skippedMaturityCriteria: maturityLevels.skip({
+  skippedMaturityCriteria: {
     'Developer guides exist in developer documentation': 'Application logic does not interact with nginx',
     'Structured logs available in Kibana': 'Logs from nginx are not ingested to ElasticSearch due to volume. Usually, workhorse logs will cover the same ground. Besides, the logs are also available in Stackdriver',
-  }),
+  },
 })

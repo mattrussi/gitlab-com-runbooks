@@ -1,5 +1,4 @@
 local googleLoadBalancerComponents = import './lib/google_load_balancer_components.libsonnet';
-local maturityLevels = import 'service-maturity/levels.libsonnet';
 local metricsCatalog = import 'servicemetrics/metrics.libsonnet';
 local toolingLinks = import 'toolinglinks/toolinglinks.libsonnet';
 
@@ -40,8 +39,8 @@ metricsCatalog.serviceDefinition({
       ]
     ),
   },
-  skippedMaturityCriteria: maturityLevels.skip({
+  skippedMaturityCriteria: {
     'Structured logs available in Kibana': 'The logs are available in Stackdriver.',
     'Service exists in the dependency graph': 'Platuml is a is a stateless web application that generates UML diagrams on the fly. The rendered markdown points to the platuml server in the frontends. It does not interact with any declared services',
-  }),
+  },
 })

@@ -3,7 +3,6 @@ local toolingLinks = import 'toolinglinks/toolinglinks.libsonnet';
 local histogramApdex = metricsCatalog.histogramApdex;
 local rateMetric = metricsCatalog.rateMetric;
 local combined = metricsCatalog.combined;
-local maturityLevels = import 'service-maturity/levels.libsonnet';
 
 metricsCatalog.serviceDefinition({
   type: 'sentry',
@@ -111,8 +110,8 @@ metricsCatalog.serviceDefinition({
     },
 
   },
-  skippedMaturityCriteria: maturityLevels.skip({
+  skippedMaturityCriteria: {
     'Structured logs available in Kibana': 'We are migrating our self-managed Sentry instance to the hosted one. For more information: https://gitlab.com/gitlab-com/gl-infra/reliability/-/issues/13963. Besides, Sentry logs are also available in Stackdriver.',
     'Service exists in the dependency graph': 'Sentry is an independent internal observability tool',
-  }),
+  },
 })

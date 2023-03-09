@@ -3,7 +3,6 @@ local histogramApdex = metricsCatalog.histogramApdex;
 local rateMetric = metricsCatalog.rateMetric;
 local toolingLinks = import 'toolinglinks/toolinglinks.libsonnet';
 local customRateQuery = metricsCatalog.customRateQuery;
-local maturityLevels = import 'service-maturity/levels.libsonnet';
 local kubeLabelSelectors = metricsCatalog.kubeLabelSelectors;
 
 metricsCatalog.serviceDefinition({
@@ -152,8 +151,8 @@ metricsCatalog.serviceDefinition({
       ],
     },
   },
-  skippedMaturityCriteria: maturityLevels.skip({
+  skippedMaturityCriteria: {
     'Developer guides exist in developer documentation': 'Application logic does not interact with kube',
     'Service exists in the dependency graph': 'This service is managed by GKE at the moment. It does not interfact directly with any other services',
-  }),
+  },
 })

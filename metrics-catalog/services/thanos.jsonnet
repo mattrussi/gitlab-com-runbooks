@@ -5,7 +5,6 @@ local rateMetric = metricsCatalog.rateMetric;
 local errorCounterApdex = metricsCatalog.errorCounterApdex;
 local toolingLinks = import 'toolinglinks/toolinglinks.libsonnet';
 local googleLoadBalancerComponents = import './lib/google_load_balancer_components.libsonnet';
-local maturityLevels = import 'service-maturity/levels.libsonnet';
 local kubeLabelSelectors = metricsCatalog.kubeLabelSelectors;
 local combined = metricsCatalog.combined;
 
@@ -380,7 +379,7 @@ metricsCatalog.serviceDefinition({
     },
   },
 
-  skippedMaturityCriteria: maturityLevels.skip({
+  skippedMaturityCriteria: {
     'Service exists in the dependency graph': 'Thanos is an independent internal observability tool. It fetches metrics from other services, but does not interact with them, functionally',
-  }),
+  },
 })
