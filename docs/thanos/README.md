@@ -58,7 +58,6 @@
 * [A survival guide for SREs to working with Redis at GitLab](../redis/redis-survival-guide-for-sres.md)
 * [../redis/redis.md](../redis/redis.md)
 * [Container Registry Database Index Bloat](../registry/db-index-bloat.md)
-* [../registry/migration-failure-scenarios.md](../registry/migration-failure-scenarios.md)
 * [GET Monitoring Setup](../staging-ref/get-monitoring-setup.md)
 * [Vault Secrets Management](../vault/vault.md)
 * [Diagnostic Reports](../web/diagnostic-reports.md)

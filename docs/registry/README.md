@@ -37,8 +37,6 @@
 * [Container Registry Database Index Bloat](db-index-bloat.md)
 * [Container Registry database post-deployment migrations](db-post-deployment-migrations.md)
 * [gitlab-registry.md](gitlab-registry.md)
-* [migration-failure-scenarios.md](migration-failure-scenarios.md)
-* [Container Registry Migration Phase 2](migration-phase2.md)
 * [High Number of Overdue Online GC Tasks](online-gc-high-overdue-tasks.md)
 * [Deleting a project manually](../uncategorized/delete-projects-manually.md)
 * [Tweeting Guidelines](../uncategorized/tweeting-guidelines.md)
