@@ -2,7 +2,6 @@ local metricsCatalog = import 'servicemetrics/metrics.libsonnet';
 local histogramApdex = metricsCatalog.histogramApdex;
 local rateMetric = metricsCatalog.rateMetric;
 local toolingLinks = import 'toolinglinks/toolinglinks.libsonnet';
-local maturityLevels = import 'service-maturity/levels.libsonnet';
 local kubeLabelSelectors = metricsCatalog.kubeLabelSelectors;
 
 local woodhouseLogs = [
@@ -113,7 +112,7 @@ metricsCatalog.serviceDefinition({
       toolingLinks: woodhouseLogs,
     },
   },
-  skippedMaturityCriteria: maturityLevels.skip({
+  skippedMaturityCriteria: {
     'Structured logs available in Kibana': 'Log volume is very low; tooling links to StackDriver provided which is sufficient for the purposes',
-  }),
+  },
 })

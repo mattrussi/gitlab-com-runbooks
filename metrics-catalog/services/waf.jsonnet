@@ -1,6 +1,5 @@
 local metricsCatalog = import 'servicemetrics/metrics.libsonnet';
 local rateMetric = metricsCatalog.rateMetric;
-local maturityLevels = import 'service-maturity/levels.libsonnet';
 
 metricsCatalog.serviceDefinition({
   type: 'waf',
@@ -66,8 +65,8 @@ metricsCatalog.serviceDefinition({
       significantLabels: [],
     },
   },
-  skippedMaturityCriteria: maturityLevels.skip({
+  skippedMaturityCriteria: {
     'Developer guides exist in developer documentation': 'WAF is an infrastructure component, powered by Cloudflare',
     'Structured logs available in Kibana': 'Logs from CloudFlare are pushed to a GCS bucket by CloudFlare, and not ingested to ElasticSearch due to volume.  See https://gitlab.com/gitlab-com/runbooks/-/blob/master/docs/cloudflare/logging.md for alternatives',
-  }),
+  },
 })

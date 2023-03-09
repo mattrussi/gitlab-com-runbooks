@@ -1,6 +1,7 @@
 local kubeLabelSelectors = import 'kube_label_selectors.libsonnet';
 local multiburnExpression = import 'mwmbr/expression.libsonnet';
 local serviceLevelIndicatorDefinition = import 'service_level_indicator_definition.libsonnet';
+local maturityLevels = import 'service-maturity/levels.libsonnet';
 
 // For now we assume that services are provisioned on vms and not kubernetes
 local provisioningDefaults = { vms: true, kubernetes: false };
@@ -73,6 +74,12 @@ local validateAndApplyServiceDefaults(service) =
       [sliName]: prepareComponent(service.serviceLevelIndicators[sliName]).initServiceLevelIndicatorWithName(sliName, sliInheritedDefaults)
       for sliName in std.objectFields(service.serviceLevelIndicators)
     },
+    skippedMaturityCriteria: maturityLevels.skip(
+      if std.objectHas(service, 'contractualThresholds') then
+        serviceWithDefaults.skippedMaturityCriteria
+      else
+        serviceWithDefaults.skippedMaturityCriteria + ({'SLA calculations driven from SLO metrics': 'Service is not user facing'})
+    ),
   };
 
 local serviceDefinition(service) =

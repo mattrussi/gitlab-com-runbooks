@@ -3,7 +3,6 @@ local histogramApdex = metricsCatalog.histogramApdex;
 local rateMetric = metricsCatalog.rateMetric;
 local googleLoadBalancerComponents = import './lib/google_load_balancer_components.libsonnet';
 local toolingLinks = import 'toolinglinks/toolinglinks.libsonnet';
-local maturityLevels = import 'service-maturity/levels.libsonnet';
 
 metricsCatalog.serviceDefinition({
   type: 'camoproxy',
@@ -70,7 +69,7 @@ metricsCatalog.serviceDefinition({
       ],
     },
   },
-  skippedMaturityCriteria: maturityLevels.skip({
+  skippedMaturityCriteria: {
     'Service exists in the dependency graph': 'Camoproxy does not interact directly with any declared services in our system',
-  }),
+  },
 })
