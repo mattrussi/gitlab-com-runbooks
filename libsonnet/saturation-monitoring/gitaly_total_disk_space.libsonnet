@@ -19,6 +19,7 @@ local resourceSaturationPoint = (import 'servicemetrics/resource_saturation_poin
     |||,
     grafana_dashboard_uid: 'sat_gitaly_total_disk_space',
     resourceLabels: ['shard'],
+    capacityPlanningStrategy: 'exclude',
     query: |||
       1 - (
         sum by (%(aggregationLabels)s) (
@@ -32,7 +33,7 @@ local resourceSaturationPoint = (import 'servicemetrics/resource_saturation_poin
     |||,
     slos: {
       soft: 0.8,
-      hard: 0.85,
+      hard: 0.95,
     },
   }),
 }
