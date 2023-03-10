@@ -215,6 +215,8 @@ teams:
   - graphql_query
 - name: compliance
   product_stage_group: compliance
+  slack_error_budget_channel: g_govern_compliance
+  send_error_budget_weekly_to_slack: true
   ignored_components:
   - graphql_query
 - name: composition_analysis
