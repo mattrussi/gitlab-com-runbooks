@@ -381,6 +381,34 @@ services:
         grafana_folder:
         primary_grafana_dashboard:
 
+  - name: zoekt
+    tier: inf
+    friendly_name: Global Code Search
+    label: Zoekt
+    owner: global_search
+    technical:
+      project:
+      documents:
+        design:
+        architecture: https://docs.gitlab.com/ee/architecture/blueprints/code_search_with_zoekt/
+        readiness_review: https://gitlab.com/gitlab-com/gl-infra/readiness/-/merge_requests/146
+        sre_guide:
+        developer_guide:
+        service: []
+        security:
+      dependencies:
+        - service:
+      sub_components:
+      logging:
+        - name: Rails
+          permalink: https://log.gprd.gitlab.net/goto/15b83f5a97e93af2496072d4aa53105f
+        - name: Sidekiq
+          permalink: https://log.gprd.gitlab.net/goto/d7e4791e63d2a2b192514ac821c9f14f
+    observability:
+      monitors:
+        grafana_folder:
+        primary_grafana_dashboard:
+
   - name: web
     tier: sv
     friendly_name: GitLab.com Web

@@ -320,6 +320,10 @@ Selected elastic documents and resources:
 
 [elasticsearch-integration-in-gitlab.md](docs/elastic/elasticsearch-integration-in-gitlab.md)
 
+### Zoekt integration in Gitlab (indexing code, BETA)
+
+[zoekt-integration-in-gitlab.md](docs/zoekt/)
+
 ### Logging
 
 Selected logging documents and resources:
