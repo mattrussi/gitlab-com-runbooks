@@ -282,11 +282,11 @@ local processExporter = import 'gitlab-dashboards/process_exporter.libsonnet';
                            label_replace(redis_memory_used_rss_bytes{%(selector)s}, "memtype", "rss","","")
                            or
                            label_replace(redis_memory_used_bytes{%(selector)s}, "memtype", "used","","")
-                         ) by (type, stage, environment, instance)
-                         / on(instance) group_left
+                         ) by (type, stage, environment, fqdn)
+                         / on (fqdn) group_left
                          node_memory_MemTotal_bytes{%(selector)s}
                        ||| % formatConfig,
-                       legendFormat='{{ pod }} {{ instance }}',
+                       legendFormat='{{ pod }} {{ fqdn }}',
                        interval='30s',
                        intervalFactor=1,
                      )
