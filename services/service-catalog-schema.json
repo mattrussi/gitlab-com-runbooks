@@ -441,6 +441,7 @@
       ]
     }
   },
+  "$comment": "The `required` keyword has been omitted for top-level properties due to multiple YAML files sharing same JSON schema",
   "properties": {
     "teams": {
       "description": "The list of teams",
