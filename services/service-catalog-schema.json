@@ -14,9 +14,13 @@
         },
         "url": {
           "description": "The handbook URL of the team",
-          "type": [
-            "string",
-            "null"
+          "oneOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
           ]
         },
         "product_stage_group": {
@@ -69,30 +73,46 @@
         },
         "manager_slug": {
           "description": "DEPRECATED: The manager's slug for the team",
-          "type": [
-            "string",
-            "null"
+          "oneOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
           ]
         },
         "engagement_policy": {
           "description": "DEPRECATED: The engagement policy of the team",
-          "type": [
-            "string",
-            "null"
+          "oneOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
           ]
         },
         "oncall_schedule": {
           "description": "DEPRECATED: The on-call schedule of the team",
-          "type": [
-            "string",
-            "null"
+          "oneOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
           ]
         },
         "slack_channel": {
           "description": "DEPRECATED: The Slack channel of the team",
-          "type": [
-            "string",
-            "null"
+          "oneOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
           ]
         }
       },
@@ -154,67 +174,95 @@
           "properties": {
             "project": {
               "description": "The list of project links for the service",
-              "type": [
-                "array",
-                "null"
-              ],
-              "items": {
-                "type": "string"
-              },
-              "uniqueItems": true
+              "oneOf": [
+                {
+                  "type": "array",
+                  "items": {
+                    "type": "string"
+                  },
+                  "uniqueItems": true
+                },
+                {
+                  "type": "null"
+                }
+              ]
             },
             "documents": {
               "type": "object",
               "properties": {
                 "design": {
                   "description": "The link to design document for the service",
-                  "type": [
-                    "string",
-                    "null"
+                  "oneOf": [
+                    {
+                      "type": "string"
+                    },
+                    {
+                      "type": "null"
+                    }
                   ]
                 },
                 "architecture": {
                   "description": "The link to architecture document for the service",
-                  "type": [
-                    "string",
-                    "null"
+                  "oneOf": [
+                    {
+                      "type": "string"
+                    },
+                    {
+                      "type": "null"
+                    }
                   ]
                 },
                 "readiness_review": {
                   "description": "The link to production readiness review document for the service",
-                  "type": [
-                    "string",
-                    "null"
+                  "oneOf": [
+                    {
+                      "type": "string"
+                    },
+                    {
+                      "type": "null"
+                    }
                   ]
                 },
                 "sre_guide": {
                   "description": "The link to SRE guide document for the service",
-                  "type": [
-                    "string",
-                    "null"
+                  "oneOf": [
+                    {
+                      "type": "string"
+                    },
+                    {
+                      "type": "null"
+                    }
                   ]
                 },
                 "developer_guide": {
                   "description": "The link to developer guide document for the service",
-                  "type": [
-                    "string",
-                    "null"
+                  "oneOf": [
+                    {
+                      "type": "string"
+                    },
+                    {
+                      "type": "null"
+                    }
                   ]
                 },
                 "service": {
                   "description": "The list of links for the service",
-                  "type": [
-                    "array",
-                    "null"
-                  ],
-                  "items": {
-                    "type": "string"
-                  },
-                  "uniqueItems": true
+                  "oneOf": [
+                    {
+                      "type": "array",
+                      "items": {
+                        "type": "string"
+                      },
+                      "uniqueItems": true
+                    },
+                    {
+                      "type": "null"
+                    }
+                  ]
                 },
                 "security": {
                   "description": "The link to security document for the service",
-                  "anyOf": [
+                  "oneOf": [
                     {
                       "type": "string"
                     },
@@ -228,7 +276,7 @@
             },
             "logging": {
               "description": "The list of logging links for the service",
-              "anyOf": [
+              "oneOf": [
                 {
                   "type": "array",
                   "minItems": 1,
@@ -237,16 +285,24 @@
                     "properties": {
                       "name": {
                         "description": "The name of logging link for the service",
-                        "type": [
-                          "string",
-                          "null"
+                        "oneOf": [
+                          {
+                            "type": "string"
+                          },
+                          {
+                            "type": "null"
+                          }
                         ]
                       },
                       "permalink": {
                         "description": "The URL of logging link for the service",
-                        "type": [
-                          "string",
-                          "null"
+                        "oneOf": [
+                          {
+                            "type": "string"
+                          },
+                          {
+                            "type": "null"
+                          }
                         ]
                       }
                     },
@@ -268,16 +324,24 @@
                     "properties": {
                       "service": {
                         "description": "DEPRECATED: The name of the dependency for the service",
-                        "type": [
-                          "string",
-                          "null"
+                        "oneOf": [
+                          {
+                            "type": "string"
+                          },
+                          {
+                            "type": "null"
+                          }
                         ]
                       },
                       "type": {
                         "description": "DEPRECATED: The type of the dependency for the service",
-                        "type": [
-                          "string",
-                          "null"
+                        "oneOf": [
+                          {
+                            "type": "string"
+                          },
+                          {
+                            "type": "null"
+                          }
                         ]
                       }
                     },
@@ -326,7 +390,7 @@
           "type": "object",
           "properties": {
             "monitors": {
-              "anyOf": [
+              "oneOf": [
                 {
                   "type": "object",
                   "properties": {
@@ -344,23 +408,35 @@
                     },
                     "grafana_folder": {
                       "description": "The Grafana folder for the service",
-                      "type": [
-                        "string",
-                        "null"
+                      "oneOf": [
+                        {
+                          "type": "string"
+                        },
+                        {
+                          "type": "null"
+                        }
                       ]
                     },
                     "sentry_slug": {
                       "description": "The Sentry slug for the service",
-                      "type": [
-                        "string",
-                        "null"
+                      "oneOf": [
+                        {
+                          "type": "string"
+                        },
+                        {
+                          "type": "null"
+                        }
                       ]
                     },
                     "gitlab_dashboard": {
                       "description": "The GitLab dashboard for the service",
-                      "type": [
-                        "string",
-                        "null"
+                      "oneOf": [
+                        {
+                          "type": "string"
+                        },
+                        {
+                          "type": "null"
+                        }
                       ]
                     }
                   },
@@ -372,7 +448,7 @@
               ]
             },
             "alerts": {
-              "anyOf": [
+              "oneOf": [
                 {
                   "type": "array",
                   "items": {
@@ -380,9 +456,13 @@
                     "properties": {
                       "alert_link": {
                         "description": "The link of the alert for a service",
-                        "type": [
-                          "string",
-                          "null"
+                        "oneOf": [
+                          {
+                            "type": "string"
+                          },
+                          {
+                            "type": "null"
+                          }
                         ]
                       }
                     },
