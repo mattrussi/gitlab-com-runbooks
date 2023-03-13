@@ -143,10 +143,8 @@
                 "overall_sla_weighting": {
                   "description": "The value to use as a weighted average to include the service in overall SLA",
                   "type": "integer"
-                },
-                "additionalProperties": false
-              },
-              "additionalProperties": false
+                }
+              }
             }
           },
           "additionalProperties": false
