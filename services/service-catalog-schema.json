@@ -50,7 +50,7 @@
         },
         "slack_error_budget_channel": {
           "description": "The name of the Slack channel to receive weekly error budget reports for the team. Must omit `#` prefix",
-          "anyOf": [
+          "oneOf": [
             {
               "type": "array",
               "items": {
