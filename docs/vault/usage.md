@@ -51,6 +51,7 @@ glsh vault proxy
 
 # In a new shell
 export VAULT_PROXY_ADDR="socks5://localhost:18200"
+export VAULT_ADDR="https://vault.ops.gke.gitlab.net"
 glsh vault login
 ```
 
