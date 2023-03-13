@@ -1,0 +1,31 @@
+groups:
+- name: thanos.rules
+  rules:
+  - alert: ThanosCompactHalted
+    annotations:
+      title: Thanos Compact has failed to run and is now halted.
+      description: >
+        Thanos Compact {{$labels.job}} has failed to run and now is halted.
+      runbooy: docs/monitoring/thanos-compact.md
+    expr: thanos_compact_halted{job=~"thanos-.+-compactor"} == 1
+    for: 5m
+    labels:
+      severity: s3
+      alert_type: symptom
+      team: reliability_observability
+
+  - alert: ThanosSidecarNoConnectionToStartedPrometheus
+    annotations:
+    title: Thanos Sidecar cannot access Prometheus, even though Prometheus seems healthy and has reloaded WAL.
+    description: >
+      Thanos Sidecar {{$labels.instance}} is unhealthy.
+    runbook: docs/monitoring/README.md
+    expr: |
+      thanos_sidecar_prometheus_up{job=~".*thanos-sidecar.*"} == 0
+      AND on (namespace, pod)
+      prometheus_tsdb_data_replay_duration_seconds != 0
+    for: 5m
+    labels:
+      severity: s3
+      alert_type: symptom
+      team: reliability_observability
