@@ -42,7 +42,7 @@ metricsCatalog.serviceDefinition({
         counter='registry_storage_action_seconds_count',
       ),
 
-      significantLabels: ['action', 'migration_path'],
+      significantLabels: ['action'],
     },
 
     workhorse_upload: {

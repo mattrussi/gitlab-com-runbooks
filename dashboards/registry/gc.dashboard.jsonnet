@@ -131,7 +131,7 @@ basic.dashboard(
     )
     .addTarget(
       promQuery.target(
-        'sum(increase(registry_storage_blob_upload_bytes_sum{environment="$environment", stage="$stage", migration_path="new"}[$__interval]))',
+        'sum(increase(registry_storage_blob_upload_bytes_sum{environment="$environment", stage="$stage"}[$__interval]))',
       )
     ),
     statPanel.new(

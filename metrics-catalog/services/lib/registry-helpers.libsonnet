@@ -141,7 +141,7 @@ local sliFromConfig(config) =
       counter='registry_http_request_duration_seconds_count',
       selector=selector
     ),
-    significantLabels: ['method', 'migration_path'],
+    significantLabels: ['method'],
   };
 
 local customRouteApdexes =

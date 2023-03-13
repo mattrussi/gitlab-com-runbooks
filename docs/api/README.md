@@ -68,8 +68,6 @@
 * [A survival guide for SREs to working with Redis at GitLab](../redis/redis-survival-guide-for-sres.md)
 * [Database Connection Pool Saturation](../registry/app-db-conn-pool-saturation.md)
 * [Container Registry database post-deployment migrations](../registry/db-post-deployment-migrations.md)
-* [../registry/migration-failure-scenarios.md](../registry/migration-failure-scenarios.md)
-* [Container Registry Migration Phase 2](../registry/migration-phase2.md)
 * [High Number of Overdue Online GC Tasks](../registry/online-gc-high-overdue-tasks.md)
 * [Sentry general admin troubleshooting](../sentry/sentry-admin.md)
 * [Managing Sentry in Kubernetes](../sentry/sentry-in-kube.md)
