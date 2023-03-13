@@ -21,8 +21,8 @@ groups:
       Thanos Sidecar {{$labels.instance}} is unhealthy.
     runbook: docs/monitoring/README.md
     expr: |
-      thanos_sidecar_prometheus_up{job=~".*thanos-sidecar.*"} == 0
-      AND on (namespace, pod)
+      thanos_sidecar_prometheus_up{job=~"gitlab-monitoring.*|prometheus-gitlab.*"} == 0 
+      AND on (cluster, namespace, pod) 
       prometheus_tsdb_data_replay_duration_seconds != 0
     for: 5m
     labels:
