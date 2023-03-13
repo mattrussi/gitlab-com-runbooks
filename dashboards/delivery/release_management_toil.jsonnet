@@ -5,6 +5,7 @@ local template = grafana.template;
 
 local numberOfAutoDeployJobRetriesQuery = 'sort_desc(sum(increase(delivery_webhooks_auto_deploy_job_retries[$__range])) by (project) != 0)';
 local numberOfAutoDeployJobRetriesByJobQuery = 'sort_desc(sum(increase(delivery_webhooks_auto_deploy_job_retries[$__range])) by (project, job_name) != 0)';
+local secondsLostBetweenRetriesQuery = 'sum by(job_name)(delivery_webhooks_auto_deploy_job_failure_lost_seconds)';
 
 local styles = [
   {  // remove decimal points
@@ -12,6 +13,7 @@ local styles = [
     pattern: 'Value',
     decimals: 0,
     mappingType: 1,
+    unit: 'm',
   },
 ];
 
@@ -24,6 +26,25 @@ basic.dashboard(
   includeStandardEnvironmentAnnotations=false,
   includeEnvironmentTemplate=false,
 )
+
+.addPanels(layout.singleRow([
+  basic.table(
+    title='Time lost between retries',
+    styles=styles,
+    queries=[secondsLostBetweenRetriesQuery],
+    sort=4,
+    transformations=[
+      {
+        id: 'organize',
+        options: {
+          excludeByName: {
+            Time: true,
+          },
+        },
+      },
+    ],
+  ),
+], rowHeight=8, startRow=0))
 
 .addPanels(layout.singleRow([
   basic.table(
