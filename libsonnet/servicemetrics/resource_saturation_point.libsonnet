@@ -58,15 +58,6 @@ local validateAndApplyDefaults(definition) =
     slos: {
       alertTriggerDuration: '5m',
     } + definition.slos,
-    capacityPlanningEnvironments: std.foldl(
-      function(memo, type)
-        local service = metricsCatalog.getService(type);
-        local serviceEnvironments = [service.capacityPlanningEnvironment];
-        std.set(memo + serviceEnvironments),
-      definition.appliesTo,
-      []
-    ),
-
   };
 
 local filterServicesForResource(definition, thanosSelfMonitoring) =
