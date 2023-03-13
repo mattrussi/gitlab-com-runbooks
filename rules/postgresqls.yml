@@ -451,9 +451,9 @@ groups:
       ) > 0.5
     for: 5m
     labels:
-      pager: pagerduty
-      severity: s2
+      severity: s3
       alert_type: cause
+      incident_project: gitlab.com/gitlab-com/gl-infra/production
       type: patroni
     annotations:
       title: PostgreSQL queries dominating total query time
