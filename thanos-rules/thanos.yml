@@ -1,5 +1,6 @@
 groups:
 - name: thanos.rules
+  partial_response_strategy: abort
   rules:
   - alert: ThanosCompactHalted
     annotations:
