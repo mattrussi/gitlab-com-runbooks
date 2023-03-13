@@ -6,7 +6,7 @@ groups:
       title: Thanos Compact has failed to run and is now halted.
       description: >
         Thanos Compact {{$labels.job}} has failed to run and now is halted.
-      runbooy: docs/monitoring/thanos-compact.md
+      runbook: docs/monitoring/thanos-compact.md
     expr: thanos_compact_halted{job=~"thanos-.+-compactor"} == 1
     for: 5m
     labels:
@@ -21,8 +21,8 @@ groups:
         Thanos Sidecar {{$labels.instance}} is unhealthy.
       runbook: docs/monitoring/README.md
     expr: |
-      thanos_sidecar_prometheus_up{job=~"gitlab-monitoring.*|prometheus-gitlab.*"} == 0 
-      AND on (cluster, namespace, pod) 
+      thanos_sidecar_prometheus_up{job=~"gitlab-monitoring.*|prometheus-gitlab.*"} == 0
+      AND on (cluster, namespace, pod)
       prometheus_tsdb_data_replay_duration_seconds != 0
     for: 5m
     labels:
