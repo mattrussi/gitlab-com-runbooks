@@ -1,4 +1,5 @@
 local metricsCatalog = import 'servicemetrics/metrics.libsonnet';
+local histogramApdex = metricsCatalog.histogramApdex;
 local rateMetric = metricsCatalog.rateMetric;
 local toolingLinks = import 'toolinglinks/toolinglinks.libsonnet';
 
@@ -48,6 +49,12 @@ metricsCatalog.serviceDefinition({
       local baseSelector = {
         type: 'kas',
       },
+
+      apdex: histogramApdex(
+        histogram='k8s_api_proxy_routing_duration_seconds_bucket',
+        selector=baseSelector,
+        satisfiedThreshold=5
+      ),
 
       requestRate: rateMetric(
         counter='grpc_server_handled_total',
