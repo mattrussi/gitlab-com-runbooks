@@ -50,6 +50,7 @@ eval "$(glsh vault init -)"
 glsh vault proxy
 
 # In a new shell
+eval "$(glsh vault init -)"
 export VAULT_PROXY_ADDR="socks5://localhost:18200"
 glsh vault login
 ```
