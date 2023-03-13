@@ -16,10 +16,10 @@ groups:
 
   - alert: ThanosSidecarNoConnectionToStartedPrometheus
     annotations:
-    title: Thanos Sidecar cannot access Prometheus, even though Prometheus seems healthy and has reloaded WAL.
-    description: >
-      Thanos Sidecar {{$labels.instance}} is unhealthy.
-    runbook: docs/monitoring/README.md
+      title: Thanos Sidecar cannot access Prometheus, even though Prometheus seems healthy and has reloaded WAL.
+      description: >
+        Thanos Sidecar {{$labels.instance}} is unhealthy.
+      runbook: docs/monitoring/README.md
     expr: |
       thanos_sidecar_prometheus_up{job=~"gitlab-monitoring.*|prometheus-gitlab.*"} == 0 
       AND on (cluster, namespace, pod) 
