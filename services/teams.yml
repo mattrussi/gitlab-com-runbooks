@@ -404,3 +404,8 @@ teams:
 
 - name: trust_and_safety
   url: https://about.gitlab.com/handbook/security/security-operations/trustandsafety/
+
+- name: anti-abuse
+  product_stage_group: anti-abuse
+  slack_error_budget_channel: g_anti-abuse
+  send_error_budget_weekly_to_slack: true
