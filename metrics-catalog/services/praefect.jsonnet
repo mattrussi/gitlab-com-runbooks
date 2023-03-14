@@ -54,16 +54,11 @@ metricsCatalog.serviceDefinition({
       ),
 
       requestRate: rateMetric(
-        counter='grpc_server_handled_total',
+        counter='gitaly_service_client_requests_total',
         selector=baseSelector
       ),
 
-      errorRate: rateMetric(
-        counter='grpc_server_handled_total',
-        selector=baseSelector {
-          grpc_code: { nre: '^(OK|NotFound|Unauthenticated|AlreadyExists|FailedPrecondition|Canceled)$' },
-        }
-      ),
+      errorRate: gitalyHelper.gitalyGRPCErrorRate(baseSelector),
 
       significantLabels: ['fqdn'],
 

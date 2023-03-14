@@ -296,7 +296,9 @@ groups:
       grafana_variables: environment,stage
       promql_template_1: |
         sum by (env,environment,tier,stage) (
-          rate(grpc_server_handled_total{environment="{{ $labels.environment }}",grpc_code!~"^(OK|NotFound|Unauthenticated|AlreadyExists|FailedPrecondition|Canceled)$",job="praefect",stage="{{ $labels.stage }}"}[5m])
+          label_replace(rate(gitaly_service_client_requests_total{environment="{{ $labels.environment }}",grpc_code!~"AlreadyExists|Canceled|DeadlineExceeded|FailedPrecondition|InvalidArgument|NotFound|OK|PermissionDenied|ResourceExhausted|Unauthenticated",job="praefect",stage="{{ $labels.stage }}"}[5m]), "_c", "0", "", "")
+          or
+          label_replace(rate(gitaly_service_client_requests_total{deadline_type!="limited",environment="{{ $labels.environment }}",grpc_code="DeadlineExceeded",job="praefect",stage="{{ $labels.stage }}"}[5m]), "_c", "1", "", "")
         )
       runbook: docs/praefect/README.md
     labels:
@@ -344,7 +346,9 @@ groups:
       grafana_variables: environment,stage
       promql_template_1: |
         sum by (env,environment,tier,stage) (
-          rate(grpc_server_handled_total{environment="{{ $labels.environment }}",grpc_code!~"^(OK|NotFound|Unauthenticated|AlreadyExists|FailedPrecondition|Canceled)$",job="praefect",stage="{{ $labels.stage }}"}[5m])
+          label_replace(rate(gitaly_service_client_requests_total{environment="{{ $labels.environment }}",grpc_code!~"AlreadyExists|Canceled|DeadlineExceeded|FailedPrecondition|InvalidArgument|NotFound|OK|PermissionDenied|ResourceExhausted|Unauthenticated",job="praefect",stage="{{ $labels.stage }}"}[5m]), "_c", "0", "", "")
+          or
+          label_replace(rate(gitaly_service_client_requests_total{deadline_type!="limited",environment="{{ $labels.environment }}",grpc_code="DeadlineExceeded",job="praefect",stage="{{ $labels.stage }}"}[5m]), "_c", "1", "", "")
         )
       runbook: docs/praefect/README.md
     labels:
@@ -392,7 +396,7 @@ groups:
       grafana_variables: environment,stage
       promql_template_1: |
         sum by (env,environment,tier,stage) (
-          rate(grpc_server_handled_total{environment="{{ $labels.environment }}",job="praefect",stage="{{ $labels.stage }}"}[5m])
+          rate(gitaly_service_client_requests_total{environment="{{ $labels.environment }}",job="praefect",stage="{{ $labels.stage }}"}[5m])
         )
       runbook: docs/praefect/README.md
     labels:
@@ -429,7 +433,7 @@ groups:
       grafana_variables: environment,stage
       promql_template_1: |
         sum by (env,environment,tier,stage) (
-          rate(grpc_server_handled_total{environment="{{ $labels.environment }}",job="praefect",stage="{{ $labels.stage }}"}[5m])
+          rate(gitaly_service_client_requests_total{environment="{{ $labels.environment }}",job="praefect",stage="{{ $labels.stage }}"}[5m])
         )
       runbook: docs/praefect/README.md
     labels:

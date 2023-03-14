@@ -87,7 +87,7 @@ groups:
       type: praefect
     expr: |
       sum by (environment,stage) (
-        rate(grpc_server_handled_total{job="praefect"}[1m])
+        rate(gitaly_service_client_requests_total{job="praefect"}[1m])
       )
   - record: gitlab_component_errors:rate
     labels:
@@ -97,7 +97,9 @@ groups:
     expr: |
       (
         sum by (environment,stage) (
-          rate(grpc_server_handled_total{grpc_code!~"^(OK|NotFound|Unauthenticated|AlreadyExists|FailedPrecondition|Canceled)$",job="praefect"}[1m])
+          label_replace(rate(gitaly_service_client_requests_total{grpc_code!~"AlreadyExists|Canceled|DeadlineExceeded|FailedPrecondition|InvalidArgument|NotFound|OK|PermissionDenied|ResourceExhausted|Unauthenticated",job="praefect"}[1m]), "_c", "0", "", "")
+          or
+          label_replace(rate(gitaly_service_client_requests_total{deadline_type!="limited",grpc_code="DeadlineExceeded",job="praefect"}[1m]), "_c", "1", "", "")
         )
       )
       or
@@ -219,7 +221,7 @@ groups:
       type: praefect
     expr: |
       sum by (environment,stage) (
-        rate(grpc_server_handled_total{job="praefect"}[5m])
+        rate(gitaly_service_client_requests_total{job="praefect"}[5m])
       )
   - record: gitlab_component_errors:rate_5m
     labels:
@@ -229,7 +231,9 @@ groups:
     expr: |
       (
         sum by (environment,stage) (
-          rate(grpc_server_handled_total{grpc_code!~"^(OK|NotFound|Unauthenticated|AlreadyExists|FailedPrecondition|Canceled)$",job="praefect"}[5m])
+          label_replace(rate(gitaly_service_client_requests_total{grpc_code!~"AlreadyExists|Canceled|DeadlineExceeded|FailedPrecondition|InvalidArgument|NotFound|OK|PermissionDenied|ResourceExhausted|Unauthenticated",job="praefect"}[5m]), "_c", "0", "", "")
+          or
+          label_replace(rate(gitaly_service_client_requests_total{deadline_type!="limited",grpc_code="DeadlineExceeded",job="praefect"}[5m]), "_c", "1", "", "")
         )
       )
       or
@@ -351,7 +355,7 @@ groups:
       type: praefect
     expr: |
       sum by (environment,stage) (
-        rate(grpc_server_handled_total{job="praefect"}[30m])
+        rate(gitaly_service_client_requests_total{job="praefect"}[30m])
       )
   - record: gitlab_component_errors:rate_30m
     labels:
@@ -361,7 +365,9 @@ groups:
     expr: |
       (
         sum by (environment,stage) (
-          rate(grpc_server_handled_total{grpc_code!~"^(OK|NotFound|Unauthenticated|AlreadyExists|FailedPrecondition|Canceled)$",job="praefect"}[30m])
+          label_replace(rate(gitaly_service_client_requests_total{grpc_code!~"AlreadyExists|Canceled|DeadlineExceeded|FailedPrecondition|InvalidArgument|NotFound|OK|PermissionDenied|ResourceExhausted|Unauthenticated",job="praefect"}[30m]), "_c", "0", "", "")
+          or
+          label_replace(rate(gitaly_service_client_requests_total{deadline_type!="limited",grpc_code="DeadlineExceeded",job="praefect"}[30m]), "_c", "1", "", "")
         )
       )
       or
@@ -483,7 +489,7 @@ groups:
       type: praefect
     expr: |
       sum by (environment,stage) (
-        rate(grpc_server_handled_total{job="praefect"}[1h])
+        rate(gitaly_service_client_requests_total{job="praefect"}[1h])
       )
   - record: gitlab_component_errors:rate_1h
     labels:
@@ -493,7 +499,9 @@ groups:
     expr: |
       (
         sum by (environment,stage) (
-          rate(grpc_server_handled_total{grpc_code!~"^(OK|NotFound|Unauthenticated|AlreadyExists|FailedPrecondition|Canceled)$",job="praefect"}[1h])
+          label_replace(rate(gitaly_service_client_requests_total{grpc_code!~"AlreadyExists|Canceled|DeadlineExceeded|FailedPrecondition|InvalidArgument|NotFound|OK|PermissionDenied|ResourceExhausted|Unauthenticated",job="praefect"}[1h]), "_c", "0", "", "")
+          or
+          label_replace(rate(gitaly_service_client_requests_total{deadline_type!="limited",grpc_code="DeadlineExceeded",job="praefect"}[1h]), "_c", "1", "", "")
         )
       )
       or
@@ -615,7 +623,7 @@ groups:
       type: praefect
     expr: |
       sum by (environment,stage) (
-        rate(grpc_server_handled_total{job="praefect"}[6h])
+        rate(gitaly_service_client_requests_total{job="praefect"}[6h])
       )
   - record: gitlab_component_errors:rate_6h
     labels:
@@ -625,7 +633,9 @@ groups:
     expr: |
       (
         sum by (environment,stage) (
-          rate(grpc_server_handled_total{grpc_code!~"^(OK|NotFound|Unauthenticated|AlreadyExists|FailedPrecondition|Canceled)$",job="praefect"}[6h])
+          label_replace(rate(gitaly_service_client_requests_total{grpc_code!~"AlreadyExists|Canceled|DeadlineExceeded|FailedPrecondition|InvalidArgument|NotFound|OK|PermissionDenied|ResourceExhausted|Unauthenticated",job="praefect"}[6h]), "_c", "0", "", "")
+          or
+          label_replace(rate(gitaly_service_client_requests_total{deadline_type!="limited",grpc_code="DeadlineExceeded",job="praefect"}[6h]), "_c", "1", "", "")
         )
       )
       or
