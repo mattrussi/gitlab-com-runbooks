@@ -107,6 +107,7 @@ metricsCatalog.serviceDefinition({
                 '^/([^/]+/){1,}[^/]+\\\\.git/git-upload-pack\\\\z',
                 '^/([^/]+/){1,}[^/]+\\\\.git/info/refs\\\\z',
                 '^/([^/]+/){1,}[^/]+\\\\.git/gitlab-lfs/objects/([0-9a-f]{64})/([0-9]+)\\\\z',
+                '^/-/cable\\\\z',
               ],
             },
           },
