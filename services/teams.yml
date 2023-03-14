@@ -386,6 +386,8 @@ teams:
   slack_alerts_channel: g_infra_observability_alerts
   alerts:
   - thanos
+  - ops
+  - gstg
 
 - name: reliability_foundations
   url: https://about.gitlab.com/handbook/engineering/infrastructure/team/reliability/foundations.html
