@@ -28,6 +28,7 @@
 * [Chef Vault Basics](../config_management/chef-vault.md)
 * [Chef Tips and Tools](../config_management/chef-workflow.md)
 * [customers.gitlab.com](../customersdot/api-key-rotation.md)
+* [What is Programmable Search Engine?](../docs.gitlab.com/programmableSearch.md)
 * [../elastic/elastic-cloud.md](../elastic/elastic-cloud.md)
 * [HAProxy management at GitLab](../frontend/haproxy.md)
 * [Gitaly token rotation](../gitaly/gitaly-token-rotation.md)
