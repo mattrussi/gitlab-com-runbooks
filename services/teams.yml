@@ -384,6 +384,7 @@ teams:
 - name: reliability_observability
   url: https://about.gitlab.com/handbook/engineering/infrastructure/team/reliability/observability.html
   slack_alerts_channel: g_infra_observability_alerts
+  send_slo_alerts_to_team_slack_channel: true
   alerts:
   - thanos
   - ops

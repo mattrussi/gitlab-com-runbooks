@@ -100,6 +100,8 @@ metricsCatalog.serviceDefinition({
   serviceLevelIndicators: {
     thanos_query: {
       staticLabels: staticLabels,
+      severity: 's3',
+      team: 'reliability_observability',
       monitoringThresholds: {
         apdexScore: 0.95,
         errorRatio: 0.95,
@@ -137,6 +139,8 @@ metricsCatalog.serviceDefinition({
 
     thanos_query_frontend: {
       staticLabels: staticLabels,
+      severity: 's3',
+      team: 'reliability_observability',
       monitoringThresholds: {
         apdexScore: 0.95,
         errorRatio: 0.95,
@@ -178,6 +182,8 @@ metricsCatalog.serviceDefinition({
 
     thanos_store: {
       staticLabels: staticLabels,
+      severity: 's3',
+      team: 'reliability_observability',
       monitoringThresholds: {
         apdexScore: 0.95,
         errorRatio: 0.95,
@@ -222,6 +228,8 @@ metricsCatalog.serviceDefinition({
 
     thanos_compactor: {
       staticLabels: staticLabels,
+      severity: 's3',
+      team: 'reliability_observability',
       userImpacting: false,
       featureCategory: 'not_owned',
       trafficCessationAlertConfig: false,
@@ -245,7 +253,7 @@ metricsCatalog.serviceDefinition({
         selector=thanosCompactorSelector
       ),
 
-      significantLabels: ['fqdn'],
+      significantLabels: ['pod'],
 
       toolingLinks: [
         toolingLinks.kibana(title='Thanos Compact (gprd)', index='monitoring_gprd', tag='monitoring.systemd.thanos-compact'),
@@ -255,6 +263,8 @@ metricsCatalog.serviceDefinition({
 
     thanos_rule_alert_sender: {
       staticLabels: staticLabels,
+      severity: 's3',
+      team: 'reliability_observability',
       userImpacting: true,
       featureCategory: 'not_owned',
       description: |||
@@ -276,7 +286,7 @@ metricsCatalog.serviceDefinition({
         selector=thanosRuleAlertsSelector
       ),
 
-      significantLabels: ['fqdn'],
+      significantLabels: ['pod'],
 
       toolingLinks: [
         toolingLinks.kibana(title='Thanos Rule', index='monitoring_ops', tag='monitoring.systemd.thanos-rule'),
@@ -291,6 +301,7 @@ metricsCatalog.serviceDefinition({
     rule_evaluation: {
       staticLabels: staticLabels,
       severity: 's3',
+      team: 'reliability_observability',
       userImpacting: false,
       featureCategory: 'not_owned',
       description: |||
@@ -337,6 +348,8 @@ metricsCatalog.serviceDefinition({
 
     thanos_memcached: {
       staticLabels: staticLabels,
+      severity: 's3',
+      team: 'reliability_observability',
       userImpacting: false,
       serviceAggregation: false,
       featureCategory: 'not_owned',

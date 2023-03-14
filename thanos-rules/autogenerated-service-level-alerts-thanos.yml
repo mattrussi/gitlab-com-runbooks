@@ -36,6 +36,7 @@ groups:
       severity: s3
       sli_type: apdex
       slo_alert: "yes"
+      team: reliability_observability
       user_impacting: "no"
       window: 1h
     expr: |
@@ -85,6 +86,7 @@ groups:
       severity: s3
       sli_type: apdex
       slo_alert: "yes"
+      team: reliability_observability
       user_impacting: "no"
       window: 6h
     expr: |
@@ -140,6 +142,7 @@ groups:
       severity: s3
       sli_type: error
       slo_alert: "yes"
+      team: reliability_observability
       user_impacting: "no"
       window: 1h
     expr: |
@@ -195,6 +198,7 @@ groups:
       severity: s3
       sli_type: error
       slo_alert: "yes"
+      team: reliability_observability
       user_impacting: "no"
       window: 6h
     expr: |
@@ -248,6 +252,7 @@ groups:
       severity: s3
       sli_type: ops
       slo_alert: "no"
+      team: reliability_observability
       user_impacting: "no"
     expr: |
       gitlab_component_ops:rate_30m{component="rule_evaluation",monitor="global",stage="main",type="thanos"} == 0
@@ -290,6 +295,7 @@ groups:
       severity: s3
       sli_type: ops
       slo_alert: "no"
+      team: reliability_observability
       user_impacting: "no"
     expr: |
       gitlab_component_ops:rate_5m{component="rule_evaluation",monitor="global",stage="main",type="thanos"} offset 1h
@@ -320,11 +326,11 @@ groups:
       alert_class: slo_violation
       alert_type: symptom
       feature_category: not_owned
-      pager: pagerduty
       rules_domain: general
-      severity: s2
+      severity: s3
       sli_type: error
       slo_alert: "yes"
+      team: reliability_observability
       user_impacting: "no"
       window: 1h
     expr: |
@@ -368,11 +374,11 @@ groups:
       alert_class: slo_violation
       alert_type: symptom
       feature_category: not_owned
-      pager: pagerduty
       rules_domain: general
-      severity: s2
+      severity: s3
       sli_type: error
       slo_alert: "yes"
+      team: reliability_observability
       user_impacting: "no"
       window: 6h
     expr: |
@@ -419,11 +425,11 @@ groups:
       alert_class: slo_violation
       alert_type: symptom
       feature_category: not_owned
-      pager: pagerduty
       rules_domain: general
-      severity: s2
+      severity: s3
       sli_type: apdex
       slo_alert: "yes"
+      team: reliability_observability
       user_impacting: "no"
       window: 1h
     expr: |
@@ -470,11 +476,11 @@ groups:
       alert_class: slo_violation
       alert_type: symptom
       feature_category: not_owned
-      pager: pagerduty
       rules_domain: general
-      severity: s2
+      severity: s3
       sli_type: apdex
       slo_alert: "yes"
+      team: reliability_observability
       user_impacting: "no"
       window: 6h
     expr: |
@@ -518,11 +524,11 @@ groups:
       alert_class: slo_violation
       alert_type: symptom
       feature_category: not_owned
-      pager: pagerduty
       rules_domain: general
-      severity: s2
+      severity: s3
       sli_type: error
       slo_alert: "yes"
+      team: reliability_observability
       user_impacting: "no"
       window: 1h
     expr: |
@@ -566,11 +572,11 @@ groups:
       alert_class: slo_violation
       alert_type: symptom
       feature_category: not_owned
-      pager: pagerduty
       rules_domain: general
-      severity: s2
+      severity: s3
       sli_type: error
       slo_alert: "yes"
+      team: reliability_observability
       user_impacting: "no"
       window: 6h
     expr: |
@@ -617,11 +623,11 @@ groups:
       alert_class: slo_violation
       alert_type: symptom
       feature_category: not_owned
-      pager: pagerduty
       rules_domain: general
-      severity: s2
+      severity: s3
       sli_type: apdex
       slo_alert: "yes"
+      team: reliability_observability
       user_impacting: "no"
       window: 1h
     expr: |
@@ -668,11 +674,11 @@ groups:
       alert_class: slo_violation
       alert_type: symptom
       feature_category: not_owned
-      pager: pagerduty
       rules_domain: general
-      severity: s2
+      severity: s3
       sli_type: apdex
       slo_alert: "yes"
+      team: reliability_observability
       user_impacting: "no"
       window: 6h
     expr: |
@@ -716,11 +722,11 @@ groups:
       alert_class: slo_violation
       alert_type: symptom
       feature_category: not_owned
-      pager: pagerduty
       rules_domain: general
-      severity: s2
+      severity: s3
       sli_type: error
       slo_alert: "yes"
+      team: reliability_observability
       user_impacting: "no"
       window: 1h
     expr: |
@@ -764,11 +770,11 @@ groups:
       alert_class: slo_violation
       alert_type: symptom
       feature_category: not_owned
-      pager: pagerduty
       rules_domain: general
-      severity: s2
+      severity: s3
       sli_type: error
       slo_alert: "yes"
+      team: reliability_observability
       user_impacting: "no"
       window: 6h
     expr: |
@@ -812,11 +818,11 @@ groups:
       alert_class: traffic_cessation
       alert_type: cause
       feature_category: not_owned
-      pager: pagerduty
       rules_domain: general
-      severity: s2
+      severity: s3
       sli_type: ops
       slo_alert: "no"
+      team: reliability_observability
       user_impacting: "no"
     expr: |
       gitlab_component_ops:rate_30m{component="thanos_query",monitor="global",stage="main",type="thanos"} == 0
@@ -849,11 +855,11 @@ groups:
       alert_class: traffic_cessation
       alert_type: cause
       feature_category: not_owned
-      pager: pagerduty
       rules_domain: general
-      severity: s2
+      severity: s3
       sli_type: ops
       slo_alert: "no"
+      team: reliability_observability
       user_impacting: "no"
     expr: |
       gitlab_component_ops:rate_5m{component="thanos_query",monitor="global",stage="main",type="thanos"} offset 1h
@@ -887,11 +893,11 @@ groups:
       alert_class: slo_violation
       alert_type: symptom
       feature_category: not_owned
-      pager: pagerduty
       rules_domain: general
-      severity: s2
+      severity: s3
       sli_type: apdex
       slo_alert: "yes"
+      team: reliability_observability
       user_impacting: "no"
       window: 1h
     expr: |
@@ -938,11 +944,11 @@ groups:
       alert_class: slo_violation
       alert_type: symptom
       feature_category: not_owned
-      pager: pagerduty
       rules_domain: general
-      severity: s2
+      severity: s3
       sli_type: apdex
       slo_alert: "yes"
+      team: reliability_observability
       user_impacting: "no"
       window: 6h
     expr: |
@@ -986,11 +992,11 @@ groups:
       alert_class: slo_violation
       alert_type: symptom
       feature_category: not_owned
-      pager: pagerduty
       rules_domain: general
-      severity: s2
+      severity: s3
       sli_type: error
       slo_alert: "yes"
+      team: reliability_observability
       user_impacting: "no"
       window: 1h
     expr: |
@@ -1034,11 +1040,11 @@ groups:
       alert_class: slo_violation
       alert_type: symptom
       feature_category: not_owned
-      pager: pagerduty
       rules_domain: general
-      severity: s2
+      severity: s3
       sli_type: error
       slo_alert: "yes"
+      team: reliability_observability
       user_impacting: "no"
       window: 6h
     expr: |
@@ -1082,11 +1088,11 @@ groups:
       alert_class: traffic_cessation
       alert_type: cause
       feature_category: not_owned
-      pager: pagerduty
       rules_domain: general
-      severity: s2
+      severity: s3
       sli_type: ops
       slo_alert: "no"
+      team: reliability_observability
       user_impacting: "no"
     expr: |
       gitlab_component_ops:rate_30m{component="thanos_query_frontend",monitor="global",stage="main",type="thanos"} == 0
@@ -1119,11 +1125,11 @@ groups:
       alert_class: traffic_cessation
       alert_type: cause
       feature_category: not_owned
-      pager: pagerduty
       rules_domain: general
-      severity: s2
+      severity: s3
       sli_type: ops
       slo_alert: "no"
+      team: reliability_observability
       user_impacting: "no"
     expr: |
       gitlab_component_ops:rate_5m{component="thanos_query_frontend",monitor="global",stage="main",type="thanos"} offset 1h
@@ -1154,11 +1160,11 @@ groups:
       alert_class: slo_violation
       alert_type: symptom
       feature_category: not_owned
-      pager: pagerduty
       rules_domain: general
-      severity: s2
+      severity: s3
       sli_type: error
       slo_alert: "yes"
+      team: reliability_observability
       user_impacting: "yes"
       window: 1h
     expr: |
@@ -1202,11 +1208,11 @@ groups:
       alert_class: slo_violation
       alert_type: symptom
       feature_category: not_owned
-      pager: pagerduty
       rules_domain: general
-      severity: s2
+      severity: s3
       sli_type: error
       slo_alert: "yes"
+      team: reliability_observability
       user_impacting: "yes"
       window: 6h
     expr: |
@@ -1250,11 +1256,11 @@ groups:
       alert_class: traffic_cessation
       alert_type: cause
       feature_category: not_owned
-      pager: pagerduty
       rules_domain: general
-      severity: s2
+      severity: s3
       sli_type: ops
       slo_alert: "no"
+      team: reliability_observability
       user_impacting: "yes"
     expr: |
       gitlab_component_ops:rate_30m{component="thanos_rule_alert_sender",monitor="global",stage="main",type="thanos"} == 0
@@ -1287,11 +1293,11 @@ groups:
       alert_class: traffic_cessation
       alert_type: cause
       feature_category: not_owned
-      pager: pagerduty
       rules_domain: general
-      severity: s2
+      severity: s3
       sli_type: ops
       slo_alert: "no"
+      team: reliability_observability
       user_impacting: "yes"
     expr: |
       gitlab_component_ops:rate_5m{component="thanos_rule_alert_sender",monitor="global",stage="main",type="thanos"} offset 1h
@@ -1325,11 +1331,11 @@ groups:
       alert_class: slo_violation
       alert_type: symptom
       feature_category: not_owned
-      pager: pagerduty
       rules_domain: general
-      severity: s2
+      severity: s3
       sli_type: apdex
       slo_alert: "yes"
+      team: reliability_observability
       user_impacting: "no"
       window: 1h
     expr: |
@@ -1376,11 +1382,11 @@ groups:
       alert_class: slo_violation
       alert_type: symptom
       feature_category: not_owned
-      pager: pagerduty
       rules_domain: general
-      severity: s2
+      severity: s3
       sli_type: apdex
       slo_alert: "yes"
+      team: reliability_observability
       user_impacting: "no"
       window: 6h
     expr: |
@@ -1424,11 +1430,11 @@ groups:
       alert_class: slo_violation
       alert_type: symptom
       feature_category: not_owned
-      pager: pagerduty
       rules_domain: general
-      severity: s2
+      severity: s3
       sli_type: error
       slo_alert: "yes"
+      team: reliability_observability
       user_impacting: "no"
       window: 1h
     expr: |
@@ -1472,11 +1478,11 @@ groups:
       alert_class: slo_violation
       alert_type: symptom
       feature_category: not_owned
-      pager: pagerduty
       rules_domain: general
-      severity: s2
+      severity: s3
       sli_type: error
       slo_alert: "yes"
+      team: reliability_observability
       user_impacting: "no"
       window: 6h
     expr: |
@@ -1520,11 +1526,11 @@ groups:
       alert_class: traffic_cessation
       alert_type: cause
       feature_category: not_owned
-      pager: pagerduty
       rules_domain: general
-      severity: s2
+      severity: s3
       sli_type: ops
       slo_alert: "no"
+      team: reliability_observability
       user_impacting: "no"
     expr: |
       gitlab_component_ops:rate_30m{component="thanos_store",monitor="global",stage="main",type="thanos"} == 0
@@ -1557,11 +1563,11 @@ groups:
       alert_class: traffic_cessation
       alert_type: cause
       feature_category: not_owned
-      pager: pagerduty
       rules_domain: general
-      severity: s2
+      severity: s3
       sli_type: ops
       slo_alert: "no"
+      team: reliability_observability
       user_impacting: "no"
     expr: |
       gitlab_component_ops:rate_5m{component="thanos_store",monitor="global",stage="main",type="thanos"} offset 1h
