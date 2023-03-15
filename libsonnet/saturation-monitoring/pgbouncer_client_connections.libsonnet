@@ -31,13 +31,13 @@ local pgbouncer_client_conn(maxClientConns, name, appliesToServiceTypes) =
       maxClientConns: maxClientConns,
     },
     query: |||
-      avg_over_time(pgbouncer_used_clients{%(selector)s}[%(rangeInterval)s])
+      max_over_time(pgbouncer_used_clients{%(selector)s}[%(rangeInterval)s])
       /
       %(maxClientConns)g
     |||,
     slos: {
       soft: 0.80,
-      hard: 0.85,
+      hard: 0.90,
     },
   });
 

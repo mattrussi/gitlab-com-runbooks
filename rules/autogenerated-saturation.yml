@@ -732,7 +732,7 @@ groups:
       max by(environment, tier, type, stage, shard) (
         clamp_min(
           clamp_max(
-            avg_over_time(pgbouncer_used_clients{type=~"pgbouncer|pgbouncer-registry|pgbouncer-ci"}[5m])
+            max_over_time(pgbouncer_used_clients{type=~"pgbouncer|pgbouncer-registry|pgbouncer-ci"}[5m])
             /
             15000
             ,
@@ -747,7 +747,7 @@ groups:
       max by(environment, tier, type, stage, shard) (
         clamp_min(
           clamp_max(
-            avg_over_time(pgbouncer_used_clients{type=~"patroni|patroni-registry|patroni-ci"}[5m])
+            max_over_time(pgbouncer_used_clients{type=~"patroni|patroni-registry|patroni-ci"}[5m])
             /
             30000
             ,
@@ -1495,7 +1495,7 @@ groups:
   - record: slo:max:hard:gitlab_component_saturation:ratio
     labels:
       component: pgbouncer_client_conn_primary
-    expr: "0.85"
+    expr: "0.9"
   - record: slo:max:soft:gitlab_component_saturation:ratio
     labels:
       component: pgbouncer_client_conn_replicas
@@ -1503,7 +1503,7 @@ groups:
   - record: slo:max:hard:gitlab_component_saturation:ratio
     labels:
       component: pgbouncer_client_conn_replicas
-    expr: "0.85"
+    expr: "0.9"
   - record: slo:max:soft:gitlab_component_saturation:ratio
     labels:
       component: pgbouncer_single_core
@@ -4108,7 +4108,7 @@ groups:
         max by(environment, tier, type, stage, shard, fqdn) (
           clamp_min(
             clamp_max(
-              avg_over_time(pgbouncer_used_clients{environment="{{ $labels.environment }}",stage="{{ $labels.stage }}",type="{{ $labels.type }}"}[5m])
+              max_over_time(pgbouncer_used_clients{environment="{{ $labels.environment }}",stage="{{ $labels.stage }}",type="{{ $labels.type }}"}[5m])
               /
               15000
               ,
@@ -4154,7 +4154,7 @@ groups:
         max by(environment, tier, type, stage, shard, fqdn) (
           clamp_min(
             clamp_max(
-              avg_over_time(pgbouncer_used_clients{environment="{{ $labels.environment }}",stage="{{ $labels.stage }}",type="{{ $labels.type }}"}[5m])
+              max_over_time(pgbouncer_used_clients{environment="{{ $labels.environment }}",stage="{{ $labels.stage }}",type="{{ $labels.type }}"}[5m])
               /
               30000
               ,
