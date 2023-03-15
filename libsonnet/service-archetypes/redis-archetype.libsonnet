@@ -83,4 +83,7 @@ function(
         serviceAggregation: false,
       },
     },
+    skippedMaturityCriteria: {
+      'Logging includes metadata for measuring scalability': "Metadata can't be injected in redis logs",
+    },
   }
