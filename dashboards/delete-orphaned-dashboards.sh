@@ -59,6 +59,7 @@ find_orphaned_dashboards() {
     .[] |
     . as $i |
     select([$protected.dashboardUids[] | contains($i.uid)] | any | not) |
+    select([$protected.protectedTags[] | select(. == $i.tags[])] | any | not) |
     select($i.folderTitle == null or ([$protected.folderTitles[] | contains($i.folderTitle)] | any | not))
     ' | while IFS= read -r line; do
     local dashboard_id
