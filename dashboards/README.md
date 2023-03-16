@@ -78,13 +78,15 @@ The file should end with `.shared.jsonnet` and the format of the file should be 
 ```
 
 ## Protecting Dashboards From Deletion
-By default we delete any dashboards that are not maintained within the `runbooks` repo.  
-If you have a dashboard you wish to maintain yourself via the UI or another means, you can exclude this from the deletion process.  
-Exclusions of protected dashboards are configured via the [protected-grafana-dashboards](./protected-grafana-dashboards.jsonnet) file.  
+By default we delete any dashboards that are not maintained within the `runbooks` repo.
 
-The easiest method is to add the label `protected` to your dashboard which will automatically exclude it.  
+If you have a dashboard you wish to maintain yourself via the UI or another means, you can exclude this from the deletion process.
 
-You can alternatively add static dashboard uids or folder names as denoted in that file.  
+Exclusions of protected dashboards are configured via the [protected-grafana-dashboards](./protected-grafana-dashboards.jsonnet) file.
+
+The easiest method is to add the label `protected` to your dashboard which will automatically exclude it.
+
+You can alternatively add static dashboard uids or folder names as denoted in that file.
 
 ## Backups
 
