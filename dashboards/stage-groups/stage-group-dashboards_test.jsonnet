@@ -202,8 +202,6 @@ test.suite({
       'Overall Error Ratio',
       'Overall RPS - Requests per Second',
       '🔬 Service Level Indicators',
-      '🔬 SLI Detail: graphql_query',
-      '🔬 SLI Detail: rails_request',
     ],
   },
 
@@ -226,10 +224,6 @@ test.suite({
       'Overall Error Ratio',
       'Overall RPS - Requests per Second',
       '🔬 Service Level Indicators',
-      '🔬 SLI Detail: customers_dot_requests',
-      '🔬 SLI Detail: customers_dot_sidekiq_jobs',
-      '🔬 SLI Detail: graphql_query',
-      '🔬 SLI Detail: rails_request',
     ],
   },
 

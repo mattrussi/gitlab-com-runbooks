@@ -676,18 +676,6 @@ local errorBudgetDetailDashboard(stageGroup) =
         },
         sliFilter=sliFilter,
       )
-    )
-    .addPanels(
-      metricsCatalogDashboards.autoDetailRowsAcrossServices(
-        serviceTypes=serviceTypes,
-        selectorHash={
-          environment: '$environment',
-          stage: '$stage',
-          feature_category: { re: featureCategoriesSelector },
-        },
-        startRow=1200,
-        sliFilter=sliFilter,
-      )
     );
 
   dashboard {
