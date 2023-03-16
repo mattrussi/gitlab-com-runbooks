@@ -52,7 +52,17 @@ metricsCatalog.serviceDefinition({
 
       apdex: histogramApdex(
         histogram='k8s_api_proxy_routing_duration_seconds_bucket',
-        selector=baseSelector,
+        selector=baseSelector {
+          // The `success` status contains durations up to 20s and
+          // the `timeout` would contain everything above that.
+          // However, if no agent is connected at the time of the proxy request,
+          // (because it simply isn't or is reconnecting) this is NOT an actual
+          // issue with KAS itself, but with the customers infrastructure.
+          // Therefore, we only select for `success` statuses for now and will
+          // look into how we can improve the Apdex score long-term.
+          // status: { oneOf: ['success', 'timeout'] },
+          status: { oneOf: ['success'] },
+        },
         satisfiedThreshold=5
       ),
 
