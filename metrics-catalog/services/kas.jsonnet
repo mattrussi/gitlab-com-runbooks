@@ -63,7 +63,7 @@ metricsCatalog.serviceDefinition({
           // status: { oneOf: ['success', 'timeout'] },
           status: { oneOf: ['success'] },
         },
-        satisfiedThreshold=5
+        satisfiedThreshold=4.096,
       ),
 
       requestRate: rateMetric(

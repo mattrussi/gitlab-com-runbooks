@@ -11,7 +11,7 @@ groups:
       type: kas
     expr: |
       sum by (env,environment,stage) (
-        rate(k8s_api_proxy_routing_duration_seconds_bucket{le="5",status=~"success",type="kas"}[5m])
+        rate(k8s_api_proxy_routing_duration_seconds_bucket{le="4.096",status=~"success",type="kas"}[5m])
       )
   - record: gitlab:component:feature_category:execution:apdex:weight:score_5m
     labels:
@@ -61,7 +61,7 @@ groups:
       type: kas
     expr: |
       sum by (env,environment,stage) (
-        rate(k8s_api_proxy_routing_duration_seconds_bucket{le="5",status=~"success",type="kas"}[30m])
+        rate(k8s_api_proxy_routing_duration_seconds_bucket{le="4.096",status=~"success",type="kas"}[30m])
       )
   - record: gitlab:component:feature_category:execution:apdex:weight:score_30m
     labels:
@@ -111,7 +111,7 @@ groups:
       type: kas
     expr: |
       sum by (env,environment,stage) (
-        rate(k8s_api_proxy_routing_duration_seconds_bucket{le="5",status=~"success",type="kas"}[1h])
+        rate(k8s_api_proxy_routing_duration_seconds_bucket{le="4.096",status=~"success",type="kas"}[1h])
       )
   - record: gitlab:component:feature_category:execution:apdex:weight:score_1h
     labels:
