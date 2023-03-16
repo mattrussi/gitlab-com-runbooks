@@ -678,11 +678,22 @@ groups:
       tier: inf
       type: jaeger
     expr: "0.001000"
+  - record: slo:min:events:gitlab_service_apdex:ratio
+    labels:
+      tier: sv
+      type: kas
+    expr: "0.950000"
   - record: slo:max:events:gitlab_service_errors:ratio
     labels:
       tier: sv
       type: kas
     expr: "0.000500"
+  - record: slo:min:events:gitlab_service_apdex:ratio
+    labels:
+      component: grpc_requests
+      tier: sv
+      type: kas
+    expr: "0.950000"
   - record: slo:max:events:gitlab_service_errors:ratio
     labels:
       component: grpc_requests

@@ -5,6 +5,104 @@ groups:
   interval: 1m
   partial_response_strategy: warn
   rules:
+  - alert: KasServiceGrpcRequestsApdexSLOViolation
+    for: 2m
+    annotations:
+      title: The grpc_requests SLI of the kas service (`{{ $labels.stage }}` stage)
+        has an apdex violating SLO
+      description: |
+        Currently the apdex value is {{ $value | humanizePercentage }}.
+      grafana_dashboard_id: kas-main/kas-overview
+      grafana_dashboard_link: https://dashboards.gitlab.net/d/kas-main/kas-overview?from=now-6h/m&to=now-1m/m&var-environment={{
+        $labels.environment }}&var-stage={{ $labels.stage }}
+      grafana_min_zoom_hours: "6"
+      grafana_panel_id: "2041855155"
+      grafana_variables: environment,stage
+      promql_template_1: |
+        histogram_quantile(
+          0.950000,
+          sum by (env,environment,tier,stage,le) (
+            rate(k8s_api_proxy_routing_duration_seconds_bucket{environment="{{ $labels.environment }}",stage="{{ $labels.stage }}",status=~"success",type="kas"}[5m])
+          )
+        )
+      runbook: docs/kas/README.md
+    labels:
+      aggregation: component
+      alert_class: slo_violation
+      alert_type: symptom
+      feature_category: kubernetes_management
+      pager: pagerduty
+      rules_domain: general
+      severity: s2
+      sli_type: apdex
+      slo_alert: "yes"
+      user_impacting: "yes"
+      window: 1h
+    expr: |
+      (
+        (
+          gitlab_component_apdex:ratio_1h{component="grpc_requests",monitor="global",type="kas"}
+          < (1 - 14.4 * 0.050000)
+        )
+        and
+        (
+          gitlab_component_apdex:ratio_5m{component="grpc_requests",monitor="global",type="kas"}
+          < (1 - 14.4 * 0.050000)
+        )
+      )
+      and on(env,environment,tier,type,stage,component)
+      (
+        sum by(env,environment,tier,type,stage,component) (gitlab_component_ops:rate_1h{component="grpc_requests",monitor="global",type="kas"}) >= 1
+      )
+  - alert: KasServiceGrpcRequestsApdexSLOViolation
+    for: 2m
+    annotations:
+      title: The grpc_requests SLI of the kas service (`{{ $labels.stage }}` stage)
+        has an apdex violating SLO
+      description: |
+        Currently the apdex value is {{ $value | humanizePercentage }}.
+      grafana_dashboard_id: kas-main/kas-overview
+      grafana_dashboard_link: https://dashboards.gitlab.net/d/kas-main/kas-overview?from=now-6h/m&to=now-1m/m&var-environment={{
+        $labels.environment }}&var-stage={{ $labels.stage }}
+      grafana_min_zoom_hours: "6"
+      grafana_panel_id: "2041855155"
+      grafana_variables: environment,stage
+      promql_template_1: |
+        histogram_quantile(
+          0.950000,
+          sum by (env,environment,tier,stage,le) (
+            rate(k8s_api_proxy_routing_duration_seconds_bucket{environment="{{ $labels.environment }}",stage="{{ $labels.stage }}",status=~"success",type="kas"}[5m])
+          )
+        )
+      runbook: docs/kas/README.md
+    labels:
+      aggregation: component
+      alert_class: slo_violation
+      alert_type: symptom
+      feature_category: kubernetes_management
+      pager: pagerduty
+      rules_domain: general
+      severity: s2
+      sli_type: apdex
+      slo_alert: "yes"
+      user_impacting: "yes"
+      window: 6h
+    expr: |
+      (
+        (
+          gitlab_component_apdex:ratio_6h{component="grpc_requests",monitor="global",type="kas"}
+          < (1 - 6 * 0.050000)
+        )
+        and
+        (
+          gitlab_component_apdex:ratio_30m{component="grpc_requests",monitor="global",type="kas"}
+          < (1 - 6 * 0.050000)
+        )
+      )
+      and on(env,environment,tier,type,stage,component)
+      (
+        sum by(env,environment,tier,type,stage,component) (gitlab_component_ops:rate_6h{component="grpc_requests",monitor="global",type="kas"}) >= 0.16667
+      )
   - alert: KasServiceGrpcRequestsErrorSLOViolation
     for: 2m
     annotations:
