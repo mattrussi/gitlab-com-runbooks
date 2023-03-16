@@ -22,11 +22,19 @@ basic.dashboard(
       legendFormat='__auto',
     ),
     basic.heatmap(
-      title='Routing latency (failure)',
+      title='Routing latency (request timed out)',
       description='Time it takes kas to find a suitable reverse tunnel from an agent',
-      query='sum by (le) (rate(k8s_api_proxy_routing_duration_seconds_bucket{%s, status="error"}[$__rate_interval]))' % env_stage_app,
+      query='sum by (le) (rate(k8s_api_proxy_routing_duration_seconds_bucket{%s, status="timeout"}[$__rate_interval]))' % env_stage_app,
       dataFormat='tsbuckets',
       color_cardColor='#ff0000',
+      legendFormat='__auto',
+    ),
+    basic.heatmap(
+      title='Routing latency (request aborted)',
+      description='Time it takes kas to find a suitable reverse tunnel from an agent',
+      query='sum by (le) (rate(k8s_api_proxy_routing_duration_seconds_bucket{%s, status="aborted"}[$__rate_interval]))' % env_stage_app,
+      dataFormat='tsbuckets',
+      color_cardColor='#0000ff',
       legendFormat='__auto',
     ),
     basic.timeseries(
@@ -57,5 +65,5 @@ basic.dashboard(
       yAxisLabel='rps',
       linewidth=1,
     ),
-  ], cols=2, rowHeight=10)
+  ], cols=3, rowHeight=10)
 )
