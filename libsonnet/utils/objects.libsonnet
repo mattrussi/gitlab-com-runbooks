@@ -51,6 +51,9 @@
       std.objectFields(object),
       {}
     ),
+
+  transformKeys(fn, object)::
+    { [fn(key)]: object[key] for key in std.objectFields(object) },
   invert(object)::
     std.foldl(
       function(memo, key)

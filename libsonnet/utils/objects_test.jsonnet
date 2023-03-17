@@ -68,6 +68,19 @@ test.suite({
     expect: {},
   },
 
+  testTransformKeys: {
+    actual: objects.transformKeys(
+      function(key)
+        if key == 'remove-me' then null else '%s-transformed' % [key],
+      { a: 1, b: 2, 'remove-me': 3, c: 4 }
+    ),
+    expect: {
+      'a-transformed': 1,
+      'b-transformed': 2,
+      'c-transformed': 4,
+    },
+  },
+
   testInvert: {
     actual: objects.invert({ a: 1, b: 2 }),
     expect: { '1': 'a', '2': 'b' },
