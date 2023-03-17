@@ -84,6 +84,4 @@ local options = validateReferenceArchitectureOptions(import 'gitlab-metrics-opti
     node: 'node',
     sliComponent: 'component',
   }),
-
-  separateGlobalRecordingSelectors: {},
 }
