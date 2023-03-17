@@ -23,11 +23,11 @@ groups:
     expr: |
       (
         sum by (environment) (
-          rate(gitlab_cache_operation_duration_seconds_bucket{store="RedisRepositoryCache", le="0.01"}[1m])
+          rate(gitlab_cache_operation_duration_seconds_bucket{le="0.01",store="RedisRepositoryCache"}[1m])
         )
         +
         sum by (environment) (
-          rate(gitlab_cache_operation_duration_seconds_bucket{store="RedisRepositoryCache", le="0.1"}[1m])
+          rate(gitlab_cache_operation_duration_seconds_bucket{le="0.1",store="RedisRepositoryCache"}[1m])
         )
       )
       /
@@ -40,7 +40,7 @@ groups:
       type: redis-repository-cache
     expr: |
       sum by (environment) (
-        rate(gitlab_cache_operation_duration_seconds_bucket{store="RedisRepositoryCache", le="+Inf"}[1m])
+        rate(gitlab_cache_operation_duration_seconds_bucket{le="+Inf",store="RedisRepositoryCache"}[1m])
       )
   - record: gitlab_component_ops:rate
     labels:
@@ -140,11 +140,11 @@ groups:
     expr: |
       (
         sum by (environment) (
-          rate(gitlab_cache_operation_duration_seconds_bucket{store="RedisRepositoryCache", le="0.01"}[5m])
+          rate(gitlab_cache_operation_duration_seconds_bucket{le="0.01",store="RedisRepositoryCache"}[5m])
         )
         +
         sum by (environment) (
-          rate(gitlab_cache_operation_duration_seconds_bucket{store="RedisRepositoryCache", le="0.1"}[5m])
+          rate(gitlab_cache_operation_duration_seconds_bucket{le="0.1",store="RedisRepositoryCache"}[5m])
         )
       )
       /
@@ -157,7 +157,7 @@ groups:
       type: redis-repository-cache
     expr: |
       sum by (environment) (
-        rate(gitlab_cache_operation_duration_seconds_bucket{store="RedisRepositoryCache", le="+Inf"}[5m])
+        rate(gitlab_cache_operation_duration_seconds_bucket{le="+Inf",store="RedisRepositoryCache"}[5m])
       )
   - record: gitlab_component_ops:rate_5m
     labels:
@@ -257,11 +257,11 @@ groups:
     expr: |
       (
         sum by (environment) (
-          rate(gitlab_cache_operation_duration_seconds_bucket{store="RedisRepositoryCache", le="0.01"}[30m])
+          rate(gitlab_cache_operation_duration_seconds_bucket{le="0.01",store="RedisRepositoryCache"}[30m])
         )
         +
         sum by (environment) (
-          rate(gitlab_cache_operation_duration_seconds_bucket{store="RedisRepositoryCache", le="0.1"}[30m])
+          rate(gitlab_cache_operation_duration_seconds_bucket{le="0.1",store="RedisRepositoryCache"}[30m])
         )
       )
       /
@@ -274,7 +274,7 @@ groups:
       type: redis-repository-cache
     expr: |
       sum by (environment) (
-        rate(gitlab_cache_operation_duration_seconds_bucket{store="RedisRepositoryCache", le="+Inf"}[30m])
+        rate(gitlab_cache_operation_duration_seconds_bucket{le="+Inf",store="RedisRepositoryCache"}[30m])
       )
   - record: gitlab_component_ops:rate_30m
     labels:
@@ -374,11 +374,11 @@ groups:
     expr: |
       (
         sum by (environment) (
-          rate(gitlab_cache_operation_duration_seconds_bucket{store="RedisRepositoryCache", le="0.01"}[1h])
+          rate(gitlab_cache_operation_duration_seconds_bucket{le="0.01",store="RedisRepositoryCache"}[1h])
         )
         +
         sum by (environment) (
-          rate(gitlab_cache_operation_duration_seconds_bucket{store="RedisRepositoryCache", le="0.1"}[1h])
+          rate(gitlab_cache_operation_duration_seconds_bucket{le="0.1",store="RedisRepositoryCache"}[1h])
         )
       )
       /
@@ -391,7 +391,7 @@ groups:
       type: redis-repository-cache
     expr: |
       sum by (environment) (
-        rate(gitlab_cache_operation_duration_seconds_bucket{store="RedisRepositoryCache", le="+Inf"}[1h])
+        rate(gitlab_cache_operation_duration_seconds_bucket{le="+Inf",store="RedisRepositoryCache"}[1h])
       )
   - record: gitlab_component_ops:rate_1h
     labels:
@@ -491,11 +491,11 @@ groups:
     expr: |
       (
         sum by (environment) (
-          rate(gitlab_cache_operation_duration_seconds_bucket{store="RedisRepositoryCache", le="0.01"}[6h])
+          rate(gitlab_cache_operation_duration_seconds_bucket{le="0.01",store="RedisRepositoryCache"}[6h])
         )
         +
         sum by (environment) (
-          rate(gitlab_cache_operation_duration_seconds_bucket{store="RedisRepositoryCache", le="0.1"}[6h])
+          rate(gitlab_cache_operation_duration_seconds_bucket{le="0.1",store="RedisRepositoryCache"}[6h])
         )
       )
       /
@@ -508,7 +508,7 @@ groups:
       type: redis-repository-cache
     expr: |
       sum by (environment) (
-        rate(gitlab_cache_operation_duration_seconds_bucket{store="RedisRepositoryCache", le="+Inf"}[6h])
+        rate(gitlab_cache_operation_duration_seconds_bucket{le="+Inf",store="RedisRepositoryCache"}[6h])
       )
   - record: gitlab_component_ops:rate_6h
     labels:
