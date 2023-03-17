@@ -11,7 +11,7 @@ The following setup enables us to use the YubiKey with OpenPGP, the Authenticati
 **WARNING**: When setting a pin, make sure it is between 6 and 8 ascii characters, longer pins may be silently truncated.
 
 1. Follow the instructions for [installing yubikey-agent](https://github.com/FiloSottile/yubikey-agent#installation).
-1. Optional (but recommended): Follow the workaround below for setting a "cached" touch policy. 
+1. Optional (but recommended): Follow the workaround below for setting a "cached" touch policy.
 1. Add the public key to your [GitLab account](https://gitlab.com/-/profile/keys) for authentication and signing.
 1. Copy the public key that was created in (1) to a file (e.g.: `~/.ssh/yubikey.pub`).
 1. Follow the instructions to [use your ssh key for signing](https://docs.gitlab.com/ee/user/project/repository/ssh_signed_commits/#configure-git-to-sign-commits-with-your-ssh-key).
