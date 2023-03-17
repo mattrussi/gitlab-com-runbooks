@@ -31,13 +31,20 @@ dashboardIncident.incidentDashboard(
 .addGrid(
   panels=[
     fleetingGraphs.provisionerInstancesStates,
+    fleetingGraphs.provisionerInstanceOperationsRate,
     fleetingGraphs.provisionerMissedUpdates,
+  ],
+  rowHeight=8,
+  startRow=4000,
+)
+.addGrid(
+  panels=[
     fleetingGraphs.provisionerCreationTiming,
     fleetingGraphs.provisionerIsRunningTiming,
     fleetingGraphs.provisionerDeletionTiming,
   ],
   rowHeight=8,
-  startRow=4000,
+  startRow=5000,
 )
 .addGrid(
   panels=[
@@ -46,5 +53,5 @@ dashboardIncident.incidentDashboard(
     fleetingGraphs.taskscalerInstanceReadinessTiming,
   ],
   rowHeight=8,
-  startRow=5000,
+  startRow=6000,
 )
