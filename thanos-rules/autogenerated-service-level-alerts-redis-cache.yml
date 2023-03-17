@@ -96,7 +96,7 @@ groups:
         histogram_quantile(
           0.950000,
           sum by (env,environment,tier,stage,le) (
-            rate(gitlab_cache_operation_duration_seconds_bucket{environment="{{ $labels.environment }}",stage="{{ $labels.stage }}"}[5m])
+            rate(gitlab_cache_operation_duration_seconds_bucket{store="RedisCacheStore", environment="{{ $labels.environment }}",stage="{{ $labels.stage }}"}[5m])
           )
         )
       runbook: docs/redis-cache/README.md
@@ -147,7 +147,7 @@ groups:
         histogram_quantile(
           0.950000,
           sum by (env,environment,tier,stage,le) (
-            rate(gitlab_cache_operation_duration_seconds_bucket{environment="{{ $labels.environment }}",stage="{{ $labels.stage }}"}[5m])
+            rate(gitlab_cache_operation_duration_seconds_bucket{store="RedisCacheStore", environment="{{ $labels.environment }}",stage="{{ $labels.stage }}"}[5m])
           )
         )
       runbook: docs/redis-cache/README.md
@@ -196,7 +196,7 @@ groups:
       grafana_variables: environment,stage
       promql_template_1: |
         sum by (env,environment,tier,stage) (
-          rate(gitlab_cache_operation_duration_seconds_count{environment="{{ $labels.environment }}",stage="{{ $labels.stage }}"}[5m])
+          rate(gitlab_cache_operation_duration_seconds_count{store="RedisCacheStore", environment="{{ $labels.environment }}",stage="{{ $labels.stage }}"}[5m])
         )
       runbook: docs/redis-cache/README.md
     labels:
@@ -233,7 +233,7 @@ groups:
       grafana_variables: environment,stage
       promql_template_1: |
         sum by (env,environment,tier,stage) (
-          rate(gitlab_cache_operation_duration_seconds_count{environment="{{ $labels.environment }}",stage="{{ $labels.stage }}"}[5m])
+          rate(gitlab_cache_operation_duration_seconds_count{store="RedisCacheStore", environment="{{ $labels.environment }}",stage="{{ $labels.stage }}"}[5m])
         )
       runbook: docs/redis-cache/README.md
     labels:
