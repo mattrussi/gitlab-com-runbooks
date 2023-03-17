@@ -81,10 +81,20 @@ basic.dashboard(
 
 .addTemplate(
   template.new(
-    'deployment',
+    'target_stage',
     '$PROMETHEUS_DS',
-    'label_values(delivery_deployment_merge_request_lead_time_seconds{target_env="$environment"}, deployment_id)',
-    label='deployment',
+    'label_values(delivery_deployment_merge_request_lead_time_seconds{target_env="$environment"}, target_stage)',
+    label='stage',
+    refresh='time',
+  )
+)
+
+.addTemplate(
+  template.new(
+    'deploy_version',
+    '$PROMETHEUS_DS',
+    'label_values(delivery_deployment_merge_request_lead_time_seconds{target_env="$environment", target_stage="$target_stage"}, deploy_version)',
+    label='version',
     refresh='time',
   )
 )
@@ -94,7 +104,7 @@ basic.dashboard(
       bargaugePanel(
         'Merge requests lead time',
         description='Time it take Merge Request from being merged to production',
-        query='delivery_deployment_merge_request_lead_time_seconds{deployment_id="$deployment"}',
+        query='delivery_deployment_merge_request_lead_time_seconds{target_env="$environment", target_stage="$target_stage", deploy_version="$deploy_version"}',
         legendFormat='{{mr_id}}',
         fieldLinks=[
           {
@@ -105,9 +115,10 @@ basic.dashboard(
         ],
         thresholds={
           steps: [
-            { color: colorScheme.normalRangeColor, value: 172799 },
-            { color: colorScheme.warningColor, value: 172800 },
-            { color: colorScheme.errorColor, value: 259200 },
+            { color: colorScheme.normalRangeColor, value: 0 },
+            { color: colorScheme.warningColor, value: 39600 },
+            { color: colorScheme.errorColor, value: 43200 },
+            { color: colorScheme.criticalColor, value: 46800 },
           ],
         },
       ),
