@@ -1,7 +1,7 @@
 groups:
 - name: SnitchHeartBeat
   interval: 1m
-  partial_response_strategy: abort
+  partial_response_strategy: warn
   rules:
   - alert: SnitchHeartBeat
     expr: vector(1)
