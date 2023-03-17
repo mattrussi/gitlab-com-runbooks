@@ -58,4 +58,16 @@ local objects = import 'utils/objects.libsonnet';
     node: 'fqdn',
     sliComponent: 'component',
   }),
+
+  // This allows separating global recording rules in Thanos.
+  // The format is `name: selectorHash`.
+  // For each entry in this object, we'll generate a separate recording rule file
+  // for any definition in `thanos-rules-jsonnet/`
+  // This allows us to decouple production recording rule evaluations
+  // from non-production ones
+  separateGlobalRecordingSelectors: {
+    gprd: { env: 'gprd' },
+    ops: { env: 'ops' },
+    other: { env: { noneOf: ['gprd', 'ops'] } },
+  },
 }
