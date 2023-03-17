@@ -78,6 +78,7 @@ local gitalyGRPCErrorRate(baseSelector) =
       counter='gitaly_service_client_requests_total',
       selector=baseSelector {
         grpc_code: { noneOf: ['OK', 'NotFound', 'Unauthenticated', 'AlreadyExists', 'FailedPrecondition', 'DeadlineExceeded', 'Canceled', 'InvalidArgument', 'PermissionDenied', 'ResourceExhausted'] },
+        grpc_method: { noneOf: ['InfoRefsUploadPack'] },  // https://gitlab.com/gitlab-com/gl-infra/production/-/issues/8566
       }
     ),
     // Include some errors for code `DeadlineExceeded`
