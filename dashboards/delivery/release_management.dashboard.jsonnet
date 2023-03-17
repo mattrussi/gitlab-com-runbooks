@@ -226,6 +226,7 @@ basic.dashboard(
         colorMode='none',
         graphMode='none',
         textMode='value',
+        unit='String',
       )
       .addTarget(railsVersion(environment))
       for environment in environments
@@ -240,6 +241,7 @@ basic.dashboard(
         colorMode='none',
         graphMode='none',
         textMode='value',
+        unit='String',
       )
       .addTarget(packageVersion(environment))
       for environment in environments
