@@ -1,23 +1,6 @@
 local panels = import './panels.libsonnet';
 local basic = import 'grafana/basic.libsonnet';
 
-local provisionerMaxInstances =
-  basic.statPanel(
-    title=null,
-    panelTitle='Fleeting max instances',
-    color='green',
-    query='sum by(shard) (fleeting_provisioner_max_instances{environment=~"$environment",stage=~"$stage",instance=~"${runner_manager:pipe}"})',
-    legendFormat='{{shard}}',
-    unit='short',
-    decimals=0,
-    colorMode='value',
-    instant=true,
-    interval='1d',
-    intervalFactor=1,
-    reducerFunction='last',
-    justifyMode='center',
-  );
-
 local provisionerInstancesSaturation =
   basic.timeseries(
     'Fleeting instances saturation',
@@ -39,8 +22,6 @@ local provisionerInstancesStates =
     'Fleeting instances states',
     legendFormat='{{shard}}: {{state}}',
     format='short',
-    fill=1,
-    stack=true,
     query=|||
       sum by(shard, state) (
         fleeting_provisioner_instances{environment=~"$environment", stage=~"$stage", instance=~"${runner_manager:pipe}"}
@@ -53,8 +34,6 @@ local provisionerMissedUpdates =
     'Fleeting missed updates rate',
     legendFormat='{{shard}}',
     format='short',
-    fill=1,
-    stack=true,
     query=|||
       sum by(shard) (
         increase(
@@ -86,8 +65,8 @@ local provisionerCreationTiming =
         increase(fleeting_provisioner_instance_creation_time_seconds_bucket{environment=~"$environment", stage=~"$stage", instance=~"${runner_manager:pipe}"}[$__interval])
       )
     |||,
-    color_cardColor='#96D98D',
-    color_exponent=0.25,
+    color_cardColor='#00DD33',
+    color_exponent=0.1,
     intervalFactor=2,
   );
 
@@ -99,8 +78,8 @@ local provisionerIsRunningTiming =
         increase(fleeting_provisioner_instance_is_running_time_seconds_bucket{environment=~"$environment", stage=~"$stage", instance=~"${runner_manager:pipe}"}[$__interval])
       )
     |||,
-    color_cardColor='#96D98D',
-    color_exponent=0.25,
+    color_cardColor='#DDDD00',
+    color_exponent=0.1,
     intervalFactor=2,
   );
 
@@ -112,8 +91,8 @@ local provisionerDeletionTiming =
         increase(fleeting_provisioner_instance_deletion_time_seconds_bucket{environment=~"$environment", stage=~"$stage", instance=~"${runner_manager:pipe}"}[$__interval])
       )
     |||,
-    color_cardColor='#96D98D',
-    color_exponent=0.25,
+    color_cardColor='#DD0000',
+    color_exponent=0.1,
     intervalFactor=2,
   );
 
@@ -124,7 +103,7 @@ local taskscalerTasksSaturation =
     format='percentunit',
     query=|||
       sum by(shard) (
-          fleeting_taskscaler_tasks{environment=~"$environment", stage=~"$stage", instance=~"${runner_manager:pipe}"}
+          fleeting_taskscaler_tasks{environment=~"$environment", stage=~"$stage", instance=~"${runner_manager:pipe}", state!~"idle|reserved"}
       )
       /
       sum by(shard) (
@@ -140,8 +119,6 @@ local taskscalerOperationsRate =
     'Taskscaler operations rate',
     legendFormat='{{shard}}: {{operation}}',
     format='short',
-    fill=1,
-    stack=true,
     query=|||
       sum by(shard, operation) (
         increase(
@@ -156,8 +133,6 @@ local taskscalerTasks =
     'Taskscaler tasks',
     legendFormat='{{shard}}: {{state}}',
     format='short',
-    fill=1,
-    stack=true,
     query=|||
       sum by(shard, state) (
           fleeting_taskscaler_tasks{environment=~"$environment", stage=~"$stage", instance=~"${runner_manager:pipe}"}
@@ -165,8 +140,20 @@ local taskscalerTasks =
     |||,
   );
 
+local taskscalerInstanceReadinessTiming =
+  panels.heatmap(
+    'Taskscaler instance readiness timing',
+    |||
+      sum by (le) (
+        increase(fleeting_taskscaler_task_instance_readiness_time_seconds_bucket{environment=~"$environment", stage=~"$stage", instance=~"${runner_manager:pipe}"}[$__interval])
+      )
+    |||,
+    color_cardColor='#DD33DD',
+    color_exponent=0.1,
+    intervalFactor=2,
+  );
+
 {
-  provisionerMaxInstances: provisionerMaxInstances,
   provisionerInstancesSaturation: provisionerInstancesSaturation,
   provisionerInstancesStates: provisionerInstancesStates,
   provisionerMissedUpdates: provisionerMissedUpdates,
@@ -177,4 +164,5 @@ local taskscalerTasks =
   taskscalerTasksSaturation: taskscalerTasksSaturation,
   taskscalerOperationsRate: taskscalerOperationsRate,
   taskscalerTasks: taskscalerTasks,
+  taskscalerInstanceReadinessTiming: taskscalerInstanceReadinessTiming,
 }

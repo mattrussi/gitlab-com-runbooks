@@ -1,7 +1,6 @@
 local autoscalingGraphs = import 'stage-groups/verify-runner/autoscaling_graphs.libsonnet';
 local dashboardFilters = import 'stage-groups/verify-runner/dashboard_filters.libsonnet';
 local dashboardIncident = import 'stage-groups/verify-runner/dashboard_incident.libsonnet';
-local fleetingGraphs = import 'stage-groups/verify-runner/fleeting_graphs.libsonnet';
 
 dashboardIncident.incidentDashboard(
   'autoscaling',
@@ -35,10 +34,6 @@ dashboardIncident.incidentDashboard(
       section.
     - Docker Machine bug. Very rare, as we've probably already caught all of them, but to be sure
       check if there was no updates of used Docker Machine version just before the incideent happened.
-
-    **We're currently in the process of moving to a new autoscaling mechanism.** For now there are no
-    known guidelines as to how to work with it and what to review in case of troubles. We will be
-    udpating this description after getting some more experience with using that new method.
   |||,
 )
 .addTemplates([
@@ -62,38 +57,4 @@ dashboardIncident.incidentDashboard(
   ],
   rowHeight=8,
   startRow=4000,
-)
-.addGrid(
-  panels=[
-    fleetingGraphs.provisionerMaxInstances,
-  ],
-  rowHeight=3,
-  startRow=5000,
-)
-.addGrid(
-  panels=[
-    fleetingGraphs.taskscalerTasksSaturation,
-    fleetingGraphs.provisionerInstancesSaturation,
-  ],
-  rowHeight=8,
-  startRow=6000,
-)
-.addGrid(
-  panels=[
-    fleetingGraphs.provisionerInstancesStates,
-    fleetingGraphs.provisionerMissedUpdates,
-    fleetingGraphs.provisionerCreationTiming,
-    fleetingGraphs.provisionerIsRunningTiming,
-    fleetingGraphs.provisionerDeletionTiming,
-  ],
-  rowHeight=8,
-  startRow=7000,
-)
-.addGrid(
-  panels=[
-    fleetingGraphs.taskscalerOperationsRate,
-    fleetingGraphs.taskscalerTasks,
-  ],
-  rowHeight=8,
-  startRow=8000,
 )
