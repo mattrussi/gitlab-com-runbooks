@@ -23,23 +23,13 @@ groups:
           description: Patroni on {{$labels.fqdn}} seems to be down, which means that PostgreSQL is probably down there as well.
           title: Patroni is down
           runbook: docs/patroni/patroni-management.md
-      - alert: PatroniXminAgeTooLargeWarning
-        expr: pg_txid_xmin_age > 300000
-        for: 5m
-        labels:
-          severity: s4
-          alert_type: cause
-        annotations:
-          description: The xmin horizon is too old on {{$labels.fqdn}}.
-          title: Long-running transactions detected on Patroni
-          runbook: docs/patroni/pg_xid_xmin_age_alert.md
-      - alert: PatroniXminAgeTooLargeError
+      - alert: PatroniXminAgeTooLarge
         expr: pg_txid_xmin_age > 500000
-        for: 25m
+        for: 45m
         labels:
-          pager: pagerduty
-          severity: s1
+          severity: s3
           alert_type: cause
+          incident_project: gitlab.com/gitlab-com/gl-infra/production
         annotations:
           description: The xmin horizon is too old on {{$labels.fqdn}}.
           title: Long-running transactions detected on Patroni
