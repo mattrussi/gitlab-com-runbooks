@@ -102,7 +102,7 @@ groups:
     expr: |
       (
         sum by (env,environment,stage) (
-          label_replace(rate(gitaly_service_client_requests_total{grpc_code!~"AlreadyExists|Canceled|DeadlineExceeded|FailedPrecondition|InvalidArgument|NotFound|OK|PermissionDenied|ResourceExhausted|Unauthenticated",grpc_method!~"InfoRefsUploadPack",job="praefect"}[5m]), "_c", "0", "", "")
+          label_replace(rate(gitaly_service_client_requests_total{grpc_code!~"AlreadyExists|Canceled|DeadlineExceeded|FailedPrecondition|InvalidArgument|NotFound|OK|PermissionDenied|ResourceExhausted|Unauthenticated",job="praefect"}[5m]), "_c", "0", "", "")
           or
           label_replace(rate(gitaly_service_client_requests_total{deadline_type!="limited",grpc_code="DeadlineExceeded",job="praefect"}[5m]), "_c", "1", "", "")
         )
@@ -244,7 +244,7 @@ groups:
     expr: |
       (
         sum by (env,environment,stage) (
-          label_replace(rate(gitaly_service_client_requests_total{grpc_code!~"AlreadyExists|Canceled|DeadlineExceeded|FailedPrecondition|InvalidArgument|NotFound|OK|PermissionDenied|ResourceExhausted|Unauthenticated",grpc_method!~"InfoRefsUploadPack",job="praefect"}[30m]), "_c", "0", "", "")
+          label_replace(rate(gitaly_service_client_requests_total{grpc_code!~"AlreadyExists|Canceled|DeadlineExceeded|FailedPrecondition|InvalidArgument|NotFound|OK|PermissionDenied|ResourceExhausted|Unauthenticated",job="praefect"}[30m]), "_c", "0", "", "")
           or
           label_replace(rate(gitaly_service_client_requests_total{deadline_type!="limited",grpc_code="DeadlineExceeded",job="praefect"}[30m]), "_c", "1", "", "")
         )
@@ -386,7 +386,7 @@ groups:
     expr: |
       (
         sum by (env,environment,stage) (
-          label_replace(rate(gitaly_service_client_requests_total{grpc_code!~"AlreadyExists|Canceled|DeadlineExceeded|FailedPrecondition|InvalidArgument|NotFound|OK|PermissionDenied|ResourceExhausted|Unauthenticated",grpc_method!~"InfoRefsUploadPack",job="praefect"}[1h]), "_c", "0", "", "")
+          label_replace(rate(gitaly_service_client_requests_total{grpc_code!~"AlreadyExists|Canceled|DeadlineExceeded|FailedPrecondition|InvalidArgument|NotFound|OK|PermissionDenied|ResourceExhausted|Unauthenticated",job="praefect"}[1h]), "_c", "0", "", "")
           or
           label_replace(rate(gitaly_service_client_requests_total{deadline_type!="limited",grpc_code="DeadlineExceeded",job="praefect"}[1h]), "_c", "1", "", "")
         )
