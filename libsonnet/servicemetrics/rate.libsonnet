@@ -44,10 +44,10 @@ local generateRangeFunctionQuery(rate, rangeFunction, additionalSelectors, range
 
     // This creates an aggregated rate query of the form
     // sum by(<aggregationLabels>) (rate(....{<selector>}[<rangeInterval>]))
-    aggregatedRateQuery(aggregationLabels, selector, rangeInterval, withoutLabels=[])::
+    aggregatedRateQuery(aggregationLabels, selector, rangeInterval, withoutLabels=[], useRecordingRuleRegistry=true)::
       local combinedSelector = selectors.without(selectors.merge(self.selector, selector), withoutLabels);
 
-      local resolvedRecordingRule = recordingRuleRegistry.resolveRecordingRuleFor(
+      local resolvedRecordingRule = if useRecordingRuleRegistry == true then recordingRuleRegistry.resolveRecordingRuleFor(
         aggregationFunction='sum',
         aggregationLabels=aggregationLabels,
         rangeVectorFunction='rate',

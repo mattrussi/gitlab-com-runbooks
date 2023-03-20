@@ -4,7 +4,7 @@ local aggregations = import 'promql/aggregations.libsonnet';
 local selectors = import 'promql/selectors.libsonnet';
 local strings = import 'utils/strings.libsonnet';
 
-local transformErrorRateToSuccessRate(errorRateMetric, operationRateMetric, selector, rangeInterval, aggregationLabels) =
+local transformErrorRateToSuccessRate(errorRateMetric, operationRateMetric, selector, rangeInterval, aggregationLabels, useRecordingRuleRegistry=true) =
   |||
     %(operationRate)s - (
       %(errorRate)s or
@@ -12,13 +12,13 @@ local transformErrorRateToSuccessRate(errorRateMetric, operationRateMetric, sele
     )
   ||| % {
     operationRate: strings.chomp(resolveRateQuery(
-      operationRateMetric, selector, rangeInterval, aggregationFunction='sum', aggregationLabels=aggregationLabels
+      operationRateMetric, selector, rangeInterval, aggregationFunction='sum', aggregationLabels=aggregationLabels, useRecordingRuleRegistry=useRecordingRuleRegistry
     )),
     indentedOperationRate: strings.indent(strings.chomp(resolveRateQuery(
-      operationRateMetric, selector, rangeInterval, aggregationFunction='sum', aggregationLabels=aggregationLabels
+      operationRateMetric, selector, rangeInterval, aggregationFunction='sum', aggregationLabels=aggregationLabels, useRecordingRuleRegistry=useRecordingRuleRegistry
     )), 2),
     errorRate: strings.indent(strings.chomp(resolveRateQuery(
-      errorRateMetric, selector, rangeInterval, aggregationFunction='sum', aggregationLabels=aggregationLabels
+      errorRateMetric, selector, rangeInterval, aggregationFunction='sum', aggregationLabels=aggregationLabels, useRecordingRuleRegistry=useRecordingRuleRegistry
     )), 2),
   };
 
@@ -32,40 +32,44 @@ local transformErrorRateToSuccessRate(errorRateMetric, operationRateMetric, sele
     operationRateMetric: operationRateMetric,
     selector: selector,
 
-    apdexSuccessRateQuery(aggregationLabels, selector, rangeInterval, withoutLabels=[])::
+    apdexSuccessRateQuery(aggregationLabels, selector, rangeInterval, withoutLabels=[], useRecordingRuleRegistry=true)::
       transformErrorRateToSuccessRate(
         self.errorRateMetric,
         self.operationRateMetric,
         selectors.without(selectors.merge(self.selector, selector), withoutLabels),
         rangeInterval,
         aggregationLabels,
+        useRecordingRuleRegistry=useRecordingRuleRegistry,
       ),
-    apdexWeightQuery(aggregationLabels, selector, rangeInterval, withoutLabels=[])::
+    apdexWeightQuery(aggregationLabels, selector, rangeInterval, withoutLabels=[], useRecordingRuleRegistry=true)::
       resolveRateQuery(
         self.operationRateMetric,
         selectors.without(selectors.merge(self.selector, selector), withoutLabels),
         rangeInterval,
         aggregationLabels=aggregationLabels,
-        aggregationFunction='sum'
+        aggregationFunction='sum',
+        useRecordingRuleRegistry=useRecordingRuleRegistry,
       ),
-    apdexNumerator(selector, rangeInterval, withoutLabels=[])::
+    apdexNumerator(selector, rangeInterval, withoutLabels=[], useRecordingRuleRegistry=true)::
       transformErrorRateToSuccessRate(
         self.errorRateMetric,
         self.operationRateMetric,
         selectors.without(selectors.merge(self.selector, selector), withoutLabels),
         rangeInterval,
         [],
+        useRecordingRuleRegistry=useRecordingRuleRegistry,
       ),
 
-    apdexDenominator(selector, rangeInterval, withoutLabels=[])::
+    apdexDenominator(selector, rangeInterval, withoutLabels=[], useRecordingRuleRegistry=true)::
       resolveRateQuery(
         self.operationRateMetric,
         selectors.without(selectors.merge(self.selector, selector), withoutLabels),
         rangeInterval,
+        useRecordingRuleRegistry=useRecordingRuleRegistry,
       ),
 
-    apdexAttribution(aggregationLabel, selector, rangeInterval, withoutLabels=[])::
-      generateApdexAttributionQuery(self, aggregationLabel, selector, rangeInterval, withoutLabels),
+    apdexAttribution(aggregationLabel, selector, rangeInterval, withoutLabels=[], useRecordingRuleRegistry=true)::
+      generateApdexAttributionQuery(self, aggregationLabel, selector, rangeInterval, withoutLabels, useRecordingRuleRegistry=useRecordingRuleRegistry),
 
     // Only support reflection on hash selectors
     [if std.isObject(selector) then 'supportsReflection']():: {
