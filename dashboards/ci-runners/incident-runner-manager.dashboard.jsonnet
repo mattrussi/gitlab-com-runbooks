@@ -3,6 +3,7 @@ local dashboardIncident = import 'stage-groups/verify-runner/dashboard_incident.
 local jobGraphs = import 'stage-groups/verify-runner/job_graphs.libsonnet';
 local resourcesGraphs = import 'stage-groups/verify-runner/resources_graphs.libsonnet';
 local saturationGraphs = import 'stage-groups/verify-runner/saturation_graphs.libsonnet';
+local workerGraphs = import 'stage-groups/verify-runner/worker_graphs.libsonnet';
 
 dashboardIncident.incidentDashboard(
   'runner-manager',
@@ -75,4 +76,22 @@ dashboardIncident.incidentDashboard(
     jobGraphs.running(['executor_stage']),
   ],
   startRow=7000,
+)
+.addRowGrid(
+  'Workers & Slots',
+  panels=[
+    workerGraphs.workerFeedRate,
+    workerGraphs.workerSlots,
+    workerGraphs.workerSlotOperationsRate,
+  ],
+  startRow=8000,
+)
+.addRowGrid(
+  'Workers & Slots failures',
+  panels=[
+    workerGraphs.workerFeedFailuresRate,
+    workerGraphs.workerProcessingFailuresRate,
+    workerGraphs.workerHealthCheckFailuresRate,
+  ],
+  startRow=9000,
 )
