@@ -56,7 +56,12 @@ local selector = { env: '$environment', type: '$type', stage: '$stage' };
     local defaultType = saturationResources[component].getDefaultGrafanaType();
 
     self.saturationDashboard(
-      dashboardTitle=component + ': Saturation Detail',
+      // Grafana currently fails deploying dashboards with underscores in the title,
+      // So replacing them with dashes. The URLs remain the same, but we can no
+      // longer paste the component name into the search box with this change
+      // Remove the std.strReplace once https://github.com/grafana/grafana/issues/64595
+      // is resolved.
+      dashboardTitle=std.strReplace(component, '_', ' ') + ': Saturation Detail',
       component=component,
       panel=saturationDetail.componentSaturationPanel(component, selector),
       helpPanel=saturationDetail.componentSaturationHelpPanel(component),
