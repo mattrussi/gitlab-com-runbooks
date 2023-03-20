@@ -45,6 +45,11 @@ metricsCatalog.serviceDefinition({
   serviceLevelIndicators: {
     grpc_requests: {
       userImpacting: true,
+      // Do not page SREs for this SLI for now.
+      // Once we are comfortable with the Apdex,
+      // we can remove it for a default `s2` severity.
+      // see https://gitlab.com/gitlab-com/runbooks/-/merge_requests/5526#note_1321200842
+      severity: 's4',
       featureCategory: 'kubernetes_management',
       local baseSelector = {
         type: 'kas',
