@@ -106,6 +106,15 @@ variables:
         REGION: us-east1-c
         KUBE_NAMESPACE: prometheus
 
+.if-merge-request: &if-merge-request
+  if: '$CI_MERGE_REQUEST_EVENT_TYPE == "merged_result" || $CI_MERGE_REQUEST_EVENT_TYPE == "detached"'
+
+.ruby-patterns: &ruby-patterns
+  - "**/*.rb"
+
+.md-patterns: &md-patterns
+  - "**/*.md"
+
 default:
   image: "${CI_REGISTRY_IMAGE}:latest"
   tags:
@@ -217,23 +226,32 @@ danger-review:
     - bundle install --with=danger
 
 rubocop:
-  extends: .default-job
   stage: validate
+  rules:
+    - !reference [".default-job-rules", rules]
+    - <<: *if-merge-request
+      changes: *ruby-patterns
   script:
     - gem install bundler --no-document -v $BUNDLER_VERSION
     - bundle install --with=test
     - bundle exec rubocop
 
 markdownlint:
-  extends: .default-job
   stage: validate
+  rules:
+    - !reference [".default-job-rules", rules]
+    - <<: *if-merge-request
+      changes: *md-patterns
   script:
     - npm install
     - npm run markdownlint docs README.md
 
 rspec:
-  extends: .default-job
   stage: test
+  rules:
+    - !reference [".default-job-rules", rules]
+    - <<: *if-merge-request
+      changes: *ruby-patterns
   script:
     - ./scripts/bundler.sh  # Install jsonnet bundles
     - gem install bundler --no-document -v $BUNDLER_VERSION
@@ -242,8 +260,12 @@ rspec:
     - bundle exec rspec
 
 .test-rules:
-  extends: .default-job
   stage: test
+  rules:
+    - !reference [".default-job-rules", rules]
+    - <<: *if-merge-request
+      changes:
+        - "rules/**/*"
   script:
     - gem install bundler --no-document -v $BUNDLER_VERSION
     - bundle install --with=test
@@ -324,8 +346,12 @@ prepare-service-health-dashboard-json:
 
 
 validate-service-mappings:
-  extends: .default-job
   stage: validate
+  rules:
+    - !reference [".default-job-rules", rules]
+    - <<: *if-merge-request
+      changes:
+        - "services/**/*"
   script:
     - make validate-service-mappings
 
@@ -343,20 +369,36 @@ validate-service-catalog-schema:
     - npm run validate-service-catalog-schema -- -s ./services/service-catalog-schema.json -d ./services/service_catalog.json
 
 validate-prom-rules:
-  extends: .default-job
   stage: validate
+  rules:
+    - !reference [".default-job-rules", rules]
+    - <<: *if-merge-request
+      changes:
+        - "scripts/prometheus.yml"
+        - "rules/**/*"
+        - "thanos-rules/**/*"
   script:
     - make validate-prom-rules
 
 validate-kibana-urls:
-  extends: .default-job
   stage: validate
+  rules:
+    - !reference [".default-job-rules", rules]
+    - <<: *if-merge-request
+      changes: *md-patterns
   script:
     - make validate-kibana-urls
 
 validate-alerts:
-  extends: .default-job
   stage: validate
+  rules:
+    - !reference [".default-job-rules", rules]
+    - <<: *if-merge-request
+      changes:
+        - "docs/**/*"
+        - "rules/**/*"
+        - "thanos-rules/**/*"
+        - "services/**/*"
   script:
     - make validate-alerts
 
@@ -588,6 +630,13 @@ check_alerts:
 test_dashboards:
   extends: .dashboards
   stage: test
+  rules:
+    - !reference [".dashboards", rules]
+    - <<: *if-merge-request
+      changes:
+        - "services/**/*"
+        - "dashboards/**/*"
+        - "lib/monitored_services.rb"
   dependencies:
     - prepare-service-health-dashboard-json
   script:
