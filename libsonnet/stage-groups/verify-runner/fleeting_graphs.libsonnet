@@ -33,7 +33,7 @@ local provisionerMissedUpdates =
   basic.timeseries(
     'Fleeting missed updates rate',
     legendFormat='{{shard}}',
-    format='short',
+    format='ops',
     query=|||
       sum by(shard) (
         increase(
@@ -47,7 +47,7 @@ local provisionerInstanceOperationsRate =
   basic.timeseries(
     'Fleeting instance operations rate',
     legendFormat='{{shard}}: {{operation}}',
-    format='short',
+    format='ops',
     query=|||
       sum by(shard, operation) (
         increase(
@@ -131,7 +131,7 @@ local taskscalerOperationsRate =
   basic.timeseries(
     'Taskscaler operations rate',
     legendFormat='{{shard}}: {{operation}}',
-    format='short',
+    format='ops',
     query=|||
       sum by(shard, operation) (
         increase(
@@ -170,7 +170,7 @@ local taskscalerScaleOperationsRate =
   basic.timeseries(
     'Taskscaler scale operations rate',
     legendFormat='{{shard}}: {{operation}}',
-    format='short',
+    format='ops',
     query=|||
       sum by(shard, operation) (
         increase(
