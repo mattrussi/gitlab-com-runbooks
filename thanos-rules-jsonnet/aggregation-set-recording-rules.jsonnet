@@ -2,6 +2,7 @@ local aggregationSets = (import 'gitlab-metrics-config.libsonnet').aggregationSe
 local aggregationSetTransformer = import 'servicemetrics/aggregation-set-transformer.libsonnet';
 local applicationSlis = (import 'gitlab-slis/library.libsonnet').all;
 local applicationSliAggregations = import 'gitlab-slis/aggregation-sets.libsonnet';
+local metricsConfig = import 'gitlab-metrics-config.libsonnet';
 
 local defaultsForRecordingRuleGroup = { partial_response_strategy: 'warn' };
 
@@ -10,53 +11,55 @@ local outputPromYaml(groups) =
     groups: groups,
   });
 
-local groupsForApplicationSli(sli) =
-  local targetAggregationSet = applicationSliAggregations.targetAggregationSet(sli);
-  local sourceAggregationSet = applicationSliAggregations.sourceAggregationSet(sli);
+local transformRuleGroups(sourceAggregationSet, targetAggregationSet, extraSourceSelector) =
   aggregationSetTransformer.generateRecordingRuleGroups(
-    sourceAggregationSet=sourceAggregationSet,
+    sourceAggregationSet=sourceAggregationSet { selector+: extraSourceSelector },
     targetAggregationSet=targetAggregationSet,
     extrasForGroup=defaultsForRecordingRuleGroup
   );
 
+local groupsForApplicationSli(sli, extraSelector) =
+  local targetAggregationSet = applicationSliAggregations.targetAggregationSet(sli);
+  local sourceAggregationSet = applicationSliAggregations.sourceAggregationSet(sli);
+  transformRuleGroups(sourceAggregationSet, targetAggregationSet, extraSelector);
 
 /**
  * This file defines all the aggregation recording rules that will aggregate in Thanos to a single global view
  */
-{
+local filesForSeparateSelector(name, selector) = {
   /**
    * Aggregates from multiple "split-brain" prometheus SLIs to a global/single-view SLI metrics
    */
-  'aggregated-component-metrics.yml':
+  ['aggregated-component-metrics-%s.yml' % [name]]:
     outputPromYaml(
-      aggregationSetTransformer.generateRecordingRuleGroups(
+      transformRuleGroups(
         sourceAggregationSet=aggregationSets.promSourceSLIs,
         targetAggregationSet=aggregationSets.componentSLIs,
-        extrasForGroup=defaultsForRecordingRuleGroup
+        extraSourceSelector=selector,
       )
     ),
 
   /**
    * Aggregates from multiple "split-brain" prometheus SLIs to a global/single-view service-level aggregated metrics
    */
-  'aggregated-service-metrics.yml':
+  ['aggregated-service-metrics-%s.yml' % [name]]:
     outputPromYaml(
-      aggregationSetTransformer.generateRecordingRuleGroups(
+      transformRuleGroups(
         sourceAggregationSet=aggregationSets.promSourceSLIs,
         targetAggregationSet=aggregationSets.serviceSLIs,
-        extrasForGroup=defaultsForRecordingRuleGroup
+        extraSourceSelector=selector,
       )
     ),
 
   /**
    * Aggregates from multiple "split-brain" prometheus per-node SLIs to a global/single-view SLI-node-level aggregated metrics
    */
-  'aggregated-sli-node-metrics.yml':
+  ['aggregated-sli-node-metrics-%s.yml' % [name]]:
     outputPromYaml(
-      aggregationSetTransformer.generateRecordingRuleGroups(
+      transformRuleGroups(
         sourceAggregationSet=aggregationSets.promSourceNodeComponentSLIs,
         targetAggregationSet=aggregationSets.nodeComponentSLIs,
-        extrasForGroup=defaultsForRecordingRuleGroup
+        extraSourceSelector=selector,
       ),
     ),
 
@@ -64,63 +67,63 @@ local groupsForApplicationSli(sli) =
    * Aggregates from multiple "split-brain" prometheus SLIs to a global/single-view service-node-level aggregated metrics
    * TODO: consider whether this aggregation is neccessary and useful.
    */
-  'aggregated-service-node-metrics.yml':
+  ['aggregated-service-node-metrics-%s.yml' % [name]]:
     outputPromYaml(
-      aggregationSetTransformer.generateRecordingRuleGroups(
+      transformRuleGroups(
         sourceAggregationSet=aggregationSets.promSourceNodeComponentSLIs,
         targetAggregationSet=aggregationSets.nodeServiceSLIs,
-        extrasForGroup=defaultsForRecordingRuleGroup
+        extraSourceSelector=selector,
       ),
     ),
 
   /**
    * Regional SLIS
    */
-  'aggregated-sli-regional-metrics.yml':
+  ['aggregated-sli-regional-metrics-%s.yml' % [name]]:
     outputPromYaml(
-      aggregationSetTransformer.generateRecordingRuleGroups(
+      transformRuleGroups(
         sourceAggregationSet=aggregationSets.promSourceSLIs,
         targetAggregationSet=aggregationSets.regionalComponentSLIs,
-        extrasForGroup=defaultsForRecordingRuleGroup
+        extraSourceSelector=selector,
       ),
     ),
 
   /**
    * Regional SLIs, aggregated to the service level
    */
-  'aggregated-service-regional-metrics.yml':
+  ['aggregated-service-regional-metrics-%s.yml' % [name]]:
     outputPromYaml(
-      aggregationSetTransformer.generateRecordingRuleGroups(
+      transformRuleGroups(
         sourceAggregationSet=aggregationSets.promSourceSLIs,
         targetAggregationSet=aggregationSets.regionalServiceSLIs,
-        extrasForGroup=defaultsForRecordingRuleGroup
+        extraSourceSelector=selector,
       ),
     ),
 
-  'aggregated-feature-category-metrics.yml':
+  ['aggregated-feature-category-metrics-%s.yml' % [name]]:
     outputPromYaml(
-      aggregationSetTransformer.generateRecordingRuleGroups(
+      transformRuleGroups(
         sourceAggregationSet=aggregationSets.featureCategorySourceSLIs,
         targetAggregationSet=aggregationSets.featureCategorySLIs,
-        extrasForGroup=defaultsForRecordingRuleGroup
+        extraSourceSelector=selector,
       ),
     ),
 
-  'aggregated-service-component-stage-group-metrics.yml':
+  ['aggregated-service-component-stage-group-metrics-%s.yml' % [name]]:
     outputPromYaml(
-      aggregationSetTransformer.generateRecordingRuleGroups(
+      transformRuleGroups(
         sourceAggregationSet=aggregationSets.featureCategorySourceSLIs,
         targetAggregationSet=aggregationSets.serviceComponentStageGroupSLIs,
-        extrasForGroup=defaultsForRecordingRuleGroup
+        extraSourceSelector=selector,
       ),
     ),
 
-  'aggregated-stage-group-metrics.yml':
+  ['aggregated-stage-group-metrics-%s.yml' % [name]]:
     outputPromYaml(
-      aggregationSetTransformer.generateRecordingRuleGroups(
+      transformRuleGroups(
         sourceAggregationSet=aggregationSets.featureCategorySourceSLIs,
         targetAggregationSet=aggregationSets.stageGroupSLIs,
-        extrasForGroup=defaultsForRecordingRuleGroup
+        extraSourceSelector=selector,
       ),
     ),
 
@@ -130,10 +133,11 @@ local groupsForApplicationSli(sli) =
   // If the application SLI is added to the service catalog, it will automatically
   // generate `sli_aggregation:` recordings that can be reused everywhere. So no
   // real need to duplicate them.
-  'aggregated-application-sli-metrics.yml':
+  ['aggregated-application-sli-metrics-%s.yml' % [name]]:
     outputPromYaml(
       std.flatMap(
-        groupsForApplicationSli,
+        function(sli)
+          groupsForApplicationSli(sli, selector),
         applicationSlis
       ),
     ),
@@ -142,12 +146,12 @@ local groupsForApplicationSli(sli) =
    * Aggregates component SLIs that are evaluated only in Thanos
    * Used for Thanos self-monitoring
    */
-  'aggregated-global-component-slis.yml':
+  ['aggregated-global-component-slis-%s.yml' % [name]]:
     outputPromYaml(
-      aggregationSetTransformer.generateRecordingRuleGroups(
+      transformRuleGroups(
         sourceAggregationSet=aggregationSets.globallyEvaluatedSourceSLIs,
         targetAggregationSet=aggregationSets.globallyEvaluatedSLIs,
-        extrasForGroup=defaultsForRecordingRuleGroup
+        extraSourceSelector=selector,
       ),
     ),
 
@@ -156,14 +160,19 @@ local groupsForApplicationSli(sli) =
    * Aggregates component SLIs to service level that are evaluated only in Thanos
    * Used for Thanos self-monitoring
    */
-  'aggregated-global-service-slis.yml':
+  ['aggregated-global-service-slis-%s.yml' % [name]]:
     outputPromYaml(
-      aggregationSetTransformer.generateRecordingRuleGroups(
+      transformRuleGroups(
         sourceAggregationSet=aggregationSets.globallyEvaluatedSourceSLIs,
         targetAggregationSet=aggregationSets.globallyEvaluatedServiceSLIs,
-        extrasForGroup=defaultsForRecordingRuleGroup
+        extraSourceSelector=selector,
       ),
     ),
+};
 
-
-}
+std.foldl(
+  function(memo, groupName)
+    memo + filesForSeparateSelector(groupName, metricsConfig.separateGlobalRecordingSelectors[groupName]),
+  std.objectFields(metricsConfig.separateGlobalRecordingSelectors),
+  {}
+)
