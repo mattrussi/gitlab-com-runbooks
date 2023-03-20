@@ -16,8 +16,7 @@ function(
         userImpacting: true,
         featureCategory: featureCategory,
         description: |||
-          Aggregation of all %(descriptiveName)s operations issued from the Rails codebase
-          through `Gitlab::Redis::Wrapper` subclasses.
+          Aggregation of all %(descriptiveName)s operations issued from the Rails codebase.
         ||| % { descriptiveName: descriptiveName },
         significantLabels: ['type'],
 
