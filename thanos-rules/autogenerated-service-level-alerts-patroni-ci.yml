@@ -185,6 +185,354 @@ groups:
       gitlab_component_ops:rate_5m{component="pgbouncer",monitor="global",stage="main",type="patroni-ci"} offset 1h
       unless
       gitlab_component_ops:rate_5m{component="pgbouncer",monitor="global",stage="main",type="patroni-ci"}
+  - alert: PatroniCiServiceRailsPrimarySqlApdexSLOViolation
+    for: 2m
+    annotations:
+      title: The rails_primary_sql SLI of the patroni-ci service (`{{ $labels.stage
+        }}` stage) has an apdex violating SLO
+      description: |
+        Represents all SQL transactions issued through ActiveRecord from the Rails monolith (web, api, websockets, but not sidekiq) to the Postgres primary. Durations can be impacted by various conditions other than Patroni, including client pool saturation, pgbouncer saturation, Ruby thread contention and network conditions.
+
+        Currently the apdex value is {{ $value | humanizePercentage }}.
+      grafana_dashboard_id: patroni-ci-main/patroni-ci-overview
+      grafana_dashboard_link: https://dashboards.gitlab.net/d/patroni-ci-main/patroni-ci-overview?from=now-6h/m&to=now-1m/m&var-environment={{
+        $labels.environment }}&var-stage={{ $labels.stage }}
+      grafana_min_zoom_hours: "6"
+      grafana_panel_id: "2409561530"
+      grafana_variables: environment,stage
+      promql_template_1: |
+        histogram_quantile(
+          0.950000,
+          sum by (env,environment,tier,stage,le) (
+            sli_aggregations:gitlab_sql_primary_duration_seconds_bucket_rate5m{db_config_name="ci",environment="{{ $labels.environment }}",stage="{{ $labels.stage }}",type!="sidekiq"}
+          )
+        )
+      runbook: docs/patroni-ci/README.md
+    labels:
+      aggregation: component
+      alert_class: slo_violation
+      alert_type: symptom
+      feature_category: not_owned
+      pager: pagerduty
+      rules_domain: general
+      severity: s2
+      sli_type: apdex
+      slo_alert: "yes"
+      user_impacting: "yes"
+      window: 1h
+    expr: |
+      (
+        (
+          gitlab_component_apdex:ratio_1h{component="rails_primary_sql",monitor="global",type="patroni-ci"}
+          < (1 - 14.4 * 0.001000)
+        )
+        and
+        (
+          gitlab_component_apdex:ratio_5m{component="rails_primary_sql",monitor="global",type="patroni-ci"}
+          < (1 - 14.4 * 0.001000)
+        )
+      )
+      and on(env,environment,tier,type,stage,component)
+      (
+        sum by(env,environment,tier,type,stage,component) (gitlab_component_ops:rate_1h{component="rails_primary_sql",monitor="global",type="patroni-ci"}) >= 1
+      )
+  - alert: PatroniCiServiceRailsPrimarySqlApdexSLOViolation
+    for: 2m
+    annotations:
+      title: The rails_primary_sql SLI of the patroni-ci service (`{{ $labels.stage
+        }}` stage) has an apdex violating SLO
+      description: |
+        Represents all SQL transactions issued through ActiveRecord from the Rails monolith (web, api, websockets, but not sidekiq) to the Postgres primary. Durations can be impacted by various conditions other than Patroni, including client pool saturation, pgbouncer saturation, Ruby thread contention and network conditions.
+
+        Currently the apdex value is {{ $value | humanizePercentage }}.
+      grafana_dashboard_id: patroni-ci-main/patroni-ci-overview
+      grafana_dashboard_link: https://dashboards.gitlab.net/d/patroni-ci-main/patroni-ci-overview?from=now-6h/m&to=now-1m/m&var-environment={{
+        $labels.environment }}&var-stage={{ $labels.stage }}
+      grafana_min_zoom_hours: "6"
+      grafana_panel_id: "2409561530"
+      grafana_variables: environment,stage
+      promql_template_1: |
+        histogram_quantile(
+          0.950000,
+          sum by (env,environment,tier,stage,le) (
+            sli_aggregations:gitlab_sql_primary_duration_seconds_bucket_rate5m{db_config_name="ci",environment="{{ $labels.environment }}",stage="{{ $labels.stage }}",type!="sidekiq"}
+          )
+        )
+      runbook: docs/patroni-ci/README.md
+    labels:
+      aggregation: component
+      alert_class: slo_violation
+      alert_type: symptom
+      feature_category: not_owned
+      pager: pagerduty
+      rules_domain: general
+      severity: s2
+      sli_type: apdex
+      slo_alert: "yes"
+      user_impacting: "yes"
+      window: 6h
+    expr: |
+      (
+        (
+          gitlab_component_apdex:ratio_6h{component="rails_primary_sql",monitor="global",type="patroni-ci"}
+          < (1 - 6 * 0.001000)
+        )
+        and
+        (
+          gitlab_component_apdex:ratio_30m{component="rails_primary_sql",monitor="global",type="patroni-ci"}
+          < (1 - 6 * 0.001000)
+        )
+      )
+      and on(env,environment,tier,type,stage,component)
+      (
+        sum by(env,environment,tier,type,stage,component) (gitlab_component_ops:rate_6h{component="rails_primary_sql",monitor="global",type="patroni-ci"}) >= 0.16667
+      )
+  - alert: PatroniCiServiceRailsPrimarySqlTrafficCessation
+    for: 5m
+    annotations:
+      title: The rails_primary_sql SLI of the patroni-ci service (`{{ $labels.stage
+        }}` stage) has not received any traffic in the past 30m
+      description: |
+        Represents all SQL transactions issued through ActiveRecord from the Rails monolith (web, api, websockets, but not sidekiq) to the Postgres primary. Durations can be impacted by various conditions other than Patroni, including client pool saturation, pgbouncer saturation, Ruby thread contention and network conditions.
+
+        This alert signifies that the SLI is reporting a cessation of traffic; the signal is present, but is zero.
+      grafana_dashboard_id: patroni-ci-main/patroni-ci-overview
+      grafana_dashboard_link: https://dashboards.gitlab.net/d/patroni-ci-main/patroni-ci-overview?from=now-6h/m&to=now-1m/m&var-environment={{
+        $labels.environment }}&var-stage={{ $labels.stage }}
+      grafana_min_zoom_hours: "6"
+      grafana_panel_id: "12068001"
+      grafana_variables: environment,stage
+      promql_template_1: |
+        sum by (env,environment,tier,stage) (
+          sli_aggregations:gitlab_sql_primary_duration_seconds_bucket_rate5m{db_config_name="ci",environment="{{ $labels.environment }}",le="+Inf",stage="{{ $labels.stage }}",type!="sidekiq"}
+        )
+      runbook: docs/patroni-ci/README.md
+    labels:
+      aggregation: component
+      alert_class: traffic_cessation
+      alert_type: cause
+      feature_category: not_owned
+      pager: pagerduty
+      rules_domain: general
+      severity: s2
+      sli_type: ops
+      slo_alert: "no"
+      user_impacting: "yes"
+    expr: |
+      gitlab_component_ops:rate_30m{component="rails_primary_sql",monitor="global",stage="main",type="patroni-ci"} == 0
+      and
+      gitlab_component_ops:rate_30m{component="rails_primary_sql",monitor="global",stage="main",type="patroni-ci"} offset 1h >= 0.16666666666666666
+  - alert: PatroniCiServiceRailsPrimarySqlTrafficAbsent
+    for: 30m
+    annotations:
+      title: The rails_primary_sql SLI of the patroni-ci service (`{{ $labels.stage
+        }}` stage) has not reported any traffic in the past 30m
+      description: |
+        Represents all SQL transactions issued through ActiveRecord from the Rails monolith (web, api, websockets, but not sidekiq) to the Postgres primary. Durations can be impacted by various conditions other than Patroni, including client pool saturation, pgbouncer saturation, Ruby thread contention and network conditions.
+
+        This alert signifies that the SLI was previously reporting traffic, but is no longer - the signal is absent.
+
+        This could be caused by a change to the metrics used in the SLI, or by the service not receiving traffic.
+      grafana_dashboard_id: patroni-ci-main/patroni-ci-overview
+      grafana_dashboard_link: https://dashboards.gitlab.net/d/patroni-ci-main/patroni-ci-overview?from=now-6h/m&to=now-1m/m&var-environment={{
+        $labels.environment }}&var-stage={{ $labels.stage }}
+      grafana_min_zoom_hours: "6"
+      grafana_panel_id: "12068001"
+      grafana_variables: environment,stage
+      promql_template_1: |
+        sum by (env,environment,tier,stage) (
+          sli_aggregations:gitlab_sql_primary_duration_seconds_bucket_rate5m{db_config_name="ci",environment="{{ $labels.environment }}",le="+Inf",stage="{{ $labels.stage }}",type!="sidekiq"}
+        )
+      runbook: docs/patroni-ci/README.md
+    labels:
+      aggregation: component
+      alert_class: traffic_cessation
+      alert_type: cause
+      feature_category: not_owned
+      pager: pagerduty
+      rules_domain: general
+      severity: s2
+      sli_type: ops
+      slo_alert: "no"
+      user_impacting: "yes"
+    expr: |
+      gitlab_component_ops:rate_5m{component="rails_primary_sql",monitor="global",stage="main",type="patroni-ci"} offset 1h
+      unless
+      gitlab_component_ops:rate_5m{component="rails_primary_sql",monitor="global",stage="main",type="patroni-ci"}
+  - alert: PatroniCiServiceRailsReplicaSqlApdexSLOViolation
+    for: 2m
+    annotations:
+      title: The rails_replica_sql SLI of the patroni-ci service (`{{ $labels.stage
+        }}` stage) has an apdex violating SLO
+      description: |
+        Represents all SQL transactions issued through ActiveRecord from the Rails monolith (web, api, websockets, but not sidekiq) to Postgres replicas. Durations can be impacted by various conditions other than Patroni, including client pool saturation, pgbouncer saturation, Ruby thread contention and network conditions.
+
+        Currently the apdex value is {{ $value | humanizePercentage }}.
+      grafana_dashboard_id: patroni-ci-main/patroni-ci-overview
+      grafana_dashboard_link: https://dashboards.gitlab.net/d/patroni-ci-main/patroni-ci-overview?from=now-6h/m&to=now-1m/m&var-environment={{
+        $labels.environment }}&var-stage={{ $labels.stage }}
+      grafana_min_zoom_hours: "6"
+      grafana_panel_id: "4242138551"
+      grafana_variables: environment,stage
+      promql_template_1: |
+        histogram_quantile(
+          0.950000,
+          sum by (env,environment,tier,stage,le) (
+            sli_aggregations:gitlab_sql_replica_duration_seconds_bucket_rate5m{db_config_name="ci_replica",environment="{{ $labels.environment }}",stage="{{ $labels.stage }}",type!="sidekiq"}
+          )
+        )
+      runbook: docs/patroni-ci/README.md
+    labels:
+      aggregation: component
+      alert_class: slo_violation
+      alert_type: symptom
+      feature_category: not_owned
+      pager: pagerduty
+      rules_domain: general
+      severity: s2
+      sli_type: apdex
+      slo_alert: "yes"
+      user_impacting: "yes"
+      window: 1h
+    expr: |
+      (
+        (
+          gitlab_component_apdex:ratio_1h{component="rails_replica_sql",monitor="global",type="patroni-ci"}
+          < (1 - 14.4 * 0.001000)
+        )
+        and
+        (
+          gitlab_component_apdex:ratio_5m{component="rails_replica_sql",monitor="global",type="patroni-ci"}
+          < (1 - 14.4 * 0.001000)
+        )
+      )
+      and on(env,environment,tier,type,stage,component)
+      (
+        sum by(env,environment,tier,type,stage,component) (gitlab_component_ops:rate_1h{component="rails_replica_sql",monitor="global",type="patroni-ci"}) >= 1
+      )
+  - alert: PatroniCiServiceRailsReplicaSqlApdexSLOViolation
+    for: 2m
+    annotations:
+      title: The rails_replica_sql SLI of the patroni-ci service (`{{ $labels.stage
+        }}` stage) has an apdex violating SLO
+      description: |
+        Represents all SQL transactions issued through ActiveRecord from the Rails monolith (web, api, websockets, but not sidekiq) to Postgres replicas. Durations can be impacted by various conditions other than Patroni, including client pool saturation, pgbouncer saturation, Ruby thread contention and network conditions.
+
+        Currently the apdex value is {{ $value | humanizePercentage }}.
+      grafana_dashboard_id: patroni-ci-main/patroni-ci-overview
+      grafana_dashboard_link: https://dashboards.gitlab.net/d/patroni-ci-main/patroni-ci-overview?from=now-6h/m&to=now-1m/m&var-environment={{
+        $labels.environment }}&var-stage={{ $labels.stage }}
+      grafana_min_zoom_hours: "6"
+      grafana_panel_id: "4242138551"
+      grafana_variables: environment,stage
+      promql_template_1: |
+        histogram_quantile(
+          0.950000,
+          sum by (env,environment,tier,stage,le) (
+            sli_aggregations:gitlab_sql_replica_duration_seconds_bucket_rate5m{db_config_name="ci_replica",environment="{{ $labels.environment }}",stage="{{ $labels.stage }}",type!="sidekiq"}
+          )
+        )
+      runbook: docs/patroni-ci/README.md
+    labels:
+      aggregation: component
+      alert_class: slo_violation
+      alert_type: symptom
+      feature_category: not_owned
+      pager: pagerduty
+      rules_domain: general
+      severity: s2
+      sli_type: apdex
+      slo_alert: "yes"
+      user_impacting: "yes"
+      window: 6h
+    expr: |
+      (
+        (
+          gitlab_component_apdex:ratio_6h{component="rails_replica_sql",monitor="global",type="patroni-ci"}
+          < (1 - 6 * 0.001000)
+        )
+        and
+        (
+          gitlab_component_apdex:ratio_30m{component="rails_replica_sql",monitor="global",type="patroni-ci"}
+          < (1 - 6 * 0.001000)
+        )
+      )
+      and on(env,environment,tier,type,stage,component)
+      (
+        sum by(env,environment,tier,type,stage,component) (gitlab_component_ops:rate_6h{component="rails_replica_sql",monitor="global",type="patroni-ci"}) >= 0.16667
+      )
+  - alert: PatroniCiServiceRailsReplicaSqlTrafficCessation
+    for: 5m
+    annotations:
+      title: The rails_replica_sql SLI of the patroni-ci service (`{{ $labels.stage
+        }}` stage) has not received any traffic in the past 30m
+      description: |
+        Represents all SQL transactions issued through ActiveRecord from the Rails monolith (web, api, websockets, but not sidekiq) to Postgres replicas. Durations can be impacted by various conditions other than Patroni, including client pool saturation, pgbouncer saturation, Ruby thread contention and network conditions.
+
+        This alert signifies that the SLI is reporting a cessation of traffic; the signal is present, but is zero.
+      grafana_dashboard_id: patroni-ci-main/patroni-ci-overview
+      grafana_dashboard_link: https://dashboards.gitlab.net/d/patroni-ci-main/patroni-ci-overview?from=now-6h/m&to=now-1m/m&var-environment={{
+        $labels.environment }}&var-stage={{ $labels.stage }}
+      grafana_min_zoom_hours: "6"
+      grafana_panel_id: "762276418"
+      grafana_variables: environment,stage
+      promql_template_1: |
+        sum by (env,environment,tier,stage) (
+          sli_aggregations:gitlab_sql_replica_duration_seconds_bucket_rate5m{db_config_name="ci_replica",environment="{{ $labels.environment }}",le="+Inf",stage="{{ $labels.stage }}",type!="sidekiq"}
+        )
+      runbook: docs/patroni-ci/README.md
+    labels:
+      aggregation: component
+      alert_class: traffic_cessation
+      alert_type: cause
+      feature_category: not_owned
+      pager: pagerduty
+      rules_domain: general
+      severity: s2
+      sli_type: ops
+      slo_alert: "no"
+      user_impacting: "yes"
+    expr: |
+      gitlab_component_ops:rate_30m{component="rails_replica_sql",monitor="global",stage="main",type="patroni-ci"} == 0
+      and
+      gitlab_component_ops:rate_30m{component="rails_replica_sql",monitor="global",stage="main",type="patroni-ci"} offset 1h >= 0.16666666666666666
+  - alert: PatroniCiServiceRailsReplicaSqlTrafficAbsent
+    for: 30m
+    annotations:
+      title: The rails_replica_sql SLI of the patroni-ci service (`{{ $labels.stage
+        }}` stage) has not reported any traffic in the past 30m
+      description: |
+        Represents all SQL transactions issued through ActiveRecord from the Rails monolith (web, api, websockets, but not sidekiq) to Postgres replicas. Durations can be impacted by various conditions other than Patroni, including client pool saturation, pgbouncer saturation, Ruby thread contention and network conditions.
+
+        This alert signifies that the SLI was previously reporting traffic, but is no longer - the signal is absent.
+
+        This could be caused by a change to the metrics used in the SLI, or by the service not receiving traffic.
+      grafana_dashboard_id: patroni-ci-main/patroni-ci-overview
+      grafana_dashboard_link: https://dashboards.gitlab.net/d/patroni-ci-main/patroni-ci-overview?from=now-6h/m&to=now-1m/m&var-environment={{
+        $labels.environment }}&var-stage={{ $labels.stage }}
+      grafana_min_zoom_hours: "6"
+      grafana_panel_id: "762276418"
+      grafana_variables: environment,stage
+      promql_template_1: |
+        sum by (env,environment,tier,stage) (
+          sli_aggregations:gitlab_sql_replica_duration_seconds_bucket_rate5m{db_config_name="ci_replica",environment="{{ $labels.environment }}",le="+Inf",stage="{{ $labels.stage }}",type!="sidekiq"}
+        )
+      runbook: docs/patroni-ci/README.md
+    labels:
+      aggregation: component
+      alert_class: traffic_cessation
+      alert_type: cause
+      feature_category: not_owned
+      pager: pagerduty
+      rules_domain: general
+      severity: s2
+      sli_type: ops
+      slo_alert: "no"
+      user_impacting: "yes"
+    expr: |
+      gitlab_component_ops:rate_5m{component="rails_replica_sql",monitor="global",stage="main",type="patroni-ci"} offset 1h
+      unless
+      gitlab_component_ops:rate_5m{component="rails_replica_sql",monitor="global",stage="main",type="patroni-ci"}
   - alert: PatroniCiServiceTransactionsPrimaryErrorSLOViolation
     for: 2m
     annotations:

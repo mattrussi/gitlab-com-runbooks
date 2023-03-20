@@ -45,14 +45,14 @@ metricsCatalog.serviceDefinition(
 
         apdex: histogramApdex(
           histogram='gitlab_sql_primary_duration_seconds_bucket',
-          selector=railsBaseSelector,
+          selector=railsBaseSelector { db_config_name: 'main' },
           satisfiedThreshold=0.05,
           toleratedThreshold=0.1
         ),
 
         requestRate: rateMetric(
           counter='gitlab_sql_primary_duration_seconds_bucket',
-          selector=railsBaseSelector { le: '+Inf' },
+          selector=railsBaseSelector { le: '+Inf', db_config_name: 'main' },
         ),
 
         significantLabels: ['feature_category'],
@@ -70,14 +70,14 @@ metricsCatalog.serviceDefinition(
 
         apdex: histogramApdex(
           histogram='gitlab_sql_replica_duration_seconds_bucket',
-          selector=railsBaseSelector,
+          selector=railsBaseSelector { db_config_name: 'main_replica' },
           satisfiedThreshold=0.05,
           toleratedThreshold=0.1
         ),
 
         requestRate: rateMetric(
           counter='gitlab_sql_replica_duration_seconds_bucket',
-          selector=railsBaseSelector { le: '+Inf' },
+          selector=railsBaseSelector { le: '+Inf', db_config_name: 'main_replica' },
         ),
 
         significantLabels: ['feature_category'],
