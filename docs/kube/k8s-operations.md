@@ -97,6 +97,23 @@ Refer to existing Kubernetes documentation for reference and further details:
 - <https://kubernetes.io/docs/tasks/run-application/horizontal-pod-autoscale/>
 - <https://github.com/kubernetes/community/blob/master/contributors/design-proposals/autoscaling/horizontal-pod-autoscaler.md>
 
+## Rotating/Restarting a Deployment
+
+In some cases there might be a need to rotate all pods for a workload (e.g. feature flags that require an app restart).
+This can be triggered by using `kubectl rollout restart`.
+
+Example:
+
+```sh
+kubectl -n gitlab rollout restart deployment/gitlab-gitlab-shell
+```
+
+Status of the deployment rotation can be checked with:
+
+```sh
+kubectl rollout status -n gitlab deployment/gitlab-gitlab-shell
+```
+
 ## Deployment lifecycle
 
 Kubernetes keeps replicasets objects for a limited number of revisions of deployments. Kubernetes events are not created for a replicaset creation/deletion. Only for pods creation/deletion within a replicaset. Similarly, there are no events created for changes to Deployments.
