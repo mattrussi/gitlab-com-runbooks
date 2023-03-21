@@ -44,6 +44,14 @@
       'navigation',
     ],
   },
+  knowledge: {
+    name: 'Knowledge',
+    stage: 'plan',
+    feature_categories: [
+      'wiki',
+      'pages',
+    ],
+  },
   project_management: {
     name: 'Project Management',
     stage: 'plan',
@@ -91,8 +99,6 @@
     stage: 'create',
     feature_categories: [
       'web_ide',
-      'wiki',
-      'pages',
       'remote_development',
     ],
   },
