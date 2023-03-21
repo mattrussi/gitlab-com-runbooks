@@ -3263,7 +3263,7 @@ groups:
 
         Details of the Kube Container Memory Utilization resource:
 
-        Records the total memory utilization for containers for this service, as a percentage of the memory limit as configured through Kubernetes.
+        This uses the working set size from cAdvisor for the cgroup's memory usage. That may not be a good measure as it includes filesystem cache pages that are not necessarily attributable to the application inside the cgroup, and are permitted to be evicted instead of being OOM killed.
 
       grafana_dashboard_id: alerts-sat_kube_container_memory
       grafana_dashboard_link: https://dashboards.gitlab.net/d/alerts-sat_kube_container_memory?from=now-6h/m&to=now-1m/m&var-type={{

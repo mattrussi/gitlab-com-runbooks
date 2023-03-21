@@ -16,6 +16,7 @@ local noUrgencySelector = { urgency: '' };
 metricsCatalog.serviceDefinition({
   type: 'sidekiq',
   tier: 'sv',
+  tags: ['rails'],
   monitoringThresholds: {
     apdexScore: 0.995,
     errorRatio: 0.995,
