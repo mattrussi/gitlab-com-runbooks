@@ -1,4 +1,5 @@
 local metricsCatalog = import 'servicemetrics/metrics.libsonnet';
+local histogramApdex = metricsCatalog.histogramApdex;
 local rateMetric = metricsCatalog.rateMetric;
 local toolingLinks = import 'toolinglinks/toolinglinks.libsonnet';
 
@@ -9,7 +10,7 @@ metricsCatalog.serviceDefinition({
   tags: ['golang'],
 
   monitoringThresholds: {
-    // apdexScore: 0.95,
+    apdexScore: 0.95,
     errorRatio: 0.9995,
   },
   otherThresholds: {
@@ -44,10 +45,31 @@ metricsCatalog.serviceDefinition({
   serviceLevelIndicators: {
     grpc_requests: {
       userImpacting: true,
+      // Do not page SREs for this SLI for now.
+      // Once we are comfortable with the Apdex,
+      // we can remove it for a default `s2` severity.
+      // see https://gitlab.com/gitlab-com/runbooks/-/merge_requests/5526#note_1321200842
+      severity: 's4',
       featureCategory: 'kubernetes_management',
       local baseSelector = {
         type: 'kas',
       },
+
+      apdex: histogramApdex(
+        histogram='k8s_api_proxy_routing_duration_seconds_bucket',
+        selector=baseSelector {
+          // The `success` status contains durations up to 20s and
+          // the `timeout` would contain everything above that.
+          // However, if no agent is connected at the time of the proxy request,
+          // (because it simply isn't or is reconnecting) this is NOT an actual
+          // issue with KAS itself, but with the customers infrastructure.
+          // Therefore, we only select for `success` statuses for now and will
+          // look into how we can improve the Apdex score long-term.
+          // status: { oneOf: ['success', 'timeout'] },
+          status: { oneOf: ['success'] },
+        },
+        satisfiedThreshold=4.096,
+      ),
 
       requestRate: rateMetric(
         counter='grpc_server_handled_total',
