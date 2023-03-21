@@ -11,7 +11,7 @@ groups:
       title: The primary_server SLI of the redis-db-load-balancing service (`{{ $labels.stage
         }}` stage) has not received any traffic in the past 30m
       description: |
-        Operations on the Redis primary for Redis Rate-Limiting instance.
+        Operations on the Redis primary for Redis DB load balancing instance.
 
         This alert signifies that the SLI is reporting a cessation of traffic; the signal is present, but is zero.
       grafana_dashboard_id: redis-db-load-balancing-main/redis-db-load-balancing-overview
@@ -46,7 +46,7 @@ groups:
       title: The primary_server SLI of the redis-db-load-balancing service (`{{ $labels.stage
         }}` stage) has not reported any traffic in the past 30m
       description: |
-        Operations on the Redis primary for Redis Rate-Limiting instance.
+        Operations on the Redis primary for Redis DB load balancing instance.
 
         This alert signifies that the SLI was previously reporting traffic, but is no longer - the signal is absent.
 
@@ -83,7 +83,7 @@ groups:
       title: The rails_redis_client SLI of the redis-db-load-balancing service (`{{
         $labels.stage }}` stage) has an apdex violating SLO
       description: |
-        Aggregation of all Redis Rate-Limiting operations issued from the Rails codebase.
+        Aggregation of all Redis DB load balancing operations issued from the Rails codebase.
 
         Currently the apdex value is {{ $value | humanizePercentage }}.
       grafana_dashboard_id: redis-db-load-balancing-main/redis-db-load-balancing-overview
@@ -96,7 +96,7 @@ groups:
         histogram_quantile(
           0.950000,
           sum by (env,environment,tier,stage,le) (
-            rate(gitlab_redis_client_requests_duration_seconds_bucket{environment="{{ $labels.environment }}",stage="{{ $labels.stage }}",storage="rate_limiting"}[5m])
+            rate(gitlab_redis_client_requests_duration_seconds_bucket{environment="{{ $labels.environment }}",stage="{{ $labels.stage }}",storage="db_load_balancing"}[5m])
           )
         )
       runbook: docs/redis-db-load-balancing/README.md
@@ -134,7 +134,7 @@ groups:
       title: The rails_redis_client SLI of the redis-db-load-balancing service (`{{
         $labels.stage }}` stage) has an apdex violating SLO
       description: |
-        Aggregation of all Redis Rate-Limiting operations issued from the Rails codebase.
+        Aggregation of all Redis DB load balancing operations issued from the Rails codebase.
 
         Currently the apdex value is {{ $value | humanizePercentage }}.
       grafana_dashboard_id: redis-db-load-balancing-main/redis-db-load-balancing-overview
@@ -147,7 +147,7 @@ groups:
         histogram_quantile(
           0.950000,
           sum by (env,environment,tier,stage,le) (
-            rate(gitlab_redis_client_requests_duration_seconds_bucket{environment="{{ $labels.environment }}",stage="{{ $labels.stage }}",storage="rate_limiting"}[5m])
+            rate(gitlab_redis_client_requests_duration_seconds_bucket{environment="{{ $labels.environment }}",stage="{{ $labels.stage }}",storage="db_load_balancing"}[5m])
           )
         )
       runbook: docs/redis-db-load-balancing/README.md
@@ -185,7 +185,7 @@ groups:
       title: The rails_redis_client SLI of the redis-db-load-balancing service (`{{
         $labels.stage }}` stage) has an error rate violating SLO
       description: |
-        Aggregation of all Redis Rate-Limiting operations issued from the Rails codebase.
+        Aggregation of all Redis DB load balancing operations issued from the Rails codebase.
 
         Currently the error-rate is {{ $value | humanizePercentage }}.
       grafana_dashboard_id: redis-db-load-balancing-main/redis-db-load-balancing-overview
@@ -196,7 +196,7 @@ groups:
       grafana_variables: environment,stage
       promql_template_1: |
         sum by (env,environment,tier,stage) (
-          rate(gitlab_redis_client_exceptions_total{environment="{{ $labels.environment }}",stage="{{ $labels.stage }}",storage="rate_limiting"}[5m])
+          rate(gitlab_redis_client_exceptions_total{environment="{{ $labels.environment }}",stage="{{ $labels.stage }}",storage="db_load_balancing"}[5m])
         )
       runbook: docs/redis-db-load-balancing/README.md
     labels:
@@ -233,7 +233,7 @@ groups:
       title: The rails_redis_client SLI of the redis-db-load-balancing service (`{{
         $labels.stage }}` stage) has an error rate violating SLO
       description: |
-        Aggregation of all Redis Rate-Limiting operations issued from the Rails codebase.
+        Aggregation of all Redis DB load balancing operations issued from the Rails codebase.
 
         Currently the error-rate is {{ $value | humanizePercentage }}.
       grafana_dashboard_id: redis-db-load-balancing-main/redis-db-load-balancing-overview
@@ -244,7 +244,7 @@ groups:
       grafana_variables: environment,stage
       promql_template_1: |
         sum by (env,environment,tier,stage) (
-          rate(gitlab_redis_client_exceptions_total{environment="{{ $labels.environment }}",stage="{{ $labels.stage }}",storage="rate_limiting"}[5m])
+          rate(gitlab_redis_client_exceptions_total{environment="{{ $labels.environment }}",stage="{{ $labels.stage }}",storage="db_load_balancing"}[5m])
         )
       runbook: docs/redis-db-load-balancing/README.md
     labels:
@@ -281,7 +281,7 @@ groups:
       title: The rails_redis_client SLI of the redis-db-load-balancing service (`{{
         $labels.stage }}` stage) has not received any traffic in the past 30m
       description: |
-        Aggregation of all Redis Rate-Limiting operations issued from the Rails codebase.
+        Aggregation of all Redis DB load balancing operations issued from the Rails codebase.
 
         This alert signifies that the SLI is reporting a cessation of traffic; the signal is present, but is zero.
       grafana_dashboard_id: redis-db-load-balancing-main/redis-db-load-balancing-overview
@@ -292,7 +292,7 @@ groups:
       grafana_variables: environment,stage
       promql_template_1: |
         sum by (env,environment,tier,stage) (
-          rate(gitlab_redis_client_requests_total{environment="{{ $labels.environment }}",stage="{{ $labels.stage }}",storage="rate_limiting"}[5m])
+          rate(gitlab_redis_client_requests_total{environment="{{ $labels.environment }}",stage="{{ $labels.stage }}",storage="db_load_balancing"}[5m])
         )
       runbook: docs/redis-db-load-balancing/README.md
     labels:
@@ -316,7 +316,7 @@ groups:
       title: The rails_redis_client SLI of the redis-db-load-balancing service (`{{
         $labels.stage }}` stage) has not reported any traffic in the past 30m
       description: |
-        Aggregation of all Redis Rate-Limiting operations issued from the Rails codebase.
+        Aggregation of all Redis DB load balancing operations issued from the Rails codebase.
 
         This alert signifies that the SLI was previously reporting traffic, but is no longer - the signal is absent.
 
@@ -329,7 +329,7 @@ groups:
       grafana_variables: environment,stage
       promql_template_1: |
         sum by (env,environment,tier,stage) (
-          rate(gitlab_redis_client_requests_total{environment="{{ $labels.environment }}",stage="{{ $labels.stage }}",storage="rate_limiting"}[5m])
+          rate(gitlab_redis_client_requests_total{environment="{{ $labels.environment }}",stage="{{ $labels.stage }}",storage="db_load_balancing"}[5m])
         )
       runbook: docs/redis-db-load-balancing/README.md
     labels:
@@ -353,7 +353,7 @@ groups:
       title: The secondary_servers SLI of the redis-db-load-balancing service (`{{
         $labels.stage }}` stage) has not received any traffic in the past 30m
       description: |
-        Operations on the Redis secondaries for the Redis Rate-Limiting instance.
+        Operations on the Redis secondaries for the Redis DB load balancing instance.
 
         This alert signifies that the SLI is reporting a cessation of traffic; the signal is present, but is zero.
       grafana_dashboard_id: redis-db-load-balancing-main/redis-db-load-balancing-overview
@@ -388,7 +388,7 @@ groups:
       title: The secondary_servers SLI of the redis-db-load-balancing service (`{{
         $labels.stage }}` stage) has not reported any traffic in the past 30m
       description: |
-        Operations on the Redis secondaries for the Redis Rate-Limiting instance.
+        Operations on the Redis secondaries for the Redis DB load balancing instance.
 
         This alert signifies that the SLI was previously reporting traffic, but is no longer - the signal is absent.
 
