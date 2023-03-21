@@ -232,3 +232,11 @@ Restart thanos-compact.
 #### Example incidents
 
 * <https://gitlab.com/gitlab-com/gl-infra/production/-/issues/3308>
+
+
+#### thanos-compact-parse.py
+
+`thanos-compact-parse.py` is a quick script that attempts to parse and sort the above scenarios; It wont run anything automatically, and should be considered experimental, use it like this
+```bash
+$ kubectl -n thanos logs {compactor-pod} | ./thanos-compact-parse.py
+```
