@@ -23,6 +23,87 @@ local timeLostUnit = [
   },
 ];
 
+local autoDeployJobRetriesTable =
+  basic.table(
+    title='🔄 Number of auto-deploy job retries per Project 🔄',
+    description="This table shows the number of auto-deploy job retries per project for the duration chosen. For further insight, refer to the 'Number of auto-deploy retries per job' table, which separates the retries by job name",
+    styles=null,
+    queries=[numberOfAutoDeployJobRetriesQuery],
+    sort=4,  // numerically descending
+    transformations=[
+      {
+        id: 'organize',
+        options: {
+          excludeByName: {
+            Time: true,
+          },
+          renameByName: {
+            project: 'Project',
+            Value: 'Total Retries',
+          },
+        },
+      },
+    ],
+  ) {
+    fieldConfig+: {
+      overrides: [
+        {
+          matcher: {
+            id: 'byName',
+            options: 'Value',
+          },
+          properties: [
+            {  // remove decimals
+              id: 'decimals',
+              value: 0,
+            },
+          ],
+        },
+      ],
+    },
+  };
+
+local autoDeployJobRetriesByJobTable =
+  basic.table(
+    title='🔄 Number of auto-deploy retries per job 🔄',
+    description='This table shows the number of auto-deploy job retries per project and per job for the duration chosen.',
+    styles=styles,
+    queries=[numberOfAutoDeployJobRetriesByJobQuery],
+    sort=4,  // numerically descending
+    transformations=[
+      {
+        id: 'organize',
+        options: {
+          excludeByName: {
+            Time: true,
+          },
+          renameByName: {
+            project: 'Project',
+            Value: 'Total Retries',
+            job_name: 'Job Name',
+          },
+        },
+      },
+    ],
+  ) {
+    fieldConfig+: {
+      overrides: [
+        {
+          matcher: {
+            id: 'byName',
+            options: 'Value',
+          },
+          properties: [
+            {  // remove decimals
+              id: 'decimals',
+              value: 0,
+            },
+          ],
+        },
+      ],
+    },
+  };
+
 local taggedReleasesByTypeTable =
   basic.table(
     title='🚀 Number of Tagged Releases by Type 🚀',
@@ -208,52 +289,18 @@ basic.dashboard(
   ], rowHeight=8, startRow=0),
 )
 
-.addPanels(layout.singleRow([
-  basic.table(
-    title='🔄 Number of auto-deploy retries per Project 🔄',
-    styles=styles,
-    queries=[numberOfAutoDeployJobRetriesQuery],
-    sort=4,  // numerically descending
-    transformations=[
-      {
-        id: 'organize',
-        options: {
-          excludeByName: {
-            Time: true,
-          },
-          renameByName: {
-            project: 'Project',
-            Value: 'Total Retries',
-          },
-        },
-      },
+.addPanels(
+  layout.rowGrid(
+    'Auto Deploy Job Retries',
+    [
+      autoDeployJobRetriesTable,
+      autoDeployJobRetriesByJobTable,
     ],
-  ),
-], rowHeight=8, startRow=0))
-
-.addPanels(layout.singleRow([
-  basic.table(
-    title='🔄 Number of auto-deploy retries per job 🔄',
-    styles=styles,
-    queries=[numberOfAutoDeployJobRetriesByJobQuery],
-    sort=4,  // numerically descending
-    transformations=[
-      {
-        id: 'organize',
-        options: {
-          excludeByName: {
-            Time: true,
-          },
-          renameByName: {
-            project: 'Project',
-            Value: 'Total Retries',
-            job_name: 'Job Name',
-          },
-        },
-      },
-    ],
-  ),
-], rowHeight=8, startRow=100))
+    collapse=false,
+    rowHeight=8,
+    startRow=100,
+  )
+)
 
 .addPanels(
   layout.rowGrid(
