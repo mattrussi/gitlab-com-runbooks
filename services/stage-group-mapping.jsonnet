@@ -58,12 +58,6 @@
     feature_categories: [
       'portfolio_management',
       'design_management',
-    ],
-  },
-  certify: {
-    name: 'Certify',
-    stage: 'plan',
-    feature_categories: [
       'requirements_management',
       'quality_management',
     ],
