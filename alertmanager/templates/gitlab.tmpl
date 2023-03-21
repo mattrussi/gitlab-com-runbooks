@@ -1,8 +1,8 @@
 {{ define "gitlab.title" }}
     {{- if .GroupLabels.type -}}
-        {{- printf "%s - Service %s" .Status .GroupLabels.type -}}
+        {{- printf "%s - Service %s (%s)" .Status .GroupLabels.type .Labels.env -}}
     {{- else -}}
-        {{- printf "%s - %s" .Status .CommonAnnotations.title -}}
+        {{- printf "%s - %s (%s)" .Status .CommonAnnotations.title .Labels.env -}}
     {{- end -}}
 {{ end }}
 
