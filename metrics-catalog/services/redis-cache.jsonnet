@@ -28,8 +28,8 @@ metricsCatalog.serviceDefinition(
         apdex: histogramApdex(
           histogram='gitlab_cache_operation_duration_seconds_bucket',
           selector={ store: 'RedisCacheStore' },
-          satisfiedThreshold=0.01,
-          toleratedThreshold=0.1
+          satisfiedThreshold=0.1,
+          toleratedThreshold=0.25
         ),
 
         requestRate: rateMetric(

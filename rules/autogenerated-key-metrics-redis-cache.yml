@@ -23,11 +23,11 @@ groups:
     expr: |
       (
         sum by (environment) (
-          rate(gitlab_cache_operation_duration_seconds_bucket{le="0.01",store="RedisCacheStore"}[1m])
+          rate(gitlab_cache_operation_duration_seconds_bucket{le="0.1",store="RedisCacheStore"}[1m])
         )
         +
         sum by (environment) (
-          rate(gitlab_cache_operation_duration_seconds_bucket{le="0.1",store="RedisCacheStore"}[1m])
+          rate(gitlab_cache_operation_duration_seconds_bucket{le="0.25",store="RedisCacheStore"}[1m])
         )
       )
       /
@@ -140,11 +140,11 @@ groups:
     expr: |
       (
         sum by (environment) (
-          rate(gitlab_cache_operation_duration_seconds_bucket{le="0.01",store="RedisCacheStore"}[5m])
+          rate(gitlab_cache_operation_duration_seconds_bucket{le="0.1",store="RedisCacheStore"}[5m])
         )
         +
         sum by (environment) (
-          rate(gitlab_cache_operation_duration_seconds_bucket{le="0.1",store="RedisCacheStore"}[5m])
+          rate(gitlab_cache_operation_duration_seconds_bucket{le="0.25",store="RedisCacheStore"}[5m])
         )
       )
       /
@@ -257,11 +257,11 @@ groups:
     expr: |
       (
         sum by (environment) (
-          rate(gitlab_cache_operation_duration_seconds_bucket{le="0.01",store="RedisCacheStore"}[30m])
+          rate(gitlab_cache_operation_duration_seconds_bucket{le="0.1",store="RedisCacheStore"}[30m])
         )
         +
         sum by (environment) (
-          rate(gitlab_cache_operation_duration_seconds_bucket{le="0.1",store="RedisCacheStore"}[30m])
+          rate(gitlab_cache_operation_duration_seconds_bucket{le="0.25",store="RedisCacheStore"}[30m])
         )
       )
       /
@@ -374,11 +374,11 @@ groups:
     expr: |
       (
         sum by (environment) (
-          rate(gitlab_cache_operation_duration_seconds_bucket{le="0.01",store="RedisCacheStore"}[1h])
+          rate(gitlab_cache_operation_duration_seconds_bucket{le="0.1",store="RedisCacheStore"}[1h])
         )
         +
         sum by (environment) (
-          rate(gitlab_cache_operation_duration_seconds_bucket{le="0.1",store="RedisCacheStore"}[1h])
+          rate(gitlab_cache_operation_duration_seconds_bucket{le="0.25",store="RedisCacheStore"}[1h])
         )
       )
       /
@@ -491,11 +491,11 @@ groups:
     expr: |
       (
         sum by (environment) (
-          rate(gitlab_cache_operation_duration_seconds_bucket{le="0.01",store="RedisCacheStore"}[6h])
+          rate(gitlab_cache_operation_duration_seconds_bucket{le="0.1",store="RedisCacheStore"}[6h])
         )
         +
         sum by (environment) (
-          rate(gitlab_cache_operation_duration_seconds_bucket{le="0.1",store="RedisCacheStore"}[6h])
+          rate(gitlab_cache_operation_duration_seconds_bucket{le="0.25",store="RedisCacheStore"}[6h])
         )
       )
       /
