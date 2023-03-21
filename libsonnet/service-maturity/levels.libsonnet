@@ -89,14 +89,20 @@ local levels = [
         evidence: function(service) null,
       },
       {
-        name: 'Apdex built from multiple sources',
+        name: 'All components include an apdex',
         evidence: function(service)
-          local components = std.objectValues(service.serviceLevelIndicators);
-          local apdexComponents = std.filter(function(sli) std.objectHas(sli, 'apdex'), components);
+          local apdexComponents = std.filter(
+            // If not specified, every component is considered to require an Apdex score by default
+            function(sli) !std.objectHas(sli, 'apdexSkip'), std.objectValues(service.serviceLevelIndicators)
+          );
+          local apdexComponentsWithoutApdex = std.filter(
+            function(sli) !std.objectHas(sli, 'apdex'), apdexComponents
+          );
 
-          // If the service only has one component, and that has apdex,
-          // then this is also fine.
-          if std.length(apdexComponents) > 1 || (std.length(components) == 1 && std.length(apdexComponents) == 1) then
+
+          // Check that every component of the service that warrants an Apdex score has one, and that
+          // there's at least one such component
+          if std.length(apdexComponents) > 0 && std.length(apdexComponentsWithoutApdex) == 0 then
             metricsDashboardLink(service.type)
           else
             false,

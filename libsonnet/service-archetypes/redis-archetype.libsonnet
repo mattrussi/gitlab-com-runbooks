@@ -49,6 +49,7 @@ function(
     },
     serviceLevelIndicators: {
       primary_server: {
+        apdexSkip: 'apdex for redis is measured clientside',
         userImpacting: true,
         featureCategory: featureCategory,
         description: |||
@@ -67,6 +68,7 @@ function(
       },
 
       secondary_servers: {
+        apdexSkip: 'apdex for redis is measured clientside',
         userImpacting: true,  // userImpacting for data redundancy reasons
         featureCategory: featureCategory,
         description: |||
