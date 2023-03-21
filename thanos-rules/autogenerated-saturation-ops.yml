@@ -51,10 +51,10 @@ groups:
       max by(env, environment, shard) (
         clamp_min(
           clamp_max(
-            sum(:kube_pod_info_node_count:) by (env, environment, shard, cluster)
+            sum(:kube_pod_info_node_count:{env="ops"}) by (env, environment, shard, cluster)
             /
             sum(
-              gitlab:gcp_subnet_max_ips * on (subnet) group_right gitlab:cluster:subnet:mapping
+              gitlab:gcp_subnet_max_ips{env="ops"} * on (subnet) group_right gitlab:cluster:subnet:mapping{env="ops"}
             ) by (env, environment, shard, cluster)
             ,
             1)
@@ -279,10 +279,10 @@ groups:
         max by(env, environment, shard, cluster) (
           clamp_min(
             clamp_max(
-              sum(:kube_pod_info_node_count:) by (env, environment, shard, cluster)
+              sum(:kube_pod_info_node_count:{environment="{{ $labels.environment }}"}) by (env, environment, shard, cluster)
               /
               sum(
-                gitlab:gcp_subnet_max_ips * on (subnet) group_right gitlab:cluster:subnet:mapping
+                gitlab:gcp_subnet_max_ips{environment="{{ $labels.environment }}"} * on (subnet) group_right gitlab:cluster:subnet:mapping{environment="{{ $labels.environment }}"}
               ) by (env, environment, shard, cluster)
               ,
               1)
