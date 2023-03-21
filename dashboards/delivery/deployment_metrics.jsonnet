@@ -7,6 +7,7 @@ local templates = import 'grafana/templates.libsonnet';
 local template = grafana.template;
 local promQuery = import 'grafana/prom_query.libsonnet';
 local colorScheme = import 'grafana/color_scheme.libsonnet';
+local row = grafana.row;
 
 local explainer = |||
   This dashboard shows information about each particular deployment.
@@ -49,13 +50,6 @@ local bargaugePanel(
     targets: [promQuery.target(query, legendFormat=legendFormat, instant=true)],
     title: title,
     type: 'bargauge',
-    gridPos: {
-      h: 12,
-      w: 16,
-      x: 0,
-      y: 0,
-    },
-
   };
 
 
@@ -96,15 +90,25 @@ basic.dashboard(
     'label_values(delivery_deployment_merge_request_lead_time_seconds{target_env="$environment", target_stage="$target_stage"}, deploy_version)',
     label='version',
     refresh='time',
+    sort=2,
   )
 )
+.addPanel(
+  row.new(title='📊 Merge requests statistics'),
+  gridPos={
+    x: 0,
+    y: 0,
+    w: 24,
+    h: 1,
+  }
+)
 .addPanels(
-  layout.grid(
+  layout.columnGrid([
     [
       bargaugePanel(
         'Merge requests lead time',
         description='Time it take Merge Request from being merged to production',
-        query='delivery_deployment_merge_request_lead_time_seconds{target_env="$environment", target_stage="$target_stage", deploy_version="$deploy_version"}',
+        query='last_over_time(delivery_deployment_merge_request_lead_time_seconds{target_env="$environment", target_stage="$target_stage", deploy_version="$deploy_version"}[$__range])',
         legendFormat='{{mr_id}}',
         fieldLinks=[
           {
@@ -122,8 +126,24 @@ basic.dashboard(
           ],
         },
       ),
+      basic.statPanel(
+        title='',
+        panelTitle='Average MR lead time',
+        color='blue',
+        query='avg(delivery_deployment_merge_request_lead_time_seconds{target_env="$environment", target_stage="$target_stage", deploy_version="$deploy_version"})',
+        legendFormat='__auto',
+        colorMode='background',
+        textMode='value',
+        unit='s',
+      )
+      .addThresholds([
+        { color: colorScheme.normalRangeColor, value: 0 },
+        { color: colorScheme.warningColor, value: 39600 },
+        { color: colorScheme.errorColor, value: 43200 },
+        { color: colorScheme.criticalColor, value: 46800 },
+      ]),
     ],
-  )
+  ], [19, 5], rowHeight=10, startRow=1)
 )
 
 .trailer()
