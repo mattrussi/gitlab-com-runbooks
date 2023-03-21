@@ -24,9 +24,9 @@ local processExporter = import 'gitlab-dashboards/process_exporter.libsonnet';
         title='Connected Clients',
         yAxisLabel='Clients',
         query=|||
-          sum(avg_over_time(redis_connected_clients{%(selector)s}[$__interval])) by (instance, pod)
+          sum(avg_over_time(redis_connected_clients{%(selector)s}[$__interval])) by (fqdn, pod)
         ||| % formatConfig,
-        legendFormat='{{ pod }} {{ instance }}',
+        legendFormat='{{ pod }} {{ fqdn }}',
         intervalFactor=2,
       ),
       basic.timeseries(
@@ -34,18 +34,18 @@ local processExporter = import 'gitlab-dashboards/process_exporter.libsonnet';
         description='Blocked clients are waiting for a state change event using commands such as BLPOP. Blocked clients are not a sign of an issue on their own.',
         yAxisLabel='Blocked Clients',
         query=|||
-          sum(avg_over_time(redis_blocked_clients{%(selector)s}[$__interval])) by (instance, pod)
+          sum(avg_over_time(redis_blocked_clients{%(selector)s}[$__interval])) by (fqdn, pod)
         ||| % formatConfig,
-        legendFormat='{{ pod }} {{ instance }}',
+        legendFormat='{{ pod }} {{ fqdn }}',
         intervalFactor=2,
       ),
       basic.timeseries(
         title='Connections Received',
         yAxisLabel='Connections',
         query=|||
-          sum(rate(redis_connections_received_total{%(selector)s}[$__interval])) by (instance, pod)
+          sum(rate(redis_connections_received_total{%(selector)s}[$__interval])) by (fqdn, pod)
         ||| % formatConfig,
-        legendFormat='{{ pod }} {{ instance }}',
+        legendFormat='{{ pod }} {{ fqdn }}',
         intervalFactor=2,
       ),
     ], cols=2, rowHeight=10, startRow=startRow + 1);
@@ -61,8 +61,8 @@ local processExporter = import 'gitlab-dashboards/process_exporter.libsonnet';
   workload(serviceType, startRow, cluster=false)::
     local formatConfig = {
       serviceType: serviceType,
-      primarySelectorSnippet: 'and on (instance) redis_instance_info{role="master"}',
-      replicaSelectorSnippet: 'and on (instance) redis_instance_info{role="slave"}',
+      primarySelectorSnippet: 'and on (pod, fqdn) redis_instance_info{role="master", environment="$environment"}',
+      replicaSelectorSnippet: 'and on (pod, fqdn) redis_instance_info{role="slave", environment="$environment"}',
       selector: selectors.serializeHash({
         environment: '$environment',
         type: serviceType,
@@ -74,18 +74,18 @@ local processExporter = import 'gitlab-dashboards/process_exporter.libsonnet';
         title='Operation Rate - Primary',
         yAxisLabel='Operations/sec',
         query=|||
-          sum(rate(redis_commands_total{%(selector)s}[$__interval]) %(primarySelectorSnippet)s ) by (instance, pod)
+          sum(rate(redis_commands_total{%(selector)s}[$__interval]) %(primarySelectorSnippet)s ) by (fqdn, pod)
         ||| % formatConfig,
-        legendFormat='{{ pod }} {{ instance }}',
+        legendFormat='{{ pod }} {{ fqdn }}',
         intervalFactor=1,
       ),
       basic.timeseries(
         title='Operation Rate - Replicas',
         yAxisLabel='Operations/sec',
         query=|||
-          sum(rate(redis_commands_total{%(selector)s}[$__interval]) %(replicaSelectorSnippet)s ) by (instance, pod)
+          sum(rate(redis_commands_total{%(selector)s}[$__interval]) %(replicaSelectorSnippet)s ) by (fqdn, pod)
         ||| % formatConfig,
-        legendFormat='{{ pod }} {{ instance }}',
+        legendFormat='{{ pod }} {{ fqdn }}',
         intervalFactor=1,
       ),
       basic.saturationTimeseries(
@@ -95,9 +95,9 @@ local processExporter = import 'gitlab-dashboards/process_exporter.libsonnet';
           max(
             max_over_time(instance:redis_cpu_usage:rate1m{environment="$environment", type="%(serviceType)s"}[$__interval])
               %(primarySelectorSnippet)s
-          ) by (instance, pod)
+          ) by (fqdn, pod)
         ||| % formatConfig,
-        legendFormat='{{ pod }} {{ instance }}',
+        legendFormat='{{ pod }} {{ fqdn }}',
         interval='30s',
         intervalFactor=1,
       ),
@@ -108,9 +108,9 @@ local processExporter = import 'gitlab-dashboards/process_exporter.libsonnet';
           max(
             max_over_time(instance:redis_cpu_usage:rate1m{environment="$environment", type="%(serviceType)s"}[$__interval])
               %(replicaSelectorSnippet)s
-          ) by (instance, pod)
+          ) by (fqdn, pod)
         ||| % formatConfig,
-        legendFormat='{{ pod }} {{ instance }}',
+        legendFormat='{{ pod }} {{ fqdn }}',
         interval='30s',
         intervalFactor=1,
       ),
@@ -120,9 +120,9 @@ local processExporter = import 'gitlab-dashboards/process_exporter.libsonnet';
         query=|||
           sum(rate(redis_net_output_bytes_total{%(selector)s}[$__interval])
            %(primarySelectorSnippet)s
-          ) by (instance, pod)
+          ) by (fqdn, pod)
         ||| % formatConfig,
-        legendFormat='{{ pod }} {{ instance }}',
+        legendFormat='{{ pod }} {{ fqdn }}',
         intervalFactor=2,
       ),
       basic.timeseries(
@@ -131,9 +131,9 @@ local processExporter = import 'gitlab-dashboards/process_exporter.libsonnet';
         query=|||
           sum(rate(redis_net_output_bytes_total{%(selector)s}[$__interval])
            %(replicaSelectorSnippet)s
-          ) by (instance, pod)
+          ) by (fqdn, pod)
         ||| % formatConfig,
-        legendFormat='{{ pod }} {{ instance }}',
+        legendFormat='{{ pod }} {{ fqdn }}',
         intervalFactor=2,
       ),
       basic.timeseries(
@@ -142,9 +142,9 @@ local processExporter = import 'gitlab-dashboards/process_exporter.libsonnet';
         query=|||
           sum(rate(redis_net_input_bytes_total{%(selector)s}[$__interval])
             %(primarySelectorSnippet)s
-          ) by (instance, pod)
+          ) by (fqdn, pod)
         ||| % formatConfig,
-        legendFormat='{{ pod }} {{ instance }}',
+        legendFormat='{{ pod }} {{ fqdn }}',
         intervalFactor=2,
       ),
       basic.timeseries(
@@ -153,9 +153,9 @@ local processExporter = import 'gitlab-dashboards/process_exporter.libsonnet';
         query=|||
           sum(rate(redis_net_input_bytes_total{%(selector)s}[$__interval])
             %(replicaSelectorSnippet)s
-          ) by (instance, pod)
+          ) by (fqdn, pod)
         ||| % formatConfig,
-        legendFormat='{{ pod }} {{ instance }}',
+        legendFormat='{{ pod }} {{ fqdn }}',
         intervalFactor=2,
       ),
       basic.timeseries(
@@ -164,9 +164,9 @@ local processExporter = import 'gitlab-dashboards/process_exporter.libsonnet';
         query=|||
           sum(changes(redis_slowlog_last_id{%(selector)s}[$__interval])
             %(primarySelectorSnippet)s
-          ) by (instance, pod)
+          ) by (fqdn, pod)
         ||| % formatConfig,
-        legendFormat='{{ pod }} {{ instance }}',
+        legendFormat='{{ pod }} {{ fqdn }}',
         intervalFactor=10,
       ),
       basic.timeseries(
@@ -175,9 +175,9 @@ local processExporter = import 'gitlab-dashboards/process_exporter.libsonnet';
         query=|||
           sum(changes(redis_slowlog_last_id{%(selector)s}[$__interval])
             %(replicaSelectorSnippet)s
-          ) by (instance, pod)
+          ) by (fqdn, pod)
         ||| % formatConfig,
-        legendFormat='{{ pod }} {{ instance }}',
+        legendFormat='{{ pod }} {{ fqdn }}',
         intervalFactor=10,
       ),
       basic.timeseries(
@@ -316,7 +316,7 @@ local processExporter = import 'gitlab-dashboards/process_exporter.libsonnet';
                        query=|||
                          max_over_time(redis_memory_used_bytes{%(selector)s}[$__interval])
                        ||| % formatConfig,
-                       legendFormat='{{ pod }} {{ instance }}',
+                       legendFormat='{{ pod }} {{ fqdn }}',
                        intervalFactor=2,
                      ),
                      basic.timeseries(
@@ -324,9 +324,9 @@ local processExporter = import 'gitlab-dashboards/process_exporter.libsonnet';
                        yAxisLabel='Bytes/sec',
                        format='Bps',
                        query=|||
-                         sum(rate(redis_memory_used_bytes{%(selector)s}[$__interval])) by (instance, pod)
+                         sum(rate(redis_memory_used_bytes{%(selector)s}[$__interval])) by (fqdn, pod)
                        ||| % formatConfig,
-                       legendFormat='{{ pod }} {{ instance }}',
+                       legendFormat='{{ pod }} {{ fqdn }}',
                        intervalFactor=2,
                      ),
                      basic.timeseries(
@@ -336,7 +336,7 @@ local processExporter = import 'gitlab-dashboards/process_exporter.libsonnet';
                        query=|||
                          max_over_time(redis_memory_used_rss_bytes{%(selector)s}[$__interval])
                        ||| % formatConfig,
-                       legendFormat='{{ pod }} {{ instance }}',
+                       legendFormat='{{ pod }} {{ fqdn }}',
                        intervalFactor=2,
                      ),
                      basic.timeseries(
@@ -345,25 +345,25 @@ local processExporter = import 'gitlab-dashboards/process_exporter.libsonnet';
                        query=|||
                          redis_memory_used_rss_bytes{%(selector)s} / redis_memory_used_bytes{%(selector)s}
                        ||| % formatConfig,
-                       legendFormat='{{ pod }} {{ instance }}',
+                       legendFormat='{{ pod }} {{ fqdn }}',
                        intervalFactor=2,
                      ),
                      basic.timeseries(
                        title='Expired Keys',
                        yAxisLabel='Keys',
                        query=|||
-                         sum(rate(redis_expired_keys_total{%(selector)s}[$__interval])) by (instance, pod)
+                         sum(rate(redis_expired_keys_total{%(selector)s}[$__interval])) by (fqdn, pod)
                        ||| % formatConfig,
-                       legendFormat='{{ pod }} {{ instance }}',
+                       legendFormat='{{ pod }} {{ fqdn }}',
                        intervalFactor=2,
                      ),
                      basic.timeseries(
                        title='Keys Rate of Change',
                        yAxisLabel='Keys/sec',
                        query=|||
-                         sum(rate(redis_db_keys{%(selector)s}[$__interval])) by (instance, pod)
+                         sum(rate(redis_db_keys{%(selector)s}[$__interval])) by (fqdn, pod)
                        ||| % formatConfig,
-                       legendFormat='{{ pod }} {{ instance }}',
+                       legendFormat='{{ pod }} {{ fqdn }}',
                        intervalFactor=2,
                      ),
                    ] +
@@ -374,15 +374,15 @@ local processExporter = import 'gitlab-dashboards/process_exporter.libsonnet';
                          yAxisLabel='Hits',
                          format='percentunit',
                          query=|||
-                           sum(redis:keyspace_hits:irate1m{%(selector)s} and on (instance) redis_instance_info{role="master"})
+                           sum(redis:keyspace_hits:irate1m{%(selector)s} and on (fqdn) redis_instance_info{role="master"})
                            /
                            (
-                           sum(redis:keyspace_hits:irate1m{%(selector)s} and on (instance) redis_instance_info{role="master"})
+                           sum(redis:keyspace_hits:irate1m{%(selector)s} and on (fqdn) redis_instance_info{role="master"})
                            +
-                           sum(redis:keyspace_misses:irate1m{%(selector)s} and on (instance) redis_instance_info{role="master"})
+                           sum(redis:keyspace_misses:irate1m{%(selector)s} and on (fqdn) redis_instance_info{role="master"})
                            )
                          ||| % formatConfig,
-                         legendFormat='{{ pod }} {{ instance }}',
+                         legendFormat='{{ pod }} {{ fqdn }}',
                          intervalFactor=2,
                        ),
                      ]
@@ -411,9 +411,9 @@ local processExporter = import 'gitlab-dashboards/process_exporter.libsonnet';
         title='Connected Secondaries',
         yAxisLabel='Secondaries',
         query=|||
-          sum(avg_over_time(redis_connected_slaves{%(selector)s}[$__interval])) by (instance, pod)
+          sum(avg_over_time(redis_connected_slaves{%(selector)s}[$__interval])) by (fqdn, pod)
         ||| % formatConfig,
-        legendFormat='{{ pod }} {{ instance }}',
+        legendFormat='{{ pod }} {{ fqdn }}',
         intervalFactor=2,
       ),
       basic.timeseries(
@@ -422,7 +422,7 @@ local processExporter = import 'gitlab-dashboards/process_exporter.libsonnet';
         format='bytes',
         query=|||
           redis_master_repl_offset{%(selector)s}
-          - on(instance) group_right
+          - on(fqdn) group_right
           redis_connected_slave_offset_bytes{%(selector)s}
         ||| % formatConfig,
         legendFormat='secondary {{ slave_ip }}',
@@ -432,9 +432,9 @@ local processExporter = import 'gitlab-dashboards/process_exporter.libsonnet';
         title='Resync Events',
         yAxisLabel='Events',
         query=|||
-          sum(increase(redis_slave_resync_total{%(selector)s}[$__interval])) by (instance, pod)
+          sum(increase(redis_slave_resync_total{%(selector)s}[$__interval])) by (fqdn, pod)
         ||| % formatConfig,
-        legendFormat='{{ pod }} {{ instance }}',
+        legendFormat='{{ pod }} {{ fqdn }}',
         intervalFactor=2,
       ),
     ], cols=2, rowHeight=10, startRow=startRow + 1);
