@@ -11,13 +11,12 @@ source "$ASDF_DIR/asdf.sh"
 plugin_list=$(asdf plugin list || echo)
 
 update_ruby_build() {
-  local default_ruby_build_path="${HOME}/.asdf/plugins/ruby/ruby-build"
-  if [[ -d "${default_ruby_build_path}" ]]; then
+  # If ruby is installed
+  if [[ -d $(asdf where ruby) ]]; then
+    # Then so is rbenv and ruby-build
     echo "# Updating ruby-build"
-    pushd "${HOME}/.asdf/plugins/ruby/ruby-build"
-    git fetch origin
-    git pull origin master
-    popd
+    # Make sure ruby-build has the latest ruby versions releases list
+    asdf update ruby
   fi
 }
 
@@ -32,8 +31,8 @@ install_plugin() {
     } >&2
   fi
 
-  echo "# Installing ${plugin} version"
   [[ "${plugin}" == 'ruby' ]] && update_ruby_build
+  echo "# Installing ${plugin} version"
   asdf install "${plugin}" || {
     echo "Failed to install plugin version: ${plugin}"
     exit 1
