@@ -132,6 +132,10 @@ default:
     - *avoid-stage-group-check-rule
     - *avoid-downstream-generation-pipelines-rule
     - *avoid-schedule-rule
+
+.default-job:
+  rules:
+    - !reference [".default-job-rules", rules]
     - when: always
 
 workflow:
@@ -150,9 +154,7 @@ workflow:
   variables:
     KUBE_NAMESPACE: monitoring
   rules:
-    - *avoid-stage-group-check-rule
-    - *avoid-downstream-generation-pipelines-rule
-    - *avoid-schedule-rule
+    - !reference [".default-job-rules", rules]
     # Only run deploy rules from ops on the default branch
     - if: '$CI_API_V4_URL == "https://ops.gitlab.net/api/v4" && $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH'
   script:
@@ -180,9 +182,7 @@ workflow:
 .dashboards:
   <<: *jsonnet-cache
   rules:
-    - *avoid-stage-group-check-rule
-    - *avoid-downstream-generation-pipelines-rule
-    - *avoid-schedule-rule
+    - !reference [".default-job-rules", rules]
     - if: '$CI_PROJECT_URL !~ /^https:\/\/gitlab\.com\/.*/'
       when: never
     - if: '$CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH'
@@ -203,7 +203,7 @@ notify_mirror_source:
       allow_failure: true
 
 verify:
-  extends: .default-job-rules
+  extends: .default-job
   stage: test
   dependencies:
     - prepare-service-health-dashboard-json
@@ -217,7 +217,7 @@ danger-review:
     - bundle install --with=danger
 
 rubocop:
-  extends: .default-job-rules
+  extends: .default-job
   stage: validate
   script:
     - gem install bundler --no-document -v $BUNDLER_VERSION
@@ -225,14 +225,14 @@ rubocop:
     - bundle exec rubocop
 
 markdownlint:
-  extends: .default-job-rules
+  extends: .default-job
   stage: validate
   script:
     - npm install
     - npm run markdownlint docs README.md
 
 rspec:
-  extends: .default-job-rules
+  extends: .default-job
   stage: test
   script:
     - ./scripts/bundler.sh  # Install jsonnet bundles
@@ -242,8 +242,7 @@ rspec:
     - bundle exec rspec
 
 .test-rules:
-  extends:
-    - .default-job-rules
+  extends: .default-job
   stage: test
   script:
     - gem install bundler --no-document -v $BUNDLER_VERSION
@@ -325,18 +324,15 @@ prepare-service-health-dashboard-json:
 
 
 validate-service-mappings:
-  extends: .default-job-rules
+  extends: .default-job
   stage: validate
   script:
     - make validate-service-mappings
 
 validate-service-catalog-schema:
-  extends: .default-job-rules
   stage: validate
   rules:
-    - *avoid-stage-group-check-rule
-    - *avoid-downstream-generation-pipelines-rule
-    - *avoid-schedule-rule
+    - !reference [".default-job-rules", rules]
     - if: '($CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH) || $CI_MERGE_REQUEST_IID'
       changes:
         - "services/service-catalog.yml"
@@ -347,37 +343,37 @@ validate-service-catalog-schema:
     - npm run validate-service-catalog-schema -- -s ./services/service-catalog-schema.json -d ./services/service_catalog.json
 
 validate-prom-rules:
-  extends: .default-job-rules
+  extends: .default-job
   stage: validate
   script:
     - make validate-prom-rules
 
 validate-kibana-urls:
-  extends: .default-job-rules
+  extends: .default-job
   stage: validate
   script:
     - make validate-kibana-urls
 
 validate-alerts:
-  extends: .default-job-rules
+  extends: .default-job
   stage: validate
   script:
     - make validate-alerts
 
 test-jsonnet:
-  extends: .default-job-rules
+  extends: .default-job
   stage: test
   script:
     - make jsonnet-bundle test-jsonnet
 
 test-shunit:
-  extends: .default-job-rules
+  extends: .default-job
   stage: test
   script:
     - make jsonnet-bundle test-shunit
 
 test-service-catalog-schema:
-  extends: .default-job-rules
+  extends: .default-job
   stage: test
   script:
     - npm install
@@ -385,7 +381,7 @@ test-service-catalog-schema:
     - npm run test-service-catalog-schema -- -s ./services/service-catalog-schema.json -d ./services/service_catalog.json
 
 ensure_generated_content_up_to_date:
-  extends: .default-job-rules
+  extends: .default-job
   stage: test
   script:
     - rm -rf service-health-dashboard-manifest/  # Rm artifacts to pass git diff
@@ -409,9 +405,7 @@ ensure_maturity_model_minimum_level:
 ################################################################################
 update_elastic_log_gprd_ilm:
   rules:
-    - *avoid-stage-group-check-rule
-    - *avoid-downstream-generation-pipelines-rule
-    - *avoid-schedule-rule
+    - !reference [".default-job-rules", rules]
     - if: '$CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH && $ES_LOG_GPRD_URL'
       changes:
         - elastic/managed-objects/log_gprd/ILM/*
@@ -421,9 +415,7 @@ update_elastic_log_gprd_ilm:
 
 update_elastic_log_gprd_watches:
   rules:
-    - *avoid-stage-group-check-rule
-    - *avoid-downstream-generation-pipelines-rule
-    - *avoid-schedule-rule
+    - !reference [".default-job-rules", rules]
     - if: '$CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH && $ES_LOG_GPRD_URL'
       changes:
         - elastic/managed-objects/log_gprd/watches/*
@@ -434,9 +426,7 @@ update_elastic_log_gprd_watches:
 update_elastic_log_gprd_index_templates:
   stage: deploy
   rules:
-    - *avoid-stage-group-check-rule
-    - *avoid-downstream-generation-pipelines-rule
-    - *avoid-schedule-rule
+    - !reference [".default-job-rules", rules]
     - if: '$CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH && $ES_LOG_GPRD_URL'
       changes:
         - elastic/managed-objects/log_gprd/index-templates/*
@@ -450,9 +440,7 @@ update_elastic_log_gprd_index_templates:
 update_elastic_log_gprd_cluster_settings:
   stage: deploy
   rules:
-    - *avoid-stage-group-check-rule
-    - *avoid-downstream-generation-pipelines-rule
-    - *avoid-schedule-rule
+    - !reference [".default-job-rules", rules]
     - if: '$CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH && $ES_LOG_GPRD_URL'
       changes:
         - elastic/managed-objects/log_gprd/cluster-settings/*
@@ -473,9 +461,7 @@ update_elastic_log_gprd_hot_index_shards_per_node:
 update_elastic_nonprod-log_watches:
   stage: deploy
   rules:
-    - *avoid-stage-group-check-rule
-    - *avoid-downstream-generation-pipelines-rule
-    - *avoid-schedule-rule
+    - !reference [".default-job-rules", rules]
     - if: '$CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH && $ES_NONPROD_URL'
       changes:
         - elastic/managed-objects/nonprod-log/watches/*
@@ -485,9 +471,7 @@ update_elastic_nonprod-log_watches:
 update_elastic_nonprod-log_ilm:
   stage: deploy
   rules:
-    - *avoid-stage-group-check-rule
-    - *avoid-downstream-generation-pipelines-rule
-    - *avoid-schedule-rule
+    - !reference [".default-job-rules", rules]
     - if: '$CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH && $ES_NONPROD_URL'
       changes:
         - elastic/managed-objects/nonprod-log/ILM/*
@@ -497,9 +481,7 @@ update_elastic_nonprod-log_ilm:
 update_elastic_nonprod-log_index_templates:
   stage: deploy
   rules:
-    - *avoid-stage-group-check-rule
-    - *avoid-downstream-generation-pipelines-rule
-    - *avoid-schedule-rule
+    - !reference [".default-job-rules", rules]
     - if: '$CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH && $ES_NONPROD_URL'
       changes:
         - elastic/managed-objects/nonprod-log/index-templates/*
@@ -513,9 +495,7 @@ update_elastic_nonprod-log_index_templates:
 update_elastic_nonprod-log_cluster_settings:
   stage: deploy
   rules:
-    - *avoid-stage-group-check-rule
-    - *avoid-downstream-generation-pipelines-rule
-    - *avoid-schedule-rule
+    - !reference [".default-job-rules", rules]
     - if: '$CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH && $ES_NONPROD_URL'
       changes:
         - elastic/managed-objects/nonprod-log/cluster-settings/*
@@ -537,9 +517,7 @@ update_elastic_nonprod-log_hot_index_shards_per_node:
 update_elastic_monitoring-es7_cluster_settings:
   stage: deploy
   rules:
-    - *avoid-stage-group-check-rule
-    - *avoid-downstream-generation-pipelines-rule
-    - *avoid-schedule-rule
+    - !reference [".default-job-rules", rules]
     - if: '$CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH && $ES_MONITORING_ES7_URL'
       changes:
         - elastic/managed-objects/monitoring-es7/cluster-settings/*
@@ -549,9 +527,7 @@ update_elastic_monitoring-es7_cluster_settings:
 update_elastic_monitoring-es7_ilm:
   stage: deploy
   rules:
-    - *avoid-stage-group-check-rule
-    - *avoid-downstream-generation-pipelines-rule
-    - *avoid-schedule-rule
+    - !reference [".default-job-rules", rules]
     - if: '$CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH && $ES_MONITORING_ES7_URL'
       changes:
         - elastic/managed-objects/monitoring-es7/ILM/*
@@ -626,9 +602,6 @@ deploy_dashboards:
     - prepare-service-health-dashboard-json
   rules:
     # This will override all the rules from .dashboards, we only want to run this on master
-    - *avoid-stage-group-check-rule
-    - *avoid-downstream-generation-pipelines-rule
-    - *avoid-schedule-rule
     - if: '$CI_PROJECT_URL !~ /^https:\/\/gitlab\.com\/.*/'
       when: never
     - if: '$CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH'
@@ -709,7 +682,7 @@ docker_image_build:
     - schedules
 
 test-alertmanager:
-  extends: .default-job-rules
+  extends: .default-job
   stage: test
   script:
     - make test-alertmanager
@@ -821,9 +794,7 @@ publish-periodic-queries:
 .deploy-thanos-rules:
   image: google/cloud-sdk:alpine
   rules:
-    - *avoid-stage-group-check-rule
-    - *avoid-downstream-generation-pipelines-rule
-    - *avoid-schedule-rule
+    - !reference [".default-job-rules", rules]
     - if: '$CI_API_V4_URL == "https://ops.gitlab.net/api/v4" && $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH'
   script:
     - gcloud auth activate-service-account --key-file ${THANOS_RULES_BUCKET_SERVICE_KEY}
@@ -849,9 +820,7 @@ deploy-thanos-rules-produciton:
 
 reconcile_service_catalog_labels:
   rules:
-    - *avoid-stage-group-check-rule
-    - *avoid-downstream-generation-pipelines-rule
-    - *avoid-schedule-rule
+    - !reference [".default-job-rules", rules]
     - if: '$CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH'
       changes:
         - "services/service-catalog.yml"
