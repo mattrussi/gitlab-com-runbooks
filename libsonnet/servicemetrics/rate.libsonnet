@@ -47,7 +47,7 @@ local generateRangeFunctionQuery(rate, rangeFunction, additionalSelectors, range
     aggregatedRateQuery(aggregationLabels, selector, rangeInterval, withoutLabels=[], useRecordingRuleRegistry=true)::
       local combinedSelector = selectors.without(selectors.merge(self.selector, selector), withoutLabels);
 
-      local resolvedRecordingRule = if useRecordingRuleRegistry == true then recordingRuleRegistry.resolveRecordingRuleFor(
+      local resolvedRecordingRule = if useRecordingRuleRegistry then recordingRuleRegistry.resolveRecordingRuleFor(
         aggregationFunction='sum',
         aggregationLabels=aggregationLabels,
         rangeVectorFunction='rate',

@@ -32,11 +32,11 @@ local generateIncreaseQuery(c, selector, rangeInterval, withoutLabels) =
   local increaseQueries = std.mapWithIndex(function(index, metric) wrapForUniqueness(index, metric.increaseQuery(selector, rangeInterval, withoutLabels=withoutLabels)), c.metrics);
   orJoin(increaseQueries);
 
-local generateApdexNumeratorQuery(c, aggregationLabels, selector, rangeInterval, withoutLabels, useRecordingRuleRegistry=true) =
+local generateApdexNumeratorQuery(c, aggregationLabels, selector, rangeInterval, withoutLabels, useRecordingRuleRegistry) =
   local numeratorQueries = std.mapWithIndex(function(index, metric) wrapForUniqueness(index, metric.apdexSuccessRateQuery(aggregationLabels, selector, rangeInterval, withoutLabels=withoutLabels, useRecordingRuleRegistry=useRecordingRuleRegistry)), c.metrics);
   aggregations.aggregateOverQuery('sum', aggregationLabels, orJoin(numeratorQueries));
 
-local generateApdexQuery(c, aggregationLabels, selector, rangeInterval, withoutLabels, useRecordingRuleRegistry=true) =
+local generateApdexQuery(c, aggregationLabels, selector, rangeInterval, withoutLabels, useRecordingRuleRegistry) =
   local aggregatedNumerators = generateApdexNumeratorQuery(c, aggregationLabels, selector, rangeInterval, withoutLabels=withoutLabels, useRecordingRuleRegistry=useRecordingRuleRegistry);
   local denominatorQueries = std.mapWithIndex(function(index, metric) wrapForUniqueness(index, metric.apdexQuery(aggregationLabels, selector, rangeInterval, withoutLabels=withoutLabels, useRecordingRuleRegistry=useRecordingRuleRegistry)), c.metrics);
 
@@ -53,7 +53,7 @@ local generateApdexQuery(c, aggregationLabels, selector, rangeInterval, withoutL
     aggregatedDenominators: strings.indent(strings.chomp(aggregatedDenominators), 2),
   };
 
-local generateApdexWeightQuery(c, aggregationLabels, selector, rangeInterval, withoutLabels, useRecordingRuleRegistry=true) =
+local generateApdexWeightQuery(c, aggregationLabels, selector, rangeInterval, withoutLabels, useRecordingRuleRegistry) =
   local apdexWeightQueries = std.mapWithIndex(function(index, metric) wrapForUniqueness(index, metric.apdexWeightQuery(aggregationLabels, selector, rangeInterval, withoutLabels=withoutLabels, useRecordingRuleRegistry=useRecordingRuleRegistry)), c.metrics);
   aggregations.aggregateOverQuery('sum', aggregationLabels, orJoin(apdexWeightQueries));
 

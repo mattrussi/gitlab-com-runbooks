@@ -5,7 +5,7 @@ local generateApdexAttributionQuery = (import './lib/counter-apdex-attribution-q
 local selectors = import 'promql/selectors.libsonnet';
 local strings = import 'utils/strings.libsonnet';
 
-local generateApdexRatio(successCounterApdex, aggregationLabels, additionalSelectors, rangeInterval, withoutLabels=[], useRecordingRuleRegistry=true) =
+local generateApdexRatio(successCounterApdex, aggregationLabels, additionalSelectors, rangeInterval, withoutLabels=[], useRecordingRuleRegistry) =
   |||
     %(successRateQuery)s
     /

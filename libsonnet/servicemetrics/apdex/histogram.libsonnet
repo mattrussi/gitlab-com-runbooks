@@ -17,12 +17,12 @@ local strings = import 'utils/strings.libsonnet';
 // The other functions here all use this to generate the final apdex
 // query.
 
-local generateApdexComponentRateQuery(histogramApdex, additionalSelectors, rangeInterval, leSelector={}, aggregationFunction=null, aggregationLabels=[], withoutLabels=[], useRecordingRuleRegistry=true) =
+local generateApdexComponentRateQuery(histogramApdex, additionalSelectors, rangeInterval, leSelector={}, aggregationFunction=null, aggregationLabels=[], withoutLabels=[], useRecordingRuleRegistry) =
   local selector = selectors.merge(histogramApdex.selector, additionalSelectors);
   local selectorWithLe = selectors.merge(selector, leSelector);
   local selectorWithout = selectors.without(selectorWithLe, withoutLabels);
 
-  local resolvedRecordingRule = if useRecordingRuleRegistry == true then recordingRuleRegistry.resolveRecordingRuleFor(
+  local resolvedRecordingRule = if useRecordingRuleRegistry then recordingRuleRegistry.resolveRecordingRuleFor(
     aggregationFunction=aggregationFunction,
     aggregationLabels=aggregationLabels,
     rangeVectorFunction='rate',
@@ -78,7 +78,7 @@ local representLe(histogramApdex, value) =
     { le: value };
 
 // A double threshold apdex score only has both SATISFACTORY threshold and TOLERABLE thresholds
-local generateDoubleThresholdApdexNumeratorQuery(histogramApdex, additionalSelectors, rangeInterval, aggregationFunction=null, aggregationLabels=[], withoutLabels=[], useRecordingRuleRegistry=true) =
+local generateDoubleThresholdApdexNumeratorQuery(histogramApdex, additionalSelectors, rangeInterval, aggregationFunction=null, aggregationLabels=[], withoutLabels=[], useRecordingRuleRegistry) =
   local satisfiedQuery = generateApdexComponentRateQuery(
     histogramApdex,
     additionalSelectors,
@@ -113,7 +113,7 @@ local generateDoubleThresholdApdexNumeratorQuery(histogramApdex, additionalSelec
     tolerated: strings.indent(toleratedQuery, 2),
   };
 
-local generateApdexNumeratorQuery(histogramApdex, additionalSelectors, rangeInterval, aggregationFunction=null, aggregationLabels=[], histogramRates=false, withoutLabels=[], useRecordingRuleRegistry=true) =
+local generateApdexNumeratorQuery(histogramApdex, additionalSelectors, rangeInterval, aggregationFunction=null, aggregationLabels=[], histogramRates=false, withoutLabels=[], useRecordingRuleRegistry) =
   if histogramRates then
     generateApdexComponentRateQuery(histogramApdex, additionalSelectors, rangeInterval, {}, aggregationFunction=aggregationFunction, aggregationLabels=aggregationLabels, withoutLabels=withoutLabels, useRecordingRuleRegistry=useRecordingRuleRegistry)
   else if histogramApdex.toleratedThreshold == null then
@@ -122,7 +122,7 @@ local generateApdexNumeratorQuery(histogramApdex, additionalSelectors, rangeInte
   else
     generateDoubleThresholdApdexNumeratorQuery(histogramApdex, additionalSelectors, rangeInterval, aggregationFunction=aggregationFunction, aggregationLabels=aggregationLabels, withoutLabels=withoutLabels, useRecordingRuleRegistry=useRecordingRuleRegistry);
 
-local generateApdexScoreQuery(histogramApdex, aggregationLabels, additionalSelectors, rangeInterval, aggregationFunction=null, withoutLabels=[], useRecordingRuleRegistry=true) =
+local generateApdexScoreQuery(histogramApdex, aggregationLabels, additionalSelectors, rangeInterval, aggregationFunction=null, withoutLabels=[], useRecordingRuleRegistry) =
   local numeratorQuery = generateApdexNumeratorQuery(histogramApdex, additionalSelectors, rangeInterval, aggregationFunction=aggregationFunction, aggregationLabels=aggregationLabels, withoutLabels=withoutLabels, useRecordingRuleRegistry=useRecordingRuleRegistry);
   local weightQuery = generateApdexComponentRateQuery(histogramApdex, additionalSelectors, rangeInterval, { le: '+Inf' }, aggregationFunction=aggregationFunction, aggregationLabels=aggregationLabels, withoutLabels=withoutLabels, useRecordingRuleRegistry=useRecordingRuleRegistry);
 
@@ -137,7 +137,7 @@ local generateApdexScoreQuery(histogramApdex, aggregationLabels, additionalSelec
     weightQuery: strings.indent(strings.chomp(weightQuery), 2),
   };
 
-local generatePercentileLatencyQuery(histogram, percentile, aggregationLabels, additionalSelectors, rangeInterval, withoutLabels=[], useRecordingRuleRegistry=true) =
+local generatePercentileLatencyQuery(histogram, percentile, aggregationLabels, additionalSelectors, rangeInterval, withoutLabels=[], useRecordingRuleRegistry) =
   local aggregationLabelsWithLe = aggregations.join([aggregationLabels, 'le']);
   local aggregatedRateQuery = generateApdexComponentRateQuery(histogram, additionalSelectors, rangeInterval, aggregationFunction='sum', aggregationLabels=aggregationLabelsWithLe, withoutLabels=withoutLabels, useRecordingRuleRegistry=useRecordingRuleRegistry);
 
@@ -152,7 +152,7 @@ local generatePercentileLatencyQuery(histogram, percentile, aggregationLabels, a
   };
 
 
-local generateApdexAttributionQuery(histogram, selector, rangeInterval, aggregationLabel, withoutLabels=[], useRecordingRuleRegistry=true) =
+local generateApdexAttributionQuery(histogram, selector, rangeInterval, aggregationLabel, withoutLabels=[], useRecordingRuleRegistry) =
   |||
     (
       (
@@ -181,7 +181,6 @@ local generateApdexAttributionQuery(histogram, selector, rangeInterval, aggregat
     satisfiedThreshold=null,
     toleratedThreshold=null,
     metricsFormat='prometheus',
-    useRecordingRuleRegistry=true,
   ):: {
     histogram: histogram,
     selector: selector,
