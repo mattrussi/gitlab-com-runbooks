@@ -6,12 +6,28 @@ local defaultSelector = {
   environment: 'gprd',
 };
 
+local bloatSelector = {
+  job: 'gitlab-monitor-database-bloat',
+};
+
 {
   database_table_size_daily: periodicQuery.new({
     query: |||
       max by (relname, type, fqdn) (pg_total_relation_size_bytes{%(selectors)s})
     ||| % {
       selectors: selectors.serializeHash(defaultSelector),
+    },
+  }),
+}
+
+{
+  database_table_bloat_ratio_daily: periodicQuery.new({
+    query: |||
+      sum by (type, query_name) (last_over_time(gitlab_database_bloat_table_bloat_size{job="gitlab-monitor-database-bloat", %(selectors)s}[1h]))
+      /
+      sum by (type, query_name) (last_over_time(gitlab_database_bloat_table_real_size{job="gitlab-monitor-database-bloat", %(selectors)s}[1h])) 
+    ||| % {
+      selectors: selectors.serializeHash(defaultSelector + bloatSelector),
     },
   }),
 }
