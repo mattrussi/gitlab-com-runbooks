@@ -59,17 +59,17 @@ function(
 
         apdex: histogramApdex(
           histogram='gitlab_sql_replica_duration_seconds_bucket',
-          selector=railsBaseSelector { db_config_name: db_config_name+'_replica' },
+          selector=railsBaseSelector { db_config_name: db_config_name + '_replica' },
           satisfiedThreshold=0.05,
           toleratedThreshold=0.1
         ),
 
         requestRate: rateMetric(
           counter='gitlab_sql_replica_duration_seconds_bucket',
-          selector=railsBaseSelector { le: '+Inf', db_config_name: db_config_name+'_replica' },
+          selector=railsBaseSelector { le: '+Inf', db_config_name: db_config_name + '_replica' },
         ),
 
         significantLabels: ['feature_category'],
       },
-    }
+    },
   }
