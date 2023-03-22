@@ -3187,7 +3187,7 @@ groups:
       component: rails_redis_client
       global_aggregation: "no"
       regional_aggregation: "no"
-      service_aggregation: "yes"
+      service_aggregation: "no"
       tier: db
       type: redis-cache
     expr: "1"
@@ -3214,7 +3214,7 @@ groups:
       component: rails_redis_client
       global_aggregation: "no"
       regional_aggregation: "no"
-      service_aggregation: "yes"
+      service_aggregation: "no"
       tier: db
       type: redis-sidekiq
     expr: "1"
@@ -3241,7 +3241,7 @@ groups:
       component: rails_redis_client
       global_aggregation: "no"
       regional_aggregation: "no"
-      service_aggregation: "yes"
+      service_aggregation: "no"
       tier: db
       type: redis-tracechunks
     expr: "1"
@@ -3268,7 +3268,7 @@ groups:
       component: rails_redis_client
       global_aggregation: "no"
       regional_aggregation: "no"
-      service_aggregation: "yes"
+      service_aggregation: "no"
       tier: db
       type: redis-ratelimiting
     expr: "1"
@@ -3304,7 +3304,7 @@ groups:
       component: rails_redis_client
       global_aggregation: "no"
       regional_aggregation: "no"
-      service_aggregation: "yes"
+      service_aggregation: "no"
       tier: db
       type: redis-cluster-ratelimiting
     expr: "1"
@@ -3331,7 +3331,7 @@ groups:
       component: rails_redis_client
       global_aggregation: "no"
       regional_aggregation: "no"
-      service_aggregation: "yes"
+      service_aggregation: "no"
       tier: db
       type: redis-sessions
     expr: "1"
@@ -3385,7 +3385,7 @@ groups:
       component: rails_redis_client
       global_aggregation: "no"
       regional_aggregation: "no"
-      service_aggregation: "yes"
+      service_aggregation: "no"
       tier: db
       type: redis-repository-cache
     expr: "1"
@@ -3412,7 +3412,7 @@ groups:
       component: rails_redis_client
       global_aggregation: "no"
       regional_aggregation: "no"
-      service_aggregation: "yes"
+      service_aggregation: "no"
       tier: db
       type: redis-db-load-balancing
     expr: "1"
@@ -3439,7 +3439,7 @@ groups:
       component: rails_redis_client
       global_aggregation: "no"
       regional_aggregation: "no"
-      service_aggregation: "yes"
+      service_aggregation: "no"
       tier: db
       type: redis
     expr: "1"
