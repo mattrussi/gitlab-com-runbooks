@@ -2,10 +2,7 @@ local aggregations = import 'promql/aggregations.libsonnet';
 local selectors = import 'promql/selectors.libsonnet';
 local stages = import 'service-catalog/stages.libsonnet';
 local dependencies = import 'servicemetrics/dependencies_definition.libsonnet';
-local metricsCatalog = import 'servicemetrics/metrics-catalog.libsonnet';
 local toolingLinks = import 'toolinglinks/toolinglinks.libsonnet';
-local debug = import 'utils/debug.libsonnet';
-local misc = import 'utils/misc.libsonnet';
 local strings = import 'utils/strings.libsonnet';
 
 local featureCategoryFromSourceMetrics = 'featureCategoryFromSourceMetrics';
@@ -157,7 +154,7 @@ local serviceLevelIndicatorDefinition(sliName, serviceLevelIndicator) =
         local apdexSuccessRateRecordingRuleName = aggregationSet.getApdexSuccessRateMetricForBurnRate(burnRate);
         local apdexWeightRecordingRuleName = aggregationSet.getApdexWeightMetricForBurnRate(burnRate);
 
-        local useRecordingRuleRegistry = std.get(aggregationSet, 'useRecordingRuleRegistry', default=true);
+        local useRecordingRuleRegistry = std.get(aggregationSet, 'useRecordingRuleRegistry');
 
         local apdexSuccessRateExpr = serviceLevelIndicator.apdex.apdexSuccessRateQuery(
           aggregationLabels=aggregationLabelsWithoutStaticLabels,
