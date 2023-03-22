@@ -22,8 +22,8 @@ dashboardIncident.incidentDashboard(
 )
 .addGrid(
   panels=[
-    fleetingGraphs.taskscalerTasksSaturation,
     fleetingGraphs.provisionerInstancesSaturation,
+    fleetingGraphs.taskscalerTasksSaturation,
   ],
   rowHeight=6,
   startRow=3000,
@@ -42,14 +42,16 @@ dashboardIncident.incidentDashboard(
     fleetingGraphs.provisionerCreationTiming,
     fleetingGraphs.provisionerIsRunningTiming,
     fleetingGraphs.provisionerDeletionTiming,
+    fleetingGraphs.provisionerInstanceLifeDuration,
   ],
   rowHeight=8,
   startRow=5000,
 )
 .addGrid(
   panels=[
-    fleetingGraphs.taskscalerOperationsRate,
     fleetingGraphs.taskscalerTasks,
+    fleetingGraphs.taskscalerOperationsRate,
+    fleetingGraphs.taskscalerScaleOperationsRate,
     fleetingGraphs.taskscalerInstanceReadinessTiming,
   ],
   rowHeight=8,

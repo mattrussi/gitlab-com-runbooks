@@ -33,7 +33,7 @@ local provisionerMissedUpdates =
   basic.timeseries(
     'Fleeting missed updates rate',
     legendFormat='{{shard}}',
-    format='short',
+    format='ops',
     query=|||
       sum by(shard) (
         increase(
@@ -47,7 +47,7 @@ local provisionerInstanceOperationsRate =
   basic.timeseries(
     'Fleeting instance operations rate',
     legendFormat='{{shard}}: {{operation}}',
-    format='short',
+    format='ops',
     query=|||
       sum by(shard, operation) (
         increase(
@@ -96,6 +96,19 @@ local provisionerDeletionTiming =
     intervalFactor=2,
   );
 
+local provisionerInstanceLifeDuration =
+  panels.heatmap(
+    'Fleeting instance life duration',
+    |||
+      sum by (le) (
+        increase(fleeting_provisioner_instance_life_duration_seconds_bucket{environment=~"$environment", stage=~"$stage", instance=~"${runner_manager:pipe}"}[$__interval])
+      )
+    |||,
+    color_cardColor='#3333DD',
+    color_exponent=0.1,
+    intervalFactor=2,
+  );
+
 local taskscalerTasksSaturation =
   basic.timeseries(
     'Taskscaler tasks saturation',
@@ -118,7 +131,7 @@ local taskscalerOperationsRate =
   basic.timeseries(
     'Taskscaler operations rate',
     legendFormat='{{shard}}: {{operation}}',
-    format='short',
+    format='ops',
     query=|||
       sum by(shard, operation) (
         increase(
@@ -153,6 +166,20 @@ local taskscalerInstanceReadinessTiming =
     intervalFactor=2,
   );
 
+local taskscalerScaleOperationsRate =
+  basic.timeseries(
+    'Taskscaler scale operations rate',
+    legendFormat='{{shard}}: {{operation}}',
+    format='ops',
+    query=|||
+      sum by(shard, operation) (
+        increase(
+          fleeting_taskscaler_scale_operations_total{environment=~"$environment", stage=~"$stage", instance=~"${runner_manager:pipe}"}[$__interval]
+        )
+      )
+    |||,
+  );
+
 {
   provisionerInstancesSaturation: provisionerInstancesSaturation,
   provisionerInstancesStates: provisionerInstancesStates,
@@ -161,8 +188,10 @@ local taskscalerInstanceReadinessTiming =
   provisionerCreationTiming: provisionerCreationTiming,
   provisionerIsRunningTiming: provisionerIsRunningTiming,
   provisionerDeletionTiming: provisionerDeletionTiming,
+  provisionerInstanceLifeDuration: provisionerInstanceLifeDuration,
   taskscalerTasksSaturation: taskscalerTasksSaturation,
   taskscalerOperationsRate: taskscalerOperationsRate,
   taskscalerTasks: taskscalerTasks,
   taskscalerInstanceReadinessTiming: taskscalerInstanceReadinessTiming,
+  taskscalerScaleOperationsRate: taskscalerScaleOperationsRate,
 }
