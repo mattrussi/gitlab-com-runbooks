@@ -30,11 +30,12 @@ groups:
       alert_class: slo_violation
       alert_type: symptom
       feature_category: not_owned
+      pager: pagerduty
       rules_domain: general
-      severity: s4
+      severity: s2
       sli_type: error
       slo_alert: "yes"
-      user_impacting: "no"
+      user_impacting: "yes"
       window: 1h
     expr: |
       (
@@ -77,11 +78,12 @@ groups:
       alert_class: slo_violation
       alert_type: symptom
       feature_category: not_owned
+      pager: pagerduty
       rules_domain: general
-      severity: s4
+      severity: s2
       sli_type: error
       slo_alert: "yes"
-      user_impacting: "no"
+      user_impacting: "yes"
       window: 6h
     expr: |
       (
@@ -124,11 +126,12 @@ groups:
       alert_class: traffic_cessation
       alert_type: cause
       feature_category: not_owned
+      pager: pagerduty
       rules_domain: general
-      severity: s4
+      severity: s2
       sli_type: ops
       slo_alert: "no"
-      user_impacting: "no"
+      user_impacting: "yes"
     expr: |
       gitlab_component_ops:rate_30m{component="cluster_redirections",monitor="global",stage="main",type="redis-cluster-ratelimiting"} == 0
       and
@@ -160,11 +163,12 @@ groups:
       alert_class: traffic_cessation
       alert_type: cause
       feature_category: not_owned
+      pager: pagerduty
       rules_domain: general
-      severity: s4
+      severity: s2
       sli_type: ops
       slo_alert: "no"
-      user_impacting: "no"
+      user_impacting: "yes"
     expr: |
       gitlab_component_ops:rate_5m{component="cluster_redirections",monitor="global",stage="main",type="redis-cluster-ratelimiting"} offset 1h
       unless
@@ -194,11 +198,12 @@ groups:
       alert_class: traffic_cessation
       alert_type: cause
       feature_category: not_owned
+      pager: pagerduty
       rules_domain: general
-      severity: s4
+      severity: s2
       sli_type: ops
       slo_alert: "no"
-      user_impacting: "no"
+      user_impacting: "yes"
     expr: |
       gitlab_component_ops:rate_30m{component="primary_server",monitor="global",stage="main",type="redis-cluster-ratelimiting"} == 0
       and
@@ -230,11 +235,12 @@ groups:
       alert_class: traffic_cessation
       alert_type: cause
       feature_category: not_owned
+      pager: pagerduty
       rules_domain: general
-      severity: s4
+      severity: s2
       sli_type: ops
       slo_alert: "no"
-      user_impacting: "no"
+      user_impacting: "yes"
     expr: |
       gitlab_component_ops:rate_5m{component="primary_server",monitor="global",stage="main",type="redis-cluster-ratelimiting"} offset 1h
       unless
@@ -267,11 +273,12 @@ groups:
       alert_class: slo_violation
       alert_type: symptom
       feature_category: not_owned
+      pager: pagerduty
       rules_domain: general
-      severity: s4
+      severity: s2
       sli_type: apdex
       slo_alert: "yes"
-      user_impacting: "no"
+      user_impacting: "yes"
       window: 1h
     expr: |
       (
@@ -317,11 +324,12 @@ groups:
       alert_class: slo_violation
       alert_type: symptom
       feature_category: not_owned
+      pager: pagerduty
       rules_domain: general
-      severity: s4
+      severity: s2
       sli_type: apdex
       slo_alert: "yes"
-      user_impacting: "no"
+      user_impacting: "yes"
       window: 6h
     expr: |
       (
@@ -364,11 +372,12 @@ groups:
       alert_class: slo_violation
       alert_type: symptom
       feature_category: not_owned
+      pager: pagerduty
       rules_domain: general
-      severity: s4
+      severity: s2
       sli_type: error
       slo_alert: "yes"
-      user_impacting: "no"
+      user_impacting: "yes"
       window: 1h
     expr: |
       (
@@ -411,11 +420,12 @@ groups:
       alert_class: slo_violation
       alert_type: symptom
       feature_category: not_owned
+      pager: pagerduty
       rules_domain: general
-      severity: s4
+      severity: s2
       sli_type: error
       slo_alert: "yes"
-      user_impacting: "no"
+      user_impacting: "yes"
       window: 6h
     expr: |
       (
@@ -458,11 +468,12 @@ groups:
       alert_class: traffic_cessation
       alert_type: cause
       feature_category: not_owned
+      pager: pagerduty
       rules_domain: general
-      severity: s4
+      severity: s2
       sli_type: ops
       slo_alert: "no"
-      user_impacting: "no"
+      user_impacting: "yes"
     expr: |
       gitlab_component_ops:rate_30m{component="rails_redis_client",monitor="global",stage="main",type="redis-cluster-ratelimiting"} == 0
       and
@@ -494,11 +505,12 @@ groups:
       alert_class: traffic_cessation
       alert_type: cause
       feature_category: not_owned
+      pager: pagerduty
       rules_domain: general
-      severity: s4
+      severity: s2
       sli_type: ops
       slo_alert: "no"
-      user_impacting: "no"
+      user_impacting: "yes"
     expr: |
       gitlab_component_ops:rate_5m{component="rails_redis_client",monitor="global",stage="main",type="redis-cluster-ratelimiting"} offset 1h
       unless
@@ -528,11 +540,12 @@ groups:
       alert_class: traffic_cessation
       alert_type: cause
       feature_category: not_owned
+      pager: pagerduty
       rules_domain: general
-      severity: s4
+      severity: s2
       sli_type: ops
       slo_alert: "no"
-      user_impacting: "no"
+      user_impacting: "yes"
     expr: |
       gitlab_component_ops:rate_30m{component="secondary_servers",monitor="global",stage="main",type="redis-cluster-ratelimiting"} == 0
       and
@@ -564,11 +577,12 @@ groups:
       alert_class: traffic_cessation
       alert_type: cause
       feature_category: not_owned
+      pager: pagerduty
       rules_domain: general
-      severity: s4
+      severity: s2
       sli_type: ops
       slo_alert: "no"
-      user_impacting: "no"
+      user_impacting: "yes"
     expr: |
       gitlab_component_ops:rate_5m{component="secondary_servers",monitor="global",stage="main",type="redis-cluster-ratelimiting"} offset 1h
       unless
