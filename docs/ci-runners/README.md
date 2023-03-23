@@ -403,6 +403,10 @@ Every new CIDR should start at directly after the previously reserved one ends.
 | `AWS/r-saas-m-staging`              | `jobs-vpc/saas-macos-staging-blue-2`       | `10.20.8.0/21`   |
 | `AWS/r-saas-m-staging`              | `jobs-vpc/saas-macos-staging-green-1`      | `10.20.16.0/21`  |
 | `AWS/r-saas-m-staging`              | `jobs-vpc/saas-macos-staging-green-2`      | `10.20.24.0/21`  |
+| `AWS/r-saas-m-m1`                   | `jobs-vpc/saas-macos-m1-blue-1`            | `10.30.0.0/21`   |
+| `AWS/r-saas-m-m1`                   | `jobs-vpc/saas-macos-m1-blue-2`            | `10.30.8.0/21`   |
+| `AWS/r-saas-m-m1`                   | `jobs-vpc/saas-macos-m1-green-1`           | `10.30.16.0/21`  |
+| `AWS/r-saas-m-m1`                   | `jobs-vpc/saas-macos-m1-green-2`           | `10.30.24.0/21`  |
 
 ##### `ci-gateway` ILB firewall
 
