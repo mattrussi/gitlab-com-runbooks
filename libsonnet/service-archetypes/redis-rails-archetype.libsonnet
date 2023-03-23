@@ -15,7 +15,6 @@ function(
       rails_redis_client: {
         userImpacting: true,
         featureCategory: featureCategory,
-        serviceAggregation: false,
         description: |||
           Aggregation of all %(descriptiveName)s operations issued from the Rails codebase.
         ||| % { descriptiveName: descriptiveName },

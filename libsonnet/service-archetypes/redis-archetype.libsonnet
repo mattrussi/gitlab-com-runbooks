@@ -52,6 +52,7 @@ function(
         apdexSkip: 'apdex for redis is measured clientside',
         userImpacting: true,
         featureCategory: featureCategory,
+        serviceAggregation: false,
         description: |||
           Operations on the Redis primary for %(descriptiveName)s instance.
         ||| % formatConfig,
