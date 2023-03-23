@@ -27,5 +27,5 @@ cat "generated/$filename" | jq -c | while IFS= read -r dashboard; do
     fullurl="https://dashboards.gitlab.net$url"
     echo "${folder},${fullurl}"
   fi
-  >&2 echo "Processed dashboards for $uid"
+  echo >&2 "Processed dashboards for $uid"
 done

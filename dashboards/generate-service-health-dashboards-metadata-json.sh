@@ -67,10 +67,9 @@ if [[ -z $dry_run && -z ${GRAFANA_API_TOKEN:-} ]]; then
   exit 1
 fi
 
-if ! command -v parallel &> /dev/null
-then
-    echo "You must install GNU parallel to use this script"
-    exit 1
+if ! command -v parallel &>/dev/null; then
+  echo "You must install GNU parallel to use this script"
+  exit 1
 fi
 
 prepare
@@ -82,7 +81,7 @@ if [ ! -f "$FILE" ]; then
   echo "{}" >"$FILE"
 fi
 
-find -P generated -name '*.json' | sed 's/generated\///' | parallel -k -j20 ./generate-service-health-dashboards-metadata-json-single.sh > $TEMPFILE
+find -P generated -name '*.json' | sed 's/generated\///' | parallel -k -j20 ./generate-service-health-dashboards-metadata-json-single.sh >$TEMPFILE
 
 if [[ -n $dry_run ]]; then
   jq -R -n '[inputs|split(",")]| group_by(.[0]) | map({(.[0][0]): [.[][1]]}) | add | .[]|=sort' $TEMPFILE
