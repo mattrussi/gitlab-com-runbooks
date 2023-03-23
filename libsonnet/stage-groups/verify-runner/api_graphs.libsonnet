@@ -24,7 +24,7 @@ local runnerRequests(endpoint, statuses='.*') =
     query=|||
       sum by(status) (
         increase(
-          gitlab_runner_api_request_statuses_total{environment=~"$environment",stage=~"$stage",instance=~"${runner_manager:pipe}",endpoint="%(endpoint)s",status=~"%(statuses)s"}[$__interval]
+          gitlab_runner_api_request_statuses_total{environment=~"$environment",stage=~"$stage",instance=~"${runner_manager:pipe}",endpoint="%(endpoint)s",status=~"%(statuses)s"}[$__rate_interval]
         )
       )
     ||| % {

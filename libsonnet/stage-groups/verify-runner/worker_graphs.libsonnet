@@ -8,7 +8,7 @@ local workerFeedRate =
     query=|||
       sum by(shard) (
         increase(
-          gitlab_runner_worker_feeds_total{environment=~"$environment", stage=~"$stage", instance=~"${runner_manager:pipe}"}[$__interval]
+          gitlab_runner_worker_feeds_total{environment=~"$environment", stage=~"$stage", instance=~"${runner_manager:pipe}"}[$__rate_interval]
         )
       )
     |||,
@@ -22,7 +22,7 @@ local workerFeedFailuresRate =
     query=|||
       sum by(shard) (
         increase(
-          gitlab_runner_worker_feed_failures_total{environment=~"$environment", stage=~"$stage", instance=~"${runner_manager:pipe}"}[$__interval]
+          gitlab_runner_worker_feed_failures_total{environment=~"$environment", stage=~"$stage", instance=~"${runner_manager:pipe}"}[$__rate_interval]
         )
       )
     |||,
@@ -48,7 +48,7 @@ local workerSlotOperationsRate =
     query=|||
       sum by(shard) (
         increase(
-          gitlab_runner_worker_slot_operations_total{environment=~"$environment", stage=~"$stage", instance=~"${runner_manager:pipe}"}[$__interval]
+          gitlab_runner_worker_slot_operations_total{environment=~"$environment", stage=~"$stage", instance=~"${runner_manager:pipe}"}[$__rate_interval]
         )
       )
     |||,
@@ -62,7 +62,7 @@ local workerProcessingFailuresRate =
     query=|||
       sum by(shard, failure_type) (
         increase(
-          gitlab_runner_worker_processing_failures_total{environment=~"$environment", stage=~"$stage", instance=~"${runner_manager:pipe}"}[$__interval]
+          gitlab_runner_worker_processing_failures_total{environment=~"$environment", stage=~"$stage", instance=~"${runner_manager:pipe}"}[$__rate_interval]
         )
       )
     |||,
@@ -76,7 +76,7 @@ local workerHealthCheckFailuresRate =
     query=|||
       sum by(shard, runner_name) (
         increase(
-          gitlab_runner_worker_health_check_failures_total{environment=~"$environment", stage=~"$stage", instance=~"${runner_manager:pipe}"}[$__interval]
+          gitlab_runner_worker_health_check_failures_total{environment=~"$environment", stage=~"$stage", instance=~"${runner_manager:pipe}"}[$__rate_interval]
         )
       )
     |||,

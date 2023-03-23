@@ -96,7 +96,7 @@ local networkUtilization =
         legendFormat: '{{instance}} - sent',
         query: |||
           sum by (instance) (
-            rate(node_network_transmit_bytes_total{environment=~"$environment",stage=~"$stage",instance=~"${runner_manager:pipe}"}[$__interval])
+            rate(node_network_transmit_bytes_total{environment=~"$environment",stage=~"$stage",instance=~"${runner_manager:pipe}"}[$__rate_interval])
           )
         |||,
       },
@@ -104,7 +104,7 @@ local networkUtilization =
         legendFormat: '{{instance}} - received',
         query: |||
           sum by (instance) (
-            rate(node_network_receive_bytes_total{environment=~"$environment",stage=~"$stage",instance=~"${runner_manager:pipe}"}[$__interval])
+            rate(node_network_receive_bytes_total{environment=~"$environment",stage=~"$stage",instance=~"${runner_manager:pipe}"}[$__rate_interval])
           )
         |||,
       },

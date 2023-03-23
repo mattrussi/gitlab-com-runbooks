@@ -37,7 +37,7 @@ local provisionerMissedUpdates =
     query=|||
       sum by(shard) (
         increase(
-          fleeting_provisioner_missed_updates_total{environment=~"$environment", stage=~"$stage", instance=~"${runner_manager:pipe}"}[$__interval]
+          fleeting_provisioner_missed_updates_total{environment=~"$environment", stage=~"$stage", instance=~"${runner_manager:pipe}"}[$__rate_interval]
         )
       )
     |||,
@@ -51,7 +51,7 @@ local provisionerInstanceOperationsRate =
     query=|||
       sum by(shard, operation) (
         increase(
-          fleeting_provisioner_instance_operations_total{environment=~"$environment", stage=~"$stage", instance=~"${runner_manager:pipe}"}[$__interval]
+          fleeting_provisioner_instance_operations_total{environment=~"$environment", stage=~"$stage", instance=~"${runner_manager:pipe}"}[$__rate_interval]
         )
       )
     |||,
@@ -62,7 +62,7 @@ local provisionerCreationTiming =
     'Fleeting instance creation timing',
     |||
       sum by (le) (
-        increase(fleeting_provisioner_instance_creation_time_seconds_bucket{environment=~"$environment", stage=~"$stage", instance=~"${runner_manager:pipe}"}[$__interval])
+        increase(fleeting_provisioner_instance_creation_time_seconds_bucket{environment=~"$environment", stage=~"$stage", instance=~"${runner_manager:pipe}"}[$__rate_interval])
       )
     |||,
     color_cardColor='#00DD33',
@@ -75,7 +75,7 @@ local provisionerIsRunningTiming =
     'Fleeting instance is_running timing',
     |||
       sum by (le) (
-        increase(fleeting_provisioner_instance_is_running_time_seconds_bucket{environment=~"$environment", stage=~"$stage", instance=~"${runner_manager:pipe}"}[$__interval])
+        increase(fleeting_provisioner_instance_is_running_time_seconds_bucket{environment=~"$environment", stage=~"$stage", instance=~"${runner_manager:pipe}"}[$__rate_interval])
       )
     |||,
     color_cardColor='#DDDD00',
@@ -88,7 +88,7 @@ local provisionerDeletionTiming =
     'Fleeting instance deletion timing',
     |||
       sum by (le) (
-        increase(fleeting_provisioner_instance_deletion_time_seconds_bucket{environment=~"$environment", stage=~"$stage", instance=~"${runner_manager:pipe}"}[$__interval])
+        increase(fleeting_provisioner_instance_deletion_time_seconds_bucket{environment=~"$environment", stage=~"$stage", instance=~"${runner_manager:pipe}"}[$__rate_interval])
       )
     |||,
     color_cardColor='#DD0000',
@@ -101,7 +101,7 @@ local provisionerInstanceLifeDuration =
     'Fleeting instance life duration',
     |||
       sum by (le) (
-        increase(fleeting_provisioner_instance_life_duration_seconds_bucket{environment=~"$environment", stage=~"$stage", instance=~"${runner_manager:pipe}"}[$__interval])
+        increase(fleeting_provisioner_instance_life_duration_seconds_bucket{environment=~"$environment", stage=~"$stage", instance=~"${runner_manager:pipe}"}[$__rate_interval])
       )
     |||,
     color_cardColor='#3333DD',
@@ -135,7 +135,7 @@ local taskscalerOperationsRate =
     query=|||
       sum by(shard, operation) (
         increase(
-          fleeting_taskscaler_task_operations_total{environment=~"$environment", stage=~"$stage", instance=~"${runner_manager:pipe}"}[$__interval]
+          fleeting_taskscaler_task_operations_total{environment=~"$environment", stage=~"$stage", instance=~"${runner_manager:pipe}"}[$__rate_interval]
         )
       )
     |||,
@@ -158,7 +158,7 @@ local taskscalerInstanceReadinessTiming =
     'Taskscaler instance readiness timing',
     |||
       sum by (le) (
-        increase(fleeting_taskscaler_task_instance_readiness_time_seconds_bucket{environment=~"$environment", stage=~"$stage", instance=~"${runner_manager:pipe}"}[$__interval])
+        increase(fleeting_taskscaler_task_instance_readiness_time_seconds_bucket{environment=~"$environment", stage=~"$stage", instance=~"${runner_manager:pipe}"}[$__rate_interval])
       )
     |||,
     color_cardColor='#DD33DD',
@@ -174,7 +174,7 @@ local taskscalerScaleOperationsRate =
     query=|||
       sum by(shard, operation) (
         increase(
-          fleeting_taskscaler_scale_operations_total{environment=~"$environment", stage=~"$stage", instance=~"${runner_manager:pipe}"}[$__interval]
+          fleeting_taskscaler_scale_operations_total{environment=~"$environment", stage=~"$stage", instance=~"${runner_manager:pipe}"}[$__rate_interval]
         )
       )
     |||,
