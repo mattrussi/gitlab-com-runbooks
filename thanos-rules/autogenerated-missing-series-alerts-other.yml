@@ -25,11 +25,11 @@ groups:
     expr: |
       (
         sum by (env, environment, tier, type, stage, component) (
-          gitlab_component_ops:rate{monitor!="global"} offset 1d >= 0
+          gitlab_component_ops:rate{env!~"gprd|ops",monitor!="global"} offset 1d >= 0
         )
         unless
         sum by (env, environment, tier, type, stage, component) (
-          gitlab_component_ops:rate{monitor!="global"} >= 0
+          gitlab_component_ops:rate{env!~"gprd|ops",monitor!="global"} >= 0
         )
       )
       and on (type, component)
@@ -55,11 +55,11 @@ groups:
     expr: |
       (
         sum by (env, environment, tier, type, stage, component) (
-          gitlab_component_apdex:ratio{monitor="global"} offset 1d >= 0
+          gitlab_component_apdex:ratio{env!~"gprd|ops",monitor="global"} offset 1d >= 0
         )
         unless
         sum by (env, environment, tier, type, stage, component) (
-          gitlab_component_apdex:ratio{monitor="global"}
+          gitlab_component_apdex:ratio{env!~"gprd|ops",monitor="global"}
         )
       )
       and on (type, component)
@@ -85,11 +85,11 @@ groups:
     expr: |
       (
         sum by (env, environment, tier, type, stage, component) (
-          (gitlab_component_errors:rate{monitor!="global", stage!="cny"} offset 1d)
+          (gitlab_component_errors:rate{env!~"gprd|ops",monitor!="global",stage!="cny"} offset 1d)
         )
         unless
         sum by (env, environment, tier, type, stage, component) (
-          gitlab_component_errors:rate{monitor!="global", stage!="cny"}
+          gitlab_component_errors:rate{env!~"gprd|ops",monitor!="global",stage!="cny"}
         )
       )
       and on (type, component)

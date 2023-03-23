@@ -1,5 +1,8 @@
 local alerts = import 'alerts/alerts.libsonnet';
+local selectors = import 'promql/selectors.libsonnet';
 local stableIds = import 'stable-ids/stable-ids.libsonnet';
+local separateGlobalRecordingFiles = (import './lib/separate-global-recording-files.libsonnet').separateGlobalRecordingFiles;
+
 
 local labels = {
   rules_domain: 'general',
@@ -7,23 +10,25 @@ local labels = {
   alert_type: 'cause',
 };
 
-local rules = [
+local rules(extraSelector) = [
   // Ops Rate
   {
     alert: 'gitlab_component_opsrate_missing_series',
     expr: |||
       (
         sum by (env, environment, tier, type, stage, component) (
-          gitlab_component_ops:rate{monitor!="global"} offset 1d >= 0
+          gitlab_component_ops:rate{%(selector)s} offset 1d >= 0
         )
         unless
         sum by (env, environment, tier, type, stage, component) (
-          gitlab_component_ops:rate{monitor!="global"} >= 0
+          gitlab_component_ops:rate{%(selector)s} >= 0
         )
       )
       and on (type, component)
       gitlab_component_service:mapping{monitor="global"}
-    |||,
+    ||| % {
+      selector: selectors.serializeHash({ monitor: { ne: 'global' } } + extraSelector),
+    },
     'for': '1h',
     labels: labels,
     annotations: {
@@ -45,16 +50,18 @@ local rules = [
     expr: |||
       (
         sum by (env, environment, tier, type, stage, component) (
-          gitlab_component_apdex:ratio{monitor="global"} offset 1d >= 0
+          gitlab_component_apdex:ratio{%(selector)s} offset 1d >= 0
         )
         unless
         sum by (env, environment, tier, type, stage, component) (
-          gitlab_component_apdex:ratio{monitor="global"}
+          gitlab_component_apdex:ratio{%(selector)s}
         )
       )
       and on (type, component)
       gitlab_component_service:mapping{monitor="global"}
-    |||,
+    ||| % {
+      selector: selectors.serializeHash({ monitor: 'global' } + extraSelector),
+    },
     'for': '1h',
     labels: labels,
     annotations: {
@@ -79,16 +86,18 @@ local rules = [
     expr: |||
       (
         sum by (env, environment, tier, type, stage, component) (
-          (gitlab_component_errors:rate{monitor!="global", stage!="cny"} offset 1d)
+          (gitlab_component_errors:rate{%(selector)s} offset 1d)
         )
         unless
         sum by (env, environment, tier, type, stage, component) (
-          gitlab_component_errors:rate{monitor!="global", stage!="cny"}
+          gitlab_component_errors:rate{%(selector)s}
         )
       )
       and on (type, component)
       gitlab_component_service:mapping{monitor="global"}
-    |||,
+    ||| % {
+      selector: selectors.serializeHash({ monitor: { ne: 'global' }, stage: { ne: 'cny' } } + extraSelector),
+    },
     'for': '2h',
     labels: labels,
     annotations: {
@@ -106,14 +115,17 @@ local rules = [
   },
 ];
 
-{
-  'missing-series-alerts.yml': std.manifestYamlDoc({
-    groups: [
-      {
-        name: 'missing_series_alerts.rules',
-        partial_response_strategy: 'warn',
-        rules: alerts.processAlertRules(rules),
-      },
-    ],
-  }),
-}
+separateGlobalRecordingFiles(
+  function(selector)
+    {
+      'missing-series-alerts': std.manifestYamlDoc({
+        groups: [
+          {
+            name: 'missing_series_alerts.rules',
+            partial_response_strategy: 'warn',
+            rules: alerts.processAlertRules(rules(selector)),
+          },
+        ],
+      }),
+    }
+)
