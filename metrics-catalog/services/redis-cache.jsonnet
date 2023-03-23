@@ -4,6 +4,8 @@ local rateMetric = metricsCatalog.rateMetric;
 local redisArchetype = import 'service-archetypes/redis-rails-archetype.libsonnet';
 local redisHelpers = import './lib/redis-helpers.libsonnet';
 
+local cacheStoreSelector = { store: 'RedisCacheStore' };
+
 metricsCatalog.serviceDefinition(
   redisArchetype(
     type='redis-cache',
@@ -21,18 +23,21 @@ metricsCatalog.serviceDefinition(
       rails_cache: {
         userImpacting: true,
         featureCategory: 'not_owned',
+        serviceAggregation: false,
         description: |||
           Rails ActiveSupport Cache operations against the Redis Cache
         |||,
 
         apdex: histogramApdex(
           histogram='gitlab_cache_operation_duration_seconds_bucket',
+          selector=cacheStoreSelector,
           satisfiedThreshold=0.01,
           toleratedThreshold=0.1
         ),
 
         requestRate: rateMetric(
           counter='gitlab_cache_operation_duration_seconds_count',
+          selector=cacheStoreSelector,
         ),
 
         significantLabels: [],
