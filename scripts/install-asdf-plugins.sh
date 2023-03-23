@@ -10,6 +10,16 @@ source "$ASDF_DIR/asdf.sh"
 
 plugin_list=$(asdf plugin list || echo)
 
+update_ruby_build() {
+  # If ruby is installed
+  if [[ -d $(asdf where ruby) ]]; then
+    # Then so is rbenv and ruby-build
+    echo "# Updating ruby-build"
+    # Make sure ruby-build has the latest ruby versions releases list
+    asdf update ruby
+  fi
+}
+
 install_plugin() {
   local plugin=$1
 
@@ -21,6 +31,7 @@ install_plugin() {
     } >&2
   fi
 
+  [[ "${plugin}" == 'ruby' ]] && update_ruby_build
   echo "# Installing ${plugin} version"
   asdf install "${plugin}" || {
     echo "Failed to install plugin version: ${plugin}"
