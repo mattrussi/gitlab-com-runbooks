@@ -67,6 +67,12 @@ if [[ -z $dry_run && -z ${GRAFANA_API_TOKEN:-} ]]; then
   exit 1
 fi
 
+if ! command -v parallel &> /dev/null
+then
+    echo "You must install GNU parallel to use this script"
+    exit 1
+fi
+
 prepare
 
 trap 'rm -rf "${TEMPFILE}"' EXIT
@@ -76,22 +82,7 @@ if [ ! -f "$FILE" ]; then
   echo "{}" >"$FILE"
 fi
 
-find -P generated -name '*.json' | sed 's/generated\///' | while read -r line; do
-  relative=${line#"./"}
-  folder=${GRAFANA_FOLDER:-$(dirname "$relative")}
-
-  cat "generated/$line" | jq -c | while IFS= read -r dashboard; do
-    # Use http1.1 and gzip compression to workaround unexplainable random errors that
-    # occur when uploading some dashboards
-    uid=$(echo "${dashboard}" | jq -r '.uid')
-    if response=$(call_grafana_api "https://dashboards.gitlab.net/api/dashboards/uid/$uid"); then
-      url=$(echo "${response}" | jq '.meta.url' | tr -d '"')
-      fullurl="https://dashboards.gitlab.net$url"
-      echo "${folder},${fullurl}" >>$TEMPFILE
-    fi
-    echo "Processed dashboards for $uid"
-  done
-done
+find -P generated -name '*.json' | sed 's/generated\///' | parallel -k -j20 ./generate-service-health-dashboards-metadata-json-single.sh > $TEMPFILE
 
 if [[ -n $dry_run ]]; then
   jq -R -n '[inputs|split(",")]| group_by(.[0]) | map({(.[0][0]): [.[][1]]}) | add | .[]|=sort' $TEMPFILE
