@@ -413,7 +413,7 @@ groups:
       component: rails_redis_client
       global_aggregation: "no"
       regional_aggregation: "no"
-      service_aggregation: "yes"
+      service_aggregation: "no"
       tier: db
       type: redis-cluster-ratelimiting
     expr: "1"
