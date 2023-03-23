@@ -130,7 +130,7 @@ basic.dashboard(
         title='',
         panelTitle='Average MR lead time',
         color='blue',
-        query='avg(delivery_deployment_merge_request_lead_time_seconds{target_env="$environment", target_stage="$target_stage", deploy_version="$deploy_version"})',
+        query='avg(last_over_time(delivery_deployment_merge_request_lead_time_seconds{target_env="$environment", target_stage="$target_stage", deploy_version="$deploy_version"}[$__range]))',
         legendFormat='__auto',
         colorMode='background',
         textMode='value',
