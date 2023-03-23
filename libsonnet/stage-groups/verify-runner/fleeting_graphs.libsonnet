@@ -8,11 +8,11 @@ local provisionerInstancesSaturation =
     format='percentunit',
     query=|||
       sum by(shard) (
-          fleeting_provisioner_instances{state=~"running|deleting", environment=~"$environment", stage=~"$stage", instance=~"${runner_manager:pipe}"}
+        fleeting_provisioner_instances{state=~"running|deleting", environment=~"$environment", stage=~"$stage", instance=~"${runner_manager:pipe}"}
       )
       /
       sum by(shard) (
-          fleeting_provisioner_max_instances{environment=~"$environment", stage=~"$stage", instance=~"${runner_manager:pipe}"}
+        fleeting_provisioner_max_instances{environment=~"$environment", stage=~"$stage", instance=~"${runner_manager:pipe}"}
       )
     |||,
   );
@@ -36,7 +36,7 @@ local provisionerMissedUpdates =
     format='ops',
     query=|||
       sum by(shard) (
-        increase(
+        rate(
           fleeting_provisioner_missed_updates_total{environment=~"$environment", stage=~"$stage", instance=~"${runner_manager:pipe}"}[$__rate_interval]
         )
       )
@@ -50,7 +50,7 @@ local provisionerInstanceOperationsRate =
     format='ops',
     query=|||
       sum by(shard, operation) (
-        increase(
+        rate(
           fleeting_provisioner_instance_operations_total{environment=~"$environment", stage=~"$stage", instance=~"${runner_manager:pipe}"}[$__rate_interval]
         )
       )
@@ -62,7 +62,9 @@ local provisionerCreationTiming =
     'Fleeting instance creation timing',
     |||
       sum by (le) (
-        increase(fleeting_provisioner_instance_creation_time_seconds_bucket{environment=~"$environment", stage=~"$stage", instance=~"${runner_manager:pipe}"}[$__rate_interval])
+        rate(
+          fleeting_provisioner_instance_creation_time_seconds_bucket{environment=~"$environment", stage=~"$stage", instance=~"${runner_manager:pipe}"}[$__rate_interval]
+        )
       )
     |||,
     color_cardColor='#00DD33',
@@ -75,7 +77,9 @@ local provisionerIsRunningTiming =
     'Fleeting instance is_running timing',
     |||
       sum by (le) (
-        increase(fleeting_provisioner_instance_is_running_time_seconds_bucket{environment=~"$environment", stage=~"$stage", instance=~"${runner_manager:pipe}"}[$__rate_interval])
+        rate(
+          fleeting_provisioner_instance_is_running_time_seconds_bucket{environment=~"$environment", stage=~"$stage", instance=~"${runner_manager:pipe}"}[$__rate_interval]
+        )
       )
     |||,
     color_cardColor='#DDDD00',
@@ -88,7 +92,9 @@ local provisionerDeletionTiming =
     'Fleeting instance deletion timing',
     |||
       sum by (le) (
-        increase(fleeting_provisioner_instance_deletion_time_seconds_bucket{environment=~"$environment", stage=~"$stage", instance=~"${runner_manager:pipe}"}[$__rate_interval])
+        rate(
+          fleeting_provisioner_instance_deletion_time_seconds_bucket{environment=~"$environment", stage=~"$stage", instance=~"${runner_manager:pipe}"}[$__rate_interval]
+        )
       )
     |||,
     color_cardColor='#DD0000',
@@ -101,7 +107,9 @@ local provisionerInstanceLifeDuration =
     'Fleeting instance life duration',
     |||
       sum by (le) (
-        increase(fleeting_provisioner_instance_life_duration_seconds_bucket{environment=~"$environment", stage=~"$stage", instance=~"${runner_manager:pipe}"}[$__rate_interval])
+        rate(
+          fleeting_provisioner_instance_life_duration_seconds_bucket{environment=~"$environment", stage=~"$stage", instance=~"${runner_manager:pipe}"}[$__rate_interval]
+        )
       )
     |||,
     color_cardColor='#3333DD',
@@ -116,13 +124,13 @@ local taskscalerTasksSaturation =
     format='percentunit',
     query=|||
       sum by(shard) (
-          fleeting_taskscaler_tasks{environment=~"$environment", stage=~"$stage", instance=~"${runner_manager:pipe}", state!~"idle|reserved"}
+        fleeting_taskscaler_tasks{environment=~"$environment", stage=~"$stage", instance=~"${runner_manager:pipe}", state!~"idle|reserved"}
       )
       /
       sum by(shard) (
-                fleeting_provisioner_max_instances{environment=~"$environment", stage=~"$stage", instance=~"${runner_manager:pipe}"}
-                *
-                fleeting_taskscaler_max_tasks_per_instance{environment=~"$environment", stage=~"$stage", instance=~"${runner_manager:pipe}"}
+        fleeting_provisioner_max_instances{environment=~"$environment", stage=~"$stage", instance=~"${runner_manager:pipe}"}
+        *
+        fleeting_taskscaler_max_tasks_per_instance{environment=~"$environment", stage=~"$stage", instance=~"${runner_manager:pipe}"}
       )
     |||,
   );
@@ -134,7 +142,7 @@ local taskscalerOperationsRate =
     format='ops',
     query=|||
       sum by(shard, operation) (
-        increase(
+        rate(
           fleeting_taskscaler_task_operations_total{environment=~"$environment", stage=~"$stage", instance=~"${runner_manager:pipe}"}[$__rate_interval]
         )
       )
@@ -148,7 +156,7 @@ local taskscalerTasks =
     format='short',
     query=|||
       sum by(shard, state) (
-          fleeting_taskscaler_tasks{environment=~"$environment", stage=~"$stage", instance=~"${runner_manager:pipe}"}
+        fleeting_taskscaler_tasks{environment=~"$environment", stage=~"$stage", instance=~"${runner_manager:pipe}"}
       )
     |||,
   );
@@ -158,7 +166,9 @@ local taskscalerInstanceReadinessTiming =
     'Taskscaler instance readiness timing',
     |||
       sum by (le) (
-        increase(fleeting_taskscaler_task_instance_readiness_time_seconds_bucket{environment=~"$environment", stage=~"$stage", instance=~"${runner_manager:pipe}"}[$__rate_interval])
+        rate(
+          fleeting_taskscaler_task_instance_readiness_time_seconds_bucket{environment=~"$environment", stage=~"$stage", instance=~"${runner_manager:pipe}"}[$__rate_interval]
+        )
       )
     |||,
     color_cardColor='#DD33DD',
@@ -173,7 +183,7 @@ local taskscalerScaleOperationsRate =
     format='ops',
     query=|||
       sum by(shard, operation) (
-        increase(
+        rate(
           fleeting_taskscaler_scale_operations_total{environment=~"$environment", stage=~"$stage", instance=~"${runner_manager:pipe}"}[$__rate_interval]
         )
       )
