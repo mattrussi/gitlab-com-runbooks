@@ -1048,6 +1048,30 @@ groups:
     expr: "0.001000"
   - record: slo:min:events:gitlab_service_apdex:ratio
     labels:
+      component: rails_primary_sql
+      tier: db
+      type: patroni-ci
+    expr: "0.999000"
+  - record: slo:max:events:gitlab_service_errors:ratio
+    labels:
+      component: rails_primary_sql
+      tier: db
+      type: patroni-ci
+    expr: "0.001000"
+  - record: slo:min:events:gitlab_service_apdex:ratio
+    labels:
+      component: rails_replica_sql
+      tier: db
+      type: patroni-ci
+    expr: "0.999000"
+  - record: slo:max:events:gitlab_service_errors:ratio
+    labels:
+      component: rails_replica_sql
+      tier: db
+      type: patroni-ci
+    expr: "0.001000"
+  - record: slo:min:events:gitlab_service_apdex:ratio
+    labels:
       component: transactions_primary
       tier: db
       type: patroni-ci
@@ -3059,6 +3083,24 @@ groups:
   - record: gitlab_component_service:mapping
     labels:
       component: pgbouncer
+      global_aggregation: "no"
+      regional_aggregation: "no"
+      service_aggregation: "yes"
+      tier: db
+      type: patroni-ci
+    expr: "1"
+  - record: gitlab_component_service:mapping
+    labels:
+      component: rails_primary_sql
+      global_aggregation: "no"
+      regional_aggregation: "no"
+      service_aggregation: "yes"
+      tier: db
+      type: patroni-ci
+    expr: "1"
+  - record: gitlab_component_service:mapping
+    labels:
+      component: rails_replica_sql
       global_aggregation: "no"
       regional_aggregation: "no"
       service_aggregation: "yes"

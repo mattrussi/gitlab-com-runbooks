@@ -1,9 +1,9 @@
 local patroniHelpers = import './lib/patroni-helpers.libsonnet';
-local patroniArchetype = import 'service-archetypes/patroni-archetype.libsonnet';
+local patroniRailsArchetype = import 'service-archetypes/patroni-rails-archetype.libsonnet';
 local metricsCatalog = import 'servicemetrics/metrics.libsonnet';
 
 metricsCatalog.serviceDefinition(
-  patroniArchetype(
+  patroniRailsArchetype(
     type='patroni-ci',
     serviceDependencies={
       patroni: true,
