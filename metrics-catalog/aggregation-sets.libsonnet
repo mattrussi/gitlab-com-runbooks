@@ -389,7 +389,6 @@ local aggregationSet = import 'servicemetrics/aggregation-set.libsonnet';
       opsRate: 'gitlab:component:feature_category:execution:ops:rate_%s',
       errorRate: 'gitlab:component:feature_category:execution:error:rate_%s',
     },
-    useRecordingRuleRegistry: false,
   }),
 
   featureCategorySLIs: aggregationSet.AggregationSet({

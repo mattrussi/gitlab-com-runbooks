@@ -27,7 +27,8 @@ FROM ruby:${GL_ASDF_RUBY_VERSION}-alpine
 
 RUN apk add --no-cache \
   python3 curl bash build-base git jq make \
-  openssl tar yamllint zlib npm parallel
+  openssl tar yamllint zlib npm \
+  parallel
 
 ENV PATH $PATH:/usr/local/gcloud/google-cloud-sdk/bin
 

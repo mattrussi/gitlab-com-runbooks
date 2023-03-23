@@ -1,7 +1,7 @@
 local strings = import 'utils/strings.libsonnet';
 
 {
-  attributionQuery(counterApdex, aggregationLabel, selector, rangeInterval, withoutLabels, useRecordingRuleRegistry)::
+  attributionQuery(counterApdex, aggregationLabel, selector, rangeInterval, withoutLabels)::
     |||
       (
         (
@@ -15,9 +15,9 @@ local strings = import 'utils/strings.libsonnet';
         )
       ) > 0
     ||| % {
-      splitTotalQuery: strings.indent(counterApdex.apdexWeightQuery([aggregationLabel], selector, rangeInterval, withoutLabels=withoutLabels, useRecordingRuleRegistry=useRecordingRuleRegistry), 4),
-      splitSuccessRateQuery: strings.indent(counterApdex.apdexSuccessRateQuery([aggregationLabel], selector, rangeInterval, withoutLabels=withoutLabels, useRecordingRuleRegistry=useRecordingRuleRegistry), 4),
+      splitTotalQuery: strings.indent(counterApdex.apdexWeightQuery([aggregationLabel], selector, rangeInterval, withoutLabels=withoutLabels), 4),
+      splitSuccessRateQuery: strings.indent(counterApdex.apdexSuccessRateQuery([aggregationLabel], selector, rangeInterval, withoutLabels=withoutLabels), 4),
       aggregationLabel: aggregationLabel,
-      aggregatedTotalQuery: strings.indent(counterApdex.apdexWeightQuery([], selector, rangeInterval, withoutLabels=withoutLabels, useRecordingRuleRegistry=useRecordingRuleRegistry), 4),
+      aggregatedTotalQuery: strings.indent(counterApdex.apdexWeightQuery([], selector, rangeInterval, withoutLabels=withoutLabels), 4),
     },
 }

@@ -73,7 +73,11 @@ dispSnapshots() {
   #   2023-01-24 12:06:38 (-1h23m)	file-02-stor-gstg-data  https://www.google.../snapshots/file-02-stor...hdd10
   #   2023-01-24 12:06:37 (-1h23m)	file-03-stor-gstg-data  https://www.google.../snapshots/file-03-stor...kfe8b
 
-  local diskFilter="sourceDisk~'$filter'"
+  local sixHoursAgo
+  # look 6 hours back which should be enough time to find at least one snapshot
+  # for each disk
+  sixHoursAgo=$(date +%Y-%m-%dT%H:%M:%S -d "6 hours ago")
+  local diskFilter="creationTimestamp>=$sixHoursAgo AND sourceDisk~'$filter'"
   if [[ $zone != any ]]; then
     diskFilter+=" AND sourceDisk~'$zone'"
   fi
@@ -98,7 +102,7 @@ dispSnapshots() {
 
     sourceDiskId=$(echo "$s" | jq -r '.sourceDiskId')
     if [[ ${seenDiskIds[*]} == *"$sourceDiskId"* ]]; then
-      break
+      continue
     fi
 
     sourceDisk=$(basename "$(echo "$s" | jq -r '.sourceDisk')")
