@@ -26,6 +26,13 @@ metricsCatalog.serviceDefinition(
     ],
   )
   {
+    serviceLevelIndicators+: {
+      rails_replica_sql+: {
+        monitoringThresholds+: {
+          apdexScore: 0.997,
+        },
+      },
+    },
     skippedMaturityCriteria: {
       'Developer guides exist in developer documentation': 'patroni is an infrastructure component, developers do not interact with it',
     },

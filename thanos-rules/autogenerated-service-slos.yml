@@ -1063,7 +1063,7 @@ groups:
       component: rails_replica_sql
       tier: db
       type: patroni-ci
-    expr: "0.999000"
+    expr: "0.997000"
   - record: slo:max:events:gitlab_service_errors:ratio
     labels:
       component: rails_replica_sql
