@@ -54,7 +54,7 @@ local slowQueries =
     format='opm',
     legendFormat='{{fqdn}}',
     query=|||
-      rate(pg_slow_queries{environment=~"$environment",stage=~"$stage",fqdn=~"$db_instances"}[$__interval]) * 60
+      rate(pg_slow_queries{environment=~"$environment",stage=~"$stage",fqdn=~"$db_instances"}[$__rate_interval]) * 60
     |||,
   );
 

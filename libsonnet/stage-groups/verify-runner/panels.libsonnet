@@ -5,7 +5,7 @@ local promQuery = import 'grafana/prom_query.libsonnet';
 local heatmap(
   title,
   query,
-  interval='$__interval',
+  interval='$__rate_interval',
   intervalFactor=3,
   color_cardColor='#FA6400',
   color_exponent=0.5,
@@ -38,7 +38,7 @@ local heatmap(
       orderByTime: 'ASC',
       groupBy: [
         {
-          params: ['$__interval'],
+          params: ['$__rate_interval'],
           type: 'time',
         },
         {

@@ -9,7 +9,7 @@ local longPollingRequestStateCounter =
     fill=1,
     query=|||
       sum by (status) (
-        increase(gitlab_workhorse_builds_register_handler_requests{environment=~"$environment",stage=~"$stage"}[$__interval])
+        increase(gitlab_workhorse_builds_register_handler_requests{environment=~"$environment",stage=~"$stage"}[$__rate_interval])
       )
     |||,
   );
@@ -36,7 +36,7 @@ local queueingErrors =
     query=|||
       sum by (type) (
         increase(
-          gitlab_workhorse_queueing_errors{environment=~"$environment",stage=~"$stage",queue_name="ci_api_job_requests"}[$__interval]
+          gitlab_workhorse_queueing_errors{environment=~"$environment",stage=~"$stage",queue_name="ci_api_job_requests"}[$__rate_interval]
         )
       )
     |||,
@@ -97,7 +97,7 @@ local queueingTime =
           0.%d,
           sum by (le) (
             rate(
-              gitlab_workhorse_queueing_waiting_time_bucket{environment=~"$environment",stage=~"$stage",queue_name="ci_api_job_requests"}[$__interval]
+              gitlab_workhorse_queueing_waiting_time_bucket{environment=~"$environment",stage=~"$stage",queue_name="ci_api_job_requests"}[$__rate_interval]
             )
           )
         )

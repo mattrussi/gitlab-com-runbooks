@@ -30,7 +30,7 @@ local runnerJobFailuresGraph(aggregators=[]) =
     |||
       sum by (%s)
       (
-        increase(gitlab_runner_failed_jobs_total{environment=~"$environment",stage=~"$stage",instance=~"${runner_manager:pipe}",failure_reason=~"$runner_job_failure_reason"}[$__interval])
+        increase(gitlab_runner_failed_jobs_total{environment=~"$environment",stage=~"$stage",instance=~"${runner_manager:pipe}",failure_reason=~"$runner_job_failure_reason"}[$__rate_interval])
       )
     |||,
     aggregators,
@@ -41,7 +41,7 @@ local startedJobsGraph(aggregators=[]) =
     'Jobs started on runners (by %s)',
     |||
       sum by(%s) (
-        increase(gitlab_runner_jobs_total{environment=~"$environment",stage=~"$stage",instance=~"${runner_manager:pipe}"}[$__interval])
+        increase(gitlab_runner_jobs_total{environment=~"$environment",stage=~"$stage",instance=~"${runner_manager:pipe}"}[$__rate_interval])
       )
     |||,
     aggregators,
@@ -51,7 +51,7 @@ local startedJobsGraph(aggregators=[]) =
     targets+: [{
       expr: |||
         avg (
-          increase(gitlab_runner_jobs_total{environment=~"$environment",stage=~"$stage",instance=~"${runner_manager:pipe}"}[$__interval])
+          increase(gitlab_runner_jobs_total{environment=~"$environment",stage=~"$stage",instance=~"${runner_manager:pipe}"}[$__rate_interval])
         )
       |||,
       format: 'time_series',
@@ -92,7 +92,7 @@ local finishedJobsDurationHistogram = panels.heatmap(
   'Finished job durations histogram',
   |||
     sum by (le) (
-      rate(gitlab_runner_job_duration_seconds_bucket{environment=~"$environment",stage=~"$stage",instance=~"${runner_manager:pipe}"}[$__interval])
+      rate(gitlab_runner_job_duration_seconds_bucket{environment=~"$environment",stage=~"$stage",instance=~"${runner_manager:pipe}"}[$__rate_interval])
     )
   |||,
   intervalFactor=1,
@@ -109,7 +109,7 @@ local finishedJobsMinutesIncreaseGraph =
     intervalFactor=5,
     query=|||
       sum by(shard) (
-        increase(gitlab_runner_job_duration_seconds_sum{environment=~"$environment",stage=~"$stage",instance=~"${runner_manager:pipe}"}[$__interval])
+        increase(gitlab_runner_job_duration_seconds_sum{environment=~"$environment",stage=~"$stage",instance=~"${runner_manager:pipe}"}[$__rate_interval])
       )/60
     |||,
   ) + {
@@ -118,7 +118,7 @@ local finishedJobsMinutesIncreaseGraph =
     targets+: [{
       expr: |||
         avg (
-          increase(gitlab_runner_job_duration_seconds_sum{environment=~"$environment",stage=~"$stage",instance=~"${runner_manager:pipe}"}[$__interval])
+          increase(gitlab_runner_job_duration_seconds_sum{environment=~"$environment",stage=~"$stage",instance=~"${runner_manager:pipe}"}[$__rate_interval])
         )/60
       |||,
       format: 'time_series',

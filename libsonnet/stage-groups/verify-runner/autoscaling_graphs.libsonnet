@@ -24,7 +24,7 @@ local vmOperationsRate =
     stack=true,
     query=|||
       sum by (shard, action) (
-        increase(gitlab_runner_autoscaling_actions_total{environment=~"$environment", stage=~"$stage", executor="docker+machine", instance=~"${runner_manager:pipe}"}[$__interval])
+        increase(gitlab_runner_autoscaling_actions_total{environment=~"$environment", stage=~"$stage", executor="docker+machine", instance=~"${runner_manager:pipe}"}[$__rate_interval])
       )
     |||,
   );
@@ -34,7 +34,7 @@ local vmCreationTiming =
     'Autoscaled VMs creation timing',
     |||
       sum by (le) (
-        increase(gitlab_runner_autoscaling_machine_creation_duration_seconds_bucket{environment=~"$environment", stage=~"$stage", executor="docker+machine",instance=~"${runner_manager:pipe}"}[$__interval])
+        increase(gitlab_runner_autoscaling_machine_creation_duration_seconds_bucket{environment=~"$environment", stage=~"$stage", executor="docker+machine",instance=~"${runner_manager:pipe}"}[$__rate_interval])
       )
     |||,
     color_cardColor='#00DD33',
