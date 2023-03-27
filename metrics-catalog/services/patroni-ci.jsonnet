@@ -1,6 +1,7 @@
 local patroniHelpers = import './lib/patroni-helpers.libsonnet';
 local patroniRailsArchetype = import 'service-archetypes/patroni-rails-archetype.libsonnet';
 local metricsCatalog = import 'servicemetrics/metrics.libsonnet';
+local histogramApdex = metricsCatalog.histogramApdex;
 
 metricsCatalog.serviceDefinition(
   patroniRailsArchetype(
@@ -28,9 +29,12 @@ metricsCatalog.serviceDefinition(
   {
     serviceLevelIndicators+: {
       rails_replica_sql+: {
-        monitoringThresholds+: {
-          apdexScore: 0.997,
-        },
+        apdex: histogramApdex(
+          histogram='gitlab_sql_replica_duration_seconds_bucket',
+          selector={ type: { ne: 'sidekiq' }, db_config_name: 'ci_replica' },
+          satisfiedThreshold=0.1,
+          toleratedThreshold=0.25
+        ),
       },
     },
     skippedMaturityCriteria: {

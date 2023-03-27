@@ -398,12 +398,12 @@ groups:
       (
         (
           gitlab_component_apdex:ratio_1h{component="rails_replica_sql",monitor="global",type="patroni-ci"}
-          < (1 - 14.4 * 0.003000)
+          < (1 - 14.4 * 0.001000)
         )
         and
         (
           gitlab_component_apdex:ratio_5m{component="rails_replica_sql",monitor="global",type="patroni-ci"}
-          < (1 - 14.4 * 0.003000)
+          < (1 - 14.4 * 0.001000)
         )
       )
       and on(env,environment,tier,type,stage,component)
@@ -449,12 +449,12 @@ groups:
       (
         (
           gitlab_component_apdex:ratio_6h{component="rails_replica_sql",monitor="global",type="patroni-ci"}
-          < (1 - 6 * 0.003000)
+          < (1 - 6 * 0.001000)
         )
         and
         (
           gitlab_component_apdex:ratio_30m{component="rails_replica_sql",monitor="global",type="patroni-ci"}
-          < (1 - 6 * 0.003000)
+          < (1 - 6 * 0.001000)
         )
       )
       and on(env,environment,tier,type,stage,component)

@@ -91,11 +91,11 @@ groups:
     expr: |
       (
         sum by (environment) (
-          sli_aggregations:gitlab_sql_replica_duration_seconds_bucket_rate1m{db_config_name="ci_replica",le="0.05",type!="sidekiq"}
+          sli_aggregations:gitlab_sql_replica_duration_seconds_bucket_rate1m{db_config_name="ci_replica",le="0.1",type!="sidekiq"}
         )
         +
         sum by (environment) (
-          sli_aggregations:gitlab_sql_replica_duration_seconds_bucket_rate1m{db_config_name="ci_replica",le="0.1",type!="sidekiq"}
+          sli_aggregations:gitlab_sql_replica_duration_seconds_bucket_rate1m{db_config_name="ci_replica",le="0.25",type!="sidekiq"}
         )
       )
       /
@@ -270,11 +270,11 @@ groups:
     expr: |
       (
         sum by (environment) (
-          sli_aggregations:gitlab_sql_replica_duration_seconds_bucket_rate5m{db_config_name="ci_replica",le="0.05",type!="sidekiq"}
+          sli_aggregations:gitlab_sql_replica_duration_seconds_bucket_rate5m{db_config_name="ci_replica",le="0.1",type!="sidekiq"}
         )
         +
         sum by (environment) (
-          sli_aggregations:gitlab_sql_replica_duration_seconds_bucket_rate5m{db_config_name="ci_replica",le="0.1",type!="sidekiq"}
+          sli_aggregations:gitlab_sql_replica_duration_seconds_bucket_rate5m{db_config_name="ci_replica",le="0.25",type!="sidekiq"}
         )
       )
       /
@@ -449,11 +449,11 @@ groups:
     expr: |
       (
         sum by (environment) (
-          sli_aggregations:gitlab_sql_replica_duration_seconds_bucket_rate30m{db_config_name="ci_replica",le="0.05",type!="sidekiq"}
+          sli_aggregations:gitlab_sql_replica_duration_seconds_bucket_rate30m{db_config_name="ci_replica",le="0.1",type!="sidekiq"}
         )
         +
         sum by (environment) (
-          sli_aggregations:gitlab_sql_replica_duration_seconds_bucket_rate30m{db_config_name="ci_replica",le="0.1",type!="sidekiq"}
+          sli_aggregations:gitlab_sql_replica_duration_seconds_bucket_rate30m{db_config_name="ci_replica",le="0.25",type!="sidekiq"}
         )
       )
       /
@@ -632,11 +632,11 @@ groups:
     expr: |
       (
         sum by (environment) (
-          sli_aggregations:gitlab_sql_replica_duration_seconds_bucket_rate1h{db_config_name="ci_replica",le="0.05",type!="sidekiq"}
+          sli_aggregations:gitlab_sql_replica_duration_seconds_bucket_rate1h{db_config_name="ci_replica",le="0.1",type!="sidekiq"}
         )
         +
         sum by (environment) (
-          sli_aggregations:gitlab_sql_replica_duration_seconds_bucket_rate1h{db_config_name="ci_replica",le="0.1",type!="sidekiq"}
+          sli_aggregations:gitlab_sql_replica_duration_seconds_bucket_rate1h{db_config_name="ci_replica",le="0.25",type!="sidekiq"}
         )
       )
       /
