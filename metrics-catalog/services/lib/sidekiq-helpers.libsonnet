@@ -17,16 +17,6 @@ local shardDefaults = {
 local shardDefinitions = {
   'database-throttled': { urgency: 'throttled', gkeDeployment: 'gitlab-sidekiq-database-throttled-v1', userImpacting: false, trafficCessationAlertConfig: false },
   'gitaly-throttled': { urgency: 'throttled', gkeDeployment: 'gitlab-sidekiq-gitaly-throttled-v1', userImpacting: false, trafficCessationAlertConfig: false },
-  imports: {
-    urgency: null,
-    gkeDeployment: 'gitlab-sidekiq-catchall-v1',
-    userImpacting: true,
-    trafficCessationAlertConfig: false,
-    autoScaling: false,
-    monitoringThresholds+: {
-      apdexScore: 0.90,
-    },
-  },
   'low-urgency-cpu-bound': { urgency: 'low', gkeDeployment: 'gitlab-sidekiq-low-urgency-cpu-bound-v1', userImpacting: true, trafficCessationAlertConfig: true },
   'memory-bound': {
     urgency: null,
