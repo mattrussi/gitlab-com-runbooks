@@ -11,11 +11,11 @@ local outputPromYaml(groups) =
     groups: groups,
   });
 
-local transformRuleGroups(sourceAggregationSet, targetAggregationSet, extraSourceSelector) =
+local transformRuleGroups(sourceAggregationSet, targetAggregationSet, extraSourceSelector, extrasForGroup=defaultsForRecordingRuleGroup) =
   aggregationSetTransformer.generateRecordingRuleGroups(
     sourceAggregationSet=sourceAggregationSet { selector+: extraSourceSelector },
     targetAggregationSet=targetAggregationSet,
-    extrasForGroup=defaultsForRecordingRuleGroup
+    extrasForGroup=extrasForGroup,
   );
 
 local groupsForApplicationSli(sli, extraSelector) =
@@ -106,6 +106,7 @@ local filesForSeparateSelector(name, selector) = {
         sourceAggregationSet=aggregationSets.featureCategorySourceSLIs,
         targetAggregationSet=aggregationSets.featureCategorySLIs,
         extraSourceSelector=selector,
+        extrasForGroup={ partial_response_strategy: 'abort' },
       ),
     ),
 
@@ -115,6 +116,7 @@ local filesForSeparateSelector(name, selector) = {
         sourceAggregationSet=aggregationSets.featureCategorySourceSLIs,
         targetAggregationSet=aggregationSets.serviceComponentStageGroupSLIs,
         extraSourceSelector=selector,
+        extrasForGroup={ partial_response_strategy: 'abort' },
       ),
     ),
 
@@ -124,6 +126,7 @@ local filesForSeparateSelector(name, selector) = {
         sourceAggregationSet=aggregationSets.featureCategorySourceSLIs,
         targetAggregationSet=aggregationSets.stageGroupSLIs,
         extraSourceSelector=selector,
+        extrasForGroup={ partial_response_strategy: 'abort' },
       ),
     ),
 

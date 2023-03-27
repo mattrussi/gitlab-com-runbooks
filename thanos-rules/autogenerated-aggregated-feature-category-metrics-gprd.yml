@@ -3,7 +3,7 @@
 groups:
 - name: Feature Category Metrics (fast burn)
   interval: 1m
-  partial_response_strategy: warn
+  partial_response_strategy: abort
   rules:
   - record: gitlab:component:feature_category:execution:error:rate_5m
     expr: |
@@ -87,7 +87,7 @@ groups:
       )
 - name: Feature Category Metrics (slow burn)
   interval: 2m
-  partial_response_strategy: warn
+  partial_response_strategy: abort
   rules:
   - record: gitlab:component:feature_category:execution:error:rate_30m
     expr: |

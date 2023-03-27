@@ -3,7 +3,7 @@
 groups:
 - name: Stage Group Service-And-Component-Aggregated Metrics (fast burn)
   interval: 1m
-  partial_response_strategy: warn
+  partial_response_strategy: abort
   rules:
   - record: gitlab:component:stage_group:execution:error:rate_5m
     expr: |
@@ -87,7 +87,7 @@ groups:
       )
 - name: Stage Group Service-And-Component-Aggregated Metrics (slow burn)
   interval: 2m
-  partial_response_strategy: warn
+  partial_response_strategy: abort
   rules:
   - record: gitlab:component:stage_group:execution:error:rate_30m
     expr: |
