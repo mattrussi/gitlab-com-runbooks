@@ -15,5 +15,15 @@
     "reprazent",
     "smcgivern",
     "steveazz"
+  ],
+  "packageRules": [
+    {
+      "matchPackagePatterns": ["*"],
+      "semanticCommitType": "chore"
+    },
+    {
+      "matchFiles": [".tool-versions"],
+      "semanticCommitType": "feat"
+    }
   ]
 }
