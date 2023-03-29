@@ -17,6 +17,14 @@ metricsCatalog.serviceDefinition(
 
           If this SLI is experiencing a degradation then the output of CI jobs may be delayed in becoming visible or in severe situations the data may be lost.
         |||,
+
+        trafficCessationAlertConfig: {
+          // Excluding ops from these traffic cessation alerts because the metrics
+          // get briefly initialized but then never used because there is no separate
+          // redis-tracechunks in ops.
+          // See https://gitlab.com/gitlab-com/gl-infra/reliability/-/issues/17557
+          component: { env: { ne: 'ops' } },
+        },
       },
     },
   }
