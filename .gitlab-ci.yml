@@ -752,7 +752,7 @@ check-stage-groups:
     - .jsonnet-cache
   script:
     - ./scripts/bundler.sh  # Install jsonnet bundles, required for make generate
-    - make update-feature-categories
+    - make update-feature-categories-ci
     - git diff --exit-code
 
 generate_service_maturity_manifest:
