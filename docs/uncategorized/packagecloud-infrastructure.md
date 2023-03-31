@@ -1,3 +1,5 @@
+
+
 # PackageCloud Infrastructure and Backups
 
 This document will cover how our packagecloud infrastructure works, how
@@ -5,6 +7,12 @@ backups are taken, and how to restore said backups. `packages.gitlab.com`
 is hosted in AWS us-west-1 (N. California). There are also
 [PackageCloud docs](https://packagecloud.atlassian.net/wiki/display/ENTERPRISE/Backups)
 on the entire backup process.
+
+## Support Requests
+
+We are entitled to product support from PackageCloud.  To open a new support request email: support@packagecloud.io
+
+To escalate a support request reach out to the [Reliability General Team](https://about.gitlab.com/handbook/engineering/infrastructure/team/reliability/general.html).
 
 ## How Does PackageCloud Work?
 
