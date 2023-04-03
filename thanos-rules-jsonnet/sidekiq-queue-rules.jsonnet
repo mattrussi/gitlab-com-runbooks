@@ -3,6 +3,8 @@ local alerts = import 'alerts/alerts.libsonnet';
 local aggregationSetTransformer = import 'servicemetrics/aggregation-set-transformer.libsonnet';
 local serviceLevelAlerts = import 'slo-alerts/service-level-alerts.libsonnet';
 local stableIds = import 'stable-ids/stable-ids.libsonnet';
+local separateGlobalRecordingFiles = (import './lib/separate-global-recording-files.libsonnet').separateGlobalRecordingFiles;
+local selectors = import 'promql/selectors.libsonnet';
 
 /* TODO: having some sort of criticality label on sidekiq jobs would allow us to
    define different criticality labels for each worker. For now we need to use
@@ -17,7 +19,7 @@ local minimumSamplesForMonitoringApdex = 1200; /* We don't really care if someth
 local minimumSamplesForMonitoringErrors = 3; /* Low-frequency jobs may be doing very important things */
 
 
-local sidekiqThanosAlerts() =
+local sidekiqThanosAlerts(extraSelector) =
   [
     /**
        * Throttled queues don’t alert on queues SLOs.
@@ -34,16 +36,18 @@ local sidekiqThanosAlerts() =
       expr: |||
         (
           sum by (environment, queue, feature_category, worker) (
-            gitlab_background_jobs:queue:ops:rate_1h{urgency="throttled"}
+            gitlab_background_jobs:queue:ops:rate_1h{%(selector)s}
           ) > 0
         )
         unless
         (
           sum by (environment, queue, feature_category, worker) (
-            gitlab_background_jobs:execution:ops:rate_1h{urgency="throttled"}
+            gitlab_background_jobs:execution:ops:rate_1h{%(selector)s}
           ) > 0
         )
-      |||,
+      ||| % {
+        selector: selectors.serializeHash({ urgency: { eq: 'throttled' } } + extraSelector),
+      },
       'for': '30m',
       labels: {
         type: 'sidekiq',  // Hardcoded because `gitlab_background_jobs:queue:ops:rate_1h` `type` label depends on the sidekiq client `type`
@@ -72,10 +76,12 @@ local sidekiqThanosAlerts() =
     {
       alert: 'SidekiqQueueNoLongerBeingProcessed',
       expr: |||
-        (sum by(environment, queue) (gitlab_background_jobs:queue:ops:rate_6h) > 0.001)
+        (sum by(environment, queue) (gitlab_background_jobs:queue:ops:rate_6h{%(selector)s})> 0.001)
         unless
-        (sum by(environment, queue) (gitlab_background_jobs:execution:ops:rate_6h)  > 0)
-      |||,
+        (sum by(environment, queue) (gitlab_background_jobs:execution:ops:rate_6h{%(selector)s}) > 0)
+      ||| % {
+        selector: selectors.serializeHash(extraSelector),
+      },
       'for': '20m',
       labels: {
         type: 'sidekiq',
@@ -99,10 +105,12 @@ local sidekiqThanosAlerts() =
     {
       alert: 'SidekiqWorkerNoLongerBeingProcessed',
       expr: |||
-        (sum by(environment, worker) (gitlab_background_jobs:queue:ops:rate_6h) > 0.001)
+        (sum by(environment, worker) (gitlab_background_jobs:queue:ops:rate_6h{%(selector)s})> 0.001)
         unless
-        (sum by(environment, worker) (gitlab_background_jobs:execution:ops:rate_6h)  > 0)
-      |||,
+        (sum by(environment, worker) (gitlab_background_jobs:execution:ops:rate_6h{%(selector)s})  > 0)
+      ||| % {
+        selector: selectors.serializeHash(extraSelector),
+      },
       'for': '20m',
       labels: {
         type: 'sidekiq',
@@ -135,7 +143,7 @@ local sidekiqThanosAlerts() =
     thresholdSLOValue=fixedApdexThreshold,
     aggregationSet=aggregationSets.sidekiqWorkerExecutionSLIs,
     windows=['3d'],
-    metricSelectorHash={},
+    metricSelectorHash=extraSelector,
     minimumSamplesForMonitoring=minimumSamplesForMonitoringApdex,
     extraAnnotations={
       grafana_dashboard_id: 'sidekiq-worker-detail/sidekiq-worker-detail',
@@ -156,7 +164,7 @@ local sidekiqThanosAlerts() =
     thresholdSLOValue=fixedErrorRateThreshold,
     aggregationSet=aggregationSets.sidekiqWorkerExecutionSLIs,
     windows=['3d'],
-    metricSelectorHash={},
+    metricSelectorHash=extraSelector,
     minimumSamplesForMonitoring=minimumSamplesForMonitoringErrors,
     extraAnnotations={
       grafana_dashboard_id: 'sidekiq-worker-detail/sidekiq-worker-detail',
@@ -167,15 +175,15 @@ local sidekiqThanosAlerts() =
   );
 
 
-local rules = {
+local rules(extraSelector) = {
   groups:
     aggregationSetTransformer.generateRecordingRuleGroups(
-      sourceAggregationSet=aggregationSets.sidekiqWorkerQueueSourceSLIs,
+      sourceAggregationSet=aggregationSets.sidekiqWorkerQueueSourceSLIs { selector+: extraSelector },
       targetAggregationSet=aggregationSets.sidekiqWorkerQueueSLIs,
       extrasForGroup={ partial_response_strategy: 'warn' },
     ) +
     aggregationSetTransformer.generateRecordingRuleGroups(
-      sourceAggregationSet=aggregationSets.sidekiqWorkerExecutionSourceSLIs,
+      sourceAggregationSet=aggregationSets.sidekiqWorkerExecutionSourceSLIs { selector+: extraSelector },
       targetAggregationSet=aggregationSets.sidekiqWorkerExecutionSLIs,
       extrasForGroup={ partial_response_strategy: 'warn' },
     )
@@ -183,10 +191,10 @@ local rules = {
       name: 'Sidekiq Aggregated Thanos Alerts',
       partial_response_strategy: 'warn',
       interval: '1m',
-      rules: alerts.processAlertRules(sidekiqThanosAlerts()),
+      rules: alerts.processAlertRules(sidekiqThanosAlerts(extraSelector)),
     }],
 };
 
-{
-  'sidekiq-alerts.yml': std.manifestYamlDoc(rules),
-}
+separateGlobalRecordingFiles(function(selector) {
+  'sidekiq-alerts.yml': std.manifestYamlDoc(rules(selector)),
+})

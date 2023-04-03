@@ -8,30 +8,30 @@ groups:
   - record: gitlab_background_jobs:queue:ops:rate_5m
     expr: |
       sum by (env,environment,tier,type,stage,shard,queue,feature_category,urgency,worker) (
-        (gitlab_background_jobs:queue:ops:rate_5m{monitor!="global"} >= 0)
+        (gitlab_background_jobs:queue:ops:rate_5m{env="gprd",monitor!="global"} >= 0)
       )
   - record: gitlab_background_jobs:queue:apdex:ratio_5m
     expr: |
       sum by (env,environment,tier,type,stage,shard,queue,feature_category,urgency,worker) (
-        (gitlab_background_jobs:queue:apdex:success:rate_5m{monitor!="global"} >= 0)
+        (gitlab_background_jobs:queue:apdex:success:rate_5m{env="gprd",monitor!="global"} >= 0)
       )
       /
       sum by (env,environment,tier,type,stage,shard,queue,feature_category,urgency,worker) (
-        (gitlab_background_jobs:queue:apdex:weight:score_5m{monitor!="global"} >= 0)
+        (gitlab_background_jobs:queue:apdex:weight:score_5m{env="gprd",monitor!="global"} >= 0)
       )
   - record: gitlab_background_jobs:queue:ops:rate_1h
     expr: |
       sum by (env,environment,tier,type,stage,shard,queue,feature_category,urgency,worker) (
-        (gitlab_background_jobs:queue:ops:rate_1h{monitor!="global"} >= 0)
+        (gitlab_background_jobs:queue:ops:rate_1h{env="gprd",monitor!="global"} >= 0)
       )
   - record: gitlab_background_jobs:queue:apdex:ratio_1h
     expr: |
       sum by (env,environment,tier,type,stage,shard,queue,feature_category,urgency,worker) (
-        (gitlab_background_jobs:queue:apdex:success:rate_1h{monitor!="global"} >= 0)
+        (gitlab_background_jobs:queue:apdex:success:rate_1h{env="gprd",monitor!="global"} >= 0)
       )
       /
       sum by (env,environment,tier,type,stage,shard,queue,feature_category,urgency,worker) (
-        (gitlab_background_jobs:queue:apdex:weight:score_1h{monitor!="global"} >= 0)
+        (gitlab_background_jobs:queue:apdex:weight:score_1h{env="gprd",monitor!="global"} >= 0)
       )
 - name: Sidekiq queue source metrics per worker (slow burn)
   interval: 2m
@@ -40,44 +40,44 @@ groups:
   - record: gitlab_background_jobs:queue:ops:rate_30m
     expr: |
       sum by (env,environment,tier,type,stage,shard,queue,feature_category,urgency,worker) (
-        (gitlab_background_jobs:queue:ops:rate_30m{monitor!="global"} >= 0)
+        (gitlab_background_jobs:queue:ops:rate_30m{env="gprd",monitor!="global"} >= 0)
       )
   - record: gitlab_background_jobs:queue:apdex:ratio_30m
     expr: |
       sum by (env,environment,tier,type,stage,shard,queue,feature_category,urgency,worker) (
-        (gitlab_background_jobs:queue:apdex:success:rate_30m{monitor!="global"} >= 0)
+        (gitlab_background_jobs:queue:apdex:success:rate_30m{env="gprd",monitor!="global"} >= 0)
       )
       /
       sum by (env,environment,tier,type,stage,shard,queue,feature_category,urgency,worker) (
-        (gitlab_background_jobs:queue:apdex:weight:score_30m{monitor!="global"} >= 0)
+        (gitlab_background_jobs:queue:apdex:weight:score_30m{env="gprd",monitor!="global"} >= 0)
       )
   - record: gitlab_background_jobs:queue:ops:rate_6h
     expr: |
       sum by (env,environment,tier,type,stage,shard,queue,feature_category,urgency,worker) (
-        avg_over_time(gitlab_background_jobs:queue:ops:rate_1h{monitor!="global"}[6h])
+        avg_over_time(gitlab_background_jobs:queue:ops:rate_1h{env="gprd",monitor!="global"}[6h])
       )
   - record: gitlab_background_jobs:queue:apdex:ratio_6h
     expr: |
       sum by (env,environment,tier,type,stage,shard,queue,feature_category,urgency,worker) (
-        sum_over_time(gitlab_background_jobs:queue:apdex:success:rate_1h{monitor!="global"}[6h])
+        sum_over_time(gitlab_background_jobs:queue:apdex:success:rate_1h{env="gprd",monitor!="global"}[6h])
       )
       /
       sum by (env,environment,tier,type,stage,shard,queue,feature_category,urgency,worker) (
-        sum_over_time(gitlab_background_jobs:queue:apdex:weight:score_1h{monitor!="global"}[6h])
+        sum_over_time(gitlab_background_jobs:queue:apdex:weight:score_1h{env="gprd",monitor!="global"}[6h])
       )
   - record: gitlab_background_jobs:queue:ops:rate_3d
     expr: |
       sum by (env,environment,tier,type,stage,shard,queue,feature_category,urgency,worker) (
-        avg_over_time(gitlab_background_jobs:queue:ops:rate_1h{monitor!="global"}[3d])
+        avg_over_time(gitlab_background_jobs:queue:ops:rate_1h{env="gprd",monitor!="global"}[3d])
       )
   - record: gitlab_background_jobs:queue:apdex:ratio_3d
     expr: |
       sum by (env,environment,tier,type,stage,shard,queue,feature_category,urgency,worker) (
-        sum_over_time(gitlab_background_jobs:queue:apdex:success:rate_1h{monitor!="global"}[3d])
+        sum_over_time(gitlab_background_jobs:queue:apdex:success:rate_1h{env="gprd",monitor!="global"}[3d])
       )
       /
       sum by (env,environment,tier,type,stage,shard,queue,feature_category,urgency,worker) (
-        sum_over_time(gitlab_background_jobs:queue:apdex:weight:score_1h{monitor!="global"}[3d])
+        sum_over_time(gitlab_background_jobs:queue:apdex:weight:score_1h{env="gprd",monitor!="global"}[3d])
       )
 - name: Sidekiq execution source metrics per worker (fast burn)
   interval: 1m
@@ -86,72 +86,72 @@ groups:
   - record: gitlab_background_jobs:execution:error:rate_5m
     expr: |
       sum by (env,environment,tier,type,stage,shard,queue,feature_category,urgency,worker) (
-        (gitlab_background_jobs:execution:error:rate_5m{monitor!="global"} >= 0)
+        (gitlab_background_jobs:execution:error:rate_5m{env="gprd",monitor!="global"} >= 0)
       )
   - record: gitlab_background_jobs:execution:ops:rate_5m
     expr: |
       sum by (env,environment,tier,type,stage,shard,queue,feature_category,urgency,worker) (
-        (gitlab_background_jobs:execution:ops:rate_5m{monitor!="global"} >= 0)
+        (gitlab_background_jobs:execution:ops:rate_5m{env="gprd",monitor!="global"} >= 0)
       )
   - record: gitlab_background_jobs:execution:error:ratio_5m
     expr: |
       sum by (env,environment,tier,type,stage,shard,queue,feature_category,urgency,worker)(
-        (gitlab_background_jobs:execution:error:rate_5m{monitor!="global"} >= 0)
+        (gitlab_background_jobs:execution:error:rate_5m{env="gprd",monitor!="global"} >= 0)
       )
       /
       sum by (env,environment,tier,type,stage,shard,queue,feature_category,urgency,worker)(
-        (gitlab_background_jobs:execution:ops:rate_5m{monitor!="global"} >= 0)
+        (gitlab_background_jobs:execution:ops:rate_5m{env="gprd",monitor!="global"} >= 0)
         and
-        (gitlab_background_jobs:execution:error:rate_5m{monitor!="global"} >= 0)
+        (gitlab_background_jobs:execution:error:rate_5m{env="gprd",monitor!="global"} >= 0)
       )
   - record: gitlab_background_jobs:execution:apdex:weight:score_5m
     expr: |
       sum by (env,environment,tier,type,stage,shard,queue,feature_category,urgency,worker) (
-        (gitlab_background_jobs:execution:apdex:weight:score_5m{monitor!="global"} >= 0)
+        (gitlab_background_jobs:execution:apdex:weight:score_5m{env="gprd",monitor!="global"} >= 0)
       )
   - record: gitlab_background_jobs:execution:apdex:ratio_5m
     expr: |
       sum by (env,environment,tier,type,stage,shard,queue,feature_category,urgency,worker) (
-        (gitlab_background_jobs:execution:apdex:success:rate_5m{monitor!="global"} >= 0)
+        (gitlab_background_jobs:execution:apdex:success:rate_5m{env="gprd",monitor!="global"} >= 0)
       )
       /
       sum by (env,environment,tier,type,stage,shard,queue,feature_category,urgency,worker) (
-        (gitlab_background_jobs:execution:apdex:weight:score_5m{monitor!="global"} >= 0)
+        (gitlab_background_jobs:execution:apdex:weight:score_5m{env="gprd",monitor!="global"} >= 0)
       )
   - record: gitlab_background_jobs:execution:error:rate_1h
     expr: |
       sum by (env,environment,tier,type,stage,shard,queue,feature_category,urgency,worker) (
-        (gitlab_background_jobs:execution:error:rate_1h{monitor!="global"} >= 0)
+        (gitlab_background_jobs:execution:error:rate_1h{env="gprd",monitor!="global"} >= 0)
       )
   - record: gitlab_background_jobs:execution:ops:rate_1h
     expr: |
       sum by (env,environment,tier,type,stage,shard,queue,feature_category,urgency,worker) (
-        (gitlab_background_jobs:execution:ops:rate_1h{monitor!="global"} >= 0)
+        (gitlab_background_jobs:execution:ops:rate_1h{env="gprd",monitor!="global"} >= 0)
       )
   - record: gitlab_background_jobs:execution:error:ratio_1h
     expr: |
       sum by (env,environment,tier,type,stage,shard,queue,feature_category,urgency,worker)(
-        (gitlab_background_jobs:execution:error:rate_1h{monitor!="global"} >= 0)
+        (gitlab_background_jobs:execution:error:rate_1h{env="gprd",monitor!="global"} >= 0)
       )
       /
       sum by (env,environment,tier,type,stage,shard,queue,feature_category,urgency,worker)(
-        (gitlab_background_jobs:execution:ops:rate_1h{monitor!="global"} >= 0)
+        (gitlab_background_jobs:execution:ops:rate_1h{env="gprd",monitor!="global"} >= 0)
         and
-        (gitlab_background_jobs:execution:error:rate_1h{monitor!="global"} >= 0)
+        (gitlab_background_jobs:execution:error:rate_1h{env="gprd",monitor!="global"} >= 0)
       )
   - record: gitlab_background_jobs:execution:apdex:weight:score_1h
     expr: |
       sum by (env,environment,tier,type,stage,shard,queue,feature_category,urgency,worker) (
-        (gitlab_background_jobs:execution:apdex:weight:score_1h{monitor!="global"} >= 0)
+        (gitlab_background_jobs:execution:apdex:weight:score_1h{env="gprd",monitor!="global"} >= 0)
       )
   - record: gitlab_background_jobs:execution:apdex:ratio_1h
     expr: |
       sum by (env,environment,tier,type,stage,shard,queue,feature_category,urgency,worker) (
-        (gitlab_background_jobs:execution:apdex:success:rate_1h{monitor!="global"} >= 0)
+        (gitlab_background_jobs:execution:apdex:success:rate_1h{env="gprd",monitor!="global"} >= 0)
       )
       /
       sum by (env,environment,tier,type,stage,shard,queue,feature_category,urgency,worker) (
-        (gitlab_background_jobs:execution:apdex:weight:score_1h{monitor!="global"} >= 0)
+        (gitlab_background_jobs:execution:apdex:weight:score_1h{env="gprd",monitor!="global"} >= 0)
       )
 - name: Sidekiq execution source metrics per worker (slow burn)
   interval: 2m
@@ -160,97 +160,97 @@ groups:
   - record: gitlab_background_jobs:execution:error:rate_30m
     expr: |
       sum by (env,environment,tier,type,stage,shard,queue,feature_category,urgency,worker) (
-        (gitlab_background_jobs:execution:error:rate_30m{monitor!="global"} >= 0)
+        (gitlab_background_jobs:execution:error:rate_30m{env="gprd",monitor!="global"} >= 0)
       )
   - record: gitlab_background_jobs:execution:ops:rate_30m
     expr: |
       sum by (env,environment,tier,type,stage,shard,queue,feature_category,urgency,worker) (
-        (gitlab_background_jobs:execution:ops:rate_30m{monitor!="global"} >= 0)
+        (gitlab_background_jobs:execution:ops:rate_30m{env="gprd",monitor!="global"} >= 0)
       )
   - record: gitlab_background_jobs:execution:error:ratio_30m
     expr: |
       sum by (env,environment,tier,type,stage,shard,queue,feature_category,urgency,worker)(
-        (gitlab_background_jobs:execution:error:rate_30m{monitor!="global"} >= 0)
+        (gitlab_background_jobs:execution:error:rate_30m{env="gprd",monitor!="global"} >= 0)
       )
       /
       sum by (env,environment,tier,type,stage,shard,queue,feature_category,urgency,worker)(
-        (gitlab_background_jobs:execution:ops:rate_30m{monitor!="global"} >= 0)
+        (gitlab_background_jobs:execution:ops:rate_30m{env="gprd",monitor!="global"} >= 0)
         and
-        (gitlab_background_jobs:execution:error:rate_30m{monitor!="global"} >= 0)
+        (gitlab_background_jobs:execution:error:rate_30m{env="gprd",monitor!="global"} >= 0)
       )
   - record: gitlab_background_jobs:execution:apdex:weight:score_30m
     expr: |
       sum by (env,environment,tier,type,stage,shard,queue,feature_category,urgency,worker) (
-        (gitlab_background_jobs:execution:apdex:weight:score_30m{monitor!="global"} >= 0)
+        (gitlab_background_jobs:execution:apdex:weight:score_30m{env="gprd",monitor!="global"} >= 0)
       )
   - record: gitlab_background_jobs:execution:apdex:ratio_30m
     expr: |
       sum by (env,environment,tier,type,stage,shard,queue,feature_category,urgency,worker) (
-        (gitlab_background_jobs:execution:apdex:success:rate_30m{monitor!="global"} >= 0)
+        (gitlab_background_jobs:execution:apdex:success:rate_30m{env="gprd",monitor!="global"} >= 0)
       )
       /
       sum by (env,environment,tier,type,stage,shard,queue,feature_category,urgency,worker) (
-        (gitlab_background_jobs:execution:apdex:weight:score_30m{monitor!="global"} >= 0)
+        (gitlab_background_jobs:execution:apdex:weight:score_30m{env="gprd",monitor!="global"} >= 0)
       )
   - record: gitlab_background_jobs:execution:error:rate_6h
     expr: |
       sum by (env,environment,tier,type,stage,shard,queue,feature_category,urgency,worker) (
-        avg_over_time(gitlab_background_jobs:execution:error:rate_1h{monitor!="global"}[6h])
+        avg_over_time(gitlab_background_jobs:execution:error:rate_1h{env="gprd",monitor!="global"}[6h])
       )
   - record: gitlab_background_jobs:execution:ops:rate_6h
     expr: |
       sum by (env,environment,tier,type,stage,shard,queue,feature_category,urgency,worker) (
-        avg_over_time(gitlab_background_jobs:execution:ops:rate_1h{monitor!="global"}[6h])
+        avg_over_time(gitlab_background_jobs:execution:ops:rate_1h{env="gprd",monitor!="global"}[6h])
       )
   - record: gitlab_background_jobs:execution:error:ratio_6h
     expr: |
       sum by (env,environment,tier,type,stage,shard,queue,feature_category,urgency,worker) (
-        sum_over_time(gitlab_background_jobs:execution:error:rate_1h{monitor!="global"}[6h])
+        sum_over_time(gitlab_background_jobs:execution:error:rate_1h{env="gprd",monitor!="global"}[6h])
       )
       /
       sum by (env,environment,tier,type,stage,shard,queue,feature_category,urgency,worker) (
-        sum_over_time(gitlab_background_jobs:execution:ops:rate_1h{monitor!="global"}[6h])
+        sum_over_time(gitlab_background_jobs:execution:ops:rate_1h{env="gprd",monitor!="global"}[6h])
         and
-        gitlab_background_jobs:execution:error:rate_1h{monitor!="global"} >= 0
+        gitlab_background_jobs:execution:error:rate_1h{env="gprd",monitor!="global"} >= 0
       )
   - record: gitlab_background_jobs:execution:apdex:ratio_6h
     expr: |
       sum by (env,environment,tier,type,stage,shard,queue,feature_category,urgency,worker) (
-        sum_over_time(gitlab_background_jobs:execution:apdex:success:rate_1h{monitor!="global"}[6h])
+        sum_over_time(gitlab_background_jobs:execution:apdex:success:rate_1h{env="gprd",monitor!="global"}[6h])
       )
       /
       sum by (env,environment,tier,type,stage,shard,queue,feature_category,urgency,worker) (
-        sum_over_time(gitlab_background_jobs:execution:apdex:weight:score_1h{monitor!="global"}[6h])
+        sum_over_time(gitlab_background_jobs:execution:apdex:weight:score_1h{env="gprd",monitor!="global"}[6h])
       )
   - record: gitlab_background_jobs:execution:error:rate_3d
     expr: |
       sum by (env,environment,tier,type,stage,shard,queue,feature_category,urgency,worker) (
-        avg_over_time(gitlab_background_jobs:execution:error:rate_1h{monitor!="global"}[3d])
+        avg_over_time(gitlab_background_jobs:execution:error:rate_1h{env="gprd",monitor!="global"}[3d])
       )
   - record: gitlab_background_jobs:execution:ops:rate_3d
     expr: |
       sum by (env,environment,tier,type,stage,shard,queue,feature_category,urgency,worker) (
-        avg_over_time(gitlab_background_jobs:execution:ops:rate_1h{monitor!="global"}[3d])
+        avg_over_time(gitlab_background_jobs:execution:ops:rate_1h{env="gprd",monitor!="global"}[3d])
       )
   - record: gitlab_background_jobs:execution:error:ratio_3d
     expr: |
       sum by (env,environment,tier,type,stage,shard,queue,feature_category,urgency,worker) (
-        sum_over_time(gitlab_background_jobs:execution:error:rate_1h{monitor!="global"}[3d])
+        sum_over_time(gitlab_background_jobs:execution:error:rate_1h{env="gprd",monitor!="global"}[3d])
       )
       /
       sum by (env,environment,tier,type,stage,shard,queue,feature_category,urgency,worker) (
-        sum_over_time(gitlab_background_jobs:execution:ops:rate_1h{monitor!="global"}[3d])
+        sum_over_time(gitlab_background_jobs:execution:ops:rate_1h{env="gprd",monitor!="global"}[3d])
         and
-        gitlab_background_jobs:execution:error:rate_1h{monitor!="global"} >= 0
+        gitlab_background_jobs:execution:error:rate_1h{env="gprd",monitor!="global"} >= 0
       )
   - record: gitlab_background_jobs:execution:apdex:ratio_3d
     expr: |
       sum by (env,environment,tier,type,stage,shard,queue,feature_category,urgency,worker) (
-        sum_over_time(gitlab_background_jobs:execution:apdex:success:rate_1h{monitor!="global"}[3d])
+        sum_over_time(gitlab_background_jobs:execution:apdex:success:rate_1h{env="gprd",monitor!="global"}[3d])
       )
       /
       sum by (env,environment,tier,type,stage,shard,queue,feature_category,urgency,worker) (
-        sum_over_time(gitlab_background_jobs:execution:apdex:weight:score_1h{monitor!="global"}[3d])
+        sum_over_time(gitlab_background_jobs:execution:apdex:weight:score_1h{env="gprd",monitor!="global"}[3d])
       )
 - name: Sidekiq Aggregated Thanos Alerts
   interval: 1m
@@ -283,13 +283,13 @@ groups:
     expr: |
       (
         sum by (environment, queue, feature_category, worker) (
-          gitlab_background_jobs:queue:ops:rate_1h{urgency="throttled"}
+          gitlab_background_jobs:queue:ops:rate_1h{env="gprd",urgency="throttled"}
         ) > 0
       )
       unless
       (
         sum by (environment, queue, feature_category, worker) (
-          gitlab_background_jobs:execution:ops:rate_1h{urgency="throttled"}
+          gitlab_background_jobs:execution:ops:rate_1h{env="gprd",urgency="throttled"}
         ) > 0
       )
   - alert: SidekiqQueueNoLongerBeingProcessed
@@ -316,9 +316,9 @@ groups:
       tier: sv
       type: sidekiq
     expr: |
-      (sum by(environment, queue) (gitlab_background_jobs:queue:ops:rate_6h) > 0.001)
+      (sum by(environment, queue) (gitlab_background_jobs:queue:ops:rate_6h{env="gprd"})> 0.001)
       unless
-      (sum by(environment, queue) (gitlab_background_jobs:execution:ops:rate_6h)  > 0)
+      (sum by(environment, queue) (gitlab_background_jobs:execution:ops:rate_6h{env="gprd"}) > 0)
   - alert: SidekiqWorkerNoLongerBeingProcessed
     for: 20m
     annotations:
@@ -343,9 +343,9 @@ groups:
       tier: sv
       type: sidekiq
     expr: |
-      (sum by(environment, worker) (gitlab_background_jobs:queue:ops:rate_6h) > 0.001)
+      (sum by(environment, worker) (gitlab_background_jobs:queue:ops:rate_6h{env="gprd"})> 0.001)
       unless
-      (sum by(environment, worker) (gitlab_background_jobs:execution:ops:rate_6h)  > 0)
+      (sum by(environment, worker) (gitlab_background_jobs:execution:ops:rate_6h{env="gprd"})  > 0)
   - alert: SidekiqServiceWorkerExecutionApdexSLOViolation
     for: 1h
     annotations:
@@ -375,18 +375,18 @@ groups:
     expr: |
       (
         (
-          gitlab_background_jobs:execution:apdex:ratio_3d{monitor="global"}
+          gitlab_background_jobs:execution:apdex:ratio_3d{env="gprd",monitor="global"}
           < (1 - 1 * 0.100000)
         )
         and
         (
-          gitlab_background_jobs:execution:apdex:ratio_6h{monitor="global"}
+          gitlab_background_jobs:execution:apdex:ratio_6h{env="gprd",monitor="global"}
           < (1 - 1 * 0.100000)
         )
       )
       and on(env,environment,tier,type,stage,shard,queue,feature_category,urgency,worker)
       (
-        sum by(env,environment,tier,type,stage,shard,queue,feature_category,urgency,worker) (gitlab_background_jobs:execution:ops:rate_3d{monitor="global"}) >= 0.00463
+        sum by(env,environment,tier,type,stage,shard,queue,feature_category,urgency,worker) (gitlab_background_jobs:execution:ops:rate_3d{env="gprd",monitor="global"}) >= 0.00463
       )
   - alert: SidekiqServiceWorkerExecutionErrorSLOViolation
     for: 1h
@@ -417,16 +417,16 @@ groups:
     expr: |
       (
         (
-          gitlab_background_jobs:execution:error:ratio_3d{monitor="global"}
+          gitlab_background_jobs:execution:error:ratio_3d{env="gprd",monitor="global"}
           > (1 * 0.100000)
         )
         and
         (
-          gitlab_background_jobs:execution:error:ratio_6h{monitor="global"}
+          gitlab_background_jobs:execution:error:ratio_6h{env="gprd",monitor="global"}
           > (1 * 0.100000)
         )
       )
       and on(env,environment,tier,type,stage,shard,queue,feature_category,urgency,worker)
       (
-        sum by(env,environment,tier,type,stage,shard,queue,feature_category,urgency,worker) (gitlab_background_jobs:execution:ops:rate_3d{monitor="global"}) >= 1.15741e-05
+        sum by(env,environment,tier,type,stage,shard,queue,feature_category,urgency,worker) (gitlab_background_jobs:execution:ops:rate_3d{env="gprd",monitor="global"}) >= 1.15741e-05
       )
