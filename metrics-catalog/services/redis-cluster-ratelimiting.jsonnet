@@ -6,7 +6,8 @@ metricsCatalog.serviceDefinition(
   redisArchetype(
     type='redis-cluster-ratelimiting',
     // TODO: switch to `rate_limiting` after Rails app drops ClusterRateLimiting class
-    railsStorageSelector={ storage: 'cluster_rate_limiting' },
+    // currently accepts both 'cluster_rate_limiting' and 'rate_limiting' during transition period
+    railsStorageSelector={ storage: { oneOf: ['cluster_rate_limiting', 'rate_limiting'] } },
     descriptiveName='Redis Cluster Rate-Limiting'
   )
   {
