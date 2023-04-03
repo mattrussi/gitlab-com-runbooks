@@ -1,5 +1,3 @@
-
-
 # PackageCloud Infrastructure and Backups
 
 This document will cover how our packagecloud infrastructure works, how
