@@ -1171,33 +1171,6 @@ services:
       monitors:
         primary_grafana_dashboard: wccEP9Imk/redis
 
-  - name: redis-ratelimiting
-    tier: db
-    friendly_name: Redis RateLimiting
-    label: RedisRateLimiting
-    owner: scalability
-    technical:
-      project:
-        - https://github.com/antirez/redis/
-      documents:
-        design:
-        architecture:
-        readiness_review:
-        sre_guide: https://gitlab.com/gitlab-com/runbooks/-/tree/master/docs/redis-ratelimiting
-        developer_guide: https://docs.gitlab.com/ee/development/redis.html#redis-guidelines
-        service:
-          - https://redis.io/documentation
-          - https://docs.gitlab.com/omnibus/settings/redis.html
-        security:
-      dependencies:
-        - service:
-      logging:
-        - name: system
-          permalink: https://log.gprd.gitlab.net/goto/b0f9e5bad8ac43431efaf9f350e3a975
-    observability:
-      monitors:
-        primary_grafana_dashboard: redis-ratelimiting-main/redis-ratelimiting-overview
-
   - name: redis-cluster-ratelimiting
     tier: db
     friendly_name: Redis Cluster RateLimiting
