@@ -6,7 +6,6 @@
 
 # Redis-ratelimiting Service
 
-
 * [Service Overview](https://dashboards.gitlab.net/d/redis-ratelimiting-main/redis-ratelimiting-overview)
 * **Alerts**: <https://alerts.gitlab.net/#/alerts?filter=%7Btype%3D%22redis-ratelimiting%22%2C%20tier%3D%22db%22%7D>
 * **Label**: gitlab-com/gl-infra/production~"Service::RedisRateLimiting"
@@ -23,8 +22,8 @@
 * [../redis/redis.md](../redis/redis.md)
 <!-- END_MARKER -->
 
-
 ## Summary
+
 **This service is decommissioned in favour of [Redis-cluster-ratelimiting Service](../redis-cluster-ratelimiting/README.md)**
 
 The Ratelimiting Redis instances is a distinct Redis cluster used by RackAttack and Application Rate Limiting
