@@ -24,6 +24,8 @@
 
 ## Summary
 
+**This service is decommissioned in favour of [Redis-cluster-ratelimiting Service](../redis-cluster-ratelimiting/README.md)**
+
 The Ratelimiting Redis instances is a distinct Redis cluster used by RackAttack and Application Rate Limiting
 to store the transient rate-limiting counts (almost exclusively a one minute period).  Data has a very short applicable lifespan;
 the relevant period is actually stored as part of the keyname (`epoch_time / period`), and it uses Redis TTLs to
