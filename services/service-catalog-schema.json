@@ -71,11 +71,36 @@
           "description": "The setting to enable/disable receiving weekly error budget reports in the team's Slack error budget channel",
           "type": "boolean"
         },
-        "manager_slug": {
-          "description": "DEPRECATED: The manager's slug for the team",
+        "manager": {
+          "description": "The GitLab username for manager of team. Must omit `@` prefix",
           "oneOf": [
             {
-              "type": "string"
+              "type": "string",
+              "pattern": "^(?!@.*$).*"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "label": {
+          "description": "The label of the team. Must omit `~` prefix",
+          "oneOf": [
+            {
+              "type": "string",
+              "pattern": "^(?!~.*$).*"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "assign_capacity_planning_issues": {
+          "description": "The setting to enable/disable assignment of capacity planning issues to the team. Disabled by default",
+          "oneOf": [
+            {
+              "type": "boolean",
+              "default": false
             },
             {
               "type": "null"
@@ -125,6 +150,10 @@
         ],
         "alerts": [
           "slack_alerts_channel"
+        ],
+        "assign_capacity_planning_issues": [
+          "label",
+          "manager"
         ]
       },
       "required": [

@@ -79,6 +79,10 @@ test.suite({
       product_stage_group: 'scalability',
       send_slo_alerts_to_team_slack_channel: false,
       slack_alerts_channel: 'g_scalability',
+      manager: 'rnienaber',
+      label: 'group::scalability',
+      url: 'https://about.gitlab.com/handbook/engineering/infrastructure/team/scalability/',
+      assign_capacity_planning_issues: true,
     },
   },
   testTeams: {
