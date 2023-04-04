@@ -4,6 +4,7 @@ local saturation = import 'servicemetrics/saturation-resources.libsonnet';
 local sidekiqHelpers = import 'services/lib/sidekiq-helpers.libsonnet';
 local mapping = import './tamland_service_env_mapping.libsonnet';
 local saturation = import 'servicemetrics/saturation-resources.libsonnet';
+local serviceCatalog = import 'service-catalog/service-catalog.libsonnet';
 
 {
   saturationResources: saturation,
@@ -11,4 +12,8 @@ local saturation = import 'servicemetrics/saturation-resources.libsonnet';
     sidekiq: sidekiqHelpers.shards.listByName(),
   },
   servicesEnvMapping: mapping.servicesEnvMapping(mapping.uniqServices(saturation)),
+  serviceCatalog: {
+    services: serviceCatalog.getRawCatalogServices(),
+    teams: serviceCatalog.getRawCatalogTeams(),
+  },
 }
