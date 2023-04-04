@@ -1,3 +1,5 @@
+local mapping = import './tamland_service_env_mapping.libsonnet';
+local saturation = import 'servicemetrics/saturation-resources.libsonnet';
 local tamlandSaturation = import 'tamland.jsonnet';
 local test = import 'test.libsonnet';
 
@@ -49,6 +51,23 @@ test.suite({
     expectThat: {
       result: std.sort(std.objectFields(self.actual.serviceCatalog.teams[0])) == std.sort(['name', 'label', 'manager', 'assignCapacityPlanningIssues']),
       description: 'Expect object to have serviceCatalog.teams fields',
+    },
+  },
+  testServiceCatalogServicesSubset: {
+    actual: tamlandSaturation,
+    expectThat: {
+      result:
+        local metricsCatalogServices = std.sort(mapping.uniqServices(saturation));
+        local serviceCatalogServices = std.sort(
+          std.map(
+            function(service)
+              service.name
+            , self.actual.serviceCatalog.services
+          )
+        );
+        local unknownServices = std.setDiff(metricsCatalogServices, serviceCatalogServices);
+        std.length(unknownServices) == 0,
+      description: 'Expected metricsCatalog services to be subset of serviceCatalog services',
     },
   },
 })
