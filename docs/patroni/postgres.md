@@ -199,6 +199,11 @@ As well there are a few alerts that are intended to detect problems that could *
   fast! If things don't resolve, remove the replication slot on the primary (see
   [below](#replication-slots))
 
+- Check if there's a significant increase in writes in the [Tuple Stats dashboard](https://dashboards.gitlab.net/goto/7eDuWvY4z?orgId=1).
+  - Check `pg_stat_activity_marginalia_sampler_active_count` in [Thanos](https://thanos-query.ops.gitlab.net/graph?g0.expr=sum%20by%20(endpoint%2C%20fqdn%2C%20environment)%20(%0A%20%20%20%20avg_over_time(pg_stat_activity_marginalia_sampler_active_count%7Benv%3D%22gprd%22%2C%20application%3D~%22.*%22%2C%20fqdn%3D~%22patroni-ci-2004.*%22%2C%20endpoint%3D~%22.*%22%2C%20state%3D~%22.*%22%7D%5B1m%5D)%0A)%0A&g0.tab=0&g0.stacked=0&g0.range_input=12h&g0.max_source_resolution=0s&g0.deduplicate=1&g0.partial_response=0&g0.store_matches=%5B%5D&g0.end_input=2023-03-30%2001%3A01%3A32&g0.moment_input=2023-03-30%2001%3A01%3A32) for possible leads on which endpoint may be making the database busy.
+
+- Note that as replicas in the pool become outdated, all read workload will be shifted to whichever replicas remaining that are not lagging. Replicas dropping out of the pool would lead to increased load on the primary.
+
 ### Resolution
 
 Look into whether there's a particularly heavy migration running which
