@@ -107,7 +107,11 @@ As we can see we have a table with the reference of the queryIds:
 
 Now we have the list, as you can see the queryId we recognized as consuming more time to resolve ( 8726813440039762943 ) being the first row in this table too.
 
-The next step is to find what SQL statement is each one of these queryIds. To gather this information, you need to connect to the primary database host, open a `gitlab-psql` session, and issue the following command:
+The next step is to find what SQL statement is each one of these queryIds. To gather this information, you need to connect to the primary database host.
+
+If you do not have access to the primary database host, follow the [mapping docs](mapping_statements.md) to find the SQL statements.
+
+Open a `gitlab-psql` session, and issue the following command:
 
 * I recommend using the command `\a` in the `gitlab-psql` session, before executing the query, to get the output unaligned. It will be easier to generate the next table.
 
