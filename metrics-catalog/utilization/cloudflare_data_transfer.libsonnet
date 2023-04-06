@@ -13,7 +13,7 @@ local utilizationMetric = metricsCatalog.utilizationMetric;
     resourceLabels: ['zone'],
     query: |||
       sum by (%(aggregationLabels)s) (
-        rate(cloudflare_zones_http_country_bytes_total{%(selector)s}[%(rangeDuration)s])
+        rate(cloudflare_zone_bandwidth_country{%(selector)s}[%(rangeDuration)s])
       )
     |||,
   }),
