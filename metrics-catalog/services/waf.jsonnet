@@ -19,6 +19,8 @@ metricsCatalog.serviceDefinition({
   },
   serviceLevelIndicators: {
     gitlab_zone: {
+      severity: 's3',
+      team: 'reliability_foundations',
       userImpacting: false,  // Low until CF exporter metric quality increases https://gitlab.com/gitlab-com/gl-infra/reliability/-/issues/10294
       featureCategory: 'not_owned',
       description: |||
@@ -43,6 +45,8 @@ metricsCatalog.serviceDefinition({
     },
     // The "gitlab.net" zone
     gitlab_net_zone: {
+      severity: 's3',
+      team: 'reliability_foundations',
       userImpacting: false,  // Low until CF exporter metric quality increases https://gitlab.com/gitlab-com/gl-infra/reliability/-/issues/10294
       featureCategory: 'not_owned',
       description: |||
