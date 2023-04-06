@@ -364,6 +364,9 @@ teams:
 - name: reliability_foundations
   url: https://about.gitlab.com/handbook/engineering/infrastructure/team/reliability/foundations.html
   slack_alerts_channel: g_infra_foundations_alerts
+  send_slo_alerts_to_team_slack_channel: true
+  alerts:
+  - ops
 
 - name: reliability_practices
   url: https://about.gitlab.com/handbook/engineering/infrastructure/team/reliability/practices.html
