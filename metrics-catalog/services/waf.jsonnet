@@ -17,6 +17,10 @@ metricsCatalog.serviceDefinition({
     kubernetes: false,
     vms: false,
   },
+
+  // No stages for Thanos
+  serviceIsStageless: true,
+
   serviceLevelIndicators: {
     gitlab_zone: {
       userImpacting: false,  // Low until CF exporter metric quality increases https://gitlab.com/gitlab-com/gl-infra/reliability/-/issues/10294
@@ -29,14 +33,17 @@ metricsCatalog.serviceDefinition({
         serious upstream failures on GitLab.com.
       |||,
 
+      local zoneSelector = { zone: { re: 'gitlab.com|staging.gitlab.com' } },
       requestRate: rateMetric(
         counter='cloudflare_zone_requests_total',
-        selector='zone=~"gitlab.com|staging.gitlab.com"'
+        selector=zoneSelector
       ),
 
       errorRate: rateMetric(
         counter='cloudflare_zone_requests_status',
-        selector='zone=~"gitlab.com|staging.gitlab.com", status=~"5.."',
+        selector=zoneSelector {
+          status: { re: '5..' },
+        },
       ),
 
       significantLabels: [],
@@ -52,14 +59,18 @@ metricsCatalog.serviceDefinition({
         malicious traffic and is blocking it.
       |||,
 
+      local zoneSelector = { zone: 'gitlab.net' },
+
       requestRate: rateMetric(
         counter='cloudflare_zone_requests_total',
-        selector='zone="gitlab.net"'
+        selector=zoneSelector
       ),
 
       errorRate: rateMetric(
         counter='cloudflare_zone_requests_status',
-        selector='zone="gitlab.net", status=~"5.."',
+        selector=zoneSelector {
+          status: { re: '5..' },
+        },
       ),
 
       significantLabels: [],

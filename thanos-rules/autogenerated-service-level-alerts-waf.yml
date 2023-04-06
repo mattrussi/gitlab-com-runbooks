@@ -24,7 +24,7 @@ groups:
       grafana_variables: environment,stage
       promql_template_1: |
         sum by (env,environment,tier,stage) (
-          rate(cloudflare_zone_requests_total{zone="gitlab.net", environment="{{ $labels.environment }}",stage="{{ $labels.stage }}"}[5m])
+          rate(cloudflare_zone_requests_total{environment="{{ $labels.environment }}",stage="{{ $labels.stage }}",zone="gitlab.net"}[5m])
         )
       runbook: docs/waf/README.md
     labels:
@@ -63,7 +63,7 @@ groups:
       grafana_variables: environment,stage
       promql_template_1: |
         sum by (env,environment,tier,stage) (
-          rate(cloudflare_zone_requests_total{zone="gitlab.net", environment="{{ $labels.environment }}",stage="{{ $labels.stage }}"}[5m])
+          rate(cloudflare_zone_requests_total{environment="{{ $labels.environment }}",stage="{{ $labels.stage }}",zone="gitlab.net"}[5m])
         )
       runbook: docs/waf/README.md
     labels:
@@ -100,7 +100,7 @@ groups:
       grafana_variables: environment,stage
       promql_template_1: |
         sum by (env,environment,tier,stage) (
-          rate(cloudflare_zone_requests_total{zone=~"gitlab.com|staging.gitlab.com", environment="{{ $labels.environment }}",stage="{{ $labels.stage }}"}[5m])
+          rate(cloudflare_zone_requests_total{environment="{{ $labels.environment }}",stage="{{ $labels.stage }}",zone=~"gitlab.com|staging.gitlab.com"}[5m])
         )
       runbook: docs/waf/README.md
     labels:
@@ -139,7 +139,7 @@ groups:
       grafana_variables: environment,stage
       promql_template_1: |
         sum by (env,environment,tier,stage) (
-          rate(cloudflare_zone_requests_total{zone=~"gitlab.com|staging.gitlab.com", environment="{{ $labels.environment }}",stage="{{ $labels.stage }}"}[5m])
+          rate(cloudflare_zone_requests_total{environment="{{ $labels.environment }}",stage="{{ $labels.stage }}",zone=~"gitlab.com|staging.gitlab.com"}[5m])
         )
       runbook: docs/waf/README.md
     labels:
