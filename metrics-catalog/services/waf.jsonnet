@@ -30,13 +30,13 @@ metricsCatalog.serviceDefinition({
       |||,
 
       requestRate: rateMetric(
-        counter='cloudflare_zones_http_responses_total',
+        counter='cloudflare_zone_requests_total',
         selector='zone=~"gitlab.com|staging.gitlab.com"'
       ),
 
       errorRate: rateMetric(
-        counter='cloudflare_zones_http_responses_total',
-        selector='zone=~"gitlab.com|staging.gitlab.com", edge_response_status=~"5.."',
+        counter='cloudflare_zone_requests_status',
+        selector='zone=~"gitlab.com|staging.gitlab.com", status=~"5.."',
       ),
 
       significantLabels: [],
@@ -53,13 +53,13 @@ metricsCatalog.serviceDefinition({
       |||,
 
       requestRate: rateMetric(
-        counter='cloudflare_zones_http_responses_total',
+        counter='cloudflare_zone_requests_total',
         selector='zone="gitlab.net"'
       ),
 
       errorRate: rateMetric(
-        counter='cloudflare_zones_http_responses_total',
-        selector='zone="gitlab.net", edge_response_status=~"5.."',
+        counter='cloudflare_zone_requests_status',
+        selector='zone="gitlab.net", status=~"5.."',
       ),
 
       significantLabels: [],
