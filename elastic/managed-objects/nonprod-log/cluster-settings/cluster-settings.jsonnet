@@ -10,6 +10,6 @@
     // https://www.elastic.co/guide/en/elasticsearch/reference/current/search-settings.html
     // Adjusting this from the 1024 (default) to 1536 to temporarily alleviate errors from full-text searches, until we can do a more proper assessment of our index mappings and usage to determine if/why so many fields are required.
     // Alternatively, this is dynamically adjusted in newer 8.x ES versions, and may be a moot point if/after we upgrade.
-    'indices.query.bool.max_clause_count': '1536',
+    'indices.query.bool.max_clause_count': 1536,
   },
 }
