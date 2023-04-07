@@ -50,7 +50,6 @@
 * [Node CPU alerts](../uncategorized/node_cpu.md)
 * [PackageCloud Infrastructure and Backups](../uncategorized/packagecloud-infrastructure.md)
 * [GitLab staging environment](../uncategorized/staging-environment.md)
-* [Tweeting Guidelines](../uncategorized/tweeting-guidelines.md)
 * [How to Use Vault for Secrets Management in Infrastructure](../vault/usage.md)
 <!-- END_MARKER -->
 

@@ -53,7 +53,6 @@ Start by checking how many alerts are in flight right now
 
 - go to the [fleet overview dashboard](https://dashboards.gitlab.net/d/RZmbBr7mk/gitlab-triage) and check the number of Active Alerts, it should be 0. If it is not 0
   - go to the alerts dashboard and check what is being triggered
-    - [azure][prometheus-azure]
     - [gprd prometheus][prometheus-gprd]
     - [gprd prometheus-app][prometheus-app-gprd]
   - watch the [#production][slack-production] channel or [Pagerduty](https://gitlab.pagerduty.com) for alert notifications; each alert here should point you to the right [runbook][runbook-repo] to fix it.
@@ -66,7 +65,6 @@ Check how many targets are not scraped at the moment. alerts are in flight right
 
 - go to the [fleet overview dashboard](https://dashboards.gitlab.net/d/RZmbBr7mk/gitlab-triage) and check the number of Targets down. It should be 0. If it is not 0
   - go to the [targets down list] and check what is.
-    - [azure][prometheus-azure-targets-down]
     - [gprd prometheus][prometheus-gprd-targets-down]
     - [gprd prometheus-app][prometheus-app-gprd-targets-down]
   - try to figure out why there is scraping problems and try to fix it. Note that sometimes there can be temporary scraping problems because of exporter errors.
@@ -136,7 +134,6 @@ During an incident, we have [roles defined in the handbook](https://about.gitlab
 - [GitLab Pages returns 404](docs/pages/gitlab-pages.md)
 - [HAProxy is missing workers](docs/config_management/chef-troubleshooting.md)
 - [Worker's root filesystem is running out of space](docs/monitoring/filesystem_alerts.md)
-- [Azure Load Balancers Misbehave](docs/frontend/load-balancer-outage.md)
 - [GitLab registry is down](docs/registry/gitlab-registry.md)
 - [Sidekiq stats no longer showing](docs/sidekiq/sidekiq_stats_no_longer_showing.md)
 - [Gemnasium is down](docs/uncategorized/gemnasium_is_down.md)
@@ -243,7 +240,6 @@ During an incident, we have [roles defined in the handbook](https://about.gitlab
 
 - [Deleted Project Restoration](docs/uncategorized/deleted-project-restore.md)
 - [PostgreSQL Backups: WAL-E, WAL-G](docs/patroni/postgresql-backups-wale-walg.md)
-- [Work with Azure Snapshots](docs/uncategorized/azure-snapshots.md)
 - [Work with GCP Snapshots](docs/uncategorized/gcp-snapshots.md)
 - [PackageCloud Infrastructure And Recovery](docs/uncategorized/packagecloud-infrastructure.md)
 
@@ -284,7 +280,6 @@ During an incident, we have [roles defined in the handbook](https://about.gitlab
 
 - [Getting Support from GCP](docs/uncategorized/externalvendors/GCP-rackspace-support.md)
 - [Create a DO VM for a Service Engineer](docs/uncategorized/create-do-vm-for-service-engineer.md)
-- [Create VMs in Azure, add disks, etc](https://ops.gitlab.net/gitlab-cookbooks/chef-repo/blob/master/doc/azure.md#managing-vms-in-azure)
 - [Bootstrap a new VM](https://ops.gitlab.net/gitlab-cookbooks/chef-repo/blob/master/doc/new-vps.md)
 - [Remove existing node checklist](docs/uncategorized/remove-node.md)
 
@@ -296,10 +291,6 @@ During an incident, we have [roles defined in the handbook](https://about.gitlab
 ### Dealing with Spam
 
 - [General procedures for fighting spam in snippets, issues, projects, and comments](https://docs.google.com/document/d/1V0X2aYiNTZE1npzeqDvq-dhNFZsEPsL__FqKOMXOjE8)
-
-### Manage Marvin, our infra bot
-
-- [Manage cog](docs/uncategorized/manage-cog.md)
 
 ### ElasticStack (previously Elasticsearch)
 
@@ -367,18 +358,9 @@ Selected logging documents and resources:
 - [Getting Started with Kubernetes and GitLab.com](docs/kube/k8s-gitlab.md)
 - [Using Chatops bot to run commands across the fleet](docs/uncategorized/deploycmd.md)
 
-### Gitter
-
-- [MongoDB operations](docs/git/gitter/mongodb-operations.md)
-- [Renew the Gitter TLS certificate](docs/git/gitter/renew-certificates.md)
-
 ### Manage Package Signing Keys
 
 - [Manage Package Signing Keys](docs/uncategorized/manage-package-signing-keys.md)
-
-### Other Servers and Services
-
-- [GitHost / GitLab Hosted](docs/git/githost.md)
 
 ### Adding runbooks rules
 
@@ -739,8 +721,6 @@ Please see the [contribution guidelines](CONTRIBUTING.md)
 [pagerduty-overrides]:              https://support.pagerduty.com/docs/editing-schedules#section-create-and-delete-overrides
 [pagerduty-shadow-schedule]:        https://community.pagerduty.com/t/creating-a-shadow-schedule-to-onboard-new-employees/214
 
-[prometheus-azure]:                 https://prometheus.gitlab.com/alerts
-[prometheus-azure-targets-down]:    https://prometheus.gitlab.com/consoles/up.html
 [prometheus-gprd]:                  https://prometheus.gprd.gitlab.net/alerts
 [prometheus-gprd-targets-down]:     https://prometheus.gprd.gitlab.net/consoles/up.html
 [prometheus-app-gprd]:              https://prometheus-app.gprd.gitlab.net/alerts
