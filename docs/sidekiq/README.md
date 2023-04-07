@@ -58,7 +58,6 @@
 * [Ruby profiling](../uncategorized/ruby-profiling.md)
 * [GitLab staging environment](../uncategorized/staging-environment.md)
 * [Application Database Queries](../uncategorized/tracing-app-db-queries.md)
-* [Tweeting Guidelines](../uncategorized/tweeting-guidelines.md)
 * [Diagnostic Reports](../web/diagnostic-reports.md)
 <!-- END_MARKER -->
 

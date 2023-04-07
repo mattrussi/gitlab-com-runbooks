@@ -11,7 +11,6 @@ Currently we have multiple ways of deploying certificates. Please see the `Manag
 - [Chef Hybrid][chef_hybrid]
 - [Fastly][f]
 - [Forum][fo]
-- [Gitter.im][gitter]
 - [GCP Load Balancer][gcp]
 - [GKMS][gkms] (mostly automated using [Certificates Updater](https://gitlab.com/gitlab-com/gl-infra/certificates-updater))
 - [manual Cloudflare][manual_cf] (planned to be used intermittently in the migration phase)
@@ -182,12 +181,10 @@ By editing list inside `prometheus.jobs.blackbox-ssl.target` attribute in the ro
 | staging.pages-check.gitlab.net | COMODO RSA Domain Validation Secure Server CA | [GitLab pages check](https://staging.gitlab.com/gitlab-com/pages-ip-check) | automated (GitLab Pages managed) | |
 | status.gitlab.com | Sectigo RSA Domain Validation Secure Server CA | status.io | | [Status.io][statusio] |
 | support.gitlab.com | Let's Encrypt Authority X3 | General zendesk | [ZenDesk][zd] | |
-| swedish.chef.gitlab.com | COMODO RSA Domain Validation Secure Server CA | Chef server, that hosts some remains of GitHost.io | [Chef Server][cs] | Could not be validated, due to lack of access. |
 | user-content.staging.gitlab-static.net | Sectigo ECC Domain Validation Secure Server CA | | [GCP Load Balancer][gcp] | project: `gitlab-production` |
 | version.gitlab.com | Sectigo RSA Domain Validation Secure Server CA | | [Chef Vault][cv] | data bag: `version-gitlab-com`, item: `_default`, fields: `ssl_certificate`, `ssl_key` |
 | *.ci-gateway.int.gstg.gitlab.net | Sectigo RSA Domain Validation Secure Server CA | | [GKMS][gkms] | GKMS item: `frontend-loadbalancer gstg`, fields: `gitlab-haproxy.ssl.ci_gateway_crt`,  `gitlab-haproxy.ssl.ci_gateway_key`;  project: `gitlab-staging-1` |
 | *.gitlab.io | C=BE, O=GlobalSign nv-sa, CN=AlphaSSL CA - SHA256 - G2 | GitLab pages | [GKMS][gkms] | item: `gitlab-omnibus-secrets gprd`, fields: `omnibus-gitlab.ssl.pages_certificate`,  `omnibus-gitlab.ssl.pages_private_key` |
-| *.gitter.im | COMODO RSA Domain Validation Secure Server CA | gitter.im | [Gitter.im][gitter] ||
 | *.gprd.gitlab.net | Sectigo RSA Domain Validation Secure Server CA | | [GCP Load Balancer][gcp] & [GKMS][gkms] | GKMS item: `frontend-loadbalancer gprd`, fields: `gitlab-haproxy.ssl.internal_crt`,  `gitlab-haproxy.ssl.internal_key`;  project: `gitlab-production` |
 | *.gstg.gitlab.com | Sectigo RSA Domain Validation Secure Server CA | | [GCP Load Balancer][gcp] | project: `gitlab-staging` |
 | *.gstg.gitlab.io | Sectigo RSA Domain Validation Secure Server CA | GitLab pages on gstg | [GKMS][gkms] | item: `gitlab-omnibus-secrets gstg`, fields: `omnibus-gitlab.ssl.pages_certificate`,  `omnibus-gitlab.ssl.pages_private_key` |
@@ -204,7 +201,6 @@ Defunct certs (dead hosts, no longer used, etc)
 
 | domain | issuer | valid until | Comments |
 | ------ | ------ | ----------- | -------- |
-| alerts.gitlabhosted.com | COMODO RSA Domain Validation Secure Server CA | 2020-01-03T23:59:59 | GitHost related |
 | alerts.gitlab.com | Sectigo RSA Domain Validation Secure Server CA | 2020-06-24T23:59:59 | Active certificate, but not rolled out to the CN host. |
 | allremote.org | Sectigo RSA Domain Validation Secure Server CA | 2020-06-08T23:59:59 | Page 404s with HTTP, and `NET::ERR_CERT_COMMON_NAME_INVALID` on HTTPS. Is a gitlab.io page. |
 | canary.staging.gitlab.com | COMODO RSA Domain Validation Secure Server CA | 2019-09-06T23:59:59 | Connection to host times out |
@@ -232,7 +228,6 @@ Defunct certs (dead hosts, no longer used, etc)
 | prometheus-3.gitlab.com | Sectigo RSA Domain Validation Secure Server CA | 2020-06-25T23:59:59 | times out |
 | prometheus-app-01.gitlab.net | COMODO RSA Domain Validation Secure Server CA | 2020-02-16T23:59:59 | times out |
 | prometheus-app-02.gitlab.net | COMODO RSA Domain Validation Secure Server CA | 2020-02-16T23:59:59 | times out |
-| prometheus.gitlabhosted.com | COMODO RSA Domain Validation Secure Server CA | 2019-11-28T23:59:59 | cert not rolled out to host |
 | runners-cache-5.gitlab.com | Sectigo RSA Domain Validation Secure Server CA | 2020-06-07T23:59:59 | does not resolve |
 | sentry-infra.gitlap.com | Sectigo RSA Domain Validation Secure Server CA | 2020-05-26T23:59:59 | connection refused |
 | snowplow.trx.gitlab.net | Sectigo RSA Domain Validation Secure Server CA | 2020-07-03T23:59:59 | time out |
@@ -243,7 +238,6 @@ Defunct certs (dead hosts, no longer used, etc)
 | *.dr.gitlab.net | Sectigo ECC Domain Validation Secure Server CA | 2020-01-23T23:59:59 | does not resolve |
 | *.ee.gitlab-review.app | COMODO ECC Domain Validation Secure Server CA | 2019-10-03T23:59:59 | times out |
 | *.eks.helm-charts.win | Sectigo RSA Domain Validation Secure Server CA | 2020-04-01T23:59:59 | does not resolve |
-| *.githost.io | Sectigo RSA Domain Validation Secure Server CA | 2020-05-03T23:59:59 | wildcard is dead (does not resolve) and githost is shut down (but githost.io still reachable) |
 | *.gitlab-review.app | COMODO RSA Domain Validation Secure Server CA | 2019-09-10T23:59:59 | does not resolve |
 | *.gprd.gitlab.com | COMODO RSA Domain Validation Secure Server CA | - | No longer in used (was used before `gitlab.net`) |
 | *.helm-charts.win | COMODO RSA Domain Validation Secure Server CA | 2019-11-08T23:59:59 | times out |
@@ -277,7 +271,6 @@ Other Certs (Unknown maintainer)
 [chef_hybrid]: chef_hybrid.md
 [f]: fastly.md
 [fo]: forum.md
-[gitter]: https://gitlab.com/gitlab-com/gl-infra/gitter-infrastructure/tree/master#update-sslhttps-certs
 [gkms]: gkms.md
 [gcp]: gcp.md
 [manual_cf]: manual_cloudflare.md
