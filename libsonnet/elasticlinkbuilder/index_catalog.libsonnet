@@ -38,6 +38,22 @@ local indexDefaults = {
     requestsNotSupported: true,
   },
 
+  customers_dot_requests: indexDefaults {
+    timestamp: 'json.time',
+    indexPattern: '7dbddf20-5530-11ed-b0ec-930003e0679c',
+    defaultColumns: ['json.method', 'json.status', 'json.path', 'json.duration'],
+    defaultFilters: [existsFilter('json.controller'), existsFilter('json.duration')],
+    failureFilter: statusCode('json.status'),
+  },
+
+  customers_dot_sidekiq: indexDefaults {
+    timestamp: 'json.time',
+    indexPattern: 'a1a19670-55d5-11ed-b0ec-930003e0679c',
+    defaultColumns: ['json.class', 'json.message', 'json.queue', 'json.job_status'],
+    defaultFilters: [existsFilter('json.class')],
+    failureFilter: [existsFilter('json.failed_at')],
+  },
+
   fluentd: indexDefaults {
     timestamp: 'json.time',
     indexPattern: '6f3fe550-4317-11ec-8c8e-ed83b5469915',

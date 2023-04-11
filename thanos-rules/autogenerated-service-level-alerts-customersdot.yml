@@ -11,7 +11,7 @@ groups:
       title: The customers_dot_requests SLI of the customersdot service (`{{ $labels.stage
         }}` stage) has an apdex violating SLO
       description: |
-        The number of CustomersDot requests meeting their duration target based on the urgency of the endpoint. By default, a request should take no more than 0.4s. But this can be adjusted by endpoint.
+        The number of CustomersDot requests meeting their duration target based on the urgency of the endpoint. By default, a request should take no more than 1 second. But this can be adjusted by endpoint.
 
         Currently the apdex value is {{ $value | humanizePercentage }}.
       grafana_dashboard_id: customersdot-main/customersdot-overview
@@ -26,8 +26,9 @@ groups:
       alert_class: slo_violation
       alert_type: symptom
       feature_category: in_source_metrics
+      pager: pagerduty
       rules_domain: general
-      severity: s3
+      severity: s2
       sli_type: apdex
       slo_alert: "yes"
       user_impacting: "yes"
@@ -36,12 +37,12 @@ groups:
       (
         (
           gitlab_component_apdex:ratio_1h{component="customers_dot_requests",monitor="global",type="customersdot"}
-          < (1 - 14.4 * 0.100000)
+          < (1 - 14.4 * 0.007000)
         )
         and
         (
           gitlab_component_apdex:ratio_5m{component="customers_dot_requests",monitor="global",type="customersdot"}
-          < (1 - 14.4 * 0.100000)
+          < (1 - 14.4 * 0.007000)
         )
       )
       and on(env,environment,tier,type,stage,component)
@@ -54,7 +55,7 @@ groups:
       title: The customers_dot_requests SLI of the customersdot service (`{{ $labels.stage
         }}` stage) has an apdex violating SLO
       description: |
-        The number of CustomersDot requests meeting their duration target based on the urgency of the endpoint. By default, a request should take no more than 0.4s. But this can be adjusted by endpoint.
+        The number of CustomersDot requests meeting their duration target based on the urgency of the endpoint. By default, a request should take no more than 1 second. But this can be adjusted by endpoint.
 
         Currently the apdex value is {{ $value | humanizePercentage }}.
       grafana_dashboard_id: customersdot-main/customersdot-overview
@@ -69,8 +70,9 @@ groups:
       alert_class: slo_violation
       alert_type: symptom
       feature_category: in_source_metrics
+      pager: pagerduty
       rules_domain: general
-      severity: s3
+      severity: s2
       sli_type: apdex
       slo_alert: "yes"
       user_impacting: "yes"
@@ -79,12 +81,12 @@ groups:
       (
         (
           gitlab_component_apdex:ratio_6h{component="customers_dot_requests",monitor="global",type="customersdot"}
-          < (1 - 6 * 0.100000)
+          < (1 - 6 * 0.007000)
         )
         and
         (
           gitlab_component_apdex:ratio_30m{component="customers_dot_requests",monitor="global",type="customersdot"}
-          < (1 - 6 * 0.100000)
+          < (1 - 6 * 0.007000)
         )
       )
       and on(env,environment,tier,type,stage,component)
@@ -97,7 +99,7 @@ groups:
       title: The customers_dot_requests SLI of the customersdot service (`{{ $labels.stage
         }}` stage) has an error rate violating SLO
       description: |
-        The number of CustomersDot requests meeting their duration target based on the urgency of the endpoint. By default, a request should take no more than 0.4s. But this can be adjusted by endpoint.
+        The number of CustomersDot requests meeting their duration target based on the urgency of the endpoint. By default, a request should take no more than 1 second. But this can be adjusted by endpoint.
 
         Currently the error-rate is {{ $value | humanizePercentage }}.
       grafana_dashboard_id: customersdot-main/customersdot-overview
@@ -116,8 +118,9 @@ groups:
       alert_class: slo_violation
       alert_type: symptom
       feature_category: in_source_metrics
+      pager: pagerduty
       rules_domain: general
-      severity: s3
+      severity: s2
       sli_type: error
       slo_alert: "yes"
       user_impacting: "yes"
@@ -144,7 +147,7 @@ groups:
       title: The customers_dot_requests SLI of the customersdot service (`{{ $labels.stage
         }}` stage) has an error rate violating SLO
       description: |
-        The number of CustomersDot requests meeting their duration target based on the urgency of the endpoint. By default, a request should take no more than 0.4s. But this can be adjusted by endpoint.
+        The number of CustomersDot requests meeting their duration target based on the urgency of the endpoint. By default, a request should take no more than 1 second. But this can be adjusted by endpoint.
 
         Currently the error-rate is {{ $value | humanizePercentage }}.
       grafana_dashboard_id: customersdot-main/customersdot-overview
@@ -163,8 +166,9 @@ groups:
       alert_class: slo_violation
       alert_type: symptom
       feature_category: in_source_metrics
+      pager: pagerduty
       rules_domain: general
-      severity: s3
+      severity: s2
       sli_type: error
       slo_alert: "yes"
       user_impacting: "yes"
@@ -191,7 +195,7 @@ groups:
       title: The customers_dot_requests SLI of the customersdot service (`{{ $labels.stage
         }}` stage) has not received any traffic in the past 30m
       description: |
-        The number of CustomersDot requests meeting their duration target based on the urgency of the endpoint. By default, a request should take no more than 0.4s. But this can be adjusted by endpoint.
+        The number of CustomersDot requests meeting their duration target based on the urgency of the endpoint. By default, a request should take no more than 1 second. But this can be adjusted by endpoint.
 
         This alert signifies that the SLI is reporting a cessation of traffic; the signal is present, but is zero.
       grafana_dashboard_id: customersdot-main/customersdot-overview
@@ -210,8 +214,9 @@ groups:
       alert_class: traffic_cessation
       alert_type: cause
       feature_category: in_source_metrics
+      pager: pagerduty
       rules_domain: general
-      severity: s3
+      severity: s2
       sli_type: ops
       slo_alert: "no"
       user_impacting: "yes"
@@ -225,7 +230,7 @@ groups:
       title: The customers_dot_requests SLI of the customersdot service (`{{ $labels.stage
         }}` stage) has not reported any traffic in the past 30m
       description: |
-        The number of CustomersDot requests meeting their duration target based on the urgency of the endpoint. By default, a request should take no more than 0.4s. But this can be adjusted by endpoint.
+        The number of CustomersDot requests meeting their duration target based on the urgency of the endpoint. By default, a request should take no more than 1 second. But this can be adjusted by endpoint.
 
         This alert signifies that the SLI was previously reporting traffic, but is no longer - the signal is absent.
 
@@ -246,8 +251,9 @@ groups:
       alert_class: traffic_cessation
       alert_type: cause
       feature_category: in_source_metrics
+      pager: pagerduty
       rules_domain: general
-      severity: s3
+      severity: s2
       sli_type: ops
       slo_alert: "no"
       user_impacting: "yes"
@@ -286,12 +292,12 @@ groups:
       (
         (
           gitlab_component_apdex:ratio_1h{component="customers_dot_sidekiq_jobs",monitor="global",type="customersdot"}
-          < (1 - 14.4 * 0.100000)
+          < (1 - 14.4 * 0.007000)
         )
         and
         (
           gitlab_component_apdex:ratio_5m{component="customers_dot_sidekiq_jobs",monitor="global",type="customersdot"}
-          < (1 - 14.4 * 0.100000)
+          < (1 - 14.4 * 0.007000)
         )
       )
       and on(env,environment,tier,type,stage,component)
@@ -329,12 +335,12 @@ groups:
       (
         (
           gitlab_component_apdex:ratio_6h{component="customers_dot_sidekiq_jobs",monitor="global",type="customersdot"}
-          < (1 - 6 * 0.100000)
+          < (1 - 6 * 0.007000)
         )
         and
         (
           gitlab_component_apdex:ratio_30m{component="customers_dot_sidekiq_jobs",monitor="global",type="customersdot"}
-          < (1 - 6 * 0.100000)
+          < (1 - 6 * 0.007000)
         )
       )
       and on(env,environment,tier,type,stage,component)
