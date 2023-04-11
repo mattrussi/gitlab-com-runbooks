@@ -31,6 +31,7 @@ export indices=(
   shell
   sidekiq
   system
+  thanos
   vault
   workhorse
 )

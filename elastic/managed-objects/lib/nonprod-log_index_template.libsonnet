@@ -19,6 +19,7 @@ local mappings = {
   shell: import './index_mappings/shell.jsonnet',
   sidekiq: import './index_mappings/sidekiq.jsonnet',
   system: import './index_mappings/system.jsonnet',
+  thanos: import './index_mappings/thanos.jsonnet',
   vault: import './index_mappings/vault.jsonnet',
   workhorse: import './index_mappings/workhorse.jsonnet',
 };
