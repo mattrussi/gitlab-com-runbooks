@@ -17,6 +17,10 @@ metricsCatalog.serviceDefinition({
   type: 'sidekiq',
   tier: 'sv',
   tags: ['rails'],
+  contractualThresholds: {
+    apdexRatio: 0.9,
+    errorRatio: 0.005,
+  },
   monitoringThresholds: {
     apdexScore: 0.995,
     errorRatio: 0.995,

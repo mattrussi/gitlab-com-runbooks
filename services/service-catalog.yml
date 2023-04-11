@@ -1455,6 +1455,9 @@ services:
       - plan
     label: Sidekiq
     owner: reliability_general
+    business:
+      SLA:
+        overall_sla_weighting: 1 # If this exists, this service will be included in the overall SLA, using this value as a weighted average
     technical:
       project:
         - https://gitlab.com/gitlab-org/gitlab-ce
