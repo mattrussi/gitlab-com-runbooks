@@ -6,7 +6,7 @@
       {
         "builtIn": 1,
         "datasource": "-- Grafana --",
-        "enable": false,
+        "enable": true,
         "hide": false,
         "iconColor": "#96D98D",
         "name": "deploy",
