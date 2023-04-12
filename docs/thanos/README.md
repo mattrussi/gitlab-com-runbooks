@@ -77,7 +77,7 @@ Summary of Thanos Services and labels:
 
 | PromQL Job Name           | Component                         |
 |---------------------------|-----------------------------------|
-| `thanos-query`            | [Thanos Query](https://gitlab.com/gitlab-com/gl-infra/readiness/-/blob/master/thanos/overview.md#thanos-queryfrontend) | 
+| `thanos-query`            | [Thanos Query](https://gitlab.com/gitlab-com/gl-infra/readiness/-/blob/master/thanos/overview.md#thanos-queryfrontend) |
 | `thanos-query-frontend`   | [Thanos Query- Frontend](https://gitlab.com/gitlab-com/gl-infra/readiness/-/blob/master/thanos/overview.md#thanos-queryfrontend) |
 | `thanos-ruler`            | [Thanos Ruler](https://gitlab.com/gitlab-com/gl-infra/readiness/-/blob/master/thanos/overview.md#thanos-rule) |
 | `thanos-{env}-compactor`  | [Thanos Compactor](https://gitlab.com/gitlab-com/gl-infra/readiness/-/blob/master/thanos/overview.md#thanos-compact) |
