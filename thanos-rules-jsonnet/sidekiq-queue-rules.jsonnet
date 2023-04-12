@@ -196,5 +196,5 @@ local rules(extraSelector) = {
 };
 
 separateGlobalRecordingFiles(function(selector) {
-  'sidekiq-alerts.yml': std.manifestYamlDoc(rules(selector)),
+  'sidekiq-alerts': std.manifestYamlDoc(rules(selector)),
 })
