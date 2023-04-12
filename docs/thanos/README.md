@@ -73,6 +73,18 @@ This is because, while Thanos runs in pods and VMs hosted within different envir
 
 Breaking Thanos metrics down with an environment label is unhelpful and leads to metrics being incorrectly decomposed across services, and reducing our ability to measure the complete health of the service.
 
+Summary of Thanos Services and labels:
+
+| PromQL Job Name           | Component                         |
+|---------------------------|-----------------------------------|
+| `thanos-query`            | [Thanos Query](https://gitlab.com/gitlab-com/gl-infra/readiness/-/blob/master/thanos/overview.md#thanos-queryfrontend) | 
+| `thanos-query-frontend`   | [Thanos Query- Frontend](https://gitlab.com/gitlab-com/gl-infra/readiness/-/blob/master/thanos/overview.md#thanos-queryfrontend) |
+| `thanos-ruler`            | [Thanos Ruler](https://gitlab.com/gitlab-com/gl-infra/readiness/-/blob/master/thanos/overview.md#thanos-rule) |
+| `thanos-{env}-compactor`  | [Thanos Compactor](https://gitlab.com/gitlab-com/gl-infra/readiness/-/blob/master/thanos/overview.md#thanos-compact) |
+| `thanos-{env}-storegateway-## `  | [Thanos Store](https://gitlab.com/gitlab-com/gl-infra/readiness/-/blob/master/thanos/overview.md#thanos-store) |
+| `thanos-receive`          | [Thanos-receiver](https://thanos.io/tip/components/receive.md/)       |
+| `{inherited from prometheus container}` `container="thanos-sidecar"`  | [Thanos Sidecar](https://gitlab.com/gitlab-com/gl-infra/readiness/-/blob/master/thanos/overview.md#thanos-sidecar) |
+
 ### Alerts for `environment="thanos"`
 
 When Thanos generates alerts, they will use the `environment="thanos"` label. This is unique to Thanos. The Thanos dashboards will automatically display metrics for this environment, and operators do not need to switch between different environments in the Grafana dashboards to investigate these alerts.
@@ -96,3 +108,7 @@ In AlertManager, `environment="thanos"` are routed in the same way as `environme
 <!-- ## Monitoring/Alerting -->
 
 <!-- ## Links to further Documentation -->
+
+## Further documentation
+
+Last updated (2023 March) [Readiness review](https://gitlab.com/gitlab-com/gl-infra/readiness/-/blob/master/thanos/overview.md)
