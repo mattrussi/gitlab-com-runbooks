@@ -16,7 +16,7 @@ local rules = {
                 stage!="",
                 tier!="",
                 type!="",
-                reason!="ContainerCreating",
+                reason!~"ContainerCreating|PodInitializing",
               }
             )
             > 0
