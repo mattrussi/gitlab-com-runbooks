@@ -2,6 +2,7 @@
 # YOUR CHANGES WILL BE OVERRIDDEN
 groups:
 - name: 'Prometheus Intermediate Metrics per feature: praefect - burn-rate 5m'
+  interval: 1m
   rules:
   - record: gitlab:component:feature_category:execution:ops:rate_5m
     labels:
@@ -144,6 +145,7 @@ groups:
         rate(gitaly_praefect_replication_delay_bucket{job="praefect",le="+Inf"}[5m])
       )
 - name: 'Prometheus Intermediate Metrics per feature: praefect - burn-rate 30m'
+  interval: 1m
   rules:
   - record: gitlab:component:feature_category:execution:ops:rate_30m
     labels:
@@ -286,6 +288,7 @@ groups:
         rate(gitaly_praefect_replication_delay_bucket{job="praefect",le="+Inf"}[30m])
       )
 - name: 'Prometheus Intermediate Metrics per feature: praefect - burn-rate 1h'
+  interval: 1m
   rules:
   - record: gitlab:component:feature_category:execution:ops:rate_1h
     labels:

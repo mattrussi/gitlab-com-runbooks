@@ -2,7 +2,6 @@ local aggregations = import 'promql/aggregations.libsonnet';
 local selectors = import 'promql/selectors.libsonnet';
 local stages = import 'service-catalog/stages.libsonnet';
 local dependencies = import 'servicemetrics/dependencies_definition.libsonnet';
-local metricsCatalog = import 'servicemetrics/metrics-catalog.libsonnet';
 local toolingLinks = import 'toolinglinks/toolinglinks.libsonnet';
 local strings = import 'utils/strings.libsonnet';
 
@@ -155,16 +154,20 @@ local serviceLevelIndicatorDefinition(sliName, serviceLevelIndicator) =
         local apdexSuccessRateRecordingRuleName = aggregationSet.getApdexSuccessRateMetricForBurnRate(burnRate);
         local apdexWeightRecordingRuleName = aggregationSet.getApdexWeightMetricForBurnRate(burnRate);
 
+        local useRecordingRuleRegistry = std.get(aggregationSet, 'useRecordingRuleRegistry');
+
         local apdexSuccessRateExpr = serviceLevelIndicator.apdex.apdexSuccessRateQuery(
           aggregationLabels=aggregationLabelsWithoutStaticLabels,
           selector={},
-          rangeInterval=burnRate
+          rangeInterval=burnRate,
+          useRecordingRuleRegistry=useRecordingRuleRegistry,
         );
 
         local apdexWeightExpr = serviceLevelIndicator.apdex.apdexWeightQuery(
           aggregationLabels=aggregationLabelsWithoutStaticLabels,
           selector={},
-          rangeInterval=burnRate
+          rangeInterval=burnRate,
+          useRecordingRuleRegistry=useRecordingRuleRegistry,
         );
 
         (
