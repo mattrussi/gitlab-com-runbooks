@@ -102,7 +102,7 @@ variables:
         CLUSTER: stgsub-customers-gke
         REGION: us-east1
       - DEPLOY_ENV: gstg-ref
-        CLUSTER: staging-ref-10k-hybrid
+        CLUSTER: staging-ref-3k-hybrid-us
         REGION: us-east1-c
         KUBE_NAMESPACE: prometheus
 
