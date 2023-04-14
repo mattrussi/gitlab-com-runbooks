@@ -41,6 +41,16 @@ groups:
       product_stage: modelops
       stage_group: ai_assisted
     expr: "1"
+- name: 'Stage group Ignored components: analytics - Analytics Instrumentation'
+  interval: 1m
+  partial_response_strategy: warn
+  rules:
+  - record: gitlab:ignored_component:stage_group
+    labels:
+      component: graphql_query
+      product_stage: analytics
+      stage_group: analytics_instrumentation
+    expr: "1"
 - name: 'Stage group Ignored components: data_stores - Application Performance'
   interval: 1m
   partial_response_strategy: warn
@@ -151,7 +161,7 @@ groups:
       product_stage: platforms
       stage_group: delivery
     expr: "1"
-- name: 'Stage group Ignored components: systems - Distribution:Deploy'
+- name: 'Stage group Ignored components: systems - Distribution::Deploy'
   interval: 1m
   partial_response_strategy: warn
   rules:
@@ -170,16 +180,6 @@ groups:
       component: graphql_query
       product_stage: secure
       stage_group: dynamic_analysis
-    expr: "1"
-- name: 'Stage group Ignored components: create - Editor'
-  interval: 1m
-  partial_response_strategy: warn
-  rules:
-  - record: gitlab:ignored_component:stage_group
-    labels:
-      component: graphql_query
-      product_stage: create
-      stage_group: editor
     expr: "1"
 - name: 'Stage group Ignored components: deploy - Environments'
   interval: 1m
@@ -221,7 +221,7 @@ groups:
       product_stage: systems
       stage_group: geo
     expr: "1"
-- name: 'Stage group Ignored components: systems - Gitaly:Cluster'
+- name: 'Stage group Ignored components: systems - Gitaly::Cluster'
   interval: 1m
   partial_response_strategy: warn
   rules:
@@ -231,7 +231,7 @@ groups:
       product_stage: systems
       stage_group: gitaly_cluster
     expr: "1"
-- name: 'Stage group Ignored components: systems - Gitaly:Git'
+- name: 'Stage group Ignored components: systems - Gitaly::Git'
   interval: 1m
   partial_response_strategy: warn
   rules:
@@ -250,6 +250,16 @@ groups:
       component: graphql_query
       product_stage: data_stores
       stage_group: global_search
+    expr: "1"
+- name: 'Stage group Ignored components: create - IDE'
+  interval: 1m
+  partial_response_strategy: warn
+  rules:
+  - record: gitlab:ignored_component:stage_group
+    labels:
+      component: graphql_query
+      product_stage: create
+      stage_group: ide
     expr: "1"
 - name: 'Stage group Ignored components: manage - Import'
   interval: 1m
@@ -350,16 +360,6 @@ groups:
       component: graphql_query
       product_stage: verify
       stage_group: pipeline_security
-    expr: "1"
-- name: 'Stage group Ignored components: analytics - Product Intelligence'
-  interval: 1m
-  partial_response_strategy: warn
-  rules:
-  - record: gitlab:ignored_component:stage_group
-    labels:
-      component: graphql_query
-      product_stage: analytics
-      stage_group: product_intelligence
     expr: "1"
 - name: 'Stage group Ignored components: plan - Product Planning'
   interval: 1m

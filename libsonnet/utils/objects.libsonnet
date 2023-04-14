@@ -58,7 +58,11 @@
     std.foldl(
       function(memo, key)
         local value = '' + object[key];
-        if std.objectHas(memo, value) then memo else memo { [value]: key },
+        if std.objectHas(memo, value) then
+          local memoValue = if std.isArray(memo[value]) then memo[value] else [memo[value]];
+          memo { [value]: memoValue + [key] }
+        else
+          memo { [value]: key },
       std.objectFields(object),
       {}
     ),
