@@ -45,7 +45,7 @@ metricsCatalog.serviceDefinition({
   serviceLevelIndicators: {
     grpc_requests: {
       userImpacting: true,
-      featureCategory: 'kubernetes_management',
+      featureCategory: 'deployment_management',
       local baseSelector = {
         type: 'kas',
       },

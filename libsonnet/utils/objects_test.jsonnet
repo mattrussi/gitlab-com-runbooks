@@ -86,7 +86,7 @@ test.suite({
     expect: { '1': 'a', '2': 'b' },
   },
   testInvertDuplicates: {
-    actual: objects.invert({ a: '', b: '', c: 3 }),
-    expect: { '': 'a', '3': 'c' },
+    actual: objects.invert({ a: '', b: '', c: 3, d: '', e: '' }),
+    expect: { '': ['a', 'b', 'd', 'e'], '3': 'c' },
   },
 })

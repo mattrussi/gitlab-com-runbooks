@@ -213,8 +213,8 @@ teams:
   product_stage_group: dynamic_analysis
   ignored_components:
   - graphql_query
-- name: editor
-  product_stage_group: editor
+- name: ide
+  product_stage_group: ide
   ignored_components:
   - graphql_query
 - name: foundations
@@ -285,8 +285,8 @@ teams:
   send_error_budget_weekly_to_slack: true
   ignored_components:
   - graphql_query
-- name: product_intelligence
-  product_stage_group: product_intelligence
+- name: analytics_instrumentation
+  product_stage_group: analytics_instrumentation
   ignored_components:
   - graphql_query
 - name: product_planning
