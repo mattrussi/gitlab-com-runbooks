@@ -1161,13 +1161,7 @@
         graphql: {
           properties: {
             complexity: {
-              type: 'text',
-              fields: {
-                keyword: {
-                  type: 'keyword',
-                  ignore_above: 256,
-                },
-              },
+              type: 'integer',
             },
             depth: {
               type: 'long',
