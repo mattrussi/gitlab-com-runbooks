@@ -29,7 +29,7 @@
     { name: 'gstg', apiKey: 'secret', cluster: 'opstrace-staging' },
     { name: 'gprd', apiKey: 'secret', cluster: 'opstrace-prod' },
     { name: 'gstg', apiKey: 'secret', cluster: '' },
-    { name: 'gstg-ref', apiKey: 'secret', cluster: 'staging-ref-10k-hybrid' },
+    { name: 'gstg-ref', apiKey: 'secret', cluster: 'staging-ref-3k-hybrid-us' },
     { name: 'pre', apiKey: 'secret', cluster: '' },
     { name: 'testbed', apiKey: 'secret', cluster: '' },
     { name: 'thanos-rule', apiKey: 'secret', cluster: '' },
