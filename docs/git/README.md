@@ -42,6 +42,7 @@
 * [Debugging gitaly with gitaly-debug](../gitaly/gitaly-debugging-tool.md)
 * [Gitaly is down](../gitaly/gitaly-down.md)
 * [Gitaly latency is too high](../gitaly/gitaly-latency.md)
+* [Gitaly profiling](../gitaly/gitaly-profiling.md)
 * [Gitaly Queuing](../gitaly/gitaly-rate-limiting.md)
 * [Gitaly repository cgroups](../gitaly/gitaly-repos-cgroup.md)
 * [Restoring gitaly data corruption on a project after an unclean shutdown](../gitaly/gitaly-repository-corruption.md)
