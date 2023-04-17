@@ -1,10 +1,12 @@
 # Gitaly profiling
 
-## First and foremost
+**Table of Contents**
 
-* *Don't Panic*
+[[_TOC_]]
 
-## 1. Download the profiles
+## Gitaly process
+
+Gitally is written in Go which has [built in profiling](https://go.dev/blog/pprof).
 
 A convenient way is to use ssh port forwarding to download the profiles
 directly to your own workstation. The actual Gitaly port (`9236`) can be found
@@ -12,51 +14,52 @@ directly to your own workstation. The actual Gitaly port (`9236`) can be found
 forwarding this to our local port `6060` as this is the standard port for go
 pprof endpoints.
 
-```
+```shell
 ssh -N -L 6060:localhost:9236 file-03-stor-gprd.c.gitlab-production.internal
 ```
 
-```
+```shell
 # fetch 30 seconds of CPU profiling
-curl -o cpu.bin http://localhost:6060/debug/pprof/profile
+curl -o cpu.bin 'http://localhost:6060/debug/pprof/profile'
+go tool pprof -http :8080 cpu.bin
 
 # fetch 5 seconds of execution trace (this will have a performance impact)
-curl -o trace.bin http://localhost:6060/debug/pprof/trace?seconds=5`
+curl -o trace.bin 'http://localhost:6060/debug/pprof/trace?seconds=5'
+go tool trace trace.bin
 
 # fetch a heap profile to profile memory usage
-curl -o heap.bin http://localhost:6060/debug/pprof/heap
+curl -o heap.bin 'http://localhost:6060/debug/pprof/heap'
+go tool pprof -http :8080 heap.bin
 
 # fetch a list of running goroutines
-curl -o goroutines.txt http://localhost:6060/debug/pprof/goroutine?debug=2
+curl -o goroutines.txt 'http://localhost:6060/debug/pprof/goroutine?debug=2'
 ```
 
-## 2. Hand them off
+## GCP Profiling
 
-To the Gitaly Team attached to an [issue](https://gitlab.com/gitlab-org/gitaly/issues/new).
-Remember to make it confidential.
+[GCP
+profiles](https://console.cloud.google.com/profiler/gitaly/cpu&project=gitlab-production)
+are also available service wide.
 
-## 3. Analyze profiling data
+## System CPU Profile
 
-Make sure you have the go SDK installed.
+Since Gitaly shells out to `git` the Go profile is not enough information. We
+can use Linux built in [`perf`
+tool](../tutorials/how_to_use_flamegraphs_for_perf_profiling.md)
 
-### Finding where CPU time is spend
+```
+# All processes
+steve@file-01-stor-gstg.c.gitlab-staging-1.internal:~$ perf_flamegraph_for_all_running_processes.sh
 
-* Run `go tool pprof cpu.bin` to enter interactive mode.
-  * use `top 30` to show the top 30 methods for CPU consumption
-  * In most cases it's better to sort by cumulative CPU consumption: `top 30 -cum`
+# Specific Process
+steve@file-01-stor-gstg.c.gitlab-staging-1.internal:~$ perf_flamegraph_for_pid.sh 12
 
-* Or use it non-interactively:
-  * `go tool pprof -top -cum cpu.bin`
+# For user
+steve@file-01-stor-gstg.c.gitlab-staging-1.internal:~$ perf_flamegraph_for_user.sh git
+```
 
-* To look into one of the listed methods to see CPU usage for each line of code:
-  * `go tool pprof -source_path </path/to/go_src> -list <methodname_regexp> cpu.bin`
+## Periodic System CPU Profiles
 
-* To get a graphical tree representation of CPU consumption:
-  * `go tool pprof -web cpu.bin`
-
-* Or **get all the goodness in one nice web interface** (pprof will listen on localhost:8080):
-  * `go tool pprof -http localhost:8080 cpu.bin`
-
-### Finding where memory is allocated
-
-Same as with CPU profiling above, but using the `heap.bin` file instead of `cpu.bin`.
+We run CPU profiles at a periodic internal and upload these to
+[`gs://gitlab-gprd-periodic-host-profile`](https://console.cloud.google.com/storage/browser/gitlab-gprd-periodic-host-profile;tab=objects?forceOnBucketsSortingFiltering=true&project=gitlab-production&prefix=&forceOnObjectsSortingFiltering=false)
+where you can choose a hostname and a specific time.

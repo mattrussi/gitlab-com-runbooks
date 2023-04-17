@@ -41,6 +41,7 @@
 * [Purge Git data](../git/purge-git-data.md)
 * [Find a project from its hashed storage path](../gitaly/find-project-from-hashed-storage.md)
 * [Gitaly is down](../gitaly/gitaly-down.md)
+* [Gitaly profiling](../gitaly/gitaly-profiling.md)
 * [Gitaly Repository Export](../gitaly/gitaly-repositry-export.md)
 * [Gitaly token rotation](../gitaly/gitaly-token-rotation.md)
 * [Moving repositories from one Gitaly node to another](../gitaly/move-repositories.md)

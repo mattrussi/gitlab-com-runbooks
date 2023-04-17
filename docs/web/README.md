@@ -40,7 +40,6 @@
 * [../gitaly/git-high-cpu-and-memory-usage.md](../gitaly/git-high-cpu-and-memory-usage.md)
 * [Gitaly is down](../gitaly/gitaly-down.md)
 * [Gitaly latency is too high](../gitaly/gitaly-latency.md)
-* [Gitaly profiling](../gitaly/gitaly-profiling.md)
 * [Gitaly unusual activity alert](../gitaly/gitaly-unusual-activity.md)
 * [Git Storage Servers](../gitaly/storage-servers.md)
 * [Kubernetes-Agent Basic Troubleshooting](../kas/kubernetes-agent-basic-troubleshooting.md)
