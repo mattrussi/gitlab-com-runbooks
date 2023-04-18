@@ -85,8 +85,8 @@
       'gitlab_cli',
     ],
   },
-  editor: {
-    name: 'Editor',
+  ide: {
+    name: 'IDE',
     stage: 'create',
     feature_categories: [
       'web_ide',
@@ -101,6 +101,7 @@
       'merge_trains',
       'code_testing',
       'review_apps',
+      'ci-cd_visibility',
     ],
   },
   pipeline_authoring: {
@@ -174,9 +175,8 @@
     name: 'Composition Analysis',
     stage: 'secure',
     feature_categories: [
-      'dependency_scanning',
+      'software_composition_analysis',
       'container_scanning',
-      'license_compliance',
     ],
   },
   vulnerability_research: {
@@ -199,16 +199,14 @@
     name: 'Environments',
     stage: 'deploy',
     feature_categories: [
-      'continuous_delivery',
-      'advanced_deployments',
-      'feature_flags',
-      'release_orchestration',
-      'release_evidence',
-      'environment_management',
       'auto_devops',
-      'infrastructure_as_code',
-      'kubernetes_management',
+      'continuous_delivery',
       'deployment_management',
+      'environment_management',
+      'feature_flags',
+      'infrastructure_as_code',
+      'release_evidence',
+      'release_orchestration',
     ],
   },
   respond: {
@@ -255,8 +253,8 @@
       'compliance_management',
     ],
   },
-  product_intelligence: {
-    name: 'Product Intelligence',
+  analytics_instrumentation: {
+    name: 'Analytics Instrumentation',
     stage: 'analytics',
     feature_categories: [
       'service_ping',
@@ -329,14 +327,14 @@
     ],
   },
   distribution_build: {
-    name: 'Distribution:Build',
+    name: 'Distribution::Build',
     stage: 'systems',
     feature_categories: [
       'build',
     ],
   },
   distribution_deploy: {
-    name: 'Distribution:Deploy',
+    name: 'Distribution::Deploy',
     stage: 'systems',
     feature_categories: [
       'omnibus_package',
@@ -344,14 +342,14 @@
     ],
   },
   gitaly_cluster: {
-    name: 'Gitaly:Cluster',
+    name: 'Gitaly::Cluster',
     stage: 'systems',
     feature_categories: [
       'gitaly',
     ],
   },
   gitaly_git: {
-    name: 'Gitaly:Git',
+    name: 'Gitaly::Git',
     stage: 'systems',
     feature_categories: [
 

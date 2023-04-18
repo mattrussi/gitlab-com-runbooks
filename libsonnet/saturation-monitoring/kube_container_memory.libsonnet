@@ -1,12 +1,18 @@
 local metricsCatalog = import 'servicemetrics/metrics-catalog.libsonnet';
 local resourceSaturationPoint = (import 'servicemetrics/resource_saturation_point.libsonnet').resourceSaturationPoint;
 
+local servicesUsingRssSaturationMonitoring = std.set((import './kube_container_rss.libsonnet').kube_container_rss.appliesTo);
+
 {
   kube_container_memory: resourceSaturationPoint({
     title: 'Kube Container Memory Utilization',
     severity: 's4',
     horizontallyScalable: true,
-    appliesTo: metricsCatalog.findKubeProvisionedServices(first='web'),
+    appliesTo: std.filter(
+      function(service)
+        !std.member(servicesUsingRssSaturationMonitoring, service),
+      metricsCatalog.findKubeProvisionedServices(first='web'),
+    ),
     description: |||
       This uses the working set size from cAdvisor for the cgroup's memory usage. That may
       not be a good measure as it includes filesystem cache pages that are not necessarily

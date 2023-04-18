@@ -7,12 +7,6 @@ groups:
   rules:
   - record: gitlab:feature_category:stage_group:mapping
     labels:
-      feature_category: advanced_deployments
-      product_stage: deploy
-      stage_group: environments
-    expr: "1"
-  - record: gitlab:feature_category:stage_group:mapping
-    labels:
       feature_category: advisory_database
       product_stage: secure
       stage_group: vulnerability_research
@@ -33,7 +27,7 @@ groups:
     labels:
       feature_category: application_instrumentation
       product_stage: analytics
-      stage_group: product_intelligence
+      stage_group: analytics_instrumentation
     expr: "1"
   - record: gitlab:feature_category:stage_group:mapping
     labels:
@@ -97,6 +91,12 @@ groups:
     expr: "1"
   - record: gitlab:feature_category:stage_group:mapping
     labels:
+      feature_category: ci-cd_visibility
+      product_stage: verify
+      stage_group: pipeline_execution
+    expr: "1"
+  - record: gitlab:feature_category:stage_group:mapping
+    labels:
       feature_category: cloud_native_installation
       product_stage: systems
       stage_group: distribution_deploy
@@ -146,12 +146,6 @@ groups:
   - record: gitlab:feature_category:stage_group:mapping
     labels:
       feature_category: consumables_cost_management
-      product_stage: fulfillment
-      stage_group: utilization
-    expr: "1"
-  - record: gitlab:feature_category:stage_group:mapping
-    labels:
-      feature_category: subscription_cost_management
       product_stage: fulfillment
       stage_group: utilization
     expr: "1"
@@ -229,13 +223,19 @@ groups:
     expr: "1"
   - record: gitlab:feature_category:stage_group:mapping
     labels:
-      feature_category: dependency_scanning
-      product_stage: secure
-      stage_group: composition_analysis
+      feature_category: deployment_management
+      product_stage: deploy
+      stage_group: environments
     expr: "1"
   - record: gitlab:feature_category:stage_group:mapping
     labels:
-      feature_category: deployment_management
+      feature_category: advanced_deployments
+      product_stage: deploy
+      stage_group: environments
+    expr: "1"
+  - record: gitlab:feature_category:stage_group:mapping
+    labels:
+      feature_category: kubernetes_management
       product_stage: deploy
       stage_group: environments
     expr: "1"
@@ -445,18 +445,6 @@ groups:
     expr: "1"
   - record: gitlab:feature_category:stage_group:mapping
     labels:
-      feature_category: kubernetes_management
-      product_stage: deploy
-      stage_group: environments
-    expr: "1"
-  - record: gitlab:feature_category:stage_group:mapping
-    labels:
-      feature_category: license_compliance
-      product_stage: secure
-      stage_group: composition_analysis
-    expr: "1"
-  - record: gitlab:feature_category:stage_group:mapping
-    labels:
       feature_category: logging
       product_stage: monitor
       stage_group: observability
@@ -609,7 +597,7 @@ groups:
     labels:
       feature_category: remote_development
       product_stage: create
-      stage_group: editor
+      stage_group: ide
     expr: "1"
   - record: gitlab:feature_category:stage_group:mapping
     labels:
@@ -705,13 +693,31 @@ groups:
     labels:
       feature_category: service_ping
       product_stage: analytics
-      stage_group: product_intelligence
+      stage_group: analytics_instrumentation
     expr: "1"
   - record: gitlab:feature_category:stage_group:mapping
     labels:
       feature_category: sm_provisioning
       product_stage: fulfillment
       stage_group: provision
+    expr: "1"
+  - record: gitlab:feature_category:stage_group:mapping
+    labels:
+      feature_category: software_composition_analysis
+      product_stage: secure
+      stage_group: composition_analysis
+    expr: "1"
+  - record: gitlab:feature_category:stage_group:mapping
+    labels:
+      feature_category: dependency_scanning
+      product_stage: secure
+      stage_group: composition_analysis
+    expr: "1"
+  - record: gitlab:feature_category:stage_group:mapping
+    labels:
+      feature_category: license_compliance
+      product_stage: secure
+      stage_group: composition_analysis
     expr: "1"
   - record: gitlab:feature_category:stage_group:mapping
     labels:
@@ -783,7 +789,7 @@ groups:
     labels:
       feature_category: web_ide
       product_stage: create
-      stage_group: editor
+      stage_group: ide
     expr: "1"
   - record: gitlab:feature_category:stage_group:mapping
     labels:

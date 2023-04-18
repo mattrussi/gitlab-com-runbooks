@@ -6,8 +6,8 @@
 //
 // Blank values will be ignored.
 {
-  cluster_cost_management: '',
-  pods: 'cells',
-  continuous_verification: '',
-  subscription_cost_management: 'consumables_cost_management',
+  dependency_scanning: 'software_composition_analysis',
+  license_compliance: 'software_composition_analysis',
+  advanced_deployments: 'deployment_management',
+  kubernetes_management: 'deployment_management',
 }

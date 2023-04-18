@@ -19,7 +19,7 @@ local styles = [
 // Adding the unit to the styles array
 local timeLostUnit = [
   styles[0] {
-    unit: 'm',
+    unit: 's',
   },
 ];
 

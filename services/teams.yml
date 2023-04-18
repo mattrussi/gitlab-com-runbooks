@@ -212,8 +212,8 @@ teams:
   product_stage_group: dynamic_analysis
   ignored_components:
   - graphql_query
-- name: editor
-  product_stage_group: editor
+- name: ide
+  product_stage_group: ide
   ignored_components:
   - graphql_query
 - name: foundations
@@ -284,8 +284,8 @@ teams:
   send_error_budget_weekly_to_slack: true
   ignored_components:
   - graphql_query
-- name: product_intelligence
-  product_stage_group: product_intelligence
+- name: analytics_instrumentation
+  product_stage_group: analytics_instrumentation
   ignored_components:
   - graphql_query
 - name: product_planning
@@ -372,6 +372,9 @@ teams:
   label: team::Foundations
   assign_capacity_planning_issues: false
   slack_alerts_channel: g_infra_foundations_alerts
+  send_slo_alerts_to_team_slack_channel: true
+  alerts:
+  - ops
 
 - name: reliability_practices
   url: https://about.gitlab.com/handbook/engineering/infrastructure/team/reliability/practices.html

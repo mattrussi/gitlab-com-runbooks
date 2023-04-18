@@ -1455,6 +1455,9 @@ services:
       - plan
     label: Sidekiq
     owner: reliability_general
+    business:
+      SLA:
+        overall_sla_weighting: 0 # Treated as a primary service, but with a zero weight for now
     technical:
       project:
         - https://gitlab.com/gitlab-org/gitlab-ce

@@ -6,7 +6,7 @@ local annotation = grafana.annotation;
     annotation.datasource(
       'deploy',
       '-- Grafana --',
-      enable=false,
+      enable=true,
       tags=['deploy', '$environment'],
       builtIn=1,
       iconColor='#96D98D',

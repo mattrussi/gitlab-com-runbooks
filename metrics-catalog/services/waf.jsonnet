@@ -17,8 +17,14 @@ metricsCatalog.serviceDefinition({
     kubernetes: false,
     vms: false,
   },
+
+  // No stages for Thanos
+  serviceIsStageless: true,
+
   serviceLevelIndicators: {
     gitlab_zone: {
+      severity: 's3',
+      team: 'reliability_foundations',
       userImpacting: false,  // Low until CF exporter metric quality increases https://gitlab.com/gitlab-com/gl-infra/reliability/-/issues/10294
       featureCategory: 'not_owned',
       description: |||
@@ -29,20 +35,25 @@ metricsCatalog.serviceDefinition({
         serious upstream failures on GitLab.com.
       |||,
 
+      local zoneSelector = { zone: { re: 'gitlab.com|staging.gitlab.com' } },
       requestRate: rateMetric(
-        counter='cloudflare_zones_http_responses_total',
-        selector='zone=~"gitlab.com|staging.gitlab.com"'
+        counter='cloudflare_zone_requests_total',
+        selector=zoneSelector
       ),
 
       errorRate: rateMetric(
-        counter='cloudflare_zones_http_responses_total',
-        selector='zone=~"gitlab.com|staging.gitlab.com", edge_response_status=~"5.."',
+        counter='cloudflare_zone_requests_status',
+        selector=zoneSelector {
+          status: { re: '5..' },
+        },
       ),
 
       significantLabels: [],
     },
     // The "gitlab.net" zone
     gitlab_net_zone: {
+      severity: 's3',
+      team: 'reliability_foundations',
       userImpacting: false,  // Low until CF exporter metric quality increases https://gitlab.com/gitlab-com/gl-infra/reliability/-/issues/10294
       featureCategory: 'not_owned',
       description: |||
@@ -52,14 +63,18 @@ metricsCatalog.serviceDefinition({
         malicious traffic and is blocking it.
       |||,
 
+      local zoneSelector = { zone: 'gitlab.net' },
+
       requestRate: rateMetric(
-        counter='cloudflare_zones_http_responses_total',
-        selector='zone="gitlab.net"'
+        counter='cloudflare_zone_requests_total',
+        selector=zoneSelector
       ),
 
       errorRate: rateMetric(
-        counter='cloudflare_zones_http_responses_total',
-        selector='zone="gitlab.net", edge_response_status=~"5.."',
+        counter='cloudflare_zone_requests_status',
+        selector=zoneSelector {
+          status: { re: '5..' },
+        },
       ),
 
       significantLabels: [],

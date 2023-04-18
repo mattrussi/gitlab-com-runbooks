@@ -61,26 +61,37 @@ The cgroup Hierarchy:
 |              |--cpu.shares
 |              |--repos-0
 |              |     |--cpu.shares
+|              |     |--cpu.cfs_quota_us
 |              |--repos-1
 |              |     |--cpu.shares
+|              |     |--cpu.cfs_quota_us
 |              |--repos-2
 |              |     |--cpu.shares
+|              |     |--cpu.cfs_quota_us
 |              |--repos-3
 |              |     |--cpu.shares
+|              |     |--cpu.cfs_quota_us
 |              |--repos-4
 |              |     |--cpu.shares
+|              |     |--cpu.cfs_quota_us
 |              |--repos-5
 |              |     |--cpu.shares
+|              |     |--cpu.cfs_quota_us
 |              |--repos-6
 |              |     |--cpu.shares
+|              |     |--cpu.cfs_quota_us
 |              |--repos-7
 |              |     |--cpu.shares
+|              |     |--cpu.cfs_quota_us
 |              |--repos-8
 |              |     |--cpu.shares
+|              |     |--cpu.cfs_quota_us
 |              |--repos-9
 |              |     |--cpu.shares
+|              |     |--cpu.cfs_quota_us
 |              |--repos-10
 |                    |--cpu.shares
+|                    |--cpu.cfs_quota_us
 ```
 
 - `/gitaly`: Known as hierarchy root, we don't specify any limits, or put any
@@ -95,6 +106,7 @@ The cgroup Hierarchy:
 ## Learning about cgroup in Linux
 
 - [Kernel documentation](https://docs.kernel.org/admin-guide/cgroup-v1/)
+- [CFS Bandwidth Control](https://docs.kernel.org/scheduler/sched-bwc.html)
 - [Understanding and Working with the Cgroups Interface](https://www.youtube.com/watch?v=z7mgaWqiV90)
 - [How to understand the linux control groups cgroups](https://www.youtube.com/watch?v=NtK3poD_0X0)
 
@@ -122,6 +134,7 @@ information](https://gitlab.com/gitlab-com/gl-infra/chef-repo/-/blob/16beeefdb40
 the most interesting ones are:
 
 - `container_cpu_usage_seconds_total`: A counter which specifies the CPU usage of each cgroups, if it's a flat line it might indicate that the cgroup is not being used or it's being saturated.
+- `container_cpu_cfs_throttled_seconds_total`: A counter specifies how much we are throttling the cgroup. The high the more throttling we are doing.
 - `container_memory_usage_bytes`: A guage which specifies the usage of memory for that cgroup.
 
 Inside [Gitaly: Host Detail](https://dashboards.gitlab.net/d/gitaly-host-detail/gitaly-host-detail?orgId=1) you can find a `cgroup` panel that will give you information about cgroups:
@@ -151,18 +164,20 @@ To find out which `cgroup` was used for the commands that run for a specific RPC
     sudo find /sys/fs/cgroup/{cpu,memory}/gitaly -mindepth 1 -type d | wc -l
     ```
 
-1. Get CPU shares per gitaly shard
+1. Get CPU shares
 
-    ```
-    ssh file-cny-01-stor-gprd.c.gitlab-production.internal -- 'sudo cat /sys/fs/cgroup/cpu,cpuacct/gitaly/gitaly-$(pidof gitaly)/cpu.shares && sudo cat /sys/fs/cgroup/cpu,cpuacct/gitaly/gitaly-$(pidof gitaly)/repos-1/cpu.shares'
+    ```shell
     ssh file-01-stor-gprd.c.gitlab-production.internal -- 'sudo cat /sys/fs/cgroup/cpu,cpuacct/gitaly/gitaly-$(pidof gitaly)/cpu.shares && sudo cat /sys/fs/cgroup/cpu,cpuacct/gitaly/gitaly-$(pidof gitaly)/repos-1/cpu.shares'
-    ssh file-hdd-01-stor-gprd.c.gitlab-production.internal -- 'sudo cat /sys/fs/cgroup/cpu,cpuacct/gitaly/gitaly-$(pidof gitaly)/cpu.shares && sudo cat /sys/fs/cgroup/cpu,cpuacct/gitaly/gitaly-$(pidof gitaly)/repos-1/cpu.shares'
     ```
 
-1. Get Memory limits per gitaly shard
+1. Get CPU quota
 
+    ```shell
+    ssh file-01-stor-gprd.c.gitlab-production.internal -- 'sudo cat /sys/fs/cgroup/cpu,cpuacct/gitaly/gitaly-$(pidof gitaly)/cpu.cfs_quota_us && sudo cat /sys/fs/cgroup/cpu,cpuacct/gitaly/gitaly-$(pidof gitaly)/repos-1/cpu.cpu_quota_us'
     ```
-    ssh file-cny-01-stor-gprd.c.gitlab-production.internal -- 'sudo cat /sys/fs/cgroup/memory/gitaly/gitaly-$(pidof gitaly)/memory.limit_in_bytes && sudo cat /sys/fs/cgroup/memory/gitaly/gitaly-$(pidof gitaly)/repos-1/memory.limit_in_bytes'
+
+1. Get Memory limits
+
+    ```shell
     ssh file-01-stor-gprd.c.gitlab-production.internal -- 'sudo cat /sys/fs/cgroup/memory/gitaly/gitaly-$(pidof gitaly)/memory.limit_in_bytes && sudo cat /sys/fs/cgroup/memory/gitaly/gitaly-$(pidof gitaly)/repos-1/memory.limit_in_bytes'
-    ssh file-hdd-01-stor-gprd.c.gitlab-production.internal -- 'sudo cat /sys/fs/cgroup/memory/gitaly/gitaly-$(pidof gitaly)/memory.limit_in_bytes && sudo cat /sys/fs/cgroup/memory/gitaly/gitaly-$(pidof gitaly)/repos-1/memory.limit_in_bytes'
     ```

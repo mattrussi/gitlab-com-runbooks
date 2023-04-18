@@ -5,7 +5,7 @@ local crossoverMappings = objects.invert((import 'gitlab-metrics-config.libsonne
 local rules = std.flatMap(
   function(featureCategory)
     local stageGroup = stages.featureCategoryMap[featureCategory];
-    local featureCategories = [featureCategory, std.get(crossoverMappings, featureCategory)];
+    local featureCategories = [featureCategory] + std.flattenArrays(std.prune([std.get(crossoverMappings, featureCategory)]));
 
     std.map(
       function(category)
@@ -18,7 +18,7 @@ local rules = std.flatMap(
           },
           expr: '1',
         },
-      std.prune(featureCategories),
+      featureCategories,
     ),
   std.objectFields(stages.featureCategoryMap)
 );

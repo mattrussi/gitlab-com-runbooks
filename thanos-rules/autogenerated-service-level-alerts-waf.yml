@@ -24,7 +24,7 @@ groups:
       grafana_variables: environment,stage
       promql_template_1: |
         sum by (env,environment,tier,stage) (
-          rate(cloudflare_zones_http_responses_total{zone="gitlab.net", environment="{{ $labels.environment }}",stage="{{ $labels.stage }}"}[5m])
+          rate(cloudflare_zone_requests_total{environment="{{ $labels.environment }}",stage="{{ $labels.stage }}",zone="gitlab.net"}[5m])
         )
       runbook: docs/waf/README.md
     labels:
@@ -32,11 +32,11 @@ groups:
       alert_class: traffic_cessation
       alert_type: cause
       feature_category: not_owned
-      pager: pagerduty
       rules_domain: general
-      severity: s2
+      severity: s3
       sli_type: ops
       slo_alert: "no"
+      team: reliability_foundations
       user_impacting: "no"
     expr: |
       gitlab_component_ops:rate_30m{component="gitlab_net_zone",monitor="global",stage="main",type="waf"} == 0
@@ -63,7 +63,7 @@ groups:
       grafana_variables: environment,stage
       promql_template_1: |
         sum by (env,environment,tier,stage) (
-          rate(cloudflare_zones_http_responses_total{zone="gitlab.net", environment="{{ $labels.environment }}",stage="{{ $labels.stage }}"}[5m])
+          rate(cloudflare_zone_requests_total{environment="{{ $labels.environment }}",stage="{{ $labels.stage }}",zone="gitlab.net"}[5m])
         )
       runbook: docs/waf/README.md
     labels:
@@ -71,11 +71,11 @@ groups:
       alert_class: traffic_cessation
       alert_type: cause
       feature_category: not_owned
-      pager: pagerduty
       rules_domain: general
-      severity: s2
+      severity: s3
       sli_type: ops
       slo_alert: "no"
+      team: reliability_foundations
       user_impacting: "no"
     expr: |
       gitlab_component_ops:rate_5m{component="gitlab_net_zone",monitor="global",stage="main",type="waf"} offset 1h
@@ -100,7 +100,7 @@ groups:
       grafana_variables: environment,stage
       promql_template_1: |
         sum by (env,environment,tier,stage) (
-          rate(cloudflare_zones_http_responses_total{zone=~"gitlab.com|staging.gitlab.com", environment="{{ $labels.environment }}",stage="{{ $labels.stage }}"}[5m])
+          rate(cloudflare_zone_requests_total{environment="{{ $labels.environment }}",stage="{{ $labels.stage }}",zone=~"gitlab.com|staging.gitlab.com"}[5m])
         )
       runbook: docs/waf/README.md
     labels:
@@ -108,11 +108,11 @@ groups:
       alert_class: traffic_cessation
       alert_type: cause
       feature_category: not_owned
-      pager: pagerduty
       rules_domain: general
-      severity: s2
+      severity: s3
       sli_type: ops
       slo_alert: "no"
+      team: reliability_foundations
       user_impacting: "no"
     expr: |
       gitlab_component_ops:rate_30m{component="gitlab_zone",monitor="global",stage="main",type="waf"} == 0
@@ -139,7 +139,7 @@ groups:
       grafana_variables: environment,stage
       promql_template_1: |
         sum by (env,environment,tier,stage) (
-          rate(cloudflare_zones_http_responses_total{zone=~"gitlab.com|staging.gitlab.com", environment="{{ $labels.environment }}",stage="{{ $labels.stage }}"}[5m])
+          rate(cloudflare_zone_requests_total{environment="{{ $labels.environment }}",stage="{{ $labels.stage }}",zone=~"gitlab.com|staging.gitlab.com"}[5m])
         )
       runbook: docs/waf/README.md
     labels:
@@ -147,11 +147,11 @@ groups:
       alert_class: traffic_cessation
       alert_type: cause
       feature_category: not_owned
-      pager: pagerduty
       rules_domain: general
-      severity: s2
+      severity: s3
       sli_type: ops
       slo_alert: "no"
+      team: reliability_foundations
       user_impacting: "no"
     expr: |
       gitlab_component_ops:rate_5m{component="gitlab_zone",monitor="global",stage="main",type="waf"} offset 1h

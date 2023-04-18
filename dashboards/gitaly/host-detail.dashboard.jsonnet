@@ -160,6 +160,21 @@ local gitalyCGroupMemoryQuantile(selector) =
     legendFormat='cgroup: Memory',
   );
 
+local gitalyCgroupCPUThrottling(selector) =
+  basic.timeseries(
+    title='cgroup: CPU Throttling',
+    description='Cgroups that are getting CPU throttled. If the cgroup is not visable it is not getting throttled.',
+    query=|||
+      rate(
+        container_cpu_cfs_throttled_seconds_total{%(selector)s}[$__rate_interval]
+      ) > 0
+    ||| % { selector: selector },
+    interval='1m',
+    linewidth=1,
+    legendFormat='{{ id }}',
+  );
+
+
 local selectorHash = {
   environment: '$environment',
   env: '$environment',
@@ -394,6 +409,7 @@ basic.dashboard(
       gitalyCGroupMemoryUsagePerCGroup(selectorSerialized),
       gitalyCGroupMemoryQuantile(selectorSerialized),
       oomKillsPerNode(selectorSerialized),
+      gitalyCgroupCPUThrottling(selectorSerialized),
       textPanel.new(
         title='cgroup runbook',
         content=|||
