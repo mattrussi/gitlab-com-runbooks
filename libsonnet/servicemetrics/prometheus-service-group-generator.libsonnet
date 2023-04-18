@@ -40,7 +40,6 @@ local featureCategoryRecordingRuleGroupsForService(serviceDefinition, aggregatio
   local indicators = std.filter(function(indicator) indicator.hasFeatureCategory(), serviceDefinition.listServiceLevelIndicators());
   {
     name: 'Prometheus Intermediate Metrics per feature: %s - burn-rate %s' % [serviceDefinition.type, burnRate],
-    interval: '1m',
     rules: generator.generateRecordingRulesForService(serviceDefinition, serviceLevelIndicators=indicators),
   };
 

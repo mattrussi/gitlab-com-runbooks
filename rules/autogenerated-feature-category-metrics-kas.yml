@@ -2,7 +2,6 @@
 # YOUR CHANGES WILL BE OVERRIDDEN
 groups:
 - name: 'Prometheus Intermediate Metrics per feature: kas - burn-rate 5m'
-  interval: 1m
   rules:
   - record: gitlab:component:feature_category:execution:apdex:success:rate_5m
     labels:
@@ -53,7 +52,6 @@ groups:
         )
       )
 - name: 'Prometheus Intermediate Metrics per feature: kas - burn-rate 30m'
-  interval: 1m
   rules:
   - record: gitlab:component:feature_category:execution:apdex:success:rate_30m
     labels:
@@ -104,7 +102,6 @@ groups:
         )
       )
 - name: 'Prometheus Intermediate Metrics per feature: kas - burn-rate 1h'
-  interval: 1m
   rules:
   - record: gitlab:component:feature_category:execution:apdex:success:rate_1h
     labels:

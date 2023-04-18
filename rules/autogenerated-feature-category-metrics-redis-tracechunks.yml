@@ -3,7 +3,6 @@
 groups:
 - name: 'Prometheus Intermediate Metrics per feature: redis-tracechunks - burn-rate
     5m'
-  interval: 1m
   rules:
   - record: gitlab:component:feature_category:execution:ops:rate_5m
     labels:
@@ -89,7 +88,6 @@ groups:
       )
 - name: 'Prometheus Intermediate Metrics per feature: redis-tracechunks - burn-rate
     30m'
-  interval: 1m
   rules:
   - record: gitlab:component:feature_category:execution:ops:rate_30m
     labels:
@@ -175,7 +173,6 @@ groups:
       )
 - name: 'Prometheus Intermediate Metrics per feature: redis-tracechunks - burn-rate
     1h'
-  interval: 1m
   rules:
   - record: gitlab:component:feature_category:execution:ops:rate_1h
     labels:
