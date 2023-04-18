@@ -367,9 +367,9 @@ groups:
       max by(environment, tier, type, stage, shard) (
         clamp_min(
           clamp_max(
-            container_memory_working_set_bytes:labeled{container!="", container!="POD", type=~"web|api|internal-api|camoproxy|consul|external-dns|git|kas|kube|logging|mailroom|monitoring|nginx|plantuml|redis-cache|redis-sidekiq|redis-tracechunks|redis-cluster-ratelimiting|redis-sessions|redis-registry-cache|redis-repository-cache|redis-db-load-balancing|redis|registry|sidekiq|vault|web-pages|websockets|woodhouse"}
+            container_memory_working_set_bytes:labeled{container!="", container!="POD", type=~"camoproxy|consul|external-dns|kas|kube|logging|mailroom|monitoring|nginx|plantuml|redis-cache|redis-sidekiq|redis-tracechunks|redis-cluster-ratelimiting|redis-sessions|redis-registry-cache|redis-repository-cache|redis-db-load-balancing|redis|registry|vault|web-pages|websockets|woodhouse"}
             /
-            (container_spec_memory_limit_bytes:labeled{container!="", container!="POD", type=~"web|api|internal-api|camoproxy|consul|external-dns|git|kas|kube|logging|mailroom|monitoring|nginx|plantuml|redis-cache|redis-sidekiq|redis-tracechunks|redis-cluster-ratelimiting|redis-sessions|redis-registry-cache|redis-repository-cache|redis-db-load-balancing|redis|registry|sidekiq|vault|web-pages|websockets|woodhouse"} > 0)
+            (container_spec_memory_limit_bytes:labeled{container!="", container!="POD", type=~"camoproxy|consul|external-dns|kas|kube|logging|mailroom|monitoring|nginx|plantuml|redis-cache|redis-sidekiq|redis-tracechunks|redis-cluster-ratelimiting|redis-sessions|redis-registry-cache|redis-repository-cache|redis-db-load-balancing|redis|registry|vault|web-pages|websockets|woodhouse"} > 0)
             ,
             1)
         ,
