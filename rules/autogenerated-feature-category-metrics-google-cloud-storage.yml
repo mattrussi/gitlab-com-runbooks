@@ -67,7 +67,7 @@ groups:
       )
 - name: 'Prometheus Intermediate Metrics per feature: google-cloud-storage - burn-rate
     30m'
-  interval: 1m
+  interval: 2m
   rules:
   - record: gitlab:component:feature_category:execution:ops:rate_30m
     labels:

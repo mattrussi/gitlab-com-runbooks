@@ -63,7 +63,7 @@ groups:
         rate(gitlab_sli_global_search_indexing_apdex_total{type="sidekiq"}[5m])
       )
 - name: 'Prometheus Intermediate Metrics per feature: sidekiq - burn-rate 30m'
-  interval: 1m
+  interval: 2m
   rules:
   - record: gitlab:component:feature_category:execution:ops:rate_30m
     labels:

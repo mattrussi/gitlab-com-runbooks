@@ -145,7 +145,7 @@ groups:
         rate(gitaly_praefect_replication_delay_bucket{job="praefect",le="+Inf"}[5m])
       )
 - name: 'Prometheus Intermediate Metrics per feature: praefect - burn-rate 30m'
-  interval: 1m
+  interval: 2m
   rules:
   - record: gitlab:component:feature_category:execution:ops:rate_30m
     labels:
