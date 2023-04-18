@@ -2,6 +2,7 @@
 # YOUR CHANGES WILL BE OVERRIDDEN
 groups:
 - name: 'Prometheus Intermediate Metrics per feature: sidekiq - burn-rate 5m'
+  interval: 1m
   rules:
   - record: gitlab:component:feature_category:execution:ops:rate_5m
     labels:
@@ -62,6 +63,7 @@ groups:
         rate(gitlab_sli_global_search_indexing_apdex_total{type="sidekiq"}[5m])
       )
 - name: 'Prometheus Intermediate Metrics per feature: sidekiq - burn-rate 30m'
+  interval: 2m
   rules:
   - record: gitlab:component:feature_category:execution:ops:rate_30m
     labels:
@@ -122,6 +124,7 @@ groups:
         rate(gitlab_sli_global_search_indexing_apdex_total{type="sidekiq"}[30m])
       )
 - name: 'Prometheus Intermediate Metrics per feature: sidekiq - burn-rate 1h'
+  interval: 1m
   rules:
   - record: gitlab:component:feature_category:execution:ops:rate_1h
     labels:
