@@ -28,6 +28,7 @@
 * [CI Artifacts CDN](../google-cloud-storage/artifacts-cdn.md)
 * [../kube/k8s-operations.md](../kube/k8s-operations.md)
 * [Kubernetes](../kube/kubernetes.md)
+* [Alerting](../monitoring/alerts_manual.md)
 * [An impatient SRE's guide to deleting alerts](../monitoring/deleting-alerts.md)
 * [Gitlab.com on Kubernetes](../onboarding/gitlab.com_on_k8s.md)
 * [Diagnosis with Kibana](../onboarding/kibana-diagnosis.md)

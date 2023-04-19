@@ -51,7 +51,6 @@
 * [Kubernetes](../kube/kubernetes.md)
 * [Scaling Elastic Cloud Clusters](../logging/scaling.md)
 * [Alertmanager Notification Failures](../monitoring/alertmanager-notification-failures.md)
-* [Alerting](../monitoring/alerts_manual.md)
 * [../monitoring/apdex-alerts-guide.md](../monitoring/apdex-alerts-guide.md)
 * [Thanos Query and Stores](../monitoring/thanos-query.md)
 * [Session: Application architecture](../onboarding/architecture.md)

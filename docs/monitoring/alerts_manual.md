@@ -108,15 +108,28 @@ each host.
 
 Alerts raised by Prometheus, as defined by alert rules, are sent to alertmanager. Alertmanager is configured with routing rules and receivers. Incoming alerts from Prometheus are routed to receivers based on routing rules.
 
-## How to add new alerts (alert rules in Prometheus config)
+## How to add new alerts
 
-Create a new yml file under `/rules` in this repo, and submit a MR. Once the MR has been approved &
-merged it will automatically converge in Chef and be pushed to Kubernetes.
+### Manual alerts
 
-In order to get rules deployed into Kubernetes, follow the above and watch the
-CI/CD pipeline on the ops instance.  The `./bin/create_kubernetes_rules` script
-will take the generated file and convert it to a PrometheusRules object.
-<https://github.com/coreos/prometheus-operator/blob/master/Documentation/api.md#prometheusrule>
+1. Create a new file in [`/rules`](../../rules) or add to an existing one.
+1. Add the appropriate [fields](#fields)
+    1. Add `team` label if you want it routed to a specific Slack channel for a product team.
+    1. Add [severity](https://about.gitlab.com/handbook/engineering/infrastructure/incident-management/#severities) (`severity: s2`/`severity: s1`) & `pager: pagerduty` if you want it to page the on-call.
+
+Example: [registry queue](../../rules/registry-gc-queues.yml)
+
+### Templating alerts
+
+Sometimes you need to template alerts, and tie them with our [metric
+catalog](../../metrics-catalog/README.md). Writing them
+[manually](#manual-alerts) might not be ideal.
+
+1. Create a new jsonnet file in [`/rules-jsonnet`](../../rules-jsonnet)
+1. Add a new alert
+1. Run `make generate`
+
+Example: [patroni alerts](../../rules-jsonnet/patroni-cause-alerts.jsonnet)
 
 ## Where to find things
 
