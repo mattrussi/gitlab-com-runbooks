@@ -866,7 +866,8 @@ module Storage
       @gitlab_api_client = Storage::GitLabClient.new(@options)
       @migration_errors = []
       log.level = @options[:log_level]
-      @pagination_indices = {}
+      @pagination_index = '1'
+      @started_over = false
       @hard_coded_projects = @options[:projects].any?
     end
 
@@ -913,28 +914,41 @@ module Storage
     end
 
     def fetch_largest_projects(next_page = false)
-      # A nil entry in @pagination_indices means we have reached the end,
-      # we need to return or we would be stuck in an infinite requests loop.
-      return [] if @pagination_indices.key?(__method__) && @pagination_indices[__method__].nil?
-
       source_shard = options[:source_shard]
       url = get_api_url(:projects_api_uri)
       parameters = {
         order_by: 'repository_size',
         statistics: true,
         repository_storage: source_shard,
-        per_page: options[:projects_per_page]
+        per_page: options[:projects_per_page],
+        page: @pagination_index
       }
 
       @options[:custom_attributes].each do |key, val|
         parameters["custom_attributes[#{key}]"] = val
       end
 
-      parameters['page'] = @pagination_indices[__method__] if @pagination_indices.include?(__method__)
       projects, error, status, headers = gitlab_api_client.get(url, parameters: parameters)
       raise error unless error.nil?
 
-      @pagination_indices[__method__] = headers['x-next-page'].first
+      @pagination_index = headers['x-next-page'].first
+
+      # With each project we migrate, we shrink the set we're selecting from (as we're
+      # selecting by repository_storage) while advancing the pagination index forward
+      # at a constance pace. At some point we're going request a page that's outside
+      # the shrunk set, getting empty list in response. Here we do a start-over from page
+      # 1 whenever we think we reached the end of the set, and only exiting when we get two
+      # empty responses in a row.
+      if projects.empty? && @pagination_index.nil?
+        return [] if @started_over
+
+        @pagination_index = '1'
+        @started_over = true
+
+        return fetch_largest_projects(next_page)
+      end
+
+      @started_over = false
 
       raise "Invalid response status code: #{status}" unless [200].include?(status)
 
