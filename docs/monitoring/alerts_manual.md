@@ -83,10 +83,10 @@ groups:
 * expr: the expression to evaluate, has to evaluate to boolean.
 * for: how long to wait until this alert starts firing.
 * labels: any alert that triggers will include all the labels that come from the prometheus metric, here we can add more labels to manage the alert behavior. We could, for example add more labels like this:
-  * team: which team the alert should go to. Teams are defined in `./runbooks/services/service-catalog.yml`
-  * severity: `critical` for it to be red, `warn` for it to be only a warning (orange)
-  * pager: if `pagerduty` then the alert will be also sent to pagerduty to the production on-call
-    * environment: this one generally comes with the metric, we can override it to send to different channels (stg, pre, or geo)
+  * `team`: which team the alert should go to. Teams are defined in [teams.yml](../../services/teams.yml)
+  * `severity`: `s1`, `s2`, `s3`, and `s4`
+  * `pager`: if `pagerduty` then the alert will be also sent to pagerduty to the production on-call
+  * `environment`: this one generally comes with the metric, we can override it to send to different channels (stg, pre, or geo)
 * annotations: there are 2 annotations that will be always used: title and descriptions. These should be static (they can't have any variable in them) more on this later on. Additionally we can define as many other annotations as we want, more on this later.
 
 ### Annotations
