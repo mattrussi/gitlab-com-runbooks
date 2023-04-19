@@ -4,6 +4,7 @@ local layout = import 'grafana/layout.libsonnet';
 
 local numberOfAutoDeployJobRetriesQuery = 'sort_desc(sum(increase(delivery_webhooks_auto_deploy_job_retries[$__range])) by (project) != 0)';
 local numberOfAutoDeployJobRetriesByJobQuery = 'sort_desc(sum(increase(delivery_webhooks_auto_deploy_job_retries[$__range])) by (project, job_name) != 0)';
+local incompleteDeploymentsQuery = 'sum by (version) (max_over_time(delivery_deployment_completed[$__range])) < 4';
 local secondsLostBetweenRetriesQuery = 'sum by(job_name)(increase(delivery_webhooks_auto_deploy_job_failure_lost_seconds[$__range]) != 0)';
 local taggedPackagesTotalByTypesQuery = 'sort_desc(sum(increase(delivery_packages_tagging_total[$__range])) by (pkg_type,security))';
 
@@ -25,7 +26,7 @@ local timeLostUnit = [
 
 local autoDeployJobRetriesTable =
   basic.table(
-    title='🔄 Number of auto-deploy job retries per Project 🔄',
+    title='Number of auto-deploy job retries per Project',
     description="This table shows the number of auto-deploy job retries per project for the duration chosen. For further insight, refer to the 'Number of auto-deploy retries per job' table, which separates the retries by job name",
     styles=null,
     queries=[numberOfAutoDeployJobRetriesQuery],
@@ -65,7 +66,7 @@ local autoDeployJobRetriesTable =
 
 local autoDeployJobRetriesByJobTable =
   basic.table(
-    title='🔄 Number of auto-deploy retries per job 🔄',
+    title='Number of auto-deploy retries per job',
     description='This table shows the number of auto-deploy job retries per project and per job for the duration chosen.',
     styles=styles,
     queries=[numberOfAutoDeployJobRetriesByJobQuery],
@@ -106,7 +107,7 @@ local autoDeployJobRetriesByJobTable =
 
 local taggedReleasesByTypeTable =
   basic.table(
-    title='🚀 Number of Tagged Releases by Type 🚀',
+    title='Number of Tagged Releases by Type',
     styles=null,
     query=taggedPackagesTotalByTypesQuery,
     transformations=[
@@ -254,6 +255,69 @@ local taggedReleasesByTypeTable =
     },
   };
 
+local incompleteDeploymentsTable =
+  basic.table(
+    title='Incomplete Auto-Deployment Versions',
+    description='Remember to not count the currently deploying version. Because of of how the delivery_deployment_completed metric works, it will always include the last one that is still deploying by the end of this query range (at the top).',
+    styles=null,
+    instant=true,
+    query=incompleteDeploymentsQuery,
+    interval=null,
+    intervalFactor=null,
+    transformations=[
+      {
+        id: 'organize',
+        options: {
+          excludeByName: {
+            Time: true,
+            Value: true,
+          },
+          indexByName: {},
+          renameByName: {
+            version: 'versions (read description)',
+          },
+        },
+      },
+    ],
+  );
+
+local incompleteDeploymentsStatPanel =
+  basic.statPanel(
+    title='',
+    panelTitle='Total Number of Incomplete Auto-Deployments',
+    description='Because of of how the delivery_deployment_completed metric works, it will always include the last one that is still deploying by the end of this query range (at the top). That is why this number is 1 less than the number of rows from the Incomplete Auto-Deploy Versions table.',
+    colorMode='value',
+    format='table',
+    query=incompleteDeploymentsQuery,
+    color=[
+      { color: 'white', value: null },
+    ],
+    transformations=[
+      {
+        id: 'organize',
+        options: {
+          excludeByName: {
+            Time: true,
+            Value: true,
+          },
+          indexByName: {},
+          renameByName: {},
+        },
+      },
+      {
+        id: 'reduce',
+        options: {
+          reducers: [
+            'changeCount',
+          ],
+          includeTimeField: false,
+          labelsToFields: true,
+          mode: 'seriesToRows',
+        },
+      },
+    ],
+  );
+
 basic.dashboard(
   'Release Management Toil',
   tags=['release'],
@@ -291,7 +355,7 @@ basic.dashboard(
 
 .addPanels(
   layout.rowGrid(
-    'Auto Deploy Job Retries',
+    '🔄 Auto Deploy Job Retries 🔄',
     [
       autoDeployJobRetriesTable,
       autoDeployJobRetriesByJobTable,
@@ -304,11 +368,24 @@ basic.dashboard(
 
 .addPanels(
   layout.rowGrid(
-    'Tagged Releases',
+    '🚀 Tagged Releases 🚀',
     [taggedReleasesByTypeTable],
     collapse=false,
     rowHeight=10,
     startRow=200,
+  )
+)
+
+.addPanels(
+  layout.rowGrid(
+    '❌ Incomplete/Failed Deployments ❌',
+    [
+      incompleteDeploymentsTable,
+      incompleteDeploymentsStatPanel,
+    ],
+    collapse=false,
+    rowHeight=10,
+    startRow=300,
   )
 )
 

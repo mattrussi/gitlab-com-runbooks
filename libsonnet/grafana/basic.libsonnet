@@ -952,6 +952,7 @@ local validateTags(tags) =
     noValue=null,
     links=[],
     stableId=null,
+    transformations=[],
   )::
     local steps =
       if std.type(color) == 'string' then
@@ -990,7 +991,9 @@ local validateTags(tags) =
         intervalFactor=intervalFactor,
       )
     )
-    + panelOverrides(stableId),
+    + panelOverrides(stableId) + {
+      transformations: transformations,
+    },
 
   gaugePanel(
     title,
