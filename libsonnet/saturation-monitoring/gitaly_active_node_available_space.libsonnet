@@ -5,7 +5,7 @@ local selectors = import 'promql/selectors.libsonnet';
 {
   gitaly_active_node_available_space: resourceSaturationPoint({
     title: 'Gitaly Active Node Available Space',
-    severity: 's3',
+    severity: 's2',
     horizontallyScalable: true,
     appliesTo: ['gitaly'],
     description: |||
