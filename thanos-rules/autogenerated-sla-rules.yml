@@ -17,6 +17,8 @@ groups:
         min without(slo) (avg_over_time(slo_observation_status{type="registry", monitor="global"}[5m])) * 1
         or
         min without(slo) (avg_over_time(slo_observation_status{type="web", monitor="global"}[5m])) * 5
+        or
+        min without(slo) (avg_over_time(slo_observation_status{type="web-pages", monitor="global"}[5m])) * 5
       )
   - record: sla:gitlab:weights
     labels:
@@ -30,6 +32,8 @@ groups:
         group without(slo) (avg_over_time(slo_observation_status{type="registry", monitor="global"}[5m])) * 1
         or
         group without(slo) (avg_over_time(slo_observation_status{type="web", monitor="global"}[5m])) * 5
+        or
+        group without(slo) (avg_over_time(slo_observation_status{type="web-pages", monitor="global"}[5m])) * 5
       )
   - record: sla:gitlab:ratio
     labels:
@@ -48,11 +52,11 @@ groups:
       sum by (env,environment,tier,type,stage) (
         (
           sum by(env,environment,tier,type,stage) (
-            gitlab_service_ops:rate_1h{type=~"api|git|registry|web"}
+            gitlab_service_ops:rate_1h{type=~"api|git|registry|web|web-pages"}
           )
           +
           sum by (env,environment,tier,type,stage) (
-            gitlab_service_apdex:weight:score_1h{type=~"api|git|registry|web"}
+            gitlab_service_apdex:weight:score_1h{type=~"api|git|registry|web|web-pages"}
           )
         )
       )
@@ -61,11 +65,11 @@ groups:
       sum by (env,environment,tier,type,stage) (
         (
           sum by(env,environment,tier,type,stage) (
-            gitlab_service_apdex:success:rate_1h{type=~"api|git|registry|web"}
+            gitlab_service_apdex:success:rate_1h{type=~"api|git|registry|web|web-pages"}
           )
           +
           sum by (env,environment,tier,type,stage)(
-            gitlab_service_ops:rate_1h{type=~"api|git|registry|web"} - gitlab_service_errors:rate_1h{type=~"api|git|registry|web"}
+            gitlab_service_ops:rate_1h{type=~"api|git|registry|web|web-pages"} - gitlab_service_errors:rate_1h{type=~"api|git|registry|web|web-pages"}
           )
         )
       )

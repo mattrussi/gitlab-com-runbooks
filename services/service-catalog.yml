@@ -713,7 +713,7 @@ services:
     owner: reliability_general
     business:
       SLA:
-        overall_sla_weighting: 0 # Treated as a primary service, but with a zero weight for now
+        overall_sla_weighting: 5 # If this exists, this service will be included in the overall SLA, using this value as a weighted average
     technical:
       project:
         - https://gitlab.com/gitlab-org/gitlab-pages
@@ -1556,9 +1556,6 @@ services:
     friendly_name: CI Runners
     label: CI Runners
     owner: reliability_practices
-    business:
-      SLA:
-        overall_sla_weighting: 0 # Treated as a primary service, but with a zero weight for now
     technical:
       project:
         - https://gitlab.com/gitlab-org/gitlab-runner
