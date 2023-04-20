@@ -8,17 +8,35 @@ local template = grafana.template;
 local row = grafana.row;
 
 stageGroupDashboards.dashboard('fulfillment_platform')
-.addTemplate(
-  template.new(
-    'instance',
-    '$PROMETHEUS_DS',
-    'label_values(probe_success{environment="$environment", type="blackbox"}, instance)',
-    current='https://customers.gitlab.com/-/liveness/database,migrations,cache',
-    refresh='load',
-  )
-)
 .addPanels(
-  layout.rowGrid('⏱️  Stack Component Uptime', [
+  layout.rowGrid('⏱️  Stack Component Uptime and Maintenance', [
+    basic.statPanel(
+      '',
+      'Gitlab-triggered maintenance',
+      query='((avg_over_time(customers_dot_maintenance_mode{environment="$environment", trigger="GitLab"}[$__range])) * $__range_s)',
+      legendFormat='',
+      color='green',
+      noValue='0 min',
+      unit='s',
+    ),
+    basic.statPanel(
+      '',
+      'Zuora-triggered maintenance',
+      query='((avg_over_time(customers_dot_maintenance_mode{environment="$environment", trigger="Zuora"}[$__range])) * $__range_s)',
+      legendFormat='',
+      color='green',
+      noValue='0 min',
+      unit='s',
+    ),
+    basic.statPanel(
+      '',
+      'Manually triggered maintenance',
+      query='((avg_over_time(customers_dot_maintenance_mode{environment="$environment", trigger="Manual"}[$__range])) * $__range_s)',
+      legendFormat='',
+      color='green',
+      noValue='0 min',
+      unit='s',
+    ),
     basic.slaStats(
       title='CustomersDot probe result',
       query='avg_over_time(probe_success{instance="$instance", environment="$environment", job="blackbox"}[$__interval])'
@@ -27,6 +45,15 @@ stageGroupDashboards.dashboard('fulfillment_platform')
       title='Puma uptime',
       query='1-(avg_over_time(last_scrape_error{environment="$environment", type="customersdot", job="prometheus-puma-exporter"}[$__interval]))',
     ),
-  ], startRow=1001, rowHeight=8)
+  ], startRow=1, rowHeight=4)
+)
+.addTemplate(
+  template.new(
+    'instance',
+    '$PROMETHEUS_DS',
+    'label_values(probe_success{environment="$environment", type="blackbox"}, instance)',
+    current='https://customers.gitlab.com/-/liveness/database,migrations,cache',
+    refresh='load',
+  )
 )
 .stageGroupDashboardTrailer()
