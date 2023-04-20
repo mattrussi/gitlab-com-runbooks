@@ -70,9 +70,13 @@ local excludedRedisInstances = ['redis-tracechunks'];
 
 {
   redis_memory: resourceSaturationPoint(redisMemoryDefinition {
-    appliesTo: std.filter(function(s) !std.member(excludedRedisInstances, s), metricsCatalog.findServicesWithTag(tag='redis')),
+    appliesTo: std.filter(function(s) !std.member(excludedRedisInstances, s), metricsCatalog.findServicesWithTag(tag='redis-sentinel')),
   }),
 
+  redis_cluster_memory: resourceSaturationPoint(redisMemoryDefinition {
+    appliesTo: std.filter(function(s) !std.member(excludedRedisInstances, s), metricsCatalog.findServicesWithTag(tag='redis-cluster')),
+    horizontallyScalable: true,
+  }),
 
   redis_memory_cache: resourceSaturationPoint(maxMemoryDefinition {
     appliesTo: ['redis-cache'],

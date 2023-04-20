@@ -8,8 +8,9 @@ function(
   railsStorageSelector,
   descriptiveName,
   featureCategory='not_owned',
+  redisCluster=false,
 )
-  redisArchetype(type, descriptiveName, featureCategory)
+  redisArchetype(type, descriptiveName, featureCategory, redisCluster)
   {
     serviceLevelIndicators+: {
       rails_redis_client: {

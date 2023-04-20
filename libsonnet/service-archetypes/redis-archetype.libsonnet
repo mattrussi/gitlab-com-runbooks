@@ -7,6 +7,7 @@ function(
   type,
   descriptiveName,
   featureCategory='not_owned',
+  redisCluster=false,
 )
   local baseSelector = { type: type };
   local formatConfig = {
@@ -25,6 +26,7 @@ function(
     tags: [
       // redis tag signifies that this service has redis-exporter
       'redis',
+      if redisCluster then 'redis-cluster' else 'redis-sentinel',
     ],
 
     monitoringThresholds: {
