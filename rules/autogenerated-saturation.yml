@@ -887,9 +887,62 @@ groups:
       max by(environment, tier, type, stage, shard) (
         clamp_min(
           clamp_max(
-            max_over_time(redis_connected_clients{type=~"redis-cache|redis-sidekiq|redis-tracechunks|redis-cluster-ratelimiting|redis-sessions|redis-registry-cache|redis-repository-cache|redis-db-load-balancing|redis"}[1m])
+            max_over_time(redis_connected_clients{type=~"redis-cache|redis-sidekiq|redis-tracechunks|redis-sessions|redis-registry-cache|redis-repository-cache|redis-db-load-balancing|redis"}[1m])
             /
-            redis_config_maxclients{type=~"redis-cache|redis-sidekiq|redis-tracechunks|redis-cluster-ratelimiting|redis-sessions|redis-registry-cache|redis-repository-cache|redis-db-load-balancing|redis"}
+            redis_config_maxclients{type=~"redis-cache|redis-sidekiq|redis-tracechunks|redis-sessions|redis-registry-cache|redis-repository-cache|redis-db-load-balancing|redis"}
+            ,
+            1)
+        ,
+        0)
+      )
+  - record: gitlab_component_saturation:ratio
+    labels:
+      component: redis_cluster_clients
+    expr: |
+      max by(environment, tier, type, stage, shard) (
+        clamp_min(
+          clamp_max(
+            max_over_time(redis_connected_clients{type="redis-cluster-ratelimiting"}[1m])
+            /
+            redis_config_maxclients{type="redis-cluster-ratelimiting"}
+            ,
+            1)
+        ,
+        0)
+      )
+  - record: gitlab_component_saturation:ratio
+    labels:
+      component: redis_cluster_memory
+    expr: |
+      max by(environment, tier, type, stage, shard) (
+        clamp_min(
+          clamp_max(
+            max by (environment, tier, type, stage, shard, fqdn, instance, shard) (
+              label_replace(redis_memory_used_rss_bytes{type="redis-cluster-ratelimiting"}, "memtype", "rss","","")
+              or
+              label_replace(redis_memory_used_bytes{type="redis-cluster-ratelimiting"}, "memtype", "used","","")
+            )
+            /
+            avg by (environment, tier, type, stage, shard, fqdn, instance, shard) (
+              node_memory_MemTotal_bytes{type="redis-cluster-ratelimiting"}
+            )
+            ,
+            1)
+        ,
+        0)
+      )
+  - record: gitlab_component_saturation:ratio
+    labels:
+      component: redis_cluster_primary_cpu
+    expr: |
+      max by(environment, tier, type, stage, shard) (
+        clamp_min(
+          clamp_max(
+            sum by (environment, tier, type, stage, shard, fqdn, instance, shard) (
+              rate(
+                namedprocess_namegroup_thread_cpu_seconds_total{type="redis-cluster-ratelimiting", groupname="redis-server", threadname="redis-server"}[1m])
+            )
+            and on (fqdn) redis_instance_info{role="master"}
             ,
             1)
         ,
@@ -903,13 +956,13 @@ groups:
         clamp_min(
           clamp_max(
             max by (environment, tier, type, stage, shard, fqdn, instance, shard) (
-              label_replace(redis_memory_used_rss_bytes{type=~"redis-cache|redis-sidekiq|redis-cluster-ratelimiting|redis-sessions|redis-registry-cache|redis-repository-cache|redis-db-load-balancing|redis"}, "memtype", "rss","","")
+              label_replace(redis_memory_used_rss_bytes{type=~"redis-cache|redis-sidekiq|redis-sessions|redis-registry-cache|redis-repository-cache|redis-db-load-balancing|redis"}, "memtype", "rss","","")
               or
-              label_replace(redis_memory_used_bytes{type=~"redis-cache|redis-sidekiq|redis-cluster-ratelimiting|redis-sessions|redis-registry-cache|redis-repository-cache|redis-db-load-balancing|redis"}, "memtype", "used","","")
+              label_replace(redis_memory_used_bytes{type=~"redis-cache|redis-sidekiq|redis-sessions|redis-registry-cache|redis-repository-cache|redis-db-load-balancing|redis"}, "memtype", "used","","")
             )
             /
             avg by (environment, tier, type, stage, shard, fqdn, instance, shard) (
-              node_memory_MemTotal_bytes{type=~"redis-cache|redis-sidekiq|redis-cluster-ratelimiting|redis-sessions|redis-registry-cache|redis-repository-cache|redis-db-load-balancing|redis"}
+              node_memory_MemTotal_bytes{type=~"redis-cache|redis-sidekiq|redis-sessions|redis-registry-cache|redis-repository-cache|redis-db-load-balancing|redis"}
             )
             ,
             1)
@@ -988,7 +1041,7 @@ groups:
           clamp_max(
             sum by (environment, tier, type, stage, shard, fqdn, instance, shard) (
               rate(
-                namedprocess_namegroup_thread_cpu_seconds_total{type=~"redis-cache|redis-sidekiq|redis-tracechunks|redis-cluster-ratelimiting|redis-sessions|redis-registry-cache|redis-repository-cache|redis-db-load-balancing|redis", groupname="redis-server", threadname="redis-server"}[1m])
+                namedprocess_namegroup_thread_cpu_seconds_total{type=~"redis-cache|redis-sidekiq|redis-tracechunks|redis-sessions|redis-registry-cache|redis-repository-cache|redis-db-load-balancing|redis", groupname="redis-server", threadname="redis-server"}[1m])
             )
             and on (fqdn) redis_instance_info{role="master"}
             ,
@@ -1585,6 +1638,30 @@ groups:
     expr: "0.9"
   - record: slo:max:soft:gitlab_component_saturation:ratio
     labels:
+      component: redis_cluster_clients
+    expr: "0.8"
+  - record: slo:max:hard:gitlab_component_saturation:ratio
+    labels:
+      component: redis_cluster_clients
+    expr: "0.9"
+  - record: slo:max:soft:gitlab_component_saturation:ratio
+    labels:
+      component: redis_cluster_memory
+    expr: "0.65"
+  - record: slo:max:hard:gitlab_component_saturation:ratio
+    labels:
+      component: redis_cluster_memory
+    expr: "0.7"
+  - record: slo:max:soft:gitlab_component_saturation:ratio
+    labels:
+      component: redis_cluster_primary_cpu
+    expr: "0.85"
+  - record: slo:max:hard:gitlab_component_saturation:ratio
+    labels:
+      component: redis_cluster_primary_cpu
+    expr: "0.95"
+  - record: slo:max:soft:gitlab_component_saturation:ratio
+    labels:
       component: redis_memory
     expr: "0.65"
   - record: slo:max:hard:gitlab_component_saturation:ratio
@@ -2113,6 +2190,30 @@ groups:
       horiz_scaling: "no"
       quantile: max
       severity: s3
+    expr: "1"
+  - record: gitlab_component_saturation_info
+    labels:
+      capacity_planning_strategy: quantile95_1h
+      component: redis_cluster_clients
+      horiz_scaling: "yes"
+      quantile: max
+      severity: s3
+    expr: "1"
+  - record: gitlab_component_saturation_info
+    labels:
+      capacity_planning_strategy: quantile95_1h
+      component: redis_cluster_memory
+      horiz_scaling: "yes"
+      quantile: max
+      severity: s2
+    expr: "1"
+  - record: gitlab_component_saturation_info
+    labels:
+      capacity_planning_strategy: quantile95_1h
+      component: redis_cluster_primary_cpu
+      horiz_scaling: "yes"
+      quantile: max
+      severity: s1
     expr: "1"
   - record: gitlab_component_saturation_info
     labels:
@@ -4573,6 +4674,145 @@ groups:
     expr: |
       gitlab_component_saturation:ratio{component="redis_clients"} > on(component) group_left
       slo:max:hard:gitlab_component_saturation:ratio{component="redis_clients"}
+  - alert: component_saturation_slo_out_of_bounds
+    for: 5m
+    annotations:
+      title: The Redis Client Utilization per Node resource of the {{ $labels.type
+        }} service ({{ $labels.stage }} stage) has a saturation exceeding SLO and
+        is close to its capacity limit.
+      description: |
+        This means that this resource is running close to capacity and is at risk of exceeding its current capacity limit.
+
+        Details of the Redis Client Utilization per Node resource:
+
+        Redis client utilization per node.
+
+        A redis server has a maximum number of clients that can connect. When this resource is saturated, new clients may fail to connect.
+
+        More details at https://redis.io/topics/clients#maximum-number-of-clients
+      grafana_dashboard_id: alerts-sat_redis_cluster_clients
+      grafana_dashboard_link: https://dashboards.gitlab.net/d/alerts-sat_redis_cluster_clients?from=now-6h/m&to=now-1m/m&var-environment={{
+        $labels.environment }}&var-type={{ $labels.type }}&var-stage={{ $labels.stage
+        }}
+      grafana_min_zoom_hours: "6"
+      grafana_panel_id: "797649961"
+      grafana_variables: environment,type,stage
+      promql_query: |
+        max by(environment, tier, type, stage, shard, fqdn, instance, shard) (
+          clamp_min(
+            clamp_max(
+              max_over_time(redis_connected_clients{environment="{{ $labels.environment }}",stage="{{ $labels.stage }}",type="{{ $labels.type }}"}[1m])
+              /
+              redis_config_maxclients{environment="{{ $labels.environment }}",stage="{{ $labels.stage }}",type="{{ $labels.type }}"}
+              ,
+              1)
+          ,
+          0)
+        )
+      runbook: docs/{{ $labels.type }}/README.md
+    labels:
+      alert_type: cause
+      rules_domain: general
+      severity: s3
+    expr: |
+      gitlab_component_saturation:ratio{component="redis_cluster_clients"} > on(component) group_left
+      slo:max:hard:gitlab_component_saturation:ratio{component="redis_cluster_clients"}
+  - alert: component_saturation_slo_out_of_bounds
+    for: 5m
+    annotations:
+      title: The Redis Memory Utilization per Node resource of the {{ $labels.type
+        }} service ({{ $labels.stage }} stage) has a saturation exceeding SLO and
+        is close to its capacity limit.
+      description: |
+        This means that this resource is running close to capacity and is at risk of exceeding its current capacity limit.
+
+        Details of the Redis Memory Utilization per Node resource:
+
+        Redis memory utilization per node.
+
+        As Redis memory saturates node memory, the likelyhood of OOM kills, possibly to the Redis process, become more likely.
+
+        For caches, consider lowering the `maxmemory` setting in Redis. For non-caching Redis instances, this has been caused in the past by credential stuffing, leading to large numbers of web sessions.
+
+        This threshold is kept deliberately low, since Redis RDB snapshots could consume a significant amount of memory, especially when the rate of change in Redis is high, leading to copy-on-write consuming more memory than when the rate-of-change is low.
+      grafana_dashboard_id: alerts-sat_redis_cluster_memory
+      grafana_dashboard_link: https://dashboards.gitlab.net/d/alerts-sat_redis_cluster_memory?from=now-6h/m&to=now-1m/m&var-environment={{
+        $labels.environment }}&var-type={{ $labels.type }}&var-stage={{ $labels.stage
+        }}
+      grafana_min_zoom_hours: "6"
+      grafana_panel_id: "2636709328"
+      grafana_variables: environment,type,stage
+      promql_query: |
+        max by(environment, tier, type, stage, shard, fqdn, instance, shard) (
+          clamp_min(
+            clamp_max(
+              max by (environment, tier, type, stage, shard, fqdn, instance, shard) (
+                label_replace(redis_memory_used_rss_bytes{environment="{{ $labels.environment }}",stage="{{ $labels.stage }}",type="{{ $labels.type }}"}, "memtype", "rss","","")
+                or
+                label_replace(redis_memory_used_bytes{environment="{{ $labels.environment }}",stage="{{ $labels.stage }}",type="{{ $labels.type }}"}, "memtype", "used","","")
+              )
+              /
+              avg by (environment, tier, type, stage, shard, fqdn, instance, shard) (
+                node_memory_MemTotal_bytes{environment="{{ $labels.environment }}",stage="{{ $labels.stage }}",type="{{ $labels.type }}"}
+              )
+              ,
+              1)
+          ,
+          0)
+        )
+      runbook: docs/{{ $labels.type }}/README.md
+    labels:
+      alert_type: cause
+      pager: pagerduty
+      rules_domain: general
+      severity: s2
+    expr: |
+      gitlab_component_saturation:ratio{component="redis_cluster_memory"} > on(component) group_left
+      slo:max:hard:gitlab_component_saturation:ratio{component="redis_cluster_memory"}
+  - alert: component_saturation_slo_out_of_bounds
+    for: 5m
+    annotations:
+      title: The Redis Primary CPU Utilization per Node resource of the {{ $labels.type
+        }} service ({{ $labels.stage }} stage) has a saturation exceeding SLO and
+        is close to its capacity limit.
+      description: |
+        This means that this resource is running close to capacity and is at risk of exceeding its current capacity limit.
+
+        Details of the Redis Primary CPU Utilization per Node resource:
+
+        Redis Primary CPU Utilization per Node.
+
+        The core server of redis is single-threaded; this thread is only able to scale to full use of a single CPU on a given server. When the primary Redis thread is saturated, major slowdowns should be expected across the application, so avoid if at all possible.
+      grafana_dashboard_id: alerts-sat_redis_cluster_primary_cpu
+      grafana_dashboard_link: https://dashboards.gitlab.net/d/alerts-sat_redis_cluster_primary_cpu?from=now-6h/m&to=now-1m/m&var-environment={{
+        $labels.environment }}&var-type={{ $labels.type }}&var-stage={{ $labels.stage
+        }}
+      grafana_min_zoom_hours: "6"
+      grafana_panel_id: "2575624819"
+      grafana_variables: environment,type,stage
+      promql_query: |
+        max by(environment, tier, type, stage, shard, fqdn, instance, shard) (
+          clamp_min(
+            clamp_max(
+              sum by (environment, tier, type, stage, shard, fqdn, instance, shard) (
+                rate(
+                  namedprocess_namegroup_thread_cpu_seconds_total{environment="{{ $labels.environment }}",stage="{{ $labels.stage }}",type="{{ $labels.type }}", groupname="redis-server", threadname="redis-server"}[1m])
+              )
+              and on (fqdn) redis_instance_info{role="master"}
+              ,
+              1)
+          ,
+          0)
+        )
+      runbook: docs/{{ $labels.type }}/README.md
+    labels:
+      alert_type: cause
+      pager: pagerduty
+      rules_domain: general
+      severity: s1
+    expr: |
+      gitlab_component_saturation:ratio{component="redis_cluster_primary_cpu"} > on(component) group_left
+      slo:max:hard:gitlab_component_saturation:ratio{component="redis_cluster_primary_cpu"}
   - alert: component_saturation_slo_out_of_bounds
     for: 5m
     annotations:
