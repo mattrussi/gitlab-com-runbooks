@@ -62,6 +62,946 @@ groups:
       sum by (env,environment,stage) (
         rate(gitlab_sli_global_search_indexing_apdex_total{type="sidekiq"}[5m])
       )
+  - record: gitlab:component:feature_category:execution:apdex:success:rate_5m
+    labels:
+      component: shard_catchall
+      feature_category: not_owned
+      tier: sv
+      type: sidekiq
+    expr: |
+      sum by (env,environment,stage) (
+        label_replace(sum by (env,environment,stage) (
+          sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate5m{le="10",shard="catchall",urgency="high"}
+        )
+        , "_c", "0", "", "")
+        or
+        label_replace(sum by (env,environment,stage) (
+          sli_aggregations:sidekiq_jobs_queue_duration_seconds_bucket_rate5m{le="10",shard="catchall",urgency="high"}
+        )
+        , "_c", "1", "", "")
+        or
+        label_replace(sum by (env,environment,stage) (
+          sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate5m{le="300",shard="catchall",urgency="low"}
+        )
+        , "_c", "2", "", "")
+        or
+        label_replace(sum by (env,environment,stage) (
+          sli_aggregations:sidekiq_jobs_queue_duration_seconds_bucket_rate5m{le="60",shard="catchall",urgency="low"}
+        )
+        , "_c", "3", "", "")
+        or
+        label_replace(sum by (env,environment,stage) (
+          sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate5m{le="300",shard="catchall",urgency="throttled"}
+        )
+        , "_c", "4", "", "")
+      )
+  - record: gitlab:component:feature_category:execution:apdex:weight:score_5m
+    labels:
+      component: shard_catchall
+      feature_category: not_owned
+      tier: sv
+      type: sidekiq
+    expr: |
+      sum by (env,environment,stage) (
+        label_replace(sum by (env,environment,stage) (
+          sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate5m{le="+Inf",shard="catchall",urgency="high"}
+        )
+        , "_c", "0", "", "")
+        or
+        label_replace(sum by (env,environment,stage) (
+          sli_aggregations:sidekiq_jobs_queue_duration_seconds_bucket_rate5m{le="+Inf",shard="catchall",urgency="high"}
+        )
+        , "_c", "1", "", "")
+        or
+        label_replace(sum by (env,environment,stage) (
+          sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate5m{le="+Inf",shard="catchall",urgency="low"}
+        )
+        , "_c", "2", "", "")
+        or
+        label_replace(sum by (env,environment,stage) (
+          sli_aggregations:sidekiq_jobs_queue_duration_seconds_bucket_rate5m{le="+Inf",shard="catchall",urgency="low"}
+        )
+        , "_c", "3", "", "")
+        or
+        label_replace(sum by (env,environment,stage) (
+          sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate5m{le="+Inf",shard="catchall",urgency="throttled"}
+        )
+        , "_c", "4", "", "")
+      )
+  - record: gitlab:component:feature_category:execution:ops:rate_5m
+    labels:
+      component: shard_catchall
+      feature_category: not_owned
+      tier: sv
+      type: sidekiq
+    expr: |
+      sum by (env,environment,stage) (
+        sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate5m{le="+Inf",shard="catchall"}
+      )
+  - record: gitlab:component:feature_category:execution:error:rate_5m
+    labels:
+      component: shard_catchall
+      feature_category: not_owned
+      tier: sv
+      type: sidekiq
+    expr: |
+      (
+        sum by (env,environment,stage) (
+          sli_aggregations:sidekiq_jobs_failed_total_rate5m{shard="catchall"}
+        )
+      )
+      or
+      (
+        0 * group by(env,environment,stage) (
+          gitlab:component:feature_category:execution:ops:rate_5m{component="shard_catchall",feature_category="not_owned",tier="sv",type="sidekiq"}
+        )
+      )
+  - record: gitlab:component:feature_category:execution:apdex:success:rate_5m
+    labels:
+      component: shard_database_throttled
+      feature_category: not_owned
+      tier: sv
+      type: sidekiq
+    expr: |
+      sum by (env,environment,stage) (
+        label_replace(sum by (env,environment,stage) (
+          sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate5m{le="10",shard="database-throttled",urgency="high"}
+        )
+        , "_c", "0", "", "")
+        or
+        label_replace(sum by (env,environment,stage) (
+          sli_aggregations:sidekiq_jobs_queue_duration_seconds_bucket_rate5m{le="10",shard="database-throttled",urgency="high"}
+        )
+        , "_c", "1", "", "")
+        or
+        label_replace(sum by (env,environment,stage) (
+          sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate5m{le="300",shard="database-throttled",urgency="low"}
+        )
+        , "_c", "2", "", "")
+        or
+        label_replace(sum by (env,environment,stage) (
+          sli_aggregations:sidekiq_jobs_queue_duration_seconds_bucket_rate5m{le="60",shard="database-throttled",urgency="low"}
+        )
+        , "_c", "3", "", "")
+        or
+        label_replace(sum by (env,environment,stage) (
+          sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate5m{le="300",shard="database-throttled",urgency="throttled"}
+        )
+        , "_c", "4", "", "")
+      )
+  - record: gitlab:component:feature_category:execution:apdex:weight:score_5m
+    labels:
+      component: shard_database_throttled
+      feature_category: not_owned
+      tier: sv
+      type: sidekiq
+    expr: |
+      sum by (env,environment,stage) (
+        label_replace(sum by (env,environment,stage) (
+          sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate5m{le="+Inf",shard="database-throttled",urgency="high"}
+        )
+        , "_c", "0", "", "")
+        or
+        label_replace(sum by (env,environment,stage) (
+          sli_aggregations:sidekiq_jobs_queue_duration_seconds_bucket_rate5m{le="+Inf",shard="database-throttled",urgency="high"}
+        )
+        , "_c", "1", "", "")
+        or
+        label_replace(sum by (env,environment,stage) (
+          sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate5m{le="+Inf",shard="database-throttled",urgency="low"}
+        )
+        , "_c", "2", "", "")
+        or
+        label_replace(sum by (env,environment,stage) (
+          sli_aggregations:sidekiq_jobs_queue_duration_seconds_bucket_rate5m{le="+Inf",shard="database-throttled",urgency="low"}
+        )
+        , "_c", "3", "", "")
+        or
+        label_replace(sum by (env,environment,stage) (
+          sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate5m{le="+Inf",shard="database-throttled",urgency="throttled"}
+        )
+        , "_c", "4", "", "")
+      )
+  - record: gitlab:component:feature_category:execution:ops:rate_5m
+    labels:
+      component: shard_database_throttled
+      feature_category: not_owned
+      tier: sv
+      type: sidekiq
+    expr: |
+      sum by (env,environment,stage) (
+        sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate5m{le="+Inf",shard="database-throttled"}
+      )
+  - record: gitlab:component:feature_category:execution:error:rate_5m
+    labels:
+      component: shard_database_throttled
+      feature_category: not_owned
+      tier: sv
+      type: sidekiq
+    expr: |
+      (
+        sum by (env,environment,stage) (
+          sli_aggregations:sidekiq_jobs_failed_total_rate5m{shard="database-throttled"}
+        )
+      )
+      or
+      (
+        0 * group by(env,environment,stage) (
+          gitlab:component:feature_category:execution:ops:rate_5m{component="shard_database_throttled",feature_category="not_owned",tier="sv",type="sidekiq"}
+        )
+      )
+  - record: gitlab:component:feature_category:execution:apdex:success:rate_5m
+    labels:
+      component: shard_elasticsearch
+      feature_category: not_owned
+      tier: sv
+      type: sidekiq
+    expr: |
+      sum by (env,environment,stage) (
+        label_replace(sum by (env,environment,stage) (
+          sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate5m{le="10",shard="elasticsearch",urgency="high"}
+        )
+        , "_c", "0", "", "")
+        or
+        label_replace(sum by (env,environment,stage) (
+          sli_aggregations:sidekiq_jobs_queue_duration_seconds_bucket_rate5m{le="10",shard="elasticsearch",urgency="high"}
+        )
+        , "_c", "1", "", "")
+        or
+        label_replace(sum by (env,environment,stage) (
+          sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate5m{le="300",shard="elasticsearch",urgency="low"}
+        )
+        , "_c", "2", "", "")
+        or
+        label_replace(sum by (env,environment,stage) (
+          sli_aggregations:sidekiq_jobs_queue_duration_seconds_bucket_rate5m{le="60",shard="elasticsearch",urgency="low"}
+        )
+        , "_c", "3", "", "")
+        or
+        label_replace(sum by (env,environment,stage) (
+          sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate5m{le="300",shard="elasticsearch",urgency="throttled"}
+        )
+        , "_c", "4", "", "")
+      )
+  - record: gitlab:component:feature_category:execution:apdex:weight:score_5m
+    labels:
+      component: shard_elasticsearch
+      feature_category: not_owned
+      tier: sv
+      type: sidekiq
+    expr: |
+      sum by (env,environment,stage) (
+        label_replace(sum by (env,environment,stage) (
+          sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate5m{le="+Inf",shard="elasticsearch",urgency="high"}
+        )
+        , "_c", "0", "", "")
+        or
+        label_replace(sum by (env,environment,stage) (
+          sli_aggregations:sidekiq_jobs_queue_duration_seconds_bucket_rate5m{le="+Inf",shard="elasticsearch",urgency="high"}
+        )
+        , "_c", "1", "", "")
+        or
+        label_replace(sum by (env,environment,stage) (
+          sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate5m{le="+Inf",shard="elasticsearch",urgency="low"}
+        )
+        , "_c", "2", "", "")
+        or
+        label_replace(sum by (env,environment,stage) (
+          sli_aggregations:sidekiq_jobs_queue_duration_seconds_bucket_rate5m{le="+Inf",shard="elasticsearch",urgency="low"}
+        )
+        , "_c", "3", "", "")
+        or
+        label_replace(sum by (env,environment,stage) (
+          sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate5m{le="+Inf",shard="elasticsearch",urgency="throttled"}
+        )
+        , "_c", "4", "", "")
+      )
+  - record: gitlab:component:feature_category:execution:ops:rate_5m
+    labels:
+      component: shard_elasticsearch
+      feature_category: not_owned
+      tier: sv
+      type: sidekiq
+    expr: |
+      sum by (env,environment,stage) (
+        sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate5m{le="+Inf",shard="elasticsearch"}
+      )
+  - record: gitlab:component:feature_category:execution:error:rate_5m
+    labels:
+      component: shard_elasticsearch
+      feature_category: not_owned
+      tier: sv
+      type: sidekiq
+    expr: |
+      (
+        sum by (env,environment,stage) (
+          sli_aggregations:sidekiq_jobs_failed_total_rate5m{shard="elasticsearch"}
+        )
+      )
+      or
+      (
+        0 * group by(env,environment,stage) (
+          gitlab:component:feature_category:execution:ops:rate_5m{component="shard_elasticsearch",feature_category="not_owned",tier="sv",type="sidekiq"}
+        )
+      )
+  - record: gitlab:component:feature_category:execution:apdex:success:rate_5m
+    labels:
+      component: shard_gitaly_throttled
+      feature_category: not_owned
+      tier: sv
+      type: sidekiq
+    expr: |
+      sum by (env,environment,stage) (
+        label_replace(sum by (env,environment,stage) (
+          sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate5m{le="10",shard="gitaly-throttled",urgency="high"}
+        )
+        , "_c", "0", "", "")
+        or
+        label_replace(sum by (env,environment,stage) (
+          sli_aggregations:sidekiq_jobs_queue_duration_seconds_bucket_rate5m{le="10",shard="gitaly-throttled",urgency="high"}
+        )
+        , "_c", "1", "", "")
+        or
+        label_replace(sum by (env,environment,stage) (
+          sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate5m{le="300",shard="gitaly-throttled",urgency="low"}
+        )
+        , "_c", "2", "", "")
+        or
+        label_replace(sum by (env,environment,stage) (
+          sli_aggregations:sidekiq_jobs_queue_duration_seconds_bucket_rate5m{le="60",shard="gitaly-throttled",urgency="low"}
+        )
+        , "_c", "3", "", "")
+        or
+        label_replace(sum by (env,environment,stage) (
+          sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate5m{le="300",shard="gitaly-throttled",urgency="throttled"}
+        )
+        , "_c", "4", "", "")
+      )
+  - record: gitlab:component:feature_category:execution:apdex:weight:score_5m
+    labels:
+      component: shard_gitaly_throttled
+      feature_category: not_owned
+      tier: sv
+      type: sidekiq
+    expr: |
+      sum by (env,environment,stage) (
+        label_replace(sum by (env,environment,stage) (
+          sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate5m{le="+Inf",shard="gitaly-throttled",urgency="high"}
+        )
+        , "_c", "0", "", "")
+        or
+        label_replace(sum by (env,environment,stage) (
+          sli_aggregations:sidekiq_jobs_queue_duration_seconds_bucket_rate5m{le="+Inf",shard="gitaly-throttled",urgency="high"}
+        )
+        , "_c", "1", "", "")
+        or
+        label_replace(sum by (env,environment,stage) (
+          sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate5m{le="+Inf",shard="gitaly-throttled",urgency="low"}
+        )
+        , "_c", "2", "", "")
+        or
+        label_replace(sum by (env,environment,stage) (
+          sli_aggregations:sidekiq_jobs_queue_duration_seconds_bucket_rate5m{le="+Inf",shard="gitaly-throttled",urgency="low"}
+        )
+        , "_c", "3", "", "")
+        or
+        label_replace(sum by (env,environment,stage) (
+          sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate5m{le="+Inf",shard="gitaly-throttled",urgency="throttled"}
+        )
+        , "_c", "4", "", "")
+      )
+  - record: gitlab:component:feature_category:execution:ops:rate_5m
+    labels:
+      component: shard_gitaly_throttled
+      feature_category: not_owned
+      tier: sv
+      type: sidekiq
+    expr: |
+      sum by (env,environment,stage) (
+        sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate5m{le="+Inf",shard="gitaly-throttled"}
+      )
+  - record: gitlab:component:feature_category:execution:error:rate_5m
+    labels:
+      component: shard_gitaly_throttled
+      feature_category: not_owned
+      tier: sv
+      type: sidekiq
+    expr: |
+      (
+        sum by (env,environment,stage) (
+          sli_aggregations:sidekiq_jobs_failed_total_rate5m{shard="gitaly-throttled"}
+        )
+      )
+      or
+      (
+        0 * group by(env,environment,stage) (
+          gitlab:component:feature_category:execution:ops:rate_5m{component="shard_gitaly_throttled",feature_category="not_owned",tier="sv",type="sidekiq"}
+        )
+      )
+  - record: gitlab:component:feature_category:execution:apdex:success:rate_5m
+    labels:
+      component: shard_low_urgency_cpu_bound
+      feature_category: not_owned
+      tier: sv
+      type: sidekiq
+    expr: |
+      sum by (env,environment,stage) (
+        label_replace(sum by (env,environment,stage) (
+          sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate5m{le="10",shard="low-urgency-cpu-bound",urgency="high"}
+        )
+        , "_c", "0", "", "")
+        or
+        label_replace(sum by (env,environment,stage) (
+          sli_aggregations:sidekiq_jobs_queue_duration_seconds_bucket_rate5m{le="10",shard="low-urgency-cpu-bound",urgency="high"}
+        )
+        , "_c", "1", "", "")
+        or
+        label_replace(sum by (env,environment,stage) (
+          sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate5m{le="300",shard="low-urgency-cpu-bound",urgency="low"}
+        )
+        , "_c", "2", "", "")
+        or
+        label_replace(sum by (env,environment,stage) (
+          sli_aggregations:sidekiq_jobs_queue_duration_seconds_bucket_rate5m{le="60",shard="low-urgency-cpu-bound",urgency="low"}
+        )
+        , "_c", "3", "", "")
+        or
+        label_replace(sum by (env,environment,stage) (
+          sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate5m{le="300",shard="low-urgency-cpu-bound",urgency="throttled"}
+        )
+        , "_c", "4", "", "")
+      )
+  - record: gitlab:component:feature_category:execution:apdex:weight:score_5m
+    labels:
+      component: shard_low_urgency_cpu_bound
+      feature_category: not_owned
+      tier: sv
+      type: sidekiq
+    expr: |
+      sum by (env,environment,stage) (
+        label_replace(sum by (env,environment,stage) (
+          sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate5m{le="+Inf",shard="low-urgency-cpu-bound",urgency="high"}
+        )
+        , "_c", "0", "", "")
+        or
+        label_replace(sum by (env,environment,stage) (
+          sli_aggregations:sidekiq_jobs_queue_duration_seconds_bucket_rate5m{le="+Inf",shard="low-urgency-cpu-bound",urgency="high"}
+        )
+        , "_c", "1", "", "")
+        or
+        label_replace(sum by (env,environment,stage) (
+          sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate5m{le="+Inf",shard="low-urgency-cpu-bound",urgency="low"}
+        )
+        , "_c", "2", "", "")
+        or
+        label_replace(sum by (env,environment,stage) (
+          sli_aggregations:sidekiq_jobs_queue_duration_seconds_bucket_rate5m{le="+Inf",shard="low-urgency-cpu-bound",urgency="low"}
+        )
+        , "_c", "3", "", "")
+        or
+        label_replace(sum by (env,environment,stage) (
+          sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate5m{le="+Inf",shard="low-urgency-cpu-bound",urgency="throttled"}
+        )
+        , "_c", "4", "", "")
+      )
+  - record: gitlab:component:feature_category:execution:ops:rate_5m
+    labels:
+      component: shard_low_urgency_cpu_bound
+      feature_category: not_owned
+      tier: sv
+      type: sidekiq
+    expr: |
+      sum by (env,environment,stage) (
+        sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate5m{le="+Inf",shard="low-urgency-cpu-bound"}
+      )
+  - record: gitlab:component:feature_category:execution:error:rate_5m
+    labels:
+      component: shard_low_urgency_cpu_bound
+      feature_category: not_owned
+      tier: sv
+      type: sidekiq
+    expr: |
+      (
+        sum by (env,environment,stage) (
+          sli_aggregations:sidekiq_jobs_failed_total_rate5m{shard="low-urgency-cpu-bound"}
+        )
+      )
+      or
+      (
+        0 * group by(env,environment,stage) (
+          gitlab:component:feature_category:execution:ops:rate_5m{component="shard_low_urgency_cpu_bound",feature_category="not_owned",tier="sv",type="sidekiq"}
+        )
+      )
+  - record: gitlab:component:feature_category:execution:apdex:success:rate_5m
+    labels:
+      component: shard_memory_bound
+      feature_category: not_owned
+      tier: sv
+      type: sidekiq
+    expr: |
+      sum by (env,environment,stage) (
+        label_replace(sum by (env,environment,stage) (
+          sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate5m{le="10",shard="memory-bound",urgency="high"}
+        )
+        , "_c", "0", "", "")
+        or
+        label_replace(sum by (env,environment,stage) (
+          sli_aggregations:sidekiq_jobs_queue_duration_seconds_bucket_rate5m{le="10",shard="memory-bound",urgency="high"}
+        )
+        , "_c", "1", "", "")
+        or
+        label_replace(sum by (env,environment,stage) (
+          sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate5m{le="300",shard="memory-bound",urgency="low"}
+        )
+        , "_c", "2", "", "")
+        or
+        label_replace(sum by (env,environment,stage) (
+          sli_aggregations:sidekiq_jobs_queue_duration_seconds_bucket_rate5m{le="60",shard="memory-bound",urgency="low"}
+        )
+        , "_c", "3", "", "")
+        or
+        label_replace(sum by (env,environment,stage) (
+          sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate5m{le="300",shard="memory-bound",urgency="throttled"}
+        )
+        , "_c", "4", "", "")
+      )
+  - record: gitlab:component:feature_category:execution:apdex:weight:score_5m
+    labels:
+      component: shard_memory_bound
+      feature_category: not_owned
+      tier: sv
+      type: sidekiq
+    expr: |
+      sum by (env,environment,stage) (
+        label_replace(sum by (env,environment,stage) (
+          sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate5m{le="+Inf",shard="memory-bound",urgency="high"}
+        )
+        , "_c", "0", "", "")
+        or
+        label_replace(sum by (env,environment,stage) (
+          sli_aggregations:sidekiq_jobs_queue_duration_seconds_bucket_rate5m{le="+Inf",shard="memory-bound",urgency="high"}
+        )
+        , "_c", "1", "", "")
+        or
+        label_replace(sum by (env,environment,stage) (
+          sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate5m{le="+Inf",shard="memory-bound",urgency="low"}
+        )
+        , "_c", "2", "", "")
+        or
+        label_replace(sum by (env,environment,stage) (
+          sli_aggregations:sidekiq_jobs_queue_duration_seconds_bucket_rate5m{le="+Inf",shard="memory-bound",urgency="low"}
+        )
+        , "_c", "3", "", "")
+        or
+        label_replace(sum by (env,environment,stage) (
+          sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate5m{le="+Inf",shard="memory-bound",urgency="throttled"}
+        )
+        , "_c", "4", "", "")
+      )
+  - record: gitlab:component:feature_category:execution:ops:rate_5m
+    labels:
+      component: shard_memory_bound
+      feature_category: not_owned
+      tier: sv
+      type: sidekiq
+    expr: |
+      sum by (env,environment,stage) (
+        sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate5m{le="+Inf",shard="memory-bound"}
+      )
+  - record: gitlab:component:feature_category:execution:error:rate_5m
+    labels:
+      component: shard_memory_bound
+      feature_category: not_owned
+      tier: sv
+      type: sidekiq
+    expr: |
+      (
+        sum by (env,environment,stage) (
+          sli_aggregations:sidekiq_jobs_failed_total_rate5m{shard="memory-bound"}
+        )
+      )
+      or
+      (
+        0 * group by(env,environment,stage) (
+          gitlab:component:feature_category:execution:ops:rate_5m{component="shard_memory_bound",feature_category="not_owned",tier="sv",type="sidekiq"}
+        )
+      )
+  - record: gitlab:component:feature_category:execution:apdex:success:rate_5m
+    labels:
+      component: shard_quarantine
+      feature_category: not_owned
+      tier: sv
+      type: sidekiq
+    expr: |
+      sum by (env,environment,stage) (
+        label_replace(sum by (env,environment,stage) (
+          sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate5m{le="10",shard="quarantine",urgency="high"}
+        )
+        , "_c", "0", "", "")
+        or
+        label_replace(sum by (env,environment,stage) (
+          sli_aggregations:sidekiq_jobs_queue_duration_seconds_bucket_rate5m{le="10",shard="quarantine",urgency="high"}
+        )
+        , "_c", "1", "", "")
+        or
+        label_replace(sum by (env,environment,stage) (
+          sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate5m{le="300",shard="quarantine",urgency="low"}
+        )
+        , "_c", "2", "", "")
+        or
+        label_replace(sum by (env,environment,stage) (
+          sli_aggregations:sidekiq_jobs_queue_duration_seconds_bucket_rate5m{le="60",shard="quarantine",urgency="low"}
+        )
+        , "_c", "3", "", "")
+        or
+        label_replace(sum by (env,environment,stage) (
+          sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate5m{le="300",shard="quarantine",urgency="throttled"}
+        )
+        , "_c", "4", "", "")
+      )
+  - record: gitlab:component:feature_category:execution:apdex:weight:score_5m
+    labels:
+      component: shard_quarantine
+      feature_category: not_owned
+      tier: sv
+      type: sidekiq
+    expr: |
+      sum by (env,environment,stage) (
+        label_replace(sum by (env,environment,stage) (
+          sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate5m{le="+Inf",shard="quarantine",urgency="high"}
+        )
+        , "_c", "0", "", "")
+        or
+        label_replace(sum by (env,environment,stage) (
+          sli_aggregations:sidekiq_jobs_queue_duration_seconds_bucket_rate5m{le="+Inf",shard="quarantine",urgency="high"}
+        )
+        , "_c", "1", "", "")
+        or
+        label_replace(sum by (env,environment,stage) (
+          sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate5m{le="+Inf",shard="quarantine",urgency="low"}
+        )
+        , "_c", "2", "", "")
+        or
+        label_replace(sum by (env,environment,stage) (
+          sli_aggregations:sidekiq_jobs_queue_duration_seconds_bucket_rate5m{le="+Inf",shard="quarantine",urgency="low"}
+        )
+        , "_c", "3", "", "")
+        or
+        label_replace(sum by (env,environment,stage) (
+          sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate5m{le="+Inf",shard="quarantine",urgency="throttled"}
+        )
+        , "_c", "4", "", "")
+      )
+  - record: gitlab:component:feature_category:execution:ops:rate_5m
+    labels:
+      component: shard_quarantine
+      feature_category: not_owned
+      tier: sv
+      type: sidekiq
+    expr: |
+      sum by (env,environment,stage) (
+        sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate5m{le="+Inf",shard="quarantine"}
+      )
+  - record: gitlab:component:feature_category:execution:error:rate_5m
+    labels:
+      component: shard_quarantine
+      feature_category: not_owned
+      tier: sv
+      type: sidekiq
+    expr: |
+      (
+        sum by (env,environment,stage) (
+          sli_aggregations:sidekiq_jobs_failed_total_rate5m{shard="quarantine"}
+        )
+      )
+      or
+      (
+        0 * group by(env,environment,stage) (
+          gitlab:component:feature_category:execution:ops:rate_5m{component="shard_quarantine",feature_category="not_owned",tier="sv",type="sidekiq"}
+        )
+      )
+  - record: gitlab:component:feature_category:execution:apdex:success:rate_5m
+    labels:
+      component: shard_urgent_authorized_projects
+      feature_category: not_owned
+      tier: sv
+      type: sidekiq
+    expr: |
+      sum by (env,environment,stage) (
+        label_replace(sum by (env,environment,stage) (
+          sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate5m{le="10",shard="urgent-authorized-projects",urgency="high"}
+        )
+        , "_c", "0", "", "")
+        or
+        label_replace(sum by (env,environment,stage) (
+          sli_aggregations:sidekiq_jobs_queue_duration_seconds_bucket_rate5m{le="10",shard="urgent-authorized-projects",urgency="high"}
+        )
+        , "_c", "1", "", "")
+        or
+        label_replace(sum by (env,environment,stage) (
+          sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate5m{le="300",shard="urgent-authorized-projects",urgency="low"}
+        )
+        , "_c", "2", "", "")
+        or
+        label_replace(sum by (env,environment,stage) (
+          sli_aggregations:sidekiq_jobs_queue_duration_seconds_bucket_rate5m{le="60",shard="urgent-authorized-projects",urgency="low"}
+        )
+        , "_c", "3", "", "")
+        or
+        label_replace(sum by (env,environment,stage) (
+          sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate5m{le="300",shard="urgent-authorized-projects",urgency="throttled"}
+        )
+        , "_c", "4", "", "")
+      )
+  - record: gitlab:component:feature_category:execution:apdex:weight:score_5m
+    labels:
+      component: shard_urgent_authorized_projects
+      feature_category: not_owned
+      tier: sv
+      type: sidekiq
+    expr: |
+      sum by (env,environment,stage) (
+        label_replace(sum by (env,environment,stage) (
+          sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate5m{le="+Inf",shard="urgent-authorized-projects",urgency="high"}
+        )
+        , "_c", "0", "", "")
+        or
+        label_replace(sum by (env,environment,stage) (
+          sli_aggregations:sidekiq_jobs_queue_duration_seconds_bucket_rate5m{le="+Inf",shard="urgent-authorized-projects",urgency="high"}
+        )
+        , "_c", "1", "", "")
+        or
+        label_replace(sum by (env,environment,stage) (
+          sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate5m{le="+Inf",shard="urgent-authorized-projects",urgency="low"}
+        )
+        , "_c", "2", "", "")
+        or
+        label_replace(sum by (env,environment,stage) (
+          sli_aggregations:sidekiq_jobs_queue_duration_seconds_bucket_rate5m{le="+Inf",shard="urgent-authorized-projects",urgency="low"}
+        )
+        , "_c", "3", "", "")
+        or
+        label_replace(sum by (env,environment,stage) (
+          sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate5m{le="+Inf",shard="urgent-authorized-projects",urgency="throttled"}
+        )
+        , "_c", "4", "", "")
+      )
+  - record: gitlab:component:feature_category:execution:ops:rate_5m
+    labels:
+      component: shard_urgent_authorized_projects
+      feature_category: not_owned
+      tier: sv
+      type: sidekiq
+    expr: |
+      sum by (env,environment,stage) (
+        sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate5m{le="+Inf",shard="urgent-authorized-projects"}
+      )
+  - record: gitlab:component:feature_category:execution:error:rate_5m
+    labels:
+      component: shard_urgent_authorized_projects
+      feature_category: not_owned
+      tier: sv
+      type: sidekiq
+    expr: |
+      (
+        sum by (env,environment,stage) (
+          sli_aggregations:sidekiq_jobs_failed_total_rate5m{shard="urgent-authorized-projects"}
+        )
+      )
+      or
+      (
+        0 * group by(env,environment,stage) (
+          gitlab:component:feature_category:execution:ops:rate_5m{component="shard_urgent_authorized_projects",feature_category="not_owned",tier="sv",type="sidekiq"}
+        )
+      )
+  - record: gitlab:component:feature_category:execution:apdex:success:rate_5m
+    labels:
+      component: shard_urgent_cpu_bound
+      feature_category: not_owned
+      tier: sv
+      type: sidekiq
+    expr: |
+      sum by (env,environment,stage) (
+        label_replace(sum by (env,environment,stage) (
+          sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate5m{le="10",shard="urgent-cpu-bound",urgency="high"}
+        )
+        , "_c", "0", "", "")
+        or
+        label_replace(sum by (env,environment,stage) (
+          sli_aggregations:sidekiq_jobs_queue_duration_seconds_bucket_rate5m{le="10",shard="urgent-cpu-bound",urgency="high"}
+        )
+        , "_c", "1", "", "")
+        or
+        label_replace(sum by (env,environment,stage) (
+          sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate5m{le="300",shard="urgent-cpu-bound",urgency="low"}
+        )
+        , "_c", "2", "", "")
+        or
+        label_replace(sum by (env,environment,stage) (
+          sli_aggregations:sidekiq_jobs_queue_duration_seconds_bucket_rate5m{le="60",shard="urgent-cpu-bound",urgency="low"}
+        )
+        , "_c", "3", "", "")
+        or
+        label_replace(sum by (env,environment,stage) (
+          sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate5m{le="300",shard="urgent-cpu-bound",urgency="throttled"}
+        )
+        , "_c", "4", "", "")
+      )
+  - record: gitlab:component:feature_category:execution:apdex:weight:score_5m
+    labels:
+      component: shard_urgent_cpu_bound
+      feature_category: not_owned
+      tier: sv
+      type: sidekiq
+    expr: |
+      sum by (env,environment,stage) (
+        label_replace(sum by (env,environment,stage) (
+          sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate5m{le="+Inf",shard="urgent-cpu-bound",urgency="high"}
+        )
+        , "_c", "0", "", "")
+        or
+        label_replace(sum by (env,environment,stage) (
+          sli_aggregations:sidekiq_jobs_queue_duration_seconds_bucket_rate5m{le="+Inf",shard="urgent-cpu-bound",urgency="high"}
+        )
+        , "_c", "1", "", "")
+        or
+        label_replace(sum by (env,environment,stage) (
+          sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate5m{le="+Inf",shard="urgent-cpu-bound",urgency="low"}
+        )
+        , "_c", "2", "", "")
+        or
+        label_replace(sum by (env,environment,stage) (
+          sli_aggregations:sidekiq_jobs_queue_duration_seconds_bucket_rate5m{le="+Inf",shard="urgent-cpu-bound",urgency="low"}
+        )
+        , "_c", "3", "", "")
+        or
+        label_replace(sum by (env,environment,stage) (
+          sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate5m{le="+Inf",shard="urgent-cpu-bound",urgency="throttled"}
+        )
+        , "_c", "4", "", "")
+      )
+  - record: gitlab:component:feature_category:execution:ops:rate_5m
+    labels:
+      component: shard_urgent_cpu_bound
+      feature_category: not_owned
+      tier: sv
+      type: sidekiq
+    expr: |
+      sum by (env,environment,stage) (
+        sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate5m{le="+Inf",shard="urgent-cpu-bound"}
+      )
+  - record: gitlab:component:feature_category:execution:error:rate_5m
+    labels:
+      component: shard_urgent_cpu_bound
+      feature_category: not_owned
+      tier: sv
+      type: sidekiq
+    expr: |
+      (
+        sum by (env,environment,stage) (
+          sli_aggregations:sidekiq_jobs_failed_total_rate5m{shard="urgent-cpu-bound"}
+        )
+      )
+      or
+      (
+        0 * group by(env,environment,stage) (
+          gitlab:component:feature_category:execution:ops:rate_5m{component="shard_urgent_cpu_bound",feature_category="not_owned",tier="sv",type="sidekiq"}
+        )
+      )
+  - record: gitlab:component:feature_category:execution:apdex:success:rate_5m
+    labels:
+      component: shard_urgent_other
+      feature_category: not_owned
+      tier: sv
+      type: sidekiq
+    expr: |
+      sum by (env,environment,stage) (
+        label_replace(sum by (env,environment,stage) (
+          sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate5m{le="10",shard="urgent-other",urgency="high"}
+        )
+        , "_c", "0", "", "")
+        or
+        label_replace(sum by (env,environment,stage) (
+          sli_aggregations:sidekiq_jobs_queue_duration_seconds_bucket_rate5m{le="10",shard="urgent-other",urgency="high"}
+        )
+        , "_c", "1", "", "")
+        or
+        label_replace(sum by (env,environment,stage) (
+          sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate5m{le="300",shard="urgent-other",urgency="low"}
+        )
+        , "_c", "2", "", "")
+        or
+        label_replace(sum by (env,environment,stage) (
+          sli_aggregations:sidekiq_jobs_queue_duration_seconds_bucket_rate5m{le="60",shard="urgent-other",urgency="low"}
+        )
+        , "_c", "3", "", "")
+        or
+        label_replace(sum by (env,environment,stage) (
+          sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate5m{le="300",shard="urgent-other",urgency="throttled"}
+        )
+        , "_c", "4", "", "")
+      )
+  - record: gitlab:component:feature_category:execution:apdex:weight:score_5m
+    labels:
+      component: shard_urgent_other
+      feature_category: not_owned
+      tier: sv
+      type: sidekiq
+    expr: |
+      sum by (env,environment,stage) (
+        label_replace(sum by (env,environment,stage) (
+          sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate5m{le="+Inf",shard="urgent-other",urgency="high"}
+        )
+        , "_c", "0", "", "")
+        or
+        label_replace(sum by (env,environment,stage) (
+          sli_aggregations:sidekiq_jobs_queue_duration_seconds_bucket_rate5m{le="+Inf",shard="urgent-other",urgency="high"}
+        )
+        , "_c", "1", "", "")
+        or
+        label_replace(sum by (env,environment,stage) (
+          sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate5m{le="+Inf",shard="urgent-other",urgency="low"}
+        )
+        , "_c", "2", "", "")
+        or
+        label_replace(sum by (env,environment,stage) (
+          sli_aggregations:sidekiq_jobs_queue_duration_seconds_bucket_rate5m{le="+Inf",shard="urgent-other",urgency="low"}
+        )
+        , "_c", "3", "", "")
+        or
+        label_replace(sum by (env,environment,stage) (
+          sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate5m{le="+Inf",shard="urgent-other",urgency="throttled"}
+        )
+        , "_c", "4", "", "")
+      )
+  - record: gitlab:component:feature_category:execution:ops:rate_5m
+    labels:
+      component: shard_urgent_other
+      feature_category: not_owned
+      tier: sv
+      type: sidekiq
+    expr: |
+      sum by (env,environment,stage) (
+        sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate5m{le="+Inf",shard="urgent-other"}
+      )
+  - record: gitlab:component:feature_category:execution:error:rate_5m
+    labels:
+      component: shard_urgent_other
+      feature_category: not_owned
+      tier: sv
+      type: sidekiq
+    expr: |
+      (
+        sum by (env,environment,stage) (
+          sli_aggregations:sidekiq_jobs_failed_total_rate5m{shard="urgent-other"}
+        )
+      )
+      or
+      (
+        0 * group by(env,environment,stage) (
+          gitlab:component:feature_category:execution:ops:rate_5m{component="shard_urgent_other",feature_category="not_owned",tier="sv",type="sidekiq"}
+        )
+      )
 - name: 'Prometheus Intermediate Metrics per feature: sidekiq - burn-rate 30m'
   interval: 2m
   rules:
@@ -123,6 +1063,946 @@ groups:
       sum by (env,environment,stage) (
         rate(gitlab_sli_global_search_indexing_apdex_total{type="sidekiq"}[30m])
       )
+  - record: gitlab:component:feature_category:execution:apdex:success:rate_30m
+    labels:
+      component: shard_catchall
+      feature_category: not_owned
+      tier: sv
+      type: sidekiq
+    expr: |
+      sum by (env,environment,stage) (
+        label_replace(sum by (env,environment,stage) (
+          sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate30m{le="10",shard="catchall",urgency="high"}
+        )
+        , "_c", "0", "", "")
+        or
+        label_replace(sum by (env,environment,stage) (
+          sli_aggregations:sidekiq_jobs_queue_duration_seconds_bucket_rate30m{le="10",shard="catchall",urgency="high"}
+        )
+        , "_c", "1", "", "")
+        or
+        label_replace(sum by (env,environment,stage) (
+          sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate30m{le="300",shard="catchall",urgency="low"}
+        )
+        , "_c", "2", "", "")
+        or
+        label_replace(sum by (env,environment,stage) (
+          sli_aggregations:sidekiq_jobs_queue_duration_seconds_bucket_rate30m{le="60",shard="catchall",urgency="low"}
+        )
+        , "_c", "3", "", "")
+        or
+        label_replace(sum by (env,environment,stage) (
+          sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate30m{le="300",shard="catchall",urgency="throttled"}
+        )
+        , "_c", "4", "", "")
+      )
+  - record: gitlab:component:feature_category:execution:apdex:weight:score_30m
+    labels:
+      component: shard_catchall
+      feature_category: not_owned
+      tier: sv
+      type: sidekiq
+    expr: |
+      sum by (env,environment,stage) (
+        label_replace(sum by (env,environment,stage) (
+          sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate30m{le="+Inf",shard="catchall",urgency="high"}
+        )
+        , "_c", "0", "", "")
+        or
+        label_replace(sum by (env,environment,stage) (
+          sli_aggregations:sidekiq_jobs_queue_duration_seconds_bucket_rate30m{le="+Inf",shard="catchall",urgency="high"}
+        )
+        , "_c", "1", "", "")
+        or
+        label_replace(sum by (env,environment,stage) (
+          sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate30m{le="+Inf",shard="catchall",urgency="low"}
+        )
+        , "_c", "2", "", "")
+        or
+        label_replace(sum by (env,environment,stage) (
+          sli_aggregations:sidekiq_jobs_queue_duration_seconds_bucket_rate30m{le="+Inf",shard="catchall",urgency="low"}
+        )
+        , "_c", "3", "", "")
+        or
+        label_replace(sum by (env,environment,stage) (
+          sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate30m{le="+Inf",shard="catchall",urgency="throttled"}
+        )
+        , "_c", "4", "", "")
+      )
+  - record: gitlab:component:feature_category:execution:ops:rate_30m
+    labels:
+      component: shard_catchall
+      feature_category: not_owned
+      tier: sv
+      type: sidekiq
+    expr: |
+      sum by (env,environment,stage) (
+        sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate30m{le="+Inf",shard="catchall"}
+      )
+  - record: gitlab:component:feature_category:execution:error:rate_30m
+    labels:
+      component: shard_catchall
+      feature_category: not_owned
+      tier: sv
+      type: sidekiq
+    expr: |
+      (
+        sum by (env,environment,stage) (
+          sli_aggregations:sidekiq_jobs_failed_total_rate30m{shard="catchall"}
+        )
+      )
+      or
+      (
+        0 * group by(env,environment,stage) (
+          gitlab:component:feature_category:execution:ops:rate_30m{component="shard_catchall",feature_category="not_owned",tier="sv",type="sidekiq"}
+        )
+      )
+  - record: gitlab:component:feature_category:execution:apdex:success:rate_30m
+    labels:
+      component: shard_database_throttled
+      feature_category: not_owned
+      tier: sv
+      type: sidekiq
+    expr: |
+      sum by (env,environment,stage) (
+        label_replace(sum by (env,environment,stage) (
+          sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate30m{le="10",shard="database-throttled",urgency="high"}
+        )
+        , "_c", "0", "", "")
+        or
+        label_replace(sum by (env,environment,stage) (
+          sli_aggregations:sidekiq_jobs_queue_duration_seconds_bucket_rate30m{le="10",shard="database-throttled",urgency="high"}
+        )
+        , "_c", "1", "", "")
+        or
+        label_replace(sum by (env,environment,stage) (
+          sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate30m{le="300",shard="database-throttled",urgency="low"}
+        )
+        , "_c", "2", "", "")
+        or
+        label_replace(sum by (env,environment,stage) (
+          sli_aggregations:sidekiq_jobs_queue_duration_seconds_bucket_rate30m{le="60",shard="database-throttled",urgency="low"}
+        )
+        , "_c", "3", "", "")
+        or
+        label_replace(sum by (env,environment,stage) (
+          sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate30m{le="300",shard="database-throttled",urgency="throttled"}
+        )
+        , "_c", "4", "", "")
+      )
+  - record: gitlab:component:feature_category:execution:apdex:weight:score_30m
+    labels:
+      component: shard_database_throttled
+      feature_category: not_owned
+      tier: sv
+      type: sidekiq
+    expr: |
+      sum by (env,environment,stage) (
+        label_replace(sum by (env,environment,stage) (
+          sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate30m{le="+Inf",shard="database-throttled",urgency="high"}
+        )
+        , "_c", "0", "", "")
+        or
+        label_replace(sum by (env,environment,stage) (
+          sli_aggregations:sidekiq_jobs_queue_duration_seconds_bucket_rate30m{le="+Inf",shard="database-throttled",urgency="high"}
+        )
+        , "_c", "1", "", "")
+        or
+        label_replace(sum by (env,environment,stage) (
+          sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate30m{le="+Inf",shard="database-throttled",urgency="low"}
+        )
+        , "_c", "2", "", "")
+        or
+        label_replace(sum by (env,environment,stage) (
+          sli_aggregations:sidekiq_jobs_queue_duration_seconds_bucket_rate30m{le="+Inf",shard="database-throttled",urgency="low"}
+        )
+        , "_c", "3", "", "")
+        or
+        label_replace(sum by (env,environment,stage) (
+          sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate30m{le="+Inf",shard="database-throttled",urgency="throttled"}
+        )
+        , "_c", "4", "", "")
+      )
+  - record: gitlab:component:feature_category:execution:ops:rate_30m
+    labels:
+      component: shard_database_throttled
+      feature_category: not_owned
+      tier: sv
+      type: sidekiq
+    expr: |
+      sum by (env,environment,stage) (
+        sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate30m{le="+Inf",shard="database-throttled"}
+      )
+  - record: gitlab:component:feature_category:execution:error:rate_30m
+    labels:
+      component: shard_database_throttled
+      feature_category: not_owned
+      tier: sv
+      type: sidekiq
+    expr: |
+      (
+        sum by (env,environment,stage) (
+          sli_aggregations:sidekiq_jobs_failed_total_rate30m{shard="database-throttled"}
+        )
+      )
+      or
+      (
+        0 * group by(env,environment,stage) (
+          gitlab:component:feature_category:execution:ops:rate_30m{component="shard_database_throttled",feature_category="not_owned",tier="sv",type="sidekiq"}
+        )
+      )
+  - record: gitlab:component:feature_category:execution:apdex:success:rate_30m
+    labels:
+      component: shard_elasticsearch
+      feature_category: not_owned
+      tier: sv
+      type: sidekiq
+    expr: |
+      sum by (env,environment,stage) (
+        label_replace(sum by (env,environment,stage) (
+          sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate30m{le="10",shard="elasticsearch",urgency="high"}
+        )
+        , "_c", "0", "", "")
+        or
+        label_replace(sum by (env,environment,stage) (
+          sli_aggregations:sidekiq_jobs_queue_duration_seconds_bucket_rate30m{le="10",shard="elasticsearch",urgency="high"}
+        )
+        , "_c", "1", "", "")
+        or
+        label_replace(sum by (env,environment,stage) (
+          sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate30m{le="300",shard="elasticsearch",urgency="low"}
+        )
+        , "_c", "2", "", "")
+        or
+        label_replace(sum by (env,environment,stage) (
+          sli_aggregations:sidekiq_jobs_queue_duration_seconds_bucket_rate30m{le="60",shard="elasticsearch",urgency="low"}
+        )
+        , "_c", "3", "", "")
+        or
+        label_replace(sum by (env,environment,stage) (
+          sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate30m{le="300",shard="elasticsearch",urgency="throttled"}
+        )
+        , "_c", "4", "", "")
+      )
+  - record: gitlab:component:feature_category:execution:apdex:weight:score_30m
+    labels:
+      component: shard_elasticsearch
+      feature_category: not_owned
+      tier: sv
+      type: sidekiq
+    expr: |
+      sum by (env,environment,stage) (
+        label_replace(sum by (env,environment,stage) (
+          sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate30m{le="+Inf",shard="elasticsearch",urgency="high"}
+        )
+        , "_c", "0", "", "")
+        or
+        label_replace(sum by (env,environment,stage) (
+          sli_aggregations:sidekiq_jobs_queue_duration_seconds_bucket_rate30m{le="+Inf",shard="elasticsearch",urgency="high"}
+        )
+        , "_c", "1", "", "")
+        or
+        label_replace(sum by (env,environment,stage) (
+          sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate30m{le="+Inf",shard="elasticsearch",urgency="low"}
+        )
+        , "_c", "2", "", "")
+        or
+        label_replace(sum by (env,environment,stage) (
+          sli_aggregations:sidekiq_jobs_queue_duration_seconds_bucket_rate30m{le="+Inf",shard="elasticsearch",urgency="low"}
+        )
+        , "_c", "3", "", "")
+        or
+        label_replace(sum by (env,environment,stage) (
+          sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate30m{le="+Inf",shard="elasticsearch",urgency="throttled"}
+        )
+        , "_c", "4", "", "")
+      )
+  - record: gitlab:component:feature_category:execution:ops:rate_30m
+    labels:
+      component: shard_elasticsearch
+      feature_category: not_owned
+      tier: sv
+      type: sidekiq
+    expr: |
+      sum by (env,environment,stage) (
+        sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate30m{le="+Inf",shard="elasticsearch"}
+      )
+  - record: gitlab:component:feature_category:execution:error:rate_30m
+    labels:
+      component: shard_elasticsearch
+      feature_category: not_owned
+      tier: sv
+      type: sidekiq
+    expr: |
+      (
+        sum by (env,environment,stage) (
+          sli_aggregations:sidekiq_jobs_failed_total_rate30m{shard="elasticsearch"}
+        )
+      )
+      or
+      (
+        0 * group by(env,environment,stage) (
+          gitlab:component:feature_category:execution:ops:rate_30m{component="shard_elasticsearch",feature_category="not_owned",tier="sv",type="sidekiq"}
+        )
+      )
+  - record: gitlab:component:feature_category:execution:apdex:success:rate_30m
+    labels:
+      component: shard_gitaly_throttled
+      feature_category: not_owned
+      tier: sv
+      type: sidekiq
+    expr: |
+      sum by (env,environment,stage) (
+        label_replace(sum by (env,environment,stage) (
+          sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate30m{le="10",shard="gitaly-throttled",urgency="high"}
+        )
+        , "_c", "0", "", "")
+        or
+        label_replace(sum by (env,environment,stage) (
+          sli_aggregations:sidekiq_jobs_queue_duration_seconds_bucket_rate30m{le="10",shard="gitaly-throttled",urgency="high"}
+        )
+        , "_c", "1", "", "")
+        or
+        label_replace(sum by (env,environment,stage) (
+          sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate30m{le="300",shard="gitaly-throttled",urgency="low"}
+        )
+        , "_c", "2", "", "")
+        or
+        label_replace(sum by (env,environment,stage) (
+          sli_aggregations:sidekiq_jobs_queue_duration_seconds_bucket_rate30m{le="60",shard="gitaly-throttled",urgency="low"}
+        )
+        , "_c", "3", "", "")
+        or
+        label_replace(sum by (env,environment,stage) (
+          sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate30m{le="300",shard="gitaly-throttled",urgency="throttled"}
+        )
+        , "_c", "4", "", "")
+      )
+  - record: gitlab:component:feature_category:execution:apdex:weight:score_30m
+    labels:
+      component: shard_gitaly_throttled
+      feature_category: not_owned
+      tier: sv
+      type: sidekiq
+    expr: |
+      sum by (env,environment,stage) (
+        label_replace(sum by (env,environment,stage) (
+          sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate30m{le="+Inf",shard="gitaly-throttled",urgency="high"}
+        )
+        , "_c", "0", "", "")
+        or
+        label_replace(sum by (env,environment,stage) (
+          sli_aggregations:sidekiq_jobs_queue_duration_seconds_bucket_rate30m{le="+Inf",shard="gitaly-throttled",urgency="high"}
+        )
+        , "_c", "1", "", "")
+        or
+        label_replace(sum by (env,environment,stage) (
+          sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate30m{le="+Inf",shard="gitaly-throttled",urgency="low"}
+        )
+        , "_c", "2", "", "")
+        or
+        label_replace(sum by (env,environment,stage) (
+          sli_aggregations:sidekiq_jobs_queue_duration_seconds_bucket_rate30m{le="+Inf",shard="gitaly-throttled",urgency="low"}
+        )
+        , "_c", "3", "", "")
+        or
+        label_replace(sum by (env,environment,stage) (
+          sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate30m{le="+Inf",shard="gitaly-throttled",urgency="throttled"}
+        )
+        , "_c", "4", "", "")
+      )
+  - record: gitlab:component:feature_category:execution:ops:rate_30m
+    labels:
+      component: shard_gitaly_throttled
+      feature_category: not_owned
+      tier: sv
+      type: sidekiq
+    expr: |
+      sum by (env,environment,stage) (
+        sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate30m{le="+Inf",shard="gitaly-throttled"}
+      )
+  - record: gitlab:component:feature_category:execution:error:rate_30m
+    labels:
+      component: shard_gitaly_throttled
+      feature_category: not_owned
+      tier: sv
+      type: sidekiq
+    expr: |
+      (
+        sum by (env,environment,stage) (
+          sli_aggregations:sidekiq_jobs_failed_total_rate30m{shard="gitaly-throttled"}
+        )
+      )
+      or
+      (
+        0 * group by(env,environment,stage) (
+          gitlab:component:feature_category:execution:ops:rate_30m{component="shard_gitaly_throttled",feature_category="not_owned",tier="sv",type="sidekiq"}
+        )
+      )
+  - record: gitlab:component:feature_category:execution:apdex:success:rate_30m
+    labels:
+      component: shard_low_urgency_cpu_bound
+      feature_category: not_owned
+      tier: sv
+      type: sidekiq
+    expr: |
+      sum by (env,environment,stage) (
+        label_replace(sum by (env,environment,stage) (
+          sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate30m{le="10",shard="low-urgency-cpu-bound",urgency="high"}
+        )
+        , "_c", "0", "", "")
+        or
+        label_replace(sum by (env,environment,stage) (
+          sli_aggregations:sidekiq_jobs_queue_duration_seconds_bucket_rate30m{le="10",shard="low-urgency-cpu-bound",urgency="high"}
+        )
+        , "_c", "1", "", "")
+        or
+        label_replace(sum by (env,environment,stage) (
+          sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate30m{le="300",shard="low-urgency-cpu-bound",urgency="low"}
+        )
+        , "_c", "2", "", "")
+        or
+        label_replace(sum by (env,environment,stage) (
+          sli_aggregations:sidekiq_jobs_queue_duration_seconds_bucket_rate30m{le="60",shard="low-urgency-cpu-bound",urgency="low"}
+        )
+        , "_c", "3", "", "")
+        or
+        label_replace(sum by (env,environment,stage) (
+          sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate30m{le="300",shard="low-urgency-cpu-bound",urgency="throttled"}
+        )
+        , "_c", "4", "", "")
+      )
+  - record: gitlab:component:feature_category:execution:apdex:weight:score_30m
+    labels:
+      component: shard_low_urgency_cpu_bound
+      feature_category: not_owned
+      tier: sv
+      type: sidekiq
+    expr: |
+      sum by (env,environment,stage) (
+        label_replace(sum by (env,environment,stage) (
+          sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate30m{le="+Inf",shard="low-urgency-cpu-bound",urgency="high"}
+        )
+        , "_c", "0", "", "")
+        or
+        label_replace(sum by (env,environment,stage) (
+          sli_aggregations:sidekiq_jobs_queue_duration_seconds_bucket_rate30m{le="+Inf",shard="low-urgency-cpu-bound",urgency="high"}
+        )
+        , "_c", "1", "", "")
+        or
+        label_replace(sum by (env,environment,stage) (
+          sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate30m{le="+Inf",shard="low-urgency-cpu-bound",urgency="low"}
+        )
+        , "_c", "2", "", "")
+        or
+        label_replace(sum by (env,environment,stage) (
+          sli_aggregations:sidekiq_jobs_queue_duration_seconds_bucket_rate30m{le="+Inf",shard="low-urgency-cpu-bound",urgency="low"}
+        )
+        , "_c", "3", "", "")
+        or
+        label_replace(sum by (env,environment,stage) (
+          sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate30m{le="+Inf",shard="low-urgency-cpu-bound",urgency="throttled"}
+        )
+        , "_c", "4", "", "")
+      )
+  - record: gitlab:component:feature_category:execution:ops:rate_30m
+    labels:
+      component: shard_low_urgency_cpu_bound
+      feature_category: not_owned
+      tier: sv
+      type: sidekiq
+    expr: |
+      sum by (env,environment,stage) (
+        sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate30m{le="+Inf",shard="low-urgency-cpu-bound"}
+      )
+  - record: gitlab:component:feature_category:execution:error:rate_30m
+    labels:
+      component: shard_low_urgency_cpu_bound
+      feature_category: not_owned
+      tier: sv
+      type: sidekiq
+    expr: |
+      (
+        sum by (env,environment,stage) (
+          sli_aggregations:sidekiq_jobs_failed_total_rate30m{shard="low-urgency-cpu-bound"}
+        )
+      )
+      or
+      (
+        0 * group by(env,environment,stage) (
+          gitlab:component:feature_category:execution:ops:rate_30m{component="shard_low_urgency_cpu_bound",feature_category="not_owned",tier="sv",type="sidekiq"}
+        )
+      )
+  - record: gitlab:component:feature_category:execution:apdex:success:rate_30m
+    labels:
+      component: shard_memory_bound
+      feature_category: not_owned
+      tier: sv
+      type: sidekiq
+    expr: |
+      sum by (env,environment,stage) (
+        label_replace(sum by (env,environment,stage) (
+          sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate30m{le="10",shard="memory-bound",urgency="high"}
+        )
+        , "_c", "0", "", "")
+        or
+        label_replace(sum by (env,environment,stage) (
+          sli_aggregations:sidekiq_jobs_queue_duration_seconds_bucket_rate30m{le="10",shard="memory-bound",urgency="high"}
+        )
+        , "_c", "1", "", "")
+        or
+        label_replace(sum by (env,environment,stage) (
+          sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate30m{le="300",shard="memory-bound",urgency="low"}
+        )
+        , "_c", "2", "", "")
+        or
+        label_replace(sum by (env,environment,stage) (
+          sli_aggregations:sidekiq_jobs_queue_duration_seconds_bucket_rate30m{le="60",shard="memory-bound",urgency="low"}
+        )
+        , "_c", "3", "", "")
+        or
+        label_replace(sum by (env,environment,stage) (
+          sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate30m{le="300",shard="memory-bound",urgency="throttled"}
+        )
+        , "_c", "4", "", "")
+      )
+  - record: gitlab:component:feature_category:execution:apdex:weight:score_30m
+    labels:
+      component: shard_memory_bound
+      feature_category: not_owned
+      tier: sv
+      type: sidekiq
+    expr: |
+      sum by (env,environment,stage) (
+        label_replace(sum by (env,environment,stage) (
+          sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate30m{le="+Inf",shard="memory-bound",urgency="high"}
+        )
+        , "_c", "0", "", "")
+        or
+        label_replace(sum by (env,environment,stage) (
+          sli_aggregations:sidekiq_jobs_queue_duration_seconds_bucket_rate30m{le="+Inf",shard="memory-bound",urgency="high"}
+        )
+        , "_c", "1", "", "")
+        or
+        label_replace(sum by (env,environment,stage) (
+          sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate30m{le="+Inf",shard="memory-bound",urgency="low"}
+        )
+        , "_c", "2", "", "")
+        or
+        label_replace(sum by (env,environment,stage) (
+          sli_aggregations:sidekiq_jobs_queue_duration_seconds_bucket_rate30m{le="+Inf",shard="memory-bound",urgency="low"}
+        )
+        , "_c", "3", "", "")
+        or
+        label_replace(sum by (env,environment,stage) (
+          sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate30m{le="+Inf",shard="memory-bound",urgency="throttled"}
+        )
+        , "_c", "4", "", "")
+      )
+  - record: gitlab:component:feature_category:execution:ops:rate_30m
+    labels:
+      component: shard_memory_bound
+      feature_category: not_owned
+      tier: sv
+      type: sidekiq
+    expr: |
+      sum by (env,environment,stage) (
+        sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate30m{le="+Inf",shard="memory-bound"}
+      )
+  - record: gitlab:component:feature_category:execution:error:rate_30m
+    labels:
+      component: shard_memory_bound
+      feature_category: not_owned
+      tier: sv
+      type: sidekiq
+    expr: |
+      (
+        sum by (env,environment,stage) (
+          sli_aggregations:sidekiq_jobs_failed_total_rate30m{shard="memory-bound"}
+        )
+      )
+      or
+      (
+        0 * group by(env,environment,stage) (
+          gitlab:component:feature_category:execution:ops:rate_30m{component="shard_memory_bound",feature_category="not_owned",tier="sv",type="sidekiq"}
+        )
+      )
+  - record: gitlab:component:feature_category:execution:apdex:success:rate_30m
+    labels:
+      component: shard_quarantine
+      feature_category: not_owned
+      tier: sv
+      type: sidekiq
+    expr: |
+      sum by (env,environment,stage) (
+        label_replace(sum by (env,environment,stage) (
+          sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate30m{le="10",shard="quarantine",urgency="high"}
+        )
+        , "_c", "0", "", "")
+        or
+        label_replace(sum by (env,environment,stage) (
+          sli_aggregations:sidekiq_jobs_queue_duration_seconds_bucket_rate30m{le="10",shard="quarantine",urgency="high"}
+        )
+        , "_c", "1", "", "")
+        or
+        label_replace(sum by (env,environment,stage) (
+          sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate30m{le="300",shard="quarantine",urgency="low"}
+        )
+        , "_c", "2", "", "")
+        or
+        label_replace(sum by (env,environment,stage) (
+          sli_aggregations:sidekiq_jobs_queue_duration_seconds_bucket_rate30m{le="60",shard="quarantine",urgency="low"}
+        )
+        , "_c", "3", "", "")
+        or
+        label_replace(sum by (env,environment,stage) (
+          sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate30m{le="300",shard="quarantine",urgency="throttled"}
+        )
+        , "_c", "4", "", "")
+      )
+  - record: gitlab:component:feature_category:execution:apdex:weight:score_30m
+    labels:
+      component: shard_quarantine
+      feature_category: not_owned
+      tier: sv
+      type: sidekiq
+    expr: |
+      sum by (env,environment,stage) (
+        label_replace(sum by (env,environment,stage) (
+          sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate30m{le="+Inf",shard="quarantine",urgency="high"}
+        )
+        , "_c", "0", "", "")
+        or
+        label_replace(sum by (env,environment,stage) (
+          sli_aggregations:sidekiq_jobs_queue_duration_seconds_bucket_rate30m{le="+Inf",shard="quarantine",urgency="high"}
+        )
+        , "_c", "1", "", "")
+        or
+        label_replace(sum by (env,environment,stage) (
+          sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate30m{le="+Inf",shard="quarantine",urgency="low"}
+        )
+        , "_c", "2", "", "")
+        or
+        label_replace(sum by (env,environment,stage) (
+          sli_aggregations:sidekiq_jobs_queue_duration_seconds_bucket_rate30m{le="+Inf",shard="quarantine",urgency="low"}
+        )
+        , "_c", "3", "", "")
+        or
+        label_replace(sum by (env,environment,stage) (
+          sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate30m{le="+Inf",shard="quarantine",urgency="throttled"}
+        )
+        , "_c", "4", "", "")
+      )
+  - record: gitlab:component:feature_category:execution:ops:rate_30m
+    labels:
+      component: shard_quarantine
+      feature_category: not_owned
+      tier: sv
+      type: sidekiq
+    expr: |
+      sum by (env,environment,stage) (
+        sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate30m{le="+Inf",shard="quarantine"}
+      )
+  - record: gitlab:component:feature_category:execution:error:rate_30m
+    labels:
+      component: shard_quarantine
+      feature_category: not_owned
+      tier: sv
+      type: sidekiq
+    expr: |
+      (
+        sum by (env,environment,stage) (
+          sli_aggregations:sidekiq_jobs_failed_total_rate30m{shard="quarantine"}
+        )
+      )
+      or
+      (
+        0 * group by(env,environment,stage) (
+          gitlab:component:feature_category:execution:ops:rate_30m{component="shard_quarantine",feature_category="not_owned",tier="sv",type="sidekiq"}
+        )
+      )
+  - record: gitlab:component:feature_category:execution:apdex:success:rate_30m
+    labels:
+      component: shard_urgent_authorized_projects
+      feature_category: not_owned
+      tier: sv
+      type: sidekiq
+    expr: |
+      sum by (env,environment,stage) (
+        label_replace(sum by (env,environment,stage) (
+          sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate30m{le="10",shard="urgent-authorized-projects",urgency="high"}
+        )
+        , "_c", "0", "", "")
+        or
+        label_replace(sum by (env,environment,stage) (
+          sli_aggregations:sidekiq_jobs_queue_duration_seconds_bucket_rate30m{le="10",shard="urgent-authorized-projects",urgency="high"}
+        )
+        , "_c", "1", "", "")
+        or
+        label_replace(sum by (env,environment,stage) (
+          sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate30m{le="300",shard="urgent-authorized-projects",urgency="low"}
+        )
+        , "_c", "2", "", "")
+        or
+        label_replace(sum by (env,environment,stage) (
+          sli_aggregations:sidekiq_jobs_queue_duration_seconds_bucket_rate30m{le="60",shard="urgent-authorized-projects",urgency="low"}
+        )
+        , "_c", "3", "", "")
+        or
+        label_replace(sum by (env,environment,stage) (
+          sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate30m{le="300",shard="urgent-authorized-projects",urgency="throttled"}
+        )
+        , "_c", "4", "", "")
+      )
+  - record: gitlab:component:feature_category:execution:apdex:weight:score_30m
+    labels:
+      component: shard_urgent_authorized_projects
+      feature_category: not_owned
+      tier: sv
+      type: sidekiq
+    expr: |
+      sum by (env,environment,stage) (
+        label_replace(sum by (env,environment,stage) (
+          sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate30m{le="+Inf",shard="urgent-authorized-projects",urgency="high"}
+        )
+        , "_c", "0", "", "")
+        or
+        label_replace(sum by (env,environment,stage) (
+          sli_aggregations:sidekiq_jobs_queue_duration_seconds_bucket_rate30m{le="+Inf",shard="urgent-authorized-projects",urgency="high"}
+        )
+        , "_c", "1", "", "")
+        or
+        label_replace(sum by (env,environment,stage) (
+          sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate30m{le="+Inf",shard="urgent-authorized-projects",urgency="low"}
+        )
+        , "_c", "2", "", "")
+        or
+        label_replace(sum by (env,environment,stage) (
+          sli_aggregations:sidekiq_jobs_queue_duration_seconds_bucket_rate30m{le="+Inf",shard="urgent-authorized-projects",urgency="low"}
+        )
+        , "_c", "3", "", "")
+        or
+        label_replace(sum by (env,environment,stage) (
+          sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate30m{le="+Inf",shard="urgent-authorized-projects",urgency="throttled"}
+        )
+        , "_c", "4", "", "")
+      )
+  - record: gitlab:component:feature_category:execution:ops:rate_30m
+    labels:
+      component: shard_urgent_authorized_projects
+      feature_category: not_owned
+      tier: sv
+      type: sidekiq
+    expr: |
+      sum by (env,environment,stage) (
+        sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate30m{le="+Inf",shard="urgent-authorized-projects"}
+      )
+  - record: gitlab:component:feature_category:execution:error:rate_30m
+    labels:
+      component: shard_urgent_authorized_projects
+      feature_category: not_owned
+      tier: sv
+      type: sidekiq
+    expr: |
+      (
+        sum by (env,environment,stage) (
+          sli_aggregations:sidekiq_jobs_failed_total_rate30m{shard="urgent-authorized-projects"}
+        )
+      )
+      or
+      (
+        0 * group by(env,environment,stage) (
+          gitlab:component:feature_category:execution:ops:rate_30m{component="shard_urgent_authorized_projects",feature_category="not_owned",tier="sv",type="sidekiq"}
+        )
+      )
+  - record: gitlab:component:feature_category:execution:apdex:success:rate_30m
+    labels:
+      component: shard_urgent_cpu_bound
+      feature_category: not_owned
+      tier: sv
+      type: sidekiq
+    expr: |
+      sum by (env,environment,stage) (
+        label_replace(sum by (env,environment,stage) (
+          sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate30m{le="10",shard="urgent-cpu-bound",urgency="high"}
+        )
+        , "_c", "0", "", "")
+        or
+        label_replace(sum by (env,environment,stage) (
+          sli_aggregations:sidekiq_jobs_queue_duration_seconds_bucket_rate30m{le="10",shard="urgent-cpu-bound",urgency="high"}
+        )
+        , "_c", "1", "", "")
+        or
+        label_replace(sum by (env,environment,stage) (
+          sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate30m{le="300",shard="urgent-cpu-bound",urgency="low"}
+        )
+        , "_c", "2", "", "")
+        or
+        label_replace(sum by (env,environment,stage) (
+          sli_aggregations:sidekiq_jobs_queue_duration_seconds_bucket_rate30m{le="60",shard="urgent-cpu-bound",urgency="low"}
+        )
+        , "_c", "3", "", "")
+        or
+        label_replace(sum by (env,environment,stage) (
+          sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate30m{le="300",shard="urgent-cpu-bound",urgency="throttled"}
+        )
+        , "_c", "4", "", "")
+      )
+  - record: gitlab:component:feature_category:execution:apdex:weight:score_30m
+    labels:
+      component: shard_urgent_cpu_bound
+      feature_category: not_owned
+      tier: sv
+      type: sidekiq
+    expr: |
+      sum by (env,environment,stage) (
+        label_replace(sum by (env,environment,stage) (
+          sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate30m{le="+Inf",shard="urgent-cpu-bound",urgency="high"}
+        )
+        , "_c", "0", "", "")
+        or
+        label_replace(sum by (env,environment,stage) (
+          sli_aggregations:sidekiq_jobs_queue_duration_seconds_bucket_rate30m{le="+Inf",shard="urgent-cpu-bound",urgency="high"}
+        )
+        , "_c", "1", "", "")
+        or
+        label_replace(sum by (env,environment,stage) (
+          sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate30m{le="+Inf",shard="urgent-cpu-bound",urgency="low"}
+        )
+        , "_c", "2", "", "")
+        or
+        label_replace(sum by (env,environment,stage) (
+          sli_aggregations:sidekiq_jobs_queue_duration_seconds_bucket_rate30m{le="+Inf",shard="urgent-cpu-bound",urgency="low"}
+        )
+        , "_c", "3", "", "")
+        or
+        label_replace(sum by (env,environment,stage) (
+          sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate30m{le="+Inf",shard="urgent-cpu-bound",urgency="throttled"}
+        )
+        , "_c", "4", "", "")
+      )
+  - record: gitlab:component:feature_category:execution:ops:rate_30m
+    labels:
+      component: shard_urgent_cpu_bound
+      feature_category: not_owned
+      tier: sv
+      type: sidekiq
+    expr: |
+      sum by (env,environment,stage) (
+        sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate30m{le="+Inf",shard="urgent-cpu-bound"}
+      )
+  - record: gitlab:component:feature_category:execution:error:rate_30m
+    labels:
+      component: shard_urgent_cpu_bound
+      feature_category: not_owned
+      tier: sv
+      type: sidekiq
+    expr: |
+      (
+        sum by (env,environment,stage) (
+          sli_aggregations:sidekiq_jobs_failed_total_rate30m{shard="urgent-cpu-bound"}
+        )
+      )
+      or
+      (
+        0 * group by(env,environment,stage) (
+          gitlab:component:feature_category:execution:ops:rate_30m{component="shard_urgent_cpu_bound",feature_category="not_owned",tier="sv",type="sidekiq"}
+        )
+      )
+  - record: gitlab:component:feature_category:execution:apdex:success:rate_30m
+    labels:
+      component: shard_urgent_other
+      feature_category: not_owned
+      tier: sv
+      type: sidekiq
+    expr: |
+      sum by (env,environment,stage) (
+        label_replace(sum by (env,environment,stage) (
+          sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate30m{le="10",shard="urgent-other",urgency="high"}
+        )
+        , "_c", "0", "", "")
+        or
+        label_replace(sum by (env,environment,stage) (
+          sli_aggregations:sidekiq_jobs_queue_duration_seconds_bucket_rate30m{le="10",shard="urgent-other",urgency="high"}
+        )
+        , "_c", "1", "", "")
+        or
+        label_replace(sum by (env,environment,stage) (
+          sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate30m{le="300",shard="urgent-other",urgency="low"}
+        )
+        , "_c", "2", "", "")
+        or
+        label_replace(sum by (env,environment,stage) (
+          sli_aggregations:sidekiq_jobs_queue_duration_seconds_bucket_rate30m{le="60",shard="urgent-other",urgency="low"}
+        )
+        , "_c", "3", "", "")
+        or
+        label_replace(sum by (env,environment,stage) (
+          sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate30m{le="300",shard="urgent-other",urgency="throttled"}
+        )
+        , "_c", "4", "", "")
+      )
+  - record: gitlab:component:feature_category:execution:apdex:weight:score_30m
+    labels:
+      component: shard_urgent_other
+      feature_category: not_owned
+      tier: sv
+      type: sidekiq
+    expr: |
+      sum by (env,environment,stage) (
+        label_replace(sum by (env,environment,stage) (
+          sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate30m{le="+Inf",shard="urgent-other",urgency="high"}
+        )
+        , "_c", "0", "", "")
+        or
+        label_replace(sum by (env,environment,stage) (
+          sli_aggregations:sidekiq_jobs_queue_duration_seconds_bucket_rate30m{le="+Inf",shard="urgent-other",urgency="high"}
+        )
+        , "_c", "1", "", "")
+        or
+        label_replace(sum by (env,environment,stage) (
+          sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate30m{le="+Inf",shard="urgent-other",urgency="low"}
+        )
+        , "_c", "2", "", "")
+        or
+        label_replace(sum by (env,environment,stage) (
+          sli_aggregations:sidekiq_jobs_queue_duration_seconds_bucket_rate30m{le="+Inf",shard="urgent-other",urgency="low"}
+        )
+        , "_c", "3", "", "")
+        or
+        label_replace(sum by (env,environment,stage) (
+          sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate30m{le="+Inf",shard="urgent-other",urgency="throttled"}
+        )
+        , "_c", "4", "", "")
+      )
+  - record: gitlab:component:feature_category:execution:ops:rate_30m
+    labels:
+      component: shard_urgent_other
+      feature_category: not_owned
+      tier: sv
+      type: sidekiq
+    expr: |
+      sum by (env,environment,stage) (
+        sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate30m{le="+Inf",shard="urgent-other"}
+      )
+  - record: gitlab:component:feature_category:execution:error:rate_30m
+    labels:
+      component: shard_urgent_other
+      feature_category: not_owned
+      tier: sv
+      type: sidekiq
+    expr: |
+      (
+        sum by (env,environment,stage) (
+          sli_aggregations:sidekiq_jobs_failed_total_rate30m{shard="urgent-other"}
+        )
+      )
+      or
+      (
+        0 * group by(env,environment,stage) (
+          gitlab:component:feature_category:execution:ops:rate_30m{component="shard_urgent_other",feature_category="not_owned",tier="sv",type="sidekiq"}
+        )
+      )
 - name: 'Prometheus Intermediate Metrics per feature: sidekiq - burn-rate 1h'
   interval: 1m
   rules:
@@ -183,4 +2063,984 @@ groups:
     expr: |
       sum by (env,environment,stage) (
         rate(gitlab_sli_global_search_indexing_apdex_total{type="sidekiq"}[1h])
+      )
+  - record: gitlab:component:feature_category:execution:apdex:success:rate_1h
+    labels:
+      component: shard_catchall
+      feature_category: not_owned
+      tier: sv
+      type: sidekiq
+      upscale_source: "yes"
+    expr: |
+      sum by (env,environment,stage) (
+        label_replace(sum by (env,environment,stage) (
+          sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate1h{le="10",shard="catchall",urgency="high"}
+        )
+        , "_c", "0", "", "")
+        or
+        label_replace(sum by (env,environment,stage) (
+          sli_aggregations:sidekiq_jobs_queue_duration_seconds_bucket_rate1h{le="10",shard="catchall",urgency="high"}
+        )
+        , "_c", "1", "", "")
+        or
+        label_replace(sum by (env,environment,stage) (
+          sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate1h{le="300",shard="catchall",urgency="low"}
+        )
+        , "_c", "2", "", "")
+        or
+        label_replace(sum by (env,environment,stage) (
+          sli_aggregations:sidekiq_jobs_queue_duration_seconds_bucket_rate1h{le="60",shard="catchall",urgency="low"}
+        )
+        , "_c", "3", "", "")
+        or
+        label_replace(sum by (env,environment,stage) (
+          sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate1h{le="300",shard="catchall",urgency="throttled"}
+        )
+        , "_c", "4", "", "")
+      )
+  - record: gitlab:component:feature_category:execution:apdex:weight:score_1h
+    labels:
+      component: shard_catchall
+      feature_category: not_owned
+      tier: sv
+      type: sidekiq
+      upscale_source: "yes"
+    expr: |
+      sum by (env,environment,stage) (
+        label_replace(sum by (env,environment,stage) (
+          sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate1h{le="+Inf",shard="catchall",urgency="high"}
+        )
+        , "_c", "0", "", "")
+        or
+        label_replace(sum by (env,environment,stage) (
+          sli_aggregations:sidekiq_jobs_queue_duration_seconds_bucket_rate1h{le="+Inf",shard="catchall",urgency="high"}
+        )
+        , "_c", "1", "", "")
+        or
+        label_replace(sum by (env,environment,stage) (
+          sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate1h{le="+Inf",shard="catchall",urgency="low"}
+        )
+        , "_c", "2", "", "")
+        or
+        label_replace(sum by (env,environment,stage) (
+          sli_aggregations:sidekiq_jobs_queue_duration_seconds_bucket_rate1h{le="+Inf",shard="catchall",urgency="low"}
+        )
+        , "_c", "3", "", "")
+        or
+        label_replace(sum by (env,environment,stage) (
+          sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate1h{le="+Inf",shard="catchall",urgency="throttled"}
+        )
+        , "_c", "4", "", "")
+      )
+  - record: gitlab:component:feature_category:execution:ops:rate_1h
+    labels:
+      component: shard_catchall
+      feature_category: not_owned
+      tier: sv
+      type: sidekiq
+      upscale_source: "yes"
+    expr: |
+      sum by (env,environment,stage) (
+        sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate1h{le="+Inf",shard="catchall"}
+      )
+  - record: gitlab:component:feature_category:execution:error:rate_1h
+    labels:
+      component: shard_catchall
+      feature_category: not_owned
+      tier: sv
+      type: sidekiq
+      upscale_source: "yes"
+    expr: |
+      (
+        sum by (env,environment,stage) (
+          sli_aggregations:sidekiq_jobs_failed_total_rate1h{shard="catchall"}
+        )
+      )
+      or
+      (
+        0 * group by(env,environment,stage) (
+          gitlab:component:feature_category:execution:ops:rate_1h{component="shard_catchall",feature_category="not_owned",tier="sv",type="sidekiq",upscale_source="yes"}
+        )
+      )
+  - record: gitlab:component:feature_category:execution:apdex:success:rate_1h
+    labels:
+      component: shard_database_throttled
+      feature_category: not_owned
+      tier: sv
+      type: sidekiq
+      upscale_source: "yes"
+    expr: |
+      sum by (env,environment,stage) (
+        label_replace(sum by (env,environment,stage) (
+          sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate1h{le="10",shard="database-throttled",urgency="high"}
+        )
+        , "_c", "0", "", "")
+        or
+        label_replace(sum by (env,environment,stage) (
+          sli_aggregations:sidekiq_jobs_queue_duration_seconds_bucket_rate1h{le="10",shard="database-throttled",urgency="high"}
+        )
+        , "_c", "1", "", "")
+        or
+        label_replace(sum by (env,environment,stage) (
+          sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate1h{le="300",shard="database-throttled",urgency="low"}
+        )
+        , "_c", "2", "", "")
+        or
+        label_replace(sum by (env,environment,stage) (
+          sli_aggregations:sidekiq_jobs_queue_duration_seconds_bucket_rate1h{le="60",shard="database-throttled",urgency="low"}
+        )
+        , "_c", "3", "", "")
+        or
+        label_replace(sum by (env,environment,stage) (
+          sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate1h{le="300",shard="database-throttled",urgency="throttled"}
+        )
+        , "_c", "4", "", "")
+      )
+  - record: gitlab:component:feature_category:execution:apdex:weight:score_1h
+    labels:
+      component: shard_database_throttled
+      feature_category: not_owned
+      tier: sv
+      type: sidekiq
+      upscale_source: "yes"
+    expr: |
+      sum by (env,environment,stage) (
+        label_replace(sum by (env,environment,stage) (
+          sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate1h{le="+Inf",shard="database-throttled",urgency="high"}
+        )
+        , "_c", "0", "", "")
+        or
+        label_replace(sum by (env,environment,stage) (
+          sli_aggregations:sidekiq_jobs_queue_duration_seconds_bucket_rate1h{le="+Inf",shard="database-throttled",urgency="high"}
+        )
+        , "_c", "1", "", "")
+        or
+        label_replace(sum by (env,environment,stage) (
+          sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate1h{le="+Inf",shard="database-throttled",urgency="low"}
+        )
+        , "_c", "2", "", "")
+        or
+        label_replace(sum by (env,environment,stage) (
+          sli_aggregations:sidekiq_jobs_queue_duration_seconds_bucket_rate1h{le="+Inf",shard="database-throttled",urgency="low"}
+        )
+        , "_c", "3", "", "")
+        or
+        label_replace(sum by (env,environment,stage) (
+          sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate1h{le="+Inf",shard="database-throttled",urgency="throttled"}
+        )
+        , "_c", "4", "", "")
+      )
+  - record: gitlab:component:feature_category:execution:ops:rate_1h
+    labels:
+      component: shard_database_throttled
+      feature_category: not_owned
+      tier: sv
+      type: sidekiq
+      upscale_source: "yes"
+    expr: |
+      sum by (env,environment,stage) (
+        sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate1h{le="+Inf",shard="database-throttled"}
+      )
+  - record: gitlab:component:feature_category:execution:error:rate_1h
+    labels:
+      component: shard_database_throttled
+      feature_category: not_owned
+      tier: sv
+      type: sidekiq
+      upscale_source: "yes"
+    expr: |
+      (
+        sum by (env,environment,stage) (
+          sli_aggregations:sidekiq_jobs_failed_total_rate1h{shard="database-throttled"}
+        )
+      )
+      or
+      (
+        0 * group by(env,environment,stage) (
+          gitlab:component:feature_category:execution:ops:rate_1h{component="shard_database_throttled",feature_category="not_owned",tier="sv",type="sidekiq",upscale_source="yes"}
+        )
+      )
+  - record: gitlab:component:feature_category:execution:apdex:success:rate_1h
+    labels:
+      component: shard_elasticsearch
+      feature_category: not_owned
+      tier: sv
+      type: sidekiq
+      upscale_source: "yes"
+    expr: |
+      sum by (env,environment,stage) (
+        label_replace(sum by (env,environment,stage) (
+          sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate1h{le="10",shard="elasticsearch",urgency="high"}
+        )
+        , "_c", "0", "", "")
+        or
+        label_replace(sum by (env,environment,stage) (
+          sli_aggregations:sidekiq_jobs_queue_duration_seconds_bucket_rate1h{le="10",shard="elasticsearch",urgency="high"}
+        )
+        , "_c", "1", "", "")
+        or
+        label_replace(sum by (env,environment,stage) (
+          sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate1h{le="300",shard="elasticsearch",urgency="low"}
+        )
+        , "_c", "2", "", "")
+        or
+        label_replace(sum by (env,environment,stage) (
+          sli_aggregations:sidekiq_jobs_queue_duration_seconds_bucket_rate1h{le="60",shard="elasticsearch",urgency="low"}
+        )
+        , "_c", "3", "", "")
+        or
+        label_replace(sum by (env,environment,stage) (
+          sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate1h{le="300",shard="elasticsearch",urgency="throttled"}
+        )
+        , "_c", "4", "", "")
+      )
+  - record: gitlab:component:feature_category:execution:apdex:weight:score_1h
+    labels:
+      component: shard_elasticsearch
+      feature_category: not_owned
+      tier: sv
+      type: sidekiq
+      upscale_source: "yes"
+    expr: |
+      sum by (env,environment,stage) (
+        label_replace(sum by (env,environment,stage) (
+          sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate1h{le="+Inf",shard="elasticsearch",urgency="high"}
+        )
+        , "_c", "0", "", "")
+        or
+        label_replace(sum by (env,environment,stage) (
+          sli_aggregations:sidekiq_jobs_queue_duration_seconds_bucket_rate1h{le="+Inf",shard="elasticsearch",urgency="high"}
+        )
+        , "_c", "1", "", "")
+        or
+        label_replace(sum by (env,environment,stage) (
+          sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate1h{le="+Inf",shard="elasticsearch",urgency="low"}
+        )
+        , "_c", "2", "", "")
+        or
+        label_replace(sum by (env,environment,stage) (
+          sli_aggregations:sidekiq_jobs_queue_duration_seconds_bucket_rate1h{le="+Inf",shard="elasticsearch",urgency="low"}
+        )
+        , "_c", "3", "", "")
+        or
+        label_replace(sum by (env,environment,stage) (
+          sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate1h{le="+Inf",shard="elasticsearch",urgency="throttled"}
+        )
+        , "_c", "4", "", "")
+      )
+  - record: gitlab:component:feature_category:execution:ops:rate_1h
+    labels:
+      component: shard_elasticsearch
+      feature_category: not_owned
+      tier: sv
+      type: sidekiq
+      upscale_source: "yes"
+    expr: |
+      sum by (env,environment,stage) (
+        sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate1h{le="+Inf",shard="elasticsearch"}
+      )
+  - record: gitlab:component:feature_category:execution:error:rate_1h
+    labels:
+      component: shard_elasticsearch
+      feature_category: not_owned
+      tier: sv
+      type: sidekiq
+      upscale_source: "yes"
+    expr: |
+      (
+        sum by (env,environment,stage) (
+          sli_aggregations:sidekiq_jobs_failed_total_rate1h{shard="elasticsearch"}
+        )
+      )
+      or
+      (
+        0 * group by(env,environment,stage) (
+          gitlab:component:feature_category:execution:ops:rate_1h{component="shard_elasticsearch",feature_category="not_owned",tier="sv",type="sidekiq",upscale_source="yes"}
+        )
+      )
+  - record: gitlab:component:feature_category:execution:apdex:success:rate_1h
+    labels:
+      component: shard_gitaly_throttled
+      feature_category: not_owned
+      tier: sv
+      type: sidekiq
+      upscale_source: "yes"
+    expr: |
+      sum by (env,environment,stage) (
+        label_replace(sum by (env,environment,stage) (
+          sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate1h{le="10",shard="gitaly-throttled",urgency="high"}
+        )
+        , "_c", "0", "", "")
+        or
+        label_replace(sum by (env,environment,stage) (
+          sli_aggregations:sidekiq_jobs_queue_duration_seconds_bucket_rate1h{le="10",shard="gitaly-throttled",urgency="high"}
+        )
+        , "_c", "1", "", "")
+        or
+        label_replace(sum by (env,environment,stage) (
+          sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate1h{le="300",shard="gitaly-throttled",urgency="low"}
+        )
+        , "_c", "2", "", "")
+        or
+        label_replace(sum by (env,environment,stage) (
+          sli_aggregations:sidekiq_jobs_queue_duration_seconds_bucket_rate1h{le="60",shard="gitaly-throttled",urgency="low"}
+        )
+        , "_c", "3", "", "")
+        or
+        label_replace(sum by (env,environment,stage) (
+          sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate1h{le="300",shard="gitaly-throttled",urgency="throttled"}
+        )
+        , "_c", "4", "", "")
+      )
+  - record: gitlab:component:feature_category:execution:apdex:weight:score_1h
+    labels:
+      component: shard_gitaly_throttled
+      feature_category: not_owned
+      tier: sv
+      type: sidekiq
+      upscale_source: "yes"
+    expr: |
+      sum by (env,environment,stage) (
+        label_replace(sum by (env,environment,stage) (
+          sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate1h{le="+Inf",shard="gitaly-throttled",urgency="high"}
+        )
+        , "_c", "0", "", "")
+        or
+        label_replace(sum by (env,environment,stage) (
+          sli_aggregations:sidekiq_jobs_queue_duration_seconds_bucket_rate1h{le="+Inf",shard="gitaly-throttled",urgency="high"}
+        )
+        , "_c", "1", "", "")
+        or
+        label_replace(sum by (env,environment,stage) (
+          sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate1h{le="+Inf",shard="gitaly-throttled",urgency="low"}
+        )
+        , "_c", "2", "", "")
+        or
+        label_replace(sum by (env,environment,stage) (
+          sli_aggregations:sidekiq_jobs_queue_duration_seconds_bucket_rate1h{le="+Inf",shard="gitaly-throttled",urgency="low"}
+        )
+        , "_c", "3", "", "")
+        or
+        label_replace(sum by (env,environment,stage) (
+          sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate1h{le="+Inf",shard="gitaly-throttled",urgency="throttled"}
+        )
+        , "_c", "4", "", "")
+      )
+  - record: gitlab:component:feature_category:execution:ops:rate_1h
+    labels:
+      component: shard_gitaly_throttled
+      feature_category: not_owned
+      tier: sv
+      type: sidekiq
+      upscale_source: "yes"
+    expr: |
+      sum by (env,environment,stage) (
+        sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate1h{le="+Inf",shard="gitaly-throttled"}
+      )
+  - record: gitlab:component:feature_category:execution:error:rate_1h
+    labels:
+      component: shard_gitaly_throttled
+      feature_category: not_owned
+      tier: sv
+      type: sidekiq
+      upscale_source: "yes"
+    expr: |
+      (
+        sum by (env,environment,stage) (
+          sli_aggregations:sidekiq_jobs_failed_total_rate1h{shard="gitaly-throttled"}
+        )
+      )
+      or
+      (
+        0 * group by(env,environment,stage) (
+          gitlab:component:feature_category:execution:ops:rate_1h{component="shard_gitaly_throttled",feature_category="not_owned",tier="sv",type="sidekiq",upscale_source="yes"}
+        )
+      )
+  - record: gitlab:component:feature_category:execution:apdex:success:rate_1h
+    labels:
+      component: shard_low_urgency_cpu_bound
+      feature_category: not_owned
+      tier: sv
+      type: sidekiq
+      upscale_source: "yes"
+    expr: |
+      sum by (env,environment,stage) (
+        label_replace(sum by (env,environment,stage) (
+          sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate1h{le="10",shard="low-urgency-cpu-bound",urgency="high"}
+        )
+        , "_c", "0", "", "")
+        or
+        label_replace(sum by (env,environment,stage) (
+          sli_aggregations:sidekiq_jobs_queue_duration_seconds_bucket_rate1h{le="10",shard="low-urgency-cpu-bound",urgency="high"}
+        )
+        , "_c", "1", "", "")
+        or
+        label_replace(sum by (env,environment,stage) (
+          sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate1h{le="300",shard="low-urgency-cpu-bound",urgency="low"}
+        )
+        , "_c", "2", "", "")
+        or
+        label_replace(sum by (env,environment,stage) (
+          sli_aggregations:sidekiq_jobs_queue_duration_seconds_bucket_rate1h{le="60",shard="low-urgency-cpu-bound",urgency="low"}
+        )
+        , "_c", "3", "", "")
+        or
+        label_replace(sum by (env,environment,stage) (
+          sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate1h{le="300",shard="low-urgency-cpu-bound",urgency="throttled"}
+        )
+        , "_c", "4", "", "")
+      )
+  - record: gitlab:component:feature_category:execution:apdex:weight:score_1h
+    labels:
+      component: shard_low_urgency_cpu_bound
+      feature_category: not_owned
+      tier: sv
+      type: sidekiq
+      upscale_source: "yes"
+    expr: |
+      sum by (env,environment,stage) (
+        label_replace(sum by (env,environment,stage) (
+          sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate1h{le="+Inf",shard="low-urgency-cpu-bound",urgency="high"}
+        )
+        , "_c", "0", "", "")
+        or
+        label_replace(sum by (env,environment,stage) (
+          sli_aggregations:sidekiq_jobs_queue_duration_seconds_bucket_rate1h{le="+Inf",shard="low-urgency-cpu-bound",urgency="high"}
+        )
+        , "_c", "1", "", "")
+        or
+        label_replace(sum by (env,environment,stage) (
+          sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate1h{le="+Inf",shard="low-urgency-cpu-bound",urgency="low"}
+        )
+        , "_c", "2", "", "")
+        or
+        label_replace(sum by (env,environment,stage) (
+          sli_aggregations:sidekiq_jobs_queue_duration_seconds_bucket_rate1h{le="+Inf",shard="low-urgency-cpu-bound",urgency="low"}
+        )
+        , "_c", "3", "", "")
+        or
+        label_replace(sum by (env,environment,stage) (
+          sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate1h{le="+Inf",shard="low-urgency-cpu-bound",urgency="throttled"}
+        )
+        , "_c", "4", "", "")
+      )
+  - record: gitlab:component:feature_category:execution:ops:rate_1h
+    labels:
+      component: shard_low_urgency_cpu_bound
+      feature_category: not_owned
+      tier: sv
+      type: sidekiq
+      upscale_source: "yes"
+    expr: |
+      sum by (env,environment,stage) (
+        sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate1h{le="+Inf",shard="low-urgency-cpu-bound"}
+      )
+  - record: gitlab:component:feature_category:execution:error:rate_1h
+    labels:
+      component: shard_low_urgency_cpu_bound
+      feature_category: not_owned
+      tier: sv
+      type: sidekiq
+      upscale_source: "yes"
+    expr: |
+      (
+        sum by (env,environment,stage) (
+          sli_aggregations:sidekiq_jobs_failed_total_rate1h{shard="low-urgency-cpu-bound"}
+        )
+      )
+      or
+      (
+        0 * group by(env,environment,stage) (
+          gitlab:component:feature_category:execution:ops:rate_1h{component="shard_low_urgency_cpu_bound",feature_category="not_owned",tier="sv",type="sidekiq",upscale_source="yes"}
+        )
+      )
+  - record: gitlab:component:feature_category:execution:apdex:success:rate_1h
+    labels:
+      component: shard_memory_bound
+      feature_category: not_owned
+      tier: sv
+      type: sidekiq
+      upscale_source: "yes"
+    expr: |
+      sum by (env,environment,stage) (
+        label_replace(sum by (env,environment,stage) (
+          sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate1h{le="10",shard="memory-bound",urgency="high"}
+        )
+        , "_c", "0", "", "")
+        or
+        label_replace(sum by (env,environment,stage) (
+          sli_aggregations:sidekiq_jobs_queue_duration_seconds_bucket_rate1h{le="10",shard="memory-bound",urgency="high"}
+        )
+        , "_c", "1", "", "")
+        or
+        label_replace(sum by (env,environment,stage) (
+          sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate1h{le="300",shard="memory-bound",urgency="low"}
+        )
+        , "_c", "2", "", "")
+        or
+        label_replace(sum by (env,environment,stage) (
+          sli_aggregations:sidekiq_jobs_queue_duration_seconds_bucket_rate1h{le="60",shard="memory-bound",urgency="low"}
+        )
+        , "_c", "3", "", "")
+        or
+        label_replace(sum by (env,environment,stage) (
+          sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate1h{le="300",shard="memory-bound",urgency="throttled"}
+        )
+        , "_c", "4", "", "")
+      )
+  - record: gitlab:component:feature_category:execution:apdex:weight:score_1h
+    labels:
+      component: shard_memory_bound
+      feature_category: not_owned
+      tier: sv
+      type: sidekiq
+      upscale_source: "yes"
+    expr: |
+      sum by (env,environment,stage) (
+        label_replace(sum by (env,environment,stage) (
+          sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate1h{le="+Inf",shard="memory-bound",urgency="high"}
+        )
+        , "_c", "0", "", "")
+        or
+        label_replace(sum by (env,environment,stage) (
+          sli_aggregations:sidekiq_jobs_queue_duration_seconds_bucket_rate1h{le="+Inf",shard="memory-bound",urgency="high"}
+        )
+        , "_c", "1", "", "")
+        or
+        label_replace(sum by (env,environment,stage) (
+          sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate1h{le="+Inf",shard="memory-bound",urgency="low"}
+        )
+        , "_c", "2", "", "")
+        or
+        label_replace(sum by (env,environment,stage) (
+          sli_aggregations:sidekiq_jobs_queue_duration_seconds_bucket_rate1h{le="+Inf",shard="memory-bound",urgency="low"}
+        )
+        , "_c", "3", "", "")
+        or
+        label_replace(sum by (env,environment,stage) (
+          sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate1h{le="+Inf",shard="memory-bound",urgency="throttled"}
+        )
+        , "_c", "4", "", "")
+      )
+  - record: gitlab:component:feature_category:execution:ops:rate_1h
+    labels:
+      component: shard_memory_bound
+      feature_category: not_owned
+      tier: sv
+      type: sidekiq
+      upscale_source: "yes"
+    expr: |
+      sum by (env,environment,stage) (
+        sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate1h{le="+Inf",shard="memory-bound"}
+      )
+  - record: gitlab:component:feature_category:execution:error:rate_1h
+    labels:
+      component: shard_memory_bound
+      feature_category: not_owned
+      tier: sv
+      type: sidekiq
+      upscale_source: "yes"
+    expr: |
+      (
+        sum by (env,environment,stage) (
+          sli_aggregations:sidekiq_jobs_failed_total_rate1h{shard="memory-bound"}
+        )
+      )
+      or
+      (
+        0 * group by(env,environment,stage) (
+          gitlab:component:feature_category:execution:ops:rate_1h{component="shard_memory_bound",feature_category="not_owned",tier="sv",type="sidekiq",upscale_source="yes"}
+        )
+      )
+  - record: gitlab:component:feature_category:execution:apdex:success:rate_1h
+    labels:
+      component: shard_quarantine
+      feature_category: not_owned
+      tier: sv
+      type: sidekiq
+      upscale_source: "yes"
+    expr: |
+      sum by (env,environment,stage) (
+        label_replace(sum by (env,environment,stage) (
+          sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate1h{le="10",shard="quarantine",urgency="high"}
+        )
+        , "_c", "0", "", "")
+        or
+        label_replace(sum by (env,environment,stage) (
+          sli_aggregations:sidekiq_jobs_queue_duration_seconds_bucket_rate1h{le="10",shard="quarantine",urgency="high"}
+        )
+        , "_c", "1", "", "")
+        or
+        label_replace(sum by (env,environment,stage) (
+          sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate1h{le="300",shard="quarantine",urgency="low"}
+        )
+        , "_c", "2", "", "")
+        or
+        label_replace(sum by (env,environment,stage) (
+          sli_aggregations:sidekiq_jobs_queue_duration_seconds_bucket_rate1h{le="60",shard="quarantine",urgency="low"}
+        )
+        , "_c", "3", "", "")
+        or
+        label_replace(sum by (env,environment,stage) (
+          sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate1h{le="300",shard="quarantine",urgency="throttled"}
+        )
+        , "_c", "4", "", "")
+      )
+  - record: gitlab:component:feature_category:execution:apdex:weight:score_1h
+    labels:
+      component: shard_quarantine
+      feature_category: not_owned
+      tier: sv
+      type: sidekiq
+      upscale_source: "yes"
+    expr: |
+      sum by (env,environment,stage) (
+        label_replace(sum by (env,environment,stage) (
+          sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate1h{le="+Inf",shard="quarantine",urgency="high"}
+        )
+        , "_c", "0", "", "")
+        or
+        label_replace(sum by (env,environment,stage) (
+          sli_aggregations:sidekiq_jobs_queue_duration_seconds_bucket_rate1h{le="+Inf",shard="quarantine",urgency="high"}
+        )
+        , "_c", "1", "", "")
+        or
+        label_replace(sum by (env,environment,stage) (
+          sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate1h{le="+Inf",shard="quarantine",urgency="low"}
+        )
+        , "_c", "2", "", "")
+        or
+        label_replace(sum by (env,environment,stage) (
+          sli_aggregations:sidekiq_jobs_queue_duration_seconds_bucket_rate1h{le="+Inf",shard="quarantine",urgency="low"}
+        )
+        , "_c", "3", "", "")
+        or
+        label_replace(sum by (env,environment,stage) (
+          sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate1h{le="+Inf",shard="quarantine",urgency="throttled"}
+        )
+        , "_c", "4", "", "")
+      )
+  - record: gitlab:component:feature_category:execution:ops:rate_1h
+    labels:
+      component: shard_quarantine
+      feature_category: not_owned
+      tier: sv
+      type: sidekiq
+      upscale_source: "yes"
+    expr: |
+      sum by (env,environment,stage) (
+        sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate1h{le="+Inf",shard="quarantine"}
+      )
+  - record: gitlab:component:feature_category:execution:error:rate_1h
+    labels:
+      component: shard_quarantine
+      feature_category: not_owned
+      tier: sv
+      type: sidekiq
+      upscale_source: "yes"
+    expr: |
+      (
+        sum by (env,environment,stage) (
+          sli_aggregations:sidekiq_jobs_failed_total_rate1h{shard="quarantine"}
+        )
+      )
+      or
+      (
+        0 * group by(env,environment,stage) (
+          gitlab:component:feature_category:execution:ops:rate_1h{component="shard_quarantine",feature_category="not_owned",tier="sv",type="sidekiq",upscale_source="yes"}
+        )
+      )
+  - record: gitlab:component:feature_category:execution:apdex:success:rate_1h
+    labels:
+      component: shard_urgent_authorized_projects
+      feature_category: not_owned
+      tier: sv
+      type: sidekiq
+      upscale_source: "yes"
+    expr: |
+      sum by (env,environment,stage) (
+        label_replace(sum by (env,environment,stage) (
+          sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate1h{le="10",shard="urgent-authorized-projects",urgency="high"}
+        )
+        , "_c", "0", "", "")
+        or
+        label_replace(sum by (env,environment,stage) (
+          sli_aggregations:sidekiq_jobs_queue_duration_seconds_bucket_rate1h{le="10",shard="urgent-authorized-projects",urgency="high"}
+        )
+        , "_c", "1", "", "")
+        or
+        label_replace(sum by (env,environment,stage) (
+          sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate1h{le="300",shard="urgent-authorized-projects",urgency="low"}
+        )
+        , "_c", "2", "", "")
+        or
+        label_replace(sum by (env,environment,stage) (
+          sli_aggregations:sidekiq_jobs_queue_duration_seconds_bucket_rate1h{le="60",shard="urgent-authorized-projects",urgency="low"}
+        )
+        , "_c", "3", "", "")
+        or
+        label_replace(sum by (env,environment,stage) (
+          sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate1h{le="300",shard="urgent-authorized-projects",urgency="throttled"}
+        )
+        , "_c", "4", "", "")
+      )
+  - record: gitlab:component:feature_category:execution:apdex:weight:score_1h
+    labels:
+      component: shard_urgent_authorized_projects
+      feature_category: not_owned
+      tier: sv
+      type: sidekiq
+      upscale_source: "yes"
+    expr: |
+      sum by (env,environment,stage) (
+        label_replace(sum by (env,environment,stage) (
+          sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate1h{le="+Inf",shard="urgent-authorized-projects",urgency="high"}
+        )
+        , "_c", "0", "", "")
+        or
+        label_replace(sum by (env,environment,stage) (
+          sli_aggregations:sidekiq_jobs_queue_duration_seconds_bucket_rate1h{le="+Inf",shard="urgent-authorized-projects",urgency="high"}
+        )
+        , "_c", "1", "", "")
+        or
+        label_replace(sum by (env,environment,stage) (
+          sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate1h{le="+Inf",shard="urgent-authorized-projects",urgency="low"}
+        )
+        , "_c", "2", "", "")
+        or
+        label_replace(sum by (env,environment,stage) (
+          sli_aggregations:sidekiq_jobs_queue_duration_seconds_bucket_rate1h{le="+Inf",shard="urgent-authorized-projects",urgency="low"}
+        )
+        , "_c", "3", "", "")
+        or
+        label_replace(sum by (env,environment,stage) (
+          sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate1h{le="+Inf",shard="urgent-authorized-projects",urgency="throttled"}
+        )
+        , "_c", "4", "", "")
+      )
+  - record: gitlab:component:feature_category:execution:ops:rate_1h
+    labels:
+      component: shard_urgent_authorized_projects
+      feature_category: not_owned
+      tier: sv
+      type: sidekiq
+      upscale_source: "yes"
+    expr: |
+      sum by (env,environment,stage) (
+        sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate1h{le="+Inf",shard="urgent-authorized-projects"}
+      )
+  - record: gitlab:component:feature_category:execution:error:rate_1h
+    labels:
+      component: shard_urgent_authorized_projects
+      feature_category: not_owned
+      tier: sv
+      type: sidekiq
+      upscale_source: "yes"
+    expr: |
+      (
+        sum by (env,environment,stage) (
+          sli_aggregations:sidekiq_jobs_failed_total_rate1h{shard="urgent-authorized-projects"}
+        )
+      )
+      or
+      (
+        0 * group by(env,environment,stage) (
+          gitlab:component:feature_category:execution:ops:rate_1h{component="shard_urgent_authorized_projects",feature_category="not_owned",tier="sv",type="sidekiq",upscale_source="yes"}
+        )
+      )
+  - record: gitlab:component:feature_category:execution:apdex:success:rate_1h
+    labels:
+      component: shard_urgent_cpu_bound
+      feature_category: not_owned
+      tier: sv
+      type: sidekiq
+      upscale_source: "yes"
+    expr: |
+      sum by (env,environment,stage) (
+        label_replace(sum by (env,environment,stage) (
+          sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate1h{le="10",shard="urgent-cpu-bound",urgency="high"}
+        )
+        , "_c", "0", "", "")
+        or
+        label_replace(sum by (env,environment,stage) (
+          sli_aggregations:sidekiq_jobs_queue_duration_seconds_bucket_rate1h{le="10",shard="urgent-cpu-bound",urgency="high"}
+        )
+        , "_c", "1", "", "")
+        or
+        label_replace(sum by (env,environment,stage) (
+          sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate1h{le="300",shard="urgent-cpu-bound",urgency="low"}
+        )
+        , "_c", "2", "", "")
+        or
+        label_replace(sum by (env,environment,stage) (
+          sli_aggregations:sidekiq_jobs_queue_duration_seconds_bucket_rate1h{le="60",shard="urgent-cpu-bound",urgency="low"}
+        )
+        , "_c", "3", "", "")
+        or
+        label_replace(sum by (env,environment,stage) (
+          sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate1h{le="300",shard="urgent-cpu-bound",urgency="throttled"}
+        )
+        , "_c", "4", "", "")
+      )
+  - record: gitlab:component:feature_category:execution:apdex:weight:score_1h
+    labels:
+      component: shard_urgent_cpu_bound
+      feature_category: not_owned
+      tier: sv
+      type: sidekiq
+      upscale_source: "yes"
+    expr: |
+      sum by (env,environment,stage) (
+        label_replace(sum by (env,environment,stage) (
+          sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate1h{le="+Inf",shard="urgent-cpu-bound",urgency="high"}
+        )
+        , "_c", "0", "", "")
+        or
+        label_replace(sum by (env,environment,stage) (
+          sli_aggregations:sidekiq_jobs_queue_duration_seconds_bucket_rate1h{le="+Inf",shard="urgent-cpu-bound",urgency="high"}
+        )
+        , "_c", "1", "", "")
+        or
+        label_replace(sum by (env,environment,stage) (
+          sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate1h{le="+Inf",shard="urgent-cpu-bound",urgency="low"}
+        )
+        , "_c", "2", "", "")
+        or
+        label_replace(sum by (env,environment,stage) (
+          sli_aggregations:sidekiq_jobs_queue_duration_seconds_bucket_rate1h{le="+Inf",shard="urgent-cpu-bound",urgency="low"}
+        )
+        , "_c", "3", "", "")
+        or
+        label_replace(sum by (env,environment,stage) (
+          sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate1h{le="+Inf",shard="urgent-cpu-bound",urgency="throttled"}
+        )
+        , "_c", "4", "", "")
+      )
+  - record: gitlab:component:feature_category:execution:ops:rate_1h
+    labels:
+      component: shard_urgent_cpu_bound
+      feature_category: not_owned
+      tier: sv
+      type: sidekiq
+      upscale_source: "yes"
+    expr: |
+      sum by (env,environment,stage) (
+        sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate1h{le="+Inf",shard="urgent-cpu-bound"}
+      )
+  - record: gitlab:component:feature_category:execution:error:rate_1h
+    labels:
+      component: shard_urgent_cpu_bound
+      feature_category: not_owned
+      tier: sv
+      type: sidekiq
+      upscale_source: "yes"
+    expr: |
+      (
+        sum by (env,environment,stage) (
+          sli_aggregations:sidekiq_jobs_failed_total_rate1h{shard="urgent-cpu-bound"}
+        )
+      )
+      or
+      (
+        0 * group by(env,environment,stage) (
+          gitlab:component:feature_category:execution:ops:rate_1h{component="shard_urgent_cpu_bound",feature_category="not_owned",tier="sv",type="sidekiq",upscale_source="yes"}
+        )
+      )
+  - record: gitlab:component:feature_category:execution:apdex:success:rate_1h
+    labels:
+      component: shard_urgent_other
+      feature_category: not_owned
+      tier: sv
+      type: sidekiq
+      upscale_source: "yes"
+    expr: |
+      sum by (env,environment,stage) (
+        label_replace(sum by (env,environment,stage) (
+          sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate1h{le="10",shard="urgent-other",urgency="high"}
+        )
+        , "_c", "0", "", "")
+        or
+        label_replace(sum by (env,environment,stage) (
+          sli_aggregations:sidekiq_jobs_queue_duration_seconds_bucket_rate1h{le="10",shard="urgent-other",urgency="high"}
+        )
+        , "_c", "1", "", "")
+        or
+        label_replace(sum by (env,environment,stage) (
+          sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate1h{le="300",shard="urgent-other",urgency="low"}
+        )
+        , "_c", "2", "", "")
+        or
+        label_replace(sum by (env,environment,stage) (
+          sli_aggregations:sidekiq_jobs_queue_duration_seconds_bucket_rate1h{le="60",shard="urgent-other",urgency="low"}
+        )
+        , "_c", "3", "", "")
+        or
+        label_replace(sum by (env,environment,stage) (
+          sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate1h{le="300",shard="urgent-other",urgency="throttled"}
+        )
+        , "_c", "4", "", "")
+      )
+  - record: gitlab:component:feature_category:execution:apdex:weight:score_1h
+    labels:
+      component: shard_urgent_other
+      feature_category: not_owned
+      tier: sv
+      type: sidekiq
+      upscale_source: "yes"
+    expr: |
+      sum by (env,environment,stage) (
+        label_replace(sum by (env,environment,stage) (
+          sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate1h{le="+Inf",shard="urgent-other",urgency="high"}
+        )
+        , "_c", "0", "", "")
+        or
+        label_replace(sum by (env,environment,stage) (
+          sli_aggregations:sidekiq_jobs_queue_duration_seconds_bucket_rate1h{le="+Inf",shard="urgent-other",urgency="high"}
+        )
+        , "_c", "1", "", "")
+        or
+        label_replace(sum by (env,environment,stage) (
+          sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate1h{le="+Inf",shard="urgent-other",urgency="low"}
+        )
+        , "_c", "2", "", "")
+        or
+        label_replace(sum by (env,environment,stage) (
+          sli_aggregations:sidekiq_jobs_queue_duration_seconds_bucket_rate1h{le="+Inf",shard="urgent-other",urgency="low"}
+        )
+        , "_c", "3", "", "")
+        or
+        label_replace(sum by (env,environment,stage) (
+          sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate1h{le="+Inf",shard="urgent-other",urgency="throttled"}
+        )
+        , "_c", "4", "", "")
+      )
+  - record: gitlab:component:feature_category:execution:ops:rate_1h
+    labels:
+      component: shard_urgent_other
+      feature_category: not_owned
+      tier: sv
+      type: sidekiq
+      upscale_source: "yes"
+    expr: |
+      sum by (env,environment,stage) (
+        sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate1h{le="+Inf",shard="urgent-other"}
+      )
+  - record: gitlab:component:feature_category:execution:error:rate_1h
+    labels:
+      component: shard_urgent_other
+      feature_category: not_owned
+      tier: sv
+      type: sidekiq
+      upscale_source: "yes"
+    expr: |
+      (
+        sum by (env,environment,stage) (
+          sli_aggregations:sidekiq_jobs_failed_total_rate1h{shard="urgent-other"}
+        )
+      )
+      or
+      (
+        0 * group by(env,environment,stage) (
+          gitlab:component:feature_category:execution:ops:rate_1h{component="shard_urgent_other",feature_category="not_owned",tier="sv",type="sidekiq",upscale_source="yes"}
+        )
       )

@@ -125,9 +125,7 @@ local serviceLevelIndicatorDefinition(sliName, serviceLevelIndicator) =
       serviceLevelIndicator.featureCategory == featureCategoryFromSourceMetrics,
 
     hasStaticFeatureCategory()::
-      std.objectHas(serviceLevelIndicator, 'featureCategory') &&
-      serviceLevelIndicator.featureCategory != featureCategoryNotOwned &&
-      !self.hasFeatureCategoryFromSourceMetrics(),
+      std.objectHas(serviceLevelIndicator, 'featureCategory') && !self.hasFeatureCategoryFromSourceMetrics(),
 
     hasFeatureCategory()::
       self.hasStaticFeatureCategory() || self.hasFeatureCategoryFromSourceMetrics(),
