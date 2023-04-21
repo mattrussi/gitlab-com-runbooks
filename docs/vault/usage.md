@@ -1028,3 +1028,74 @@ In `chef-repo` we define its default attributes for the `env-base.json` role as 
 ```
 
 Example of the attribute definition on [db-benchmarking-base.json role](https://gitlab.com/gitlab-com/gl-infra/chef-repo/-/blob/master/roles/db-benchmarking-base.json#L65-73)
+
+#### Rotating Chef Secrets
+
+For updating a secret content, we should download the secret data as json locally, modify its content and then `patch` the secret in Vault.
+
+* Retrieve secret data from Vault:
+
+```
+➜  ~ vault kv get -mount=chef -format=json env/db-benchmarking/shared/test-secret |jq '.data.data' > data.json
+➜  ~ cat data.json
+{
+  "favorite-things": {
+    "animal": "dog",
+    "color": "blue",
+    "food": "pizza"
+  },
+  "password": "foopass",
+  "user": "foo"
+}
+```
+
+* Update the data.json file with your favorite text editor and add/modify content:
+
+```
+➜  ~ cat data.json
+{
+  "favorite-things": {
+    "animal": "dog",
+    "color": "blue",
+    "food": "pizza",
+    "place": "san francisco"
+  },
+  "password": "foopass",
+  "user": "foo"
+}
+```
+
+* You can now patch the existing secret with the content of the modified data.json:
+
+```
+➜  ~ cat test-secret.json|vault kv patch -mount=chef env/db-benchmarking/shared/test-secret -
+================== Secret Path ==================
+chef/data/env/db-benchmarking/shared/test-secret
+
+======= Metadata =======
+Key                Value
+---                -----
+created_time       2023-04-21T13:32:11.841063562Z
+custom_metadata    <nil>
+deletion_time      n/a
+destroyed          false
+version            9
+➜  ~ vault kv get -mount=chef -format=json env/db-benchmarking/shared/test-secret |jq .data.data
+{
+  "favorite-things": {
+    "animal": "dog",
+    "color": "blue",
+    "food": "pizza",
+    "place": "san francisco"
+  },
+  "password": "foopass",
+  "user": "foo"
+}
+➜  ~
+```
+
+* Remove local secret file:
+
+```
+rm test-secret.json
+```
