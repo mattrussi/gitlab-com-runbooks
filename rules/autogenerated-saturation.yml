@@ -4690,8 +4690,8 @@ groups:
         A redis server has a maximum number of clients that can connect. When this resource is saturated, new clients may fail to connect.
 
         More details at https://redis.io/topics/clients#maximum-number-of-clients
-      grafana_dashboard_id: alerts-sat_redis_clients
-      grafana_dashboard_link: https://dashboards.gitlab.net/d/alerts-sat_redis_clients?from=now-6h/m&to=now-1m/m&var-environment={{
+      grafana_dashboard_id: alerts-sat_redis_cluster_clients
+      grafana_dashboard_link: https://dashboards.gitlab.net/d/alerts-sat_redis_cluster_clients?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-type={{ $labels.type }}&var-stage={{ $labels.stage
         }}
       grafana_min_zoom_hours: "6"
@@ -4735,8 +4735,8 @@ groups:
         For caches, consider lowering the `maxmemory` setting in Redis. For non-caching Redis instances, this has been caused in the past by credential stuffing, leading to large numbers of web sessions.
 
         This threshold is kept deliberately low, since Redis RDB snapshots could consume a significant amount of memory, especially when the rate of change in Redis is high, leading to copy-on-write consuming more memory than when the rate-of-change is low.
-      grafana_dashboard_id: alerts-sat_redis_memory
-      grafana_dashboard_link: https://dashboards.gitlab.net/d/alerts-sat_redis_memory?from=now-6h/m&to=now-1m/m&var-environment={{
+      grafana_dashboard_id: alerts-sat_redis_cluster_memory
+      grafana_dashboard_link: https://dashboards.gitlab.net/d/alerts-sat_redis_cluster_memory?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-type={{ $labels.type }}&var-stage={{ $labels.stage
         }}
       grafana_min_zoom_hours: "6"
@@ -4783,8 +4783,8 @@ groups:
         Redis Primary CPU Utilization per Node.
 
         The core server of redis is single-threaded; this thread is only able to scale to full use of a single CPU on a given server. When the primary Redis thread is saturated, major slowdowns should be expected across the application, so avoid if at all possible.
-      grafana_dashboard_id: alerts-sat_redis_primary_cpu
-      grafana_dashboard_link: https://dashboards.gitlab.net/d/alerts-sat_redis_primary_cpu?from=now-6h/m&to=now-1m/m&var-environment={{
+      grafana_dashboard_id: alerts-sat_redis_cluster_primary_cpu
+      grafana_dashboard_link: https://dashboards.gitlab.net/d/alerts-sat_redis_cluster_primary_cpu?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-type={{ $labels.type }}&var-stage={{ $labels.stage
         }}
       grafana_min_zoom_hours: "6"

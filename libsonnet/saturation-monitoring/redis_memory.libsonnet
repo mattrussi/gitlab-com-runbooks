@@ -75,6 +75,7 @@ local excludedRedisInstances = ['redis-tracechunks'];
 
   redis_cluster_memory: resourceSaturationPoint(redisMemoryDefinition {
     appliesTo: std.filter(function(s) !std.member(excludedRedisInstances, s), metricsCatalog.findServicesWithTag(tag='redis-cluster')),
+    grafana_dashboard_uid: 'sat_redis_cluster_memory',
     horizontallyScalable: true,
   }),
 

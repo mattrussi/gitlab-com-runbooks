@@ -13,7 +13,6 @@ local commonDefinition = {
 
     More details at https://redis.io/topics/clients#maximum-number-of-clients
   |||,
-  grafana_dashboard_uid: 'sat_redis_clients',
   resourceLabels: ['fqdn', 'instance', 'shard'],
   query: |||
     max_over_time(redis_connected_clients{%(selector)s}[%(rangeInterval)s])
@@ -29,10 +28,12 @@ local commonDefinition = {
 {
   redis_clients: resourceSaturationPoint(commonDefinition {
     appliesTo: metricsCatalog.findServicesWithTag(tag='redis-sentinel'),
+    grafana_dashboard_uid: 'sat_redis_clients',
   }),
 
   redis_cluster_clients: resourceSaturationPoint(commonDefinition {
     appliesTo: metricsCatalog.findServicesWithTag(tag='redis-cluster'),
+    grafana_dashboard_uid: 'sat_redis_cluster_clients',
     horizontallyScalable: true,
   }),
 }

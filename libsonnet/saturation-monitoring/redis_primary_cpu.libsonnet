@@ -12,7 +12,6 @@ local commonDefinition = {
     When the primary Redis thread is saturated, major slowdowns should be expected across the application, so avoid if at all
     possible.
   |||,
-  grafana_dashboard_uid: 'sat_redis_primary_cpu',
   resourceLabels: ['fqdn', 'instance', 'shard'],
   burnRate: '5m',
   query: |||
@@ -31,10 +30,12 @@ local commonDefinition = {
 {
   redis_primary_cpu: resourceSaturationPoint(commonDefinition {
     appliesTo: metricsCatalog.findServicesWithTag(tag='redis-sentinel'),
+    grafana_dashboard_uid: 'sat_redis_primary_cpu',
   }),
 
   redis_cluster_primary_cpu: resourceSaturationPoint(commonDefinition {
     appliesTo: metricsCatalog.findServicesWithTag(tag='redis-cluster'),
+    grafana_dashboard_uid: 'sat_redis_cluster_primary_cpu',
     horizontallyScalable: true,
   }),
 }
