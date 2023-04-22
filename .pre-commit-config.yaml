@@ -20,12 +20,12 @@ repos:
       - id: no-commit-to-branch
         args: [--branch, master]
   - repo: https://github.com/compilerla/conventional-pre-commit
-    rev: v2.1.1
+    rev: v2.2.0
     hooks:
       - id: conventional-pre-commit
         stages: [commit-msg]
   - repo: https://github.com/google/go-jsonnet
-    rev: v0.19.1
+    rev: v0.20.0
     hooks:
       - id: jsonnet-format
         args: [-i, --string-style, s, -n, "2"]
