@@ -57,11 +57,8 @@ so that we can have extra certainty that the packages will survive.
 
 ## Backup Failure Notifications
 
-To Be Documented
-
-## DB Restores for validation
-
-To Be Documented
+The daily backup notifies the deadmansnitch. If a backup is not completed, an alert should be generated
+for the Engineer on Call (EOC).
 
 ## Updating the License Key
 
