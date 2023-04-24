@@ -2,8 +2,6 @@
 
 ## Adding a GitLab instance to Vault
 
-⚠️ `vault.ops.gke.gitlab.net` is an internal endpoint, making it only accessible from the `ops` runners at this stage, which are not currently configured on `gitlab.com`. Because of this, retrieving CI secrets from Vault is only possible from `ops.gitlab.net` at the moment. See [this issue](https://gitlab.com/gitlab-com/gl-infra/reliability/-/issues/16235) for the investigation on how to enable access to Vault from CI on `gitlab.com`.
-
 In order to enable authentication to Vault from CI for a GitLab instance, add it to the `jwt_auth_backends` map in [`environments/vault-production/vault_config.tf`](https://ops.gitlab.net/gitlab-com/gl-infra/config-mgmt/-/blob/master/environments/vault-production/vault_config.tf):
 
 ```terraform
@@ -16,7 +14,7 @@ module "vault-config" {
     ops-gitlab-net = {
       description  = "GitLab CI JWT for ops.gitlab.net"
       jwks_url     = "https://ops.gitlab.net/-/jwks"
-      bound_issuer = "ops.gitlab.net"
+      bound_issuer = "https://ops.gitlab.net"
     }
   }
 
@@ -48,8 +46,7 @@ Then the cluster information must be saved in a Vault secret that will be used b
 ```sh
 KUBERNETES_HOST="$(kubectl config view -o jsonpath='{.clusters[?(@.name == "gke_gitlab-pre_us-east1_pre-gitlab-gke")].cluster.server}')"
 CA_CERT="$(kubectl config view --raw -o jsonpath='{.clusters[?(@.name == "gke_gitlab-pre_us-east1_pre-gitlab-gke")].cluster.certificate-authority-data}' | base64 -d)"
-
-vault kv put ci/ops-gitlab-net/config-mgmt/vault-production/kubernetes/pre-gitlab-gke host="${KUBERNETES_HOST}" ca_cert="${CA_CERT}"
+vault kv put ci/ops-gitlab-net/gitlab-com/gl-infra/config-mgmt/vault-production/kubernetes/pre-gitlab-gke host="${KUBERNETES_HOST}" ca_cert="${CA_CERT}"
 ```
 
 Finally, the cluster has to be added in [`environments/vault-production/kubernetes.tf`](https://ops.gitlab.net/gitlab-com/gl-infra/config-mgmt/-/blob/master/environments/vault-production/kubernetes.tf):
