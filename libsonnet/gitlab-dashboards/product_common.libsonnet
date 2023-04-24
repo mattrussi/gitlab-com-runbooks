@@ -52,15 +52,15 @@ local graphite = grafana.graphite;
       format='short',
     ).addTarget(
       graphite.target(
-        'aliasByNode(sitespeed_io.desktop.pageSummary.gitlab_com.' + page_alias + '.chrome.cable.browsertime.statistics.visualMetrics.FirstVisualChange.$function, 10)'
+        'aliasByNode(sitespeed_io.desktop.gitlab.pageSummary.gitlab_com.' + page_alias + '.chrome.cable.browsertime.statistics.visualMetrics.FirstVisualChange.$function, 10)'
       ),
     ).addTarget(
       graphite.target(
-        'aliasByNode(sitespeed_io.desktop.pageSummary.gitlab_com.' + page_alias + '.chrome.cable.browsertime.statistics.visualMetrics.LastVisualChange.$function, 10)'
+        'aliasByNode(sitespeed_io.desktop.gitlab.pageSummary.gitlab_com.' + page_alias + '.chrome.cable.browsertime.statistics.visualMetrics.LastVisualChange.$function, 10)'
       ),
     ).addTarget(
       graphite.target(
-        'aliasByNode(sitespeed_io.desktop.pageSummary.gitlab_com.' + page_alias + '.chrome.cable.browsertime.statistics.timings.largestContentfulPaint.renderTime.$function, 10)'
+        'aliasByNode(sitespeed_io.desktop.gitlab.pageSummary.gitlab_com.' + page_alias + '.chrome.cable.browsertime.statistics.timings.largestContentfulPaint.renderTime.$function, 10)'
       ),
     ),
 }
