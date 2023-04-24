@@ -264,6 +264,7 @@ There is 1 core dashboard for redis, with a variant for each cluster:
 * [Sidekiq](https://dashboards.gitlab.net/d/redis-sidekiq-main/redis-sidekiq-overview?orgId=1)
 * [Tracechunks](https://dashboards.gitlab.net/d/redis-tracechunks-main/redis-tracechunks-overview?orgId=1)
 * [Ratelimiting](https://dashboards.gitlab.net/d/redis-ratelimiting-main/redis-ratelimiting-overview?orgId=1)
+* [ClusterRatelimiting](https://dashboards.gitlab.net/d/redis-cluster-ratelimiting-main/redis-cluster-ratelimiting-overview?orgId=1)
 * [Sessions](https://dashboards.gitlab.net/d/redis-sessions-main/redis-sessions-overview?orgId=1)
 
 Note that many of the panels are have both Primary and Secondary variants; because only the primary is active, usually

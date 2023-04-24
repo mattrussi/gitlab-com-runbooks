@@ -16,6 +16,7 @@
 
 ## Troubleshooting Pointers
 
+* [Redis Cluster](../redis/redis-cluster.md)
 * [Redis-Sidekiq catchall workloads reduction](../redis/redis-sidekiq-catchall-workloads-reduction.md)
 * [A survival guide for SREs to working with Redis at GitLab](../redis/redis-survival-guide-for-sres.md)
 * [../redis/redis.md](../redis/redis.md)

@@ -32,6 +32,7 @@
 * [Blocking individual IPs using Redis and Rack Attack](ban-an-IP-with-redis.md)
 * [Clearing sessions for anonymous users](clear_anonymous_sessions.md)
 * [Redis on Kubernetes](kubernetes.md)
+* [Redis Cluster](redis-cluster.md)
 * [redis-functional-partitioning.md](redis-functional-partitioning.md)
 * [Redis RDB Snapshots](redis-rdb-snapshots.md)
 * [Redis-Sidekiq catchall workloads reduction](redis-sidekiq-catchall-workloads-reduction.md)
