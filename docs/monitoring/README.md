@@ -64,7 +64,6 @@
 * [../uncategorized/access-gcp-hosts.md](../uncategorized/access-gcp-hosts.md)
 * [GitLab Job Completion](../uncategorized/job_completion.md)
 * [../uncategorized/osquery.md](../uncategorized/osquery.md)
-* [PackageCloud Infrastructure and Backups](../uncategorized/packagecloud-infrastructure.md)
 * [Periodic Job Monitoring](../uncategorized/periodic_job_monitoring.md)
 * [../uncategorized/subnet-allocations.md](../uncategorized/subnet-allocations.md)
 * [version.gitlab.com Runbook](../version/version-gitlab-com.md)
