@@ -220,12 +220,12 @@ replica which conflicts with a vacuum operation from the primary. This should
 not be common because we don't generally run many long-running queries on
 gitlab.com and we have vacuum feedback enabled.
 
-[get_slow_queries.sh](../uncategorized/db_scripts/get_slow_queries.sh)
+[get_slow_queries.sh](../../scripts/database/get_slow_queries.sh)
 
 Just wait, replication self recovers :wine_glass:
 
 If it takes too long, kill the blocking query:
-[terminate_slow_queries.sh](../uncategorized/db_scripts/terminate_slow_queries.sh)
+[terminate_slow_queries.sh](../../scripts/database/terminate_slow_queries.sh)
 
 ## Replication Slots
 
