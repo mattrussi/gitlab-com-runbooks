@@ -1028,3 +1028,92 @@ In `chef-repo` we define its default attributes for the `env-base.json` role as 
 ```
 
 Example of the attribute definition on [db-benchmarking-base.json role](https://gitlab.com/gitlab-com/gl-infra/chef-repo/-/blob/master/roles/db-benchmarking-base.json#L65-73)
+
+### Interact with Vault Secrets
+
+For reviewing or updating a secret you can either use the [Vault UI](https://vault.gitlab.net/) or use `glsh` commands as follows:
+
+1. Start proxy to connect to Vault
+
+```
+glsh vault proxy
+```
+
+2. On another tab, authenticate to Vault
+
+```
+glsh vault login
+```
+
+3. Interact with Secret:
+
+    * Retrieve secret data from Vault:
+
+    ```
+    glsh vault show-secret MOUNT PATH
+    ```
+
+    * Modify secret data and update it on Vault:
+
+    ```
+    glsh vault edit-secret MOUNT PATH
+    ```
+
+We will demonstrate this procedure with an example using the following secret attributes:
+Secret Path: `env/db-benchmarking/shared/test-secret`
+Mount: `chef`
+
+* Show Vault Secret:
+
+```
+glsh vault show-secret chef env/db-benchmarking/shared/test-secret
+{
+  "database": {
+    "password": "foopass",
+    "user": "foo"
+  },
+  "favorite-things": {
+    "animal": "dog",
+    "car": "tesla",
+    "color": "blue",
+    "food": "pizza",
+    "place": "san francisco"
+  }
+}
+```
+
+* Modify Vault Secret:
+
+We will update the `password` field:
+
+```
+glsh vault edit-secret chef env/db-benchmarking/shared/test-secret
+Retrieving secret from Vault
+Checking file is valid json
+Creating new env/db-benchmarking/shared/test-secret version in Vault
+================== Secret Path ==================
+chef/data/env/db-benchmarking/shared/test-secret
+
+======= Metadata =======
+Key                Value
+---                -----
+created_time       2023-04-25T15:10:48.609120095Z
+custom_metadata    <nil>
+deletion_time      n/a
+destroyed          false
+version            16
+Updated secret:
+{
+  "database": {
+    "password": "supersecretpassword",
+    "user": "foo"
+  },
+  "favorite-things": {
+    "animal": "dog",
+    "car": "tesla",
+    "color": "blue",
+    "food": "pizza",
+    "place": "san francisco"
+  }
+}
+```
