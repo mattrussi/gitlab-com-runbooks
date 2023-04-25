@@ -1,6 +1,7 @@
 #!/bin/sh
 
 set -e
+#set -x
 
 VAULT_ADDR="https://vault.ops.gke.gitlab.net"
 if [ -z "$VAULT_PROXY_ADDR" ]; then
@@ -17,6 +18,8 @@ usage() {
   echo >&2 "    init    Initialize the shell environment for Vault"
   echo >&2 "    login   Login into Vault"
   echo >&2 "    proxy   Start a SOCKS5 proxy for Vault through the ops bastion"
+  echo >&2 "    show-secret MOUNT PATH - Retrieves and show a secret from Vault"
+  echo >&2 "    edit-secret MOUNT PATH - Modify and create a new secret version from Vault"
 }
 
 init() {
@@ -63,6 +66,76 @@ proxy() {
   fi
 }
 
+cleanup () {
+  rm -f "$tmpfile"
+}
+
+get_secret() {
+  mount=$1
+  path=$2
+  tmpfile=$3
+  vault kv get -format=json -mount="$mount" "$path" |jq '.data.data' > "$tmpfile"
+}
+
+show_secret() {
+  mount=$1
+  path=$2
+  tmpfile=$(mktemp /tmp/vault-secret.XXXXXX)
+
+  get_secret "$mount" "$path" "$tmpfile"
+
+  cat "$tmpfile"
+
+  cleanup
+}
+
+edit_secret(){
+  mount=$1
+  path=$2
+  tmpfile=$(mktemp /tmp/vault-secret.XXXXXX)
+
+  echo "Retrieving secret from Vault"
+  get_secret "$mount" "$path" "$tmpfile"
+
+  if [ -z "${EDITOR}" ]; then
+    EDITOR="$(which vim)"
+    export EDITOR
+  fi
+
+  BEFORE_SUM=$(sha256sum "$tmpfile" | cut -d" " -f1 )
+  $EDITOR "$tmpfile"
+  AFTER_SUM=$(sha256sum "$tmpfile" | cut -d" " -f1)
+
+  if [ "$BEFORE_SUM" = "$AFTER_SUM" ]; then
+  echo "No changes; not uploading to Vault" 1>&2
+  exit
+  fi
+
+  echo "Checking file is valid json"
+  check_json "$tmpfile"
+
+  echo "Creating new $path version in Vault"
+  cat "$tmpfile" | vault kv put -mount="$mount" "$path" -
+
+  echo "Updated secret:"
+  show_secret "$mount" "$path"
+
+  cleanup
+}
+
+check_json() {
+    local tempfile="$(mktemp)"
+    if ! jq . "$1" > "$tempfile"; then
+        echo "Aborting, invalid json." 1>&2
+        rm -f "${tempfile}"
+        cleanup
+        exit 1
+    else
+        mv "${tempfile}" "$1"
+        rm -f "${tempfile}"
+    fi
+}
+
 case $1 in
     init)
         shift
@@ -75,6 +148,14 @@ case $1 in
     proxy)
         shift
         proxy "$@"
+        ;;
+    show-secret)
+        shift
+        show_secret "$@"
+        ;;
+    edit-secret)
+        shift
+        edit_secret "$@"
         ;;
     *)
         usage
