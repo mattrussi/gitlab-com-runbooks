@@ -115,7 +115,7 @@ edit_secret(){
   check_json "$tmpfile"
 
   echo "Creating new $path version in Vault"
-  cat "$tmpfile" | vault kv patch -mount="$mount" "$path" -
+  cat "$tmpfile" | vault kv put -mount="$mount" "$path" -
 
   echo "Updated secret:"
   show_secret "$mount" "$path"
