@@ -1029,73 +1029,91 @@ In `chef-repo` we define its default attributes for the `env-base.json` role as 
 
 Example of the attribute definition on [db-benchmarking-base.json role](https://gitlab.com/gitlab-com/gl-infra/chef-repo/-/blob/master/roles/db-benchmarking-base.json#L65-73)
 
-#### Rotating Chef Secrets
+### Interact with Vault Secrets
 
-For updating a secret content, we should download the secret data as json locally, modify its content and then `patch` the secret in Vault.
+For reviewing or updating a secret you can either use the [Vault UI](https://vault.gitlab.net/) or use `glsh` commands as follows:
 
-* Retrieve secret data from Vault:
+1. Start proxy to connect to Vault
 
 ```
-➜  ~ vault kv get -mount=chef -format=json env/db-benchmarking/shared/test-secret |jq '.data.data' > data.json
-➜  ~ cat data.json
+glsh vault proxy
+```
+
+2. On another tab, authenticate to Vault
+
+```
+glsh vault login
+```
+
+3. Interact with Secret:
+
+    * Retrieve secret data from Vault:
+
+    ```
+    glsh vault show-secret MOUNT PATH
+    ```
+
+    * Modify secret data and update it on Vault:
+
+    ```
+    glsh vault edit-secret MOUNT PATH
+    ```
+
+We will demonstrate this procedure with an example using the following secret attributes:
+Secret Path: `env/db-benchmarking/shared/test-secret`
+Mount: `chef`
+
+* Show Vault Secret:
+
+```
+glsh vault show-secret chef env/db-benchmarking/shared/test-secret
 {
-  "favorite-things": {
-    "animal": "dog",
-    "color": "blue",
-    "food": "pizza"
+  "database": {
+    "password": "foopass",
+    "user": "foo"
   },
-  "password": "foopass",
-  "user": "foo"
-}
-```
-
-* Update the data.json file with your favorite text editor and add/modify content:
-
-```
-➜  ~ cat data.json
-{
   "favorite-things": {
     "animal": "dog",
+    "car": "tesla",
     "color": "blue",
     "food": "pizza",
     "place": "san francisco"
-  },
-  "password": "foopass",
-  "user": "foo"
+  }
 }
 ```
 
-* You can now patch the existing secret with the content of the modified data.json:
+* Modify Vault Secret:
+
+We will update the `password` field:
 
 ```
-➜  ~ cat test-secret.json|vault kv patch -mount=chef env/db-benchmarking/shared/test-secret -
+glsh vault edit-secret chef env/db-benchmarking/shared/test-secret
+Retrieving secret from Vault
+Checking file is valid json
+Creating new env/db-benchmarking/shared/test-secret version in Vault
 ================== Secret Path ==================
 chef/data/env/db-benchmarking/shared/test-secret
 
 ======= Metadata =======
 Key                Value
 ---                -----
-created_time       2023-04-21T13:32:11.841063562Z
+created_time       2023-04-25T15:10:48.609120095Z
 custom_metadata    <nil>
 deletion_time      n/a
 destroyed          false
-version            9
-➜  ~ vault kv get -mount=chef -format=json env/db-benchmarking/shared/test-secret |jq .data.data
+version            16
+Updated secret:
 {
+  "database": {
+    "password": "supersecretpassword",
+    "user": "foo"
+  },
   "favorite-things": {
     "animal": "dog",
+    "car": "tesla",
     "color": "blue",
     "food": "pizza",
     "place": "san francisco"
-  },
-  "password": "foopass",
-  "user": "foo"
+  }
 }
-➜  ~
-```
-
-* Remove local secret file:
-
-```
-rm test-secret.json
 ```
