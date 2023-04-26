@@ -26,11 +26,11 @@ groups:
     expr: |
       (
         sum by (env,environment) (
-          rate(gitlab_redis_client_requests_duration_seconds_bucket{le="0.5",storage=~"cluster_rate_limiting|rate_limiting"}[5m])
+          rate(gitlab_redis_client_requests_duration_seconds_bucket{le="0.5",storage="rate_limiting"}[5m])
         )
         +
         sum by (env,environment) (
-          rate(gitlab_redis_client_requests_duration_seconds_bucket{le="0.75",storage=~"cluster_rate_limiting|rate_limiting"}[5m])
+          rate(gitlab_redis_client_requests_duration_seconds_bucket{le="0.75",storage="rate_limiting"}[5m])
         )
       )
       /
@@ -44,7 +44,7 @@ groups:
       type: redis-cluster-ratelimiting
     expr: |
       sum by (env,environment) (
-        rate(gitlab_redis_client_requests_duration_seconds_bucket{le="+Inf",storage=~"cluster_rate_limiting|rate_limiting"}[5m])
+        rate(gitlab_redis_client_requests_duration_seconds_bucket{le="+Inf",storage="rate_limiting"}[5m])
       )
   - record: gitlab:component:feature_category:execution:ops:rate_5m
     labels:
@@ -55,7 +55,7 @@ groups:
       type: redis-cluster-ratelimiting
     expr: |
       sum by (env,environment) (
-        rate(gitlab_redis_client_requests_total{storage=~"cluster_rate_limiting|rate_limiting"}[5m])
+        rate(gitlab_redis_client_requests_total{storage="rate_limiting"}[5m])
       )
   - record: gitlab:component:feature_category:execution:error:rate_5m
     labels:
@@ -67,7 +67,7 @@ groups:
     expr: |
       (
         sum by (env,environment) (
-          rate(gitlab_redis_client_exceptions_total{storage=~"cluster_rate_limiting|rate_limiting"}[5m])
+          rate(gitlab_redis_client_exceptions_total{storage="rate_limiting"}[5m])
         )
       )
       or
@@ -112,11 +112,11 @@ groups:
     expr: |
       (
         sum by (env,environment) (
-          rate(gitlab_redis_client_requests_duration_seconds_bucket{le="0.5",storage=~"cluster_rate_limiting|rate_limiting"}[30m])
+          rate(gitlab_redis_client_requests_duration_seconds_bucket{le="0.5",storage="rate_limiting"}[30m])
         )
         +
         sum by (env,environment) (
-          rate(gitlab_redis_client_requests_duration_seconds_bucket{le="0.75",storage=~"cluster_rate_limiting|rate_limiting"}[30m])
+          rate(gitlab_redis_client_requests_duration_seconds_bucket{le="0.75",storage="rate_limiting"}[30m])
         )
       )
       /
@@ -130,7 +130,7 @@ groups:
       type: redis-cluster-ratelimiting
     expr: |
       sum by (env,environment) (
-        rate(gitlab_redis_client_requests_duration_seconds_bucket{le="+Inf",storage=~"cluster_rate_limiting|rate_limiting"}[30m])
+        rate(gitlab_redis_client_requests_duration_seconds_bucket{le="+Inf",storage="rate_limiting"}[30m])
       )
   - record: gitlab:component:feature_category:execution:ops:rate_30m
     labels:
@@ -141,7 +141,7 @@ groups:
       type: redis-cluster-ratelimiting
     expr: |
       sum by (env,environment) (
-        rate(gitlab_redis_client_requests_total{storage=~"cluster_rate_limiting|rate_limiting"}[30m])
+        rate(gitlab_redis_client_requests_total{storage="rate_limiting"}[30m])
       )
   - record: gitlab:component:feature_category:execution:error:rate_30m
     labels:
@@ -153,7 +153,7 @@ groups:
     expr: |
       (
         sum by (env,environment) (
-          rate(gitlab_redis_client_exceptions_total{storage=~"cluster_rate_limiting|rate_limiting"}[30m])
+          rate(gitlab_redis_client_exceptions_total{storage="rate_limiting"}[30m])
         )
       )
       or
@@ -198,11 +198,11 @@ groups:
     expr: |
       (
         sum by (env,environment) (
-          rate(gitlab_redis_client_requests_duration_seconds_bucket{le="0.5",storage=~"cluster_rate_limiting|rate_limiting"}[1h])
+          rate(gitlab_redis_client_requests_duration_seconds_bucket{le="0.5",storage="rate_limiting"}[1h])
         )
         +
         sum by (env,environment) (
-          rate(gitlab_redis_client_requests_duration_seconds_bucket{le="0.75",storage=~"cluster_rate_limiting|rate_limiting"}[1h])
+          rate(gitlab_redis_client_requests_duration_seconds_bucket{le="0.75",storage="rate_limiting"}[1h])
         )
       )
       /
@@ -216,7 +216,7 @@ groups:
       type: redis-cluster-ratelimiting
     expr: |
       sum by (env,environment) (
-        rate(gitlab_redis_client_requests_duration_seconds_bucket{le="+Inf",storage=~"cluster_rate_limiting|rate_limiting"}[1h])
+        rate(gitlab_redis_client_requests_duration_seconds_bucket{le="+Inf",storage="rate_limiting"}[1h])
       )
   - record: gitlab:component:feature_category:execution:ops:rate_1h
     labels:
@@ -227,7 +227,7 @@ groups:
       type: redis-cluster-ratelimiting
     expr: |
       sum by (env,environment) (
-        rate(gitlab_redis_client_requests_total{storage=~"cluster_rate_limiting|rate_limiting"}[1h])
+        rate(gitlab_redis_client_requests_total{storage="rate_limiting"}[1h])
       )
   - record: gitlab:component:feature_category:execution:error:rate_1h
     labels:
@@ -239,7 +239,7 @@ groups:
     expr: |
       (
         sum by (env,environment) (
-          rate(gitlab_redis_client_exceptions_total{storage=~"cluster_rate_limiting|rate_limiting"}[1h])
+          rate(gitlab_redis_client_exceptions_total{storage="rate_limiting"}[1h])
         )
       )
       or
