@@ -17,8 +17,8 @@ basic.dashboard(
 .addTemplate(
   template.custom(
     name='Deployment',
-    query='gitlab-(cny-)?webservice,',
-    current='gitlab-(cny-)?webservice',
+    query='gitlab-(cny-)?webservice-git,',
+    current='gitlab-(cny-)?webservice-git',
     hide='variable',
   )
 )
