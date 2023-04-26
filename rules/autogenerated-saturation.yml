@@ -1075,7 +1075,7 @@ groups:
         0.99,
         clamp_min(
           clamp_max(
-            rate(ruby_process_cpu_seconds_total{type=~"web|sidekiq|api|git|websockets"}[10m])
+            rate(ruby_process_cpu_seconds_total{type=~"web|sidekiq|api|git|websockets"}[1h])
             ,
             1)
         ,
@@ -5129,7 +5129,7 @@ groups:
           0.99,
           clamp_min(
             clamp_max(
-              rate(ruby_process_cpu_seconds_total{environment="{{ $labels.environment }}",stage="{{ $labels.stage }}",type="{{ $labels.type }}"}[10m])
+              rate(ruby_process_cpu_seconds_total{environment="{{ $labels.environment }}",stage="{{ $labels.stage }}",type="{{ $labels.type }}"}[1h])
               ,
               1)
           ,
