@@ -18,18 +18,18 @@ test.suite({
     },
   }),
 
-  local testPromql = availabilityPromql.new(keyServices, testSet),
+  local testPromql = availabilityPromql.new(keyServices, testSet, extraSelector={ env: 'gprd' }),
 
   testSuccessRate: {
     actual: testPromql.successRate,
     expect: |||
       (
         sum by(env,environment,type,stage) (
-          gitlab_service_apdex:success:rate_1h{type=~"registry|webservice"}
+          gitlab_service_apdex:success:rate_1h{env="gprd",type=~"registry|webservice"}
         )
         +
         sum by (env,environment,type,stage)(
-          gitlab_service_ops:rate_1h{type=~"registry|webservice"} - gitlab_service_errors:rate_1h{type=~"registry|webservice"}
+          gitlab_service_ops:rate_1h{env="gprd",type=~"registry|webservice"} - gitlab_service_errors:rate_1h{env="gprd",type=~"registry|webservice"}
         )
       )
     |||,
@@ -40,11 +40,11 @@ test.suite({
     expect: |||
       (
         sum by(env,environment,type,stage) (
-          gitlab_service_ops:rate_1h{type=~"registry|webservice"}
+          gitlab_service_ops:rate_1h{env="gprd",type=~"registry|webservice"}
         )
         +
         sum by (env,environment,type,stage) (
-          gitlab_service_apdex:weight:score_1h{type=~"registry|webservice"}
+          gitlab_service_apdex:weight:score_1h{env="gprd",type=~"registry|webservice"}
         )
       )
     |||,

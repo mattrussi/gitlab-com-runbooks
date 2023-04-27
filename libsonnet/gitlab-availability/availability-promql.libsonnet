@@ -3,10 +3,10 @@ local selectors = import 'promql/selectors.libsonnet';
 local misc = import 'utils/misc.libsonnet';
 
 {
-  new(keyServices, aggregationSet):: {
+  new(keyServices, aggregationSet, extraSelector={}):: {
     local burnRate = '1h',  // use the one hour burn rate as the largest non-upscaled one
 
-    local serviceSelector = selectors.serializeHash({ type: { oneOf: keyServices } }),
+    local serviceSelector = selectors.serializeHash({ type: { oneOf: keyServices } } + extraSelector),
 
     local formatConfig = {
       aggregationLabels: aggregations.serialize(aggregationSet.labels),
