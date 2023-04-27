@@ -15,6 +15,7 @@ local metricsCatalog = import 'servicemetrics/metrics-catalog.libsonnet';
 local aggregationSets = (import 'gitlab-metrics-config.libsonnet').aggregationSets;
 local singleMetricRow = import 'key-metric-panels/single-metric-row.libsonnet';
 local textPanel = grafana.text;
+local gitalyPackObjectsDashboards = import 'gitlab-dashboards/gitaly/pack_objects.libsonnet';
 
 local serviceType = 'gitaly';
 
@@ -401,6 +402,26 @@ basic.dashboard(
   }
 )
 .addPanel(
+  row.new(title='gitaly pack-objects metrics', collapse=true)
+  .addPanels(
+    layout.grid([
+      gitalyPackObjectsDashboards.process_active_callers(selectorHash, 'concurrency by repository', segment='repository'),
+      gitalyPackObjectsDashboards.process_active_callers(selectorHash, 'concurrency by remote_ip', segment='remote_ip'),
+      gitalyPackObjectsDashboards.queued_commands(selectorHash, 'queued commands'),
+      gitalyPackObjectsDashboards.dropped_commands(selectorHash, 'dropped commands'),
+      gitalyPackObjectsDashboards.cache_served(selectorHash, 'cache served'),
+      gitalyPackObjectsDashboards.cache_generated(selectorHash, 'cache generated'),
+      gitalyPackObjectsDashboards.cache_lookup(selectorHash, '{{ result }}'),
+    ], startRow=5902)
+  ),
+  gridPos={
+    x: 0,
+    y: 5900,
+    w: 24,
+    h: 1,
+  }
+)
+.addPanel(
   row.new(title='cgroup', collapse=true)
   .addPanels(
     layout.grid([
@@ -423,11 +444,11 @@ basic.dashboard(
           https://gitlab.com/gitlab-com/runbooks/-/blob/master/docs/gitaly/gitaly-repos-cgroup.md
         |||
       ),
-    ], startRow=5901)
+    ], startRow=6001)
   ),
   gridPos={
     x: 0,
-    y: 5900,
+    y: 6000,
     w: 24,
     h: 1,
   }
