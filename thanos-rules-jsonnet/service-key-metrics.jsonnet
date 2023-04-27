@@ -30,4 +30,6 @@ local filesForService(service) =
  */
 local dangerouslyThanosEvaluatedServices = std.filter(function(service) service.dangerouslyThanosEvaluated, services);
 
+// These are not separated by environment, as they are only globally evaluated. The environment could be
+// anything, in the resulting rules we have a separate `env:` as a static label
 std.foldl(function(memo, service) memo + filesForService(service), dangerouslyThanosEvaluatedServices, {})

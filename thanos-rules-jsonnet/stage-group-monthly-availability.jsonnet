@@ -62,7 +62,7 @@ local rules = {
   ],
 };
 
-
+// This is filtered to only record for gprd, no need to separatly record for each environment
 {
-  'stage-group-monthly-availability.yml': std.manifestYamlDoc(rules),
+  'stage-group-monthly-availability-gprd.yml': std.manifestYamlDoc(rules),
 }
