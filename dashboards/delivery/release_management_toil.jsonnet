@@ -436,7 +436,7 @@ basic.dashboard(
 
 .addPanels(
   layout.rowGrid(
-    'Auto-deploy Deployments Total Stastics',
+    'Auto-deploy Deployments Total Statistics',
     [
       barGaugePanel(
         'Auto-deploy Deployments Pipeline Duration',
