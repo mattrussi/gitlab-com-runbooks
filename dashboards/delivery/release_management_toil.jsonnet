@@ -326,7 +326,7 @@ local barGaugePanel(
   fieldLinks=[],
   legendFormat='',
   links=[],
-  minVizHeight=10,
+  minVizHeight=30,
   minVizWidth=0,
   orientation='horizontal',
   query='',
@@ -443,7 +443,7 @@ basic.dashboard(
         description='For all the auto-deploy pipelines in the time range, display total duration per pipeline',
         fieldColor={
           fixedColor: 'green',
-          mode: 'fixed',
+          mode: 'palette-classic',
         },
         fieldLinks=[
           {
