@@ -32,8 +32,8 @@ groups:
     expr: |
       (
           (
-            (gitlab_service_ops:rate{monitor="global"} -  gitlab_service_ops:rate:prediction{monitor="global"}) /
-          gitlab_service_ops:rate:stddev_over_time_1w{monitor="global"}
+            (gitlab_service_ops:rate{env="ops",monitor="global"} -  gitlab_service_ops:rate:prediction{env="ops",monitor="global"}) /
+          gitlab_service_ops:rate:stddev_over_time_1w{env="ops",monitor="global"}
         )
         >
         3
@@ -68,8 +68,8 @@ groups:
     expr: |
       (
           (
-            (gitlab_service_ops:rate{monitor="global"} -  gitlab_service_ops:rate:prediction{monitor="global"}) /
-          gitlab_service_ops:rate:stddev_over_time_1w{monitor="global"}
+            (gitlab_service_ops:rate{env="ops",monitor="global"} -  gitlab_service_ops:rate:prediction{env="ops",monitor="global"}) /
+          gitlab_service_ops:rate:stddev_over_time_1w{env="ops",monitor="global"}
         )
         <
         -3
