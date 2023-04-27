@@ -151,10 +151,10 @@ local generateTrafficCessationAlerts(service, sli, alertDescriptor, trafficCessa
          ),
      }] else []);
 
-function(service, sli, alertDescriptor)
+function(service, sli, alertDescriptor, extraSelector)
   local trafficCessationAlertSelector = getTrafficCessationAlertSelector(service, sli, alertDescriptor);
 
   // null selector means no traffic cessation alerts for this SLI/aggregationset combination
   if trafficCessationAlertSelector != null then
-    generateTrafficCessationAlerts(service, sli, alertDescriptor, trafficCessationAlertSelector)
+    generateTrafficCessationAlerts(service, sli, alertDescriptor, trafficCessationAlertSelector + extraSelector)
   else []
