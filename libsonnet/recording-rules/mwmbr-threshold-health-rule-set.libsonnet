@@ -1,12 +1,13 @@
 local mwmbrExpression = import 'mwmbr/expression.libsonnet';
 local aggregationSets = (import 'gitlab-metrics-config.libsonnet').aggregationSets;
+local selectors = import 'promql/selectors.libsonnet';
 
-local otherThresholdRules(threshold) =
+local otherThresholdRules(threshold, selector) =
   [{
     record: threshold.errorHealth,
     expr: mwmbrExpression.errorHealthExpression(
       aggregationSet=aggregationSets.serviceSLIs,
-      metricSelectorHash={},
+      metricSelectorHash=selector,
       thresholdSLOMetricName=threshold.errorSLO,
       thresholdSLOMetricAggregationLabels=['type', 'tier'],
     ),
@@ -14,7 +15,7 @@ local otherThresholdRules(threshold) =
     record: threshold.apdexHealth,
     expr: mwmbrExpression.apdexHealthExpression(
       aggregationSet=aggregationSets.serviceSLIs,
-      metricSelectorHash={},
+      metricSelectorHash=selector,
       thresholdSLOMetricName=threshold.apdexSLO,
       thresholdSLOMetricAggregationLabels=['type', 'tier'],
     ),
@@ -22,20 +23,27 @@ local otherThresholdRules(threshold) =
     record: threshold.aggregateServiceHealth,
     expr: |||
       min without (sli_type) (
-        label_replace(%(apdexHealth)s{monitor="global"}, "sli_type", "apdex", "", "")
+        label_replace(%(apdexHealth)s{%(selector)s}, "sli_type", "apdex", "", "")
         or
-        label_replace(%(errorHealth)s{monitor="global"}, "sli_type", "errors", "", "")
+        label_replace(%(errorHealth)s{%(selector)s}, "sli_type", "errors", "", "")
       )
-    ||| % { apdexHealth: threshold.apdexHealth, errorHealth: threshold.errorHealth },
+    ||| % {
+      apdexHealth: threshold.apdexHealth,
+      errorHealth: threshold.errorHealth,
+      selector: selectors.serializeHash({ monitor: 'global' } + selector),
+    },
   }, {
     record: threshold.aggregateStageHealth,
     expr: |||
       min by (environment, env, stage) (
-        %(aggregateServiceHealth)s{monitor="global"}
+        %(aggregateServiceHealth)s{%(selector)s}
       )
-    ||| % { aggregateServiceHealth: threshold.aggregateServiceHealth },
+    ||| % {
+      aggregateServiceHealth: threshold.aggregateServiceHealth,
+      selector: selectors.serializeHash({ monitor: 'global' } + selector),
+    },
   }];
 
 {
-  thresholdHealthRuleSet(name):: otherThresholdRules(name),
+  thresholdHealthRuleSet:: otherThresholdRules,
 }
