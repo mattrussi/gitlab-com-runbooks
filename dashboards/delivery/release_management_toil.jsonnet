@@ -452,7 +452,7 @@ basic.dashboard(
           },
         ],
         legendFormat='{{deploy_version}}',
-        query='sum by (deploy_version) (delivery_deployment_pipeline_duration_seconds{project_name="gitlab-org/release/tools"})',
+        query='delivery_deployment_pipeline_duration_seconds{project_name="gitlab-org/release/tools", pipeline_name="Coordinator pipeline"}',
         reduceOptions={
           values: 'true',
           calcs: [],

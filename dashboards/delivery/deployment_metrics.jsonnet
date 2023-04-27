@@ -172,7 +172,7 @@ basic.dashboard(
         format='table',
         mode='absolute',
         legendFormat='{{target_env, target_stage}}',
-        query='sum by (target_env, target_stage) (delivery_deployment_pipeline_duration_seconds{deploy_version="$deploy_version",target_env!="",target_stage!=""})',
+        query='sum by (target_env, target_stage) (delivery_deployment_pipeline_duration_seconds{deploy_version="$deploy_version", pipeline_name!="Coordinator pipeline"})',
         reduceOptions={
           values: true,
           calcs: [],
@@ -191,16 +191,6 @@ basic.dashboard(
             id: 'groupBy',
             options: {
               fields: {
-                Value: {
-                  aggregations: [
-                    'max',
-                  ],
-                  operation: 'aggregate',
-                },
-                project_name: {
-                  aggregations: [],
-                  operation: 'groupby',
-                },
                 target_env: {
                   aggregations: [],
                   operation: 'groupby',
@@ -208,6 +198,12 @@ basic.dashboard(
                 target_stage: {
                   aggregations: [],
                   operation: 'groupby',
+                },
+                Value: {
+                  aggregations: [
+                    'lastNotNull',
+                  ],
+                  operation: 'aggregate',
                 },
               },
             },
@@ -222,22 +218,22 @@ basic.dashboard(
         format='table',
         legendFormat='__auto',
         panelTitle='Total Pipeline Duration',
-        query='sum by (deploy_version) (delivery_deployment_pipeline_duration_seconds{project_name="gitlab-org/release/tools", deploy_version="$deploy_version"})',
+        query='delivery_deployment_pipeline_duration_seconds{project_name="gitlab-org/release/tools", pipeline_name="Coordinator pipeline", deploy_version="$deploy_version"}',
         title='',
         transformations=[
           {
             id: 'groupBy',
             options: {
               fields: {
-                Value: {
-                  aggregations: [
-                    'max',
-                  ],
-                  operation: 'aggregate',
-                },
                 deploy_version: {
                   aggregations: [],
                   operation: 'groupby',
+                },
+                Value: {
+                  aggregations: [
+                    'last',
+                  ],
+                  operations: 'aggregate',
                 },
               },
             },
