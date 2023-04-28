@@ -1,6 +1,7 @@
 local grafana = import 'github.com/grafana/grafonnet-lib/grafonnet/grafana.libsonnet';
 local basic = import 'grafana/basic.libsonnet';
 local layout = import 'grafana/layout.libsonnet';
+local promQuery = import 'grafana/prom_query.libsonnet';
 
 local numberOfAutoDeployJobRetriesQuery = 'sort_desc(sum(increase(delivery_webhooks_auto_deploy_job_retries[$__range])) by (project) != 0)';
 local numberOfAutoDeployJobRetriesByJobQuery = 'sort_desc(sum(increase(delivery_webhooks_auto_deploy_job_retries[$__range])) by (project, job_name) != 0)';
@@ -318,6 +319,50 @@ local incompleteDeploymentsStatPanel =
     ],
   );
 
+local barGaugePanel(
+  title,
+  description='',
+  fieldColor={},
+  fieldLinks=[],
+  legendFormat='',
+  links=[],
+  minVizHeight=30,
+  minVizWidth=0,
+  orientation='horizontal',
+  query='',
+  reduceOptions={},
+  thresholds={},
+  transformations=[],
+  unit=''
+      ) =
+  {
+    description: description,
+    fieldConfig: {
+      values: false,
+      defaults: {
+        mappings: [],
+        thresholds: thresholds,
+        color: fieldColor,
+        links: fieldLinks,
+        unit: unit,
+      },
+    },
+    links: links,
+    options: {
+      reduceOptions: reduceOptions,
+      displayMode: 'basic',
+      orientation: orientation,
+      showUnfilled: true,
+      minVizWidth: minVizWidth,
+      minVizHeight: minVizHeight,
+    },
+    pluginVersion: '9.4.7',
+    targets: [promQuery.target(query, format='table', intervalFactor=2, legendFormat=legendFormat, instant=false)],
+    title: title,
+    type: 'bargauge',
+    transformations: transformations,
+  };
+
 basic.dashboard(
   'Release Management Toil',
   tags=['release'],
@@ -386,6 +431,77 @@ basic.dashboard(
     collapse=false,
     rowHeight=10,
     startRow=300,
+  )
+)
+
+.addPanels(
+  layout.rowGrid(
+    'Auto-deploy Deployments Total Statistics',
+    [
+      barGaugePanel(
+        'Auto-deploy Deployments Pipeline Duration',
+        description='For all the auto-deploy pipelines in the time range, display total duration per pipeline',
+        fieldColor={
+          fixedColor: 'green',
+          mode: 'palette-classic',
+        },
+        fieldLinks=[
+          {
+            title: 'Deploy version link',
+            url: 'https://dashboards.gitlab.net/d/delivery-deployment_metrics/delivery-deployment-metrics?orgId=1&${__url_time_range}&var-deploy_version=${__data.fields.deploy_version}',
+          },
+        ],
+        legendFormat='{{deploy_version}}',
+        query='delivery_deployment_pipeline_duration_seconds{project_name="gitlab-org/release/tools", pipeline_name="Coordinator pipeline"}',
+        reduceOptions={
+          values: 'true',
+          calcs: [],
+          fields: '/^Value \\(max\\)$/',
+        },
+        thresholds={
+          steps: [
+            { color: 'green', value: null },
+          ],
+        },
+        transformations=[
+          {
+            id: 'groupBy',
+            options: {
+              fields: {
+                Time: {
+                  aggregations: ['first'],
+                  operation: 'aggregate',
+                },
+                Value: {
+                  aggregations: ['max'],
+                  operation: 'aggregate',
+                },
+                deploy_version: {
+                  aggregations: [],
+                  operation: 'groupby',
+                },
+              },
+            },
+          },
+          {
+            id: 'sortBy',
+            options: {
+              fields: {},
+              sort: [
+                {
+                  desc: 'true',
+                  field: 'deploy_version',
+                },
+              ],
+            },
+          },
+        ],
+        unit='s',
+      ),
+    ],
+    collapse=false,
+    rowHeight=10,
+    startRow=400,
   )
 )
 

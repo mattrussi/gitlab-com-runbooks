@@ -17,39 +17,46 @@ local explainer = |||
 local bargaugePanel(
   title,
   description='',
-  query='',
-  legendFormat='',
-  thresholds={},
-  links=[],
   fieldLinks=[],
+  format='time_series',
+  instant=true,
+  legendFormat='',
+  links=[],
+  mode='thresholds',
   orientation='vertical',
+  query='',
+  reduceOptions={
+    calcs: [
+      'last',
+    ],
+  },
+  thresholds={},
+  transformations=[],
+  unit='s',
       ) =
   {
     description: description,
     fieldConfig: {
       values: false,
       defaults: {
-        reduceOptions: {
-          calcs: [
-            'last',
-          ],
-        },
-        thresholds: thresholds,
-        unit: 's',
         links: fieldLinks,
-        mode: 'thresholds',
+        mode: mode,
+        thresholds: thresholds,
+        unit: unit,
       },
     },
     links: links,
     options: {
       displayMode: 'basic',
       orientation: orientation,
+      reduceOptions: reduceOptions,
       showUnfilled: true,
     },
     pluginVersion: '9.3.6',
-    targets: [promQuery.target(query, legendFormat=legendFormat, instant=true)],
+    targets: [promQuery.target(query, format=format, legendFormat=legendFormat, instant=instant)],
     title: title,
     type: 'bargauge',
+    transformations: transformations,
   };
 
 
@@ -144,6 +151,104 @@ basic.dashboard(
       ]),
     ],
   ], [19, 5], rowHeight=10, startRow=1)
+)
+
+.addPanel(
+  row.new(title='📊 Downstream Pipeline statistics'),
+  gridPos={
+    x: 0,
+    y: 11,
+    w: 24,
+    h: 1,
+  }
+)
+.addPanels(
+  layout.columnGrid([
+    [
+      bargaugePanel(
+        'Downstream Pipelines Duration',
+        description='Duration for each downstream pipelines to complete',
+        instant=false,
+        format='table',
+        mode='absolute',
+        legendFormat='{{target_env, target_stage}}',
+        query='sum by (target_env, target_stage) (delivery_deployment_pipeline_duration_seconds{deploy_version="$deploy_version", pipeline_name!="Coordinator pipeline"})',
+        reduceOptions={
+          values: true,
+          calcs: [],
+          fields: '',
+        },
+        thresholds={
+          steps: [
+            { color: colorScheme.normalRangeColor, value: 0 },
+            { color: colorScheme.warningColor, value: 8400 },  // 140 minutes
+            { color: colorScheme.errorColor, value: 10800 },  // 3 hours
+            { color: colorScheme.criticalColor, value: 21600 },  // 6 hours
+          ],
+        },
+        transformations=[
+          {
+            id: 'groupBy',
+            options: {
+              fields: {
+                target_env: {
+                  aggregations: [],
+                  operation: 'groupby',
+                },
+                target_stage: {
+                  aggregations: [],
+                  operation: 'groupby',
+                },
+                Value: {
+                  aggregations: [
+                    'lastNotNull',
+                  ],
+                  operation: 'aggregate',
+                },
+              },
+            },
+          },
+        ],
+      ),
+      basic.statPanel(
+        color='blue',
+        graphMode='area',
+        instant=false,
+        interval='',
+        format='table',
+        legendFormat='__auto',
+        panelTitle='Total Pipeline Duration',
+        query='delivery_deployment_pipeline_duration_seconds{project_name="gitlab-org/release/tools", pipeline_name="Coordinator pipeline", deploy_version="$deploy_version"}',
+        title='',
+        transformations=[
+          {
+            id: 'groupBy',
+            options: {
+              fields: {
+                deploy_version: {
+                  aggregations: [],
+                  operation: 'groupby',
+                },
+                Value: {
+                  aggregations: [
+                    'last',
+                  ],
+                  operations: 'aggregate',
+                },
+              },
+            },
+          },
+        ],
+        unit='s',
+      )
+      .addThresholds([
+        { color: colorScheme.normalRangeColor, value: 0 },
+        { color: colorScheme.warningColor, value: 28800 },
+        { color: colorScheme.errorColor, value: 36000 },
+        { color: colorScheme.criticalColor, value: 43200 },
+      ]),
+    ],
+  ], [19, 5], rowHeight=10, startRow=12)
 )
 
 .trailer()
