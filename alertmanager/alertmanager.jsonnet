@@ -464,11 +464,18 @@ local routingTree = Route(
     ),
   ] +
   [
-    // Route Kubernetes alerts for staging to `feed_alerts_staging`
+    // Route Kubernetes alerts for staging to `#alerts-nonprod`
     Route(
       receiver='nonprod_alerts_slack_channel',
       continue=true,
       matchers={ env: { re: 'gstg(-ref)?' }, type: 'kube' },
+    ),
+    // Route gitaly storage alerts for staging to #alerts-nonprod
+    // https://gitlab.com/gitlab-com/gl-infra/reliability/-/issues/16964
+    Route(
+      receiver='nonprod_alerts_slack_channel',
+      continue=true,
+      matchers={ env: { re: 'gstg(-ref)?' }, type: 'gitaly', tier: 'stor', component: 'disk_space' },
     ),
   ]
   + [
