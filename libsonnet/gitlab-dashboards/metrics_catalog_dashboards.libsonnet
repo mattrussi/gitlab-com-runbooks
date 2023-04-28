@@ -112,7 +112,7 @@ local sliDetailLatencyPanel(
   logBase=10,
   legendFormat='%(percentile_humanized)s %(sliName)s',
   min=0.01,
-  intervalFactor=2,
+  intervalFactor=1,
   withoutLabels=[],
       ) =
   local percentile = getLatencyPercentileForService(serviceType);
@@ -145,7 +145,7 @@ local sliDetailOpsRatePanel(
   selector=null,
   aggregationLabels='',
   legendFormat='%(sliName)s operations',
-  intervalFactor=2,
+  intervalFactor=1,
   withoutLabels=[],
       ) =
 
@@ -168,7 +168,7 @@ local sliDetailErrorRatePanel(
   selector=null,
   aggregationLabels='',
   legendFormat='%(sliName)s errors',
-  intervalFactor=2,
+  intervalFactor=1,
   withoutLabels=[],
       ) =
 
@@ -318,7 +318,7 @@ local sliDetailErrorRatePanel(
                         rangeInterval='$__interval',
                       ),
                       legendFormat=aggregationSet.legendFormat % { sliName: sliName },
-                      intervalFactor=3,
+                      intervalFactor=1,
                       decimals=2,
                       linewidth=1,
                       fill=4,
@@ -405,7 +405,7 @@ local sliDetailErrorRatePanel(
                         withoutLabels=withoutLabels,
                       ),
                       legendFormat=aggregationSet.legendFormat % { sliName: sli.name },
-                      intervalFactor=3,
+                      intervalFactor=1,
                       decimals=2,
                       linewidth=1,
                       fill=4,
