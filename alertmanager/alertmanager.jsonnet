@@ -476,7 +476,7 @@ local routingTree = Route(
       receiver='nonprod_alerts_slack_channel',
       continue=true,
       matchers={ env: { re: 'gstg(-ref)?' }, type: 'gitaly', tier: 'stor', component: 'disk_space' },
-    )
+    ),
   ]
   + [
     // Terminators go last
