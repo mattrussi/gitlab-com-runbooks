@@ -34,7 +34,6 @@
 * [Google mtail for prometheus metrics](../uncategorized/mtail.md)
 * [../uncategorized/namespace-restore.md](../uncategorized/namespace-restore.md)
 * [PackageCloud Infrastructure and Backups](../uncategorized/packagecloud-infrastructure.md)
-* [Setup oauth2-proxy protection for web based application](../uncategorized/setup-oauth2-proxy-protected-application.md)
 * [version.gitlab.com Runbook](../version/version-gitlab-com.md)
 * [Nginx is down](../web/nginx-is-down.md)
 <!-- END_MARKER -->
