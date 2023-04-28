@@ -132,12 +132,12 @@ src: <https://docs.gitlab.com/ee/administration/troubleshooting/sidekiq.html#enu
 
 ### Get queues using sq.rb script
 
-[sq](https://gitlab.com/gitlab-com/runbooks/raw/master/docs/uncategorized/db_scripts/sq.rb) is a command-line tool that you can run to
+[sq](https://gitlab.com/gitlab-com/runbooks/raw/master/scripts/sidekiq/sq.rb) is a command-line tool that you can run to
 assist you in viewing the state of Sidekiq and killing certain workers. To use it,
 first download a copy:
 
 ```bash
-curl -o /tmp/sq.rb https://gitlab.com/gitlab-com/runbooks/raw/master/docs/uncategorized/db_scripts/sq.rb
+curl -o /tmp/sq.rb https://gitlab.com/gitlab-com/runbooks/raw/master/scripts/sidekiq/sq.rb
 ```
 
 To display a breakdown of all the workers, run:
@@ -166,7 +166,7 @@ BE CAREFUL WITH THIS COMMAND! You can see how many jobs would be killed using th
 parameter:
 
 ```bash
-curl -o /tmp/sq.rb https://gitlab.com/gitlab-com/runbooks/raw/master/docs/uncategorized/db_scripts/sq.rb
+curl -o /tmp/sq.rb https://gitlab.com/gitlab-com/runbooks/raw/master/scripts/sidekiq/sq.rb
 sudo gitlab-rails runner /tmp/sq.rb
 sudo gitlab-rails runner /tmp/sq.rb kill <WORKER NAME> --dry-run
 ```

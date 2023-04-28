@@ -38,7 +38,7 @@
 * Download `sq.rb` and run it to log all Sidekiq jobs and their arguments:
 
     ```sh
-    curl -o /tmp/sq.rb https://gitlab.com/gitlab-com/runbooks/-/raw/master/docs/uncategorized/db_scripts/sq.rb
+    curl -o /tmp/sq.rb https://gitlab.com/gitlab-com/runbooks/-/raw/master/scripts/sidekiq/sq.rb
     sudo gitlab-rails runner /tmp/sq.rb --job-type='*' show > /tmp/sidekiq-jobs.txt
     ```
 
