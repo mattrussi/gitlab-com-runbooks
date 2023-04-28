@@ -442,3 +442,24 @@ a similar procedure for the regional cluster where Sidekiq currently runs.
       0, or the metric will disappear.  For most workloads we exclude
       healthchecks and metrics gathering from displaying as part of our
       dashboards.
+
+## Cluster upgrades
+
+Cluster upgrade operations can be viewed using `gcloud`:
+
+```sh
+gcloud --project XXXX container operations list
+```
+
+We have a handy list of k8s clusters with their Google project in `../../kubernetes/clusters.json`
+so if you want to view the container operations for all k8s clusters in all projects, you can
+do the following:
+
+```sh
+for project in $(jq -r '.[] | .project' < ../../kubernetes/clusters.json | sort | uniq)
+do
+  echo "### ${project}"
+  gcloud --project $project container operations list
+  echo
+done
+```
