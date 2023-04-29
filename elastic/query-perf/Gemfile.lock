@@ -2,7 +2,7 @@ GEM
   remote: https://rubygems.org/
   specs:
     HDRHistogram (0.1.11)
-    addressable (2.8.1)
+    addressable (2.8.4)
       public_suffix (>= 2.0.2, < 6.0)
     domain_name (0.5.20190701)
       unf (>= 0.0.5, < 1.0.0)
@@ -35,4 +35,4 @@ DEPENDENCIES
   http
 
 BUNDLED WITH
-   2.3.5
+   2.4.10
