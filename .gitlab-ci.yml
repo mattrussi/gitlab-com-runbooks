@@ -665,11 +665,11 @@ deploy_dashboards:
     - dashboards/tag-unmanaged-dashboards.sh
 
 .docker_image_template:
-  image: docker:23.0.4
+  image: docker:23.0.5
   tags:
     - gitlab-org-docker
   services:
-    - docker:23.0.4-dind
+    - docker:23.0.5-dind
   retry: 2
   variables:
     DOCKER_TLS_CERTDIR: ""
