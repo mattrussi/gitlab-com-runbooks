@@ -799,6 +799,35 @@ services:
         grafana_folder: pgbouncer-registry
         primary_grafana_dashboard: pgbouncer-main/pgbouncer-overview
 
+  - name: pgbouncer-embedding
+    tier: db
+    friendly_name: Embedding PGBouncer Primary Database Pool
+    label: PgbouncerEmbedding
+    owner: reliability_database_reliability
+    technical:
+      project:
+        - https://github.com/pgbouncer/pgbouncer
+      documents:
+        design:
+        architecture: https://about.gitlab.com/handbook/engineering/infrastructure/production-architecture/#database-architecture
+        sre_guide: https://gitlab.com/gitlab-com/runbooks/-/tree/master/docs/pgbouncer-embedding
+        developer_guide:
+        readiness_review:
+        service:
+          - https://pgbouncer.github.io/features.html
+        security:
+      dependencies:
+        - service: postgres
+      logging:
+        - name: pgbouncer
+          permalink: https://log.gprd.gitlab.net/goto/3fb9391e5ef07b47aac2fce6fda175d9
+        - name: system
+          permalink: https://log.gprd.gitlab.net/goto/ae311f6f133cc1c45b62541977081043
+    observability:
+      monitors:
+        grafana_folder: pgbouncer-embedding
+        primary_grafana_dashboard: pgbouncer-main/pgbouncer-overview
+
   - name: pgbouncer-ci
     tier: db
     friendly_name: CI PGBouncer Primary Database Pool
@@ -872,6 +901,37 @@ services:
         architecture: https://about.gitlab.com/handbook/engineering/infrastructure/production-architecture/#database-architecture
         readiness_review:
         sre_guide: https://gitlab.com/gitlab-com/runbooks/-/tree/master/docs/patroni-registry
+        developer_guide:
+        service:
+          - https://www.postgresql.org/docs/9.6/index.html
+        security: https://www.postgresql.org/support/security/
+      dependencies:
+        - service: consul
+      components:
+        - patroni
+      logging:
+        - name: Postgres
+          permalink: https://log.gprd.gitlab.net/goto/d0f8993486c9007a69d85e3a08f1ea7c # TODO: Update when provisioned in gprd
+        - name: system
+          permalink: https://log.gprd.gitlab.net/goto/3669d551a595a3a5cf1e9318b74e6c22 # TODO: Update when provisioned in gprd
+    observability:
+      monitors:
+        grafana_folder: RNfEDpLmz # TODO: Update when provisioned
+        primary_grafana_dashboard: patroni-main/patroni-overview
+
+  - name: patroni-embedding
+    tier: db
+    friendly_name: Embedding Postgres (Patroni)
+    label: PatroniEmbedding
+    owner: reliability_database_reliability
+    technical:
+      project:
+        - https://github.com/postgres/postgres
+      documents:
+        design:
+        architecture: https://about.gitlab.com/handbook/engineering/infrastructure/production-architecture/#database-architecture
+        readiness_review:
+        sre_guide: https://gitlab.com/gitlab-com/runbooks/-/tree/master/docs/patroni-embedding
         developer_guide:
         service:
           - https://www.postgresql.org/docs/9.6/index.html
