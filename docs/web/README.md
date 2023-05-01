@@ -18,9 +18,6 @@
 
 ## Troubleshooting Pointers
 
-* [How to connect to a Database console using Teleport](../Teleport/Connect_to_Database_Console_via_Teleport.md)
-* [How to connect to a Rails Console using Teleport](../Teleport/Connect_to_Rails_Console_via_Teleport.md)
-* [Teleport Approver Workflow](../Teleport/teleport_approval_workflow.md)
 * [../ci-runners/service-ci-runners.md](../ci-runners/service-ci-runners.md)
 * [Cloudflare: Managing Traffic](../cloudflare/managing-traffic.md)
 * [Cloudflare for the on-call](../cloudflare/oncall.md)
@@ -69,6 +66,9 @@
 * [Sentry is down and gives error 500](../sentry/sentry-is-down.md)
 * [A survival guide for SREs to working with Sidekiq at GitLab](../sidekiq/sidekiq-survival-guide-for-sres.md)
 * [../spamcheck/index.md](../spamcheck/index.md)
+* [How to connect to a Database console using Teleport](../teleport/Connect_to_Database_Console_via_Teleport.md)
+* [How to connect to a Rails Console using Teleport](../teleport/Connect_to_Rails_Console_via_Teleport.md)
+* [Teleport Approver Workflow](../teleport/teleport_approval_workflow.md)
 * [Example Tutorial Template](../tutorials/example_tutorial_template.md)
 * [How to use flamegraphs for performance profiling](../tutorials/how_to_use_flamegraphs_for_perf_profiling.md)
 * [Life of a Git Request](../tutorials/overview_life_of_a_git_request.md)

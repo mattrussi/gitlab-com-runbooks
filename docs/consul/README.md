@@ -17,7 +17,6 @@
 
 ## Troubleshooting Pointers
 
-* [Teleport Administration](../Teleport/teleport_admin.md)
 * [Interacting with Consul](interaction.md)
 * [What is Programmable Search Engine?](../docs.gitlab.com/programmableSearch.md)
 * [Diagnosis with Kibana](../onboarding/kibana-diagnosis.md)

@@ -18,7 +18,6 @@
 
 ## Troubleshooting Pointers
 
-* [How to connect to a Database console using Teleport](../Teleport/Connect_to_Database_Console_via_Teleport.md)
 * [Cloud SQL Troubleshooting](../cloud-sql/cloud-sql.md)
 * [Cloudflare: Managing Traffic](../cloudflare/managing-traffic.md)
 * [Interacting with Consul](../consul/interaction.md)
@@ -39,6 +38,7 @@
 * [Container Registry database post-deployment migrations](db-post-deployment-migrations.md)
 * [gitlab-registry.md](gitlab-registry.md)
 * [High Number of Overdue Online GC Tasks](online-gc-high-overdue-tasks.md)
+* [How to connect to a Database console using Teleport](../teleport/Connect_to_Database_Console_via_Teleport.md)
 * [Deleting a project manually](../uncategorized/delete-projects-manually.md)
 * [How to Use Vault for Secrets Management in Infrastructure](../vault/usage.md)
 * [Vault Secrets Management](../vault/vault.md)
