@@ -165,6 +165,8 @@ teams:
   - graphql_query
 
 - name: global_search
+  manager: changzhengliu
+  label: group::global search
   slack_alerts_channel: g_global_search
   product_stage_group: global_search
   ignored_components:
