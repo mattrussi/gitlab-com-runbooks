@@ -74,7 +74,6 @@ local truncateRawCatalogTeam(team) =
     name: team.name,
     label: if std.objectHas(team, 'label') then team.label else null,
     manager: if std.objectHas(team, 'manager') then team.manager else null,
-    assignCapacityPlanningIssues: if std.objectHas(team, 'assign_capacity_planning_issues') then team.assign_capacity_planning_issues else false,
   };
 
 {

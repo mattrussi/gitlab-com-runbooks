@@ -82,7 +82,6 @@ test.suite({
       manager: 'rnienaber',
       label: 'group::scalability',
       url: 'https://about.gitlab.com/handbook/engineering/infrastructure/team/scalability/',
-      assign_capacity_planning_issues: true,
     },
   },
   testTeams: {
