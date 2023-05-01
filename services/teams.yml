@@ -347,8 +347,6 @@ teams:
   - graphql_query
 - name: security_policies
   product_stage_group: security_policies
-  ignored_components:
-  - graphql_query
   slack_error_budget_channel: g_govern_security_policies
   send_error_budget_weekly_to_slack: true
 
