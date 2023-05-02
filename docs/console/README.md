@@ -16,10 +16,6 @@
 
 ## Troubleshooting Pointers
 
-* [How to connect to a Database console using Teleport](../Teleport/Connect_to_Database_Console_via_Teleport.md)
-* [How to connect to a Rails Console using Teleport](../Teleport/Connect_to_Rails_Console_via_Teleport.md)
-* [Teleport Administration](../Teleport/teleport_admin.md)
-* [Teleport Approver Workflow](../Teleport/teleport_approval_workflow.md)
 * [../bastions/gprd-bastions.md](../bastions/gprd-bastions.md)
 * [../bastions/gstg-bastions.md](../bastions/gstg-bastions.md)
 * [../bastions/ops-bastions.md](../bastions/ops-bastions.md)
@@ -97,6 +93,10 @@
 * [../sidekiq/sidekiq_stats_no_longer_showing.md](../sidekiq/sidekiq_stats_no_longer_showing.md)
 * [../sidekiq/silent-project-exports.md](../sidekiq/silent-project-exports.md)
 * [../spamcheck/index.md](../spamcheck/index.md)
+* [How to connect to a Database console using Teleport](../teleport/Connect_to_Database_Console_via_Teleport.md)
+* [How to connect to a Rails Console using Teleport](../teleport/Connect_to_Rails_Console_via_Teleport.md)
+* [Teleport Administration](../teleport/teleport_admin.md)
+* [Teleport Approver Workflow](../teleport/teleport_approval_workflow.md)
 * [How to use flamegraphs for performance profiling](../tutorials/how_to_use_flamegraphs_for_perf_profiling.md)
 * [../uncategorized/about-gitlab-com.md](../uncategorized/about-gitlab-com.md)
 * [Access Requests](../uncategorized/access-requests.md)

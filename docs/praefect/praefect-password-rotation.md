@@ -111,4 +111,4 @@ knife ssh -C1 'role:gprd-base-stor-praefect-cny' -- sudo gitlab-ctl praefect che
 knife ssh -C1 'role:gprd-base-stor-praefect-cny' -- 'sudo gitlab-ctl restart praefect; sleep 20'
 ```
 
-- [ ] Rotate the password for [the `praefect_01` user](https://console.cloud.google.com/sql/instances/praefect-db-9dfb/users?project=gitlab-production_: `https://console.cloud.google.com/sql/instances/praefect-db-9dfb/users?project=gitlab-production`
+- [ ] Rotate the password for [the `praefect_01` user](https://console.cloud.google.com/sql/instances/praefect-db-9dfb/users?project=gitlab-production)

@@ -8,7 +8,7 @@ on the entire backup process.
 
 ## Support Requests
 
-We are entitled to product support from PackageCloud.  To open a new support request email: support@packagecloud.io
+We are entitled to product support from PackageCloud.  To open a new support request email: <support@packagecloud.io>
 
 To escalate a support request reach out to the [Reliability General Team](https://about.gitlab.com/handbook/engineering/infrastructure/team/reliability/general.html).
 

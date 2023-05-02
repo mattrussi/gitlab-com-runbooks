@@ -182,4 +182,4 @@ The output will look like follows:
 
 As each migration is applied, it will be inserted in this table, with the current time set in `applied_at`. So we can glance at this query result when wondering how many have been already applied.
 
-Follow [this guide](https://gitlab.com/gitlab-com/runbooks/-/blob/master/docs/Teleport/Connect_to_Database_Console_via_Teleport.md#accessing-the-database-console-via-teleport) on how to connect to the registry database using `tsh`.
+Follow [this guide](https://gitlab.com/gitlab-com/runbooks/-/blob/master/docs/teleport/Connect_to_Database_Console_via_Teleport.md#accessing-the-database-console-via-teleport) on how to connect to the registry database using `tsh`.

@@ -138,7 +138,7 @@ The benchmarked in [Benchmark of VACUUM PostgreSQL 12 vs. 13 (btree deduplicatio
 
 ## Incidents and issues involving VACUUM
 
-- [[Design Document] Configure properly Autovacuum for postgresql](https://gitlab.com/gitlab-com/gl-infra/reliability/-/issues/5024)
+- [(Design Document) Configure properly Autovacuum for postgresql](https://gitlab.com/gitlab-com/gl-infra/reliability/-/issues/5024)
 - [Review Autovacuum Strategy for all high traffic tables](https://gitlab.com/gitlab-com/gl-infra/reliability/-/issues/14811)
 - [Infra review of Autovacuum historical comments and decisions](https://gitlab.com/gitlab-com/gl-infra/reliability/-/issues/15050)
 - [Optimize PostgreSQL AUTOVACUUM - 2021](https://gitlab.com/groups/gitlab-com/gl-infra/-/epics/413#note_820480832)

@@ -15,8 +15,6 @@
 
 ## Troubleshooting Pointers
 
-* [How to connect to a Rails Console using Teleport](../Teleport/Connect_to_Rails_Console_via_Teleport.md)
-* [Teleport Approver Workflow](../Teleport/teleport_approval_workflow.md)
 * [Upgrade camoproxy](../camoproxy/upgrade-camoproxy.md)
 * [../ci-runners/ci_pending_builds.md](../ci-runners/ci_pending_builds.md)
 * [Cloudflare: Managing Traffic](../cloudflare/managing-traffic.md)
@@ -65,6 +63,8 @@
 * [Container Registry database post-deployment migrations](../registry/db-post-deployment-migrations.md)
 * [High Number of Overdue Online GC Tasks](../registry/online-gc-high-overdue-tasks.md)
 * [Managing Sentry in Kubernetes](../sentry/sentry-in-kube.md)
+* [How to connect to a Rails Console using Teleport](../teleport/Connect_to_Rails_Console_via_Teleport.md)
+* [Teleport Administration](../teleport/teleport_admin.md)
 * [../uncategorized/about-gitlab-com.md](../uncategorized/about-gitlab-com.md)
 * [Aptly](../uncategorized/aptly.md)
 * [Auto DevOps](../uncategorized/auto-devops.md)

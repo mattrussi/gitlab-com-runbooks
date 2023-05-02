@@ -23,4 +23,4 @@ If access to any other groups are needed, please clarify with the requester.
 
 ## Read Only Rails Console Access
 
-When developers ask for access to the rails console, have them submit an access request via Teleport using the [Teleport Rails Console Runbook](../Teleport/Connect_to_Rails_Console_via_Teleport.md) - Then approve that request (if appropriate) using the [Teleport Approval Workflow](../Teleport/teleport_approval_workflow.md) - If the request is for Read/Write access, it's best to give the commands to an SRE and have them run them.
+When developers ask for access to the rails console, have them submit an access request via Teleport using the [Teleport Rails Console Runbook](../teleport/Connect_to_Rails_Console_via_Teleport.md) - Then approve that request (if appropriate) using the [Teleport Approval Workflow](../teleport/teleport_approval_workflow.md) - If the request is for Read/Write access, it's best to give the commands to an SRE and have them run them.

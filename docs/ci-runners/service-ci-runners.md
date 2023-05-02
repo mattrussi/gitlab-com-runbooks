@@ -127,7 +127,7 @@ Put your namespace ids into the array at the start of this iterator expression:
 
 ##### Review the namespaces via the GitLab web UI
 
-To view the namespace (and its projects), you will probably need to authenticate to GitLab.com using your admin account (e.g. "msmiley+admin@gitlab.com") rather than your normal account, since abusive projects tend to be marked as private.
+To view the namespace (and its projects), you will probably need to authenticate to GitLab.com using your admin account (e.g. `msmiley+admin@gitlab.com`) rather than your normal account, since abusive projects tend to be marked as private.
 
 Often (but not always), both the namespace and the project are disposable, having minimal setup and content, apart from the `.gitlab-ci.yml` file that defines the pipeline jobs.  For reference, here is an [example namespace](https://gitlab.com/zabuzhkofaina), its one [project](https://gitlab.com/zabuzhkofaina/zabuzhkofaina), and its [`.gitlab-ci.yml` file](https://gitlab.com/zabuzhkofaina/zabuzhkofaina/blob/master/.gitlab-ci.yml).
 

@@ -1,6 +1,6 @@
 # Set up bastions for Release managers
 
-:warning: **This will soon be superseded via [Teleport](../Teleport/Connect_to_Rails_Console_via_Teleport.md)** :warning:
+:warning: **This will soon be superseded via [Teleport](../teleport/Connect_to_Rails_Console_via_Teleport.md)** :warning:
 
 All SSH commands need to be proxied trough one of the bastion
 hosts. As part of the release manager on-boarding, you should already

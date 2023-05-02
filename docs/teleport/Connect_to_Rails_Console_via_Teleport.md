@@ -19,27 +19,26 @@ It is worth noting that the current access granted is a read-only access, if you
 There are two ways to use to Teleport to connect to a Rails console:
 
 1. Installing [tsh](https://goteleport.com/teleport/docs/cli-docs/#tsh), the Teleport CLI client. This is the recommended way.
-1. Via the Teleport HTTP portal ([https://teleport.gstg.gitlab.net:3080](https://teleport.gstg.gitlab.net:3080) in staging).
+1. Via the Teleport HTTP portal:
+
+- [https://staging.teleport.gitlab.net/]() in staging
+- [https://teleport.gprd.gitlab.net:3080/]() in production (old endpoint pending migration)
 
 ### Installing tsh
 
 Official packages for [macOS](https://goteleport.com/docs/installation/#macos) and [Linux](https://goteleport.com/docs/installation/#linux)
 can be found at Teleport's website.
 
-**Note:**
-
-- The Teleport package in Homebrew is not maintained by Teleport and they can't guarantee its reliability or security.
-- Newer version of `tsh` (v12.x and above) seems to be probing for `Device Trust` configs on the teleport server side, resulting in errors like `ERROR: failed to get cluster details`.
-  - To get around this issue, please downgrade version of teleport client to v11.2.3. For further details, please see [this incident issue](https://gitlab.com/gitlab-com/gl-infra/production/-/issues/8395).
-
 #### Accessing the Rails console via Teleport
+
+Always use staging to test and experiment, unless production data is strickly necessary.
 
 ##### Staging
 
-The `rails-ro` role in the `gstg` environment does not require a request or approval, use this unless you require production
+The `rails-console-ro-gstg` role in the `gstg` environment does not require a request or approval.
 
 ```shell
-tsh login --proxy=teleport.gstg.gitlab.net
+tsh login --proxy=staging.teleport.gitlab.net
 tsh ssh rails-ro@console-ro-01-sv-gstg
 ```
 
@@ -47,23 +46,20 @@ tsh ssh rails-ro@console-ro-01-sv-gstg
 
 ##### Production
 
-> Note: It is not required, but it is easier to be logged in to Okta already before this step
+**Note:**
 
-1. Authenticate to the Teleport server
-2. Unless using read only access in staging, request approval for the rails console role that you need
-3. Connect the Rails Console
+- The production instance is in the process of being migrated, newer versions of `tsh` (v12.x and above) seems to be probing for `Device Trust` configs on the teleport server side, resulting in errors like `ERROR: failed to get cluster details`.
+  - To get around this issue, please downgrade version of teleport client to v11.2.3. For further details, please see [this incident issue](https://gitlab.com/gitlab-com/gl-infra/production/-/issues/8395).
 
-The access will be temporary (`12h` max) and can be approved by any SRE or Reliability Manager.  The `@sre-oncall` can help if it's urgent, but if you can wait it is considerate to spread the load out by asking the wider SRE team in `#infrastructure-lounge`. Access can be extended before or after expiration using the same process.
-
-> Tip: As long as you understand that two separate things are happening in the second command below, you can skip the first and just use the second.
-
-Authenticate to the Teleport proxy/server. This command opens Okta in a browser window:
+1. Authenticate to the Teleport proxy/server. This command opens Okta in a browser window:
 
 ```shell
 tsh login --proxy=teleport.gprd.gitlab.net
 ```
 
-If you need to request a role which includes elevated permissions for the Rails console.  Currently only `rails-ro` is implemented, and is only required in `gprd`
+2. Request approval for the rails console role that you need
+
+Currently only `rails-ro` is implemented, and is only required in `gprd`
 
 ```shell
 tsh login --proxy=teleport.gprd.gitlab.net --request-roles=rails-ro --request-reason="Issue-URL or explanation"
@@ -73,13 +69,15 @@ This command will pause while it waits for the approver to approve the request. 
 
 If the command is stopped or times out, but the request is approved, you don't need to request another approval.  Simply login and provide the approved request ID (output by the previous command, or find it in the web interface):
 
+3. Connect to the Rails Console
+
 ```shell
 tsh login --proxy=teleport.gprd.gitlab.net --request-id=<request-id>
 ```
 
 The request ID is shown in the output of `tsh login` when making the initial request, and can also be found attached to your request notification in `#infrastructure-lounge`.
 
-> Note: These examples assume you are requesting read-only access. **read-write access via teleport isn't supported yet**, when that is added, one could use `--request-roles=rails` rather than `--request-roles=rails-ro`.  Please default to read-only though, since we will have stricter requirements for approving read-write access.
+The access will be temporary (`12h` max) and can be approved by any SRE or Reliability Manager.  The `@sre-oncall` can help if it's urgent, but if you can wait it is considerate to spread the load out by asking the wider SRE team in `#infrastructure-lounge`. Access can be extended before or after expiration using the same process.
 
 ### Access approval
 
@@ -116,22 +114,23 @@ The `tsh login` command requests that the server validate your identity with Okt
 
 ```shell
 $ tsh status
-> Profile URL:        https://teleport.gstg.gitlab.net:3080
-  Logged in as:       yourname@gitlab.com
-  Cluster:            gstg-teleport-cluster
-  Roles:              rails-requestor,rails-ro-requestor
-  Logins:             yourname@gitlab.com
-  Kubernetes:         disabled
-  Valid until:        2021-04-13 21:38:09 -1000 HST [valid for 11h27m0s]
-  Extensions:         permit-pty
+> Profile URL:        https://staging.teleport.gitlab.net:443
+  Logged in as:       <username>@gitlab.com
+  Cluster:            staging.teleport.gitlab.net
+  Roles:              <roles>
+  Logins:             <username>, rails, rails-ro, <any other logins (SSH)>
+  Kubernetes:         enabled
+  Kubernetes groups:  <k8s groups>
+  Valid until:        2023-05-02 07:00:26 +1200 NZST [valid for 11h49m0s]
+  Extensions:         login-ip, permit-agent-forwarding, permit-port-forwarding, permit-pty, private-key-policy
 ```
 
-Note that the default certificate does not have the `rails-ro` role assigned. The default certificate allows you to interact with the Teleport server, and to request more roles, but does not allow connecting to any other services.
+Note that the default certificate might not have any roles assigned, allowing you to interact with the Teleport server, and to request more roles, but does not allow connecting to any other services.
 
 To request permission to connect to a service, you must use the `--request-roles` flag.  You can request a role after already having a valid certificate, or simply by adding the flag to your initial login. Each `--request-roles` requires a `--request-reason`. It's best to use the URL of the issue or incident that this activity relates to.
 
 ```shell
-tsh login --proxy=teleport.gstg.gitlab.net --request-roles=rails-ro --request-reason="Issue-URL or explanation"
+tsh login --proxy=staging.teleport.gitlab.net --request-roles=rails-console-ro-gstg --request-reason="Issue-URL or explanation"
 ```
 
 Once approved, the server will replace your loally stored certificate with an updated one, and your newly valid roles will appear in the `tsh status` output.
