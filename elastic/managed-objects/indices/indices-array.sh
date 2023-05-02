@@ -33,4 +33,5 @@ export indices=(
   system
   vault
   workhorse
+  zoekt
 )
