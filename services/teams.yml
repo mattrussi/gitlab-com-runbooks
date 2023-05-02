@@ -127,7 +127,6 @@ teams:
   url: https://about.gitlab.com/handbook/engineering/infrastructure/team/scalability/
   manager: rnienaber
   label: group::scalability
-  assign_capacity_planning_issues: true # Temporarily used as feature flag
   slack_alerts_channel: g_scalability
   product_stage_group: scalability
   ignored_components:
@@ -165,6 +164,8 @@ teams:
   - graphql_query
 
 - name: global_search
+  manager: changzhengliu
+  label: group::global search
   slack_alerts_channel: g_global_search
   product_stage_group: global_search
   ignored_components:
@@ -356,13 +357,11 @@ teams:
   url: https://about.gitlab.com/handbook/engineering/infrastructure/team/reliability/general.html
   manager: afappiano
   label: team::General
-  assign_capacity_planning_issues: false
 
 - name: reliability_observability
   url: https://about.gitlab.com/handbook/engineering/infrastructure/team/reliability/observability.html
   manager: dawsmith
   label: team::Observability
-  assign_capacity_planning_issues: false
   slack_alerts_channel: g_infra_observability_alerts
   send_slo_alerts_to_team_slack_channel: true
   alerts:
@@ -374,7 +373,6 @@ teams:
   url: https://about.gitlab.com/handbook/engineering/infrastructure/team/reliability/foundations.html
   manager: amoter
   label: team::Foundations
-  assign_capacity_planning_issues: false
   slack_alerts_channel: g_infra_foundations_alerts
   send_slo_alerts_to_team_slack_channel: true
   alerts:
@@ -384,13 +382,11 @@ teams:
   url: https://about.gitlab.com/handbook/engineering/infrastructure/team/reliability/practices.html
   manager: kwanyangu
   label: team::Practices
-  assign_capacity_planning_issues: false
 
 - name: reliability_database_reliability
   url: https://about.gitlab.com/handbook/engineering/infrastructure/team/reliability/database-reliability.html#ownership
   manager: kwanyangu
   label: team::Database Reliability
-  assign_capacity_planning_issues: false
 
 # Security
 

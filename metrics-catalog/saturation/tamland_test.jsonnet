@@ -49,7 +49,7 @@ test.suite({
   testHasServiceCatalogTeamsFields: {
     actual: tamlandSaturation,
     expectThat: {
-      result: std.sort(std.objectFields(self.actual.serviceCatalog.teams[0])) == std.sort(['name', 'label', 'manager', 'assignCapacityPlanningIssues']),
+      result: std.sort(std.objectFields(self.actual.serviceCatalog.teams[0])) == std.sort(['name', 'label', 'manager']),
       description: 'Expect object to have serviceCatalog.teams fields',
     },
   },
