@@ -1,6 +1,7 @@
 local aggregationSets = (import 'gitlab-metrics-config.libsonnet').aggregationSets;
 local metricsCatalog = import 'servicemetrics/metrics-catalog.libsonnet';
 local serviceAlertsGenerator = import 'slo-alerts/service-alerts-generator.libsonnet';
+local separateGlobalRecordingFiles = (import './lib/separate-global-recording-files.libsonnet').separateGlobalRecordingFiles;
 
 // Minimum operation rate thresholds:
 // This is to avoid low-volume, noisy alerts.
@@ -52,15 +53,18 @@ local alertDescriptors = [{
   minimumSamplesForTrafficCessation: minimumSamplesForTrafficCessation,
 }];
 
-local groupsForService(service) = {
-  groups: serviceAlertsGenerator(service, alertDescriptors, groupExtras={ partial_response_strategy: 'warn' }),
+local groupsForService(service, selector) = {
+  groups: serviceAlertsGenerator(service, alertDescriptors, groupExtras={ partial_response_strategy: 'warn' }, extraSelector=selector),
 };
 
-std.foldl(
-  function(docs, service)
-    docs {
-      ['service-level-alerts-%s.yml' % [service.type]]: std.manifestYamlDoc(groupsForService(service)),
-    },
-  metricsCatalog.services,
-  {},
+separateGlobalRecordingFiles(
+  function(selector)
+    std.foldl(
+      function(docs, service)
+        docs {
+          ['service-level-alerts-%s' % [service.type]]: std.manifestYamlDoc(groupsForService(service, selector)),
+        },
+      metricsCatalog.services,
+      {},
+    )
 )

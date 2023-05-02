@@ -134,45 +134,45 @@ local alertDescriptorFixture3 = alertDescriptorFixtureBase {
 test.suite({
   // trafficCessationAlertConfig: false,
   testNoCessationAlerts: {
-    actual: underTest(serviceFixture, serviceFixture.serviceLevelIndicators.test_sli_no_cessation_alerts, alertDescriptorFixture1),
+    actual: underTest(serviceFixture, serviceFixture.serviceLevelIndicators.test_sli_no_cessation_alerts, alertDescriptorFixture1, {}),
     expect: [],
   },
 
   // trafficCessationAlertConfig: true,
   testCessationAlerts: {
-    actual: underTest(serviceFixture, serviceFixture.serviceLevelIndicators.test_sli_cessation_alerts, alertDescriptorFixture1),
+    actual: underTest(serviceFixture, serviceFixture.serviceLevelIndicators.test_sli_cessation_alerts, alertDescriptorFixture1, {}),
     expectThat: function(x) std.length(x) == 2,
   },
 
   // when [aggregation_set_id] is true, traffic cessation alerts are generated
   testCessationPartialAlertsTrue: {
-    actual: underTest(serviceFixture, serviceFixture.serviceLevelIndicators.test_sli_partial_cessation_alerts, alertDescriptorFixture1),
+    actual: underTest(serviceFixture, serviceFixture.serviceLevelIndicators.test_sli_partial_cessation_alerts, alertDescriptorFixture1, {}),
     expectThat: function(x) std.length(x) == 2,
   },
 
   // when [aggregation_set_id] is false, no traffic cessation alerts
   testCessationPartialAlertsFalse: {
-    actual: underTest(serviceFixture, serviceFixture.serviceLevelIndicators.test_sli_partial_cessation_alerts, alertDescriptorFixture2),
+    actual: underTest(serviceFixture, serviceFixture.serviceLevelIndicators.test_sli_partial_cessation_alerts, alertDescriptorFixture2, {}),
     expect: [],
   },
 
   // when [aggregation_set_id] is missing, traffic cessation alerts are generated
   testCessationPartialAlertsMissing: {
-    actual: underTest(serviceFixture, serviceFixture.serviceLevelIndicators.test_sli_partial_cessation_alerts, alertDescriptorFixture3),
+    actual: underTest(serviceFixture, serviceFixture.serviceLevelIndicators.test_sli_partial_cessation_alerts, alertDescriptorFixture3, {}),
     expectThat: function(x) std.length(x) == 2,
   },
 
   // when [aggregation_set_id] contains a selector, it should be used in the expression
   testCessationPartialAlertsSelector: {
-    actual: std.map(function(f) f.expr, underTest(serviceFixture, serviceFixture.serviceLevelIndicators.test_sli_partial_cessation_alerts_with_selector, alertDescriptorFixture1)),
+    actual: std.map(function(f) f.expr, underTest(serviceFixture, serviceFixture.serviceLevelIndicators.test_sli_partial_cessation_alerts_with_selector, alertDescriptorFixture1, { env: 'gprd' })),
     expect: [|||
-      operation:rate_30m{component="test_sli_partial_cessation_alerts_with_selector",monitor="global",selector1="value1",stage="main",type="service_type"} == 0
+      operation:rate_30m{component="test_sli_partial_cessation_alerts_with_selector",env="gprd",monitor="global",selector1="value1",stage="main",type="service_type"} == 0
       and
-      operation:rate_30m{component="test_sli_partial_cessation_alerts_with_selector",monitor="global",selector1="value1",stage="main",type="service_type"} offset 1h >= 0.16666666666666666
+      operation:rate_30m{component="test_sli_partial_cessation_alerts_with_selector",env="gprd",monitor="global",selector1="value1",stage="main",type="service_type"} offset 1h >= 0.16666666666666666
     |||, |||
-      operation:rate_5m{component="test_sli_partial_cessation_alerts_with_selector",monitor="global",selector1="value1",stage="main",type="service_type"} offset 1h
+      operation:rate_5m{component="test_sli_partial_cessation_alerts_with_selector",env="gprd",monitor="global",selector1="value1",stage="main",type="service_type"} offset 1h
       unless
-      operation:rate_5m{component="test_sli_partial_cessation_alerts_with_selector",monitor="global",selector1="value1",stage="main",type="service_type"}
+      operation:rate_5m{component="test_sli_partial_cessation_alerts_with_selector",env="gprd",monitor="global",selector1="value1",stage="main",type="service_type"}
     |||],
   },
 

@@ -4,7 +4,7 @@ local labelsForSLIAlert = import './slo-alert-labels.libsonnet';
 local trafficCessationAlertForSLIForAlertDescriptor = import './traffic-cessation-alerts.libsonnet';
 local alerts = import 'alerts/alerts.libsonnet';
 
-local apdexAlertForSLIForAlertDescriptor(service, sli, alertDescriptor) =
+local apdexAlertForSLIForAlertDescriptor(service, sli, alertDescriptor, extraSelector) =
   local apdexScoreSLO = sli.monitoringThresholds.apdexScore;
   local formatConfig = {
     sliName: sli.name,
@@ -20,14 +20,14 @@ local apdexAlertForSLIForAlertDescriptor(service, sli, alertDescriptor) =
     thresholdSLOValue=apdexScoreSLO,
     aggregationSet=alertDescriptor.aggregationSet,
     windows=service.alertWindows,
-    metricSelectorHash={ type: service.type, component: sli.name },
+    metricSelectorHash={ type: service.type, component: sli.name } + extraSelector,
     minimumSamplesForMonitoring=alertDescriptor.minimumSamplesForMonitoring,
     alertForDuration=alertDescriptor.alertForDuration,
     extraLabels=labelsForSLIAlert(sli),
     extraAnnotations=sloAlertAnnotations(service.type, sli, alertDescriptor.aggregationSet, 'apdex')
   );
 
-local errorAlertForSLIForAlertDescriptor(service, sli, alertDescriptor) =
+local errorAlertForSLIForAlertDescriptor(service, sli, alertDescriptor, extraSelector) =
   local errorRateSLO = sli.monitoringThresholds.errorRatio;
   local formatConfig = {
     sliName: sli.name,
@@ -43,7 +43,7 @@ local errorAlertForSLIForAlertDescriptor(service, sli, alertDescriptor) =
     thresholdSLOValue=errorRateSLO,
     aggregationSet=alertDescriptor.aggregationSet,
     windows=service.alertWindows,
-    metricSelectorHash={ type: service.type, component: sli.name },
+    metricSelectorHash={ type: service.type, component: sli.name } + extraSelector,
     minimumSamplesForMonitoring=alertDescriptor.minimumSamplesForMonitoring,
     extraLabels=labelsForSLIAlert(sli),
     alertForDuration=alertDescriptor.alertForDuration,
@@ -51,59 +51,59 @@ local errorAlertForSLIForAlertDescriptor(service, sli, alertDescriptor) =
   );
 
 // Generates an apdex alert for an SLI
-local apdexAlertForSLI(service, sli, alertDescriptors) =
+local apdexAlertForSLI(service, sli, alertDescriptors, extraSelector) =
   std.flatMap(
     function(descriptor)
       if descriptor.predicate(service) then
-        apdexAlertForSLIForAlertDescriptor(service, sli, descriptor)
+        apdexAlertForSLIForAlertDescriptor(service, sli, descriptor, extraSelector)
       else
         [],
     alertDescriptors
   );
 
 // Generates an error rate alert for an SLI
-local errorRateAlertsForSLI(service, sli, alertDescriptors) =
+local errorRateAlertsForSLI(service, sli, alertDescriptors, extraSelector) =
   std.flatMap(
     function(descriptor)
       if descriptor.predicate(service) then
-        errorAlertForSLIForAlertDescriptor(service, sli, descriptor)
+        errorAlertForSLIForAlertDescriptor(service, sli, descriptor, extraSelector)
       else
         [],
     alertDescriptors
   );
 
-local trafficCessationAlertsForSLI(service, sli, alertDescriptors) =
+local trafficCessationAlertsForSLI(service, sli, alertDescriptors, extraSelector) =
   std.flatMap(
     function(descriptor)
       if descriptor.predicate(service) then
-        trafficCessationAlertForSLIForAlertDescriptor(service, sli, descriptor)
+        trafficCessationAlertForSLIForAlertDescriptor(service, sli, descriptor, extraSelector)
       else
         [],
     alertDescriptors
   );
 
 
-local alertsForService(service, alertDescriptors) =
+local alertsForService(service, alertDescriptors, extraSelector) =
   local slis = service.listServiceLevelIndicators();
 
   local rules = std.flatMap(
     function(sli)
       (
         if sli.hasApdexSLO() && sli.hasApdex() then
-          apdexAlertForSLI(service, sli, alertDescriptors)
+          apdexAlertForSLI(service, sli, alertDescriptors, extraSelector)
         else
           []
       )
       +
       (
         if sli.hasErrorRateSLO() && sli.hasErrorRate() then
-          errorRateAlertsForSLI(service, sli, alertDescriptors)
+          errorRateAlertsForSLI(service, sli, alertDescriptors, extraSelector)
         else
           []
       )
       +
       (
-        trafficCessationAlertsForSLI(service, sli, alertDescriptors)
+        trafficCessationAlertsForSLI(service, sli, alertDescriptors, extraSelector)
       ),
     slis
   );
@@ -111,9 +111,9 @@ local alertsForService(service, alertDescriptors) =
   alerts.processAlertRules(rules);
 
 
-function(service, alertDescriptors, groupExtras={})
+function(service, alertDescriptors, groupExtras={}, extraSelector={})
   [{
     name: 'Service Component Alerts: %s' % [service.type],
     interval: '1m',
-    rules: alertsForService(service, alertDescriptors),
+    rules: alertsForService(service, alertDescriptors, extraSelector),
   } + groupExtras]
