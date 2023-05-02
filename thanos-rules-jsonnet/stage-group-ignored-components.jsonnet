@@ -23,6 +23,8 @@ local ruleGroupForStageGroup(stageGroup) = {
   ],
 };
 
+// The ignored components are the same for a group across environments.
+// No need to separate this by environment
 {
   'stage-group-ignored-components.yml':
     outputPromYaml(

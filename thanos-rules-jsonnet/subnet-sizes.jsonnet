@@ -46,7 +46,9 @@ local clusterSubnetMappingRules = [
 ];
 
 {
-  'subnet-sizes.yml': std.manifestYamlDoc({
+  // We're only recording this for 'gprd' with a static label. No need to separate
+  // across environments
+  'subnet-sizes-gprd.yml': std.manifestYamlDoc({
     groups: [
       {
         name: 'GCP Subnet size',
