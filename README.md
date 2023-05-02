@@ -350,7 +350,6 @@ Selected logging documents and resources:
 
 ### Other
 
-- [Setup oauth2-proxy protection for web based application](docs/uncategorized/setup-oauth2-proxy-protected-application.md)
 - [Register new domain(s)](docs/uncategorized/domain-registration.md)
 - [Manage DNS entries](docs/uncategorized/manage-dns-entries.md)
 - [Setup and Use my Yubikey](docs/uncategorized/yubikey.md)
