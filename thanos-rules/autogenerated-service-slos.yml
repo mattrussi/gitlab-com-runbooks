@@ -341,7 +341,7 @@ groups:
     labels:
       tier: sv
       type: customersdot
-    expr: "0.900000"
+    expr: "0.993000"
   - record: slo:max:events:gitlab_service_errors:ratio
     labels:
       tier: sv
@@ -352,7 +352,7 @@ groups:
       component: customers_dot_requests
       tier: sv
       type: customersdot
-    expr: "0.900000"
+    expr: "0.993000"
   - record: slo:max:events:gitlab_service_errors:ratio
     labels:
       component: customers_dot_requests
@@ -364,7 +364,7 @@ groups:
       component: customers_dot_sidekiq_jobs
       tier: sv
       type: customersdot
-    expr: "0.900000"
+    expr: "0.993000"
   - record: slo:max:events:gitlab_service_errors:ratio
     labels:
       component: customers_dot_sidekiq_jobs

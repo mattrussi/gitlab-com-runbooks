@@ -8,7 +8,7 @@ metricsCatalog.serviceDefinition({
   tier: 'sv',
 
   monitoringThresholds: {
-    apdexScore: 0.9,
+    apdexScore: 0.993,
     errorRatio: 0.95,
   },
 
@@ -25,24 +25,16 @@ metricsCatalog.serviceDefinition({
 
   serviceLevelIndicators:
     sliLibrary.get('customers_dot_requests').generateServiceLevelIndicator({}, {
-      severity: 's3',
+      severity: 's2',
       toolingLinks: [
-        toolingLinks.stackdriverLogs(
-          'Stackdriver Logs: CustomersDot',
-          queryHash={
-            'resource.type': 'gce_instance',
-            'jsonPayload.controller': { exists: true },
-            'jsonPayload.duration': { exists: true },
-          },
-          project='gitlab-subscriptions-prod',
-        ),
+        toolingLinks.kibana(title='CustomersDot Requests', index='customers_dot_requests'),
       ],
     })
     +
     sliLibrary.get('customers_dot_sidekiq_jobs').generateServiceLevelIndicator({ type: 'customersdot' }, {
       severity: 's3',
+      toolingLinks: [
+        toolingLinks.kibana(title='CustomersDot Sidekiq', index='customers_dot_sidekiq'),
+      ],
     }),
-  skippedMaturityCriteria: {
-    'Structured logs available in Kibana': 'All logs are available in Stackdriver',
-  },
 })
