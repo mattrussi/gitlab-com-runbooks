@@ -463,3 +463,9 @@ do
   echo
 done
 ```
+
+You can also view container operations in Google Cloud's operations suite (formerly Stackdriver):
+
+- [Production](https://console.cloud.google.com/logs/query;lfeCustomFields=;query=protoPayload.methodName%3D%22google.container.internal.ClusterManagerInternal.UpdateClusterInternal%22;summaryFields=resource%252Flabels%252Fcluster_name,protoPayload%252Fmetadata%252FoperationType,resource%252Ftype,operation%252Fid:false:32:beginning;timeRange=P7D?project=gitlab-production)
+- [Staging](https://console.cloud.google.com/logs/query;lfeCustomFields=;query=protoPayload.methodName%3D%22google.container.internal.ClusterManagerInternal.UpdateClusterInternal%22;summaryFields=resource%252Flabels%252Fcluster_name,protoPayload%252Fmetadata%252FoperationType,resource%252Ftype,operation%252Fid:false:32:beginning;timeRange=P7D?project=gitlab-staging-1)
+- [Ops](https://console.cloud.google.com/logs/query;lfeCustomFields=;query=protoPayload.methodName%3D%22google.container.internal.ClusterManagerInternal.UpdateClusterInternal%22;summaryFields=resource%252Flabels%252Fcluster_name,protoPayload%252Fmetadata%252FoperationType,resource%252Ftype,operation%252Fid:false:32:beginning;timeRange=P7D?project=gitlab-ops)
