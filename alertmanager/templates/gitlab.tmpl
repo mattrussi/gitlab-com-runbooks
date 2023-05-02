@@ -36,11 +36,6 @@
             {{- range $filteredLabels.SortedPairs -}}
                 {{- printf "*%s*: %s\n" .Name .Value -}}
             {{- end -}}
-
-            {{/* https://gitlab.com/gitlab-com/gl-infra/reliability/-/issues/16964 */}}
-            {{ if eq .CommonLabels.channel "#alerts-nonprod" }}
-                fyi: @sre-oncall
-            {{- end -}}
         {{- end -}}
     {{- end -}}
 {{ end }}
