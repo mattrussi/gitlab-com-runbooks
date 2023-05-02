@@ -442,3 +442,30 @@ a similar procedure for the regional cluster where Sidekiq currently runs.
       0, or the metric will disappear.  For most workloads we exclude
       healthchecks and metrics gathering from displaying as part of our
       dashboards.
+
+## Cluster upgrades
+
+Cluster upgrade operations can be viewed using `gcloud`:
+
+```sh
+gcloud --project XXXX container operations list
+```
+
+We have a handy list of k8s clusters with their Google project in `../../kubernetes/clusters.json`
+so if you want to view the container operations for all k8s clusters in all projects, you can
+do the following:
+
+```sh
+for project in $(jq -r '.[] | .project' < ../../kubernetes/clusters.json | sort | uniq)
+do
+  echo "### ${project}"
+  gcloud --project $project container operations list
+  echo
+done
+```
+
+You can also view container operations in Google Cloud's operations suite (formerly Stackdriver):
+
+- [Production](https://console.cloud.google.com/logs/query;lfeCustomFields=;query=protoPayload.methodName%3D%22google.container.internal.ClusterManagerInternal.UpdateClusterInternal%22;summaryFields=resource%252Flabels%252Fcluster_name,protoPayload%252Fmetadata%252FoperationType,resource%252Ftype,operation%252Fid:false:32:beginning;timeRange=P7D?project=gitlab-production)
+- [Staging](https://console.cloud.google.com/logs/query;lfeCustomFields=;query=protoPayload.methodName%3D%22google.container.internal.ClusterManagerInternal.UpdateClusterInternal%22;summaryFields=resource%252Flabels%252Fcluster_name,protoPayload%252Fmetadata%252FoperationType,resource%252Ftype,operation%252Fid:false:32:beginning;timeRange=P7D?project=gitlab-staging-1)
+- [Ops](https://console.cloud.google.com/logs/query;lfeCustomFields=;query=protoPayload.methodName%3D%22google.container.internal.ClusterManagerInternal.UpdateClusterInternal%22;summaryFields=resource%252Flabels%252Fcluster_name,protoPayload%252Fmetadata%252FoperationType,resource%252Ftype,operation%252Fid:false:32:beginning;timeRange=P7D?project=gitlab-ops)
