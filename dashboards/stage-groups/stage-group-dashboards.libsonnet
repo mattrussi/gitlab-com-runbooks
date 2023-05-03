@@ -75,7 +75,7 @@ local errorBudgetAttribution(group, budget, featureCategories) =
   [
     budget.panels.violationRatePanel(group.key),
     budget.panels.violationRateExplanation,
-    budget.panels.logLinks(featureCategories),
+    budget.panels.logLinks(featureCategories, group.key),
   ];
 
 local railsRequestRate(type, featureCategories, featureCategoriesSelector) =
