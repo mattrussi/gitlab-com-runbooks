@@ -55,7 +55,7 @@ stages:
   - renovate_bot
 
 variables:
-  BUNDLER_VERSION: 2.3.15
+  BUNDLER_VERSION: 2.4.12
   GOLANG_IMAGE: golang:${GL_ASDF_GOLANG_VERSION}
 
 .id_tokens:
@@ -67,48 +67,61 @@ variables:
   parallel:
     matrix:
       - DEPLOY_ENV: gprd
-        CLUSTER: gprd-gitlab-gke
-        REGION: us-east1
+        GKE_CLUSTER: gprd-gitlab-gke
+        LOCATION: us-east1
+        GOOGLE_PROJECT: gitlab-production
       - DEPLOY_ENV: gprd-us-east1-b
-        CLUSTER: gprd-us-east1-b
-        REGION: us-east1-b
+        GKE_CLUSTER: gprd-us-east1-b
+        LOCATION: us-east1-b
+        GOOGLE_PROJECT: gitlab-production
       - DEPLOY_ENV: gprd-us-east1-c
-        CLUSTER: gprd-us-east1-c
-        REGION: us-east1-c
+        GKE_CLUSTER: gprd-us-east1-c
+        LOCATION: us-east1-c
+        GOOGLE_PROJECT: gitlab-production
       - DEPLOY_ENV: gprd-us-east1-d
-        CLUSTER: gprd-us-east1-d
-        REGION: us-east1-d
+        GKE_CLUSTER: gprd-us-east1-d
+        GOOGLE_PROJECT: gitlab-production
+        LOCATION: us-east1-d
       - DEPLOY_ENV: prdsub
-        CLUSTER: prdsub-customers-gke
-        REGION: us-east1
+        GKE_CLUSTER: prdsub-customers-gke
+        GOOGLE_PROJECT: gitlab-subscriptions-prod
+        LOCATION: us-east1
 
 .matrix_non_production:
   parallel:
     matrix:
       - DEPLOY_ENV: pre
-        CLUSTER: pre-gitlab-gke
-        REGION: us-east1
+        GKE_CLUSTER: pre-gitlab-gke
+        GOOGLE_PROJECT: gitlab-pre
+        LOCATION: us-east1
       - DEPLOY_ENV: gstg
-        CLUSTER: gstg-gitlab-gke
-        REGION: us-east1
+        GKE_CLUSTER: gstg-gitlab-gke
+        GOOGLE_PROJECT: gitlab-staging-1
+        LOCATION: us-east1
       - DEPLOY_ENV: gstg-us-east1-b
-        CLUSTER: gstg-us-east1-b
-        REGION: us-east1-b
+        GKE_CLUSTER: gstg-us-east1-b
+        GOOGLE_PROJECT: gitlab-staging-1
+        LOCATION: us-east1-b
       - DEPLOY_ENV: gstg-us-east1-c
-        CLUSTER: gstg-us-east1-c
-        REGION: us-east1-c
+        GKE_CLUSTER: gstg-us-east1-c
+        GOOGLE_PROJECT: gitlab-staging-1
+        LOCATION: us-east1-c
       - DEPLOY_ENV: gstg-us-east1-d
-        CLUSTER: gstg-us-east1-d
-        REGION: us-east1-d
+        GKE_CLUSTER: gstg-us-east1-d
+        GOOGLE_PROJECT: gitlab-staging-1
+        LOCATION: us-east1-d
       - DEPLOY_ENV: ops
-        CLUSTER: ops-gitlab-gke
-        REGION: us-east1
+        GKE_CLUSTER: ops-gitlab-gke
+        GOOGLE_PROJECT: gitlab-ops
+        LOCATION: us-east1
       - DEPLOY_ENV: stgsub
-        CLUSTER: stgsub-customers-gke
-        REGION: us-east1
+        GKE_CLUSTER: stgsub-customers-gke
+        GOOGLE_PROJECT: gitlab-subscriptions-staging
+        LOCATION: us-east1
       - DEPLOY_ENV: gstg-ref
-        CLUSTER: staging-ref-3k-hybrid-us
-        REGION: us-east1-c
+        GKE_CLUSTER: staging-ref-3k-hybrid-us
+        GOOGLE_PROJECT: gitlab-subscriptions-stg-ref
+        LOCATION: us-east1-c
         KUBE_NAMESPACE: prometheus
 
 .if-merge-request: &if-merge-request
@@ -163,23 +176,71 @@ workflow:
     # When triggered from another pipeline, create a pipeline
     - if: '$CI_PIPELINE_SOURCE == "pipeline"'
 
-.deploy-rules:
+.gke_cluster_auth:
+  extends:
+    - .id_tokens
+  variables:
+    KUBE_NAMESPACE: default
+    RUNBOOKS_VAULT_AUTH_ROLE: ${VAULT_AUTH_ROLE}
+    VAULT_GCP_IMPERSONATED_ACCOUNT: ${GOOGLE_PROJECT}--k8s-workloads-ro
+    VAULT_KUBERNETES_ROLE: cluster-view
+  before_script:
+    # Authentication
+    - export VAULT_TOKEN="$(vault write -field=token "auth/${VAULT_AUTH_PATH}/login" role="${RUNBOOKS_VAULT_AUTH_ROLE}" jwt="${VAULT_ID_TOKEN}")"
+    - export CLOUDSDK_AUTH_ACCESS_TOKEN="$(vault read -field=token "gcp/impersonated-account/${VAULT_GCP_IMPERSONATED_ACCOUNT}/token")"
+    - gcloud container clusters get-credentials "${GKE_CLUSTER}" --project "${GOOGLE_PROJECT}" --location "${LOCATION}"
+    - export KUBE_TOKEN="$(vault write -field=service_account_token "kubernetes/${GKE_CLUSTER}/creds/${VAULT_KUBERNETES_ROLE}" kubernetes_namespace="${KUBE_NAMESPACE}" ttl=30m)"
+    - kubectl config set-credentials "${VAULT_KUBERNETES_ROLE}" --token="${KUBE_TOKEN}"
+    - kubectl config set-context "$(kubectl config current-context)" --user "${VAULT_KUBERNETES_ROLE}"
+
+.vault_rw:
+  variables:
+    RUNBOOKS_VAULT_AUTH_ROLE: gitlab-com_runbooks-rw
+
+.diff-prometheus-rules:
+  extends:
+    - .gke_cluster_auth
+  stage: test
+  needs:
+    - job: generate-prometheus-rules
+      artifacts: true
+  variables:
+    KUBE_NAMESPACE: monitoring
+  rules:
+    - !reference [".default-job-rules", rules]
+    - if: $CI_API_V4_URL == "https://ops.gitlab.net/api/v4"
+      changes:
+        paths:
+          - "rules/**/*"
+  script:
+    # Dry-run delete orphaned PrometheusRules
+    - ./bin/delete_orphan_kubenetes_rules.sh -D
+    # Diff PrometheusRules
+    - kubectl diff --namespace "${KUBE_NAMESPACE}" --filename "${CI_PROJECT_DIR}/rules-k8s/"
+  tags:
+    - k8s-workloads
+
+.deploy-prometheus-rules:
+  extends:
+    - .gke_cluster_auth
+    - .vault_rw
   stage: deploy
+  needs:
+    - job: generate-prometheus-rules
+      artifacts: true
   variables:
     KUBE_NAMESPACE: monitoring
   rules:
     - !reference [".default-job-rules", rules]
     # Only run deploy rules from ops on the default branch
     - if: '$CI_API_V4_URL == "https://ops.gitlab.net/api/v4" && $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH'
+      changes:
+        paths:
+          - "rules/**/*"
   script:
-    - gcloud auth activate-service-account --key-file ${SERVICE_KEY}
-    - gcloud config set project ${PROJECT}
-    - gcloud container clusters get-credentials ${CLUSTER} --region ${REGION}
-    # Generate rules
-    - gem install bundler --no-document -v $BUNDLER_VERSION
-    - bundle install --with=test
-    - bundle exec ./bin/create_kubernetes_rules.rb --create --validate
-    - ./bin/delete_orphan_kubenetes_rules.sh  # Delete orphaned PrometheusRules
+    # Delete orphaned PrometheusRules
+    - ./bin/delete_orphan_kubenetes_rules.sh
+    # Deploy PrometheusRules
     - kubectl apply --namespace "${KUBE_NAMESPACE}" --filename "${CI_PROJECT_DIR}/rules-k8s/"
   tags:
     - k8s-workloads
@@ -264,44 +325,47 @@ rspec:
     - cp service-health-dashboard-manifest/autogenerated-service-health-dashboards.json dashboards/
     - bundle exec rspec
 
-.test-rules:
-  stage: test
+generate-prometheus-rules:
+  stage: prepare
   rules:
     - !reference [".default-job-rules", rules]
-    - <<: *if-merge-request
-      changes:
-        - "rules/**/*"
+    - changes:
+        paths:
+          - "rules/**/*"
   script:
-    - gem install bundler --no-document -v $BUNDLER_VERSION
-    - bundle install --with=test
+    - gem install bundler --no-document -v "${BUNDLER_VERSION}"
+    - bundle install
     - bundle exec ./bin/create_kubernetes_rules.rb --create --validate
+  artifacts:
+    name: prometheus-rules
+    paths:
+      - rules-k8s/
 
-# Test rules to non-production environments
-test-rules-non-production:
+# Diff rules for non-production environments
+diff-prometheus-rules-non-production:
   extends:
-    - .test-rules
+    - .diff-prometheus-rules
     - .matrix_non_production
 
-# Test rules to non-production environments
-test-rules-production:
+# Diff rules for production environments
+diff-prometheus-rules-production:
   extends:
-    - .test-rules
+    - .diff-prometheus-rules
     - .matrix_production
 
 # Deploy rules to non-production environments
-deploy-rules-non-production:
+deploy-prometheus-rules-non-production:
   environment: $DEPLOY_ENV
-  stage: deploy
   extends:
-    - .deploy-rules
+    - .deploy-prometheus-rules
     - .matrix_non_production
 
 # Deploy rules to production environments
-deploy-rules-production:
+deploy-prometheus-rules-production:
   environment: $DEPLOY_ENV
   stage: deploy-rules-production
   extends:
-    - .deploy-rules
+    - .deploy-prometheus-rules
     - .matrix_production
 
 update-alertmanager:
@@ -686,6 +750,7 @@ docker_image_test:
   needs: []
   script:
     - docker build
+      --build-arg GL_ASDF_AMTOOL_VERSION
       --build-arg GL_ASDF_GO_JSONNET_VERSION
       --build-arg GL_ASDF_JB_VERSION
       --build-arg GL_ASDF_JSONNET_TOOL_VERSION
@@ -695,8 +760,8 @@ docker_image_test:
       --build-arg GL_ASDF_SHFMT_VERSION
       --build-arg GL_ASDF_TERRAFORM_VERSION
       --build-arg GL_ASDF_THANOS_VERSION
+      --build-arg GL_ASDF_VAULT_VERSION
       --build-arg GL_ASDF_YQ_VERSION
-      --build-arg GL_ASDF_AMTOOL_VERSION
       .
   only:
     changes:
@@ -717,6 +782,7 @@ docker_image_build:
     - export ci_image_tag=${CI_COMMIT_TAG:-$CI_COMMIT_SHORT_SHA}
     - echo ${CI_JOB_TOKEN} | docker login --password-stdin -u $CI_REGISTRY_USER $CI_REGISTRY
     - docker build -t ${IMAGE}:$ci_image_tag -t ${IMAGE}:latest
+        --build-arg GL_ASDF_AMTOOL_VERSION
         --build-arg GL_ASDF_GO_JSONNET_VERSION
         --build-arg GL_ASDF_JB_VERSION
         --build-arg GL_ASDF_JSONNET_TOOL_VERSION
@@ -726,8 +792,8 @@ docker_image_build:
         --build-arg GL_ASDF_SHFMT_VERSION
         --build-arg GL_ASDF_TERRAFORM_VERSION
         --build-arg GL_ASDF_THANOS_VERSION
+        --build-arg GL_ASDF_VAULT_VERSION
         --build-arg GL_ASDF_YQ_VERSION
-        --build-arg GL_ASDF_AMTOOL_VERSION
         .
     - docker push ${IMAGE}:latest
     - docker push ${IMAGE}:$ci_image_tag

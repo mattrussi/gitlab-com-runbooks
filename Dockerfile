@@ -8,11 +8,13 @@ ARG GL_ASDF_SHELLCHECK_VERSION
 ARG GL_ASDF_SHFMT_VERSION
 ARG GL_ASDF_TERRAFORM_VERSION
 ARG GL_ASDF_THANOS_VERSION
+ARG GL_ASDF_VAULT_VERSION
 ARG GL_ASDF_YQ_VERSION
 
 # Referenced container images
 FROM docker.io/mikefarah/yq:${GL_ASDF_YQ_VERSION} as yq
 FROM hashicorp/terraform:${GL_ASDF_TERRAFORM_VERSION} AS terraform
+FROM hashicorp/vault:${GL_ASDF_VAULT_VERSION} AS vault
 FROM koalaman/shellcheck:v${GL_ASDF_SHELLCHECK_VERSION} AS shellcheck
 FROM mvdan/shfmt:v${GL_ASDF_SHFMT_VERSION}-alpine as shfmt
 FROM quay.io/prometheus/alertmanager:v${GL_ASDF_AMTOOL_VERSION} AS amtool
@@ -51,6 +53,7 @@ COPY --from=shellcheck /bin/shellcheck /bin/shellcheck
 COPY --from=shfmt /bin/shfmt /bin/shfmt
 COPY --from=terraform /bin/terraform /bin/terraform
 COPY --from=thanos /bin/thanos /bin/thanos
+COPY --from=vault /bin/vault /bin/vault
 COPY --from=yq /usr/bin/yq /usr/bin/yq
 
 ENTRYPOINT ["/bin/sh", "-c"]
