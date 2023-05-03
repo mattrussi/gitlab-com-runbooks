@@ -21,6 +21,7 @@ local mappings = {
   system: import './index_mappings/system.jsonnet',
   vault: import './index_mappings/vault.jsonnet',
   workhorse: import './index_mappings/workhorse.jsonnet',
+  zoekt: import './index_mappings/zoekt.jsonnet',
 };
 local settings = import 'settings_nonprod.libsonnet';
 

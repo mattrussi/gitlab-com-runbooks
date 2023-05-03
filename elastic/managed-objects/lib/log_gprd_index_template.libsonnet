@@ -22,6 +22,7 @@ local mappings = {
   sidekiq: import './index_mappings/sidekiq.jsonnet',
   system: import './index_mappings/system.jsonnet',
   workhorse: import './index_mappings/workhorse.jsonnet',
+  zoekt: import './index_mappings/zoekt.jsonnet',
 };
 local settings = import 'settings_gprd.libsonnet';
 
