@@ -300,6 +300,10 @@ local endpointsSortedByTrafficTable =
               decimals: 3,
               value: 'percentunit',
             },
+            {
+              id: 'decimals',
+              value: 3,
+            },
           ],
         },
       ],

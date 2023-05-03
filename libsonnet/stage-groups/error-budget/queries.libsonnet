@@ -62,6 +62,60 @@ local errorBudgetRatio(range, groupSelectors, aggregationLabels, ignoreComponent
     ignoreCondition: ignoreCondition(ignoreComponents),
   };
 
+local errorBudgetApdexRatio(range, groupSelectors, aggregationLabels, ignoreComponents) =
+  |||
+    clamp_max(
+      sum by (%(aggregations)s)(
+        sum by (%(aggregationsIncludingComponent)s) (
+          sum_over_time(
+            gitlab:component:stage_group:execution:apdex:success:rate_1h{%(selectorHash)s}[%(range)s]
+          )
+        ) %(ignoreCondition)s
+      )
+      /
+      sum by (%(aggregations)s)(
+        sum by (%(aggregationsIncludingComponent)s) (
+          sum_over_time(
+            gitlab:component:stage_group:execution:apdex:weight:score_1h{%(selectorHash)s}[%(range)s]
+          )
+        ) %(ignoreCondition)s
+      ),
+    1)
+  ||| % {
+    selectorHash: selectors.serializeHash(groupSelectors),
+    range: range,
+    aggregations: aggregations.serialize(aggregationLabels),
+    aggregationsIncludingComponent: aggregations.serialize(aggregationLabels + ignoredComponentJoinLabels),
+    ignoreCondition: ignoreCondition(ignoreComponents),
+  };
+
+local errorBudgetErrorRatio(range, groupSelectors, aggregationLabels, ignoreComponents) =
+  |||
+    clamp_max(
+      sum by (%(aggregations)s)(
+        sum by (%(aggregationsIncludingComponent)s) (
+          sum_over_time(
+            gitlab:component:stage_group:execution:error:rate_1h{%(selectorHash)s}[%(range)s]
+          )
+        ) %(ignoreCondition)s
+      )
+      /
+      sum by (%(aggregations)s)(
+        sum by (%(aggregationsIncludingComponent)s) (
+          sum_over_time(
+            gitlab:component:stage_group:execution:ops:rate_1h{%(selectorHash)s}[%(range)s]
+          )
+        ) %(ignoreCondition)s
+      ),
+    1)
+  ||| % {
+    selectorHash: selectors.serializeHash(groupSelectors),
+    range: range,
+    aggregations: aggregations.serialize(aggregationLabels),
+    aggregationsIncludingComponent: aggregations.serialize(aggregationLabels + ignoredComponentJoinLabels),
+    ignoreCondition: ignoreCondition(ignoreComponents),
+  };
+
 local errorBudgetTimeSpent(range, selectors, aggregationLabels, ignoreComponents) =
   |||
     (
@@ -182,6 +236,10 @@ local errorBudgetOperationRate(range, groupSelectors, aggregationLabels, ignoreC
   init(slaTarget, range): {
     errorBudgetRatio(selectors, aggregationLabels=[], ignoreComponents=true):
       errorBudgetRatio(range, selectors, aggregationLabels, ignoreComponents),
+    errorBudgetApdexRatio(selectors, aggregationLabels=[], ignoreComponents=true):
+      errorBudgetApdexRatio(range, selectors, aggregationLabels, ignoreComponents),
+    errorBudgetErrorRatio(selectors, aggregationLabels=[], ignoreComponents=true):
+      errorBudgetErrorRatio(range, selectors, aggregationLabels, ignoreComponents),
     errorBudgetTimeSpent(selectors, aggregationLabels=[], ignoreComponents=true):
       errorBudgetTimeSpent(range, selectors, aggregationLabels, ignoreComponents),
     budgetSecondsForRange():
