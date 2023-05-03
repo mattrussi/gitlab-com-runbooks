@@ -58,6 +58,11 @@ variables:
   BUNDLER_VERSION: 2.3.15
   GOLANG_IMAGE: golang:${GL_ASDF_GOLANG_VERSION}
 
+.id_tokens:
+  id_tokens:
+    VAULT_ID_TOKEN:
+      aud: https://vault.gitlab.net
+
 .matrix_production:
   parallel:
     matrix:
@@ -869,12 +874,18 @@ deploy-thanos-rules-produciton:
     - .deploy-thanos-rules
 
 reconcile_service_catalog_labels:
+  extends:
+    - .id_tokens
+  secrets:
+    GITLAB_RECONCILE_SERVICE_LABELS_TOKEN:
+      file: false
+      vault: access_tokens/gitlab-com/gitlab-com/gl-infra/_group_access_tokens/runbooks-label-reconciler/token@ci
   rules:
     - !reference [".default-job-rules", rules]
     - if: '$CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH'
       changes:
         - "services/service-catalog.yml"
     - if: "$TASK == $CI_JOB_NAME"
-  stage: test
+  stage: deploy
   script:
     - ./scripts/reconcile_service_catalog_labels.rb
