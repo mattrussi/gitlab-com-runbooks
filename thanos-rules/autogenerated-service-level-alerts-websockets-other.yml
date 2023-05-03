@@ -317,6 +317,194 @@ groups:
       gitlab_regional_sli_ops:rate_5m{component="loadbalancer",env!~"gprd|ops",monitor="global",stage="main",type="websockets"} offset 1h
       unless
       gitlab_regional_sli_ops:rate_5m{component="loadbalancer",env!~"gprd|ops",monitor="global",stage="main",type="websockets"}
+  - alert: WebsocketsServiceRailsRequestApdexSLOViolation
+    for: 2m
+    annotations:
+      title: The rails_request SLI of the websockets service (`{{ $labels.stage }}`
+        stage) has an apdex violating SLO
+      description: |
+        The number of requests meeting their duration target based on the urgency of the endpoint. By default, a request should take no more than 1s. But this can be adjusted by endpoint.
+
+        Read more about this in the [documentation](https://docs.gitlab.com/ee/development/application_slis/rails_request_apdex.html).
+
+        Currently the apdex value is {{ $value | humanizePercentage }}.
+      grafana_dashboard_id: websockets-main/websockets-overview
+      grafana_dashboard_link: https://dashboards.gitlab.net/d/websockets-main/websockets-overview?from=now-6h/m&to=now-1m/m&var-environment={{
+        $labels.environment }}&var-stage={{ $labels.stage }}
+      grafana_min_zoom_hours: "6"
+      grafana_panel_id: "495984175"
+      grafana_variables: environment,stage
+      runbook: docs/websockets/README.md
+    labels:
+      aggregation: component
+      alert_class: slo_violation
+      alert_type: symptom
+      feature_category: in_source_metrics
+      pager: pagerduty
+      rules_domain: general
+      severity: s2
+      sli_type: apdex
+      slo_alert: "yes"
+      user_impacting: "yes"
+      window: 1h
+    expr: |
+      (
+        (
+          gitlab_component_apdex:ratio_1h{component="rails_request",env!~"gprd|ops",monitor="global",type="websockets"}
+          < (1 - 14.4 * 0.002000)
+        )
+        and
+        (
+          gitlab_component_apdex:ratio_5m{component="rails_request",env!~"gprd|ops",monitor="global",type="websockets"}
+          < (1 - 14.4 * 0.002000)
+        )
+      )
+      and on(env,environment,tier,type,stage,component)
+      (
+        sum by(env,environment,tier,type,stage,component) (gitlab_component_ops:rate_1h{component="rails_request",env!~"gprd|ops",monitor="global",type="websockets"}) >= 1
+      )
+  - alert: WebsocketsServiceRailsRequestApdexSLOViolation
+    for: 2m
+    annotations:
+      title: The rails_request SLI of the websockets service (`{{ $labels.stage }}`
+        stage) has an apdex violating SLO
+      description: |
+        The number of requests meeting their duration target based on the urgency of the endpoint. By default, a request should take no more than 1s. But this can be adjusted by endpoint.
+
+        Read more about this in the [documentation](https://docs.gitlab.com/ee/development/application_slis/rails_request_apdex.html).
+
+        Currently the apdex value is {{ $value | humanizePercentage }}.
+      grafana_dashboard_id: websockets-main/websockets-overview
+      grafana_dashboard_link: https://dashboards.gitlab.net/d/websockets-main/websockets-overview?from=now-6h/m&to=now-1m/m&var-environment={{
+        $labels.environment }}&var-stage={{ $labels.stage }}
+      grafana_min_zoom_hours: "6"
+      grafana_panel_id: "495984175"
+      grafana_variables: environment,stage
+      runbook: docs/websockets/README.md
+    labels:
+      aggregation: component
+      alert_class: slo_violation
+      alert_type: symptom
+      feature_category: in_source_metrics
+      pager: pagerduty
+      rules_domain: general
+      severity: s2
+      sli_type: apdex
+      slo_alert: "yes"
+      user_impacting: "yes"
+      window: 6h
+    expr: |
+      (
+        (
+          gitlab_component_apdex:ratio_6h{component="rails_request",env!~"gprd|ops",monitor="global",type="websockets"}
+          < (1 - 6 * 0.002000)
+        )
+        and
+        (
+          gitlab_component_apdex:ratio_30m{component="rails_request",env!~"gprd|ops",monitor="global",type="websockets"}
+          < (1 - 6 * 0.002000)
+        )
+      )
+      and on(env,environment,tier,type,stage,component)
+      (
+        sum by(env,environment,tier,type,stage,component) (gitlab_component_ops:rate_6h{component="rails_request",env!~"gprd|ops",monitor="global",type="websockets"}) >= 0.16667
+      )
+  - alert: WebsocketsServiceRailsRequestApdexSLOViolationRegional
+    for: 2m
+    annotations:
+      title: The rails_request SLI of the websockets service in region `{{ $labels.region
+        }}` has an apdex violating SLO
+      description: |
+        The number of requests meeting their duration target based on the urgency of the endpoint. By default, a request should take no more than 1s. But this can be adjusted by endpoint.
+
+        Read more about this in the [documentation](https://docs.gitlab.com/ee/development/application_slis/rails_request_apdex.html).
+
+        Note that this alert is specific to the `{{ $labels.region }}` region.
+
+        Currently the apdex value is {{ $value | humanizePercentage }}.
+      grafana_dashboard_id: websockets-main/websockets-overview
+      grafana_dashboard_link: https://dashboards.gitlab.net/d/websockets-main/websockets-overview?from=now-6h/m&to=now-1m/m&var-environment={{
+        $labels.environment }}&var-stage={{ $labels.stage }}
+      grafana_min_zoom_hours: "6"
+      grafana_panel_id: "495984175"
+      grafana_variables: environment,stage
+      runbook: docs/websockets/README.md
+    labels:
+      aggregation: regional_component
+      alert_class: slo_violation
+      alert_type: symptom
+      feature_category: in_source_metrics
+      pager: pagerduty
+      rules_domain: general
+      severity: s2
+      sli_type: apdex
+      slo_alert: "yes"
+      user_impacting: "yes"
+      window: 1h
+    expr: |
+      (
+        (
+          gitlab_regional_sli_apdex:ratio_1h{component="rails_request",env!~"gprd|ops",monitor="global",type="websockets"}
+          < (1 - 14.4 * 0.002000)
+        )
+        and
+        (
+          gitlab_regional_sli_apdex:ratio_5m{component="rails_request",env!~"gprd|ops",monitor="global",type="websockets"}
+          < (1 - 14.4 * 0.002000)
+        )
+      )
+      and on(env,environment,tier,type,stage,region,component)
+      (
+        sum by(env,environment,tier,type,stage,region,component) (gitlab_regional_sli_ops:rate_1h{component="rails_request",env!~"gprd|ops",monitor="global",type="websockets"}) >= 1
+      )
+  - alert: WebsocketsServiceRailsRequestApdexSLOViolationRegional
+    for: 2m
+    annotations:
+      title: The rails_request SLI of the websockets service in region `{{ $labels.region
+        }}` has an apdex violating SLO
+      description: |
+        The number of requests meeting their duration target based on the urgency of the endpoint. By default, a request should take no more than 1s. But this can be adjusted by endpoint.
+
+        Read more about this in the [documentation](https://docs.gitlab.com/ee/development/application_slis/rails_request_apdex.html).
+
+        Note that this alert is specific to the `{{ $labels.region }}` region.
+
+        Currently the apdex value is {{ $value | humanizePercentage }}.
+      grafana_dashboard_id: websockets-main/websockets-overview
+      grafana_dashboard_link: https://dashboards.gitlab.net/d/websockets-main/websockets-overview?from=now-6h/m&to=now-1m/m&var-environment={{
+        $labels.environment }}&var-stage={{ $labels.stage }}
+      grafana_min_zoom_hours: "6"
+      grafana_panel_id: "495984175"
+      grafana_variables: environment,stage
+      runbook: docs/websockets/README.md
+    labels:
+      aggregation: regional_component
+      alert_class: slo_violation
+      alert_type: symptom
+      feature_category: in_source_metrics
+      pager: pagerduty
+      rules_domain: general
+      severity: s2
+      sli_type: apdex
+      slo_alert: "yes"
+      user_impacting: "yes"
+      window: 6h
+    expr: |
+      (
+        (
+          gitlab_regional_sli_apdex:ratio_6h{component="rails_request",env!~"gprd|ops",monitor="global",type="websockets"}
+          < (1 - 6 * 0.002000)
+        )
+        and
+        (
+          gitlab_regional_sli_apdex:ratio_30m{component="rails_request",env!~"gprd|ops",monitor="global",type="websockets"}
+          < (1 - 6 * 0.002000)
+        )
+      )
+      and on(env,environment,tier,type,stage,region,component)
+      (
+        sum by(env,environment,tier,type,stage,region,component) (gitlab_regional_sli_ops:rate_6h{component="rails_request",env!~"gprd|ops",monitor="global",type="websockets"}) >= 0.16667
+      )
   - alert: WebsocketsServiceRailsRequestErrorSLOViolation
     for: 2m
     annotations:
@@ -677,6 +865,210 @@ groups:
       gitlab_regional_sli_ops:rate_5m{component="rails_request",env!~"gprd|ops",monitor="global",stage="main",type="websockets"} offset 1h
       unless
       gitlab_regional_sli_ops:rate_5m{component="rails_request",env!~"gprd|ops",monitor="global",stage="main",type="websockets"}
+  - alert: WebsocketsServiceWorkhorseApdexSLOViolation
+    for: 2m
+    annotations:
+      title: The workhorse SLI of the websockets service (`{{ $labels.stage }}` stage)
+        has an apdex violating SLO
+      description: |
+        Monitors the Workhorse instance running in the Websockets fleet, via the HTTP interface. This only covers the initial protocal upgrade requests to `/-/cable`. https://gitlab.com/gitlab-org/gitlab/-/issues/296845 tracks making these metrics more useful for Websockets.
+
+        Currently the apdex value is {{ $value | humanizePercentage }}.
+      grafana_dashboard_id: websockets-main/websockets-overview
+      grafana_dashboard_link: https://dashboards.gitlab.net/d/websockets-main/websockets-overview?from=now-6h/m&to=now-1m/m&var-environment={{
+        $labels.environment }}&var-stage={{ $labels.stage }}
+      grafana_min_zoom_hours: "6"
+      grafana_panel_id: "2586818196"
+      grafana_variables: environment,stage
+      promql_template_1: |
+        histogram_quantile(
+          0.950000,
+          sum by (env,environment,tier,stage,le) (
+            rate(gitlab_workhorse_http_request_duration_seconds_bucket{environment="{{ $labels.environment }}",job="gitlab-workhorse",route!="^/([^/]+/){1,}[^/]+/uploads\\z",route!="^/([^/]+/){1,}[^/]+\\.git/git-receive-pack\\z",route!="^/([^/]+/){1,}[^/]+\\.git/git-upload-pack\\z",route!="^/([^/]+/){1,}[^/]+\\.git/info/refs\\z",route!="^/([^/]+/){1,}[^/]+\\.git/gitlab-lfs/objects/([0-9a-f]{64})/([0-9]+)\\z",stage="{{ $labels.stage }}",type="websockets"}[5m])
+          )
+        )
+      runbook: docs/websockets/README.md
+    labels:
+      aggregation: component
+      alert_class: slo_violation
+      alert_type: symptom
+      feature_category: not_owned
+      rules_domain: general
+      severity: s3
+      sli_type: apdex
+      slo_alert: "yes"
+      user_impacting: "yes"
+      window: 1h
+    expr: |
+      (
+        (
+          gitlab_component_apdex:ratio_1h{component="workhorse",env!~"gprd|ops",monitor="global",type="websockets"}
+          < (1 - 14.4 * 0.002000)
+        )
+        and
+        (
+          gitlab_component_apdex:ratio_5m{component="workhorse",env!~"gprd|ops",monitor="global",type="websockets"}
+          < (1 - 14.4 * 0.002000)
+        )
+      )
+      and on(env,environment,tier,type,stage,component)
+      (
+        sum by(env,environment,tier,type,stage,component) (gitlab_component_ops:rate_1h{component="workhorse",env!~"gprd|ops",monitor="global",type="websockets"}) >= 1
+      )
+  - alert: WebsocketsServiceWorkhorseApdexSLOViolation
+    for: 2m
+    annotations:
+      title: The workhorse SLI of the websockets service (`{{ $labels.stage }}` stage)
+        has an apdex violating SLO
+      description: |
+        Monitors the Workhorse instance running in the Websockets fleet, via the HTTP interface. This only covers the initial protocal upgrade requests to `/-/cable`. https://gitlab.com/gitlab-org/gitlab/-/issues/296845 tracks making these metrics more useful for Websockets.
+
+        Currently the apdex value is {{ $value | humanizePercentage }}.
+      grafana_dashboard_id: websockets-main/websockets-overview
+      grafana_dashboard_link: https://dashboards.gitlab.net/d/websockets-main/websockets-overview?from=now-6h/m&to=now-1m/m&var-environment={{
+        $labels.environment }}&var-stage={{ $labels.stage }}
+      grafana_min_zoom_hours: "6"
+      grafana_panel_id: "2586818196"
+      grafana_variables: environment,stage
+      promql_template_1: |
+        histogram_quantile(
+          0.950000,
+          sum by (env,environment,tier,stage,le) (
+            rate(gitlab_workhorse_http_request_duration_seconds_bucket{environment="{{ $labels.environment }}",job="gitlab-workhorse",route!="^/([^/]+/){1,}[^/]+/uploads\\z",route!="^/([^/]+/){1,}[^/]+\\.git/git-receive-pack\\z",route!="^/([^/]+/){1,}[^/]+\\.git/git-upload-pack\\z",route!="^/([^/]+/){1,}[^/]+\\.git/info/refs\\z",route!="^/([^/]+/){1,}[^/]+\\.git/gitlab-lfs/objects/([0-9a-f]{64})/([0-9]+)\\z",stage="{{ $labels.stage }}",type="websockets"}[5m])
+          )
+        )
+      runbook: docs/websockets/README.md
+    labels:
+      aggregation: component
+      alert_class: slo_violation
+      alert_type: symptom
+      feature_category: not_owned
+      rules_domain: general
+      severity: s3
+      sli_type: apdex
+      slo_alert: "yes"
+      user_impacting: "yes"
+      window: 6h
+    expr: |
+      (
+        (
+          gitlab_component_apdex:ratio_6h{component="workhorse",env!~"gprd|ops",monitor="global",type="websockets"}
+          < (1 - 6 * 0.002000)
+        )
+        and
+        (
+          gitlab_component_apdex:ratio_30m{component="workhorse",env!~"gprd|ops",monitor="global",type="websockets"}
+          < (1 - 6 * 0.002000)
+        )
+      )
+      and on(env,environment,tier,type,stage,component)
+      (
+        sum by(env,environment,tier,type,stage,component) (gitlab_component_ops:rate_6h{component="workhorse",env!~"gprd|ops",monitor="global",type="websockets"}) >= 0.16667
+      )
+  - alert: WebsocketsServiceWorkhorseApdexSLOViolationRegional
+    for: 2m
+    annotations:
+      title: The workhorse SLI of the websockets service in region `{{ $labels.region
+        }}` has an apdex violating SLO
+      description: |
+        Monitors the Workhorse instance running in the Websockets fleet, via the HTTP interface. This only covers the initial protocal upgrade requests to `/-/cable`. https://gitlab.com/gitlab-org/gitlab/-/issues/296845 tracks making these metrics more useful for Websockets.
+
+        Note that this alert is specific to the `{{ $labels.region }}` region.
+
+        Currently the apdex value is {{ $value | humanizePercentage }}.
+      grafana_dashboard_id: websockets-main/websockets-overview
+      grafana_dashboard_link: https://dashboards.gitlab.net/d/websockets-main/websockets-overview?from=now-6h/m&to=now-1m/m&var-environment={{
+        $labels.environment }}&var-stage={{ $labels.stage }}
+      grafana_min_zoom_hours: "6"
+      grafana_panel_id: "2586818196"
+      grafana_variables: environment,stage
+      promql_template_1: |
+        histogram_quantile(
+          0.950000,
+          sum by (env,environment,tier,stage,region,le) (
+            rate(gitlab_workhorse_http_request_duration_seconds_bucket{environment="{{ $labels.environment }}",job="gitlab-workhorse",region="{{ $labels.region }}",route!="^/([^/]+/){1,}[^/]+/uploads\\z",route!="^/([^/]+/){1,}[^/]+\\.git/git-receive-pack\\z",route!="^/([^/]+/){1,}[^/]+\\.git/git-upload-pack\\z",route!="^/([^/]+/){1,}[^/]+\\.git/info/refs\\z",route!="^/([^/]+/){1,}[^/]+\\.git/gitlab-lfs/objects/([0-9a-f]{64})/([0-9]+)\\z",stage="{{ $labels.stage }}",type="websockets"}[5m])
+          )
+        )
+      runbook: docs/websockets/README.md
+    labels:
+      aggregation: regional_component
+      alert_class: slo_violation
+      alert_type: symptom
+      feature_category: not_owned
+      rules_domain: general
+      severity: s3
+      sli_type: apdex
+      slo_alert: "yes"
+      user_impacting: "yes"
+      window: 1h
+    expr: |
+      (
+        (
+          gitlab_regional_sli_apdex:ratio_1h{component="workhorse",env!~"gprd|ops",monitor="global",type="websockets"}
+          < (1 - 14.4 * 0.002000)
+        )
+        and
+        (
+          gitlab_regional_sli_apdex:ratio_5m{component="workhorse",env!~"gprd|ops",monitor="global",type="websockets"}
+          < (1 - 14.4 * 0.002000)
+        )
+      )
+      and on(env,environment,tier,type,stage,region,component)
+      (
+        sum by(env,environment,tier,type,stage,region,component) (gitlab_regional_sli_ops:rate_1h{component="workhorse",env!~"gprd|ops",monitor="global",type="websockets"}) >= 1
+      )
+  - alert: WebsocketsServiceWorkhorseApdexSLOViolationRegional
+    for: 2m
+    annotations:
+      title: The workhorse SLI of the websockets service in region `{{ $labels.region
+        }}` has an apdex violating SLO
+      description: |
+        Monitors the Workhorse instance running in the Websockets fleet, via the HTTP interface. This only covers the initial protocal upgrade requests to `/-/cable`. https://gitlab.com/gitlab-org/gitlab/-/issues/296845 tracks making these metrics more useful for Websockets.
+
+        Note that this alert is specific to the `{{ $labels.region }}` region.
+
+        Currently the apdex value is {{ $value | humanizePercentage }}.
+      grafana_dashboard_id: websockets-main/websockets-overview
+      grafana_dashboard_link: https://dashboards.gitlab.net/d/websockets-main/websockets-overview?from=now-6h/m&to=now-1m/m&var-environment={{
+        $labels.environment }}&var-stage={{ $labels.stage }}
+      grafana_min_zoom_hours: "6"
+      grafana_panel_id: "2586818196"
+      grafana_variables: environment,stage
+      promql_template_1: |
+        histogram_quantile(
+          0.950000,
+          sum by (env,environment,tier,stage,region,le) (
+            rate(gitlab_workhorse_http_request_duration_seconds_bucket{environment="{{ $labels.environment }}",job="gitlab-workhorse",region="{{ $labels.region }}",route!="^/([^/]+/){1,}[^/]+/uploads\\z",route!="^/([^/]+/){1,}[^/]+\\.git/git-receive-pack\\z",route!="^/([^/]+/){1,}[^/]+\\.git/git-upload-pack\\z",route!="^/([^/]+/){1,}[^/]+\\.git/info/refs\\z",route!="^/([^/]+/){1,}[^/]+\\.git/gitlab-lfs/objects/([0-9a-f]{64})/([0-9]+)\\z",stage="{{ $labels.stage }}",type="websockets"}[5m])
+          )
+        )
+      runbook: docs/websockets/README.md
+    labels:
+      aggregation: regional_component
+      alert_class: slo_violation
+      alert_type: symptom
+      feature_category: not_owned
+      rules_domain: general
+      severity: s3
+      sli_type: apdex
+      slo_alert: "yes"
+      user_impacting: "yes"
+      window: 6h
+    expr: |
+      (
+        (
+          gitlab_regional_sli_apdex:ratio_6h{component="workhorse",env!~"gprd|ops",monitor="global",type="websockets"}
+          < (1 - 6 * 0.002000)
+        )
+        and
+        (
+          gitlab_regional_sli_apdex:ratio_30m{component="workhorse",env!~"gprd|ops",monitor="global",type="websockets"}
+          < (1 - 6 * 0.002000)
+        )
+      )
+      and on(env,environment,tier,type,stage,region,component)
+      (
+        sum by(env,environment,tier,type,stage,region,component) (gitlab_regional_sli_ops:rate_6h{component="workhorse",env!~"gprd|ops",monitor="global",type="websockets"}) >= 0.16667
+      )
   - alert: WebsocketsServiceWorkhorseErrorSLOViolation
     for: 2m
     annotations:
@@ -702,9 +1094,8 @@ groups:
       alert_class: slo_violation
       alert_type: symptom
       feature_category: not_owned
-      pager: pagerduty
       rules_domain: general
-      severity: s2
+      severity: s3
       sli_type: error
       slo_alert: "yes"
       user_impacting: "yes"
@@ -750,9 +1141,8 @@ groups:
       alert_class: slo_violation
       alert_type: symptom
       feature_category: not_owned
-      pager: pagerduty
       rules_domain: general
-      severity: s2
+      severity: s3
       sli_type: error
       slo_alert: "yes"
       user_impacting: "yes"
@@ -800,9 +1190,8 @@ groups:
       alert_class: slo_violation
       alert_type: symptom
       feature_category: not_owned
-      pager: pagerduty
       rules_domain: general
-      severity: s2
+      severity: s3
       sli_type: error
       slo_alert: "yes"
       user_impacting: "yes"
@@ -850,9 +1239,8 @@ groups:
       alert_class: slo_violation
       alert_type: symptom
       feature_category: not_owned
-      pager: pagerduty
       rules_domain: general
-      severity: s2
+      severity: s3
       sli_type: error
       slo_alert: "yes"
       user_impacting: "yes"
@@ -898,9 +1286,8 @@ groups:
       alert_class: traffic_cessation
       alert_type: cause
       feature_category: not_owned
-      pager: pagerduty
       rules_domain: general
-      severity: s2
+      severity: s3
       sli_type: ops
       slo_alert: "no"
       user_impacting: "yes"
@@ -935,9 +1322,8 @@ groups:
       alert_class: traffic_cessation
       alert_type: cause
       feature_category: not_owned
-      pager: pagerduty
       rules_domain: general
-      severity: s2
+      severity: s3
       sli_type: ops
       slo_alert: "no"
       user_impacting: "yes"
@@ -972,9 +1358,8 @@ groups:
       alert_class: traffic_cessation
       alert_type: cause
       feature_category: not_owned
-      pager: pagerduty
       rules_domain: general
-      severity: s2
+      severity: s3
       sli_type: ops
       slo_alert: "no"
       user_impacting: "yes"
@@ -1011,9 +1396,8 @@ groups:
       alert_class: traffic_cessation
       alert_type: cause
       feature_category: not_owned
-      pager: pagerduty
       rules_domain: general
-      severity: s2
+      severity: s3
       sli_type: ops
       slo_alert: "no"
       user_impacting: "yes"
