@@ -3,9 +3,10 @@ local basic = import 'grafana/basic.libsonnet';
 local layout = import 'grafana/layout.libsonnet';
 local promQuery = import 'grafana/prom_query.libsonnet';
 
-local numberOfAutoDeployJobRetriesQuery = 'sort_desc(sum(increase(delivery_webhooks_auto_deploy_job_retries[$__range])) by (project) != 0)';
-local numberOfAutoDeployJobRetriesByJobQuery = 'sort_desc(sum(increase(delivery_webhooks_auto_deploy_job_retries[$__range])) by (project, job_name) != 0)';
+local totalNumberOfJobsFailed = 'count(count_over_time(delivery_deployment_job_duration_seconds{job_status="failed"}[$__range]))';
 local incompleteDeploymentsQuery = 'sum by (version) (max_over_time(delivery_deployment_completed[$__range])) < 4';
+local numberOfAutoDeployJobRetriesByJobQuery = 'sort_desc(sum(increase(delivery_webhooks_auto_deploy_job_retries[$__range])) by (project, job_name) != 0)';
+local numberOfAutoDeployJobRetriesQuery = 'sort_desc(sum(increase(delivery_webhooks_auto_deploy_job_retries[$__range])) by (project) != 0)';
 local secondsLostBetweenRetriesQuery = 'sum by(job_name)(increase(delivery_webhooks_auto_deploy_job_failure_lost_seconds[$__range]) != 0)';
 local taggedPackagesTotalByTypesQuery = 'sort_desc(sum(increase(delivery_packages_tagging_total[$__range])) by (pkg_type,security))';
 
@@ -24,6 +25,18 @@ local timeLostUnit = [
     unit: 's',
   },
 ];
+
+local totalJobsFailedStatPanel =
+  basic.statPanel(
+    title='',
+    panelTitle='Total Number of Job Failures',
+    colorMode='value',
+    format='table',
+    query=totalNumberOfJobsFailed,
+    color=[
+      { color: 'white', value: null },
+    ],
+  );
 
 local autoDeployJobRetriesTable =
   basic.table(
@@ -374,69 +387,18 @@ basic.dashboard(
 )
 
 .addPanels(
-  layout.singleRow([
-    basic.table(
-      title='Increase in deployment pipeline duration due to retry of failed jobs',
-      description='This panel shows how much the deployment pipeline duration was increased by the need to retry failed jobs. For example,\nif a failed job is retried and succeeds after an hour of the failure, the deployment pipeline duration was increased by an hour.',
-      styles=timeLostUnit,
-      queries=[secondsLostBetweenRetriesQuery],
-      sort={
-        col: 1,
-        desc: true,
-      },
-      transformations=[
-        {
-          id: 'organize',
-          options: {
-            excludeByName: {
-              Time: true,
-            },
-          },
-        },
-      ],
-    ),
-  ], rowHeight=8, startRow=0),
-)
-
-.addPanels(
-  layout.rowGrid(
-    '🔄 Auto Deploy Job Retries 🔄',
-    [
-      autoDeployJobRetriesTable,
-      autoDeployJobRetriesByJobTable,
-    ],
-    collapse=false,
-    rowHeight=8,
-    startRow=100,
-  )
-)
-
-.addPanels(
   layout.rowGrid(
     '🚀 Tagged Releases 🚀',
     [taggedReleasesByTypeTable],
     collapse=false,
     rowHeight=10,
-    startRow=200,
+    startRow=0,
   )
 )
 
 .addPanels(
   layout.rowGrid(
-    '❌ Incomplete/Failed Deployments ❌',
-    [
-      incompleteDeploymentsTable,
-      incompleteDeploymentsStatPanel,
-    ],
-    collapse=false,
-    rowHeight=10,
-    startRow=300,
-  )
-)
-
-.addPanels(
-  layout.rowGrid(
-    'Auto-deploy Deployments Total Statistics',
+    'Auto-deploy Deployments Statistics',
     [
       barGaugePanel(
         'Auto-deploy Deployments Pipeline Duration',
@@ -501,8 +463,128 @@ basic.dashboard(
     ],
     collapse=false,
     rowHeight=10,
+    startRow=100,
+  ),
+)
+
+.addPanels(
+  layout.rowGrid(
+    '❌ Incomplete/Failed Deployments ❌',
+    [
+      incompleteDeploymentsStatPanel,
+      incompleteDeploymentsTable,
+    ],
+    collapse=false,
+    rowHeight=10,
+    startRow=200,
+  )
+)
+
+.addPanels(
+  layout.rowGrid(
+    '❌ Failed Jobs ❌',
+    [
+      totalJobsFailedStatPanel,
+      barGaugePanel(
+        'Total Number of Job Failures Per Auto-Deploy Version',
+        description='For all the auto-deploy pipelines in the time range, display total number of job failures',
+        fieldColor={
+          fixedColor: 'green',
+          mode: 'palette-classic',
+        },
+        fieldLinks=[
+          {
+            title: 'Deploy version link',
+            url: 'https://dashboards.gitlab.net/d/delivery-deployment_metrics/delivery-deployment-metrics?orgId=1&${__url_time_range}&var-deploy_version=${__data.fields.deploy_version}',
+          },
+        ],
+        legendFormat='{{deploy_version}}',
+        query='count by (deploy_version) (sum_over_time(delivery_deployment_job_duration_seconds{job_status="failed"}[$__range]))',
+        reduceOptions={
+          values: 'true',
+          calcs: [],
+          fields: '/^Value \\(max\\)$/',
+        },
+        thresholds={
+          steps: [
+            { color: 'green', value: null },
+          ],
+        },
+        transformations=[
+          {
+            id: 'groupBy',
+            options: {
+              fields: {
+                deploy_version: {
+                  aggregations: [],
+                  operation: 'groupby',
+                },
+                Value: {
+                  aggregations: [
+                    'max',
+                  ],
+                  operation: 'aggregate',
+                },
+              },
+            },
+          },
+          {
+            id: 'sortBy',
+            options: {
+              fields: {},
+              sort: [
+                {
+                  field: 'deploy_version',
+                  desc: true,
+                },
+              ],
+            },
+          },
+        ],
+      ),
+    ],
+    collapse=false,
+    rowHeight=10,
+    startRow=300,
+  )
+)
+
+.addPanels(
+  layout.rowGrid(
+    '🔄 Auto Deploy Job Retries 🔄',
+    [
+      autoDeployJobRetriesTable,
+      autoDeployJobRetriesByJobTable,
+    ],
+    collapse=false,
+    rowHeight=8,
     startRow=400,
   )
+)
+
+.addPanels(
+  layout.singleRow([
+    basic.table(
+      title='Increase in deployment pipeline duration due to retry of failed jobs',
+      description='This panel shows how much the deployment pipeline duration was increased by the need to retry failed jobs. For example,\nif a failed job is retried and succeeds after an hour of the failure, the deployment pipeline duration was increased by an hour.',
+      styles=timeLostUnit,
+      queries=[secondsLostBetweenRetriesQuery],
+      sort={
+        col: 1,
+        desc: true,
+      },
+      transformations=[
+        {
+          id: 'organize',
+          options: {
+            excludeByName: {
+              Time: true,
+            },
+          },
+        },
+      ],
+    ),
+  ], rowHeight=8, startRow=500),
 )
 
 .trailer()
