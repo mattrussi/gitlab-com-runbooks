@@ -15,6 +15,7 @@ local envSelector = {
 };
 
 local groupSelector = {
+  product_stage: { re: '$product_stage' },
   stage_group: { re: '$stage_group' },
 };
 
@@ -306,6 +307,7 @@ basic.dashboard(
   time_to='now/m',
 ).addTemplate(prebuiltTemplates.environment)
 .addTemplate(prebuiltTemplates.stage)
+.addTemplate(prebuiltTemplates.productStage())
 .addTemplate(prebuiltTemplates.stageGroup())
 .addPanels(
   layout.grid(
