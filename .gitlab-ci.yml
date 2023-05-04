@@ -899,13 +899,19 @@ publish-periodic-queries:
 
 .deploy-thanos-rules:
   image: google/cloud-sdk:alpine
+  extends:
+    - .vault_rw
   needs: []
   rules:
-    - !reference [".default-job-rules", rules]
-    - if: '$CI_API_V4_URL == "https://ops.gitlab.net/api/v4" && $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH'
+    - !reference [.default-job-rules, rules]
+    - if: $CI_API_V4_URL == "https://ops.gitlab.net/api/v4" && $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH
+  variables:
+    THANOS_RULES_BUCKET: ${GOOGLE_PROJECT}-thanos-rules
+    VAULT_GCP_IMPERSONATED_ACCOUNT: ${GOOGLE_PROJECT}--thanos-rules
+  before_script:
+    - export VAULT_TOKEN="$(vault write -field=token "auth/${VAULT_AUTH_PATH}/login" role="${RUNBOOKS_VAULT_AUTH_ROLE}" jwt="${VAULT_ID_TOKEN}")"
+    - export CLOUDSDK_AUTH_ACCESS_TOKEN="$(vault read -field=token "gcp/impersonated-account/${VAULT_GCP_IMPERSONATED_ACCOUNT}/token")"
   script:
-    - gcloud auth activate-service-account --key-file ${THANOS_RULES_BUCKET_SERVICE_KEY}
-    - gcloud config set project ${PROJECT}
     - tar -czvf thanos-rules.tar.gz thanos-rules
     - gsutil cp thanos-rules.tar.gz gs://${THANOS_RULES_BUCKET}
 
@@ -913,15 +919,15 @@ deploy-thanos-rules-staging:
   stage: deploy
   environment: pre
   variables:
-    THANOS_RULES_BUCKET: gitlab-pre-thanos-rules
+    GOOGLE_PROJECT: gitlab-pre
   extends:
     - .deploy-thanos-rules
 
-deploy-thanos-rules-produciton:
+deploy-thanos-rules-production:
   stage: deploy-rules-production
   environment: ops
   variables:
-    THANOS_RULES_BUCKET: gitlab-ops-thanos-rules
+    GOOGLE_PROJECT: gitlab-ops
   extends:
     - .deploy-thanos-rules
 
