@@ -347,16 +347,23 @@ deploy-prometheus-rules-production:
     - .matrix_production
 
 update-alertmanager:
+  extends:
+    - .gke_cluster_auth
+    - .vault_rw
   stage: deploy
   needs:
     - job: test-alertmanager
   environment: ops
   tags:
     - k8s-workloads
+  variables:
+    GOOGLE_PROJECT: gitlab-ops
+    GKE_CLUSTER: ops-gitlab-gke
+    LOCATION: us-east1
+    VAULT_KUBERNETES_ROLE: alertmanager-edit
   script:
     - make alertmanager/alertmanager.yml
-    - cd alertmanager
-    - ./update.sh
+    - kubectl apply --filename alertmanager/k8s_alertmanager_secret.yaml
   only:
     refs:
       - master
@@ -364,9 +371,6 @@ update-alertmanager:
       - $CI_API_V4_URL == "https://ops.gitlab.net/api/v4"
   except:
     - schedules
-  variables:
-    CLUSTER: ops-gitlab-gke
-    REGION: us-east1
 
 prepare-service-health-dashboard-json:
   rules:
