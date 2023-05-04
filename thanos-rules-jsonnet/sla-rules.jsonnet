@@ -17,15 +17,6 @@ local keyServiceWeightsMapping = {
   weighted_v3: keyServiceWeights,
 };
 
-
-local keyServiceWeightsNew = keyServiceWeights { sidekiq: 1 };
-
-local keyServiceWeightsMapping = {
-  'weighted_v2.1': keyServiceWeights,
-  weighted_v3: keyServiceWeights,
-};
-
-
 local getScoreQuery(weights, interval, selector) =
   local items = [
     'min without(slo) (avg_over_time(slo_observation_status{%(selector)s}[%(interval)s])) * %(weight)d' % {
