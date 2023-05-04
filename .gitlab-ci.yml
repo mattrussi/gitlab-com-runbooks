@@ -183,14 +183,14 @@ workflow:
     KUBE_NAMESPACE: default
     RUNBOOKS_VAULT_AUTH_ROLE: ${VAULT_AUTH_ROLE}
     VAULT_GCP_IMPERSONATED_ACCOUNT: ${GOOGLE_PROJECT}--k8s-workloads-ro
-    VAULT_KUBERNETES_ROLE: cluster-view
+    VAULT_KUBERNETES_ROLE: prometheus-rules-view
   before_script:
     # Authentication
     - export VAULT_TOKEN="$(vault write -field=token "auth/${VAULT_AUTH_PATH}/login" role="${RUNBOOKS_VAULT_AUTH_ROLE}" jwt="${VAULT_ID_TOKEN}")"
     - export CLOUDSDK_AUTH_ACCESS_TOKEN="$(vault read -field=token "gcp/impersonated-account/${VAULT_GCP_IMPERSONATED_ACCOUNT}/token")"
     - gcloud container clusters get-credentials "${GKE_CLUSTER}" --project "${GOOGLE_PROJECT}" --location "${LOCATION}"
     - export KUBE_TOKEN="$(vault write -field=service_account_token "kubernetes/${GKE_CLUSTER}/creds/${VAULT_KUBERNETES_ROLE}" kubernetes_namespace="${KUBE_NAMESPACE}" ttl=30m)"
-    - kubectl config set-credentials "${VAULT_KUBERNETES_ROLE}" --token="${KUBE_TOKEN}"
+    - kubectl config set-credentials "${VAULT_KUBERNETES_ROLE}" --token "${KUBE_TOKEN}"
     - kubectl config set-context "$(kubectl config current-context)" --user "${VAULT_KUBERNETES_ROLE}"
 
 .vault_rw:
@@ -230,6 +230,7 @@ workflow:
       artifacts: true
   variables:
     KUBE_NAMESPACE: monitoring
+    VAULT_KUBERNETES_ROLE: prometheus-rules-edit
   rules:
     - !reference [".default-job-rules", rules]
     # Only run deploy rules from ops on the default branch
