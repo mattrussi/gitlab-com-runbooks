@@ -24,7 +24,7 @@ Zoom out to a few days (3 or 7) to get a feel for the impact.
   - Customers may be using an uncommon service for redirection that has changed its headers.
   - The customer's email may be marked as Spam in the incoming mail inbox.
 
-Check the [Certify Grafana charts](https://dashboards.gitlab.net/d/stage-groups-certify/stage-groups-certify-group-dashboard?orgId=1&from=now-7d&to=now)
+Check the [Respond Grafana charts](https://dashboards.gitlab.net/d/stage-groups-respond/stage-groups-respond-group-dashboard?orgId=1&from=now-7d&to=now)
 
 - Is there a noticeable impact?
 
