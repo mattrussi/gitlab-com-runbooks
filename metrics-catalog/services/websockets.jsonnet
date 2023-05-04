@@ -91,19 +91,7 @@ metricsCatalog.serviceDefinition({
 
       apdex: histogramApdex(
         histogram='gitlab_workhorse_http_request_duration_seconds_bucket',
-        selector=baseSelector {
-          route: {
-            ne: [
-              '^/([^/]+/){1,}[^/]+/uploads\\\\z',
-              // Technically none of these git endpoints should end up in cny, but sometimes they do,
-              // so exclude them from apdex
-              '^/([^/]+/){1,}[^/]+\\\\.git/git-receive-pack\\\\z',
-              '^/([^/]+/){1,}[^/]+\\\\.git/git-upload-pack\\\\z',
-              '^/([^/]+/){1,}[^/]+\\\\.git/info/refs\\\\z',
-              '^/([^/]+/){1,}[^/]+\\\\.git/gitlab-lfs/objects/([0-9a-f]{64})/([0-9]+)\\\\z',
-            ],
-          },
-        },
+        selector=baseSelector,
         satisfiedThreshold=1,
         toleratedThreshold=10,
       ),
