@@ -899,6 +899,7 @@ publish-periodic-queries:
 
 .deploy-thanos-rules:
   extends:
+    - .id_tokens
     - .vault_rw
   needs: []
   rules:
