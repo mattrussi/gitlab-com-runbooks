@@ -39,17 +39,17 @@ basic.dashboard(
 .addPanels(
   layout.grid([
     basic.timeseries(
-      title='Total Tokens Spent Per Hour',
+      title='Total Tokens Spent',
       query='sum(increase(gitlab_cloud_cost_spend_entry_total{env="$environment", vendor="open_ai", unit="tokens"}[$__interval]))',
       legendFormat='Amount'
     ),
     basic.timeseries(
-      title='Prompt Tokens Spent Per Hour',
+      title='Prompt Tokens Spent',
       query='sum(increase(gitlab_cloud_cost_spend_entry_total{env="$environment", vendor="open_ai", unit="tokens", item=~".*/prompt"}[$__interval]))',
       legendFormat='Amount'
     ),
     basic.timeseries(
-      title='Completion Tokens Spent Per Hour',
+      title='Completion Tokens Spent',
       query='sum(increase(gitlab_cloud_cost_spend_entry_total{env="$environment", vendor="open_ai", unit="tokens", item=~".*/completion"}[$__interval]))',
       legendFormat='Amount'
     ),
@@ -58,17 +58,17 @@ basic.dashboard(
 .addPanels(
   layout.grid([
     basic.timeseries(
-      title='Chat Tokens Spent Per Hour',
+      title='Chat Tokens Spent',
       query='sum(increase(gitlab_cloud_cost_spend_entry_total{env="$environment", vendor="open_ai", unit="tokens", item=~"chat/.*"}[$__interval]))',
       legendFormat='Amount'
     ),
     basic.timeseries(
-      title='Chat Prompt Tokens Spent Per Hour',
+      title='Chat Prompt Tokens Spent',
       query='sum(increase(gitlab_cloud_cost_spend_entry_total{env="$environment", vendor="open_ai", unit="tokens", item="chat/prompt"}[$__interval]))',
       legendFormat='Amount'
     ),
     basic.timeseries(
-      title='Chat Completion Tokens Spent Per Hour',
+      title='Chat Completion Tokens Spent',
       query='sum(increase(gitlab_cloud_cost_spend_entry_total{env="$environment", vendor="open_ai", unit="tokens", item="chat/completion"}[$__interval]))',
       legendFormat='Amount'
     ),
@@ -77,17 +77,17 @@ basic.dashboard(
 .addPanels(
   layout.grid([
     basic.timeseries(
-      title='Completions Tokens Spent Per Hour',
+      title='Completions Tokens Spent',
       query='sum(increase(gitlab_cloud_cost_spend_entry_total{env="$environment", vendor="open_ai", unit="tokens", item=~"completions/.*"}[$__interval]))',
       legendFormat='Amount'
     ),
     basic.timeseries(
-      title='Completions Prompt Tokens Spent Per Hour',
+      title='Completions Prompt Tokens Spent',
       query='sum(increase(gitlab_cloud_cost_spend_entry_total{env="$environment", vendor="open_ai", unit="tokens", item="completions/prompt"}[$__interval]))',
       legendFormat='Amount'
     ),
     basic.timeseries(
-      title='Completions Completion Tokens Spent Per Hour',
+      title='Completions Completion Tokens Spent',
       query='sum(increase(gitlab_cloud_cost_spend_entry_total{env="$environment", vendor="open_ai", unit="tokens", item="completions/completion"}[$__interval]))',
       legendFormat='Amount'
     ),
@@ -96,17 +96,17 @@ basic.dashboard(
 .addPanels(
   layout.grid([
     basic.timeseries(
-      title='Edits Tokens Spent Per Hour',
+      title='Edits Tokens Spent',
       query='sum(increase(gitlab_cloud_cost_spend_entry_total{env="$environment", vendor="open_ai", unit="tokens", item=~"edits/.*"}[$__interval]))',
       legendFormat='Amount'
     ),
     basic.timeseries(
-      title='Edits Prompt Tokens Spent Per Hour',
+      title='Edits Prompt Tokens Spent',
       query='sum(increase(gitlab_cloud_cost_spend_entry_total{env="$environment", vendor="open_ai", unit="tokens", item="edits/prompt"}[$__interval]))',
       legendFormat='Amount'
     ),
     basic.timeseries(
-      title='Edits Completion Tokens Spent Per Hour',
+      title='Edits Completion Tokens Spent',
       query='sum(increase(gitlab_cloud_cost_spend_entry_total{env="$environment", vendor="open_ai", unit="tokens", item="edits/completion"}[$__interval]))',
       legendFormat='Amount'
     ),
@@ -115,17 +115,17 @@ basic.dashboard(
 .addPanels(
   layout.grid([
     basic.timeseries(
-      title='Embeddings Tokens Spent Per Hour',
+      title='Embeddings Tokens Spent',
       query='sum(increase(gitlab_cloud_cost_spend_entry_total{env="$environment", vendor="open_ai", unit="tokens", item=~"embeddings/.*"}[$__interval]))',
       legendFormat='Amount'
     ),
     basic.timeseries(
-      title='Embeddings Prompt Tokens Spent Per Hour',
+      title='Embeddings Prompt Tokens Spent',
       query='sum(increase(gitlab_cloud_cost_spend_entry_total{env="$environment", vendor="open_ai", unit="tokens", item="embeddings/prompt"}[$__interval]))',
       legendFormat='Amount'
     ),
     basic.timeseries(
-      title='Embeddings Completion Tokens Spent Per Hour',
+      title='Embeddings Completion Tokens Spent',
       query='sum(increase(gitlab_cloud_cost_spend_entry_total{env="$environment", vendor="open_ai", unit="tokens", item="embeddings/completion"}[$__interval]))',
       legendFormat='Amount'
     ),
