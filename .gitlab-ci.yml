@@ -209,29 +209,6 @@ workflow:
   variables:
     RUNBOOKS_VAULT_AUTH_ROLE: gitlab-com_runbooks-rw
 
-.diff-prometheus-rules:
-  extends:
-    - .gke_cluster_auth
-  stage: test
-  needs:
-    - job: generate-prometheus-rules
-      artifacts: true
-  variables:
-    KUBE_NAMESPACE: monitoring
-  rules:
-    - !reference [".default-job-rules", rules]
-    - if: $CI_API_V4_URL == "https://ops.gitlab.net/api/v4"
-      changes:
-        paths:
-          - "rules/**/*"
-  script:
-    # Dry-run delete orphaned PrometheusRules
-    - ./bin/delete_orphan_kubenetes_rules.sh -D
-    # Diff PrometheusRules
-    - kubectl diff --namespace "${KUBE_NAMESPACE}" --filename "${CI_PROJECT_DIR}/rules-k8s/"
-  tags:
-    - k8s-workloads
-
 .deploy-prometheus-rules:
   extends:
     - .gke_cluster_auth
@@ -354,26 +331,9 @@ generate-prometheus-rules:
     paths:
       - rules-k8s/
 
-# Diff rules for non-production environments
-diff-prometheus-rules-non-production:
-  extends:
-    - .diff-prometheus-rules
-    - .matrix_non_production
-
-# Diff rules for production environments
-diff-prometheus-rules-production:
-  extends:
-    - .diff-prometheus-rules
-    - .matrix_production
-
 # Deploy rules to non-production environments
 deploy-prometheus-rules-non-production:
   environment: $DEPLOY_ENV
-  needs:
-    - job: generate-prometheus-rules
-      artifacts: true
-    - job: diff-prometheus-rules-non-production
-      artifacts: false
   extends:
     - .deploy-prometheus-rules
     - .matrix_non_production
@@ -382,11 +342,6 @@ deploy-prometheus-rules-non-production:
 deploy-prometheus-rules-production:
   environment: $DEPLOY_ENV
   stage: deploy-rules-production
-  needs:
-    - job: generate-prometheus-rules
-      artifacts: true
-    - job: diff-prometheus-rules-production
-      artifacts: false
   extends:
     - .deploy-prometheus-rules
     - .matrix_production
@@ -399,6 +354,7 @@ update-alertmanager:
   tags:
     - k8s-workloads
   script:
+    - make alertmanager/alertmanager.yml
     - cd alertmanager
     - ./update.sh
   only:
