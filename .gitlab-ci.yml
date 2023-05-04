@@ -898,7 +898,6 @@ publish-periodic-queries:
     - k8s-workloads
 
 .deploy-thanos-rules:
-  image: google/cloud-sdk:alpine
   extends:
     - .vault_rw
   needs: []
