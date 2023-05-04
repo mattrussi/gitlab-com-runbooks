@@ -114,15 +114,27 @@ variables:
         GKE_CLUSTER: ops-gitlab-gke
         GOOGLE_PROJECT: gitlab-ops
         LOCATION: us-east1
+      - DEPLOY_ENV: ops-central
+        GKE_CLUSTER: ops-central
+        GOOGLE_PROJECT: gitlab-ops
+        LOCATION: us-central1
       - DEPLOY_ENV: stgsub
         GKE_CLUSTER: stgsub-customers-gke
         GOOGLE_PROJECT: gitlab-subscriptions-staging
         LOCATION: us-east1
+      - DEPLOY_ENV: stgsub-ref
+        GKE_CLUSTER: stgsub-ref-customers-gke
+        GOOGLE_PROJECT: gitlab-subscriptions-stg-ref
+        LOCATION: us-east1
       - DEPLOY_ENV: gstg-ref
         GKE_CLUSTER: staging-ref-3k-hybrid-us
-        GOOGLE_PROJECT: gitlab-subscriptions-stg-ref
+        GOOGLE_PROJECT: gitlab-staging-ref
         LOCATION: us-east1-c
         KUBE_NAMESPACE: prometheus
+      - DEPLOY_ENV: db-benchmarking
+        GKE_CLUSTER: db-benchmarking-gitlab-gke
+        GOOGLE_PROJECT: gitlab-db-benchmarking
+        LOCATION: us-east1
 
 .if-merge-request: &if-merge-request
   if: '$CI_MERGE_REQUEST_EVENT_TYPE == "merged_result" || $CI_MERGE_REQUEST_EVENT_TYPE == "detached"'
@@ -357,6 +369,11 @@ diff-prometheus-rules-production:
 # Deploy rules to non-production environments
 deploy-prometheus-rules-non-production:
   environment: $DEPLOY_ENV
+  needs:
+    - job: generate-prometheus-rules
+      artifacts: true
+    - job: diff-prometheus-rules-non-production
+      artifacts: false
   extends:
     - .deploy-prometheus-rules
     - .matrix_non_production
@@ -365,17 +382,23 @@ deploy-prometheus-rules-non-production:
 deploy-prometheus-rules-production:
   environment: $DEPLOY_ENV
   stage: deploy-rules-production
+  needs:
+    - job: generate-prometheus-rules
+      artifacts: true
+    - job: diff-prometheus-rules-production
+      artifacts: false
   extends:
     - .deploy-prometheus-rules
     - .matrix_production
 
 update-alertmanager:
   stage: deploy
+  needs:
+    - job: test-alertmanager
   environment: ops
   tags:
     - k8s-workloads
   script:
-    - make test-alertmanager
     - cd alertmanager
     - ./update.sh
   only:
@@ -915,6 +938,7 @@ publish-periodic-queries:
 
 .deploy-thanos-rules:
   image: google/cloud-sdk:alpine
+  needs: []
   rules:
     - !reference [".default-job-rules", rules]
     - if: '$CI_API_V4_URL == "https://ops.gitlab.net/api/v4" && $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH'
@@ -949,10 +973,9 @@ reconcile_service_catalog_labels:
       vault: access_tokens/gitlab-com/gitlab-com/gl-infra/_group_access_tokens/runbooks-label-reconciler/token@ci
   rules:
     - !reference [".default-job-rules", rules]
-    - if: '$CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH'
+    - if: $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH && $CI_API_V4_URL == "https://gitlab.com/api/v4"
       changes:
         - "services/service-catalog.yml"
-    - if: "$TASK == $CI_JOB_NAME"
   stage: deploy
   script:
     - ./scripts/reconcile_service_catalog_labels.rb
