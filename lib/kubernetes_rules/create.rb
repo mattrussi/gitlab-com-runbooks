@@ -12,11 +12,6 @@ module KubernetesRules
     def create!
       files = Dir.glob("#{@input_dir}/*.yml")
 
-      # When deploying for a specific CLUSTER,
-      # also include files in ./rules/clusters/<cluster>/*.yml
-      cluster = ENV['CLUSTER']
-      files += Dir.glob("#{@input_dir}/clusters/#{cluster}/*.yml") if cluster
-
       files.each do |file_path|
         file_name = File.basename(file_path)
         puts "Rendering #{file_name}"
