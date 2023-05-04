@@ -26,7 +26,7 @@ exported in the `ALERTMANAGER_SECRETS_FILE` variable.
 Then run:
 
 ```shell
-kubectl apply --filename k8s_alertmanager_secret.yaml
+kubectl apply --namespace monitoring --filename k8s_alertmanager_secret.yaml
 ```
 
 * Generate the `alertmanager.yml` file.

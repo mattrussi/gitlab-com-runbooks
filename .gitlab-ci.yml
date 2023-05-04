@@ -357,13 +357,14 @@ update-alertmanager:
   tags:
     - k8s-workloads
   variables:
-    GOOGLE_PROJECT: gitlab-ops
     GKE_CLUSTER: ops-gitlab-gke
+    GOOGLE_PROJECT: gitlab-ops
+    KUBE_NAMESPACE: monitoring
     LOCATION: us-east1
     VAULT_KUBERNETES_ROLE: alertmanager-edit
   script:
     - make alertmanager/alertmanager.yml
-    - kubectl apply --filename alertmanager/k8s_alertmanager_secret.yaml
+    - kubectl apply --namespace "${KUBE_NAMESPACE}" --filename alertmanager/k8s_alertmanager_secret.yaml
   only:
     refs:
       - master
