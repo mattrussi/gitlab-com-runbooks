@@ -7,8 +7,15 @@ local serviceDashboard = import 'gitlab-dashboards/service_dashboard.libsonnet';
 local colorScheme = import 'grafana/color_scheme.libsonnet';
 local metricsCatalog = import 'servicemetrics/metrics-catalog.libsonnet';
 local multiburnFactors = import 'mwmbr/multiburn_factors.libsonnet';
+local selectors = import 'promql/selectors.libsonnet';
 
-local selector = 'environment="$environment", type="gitaly", stage="$stage"';
+local gitalyPackObjectsDashboards = import 'gitlab-dashboards/gitaly/pack_objects.libsonnet';
+
+local selector = {
+  environment: '$environment',
+  type: 'gitaly',
+  stage: '$stage',
+};
 
 local gitalyServiceInfo = metricsCatalog.getService('gitaly');
 
@@ -140,7 +147,7 @@ serviceDashboard.overview('gitaly')
         gitaly_blackbox_git_http_get_first_packet_seconds{%(selector)s}
         /
         gitaly_blackbox_git_http_get_total_time_seconds{%(selector)s}
-      ||| % { selector: selector },
+      ||| % { selector: selectors.serializeHash(selector) },
       legendFormat='{{ probe }}',
       interval='1m',
       linewidth=1,
@@ -159,7 +166,7 @@ serviceDashboard.overview('gitaly')
           +
           gitaly_blackbox_git_http_get_total_time_seconds{%(selector)s}
         )
-      ||| % { selector: selector },
+      ||| % { selector: selectors.serializeHash(selector) },
       legendFormat='{{ probe }}',
       interval='1m',
       linewidth=1,
@@ -170,7 +177,7 @@ serviceDashboard.overview('gitaly')
         gitaly_blackbox_git_http_wanted_refs{%(selector)s}
         /
         gitaly_blackbox_git_http_get_total_time_seconds{%(selector)s}
-      ||| % { selector: selector },
+      ||| % { selector: selectors.serializeHash(selector) },
       legendFormat='{{ probe }}',
       interval='1m',
       linewidth=1,
@@ -181,11 +188,27 @@ serviceDashboard.overview('gitaly')
         gitaly_blackbox_git_http_post_total_time_seconds{%(selector)s}
         /
         gitaly_blackbox_git_http_post_pack_bytes{%(selector)s}
-      ||| % { selector: selector },
+      ||| % { selector: selectors.serializeHash(selector) },
       legendFormat='{{ probe }}',
       interval='1m',
       linewidth=1,
     ),
   ], startRow=3001)
+)
+.addPanel(
+  row.new(title='Pack objects metrics'),
+  gridPos={
+    x: 0,
+    y: 4000,
+    w: 24,
+    h: 1,
+  }
+)
+.addPanels(
+  layout.grid([
+    gitalyPackObjectsDashboards.process_active_callers(selectors, '{{ fqdn }}', segment='repository'),
+    gitalyPackObjectsDashboards.process_active_callers(selectors, '{{ fqdn }}', segment='remote_ip'),
+    gitalyPackObjectsDashboards.cache_lookup(selectors, '{{ result }}'),
+  ], startRow=4001)
 )
 .overviewTrailer()

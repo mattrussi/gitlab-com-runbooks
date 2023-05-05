@@ -7,6 +7,7 @@ local templates = import 'grafana/templates.libsonnet';
 local template = grafana.template;
 local promQuery = import 'grafana/prom_query.libsonnet';
 local colorScheme = import 'grafana/color_scheme.libsonnet';
+local pipelineOverview = import './panels/pipelineoverview.libjsonnet';
 local row = grafana.row;
 
 local explainer = |||
@@ -69,40 +70,18 @@ basic.dashboard(
   includeStandardEnvironmentAnnotations=false,
   includeEnvironmentTemplate=false,
 )
-
-.addTemplate(
-  template.new(
-    'environment',
-    '$PROMETHEUS_DS',
-    'label_values(delivery_deployment_merge_request_lead_time_seconds, target_env)',
-    label='environment',
-    refresh='time',
-  )
-)
-
-.addTemplate(
-  template.new(
-    'target_stage',
-    '$PROMETHEUS_DS',
-    'label_values(delivery_deployment_merge_request_lead_time_seconds{target_env="$environment"}, target_stage)',
-    label='stage',
-    refresh='time',
-  )
-)
-
 .addTemplate(
   template.new(
     'deploy_version',
     '$PROMETHEUS_DS',
-    'label_values(delivery_deployment_merge_request_lead_time_seconds{target_env="$environment", target_stage="$target_stage"}, deploy_version)',
+    'label_values(delivery_deployment_merge_request_lead_time_seconds, deploy_version)',
     label='version',
     refresh='time',
     sort=2,
   )
 )
-
 .addPanel(
-  row.new(title='📊 Downstream Pipeline statistics'),
+  row.new(title='🚀 Downstream Pipeline statistics'),
   gridPos={
     x: 0,
     y: 0,
@@ -120,7 +99,7 @@ basic.dashboard(
         format='table',
         mode='absolute',
         legendFormat='{{target_env, target_stage}}',
-        query='sum by (target_env, target_stage) (delivery_deployment_pipeline_duration_seconds{deploy_version="$deploy_version", pipeline_name!="Coordinator pipeline"})',
+        query='sum by (target_env, target_stage) (delivery_deployment_pipeline_duration_seconds{target_env!="",target_stage!="", deploy_version="$deploy_version", pipeline_name!="Coordinator pipeline"})',
         reduceOptions={
           values: true,
           calcs: [],
@@ -165,7 +144,7 @@ basic.dashboard(
         interval='',
         format='table',
         legendFormat='__auto',
-        panelTitle='Total Pipeline Duration',
+        panelTitle='Coordinated Pipeline Duration',
         query='delivery_deployment_pipeline_duration_seconds{project_name="gitlab-org/release/tools", pipeline_name="Coordinator pipeline", deploy_version="$deploy_version"}',
         title='',
         transformations=[
@@ -196,6 +175,7 @@ basic.dashboard(
         { color: colorScheme.criticalColor, value: 43200 },
       ]),
     ],
+    [pipelineOverview],
   ], [19, 5], rowHeight=10, startRow=1)
 )
 
@@ -212,9 +192,9 @@ basic.dashboard(
   layout.columnGrid([
     [
       bargaugePanel(
-        'Merge requests lead time',
+        'Merge requests lead time to production',
         description='Time it take Merge Request from being merged to production',
-        query='last_over_time(delivery_deployment_merge_request_lead_time_seconds{target_env="$environment", target_stage="$target_stage", deploy_version="$deploy_version"}[$__range])',
+        query='last_over_time(delivery_deployment_merge_request_lead_time_seconds{target_env="gprd", target_stage="main", deploy_version="$deploy_version"}[$__range])',
         legendFormat='{{mr_id}}',
         fieldLinks=[
           {
@@ -234,9 +214,9 @@ basic.dashboard(
       ),
       basic.statPanel(
         title='',
-        panelTitle='Average MR lead time',
+        panelTitle='Average MR lead time to production',
         color='blue',
-        query='avg(last_over_time(delivery_deployment_merge_request_lead_time_seconds{target_env="$environment", target_stage="$target_stage", deploy_version="$deploy_version"}[$__range]))',
+        query='avg(last_over_time(delivery_deployment_merge_request_lead_time_seconds{target_env="gprd", target_stage="main", deploy_version="$deploy_version"}[$__range]))',
         legendFormat='__auto',
         colorMode='background',
         textMode='value',
