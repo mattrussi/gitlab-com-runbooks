@@ -1559,13 +1559,13 @@ services:
     owner: reliability_general
     technical:
       project:
-        - https://gitlab.com/gitlab-com/version-gitlab-com
+        - https://gitlab.com/gitlab-org/gitlab-services/version.gitlab.com
       documents:
         design:
         architecture:
         readiness_review:
         service:
-          - https://gitlab.com/gitlab-com/version-gitlab-com/blob/master/README.md
+          - https://gitlab.com/gitlab-org/gitlab-services/version.gitlab.com/-/blob/main/README.md
         security:
       dependencies:
       logging:
