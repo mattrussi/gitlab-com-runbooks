@@ -4,9 +4,9 @@
 
 ## DRI
 
-[Certify group](https://about.gitlab.com/handbook/product/categories/features/#plancertify-group) is responsible for Service Desk product development.
+The [Monitor:Respond group](https://about.gitlab.com/handbook/product/categories/features/#monitorrespond-group) is responsible for Service Desk product development.
 
-Additionally, [Scalability group](https://about.gitlab.com/handbook/engineering/infrastructure/team/scalability/) has been doing some infrastructure work around mailroom on gitlab.com.
+Additionally, the [Scalability group](https://about.gitlab.com/handbook/engineering/infrastructure/team/scalability/) has been doing some infrastructure work around mailroom on gitlab.com.
 
 ## Assessing impact
 
@@ -28,7 +28,7 @@ Check the [Respond Grafana charts](https://dashboards.gitlab.net/d/stage-groups-
 
 - Is there a noticeable impact?
 
-There are helpful links to the side of the Certify charts (e.g. Kibana, Sentry links).
+There are helpful links to the side of the Respond charts (e.g. Kibana, Sentry links).
 
 ## Determine root cause
 
