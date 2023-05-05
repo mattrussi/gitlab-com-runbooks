@@ -10,15 +10,15 @@ local row = grafana.row;
 local metricsCatalogDashboards = import 'gitlab-dashboards/metrics_catalog_dashboards.libsonnet';
 local selectors = import 'promql/selectors.libsonnet';
 local processExporter = import 'gitlab-dashboards/process_exporter.libsonnet';
-local gitalyCommandStats = import 'gitlab-dashboards/gitaly_command_stats.libsonnet';
 local metricsCatalog = import 'servicemetrics/metrics-catalog.libsonnet';
 local aggregationSets = (import 'gitlab-metrics-config.libsonnet').aggregationSets;
 local singleMetricRow = import 'key-metric-panels/single-metric-row.libsonnet';
 local textPanel = grafana.text;
+
+local gitalyCommandStats = import 'gitlab-dashboards/gitaly/command_stats.libsonnet';
 local gitalyPackObjectsDashboards = import 'gitlab-dashboards/gitaly/pack_objects.libsonnet';
 
 local serviceType = 'gitaly';
-
 local ratelimitLockPercentage(selector) =
   basic.percentageTimeseries(
     'Request % acquiring rate-limit lock within 1m, by host + method',
