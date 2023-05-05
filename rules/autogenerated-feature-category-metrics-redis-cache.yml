@@ -66,11 +66,11 @@ groups:
     expr: |
       (
         sum by (env,environment) (
-          rate(gitlab_redis_client_requests_duration_seconds_bucket{le="0.5",storage="cache"}[5m])
+          rate(gitlab_redis_client_requests_duration_seconds_bucket{le="0.5",storage=~"cache|feature_flag"}[5m])
         )
         +
         sum by (env,environment) (
-          rate(gitlab_redis_client_requests_duration_seconds_bucket{le="0.75",storage="cache"}[5m])
+          rate(gitlab_redis_client_requests_duration_seconds_bucket{le="0.75",storage=~"cache|feature_flag"}[5m])
         )
       )
       /
@@ -84,7 +84,7 @@ groups:
       type: redis-cache
     expr: |
       sum by (env,environment) (
-        rate(gitlab_redis_client_requests_duration_seconds_bucket{le="+Inf",storage="cache"}[5m])
+        rate(gitlab_redis_client_requests_duration_seconds_bucket{le="+Inf",storage=~"cache|feature_flag"}[5m])
       )
   - record: gitlab:component:feature_category:execution:ops:rate_5m
     labels:
@@ -95,7 +95,7 @@ groups:
       type: redis-cache
     expr: |
       sum by (env,environment) (
-        rate(gitlab_redis_client_requests_total{storage="cache"}[5m])
+        rate(gitlab_redis_client_requests_total{storage=~"cache|feature_flag"}[5m])
       )
   - record: gitlab:component:feature_category:execution:error:rate_5m
     labels:
@@ -107,7 +107,7 @@ groups:
     expr: |
       (
         sum by (env,environment) (
-          rate(gitlab_redis_client_exceptions_total{storage="cache"}[5m])
+          rate(gitlab_redis_client_exceptions_total{storage=~"cache|feature_flag"}[5m])
         )
       )
       or
@@ -192,11 +192,11 @@ groups:
     expr: |
       (
         sum by (env,environment) (
-          rate(gitlab_redis_client_requests_duration_seconds_bucket{le="0.5",storage="cache"}[30m])
+          rate(gitlab_redis_client_requests_duration_seconds_bucket{le="0.5",storage=~"cache|feature_flag"}[30m])
         )
         +
         sum by (env,environment) (
-          rate(gitlab_redis_client_requests_duration_seconds_bucket{le="0.75",storage="cache"}[30m])
+          rate(gitlab_redis_client_requests_duration_seconds_bucket{le="0.75",storage=~"cache|feature_flag"}[30m])
         )
       )
       /
@@ -210,7 +210,7 @@ groups:
       type: redis-cache
     expr: |
       sum by (env,environment) (
-        rate(gitlab_redis_client_requests_duration_seconds_bucket{le="+Inf",storage="cache"}[30m])
+        rate(gitlab_redis_client_requests_duration_seconds_bucket{le="+Inf",storage=~"cache|feature_flag"}[30m])
       )
   - record: gitlab:component:feature_category:execution:ops:rate_30m
     labels:
@@ -221,7 +221,7 @@ groups:
       type: redis-cache
     expr: |
       sum by (env,environment) (
-        rate(gitlab_redis_client_requests_total{storage="cache"}[30m])
+        rate(gitlab_redis_client_requests_total{storage=~"cache|feature_flag"}[30m])
       )
   - record: gitlab:component:feature_category:execution:error:rate_30m
     labels:
@@ -233,7 +233,7 @@ groups:
     expr: |
       (
         sum by (env,environment) (
-          rate(gitlab_redis_client_exceptions_total{storage="cache"}[30m])
+          rate(gitlab_redis_client_exceptions_total{storage=~"cache|feature_flag"}[30m])
         )
       )
       or
@@ -318,11 +318,11 @@ groups:
     expr: |
       (
         sum by (env,environment) (
-          rate(gitlab_redis_client_requests_duration_seconds_bucket{le="0.5",storage="cache"}[1h])
+          rate(gitlab_redis_client_requests_duration_seconds_bucket{le="0.5",storage=~"cache|feature_flag"}[1h])
         )
         +
         sum by (env,environment) (
-          rate(gitlab_redis_client_requests_duration_seconds_bucket{le="0.75",storage="cache"}[1h])
+          rate(gitlab_redis_client_requests_duration_seconds_bucket{le="0.75",storage=~"cache|feature_flag"}[1h])
         )
       )
       /
@@ -336,7 +336,7 @@ groups:
       type: redis-cache
     expr: |
       sum by (env,environment) (
-        rate(gitlab_redis_client_requests_duration_seconds_bucket{le="+Inf",storage="cache"}[1h])
+        rate(gitlab_redis_client_requests_duration_seconds_bucket{le="+Inf",storage=~"cache|feature_flag"}[1h])
       )
   - record: gitlab:component:feature_category:execution:ops:rate_1h
     labels:
@@ -347,7 +347,7 @@ groups:
       type: redis-cache
     expr: |
       sum by (env,environment) (
-        rate(gitlab_redis_client_requests_total{storage="cache"}[1h])
+        rate(gitlab_redis_client_requests_total{storage=~"cache|feature_flag"}[1h])
       )
   - record: gitlab:component:feature_category:execution:error:rate_1h
     labels:
@@ -359,7 +359,7 @@ groups:
     expr: |
       (
         sum by (env,environment) (
-          rate(gitlab_redis_client_exceptions_total{storage="cache"}[1h])
+          rate(gitlab_redis_client_exceptions_total{storage=~"cache|feature_flag"}[1h])
         )
       )
       or

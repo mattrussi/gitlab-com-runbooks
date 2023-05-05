@@ -7,7 +7,7 @@ local redisHelpers = import './lib/redis-helpers.libsonnet';
 metricsCatalog.serviceDefinition(
   redisArchetype(
     type='redis-cache',
-    railsStorageSelector={ storage: 'cache' },
+    railsStorageSelector={ storage: { oneOf: ['cache', 'feature_flag'] } },
     descriptiveName='Redis Cache'
   )
   {
