@@ -913,7 +913,7 @@ publish-periodic-queries:
     - export CLOUDSDK_AUTH_ACCESS_TOKEN="$(vault read -field=token "gcp/impersonated-account/${VAULT_GCP_IMPERSONATED_ACCOUNT}/token")"
   script:
     - tar -czvf thanos-rules.tar.gz thanos-rules
-    - gsutil cp thanos-rules.tar.gz gs://${THANOS_RULES_BUCKET}
+    - gcloud storage cp thanos-rules.tar.gz gs://${THANOS_RULES_BUCKET}
 
 deploy-thanos-rules-staging:
   stage: deploy
