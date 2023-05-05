@@ -1,51 +1,52 @@
+---
 include:
   # Import GL_ASDF_* variables to match versions declared in ASDF
   - local: .gitlab-ci-asdf-versions.yml
 
   # variables needed for other tasks
-  - project: "gitlab-com/gl-infra/common-ci-tasks"
+  - project: gitlab-com/gl-infra/common-ci-tasks
     ref: v1.69.0
-    file: ".gitlab-ci-other-versions.yml"
+    file: .gitlab-ci-other-versions.yml
 
   # automatically tag releases using semantic-releases, based on conventional commit messages
-  - project: "gitlab-com/gl-infra/common-ci-tasks"
+  - project: gitlab-com/gl-infra/common-ci-tasks
     ref: v1.69.0
-    file: "semantic-release.yml"
+    file: semantic-release.yml
 
   # Checks that the `.tool-versions` file is synced with .gitlab-ci-asdf-versions.yml,
   # that all the plugins are declared in `./scripts/install-asdf-plugins.sh`
   # and that ASDF is generally working
-  - project: "gitlab-com/gl-infra/common-ci-tasks"
+  - project: gitlab-com/gl-infra/common-ci-tasks
     ref: v1.69.0
     file: asdf-tool-versions.yml
 
   # Upgrades dependencies on a schedule
   # see https://gitlab.com/gitlab-com/gl-infra/common-ci-tasks/-/blob/main/renovate-bot.md
-  - project: "gitlab-com/gl-infra/common-ci-tasks"
-    ref: v1.69.0  # renovate:managed
+  - project: gitlab-com/gl-infra/common-ci-tasks
+    ref: v1.69.0
     file: renovate-bot.yml
 
   # validate .editorconfig
   # see https://gitlab.com/gitlab-com/gl-infra/common-ci-tasks/-/blob/main/editorconfig-check.md
-  - project: "gitlab-com/gl-infra/common-ci-tasks"
-    ref: v1.69.0  # renovate:managed
-    file: "editorconfig-check.yml"
+  - project: gitlab-com/gl-infra/common-ci-tasks
+    ref: v1.69.0
+    file: editorconfig-check.yml
 
   # validate YAML files
   # see https://gitlab.com/gitlab-com/gl-infra/common-ci-tasks/-/blob/main/yamllint.md
-  - project: "gitlab-com/gl-infra/common-ci-tasks"
-    ref: v1.69.0  # renovate:managed
-    file: "yamllint.yml"
+  - project: gitlab-com/gl-infra/common-ci-tasks
+    ref: v1.69.0
+    file: yamllint.yml
 
   # Import the danger-review job
-  - project: "gitlab-org/quality/pipeline-common"
+  - project: gitlab-org/quality/pipeline-common
     file:
-      - "/ci/danger-review.yml"
+      - /ci/danger-review.yml
 
 stages:
   - notify
   - images
-  - release  # used for semantic-release
+  - release
   - prepare
   - validate
   - test
@@ -54,16 +55,25 @@ stages:
   - scheduled
   - renovate_bot
 
+################
+# Variables
+################
+
 variables:
   BUNDLER_VERSION: 2.4.12
   GOLANG_IMAGE: golang:${GL_ASDF_GOLANG_VERSION}
+  RUNBOOKS_VAULT_AUTH_ROLE: ${VAULT_AUTH_ROLE}
 
-.id_tokens:
+.vault-rw:
+  variables:
+    RUNBOOKS_VAULT_AUTH_ROLE: gitlab-com_runbooks-rw
+
+.id-tokens: &id-tokens
   id_tokens:
     VAULT_ID_TOKEN:
       aud: https://vault.gitlab.net
 
-.matrix_production:
+.gke-clusters-production:
   parallel:
     matrix:
       - DEPLOY_ENV: gprd
@@ -87,7 +97,7 @@ variables:
         GOOGLE_PROJECT: gitlab-subscriptions-prod
         LOCATION: us-east1
 
-.matrix_non_production:
+.gke-clusters-non-production:
   parallel:
     matrix:
       - DEPLOY_ENV: pre
@@ -136,8 +146,9 @@ variables:
         GOOGLE_PROJECT: gitlab-db-benchmarking
         LOCATION: us-east1
 
-.if-merge-request: &if-merge-request
-  if: '$CI_MERGE_REQUEST_EVENT_TYPE == "merged_result" || $CI_MERGE_REQUEST_EVENT_TYPE == "detached"'
+################
+# Rules
+################
 
 .ruby-patterns: &ruby-patterns
   - "**/*.rb"
@@ -145,19 +156,40 @@ variables:
 .md-patterns: &md-patterns
   - "**/*.md"
 
-default:
-  image: "${CI_REGISTRY_IMAGE}:latest"
-  tags:
-    - gitlab-org
+.prometheus-rules-patterns: &prometheus-rules-patterns
+  - rules/**/*
 
 .avoid-stage-group-check: &avoid-stage-group-check-rule
-  if: '$CHECK_STAGE_GROUPS == "1"'
+  if: $CHECK_STAGE_GROUPS == "1"
   when: never
+
 .avoid-downstream-generation-pipelines: &avoid-downstream-generation-pipelines-rule
-  if: '($GENERATE_SERVICE_MATURITY_MANIFEST == "1") || ($GENERATE_TAMLAND_SATURATION_MANIFEST == "1")'
+  if: ($GENERATE_SERVICE_MATURITY_MANIFEST == "1") || ($GENERATE_TAMLAND_SATURATION_MANIFEST == "1")
   when: never
+
 .avoid-schedule: &avoid-schedule-rule
-  if: '$CI_PIPELINE_SOURCE == "schedule"'
+  if: $CI_PIPELINE_SOURCE == "schedule"
+  when: never
+
+.avoid-merge-train: &avoid-merge-train-rule
+  if: $CI_MERGE_REQUEST_EVENT_TYPE == "merge_train"
+  when: never
+
+.if-merge-request: &if-merge-request-rule
+  if: $CI_PIPELINE_SOURCE == "merge_request_event"
+
+.if-main-branch: &if-main-branch-rule
+  if: $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH
+
+.if-tag: &if-tag-rule
+  if: $CI_COMMIT_TAG
+
+.gitlab-com-only: &gitlab-com-only-rule
+  if: $CI_API_V4_URL != "https://gitlab.com/api/v4"
+  when: never
+
+.ops-gitlab-net-only: &ops-gitlab-net-only-rule
+  if: $CI_API_V4_URL != "https://ops.gitlab.net/api/v4"
   when: never
 
 # Regular test jobs that run on merge requests or master should extend this
@@ -174,551 +206,52 @@ default:
 
 .default-job:
   rules:
-    - !reference [".default-job-rules", rules]
+    - !reference [.default-job-rules, rules]
     - when: always
 
 workflow:
   rules:
     # For merge requests, create a pipeline.
-    - if: '$CI_MERGE_REQUEST_IID'
+    - if: $CI_MERGE_REQUEST_IID
     # For `master` branch, create a pipeline (this includes on schedules, pushes, merges, etc.).
-    - if: '$CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH'
+    - if: $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH
     # For tags, create a pipeline.
-    - if: '$CI_COMMIT_TAG'
+    - if: $CI_COMMIT_TAG
     # When triggered from another pipeline, create a pipeline
-    - if: '$CI_PIPELINE_SOURCE == "pipeline"'
+    - if: $CI_PIPELINE_SOURCE == "pipeline"
 
-.gke_cluster_auth:
-  extends:
-    - .id_tokens
-  variables:
-    KUBE_NAMESPACE: default
-    RUNBOOKS_VAULT_AUTH_ROLE: ${VAULT_AUTH_ROLE}
-    VAULT_GCP_IMPERSONATED_ACCOUNT: ${GOOGLE_PROJECT}--k8s-workloads-ro
-    VAULT_KUBERNETES_ROLE: prometheus-rules-view
-  before_script:
-    # Authentication
-    - export VAULT_TOKEN="$(vault write -field=token "auth/${VAULT_AUTH_PATH}/login" role="${RUNBOOKS_VAULT_AUTH_ROLE}" jwt="${VAULT_ID_TOKEN}")"
-    - export CLOUDSDK_AUTH_ACCESS_TOKEN="$(vault read -field=token "gcp/impersonated-account/${VAULT_GCP_IMPERSONATED_ACCOUNT}/token")"
-    - gcloud container clusters get-credentials "${GKE_CLUSTER}" --project "${GOOGLE_PROJECT}" --location "${LOCATION}"
-    - export KUBE_TOKEN="$(vault write -field=service_account_token "kubernetes/${GKE_CLUSTER}/creds/${VAULT_KUBERNETES_ROLE}" kubernetes_namespace="${KUBE_NAMESPACE}" ttl=30m)"
-    - kubectl config set-credentials "${VAULT_KUBERNETES_ROLE}" --token "${KUBE_TOKEN}"
-    - kubectl config set-context "$(kubectl config current-context)" --user "${VAULT_KUBERNETES_ROLE}"
+################
+# Default job, inherited in all other jobs
+################
 
-.vault_rw:
-  variables:
-    RUNBOOKS_VAULT_AUTH_ROLE: gitlab-com_runbooks-rw
-
-.deploy-prometheus-rules:
-  extends:
-    - .gke_cluster_auth
-    - .vault_rw
-  stage: deploy
-  needs:
-    - job: generate-prometheus-rules
-      artifacts: true
-  variables:
-    KUBE_NAMESPACE: monitoring
-    VAULT_KUBERNETES_ROLE: prometheus-rules-edit
-  rules:
-    - !reference [".default-job-rules", rules]
-    # Only run deploy rules from ops on the default branch
-    - if: '$CI_API_V4_URL == "https://ops.gitlab.net/api/v4" && $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH'
-      changes:
-        paths:
-          - "rules/**/*"
-  script:
-    # Delete orphaned PrometheusRules
-    - ./bin/delete_orphan_kubenetes_rules.sh
-    # Deploy PrometheusRules
-    - kubectl apply --namespace "${KUBE_NAMESPACE}" --filename "${CI_PROJECT_DIR}/rules-k8s/"
+default:
+  image: ${CI_REGISTRY_IMAGE}:latest
   tags:
-    - k8s-workloads
+    - gitlab-org
 
-# Cache the jsonnet vendor bundle for faster builds
-.jsonnet-cache: &jsonnet-cache
-  cache:
-    - key:
-        files:
-          - jsonnetfile.lock.json
-      paths:
-        - vendor
+################
+# Notify
+################
 
-.dashboards:
-  <<: *jsonnet-cache
-  rules:
-    - !reference [".default-job-rules", rules]
-    - if: '$CI_PROJECT_URL !~ /^https:\/\/gitlab\.com\/.*/'
-      when: never
-    - if: '$CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH'
-    - if: '$CI_PIPELINE_SOURCE == "merge_request_event"'
-    - if: '$CI_COMMIT_TAG'
-  before_script:
-    - ./scripts/bundler.sh  # Install jsonnet bundles
-    - dashboards/generate-mixins.sh  # Generate dashboards from mixins
-
-notify_mirror_source:
+notify-mirror-source:
+  extends: .id-tokens
   stage: notify
+  secrets:
+    GITLAB_API_TOKEN:
+      file: false
+      vault: access_tokens/gitlab-com/${CI_PROJECT_PATH}/woodhouse/token@ci
   image: registry.gitlab.com/gitlab-com/gl-infra/woodhouse:latest
   script: woodhouse gitlab notify-mirrored-mr
+  allow_failure: true
   rules:
-    - if: '$CI_PIPELINE_SOURCE == "schedule"'
-      when: never
-    - if: '$CI_API_V4_URL == "https://ops.gitlab.net/api/v4"'
-      allow_failure: true
-
-verify:
-  extends: .default-job
-  stage: test
-  dependencies:
-    - prepare-service-health-dashboard-json
-  script:
-    - cp service-health-dashboard-manifest/autogenerated-service-health-dashboards.json dashboards/
-    - make verify
-
-danger-review:
-  before_script:
-    - gem install bundler --no-document -v $BUNDLER_VERSION
-    - bundle install --with=danger
-
-rubocop:
-  stage: validate
-  rules:
-    - !reference [".default-job-rules", rules]
-    - <<: *if-merge-request
-      changes: *ruby-patterns
-  script:
-    - gem install bundler --no-document -v $BUNDLER_VERSION
-    - bundle install --with=test
-    - bundle exec rubocop
-
-markdownlint:
-  stage: validate
-  rules:
-    - !reference [".default-job-rules", rules]
-    - <<: *if-merge-request
-      changes: *md-patterns
-  script:
-    - npm install
-    - npm run markdownlint docs README.md
-
-rspec:
-  stage: test
-  rules:
-    - !reference [".default-job-rules", rules]
-    - <<: *if-merge-request
-      changes: *ruby-patterns
-  script:
-    - ./scripts/bundler.sh  # Install jsonnet bundles
-    - gem install bundler --no-document -v $BUNDLER_VERSION
-    - bundle install --with=test
-    - cp service-health-dashboard-manifest/autogenerated-service-health-dashboards.json dashboards/
-    - bundle exec rspec
-
-generate-prometheus-rules:
-  stage: prepare
-  rules:
-    - !reference [".default-job-rules", rules]
-    - changes:
-        paths:
-          - "rules/**/*"
-  script:
-    - gem install bundler --no-document -v "${BUNDLER_VERSION}"
-    - bundle install
-    - bundle exec ./bin/create_kubernetes_rules.rb --create --validate
-  artifacts:
-    name: prometheus-rules
-    paths:
-      - rules-k8s/
-
-# Deploy rules to non-production environments
-deploy-prometheus-rules-non-production:
-  environment: $DEPLOY_ENV
-  extends:
-    - .deploy-prometheus-rules
-    - .matrix_non_production
-
-# Deploy rules to production environments
-deploy-prometheus-rules-production:
-  environment: $DEPLOY_ENV
-  stage: deploy-rules-production
-  extends:
-    - .deploy-prometheus-rules
-    - .matrix_production
-
-update-alertmanager:
-  extends:
-    - .gke_cluster_auth
-    - .vault_rw
-  stage: deploy
-  needs:
-    - job: test-alertmanager
-  environment: ops
-  tags:
-    - k8s-workloads
-  variables:
-    GKE_CLUSTER: ops-gitlab-gke
-    GOOGLE_PROJECT: gitlab-ops
-    KUBE_NAMESPACE: monitoring
-    LOCATION: us-east1
-    VAULT_KUBERNETES_ROLE: alertmanager-edit
-  script:
-    - make alertmanager/alertmanager.yml
-    - kubectl apply --namespace "${KUBE_NAMESPACE}" --filename alertmanager/k8s_alertmanager_secret.yaml
-  only:
-    refs:
-      - master
-    variables:
-      - $CI_API_V4_URL == "https://ops.gitlab.net/api/v4"
-  except:
-    - schedules
-
-prepare-service-health-dashboard-json:
-  rules:
-    - *avoid-stage-group-check-rule
+    - *ops-gitlab-net-only-rule
     - *avoid-schedule-rule
-    - if: '$GENERATE_SERVICE_MATURITY_MANIFEST == "1"'
-      when: always
-    - if: '$CI_PIPELINE_SOURCE == "merge_request_event"'
-      when: always
-    - if: '$CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH'
-      when: always
-    - if: '$CI_COMMIT_TAG'
-      when: always
-  stage: prepare
-  script:
-    - ./dashboards/generate-dashboards.sh
-    - ./dashboards/generate-service-health-dashboards-metadata-json.sh
-    - mkdir -p service-health-dashboard-manifest/generated
-    - cp dashboards/autogenerated-service-health-dashboards.json service-health-dashboard-manifest/
-    - cp -r dashboards/generated service-health-dashboard-manifest
-  artifacts:
-    expose_as: 'service health dashboard manifest'
-    expire_in: 1 day
-    paths:
-      - service-health-dashboard-manifest/
 
+################
+# Docker image
+################
 
-validate-service-mappings:
-  stage: validate
-  rules:
-    - !reference [".default-job-rules", rules]
-    - <<: *if-merge-request
-      changes:
-        - "services/**/*"
-  script:
-    - make validate-service-mappings
-
-validate-service-catalog-schema:
-  stage: validate
-  rules:
-    - !reference [".default-job-rules", rules]
-    - if: '($CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH) || $CI_MERGE_REQUEST_IID'
-      changes:
-        - "services/service-catalog.yml"
-        - "services/teams.yml"
-  script:
-    - npm install
-    - ./scripts/compile_jsonnet.rb ./services/raw-catalog.jsonnet > ./services/service_catalog.json
-    - npm run validate-service-catalog-schema -- -s ./services/service-catalog-schema.json -d ./services/service_catalog.json
-
-validate-prom-rules:
-  stage: validate
-  rules:
-    - !reference [".default-job-rules", rules]
-    - <<: *if-merge-request
-      changes:
-        - "scripts/prometheus.yml"
-        - "rules/**/*"
-        - "thanos-rules/**/*"
-  script:
-    - make validate-prom-rules
-
-validate-kibana-urls:
-  stage: validate
-  rules:
-    - !reference [".default-job-rules", rules]
-    - <<: *if-merge-request
-      changes: *md-patterns
-  script:
-    - make validate-kibana-urls
-
-validate-alerts:
-  stage: validate
-  rules:
-    - !reference [".default-job-rules", rules]
-    - <<: *if-merge-request
-      changes:
-        - "docs/**/*"
-        - "rules/**/*"
-        - "thanos-rules/**/*"
-        - "services/**/*"
-  script:
-    - make validate-alerts
-
-test-jsonnet:
-  extends: .default-job
-  stage: test
-  script:
-    - make jsonnet-bundle test-jsonnet
-
-test-shunit:
-  extends: .default-job
-  stage: test
-  script:
-    - make jsonnet-bundle test-shunit
-
-test-service-catalog-schema:
-  extends: .default-job
-  stage: test
-  script:
-    - npm install
-    - ./scripts/compile_jsonnet.rb ./services/raw-catalog.jsonnet > ./services/service_catalog.json
-    - npm run test-service-catalog-schema -- -s ./services/service-catalog-schema.json -d ./services/service_catalog.json
-
-ensure_generated_content_up_to_date:
-  extends: .default-job
-  stage: test
-  script:
-    - rm -rf service-health-dashboard-manifest/  # Rm artifacts to pass git diff
-    - ./scripts/bundler.sh  # Install jsonnet bundles
-    - make ensure-generated-content-up-to-date
-
-ensure_maturity_model_minimum_level:
-  rules:
-    - if: '$CI_PIPELINE_SOURCE == "merge_request_event"'
-      when: always
-  stage: test
-  dependencies:
-    - prepare-service-health-dashboard-json
-  script:
-    - scripts/bundler.sh  # Install jsonnet bundles
-    - scripts/generate-jsonnet-rules.sh
-    - cp service-health-dashboard-manifest/autogenerated-service-health-dashboards.json dashboards/
-    - scripts/validate-maturity-model
-
-# log.gprd.gitlab.net
-################################################################################
-update_elastic_log_gprd_ilm:
-  rules:
-    - !reference [".default-job-rules", rules]
-    - if: '$CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH && $ES_LOG_GPRD_URL'
-      changes:
-        - elastic/managed-objects/log_gprd/ILM/*
-  stage: deploy
-  script:
-    - ./elastic/managed-objects/log_gprd/ILM/update-ilm.sh
-
-update_elastic_log_gprd_watches:
-  rules:
-    - !reference [".default-job-rules", rules]
-    - if: '$CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH && $ES_LOG_GPRD_URL'
-      changes:
-        - elastic/managed-objects/log_gprd/watches/*
-  stage: deploy
-  script:
-    - ./elastic/managed-objects/log_gprd/watches/update-watches.sh
-
-update_elastic_log_gprd_index_templates:
-  stage: deploy
-  rules:
-    - !reference [".default-job-rules", rules]
-    - if: '$CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH && $ES_LOG_GPRD_URL'
-      changes:
-        - elastic/managed-objects/log_gprd/index-templates/*
-        - elastic/managed-objects/lib/log_gprd_index_template.libsonnet
-        - elastic/managed-objects/lib/index_mappings/*.jsonnet
-        - elastic/managed-objects/lib/settings_gprd.libsonnet
-        - elastic/managed-objects/indices/indices-array.sh
-  script:
-    - ./elastic/managed-objects/log_gprd/index-templates/update-index-templates.sh
-
-update_elastic_log_gprd_cluster_settings:
-  stage: deploy
-  rules:
-    - !reference [".default-job-rules", rules]
-    - if: '$CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH && $ES_LOG_GPRD_URL'
-      changes:
-        - elastic/managed-objects/log_gprd/cluster-settings/*
-  script:
-    - ./elastic/managed-objects/log_gprd/cluster-settings/update-cluster-settings.sh
-
-update_elastic_log_gprd_hot_index_shards_per_node:
-  stage: scheduled
-  rules:
-    - if: '$CI_PIPELINE_SOURCE == "schedule" && $JOB_SCHEDULE_ELASTIC_PROD'
-  script:
-    - ./elastic/scheduled/hot_index_shards_per_node.sh
-  variables:
-    ELASTICSEARCH_URL: $ES_LOG_GPRD_URL
-
-# nonprod-log.gitlab.net
-################################################################################
-update_elastic_nonprod-log_watches:
-  stage: deploy
-  rules:
-    - !reference [".default-job-rules", rules]
-    - if: '$CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH && $ES_NONPROD_URL'
-      changes:
-        - elastic/managed-objects/nonprod-log/watches/*
-  script:
-    - ./elastic/managed-objects/nonprod-log/watches/update-watches.sh
-
-update_elastic_nonprod-log_ilm:
-  stage: deploy
-  rules:
-    - !reference [".default-job-rules", rules]
-    - if: '$CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH && $ES_NONPROD_URL'
-      changes:
-        - elastic/managed-objects/nonprod-log/ILM/*
-  script:
-    - ./elastic/managed-objects/nonprod-log/ILM/update-ilm.sh
-
-update_elastic_nonprod-log_index_templates:
-  stage: deploy
-  rules:
-    - !reference [".default-job-rules", rules]
-    - if: '$CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH && $ES_NONPROD_URL'
-      changes:
-        - elastic/managed-objects/nonprod-log/index-templates/*
-        - elastic/managed-objects/lib/nonprod-log_index_template.libsonnet
-        - elastic/managed-objects/lib/index_mappings/*.jsonnet
-        - elastic/managed-objects/lib/settings_nonprod.libsonnet
-        - elastic/managed-objects/indices/indices-array.sh
-  script:
-    - ./elastic/managed-objects/nonprod-log/index-templates/update-index-templates.sh
-
-update_elastic_nonprod-log_cluster_settings:
-  stage: deploy
-  rules:
-    - !reference [".default-job-rules", rules]
-    - if: '$CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH && $ES_NONPROD_URL'
-      changes:
-        - elastic/managed-objects/nonprod-log/cluster-settings/*
-  script:
-    - ./elastic/managed-objects/nonprod-log/cluster-settings/update-cluster-settings.sh
-
-update_elastic_nonprod-log_hot_index_shards_per_node:
-  stage: scheduled
-  rules:
-    - if: '$CI_PIPELINE_SOURCE == "schedule" && $JOB_SCHEDULE_ELASTIC_NONPROD'
-  script:
-    - ./elastic/scheduled/hot_index_shards_per_node.sh
-  variables:
-    ELASTICSEARCH_URL: $ES_NONPROD_URL
-
-# monitoring-es7
-################################################################################
-
-update_elastic_monitoring-es7_cluster_settings:
-  stage: deploy
-  rules:
-    - !reference [".default-job-rules", rules]
-    - if: '$CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH && $ES_MONITORING_ES7_URL'
-      changes:
-        - elastic/managed-objects/monitoring-es7/cluster-settings/*
-  script:
-    - ./elastic/managed-objects/monitoring-es7/cluster-settings/update-cluster-settings.sh
-
-update_elastic_monitoring-es7_ilm:
-  stage: deploy
-  rules:
-    - !reference [".default-job-rules", rules]
-    - if: '$CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH && $ES_MONITORING_ES7_URL'
-      changes:
-        - elastic/managed-objects/monitoring-es7/ILM/*
-  script:
-    - ./elastic/managed-objects/monitoring-es7/ILM/update-ilm.sh
-
-################################################################################
-
-dryrun_pingdom_checks:
-  stage: test
-  image: $GOLANG_IMAGE
-  script:
-    - cd pingdom
-    - go run pingdom.go --dry-run
-  except:
-    refs:
-      - master
-  only:
-    variables:
-      - $CI_PROJECT_URL =~ /^https:\/\/gitlab\.com\/.*/
-    refs:
-      - merge_requests
-      - tags
-
-deploy_pingdom_checks:
-  stage: deploy
-  image: $GOLANG_IMAGE
-  script:
-    - cd pingdom
-    - go run pingdom.go
-  only:
-    refs:
-      - master
-    variables:
-      - $CI_PROJECT_URL =~ /^https:\/\/gitlab\.com\/.*/
-  except:
-    - schedules
-    - pipelines
-
-check_alerts:
-  image: $GOLANG_IMAGE
-  script:
-    - cd alerts-checker
-    # TODO use go modules rather than fetching HEAD
-    # We are seeing errors related to
-    # github.com/prometheus/prometheus/promql/parser when we try to set up go
-    # modules. For now, let's get this working hackily.
-    - go get github.com/prometheus/prometheus/...
-    - go run alerts-checker.go ../rules $THANOS_URL $IGNORED_ALERTS
-  only:
-    variables:
-      - $PERFORM_ALERTS_CHECK
-  tags:
-    - k8s-workloads
-  except:
-    - schedules
-
-test_dashboards:
-  extends: .dashboards
-  stage: test
-  rules:
-    - !reference [".dashboards", rules]
-    - <<: *if-merge-request
-      changes:
-        - "services/**/*"
-        - "dashboards/**/*"
-        - "lib/monitored_services.rb"
-  dependencies:
-    - prepare-service-health-dashboard-json
-  script:
-    - cp service-health-dashboard-manifest/autogenerated-service-health-dashboards.json dashboards/
-    - cp -r service-health-dashboard-manifest/generated dashboards
-    - dashboards/upload.sh -D
-    - make validate-service-dashboards
-
-deploy_dashboards:
-  extends: .dashboards
-  dependencies:
-    - prepare-service-health-dashboard-json
-  rules:
-    # This will override all the rules from .dashboards, we only want to run this on master
-    - !reference [".default-job-rules", rules]
-    - if: '$CI_PROJECT_URL !~ /^https:\/\/gitlab\.com\/.*/'
-      when: never
-    - if: '$CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH'
-  stage: deploy
-  script:
-    - cp service-health-dashboard-manifest/autogenerated-service-health-dashboards.json dashboards/
-    - cp -r service-health-dashboard-manifest/generated dashboards
-    - dashboards/ensure-grafana-folders.sh
-    - dashboards/upload.sh
-    - dashboards/delete-orphaned-dashboards.sh
-    - dashboards/tag-unmanaged-dashboards.sh
-
-.docker_image_template:
+.docker-image:
   image: docker:23.0.5
   tags:
     - gitlab-org-docker
@@ -728,13 +261,7 @@ deploy_dashboards:
   variables:
     DOCKER_TLS_CERTDIR: ""
     IMAGE: ${CI_REGISTRY_IMAGE}
-
-docker_image_test:
-  extends: .docker_image_template
-  stage: test
-  needs: []
-  script:
-    - docker build
+    DOCKER_BUILD_ARGS: >
       --build-arg GL_ASDF_AMTOOL_VERSION
       --build-arg GL_ASDF_GO_JSONNET_VERSION
       --build-arg GL_ASDF_JB_VERSION
@@ -747,164 +274,860 @@ docker_image_test:
       --build-arg GL_ASDF_THANOS_VERSION
       --build-arg GL_ASDF_VAULT_VERSION
       --build-arg GL_ASDF_YQ_VERSION
-      .
-  only:
-    changes:
-      - Dockerfile
-      - .tool-versions
-      - .gitlab-ci-asdf-versions.yml
-      - .gitlab-ci.yml
-    refs:
-      - merge_requests
-      - tags
-  except:
-    - schedules
 
-docker_image_build:
-  extends: .docker_image_template
+test-docker-image:
+  extends: .docker-image
+  stage: test
+  needs: []
+  script:
+    - docker build ${DOCKER_BUILD_ARGS} .
+  rules:
+    - *avoid-merge-train-rule
+    - <<: *if-merge-request-rule
+      changes:
+        - Dockerfile
+        - .tool-versions
+        - .gitlab-ci-asdf-versions.yml
+        - .gitlab-ci.yml
+
+build-docker-image:
+  extends: .docker-image
   stage: images
   script:
     - export ci_image_tag=${CI_COMMIT_TAG:-$CI_COMMIT_SHORT_SHA}
     - echo ${CI_JOB_TOKEN} | docker login --password-stdin -u $CI_REGISTRY_USER $CI_REGISTRY
-    - docker build -t ${IMAGE}:$ci_image_tag -t ${IMAGE}:latest
-        --build-arg GL_ASDF_AMTOOL_VERSION
-        --build-arg GL_ASDF_GO_JSONNET_VERSION
-        --build-arg GL_ASDF_JB_VERSION
-        --build-arg GL_ASDF_JSONNET_TOOL_VERSION
-        --build-arg GL_ASDF_PROMTOOL_VERSION
-        --build-arg GL_ASDF_RUBY_VERSION
-        --build-arg GL_ASDF_SHELLCHECK_VERSION
-        --build-arg GL_ASDF_SHFMT_VERSION
-        --build-arg GL_ASDF_TERRAFORM_VERSION
-        --build-arg GL_ASDF_THANOS_VERSION
-        --build-arg GL_ASDF_VAULT_VERSION
-        --build-arg GL_ASDF_YQ_VERSION
-        .
+    - docker build -t ${IMAGE}:$ci_image_tag -t ${IMAGE}:latest ${DOCKER_BUILD_ARGS} .
     - docker push ${IMAGE}:latest
     - docker push ${IMAGE}:$ci_image_tag
-  only:
-    - tags
-  except:
-    - schedules
+  rules:
+    - *avoid-schedule-rule
+    - *if-tag-rule
 
-test-alertmanager:
+################
+# Danger
+################
+
+danger-review:
+  <<: *id-tokens
+  secrets:
+    DANGER_GITLAB_API_TOKEN:
+      file: false
+      vault: access_tokens/gitlab-com/${CI_PROJECT_PATH}/danger/token@ci
+  before_script:
+    - gem install bundler --no-document -v $BUNDLER_VERSION
+    - bundle install --with=danger
+
+################
+# Common checks
+################
+
+editorconfig_check:
+  rules:
+    - *gitlab-com-only-rule
+    - *avoid-merge-train-rule
+    - *if-merge-request-rule
+
+yamllint:
+  rules:
+    - *gitlab-com-only-rule
+    - *avoid-merge-train-rule
+    - *if-merge-request-rule
+
+################
+# Renovate
+################
+
+renovate_validate:
+  rules:
+    - *gitlab-com-only-rule
+    - *avoid-schedule-rule
+    - *avoid-merge-train-rule
+    - *if-merge-request-rule
+
+renovate_bot:
+  extends:
+    - .base_renovate_bot
+    - .id-tokens
+  secrets:
+    RENOVATE_GITHUB_TOKEN:
+      file: false
+      vault: renovate/github/token@shared
+    RENOVATE_GITLAB_TOKEN:
+      file: false
+      vault: access_tokens/${VAULT_SECRETS_PATH}/renovate/token@ci
+
+################
+# Semantic release
+################
+
+semantic_release:
+  extends: .id-tokens
+  stage: release
+  secrets:
+    SEMANTIC_RELEASE_GITLAB_TOKEN:
+      file: false
+      vault: access_tokens/${VAULT_SECRETS_PATH}/semantic-release/token@ci
+
+################
+# Linting
+################
+
+markdownlint:
+  stage: validate
+  needs: []
+  rules:
+    - !reference [.default-job-rules, rules]
+    - *avoid-merge-train-rule
+    - <<: *if-merge-request-rule
+      changes:
+        paths: *md-patterns
+  script:
+    - npm install
+    - npm run markdownlint docs README.md
+
+rubocop:
+  stage: validate
+  needs: []
+  rules:
+    - !reference [.default-job-rules, rules]
+    - *avoid-merge-train-rule
+    - <<: *if-merge-request-rule
+      changes:
+        paths: *ruby-patterns
+  script:
+    - gem install bundler --no-document -v $BUNDLER_VERSION
+    - bundle install --with=test
+    - bundle exec rubocop
+
+################
+# Jsonnet
+################
+
+ensure-generated-content-up-to-date:
   extends: .default-job
   stage: test
+  needs: []
   script:
-    - make test-alertmanager
+    - make jsonnet-bundle ensure-generated-content-up-to-date
 
-check-stage-groups:
+test-jsonnet:
+  extends: .default-job
+  stage: test
+  needs: []
   rules:
-    - if: '$CHECK_STAGE_GROUPS == "1"'
-      when: always
-    - if: '$CI_PIPELINE_SOURCE == "merge_request_event"'
-      changes:
-        - services/stage-group-mapping.jsonnet
-      when: always
-    - if: '$CI_PIPELINE_SOURCE == "merge_request_event"'
-      when: manual
-      allow_failure: true
-  stage: test
-  extends:
-    - .jsonnet-cache
+    - !reference [.default-job-rules, rules]
+    - *gitlab-com-only-rule
   script:
-    - ./scripts/bundler.sh  # Install jsonnet bundles, required for make generate
-    - make update-feature-categories-ci
-    - git diff --exit-code
+    - make jsonnet-bundle test-jsonnet
 
-generate_service_maturity_manifest:
-  stage: test
+################
+# Dashboards / Services
+################
+
+# Cache the jsonnet vendor bundle for faster builds
+.jsonnet-cache: &jsonnet-cache
+  cache:
+    - key:
+        files:
+          - jsonnetfile.lock.json
+      paths:
+        - vendor
+
+.dashboards:
+  extends:
+    - .id-tokens
+    - .jsonnet-cache
+  environment:
+    name: ops
+  rules:
+    - !reference [.default-job-rules, rules]
+    - *gitlab-com-only-rule
+    - *avoid-merge-train-rule
+    - *if-merge-request-rule
+    - *if-main-branch-rule
+    - *if-tag-rule
+  secrets:
+    GRAFANA_API_TOKEN:
+      file: false
+      vault: ${VAULT_SECRETS_PATH}/ops/grafana/api_token@ci
+  before_script:
+    - make jsonnet-bundle
+    - dashboards/generate-mixins.sh  # Generate dashboards from mixins
+
+prepare-service-health-dashboard-json:
+  extends: .id-tokens
+  stage: prepare
+  environment:
+    name: ops
+    action: prepare
   rules:
     - *avoid-stage-group-check-rule
-    - if: '$GENERATE_SERVICE_MATURITY_MANIFEST == "1"'
-      when: always
-    - if: '$CI_PIPELINE_SOURCE == "merge_request_event"'
-      when: always
-  dependencies:
-    - prepare-service-health-dashboard-json
+    - *avoid-schedule-rule
+    - *if-merge-request-rule
+    - *if-main-branch-rule
+    - *if-tag-rule
+    - if: $GENERATE_SERVICE_MATURITY_MANIFEST == "1"
+  secrets:
+    GRAFANA_API_TOKEN:
+      file: false
+      vault: ${VAULT_SECRETS_PATH}/ops/grafana/api_token@ci
+  script:
+    - ./dashboards/generate-dashboards.sh
+    - ./dashboards/generate-service-health-dashboards-metadata-json.sh
+    - mkdir -p service-health-dashboard-manifest/generated
+    - cp dashboards/autogenerated-service-health-dashboards.json service-health-dashboard-manifest/
+    - cp -r dashboards/generated service-health-dashboard-manifest
+  artifacts:
+    expose_as: service health dashboard manifest
+    expire_in: 1 day
+    paths:
+      - service-health-dashboard-manifest/
+
+validate-service-catalog-schema:
+  stage: validate
+  needs: []
+  rules:
+    - !reference [.default-job-rules, rules]
+    - *gitlab-com-only-rule
+    - if: $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH || $CI_MERGE_REQUEST_IID
+      changes:
+        paths:
+          - services/service-catalog.yml
+          - services/teams.yml
+  script:
+    - npm install
+    - ./scripts/compile_jsonnet.rb ./services/raw-catalog.jsonnet > ./services/service_catalog.json
+    - npm run validate-service-catalog-schema -- -s ./services/service-catalog-schema.json -d ./services/service_catalog.json
+
+validate-service-mappings:
+  stage: validate
+  needs: []
+  rules:
+    - !reference [.default-job-rules, rules]
+    - *avoid-merge-train-rule
+    - <<: *if-merge-request-rule
+      changes:
+        paths:
+          - services/**/*
+  script:
+    - make validate-service-mappings
+
+check-stage-groups:
   extends:
     - .jsonnet-cache
+  stage: test
+  needs: []
+  rules:
+    - *gitlab-com-only-rule
+    - if: $CHECK_STAGE_GROUPS == "1"
+    - <<: *if-merge-request-rule
+      changes:
+        paths:
+          - services/stage-group-mapping.jsonnet
+    - <<: *if-merge-request-rule
+      when: manual
+      allow_failure: true
   script:
-    - ./scripts/bundler.sh  # Install jsonnet bundles
+    - make jsonnet-bundle update-feature-categories-ci
+    - git diff --exit-code
+
+ensure-maturity-model-minimum-level:
+  stage: test
+  needs:
+    - job: prepare-service-health-dashboard-json
+      artifacts: true
+  rules:
+    - !reference [.default-job-rules, rules]
+    - *if-merge-request-rule
+  script:
+    - make jsonnet-bundle
+    - scripts/generate-jsonnet-rules.sh
+    - cp service-health-dashboard-manifest/autogenerated-service-health-dashboards.json dashboards/
+    - scripts/validate-maturity-model
+
+generate-service-maturity-manifest:
+  extends:
+    - .jsonnet-cache
+  stage: test
+  needs:
+    - job: prepare-service-health-dashboard-json
+      artifacts: true
+  rules:
+    - *avoid-stage-group-check-rule
+    - *gitlab-com-only-rule
+    - if: $GENERATE_SERVICE_MATURITY_MANIFEST == "1"
+    - *if-merge-request-rule
+  script:
+    - make jsonnet-bundle
     - ./scripts/generate-jsonnet-rules.sh
     - cp service-health-dashboard-manifest/autogenerated-service-health-dashboards.json dashboards/
     - mkdir -p service-maturity-manifest
     - ./scripts/compile_jsonnet.rb ./service-maturity/maturity.jsonnet > ./service-maturity-manifest/service_maturity.yml
   artifacts:
-    expose_as: 'service maturity manifest'
+    expose_as: service maturity manifest
     expire_in: 1 day
     paths:
       - service-maturity-manifest/
 
-generate_tamland_saturation_manifest:
-  stage: test
-  rules:
-    - *avoid-stage-group-check-rule
-    - if: '$GENERATE_TAMLAND_SATURATION_MANIFEST == "1"'
-      when: always
-    - if: '$CI_PIPELINE_SOURCE == "merge_request_event"'
-      when: always
+generate-tamland-saturation-manifest:
   extends:
     - .jsonnet-cache
+  stage: test
+  needs: []
+  rules:
+    - *avoid-stage-group-check-rule
+    - *gitlab-com-only-rule
+    - if: $GENERATE_TAMLAND_SATURATION_MANIFEST == "1"
+    - *if-merge-request-rule
   script:
-    - ./scripts/bundler.sh  # Install jsonnet bundles
+    - make jsonnet-bundle
     - ./scripts/generate-jsonnet-rules.sh
     - mkdir -p tamland-saturation-manifest
     - ./scripts/compile_jsonnet.rb ./metrics-catalog/saturation/tamland.jsonnet > ./tamland-saturation-manifest/saturation.json
   artifacts:
-    expose_as: 'Tamland saturation manifest'
+    expose_as: Tamland saturation manifest
     expire_in: 1 day
     paths:
       - tamland-saturation-manifest/
 
-test-periodic-queries:
+rspec:
+  stage: test
+  needs:
+    - job: prepare-service-health-dashboard-json
+      artifacts: true
   rules:
-    - *avoid-schedule-rule
-    - *avoid-stage-group-check-rule
-    - *avoid-downstream-generation-pipelines-rule
-    - if: '$CI_PIPELINE_SOURCE == "merge_request_event"'
+    - !reference [.default-job-rules, rules]
+    - *avoid-merge-train-rule
+    - <<: *if-merge-request-rule
       changes:
-        - libsonnet/**/*
-        - periodic-thanos-queries/*
-        - lib/periodic_queries.rb
-        - lib/periodic_queries/**/*
-      when: 'always'
-    - if: '$CI_PIPELINE_SOURCE == "merge_request_event"'
-      when: manual
-      allow_failure: true
+        paths: *ruby-patterns
   script:
+    - make jsonnet-bundle
     - gem install bundler --no-document -v $BUNDLER_VERSION
-    - bundle install
-    - bundle exec scripts/perform-periodic-thanos-queries.rb --dry-run
+    - bundle install --with=test
+    - cp service-health-dashboard-manifest/autogenerated-service-health-dashboards.json dashboards/
+    - bundle exec rspec
 
-publish-periodic-queries:
-  stage: deploy
-  rules:
-    - if: '$PERIODIC_QUERY_PUBLISH == "1"'
-      when: always
-      # This condition allows us to open a test MR on ops to demo publishing
-    - if: '$CI_PIPELINE_SOURCE == "merge_request_event" && $CI_API_V4_URL == "https://ops.gitlab.net/api/v4"'
-      when: manual
-      allow_failure: true
-  script:
-    - gem install bundler --no-document -v $BUNDLER_VERSION
-    - bundle install
-    - bundle exec scripts/perform-periodic-thanos-queries.rb
-  artifacts:
-    expose_as: 'thanos query results'
-    paths:
-      - periodic-query-results/
-  tags:
-    - k8s-workloads
-
-.deploy-thanos-rules:
-  extends:
-    - .id_tokens
-    - .vault_rw
+test-shunit:
+  extends: .default-job
+  stage: test
   needs: []
   rules:
     - !reference [.default-job-rules, rules]
-    - if: $CI_API_V4_URL == "https://ops.gitlab.net/api/v4" && $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH
+    - *gitlab-com-only-rule
+  script:
+    - make jsonnet-bundle test-shunit
+
+test-dashboards:
+  extends: .dashboards
+  stage: test
+  environment:
+    action: verify
+  needs:
+    - job: prepare-service-health-dashboard-json
+      artifacts: true
+  rules:
+    - !reference [.dashboards, rules]
+    - *avoid-merge-train-rule
+    - <<: *if-merge-request-rule
+      changes:
+        paths:
+          - services/**/*
+          - dashboards/**/*
+          - lib/monitored_services.rb
+  script:
+    - cp service-health-dashboard-manifest/autogenerated-service-health-dashboards.json dashboards/
+    - cp -r service-health-dashboard-manifest/generated dashboards
+    - dashboards/upload.sh -D
+    - make validate-service-dashboards
+
+test-service-catalog-schema:
+  extends: .default-job
+  stage: test
+  needs: []
+  rules:
+    - !reference [.default-job-rules, rules]
+    - *gitlab-com-only-rule
+    - *if-main-branch-rule
+    - *if-merge-request-rule
+  script:
+    - npm install
+    - ./scripts/compile_jsonnet.rb ./services/raw-catalog.jsonnet > ./services/service_catalog.json
+    - npm run test-service-catalog-schema -- -s ./services/service-catalog-schema.json -d ./services/service_catalog.json
+
+verify:
+  extends: .default-job
+  stage: test
+  needs:
+    - job: prepare-service-health-dashboard-json
+      artifacts: true
+  rules:
+    - !reference [.default-job-rules, rules]
+    - *gitlab-com-only-rule
+  script:
+    - cp service-health-dashboard-manifest/autogenerated-service-health-dashboards.json dashboards/
+    - make verify
+
+deploy-dashboards:
+  extends:
+    - .dashboards
+  stage: deploy
+  needs:
+    - job: prepare-service-health-dashboard-json
+      artifacts: true
+  rules:
+    - !reference [.default-job-rules, rules]
+    - *gitlab-com-only-rule
+    - *if-main-branch-rule
+  script:
+    - cp service-health-dashboard-manifest/autogenerated-service-health-dashboards.json dashboards/
+    - cp -r service-health-dashboard-manifest/generated dashboards
+    - dashboards/ensure-grafana-folders.sh
+    - dashboards/upload.sh
+    - dashboards/delete-orphaned-dashboards.sh
+    - dashboards/tag-unmanaged-dashboards.sh
+
+reconcile-service-catalog-labels:
+  extends: .id-tokens
+  stage: deploy
+  secrets:
+    GITLAB_RECONCILE_SERVICE_LABELS_TOKEN:
+      file: false
+      vault: access_tokens/gitlab-com/gitlab-com/gl-infra/_group_access_tokens/runbooks-label-reconciler/token@ci
+  rules:
+    - !reference [.default-job-rules, rules]
+    - *gitlab-com-only-rule
+    - <<: *if-main-branch-rule
+      changes:
+        paths:
+          - services/service-catalog.yml
+  script:
+    - ./scripts/reconcile_service_catalog_labels.rb
+
+################
+# Elasticsearch / Kibana
+################
+
+validate-kibana-urls:
+  stage: validate
+  needs: []
+  rules:
+    - !reference [.default-job-rules, rules]
+    - *avoid-merge-train-rule
+    - <<: *if-merge-request-rule
+      changes:
+        paths: *md-patterns
+  script:
+    - make validate-kibana-urls
+
+.elastic:
+  extends: .id-tokens
+  secrets:
+    MARQUEE_CUSTOMERS_TOP_LEVEL_DOMAINS:
+      file: false
+      vault: ${VAULT_SECRETS_PATH}/shared/marquee-customers/top-level-domains@ci
+
+.elastic-log-gprd:
+  extends: .elastic
+  environment:
+    name: elastic-log-gprd
+  secrets:
+    ES_LOG_GPRD_URL:
+      file: false
+      vault: ${VAULT_SECRETS_PATH}/elastic-log-gprd/elastic/url@ci
+
+.elastic-log-nonprod:
+  extends: .elastic
+  environment:
+    name: elastic-log-nonprod
+  secrets:
+    ES_NONPROD_URL:
+      file: false
+      vault: ${VAULT_SECRETS_PATH}/elastic-log-nonprod/elastic/url@ci
+
+.elastic-monitoring-es7:
+  extends: .elastic
+  environment:
+    name: elastic-monitoring-es7
+  secrets:
+    ES_MONITORING_ES7_URL:
+      file: false
+      vault: ${VAULT_SECRETS_PATH}/elastic-monitoring-es7/elastic/url@ci
+
+# log.gprd.gitlab.net
+update-elastic-ilm:log-gprd:
+  extends: .elastic-log-gprd
+  rules:
+    - !reference [.default-job-rules, rules]
+    - *gitlab-com-only-rule
+    - <<: *if-main-branch-rule
+      changes:
+        paths:
+          - elastic/managed-objects/log_gprd/ILM/*
+  stage: deploy
+  script:
+    - ./elastic/managed-objects/log_gprd/ILM/update-ilm.sh
+
+update-elastic-watches:log-gprd:
+  extends: .elastic-log-gprd
+  rules:
+    - !reference [.default-job-rules, rules]
+    - *gitlab-com-only-rule
+    - <<: *if-main-branch-rule
+      changes:
+        - elastic/managed-objects/log_gprd/watches/*
+  stage: deploy
+  script:
+    - ./elastic/managed-objects/log_gprd/watches/update-watches.sh
+
+update-elastic-index-templates:log-gprd:
+  extends: .elastic-log-gprd
+  stage: deploy
+  rules:
+    - !reference [.default-job-rules, rules]
+    - *gitlab-com-only-rule
+    - <<: *if-main-branch-rule
+      changes:
+        - elastic/managed-objects/log_gprd/index-templates/*
+        - elastic/managed-objects/lib/log_gprd_index_template.libsonnet
+        - elastic/managed-objects/lib/index_mappings/*.jsonnet
+        - elastic/managed-objects/lib/settings_gprd.libsonnet
+        - elastic/managed-objects/indices/indices-array.sh
+  script:
+    - ./elastic/managed-objects/log_gprd/index-templates/update-index-templates.sh
+
+update-elastic-cluster-settings:log-gprd:
+  extends: .elastic-log-gprd
+  stage: deploy
+  rules:
+    - !reference [.default-job-rules, rules]
+    - *gitlab-com-only-rule
+    - <<: *if-main-branch-rule
+      changes:
+        - elastic/managed-objects/log_gprd/cluster-settings/*
+  script:
+    - ./elastic/managed-objects/log_gprd/cluster-settings/update-cluster-settings.sh
+
+update-elastic-hot-index-shards-per-node:log-gprd:
+  extends: .elastic-log-gprd
+  stage: scheduled
+  rules:
+    - *gitlab-com-only-rule
+    - if: $CI_PIPELINE_SOURCE == "schedule" && $JOB_SCHEDULE_ELASTIC_PROD
+  script:
+    - ./elastic/scheduled/hot_index_shards_per_node.sh
+  variables:
+    ELASTICSEARCH_URL: $ES_LOG_GPRD_URL
+
+# nonprod-log.gitlab.net
+update-elastic-ilm:log-nonprod:
+  extends: .elastic-log-nonprod
+  stage: deploy
+  rules:
+    - !reference [.default-job-rules, rules]
+    - *gitlab-com-only-rule
+    - <<: *if-main-branch-rule
+      changes:
+        - elastic/managed-objects/nonprod-log/ILM/*
+  script:
+    - ./elastic/managed-objects/nonprod-log/ILM/update-ilm.sh
+
+update-elastic-watches:log-nonprod:
+  extends: .elastic-log-nonprod
+  stage: deploy
+  rules:
+    - !reference [.default-job-rules, rules]
+    - *gitlab-com-only-rule
+    - <<: *if-main-branch-rule
+      changes:
+        - elastic/managed-objects/nonprod-log/watches/*
+  script:
+    - ./elastic/managed-objects/nonprod-log/watches/update-watches.sh
+
+update-elastic-index-templates:log-nonprod:
+  extends: .elastic-log-nonprod
+  stage: deploy
+  rules:
+    - !reference [.default-job-rules, rules]
+    - *gitlab-com-only-rule
+    - <<: *if-main-branch-rule
+      changes:
+        - elastic/managed-objects/nonprod-log/index-templates/*
+        - elastic/managed-objects/lib/nonprod-log_index_template.libsonnet
+        - elastic/managed-objects/lib/index_mappings/*.jsonnet
+        - elastic/managed-objects/lib/settings_nonprod.libsonnet
+        - elastic/managed-objects/indices/indices-array.sh
+  script:
+    - ./elastic/managed-objects/nonprod-log/index-templates/update-index-templates.sh
+
+update-elastic-cluster-settings:log-nonprod:
+  extends: .elastic-log-nonprod
+  stage: deploy
+  rules:
+    - !reference [.default-job-rules, rules]
+    - *gitlab-com-only-rule
+    - <<: *if-main-branch-rule
+      changes:
+        - elastic/managed-objects/nonprod-log/cluster-settings/*
+  script:
+    - ./elastic/managed-objects/nonprod-log/cluster-settings/update-cluster-settings.sh
+
+update-elastic-hot-index-shards-per-node:log-nonprod:
+  extends: .elastic-log-nonprod
+  stage: scheduled
+  rules:
+    - *gitlab-com-only-rule
+    - if: $CI_PIPELINE_SOURCE == "schedule" && $JOB_SCHEDULE_ELASTIC_NONPROD
+  script:
+    - ./elastic/scheduled/hot_index_shards_per_node.sh
+  variables:
+    ELASTICSEARCH_URL: $ES_NONPROD_URL
+
+# monitoring-es7
+update-elastic-cluster-settings:monitoring-es7:
+  extends: .elastic-monitoring-es7
+  stage: deploy
+  rules:
+    - !reference [.default-job-rules, rules]
+    - *gitlab-com-only-rule
+    - <<: *if-main-branch-rule
+      changes:
+        - elastic/managed-objects/monitoring-es7/cluster-settings/*
+  script:
+    - ./elastic/managed-objects/monitoring-es7/cluster-settings/update-cluster-settings.sh
+
+update-elastic-ilm:monitoring-es7:
+  extends: .elastic-monitoring-es7
+  stage: deploy
+  rules:
+    - !reference [.default-job-rules, rules]
+    - *gitlab-com-only-rule
+    - <<: *if-main-branch-rule
+      changes:
+        - elastic/managed-objects/monitoring-es7/ILM/*
+  script:
+    - ./elastic/managed-objects/monitoring-es7/ILM/update-ilm.sh
+
+################
+# Pingdom
+################
+
+.pingdom:
+  extends: .id-tokens
+  secrets:
+    PINGDOM_ACCOUNT_EMAIL:
+      file: false
+      vault: ${VAULT_SECRETS_PATH}/shared/pingdom/account_email@ci
+    PINGDOM_APPKEY:
+      file: false
+      vault: ${VAULT_SECRETS_PATH}/shared/pingdom/app_key@ci
+    PINGDOM_USERNAME:
+      file: false
+      vault: ${VAULT_SECRETS_PATH}/shared/pingdom/username@ci
+    PINGDOM_PASSWORD:
+      file: false
+      vault: ${VAULT_SECRETS_PATH}/shared/pingdom/password@ci
+
+dry-run-pingdom-checks:
+  extends: .pingdom
+  stage: test
+  needs: []
+  image: $GOLANG_IMAGE
+  script:
+    - cd pingdom
+    - go run pingdom.go --dry-run
+  rules:
+    - !reference [.default-job-rules, rules]
+    - *gitlab-com-only-rule
+    - *avoid-merge-train-rule
+    - *if-merge-request-rule
+    - *if-tag-rule
+
+deploy-pingdom-checks:
+  extends: .pingdom
+  stage: deploy
+  needs: []
+  image: $GOLANG_IMAGE
+  script:
+    - cd pingdom
+    - go run pingdom.go
+  rules:
+    - !reference [.default-job-rules, rules]
+    - *gitlab-com-only-rule
+    - *avoid-schedule-rule
+    - *if-main-branch-rule
+
+################
+# Alertmanager
+################
+
+check-alerts:
+  stage: test
+  needs: []
+  image: $GOLANG_IMAGE
+  rules:
+    - !reference [.default-job-rules, rules]
+    - *avoid-schedule-rule
+    - if: $PERFORM_ALERTS_CHECK
+  tags:
+    - k8s-workloads
+  script:
+    - cd alerts-checker
+    # TODO use go modules rather than fetching HEAD
+    # We are seeing errors related to
+    # github.com/prometheus/prometheus/promql/parser when we try to set up go
+    # modules. For now, let's get this working hackily.
+    - go get github.com/prometheus/prometheus/...
+    - go run alerts-checker.go ../rules $THANOS_URL $IGNORED_ALERTS
+
+validate-alerts:
+  stage: validate
+  needs: []
+  rules:
+    - !reference [.default-job-rules, rules]
+    - *avoid-merge-train-rule
+    - <<: *if-merge-request-rule
+      changes:
+        - docs/**/*
+        - rules/**/*
+        - thanos-rules/**/*
+        - services/**/*
+  script:
+    - make validate-alerts
+
+test-alertmanager:
+  extends: .default-job
+  stage: test
+  needs: []
+  script:
+    - make test-alertmanager
+
+update-alertmanager:
+  extends:
+    - .id-tokens
+    - .gke-cluster-auth
+    - .vault-rw
+  stage: deploy
+  needs:
+    - job: test-alertmanager
+  environment: ops
+  rules:
+    - !reference [.default-job-rules, rules]
+    - *ops-gitlab-net-only-rule
+    - *if-main-branch-rule
+  tags:
+    - k8s-workloads
+  secrets:
+    ALERTMANAGER_SECRETS_FILE:
+      file: true
+      vault: ${VAULT_SECRETS_PATH}/ops/alertmanager/secrets@ci
+  variables:
+    GKE_CLUSTER: ops-gitlab-gke
+    GOOGLE_PROJECT: gitlab-ops
+    KUBE_NAMESPACE: monitoring
+    LOCATION: us-east1
+    VAULT_KUBERNETES_ROLE: alertmanager-edit
+  script:
+    - make alertmanager/alertmanager.yml
+    - kubectl apply --namespace "${KUBE_NAMESPACE}" --filename alertmanager/k8s_alertmanager_secret.yaml
+
+################
+# Prometheus / Thanos
+################
+
+.gke-cluster-auth:
+  extends: .id-tokens
+  variables:
+    KUBE_NAMESPACE: default
+    RUNBOOKS_VAULT_AUTH_ROLE: ${VAULT_AUTH_ROLE}
+    VAULT_GCP_IMPERSONATED_ACCOUNT: ${GOOGLE_PROJECT}--k8s-workloads-ro
+    VAULT_KUBERNETES_ROLE: prometheus-rules-view
+  before_script:
+    - export VAULT_TOKEN="$(vault write -field=token "auth/${VAULT_AUTH_PATH}/login" role="${RUNBOOKS_VAULT_AUTH_ROLE}" jwt="${VAULT_ID_TOKEN}")"
+    - export CLOUDSDK_AUTH_ACCESS_TOKEN="$(vault read -field=token "gcp/impersonated-account/${VAULT_GCP_IMPERSONATED_ACCOUNT}/token")"
+    - gcloud container clusters get-credentials "${GKE_CLUSTER}" --project "${GOOGLE_PROJECT}" --location "${LOCATION}"
+    - export KUBE_TOKEN="$(vault write -field=service_account_token "kubernetes/${GKE_CLUSTER}/creds/${VAULT_KUBERNETES_ROLE}" kubernetes_namespace="${KUBE_NAMESPACE}" ttl=30m)"
+    - kubectl config set-credentials "${VAULT_KUBERNETES_ROLE}" --token "${KUBE_TOKEN}"
+    - kubectl config set-context "$(kubectl config current-context)" --user "${VAULT_KUBERNETES_ROLE}"
+
+generate-prometheus-rules:
+  stage: prepare
+  needs: []
+  rules:
+    - !reference [.default-job-rules, rules]
+    - changes:
+        paths: *prometheus-rules-patterns
+  script:
+    - gem install bundler --no-document -v "${BUNDLER_VERSION}"
+    - bundle install
+    - bundle exec ./bin/create_kubernetes_rules.rb --create --validate
+  artifacts:
+    name: prometheus-rules
+    paths:
+      - rules-k8s/
+
+validate-prom-rules:
+  stage: validate
+  needs:
+    - job: generate-prometheus-rules
+      artifacts: true
+  rules:
+    - !reference [.default-job-rules, rules]
+    - *avoid-merge-train-rule
+    - <<: *if-merge-request-rule
+      changes:
+        - scripts/prometheus.yml
+        - rules/**/*
+        - thanos-rules/**/*
+  script:
+    - make validate-prom-rules
+
+.deploy-prometheus-rules:
+  extends:
+    - .gke-cluster-auth
+    - .vault-rw
+  stage: deploy
+  needs:
+    - job: generate-prometheus-rules
+      artifacts: true
+  variables:
+    KUBE_NAMESPACE: monitoring
+    VAULT_KUBERNETES_ROLE: prometheus-rules-edit
+  rules:
+    - !reference [.default-job-rules, rules]
+    - *ops-gitlab-net-only-rule
+    - <<: *if-main-branch-rule
+      changes:
+        paths: *prometheus-rules-patterns
+  script:
+    # Delete orphaned PrometheusRules
+    - ./bin/delete_orphan_kubenetes_rules.sh
+    # Deploy PrometheusRules
+    - kubectl apply --namespace "${KUBE_NAMESPACE}" --filename "${CI_PROJECT_DIR}/rules-k8s/"
+  tags:
+    - k8s-workloads
+
+deploy-prometheus-rules:non-production:
+  environment: $DEPLOY_ENV
+  extends:
+    - .deploy-prometheus-rules
+    - .gke-clusters-non-production
+
+deploy-prometheus-rules:production:
+  environment: $DEPLOY_ENV
+  stage: deploy-rules-production
+  extends:
+    - .deploy-prometheus-rules
+    - .gke-clusters-production
+
+.deploy-thanos-rules:
+  extends:
+    - .id-tokens
+    - .vault-rw
+  rules:
+    - !reference [.default-job-rules, rules]
+    - *ops-gitlab-net-only-rule
+    - *if-main-branch-rule
   variables:
     THANOS_RULES_BUCKET: ${GOOGLE_PROJECT}-thanos-rules
     VAULT_GCP_IMPERSONATED_ACCOUNT: ${GOOGLE_PROJECT}--thanos-rules
@@ -915,7 +1138,7 @@ publish-periodic-queries:
     - tar -czvf thanos-rules.tar.gz thanos-rules
     - gcloud storage cp thanos-rules.tar.gz gs://${THANOS_RULES_BUCKET}
 
-deploy-thanos-rules-staging:
+deploy-thanos-rules:staging:
   stage: deploy
   environment: pre
   variables:
@@ -923,7 +1146,7 @@ deploy-thanos-rules-staging:
   extends:
     - .deploy-thanos-rules
 
-deploy-thanos-rules-production:
+deploy-thanos-rules:production:
   stage: deploy-rules-production
   environment: ops
   variables:
@@ -931,18 +1154,43 @@ deploy-thanos-rules-production:
   extends:
     - .deploy-thanos-rules
 
-reconcile_service_catalog_labels:
-  extends:
-    - .id_tokens
-  secrets:
-    GITLAB_RECONCILE_SERVICE_LABELS_TOKEN:
-      file: false
-      vault: access_tokens/gitlab-com/gitlab-com/gl-infra/_group_access_tokens/runbooks-label-reconciler/token@ci
+test-periodic-queries:
+  stage: test
+  needs: []
   rules:
-    - !reference [".default-job-rules", rules]
-    - if: $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH && $CI_API_V4_URL == "https://gitlab.com/api/v4"
+    - *avoid-schedule-rule
+    - *avoid-stage-group-check-rule
+    - *avoid-downstream-generation-pipelines-rule
+    - <<: *if-merge-request-rule
       changes:
-        - "services/service-catalog.yml"
-  stage: deploy
+        - libsonnet/**/*
+        - periodic-thanos-queries/*
+        - lib/periodic_queries.rb
+        - lib/periodic_queries/**/*
+    - <<: *if-merge-request-rule
+      when: manual
+      allow_failure: true
   script:
-    - ./scripts/reconcile_service_catalog_labels.rb
+    - gem install bundler --no-document -v $BUNDLER_VERSION
+    - bundle install
+    - bundle exec scripts/perform-periodic-thanos-queries.rb --dry-run
+
+publish-periodic-queries:
+  stage: deploy
+  rules:
+    - *ops-gitlab-net-only-rule
+    - if: $PERIODIC_QUERY_PUBLISH == "1"
+    # This condition allows us to open a test MR on ops to demo publishing
+    - if: $CI_PIPELINE_SOURCE == "merge_request_event"
+      when: manual
+      allow_failure: true
+  tags:
+    - k8s-workloads
+  script:
+    - gem install bundler --no-document -v $BUNDLER_VERSION
+    - bundle install
+    - bundle exec scripts/perform-periodic-thanos-queries.rb
+  artifacts:
+    expose_as: thanos query results
+    paths:
+      - periodic-query-results/

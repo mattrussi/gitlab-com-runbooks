@@ -79,7 +79,6 @@ validate-service-dashboards:
 .PHONY: validate-prom-rules
 validate-prom-rules:
 	./scripts/validate-recording-rule-groups
-	# TODO: Add rules/*/*.yml when valid rules are created.
 	@$(PROMTOOL_COMMAND) check rules $(PROM_RULE_FILES)
 	@$(THANOS_COMMAND) tools rules-check --rules 'thanos-rules/*.yml'
 	# Prometheus config checks are stricter than rules checks, so use a fake config to check this too
