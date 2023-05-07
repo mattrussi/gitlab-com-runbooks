@@ -29,7 +29,6 @@ groups:
     labels:
       alert_type: cause
       severity: s4
-      team: rapid-action-intercom
     expr: |
       (
         sum by (environment,tier,type,fqdn,relname) (
@@ -70,7 +69,6 @@ groups:
     labels:
       alert_type: cause
       severity: s4
-      team: rapid-action-intercom
     expr: |
       (
         sum by (environment,tier,type,relname) (

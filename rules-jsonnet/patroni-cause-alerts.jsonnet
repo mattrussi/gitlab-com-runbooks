@@ -66,7 +66,6 @@ local hotspotTupleAlert(alertName, periodFor, warning, replica) =
     ),
     'for': periodFor,
     labels: {
-      team: 'rapid-action-intercom',
       severity: if warning then 's4' else 's1',
       alert_type: 'cause',
       [if !warning then 'pager']: 'pagerduty',
