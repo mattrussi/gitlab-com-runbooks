@@ -4,13 +4,25 @@
 
 [[_TOC_]]
 
-# Design.gitlab.com Service
+# Design Service
+
+* **Alerts**: <https://alerts.gitlab.net/#/alerts?filter=%7Btype%3D%22design%22%2C%20tier%3D%22sv%22%7D>
+* **Label**: gitlab-com/gl-infra/production~"Service::Design"
 
 ## Logging
 
+* [production.log](/var/log/version/)
+
 ## Troubleshooting Pointers
 
-[design.gitlab.com Runbook](/design-gitlab-com.md)
+* [Chef Guidelines](../config_management/chef-guidelines.md)
+* [design.gitlab.com Runbook](design-gitlab-com.md)
+* [../kube/k8s-operations.md](../kube/k8s-operations.md)
+* [../patroni/postgres-checkup.md](../patroni/postgres-checkup.md)
+* [PostgreSQL VACUUM](../patroni/postgresql-vacuum.md)
+* [../pgbouncer/patroni-consul-postgres-pgbouncer-interactions.md](../pgbouncer/patroni-consul-postgres-pgbouncer-interactions.md)
+* [A survival guide for SREs to working with Redis at GitLab](../redis/redis-survival-guide-for-sres.md)
+* [A survival guide for SREs to working with Sidekiq at GitLab](../sidekiq/sidekiq-survival-guide-for-sres.md)
 <!-- END_MARKER -->
 
 <!-- ## Summary -->
