@@ -156,6 +156,12 @@ variables:
 .md-patterns: &md-patterns
   - "**/*.md"
 
+.pingdom-patterns: &pingdom-patterns
+  - pingdom/go.mod
+  - pingdom/go.sum
+  - pingdom/pingdom.go
+  - pingdom/pingdom.yml
+
 .prometheus-rules-patterns: &prometheus-rules-patterns
   - rules/**/*
 
@@ -934,6 +940,7 @@ update-elastic-ilm:monitoring-es7:
 
 .pingdom:
   extends: .id-tokens
+  image: $GOLANG_IMAGE
   secrets:
     PINGDOM_ACCOUNT_EMAIL:
       file: false
@@ -947,35 +954,37 @@ update-elastic-ilm:monitoring-es7:
     PINGDOM_PASSWORD:
       file: false
       vault: ${VAULT_SECRETS_PATH}/shared/pingdom/password@ci
+  before_script:
+    - cd pingdom
+    - go build
 
 dry-run-pingdom-checks:
   extends: .pingdom
   stage: test
   needs: []
-  image: $GOLANG_IMAGE
   script:
-    - cd pingdom
-    - go run pingdom.go --dry-run
+    - ./pingdom --dry-run
   rules:
     - !reference [.default-job-rules, rules]
     - *gitlab-com-only-rule
     - *avoid-merge-train-rule
-    - *if-merge-request-rule
-    - *if-tag-rule
+    - <<: *if-merge-request-rule
+      changes:
+        paths: *pingdom-patterns
 
 deploy-pingdom-checks:
   extends: .pingdom
   stage: deploy
   needs: []
-  image: $GOLANG_IMAGE
   script:
-    - cd pingdom
-    - go run pingdom.go
+    - ./pingdom
   rules:
     - !reference [.default-job-rules, rules]
     - *gitlab-com-only-rule
     - *avoid-schedule-rule
-    - *if-main-branch-rule
+    - <<: *if-main-branch-rule
+      changes:
+        paths: *pingdom-patterns
 
 ################
 # Alertmanager
