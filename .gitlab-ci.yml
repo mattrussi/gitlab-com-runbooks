@@ -159,6 +159,9 @@ variables:
 .prometheus-rules-patterns: &prometheus-rules-patterns
   - rules/**/*
 
+.thanos-rules-patterns: &thanos-rules-patterns
+  - thanos-rules/**/*
+
 .avoid-stage-group-check: &avoid-stage-group-check-rule
   if: $CHECK_STAGE_GROUPS == "1"
   when: never
@@ -286,10 +289,11 @@ test-docker-image:
     - *avoid-merge-train-rule
     - <<: *if-merge-request-rule
       changes:
-        - Dockerfile
-        - .tool-versions
-        - .gitlab-ci-asdf-versions.yml
-        - .gitlab-ci.yml
+        paths:
+          - Dockerfile
+          - .tool-versions
+          - .gitlab-ci-asdf-versions.yml
+          - .gitlab-ci.yml
 
 build-docker-image:
   extends: .docker-image
@@ -782,7 +786,8 @@ update-elastic-watches:log-gprd:
     - *gitlab-com-only-rule
     - <<: *if-main-branch-rule
       changes:
-        - elastic/managed-objects/log_gprd/watches/*
+        paths:
+          - elastic/managed-objects/log_gprd/watches/*
   stage: deploy
   script:
     - ./elastic/managed-objects/log_gprd/watches/update-watches.sh
@@ -795,11 +800,12 @@ update-elastic-index-templates:log-gprd:
     - *gitlab-com-only-rule
     - <<: *if-main-branch-rule
       changes:
-        - elastic/managed-objects/log_gprd/index-templates/*
-        - elastic/managed-objects/lib/log_gprd_index_template.libsonnet
-        - elastic/managed-objects/lib/index_mappings/*.jsonnet
-        - elastic/managed-objects/lib/settings_gprd.libsonnet
-        - elastic/managed-objects/indices/indices-array.sh
+        paths:
+          - elastic/managed-objects/log_gprd/index-templates/*
+          - elastic/managed-objects/lib/log_gprd_index_template.libsonnet
+          - elastic/managed-objects/lib/index_mappings/*.jsonnet
+          - elastic/managed-objects/lib/settings_gprd.libsonnet
+          - elastic/managed-objects/indices/indices-array.sh
   script:
     - ./elastic/managed-objects/log_gprd/index-templates/update-index-templates.sh
 
@@ -811,7 +817,8 @@ update-elastic-cluster-settings:log-gprd:
     - *gitlab-com-only-rule
     - <<: *if-main-branch-rule
       changes:
-        - elastic/managed-objects/log_gprd/cluster-settings/*
+        paths:
+          - elastic/managed-objects/log_gprd/cluster-settings/*
   script:
     - ./elastic/managed-objects/log_gprd/cluster-settings/update-cluster-settings.sh
 
@@ -835,7 +842,8 @@ update-elastic-ilm:log-nonprod:
     - *gitlab-com-only-rule
     - <<: *if-main-branch-rule
       changes:
-        - elastic/managed-objects/nonprod-log/ILM/*
+        paths:
+          - elastic/managed-objects/nonprod-log/ILM/*
   script:
     - ./elastic/managed-objects/nonprod-log/ILM/update-ilm.sh
 
@@ -847,7 +855,8 @@ update-elastic-watches:log-nonprod:
     - *gitlab-com-only-rule
     - <<: *if-main-branch-rule
       changes:
-        - elastic/managed-objects/nonprod-log/watches/*
+        paths:
+          - elastic/managed-objects/nonprod-log/watches/*
   script:
     - ./elastic/managed-objects/nonprod-log/watches/update-watches.sh
 
@@ -859,11 +868,12 @@ update-elastic-index-templates:log-nonprod:
     - *gitlab-com-only-rule
     - <<: *if-main-branch-rule
       changes:
-        - elastic/managed-objects/nonprod-log/index-templates/*
-        - elastic/managed-objects/lib/nonprod-log_index_template.libsonnet
-        - elastic/managed-objects/lib/index_mappings/*.jsonnet
-        - elastic/managed-objects/lib/settings_nonprod.libsonnet
-        - elastic/managed-objects/indices/indices-array.sh
+        paths:
+          - elastic/managed-objects/nonprod-log/index-templates/*
+          - elastic/managed-objects/lib/nonprod-log_index_template.libsonnet
+          - elastic/managed-objects/lib/index_mappings/*.jsonnet
+          - elastic/managed-objects/lib/settings_nonprod.libsonnet
+          - elastic/managed-objects/indices/indices-array.sh
   script:
     - ./elastic/managed-objects/nonprod-log/index-templates/update-index-templates.sh
 
@@ -875,7 +885,8 @@ update-elastic-cluster-settings:log-nonprod:
     - *gitlab-com-only-rule
     - <<: *if-main-branch-rule
       changes:
-        - elastic/managed-objects/nonprod-log/cluster-settings/*
+        paths:
+          - elastic/managed-objects/nonprod-log/cluster-settings/*
   script:
     - ./elastic/managed-objects/nonprod-log/cluster-settings/update-cluster-settings.sh
 
@@ -899,7 +910,8 @@ update-elastic-cluster-settings:monitoring-es7:
     - *gitlab-com-only-rule
     - <<: *if-main-branch-rule
       changes:
-        - elastic/managed-objects/monitoring-es7/cluster-settings/*
+        paths:
+          - elastic/managed-objects/monitoring-es7/cluster-settings/*
   script:
     - ./elastic/managed-objects/monitoring-es7/cluster-settings/update-cluster-settings.sh
 
@@ -911,7 +923,8 @@ update-elastic-ilm:monitoring-es7:
     - *gitlab-com-only-rule
     - <<: *if-main-branch-rule
       changes:
-        - elastic/managed-objects/monitoring-es7/ILM/*
+        paths:
+          - elastic/managed-objects/monitoring-es7/ILM/*
   script:
     - ./elastic/managed-objects/monitoring-es7/ILM/update-ilm.sh
 
@@ -995,10 +1008,11 @@ validate-alerts:
     - *avoid-merge-train-rule
     - <<: *if-merge-request-rule
       changes:
-        - docs/**/*
-        - rules/**/*
-        - thanos-rules/**/*
-        - services/**/*
+        paths:
+          - docs/**/*
+          - rules/**/*
+          - thanos-rules/**/*
+          - services/**/*
   script:
     - make validate-alerts
 
@@ -1083,9 +1097,10 @@ validate-prom-rules:
     - *avoid-merge-train-rule
     - <<: *if-merge-request-rule
       changes:
-        - scripts/prometheus.yml
-        - rules/**/*
-        - thanos-rules/**/*
+        paths:
+          - scripts/prometheus.yml
+          - rules/**/*
+          - thanos-rules/**/*
   script:
     - make validate-prom-rules
 
@@ -1134,7 +1149,9 @@ deploy-prometheus-rules:production:
   rules:
     - !reference [.default-job-rules, rules]
     - *ops-gitlab-net-only-rule
-    - *if-main-branch-rule
+    - <<: *if-main-branch-rule
+      changes:
+        paths: *thanos-rules-patterns
   variables:
     THANOS_RULES_BUCKET: ${GOOGLE_PROJECT}-thanos-rules
     VAULT_GCP_IMPERSONATED_ACCOUNT: ${GOOGLE_PROJECT}--thanos-rules
@@ -1148,6 +1165,7 @@ deploy-prometheus-rules:production:
 deploy-thanos-rules:staging:
   stage: deploy
   environment: pre
+  needs: []
   variables:
     GOOGLE_PROJECT: gitlab-pre
   extends:
@@ -1156,6 +1174,9 @@ deploy-thanos-rules:staging:
 deploy-thanos-rules:production:
   stage: deploy-rules-production
   environment: ops
+  needs:
+    - job: deploy-thanos-rules:staging
+      artifacts: false
   variables:
     GOOGLE_PROJECT: gitlab-ops
   extends:
@@ -1170,10 +1191,11 @@ test-periodic-queries:
     - *avoid-downstream-generation-pipelines-rule
     - <<: *if-merge-request-rule
       changes:
-        - libsonnet/**/*
-        - periodic-thanos-queries/*
-        - lib/periodic_queries.rb
-        - lib/periodic_queries/**/*
+        paths:
+          - libsonnet/**/*
+          - periodic-thanos-queries/*
+          - lib/periodic_queries.rb
+          - lib/periodic_queries/**/*
     - <<: *if-merge-request-rule
       when: manual
       allow_failure: true
