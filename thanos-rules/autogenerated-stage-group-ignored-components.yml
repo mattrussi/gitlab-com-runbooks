@@ -261,7 +261,7 @@ groups:
       product_stage: create
       stage_group: ide
     expr: "1"
-- name: 'Stage group Ignored components: manage - Import'
+- name: 'Stage group Ignored components: manage - Import and Integrate'
   interval: 1m
   partial_response_strategy: warn
   rules:
@@ -269,17 +269,7 @@ groups:
     labels:
       component: graphql_query
       product_stage: manage
-      stage_group: import
-    expr: "1"
-- name: 'Stage group Ignored components: manage - Integrations'
-  interval: 1m
-  partial_response_strategy: warn
-  rules:
-  - record: gitlab:ignored_component:stage_group
-    labels:
-      component: graphql_query
-      product_stage: manage
-      stage_group: integrations
+      stage_group: import_and_integrate
     expr: "1"
 - name: 'Stage group Ignored components: modelops - MLOps'
   interval: 1m
