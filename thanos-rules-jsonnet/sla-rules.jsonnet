@@ -10,12 +10,20 @@ local keyServiceWeights = std.foldl(
   }, serviceCatalog.findKeyBusinessServices(), {}
 );
 
-local keyServiceWeightsNew = keyServiceWeights { sidekiq: 1 };
-
+// This allows overriding values stored in the service catalog as well as adding services and
+// their weight.
 local keyServiceWeightsMapping = {
   'weighted_v2.1': keyServiceWeights,
-  weighted_v3: keyServiceWeights,
+  weighted_v3: keyServiceWeights { sidekiq: 1 },
 };
+
+// This allows changing the interval we average over for the SLA
+local weightedIntervalVersions = {
+  'weighted_v2.1': '5m',
+  weighted_v3: '5m',
+};
+
+assert std.set(std.objectFields(keyServiceWeightsMapping)) == std.set(std.objectFields(weightedIntervalVersions)) : 'All versions in `keyServiceWeightMapping` need to be in `weightedIntervalVersions`';
 
 local getScoreQuery(weights, interval, selector) =
   local items = [
@@ -41,16 +49,12 @@ local getWeightQuery(weights, interval, selector) =
 
   std.join('\n  or\n  ', items);
 
-local weightedIntervalVersions = {
-  'weighted_v2.1': '5m',
-  weighted_v3: '5m',
-};
-
-local ruleGroup(version, interval, selector) =
+local ruleGroup(version, selector) =
   local labels = {
     sla_type: version,
   };
-  local serviceWeights = if version == 'weighted_v3' then keyServiceWeightsNew else keyServiceWeights;
+  local interval = weightedIntervalVersions[version];
+  local serviceWeights = keyServiceWeightsMapping[version];
 
   {
     name: 'SLA weight calculations - %s' % [version],
@@ -107,7 +111,7 @@ local occurenceRatesRuleGroup(selector) = {
 
 local rules(selector) = {
   groups: [
-            ruleGroup(version, weightedIntervalVersions[version], selector)
+            ruleGroup(version, selector)
             for version in std.objectFields(weightedIntervalVersions)
           ]
           +
