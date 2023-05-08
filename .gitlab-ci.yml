@@ -246,6 +246,7 @@ notify-mirror-source:
   rules:
     - *ops-gitlab-net-only-rule
     - *avoid-schedule-rule
+    - *if-main-branch-rule
 
 ################
 # Docker image
@@ -407,6 +408,9 @@ ensure-generated-content-up-to-date:
   extends: .default-job
   stage: test
   needs: []
+  rules:
+    - !reference [.default-job-rules, rules]
+    - *if-merge-request-rule
   script:
     - make jsonnet-bundle ensure-generated-content-up-to-date
 
@@ -463,6 +467,7 @@ prepare-service-health-dashboard-json:
   rules:
     - *avoid-stage-group-check-rule
     - *avoid-schedule-rule
+    - *gitlab-com-only-rule
     - *if-merge-request-rule
     - *if-main-branch-rule
     - *if-tag-rule
@@ -675,6 +680,8 @@ deploy-dashboards:
   needs:
     - job: prepare-service-health-dashboard-json
       artifacts: true
+    - job: test-dashboards
+      artifacts: false
   rules:
     - !reference [.default-job-rules, rules]
     - *gitlab-com-only-rule
