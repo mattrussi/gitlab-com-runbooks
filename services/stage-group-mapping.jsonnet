@@ -9,21 +9,15 @@
       'system_access',
     ],
   },
-  'import': {
-    name: 'Import',
-    stage: 'manage',
-    feature_categories: [
-      'importers',
-      'internationalization',
-    ],
-  },
-  integrations: {
-    name: 'Integrations',
+  import_and_integrate: {
+    name: 'Import and Integrate',
     stage: 'manage',
     feature_categories: [
       'api',
       'integrations',
       'webhooks',
+      'importers',
+      'internationalization',
     ],
   },
   foundations: {
@@ -40,7 +34,6 @@
     stage: 'plan',
     feature_categories: [
       'team_planning',
-      'planning_analytics',
     ],
   },
   product_planning: {
@@ -205,7 +198,6 @@
       'environment_management',
       'feature_flags',
       'infrastructure_as_code',
-      'release_evidence',
       'release_orchestration',
     ],
   },
@@ -251,6 +243,7 @@
     feature_categories: [
       'audit_events',
       'compliance_management',
+      'release_evidence',
     ],
   },
   analytics_instrumentation: {

@@ -6,8 +6,5 @@
 //
 // Blank values will be ignored.
 {
-  dependency_scanning: 'software_composition_analysis',
-  license_compliance: 'software_composition_analysis',
-  advanced_deployments: 'deployment_management',
-  kubernetes_management: 'deployment_management',
+  planning_analytics: 'team_planning',
 }

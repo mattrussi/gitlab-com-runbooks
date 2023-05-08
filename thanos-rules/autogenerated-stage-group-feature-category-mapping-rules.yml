@@ -15,7 +15,7 @@ groups:
     labels:
       feature_category: api
       product_stage: manage
-      stage_group: integrations
+      stage_group: import_and_integrate
     expr: "1"
   - record: gitlab:feature_category:stage_group:mapping
     labels:
@@ -229,18 +229,6 @@ groups:
     expr: "1"
   - record: gitlab:feature_category:stage_group:mapping
     labels:
-      feature_category: advanced_deployments
-      product_stage: deploy
-      stage_group: environments
-    expr: "1"
-  - record: gitlab:feature_category:stage_group:mapping
-    labels:
-      feature_category: kubernetes_management
-      product_stage: deploy
-      stage_group: environments
-    expr: "1"
-  - record: gitlab:feature_category:stage_group:mapping
-    labels:
       feature_category: design_management
       product_stage: plan
       stage_group: product_planning
@@ -387,7 +375,7 @@ groups:
     labels:
       feature_category: importers
       product_stage: manage
-      stage_group: import
+      stage_group: import_and_integrate
     expr: "1"
   - record: gitlab:feature_category:stage_group:mapping
     labels:
@@ -423,7 +411,7 @@ groups:
     labels:
       feature_category: integrations
       product_stage: manage
-      stage_group: integrations
+      stage_group: import_and_integrate
     expr: "1"
   - record: gitlab:feature_category:stage_group:mapping
     labels:
@@ -441,7 +429,7 @@ groups:
     labels:
       feature_category: internationalization
       product_stage: manage
-      stage_group: import
+      stage_group: import_and_integrate
     expr: "1"
   - record: gitlab:feature_category:stage_group:mapping
     labels:
@@ -529,12 +517,6 @@ groups:
     expr: "1"
   - record: gitlab:feature_category:stage_group:mapping
     labels:
-      feature_category: planning_analytics
-      product_stage: plan
-      stage_group: project_management
-    expr: "1"
-  - record: gitlab:feature_category:stage_group:mapping
-    labels:
       feature_category: portfolio_management
       product_stage: plan
       stage_group: product_planning
@@ -584,8 +566,8 @@ groups:
   - record: gitlab:feature_category:stage_group:mapping
     labels:
       feature_category: release_evidence
-      product_stage: deploy
-      stage_group: environments
+      product_stage: govern
+      stage_group: compliance
     expr: "1"
   - record: gitlab:feature_category:stage_group:mapping
     labels:
@@ -709,18 +691,6 @@ groups:
     expr: "1"
   - record: gitlab:feature_category:stage_group:mapping
     labels:
-      feature_category: dependency_scanning
-      product_stage: secure
-      stage_group: composition_analysis
-    expr: "1"
-  - record: gitlab:feature_category:stage_group:mapping
-    labels:
-      feature_category: license_compliance
-      product_stage: secure
-      stage_group: composition_analysis
-    expr: "1"
-  - record: gitlab:feature_category:stage_group:mapping
-    labels:
       feature_category: source_code_management
       product_stage: create
       stage_group: source_code
@@ -752,6 +722,12 @@ groups:
   - record: gitlab:feature_category:stage_group:mapping
     labels:
       feature_category: team_planning
+      product_stage: plan
+      stage_group: project_management
+    expr: "1"
+  - record: gitlab:feature_category:stage_group:mapping
+    labels:
+      feature_category: planning_analytics
       product_stage: plan
       stage_group: project_management
     expr: "1"
@@ -795,7 +771,7 @@ groups:
     labels:
       feature_category: webhooks
       product_stage: manage
-      stage_group: integrations
+      stage_group: import_and_integrate
     expr: "1"
   - record: gitlab:feature_category:stage_group:mapping
     labels:
