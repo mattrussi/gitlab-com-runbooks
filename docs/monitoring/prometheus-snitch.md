@@ -14,4 +14,4 @@ Prometheus SnitchHeartBeat is an always-firing alert. It's used as an end-to-end
 ## Setting up a snitch
 
 1. Create a new snitch in <https://deadmanssnitch.com/>
-1. Update the json array `snitchChannels` in the [`alertmanager` Vault secret](https://vault.gitlab.net/ui/vault/secrets/ci/show/ops-gitlab-net/gitlab-com/runbooks/alertmanager), which [alertmanager.jsonnet](../../alertmanager/alertmanager.jsonnet) uses.
+1. Update the json array `snitchChannels` in the [`alertmanager` Vault secret](https://vault.gitlab.net/ui/vault/secrets/ci/show/ops-gitlab-net/gitlab-com/runbooks/ops/alertmanager), which [alertmanager.jsonnet](../../alertmanager/alertmanager.jsonnet) uses.
