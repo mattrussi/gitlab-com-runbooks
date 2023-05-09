@@ -28,7 +28,7 @@ When a user requests access to a role, the Teleport server will post a message i
 The web Access Request lists are:
 
 - Staging - <https://staging.teleport.gitlab.net/web/requests>
-- Production - <https://teleport.gprd.gitlab.net:3080/web/requests>
+- Production - <https://production.teleport.gitlab.net/web/requests>
 
 The Slack notifications are only there to provide timely notification of new requests. It is fine to approve a request which you are notified of through other reasonable means (for example verbally during an incident). Just go to one of the lists above, find the request you'd like to approve, and click `View`.  This will take you to the same review and approval page as the Slack link.
 
@@ -57,10 +57,10 @@ If you see the following errors:
 It's likely that you need to log in or re-authenticate with:
 
 ```shell
-tsh login --proxy=teleport.gstg.gitlab.net
+tsh login --proxy=staging.teleport.gitlab.net
 ```
 
-> Note: All examples are for the `gstg` environment.  Replace `gstg` with `gprd` for production
+> Note: All examples are for the `staging` environment.  Replace `staging` with `production` for production
 
 ## User issues
 
