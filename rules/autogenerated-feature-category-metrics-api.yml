@@ -61,34 +61,6 @@ groups:
       sum by (env,environment,stage,feature_category) (
         sli_aggregations:gitlab_sli_graphql_query_apdex_total_rate5m{job="gitlab-rails",type="api"}
       )
-  - record: gitlab:component:feature_category:execution:ops:rate_5m
-    labels:
-      component: nginx_ingress
-      feature_category: not_owned
-      tier: sv
-      type: api
-    expr: |
-      sum by (env,environment,stage) (
-        rate(nginx_ingress_controller_requests:labeled{type="api"}[5m])
-      )
-  - record: gitlab:component:feature_category:execution:error:rate_5m
-    labels:
-      component: nginx_ingress
-      feature_category: not_owned
-      tier: sv
-      type: api
-    expr: |
-      (
-        sum by (env,environment,stage) (
-          rate(nginx_ingress_controller_requests:labeled{status=~"^5.*",type="api"}[5m])
-        )
-      )
-      or
-      (
-        0 * group by(env,environment,stage) (
-          gitlab:component:feature_category:execution:ops:rate_5m{component="nginx_ingress",feature_category="not_owned",tier="sv",type="api"}
-        )
-      )
   - record: gitlab:component:feature_category:execution:apdex:success:rate_5m
     labels:
       component: rails_request
@@ -131,62 +103,6 @@ groups:
       (
         0 * group by(env,environment,stage,feature_category) (
           gitlab:component:feature_category:execution:ops:rate_5m{component="rails_request",tier="sv",type="api"}
-        )
-      )
-  - record: gitlab:component:feature_category:execution:apdex:success:rate_5m
-    labels:
-      component: workhorse
-      feature_category: not_owned
-      tier: sv
-      type: api
-    expr: |
-      (
-        sum by (env,environment,stage) (
-          rate(gitlab_workhorse_http_request_duration_seconds_bucket{job=~"gitlab-workhorse-api|gitlab-workhorse", type="api", route!="\\A/api/v4/jobs/request\\z", route!="^/api/v4/jobs/request\\z", route!="^/-/health$", route!="^/-/(readiness|liveness)$", le="1"}[5m])
-        )
-        +
-        sum by (env,environment,stage) (
-          rate(gitlab_workhorse_http_request_duration_seconds_bucket{job=~"gitlab-workhorse-api|gitlab-workhorse", type="api", route!="\\A/api/v4/jobs/request\\z", route!="^/api/v4/jobs/request\\z", route!="^/-/health$", route!="^/-/(readiness|liveness)$", le="10"}[5m])
-        )
-      )
-      /
-      2
-  - record: gitlab:component:feature_category:execution:apdex:weight:score_5m
-    labels:
-      component: workhorse
-      feature_category: not_owned
-      tier: sv
-      type: api
-    expr: |
-      sum by (env,environment,stage) (
-        rate(gitlab_workhorse_http_request_duration_seconds_bucket{job=~"gitlab-workhorse-api|gitlab-workhorse", type="api", route!="\\A/api/v4/jobs/request\\z", route!="^/api/v4/jobs/request\\z", route!="^/-/health$", route!="^/-/(readiness|liveness)$", le="+Inf"}[5m])
-      )
-  - record: gitlab:component:feature_category:execution:ops:rate_5m
-    labels:
-      component: workhorse
-      feature_category: not_owned
-      tier: sv
-      type: api
-    expr: |
-      sum by (env,environment,stage) (
-        rate(gitlab_workhorse_http_requests_total{job=~"gitlab-workhorse-api|gitlab-workhorse", type="api"}[5m])
-      )
-  - record: gitlab:component:feature_category:execution:error:rate_5m
-    labels:
-      component: workhorse
-      feature_category: not_owned
-      tier: sv
-      type: api
-    expr: |
-      (
-        sum by (env,environment,stage) (
-          rate(gitlab_workhorse_http_requests_total{job=~"gitlab-workhorse-api|gitlab-workhorse", type="api", code=~"^5.*", route!="^/-/health$", route!="^/-/(readiness|liveness)$"}[5m])
-        )
-      )
-      or
-      (
-        0 * group by(env,environment,stage) (
-          gitlab:component:feature_category:execution:ops:rate_5m{component="workhorse",feature_category="not_owned",tier="sv",type="api"}
         )
       )
 - name: 'Prometheus Intermediate Metrics per feature: api - burn-rate 30m'
@@ -249,34 +165,6 @@ groups:
       sum by (env,environment,stage,feature_category) (
         sli_aggregations:gitlab_sli_graphql_query_apdex_total_rate30m{job="gitlab-rails",type="api"}
       )
-  - record: gitlab:component:feature_category:execution:ops:rate_30m
-    labels:
-      component: nginx_ingress
-      feature_category: not_owned
-      tier: sv
-      type: api
-    expr: |
-      sum by (env,environment,stage) (
-        rate(nginx_ingress_controller_requests:labeled{type="api"}[30m])
-      )
-  - record: gitlab:component:feature_category:execution:error:rate_30m
-    labels:
-      component: nginx_ingress
-      feature_category: not_owned
-      tier: sv
-      type: api
-    expr: |
-      (
-        sum by (env,environment,stage) (
-          rate(nginx_ingress_controller_requests:labeled{status=~"^5.*",type="api"}[30m])
-        )
-      )
-      or
-      (
-        0 * group by(env,environment,stage) (
-          gitlab:component:feature_category:execution:ops:rate_30m{component="nginx_ingress",feature_category="not_owned",tier="sv",type="api"}
-        )
-      )
   - record: gitlab:component:feature_category:execution:apdex:success:rate_30m
     labels:
       component: rails_request
@@ -319,62 +207,6 @@ groups:
       (
         0 * group by(env,environment,stage,feature_category) (
           gitlab:component:feature_category:execution:ops:rate_30m{component="rails_request",tier="sv",type="api"}
-        )
-      )
-  - record: gitlab:component:feature_category:execution:apdex:success:rate_30m
-    labels:
-      component: workhorse
-      feature_category: not_owned
-      tier: sv
-      type: api
-    expr: |
-      (
-        sum by (env,environment,stage) (
-          rate(gitlab_workhorse_http_request_duration_seconds_bucket{job=~"gitlab-workhorse-api|gitlab-workhorse", type="api", route!="\\A/api/v4/jobs/request\\z", route!="^/api/v4/jobs/request\\z", route!="^/-/health$", route!="^/-/(readiness|liveness)$", le="1"}[30m])
-        )
-        +
-        sum by (env,environment,stage) (
-          rate(gitlab_workhorse_http_request_duration_seconds_bucket{job=~"gitlab-workhorse-api|gitlab-workhorse", type="api", route!="\\A/api/v4/jobs/request\\z", route!="^/api/v4/jobs/request\\z", route!="^/-/health$", route!="^/-/(readiness|liveness)$", le="10"}[30m])
-        )
-      )
-      /
-      2
-  - record: gitlab:component:feature_category:execution:apdex:weight:score_30m
-    labels:
-      component: workhorse
-      feature_category: not_owned
-      tier: sv
-      type: api
-    expr: |
-      sum by (env,environment,stage) (
-        rate(gitlab_workhorse_http_request_duration_seconds_bucket{job=~"gitlab-workhorse-api|gitlab-workhorse", type="api", route!="\\A/api/v4/jobs/request\\z", route!="^/api/v4/jobs/request\\z", route!="^/-/health$", route!="^/-/(readiness|liveness)$", le="+Inf"}[30m])
-      )
-  - record: gitlab:component:feature_category:execution:ops:rate_30m
-    labels:
-      component: workhorse
-      feature_category: not_owned
-      tier: sv
-      type: api
-    expr: |
-      sum by (env,environment,stage) (
-        rate(gitlab_workhorse_http_requests_total{job=~"gitlab-workhorse-api|gitlab-workhorse", type="api"}[30m])
-      )
-  - record: gitlab:component:feature_category:execution:error:rate_30m
-    labels:
-      component: workhorse
-      feature_category: not_owned
-      tier: sv
-      type: api
-    expr: |
-      (
-        sum by (env,environment,stage) (
-          rate(gitlab_workhorse_http_requests_total{job=~"gitlab-workhorse-api|gitlab-workhorse", type="api", code=~"^5.*", route!="^/-/health$", route!="^/-/(readiness|liveness)$"}[30m])
-        )
-      )
-      or
-      (
-        0 * group by(env,environment,stage) (
-          gitlab:component:feature_category:execution:ops:rate_30m{component="workhorse",feature_category="not_owned",tier="sv",type="api"}
         )
       )
 - name: 'Prometheus Intermediate Metrics per feature: api - burn-rate 1h'
@@ -437,34 +269,6 @@ groups:
       sum by (env,environment,stage,feature_category) (
         sli_aggregations:gitlab_sli_graphql_query_apdex_total_rate1h{job="gitlab-rails",type="api"}
       )
-  - record: gitlab:component:feature_category:execution:ops:rate_1h
-    labels:
-      component: nginx_ingress
-      feature_category: not_owned
-      tier: sv
-      type: api
-    expr: |
-      sum by (env,environment,stage) (
-        rate(nginx_ingress_controller_requests:labeled{type="api"}[1h])
-      )
-  - record: gitlab:component:feature_category:execution:error:rate_1h
-    labels:
-      component: nginx_ingress
-      feature_category: not_owned
-      tier: sv
-      type: api
-    expr: |
-      (
-        sum by (env,environment,stage) (
-          rate(nginx_ingress_controller_requests:labeled{status=~"^5.*",type="api"}[1h])
-        )
-      )
-      or
-      (
-        0 * group by(env,environment,stage) (
-          gitlab:component:feature_category:execution:ops:rate_1h{component="nginx_ingress",feature_category="not_owned",tier="sv",type="api"}
-        )
-      )
   - record: gitlab:component:feature_category:execution:apdex:success:rate_1h
     labels:
       component: rails_request
@@ -507,61 +311,5 @@ groups:
       (
         0 * group by(env,environment,stage,feature_category) (
           gitlab:component:feature_category:execution:ops:rate_1h{component="rails_request",tier="sv",type="api"}
-        )
-      )
-  - record: gitlab:component:feature_category:execution:apdex:success:rate_1h
-    labels:
-      component: workhorse
-      feature_category: not_owned
-      tier: sv
-      type: api
-    expr: |
-      (
-        sum by (env,environment,stage) (
-          rate(gitlab_workhorse_http_request_duration_seconds_bucket{job=~"gitlab-workhorse-api|gitlab-workhorse", type="api", route!="\\A/api/v4/jobs/request\\z", route!="^/api/v4/jobs/request\\z", route!="^/-/health$", route!="^/-/(readiness|liveness)$", le="1"}[1h])
-        )
-        +
-        sum by (env,environment,stage) (
-          rate(gitlab_workhorse_http_request_duration_seconds_bucket{job=~"gitlab-workhorse-api|gitlab-workhorse", type="api", route!="\\A/api/v4/jobs/request\\z", route!="^/api/v4/jobs/request\\z", route!="^/-/health$", route!="^/-/(readiness|liveness)$", le="10"}[1h])
-        )
-      )
-      /
-      2
-  - record: gitlab:component:feature_category:execution:apdex:weight:score_1h
-    labels:
-      component: workhorse
-      feature_category: not_owned
-      tier: sv
-      type: api
-    expr: |
-      sum by (env,environment,stage) (
-        rate(gitlab_workhorse_http_request_duration_seconds_bucket{job=~"gitlab-workhorse-api|gitlab-workhorse", type="api", route!="\\A/api/v4/jobs/request\\z", route!="^/api/v4/jobs/request\\z", route!="^/-/health$", route!="^/-/(readiness|liveness)$", le="+Inf"}[1h])
-      )
-  - record: gitlab:component:feature_category:execution:ops:rate_1h
-    labels:
-      component: workhorse
-      feature_category: not_owned
-      tier: sv
-      type: api
-    expr: |
-      sum by (env,environment,stage) (
-        rate(gitlab_workhorse_http_requests_total{job=~"gitlab-workhorse-api|gitlab-workhorse", type="api"}[1h])
-      )
-  - record: gitlab:component:feature_category:execution:error:rate_1h
-    labels:
-      component: workhorse
-      feature_category: not_owned
-      tier: sv
-      type: api
-    expr: |
-      (
-        sum by (env,environment,stage) (
-          rate(gitlab_workhorse_http_requests_total{job=~"gitlab-workhorse-api|gitlab-workhorse", type="api", code=~"^5.*", route!="^/-/health$", route!="^/-/(readiness|liveness)$"}[1h])
-        )
-      )
-      or
-      (
-        0 * group by(env,environment,stage) (
-          gitlab:component:feature_category:execution:ops:rate_1h{component="workhorse",feature_category="not_owned",tier="sv",type="api"}
         )
       )

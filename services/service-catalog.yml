@@ -1559,13 +1559,38 @@ services:
     owner: reliability_general
     technical:
       project:
-        - https://gitlab.com/gitlab-com/version-gitlab-com
+        - https://gitlab.com/gitlab-org/gitlab-services/version.gitlab.com
       documents:
         design:
         architecture:
         readiness_review:
         service:
-          - https://gitlab.com/gitlab-com/version-gitlab-com/blob/master/README.md
+          - https://gitlab.com/gitlab-org/gitlab-services/version.gitlab.com/-/blob/main/README.md
+        security:
+      dependencies:
+      logging:
+        - name: production.log
+          permalink: /var/log/version/
+    observability:
+      monitors:
+        grafana_folder:
+        primary_grafana_dashboard:
+        sentry_slug:
+
+  - name: design
+    tier: sv
+    friendly_name: design.gitlab.com
+    label: Design
+    owner: reliability_general
+    technical:
+      project:
+        - https://gitlab.com/gitlab-org/gitlab-services/design.gitlab.com
+      documents:
+        design:
+        architecture:
+        readiness_review:
+        service:
+          - https://gitlab.com/gitlab-org/gitlab-services/design.gitlab.com/blob/master/README.md
         security:
       dependencies:
       logging:

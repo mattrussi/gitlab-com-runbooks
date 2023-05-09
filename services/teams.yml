@@ -225,12 +225,8 @@ teams:
   product_stage_group: dedicated
   ignored_components:
   - graphql_query
-- name: import
-  product_stage_group: import
-  ignored_components:
-  - graphql_query
-- name: integrations
-  product_stage_group: integrations
+- name: import_and_integrate
+  product_stage_group: import_and_integrate
   ignored_components:
   - graphql_query
 - name: provision

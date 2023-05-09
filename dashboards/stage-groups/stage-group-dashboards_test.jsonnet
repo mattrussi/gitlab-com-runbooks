@@ -188,7 +188,7 @@ test.suite({
       key: 'project_management',
       name: 'Project Management',
       stage: 'plan',
-      feature_categories: ['team_planning', 'planning_analytics'],
+      feature_categories: ['team_planning'],
     })),
     expect: [
       'Error Budget (From ${__from:date:YYYY-MM-DD HHːmm} to ${__to:date:YYYY-MM-DD HHːmm})',
@@ -234,7 +234,7 @@ test.suite({
         key: 'project_management',
         name: 'Project Management',
         stage: 'plan',
-        feature_categories: ['team_planning', 'planning_analytics'],
+        feature_categories: ['team_planning'],
       }).links
     ),
     expect: ['Group Dashboards', 'API Detail', 'Web Detail', 'Git Detail'],
