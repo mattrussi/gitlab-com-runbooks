@@ -44,9 +44,9 @@ The access will be temporary (`12h` max) and can be approved by any SRE or Relia
 There are two Teleport cluster/servers:
 
 - <https://staging.teleport.gitlab.net/> for staging
-- <https://teleport.gprd.gitlab.net:3080/> for production (old endpoint pending migration)
+- <https://production.teleport.gitlab.net/> for production
 
-> Note: All examples are for the **staging environment** only! This is to limit the consequences of unintended copy/paste errors.  To connect to the production environment, change the `--proxy` flag, e.g. `tsh login --proxy=teleport.gprd.gitlab.net:3080`.
+> Note: All examples are for the **staging environment** only! This is to limit the consequences of unintended copy/paste errors.  To connect to the production environment, change the `--proxy` flag, e.g. `tsh login --proxy=production.teleport.gitlab.net`.
 
 Authenticate to the Teleport proxy/server. This command opens Okta in a browser window:
 
@@ -60,17 +60,21 @@ If you need to request a role which includes elevated permissions for the Databa
 
 #### For `main` and `CI` databases
 
-- `database-ro` (gprd)
-- `database` (gprd)
-- `database-ro-gstg` (gstg)
-- `database-rw-gstg` (gstg)
+- Staging
+  - `database-ro-gstg`
+  - `database-rw-gstg`
+- Production
+  - `database-ro-gprd`
+  - `database-rw-gprd`
 
 #### For `registry` database
 
-- `registry-database-ro` (gprd)
-- `registry-database` (gprd)
-- `database-registry-ro-gstg` (gstg)
-- `database-registry-rw-gstg` (gstg)
+- Staging
+  - `database-registry-ro-gstg`
+  - `database-registry-rw-gstg`
+- Production
+  - `database-registry-ro-gprd`
+  - `database-registry-rw-gprd`
 
 #### For all databases to request superuser priveleges (DBREs only)
 

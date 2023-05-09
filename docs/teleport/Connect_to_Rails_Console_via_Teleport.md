@@ -21,8 +21,8 @@ There are two ways to use to Teleport to connect to a Rails console:
 1. Installing [tsh](https://goteleport.com/teleport/docs/cli-docs/#tsh), the Teleport CLI client. This is the recommended way.
 1. Via the Teleport HTTP portal:
 
-- [https://staging.teleport.gitlab.net/]() in staging
-- [https://teleport.gprd.gitlab.net:3080/]() in production (old endpoint pending migration)
+- <https://staging.teleport.gitlab.net/> for staging
+- <https://production.teleport.gitlab.net/> for production
 
 ### Installing tsh
 
@@ -46,23 +46,18 @@ tsh ssh rails-ro@console-ro-01-sv-gstg
 
 ##### Production
 
-**Note:**
-
-- The production instance is in the process of being migrated, newer versions of `tsh` (v12.x and above) seems to be probing for `Device Trust` configs on the teleport server side, resulting in errors like `ERROR: failed to get cluster details`.
-  - To get around this issue, please downgrade version of teleport client to v11.2.3. For further details, please see [this incident issue](https://gitlab.com/gitlab-com/gl-infra/production/-/issues/8395).
-
 1. Authenticate to the Teleport proxy/server. This command opens Okta in a browser window:
 
 ```shell
-tsh login --proxy=teleport.gprd.gitlab.net
+tsh login --proxy=production.teleport.gitlab.net
 ```
 
 2. Request approval for the rails console role that you need
 
-Currently only `rails-ro` is implemented, and is only required in `gprd`
+Currently only `rails-console-ro-gprd` is implemented, and is only required in `gprd`
 
 ```shell
-tsh login --proxy=teleport.gprd.gitlab.net --request-roles=rails-ro --request-reason="Issue-URL or explanation"
+tsh login --proxy=production.teleport.gitlab.net --request-roles=rails-console-ro-gprd --request-reason="Issue-URL or explanation"
 ```
 
 This command will pause while it waits for the approver to approve the request.  It may appear to hang, but it is waiting for someone to approve it.  The command will return as soon as the request is approved, denied, or times out.
@@ -72,7 +67,7 @@ If the command is stopped or times out, but the request is approved, you don't n
 3. Connect to the Rails Console
 
 ```shell
-tsh login --proxy=teleport.gprd.gitlab.net --request-id=<request-id>
+tsh login --proxy=production.teleport.gitlab.net --request-id=<request-id>
 ```
 
 The request ID is shown in the output of `tsh login` when making the initial request, and can also be found attached to your request notification in `#infrastructure-lounge`.
