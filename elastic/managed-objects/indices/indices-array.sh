@@ -16,6 +16,7 @@ export indices=(
   jaeger
   kas
   mailroom
+  mlops
   monitoring
   pages
   postgres
