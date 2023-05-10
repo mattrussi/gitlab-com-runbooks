@@ -47,7 +47,7 @@ we filter for the 10 statements that consumed more time during the peak time.
 The PROMQL query is :
 
 ```
-topk(10, 
+topk(10,
   sum by (queryid) (
     rate(pg_stat_statements_seconds_total{env="gprd", monitor="db", type="patroni"}[30s]) and on (instance) pg_replication_is_replica == 0
   )
@@ -73,7 +73,7 @@ Click on the button:
 we need to adapt our query to:
 
 ```
-topk(10, 
+topk(10,
   sum by (queryid) (
     rate(pg_stat_statements_seconds_total{env="gprd", monitor="db", type="patroni"}[15m]) and on (instance) pg_replication_is_replica == 0
   )
@@ -163,7 +163,7 @@ in the field query we have a SQL comment called marginalia: /*application:sideki
  We follow the same process as for the total time, just considering a different PROMQL query:
 
  ```
-  topk(10, 
+  topk(10,
     sum by (queryid) (
       rate(pg_stat_statements_calls{env="gprd", monitor="db", type="patroni"}[30s]) and on (instance) pg_replication_is_replica == 0
     )
