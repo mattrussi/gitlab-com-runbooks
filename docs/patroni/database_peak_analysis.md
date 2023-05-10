@@ -54,7 +54,7 @@ topk(10,
 )
 ```
 
-Click the link below: https://thanos.gitlab.net/graph?g0.expr=topk(10%2C%20%0A%20%20sum%20by%20(queryid)%20(%0A%20%20%20%20rate(pg_stat_statements_seconds_total%7Benv%3D%22gprd%22%2C%20monitor%3D%22db%22%2C%20type%3D%22patroni%22%7D%5B30s%5D)%20and%20on%20(instance)%20pg_replication_is_replica%20%3D%3D%200%0A%20%20)%0A)&g0.tab=0&g0.stacked=0&g0.range_input=15m&g0.max_source_resolution=0s&g0.deduplicate=1&g0.partial_response=0&g0.store_matches=%5B%5D&g0.end_input=2023-05-09%2015%3A10%3A00&g0.moment_input=2023-05-09%2015%3A10%3A00
+Click the link below: <https://thanos.gitlab.net/graph?g0.expr=topk(10%2C%20%0A%20%20sum%20by%20(queryid)%20(%0A%20%20%20%20rate(pg_stat_statements_seconds_total%7Benv%3D%22gprd%22%2C%20monitor%3D%22db%22%2C%20type%3D%22patroni%22%7D%5B30s%5D)%20and%20on%20(instance)%20pg_replication_is_replica%20%3D%3D%200%0A%20%20)%0A)&g0.tab=0&g0.stacked=0&g0.range_input=15m&g0.max_source_resolution=0s&g0.deduplicate=1&g0.partial_response=0&g0.store_matches=%5B%5D&g0.end_input=2023-05-09%2015%3A10%3A00&g0.moment_input=2023-05-09%2015%3A10%3A00>
 
 In the fields of the graph please choose the interval of 15 minutes and few minutes after the peak, the search will be 15 minutes recursive, in our example, the value is: 2021-06-10 19:25
 
