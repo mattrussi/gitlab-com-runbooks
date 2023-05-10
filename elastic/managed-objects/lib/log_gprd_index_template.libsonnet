@@ -8,6 +8,7 @@ local mappings = {
   'gke-systemd': import './index_mappings/gke-systemd.jsonnet',
   gke: import './index_mappings/gke.jsonnet',
   mailroom: import './index_mappings/mailroom.jsonnet',
+  mlops: import './index_mappings/mlops.jsonnet',
   monitoring: import './index_mappings/monitoring.jsonnet',
   pages: import './index_mappings/pages.jsonnet',
   postgres: import './index_mappings/postgres.jsonnet',

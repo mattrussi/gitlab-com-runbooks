@@ -5,6 +5,7 @@ local mappings = {
   gke: import './index_mappings/gke.jsonnet',
   kas: import './index_mappings/kas.jsonnet',
   mailroom: import './index_mappings/mailroom.jsonnet',
+  mlops: import './index_mappings/mlops.jsonnet',
   monitoring: import './index_mappings/monitoring.jsonnet',
   pages: import './index_mappings/pages.jsonnet',
   postgres: import './index_mappings/postgres.jsonnet',
