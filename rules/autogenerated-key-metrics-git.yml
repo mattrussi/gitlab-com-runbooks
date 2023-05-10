@@ -12,7 +12,7 @@ groups:
       type: git
     expr: |
       sum by (environment) (
-        sum by (environment) (rate(haproxy_backend_current_sessions{backend=~"ssh|altssh"}[5m]))
+        sum by (environment) (haproxy_backend_current_session_rate{backend=~"ssh|altssh"})
       )
   - record: gitlab_component_apdex:success:rate
     labels:
@@ -301,7 +301,7 @@ groups:
       type: git
     expr: |
       sum by (environment) (
-        sum by (environment) (rate(haproxy_backend_current_sessions{backend=~"ssh|altssh"}[5m]))
+        sum by (environment) (haproxy_backend_current_session_rate{backend=~"ssh|altssh"})
       )
   - record: gitlab_component_apdex:success:rate_5m
     labels:
@@ -590,7 +590,7 @@ groups:
       type: git
     expr: |
       sum by (environment) (
-        sum by (environment) (rate(haproxy_backend_current_sessions{backend=~"ssh|altssh"}[5m]))
+        sum by (environment) (haproxy_backend_current_session_rate{backend=~"ssh|altssh"})
       )
   - record: gitlab_component_apdex:success:rate_30m
     labels:
@@ -879,7 +879,7 @@ groups:
       type: git
     expr: |
       sum by (environment) (
-        sum by (environment) (rate(haproxy_backend_current_sessions{backend=~"ssh|altssh"}[5m]))
+        sum by (environment) (haproxy_backend_current_session_rate{backend=~"ssh|altssh"})
       )
   - record: gitlab_component_apdex:success:rate_1h
     labels:
@@ -1168,7 +1168,7 @@ groups:
       type: git
     expr: |
       sum by (environment) (
-        sum by (environment) (rate(haproxy_backend_current_sessions{backend=~"ssh|altssh"}[5m]))
+        sum by (environment) (haproxy_backend_current_session_rate{backend=~"ssh|altssh"})
       )
   - record: gitlab_component_apdex:success:rate_6h
     labels:
