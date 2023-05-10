@@ -239,7 +239,7 @@ metricsCatalog.serviceDefinition({
       // Unfortunately we don't have a better way of measuring this at present,
       // so we rely on HAProxy metrics
       requestRate: customRateQuery(|||
-        sum by (environment) (rate(haproxy_backend_current_sessions{backend=~"ssh|altssh"}[5m]))
+        sum by (environment) (haproxy_backend_current_session_rate{backend=~"ssh|altssh"})
       |||),
 
       significantLabels: [],

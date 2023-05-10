@@ -22,7 +22,7 @@ groups:
       grafana_variables: environment,stage
       promql_template_1: |
         sum by (env,environment,tier,stage) (
-          sum by (environment) (rate(haproxy_backend_current_sessions{backend=~"ssh|altssh"}[5m]))
+          sum by (environment) (haproxy_backend_current_session_rate{backend=~"ssh|altssh"})
         )
       runbook: docs/git/README.md
     labels:
@@ -59,7 +59,7 @@ groups:
       grafana_variables: environment,stage
       promql_template_1: |
         sum by (env,environment,tier,stage) (
-          sum by (environment) (rate(haproxy_backend_current_sessions{backend=~"ssh|altssh"}[5m]))
+          sum by (environment) (haproxy_backend_current_session_rate{backend=~"ssh|altssh"})
         )
       runbook: docs/git/README.md
     labels:
@@ -96,7 +96,7 @@ groups:
       grafana_variables: environment,stage
       promql_template_1: |
         sum by (env,environment,tier,stage,region) (
-          sum by (environment) (rate(haproxy_backend_current_sessions{backend=~"ssh|altssh"}[5m]))
+          sum by (environment) (haproxy_backend_current_session_rate{backend=~"ssh|altssh"})
         )
       runbook: docs/git/README.md
     labels:
@@ -135,7 +135,7 @@ groups:
       grafana_variables: environment,stage
       promql_template_1: |
         sum by (env,environment,tier,stage,region) (
-          sum by (environment) (rate(haproxy_backend_current_sessions{backend=~"ssh|altssh"}[5m]))
+          sum by (environment) (haproxy_backend_current_session_rate{backend=~"ssh|altssh"})
         )
       runbook: docs/git/README.md
     labels:
