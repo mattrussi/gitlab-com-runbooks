@@ -124,10 +124,6 @@ variables:
         GKE_CLUSTER: ops-gitlab-gke
         GOOGLE_PROJECT: gitlab-ops
         LOCATION: us-east1
-      - DEPLOY_ENV: ops-central
-        GKE_CLUSTER: ops-central
-        GOOGLE_PROJECT: gitlab-ops
-        LOCATION: us-central1
       - DEPLOY_ENV: stgsub
         GKE_CLUSTER: stgsub-customers-gke
         GOOGLE_PROJECT: gitlab-subscriptions-staging
