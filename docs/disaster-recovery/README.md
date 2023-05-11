@@ -70,16 +70,21 @@ To recover from a zonal outage, configure a new replica in Terraform with a zone
 The latest snapshot will be used automatically when the machine is provisioned.
 As of `2022-12-01`, it is expected that it will take approximately [2 hours for the new replica to catch up to the primary](https://gitlab.com/gitlab-com/gl-infra/reliability/-/issues/16792) using a disk snapshot that is 1 hour old.
 
-To see how old the latest snapshots are for Postgres use the [`list-disk-snapshots`](../bin/list-disk-snapshots) helper script:
+To see how old the latest snapshots are for Postgres use the `glsh snapshots list` helper script:
 
 ```
 
-$ glsh list-disk-snapshots -e gprd patroni
-Searching for snapshots filter=patroni env=gprd zone=any project=gitlab-production
--
-2023-01-23:06:00 (-4h56m)  patroni-ci-2004-03-db-gprd-data  https://www.googleapis.com/compute/v1/projects/gitlab-production/global/snapshots/me2aeuphifuv
-2023-01-23:06:00 (-4h55m)  patroni-main-2004-10-db-gprd-data  https://www.googleapis.com/compute/v1/projects/gitlab-production/global/snapshots/b7za5ub8avb2
-2023-01-23:06:00 (-4h56m)  patroni-v12-registry-03-db-gprd-data  https://www.googleapis.com/compute/v1/projects/gitlab-production/global/snapshots/gebwcqqc2or4
+$ glsh snapshots list -e gprd -z us-east1-d -t 'file'
+Shows the most recent snapshot for each disk that matches the filter looking back 1 day, and provides the self link.
+
+Fetching snapshot data, opts: env=gprd days=1 bucket_duration=hour zone=us-east1-d terraform=true filter=file..
+
+╭─────────────────────────────────┬──────────────────────┬────────┬──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────╮
+│ disk                            │ timestamp            │ delta  │ selfLink                                                                                                                                 │
+╞═════════════════════════════════╪══════════════════════╪════════╪══════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════╡
+│ file-23-stor-gprd-data          │ 2023-04-06T14:02:53Z │ 01h60m │ https://www.googleapis.com/compute/v1/projects/gitlab-production/global/snapshots/file-23-stor-gprd-d-us-east1-d-20230406140252-crc9hy33 │
+│ file-26-stor-gprd-data          │ 2023-04-06T13:04:27Z │ 02h60m │ https://www.googleapis.com/compute/v1/projects/gitlab-production/global/snapshots/file-26-stor-gprd-d-us-east1-d-20230406130426-pt2f6fwl │
+...
 
 ```
 
@@ -97,11 +102,11 @@ Snapshots are used to minimize data loss which will be anywhere from minutes to 
 It will be necessary to spread the new Gitaly servers across all zones that are available.
 For example, if there is a failure in `us-east1-b`, set `zones = ['us-east1-c', 'us-east1-d']`.
 
-The `list-disk-snaphots` helper script can be used to aid setting the latest snapshot for the failed Gitaly nodes.
+The `glsh snapshots list` helper script can be used to aid setting the latest snapshot for the failed Gitaly nodes.
 For example, for a `us-east1-d` failure this will find the latest snapshots for all Gitaly nodes in that zone:
 
 ```
-$ glsh list-disk-snapshots -e gprd -z us-east1-d -t 'file-\d+-stor'
+$ glsh snapshots list -e gprd -z us-east1-d -t 'file'
 Searching for snapshots filter=file-\d+-stor env=gprd zone=us-east1-d project=gitlab-production
 -
 2023-01-23:08:37 (-2h37m)  file-23-stor-gprd-data  https://www.googleapis.com/compute/v1/projects/gitlab-production/global/snapshots/file-23-stor-gprd-d-us-east1-d-20230123083755-xdbrvfee
