@@ -112,11 +112,11 @@ groups:
     expr: |
       (
         sum by (environment,stage) (
-          rate(gitlab_workhorse_http_request_duration_seconds_bucket{job="gitlab-workhorse",le="1",route!="^/-/health$",route!="^/-/(readiness|liveness)$",route!="^/api/",type="websockets"}[1m])
+          rate(gitlab_workhorse_http_request_duration_seconds_bucket{job="gitlab-workhorse",le="300",route!="^/-/health$",route!="^/-/(readiness|liveness)$",route!="^/api/",type="websockets"}[1m])
         )
         +
         sum by (environment,stage) (
-          rate(gitlab_workhorse_http_request_duration_seconds_bucket{job="gitlab-workhorse",le="10",route!="^/-/health$",route!="^/-/(readiness|liveness)$",route!="^/api/",type="websockets"}[1m])
+          rate(gitlab_workhorse_http_request_duration_seconds_bucket{job="gitlab-workhorse",le="450",route!="^/-/health$",route!="^/-/(readiness|liveness)$",route!="^/api/",type="websockets"}[1m])
         )
       )
       /
@@ -267,11 +267,11 @@ groups:
     expr: |
       (
         sum by (environment,stage) (
-          rate(gitlab_workhorse_http_request_duration_seconds_bucket{job="gitlab-workhorse",le="1",route!="^/-/health$",route!="^/-/(readiness|liveness)$",route!="^/api/",type="websockets"}[5m])
+          rate(gitlab_workhorse_http_request_duration_seconds_bucket{job="gitlab-workhorse",le="300",route!="^/-/health$",route!="^/-/(readiness|liveness)$",route!="^/api/",type="websockets"}[5m])
         )
         +
         sum by (environment,stage) (
-          rate(gitlab_workhorse_http_request_duration_seconds_bucket{job="gitlab-workhorse",le="10",route!="^/-/health$",route!="^/-/(readiness|liveness)$",route!="^/api/",type="websockets"}[5m])
+          rate(gitlab_workhorse_http_request_duration_seconds_bucket{job="gitlab-workhorse",le="450",route!="^/-/health$",route!="^/-/(readiness|liveness)$",route!="^/api/",type="websockets"}[5m])
         )
       )
       /
@@ -422,11 +422,11 @@ groups:
     expr: |
       (
         sum by (environment,stage) (
-          rate(gitlab_workhorse_http_request_duration_seconds_bucket{job="gitlab-workhorse",le="1",route!="^/-/health$",route!="^/-/(readiness|liveness)$",route!="^/api/",type="websockets"}[30m])
+          rate(gitlab_workhorse_http_request_duration_seconds_bucket{job="gitlab-workhorse",le="300",route!="^/-/health$",route!="^/-/(readiness|liveness)$",route!="^/api/",type="websockets"}[30m])
         )
         +
         sum by (environment,stage) (
-          rate(gitlab_workhorse_http_request_duration_seconds_bucket{job="gitlab-workhorse",le="10",route!="^/-/health$",route!="^/-/(readiness|liveness)$",route!="^/api/",type="websockets"}[30m])
+          rate(gitlab_workhorse_http_request_duration_seconds_bucket{job="gitlab-workhorse",le="450",route!="^/-/health$",route!="^/-/(readiness|liveness)$",route!="^/api/",type="websockets"}[30m])
         )
       )
       /
@@ -577,11 +577,11 @@ groups:
     expr: |
       (
         sum by (environment,stage) (
-          rate(gitlab_workhorse_http_request_duration_seconds_bucket{job="gitlab-workhorse",le="1",route!="^/-/health$",route!="^/-/(readiness|liveness)$",route!="^/api/",type="websockets"}[1h])
+          rate(gitlab_workhorse_http_request_duration_seconds_bucket{job="gitlab-workhorse",le="300",route!="^/-/health$",route!="^/-/(readiness|liveness)$",route!="^/api/",type="websockets"}[1h])
         )
         +
         sum by (environment,stage) (
-          rate(gitlab_workhorse_http_request_duration_seconds_bucket{job="gitlab-workhorse",le="10",route!="^/-/health$",route!="^/-/(readiness|liveness)$",route!="^/api/",type="websockets"}[1h])
+          rate(gitlab_workhorse_http_request_duration_seconds_bucket{job="gitlab-workhorse",le="450",route!="^/-/health$",route!="^/-/(readiness|liveness)$",route!="^/api/",type="websockets"}[1h])
         )
       )
       /
@@ -732,11 +732,11 @@ groups:
     expr: |
       (
         sum by (environment,stage) (
-          rate(gitlab_workhorse_http_request_duration_seconds_bucket{job="gitlab-workhorse",le="1",route!="^/-/health$",route!="^/-/(readiness|liveness)$",route!="^/api/",type="websockets"}[6h])
+          rate(gitlab_workhorse_http_request_duration_seconds_bucket{job="gitlab-workhorse",le="300",route!="^/-/health$",route!="^/-/(readiness|liveness)$",route!="^/api/",type="websockets"}[6h])
         )
         +
         sum by (environment,stage) (
-          rate(gitlab_workhorse_http_request_duration_seconds_bucket{job="gitlab-workhorse",le="10",route!="^/-/health$",route!="^/-/(readiness|liveness)$",route!="^/api/",type="websockets"}[6h])
+          rate(gitlab_workhorse_http_request_duration_seconds_bucket{job="gitlab-workhorse",le="450",route!="^/-/health$",route!="^/-/(readiness|liveness)$",route!="^/api/",type="websockets"}[6h])
         )
       )
       /
