@@ -195,3 +195,13 @@ tsh login --proxy=staging.teleport.gitlab.net --request-roles=database-ro-gstg -
 ```
 
 Once approved, the server will replace your loally stored certificate with an updated one, and your newly valid roles will appear in the `tsh status` output.
+
+## Troubleshooting
+
+### Debug
+
+If you have issues connecting, try using the `--debug` flag to display more verbose information
+
+### `psql: error: sslmode value "verify-full" invalid when SSL support is not compiled in`
+
+`tsh db` is a wrapper over `psql` and this likely means that your installed psql version was not configured with OpenSSL options. You can consider taking steps like [this blog post](https://dev.to/jbranchaud/reinstall-postgresql-with-openssl-using-asdf-cmj) if psql was installed via asdf. Ideally, use the brew installed psql version.
