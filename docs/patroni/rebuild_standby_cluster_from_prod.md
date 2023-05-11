@@ -6,8 +6,11 @@ The recreation of the Standby Clusters is done entirely locally through TF and A
 * 1. [Pre-requisites](#Pre-requisites)
 * 2. [Chef role for the Target cluster](#ChefrolefortheTargetcluster)
 * 3. [Define the new Standby Cluster in Terraform](#DefinethenewStandbyClusterinTerraform)
-* 4. [Create the Patroni CI Standby Cluster instances](#CreatethePatroniCIStandbyClusterinstances)
-* 5. [Destroy the Standby Cluster (if it already exist)](#DestroytheStandbyClusterifitalreadyexist)
+* 4. [Steps to Destroy a Standby Cluster if you want to recreaate it](#StepstoDestroyaStandbyClusterifyouwanttorecreaateit)
+* 5. [Create the Patroni CI Standby Cluster instances](#CreatethePatroniCIStandbyClusterinstances)
+	* 5.1. [TF create](#TFcreate)
+	* 5.2. [Stop patroni and reset WAL directory from old files](#StoppatroniandresetWALdirectoryfromoldfiles)
+	* 5.3. [Initialize Patroni standby_cluster with Ansible playbook](#InitializePatronistandby_clusterwithAnsibleplaybook)
 
 <!-- vscode-markdown-toc-config
 	numbering=true
@@ -95,7 +98,7 @@ module "patroni-main-standby_cluster" {
 }
 ```
 
-##  4. <a name='DestroytheStandbyClusterifitalreadyexist'></a>Steps to Destroy a Standby Cluster if you want to recreaate it 
+##  4. <a name='StepstoDestroyaStandbyClusterifyouwanttorecreaateit'></a>Steps to Destroy a Standby Cluster if you want to recreaate it 
 
 Perform a TF destroy locally using target
 
@@ -114,7 +117,7 @@ knife client delete --yes patroni-main-standby_cluster-10{1..5}-db-$env.c.gitlab
 
 ##  5. <a name='CreatethePatroniCIStandbyClusterinstances'></a>Create the Patroni CI Standby Cluster instances
 
-### TF create
+###  5.1. <a name='TFcreate'></a>TF create
 
 If you are creating the nodes for the first time, they should be created by our CI/CO pipeline when you merge the changes in `main.tf` in the repository. Otherwise, if you have destroyed using `tf destroy` you can manually create them with:
 
@@ -123,7 +126,7 @@ cd /config-mgmt/environments/<environment>
 tf destroy -target="module.<standby_cluster_tf_module>"
 ```
 
-### Stop patroni and reset WAL directory from old files
+###  5.2. <a name='StoppatroniandresetWALdirectoryfromoldfiles'></a>Stop patroni and reset WAL directory from old files
 
 Before executing the playbook to create the standby cluster, you have to stop patroni service in all nodes of the new standby cluster.
 
@@ -141,7 +144,7 @@ knife ssh "role:<patroni_standby_cluster_role>" "sudo rm -rf /var/opt/gitlab/pos
 Note: you can change `/var/opt/gitlab/postgresql/data12` to any other data directory that is in use, eg. `/var/opt/gitlab/postgresql/data14`, etc.
 
 
-### Initialize Patroni standby_cluster with Ansible playbook
+###  5.3. <a name='InitializePatronistandby_clusterwithAnsibleplaybook'></a>Initialize Patroni standby_cluster with Ansible playbook
 
 1. Download/clone the [gitlab.com/gitlab-com/gl-infra/db-migration](https://gitlab.com/gitlab-com/gl-infra/db-migration) project into your workstatation or a `console` node;
 
@@ -153,13 +156,14 @@ git clone https://gitlab.com/gitlab-com/gl-infra/db-migration.git
     - `all.vars.walg_gs_prefix`: this is the GCS bucket and directory of the SOURCE database WAL archive location (the source database is the cluster you refered the `data_disk_snapshot` to create the cluster throught TF). You can find this value in the source cluster Chef role, it shoud be the `gitlab_walg.storage_prefix` for that cluster.
     - `all.hosts`: a regex that represent the FQDN of the hosts that are going to be part of this cluster, where the first node will be created as Standby Leader.
 
-```
-all:
-  vars:
-    walg_gs_prefix: 'gs://gitlab-gstg-postgres-backup/pitr-walg-main-pg12-2004'
-  hosts:
-    patroni-main-v14-[101:105]-db-gstg.c.gitlab-staging-1.internal:
-```
+Example:
+        ```
+        all:
+        vars:
+            walg_gs_prefix: 'gs://gitlab-gstg-postgres-backup/pitr-walg-main-pg12-2004'
+        hosts:
+            patroni-main-v14-[101:105]-db-gstg.c.gitlab-staging-1.internal:
+        ```
 
 3. Run `ansible -i inventory/<file> all -m ping` to ensure that all `hosts` in the inventory are reachable;
 
