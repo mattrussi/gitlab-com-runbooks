@@ -28,7 +28,7 @@ metricsCatalog.serviceDefinition({
       },
 
       apdex: histogramApdex(
-        histogram='haproxy_http_response_duration_seconds_bucket',
+        histogram='haproxy_http_response_duration_seconds_bucket',  // This is an haproxy.mtail metric!
         selector='type="frontend", backend_name!~"canary_.*|api_rate_limit|websockets"',
         satisfiedThreshold=5
       ),
@@ -57,7 +57,7 @@ metricsCatalog.serviceDefinition({
       },
 
       apdex: histogramApdex(
-        histogram='haproxy_http_response_duration_seconds_bucket',
+        histogram='haproxy_http_response_duration_seconds_bucket',  // This is an haproxy.mtail metric!
         selector='type="frontend", backend_name=~"canary_.*"',
         satisfiedThreshold=5
       ),
@@ -87,14 +87,14 @@ metricsCatalog.serviceDefinition({
 
       userImpacting: false,  // HAproxy backends are monitored alongside their respective services, so here we keep as not user impacting
       apdex: histogramApdex(
-        histogram='haproxy_ssh_request_duration_seconds_bucket',
+        histogram='haproxy_ssh_request_duration_seconds_bucket',  // This is an haproxy.mtail metric!
         selector='type="frontend"',
         satisfiedThreshold=16,
         toleratedThreshold=32,
       ),
 
       requestRate: rateMetric(
-        counter='haproxy_ssh_requests_total',
+        counter='haproxy_ssh_requests_total',  // This is an haproxy.mtail metric!
         selector='type="frontend"'
       ),
 
@@ -119,7 +119,7 @@ metricsCatalog.serviceDefinition({
       // D : the session was killed by haproxy because the server was detected
       //     as down and was configured to kill all connections when going down.
       errorRate: rateMetric(
-        counter='haproxy_ssh_requests_terminated_total',
+        counter='haproxy_ssh_requests_terminated_total',  // This is an haproxy.mtail metric!
         selector='type="frontend", cause=~"K|S|s|P|I|D"'
       ),
 
