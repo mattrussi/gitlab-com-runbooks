@@ -92,8 +92,8 @@ metricsCatalog.serviceDefinition({
       apdex: histogramApdex(
         histogram='gitlab_workhorse_http_request_duration_seconds_bucket',
         selector=baseSelector,
-        satisfiedThreshold=1,
-        toleratedThreshold=10,
+        satisfiedThreshold=300,
+        toleratedThreshold=450,
       ),
 
       requestRate: rateMetric(
