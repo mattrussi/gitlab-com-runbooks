@@ -1,7 +1,5 @@
 # Steps to Recreate/Rebuild a new Standby CLuster using a Snapshot from a Production cluster as Master cluster (instead of pg_basebackup)
 
-The recreation of the Standby Clusters is done entirely locally through TF and Ansible
-
 <!-- vscode-markdown-toc -->
 * 1. [Pre-requisites](#Pre-requisites)
 * 2. [Chef role for the Target cluster](#ChefrolefortheTargetcluster)
@@ -17,6 +15,15 @@ The recreation of the Standby Clusters is done entirely locally through TF and A
 	autoSave=true
 	/vscode-markdown-toc-config -->
 <!-- /vscode-markdown-toc -->
+
+# Summary
+
+From time to time we have to create Standby Clusters from a source/existing Gitlab.com Patroni database, usually from GPRD or GSTG.
+
+Standby Clusters are physically replicated clusters, that stream or recover WALs from source Patroni/PostgreSQL database, but have an independent Patroni configuration and management, therefore can be promoted if required.
+
+This runbook describe the whole procedure and several take aways to help you to create a new Patrony Standby Clusters from scratch.
+
 
 ##  1. <a name='Pre-requisites'></a>Pre-requisites
 
