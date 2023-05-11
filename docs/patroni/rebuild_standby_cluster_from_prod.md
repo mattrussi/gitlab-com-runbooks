@@ -18,7 +18,7 @@ The recreation of the Standby Clusters is done entirely locally through TF and A
 ##  1. <a name='Pre-requisites'></a>Pre-requisites
 
 1. Terraform should be installed and configured;
-2. Ansible should be installed and configured into your account into a `console` node, you can use the following commands:
+2. Ansible should be installed and configured into your account into your workstatation or a `console` node, you can use the following commands:
     ```
     python3 -m venv ansible
     source ansible/bin/activate
@@ -26,11 +26,7 @@ The recreation of the Standby Clusters is done entirely locally through TF and A
     python3 -m pip install ansible
     ansible --version
     ```
-3. Download/clone the [ops.gitlab.net/gitlab-com/gl-infra/config-mgmt](https://ops.gitlab.net/gitlab-com/gl-infra/config-mgmt) project into a `console` node;
-4. Download/clone the [gitlab.com/gitlab-com/gl-infra/db-migration](https://gitlab.com/gitlab-com/gl-infra/db-migration) project into a `console` node;
-5. Check that the inventory file for your desired environment exists in `db-migration/pg-replica-rebuild/inventory/` and it's up-to-date with the hosts you're targeting;
-6. Run `cd db-migration/pg-replica-rebuild; ansible -i inventory/<file> all -m ping` and ensure that all nodes are reachable;
-
+3. Download/clone the [ops.gitlab.net/gitlab-com/gl-infra/config-mgmt](https://ops.gitlab.net/gitlab-com/gl-infra/config-mgmt) project into your workstatation or a `console` node;
 
 ##  2. <a name='ChefrolefortheTargetcluster'></a>Chef role for the Target cluster
 
@@ -99,7 +95,7 @@ module "patroni-main-standby_cluster" {
 }
 ```
 
-##  5. <a name='DestroytheStandbyClusterifitalreadyexist'></a>Steps to Destroy a Standby Cluster if you want to recreaate it 
+##  4. <a name='DestroytheStandbyClusterifitalreadyexist'></a>Steps to Destroy a Standby Cluster if you want to recreaate it 
 
 Perform a TF destroy locally using target
 
@@ -116,119 +112,65 @@ knife client delete --yes patroni-main-standby_cluster-10{1..5}-db-$env.c.gitlab
 ```
 
 
-##  4. <a name='CreatethePatroniCIStandbyClusterinstances'></a>Create the Patroni CI Standby Cluster instances
+##  5. <a name='CreatethePatroniCIStandbyClusterinstances'></a>Create the Patroni CI Standby Cluster instances
 
-You can use the following steps to create all or a subset of the patroni CI instances, just depending on how many instances were previously destroyed.
+### TF create
 
-1. Change Terraform environment
-    - Execute the following `gcloud` command to get the name of the most recent GCS snapshot from the patroni backup data disk, but **DO NOT SIMPLY COPY/PASTE IT**, set the `--project` and `--filter` accordingly with the environment you are performing the restore:
+If you are creating the nodes for the first time, they should be created by our CI/CO pipeline when you merge the changes in `main.tf` in the repository. Otherwise, if you have destroyed using `tf destroy` you can manually create them with:
 
-        ```
-        gcloud compute snapshots list --project [gitlab-staging-1|gitlab-production] --limit=1 --uri --sort-by=~creationTimestamp --filter=status~READY --filter=sourceDisk~patroni-[06-db-gstg|v12-10-db-gprd]-data
-        ```
+```
+cd /config-mgmt/environments/<environment>
+tf destroy -target="module.<standby_cluster_tf_module>"
+```
 
-    - Remove the `https://www.googleapis.com/compute/v1/` prefix of the snapshot name
+### Stop patroni and reset WAL directory from old files
 
-        - For example: `https://www.googleapis.com/compute/v1/projects/gitlab-production/global/snapshots/nukw46z00o90` will turn into `projects/gitlab-production/global/snapshots/nukw46z00o90`
+Before executing the playbook to create the standby cluster, you have to stop patroni service in all nodes of the new standby cluster.
 
-    - Add the following line into `patroni-ci` module at `main.tf`
+```
+knife ssh "role:<patroni_standby_cluster_role>" "sudo systemctl stop patroni"
+````
 
-        ```
-          data_disk_snapshot     = "<snapshot_name>"
-          data_disk_create_timeout = "120m"
-        ```
+Then you have to clean out the `pg_wal` directory of in all nodes of the new standby cluster, otherwise there could be old TL history data on this directories that will affect the WAL recovery from the source cluster.
+You can perform the following:
 
-    - Change the `"node_count"` of patroni CI back to the original amount of nodes at `variables.tf`:
+```
+knife ssh "role:<patroni_standby_cluster_role>" "sudo rm -rf /var/opt/gitlab/postgresql/data12/pg_wal; sudo mkdir /var/opt/gitlab/postgresql/data12/pg_wal; sudo chown gitlab-psql /var/opt/gitlab/postgresql/data12/pg_wal"
+```
 
-        <details><summary>Node count in GSTG</summary>
-
-        ```
-            "patroni-ci"           = 7
-        ```
-
-        </details>
-        <details><summary>Node count in GPRD</summary>
-
-        ```
-            "patroni-ci"           = 10
-        ```
-
-        </details>
-
-1. Create all the Patroni CI nodes with: `tf apply`
-1. Check the VM instance Serial port in the GCP console to see if the instance is already initialized and if Chef has finished running, for example:
-   - GSTG: instance [patroni-ci-01-db-gstg/console?port=1&project=gitlab-staging-1](https://console.cloud.google.com/compute/instancesDetail/zones/us-east1-c/instances/patroni-ci-01-db-gstg/console?port=1&project=gitlab-staging-1)
-   - GPRD: instance [patroni-ci-01-db-gprd/console?port=1&project=gitlab-production](https://console.cloud.google.com/compute/instancesDetail/zones/us-east1-c/instances/patroni-ci-01-db-gprd/console?port=1&project=gitlab-production)
-   - Or you can execute `gcloud compute instances get-serial-port-output <instance_name>`
-1. Look into the instance Serial Console, or `/var/log/syslog` log file, if the Chef bootstrap has failed. Any kind of error needs to be addressed, except for while performing `usermod: directory /var/opt/gitlab/postgresql`, which is a known issue that can be ignored. Therefore if you observe the following message in `/var/log/syslog` or the instance serial port/console, you can start executing the pg-replica-rebuild Ansible playbook.
-
-    ```
-    $ sudo cat /var/log/syslog | grep "STDERR: usermod: directory /var/opt/gitlab/postgresql exists"
-
-    ??? ??? GCEMetadataScripts[1935]: ??? GCEMetadataScripts: startup-script: #033[0m    STDERR: usermod: directory /var/opt/gitlab/postgresql exists
-    ??? ??? GCEMetadataScripts[1935]: ??? GCEMetadataScripts: startup-script: STDERR: usermod: directory /var/opt/gitlab/postgresql exists
-    ```
-
-1. **If Chef failed for any other reason**, then you might have to:
-    - Manually delete the nodes from Chef
-        <details><summary>Knife node delete GSTG</summary>
-
-        ```
-        for i in `seq 7`; do for type in node client; do knife $type delete -y patroni-ci-$(printf '%02d' $i)-db-gstg.c.gitlab-staging-1.internal; done; done
-        ````
-
-        </details>
-        <details><summary>Knife node delete GPRD</summary>
-
-        ```
-        for i in `seq 10`; do for type in node client; do knife $type delete -y patroni-ci-$(printf '%02d' $i)-db-gprd.c.gitlab-production.internal; done; done
-        ````
-
-        </details>
-    - Restart the VM instances through the GCP console
-
-1. From a `console` node initialize a Tmux session to execute the Ansible playbook from it;
-
-1. Execute the `db-migration/pg-replica-rebuild` Ansible playbook from your Tmux session to Initialize the whole cluster or a set of Replicas:
-
-    - To initialize the whole cluster, including the Standby Leader, run the `rebuild-all.yml` playbook:
-
-        ```
-        cd <workspace>/db-migration/pg-replica-rebuild
-        ansible-playbook -i inventory/<environment_file>.yml rebuild-all.yml
-        ```
-
-    - To initialize only  Replicas in the cluster, run the `rebuild-replicas.yml` playbook using [Ansible's `-l <SUBSET>`](https://docs.ansible.com/ansible/latest/cli/ansible-playbook.html#cmdoption-ansible-playbook-l) and [patterns to target hosts and groups](https://docs.ansible.com/ansible/latest/user_guide/intro_patterns.html#patterns-targeting-hosts-and-groups), limiting the replica hosts where the playbook will be executed, like for example:
-
-        - For example, to initialize all replicas except node `patroni-ci-01` you can use the following pattern regex:
-
-            ```
-            cd <workspace>/db-migration/pg-replica-rebuild
-            ansible-playbook -i inventory/<environment_file>.yml rebuild-replicas.yml -l '!~patroni-ci-01'
-            ```
-
-        - For example, to initialize the range of 4 replicas starting from `patroni-ci-06` up to `patroni-ci-10` you can use the following pattern regex:
-
-            ```
-            cd <workspace>/db-migration/pg-replica-rebuild
-            ansible-playbook -i inventory/<environment_file>.yml rebuild-replicas.yml -l '~patroni-ci-(0[6-9]|10)'
-            ```
-
-1. Force run of Chef-Client in the nodes to let all configuration files in sync with the repo
-    <details><summary>Force run of Chef-Client in GSTG</summary>
-
-    ```
-    knife ssh -C 7 "role:gstg-base-db-patroni-ci" "sudo chef-client"
-    ```
-
-    </details>
-    <details><summary>Force run of Chef-Client in GPRD</summary>
-
-    ```
-    knife ssh -C 10 "role:gprd-base-db-patroni-ci" "sudo chef-client"
-    ```
-
-    </details>
+Note: you can change `/var/opt/gitlab/postgresql/data12` to any other data directory that is in use, eg. `/var/opt/gitlab/postgresql/data14`, etc.
 
 
+### Initialize Patroni standby_cluster with Ansible playbook
 
+1. Download/clone the [gitlab.com/gitlab-com/gl-infra/db-migration](https://gitlab.com/gitlab-com/gl-infra/db-migration) project into your workstatation or a `console` node;
+
+```
+git clone https://gitlab.com/gitlab-com/gl-infra/db-migration.git
+```
+
+2. Check that the inventory file for your desired environment exists in `db-migration/pg-replica-rebuild/inventory/` and it's up-to-date with the hosts you're targeting. The inventory file should contain
+    - `all.vars.walg_gs_prefix`: this is the GCS bucket and directory of the SOURCE database WAL archive location (the source database is the cluster you refered the `data_disk_snapshot` to create the cluster throught TF). You can find this value in the source cluster Chef role, it shoud be the `gitlab_walg.storage_prefix` for that cluster.
+    - `all.hosts`: a regex that represent the FQDN of the hosts that are going to be part of this cluster, where the first node will be created as Standby Leader.
+
+```
+all:
+  vars:
+    walg_gs_prefix: 'gs://gitlab-gstg-postgres-backup/pitr-walg-main-pg12-2004'
+  hosts:
+    patroni-main-v14-[101:105]-db-gstg.c.gitlab-staging-1.internal:
+```
+
+3. Run `ansible -i inventory/<file> all -m ping` to ensure that all `hosts` in the inventory are reachable;
+
+```
+cd db-migration/pg-replica-rebuild
+ansible -i inventory/<file> all -m ping
+```
+
+4. Execute the `rebuild-all` Ansible playbook to create the standby_cluster, and sync all nodes with the source database;
+
+```
+cd db-migration/pg-replica-rebuild
+ansible-playbook -i inventory/patroni-main-v14-gstg.yml rebuild-all.yml
+```
