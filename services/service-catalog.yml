@@ -1577,6 +1577,31 @@ services:
         primary_grafana_dashboard:
         sentry_slug:
 
+  - name: about
+    tier: sv
+    friendly_name: about.gitlab.com
+    label: About
+    owner: reliability_general
+    technical:
+      project:
+        - https://gitlab.com/gitlab-com/www-gitlab-com
+      documents:
+        design:
+        architecture:
+        readiness_review:
+        service:
+          - https://gitlab.com/gitlab-com/runbooks/-/blob/master/docs/uncategorized/about-gitlab-com.md
+        security:
+      dependencies:
+      logging:
+        - name: stackdriver
+          permalink: https://console.cloud.google.com/logs
+    observability:
+      monitors:
+        grafana_folder:
+        primary_grafana_dashboard:
+        sentry_slug:
+
   - name: design
     tier: sv
     friendly_name: design.gitlab.com
@@ -1925,6 +1950,30 @@ services:
         architecture:
         readiness_review:
         sre_guide: https://gitlab.com/gitlab-com/runbooks/-/tree/master/docs/gitlab-com-pkgs
+        developer_guide:
+        service:
+        security:
+      logging:
+        - name:
+          permalink:
+    observability:
+      monitors:
+        grafana_folder:
+        primary_grafana_dashboard:
+
+  - name: packagecloud
+    tier: inf
+    friendly_name: PackageCloud
+    label: Packagecloud
+    owner: reliability_general
+    technical:
+      project:
+        - https://gitlab.com/gitlab-cookbooks/gitlab-packagecloud
+      documents:
+        design:
+        architecture:
+        readiness_review:
+        sre_guide: https://gitlab.com/gitlab-com/runbooks/-/blob/master/docs/uncategorized/packagecloud-infrastructure.md
         developer_guide:
         service:
         security:
