@@ -10,11 +10,26 @@ local keyServiceWeights = std.foldl(
   }, serviceCatalog.findKeyBusinessServices(), {}
 );
 
+// This allows overriding values stored in the service catalog as well as adding services and
+// their weight.
+local keyServiceWeightsMapping = {
+  'weighted_v2.1': keyServiceWeights,
+  weighted_v3: keyServiceWeights { sidekiq: 1 },
+};
+
+// This allows changing the interval we average over for the SLA
+local weightedIntervalVersions = {
+  'weighted_v2.1': '5m',
+  weighted_v3: '5m',
+};
+
+assert std.set(std.objectFields(keyServiceWeightsMapping)) == std.set(std.objectFields(weightedIntervalVersions)) : 'All versions in `keyServiceWeightMapping` need to be in `weightedIntervalVersions`';
+
 local getScoreQuery(weights, interval, selector) =
   local items = [
     'min without(slo) (avg_over_time(slo_observation_status{%(selector)s}[%(interval)s])) * %(weight)d' % {
       selector: selectors.serializeHash({ type: type, monitor: 'global' } + selector),
-      weight: keyServiceWeights[type],
+      weight: weights[type],
       interval: interval,
     }
     for type in std.objectFields(weights)
@@ -26,7 +41,7 @@ local getWeightQuery(weights, interval, selector) =
   local items = [
     'group without(slo) (avg_over_time(slo_observation_status{%(selector)s}[%(interval)s])) * %(weight)d' % {
       selector: selectors.serializeHash({ type: type, monitor: 'global' } + selector),
-      weight: keyServiceWeights[type],
+      weight: weights[type],
       interval: interval,
     }
     for type in std.objectFields(weights)
@@ -34,14 +49,13 @@ local getWeightQuery(weights, interval, selector) =
 
   std.join('\n  or\n  ', items);
 
-local weightedIntervalVersions = {
-  'weighted_v2.1': '5m',
-};
-
-local ruleGroup(version, interval, selector) =
+local ruleGroup(version, selector) =
   local labels = {
     sla_type: version,
   };
+  local interval = weightedIntervalVersions[version];
+  local serviceWeights = keyServiceWeightsMapping[version];
+
   {
     name: 'SLA weight calculations - %s' % [version],
     partial_response_strategy: 'warn',
@@ -54,7 +68,7 @@ local ruleGroup(version, interval, selector) =
         sum by (environment, env, stage) (
           %s
         )
-      ||| % [getScoreQuery(keyServiceWeights, interval, selector)],
+      ||| % [getScoreQuery(serviceWeights, interval, selector)],
     }, {
       // TODO: these are kept for backwards compatibility for now
       // See https://gitlab.com/gitlab-com/gl-infra/scalability/-/issues/309
@@ -64,7 +78,7 @@ local ruleGroup(version, interval, selector) =
         sum by (environment, env, stage) (
           %s
         )
-      ||| % [getWeightQuery(keyServiceWeights, interval, selector)],
+      ||| % [getWeightQuery(serviceWeights, interval, selector)],
     }, {
       record: 'sla:gitlab:ratio',
       labels: labels,
@@ -97,7 +111,7 @@ local occurenceRatesRuleGroup(selector) = {
 
 local rules(selector) = {
   groups: [
-            ruleGroup(version, weightedIntervalVersions[version], selector)
+            ruleGroup(version, selector)
             for version in std.objectFields(weightedIntervalVersions)
           ]
           +

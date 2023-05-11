@@ -1090,7 +1090,10 @@ generate-prometheus-rules:
   rules:
     - !reference [.default-job-rules, rules]
     - changes:
-        paths: *prometheus-rules-patterns
+        paths: &rule-validation-paths
+          - scripts/prometheus.yml
+          - rules/**/*
+          - thanos-rules/**/*
   script:
     - gem install bundler --no-document -v "${BUNDLER_VERSION}"
     - bundle install
@@ -1110,10 +1113,7 @@ validate-prom-rules:
     - *avoid-merge-train-rule
     - <<: *if-merge-request-rule
       changes:
-        paths:
-          - scripts/prometheus.yml
-          - rules/**/*
-          - thanos-rules/**/*
+        paths: *rule-validation-paths
   script:
     - make validate-prom-rules
 
