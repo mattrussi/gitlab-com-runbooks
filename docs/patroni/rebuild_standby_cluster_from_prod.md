@@ -155,8 +155,8 @@ git clone https://gitlab.com/gitlab-com/gl-infra/db-migration.git
 ```
 
 **2nd -** Check that the inventory file for your desired environment exists in `db-migration/pg-replica-rebuild/inventory/` and it's up-to-date with the hosts you're targeting. The inventory file should contain
-    - `all.vars.walg_gs_prefix`: this is the GCS bucket and directory of the SOURCE database WAL archive location (the source database is the cluster you refered the `data_disk_snapshot` to create the cluster throught TF). You can find this value in the source cluster Chef role, it shoud be the `gitlab_walg.storage_prefix` for that cluster.
-    - `all.hosts`: a regex that represent the FQDN of the hosts that are going to be part of this cluster, where the first node will be created as Standby Leader.
+- `all.vars.walg_gs_prefix`: this is the GCS bucket and directory of the SOURCE database WAL archive location (the source database is the cluster you refered the `data_disk_snapshot` to create the cluster throught TF). You can find this value in the source cluster Chef role, it shoud be the `gitlab_walg.storage_prefix` for that cluster.
+- `all.hosts`: a regex that represent the FQDN of the hosts that are going to be part of this cluster, where the first node will be created as Standby Leader.
 
 Example:
 
