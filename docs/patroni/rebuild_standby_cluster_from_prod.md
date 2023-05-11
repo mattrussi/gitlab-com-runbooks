@@ -1,16 +1,24 @@
-# Steps to Recreate/Rebuild the CI CLuster using a Snapshot from the Master cluster (instead of pg_basebackup)
+# Steps to Recreate/Rebuild a new Standby CLuster using a Snapshot from a Production cluster as Master cluster (instead of pg_basebackup)
 
-The recreation of the CI Cluster is done entirely locally through TF and Ansible, therefore **DO NOT COMMIT ANY FILE CHANGES** into the config-mgmt repo.
+The recreation of the Standby Clusters is done entirely locally through TF and Ansible
 
-Make sure that **there are no CI Read requests being made in the patroni-ci cluster**,  as this indicates that the cluster is being used
+<!-- vscode-markdown-toc -->
+* 1. [Pre-requisites](#Pre-requisites)
+* 2. [Chef role for the Target cluster](#ChefrolefortheTargetcluster)
+* 3. [Define the new Standby Cluster in Terraform](#DefinethenewStandbyClusterinTerraform)
+* 4. [Create the Patroni CI Standby Cluster instances](#CreatethePatroniCIStandbyClusterinstances)
+* 5. [Destroy the Standby Cluster (if it already exist)](#DestroytheStandbyClusterifitalreadyexist)
 
-- Check the [CI Reads in CI cluster thanos query](https://thanos.gitlab.net/graph?g0.expr=(sum(rate(pg_stat_user_tables_idx_tup_fetch%7Benv%3D%22gprd%22%2C%20relname%3D~%22(ci_.*%7Cexternal_pull_requests%7Ctaggings%7Ctags)%22%2Cinstance%3D~%22patroni-ci-.*%22%7D%5B1m%5D))%20by%20(relname%2C%20instance)%20%3E%201)%20and%20on(instance)%20pg_replication_is_replica%3D%3D1&g0.tab=0&g0.stacked=0&g0.range_input=6h&g0.max_source_resolution=0s&g0.deduplicate=1&g0.partial_response=0&g0.store_matches=%5B%5D)
+<!-- vscode-markdown-toc-config
+	numbering=true
+	autoSave=true
+	/vscode-markdown-toc-config -->
+<!-- /vscode-markdown-toc -->
 
-## Pre-requisites
+##  1. <a name='Pre-requisites'></a>Pre-requisites
 
 1. Terraform should be installed and configured;
 2. Ansible should be installed and configured into your account into a `console` node, you can use the following commands:
-
     ```
     python3 -m venv ansible
     source ansible/bin/activate
@@ -18,65 +26,97 @@ Make sure that **there are no CI Read requests being made in the patroni-ci clus
     python3 -m pip install ansible
     ansible --version
     ```
-
 3. Download/clone the [ops.gitlab.net/gitlab-com/gl-infra/config-mgmt](https://ops.gitlab.net/gitlab-com/gl-infra/config-mgmt) project into a `console` node;
 4. Download/clone the [gitlab.com/gitlab-com/gl-infra/db-migration](https://gitlab.com/gitlab-com/gl-infra/db-migration) project into a `console` node;
 5. Check that the inventory file for your desired environment exists in `db-migration/pg-replica-rebuild/inventory/` and it's up-to-date with the hosts you're targeting;
 6. Run `cd db-migration/pg-replica-rebuild; ansible -i inventory/<file> all -m ping` and ensure that all nodes are reachable;
 
-## Destroy the Standby Cluster
 
-You can destroy all the nodes in the cluster by setting the node counter to `0` (zero), or just the last `n` nodes by reducing the node count.
+##  2. <a name='ChefrolefortheTargetcluster'></a>Chef role for the Target cluster
 
-1. To destroy the whole cluster set the `"node_count"` at `variables.tf` to `=0` for the `patroni-ci` and `patroni-zfs-ci` clusters:
+Some `postgresql` settings need to be the SAME as the Source cluster for the physical replication to work, they are:
 
-    ```
-        "patroni-ci"           = 0
-        "patroni-zfs-ci"       = 0
-    ```
+```
+    "postgresql": {
+        "version":
+        "pg_user_homedir":
+        "config_directory":
+        "data_directory":
+        "log_directory":
+        "bin_directory":
+    ...
+    }
 
-2. Apply the TF change `tf apply` checking if only the `patroni-ci` and its related modules are the ones that will be removed.
-3. Manually delete the nodes from Chef
-    <details><summary>Knife node delete GSTG</summary>
+```
 
-    ```
-    for i in `seq 7`; do for type in node client; do knife $type delete -y patroni-ci-$(printf '%02d' $i)-db-gstg.c.gitlab-staging-1.internal; done; done
-    knife node delete -y patroni-zfs-ci-01-db-gstg.c.gitlab-staging-1.internal
-    knife client delete -y patroni-zfs-ci-01-db-gstg.c.gitlab-staging-1.internal
-    ```
+**IMPORTANT: the `gitlab_walg.storage_prefix` in the target Chef role SHOULD NOT BE THE SAME as the Source cluster**, otherwise the backup of the source cluster can be overwriten.
 
-    </details>
-    <details><summary>Knife node delete GPRD</summary>
+The Chef role of the standby patroni cluster should have defined the `standby_cluster` settings under `override_attributes.gitlab-patroni.patroni.config.bootstrap.dcs` like the bellow example.
+Notice that `host` should point to the endpoint of the Primary/Master node of the source cluster, therefore if there's a failover we don't have to reconfigure the standby cluster.
 
-    ```
-    for i in `seq 10`; do for type in node client; do knife $type delete -y patroni-ci-$(printf '%02d' $i)-db-gprd.c.gitlab-production.internal; done; done
-    knife node delete -y patroni-zfs-ci-01-db-gprd.c.gitlab-production.internal
-    knife client delete -y patroni-zfs-ci-01-db-gprd.c.gitlab-production.internal
-    ```
+```
+  "override_attributes": {
+    "gitlab-patroni": {
+      "patroni": {
+        "config": {
+          "bootstrap": {
+            "dcs": {
+              "standby_cluster": {
+                "host": "master.patroni.service.consul",
+                "port": 5432
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+```
 
-    </details>
+##  3. <a name='DefinethenewStandbyClusterinTerraform'></a>Define the new Standby Cluster in Terraform
 
-## Take a snapshot from the Writer node
+Define a disk snapshot from the source cluster in Terraform, like for example:
 
-1. Find which instance is the database cluster Backup Node
+```
+data "google_compute_snapshot" "gcp_database_snapshot_gprd_main_2004" {
+  filter      = "sourceDisk eq .*/patroni-main-2004-.*"
+  most_recent = true
+}
+```
 
-    - GSTG: `knife search 'roles:gstg-base-db-patroni-backup-replica AND roles:gstg-base-db-patroni-main' --id-only`
-    - GPRD: `knife search 'roles:gprd-base-db-patroni-backup-replica AND roles:gprd-base-db-patroni-v12' --id-only`
+When defining the target cluster module in Terraform, define the storage size and settings similar as the source, and then define the `data_disk_snapshot` pointing to the source snapshot and a large amount of time for `data_disk_create_timeout`, like for example:
 
-1. Log into the Backup Node and execute a gcs-snapshot:
+```
+module "patroni-main-standby_cluster" {
+  source  = "ops.gitlab.net/gitlab-com/generic-stor-with-group/google"
+  version = "8.1.0"
 
-    ```
-    sudo su - gitlab-psql
-    PATH="/usr/local/sbin:/usr/sbin/:/sbin:/usr/local/bin:/usr/bin:/bin:/snap/bin"
-    /usr/local/bin/gcs-snapshot.sh
-    ```
+  data_disk_size           = var.data_disk_sizes["patroni-main-2004"]
+  data_disk_type           = "pd-ssd"
+  data_disk_snapshot       = data.google_compute_snapshot.gcp_database_snapshot_gprd_main_2004.id
+  data_disk_create_timeout = "120m"
+  ...
+}
+```
 
-Note: _At the last update (2022/06/10) the Replication Backup nodes were_ :
+##  5. <a name='DestroytheStandbyClusterifitalreadyexist'></a>Steps to Destroy a Standby Cluster if you want to recreaate it 
 
-- GSTG: patroni-06-db-gstg.c.gitlab-staging-1.internal
-- GPRD: patroni-v12-10-db-gprd.c.gitlab-production.internal
+Perform a TF destroy locally using target
 
-## Create the Patroni CI Standby Cluster instances
+```
+cd /config-mgmt/environments/<environment>
+tf destroy -target="module.<standby_cluster_tf_module>"
+```
+
+Clean out any remaining Chef client/nodes using `knife`, like for example:
+
+```
+knife node delete --yes patroni-main-standby_cluster-10{1..5}-db-$env.c.gitlab-$gcp_project.internal
+knife client delete --yes patroni-main-standby_cluster-10{1..5}-db-$env.c.gitlab-$gcp_project.internal
+```
+
+
+##  4. <a name='CreatethePatroniCIStandbyClusterinstances'></a>Create the Patroni CI Standby Cluster instances
 
 You can use the following steps to create all or a subset of the patroni CI instances, just depending on how many instances were previously destroyed.
 
@@ -190,41 +230,5 @@ You can use the following steps to create all or a subset of the patroni CI inst
 
     </details>
 
-## Recover the Patroni ZFS CI cluster
 
-The ZFS cluster nodes can't be rebuilt through GCP snapshots, because the `/var/opt/gitlab` mount point is a ZFS filesystem instead of EXT4 used by other Patroni nodes, therefore it's necessary to use the default `pg_basebackup` process to recreate this cluster.
 
-1. Change Terraform environment
-    - Change the `"node_count"` of patroni ZFS CI back to 1 at `variables.tf`:
-
-        ```
-            "patroni-zfs-ci"       = 1
-        ```
-
-1. Create Patroni ZFS CI node with: `tf apply`
-1. Check the `patroni-zfs-ci-01-db` Serial port in GCP console to see if the instance is already intialized and if Chef have finished to run, for example:
-   - GSTG: [patroni-zfs-ci-01-db-gstg/console?port=1&project=gitlab-staging-1](https://console.cloud.google.com/compute/instancesDetail/zones/us-east1-c/instances/patroni-zfs-ci-01-db-gstg/console?port=1&project=gitlab-staging-1)
-   - GPRD: [patroni-zfs-ci-01-db-gprd/console?port=1&project=gitlab-production](https://console.cloud.google.com/compute/instancesDetail/zones/us-east1-c/instances/patroni-zfs-ci-01-db-gprd/console?port=1&project=gitlab-production)
-1. Check if `scope=<cluster_name>` and if `name=<hostname>` in the `/var/opt/gitlab/patroni/patroni.yml` file, this is an evidence that Chef have sucessfully executed on the node. For example in the `patroni-zfs-ci-01-db-gstg` node the content of the file should be the following:
-
-    ```
-    $ sudo head -3 /var/opt/gitlab/patroni/patroni.yml
-    ---
-    scope: gstg-patroni-zfs-ci
-    name: patroni-zfs-ci-01-db-gstg.c.gitlab-staging-1.internal
-    ```
-
-1. Start the Patroni Cluster
-    - Execute: `sudo systemctl start patroni.service`
-    - If you observe the `/var/log/gitlab/patroni/patroni.log` you should see the `INFO: waiting for standby_leader to bootstrap` message
-1. Remove the Patroni Cluster from DCS
-    - Execute: `sudo gitlab-patronictl remove <cluster_name>`
-        - GSTG cluster name: gstg-patroni-zfs-ci
-        - GPRD cluster name: gprd-patroni-zfs-ci
-    - If you observe the `/var/log/gitlab/patroni/patroni.log` you should see the `INFO: bootstrap_standby_leader in progress` message
-6. Check if `pg_basebackup` is running
-    - Execute: `ps -ef | grep pg_basebackup`
-    - If there is a `/usr/lib/postgresql/??/bin/pg_basebackup` process running then you will have to wait for it to finish (which can take dozens of hours)
-7. After `pg_basebackup` is finished the replica should apply/stream pending WAL files from the primary/writer or its archive location (which can also take dozens of hours);
-    - Check the logs at `/var/log/gitlab/postgresql/postgresql.csv` to see if there is progress in the WAL recovery;
-    - If the instance can't find the archive logs you should have to modify the archive location in `/etc/wal-g.d/env/WALG_GS_PREFIX`
