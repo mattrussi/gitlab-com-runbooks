@@ -8,7 +8,7 @@ The recreation of the Standby Clusters is done entirely locally through TF and A
 * 3. [Define the new Standby Cluster in Terraform](#DefinethenewStandbyClusterinTerraform)
 * 4. [Steps to Destroy a Standby Cluster if you want to recreaate it](#StepstoDestroyaStandbyClusterifyouwanttorecreaateit)
 * 5. [Create the Patroni CI Standby Cluster instances](#CreatethePatroniCIStandbyClusterinstances)
-	* 5.1. [TF create](#TFcreate)
+	* 5.1. [Create the cluster with TF](#CreatetheclusterwithTF)
 	* 5.2. [Stop patroni and reset WAL directory from old files](#StoppatroniandresetWALdirectoryfromoldfiles)
 	* 5.3. [Initialize Patroni standby_cluster with Ansible playbook](#InitializePatronistandby_clusterwithAnsibleplaybook)
 
@@ -117,13 +117,15 @@ knife client delete --yes patroni-main-standby_cluster-10{1..5}-db-$env.c.gitlab
 
 ##  5. <a name='CreatethePatroniCIStandbyClusterinstances'></a>Create the Patroni CI Standby Cluster instances
 
-###  5.1. <a name='TFcreate'></a>TF create
+###  5.1. <a name='CreatetheclusterwithTF'></a>Create the cluster with TF
 
-If you are creating the nodes for the first time, they should be created by our CI/CO pipeline when you merge the changes in `main.tf` in the repository. Otherwise, if you have destroyed using `tf destroy` you can manually create them with:
+If you are creating the nodes for the first time, **they should be created by our CI/CO pipeline** when you merge the changes in `main.tf` in the repository.
+
+Otherwise, if you have destroyed using `tf destroy` you can manually create them with:
 
 ```
 cd /config-mgmt/environments/<environment>
-tf destroy -target="module.<standby_cluster_tf_module>"
+tf apply -target="module.<standby_cluster_tf_module>"
 ```
 
 ###  5.2. <a name='StoppatroniandresetWALdirectoryfromoldfiles'></a>Stop patroni and reset WAL directory from old files
@@ -146,33 +148,34 @@ Note: you can change `/var/opt/gitlab/postgresql/data12` to any other data direc
 
 ###  5.3. <a name='InitializePatronistandby_clusterwithAnsibleplaybook'></a>Initialize Patroni standby_cluster with Ansible playbook
 
-1. Download/clone the [gitlab.com/gitlab-com/gl-infra/db-migration](https://gitlab.com/gitlab-com/gl-infra/db-migration) project into your workstatation or a `console` node;
+**1st -** Download/clone the [gitlab.com/gitlab-com/gl-infra/db-migration](https://gitlab.com/gitlab-com/gl-infra/db-migration) project into your workstatation or a `console` node;
 
 ```
 git clone https://gitlab.com/gitlab-com/gl-infra/db-migration.git
 ```
 
-2. Check that the inventory file for your desired environment exists in `db-migration/pg-replica-rebuild/inventory/` and it's up-to-date with the hosts you're targeting. The inventory file should contain
+**2nd -** Check that the inventory file for your desired environment exists in `db-migration/pg-replica-rebuild/inventory/` and it's up-to-date with the hosts you're targeting. The inventory file should contain
     - `all.vars.walg_gs_prefix`: this is the GCS bucket and directory of the SOURCE database WAL archive location (the source database is the cluster you refered the `data_disk_snapshot` to create the cluster throught TF). You can find this value in the source cluster Chef role, it shoud be the `gitlab_walg.storage_prefix` for that cluster.
     - `all.hosts`: a regex that represent the FQDN of the hosts that are going to be part of this cluster, where the first node will be created as Standby Leader.
 
 Example:
-        ```
-        all:
-        vars:
-            walg_gs_prefix: 'gs://gitlab-gstg-postgres-backup/pitr-walg-main-pg12-2004'
-        hosts:
-            patroni-main-v14-[101:105]-db-gstg.c.gitlab-staging-1.internal:
-        ```
 
-3. Run `ansible -i inventory/<file> all -m ping` to ensure that all `hosts` in the inventory are reachable;
+```
+all:
+vars:
+    walg_gs_prefix: 'gs://gitlab-gstg-postgres-backup/pitr-walg-main-pg12-2004'
+hosts:
+    patroni-main-v14-[101:105]-db-gstg.c.gitlab-staging-1.internal:
+```
+
+**3rd -** Run `ansible -i inventory/<file> all -m ping` to ensure that all `hosts` in the inventory are reachable;
 
 ```
 cd db-migration/pg-replica-rebuild
 ansible -i inventory/<file> all -m ping
 ```
 
-4. Execute the `rebuild-all` Ansible playbook to create the standby_cluster, and sync all nodes with the source database;
+**4th -** Execute the `rebuild-all` Ansible playbook to create the standby_cluster, and sync all nodes with the source database;
 
 ```
 cd db-migration/pg-replica-rebuild
