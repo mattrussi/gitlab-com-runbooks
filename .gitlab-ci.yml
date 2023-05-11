@@ -1,4 +1,3 @@
----
 include:
   # Import GL_ASDF_* variables to match versions declared in ASDF
   - local: .gitlab-ci-asdf-versions.yml
@@ -359,6 +358,11 @@ renovate_bot:
   extends:
     - .base_renovate_bot
     - .id-tokens
+  rules:
+    - *gitlab-com-only-rule
+    - if: $CI_PIPELINE_SOURCE == "schedule" && $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH && $RENOVATE_SCHEDULED && ($RENOVATE_IMMEDIATE == '' || $RENOVATE_IMMEDIATE == null)
+      exists:
+        - renovate.json
   secrets:
     RENOVATE_GITHUB_TOKEN:
       file: false
