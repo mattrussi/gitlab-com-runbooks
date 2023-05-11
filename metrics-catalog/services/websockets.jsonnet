@@ -1,4 +1,5 @@
 local metricsCatalog = import 'servicemetrics/metrics.libsonnet';
+local histogramApdex = metricsCatalog.histogramApdex;
 local rateMetric = metricsCatalog.rateMetric;
 local toolingLinks = import 'toolinglinks/toolinglinks.libsonnet';
 local haproxyComponents = import './lib/haproxy_components.libsonnet';
@@ -15,6 +16,7 @@ metricsCatalog.serviceDefinition({
   tags: ['golang'],
 
   monitoringThresholds: {
+    apdexScore: 0.998,
     errorRatio: 0.9995,
   },
   otherThresholds: {
@@ -74,6 +76,7 @@ metricsCatalog.serviceDefinition({
       userImpacting: true,
       featureCategory: 'not_owned',
       team: 'workhorse',
+      severity: 's3',
       description: |||
         Monitors the Workhorse instance running in the Websockets fleet, via the HTTP interface.
         This only covers the initial protocal upgrade requests to `/-/cable`.
@@ -85,6 +88,13 @@ metricsCatalog.serviceDefinition({
         type: 'websockets',
         route: [{ ne: '^/-/health$' }, { ne: '^/-/(readiness|liveness)$' }, { ne: '^/api/' }],
       },
+
+      apdex: histogramApdex(
+        histogram='gitlab_workhorse_http_request_duration_seconds_bucket',
+        selector=baseSelector,
+        satisfiedThreshold=1,
+        toleratedThreshold=10,
+      ),
 
       requestRate: rateMetric(
         counter='gitlab_workhorse_http_requests_total',
