@@ -260,6 +260,7 @@ DEPENDENCIES
   rspec-parameterized (>= 1.0.0)
   rubocop
   super_diff
+  terminal-table (~> 3.0)
   webmock
 
 BUNDLED WITH

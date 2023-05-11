@@ -8,6 +8,7 @@ gem 'google-cloud-storage'
 gem 'io-console'
 gem 'json'
 gem 'digest-crc'
+gem 'terminal-table', '~> 3.0'
 
 group :development, :test do
   gem 'rake'
