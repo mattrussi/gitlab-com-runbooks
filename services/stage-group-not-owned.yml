@@ -1,0 +1,8 @@
+stages:
+  not_owned:
+    display_name: "Not Owned"
+    groups:
+      not_owned:
+        name: Not Owned
+        categories:
+          - not_owned
