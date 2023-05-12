@@ -68,7 +68,7 @@ local serviceAvailabilityQuery(selectorHash, metricName, rangeInterval) =
   };
 
   |||
-    avg(
+    min(
       clamp_max(
         avg_over_time(%(metricName)s{%(selector)s}[%(rangeInterval)s]),
         1
@@ -95,7 +95,7 @@ local serviceAvailabilityMillisecondsQuery(selectorHash, metricName) =
   |||
     (
       1 -
-      avg(
+      min(
         clamp_max(
           avg_over_time(%(metricName)s{%(selector)s}[$__range]),
           1
