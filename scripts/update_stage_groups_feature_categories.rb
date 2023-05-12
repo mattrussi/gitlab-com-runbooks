@@ -11,6 +11,7 @@ require 'logger'
 # This jsonnet file is mostly used to generate Grafana dashboards for each group.
 class UpdateStageGroupsFeatureCategories
   DEFAULT_STAGE_URL = 'https://gitlab.com/gitlab-com/www-gitlab-com/-/raw/master/data/stages.yml'
+  # The reason for the usage of services/stage-group-not-owned.yml is detailed within the file.
   NOT_OWNED_STAGE_GROUP_PATH = File.expand_path(File.join(File.dirname(__FILE__), '../services/stage-group-not-owned.yml'))
   DEFAULT_MAPPING_PATH = File.expand_path(File.join(File.dirname(__FILE__), '../services/stage-group-mapping.jsonnet'))
 

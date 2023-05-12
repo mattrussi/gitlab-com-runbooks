@@ -1,3 +1,16 @@
+# The not_owned category is neither attributed to a group nor to a stage.
+# For obvious reasons, the not_owned category is in place to sinalyze pieces
+# of our codebase that have no clear boundaries established.
+#
+# Given the reason above, we don't have not_owned in our https://gitlab.com/gitlab-com/www-gitlab-com/-/raw/master/data/stages.yml
+#
+# We take advantage of the stages.yml file structure to auto generate stage group error
+# budget dashboards.
+#
+# This file is intends to mimic not_owned as a stage and group, given the category
+# with the same name. It's being utilized by the file scripts/update_stage_groups_feature_categories.rb
+# to generate the stage group error budget dashboard. This way, no workaround needs to be added to our
+# code, apart from this one.
 stages:
   not_owned:
     display_name: "Not Owned"
