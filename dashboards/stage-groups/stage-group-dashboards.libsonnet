@@ -426,7 +426,7 @@ local commonHeader(
   )
   .addPanels(
     if displayBudget then
-      // Errorbudgets are always viewed over a 28d rolling average, regardles of the
+      // Error budgets are always viewed over a 28d rolling average, regardles of the
       // selected range see the configuration in `libsonnet/stage-groups/error_budget.libsonnet`
       local title =
         if budget.isDynamicRange then
