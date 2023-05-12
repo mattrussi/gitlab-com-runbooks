@@ -466,4 +466,11 @@
       'no_code_automation',
     ],
   },
+  not_owned: {
+    name: 'Not Owned',
+    stage: 'not_owned',
+    feature_categories: [
+      'not_owned',
+    ],
+  },
 }
