@@ -259,6 +259,17 @@
           },
         },
       },
+      response: {
+        properties: {
+          data: {
+            properties: {
+              data: {
+                type: 'flattened',
+              },
+            },
+          },
+        },
+      },
     },
     message_id: {
       type: 'text',
