@@ -258,13 +258,13 @@
             },
           },
         },
-      },
-      response: {
-        properties: {
-          data: {
-            properties: {
-              data: {
-                type: 'flattened',
+        response: {
+          properties: {
+            data: {
+              properties: {
+                data: {
+                  type: 'flattened',
+                },
               },
             },
           },
