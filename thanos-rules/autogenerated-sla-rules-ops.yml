@@ -90,11 +90,11 @@ groups:
       sum by (env,environment,tier,type,stage) (
         (
           sum by(env,environment,tier,type,stage) (
-            gitlab_service_ops:rate_1h{env="ops",type=~"api|git|registry|web"}
+            gitlab_service_ops:rate_1h{env="ops",type=~"api|ci-runners|git|internal-api|registry|sidekiq|web|web-pages"}
           )
           +
           sum by (env,environment,tier,type,stage) (
-            gitlab_service_apdex:weight:score_1h{env="ops",type=~"api|git|registry|web"}
+            gitlab_service_apdex:weight:score_1h{env="ops",type=~"api|ci-runners|git|internal-api|registry|sidekiq|web|web-pages"}
           )
         )
       )
@@ -103,11 +103,11 @@ groups:
       sum by (env,environment,tier,type,stage) (
         (
           sum by(env,environment,tier,type,stage) (
-            gitlab_service_apdex:success:rate_1h{env="ops",type=~"api|git|registry|web"}
+            gitlab_service_apdex:success:rate_1h{env="ops",type=~"api|ci-runners|git|internal-api|registry|sidekiq|web|web-pages"}
           )
           +
           sum by (env,environment,tier,type,stage)(
-            gitlab_service_ops:rate_1h{env="ops",type=~"api|git|registry|web"} - gitlab_service_errors:rate_1h{env="ops",type=~"api|git|registry|web"}
+            gitlab_service_ops:rate_1h{env="ops",type=~"api|ci-runners|git|internal-api|registry|sidekiq|web|web-pages"} - gitlab_service_errors:rate_1h{env="ops",type=~"api|ci-runners|git|internal-api|registry|sidekiq|web|web-pages"}
           )
         )
       )
