@@ -1,9 +1,13 @@
+local grafana = import 'github.com/grafana/grafonnet-lib/grafonnet/grafana.libsonnet';
+local template = grafana.template;
 local availabilityPromql = import 'gitlab-availability/availability-promql.libsonnet';
 local grafanaCalHeatmap = import 'grafana-cal-heatmap-panel/panel.libsonnet';
 local basic = import 'grafana/basic.libsonnet';
 local layout = import 'grafana/layout.libsonnet';
 local strings = import 'utils/strings.libsonnet';
 
+local templateServiceName(service) =
+  std.strReplace(service, '-', '_');
 local milisecondsQuery(ratioQuery) =
   |||
     (
@@ -28,24 +32,23 @@ local clampRatio(ratioQuery) =
     )
   ||| % [strings.indent(ratioQuery, 4)];
 
-local slaRow(availability, services, sloThreshold, selector) =
-  local overallAvailabilitRatio = clampRatio(
+local serviceSlaRow(availability, service, sloThreshold, selector) =
+  local slaAvailabilityRatio = clampRatio(
     availability.availabilityRatio(
       aggregationLabels=[],
       selector=selector,
-      services=services,
+      services=[service],
       range='$__range',
     )
   );
-  local serviceName = if std.length(services) == 1 then services[0] else 'Overall';
   [
     basic.slaStats(
-      title='%s availability' % [serviceName],
-      query=overallAvailabilitRatio,
+      title='%s availability' % [service],
+      query=slaAvailabilityRatio,
     ),
     basic.slaStats(
       title='',
-      query=milisecondsQuery(overallAvailabilitRatio),
+      query=milisecondsQuery(slaAvailabilityRatio),
       legendFormat='',
       displayName='Budget Spent',
       decimals=1,
@@ -58,7 +61,7 @@ local slaRow(availability, services, sloThreshold, selector) =
       query=availability.availabilityRatio(
         aggregationLabels=[],
         selector=selector,
-        services=services,
+        services=[service],
         range='1d',
       ),
       legendFormat='',
@@ -67,35 +70,83 @@ local slaRow(availability, services, sloThreshold, selector) =
       threshold='%f' % [sloThreshold]
     ),
     basic.slaTimeseries(
-      title='%s SLA over time period' % [serviceName],
+      title='%s SLA over time period' % [service],
       description='Availability over time, higher is better.',
       yAxisLabel='SLA',
       query=clampRatio(availability.availabilityRatio(
         aggregationLabels=[],
         selector=selector,
-        services=services,
+        services=[service],
         range='$__interval',
       )),
-      legendFormat='%s SLA' % [serviceName],
-      intervalFactor=1,
+      legendFormat='%s SLA' % [service],
       legend_show=false
     ),
   ];
 
-local dashboard(availability, keyServices, slo, selector) =
+local overallSlaRow(availability, keyServiceWeights, sloThreshold, selector) =
+  local dashboardServiceWeights = {
+    [service]: '$%s_weight' % [templateServiceName(service)]
+    for service in std.objectFields(keyServiceWeights)
+  };
+  local slaAvailabilityRatio = availability.weightedAvailabilityQuery(dashboardServiceWeights, selector, '$__range');
+  [
+    basic.slaStats(
+      title='Overall availability',
+      query=slaAvailabilityRatio,
+    ),
+    basic.slaStats(
+      title='',
+      query=milisecondsQuery(slaAvailabilityRatio),
+      legendFormat='',
+      displayName='Budget Spent',
+      decimals=1,
+      unit='ms',
+      colors=[budgetMinutesColor],
+      colorMode='value',
+    ),
+    grafanaCalHeatmap.heatmapCalendarPanel(
+      'Calendar',
+      query=availability.weightedAvailabilityQuery(dashboardServiceWeights, selector, '1d'),
+      legendFormat='',
+      datasource='$PROMETHEUS_DS',
+      intervalFactor=1,
+      threshold='%f' % [sloThreshold]
+    ),
+    basic.slaTimeseries(
+      title='Overall GitLab.com SLA over time period',
+      description='Availability over time, higher is better.',
+      yAxisLabel='SLA',
+      query=clampRatio(availability.weightedAvailabilityQuery(dashboardServiceWeights, selector, '$__interval')),
+      legendFormat='Overall SLA',
+      legend_show=false
+    ),
+  ];
+
+local dashboard(availability, keyServiceWeights, slo, selector, sortedServices) =
+  local serviceWeightTemplates = [
+    template.custom(
+      name='%s_weight' % [templateServiceName(service)],
+      query='0,1,5',
+      current='%s' % [keyServiceWeights[service]]
+    )
+    for service in sortedServices
+  ];
   basic.dashboard(
     'Occurence SLAs',
     tags=['general', 'slas', 'service-levels'],
     includeStandardEnvironmentAnnotations=false,
     time_from='now-1M/M',
     time_to='now-1d/d',
-  ).addPanels(
+  )
+  .addTemplates(serviceWeightTemplates)
+  .addPanels(
     layout.titleRowWithPanels(
       title='Overall GitLab availability',
       collapse=false,
       startRow=5,
       panels=layout.columnGrid(
-        rowsOfPanels=[slaRow(availability, keyServices, slo, selector)],
+        rowsOfPanels=[overallSlaRow(availability, keyServiceWeights, slo, selector)],
         columnWidths=[4, 4, 4, 12],
         rowHeight=5,
         startRow=10
@@ -108,8 +159,8 @@ local dashboard(availability, keyServices, slo, selector) =
       startRow=15,
       panels=layout.columnGrid(
         rowsOfPanels=[
-          slaRow(availability, [service], slo, selector)
-          for service in keyServices
+          serviceSlaRow(availability, service, slo, selector)
+          for service in sortedServices
         ],
         columnWidths=[4, 4, 4, 12],
         rowHeight=5,
@@ -119,7 +170,7 @@ local dashboard(availability, keyServices, slo, selector) =
   );
 
 {
-  dashboard(keyServices, aggregationSet, slo, extraSelector={}):
-    local availability = availabilityPromql.new(keyServices, aggregationSet);
-    dashboard(availability, keyServices, slo, extraSelector),
+  dashboard(keyServiceWeights, aggregationSet, slo, extraSelector={}, sortedServices=std.objectFields(keyServiceWeights)):
+    local availability = availabilityPromql.new(keyServiceWeights, aggregationSet);
+    dashboard(availability, keyServiceWeights, slo, extraSelector, sortedServices),
 }

@@ -1,4 +1,13 @@
 local occurenceSLADashboard = import 'gitlab-dashboards/occurrence-sla-dashboard.libsonnet';
 local metricsConfig = import 'gitlab-metrics-config.libsonnet';
 
-occurenceSLADashboard.dashboard(metricsConfig.keyServices, metricsConfig.aggregationSets.serviceSLIs, metricsConfig.slaTarget)
+local serviceWeights = {
+  [service]: 1
+  for service in metricsConfig.keyServices
+};
+occurenceSLADashboard.dashboard(
+  serviceWeights,
+  metricsConfig.aggregationSets.serviceSLIs,
+  metricsConfig.slaTarget,
+  sortedServices=metricsConfig.keyServices
+)

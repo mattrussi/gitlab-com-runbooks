@@ -67,4 +67,30 @@ test.suite({
       )
     |||,
   },
+
+  testWeightedAvailabilityQuery: {
+    local serviceWeights = { web: '$web_weight', api: '$api_weight' },
+    actual: testPromql.weightedAvailabilityQuery(serviceWeights, { env: 'gprd' }, '$__range'),
+    expect: |||
+      sum(
+        sum by (type)(
+          sum_over_time(gitlab:availability:success:rate_1h{env="gprd",type="api"}[$__range]) * $api_weight
+        )
+        or
+        sum by (type)(
+          sum_over_time(gitlab:availability:success:rate_1h{env="gprd",type="web"}[$__range]) * $web_weight
+        )
+      )
+      /
+      sum(
+        sum by (type)(
+          sum_over_time(gitlab:availability:ops:rate_1h{env="gprd",type="api"}[$__range]) * $api_weight
+        )
+        or
+        sum by (type)(
+          sum_over_time(gitlab:availability:ops:rate_1h{env="gprd",type="web"}[$__range]) * $web_weight
+        )
+      )
+    |||,
+  },
 })
