@@ -27,7 +27,7 @@ local objects = import 'utils/objects.libsonnet';
   serviceCatalog:: rawServiceCatalog,
 
   keyServices::
-    local keyServices = serviceCatalog.findKeyBusinessServices();
+    local keyServices = serviceCatalog.findKeyBusinessServices(includeZeroScore=true);
     std.map(function(service) service.name, keyServices),
 
   // stage-group-mapping.jsonnet is generated file, stored in the `services` directory
