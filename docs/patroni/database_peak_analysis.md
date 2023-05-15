@@ -49,20 +49,18 @@ The PROMQL query is :
 ```
 topk(10,
   sum by (queryid) (
-    rate(pg_stat_statements_seconds_total{env="gprd", monitor="db", type="patroni",instance="patroni-v12-02-db-gprd.c.gitlab-production.internal:9187"}[1m])
+    rate(pg_stat_statements_seconds_total{env="gprd", monitor="db", type="patroni"}[30s]) and on (instance) pg_replication_is_replica == 0
   )
 )
 ```
+
+Click the link below: <https://thanos.gitlab.net/graph?g0.expr=topk(10%2C%20%0A%20%20sum%20by%20(queryid)%20(%0A%20%20%20%20rate(pg_stat_statements_seconds_total%7Benv%3D%22gprd%22%2C%20monitor%3D%22db%22%2C%20type%3D%22patroni%22%7D%5B30s%5D)%20and%20on%20(instance)%20pg_replication_is_replica%20%3D%3D%200%0A%20%20)%0A)&g0.tab=0&g0.stacked=0&g0.range_input=15m&g0.max_source_resolution=0s&g0.deduplicate=1&g0.partial_response=0&g0.store_matches=%5B%5D&g0.end_input=2023-05-09%2015%3A10%3A00&g0.moment_input=2023-05-09%2015%3A10%3A00>
 
 In the fields of the graph please choose the interval of 15 minutes and few minutes after the peak, the search will be 15 minutes recursive, in our example, the value is: 2021-06-10 19:25
 
 Click on the execute button to render the graph.
 
-the link to this query:
-
-<https://thanos.gitlab.net/graph?g0.range_input=15m&g0.end_input=2021-06-10%2019%3A25&g0.step_input=3&g0.moment_input=2021-03-20%2020%3A20%3A00&g0.max_source_resolution=0s&g0.expr=topk(10%2C%20%0A%20%20sum%20by%20(queryid)%20(%0A%20%20%20%20rate(pg_stat_statements_seconds_total%7Benv%3D%22gprd%22%2C%20monitor%3D%22db%22%2C%20type%3D%22patroni%22%2Cinstance%3D%22patroni-v12-02-db-gprd.c.gitlab-production.internal%3A9187%22%7D%5B1m%5D)%0A%20%20)%0A)&g0.tab=0>
-
-Where we can see 1 statements is above the average in the graph
+For this example, we can see 1 statements is above the average in the graph
 
 QueryId: 8726813440039762943  ( at this moment you can scroll the mouse over the different lines to see the queryId)
 
@@ -77,7 +75,7 @@ we need to adapt our query to:
 ```
 topk(10,
   sum by (queryid) (
-    rate(pg_stat_statements_seconds_total{env="gprd", monitor="db", type="patroni",instance="patroni-v12-02-db-gprd.c.gitlab-production.internal:9187"}[15m])
+    rate(pg_stat_statements_seconds_total{env="gprd", monitor="db", type="patroni"}[15m]) and on (instance) pg_replication_is_replica == 0
   )
 )
 ```
@@ -165,11 +163,11 @@ in the field query we have a SQL comment called marginalia: /*application:sideki
  We follow the same process as for the total time, just considering a different PROMQL query:
 
  ```
- topk(10,
-  sum by (queryid) (
-    rate(pg_stat_statements_calls_total{env="gprd", monitor="db", type="patroni",instance="patroni-v12-02-db-gprd.c.gitlab-production.internal:9187"}[1m])
+  topk(10,
+    sum by (queryid) (
+      rate(pg_stat_statements_calls{env="gprd", monitor="db", type="patroni"}[30s]) and on (instance) pg_replication_is_replica == 0
+    )
   )
-)
  ```
 
  ![](img/pg_calls.png)
