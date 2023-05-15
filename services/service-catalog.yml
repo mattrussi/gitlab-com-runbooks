@@ -672,6 +672,22 @@ services:
         grafana_folder: pvs
         primary_grafana_dashboard: pvs-main/pvs-overview
 
+  - name: code_suggestions
+    tier: inf
+    friendly_name: Code Suggestions
+    teams:
+      - trust_and_safety
+    label: CodeSuggestions
+    owner: mlops
+    technical:
+      project:
+        - https://gitlab.com/groups/gitlab-org/modelops/applied-ml/code-suggestions
+      documents:
+        architecture: https://gitlab.com/gitlab-org/modelops/applied-ml/code-suggestions/ai-assist/-/blob/main/docs/architecture.md
+      logging:
+        - name: mlops
+          permalink: https://log.gprd.gitlab.net/goto/d21f8880-f0a7-11ed-a017-0d32180b1390
+
   - name: mailroom
     tier: sv
     friendly_name: Mailroom Incoming Mail Service
