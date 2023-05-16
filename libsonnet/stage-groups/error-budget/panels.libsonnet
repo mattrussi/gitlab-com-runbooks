@@ -302,7 +302,6 @@ local violationRatePanel(queries, group) =
           renameByName: {
             'Value #A': 'failures past 28 days',
             'Value #B': 'measurements past 28 days',
-
           },
         },
       },
@@ -313,6 +312,15 @@ local violationRatePanel(queries, group) =
         displayName: 'failures past 28 days',
         desc: true,
       }],
+      footer: {
+        show: true,
+        reducer: ['sum'],
+        countRows: false,
+        fields: [
+          'Value #A',
+          'Value #B',
+        ],
+      },
     },
     fieldConfig+: {
       overrides+: [
