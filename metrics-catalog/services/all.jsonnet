@@ -9,6 +9,7 @@
   import 'camoproxy.jsonnet',
   import 'ci-runners.jsonnet',
   import 'cloud-sql.jsonnet',
+  import 'code-suggestions.jsonnet',
   import 'consul.jsonnet',
   import 'customersdot.jsonnet',
   import 'external-dns.jsonnet',
