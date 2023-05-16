@@ -8,12 +8,16 @@ local notOwnedGroup = serviceCatalog.lookupTeamForStageGroup('not_owned') + {
   stage: 'not_owned',
   feature_categories: [
     'not_owned',
+    'unknown',
   ],
 };
 
 local stageGroup(groupName) =
-  local team = serviceCatalog.lookupTeamForStageGroup(groupName);
-  team + stageGroupMapping[groupName] { key: groupName };
+  if groupName == 'not_owned' then
+    notOwnedGroup
+  else
+    local team = serviceCatalog.lookupTeamForStageGroup(groupName);
+    team + stageGroupMapping[groupName] { key: groupName };
 
 local stageGroupsWithoutNotOwned =
   std.map(stageGroup, std.objectFields(stageGroupMapping));

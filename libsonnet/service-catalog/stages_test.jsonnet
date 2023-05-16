@@ -26,6 +26,22 @@ test.suite({
     actual: stages.stageGroup('authentication_and_authorization').slack_alerts_channel,
     expect: 'feed_alerts_access',
   },
+  testStageGroupNotOwnedLookup: {
+    actual: stages.stageGroup('not_owned'),
+    expect: {
+      key: 'not_owned',
+      name: 'not_owned',
+      stage: 'not_owned',
+      feature_categories: [
+        'not_owned',
+        'unknown',
+      ],
+      issue_tracker: null,
+      product_stage_group: null,
+      send_slo_alerts_to_team_slack_channel: false,
+      ignored_components: [],
+    },
+  },
   testFeatureCategoryMapCategories: {
     actual: std.objectFields(stages.featureCategoryMap),
     expectThat: {
