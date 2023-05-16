@@ -181,6 +181,9 @@ teams:
   - graphql_query
 
 - name: ai_assisted
+  url: https://about.gitlab.com/handbook/engineering/development/data-science/ai-assisted/
+  manager: mray2020
+  label: group::ai assisted
   slack_alerts_channel: f_code_suggestions
   product_stage_group: ai_assisted
   ignored_components:
