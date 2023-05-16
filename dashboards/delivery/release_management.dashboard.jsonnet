@@ -269,22 +269,33 @@ basic.dashboard(
         ],
       ),
     ],
-    // Column 4: release pressure (based on pick labels)
+    // Column 4: S1/S2 Patch release pressure
     [
       bargaugePanel(
-        'Release pressure',
-        description='Number of `Pick into` merge requests for previous releases.',
+        'Patch release pressure: S1/S2',
+        description='Number of S1/S2 merge requests merged in previous releases.',
         query=|||
-          sum(delivery_release_pressure{state="merged"}) by (state, version)
+          sum by (version) (delivery_release_pressure{severity=~"severity::1|severity::2",job="delivery-metrics"})
         |||,
-        legendFormat='{{version}} ({{state}})',
-        fieldLinks=[
-          {
-            title: 'View merge requests',
-            url: 'https://gitlab.com/groups/gitlab-org/-/merge_requests?scope=all&state=${__field.labels.state}&label_name[]=Pick+into+${__field.labels.version}',
-            targetBlank: true,
-          },
-        ],
+        legendFormat='{{version}}',
+        thresholds={
+          mode: 'absolute',
+          steps: [
+            { color: colorScheme.normalRangeColor, value: 0 },
+            { color: colorScheme.criticalColor, value: 1 },
+          ],
+        },
+      ),
+    ],
+    // Column 5: Patch release pressure
+    [
+      bargaugePanel(
+        'Patch release pressure: Total ',
+        description='Number of merge requests merged in previous releases regardless severity.',
+        query=|||
+          sum by (version) (delivery_release_pressure{job="delivery-metrics"})
+        |||,
+        legendFormat='{{version}}',
         thresholds={
           mode: 'absolute',
           steps: [
@@ -295,51 +306,6 @@ basic.dashboard(
           ],
         },
       ),
-    ],
-    // Column 5: Patch release pressure
-    [
-      statPanel.new(
-        'Patch release pressure (not ready for use)',
-        description='Total of unreleased S1/S2 merge requests merged into stable branches',
-        reducerFunction='lastNotNull',
-        colorMode='value',
-        graphMode='area',
-        textMode='value_and_name',
-        displayName='S1/S2 pressure',
-      )
-      .addTarget(
-        prometheus.target(
-          'sum(delivery_release_pressure{severity=~"severity::1|severity::2",job="delivery-metrics"})',
-        )
-      )
-      .addThresholds([
-        { color: colorScheme.criticalColor, value: 1 },
-      ]) {
-        gridPos+: {
-          h: 8,
-        },
-      },
-      statPanel.new(
-        'Patch release pressure (not ready for use)',
-        description='Total of unreleased merge requests merged into stable branches',
-        reducerFunction='lastNotNull',
-        colorMode='value',
-        graphMode='area',
-        textMode='value_and_name',
-        displayName='Total pressure',
-      )
-      .addTarget(
-        prometheus.target(
-          'sum(delivery_release_pressure{job="delivery-metrics"})',
-        )
-      )
-      .addThresholds([
-        { color: colorScheme.warningColor, value: 1 },
-      ]) {
-        gridPos+: {
-          h: 7,
-        },
-      },
     ],
     // column 6: Post deploy migration pressure
     [
@@ -357,50 +323,6 @@ basic.dashboard(
       ),
     ],
   ], cellHeights=[3 for x in environments], startRow=1)
-)
-.addPanel(
-  row.new(title='Patch release pressure (not ready for use)'),
-  gridPos={ x: 0, y: 1000, w: 24, h: 12 },
-)
-.addPanels(
-  layout.grid(
-    [
-      bargaugePanel(
-        'S1/S2 MR Pressure (not ready for use)',
-        description='Number of S1/S2 merge requests merged in previous releases.',
-        query=|||
-          sum by (version) (delivery_release_pressure{severity=~"severity::1|severity::2",job="delivery-metrics"})
-        |||,
-        legendFormat='{{version}}',
-        thresholds={
-          mode: 'absolute',
-          steps: [
-            { color: colorScheme.normalRangeColor, value: 0 },
-            { color: colorScheme.criticalColor, value: 1 },
-          ],
-        },
-      ),
-      bargaugePanel(
-        'Total MR Pressure (not ready for use)',
-        description='Number of merge requests merged in previous releases.',
-        query=|||
-          sum by (version) (delivery_release_pressure{job="delivery-metrics"})
-        |||,
-        legendFormat='{{version}}',
-        thresholds={
-          mode: 'absolute',
-          steps: [
-            { color: colorScheme.normalRangeColor, value: null },
-            { color: colorScheme.warningColor, value: 5 },
-            { color: colorScheme.errorColor, value: 10 },
-            { color: colorScheme.criticalColor, value: 15 },
-          ],
-        },
-      ),
-    ],
-    cols=3,
-    startRow=1000
-  )
 )
 .addPanels(
   std.flattenArrays(
