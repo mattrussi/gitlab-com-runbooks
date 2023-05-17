@@ -38,7 +38,11 @@ sequenceDiagram
 * ModelGateway: Entry point for code suggestions and will route requests accordingly.
 * ModleTriton: [Inference Server](https://github.com/triton-inference-server/server) that loads our model data from the NFS server into memory.
 
-Mode detailed architecture description avialable in: <https://docs.gitlab.com/ee/development/ai_architecture.html>
+Mode detailed architecture description avialable in:
+<https://docs.gitlab.com/ee/development/ai_architecture.html> and in
+the [Architecture
+overview](https://gitlab.com/gitlab-org/modelops/applied-ml/code-suggestions/ai-assist/-/blob/main/docs/architecture.md)
+in the source repository.
 
 <!-- ## Performance -->
 
@@ -63,4 +67,6 @@ To apply these changes:
 
 <!-- ## Monitoring/Alerting -->
 
-<!-- ## Links to further Documentation -->
+## Links to further Documentation
+
+* [Deploying to the kubernetes cluster](https://gitlab.com/gitlab-org/modelops/applied-ml/code-suggestions/ai-assist#deploying-to-the-kubernetes-cluster)
