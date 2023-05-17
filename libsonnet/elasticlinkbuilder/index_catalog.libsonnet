@@ -108,6 +108,22 @@ local indexDefaults = {
     requestsNotSupported: true,
   },
 
+  mlops: indexDefaults {
+    timestamp: '@timestamp',
+    indexPattern: '8cd9c4c0-f0a7-11ed-a017-0d32180b1390',
+    defaultColumns: [
+      'json.jsonPayload.level',
+      'json.jsonPayload.method',
+      'json.jsonPayload.status_code',
+      'json.jsonPayload.path',
+      'json.jsonPayload.duration_s',
+      'json.jsonPayload.correlation_id',
+    ],
+    defaultLatencyField: 'json.jsonPayload.duration_s',
+    defaultSeriesSplitField: 'json.jsonPayload.url',
+    failureFilter: statusCode('json.jsonPayload.status_code'),
+  },
+
   monitoring_ops: indexDefaults {
     timestamp: '@timestamp',
     indexPattern: '0931f630-582b-11ec-87e2-4f63f28291d2',
