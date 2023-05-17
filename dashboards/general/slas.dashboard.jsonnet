@@ -11,6 +11,7 @@ local templates = import 'grafana/templates.libsonnet';
 local thresholds = import 'gitlab-dashboards/thresholds.libsonnet';
 local generalServicesDashboard = import 'general-services-dashboard.libsonnet';
 local template = grafana.template;
+local strings = import 'utils/strings.libsonnet';
 
 local overviewDashboardLinks(type) =
   local formatConfig = { type: type };
@@ -39,20 +40,62 @@ local budgetMinutesColor = {
   color: 'light-blue',
   value: null,
 };
+local defaultSelector = {
+  env: { re: 'ops|$environment' },
+  environment: '$environment',
+  stage: 'main',
+  monitor: { re: 'global|' },
+};
 
 local systemAvailabilityQuery(selectorHash, rangeInterval) =
-  local defaultSelector = {
-    env: { re: 'ops|$environment' },
-    environment: '$environment',
-    stage: 'main',
-    monitor: { re: 'global|' },
-  };
-
   |||
     avg_over_time(sla:gitlab:ratio{%(selectors)s}[%(rangeInterval)s])
   ||| % {
     selectors: selectors.serializeHash(defaultSelector + selectorHash),
     rangeInterval: rangeInterval,
+  };
+
+local templateServiceName(service) =
+  '%s_weight' % [std.strReplace(service, '-', '_')];
+
+local serviceWeights = {
+  [service.name]: service.business.SLA.overall_sla_weighting
+  for service in generalServicesDashboard.keyServices(includeZeroScore=true)
+};
+
+local weightableQuery(aggregation, service, rangeInterval) =
+  local serviceWeightTemplate = '$%s' % [templateServiceName(service)];
+  |||
+    %(aggregation)s without (slo) (avg_over_time(slo_observation_status{%(selector)s}[%(rangeInterval)s])) * %(weight)s
+  ||| % {
+    aggregation: aggregation,
+    selector: selectors.serializeHash(defaultSelector { type: service }),
+    weight: serviceWeightTemplate,
+    rangeInterval: rangeInterval,
+  };
+
+local adjustableWeightQuery(rangeInterval) =
+  local serviceScoreQueries = std.map(
+    function(service)
+      weightableQuery('min', service, rangeInterval),
+    std.objectFields(serviceWeights)
+  );
+  local serviceWeightQueries = std.map(
+    function(service)
+      weightableQuery('group', service, rangeInterval),
+    std.objectFields(serviceWeights)
+  );
+  |||
+    sum by (environment, env, stage) (
+      %(score)s
+    )
+    /
+    sum by (environment, env, stage) (
+      %(weight)s
+    )
+  ||| % {
+    score: strings.chomp(strings.indent(std.join('\nor\n', serviceScoreQueries), 2)),
+    weight: strings.chomp(strings.indent(std.join('\nor\n', serviceWeightQueries), 2)),
   };
 
 // NB: this query takes into account values recorded in Prometheus prior to
@@ -153,6 +196,14 @@ local serviceRow(service) =
   ];
 
 local primaryServiceRows = std.map(serviceRow, generalServicesDashboard.sortedKeyServices());
+local serviceWeightTemplates = [
+  template.custom(
+    name=templateServiceName(service),
+    query='0,1,5',
+    current='%s' % [serviceWeights[service]]
+  )
+  for service in std.map(function(s) s.name, generalServicesDashboard.sortedKeyServices())
+];
 
 basic.dashboard(
   'SLAs',
@@ -163,7 +214,7 @@ basic.dashboard(
 )
 .addTemplate(
   templates.slaType,
-)
+).addTemplates(serviceWeightTemplates)
 .addPanel(
   row.new(title='Overall System Availability'),
   gridPos={
@@ -175,13 +226,22 @@ basic.dashboard(
 )
 .addPanels(
   local systemSelector = { sla_type: '$sla_type' };
-  layout.columnGrid([[
-    basic.slaStats(
-      title='GitLab.com Availability',
-      query=systemAvailabilityQuery(systemSelector, '$__range'),
-      intervalFactor=1,
-    ),
-    basic.slaStats(
+  layout.splitColumnGrid([
+    [
+      basic.slaStats(
+        title='GitLab.com Availability',
+        description='Recorded availability',
+        query=systemAvailabilityQuery(systemSelector, '$__range'),
+        intervalFactor=1,
+      ),
+      basic.slaStats(
+        title='Gitlab.com Availability with selected weights',
+        description='Availability taking into account weights from the dropdowns',
+        query=adjustableWeightQuery('$__range'),
+        intervalFactor=1,
+      ),
+    ],
+    [basic.slaStats(
       title='',
       query=serviceAvailabilityMillisecondsQuery(systemSelector, 'sla:gitlab:ratio'),
       legendFormat='',
@@ -191,26 +251,26 @@ basic.dashboard(
       colors=[budgetMinutesColor],
       colorMode='value',
       intervalFactor=1,
-    ),
-    grafanaCalHeatmap.heatmapCalendarPanel(
+    )],
+    [grafanaCalHeatmap.heatmapCalendarPanel(
       'Calendar',
       query=systemAvailabilityQuery(systemSelector, '1d'),
       legendFormat='',
       datasource='$PROMETHEUS_DS',
       intervalFactor=1,
-    ),
-    basic.slaTimeseries(
-      title='Overall SLA over time period - gitlab.com',
-      description='Rolling average SLO adherence across all primary services. Higher is better.',
-      yAxisLabel='SLA',
-      query=systemAvailabilityQuery(systemSelector, '$__interval'),
-      legendFormat='gitlab.com SLA',
-      intervalFactor=1,
-      legend_show=false
-    )
-    .addSeriesOverride(seriesOverrides.goldenMetric('gitlab.com SLA'))
-    + thresholdsValues,
-  ]], [4, 4, 4, 12], rowHeight=5, startRow=1)
+    )],
+    [basic.slaTimeseries(
+       title='Overall SLA over time period - gitlab.com',
+       description='Rolling average SLO adherence across all primary services. Higher is better.',
+       yAxisLabel='SLA',
+       query=systemAvailabilityQuery(systemSelector, '$__interval'),
+       legendFormat='gitlab.com SLA',
+       intervalFactor=1,
+       legend_show=false
+     )
+     .addSeriesOverride(seriesOverrides.goldenMetric('gitlab.com SLA'))
+     + thresholdsValues],
+  ], cellHeights=[3, 2], columnWidths=[4, 4, 4, 12], startRow=1)
 )
 .addPanel(
   row.new(title='Primary Services'),
