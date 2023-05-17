@@ -21,6 +21,7 @@
 * [Tuning and Modifying Alerts](../monitoring/alert_tuning.md)
 * [Gitlab.com on Kubernetes](../onboarding/gitlab.com_on_k8s.md)
 * [Life of a Web Request](../tutorials/overview_life_of_a_web_request.md)
+* [Custom Websocket Alerts](slow-broken-upgrades.md)
 <!-- END_MARKER -->
 
 <!-- ## Summary -->
