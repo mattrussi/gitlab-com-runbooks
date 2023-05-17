@@ -46,6 +46,7 @@
 * [A survival guide for SREs to working with Redis at GitLab](../redis/redis-survival-guide-for-sres.md)
 * [../redis/redis.md](../redis/redis.md)
 * [Creating a Sidekiq Shard](creating-a-shard.md)
+* [Deferring Sidekiq jobs](deferring-jobs.md)
 * [Disabling a Sidekiq queue](disabling-a-queue.md)
 * [Pull mirror overdue queue is too large](large-pull-mirror-queue.md)
 * [Sidekiq Queue Out of Control](large-sidekiq-queue.md)

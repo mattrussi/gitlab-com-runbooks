@@ -39,6 +39,7 @@
 * [A survival guide for SREs to working with Redis at GitLab](redis-survival-guide-for-sres.md)
 * [redis.md](redis.md)
 * [Sentry is down and gives error 500](../sentry/sentry-is-down.md)
+* [Deferring Sidekiq jobs](../sidekiq/deferring-jobs.md)
 * [Pull mirror overdue queue is too large](../sidekiq/large-pull-mirror-queue.md)
 * [Sidekiq queue migration](../sidekiq/queue-migration.md)
 * [Poking around at sidekiq's running state](../sidekiq/sidekiq-inspection.md)
