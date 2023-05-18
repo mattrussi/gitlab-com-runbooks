@@ -15,18 +15,16 @@ metricsCatalog.serviceDefinition(
     },
     // disable alerts until we are receiving production traffic
     serviceLevelIndicators+: {
-      // rails_cache SLI omitted as the application does not use any
-      // ActiveSupport::Cache::RedisCacheStore for this service.
       rails_redis_client+: {
-        userImpacting: false,
+        userImpacting: true,
         severity: 's4',
       },
       primary_server+: {
-        userImpacting: false,
+        userImpacting: true,
         severity: 's4',
       },
       secondary_servers+: {
-        userImpacting: false,
+        userImpacting: true,
         severity: 's4',
       },
     },
