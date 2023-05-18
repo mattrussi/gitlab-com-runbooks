@@ -473,4 +473,36 @@ generateTests([
     labels: { env: 'gstg', slo_alert: 'yes', type: 'web', aggregation: 'regional_component' },
     receivers: ['blackhole'],
   },
+  {
+    name: 'slo_alert=yes, env=gprd, team=ai_assisted should go to f_code_suggestions',
+    labels: { env: 'gprd', team: 'ai_assisted' },
+    receivers: [
+      'team_ai_assisted_alerts_channel',
+      'prod_alerts_slack_channel',
+    ],
+  },
+  {
+    name: 'slo_alert=yes, env=gprd, team=ai_assisted should go to f_code_suggestions',
+    labels: { env: 'gprd', team: 'ai_assisted' },
+    receivers: [
+      'team_ai_assisted_alerts_channel',
+      'prod_alerts_slack_channel',
+    ],
+  },
+  {
+    name: 'env=gprd, feature_category=code_suggestions should go to f_code_suggestions',
+    labels: { env: 'gprd', feature_category: 'code_suggestions' },
+    receivers: [
+      'team_ai_assisted_alerts_channel',
+      'prod_alerts_slack_channel',
+    ],
+  },
+  {
+    name: 'env=gprd, product_stage_group=ai_assisted should go to f_code_suggestions',
+    labels: { env: 'gprd', product_stage_group: 'ai_assisted' },
+    receivers: [
+      'team_ai_assisted_alerts_channel',
+      'prod_alerts_slack_channel',
+    ],
+  },
 ])

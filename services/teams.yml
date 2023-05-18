@@ -179,10 +179,15 @@ teams:
   product_stage_group: activation
   ignored_components:
   - graphql_query
+
 - name: ai_assisted
+  slack_alerts_channel: f_code_suggestions
   product_stage_group: ai_assisted
   ignored_components:
   - graphql_query
+  slack_error_budget_channel: f_code_suggestions
+  send_error_budget_weekly_to_slack: true
+
 - name: code_review
   product_stage_group: code_review
   ignored_components:
