@@ -12,7 +12,7 @@ groups:
       type: code_suggestions
     expr: |
       sum by (environment) (
-        sli_aggregations:http_requests_total_rate1m{type="code_suggestions"}
+        rate(http_requests_total{type="code_suggestions"}[1m])
       )
   - record: gitlab_component_errors:rate
     labels:
@@ -23,7 +23,7 @@ groups:
     expr: |
       (
         sum by (environment) (
-          sli_aggregations:http_requests_total_rate1m{status=~"^5.*",type="code_suggestions"}
+          rate(http_requests_total{status=~"^5.*",type="code_suggestions"}[1m])
         )
       )
       or
@@ -43,7 +43,7 @@ groups:
       type: code_suggestions
     expr: |
       sum by (environment) (
-        sli_aggregations:http_requests_total_rate5m{type="code_suggestions"}
+        rate(http_requests_total{type="code_suggestions"}[5m])
       )
   - record: gitlab_component_errors:rate_5m
     labels:
@@ -54,7 +54,7 @@ groups:
     expr: |
       (
         sum by (environment) (
-          sli_aggregations:http_requests_total_rate5m{status=~"^5.*",type="code_suggestions"}
+          rate(http_requests_total{status=~"^5.*",type="code_suggestions"}[5m])
         )
       )
       or
@@ -74,7 +74,7 @@ groups:
       type: code_suggestions
     expr: |
       sum by (environment) (
-        sli_aggregations:http_requests_total_rate30m{type="code_suggestions"}
+        rate(http_requests_total{type="code_suggestions"}[30m])
       )
   - record: gitlab_component_errors:rate_30m
     labels:
@@ -85,7 +85,7 @@ groups:
     expr: |
       (
         sum by (environment) (
-          sli_aggregations:http_requests_total_rate30m{status=~"^5.*",type="code_suggestions"}
+          rate(http_requests_total{status=~"^5.*",type="code_suggestions"}[30m])
         )
       )
       or
@@ -105,7 +105,7 @@ groups:
       type: code_suggestions
     expr: |
       sum by (environment) (
-        sli_aggregations:http_requests_total_rate1h{type="code_suggestions"}
+        rate(http_requests_total{type="code_suggestions"}[1h])
       )
   - record: gitlab_component_errors:rate_1h
     labels:
@@ -116,7 +116,7 @@ groups:
     expr: |
       (
         sum by (environment) (
-          sli_aggregations:http_requests_total_rate1h{status=~"^5.*",type="code_suggestions"}
+          rate(http_requests_total{status=~"^5.*",type="code_suggestions"}[1h])
         )
       )
       or
@@ -136,7 +136,7 @@ groups:
       type: code_suggestions
     expr: |
       sum by (environment) (
-        sli_aggregations:http_requests_total_rate6h{type="code_suggestions"}
+        rate(http_requests_total{type="code_suggestions"}[6h])
       )
   - record: gitlab_component_errors:rate_6h
     labels:
@@ -147,7 +147,7 @@ groups:
     expr: |
       (
         sum by (environment) (
-          sli_aggregations:http_requests_total_rate6h{status=~"^5.*",type="code_suggestions"}
+          rate(http_requests_total{status=~"^5.*",type="code_suggestions"}[6h])
         )
       )
       or

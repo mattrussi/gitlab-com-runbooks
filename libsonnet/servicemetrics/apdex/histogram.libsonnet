@@ -31,7 +31,7 @@ local generateApdexComponentRateQuery(histogramApdex, additionalSelectors, range
     selector=selectorWithout,
   );
 
-  if resolvedRecordingRule == null then
+  if !histogramApdex.useRecordingRuleRegistry || resolvedRecordingRule == null then
     local query = 'rate(%(histogram)s{%(selector)s}[%(rangeInterval)s])' % {
       histogram: histogramApdex.histogram,
       selector: selectors.serializeHash(selectorWithout),
@@ -163,12 +163,14 @@ local generateApdexAttributionQuery(histogram, selector, rangeInterval, aggregat
     satisfiedThreshold=null,
     toleratedThreshold=null,
     metricsFormat='prometheus',
+    useRecordingRuleRegistry=true
   ):: {
     histogram: histogram,
     selector: selector,
     satisfiedThreshold: satisfiedThreshold,
     toleratedThreshold: toleratedThreshold,
     metricsFormat: metricsFormat,
+    useRecordingRuleRegistry: useRecordingRuleRegistry,
 
     apdexQuery(aggregationLabels, selector, rangeInterval, withoutLabels=[])::
       generateApdexScoreQuery(

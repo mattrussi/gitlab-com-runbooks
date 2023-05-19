@@ -29,12 +29,14 @@ metricsCatalog.serviceDefinition({
 
       requestRate: rateMetric(
         counter='http_requests_total',
-        selector=baseSelector
+        selector=baseSelector,
+        useRecordingRuleRegistry=false,
       ),
 
       errorRate: rateMetric(
         counter='http_requests_total',
-        selector=baseSelector { status: { re: '^5.*' } }
+        selector=baseSelector { status: { re: '^5.*' } },
+        useRecordingRuleRegistry=false,
       ),
 
       significantLabels: ['status'],

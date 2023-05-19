@@ -3,7 +3,7 @@ local aggregations = import 'promql/aggregations.libsonnet';
 local selectors = import 'promql/selectors.libsonnet';
 
 {
-  resolveRateQuery(metricName, selector, rangeInterval, aggregationFunction=null, aggregationLabels=[])::
+  resolveRateQuery(metricName, selector, rangeInterval, useRecordingRuleRegistry, aggregationFunction=null, aggregationLabels=[])::
     local recordedRate = recordingRuleRegistry.resolveRecordingRuleFor(
       aggregationFunction=aggregationFunction,
       aggregationLabels=aggregationLabels,
@@ -12,7 +12,7 @@ local selectors = import 'promql/selectors.libsonnet';
       rangeInterval=rangeInterval,
       selector=selector,
     );
-    if recordedRate != null then
+    if useRecordingRuleRegistry && recordedRate != null then
       recordedRate
     else
       local query = 'rate(%(metric)s{%(selector)s}[%(rangeInterval)s])' % {
