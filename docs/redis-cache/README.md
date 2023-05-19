@@ -12,7 +12,7 @@
 
 ## Logging
 
-* [system](https://log.gprd.gitlab.net/goto/1a4342231de57c0ceabc8f5e0e402909)
+* [system]()
 
 ## Troubleshooting Pointers
 

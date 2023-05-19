@@ -49,6 +49,7 @@ metricsCatalog.serviceDefinition({
     'redis-cache': true,
     'redis-repository-cache': true,
     'redis-sessions': true,
+    'redis-feature-flag': true,
     redis: true,
     patroni: true,
     pgbouncer: true,
