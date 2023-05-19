@@ -4,7 +4,7 @@ local aggregations = import 'promql/aggregations.libsonnet';
 local selectors = import 'promql/selectors.libsonnet';
 local strings = import 'utils/strings.libsonnet';
 
-local transformErrorRateToSuccessRate(errorRateMetric, operationRateMetric, selector, rangeInterval, aggregationLabels) =
+local transformErrorRateToSuccessRate(errorRateMetric, operationRateMetric, selector, rangeInterval, aggregationLabels, useRecordingRuleRegistry) =
   |||
     %(operationRate)s - (
       %(errorRate)s or
@@ -12,13 +12,28 @@ local transformErrorRateToSuccessRate(errorRateMetric, operationRateMetric, sele
     )
   ||| % {
     operationRate: strings.chomp(resolveRateQuery(
-      operationRateMetric, selector, rangeInterval, aggregationFunction='sum', aggregationLabels=aggregationLabels
+      operationRateMetric,
+      selector,
+      rangeInterval,
+      useRecordingRuleRegistry,
+      aggregationFunction='sum',
+      aggregationLabels=aggregationLabels
     )),
     indentedOperationRate: strings.indent(strings.chomp(resolveRateQuery(
-      operationRateMetric, selector, rangeInterval, aggregationFunction='sum', aggregationLabels=aggregationLabels
+      operationRateMetric,
+      selector,
+      rangeInterval,
+      useRecordingRuleRegistry,
+      aggregationFunction='sum',
+      aggregationLabels=aggregationLabels
     )), 2),
     errorRate: strings.indent(strings.chomp(resolveRateQuery(
-      errorRateMetric, selector, rangeInterval, aggregationFunction='sum', aggregationLabels=aggregationLabels
+      errorRateMetric,
+      selector,
+      rangeInterval,
+      useRecordingRuleRegistry,
+      aggregationFunction='sum',
+      aggregationLabels=aggregationLabels
     )), 2),
   };
 
@@ -27,10 +42,11 @@ local transformErrorRateToSuccessRate(errorRateMetric, operationRateMetric, sele
   // errorCounterApdex constructs an apdex score (ie, successes/total) from an error score (ie, errors/total).
   // This can be useful for latency metrics that count latencies that exceed threshold, instead of the more
   // common form of latencies that are within threshold.
-  errorCounterApdex(errorRateMetric, operationRateMetric, selector):: {
+  errorCounterApdex(errorRateMetric, operationRateMetric, selector, useRecordingRuleRegistry=true):: {
     errorRateMetric: errorRateMetric,
     operationRateMetric: operationRateMetric,
     selector: selector,
+    useRecordingRuleRegistry: useRecordingRuleRegistry,
 
     apdexSuccessRateQuery(aggregationLabels, selector, rangeInterval, withoutLabels=[])::
       transformErrorRateToSuccessRate(
@@ -39,12 +55,14 @@ local transformErrorRateToSuccessRate(errorRateMetric, operationRateMetric, sele
         selectors.without(selectors.merge(self.selector, selector), withoutLabels),
         rangeInterval,
         aggregationLabels,
+        useRecordingRuleRegistry,
       ),
     apdexWeightQuery(aggregationLabels, selector, rangeInterval, withoutLabels=[])::
       resolveRateQuery(
         self.operationRateMetric,
         selectors.without(selectors.merge(self.selector, selector), withoutLabels),
         rangeInterval,
+        useRecordingRuleRegistry,
         aggregationLabels=aggregationLabels,
         aggregationFunction='sum'
       ),
@@ -55,6 +73,7 @@ local transformErrorRateToSuccessRate(errorRateMetric, operationRateMetric, sele
         selectors.without(selectors.merge(self.selector, selector), withoutLabels),
         rangeInterval,
         [],
+        useRecordingRuleRegistry,
       ),
 
     apdexDenominator(selector, rangeInterval, withoutLabels=[])::
@@ -62,6 +81,7 @@ local transformErrorRateToSuccessRate(errorRateMetric, operationRateMetric, sele
         self.operationRateMetric,
         selectors.without(selectors.merge(self.selector, selector), withoutLabels),
         rangeInterval,
+        useRecordingRuleRegistry,
       ),
 
     apdexAttribution(aggregationLabel, selector, rangeInterval, withoutLabels=[])::

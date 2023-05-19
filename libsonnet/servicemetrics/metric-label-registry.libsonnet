@@ -26,7 +26,7 @@ local collectMetricsBurnRatesLabelsForKeyMetric(sli, keyMetricAttribute, signifi
     local keyMetric = sli[keyMetricAttribute];
 
     // Does the key metric support reflection?
-    if std.objectHasAll(keyMetric, 'supportsReflection') then
+    if std.objectHasAll(keyMetric, 'supportsReflection') && keyMetric.useRecordingRuleRegistry then
       local reflection = sli[keyMetricAttribute].supportsReflection();
       local metricNamesAndLabels = reflection.getMetricNamesAndLabels();
       std.foldl(

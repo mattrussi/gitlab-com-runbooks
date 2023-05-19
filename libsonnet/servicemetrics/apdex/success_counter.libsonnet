@@ -16,16 +16,18 @@ local generateApdexRatio(successCounterApdex, aggregationLabels, additionalSelec
   };
 
 {
-  successCounterApdex(successRateMetric, operationRateMetric, selector=''):: {
+  successCounterApdex(successRateMetric, operationRateMetric, selector='', useRecordingRuleRegistry=true):: {
     successRateMetric: successRateMetric,
     operationRateMetric: operationRateMetric,
     selector: selector,
+    useRecordingRuleRegistry: useRecordingRuleRegistry,
 
     apdexSuccessRateQuery(aggregationLabels, selector, rangeInterval, withoutLabels=[])::
       resolveRateQuery(
         self.successRateMetric,
         selectors.without(selectors.merge(self.selector, selector), withoutLabels),
         rangeInterval,
+        useRecordingRuleRegistry,
         aggregationLabels=aggregationLabels,
         aggregationFunction='sum',
       ),
@@ -34,6 +36,7 @@ local generateApdexRatio(successCounterApdex, aggregationLabels, additionalSelec
         self.operationRateMetric,
         selectors.without(selectors.merge(self.selector, selector), withoutLabels),
         rangeInterval,
+        useRecordingRuleRegistry,
         aggregationLabels=aggregationLabels,
         aggregationFunction='sum'
       ),
@@ -45,6 +48,7 @@ local generateApdexRatio(successCounterApdex, aggregationLabels, additionalSelec
         self.successRateMetric,
         selectors.without(selectors.merge(self.selector, selector), withoutLabels),
         rangeInterval,
+        useRecordingRuleRegistry,
       ),
 
     apdexDenominator(selector, rangeInterval, withoutLabels=[])::
@@ -52,6 +56,7 @@ local generateApdexRatio(successCounterApdex, aggregationLabels, additionalSelec
         self.operationRateMetric,
         selectors.without(selectors.merge(self.selector, selector), withoutLabels),
         rangeInterval,
+        useRecordingRuleRegistry,
       ),
 
     apdexAttribution(aggregationLabel, selector, rangeInterval, withoutLabels=[])::

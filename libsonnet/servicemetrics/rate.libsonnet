@@ -27,10 +27,12 @@ local generateRangeFunctionQuery(rate, rangeFunction, additionalSelectors, range
     counter,
     selector={},
     instanceFilter='',
+    useRecordingRuleRegistry=true,
   ):: {
     counter: counter,
     selector: selector,
     instanceFilter: instanceFilter,
+    useRecordingRuleRegistry: useRecordingRuleRegistry,
 
     // This creates a rate query of the form
     // rate(....{<selector>}[<rangeInterval>])
@@ -56,7 +58,7 @@ local generateRangeFunctionQuery(rate, rangeFunction, additionalSelectors, range
         selector=combinedSelector,
       );
 
-      if resolvedRecordingRule == null then
+      if !useRecordingRuleRegistry || resolvedRecordingRule == null then
         local query = generateRangeFunctionQuery(self, 'rate', selector, rangeInterval, withoutLabels);
         aggregations.aggregateOverQuery('sum', aggregationLabels, query)
       else
@@ -95,6 +97,7 @@ local generateRangeFunctionQuery(rate, rangeFunction, additionalSelectors, range
     selector: selector,
     instanceFilter: instanceFilter,
     clampMinZero: clampMinZero,
+    useRecordingRuleRegistry: false,
 
     // This creates a rate query of the form
     // deriv(....{<selector>}[<rangeInterval>])

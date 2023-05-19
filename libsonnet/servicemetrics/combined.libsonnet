@@ -1,4 +1,5 @@
 local aggregations = import 'promql/aggregations.libsonnet';
+local misc = import 'utils/misc.libsonnet';
 local strings = import 'utils/strings.libsonnet';
 
 // Merge two hashes of the form { key: set },
@@ -86,6 +87,7 @@ local generateApdexPercentileLatencyQuery(c, percentile, aggregationLabels, sele
     else
       {
         metrics: metrics,
+        useRecordingRuleRegistry: misc.any(function(metric) metric.useRecordingRuleRegistry, metrics),
         // We use `combined(histogramApdex(), histogramApdex())` with diferent
         // thresholds to categorize different operations.
         // This allows us to still generate the `histogram_quantile` graphs on
