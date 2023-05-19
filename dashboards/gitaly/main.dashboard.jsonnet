@@ -206,9 +206,9 @@ serviceDashboard.overview('gitaly')
 )
 .addPanels(
   layout.grid([
-    gitalyPackObjectsDashboards.process_active_callers(selectors, '{{ fqdn }}', segment='repository'),
-    gitalyPackObjectsDashboards.process_active_callers(selectors, '{{ fqdn }}', segment='remote_ip'),
-    gitalyPackObjectsDashboards.cache_lookup(selectors, '{{ result }}'),
+    gitalyPackObjectsDashboards.process_active_callers(selectors.serializeHash(selector), '{{ fqdn }}', segment='repository'),
+    gitalyPackObjectsDashboards.process_active_callers(selectors.serializeHash(selector), '{{ fqdn }}', segment='remote_ip'),
+    gitalyPackObjectsDashboards.cache_lookup(selectors.serializeHash(selector), '{{ result }}'),
   ], startRow=4001)
 )
 .overviewTrailer()
