@@ -52,7 +52,7 @@ Labels help organize metrics by service. Labels can be added via the GitLab helm
 
 [Prometheus-stack](https://gitlab.com/gitlab-org/quality/gitlab-environment-toolkit-configs/staging-ref/-/tree/main/3k_hybrid_geo/ansible/us-east1/helm/prometheus-stack) is a helm chart that bundles cluster monitoring with prometheus using the prometheus operator. We'll be using this chart to deploy prometheus.
 
-* Deploy to the GET cluster under the `prometheus` namespace via helm. In staging-ref, this is managed by CI jobs that [validate](https://gitlab.com/gitlab-org/quality/gitlab-environment-toolkit-configs/staging-ref/-/blob/main/.gitlab/ci/.mr_checks.yml#L43-53) and [configure](https://gitlab.com/gitlab-org/quality/gitlab-environment-toolkit-configs/staging-ref/-/blob/main/.gitlab/ci/.ansible.yml#L37-46) any changes to the helm chart. You can view the setup of this chart in [this directory](https://gitlab.com/gitlab-org/quality/gitlab-environment-toolkit-configs/staging-ref/-/tree/main/3k_hybrid_geo/ansible/us-east1/helm/prometheus-stack).
+* Deploy to the GET cluster under the `prometheus` namespace via helm. In staging-ref, this is managed by CI jobs that [validate](https://gitlab.com/gitlab-org/quality/gitlab-environment-toolkit-configs/staging-ref/-/blob/2005cbcc49034513111dd3f9ed842bfba5e9dcc2/.gitlab-ci.yml#L24-37) and [configure](https://gitlab.com/gitlab-org/quality/gitlab-environment-toolkit-configs/staging-ref/-/blob/2005cbcc49034513111dd3f9ed842bfba5e9dcc2/.gitlab-ci.yml#L139-145) any changes to the helm chart. You can view the setup of this chart in [this directory](https://gitlab.com/gitlab-org/quality/gitlab-environment-toolkit-configs/staging-ref/-/tree/main/3k_hybrid_geo/ansible/us-east1/helm/prometheus-stack).
 
 #### Scraping targets
 
