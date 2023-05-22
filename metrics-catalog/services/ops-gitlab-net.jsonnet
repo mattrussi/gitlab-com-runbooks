@@ -217,4 +217,8 @@ metricsCatalog.serviceDefinition({
     // - git (https/ssh)
     // - ...
   },
+
+  skippedMaturityCriteria: {
+    'Service exists in the dependency graph': 'ops.gitlab.net is a standalone GitLab deployment',
+  },
 })
