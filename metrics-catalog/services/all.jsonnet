@@ -25,6 +25,7 @@
   import 'monitoring.jsonnet',
   import 'nat.jsonnet',
   import 'nginx.jsonnet',
+  import 'ops-gitlab-net.jsonnet',
   import 'patroni.jsonnet',
   import 'patroni-registry.jsonnet',
   import 'patroni-embedding.jsonnet',
