@@ -474,7 +474,7 @@ generateTests([
     receivers: ['blackhole'],
   },
   {
-    name: 'slo_alert=yes, env=gprd, team=ai_assisted should go to f_code_suggestions',
+    name: 'slo_alert=yes, env=gprd, team=ai_assisted should go to g_mlops-alerts',
     labels: { env: 'gprd', team: 'ai_assisted' },
     receivers: [
       'team_ai_assisted_alerts_channel',
@@ -482,7 +482,7 @@ generateTests([
     ],
   },
   {
-    name: 'slo_alert=yes, env=gprd, team=ai_assisted should go to f_code_suggestions',
+    name: 'slo_alert=yes, env=gprd, team=ai_assisted should go to g_mlops-alerts',
     labels: { env: 'gprd', team: 'ai_assisted' },
     receivers: [
       'team_ai_assisted_alerts_channel',
@@ -490,7 +490,7 @@ generateTests([
     ],
   },
   {
-    name: 'env=gprd, feature_category=code_suggestions should go to f_code_suggestions',
+    name: 'env=gprd, feature_category=code_suggestions should go to g_mlops-alerts',
     labels: { env: 'gprd', feature_category: 'code_suggestions' },
     receivers: [
       'team_ai_assisted_alerts_channel',
@@ -498,7 +498,7 @@ generateTests([
     ],
   },
   {
-    name: 'env=gprd, product_stage_group=ai_assisted should go to f_code_suggestions',
+    name: 'env=gprd, product_stage_group=ai_assisted should go to g_mlops-alerts',
     labels: { env: 'gprd', product_stage_group: 'ai_assisted' },
     receivers: [
       'team_ai_assisted_alerts_channel',
