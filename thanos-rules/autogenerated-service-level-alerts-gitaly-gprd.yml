@@ -24,11 +24,11 @@ groups:
         histogram_quantile(
           0.950000,
           sum by (env,environment,tier,stage,le) (
-            rate(grpc_server_handling_seconds_bucket{environment="{{ $labels.environment }}",grpc_method!~"CalculateChecksum|CommitLanguages|CommitStats|CreateFork|CreateRepositoryFromURL|FetchInternalRemote|FetchIntoObjectPool|FetchRemote|FetchSourceBranch|FindCommit|FindRemoteRepository|FindRemoteRootRef|Fsck|GarbageCollect|GetArchive|LastCommitForPath|OptimizeRepository|PackObjectsHookWithSidechannel|PostReceiveHook|PostUploadPackWithSidechannel|PreReceiveHook|RepackFull|RepackIncremental|ReplicateRepository|RepositorySize|SSHUploadPackWithSidechannel|UpdateHook|WriteRef",grpc_service!="gitaly.OperationService",grpc_type="unary",job="gitaly",stage="{{ $labels.stage }}"}[5m])
+            rate(grpc_server_handling_seconds_bucket{environment="{{ $labels.environment }}",grpc_method!~"CalculateChecksum|CommitLanguages|CommitStats|CreateFork|CreateRepositoryFromURL|FetchInternalRemote|FetchIntoObjectPool|FetchRemote|FetchSourceBranch|FindCommit|FindRemoteRepository|FindRemoteRootRef|Fsck|GarbageCollect|GetArchive|LastCommitForPath|OptimizeRepository|PackObjectsHookWithSidechannel|PostReceiveHook|PostUploadPackWithSidechannel|PreReceiveHook|RepackFull|RepackIncremental|ReplicateRepository|RepositorySize|SSHUploadPackWithSidechannel|UpdateHook|WriteRef",grpc_service!="gitaly.OperationService",grpc_type="unary",job="gitaly",stage="{{ $labels.stage }}",type="gitaly"}[5m])
             or
-            rate(grpc_server_handling_seconds_bucket{environment="{{ $labels.environment }}",grpc_method=~"FindCommit|GetArchive|LastCommitForPath|RepositorySize|WriteRef",grpc_service!="gitaly.OperationService",grpc_type="unary",job="gitaly",stage="{{ $labels.stage }}"}[5m])
+            rate(grpc_server_handling_seconds_bucket{environment="{{ $labels.environment }}",grpc_method=~"FindCommit|GetArchive|LastCommitForPath|RepositorySize|WriteRef",grpc_service!="gitaly.OperationService",grpc_type="unary",job="gitaly",stage="{{ $labels.stage }}",type="gitaly"}[5m])
             or
-            rate(grpc_server_handling_seconds_bucket{environment="{{ $labels.environment }}",grpc_service="gitaly.OperationService",grpc_type="unary",job="gitaly",stage="{{ $labels.stage }}"}[5m])
+            rate(grpc_server_handling_seconds_bucket{environment="{{ $labels.environment }}",grpc_service="gitaly.OperationService",grpc_type="unary",job="gitaly",stage="{{ $labels.stage }}",type="gitaly"}[5m])
           )
         )
       runbook: docs/gitaly/README.md
@@ -79,11 +79,11 @@ groups:
         histogram_quantile(
           0.950000,
           sum by (env,environment,tier,stage,le) (
-            rate(grpc_server_handling_seconds_bucket{environment="{{ $labels.environment }}",grpc_method!~"CalculateChecksum|CommitLanguages|CommitStats|CreateFork|CreateRepositoryFromURL|FetchInternalRemote|FetchIntoObjectPool|FetchRemote|FetchSourceBranch|FindCommit|FindRemoteRepository|FindRemoteRootRef|Fsck|GarbageCollect|GetArchive|LastCommitForPath|OptimizeRepository|PackObjectsHookWithSidechannel|PostReceiveHook|PostUploadPackWithSidechannel|PreReceiveHook|RepackFull|RepackIncremental|ReplicateRepository|RepositorySize|SSHUploadPackWithSidechannel|UpdateHook|WriteRef",grpc_service!="gitaly.OperationService",grpc_type="unary",job="gitaly",stage="{{ $labels.stage }}"}[5m])
+            rate(grpc_server_handling_seconds_bucket{environment="{{ $labels.environment }}",grpc_method!~"CalculateChecksum|CommitLanguages|CommitStats|CreateFork|CreateRepositoryFromURL|FetchInternalRemote|FetchIntoObjectPool|FetchRemote|FetchSourceBranch|FindCommit|FindRemoteRepository|FindRemoteRootRef|Fsck|GarbageCollect|GetArchive|LastCommitForPath|OptimizeRepository|PackObjectsHookWithSidechannel|PostReceiveHook|PostUploadPackWithSidechannel|PreReceiveHook|RepackFull|RepackIncremental|ReplicateRepository|RepositorySize|SSHUploadPackWithSidechannel|UpdateHook|WriteRef",grpc_service!="gitaly.OperationService",grpc_type="unary",job="gitaly",stage="{{ $labels.stage }}",type="gitaly"}[5m])
             or
-            rate(grpc_server_handling_seconds_bucket{environment="{{ $labels.environment }}",grpc_method=~"FindCommit|GetArchive|LastCommitForPath|RepositorySize|WriteRef",grpc_service!="gitaly.OperationService",grpc_type="unary",job="gitaly",stage="{{ $labels.stage }}"}[5m])
+            rate(grpc_server_handling_seconds_bucket{environment="{{ $labels.environment }}",grpc_method=~"FindCommit|GetArchive|LastCommitForPath|RepositorySize|WriteRef",grpc_service!="gitaly.OperationService",grpc_type="unary",job="gitaly",stage="{{ $labels.stage }}",type="gitaly"}[5m])
             or
-            rate(grpc_server_handling_seconds_bucket{environment="{{ $labels.environment }}",grpc_service="gitaly.OperationService",grpc_type="unary",job="gitaly",stage="{{ $labels.stage }}"}[5m])
+            rate(grpc_server_handling_seconds_bucket{environment="{{ $labels.environment }}",grpc_service="gitaly.OperationService",grpc_type="unary",job="gitaly",stage="{{ $labels.stage }}",type="gitaly"}[5m])
           )
         )
       runbook: docs/gitaly/README.md
@@ -136,11 +136,11 @@ groups:
         histogram_quantile(
           0.950000,
           sum by (env,environment,tier,stage,shard,fqdn,le) (
-            rate(grpc_server_handling_seconds_bucket{environment="{{ $labels.environment }}",fqdn="{{ $labels.fqdn }}",grpc_method!~"CalculateChecksum|CommitLanguages|CommitStats|CreateFork|CreateRepositoryFromURL|FetchInternalRemote|FetchIntoObjectPool|FetchRemote|FetchSourceBranch|FindCommit|FindRemoteRepository|FindRemoteRootRef|Fsck|GarbageCollect|GetArchive|LastCommitForPath|OptimizeRepository|PackObjectsHookWithSidechannel|PostReceiveHook|PostUploadPackWithSidechannel|PreReceiveHook|RepackFull|RepackIncremental|ReplicateRepository|RepositorySize|SSHUploadPackWithSidechannel|UpdateHook|WriteRef",grpc_service!="gitaly.OperationService",grpc_type="unary",job="gitaly",shard="{{ $labels.shard }}",stage="{{ $labels.stage }}"}[5m])
+            rate(grpc_server_handling_seconds_bucket{environment="{{ $labels.environment }}",fqdn="{{ $labels.fqdn }}",grpc_method!~"CalculateChecksum|CommitLanguages|CommitStats|CreateFork|CreateRepositoryFromURL|FetchInternalRemote|FetchIntoObjectPool|FetchRemote|FetchSourceBranch|FindCommit|FindRemoteRepository|FindRemoteRootRef|Fsck|GarbageCollect|GetArchive|LastCommitForPath|OptimizeRepository|PackObjectsHookWithSidechannel|PostReceiveHook|PostUploadPackWithSidechannel|PreReceiveHook|RepackFull|RepackIncremental|ReplicateRepository|RepositorySize|SSHUploadPackWithSidechannel|UpdateHook|WriteRef",grpc_service!="gitaly.OperationService",grpc_type="unary",job="gitaly",shard="{{ $labels.shard }}",stage="{{ $labels.stage }}",type="gitaly"}[5m])
             or
-            rate(grpc_server_handling_seconds_bucket{environment="{{ $labels.environment }}",fqdn="{{ $labels.fqdn }}",grpc_method=~"FindCommit|GetArchive|LastCommitForPath|RepositorySize|WriteRef",grpc_service!="gitaly.OperationService",grpc_type="unary",job="gitaly",shard="{{ $labels.shard }}",stage="{{ $labels.stage }}"}[5m])
+            rate(grpc_server_handling_seconds_bucket{environment="{{ $labels.environment }}",fqdn="{{ $labels.fqdn }}",grpc_method=~"FindCommit|GetArchive|LastCommitForPath|RepositorySize|WriteRef",grpc_service!="gitaly.OperationService",grpc_type="unary",job="gitaly",shard="{{ $labels.shard }}",stage="{{ $labels.stage }}",type="gitaly"}[5m])
             or
-            rate(grpc_server_handling_seconds_bucket{environment="{{ $labels.environment }}",fqdn="{{ $labels.fqdn }}",grpc_service="gitaly.OperationService",grpc_type="unary",job="gitaly",shard="{{ $labels.shard }}",stage="{{ $labels.stage }}"}[5m])
+            rate(grpc_server_handling_seconds_bucket{environment="{{ $labels.environment }}",fqdn="{{ $labels.fqdn }}",grpc_service="gitaly.OperationService",grpc_type="unary",job="gitaly",shard="{{ $labels.shard }}",stage="{{ $labels.stage }}",type="gitaly"}[5m])
           )
         )
       runbook: docs/gitaly/README.md
@@ -193,11 +193,11 @@ groups:
         histogram_quantile(
           0.950000,
           sum by (env,environment,tier,stage,shard,fqdn,le) (
-            rate(grpc_server_handling_seconds_bucket{environment="{{ $labels.environment }}",fqdn="{{ $labels.fqdn }}",grpc_method!~"CalculateChecksum|CommitLanguages|CommitStats|CreateFork|CreateRepositoryFromURL|FetchInternalRemote|FetchIntoObjectPool|FetchRemote|FetchSourceBranch|FindCommit|FindRemoteRepository|FindRemoteRootRef|Fsck|GarbageCollect|GetArchive|LastCommitForPath|OptimizeRepository|PackObjectsHookWithSidechannel|PostReceiveHook|PostUploadPackWithSidechannel|PreReceiveHook|RepackFull|RepackIncremental|ReplicateRepository|RepositorySize|SSHUploadPackWithSidechannel|UpdateHook|WriteRef",grpc_service!="gitaly.OperationService",grpc_type="unary",job="gitaly",shard="{{ $labels.shard }}",stage="{{ $labels.stage }}"}[5m])
+            rate(grpc_server_handling_seconds_bucket{environment="{{ $labels.environment }}",fqdn="{{ $labels.fqdn }}",grpc_method!~"CalculateChecksum|CommitLanguages|CommitStats|CreateFork|CreateRepositoryFromURL|FetchInternalRemote|FetchIntoObjectPool|FetchRemote|FetchSourceBranch|FindCommit|FindRemoteRepository|FindRemoteRootRef|Fsck|GarbageCollect|GetArchive|LastCommitForPath|OptimizeRepository|PackObjectsHookWithSidechannel|PostReceiveHook|PostUploadPackWithSidechannel|PreReceiveHook|RepackFull|RepackIncremental|ReplicateRepository|RepositorySize|SSHUploadPackWithSidechannel|UpdateHook|WriteRef",grpc_service!="gitaly.OperationService",grpc_type="unary",job="gitaly",shard="{{ $labels.shard }}",stage="{{ $labels.stage }}",type="gitaly"}[5m])
             or
-            rate(grpc_server_handling_seconds_bucket{environment="{{ $labels.environment }}",fqdn="{{ $labels.fqdn }}",grpc_method=~"FindCommit|GetArchive|LastCommitForPath|RepositorySize|WriteRef",grpc_service!="gitaly.OperationService",grpc_type="unary",job="gitaly",shard="{{ $labels.shard }}",stage="{{ $labels.stage }}"}[5m])
+            rate(grpc_server_handling_seconds_bucket{environment="{{ $labels.environment }}",fqdn="{{ $labels.fqdn }}",grpc_method=~"FindCommit|GetArchive|LastCommitForPath|RepositorySize|WriteRef",grpc_service!="gitaly.OperationService",grpc_type="unary",job="gitaly",shard="{{ $labels.shard }}",stage="{{ $labels.stage }}",type="gitaly"}[5m])
             or
-            rate(grpc_server_handling_seconds_bucket{environment="{{ $labels.environment }}",fqdn="{{ $labels.fqdn }}",grpc_service="gitaly.OperationService",grpc_type="unary",job="gitaly",shard="{{ $labels.shard }}",stage="{{ $labels.stage }}"}[5m])
+            rate(grpc_server_handling_seconds_bucket{environment="{{ $labels.environment }}",fqdn="{{ $labels.fqdn }}",grpc_service="gitaly.OperationService",grpc_type="unary",job="gitaly",shard="{{ $labels.shard }}",stage="{{ $labels.stage }}",type="gitaly"}[5m])
           )
         )
       runbook: docs/gitaly/README.md
@@ -246,9 +246,9 @@ groups:
       grafana_variables: environment,stage
       promql_template_1: |
         sum by (env,environment,tier,stage) (
-          label_replace(rate(gitaly_service_client_requests_total{environment="{{ $labels.environment }}",grpc_code!~"AlreadyExists|Canceled|DeadlineExceeded|FailedPrecondition|InvalidArgument|NotFound|OK|PermissionDenied|ResourceExhausted|Unauthenticated",job="gitaly",stage="{{ $labels.stage }}"}[5m]), "_c", "0", "", "")
+          label_replace(rate(gitaly_service_client_requests_total{environment="{{ $labels.environment }}",grpc_code!~"AlreadyExists|Canceled|DeadlineExceeded|FailedPrecondition|InvalidArgument|NotFound|OK|PermissionDenied|ResourceExhausted|Unauthenticated",job="gitaly",stage="{{ $labels.stage }}",type="gitaly"}[5m]), "_c", "0", "", "")
           or
-          label_replace(rate(gitaly_service_client_requests_total{deadline_type!="limited",environment="{{ $labels.environment }}",grpc_code="DeadlineExceeded",job="gitaly",stage="{{ $labels.stage }}"}[5m]), "_c", "1", "", "")
+          label_replace(rate(gitaly_service_client_requests_total{deadline_type!="limited",environment="{{ $labels.environment }}",grpc_code="DeadlineExceeded",job="gitaly",stage="{{ $labels.stage }}",type="gitaly"}[5m]), "_c", "1", "", "")
         )
       runbook: docs/gitaly/README.md
     labels:
@@ -296,9 +296,9 @@ groups:
       grafana_variables: environment,stage
       promql_template_1: |
         sum by (env,environment,tier,stage) (
-          label_replace(rate(gitaly_service_client_requests_total{environment="{{ $labels.environment }}",grpc_code!~"AlreadyExists|Canceled|DeadlineExceeded|FailedPrecondition|InvalidArgument|NotFound|OK|PermissionDenied|ResourceExhausted|Unauthenticated",job="gitaly",stage="{{ $labels.stage }}"}[5m]), "_c", "0", "", "")
+          label_replace(rate(gitaly_service_client_requests_total{environment="{{ $labels.environment }}",grpc_code!~"AlreadyExists|Canceled|DeadlineExceeded|FailedPrecondition|InvalidArgument|NotFound|OK|PermissionDenied|ResourceExhausted|Unauthenticated",job="gitaly",stage="{{ $labels.stage }}",type="gitaly"}[5m]), "_c", "0", "", "")
           or
-          label_replace(rate(gitaly_service_client_requests_total{deadline_type!="limited",environment="{{ $labels.environment }}",grpc_code="DeadlineExceeded",job="gitaly",stage="{{ $labels.stage }}"}[5m]), "_c", "1", "", "")
+          label_replace(rate(gitaly_service_client_requests_total{deadline_type!="limited",environment="{{ $labels.environment }}",grpc_code="DeadlineExceeded",job="gitaly",stage="{{ $labels.stage }}",type="gitaly"}[5m]), "_c", "1", "", "")
         )
       runbook: docs/gitaly/README.md
     labels:
@@ -348,9 +348,9 @@ groups:
       grafana_variables: environment,stage
       promql_template_1: |
         sum by (env,environment,tier,stage,shard,fqdn) (
-          label_replace(rate(gitaly_service_client_requests_total{environment="{{ $labels.environment }}",fqdn="{{ $labels.fqdn }}",grpc_code!~"AlreadyExists|Canceled|DeadlineExceeded|FailedPrecondition|InvalidArgument|NotFound|OK|PermissionDenied|ResourceExhausted|Unauthenticated",job="gitaly",shard="{{ $labels.shard }}",stage="{{ $labels.stage }}"}[5m]), "_c", "0", "", "")
+          label_replace(rate(gitaly_service_client_requests_total{environment="{{ $labels.environment }}",fqdn="{{ $labels.fqdn }}",grpc_code!~"AlreadyExists|Canceled|DeadlineExceeded|FailedPrecondition|InvalidArgument|NotFound|OK|PermissionDenied|ResourceExhausted|Unauthenticated",job="gitaly",shard="{{ $labels.shard }}",stage="{{ $labels.stage }}",type="gitaly"}[5m]), "_c", "0", "", "")
           or
-          label_replace(rate(gitaly_service_client_requests_total{deadline_type!="limited",environment="{{ $labels.environment }}",fqdn="{{ $labels.fqdn }}",grpc_code="DeadlineExceeded",job="gitaly",shard="{{ $labels.shard }}",stage="{{ $labels.stage }}"}[5m]), "_c", "1", "", "")
+          label_replace(rate(gitaly_service_client_requests_total{deadline_type!="limited",environment="{{ $labels.environment }}",fqdn="{{ $labels.fqdn }}",grpc_code="DeadlineExceeded",job="gitaly",shard="{{ $labels.shard }}",stage="{{ $labels.stage }}",type="gitaly"}[5m]), "_c", "1", "", "")
         )
       runbook: docs/gitaly/README.md
     labels:
@@ -400,9 +400,9 @@ groups:
       grafana_variables: environment,stage
       promql_template_1: |
         sum by (env,environment,tier,stage,shard,fqdn) (
-          label_replace(rate(gitaly_service_client_requests_total{environment="{{ $labels.environment }}",fqdn="{{ $labels.fqdn }}",grpc_code!~"AlreadyExists|Canceled|DeadlineExceeded|FailedPrecondition|InvalidArgument|NotFound|OK|PermissionDenied|ResourceExhausted|Unauthenticated",job="gitaly",shard="{{ $labels.shard }}",stage="{{ $labels.stage }}"}[5m]), "_c", "0", "", "")
+          label_replace(rate(gitaly_service_client_requests_total{environment="{{ $labels.environment }}",fqdn="{{ $labels.fqdn }}",grpc_code!~"AlreadyExists|Canceled|DeadlineExceeded|FailedPrecondition|InvalidArgument|NotFound|OK|PermissionDenied|ResourceExhausted|Unauthenticated",job="gitaly",shard="{{ $labels.shard }}",stage="{{ $labels.stage }}",type="gitaly"}[5m]), "_c", "0", "", "")
           or
-          label_replace(rate(gitaly_service_client_requests_total{deadline_type!="limited",environment="{{ $labels.environment }}",fqdn="{{ $labels.fqdn }}",grpc_code="DeadlineExceeded",job="gitaly",shard="{{ $labels.shard }}",stage="{{ $labels.stage }}"}[5m]), "_c", "1", "", "")
+          label_replace(rate(gitaly_service_client_requests_total{deadline_type!="limited",environment="{{ $labels.environment }}",fqdn="{{ $labels.fqdn }}",grpc_code="DeadlineExceeded",job="gitaly",shard="{{ $labels.shard }}",stage="{{ $labels.stage }}",type="gitaly"}[5m]), "_c", "1", "", "")
         )
       runbook: docs/gitaly/README.md
     labels:
@@ -450,7 +450,7 @@ groups:
       grafana_variables: environment,stage
       promql_template_1: |
         sum by (env,environment,tier,stage) (
-          rate(gitaly_service_client_requests_total{environment="{{ $labels.environment }}",job="gitaly",stage="{{ $labels.stage }}"}[5m])
+          rate(gitaly_service_client_requests_total{environment="{{ $labels.environment }}",job="gitaly",stage="{{ $labels.stage }}",type="gitaly"}[5m])
         )
       runbook: docs/gitaly/README.md
     labels:
@@ -487,7 +487,7 @@ groups:
       grafana_variables: environment,stage
       promql_template_1: |
         sum by (env,environment,tier,stage) (
-          rate(gitaly_service_client_requests_total{environment="{{ $labels.environment }}",job="gitaly",stage="{{ $labels.stage }}"}[5m])
+          rate(gitaly_service_client_requests_total{environment="{{ $labels.environment }}",job="gitaly",stage="{{ $labels.stage }}",type="gitaly"}[5m])
         )
       runbook: docs/gitaly/README.md
     labels:
@@ -524,7 +524,7 @@ groups:
       grafana_variables: environment,stage
       promql_template_1: |
         sum by (env,environment,tier,stage,shard,fqdn) (
-          rate(gitaly_service_client_requests_total{environment="{{ $labels.environment }}",fqdn="{{ $labels.fqdn }}",job="gitaly",shard="{{ $labels.shard }}",stage="{{ $labels.stage }}"}[5m])
+          rate(gitaly_service_client_requests_total{environment="{{ $labels.environment }}",fqdn="{{ $labels.fqdn }}",job="gitaly",shard="{{ $labels.shard }}",stage="{{ $labels.stage }}",type="gitaly"}[5m])
         )
       runbook: docs/gitaly/README.md
     labels:
@@ -563,7 +563,7 @@ groups:
       grafana_variables: environment,stage
       promql_template_1: |
         sum by (env,environment,tier,stage,shard,fqdn) (
-          rate(gitaly_service_client_requests_total{environment="{{ $labels.environment }}",fqdn="{{ $labels.fqdn }}",job="gitaly",shard="{{ $labels.shard }}",stage="{{ $labels.stage }}"}[5m])
+          rate(gitaly_service_client_requests_total{environment="{{ $labels.environment }}",fqdn="{{ $labels.fqdn }}",job="gitaly",shard="{{ $labels.shard }}",stage="{{ $labels.stage }}",type="gitaly"}[5m])
         )
       runbook: docs/gitaly/README.md
     labels:

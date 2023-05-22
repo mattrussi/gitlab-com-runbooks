@@ -4,6 +4,8 @@ local rateMetric = metricsCatalog.rateMetric;
 local gitalyHelper = import 'service-archetypes/helpers/gitaly.libsonnet';
 local toolingLinks = import 'toolinglinks/toolinglinks.libsonnet';
 
+local baseSelector = { type: 'gitaly', job: 'gitaly' };
+
 metricsCatalog.serviceDefinition({
   type: 'gitaly',
   tier: 'stor',
@@ -43,9 +45,6 @@ metricsCatalog.serviceDefinition({
         The apdex score is based on a subset of GRPC methods which are expected to be fast.
       |||,
 
-      local baseSelector = {
-        job: 'gitaly',
-      },
       local apdexSelector = baseSelector {
         grpc_service: { ne: ['gitaly.OperationService'] },
       },
