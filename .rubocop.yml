@@ -12,7 +12,7 @@ inherit_gem:
     - rubocop-style.yml
 
 AllCops:
-  TargetRubyVersion: 3.0
+  TargetRubyVersion: 3.2
   SuggestExtensions: false
 
 # This project doesn't use ActiveRecord, so these will all be false
