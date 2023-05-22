@@ -16,6 +16,8 @@
 
 ## Troubleshooting Pointers
 
+* [../certificates/gcp.md](../certificates/gcp.md)
+* [../certificates/gkms.md](../certificates/gkms.md)
 * [Chef Guidelines](../config_management/chef-guidelines.md)
 * [Disk space alerts (production)](../customersdot/disk-space.md)
 * [Frontend (HAProxy) Logging](haproxy-logging.md)

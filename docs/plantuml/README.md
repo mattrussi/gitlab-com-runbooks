@@ -16,6 +16,7 @@
 
 ## Troubleshooting Pointers
 
+* [../certificates/gcp.md](../certificates/gcp.md)
 * [Kubernetes](../kube/kubernetes.md)
 * [PlantUML](readiness.md)
 <!-- END_MARKER -->

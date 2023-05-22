@@ -26,4 +26,4 @@ echo | openssl s_client -showcerts -servername my.hostname.com -connect my.hostn
 
 ## Resolution
 
-Purchase a new certificate. [Documentation here.](ssl_cert-1.md)
+Purchase a new certificate. [Documentation here.](../certificates/README.md)
