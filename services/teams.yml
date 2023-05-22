@@ -184,11 +184,11 @@ teams:
   url: https://about.gitlab.com/handbook/engineering/development/data-science/ai-assisted/
   manager: mray2020
   label: group::ai assisted
-  slack_alerts_channel: f_code_suggestions
+  slack_alerts_channel: g_mlops-alerts
   product_stage_group: ai_assisted
   ignored_components:
   - graphql_query
-  slack_error_budget_channel: f_code_suggestions
+  slack_error_budget_channel: g_mlops-alerts
   send_error_budget_weekly_to_slack: true
 
 - name: code_review
