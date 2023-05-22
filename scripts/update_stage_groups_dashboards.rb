@@ -1,5 +1,6 @@
 #! /usr/bin/env ruby
 # frozen_string_literal: true
+
 require_relative '../lib/sync_dashboards'
 
 ##
@@ -12,6 +13,7 @@ class UpdateStageGroupsDashboard
   DASHBOARDS_FOLDER = "stage-groups"
   DEFAULT_DASHBOARDS_DIR = File.expand_path(File.join(File.dirname(__FILE__), "../dashboards/#{DASHBOARDS_FOLDER}/"))
   DEFAULT_MAPPING_PATH = File.expand_path(File.join(File.dirname(__FILE__), '../services/stage-group-mapping.jsonnet'))
+  MANUALLY_CREATED_DASHBOARDS = %w[not_owned].freeze
 
   def self.render_template(group)
     raise 'Group key is empty' if group.nil? || group.empty?
@@ -28,9 +30,14 @@ class UpdateStageGroupsDashboard
 
   attr_reader :dashboards_dir, :mapping_path, :output
 
-  def initialize(dashboards_dir: DEFAULT_DASHBOARDS_DIR, mapping_path: DEFAULT_MAPPING_PATH, output: $stdout)
+  def initialize(
+    dashboards_dir: DEFAULT_DASHBOARDS_DIR,
+    mapping_path: DEFAULT_MAPPING_PATH,
+    manual_dashboards: MANUALLY_CREATED_DASHBOARDS,
+    output: $stdout)
     @dashboards_dir = dashboards_dir
     @mapping_path = mapping_path
+    @manual_dashboards = manual_dashboards
     @output = output
   end
 
@@ -38,7 +45,7 @@ class UpdateStageGroupsDashboard
     group_info = parse_jsonnet(@mapping_path)
     raise "#{@mapping_path} is invalid" unless group_info.is_a?(Hash)
 
-    dashboards = group_info.keys.map(&:strip)
+    dashboards = group_info.keys.map(&:strip) | @manual_dashboards
     sync_dashboards(@dashboards_dir, dashboards)
   end
 
