@@ -8,7 +8,7 @@ local toolingLinks = import 'toolinglinks/toolinglinks.libsonnet';
 local kubeLabelSelectors = metricsCatalog.kubeLabelSelectors;
 local sliLibrary = import 'gitlab-slis/library.libsonnet';
 
-local baseSelector = { type: 'sidekiq', job: 'sidekiq' };
+local baseSelector = { type: 'sidekiq' };
 local highUrgencySelector = { urgency: 'high' };
 local lowUrgencySelector = { urgency: 'low' };
 local throttledUrgencySelector = { urgency: 'throttled' };
