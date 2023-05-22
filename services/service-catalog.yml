@@ -1278,6 +1278,33 @@ services:
       monitors:
         primary_grafana_dashboard: redis-cluster-ratelimiting-main/redis-cluster-ratelimiting-overview
 
+  - name: redis-cluster-chat-cache
+    tier: db
+    friendly_name: Redis Cluster Chat Cache
+    label: RedisClusterChatCache
+    owner: scalability
+    technical:
+      project:
+        - https://github.com/redis/redis
+      documents:
+        design:
+        architecture:
+        readiness_review:
+        sre_guide: https://gitlab.com/gitlab-com/runbooks/-/blob/master/docs/redis/redis-cluster.md
+        developer_guide: https://docs.gitlab.com/ee/development/redis.html#redis-guidelines
+        service:
+          - https://redis.io/documentation
+          - https://docs.gitlab.com/omnibus/settings/redis.html
+        security:
+      dependencies:
+        - service:
+      logging:
+        - name: system
+          permalink:
+    observability:
+      monitors:
+        primary_grafana_dashboard: redis-cluster-chat-cache-main/redis-cluster-chat-cache-overview
+
   - name: redis-repository-cache
     tier: db
     friendly_name: Redis Repository Cache

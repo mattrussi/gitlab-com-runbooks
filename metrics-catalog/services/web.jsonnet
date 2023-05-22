@@ -43,6 +43,7 @@ metricsCatalog.serviceDefinition({
   serviceDependencies: {
     gitaly: true,
     'redis-cluster-ratelimiting': true,
+    'redis-cluster-chat-cache': true,
     'redis-sidekiq': true,
     'redis-cache': true,
     'redis-repository-cache': true,
