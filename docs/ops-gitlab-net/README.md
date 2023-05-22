@@ -15,6 +15,7 @@
 
 ## Troubleshooting Pointers
 
+* [../certificates/gcp.md](../certificates/gcp.md)
 * [Chef Tips and Tools](../config_management/chef-workflow.md)
 * [Rebuilding a kubernetes cluster](../kube/k8s-cluster-rebuild.md)
 * [Prometheus Dead Man's Snitch](../monitoring/prometheus-snitch.md)
