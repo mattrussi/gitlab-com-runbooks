@@ -250,6 +250,35 @@ metricsCatalog.serviceDefinition({
       dependsOn: dependOnPatroni.sqlComponents,
     },
 
+    // TODO:
+    //   This is a temporary new SLI while we're completing the HAProxy 2.6 migration in production.
+    //   After the migration completed we can delete this one and replace the old query with this new query.
+    gitlab_shell_v2: {
+      userImpacting: true,
+      featureCategory: 'not_owned',
+      description: |||
+        We monitor GitLab shell, using HAProxy 2.6 SSH connection information.
+      |||,
+
+      staticLabels: {
+        tier: 'sv',
+        stage: 'main',
+      },
+
+      // Unfortunately we don't have a better way of measuring this at present, so we rely on HAProxy metrics.
+      requestRate: rateMetric(
+        counter="haproxy_backend_sessions_total",
+        selector= { backend: { oneOf: ['ssh', 'altssh'] } },
+      ),
+
+      significantLabels: [],
+
+      toolingLinks: [
+        toolingLinks.kibana(title='GitLab Shell', index='shell'),
+      ],
+      dependsOn: dependOnPatroni.sqlComponents,
+    },
+
     gitlab_sshd: {
       // https://gitlab.com/gitlab-org/gitaly/-/issues/4331
       monitoringThresholds+: {
