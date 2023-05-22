@@ -1,5 +1,6 @@
 local gitalyHelper = import 'service-archetypes/helpers/gitaly.libsonnet';
 local metricsCatalog = import 'servicemetrics/metrics.libsonnet';
+local toolingLinks = import 'toolinglinks/toolinglinks.libsonnet';
 
 local combined = metricsCatalog.combined;
 local kubeLabelSelectors = metricsCatalog.kubeLabelSelectors;
@@ -103,7 +104,9 @@ metricsCatalog.serviceDefinition({
 
       significantLabels: [],
 
-      toolingLinks: [],
+      toolingLinks: [
+        toolingLinks.kibana(title='Puma', index='rails', type='default', slowRequestSeconds=10),
+      ],
     },
 
     workhorse: {
@@ -153,7 +156,9 @@ metricsCatalog.serviceDefinition({
 
       significantLabels: ['route'],
 
-      toolingLinks: [],
+      toolingLinks: [
+        toolingLinks.kibana(title='Workhorse', index='workhorse', type='default', slowRequestSeconds=10),
+      ],
     },
 
     // gitaly
@@ -200,7 +205,9 @@ metricsCatalog.serviceDefinition({
 
       significantLabels: [],
 
-      toolingLinks: [],
+      toolingLinks: [
+        toolingLinks.kibana(title='Gitaly', index='gitaly', slowRequestSeconds=1),
+      ],
     },
 
     // Still to come:
