@@ -1,6 +1,7 @@
 local aggregations = import 'promql/aggregations.libsonnet';
 local selectors = import 'promql/selectors.libsonnet';
 local misc = import 'utils/misc.libsonnet';
+local strings = import 'utils/strings.libsonnet';
 
 {
   new(keyServices, aggregationSet, extraSelector={}):: {
@@ -62,6 +63,45 @@ local misc = import 'utils/misc.libsonnet';
         range: range,
         availabilitySuccessRate: availabilitySuccessRate,
         availabilityOpsRate: availabilityOpsRate,
+      },
+
+    weightedAvailabilityQuery(serviceWeights, selector, range):
+      local joinQueries = function(queries)
+        std.join('\n  or\n  ', std.map(
+          function(query)
+            strings.indent(strings.chomp(query), 2),
+          queries
+        ));
+      local weightedSumOfRates = function(rateQuery)
+        local rateQueries = std.map(
+          function(service)
+            local selectorWithType = selector { type: service };
+            |||
+              sum by (type)(
+                sum_over_time(%(rateQuery)s{%(selector)s}[%(range)s]) * %(serviceWeight)s
+              )
+            ||| % {
+              serviceWeight: serviceWeights[service],
+              rateQuery: rateQuery,
+              selector: selectors.serializeHash(selectorWithType),
+              range: range,
+            }, std.objectFields(serviceWeights)
+        );
+        joinQueries(rateQueries);
+
+      local numerator = weightedSumOfRates(availabilitySuccessRate);
+      local denominator = weightedSumOfRates(availabilityOpsRate);
+      |||
+        sum(
+          %(numerator)s
+        )
+        /
+        sum(
+          %(denominator)s
+        )
+      ||| % {
+        numerator: numerator,
+        denominator: denominator,
       },
 
     rateRules: [

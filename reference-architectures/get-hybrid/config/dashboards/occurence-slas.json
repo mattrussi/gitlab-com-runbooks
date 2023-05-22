@@ -101,7 +101,7 @@
       "pluginVersion": "7",
       "targets": [
         {
-          "expr": "clamp_max(\n  clamp_min(\n    sum by () (\n      sum_over_time(gitlab:availability:success:rate_1h{type=~\"registry|webservice\"}[$__range])\n    )\n    /\n    sum by () (\n      sum_over_time(gitlab:availability:ops:rate_1h{type=~\"registry|webservice\"}[$__range])\n    ),\n    0\n  ),\n  1\n)\n",
+          "expr": "sum(\n  sum by (type)(\n    sum_over_time(gitlab:availability:success:rate_1h{type=\"registry\"}[$__range]) * $registry_weight\n  )\n  or\n  sum by (type)(\n    sum_over_time(gitlab:availability:success:rate_1h{type=\"webservice\"}[$__range]) * $webservice_weight\n  )\n)\n/\nsum(\n  sum by (type)(\n    sum_over_time(gitlab:availability:ops:rate_1h{type=\"registry\"}[$__range]) * $registry_weight\n  )\n  or\n  sum by (type)(\n    sum_over_time(gitlab:availability:ops:rate_1h{type=\"webservice\"}[$__range]) * $webservice_weight\n  )\n)\n",
           "format": "time_series",
           "instant": true,
           "interval": "1m",
@@ -162,7 +162,7 @@
       "pluginVersion": "7",
       "targets": [
         {
-          "expr": "(\n  1 - (\n    clamp_max(\n      clamp_min(\n        sum by () (\n          sum_over_time(gitlab:availability:success:rate_1h{type=~\"registry|webservice\"}[$__range])\n        )\n        /\n        sum by () (\n          sum_over_time(gitlab:availability:ops:rate_1h{type=~\"registry|webservice\"}[$__range])\n        ),\n        0\n      ),\n      1\n    )\n  )\n) * $__range_ms\n",
+          "expr": "(\n  1 - (\n    sum(\n      sum by (type)(\n        sum_over_time(gitlab:availability:success:rate_1h{type=\"registry\"}[$__range]) * $registry_weight\n      )\n      or\n      sum by (type)(\n        sum_over_time(gitlab:availability:success:rate_1h{type=\"webservice\"}[$__range]) * $webservice_weight\n      )\n    )\n    /\n    sum(\n      sum by (type)(\n        sum_over_time(gitlab:availability:ops:rate_1h{type=\"registry\"}[$__range]) * $registry_weight\n      )\n      or\n      sum by (type)(\n        sum_over_time(gitlab:availability:ops:rate_1h{type=\"webservice\"}[$__range]) * $webservice_weight\n      )\n    )\n  )\n) * $__range_ms\n",
           "format": "time_series",
           "instant": true,
           "interval": "1m",
@@ -232,7 +232,7 @@
       "id": 5,
       "targets": [
         {
-          "expr": "sum by () (\n  sum_over_time(gitlab:availability:success:rate_1h{type=~\"registry|webservice\"}[1d])\n)\n/\nsum by () (\n  sum_over_time(gitlab:availability:ops:rate_1h{type=~\"registry|webservice\"}[1d])\n)\n",
+          "expr": "sum(\n  sum by (type)(\n    sum_over_time(gitlab:availability:success:rate_1h{type=\"registry\"}[1d]) * $registry_weight\n  )\n  or\n  sum by (type)(\n    sum_over_time(gitlab:availability:success:rate_1h{type=\"webservice\"}[1d]) * $webservice_weight\n  )\n)\n/\nsum(\n  sum by (type)(\n    sum_over_time(gitlab:availability:ops:rate_1h{type=\"registry\"}[1d]) * $registry_weight\n  )\n  or\n  sum by (type)(\n    sum_over_time(gitlab:availability:ops:rate_1h{type=\"webservice\"}[1d]) * $webservice_weight\n  )\n)\n",
           "format": "time_series",
           "instant": false,
           "interval": "1d",
@@ -288,7 +288,7 @@
       "steppedLine": false,
       "targets": [
         {
-          "expr": "clamp_min(clamp_max(clamp_max(\n  clamp_min(\n    sum by () (\n      sum_over_time(gitlab:availability:success:rate_1h{type=~\"registry|webservice\"}[$__interval])\n    )\n    /\n    sum by () (\n      sum_over_time(gitlab:availability:ops:rate_1h{type=~\"registry|webservice\"}[$__interval])\n    ),\n    0\n  ),\n  1\n)\n,1),0)\n",
+          "expr": "clamp_min(clamp_max(clamp_max(\n  clamp_min(\n    sum(\n      sum by (type)(\n        sum_over_time(gitlab:availability:success:rate_1h{type=\"registry\"}[$__interval]) * $registry_weight\n      )\n      or\n      sum by (type)(\n        sum_over_time(gitlab:availability:success:rate_1h{type=\"webservice\"}[$__interval]) * $webservice_weight\n      )\n    )\n    /\n    sum(\n      sum by (type)(\n        sum_over_time(gitlab:availability:ops:rate_1h{type=\"registry\"}[$__interval]) * $registry_weight\n      )\n      or\n      sum by (type)(\n        sum_over_time(gitlab:availability:ops:rate_1h{type=\"webservice\"}[$__interval]) * $webservice_weight\n      )\n    ),\n    0\n  ),\n  1\n)\n,1),0)\n",
           "format": "time_series",
           "interval": "1m",
           "intervalFactor": 1,
@@ -299,7 +299,7 @@
       "thresholds": [],
       "timeFrom": null,
       "timeShift": null,
-      "title": "Overall SLA over time period",
+      "title": "Overall GitLab.com SLA over time period",
       "tooltip": {
         "shared": true,
         "sort": 2,
@@ -1003,6 +1003,64 @@
         "tagsQuery": "",
         "type": "query",
         "useTags": false
+      },
+      {
+        "allValue": null,
+        "current": {
+          "text": "1",
+          "value": "1"
+        },
+        "hide": 0,
+        "includeAll": false,
+        "label": "",
+        "multi": false,
+        "name": "webservice_weight",
+        "options": [
+          {
+            "text": "0",
+            "value": "0"
+          },
+          {
+            "text": "1",
+            "value": "1"
+          },
+          {
+            "text": "5",
+            "value": "5"
+          }
+        ],
+        "query": "0,1,5",
+        "refresh": 0,
+        "type": "custom"
+      },
+      {
+        "allValue": null,
+        "current": {
+          "text": "1",
+          "value": "1"
+        },
+        "hide": 0,
+        "includeAll": false,
+        "label": "",
+        "multi": false,
+        "name": "registry_weight",
+        "options": [
+          {
+            "text": "0",
+            "value": "0"
+          },
+          {
+            "text": "1",
+            "value": "1"
+          },
+          {
+            "text": "5",
+            "value": "5"
+          }
+        ],
+        "query": "0,1,5",
+        "refresh": 0,
+        "type": "custom"
       }
     ]
   },
