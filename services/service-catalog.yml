@@ -2092,3 +2092,27 @@ services:
       logging:
         - name: Rails
           permalink: https://eu-central-1.console.aws.amazon.com/cloudwatch/home?region=eu-central-1#logsV2:log-groups/log-group/production-switchboard
+
+  - name: ops-gitlab-net
+    tier: sv
+    friendly_name: ops.gitlab.net
+    label: OpsGitlabNet
+    owner: reliability_foundations
+    technical:
+      project:
+        - https://gitlab.com/gitlab-com/gl-infra/k8s-workloads/gitlab-helmfiles/-/tree/master/releases/gitlab
+      documents:
+        design:
+        architecture:
+        readiness_review:
+        sre_guide:
+        developer_guide:
+        service:
+        security:
+      logging:
+        - name:
+          permalink:
+    observability:
+      monitors:
+        grafana_folder:
+        primary_grafana_dashboard:
