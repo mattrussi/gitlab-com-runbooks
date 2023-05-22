@@ -16,6 +16,7 @@
 
 ## Troubleshooting Pointers
 
+* [../certificates/chef_hybrid.md](../certificates/chef_hybrid.md)
 * [ErrorTracking main troubleshooting document](../errortracking/overview.md)
 * [Increased Error Rate](../frontend/high-error-rate.md)
 * [Gitaly is down](../gitaly/gitaly-down.md)

@@ -16,6 +16,7 @@
 
 ## Troubleshooting Pointers
 
+* [../certificates/forum.md](../certificates/forum.md)
 * [Management for forum.gitlab.com](discourse-forum.md)
 <!-- END_MARKER -->
 

@@ -23,6 +23,10 @@
 
 ## Troubleshooting Pointers
 
+* [../certificates/chef_hybrid.md](../certificates/chef_hybrid.md)
+* [../certificates/chef_vault.md](../certificates/chef_vault.md)
+* [../certificates/gcp.md](../certificates/gcp.md)
+* [../certificates/gkms.md](../certificates/gkms.md)
 * [Cloudflare for the on-call](../cloudflare/oncall.md)
 * [VM Build Process with Terraform and Chef](../config_management/chef-process-overview.md)
 * [Chef Vault Basics](../config_management/chef-vault.md)
