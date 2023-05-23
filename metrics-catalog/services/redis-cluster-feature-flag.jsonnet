@@ -8,9 +8,9 @@ local railsCacheSelector = { store: 'FeatureFlagStore' };
 
 metricsCatalog.serviceDefinition(
   redisArchetype(
-    type='redis-feature-flag',
+    type='redis-cluster-feature-flag',
     railsStorageSelector={ storage: 'feature_flag' },
-    descriptiveName='Redis Feature Flag'
+    descriptiveName='Redis Cluster Feature Flag'
   )
   {
     monitoringThresholds+: {
@@ -43,5 +43,5 @@ metricsCatalog.serviceDefinition(
       },
     },
   }
-  + redisHelpers.gitlabcomObservabilityToolingForRedis('redis-feature-flag')
+  + redisHelpers.gitlabcomObservabilityToolingForRedis('redis-cluster-feature-flag')
 )
