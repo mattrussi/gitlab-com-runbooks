@@ -11,7 +11,7 @@ describe ::Uploads::Cleaner do
   let(:disk_path) { 'test/path' }
   let(:file) { 'test' }
   let(:operation) { :delete }
-  let(:args) { { disk_path: disk_path, operation: operation } }
+  let(:args) { { disk_path:, operation: } }
   let(:defaults) { ::Uploads::CleanupScript::Config::DEFAULTS.dup.merge(args) }
   let(:options) { defaults }
 
@@ -19,21 +19,21 @@ describe ::Uploads::Cleaner do
     let(:path) { File.join(options[:uploads_dir_path], disk_path) }
     let(:found) { File.join(path, 'tmp/test') }
     let(:find_command) do
-      command = format(options[:find], path: path, minutes: options[:interval_minutes])
+      command = format(options[:find], path:, minutes: options[:interval_minutes])
       format(
         options[:remote_command],
         hostname: options[:hostname],
-        command: command
+        command:
       )
     end
 
     let(:find_with_delete_command) do
-      command = format(options[:find], path: path, minutes: options[:interval_minutes])
+      command = format(options[:find], path:, minutes: options[:interval_minutes])
       command = command << " -#{operation}"
       format(
         options[:remote_command],
         hostname: options[:hostname],
-        command: command
+        command:
       )
     end
 

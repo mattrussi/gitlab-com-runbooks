@@ -413,7 +413,8 @@ rubocop:
     - gem install bundler --no-document -v $BUNDLER_VERSION
     - bundle install --with=test
     # this will only run rubocop against the changes made in the current branch, to avoid complaints about random files not touched
-    - cat <(git diff --name-only HEAD) <(git diff --name-only HEAD origin/master) | xargs bundle exec rubocop --only-recognized-file-types
+    # - cat <(git diff --name-only HEAD) <(git diff --name-only HEAD origin/master) | xargs bundle exec rubocop --only-recognized-file-types
+    - bundle exec rubocop
 
 ################
 # Jsonnet

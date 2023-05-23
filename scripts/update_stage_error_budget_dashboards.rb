@@ -1,5 +1,6 @@
 #! /usr/bin/env ruby
 # frozen_string_literal: true
+
 require_relative '../lib/sync_dashboards'
 
 ##
@@ -39,7 +40,7 @@ class UpdateStageErrorBudgetDashboards
     group_info = parse_jsonnet(@mapping_path)
     raise "#{@mapping_path} is invalid" unless group_info.is_a?(Hash)
 
-    dashboards = group_info.map { |k, v| v['stage'] }.compact.uniq.map(&:strip)
+    dashboards = group_info.map { |_k, v| v['stage'] }.compact.uniq.map(&:strip)
     sync_dashboards(@dashboards_dir, dashboards)
   end
 

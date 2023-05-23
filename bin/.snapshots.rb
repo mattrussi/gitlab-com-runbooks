@@ -341,7 +341,7 @@ def main
     exit
   end
 
-  table = Terminal::Table.new(headings: headings, rows: rows)
+  table = Terminal::Table.new(headings:, rows:)
   table.style = { border: Terminal::Table::UnicodeRoundBorder.new }
   puts table
 

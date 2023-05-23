@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 require 'spec_helper'
 require_relative '../../lib/periodic_queries/prometheus_api'
 require_relative '../../lib/periodic_queries/query'

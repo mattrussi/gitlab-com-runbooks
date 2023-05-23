@@ -6,8 +6,9 @@ require_relative '../scripts/storage_project_selector'
 
 unless defined? Project
   # Define a dummy Project class
-  class Project
-  end
+  # rubocop:disable Lint/EmptyClass
+  class Project; end
+  # rubocop:enable Lint/EmptyClass
 end
 
 describe ::Storage::ProjectSelector do

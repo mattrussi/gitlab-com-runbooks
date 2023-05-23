@@ -32,7 +32,7 @@ describe UpdateStageErrorBudgetDashboards do
       file_fixture('stage-group-mapping-fixtures.jsonnet')
     end
 
-    let(:operation) { described_class.new(dashboards_dir: dashboard_dir, mapping_path: mapping_path, output: output) }
+    let(:operation) { described_class.new(dashboards_dir: dashboard_dir, mapping_path:, output:) }
 
     after do
       FileUtils.remove_entry dashboard_dir

@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 # rubocop:disable Style/TrailingCommaInHashLiteral
 # rubocop:disable Style/TrailingCommaInArguments
 # rubocop:disable Style/TrailingCommaInArrayLiteral
@@ -104,14 +105,14 @@ raise "expected status 200, got #{resp.status.code}, response #{resp}" unless re
 body = JSON.parse(resp.body)
 
 req = JSON.generate({
-  "_source": ["json.correlation_id"],
-  "query": {
-    "bool": {"must": [
-      {"exists": {"field": "json.correlation_id"}},
-      {"range":{"json.time":{"gte":timestamp_yesterday,"lte":timestamp_until,"format":"epoch_millis"}}},
+  _source: ["json.correlation_id"],
+  query: {
+    bool: {must: [
+      {exists: {field: "json.correlation_id"}},
+      {range:{"json.time":{gte:timestamp_yesterday,lte:timestamp_until,format:"epoch_millis"}}},
     ]}
   },
-  "size": options[:num_correlation_ids],
+  size: options[:num_correlation_ids],
 })
 resp = client.post(
   '/pubsub-rails-inf-gprd-*/_search',
@@ -204,13 +205,13 @@ clusters.each do |cluster, url|
             }.flatten.sum
             [node, sum]
           }
-          .sort_by { |k, v| -v }
+          .sort_by { |_k, v| -v }
           .to_h
 
         shards_per_node = body['profile']['shards']
           .group_by { |s| s['id'].scan(/\[(.+?)\]/).flatten[0] }
           .map { |node, shards| [node, shards.size] }
-          .sort_by { |k, v| -v }
+          .sort_by { |_k, v| -v }
           .to_h
 
         # cumulative -- these are supposedly concurrent

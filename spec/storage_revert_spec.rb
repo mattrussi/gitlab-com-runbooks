@@ -6,8 +6,9 @@ require_relative '../scripts/storage_revert'
 
 unless defined? Project
   # Define a dummy Project class
-  class Project
-  end
+  # rubocop:disable Lint/EmptyClass
+  class Project; end
+  # rubocop:enable Lint/EmptyClass
 end
 
 describe ::Storage::Reverter do
@@ -18,7 +19,7 @@ describe ::Storage::Reverter do
   let(:node_name) { 'nfs-file03' }
   let(:gitaly_address) { 'test://test' }
   let(:node_configuration) { { node_name => { 'gitaly_address' => gitaly_address } } }
-  let(:args) { { original_file_server: node_name, project_id: test_project_id, dry_run: dry_run } }
+  let(:args) { { original_file_server: node_name, project_id: test_project_id, dry_run: } }
   let(:defaults) { ::Storage::RevertScript::Config::DEFAULTS.dup.merge(args) }
   let(:options) { defaults }
 
@@ -77,7 +78,7 @@ describe ::Storage::RevertScript do
 
   let(:dry_run) { true }
   let(:node_configuration) { { 'nfs-file03': 'test://test' } }
-  let(:args) { { original_file_server: 'nfs-file03', project_id: 1, dry_run: dry_run } }
+  let(:args) { { original_file_server: 'nfs-file03', project_id: 1, dry_run: } }
   let(:defaults) { ::Storage::RevertScript::Config::DEFAULTS.dup.merge(args) }
   let(:options) { defaults }
   let(:reverter) { instance_double('::Registry::Reverter') }

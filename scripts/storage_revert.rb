@@ -58,7 +58,7 @@ module Storage
       log = Logger.new $stdout
       log.level = Logger::INFO
       log.formatter = proc do |level, t, _name, msg|
-        fields = { timestamp: t.strftime(timestamp_format), level: level, msg: msg }
+        fields = { timestamp: t.strftime(timestamp_format), level:, msg: }
         Kernel.format("%<timestamp>s %-5<level>s %<msg>s\n", **fields)
       end
       log
@@ -136,7 +136,7 @@ module Storage
       end
 
       def define_list_nodes_option
-        @parser.on('--list-nodes', 'List all known repository storage nodes') do |list_nodes|
+        @parser.on('--list-nodes', 'List all known repository storage nodes') do |_list_nodes|
           @options[:list_nodes] = true
         end
       end
@@ -164,7 +164,9 @@ module Storage
     def parse(args)
       opt = Options.new
       args.push('-?') if args.empty?
+      # rubocop:disable Lint/EmptyBlock
       opt.parser.parse!(opt.parser.order!(args) {})
+      # rubocop:enable Lint/EmptyBlock
       opt.options
     rescue OptionParser::InvalidOption, OptionParser::MissingArgument => e
       puts e.message

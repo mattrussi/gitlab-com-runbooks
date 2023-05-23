@@ -3,7 +3,6 @@
 
 require 'yaml'
 require 'json'
-require 'set'
 require 'net/http'
 require 'logger'
 
@@ -45,7 +44,7 @@ class ReconcileServiceCatalogLabels
     page_size = 100
     labels = []
     loop do
-      params = { search: search_keyword, page: page, per_page: page_size }
+      params = { search: search_keyword, page:, per_page: page_size }
       uri.query = URI.encode_www_form(params)
 
       res = Net::HTTP.get_response(uri, { "PRIVATE-TOKEN": ENV["GITLAB_RECONCILE_SERVICE_LABELS_TOKEN"] })

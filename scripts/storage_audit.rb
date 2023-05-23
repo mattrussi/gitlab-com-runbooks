@@ -122,7 +122,7 @@ module Storage
       log = Logger.new $stdout
       log.level = Logger::INFO
       log.formatter = proc do |level, t, _name, msg|
-        fields = { timestamp: t.strftime(timestamp_format), level: level, msg: msg }
+        fields = { timestamp: t.strftime(timestamp_format), level:, msg: }
         Kernel.format("%<timestamp>s %-5<level>s %<msg>s\n", **fields)
       end
       log
@@ -132,7 +132,7 @@ module Storage
       log = initialize_log
       timestamp_format = ::Storage::RepositoryAuditScript::LOG_TIMESTAMP_FORMAT
       log.formatter = proc do |level, t, _name, msg|
-        fields = { timestamp: t.strftime(timestamp_format), level: level, msg: msg }
+        fields = { timestamp: t.strftime(timestamp_format), level:, msg: }
         Kernel.format("\r%<timestamp>s %-5<level>s %<msg>s", **fields)
       end
       log
@@ -231,7 +231,7 @@ module Storage
     end
     # class OptionsParser
 
-    def parse(args = ARGV, file_path = ARGF)
+    def parse(args = ARGV, _file_path = ARGF)
       opt = OptionsParser.new
       args.push('-?') if args.empty?
       opt.parser.parse!(args)

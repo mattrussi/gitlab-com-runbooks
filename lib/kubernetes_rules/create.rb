@@ -33,7 +33,7 @@ module KubernetesRules
     def gather_vars(file, rule_name)
       template = File.readlines(file).each(&:chomp).join('  ')
 
-      OpenStruct.new(rule_name: rule_name, template: template)
+      OpenStruct.new(rule_name:, template:)
     end
 
     def render_for_k8s(template_vars)

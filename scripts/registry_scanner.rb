@@ -95,7 +95,7 @@ class RegistryScanner
     current = `gsutil cat #{filename}`
 
     raise "Error reading: #{filename}" unless $CHILD_STATUS.success?
-    raise ZeroByteFileError, "0-byte file found: #{filename}" if current.length.zero?
+    raise ZeroByteFileError, "0-byte file found: #{filename}" if current.empty?
 
     current.gsub!(/^sha256:/, '')
   end

@@ -19,22 +19,22 @@ class Validator
 
   # Add a validation warning
   def validation_warning(message)
-    @failures << { context: @context.dup, level: :warn, message: message }
+    @failures << { context: @context.dup, level: :warn, message: }
   end
 
   # Add a validation error
   def validation_error(message)
-    @failures << { context: @context.dup, level: :error, message: message }
+    @failures << { context: @context.dup, level: :error, message: }
   end
 
   # Add a validation failure and abort the current validation
   def validation_fatal(message)
-    @failures << { context: @context.dup, level: :error, message: message }
+    @failures << ({ context: @context.dup, level: :error, message: })
     raise ValidationError
   end
 
   # Ensures that the rule has valid annotations
-  def validate_alert_rule_annotations(rule, thanos_evaluation)
+  def validate_alert_rule_annotations(rule, _thanos_evaluation)
     annotations = rule["annotations"]
     validation_fatal("rules must contain a `title` annotation") unless annotations["title"]
 
@@ -64,7 +64,7 @@ class Validator
     validation_error("channel annotations have been removed in favour of team labels, please use a team label instead") if annotations["channel"]
   end
 
-  def validate_pager_severity_labels(rule, thanos_evaluation)
+  def validate_pager_severity_labels(rule, _thanos_evaluation)
     labels = rule["labels"]
 
     if labels["pager"]
@@ -75,7 +75,7 @@ class Validator
     end
   end
 
-  def validate_label_team(rule, thanos_evaluation)
+  def validate_label_team(rule, _thanos_evaluation)
     labels = rule["labels"]
     team = @service_catalog_teams[labels["team"]]
 

@@ -1,5 +1,6 @@
 #! /usr/bin/env ruby
 # frozen_string_literal: true
+
 require 'net/http'
 require 'yaml'
 require 'json'
@@ -50,7 +51,7 @@ class UpdateStageGroupsFeatureCategories
 
         resulting_group_info[group_key] = {
           name: group_info['name'],
-          stage: stage,
+          stage:,
           feature_categories: categories
         }
       end

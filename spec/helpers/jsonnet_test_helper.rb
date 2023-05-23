@@ -126,7 +126,7 @@ RSpec::Matchers.define :reject_jsonnet do |expected|
     "reject jsonnet content with reason: #{expected.inspect}"
   end
 
-  failure_message do |actual|
+  failure_message do |_actual|
     if @result.success?
       'Jsonnet content renders successfully. Expecting an error!'
     else

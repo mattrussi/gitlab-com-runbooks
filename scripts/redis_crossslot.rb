@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 require 'digest/crc16'
 require 'json'
 
@@ -58,6 +59,7 @@ ARGV.each do |idx_filename|
 
         cmd = args[0].downcase
 
+        # rubocop:disable Lint/DuplicateBranch
         case cmd
         when "get"
           keys = [args[1]]
@@ -116,6 +118,7 @@ ARGV.each do |idx_filename|
         else
           raise "unknown command #{cmd}"
         end
+        # rubocop:enable Lint/DuplicateBranch
 
         in_tx = true if cmd == "multi"
 
@@ -135,8 +138,10 @@ ARGV.each do |idx_filename|
 
         if keys.size > 1 && keys.map { |k| hash_slot(k) }.uniq.size != 1
           # data = { args: args, extra: extra }
-          data = { cmd: cmd, keys: keys, patterns: keys.map { |k| filter_key(k) }.uniq, tx_ops: extra&.map { |a| a[0] } }
+          data = { cmd:, keys:, patterns: keys.map { |k| filter_key(k) }.uniq, tx_ops: extra&.map { |a| a[0] } }
+          # rubocop:disable GitlabSecurity/JsonSerialization
           puts data.to_json
+          # rubocop:enable GitlabSecurity/JsonSerialization
         end
       rescue EOFError
       end

@@ -47,7 +47,7 @@ module Registry
       log = Logger.new $stdout
       log.level = Logger::INFO
       log.formatter = proc do |level, t, _name, msg|
-        fields = { timestamp: t.strftime(LOG_TIMESTAMP_FORMAT), level: level, msg: msg }
+        fields = { timestamp: t.strftime(LOG_TIMESTAMP_FORMAT), level:, msg: }
         Kernel.format("%<timestamp>s %-5<level>s %<msg>s\n", **fields)
       end
       log
@@ -180,7 +180,9 @@ module Registry
     def parse(args)
       opt = Options.new
       args.push('-?') if args.empty?
+      # rubocop:disable Lint/EmptyBlock
       opt.parser.parse!(opt.parser.order!(args) {})
+      # rubocop:enable Lint/EmptyBlock
       opt.options
     rescue OptionParser::InvalidArgument, OptionParser::InvalidOption,
       OptionParser::MissingArgument => e

@@ -131,7 +131,7 @@ module Storage
       log = Logger.new $stdout
       log.level = Logger::INFO
       log.formatter = proc do |level, t, _name, msg|
-        fields = { timestamp: t.strftime(timestamp_format), level: level, msg: msg }
+        fields = { timestamp: t.strftime(timestamp_format), level:, msg: }
         Kernel.format("%<timestamp>s %-5<level>s %<msg>s\n", **fields)
       end
       log
@@ -148,7 +148,7 @@ module Storage
 
     def log_error(err, message = nil, error = {})
       error[:error] = {
-        timestamp: timestamp,
+        timestamp:,
         message: message.nil? ? err.message : format(message, message: err.message)
       }
       error[:error][:backtrace] = err.backtrace unless err.is_a?(UserError)
@@ -306,7 +306,7 @@ module Storage
       raise UserError, "Required argument: #{required_arg}"
     end
 
-    def parse(args = ARGV, file_path = ARGF)
+    def parse(args = ARGV, _file_path = ARGF)
       opt = OptionsParser.new
       args.push('-?') if args.empty?
       opt.parser.parse!(args)
@@ -364,7 +364,7 @@ module Storage
       repository_storage = options[:source_shard]
       excluded_projects = options[:excluded_projects]
       clauses = namespace_filter(options[:clauses].dup, options[:group])
-      clauses.merge!(repository_storage: repository_storage)
+      clauses.merge!(repository_storage:)
       clauses.delete(:mirror) if options[:include_mirrors]
       query = Project.joins(:statistics).where(**clauses)
       unless excluded_projects.empty?
@@ -375,7 +375,7 @@ module Storage
       count = Project.transaction do
         with_timeout(options[:long_query_timeout]) { query.size }
       end
-      log_info(repository_storage: repository_storage, movable_project_count: count)
+      log_info(repository_storage:, movable_project_count: count)
     rescue StandardError => e
       log_error(e, "Failed to count movable projects: %{message}")
       abort
@@ -385,7 +385,7 @@ module Storage
       shards = ::Storage.node_configuration.sort.collect do |shard_name, config|
         { repository_storage: shard_name, gitaly_address: config['gitaly_address'] }
       end
-      log_info({ shards: shards })
+      log_info({ shards: })
     end
 
     def project_details(project)
@@ -482,8 +482,9 @@ module Storage
       if args[:format] == :csv
         puts CSV.generate { |csv| projects.each { |project| csv << project.values } }
       else
-        log_info(projects: projects)
+        log_info(projects:)
       end
+    # rubocop:disable Lint/DuplicateBranch
     rescue UserError => e
       log_error(e)
       abort
@@ -498,6 +499,7 @@ module Storage
       $stdin.echo = true
       exit 0
     end
+    # rubocop:enable Lint/DuplicateBranch
   end
   # ProjectSelectorScript module
 end
