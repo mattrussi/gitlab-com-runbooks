@@ -15,24 +15,24 @@ local shardDefaults = {
 };
 
 local shardDefinitions = {
-  'database-throttled': { urgency: 'throttled', gkeDeployment: 'gitlab-sidekiq-database-throttled-v1', userImpacting: false, trafficCessationAlertConfig: false },
-  'gitaly-throttled': { urgency: 'throttled', gkeDeployment: 'gitlab-sidekiq-gitaly-throttled-v1', userImpacting: false, trafficCessationAlertConfig: false },
-  'low-urgency-cpu-bound': { urgency: 'low', gkeDeployment: 'gitlab-sidekiq-low-urgency-cpu-bound-v1', userImpacting: true, trafficCessationAlertConfig: true },
+  'database-throttled': { urgency: 'throttled', gkeDeployment: 'gitlab-sidekiq-database-throttled-v2', userImpacting: false, trafficCessationAlertConfig: false },
+  'gitaly-throttled': { urgency: 'throttled', gkeDeployment: 'gitlab-sidekiq-gitaly-throttled-v2', userImpacting: false, trafficCessationAlertConfig: false },
+  'low-urgency-cpu-bound': { urgency: 'low', gkeDeployment: 'gitlab-sidekiq-low-urgency-cpu-bound-v2', userImpacting: true, trafficCessationAlertConfig: true },
   'memory-bound': {
     urgency: null,
-    gkeDeployment: 'gitlab-sidekiq-memory-bound-v1',
+    gkeDeployment: 'gitlab-sidekiq-memory-bound-v2',
     userImpacting: true,
     trafficCessationAlertConfig: false,
     monitoringThresholds+: {
       apdexScore: 0.92,
     },
   },
-  quarantine: { urgency: null, gkeDeployment: 'gitlab-sidekiq-catchall-v1', userImpacting: true, trafficCessationAlertConfig: false },
-  'urgent-cpu-bound': { urgency: 'high', gkeDeployment: 'gitlab-sidekiq-urgent-cpu-bound-v1', userImpacting: true, trafficCessationAlertConfig: true },
-  'urgent-other': { urgency: 'high', autoScaling: false, gkeDeployment: 'gitlab-sidekiq-urgent-other-v1', userImpacting: true, trafficCessationAlertConfig: true },
-  'urgent-authorized-projects': { urgency: 'throttled', gkeDeployment: 'gitlab-sidekiq-urgent-authorized-projects-v1', userImpacting: true, trafficCessationAlertConfig: false },
-  catchall: { urgency: null, gkeDeployment: 'gitlab-sidekiq-catchall-v1', userImpacting: true, trafficCessationAlertConfig: true /* no urgency attribute since multiple values are supported */ },
-  elasticsearch: { urgency: 'throttled', gkeDeployment: 'gitlab-sidekiq-elasticsearch-v1', userImpacting: false, trafficCessationAlertConfig: false },
+  quarantine: { urgency: null, gkeDeployment: 'gitlab-sidekiq-catchall-v2', userImpacting: true, trafficCessationAlertConfig: false },
+  'urgent-cpu-bound': { urgency: 'high', gkeDeployment: 'gitlab-sidekiq-urgent-cpu-bound-v2', userImpacting: true, trafficCessationAlertConfig: true },
+  'urgent-other': { urgency: 'high', autoScaling: false, gkeDeployment: 'gitlab-sidekiq-urgent-other-v2', userImpacting: true, trafficCessationAlertConfig: true },
+  'urgent-authorized-projects': { urgency: 'throttled', gkeDeployment: 'gitlab-sidekiq-urgent-authorized-projects-v2', userImpacting: true, trafficCessationAlertConfig: false },
+  catchall: { urgency: null, gkeDeployment: 'gitlab-sidekiq-catchall-v2', userImpacting: true, trafficCessationAlertConfig: true /* no urgency attribute since multiple values are supported */ },
+  elasticsearch: { urgency: 'throttled', gkeDeployment: 'gitlab-sidekiq-elasticsearch-v2', userImpacting: false, trafficCessationAlertConfig: false },
 };
 
 local shards = std.foldl(
