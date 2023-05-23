@@ -17,7 +17,6 @@
 
 ## Troubleshooting Pointers
 
-* [Steps to Recreate/Rebuild the CI CLuster using a Snapshot from the Master cluster (instead of pg_basebackup)](rebuild_ci_cluster_from_prod.md)
 * [Recovering from CI Patroni cluster lagging too much or becoming completely broken](recovering_patroni_ci_intense_lagging_or_replication_stopped.md)
 * [OS Upgrade Reference Architecture](../patroni/os_upgrade_reference_architecture.md)
 * [Handling Unhealthy Patroni Replica](../patroni/unhealthy_patroni_node_handling.md)

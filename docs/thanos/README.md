@@ -42,7 +42,6 @@
 * [Upgrading Monitoring Components](../monitoring/upgrades.md)
 * [Diagnosis with Kibana](../onboarding/kibana-diagnosis.md)
 * [Block specific pages domains through HAproxy](../pages/block-pages-domain.md)
-* [Steps to Recreate/Rebuild the CI CLuster using a Snapshot from the Master cluster (instead of pg_basebackup)](../patroni-ci/rebuild_ci_cluster_from_prod.md)
 * [Recovering from CI Patroni cluster lagging too much or becoming completely broken](../patroni-ci/recovering_patroni_ci_intense_lagging_or_replication_stopped.md)
 * [../patroni/database_peak_analysis.md](../patroni/database_peak_analysis.md)
 * [Geo Patroni Cluster Management](../patroni/geo-patroni-cluster.md)
