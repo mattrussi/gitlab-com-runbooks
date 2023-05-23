@@ -954,18 +954,6 @@ groups:
     expr: "0.000100"
   - record: slo:min:events:gitlab_service_apdex:ratio
     labels:
-      component: email_receiver
-      tier: sv
-      type: ops-gitlab-net
-    expr: "0.998000"
-  - record: slo:max:events:gitlab_service_errors:ratio
-    labels:
-      component: email_receiver
-      tier: sv
-      type: ops-gitlab-net
-    expr: "0.300000"
-  - record: slo:min:events:gitlab_service_apdex:ratio
-    labels:
       component: gitlab_sshd
       tier: sv
       type: ops-gitlab-net
@@ -3220,15 +3208,6 @@ groups:
       service_aggregation: "yes"
       tier: sv
       type: nginx
-    expr: "1"
-  - record: gitlab_component_service:mapping
-    labels:
-      component: email_receiver
-      global_aggregation: "no"
-      regional_aggregation: "no"
-      service_aggregation: "yes"
-      tier: sv
-      type: ops-gitlab-net
     expr: "1"
   - record: gitlab_component_service:mapping
     labels:
