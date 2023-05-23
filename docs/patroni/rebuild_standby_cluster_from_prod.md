@@ -27,10 +27,11 @@ Standby Clusters are physically replicated clusters, that stream or recover WALs
 
 This runbook describes the whole procedure and several takeaways to help you to create a new Patrony Standby Clusters from scratch.
 
-##  1. <a name='Pre-requisites'></a>Pre-requisites
+## 1. <a name='Pre-requisites'></a>Pre-requisites
 
 1. Terraform should be installed and configured;
 2. Ansible should be installed and configured into your account into your workstation or a `console` node, you can use the following commands:
+
     ```
     python3 -m venv ansible
     source ansible/bin/activate
@@ -38,9 +39,10 @@ This runbook describes the whole procedure and several takeaways to help you to 
     python3 -m pip install ansible
     ansible --version
     ```
+
 3. Download/clone the [ops.gitlab.net/gitlab-com/gl-infra/config-mgmt](https://ops.gitlab.net/gitlab-com/gl-infra/config-mgmt) project into your workstation or a `console` node;
 
-##  2. <a name='ChefrolefortheTargetcluster'></a>Chef role for the Target cluster
+## 2. <a name='ChefrolefortheTargetcluster'></a>Chef role for the Target cluster
 
 Some `postgresql` settings need to be the SAME as the Source cluster for the physical replication to work, they are:
 
@@ -81,7 +83,7 @@ Notice that `host` should point to the endpoint of the Primary/Master node of th
   },
 ```
 
-##  3. <a name='DefinethenewStandbyClusterinTerraform'></a>Define the new Standby Cluster in Terraform
+## 3. <a name='DefinethenewStandbyClusterinTerraform'></a>Define the new Standby Cluster in Terraform
 
 Define a disk snapshot from the source cluster in Terraform, for example:
 
@@ -107,7 +109,7 @@ module "patroni-main-standby_cluster" {
 }
 ```
 
-##  4. <a name='StepstoDestroyaStandbyClusterifyouwanttorecreateit'></a>Steps to Destroy a Standby Cluster if you want to recreate it 
+## 4. <a name='StepstoDestroyaStandbyClusterifyouwanttorecreateit'></a>Steps to Destroy a Standby Cluster if you want to recreate it
 
 **IMPORTANT: make sure to review this command or perform the execution with a peer**
 
@@ -127,9 +129,9 @@ knife node delete --yes patroni-main-standby_cluster-10{1..5}-db-$env.c.gitlab-$
 knife client delete --yes patroni-main-standby_cluster-10{1..5}-db-$env.c.gitlab-$gcp_project.internal
 ```
 
-##  5. <a name='CreatethePatroniCIStandbyClusterinstances'></a>Create the Patroni CI Standby Cluster instances
+## 5. <a name='CreatethePatroniCIStandbyClusterinstances'></a>Create the Patroni CI Standby Cluster instances
 
-###  5.1. <a name='CreatetheclusterwithTF'></a>Create the cluster with TF
+### 5.1. <a name='CreatetheclusterwithTF'></a>Create the cluster with TF
 
 If you are creating the nodes for the first time, **they should be created by our CI/CO pipeline** when you merge the changes in `main.tf` in the repository.
 
@@ -140,7 +142,7 @@ cd /config-mgmt/environments/<environment>
 tf apply -target="module.<standby_cluster_tf_module>"
 ```
 
-###  5.2. <a name='StoppatroniandresetWALdirectoryfromoldfiles'></a>Stop patroni and reset WAL directory from old files
+### 5.2. <a name='StoppatroniandresetWALdirectoryfromoldfiles'></a>Stop patroni and reset WAL directory from old files
 
 Before executing the playbook to create the standby cluster, you have to stop patroni service in all nodes of the new standby cluster.
 
@@ -157,7 +159,7 @@ knife ssh "role:<patroni_standby_cluster_role>" "sudo rm -rf /var/opt/gitlab/pos
 
 Note: you can change `/var/opt/gitlab/postgresql/data12` to any other data directory that is in use, eg. `/var/opt/gitlab/postgresql/data14`, etc.
 
-###  5.3. <a name='InitializePatronistandby_clusterwithAnsibleplaybook'></a>Initialize Patroni standby_cluster with Ansible playbook
+### 5.3. <a name='InitializePatronistandby_clusterwithAnsibleplaybook'></a>Initialize Patroni standby_cluster with Ansible playbook
 
 **1st -** Download/clone the [gitlab.com/gitlab-com/gl-infra/db-migration](https://gitlab.com/gitlab-com/gl-infra/db-migration) project into your workstation or a `console` node;
 
@@ -165,9 +167,10 @@ Note: you can change `/var/opt/gitlab/postgresql/data12` to any other data direc
 git clone https://gitlab.com/gitlab-com/gl-infra/db-migration.git
 ```
 
-**2nd -** Check that the inventory file for your desired environment exists in `db-migration/pg-replica-rebuild/inventory/` and it's up-to-date with the hosts you're targeting. The inventory file should contain
-- `all.vars.walg_gs_prefix`: this is the GCS bucket and directory of the SOURCE database WAL archive location (the source database is the cluster you referred the `data_disk_snapshot` to create the cluster throughout TF). You can find this value in the source cluster Chef role, it should be the `gitlab_walg.storage_prefix` for that cluster.
-- `all.hosts`: a regex that represents the FQDN of the hosts that are going to be part of this cluster, where the first node will be created as Standby Leader.
+**2nd -** Check that the inventory file for your desired environment exists in `db-migration/pg-replica-rebuild/inventory/` and it's up-to-date with the hosts you're targeting. The inventory file should contain:
+
+* `all.vars.walg_gs_prefix`: this is the GCS bucket and directory of the SOURCE database WAL archive location (the source database is the cluster you referred the `data_disk_snapshot` to create the cluster throughout TF). You can find this value in the source cluster Chef role, it should be the `gitlab_walg.storage_prefix` for that cluster.
+* `all.hosts`: a regex that represents the FQDN of the hosts that are going to be part of this cluster, where the first node will be created as Standby Leader.
 
 Example:
 
@@ -193,20 +196,22 @@ cd db-migration/pg-replica-rebuild
 ansible-playbook -i inventory/patroni-main-v14-gstg.yml rebuild-all.yml
 ```
 
-###  5.4. <a name='CheckifthePatronistandby_clusterishealthyandreplicating'></a>Check if the Patroni standby_cluster is healthy and replicating
+### 5.4. <a name='CheckifthePatronistandby_clusterishealthyandreplicating'></a>Check if the Patroni standby_cluster is healthy and replicating
 
-####  5.4.1. <a name='Checkstandby_clustersourceconfiguration'></a>Check standby_cluster source configuration 
+#### 5.4.1. <a name='Checkstandby_clustersourceconfiguration'></a>Check standby_cluster source configuration
 
-Execute 
+Execute
+
 ```
 gitlab-patronictl show-config
 ```
 
 The output should present the `standby_cluster` block with the `host` property pointing to the proper source cluster master endpoint.
 
-####  5.4.2. <a name='CheckReplicationstatus'></a>Check Replication status
+#### 5.4.2. <a name='CheckReplicationstatus'></a>Check Replication status
 
-Execute 
+Execute
+
 ```
 gitlab-patronictl list
 ```
