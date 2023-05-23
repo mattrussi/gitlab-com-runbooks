@@ -1,18 +1,12 @@
 local stages = import 'service-catalog/stages.libsonnet';
+local array = import 'utils/array.libsonnet';
 local objects = import 'utils/objects.libsonnet';
 local crossoverMappings = objects.invert((import 'gitlab-metrics-config.libsonnet').stageGroupMappingCrossover);
 
 local rules = std.flatMap(
   function(featureCategory)
     local stageGroup = stages.featureCategoryMap[featureCategory];
-    local featureCategories = [featureCategory] + std.flattenArrays(
-      [  // TODO: this inner array can be removed as soon as the PR
-        // https://github.com/google/jsonnet/pull/1082 is merged,
-        // and a new version of jsonnet is released
-        std.prune([std.get(crossoverMappings, featureCategory)]),
-      ]
-    );
-
+    local featureCategories = [featureCategory] + array.compact([std.get(crossoverMappings, featureCategory)]);
     std.map(
       function(category)
         {

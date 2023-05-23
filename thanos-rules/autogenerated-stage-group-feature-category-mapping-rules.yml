@@ -367,6 +367,24 @@ groups:
     expr: "1"
   - record: gitlab:feature_category:stage_group:mapping
     labels:
+      feature_category: groups_and_projects
+      product_stage: data_stores
+      stage_group: tenant_scale
+    expr: "1"
+  - record: gitlab:feature_category:stage_group:mapping
+    labels:
+      feature_category: projects
+      product_stage: data_stores
+      stage_group: tenant_scale
+    expr: "1"
+  - record: gitlab:feature_category:stage_group:mapping
+    labels:
+      feature_category: subgroups
+      product_stage: data_stores
+      stage_group: tenant_scale
+    expr: "1"
+  - record: gitlab:feature_category:stage_group:mapping
+    labels:
       feature_category: helm_chart_registry
       product_stage: package
       stage_group: package_registry
@@ -439,6 +457,12 @@ groups:
     expr: "1"
   - record: gitlab:feature_category:stage_group:mapping
     labels:
+      feature_category: measurement_and_locking
+      product_stage: growth
+      stage_group: acquisition
+    expr: "1"
+  - record: gitlab:feature_category:stage_group:mapping
+    labels:
       feature_category: merge_trains
       product_stage: verify
       stage_group: pipeline_execution
@@ -499,6 +523,12 @@ groups:
     expr: "1"
   - record: gitlab:feature_category:stage_group:mapping
     labels:
+      feature_category: organization
+      product_stage: data_stores
+      stage_group: tenant_scale
+    expr: "1"
+  - record: gitlab:feature_category:stage_group:mapping
+    labels:
       feature_category: package_registry
       product_stage: package
       stage_group: package_registry
@@ -526,12 +556,6 @@ groups:
       feature_category: product_analytics
       product_stage: analytics
       stage_group: product_analytics
-    expr: "1"
-  - record: gitlab:feature_category:stage_group:mapping
-    labels:
-      feature_category: projects
-      product_stage: data_stores
-      stage_group: tenant_scale
     expr: "1"
   - record: gitlab:feature_category:stage_group:mapping
     labels:
@@ -703,12 +727,6 @@ groups:
     expr: "1"
   - record: gitlab:feature_category:stage_group:mapping
     labels:
-      feature_category: subgroups
-      product_stage: data_stores
-      stage_group: tenant_scale
-    expr: "1"
-  - record: gitlab:feature_category:stage_group:mapping
-    labels:
       feature_category: subscription_management
       product_stage: fulfillment
       stage_group: billing_and_subscription_management
@@ -722,12 +740,6 @@ groups:
   - record: gitlab:feature_category:stage_group:mapping
     labels:
       feature_category: team_planning
-      product_stage: plan
-      stage_group: project_management
-    expr: "1"
-  - record: gitlab:feature_category:stage_group:mapping
-    labels:
-      feature_category: planning_analytics
       product_stage: plan
       stage_group: project_management
     expr: "1"
