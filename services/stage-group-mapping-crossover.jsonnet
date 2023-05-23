@@ -6,5 +6,6 @@
 //
 // Blank values will be ignored.
 {
-  planning_analytics: 'team_planning',
+  projects: 'groups_and_projects',
+  subgroups: 'groups_and_projects'
 }

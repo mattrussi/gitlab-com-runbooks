@@ -308,6 +308,7 @@
     feature_categories: [
       'experimentation_conversion',
       'experimentation_expansion',
+      'measurement_and_locking',
       'onboarding',
     ],
   },
@@ -386,9 +387,9 @@
     stage: 'data_stores',
     feature_categories: [
       'cell',
-      'subgroups',
-      'projects',
+      'groups_and_projects',
       'user_profile',
+      'organization',
     ],
   },
   delivery: {
