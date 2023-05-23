@@ -2114,5 +2114,5 @@ services:
           permalink:
     observability:
       monitors:
-        grafana_folder:
-        primary_grafana_dashboard:
+        grafana_folder: ops-gitlab-net
+        primary_grafana_dashboard: ops-gitlab-net-main/ops-gitlab-net-overview
