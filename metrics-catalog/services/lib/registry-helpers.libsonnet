@@ -117,7 +117,9 @@ local registryApdex(selector, satisfiedThreshold, toleratedThreshold=null) =
     toleratedThreshold=toleratedThreshold,
   );
 
-local mainApdex(selector=registryBaseSelector) =
+local mainApdex(
+  selector=registryBaseSelector
+      ) =
   local customizedRoutes = std.set(std.map(function(routeConfig) routeConfig.route, customRouteSLIs));
   local withoutCustomizedRouteSelector = selector {
     route: { nre: std.join('|', customizedRoutes) },
