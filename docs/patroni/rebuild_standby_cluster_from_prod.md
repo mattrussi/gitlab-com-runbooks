@@ -6,12 +6,12 @@
 * 3. [Define the new Standby Cluster in Terraform](#DefinethenewStandbyClusterinTerraform)
 * 4. [Steps to Destroy a Standby Cluster if you want to recreate it](#StepstoDestroyaStandbyClusterifyouwanttorecreateit)
 * 5. [Create the Patroni CI Standby Cluster instances](#CreatethePatroniCIStandbyClusterinstances)
-	* 5.1. [Create the cluster with TF](#CreatetheclusterwithTF)
-	* 5.2. [Stop patroni and reset WAL directory from old files](#StoppatroniandresetWALdirectoryfromoldfiles)
-	* 5.3. [Initialize Patroni standby_cluster with Ansible playbook](#InitializePatronistandby_clusterwithAnsibleplaybook)
-	* 5.4. [Check if the Patroni standby_cluster is healthy and replicating](#CheckifthePatronistandby_clusterishealthyandreplicating)
-		* 5.4.1. [Check standby_cluster source configuration](#Checkstandby_clustersourceconfiguration)
-		* 5.4.2. [Check Replication status](#CheckReplicationstatus)
+  * 5.1. [Create the cluster with TF](#CreatetheclusterwithTF)
+  * 5.2. [Stop patroni and reset WAL directory from old files](#StoppatroniandresetWALdirectoryfromoldfiles)
+  * 5.3. [Initialize Patroni standby_cluster with Ansible playbook](#InitializePatronistandby_clusterwithAnsibleplaybook)
+  * 5.4. [Check if the Patroni standby_cluster is healthy and replicating](#CheckifthePatronistandby_clusterishealthyandreplicating)
+    * 5.4.1. [Check standby_cluster source configuration](#Checkstandby_clustersourceconfiguration)
+    * 5.4.2. [Check Replication status](#CheckReplicationstatus)
 
 <!-- vscode-markdown-toc-config
 	numbering=true
@@ -26,7 +26,6 @@ From time to time we have to create Standby Clusters from a source/existing Gitl
 Standby Clusters are physically replicated clusters, that stream or recover WALs from the source Patroni/PostgreSQL database, but have an independent Patroni configuration and management, therefore can be promoted if required.
 
 This runbook describes the whole procedure and several takeaways to help you to create a new Patrony Standby Clusters from scratch.
-
 
 ##  1. <a name='Pre-requisites'></a>Pre-requisites
 
@@ -128,7 +127,6 @@ knife node delete --yes patroni-main-standby_cluster-10{1..5}-db-$env.c.gitlab-$
 knife client delete --yes patroni-main-standby_cluster-10{1..5}-db-$env.c.gitlab-$gcp_project.internal
 ```
 
-
 ##  5. <a name='CreatethePatroniCIStandbyClusterinstances'></a>Create the Patroni CI Standby Cluster instances
 
 ###  5.1. <a name='CreatetheclusterwithTF'></a>Create the cluster with TF
@@ -158,7 +156,6 @@ knife ssh "role:<patroni_standby_cluster_role>" "sudo rm -rf /var/opt/gitlab/pos
 ```
 
 Note: you can change `/var/opt/gitlab/postgresql/data12` to any other data directory that is in use, eg. `/var/opt/gitlab/postgresql/data14`, etc.
-
 
 ###  5.3. <a name='InitializePatronistandby_clusterwithAnsibleplaybook'></a>Initialize Patroni standby_cluster with Ansible playbook
 
@@ -206,7 +203,6 @@ gitlab-patronictl show-config
 ```
 
 The output should present the `standby_cluster` block with the `host` property pointing to the proper source cluster master endpoint.
-
 
 ####  5.4.2. <a name='CheckReplicationstatus'></a>Check Replication status
 
