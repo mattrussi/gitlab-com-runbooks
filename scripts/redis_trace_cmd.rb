@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 require 'time'
 require 'json'
 require_relative '../lib/redis_trace/key_pattern'
@@ -73,13 +74,15 @@ ARGV.each do |idx_filename|
           patterns = keys.map { |key| RedisTrace::KeyPattern.filter_key(key).gsub(' ', '_') }
           data = {
             time: ts.iso8601(9),
-            cmd: cmd,
-            src_host: src_host,
-            keys: keys,
-            patterns: patterns,
+            cmd:,
+            src_host:,
+            keys:,
+            patterns:,
             patterns_uniq: patterns.sort.uniq
           }
+          # rubocop:disable GitlabSecurity/JsonSerialization
           puts data.to_json
+          # rubocop:enable GitlabSecurity/JsonSerialization
         else
           keys.each do |key|
             puts "#{ts.iso8601(9)} #{ts.to_time.to_i % 60} #{cmd} #{src_host} #{RedisTrace::KeyPattern.filter_key(key).gsub(' ', '_').inspect} #{key.gsub(' ', '_').inspect}"

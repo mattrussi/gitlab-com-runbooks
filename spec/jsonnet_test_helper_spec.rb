@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 # Of course, a test to test a test matcher :monocle:
 
 require 'spec_helper'

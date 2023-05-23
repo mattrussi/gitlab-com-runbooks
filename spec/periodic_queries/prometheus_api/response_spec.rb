@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 require 'spec_helper'
 require_relative '../../../lib/periodic_queries/prometheus_api/response'
 require_relative '../../../lib/periodic_queries/query'
@@ -11,7 +12,7 @@ describe PeriodicQueries::PrometheusApi::Response do
   let(:body) { '{ "queryname": "result" }' }
 
   let(:raw_response) do
-    instance_double(Net::HTTPResponse, code: code, message: message, body: body)
+    instance_double(Net::HTTPResponse, code:, message:, body:)
   end
 
   describe '#status' do

@@ -67,10 +67,12 @@ class SlackWebhook
   def self.fire_hook(text, attachment: nil, channel: CHANNEL)
     return unless ENV['SLACK_TOKEN']
 
-    body = { text: text }
+    body = { text: }
     body[:channel] = channel
     body[:attachments] = [{ text: attachment, color: 'danger' }] if attachment
+    # rubocop:disable GitlabSecurity/JsonSerialization
     response = HTTParty.post(WEBHOOK_URL, body: body.to_json)
+    # rubocop:enable GitlabSecurity/JsonSerialization
 
     raise CouldNotPostError, response.inspect unless response.code == 200
   end

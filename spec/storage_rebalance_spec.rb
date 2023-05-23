@@ -15,7 +15,7 @@ describe ::Storage::Rebalancer do
   let(:dry_run) { true }
   let(:args) do
     { source_shard: test_node_01, destination_shard: test_node_02,
-      dry_run: dry_run }
+      dry_run: }
   end
 
   let(:defaults) { ::Storage::RebalanceScript::Config::DEFAULTS.dup.merge(args) }
@@ -67,14 +67,14 @@ describe ::Storage::Rebalancer do
         disk_path: test_project_disk_path, repository_storage: test_node_01 }
     end
 
-    let(:test_project_put_response) { { 'id': test_project_id }.transform_keys(&:to_s) }
+    let(:test_project_put_response) { { id: test_project_id }.transform_keys(&:to_s) }
     let(:test_updated_full_project) do
       { id: test_project_id, name: test_project_name, path_with_namespace: test_project_path_with_namespace,
         disk_path: test_project_disk_path, repository_storage: test_node_02 }
     end
 
-    let(:test_moves) { [{ 'project': { 'id': test_project_id }, 'state': 'finished' }] }
-    let(:test_move) { { 'project': { 'id': test_project_id }, 'state': 'started' } }
+    let(:test_moves) { [{ project: { id: test_project_id }, state: 'finished' }] }
+    let(:test_move) { { project: { id: test_project_id }, state: 'started' } }
     let(:test_migration_logger) { instance_double('FileLogger') }
     let(:test_time) { DateTime.now.iso8601(::Storage::Helpers::ISO8601_FRACTIONAL_SECONDS_LENGTH) }
     let(:test_artifact) do
@@ -112,7 +112,7 @@ describe ::Storage::Rebalancer do
       defaults.merge(
         source_shard: test_node_01,
         destination_shard: test_node_02,
-        dry_run: dry_run
+        dry_run:
       )
     end
 
@@ -340,7 +340,7 @@ describe ::Storage::RebalanceScript do
   let(:dry_run) { true }
   let(:args) do
     { source_shard: test_node_01, destination_shard: test_node_02,
-      projects: projects, dry_run: dry_run }
+      projects:, dry_run: }
   end
 
   let(:defaults) { ::Storage::RebalanceScript::Config::DEFAULTS.dup.merge(args) }
@@ -447,7 +447,7 @@ describe ::Storage::GitLabClient do
   let(:put_url) { 'https://test.com/api/resource.json' }
   let(:post_url) { 'https://test.com/api/resource.json' }
 
-  RSpec::Matchers.define :an_http_request do |x|
+  RSpec::Matchers.define :an_http_request do |_x|
     match { |actual| actual.is_a?(Net::HTTPRequest) }
   end
 

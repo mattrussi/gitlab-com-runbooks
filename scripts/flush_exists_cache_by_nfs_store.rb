@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 STORAGE = 'nfs-file02' # Change this to the right storage
 
 # First expire all projects with no subgroups

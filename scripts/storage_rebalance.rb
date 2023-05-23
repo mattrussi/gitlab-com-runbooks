@@ -159,7 +159,7 @@ module Storage
         format(
           format_template,
           timestamp: t.strftime(::Storage::RebalanceScript::LOG_TIMESTAMP_FORMAT),
-          level: level, msg: msg)
+          level:, msg:)
       end
     end
 
@@ -226,7 +226,7 @@ module Storage
     PRIVATE_TOKEN_HEADER_PATTERN = /Private-Token/i
 
     def get_request_headers(request)
-      request.instance_variable_get('@header'.to_sym) || []
+      request.instance_variable_get(:@header) || []
     end
 
     # rubocop: disable Style/PercentLiteralDelimiters
@@ -234,7 +234,9 @@ module Storage
     def to_unescaped_json(data)
       return data unless data.respond_to?(:to_json)
 
+      # rubocop:disable GitlabSecurity/JsonSerialization
       data.to_json.gsub(%r[\\"], '"').gsub(%r[^"{], '{').gsub(%r[}"$], '}')
+      # rubocop:enable GitlabSecurity/JsonSerialization
     end
     # rubocop: enable Style/PercentLiteralDelimiters
     # rubocop: enable Style/RegexpLiteral
@@ -295,7 +297,7 @@ module Storage
       logfile_path = File.join(logdir_path, logfile_name)
       FileUtils.touch logfile_path
       logger = Logger.new(logfile_path, level: log_level)
-      logger.formatter = proc { |level, t, name, msg| "#{msg}\n" }
+      logger.formatter = proc { |_level, _t, _name, msg| "#{msg}\n" }
       log.debug "Migration log file path: #{logfile_path}"
       logger
     rescue StandardError => e
@@ -319,17 +321,17 @@ module Storage
   module Helpers
     ISO8601_FRACTIONAL_SECONDS_LENGTH = 3
     BYTES_CONVERSIONS = {
-      'B': 1024,
-      'KB': 1024 * 1024,
-      'MB': 1024 * 1024 * 1024,
-      'GB': 1024 * 1024 * 1024 * 1024,
-      'TB': 1024 * 1024 * 1024 * 1024 * 1024
+      B: 1024,
+      KB: 1024 * 1024,
+      MB: 1024 * 1024 * 1024,
+      GB: 1024 * 1024 * 1024 * 1024,
+      TB: 1024 * 1024 * 1024 * 1024 * 1024
     }.freeze
     DEFAULT_TERMINAL_LINE_HEIGHT = 45
     DEFAULT_TERMINAL_COLUMN_WIDTH = 80
 
     def execute_remote_command(hostname, command)
-      execute_command(format(options[:ssh_command], hostname: hostname, command: command))
+      execute_command(format(options[:ssh_command], hostname:, command:))
     end
 
     def execute_command(command)
@@ -637,7 +639,7 @@ module Storage
       end
 
       def define_include_mirrors_option
-        @parser.on('-M', '--include-mirrors', 'Include mirror repositories') do |include_mirrors|
+        @parser.on('-M', '--include-mirrors', 'Include mirror repositories') do |_include_mirrors|
           @options[:include_mirrors] = true
         end
       end
@@ -752,13 +754,16 @@ module Storage
     # rubocop: disable Metrics/AbcSize
     def invoke(client, request, opts = {})
       body = opts[:body]
+      # rubocop:disable GitlabSecurity/JsonSerialization
       request.body = body.respond_to?(:bytesize) ? body : body.to_json unless body.nil?
+      # rubocop:enable GitlabSecurity/JsonSerialization
       debug_request(request)
 
       response = DEFAULT_RESPONSE
       result = {}
       error = nil
       status = response.code
+      # rubocop:disable Lint/DuplicateBranch
       begin
         response, status = execute(client, request)
       rescue Errno::ECONNREFUSED => e
@@ -807,6 +812,7 @@ module Storage
         log.error e.exception_type if e.respond_to? :exception_type
         error = e
       end
+      # rubocop:enable Lint/DuplicateBranch
 
       headers = {}
       response.each_header { |key, value| headers[key] = value.split(', ') }
@@ -878,7 +884,9 @@ module Storage
         destination: project[:repository_storage],
         date: DateTime.now.iso8601(ISO8601_FRACTIONAL_SECONDS_LENGTH)
       }
+      # rubocop:disable GitlabSecurity/JsonSerialization
       migration_log.info log_artifact.to_json
+      # rubocop:enable GitlabSecurity/JsonSerialization
     end
 
     def log_migration_error(project, error)
@@ -894,13 +902,15 @@ module Storage
         destination: destination_shard,
         date: DateTime.now.iso8601(ISO8601_FRACTIONAL_SECONDS_LENGTH)
       )
+      # rubocop:disable GitlabSecurity/JsonSerialization
       migration_error_log.error log_artifact.to_json
+      # rubocop:enable GitlabSecurity/JsonSerialization
     end
 
     def fetch_project(project_id)
       return {} if project_id.nil? || project_id.to_s.empty?
 
-      url = format(get_api_url(:projects_by_id_api_uri), project_id: project_id)
+      url = format(get_api_url(:projects_by_id_api_uri), project_id:)
       project, error, status, _headers = gitlab_api_client.get(
         url, parameters: { statistics: true })
       raise error unless error.nil?
@@ -912,7 +922,7 @@ module Storage
       project
     end
 
-    def fetch_largest_projects(next_page = false)
+    def fetch_largest_projects(_next_page = false)
       # A nil entry in @pagination_indices means we have reached the end,
       # we need to return or we would be stuck in an infinite requests loop.
       return [] if @pagination_indices.key?(__method__) && @pagination_indices[__method__].nil?
@@ -931,7 +941,7 @@ module Storage
       end
 
       parameters['page'] = @pagination_indices[__method__] if @pagination_indices.include?(__method__)
-      projects, error, status, headers = gitlab_api_client.get(url, parameters: parameters)
+      projects, error, status, headers = gitlab_api_client.get(url, parameters:)
       raise error unless error.nil?
 
       @pagination_indices[__method__] = headers['x-next-page'].first
@@ -977,7 +987,7 @@ module Storage
       body[:destination_storage_name] = destination unless destination.nil?
 
       move, error, status, _headers = gitlab_api_client.post(
-        url, body: body)
+        url, body:)
       raise error unless error.nil?
 
       raise "Invalid response status code: #{status}" unless [200, 201].include?(status)
@@ -1175,7 +1185,7 @@ module Storage
       projects
     end
 
-    def paginate_projects(projects, &block)
+    def paginate_projects(projects)
       return projects unless block_given?
 
       loop do

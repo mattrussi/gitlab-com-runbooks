@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 require 'spec_helper'
 require_relative '../lib/periodic_queries'
 
@@ -39,12 +40,12 @@ describe PeriodicQueries do
       topic1 = instance_double(
         PeriodicQueries::Topic,
         name: 'set1',
-        to_result: { 'query1' => { 'success': false } }
+        to_result: { 'query1' => { success: false } }
       )
       topic2 = instance_double(
         PeriodicQueries::Topic,
         name: 'set2',
-        to_result: { 'query2' => { 'success': true } }
+        to_result: { 'query2' => { success: true } }
       )
       time = Time.parse("2021-05-31 15:28:21 +0200")
 

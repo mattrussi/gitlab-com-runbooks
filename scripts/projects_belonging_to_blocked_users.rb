@@ -32,7 +32,7 @@ end
 log = Logger.new($stdout)
 log.level = Logger::INFO
 log.formatter = proc do |level, t, _name, msg|
-  format("%<timestamp>s %-5<level>s %<msg>s\n", timestamp: t.strftime('%Y-%m-%d %H:%M:%S'), level: level, msg: msg)
+  format("%<timestamp>s %-5<level>s %<msg>s\n", timestamp: t.strftime('%Y-%m-%d %H:%M:%S'), level:, msg:)
 end
 
 file_name = "projects_belonging_to_blocked_users_#{Time.now.strftime('%Y-%m-%d_%H%M%S')}.json"
@@ -50,7 +50,9 @@ log.info "Found #{total_projects_belonging_to_blocked_users} projects belonging 
 data = { projects: projects.map(&:id) }
 
 File.open(output_file_path, 'w') do |f|
+  # rubocop:disable GitlabSecurity/JsonSerialization
   f.write(data.to_json)
+  # rubocop:enable GitlabSecurity/JsonSerialization
 end
 
 log.info "Saved projects to: #{output_file_path}"

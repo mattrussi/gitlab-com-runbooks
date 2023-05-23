@@ -2,7 +2,7 @@
 
 require_relative './key_pattern'
 
-# rubocop:disable Metrics/AbcSize,Metrics/CyclomaticComplexity,Metrics/PerceivedComplexity
+# rubocop:disable Metrics/AbcSize,Metrics/CyclomaticComplexity,Metrics/PerceivedComplexity,Lint/DuplicateBranch
 module RedisTrace
   class Trace
     attr_accessor :timestamp, :request, :cmd, :keys, :key_patterns, :value, :args, :response, :successful
@@ -180,4 +180,4 @@ module RedisTrace
     end
   end
 end
-# rubocop:enable Metrics/AbcSize,Metrics/CyclomaticComplexity,Metrics/PerceivedComplexity
+# rubocop:enable Metrics/AbcSize,Metrics/CyclomaticComplexity,Metrics/PerceivedComplexity,Lint/DuplicateBranch

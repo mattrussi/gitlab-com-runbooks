@@ -27,7 +27,7 @@ module Storage
       log = Logger.new $stdout
       log.level = Logger::INFO
       log.formatter = proc do |level, t, _name, msg|
-        fields = { timestamp: t.strftime(timestamp_format), level: level, msg: msg }
+        fields = { timestamp: t.strftime(timestamp_format), level:, msg: }
         Kernel.format("%<timestamp>s %-5<level>s %<msg>s\n", **fields)
       end
       log
@@ -106,7 +106,9 @@ module CommandLineSupport
   def parse(args)
     opt = Options.new
     args.push('-?') if args.empty?
+    # rubocop:disable Lint/EmptyBlock
     opt.parser.parse!(opt.parser.order!(args) {})
+    # rubocop:enable Lint/EmptyBlock
     opt.options
   rescue OptionParser::InvalidOption, OptionParser::MissingArgument => e
     puts e.message
@@ -146,7 +148,7 @@ module Storage
     def verify
       logdir_path = options[:logdir_path]
       logfile_name = format(options[:migration_logfile_name], date: '*')
-      log_file_paths = Dir[File.join(logdir_path, logfile_name)].sort
+      log_file_paths = Dir[File.join(logdir_path, logfile_name)]
 
       moved_projects = get_migrated_project_logs(log_file_paths)
 

@@ -123,7 +123,7 @@ module Runbooks
           format(
             format_template,
             timestamp: t.strftime(::Runbooks::Sidekiq::Logging::LOG_TIMESTAMP_FORMAT),
-            level: level, msg: msg)
+            level:, msg:)
         end
       end
 
@@ -225,7 +225,7 @@ module Runbooks
         message = "Counting all jobs of class #{query[:worker_name]}"
         message = "#{message} and type #{query[:job_type]}" unless query[:job_type].nil?
         log.info message
-        for_each_job(query) do |job|
+        for_each_job(query) do |_job|
           count += 1
         end
 
@@ -341,13 +341,13 @@ module Runbooks
         when 'count'
           worker_name = parameters.first
           job_type = options.job_type
-          count = count_jobs(worker_name: worker_name, job_type: job_type)
+          count = count_jobs(worker_name:, job_type:)
           log.info "Total jobs: #{count}"
         when 'kill_jid', 'kill_job'
           job_id = parameters.first
           abort 'Specify a job ID to kill' if job_id.nil? || job_id.empty?
 
-          kill_job_by_id(job_id: job_id)
+          kill_job_by_id(job_id:)
         when 'kill', 'kill_worker'
           worker_name = parameters.first
           job_type = options.job_type
@@ -356,7 +356,7 @@ module Runbooks
                   'RepositoryUpdateMirrorWorker)'
           end
 
-          count = kill_jobs_by_worker_name(worker_name: worker_name, job_type: job_type)
+          count = kill_jobs_by_worker_name(worker_name:, job_type:)
           if options.dry_run
             log.info "[Dry-run] Would have killed #{count} jobs"
           else

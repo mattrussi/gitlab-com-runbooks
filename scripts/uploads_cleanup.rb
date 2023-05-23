@@ -57,7 +57,7 @@ module Uploads
       log = Logger.new $stdout
       log.level = Logger::INFO
       log.formatter = proc do |level, t, _name, msg|
-        fields = { timestamp: t.strftime(timestamp_format), level: level, msg: msg }
+        fields = { timestamp: t.strftime(timestamp_format), level:, msg: }
         Kernel.format("%<timestamp>s %-5<level>s %<msg>s\n", **fields)
       end
       log
@@ -168,7 +168,9 @@ module Uploads
     def parse(args)
       opt = Options.new
       args.push('-?') if args.empty?
+      # rubocop:disable Lint/EmptyBlock
       opt.parser.parse!(opt.parser.order!(args) {})
+      # rubocop:enable Lint/EmptyBlock
       opt.options
     rescue OptionParser::InvalidArgument, OptionParser::InvalidOption,
       OptionParser::MissingArgument, OptionParser::ParseError => e
@@ -187,7 +189,7 @@ module Uploads
   module SelectorMethods
     def get_non_empty_with_only_tmp_dir_files(hostname, path)
       tmp_dir_path = File.join(path, 'tmp')
-      command = format(options[:find], path: path, minutes: options[:interval_minutes])
+      command = format(options[:find], path:, minutes: options[:interval_minutes])
       remote_command = build_remote_command(hostname, command)
       results = invoke(remote_command).split
       if !results.empty? && results.all? { |path| path.start_with?(tmp_dir_path) }
@@ -204,7 +206,7 @@ module Uploads
   # RemoteSupport module
   module CommandSupport
     def build_remote_command(hostname, command)
-      format(options[:remote_command], hostname: hostname, command: command)
+      format(options[:remote_command], hostname:, command:)
     end
 
     def invoke(command)
@@ -215,7 +217,7 @@ module Uploads
     def safely_invoke_find_with_operation(hostname, path, operation)
       return if operation.nil? || !options[:valid_operations].include?(operation)
 
-      command = format(options[:find], path: path, minutes: options[:interval_minutes])
+      command = format(options[:find], path:, minutes: options[:interval_minutes])
       command << " -#{operation}"
       remote_command = build_remote_command(hostname, command)
 

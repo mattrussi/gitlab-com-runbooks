@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 require 'json'
 require 'fileutils'
 
@@ -13,7 +14,7 @@ module SyncDashboards
     JsonnetWrapper.new.parse(jsonnet_file)
   end
 
-  def sync_dashboards(dashboards_dir, dashboards)
+  def sync_dashboards(_dashboards_dir, dashboards)
     dashboards = dashboards.to_h { |d| [trim_dashboard_file(d), d] }
     existing_dashboards = fetch_existing_dashboards(@dashboards_dir)
 

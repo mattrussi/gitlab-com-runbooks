@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 require 'fileutils'
 require_relative 'periodic_queries/prometheus_api'
 require_relative 'periodic_queries/topic'
@@ -27,7 +28,9 @@ module PeriodicQueries
     sets.each do |set|
       filename = File.join(directory, "#{set.name}.json")
       out.puts "-- 💾 #{set.name}: #{filename}"
+      # rubocop:disable GitlabSecurity/JsonSerialization
       File.write(filename, set.to_result.to_json)
+      # rubocop:enable GitlabSecurity/JsonSerialization
     end
   end
 

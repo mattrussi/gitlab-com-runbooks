@@ -57,6 +57,9 @@ require 'json'
 require 'logger'
 require 'optparse'
 
+# rubocop:disable Naming/InclusiveLanguage
+# TODO: Consider replacing 'whitelist' with 'allowlist' or 'permit'
+
 # This module defines logging methods
 module Logging
   LOG_TIMESTAMP_FORMAT = '%Y-%m-%d %H:%M:%S'
@@ -66,7 +69,7 @@ module Logging
     log = Logger.new $stdout
     log.level = Logger::INFO
     log.formatter = proc do |level, t, _name, msg|
-      fields = { timestamp: t.strftime(LOG_TIMESTAMP_FORMAT), level: level, msg: msg }
+      fields = { timestamp: t.strftime(LOG_TIMESTAMP_FORMAT), level:, msg: }
       Kernel.format("%<timestamp>s %-5<level>s %<msg>s\n", **fields)
     end
     log
@@ -208,7 +211,9 @@ module CommandLineSupport
   def parse(args)
     opt = Options.new
     args.push('-?') if args.empty?
+    # rubocop:disable Lint/EmptyBlock
     opt.parser.parse!(opt.parser.order!(args) {})
+    # rubocop:enable Lint/EmptyBlock
     opt.options
   rescue OptionParser::InvalidOption, OptionParser::MissingArgument => e
     puts e.message
@@ -222,11 +227,11 @@ end
 # Helper methods
 module Helpers
   DENOMINATION_CONVERSIONS = {
-    'Bytes': 1024,
-    'KB': 1024 * 1024,
-    'MB': 1024 * 1024 * 1024,
-    'GB': 1024 * 1024 * 1024 * 1024,
-    'TB': 1024 * 1024 * 1024 * 1024 * 1024
+    Bytes: 1024,
+    KB: 1024 * 1024,
+    MB: 1024 * 1024 * 1024,
+    GB: 1024 * 1024 * 1024 * 1024,
+    TB: 1024 * 1024 * 1024 * 1024 * 1024
   }.freeze
 
   def human_friendly_filesize(bytes)
@@ -413,7 +418,7 @@ module Storage
 
     def logged
       local_logdir_path = get_log_files(@options[:console_nodes][@options[:env]])
-      log_file_paths = Dir[File.join(local_logdir_path, @options[:migration_logfile_name])].sort
+      log_file_paths = Dir[File.join(local_logdir_path, @options[:migration_logfile_name])]
       get_migrated_repositories_from_logs(log_file_paths).filter do |repo|
         !repo[:dry_run] && (@nodes_whitelist.empty? || @nodes_whitelist.include?(repo[:source]))
       end
@@ -452,3 +457,4 @@ module Script
 end
 
 Object.new.extend(Script).main if $PROGRAM_NAME == __FILE__
+# rubocop:enable Naming/InclusiveLanguage
