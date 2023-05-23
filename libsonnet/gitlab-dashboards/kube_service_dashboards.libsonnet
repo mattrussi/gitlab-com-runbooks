@@ -1,5 +1,6 @@
 local platformLinks = import './platform_links.libsonnet';
 local grafana = import 'github.com/grafana/grafonnet-lib/grafonnet/grafana.libsonnet';
+local metricsConfig = import 'gitlab-metrics-config.libsonnet';
 local basic = import 'grafana/basic.libsonnet';
 local layout = import 'grafana/layout.libsonnet';
 local quantilePanel = import 'grafana/quantile_panel.libsonnet';
@@ -272,13 +273,14 @@ local rowsForContainer(container, deployment, selectorHash) =
     ],
   ];
 
-local dashboardsForService(type) =
+local dashboardsForService(
+  type,
+  environmentSelectorHash=metricsConfig.grafanaEnvironmentSelector,
+      ) =
   local serviceInfo = metricsCatalog.getService(type);
   local serviceHasDedicatedKubeNodePool = serviceInfo.hasDedicatedKubeNodePool();
   local deployments = std.objectFields(serviceInfo.kubeResources);
-  local selector = {
-    env: '$environment',
-    environment: '$environment',
+  local selector = environmentSelectorHash {
     type: type,
     [if serviceInfo.serviceIsStageless then null else 'stage']: '$stage',
   };
@@ -288,6 +290,7 @@ local dashboardsForService(type) =
       basic.dashboard(
         'Kube Containers Detail',
         tags=[type, 'type:' + type, 'kube', 'kube detail'],
+        includeEnvironmentTemplate=std.objectHas(environmentSelectorHash, 'environment'),
       )
       .addTemplateIf(std.objectHas(selector, 'stage'), templates.stage)
       .addPanels(
@@ -316,6 +319,7 @@ local dashboardsForService(type) =
       basic.dashboard(
         'Kube Deployment Detail',
         tags=[type, 'type:' + type, 'kube', 'kube detail'],
+        includeEnvironmentTemplate=std.objectHas(environmentSelectorHash, 'environment'),
       )
       .addTemplateIf(std.objectHas(selector, 'stage'), templates.stage)
       .addPanels(
