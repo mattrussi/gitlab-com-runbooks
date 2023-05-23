@@ -1,5 +1,6 @@
 local saturationDetail = import './saturation_detail.libsonnet';
 local grafana = import 'github.com/grafana/grafonnet-lib/grafonnet/grafana.libsonnet';
+local metricsConfig = import 'gitlab-metrics-config.libsonnet';
 local basic = import 'grafana/basic.libsonnet';
 local layout = import 'grafana/layout.libsonnet';
 local selectors = import 'promql/selectors.libsonnet';
@@ -163,7 +164,10 @@ local sortSaturationComponents(saturationComponents) =
   +
   std.sort(hs, keyF=keyF);
 
-local dashboardsForService(type, environmentSelectorHash) =
+local dashboardsForService(
+  type,
+  environmentSelectorHash=metricsConfig.grafanaEnvironmentSelector,
+      ) =
   local serviceInfo = metricsCatalog.getService(type);
   local saturationComponents = serviceInfo.applicableSaturationTypes();
 

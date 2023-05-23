@@ -1,12 +1,13 @@
 local capacityReviewDashboards = import './capacity_review_dashboard.libsonnet';
 local kubeDashboards = import './kube_service_dashboards.libsonnet';
 local regionalDashboards = import './regional_service_dashboard.libsonnet';
+local metricsConfig = import 'gitlab-metrics-config.libsonnet';
 local metricsCatalog = import 'servicemetrics/metrics-catalog.libsonnet';
 local aggregationSets = (import 'gitlab-metrics-config.libsonnet').aggregationSets;
 
 local forService(
   serviceType,
-  environmentSelectorHash={ env: '$environment', environment: '$environment' },
+  environmentSelectorHash=metricsConfig.grafanaEnvironmentSelector,
       ) =
 
   local serviceInfo = metricsCatalog.getService(serviceType);
