@@ -954,6 +954,30 @@ groups:
     expr: "0.000100"
   - record: slo:min:events:gitlab_service_apdex:ratio
     labels:
+      component: email_receiver
+      tier: sv
+      type: ops-gitlab-net
+    expr: "0.998000"
+  - record: slo:max:events:gitlab_service_errors:ratio
+    labels:
+      component: email_receiver
+      tier: sv
+      type: ops-gitlab-net
+    expr: "0.300000"
+  - record: slo:min:events:gitlab_service_apdex:ratio
+    labels:
+      component: gitlab_sshd
+      tier: sv
+      type: ops-gitlab-net
+    expr: "0.998000"
+  - record: slo:max:events:gitlab_service_errors:ratio
+    labels:
+      component: gitlab_sshd
+      tier: sv
+      type: ops-gitlab-net
+    expr: "0.001000"
+  - record: slo:min:events:gitlab_service_apdex:ratio
+    labels:
       component: goserver
       tier: sv
       type: ops-gitlab-net
@@ -973,6 +997,30 @@ groups:
   - record: slo:max:events:gitlab_service_errors:ratio
     labels:
       component: puma
+      tier: sv
+      type: ops-gitlab-net
+    expr: "0.000100"
+  - record: slo:min:events:gitlab_service_apdex:ratio
+    labels:
+      component: registry_server
+      tier: sv
+      type: ops-gitlab-net
+    expr: "0.998000"
+  - record: slo:max:events:gitlab_service_errors:ratio
+    labels:
+      component: registry_server
+      tier: sv
+      type: ops-gitlab-net
+    expr: "0.000100"
+  - record: slo:min:events:gitlab_service_apdex:ratio
+    labels:
+      component: shard_default
+      tier: sv
+      type: ops-gitlab-net
+    expr: "0.998000"
+  - record: slo:max:events:gitlab_service_errors:ratio
+    labels:
+      component: shard_default
       tier: sv
       type: ops-gitlab-net
     expr: "0.000100"
@@ -3175,6 +3223,24 @@ groups:
     expr: "1"
   - record: gitlab_component_service:mapping
     labels:
+      component: email_receiver
+      global_aggregation: "no"
+      regional_aggregation: "no"
+      service_aggregation: "yes"
+      tier: sv
+      type: ops-gitlab-net
+    expr: "1"
+  - record: gitlab_component_service:mapping
+    labels:
+      component: gitlab_sshd
+      global_aggregation: "no"
+      regional_aggregation: "no"
+      service_aggregation: "yes"
+      tier: sv
+      type: ops-gitlab-net
+    expr: "1"
+  - record: gitlab_component_service:mapping
+    labels:
       component: goserver
       global_aggregation: "no"
       regional_aggregation: "no"
@@ -3185,6 +3251,24 @@ groups:
   - record: gitlab_component_service:mapping
     labels:
       component: puma
+      global_aggregation: "no"
+      regional_aggregation: "no"
+      service_aggregation: "yes"
+      tier: sv
+      type: ops-gitlab-net
+    expr: "1"
+  - record: gitlab_component_service:mapping
+    labels:
+      component: registry_server
+      global_aggregation: "no"
+      regional_aggregation: "no"
+      service_aggregation: "yes"
+      tier: sv
+      type: ops-gitlab-net
+    expr: "1"
+  - record: gitlab_component_service:mapping
+    labels:
+      component: shard_default
       global_aggregation: "no"
       regional_aggregation: "no"
       service_aggregation: "yes"

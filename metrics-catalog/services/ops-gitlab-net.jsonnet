@@ -1,9 +1,9 @@
+local registryHelpers = import './lib/registry-helpers.libsonnet';
 local gitalyHelper = import 'service-archetypes/helpers/gitaly.libsonnet';
 local metricsCatalog = import 'servicemetrics/metrics.libsonnet';
 local toolingLinks = import 'toolinglinks/toolinglinks.libsonnet';
 
 local combined = metricsCatalog.combined;
-local kubeLabelSelectors = metricsCatalog.kubeLabelSelectors;
 local successCounterApdex = metricsCatalog.successCounterApdex;
 local rateMetric = metricsCatalog.rateMetric;
 local histogramApdex = metricsCatalog.histogramApdex;
@@ -30,15 +30,7 @@ metricsCatalog.serviceDefinition({
   },
   regional: false,
 
-  kubeConfig: {
-    local kubeSelector = baseSelector,
-    labelSelectors: kubeLabelSelectors(
-      podSelector=kubeSelector,
-      hpaSelector=kubeSelector,
-      ingressSelector=kubeSelector,
-      deploymentSelector=kubeSelector
-    ),
-  },
+  kubeConfig: {},
   kubeResources: {
     webservice: {
       kind: 'Deployment',
@@ -73,12 +65,25 @@ metricsCatalog.serviceDefinition({
     },
   },
 
+  // Use recordingRuleMetrics to specify a set of metrics with known high
+  // cardinality. The metrics catalog will generate recording rules with
+  // the appropriate aggregations based on this set.
+  // Use sparingly, and don't overuse.
+  recordingRuleMetrics: [
+    'sidekiq_jobs_completion_seconds_bucket',
+    'sidekiq_jobs_queue_duration_seconds_bucket',
+    'sidekiq_jobs_failed_total',
+  ],
+
   serviceLevelIndicators: {
-    // webservice
-    puma: {
+    local sliCommon = {
       userImpacting: true,
       team: 'reliability_foundations',
       severity: 's3',  // don't page the EOC yet
+    },
+
+    // webservice
+    puma: sliCommon {
       description: |||
         Aggregation of most web requests that pass through the puma to the GitLab rails monolith.
         Healthchecks are excluded.
@@ -105,14 +110,11 @@ metricsCatalog.serviceDefinition({
       significantLabels: [],
 
       toolingLinks: [
-        toolingLinks.kibana(title='Puma', index='rails', type='default', slowRequestSeconds=10),
+        toolingLinks.kibana(title='Puma', index='rails_ops', slowRequestSeconds=10, includeMatchersForPrometheusSelector=false),
       ],
     },
 
-    workhorse: {
-      userImpacting: true,
-      team: 'reliability_foundations',
-      severity: 's3',  // don't page the EOC yet
+    workhorse: sliCommon {
       featureCategory: 'not_owned',
       description: |||
         Aggregation of most web requests that pass through workhorse, monitored via the HTTP interface.
@@ -157,15 +159,12 @@ metricsCatalog.serviceDefinition({
       significantLabels: ['route'],
 
       toolingLinks: [
-        toolingLinks.kibana(title='Workhorse', index='workhorse', type='default', slowRequestSeconds=10),
+        toolingLinks.kibana(title='Workhorse', index='workhorse_ops', slowRequestSeconds=10, includeMatchersForPrometheusSelector=false),
       ],
     },
 
     // gitaly
-    goserver: {
-      userImpacting: true,
-      team: 'reliability_foundations',
-      severity: 's3',  // don't page the EOC yet
+    goserver: sliCommon {
       featureCategory: 'gitaly',
       description: |||
         This SLI monitors all Gitaly GRPC requests in aggregate, excluding the OperationService.
@@ -206,16 +205,181 @@ metricsCatalog.serviceDefinition({
       significantLabels: [],
 
       toolingLinks: [
-        toolingLinks.kibana(title='Gitaly', index='gitaly', slowRequestSeconds=1),
+        toolingLinks.kibana(title='Gitaly', index='gitaly_ops', slowRequestSeconds=1, includeMatchersForPrometheusSelector=false),
       ],
     },
 
-    // Still to come:
-    //
-    // - sidekiq
-    // - registry
-    // - git (https/ssh)
-    // - ...
+    local sidekiqBaseSelector = baseSelector { job: 'sidekiq' },
+
+    // sidekiq
+    shard_default: sliCommon {
+      upscaleLongerBurnRates: true,
+
+      description: |||
+        All Sidekiq jobs
+      |||,
+
+      local highUrgencySelector = sidekiqBaseSelector { urgency: 'high' },
+      local lowUrgencySelector = sidekiqBaseSelector { urgency: 'low' },
+      local throttledUrgencySelector = sidekiqBaseSelector { urgency: 'throttled' },
+
+      local slos = {
+        urgent: {
+          queueingDurationSeconds: 10,
+          executionDurationSeconds: 10,
+        },
+        lowUrgency: {
+          queueingDurationSeconds: 60,
+          executionDurationSeconds: 300,
+        },
+        throttled: {
+          // Throttled jobs don't have a queuing duration,
+          // so don't add one here!
+          executionDurationSeconds: 300,
+        },
+      },
+
+      apdex: combined(
+        [
+          histogramApdex(
+            histogram='sidekiq_jobs_completion_seconds_bucket',
+            selector=highUrgencySelector,
+            satisfiedThreshold=slos.urgent.executionDurationSeconds,
+          ),
+          histogramApdex(
+            histogram='sidekiq_jobs_queue_duration_seconds_bucket',
+            selector=highUrgencySelector,
+            satisfiedThreshold=slos.urgent.queueingDurationSeconds,
+          ),
+          histogramApdex(
+            histogram='sidekiq_jobs_completion_seconds_bucket',
+            selector=lowUrgencySelector,
+            satisfiedThreshold=slos.lowUrgency.executionDurationSeconds,
+          ),
+          histogramApdex(
+            histogram='sidekiq_jobs_queue_duration_seconds_bucket',
+            selector=lowUrgencySelector,
+            satisfiedThreshold=slos.lowUrgency.queueingDurationSeconds,
+          ),
+          histogramApdex(
+            histogram='sidekiq_jobs_completion_seconds_bucket',
+            selector=throttledUrgencySelector,
+            satisfiedThreshold=slos.throttled.executionDurationSeconds,
+          ),
+        ]
+      ),
+
+      requestRate: rateMetric(
+        counter='sidekiq_jobs_completion_seconds_bucket',
+        selector=sidekiqBaseSelector { le: '+Inf' },
+      ),
+
+      errorRate: rateMetric(
+        counter='sidekiq_jobs_failed_total',
+        selector=sidekiqBaseSelector,
+      ),
+
+      // Note: these labels will also be included in the
+      // intermediate recording rules specified in the
+      // `recordingRuleMetrics` stanza above
+      significantLabels: ['feature_category', 'queue', 'urgency', 'worker'],
+
+      // Consider adding useful links for the environment in the future.
+      toolingLinks: [
+        toolingLinks.kibana(title='shard_default', index='sidekiq_ops', slowRequestSeconds=slos.lowUrgency.executionDurationSeconds, includeMatchersForPrometheusSelector=false),
+      ],
+    },
+
+    email_receiver: sliCommon {
+      featureCategory: 'not_owned',
+      description: |||
+        Monitors ratio between all received emails and received emails which
+        could not be processed for some reason.
+      |||,
+
+      requestRate: rateMetric(
+        counter='sidekiq_jobs_completion_seconds_count',
+        selector=sidekiqBaseSelector { worker: { re: 'EmailReceiverWorker|ServiceDeskEmailReceiverWorker' } }
+      ),
+
+      errorRate: rateMetric(
+        counter='gitlab_transaction_event_email_receiver_error_total',
+        selector=sidekiqBaseSelector { 'error': { ne: 'Gitlab::Email::AutoGeneratedEmailError' } }
+      ),
+
+      monitoringThresholds+: {
+        errorRatio: 0.7,
+      },
+
+      significantLabels: ['error'],
+
+      toolingLinks: [
+        toolingLinks.kibana(title='Email receiver errors', index='sidekiq_ops', message='Error processing message', includeMatchersForPrometheusSelector=false),
+      ],
+    },
+
+    // registry
+    registry_server: sliCommon {
+      description: |||
+        Aggregation of all registry HTTP requests.
+      |||,
+
+      local registryBaseSelector = baseSelector { job: 'registry' },
+
+      apdex: registryHelpers.mainApdex(registryBaseSelector),
+
+      requestRate: rateMetric(
+        counter='registry_http_requests_total',
+        selector=registryBaseSelector,
+      ),
+
+      errorRate: rateMetric(
+        counter='registry_http_requests_total',
+        selector=registryBaseSelector { code: { re: '5..' } }
+      ),
+
+      significantLabels: ['route', 'method'],
+
+      toolingLinks: [
+        toolingLinks.kibana(title='Registry', index='registry_ops', slowRequestSeconds=10, includeMatchersForPrometheusSelector=false),
+      ],
+    },
+
+    // git over SSH
+    gitlab_sshd: sliCommon {
+      monitoringThresholds+: {
+        errorRatio: 0.999,
+      },
+      featureCategory: 'source_code_management',
+      description: |||
+        Monitors Gitlab-sshd, using the connections bucket, and http requests bucket.
+      |||,
+
+      local gitlabSshdBaseSelector = baseSelector { job: 'gitlab-shell' },
+
+      apdex: histogramApdex(
+        histogram='gitlab_shell_sshd_session_established_duration_seconds_bucket',
+        selector=gitlabSshdBaseSelector,
+        satisfiedThreshold=1,
+        toleratedThreshold=5
+      ),
+
+      errorRate: rateMetric(
+        counter='gitlab_sli:shell_sshd_sessions:errors_total',
+        selector=gitlabSshdBaseSelector
+      ),
+
+      requestRate: rateMetric(
+        counter='gitlab_sli:shell_sshd_sessions:total',
+        selector=gitlabSshdBaseSelector
+      ),
+
+      significantLabels: [],
+
+      toolingLinks: [
+        toolingLinks.kibana(title='GitLab Shell', index='shell_ops', includeMatchersForPrometheusSelector=false),
+      ],
+    },
   },
 
   skippedMaturityCriteria: {

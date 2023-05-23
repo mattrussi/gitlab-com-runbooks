@@ -70,6 +70,11 @@ local indexDefaults = {
     latencyFieldUnitMultiplier: 1000,
   },
 
+  gitaly_ops: self.gitaly {
+    kibanaEndpoint: 'https://nonprod-log.gitlab.net/app/kibana',
+    indexPattern: 'pubsub-gitaly-inf-ops',
+  },
+
   gkeKube: indexDefaults {
     timestamp: 'json.timestamp',
     indexPattern: '1d7c16d0-c0fa-11ea-a0f8-0b8742fd907c',
@@ -124,21 +129,17 @@ local indexDefaults = {
     failureFilter: statusCode('json.jsonPayload.status_code'),
   },
 
-  monitoring_ops: indexDefaults {
-    timestamp: '@timestamp',
-    indexPattern: '0931f630-582b-11ec-87e2-4f63f28291d2',
-    defaultColumns: ['json.hostname', 'json.msg', 'json.level'],
-    defaultSeriesSplitField: 'json.hostname.keyword',
-    failureFilter: [matchFilter('json.level', 'error')],
-    kibanaEndpoint: 'https://nonprod-log.gitlab.net/app/kibana',
-  },
-
   monitoring_gprd: indexDefaults {
     timestamp: '@timestamp',
     indexPattern: 'AW5ZoH2ddtvLTaJbch2P',
     defaultColumns: ['json.hostname', 'json.msg', 'json.level'],
     defaultSeriesSplitField: 'json.hostname.keyword',
     failureFilter: [matchFilter('json.level', 'error')],
+  },
+
+  monitoring_ops: self.monitoring_gprd {
+    indexPattern: '0931f630-582b-11ec-87e2-4f63f28291d2',
+    kibanaEndpoint: 'https://nonprod-log.gitlab.net/app/kibana',
   },
 
   pages: indexDefaults {
@@ -246,6 +247,11 @@ local indexDefaults = {
     },
   },
 
+  rails_ops: self.rails {
+    kibanaEndpoint: 'https://nonprod-log.gitlab.net/app/kibana',
+    indexPattern: 'pubsub-rails-inf-ops',
+  },
+
   rails_graphql: self.rails {
     defaultSeriesSplitField: 'json.meta.caller_id.keyword',
     defaultColumns: ['json.meta.caller_id', 'json.operation_name', 'json.meta.feature_category', 'json.operation_fingerprint', 'json.duration_s'],
@@ -277,6 +283,11 @@ local indexDefaults = {
     failureFilter: statusCode('json.status'),
     defaultLatencyField: 'json.duration_ms',
     latencyFieldUnitMultiplier: 1000,
+  },
+
+  registry_ops: self.registry {
+    kibanaEndpoint: 'https://nonprod-log.gitlab.net/app/kibana',
+    indexPattern: 'pubsub-registry-inf-ops',
   },
 
   registry_garbagecollection: indexDefaults {
@@ -315,6 +326,11 @@ local indexDefaults = {
     failureFilter: [matchFilter('json.level', 'error')],
   },
 
+  shell_ops: self.shell {
+    kibanaEndpoint: 'https://nonprod-log.gitlab.net/app/kibana',
+    indexPattern: 'pubsub-shell-inf-ops',
+  },
+
   sidekiq: indexDefaults {
     timestamp: 'json.time',
     indexPattern: 'AWNABDRwNDuQHTm2tH6l',
@@ -325,6 +341,11 @@ local indexDefaults = {
     latencyFieldUnitMultiplier: 1,
   },
 
+  sidekiq_ops: self.sidekiq {
+    kibanaEndpoint: 'https://nonprod-log.gitlab.net/app/kibana',
+    indexPattern: 'pubsub-sidekiq-inf-ops',
+  },
+
   workhorse: indexDefaults {
     timestamp: 'json.time',
     indexPattern: 'a4f5b470-edde-11ea-81e5-155ba78758d4',
@@ -333,6 +354,11 @@ local indexDefaults = {
     failureFilter: statusCode('json.status'),
     defaultLatencyField: 'json.duration_ms',
     latencyFieldUnitMultiplier: 1000,
+  },
+
+  workhorse_ops: self.workhorse {
+    kibanaEndpoint: 'https://nonprod-log.gitlab.net/app/kibana',
+    indexPattern: 'pubsub-workhorse-inf-ops',
   },
 
   workhorse_imageresizer: indexDefaults {

@@ -85,7 +85,7 @@ metricsCatalog.serviceDefinition({
         Aggregation of all registry requests.
       |||,
 
-      apdex: registryHelpers.mainApdex,
+      apdex: registryHelpers.mainApdex(),
 
       requestRate: rateMetric(
         counter='registry_http_requests_total',
