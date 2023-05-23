@@ -217,4 +217,3 @@ gitlab-patronictl list
 ```
 
 In the output, the leader node of the new standby cluster should have its `Role` defined as `Standby Leader`, the `TL` (timeline) should match the TL from the source cluster, and all replicas `State` should be `running`, which mean that they are replicating/streaming from their sources.
-
