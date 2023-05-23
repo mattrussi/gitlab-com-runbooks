@@ -4,7 +4,11 @@ local regionalDashboards = import './regional_service_dashboard.libsonnet';
 local metricsCatalog = import 'servicemetrics/metrics-catalog.libsonnet';
 local aggregationSets = (import 'gitlab-metrics-config.libsonnet').aggregationSets;
 
-local forService(serviceType) =
+local forService(
+  serviceType,
+  environmentSelectorHash={ env: '$environment', environment: '$environment' },
+      ) =
+
   local serviceInfo = metricsCatalog.getService(serviceType);
 
   {}
@@ -24,12 +28,12 @@ local forService(serviceType) =
   +
   (
     if std.length(serviceInfo.kubeResources) > 0 then
-      kubeDashboards.dashboardsForService(serviceType)
+      kubeDashboards.dashboardsForService(serviceType, environmentSelectorHash)
     else
       {}
   )
   +
-  capacityReviewDashboards.dashboardsForService(serviceType);
+  capacityReviewDashboards.dashboardsForService(serviceType, environmentSelectorHash);
 
 {
   forService:: forService,

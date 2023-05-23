@@ -8,12 +8,6 @@ local saturationResources = import 'servicemetrics/saturation-resources.libsonne
 
 local row = grafana.row;
 
-local environmentSelector = {
-  env: '$environment',
-  environment: '$environment',
-  stage: 'main',
-};
-
 local severityPanel(severity) =
   local sLookup = {
     s1: { color: 'light-red', i: 1 },
@@ -114,11 +108,12 @@ local tamlandForecastPanel(title, type, saturationComponent, confidenceType, thr
     noValue='No Forecast'
   );
 
-local capacityPlanSectionFor(type, saturationComponent, startRow) =
+local capacityPlanSectionFor(type, environmentSelectorHash, saturationComponent, startRow) =
   local saturatonComponentInfo = saturationResources[saturationComponent];
 
-  local selector = environmentSelector {
+  local selector = environmentSelectorHash {
     type: type,
+    stage: 'main',
   };
 
   layout.rows(
@@ -168,10 +163,9 @@ local sortSaturationComponents(saturationComponents) =
   +
   std.sort(hs, keyF=keyF);
 
-local dashboardsForService(type) =
+local dashboardsForService(type, environmentSelectorHash) =
   local serviceInfo = metricsCatalog.getService(type);
   local saturationComponents = serviceInfo.applicableSaturationTypes();
-
 
   {
     'capacity-review':
@@ -180,13 +174,14 @@ local dashboardsForService(type) =
         tags=[type, 'type:' + type, 'capacity-review'],
         time_from='now-15d/d',
         time_to='now-1d/d',
-        includeStandardEnvironmentAnnotations=false
+        includeStandardEnvironmentAnnotations=false,
+        includeEnvironmentTemplate=std.objectHas(environmentSelectorHash, 'environment'),
       )
       .addPanels(
         std.flattenArrays(
           std.mapWithIndex(
             function(index, saturationComponent)
-              capacityPlanSectionFor(type, saturationComponent, startRow=index * 100),
+              capacityPlanSectionFor(type, environmentSelectorHash, saturationComponent, startRow=index * 100),
             sortSaturationComponents(saturationComponents)
           )
         )
