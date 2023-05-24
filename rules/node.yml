@@ -132,6 +132,7 @@ groups:
       instance: '{{ $labels.instance }}'
       device: '{{ $labels.device }}'
       mountpoint: '{{ $labels.mountpoint }}'
+      team: '{{ $labels.team }}'
   # GKE Node Filesystem check.
   - alert: GKEFilesystemFullSoon
     # We use a static threshold check here, rather than a predict_linear, as we expect the kubernetes garbage collection to kick in.
