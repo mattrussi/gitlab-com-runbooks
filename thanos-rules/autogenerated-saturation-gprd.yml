@@ -26,6 +26,42 @@ groups:
       )
   - record: gitlab_component_saturation:ratio
     labels:
+      component: kube_container_cpu
+    expr: |
+      max by(environment, tier, type, stage, shard) (
+        clamp_min(
+          clamp_max(
+            sum by (environment, tier, type, stage, shard, pod, container) (
+              rate(container_cpu_usage_seconds_total:labeled{container!="", container!="POD", env="gprd",type="code_suggestions"}[5m])
+            )
+            /
+            sum by(environment, tier, type, stage, shard, pod, container) (
+              container_spec_cpu_quota:labeled{container!="", container!="POD", env="gprd",type="code_suggestions"}
+              /
+              container_spec_cpu_period:labeled{container!="", container!="POD", env="gprd",type="code_suggestions"}
+            )
+            ,
+            1)
+        ,
+        0)
+      )
+  - record: gitlab_component_saturation:ratio
+    labels:
+      component: kube_container_memory
+    expr: |
+      max by(environment, tier, type, stage, shard) (
+        clamp_min(
+          clamp_max(
+            container_memory_working_set_bytes:labeled{container!="", container!="POD", env="gprd",type="code_suggestions"}
+            /
+            (container_spec_memory_limit_bytes:labeled{container!="", container!="POD", env="gprd",type="code_suggestions"} > 0)
+            ,
+            1)
+        ,
+        0)
+      )
+  - record: gitlab_component_saturation:ratio
+    labels:
       component: kube_go_memory
     expr: |
       max by(env, environment, tier, type, stage, shard) (
@@ -36,6 +72,21 @@ groups:
             topk by(env, environment, tier, type, stage, shard, cluster, pod) (1,
               container_spec_memory_limit_bytes:labeled{container=~"gitlab-pages|gitlab-workhorse|kas|registry|thanos-store",env="gprd",type=~"api|git|internal-api|kas|monitoring|ops-gitlab-net|registry|vault|web|web-pages|websockets"}
             )
+            ,
+            1)
+        ,
+        0)
+      )
+  - record: gitlab_component_saturation:ratio
+    labels:
+      component: kube_horizontalpodautoscaler_desired_replicas
+    expr: |
+      max by(environment, tier, type, stage, shard) (
+        clamp_min(
+          clamp_max(
+            kube_horizontalpodautoscaler_status_desired_replicas:labeled{env="gprd",type="code_suggestions", shard!~"database-throttled|elasticsearch|gitaly-throttled|urgent-authorized-projects|urgent-other", namespace!~"pubsubbeat"}
+            /
+            kube_horizontalpodautoscaler_spec_max_replicas:labeled{env="gprd",type="code_suggestions", shard!~"database-throttled|elasticsearch|gitaly-throttled|urgent-authorized-projects|urgent-other", namespace!~"pubsubbeat"}
             ,
             1)
         ,
@@ -82,6 +133,29 @@ groups:
                   kube_node_labels:labeled{env="gprd",type=~"api|internal-api|git|kube|redis-cache|redis-sidekiq|redis-tracechunks|redis-cluster-ratelimiting|redis-cluster-chat-cache|redis-sessions|redis-registry-cache|redis-repository-cache|redis-db-load-balancing|redis|registry|sidekiq|vault|web-pages|web|websockets"}
                 )
               )
+            )
+            ,
+            1)
+        ,
+        0)
+      )
+  - record: gitlab_component_saturation:ratio
+    labels:
+      component: open_fds
+    expr: |
+      max by(environment, tier, type, stage, shard) (
+        clamp_min(
+          clamp_max(
+            (
+              process_open_fds{env="gprd",type="code_suggestions"}
+              /
+              process_max_fds{env="gprd",type="code_suggestions"}
+            )
+            or
+            (
+              ruby_file_descriptors{env="gprd",type="code_suggestions"}
+              /
+              ruby_process_max_fds{env="gprd",type="code_suggestions"}
             )
             ,
             1)
@@ -214,6 +288,90 @@ groups:
       gitlab_component_saturation:ratio{component="go_memory",env="gprd",monitor="global"} > on(component) group_left
       slo:max:hard:gitlab_component_saturation:ratio{component="go_memory",env="gprd",monitor="global"}
   - alert: component_saturation_slo_out_of_bounds
+    for: 15m
+    annotations:
+      title: The Kube Container CPU Utilization resource of the {{ $labels.type }}
+        service ({{ $labels.stage }} stage) has a saturation exceeding SLO and is
+        close to its capacity limit.
+      description: |
+        This means that this resource is running close to capacity and is at risk of exceeding its current capacity limit.
+
+        Details of the Kube Container CPU Utilization resource:
+
+        Kubernetes containers are allocated a share of CPU. When this is exhausted, the container may be thottled.
+      grafana_dashboard_id: alerts-sat_kube_container_cpu
+      grafana_dashboard_link: https://dashboards.gitlab.net/d/alerts-sat_kube_container_cpu?from=now-6h/m&to=now-1m/m&var-environment={{
+        $labels.environment }}&var-type={{ $labels.type }}&var-stage={{ $labels.stage
+        }}
+      grafana_min_zoom_hours: "6"
+      grafana_panel_id: "2713861591"
+      grafana_variables: environment,type,stage
+      promql_query: |
+        max by(environment, tier, type, stage, shard, pod, container) (
+          clamp_min(
+            clamp_max(
+              sum by (environment, tier, type, stage, shard, pod, container) (
+                rate(container_cpu_usage_seconds_total:labeled{container!="", container!="POD", environment="{{ $labels.environment }}",stage="{{ $labels.stage }}",type="{{ $labels.type }}"}[5m])
+              )
+              /
+              sum by(environment, tier, type, stage, shard, pod, container) (
+                container_spec_cpu_quota:labeled{container!="", container!="POD", environment="{{ $labels.environment }}",stage="{{ $labels.stage }}",type="{{ $labels.type }}"}
+                /
+                container_spec_cpu_period:labeled{container!="", container!="POD", environment="{{ $labels.environment }}",stage="{{ $labels.stage }}",type="{{ $labels.type }}"}
+              )
+              ,
+              1)
+          ,
+          0)
+        )
+      runbook: docs/{{ $labels.type }}/README.md
+    labels:
+      alert_type: cause
+      rules_domain: general
+      severity: s4
+    expr: |
+      gitlab_component_saturation:ratio{component="kube_container_cpu",env="gprd",monitor="global"} > on(component) group_left
+      slo:max:hard:gitlab_component_saturation:ratio{component="kube_container_cpu",env="gprd",monitor="global"}
+  - alert: component_saturation_slo_out_of_bounds
+    for: 15m
+    annotations:
+      title: The Kube Container Memory Utilization resource of the {{ $labels.type
+        }} service ({{ $labels.stage }} stage) has a saturation exceeding SLO and
+        is close to its capacity limit.
+      description: |
+        This means that this resource is running close to capacity and is at risk of exceeding its current capacity limit.
+
+        Details of the Kube Container Memory Utilization resource:
+
+        This uses the working set size from cAdvisor for the cgroup's memory usage. That may not be a good measure as it includes filesystem cache pages that are not necessarily attributable to the application inside the cgroup, and are permitted to be evicted instead of being OOM killed.
+      grafana_dashboard_id: alerts-sat_kube_container_memory
+      grafana_dashboard_link: https://dashboards.gitlab.net/d/alerts-sat_kube_container_memory?from=now-6h/m&to=now-1m/m&var-environment={{
+        $labels.environment }}&var-type={{ $labels.type }}&var-stage={{ $labels.stage
+        }}
+      grafana_min_zoom_hours: "6"
+      grafana_panel_id: "172578411"
+      grafana_variables: environment,type,stage
+      promql_query: |
+        max by(environment, tier, type, stage, shard) (
+          clamp_min(
+            clamp_max(
+              container_memory_working_set_bytes:labeled{container!="", container!="POD", environment="{{ $labels.environment }}",stage="{{ $labels.stage }}",type="{{ $labels.type }}"}
+              /
+              (container_spec_memory_limit_bytes:labeled{container!="", container!="POD", environment="{{ $labels.environment }}",stage="{{ $labels.stage }}",type="{{ $labels.type }}"} > 0)
+              ,
+              1)
+          ,
+          0)
+        )
+      runbook: docs/{{ $labels.type }}/README.md
+    labels:
+      alert_type: cause
+      rules_domain: general
+      severity: s4
+    expr: |
+      gitlab_component_saturation:ratio{component="kube_container_memory",env="gprd",monitor="global"} > on(component) group_left
+      slo:max:hard:gitlab_component_saturation:ratio{component="kube_container_memory",env="gprd",monitor="global"}
+  - alert: component_saturation_slo_out_of_bounds
     for: 5m
     annotations:
       title: The Go Memory Utilization per Node resource of the {{ $labels.type }}
@@ -254,6 +412,47 @@ groups:
     expr: |
       gitlab_component_saturation:ratio{component="kube_go_memory",env="gprd",monitor="global"} > on(component) group_left
       slo:max:hard:gitlab_component_saturation:ratio{component="kube_go_memory",env="gprd",monitor="global"}
+  - alert: component_saturation_slo_out_of_bounds
+    for: 25m
+    annotations:
+      title: The Horizontal Pod Autoscaler Desired Replicas resource of the {{ $labels.type
+        }} service ({{ $labels.stage }} stage) has a saturation exceeding SLO and
+        is close to its capacity limit.
+      description: |
+        This means that this resource is running close to capacity and is at risk of exceeding its current capacity limit.
+
+        Details of the Horizontal Pod Autoscaler Desired Replicas resource:
+
+        The [Horizontal Pod Autoscaler](https://kubernetes.io/docs/tasks/run-application/horizontal-pod-autoscale/) automatically scales the number of Pods in a deployment based on metrics.
+
+        The Horizontal Pod Autoscaler has a configured upper maximum. When this limit is reached, the HPA will not increase the number of pods and other resource saturation (eg, CPU, memory) may occur.
+      grafana_dashboard_id: alerts-sat_kube_horizontalpodautoscaler
+      grafana_dashboard_link: https://dashboards.gitlab.net/d/alerts-sat_kube_horizontalpodautoscaler?from=now-6h/m&to=now-1m/m&var-environment={{
+        $labels.environment }}&var-type={{ $labels.type }}&var-stage={{ $labels.stage
+        }}
+      grafana_min_zoom_hours: "6"
+      grafana_panel_id: "351198712"
+      grafana_variables: environment,type,stage
+      promql_query: |
+        max by(environment, tier, type, stage, shard, horizontalpodautoscaler, shard) (
+          clamp_min(
+            clamp_max(
+              kube_horizontalpodautoscaler_status_desired_replicas:labeled{environment="{{ $labels.environment }}",stage="{{ $labels.stage }}",type="{{ $labels.type }}", shard!~"database-throttled|elasticsearch|gitaly-throttled|urgent-authorized-projects|urgent-other", namespace!~"pubsubbeat"}
+              /
+              kube_horizontalpodautoscaler_spec_max_replicas:labeled{environment="{{ $labels.environment }}",stage="{{ $labels.stage }}",type="{{ $labels.type }}", shard!~"database-throttled|elasticsearch|gitaly-throttled|urgent-authorized-projects|urgent-other", namespace!~"pubsubbeat"}
+              ,
+              1)
+          ,
+          0)
+        )
+      runbook: docs/kube/kubernetes.md#hpascalecapability
+    labels:
+      alert_type: cause
+      rules_domain: general
+      severity: s3
+    expr: |
+      gitlab_component_saturation:ratio{component="kube_horizontalpodautoscaler_desired_replicas",env="gprd",monitor="global"} > on(component) group_left
+      slo:max:hard:gitlab_component_saturation:ratio{component="kube_horizontalpodautoscaler_desired_replicas",env="gprd",monitor="global"}
   - alert: component_saturation_slo_out_of_bounds
     for: 5m
     annotations:
@@ -350,6 +549,58 @@ groups:
     expr: |
       gitlab_component_saturation:ratio{component="kube_pool_max_nodes",env="gprd",monitor="global"} > on(component) group_left
       slo:max:hard:gitlab_component_saturation:ratio{component="kube_pool_max_nodes",env="gprd",monitor="global"}
+  - alert: component_saturation_slo_out_of_bounds
+    for: 5m
+    annotations:
+      title: The Open file descriptor utilization per instance resource of the {{
+        $labels.type }} service ({{ $labels.stage }} stage) has a saturation exceeding
+        SLO and is close to its capacity limit.
+      description: |
+        This means that this resource is running close to capacity and is at risk of exceeding its current capacity limit.
+
+        Details of the Open file descriptor utilization per instance resource:
+
+        Open file descriptor utilization per instance.
+
+        Saturation on file descriptor limits may indicate a resource-descriptor leak in the application.
+
+        As a temporary fix, you may want to consider restarting the affected process.
+      grafana_dashboard_id: alerts-sat_open_fds
+      grafana_dashboard_link: https://dashboards.gitlab.net/d/alerts-sat_open_fds?from=now-6h/m&to=now-1m/m&var-environment={{
+        $labels.environment }}&var-type={{ $labels.type }}&var-stage={{ $labels.stage
+        }}
+      grafana_min_zoom_hours: "6"
+      grafana_panel_id: "1001792825"
+      grafana_variables: environment,type,stage
+      promql_query: |
+        max by(environment, tier, type, stage, shard, job, instance) (
+          clamp_min(
+            clamp_max(
+              (
+                process_open_fds{environment="{{ $labels.environment }}",stage="{{ $labels.stage }}",type="{{ $labels.type }}"}
+                /
+                process_max_fds{environment="{{ $labels.environment }}",stage="{{ $labels.stage }}",type="{{ $labels.type }}"}
+              )
+              or
+              (
+                ruby_file_descriptors{environment="{{ $labels.environment }}",stage="{{ $labels.stage }}",type="{{ $labels.type }}"}
+                /
+                ruby_process_max_fds{environment="{{ $labels.environment }}",stage="{{ $labels.stage }}",type="{{ $labels.type }}"}
+              )
+              ,
+              1)
+          ,
+          0)
+        )
+      runbook: docs/{{ $labels.type }}/README.md
+    labels:
+      alert_type: cause
+      pager: pagerduty
+      rules_domain: general
+      severity: s2
+    expr: |
+      gitlab_component_saturation:ratio{component="open_fds",env="gprd",monitor="global"} > on(component) group_left
+      slo:max:hard:gitlab_component_saturation:ratio{component="open_fds",env="gprd",monitor="global"}
   - alert: component_saturation_slo_out_of_bounds
     for: 5m
     annotations:

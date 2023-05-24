@@ -20,6 +20,14 @@ metricsCatalog.serviceDefinition({
     api: true,
   },
   serviceIsStageless: true,
+
+  // This is evaluated in Thanos because the prometheus uses thanos-receive to
+  // get its metrics available.
+  // Our recording rules are currently not deployed to the external cluster that runs
+  // code-suggestions.
+  // We should get rid of this to be in line with other services when we can
+  dangerouslyThanosEvaluated: true,
+
   serviceLevelIndicators: {
     server: {
       severity: 's3',  // NOTE: Do not page on-call SREs until production ready
