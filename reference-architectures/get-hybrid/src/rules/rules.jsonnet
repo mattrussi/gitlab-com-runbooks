@@ -50,21 +50,18 @@ local serviceSLOsGroups =
   }];
 
 local saturationGroup = saturationRules.generateSaturationRulesGroup(
-  includePrometheusEvaluated=true,
-  includeDangerouslyThanosEvaluated=true,  // this environment has no thanos, so we evaluate these recording rules in Prometheus
+  evaluation='both',
   saturationResources=saturationResources,
   thanosSelfMonitoring=false,
 );
 
 local saturationMetadataGroup = saturationRules.generateSaturationMetadataRulesGroup(
   saturationResources=saturationResources,
-  includePrometheusEvaluated=true,
-  includeDangerouslyThanosEvaluated=true,
+  evaluation='both',
 );
 
 local saturationAuxGroup = saturationRules.generateSaturationAuxRulesGroup(
-  includePrometheusEvaluated=true,
-  includeDangerouslyThanosEvaluated=true,  // this environment has no thanos, so we evaluate these recording rules in Prometheus
+  evaluation='both',
   saturationResources=saturationResources,
 );
 
