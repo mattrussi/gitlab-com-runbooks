@@ -17,7 +17,7 @@ local quantilePanelTimeSeries(
   description='',
   format='short',
   interval='1m',
-  intervalFactor=1,
+  intervalFactor=3,
   yAxisLabel='',
   sort='decreasing',
   legend_show=true,

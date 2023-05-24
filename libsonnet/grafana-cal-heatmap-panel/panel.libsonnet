@@ -5,7 +5,7 @@ local heatmapCalendarPanel(
   query,
   legendFormat='',
   datasource='$PROMETHEUS_DS',
-  intervalFactor=1,
+  intervalFactor=3,
   threshold='0.995'
       ) =
   {
