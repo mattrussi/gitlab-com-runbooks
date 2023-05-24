@@ -748,7 +748,7 @@ validate-kibana-urls:
   secrets:
     MARQUEE_CUSTOMERS_TOP_LEVEL_DOMAINS:
       file: false
-      vault: ${VAULT_SECRETS_PATH}/shared/marquee-customers/top-level-domains@ci
+      vault: ${VAULT_SECRETS_PATH}/shared/marquee-customers/top_level_domains@ci
 
 .elastic-log-gprd:
   extends: .elastic
