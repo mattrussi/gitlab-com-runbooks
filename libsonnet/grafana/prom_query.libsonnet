@@ -4,7 +4,7 @@ local prometheus = grafana.prometheus;
   target(
     expr,
     format='time_series',
-    intervalFactor=1,
+    intervalFactor=3,
     legendFormat='',
     datasource=null,
     interval='1m',

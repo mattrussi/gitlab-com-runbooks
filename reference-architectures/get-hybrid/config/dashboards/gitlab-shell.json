@@ -243,7 +243,7 @@
           "expr": "min_over_time(gitlab_service_apdex:ratio_5m{type=\"gitlab-shell\"}[$__interval])\n",
           "format": "time_series",
           "interval": "1m",
-          "intervalFactor": 1,
+          "intervalFactor": 3,
           "legendFormat": "gitlab-shell apdex",
           "refId": "A"
         },
@@ -251,7 +251,7 @@
           "expr": "(1 - 6 * (1 - avg(slo:min:events:gitlab_service_apdex:ratio{component=\"\",type=\"gitlab-shell\"})\n))\n",
           "format": "time_series",
           "interval": "5m",
-          "intervalFactor": 1,
+          "intervalFactor": 3,
           "legendFormat": "6h Degradation SLO (5% of monthly error budget)",
           "refId": "B"
         },
@@ -259,7 +259,7 @@
           "expr": "(1 - 14.4 * (1 - avg(slo:min:events:gitlab_service_apdex:ratio{component=\"\",type=\"gitlab-shell\"})\n))\n",
           "format": "time_series",
           "interval": "5m",
-          "intervalFactor": 1,
+          "intervalFactor": 3,
           "legendFormat": "1h Outage SLO (2% of monthly error budget)",
           "refId": "C"
         },
@@ -267,7 +267,7 @@
           "expr": "avg_over_time(gitlab_service_apdex:ratio_5m{type=\"gitlab-shell\"}[$__interval])\n",
           "format": "time_series",
           "interval": "1m",
-          "intervalFactor": 1,
+          "intervalFactor": 3,
           "legendFormat": "gitlab-shell apdex avg",
           "refId": "D"
         },
@@ -275,7 +275,7 @@
           "expr": "clamp_min(\n  gitlab_service_apdex:ratio_5m{type=\"gitlab-shell\"} offset 1w\n,\n  scalar(min((1 - 14.4 * (1 - avg(slo:min:events:gitlab_service_apdex:ratio{component=\"\",type=\"gitlab-shell\"})\n))\n))\n)\n",
           "format": "time_series",
           "interval": "1m",
-          "intervalFactor": 1,
+          "intervalFactor": 3,
           "legendFormat": "last week",
           "refId": "E"
         }
@@ -500,7 +500,7 @@
           "format": "time_series",
           "instant": true,
           "interval": "1m",
-          "intervalFactor": 1,
+          "intervalFactor": 3,
           "legendFormat": "gitlab-shell Service | Latency/Apdex",
           "refId": "A"
         }
@@ -616,7 +616,7 @@
           "expr": "clamp_max(\n  max_over_time(gitlab_service_errors:ratio_5m{type=\"gitlab-shell\"}[$__interval])\n,\n  1\n)\n",
           "format": "time_series",
           "interval": "1m",
-          "intervalFactor": 1,
+          "intervalFactor": 3,
           "legendFormat": "gitlab-shell error ratio",
           "refId": "A"
         },
@@ -624,7 +624,7 @@
           "expr": "(6 * avg(slo:max:events:gitlab_service_errors:ratio{component=\"\",type=\"gitlab-shell\"})\n)\n",
           "format": "time_series",
           "interval": "5m",
-          "intervalFactor": 1,
+          "intervalFactor": 3,
           "legendFormat": "6h Degradation SLO (5% of monthly error budget)",
           "refId": "B"
         },
@@ -632,7 +632,7 @@
           "expr": "(14.4 * avg(slo:max:events:gitlab_service_errors:ratio{component=\"\",type=\"gitlab-shell\"})\n)\n",
           "format": "time_series",
           "interval": "5m",
-          "intervalFactor": 1,
+          "intervalFactor": 3,
           "legendFormat": "1h Outage SLO (2% of monthly error budget)",
           "refId": "C"
         },
@@ -640,7 +640,7 @@
           "expr": "clamp_max(\n  avg_over_time(gitlab_service_errors:ratio_5m{type=\"gitlab-shell\"}[$__interval])\n,\n  1\n)\n",
           "format": "time_series",
           "interval": "1m",
-          "intervalFactor": 1,
+          "intervalFactor": 3,
           "legendFormat": "gitlab-shell error ratio avg",
           "refId": "D"
         },
@@ -648,7 +648,7 @@
           "expr": "clamp_max(\n  gitlab_service_errors:ratio_5m{type=\"gitlab-shell\"} offset 1w\n,\n  scalar(max((14.4 * avg(slo:max:events:gitlab_service_errors:ratio{component=\"\",type=\"gitlab-shell\"})\n)\n))\n)\n",
           "format": "time_series",
           "interval": "1m",
-          "intervalFactor": 1,
+          "intervalFactor": 3,
           "legendFormat": "last week",
           "refId": "E"
         }
@@ -873,7 +873,7 @@
           "format": "time_series",
           "instant": true,
           "interval": "1m",
-          "intervalFactor": 1,
+          "intervalFactor": 3,
           "legendFormat": "gitlab-shell Service | Errors",
           "refId": "A"
         }
@@ -971,7 +971,7 @@
           "expr": "avg_over_time(gitlab_service_ops:rate_5m{type=\"gitlab-shell\"}[$__interval])\n",
           "format": "time_series",
           "interval": "1m",
-          "intervalFactor": 1,
+          "intervalFactor": 3,
           "legendFormat": "gitlab-shell RPS",
           "refId": "A"
         },
@@ -979,7 +979,7 @@
           "expr": "gitlab_service_ops:rate_5m{type=\"gitlab-shell\"} offset 1w\n",
           "format": "time_series",
           "interval": "1m",
-          "intervalFactor": 1,
+          "intervalFactor": 3,
           "legendFormat": "last week",
           "refId": "B"
         },
@@ -987,7 +987,7 @@
           "expr": "clamp_min(\n  avg by (type) (\n    gitlab_service_ops:rate:prediction{type=\"gitlab-shell\"}\n    + (1) *\n    gitlab_service_ops:rate:stddev_over_time_1w{type=\"gitlab-shell\"}\n  ),\n  0\n)\n",
           "format": "time_series",
           "interval": "1m",
-          "intervalFactor": 1,
+          "intervalFactor": 3,
           "legendFormat": "upper normal",
           "refId": "C"
         },
@@ -995,7 +995,7 @@
           "expr": "clamp_min(\n  avg by (type) (\n    gitlab_service_ops:rate:prediction{type=\"gitlab-shell\"}\n    + (-1) *\n    gitlab_service_ops:rate:stddev_over_time_1w{type=\"gitlab-shell\"}\n  ),\n  0\n)\n",
           "format": "time_series",
           "interval": "1m",
-          "intervalFactor": 1,
+          "intervalFactor": 3,
           "legendFormat": "lower normal",
           "refId": "D"
         }
@@ -1072,7 +1072,7 @@
           "expr": "max(\n  max_over_time(\n    gitlab_component_saturation:ratio{type=\"gitlab-shell\"}[$__interval]\n  )\n) by (component)\n",
           "format": "time_series",
           "interval": "1m",
-          "intervalFactor": 1,
+          "intervalFactor": 3,
           "legendFormat": "{{ component }} component",
           "refId": "A"
         }
@@ -1242,7 +1242,7 @@
           "expr": "min_over_time(gitlab_component_apdex:ratio_5m{component=\"grpc_requests\",type=\"gitlab-shell\"}[$__interval])\n",
           "format": "time_series",
           "interval": "1m",
-          "intervalFactor": 1,
+          "intervalFactor": 3,
           "legendFormat": "grpc_requests apdex",
           "refId": "A"
         },
@@ -1250,7 +1250,7 @@
           "expr": "(1 - 6 * (1 - avg(slo:min:events:gitlab_service_apdex:ratio{component=\"grpc_requests\",type=\"gitlab-shell\"})\n))\n",
           "format": "time_series",
           "interval": "5m",
-          "intervalFactor": 1,
+          "intervalFactor": 3,
           "legendFormat": "6h Degradation SLO (5% of monthly error budget)",
           "refId": "B"
         },
@@ -1258,7 +1258,7 @@
           "expr": "(1 - 14.4 * (1 - avg(slo:min:events:gitlab_service_apdex:ratio{component=\"grpc_requests\",type=\"gitlab-shell\"})\n))\n",
           "format": "time_series",
           "interval": "5m",
-          "intervalFactor": 1,
+          "intervalFactor": 3,
           "legendFormat": "1h Outage SLO (2% of monthly error budget)",
           "refId": "C"
         },
@@ -1266,7 +1266,7 @@
           "expr": "avg_over_time(gitlab_component_apdex:ratio_5m{component=\"grpc_requests\",type=\"gitlab-shell\"}[$__interval])\n",
           "format": "time_series",
           "interval": "1m",
-          "intervalFactor": 1,
+          "intervalFactor": 3,
           "legendFormat": "grpc_requests apdex avg",
           "refId": "D"
         },
@@ -1274,7 +1274,7 @@
           "expr": "clamp_min(\n  gitlab_component_apdex:ratio_5m{component=\"grpc_requests\",type=\"gitlab-shell\"} offset 1w\n,\n  scalar(min((1 - 14.4 * (1 - avg(slo:min:events:gitlab_service_apdex:ratio{component=\"grpc_requests\",type=\"gitlab-shell\"})\n))\n))\n)\n",
           "format": "time_series",
           "interval": "1m",
-          "intervalFactor": 1,
+          "intervalFactor": 3,
           "legendFormat": "last week",
           "refId": "E"
         }
@@ -1499,7 +1499,7 @@
           "format": "time_series",
           "instant": true,
           "interval": "1m",
-          "intervalFactor": 1,
+          "intervalFactor": 3,
           "legendFormat": "grpc_requests SLI | Latency/Apdex",
           "refId": "A"
         }
@@ -1615,7 +1615,7 @@
           "expr": "clamp_max(\n  max_over_time(gitlab_component_errors:ratio_5m{component=\"grpc_requests\",type=\"gitlab-shell\"}[$__interval])\n,\n  1\n)\n",
           "format": "time_series",
           "interval": "1m",
-          "intervalFactor": 1,
+          "intervalFactor": 3,
           "legendFormat": "grpc_requests error ratio",
           "refId": "A"
         },
@@ -1623,7 +1623,7 @@
           "expr": "(6 * avg(slo:max:events:gitlab_service_errors:ratio{component=\"grpc_requests\",type=\"gitlab-shell\"})\n)\n",
           "format": "time_series",
           "interval": "5m",
-          "intervalFactor": 1,
+          "intervalFactor": 3,
           "legendFormat": "6h Degradation SLO (5% of monthly error budget)",
           "refId": "B"
         },
@@ -1631,7 +1631,7 @@
           "expr": "(14.4 * avg(slo:max:events:gitlab_service_errors:ratio{component=\"grpc_requests\",type=\"gitlab-shell\"})\n)\n",
           "format": "time_series",
           "interval": "5m",
-          "intervalFactor": 1,
+          "intervalFactor": 3,
           "legendFormat": "1h Outage SLO (2% of monthly error budget)",
           "refId": "C"
         },
@@ -1639,7 +1639,7 @@
           "expr": "clamp_max(\n  avg_over_time(gitlab_component_errors:ratio_5m{component=\"grpc_requests\",type=\"gitlab-shell\"}[$__interval])\n,\n  1\n)\n",
           "format": "time_series",
           "interval": "1m",
-          "intervalFactor": 1,
+          "intervalFactor": 3,
           "legendFormat": "grpc_requests error ratio avg",
           "refId": "D"
         },
@@ -1647,7 +1647,7 @@
           "expr": "clamp_max(\n  gitlab_component_errors:ratio_5m{component=\"grpc_requests\",type=\"gitlab-shell\"} offset 1w\n,\n  scalar(max((14.4 * avg(slo:max:events:gitlab_service_errors:ratio{component=\"grpc_requests\",type=\"gitlab-shell\"})\n)\n))\n)\n",
           "format": "time_series",
           "interval": "1m",
-          "intervalFactor": 1,
+          "intervalFactor": 3,
           "legendFormat": "last week",
           "refId": "E"
         }
@@ -1872,7 +1872,7 @@
           "format": "time_series",
           "instant": true,
           "interval": "1m",
-          "intervalFactor": 1,
+          "intervalFactor": 3,
           "legendFormat": "grpc_requests SLI | Errors",
           "refId": "A"
         }
@@ -1945,7 +1945,7 @@
           "expr": "avg_over_time(gitlab_component_ops:rate_5m{component=\"grpc_requests\",type=\"gitlab-shell\"}[$__interval])\n",
           "format": "time_series",
           "interval": "1m",
-          "intervalFactor": 1,
+          "intervalFactor": 3,
           "legendFormat": "grpc_requests RPS",
           "refId": "A"
         },
@@ -1953,7 +1953,7 @@
           "expr": "gitlab_component_ops:rate_5m{component=\"grpc_requests\",type=\"gitlab-shell\"} offset 1w\n",
           "format": "time_series",
           "interval": "1m",
-          "intervalFactor": 1,
+          "intervalFactor": 3,
           "legendFormat": "last week",
           "refId": "B"
         }
@@ -2053,7 +2053,7 @@
               "expr": "histogram_quantile(\n  0.950000,\n  sum by (le) (\n    rate(grpc_server_handling_seconds_bucket{grpc_service=\"gitaly.SSHService\",grpc_type=\"unary\",job=\"gitaly\"}[$__interval])\n  )\n)\n \u003e 0",
               "format": "time_series",
               "interval": "1m",
-              "intervalFactor": 1,
+              "intervalFactor": 2,
               "legendFormat": "p95 overall",
               "refId": "A"
             }
@@ -2149,7 +2149,7 @@
               "expr": "sum by () (\n  rate(grpc_server_handled_total{grpc_code!=\"OK\",grpc_service=\"gitaly.SSHService\",job=\"gitaly\"}[$__interval])\n)\n \u003e 0",
               "format": "time_series",
               "interval": "1m",
-              "intervalFactor": 1,
+              "intervalFactor": 2,
               "legendFormat": "overall",
               "refId": "A"
             }
@@ -2225,7 +2225,7 @@
               "expr": "sum by () (\n  rate(gitaly_service_client_requests_total{grpc_service=\"gitaly.SSHService\",job=\"gitaly\"}[$__interval])\n)\n \u003e 0",
               "format": "time_series",
               "interval": "1m",
-              "intervalFactor": 1,
+              "intervalFactor": 2,
               "legendFormat": "overall",
               "refId": "A"
             }
@@ -2301,7 +2301,7 @@
               "expr": "histogram_quantile(\n  0.950000,\n  sum by (le,node) (\n    rate(grpc_server_handling_seconds_bucket{grpc_service=\"gitaly.SSHService\",grpc_type=\"unary\",job=\"gitaly\",node!=\"\"}[$__interval])\n  )\n)\n \u003e 0",
               "format": "time_series",
               "interval": "1m",
-              "intervalFactor": 1,
+              "intervalFactor": 2,
               "legendFormat": "p95 {{node}}",
               "refId": "A"
             }
@@ -2403,7 +2403,7 @@
               "expr": "clamp_min(clamp_max((\n  (\n    sum by (node) (\n  rate(grpc_server_handling_seconds_bucket{grpc_service=\"gitaly.SSHService\",grpc_type=\"unary\",job=\"gitaly\",le=\"+Inf\",node!=\"\"}[$__interval])\n)\n\n    -\n    (\n      (\n  sum by (node) (\n    rate(grpc_server_handling_seconds_bucket{grpc_service=\"gitaly.SSHService\",grpc_type=\"unary\",job=\"gitaly\",le=\"30\",node!=\"\"}[$__interval])\n  )\n  +\n  sum by (node) (\n    rate(grpc_server_handling_seconds_bucket{grpc_service=\"gitaly.SSHService\",grpc_type=\"unary\",job=\"gitaly\",le=\"60\",node!=\"\"}[$__interval])\n  )\n)\n/\n2\n\n    )\n  )\n  / ignoring(node) group_left()\n  (\n    sum by () (\n  rate(grpc_server_handling_seconds_bucket{grpc_service=\"gitaly.SSHService\",grpc_type=\"unary\",job=\"gitaly\",le=\"+Inf\",node!=\"\"}[$__interval])\n)\n\n  )\n) \u003e 0\n,1),0)\n",
               "format": "time_series",
               "interval": "1m",
-              "intervalFactor": 1,
+              "intervalFactor": 3,
               "legendFormat": "{{node}}",
               "refId": "A"
             }
@@ -2478,7 +2478,7 @@
               "expr": "sum by (node) (\n  rate(grpc_server_handled_total{grpc_code!=\"OK\",grpc_service=\"gitaly.SSHService\",job=\"gitaly\",node!=\"\"}[$__interval])\n)\n \u003e 0",
               "format": "time_series",
               "interval": "1m",
-              "intervalFactor": 1,
+              "intervalFactor": 2,
               "legendFormat": "{{node}}",
               "refId": "A"
             }
@@ -2554,7 +2554,7 @@
               "expr": "sum by (node) (\n  rate(gitaly_service_client_requests_total{grpc_service=\"gitaly.SSHService\",job=\"gitaly\",node!=\"\"}[$__interval])\n)\n \u003e 0",
               "format": "time_series",
               "interval": "1m",
-              "intervalFactor": 1,
+              "intervalFactor": 2,
               "legendFormat": "{{node}}",
               "refId": "A"
             }
@@ -2713,7 +2713,7 @@
               "expr": "clamp_min(\n  clamp_max(\n    max by(type, pod, container) (\n  clamp_min(\n    clamp_max(\n      sum by (type, pod, container) (\n        rate(container_cpu_usage_seconds_total:labeled{container!=\"\", container!=\"POD\", type=\"gitlab-shell\"}[5m])\n      )\n      /\n      sum by(type, pod, container) (\n        container_spec_cpu_quota:labeled{container!=\"\", container!=\"POD\", type=\"gitlab-shell\"}\n        /\n        container_spec_cpu_period:labeled{container!=\"\", container!=\"POD\", type=\"gitlab-shell\"}\n      )\n      ,\n      1)\n  ,\n  0)\n)\n\n  ,1)\n,0)\n",
               "format": "time_series",
               "interval": "1m",
-              "intervalFactor": 1,
+              "intervalFactor": 3,
               "legendFormat": "{{ pod }} {{ container }}",
               "refId": "A"
             },
@@ -2721,7 +2721,7 @@
               "expr": "clamp_min(\n  clamp_max(\n    max(\n      max_over_time(gitlab_component_saturation:ratio{type=\"gitlab-shell\", component=\"kube_container_cpu\"}[$__interval])\n    ) by (component)\n  ,1)\n,0)\n",
               "format": "time_series",
               "interval": "1m",
-              "intervalFactor": 1,
+              "intervalFactor": 3,
               "legendFormat": "aggregated {{ component }}",
               "refId": "B"
             },
@@ -2729,7 +2729,7 @@
               "expr": "max(\n  gitlab_component_saturation:ratio_quantile95_1w{type=\"gitlab-shell\", component=\"kube_container_cpu\"}\n)\n",
               "format": "time_series",
               "interval": "1m",
-              "intervalFactor": 1,
+              "intervalFactor": 3,
               "legendFormat": "95th quantile for week {{ component }}",
               "refId": "C"
             },
@@ -2737,7 +2737,7 @@
               "expr": "max(\n  gitlab_component_saturation:ratio_quantile99_1w{type=\"gitlab-shell\", component=\"kube_container_cpu\"}\n)\n",
               "format": "time_series",
               "interval": "1m",
-              "intervalFactor": 1,
+              "intervalFactor": 3,
               "legendFormat": "99th quantile for week {{ component }}",
               "refId": "D"
             },
@@ -2745,7 +2745,7 @@
               "expr": "avg(slo:max:soft:gitlab_component_saturation:ratio{component=\"kube_container_cpu\"}) by (component)\n",
               "format": "time_series",
               "interval": "1m",
-              "intervalFactor": 1,
+              "intervalFactor": 3,
               "legendFormat": "Soft SLO: {{ component }}",
               "refId": "E"
             },
@@ -2753,7 +2753,7 @@
               "expr": "avg(slo:max:hard:gitlab_component_saturation:ratio{component=\"kube_container_cpu\"}) by (component)\n",
               "format": "time_series",
               "interval": "1m",
-              "intervalFactor": 1,
+              "intervalFactor": 3,
               "legendFormat": "Hard SLO: {{ component }}",
               "refId": "F"
             }
@@ -2900,7 +2900,7 @@
               "expr": "clamp_min(\n  clamp_max(\n    max by(type) (\n  clamp_min(\n    clamp_max(\n      container_memory_working_set_bytes:labeled{container!=\"\", container!=\"POD\", type=\"gitlab-shell\"}\n      /\n      (container_spec_memory_limit_bytes:labeled{container!=\"\", container!=\"POD\", type=\"gitlab-shell\"} \u003e 0)\n      ,\n      1)\n  ,\n  0)\n)\n\n  ,1)\n,0)\n",
               "format": "time_series",
               "interval": "1m",
-              "intervalFactor": 1,
+              "intervalFactor": 3,
               "legendFormat": "{{ type }}",
               "refId": "A"
             },
@@ -2908,7 +2908,7 @@
               "expr": "clamp_min(\n  clamp_max(\n    max(\n      max_over_time(gitlab_component_saturation:ratio{type=\"gitlab-shell\", component=\"kube_container_memory\"}[$__interval])\n    ) by (component)\n  ,1)\n,0)\n",
               "format": "time_series",
               "interval": "1m",
-              "intervalFactor": 1,
+              "intervalFactor": 3,
               "legendFormat": "aggregated {{ component }}",
               "refId": "B"
             },
@@ -2916,7 +2916,7 @@
               "expr": "max(\n  gitlab_component_saturation:ratio_quantile95_1w{type=\"gitlab-shell\", component=\"kube_container_memory\"}\n)\n",
               "format": "time_series",
               "interval": "1m",
-              "intervalFactor": 1,
+              "intervalFactor": 3,
               "legendFormat": "95th quantile for week {{ component }}",
               "refId": "C"
             },
@@ -2924,7 +2924,7 @@
               "expr": "max(\n  gitlab_component_saturation:ratio_quantile99_1w{type=\"gitlab-shell\", component=\"kube_container_memory\"}\n)\n",
               "format": "time_series",
               "interval": "1m",
-              "intervalFactor": 1,
+              "intervalFactor": 3,
               "legendFormat": "99th quantile for week {{ component }}",
               "refId": "D"
             },
@@ -2932,7 +2932,7 @@
               "expr": "avg(slo:max:soft:gitlab_component_saturation:ratio{component=\"kube_container_memory\"}) by (component)\n",
               "format": "time_series",
               "interval": "1m",
-              "intervalFactor": 1,
+              "intervalFactor": 3,
               "legendFormat": "Soft SLO: {{ component }}",
               "refId": "E"
             },
@@ -2940,7 +2940,7 @@
               "expr": "avg(slo:max:hard:gitlab_component_saturation:ratio{component=\"kube_container_memory\"}) by (component)\n",
               "format": "time_series",
               "interval": "1m",
-              "intervalFactor": 1,
+              "intervalFactor": 3,
               "legendFormat": "Hard SLO: {{ component }}",
               "refId": "F"
             }
