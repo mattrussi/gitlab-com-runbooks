@@ -131,6 +131,39 @@ local sidekiqThanosAlerts(extraSelector) =
         promql_template_1: 'gitlab_background_jobs:execution:ops:rate_6h{environment="$environment", worker="$worker"}',
       },
     },
+    {
+      alert: 'SidekiqJobsDeferredTooLong',
+      expr: |||
+        sum by (environment, worker)  (
+          rate(
+            sidekiq_jobs_deferred_total{%(selector)s}[1h]
+            )
+          )
+          > 0
+      ||| % {
+        selector: selectors.serializeHash(extraSelector),
+      },
+      'for': '3h',
+      labels: {
+        team: 'scalability',
+        severity: 's4',
+        alert_type: 'cause',
+      },
+      annotations: {
+        title: 'Sidekiq jobs from `{{ $labels.worker }}` are intentionally being deferred for too long',
+        description: |||
+          Sidekiq jobs from `{{ $labels.worker }}` are being deferred indefinitely via feature flag `defer_sidekiq_jobs_<worker_name>`. This feature flag might be enabled during an incident and forgotten
+          to be disabled.
+          Ignore if this is still intentionally left enabled.
+
+          Run `/chatops run feature list --match defer_sidekiq_jobs` to list all enabled feature flags.
+        |||,
+        grafana_dashboard_id: 'sidekiq-worker-detail',
+        grafana_panel_id: stableIds.hashStableId('jobs-deferred'),
+        grafana_min_zoom_hours: '6',
+        grafana_variables: 'environment,worker',
+      },
+    },
   ] +
   serviceLevelAlerts.apdexAlertsForSLI(
     alertName=serviceLevelAlerts.nameSLOViolationAlert('sidekiq', 'WorkerExecution', 'ApdexSLOViolation'),

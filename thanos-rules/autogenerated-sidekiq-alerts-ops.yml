@@ -346,6 +346,32 @@ groups:
       (sum by(environment, worker) (gitlab_background_jobs:queue:ops:rate_6h{env="ops"})> 0.001)
       unless
       (sum by(environment, worker) (gitlab_background_jobs:execution:ops:rate_6h{env="ops"})  > 0)
+  - alert: SidekiqJobsDeferredTooLong
+    for: 3h
+    annotations:
+      title: Sidekiq jobs from `{{ $labels.worker }}` are intentionally being deferred
+        for too long
+      description: |
+        Sidekiq jobs from `{{ $labels.worker }}` are being deferred indefinitely via feature flag `defer_sidekiq_jobs_<worker_name>`. This feature flag might be enabled during an incident and forgotten to be disabled. Ignore if this is still intentionally left enabled.
+
+        Run `/chatops run feature list --match defer_sidekiq_jobs` to list all enabled feature flags.
+      grafana_dashboard_id: sidekiq-worker-detail
+      grafana_dashboard_link: https://dashboards.gitlab.net/d/sidekiq-worker-detail?from=now-6h/m&to=now-1m/m&var-environment={{
+        $labels.environment }}&var-worker={{ $labels.worker }}
+      grafana_min_zoom_hours: "6"
+      grafana_panel_id: "1760026825"
+      grafana_variables: environment,worker
+    labels:
+      alert_type: cause
+      severity: s4
+      team: scalability
+    expr: |
+      sum by (environment, worker)  (
+        rate(
+          sidekiq_jobs_deferred_total{env="ops"}[1h]
+          )
+        )
+        > 0
   - alert: SidekiqServiceWorkerExecutionApdexSLOViolation
     for: 1h
     annotations:
