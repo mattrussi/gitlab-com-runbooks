@@ -381,6 +381,8 @@ Every new CIDR should start at directly after the previously reserved one ends.
 | `GCP/gitlab-ci-private-2`                  | `ephemeral-runners/ephemeral-runners`      | `10.10.72.0/21`  |
 | `GCP/gitlab-ci-private-3`                  | `ephemeral-runners/ephemeral-runners`      | `10.10.80.0/21`  |
 | `GCP/gitlab-ci-private-4`                  | `ephemeral-runners/ephemeral-runners`      | `10.10.88.0/21`  |
+| `GCP/gitlab-ci-private-5`                  | `ephemeral-runners/ephemeral-runners`      | `10.11.64.0/21`  |
+| `GCP/gitlab-ci-private-6`                  | `ephemeral-runners/ephemeral-runners`      | `10.11.72.0/21`  |
 | `GCP/gitlab-ci`                            | `ci/ephemeral-runners-shared-gitlab-org-2` | `10.10.96.0/21`  |
 | `GCP/gitlab-ci`                            | `ci/ephemeral-runners-shared-gitlab-org-3` | `10.10.104.0/21` |
 | `GCP/gitlab-ci`                            | `ci/ephemeral-runners-shared-gitlab-org-4` | `10.10.112.0/21` |
