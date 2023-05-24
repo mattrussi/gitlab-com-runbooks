@@ -32,10 +32,10 @@ local matchInFilter(field, possibleValues) =
   };
 
 // Builds an ElasticSearch range filter clause
-local rangeFilter(field, gteValue, lteValue) =
+local rangeFilter(field, gteValue, lteValue, indexPattern=null) =
   local params = {
-    [if gteValue != null then 'gte']: gteValue,
-    [if lteValue != null then 'lte']: lteValue,
+    gte: gteValue,
+    lte: lteValue,
   };
 
   {
@@ -45,9 +45,11 @@ local rangeFilter(field, gteValue, lteValue) =
       },
     },
     meta: {
+      field: field,
       key: field,
       type: 'range',
       params: params,
+      [if indexPattern != null then 'index']: indexPattern,
     },
   };
 
