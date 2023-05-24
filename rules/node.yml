@@ -127,7 +127,7 @@ groups:
     annotations:
       title: 'Filesystem will be full SOON'
       description: >
-        The filesystem is predicted to be full in will be full in the next 24 hours.
+        The filesystem is predicted to be full in the next 24 hours.
       runbook: docs/monitoring/filesystem_alerts.md
       instance: '{{ $labels.instance }}'
       device: '{{ $labels.device }}'

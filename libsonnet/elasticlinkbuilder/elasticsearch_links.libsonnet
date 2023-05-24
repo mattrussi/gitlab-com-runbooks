@@ -420,7 +420,7 @@ local buildElasticLinePercentileVizURL(index, filters, luceneQueries=[], latency
     local ic = indexCatalog[index];
     local slowRequestFilter = if std.objectHas(ic, 'slowRequestFilter') then ic.slowRequestFilter else [];
     local exceedingDurationFilter = if slowRequestSeconds != null then
-      [rangeFilter(ic.defaultLatencyField, gteValue=slowRequestSeconds * ic.latencyFieldUnitMultiplier, lteValue=null)]
+      [rangeFilter(ic.defaultLatencyField, gteValue=slowRequestSeconds * ic.latencyFieldUnitMultiplier, lteValue=null, indexPattern=ic.indexPattern)]
     else
       [];
 
