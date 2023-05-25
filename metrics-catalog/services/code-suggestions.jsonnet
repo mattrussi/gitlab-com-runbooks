@@ -1,6 +1,7 @@
 local metricsCatalog = import 'servicemetrics/metrics.libsonnet';
 local histogramApdex = metricsCatalog.histogramApdex;
 local rateMetric = metricsCatalog.rateMetric;
+local histogramApdex = metricsCatalog.histogramApdex;
 local toolingLinks = import 'toolinglinks/toolinglinks.libsonnet';
 
 local baseSelector = { type: 'code_suggestions' };
@@ -9,7 +10,7 @@ metricsCatalog.serviceDefinition({
   type: 'code_suggestions',
   tier: 'sv',
   monitoringThresholds: {
-    apdexScore: 0.999,
+    apdexScore: 0.95,
     errorRatio: 0.999,
   },
   provisioning: {
@@ -29,25 +30,32 @@ metricsCatalog.serviceDefinition({
   dangerouslyThanosEvaluated: true,
 
   serviceLevelIndicators: {
-    server: {
-      severity: 's3',  // NOTE: Do not page on-call SREs until production ready
+    model_gateway: {
+      local modelGatewaySelector = baseSelector { container: 'model-gateway' },
+      severity: 's4',  // NOTE: Do not page on-call SREs until production ready
       userImpacting: true,
       team: 'ai_assisted',
       featureCategory: 'code_suggestions',
 
       requestRate: rateMetric(
-        counter='http_requests_total',
-        selector=baseSelector,
+        counter='http_request_duration_seconds_count',
+        selector=modelGatewaySelector,
         useRecordingRuleRegistry=false,
       ),
 
       errorRate: rateMetric(
         counter='http_requests_total',
-        selector=baseSelector { status: { re: '^5.*' } },
+        selector=modelGatewaySelector { status: '5xx' },
         useRecordingRuleRegistry=false,
       ),
 
-      significantLabels: ['status'],
+      apdex: histogramApdex(
+        histogram='http_request_duration_seconds_bucket',
+        selector=modelGatewaySelector { status: { noneOf: ['4xx', '5xx'] } },
+        satisfiedThreshold='10.0',
+      ),
+
+      significantLabels: ['status', 'handler', 'method'],
 
       toolingLinks: [
         toolingLinks.kibana(title='MLOps', index='mlops'),

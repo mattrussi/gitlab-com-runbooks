@@ -5,160 +5,260 @@ groups:
   interval: 1m
   partial_response_strategy: warn
   rules:
-  - record: gitlab_component_ops:rate
+  - record: gitlab_component_apdex:success:rate
     labels:
-      component: server
+      component: model_gateway
       stage: main
       tier: sv
       type: code_suggestions
     expr: |
       sum by (env,environment) (
-        rate(http_requests_total{type="code_suggestions"}[1m])
+        rate(http_request_duration_seconds_bucket{container="model-gateway",le="10.0",status!~"4xx|5xx",type="code_suggestions"}[1m])
+      )
+  - record: gitlab_component_apdex:weight:score
+    labels:
+      component: model_gateway
+      stage: main
+      tier: sv
+      type: code_suggestions
+    expr: |
+      sum by (env,environment) (
+        rate(http_request_duration_seconds_bucket{container="model-gateway",le="+Inf",status!~"4xx|5xx",type="code_suggestions"}[1m])
+      )
+  - record: gitlab_component_ops:rate
+    labels:
+      component: model_gateway
+      stage: main
+      tier: sv
+      type: code_suggestions
+    expr: |
+      sum by (env,environment) (
+        rate(http_request_duration_seconds_count{container="model-gateway",type="code_suggestions"}[1m])
       )
   - record: gitlab_component_errors:rate
     labels:
-      component: server
+      component: model_gateway
       stage: main
       tier: sv
       type: code_suggestions
     expr: |
       (
         sum by (env,environment) (
-          rate(http_requests_total{status=~"^5.*",type="code_suggestions"}[1m])
+          rate(http_requests_total{container="model-gateway",status="5xx",type="code_suggestions"}[1m])
         )
       )
       or
       (
         0 * group by(env,environment) (
-          gitlab_component_ops:rate{component="server",stage="main",tier="sv",type="code_suggestions"}
+          gitlab_component_ops:rate{component="model_gateway",stage="main",tier="sv",type="code_suggestions"}
         )
       )
 - name: 'Component-Level SLIs: code_suggestions - 5m burn-rate'
   interval: 1m
   partial_response_strategy: warn
   rules:
-  - record: gitlab_component_ops:rate_5m
+  - record: gitlab_component_apdex:success:rate_5m
     labels:
-      component: server
+      component: model_gateway
       stage: main
       tier: sv
       type: code_suggestions
     expr: |
       sum by (env,environment) (
-        rate(http_requests_total{type="code_suggestions"}[5m])
+        rate(http_request_duration_seconds_bucket{container="model-gateway",le="10.0",status!~"4xx|5xx",type="code_suggestions"}[5m])
+      )
+  - record: gitlab_component_apdex:weight:score_5m
+    labels:
+      component: model_gateway
+      stage: main
+      tier: sv
+      type: code_suggestions
+    expr: |
+      sum by (env,environment) (
+        rate(http_request_duration_seconds_bucket{container="model-gateway",le="+Inf",status!~"4xx|5xx",type="code_suggestions"}[5m])
+      )
+  - record: gitlab_component_ops:rate_5m
+    labels:
+      component: model_gateway
+      stage: main
+      tier: sv
+      type: code_suggestions
+    expr: |
+      sum by (env,environment) (
+        rate(http_request_duration_seconds_count{container="model-gateway",type="code_suggestions"}[5m])
       )
   - record: gitlab_component_errors:rate_5m
     labels:
-      component: server
+      component: model_gateway
       stage: main
       tier: sv
       type: code_suggestions
     expr: |
       (
         sum by (env,environment) (
-          rate(http_requests_total{status=~"^5.*",type="code_suggestions"}[5m])
+          rate(http_requests_total{container="model-gateway",status="5xx",type="code_suggestions"}[5m])
         )
       )
       or
       (
         0 * group by(env,environment) (
-          gitlab_component_ops:rate_5m{component="server",stage="main",tier="sv",type="code_suggestions"}
+          gitlab_component_ops:rate_5m{component="model_gateway",stage="main",tier="sv",type="code_suggestions"}
         )
       )
 - name: 'Component-Level SLIs: code_suggestions - 30m burn-rate'
   interval: 2m
   partial_response_strategy: warn
   rules:
-  - record: gitlab_component_ops:rate_30m
+  - record: gitlab_component_apdex:success:rate_30m
     labels:
-      component: server
+      component: model_gateway
       stage: main
       tier: sv
       type: code_suggestions
     expr: |
       sum by (env,environment) (
-        rate(http_requests_total{type="code_suggestions"}[30m])
+        rate(http_request_duration_seconds_bucket{container="model-gateway",le="10.0",status!~"4xx|5xx",type="code_suggestions"}[30m])
+      )
+  - record: gitlab_component_apdex:weight:score_30m
+    labels:
+      component: model_gateway
+      stage: main
+      tier: sv
+      type: code_suggestions
+    expr: |
+      sum by (env,environment) (
+        rate(http_request_duration_seconds_bucket{container="model-gateway",le="+Inf",status!~"4xx|5xx",type="code_suggestions"}[30m])
+      )
+  - record: gitlab_component_ops:rate_30m
+    labels:
+      component: model_gateway
+      stage: main
+      tier: sv
+      type: code_suggestions
+    expr: |
+      sum by (env,environment) (
+        rate(http_request_duration_seconds_count{container="model-gateway",type="code_suggestions"}[30m])
       )
   - record: gitlab_component_errors:rate_30m
     labels:
-      component: server
+      component: model_gateway
       stage: main
       tier: sv
       type: code_suggestions
     expr: |
       (
         sum by (env,environment) (
-          rate(http_requests_total{status=~"^5.*",type="code_suggestions"}[30m])
+          rate(http_requests_total{container="model-gateway",status="5xx",type="code_suggestions"}[30m])
         )
       )
       or
       (
         0 * group by(env,environment) (
-          gitlab_component_ops:rate_30m{component="server",stage="main",tier="sv",type="code_suggestions"}
+          gitlab_component_ops:rate_30m{component="model_gateway",stage="main",tier="sv",type="code_suggestions"}
         )
       )
 - name: 'Component-Level SLIs: code_suggestions - 1h burn-rate'
   interval: 1m
   partial_response_strategy: warn
   rules:
-  - record: gitlab_component_ops:rate_1h
+  - record: gitlab_component_apdex:success:rate_1h
     labels:
-      component: server
+      component: model_gateway
       stage: main
       tier: sv
       type: code_suggestions
     expr: |
       sum by (env,environment) (
-        rate(http_requests_total{type="code_suggestions"}[1h])
+        rate(http_request_duration_seconds_bucket{container="model-gateway",le="10.0",status!~"4xx|5xx",type="code_suggestions"}[1h])
+      )
+  - record: gitlab_component_apdex:weight:score_1h
+    labels:
+      component: model_gateway
+      stage: main
+      tier: sv
+      type: code_suggestions
+    expr: |
+      sum by (env,environment) (
+        rate(http_request_duration_seconds_bucket{container="model-gateway",le="+Inf",status!~"4xx|5xx",type="code_suggestions"}[1h])
+      )
+  - record: gitlab_component_ops:rate_1h
+    labels:
+      component: model_gateway
+      stage: main
+      tier: sv
+      type: code_suggestions
+    expr: |
+      sum by (env,environment) (
+        rate(http_request_duration_seconds_count{container="model-gateway",type="code_suggestions"}[1h])
       )
   - record: gitlab_component_errors:rate_1h
     labels:
-      component: server
+      component: model_gateway
       stage: main
       tier: sv
       type: code_suggestions
     expr: |
       (
         sum by (env,environment) (
-          rate(http_requests_total{status=~"^5.*",type="code_suggestions"}[1h])
+          rate(http_requests_total{container="model-gateway",status="5xx",type="code_suggestions"}[1h])
         )
       )
       or
       (
         0 * group by(env,environment) (
-          gitlab_component_ops:rate_1h{component="server",stage="main",tier="sv",type="code_suggestions"}
+          gitlab_component_ops:rate_1h{component="model_gateway",stage="main",tier="sv",type="code_suggestions"}
         )
       )
 - name: 'Component-Level SLIs: code_suggestions - 6h burn-rate'
   interval: 2m
   partial_response_strategy: warn
   rules:
-  - record: gitlab_component_ops:rate_6h
+  - record: gitlab_component_apdex:success:rate_6h
     labels:
-      component: server
+      component: model_gateway
       stage: main
       tier: sv
       type: code_suggestions
     expr: |
       sum by (env,environment) (
-        rate(http_requests_total{type="code_suggestions"}[6h])
+        rate(http_request_duration_seconds_bucket{container="model-gateway",le="10.0",status!~"4xx|5xx",type="code_suggestions"}[6h])
+      )
+  - record: gitlab_component_apdex:weight:score_6h
+    labels:
+      component: model_gateway
+      stage: main
+      tier: sv
+      type: code_suggestions
+    expr: |
+      sum by (env,environment) (
+        rate(http_request_duration_seconds_bucket{container="model-gateway",le="+Inf",status!~"4xx|5xx",type="code_suggestions"}[6h])
+      )
+  - record: gitlab_component_ops:rate_6h
+    labels:
+      component: model_gateway
+      stage: main
+      tier: sv
+      type: code_suggestions
+    expr: |
+      sum by (env,environment) (
+        rate(http_request_duration_seconds_count{container="model-gateway",type="code_suggestions"}[6h])
       )
   - record: gitlab_component_errors:rate_6h
     labels:
-      component: server
+      component: model_gateway
       stage: main
       tier: sv
       type: code_suggestions
     expr: |
       (
         sum by (env,environment) (
-          rate(http_requests_total{status=~"^5.*",type="code_suggestions"}[6h])
+          rate(http_requests_total{container="model-gateway",status="5xx",type="code_suggestions"}[6h])
         )
       )
       or
       (
         0 * group by(env,environment) (
-          gitlab_component_ops:rate_6h{component="server",stage="main",tier="sv",type="code_suggestions"}
+          gitlab_component_ops:rate_6h{component="model_gateway",stage="main",tier="sv",type="code_suggestions"}
         )
       )
 - name: 'Component mapping: code_suggestions'
@@ -167,7 +267,7 @@ groups:
   rules:
   - record: gitlab_component_service:mapping
     labels:
-      component: server
+      component: model_gateway
       global_aggregation: "yes"
       regional_aggregation: "no"
       service_aggregation: "yes"
