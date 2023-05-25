@@ -4,12 +4,12 @@ local rateMetric = metricsCatalog.rateMetric;
 local redisArchetype = import 'service-archetypes/redis-rails-archetype.libsonnet';
 local redisHelpers = import './lib/redis-helpers.libsonnet';
 
-local railsCacheSelector = { store: { oneOf: ['RedisCacheStore', 'FeatureFlagStore'] } };
+local railsCacheSelector = redisHelpers.storeSelector({ oneOf: ['RedisCacheStore', 'FeatureFlagStore'] });
 
 metricsCatalog.serviceDefinition(
   redisArchetype(
     type='redis-cache',
-    railsStorageSelector=redisHelpers.excludeOpsGitlabNet { storage: { oneOf: ['cache', 'feature_flag'] } },
+    railsStorageSelector=redisHelpers.storageSelector({ oneOf: ['cache', 'feature_flag'] }),
     descriptiveName='Redis Cache'
   )
   {

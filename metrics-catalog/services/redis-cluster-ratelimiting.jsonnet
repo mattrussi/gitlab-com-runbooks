@@ -5,7 +5,7 @@ local metricsCatalog = import 'servicemetrics/metrics.libsonnet';
 metricsCatalog.serviceDefinition(
   redisArchetype(
     type='redis-cluster-ratelimiting',
-    railsStorageSelector=redisHelpers.excludeOpsGitlabNet { storage: 'rate_limiting' },
+    railsStorageSelector=redisHelpers.storageSelector('rate_limiting'),
     descriptiveName='Redis Cluster Rate-Limiting',
     redisCluster=true
   )

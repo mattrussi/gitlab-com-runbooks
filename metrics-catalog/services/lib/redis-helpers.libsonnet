@@ -14,8 +14,11 @@ local toolingLinks = import 'toolinglinks/toolinglinks.libsonnet';
       },
     },
 
-  excludeOpsGitlabNet::
-    {
+  baseSelector(selectorHash)::
+    selectorHash {
       type: { ne: 'ops-gitlab-net' },
     },
+
+  storageSelector(storageName):: self.baseSelector({ storage: storageName }),
+  storeSelector(storeName):: self.baseSelector({ store: storeName }),
 }
