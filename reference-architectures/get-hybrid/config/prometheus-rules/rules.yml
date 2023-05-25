@@ -2887,14 +2887,6 @@ groups:
     labels:
       component: memory
     record: slo:max:hard:gitlab_component_saturation:ratio
-  - expr: "0.9"
-    labels:
-      component: memory_redis_cache
-    record: slo:max:soft:gitlab_component_saturation:ratio
-  - expr: "0.98"
-    labels:
-      component: memory_redis_cache
-    record: slo:max:hard:gitlab_component_saturation:ratio
   - expr: "0.1"
     labels:
       component: node_schedstat_waiting
@@ -2902,22 +2894,6 @@ groups:
   - expr: "0.15"
     labels:
       component: node_schedstat_waiting
-    record: slo:max:hard:gitlab_component_saturation:ratio
-  - expr: "0.65"
-    labels:
-      component: opensearch_cpu
-    record: slo:max:soft:gitlab_component_saturation:ratio
-  - expr: "0.8"
-    labels:
-      component: opensearch_cpu
-    record: slo:max:hard:gitlab_component_saturation:ratio
-  - expr: "0.6"
-    labels:
-      component: opensearch_disk_space
-    record: slo:max:soft:gitlab_component_saturation:ratio
-  - expr: "0.75"
-    labels:
-      component: opensearch_disk_space
     record: slo:max:hard:gitlab_component_saturation:ratio
   - expr: "0.9"
     labels:
@@ -2996,35 +2972,11 @@ groups:
     record: gitlab_component_saturation_info
   - expr: "1"
     labels:
-      capacity_planning_strategy: exclude
-      component: memory_redis_cache
-      horiz_scaling: "yes"
-      quantile: max
-      severity: s4
-    record: gitlab_component_saturation_info
-  - expr: "1"
-    labels:
       capacity_planning_strategy: quantile95_1h
       component: node_schedstat_waiting
       horiz_scaling: "yes"
       quantile: max
       severity: s4
-    record: gitlab_component_saturation_info
-  - expr: "1"
-    labels:
-      capacity_planning_strategy: quantile95_1h
-      component: opensearch_cpu
-      horiz_scaling: "yes"
-      quantile: max
-      severity: s4
-    record: gitlab_component_saturation_info
-  - expr: "1"
-    labels:
-      capacity_planning_strategy: quantile95_1h
-      component: opensearch_disk_space
-      horiz_scaling: "yes"
-      quantile: max
-      severity: s3
     record: gitlab_component_saturation_info
   - expr: "1"
     labels:
@@ -3375,45 +3327,6 @@ groups:
       description: |+
         This means that this resource is running close to capacity and is at risk of exceeding its current capacity limit.
 
-        Details of the Memory Utilization per Node resource:
-
-        Memory utilization per device per node.
-
-
-        redis-cache has a separate saturation point for this to exclude it from capacity planning calculations.
-
-      grafana_dashboard_id: alerts-sat_memory_redis_cache
-      grafana_dashboard_link: https://dashboards.gitlab.net/d/alerts-sat_memory_redis_cache?from=now-6h/m&to=now-1m/m&var-type={{
-        $labels.type }}
-      grafana_min_zoom_hours: "6"
-      grafana_panel_id: "2178235391"
-      grafana_variables: type
-      promql_query: |
-        max by(type, node) (
-          clamp_min(
-            clamp_max(
-              instance:node_memory_utilization:ratio{type="{{ $labels.type }}"} or instance:node_memory_utilisation:ratio{type="{{ $labels.type }}"}
-              ,
-              1)
-          ,
-          0)
-        )
-      runbook: docs/{{ $labels.type }}/README.md
-      title: The Memory Utilization per Node resource of the {{ $labels.type }} service
-        has a saturation exceeding SLO and is close to its capacity limit.
-    expr: |
-      gitlab_component_saturation:ratio{component="memory_redis_cache"} > on(component) group_left
-      slo:max:hard:gitlab_component_saturation:ratio{component="memory_redis_cache"}
-    for: 5m
-    labels:
-      alert_type: cause
-      rules_domain: general
-      severity: s4
-  - alert: component_saturation_slo_out_of_bounds
-    annotations:
-      description: |+
-        This means that this resource is running close to capacity and is at risk of exceeding its current capacity limit.
-
         Details of the Node Scheduler Waiting Time resource:
 
         Measures the amount of scheduler waiting time that processes are waiting to be scheduled, according to [`CPU Scheduling Metrics`](https://www.robustperception.io/cpu-scheduling-metrics-from-the-node-exporter).
@@ -3449,80 +3362,6 @@ groups:
       alert_type: cause
       rules_domain: general
       severity: s4
-  - alert: component_saturation_slo_out_of_bounds
-    annotations:
-      description: |+
-        This means that this resource is running close to capacity and is at risk of exceeding its current capacity limit.
-
-        Details of the Average CPU Utilization for Opensearch resource:
-
-        Average CPU utilization.
-
-        This resource measures the CPU utilization for the selected cluster or domain. If it is becoming saturated, it may indicate that the fleet needs horizontal or vertical scaling. The metrics are coming from cloudwatch_exporter.
-
-      grafana_dashboard_id: alerts-sat_opensearch_cpu
-      grafana_dashboard_link: https://dashboards.gitlab.net/d/alerts-sat_opensearch_cpu?from=now-6h/m&to=now-1m/m&var-type={{
-        $labels.type }}
-      grafana_min_zoom_hours: "6"
-      grafana_panel_id: "761924359"
-      grafana_variables: type
-      promql_query: |
-        max by(type) (
-          clamp_min(
-            clamp_max(
-              avg_over_time(aws_es_cpuutilization_average[1m])/100
-              ,
-              1)
-          ,
-          0)
-        )
-      runbook: docs/{{ $labels.type }}/README.md
-      title: The Average CPU Utilization for Opensearch resource of the {{ $labels.type
-        }} service has a saturation exceeding SLO and is close to its capacity limit.
-    expr: |
-      gitlab_component_saturation:ratio{component="opensearch_cpu"} > on(component) group_left
-      slo:max:hard:gitlab_component_saturation:ratio{component="opensearch_cpu"}
-    for: 5m
-    labels:
-      alert_type: cause
-      rules_domain: general
-      severity: s4
-  - alert: component_saturation_slo_out_of_bounds
-    annotations:
-      description: |+
-        This means that this resource is running close to capacity and is at risk of exceeding its current capacity limit.
-
-        Details of the Disk Utilization Overall resource:
-
-        Disk utilization for Opensearch
-
-      grafana_dashboard_id: alerts-sat_opensearch_disk_space
-      grafana_dashboard_link: https://dashboards.gitlab.net/d/alerts-sat_opensearch_disk_space?from=now-6h/m&to=now-1m/m&var-type={{
-        $labels.type }}
-      grafana_min_zoom_hours: "6"
-      grafana_panel_id: "1859424869"
-      grafana_variables: type
-      promql_query: |
-        max by(type) (
-          clamp_min(
-            clamp_max(
-              aws_es_cluster_used_space_average/(aws_es_free_storage_space_average+aws_es_cluster_used_space_average)
-              ,
-              1)
-          ,
-          0)
-        )
-      runbook: docs/{{ $labels.type }}/README.md
-      title: The Disk Utilization Overall resource of the {{ $labels.type }} service
-        has a saturation exceeding SLO and is close to its capacity limit.
-    expr: |
-      gitlab_component_saturation:ratio{component="opensearch_disk_space"} > on(component) group_left
-      slo:max:hard:gitlab_component_saturation:ratio{component="opensearch_disk_space"}
-    for: 5m
-    labels:
-      alert_type: cause
-      rules_domain: general
-      severity: s3
   - alert: component_saturation_slo_out_of_bounds
     annotations:
       description: |+

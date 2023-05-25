@@ -2,9 +2,6 @@ local saturationResources = import 'servicemetrics/saturation-resources.libsonne
 local saturationRules = import 'servicemetrics/saturation_rules.libsonnet';
 local separateGlobalRecordingFiles = (import './lib/separate-global-recording-files.libsonnet').separateGlobalRecordingFiles;
 
-local includePrometheusEvaluated = false;
-local includeDangerouslyThanosEvaluated = true;
-
 local filesForSeparateSelector(selector) = {
   saturation:
     std.manifestYamlDoc({
@@ -13,16 +10,14 @@ local filesForSeparateSelector(selector) = {
         saturationRules.generateSaturationRulesGroup(
           saturationResources=saturationResources,
           extraSourceSelector=selector,
-          includePrometheusEvaluated=includePrometheusEvaluated,
-          includeDangerouslyThanosEvaluated=includeDangerouslyThanosEvaluated,
+          evaluation='thanos',
         )
         +
         // Alerts and long range quantiles
         saturationRules.generateSaturationAuxRulesGroup(
           saturationResources=saturationResources,
           extraSelector=selector,
-          includePrometheusEvaluated=includePrometheusEvaluated,
-          includeDangerouslyThanosEvaluated=includeDangerouslyThanosEvaluated,
+          evaluation='thanos',
           thanosSelfMonitoring=false,
         ),
     }),
@@ -33,9 +28,8 @@ separateGlobalRecordingFiles(filesForSeparateSelector) {
   'saturation-metadata.yml': std.manifestYamlDoc({
     groups: saturationRules.generateSaturationMetadataRulesGroup(
       saturationResources=saturationResources,
-      includePrometheusEvaluated=includePrometheusEvaluated,
-      includeDangerouslyThanosEvaluated=includeDangerouslyThanosEvaluated,
-      thanosSelfMonitoring=true,
+      evaluation='thanos',
+      thanosSelfMonitoring=false,
     ),
   }),
 
@@ -43,8 +37,7 @@ separateGlobalRecordingFiles(filesForSeparateSelector) {
     groups:
       saturationRules.generateSaturationRulesGroup(
         saturationResources=saturationResources,
-        includePrometheusEvaluated=includePrometheusEvaluated,
-        includeDangerouslyThanosEvaluated=includeDangerouslyThanosEvaluated,
+        evaluation='thanos',
         thanosSelfMonitoring=true,
         staticLabels={
           env: 'thanos',
@@ -59,8 +52,7 @@ separateGlobalRecordingFiles(filesForSeparateSelector) {
         // Only generate alerts for thanos here, the others evaluated in thanos
         // will be part of the environment specific files
         extraSelector={ type: 'thanos' },
-        includePrometheusEvaluated=includePrometheusEvaluated,
-        includeDangerouslyThanosEvaluated=includeDangerouslyThanosEvaluated,
+        evaluation='thanos',
         thanosSelfMonitoring=true,
       ),
   }),

@@ -2,29 +2,20 @@ local selectors = import 'promql/selectors.libsonnet';
 local metricsCatalog = import 'servicemetrics/metrics-catalog.libsonnet';
 local misc = import 'utils/misc.libsonnet';
 
-local getSelectorHash(
-  includePrometheusEvaluated,
-  includeDangerouslyThanosEvaluated,
-      ) =
-  if includeDangerouslyThanosEvaluated && !includePrometheusEvaluated then
+local assertEvaluationType(evaluation) =
+  local knownTypes = ['prometheus', 'thanos', 'both'];
+  assert std.member(knownTypes, evaluation) : 'Evaluation type %s is needs to be one of %s' % [evaluation, knownTypes];
+  evaluation;
+
+local getSelectorHash(evaluation) =
+  if evaluation == 'thanos' then
     { monitor: 'global' }
   else
     {};
 
-// Returns true if at least one of the services in the list has
-// dangerouslyThanosEvaluated true
-local appliesToAnyThanosEvaluatedService(serviceTypes) =
-  misc.any(
-    function(serviceType)
-      local s = metricsCatalog.getServiceOptional(serviceType);
-      s != null && s.dangerouslyThanosEvaluated,
-    serviceTypes
-  );
-
 local filterSaturationDefinitions(
   saturationResources,
-  includePrometheusEvaluated,
-  includeDangerouslyThanosEvaluated,
+  evaluation,
   thanosSelfMonitoring
       ) =
   local saturationResourceNames = std.objectFields(saturationResources);
@@ -34,24 +25,17 @@ local filterSaturationDefinitions(
       // Not all saturation metrics will match all architectures, filter our non-matches
       (std.length(definition.appliesTo) > 0)
       &&
-      (
-        (thanosSelfMonitoring && appliesToAnyThanosEvaluatedService(definition.appliesTo))
-        ||
-        (includePrometheusEvaluated && !definition.dangerouslyThanosEvaluated)
-        ||
-        (includeDangerouslyThanosEvaluated && definition.dangerouslyThanosEvaluated)
-      ),
+      definition.hasServicesForResource(evaluation, thanosSelfMonitoring),
     saturationResourceNames
   );
 
 local prepareGroups(
   groups,
-  includePrometheusEvaluated,
-  includeDangerouslyThanosEvaluated,
+  evaluation,
       ) =
   // When generating thanos-only rules, we need to add partial_response_strategy
   local groupBase =
-    if !includePrometheusEvaluated && includeDangerouslyThanosEvaluated then
+    if evaluation == 'thanos' then
       { partial_response_strategy: 'warn' }
     else
       {};
@@ -72,15 +56,15 @@ local prepareGroups(
 
 local generateSaturationAuxRulesGroup(
   saturationResources,
-  includePrometheusEvaluated,
-  includeDangerouslyThanosEvaluated,
+  evaluation,
   extraSelector={},
   thanosSelfMonitoring=false,  // Include Thanos self-monitor saturation rules in the alert groups
       ) =
-  local selectorHash = getSelectorHash(includePrometheusEvaluated, includeDangerouslyThanosEvaluated) + extraSelector;
+  local knownEvaluation = assertEvaluationType(evaluation);
+  local selectorHash = getSelectorHash(knownEvaluation) + extraSelector;
   local selector = selectors.serializeHash(selectorHash);
 
-  local filtered = filterSaturationDefinitions(saturationResources, includePrometheusEvaluated, includeDangerouslyThanosEvaluated, thanosSelfMonitoring);
+  local filtered = filterSaturationDefinitions(saturationResources, knownEvaluation, thanosSelfMonitoring);
 
   local saturationAlerts = std.flatMap(function(key) saturationResources[key].getSaturationAlerts(key, selectorHash), filtered);
   local recordedQuantiles = [0.95, 0.99];
@@ -128,15 +112,15 @@ local generateSaturationAuxRulesGroup(
     name: 'GitLab Saturation Alerts',
     interval: '1m',
     rules: saturationAlerts,
-  }], includePrometheusEvaluated, includeDangerouslyThanosEvaluated);
+  }], knownEvaluation);
 
 local generateSaturationMetadataRulesGroup(
   saturationResources,
-  includePrometheusEvaluated,
-  includeDangerouslyThanosEvaluated,
+  evaluation,
   thanosSelfMonitoring=false,
       ) =
-  local filtered = filterSaturationDefinitions(saturationResources, includePrometheusEvaluated, includeDangerouslyThanosEvaluated, thanosSelfMonitoring);
+  local knownEvaluation = assertEvaluationType(evaluation);
+  local filtered = filterSaturationDefinitions(saturationResources, knownEvaluation, thanosSelfMonitoring);
   local sloThresholdRecordingRules = std.flatMap(function(key) saturationResources[key].getSLORecordingRuleDefinition(key), filtered);
   local saturationMetadataRecordingRules = std.map(function(key) saturationResources[key].getMetadataRecordingRuleDefinition(key), filtered);
 
@@ -150,20 +134,20 @@ local generateSaturationMetadataRulesGroup(
     name: 'GitLab Component Saturation Metadata',
     interval: '5m',
     rules: saturationMetadataRecordingRules,
-  }], includePrometheusEvaluated, includeDangerouslyThanosEvaluated);
+  }], knownEvaluation);
 
 local generateSaturationRulesGroup(
-  includePrometheusEvaluated,
-  includeDangerouslyThanosEvaluated,
+  evaluation,  // 'prometheus', 'thanos' or 'both'
   saturationResources,
   extraSourceSelector={},
   thanosSelfMonitoring=false,
   staticLabels={},
       ) =
-  local selectorHash = getSelectorHash(includePrometheusEvaluated, includeDangerouslyThanosEvaluated);
+  local knownEvaluation = assertEvaluationType(evaluation);
+  local selectorHash = getSelectorHash(knownEvaluation);
 
   local saturationResourceNames = std.objectFields(saturationResources);
-  local filtered = filterSaturationDefinitions(saturationResources, includePrometheusEvaluated, includeDangerouslyThanosEvaluated, thanosSelfMonitoring);
+  local filtered = filterSaturationDefinitions(saturationResources, knownEvaluation, thanosSelfMonitoring);
 
   local resourceAutoscalingRuleFiltered = std.filter(
     function(key) std.get(saturationResources[key], 'resourceAutoscalingRule', false),
@@ -174,6 +158,7 @@ local generateSaturationRulesGroup(
     function(key)
       saturationResources[key].getRecordingRuleDefinition(
         key,
+        knownEvaluation,
         thanosSelfMonitoring=thanosSelfMonitoring,
         staticLabels=staticLabels,
         extraSelector=extraSourceSelector,
@@ -185,6 +170,7 @@ local generateSaturationRulesGroup(
     function(key)
       saturationResources[key].getResourceAutoscalingRecordingRuleDefinition(
         key,
+        knownEvaluation,
         thanosSelfMonitoring=thanosSelfMonitoring,
         staticLabels=staticLabels,
         extraSelector=extraSourceSelector
@@ -204,7 +190,7 @@ local generateSaturationRulesGroup(
     name: namePrefix + 'Resource Saturation Rules (autogenerated)',
     interval: '1m',
     rules: resourceAutoscalingRules,
-  }], includePrometheusEvaluated, includeDangerouslyThanosEvaluated);
+  }], knownEvaluation);
 
 {
   generateSaturationRulesGroup:: generateSaturationRulesGroup,

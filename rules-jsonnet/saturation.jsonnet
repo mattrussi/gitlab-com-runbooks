@@ -10,21 +10,18 @@ local includeDangerouslyThanosEvaluated = false;
       groups:
         saturationRules.generateSaturationRulesGroup(
           saturationResources=saturationResources,
-          includePrometheusEvaluated=includePrometheusEvaluated,
-          includeDangerouslyThanosEvaluated=includeDangerouslyThanosEvaluated,
+          evaluation='prometheus'
         )
         +
         saturationRules.generateSaturationMetadataRulesGroup(
           saturationResources=saturationResources,
-          includePrometheusEvaluated=includePrometheusEvaluated,
-          includeDangerouslyThanosEvaluated=includeDangerouslyThanosEvaluated,
+          evaluation='prometheus'
         )
         +
         // Metadata + Alerts
         saturationRules.generateSaturationAuxRulesGroup(
           saturationResources=saturationResources,
-          includePrometheusEvaluated=includePrometheusEvaluated,
-          includeDangerouslyThanosEvaluated=includeDangerouslyThanosEvaluated,
+          evaluation='prometheus'
         ),
     }),
 }

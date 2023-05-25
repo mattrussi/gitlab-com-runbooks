@@ -60,11 +60,24 @@ local validateAndApplyDefaults(definition) =
     } + definition.slos,
   };
 
-local filterServicesForResource(definition, thanosSelfMonitoring) =
+local filterServicesForResource(definition, evaluation, thanosSelfMonitoring) =
   std.filter(
     function(type)
       local service = metricsCatalog.getServiceOptional(type);
-      service != null && (thanosSelfMonitoring == service.dangerouslyThanosEvaluated),
+      service != null && (
+        if thanosSelfMonitoring then
+          assert evaluation == 'thanos' : 'thanos-saturation needs to be globally evaluated in thanos, not %s' % [evaluation];
+          type == 'thanos'
+        else if evaluation == 'prometheus' then
+          !service.dangerouslyThanosEvaluated && !definition.dangerouslyThanosEvaluated
+        else if evaluation == 'thanos' then
+          type != 'thanos' && (service.dangerouslyThanosEvaluated || definition.dangerouslyThanosEvaluated)
+        else if evaluation == 'both' then
+          true
+        else
+          assert false : 'unknown evaluation type %s' % [evaluation];
+          false
+      ),
     definition.appliesTo
   );
 
@@ -147,10 +160,13 @@ local resourceSaturationPoint = function(options)
     getBurnRatePeriod()::
       ({ burnRatePeriod: '1m' } + self).burnRatePeriod,
 
-    getRecordingRuleDefinition(componentName, thanosSelfMonitoring, staticLabels, extraSelector)::
+    hasServicesForResource(evaluation, thanosSelfMonitoring)::
+      std.length(filterServicesForResource(self, evaluation, thanosSelfMonitoring)) > 0,
+
+    getRecordingRuleDefinition(componentName, evaluation, thanosSelfMonitoring, staticLabels, extraSelector)::
       local definition = self;
 
-      local services = filterServicesForResource(definition, thanosSelfMonitoring);
+      local services = filterServicesForResource(definition, evaluation, thanosSelfMonitoring);
 
       if std.length(services) > 0 then
         local selectorHash = oneOfType(services) + extraSelector;
@@ -167,9 +183,9 @@ local resourceSaturationPoint = function(options)
         }
       else null,
 
-    getResourceAutoscalingRecordingRuleDefinition(componentName, thanosSelfMonitoring, staticLabels, extraSelector)::
+    getResourceAutoscalingRecordingRuleDefinition(componentName, evaluation, thanosSelfMonitoring, staticLabels, extraSelector)::
       local definition = self;
-      local services = filterServicesForResource(definition, thanosSelfMonitoring);
+      local services = filterServicesForResource(definition, evaluation, thanosSelfMonitoring);
 
       if std.length(services) > 0 then
         local selectorHash = oneOfType(services) + extraSelector;
