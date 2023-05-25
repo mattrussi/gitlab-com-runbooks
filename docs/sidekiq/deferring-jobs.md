@@ -52,3 +52,20 @@ The overhead includes:
 
 If the overhead turns out significantly impacting all workers performance, we can disable the middleware
 by setting the environment variable `SIDEKIQ_DEFER_JOBS` to `false` or `1` and restart the Sidekiq pods.
+
+## Observability
+
+### Logging
+
+Jobs deferred will be logged as `{"job_status": "deferred"}` instead of `done` or `fail`.
+
+### Alert
+
+Whenever a job is deferred, a counter `sidekiq_jobs_deferred_total` is incremented. An alert will fire
+if jobs are being deferred consecutively for a long period of time (currently 3 hours). This alert helps to
+prevent when jobs are unintentionally being deferred for a long time (i.e. when someone forgets to turn off
+the feature flag).
+
+The dashboard for this alert can be found at [sidekiq: Worker Detail](https://dashboards.gitlab.net/d/sidekiq-worker-detail/sidekiq-worker-detail?orgId=1&viewPanel=1760026825).
+Note that deferred jobs are still counted in the [Execution Rate (RPS)](https://dashboards.gitlab.net/d/sidekiq-worker-detail/sidekiq-worker-detail?orgId=1&viewPanel=3168042924)
+panel.
