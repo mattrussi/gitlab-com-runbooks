@@ -11,7 +11,7 @@ groups:
       tier: runners
       type: ci-runners
     expr: |
-      sum by (environment) (
+      sum by (env,environment) (
         rate(haproxy_backend_http_responses_total{backend=~"https_git|api|ci_gateway_catch_all",type="ci"}[1m])
       )
   - record: gitlab_component_errors:rate
@@ -22,13 +22,13 @@ groups:
       type: ci-runners
     expr: |
       (
-        sum by (environment) (
+        sum by (env,environment) (
           rate(haproxy_backend_http_responses_total{backend=~"https_git|api|ci_gateway_catch_all",code="5xx",type="ci"}[1m])
         )
       )
       or
       (
-        0 * group by(environment) (
+        0 * group by(env,environment) (
           gitlab_component_ops:rate{component="loadbalancer",stage="main",tier="runners",type="ci-runners"}
         )
       )
@@ -38,7 +38,7 @@ groups:
       tier: runners
       type: ci-runners
     expr: |
-      sum by (environment,stage) (
+      sum by (env,environment,stage) (
         rate(gitlab_workhorse_http_requests_total{route="^/api/v4/jobs/request\\z"}[1m])
       )
   - record: gitlab_component_errors:rate
@@ -48,13 +48,13 @@ groups:
       type: ci-runners
     expr: |
       (
-        sum by (environment,stage) (
+        sum by (env,environment,stage) (
           rate(gitlab_workhorse_http_requests_total{code=~"5..",route="^/api/v4/jobs/request\\z"}[1m])
         )
       )
       or
       (
-        0 * group by(environment,stage) (
+        0 * group by(env,environment,stage) (
           gitlab_component_ops:rate{component="polling",tier="runners",type="ci-runners"}
         )
       )
@@ -64,7 +64,7 @@ groups:
       tier: runners
       type: ci-runners
     expr: |
-      sum by (environment,stage) (
+      sum by (env,environment,stage) (
         rate(gitlab_ci_queue_retrieval_duration_seconds_bucket{le="0.5"}[1m])
       )
   - record: gitlab_component_apdex:weight:score
@@ -73,7 +73,7 @@ groups:
       tier: runners
       type: ci-runners
     expr: |
-      sum by (environment,stage) (
+      sum by (env,environment,stage) (
         rate(gitlab_ci_queue_retrieval_duration_seconds_bucket{le="+Inf"}[1m])
       )
   - record: gitlab_component_ops:rate
@@ -82,7 +82,7 @@ groups:
       tier: runners
       type: ci-runners
     expr: |
-      sum by (environment,stage) (
+      sum by (env,environment,stage) (
         rate(gitlab_ci_queue_retrieval_duration_seconds_count{}[1m])
       )
   - record: gitlab_component_apdex:success:rate
@@ -91,7 +91,7 @@ groups:
       tier: runners
       type: ci-runners
     expr: |
-      sum by (environment,stage) (
+      sum by (env,environment,stage) (
         rate(job_queue_duration_seconds_bucket{jobs_running_for_project=~"^(0|1|2|3|4)$",le="60",shared_runner="true"}[1m])
       )
   - record: gitlab_component_apdex:weight:score
@@ -100,7 +100,7 @@ groups:
       tier: runners
       type: ci-runners
     expr: |
-      sum by (environment,stage) (
+      sum by (env,environment,stage) (
         rate(job_queue_duration_seconds_bucket{jobs_running_for_project=~"^(0|1|2|3|4)$",le="+Inf",shared_runner="true"}[1m])
       )
   - record: gitlab_component_ops:rate
@@ -109,7 +109,7 @@ groups:
       tier: runners
       type: ci-runners
     expr: |
-      sum by (environment,stage) (
+      sum by (env,environment,stage) (
         rate(gitlab_runner_jobs_total{job="runners-manager",shard="shared"}[1m])
       )
   - record: gitlab_component_errors:rate
@@ -119,13 +119,13 @@ groups:
       type: ci-runners
     expr: |
       (
-        sum by (environment,stage) (
+        sum by (env,environment,stage) (
           rate(gitlab_runner_failed_jobs_total{failure_reason="runner_system_failure",job="runners-manager",shard="shared"}[1m])
         )
       )
       or
       (
-        0 * group by(environment,stage) (
+        0 * group by(env,environment,stage) (
           gitlab_component_ops:rate{component="shared_runner_queues",tier="runners",type="ci-runners"}
         )
       )
@@ -135,7 +135,7 @@ groups:
       tier: runners
       type: ci-runners
     expr: |
-      sum by (environment,stage) (
+      sum by (env,environment,stage) (
         rate(sidekiq_jobs_completion_seconds_count{worker="Ci::ArchiveTraceWorker"}[1m])
       )
   - record: gitlab_component_errors:rate
@@ -145,13 +145,13 @@ groups:
       type: ci-runners
     expr: |
       (
-        sum by (environment,stage) (
+        sum by (env,environment,stage) (
           rate(job_trace_archive_failed_total{}[1m])
         )
       )
       or
       (
-        0 * group by(environment,stage) (
+        0 * group by(env,environment,stage) (
           gitlab_component_ops:rate{component="trace_archiving_ci_jobs",tier="runners",type="ci-runners"}
         )
       )
@@ -165,7 +165,7 @@ groups:
       tier: runners
       type: ci-runners
     expr: |
-      sum by (environment) (
+      sum by (env,environment) (
         rate(haproxy_backend_http_responses_total{backend=~"https_git|api|ci_gateway_catch_all",type="ci"}[5m])
       )
   - record: gitlab_component_errors:rate_5m
@@ -176,13 +176,13 @@ groups:
       type: ci-runners
     expr: |
       (
-        sum by (environment) (
+        sum by (env,environment) (
           rate(haproxy_backend_http_responses_total{backend=~"https_git|api|ci_gateway_catch_all",code="5xx",type="ci"}[5m])
         )
       )
       or
       (
-        0 * group by(environment) (
+        0 * group by(env,environment) (
           gitlab_component_ops:rate_5m{component="loadbalancer",stage="main",tier="runners",type="ci-runners"}
         )
       )
@@ -192,7 +192,7 @@ groups:
       tier: runners
       type: ci-runners
     expr: |
-      sum by (environment,stage) (
+      sum by (env,environment,stage) (
         rate(gitlab_workhorse_http_requests_total{route="^/api/v4/jobs/request\\z"}[5m])
       )
   - record: gitlab_component_errors:rate_5m
@@ -202,13 +202,13 @@ groups:
       type: ci-runners
     expr: |
       (
-        sum by (environment,stage) (
+        sum by (env,environment,stage) (
           rate(gitlab_workhorse_http_requests_total{code=~"5..",route="^/api/v4/jobs/request\\z"}[5m])
         )
       )
       or
       (
-        0 * group by(environment,stage) (
+        0 * group by(env,environment,stage) (
           gitlab_component_ops:rate_5m{component="polling",tier="runners",type="ci-runners"}
         )
       )
@@ -218,7 +218,7 @@ groups:
       tier: runners
       type: ci-runners
     expr: |
-      sum by (environment,stage) (
+      sum by (env,environment,stage) (
         rate(gitlab_ci_queue_retrieval_duration_seconds_bucket{le="0.5"}[5m])
       )
   - record: gitlab_component_apdex:weight:score_5m
@@ -227,7 +227,7 @@ groups:
       tier: runners
       type: ci-runners
     expr: |
-      sum by (environment,stage) (
+      sum by (env,environment,stage) (
         rate(gitlab_ci_queue_retrieval_duration_seconds_bucket{le="+Inf"}[5m])
       )
   - record: gitlab_component_ops:rate_5m
@@ -236,7 +236,7 @@ groups:
       tier: runners
       type: ci-runners
     expr: |
-      sum by (environment,stage) (
+      sum by (env,environment,stage) (
         rate(gitlab_ci_queue_retrieval_duration_seconds_count{}[5m])
       )
   - record: gitlab_component_apdex:success:rate_5m
@@ -245,7 +245,7 @@ groups:
       tier: runners
       type: ci-runners
     expr: |
-      sum by (environment,stage) (
+      sum by (env,environment,stage) (
         rate(job_queue_duration_seconds_bucket{jobs_running_for_project=~"^(0|1|2|3|4)$",le="60",shared_runner="true"}[5m])
       )
   - record: gitlab_component_apdex:weight:score_5m
@@ -254,7 +254,7 @@ groups:
       tier: runners
       type: ci-runners
     expr: |
-      sum by (environment,stage) (
+      sum by (env,environment,stage) (
         rate(job_queue_duration_seconds_bucket{jobs_running_for_project=~"^(0|1|2|3|4)$",le="+Inf",shared_runner="true"}[5m])
       )
   - record: gitlab_component_ops:rate_5m
@@ -263,7 +263,7 @@ groups:
       tier: runners
       type: ci-runners
     expr: |
-      sum by (environment,stage) (
+      sum by (env,environment,stage) (
         rate(gitlab_runner_jobs_total{job="runners-manager",shard="shared"}[5m])
       )
   - record: gitlab_component_errors:rate_5m
@@ -273,13 +273,13 @@ groups:
       type: ci-runners
     expr: |
       (
-        sum by (environment,stage) (
+        sum by (env,environment,stage) (
           rate(gitlab_runner_failed_jobs_total{failure_reason="runner_system_failure",job="runners-manager",shard="shared"}[5m])
         )
       )
       or
       (
-        0 * group by(environment,stage) (
+        0 * group by(env,environment,stage) (
           gitlab_component_ops:rate_5m{component="shared_runner_queues",tier="runners",type="ci-runners"}
         )
       )
@@ -289,7 +289,7 @@ groups:
       tier: runners
       type: ci-runners
     expr: |
-      sum by (environment,stage) (
+      sum by (env,environment,stage) (
         rate(sidekiq_jobs_completion_seconds_count{worker="Ci::ArchiveTraceWorker"}[5m])
       )
   - record: gitlab_component_errors:rate_5m
@@ -299,13 +299,13 @@ groups:
       type: ci-runners
     expr: |
       (
-        sum by (environment,stage) (
+        sum by (env,environment,stage) (
           rate(job_trace_archive_failed_total{}[5m])
         )
       )
       or
       (
-        0 * group by(environment,stage) (
+        0 * group by(env,environment,stage) (
           gitlab_component_ops:rate_5m{component="trace_archiving_ci_jobs",tier="runners",type="ci-runners"}
         )
       )
@@ -319,7 +319,7 @@ groups:
       tier: runners
       type: ci-runners
     expr: |
-      sum by (environment) (
+      sum by (env,environment) (
         rate(haproxy_backend_http_responses_total{backend=~"https_git|api|ci_gateway_catch_all",type="ci"}[30m])
       )
   - record: gitlab_component_errors:rate_30m
@@ -330,13 +330,13 @@ groups:
       type: ci-runners
     expr: |
       (
-        sum by (environment) (
+        sum by (env,environment) (
           rate(haproxy_backend_http_responses_total{backend=~"https_git|api|ci_gateway_catch_all",code="5xx",type="ci"}[30m])
         )
       )
       or
       (
-        0 * group by(environment) (
+        0 * group by(env,environment) (
           gitlab_component_ops:rate_30m{component="loadbalancer",stage="main",tier="runners",type="ci-runners"}
         )
       )
@@ -346,7 +346,7 @@ groups:
       tier: runners
       type: ci-runners
     expr: |
-      sum by (environment,stage) (
+      sum by (env,environment,stage) (
         rate(gitlab_workhorse_http_requests_total{route="^/api/v4/jobs/request\\z"}[30m])
       )
   - record: gitlab_component_errors:rate_30m
@@ -356,13 +356,13 @@ groups:
       type: ci-runners
     expr: |
       (
-        sum by (environment,stage) (
+        sum by (env,environment,stage) (
           rate(gitlab_workhorse_http_requests_total{code=~"5..",route="^/api/v4/jobs/request\\z"}[30m])
         )
       )
       or
       (
-        0 * group by(environment,stage) (
+        0 * group by(env,environment,stage) (
           gitlab_component_ops:rate_30m{component="polling",tier="runners",type="ci-runners"}
         )
       )
@@ -372,7 +372,7 @@ groups:
       tier: runners
       type: ci-runners
     expr: |
-      sum by (environment,stage) (
+      sum by (env,environment,stage) (
         rate(gitlab_ci_queue_retrieval_duration_seconds_bucket{le="0.5"}[30m])
       )
   - record: gitlab_component_apdex:weight:score_30m
@@ -381,7 +381,7 @@ groups:
       tier: runners
       type: ci-runners
     expr: |
-      sum by (environment,stage) (
+      sum by (env,environment,stage) (
         rate(gitlab_ci_queue_retrieval_duration_seconds_bucket{le="+Inf"}[30m])
       )
   - record: gitlab_component_ops:rate_30m
@@ -390,7 +390,7 @@ groups:
       tier: runners
       type: ci-runners
     expr: |
-      sum by (environment,stage) (
+      sum by (env,environment,stage) (
         rate(gitlab_ci_queue_retrieval_duration_seconds_count{}[30m])
       )
   - record: gitlab_component_apdex:success:rate_30m
@@ -399,7 +399,7 @@ groups:
       tier: runners
       type: ci-runners
     expr: |
-      sum by (environment,stage) (
+      sum by (env,environment,stage) (
         rate(job_queue_duration_seconds_bucket{jobs_running_for_project=~"^(0|1|2|3|4)$",le="60",shared_runner="true"}[30m])
       )
   - record: gitlab_component_apdex:weight:score_30m
@@ -408,7 +408,7 @@ groups:
       tier: runners
       type: ci-runners
     expr: |
-      sum by (environment,stage) (
+      sum by (env,environment,stage) (
         rate(job_queue_duration_seconds_bucket{jobs_running_for_project=~"^(0|1|2|3|4)$",le="+Inf",shared_runner="true"}[30m])
       )
   - record: gitlab_component_ops:rate_30m
@@ -417,7 +417,7 @@ groups:
       tier: runners
       type: ci-runners
     expr: |
-      sum by (environment,stage) (
+      sum by (env,environment,stage) (
         rate(gitlab_runner_jobs_total{job="runners-manager",shard="shared"}[30m])
       )
   - record: gitlab_component_errors:rate_30m
@@ -427,13 +427,13 @@ groups:
       type: ci-runners
     expr: |
       (
-        sum by (environment,stage) (
+        sum by (env,environment,stage) (
           rate(gitlab_runner_failed_jobs_total{failure_reason="runner_system_failure",job="runners-manager",shard="shared"}[30m])
         )
       )
       or
       (
-        0 * group by(environment,stage) (
+        0 * group by(env,environment,stage) (
           gitlab_component_ops:rate_30m{component="shared_runner_queues",tier="runners",type="ci-runners"}
         )
       )
@@ -443,7 +443,7 @@ groups:
       tier: runners
       type: ci-runners
     expr: |
-      sum by (environment,stage) (
+      sum by (env,environment,stage) (
         rate(sidekiq_jobs_completion_seconds_count{worker="Ci::ArchiveTraceWorker"}[30m])
       )
   - record: gitlab_component_errors:rate_30m
@@ -453,13 +453,13 @@ groups:
       type: ci-runners
     expr: |
       (
-        sum by (environment,stage) (
+        sum by (env,environment,stage) (
           rate(job_trace_archive_failed_total{}[30m])
         )
       )
       or
       (
-        0 * group by(environment,stage) (
+        0 * group by(env,environment,stage) (
           gitlab_component_ops:rate_30m{component="trace_archiving_ci_jobs",tier="runners",type="ci-runners"}
         )
       )
@@ -473,7 +473,7 @@ groups:
       tier: runners
       type: ci-runners
     expr: |
-      sum by (environment) (
+      sum by (env,environment) (
         rate(haproxy_backend_http_responses_total{backend=~"https_git|api|ci_gateway_catch_all",type="ci"}[1h])
       )
   - record: gitlab_component_errors:rate_1h
@@ -484,13 +484,13 @@ groups:
       type: ci-runners
     expr: |
       (
-        sum by (environment) (
+        sum by (env,environment) (
           rate(haproxy_backend_http_responses_total{backend=~"https_git|api|ci_gateway_catch_all",code="5xx",type="ci"}[1h])
         )
       )
       or
       (
-        0 * group by(environment) (
+        0 * group by(env,environment) (
           gitlab_component_ops:rate_1h{component="loadbalancer",stage="main",tier="runners",type="ci-runners"}
         )
       )
@@ -500,7 +500,7 @@ groups:
       tier: runners
       type: ci-runners
     expr: |
-      sum by (environment,stage) (
+      sum by (env,environment,stage) (
         rate(gitlab_workhorse_http_requests_total{route="^/api/v4/jobs/request\\z"}[1h])
       )
   - record: gitlab_component_errors:rate_1h
@@ -510,13 +510,13 @@ groups:
       type: ci-runners
     expr: |
       (
-        sum by (environment,stage) (
+        sum by (env,environment,stage) (
           rate(gitlab_workhorse_http_requests_total{code=~"5..",route="^/api/v4/jobs/request\\z"}[1h])
         )
       )
       or
       (
-        0 * group by(environment,stage) (
+        0 * group by(env,environment,stage) (
           gitlab_component_ops:rate_1h{component="polling",tier="runners",type="ci-runners"}
         )
       )
@@ -526,7 +526,7 @@ groups:
       tier: runners
       type: ci-runners
     expr: |
-      sum by (environment,stage) (
+      sum by (env,environment,stage) (
         rate(gitlab_ci_queue_retrieval_duration_seconds_bucket{le="0.5"}[1h])
       )
   - record: gitlab_component_apdex:weight:score_1h
@@ -535,7 +535,7 @@ groups:
       tier: runners
       type: ci-runners
     expr: |
-      sum by (environment,stage) (
+      sum by (env,environment,stage) (
         rate(gitlab_ci_queue_retrieval_duration_seconds_bucket{le="+Inf"}[1h])
       )
   - record: gitlab_component_ops:rate_1h
@@ -544,7 +544,7 @@ groups:
       tier: runners
       type: ci-runners
     expr: |
-      sum by (environment,stage) (
+      sum by (env,environment,stage) (
         rate(gitlab_ci_queue_retrieval_duration_seconds_count{}[1h])
       )
   - record: gitlab_component_apdex:success:rate_1h
@@ -553,7 +553,7 @@ groups:
       tier: runners
       type: ci-runners
     expr: |
-      sum by (environment,stage) (
+      sum by (env,environment,stage) (
         rate(job_queue_duration_seconds_bucket{jobs_running_for_project=~"^(0|1|2|3|4)$",le="60",shared_runner="true"}[1h])
       )
   - record: gitlab_component_apdex:weight:score_1h
@@ -562,7 +562,7 @@ groups:
       tier: runners
       type: ci-runners
     expr: |
-      sum by (environment,stage) (
+      sum by (env,environment,stage) (
         rate(job_queue_duration_seconds_bucket{jobs_running_for_project=~"^(0|1|2|3|4)$",le="+Inf",shared_runner="true"}[1h])
       )
   - record: gitlab_component_ops:rate_1h
@@ -571,7 +571,7 @@ groups:
       tier: runners
       type: ci-runners
     expr: |
-      sum by (environment,stage) (
+      sum by (env,environment,stage) (
         rate(gitlab_runner_jobs_total{job="runners-manager",shard="shared"}[1h])
       )
   - record: gitlab_component_errors:rate_1h
@@ -581,13 +581,13 @@ groups:
       type: ci-runners
     expr: |
       (
-        sum by (environment,stage) (
+        sum by (env,environment,stage) (
           rate(gitlab_runner_failed_jobs_total{failure_reason="runner_system_failure",job="runners-manager",shard="shared"}[1h])
         )
       )
       or
       (
-        0 * group by(environment,stage) (
+        0 * group by(env,environment,stage) (
           gitlab_component_ops:rate_1h{component="shared_runner_queues",tier="runners",type="ci-runners"}
         )
       )
@@ -597,7 +597,7 @@ groups:
       tier: runners
       type: ci-runners
     expr: |
-      sum by (environment,stage) (
+      sum by (env,environment,stage) (
         rate(sidekiq_jobs_completion_seconds_count{worker="Ci::ArchiveTraceWorker"}[1h])
       )
   - record: gitlab_component_errors:rate_1h
@@ -607,13 +607,13 @@ groups:
       type: ci-runners
     expr: |
       (
-        sum by (environment,stage) (
+        sum by (env,environment,stage) (
           rate(job_trace_archive_failed_total{}[1h])
         )
       )
       or
       (
-        0 * group by(environment,stage) (
+        0 * group by(env,environment,stage) (
           gitlab_component_ops:rate_1h{component="trace_archiving_ci_jobs",tier="runners",type="ci-runners"}
         )
       )
@@ -627,7 +627,7 @@ groups:
       tier: runners
       type: ci-runners
     expr: |
-      sum by (environment) (
+      sum by (env,environment) (
         rate(haproxy_backend_http_responses_total{backend=~"https_git|api|ci_gateway_catch_all",type="ci"}[6h])
       )
   - record: gitlab_component_errors:rate_6h
@@ -638,13 +638,13 @@ groups:
       type: ci-runners
     expr: |
       (
-        sum by (environment) (
+        sum by (env,environment) (
           rate(haproxy_backend_http_responses_total{backend=~"https_git|api|ci_gateway_catch_all",code="5xx",type="ci"}[6h])
         )
       )
       or
       (
-        0 * group by(environment) (
+        0 * group by(env,environment) (
           gitlab_component_ops:rate_6h{component="loadbalancer",stage="main",tier="runners",type="ci-runners"}
         )
       )
@@ -654,7 +654,7 @@ groups:
       tier: runners
       type: ci-runners
     expr: |
-      sum by (environment,stage) (
+      sum by (env,environment,stage) (
         rate(gitlab_workhorse_http_requests_total{route="^/api/v4/jobs/request\\z"}[6h])
       )
   - record: gitlab_component_errors:rate_6h
@@ -664,13 +664,13 @@ groups:
       type: ci-runners
     expr: |
       (
-        sum by (environment,stage) (
+        sum by (env,environment,stage) (
           rate(gitlab_workhorse_http_requests_total{code=~"5..",route="^/api/v4/jobs/request\\z"}[6h])
         )
       )
       or
       (
-        0 * group by(environment,stage) (
+        0 * group by(env,environment,stage) (
           gitlab_component_ops:rate_6h{component="polling",tier="runners",type="ci-runners"}
         )
       )
@@ -680,7 +680,7 @@ groups:
       tier: runners
       type: ci-runners
     expr: |
-      sum by (environment,stage) (
+      sum by (env,environment,stage) (
         rate(gitlab_ci_queue_retrieval_duration_seconds_bucket{le="0.5"}[6h])
       )
   - record: gitlab_component_apdex:weight:score_6h
@@ -689,7 +689,7 @@ groups:
       tier: runners
       type: ci-runners
     expr: |
-      sum by (environment,stage) (
+      sum by (env,environment,stage) (
         rate(gitlab_ci_queue_retrieval_duration_seconds_bucket{le="+Inf"}[6h])
       )
   - record: gitlab_component_ops:rate_6h
@@ -698,7 +698,7 @@ groups:
       tier: runners
       type: ci-runners
     expr: |
-      sum by (environment,stage) (
+      sum by (env,environment,stage) (
         rate(gitlab_ci_queue_retrieval_duration_seconds_count{}[6h])
       )
   - record: gitlab_component_apdex:success:rate_6h
@@ -707,7 +707,7 @@ groups:
       tier: runners
       type: ci-runners
     expr: |
-      sum by (environment,stage) (
+      sum by (env,environment,stage) (
         rate(job_queue_duration_seconds_bucket{jobs_running_for_project=~"^(0|1|2|3|4)$",le="60",shared_runner="true"}[6h])
       )
   - record: gitlab_component_apdex:weight:score_6h
@@ -716,7 +716,7 @@ groups:
       tier: runners
       type: ci-runners
     expr: |
-      sum by (environment,stage) (
+      sum by (env,environment,stage) (
         rate(job_queue_duration_seconds_bucket{jobs_running_for_project=~"^(0|1|2|3|4)$",le="+Inf",shared_runner="true"}[6h])
       )
   - record: gitlab_component_ops:rate_6h
@@ -725,7 +725,7 @@ groups:
       tier: runners
       type: ci-runners
     expr: |
-      sum by (environment,stage) (
+      sum by (env,environment,stage) (
         rate(gitlab_runner_jobs_total{job="runners-manager",shard="shared"}[6h])
       )
   - record: gitlab_component_errors:rate_6h
@@ -735,13 +735,13 @@ groups:
       type: ci-runners
     expr: |
       (
-        sum by (environment,stage) (
+        sum by (env,environment,stage) (
           rate(gitlab_runner_failed_jobs_total{failure_reason="runner_system_failure",job="runners-manager",shard="shared"}[6h])
         )
       )
       or
       (
-        0 * group by(environment,stage) (
+        0 * group by(env,environment,stage) (
           gitlab_component_ops:rate_6h{component="shared_runner_queues",tier="runners",type="ci-runners"}
         )
       )
@@ -751,7 +751,7 @@ groups:
       tier: runners
       type: ci-runners
     expr: |
-      sum by (environment,stage) (
+      sum by (env,environment,stage) (
         rate(sidekiq_jobs_completion_seconds_count{worker="Ci::ArchiveTraceWorker"}[6h])
       )
   - record: gitlab_component_errors:rate_6h
@@ -761,13 +761,13 @@ groups:
       type: ci-runners
     expr: |
       (
-        sum by (environment,stage) (
+        sum by (env,environment,stage) (
           rate(job_trace_archive_failed_total{}[6h])
         )
       )
       or
       (
-        0 * group by(environment,stage) (
+        0 * group by(env,environment,stage) (
           gitlab_component_ops:rate_6h{component="trace_archiving_ci_jobs",tier="runners",type="ci-runners"}
         )
       )

@@ -17,7 +17,7 @@ local aggregationSet = import 'servicemetrics/aggregation-set.libsonnet';
     name: 'Prometheus Source SLI Metrics',
     intermediateSource: true,  // Not intended for consumption in dashboards or alerts
     selector: { monitor: { ne: 'global' } },  // Not Thanos Ruler
-    labels: ['environment', 'tier', 'type', 'stage'],
+    labels: ['env', 'environment', 'tier', 'type', 'stage'],
     supportedBurnRates: ['1m', '5m', '30m', '1h', '6h'],  // Including 1m & 6h
     metricFormats: {
       apdexSuccessRate: 'gitlab_component_apdex:success:rate_%s',

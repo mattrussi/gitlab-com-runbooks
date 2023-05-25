@@ -11,7 +11,7 @@ groups:
       tier: inf
       type: kube
     expr: |
-      sum by (environment) (
+      sum by (env,environment) (
         rate(apiserver_request_duration_seconds_bucket{job="apiserver",le="1",scope!="",verb!="WATCH"}[1m])
       )
   - record: gitlab_component_apdex:weight:score
@@ -21,7 +21,7 @@ groups:
       tier: inf
       type: kube
     expr: |
-      sum by (environment) (
+      sum by (env,environment) (
         rate(apiserver_request_duration_seconds_bucket{job="apiserver",le="+Inf",scope!="",verb!="WATCH"}[1m])
       )
   - record: gitlab_component_ops:rate
@@ -31,7 +31,7 @@ groups:
       tier: inf
       type: kube
     expr: |
-      sum by (environment) (
+      sum by (env,environment) (
         rate(apiserver_request_total{job="apiserver",scope!=""}[1m])
       )
   - record: gitlab_component_errors:rate
@@ -42,13 +42,13 @@ groups:
       type: kube
     expr: |
       (
-        sum by (environment) (
+        sum by (env,environment) (
           rate(apiserver_request_total{code=~"5..",job="apiserver",scope!=""}[1m])
         )
       )
       or
       (
-        0 * group by(environment) (
+        0 * group by(env,environment) (
           gitlab_component_ops:rate{component="apiserver",stage="main",tier="inf",type="kube"}
         )
       )
@@ -59,12 +59,12 @@ groups:
       tier: inf
       type: kube
     expr: |
-      sum by (environment) (
-        sum by (environment) (
+      sum by (env,environment) (
+        sum by (env,environment) (
           avg_over_time(stackdriver_k_8_s_cluster_logging_googleapis_com_user_k_8_s_cluster_autoscaler_scaleup_decisions[1m])
         )
         or
-        0 * group by (environment) (
+        0 * group by (env,environment) (
           avg_over_time(stackdriver_k_8_s_cluster_logging_googleapis_com_user_k_8_s_cluster_autoscaler_scaleup_decisions[6h])
         )
       )
@@ -76,15 +76,15 @@ groups:
       type: kube
     expr: |
       (
-        sum by (environment) (
-          sum by (environment) (
+        sum by (env,environment) (
+          sum by (env,environment) (
             avg_over_time(stackdriver_k_8_s_cluster_logging_googleapis_com_user_k_8_s_cluster_autoscaler_scaleup_errors[1m])
           )
         )
       )
       or
       (
-        0 * group by(environment) (
+        0 * group by(env,environment) (
           gitlab_component_ops:rate{component="cluster_scaleups",stage="main",tier="inf",type="kube"}
         )
       )
@@ -98,7 +98,7 @@ groups:
       tier: inf
       type: kube
     expr: |
-      sum by (environment) (
+      sum by (env,environment) (
         rate(apiserver_request_duration_seconds_bucket{job="apiserver",le="1",scope!="",verb!="WATCH"}[5m])
       )
   - record: gitlab_component_apdex:weight:score_5m
@@ -108,7 +108,7 @@ groups:
       tier: inf
       type: kube
     expr: |
-      sum by (environment) (
+      sum by (env,environment) (
         rate(apiserver_request_duration_seconds_bucket{job="apiserver",le="+Inf",scope!="",verb!="WATCH"}[5m])
       )
   - record: gitlab_component_ops:rate_5m
@@ -118,7 +118,7 @@ groups:
       tier: inf
       type: kube
     expr: |
-      sum by (environment) (
+      sum by (env,environment) (
         rate(apiserver_request_total{job="apiserver",scope!=""}[5m])
       )
   - record: gitlab_component_errors:rate_5m
@@ -129,13 +129,13 @@ groups:
       type: kube
     expr: |
       (
-        sum by (environment) (
+        sum by (env,environment) (
           rate(apiserver_request_total{code=~"5..",job="apiserver",scope!=""}[5m])
         )
       )
       or
       (
-        0 * group by(environment) (
+        0 * group by(env,environment) (
           gitlab_component_ops:rate_5m{component="apiserver",stage="main",tier="inf",type="kube"}
         )
       )
@@ -146,12 +146,12 @@ groups:
       tier: inf
       type: kube
     expr: |
-      sum by (environment) (
-        sum by (environment) (
+      sum by (env,environment) (
+        sum by (env,environment) (
           avg_over_time(stackdriver_k_8_s_cluster_logging_googleapis_com_user_k_8_s_cluster_autoscaler_scaleup_decisions[5m])
         )
         or
-        0 * group by (environment) (
+        0 * group by (env,environment) (
           avg_over_time(stackdriver_k_8_s_cluster_logging_googleapis_com_user_k_8_s_cluster_autoscaler_scaleup_decisions[6h])
         )
       )
@@ -163,15 +163,15 @@ groups:
       type: kube
     expr: |
       (
-        sum by (environment) (
-          sum by (environment) (
+        sum by (env,environment) (
+          sum by (env,environment) (
             avg_over_time(stackdriver_k_8_s_cluster_logging_googleapis_com_user_k_8_s_cluster_autoscaler_scaleup_errors[5m])
           )
         )
       )
       or
       (
-        0 * group by(environment) (
+        0 * group by(env,environment) (
           gitlab_component_ops:rate_5m{component="cluster_scaleups",stage="main",tier="inf",type="kube"}
         )
       )
@@ -185,7 +185,7 @@ groups:
       tier: inf
       type: kube
     expr: |
-      sum by (environment) (
+      sum by (env,environment) (
         rate(apiserver_request_duration_seconds_bucket{job="apiserver",le="1",scope!="",verb!="WATCH"}[30m])
       )
   - record: gitlab_component_apdex:weight:score_30m
@@ -195,7 +195,7 @@ groups:
       tier: inf
       type: kube
     expr: |
-      sum by (environment) (
+      sum by (env,environment) (
         rate(apiserver_request_duration_seconds_bucket{job="apiserver",le="+Inf",scope!="",verb!="WATCH"}[30m])
       )
   - record: gitlab_component_ops:rate_30m
@@ -205,7 +205,7 @@ groups:
       tier: inf
       type: kube
     expr: |
-      sum by (environment) (
+      sum by (env,environment) (
         rate(apiserver_request_total{job="apiserver",scope!=""}[30m])
       )
   - record: gitlab_component_errors:rate_30m
@@ -216,13 +216,13 @@ groups:
       type: kube
     expr: |
       (
-        sum by (environment) (
+        sum by (env,environment) (
           rate(apiserver_request_total{code=~"5..",job="apiserver",scope!=""}[30m])
         )
       )
       or
       (
-        0 * group by(environment) (
+        0 * group by(env,environment) (
           gitlab_component_ops:rate_30m{component="apiserver",stage="main",tier="inf",type="kube"}
         )
       )
@@ -233,12 +233,12 @@ groups:
       tier: inf
       type: kube
     expr: |
-      sum by (environment) (
-        sum by (environment) (
+      sum by (env,environment) (
+        sum by (env,environment) (
           avg_over_time(stackdriver_k_8_s_cluster_logging_googleapis_com_user_k_8_s_cluster_autoscaler_scaleup_decisions[30m])
         )
         or
-        0 * group by (environment) (
+        0 * group by (env,environment) (
           avg_over_time(stackdriver_k_8_s_cluster_logging_googleapis_com_user_k_8_s_cluster_autoscaler_scaleup_decisions[6h])
         )
       )
@@ -250,15 +250,15 @@ groups:
       type: kube
     expr: |
       (
-        sum by (environment) (
-          sum by (environment) (
+        sum by (env,environment) (
+          sum by (env,environment) (
             avg_over_time(stackdriver_k_8_s_cluster_logging_googleapis_com_user_k_8_s_cluster_autoscaler_scaleup_errors[30m])
           )
         )
       )
       or
       (
-        0 * group by(environment) (
+        0 * group by(env,environment) (
           gitlab_component_ops:rate_30m{component="cluster_scaleups",stage="main",tier="inf",type="kube"}
         )
       )
@@ -272,7 +272,7 @@ groups:
       tier: inf
       type: kube
     expr: |
-      sum by (environment) (
+      sum by (env,environment) (
         rate(apiserver_request_duration_seconds_bucket{job="apiserver",le="1",scope!="",verb!="WATCH"}[1h])
       )
   - record: gitlab_component_apdex:weight:score_1h
@@ -282,7 +282,7 @@ groups:
       tier: inf
       type: kube
     expr: |
-      sum by (environment) (
+      sum by (env,environment) (
         rate(apiserver_request_duration_seconds_bucket{job="apiserver",le="+Inf",scope!="",verb!="WATCH"}[1h])
       )
   - record: gitlab_component_ops:rate_1h
@@ -292,7 +292,7 @@ groups:
       tier: inf
       type: kube
     expr: |
-      sum by (environment) (
+      sum by (env,environment) (
         rate(apiserver_request_total{job="apiserver",scope!=""}[1h])
       )
   - record: gitlab_component_errors:rate_1h
@@ -303,13 +303,13 @@ groups:
       type: kube
     expr: |
       (
-        sum by (environment) (
+        sum by (env,environment) (
           rate(apiserver_request_total{code=~"5..",job="apiserver",scope!=""}[1h])
         )
       )
       or
       (
-        0 * group by(environment) (
+        0 * group by(env,environment) (
           gitlab_component_ops:rate_1h{component="apiserver",stage="main",tier="inf",type="kube"}
         )
       )
@@ -320,12 +320,12 @@ groups:
       tier: inf
       type: kube
     expr: |
-      sum by (environment) (
-        sum by (environment) (
+      sum by (env,environment) (
+        sum by (env,environment) (
           avg_over_time(stackdriver_k_8_s_cluster_logging_googleapis_com_user_k_8_s_cluster_autoscaler_scaleup_decisions[1h])
         )
         or
-        0 * group by (environment) (
+        0 * group by (env,environment) (
           avg_over_time(stackdriver_k_8_s_cluster_logging_googleapis_com_user_k_8_s_cluster_autoscaler_scaleup_decisions[6h])
         )
       )
@@ -337,15 +337,15 @@ groups:
       type: kube
     expr: |
       (
-        sum by (environment) (
-          sum by (environment) (
+        sum by (env,environment) (
+          sum by (env,environment) (
             avg_over_time(stackdriver_k_8_s_cluster_logging_googleapis_com_user_k_8_s_cluster_autoscaler_scaleup_errors[1h])
           )
         )
       )
       or
       (
-        0 * group by(environment) (
+        0 * group by(env,environment) (
           gitlab_component_ops:rate_1h{component="cluster_scaleups",stage="main",tier="inf",type="kube"}
         )
       )
@@ -359,7 +359,7 @@ groups:
       tier: inf
       type: kube
     expr: |
-      sum by (environment) (
+      sum by (env,environment) (
         rate(apiserver_request_duration_seconds_bucket{job="apiserver",le="1",scope!="",verb!="WATCH"}[6h])
       )
   - record: gitlab_component_apdex:weight:score_6h
@@ -369,7 +369,7 @@ groups:
       tier: inf
       type: kube
     expr: |
-      sum by (environment) (
+      sum by (env,environment) (
         rate(apiserver_request_duration_seconds_bucket{job="apiserver",le="+Inf",scope!="",verb!="WATCH"}[6h])
       )
   - record: gitlab_component_ops:rate_6h
@@ -379,7 +379,7 @@ groups:
       tier: inf
       type: kube
     expr: |
-      sum by (environment) (
+      sum by (env,environment) (
         rate(apiserver_request_total{job="apiserver",scope!=""}[6h])
       )
   - record: gitlab_component_errors:rate_6h
@@ -390,13 +390,13 @@ groups:
       type: kube
     expr: |
       (
-        sum by (environment) (
+        sum by (env,environment) (
           rate(apiserver_request_total{code=~"5..",job="apiserver",scope!=""}[6h])
         )
       )
       or
       (
-        0 * group by(environment) (
+        0 * group by(env,environment) (
           gitlab_component_ops:rate_6h{component="apiserver",stage="main",tier="inf",type="kube"}
         )
       )
@@ -407,12 +407,12 @@ groups:
       tier: inf
       type: kube
     expr: |
-      sum by (environment) (
-        sum by (environment) (
+      sum by (env,environment) (
+        sum by (env,environment) (
           avg_over_time(stackdriver_k_8_s_cluster_logging_googleapis_com_user_k_8_s_cluster_autoscaler_scaleup_decisions[6h])
         )
         or
-        0 * group by (environment) (
+        0 * group by (env,environment) (
           avg_over_time(stackdriver_k_8_s_cluster_logging_googleapis_com_user_k_8_s_cluster_autoscaler_scaleup_decisions[6h])
         )
       )
@@ -424,15 +424,15 @@ groups:
       type: kube
     expr: |
       (
-        sum by (environment) (
-          sum by (environment) (
+        sum by (env,environment) (
+          sum by (env,environment) (
             avg_over_time(stackdriver_k_8_s_cluster_logging_googleapis_com_user_k_8_s_cluster_autoscaler_scaleup_errors[6h])
           )
         )
       )
       or
       (
-        0 * group by(environment) (
+        0 * group by(env,environment) (
           gitlab_component_ops:rate_6h{component="cluster_scaleups",stage="main",tier="inf",type="kube"}
         )
       )
