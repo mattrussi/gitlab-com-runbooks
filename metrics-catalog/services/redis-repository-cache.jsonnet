@@ -7,7 +7,7 @@ local rateMetric = metricsCatalog.rateMetric;
 metricsCatalog.serviceDefinition(
   redisArchetype(
     type='redis-repository-cache',
-    railsStorageSelector=redisHelpers.onlyGitlabCom { storage: 'repository_cache' },
+    railsStorageSelector=redisHelpers.excludeOpsGitlabNet { storage: 'repository_cache' },
     descriptiveName='Redis Repository Cache'
   )
   {

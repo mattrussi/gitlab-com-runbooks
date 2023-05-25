@@ -5,7 +5,7 @@ local metricsCatalog = import 'servicemetrics/metrics.libsonnet';
 metricsCatalog.serviceDefinition(
   redisArchetype(
     type='redis-tracechunks',
-    railsStorageSelector=redisHelpers.onlyGitlabCom { storage: 'trace_chunks' },
+    railsStorageSelector=redisHelpers.excludeOpsGitlabNet { storage: 'trace_chunks' },
     descriptiveName='Redis Tracechunks',
     featureCategory='continuous_integration',
   )

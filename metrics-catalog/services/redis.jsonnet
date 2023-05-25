@@ -5,7 +5,7 @@ local metricsCatalog = import 'servicemetrics/metrics.libsonnet';
 metricsCatalog.serviceDefinition(
   redisArchetype(
     type='redis',
-    railsStorageSelector=redisHelpers.onlyGitlabCom { storage: 'shared_state' },
+    railsStorageSelector=redisHelpers.excludeOpsGitlabNet { storage: 'shared_state' },
     descriptiveName='Persistent Redis',
   )
   + redisHelpers.gitlabcomObservabilityToolingForRedis('redis')

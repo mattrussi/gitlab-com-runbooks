@@ -5,7 +5,7 @@ local metricsCatalog = import 'servicemetrics/metrics.libsonnet';
 metricsCatalog.serviceDefinition(
   redisArchetype(
     type='redis-sidekiq',
-    railsStorageSelector=redisHelpers.onlyGitlabCom { storage: 'queues' },
+    railsStorageSelector=redisHelpers.excludeOpsGitlabNet { storage: 'queues' },
     descriptiveName='Redis Sidekiq'
   )
   {

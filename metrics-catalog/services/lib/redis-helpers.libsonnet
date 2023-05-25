@@ -14,7 +14,7 @@ local toolingLinks = import 'toolinglinks/toolinglinks.libsonnet';
       },
     },
 
-  onlyGitlabCom::
+  excludeOpsGitlabNet::
     {
       type: { ne: 'ops-gitlab-net' },
     },
