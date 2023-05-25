@@ -5,7 +5,7 @@ local metricsCatalog = import 'servicemetrics/metrics.libsonnet';
 metricsCatalog.serviceDefinition(
   redisArchetype(
     type='redis-sessions',
-    railsStorageSelector={ storage: 'sessions' },
+    railsStorageSelector=redisHelpers.onlyGitlabCom { storage: 'sessions' },
     descriptiveName='Redis Sessions',
   )
   {

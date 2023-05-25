@@ -13,4 +13,9 @@ local toolingLinks = import 'toolinglinks/toolinglinks.libsonnet';
         },
       },
     },
+
+  onlyGitlabCom::
+    {
+      type: { ne: 'ops-gitlab-net' },
+    },
 }

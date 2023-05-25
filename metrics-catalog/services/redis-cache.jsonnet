@@ -9,7 +9,7 @@ local railsCacheSelector = { store: { oneOf: ['RedisCacheStore', 'FeatureFlagSto
 metricsCatalog.serviceDefinition(
   redisArchetype(
     type='redis-cache',
-    railsStorageSelector={ storage: { oneOf: ['cache', 'feature_flag'] } },
+    railsStorageSelector=redisHelpers.onlyGitlabCom { storage: { oneOf: ['cache', 'feature_flag'] } },
     descriptiveName='Redis Cache'
   )
   {
