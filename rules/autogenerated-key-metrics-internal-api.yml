@@ -10,7 +10,7 @@ groups:
       tier: sv
       type: internal-api
     expr: |
-      sum by (environment,stage) (
+      sum by (env,environment,stage) (
         sli_aggregations:gitlab_sli_rails_request_apdex_success_total_rate1m{job="gitlab-rails",type="internal-api"}
       )
   - record: gitlab_component_apdex:weight:score
@@ -19,7 +19,7 @@ groups:
       tier: sv
       type: internal-api
     expr: |
-      sum by (environment,stage) (
+      sum by (env,environment,stage) (
         sli_aggregations:gitlab_sli_rails_request_apdex_total_rate1m{job="gitlab-rails",type="internal-api"}
       )
   - record: gitlab_component_ops:rate
@@ -28,7 +28,7 @@ groups:
       tier: sv
       type: internal-api
     expr: |
-      sum by (environment,stage) (
+      sum by (env,environment,stage) (
         sli_aggregations:gitlab_sli_rails_request_total_rate1m{job="gitlab-rails",type="internal-api"}
       )
   - record: gitlab_component_errors:rate
@@ -38,13 +38,13 @@ groups:
       type: internal-api
     expr: |
       (
-        sum by (environment,stage) (
+        sum by (env,environment,stage) (
           sli_aggregations:gitlab_sli_rails_request_error_total_rate1m{job="gitlab-rails",type="internal-api"}
         )
       )
       or
       (
-        0 * group by(environment,stage) (
+        0 * group by(env,environment,stage) (
           gitlab_component_ops:rate{component="rails_request",tier="sv",type="internal-api"}
         )
       )
@@ -55,11 +55,11 @@ groups:
       type: internal-api
     expr: |
       (
-        sum by (environment,stage) (
+        sum by (env,environment,stage) (
           rate(gitlab_workhorse_http_request_duration_seconds_bucket{job=~"gitlab-workhorse-api|gitlab-workhorse", type="internal-api", route!="^/-/health$", route!="^/-/(readiness|liveness)$", le="1"}[1m])
         )
         +
-        sum by (environment,stage) (
+        sum by (env,environment,stage) (
           rate(gitlab_workhorse_http_request_duration_seconds_bucket{job=~"gitlab-workhorse-api|gitlab-workhorse", type="internal-api", route!="^/-/health$", route!="^/-/(readiness|liveness)$", le="10"}[1m])
         )
       )
@@ -71,7 +71,7 @@ groups:
       tier: sv
       type: internal-api
     expr: |
-      sum by (environment,stage) (
+      sum by (env,environment,stage) (
         rate(gitlab_workhorse_http_request_duration_seconds_bucket{job=~"gitlab-workhorse-api|gitlab-workhorse", type="internal-api", route!="^/-/health$", route!="^/-/(readiness|liveness)$", le="+Inf"}[1m])
       )
   - record: gitlab_component_ops:rate
@@ -80,7 +80,7 @@ groups:
       tier: sv
       type: internal-api
     expr: |
-      sum by (environment,stage) (
+      sum by (env,environment,stage) (
         rate(gitlab_workhorse_http_requests_total{job=~"gitlab-workhorse-api|gitlab-workhorse", type="internal-api"}[1m])
       )
   - record: gitlab_component_errors:rate
@@ -90,13 +90,13 @@ groups:
       type: internal-api
     expr: |
       (
-        sum by (environment,stage) (
+        sum by (env,environment,stage) (
           rate(gitlab_workhorse_http_requests_total{job=~"gitlab-workhorse-api|gitlab-workhorse", type="internal-api", code=~"^5.*", route!="^/-/health$", route!="^/-/(readiness|liveness)$"}[1m])
         )
       )
       or
       (
-        0 * group by(environment,stage) (
+        0 * group by(env,environment,stage) (
           gitlab_component_ops:rate{component="workhorse",tier="sv",type="internal-api"}
         )
       )
@@ -109,7 +109,7 @@ groups:
       tier: sv
       type: internal-api
     expr: |
-      sum by (environment,stage) (
+      sum by (env,environment,stage) (
         sli_aggregations:gitlab_sli_rails_request_apdex_success_total_rate5m{job="gitlab-rails",type="internal-api"}
       )
   - record: gitlab_component_apdex:weight:score_5m
@@ -118,7 +118,7 @@ groups:
       tier: sv
       type: internal-api
     expr: |
-      sum by (environment,stage) (
+      sum by (env,environment,stage) (
         sli_aggregations:gitlab_sli_rails_request_apdex_total_rate5m{job="gitlab-rails",type="internal-api"}
       )
   - record: gitlab_component_ops:rate_5m
@@ -127,7 +127,7 @@ groups:
       tier: sv
       type: internal-api
     expr: |
-      sum by (environment,stage) (
+      sum by (env,environment,stage) (
         sli_aggregations:gitlab_sli_rails_request_total_rate5m{job="gitlab-rails",type="internal-api"}
       )
   - record: gitlab_component_errors:rate_5m
@@ -137,13 +137,13 @@ groups:
       type: internal-api
     expr: |
       (
-        sum by (environment,stage) (
+        sum by (env,environment,stage) (
           sli_aggregations:gitlab_sli_rails_request_error_total_rate5m{job="gitlab-rails",type="internal-api"}
         )
       )
       or
       (
-        0 * group by(environment,stage) (
+        0 * group by(env,environment,stage) (
           gitlab_component_ops:rate_5m{component="rails_request",tier="sv",type="internal-api"}
         )
       )
@@ -154,11 +154,11 @@ groups:
       type: internal-api
     expr: |
       (
-        sum by (environment,stage) (
+        sum by (env,environment,stage) (
           rate(gitlab_workhorse_http_request_duration_seconds_bucket{job=~"gitlab-workhorse-api|gitlab-workhorse", type="internal-api", route!="^/-/health$", route!="^/-/(readiness|liveness)$", le="1"}[5m])
         )
         +
-        sum by (environment,stage) (
+        sum by (env,environment,stage) (
           rate(gitlab_workhorse_http_request_duration_seconds_bucket{job=~"gitlab-workhorse-api|gitlab-workhorse", type="internal-api", route!="^/-/health$", route!="^/-/(readiness|liveness)$", le="10"}[5m])
         )
       )
@@ -170,7 +170,7 @@ groups:
       tier: sv
       type: internal-api
     expr: |
-      sum by (environment,stage) (
+      sum by (env,environment,stage) (
         rate(gitlab_workhorse_http_request_duration_seconds_bucket{job=~"gitlab-workhorse-api|gitlab-workhorse", type="internal-api", route!="^/-/health$", route!="^/-/(readiness|liveness)$", le="+Inf"}[5m])
       )
   - record: gitlab_component_ops:rate_5m
@@ -179,7 +179,7 @@ groups:
       tier: sv
       type: internal-api
     expr: |
-      sum by (environment,stage) (
+      sum by (env,environment,stage) (
         rate(gitlab_workhorse_http_requests_total{job=~"gitlab-workhorse-api|gitlab-workhorse", type="internal-api"}[5m])
       )
   - record: gitlab_component_errors:rate_5m
@@ -189,13 +189,13 @@ groups:
       type: internal-api
     expr: |
       (
-        sum by (environment,stage) (
+        sum by (env,environment,stage) (
           rate(gitlab_workhorse_http_requests_total{job=~"gitlab-workhorse-api|gitlab-workhorse", type="internal-api", code=~"^5.*", route!="^/-/health$", route!="^/-/(readiness|liveness)$"}[5m])
         )
       )
       or
       (
-        0 * group by(environment,stage) (
+        0 * group by(env,environment,stage) (
           gitlab_component_ops:rate_5m{component="workhorse",tier="sv",type="internal-api"}
         )
       )
@@ -208,7 +208,7 @@ groups:
       tier: sv
       type: internal-api
     expr: |
-      sum by (environment,stage) (
+      sum by (env,environment,stage) (
         sli_aggregations:gitlab_sli_rails_request_apdex_success_total_rate30m{job="gitlab-rails",type="internal-api"}
       )
   - record: gitlab_component_apdex:weight:score_30m
@@ -217,7 +217,7 @@ groups:
       tier: sv
       type: internal-api
     expr: |
-      sum by (environment,stage) (
+      sum by (env,environment,stage) (
         sli_aggregations:gitlab_sli_rails_request_apdex_total_rate30m{job="gitlab-rails",type="internal-api"}
       )
   - record: gitlab_component_ops:rate_30m
@@ -226,7 +226,7 @@ groups:
       tier: sv
       type: internal-api
     expr: |
-      sum by (environment,stage) (
+      sum by (env,environment,stage) (
         sli_aggregations:gitlab_sli_rails_request_total_rate30m{job="gitlab-rails",type="internal-api"}
       )
   - record: gitlab_component_errors:rate_30m
@@ -236,13 +236,13 @@ groups:
       type: internal-api
     expr: |
       (
-        sum by (environment,stage) (
+        sum by (env,environment,stage) (
           sli_aggregations:gitlab_sli_rails_request_error_total_rate30m{job="gitlab-rails",type="internal-api"}
         )
       )
       or
       (
-        0 * group by(environment,stage) (
+        0 * group by(env,environment,stage) (
           gitlab_component_ops:rate_30m{component="rails_request",tier="sv",type="internal-api"}
         )
       )
@@ -253,11 +253,11 @@ groups:
       type: internal-api
     expr: |
       (
-        sum by (environment,stage) (
+        sum by (env,environment,stage) (
           rate(gitlab_workhorse_http_request_duration_seconds_bucket{job=~"gitlab-workhorse-api|gitlab-workhorse", type="internal-api", route!="^/-/health$", route!="^/-/(readiness|liveness)$", le="1"}[30m])
         )
         +
-        sum by (environment,stage) (
+        sum by (env,environment,stage) (
           rate(gitlab_workhorse_http_request_duration_seconds_bucket{job=~"gitlab-workhorse-api|gitlab-workhorse", type="internal-api", route!="^/-/health$", route!="^/-/(readiness|liveness)$", le="10"}[30m])
         )
       )
@@ -269,7 +269,7 @@ groups:
       tier: sv
       type: internal-api
     expr: |
-      sum by (environment,stage) (
+      sum by (env,environment,stage) (
         rate(gitlab_workhorse_http_request_duration_seconds_bucket{job=~"gitlab-workhorse-api|gitlab-workhorse", type="internal-api", route!="^/-/health$", route!="^/-/(readiness|liveness)$", le="+Inf"}[30m])
       )
   - record: gitlab_component_ops:rate_30m
@@ -278,7 +278,7 @@ groups:
       tier: sv
       type: internal-api
     expr: |
-      sum by (environment,stage) (
+      sum by (env,environment,stage) (
         rate(gitlab_workhorse_http_requests_total{job=~"gitlab-workhorse-api|gitlab-workhorse", type="internal-api"}[30m])
       )
   - record: gitlab_component_errors:rate_30m
@@ -288,13 +288,13 @@ groups:
       type: internal-api
     expr: |
       (
-        sum by (environment,stage) (
+        sum by (env,environment,stage) (
           rate(gitlab_workhorse_http_requests_total{job=~"gitlab-workhorse-api|gitlab-workhorse", type="internal-api", code=~"^5.*", route!="^/-/health$", route!="^/-/(readiness|liveness)$"}[30m])
         )
       )
       or
       (
-        0 * group by(environment,stage) (
+        0 * group by(env,environment,stage) (
           gitlab_component_ops:rate_30m{component="workhorse",tier="sv",type="internal-api"}
         )
       )
@@ -307,7 +307,7 @@ groups:
       tier: sv
       type: internal-api
     expr: |
-      sum by (environment,stage) (
+      sum by (env,environment,stage) (
         sli_aggregations:gitlab_sli_rails_request_apdex_success_total_rate1h{job="gitlab-rails",type="internal-api"}
       )
   - record: gitlab_component_apdex:weight:score_1h
@@ -316,7 +316,7 @@ groups:
       tier: sv
       type: internal-api
     expr: |
-      sum by (environment,stage) (
+      sum by (env,environment,stage) (
         sli_aggregations:gitlab_sli_rails_request_apdex_total_rate1h{job="gitlab-rails",type="internal-api"}
       )
   - record: gitlab_component_ops:rate_1h
@@ -325,7 +325,7 @@ groups:
       tier: sv
       type: internal-api
     expr: |
-      sum by (environment,stage) (
+      sum by (env,environment,stage) (
         sli_aggregations:gitlab_sli_rails_request_total_rate1h{job="gitlab-rails",type="internal-api"}
       )
   - record: gitlab_component_errors:rate_1h
@@ -335,13 +335,13 @@ groups:
       type: internal-api
     expr: |
       (
-        sum by (environment,stage) (
+        sum by (env,environment,stage) (
           sli_aggregations:gitlab_sli_rails_request_error_total_rate1h{job="gitlab-rails",type="internal-api"}
         )
       )
       or
       (
-        0 * group by(environment,stage) (
+        0 * group by(env,environment,stage) (
           gitlab_component_ops:rate_1h{component="rails_request",tier="sv",type="internal-api"}
         )
       )
@@ -352,11 +352,11 @@ groups:
       type: internal-api
     expr: |
       (
-        sum by (environment,stage) (
+        sum by (env,environment,stage) (
           rate(gitlab_workhorse_http_request_duration_seconds_bucket{job=~"gitlab-workhorse-api|gitlab-workhorse", type="internal-api", route!="^/-/health$", route!="^/-/(readiness|liveness)$", le="1"}[1h])
         )
         +
-        sum by (environment,stage) (
+        sum by (env,environment,stage) (
           rate(gitlab_workhorse_http_request_duration_seconds_bucket{job=~"gitlab-workhorse-api|gitlab-workhorse", type="internal-api", route!="^/-/health$", route!="^/-/(readiness|liveness)$", le="10"}[1h])
         )
       )
@@ -368,7 +368,7 @@ groups:
       tier: sv
       type: internal-api
     expr: |
-      sum by (environment,stage) (
+      sum by (env,environment,stage) (
         rate(gitlab_workhorse_http_request_duration_seconds_bucket{job=~"gitlab-workhorse-api|gitlab-workhorse", type="internal-api", route!="^/-/health$", route!="^/-/(readiness|liveness)$", le="+Inf"}[1h])
       )
   - record: gitlab_component_ops:rate_1h
@@ -377,7 +377,7 @@ groups:
       tier: sv
       type: internal-api
     expr: |
-      sum by (environment,stage) (
+      sum by (env,environment,stage) (
         rate(gitlab_workhorse_http_requests_total{job=~"gitlab-workhorse-api|gitlab-workhorse", type="internal-api"}[1h])
       )
   - record: gitlab_component_errors:rate_1h
@@ -387,13 +387,13 @@ groups:
       type: internal-api
     expr: |
       (
-        sum by (environment,stage) (
+        sum by (env,environment,stage) (
           rate(gitlab_workhorse_http_requests_total{job=~"gitlab-workhorse-api|gitlab-workhorse", type="internal-api", code=~"^5.*", route!="^/-/health$", route!="^/-/(readiness|liveness)$"}[1h])
         )
       )
       or
       (
-        0 * group by(environment,stage) (
+        0 * group by(env,environment,stage) (
           gitlab_component_ops:rate_1h{component="workhorse",tier="sv",type="internal-api"}
         )
       )
@@ -406,7 +406,7 @@ groups:
       tier: sv
       type: internal-api
     expr: |
-      sum by (environment,stage) (
+      sum by (env,environment,stage) (
         sli_aggregations:gitlab_sli_rails_request_apdex_success_total_rate6h{job="gitlab-rails",type="internal-api"}
       )
   - record: gitlab_component_apdex:weight:score_6h
@@ -415,7 +415,7 @@ groups:
       tier: sv
       type: internal-api
     expr: |
-      sum by (environment,stage) (
+      sum by (env,environment,stage) (
         sli_aggregations:gitlab_sli_rails_request_apdex_total_rate6h{job="gitlab-rails",type="internal-api"}
       )
   - record: gitlab_component_ops:rate_6h
@@ -424,7 +424,7 @@ groups:
       tier: sv
       type: internal-api
     expr: |
-      sum by (environment,stage) (
+      sum by (env,environment,stage) (
         sli_aggregations:gitlab_sli_rails_request_total_rate6h{job="gitlab-rails",type="internal-api"}
       )
   - record: gitlab_component_errors:rate_6h
@@ -434,13 +434,13 @@ groups:
       type: internal-api
     expr: |
       (
-        sum by (environment,stage) (
+        sum by (env,environment,stage) (
           sli_aggregations:gitlab_sli_rails_request_error_total_rate6h{job="gitlab-rails",type="internal-api"}
         )
       )
       or
       (
-        0 * group by(environment,stage) (
+        0 * group by(env,environment,stage) (
           gitlab_component_ops:rate_6h{component="rails_request",tier="sv",type="internal-api"}
         )
       )
@@ -451,11 +451,11 @@ groups:
       type: internal-api
     expr: |
       (
-        sum by (environment,stage) (
+        sum by (env,environment,stage) (
           rate(gitlab_workhorse_http_request_duration_seconds_bucket{job=~"gitlab-workhorse-api|gitlab-workhorse", type="internal-api", route!="^/-/health$", route!="^/-/(readiness|liveness)$", le="1"}[6h])
         )
         +
-        sum by (environment,stage) (
+        sum by (env,environment,stage) (
           rate(gitlab_workhorse_http_request_duration_seconds_bucket{job=~"gitlab-workhorse-api|gitlab-workhorse", type="internal-api", route!="^/-/health$", route!="^/-/(readiness|liveness)$", le="10"}[6h])
         )
       )
@@ -467,7 +467,7 @@ groups:
       tier: sv
       type: internal-api
     expr: |
-      sum by (environment,stage) (
+      sum by (env,environment,stage) (
         rate(gitlab_workhorse_http_request_duration_seconds_bucket{job=~"gitlab-workhorse-api|gitlab-workhorse", type="internal-api", route!="^/-/health$", route!="^/-/(readiness|liveness)$", le="+Inf"}[6h])
       )
   - record: gitlab_component_ops:rate_6h
@@ -476,7 +476,7 @@ groups:
       tier: sv
       type: internal-api
     expr: |
-      sum by (environment,stage) (
+      sum by (env,environment,stage) (
         rate(gitlab_workhorse_http_requests_total{job=~"gitlab-workhorse-api|gitlab-workhorse", type="internal-api"}[6h])
       )
   - record: gitlab_component_errors:rate_6h
@@ -486,13 +486,13 @@ groups:
       type: internal-api
     expr: |
       (
-        sum by (environment,stage) (
+        sum by (env,environment,stage) (
           rate(gitlab_workhorse_http_requests_total{job=~"gitlab-workhorse-api|gitlab-workhorse", type="internal-api", code=~"^5.*", route!="^/-/health$", route!="^/-/(readiness|liveness)$"}[6h])
         )
       )
       or
       (
-        0 * group by(environment,stage) (
+        0 * group by(env,environment,stage) (
           gitlab_component_ops:rate_6h{component="workhorse",tier="sv",type="internal-api"}
         )
       )

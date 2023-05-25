@@ -11,7 +11,7 @@ groups:
       tier: sv
       type: mailroom
     expr: |
-      sum by (environment) (
+      sum by (env,environment) (
         sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate1m{le="+Inf",worker="EmailReceiverWorker"}
       )
   - record: gitlab_component_errors:rate
@@ -22,13 +22,13 @@ groups:
       type: mailroom
     expr: |
       (
-        sum by (environment) (
+        sum by (env,environment) (
           sli_aggregations:sidekiq_jobs_failed_total_rate1m{worker="EmailReceiverWorker"}
         )
       )
       or
       (
-        0 * group by(environment) (
+        0 * group by(env,environment) (
           gitlab_component_ops:rate{component="emailsProcessed",stage="main",tier="sv",type="mailroom"}
         )
       )
@@ -42,7 +42,7 @@ groups:
       tier: sv
       type: mailroom
     expr: |
-      sum by (environment) (
+      sum by (env,environment) (
         sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate5m{le="+Inf",worker="EmailReceiverWorker"}
       )
   - record: gitlab_component_errors:rate_5m
@@ -53,13 +53,13 @@ groups:
       type: mailroom
     expr: |
       (
-        sum by (environment) (
+        sum by (env,environment) (
           sli_aggregations:sidekiq_jobs_failed_total_rate5m{worker="EmailReceiverWorker"}
         )
       )
       or
       (
-        0 * group by(environment) (
+        0 * group by(env,environment) (
           gitlab_component_ops:rate_5m{component="emailsProcessed",stage="main",tier="sv",type="mailroom"}
         )
       )
@@ -73,7 +73,7 @@ groups:
       tier: sv
       type: mailroom
     expr: |
-      sum by (environment) (
+      sum by (env,environment) (
         sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate30m{le="+Inf",worker="EmailReceiverWorker"}
       )
   - record: gitlab_component_errors:rate_30m
@@ -84,13 +84,13 @@ groups:
       type: mailroom
     expr: |
       (
-        sum by (environment) (
+        sum by (env,environment) (
           sli_aggregations:sidekiq_jobs_failed_total_rate30m{worker="EmailReceiverWorker"}
         )
       )
       or
       (
-        0 * group by(environment) (
+        0 * group by(env,environment) (
           gitlab_component_ops:rate_30m{component="emailsProcessed",stage="main",tier="sv",type="mailroom"}
         )
       )
@@ -105,7 +105,7 @@ groups:
       type: mailroom
       upscale_source: "yes"
     expr: |
-      sum by (environment) (
+      sum by (env,environment) (
         sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate1h{le="+Inf",worker="EmailReceiverWorker"}
       )
   - record: gitlab_component_errors:rate_1h
@@ -117,13 +117,13 @@ groups:
       upscale_source: "yes"
     expr: |
       (
-        sum by (environment) (
+        sum by (env,environment) (
           sli_aggregations:sidekiq_jobs_failed_total_rate1h{worker="EmailReceiverWorker"}
         )
       )
       or
       (
-        0 * group by(environment) (
+        0 * group by(env,environment) (
           gitlab_component_ops:rate_1h{component="emailsProcessed",stage="main",tier="sv",type="mailroom",upscale_source="yes"}
         )
       )

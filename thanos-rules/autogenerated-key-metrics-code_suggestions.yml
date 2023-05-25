@@ -12,7 +12,7 @@ groups:
       tier: sv
       type: code_suggestions
     expr: |
-      sum by (environment) (
+      sum by (env,environment) (
         rate(http_requests_total{type="code_suggestions"}[1m])
       )
   - record: gitlab_component_errors:rate
@@ -23,13 +23,13 @@ groups:
       type: code_suggestions
     expr: |
       (
-        sum by (environment) (
+        sum by (env,environment) (
           rate(http_requests_total{status=~"^5.*",type="code_suggestions"}[1m])
         )
       )
       or
       (
-        0 * group by(environment) (
+        0 * group by(env,environment) (
           gitlab_component_ops:rate{component="server",stage="main",tier="sv",type="code_suggestions"}
         )
       )
@@ -44,7 +44,7 @@ groups:
       tier: sv
       type: code_suggestions
     expr: |
-      sum by (environment) (
+      sum by (env,environment) (
         rate(http_requests_total{type="code_suggestions"}[5m])
       )
   - record: gitlab_component_errors:rate_5m
@@ -55,13 +55,13 @@ groups:
       type: code_suggestions
     expr: |
       (
-        sum by (environment) (
+        sum by (env,environment) (
           rate(http_requests_total{status=~"^5.*",type="code_suggestions"}[5m])
         )
       )
       or
       (
-        0 * group by(environment) (
+        0 * group by(env,environment) (
           gitlab_component_ops:rate_5m{component="server",stage="main",tier="sv",type="code_suggestions"}
         )
       )
@@ -76,7 +76,7 @@ groups:
       tier: sv
       type: code_suggestions
     expr: |
-      sum by (environment) (
+      sum by (env,environment) (
         rate(http_requests_total{type="code_suggestions"}[30m])
       )
   - record: gitlab_component_errors:rate_30m
@@ -87,13 +87,13 @@ groups:
       type: code_suggestions
     expr: |
       (
-        sum by (environment) (
+        sum by (env,environment) (
           rate(http_requests_total{status=~"^5.*",type="code_suggestions"}[30m])
         )
       )
       or
       (
-        0 * group by(environment) (
+        0 * group by(env,environment) (
           gitlab_component_ops:rate_30m{component="server",stage="main",tier="sv",type="code_suggestions"}
         )
       )
@@ -108,7 +108,7 @@ groups:
       tier: sv
       type: code_suggestions
     expr: |
-      sum by (environment) (
+      sum by (env,environment) (
         rate(http_requests_total{type="code_suggestions"}[1h])
       )
   - record: gitlab_component_errors:rate_1h
@@ -119,13 +119,13 @@ groups:
       type: code_suggestions
     expr: |
       (
-        sum by (environment) (
+        sum by (env,environment) (
           rate(http_requests_total{status=~"^5.*",type="code_suggestions"}[1h])
         )
       )
       or
       (
-        0 * group by(environment) (
+        0 * group by(env,environment) (
           gitlab_component_ops:rate_1h{component="server",stage="main",tier="sv",type="code_suggestions"}
         )
       )
@@ -140,7 +140,7 @@ groups:
       tier: sv
       type: code_suggestions
     expr: |
-      sum by (environment) (
+      sum by (env,environment) (
         rate(http_requests_total{type="code_suggestions"}[6h])
       )
   - record: gitlab_component_errors:rate_6h
@@ -151,13 +151,13 @@ groups:
       type: code_suggestions
     expr: |
       (
-        sum by (environment) (
+        sum by (env,environment) (
           rate(http_requests_total{status=~"^5.*",type="code_suggestions"}[6h])
         )
       )
       or
       (
-        0 * group by(environment) (
+        0 * group by(env,environment) (
           gitlab_component_ops:rate_6h{component="server",stage="main",tier="sv",type="code_suggestions"}
         )
       )

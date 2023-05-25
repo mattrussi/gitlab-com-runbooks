@@ -11,7 +11,7 @@ groups:
       tier: sv
       type: websockets
     expr: |
-      sum by (environment) (
+      sum by (env,environment) (
         rate(haproxy_backend_http_responses_total{backend="canary_websockets",type="frontend"}[1m])
       )
   - record: gitlab_component_ops:rate
@@ -21,7 +21,7 @@ groups:
       tier: sv
       type: websockets
     expr: |
-      sum by (environment) (
+      sum by (env,environment) (
         rate(haproxy_backend_http_responses_total{backend="websockets",type="frontend"}[1m])
       )
   - record: gitlab_component_errors:rate
@@ -32,13 +32,13 @@ groups:
       type: websockets
     expr: |
       (
-        sum by (environment) (
+        sum by (env,environment) (
           rate(haproxy_backend_http_responses_total{backend="canary_websockets",code="5xx",type="frontend"}[1m])
         )
       )
       or
       (
-        0 * group by(environment) (
+        0 * group by(env,environment) (
           gitlab_component_ops:rate{component="loadbalancer",stage="cny",tier="sv",type="websockets"}
         )
       )
@@ -50,13 +50,13 @@ groups:
       type: websockets
     expr: |
       (
-        sum by (environment) (
+        sum by (env,environment) (
           rate(haproxy_backend_http_responses_total{backend="websockets",code="5xx",type="frontend"}[1m])
         )
       )
       or
       (
-        0 * group by(environment) (
+        0 * group by(env,environment) (
           gitlab_component_ops:rate{component="loadbalancer",stage="main",tier="sv",type="websockets"}
         )
       )
@@ -66,7 +66,7 @@ groups:
       tier: sv
       type: websockets
     expr: |
-      sum by (environment,stage) (
+      sum by (env,environment,stage) (
         sli_aggregations:gitlab_sli_rails_request_apdex_success_total_rate1m{job="gitlab-rails",type="websockets"}
       )
   - record: gitlab_component_apdex:weight:score
@@ -75,7 +75,7 @@ groups:
       tier: sv
       type: websockets
     expr: |
-      sum by (environment,stage) (
+      sum by (env,environment,stage) (
         sli_aggregations:gitlab_sli_rails_request_apdex_total_rate1m{job="gitlab-rails",type="websockets"}
       )
   - record: gitlab_component_ops:rate
@@ -84,7 +84,7 @@ groups:
       tier: sv
       type: websockets
     expr: |
-      sum by (environment,stage) (
+      sum by (env,environment,stage) (
         sli_aggregations:gitlab_sli_rails_request_total_rate1m{job="gitlab-rails",type="websockets"}
       )
   - record: gitlab_component_errors:rate
@@ -94,13 +94,13 @@ groups:
       type: websockets
     expr: |
       (
-        sum by (environment,stage) (
+        sum by (env,environment,stage) (
           sli_aggregations:gitlab_sli_rails_request_error_total_rate1m{job="gitlab-rails",type="websockets"}
         )
       )
       or
       (
-        0 * group by(environment,stage) (
+        0 * group by(env,environment,stage) (
           gitlab_component_ops:rate{component="rails_request",tier="sv",type="websockets"}
         )
       )
@@ -110,7 +110,7 @@ groups:
       tier: sv
       type: websockets
     expr: |
-      sum by (environment,stage) (
+      sum by (env,environment,stage) (
         rate(gitlab_workhorse_http_requests_total{job="gitlab-workhorse",route!="^/-/health$",route!="^/-/(readiness|liveness)$",route!="^/api/",type="websockets"}[1m])
       )
   - record: gitlab_component_errors:rate
@@ -120,13 +120,13 @@ groups:
       type: websockets
     expr: |
       (
-        sum by (environment,stage) (
+        sum by (env,environment,stage) (
           rate(gitlab_workhorse_http_requests_total{code=~"^5.*",job="gitlab-workhorse",route!="^/-/health$",route!="^/-/(readiness|liveness)$",route!="^/api/",type="websockets"}[1m])
         )
       )
       or
       (
-        0 * group by(environment,stage) (
+        0 * group by(env,environment,stage) (
           gitlab_component_ops:rate{component="workhorse",tier="sv",type="websockets"}
         )
       )
@@ -140,7 +140,7 @@ groups:
       tier: sv
       type: websockets
     expr: |
-      sum by (environment) (
+      sum by (env,environment) (
         rate(haproxy_backend_http_responses_total{backend="canary_websockets",type="frontend"}[5m])
       )
   - record: gitlab_component_ops:rate_5m
@@ -150,7 +150,7 @@ groups:
       tier: sv
       type: websockets
     expr: |
-      sum by (environment) (
+      sum by (env,environment) (
         rate(haproxy_backend_http_responses_total{backend="websockets",type="frontend"}[5m])
       )
   - record: gitlab_component_errors:rate_5m
@@ -161,13 +161,13 @@ groups:
       type: websockets
     expr: |
       (
-        sum by (environment) (
+        sum by (env,environment) (
           rate(haproxy_backend_http_responses_total{backend="canary_websockets",code="5xx",type="frontend"}[5m])
         )
       )
       or
       (
-        0 * group by(environment) (
+        0 * group by(env,environment) (
           gitlab_component_ops:rate_5m{component="loadbalancer",stage="cny",tier="sv",type="websockets"}
         )
       )
@@ -179,13 +179,13 @@ groups:
       type: websockets
     expr: |
       (
-        sum by (environment) (
+        sum by (env,environment) (
           rate(haproxy_backend_http_responses_total{backend="websockets",code="5xx",type="frontend"}[5m])
         )
       )
       or
       (
-        0 * group by(environment) (
+        0 * group by(env,environment) (
           gitlab_component_ops:rate_5m{component="loadbalancer",stage="main",tier="sv",type="websockets"}
         )
       )
@@ -195,7 +195,7 @@ groups:
       tier: sv
       type: websockets
     expr: |
-      sum by (environment,stage) (
+      sum by (env,environment,stage) (
         sli_aggregations:gitlab_sli_rails_request_apdex_success_total_rate5m{job="gitlab-rails",type="websockets"}
       )
   - record: gitlab_component_apdex:weight:score_5m
@@ -204,7 +204,7 @@ groups:
       tier: sv
       type: websockets
     expr: |
-      sum by (environment,stage) (
+      sum by (env,environment,stage) (
         sli_aggregations:gitlab_sli_rails_request_apdex_total_rate5m{job="gitlab-rails",type="websockets"}
       )
   - record: gitlab_component_ops:rate_5m
@@ -213,7 +213,7 @@ groups:
       tier: sv
       type: websockets
     expr: |
-      sum by (environment,stage) (
+      sum by (env,environment,stage) (
         sli_aggregations:gitlab_sli_rails_request_total_rate5m{job="gitlab-rails",type="websockets"}
       )
   - record: gitlab_component_errors:rate_5m
@@ -223,13 +223,13 @@ groups:
       type: websockets
     expr: |
       (
-        sum by (environment,stage) (
+        sum by (env,environment,stage) (
           sli_aggregations:gitlab_sli_rails_request_error_total_rate5m{job="gitlab-rails",type="websockets"}
         )
       )
       or
       (
-        0 * group by(environment,stage) (
+        0 * group by(env,environment,stage) (
           gitlab_component_ops:rate_5m{component="rails_request",tier="sv",type="websockets"}
         )
       )
@@ -239,7 +239,7 @@ groups:
       tier: sv
       type: websockets
     expr: |
-      sum by (environment,stage) (
+      sum by (env,environment,stage) (
         rate(gitlab_workhorse_http_requests_total{job="gitlab-workhorse",route!="^/-/health$",route!="^/-/(readiness|liveness)$",route!="^/api/",type="websockets"}[5m])
       )
   - record: gitlab_component_errors:rate_5m
@@ -249,13 +249,13 @@ groups:
       type: websockets
     expr: |
       (
-        sum by (environment,stage) (
+        sum by (env,environment,stage) (
           rate(gitlab_workhorse_http_requests_total{code=~"^5.*",job="gitlab-workhorse",route!="^/-/health$",route!="^/-/(readiness|liveness)$",route!="^/api/",type="websockets"}[5m])
         )
       )
       or
       (
-        0 * group by(environment,stage) (
+        0 * group by(env,environment,stage) (
           gitlab_component_ops:rate_5m{component="workhorse",tier="sv",type="websockets"}
         )
       )
@@ -269,7 +269,7 @@ groups:
       tier: sv
       type: websockets
     expr: |
-      sum by (environment) (
+      sum by (env,environment) (
         rate(haproxy_backend_http_responses_total{backend="canary_websockets",type="frontend"}[30m])
       )
   - record: gitlab_component_ops:rate_30m
@@ -279,7 +279,7 @@ groups:
       tier: sv
       type: websockets
     expr: |
-      sum by (environment) (
+      sum by (env,environment) (
         rate(haproxy_backend_http_responses_total{backend="websockets",type="frontend"}[30m])
       )
   - record: gitlab_component_errors:rate_30m
@@ -290,13 +290,13 @@ groups:
       type: websockets
     expr: |
       (
-        sum by (environment) (
+        sum by (env,environment) (
           rate(haproxy_backend_http_responses_total{backend="canary_websockets",code="5xx",type="frontend"}[30m])
         )
       )
       or
       (
-        0 * group by(environment) (
+        0 * group by(env,environment) (
           gitlab_component_ops:rate_30m{component="loadbalancer",stage="cny",tier="sv",type="websockets"}
         )
       )
@@ -308,13 +308,13 @@ groups:
       type: websockets
     expr: |
       (
-        sum by (environment) (
+        sum by (env,environment) (
           rate(haproxy_backend_http_responses_total{backend="websockets",code="5xx",type="frontend"}[30m])
         )
       )
       or
       (
-        0 * group by(environment) (
+        0 * group by(env,environment) (
           gitlab_component_ops:rate_30m{component="loadbalancer",stage="main",tier="sv",type="websockets"}
         )
       )
@@ -324,7 +324,7 @@ groups:
       tier: sv
       type: websockets
     expr: |
-      sum by (environment,stage) (
+      sum by (env,environment,stage) (
         sli_aggregations:gitlab_sli_rails_request_apdex_success_total_rate30m{job="gitlab-rails",type="websockets"}
       )
   - record: gitlab_component_apdex:weight:score_30m
@@ -333,7 +333,7 @@ groups:
       tier: sv
       type: websockets
     expr: |
-      sum by (environment,stage) (
+      sum by (env,environment,stage) (
         sli_aggregations:gitlab_sli_rails_request_apdex_total_rate30m{job="gitlab-rails",type="websockets"}
       )
   - record: gitlab_component_ops:rate_30m
@@ -342,7 +342,7 @@ groups:
       tier: sv
       type: websockets
     expr: |
-      sum by (environment,stage) (
+      sum by (env,environment,stage) (
         sli_aggregations:gitlab_sli_rails_request_total_rate30m{job="gitlab-rails",type="websockets"}
       )
   - record: gitlab_component_errors:rate_30m
@@ -352,13 +352,13 @@ groups:
       type: websockets
     expr: |
       (
-        sum by (environment,stage) (
+        sum by (env,environment,stage) (
           sli_aggregations:gitlab_sli_rails_request_error_total_rate30m{job="gitlab-rails",type="websockets"}
         )
       )
       or
       (
-        0 * group by(environment,stage) (
+        0 * group by(env,environment,stage) (
           gitlab_component_ops:rate_30m{component="rails_request",tier="sv",type="websockets"}
         )
       )
@@ -368,7 +368,7 @@ groups:
       tier: sv
       type: websockets
     expr: |
-      sum by (environment,stage) (
+      sum by (env,environment,stage) (
         rate(gitlab_workhorse_http_requests_total{job="gitlab-workhorse",route!="^/-/health$",route!="^/-/(readiness|liveness)$",route!="^/api/",type="websockets"}[30m])
       )
   - record: gitlab_component_errors:rate_30m
@@ -378,13 +378,13 @@ groups:
       type: websockets
     expr: |
       (
-        sum by (environment,stage) (
+        sum by (env,environment,stage) (
           rate(gitlab_workhorse_http_requests_total{code=~"^5.*",job="gitlab-workhorse",route!="^/-/health$",route!="^/-/(readiness|liveness)$",route!="^/api/",type="websockets"}[30m])
         )
       )
       or
       (
-        0 * group by(environment,stage) (
+        0 * group by(env,environment,stage) (
           gitlab_component_ops:rate_30m{component="workhorse",tier="sv",type="websockets"}
         )
       )
@@ -398,7 +398,7 @@ groups:
       tier: sv
       type: websockets
     expr: |
-      sum by (environment) (
+      sum by (env,environment) (
         rate(haproxy_backend_http_responses_total{backend="canary_websockets",type="frontend"}[1h])
       )
   - record: gitlab_component_ops:rate_1h
@@ -408,7 +408,7 @@ groups:
       tier: sv
       type: websockets
     expr: |
-      sum by (environment) (
+      sum by (env,environment) (
         rate(haproxy_backend_http_responses_total{backend="websockets",type="frontend"}[1h])
       )
   - record: gitlab_component_errors:rate_1h
@@ -419,13 +419,13 @@ groups:
       type: websockets
     expr: |
       (
-        sum by (environment) (
+        sum by (env,environment) (
           rate(haproxy_backend_http_responses_total{backend="canary_websockets",code="5xx",type="frontend"}[1h])
         )
       )
       or
       (
-        0 * group by(environment) (
+        0 * group by(env,environment) (
           gitlab_component_ops:rate_1h{component="loadbalancer",stage="cny",tier="sv",type="websockets"}
         )
       )
@@ -437,13 +437,13 @@ groups:
       type: websockets
     expr: |
       (
-        sum by (environment) (
+        sum by (env,environment) (
           rate(haproxy_backend_http_responses_total{backend="websockets",code="5xx",type="frontend"}[1h])
         )
       )
       or
       (
-        0 * group by(environment) (
+        0 * group by(env,environment) (
           gitlab_component_ops:rate_1h{component="loadbalancer",stage="main",tier="sv",type="websockets"}
         )
       )
@@ -453,7 +453,7 @@ groups:
       tier: sv
       type: websockets
     expr: |
-      sum by (environment,stage) (
+      sum by (env,environment,stage) (
         sli_aggregations:gitlab_sli_rails_request_apdex_success_total_rate1h{job="gitlab-rails",type="websockets"}
       )
   - record: gitlab_component_apdex:weight:score_1h
@@ -462,7 +462,7 @@ groups:
       tier: sv
       type: websockets
     expr: |
-      sum by (environment,stage) (
+      sum by (env,environment,stage) (
         sli_aggregations:gitlab_sli_rails_request_apdex_total_rate1h{job="gitlab-rails",type="websockets"}
       )
   - record: gitlab_component_ops:rate_1h
@@ -471,7 +471,7 @@ groups:
       tier: sv
       type: websockets
     expr: |
-      sum by (environment,stage) (
+      sum by (env,environment,stage) (
         sli_aggregations:gitlab_sli_rails_request_total_rate1h{job="gitlab-rails",type="websockets"}
       )
   - record: gitlab_component_errors:rate_1h
@@ -481,13 +481,13 @@ groups:
       type: websockets
     expr: |
       (
-        sum by (environment,stage) (
+        sum by (env,environment,stage) (
           sli_aggregations:gitlab_sli_rails_request_error_total_rate1h{job="gitlab-rails",type="websockets"}
         )
       )
       or
       (
-        0 * group by(environment,stage) (
+        0 * group by(env,environment,stage) (
           gitlab_component_ops:rate_1h{component="rails_request",tier="sv",type="websockets"}
         )
       )
@@ -497,7 +497,7 @@ groups:
       tier: sv
       type: websockets
     expr: |
-      sum by (environment,stage) (
+      sum by (env,environment,stage) (
         rate(gitlab_workhorse_http_requests_total{job="gitlab-workhorse",route!="^/-/health$",route!="^/-/(readiness|liveness)$",route!="^/api/",type="websockets"}[1h])
       )
   - record: gitlab_component_errors:rate_1h
@@ -507,13 +507,13 @@ groups:
       type: websockets
     expr: |
       (
-        sum by (environment,stage) (
+        sum by (env,environment,stage) (
           rate(gitlab_workhorse_http_requests_total{code=~"^5.*",job="gitlab-workhorse",route!="^/-/health$",route!="^/-/(readiness|liveness)$",route!="^/api/",type="websockets"}[1h])
         )
       )
       or
       (
-        0 * group by(environment,stage) (
+        0 * group by(env,environment,stage) (
           gitlab_component_ops:rate_1h{component="workhorse",tier="sv",type="websockets"}
         )
       )
@@ -527,7 +527,7 @@ groups:
       tier: sv
       type: websockets
     expr: |
-      sum by (environment) (
+      sum by (env,environment) (
         rate(haproxy_backend_http_responses_total{backend="canary_websockets",type="frontend"}[6h])
       )
   - record: gitlab_component_ops:rate_6h
@@ -537,7 +537,7 @@ groups:
       tier: sv
       type: websockets
     expr: |
-      sum by (environment) (
+      sum by (env,environment) (
         rate(haproxy_backend_http_responses_total{backend="websockets",type="frontend"}[6h])
       )
   - record: gitlab_component_errors:rate_6h
@@ -548,13 +548,13 @@ groups:
       type: websockets
     expr: |
       (
-        sum by (environment) (
+        sum by (env,environment) (
           rate(haproxy_backend_http_responses_total{backend="canary_websockets",code="5xx",type="frontend"}[6h])
         )
       )
       or
       (
-        0 * group by(environment) (
+        0 * group by(env,environment) (
           gitlab_component_ops:rate_6h{component="loadbalancer",stage="cny",tier="sv",type="websockets"}
         )
       )
@@ -566,13 +566,13 @@ groups:
       type: websockets
     expr: |
       (
-        sum by (environment) (
+        sum by (env,environment) (
           rate(haproxy_backend_http_responses_total{backend="websockets",code="5xx",type="frontend"}[6h])
         )
       )
       or
       (
-        0 * group by(environment) (
+        0 * group by(env,environment) (
           gitlab_component_ops:rate_6h{component="loadbalancer",stage="main",tier="sv",type="websockets"}
         )
       )
@@ -582,7 +582,7 @@ groups:
       tier: sv
       type: websockets
     expr: |
-      sum by (environment,stage) (
+      sum by (env,environment,stage) (
         sli_aggregations:gitlab_sli_rails_request_apdex_success_total_rate6h{job="gitlab-rails",type="websockets"}
       )
   - record: gitlab_component_apdex:weight:score_6h
@@ -591,7 +591,7 @@ groups:
       tier: sv
       type: websockets
     expr: |
-      sum by (environment,stage) (
+      sum by (env,environment,stage) (
         sli_aggregations:gitlab_sli_rails_request_apdex_total_rate6h{job="gitlab-rails",type="websockets"}
       )
   - record: gitlab_component_ops:rate_6h
@@ -600,7 +600,7 @@ groups:
       tier: sv
       type: websockets
     expr: |
-      sum by (environment,stage) (
+      sum by (env,environment,stage) (
         sli_aggregations:gitlab_sli_rails_request_total_rate6h{job="gitlab-rails",type="websockets"}
       )
   - record: gitlab_component_errors:rate_6h
@@ -610,13 +610,13 @@ groups:
       type: websockets
     expr: |
       (
-        sum by (environment,stage) (
+        sum by (env,environment,stage) (
           sli_aggregations:gitlab_sli_rails_request_error_total_rate6h{job="gitlab-rails",type="websockets"}
         )
       )
       or
       (
-        0 * group by(environment,stage) (
+        0 * group by(env,environment,stage) (
           gitlab_component_ops:rate_6h{component="rails_request",tier="sv",type="websockets"}
         )
       )
@@ -626,7 +626,7 @@ groups:
       tier: sv
       type: websockets
     expr: |
-      sum by (environment,stage) (
+      sum by (env,environment,stage) (
         rate(gitlab_workhorse_http_requests_total{job="gitlab-workhorse",route!="^/-/health$",route!="^/-/(readiness|liveness)$",route!="^/api/",type="websockets"}[6h])
       )
   - record: gitlab_component_errors:rate_6h
@@ -636,13 +636,13 @@ groups:
       type: websockets
     expr: |
       (
-        sum by (environment,stage) (
+        sum by (env,environment,stage) (
           rate(gitlab_workhorse_http_requests_total{code=~"^5.*",job="gitlab-workhorse",route!="^/-/health$",route!="^/-/(readiness|liveness)$",route!="^/api/",type="websockets"}[6h])
         )
       )
       or
       (
-        0 * group by(environment,stage) (
+        0 * group by(env,environment,stage) (
           gitlab_component_ops:rate_6h{component="workhorse",tier="sv",type="websockets"}
         )
       )

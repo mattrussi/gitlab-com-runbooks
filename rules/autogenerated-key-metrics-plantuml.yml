@@ -11,7 +11,7 @@ groups:
       tier: sv
       type: plantuml
     expr: |
-      sum by (environment) (
+      sum by (env,environment) (
         rate(stackdriver_https_lb_rule_loadbalancing_googleapis_com_https_request_count{project_id="gitlab-production",url_map_name="k8s-um-plantuml-plantuml--58df01f69d082883"}[1m])
       )
   - record: gitlab_component_errors:rate
@@ -22,13 +22,13 @@ groups:
       type: plantuml
     expr: |
       (
-        sum by (environment) (
+        sum by (env,environment) (
           rate(stackdriver_https_lb_rule_loadbalancing_googleapis_com_https_request_count{project_id="gitlab-production",response_code_class="500",url_map_name="k8s-um-plantuml-plantuml--58df01f69d082883"}[1m])
         )
       )
       or
       (
-        0 * group by(environment) (
+        0 * group by(env,environment) (
           gitlab_component_ops:rate{component="loadbalancer",stage="main",tier="sv",type="plantuml"}
         )
       )
@@ -42,7 +42,7 @@ groups:
       tier: sv
       type: plantuml
     expr: |
-      sum by (environment) (
+      sum by (env,environment) (
         rate(stackdriver_https_lb_rule_loadbalancing_googleapis_com_https_request_count{project_id="gitlab-production",url_map_name="k8s-um-plantuml-plantuml--58df01f69d082883"}[5m])
       )
   - record: gitlab_component_errors:rate_5m
@@ -53,13 +53,13 @@ groups:
       type: plantuml
     expr: |
       (
-        sum by (environment) (
+        sum by (env,environment) (
           rate(stackdriver_https_lb_rule_loadbalancing_googleapis_com_https_request_count{project_id="gitlab-production",response_code_class="500",url_map_name="k8s-um-plantuml-plantuml--58df01f69d082883"}[5m])
         )
       )
       or
       (
-        0 * group by(environment) (
+        0 * group by(env,environment) (
           gitlab_component_ops:rate_5m{component="loadbalancer",stage="main",tier="sv",type="plantuml"}
         )
       )
@@ -73,7 +73,7 @@ groups:
       tier: sv
       type: plantuml
     expr: |
-      sum by (environment) (
+      sum by (env,environment) (
         rate(stackdriver_https_lb_rule_loadbalancing_googleapis_com_https_request_count{project_id="gitlab-production",url_map_name="k8s-um-plantuml-plantuml--58df01f69d082883"}[30m])
       )
   - record: gitlab_component_errors:rate_30m
@@ -84,13 +84,13 @@ groups:
       type: plantuml
     expr: |
       (
-        sum by (environment) (
+        sum by (env,environment) (
           rate(stackdriver_https_lb_rule_loadbalancing_googleapis_com_https_request_count{project_id="gitlab-production",response_code_class="500",url_map_name="k8s-um-plantuml-plantuml--58df01f69d082883"}[30m])
         )
       )
       or
       (
-        0 * group by(environment) (
+        0 * group by(env,environment) (
           gitlab_component_ops:rate_30m{component="loadbalancer",stage="main",tier="sv",type="plantuml"}
         )
       )
@@ -104,7 +104,7 @@ groups:
       tier: sv
       type: plantuml
     expr: |
-      sum by (environment) (
+      sum by (env,environment) (
         rate(stackdriver_https_lb_rule_loadbalancing_googleapis_com_https_request_count{project_id="gitlab-production",url_map_name="k8s-um-plantuml-plantuml--58df01f69d082883"}[1h])
       )
   - record: gitlab_component_errors:rate_1h
@@ -115,13 +115,13 @@ groups:
       type: plantuml
     expr: |
       (
-        sum by (environment) (
+        sum by (env,environment) (
           rate(stackdriver_https_lb_rule_loadbalancing_googleapis_com_https_request_count{project_id="gitlab-production",response_code_class="500",url_map_name="k8s-um-plantuml-plantuml--58df01f69d082883"}[1h])
         )
       )
       or
       (
-        0 * group by(environment) (
+        0 * group by(env,environment) (
           gitlab_component_ops:rate_1h{component="loadbalancer",stage="main",tier="sv",type="plantuml"}
         )
       )
@@ -135,7 +135,7 @@ groups:
       tier: sv
       type: plantuml
     expr: |
-      sum by (environment) (
+      sum by (env,environment) (
         rate(stackdriver_https_lb_rule_loadbalancing_googleapis_com_https_request_count{project_id="gitlab-production",url_map_name="k8s-um-plantuml-plantuml--58df01f69d082883"}[6h])
       )
   - record: gitlab_component_errors:rate_6h
@@ -146,13 +146,13 @@ groups:
       type: plantuml
     expr: |
       (
-        sum by (environment) (
+        sum by (env,environment) (
           rate(stackdriver_https_lb_rule_loadbalancing_googleapis_com_https_request_count{project_id="gitlab-production",response_code_class="500",url_map_name="k8s-um-plantuml-plantuml--58df01f69d082883"}[6h])
         )
       )
       or
       (
-        0 * group by(environment) (
+        0 * group by(env,environment) (
           gitlab_component_ops:rate_6h{component="loadbalancer",stage="main",tier="sv",type="plantuml"}
         )
       )

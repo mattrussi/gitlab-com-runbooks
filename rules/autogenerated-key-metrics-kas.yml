@@ -10,7 +10,7 @@ groups:
       tier: sv
       type: kas
     expr: |
-      sum by (environment,stage) (
+      sum by (env,environment,stage) (
         rate(k8s_api_proxy_routing_duration_seconds_bucket{le="4.096",status=~"success",type="kas"}[1m])
       )
   - record: gitlab_component_apdex:weight:score
@@ -19,7 +19,7 @@ groups:
       tier: sv
       type: kas
     expr: |
-      sum by (environment,stage) (
+      sum by (env,environment,stage) (
         rate(k8s_api_proxy_routing_duration_seconds_bucket{le="+Inf",status=~"success",type="kas"}[1m])
       )
   - record: gitlab_component_ops:rate
@@ -28,7 +28,7 @@ groups:
       tier: sv
       type: kas
     expr: |
-      sum by (environment,stage) (
+      sum by (env,environment,stage) (
         rate(grpc_server_handled_total{type="kas"}[1m])
       )
   - record: gitlab_component_errors:rate
@@ -38,13 +38,13 @@ groups:
       type: kas
     expr: |
       (
-        sum by (environment,stage) (
+        sum by (env,environment,stage) (
           rate(grpc_server_handled_total{grpc_code!~"^(OK|NotFound|PaymentRequired|FailedPrecondition|Unauthenticated|PermissionDenied|Canceled|DeadlineExceeded|ResourceExhausted)$",grpc_service!="gitlab.agent.kubernetes_api.rpc.KubernetesApi",type="kas"}[1m])
         )
       )
       or
       (
-        0 * group by(environment,stage) (
+        0 * group by(env,environment,stage) (
           gitlab_component_ops:rate{component="grpc_requests",tier="sv",type="kas"}
         )
       )
@@ -57,7 +57,7 @@ groups:
       tier: sv
       type: kas
     expr: |
-      sum by (environment,stage) (
+      sum by (env,environment,stage) (
         rate(k8s_api_proxy_routing_duration_seconds_bucket{le="4.096",status=~"success",type="kas"}[5m])
       )
   - record: gitlab_component_apdex:weight:score_5m
@@ -66,7 +66,7 @@ groups:
       tier: sv
       type: kas
     expr: |
-      sum by (environment,stage) (
+      sum by (env,environment,stage) (
         rate(k8s_api_proxy_routing_duration_seconds_bucket{le="+Inf",status=~"success",type="kas"}[5m])
       )
   - record: gitlab_component_ops:rate_5m
@@ -75,7 +75,7 @@ groups:
       tier: sv
       type: kas
     expr: |
-      sum by (environment,stage) (
+      sum by (env,environment,stage) (
         rate(grpc_server_handled_total{type="kas"}[5m])
       )
   - record: gitlab_component_errors:rate_5m
@@ -85,13 +85,13 @@ groups:
       type: kas
     expr: |
       (
-        sum by (environment,stage) (
+        sum by (env,environment,stage) (
           rate(grpc_server_handled_total{grpc_code!~"^(OK|NotFound|PaymentRequired|FailedPrecondition|Unauthenticated|PermissionDenied|Canceled|DeadlineExceeded|ResourceExhausted)$",grpc_service!="gitlab.agent.kubernetes_api.rpc.KubernetesApi",type="kas"}[5m])
         )
       )
       or
       (
-        0 * group by(environment,stage) (
+        0 * group by(env,environment,stage) (
           gitlab_component_ops:rate_5m{component="grpc_requests",tier="sv",type="kas"}
         )
       )
@@ -104,7 +104,7 @@ groups:
       tier: sv
       type: kas
     expr: |
-      sum by (environment,stage) (
+      sum by (env,environment,stage) (
         rate(k8s_api_proxy_routing_duration_seconds_bucket{le="4.096",status=~"success",type="kas"}[30m])
       )
   - record: gitlab_component_apdex:weight:score_30m
@@ -113,7 +113,7 @@ groups:
       tier: sv
       type: kas
     expr: |
-      sum by (environment,stage) (
+      sum by (env,environment,stage) (
         rate(k8s_api_proxy_routing_duration_seconds_bucket{le="+Inf",status=~"success",type="kas"}[30m])
       )
   - record: gitlab_component_ops:rate_30m
@@ -122,7 +122,7 @@ groups:
       tier: sv
       type: kas
     expr: |
-      sum by (environment,stage) (
+      sum by (env,environment,stage) (
         rate(grpc_server_handled_total{type="kas"}[30m])
       )
   - record: gitlab_component_errors:rate_30m
@@ -132,13 +132,13 @@ groups:
       type: kas
     expr: |
       (
-        sum by (environment,stage) (
+        sum by (env,environment,stage) (
           rate(grpc_server_handled_total{grpc_code!~"^(OK|NotFound|PaymentRequired|FailedPrecondition|Unauthenticated|PermissionDenied|Canceled|DeadlineExceeded|ResourceExhausted)$",grpc_service!="gitlab.agent.kubernetes_api.rpc.KubernetesApi",type="kas"}[30m])
         )
       )
       or
       (
-        0 * group by(environment,stage) (
+        0 * group by(env,environment,stage) (
           gitlab_component_ops:rate_30m{component="grpc_requests",tier="sv",type="kas"}
         )
       )
@@ -151,7 +151,7 @@ groups:
       tier: sv
       type: kas
     expr: |
-      sum by (environment,stage) (
+      sum by (env,environment,stage) (
         rate(k8s_api_proxy_routing_duration_seconds_bucket{le="4.096",status=~"success",type="kas"}[1h])
       )
   - record: gitlab_component_apdex:weight:score_1h
@@ -160,7 +160,7 @@ groups:
       tier: sv
       type: kas
     expr: |
-      sum by (environment,stage) (
+      sum by (env,environment,stage) (
         rate(k8s_api_proxy_routing_duration_seconds_bucket{le="+Inf",status=~"success",type="kas"}[1h])
       )
   - record: gitlab_component_ops:rate_1h
@@ -169,7 +169,7 @@ groups:
       tier: sv
       type: kas
     expr: |
-      sum by (environment,stage) (
+      sum by (env,environment,stage) (
         rate(grpc_server_handled_total{type="kas"}[1h])
       )
   - record: gitlab_component_errors:rate_1h
@@ -179,13 +179,13 @@ groups:
       type: kas
     expr: |
       (
-        sum by (environment,stage) (
+        sum by (env,environment,stage) (
           rate(grpc_server_handled_total{grpc_code!~"^(OK|NotFound|PaymentRequired|FailedPrecondition|Unauthenticated|PermissionDenied|Canceled|DeadlineExceeded|ResourceExhausted)$",grpc_service!="gitlab.agent.kubernetes_api.rpc.KubernetesApi",type="kas"}[1h])
         )
       )
       or
       (
-        0 * group by(environment,stage) (
+        0 * group by(env,environment,stage) (
           gitlab_component_ops:rate_1h{component="grpc_requests",tier="sv",type="kas"}
         )
       )
@@ -198,7 +198,7 @@ groups:
       tier: sv
       type: kas
     expr: |
-      sum by (environment,stage) (
+      sum by (env,environment,stage) (
         rate(k8s_api_proxy_routing_duration_seconds_bucket{le="4.096",status=~"success",type="kas"}[6h])
       )
   - record: gitlab_component_apdex:weight:score_6h
@@ -207,7 +207,7 @@ groups:
       tier: sv
       type: kas
     expr: |
-      sum by (environment,stage) (
+      sum by (env,environment,stage) (
         rate(k8s_api_proxy_routing_duration_seconds_bucket{le="+Inf",status=~"success",type="kas"}[6h])
       )
   - record: gitlab_component_ops:rate_6h
@@ -216,7 +216,7 @@ groups:
       tier: sv
       type: kas
     expr: |
-      sum by (environment,stage) (
+      sum by (env,environment,stage) (
         rate(grpc_server_handled_total{type="kas"}[6h])
       )
   - record: gitlab_component_errors:rate_6h
@@ -226,13 +226,13 @@ groups:
       type: kas
     expr: |
       (
-        sum by (environment,stage) (
+        sum by (env,environment,stage) (
           rate(grpc_server_handled_total{grpc_code!~"^(OK|NotFound|PaymentRequired|FailedPrecondition|Unauthenticated|PermissionDenied|Canceled|DeadlineExceeded|ResourceExhausted)$",grpc_service!="gitlab.agent.kubernetes_api.rpc.KubernetesApi",type="kas"}[6h])
         )
       )
       or
       (
-        0 * group by(environment,stage) (
+        0 * group by(env,environment,stage) (
           gitlab_component_ops:rate_6h{component="grpc_requests",tier="sv",type="kas"}
         )
       )

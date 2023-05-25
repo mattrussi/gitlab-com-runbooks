@@ -11,7 +11,7 @@ groups:
       tier: stor
       type: google-cloud-storage
     expr: |
-      sum by (environment) (
+      sum by (env,environment) (
         rate(stackdriver_https_lb_rule_loadbalancing_googleapis_com_https_request_count{project_id="gitlab-production",url_map_name="gprd-artifacts-cdn"}[1m])
       )
   - record: gitlab_component_errors:rate
@@ -22,13 +22,13 @@ groups:
       type: google-cloud-storage
     expr: |
       (
-        sum by (environment) (
+        sum by (env,environment) (
           rate(stackdriver_https_lb_rule_loadbalancing_googleapis_com_https_request_count{project_id="gitlab-production",response_code_class="500",url_map_name="gprd-artifacts-cdn"}[1m])
         )
       )
       or
       (
-        0 * group by(environment) (
+        0 * group by(env,environment) (
           gitlab_component_ops:rate{component="artifacts_cdn",stage="main",tier="stor",type="google-cloud-storage"}
         )
       )
@@ -38,7 +38,7 @@ groups:
       tier: stor
       type: google-cloud-storage
     expr: |
-      sum by (environment,stage) (
+      sum by (env,environment,stage) (
         rate(gitlab_pages_httprange_trace_duration_bucket{le="0.5",request_stage="httptrace.ClientTrace.GotFirstResponseByte"}[1m])
       )
   - record: gitlab_component_apdex:weight:score
@@ -47,7 +47,7 @@ groups:
       tier: stor
       type: google-cloud-storage
     expr: |
-      sum by (environment,stage) (
+      sum by (env,environment,stage) (
         rate(gitlab_pages_httprange_trace_duration_bucket{le="+Inf",request_stage="httptrace.ClientTrace.GotFirstResponseByte"}[1m])
       )
   - record: gitlab_component_ops:rate
@@ -56,7 +56,7 @@ groups:
       tier: stor
       type: google-cloud-storage
     expr: |
-      sum by (environment,stage) (
+      sum by (env,environment,stage) (
         rate(gitlab_pages_httprange_trace_duration_bucket{le="+Inf",request_stage="httptrace.ClientTrace.GotFirstResponseByte"}[1m])
       )
   - record: gitlab_component_apdex:success:rate
@@ -65,7 +65,7 @@ groups:
       tier: stor
       type: google-cloud-storage
     expr: |
-      sum by (environment,stage) (
+      sum by (env,environment,stage) (
         rate(gitlab_pages_httprange_requests_duration_bucket{le="0.5",request_stage="httptrace.ClientTrace.GotFirstResponseByte"}[1m])
       )
   - record: gitlab_component_apdex:weight:score
@@ -74,7 +74,7 @@ groups:
       tier: stor
       type: google-cloud-storage
     expr: |
-      sum by (environment,stage) (
+      sum by (env,environment,stage) (
         rate(gitlab_pages_httprange_requests_duration_bucket{le="+Inf",request_stage="httptrace.ClientTrace.GotFirstResponseByte"}[1m])
       )
   - record: gitlab_component_ops:rate
@@ -83,7 +83,7 @@ groups:
       tier: stor
       type: google-cloud-storage
     expr: |
-      sum by (environment,stage) (
+      sum by (env,environment,stage) (
         rate(gitlab_pages_httprange_requests_duration_bucket{le="+Inf",request_stage="httptrace.ClientTrace.GotFirstResponseByte"}[1m])
       )
   - record: gitlab_component_ops:rate
@@ -92,7 +92,7 @@ groups:
       tier: stor
       type: google-cloud-storage
     expr: |
-      sum by (environment,stage) (
+      sum by (env,environment,stage) (
         rate(gitlab_pages_httprange_requests_total{}[1m])
       )
   - record: gitlab_component_apdex:success:rate
@@ -101,7 +101,7 @@ groups:
       tier: stor
       type: google-cloud-storage
     expr: |
-      sum by (environment,stage) (
+      sum by (env,environment,stage) (
         rate(registry_storage_action_seconds_bucket{le="1"}[1m])
       )
   - record: gitlab_component_apdex:weight:score
@@ -110,7 +110,7 @@ groups:
       tier: stor
       type: google-cloud-storage
     expr: |
-      sum by (environment,stage) (
+      sum by (env,environment,stage) (
         rate(registry_storage_action_seconds_bucket{le="+Inf"}[1m])
       )
   - record: gitlab_component_ops:rate
@@ -119,7 +119,7 @@ groups:
       tier: stor
       type: google-cloud-storage
     expr: |
-      sum by (environment,stage) (
+      sum by (env,environment,stage) (
         rate(registry_storage_action_seconds_count{}[1m])
       )
   - record: gitlab_component_apdex:success:rate
@@ -128,7 +128,7 @@ groups:
       tier: stor
       type: google-cloud-storage
     expr: |
-      sum by (environment,stage) (
+      sum by (env,environment,stage) (
         rate(gitlab_workhorse_object_storage_upload_time_bucket{le="25"}[1m])
       )
   - record: gitlab_component_apdex:weight:score
@@ -137,7 +137,7 @@ groups:
       tier: stor
       type: google-cloud-storage
     expr: |
-      sum by (environment,stage) (
+      sum by (env,environment,stage) (
         rate(gitlab_workhorse_object_storage_upload_time_bucket{le="+Inf"}[1m])
       )
   - record: gitlab_component_ops:rate
@@ -146,7 +146,7 @@ groups:
       tier: stor
       type: google-cloud-storage
     expr: |
-      sum by (environment,stage) (
+      sum by (env,environment,stage) (
         rate(gitlab_workhorse_object_storage_upload_requests{le="+Inf"}[1m])
       )
   - record: gitlab_component_errors:rate
@@ -156,13 +156,13 @@ groups:
       type: google-cloud-storage
     expr: |
       (
-        sum by (environment,stage) (
+        sum by (env,environment,stage) (
           rate(gitlab_workhorse_object_storage_upload_requests{}[1m])
         )
       )
       or
       (
-        0 * group by(environment,stage) (
+        0 * group by(env,environment,stage) (
           gitlab_component_ops:rate{component="workhorse_upload",tier="stor",type="google-cloud-storage"}
         )
       )
@@ -176,7 +176,7 @@ groups:
       tier: stor
       type: google-cloud-storage
     expr: |
-      sum by (environment) (
+      sum by (env,environment) (
         rate(stackdriver_https_lb_rule_loadbalancing_googleapis_com_https_request_count{project_id="gitlab-production",url_map_name="gprd-artifacts-cdn"}[5m])
       )
   - record: gitlab_component_errors:rate_5m
@@ -187,13 +187,13 @@ groups:
       type: google-cloud-storage
     expr: |
       (
-        sum by (environment) (
+        sum by (env,environment) (
           rate(stackdriver_https_lb_rule_loadbalancing_googleapis_com_https_request_count{project_id="gitlab-production",response_code_class="500",url_map_name="gprd-artifacts-cdn"}[5m])
         )
       )
       or
       (
-        0 * group by(environment) (
+        0 * group by(env,environment) (
           gitlab_component_ops:rate_5m{component="artifacts_cdn",stage="main",tier="stor",type="google-cloud-storage"}
         )
       )
@@ -203,7 +203,7 @@ groups:
       tier: stor
       type: google-cloud-storage
     expr: |
-      sum by (environment,stage) (
+      sum by (env,environment,stage) (
         rate(gitlab_pages_httprange_trace_duration_bucket{le="0.5",request_stage="httptrace.ClientTrace.GotFirstResponseByte"}[5m])
       )
   - record: gitlab_component_apdex:weight:score_5m
@@ -212,7 +212,7 @@ groups:
       tier: stor
       type: google-cloud-storage
     expr: |
-      sum by (environment,stage) (
+      sum by (env,environment,stage) (
         rate(gitlab_pages_httprange_trace_duration_bucket{le="+Inf",request_stage="httptrace.ClientTrace.GotFirstResponseByte"}[5m])
       )
   - record: gitlab_component_ops:rate_5m
@@ -221,7 +221,7 @@ groups:
       tier: stor
       type: google-cloud-storage
     expr: |
-      sum by (environment,stage) (
+      sum by (env,environment,stage) (
         rate(gitlab_pages_httprange_trace_duration_bucket{le="+Inf",request_stage="httptrace.ClientTrace.GotFirstResponseByte"}[5m])
       )
   - record: gitlab_component_apdex:success:rate_5m
@@ -230,7 +230,7 @@ groups:
       tier: stor
       type: google-cloud-storage
     expr: |
-      sum by (environment,stage) (
+      sum by (env,environment,stage) (
         rate(gitlab_pages_httprange_requests_duration_bucket{le="0.5",request_stage="httptrace.ClientTrace.GotFirstResponseByte"}[5m])
       )
   - record: gitlab_component_apdex:weight:score_5m
@@ -239,7 +239,7 @@ groups:
       tier: stor
       type: google-cloud-storage
     expr: |
-      sum by (environment,stage) (
+      sum by (env,environment,stage) (
         rate(gitlab_pages_httprange_requests_duration_bucket{le="+Inf",request_stage="httptrace.ClientTrace.GotFirstResponseByte"}[5m])
       )
   - record: gitlab_component_ops:rate_5m
@@ -248,7 +248,7 @@ groups:
       tier: stor
       type: google-cloud-storage
     expr: |
-      sum by (environment,stage) (
+      sum by (env,environment,stage) (
         rate(gitlab_pages_httprange_requests_duration_bucket{le="+Inf",request_stage="httptrace.ClientTrace.GotFirstResponseByte"}[5m])
       )
   - record: gitlab_component_ops:rate_5m
@@ -257,7 +257,7 @@ groups:
       tier: stor
       type: google-cloud-storage
     expr: |
-      sum by (environment,stage) (
+      sum by (env,environment,stage) (
         rate(gitlab_pages_httprange_requests_total{}[5m])
       )
   - record: gitlab_component_apdex:success:rate_5m
@@ -266,7 +266,7 @@ groups:
       tier: stor
       type: google-cloud-storage
     expr: |
-      sum by (environment,stage) (
+      sum by (env,environment,stage) (
         rate(registry_storage_action_seconds_bucket{le="1"}[5m])
       )
   - record: gitlab_component_apdex:weight:score_5m
@@ -275,7 +275,7 @@ groups:
       tier: stor
       type: google-cloud-storage
     expr: |
-      sum by (environment,stage) (
+      sum by (env,environment,stage) (
         rate(registry_storage_action_seconds_bucket{le="+Inf"}[5m])
       )
   - record: gitlab_component_ops:rate_5m
@@ -284,7 +284,7 @@ groups:
       tier: stor
       type: google-cloud-storage
     expr: |
-      sum by (environment,stage) (
+      sum by (env,environment,stage) (
         rate(registry_storage_action_seconds_count{}[5m])
       )
   - record: gitlab_component_apdex:success:rate_5m
@@ -293,7 +293,7 @@ groups:
       tier: stor
       type: google-cloud-storage
     expr: |
-      sum by (environment,stage) (
+      sum by (env,environment,stage) (
         rate(gitlab_workhorse_object_storage_upload_time_bucket{le="25"}[5m])
       )
   - record: gitlab_component_apdex:weight:score_5m
@@ -302,7 +302,7 @@ groups:
       tier: stor
       type: google-cloud-storage
     expr: |
-      sum by (environment,stage) (
+      sum by (env,environment,stage) (
         rate(gitlab_workhorse_object_storage_upload_time_bucket{le="+Inf"}[5m])
       )
   - record: gitlab_component_ops:rate_5m
@@ -311,7 +311,7 @@ groups:
       tier: stor
       type: google-cloud-storage
     expr: |
-      sum by (environment,stage) (
+      sum by (env,environment,stage) (
         rate(gitlab_workhorse_object_storage_upload_requests{le="+Inf"}[5m])
       )
   - record: gitlab_component_errors:rate_5m
@@ -321,13 +321,13 @@ groups:
       type: google-cloud-storage
     expr: |
       (
-        sum by (environment,stage) (
+        sum by (env,environment,stage) (
           rate(gitlab_workhorse_object_storage_upload_requests{}[5m])
         )
       )
       or
       (
-        0 * group by(environment,stage) (
+        0 * group by(env,environment,stage) (
           gitlab_component_ops:rate_5m{component="workhorse_upload",tier="stor",type="google-cloud-storage"}
         )
       )
@@ -341,7 +341,7 @@ groups:
       tier: stor
       type: google-cloud-storage
     expr: |
-      sum by (environment) (
+      sum by (env,environment) (
         rate(stackdriver_https_lb_rule_loadbalancing_googleapis_com_https_request_count{project_id="gitlab-production",url_map_name="gprd-artifacts-cdn"}[30m])
       )
   - record: gitlab_component_errors:rate_30m
@@ -352,13 +352,13 @@ groups:
       type: google-cloud-storage
     expr: |
       (
-        sum by (environment) (
+        sum by (env,environment) (
           rate(stackdriver_https_lb_rule_loadbalancing_googleapis_com_https_request_count{project_id="gitlab-production",response_code_class="500",url_map_name="gprd-artifacts-cdn"}[30m])
         )
       )
       or
       (
-        0 * group by(environment) (
+        0 * group by(env,environment) (
           gitlab_component_ops:rate_30m{component="artifacts_cdn",stage="main",tier="stor",type="google-cloud-storage"}
         )
       )
@@ -368,7 +368,7 @@ groups:
       tier: stor
       type: google-cloud-storage
     expr: |
-      sum by (environment,stage) (
+      sum by (env,environment,stage) (
         rate(gitlab_pages_httprange_trace_duration_bucket{le="0.5",request_stage="httptrace.ClientTrace.GotFirstResponseByte"}[30m])
       )
   - record: gitlab_component_apdex:weight:score_30m
@@ -377,7 +377,7 @@ groups:
       tier: stor
       type: google-cloud-storage
     expr: |
-      sum by (environment,stage) (
+      sum by (env,environment,stage) (
         rate(gitlab_pages_httprange_trace_duration_bucket{le="+Inf",request_stage="httptrace.ClientTrace.GotFirstResponseByte"}[30m])
       )
   - record: gitlab_component_ops:rate_30m
@@ -386,7 +386,7 @@ groups:
       tier: stor
       type: google-cloud-storage
     expr: |
-      sum by (environment,stage) (
+      sum by (env,environment,stage) (
         rate(gitlab_pages_httprange_trace_duration_bucket{le="+Inf",request_stage="httptrace.ClientTrace.GotFirstResponseByte"}[30m])
       )
   - record: gitlab_component_apdex:success:rate_30m
@@ -395,7 +395,7 @@ groups:
       tier: stor
       type: google-cloud-storage
     expr: |
-      sum by (environment,stage) (
+      sum by (env,environment,stage) (
         rate(gitlab_pages_httprange_requests_duration_bucket{le="0.5",request_stage="httptrace.ClientTrace.GotFirstResponseByte"}[30m])
       )
   - record: gitlab_component_apdex:weight:score_30m
@@ -404,7 +404,7 @@ groups:
       tier: stor
       type: google-cloud-storage
     expr: |
-      sum by (environment,stage) (
+      sum by (env,environment,stage) (
         rate(gitlab_pages_httprange_requests_duration_bucket{le="+Inf",request_stage="httptrace.ClientTrace.GotFirstResponseByte"}[30m])
       )
   - record: gitlab_component_ops:rate_30m
@@ -413,7 +413,7 @@ groups:
       tier: stor
       type: google-cloud-storage
     expr: |
-      sum by (environment,stage) (
+      sum by (env,environment,stage) (
         rate(gitlab_pages_httprange_requests_duration_bucket{le="+Inf",request_stage="httptrace.ClientTrace.GotFirstResponseByte"}[30m])
       )
   - record: gitlab_component_ops:rate_30m
@@ -422,7 +422,7 @@ groups:
       tier: stor
       type: google-cloud-storage
     expr: |
-      sum by (environment,stage) (
+      sum by (env,environment,stage) (
         rate(gitlab_pages_httprange_requests_total{}[30m])
       )
   - record: gitlab_component_apdex:success:rate_30m
@@ -431,7 +431,7 @@ groups:
       tier: stor
       type: google-cloud-storage
     expr: |
-      sum by (environment,stage) (
+      sum by (env,environment,stage) (
         rate(registry_storage_action_seconds_bucket{le="1"}[30m])
       )
   - record: gitlab_component_apdex:weight:score_30m
@@ -440,7 +440,7 @@ groups:
       tier: stor
       type: google-cloud-storage
     expr: |
-      sum by (environment,stage) (
+      sum by (env,environment,stage) (
         rate(registry_storage_action_seconds_bucket{le="+Inf"}[30m])
       )
   - record: gitlab_component_ops:rate_30m
@@ -449,7 +449,7 @@ groups:
       tier: stor
       type: google-cloud-storage
     expr: |
-      sum by (environment,stage) (
+      sum by (env,environment,stage) (
         rate(registry_storage_action_seconds_count{}[30m])
       )
   - record: gitlab_component_apdex:success:rate_30m
@@ -458,7 +458,7 @@ groups:
       tier: stor
       type: google-cloud-storage
     expr: |
-      sum by (environment,stage) (
+      sum by (env,environment,stage) (
         rate(gitlab_workhorse_object_storage_upload_time_bucket{le="25"}[30m])
       )
   - record: gitlab_component_apdex:weight:score_30m
@@ -467,7 +467,7 @@ groups:
       tier: stor
       type: google-cloud-storage
     expr: |
-      sum by (environment,stage) (
+      sum by (env,environment,stage) (
         rate(gitlab_workhorse_object_storage_upload_time_bucket{le="+Inf"}[30m])
       )
   - record: gitlab_component_ops:rate_30m
@@ -476,7 +476,7 @@ groups:
       tier: stor
       type: google-cloud-storage
     expr: |
-      sum by (environment,stage) (
+      sum by (env,environment,stage) (
         rate(gitlab_workhorse_object_storage_upload_requests{le="+Inf"}[30m])
       )
   - record: gitlab_component_errors:rate_30m
@@ -486,13 +486,13 @@ groups:
       type: google-cloud-storage
     expr: |
       (
-        sum by (environment,stage) (
+        sum by (env,environment,stage) (
           rate(gitlab_workhorse_object_storage_upload_requests{}[30m])
         )
       )
       or
       (
-        0 * group by(environment,stage) (
+        0 * group by(env,environment,stage) (
           gitlab_component_ops:rate_30m{component="workhorse_upload",tier="stor",type="google-cloud-storage"}
         )
       )
@@ -506,7 +506,7 @@ groups:
       tier: stor
       type: google-cloud-storage
     expr: |
-      sum by (environment) (
+      sum by (env,environment) (
         rate(stackdriver_https_lb_rule_loadbalancing_googleapis_com_https_request_count{project_id="gitlab-production",url_map_name="gprd-artifacts-cdn"}[1h])
       )
   - record: gitlab_component_errors:rate_1h
@@ -517,13 +517,13 @@ groups:
       type: google-cloud-storage
     expr: |
       (
-        sum by (environment) (
+        sum by (env,environment) (
           rate(stackdriver_https_lb_rule_loadbalancing_googleapis_com_https_request_count{project_id="gitlab-production",response_code_class="500",url_map_name="gprd-artifacts-cdn"}[1h])
         )
       )
       or
       (
-        0 * group by(environment) (
+        0 * group by(env,environment) (
           gitlab_component_ops:rate_1h{component="artifacts_cdn",stage="main",tier="stor",type="google-cloud-storage"}
         )
       )
@@ -533,7 +533,7 @@ groups:
       tier: stor
       type: google-cloud-storage
     expr: |
-      sum by (environment,stage) (
+      sum by (env,environment,stage) (
         rate(gitlab_pages_httprange_trace_duration_bucket{le="0.5",request_stage="httptrace.ClientTrace.GotFirstResponseByte"}[1h])
       )
   - record: gitlab_component_apdex:weight:score_1h
@@ -542,7 +542,7 @@ groups:
       tier: stor
       type: google-cloud-storage
     expr: |
-      sum by (environment,stage) (
+      sum by (env,environment,stage) (
         rate(gitlab_pages_httprange_trace_duration_bucket{le="+Inf",request_stage="httptrace.ClientTrace.GotFirstResponseByte"}[1h])
       )
   - record: gitlab_component_ops:rate_1h
@@ -551,7 +551,7 @@ groups:
       tier: stor
       type: google-cloud-storage
     expr: |
-      sum by (environment,stage) (
+      sum by (env,environment,stage) (
         rate(gitlab_pages_httprange_trace_duration_bucket{le="+Inf",request_stage="httptrace.ClientTrace.GotFirstResponseByte"}[1h])
       )
   - record: gitlab_component_apdex:success:rate_1h
@@ -560,7 +560,7 @@ groups:
       tier: stor
       type: google-cloud-storage
     expr: |
-      sum by (environment,stage) (
+      sum by (env,environment,stage) (
         rate(gitlab_pages_httprange_requests_duration_bucket{le="0.5",request_stage="httptrace.ClientTrace.GotFirstResponseByte"}[1h])
       )
   - record: gitlab_component_apdex:weight:score_1h
@@ -569,7 +569,7 @@ groups:
       tier: stor
       type: google-cloud-storage
     expr: |
-      sum by (environment,stage) (
+      sum by (env,environment,stage) (
         rate(gitlab_pages_httprange_requests_duration_bucket{le="+Inf",request_stage="httptrace.ClientTrace.GotFirstResponseByte"}[1h])
       )
   - record: gitlab_component_ops:rate_1h
@@ -578,7 +578,7 @@ groups:
       tier: stor
       type: google-cloud-storage
     expr: |
-      sum by (environment,stage) (
+      sum by (env,environment,stage) (
         rate(gitlab_pages_httprange_requests_duration_bucket{le="+Inf",request_stage="httptrace.ClientTrace.GotFirstResponseByte"}[1h])
       )
   - record: gitlab_component_ops:rate_1h
@@ -587,7 +587,7 @@ groups:
       tier: stor
       type: google-cloud-storage
     expr: |
-      sum by (environment,stage) (
+      sum by (env,environment,stage) (
         rate(gitlab_pages_httprange_requests_total{}[1h])
       )
   - record: gitlab_component_apdex:success:rate_1h
@@ -596,7 +596,7 @@ groups:
       tier: stor
       type: google-cloud-storage
     expr: |
-      sum by (environment,stage) (
+      sum by (env,environment,stage) (
         rate(registry_storage_action_seconds_bucket{le="1"}[1h])
       )
   - record: gitlab_component_apdex:weight:score_1h
@@ -605,7 +605,7 @@ groups:
       tier: stor
       type: google-cloud-storage
     expr: |
-      sum by (environment,stage) (
+      sum by (env,environment,stage) (
         rate(registry_storage_action_seconds_bucket{le="+Inf"}[1h])
       )
   - record: gitlab_component_ops:rate_1h
@@ -614,7 +614,7 @@ groups:
       tier: stor
       type: google-cloud-storage
     expr: |
-      sum by (environment,stage) (
+      sum by (env,environment,stage) (
         rate(registry_storage_action_seconds_count{}[1h])
       )
   - record: gitlab_component_apdex:success:rate_1h
@@ -623,7 +623,7 @@ groups:
       tier: stor
       type: google-cloud-storage
     expr: |
-      sum by (environment,stage) (
+      sum by (env,environment,stage) (
         rate(gitlab_workhorse_object_storage_upload_time_bucket{le="25"}[1h])
       )
   - record: gitlab_component_apdex:weight:score_1h
@@ -632,7 +632,7 @@ groups:
       tier: stor
       type: google-cloud-storage
     expr: |
-      sum by (environment,stage) (
+      sum by (env,environment,stage) (
         rate(gitlab_workhorse_object_storage_upload_time_bucket{le="+Inf"}[1h])
       )
   - record: gitlab_component_ops:rate_1h
@@ -641,7 +641,7 @@ groups:
       tier: stor
       type: google-cloud-storage
     expr: |
-      sum by (environment,stage) (
+      sum by (env,environment,stage) (
         rate(gitlab_workhorse_object_storage_upload_requests{le="+Inf"}[1h])
       )
   - record: gitlab_component_errors:rate_1h
@@ -651,13 +651,13 @@ groups:
       type: google-cloud-storage
     expr: |
       (
-        sum by (environment,stage) (
+        sum by (env,environment,stage) (
           rate(gitlab_workhorse_object_storage_upload_requests{}[1h])
         )
       )
       or
       (
-        0 * group by(environment,stage) (
+        0 * group by(env,environment,stage) (
           gitlab_component_ops:rate_1h{component="workhorse_upload",tier="stor",type="google-cloud-storage"}
         )
       )
@@ -671,7 +671,7 @@ groups:
       tier: stor
       type: google-cloud-storage
     expr: |
-      sum by (environment) (
+      sum by (env,environment) (
         rate(stackdriver_https_lb_rule_loadbalancing_googleapis_com_https_request_count{project_id="gitlab-production",url_map_name="gprd-artifacts-cdn"}[6h])
       )
   - record: gitlab_component_errors:rate_6h
@@ -682,13 +682,13 @@ groups:
       type: google-cloud-storage
     expr: |
       (
-        sum by (environment) (
+        sum by (env,environment) (
           rate(stackdriver_https_lb_rule_loadbalancing_googleapis_com_https_request_count{project_id="gitlab-production",response_code_class="500",url_map_name="gprd-artifacts-cdn"}[6h])
         )
       )
       or
       (
-        0 * group by(environment) (
+        0 * group by(env,environment) (
           gitlab_component_ops:rate_6h{component="artifacts_cdn",stage="main",tier="stor",type="google-cloud-storage"}
         )
       )
@@ -698,7 +698,7 @@ groups:
       tier: stor
       type: google-cloud-storage
     expr: |
-      sum by (environment,stage) (
+      sum by (env,environment,stage) (
         rate(gitlab_pages_httprange_trace_duration_bucket{le="0.5",request_stage="httptrace.ClientTrace.GotFirstResponseByte"}[6h])
       )
   - record: gitlab_component_apdex:weight:score_6h
@@ -707,7 +707,7 @@ groups:
       tier: stor
       type: google-cloud-storage
     expr: |
-      sum by (environment,stage) (
+      sum by (env,environment,stage) (
         rate(gitlab_pages_httprange_trace_duration_bucket{le="+Inf",request_stage="httptrace.ClientTrace.GotFirstResponseByte"}[6h])
       )
   - record: gitlab_component_ops:rate_6h
@@ -716,7 +716,7 @@ groups:
       tier: stor
       type: google-cloud-storage
     expr: |
-      sum by (environment,stage) (
+      sum by (env,environment,stage) (
         rate(gitlab_pages_httprange_trace_duration_bucket{le="+Inf",request_stage="httptrace.ClientTrace.GotFirstResponseByte"}[6h])
       )
   - record: gitlab_component_apdex:success:rate_6h
@@ -725,7 +725,7 @@ groups:
       tier: stor
       type: google-cloud-storage
     expr: |
-      sum by (environment,stage) (
+      sum by (env,environment,stage) (
         rate(gitlab_pages_httprange_requests_duration_bucket{le="0.5",request_stage="httptrace.ClientTrace.GotFirstResponseByte"}[6h])
       )
   - record: gitlab_component_apdex:weight:score_6h
@@ -734,7 +734,7 @@ groups:
       tier: stor
       type: google-cloud-storage
     expr: |
-      sum by (environment,stage) (
+      sum by (env,environment,stage) (
         rate(gitlab_pages_httprange_requests_duration_bucket{le="+Inf",request_stage="httptrace.ClientTrace.GotFirstResponseByte"}[6h])
       )
   - record: gitlab_component_ops:rate_6h
@@ -743,7 +743,7 @@ groups:
       tier: stor
       type: google-cloud-storage
     expr: |
-      sum by (environment,stage) (
+      sum by (env,environment,stage) (
         rate(gitlab_pages_httprange_requests_duration_bucket{le="+Inf",request_stage="httptrace.ClientTrace.GotFirstResponseByte"}[6h])
       )
   - record: gitlab_component_ops:rate_6h
@@ -752,7 +752,7 @@ groups:
       tier: stor
       type: google-cloud-storage
     expr: |
-      sum by (environment,stage) (
+      sum by (env,environment,stage) (
         rate(gitlab_pages_httprange_requests_total{}[6h])
       )
   - record: gitlab_component_apdex:success:rate_6h
@@ -761,7 +761,7 @@ groups:
       tier: stor
       type: google-cloud-storage
     expr: |
-      sum by (environment,stage) (
+      sum by (env,environment,stage) (
         rate(registry_storage_action_seconds_bucket{le="1"}[6h])
       )
   - record: gitlab_component_apdex:weight:score_6h
@@ -770,7 +770,7 @@ groups:
       tier: stor
       type: google-cloud-storage
     expr: |
-      sum by (environment,stage) (
+      sum by (env,environment,stage) (
         rate(registry_storage_action_seconds_bucket{le="+Inf"}[6h])
       )
   - record: gitlab_component_ops:rate_6h
@@ -779,7 +779,7 @@ groups:
       tier: stor
       type: google-cloud-storage
     expr: |
-      sum by (environment,stage) (
+      sum by (env,environment,stage) (
         rate(registry_storage_action_seconds_count{}[6h])
       )
   - record: gitlab_component_apdex:success:rate_6h
@@ -788,7 +788,7 @@ groups:
       tier: stor
       type: google-cloud-storage
     expr: |
-      sum by (environment,stage) (
+      sum by (env,environment,stage) (
         rate(gitlab_workhorse_object_storage_upload_time_bucket{le="25"}[6h])
       )
   - record: gitlab_component_apdex:weight:score_6h
@@ -797,7 +797,7 @@ groups:
       tier: stor
       type: google-cloud-storage
     expr: |
-      sum by (environment,stage) (
+      sum by (env,environment,stage) (
         rate(gitlab_workhorse_object_storage_upload_time_bucket{le="+Inf"}[6h])
       )
   - record: gitlab_component_ops:rate_6h
@@ -806,7 +806,7 @@ groups:
       tier: stor
       type: google-cloud-storage
     expr: |
-      sum by (environment,stage) (
+      sum by (env,environment,stage) (
         rate(gitlab_workhorse_object_storage_upload_requests{le="+Inf"}[6h])
       )
   - record: gitlab_component_errors:rate_6h
@@ -816,13 +816,13 @@ groups:
       type: google-cloud-storage
     expr: |
       (
-        sum by (environment,stage) (
+        sum by (env,environment,stage) (
           rate(gitlab_workhorse_object_storage_upload_requests{}[6h])
         )
       )
       or
       (
-        0 * group by(environment,stage) (
+        0 * group by(env,environment,stage) (
           gitlab_component_ops:rate_6h{component="workhorse_upload",tier="stor",type="google-cloud-storage"}
         )
       )

@@ -45,7 +45,7 @@ groups:
       tier: sv
       type: web
     expr: |
-      sum by (environment,stage) (
+      sum by (env,environment,stage) (
         sli_aggregations:gitlab_sli_global_search_apdex_success_total_rate1m{job="gitlab-rails",type="web"}
       )
   - record: gitlab_component_apdex:weight:score
@@ -54,7 +54,7 @@ groups:
       tier: sv
       type: web
     expr: |
-      sum by (environment,stage) (
+      sum by (env,environment,stage) (
         sli_aggregations:gitlab_sli_global_search_apdex_total_rate1m{job="gitlab-rails",type="web"}
       )
   - record: gitlab_component_ops:rate
@@ -63,7 +63,7 @@ groups:
       tier: sv
       type: web
     expr: |
-      sum by (environment,stage) (
+      sum by (env,environment,stage) (
         sli_aggregations:gitlab_sli_global_search_apdex_total_rate1m{job="gitlab-rails",type="web"}
       )
   - record: gitlab_component_apdex:success:rate
@@ -73,11 +73,11 @@ groups:
       type: web
     expr: |
       (
-        sum by (environment,stage) (
+        sum by (env,environment,stage) (
           rate(gitlab_workhorse_image_resize_duration_seconds_bucket{job=~"gitlab-workhorse|gitlab-workhorse-web",le="0.4",type="web"}[1m])
         )
         +
-        sum by (environment,stage) (
+        sum by (env,environment,stage) (
           rate(gitlab_workhorse_image_resize_duration_seconds_bucket{job=~"gitlab-workhorse|gitlab-workhorse-web",le="0.8",type="web"}[1m])
         )
       )
@@ -89,7 +89,7 @@ groups:
       tier: sv
       type: web
     expr: |
-      sum by (environment,stage) (
+      sum by (env,environment,stage) (
         rate(gitlab_workhorse_image_resize_duration_seconds_bucket{job=~"gitlab-workhorse|gitlab-workhorse-web",le="+Inf",type="web"}[1m])
       )
   - record: gitlab_component_ops:rate
@@ -98,7 +98,7 @@ groups:
       tier: sv
       type: web
     expr: |
-      sum by (environment,stage) (
+      sum by (env,environment,stage) (
         rate(gitlab_workhorse_image_resize_requests_total{job=~"gitlab-workhorse|gitlab-workhorse-web",type="web"}[1m])
       )
   - record: gitlab_component_ops:rate
@@ -108,7 +108,7 @@ groups:
       tier: sv
       type: web
     expr: |
-      sum by (environment) (
+      sum by (env,environment) (
         rate(haproxy_backend_http_responses_total{backend="canary_web",type="frontend"}[1m])
       )
   - record: gitlab_component_ops:rate
@@ -118,7 +118,7 @@ groups:
       tier: sv
       type: web
     expr: |
-      sum by (environment) (
+      sum by (env,environment) (
         rate(haproxy_backend_http_responses_total{backend=~"web|main_web",type="frontend"}[1m])
       )
   - record: gitlab_component_errors:rate
@@ -129,13 +129,13 @@ groups:
       type: web
     expr: |
       (
-        sum by (environment) (
+        sum by (env,environment) (
           rate(haproxy_backend_http_responses_total{backend="canary_web",code="5xx",type="frontend"}[1m])
         )
       )
       or
       (
-        0 * group by(environment) (
+        0 * group by(env,environment) (
           gitlab_component_ops:rate{component="loadbalancer",stage="cny",tier="sv",type="web"}
         )
       )
@@ -147,13 +147,13 @@ groups:
       type: web
     expr: |
       (
-        sum by (environment) (
+        sum by (env,environment) (
           rate(haproxy_backend_http_responses_total{backend=~"web|main_web",code="5xx",type="frontend"}[1m])
         )
       )
       or
       (
-        0 * group by(environment) (
+        0 * group by(env,environment) (
           gitlab_component_ops:rate{component="loadbalancer",stage="main",tier="sv",type="web"}
         )
       )
@@ -163,7 +163,7 @@ groups:
       tier: sv
       type: web
     expr: |
-      sum by (environment,stage) (
+      sum by (env,environment,stage) (
         sli_aggregations:gitlab_sli_rails_request_apdex_success_total_rate1m{job="gitlab-rails",type="web"}
       )
   - record: gitlab_component_apdex:weight:score
@@ -172,7 +172,7 @@ groups:
       tier: sv
       type: web
     expr: |
-      sum by (environment,stage) (
+      sum by (env,environment,stage) (
         sli_aggregations:gitlab_sli_rails_request_apdex_total_rate1m{job="gitlab-rails",type="web"}
       )
   - record: gitlab_component_ops:rate
@@ -181,7 +181,7 @@ groups:
       tier: sv
       type: web
     expr: |
-      sum by (environment,stage) (
+      sum by (env,environment,stage) (
         sli_aggregations:gitlab_sli_rails_request_total_rate1m{job="gitlab-rails",type="web"}
       )
   - record: gitlab_component_errors:rate
@@ -191,13 +191,13 @@ groups:
       type: web
     expr: |
       (
-        sum by (environment,stage) (
+        sum by (env,environment,stage) (
           sli_aggregations:gitlab_sli_rails_request_error_total_rate1m{job="gitlab-rails",type="web"}
         )
       )
       or
       (
-        0 * group by(environment,stage) (
+        0 * group by(env,environment,stage) (
           gitlab_component_ops:rate{component="rails_request",tier="sv",type="web"}
         )
       )
@@ -208,11 +208,11 @@ groups:
       type: web
     expr: |
       (
-        sum by (environment,stage) (
+        sum by (env,environment,stage) (
           rate(gitlab_workhorse_http_request_duration_seconds_bucket{job=~"gitlab-workhorse|gitlab-workhorse-web",le="1",route!="^/([^/]+/){1,}[^/]+/uploads\\z",route!="^/-/health$",route!="^/-/(readiness|liveness)$",route!="^/([^/]+/){1,}[^/]+\\.git/git-receive-pack\\z",route!="^/([^/]+/){1,}[^/]+\\.git/git-upload-pack\\z",route!="^/([^/]+/){1,}[^/]+\\.git/info/refs\\z",route!="^/([^/]+/){1,}[^/]+\\.git/gitlab-lfs/objects/([0-9a-f]{64})/([0-9]+)\\z",type="web"}[1m])
         )
         +
-        sum by (environment,stage) (
+        sum by (env,environment,stage) (
           rate(gitlab_workhorse_http_request_duration_seconds_bucket{job=~"gitlab-workhorse|gitlab-workhorse-web",le="10",route!="^/([^/]+/){1,}[^/]+/uploads\\z",route!="^/-/health$",route!="^/-/(readiness|liveness)$",route!="^/([^/]+/){1,}[^/]+\\.git/git-receive-pack\\z",route!="^/([^/]+/){1,}[^/]+\\.git/git-upload-pack\\z",route!="^/([^/]+/){1,}[^/]+\\.git/info/refs\\z",route!="^/([^/]+/){1,}[^/]+\\.git/gitlab-lfs/objects/([0-9a-f]{64})/([0-9]+)\\z",type="web"}[1m])
         )
       )
@@ -224,7 +224,7 @@ groups:
       tier: sv
       type: web
     expr: |
-      sum by (environment,stage) (
+      sum by (env,environment,stage) (
         rate(gitlab_workhorse_http_request_duration_seconds_bucket{job=~"gitlab-workhorse|gitlab-workhorse-web",le="+Inf",route!="^/([^/]+/){1,}[^/]+/uploads\\z",route!="^/-/health$",route!="^/-/(readiness|liveness)$",route!="^/([^/]+/){1,}[^/]+\\.git/git-receive-pack\\z",route!="^/([^/]+/){1,}[^/]+\\.git/git-upload-pack\\z",route!="^/([^/]+/){1,}[^/]+\\.git/info/refs\\z",route!="^/([^/]+/){1,}[^/]+\\.git/gitlab-lfs/objects/([0-9a-f]{64})/([0-9]+)\\z",type="web"}[1m])
       )
   - record: gitlab_component_ops:rate
@@ -233,7 +233,7 @@ groups:
       tier: sv
       type: web
     expr: |
-      sum by (environment,stage) (
+      sum by (env,environment,stage) (
         rate(gitlab_workhorse_http_requests_total{job=~"gitlab-workhorse|gitlab-workhorse-web",type="web"}[1m])
       )
   - record: gitlab_component_errors:rate
@@ -243,13 +243,13 @@ groups:
       type: web
     expr: |
       (
-        sum by (environment,stage) (
+        sum by (env,environment,stage) (
           rate(gitlab_workhorse_http_requests_total{code=~"^5.*",job=~"gitlab-workhorse|gitlab-workhorse-web",route!="^/-/health$",route!="^/-/(readiness|liveness)$",type="web"}[1m])
         )
       )
       or
       (
-        0 * group by(environment,stage) (
+        0 * group by(env,environment,stage) (
           gitlab_component_ops:rate{component="workhorse",tier="sv",type="web"}
         )
       )
@@ -297,7 +297,7 @@ groups:
       tier: sv
       type: web
     expr: |
-      sum by (environment,stage) (
+      sum by (env,environment,stage) (
         sli_aggregations:gitlab_sli_global_search_apdex_success_total_rate5m{job="gitlab-rails",type="web"}
       )
   - record: gitlab_component_apdex:weight:score_5m
@@ -306,7 +306,7 @@ groups:
       tier: sv
       type: web
     expr: |
-      sum by (environment,stage) (
+      sum by (env,environment,stage) (
         sli_aggregations:gitlab_sli_global_search_apdex_total_rate5m{job="gitlab-rails",type="web"}
       )
   - record: gitlab_component_ops:rate_5m
@@ -315,7 +315,7 @@ groups:
       tier: sv
       type: web
     expr: |
-      sum by (environment,stage) (
+      sum by (env,environment,stage) (
         sli_aggregations:gitlab_sli_global_search_apdex_total_rate5m{job="gitlab-rails",type="web"}
       )
   - record: gitlab_component_apdex:success:rate_5m
@@ -325,11 +325,11 @@ groups:
       type: web
     expr: |
       (
-        sum by (environment,stage) (
+        sum by (env,environment,stage) (
           rate(gitlab_workhorse_image_resize_duration_seconds_bucket{job=~"gitlab-workhorse|gitlab-workhorse-web",le="0.4",type="web"}[5m])
         )
         +
-        sum by (environment,stage) (
+        sum by (env,environment,stage) (
           rate(gitlab_workhorse_image_resize_duration_seconds_bucket{job=~"gitlab-workhorse|gitlab-workhorse-web",le="0.8",type="web"}[5m])
         )
       )
@@ -341,7 +341,7 @@ groups:
       tier: sv
       type: web
     expr: |
-      sum by (environment,stage) (
+      sum by (env,environment,stage) (
         rate(gitlab_workhorse_image_resize_duration_seconds_bucket{job=~"gitlab-workhorse|gitlab-workhorse-web",le="+Inf",type="web"}[5m])
       )
   - record: gitlab_component_ops:rate_5m
@@ -350,7 +350,7 @@ groups:
       tier: sv
       type: web
     expr: |
-      sum by (environment,stage) (
+      sum by (env,environment,stage) (
         rate(gitlab_workhorse_image_resize_requests_total{job=~"gitlab-workhorse|gitlab-workhorse-web",type="web"}[5m])
       )
   - record: gitlab_component_ops:rate_5m
@@ -360,7 +360,7 @@ groups:
       tier: sv
       type: web
     expr: |
-      sum by (environment) (
+      sum by (env,environment) (
         rate(haproxy_backend_http_responses_total{backend="canary_web",type="frontend"}[5m])
       )
   - record: gitlab_component_ops:rate_5m
@@ -370,7 +370,7 @@ groups:
       tier: sv
       type: web
     expr: |
-      sum by (environment) (
+      sum by (env,environment) (
         rate(haproxy_backend_http_responses_total{backend=~"web|main_web",type="frontend"}[5m])
       )
   - record: gitlab_component_errors:rate_5m
@@ -381,13 +381,13 @@ groups:
       type: web
     expr: |
       (
-        sum by (environment) (
+        sum by (env,environment) (
           rate(haproxy_backend_http_responses_total{backend="canary_web",code="5xx",type="frontend"}[5m])
         )
       )
       or
       (
-        0 * group by(environment) (
+        0 * group by(env,environment) (
           gitlab_component_ops:rate_5m{component="loadbalancer",stage="cny",tier="sv",type="web"}
         )
       )
@@ -399,13 +399,13 @@ groups:
       type: web
     expr: |
       (
-        sum by (environment) (
+        sum by (env,environment) (
           rate(haproxy_backend_http_responses_total{backend=~"web|main_web",code="5xx",type="frontend"}[5m])
         )
       )
       or
       (
-        0 * group by(environment) (
+        0 * group by(env,environment) (
           gitlab_component_ops:rate_5m{component="loadbalancer",stage="main",tier="sv",type="web"}
         )
       )
@@ -415,7 +415,7 @@ groups:
       tier: sv
       type: web
     expr: |
-      sum by (environment,stage) (
+      sum by (env,environment,stage) (
         sli_aggregations:gitlab_sli_rails_request_apdex_success_total_rate5m{job="gitlab-rails",type="web"}
       )
   - record: gitlab_component_apdex:weight:score_5m
@@ -424,7 +424,7 @@ groups:
       tier: sv
       type: web
     expr: |
-      sum by (environment,stage) (
+      sum by (env,environment,stage) (
         sli_aggregations:gitlab_sli_rails_request_apdex_total_rate5m{job="gitlab-rails",type="web"}
       )
   - record: gitlab_component_ops:rate_5m
@@ -433,7 +433,7 @@ groups:
       tier: sv
       type: web
     expr: |
-      sum by (environment,stage) (
+      sum by (env,environment,stage) (
         sli_aggregations:gitlab_sli_rails_request_total_rate5m{job="gitlab-rails",type="web"}
       )
   - record: gitlab_component_errors:rate_5m
@@ -443,13 +443,13 @@ groups:
       type: web
     expr: |
       (
-        sum by (environment,stage) (
+        sum by (env,environment,stage) (
           sli_aggregations:gitlab_sli_rails_request_error_total_rate5m{job="gitlab-rails",type="web"}
         )
       )
       or
       (
-        0 * group by(environment,stage) (
+        0 * group by(env,environment,stage) (
           gitlab_component_ops:rate_5m{component="rails_request",tier="sv",type="web"}
         )
       )
@@ -460,11 +460,11 @@ groups:
       type: web
     expr: |
       (
-        sum by (environment,stage) (
+        sum by (env,environment,stage) (
           rate(gitlab_workhorse_http_request_duration_seconds_bucket{job=~"gitlab-workhorse|gitlab-workhorse-web",le="1",route!="^/([^/]+/){1,}[^/]+/uploads\\z",route!="^/-/health$",route!="^/-/(readiness|liveness)$",route!="^/([^/]+/){1,}[^/]+\\.git/git-receive-pack\\z",route!="^/([^/]+/){1,}[^/]+\\.git/git-upload-pack\\z",route!="^/([^/]+/){1,}[^/]+\\.git/info/refs\\z",route!="^/([^/]+/){1,}[^/]+\\.git/gitlab-lfs/objects/([0-9a-f]{64})/([0-9]+)\\z",type="web"}[5m])
         )
         +
-        sum by (environment,stage) (
+        sum by (env,environment,stage) (
           rate(gitlab_workhorse_http_request_duration_seconds_bucket{job=~"gitlab-workhorse|gitlab-workhorse-web",le="10",route!="^/([^/]+/){1,}[^/]+/uploads\\z",route!="^/-/health$",route!="^/-/(readiness|liveness)$",route!="^/([^/]+/){1,}[^/]+\\.git/git-receive-pack\\z",route!="^/([^/]+/){1,}[^/]+\\.git/git-upload-pack\\z",route!="^/([^/]+/){1,}[^/]+\\.git/info/refs\\z",route!="^/([^/]+/){1,}[^/]+\\.git/gitlab-lfs/objects/([0-9a-f]{64})/([0-9]+)\\z",type="web"}[5m])
         )
       )
@@ -476,7 +476,7 @@ groups:
       tier: sv
       type: web
     expr: |
-      sum by (environment,stage) (
+      sum by (env,environment,stage) (
         rate(gitlab_workhorse_http_request_duration_seconds_bucket{job=~"gitlab-workhorse|gitlab-workhorse-web",le="+Inf",route!="^/([^/]+/){1,}[^/]+/uploads\\z",route!="^/-/health$",route!="^/-/(readiness|liveness)$",route!="^/([^/]+/){1,}[^/]+\\.git/git-receive-pack\\z",route!="^/([^/]+/){1,}[^/]+\\.git/git-upload-pack\\z",route!="^/([^/]+/){1,}[^/]+\\.git/info/refs\\z",route!="^/([^/]+/){1,}[^/]+\\.git/gitlab-lfs/objects/([0-9a-f]{64})/([0-9]+)\\z",type="web"}[5m])
       )
   - record: gitlab_component_ops:rate_5m
@@ -485,7 +485,7 @@ groups:
       tier: sv
       type: web
     expr: |
-      sum by (environment,stage) (
+      sum by (env,environment,stage) (
         rate(gitlab_workhorse_http_requests_total{job=~"gitlab-workhorse|gitlab-workhorse-web",type="web"}[5m])
       )
   - record: gitlab_component_errors:rate_5m
@@ -495,13 +495,13 @@ groups:
       type: web
     expr: |
       (
-        sum by (environment,stage) (
+        sum by (env,environment,stage) (
           rate(gitlab_workhorse_http_requests_total{code=~"^5.*",job=~"gitlab-workhorse|gitlab-workhorse-web",route!="^/-/health$",route!="^/-/(readiness|liveness)$",type="web"}[5m])
         )
       )
       or
       (
-        0 * group by(environment,stage) (
+        0 * group by(env,environment,stage) (
           gitlab_component_ops:rate_5m{component="workhorse",tier="sv",type="web"}
         )
       )
@@ -549,7 +549,7 @@ groups:
       tier: sv
       type: web
     expr: |
-      sum by (environment,stage) (
+      sum by (env,environment,stage) (
         sli_aggregations:gitlab_sli_global_search_apdex_success_total_rate30m{job="gitlab-rails",type="web"}
       )
   - record: gitlab_component_apdex:weight:score_30m
@@ -558,7 +558,7 @@ groups:
       tier: sv
       type: web
     expr: |
-      sum by (environment,stage) (
+      sum by (env,environment,stage) (
         sli_aggregations:gitlab_sli_global_search_apdex_total_rate30m{job="gitlab-rails",type="web"}
       )
   - record: gitlab_component_ops:rate_30m
@@ -567,7 +567,7 @@ groups:
       tier: sv
       type: web
     expr: |
-      sum by (environment,stage) (
+      sum by (env,environment,stage) (
         sli_aggregations:gitlab_sli_global_search_apdex_total_rate30m{job="gitlab-rails",type="web"}
       )
   - record: gitlab_component_apdex:success:rate_30m
@@ -577,11 +577,11 @@ groups:
       type: web
     expr: |
       (
-        sum by (environment,stage) (
+        sum by (env,environment,stage) (
           rate(gitlab_workhorse_image_resize_duration_seconds_bucket{job=~"gitlab-workhorse|gitlab-workhorse-web",le="0.4",type="web"}[30m])
         )
         +
-        sum by (environment,stage) (
+        sum by (env,environment,stage) (
           rate(gitlab_workhorse_image_resize_duration_seconds_bucket{job=~"gitlab-workhorse|gitlab-workhorse-web",le="0.8",type="web"}[30m])
         )
       )
@@ -593,7 +593,7 @@ groups:
       tier: sv
       type: web
     expr: |
-      sum by (environment,stage) (
+      sum by (env,environment,stage) (
         rate(gitlab_workhorse_image_resize_duration_seconds_bucket{job=~"gitlab-workhorse|gitlab-workhorse-web",le="+Inf",type="web"}[30m])
       )
   - record: gitlab_component_ops:rate_30m
@@ -602,7 +602,7 @@ groups:
       tier: sv
       type: web
     expr: |
-      sum by (environment,stage) (
+      sum by (env,environment,stage) (
         rate(gitlab_workhorse_image_resize_requests_total{job=~"gitlab-workhorse|gitlab-workhorse-web",type="web"}[30m])
       )
   - record: gitlab_component_ops:rate_30m
@@ -612,7 +612,7 @@ groups:
       tier: sv
       type: web
     expr: |
-      sum by (environment) (
+      sum by (env,environment) (
         rate(haproxy_backend_http_responses_total{backend="canary_web",type="frontend"}[30m])
       )
   - record: gitlab_component_ops:rate_30m
@@ -622,7 +622,7 @@ groups:
       tier: sv
       type: web
     expr: |
-      sum by (environment) (
+      sum by (env,environment) (
         rate(haproxy_backend_http_responses_total{backend=~"web|main_web",type="frontend"}[30m])
       )
   - record: gitlab_component_errors:rate_30m
@@ -633,13 +633,13 @@ groups:
       type: web
     expr: |
       (
-        sum by (environment) (
+        sum by (env,environment) (
           rate(haproxy_backend_http_responses_total{backend="canary_web",code="5xx",type="frontend"}[30m])
         )
       )
       or
       (
-        0 * group by(environment) (
+        0 * group by(env,environment) (
           gitlab_component_ops:rate_30m{component="loadbalancer",stage="cny",tier="sv",type="web"}
         )
       )
@@ -651,13 +651,13 @@ groups:
       type: web
     expr: |
       (
-        sum by (environment) (
+        sum by (env,environment) (
           rate(haproxy_backend_http_responses_total{backend=~"web|main_web",code="5xx",type="frontend"}[30m])
         )
       )
       or
       (
-        0 * group by(environment) (
+        0 * group by(env,environment) (
           gitlab_component_ops:rate_30m{component="loadbalancer",stage="main",tier="sv",type="web"}
         )
       )
@@ -667,7 +667,7 @@ groups:
       tier: sv
       type: web
     expr: |
-      sum by (environment,stage) (
+      sum by (env,environment,stage) (
         sli_aggregations:gitlab_sli_rails_request_apdex_success_total_rate30m{job="gitlab-rails",type="web"}
       )
   - record: gitlab_component_apdex:weight:score_30m
@@ -676,7 +676,7 @@ groups:
       tier: sv
       type: web
     expr: |
-      sum by (environment,stage) (
+      sum by (env,environment,stage) (
         sli_aggregations:gitlab_sli_rails_request_apdex_total_rate30m{job="gitlab-rails",type="web"}
       )
   - record: gitlab_component_ops:rate_30m
@@ -685,7 +685,7 @@ groups:
       tier: sv
       type: web
     expr: |
-      sum by (environment,stage) (
+      sum by (env,environment,stage) (
         sli_aggregations:gitlab_sli_rails_request_total_rate30m{job="gitlab-rails",type="web"}
       )
   - record: gitlab_component_errors:rate_30m
@@ -695,13 +695,13 @@ groups:
       type: web
     expr: |
       (
-        sum by (environment,stage) (
+        sum by (env,environment,stage) (
           sli_aggregations:gitlab_sli_rails_request_error_total_rate30m{job="gitlab-rails",type="web"}
         )
       )
       or
       (
-        0 * group by(environment,stage) (
+        0 * group by(env,environment,stage) (
           gitlab_component_ops:rate_30m{component="rails_request",tier="sv",type="web"}
         )
       )
@@ -712,11 +712,11 @@ groups:
       type: web
     expr: |
       (
-        sum by (environment,stage) (
+        sum by (env,environment,stage) (
           rate(gitlab_workhorse_http_request_duration_seconds_bucket{job=~"gitlab-workhorse|gitlab-workhorse-web",le="1",route!="^/([^/]+/){1,}[^/]+/uploads\\z",route!="^/-/health$",route!="^/-/(readiness|liveness)$",route!="^/([^/]+/){1,}[^/]+\\.git/git-receive-pack\\z",route!="^/([^/]+/){1,}[^/]+\\.git/git-upload-pack\\z",route!="^/([^/]+/){1,}[^/]+\\.git/info/refs\\z",route!="^/([^/]+/){1,}[^/]+\\.git/gitlab-lfs/objects/([0-9a-f]{64})/([0-9]+)\\z",type="web"}[30m])
         )
         +
-        sum by (environment,stage) (
+        sum by (env,environment,stage) (
           rate(gitlab_workhorse_http_request_duration_seconds_bucket{job=~"gitlab-workhorse|gitlab-workhorse-web",le="10",route!="^/([^/]+/){1,}[^/]+/uploads\\z",route!="^/-/health$",route!="^/-/(readiness|liveness)$",route!="^/([^/]+/){1,}[^/]+\\.git/git-receive-pack\\z",route!="^/([^/]+/){1,}[^/]+\\.git/git-upload-pack\\z",route!="^/([^/]+/){1,}[^/]+\\.git/info/refs\\z",route!="^/([^/]+/){1,}[^/]+\\.git/gitlab-lfs/objects/([0-9a-f]{64})/([0-9]+)\\z",type="web"}[30m])
         )
       )
@@ -728,7 +728,7 @@ groups:
       tier: sv
       type: web
     expr: |
-      sum by (environment,stage) (
+      sum by (env,environment,stage) (
         rate(gitlab_workhorse_http_request_duration_seconds_bucket{job=~"gitlab-workhorse|gitlab-workhorse-web",le="+Inf",route!="^/([^/]+/){1,}[^/]+/uploads\\z",route!="^/-/health$",route!="^/-/(readiness|liveness)$",route!="^/([^/]+/){1,}[^/]+\\.git/git-receive-pack\\z",route!="^/([^/]+/){1,}[^/]+\\.git/git-upload-pack\\z",route!="^/([^/]+/){1,}[^/]+\\.git/info/refs\\z",route!="^/([^/]+/){1,}[^/]+\\.git/gitlab-lfs/objects/([0-9a-f]{64})/([0-9]+)\\z",type="web"}[30m])
       )
   - record: gitlab_component_ops:rate_30m
@@ -737,7 +737,7 @@ groups:
       tier: sv
       type: web
     expr: |
-      sum by (environment,stage) (
+      sum by (env,environment,stage) (
         rate(gitlab_workhorse_http_requests_total{job=~"gitlab-workhorse|gitlab-workhorse-web",type="web"}[30m])
       )
   - record: gitlab_component_errors:rate_30m
@@ -747,13 +747,13 @@ groups:
       type: web
     expr: |
       (
-        sum by (environment,stage) (
+        sum by (env,environment,stage) (
           rate(gitlab_workhorse_http_requests_total{code=~"^5.*",job=~"gitlab-workhorse|gitlab-workhorse-web",route!="^/-/health$",route!="^/-/(readiness|liveness)$",type="web"}[30m])
         )
       )
       or
       (
-        0 * group by(environment,stage) (
+        0 * group by(env,environment,stage) (
           gitlab_component_ops:rate_30m{component="workhorse",tier="sv",type="web"}
         )
       )
@@ -801,7 +801,7 @@ groups:
       tier: sv
       type: web
     expr: |
-      sum by (environment,stage) (
+      sum by (env,environment,stage) (
         sli_aggregations:gitlab_sli_global_search_apdex_success_total_rate1h{job="gitlab-rails",type="web"}
       )
   - record: gitlab_component_apdex:weight:score_1h
@@ -810,7 +810,7 @@ groups:
       tier: sv
       type: web
     expr: |
-      sum by (environment,stage) (
+      sum by (env,environment,stage) (
         sli_aggregations:gitlab_sli_global_search_apdex_total_rate1h{job="gitlab-rails",type="web"}
       )
   - record: gitlab_component_ops:rate_1h
@@ -819,7 +819,7 @@ groups:
       tier: sv
       type: web
     expr: |
-      sum by (environment,stage) (
+      sum by (env,environment,stage) (
         sli_aggregations:gitlab_sli_global_search_apdex_total_rate1h{job="gitlab-rails",type="web"}
       )
   - record: gitlab_component_apdex:success:rate_1h
@@ -829,11 +829,11 @@ groups:
       type: web
     expr: |
       (
-        sum by (environment,stage) (
+        sum by (env,environment,stage) (
           rate(gitlab_workhorse_image_resize_duration_seconds_bucket{job=~"gitlab-workhorse|gitlab-workhorse-web",le="0.4",type="web"}[1h])
         )
         +
-        sum by (environment,stage) (
+        sum by (env,environment,stage) (
           rate(gitlab_workhorse_image_resize_duration_seconds_bucket{job=~"gitlab-workhorse|gitlab-workhorse-web",le="0.8",type="web"}[1h])
         )
       )
@@ -845,7 +845,7 @@ groups:
       tier: sv
       type: web
     expr: |
-      sum by (environment,stage) (
+      sum by (env,environment,stage) (
         rate(gitlab_workhorse_image_resize_duration_seconds_bucket{job=~"gitlab-workhorse|gitlab-workhorse-web",le="+Inf",type="web"}[1h])
       )
   - record: gitlab_component_ops:rate_1h
@@ -854,7 +854,7 @@ groups:
       tier: sv
       type: web
     expr: |
-      sum by (environment,stage) (
+      sum by (env,environment,stage) (
         rate(gitlab_workhorse_image_resize_requests_total{job=~"gitlab-workhorse|gitlab-workhorse-web",type="web"}[1h])
       )
   - record: gitlab_component_ops:rate_1h
@@ -864,7 +864,7 @@ groups:
       tier: sv
       type: web
     expr: |
-      sum by (environment) (
+      sum by (env,environment) (
         rate(haproxy_backend_http_responses_total{backend="canary_web",type="frontend"}[1h])
       )
   - record: gitlab_component_ops:rate_1h
@@ -874,7 +874,7 @@ groups:
       tier: sv
       type: web
     expr: |
-      sum by (environment) (
+      sum by (env,environment) (
         rate(haproxy_backend_http_responses_total{backend=~"web|main_web",type="frontend"}[1h])
       )
   - record: gitlab_component_errors:rate_1h
@@ -885,13 +885,13 @@ groups:
       type: web
     expr: |
       (
-        sum by (environment) (
+        sum by (env,environment) (
           rate(haproxy_backend_http_responses_total{backend="canary_web",code="5xx",type="frontend"}[1h])
         )
       )
       or
       (
-        0 * group by(environment) (
+        0 * group by(env,environment) (
           gitlab_component_ops:rate_1h{component="loadbalancer",stage="cny",tier="sv",type="web"}
         )
       )
@@ -903,13 +903,13 @@ groups:
       type: web
     expr: |
       (
-        sum by (environment) (
+        sum by (env,environment) (
           rate(haproxy_backend_http_responses_total{backend=~"web|main_web",code="5xx",type="frontend"}[1h])
         )
       )
       or
       (
-        0 * group by(environment) (
+        0 * group by(env,environment) (
           gitlab_component_ops:rate_1h{component="loadbalancer",stage="main",tier="sv",type="web"}
         )
       )
@@ -919,7 +919,7 @@ groups:
       tier: sv
       type: web
     expr: |
-      sum by (environment,stage) (
+      sum by (env,environment,stage) (
         sli_aggregations:gitlab_sli_rails_request_apdex_success_total_rate1h{job="gitlab-rails",type="web"}
       )
   - record: gitlab_component_apdex:weight:score_1h
@@ -928,7 +928,7 @@ groups:
       tier: sv
       type: web
     expr: |
-      sum by (environment,stage) (
+      sum by (env,environment,stage) (
         sli_aggregations:gitlab_sli_rails_request_apdex_total_rate1h{job="gitlab-rails",type="web"}
       )
   - record: gitlab_component_ops:rate_1h
@@ -937,7 +937,7 @@ groups:
       tier: sv
       type: web
     expr: |
-      sum by (environment,stage) (
+      sum by (env,environment,stage) (
         sli_aggregations:gitlab_sli_rails_request_total_rate1h{job="gitlab-rails",type="web"}
       )
   - record: gitlab_component_errors:rate_1h
@@ -947,13 +947,13 @@ groups:
       type: web
     expr: |
       (
-        sum by (environment,stage) (
+        sum by (env,environment,stage) (
           sli_aggregations:gitlab_sli_rails_request_error_total_rate1h{job="gitlab-rails",type="web"}
         )
       )
       or
       (
-        0 * group by(environment,stage) (
+        0 * group by(env,environment,stage) (
           gitlab_component_ops:rate_1h{component="rails_request",tier="sv",type="web"}
         )
       )
@@ -964,11 +964,11 @@ groups:
       type: web
     expr: |
       (
-        sum by (environment,stage) (
+        sum by (env,environment,stage) (
           rate(gitlab_workhorse_http_request_duration_seconds_bucket{job=~"gitlab-workhorse|gitlab-workhorse-web",le="1",route!="^/([^/]+/){1,}[^/]+/uploads\\z",route!="^/-/health$",route!="^/-/(readiness|liveness)$",route!="^/([^/]+/){1,}[^/]+\\.git/git-receive-pack\\z",route!="^/([^/]+/){1,}[^/]+\\.git/git-upload-pack\\z",route!="^/([^/]+/){1,}[^/]+\\.git/info/refs\\z",route!="^/([^/]+/){1,}[^/]+\\.git/gitlab-lfs/objects/([0-9a-f]{64})/([0-9]+)\\z",type="web"}[1h])
         )
         +
-        sum by (environment,stage) (
+        sum by (env,environment,stage) (
           rate(gitlab_workhorse_http_request_duration_seconds_bucket{job=~"gitlab-workhorse|gitlab-workhorse-web",le="10",route!="^/([^/]+/){1,}[^/]+/uploads\\z",route!="^/-/health$",route!="^/-/(readiness|liveness)$",route!="^/([^/]+/){1,}[^/]+\\.git/git-receive-pack\\z",route!="^/([^/]+/){1,}[^/]+\\.git/git-upload-pack\\z",route!="^/([^/]+/){1,}[^/]+\\.git/info/refs\\z",route!="^/([^/]+/){1,}[^/]+\\.git/gitlab-lfs/objects/([0-9a-f]{64})/([0-9]+)\\z",type="web"}[1h])
         )
       )
@@ -980,7 +980,7 @@ groups:
       tier: sv
       type: web
     expr: |
-      sum by (environment,stage) (
+      sum by (env,environment,stage) (
         rate(gitlab_workhorse_http_request_duration_seconds_bucket{job=~"gitlab-workhorse|gitlab-workhorse-web",le="+Inf",route!="^/([^/]+/){1,}[^/]+/uploads\\z",route!="^/-/health$",route!="^/-/(readiness|liveness)$",route!="^/([^/]+/){1,}[^/]+\\.git/git-receive-pack\\z",route!="^/([^/]+/){1,}[^/]+\\.git/git-upload-pack\\z",route!="^/([^/]+/){1,}[^/]+\\.git/info/refs\\z",route!="^/([^/]+/){1,}[^/]+\\.git/gitlab-lfs/objects/([0-9a-f]{64})/([0-9]+)\\z",type="web"}[1h])
       )
   - record: gitlab_component_ops:rate_1h
@@ -989,7 +989,7 @@ groups:
       tier: sv
       type: web
     expr: |
-      sum by (environment,stage) (
+      sum by (env,environment,stage) (
         rate(gitlab_workhorse_http_requests_total{job=~"gitlab-workhorse|gitlab-workhorse-web",type="web"}[1h])
       )
   - record: gitlab_component_errors:rate_1h
@@ -999,13 +999,13 @@ groups:
       type: web
     expr: |
       (
-        sum by (environment,stage) (
+        sum by (env,environment,stage) (
           rate(gitlab_workhorse_http_requests_total{code=~"^5.*",job=~"gitlab-workhorse|gitlab-workhorse-web",route!="^/-/health$",route!="^/-/(readiness|liveness)$",type="web"}[1h])
         )
       )
       or
       (
-        0 * group by(environment,stage) (
+        0 * group by(env,environment,stage) (
           gitlab_component_ops:rate_1h{component="workhorse",tier="sv",type="web"}
         )
       )
@@ -1053,7 +1053,7 @@ groups:
       tier: sv
       type: web
     expr: |
-      sum by (environment,stage) (
+      sum by (env,environment,stage) (
         sli_aggregations:gitlab_sli_global_search_apdex_success_total_rate6h{job="gitlab-rails",type="web"}
       )
   - record: gitlab_component_apdex:weight:score_6h
@@ -1062,7 +1062,7 @@ groups:
       tier: sv
       type: web
     expr: |
-      sum by (environment,stage) (
+      sum by (env,environment,stage) (
         sli_aggregations:gitlab_sli_global_search_apdex_total_rate6h{job="gitlab-rails",type="web"}
       )
   - record: gitlab_component_ops:rate_6h
@@ -1071,7 +1071,7 @@ groups:
       tier: sv
       type: web
     expr: |
-      sum by (environment,stage) (
+      sum by (env,environment,stage) (
         sli_aggregations:gitlab_sli_global_search_apdex_total_rate6h{job="gitlab-rails",type="web"}
       )
   - record: gitlab_component_apdex:success:rate_6h
@@ -1081,11 +1081,11 @@ groups:
       type: web
     expr: |
       (
-        sum by (environment,stage) (
+        sum by (env,environment,stage) (
           rate(gitlab_workhorse_image_resize_duration_seconds_bucket{job=~"gitlab-workhorse|gitlab-workhorse-web",le="0.4",type="web"}[6h])
         )
         +
-        sum by (environment,stage) (
+        sum by (env,environment,stage) (
           rate(gitlab_workhorse_image_resize_duration_seconds_bucket{job=~"gitlab-workhorse|gitlab-workhorse-web",le="0.8",type="web"}[6h])
         )
       )
@@ -1097,7 +1097,7 @@ groups:
       tier: sv
       type: web
     expr: |
-      sum by (environment,stage) (
+      sum by (env,environment,stage) (
         rate(gitlab_workhorse_image_resize_duration_seconds_bucket{job=~"gitlab-workhorse|gitlab-workhorse-web",le="+Inf",type="web"}[6h])
       )
   - record: gitlab_component_ops:rate_6h
@@ -1106,7 +1106,7 @@ groups:
       tier: sv
       type: web
     expr: |
-      sum by (environment,stage) (
+      sum by (env,environment,stage) (
         rate(gitlab_workhorse_image_resize_requests_total{job=~"gitlab-workhorse|gitlab-workhorse-web",type="web"}[6h])
       )
   - record: gitlab_component_ops:rate_6h
@@ -1116,7 +1116,7 @@ groups:
       tier: sv
       type: web
     expr: |
-      sum by (environment) (
+      sum by (env,environment) (
         rate(haproxy_backend_http_responses_total{backend="canary_web",type="frontend"}[6h])
       )
   - record: gitlab_component_ops:rate_6h
@@ -1126,7 +1126,7 @@ groups:
       tier: sv
       type: web
     expr: |
-      sum by (environment) (
+      sum by (env,environment) (
         rate(haproxy_backend_http_responses_total{backend=~"web|main_web",type="frontend"}[6h])
       )
   - record: gitlab_component_errors:rate_6h
@@ -1137,13 +1137,13 @@ groups:
       type: web
     expr: |
       (
-        sum by (environment) (
+        sum by (env,environment) (
           rate(haproxy_backend_http_responses_total{backend="canary_web",code="5xx",type="frontend"}[6h])
         )
       )
       or
       (
-        0 * group by(environment) (
+        0 * group by(env,environment) (
           gitlab_component_ops:rate_6h{component="loadbalancer",stage="cny",tier="sv",type="web"}
         )
       )
@@ -1155,13 +1155,13 @@ groups:
       type: web
     expr: |
       (
-        sum by (environment) (
+        sum by (env,environment) (
           rate(haproxy_backend_http_responses_total{backend=~"web|main_web",code="5xx",type="frontend"}[6h])
         )
       )
       or
       (
-        0 * group by(environment) (
+        0 * group by(env,environment) (
           gitlab_component_ops:rate_6h{component="loadbalancer",stage="main",tier="sv",type="web"}
         )
       )
@@ -1171,7 +1171,7 @@ groups:
       tier: sv
       type: web
     expr: |
-      sum by (environment,stage) (
+      sum by (env,environment,stage) (
         sli_aggregations:gitlab_sli_rails_request_apdex_success_total_rate6h{job="gitlab-rails",type="web"}
       )
   - record: gitlab_component_apdex:weight:score_6h
@@ -1180,7 +1180,7 @@ groups:
       tier: sv
       type: web
     expr: |
-      sum by (environment,stage) (
+      sum by (env,environment,stage) (
         sli_aggregations:gitlab_sli_rails_request_apdex_total_rate6h{job="gitlab-rails",type="web"}
       )
   - record: gitlab_component_ops:rate_6h
@@ -1189,7 +1189,7 @@ groups:
       tier: sv
       type: web
     expr: |
-      sum by (environment,stage) (
+      sum by (env,environment,stage) (
         sli_aggregations:gitlab_sli_rails_request_total_rate6h{job="gitlab-rails",type="web"}
       )
   - record: gitlab_component_errors:rate_6h
@@ -1199,13 +1199,13 @@ groups:
       type: web
     expr: |
       (
-        sum by (environment,stage) (
+        sum by (env,environment,stage) (
           sli_aggregations:gitlab_sli_rails_request_error_total_rate6h{job="gitlab-rails",type="web"}
         )
       )
       or
       (
-        0 * group by(environment,stage) (
+        0 * group by(env,environment,stage) (
           gitlab_component_ops:rate_6h{component="rails_request",tier="sv",type="web"}
         )
       )
@@ -1216,11 +1216,11 @@ groups:
       type: web
     expr: |
       (
-        sum by (environment,stage) (
+        sum by (env,environment,stage) (
           rate(gitlab_workhorse_http_request_duration_seconds_bucket{job=~"gitlab-workhorse|gitlab-workhorse-web",le="1",route!="^/([^/]+/){1,}[^/]+/uploads\\z",route!="^/-/health$",route!="^/-/(readiness|liveness)$",route!="^/([^/]+/){1,}[^/]+\\.git/git-receive-pack\\z",route!="^/([^/]+/){1,}[^/]+\\.git/git-upload-pack\\z",route!="^/([^/]+/){1,}[^/]+\\.git/info/refs\\z",route!="^/([^/]+/){1,}[^/]+\\.git/gitlab-lfs/objects/([0-9a-f]{64})/([0-9]+)\\z",type="web"}[6h])
         )
         +
-        sum by (environment,stage) (
+        sum by (env,environment,stage) (
           rate(gitlab_workhorse_http_request_duration_seconds_bucket{job=~"gitlab-workhorse|gitlab-workhorse-web",le="10",route!="^/([^/]+/){1,}[^/]+/uploads\\z",route!="^/-/health$",route!="^/-/(readiness|liveness)$",route!="^/([^/]+/){1,}[^/]+\\.git/git-receive-pack\\z",route!="^/([^/]+/){1,}[^/]+\\.git/git-upload-pack\\z",route!="^/([^/]+/){1,}[^/]+\\.git/info/refs\\z",route!="^/([^/]+/){1,}[^/]+\\.git/gitlab-lfs/objects/([0-9a-f]{64})/([0-9]+)\\z",type="web"}[6h])
         )
       )
@@ -1232,7 +1232,7 @@ groups:
       tier: sv
       type: web
     expr: |
-      sum by (environment,stage) (
+      sum by (env,environment,stage) (
         rate(gitlab_workhorse_http_request_duration_seconds_bucket{job=~"gitlab-workhorse|gitlab-workhorse-web",le="+Inf",route!="^/([^/]+/){1,}[^/]+/uploads\\z",route!="^/-/health$",route!="^/-/(readiness|liveness)$",route!="^/([^/]+/){1,}[^/]+\\.git/git-receive-pack\\z",route!="^/([^/]+/){1,}[^/]+\\.git/git-upload-pack\\z",route!="^/([^/]+/){1,}[^/]+\\.git/info/refs\\z",route!="^/([^/]+/){1,}[^/]+\\.git/gitlab-lfs/objects/([0-9a-f]{64})/([0-9]+)\\z",type="web"}[6h])
       )
   - record: gitlab_component_ops:rate_6h
@@ -1241,7 +1241,7 @@ groups:
       tier: sv
       type: web
     expr: |
-      sum by (environment,stage) (
+      sum by (env,environment,stage) (
         rate(gitlab_workhorse_http_requests_total{job=~"gitlab-workhorse|gitlab-workhorse-web",type="web"}[6h])
       )
   - record: gitlab_component_errors:rate_6h
@@ -1251,13 +1251,13 @@ groups:
       type: web
     expr: |
       (
-        sum by (environment,stage) (
+        sum by (env,environment,stage) (
           rate(gitlab_workhorse_http_requests_total{code=~"^5.*",job=~"gitlab-workhorse|gitlab-workhorse-web",route!="^/-/health$",route!="^/-/(readiness|liveness)$",type="web"}[6h])
         )
       )
       or
       (
-        0 * group by(environment,stage) (
+        0 * group by(env,environment,stage) (
           gitlab_component_ops:rate_6h{component="workhorse",tier="sv",type="web"}
         )
       )

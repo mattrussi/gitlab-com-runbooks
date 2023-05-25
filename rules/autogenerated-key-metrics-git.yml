@@ -11,7 +11,7 @@ groups:
       tier: sv
       type: git
     expr: |
-      sum by (environment) (
+      sum by (env,environment) (
         sum by (environment) (haproxy_backend_current_session_rate{backend=~"ssh|altssh"})
       )
   - record: gitlab_component_ops:rate
@@ -21,7 +21,7 @@ groups:
       tier: sv
       type: git
     expr: |
-      sum by (environment) (
+      sum by (env,environment) (
         rate(haproxy_backend_sessions_total{backend=~"altssh|ssh"}[1m])
       )
   - record: gitlab_component_apdex:success:rate
@@ -31,11 +31,11 @@ groups:
       type: git
     expr: |
       (
-        sum by (environment,stage) (
+        sum by (env,environment,stage) (
           rate(gitlab_shell_sshd_session_established_duration_seconds_bucket{le="1",type="git"}[1m])
         )
         +
-        sum by (environment,stage) (
+        sum by (env,environment,stage) (
           rate(gitlab_shell_sshd_session_established_duration_seconds_bucket{le="5",type="git"}[1m])
         )
       )
@@ -47,7 +47,7 @@ groups:
       tier: sv
       type: git
     expr: |
-      sum by (environment,stage) (
+      sum by (env,environment,stage) (
         rate(gitlab_shell_sshd_session_established_duration_seconds_bucket{le="+Inf",type="git"}[1m])
       )
   - record: gitlab_component_ops:rate
@@ -56,7 +56,7 @@ groups:
       tier: sv
       type: git
     expr: |
-      sum by (environment,stage) (
+      sum by (env,environment,stage) (
         rate(gitlab_sli:shell_sshd_sessions:total{type="git"}[1m])
       )
   - record: gitlab_component_errors:rate
@@ -66,13 +66,13 @@ groups:
       type: git
     expr: |
       (
-        sum by (environment,stage) (
+        sum by (env,environment,stage) (
           rate(gitlab_sli:shell_sshd_sessions:errors_total{type="git"}[1m])
         )
       )
       or
       (
-        0 * group by(environment,stage) (
+        0 * group by(env,environment,stage) (
           gitlab_component_ops:rate{component="gitlab_sshd",tier="sv",type="git"}
         )
       )
@@ -83,7 +83,7 @@ groups:
       tier: sv
       type: git
     expr: |
-      sum by (environment) (
+      sum by (env,environment) (
         rate(haproxy_backend_http_responses_total{backend="canary_https_git",type="frontend"}[1m])
       )
   - record: gitlab_component_ops:rate
@@ -93,7 +93,7 @@ groups:
       tier: sv
       type: git
     expr: |
-      sum by (environment) (
+      sum by (env,environment) (
         rate(haproxy_backend_http_responses_total{backend="https_git",type="frontend"}[1m])
       )
   - record: gitlab_component_errors:rate
@@ -104,13 +104,13 @@ groups:
       type: git
     expr: |
       (
-        sum by (environment) (
+        sum by (env,environment) (
           rate(haproxy_backend_http_responses_total{backend="canary_https_git",code="5xx",type="frontend"}[1m])
         )
       )
       or
       (
-        0 * group by(environment) (
+        0 * group by(env,environment) (
           gitlab_component_ops:rate{component="loadbalancer",stage="cny",tier="sv",type="git"}
         )
       )
@@ -122,13 +122,13 @@ groups:
       type: git
     expr: |
       (
-        sum by (environment) (
+        sum by (env,environment) (
           rate(haproxy_backend_http_responses_total{backend="https_git",code="5xx",type="frontend"}[1m])
         )
       )
       or
       (
-        0 * group by(environment) (
+        0 * group by(env,environment) (
           gitlab_component_ops:rate{component="loadbalancer",stage="main",tier="sv",type="git"}
         )
       )
@@ -139,7 +139,7 @@ groups:
       tier: sv
       type: git
     expr: |
-      sum by (environment) (
+      sum by (env,environment) (
         rate(haproxy_server_sessions_total{backend=~"ssh|altssh",type="frontend"}[1m])
       )
   - record: gitlab_component_errors:rate
@@ -150,13 +150,13 @@ groups:
       type: git
     expr: |
       (
-        sum by (environment) (
+        sum by (env,environment) (
           rate(haproxy_server_connection_errors_total{backend=~"ssh|altssh",type="frontend"}[1m])
         )
       )
       or
       (
-        0 * group by(environment) (
+        0 * group by(env,environment) (
           gitlab_component_ops:rate{component="loadbalancer_ssh",stage="main",tier="sv",type="git"}
         )
       )
@@ -166,7 +166,7 @@ groups:
       tier: sv
       type: git
     expr: |
-      sum by (environment,stage) (
+      sum by (env,environment,stage) (
         sli_aggregations:gitlab_sli_rails_request_apdex_success_total_rate1m{job="gitlab-rails",type="git"}
       )
   - record: gitlab_component_apdex:weight:score
@@ -175,7 +175,7 @@ groups:
       tier: sv
       type: git
     expr: |
-      sum by (environment,stage) (
+      sum by (env,environment,stage) (
         sli_aggregations:gitlab_sli_rails_request_apdex_total_rate1m{job="gitlab-rails",type="git"}
       )
   - record: gitlab_component_ops:rate
@@ -184,7 +184,7 @@ groups:
       tier: sv
       type: git
     expr: |
-      sum by (environment,stage) (
+      sum by (env,environment,stage) (
         sli_aggregations:gitlab_sli_rails_request_total_rate1m{job="gitlab-rails",type="git"}
       )
   - record: gitlab_component_errors:rate
@@ -194,13 +194,13 @@ groups:
       type: git
     expr: |
       (
-        sum by (environment,stage) (
+        sum by (env,environment,stage) (
           sli_aggregations:gitlab_sli_rails_request_error_total_rate1m{job="gitlab-rails",type="git"}
         )
       )
       or
       (
-        0 * group by(environment,stage) (
+        0 * group by(env,environment,stage) (
           gitlab_component_ops:rate{component="rails_request",tier="sv",type="git"}
         )
       )
@@ -211,11 +211,11 @@ groups:
       type: git
     expr: |
       (
-        sum by (environment,stage) (
+        sum by (env,environment,stage) (
           rate(gitlab_workhorse_http_request_duration_seconds_bucket{job=~"gitlab-workhorse|gitlab-workhorse-git",le="30",route!="^/-/health$",route!="^/-/(readiness|liveness)$",route!="^/api/",route!="\\A/api/v4/jobs/request\\z",route!="^/api/v4/jobs/request\\z",route!="^/([^/]+/){1,}[^/]+/-/jobs/[0-9]+/terminal.ws\\z",route!="^/([^/]+/){1,}[^/]+/-/environments/[0-9]+/terminal.ws\\z",route!="^/-/cable\\z",type="git"}[1m])
         )
         +
-        sum by (environment,stage) (
+        sum by (env,environment,stage) (
           rate(gitlab_workhorse_http_request_duration_seconds_bucket{job=~"gitlab-workhorse|gitlab-workhorse-git",le="60",route!="^/-/health$",route!="^/-/(readiness|liveness)$",route!="^/api/",route!="\\A/api/v4/jobs/request\\z",route!="^/api/v4/jobs/request\\z",route!="^/([^/]+/){1,}[^/]+/-/jobs/[0-9]+/terminal.ws\\z",route!="^/([^/]+/){1,}[^/]+/-/environments/[0-9]+/terminal.ws\\z",route!="^/-/cable\\z",type="git"}[1m])
         )
       )
@@ -227,7 +227,7 @@ groups:
       tier: sv
       type: git
     expr: |
-      sum by (environment,stage) (
+      sum by (env,environment,stage) (
         rate(gitlab_workhorse_http_request_duration_seconds_bucket{job=~"gitlab-workhorse|gitlab-workhorse-git",le="+Inf",route!="^/-/health$",route!="^/-/(readiness|liveness)$",route!="^/api/",route!="\\A/api/v4/jobs/request\\z",route!="^/api/v4/jobs/request\\z",route!="^/([^/]+/){1,}[^/]+/-/jobs/[0-9]+/terminal.ws\\z",route!="^/([^/]+/){1,}[^/]+/-/environments/[0-9]+/terminal.ws\\z",route!="^/-/cable\\z",type="git"}[1m])
       )
   - record: gitlab_component_ops:rate
@@ -236,7 +236,7 @@ groups:
       tier: sv
       type: git
     expr: |
-      sum by (environment,stage) (
+      sum by (env,environment,stage) (
         rate(gitlab_workhorse_http_requests_total{job=~"gitlab-workhorse|gitlab-workhorse-git",route!="^/-/health$",route!="^/-/(readiness|liveness)$",route!="^/api/",route!="\\A/api/v4/jobs/request\\z",route!="^/api/v4/jobs/request\\z",type="git"}[1m])
       )
   - record: gitlab_component_errors:rate
@@ -246,13 +246,13 @@ groups:
       type: git
     expr: |
       (
-        sum by (environment,stage) (
+        sum by (env,environment,stage) (
           rate(gitlab_workhorse_http_requests_total{code=~"^5.*",job=~"gitlab-workhorse|gitlab-workhorse-git",route!="^/-/health$",route!="^/-/(readiness|liveness)$",route!="^/api/",route!="\\A/api/v4/jobs/request\\z",route!="^/api/v4/jobs/request\\z",type="git"}[1m])
         )
       )
       or
       (
-        0 * group by(environment,stage) (
+        0 * group by(env,environment,stage) (
           gitlab_component_ops:rate{component="workhorse",tier="sv",type="git"}
         )
       )
@@ -262,7 +262,7 @@ groups:
       tier: sv
       type: git
     expr: |
-      sum by (environment,stage) (
+      sum by (env,environment,stage) (
         rate(gitlab_workhorse_http_request_duration_seconds_bucket{job=~"gitlab-workhorse|gitlab-workhorse-git",le="1",route="^/api/",type="git"}[1m])
       )
   - record: gitlab_component_apdex:weight:score
@@ -271,7 +271,7 @@ groups:
       tier: sv
       type: git
     expr: |
-      sum by (environment,stage) (
+      sum by (env,environment,stage) (
         rate(gitlab_workhorse_http_request_duration_seconds_bucket{job=~"gitlab-workhorse|gitlab-workhorse-git",le="+Inf",route="^/api/",type="git"}[1m])
       )
   - record: gitlab_component_ops:rate
@@ -280,7 +280,7 @@ groups:
       tier: sv
       type: git
     expr: |
-      sum by (environment,stage) (
+      sum by (env,environment,stage) (
         rate(gitlab_workhorse_http_requests_total{job=~"gitlab-workhorse|gitlab-workhorse-git",route="^/api/",type="git"}[1m])
       )
   - record: gitlab_component_errors:rate
@@ -290,13 +290,13 @@ groups:
       type: git
     expr: |
       (
-        sum by (environment,stage) (
+        sum by (env,environment,stage) (
           rate(gitlab_workhorse_http_requests_total{code=~"^5.*",job=~"gitlab-workhorse|gitlab-workhorse-git",route="^/api/",type="git"}[1m])
         )
       )
       or
       (
-        0 * group by(environment,stage) (
+        0 * group by(env,environment,stage) (
           gitlab_component_ops:rate{component="workhorse_auth_api",tier="sv",type="git"}
         )
       )
@@ -310,7 +310,7 @@ groups:
       tier: sv
       type: git
     expr: |
-      sum by (environment) (
+      sum by (env,environment) (
         sum by (environment) (haproxy_backend_current_session_rate{backend=~"ssh|altssh"})
       )
   - record: gitlab_component_ops:rate_5m
@@ -320,7 +320,7 @@ groups:
       tier: sv
       type: git
     expr: |
-      sum by (environment) (
+      sum by (env,environment) (
         rate(haproxy_backend_sessions_total{backend=~"altssh|ssh"}[5m])
       )
   - record: gitlab_component_apdex:success:rate_5m
@@ -330,11 +330,11 @@ groups:
       type: git
     expr: |
       (
-        sum by (environment,stage) (
+        sum by (env,environment,stage) (
           rate(gitlab_shell_sshd_session_established_duration_seconds_bucket{le="1",type="git"}[5m])
         )
         +
-        sum by (environment,stage) (
+        sum by (env,environment,stage) (
           rate(gitlab_shell_sshd_session_established_duration_seconds_bucket{le="5",type="git"}[5m])
         )
       )
@@ -346,7 +346,7 @@ groups:
       tier: sv
       type: git
     expr: |
-      sum by (environment,stage) (
+      sum by (env,environment,stage) (
         rate(gitlab_shell_sshd_session_established_duration_seconds_bucket{le="+Inf",type="git"}[5m])
       )
   - record: gitlab_component_ops:rate_5m
@@ -355,7 +355,7 @@ groups:
       tier: sv
       type: git
     expr: |
-      sum by (environment,stage) (
+      sum by (env,environment,stage) (
         rate(gitlab_sli:shell_sshd_sessions:total{type="git"}[5m])
       )
   - record: gitlab_component_errors:rate_5m
@@ -365,13 +365,13 @@ groups:
       type: git
     expr: |
       (
-        sum by (environment,stage) (
+        sum by (env,environment,stage) (
           rate(gitlab_sli:shell_sshd_sessions:errors_total{type="git"}[5m])
         )
       )
       or
       (
-        0 * group by(environment,stage) (
+        0 * group by(env,environment,stage) (
           gitlab_component_ops:rate_5m{component="gitlab_sshd",tier="sv",type="git"}
         )
       )
@@ -382,7 +382,7 @@ groups:
       tier: sv
       type: git
     expr: |
-      sum by (environment) (
+      sum by (env,environment) (
         rate(haproxy_backend_http_responses_total{backend="canary_https_git",type="frontend"}[5m])
       )
   - record: gitlab_component_ops:rate_5m
@@ -392,7 +392,7 @@ groups:
       tier: sv
       type: git
     expr: |
-      sum by (environment) (
+      sum by (env,environment) (
         rate(haproxy_backend_http_responses_total{backend="https_git",type="frontend"}[5m])
       )
   - record: gitlab_component_errors:rate_5m
@@ -403,13 +403,13 @@ groups:
       type: git
     expr: |
       (
-        sum by (environment) (
+        sum by (env,environment) (
           rate(haproxy_backend_http_responses_total{backend="canary_https_git",code="5xx",type="frontend"}[5m])
         )
       )
       or
       (
-        0 * group by(environment) (
+        0 * group by(env,environment) (
           gitlab_component_ops:rate_5m{component="loadbalancer",stage="cny",tier="sv",type="git"}
         )
       )
@@ -421,13 +421,13 @@ groups:
       type: git
     expr: |
       (
-        sum by (environment) (
+        sum by (env,environment) (
           rate(haproxy_backend_http_responses_total{backend="https_git",code="5xx",type="frontend"}[5m])
         )
       )
       or
       (
-        0 * group by(environment) (
+        0 * group by(env,environment) (
           gitlab_component_ops:rate_5m{component="loadbalancer",stage="main",tier="sv",type="git"}
         )
       )
@@ -438,7 +438,7 @@ groups:
       tier: sv
       type: git
     expr: |
-      sum by (environment) (
+      sum by (env,environment) (
         rate(haproxy_server_sessions_total{backend=~"ssh|altssh",type="frontend"}[5m])
       )
   - record: gitlab_component_errors:rate_5m
@@ -449,13 +449,13 @@ groups:
       type: git
     expr: |
       (
-        sum by (environment) (
+        sum by (env,environment) (
           rate(haproxy_server_connection_errors_total{backend=~"ssh|altssh",type="frontend"}[5m])
         )
       )
       or
       (
-        0 * group by(environment) (
+        0 * group by(env,environment) (
           gitlab_component_ops:rate_5m{component="loadbalancer_ssh",stage="main",tier="sv",type="git"}
         )
       )
@@ -465,7 +465,7 @@ groups:
       tier: sv
       type: git
     expr: |
-      sum by (environment,stage) (
+      sum by (env,environment,stage) (
         sli_aggregations:gitlab_sli_rails_request_apdex_success_total_rate5m{job="gitlab-rails",type="git"}
       )
   - record: gitlab_component_apdex:weight:score_5m
@@ -474,7 +474,7 @@ groups:
       tier: sv
       type: git
     expr: |
-      sum by (environment,stage) (
+      sum by (env,environment,stage) (
         sli_aggregations:gitlab_sli_rails_request_apdex_total_rate5m{job="gitlab-rails",type="git"}
       )
   - record: gitlab_component_ops:rate_5m
@@ -483,7 +483,7 @@ groups:
       tier: sv
       type: git
     expr: |
-      sum by (environment,stage) (
+      sum by (env,environment,stage) (
         sli_aggregations:gitlab_sli_rails_request_total_rate5m{job="gitlab-rails",type="git"}
       )
   - record: gitlab_component_errors:rate_5m
@@ -493,13 +493,13 @@ groups:
       type: git
     expr: |
       (
-        sum by (environment,stage) (
+        sum by (env,environment,stage) (
           sli_aggregations:gitlab_sli_rails_request_error_total_rate5m{job="gitlab-rails",type="git"}
         )
       )
       or
       (
-        0 * group by(environment,stage) (
+        0 * group by(env,environment,stage) (
           gitlab_component_ops:rate_5m{component="rails_request",tier="sv",type="git"}
         )
       )
@@ -510,11 +510,11 @@ groups:
       type: git
     expr: |
       (
-        sum by (environment,stage) (
+        sum by (env,environment,stage) (
           rate(gitlab_workhorse_http_request_duration_seconds_bucket{job=~"gitlab-workhorse|gitlab-workhorse-git",le="30",route!="^/-/health$",route!="^/-/(readiness|liveness)$",route!="^/api/",route!="\\A/api/v4/jobs/request\\z",route!="^/api/v4/jobs/request\\z",route!="^/([^/]+/){1,}[^/]+/-/jobs/[0-9]+/terminal.ws\\z",route!="^/([^/]+/){1,}[^/]+/-/environments/[0-9]+/terminal.ws\\z",route!="^/-/cable\\z",type="git"}[5m])
         )
         +
-        sum by (environment,stage) (
+        sum by (env,environment,stage) (
           rate(gitlab_workhorse_http_request_duration_seconds_bucket{job=~"gitlab-workhorse|gitlab-workhorse-git",le="60",route!="^/-/health$",route!="^/-/(readiness|liveness)$",route!="^/api/",route!="\\A/api/v4/jobs/request\\z",route!="^/api/v4/jobs/request\\z",route!="^/([^/]+/){1,}[^/]+/-/jobs/[0-9]+/terminal.ws\\z",route!="^/([^/]+/){1,}[^/]+/-/environments/[0-9]+/terminal.ws\\z",route!="^/-/cable\\z",type="git"}[5m])
         )
       )
@@ -526,7 +526,7 @@ groups:
       tier: sv
       type: git
     expr: |
-      sum by (environment,stage) (
+      sum by (env,environment,stage) (
         rate(gitlab_workhorse_http_request_duration_seconds_bucket{job=~"gitlab-workhorse|gitlab-workhorse-git",le="+Inf",route!="^/-/health$",route!="^/-/(readiness|liveness)$",route!="^/api/",route!="\\A/api/v4/jobs/request\\z",route!="^/api/v4/jobs/request\\z",route!="^/([^/]+/){1,}[^/]+/-/jobs/[0-9]+/terminal.ws\\z",route!="^/([^/]+/){1,}[^/]+/-/environments/[0-9]+/terminal.ws\\z",route!="^/-/cable\\z",type="git"}[5m])
       )
   - record: gitlab_component_ops:rate_5m
@@ -535,7 +535,7 @@ groups:
       tier: sv
       type: git
     expr: |
-      sum by (environment,stage) (
+      sum by (env,environment,stage) (
         rate(gitlab_workhorse_http_requests_total{job=~"gitlab-workhorse|gitlab-workhorse-git",route!="^/-/health$",route!="^/-/(readiness|liveness)$",route!="^/api/",route!="\\A/api/v4/jobs/request\\z",route!="^/api/v4/jobs/request\\z",type="git"}[5m])
       )
   - record: gitlab_component_errors:rate_5m
@@ -545,13 +545,13 @@ groups:
       type: git
     expr: |
       (
-        sum by (environment,stage) (
+        sum by (env,environment,stage) (
           rate(gitlab_workhorse_http_requests_total{code=~"^5.*",job=~"gitlab-workhorse|gitlab-workhorse-git",route!="^/-/health$",route!="^/-/(readiness|liveness)$",route!="^/api/",route!="\\A/api/v4/jobs/request\\z",route!="^/api/v4/jobs/request\\z",type="git"}[5m])
         )
       )
       or
       (
-        0 * group by(environment,stage) (
+        0 * group by(env,environment,stage) (
           gitlab_component_ops:rate_5m{component="workhorse",tier="sv",type="git"}
         )
       )
@@ -561,7 +561,7 @@ groups:
       tier: sv
       type: git
     expr: |
-      sum by (environment,stage) (
+      sum by (env,environment,stage) (
         rate(gitlab_workhorse_http_request_duration_seconds_bucket{job=~"gitlab-workhorse|gitlab-workhorse-git",le="1",route="^/api/",type="git"}[5m])
       )
   - record: gitlab_component_apdex:weight:score_5m
@@ -570,7 +570,7 @@ groups:
       tier: sv
       type: git
     expr: |
-      sum by (environment,stage) (
+      sum by (env,environment,stage) (
         rate(gitlab_workhorse_http_request_duration_seconds_bucket{job=~"gitlab-workhorse|gitlab-workhorse-git",le="+Inf",route="^/api/",type="git"}[5m])
       )
   - record: gitlab_component_ops:rate_5m
@@ -579,7 +579,7 @@ groups:
       tier: sv
       type: git
     expr: |
-      sum by (environment,stage) (
+      sum by (env,environment,stage) (
         rate(gitlab_workhorse_http_requests_total{job=~"gitlab-workhorse|gitlab-workhorse-git",route="^/api/",type="git"}[5m])
       )
   - record: gitlab_component_errors:rate_5m
@@ -589,13 +589,13 @@ groups:
       type: git
     expr: |
       (
-        sum by (environment,stage) (
+        sum by (env,environment,stage) (
           rate(gitlab_workhorse_http_requests_total{code=~"^5.*",job=~"gitlab-workhorse|gitlab-workhorse-git",route="^/api/",type="git"}[5m])
         )
       )
       or
       (
-        0 * group by(environment,stage) (
+        0 * group by(env,environment,stage) (
           gitlab_component_ops:rate_5m{component="workhorse_auth_api",tier="sv",type="git"}
         )
       )
@@ -609,7 +609,7 @@ groups:
       tier: sv
       type: git
     expr: |
-      sum by (environment) (
+      sum by (env,environment) (
         sum by (environment) (haproxy_backend_current_session_rate{backend=~"ssh|altssh"})
       )
   - record: gitlab_component_ops:rate_30m
@@ -619,7 +619,7 @@ groups:
       tier: sv
       type: git
     expr: |
-      sum by (environment) (
+      sum by (env,environment) (
         rate(haproxy_backend_sessions_total{backend=~"altssh|ssh"}[30m])
       )
   - record: gitlab_component_apdex:success:rate_30m
@@ -629,11 +629,11 @@ groups:
       type: git
     expr: |
       (
-        sum by (environment,stage) (
+        sum by (env,environment,stage) (
           rate(gitlab_shell_sshd_session_established_duration_seconds_bucket{le="1",type="git"}[30m])
         )
         +
-        sum by (environment,stage) (
+        sum by (env,environment,stage) (
           rate(gitlab_shell_sshd_session_established_duration_seconds_bucket{le="5",type="git"}[30m])
         )
       )
@@ -645,7 +645,7 @@ groups:
       tier: sv
       type: git
     expr: |
-      sum by (environment,stage) (
+      sum by (env,environment,stage) (
         rate(gitlab_shell_sshd_session_established_duration_seconds_bucket{le="+Inf",type="git"}[30m])
       )
   - record: gitlab_component_ops:rate_30m
@@ -654,7 +654,7 @@ groups:
       tier: sv
       type: git
     expr: |
-      sum by (environment,stage) (
+      sum by (env,environment,stage) (
         rate(gitlab_sli:shell_sshd_sessions:total{type="git"}[30m])
       )
   - record: gitlab_component_errors:rate_30m
@@ -664,13 +664,13 @@ groups:
       type: git
     expr: |
       (
-        sum by (environment,stage) (
+        sum by (env,environment,stage) (
           rate(gitlab_sli:shell_sshd_sessions:errors_total{type="git"}[30m])
         )
       )
       or
       (
-        0 * group by(environment,stage) (
+        0 * group by(env,environment,stage) (
           gitlab_component_ops:rate_30m{component="gitlab_sshd",tier="sv",type="git"}
         )
       )
@@ -681,7 +681,7 @@ groups:
       tier: sv
       type: git
     expr: |
-      sum by (environment) (
+      sum by (env,environment) (
         rate(haproxy_backend_http_responses_total{backend="canary_https_git",type="frontend"}[30m])
       )
   - record: gitlab_component_ops:rate_30m
@@ -691,7 +691,7 @@ groups:
       tier: sv
       type: git
     expr: |
-      sum by (environment) (
+      sum by (env,environment) (
         rate(haproxy_backend_http_responses_total{backend="https_git",type="frontend"}[30m])
       )
   - record: gitlab_component_errors:rate_30m
@@ -702,13 +702,13 @@ groups:
       type: git
     expr: |
       (
-        sum by (environment) (
+        sum by (env,environment) (
           rate(haproxy_backend_http_responses_total{backend="canary_https_git",code="5xx",type="frontend"}[30m])
         )
       )
       or
       (
-        0 * group by(environment) (
+        0 * group by(env,environment) (
           gitlab_component_ops:rate_30m{component="loadbalancer",stage="cny",tier="sv",type="git"}
         )
       )
@@ -720,13 +720,13 @@ groups:
       type: git
     expr: |
       (
-        sum by (environment) (
+        sum by (env,environment) (
           rate(haproxy_backend_http_responses_total{backend="https_git",code="5xx",type="frontend"}[30m])
         )
       )
       or
       (
-        0 * group by(environment) (
+        0 * group by(env,environment) (
           gitlab_component_ops:rate_30m{component="loadbalancer",stage="main",tier="sv",type="git"}
         )
       )
@@ -737,7 +737,7 @@ groups:
       tier: sv
       type: git
     expr: |
-      sum by (environment) (
+      sum by (env,environment) (
         rate(haproxy_server_sessions_total{backend=~"ssh|altssh",type="frontend"}[30m])
       )
   - record: gitlab_component_errors:rate_30m
@@ -748,13 +748,13 @@ groups:
       type: git
     expr: |
       (
-        sum by (environment) (
+        sum by (env,environment) (
           rate(haproxy_server_connection_errors_total{backend=~"ssh|altssh",type="frontend"}[30m])
         )
       )
       or
       (
-        0 * group by(environment) (
+        0 * group by(env,environment) (
           gitlab_component_ops:rate_30m{component="loadbalancer_ssh",stage="main",tier="sv",type="git"}
         )
       )
@@ -764,7 +764,7 @@ groups:
       tier: sv
       type: git
     expr: |
-      sum by (environment,stage) (
+      sum by (env,environment,stage) (
         sli_aggregations:gitlab_sli_rails_request_apdex_success_total_rate30m{job="gitlab-rails",type="git"}
       )
   - record: gitlab_component_apdex:weight:score_30m
@@ -773,7 +773,7 @@ groups:
       tier: sv
       type: git
     expr: |
-      sum by (environment,stage) (
+      sum by (env,environment,stage) (
         sli_aggregations:gitlab_sli_rails_request_apdex_total_rate30m{job="gitlab-rails",type="git"}
       )
   - record: gitlab_component_ops:rate_30m
@@ -782,7 +782,7 @@ groups:
       tier: sv
       type: git
     expr: |
-      sum by (environment,stage) (
+      sum by (env,environment,stage) (
         sli_aggregations:gitlab_sli_rails_request_total_rate30m{job="gitlab-rails",type="git"}
       )
   - record: gitlab_component_errors:rate_30m
@@ -792,13 +792,13 @@ groups:
       type: git
     expr: |
       (
-        sum by (environment,stage) (
+        sum by (env,environment,stage) (
           sli_aggregations:gitlab_sli_rails_request_error_total_rate30m{job="gitlab-rails",type="git"}
         )
       )
       or
       (
-        0 * group by(environment,stage) (
+        0 * group by(env,environment,stage) (
           gitlab_component_ops:rate_30m{component="rails_request",tier="sv",type="git"}
         )
       )
@@ -809,11 +809,11 @@ groups:
       type: git
     expr: |
       (
-        sum by (environment,stage) (
+        sum by (env,environment,stage) (
           rate(gitlab_workhorse_http_request_duration_seconds_bucket{job=~"gitlab-workhorse|gitlab-workhorse-git",le="30",route!="^/-/health$",route!="^/-/(readiness|liveness)$",route!="^/api/",route!="\\A/api/v4/jobs/request\\z",route!="^/api/v4/jobs/request\\z",route!="^/([^/]+/){1,}[^/]+/-/jobs/[0-9]+/terminal.ws\\z",route!="^/([^/]+/){1,}[^/]+/-/environments/[0-9]+/terminal.ws\\z",route!="^/-/cable\\z",type="git"}[30m])
         )
         +
-        sum by (environment,stage) (
+        sum by (env,environment,stage) (
           rate(gitlab_workhorse_http_request_duration_seconds_bucket{job=~"gitlab-workhorse|gitlab-workhorse-git",le="60",route!="^/-/health$",route!="^/-/(readiness|liveness)$",route!="^/api/",route!="\\A/api/v4/jobs/request\\z",route!="^/api/v4/jobs/request\\z",route!="^/([^/]+/){1,}[^/]+/-/jobs/[0-9]+/terminal.ws\\z",route!="^/([^/]+/){1,}[^/]+/-/environments/[0-9]+/terminal.ws\\z",route!="^/-/cable\\z",type="git"}[30m])
         )
       )
@@ -825,7 +825,7 @@ groups:
       tier: sv
       type: git
     expr: |
-      sum by (environment,stage) (
+      sum by (env,environment,stage) (
         rate(gitlab_workhorse_http_request_duration_seconds_bucket{job=~"gitlab-workhorse|gitlab-workhorse-git",le="+Inf",route!="^/-/health$",route!="^/-/(readiness|liveness)$",route!="^/api/",route!="\\A/api/v4/jobs/request\\z",route!="^/api/v4/jobs/request\\z",route!="^/([^/]+/){1,}[^/]+/-/jobs/[0-9]+/terminal.ws\\z",route!="^/([^/]+/){1,}[^/]+/-/environments/[0-9]+/terminal.ws\\z",route!="^/-/cable\\z",type="git"}[30m])
       )
   - record: gitlab_component_ops:rate_30m
@@ -834,7 +834,7 @@ groups:
       tier: sv
       type: git
     expr: |
-      sum by (environment,stage) (
+      sum by (env,environment,stage) (
         rate(gitlab_workhorse_http_requests_total{job=~"gitlab-workhorse|gitlab-workhorse-git",route!="^/-/health$",route!="^/-/(readiness|liveness)$",route!="^/api/",route!="\\A/api/v4/jobs/request\\z",route!="^/api/v4/jobs/request\\z",type="git"}[30m])
       )
   - record: gitlab_component_errors:rate_30m
@@ -844,13 +844,13 @@ groups:
       type: git
     expr: |
       (
-        sum by (environment,stage) (
+        sum by (env,environment,stage) (
           rate(gitlab_workhorse_http_requests_total{code=~"^5.*",job=~"gitlab-workhorse|gitlab-workhorse-git",route!="^/-/health$",route!="^/-/(readiness|liveness)$",route!="^/api/",route!="\\A/api/v4/jobs/request\\z",route!="^/api/v4/jobs/request\\z",type="git"}[30m])
         )
       )
       or
       (
-        0 * group by(environment,stage) (
+        0 * group by(env,environment,stage) (
           gitlab_component_ops:rate_30m{component="workhorse",tier="sv",type="git"}
         )
       )
@@ -860,7 +860,7 @@ groups:
       tier: sv
       type: git
     expr: |
-      sum by (environment,stage) (
+      sum by (env,environment,stage) (
         rate(gitlab_workhorse_http_request_duration_seconds_bucket{job=~"gitlab-workhorse|gitlab-workhorse-git",le="1",route="^/api/",type="git"}[30m])
       )
   - record: gitlab_component_apdex:weight:score_30m
@@ -869,7 +869,7 @@ groups:
       tier: sv
       type: git
     expr: |
-      sum by (environment,stage) (
+      sum by (env,environment,stage) (
         rate(gitlab_workhorse_http_request_duration_seconds_bucket{job=~"gitlab-workhorse|gitlab-workhorse-git",le="+Inf",route="^/api/",type="git"}[30m])
       )
   - record: gitlab_component_ops:rate_30m
@@ -878,7 +878,7 @@ groups:
       tier: sv
       type: git
     expr: |
-      sum by (environment,stage) (
+      sum by (env,environment,stage) (
         rate(gitlab_workhorse_http_requests_total{job=~"gitlab-workhorse|gitlab-workhorse-git",route="^/api/",type="git"}[30m])
       )
   - record: gitlab_component_errors:rate_30m
@@ -888,13 +888,13 @@ groups:
       type: git
     expr: |
       (
-        sum by (environment,stage) (
+        sum by (env,environment,stage) (
           rate(gitlab_workhorse_http_requests_total{code=~"^5.*",job=~"gitlab-workhorse|gitlab-workhorse-git",route="^/api/",type="git"}[30m])
         )
       )
       or
       (
-        0 * group by(environment,stage) (
+        0 * group by(env,environment,stage) (
           gitlab_component_ops:rate_30m{component="workhorse_auth_api",tier="sv",type="git"}
         )
       )
@@ -908,7 +908,7 @@ groups:
       tier: sv
       type: git
     expr: |
-      sum by (environment) (
+      sum by (env,environment) (
         sum by (environment) (haproxy_backend_current_session_rate{backend=~"ssh|altssh"})
       )
   - record: gitlab_component_ops:rate_1h
@@ -918,7 +918,7 @@ groups:
       tier: sv
       type: git
     expr: |
-      sum by (environment) (
+      sum by (env,environment) (
         rate(haproxy_backend_sessions_total{backend=~"altssh|ssh"}[1h])
       )
   - record: gitlab_component_apdex:success:rate_1h
@@ -928,11 +928,11 @@ groups:
       type: git
     expr: |
       (
-        sum by (environment,stage) (
+        sum by (env,environment,stage) (
           rate(gitlab_shell_sshd_session_established_duration_seconds_bucket{le="1",type="git"}[1h])
         )
         +
-        sum by (environment,stage) (
+        sum by (env,environment,stage) (
           rate(gitlab_shell_sshd_session_established_duration_seconds_bucket{le="5",type="git"}[1h])
         )
       )
@@ -944,7 +944,7 @@ groups:
       tier: sv
       type: git
     expr: |
-      sum by (environment,stage) (
+      sum by (env,environment,stage) (
         rate(gitlab_shell_sshd_session_established_duration_seconds_bucket{le="+Inf",type="git"}[1h])
       )
   - record: gitlab_component_ops:rate_1h
@@ -953,7 +953,7 @@ groups:
       tier: sv
       type: git
     expr: |
-      sum by (environment,stage) (
+      sum by (env,environment,stage) (
         rate(gitlab_sli:shell_sshd_sessions:total{type="git"}[1h])
       )
   - record: gitlab_component_errors:rate_1h
@@ -963,13 +963,13 @@ groups:
       type: git
     expr: |
       (
-        sum by (environment,stage) (
+        sum by (env,environment,stage) (
           rate(gitlab_sli:shell_sshd_sessions:errors_total{type="git"}[1h])
         )
       )
       or
       (
-        0 * group by(environment,stage) (
+        0 * group by(env,environment,stage) (
           gitlab_component_ops:rate_1h{component="gitlab_sshd",tier="sv",type="git"}
         )
       )
@@ -980,7 +980,7 @@ groups:
       tier: sv
       type: git
     expr: |
-      sum by (environment) (
+      sum by (env,environment) (
         rate(haproxy_backend_http_responses_total{backend="canary_https_git",type="frontend"}[1h])
       )
   - record: gitlab_component_ops:rate_1h
@@ -990,7 +990,7 @@ groups:
       tier: sv
       type: git
     expr: |
-      sum by (environment) (
+      sum by (env,environment) (
         rate(haproxy_backend_http_responses_total{backend="https_git",type="frontend"}[1h])
       )
   - record: gitlab_component_errors:rate_1h
@@ -1001,13 +1001,13 @@ groups:
       type: git
     expr: |
       (
-        sum by (environment) (
+        sum by (env,environment) (
           rate(haproxy_backend_http_responses_total{backend="canary_https_git",code="5xx",type="frontend"}[1h])
         )
       )
       or
       (
-        0 * group by(environment) (
+        0 * group by(env,environment) (
           gitlab_component_ops:rate_1h{component="loadbalancer",stage="cny",tier="sv",type="git"}
         )
       )
@@ -1019,13 +1019,13 @@ groups:
       type: git
     expr: |
       (
-        sum by (environment) (
+        sum by (env,environment) (
           rate(haproxy_backend_http_responses_total{backend="https_git",code="5xx",type="frontend"}[1h])
         )
       )
       or
       (
-        0 * group by(environment) (
+        0 * group by(env,environment) (
           gitlab_component_ops:rate_1h{component="loadbalancer",stage="main",tier="sv",type="git"}
         )
       )
@@ -1036,7 +1036,7 @@ groups:
       tier: sv
       type: git
     expr: |
-      sum by (environment) (
+      sum by (env,environment) (
         rate(haproxy_server_sessions_total{backend=~"ssh|altssh",type="frontend"}[1h])
       )
   - record: gitlab_component_errors:rate_1h
@@ -1047,13 +1047,13 @@ groups:
       type: git
     expr: |
       (
-        sum by (environment) (
+        sum by (env,environment) (
           rate(haproxy_server_connection_errors_total{backend=~"ssh|altssh",type="frontend"}[1h])
         )
       )
       or
       (
-        0 * group by(environment) (
+        0 * group by(env,environment) (
           gitlab_component_ops:rate_1h{component="loadbalancer_ssh",stage="main",tier="sv",type="git"}
         )
       )
@@ -1063,7 +1063,7 @@ groups:
       tier: sv
       type: git
     expr: |
-      sum by (environment,stage) (
+      sum by (env,environment,stage) (
         sli_aggregations:gitlab_sli_rails_request_apdex_success_total_rate1h{job="gitlab-rails",type="git"}
       )
   - record: gitlab_component_apdex:weight:score_1h
@@ -1072,7 +1072,7 @@ groups:
       tier: sv
       type: git
     expr: |
-      sum by (environment,stage) (
+      sum by (env,environment,stage) (
         sli_aggregations:gitlab_sli_rails_request_apdex_total_rate1h{job="gitlab-rails",type="git"}
       )
   - record: gitlab_component_ops:rate_1h
@@ -1081,7 +1081,7 @@ groups:
       tier: sv
       type: git
     expr: |
-      sum by (environment,stage) (
+      sum by (env,environment,stage) (
         sli_aggregations:gitlab_sli_rails_request_total_rate1h{job="gitlab-rails",type="git"}
       )
   - record: gitlab_component_errors:rate_1h
@@ -1091,13 +1091,13 @@ groups:
       type: git
     expr: |
       (
-        sum by (environment,stage) (
+        sum by (env,environment,stage) (
           sli_aggregations:gitlab_sli_rails_request_error_total_rate1h{job="gitlab-rails",type="git"}
         )
       )
       or
       (
-        0 * group by(environment,stage) (
+        0 * group by(env,environment,stage) (
           gitlab_component_ops:rate_1h{component="rails_request",tier="sv",type="git"}
         )
       )
@@ -1108,11 +1108,11 @@ groups:
       type: git
     expr: |
       (
-        sum by (environment,stage) (
+        sum by (env,environment,stage) (
           rate(gitlab_workhorse_http_request_duration_seconds_bucket{job=~"gitlab-workhorse|gitlab-workhorse-git",le="30",route!="^/-/health$",route!="^/-/(readiness|liveness)$",route!="^/api/",route!="\\A/api/v4/jobs/request\\z",route!="^/api/v4/jobs/request\\z",route!="^/([^/]+/){1,}[^/]+/-/jobs/[0-9]+/terminal.ws\\z",route!="^/([^/]+/){1,}[^/]+/-/environments/[0-9]+/terminal.ws\\z",route!="^/-/cable\\z",type="git"}[1h])
         )
         +
-        sum by (environment,stage) (
+        sum by (env,environment,stage) (
           rate(gitlab_workhorse_http_request_duration_seconds_bucket{job=~"gitlab-workhorse|gitlab-workhorse-git",le="60",route!="^/-/health$",route!="^/-/(readiness|liveness)$",route!="^/api/",route!="\\A/api/v4/jobs/request\\z",route!="^/api/v4/jobs/request\\z",route!="^/([^/]+/){1,}[^/]+/-/jobs/[0-9]+/terminal.ws\\z",route!="^/([^/]+/){1,}[^/]+/-/environments/[0-9]+/terminal.ws\\z",route!="^/-/cable\\z",type="git"}[1h])
         )
       )
@@ -1124,7 +1124,7 @@ groups:
       tier: sv
       type: git
     expr: |
-      sum by (environment,stage) (
+      sum by (env,environment,stage) (
         rate(gitlab_workhorse_http_request_duration_seconds_bucket{job=~"gitlab-workhorse|gitlab-workhorse-git",le="+Inf",route!="^/-/health$",route!="^/-/(readiness|liveness)$",route!="^/api/",route!="\\A/api/v4/jobs/request\\z",route!="^/api/v4/jobs/request\\z",route!="^/([^/]+/){1,}[^/]+/-/jobs/[0-9]+/terminal.ws\\z",route!="^/([^/]+/){1,}[^/]+/-/environments/[0-9]+/terminal.ws\\z",route!="^/-/cable\\z",type="git"}[1h])
       )
   - record: gitlab_component_ops:rate_1h
@@ -1133,7 +1133,7 @@ groups:
       tier: sv
       type: git
     expr: |
-      sum by (environment,stage) (
+      sum by (env,environment,stage) (
         rate(gitlab_workhorse_http_requests_total{job=~"gitlab-workhorse|gitlab-workhorse-git",route!="^/-/health$",route!="^/-/(readiness|liveness)$",route!="^/api/",route!="\\A/api/v4/jobs/request\\z",route!="^/api/v4/jobs/request\\z",type="git"}[1h])
       )
   - record: gitlab_component_errors:rate_1h
@@ -1143,13 +1143,13 @@ groups:
       type: git
     expr: |
       (
-        sum by (environment,stage) (
+        sum by (env,environment,stage) (
           rate(gitlab_workhorse_http_requests_total{code=~"^5.*",job=~"gitlab-workhorse|gitlab-workhorse-git",route!="^/-/health$",route!="^/-/(readiness|liveness)$",route!="^/api/",route!="\\A/api/v4/jobs/request\\z",route!="^/api/v4/jobs/request\\z",type="git"}[1h])
         )
       )
       or
       (
-        0 * group by(environment,stage) (
+        0 * group by(env,environment,stage) (
           gitlab_component_ops:rate_1h{component="workhorse",tier="sv",type="git"}
         )
       )
@@ -1159,7 +1159,7 @@ groups:
       tier: sv
       type: git
     expr: |
-      sum by (environment,stage) (
+      sum by (env,environment,stage) (
         rate(gitlab_workhorse_http_request_duration_seconds_bucket{job=~"gitlab-workhorse|gitlab-workhorse-git",le="1",route="^/api/",type="git"}[1h])
       )
   - record: gitlab_component_apdex:weight:score_1h
@@ -1168,7 +1168,7 @@ groups:
       tier: sv
       type: git
     expr: |
-      sum by (environment,stage) (
+      sum by (env,environment,stage) (
         rate(gitlab_workhorse_http_request_duration_seconds_bucket{job=~"gitlab-workhorse|gitlab-workhorse-git",le="+Inf",route="^/api/",type="git"}[1h])
       )
   - record: gitlab_component_ops:rate_1h
@@ -1177,7 +1177,7 @@ groups:
       tier: sv
       type: git
     expr: |
-      sum by (environment,stage) (
+      sum by (env,environment,stage) (
         rate(gitlab_workhorse_http_requests_total{job=~"gitlab-workhorse|gitlab-workhorse-git",route="^/api/",type="git"}[1h])
       )
   - record: gitlab_component_errors:rate_1h
@@ -1187,13 +1187,13 @@ groups:
       type: git
     expr: |
       (
-        sum by (environment,stage) (
+        sum by (env,environment,stage) (
           rate(gitlab_workhorse_http_requests_total{code=~"^5.*",job=~"gitlab-workhorse|gitlab-workhorse-git",route="^/api/",type="git"}[1h])
         )
       )
       or
       (
-        0 * group by(environment,stage) (
+        0 * group by(env,environment,stage) (
           gitlab_component_ops:rate_1h{component="workhorse_auth_api",tier="sv",type="git"}
         )
       )
@@ -1207,7 +1207,7 @@ groups:
       tier: sv
       type: git
     expr: |
-      sum by (environment) (
+      sum by (env,environment) (
         sum by (environment) (haproxy_backend_current_session_rate{backend=~"ssh|altssh"})
       )
   - record: gitlab_component_ops:rate_6h
@@ -1217,7 +1217,7 @@ groups:
       tier: sv
       type: git
     expr: |
-      sum by (environment) (
+      sum by (env,environment) (
         rate(haproxy_backend_sessions_total{backend=~"altssh|ssh"}[6h])
       )
   - record: gitlab_component_apdex:success:rate_6h
@@ -1227,11 +1227,11 @@ groups:
       type: git
     expr: |
       (
-        sum by (environment,stage) (
+        sum by (env,environment,stage) (
           rate(gitlab_shell_sshd_session_established_duration_seconds_bucket{le="1",type="git"}[6h])
         )
         +
-        sum by (environment,stage) (
+        sum by (env,environment,stage) (
           rate(gitlab_shell_sshd_session_established_duration_seconds_bucket{le="5",type="git"}[6h])
         )
       )
@@ -1243,7 +1243,7 @@ groups:
       tier: sv
       type: git
     expr: |
-      sum by (environment,stage) (
+      sum by (env,environment,stage) (
         rate(gitlab_shell_sshd_session_established_duration_seconds_bucket{le="+Inf",type="git"}[6h])
       )
   - record: gitlab_component_ops:rate_6h
@@ -1252,7 +1252,7 @@ groups:
       tier: sv
       type: git
     expr: |
-      sum by (environment,stage) (
+      sum by (env,environment,stage) (
         rate(gitlab_sli:shell_sshd_sessions:total{type="git"}[6h])
       )
   - record: gitlab_component_errors:rate_6h
@@ -1262,13 +1262,13 @@ groups:
       type: git
     expr: |
       (
-        sum by (environment,stage) (
+        sum by (env,environment,stage) (
           rate(gitlab_sli:shell_sshd_sessions:errors_total{type="git"}[6h])
         )
       )
       or
       (
-        0 * group by(environment,stage) (
+        0 * group by(env,environment,stage) (
           gitlab_component_ops:rate_6h{component="gitlab_sshd",tier="sv",type="git"}
         )
       )
@@ -1279,7 +1279,7 @@ groups:
       tier: sv
       type: git
     expr: |
-      sum by (environment) (
+      sum by (env,environment) (
         rate(haproxy_backend_http_responses_total{backend="canary_https_git",type="frontend"}[6h])
       )
   - record: gitlab_component_ops:rate_6h
@@ -1289,7 +1289,7 @@ groups:
       tier: sv
       type: git
     expr: |
-      sum by (environment) (
+      sum by (env,environment) (
         rate(haproxy_backend_http_responses_total{backend="https_git",type="frontend"}[6h])
       )
   - record: gitlab_component_errors:rate_6h
@@ -1300,13 +1300,13 @@ groups:
       type: git
     expr: |
       (
-        sum by (environment) (
+        sum by (env,environment) (
           rate(haproxy_backend_http_responses_total{backend="canary_https_git",code="5xx",type="frontend"}[6h])
         )
       )
       or
       (
-        0 * group by(environment) (
+        0 * group by(env,environment) (
           gitlab_component_ops:rate_6h{component="loadbalancer",stage="cny",tier="sv",type="git"}
         )
       )
@@ -1318,13 +1318,13 @@ groups:
       type: git
     expr: |
       (
-        sum by (environment) (
+        sum by (env,environment) (
           rate(haproxy_backend_http_responses_total{backend="https_git",code="5xx",type="frontend"}[6h])
         )
       )
       or
       (
-        0 * group by(environment) (
+        0 * group by(env,environment) (
           gitlab_component_ops:rate_6h{component="loadbalancer",stage="main",tier="sv",type="git"}
         )
       )
@@ -1335,7 +1335,7 @@ groups:
       tier: sv
       type: git
     expr: |
-      sum by (environment) (
+      sum by (env,environment) (
         rate(haproxy_server_sessions_total{backend=~"ssh|altssh",type="frontend"}[6h])
       )
   - record: gitlab_component_errors:rate_6h
@@ -1346,13 +1346,13 @@ groups:
       type: git
     expr: |
       (
-        sum by (environment) (
+        sum by (env,environment) (
           rate(haproxy_server_connection_errors_total{backend=~"ssh|altssh",type="frontend"}[6h])
         )
       )
       or
       (
-        0 * group by(environment) (
+        0 * group by(env,environment) (
           gitlab_component_ops:rate_6h{component="loadbalancer_ssh",stage="main",tier="sv",type="git"}
         )
       )
@@ -1362,7 +1362,7 @@ groups:
       tier: sv
       type: git
     expr: |
-      sum by (environment,stage) (
+      sum by (env,environment,stage) (
         sli_aggregations:gitlab_sli_rails_request_apdex_success_total_rate6h{job="gitlab-rails",type="git"}
       )
   - record: gitlab_component_apdex:weight:score_6h
@@ -1371,7 +1371,7 @@ groups:
       tier: sv
       type: git
     expr: |
-      sum by (environment,stage) (
+      sum by (env,environment,stage) (
         sli_aggregations:gitlab_sli_rails_request_apdex_total_rate6h{job="gitlab-rails",type="git"}
       )
   - record: gitlab_component_ops:rate_6h
@@ -1380,7 +1380,7 @@ groups:
       tier: sv
       type: git
     expr: |
-      sum by (environment,stage) (
+      sum by (env,environment,stage) (
         sli_aggregations:gitlab_sli_rails_request_total_rate6h{job="gitlab-rails",type="git"}
       )
   - record: gitlab_component_errors:rate_6h
@@ -1390,13 +1390,13 @@ groups:
       type: git
     expr: |
       (
-        sum by (environment,stage) (
+        sum by (env,environment,stage) (
           sli_aggregations:gitlab_sli_rails_request_error_total_rate6h{job="gitlab-rails",type="git"}
         )
       )
       or
       (
-        0 * group by(environment,stage) (
+        0 * group by(env,environment,stage) (
           gitlab_component_ops:rate_6h{component="rails_request",tier="sv",type="git"}
         )
       )
@@ -1407,11 +1407,11 @@ groups:
       type: git
     expr: |
       (
-        sum by (environment,stage) (
+        sum by (env,environment,stage) (
           rate(gitlab_workhorse_http_request_duration_seconds_bucket{job=~"gitlab-workhorse|gitlab-workhorse-git",le="30",route!="^/-/health$",route!="^/-/(readiness|liveness)$",route!="^/api/",route!="\\A/api/v4/jobs/request\\z",route!="^/api/v4/jobs/request\\z",route!="^/([^/]+/){1,}[^/]+/-/jobs/[0-9]+/terminal.ws\\z",route!="^/([^/]+/){1,}[^/]+/-/environments/[0-9]+/terminal.ws\\z",route!="^/-/cable\\z",type="git"}[6h])
         )
         +
-        sum by (environment,stage) (
+        sum by (env,environment,stage) (
           rate(gitlab_workhorse_http_request_duration_seconds_bucket{job=~"gitlab-workhorse|gitlab-workhorse-git",le="60",route!="^/-/health$",route!="^/-/(readiness|liveness)$",route!="^/api/",route!="\\A/api/v4/jobs/request\\z",route!="^/api/v4/jobs/request\\z",route!="^/([^/]+/){1,}[^/]+/-/jobs/[0-9]+/terminal.ws\\z",route!="^/([^/]+/){1,}[^/]+/-/environments/[0-9]+/terminal.ws\\z",route!="^/-/cable\\z",type="git"}[6h])
         )
       )
@@ -1423,7 +1423,7 @@ groups:
       tier: sv
       type: git
     expr: |
-      sum by (environment,stage) (
+      sum by (env,environment,stage) (
         rate(gitlab_workhorse_http_request_duration_seconds_bucket{job=~"gitlab-workhorse|gitlab-workhorse-git",le="+Inf",route!="^/-/health$",route!="^/-/(readiness|liveness)$",route!="^/api/",route!="\\A/api/v4/jobs/request\\z",route!="^/api/v4/jobs/request\\z",route!="^/([^/]+/){1,}[^/]+/-/jobs/[0-9]+/terminal.ws\\z",route!="^/([^/]+/){1,}[^/]+/-/environments/[0-9]+/terminal.ws\\z",route!="^/-/cable\\z",type="git"}[6h])
       )
   - record: gitlab_component_ops:rate_6h
@@ -1432,7 +1432,7 @@ groups:
       tier: sv
       type: git
     expr: |
-      sum by (environment,stage) (
+      sum by (env,environment,stage) (
         rate(gitlab_workhorse_http_requests_total{job=~"gitlab-workhorse|gitlab-workhorse-git",route!="^/-/health$",route!="^/-/(readiness|liveness)$",route!="^/api/",route!="\\A/api/v4/jobs/request\\z",route!="^/api/v4/jobs/request\\z",type="git"}[6h])
       )
   - record: gitlab_component_errors:rate_6h
@@ -1442,13 +1442,13 @@ groups:
       type: git
     expr: |
       (
-        sum by (environment,stage) (
+        sum by (env,environment,stage) (
           rate(gitlab_workhorse_http_requests_total{code=~"^5.*",job=~"gitlab-workhorse|gitlab-workhorse-git",route!="^/-/health$",route!="^/-/(readiness|liveness)$",route!="^/api/",route!="\\A/api/v4/jobs/request\\z",route!="^/api/v4/jobs/request\\z",type="git"}[6h])
         )
       )
       or
       (
-        0 * group by(environment,stage) (
+        0 * group by(env,environment,stage) (
           gitlab_component_ops:rate_6h{component="workhorse",tier="sv",type="git"}
         )
       )
@@ -1458,7 +1458,7 @@ groups:
       tier: sv
       type: git
     expr: |
-      sum by (environment,stage) (
+      sum by (env,environment,stage) (
         rate(gitlab_workhorse_http_request_duration_seconds_bucket{job=~"gitlab-workhorse|gitlab-workhorse-git",le="1",route="^/api/",type="git"}[6h])
       )
   - record: gitlab_component_apdex:weight:score_6h
@@ -1467,7 +1467,7 @@ groups:
       tier: sv
       type: git
     expr: |
-      sum by (environment,stage) (
+      sum by (env,environment,stage) (
         rate(gitlab_workhorse_http_request_duration_seconds_bucket{job=~"gitlab-workhorse|gitlab-workhorse-git",le="+Inf",route="^/api/",type="git"}[6h])
       )
   - record: gitlab_component_ops:rate_6h
@@ -1476,7 +1476,7 @@ groups:
       tier: sv
       type: git
     expr: |
-      sum by (environment,stage) (
+      sum by (env,environment,stage) (
         rate(gitlab_workhorse_http_requests_total{job=~"gitlab-workhorse|gitlab-workhorse-git",route="^/api/",type="git"}[6h])
       )
   - record: gitlab_component_errors:rate_6h
@@ -1486,13 +1486,13 @@ groups:
       type: git
     expr: |
       (
-        sum by (environment,stage) (
+        sum by (env,environment,stage) (
           rate(gitlab_workhorse_http_requests_total{code=~"^5.*",job=~"gitlab-workhorse|gitlab-workhorse-git",route="^/api/",type="git"}[6h])
         )
       )
       or
       (
-        0 * group by(environment,stage) (
+        0 * group by(env,environment,stage) (
           gitlab_component_ops:rate_6h{component="workhorse_auth_api",tier="sv",type="git"}
         )
       )
