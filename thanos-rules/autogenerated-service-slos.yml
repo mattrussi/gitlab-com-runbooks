@@ -2770,15 +2770,6 @@ groups:
     expr: "1"
   - record: gitlab_component_service:mapping
     labels:
-      component: server
-      global_aggregation: "no"
-      regional_aggregation: "no"
-      service_aggregation: "yes"
-      tier: sv
-      type: code_suggestions
-    expr: "1"
-  - record: gitlab_component_service:mapping
-    labels:
       component: consul
       global_aggregation: "no"
       regional_aggregation: "yes"
