@@ -951,7 +951,7 @@ groups:
     labels:
       tier: sv
       type: ops-gitlab-net
-    expr: "0.000100"
+    expr: "0.001000"
   - record: slo:min:events:gitlab_service_apdex:ratio
     labels:
       component: gitlab_sshd
@@ -975,7 +975,7 @@ groups:
       component: goserver
       tier: sv
       type: ops-gitlab-net
-    expr: "0.000100"
+    expr: "0.001000"
   - record: slo:min:events:gitlab_service_apdex:ratio
     labels:
       component: puma
@@ -987,7 +987,7 @@ groups:
       component: puma
       tier: sv
       type: ops-gitlab-net
-    expr: "0.000100"
+    expr: "0.001000"
   - record: slo:min:events:gitlab_service_apdex:ratio
     labels:
       component: registry_server
@@ -999,7 +999,7 @@ groups:
       component: registry_server
       tier: sv
       type: ops-gitlab-net
-    expr: "0.000100"
+    expr: "0.001000"
   - record: slo:min:events:gitlab_service_apdex:ratio
     labels:
       component: shard_default
@@ -1011,7 +1011,7 @@ groups:
       component: shard_default
       tier: sv
       type: ops-gitlab-net
-    expr: "0.000100"
+    expr: "0.001000"
   - record: slo:min:events:gitlab_service_apdex:ratio
     labels:
       component: workhorse
@@ -1023,7 +1023,7 @@ groups:
       component: workhorse
       tier: sv
       type: ops-gitlab-net
-    expr: "0.000100"
+    expr: "0.001000"
   - record: slo:min:events:gitlab_service_apdex:ratio
     labels:
       tier: db

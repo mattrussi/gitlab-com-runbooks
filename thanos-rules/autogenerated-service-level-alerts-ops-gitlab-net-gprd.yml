@@ -423,12 +423,12 @@ groups:
       (
         (
           gitlab_component_errors:ratio_1h{component="goserver",env="gprd",monitor="global",type="ops-gitlab-net"}
-          > (14.4 * 0.000100)
+          > (14.4 * 0.001000)
         )
         and
         (
           gitlab_component_errors:ratio_5m{component="goserver",env="gprd",monitor="global",type="ops-gitlab-net"}
-          > (14.4 * 0.000100)
+          > (14.4 * 0.001000)
         )
       )
       and on(env,environment,tier,type,stage,component)
@@ -473,12 +473,12 @@ groups:
       (
         (
           gitlab_component_errors:ratio_6h{component="goserver",env="gprd",monitor="global",type="ops-gitlab-net"}
-          > (6 * 0.000100)
+          > (6 * 0.001000)
         )
         and
         (
           gitlab_component_errors:ratio_30m{component="goserver",env="gprd",monitor="global",type="ops-gitlab-net"}
-          > (6 * 0.000100)
+          > (6 * 0.001000)
         )
       )
       and on(env,environment,tier,type,stage,component)
@@ -681,12 +681,12 @@ groups:
       (
         (
           gitlab_component_errors:ratio_1h{component="puma",env="gprd",monitor="global",type="ops-gitlab-net"}
-          > (14.4 * 0.000100)
+          > (14.4 * 0.001000)
         )
         and
         (
           gitlab_component_errors:ratio_5m{component="puma",env="gprd",monitor="global",type="ops-gitlab-net"}
-          > (14.4 * 0.000100)
+          > (14.4 * 0.001000)
         )
       )
       and on(env,environment,tier,type,stage,component)
@@ -729,12 +729,12 @@ groups:
       (
         (
           gitlab_component_errors:ratio_6h{component="puma",env="gprd",monitor="global",type="ops-gitlab-net"}
-          > (6 * 0.000100)
+          > (6 * 0.001000)
         )
         and
         (
           gitlab_component_errors:ratio_30m{component="puma",env="gprd",monitor="global",type="ops-gitlab-net"}
-          > (6 * 0.000100)
+          > (6 * 0.001000)
         )
       )
       and on(env,environment,tier,type,stage,component)
@@ -951,12 +951,12 @@ groups:
       (
         (
           gitlab_component_errors:ratio_1h{component="registry_server",env="gprd",monitor="global",type="ops-gitlab-net"}
-          > (14.4 * 0.000100)
+          > (14.4 * 0.001000)
         )
         and
         (
           gitlab_component_errors:ratio_5m{component="registry_server",env="gprd",monitor="global",type="ops-gitlab-net"}
-          > (14.4 * 0.000100)
+          > (14.4 * 0.001000)
         )
       )
       and on(env,environment,tier,type,stage,component)
@@ -999,12 +999,12 @@ groups:
       (
         (
           gitlab_component_errors:ratio_6h{component="registry_server",env="gprd",monitor="global",type="ops-gitlab-net"}
-          > (6 * 0.000100)
+          > (6 * 0.001000)
         )
         and
         (
           gitlab_component_errors:ratio_30m{component="registry_server",env="gprd",monitor="global",type="ops-gitlab-net"}
-          > (6 * 0.000100)
+          > (6 * 0.001000)
         )
       )
       and on(env,environment,tier,type,stage,component)
@@ -1237,12 +1237,12 @@ groups:
       (
         (
           gitlab_component_errors:ratio_1h{component="shard_default",env="gprd",monitor="global",type="ops-gitlab-net"}
-          > (14.4 * 0.000100)
+          > (14.4 * 0.001000)
         )
         and
         (
           gitlab_component_errors:ratio_5m{component="shard_default",env="gprd",monitor="global",type="ops-gitlab-net"}
-          > (14.4 * 0.000100)
+          > (14.4 * 0.001000)
         )
       )
       and on(env,environment,tier,type,stage,component)
@@ -1285,12 +1285,12 @@ groups:
       (
         (
           gitlab_component_errors:ratio_6h{component="shard_default",env="gprd",monitor="global",type="ops-gitlab-net"}
-          > (6 * 0.000100)
+          > (6 * 0.001000)
         )
         and
         (
           gitlab_component_errors:ratio_30m{component="shard_default",env="gprd",monitor="global",type="ops-gitlab-net"}
-          > (6 * 0.000100)
+          > (6 * 0.001000)
         )
       )
       and on(env,environment,tier,type,stage,component)
@@ -1507,12 +1507,12 @@ groups:
       (
         (
           gitlab_component_errors:ratio_1h{component="workhorse",env="gprd",monitor="global",type="ops-gitlab-net"}
-          > (14.4 * 0.000100)
+          > (14.4 * 0.001000)
         )
         and
         (
           gitlab_component_errors:ratio_5m{component="workhorse",env="gprd",monitor="global",type="ops-gitlab-net"}
-          > (14.4 * 0.000100)
+          > (14.4 * 0.001000)
         )
       )
       and on(env,environment,tier,type,stage,component)
@@ -1555,12 +1555,12 @@ groups:
       (
         (
           gitlab_component_errors:ratio_6h{component="workhorse",env="gprd",monitor="global",type="ops-gitlab-net"}
-          > (6 * 0.000100)
+          > (6 * 0.001000)
         )
         and
         (
           gitlab_component_errors:ratio_30m{component="workhorse",env="gprd",monitor="global",type="ops-gitlab-net"}
-          > (6 * 0.000100)
+          > (6 * 0.001000)
         )
       )
       and on(env,environment,tier,type,stage,component)
