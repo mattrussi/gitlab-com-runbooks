@@ -7,7 +7,7 @@ If we let these workers to keep running, the entire system performance can be si
 
 ## Deferring jobs using feature flags via ChatOps
 
-We have a mechanism to defer jobs from a Worker class by enabling a feature flag `defer_sidekiq_jobs:{WorkerName}` via ChatOps.
+We have a mechanism to defer jobs from a Worker class by enabling a feature flag `defer_sidekiq_jobs_{WorkerName}` via ChatOps.
 By default, the jobs are **delayed for 5 minutes** indefinitely until the feature flag is disabled. The delay can be set via
 setting environment variable `SIDEKIQ_DEFER_JOBS_DELAY` in seconds.
 
@@ -22,16 +22,16 @@ to progressively let the jobs processed. For example:
 
 ```shell
 # defer 100% of the jobs
-/chatops run feature set defer_sidekiq_jobs:SlowRunningWorker true
+/chatops run feature set defer_sidekiq_jobs_SlowRunningWorker true
 
 # defer 99% of the jobs, only letting 1% processed
-/chatops run feature set defer_sidekiq_jobs:SlowRunningWorker 99
+/chatops run feature set defer_sidekiq_jobs_SlowRunningWorker 99
 
 # defer 50% of the jobs
-/chatops run feature set defer_sidekiq_jobs:SlowRunningWorker 50
+/chatops run feature set defer_sidekiq_jobs_SlowRunningWorker 50
 
 # stop deferring the jobs, jobs are being processed normally
-/chatops run feature set defer_sidekiq_jobs:SlowRunningWorker false
+/chatops run feature set defer_sidekiq_jobs_SlowRunningWorker false
 ```
 
 To ensure we are not leaving any worker being deferred forever, check all feature flags matching `defer_sidekiq_jobs`:
