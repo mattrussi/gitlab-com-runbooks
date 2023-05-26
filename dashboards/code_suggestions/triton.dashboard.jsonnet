@@ -6,6 +6,7 @@ local templates = import 'grafana/templates.libsonnet';
 local stockDashboard = import 'triton_server.json.txt';
 
 stockDashboard {
+  id: null,
   annotations: {
     list: [],
   },

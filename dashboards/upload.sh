@@ -72,6 +72,8 @@ function validate_dashboard_requests() {
       error("UID \(.uid) contains illegal characters")
     elif ([.panels,.rows | length] | add) < 1 then
       error("Dashboard \(.uid) does not have any panels or rows, is it a dashboard?")
+    elif (.id) != null then
+      error("Dashboard \(.uid) contained an ID, it should not")
     else
       .
     end
