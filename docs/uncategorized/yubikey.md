@@ -68,8 +68,6 @@ Run the following brew command on your local machine.
 
 <details>
 
-brew services restart yubikey-agent
-
 ```
 brew services restart yubikey-agent
 ```
