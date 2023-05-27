@@ -60,12 +60,16 @@ ssh-add -L
 
 </details>
 
-### Workaround if your yubikey is not working 
+### Workaround if your yubikey is not responding 
 
-If using macbook / OSX, you may need to restart the yubikey agent on your local machine. 
+If you discover that your yubikey is not responding, a restart of the YubiKey agent maybe needed. 
+
+Run the following brew command on your local machine.
 
 <details>
 
 brew services restart yubikey-agent
 
 </details>
+
+We suspect that this is impacting only macbook / OSX users.
