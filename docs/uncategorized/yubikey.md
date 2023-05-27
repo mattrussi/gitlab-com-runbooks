@@ -60,9 +60,9 @@ ssh-add -L
 
 </details>
 
-### Workaround if your yubikey is not responding 
+### Workaround if your yubikey is not responding
 
-If you discover that your yubikey is not responding, a restart of the YubiKey agent maybe needed. 
+If you discover that your yubikey is not responding, a restart of the YubiKey agent maybe needed.
 
 Run the following brew command on your local machine.
 
