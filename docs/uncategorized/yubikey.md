@@ -59,3 +59,13 @@ ssh-add -L
 ```
 
 </details>
+
+### Workaround if your yubikey is not working 
+
+If using macbook / OSX, you may need to restart the yubikey agent on your local machine. 
+
+<details>
+
+brew services restart yubikey-agent
+
+</details>
