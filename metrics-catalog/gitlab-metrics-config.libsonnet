@@ -70,4 +70,11 @@ local objects = import 'utils/objects.libsonnet';
     ops: { env: 'ops' },
     other: { env: { noneOf: ['gprd', 'ops'] } },
   },
+
+  // This selector is used in a handful of places where there are too many "type" labels
+  // and we want to exclude one (or more) labels
+  baseSelector::
+    {
+      type: { ne: 'ops-gitlab-net' },
+    },
 }
