@@ -66,8 +66,6 @@ If you discover that your Yubikey is not responding, a restart of the `yubikey-a
 
 Run the following brew command on your local machine.
 
-<details>
-
 ```
 brew services restart yubikey-agent
 ```
