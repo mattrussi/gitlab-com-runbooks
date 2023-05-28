@@ -212,9 +212,8 @@ At the time compaction halted, you should see a message of the form:
 #### Resolution
 
 Use thanos tools from a shell in the compactor's environment to mark these
-blocks for skipping. In our GCE infrastructure, this looks like:
+blocks for skipping. In GKE, to mark blocks no-compact via kube-ctl exec, you will need to find the pod name via the cloud console or via the following:
 
-Marking blocks for no-compact via kube-ctl exec, you will need to find the pod name via the cloud console or via 
 ```
 in runbooks project:  glsh kube use-cluster ops
 Then in another window:  kubectl get pods -n thanos |grep compactor
@@ -230,7 +229,9 @@ for id in ${block_list} ; do
   --id="${id}"
 done
 ```
+
 If running from another location like your workstation:
+
 ```
 export GOOGLE_APPLICATION_CREDENTIALS=/opt/prometheus/thanos/gcs-creds.json
 block_list='01EJQ1JVX2RYAVAVBC1CJCESJD 01EJR6MVVKPKQ781VFYKHSH5Z0 01EJXNXJ9NRKESZ7GQT6JXZNNW 01EK36WZ2W5HJKXC1D7S8HFY4H 01ERY52QYS0TXXSRAP14N6NJH5'
@@ -242,6 +243,7 @@ for id in ${block_list} ; do
     --id="${id}"
 done
 ```
+
 Restart thanos-compact - usually via`kubectl delete pod <POD_NAME> -n thanos`
 
 #### Example incidents
