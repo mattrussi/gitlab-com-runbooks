@@ -27,6 +27,7 @@
 * [How to take a snapshot of an application running in a StatefulSet](k8s-sts-snapshot.md)
 * [Kubernetes](kubernetes.md)
 * [Prometheus pod crashlooping](../monitoring/prometheus-pod-crashlooping.md)
+* [Thanos Compact](../monitoring/thanos-compact.md
 * [Redis on Kubernetes](../redis/kubernetes.md)
 * [Container Registry database post-deployment migrations](../registry/db-post-deployment-migrations.md)
 * [../registry/gitlab-registry.md](../registry/gitlab-registry.md)
