@@ -215,13 +215,10 @@ Use thanos tools from a shell in the compactor's environment to mark these
 blocks for skipping. In our GCE infrastructure, this looks like:
 
 Marking blocks for no-compact via kube-ctl exec, you will need to find the pod name via the cloud console or via 
-
 ```
 in runbooks project:  glsh kube use-cluster ops
 Then in another window:  kubectl get pods -n thanos |grep compactor
-```
 
-```
 block_list=(01H09QAHAXXTDVJJYSHB8Z5Q4B 01H0ETK7D7PQDQPWKGEQS1J93A 01H0FKAWKQ82JP1ZQ14TV2B2S9)
 
 for id in ${block_list} ; do
@@ -233,9 +230,7 @@ for id in ${block_list} ; do
   --id="${id}"
 done
 ```
-
 If running from another location like your workstation:
-
 ```
 export GOOGLE_APPLICATION_CREDENTIALS=/opt/prometheus/thanos/gcs-creds.json
 block_list='01EJQ1JVX2RYAVAVBC1CJCESJD 01EJR6MVVKPKQ781VFYKHSH5Z0 01EJXNXJ9NRKESZ7GQT6JXZNNW 01EK36WZ2W5HJKXC1D7S8HFY4H 01ERY52QYS0TXXSRAP14N6NJH5'
@@ -247,7 +242,6 @@ for id in ${block_list} ; do
     --id="${id}"
 done
 ```
-
 Restart thanos-compact - usually via`kubectl delete pod <POD_NAME> -n thanos`
 
 #### Example incidents
