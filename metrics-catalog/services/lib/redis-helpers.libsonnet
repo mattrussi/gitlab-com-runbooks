@@ -1,3 +1,4 @@
+local metricsConfig = import 'gitlab-metrics-config.libsonnet';
 local toolingLinks = import 'toolinglinks/toolinglinks.libsonnet';
 
 {
@@ -13,4 +14,7 @@ local toolingLinks = import 'toolinglinks/toolinglinks.libsonnet';
         },
       },
     },
+
+  storageSelector(storageName, selector=metricsConfig.baseSelector):: selector { storage: storageName },
+  storeSelector(storeName, selector=metricsConfig.baseSelector):: selector { store: storeName },
 }
