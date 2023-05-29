@@ -336,7 +336,7 @@ groups:
       type: registry
     expr: |
       sum by (env,environment,stage) (
-        rate(registry_http_request_duration_seconds_count{method=~"delete",route="/v2/{name}/blobs/uploads/{uuid}"}[5m])
+        rate(registry_http_request_duration_seconds_count{method=~"delete",route="/v2/{name}/blobs/uploads/{uuid}",type="registry"}[5m])
       )
   - record: gitlab:component:feature_category:execution:apdex:success:rate_5m
     labels:
@@ -374,7 +374,7 @@ groups:
       type: registry
     expr: |
       sum by (env,environment,stage) (
-        rate(registry_http_request_duration_seconds_count{method=~"get|head",route="/v2/{name}/blobs/uploads/{uuid}"}[5m])
+        rate(registry_http_request_duration_seconds_count{method=~"get|head",route="/v2/{name}/blobs/uploads/{uuid}",type="registry"}[5m])
       )
   - record: gitlab:component:feature_category:execution:apdex:success:rate_5m
     labels:
@@ -412,7 +412,7 @@ groups:
       type: registry
     expr: |
       sum by (env,environment,stage) (
-        rate(registry_http_request_duration_seconds_count{method=~"put|patch|post",route="/v2/{name}/blobs/uploads/{uuid}"}[5m])
+        rate(registry_http_request_duration_seconds_count{method=~"put|patch|post",route="/v2/{name}/blobs/uploads/{uuid}",type="registry"}[5m])
       )
   - record: gitlab:component:feature_category:execution:apdex:success:rate_5m
     labels:
@@ -450,7 +450,7 @@ groups:
       type: registry
     expr: |
       sum by (env,environment,stage) (
-        rate(registry_http_request_duration_seconds_count{method=~"get|head",route="/v2/{name}/manifests/{reference}"}[5m])
+        rate(registry_http_request_duration_seconds_count{method=~"get|head",route="/v2/{name}/manifests/{reference}",type="registry"}[5m])
       )
   - record: gitlab:component:feature_category:execution:apdex:success:rate_5m
     labels:
@@ -488,7 +488,7 @@ groups:
       type: registry
     expr: |
       sum by (env,environment,stage) (
-        rate(registry_http_request_duration_seconds_count{method=~"put|delete|post|patch",route="/v2/{name}/manifests/{reference}"}[5m])
+        rate(registry_http_request_duration_seconds_count{method=~"put|delete|post|patch",route="/v2/{name}/manifests/{reference}",type="registry"}[5m])
       )
 - name: 'Prometheus Intermediate Metrics per feature: registry - burn-rate 30m'
   interval: 2m
@@ -825,7 +825,7 @@ groups:
       type: registry
     expr: |
       sum by (env,environment,stage) (
-        rate(registry_http_request_duration_seconds_count{method=~"delete",route="/v2/{name}/blobs/uploads/{uuid}"}[30m])
+        rate(registry_http_request_duration_seconds_count{method=~"delete",route="/v2/{name}/blobs/uploads/{uuid}",type="registry"}[30m])
       )
   - record: gitlab:component:feature_category:execution:apdex:success:rate_30m
     labels:
@@ -863,7 +863,7 @@ groups:
       type: registry
     expr: |
       sum by (env,environment,stage) (
-        rate(registry_http_request_duration_seconds_count{method=~"get|head",route="/v2/{name}/blobs/uploads/{uuid}"}[30m])
+        rate(registry_http_request_duration_seconds_count{method=~"get|head",route="/v2/{name}/blobs/uploads/{uuid}",type="registry"}[30m])
       )
   - record: gitlab:component:feature_category:execution:apdex:success:rate_30m
     labels:
@@ -901,7 +901,7 @@ groups:
       type: registry
     expr: |
       sum by (env,environment,stage) (
-        rate(registry_http_request_duration_seconds_count{method=~"put|patch|post",route="/v2/{name}/blobs/uploads/{uuid}"}[30m])
+        rate(registry_http_request_duration_seconds_count{method=~"put|patch|post",route="/v2/{name}/blobs/uploads/{uuid}",type="registry"}[30m])
       )
   - record: gitlab:component:feature_category:execution:apdex:success:rate_30m
     labels:
@@ -939,7 +939,7 @@ groups:
       type: registry
     expr: |
       sum by (env,environment,stage) (
-        rate(registry_http_request_duration_seconds_count{method=~"get|head",route="/v2/{name}/manifests/{reference}"}[30m])
+        rate(registry_http_request_duration_seconds_count{method=~"get|head",route="/v2/{name}/manifests/{reference}",type="registry"}[30m])
       )
   - record: gitlab:component:feature_category:execution:apdex:success:rate_30m
     labels:
@@ -977,7 +977,7 @@ groups:
       type: registry
     expr: |
       sum by (env,environment,stage) (
-        rate(registry_http_request_duration_seconds_count{method=~"put|delete|post|patch",route="/v2/{name}/manifests/{reference}"}[30m])
+        rate(registry_http_request_duration_seconds_count{method=~"put|delete|post|patch",route="/v2/{name}/manifests/{reference}",type="registry"}[30m])
       )
 - name: 'Prometheus Intermediate Metrics per feature: registry - burn-rate 1h'
   interval: 1m
@@ -1314,7 +1314,7 @@ groups:
       type: registry
     expr: |
       sum by (env,environment,stage) (
-        rate(registry_http_request_duration_seconds_count{method=~"delete",route="/v2/{name}/blobs/uploads/{uuid}"}[1h])
+        rate(registry_http_request_duration_seconds_count{method=~"delete",route="/v2/{name}/blobs/uploads/{uuid}",type="registry"}[1h])
       )
   - record: gitlab:component:feature_category:execution:apdex:success:rate_1h
     labels:
@@ -1352,7 +1352,7 @@ groups:
       type: registry
     expr: |
       sum by (env,environment,stage) (
-        rate(registry_http_request_duration_seconds_count{method=~"get|head",route="/v2/{name}/blobs/uploads/{uuid}"}[1h])
+        rate(registry_http_request_duration_seconds_count{method=~"get|head",route="/v2/{name}/blobs/uploads/{uuid}",type="registry"}[1h])
       )
   - record: gitlab:component:feature_category:execution:apdex:success:rate_1h
     labels:
@@ -1390,7 +1390,7 @@ groups:
       type: registry
     expr: |
       sum by (env,environment,stage) (
-        rate(registry_http_request_duration_seconds_count{method=~"put|patch|post",route="/v2/{name}/blobs/uploads/{uuid}"}[1h])
+        rate(registry_http_request_duration_seconds_count{method=~"put|patch|post",route="/v2/{name}/blobs/uploads/{uuid}",type="registry"}[1h])
       )
   - record: gitlab:component:feature_category:execution:apdex:success:rate_1h
     labels:
@@ -1428,7 +1428,7 @@ groups:
       type: registry
     expr: |
       sum by (env,environment,stage) (
-        rate(registry_http_request_duration_seconds_count{method=~"get|head",route="/v2/{name}/manifests/{reference}"}[1h])
+        rate(registry_http_request_duration_seconds_count{method=~"get|head",route="/v2/{name}/manifests/{reference}",type="registry"}[1h])
       )
   - record: gitlab:component:feature_category:execution:apdex:success:rate_1h
     labels:
@@ -1466,5 +1466,5 @@ groups:
       type: registry
     expr: |
       sum by (env,environment,stage) (
-        rate(registry_http_request_duration_seconds_count{method=~"put|delete|post|patch",route="/v2/{name}/manifests/{reference}"}[1h])
+        rate(registry_http_request_duration_seconds_count{method=~"put|delete|post|patch",route="/v2/{name}/manifests/{reference}",type="registry"}[1h])
       )

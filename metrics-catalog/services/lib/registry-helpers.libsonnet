@@ -128,7 +128,7 @@ local mainApdex(
   registryApdex(withoutCustomizedRouteSelector, satisfiedThreshold=2.5, toleratedThreshold=25);
 
 local sliFromConfig(config) =
-  local selector = {
+  local selector = registryBaseSelector {
     route: { eq: config.route },
     method: { re: std.join('|', config.methods) },
   };
