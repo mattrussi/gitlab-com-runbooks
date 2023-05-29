@@ -14,6 +14,9 @@
 
 * [system]()
 
+## Troubleshooting Pointers
+
+* [Provisioning Redis Cluster](../redis/provisioning-redis-cluster.md)
 <!-- END_MARKER -->
 
 <!-- ## Summary -->

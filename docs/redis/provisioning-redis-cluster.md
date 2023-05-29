@@ -2,8 +2,8 @@
 
 This document outlines the steps for provisioning a Redis Cluster. Former attempts are documented here:
 
-- `redis-cluster-ratelimiting`: https://gitlab.com/gitlab-com/gl-infra/scalability/-/issues/2256
-- `redis-cluster-chat-cache`: https://gitlab.com/gitlab-com/gl-infra/scalability/-/issues/2358
+- [`redis-cluster-ratelimiting`](https://gitlab.com/gitlab-com/gl-infra/scalability/-/issues/2256)
+- [`redis-cluster-chat-cache`](https://gitlab.com/gitlab-com/gl-infra/scalability/-/issues/2358)
 
 ## Setting up instances
 
@@ -21,10 +21,9 @@ Update the gkms vault secrets via:
 ./bin/gkms-vault-edit redis-cluster <ENV>
 ```
 
-
 Update the JSON payload to include the new instance details:
-```
 
+```
 {
   ...,
   "redis-cluster-<INSTANCE_TYPE>": {
@@ -51,6 +50,7 @@ Do the same for
 ```
 
 Modify the existing JSON
+
 ```
 {
   "redis_exporter": {
@@ -64,16 +64,15 @@ Modify the existing JSON
 
 ```
 
-
 2. Create Chef roles
 
 Set the new chef roles and add the new role to the list of gitlab-redis roles in <env>-infra-prometheus-server role.
 
-An example MR is https://gitlab.com/gitlab-com/gl-infra/chef-repo/-/merge_requests/3494.
+An example MR can be found [here](https://gitlab.com/gitlab-com/gl-infra/chef-repo/-/merge_requests/3494).
 
 3. Provision VMs
 
-Provision the VMs via the generic-stor/google terraform module. This is done in the [config-mgmt project in the ops environment](https://ops.gitlab.net/gitlab-com/gl-infra/config-mgmt/). An example MR is https://ops.gitlab.net/gitlab-com/gl-infra/config-mgmt/-/merge_requests/5811.
+Provision the VMs via the generic-stor/google terraform module. This is done in the [config-mgmt project in the ops environment](https://ops.gitlab.net/gitlab-com/gl-infra/config-mgmt/). An example MR can be found [here](https://ops.gitlab.net/gitlab-com/gl-infra/config-mgmt/-/merge_requests/5811).
 
 After the MR is merged and applied, check the VM state via:
 
@@ -149,7 +148,6 @@ cluster_size:3
 
 ## Configuring the applications
 
-
 1. Configure console instances
 
 ```
@@ -165,8 +163,7 @@ OR
 ➜  ~ glsh vault edit-secret chef env/<ENV>/shared/gitlab-omnibus-secrets
 ```
 
-Update roles/<env>-base.json with the relevant connection details. An example MR: https://gitlab.com/gitlab-com/gl-infra/chef-repo/-/merge_requests/3546.
-
+Update roles/<env>-base.json with the relevant connection details. An example MR can be found [here](https://gitlab.com/gitlab-com/gl-infra/chef-repo/-/merge_requests/3546).
 
 Check the confirmation detail by using Rails console inside a console instance.
 
@@ -177,20 +174,21 @@ a. Update secret
 Proxy and authenticate to Hashicorp Vault:
 
 ```
-$ glsh vault proxy
+glsh vault proxy
 
-$ export VAULT_PROXY_ADDR="socks5://localhost:18200"
-$ glsh vault login
+export VAULT_PROXY_ADDR="socks5://localhost:18200"
+glsh vault login
 ```
 
 ```
 vault kv put k8s/env/gprd/ns/gitlab/redis-cluster-ratelimiting-rails password=RAILS_REDACTED
 ```
 
-
 For example,
+
 ```
-$ vault kv get k8s/env/<ENV>/ns/gitlab/redis-<INSTANCE>
+vault kv get k8s/env/<ENV>/ns/gitlab/redis-<INSTANCE>
+
 ======================== Secret Path ========================
 k8s/data/env/gprd/ns/gitlab/redis-cluster-ratelimiting-rails
 
