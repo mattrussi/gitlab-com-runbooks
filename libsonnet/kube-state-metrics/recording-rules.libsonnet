@@ -166,11 +166,11 @@ local kubeStateMetricTypeDescriptors = {
   },
 };
 
-local groupLeftJoinExpression(descriptor) =
+local groupLeftJoinExpression(descriptor, extraSelector, serviceSelector) =
   local joinOnLabels = commonJoinOnLabels + [descriptor.keyLabel];
   local groupLeftLabels = commonGroupLeftLabels + descriptor.extraLabels;
   local joinedMetric = descriptor.kubeLabelMetric + ':labeled';
-  local joinedMetricSelector = commonLabelSelector;
+  local joinedMetricSelector = commonLabelSelector + extraSelector + serviceSelector;
 
   |||
     on(%(joinOnLabels)s) group_left(%(groupLeftLabels)s)
@@ -183,8 +183,9 @@ local groupLeftJoinExpression(descriptor) =
   };
 
 
-local descriptorJoinedWithLabelsExpression(metricName, descriptor) =
-  local metricsFilter = descriptor.metricsFilter;
+local descriptorJoinedWithLabelsExpression(metricName, descriptor, extraSelector, serviceSelector) =
+  local descriptorFilter = if descriptor.metricsFilter != null then descriptor.metricsFilter else {};
+  local metricsFilter = descriptorFilter + extraSelector;
 
   strings.chomp(|||
     %(metricName)s%(metricsFilter)s
@@ -193,7 +194,7 @@ local descriptorJoinedWithLabelsExpression(metricName, descriptor) =
   |||) % {
     metricName: metricName,
     metricsFilter: selectors.serializeHash(metricsFilter, withBraces=true),
-    groupLeftJoinExpression: groupLeftJoinExpression(descriptor),
+    groupLeftJoinExpression: groupLeftJoinExpression(descriptor, extraSelector, serviceSelector),
   };
 
 local recordingRulesFor(metricName, labels, expression) =
@@ -213,106 +214,113 @@ local recordingRulesFor(metricName, labels, expression) =
 local generateRelabelingExpression(descriptor, kubernetesLabelSelector, staticLabels) =
   local keyLabel = descriptor.keyLabel;
   local infoMetric = descriptor.kubeLabelMetric;
+  local topKAggregationLabels = commonJoinOnLabels + [keyLabel];
+
+  local baseExpression = 'topk by(%(topKAggregationLabels)s) (1, %(infoMetric)s{%(kubernetesSelectorExpression)s})' % {
+    kubernetesSelectorExpression: selectors.serializeHash(kubernetesLabelSelector),
+    keyLabel: keyLabel,
+    infoMetric: infoMetric,
+    topKAggregationLabels: aggregations.serialize(topKAggregationLabels),
+  };
+
+  local dynamicLabels = labelTaxonomy.labelTaxonomy(labelTaxonomy.labels.stage | labelTaxonomy.labels.shard) + descriptor.extraLabels;
+
+  // Remove any static labels that may appear in the set of dynamic labels too
+  local dynamicLabelsFiltered = std.filter(function(l) !std.objectHas(staticLabels, l), dynamicLabels);
+
+  local relabels = std.foldl(
+    function(memo, label)
+      |||
+        label_replace(
+          %(memo)s,
+          "%(label)s", "$0", "label_%(label)s", ".*"
+        )
+      ||| % {
+        label: label,
+        memo: strings.indent(memo, 2),
+      },
+    dynamicLabelsFiltered,
+    baseExpression
+  );
+
+  if dynamicLabelsFiltered == [] then
+    relabels
+  else
+    local labelsToRemove = std.map(function(l) 'label_' + l, dynamicLabelsFiltered);
+    |||
+      group without(%(labelsToRemove)s) (
+        %(relabels)s
+      )
+    ||| % {
+      labelsToRemove: aggregations.serialize(labelsToRemove),
+      relabels: strings.indent(relabels, 2),
+    };
+
+local generateLabeledMetricsForServiceType(service, kubeMetricType, extraSelector) =
+  local descriptor = kubeStateMetricTypeDescriptors[kubeMetricType];
+  local kubernetesLabelSelector = service.kubeConfig.labelSelectors.getPromQLSelector(kubeMetricType);
 
   // If a service doesn't have a selector for the given resource, that means that
   // if doesn't have any of those resources
   if kubernetesLabelSelector == null then
-    null
+    []
   else
-    local topKAggregationLabels = commonJoinOnLabels + [keyLabel];
+    local defaultStaticLabels = { type: service.type, tier: service.tier };
+    local staticLabels = defaultStaticLabels + service.kubeConfig.labelSelectors.getStaticLabels(kubeMetricType);
+    local selector = kubernetesLabelSelector + extraSelector;
 
-    local baseExpression = 'topk by(%(topKAggregationLabels)s) (1, %(infoMetric)s{%(kubernetesSelectorExpression)s})' % {
-      kubernetesSelectorExpression: selectors.serializeHash(kubernetesLabelSelector),
-      keyLabel: keyLabel,
-      infoMetric: infoMetric,
-      topKAggregationLabels: aggregations.serialize(topKAggregationLabels),
-    };
-
-    local dynamicLabels = labelTaxonomy.labelTaxonomy(labelTaxonomy.labels.stage | labelTaxonomy.labels.shard) + descriptor.extraLabels;
-
-    // Remove any static labels that may appear in the set of dynamic labels too
-    local dynamicLabelsFiltered = std.filter(function(l) !std.objectHas(staticLabels, l), dynamicLabels);
-
-    local relabels = std.foldl(
-      function(memo, label)
-        |||
-          label_replace(
-            %(memo)s,
-            "%(label)s", "$0", "label_%(label)s", ".*"
-          )
-        ||| % {
-          label: label,
-          memo: strings.indent(memo, 2),
-        },
-      dynamicLabelsFiltered,
-      baseExpression
+    recordingRulesFor(
+      descriptor.kubeLabelMetric,
+      labels=staticLabels,
+      expression=generateRelabelingExpression(descriptor, selector, staticLabels)
     );
-
-    if dynamicLabelsFiltered == [] then
-      relabels
-    else
-      local labelsToRemove = std.map(function(l) 'label_' + l, dynamicLabelsFiltered);
-      |||
-        group without(%(labelsToRemove)s) (
-          %(relabels)s
-        )
-      ||| % {
-        labelsToRemove: aggregations.serialize(labelsToRemove),
-        relabels: strings.indent(relabels, 2),
-      };
-
-local generateLabeledMetricsForServiceType(service, kubeMetricType) =
-  local descriptor = kubeStateMetricTypeDescriptors[kubeMetricType];
-  local kubernetesLabelSelector = service.kubeConfig.labelSelectors.getPromQLSelector(kubeMetricType);
-  local defaultStaticLabels = { type: service.type, tier: service.tier };
-  local staticLabels = defaultStaticLabels + service.kubeConfig.labelSelectors.getStaticLabels(kubeMetricType);
-
-  recordingRulesFor(
-    descriptor.kubeLabelMetric,
-    labels=staticLabels,
-    expression=generateRelabelingExpression(descriptor, kubernetesLabelSelector, staticLabels)
-  );
 
 // For a given service, this function will generate recording rules to
 // select the appropriate kubernetes resources that are owned by the service
-local generateKubeSelectorRulesForService(service) =
+local generateKubeSelectorRulesForService(service, extraSelector) =
   local formatConfig = { type: service.type };
 
   {
     name: 'kube-state-metrics-recording-rules: %(type)s' % formatConfig,
     interval: '1m',
     rules:
-      generateLabeledMetricsForServiceType(service, 'pod') +
-      generateLabeledMetricsForServiceType(service, 'hpa') +
-      generateLabeledMetricsForServiceType(service, 'node') +
-      generateLabeledMetricsForServiceType(service, 'ingress') +
-      generateLabeledMetricsForServiceType(service, 'deployment'),
+      generateLabeledMetricsForServiceType(service, 'pod', extraSelector) +
+      generateLabeledMetricsForServiceType(service, 'hpa', extraSelector) +
+      generateLabeledMetricsForServiceType(service, 'node', extraSelector) +
+      generateLabeledMetricsForServiceType(service, 'ingress', extraSelector) +
+      generateLabeledMetricsForServiceType(service, 'deployment', extraSelector),
   };
 
 // For a given kubernetes resource type, will generate recording rules tha enrich the labelling
 // to make it easier to identify the resources for each service (as generated in `generateKubeSelectorRulesForService`)
-local generateEnrichedLabelsForType(descriptorType) =
+local generateEnrichedLabelsForType(descriptorType, extraSelector, serviceSelector) =
   local descriptor = kubeStateMetricTypeDescriptors[descriptorType];
 
   std.flatMap(
     function(metricName)
-      recordingRulesFor(metricName, labels={}, expression=descriptorJoinedWithLabelsExpression(metricName, descriptor)),
+      recordingRulesFor(metricName, labels={}, expression=descriptorJoinedWithLabelsExpression(metricName, descriptor, extraSelector, serviceSelector)),
     descriptor.metrics
   );
 
 local kubeServices = std.filter(function(s) s.provisioning.kubernetes, metricsCatalog.services);
 
-[
-  generateKubeSelectorRulesForService(service)
-  for service in kubeServices
-] + [{
-  name: 'kube-state-metrics-recording-rules: enriched label recording rules',
-  interval: '1m',
-  rules:
-    generateEnrichedLabelsForType('container') +
-    generateEnrichedLabelsForType('pod') +
-    generateEnrichedLabelsForType('hpa') +
-    generateEnrichedLabelsForType('node') +
-    generateEnrichedLabelsForType('ingress') +
-    generateEnrichedLabelsForType('deployment'),
-}]
+{
+  groupsWithFilter(filterFn, extraSelector={}):
+    local filteredServices = std.filter(filterFn, kubeServices);
+    local serviceSelector = { type: { oneOf: std.map(function(s) s.type, filteredServices) } };
+    local selector = serviceSelector + extraSelector;
+    [
+      generateKubeSelectorRulesForService(service, extraSelector)
+      for service in filteredServices
+    ] + [{
+      name: 'kube-state-metrics-recording-rules: enriched label recording rules',
+      interval: '1m',
+      rules:
+        generateEnrichedLabelsForType('container', extraSelector, serviceSelector) +
+        generateEnrichedLabelsForType('pod', extraSelector, serviceSelector) +
+        generateEnrichedLabelsForType('hpa', extraSelector, serviceSelector) +
+        generateEnrichedLabelsForType('node', extraSelector, serviceSelector) +
+        generateEnrichedLabelsForType('ingress', extraSelector, serviceSelector) +
+        generateEnrichedLabelsForType('deployment', extraSelector, serviceSelector),
+    }],
+}

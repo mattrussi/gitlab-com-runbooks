@@ -5,9 +5,11 @@ local aggregationSetTransformer = import 'servicemetrics/aggregation-set-transfo
 local recordingRules = import 'recording-rules/recording-rules.libsonnet';
 local saturationResources = import 'servicemetrics/saturation-resources.libsonnet';
 local saturationRules = import 'servicemetrics/saturation_rules.libsonnet';
-local kubeStateMetricsGroups = import 'kube-state-metrics/recording-rules.libsonnet';
+local kubeStateMetricsRecordingRules = import 'kube-state-metrics/recording-rules.libsonnet';
 local sloAlertingRulesGroup = import './slo-alerting-rules.libsonnet';
 local availabilityRateRuleGroups = import './availability-rate-rules.libsonnet';
+
+local kubeStateMetricsGroups = kubeStateMetricsRecordingRules.groupsWithFilter(function(s) true);
 
 local serviceSLOsRulesetGenerator = recordingRules.serviceSLORuleSetGenerator();
 local serviceMappingRulesetGenerator = recordingRules.serviceMappingRuleSetGenerator();
