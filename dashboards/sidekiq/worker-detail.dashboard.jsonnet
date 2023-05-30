@@ -450,6 +450,23 @@ basic.dashboard(
       ],
     ),
   ], startRow=701)
+  +
+  layout.rowGrid('Deferred Jobs', [
+    basic.timeseries(
+      stableId='jobs-deferred',
+      title='Jobs Deferred',
+      description='Jobs deferred intentionally via feature flag `defer_sidekiq_jobs_<worker_name>`',
+      query=|||
+        sum by (environment, worker)  (
+          rate(
+            sidekiq_jobs_deferred_total{environment="$environment", worker=~"$worker"}[$__interval]
+            )
+          )
+          > 0
+      |||,
+      legendFormat='{{ worker }}',
+    ),
+  ], startRow=801)
 )
 .trailer()
 + {
