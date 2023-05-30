@@ -244,6 +244,14 @@ This process is automated via a script in the `runbooks` repository:
 scripts/redis-reconfigure.sh gstg redis-cache
 ```
 
+For Redis Cluster, the reconfiguration process is similar.
+
+```
+
+scripts/redis-cluster-reconfigure.sh gstg redis-cluster-chat-cache 3 3
+
+```
+
 ## Debugging and Diagnosis
 
 So you think something is wrong with Redis, either as a cause or a symptom.  What can you do to find out more?
