@@ -1,3 +1,4 @@
+local metricsConfig = import 'gitlab-metrics-config.libsonnet';
 local patroniArchetype = import 'service-archetypes/patroni-archetype.libsonnet';
 local metricsCatalog = import 'servicemetrics/metrics.libsonnet';
 local histogramApdex = metricsCatalog.histogramApdex;
@@ -8,6 +9,7 @@ function(
   extraTags=[],
   additionalServiceLevelIndicators={},
   serviceDependencies={},
+  selector=metricsConfig.baseSelector,
 )
   patroniArchetype(type, extraTags, additionalServiceLevelIndicators, serviceDependencies)
   {
@@ -16,8 +18,11 @@ function(
       // Sidekiq has a distinct usage profile; this is used to select 'the others' which
       // are more interactive and thus require lower thresholds
       // https://gitlab.com/gitlab-com/gl-infra/scalability/-/issues/1059
-      local railsBaseSelector = {
-        type: { ne: 'sidekiq' },
+      local railsBaseSelector = selector {
+        type: std.prune([
+          { ne: 'sidekiq' },
+          std.get(selector, 'type'),
+        ]),
       },
 
       // We don't have latency histograms for patroni but for now we will
