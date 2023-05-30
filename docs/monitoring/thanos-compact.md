@@ -4,6 +4,10 @@
 
 Thanos compact failures are almost always discoverable in the logs.
 
+## Thanos Compact Dashboard
+
+The [Thanos Compact Dashboard](https://dashboards.gitlab.net/d/651943d05a8123e32867b46asd/thanos-thanos-compact) has a view of logs and recent activity that should help identify the problem.
+
 [Elasticsearch](https://nonprod-log.gitlab.net/goto/5253fd00-b7ab-11ed-9af2-6131f0ee4ce6) - Saved query params: pubsub-monitoring-inf-ops* index for kubernetes.container_name:compactor, NOT json.level:info
 
 Logs can also be found in the [GCP console](https://console.cloud.google.com/kubernetes/deployment/us-east1/ops-gitlab-gke/thanos/thanos-gprd-compactor/logs?project=gitlab-ops)
@@ -208,7 +212,25 @@ At the time compaction halted, you should see a message of the form:
 #### Resolution
 
 Use thanos tools from a shell in the compactor's environment to mark these
-blocks for skipping. In our GCE infrastructure, this looks like:
+blocks for skipping. In GKE, to mark blocks no-compact via kube-ctl exec, you will need to find the pod name via the cloud console or via the following:
+
+```
+in runbooks project:  glsh kube use-cluster ops
+Then in another window:  kubectl get pods -n thanos |grep compactor
+
+block_list=(01H09QAHAXXTDVJJYSHB8Z5Q4B 01H0ETK7D7PQDQPWKGEQS1J93A 01H0FKAWKQ82JP1ZQ14TV2B2S9)
+
+for id in ${block_list} ; do
+  kubectl exec -it <POD_NAME> \
+  --container compactor -n thanos \
+  -- thanos tools bucket mark --objstore.config-file=/conf/objstore.yml \
+  --marker=no-compact-mark.json \
+  --details='ISSUE LINK HERE' \
+  --id="${id}"
+done
+```
+
+If running from another location like your workstation:
 
 ```
 export GOOGLE_APPLICATION_CREDENTIALS=/opt/prometheus/thanos/gcs-creds.json
@@ -222,12 +244,7 @@ for id in ${block_list} ; do
 done
 ```
 
-We will need a similar process in place when we move thanos-compact to
-Kubernetes. In principle you can do this with local thanos binary against the
-bucket from your workstation, but `kubectl exec` will likely be the preferred
-procedure.
-
-Restart thanos-compact.
+Restart thanos-compact - usually via`kubectl delete pod <POD_NAME> -n thanos`
 
 #### Example incidents
 
