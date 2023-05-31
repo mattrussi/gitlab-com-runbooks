@@ -46,7 +46,7 @@ local transformErrorRateToSuccessRate(errorRateMetric, operationRateMetric, sele
     errorRateMetric: errorRateMetric,
     operationRateMetric: operationRateMetric,
     selector: selector,
-    useRecordingRuleRegistry: useRecordingRuleRegistry,
+    useRecordingRuleRegistry:: useRecordingRuleRegistry,
 
     apdexSuccessRateQuery(aggregationLabels, selector, rangeInterval, withoutLabels=[])::
       transformErrorRateToSuccessRate(

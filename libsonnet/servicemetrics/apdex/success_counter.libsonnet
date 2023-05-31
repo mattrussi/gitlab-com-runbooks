@@ -20,7 +20,7 @@ local generateApdexRatio(successCounterApdex, aggregationLabels, additionalSelec
     successRateMetric: successRateMetric,
     operationRateMetric: operationRateMetric,
     selector: selector,
-    useRecordingRuleRegistry: useRecordingRuleRegistry,
+    useRecordingRuleRegistry:: useRecordingRuleRegistry,
 
     apdexSuccessRateQuery(aggregationLabels, selector, rangeInterval, withoutLabels=[])::
       resolveRateQuery(

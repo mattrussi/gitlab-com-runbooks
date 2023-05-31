@@ -8,7 +8,7 @@ local selectors = import 'promql/selectors.libsonnet';
     gauge,
     selector=null
   ):: {
-    useRecordingRuleRegistry: false,
+    useRecordingRuleRegistry:: false,
 
     local baseSelector = selector,  // alias
     aggregatedRateQuery(aggregationLabels, selector, rangeInterval, withoutLabels=[])::

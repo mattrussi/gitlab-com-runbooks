@@ -170,7 +170,7 @@ local generateApdexAttributionQuery(histogram, selector, rangeInterval, aggregat
     satisfiedThreshold: satisfiedThreshold,
     toleratedThreshold: toleratedThreshold,
     metricsFormat: metricsFormat,
-    useRecordingRuleRegistry: useRecordingRuleRegistry,
+    useRecordingRuleRegistry:: useRecordingRuleRegistry,
 
     apdexQuery(aggregationLabels, selector, rangeInterval, withoutLabels=[])::
       generateApdexScoreQuery(

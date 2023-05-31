@@ -7,7 +7,7 @@ local aggregations = import 'promql/aggregations.libsonnet';
     query,
   ):: {
     query: query,
-    useRecordingRuleRegistry: false,
+    useRecordingRuleRegistry:: false,
     aggregatedRateQuery(aggregationLabels, selector, rangeInterval, withoutLabels=[])::
       // Note that we ignore the rangeInterval, selectors, and withoutLabels for now
       // TODO: handle those better, if we can
