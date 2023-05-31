@@ -45,6 +45,7 @@
 * [Rotating Rails' PostgreSQL password](../patroni/rotating-rails-postgresql-password.md)
 * [Add and remove file storages to praefect](../praefect/praefect-file-storages.md)
 * [Praefect Database User Password Rotation](../praefect/praefect-password-rotation.md)
+* [Provisioning Redis Cluster](../redis/provisioning-redis-cluster.md)
 * [../redis/redis-functional-partitioning.md](../redis/redis-functional-partitioning.md)
 * [Container Registry CDN](../registry/cdn.md)
 * [../uncategorized/about-gitlab-com.md](../uncategorized/about-gitlab-com.md)
