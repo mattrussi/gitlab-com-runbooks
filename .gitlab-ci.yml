@@ -431,12 +431,12 @@ ensure-generated-content-up-to-date:
     - make jsonnet-bundle ensure-generated-content-up-to-date
 
 test-jsonnet:
-  extends: .default-job
   stage: test
   needs: []
   rules:
     - !reference [.default-job-rules, rules]
     - *gitlab-com-only-rule
+    - when: always
   script:
     - make jsonnet-bundle test-jsonnet
 

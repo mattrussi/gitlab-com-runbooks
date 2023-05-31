@@ -32,7 +32,7 @@ local generateRangeFunctionQuery(rate, rangeFunction, additionalSelectors, range
     counter: counter,
     selector: selector,
     instanceFilter: instanceFilter,
-    useRecordingRuleRegistry: useRecordingRuleRegistry,
+    useRecordingRuleRegistry:: useRecordingRuleRegistry,
 
     // This creates a rate query of the form
     // rate(....{<selector>}[<rangeInterval>])
@@ -97,7 +97,7 @@ local generateRangeFunctionQuery(rate, rangeFunction, additionalSelectors, range
     selector: selector,
     instanceFilter: instanceFilter,
     clampMinZero: clampMinZero,
-    useRecordingRuleRegistry: false,
+    useRecordingRuleRegistry:: false,
 
     // This creates a rate query of the form
     // deriv(....{<selector>}[<rangeInterval>])
