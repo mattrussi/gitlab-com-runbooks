@@ -7,7 +7,7 @@ This document outlines the steps for provisioning a Redis Cluster. Former attemp
 
 ## Setting up instances
 
-1. Generate Redis passwords
+### 1. Generate Redis passwords
 
 Generate a few passwords, `REPLICA_REDACTED`, `RAILS_REDACTED`, `EXPORTER_REDACTED`, and `CONSOLE_REDACTED` using:
 
@@ -64,13 +64,13 @@ Modify the existing JSON
 
 ```
 
-2. Create Chef roles
+### 2. Create Chef roles
 
 Set the new chef roles and add the new role to the list of gitlab-redis roles in <env>-infra-prometheus-server role.
 
 An example MR can be found [here](https://gitlab.com/gitlab-com/gl-infra/chef-repo/-/merge_requests/3494).
 
-3. Provision VMs
+### 3. Provision VMs
 
 Provision the VMs via the generic-stor/google terraform module. This is done in the [config-mgmt project in the ops environment](https://ops.gitlab.net/gitlab-com/gl-infra/config-mgmt/). An example MR can be found [here](https://ops.gitlab.net/gitlab-com/gl-infra/config-mgmt/-/merge_requests/5811).
 
@@ -89,7 +89,7 @@ gcloud compute --project=gitlab-<ENV> instances tail-serial-port-output redis-cl
 
 ```
 
-3. Initialising the cluster
+### 4. Initialising the cluster
 
 Run the following inside an instance by SSH-ing into it.
 
@@ -122,7 +122,7 @@ done
 
 ```
 
-4. Validation
+### 5. Validation
 
 Wait for a few seconds as the nodes need time to gossip. Check the status via:
 
@@ -148,7 +148,7 @@ cluster_size:3
 
 ## Configuring the applications
 
-1. Configure console instances
+### 1. Configure console instances
 
 ```
 ➜  ~ vault kv get -format=json chef/env/<ENV>/shared/gitlab-omnibus-secrets | jq '.data.data' > data.json
@@ -167,7 +167,7 @@ Update roles/<env>-base.json with the relevant connection details. An example MR
 
 Check the confirmation detail by using Rails console inside a console instance.
 
-2. Configure Gitlab Rails
+### 2. Configure Gitlab Rails
 
 a. Update secret
 
@@ -226,3 +226,5 @@ gitlab-redis-cluster-<INSTANCE_TYPE>-rails-credential-v1:
 ```
 
 b. Update Gitlab Rails `.Values.global.redis` accordingly.
+
+Either add a new key to `.Values.global.redis.xxx` or `.Values.global.redis.redisYmlOverride.xxx`. An example MR can be found [here](https://gitlab.com/gitlab-com/gl-infra/k8s-workloads/gitlab-com/-/merge_requests/2753).
