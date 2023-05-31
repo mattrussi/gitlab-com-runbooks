@@ -691,6 +691,10 @@ services:
           permalink: https://log.gprd.gitlab.net/goto/c4faac00-f612-11ed-a017-0d32180b1390
         - name: request latency
           permalink: https://log.gprd.gitlab.net/goto/b423c240-f612-11ed-8afc-c9851e4645c0
+    observability:
+      monitors:
+        primary_grafana_dashboard: code_suggestions-main/code-suggestions-overview
+
 
   - name: mailroom
     tier: sv
