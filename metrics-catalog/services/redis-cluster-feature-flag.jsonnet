@@ -17,10 +17,23 @@ metricsCatalog.serviceDefinition(
       apdexScore: 0.9995,
     },
     serviceLevelIndicators+: {
+      rails_redis_client+: {
+        userImpacting: true,
+        severity: 's4',
+      },
+      primary_server+: {
+        userImpacting: true,
+        severity: 's4',
+      },
+      secondary_servers+: {
+        userImpacting: true,
+        severity: 's4',
+      },
       // Rails Cache uses metrics from the main application to guage to performance of the Redis cache
       // This is useful since it's not easy for us to directly calculate an apdex from the Redis metrics
       // directly
       rails_cache: {
+        severity: 's4',
         userImpacting: true,
         featureCategory: 'not_owned',
         description: |||
