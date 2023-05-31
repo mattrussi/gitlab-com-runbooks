@@ -6,7 +6,7 @@ groups:
   rules:
   - record: sli_aggregations:gitlab_sql_primary_duration_seconds_bucket_rate1m
     expr: |
-      sum by (db_config_name,environment,feature_category,le,shard,stage,tier,type) (
+      sum by (db_config_name,environment,feature_category,job,le,shard,stage,tier,type) (
         rate(gitlab_sql_primary_duration_seconds_bucket[1m])
       )
   - record: sli_aggregations:gitlab_sql_replica_duration_seconds_bucket_rate1m
@@ -109,7 +109,7 @@ groups:
   rules:
   - record: sli_aggregations:gitlab_sql_primary_duration_seconds_bucket_rate5m
     expr: |
-      sum by (db_config_name,environment,feature_category,le,shard,stage,tier,type) (
+      sum by (db_config_name,environment,feature_category,job,le,shard,stage,tier,type) (
         rate(gitlab_sql_primary_duration_seconds_bucket[5m])
       )
   - record: sli_aggregations:gitlab_sql_replica_duration_seconds_bucket_rate5m
@@ -212,7 +212,7 @@ groups:
   rules:
   - record: sli_aggregations:gitlab_sql_primary_duration_seconds_bucket_rate30m
     expr: |
-      sum by (db_config_name,environment,feature_category,le,shard,stage,tier,type) (
+      sum by (db_config_name,environment,feature_category,job,le,shard,stage,tier,type) (
         rate(gitlab_sql_primary_duration_seconds_bucket[30m])
       )
   - record: sli_aggregations:gitlab_sql_replica_duration_seconds_bucket_rate30m
@@ -315,7 +315,7 @@ groups:
   rules:
   - record: sli_aggregations:gitlab_sql_primary_duration_seconds_bucket_rate1h
     expr: |
-      sum by (db_config_name,environment,feature_category,le,shard,stage,tier,type) (
+      sum by (db_config_name,environment,feature_category,job,le,shard,stage,tier,type) (
         rate(gitlab_sql_primary_duration_seconds_bucket[1h])
       )
   - record: sli_aggregations:gitlab_sql_replica_duration_seconds_bucket_rate1h
