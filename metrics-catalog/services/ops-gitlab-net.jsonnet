@@ -15,7 +15,7 @@ metricsCatalog.serviceDefinition({
   tier: 'sv',
   serviceIsStageless: true,
 
-  tags: ['golang', 'rails'],
+  tags: ['golang', 'rails', 'cloud-sql'],
 
   monitoringThresholds: {
     apdexScore: 0.998,
@@ -319,9 +319,6 @@ metricsCatalog.serviceDefinition({
 
     // git over SSH
     gitlab_sshd: sliCommon {
-      monitoringThresholds+: {
-        errorRatio: 0.999,
-      },
       featureCategory: 'source_code_management',
       description: |||
         Monitors Gitlab-sshd, using the connections bucket, and http requests bucket.
@@ -351,6 +348,32 @@ metricsCatalog.serviceDefinition({
       toolingLinks: [
         toolingLinks.kibana(title='GitLab Shell', index='shell_ops', includeMatchersForPrometheusSelector=false),
       ],
+    },
+
+    // rails <-> DB
+    rails_sql: sliCommon {
+      upscaleLongerBurnRates: true,
+
+      description: |||
+        Represents all SQL transactions issued through ActiveRecord from the Rails monolith (web, api, websockets, but not sidekiq) to the database.
+        Durations can be impacted by various conditions other than the database, including Ruby thread contention and network conditions.
+      |||,
+
+      local sqlBaseSelector = baseSelector { job: { ne: 'sidekiq' } },
+
+      apdex: histogramApdex(
+        histogram='gitlab_sql_primary_duration_seconds_bucket',
+        selector=sqlBaseSelector,
+        satisfiedThreshold=0.1,
+        toleratedThreshold=0.2
+      ),
+
+      requestRate: rateMetric(
+        counter='gitlab_sql_primary_duration_seconds_bucket',
+        selector=sqlBaseSelector { le: '+Inf' },
+      ),
+
+      significantLabels: ['feature_category'],
     },
   },
 

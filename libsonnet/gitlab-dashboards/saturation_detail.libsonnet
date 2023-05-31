@@ -192,7 +192,7 @@ local maxOverTime(query) =
 
         %(description)s
 
-        ## What to do from here here?
+        ## What to do from here?
 
         * Check the ${type} service overview dashboard (accessible from the menu above)
         * [Find related issues on GitLab.com](%(issueSearchLink)s)
