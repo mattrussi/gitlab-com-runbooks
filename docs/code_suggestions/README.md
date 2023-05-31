@@ -6,6 +6,7 @@
 
 # Code_suggestions Service
 
+* [Service Overview](https://dashboards.gitlab.net/d/code_suggestions-main/code-suggestions-overview)
 * **Alerts**: <https://alerts.gitlab.net/#/alerts?filter=%7Btype%3D%22code_suggestions%22%2C%20tier%3D%22inf%22%7D>
 * **Label**: gitlab-com/gl-infra/production~"Service::CodeSuggestions"
 
@@ -59,7 +60,9 @@ To apply these changes:
 1. Set up gcloud auth: `gcloud container clusters get-credentials ai-assist --zone us-central1-c --project unreview-poc-390200e5`
 1. kubectl apply -f $FILENAME
 
-<!-- ## Availability -->
+## Availability
+
+* [Triton Server dashboard](https://dashboards.gitlab.net/d/code_suggestions-triton/code-suggestions-triton-server?orgId=1)
 
 <!-- ## Durability -->
 
