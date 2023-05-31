@@ -97,7 +97,7 @@ test.suite({
           },
       },
       {
-        meta: { key: 'rangeTest', params: { gte: 1, lte: 10 }, type: 'range' },
+        meta: { field: 'rangeTest', key: 'rangeTest', params: { gte: 1, lte: 10 }, type: 'range' },
         query: { range: { rangeTest: { gte: 1, lte: 10 } } },
       },
     ],
