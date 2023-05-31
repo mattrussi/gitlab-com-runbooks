@@ -365,7 +365,7 @@ metricsCatalog.serviceDefinition({
         histogram='gitlab_sql_primary_duration_seconds_bucket',
         selector=sqlBaseSelector,
         satisfiedThreshold=0.1,
-        toleratedThreshold=0.2
+        toleratedThreshold=0.25,
       ),
 
       requestRate: rateMetric(
