@@ -272,7 +272,7 @@ Interesting fields to search or aggregate on:
 
 1. queue: The lower-snake-case queue name
 1. jid: An ID that is the unique to a job (allocated when the job is enqueued). Useful for tracking a job through the system
-1. job_status: start, fail, deduplicated, done (or empty for some ancillary cases)
+1. job_status: `start`, `fail`, `deduplicated`, `done`, `deferred` (or empty for some ancillary cases)
    * In a debugging/incident, you *probably* want to filter for `done` so you get the timing information below.
 1. meta.user: The user that caused this job to happen, if known
 1. meta.root_namespace: The gitlab namespace (top level group) that the job is executing for
