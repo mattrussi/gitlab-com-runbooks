@@ -106,3 +106,65 @@ groups:
           >= 0
         )
       )
+- name: Experimental apdex variant D
+  interval: 1m
+  partial_response_strategy: warn
+  rules:
+  - record: test_apdex_calculation_variant_input:satisfied_ratio:rate_1h
+    # The "satisfied" and "tolerated" ratios use identical expressions except that the numerator's "le" filter is respectively "0.5" and "0.75" seconds.
+    labels:
+      component: rails_redis_client
+      stage: main
+      tier: db
+      type: redis-cluster-ratelimiting
+      env: gprd
+    expr: |
+      (
+        sum by (environment) (
+          rate(gitlab_redis_client_requests_duration_seconds_bucket{le="0.5",storage="rate_limiting",env="gprd",monitor!="global",stage="main"}[1h])
+        ) >= 0
+      )
+      /
+      (
+        sum by (environment) (
+          rate(gitlab_redis_client_requests_duration_seconds_bucket{le="+Inf",storage="rate_limiting",env="gprd",monitor!="global",stage="main"}[1h])
+        ) > 0
+      )
+  - record: test_apdex_calculation_variant_input:tolerated_ratio:rate_1h
+    # The "satisfied" and "tolerated" ratios use identical expressions except that the numerator's "le" filter is respectively "0.5" and "0.75" seconds.
+    labels:
+      component: rails_redis_client
+      stage: main
+      tier: db
+      type: redis-cluster-ratelimiting
+      env: gprd
+    expr: |
+      (
+        sum by (environment) (
+          rate(gitlab_redis_client_requests_duration_seconds_bucket{le="0.75",storage="rate_limiting",env="gprd",monitor!="global",stage="main"}[1h])
+        ) >= 0
+      )
+      /
+      (
+        sum by (environment) (
+          rate(gitlab_redis_client_requests_duration_seconds_bucket{le="+Inf",storage="rate_limiting",env="gprd",monitor!="global",stage="main"}[1h])
+        ) > 0
+      )
+  - record: test_apdex_calculation_variant
+    # Variant D: This variant first aggregates and records the "satisfied" and "tolerated" request ratios, and then averages those into the overall apdex.
+    # The "satisfied" and "tolerated" ratios are recorded by thanos rules, so they should represent the properly weighted global perspective, such that a prometheus server
+    # that had scraped twice as many pods gets twice as much weight in the global ratio.
+    # Additional label filters were added to limit the experiment's scope and overhead:
+    #   env="gprd",monitor!="global",stage="main"
+    labels:
+      apdex_variant: inputs_from_thanos_ruler_for_satisfied_and_tolerated_ratios
+    expr: |
+      sum by (env,environment,tier,type,stage,component) (
+        (
+          test_apdex_calculation_variant_input:satisfied_ratio:rate_1h{monitor="global",env="gprd",tier="db",type="redis-cluster-ratelimiting",stage="main",component="rails_redis_client"}
+          +
+          test_apdex_calculation_variant_input:tolerated_ratio:rate_1h{monitor="global",env="gprd",tier="db",type="redis-cluster-ratelimiting",stage="main",component="rails_redis_client"}
+        )
+        /
+        2
+      ) >= 0
