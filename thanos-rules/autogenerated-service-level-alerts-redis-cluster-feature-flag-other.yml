@@ -81,7 +81,7 @@ groups:
       title: The rails_cache SLI of the redis-cluster-feature-flag service (`{{ $labels.stage
         }}` stage) has an apdex violating SLO
       description: |
-        Rails ActiveSupport Cache operations against the Redis Cache
+        Rails ActiveSupport Cache operations against the Feature Flag instance
 
         Currently the apdex value is {{ $value | humanizePercentage }}.
       grafana_dashboard_id: redis-cluster-feature-flag-main/redis-cluster-feature-flag-overview
@@ -131,7 +131,7 @@ groups:
       title: The rails_cache SLI of the redis-cluster-feature-flag service (`{{ $labels.stage
         }}` stage) has an apdex violating SLO
       description: |
-        Rails ActiveSupport Cache operations against the Redis Cache
+        Rails ActiveSupport Cache operations against the Feature Flag instance
 
         Currently the apdex value is {{ $value | humanizePercentage }}.
       grafana_dashboard_id: redis-cluster-feature-flag-main/redis-cluster-feature-flag-overview
@@ -181,7 +181,7 @@ groups:
       title: The rails_cache SLI of the redis-cluster-feature-flag service (`{{ $labels.stage
         }}` stage) has not received any traffic in the past 30m
       description: |
-        Rails ActiveSupport Cache operations against the Redis Cache
+        Rails ActiveSupport Cache operations against the Feature Flag instance
 
         This alert signifies that the SLI is reporting a cessation of traffic; the signal is present, but is zero.
       grafana_dashboard_id: redis-cluster-feature-flag-main/redis-cluster-feature-flag-overview
@@ -215,7 +215,7 @@ groups:
       title: The rails_cache SLI of the redis-cluster-feature-flag service (`{{ $labels.stage
         }}` stage) has not reported any traffic in the past 30m
       description: |
-        Rails ActiveSupport Cache operations against the Redis Cache
+        Rails ActiveSupport Cache operations against the Feature Flag instance
 
         This alert signifies that the SLI was previously reporting traffic, but is no longer - the signal is absent.
 

@@ -37,7 +37,7 @@ metricsCatalog.serviceDefinition(
         userImpacting: true,
         featureCategory: 'not_owned',
         description: |||
-          Rails ActiveSupport Cache operations against the Redis Cache
+          Rails ActiveSupport Cache operations against the Feature Flag instance
         |||,
 
         apdex: histogramApdex(
