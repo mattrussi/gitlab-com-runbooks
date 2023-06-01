@@ -39,6 +39,7 @@
   import 'praefect.jsonnet',
   import 'pvs.jsonnet',
   import 'redis-cache.jsonnet',
+  import 'redis-cluster-feature-flag.jsonnet',
   import 'redis-sidekiq.jsonnet',
   import 'redis-tracechunks.jsonnet',
   import 'redis-cluster-ratelimiting.jsonnet',

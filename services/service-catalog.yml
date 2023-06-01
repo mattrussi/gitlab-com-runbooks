@@ -1203,6 +1203,33 @@ services:
         grafana_folder: redis
         primary_grafana_dashboard: redis-main/redis-overview
 
+  - name: redis-cluster-feature-flag
+    tier: db
+    friendly_name: Redis Cluster Feature Flag
+    label: RedisClusterFeatureFlag
+    owner: scalability
+    technical:
+      project:
+        - https://github.com/antirez/redis/
+      documents:
+        design:
+        architecture:
+        readiness_review:
+        sre_guide: https://gitlab.com/gitlab-com/runbooks/-/tree/master/docs/redis-cluster-feature-flag
+        developer_guide: https://docs.gitlab.com/ee/development/redis.html#redis-guidelines
+        service:
+          - https://redis.io/documentation
+          - https://docs.gitlab.com/omnibus/settings/redis.html
+        security:
+      dependencies:
+        - service:
+      logging:
+        - name: system
+          permalink:
+    observability:
+      monitors:
+        primary_grafana_dashboard: redis-cluster-feature-flag-main/redis-cluster-feature-flag-overview
+
   - name: redis-cache
     tier: db
     friendly_name: Redis Cache

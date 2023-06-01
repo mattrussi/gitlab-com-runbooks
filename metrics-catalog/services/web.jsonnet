@@ -44,6 +44,7 @@ metricsCatalog.serviceDefinition({
     gitaly: true,
     'redis-cluster-ratelimiting': true,
     'redis-cluster-chat-cache': true,
+    'redis-cluster-feature-flag': true,
     'redis-sidekiq': true,
     'redis-cache': true,
     'redis-repository-cache': true,
