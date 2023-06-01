@@ -265,6 +265,12 @@ groups:
     expr: "1"
   - record: gitlab:feature_category:stage_group:mapping
     labels:
+      feature_category: editor_extensions
+      product_stage: create
+      stage_group: code_review
+    expr: "1"
+  - record: gitlab:feature_category:stage_group:mapping
+    labels:
       feature_category: environment_management
       product_stage: deploy
       stage_group: environments
@@ -368,18 +374,6 @@ groups:
   - record: gitlab:feature_category:stage_group:mapping
     labels:
       feature_category: groups_and_projects
-      product_stage: data_stores
-      stage_group: tenant_scale
-    expr: "1"
-  - record: gitlab:feature_category:stage_group:mapping
-    labels:
-      feature_category: projects
-      product_stage: data_stores
-      stage_group: tenant_scale
-    expr: "1"
-  - record: gitlab:feature_category:stage_group:mapping
-    labels:
-      feature_category: subgroups
       product_stage: data_stores
       stage_group: tenant_scale
     expr: "1"
@@ -730,6 +724,12 @@ groups:
       feature_category: subscription_management
       product_stage: fulfillment
       stage_group: billing_and_subscription_management
+    expr: "1"
+  - record: gitlab:feature_category:stage_group:mapping
+    labels:
+      feature_category: switchboard
+      product_stage: platforms
+      stage_group: switchboard
     expr: "1"
   - record: gitlab:feature_category:stage_group:mapping
     labels:

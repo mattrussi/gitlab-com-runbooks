@@ -76,6 +76,7 @@
     feature_categories: [
       'code_review_workflow',
       'gitlab_cli',
+      'editor_extensions',
     ],
   },
   ide: {
@@ -414,6 +415,13 @@
     stage: 'platforms',
     feature_categories: [
       'dedicated',
+    ],
+  },
+  switchboard: {
+    name: 'Switchboard',
+    stage: 'platforms',
+    feature_categories: [
+      'switchboard',
     ],
   },
   pubsec_services: {
