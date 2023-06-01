@@ -10,6 +10,7 @@ The receivers[run in ops](https://gitlab.com/gitlab-com/gl-infra/readiness/-/blo
 ## Configuring Tenants
 
 Tenants for Thanos Receive are configured in two parts:
+
 1. An entry for the tenant and limits in [k8s-workloads](https://gitlab.com/gitlab-com/gl-infra/k8s-workloads/gitlab-helmfiles/-/blob/master/releases/thanos/ops.yaml.gotmpl#L22)
 2. Tenant Credentials in [Vault](https://vault.gitlab.net/ui/vault/secrets/k8s/show/env/ops/ns/thanos/htpasswd)
 
