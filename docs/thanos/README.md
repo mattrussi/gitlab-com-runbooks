@@ -81,7 +81,7 @@ Summary of Thanos Services and labels:
 | `thanos-ruler`            | [Thanos Ruler](https://gitlab.com/gitlab-com/gl-infra/readiness/-/blob/master/thanos/overview.md#thanos-rule) |
 | `thanos-{env}-compactor`  | [Thanos Compactor](https://gitlab.com/gitlab-com/gl-infra/readiness/-/blob/master/thanos/overview.md#thanos-compact) |
 | `thanos-{env}-storegateway-## `  | [Thanos Store](https://gitlab.com/gitlab-com/gl-infra/readiness/-/blob/master/thanos/overview.md#thanos-store) |
-| `thanos-receive`          | [Thanos-receiver](https://thanos.io/tip/components/receive.md/)       |
+| `thanos-receive`          | [Thanos-receiver](https://gitlab.com/gitlab-com/gl-infra/readiness/-/blob/master/thanos/overview.md#thanos-receive) |
 | `{inherited from prometheus container}` `container="thanos-sidecar"`  | [Thanos Sidecar](https://gitlab.com/gitlab-com/gl-infra/readiness/-/blob/master/thanos/overview.md#thanos-sidecar) |
 
 ### Alerts for `environment="thanos"`
