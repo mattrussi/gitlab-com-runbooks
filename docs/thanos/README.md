@@ -35,6 +35,7 @@
 * [Thanos Compact](../monitoring/thanos-compact.md)
 * [Deleting series over a given interval from thanos](../monitoring/thanos-delete-series-interval.md)
 * [Thanos Query and Stores](../monitoring/thanos-query.md)
+* [Thanos Receive](../monitoring/thanos-receive.md)
 * [Thanos Rule](../monitoring/thanos-rule.md)
 * [Thanos Store](../monitoring/thanos-store.md)
 * [Stackdriver tracing for the Thanos stack](../monitoring/thanos-tracing.md)
