@@ -14,6 +14,7 @@
   import 'customersdot.jsonnet',
   import 'external-dns.jsonnet',
   import 'frontend.jsonnet',
+  import 'filestore.jsonnet',
   import 'google-cloud-storage.jsonnet',
   import 'git.jsonnet',
   import 'gitaly.jsonnet',

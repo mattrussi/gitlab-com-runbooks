@@ -72,12 +72,14 @@ def generate_header(service, tier)
 * **Grafana Folder**: https://dashboards.gitlab.net/dashboards/f/<%= service["grafana_folder"] %>
 <% end -%>
 
+<% if service.dig("technical", "logging") -%>
 ## Logging
 
 <%- service.dig("technical", "logging")&.each do |logging_location| -%>
 * [<%= logging_location["name"] %>](<%= logging_location["permalink"] %>)
 <%- end -%>
 
+<% end -%>
 <% if troubeshooting_docs && troubeshooting_docs.any? -%>
 ## Troubleshooting Pointers
 

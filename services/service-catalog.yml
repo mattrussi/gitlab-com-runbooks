@@ -1968,6 +1968,26 @@ services:
         grafana_folder: cloud-sql
         primary_grafana_dashboard: cloud-sql-main/cloud-sql-overview
 
+  - name: filestore
+    tier: inf
+    friendly_name: Google Cloud SQL
+    label: Filestore
+    owner: reliability_general
+    technical:
+      project:
+      documents:
+        design: https://cloud.google.com/filestore/
+        architecture:
+        readiness_review:
+        sre_guide: https://gitlab.com/gitlab-com/runbooks/-/tree/master/docs/filestore
+        developer_guide:
+        service:
+        security:
+    observability:
+      monitors:
+        grafana_folder: filestore
+        primary_grafana_dashboard: filestore-main/filestore-overview
+
   - name: external-dns
     tier: sv
     friendly_name: ExternalDNS

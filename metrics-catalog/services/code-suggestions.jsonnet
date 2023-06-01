@@ -19,6 +19,7 @@ metricsCatalog.serviceDefinition({
   },
   serviceDependencies: {
     api: true,
+    filestore: true,
   },
   serviceIsStageless: true,
   tags: ['nv_gpu'],
