@@ -7,6 +7,62 @@ groups:
   rules:
   - record: gitlab_component_apdex:success:rate
     labels:
+      component: ingress
+      stage: main
+      tier: sv
+      type: code_suggestions
+    expr: |
+      (
+        sum by (env,environment) (
+          rate(nginx_ingress_controller_request_duration_seconds_bucket{container="controller",le="5",path!="/",status!~"4.*|5.*",type="code_suggestions"}[1m])
+        )
+        +
+        sum by (env,environment) (
+          rate(nginx_ingress_controller_request_duration_seconds_bucket{container="controller",le="10",path!="/",status!~"4.*|5.*",type="code_suggestions"}[1m])
+        )
+      )
+      /
+      2
+  - record: gitlab_component_apdex:weight:score
+    labels:
+      component: ingress
+      stage: main
+      tier: sv
+      type: code_suggestions
+    expr: |
+      sum by (env,environment) (
+        rate(nginx_ingress_controller_request_duration_seconds_bucket{container="controller",le="+Inf",path!="/",status!~"4.*|5.*",type="code_suggestions"}[1m])
+      )
+  - record: gitlab_component_ops:rate
+    labels:
+      component: ingress
+      stage: main
+      tier: sv
+      type: code_suggestions
+    expr: |
+      sum by (env,environment) (
+        rate(nginx_ingress_controller_requests{container="controller",path!="/",type="code_suggestions"}[1m])
+      )
+  - record: gitlab_component_errors:rate
+    labels:
+      component: ingress
+      stage: main
+      tier: sv
+      type: code_suggestions
+    expr: |
+      (
+        sum by (env,environment) (
+          rate(nginx_ingress_controller_requests{container="controller",path!="/",status=~"^5.*",type="code_suggestions"}[1m])
+        )
+      )
+      or
+      (
+        0 * group by(env,environment) (
+          gitlab_component_ops:rate{component="ingress",stage="main",tier="sv",type="code_suggestions"}
+        )
+      )
+  - record: gitlab_component_apdex:success:rate
+    labels:
       component: model_gateway
       stage: main
       tier: sv
@@ -57,6 +113,62 @@ groups:
   interval: 1m
   partial_response_strategy: warn
   rules:
+  - record: gitlab_component_apdex:success:rate_5m
+    labels:
+      component: ingress
+      stage: main
+      tier: sv
+      type: code_suggestions
+    expr: |
+      (
+        sum by (env,environment) (
+          rate(nginx_ingress_controller_request_duration_seconds_bucket{container="controller",le="5",path!="/",status!~"4.*|5.*",type="code_suggestions"}[5m])
+        )
+        +
+        sum by (env,environment) (
+          rate(nginx_ingress_controller_request_duration_seconds_bucket{container="controller",le="10",path!="/",status!~"4.*|5.*",type="code_suggestions"}[5m])
+        )
+      )
+      /
+      2
+  - record: gitlab_component_apdex:weight:score_5m
+    labels:
+      component: ingress
+      stage: main
+      tier: sv
+      type: code_suggestions
+    expr: |
+      sum by (env,environment) (
+        rate(nginx_ingress_controller_request_duration_seconds_bucket{container="controller",le="+Inf",path!="/",status!~"4.*|5.*",type="code_suggestions"}[5m])
+      )
+  - record: gitlab_component_ops:rate_5m
+    labels:
+      component: ingress
+      stage: main
+      tier: sv
+      type: code_suggestions
+    expr: |
+      sum by (env,environment) (
+        rate(nginx_ingress_controller_requests{container="controller",path!="/",type="code_suggestions"}[5m])
+      )
+  - record: gitlab_component_errors:rate_5m
+    labels:
+      component: ingress
+      stage: main
+      tier: sv
+      type: code_suggestions
+    expr: |
+      (
+        sum by (env,environment) (
+          rate(nginx_ingress_controller_requests{container="controller",path!="/",status=~"^5.*",type="code_suggestions"}[5m])
+        )
+      )
+      or
+      (
+        0 * group by(env,environment) (
+          gitlab_component_ops:rate_5m{component="ingress",stage="main",tier="sv",type="code_suggestions"}
+        )
+      )
   - record: gitlab_component_apdex:success:rate_5m
     labels:
       component: model_gateway
@@ -111,6 +223,62 @@ groups:
   rules:
   - record: gitlab_component_apdex:success:rate_30m
     labels:
+      component: ingress
+      stage: main
+      tier: sv
+      type: code_suggestions
+    expr: |
+      (
+        sum by (env,environment) (
+          rate(nginx_ingress_controller_request_duration_seconds_bucket{container="controller",le="5",path!="/",status!~"4.*|5.*",type="code_suggestions"}[30m])
+        )
+        +
+        sum by (env,environment) (
+          rate(nginx_ingress_controller_request_duration_seconds_bucket{container="controller",le="10",path!="/",status!~"4.*|5.*",type="code_suggestions"}[30m])
+        )
+      )
+      /
+      2
+  - record: gitlab_component_apdex:weight:score_30m
+    labels:
+      component: ingress
+      stage: main
+      tier: sv
+      type: code_suggestions
+    expr: |
+      sum by (env,environment) (
+        rate(nginx_ingress_controller_request_duration_seconds_bucket{container="controller",le="+Inf",path!="/",status!~"4.*|5.*",type="code_suggestions"}[30m])
+      )
+  - record: gitlab_component_ops:rate_30m
+    labels:
+      component: ingress
+      stage: main
+      tier: sv
+      type: code_suggestions
+    expr: |
+      sum by (env,environment) (
+        rate(nginx_ingress_controller_requests{container="controller",path!="/",type="code_suggestions"}[30m])
+      )
+  - record: gitlab_component_errors:rate_30m
+    labels:
+      component: ingress
+      stage: main
+      tier: sv
+      type: code_suggestions
+    expr: |
+      (
+        sum by (env,environment) (
+          rate(nginx_ingress_controller_requests{container="controller",path!="/",status=~"^5.*",type="code_suggestions"}[30m])
+        )
+      )
+      or
+      (
+        0 * group by(env,environment) (
+          gitlab_component_ops:rate_30m{component="ingress",stage="main",tier="sv",type="code_suggestions"}
+        )
+      )
+  - record: gitlab_component_apdex:success:rate_30m
+    labels:
       component: model_gateway
       stage: main
       tier: sv
@@ -161,6 +329,62 @@ groups:
   interval: 1m
   partial_response_strategy: warn
   rules:
+  - record: gitlab_component_apdex:success:rate_1h
+    labels:
+      component: ingress
+      stage: main
+      tier: sv
+      type: code_suggestions
+    expr: |
+      (
+        sum by (env,environment) (
+          rate(nginx_ingress_controller_request_duration_seconds_bucket{container="controller",le="5",path!="/",status!~"4.*|5.*",type="code_suggestions"}[1h])
+        )
+        +
+        sum by (env,environment) (
+          rate(nginx_ingress_controller_request_duration_seconds_bucket{container="controller",le="10",path!="/",status!~"4.*|5.*",type="code_suggestions"}[1h])
+        )
+      )
+      /
+      2
+  - record: gitlab_component_apdex:weight:score_1h
+    labels:
+      component: ingress
+      stage: main
+      tier: sv
+      type: code_suggestions
+    expr: |
+      sum by (env,environment) (
+        rate(nginx_ingress_controller_request_duration_seconds_bucket{container="controller",le="+Inf",path!="/",status!~"4.*|5.*",type="code_suggestions"}[1h])
+      )
+  - record: gitlab_component_ops:rate_1h
+    labels:
+      component: ingress
+      stage: main
+      tier: sv
+      type: code_suggestions
+    expr: |
+      sum by (env,environment) (
+        rate(nginx_ingress_controller_requests{container="controller",path!="/",type="code_suggestions"}[1h])
+      )
+  - record: gitlab_component_errors:rate_1h
+    labels:
+      component: ingress
+      stage: main
+      tier: sv
+      type: code_suggestions
+    expr: |
+      (
+        sum by (env,environment) (
+          rate(nginx_ingress_controller_requests{container="controller",path!="/",status=~"^5.*",type="code_suggestions"}[1h])
+        )
+      )
+      or
+      (
+        0 * group by(env,environment) (
+          gitlab_component_ops:rate_1h{component="ingress",stage="main",tier="sv",type="code_suggestions"}
+        )
+      )
   - record: gitlab_component_apdex:success:rate_1h
     labels:
       component: model_gateway
@@ -215,6 +439,62 @@ groups:
   rules:
   - record: gitlab_component_apdex:success:rate_6h
     labels:
+      component: ingress
+      stage: main
+      tier: sv
+      type: code_suggestions
+    expr: |
+      (
+        sum by (env,environment) (
+          rate(nginx_ingress_controller_request_duration_seconds_bucket{container="controller",le="5",path!="/",status!~"4.*|5.*",type="code_suggestions"}[6h])
+        )
+        +
+        sum by (env,environment) (
+          rate(nginx_ingress_controller_request_duration_seconds_bucket{container="controller",le="10",path!="/",status!~"4.*|5.*",type="code_suggestions"}[6h])
+        )
+      )
+      /
+      2
+  - record: gitlab_component_apdex:weight:score_6h
+    labels:
+      component: ingress
+      stage: main
+      tier: sv
+      type: code_suggestions
+    expr: |
+      sum by (env,environment) (
+        rate(nginx_ingress_controller_request_duration_seconds_bucket{container="controller",le="+Inf",path!="/",status!~"4.*|5.*",type="code_suggestions"}[6h])
+      )
+  - record: gitlab_component_ops:rate_6h
+    labels:
+      component: ingress
+      stage: main
+      tier: sv
+      type: code_suggestions
+    expr: |
+      sum by (env,environment) (
+        rate(nginx_ingress_controller_requests{container="controller",path!="/",type="code_suggestions"}[6h])
+      )
+  - record: gitlab_component_errors:rate_6h
+    labels:
+      component: ingress
+      stage: main
+      tier: sv
+      type: code_suggestions
+    expr: |
+      (
+        sum by (env,environment) (
+          rate(nginx_ingress_controller_requests{container="controller",path!="/",status=~"^5.*",type="code_suggestions"}[6h])
+        )
+      )
+      or
+      (
+        0 * group by(env,environment) (
+          gitlab_component_ops:rate_6h{component="ingress",stage="main",tier="sv",type="code_suggestions"}
+        )
+      )
+  - record: gitlab_component_apdex:success:rate_6h
+    labels:
       component: model_gateway
       stage: main
       tier: sv
@@ -265,6 +545,15 @@ groups:
   interval: 1m
   partial_response_strategy: warn
   rules:
+  - record: gitlab_component_service:mapping
+    labels:
+      component: ingress
+      global_aggregation: "yes"
+      regional_aggregation: "no"
+      service_aggregation: "no"
+      tier: sv
+      type: code_suggestions
+    expr: "1"
   - record: gitlab_component_service:mapping
     labels:
       component: model_gateway

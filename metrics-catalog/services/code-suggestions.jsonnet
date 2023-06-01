@@ -61,5 +61,39 @@ metricsCatalog.serviceDefinition({
         toolingLinks.kibana(title='MLOps', index='mlops'),
       ],
     },
+
+    ingress: {
+      local ingressSelector = baseSelector { container: 'controller', path: { ne: '/' } },
+      severity: 's4',  // NOTE: Do not page on-call SREs until production ready
+      userImpacting: true,
+      team: 'ai_assisted',
+      featureCategory: 'code_suggestions',
+      serviceAggregation: false,
+
+      requestRate: rateMetric(
+        counter='nginx_ingress_controller_requests',
+        selector=ingressSelector,
+        useRecordingRuleRegistry=false,
+      ),
+
+      errorRate: rateMetric(
+        counter='nginx_ingress_controller_requests',
+        selector=ingressSelector {
+          status: { re: '^5.*' },
+        },
+        useRecordingRuleRegistry=false,
+      ),
+
+      apdex: histogramApdex(
+        histogram='nginx_ingress_controller_request_duration_seconds_bucket',
+        selector=ingressSelector { status: { noneOf: ['4.*', '5.*'] } },
+        satisfiedThreshold=5,
+        toleratedThreshold=10
+      ),
+
+      significantLabels: ['path', 'status', 'method'],
+
+      toolingLinks: [],
+    },
   },
 })
