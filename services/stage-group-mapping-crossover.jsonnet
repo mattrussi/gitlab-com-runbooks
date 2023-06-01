@@ -6,6 +6,4 @@
 //
 // Blank values will be ignored.
 {
-  projects: 'groups_and_projects',
-  subgroups: 'groups_and_projects'
 }
