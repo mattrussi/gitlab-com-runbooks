@@ -91,9 +91,10 @@ local ruleGroup(version, selector) =
         clamp_max(
           sla:gitlab:score{%(selectors)s} / sla:gitlab:weights{%(selectors)s},
           1
-        )
+        ) unless on () max(gitlab_maintenance_mode{%(environment)s} == 1)
       ||| % {
         selectors: selectors.serializeHash(labels { monitor: 'global' } + selector),
+        environment: selectors.serializeHash(selector),
       },
     }],
   };
