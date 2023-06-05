@@ -164,9 +164,12 @@ local resourceSaturationPoint = function(options)
       std.length(filterServicesForResource(self, evaluation, thanosSelfMonitoring)) > 0,
 
     getRecordingRuleDefinition(componentName, evaluation, thanosSelfMonitoring, staticLabels, extraSelector)::
-      local definition = self;
-
-      local services = filterServicesForResource(definition, evaluation, thanosSelfMonitoring);
+      local services = filterServicesForResource(self, evaluation, thanosSelfMonitoring);
+      local definition = self {
+        // When evaluation could be in thanos, consider the saturation point evaluated there
+        // this will make sure we use the extra label taxonomy from thanos for aggregations
+        dangerouslyThanosEvaluated: evaluation != 'prometheus',
+      };
 
       if std.length(services) > 0 then
         local selectorHash = oneOfType(services) + extraSelector;
