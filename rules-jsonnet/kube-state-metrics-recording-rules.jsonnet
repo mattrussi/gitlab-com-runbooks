@@ -1,7 +1,10 @@
-local groups = import 'kube-state-metrics/recording-rules.libsonnet';
+local recordingRules = import 'kube-state-metrics/recording-rules.libsonnet';
 
 {
   'kube-state-metrics-recording-rules.yml': std.manifestYamlDoc({
-    groups: groups,
+    groups: recordingRules.groupsWithFilter(
+      function(service)
+        !service.dangerouslyThanosEvaluated
+    ),
   }),
 }
