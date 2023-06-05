@@ -22,23 +22,42 @@ to progressively let the jobs processed. For example:
 
 ```shell
 # defer 100% of the jobs
-/chatops run feature set defer_sidekiq_jobs_SlowRunningWorker true
+/chatops run feature set defer_sidekiq_jobs_SlowRunningWorker true --ignore-feature-flag-consistency-check
 
 # defer 99% of the jobs, only letting 1% processed
-/chatops run feature set defer_sidekiq_jobs_SlowRunningWorker 99
+/chatops run feature set defer_sidekiq_jobs_SlowRunningWorker 99 --ignore-feature-flag-consistency-check
 
 # defer 50% of the jobs
-/chatops run feature set defer_sidekiq_jobs_SlowRunningWorker 50
+/chatops run feature set defer_sidekiq_jobs_SlowRunningWorker 50 --ignore-feature-flag-consistency-check
 
 # stop deferring the jobs, jobs are being processed normally
-/chatops run feature set defer_sidekiq_jobs_SlowRunningWorker false
+/chatops run feature set defer_sidekiq_jobs_SlowRunningWorker false --ignore-feature-flag-consistency-check
 ```
+
+Note that `--ignore-feature-flag-consistency-check` is necessary as it bypasses the consistency check between staging and production.
+It is totally safe to pass this flag as we don't need to turn on the feature flag in staging during an incident.
 
 To ensure we are not leaving any worker being deferred forever, check all feature flags matching `defer_sidekiq_jobs`:
 
 ```shell
 /chatops run feature list --match defer_sidekiq_jobs
 ````
+
+### Production check in ChatOps
+
+Setting a feature flag in production triggers a production check by default (noted by the ChatOps response `Production check initiated, this may take up to 300 seconds ...`).
+This production check might fail in case of:
+
+- Incidents with ~"blocks feature-flags"
+- CRs with ~"blocks feature-flags"
+- The health of different services using the following [thanos query](https://thanos-query.ops.gitlab.net/graph?g0.expr=gitlab_deployment_health%3Aservice%7Benv%3D%22gprd%22%7D&g0.tab=0&g0.range_input=6h)
+- If production canary is up
+
+In this case, we can use `--ignore-production-check` in case the ongoing incident itself has ~"blocks feature-flags":
+
+```
+/chatops run feature set defer_sidekiq_jobs_SlowRunningWorker true --ignore-feature-flag-consistency-check --ignore-production-check
+```
 
 ### Disabling the DeferJobs middleware
 
