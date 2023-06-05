@@ -57,6 +57,20 @@ local provisionerInstanceOperationsRate =
     |||,
   );
 
+local provisionerInternalOperationsRate =
+  basic.timeseries(
+    'Fleeting internal operations rate',
+    legendFormat='{{shard}}: {{operation}}',
+    format='ops',
+    query=|||
+      sum by(shard, operation) (
+        rate(
+          fleeting_provisioner_internal_operations_total{environment=~"$environment", stage=~"$stage", instance=~"${runner_manager:pipe}"}[$__rate_interval]
+        )
+      )
+    |||,
+  );
+
 local provisionerCreationTiming =
   panels.heatmap(
     'Fleeting instance creation timing',
@@ -139,6 +153,18 @@ local taskscalerTasksSaturation =
     |||,
   );
 
+local taskscalerMaxUseCountPerInstance =
+  basic.timeseries(
+    'Taskscaler max use count per instance',
+    legendFormat='{{shard}}',
+    format='short',
+    query=|||
+      sum by(shard) (
+        fleeting_taskscaler_max_use_count_per_instance{environment=~"$environment", stage=~"$stage", instance=~"${runner_manager:pipe}"}
+      )
+    |||,
+  );
+
 local taskscalerOperationsRate =
   basic.timeseries(
     'Taskscaler operations rate',
@@ -200,11 +226,13 @@ local taskscalerScaleOperationsRate =
   provisionerInstancesStates: provisionerInstancesStates,
   provisionerMissedUpdates: provisionerMissedUpdates,
   provisionerInstanceOperationsRate: provisionerInstanceOperationsRate,
+  provisionerInternalOperationsRate: provisionerInternalOperationsRate,
   provisionerCreationTiming: provisionerCreationTiming,
   provisionerIsRunningTiming: provisionerIsRunningTiming,
   provisionerDeletionTiming: provisionerDeletionTiming,
   provisionerInstanceLifeDuration: provisionerInstanceLifeDuration,
   taskscalerTasksSaturation: taskscalerTasksSaturation,
+  taskscalerMaxUseCountPerInstance: taskscalerMaxUseCountPerInstance,
   taskscalerOperationsRate: taskscalerOperationsRate,
   taskscalerTasks: taskscalerTasks,
   taskscalerInstanceReadinessTiming: taskscalerInstanceReadinessTiming,

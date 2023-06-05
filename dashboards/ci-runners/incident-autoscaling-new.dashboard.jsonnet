@@ -24,6 +24,7 @@ dashboardIncident.incidentDashboard(
   panels=[
     fleetingGraphs.provisionerInstancesSaturation,
     fleetingGraphs.taskscalerTasksSaturation,
+    fleetingGraphs.taskscalerMaxUseCountPerInstance,
   ],
   rowHeight=6,
   startRow=3000,
@@ -32,6 +33,7 @@ dashboardIncident.incidentDashboard(
   panels=[
     fleetingGraphs.provisionerInstancesStates,
     fleetingGraphs.provisionerInstanceOperationsRate,
+    fleetingGraphs.provisionerInternalOperationsRate,
     fleetingGraphs.provisionerMissedUpdates,
   ],
   rowHeight=8,
