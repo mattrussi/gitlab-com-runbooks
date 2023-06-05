@@ -28,14 +28,14 @@ groups:
     labels:
       component: kube_container_cpu
     expr: |
-      max by(environment, tier, type, stage, shard) (
+      max by(env, environment, tier, type, stage, shard) (
         clamp_min(
           clamp_max(
-            sum by (environment, tier, type, stage, shard, pod, container) (
+            sum by (env, environment, tier, type, stage, shard, pod, container) (
               rate(container_cpu_usage_seconds_total:labeled{container!="", container!="POD", env!~"gprd|ops",type="code_suggestions"}[5m])
             )
             /
-            sum by(environment, tier, type, stage, shard, pod, container) (
+            sum by(env, environment, tier, type, stage, shard, pod, container) (
               container_spec_cpu_quota:labeled{container!="", container!="POD", env!~"gprd|ops",type="code_suggestions"}
               /
               container_spec_cpu_period:labeled{container!="", container!="POD", env!~"gprd|ops",type="code_suggestions"}
@@ -49,7 +49,7 @@ groups:
     labels:
       component: kube_container_memory
     expr: |
-      max by(environment, tier, type, stage, shard) (
+      max by(env, environment, tier, type, stage, shard) (
         clamp_min(
           clamp_max(
             container_memory_working_set_bytes:labeled{container!="", container!="POD", env!~"gprd|ops",type="code_suggestions"}
@@ -81,7 +81,7 @@ groups:
     labels:
       component: kube_horizontalpodautoscaler_desired_replicas
     expr: |
-      max by(environment, tier, type, stage, shard) (
+      max by(env, environment, tier, type, stage, shard) (
         clamp_min(
           clamp_max(
             kube_horizontalpodautoscaler_status_desired_replicas:labeled{env!~"gprd|ops",type="code_suggestions", shard!~"database-throttled|elasticsearch|gitaly-throttled|urgent-authorized-projects|urgent-other", namespace!~"pubsubbeat"}
@@ -143,7 +143,7 @@ groups:
     labels:
       component: open_fds
     expr: |
-      max by(environment, tier, type, stage, shard) (
+      max by(env, environment, tier, type, stage, shard) (
         clamp_min(
           clamp_max(
             (
