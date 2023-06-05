@@ -26,18 +26,18 @@ Service responsible for providing [code completion for the user in their editor]
 
 ```mermaid
 sequenceDiagram
-    VSCode-->>Nginx: /v2/completions
-    Nginx-->>ModelGateway: /v2/completions
+    VSCode-->>Ingress: /v2/completions
+    Ingress-->>ModelGateway: /v2/completions
     ModelGateway-->>TritonServer: code to complete
     TritonServer-->>ModelGateway: code
-    ModelGateway-->>Nginx: 200 OK with code completion
-    Nginx-->>VSCode: 200 OK with code completion
+    ModelGateway-->>Ingress: 200 OK with code completion
+    Ingress-->>VSCode: 200 OK with code completion
 ```
 
 * VSCode: This the the client where the user is writing the and getting autocompletion.
-* Nginx: Kubernetes Ingress to expose service to the internet.
+* Ingress: NGINX Controller for Kubernetes to expose service to the internet.
 * ModelGateway: Entry point for code suggestions and will route requests accordingly.
-* ModleTriton: [Inference Server](https://github.com/triton-inference-server/server) that loads our model data from the NFS server into memory.
+* TritonServer: [Inference Server](https://github.com/triton-inference-server/server) that loads our model data from the NFS server into memory.
 
 Mode detailed architecture description avialable in:
 <https://docs.gitlab.com/ee/development/ai_architecture.html> and in
@@ -49,16 +49,16 @@ in the source repository.
 
 ## Scalability
 
-We have the ability to scale horizontally both the ModelGateay and the Triton server by increasing the replica count:
+### Horizontal
 
-1. [Model Gateway](https://gitlab.com/gitlab-org/modelops/applied-ml/code-suggestions/ai-assist/-/blob/dd0521daf221c24781d2cad02d1352d6a1ce02b2/manifests/fauxpilot/model-gateway.yaml)
-1. [Triton Server](https://gitlab.com/gitlab-org/modelops/applied-ml/code-suggestions/ai-assist/-/blob/dd0521daf221c24781d2cad02d1352d6a1ce02b2/manifests/fauxpilot/model-triton.yaml)
+We have the ability to scale horizontally both the Model Gateway and the Triton Server by increasing the [replica](https://gitlab.com/gitlab-org/modelops/applied-ml/code-suggestions/ai-assist/-/blob/main/infrastructure/ai-assist/values.yaml) count:
 
-To apply these changes:
+1. [Model Gateway](https://gitlab.com/gitlab-org/modelops/applied-ml/code-suggestions/ai-assist/-/blob/main/infrastructure/ai-assist/templates/model-gateway.yaml)
+1. [Triton Server](https://gitlab.com/gitlab-org/modelops/applied-ml/code-suggestions/ai-assist/-/blob/main/infrastructure/ai-assist/templates/model-triton.yaml)
 
-1. Add your IP to the `Control plane authorized networks` in [ai-assist cluster](https://console.cloud.google.com/kubernetes/clusters/details/us-central1-c/ai-assist/details?project=unreview-poc-390200e5)
-1. Set up gcloud auth: `gcloud container clusters get-credentials ai-assist --zone us-central1-c --project unreview-poc-390200e5`
-1. kubectl apply -f $FILENAME
+To apply these changes, refer to [deployment guide](https://gitlab.com/gitlab-org/modelops/applied-ml/code-suggestions/ai-assist#deploying-to-the-kubernetes-cluster).
+
+### Vertical
 
 ## Availability
 

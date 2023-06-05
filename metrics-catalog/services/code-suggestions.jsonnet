@@ -21,6 +21,7 @@ metricsCatalog.serviceDefinition({
     api: true,
   },
   serviceIsStageless: true,
+  tags: ['nv_gpu'],
 
   // This is evaluated in Thanos because the prometheus uses thanos-receive to
   // get its metrics available.
