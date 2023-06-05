@@ -14,7 +14,7 @@ This documentation outlines setting up the staging-ref environment to work with 
 
 GET sets up Prometheus and Grafana in a VM and the default GitLab Helm chart defaults which enable Prometheus and Grafana. They will not be used and can be disabled. You can view examples of how to do this via the following MRs:
 
-* [Disable Grafana and prometheus managed by GET](https://gitlab.com/gitlab-org/quality/gitlab-environment-toolkit-configs/staging-ref/-/merge_requests/9/diffs) and remove [GET monitoring VMs](https://gitlab.com/gitlab-org/quality/gitlab-environment-toolkit-configs/staging-ref/-/merge_requests/43) in the [`gitlab_charts.yml.j2`](https://gitlab.com/gitlab-org/quality/gitlab-environment-toolkit-configs/staging-ref/-/blob/322ea56bd7529ff4afd38b293c89578fcdf3a337/3k_hybrid_geo/ansible/europe-west6/files/gitlab_configs/gitlab_charts.yml.j2) custom helm config used by GET. This can be done by adding the following to the GitLab helm values:
+* [Disable Grafana and prometheus managed by GET](https://gitlab.com/gitlab-org/quality/gitlab-environment-toolkit-configs/staging-ref/-/merge_requests/9/diffs) and remove [GET monitoring VMs](https://gitlab.com/gitlab-org/quality/gitlab-environment-toolkit-configs/staging-ref/-/merge_requests/43) in the [`gitlab_charts.yml.j2`](https://gitlab.com/gitlab-org/quality/gitlab-environment-toolkit-configs/staging-ref/-/blob/322ea56bd7529ff4afd38b293c89578fcdf3a337/3k_hybrid_geo/ansible/us-east1/files/gitlab_configs/gitlab_charts.yml.j2) custom helm config used by GET. This can be done by adding the following to the GitLab helm values:
 
  ```yaml
  global:
