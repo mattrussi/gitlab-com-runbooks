@@ -14,7 +14,7 @@ This documentation outlines setting up the staging-ref environment to work with 
 
 GET sets up Prometheus and Grafana in a VM and the default GitLab Helm chart defaults which enable Prometheus and Grafana. They will not be used and can be disabled. You can view examples of how to do this via the following MRs:
 
-* [Disable Grafana and prometheus managed by GET](https://gitlab.com/gitlab-org/quality/gitlab-environment-toolkit-configs/staging-ref/-/merge_requests/9/diffs) and remove [GET monitoring VMs](https://gitlab.com/gitlab-org/quality/gitlab-environment-toolkit-configs/staging-ref/-/merge_requests/43) in the [`gitlab_charts.yml.j2`](https://gitlab.com/gitlab-org/quality/gitlab-environment-toolkit-configs/staging-ref/-/blob/main/3k_hybrid_geo/ansible/us-east1/files/gitlab_configs/gitlab_charts.yml.j2) custom helm config used by GET. This can be done by adding the following to the GitLab helm values:
+* [Disable Grafana and prometheus managed by GET](https://gitlab.com/gitlab-org/quality/gitlab-environment-toolkit-configs/staging-ref/-/merge_requests/9/diffs) and remove [GET monitoring VMs](https://gitlab.com/gitlab-org/quality/gitlab-environment-toolkit-configs/staging-ref/-/merge_requests/43) in the [`gitlab_charts.yml.j2`](https://gitlab.com/gitlab-org/quality/gitlab-environment-toolkit-configs/staging-ref/-/blob/322ea56bd7529ff4afd38b293c89578fcdf3a337/3k_hybrid_geo/ansible/europe-west6/files/gitlab_configs/gitlab_charts.yml.j2) custom helm config used by GET. This can be done by adding the following to the GitLab helm values:
 
  ```yaml
  global:
@@ -52,15 +52,15 @@ Labels help organize metrics by service. Labels can be added via the GitLab helm
 
 [Prometheus-stack](https://gitlab.com/gitlab-org/quality/gitlab-environment-toolkit-configs/staging-ref/-/tree/main/3k_hybrid_geo/ansible/us-east1/helm/prometheus-stack) is a helm chart that bundles cluster monitoring with prometheus using the prometheus operator. We'll be using this chart to deploy prometheus.
 
-* Deploy to the GET cluster under the `prometheus` namespace via helm. In staging-ref, this is managed by CI jobs that [validate](https://gitlab.com/gitlab-org/quality/gitlab-environment-toolkit-configs/staging-ref/-/blob/2005cbcc49034513111dd3f9ed842bfba5e9dcc2/.gitlab-ci.yml#L24-37) and [configure](https://gitlab.com/gitlab-org/quality/gitlab-environment-toolkit-configs/staging-ref/-/blob/2005cbcc49034513111dd3f9ed842bfba5e9dcc2/.gitlab-ci.yml#L139-145) any changes to the helm chart. You can view the setup of this chart in [this directory](https://gitlab.com/gitlab-org/quality/gitlab-environment-toolkit-configs/staging-ref/-/tree/main/3k_hybrid_geo/ansible/us-east1/helm/prometheus-stack).
+* Deploy to the GET cluster under the `prometheus` namespace via helm. In staging-ref, this is managed by CI jobs that [validate](https://gitlab.com/gitlab-org/quality/gitlab-environment-toolkit-configs/staging-ref/-/blob/697ef75e1a81da4942274fce3eacfebce4f50152/.gitlab/ci/.mr_checks.yml#L43-53) and [configure](https://gitlab.com/gitlab-org/quality/gitlab-environment-toolkit-configs/staging-ref/-/blob/2005cbcc49034513111dd3f9ed842bfba5e9dcc2/.gitlab-ci.yml#L139-145) any changes to the helm chart. You can view the setup of this chart in [this directory](https://gitlab.com/gitlab-org/quality/gitlab-environment-toolkit-configs/staging-ref/-/tree/main/3k_hybrid_geo/ansible/us-east1/helm/prometheus-stack).
 
 #### Scraping targets
 
 Scrape targets are configured in the `values.yaml` file under the `prometheus-stack` directory. Scrape targets are applied relabeling to match what is used in staging and production.
 
-1. Kubernetes targets. Prometheus scrape targets can be found in `additionalPodMonitors` and `additionalServiceMonitors` in [`values.yaml`](https://gitlab.com/gitlab-org/quality/gitlab-environment-toolkit-configs/staging-ref/-/blob/main/3k_hybrid_geo/ansible/us-east1/helm/prometheus-stack/values.yaml).
+1. Kubernetes targets. Prometheus scrape targets can be found in `additionalPodMonitors` and `additionalServiceMonitors` in [`values.yaml`](https://gitlab.com/gitlab-org/quality/gitlab-environment-toolkit-configs/staging-ref/-/blob/a57560afd38e55f46676d4848b6f9024cb4ac81a/3k_hybrid_geo/ansible/us-east1/helm/prometheus-stack/values.yaml#L47).
 
-2. Omnibus targets. Prometheus scrape targets can be found under `additionalScrapeConfigs` in [`values.yaml`](https://gitlab.com/gitlab-org/quality/gitlab-environment-toolkit-configs/staging-ref/-/blob/main/3k_hybrid_geo/ansible/us-east1/helm/prometheus-stack/values.yaml).
+2. Omnibus targets. Prometheus scrape targets can be found under `additionalScrapeConfigs` in [`values.yaml`](https://gitlab.com/gitlab-org/quality/gitlab-environment-toolkit-configs/staging-ref/-/blob/a57560afd38e55f46676d4848b6f9024cb4ac81a/3k_hybrid_geo/ansible/us-east1/helm/prometheus-stack/values.yaml#L206).
 
 #### Exporters
 
@@ -79,7 +79,7 @@ The sidecar component of Thanos gets deployed along with the Prometheus instance
 
 1. To be added in terraform:
 
-* Create an [external IP in terraform](https://gitlab.com/gitlab-org/quality/gitlab-environment-toolkit-configs/staging-ref/-/blob/main/3k_hybrid_geo/terraform/us-east1/prometheus.tf#L7-11) to use as a `loadBalancerIP`
+* Create an [external IP in terraform](https://gitlab.com/gitlab-org/quality/gitlab-environment-toolkit-configs/staging-ref/-/blob/1829451321c6137d20d71981b6e52e7060b1da00/3k_hybrid_geo/terraform/us-east1/prometheus.tf#L7-11) to use as a `loadBalancerIP`
 * A GCS bucket for prometheus data needs to be created in terraform
 * Service account used by thanos-store in Kubernetes for access to its GCS bucket needs to be created in terraform
 * Configure a workload identity to be used by Thanos in terraform
@@ -97,7 +97,7 @@ The sidecar component of Thanos gets deployed along with the Prometheus instance
 
 Alerting rules are configured in Prometheus and then it sends alerts to an Alertmanager. The Alertmanager then manages those alerts and sends notifications, such as to a slack channel. We will not be using the bundled Alertmanager in `prometheus-stack`. Instead we've configured the use of existing alertmanager cluster.
 
-Note: If using a public cluster you will need to configure [IP Masquerade Agent](https://kubernetes.io/docs/tasks/administer-cluster/ip-masq-agent/#ip-masquerade-agent-user-guide) in your cluster. [Example configuration](https://gitlab.com/gitlab-org/quality/gitlab-environment-toolkit-configs/staging-ref/-/tree/main/3k_hybrid_geo/ansible/us-east1/helm/ip-masq-agent).
+Note: If using a public cluster you will need to configure [IP Masquerade Agent](https://kubernetes.io/docs/tasks/administer-cluster/ip-masq-agent/#ip-masquerade-agent-user-guide) in your cluster. [Example configuration](https://gitlab.com/gitlab-org/quality/gitlab-environment-toolkit-configs/staging-ref/-/tree/ec82942ec2191f47a5653c70220b6328befff7f8/3k_hybrid_geo/ansible/us-east1/helm/ip-masq-agent).
 
 1. Configure Alertmanager
 
