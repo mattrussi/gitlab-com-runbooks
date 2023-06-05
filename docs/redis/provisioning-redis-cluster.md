@@ -25,7 +25,7 @@ Generate four passwords, `REPLICA_REDACTED`, `RAILS_REDACTED`, `EXPORTER_REDACTE
 openssl rand -hex 32
 ```
 
-Update the gkms vault secrets via:
+Update the gkms vault secrets using this command in the chef-repo:
 
 ```
 ./bin/gkms-vault-edit redis-cluster <ENV>
@@ -162,7 +162,7 @@ cluster_size:3
 
 ```
 ➜  ~ vault kv get -format=json chef/env/<ENV>/shared/gitlab-omnibus-secrets | jq '.data.data' > data.json
-➜  ~ cat data.json | jq --arg PASSWORD RAILS_REDACTED'."omnibus-gitlab".gitlab_rb."gitlab-rails".redis_yml_override.<RAILS_INSTANCE_NAME_OMNIBUS>.password = $PASSWORD' > data.json.tmp
+➜  ~ cat data.json | jq --arg PASSWORD <RAILS_REDACTED> '."omnibus-gitlab".gitlab_rb."gitlab-rails".redis_yml_override.<RAILS_INSTANCE_NAME_OMNIBUS>.password = $PASSWORD' > data.json.tmp
 ➜  ~ diff -u data.json data.json.tmp
 ➜  ~ mv data.json.tmp data.json
 ➜  ~ vault kv patch chef/env/<ENV>/shared/gitlab-omnibus-secrets @data.json
@@ -176,6 +176,12 @@ OR
 Update roles/<ENV>-base.json with the relevant connection details. An example MR can be found [here](https://gitlab.com/gitlab-com/gl-infra/chef-repo/-/merge_requests/3546).
 
 Check the confirmation detail by using Rails console inside a console instance.
+
+```
+[ gstg ] production> Gitlab::Redis::FeatureFlag.with{|c| c.ping}
+=> "PONG"
+[ gstg ] production>
+```
 
 ### 2. Configure Gitlab Rails
 
@@ -191,7 +197,7 @@ glsh vault login
 ```
 
 ```
-vault kv put k8s/env/gprd/ns/gitlab/redis-cluster-<INSTANCE_TYPE>-rails password=RAILS_REDACTED
+vault kv put k8s/env/<ENV>/ns/gitlab/redis-cluster-<INSTANCE_TYPE>-rails password=<RAILS_REDACTED>
 ```
 
 For example,
