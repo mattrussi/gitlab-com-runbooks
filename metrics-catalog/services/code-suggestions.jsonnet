@@ -29,6 +29,12 @@ metricsCatalog.serviceDefinition({
   // We should get rid of this to be in line with other services when we can
   dangerouslyThanosEvaluated: true,
 
+  local gkeDeploymentDetails = {
+    project: 'unreview-poc-390200e5',
+    region: 'us-central1-c',
+    cluster: 'ai-assist',
+  },
+
   serviceLevelIndicators: {
     model_gateway: {
       local modelGatewaySelector = baseSelector { container: 'model-gateway' },
@@ -58,7 +64,50 @@ metricsCatalog.serviceDefinition({
       significantLabels: ['status', 'handler', 'method'],
 
       toolingLinks: [
+        toolingLinks.gkeDeployment(
+          'model-gateway',
+          namespace='fauxpilot',
+          containerName='model-gateway',
+          project=gkeDeploymentDetails.project,
+          region=gkeDeploymentDetails.region,
+          cluster=gkeDeploymentDetails.cluster,
+        ),
         toolingLinks.kibana(title='MLOps', index='mlops'),
+      ],
+    },
+
+    triton_server: {
+      local tritonSelector = baseSelector { container: 'triton' },
+      severity: 's4',  // NOTE: Do not page on-call SREs until production ready
+      userImpacting: true,
+      team: 'ai_assisted',
+      featureCategory: 'code_suggestions',
+      serviceAggregation: false,
+
+      requestRate: rateMetric(
+        counter='nv_inference_count',
+        selector=tritonSelector,
+        useRecordingRuleRegistry=false,
+      ),
+
+      errorRate: rateMetric(
+        counter='nv_inference_request_failure',
+        selector=tritonSelector,
+        useRecordingRuleRegistry=false,
+      ),
+
+      significantLabels: ['model'],
+
+      toolingLinks: [
+        toolingLinks.gkeDeployment(
+          'model-triton',
+          namespace='fauxpilot',
+          containerName='triton',
+          project=gkeDeploymentDetails.project,
+          region=gkeDeploymentDetails.region,
+          cluster=gkeDeploymentDetails.cluster,
+        ),
+        toolingLinks.grafana(title='Triton Server Detail', dashboardUid='code_suggestions-triton'),
       ],
     },
 
@@ -93,7 +142,16 @@ metricsCatalog.serviceDefinition({
 
       significantLabels: ['path', 'status', 'method'],
 
-      toolingLinks: [],
+      toolingLinks: [
+        toolingLinks.gkeDeployment(
+          'nginx-ingress-nginx-controller',
+          namespace='nginx',
+          containerName='controller',
+          project=gkeDeploymentDetails.project,
+          region=gkeDeploymentDetails.region,
+          cluster=gkeDeploymentDetails.cluster,
+        ),
+      ],
     },
   },
 })
