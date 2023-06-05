@@ -126,7 +126,6 @@ groups:
           type: kube
           severity: s3
           alert_type: cause
-          incident_project: gitlab.com/gitlab-com/gl-infra/production
 
       - alert: KubeStatefulSetGenerationMismatch
         annotations:
