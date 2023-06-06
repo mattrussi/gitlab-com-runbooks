@@ -53,8 +53,8 @@ in the source repository.
 
 We have the ability to scale horizontally both the Model Gateway and the Triton Server by increasing the [replica](https://gitlab.com/gitlab-org/modelops/applied-ml/code-suggestions/ai-assist/-/blob/main/infrastructure/ai-assist/values.yaml) count:
 
-1. [Model Gateway](https://gitlab.com/gitlab-org/modelops/applied-ml/code-suggestions/ai-assist/-/blob/main/infrastructure/ai-assist/templates/model-gateway.yaml)
-1. [Triton Server](https://gitlab.com/gitlab-org/modelops/applied-ml/code-suggestions/ai-assist/-/blob/main/infrastructure/ai-assist/templates/model-triton.yaml)
+1. [Model Gateway](https://gitlab.com/gitlab-org/modelops/applied-ml/code-suggestions/ai-assist/-/blob/d09f5635ee91e24d0e6059ef9d296ba89f94bd6b/infrastructure/ai-assist/values.yaml#L21)
+1. [Triton Server](https://gitlab.com/gitlab-org/modelops/applied-ml/code-suggestions/ai-assist/-/blob/d09f5635ee91e24d0e6059ef9d296ba89f94bd6b/infrastructure/ai-assist/values.yaml#L34)
 
 To apply these changes, refer to [deployment guide](https://gitlab.com/gitlab-org/modelops/applied-ml/code-suggestions/ai-assist#deploying-to-the-kubernetes-cluster).
 
