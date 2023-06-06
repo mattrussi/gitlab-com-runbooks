@@ -267,7 +267,7 @@ basic.dashboard(
       title='Hits',
       description='The number of times a free connection was found in the pool.',
       yAxisLabel='Count',
-      query='sum(max_over_time(registry_redis_pool_stats_hits{environment="$environment", cluster=~"$cluster", stage="$stage", exported_instance=~"$instance"}[$__interval]))',
+      query='sum(rate(registry_redis_pool_stats_hits{environment="$environment", cluster=~"$cluster", stage="$stage", exported_instance=~"$instance"}[$__interval]))',
       intervalFactor=5,
       legend_show=false
     ),
@@ -275,7 +275,7 @@ basic.dashboard(
       title='Misses',
       description='The number of times a free connection was not found in the pool.',
       yAxisLabel='Count',
-      query='sum(max_over_time(registry_redis_pool_stats_misses{environment="$environment", cluster=~"$cluster", stage="$stage", exported_instance=~"$instance"}[$__interval]))',
+      query='sum(rate(registry_redis_pool_stats_misses{environment="$environment", cluster=~"$cluster", stage="$stage", exported_instance=~"$instance"}[$__interval]))',
       intervalFactor=5,
       legend_show=false
     ),
@@ -283,7 +283,7 @@ basic.dashboard(
       title='Open',
       description='The total number of established connections both in use and idle.',
       yAxisLabel='Connections',
-      query='sum(max_over_time(registry_redis_pool_stats_total_conns{app="registry", environment="$environment", cluster=~"$cluster", stage="$stage"}[$__interval]))',
+      query='sum(rate(registry_redis_pool_stats_total_conns{app="registry", environment="$environment", cluster=~"$cluster", stage="$stage"}[$__interval]))',
       intervalFactor=5,
       legend_show=false
     ),
@@ -292,9 +292,9 @@ basic.dashboard(
       description='The total number of connections currently in use.',
       yAxisLabel='Connections',
       query=|||
-        sum(max_over_time(registry_redis_pool_stats_total_conns{environment="$environment", cluster=~"$cluster", stage="$stage", exported_instance=~"$instance"}[$__interval]))
+        sum(rate(registry_redis_pool_stats_total_conns{environment="$environment", cluster=~"$cluster", stage="$stage", exported_instance=~"$instance"}[$__interval]))
         -
-        sum(max_over_time(registry_redis_pool_stats_idle_conns{environment="$environment", cluster=~"$cluster", stage="$stage", exported_instance=~"$instance"}[$__interval]))
+        sum(rate(registry_redis_pool_stats_idle_conns{environment="$environment", cluster=~"$cluster", stage="$stage", exported_instance=~"$instance"}[$__interval]))
       |||,
       intervalFactor=5,
       legend_show=false
@@ -303,7 +303,7 @@ basic.dashboard(
       title='Idle',
       description='The number of idle connections in the pool.',
       yAxisLabel='Connections',
-      query='sum(max_over_time(registry_redis_pool_stats_idle_conns{environment="$environment", cluster=~"$cluster", stage="$stage", exported_instance=~"$instance"}[$__interval]))',
+      query='sum(rate(registry_redis_pool_stats_idle_conns{environment="$environment", cluster=~"$cluster", stage="$stage", exported_instance=~"$instance"}[$__interval]))',
       intervalFactor=5,
       legend_show=false
     ),
@@ -311,7 +311,7 @@ basic.dashboard(
       title='Stale',
       description='The number of stale connections removed from the pool.',
       yAxisLabel='Connections',
-      query='sum(max_over_time(registry_redis_pool_stats_stale_conns{environment="$environment", cluster=~"$cluster", stage="$stage", exported_instance=~"$instance"}[$__interval]))',
+      query='sum(rate(registry_redis_pool_stats_stale_conns{environment="$environment", cluster=~"$cluster", stage="$stage", exported_instance=~"$instance"}[$__interval]))',
       intervalFactor=5,
       legend_show=false
     ),
@@ -319,7 +319,7 @@ basic.dashboard(
       title='Timeouts',
       description='The number of times a wait timeout occurred.',
       yAxisLabel='Count',
-      query='sum(max_over_time(registry_redis_pool_stats_timeouts{environment="$environment", cluster=~"$cluster", stage="$stage", exported_instance=~"$instance"}[$__interval]))',
+      query='sum(rate(registry_redis_pool_stats_timeouts{environment="$environment", cluster=~"$cluster", stage="$stage", exported_instance=~"$instance"}[$__interval]))',
       intervalFactor=5,
       legend_show=false
     ),
