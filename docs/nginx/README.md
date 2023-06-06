@@ -27,6 +27,7 @@
 * [monitor.gitlab.net not accessible or return 5xx errors](../monitoring/monitor-gitlab-net-not-accessible.md)
 * [Gitlab.com on Kubernetes](../onboarding/gitlab.com_on_k8s.md)
 * [Sentry is down and gives error 500](../sentry/sentry-is-down.md)
+* [Thanos Architecture Overview](../thanos/architecture.md)
 * [Life of a Git Request](../tutorials/overview_life_of_a_git_request.md)
 * [Life of a Web Request](../tutorials/overview_life_of_a_web_request.md)
 * [../uncategorized/about-gitlab-com.md](../uncategorized/about-gitlab-com.md)

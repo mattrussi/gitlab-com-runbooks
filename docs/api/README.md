@@ -76,6 +76,7 @@
 * [A survival guide for SREs to working with Sidekiq at GitLab](../sidekiq/sidekiq-survival-guide-for-sres.md)
 * [../spamcheck/index.md](../spamcheck/index.md)
 * [GET Monitoring Setup](../staging-ref/get-monitoring-setup.md)
+* [Thanos Architecture Overview](../thanos/architecture.md)
 * [Example Tutorial Template](../tutorials/example_tutorial_template.md)
 * [Life of a Web Request](../tutorials/overview_life_of_a_web_request.md)
 * [Blocked user login attempts are high](../uncategorized/blocked-user-logins.md)

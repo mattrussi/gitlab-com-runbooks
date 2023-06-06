@@ -32,6 +32,7 @@
 * [../pgbouncer/service-pgbouncer.md](../pgbouncer/service-pgbouncer.md)
 * [../registry/gitlab-registry.md](../registry/gitlab-registry.md)
 * [Sentry is down and gives error 500](../sentry/sentry-is-down.md)
+* [Thanos Architecture Overview](../thanos/architecture.md)
 * [Life of a Web Request](../tutorials/overview_life_of_a_web_request.md)
 * [Alert about SSL certificate expiration](../uncategorized/alert-for-ssl-certificate-expiration.md)
 <!-- END_MARKER -->
