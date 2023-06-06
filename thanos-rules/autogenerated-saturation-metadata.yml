@@ -7,6 +7,14 @@ groups:
   rules:
   - record: slo:max:soft:gitlab_component_saturation:ratio
     labels:
+      component: filestore_disk_utilization
+    expr: "0.85"
+  - record: slo:max:hard:gitlab_component_saturation:ratio
+    labels:
+      component: filestore_disk_utilization
+    expr: "0.9"
+  - record: slo:max:soft:gitlab_component_saturation:ratio
+    labels:
       component: go_memory
     expr: "0.9"
   - record: slo:max:hard:gitlab_component_saturation:ratio
@@ -121,6 +129,14 @@ groups:
   interval: 5m
   partial_response_strategy: warn
   rules:
+  - record: gitlab_component_saturation_info
+    labels:
+      capacity_planning_strategy: quantile95_1h
+      component: filestore_disk_utilization
+      horiz_scaling: "yes"
+      quantile: max
+      severity: s4
+    expr: "1"
   - record: gitlab_component_saturation_info
     labels:
       capacity_planning_strategy: quantile95_1h

@@ -19,6 +19,13 @@ metricsCatalog.serviceDefinition({
     kubernetes: false,
   },
 
+  // This is evaluated in Thanos because the prometheus uses thanos-receive to
+  // get its metrics available.
+  // Our recording rules are currently not deployed to the external cluster that runs
+  // code-suggestions.
+  // We should get rid of this to be in line with other services when we can
+  dangerouslyThanosEvaluated: true,
+
   serviceLevelIndicators: {},
 
   skippedMaturityCriteria: {

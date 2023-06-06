@@ -280,22 +280,6 @@ groups:
       )
   - record: gitlab_component_saturation:ratio
     labels:
-      component: filestore_disk_utilization
-      stage: main
-      tier: inf
-      type: monitoring
-    expr: |
-      max by(environment, shard) (
-        clamp_min(
-          clamp_max(
-            avg_over_time(stackdriver_filestore_instance_file_googleapis_com_nfs_server_used_bytes_percent{}[5m]) / 100
-            ,
-            1)
-        ,
-        0)
-      )
-  - record: gitlab_component_saturation:ratio
-    labels:
       component: gcp_quota_limit
     expr: |
       max by(environment, tier, type, stage, shard) (
@@ -562,15 +546,15 @@ groups:
         clamp_min(
           clamp_max(
             (
-              process_open_fds{type=~"api|internal-api|camoproxy|ci-runners|consul|customersdot|external-dns|frontend|filestore|google-cloud-storage|git|gitaly|jaeger|kas|kube|logging|mailroom|monitoring|nginx|ops-gitlab-net|patroni|patroni-registry|patroni-embedding|patroni-ci|postgres-archive|pgbouncer|pgbouncer-registry|pgbouncer-embedding|pgbouncer-ci|plantuml|praefect|pvs|redis-cache|redis-cluster-feature-flag|redis-sidekiq|redis-tracechunks|redis-cluster-ratelimiting|redis-cluster-chat-cache|redis-sessions|redis-registry-cache|redis-repository-cache|redis-db-load-balancing|redis|registry|search|sentry|sidekiq|vault|web-pages|web|websockets|woodhouse"}
+              process_open_fds{type=~"api|internal-api|camoproxy|ci-runners|consul|customersdot|external-dns|frontend|google-cloud-storage|git|gitaly|jaeger|kas|kube|logging|mailroom|monitoring|nginx|ops-gitlab-net|patroni|patroni-registry|patroni-embedding|patroni-ci|postgres-archive|pgbouncer|pgbouncer-registry|pgbouncer-embedding|pgbouncer-ci|plantuml|praefect|pvs|redis-cache|redis-cluster-feature-flag|redis-sidekiq|redis-tracechunks|redis-cluster-ratelimiting|redis-cluster-chat-cache|redis-sessions|redis-registry-cache|redis-repository-cache|redis-db-load-balancing|redis|registry|search|sentry|sidekiq|vault|web-pages|web|websockets|woodhouse"}
               /
-              process_max_fds{type=~"api|internal-api|camoproxy|ci-runners|consul|customersdot|external-dns|frontend|filestore|google-cloud-storage|git|gitaly|jaeger|kas|kube|logging|mailroom|monitoring|nginx|ops-gitlab-net|patroni|patroni-registry|patroni-embedding|patroni-ci|postgres-archive|pgbouncer|pgbouncer-registry|pgbouncer-embedding|pgbouncer-ci|plantuml|praefect|pvs|redis-cache|redis-cluster-feature-flag|redis-sidekiq|redis-tracechunks|redis-cluster-ratelimiting|redis-cluster-chat-cache|redis-sessions|redis-registry-cache|redis-repository-cache|redis-db-load-balancing|redis|registry|search|sentry|sidekiq|vault|web-pages|web|websockets|woodhouse"}
+              process_max_fds{type=~"api|internal-api|camoproxy|ci-runners|consul|customersdot|external-dns|frontend|google-cloud-storage|git|gitaly|jaeger|kas|kube|logging|mailroom|monitoring|nginx|ops-gitlab-net|patroni|patroni-registry|patroni-embedding|patroni-ci|postgres-archive|pgbouncer|pgbouncer-registry|pgbouncer-embedding|pgbouncer-ci|plantuml|praefect|pvs|redis-cache|redis-cluster-feature-flag|redis-sidekiq|redis-tracechunks|redis-cluster-ratelimiting|redis-cluster-chat-cache|redis-sessions|redis-registry-cache|redis-repository-cache|redis-db-load-balancing|redis|registry|search|sentry|sidekiq|vault|web-pages|web|websockets|woodhouse"}
             )
             or
             (
-              ruby_file_descriptors{type=~"api|internal-api|camoproxy|ci-runners|consul|customersdot|external-dns|frontend|filestore|google-cloud-storage|git|gitaly|jaeger|kas|kube|logging|mailroom|monitoring|nginx|ops-gitlab-net|patroni|patroni-registry|patroni-embedding|patroni-ci|postgres-archive|pgbouncer|pgbouncer-registry|pgbouncer-embedding|pgbouncer-ci|plantuml|praefect|pvs|redis-cache|redis-cluster-feature-flag|redis-sidekiq|redis-tracechunks|redis-cluster-ratelimiting|redis-cluster-chat-cache|redis-sessions|redis-registry-cache|redis-repository-cache|redis-db-load-balancing|redis|registry|search|sentry|sidekiq|vault|web-pages|web|websockets|woodhouse"}
+              ruby_file_descriptors{type=~"api|internal-api|camoproxy|ci-runners|consul|customersdot|external-dns|frontend|google-cloud-storage|git|gitaly|jaeger|kas|kube|logging|mailroom|monitoring|nginx|ops-gitlab-net|patroni|patroni-registry|patroni-embedding|patroni-ci|postgres-archive|pgbouncer|pgbouncer-registry|pgbouncer-embedding|pgbouncer-ci|plantuml|praefect|pvs|redis-cache|redis-cluster-feature-flag|redis-sidekiq|redis-tracechunks|redis-cluster-ratelimiting|redis-cluster-chat-cache|redis-sessions|redis-registry-cache|redis-repository-cache|redis-db-load-balancing|redis|registry|search|sentry|sidekiq|vault|web-pages|web|websockets|woodhouse"}
               /
-              ruby_process_max_fds{type=~"api|internal-api|camoproxy|ci-runners|consul|customersdot|external-dns|frontend|filestore|google-cloud-storage|git|gitaly|jaeger|kas|kube|logging|mailroom|monitoring|nginx|ops-gitlab-net|patroni|patroni-registry|patroni-embedding|patroni-ci|postgres-archive|pgbouncer|pgbouncer-registry|pgbouncer-embedding|pgbouncer-ci|plantuml|praefect|pvs|redis-cache|redis-cluster-feature-flag|redis-sidekiq|redis-tracechunks|redis-cluster-ratelimiting|redis-cluster-chat-cache|redis-sessions|redis-registry-cache|redis-repository-cache|redis-db-load-balancing|redis|registry|search|sentry|sidekiq|vault|web-pages|web|websockets|woodhouse"}
+              ruby_process_max_fds{type=~"api|internal-api|camoproxy|ci-runners|consul|customersdot|external-dns|frontend|google-cloud-storage|git|gitaly|jaeger|kas|kube|logging|mailroom|monitoring|nginx|ops-gitlab-net|patroni|patroni-registry|patroni-embedding|patroni-ci|postgres-archive|pgbouncer|pgbouncer-registry|pgbouncer-embedding|pgbouncer-ci|plantuml|praefect|pvs|redis-cache|redis-cluster-feature-flag|redis-sidekiq|redis-tracechunks|redis-cluster-ratelimiting|redis-cluster-chat-cache|redis-sessions|redis-registry-cache|redis-repository-cache|redis-db-load-balancing|redis|registry|search|sentry|sidekiq|vault|web-pages|web|websockets|woodhouse"}
             )
             ,
             1)
@@ -1374,14 +1358,6 @@ groups:
     expr: "0.9"
   - record: slo:max:soft:gitlab_component_saturation:ratio
     labels:
-      component: filestore_disk_utilization
-    expr: "0.85"
-  - record: slo:max:hard:gitlab_component_saturation:ratio
-    labels:
-      component: filestore_disk_utilization
-    expr: "0.9"
-  - record: slo:max:soft:gitlab_component_saturation:ratio
-    labels:
       component: gcp_quota_limit
     expr: "0.85"
   - record: slo:max:hard:gitlab_component_saturation:ratio
@@ -1931,14 +1907,6 @@ groups:
     labels:
       capacity_planning_strategy: quantile95_1h
       component: elastic_thread_pools
-      horiz_scaling: "yes"
-      quantile: max
-      severity: s4
-    expr: "1"
-  - record: gitlab_component_saturation_info
-    labels:
-      capacity_planning_strategy: quantile95_1h
-      component: filestore_disk_utilization
       horiz_scaling: "yes"
       quantile: max
       severity: s4
@@ -3077,45 +3045,6 @@ groups:
     expr: |
       gitlab_component_saturation:ratio{component="elastic_thread_pools"} > on(component) group_left
       slo:max:hard:gitlab_component_saturation:ratio{component="elastic_thread_pools"}
-  - alert: component_saturation_slo_out_of_bounds
-    for: 5m
-    annotations:
-      title: The Filestore Disk Utilization resource of the {{ $labels.type }} service
-        ({{ $labels.stage }} stage) has a saturation exceeding SLO and is close to
-        its capacity limit.
-      description: |
-        This means that this resource is running close to capacity and is at risk of exceeding its current capacity limit.
-
-        Details of the Filestore Disk Utilization resource:
-
-        Filestore Disk utilization.
-
-        See https://cloud.google.com/monitoring/api/metrics_gcp#gcp-file for more details
-      grafana_dashboard_id: alerts-sat_filestore_disk
-      grafana_dashboard_link: https://dashboards.gitlab.net/d/alerts-sat_filestore_disk?from=now-6h/m&to=now-1m/m&var-environment={{
-        $labels.environment }}&var-type={{ $labels.type }}&var-stage={{ $labels.stage
-        }}
-      grafana_min_zoom_hours: "6"
-      grafana_panel_id: "3135430381"
-      grafana_variables: environment,type,stage
-      promql_query: |
-        max by(environment, shard, instance_name) (
-          clamp_min(
-            clamp_max(
-              avg_over_time(stackdriver_filestore_instance_file_googleapis_com_nfs_server_used_bytes_percent{environment="{{ $labels.environment }}"}[5m]) / 100
-              ,
-              1)
-          ,
-          0)
-        )
-      runbook: docs/{{ $labels.type }}/README.md
-    labels:
-      alert_type: cause
-      rules_domain: general
-      severity: s4
-    expr: |
-      gitlab_component_saturation:ratio{component="filestore_disk_utilization"} > on(component) group_left
-      slo:max:hard:gitlab_component_saturation:ratio{component="filestore_disk_utilization"}
   - alert: component_saturation_slo_out_of_bounds
     for: 15m
     annotations:

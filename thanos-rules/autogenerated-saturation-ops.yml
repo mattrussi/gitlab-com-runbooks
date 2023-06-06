@@ -7,6 +7,22 @@ groups:
   rules:
   - record: gitlab_component_saturation:ratio
     labels:
+      component: filestore_disk_utilization
+      stage: main
+      tier: inf
+      type: monitoring
+    expr: |
+      max by(environment, shard) (
+        clamp_min(
+          clamp_max(
+            avg_over_time(stackdriver_filestore_instance_file_googleapis_com_nfs_server_used_bytes_percent{env="ops"}[5m]) / 100
+            ,
+            1)
+        ,
+        0)
+      )
+  - record: gitlab_component_saturation:ratio
+    labels:
       component: go_memory
     expr: |
       max by(env, environment, tier, type, stage, shard) (
@@ -198,15 +214,15 @@ groups:
         clamp_min(
           clamp_max(
             (
-              process_open_fds{env="ops",type="code_suggestions"}
+              process_open_fds{env="ops",type=~"code_suggestions|filestore"}
               /
-              process_max_fds{env="ops",type="code_suggestions"}
+              process_max_fds{env="ops",type=~"code_suggestions|filestore"}
             )
             or
             (
-              ruby_file_descriptors{env="ops",type="code_suggestions"}
+              ruby_file_descriptors{env="ops",type=~"code_suggestions|filestore"}
               /
-              ruby_process_max_fds{env="ops",type="code_suggestions"}
+              ruby_process_max_fds{env="ops",type=~"code_suggestions|filestore"}
             )
             ,
             1)
@@ -295,6 +311,45 @@ groups:
   interval: 1m
   partial_response_strategy: warn
   rules:
+  - alert: component_saturation_slo_out_of_bounds
+    for: 5m
+    annotations:
+      title: The Filestore Disk Utilization resource of the {{ $labels.type }} service
+        ({{ $labels.stage }} stage) has a saturation exceeding SLO and is close to
+        its capacity limit.
+      description: |
+        This means that this resource is running close to capacity and is at risk of exceeding its current capacity limit.
+
+        Details of the Filestore Disk Utilization resource:
+
+        Filestore Disk utilization.
+
+        See https://cloud.google.com/monitoring/api/metrics_gcp#gcp-file for more details
+      grafana_dashboard_id: alerts-sat_filestore_disk
+      grafana_dashboard_link: https://dashboards.gitlab.net/d/alerts-sat_filestore_disk?from=now-6h/m&to=now-1m/m&var-environment={{
+        $labels.environment }}&var-type={{ $labels.type }}&var-stage={{ $labels.stage
+        }}
+      grafana_min_zoom_hours: "6"
+      grafana_panel_id: "3135430381"
+      grafana_variables: environment,type,stage
+      promql_query: |
+        max by(environment, shard, instance_name) (
+          clamp_min(
+            clamp_max(
+              avg_over_time(stackdriver_filestore_instance_file_googleapis_com_nfs_server_used_bytes_percent{environment="{{ $labels.environment }}"}[5m]) / 100
+              ,
+              1)
+          ,
+          0)
+        )
+      runbook: docs/{{ $labels.type }}/README.md
+    labels:
+      alert_type: cause
+      rules_domain: general
+      severity: s4
+    expr: |
+      gitlab_component_saturation:ratio{component="filestore_disk_utilization",env="ops",monitor="global"} > on(component) group_left
+      slo:max:hard:gitlab_component_saturation:ratio{component="filestore_disk_utilization",env="ops",monitor="global"}
   - alert: component_saturation_slo_out_of_bounds
     for: 5m
     annotations:
