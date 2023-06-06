@@ -231,6 +231,18 @@ local errorBudgetOperationRate(range, groupSelectors, aggregationLabels, ignoreC
     errorOperationRate: strings.indent(strings.chomp(labels.addStaticLabel('violation_type', 'error', errorOperationRate)), 2),
   };
 
+local errorBudgetGroupsOverBudget(range, labels) =
+  |||
+    count(
+      last_over_time(gitlab:stage_group:availability:ratio_28d{%(selectorHash)s}[%(range)s]) < 0.9995
+      and
+      last_over_time(gitlab:stage_group:traffic_share:ratio_28d{%(selectorHash)s}[%(range)s]) > 0.0001
+    )
+  ||| % {
+    range: range,
+    selectorHash: selectors.serializeHash(labels),
+  };
+
 
 {
   init(slaTarget, range): {
@@ -250,5 +262,7 @@ local errorBudgetOperationRate(range, groupSelectors, aggregationLabels, ignoreC
       errorBudgetViolationRate(range, selectors, aggregationLabels, ignoreComponents),
     errorBudgetOperationRate(selectors, aggregationLabels=[], ignoreComponents=true):
       errorBudgetOperationRate(range, selectors, aggregationLabels, ignoreComponents),
+    errorBudgetGroupsOverBudget(selectors):
+      errorBudgetGroupsOverBudget(range, selectors),
   },
 }
