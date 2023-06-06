@@ -375,6 +375,7 @@ local validateTags(tags) =
     legend_show=true,
     legend_rightSide=false,
     linewidth=2,
+    min=0,
     max=null,
     maxY2=1,
     decimals=0,
@@ -413,7 +414,7 @@ local validateTags(tags) =
     .resetYaxes()
     .addYaxis(
       format=format,
-      min=0,
+      min=min,
       max=max,
       label=yAxisLabel,
     )
@@ -438,6 +439,7 @@ local validateTags(tags) =
     legend_rightSide=false,
     linewidth=2,
     decimals=0,
+    min=0,
     max=null,
     maxY2=1,
     thresholds=[],
@@ -457,6 +459,7 @@ local validateTags(tags) =
       legend_show=legend_show,
       legend_rightSide=legend_rightSide,
       linewidth=linewidth,
+      min=min,
       max=max,
       maxY2=maxY2,
       decimals=decimals,
