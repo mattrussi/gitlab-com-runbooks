@@ -7,15 +7,87 @@ groups:
   rules:
   - record: gitlab_component_saturation:ratio
     labels:
+      component: filestore_disk_read_iops_saturation
+      stage: main
+      tier: inf
+      type: monitoring
+    expr: |
+      max by(env, environment, shard) (
+        clamp_min(
+          clamp_max(
+            (stackdriver_filestore_instance_file_googleapis_com_nfs_server_read_ops_count / 60)
+            /
+            600
+            ,
+            1)
+        ,
+        0)
+      )
+  - record: gitlab_component_saturation:ratio
+    labels:
+      component: filestore_disk_read_throughput_saturation
+      stage: main
+      tier: inf
+      type: monitoring
+    expr: |
+      max by(env, environment, shard) (
+        clamp_min(
+          clamp_max(
+            (stackdriver_filestore_instance_file_googleapis_com_nfs_server_read_bytes_count / 60)
+            /
+            100000000
+            ,
+            1)
+        ,
+        0)
+      )
+  - record: gitlab_component_saturation:ratio
+    labels:
       component: filestore_disk_utilization
       stage: main
       tier: inf
       type: monitoring
     expr: |
-      max by(environment, shard) (
+      max by(env, environment, shard) (
         clamp_min(
           clamp_max(
             avg_over_time(stackdriver_filestore_instance_file_googleapis_com_nfs_server_used_bytes_percent{env="gprd"}[5m]) / 100
+            ,
+            1)
+        ,
+        0)
+      )
+  - record: gitlab_component_saturation:ratio
+    labels:
+      component: filestore_disk_write_iops_saturation
+      stage: main
+      tier: inf
+      type: monitoring
+    expr: |
+      max by(env, environment, shard) (
+        clamp_min(
+          clamp_max(
+            (stackdriver_filestore_instance_file_googleapis_com_nfs_server_write_ops_count / 60)
+            /
+            1000
+            ,
+            1)
+        ,
+        0)
+      )
+  - record: gitlab_component_saturation:ratio
+    labels:
+      component: filestore_disk_write_throughput_saturation
+      stage: main
+      tier: inf
+      type: monitoring
+    expr: |
+      max by(env, environment, shard) (
+        clamp_min(
+          clamp_max(
+            (stackdriver_filestore_instance_file_googleapis_com_nfs_server_write_bytes_count / 60)
+            /
+            100000000
             ,
             1)
         ,
@@ -314,6 +386,88 @@ groups:
   - alert: component_saturation_slo_out_of_bounds
     for: 5m
     annotations:
+      title: The Filestore Disk Read IOPS Saturation resource of the {{ $labels.type
+        }} service ({{ $labels.stage }} stage) has a saturation exceeding SLO and
+        is close to its capacity limit.
+      description: |
+        This means that this resource is running close to capacity and is at risk of exceeding its current capacity limit.
+
+        Details of the Filestore Disk Read IOPS Saturation resource:
+
+        Filestore Disk Read IOPS Saturation.
+
+        See https://cloud.google.com/monitoring/api/metrics_gcp#gcp-file for more details
+      grafana_dashboard_id: alerts-sat_filestore_read_iops
+      grafana_dashboard_link: https://dashboards.gitlab.net/d/alerts-sat_filestore_read_iops?from=now-6h/m&to=now-1m/m&var-environment={{
+        $labels.environment }}&var-type={{ $labels.type }}&var-stage={{ $labels.stage
+        }}
+      grafana_min_zoom_hours: "6"
+      grafana_panel_id: "534260738"
+      grafana_variables: environment,type,stage
+      promql_query: |
+        max by(environment, shard, instance_name) (
+          clamp_min(
+            clamp_max(
+              (stackdriver_filestore_instance_file_googleapis_com_nfs_server_read_ops_count / 60)
+              /
+              600
+              ,
+              1)
+          ,
+          0)
+        )
+      runbook: docs/{{ $labels.type }}/README.md
+    labels:
+      alert_type: cause
+      rules_domain: general
+      severity: s4
+    expr: |
+      gitlab_component_saturation:ratio{component="filestore_disk_read_iops_saturation",env="gprd",monitor="global"} > on(component) group_left
+      slo:max:hard:gitlab_component_saturation:ratio{component="filestore_disk_read_iops_saturation",env="gprd",monitor="global"}
+  - alert: component_saturation_slo_out_of_bounds
+    for: 5m
+    annotations:
+      title: The Filestore Disk Read Throughput Saturation resource of the {{ $labels.type
+        }} service ({{ $labels.stage }} stage) has a saturation exceeding SLO and
+        is close to its capacity limit.
+      description: |
+        This means that this resource is running close to capacity and is at risk of exceeding its current capacity limit.
+
+        Details of the Filestore Disk Read Throughput Saturation resource:
+
+        Filestore Disk Read Throughput Saturation.
+
+        See https://cloud.google.com/monitoring/api/metrics_gcp#gcp-file for more details
+      grafana_dashboard_id: alerts-sat_filestore_read_throughput
+      grafana_dashboard_link: https://dashboards.gitlab.net/d/alerts-sat_filestore_read_throughput?from=now-6h/m&to=now-1m/m&var-environment={{
+        $labels.environment }}&var-type={{ $labels.type }}&var-stage={{ $labels.stage
+        }}
+      grafana_min_zoom_hours: "6"
+      grafana_panel_id: "3465313127"
+      grafana_variables: environment,type,stage
+      promql_query: |
+        max by(environment, shard, instance_name) (
+          clamp_min(
+            clamp_max(
+              (stackdriver_filestore_instance_file_googleapis_com_nfs_server_read_bytes_count / 60)
+              /
+              100000000
+              ,
+              1)
+          ,
+          0)
+        )
+      runbook: docs/{{ $labels.type }}/README.md
+    labels:
+      alert_type: cause
+      rules_domain: general
+      severity: s4
+    expr: |
+      gitlab_component_saturation:ratio{component="filestore_disk_read_throughput_saturation",env="gprd",monitor="global"} > on(component) group_left
+      slo:max:hard:gitlab_component_saturation:ratio{component="filestore_disk_read_throughput_saturation",env="gprd",monitor="global"}
+  - alert: component_saturation_slo_out_of_bounds
+    for: 5m
+    annotations:
       title: The Filestore Disk Utilization resource of the {{ $labels.type }} service
         ({{ $labels.stage }} stage) has a saturation exceeding SLO and is close to
         its capacity limit.
@@ -325,8 +479,8 @@ groups:
         Filestore Disk utilization.
 
         See https://cloud.google.com/monitoring/api/metrics_gcp#gcp-file for more details
-      grafana_dashboard_id: alerts-sat_filestore_disk
-      grafana_dashboard_link: https://dashboards.gitlab.net/d/alerts-sat_filestore_disk?from=now-6h/m&to=now-1m/m&var-environment={{
+      grafana_dashboard_id: alerts-sat_filestore_utilization
+      grafana_dashboard_link: https://dashboards.gitlab.net/d/alerts-sat_filestore_utilization?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-type={{ $labels.type }}&var-stage={{ $labels.stage
         }}
       grafana_min_zoom_hours: "6"
@@ -350,6 +504,88 @@ groups:
     expr: |
       gitlab_component_saturation:ratio{component="filestore_disk_utilization",env="gprd",monitor="global"} > on(component) group_left
       slo:max:hard:gitlab_component_saturation:ratio{component="filestore_disk_utilization",env="gprd",monitor="global"}
+  - alert: component_saturation_slo_out_of_bounds
+    for: 5m
+    annotations:
+      title: The Filestore Disk Write IOPS Saturation resource of the {{ $labels.type
+        }} service ({{ $labels.stage }} stage) has a saturation exceeding SLO and
+        is close to its capacity limit.
+      description: |
+        This means that this resource is running close to capacity and is at risk of exceeding its current capacity limit.
+
+        Details of the Filestore Disk Write IOPS Saturation resource:
+
+        Filestore Disk Write IOPS Saturation.
+
+        See https://cloud.google.com/monitoring/api/metrics_gcp#gcp-file for more details
+      grafana_dashboard_id: alerts-sat_filestore_write_iops
+      grafana_dashboard_link: https://dashboards.gitlab.net/d/alerts-sat_filestore_write_iops?from=now-6h/m&to=now-1m/m&var-environment={{
+        $labels.environment }}&var-type={{ $labels.type }}&var-stage={{ $labels.stage
+        }}
+      grafana_min_zoom_hours: "6"
+      grafana_panel_id: "2213973372"
+      grafana_variables: environment,type,stage
+      promql_query: |
+        max by(environment, shard, instance_name) (
+          clamp_min(
+            clamp_max(
+              (stackdriver_filestore_instance_file_googleapis_com_nfs_server_write_ops_count / 60)
+              /
+              1000
+              ,
+              1)
+          ,
+          0)
+        )
+      runbook: docs/{{ $labels.type }}/README.md
+    labels:
+      alert_type: cause
+      rules_domain: general
+      severity: s4
+    expr: |
+      gitlab_component_saturation:ratio{component="filestore_disk_write_iops_saturation",env="gprd",monitor="global"} > on(component) group_left
+      slo:max:hard:gitlab_component_saturation:ratio{component="filestore_disk_write_iops_saturation",env="gprd",monitor="global"}
+  - alert: component_saturation_slo_out_of_bounds
+    for: 5m
+    annotations:
+      title: The Filestore Disk Write Throughput Saturation resource of the {{ $labels.type
+        }} service ({{ $labels.stage }} stage) has a saturation exceeding SLO and
+        is close to its capacity limit.
+      description: |
+        This means that this resource is running close to capacity and is at risk of exceeding its current capacity limit.
+
+        Details of the Filestore Disk Write Throughput Saturation resource:
+
+        Filestore Disk Write Throughput Saturation.
+
+        See https://cloud.google.com/monitoring/api/metrics_gcp#gcp-file for more details
+      grafana_dashboard_id: alerts-sat_filestore_write_throughput
+      grafana_dashboard_link: https://dashboards.gitlab.net/d/alerts-sat_filestore_write_throughput?from=now-6h/m&to=now-1m/m&var-environment={{
+        $labels.environment }}&var-type={{ $labels.type }}&var-stage={{ $labels.stage
+        }}
+      grafana_min_zoom_hours: "6"
+      grafana_panel_id: "826201622"
+      grafana_variables: environment,type,stage
+      promql_query: |
+        max by(environment, shard, instance_name) (
+          clamp_min(
+            clamp_max(
+              (stackdriver_filestore_instance_file_googleapis_com_nfs_server_write_bytes_count / 60)
+              /
+              100000000
+              ,
+              1)
+          ,
+          0)
+        )
+      runbook: docs/{{ $labels.type }}/README.md
+    labels:
+      alert_type: cause
+      rules_domain: general
+      severity: s4
+    expr: |
+      gitlab_component_saturation:ratio{component="filestore_disk_write_throughput_saturation",env="gprd",monitor="global"} > on(component) group_left
+      slo:max:hard:gitlab_component_saturation:ratio{component="filestore_disk_write_throughput_saturation",env="gprd",monitor="global"}
   - alert: component_saturation_slo_out_of_bounds
     for: 5m
     annotations:
