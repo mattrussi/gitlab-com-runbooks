@@ -61,6 +61,7 @@
 * [Container Registry Database Index Bloat](../registry/db-index-bloat.md)
 * [Deferring Sidekiq jobs](../sidekiq/deferring-jobs.md)
 * [GET Monitoring Setup](../staging-ref/get-monitoring-setup.md)
+* [Thanos Architecture Overview](architecture.md)
 * [Vault Secrets Management](../vault/vault.md)
 * [Diagnostic Reports](../web/diagnostic-reports.md)
 * [Workhorse Image Scaler](../web/workhorse-image-scaler.md)

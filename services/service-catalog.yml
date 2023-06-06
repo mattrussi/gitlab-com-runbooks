@@ -1149,7 +1149,7 @@ services:
         - https://gitlab.com/gitlab-com/gl-infra/k8s-workloads/gitlab-helmfiles
       documents:
         design:
-        architecture: https://thanos.io/tip/thanos/design.md/#architecture
+        architecture: https://gitlab.com/gitlab-com/runbooks/-/tree/master/docs/thanos/architecture.md
         readiness_review:
         sre_guide: https://gitlab.com/gitlab-com/runbooks/-/tree/master/docs/thanos
         developer_guide:
