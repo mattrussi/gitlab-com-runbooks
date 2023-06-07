@@ -54,19 +54,6 @@ groups:
       runbook: docs/monitoring/prometheus-is-down.md#thanos-compact
       title: '{{$labels.job}} is restarting frequently'
 
-  - alert: ThanosCompactManyRestarts
-    expr: round(changes(process_start_time_seconds{job="thanos",fqdn=~"thanos-compact-.+"}[1h])) > 2
-    for: 30m
-    labels:
-      severity: s3
-      alert_type: cause
-      incident_project: gitlab.com/gitlab-com/gl-infra/production
-    annotations:
-      description: '{{$labels.job}} at {{$labels.instance}} {{$labels.pod}} has restarted more than
-        {{ $value }} times in the last hour. It may be crashlooping.'
-      runbook: docs/monitoring/prometheus-is-down.md#thanos-compact
-      title: '{{$labels.job}} is restarting frequently'
-
   - alert: PrometheusManyFileSDReadErrors
     expr: >
       rate(prometheus_sd_file_read_errors_total[5m]) /
