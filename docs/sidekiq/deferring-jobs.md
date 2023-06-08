@@ -25,10 +25,10 @@ to progressively let the jobs processed. For example:
 /chatops run feature set defer_sidekiq_jobs_SlowRunningWorker true --ignore-feature-flag-consistency-check
 
 # defer 99% of the jobs, only letting 1% processed
-/chatops run feature set defer_sidekiq_jobs_SlowRunningWorker 99 --ignore-feature-flag-consistency-check
+/chatops run feature set defer_sidekiq_jobs_SlowRunningWorker --random 99 --ignore-feature-flag-consistency-check
 
 # defer 50% of the jobs
-/chatops run feature set defer_sidekiq_jobs_SlowRunningWorker 50 --ignore-feature-flag-consistency-check
+/chatops run feature set defer_sidekiq_jobs_SlowRunningWorker --random 50 --ignore-feature-flag-consistency-check
 
 # stop deferring the jobs, jobs are being processed normally
 /chatops run feature set defer_sidekiq_jobs_SlowRunningWorker false --ignore-feature-flag-consistency-check
