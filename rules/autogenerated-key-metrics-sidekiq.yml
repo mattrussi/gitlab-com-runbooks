@@ -6,7 +6,7 @@ groups:
   rules:
   - record: sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate1m
     expr: |
-      sum by (environment,feature_category,job,le,queue,shard,stage,tier,type,urgency,worker) (
+      sum by (environment,error,external_dependencies,feature_category,job,le,queue,shard,stage,tier,type,urgency,worker) (
         rate(sidekiq_jobs_completion_seconds_bucket[1m])
       )
   - record: sli_aggregations:sidekiq_jobs_queue_duration_seconds_bucket_rate1m
@@ -16,7 +16,7 @@ groups:
       )
   - record: sli_aggregations:sidekiq_jobs_failed_total_rate1m
     expr: |
-      sum by (environment,feature_category,job,queue,shard,stage,tier,type,urgency,worker) (
+      sum by (environment,error,external_dependencies,feature_category,job,queue,shard,stage,tier,type,urgency,worker) (
         rate(sidekiq_jobs_failed_total[1m])
       )
   - record: gitlab_component_ops:rate
@@ -43,6 +43,32 @@ groups:
       (
         0 * group by(env,environment,stage) (
           gitlab_component_ops:rate{component="email_receiver",tier="sv",type="sidekiq"}
+        )
+      )
+  - record: gitlab_component_ops:rate
+    labels:
+      component: external_dependency
+      tier: sv
+      type: sidekiq
+    expr: |
+      sum by (env,environment,stage) (
+        sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate1m{external_dependencies=~"yes",le="+Inf",type="sidekiq"}
+      )
+  - record: gitlab_component_errors:rate
+    labels:
+      component: external_dependency
+      tier: sv
+      type: sidekiq
+    expr: |
+      (
+        sum by (env,environment,stage) (
+          sli_aggregations:sidekiq_jobs_failed_total_rate1m{external_dependencies=~"yes",type="sidekiq"}
+        )
+      )
+      or
+      (
+        0 * group by(env,environment,stage) (
+          gitlab_component_ops:rate{component="external_dependency",tier="sv",type="sidekiq"}
         )
       )
   - record: gitlab_component_apdex:success:rate
@@ -143,7 +169,7 @@ groups:
       type: sidekiq
     expr: |
       sum by (env,environment,stage) (
-        sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate1m{le="+Inf",shard="catchall",type="sidekiq"}
+        sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate1m{external_dependencies!="yes",le="+Inf",shard="catchall",type="sidekiq"}
       )
   - record: gitlab_component_errors:rate
     labels:
@@ -153,7 +179,7 @@ groups:
     expr: |
       (
         sum by (env,environment,stage) (
-          sli_aggregations:sidekiq_jobs_failed_total_rate1m{shard="catchall",type="sidekiq"}
+          sli_aggregations:sidekiq_jobs_failed_total_rate1m{external_dependencies!="yes",shard="catchall",type="sidekiq"}
         )
       )
       or
@@ -233,7 +259,7 @@ groups:
       type: sidekiq
     expr: |
       sum by (env,environment,stage) (
-        sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate1m{le="+Inf",shard="database-throttled",type="sidekiq"}
+        sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate1m{external_dependencies!="yes",le="+Inf",shard="database-throttled",type="sidekiq"}
       )
   - record: gitlab_component_errors:rate
     labels:
@@ -243,7 +269,7 @@ groups:
     expr: |
       (
         sum by (env,environment,stage) (
-          sli_aggregations:sidekiq_jobs_failed_total_rate1m{shard="database-throttled",type="sidekiq"}
+          sli_aggregations:sidekiq_jobs_failed_total_rate1m{external_dependencies!="yes",shard="database-throttled",type="sidekiq"}
         )
       )
       or
@@ -323,7 +349,7 @@ groups:
       type: sidekiq
     expr: |
       sum by (env,environment,stage) (
-        sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate1m{le="+Inf",shard="elasticsearch",type="sidekiq"}
+        sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate1m{external_dependencies!="yes",le="+Inf",shard="elasticsearch",type="sidekiq"}
       )
   - record: gitlab_component_errors:rate
     labels:
@@ -333,7 +359,7 @@ groups:
     expr: |
       (
         sum by (env,environment,stage) (
-          sli_aggregations:sidekiq_jobs_failed_total_rate1m{shard="elasticsearch",type="sidekiq"}
+          sli_aggregations:sidekiq_jobs_failed_total_rate1m{external_dependencies!="yes",shard="elasticsearch",type="sidekiq"}
         )
       )
       or
@@ -413,7 +439,7 @@ groups:
       type: sidekiq
     expr: |
       sum by (env,environment,stage) (
-        sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate1m{le="+Inf",shard="gitaly-throttled",type="sidekiq"}
+        sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate1m{external_dependencies!="yes",le="+Inf",shard="gitaly-throttled",type="sidekiq"}
       )
   - record: gitlab_component_errors:rate
     labels:
@@ -423,7 +449,7 @@ groups:
     expr: |
       (
         sum by (env,environment,stage) (
-          sli_aggregations:sidekiq_jobs_failed_total_rate1m{shard="gitaly-throttled",type="sidekiq"}
+          sli_aggregations:sidekiq_jobs_failed_total_rate1m{external_dependencies!="yes",shard="gitaly-throttled",type="sidekiq"}
         )
       )
       or
@@ -503,7 +529,7 @@ groups:
       type: sidekiq
     expr: |
       sum by (env,environment,stage) (
-        sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate1m{le="+Inf",shard="low-urgency-cpu-bound",type="sidekiq"}
+        sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate1m{external_dependencies!="yes",le="+Inf",shard="low-urgency-cpu-bound",type="sidekiq"}
       )
   - record: gitlab_component_errors:rate
     labels:
@@ -513,7 +539,7 @@ groups:
     expr: |
       (
         sum by (env,environment,stage) (
-          sli_aggregations:sidekiq_jobs_failed_total_rate1m{shard="low-urgency-cpu-bound",type="sidekiq"}
+          sli_aggregations:sidekiq_jobs_failed_total_rate1m{external_dependencies!="yes",shard="low-urgency-cpu-bound",type="sidekiq"}
         )
       )
       or
@@ -593,7 +619,7 @@ groups:
       type: sidekiq
     expr: |
       sum by (env,environment,stage) (
-        sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate1m{le="+Inf",shard="memory-bound",type="sidekiq"}
+        sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate1m{external_dependencies!="yes",le="+Inf",shard="memory-bound",type="sidekiq"}
       )
   - record: gitlab_component_errors:rate
     labels:
@@ -603,7 +629,7 @@ groups:
     expr: |
       (
         sum by (env,environment,stage) (
-          sli_aggregations:sidekiq_jobs_failed_total_rate1m{shard="memory-bound",type="sidekiq"}
+          sli_aggregations:sidekiq_jobs_failed_total_rate1m{external_dependencies!="yes",shard="memory-bound",type="sidekiq"}
         )
       )
       or
@@ -683,7 +709,7 @@ groups:
       type: sidekiq
     expr: |
       sum by (env,environment,stage) (
-        sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate1m{le="+Inf",shard="quarantine",type="sidekiq"}
+        sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate1m{external_dependencies!="yes",le="+Inf",shard="quarantine",type="sidekiq"}
       )
   - record: gitlab_component_errors:rate
     labels:
@@ -693,7 +719,7 @@ groups:
     expr: |
       (
         sum by (env,environment,stage) (
-          sli_aggregations:sidekiq_jobs_failed_total_rate1m{shard="quarantine",type="sidekiq"}
+          sli_aggregations:sidekiq_jobs_failed_total_rate1m{external_dependencies!="yes",shard="quarantine",type="sidekiq"}
         )
       )
       or
@@ -773,7 +799,7 @@ groups:
       type: sidekiq
     expr: |
       sum by (env,environment,stage) (
-        sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate1m{le="+Inf",shard="urgent-authorized-projects",type="sidekiq"}
+        sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate1m{external_dependencies!="yes",le="+Inf",shard="urgent-authorized-projects",type="sidekiq"}
       )
   - record: gitlab_component_errors:rate
     labels:
@@ -783,7 +809,7 @@ groups:
     expr: |
       (
         sum by (env,environment,stage) (
-          sli_aggregations:sidekiq_jobs_failed_total_rate1m{shard="urgent-authorized-projects",type="sidekiq"}
+          sli_aggregations:sidekiq_jobs_failed_total_rate1m{external_dependencies!="yes",shard="urgent-authorized-projects",type="sidekiq"}
         )
       )
       or
@@ -863,7 +889,7 @@ groups:
       type: sidekiq
     expr: |
       sum by (env,environment,stage) (
-        sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate1m{le="+Inf",shard="urgent-cpu-bound",type="sidekiq"}
+        sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate1m{external_dependencies!="yes",le="+Inf",shard="urgent-cpu-bound",type="sidekiq"}
       )
   - record: gitlab_component_errors:rate
     labels:
@@ -873,7 +899,7 @@ groups:
     expr: |
       (
         sum by (env,environment,stage) (
-          sli_aggregations:sidekiq_jobs_failed_total_rate1m{shard="urgent-cpu-bound",type="sidekiq"}
+          sli_aggregations:sidekiq_jobs_failed_total_rate1m{external_dependencies!="yes",shard="urgent-cpu-bound",type="sidekiq"}
         )
       )
       or
@@ -953,7 +979,7 @@ groups:
       type: sidekiq
     expr: |
       sum by (env,environment,stage) (
-        sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate1m{le="+Inf",shard="urgent-other",type="sidekiq"}
+        sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate1m{external_dependencies!="yes",le="+Inf",shard="urgent-other",type="sidekiq"}
       )
   - record: gitlab_component_errors:rate
     labels:
@@ -963,7 +989,7 @@ groups:
     expr: |
       (
         sum by (env,environment,stage) (
-          sli_aggregations:sidekiq_jobs_failed_total_rate1m{shard="urgent-other",type="sidekiq"}
+          sli_aggregations:sidekiq_jobs_failed_total_rate1m{external_dependencies!="yes",shard="urgent-other",type="sidekiq"}
         )
       )
       or
@@ -977,7 +1003,7 @@ groups:
   rules:
   - record: sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate5m
     expr: |
-      sum by (environment,feature_category,job,le,queue,shard,stage,tier,type,urgency,worker) (
+      sum by (environment,error,external_dependencies,feature_category,job,le,queue,shard,stage,tier,type,urgency,worker) (
         rate(sidekiq_jobs_completion_seconds_bucket[5m])
       )
   - record: sli_aggregations:sidekiq_jobs_queue_duration_seconds_bucket_rate5m
@@ -987,7 +1013,7 @@ groups:
       )
   - record: sli_aggregations:sidekiq_jobs_failed_total_rate5m
     expr: |
-      sum by (environment,feature_category,job,queue,shard,stage,tier,type,urgency,worker) (
+      sum by (environment,error,external_dependencies,feature_category,job,queue,shard,stage,tier,type,urgency,worker) (
         rate(sidekiq_jobs_failed_total[5m])
       )
   - record: gitlab_component_ops:rate_5m
@@ -1014,6 +1040,32 @@ groups:
       (
         0 * group by(env,environment,stage) (
           gitlab_component_ops:rate_5m{component="email_receiver",tier="sv",type="sidekiq"}
+        )
+      )
+  - record: gitlab_component_ops:rate_5m
+    labels:
+      component: external_dependency
+      tier: sv
+      type: sidekiq
+    expr: |
+      sum by (env,environment,stage) (
+        sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate5m{external_dependencies=~"yes",le="+Inf",type="sidekiq"}
+      )
+  - record: gitlab_component_errors:rate_5m
+    labels:
+      component: external_dependency
+      tier: sv
+      type: sidekiq
+    expr: |
+      (
+        sum by (env,environment,stage) (
+          sli_aggregations:sidekiq_jobs_failed_total_rate5m{external_dependencies=~"yes",type="sidekiq"}
+        )
+      )
+      or
+      (
+        0 * group by(env,environment,stage) (
+          gitlab_component_ops:rate_5m{component="external_dependency",tier="sv",type="sidekiq"}
         )
       )
   - record: gitlab_component_apdex:success:rate_5m
@@ -1114,7 +1166,7 @@ groups:
       type: sidekiq
     expr: |
       sum by (env,environment,stage) (
-        sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate5m{le="+Inf",shard="catchall",type="sidekiq"}
+        sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate5m{external_dependencies!="yes",le="+Inf",shard="catchall",type="sidekiq"}
       )
   - record: gitlab_component_errors:rate_5m
     labels:
@@ -1124,7 +1176,7 @@ groups:
     expr: |
       (
         sum by (env,environment,stage) (
-          sli_aggregations:sidekiq_jobs_failed_total_rate5m{shard="catchall",type="sidekiq"}
+          sli_aggregations:sidekiq_jobs_failed_total_rate5m{external_dependencies!="yes",shard="catchall",type="sidekiq"}
         )
       )
       or
@@ -1204,7 +1256,7 @@ groups:
       type: sidekiq
     expr: |
       sum by (env,environment,stage) (
-        sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate5m{le="+Inf",shard="database-throttled",type="sidekiq"}
+        sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate5m{external_dependencies!="yes",le="+Inf",shard="database-throttled",type="sidekiq"}
       )
   - record: gitlab_component_errors:rate_5m
     labels:
@@ -1214,7 +1266,7 @@ groups:
     expr: |
       (
         sum by (env,environment,stage) (
-          sli_aggregations:sidekiq_jobs_failed_total_rate5m{shard="database-throttled",type="sidekiq"}
+          sli_aggregations:sidekiq_jobs_failed_total_rate5m{external_dependencies!="yes",shard="database-throttled",type="sidekiq"}
         )
       )
       or
@@ -1294,7 +1346,7 @@ groups:
       type: sidekiq
     expr: |
       sum by (env,environment,stage) (
-        sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate5m{le="+Inf",shard="elasticsearch",type="sidekiq"}
+        sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate5m{external_dependencies!="yes",le="+Inf",shard="elasticsearch",type="sidekiq"}
       )
   - record: gitlab_component_errors:rate_5m
     labels:
@@ -1304,7 +1356,7 @@ groups:
     expr: |
       (
         sum by (env,environment,stage) (
-          sli_aggregations:sidekiq_jobs_failed_total_rate5m{shard="elasticsearch",type="sidekiq"}
+          sli_aggregations:sidekiq_jobs_failed_total_rate5m{external_dependencies!="yes",shard="elasticsearch",type="sidekiq"}
         )
       )
       or
@@ -1384,7 +1436,7 @@ groups:
       type: sidekiq
     expr: |
       sum by (env,environment,stage) (
-        sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate5m{le="+Inf",shard="gitaly-throttled",type="sidekiq"}
+        sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate5m{external_dependencies!="yes",le="+Inf",shard="gitaly-throttled",type="sidekiq"}
       )
   - record: gitlab_component_errors:rate_5m
     labels:
@@ -1394,7 +1446,7 @@ groups:
     expr: |
       (
         sum by (env,environment,stage) (
-          sli_aggregations:sidekiq_jobs_failed_total_rate5m{shard="gitaly-throttled",type="sidekiq"}
+          sli_aggregations:sidekiq_jobs_failed_total_rate5m{external_dependencies!="yes",shard="gitaly-throttled",type="sidekiq"}
         )
       )
       or
@@ -1474,7 +1526,7 @@ groups:
       type: sidekiq
     expr: |
       sum by (env,environment,stage) (
-        sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate5m{le="+Inf",shard="low-urgency-cpu-bound",type="sidekiq"}
+        sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate5m{external_dependencies!="yes",le="+Inf",shard="low-urgency-cpu-bound",type="sidekiq"}
       )
   - record: gitlab_component_errors:rate_5m
     labels:
@@ -1484,7 +1536,7 @@ groups:
     expr: |
       (
         sum by (env,environment,stage) (
-          sli_aggregations:sidekiq_jobs_failed_total_rate5m{shard="low-urgency-cpu-bound",type="sidekiq"}
+          sli_aggregations:sidekiq_jobs_failed_total_rate5m{external_dependencies!="yes",shard="low-urgency-cpu-bound",type="sidekiq"}
         )
       )
       or
@@ -1564,7 +1616,7 @@ groups:
       type: sidekiq
     expr: |
       sum by (env,environment,stage) (
-        sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate5m{le="+Inf",shard="memory-bound",type="sidekiq"}
+        sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate5m{external_dependencies!="yes",le="+Inf",shard="memory-bound",type="sidekiq"}
       )
   - record: gitlab_component_errors:rate_5m
     labels:
@@ -1574,7 +1626,7 @@ groups:
     expr: |
       (
         sum by (env,environment,stage) (
-          sli_aggregations:sidekiq_jobs_failed_total_rate5m{shard="memory-bound",type="sidekiq"}
+          sli_aggregations:sidekiq_jobs_failed_total_rate5m{external_dependencies!="yes",shard="memory-bound",type="sidekiq"}
         )
       )
       or
@@ -1654,7 +1706,7 @@ groups:
       type: sidekiq
     expr: |
       sum by (env,environment,stage) (
-        sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate5m{le="+Inf",shard="quarantine",type="sidekiq"}
+        sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate5m{external_dependencies!="yes",le="+Inf",shard="quarantine",type="sidekiq"}
       )
   - record: gitlab_component_errors:rate_5m
     labels:
@@ -1664,7 +1716,7 @@ groups:
     expr: |
       (
         sum by (env,environment,stage) (
-          sli_aggregations:sidekiq_jobs_failed_total_rate5m{shard="quarantine",type="sidekiq"}
+          sli_aggregations:sidekiq_jobs_failed_total_rate5m{external_dependencies!="yes",shard="quarantine",type="sidekiq"}
         )
       )
       or
@@ -1744,7 +1796,7 @@ groups:
       type: sidekiq
     expr: |
       sum by (env,environment,stage) (
-        sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate5m{le="+Inf",shard="urgent-authorized-projects",type="sidekiq"}
+        sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate5m{external_dependencies!="yes",le="+Inf",shard="urgent-authorized-projects",type="sidekiq"}
       )
   - record: gitlab_component_errors:rate_5m
     labels:
@@ -1754,7 +1806,7 @@ groups:
     expr: |
       (
         sum by (env,environment,stage) (
-          sli_aggregations:sidekiq_jobs_failed_total_rate5m{shard="urgent-authorized-projects",type="sidekiq"}
+          sli_aggregations:sidekiq_jobs_failed_total_rate5m{external_dependencies!="yes",shard="urgent-authorized-projects",type="sidekiq"}
         )
       )
       or
@@ -1834,7 +1886,7 @@ groups:
       type: sidekiq
     expr: |
       sum by (env,environment,stage) (
-        sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate5m{le="+Inf",shard="urgent-cpu-bound",type="sidekiq"}
+        sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate5m{external_dependencies!="yes",le="+Inf",shard="urgent-cpu-bound",type="sidekiq"}
       )
   - record: gitlab_component_errors:rate_5m
     labels:
@@ -1844,7 +1896,7 @@ groups:
     expr: |
       (
         sum by (env,environment,stage) (
-          sli_aggregations:sidekiq_jobs_failed_total_rate5m{shard="urgent-cpu-bound",type="sidekiq"}
+          sli_aggregations:sidekiq_jobs_failed_total_rate5m{external_dependencies!="yes",shard="urgent-cpu-bound",type="sidekiq"}
         )
       )
       or
@@ -1924,7 +1976,7 @@ groups:
       type: sidekiq
     expr: |
       sum by (env,environment,stage) (
-        sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate5m{le="+Inf",shard="urgent-other",type="sidekiq"}
+        sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate5m{external_dependencies!="yes",le="+Inf",shard="urgent-other",type="sidekiq"}
       )
   - record: gitlab_component_errors:rate_5m
     labels:
@@ -1934,7 +1986,7 @@ groups:
     expr: |
       (
         sum by (env,environment,stage) (
-          sli_aggregations:sidekiq_jobs_failed_total_rate5m{shard="urgent-other",type="sidekiq"}
+          sli_aggregations:sidekiq_jobs_failed_total_rate5m{external_dependencies!="yes",shard="urgent-other",type="sidekiq"}
         )
       )
       or
@@ -2031,7 +2083,7 @@ groups:
   rules:
   - record: sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate30m
     expr: |
-      sum by (environment,feature_category,job,le,queue,shard,stage,tier,type,urgency,worker) (
+      sum by (environment,error,external_dependencies,feature_category,job,le,queue,shard,stage,tier,type,urgency,worker) (
         rate(sidekiq_jobs_completion_seconds_bucket[30m])
       )
   - record: sli_aggregations:sidekiq_jobs_queue_duration_seconds_bucket_rate30m
@@ -2041,7 +2093,7 @@ groups:
       )
   - record: sli_aggregations:sidekiq_jobs_failed_total_rate30m
     expr: |
-      sum by (environment,feature_category,job,queue,shard,stage,tier,type,urgency,worker) (
+      sum by (environment,error,external_dependencies,feature_category,job,queue,shard,stage,tier,type,urgency,worker) (
         rate(sidekiq_jobs_failed_total[30m])
       )
   - record: gitlab_component_ops:rate_30m
@@ -2068,6 +2120,32 @@ groups:
       (
         0 * group by(env,environment,stage) (
           gitlab_component_ops:rate_30m{component="email_receiver",tier="sv",type="sidekiq"}
+        )
+      )
+  - record: gitlab_component_ops:rate_30m
+    labels:
+      component: external_dependency
+      tier: sv
+      type: sidekiq
+    expr: |
+      sum by (env,environment,stage) (
+        sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate30m{external_dependencies=~"yes",le="+Inf",type="sidekiq"}
+      )
+  - record: gitlab_component_errors:rate_30m
+    labels:
+      component: external_dependency
+      tier: sv
+      type: sidekiq
+    expr: |
+      (
+        sum by (env,environment,stage) (
+          sli_aggregations:sidekiq_jobs_failed_total_rate30m{external_dependencies=~"yes",type="sidekiq"}
+        )
+      )
+      or
+      (
+        0 * group by(env,environment,stage) (
+          gitlab_component_ops:rate_30m{component="external_dependency",tier="sv",type="sidekiq"}
         )
       )
   - record: gitlab_component_apdex:success:rate_30m
@@ -2168,7 +2246,7 @@ groups:
       type: sidekiq
     expr: |
       sum by (env,environment,stage) (
-        sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate30m{le="+Inf",shard="catchall",type="sidekiq"}
+        sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate30m{external_dependencies!="yes",le="+Inf",shard="catchall",type="sidekiq"}
       )
   - record: gitlab_component_errors:rate_30m
     labels:
@@ -2178,7 +2256,7 @@ groups:
     expr: |
       (
         sum by (env,environment,stage) (
-          sli_aggregations:sidekiq_jobs_failed_total_rate30m{shard="catchall",type="sidekiq"}
+          sli_aggregations:sidekiq_jobs_failed_total_rate30m{external_dependencies!="yes",shard="catchall",type="sidekiq"}
         )
       )
       or
@@ -2258,7 +2336,7 @@ groups:
       type: sidekiq
     expr: |
       sum by (env,environment,stage) (
-        sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate30m{le="+Inf",shard="database-throttled",type="sidekiq"}
+        sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate30m{external_dependencies!="yes",le="+Inf",shard="database-throttled",type="sidekiq"}
       )
   - record: gitlab_component_errors:rate_30m
     labels:
@@ -2268,7 +2346,7 @@ groups:
     expr: |
       (
         sum by (env,environment,stage) (
-          sli_aggregations:sidekiq_jobs_failed_total_rate30m{shard="database-throttled",type="sidekiq"}
+          sli_aggregations:sidekiq_jobs_failed_total_rate30m{external_dependencies!="yes",shard="database-throttled",type="sidekiq"}
         )
       )
       or
@@ -2348,7 +2426,7 @@ groups:
       type: sidekiq
     expr: |
       sum by (env,environment,stage) (
-        sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate30m{le="+Inf",shard="elasticsearch",type="sidekiq"}
+        sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate30m{external_dependencies!="yes",le="+Inf",shard="elasticsearch",type="sidekiq"}
       )
   - record: gitlab_component_errors:rate_30m
     labels:
@@ -2358,7 +2436,7 @@ groups:
     expr: |
       (
         sum by (env,environment,stage) (
-          sli_aggregations:sidekiq_jobs_failed_total_rate30m{shard="elasticsearch",type="sidekiq"}
+          sli_aggregations:sidekiq_jobs_failed_total_rate30m{external_dependencies!="yes",shard="elasticsearch",type="sidekiq"}
         )
       )
       or
@@ -2438,7 +2516,7 @@ groups:
       type: sidekiq
     expr: |
       sum by (env,environment,stage) (
-        sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate30m{le="+Inf",shard="gitaly-throttled",type="sidekiq"}
+        sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate30m{external_dependencies!="yes",le="+Inf",shard="gitaly-throttled",type="sidekiq"}
       )
   - record: gitlab_component_errors:rate_30m
     labels:
@@ -2448,7 +2526,7 @@ groups:
     expr: |
       (
         sum by (env,environment,stage) (
-          sli_aggregations:sidekiq_jobs_failed_total_rate30m{shard="gitaly-throttled",type="sidekiq"}
+          sli_aggregations:sidekiq_jobs_failed_total_rate30m{external_dependencies!="yes",shard="gitaly-throttled",type="sidekiq"}
         )
       )
       or
@@ -2528,7 +2606,7 @@ groups:
       type: sidekiq
     expr: |
       sum by (env,environment,stage) (
-        sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate30m{le="+Inf",shard="low-urgency-cpu-bound",type="sidekiq"}
+        sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate30m{external_dependencies!="yes",le="+Inf",shard="low-urgency-cpu-bound",type="sidekiq"}
       )
   - record: gitlab_component_errors:rate_30m
     labels:
@@ -2538,7 +2616,7 @@ groups:
     expr: |
       (
         sum by (env,environment,stage) (
-          sli_aggregations:sidekiq_jobs_failed_total_rate30m{shard="low-urgency-cpu-bound",type="sidekiq"}
+          sli_aggregations:sidekiq_jobs_failed_total_rate30m{external_dependencies!="yes",shard="low-urgency-cpu-bound",type="sidekiq"}
         )
       )
       or
@@ -2618,7 +2696,7 @@ groups:
       type: sidekiq
     expr: |
       sum by (env,environment,stage) (
-        sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate30m{le="+Inf",shard="memory-bound",type="sidekiq"}
+        sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate30m{external_dependencies!="yes",le="+Inf",shard="memory-bound",type="sidekiq"}
       )
   - record: gitlab_component_errors:rate_30m
     labels:
@@ -2628,7 +2706,7 @@ groups:
     expr: |
       (
         sum by (env,environment,stage) (
-          sli_aggregations:sidekiq_jobs_failed_total_rate30m{shard="memory-bound",type="sidekiq"}
+          sli_aggregations:sidekiq_jobs_failed_total_rate30m{external_dependencies!="yes",shard="memory-bound",type="sidekiq"}
         )
       )
       or
@@ -2708,7 +2786,7 @@ groups:
       type: sidekiq
     expr: |
       sum by (env,environment,stage) (
-        sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate30m{le="+Inf",shard="quarantine",type="sidekiq"}
+        sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate30m{external_dependencies!="yes",le="+Inf",shard="quarantine",type="sidekiq"}
       )
   - record: gitlab_component_errors:rate_30m
     labels:
@@ -2718,7 +2796,7 @@ groups:
     expr: |
       (
         sum by (env,environment,stage) (
-          sli_aggregations:sidekiq_jobs_failed_total_rate30m{shard="quarantine",type="sidekiq"}
+          sli_aggregations:sidekiq_jobs_failed_total_rate30m{external_dependencies!="yes",shard="quarantine",type="sidekiq"}
         )
       )
       or
@@ -2798,7 +2876,7 @@ groups:
       type: sidekiq
     expr: |
       sum by (env,environment,stage) (
-        sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate30m{le="+Inf",shard="urgent-authorized-projects",type="sidekiq"}
+        sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate30m{external_dependencies!="yes",le="+Inf",shard="urgent-authorized-projects",type="sidekiq"}
       )
   - record: gitlab_component_errors:rate_30m
     labels:
@@ -2808,7 +2886,7 @@ groups:
     expr: |
       (
         sum by (env,environment,stage) (
-          sli_aggregations:sidekiq_jobs_failed_total_rate30m{shard="urgent-authorized-projects",type="sidekiq"}
+          sli_aggregations:sidekiq_jobs_failed_total_rate30m{external_dependencies!="yes",shard="urgent-authorized-projects",type="sidekiq"}
         )
       )
       or
@@ -2888,7 +2966,7 @@ groups:
       type: sidekiq
     expr: |
       sum by (env,environment,stage) (
-        sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate30m{le="+Inf",shard="urgent-cpu-bound",type="sidekiq"}
+        sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate30m{external_dependencies!="yes",le="+Inf",shard="urgent-cpu-bound",type="sidekiq"}
       )
   - record: gitlab_component_errors:rate_30m
     labels:
@@ -2898,7 +2976,7 @@ groups:
     expr: |
       (
         sum by (env,environment,stage) (
-          sli_aggregations:sidekiq_jobs_failed_total_rate30m{shard="urgent-cpu-bound",type="sidekiq"}
+          sli_aggregations:sidekiq_jobs_failed_total_rate30m{external_dependencies!="yes",shard="urgent-cpu-bound",type="sidekiq"}
         )
       )
       or
@@ -2978,7 +3056,7 @@ groups:
       type: sidekiq
     expr: |
       sum by (env,environment,stage) (
-        sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate30m{le="+Inf",shard="urgent-other",type="sidekiq"}
+        sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate30m{external_dependencies!="yes",le="+Inf",shard="urgent-other",type="sidekiq"}
       )
   - record: gitlab_component_errors:rate_30m
     labels:
@@ -2988,7 +3066,7 @@ groups:
     expr: |
       (
         sum by (env,environment,stage) (
-          sli_aggregations:sidekiq_jobs_failed_total_rate30m{shard="urgent-other",type="sidekiq"}
+          sli_aggregations:sidekiq_jobs_failed_total_rate30m{external_dependencies!="yes",shard="urgent-other",type="sidekiq"}
         )
       )
       or
@@ -3085,7 +3163,7 @@ groups:
   rules:
   - record: sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate1h
     expr: |
-      sum by (environment,feature_category,job,le,queue,shard,stage,tier,type,urgency,worker) (
+      sum by (environment,error,external_dependencies,feature_category,job,le,queue,shard,stage,tier,type,urgency,worker) (
         rate(sidekiq_jobs_completion_seconds_bucket[1h])
       )
   - record: sli_aggregations:sidekiq_jobs_queue_duration_seconds_bucket_rate1h
@@ -3095,7 +3173,7 @@ groups:
       )
   - record: sli_aggregations:sidekiq_jobs_failed_total_rate1h
     expr: |
-      sum by (environment,feature_category,job,queue,shard,stage,tier,type,urgency,worker) (
+      sum by (environment,error,external_dependencies,feature_category,job,queue,shard,stage,tier,type,urgency,worker) (
         rate(sidekiq_jobs_failed_total[1h])
       )
   - record: gitlab_component_ops:rate_1h
@@ -3122,6 +3200,32 @@ groups:
       (
         0 * group by(env,environment,stage) (
           gitlab_component_ops:rate_1h{component="email_receiver",tier="sv",type="sidekiq"}
+        )
+      )
+  - record: gitlab_component_ops:rate_1h
+    labels:
+      component: external_dependency
+      tier: sv
+      type: sidekiq
+    expr: |
+      sum by (env,environment,stage) (
+        sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate1h{external_dependencies=~"yes",le="+Inf",type="sidekiq"}
+      )
+  - record: gitlab_component_errors:rate_1h
+    labels:
+      component: external_dependency
+      tier: sv
+      type: sidekiq
+    expr: |
+      (
+        sum by (env,environment,stage) (
+          sli_aggregations:sidekiq_jobs_failed_total_rate1h{external_dependencies=~"yes",type="sidekiq"}
+        )
+      )
+      or
+      (
+        0 * group by(env,environment,stage) (
+          gitlab_component_ops:rate_1h{component="external_dependency",tier="sv",type="sidekiq"}
         )
       )
   - record: gitlab_component_apdex:success:rate_1h
@@ -3225,7 +3329,7 @@ groups:
       upscale_source: "yes"
     expr: |
       sum by (env,environment,stage) (
-        sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate1h{le="+Inf",shard="catchall",type="sidekiq"}
+        sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate1h{external_dependencies!="yes",le="+Inf",shard="catchall",type="sidekiq"}
       )
   - record: gitlab_component_errors:rate_1h
     labels:
@@ -3236,7 +3340,7 @@ groups:
     expr: |
       (
         sum by (env,environment,stage) (
-          sli_aggregations:sidekiq_jobs_failed_total_rate1h{shard="catchall",type="sidekiq"}
+          sli_aggregations:sidekiq_jobs_failed_total_rate1h{external_dependencies!="yes",shard="catchall",type="sidekiq"}
         )
       )
       or
@@ -3319,7 +3423,7 @@ groups:
       upscale_source: "yes"
     expr: |
       sum by (env,environment,stage) (
-        sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate1h{le="+Inf",shard="database-throttled",type="sidekiq"}
+        sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate1h{external_dependencies!="yes",le="+Inf",shard="database-throttled",type="sidekiq"}
       )
   - record: gitlab_component_errors:rate_1h
     labels:
@@ -3330,7 +3434,7 @@ groups:
     expr: |
       (
         sum by (env,environment,stage) (
-          sli_aggregations:sidekiq_jobs_failed_total_rate1h{shard="database-throttled",type="sidekiq"}
+          sli_aggregations:sidekiq_jobs_failed_total_rate1h{external_dependencies!="yes",shard="database-throttled",type="sidekiq"}
         )
       )
       or
@@ -3413,7 +3517,7 @@ groups:
       upscale_source: "yes"
     expr: |
       sum by (env,environment,stage) (
-        sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate1h{le="+Inf",shard="elasticsearch",type="sidekiq"}
+        sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate1h{external_dependencies!="yes",le="+Inf",shard="elasticsearch",type="sidekiq"}
       )
   - record: gitlab_component_errors:rate_1h
     labels:
@@ -3424,7 +3528,7 @@ groups:
     expr: |
       (
         sum by (env,environment,stage) (
-          sli_aggregations:sidekiq_jobs_failed_total_rate1h{shard="elasticsearch",type="sidekiq"}
+          sli_aggregations:sidekiq_jobs_failed_total_rate1h{external_dependencies!="yes",shard="elasticsearch",type="sidekiq"}
         )
       )
       or
@@ -3507,7 +3611,7 @@ groups:
       upscale_source: "yes"
     expr: |
       sum by (env,environment,stage) (
-        sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate1h{le="+Inf",shard="gitaly-throttled",type="sidekiq"}
+        sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate1h{external_dependencies!="yes",le="+Inf",shard="gitaly-throttled",type="sidekiq"}
       )
   - record: gitlab_component_errors:rate_1h
     labels:
@@ -3518,7 +3622,7 @@ groups:
     expr: |
       (
         sum by (env,environment,stage) (
-          sli_aggregations:sidekiq_jobs_failed_total_rate1h{shard="gitaly-throttled",type="sidekiq"}
+          sli_aggregations:sidekiq_jobs_failed_total_rate1h{external_dependencies!="yes",shard="gitaly-throttled",type="sidekiq"}
         )
       )
       or
@@ -3601,7 +3705,7 @@ groups:
       upscale_source: "yes"
     expr: |
       sum by (env,environment,stage) (
-        sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate1h{le="+Inf",shard="low-urgency-cpu-bound",type="sidekiq"}
+        sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate1h{external_dependencies!="yes",le="+Inf",shard="low-urgency-cpu-bound",type="sidekiq"}
       )
   - record: gitlab_component_errors:rate_1h
     labels:
@@ -3612,7 +3716,7 @@ groups:
     expr: |
       (
         sum by (env,environment,stage) (
-          sli_aggregations:sidekiq_jobs_failed_total_rate1h{shard="low-urgency-cpu-bound",type="sidekiq"}
+          sli_aggregations:sidekiq_jobs_failed_total_rate1h{external_dependencies!="yes",shard="low-urgency-cpu-bound",type="sidekiq"}
         )
       )
       or
@@ -3695,7 +3799,7 @@ groups:
       upscale_source: "yes"
     expr: |
       sum by (env,environment,stage) (
-        sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate1h{le="+Inf",shard="memory-bound",type="sidekiq"}
+        sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate1h{external_dependencies!="yes",le="+Inf",shard="memory-bound",type="sidekiq"}
       )
   - record: gitlab_component_errors:rate_1h
     labels:
@@ -3706,7 +3810,7 @@ groups:
     expr: |
       (
         sum by (env,environment,stage) (
-          sli_aggregations:sidekiq_jobs_failed_total_rate1h{shard="memory-bound",type="sidekiq"}
+          sli_aggregations:sidekiq_jobs_failed_total_rate1h{external_dependencies!="yes",shard="memory-bound",type="sidekiq"}
         )
       )
       or
@@ -3789,7 +3893,7 @@ groups:
       upscale_source: "yes"
     expr: |
       sum by (env,environment,stage) (
-        sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate1h{le="+Inf",shard="quarantine",type="sidekiq"}
+        sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate1h{external_dependencies!="yes",le="+Inf",shard="quarantine",type="sidekiq"}
       )
   - record: gitlab_component_errors:rate_1h
     labels:
@@ -3800,7 +3904,7 @@ groups:
     expr: |
       (
         sum by (env,environment,stage) (
-          sli_aggregations:sidekiq_jobs_failed_total_rate1h{shard="quarantine",type="sidekiq"}
+          sli_aggregations:sidekiq_jobs_failed_total_rate1h{external_dependencies!="yes",shard="quarantine",type="sidekiq"}
         )
       )
       or
@@ -3883,7 +3987,7 @@ groups:
       upscale_source: "yes"
     expr: |
       sum by (env,environment,stage) (
-        sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate1h{le="+Inf",shard="urgent-authorized-projects",type="sidekiq"}
+        sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate1h{external_dependencies!="yes",le="+Inf",shard="urgent-authorized-projects",type="sidekiq"}
       )
   - record: gitlab_component_errors:rate_1h
     labels:
@@ -3894,7 +3998,7 @@ groups:
     expr: |
       (
         sum by (env,environment,stage) (
-          sli_aggregations:sidekiq_jobs_failed_total_rate1h{shard="urgent-authorized-projects",type="sidekiq"}
+          sli_aggregations:sidekiq_jobs_failed_total_rate1h{external_dependencies!="yes",shard="urgent-authorized-projects",type="sidekiq"}
         )
       )
       or
@@ -3977,7 +4081,7 @@ groups:
       upscale_source: "yes"
     expr: |
       sum by (env,environment,stage) (
-        sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate1h{le="+Inf",shard="urgent-cpu-bound",type="sidekiq"}
+        sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate1h{external_dependencies!="yes",le="+Inf",shard="urgent-cpu-bound",type="sidekiq"}
       )
   - record: gitlab_component_errors:rate_1h
     labels:
@@ -3988,7 +4092,7 @@ groups:
     expr: |
       (
         sum by (env,environment,stage) (
-          sli_aggregations:sidekiq_jobs_failed_total_rate1h{shard="urgent-cpu-bound",type="sidekiq"}
+          sli_aggregations:sidekiq_jobs_failed_total_rate1h{external_dependencies!="yes",shard="urgent-cpu-bound",type="sidekiq"}
         )
       )
       or
@@ -4071,7 +4175,7 @@ groups:
       upscale_source: "yes"
     expr: |
       sum by (env,environment,stage) (
-        sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate1h{le="+Inf",shard="urgent-other",type="sidekiq"}
+        sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate1h{external_dependencies!="yes",le="+Inf",shard="urgent-other",type="sidekiq"}
       )
   - record: gitlab_component_errors:rate_1h
     labels:
@@ -4082,7 +4186,7 @@ groups:
     expr: |
       (
         sum by (env,environment,stage) (
-          sli_aggregations:sidekiq_jobs_failed_total_rate1h{shard="urgent-other",type="sidekiq"}
+          sli_aggregations:sidekiq_jobs_failed_total_rate1h{external_dependencies!="yes",shard="urgent-other",type="sidekiq"}
         )
       )
       or
@@ -4177,6 +4281,16 @@ groups:
 - name: 'Component-Level SLIs: sidekiq - 6h burn-rate'
   interval: 2m
   rules:
+  - record: sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate6h
+    expr: |
+      sum by (environment,error,external_dependencies,feature_category,job,le,queue,shard,stage,tier,type,urgency,worker) (
+        rate(sidekiq_jobs_completion_seconds_bucket[6h])
+      )
+  - record: sli_aggregations:sidekiq_jobs_failed_total_rate6h
+    expr: |
+      sum by (environment,error,external_dependencies,feature_category,job,queue,shard,stage,tier,type,urgency,worker) (
+        rate(sidekiq_jobs_failed_total[6h])
+      )
   - record: gitlab_component_ops:rate_6h
     labels:
       component: email_receiver
@@ -4201,6 +4315,32 @@ groups:
       (
         0 * group by(env,environment,stage) (
           gitlab_component_ops:rate_6h{component="email_receiver",tier="sv",type="sidekiq"}
+        )
+      )
+  - record: gitlab_component_ops:rate_6h
+    labels:
+      component: external_dependency
+      tier: sv
+      type: sidekiq
+    expr: |
+      sum by (env,environment,stage) (
+        sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate6h{external_dependencies=~"yes",le="+Inf",type="sidekiq"}
+      )
+  - record: gitlab_component_errors:rate_6h
+    labels:
+      component: external_dependency
+      tier: sv
+      type: sidekiq
+    expr: |
+      (
+        sum by (env,environment,stage) (
+          sli_aggregations:sidekiq_jobs_failed_total_rate6h{external_dependencies=~"yes",type="sidekiq"}
+        )
+      )
+      or
+      (
+        0 * group by(env,environment,stage) (
+          gitlab_component_ops:rate_6h{component="external_dependency",tier="sv",type="sidekiq"}
         )
       )
   - record: gitlab_component_apdex:success:rate_6h
@@ -4236,6 +4376,15 @@ groups:
   - record: gitlab_component_service:mapping
     labels:
       component: email_receiver
+      global_aggregation: "no"
+      regional_aggregation: "no"
+      service_aggregation: "yes"
+      tier: sv
+      type: sidekiq
+    expr: "1"
+  - record: gitlab_component_service:mapping
+    labels:
+      component: external_dependency
       global_aggregation: "no"
       regional_aggregation: "no"
       service_aggregation: "yes"

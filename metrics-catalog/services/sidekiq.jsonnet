@@ -133,12 +133,12 @@ metricsCatalog.serviceDefinition({
 
       requestRate: rateMetric(
         counter='sidekiq_jobs_completion_seconds_bucket',
-        selector=shardSelector { le: '+Inf' },
+        selector=shardSelector { le: '+Inf' , external_dependencies: { ne: 'yes' } },
       ),
 
       errorRate: rateMetric(
         counter='sidekiq_jobs_failed_total',
-        selector=shardSelector,
+        selector=shardSelector { external_dependencies: { ne: 'yes' } },
       ),
 
       // Note: these labels will also be included in the
@@ -173,6 +173,32 @@ metricsCatalog.serviceDefinition({
       ),
     }
     for shard in sidekiqHelpers.shards.listAll()
+  } + {
+    external_dependency: {
+      userImpacting: true,
+      severity: 's3',
+      feature_category: 'not_owned',
+      team: 'scalability',
+      description: |||
+        Cross shard jobs with external dependencies.
+      |||,
+
+      requestRate: rateMetric(
+        counter='sidekiq_jobs_completion_seconds_bucket',
+        selector=baseSelector { le: '+Inf' , external_dependencies: { re: 'yes' } },
+      ),
+
+      errorRate: rateMetric(
+        counter='sidekiq_jobs_failed_total',
+        selector=baseSelector { external_dependencies: { re: 'yes' } },
+      ),
+
+      monitoringThresholds+: {
+        errorRatio: 0.5,
+      },
+
+      significantLabels: ['error'],
+    },
   } + {
     email_receiver: {
       userImpacting: true,
