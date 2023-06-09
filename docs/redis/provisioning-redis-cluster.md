@@ -87,7 +87,7 @@ Provision the VMs via the generic-stor/google terraform module. This is done in 
 After the MR is merged and applied, check the VM state via:
 
 ```
-gcloud compute instances list --project gitlab-production | grep 'redis-cluster-ratelimiting'
+gcloud compute instances list --project gitlab-production | grep 'redis-cluster-<INSTANCE_TYPE>'
 ```
 
 You need to wait for the initial chef-client run to complete.
@@ -101,19 +101,27 @@ gcloud compute --project=<gitlab-production/gitlab-staging-1> instances tail-ser
 
 ### 4. Initialising the cluster
 
-Run the following inside an instance by SSH-ing into it.
+a. Run the following inside an instance by SSH-ing into it. Note that depending on the cluster-size, the for-loops will need to be updated.
 
 ```
 export ENV=<ENV>
 export PROJECT=gitlab-production # or gitlab-staging-1
 export DEPLOYMENT=redis-cluster-<INSTANCE_TYPE>
+```
 
+b. Use the following command to connect the master-nodes and initialise a working cluster. Add more shard FQDN where necessary. e.g. `$DEPLOYMENT-shard-<shard_number>-01-db-$ENV.c.$PROJECT.internal:6379`.
 
+```
 sudo gitlab-redis-cli --cluster create \
   $DEPLOYMENT-shard-01-01-db-$ENV.c.$PROJECT.internal:6379 \
   $DEPLOYMENT-shard-02-01-db-$ENV.c.$PROJECT.internal:6379 \
   $DEPLOYMENT-shard-03-01-db-$ENV.c.$PROJECT.internal:6379
 
+```
+
+Use the following command to connect the remaining nodes to the cluster.  Update `{01, 02, 03, ... n}-{02,03,..n}` where necessary.
+
+```
 
 for i in {01,02,03}-{02,03}; do
   sudo gitlab-redis-cli --cluster add-node \
@@ -121,7 +129,11 @@ for i in {01,02,03}-{02,03}; do
     $DEPLOYMENT-shard-01-01-db-$ENV.c.$PROJECT.internal:6379
   sleep 2
 done
+```
 
+Use the following command, to assign the replicas within each shard. Update `{01, 02, 03, ... n}-{02,03,..n}` where necessary.
+
+```
 for i in {01,02,03}; do
   for j in {02,03}; do
     node_id="$(sudo gitlab-redis-cli cluster nodes | grep $DEPLOYMENT-shard-$i-01-db-$ENV.c.$PROJECT.internal | awk '{ print $1 }')";
@@ -129,7 +141,6 @@ for i in {01,02,03}; do
       cluster replicate $node_id
   done
 done
-
 ```
 
 ### 5. Validation
@@ -244,3 +255,13 @@ gitlab-redis-cluster-<INSTANCE_TYPE>-rails-credential-v1:
 b. Update Gitlab Rails `.Values.global.redis` accordingly.
 
 Either add a new key to `.Values.global.redis.<RAILS_INSTANCE_NAME>` or `.Values.global.redis.redisYmlOverride.<RAILS_INSTANCE_NAME>`. An example MR can be found [here](https://gitlab.com/gitlab-com/gl-infra/k8s-workloads/gitlab-com/-/merge_requests/2753).
+
+### 3. Troubleshooting
+
+#### No metrics on dashboard
+
+This was encountered when provisioning the [production instance of redis-cluster-chat-cache](https://gitlab.com/gitlab-com/gl-infra/scalability/-/issues/2358#note_1406105979). To resolve this, run chef-repo on Prometheus with:
+
+```
+knife ssh roles:gprd-infra-prometheus-server "sudo chef-client"
+```
