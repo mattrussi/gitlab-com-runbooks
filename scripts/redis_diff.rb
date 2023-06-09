@@ -8,14 +8,14 @@ require 'yaml'
 #
 # Pre-requisite: Create 2 files, source.yml and destination.yml with details of
 # the source and destination redis instances.
-# option 1: url redis://<username>:<password>@<host>:<port>
+# option 1: url: redis://<username>:<password>@<host>:<port>
 # if cluster, define cluster(list of objects with host and port keys) + username + password
 
 options = {}
 OptionParser.new do |opts|
   opts.banner = "Usage: example.rb [options]"
 
-  opts.on("-m", "--migrate", "Run verbosely") do |v|
+  opts.on("-m", "--migrate", "Copy mismatched key values (and their TTLs) from src to dst redis") do |v|
     options[:migrate] = v
   end
 
