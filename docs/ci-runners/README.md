@@ -381,11 +381,9 @@ Every new CIDR should start at directly after the previously reserved one ends.
 | `GCP/gitlab-ci-private-2`                  | `ephemeral-runners/ephemeral-runners`      | `10.10.72.0/21`  |
 | `GCP/gitlab-ci-private-3`                  | `ephemeral-runners/ephemeral-runners`      | `10.10.80.0/21`  |
 | `GCP/gitlab-ci-private-4`                  | `ephemeral-runners/ephemeral-runners`      | `10.10.88.0/21`  |
-| `GCP/gitlab-ci-private-5`                  | `ephemeral-runners/ephemeral-runners`      | `10.11.64.0/21`  |
-| `GCP/gitlab-ci-private-6`                  | `ephemeral-runners/ephemeral-runners`      | `10.11.72.0/21`  |
-| `                                          |                                            | `10.10.96.0/21`  |
-|                                            |                                            | `10.10.104.0/21` |
-|                                            |                                            | `10.10.112.0/21` |
+| `GCP/gitlab-r-saas-l-m-amd64-gpu-1`        | `ephemeral-runners/ephemeral-runners`      | `10.10.96.0/21`  |
+| `GCP/gitlab-r-saas-l-m-amd64-gpu-2`        | `ephemeral-runners/ephemeral-runners`      | `10.10.104.0/21` |
+| `GCP/gitlab-r-saas-l-m-amd64-gpu-3`        | `ephemeral-runners/ephemeral-runners`      | `10.10.112.0/21` |
 | `GCP/gitlab-r-saas-l-m-amd64-1`            | `ephemeral-runners/ephemeral-runners`      | `10.10.120.0/21` |
 | `GCP/gitlab-r-saas-l-m-amd64-2`            | `ephemeral-runners/ephemeral-runners`      | `10.10.128.0/21` |
 | `GCP/gitlab-r-saas-l-m-amd64-3`            | `ephemeral-runners/ephemeral-runners`      | `10.10.136.0/21` |
@@ -406,6 +404,15 @@ Every new CIDR should start at directly after the previously reserved one ends.
 | `GCP/gitlab-r-saas-l-l-amd64-gpu-3`        | `ephemeral-runners/tmp-ephemeral-runners`  | `10.11.8.0/21`   |
 | `GCP/gitlab-r-saas-l-l-amd64-gpu-4`        | `ephemeral-runners/tmp-ephemeral-runners`  | `10.11.16.0/21`  |
 | `GCP/gitlab-r-saas-l-l-amd64-gpu-5`        | `ephemeral-runners/tmp-ephemeral-runners`  | `10.11.24.0/21`  |
+| `GCP/gitlab-r-saas-l-m-amd64-gitlab-org-1` | `ephemeral-runners/ephemeral-runners`      | `10.11.32.0/21`  |
+| `GCP/gitlab-r-saas-l-m-amd64-gitlab-org-2` | `ephemeral-runners/ephemeral-runners`      | `10.11.40.0/21`  |
+| `GCP/gitlab-r-saas-l-m-amd64-gitlab-org-3` | `ephemeral-runners/ephemeral-runners`      | `10.11.48.0/21`  |
+| `GCP/gitlab-r-saas-l-m-amd64-gitlab-org-4` | `ephemeral-runners/ephemeral-runners`      | `10.11.56.0/21`  |
+| `GCP/gitlab-ci-private-5`                  | `ephemeral-runners/ephemeral-runners`      | `10.11.64.0/21`  |
+| `GCP/gitlab-ci-private-6`                  | `ephemeral-runners/ephemeral-runners`      | `10.11.72.0/21`  |
+| `GCP/gitlab-r-saas-l-m-amd64-gpu-1`        | `ephemeral-runners/tmp-ephemeral-runners`  | `10.11.80.0/21`  |
+| `GCP/gitlab-r-saas-l-m-amd64-gpu-2`        | `ephemeral-runners/tmp-ephemeral-runners`  | `10.11.88.0/21`  |
+| `GCP/gitlab-r-saas-l-m-amd64-gpu-3`        | `ephemeral-runners/tmp-ephemeral-runners`  | `10.11.96.0/21`  |
 | `AWS/r-saas-m-staging`                     | `jobs-vpc/saas-macos-staging-blue-1`       | `10.20.0.0/21`   |
 | `AWS/r-saas-m-staging`                     | `jobs-vpc/saas-macos-staging-blue-2`       | `10.20.8.0/21`   |
 | `AWS/r-saas-m-staging`                     | `jobs-vpc/saas-macos-staging-green-1`      | `10.20.16.0/21`  |
@@ -414,10 +421,6 @@ Every new CIDR should start at directly after the previously reserved one ends.
 | `AWS/r-saas-m-m1`                          | `jobs-vpc/saas-macos-m1-blue-2`            | `10.30.8.0/21`   |
 | `AWS/r-saas-m-m1`                          | `jobs-vpc/saas-macos-m1-green-1`           | `10.30.16.0/21`  |
 | `AWS/r-saas-m-m1`                          | `jobs-vpc/saas-macos-m1-green-2`           | `10.30.24.0/21`  |
-| `GCP/gitlab-r-saas-l-m-amd64-gitlab-org-1` | `ephemeral-runners/ephemeral-runners`      | `10.11.32.0/21`  |
-| `GCP/gitlab-r-saas-l-m-amd64-gitlab-org-2` | `ephemeral-runners/ephemeral-runners`      | `10.11.40.0/21`  |
-| `GCP/gitlab-r-saas-l-m-amd64-gitlab-org-3` | `ephemeral-runners/ephemeral-runners`      | `10.11.48.0/21`  |
-| `GCP/gitlab-r-saas-l-m-amd64-gitlab-org-4` | `ephemeral-runners/ephemeral-runners`      | `10.11.56.0/21`  |
 
 ##### `ci-gateway` ILB firewall
 
