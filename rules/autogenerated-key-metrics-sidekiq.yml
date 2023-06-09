@@ -11,7 +11,7 @@ groups:
       )
   - record: sli_aggregations:sidekiq_jobs_queue_duration_seconds_bucket_rate1m
     expr: |
-      sum by (environment,feature_category,job,le,queue,shard,stage,tier,type,urgency,worker) (
+      sum by (environment,error,external_dependencies,feature_category,job,le,queue,shard,stage,tier,type,urgency,worker) (
         rate(sidekiq_jobs_queue_duration_seconds_bucket[1m])
       )
   - record: sli_aggregations:sidekiq_jobs_failed_total_rate1m
@@ -44,6 +44,70 @@ groups:
         0 * group by(env,environment,stage) (
           gitlab_component_ops:rate{component="email_receiver",tier="sv",type="sidekiq"}
         )
+      )
+  - record: gitlab_component_apdex:success:rate
+    labels:
+      component: external_dependency
+      tier: sv
+      type: sidekiq
+    expr: |
+      sum by (env,environment,stage) (
+        label_replace(sum by (env,environment,stage) (
+          sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate1m{le="10",type="sidekiq",urgency="high"}
+        )
+        , "_c", "0", "", "")
+        or
+        label_replace(sum by (env,environment,stage) (
+          sli_aggregations:sidekiq_jobs_queue_duration_seconds_bucket_rate1m{le="10",type="sidekiq",urgency="high"}
+        )
+        , "_c", "1", "", "")
+        or
+        label_replace(sum by (env,environment,stage) (
+          sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate1m{le="300",type="sidekiq",urgency="low"}
+        )
+        , "_c", "2", "", "")
+        or
+        label_replace(sum by (env,environment,stage) (
+          sli_aggregations:sidekiq_jobs_queue_duration_seconds_bucket_rate1m{le="60",type="sidekiq",urgency="low"}
+        )
+        , "_c", "3", "", "")
+        or
+        label_replace(sum by (env,environment,stage) (
+          sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate1m{le="300",type="sidekiq",urgency="throttled"}
+        )
+        , "_c", "4", "", "")
+      )
+  - record: gitlab_component_apdex:weight:score
+    labels:
+      component: external_dependency
+      tier: sv
+      type: sidekiq
+    expr: |
+      sum by (env,environment,stage) (
+        label_replace(sum by (env,environment,stage) (
+          sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate1m{le="+Inf",type="sidekiq",urgency="high"}
+        )
+        , "_c", "0", "", "")
+        or
+        label_replace(sum by (env,environment,stage) (
+          sli_aggregations:sidekiq_jobs_queue_duration_seconds_bucket_rate1m{le="+Inf",type="sidekiq",urgency="high"}
+        )
+        , "_c", "1", "", "")
+        or
+        label_replace(sum by (env,environment,stage) (
+          sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate1m{le="+Inf",type="sidekiq",urgency="low"}
+        )
+        , "_c", "2", "", "")
+        or
+        label_replace(sum by (env,environment,stage) (
+          sli_aggregations:sidekiq_jobs_queue_duration_seconds_bucket_rate1m{le="+Inf",type="sidekiq",urgency="low"}
+        )
+        , "_c", "3", "", "")
+        or
+        label_replace(sum by (env,environment,stage) (
+          sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate1m{le="+Inf",type="sidekiq",urgency="throttled"}
+        )
+        , "_c", "4", "", "")
       )
   - record: gitlab_component_ops:rate
     labels:
@@ -106,27 +170,27 @@ groups:
     expr: |
       sum by (env,environment,stage) (
         label_replace(sum by (env,environment,stage) (
-          sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate1m{le="10",shard="catchall",type="sidekiq",urgency="high"}
+          sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate1m{external_dependencies!="yes",le="10",shard="catchall",type="sidekiq",urgency="high"}
         )
         , "_c", "0", "", "")
         or
         label_replace(sum by (env,environment,stage) (
-          sli_aggregations:sidekiq_jobs_queue_duration_seconds_bucket_rate1m{le="10",shard="catchall",type="sidekiq",urgency="high"}
+          sli_aggregations:sidekiq_jobs_queue_duration_seconds_bucket_rate1m{external_dependencies!="yes",le="10",shard="catchall",type="sidekiq",urgency="high"}
         )
         , "_c", "1", "", "")
         or
         label_replace(sum by (env,environment,stage) (
-          sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate1m{le="300",shard="catchall",type="sidekiq",urgency="low"}
+          sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate1m{external_dependencies!="yes",le="300",shard="catchall",type="sidekiq",urgency="low"}
         )
         , "_c", "2", "", "")
         or
         label_replace(sum by (env,environment,stage) (
-          sli_aggregations:sidekiq_jobs_queue_duration_seconds_bucket_rate1m{le="60",shard="catchall",type="sidekiq",urgency="low"}
+          sli_aggregations:sidekiq_jobs_queue_duration_seconds_bucket_rate1m{external_dependencies!="yes",le="60",shard="catchall",type="sidekiq",urgency="low"}
         )
         , "_c", "3", "", "")
         or
         label_replace(sum by (env,environment,stage) (
-          sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate1m{le="300",shard="catchall",type="sidekiq",urgency="throttled"}
+          sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate1m{external_dependencies!="yes",le="300",shard="catchall",type="sidekiq",urgency="throttled"}
         )
         , "_c", "4", "", "")
       )
@@ -138,27 +202,27 @@ groups:
     expr: |
       sum by (env,environment,stage) (
         label_replace(sum by (env,environment,stage) (
-          sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate1m{le="+Inf",shard="catchall",type="sidekiq",urgency="high"}
+          sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate1m{external_dependencies!="yes",le="+Inf",shard="catchall",type="sidekiq",urgency="high"}
         )
         , "_c", "0", "", "")
         or
         label_replace(sum by (env,environment,stage) (
-          sli_aggregations:sidekiq_jobs_queue_duration_seconds_bucket_rate1m{le="+Inf",shard="catchall",type="sidekiq",urgency="high"}
+          sli_aggregations:sidekiq_jobs_queue_duration_seconds_bucket_rate1m{external_dependencies!="yes",le="+Inf",shard="catchall",type="sidekiq",urgency="high"}
         )
         , "_c", "1", "", "")
         or
         label_replace(sum by (env,environment,stage) (
-          sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate1m{le="+Inf",shard="catchall",type="sidekiq",urgency="low"}
+          sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate1m{external_dependencies!="yes",le="+Inf",shard="catchall",type="sidekiq",urgency="low"}
         )
         , "_c", "2", "", "")
         or
         label_replace(sum by (env,environment,stage) (
-          sli_aggregations:sidekiq_jobs_queue_duration_seconds_bucket_rate1m{le="+Inf",shard="catchall",type="sidekiq",urgency="low"}
+          sli_aggregations:sidekiq_jobs_queue_duration_seconds_bucket_rate1m{external_dependencies!="yes",le="+Inf",shard="catchall",type="sidekiq",urgency="low"}
         )
         , "_c", "3", "", "")
         or
         label_replace(sum by (env,environment,stage) (
-          sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate1m{le="+Inf",shard="catchall",type="sidekiq",urgency="throttled"}
+          sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate1m{external_dependencies!="yes",le="+Inf",shard="catchall",type="sidekiq",urgency="throttled"}
         )
         , "_c", "4", "", "")
       )
@@ -196,27 +260,27 @@ groups:
     expr: |
       sum by (env,environment,stage) (
         label_replace(sum by (env,environment,stage) (
-          sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate1m{le="10",shard="database-throttled",type="sidekiq",urgency="high"}
+          sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate1m{external_dependencies!="yes",le="10",shard="database-throttled",type="sidekiq",urgency="high"}
         )
         , "_c", "0", "", "")
         or
         label_replace(sum by (env,environment,stage) (
-          sli_aggregations:sidekiq_jobs_queue_duration_seconds_bucket_rate1m{le="10",shard="database-throttled",type="sidekiq",urgency="high"}
+          sli_aggregations:sidekiq_jobs_queue_duration_seconds_bucket_rate1m{external_dependencies!="yes",le="10",shard="database-throttled",type="sidekiq",urgency="high"}
         )
         , "_c", "1", "", "")
         or
         label_replace(sum by (env,environment,stage) (
-          sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate1m{le="300",shard="database-throttled",type="sidekiq",urgency="low"}
+          sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate1m{external_dependencies!="yes",le="300",shard="database-throttled",type="sidekiq",urgency="low"}
         )
         , "_c", "2", "", "")
         or
         label_replace(sum by (env,environment,stage) (
-          sli_aggregations:sidekiq_jobs_queue_duration_seconds_bucket_rate1m{le="60",shard="database-throttled",type="sidekiq",urgency="low"}
+          sli_aggregations:sidekiq_jobs_queue_duration_seconds_bucket_rate1m{external_dependencies!="yes",le="60",shard="database-throttled",type="sidekiq",urgency="low"}
         )
         , "_c", "3", "", "")
         or
         label_replace(sum by (env,environment,stage) (
-          sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate1m{le="300",shard="database-throttled",type="sidekiq",urgency="throttled"}
+          sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate1m{external_dependencies!="yes",le="300",shard="database-throttled",type="sidekiq",urgency="throttled"}
         )
         , "_c", "4", "", "")
       )
@@ -228,27 +292,27 @@ groups:
     expr: |
       sum by (env,environment,stage) (
         label_replace(sum by (env,environment,stage) (
-          sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate1m{le="+Inf",shard="database-throttled",type="sidekiq",urgency="high"}
+          sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate1m{external_dependencies!="yes",le="+Inf",shard="database-throttled",type="sidekiq",urgency="high"}
         )
         , "_c", "0", "", "")
         or
         label_replace(sum by (env,environment,stage) (
-          sli_aggregations:sidekiq_jobs_queue_duration_seconds_bucket_rate1m{le="+Inf",shard="database-throttled",type="sidekiq",urgency="high"}
+          sli_aggregations:sidekiq_jobs_queue_duration_seconds_bucket_rate1m{external_dependencies!="yes",le="+Inf",shard="database-throttled",type="sidekiq",urgency="high"}
         )
         , "_c", "1", "", "")
         or
         label_replace(sum by (env,environment,stage) (
-          sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate1m{le="+Inf",shard="database-throttled",type="sidekiq",urgency="low"}
+          sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate1m{external_dependencies!="yes",le="+Inf",shard="database-throttled",type="sidekiq",urgency="low"}
         )
         , "_c", "2", "", "")
         or
         label_replace(sum by (env,environment,stage) (
-          sli_aggregations:sidekiq_jobs_queue_duration_seconds_bucket_rate1m{le="+Inf",shard="database-throttled",type="sidekiq",urgency="low"}
+          sli_aggregations:sidekiq_jobs_queue_duration_seconds_bucket_rate1m{external_dependencies!="yes",le="+Inf",shard="database-throttled",type="sidekiq",urgency="low"}
         )
         , "_c", "3", "", "")
         or
         label_replace(sum by (env,environment,stage) (
-          sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate1m{le="+Inf",shard="database-throttled",type="sidekiq",urgency="throttled"}
+          sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate1m{external_dependencies!="yes",le="+Inf",shard="database-throttled",type="sidekiq",urgency="throttled"}
         )
         , "_c", "4", "", "")
       )
@@ -286,27 +350,27 @@ groups:
     expr: |
       sum by (env,environment,stage) (
         label_replace(sum by (env,environment,stage) (
-          sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate1m{le="10",shard="elasticsearch",type="sidekiq",urgency="high"}
+          sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate1m{external_dependencies!="yes",le="10",shard="elasticsearch",type="sidekiq",urgency="high"}
         )
         , "_c", "0", "", "")
         or
         label_replace(sum by (env,environment,stage) (
-          sli_aggregations:sidekiq_jobs_queue_duration_seconds_bucket_rate1m{le="10",shard="elasticsearch",type="sidekiq",urgency="high"}
+          sli_aggregations:sidekiq_jobs_queue_duration_seconds_bucket_rate1m{external_dependencies!="yes",le="10",shard="elasticsearch",type="sidekiq",urgency="high"}
         )
         , "_c", "1", "", "")
         or
         label_replace(sum by (env,environment,stage) (
-          sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate1m{le="300",shard="elasticsearch",type="sidekiq",urgency="low"}
+          sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate1m{external_dependencies!="yes",le="300",shard="elasticsearch",type="sidekiq",urgency="low"}
         )
         , "_c", "2", "", "")
         or
         label_replace(sum by (env,environment,stage) (
-          sli_aggregations:sidekiq_jobs_queue_duration_seconds_bucket_rate1m{le="60",shard="elasticsearch",type="sidekiq",urgency="low"}
+          sli_aggregations:sidekiq_jobs_queue_duration_seconds_bucket_rate1m{external_dependencies!="yes",le="60",shard="elasticsearch",type="sidekiq",urgency="low"}
         )
         , "_c", "3", "", "")
         or
         label_replace(sum by (env,environment,stage) (
-          sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate1m{le="300",shard="elasticsearch",type="sidekiq",urgency="throttled"}
+          sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate1m{external_dependencies!="yes",le="300",shard="elasticsearch",type="sidekiq",urgency="throttled"}
         )
         , "_c", "4", "", "")
       )
@@ -318,27 +382,27 @@ groups:
     expr: |
       sum by (env,environment,stage) (
         label_replace(sum by (env,environment,stage) (
-          sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate1m{le="+Inf",shard="elasticsearch",type="sidekiq",urgency="high"}
+          sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate1m{external_dependencies!="yes",le="+Inf",shard="elasticsearch",type="sidekiq",urgency="high"}
         )
         , "_c", "0", "", "")
         or
         label_replace(sum by (env,environment,stage) (
-          sli_aggregations:sidekiq_jobs_queue_duration_seconds_bucket_rate1m{le="+Inf",shard="elasticsearch",type="sidekiq",urgency="high"}
+          sli_aggregations:sidekiq_jobs_queue_duration_seconds_bucket_rate1m{external_dependencies!="yes",le="+Inf",shard="elasticsearch",type="sidekiq",urgency="high"}
         )
         , "_c", "1", "", "")
         or
         label_replace(sum by (env,environment,stage) (
-          sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate1m{le="+Inf",shard="elasticsearch",type="sidekiq",urgency="low"}
+          sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate1m{external_dependencies!="yes",le="+Inf",shard="elasticsearch",type="sidekiq",urgency="low"}
         )
         , "_c", "2", "", "")
         or
         label_replace(sum by (env,environment,stage) (
-          sli_aggregations:sidekiq_jobs_queue_duration_seconds_bucket_rate1m{le="+Inf",shard="elasticsearch",type="sidekiq",urgency="low"}
+          sli_aggregations:sidekiq_jobs_queue_duration_seconds_bucket_rate1m{external_dependencies!="yes",le="+Inf",shard="elasticsearch",type="sidekiq",urgency="low"}
         )
         , "_c", "3", "", "")
         or
         label_replace(sum by (env,environment,stage) (
-          sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate1m{le="+Inf",shard="elasticsearch",type="sidekiq",urgency="throttled"}
+          sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate1m{external_dependencies!="yes",le="+Inf",shard="elasticsearch",type="sidekiq",urgency="throttled"}
         )
         , "_c", "4", "", "")
       )
@@ -376,27 +440,27 @@ groups:
     expr: |
       sum by (env,environment,stage) (
         label_replace(sum by (env,environment,stage) (
-          sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate1m{le="10",shard="gitaly-throttled",type="sidekiq",urgency="high"}
+          sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate1m{external_dependencies!="yes",le="10",shard="gitaly-throttled",type="sidekiq",urgency="high"}
         )
         , "_c", "0", "", "")
         or
         label_replace(sum by (env,environment,stage) (
-          sli_aggregations:sidekiq_jobs_queue_duration_seconds_bucket_rate1m{le="10",shard="gitaly-throttled",type="sidekiq",urgency="high"}
+          sli_aggregations:sidekiq_jobs_queue_duration_seconds_bucket_rate1m{external_dependencies!="yes",le="10",shard="gitaly-throttled",type="sidekiq",urgency="high"}
         )
         , "_c", "1", "", "")
         or
         label_replace(sum by (env,environment,stage) (
-          sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate1m{le="300",shard="gitaly-throttled",type="sidekiq",urgency="low"}
+          sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate1m{external_dependencies!="yes",le="300",shard="gitaly-throttled",type="sidekiq",urgency="low"}
         )
         , "_c", "2", "", "")
         or
         label_replace(sum by (env,environment,stage) (
-          sli_aggregations:sidekiq_jobs_queue_duration_seconds_bucket_rate1m{le="60",shard="gitaly-throttled",type="sidekiq",urgency="low"}
+          sli_aggregations:sidekiq_jobs_queue_duration_seconds_bucket_rate1m{external_dependencies!="yes",le="60",shard="gitaly-throttled",type="sidekiq",urgency="low"}
         )
         , "_c", "3", "", "")
         or
         label_replace(sum by (env,environment,stage) (
-          sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate1m{le="300",shard="gitaly-throttled",type="sidekiq",urgency="throttled"}
+          sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate1m{external_dependencies!="yes",le="300",shard="gitaly-throttled",type="sidekiq",urgency="throttled"}
         )
         , "_c", "4", "", "")
       )
@@ -408,27 +472,27 @@ groups:
     expr: |
       sum by (env,environment,stage) (
         label_replace(sum by (env,environment,stage) (
-          sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate1m{le="+Inf",shard="gitaly-throttled",type="sidekiq",urgency="high"}
+          sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate1m{external_dependencies!="yes",le="+Inf",shard="gitaly-throttled",type="sidekiq",urgency="high"}
         )
         , "_c", "0", "", "")
         or
         label_replace(sum by (env,environment,stage) (
-          sli_aggregations:sidekiq_jobs_queue_duration_seconds_bucket_rate1m{le="+Inf",shard="gitaly-throttled",type="sidekiq",urgency="high"}
+          sli_aggregations:sidekiq_jobs_queue_duration_seconds_bucket_rate1m{external_dependencies!="yes",le="+Inf",shard="gitaly-throttled",type="sidekiq",urgency="high"}
         )
         , "_c", "1", "", "")
         or
         label_replace(sum by (env,environment,stage) (
-          sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate1m{le="+Inf",shard="gitaly-throttled",type="sidekiq",urgency="low"}
+          sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate1m{external_dependencies!="yes",le="+Inf",shard="gitaly-throttled",type="sidekiq",urgency="low"}
         )
         , "_c", "2", "", "")
         or
         label_replace(sum by (env,environment,stage) (
-          sli_aggregations:sidekiq_jobs_queue_duration_seconds_bucket_rate1m{le="+Inf",shard="gitaly-throttled",type="sidekiq",urgency="low"}
+          sli_aggregations:sidekiq_jobs_queue_duration_seconds_bucket_rate1m{external_dependencies!="yes",le="+Inf",shard="gitaly-throttled",type="sidekiq",urgency="low"}
         )
         , "_c", "3", "", "")
         or
         label_replace(sum by (env,environment,stage) (
-          sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate1m{le="+Inf",shard="gitaly-throttled",type="sidekiq",urgency="throttled"}
+          sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate1m{external_dependencies!="yes",le="+Inf",shard="gitaly-throttled",type="sidekiq",urgency="throttled"}
         )
         , "_c", "4", "", "")
       )
@@ -466,27 +530,27 @@ groups:
     expr: |
       sum by (env,environment,stage) (
         label_replace(sum by (env,environment,stage) (
-          sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate1m{le="10",shard="low-urgency-cpu-bound",type="sidekiq",urgency="high"}
+          sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate1m{external_dependencies!="yes",le="10",shard="low-urgency-cpu-bound",type="sidekiq",urgency="high"}
         )
         , "_c", "0", "", "")
         or
         label_replace(sum by (env,environment,stage) (
-          sli_aggregations:sidekiq_jobs_queue_duration_seconds_bucket_rate1m{le="10",shard="low-urgency-cpu-bound",type="sidekiq",urgency="high"}
+          sli_aggregations:sidekiq_jobs_queue_duration_seconds_bucket_rate1m{external_dependencies!="yes",le="10",shard="low-urgency-cpu-bound",type="sidekiq",urgency="high"}
         )
         , "_c", "1", "", "")
         or
         label_replace(sum by (env,environment,stage) (
-          sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate1m{le="300",shard="low-urgency-cpu-bound",type="sidekiq",urgency="low"}
+          sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate1m{external_dependencies!="yes",le="300",shard="low-urgency-cpu-bound",type="sidekiq",urgency="low"}
         )
         , "_c", "2", "", "")
         or
         label_replace(sum by (env,environment,stage) (
-          sli_aggregations:sidekiq_jobs_queue_duration_seconds_bucket_rate1m{le="60",shard="low-urgency-cpu-bound",type="sidekiq",urgency="low"}
+          sli_aggregations:sidekiq_jobs_queue_duration_seconds_bucket_rate1m{external_dependencies!="yes",le="60",shard="low-urgency-cpu-bound",type="sidekiq",urgency="low"}
         )
         , "_c", "3", "", "")
         or
         label_replace(sum by (env,environment,stage) (
-          sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate1m{le="300",shard="low-urgency-cpu-bound",type="sidekiq",urgency="throttled"}
+          sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate1m{external_dependencies!="yes",le="300",shard="low-urgency-cpu-bound",type="sidekiq",urgency="throttled"}
         )
         , "_c", "4", "", "")
       )
@@ -498,27 +562,27 @@ groups:
     expr: |
       sum by (env,environment,stage) (
         label_replace(sum by (env,environment,stage) (
-          sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate1m{le="+Inf",shard="low-urgency-cpu-bound",type="sidekiq",urgency="high"}
+          sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate1m{external_dependencies!="yes",le="+Inf",shard="low-urgency-cpu-bound",type="sidekiq",urgency="high"}
         )
         , "_c", "0", "", "")
         or
         label_replace(sum by (env,environment,stage) (
-          sli_aggregations:sidekiq_jobs_queue_duration_seconds_bucket_rate1m{le="+Inf",shard="low-urgency-cpu-bound",type="sidekiq",urgency="high"}
+          sli_aggregations:sidekiq_jobs_queue_duration_seconds_bucket_rate1m{external_dependencies!="yes",le="+Inf",shard="low-urgency-cpu-bound",type="sidekiq",urgency="high"}
         )
         , "_c", "1", "", "")
         or
         label_replace(sum by (env,environment,stage) (
-          sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate1m{le="+Inf",shard="low-urgency-cpu-bound",type="sidekiq",urgency="low"}
+          sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate1m{external_dependencies!="yes",le="+Inf",shard="low-urgency-cpu-bound",type="sidekiq",urgency="low"}
         )
         , "_c", "2", "", "")
         or
         label_replace(sum by (env,environment,stage) (
-          sli_aggregations:sidekiq_jobs_queue_duration_seconds_bucket_rate1m{le="+Inf",shard="low-urgency-cpu-bound",type="sidekiq",urgency="low"}
+          sli_aggregations:sidekiq_jobs_queue_duration_seconds_bucket_rate1m{external_dependencies!="yes",le="+Inf",shard="low-urgency-cpu-bound",type="sidekiq",urgency="low"}
         )
         , "_c", "3", "", "")
         or
         label_replace(sum by (env,environment,stage) (
-          sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate1m{le="+Inf",shard="low-urgency-cpu-bound",type="sidekiq",urgency="throttled"}
+          sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate1m{external_dependencies!="yes",le="+Inf",shard="low-urgency-cpu-bound",type="sidekiq",urgency="throttled"}
         )
         , "_c", "4", "", "")
       )
@@ -556,27 +620,27 @@ groups:
     expr: |
       sum by (env,environment,stage) (
         label_replace(sum by (env,environment,stage) (
-          sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate1m{le="10",shard="memory-bound",type="sidekiq",urgency="high"}
+          sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate1m{external_dependencies!="yes",le="10",shard="memory-bound",type="sidekiq",urgency="high"}
         )
         , "_c", "0", "", "")
         or
         label_replace(sum by (env,environment,stage) (
-          sli_aggregations:sidekiq_jobs_queue_duration_seconds_bucket_rate1m{le="10",shard="memory-bound",type="sidekiq",urgency="high"}
+          sli_aggregations:sidekiq_jobs_queue_duration_seconds_bucket_rate1m{external_dependencies!="yes",le="10",shard="memory-bound",type="sidekiq",urgency="high"}
         )
         , "_c", "1", "", "")
         or
         label_replace(sum by (env,environment,stage) (
-          sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate1m{le="300",shard="memory-bound",type="sidekiq",urgency="low"}
+          sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate1m{external_dependencies!="yes",le="300",shard="memory-bound",type="sidekiq",urgency="low"}
         )
         , "_c", "2", "", "")
         or
         label_replace(sum by (env,environment,stage) (
-          sli_aggregations:sidekiq_jobs_queue_duration_seconds_bucket_rate1m{le="60",shard="memory-bound",type="sidekiq",urgency="low"}
+          sli_aggregations:sidekiq_jobs_queue_duration_seconds_bucket_rate1m{external_dependencies!="yes",le="60",shard="memory-bound",type="sidekiq",urgency="low"}
         )
         , "_c", "3", "", "")
         or
         label_replace(sum by (env,environment,stage) (
-          sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate1m{le="300",shard="memory-bound",type="sidekiq",urgency="throttled"}
+          sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate1m{external_dependencies!="yes",le="300",shard="memory-bound",type="sidekiq",urgency="throttled"}
         )
         , "_c", "4", "", "")
       )
@@ -588,27 +652,27 @@ groups:
     expr: |
       sum by (env,environment,stage) (
         label_replace(sum by (env,environment,stage) (
-          sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate1m{le="+Inf",shard="memory-bound",type="sidekiq",urgency="high"}
+          sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate1m{external_dependencies!="yes",le="+Inf",shard="memory-bound",type="sidekiq",urgency="high"}
         )
         , "_c", "0", "", "")
         or
         label_replace(sum by (env,environment,stage) (
-          sli_aggregations:sidekiq_jobs_queue_duration_seconds_bucket_rate1m{le="+Inf",shard="memory-bound",type="sidekiq",urgency="high"}
+          sli_aggregations:sidekiq_jobs_queue_duration_seconds_bucket_rate1m{external_dependencies!="yes",le="+Inf",shard="memory-bound",type="sidekiq",urgency="high"}
         )
         , "_c", "1", "", "")
         or
         label_replace(sum by (env,environment,stage) (
-          sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate1m{le="+Inf",shard="memory-bound",type="sidekiq",urgency="low"}
+          sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate1m{external_dependencies!="yes",le="+Inf",shard="memory-bound",type="sidekiq",urgency="low"}
         )
         , "_c", "2", "", "")
         or
         label_replace(sum by (env,environment,stage) (
-          sli_aggregations:sidekiq_jobs_queue_duration_seconds_bucket_rate1m{le="+Inf",shard="memory-bound",type="sidekiq",urgency="low"}
+          sli_aggregations:sidekiq_jobs_queue_duration_seconds_bucket_rate1m{external_dependencies!="yes",le="+Inf",shard="memory-bound",type="sidekiq",urgency="low"}
         )
         , "_c", "3", "", "")
         or
         label_replace(sum by (env,environment,stage) (
-          sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate1m{le="+Inf",shard="memory-bound",type="sidekiq",urgency="throttled"}
+          sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate1m{external_dependencies!="yes",le="+Inf",shard="memory-bound",type="sidekiq",urgency="throttled"}
         )
         , "_c", "4", "", "")
       )
@@ -646,27 +710,27 @@ groups:
     expr: |
       sum by (env,environment,stage) (
         label_replace(sum by (env,environment,stage) (
-          sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate1m{le="10",shard="quarantine",type="sidekiq",urgency="high"}
+          sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate1m{external_dependencies!="yes",le="10",shard="quarantine",type="sidekiq",urgency="high"}
         )
         , "_c", "0", "", "")
         or
         label_replace(sum by (env,environment,stage) (
-          sli_aggregations:sidekiq_jobs_queue_duration_seconds_bucket_rate1m{le="10",shard="quarantine",type="sidekiq",urgency="high"}
+          sli_aggregations:sidekiq_jobs_queue_duration_seconds_bucket_rate1m{external_dependencies!="yes",le="10",shard="quarantine",type="sidekiq",urgency="high"}
         )
         , "_c", "1", "", "")
         or
         label_replace(sum by (env,environment,stage) (
-          sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate1m{le="300",shard="quarantine",type="sidekiq",urgency="low"}
+          sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate1m{external_dependencies!="yes",le="300",shard="quarantine",type="sidekiq",urgency="low"}
         )
         , "_c", "2", "", "")
         or
         label_replace(sum by (env,environment,stage) (
-          sli_aggregations:sidekiq_jobs_queue_duration_seconds_bucket_rate1m{le="60",shard="quarantine",type="sidekiq",urgency="low"}
+          sli_aggregations:sidekiq_jobs_queue_duration_seconds_bucket_rate1m{external_dependencies!="yes",le="60",shard="quarantine",type="sidekiq",urgency="low"}
         )
         , "_c", "3", "", "")
         or
         label_replace(sum by (env,environment,stage) (
-          sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate1m{le="300",shard="quarantine",type="sidekiq",urgency="throttled"}
+          sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate1m{external_dependencies!="yes",le="300",shard="quarantine",type="sidekiq",urgency="throttled"}
         )
         , "_c", "4", "", "")
       )
@@ -678,27 +742,27 @@ groups:
     expr: |
       sum by (env,environment,stage) (
         label_replace(sum by (env,environment,stage) (
-          sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate1m{le="+Inf",shard="quarantine",type="sidekiq",urgency="high"}
+          sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate1m{external_dependencies!="yes",le="+Inf",shard="quarantine",type="sidekiq",urgency="high"}
         )
         , "_c", "0", "", "")
         or
         label_replace(sum by (env,environment,stage) (
-          sli_aggregations:sidekiq_jobs_queue_duration_seconds_bucket_rate1m{le="+Inf",shard="quarantine",type="sidekiq",urgency="high"}
+          sli_aggregations:sidekiq_jobs_queue_duration_seconds_bucket_rate1m{external_dependencies!="yes",le="+Inf",shard="quarantine",type="sidekiq",urgency="high"}
         )
         , "_c", "1", "", "")
         or
         label_replace(sum by (env,environment,stage) (
-          sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate1m{le="+Inf",shard="quarantine",type="sidekiq",urgency="low"}
+          sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate1m{external_dependencies!="yes",le="+Inf",shard="quarantine",type="sidekiq",urgency="low"}
         )
         , "_c", "2", "", "")
         or
         label_replace(sum by (env,environment,stage) (
-          sli_aggregations:sidekiq_jobs_queue_duration_seconds_bucket_rate1m{le="+Inf",shard="quarantine",type="sidekiq",urgency="low"}
+          sli_aggregations:sidekiq_jobs_queue_duration_seconds_bucket_rate1m{external_dependencies!="yes",le="+Inf",shard="quarantine",type="sidekiq",urgency="low"}
         )
         , "_c", "3", "", "")
         or
         label_replace(sum by (env,environment,stage) (
-          sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate1m{le="+Inf",shard="quarantine",type="sidekiq",urgency="throttled"}
+          sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate1m{external_dependencies!="yes",le="+Inf",shard="quarantine",type="sidekiq",urgency="throttled"}
         )
         , "_c", "4", "", "")
       )
@@ -736,27 +800,27 @@ groups:
     expr: |
       sum by (env,environment,stage) (
         label_replace(sum by (env,environment,stage) (
-          sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate1m{le="10",shard="urgent-authorized-projects",type="sidekiq",urgency="high"}
+          sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate1m{external_dependencies!="yes",le="10",shard="urgent-authorized-projects",type="sidekiq",urgency="high"}
         )
         , "_c", "0", "", "")
         or
         label_replace(sum by (env,environment,stage) (
-          sli_aggregations:sidekiq_jobs_queue_duration_seconds_bucket_rate1m{le="10",shard="urgent-authorized-projects",type="sidekiq",urgency="high"}
+          sli_aggregations:sidekiq_jobs_queue_duration_seconds_bucket_rate1m{external_dependencies!="yes",le="10",shard="urgent-authorized-projects",type="sidekiq",urgency="high"}
         )
         , "_c", "1", "", "")
         or
         label_replace(sum by (env,environment,stage) (
-          sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate1m{le="300",shard="urgent-authorized-projects",type="sidekiq",urgency="low"}
+          sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate1m{external_dependencies!="yes",le="300",shard="urgent-authorized-projects",type="sidekiq",urgency="low"}
         )
         , "_c", "2", "", "")
         or
         label_replace(sum by (env,environment,stage) (
-          sli_aggregations:sidekiq_jobs_queue_duration_seconds_bucket_rate1m{le="60",shard="urgent-authorized-projects",type="sidekiq",urgency="low"}
+          sli_aggregations:sidekiq_jobs_queue_duration_seconds_bucket_rate1m{external_dependencies!="yes",le="60",shard="urgent-authorized-projects",type="sidekiq",urgency="low"}
         )
         , "_c", "3", "", "")
         or
         label_replace(sum by (env,environment,stage) (
-          sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate1m{le="300",shard="urgent-authorized-projects",type="sidekiq",urgency="throttled"}
+          sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate1m{external_dependencies!="yes",le="300",shard="urgent-authorized-projects",type="sidekiq",urgency="throttled"}
         )
         , "_c", "4", "", "")
       )
@@ -768,27 +832,27 @@ groups:
     expr: |
       sum by (env,environment,stage) (
         label_replace(sum by (env,environment,stage) (
-          sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate1m{le="+Inf",shard="urgent-authorized-projects",type="sidekiq",urgency="high"}
+          sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate1m{external_dependencies!="yes",le="+Inf",shard="urgent-authorized-projects",type="sidekiq",urgency="high"}
         )
         , "_c", "0", "", "")
         or
         label_replace(sum by (env,environment,stage) (
-          sli_aggregations:sidekiq_jobs_queue_duration_seconds_bucket_rate1m{le="+Inf",shard="urgent-authorized-projects",type="sidekiq",urgency="high"}
+          sli_aggregations:sidekiq_jobs_queue_duration_seconds_bucket_rate1m{external_dependencies!="yes",le="+Inf",shard="urgent-authorized-projects",type="sidekiq",urgency="high"}
         )
         , "_c", "1", "", "")
         or
         label_replace(sum by (env,environment,stage) (
-          sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate1m{le="+Inf",shard="urgent-authorized-projects",type="sidekiq",urgency="low"}
+          sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate1m{external_dependencies!="yes",le="+Inf",shard="urgent-authorized-projects",type="sidekiq",urgency="low"}
         )
         , "_c", "2", "", "")
         or
         label_replace(sum by (env,environment,stage) (
-          sli_aggregations:sidekiq_jobs_queue_duration_seconds_bucket_rate1m{le="+Inf",shard="urgent-authorized-projects",type="sidekiq",urgency="low"}
+          sli_aggregations:sidekiq_jobs_queue_duration_seconds_bucket_rate1m{external_dependencies!="yes",le="+Inf",shard="urgent-authorized-projects",type="sidekiq",urgency="low"}
         )
         , "_c", "3", "", "")
         or
         label_replace(sum by (env,environment,stage) (
-          sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate1m{le="+Inf",shard="urgent-authorized-projects",type="sidekiq",urgency="throttled"}
+          sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate1m{external_dependencies!="yes",le="+Inf",shard="urgent-authorized-projects",type="sidekiq",urgency="throttled"}
         )
         , "_c", "4", "", "")
       )
@@ -826,27 +890,27 @@ groups:
     expr: |
       sum by (env,environment,stage) (
         label_replace(sum by (env,environment,stage) (
-          sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate1m{le="10",shard="urgent-cpu-bound",type="sidekiq",urgency="high"}
+          sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate1m{external_dependencies!="yes",le="10",shard="urgent-cpu-bound",type="sidekiq",urgency="high"}
         )
         , "_c", "0", "", "")
         or
         label_replace(sum by (env,environment,stage) (
-          sli_aggregations:sidekiq_jobs_queue_duration_seconds_bucket_rate1m{le="10",shard="urgent-cpu-bound",type="sidekiq",urgency="high"}
+          sli_aggregations:sidekiq_jobs_queue_duration_seconds_bucket_rate1m{external_dependencies!="yes",le="10",shard="urgent-cpu-bound",type="sidekiq",urgency="high"}
         )
         , "_c", "1", "", "")
         or
         label_replace(sum by (env,environment,stage) (
-          sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate1m{le="300",shard="urgent-cpu-bound",type="sidekiq",urgency="low"}
+          sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate1m{external_dependencies!="yes",le="300",shard="urgent-cpu-bound",type="sidekiq",urgency="low"}
         )
         , "_c", "2", "", "")
         or
         label_replace(sum by (env,environment,stage) (
-          sli_aggregations:sidekiq_jobs_queue_duration_seconds_bucket_rate1m{le="60",shard="urgent-cpu-bound",type="sidekiq",urgency="low"}
+          sli_aggregations:sidekiq_jobs_queue_duration_seconds_bucket_rate1m{external_dependencies!="yes",le="60",shard="urgent-cpu-bound",type="sidekiq",urgency="low"}
         )
         , "_c", "3", "", "")
         or
         label_replace(sum by (env,environment,stage) (
-          sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate1m{le="300",shard="urgent-cpu-bound",type="sidekiq",urgency="throttled"}
+          sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate1m{external_dependencies!="yes",le="300",shard="urgent-cpu-bound",type="sidekiq",urgency="throttled"}
         )
         , "_c", "4", "", "")
       )
@@ -858,27 +922,27 @@ groups:
     expr: |
       sum by (env,environment,stage) (
         label_replace(sum by (env,environment,stage) (
-          sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate1m{le="+Inf",shard="urgent-cpu-bound",type="sidekiq",urgency="high"}
+          sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate1m{external_dependencies!="yes",le="+Inf",shard="urgent-cpu-bound",type="sidekiq",urgency="high"}
         )
         , "_c", "0", "", "")
         or
         label_replace(sum by (env,environment,stage) (
-          sli_aggregations:sidekiq_jobs_queue_duration_seconds_bucket_rate1m{le="+Inf",shard="urgent-cpu-bound",type="sidekiq",urgency="high"}
+          sli_aggregations:sidekiq_jobs_queue_duration_seconds_bucket_rate1m{external_dependencies!="yes",le="+Inf",shard="urgent-cpu-bound",type="sidekiq",urgency="high"}
         )
         , "_c", "1", "", "")
         or
         label_replace(sum by (env,environment,stage) (
-          sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate1m{le="+Inf",shard="urgent-cpu-bound",type="sidekiq",urgency="low"}
+          sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate1m{external_dependencies!="yes",le="+Inf",shard="urgent-cpu-bound",type="sidekiq",urgency="low"}
         )
         , "_c", "2", "", "")
         or
         label_replace(sum by (env,environment,stage) (
-          sli_aggregations:sidekiq_jobs_queue_duration_seconds_bucket_rate1m{le="+Inf",shard="urgent-cpu-bound",type="sidekiq",urgency="low"}
+          sli_aggregations:sidekiq_jobs_queue_duration_seconds_bucket_rate1m{external_dependencies!="yes",le="+Inf",shard="urgent-cpu-bound",type="sidekiq",urgency="low"}
         )
         , "_c", "3", "", "")
         or
         label_replace(sum by (env,environment,stage) (
-          sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate1m{le="+Inf",shard="urgent-cpu-bound",type="sidekiq",urgency="throttled"}
+          sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate1m{external_dependencies!="yes",le="+Inf",shard="urgent-cpu-bound",type="sidekiq",urgency="throttled"}
         )
         , "_c", "4", "", "")
       )
@@ -916,27 +980,27 @@ groups:
     expr: |
       sum by (env,environment,stage) (
         label_replace(sum by (env,environment,stage) (
-          sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate1m{le="10",shard="urgent-other",type="sidekiq",urgency="high"}
+          sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate1m{external_dependencies!="yes",le="10",shard="urgent-other",type="sidekiq",urgency="high"}
         )
         , "_c", "0", "", "")
         or
         label_replace(sum by (env,environment,stage) (
-          sli_aggregations:sidekiq_jobs_queue_duration_seconds_bucket_rate1m{le="10",shard="urgent-other",type="sidekiq",urgency="high"}
+          sli_aggregations:sidekiq_jobs_queue_duration_seconds_bucket_rate1m{external_dependencies!="yes",le="10",shard="urgent-other",type="sidekiq",urgency="high"}
         )
         , "_c", "1", "", "")
         or
         label_replace(sum by (env,environment,stage) (
-          sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate1m{le="300",shard="urgent-other",type="sidekiq",urgency="low"}
+          sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate1m{external_dependencies!="yes",le="300",shard="urgent-other",type="sidekiq",urgency="low"}
         )
         , "_c", "2", "", "")
         or
         label_replace(sum by (env,environment,stage) (
-          sli_aggregations:sidekiq_jobs_queue_duration_seconds_bucket_rate1m{le="60",shard="urgent-other",type="sidekiq",urgency="low"}
+          sli_aggregations:sidekiq_jobs_queue_duration_seconds_bucket_rate1m{external_dependencies!="yes",le="60",shard="urgent-other",type="sidekiq",urgency="low"}
         )
         , "_c", "3", "", "")
         or
         label_replace(sum by (env,environment,stage) (
-          sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate1m{le="300",shard="urgent-other",type="sidekiq",urgency="throttled"}
+          sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate1m{external_dependencies!="yes",le="300",shard="urgent-other",type="sidekiq",urgency="throttled"}
         )
         , "_c", "4", "", "")
       )
@@ -948,27 +1012,27 @@ groups:
     expr: |
       sum by (env,environment,stage) (
         label_replace(sum by (env,environment,stage) (
-          sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate1m{le="+Inf",shard="urgent-other",type="sidekiq",urgency="high"}
+          sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate1m{external_dependencies!="yes",le="+Inf",shard="urgent-other",type="sidekiq",urgency="high"}
         )
         , "_c", "0", "", "")
         or
         label_replace(sum by (env,environment,stage) (
-          sli_aggregations:sidekiq_jobs_queue_duration_seconds_bucket_rate1m{le="+Inf",shard="urgent-other",type="sidekiq",urgency="high"}
+          sli_aggregations:sidekiq_jobs_queue_duration_seconds_bucket_rate1m{external_dependencies!="yes",le="+Inf",shard="urgent-other",type="sidekiq",urgency="high"}
         )
         , "_c", "1", "", "")
         or
         label_replace(sum by (env,environment,stage) (
-          sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate1m{le="+Inf",shard="urgent-other",type="sidekiq",urgency="low"}
+          sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate1m{external_dependencies!="yes",le="+Inf",shard="urgent-other",type="sidekiq",urgency="low"}
         )
         , "_c", "2", "", "")
         or
         label_replace(sum by (env,environment,stage) (
-          sli_aggregations:sidekiq_jobs_queue_duration_seconds_bucket_rate1m{le="+Inf",shard="urgent-other",type="sidekiq",urgency="low"}
+          sli_aggregations:sidekiq_jobs_queue_duration_seconds_bucket_rate1m{external_dependencies!="yes",le="+Inf",shard="urgent-other",type="sidekiq",urgency="low"}
         )
         , "_c", "3", "", "")
         or
         label_replace(sum by (env,environment,stage) (
-          sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate1m{le="+Inf",shard="urgent-other",type="sidekiq",urgency="throttled"}
+          sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate1m{external_dependencies!="yes",le="+Inf",shard="urgent-other",type="sidekiq",urgency="throttled"}
         )
         , "_c", "4", "", "")
       )
@@ -1008,7 +1072,7 @@ groups:
       )
   - record: sli_aggregations:sidekiq_jobs_queue_duration_seconds_bucket_rate5m
     expr: |
-      sum by (environment,feature_category,job,le,queue,shard,stage,tier,type,urgency,worker) (
+      sum by (environment,error,external_dependencies,feature_category,job,le,queue,shard,stage,tier,type,urgency,worker) (
         rate(sidekiq_jobs_queue_duration_seconds_bucket[5m])
       )
   - record: sli_aggregations:sidekiq_jobs_failed_total_rate5m
@@ -1041,6 +1105,70 @@ groups:
         0 * group by(env,environment,stage) (
           gitlab_component_ops:rate_5m{component="email_receiver",tier="sv",type="sidekiq"}
         )
+      )
+  - record: gitlab_component_apdex:success:rate_5m
+    labels:
+      component: external_dependency
+      tier: sv
+      type: sidekiq
+    expr: |
+      sum by (env,environment,stage) (
+        label_replace(sum by (env,environment,stage) (
+          sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate5m{le="10",type="sidekiq",urgency="high"}
+        )
+        , "_c", "0", "", "")
+        or
+        label_replace(sum by (env,environment,stage) (
+          sli_aggregations:sidekiq_jobs_queue_duration_seconds_bucket_rate5m{le="10",type="sidekiq",urgency="high"}
+        )
+        , "_c", "1", "", "")
+        or
+        label_replace(sum by (env,environment,stage) (
+          sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate5m{le="300",type="sidekiq",urgency="low"}
+        )
+        , "_c", "2", "", "")
+        or
+        label_replace(sum by (env,environment,stage) (
+          sli_aggregations:sidekiq_jobs_queue_duration_seconds_bucket_rate5m{le="60",type="sidekiq",urgency="low"}
+        )
+        , "_c", "3", "", "")
+        or
+        label_replace(sum by (env,environment,stage) (
+          sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate5m{le="300",type="sidekiq",urgency="throttled"}
+        )
+        , "_c", "4", "", "")
+      )
+  - record: gitlab_component_apdex:weight:score_5m
+    labels:
+      component: external_dependency
+      tier: sv
+      type: sidekiq
+    expr: |
+      sum by (env,environment,stage) (
+        label_replace(sum by (env,environment,stage) (
+          sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate5m{le="+Inf",type="sidekiq",urgency="high"}
+        )
+        , "_c", "0", "", "")
+        or
+        label_replace(sum by (env,environment,stage) (
+          sli_aggregations:sidekiq_jobs_queue_duration_seconds_bucket_rate5m{le="+Inf",type="sidekiq",urgency="high"}
+        )
+        , "_c", "1", "", "")
+        or
+        label_replace(sum by (env,environment,stage) (
+          sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate5m{le="+Inf",type="sidekiq",urgency="low"}
+        )
+        , "_c", "2", "", "")
+        or
+        label_replace(sum by (env,environment,stage) (
+          sli_aggregations:sidekiq_jobs_queue_duration_seconds_bucket_rate5m{le="+Inf",type="sidekiq",urgency="low"}
+        )
+        , "_c", "3", "", "")
+        or
+        label_replace(sum by (env,environment,stage) (
+          sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate5m{le="+Inf",type="sidekiq",urgency="throttled"}
+        )
+        , "_c", "4", "", "")
       )
   - record: gitlab_component_ops:rate_5m
     labels:
@@ -1103,27 +1231,27 @@ groups:
     expr: |
       sum by (env,environment,stage) (
         label_replace(sum by (env,environment,stage) (
-          sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate5m{le="10",shard="catchall",type="sidekiq",urgency="high"}
+          sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate5m{external_dependencies!="yes",le="10",shard="catchall",type="sidekiq",urgency="high"}
         )
         , "_c", "0", "", "")
         or
         label_replace(sum by (env,environment,stage) (
-          sli_aggregations:sidekiq_jobs_queue_duration_seconds_bucket_rate5m{le="10",shard="catchall",type="sidekiq",urgency="high"}
+          sli_aggregations:sidekiq_jobs_queue_duration_seconds_bucket_rate5m{external_dependencies!="yes",le="10",shard="catchall",type="sidekiq",urgency="high"}
         )
         , "_c", "1", "", "")
         or
         label_replace(sum by (env,environment,stage) (
-          sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate5m{le="300",shard="catchall",type="sidekiq",urgency="low"}
+          sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate5m{external_dependencies!="yes",le="300",shard="catchall",type="sidekiq",urgency="low"}
         )
         , "_c", "2", "", "")
         or
         label_replace(sum by (env,environment,stage) (
-          sli_aggregations:sidekiq_jobs_queue_duration_seconds_bucket_rate5m{le="60",shard="catchall",type="sidekiq",urgency="low"}
+          sli_aggregations:sidekiq_jobs_queue_duration_seconds_bucket_rate5m{external_dependencies!="yes",le="60",shard="catchall",type="sidekiq",urgency="low"}
         )
         , "_c", "3", "", "")
         or
         label_replace(sum by (env,environment,stage) (
-          sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate5m{le="300",shard="catchall",type="sidekiq",urgency="throttled"}
+          sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate5m{external_dependencies!="yes",le="300",shard="catchall",type="sidekiq",urgency="throttled"}
         )
         , "_c", "4", "", "")
       )
@@ -1135,27 +1263,27 @@ groups:
     expr: |
       sum by (env,environment,stage) (
         label_replace(sum by (env,environment,stage) (
-          sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate5m{le="+Inf",shard="catchall",type="sidekiq",urgency="high"}
+          sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate5m{external_dependencies!="yes",le="+Inf",shard="catchall",type="sidekiq",urgency="high"}
         )
         , "_c", "0", "", "")
         or
         label_replace(sum by (env,environment,stage) (
-          sli_aggregations:sidekiq_jobs_queue_duration_seconds_bucket_rate5m{le="+Inf",shard="catchall",type="sidekiq",urgency="high"}
+          sli_aggregations:sidekiq_jobs_queue_duration_seconds_bucket_rate5m{external_dependencies!="yes",le="+Inf",shard="catchall",type="sidekiq",urgency="high"}
         )
         , "_c", "1", "", "")
         or
         label_replace(sum by (env,environment,stage) (
-          sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate5m{le="+Inf",shard="catchall",type="sidekiq",urgency="low"}
+          sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate5m{external_dependencies!="yes",le="+Inf",shard="catchall",type="sidekiq",urgency="low"}
         )
         , "_c", "2", "", "")
         or
         label_replace(sum by (env,environment,stage) (
-          sli_aggregations:sidekiq_jobs_queue_duration_seconds_bucket_rate5m{le="+Inf",shard="catchall",type="sidekiq",urgency="low"}
+          sli_aggregations:sidekiq_jobs_queue_duration_seconds_bucket_rate5m{external_dependencies!="yes",le="+Inf",shard="catchall",type="sidekiq",urgency="low"}
         )
         , "_c", "3", "", "")
         or
         label_replace(sum by (env,environment,stage) (
-          sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate5m{le="+Inf",shard="catchall",type="sidekiq",urgency="throttled"}
+          sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate5m{external_dependencies!="yes",le="+Inf",shard="catchall",type="sidekiq",urgency="throttled"}
         )
         , "_c", "4", "", "")
       )
@@ -1193,27 +1321,27 @@ groups:
     expr: |
       sum by (env,environment,stage) (
         label_replace(sum by (env,environment,stage) (
-          sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate5m{le="10",shard="database-throttled",type="sidekiq",urgency="high"}
+          sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate5m{external_dependencies!="yes",le="10",shard="database-throttled",type="sidekiq",urgency="high"}
         )
         , "_c", "0", "", "")
         or
         label_replace(sum by (env,environment,stage) (
-          sli_aggregations:sidekiq_jobs_queue_duration_seconds_bucket_rate5m{le="10",shard="database-throttled",type="sidekiq",urgency="high"}
+          sli_aggregations:sidekiq_jobs_queue_duration_seconds_bucket_rate5m{external_dependencies!="yes",le="10",shard="database-throttled",type="sidekiq",urgency="high"}
         )
         , "_c", "1", "", "")
         or
         label_replace(sum by (env,environment,stage) (
-          sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate5m{le="300",shard="database-throttled",type="sidekiq",urgency="low"}
+          sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate5m{external_dependencies!="yes",le="300",shard="database-throttled",type="sidekiq",urgency="low"}
         )
         , "_c", "2", "", "")
         or
         label_replace(sum by (env,environment,stage) (
-          sli_aggregations:sidekiq_jobs_queue_duration_seconds_bucket_rate5m{le="60",shard="database-throttled",type="sidekiq",urgency="low"}
+          sli_aggregations:sidekiq_jobs_queue_duration_seconds_bucket_rate5m{external_dependencies!="yes",le="60",shard="database-throttled",type="sidekiq",urgency="low"}
         )
         , "_c", "3", "", "")
         or
         label_replace(sum by (env,environment,stage) (
-          sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate5m{le="300",shard="database-throttled",type="sidekiq",urgency="throttled"}
+          sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate5m{external_dependencies!="yes",le="300",shard="database-throttled",type="sidekiq",urgency="throttled"}
         )
         , "_c", "4", "", "")
       )
@@ -1225,27 +1353,27 @@ groups:
     expr: |
       sum by (env,environment,stage) (
         label_replace(sum by (env,environment,stage) (
-          sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate5m{le="+Inf",shard="database-throttled",type="sidekiq",urgency="high"}
+          sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate5m{external_dependencies!="yes",le="+Inf",shard="database-throttled",type="sidekiq",urgency="high"}
         )
         , "_c", "0", "", "")
         or
         label_replace(sum by (env,environment,stage) (
-          sli_aggregations:sidekiq_jobs_queue_duration_seconds_bucket_rate5m{le="+Inf",shard="database-throttled",type="sidekiq",urgency="high"}
+          sli_aggregations:sidekiq_jobs_queue_duration_seconds_bucket_rate5m{external_dependencies!="yes",le="+Inf",shard="database-throttled",type="sidekiq",urgency="high"}
         )
         , "_c", "1", "", "")
         or
         label_replace(sum by (env,environment,stage) (
-          sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate5m{le="+Inf",shard="database-throttled",type="sidekiq",urgency="low"}
+          sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate5m{external_dependencies!="yes",le="+Inf",shard="database-throttled",type="sidekiq",urgency="low"}
         )
         , "_c", "2", "", "")
         or
         label_replace(sum by (env,environment,stage) (
-          sli_aggregations:sidekiq_jobs_queue_duration_seconds_bucket_rate5m{le="+Inf",shard="database-throttled",type="sidekiq",urgency="low"}
+          sli_aggregations:sidekiq_jobs_queue_duration_seconds_bucket_rate5m{external_dependencies!="yes",le="+Inf",shard="database-throttled",type="sidekiq",urgency="low"}
         )
         , "_c", "3", "", "")
         or
         label_replace(sum by (env,environment,stage) (
-          sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate5m{le="+Inf",shard="database-throttled",type="sidekiq",urgency="throttled"}
+          sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate5m{external_dependencies!="yes",le="+Inf",shard="database-throttled",type="sidekiq",urgency="throttled"}
         )
         , "_c", "4", "", "")
       )
@@ -1283,27 +1411,27 @@ groups:
     expr: |
       sum by (env,environment,stage) (
         label_replace(sum by (env,environment,stage) (
-          sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate5m{le="10",shard="elasticsearch",type="sidekiq",urgency="high"}
+          sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate5m{external_dependencies!="yes",le="10",shard="elasticsearch",type="sidekiq",urgency="high"}
         )
         , "_c", "0", "", "")
         or
         label_replace(sum by (env,environment,stage) (
-          sli_aggregations:sidekiq_jobs_queue_duration_seconds_bucket_rate5m{le="10",shard="elasticsearch",type="sidekiq",urgency="high"}
+          sli_aggregations:sidekiq_jobs_queue_duration_seconds_bucket_rate5m{external_dependencies!="yes",le="10",shard="elasticsearch",type="sidekiq",urgency="high"}
         )
         , "_c", "1", "", "")
         or
         label_replace(sum by (env,environment,stage) (
-          sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate5m{le="300",shard="elasticsearch",type="sidekiq",urgency="low"}
+          sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate5m{external_dependencies!="yes",le="300",shard="elasticsearch",type="sidekiq",urgency="low"}
         )
         , "_c", "2", "", "")
         or
         label_replace(sum by (env,environment,stage) (
-          sli_aggregations:sidekiq_jobs_queue_duration_seconds_bucket_rate5m{le="60",shard="elasticsearch",type="sidekiq",urgency="low"}
+          sli_aggregations:sidekiq_jobs_queue_duration_seconds_bucket_rate5m{external_dependencies!="yes",le="60",shard="elasticsearch",type="sidekiq",urgency="low"}
         )
         , "_c", "3", "", "")
         or
         label_replace(sum by (env,environment,stage) (
-          sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate5m{le="300",shard="elasticsearch",type="sidekiq",urgency="throttled"}
+          sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate5m{external_dependencies!="yes",le="300",shard="elasticsearch",type="sidekiq",urgency="throttled"}
         )
         , "_c", "4", "", "")
       )
@@ -1315,27 +1443,27 @@ groups:
     expr: |
       sum by (env,environment,stage) (
         label_replace(sum by (env,environment,stage) (
-          sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate5m{le="+Inf",shard="elasticsearch",type="sidekiq",urgency="high"}
+          sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate5m{external_dependencies!="yes",le="+Inf",shard="elasticsearch",type="sidekiq",urgency="high"}
         )
         , "_c", "0", "", "")
         or
         label_replace(sum by (env,environment,stage) (
-          sli_aggregations:sidekiq_jobs_queue_duration_seconds_bucket_rate5m{le="+Inf",shard="elasticsearch",type="sidekiq",urgency="high"}
+          sli_aggregations:sidekiq_jobs_queue_duration_seconds_bucket_rate5m{external_dependencies!="yes",le="+Inf",shard="elasticsearch",type="sidekiq",urgency="high"}
         )
         , "_c", "1", "", "")
         or
         label_replace(sum by (env,environment,stage) (
-          sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate5m{le="+Inf",shard="elasticsearch",type="sidekiq",urgency="low"}
+          sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate5m{external_dependencies!="yes",le="+Inf",shard="elasticsearch",type="sidekiq",urgency="low"}
         )
         , "_c", "2", "", "")
         or
         label_replace(sum by (env,environment,stage) (
-          sli_aggregations:sidekiq_jobs_queue_duration_seconds_bucket_rate5m{le="+Inf",shard="elasticsearch",type="sidekiq",urgency="low"}
+          sli_aggregations:sidekiq_jobs_queue_duration_seconds_bucket_rate5m{external_dependencies!="yes",le="+Inf",shard="elasticsearch",type="sidekiq",urgency="low"}
         )
         , "_c", "3", "", "")
         or
         label_replace(sum by (env,environment,stage) (
-          sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate5m{le="+Inf",shard="elasticsearch",type="sidekiq",urgency="throttled"}
+          sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate5m{external_dependencies!="yes",le="+Inf",shard="elasticsearch",type="sidekiq",urgency="throttled"}
         )
         , "_c", "4", "", "")
       )
@@ -1373,27 +1501,27 @@ groups:
     expr: |
       sum by (env,environment,stage) (
         label_replace(sum by (env,environment,stage) (
-          sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate5m{le="10",shard="gitaly-throttled",type="sidekiq",urgency="high"}
+          sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate5m{external_dependencies!="yes",le="10",shard="gitaly-throttled",type="sidekiq",urgency="high"}
         )
         , "_c", "0", "", "")
         or
         label_replace(sum by (env,environment,stage) (
-          sli_aggregations:sidekiq_jobs_queue_duration_seconds_bucket_rate5m{le="10",shard="gitaly-throttled",type="sidekiq",urgency="high"}
+          sli_aggregations:sidekiq_jobs_queue_duration_seconds_bucket_rate5m{external_dependencies!="yes",le="10",shard="gitaly-throttled",type="sidekiq",urgency="high"}
         )
         , "_c", "1", "", "")
         or
         label_replace(sum by (env,environment,stage) (
-          sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate5m{le="300",shard="gitaly-throttled",type="sidekiq",urgency="low"}
+          sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate5m{external_dependencies!="yes",le="300",shard="gitaly-throttled",type="sidekiq",urgency="low"}
         )
         , "_c", "2", "", "")
         or
         label_replace(sum by (env,environment,stage) (
-          sli_aggregations:sidekiq_jobs_queue_duration_seconds_bucket_rate5m{le="60",shard="gitaly-throttled",type="sidekiq",urgency="low"}
+          sli_aggregations:sidekiq_jobs_queue_duration_seconds_bucket_rate5m{external_dependencies!="yes",le="60",shard="gitaly-throttled",type="sidekiq",urgency="low"}
         )
         , "_c", "3", "", "")
         or
         label_replace(sum by (env,environment,stage) (
-          sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate5m{le="300",shard="gitaly-throttled",type="sidekiq",urgency="throttled"}
+          sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate5m{external_dependencies!="yes",le="300",shard="gitaly-throttled",type="sidekiq",urgency="throttled"}
         )
         , "_c", "4", "", "")
       )
@@ -1405,27 +1533,27 @@ groups:
     expr: |
       sum by (env,environment,stage) (
         label_replace(sum by (env,environment,stage) (
-          sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate5m{le="+Inf",shard="gitaly-throttled",type="sidekiq",urgency="high"}
+          sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate5m{external_dependencies!="yes",le="+Inf",shard="gitaly-throttled",type="sidekiq",urgency="high"}
         )
         , "_c", "0", "", "")
         or
         label_replace(sum by (env,environment,stage) (
-          sli_aggregations:sidekiq_jobs_queue_duration_seconds_bucket_rate5m{le="+Inf",shard="gitaly-throttled",type="sidekiq",urgency="high"}
+          sli_aggregations:sidekiq_jobs_queue_duration_seconds_bucket_rate5m{external_dependencies!="yes",le="+Inf",shard="gitaly-throttled",type="sidekiq",urgency="high"}
         )
         , "_c", "1", "", "")
         or
         label_replace(sum by (env,environment,stage) (
-          sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate5m{le="+Inf",shard="gitaly-throttled",type="sidekiq",urgency="low"}
+          sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate5m{external_dependencies!="yes",le="+Inf",shard="gitaly-throttled",type="sidekiq",urgency="low"}
         )
         , "_c", "2", "", "")
         or
         label_replace(sum by (env,environment,stage) (
-          sli_aggregations:sidekiq_jobs_queue_duration_seconds_bucket_rate5m{le="+Inf",shard="gitaly-throttled",type="sidekiq",urgency="low"}
+          sli_aggregations:sidekiq_jobs_queue_duration_seconds_bucket_rate5m{external_dependencies!="yes",le="+Inf",shard="gitaly-throttled",type="sidekiq",urgency="low"}
         )
         , "_c", "3", "", "")
         or
         label_replace(sum by (env,environment,stage) (
-          sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate5m{le="+Inf",shard="gitaly-throttled",type="sidekiq",urgency="throttled"}
+          sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate5m{external_dependencies!="yes",le="+Inf",shard="gitaly-throttled",type="sidekiq",urgency="throttled"}
         )
         , "_c", "4", "", "")
       )
@@ -1463,27 +1591,27 @@ groups:
     expr: |
       sum by (env,environment,stage) (
         label_replace(sum by (env,environment,stage) (
-          sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate5m{le="10",shard="low-urgency-cpu-bound",type="sidekiq",urgency="high"}
+          sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate5m{external_dependencies!="yes",le="10",shard="low-urgency-cpu-bound",type="sidekiq",urgency="high"}
         )
         , "_c", "0", "", "")
         or
         label_replace(sum by (env,environment,stage) (
-          sli_aggregations:sidekiq_jobs_queue_duration_seconds_bucket_rate5m{le="10",shard="low-urgency-cpu-bound",type="sidekiq",urgency="high"}
+          sli_aggregations:sidekiq_jobs_queue_duration_seconds_bucket_rate5m{external_dependencies!="yes",le="10",shard="low-urgency-cpu-bound",type="sidekiq",urgency="high"}
         )
         , "_c", "1", "", "")
         or
         label_replace(sum by (env,environment,stage) (
-          sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate5m{le="300",shard="low-urgency-cpu-bound",type="sidekiq",urgency="low"}
+          sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate5m{external_dependencies!="yes",le="300",shard="low-urgency-cpu-bound",type="sidekiq",urgency="low"}
         )
         , "_c", "2", "", "")
         or
         label_replace(sum by (env,environment,stage) (
-          sli_aggregations:sidekiq_jobs_queue_duration_seconds_bucket_rate5m{le="60",shard="low-urgency-cpu-bound",type="sidekiq",urgency="low"}
+          sli_aggregations:sidekiq_jobs_queue_duration_seconds_bucket_rate5m{external_dependencies!="yes",le="60",shard="low-urgency-cpu-bound",type="sidekiq",urgency="low"}
         )
         , "_c", "3", "", "")
         or
         label_replace(sum by (env,environment,stage) (
-          sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate5m{le="300",shard="low-urgency-cpu-bound",type="sidekiq",urgency="throttled"}
+          sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate5m{external_dependencies!="yes",le="300",shard="low-urgency-cpu-bound",type="sidekiq",urgency="throttled"}
         )
         , "_c", "4", "", "")
       )
@@ -1495,27 +1623,27 @@ groups:
     expr: |
       sum by (env,environment,stage) (
         label_replace(sum by (env,environment,stage) (
-          sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate5m{le="+Inf",shard="low-urgency-cpu-bound",type="sidekiq",urgency="high"}
+          sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate5m{external_dependencies!="yes",le="+Inf",shard="low-urgency-cpu-bound",type="sidekiq",urgency="high"}
         )
         , "_c", "0", "", "")
         or
         label_replace(sum by (env,environment,stage) (
-          sli_aggregations:sidekiq_jobs_queue_duration_seconds_bucket_rate5m{le="+Inf",shard="low-urgency-cpu-bound",type="sidekiq",urgency="high"}
+          sli_aggregations:sidekiq_jobs_queue_duration_seconds_bucket_rate5m{external_dependencies!="yes",le="+Inf",shard="low-urgency-cpu-bound",type="sidekiq",urgency="high"}
         )
         , "_c", "1", "", "")
         or
         label_replace(sum by (env,environment,stage) (
-          sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate5m{le="+Inf",shard="low-urgency-cpu-bound",type="sidekiq",urgency="low"}
+          sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate5m{external_dependencies!="yes",le="+Inf",shard="low-urgency-cpu-bound",type="sidekiq",urgency="low"}
         )
         , "_c", "2", "", "")
         or
         label_replace(sum by (env,environment,stage) (
-          sli_aggregations:sidekiq_jobs_queue_duration_seconds_bucket_rate5m{le="+Inf",shard="low-urgency-cpu-bound",type="sidekiq",urgency="low"}
+          sli_aggregations:sidekiq_jobs_queue_duration_seconds_bucket_rate5m{external_dependencies!="yes",le="+Inf",shard="low-urgency-cpu-bound",type="sidekiq",urgency="low"}
         )
         , "_c", "3", "", "")
         or
         label_replace(sum by (env,environment,stage) (
-          sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate5m{le="+Inf",shard="low-urgency-cpu-bound",type="sidekiq",urgency="throttled"}
+          sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate5m{external_dependencies!="yes",le="+Inf",shard="low-urgency-cpu-bound",type="sidekiq",urgency="throttled"}
         )
         , "_c", "4", "", "")
       )
@@ -1553,27 +1681,27 @@ groups:
     expr: |
       sum by (env,environment,stage) (
         label_replace(sum by (env,environment,stage) (
-          sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate5m{le="10",shard="memory-bound",type="sidekiq",urgency="high"}
+          sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate5m{external_dependencies!="yes",le="10",shard="memory-bound",type="sidekiq",urgency="high"}
         )
         , "_c", "0", "", "")
         or
         label_replace(sum by (env,environment,stage) (
-          sli_aggregations:sidekiq_jobs_queue_duration_seconds_bucket_rate5m{le="10",shard="memory-bound",type="sidekiq",urgency="high"}
+          sli_aggregations:sidekiq_jobs_queue_duration_seconds_bucket_rate5m{external_dependencies!="yes",le="10",shard="memory-bound",type="sidekiq",urgency="high"}
         )
         , "_c", "1", "", "")
         or
         label_replace(sum by (env,environment,stage) (
-          sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate5m{le="300",shard="memory-bound",type="sidekiq",urgency="low"}
+          sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate5m{external_dependencies!="yes",le="300",shard="memory-bound",type="sidekiq",urgency="low"}
         )
         , "_c", "2", "", "")
         or
         label_replace(sum by (env,environment,stage) (
-          sli_aggregations:sidekiq_jobs_queue_duration_seconds_bucket_rate5m{le="60",shard="memory-bound",type="sidekiq",urgency="low"}
+          sli_aggregations:sidekiq_jobs_queue_duration_seconds_bucket_rate5m{external_dependencies!="yes",le="60",shard="memory-bound",type="sidekiq",urgency="low"}
         )
         , "_c", "3", "", "")
         or
         label_replace(sum by (env,environment,stage) (
-          sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate5m{le="300",shard="memory-bound",type="sidekiq",urgency="throttled"}
+          sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate5m{external_dependencies!="yes",le="300",shard="memory-bound",type="sidekiq",urgency="throttled"}
         )
         , "_c", "4", "", "")
       )
@@ -1585,27 +1713,27 @@ groups:
     expr: |
       sum by (env,environment,stage) (
         label_replace(sum by (env,environment,stage) (
-          sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate5m{le="+Inf",shard="memory-bound",type="sidekiq",urgency="high"}
+          sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate5m{external_dependencies!="yes",le="+Inf",shard="memory-bound",type="sidekiq",urgency="high"}
         )
         , "_c", "0", "", "")
         or
         label_replace(sum by (env,environment,stage) (
-          sli_aggregations:sidekiq_jobs_queue_duration_seconds_bucket_rate5m{le="+Inf",shard="memory-bound",type="sidekiq",urgency="high"}
+          sli_aggregations:sidekiq_jobs_queue_duration_seconds_bucket_rate5m{external_dependencies!="yes",le="+Inf",shard="memory-bound",type="sidekiq",urgency="high"}
         )
         , "_c", "1", "", "")
         or
         label_replace(sum by (env,environment,stage) (
-          sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate5m{le="+Inf",shard="memory-bound",type="sidekiq",urgency="low"}
+          sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate5m{external_dependencies!="yes",le="+Inf",shard="memory-bound",type="sidekiq",urgency="low"}
         )
         , "_c", "2", "", "")
         or
         label_replace(sum by (env,environment,stage) (
-          sli_aggregations:sidekiq_jobs_queue_duration_seconds_bucket_rate5m{le="+Inf",shard="memory-bound",type="sidekiq",urgency="low"}
+          sli_aggregations:sidekiq_jobs_queue_duration_seconds_bucket_rate5m{external_dependencies!="yes",le="+Inf",shard="memory-bound",type="sidekiq",urgency="low"}
         )
         , "_c", "3", "", "")
         or
         label_replace(sum by (env,environment,stage) (
-          sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate5m{le="+Inf",shard="memory-bound",type="sidekiq",urgency="throttled"}
+          sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate5m{external_dependencies!="yes",le="+Inf",shard="memory-bound",type="sidekiq",urgency="throttled"}
         )
         , "_c", "4", "", "")
       )
@@ -1643,27 +1771,27 @@ groups:
     expr: |
       sum by (env,environment,stage) (
         label_replace(sum by (env,environment,stage) (
-          sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate5m{le="10",shard="quarantine",type="sidekiq",urgency="high"}
+          sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate5m{external_dependencies!="yes",le="10",shard="quarantine",type="sidekiq",urgency="high"}
         )
         , "_c", "0", "", "")
         or
         label_replace(sum by (env,environment,stage) (
-          sli_aggregations:sidekiq_jobs_queue_duration_seconds_bucket_rate5m{le="10",shard="quarantine",type="sidekiq",urgency="high"}
+          sli_aggregations:sidekiq_jobs_queue_duration_seconds_bucket_rate5m{external_dependencies!="yes",le="10",shard="quarantine",type="sidekiq",urgency="high"}
         )
         , "_c", "1", "", "")
         or
         label_replace(sum by (env,environment,stage) (
-          sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate5m{le="300",shard="quarantine",type="sidekiq",urgency="low"}
+          sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate5m{external_dependencies!="yes",le="300",shard="quarantine",type="sidekiq",urgency="low"}
         )
         , "_c", "2", "", "")
         or
         label_replace(sum by (env,environment,stage) (
-          sli_aggregations:sidekiq_jobs_queue_duration_seconds_bucket_rate5m{le="60",shard="quarantine",type="sidekiq",urgency="low"}
+          sli_aggregations:sidekiq_jobs_queue_duration_seconds_bucket_rate5m{external_dependencies!="yes",le="60",shard="quarantine",type="sidekiq",urgency="low"}
         )
         , "_c", "3", "", "")
         or
         label_replace(sum by (env,environment,stage) (
-          sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate5m{le="300",shard="quarantine",type="sidekiq",urgency="throttled"}
+          sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate5m{external_dependencies!="yes",le="300",shard="quarantine",type="sidekiq",urgency="throttled"}
         )
         , "_c", "4", "", "")
       )
@@ -1675,27 +1803,27 @@ groups:
     expr: |
       sum by (env,environment,stage) (
         label_replace(sum by (env,environment,stage) (
-          sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate5m{le="+Inf",shard="quarantine",type="sidekiq",urgency="high"}
+          sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate5m{external_dependencies!="yes",le="+Inf",shard="quarantine",type="sidekiq",urgency="high"}
         )
         , "_c", "0", "", "")
         or
         label_replace(sum by (env,environment,stage) (
-          sli_aggregations:sidekiq_jobs_queue_duration_seconds_bucket_rate5m{le="+Inf",shard="quarantine",type="sidekiq",urgency="high"}
+          sli_aggregations:sidekiq_jobs_queue_duration_seconds_bucket_rate5m{external_dependencies!="yes",le="+Inf",shard="quarantine",type="sidekiq",urgency="high"}
         )
         , "_c", "1", "", "")
         or
         label_replace(sum by (env,environment,stage) (
-          sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate5m{le="+Inf",shard="quarantine",type="sidekiq",urgency="low"}
+          sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate5m{external_dependencies!="yes",le="+Inf",shard="quarantine",type="sidekiq",urgency="low"}
         )
         , "_c", "2", "", "")
         or
         label_replace(sum by (env,environment,stage) (
-          sli_aggregations:sidekiq_jobs_queue_duration_seconds_bucket_rate5m{le="+Inf",shard="quarantine",type="sidekiq",urgency="low"}
+          sli_aggregations:sidekiq_jobs_queue_duration_seconds_bucket_rate5m{external_dependencies!="yes",le="+Inf",shard="quarantine",type="sidekiq",urgency="low"}
         )
         , "_c", "3", "", "")
         or
         label_replace(sum by (env,environment,stage) (
-          sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate5m{le="+Inf",shard="quarantine",type="sidekiq",urgency="throttled"}
+          sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate5m{external_dependencies!="yes",le="+Inf",shard="quarantine",type="sidekiq",urgency="throttled"}
         )
         , "_c", "4", "", "")
       )
@@ -1733,27 +1861,27 @@ groups:
     expr: |
       sum by (env,environment,stage) (
         label_replace(sum by (env,environment,stage) (
-          sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate5m{le="10",shard="urgent-authorized-projects",type="sidekiq",urgency="high"}
+          sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate5m{external_dependencies!="yes",le="10",shard="urgent-authorized-projects",type="sidekiq",urgency="high"}
         )
         , "_c", "0", "", "")
         or
         label_replace(sum by (env,environment,stage) (
-          sli_aggregations:sidekiq_jobs_queue_duration_seconds_bucket_rate5m{le="10",shard="urgent-authorized-projects",type="sidekiq",urgency="high"}
+          sli_aggregations:sidekiq_jobs_queue_duration_seconds_bucket_rate5m{external_dependencies!="yes",le="10",shard="urgent-authorized-projects",type="sidekiq",urgency="high"}
         )
         , "_c", "1", "", "")
         or
         label_replace(sum by (env,environment,stage) (
-          sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate5m{le="300",shard="urgent-authorized-projects",type="sidekiq",urgency="low"}
+          sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate5m{external_dependencies!="yes",le="300",shard="urgent-authorized-projects",type="sidekiq",urgency="low"}
         )
         , "_c", "2", "", "")
         or
         label_replace(sum by (env,environment,stage) (
-          sli_aggregations:sidekiq_jobs_queue_duration_seconds_bucket_rate5m{le="60",shard="urgent-authorized-projects",type="sidekiq",urgency="low"}
+          sli_aggregations:sidekiq_jobs_queue_duration_seconds_bucket_rate5m{external_dependencies!="yes",le="60",shard="urgent-authorized-projects",type="sidekiq",urgency="low"}
         )
         , "_c", "3", "", "")
         or
         label_replace(sum by (env,environment,stage) (
-          sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate5m{le="300",shard="urgent-authorized-projects",type="sidekiq",urgency="throttled"}
+          sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate5m{external_dependencies!="yes",le="300",shard="urgent-authorized-projects",type="sidekiq",urgency="throttled"}
         )
         , "_c", "4", "", "")
       )
@@ -1765,27 +1893,27 @@ groups:
     expr: |
       sum by (env,environment,stage) (
         label_replace(sum by (env,environment,stage) (
-          sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate5m{le="+Inf",shard="urgent-authorized-projects",type="sidekiq",urgency="high"}
+          sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate5m{external_dependencies!="yes",le="+Inf",shard="urgent-authorized-projects",type="sidekiq",urgency="high"}
         )
         , "_c", "0", "", "")
         or
         label_replace(sum by (env,environment,stage) (
-          sli_aggregations:sidekiq_jobs_queue_duration_seconds_bucket_rate5m{le="+Inf",shard="urgent-authorized-projects",type="sidekiq",urgency="high"}
+          sli_aggregations:sidekiq_jobs_queue_duration_seconds_bucket_rate5m{external_dependencies!="yes",le="+Inf",shard="urgent-authorized-projects",type="sidekiq",urgency="high"}
         )
         , "_c", "1", "", "")
         or
         label_replace(sum by (env,environment,stage) (
-          sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate5m{le="+Inf",shard="urgent-authorized-projects",type="sidekiq",urgency="low"}
+          sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate5m{external_dependencies!="yes",le="+Inf",shard="urgent-authorized-projects",type="sidekiq",urgency="low"}
         )
         , "_c", "2", "", "")
         or
         label_replace(sum by (env,environment,stage) (
-          sli_aggregations:sidekiq_jobs_queue_duration_seconds_bucket_rate5m{le="+Inf",shard="urgent-authorized-projects",type="sidekiq",urgency="low"}
+          sli_aggregations:sidekiq_jobs_queue_duration_seconds_bucket_rate5m{external_dependencies!="yes",le="+Inf",shard="urgent-authorized-projects",type="sidekiq",urgency="low"}
         )
         , "_c", "3", "", "")
         or
         label_replace(sum by (env,environment,stage) (
-          sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate5m{le="+Inf",shard="urgent-authorized-projects",type="sidekiq",urgency="throttled"}
+          sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate5m{external_dependencies!="yes",le="+Inf",shard="urgent-authorized-projects",type="sidekiq",urgency="throttled"}
         )
         , "_c", "4", "", "")
       )
@@ -1823,27 +1951,27 @@ groups:
     expr: |
       sum by (env,environment,stage) (
         label_replace(sum by (env,environment,stage) (
-          sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate5m{le="10",shard="urgent-cpu-bound",type="sidekiq",urgency="high"}
+          sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate5m{external_dependencies!="yes",le="10",shard="urgent-cpu-bound",type="sidekiq",urgency="high"}
         )
         , "_c", "0", "", "")
         or
         label_replace(sum by (env,environment,stage) (
-          sli_aggregations:sidekiq_jobs_queue_duration_seconds_bucket_rate5m{le="10",shard="urgent-cpu-bound",type="sidekiq",urgency="high"}
+          sli_aggregations:sidekiq_jobs_queue_duration_seconds_bucket_rate5m{external_dependencies!="yes",le="10",shard="urgent-cpu-bound",type="sidekiq",urgency="high"}
         )
         , "_c", "1", "", "")
         or
         label_replace(sum by (env,environment,stage) (
-          sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate5m{le="300",shard="urgent-cpu-bound",type="sidekiq",urgency="low"}
+          sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate5m{external_dependencies!="yes",le="300",shard="urgent-cpu-bound",type="sidekiq",urgency="low"}
         )
         , "_c", "2", "", "")
         or
         label_replace(sum by (env,environment,stage) (
-          sli_aggregations:sidekiq_jobs_queue_duration_seconds_bucket_rate5m{le="60",shard="urgent-cpu-bound",type="sidekiq",urgency="low"}
+          sli_aggregations:sidekiq_jobs_queue_duration_seconds_bucket_rate5m{external_dependencies!="yes",le="60",shard="urgent-cpu-bound",type="sidekiq",urgency="low"}
         )
         , "_c", "3", "", "")
         or
         label_replace(sum by (env,environment,stage) (
-          sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate5m{le="300",shard="urgent-cpu-bound",type="sidekiq",urgency="throttled"}
+          sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate5m{external_dependencies!="yes",le="300",shard="urgent-cpu-bound",type="sidekiq",urgency="throttled"}
         )
         , "_c", "4", "", "")
       )
@@ -1855,27 +1983,27 @@ groups:
     expr: |
       sum by (env,environment,stage) (
         label_replace(sum by (env,environment,stage) (
-          sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate5m{le="+Inf",shard="urgent-cpu-bound",type="sidekiq",urgency="high"}
+          sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate5m{external_dependencies!="yes",le="+Inf",shard="urgent-cpu-bound",type="sidekiq",urgency="high"}
         )
         , "_c", "0", "", "")
         or
         label_replace(sum by (env,environment,stage) (
-          sli_aggregations:sidekiq_jobs_queue_duration_seconds_bucket_rate5m{le="+Inf",shard="urgent-cpu-bound",type="sidekiq",urgency="high"}
+          sli_aggregations:sidekiq_jobs_queue_duration_seconds_bucket_rate5m{external_dependencies!="yes",le="+Inf",shard="urgent-cpu-bound",type="sidekiq",urgency="high"}
         )
         , "_c", "1", "", "")
         or
         label_replace(sum by (env,environment,stage) (
-          sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate5m{le="+Inf",shard="urgent-cpu-bound",type="sidekiq",urgency="low"}
+          sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate5m{external_dependencies!="yes",le="+Inf",shard="urgent-cpu-bound",type="sidekiq",urgency="low"}
         )
         , "_c", "2", "", "")
         or
         label_replace(sum by (env,environment,stage) (
-          sli_aggregations:sidekiq_jobs_queue_duration_seconds_bucket_rate5m{le="+Inf",shard="urgent-cpu-bound",type="sidekiq",urgency="low"}
+          sli_aggregations:sidekiq_jobs_queue_duration_seconds_bucket_rate5m{external_dependencies!="yes",le="+Inf",shard="urgent-cpu-bound",type="sidekiq",urgency="low"}
         )
         , "_c", "3", "", "")
         or
         label_replace(sum by (env,environment,stage) (
-          sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate5m{le="+Inf",shard="urgent-cpu-bound",type="sidekiq",urgency="throttled"}
+          sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate5m{external_dependencies!="yes",le="+Inf",shard="urgent-cpu-bound",type="sidekiq",urgency="throttled"}
         )
         , "_c", "4", "", "")
       )
@@ -1913,27 +2041,27 @@ groups:
     expr: |
       sum by (env,environment,stage) (
         label_replace(sum by (env,environment,stage) (
-          sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate5m{le="10",shard="urgent-other",type="sidekiq",urgency="high"}
+          sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate5m{external_dependencies!="yes",le="10",shard="urgent-other",type="sidekiq",urgency="high"}
         )
         , "_c", "0", "", "")
         or
         label_replace(sum by (env,environment,stage) (
-          sli_aggregations:sidekiq_jobs_queue_duration_seconds_bucket_rate5m{le="10",shard="urgent-other",type="sidekiq",urgency="high"}
+          sli_aggregations:sidekiq_jobs_queue_duration_seconds_bucket_rate5m{external_dependencies!="yes",le="10",shard="urgent-other",type="sidekiq",urgency="high"}
         )
         , "_c", "1", "", "")
         or
         label_replace(sum by (env,environment,stage) (
-          sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate5m{le="300",shard="urgent-other",type="sidekiq",urgency="low"}
+          sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate5m{external_dependencies!="yes",le="300",shard="urgent-other",type="sidekiq",urgency="low"}
         )
         , "_c", "2", "", "")
         or
         label_replace(sum by (env,environment,stage) (
-          sli_aggregations:sidekiq_jobs_queue_duration_seconds_bucket_rate5m{le="60",shard="urgent-other",type="sidekiq",urgency="low"}
+          sli_aggregations:sidekiq_jobs_queue_duration_seconds_bucket_rate5m{external_dependencies!="yes",le="60",shard="urgent-other",type="sidekiq",urgency="low"}
         )
         , "_c", "3", "", "")
         or
         label_replace(sum by (env,environment,stage) (
-          sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate5m{le="300",shard="urgent-other",type="sidekiq",urgency="throttled"}
+          sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate5m{external_dependencies!="yes",le="300",shard="urgent-other",type="sidekiq",urgency="throttled"}
         )
         , "_c", "4", "", "")
       )
@@ -1945,27 +2073,27 @@ groups:
     expr: |
       sum by (env,environment,stage) (
         label_replace(sum by (env,environment,stage) (
-          sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate5m{le="+Inf",shard="urgent-other",type="sidekiq",urgency="high"}
+          sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate5m{external_dependencies!="yes",le="+Inf",shard="urgent-other",type="sidekiq",urgency="high"}
         )
         , "_c", "0", "", "")
         or
         label_replace(sum by (env,environment,stage) (
-          sli_aggregations:sidekiq_jobs_queue_duration_seconds_bucket_rate5m{le="+Inf",shard="urgent-other",type="sidekiq",urgency="high"}
+          sli_aggregations:sidekiq_jobs_queue_duration_seconds_bucket_rate5m{external_dependencies!="yes",le="+Inf",shard="urgent-other",type="sidekiq",urgency="high"}
         )
         , "_c", "1", "", "")
         or
         label_replace(sum by (env,environment,stage) (
-          sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate5m{le="+Inf",shard="urgent-other",type="sidekiq",urgency="low"}
+          sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate5m{external_dependencies!="yes",le="+Inf",shard="urgent-other",type="sidekiq",urgency="low"}
         )
         , "_c", "2", "", "")
         or
         label_replace(sum by (env,environment,stage) (
-          sli_aggregations:sidekiq_jobs_queue_duration_seconds_bucket_rate5m{le="+Inf",shard="urgent-other",type="sidekiq",urgency="low"}
+          sli_aggregations:sidekiq_jobs_queue_duration_seconds_bucket_rate5m{external_dependencies!="yes",le="+Inf",shard="urgent-other",type="sidekiq",urgency="low"}
         )
         , "_c", "3", "", "")
         or
         label_replace(sum by (env,environment,stage) (
-          sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate5m{le="+Inf",shard="urgent-other",type="sidekiq",urgency="throttled"}
+          sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate5m{external_dependencies!="yes",le="+Inf",shard="urgent-other",type="sidekiq",urgency="throttled"}
         )
         , "_c", "4", "", "")
       )
@@ -2088,7 +2216,7 @@ groups:
       )
   - record: sli_aggregations:sidekiq_jobs_queue_duration_seconds_bucket_rate30m
     expr: |
-      sum by (environment,feature_category,job,le,queue,shard,stage,tier,type,urgency,worker) (
+      sum by (environment,error,external_dependencies,feature_category,job,le,queue,shard,stage,tier,type,urgency,worker) (
         rate(sidekiq_jobs_queue_duration_seconds_bucket[30m])
       )
   - record: sli_aggregations:sidekiq_jobs_failed_total_rate30m
@@ -2121,6 +2249,70 @@ groups:
         0 * group by(env,environment,stage) (
           gitlab_component_ops:rate_30m{component="email_receiver",tier="sv",type="sidekiq"}
         )
+      )
+  - record: gitlab_component_apdex:success:rate_30m
+    labels:
+      component: external_dependency
+      tier: sv
+      type: sidekiq
+    expr: |
+      sum by (env,environment,stage) (
+        label_replace(sum by (env,environment,stage) (
+          sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate30m{le="10",type="sidekiq",urgency="high"}
+        )
+        , "_c", "0", "", "")
+        or
+        label_replace(sum by (env,environment,stage) (
+          sli_aggregations:sidekiq_jobs_queue_duration_seconds_bucket_rate30m{le="10",type="sidekiq",urgency="high"}
+        )
+        , "_c", "1", "", "")
+        or
+        label_replace(sum by (env,environment,stage) (
+          sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate30m{le="300",type="sidekiq",urgency="low"}
+        )
+        , "_c", "2", "", "")
+        or
+        label_replace(sum by (env,environment,stage) (
+          sli_aggregations:sidekiq_jobs_queue_duration_seconds_bucket_rate30m{le="60",type="sidekiq",urgency="low"}
+        )
+        , "_c", "3", "", "")
+        or
+        label_replace(sum by (env,environment,stage) (
+          sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate30m{le="300",type="sidekiq",urgency="throttled"}
+        )
+        , "_c", "4", "", "")
+      )
+  - record: gitlab_component_apdex:weight:score_30m
+    labels:
+      component: external_dependency
+      tier: sv
+      type: sidekiq
+    expr: |
+      sum by (env,environment,stage) (
+        label_replace(sum by (env,environment,stage) (
+          sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate30m{le="+Inf",type="sidekiq",urgency="high"}
+        )
+        , "_c", "0", "", "")
+        or
+        label_replace(sum by (env,environment,stage) (
+          sli_aggregations:sidekiq_jobs_queue_duration_seconds_bucket_rate30m{le="+Inf",type="sidekiq",urgency="high"}
+        )
+        , "_c", "1", "", "")
+        or
+        label_replace(sum by (env,environment,stage) (
+          sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate30m{le="+Inf",type="sidekiq",urgency="low"}
+        )
+        , "_c", "2", "", "")
+        or
+        label_replace(sum by (env,environment,stage) (
+          sli_aggregations:sidekiq_jobs_queue_duration_seconds_bucket_rate30m{le="+Inf",type="sidekiq",urgency="low"}
+        )
+        , "_c", "3", "", "")
+        or
+        label_replace(sum by (env,environment,stage) (
+          sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate30m{le="+Inf",type="sidekiq",urgency="throttled"}
+        )
+        , "_c", "4", "", "")
       )
   - record: gitlab_component_ops:rate_30m
     labels:
@@ -2183,27 +2375,27 @@ groups:
     expr: |
       sum by (env,environment,stage) (
         label_replace(sum by (env,environment,stage) (
-          sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate30m{le="10",shard="catchall",type="sidekiq",urgency="high"}
+          sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate30m{external_dependencies!="yes",le="10",shard="catchall",type="sidekiq",urgency="high"}
         )
         , "_c", "0", "", "")
         or
         label_replace(sum by (env,environment,stage) (
-          sli_aggregations:sidekiq_jobs_queue_duration_seconds_bucket_rate30m{le="10",shard="catchall",type="sidekiq",urgency="high"}
+          sli_aggregations:sidekiq_jobs_queue_duration_seconds_bucket_rate30m{external_dependencies!="yes",le="10",shard="catchall",type="sidekiq",urgency="high"}
         )
         , "_c", "1", "", "")
         or
         label_replace(sum by (env,environment,stage) (
-          sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate30m{le="300",shard="catchall",type="sidekiq",urgency="low"}
+          sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate30m{external_dependencies!="yes",le="300",shard="catchall",type="sidekiq",urgency="low"}
         )
         , "_c", "2", "", "")
         or
         label_replace(sum by (env,environment,stage) (
-          sli_aggregations:sidekiq_jobs_queue_duration_seconds_bucket_rate30m{le="60",shard="catchall",type="sidekiq",urgency="low"}
+          sli_aggregations:sidekiq_jobs_queue_duration_seconds_bucket_rate30m{external_dependencies!="yes",le="60",shard="catchall",type="sidekiq",urgency="low"}
         )
         , "_c", "3", "", "")
         or
         label_replace(sum by (env,environment,stage) (
-          sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate30m{le="300",shard="catchall",type="sidekiq",urgency="throttled"}
+          sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate30m{external_dependencies!="yes",le="300",shard="catchall",type="sidekiq",urgency="throttled"}
         )
         , "_c", "4", "", "")
       )
@@ -2215,27 +2407,27 @@ groups:
     expr: |
       sum by (env,environment,stage) (
         label_replace(sum by (env,environment,stage) (
-          sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate30m{le="+Inf",shard="catchall",type="sidekiq",urgency="high"}
+          sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate30m{external_dependencies!="yes",le="+Inf",shard="catchall",type="sidekiq",urgency="high"}
         )
         , "_c", "0", "", "")
         or
         label_replace(sum by (env,environment,stage) (
-          sli_aggregations:sidekiq_jobs_queue_duration_seconds_bucket_rate30m{le="+Inf",shard="catchall",type="sidekiq",urgency="high"}
+          sli_aggregations:sidekiq_jobs_queue_duration_seconds_bucket_rate30m{external_dependencies!="yes",le="+Inf",shard="catchall",type="sidekiq",urgency="high"}
         )
         , "_c", "1", "", "")
         or
         label_replace(sum by (env,environment,stage) (
-          sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate30m{le="+Inf",shard="catchall",type="sidekiq",urgency="low"}
+          sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate30m{external_dependencies!="yes",le="+Inf",shard="catchall",type="sidekiq",urgency="low"}
         )
         , "_c", "2", "", "")
         or
         label_replace(sum by (env,environment,stage) (
-          sli_aggregations:sidekiq_jobs_queue_duration_seconds_bucket_rate30m{le="+Inf",shard="catchall",type="sidekiq",urgency="low"}
+          sli_aggregations:sidekiq_jobs_queue_duration_seconds_bucket_rate30m{external_dependencies!="yes",le="+Inf",shard="catchall",type="sidekiq",urgency="low"}
         )
         , "_c", "3", "", "")
         or
         label_replace(sum by (env,environment,stage) (
-          sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate30m{le="+Inf",shard="catchall",type="sidekiq",urgency="throttled"}
+          sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate30m{external_dependencies!="yes",le="+Inf",shard="catchall",type="sidekiq",urgency="throttled"}
         )
         , "_c", "4", "", "")
       )
@@ -2273,27 +2465,27 @@ groups:
     expr: |
       sum by (env,environment,stage) (
         label_replace(sum by (env,environment,stage) (
-          sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate30m{le="10",shard="database-throttled",type="sidekiq",urgency="high"}
+          sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate30m{external_dependencies!="yes",le="10",shard="database-throttled",type="sidekiq",urgency="high"}
         )
         , "_c", "0", "", "")
         or
         label_replace(sum by (env,environment,stage) (
-          sli_aggregations:sidekiq_jobs_queue_duration_seconds_bucket_rate30m{le="10",shard="database-throttled",type="sidekiq",urgency="high"}
+          sli_aggregations:sidekiq_jobs_queue_duration_seconds_bucket_rate30m{external_dependencies!="yes",le="10",shard="database-throttled",type="sidekiq",urgency="high"}
         )
         , "_c", "1", "", "")
         or
         label_replace(sum by (env,environment,stage) (
-          sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate30m{le="300",shard="database-throttled",type="sidekiq",urgency="low"}
+          sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate30m{external_dependencies!="yes",le="300",shard="database-throttled",type="sidekiq",urgency="low"}
         )
         , "_c", "2", "", "")
         or
         label_replace(sum by (env,environment,stage) (
-          sli_aggregations:sidekiq_jobs_queue_duration_seconds_bucket_rate30m{le="60",shard="database-throttled",type="sidekiq",urgency="low"}
+          sli_aggregations:sidekiq_jobs_queue_duration_seconds_bucket_rate30m{external_dependencies!="yes",le="60",shard="database-throttled",type="sidekiq",urgency="low"}
         )
         , "_c", "3", "", "")
         or
         label_replace(sum by (env,environment,stage) (
-          sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate30m{le="300",shard="database-throttled",type="sidekiq",urgency="throttled"}
+          sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate30m{external_dependencies!="yes",le="300",shard="database-throttled",type="sidekiq",urgency="throttled"}
         )
         , "_c", "4", "", "")
       )
@@ -2305,27 +2497,27 @@ groups:
     expr: |
       sum by (env,environment,stage) (
         label_replace(sum by (env,environment,stage) (
-          sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate30m{le="+Inf",shard="database-throttled",type="sidekiq",urgency="high"}
+          sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate30m{external_dependencies!="yes",le="+Inf",shard="database-throttled",type="sidekiq",urgency="high"}
         )
         , "_c", "0", "", "")
         or
         label_replace(sum by (env,environment,stage) (
-          sli_aggregations:sidekiq_jobs_queue_duration_seconds_bucket_rate30m{le="+Inf",shard="database-throttled",type="sidekiq",urgency="high"}
+          sli_aggregations:sidekiq_jobs_queue_duration_seconds_bucket_rate30m{external_dependencies!="yes",le="+Inf",shard="database-throttled",type="sidekiq",urgency="high"}
         )
         , "_c", "1", "", "")
         or
         label_replace(sum by (env,environment,stage) (
-          sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate30m{le="+Inf",shard="database-throttled",type="sidekiq",urgency="low"}
+          sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate30m{external_dependencies!="yes",le="+Inf",shard="database-throttled",type="sidekiq",urgency="low"}
         )
         , "_c", "2", "", "")
         or
         label_replace(sum by (env,environment,stage) (
-          sli_aggregations:sidekiq_jobs_queue_duration_seconds_bucket_rate30m{le="+Inf",shard="database-throttled",type="sidekiq",urgency="low"}
+          sli_aggregations:sidekiq_jobs_queue_duration_seconds_bucket_rate30m{external_dependencies!="yes",le="+Inf",shard="database-throttled",type="sidekiq",urgency="low"}
         )
         , "_c", "3", "", "")
         or
         label_replace(sum by (env,environment,stage) (
-          sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate30m{le="+Inf",shard="database-throttled",type="sidekiq",urgency="throttled"}
+          sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate30m{external_dependencies!="yes",le="+Inf",shard="database-throttled",type="sidekiq",urgency="throttled"}
         )
         , "_c", "4", "", "")
       )
@@ -2363,27 +2555,27 @@ groups:
     expr: |
       sum by (env,environment,stage) (
         label_replace(sum by (env,environment,stage) (
-          sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate30m{le="10",shard="elasticsearch",type="sidekiq",urgency="high"}
+          sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate30m{external_dependencies!="yes",le="10",shard="elasticsearch",type="sidekiq",urgency="high"}
         )
         , "_c", "0", "", "")
         or
         label_replace(sum by (env,environment,stage) (
-          sli_aggregations:sidekiq_jobs_queue_duration_seconds_bucket_rate30m{le="10",shard="elasticsearch",type="sidekiq",urgency="high"}
+          sli_aggregations:sidekiq_jobs_queue_duration_seconds_bucket_rate30m{external_dependencies!="yes",le="10",shard="elasticsearch",type="sidekiq",urgency="high"}
         )
         , "_c", "1", "", "")
         or
         label_replace(sum by (env,environment,stage) (
-          sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate30m{le="300",shard="elasticsearch",type="sidekiq",urgency="low"}
+          sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate30m{external_dependencies!="yes",le="300",shard="elasticsearch",type="sidekiq",urgency="low"}
         )
         , "_c", "2", "", "")
         or
         label_replace(sum by (env,environment,stage) (
-          sli_aggregations:sidekiq_jobs_queue_duration_seconds_bucket_rate30m{le="60",shard="elasticsearch",type="sidekiq",urgency="low"}
+          sli_aggregations:sidekiq_jobs_queue_duration_seconds_bucket_rate30m{external_dependencies!="yes",le="60",shard="elasticsearch",type="sidekiq",urgency="low"}
         )
         , "_c", "3", "", "")
         or
         label_replace(sum by (env,environment,stage) (
-          sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate30m{le="300",shard="elasticsearch",type="sidekiq",urgency="throttled"}
+          sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate30m{external_dependencies!="yes",le="300",shard="elasticsearch",type="sidekiq",urgency="throttled"}
         )
         , "_c", "4", "", "")
       )
@@ -2395,27 +2587,27 @@ groups:
     expr: |
       sum by (env,environment,stage) (
         label_replace(sum by (env,environment,stage) (
-          sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate30m{le="+Inf",shard="elasticsearch",type="sidekiq",urgency="high"}
+          sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate30m{external_dependencies!="yes",le="+Inf",shard="elasticsearch",type="sidekiq",urgency="high"}
         )
         , "_c", "0", "", "")
         or
         label_replace(sum by (env,environment,stage) (
-          sli_aggregations:sidekiq_jobs_queue_duration_seconds_bucket_rate30m{le="+Inf",shard="elasticsearch",type="sidekiq",urgency="high"}
+          sli_aggregations:sidekiq_jobs_queue_duration_seconds_bucket_rate30m{external_dependencies!="yes",le="+Inf",shard="elasticsearch",type="sidekiq",urgency="high"}
         )
         , "_c", "1", "", "")
         or
         label_replace(sum by (env,environment,stage) (
-          sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate30m{le="+Inf",shard="elasticsearch",type="sidekiq",urgency="low"}
+          sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate30m{external_dependencies!="yes",le="+Inf",shard="elasticsearch",type="sidekiq",urgency="low"}
         )
         , "_c", "2", "", "")
         or
         label_replace(sum by (env,environment,stage) (
-          sli_aggregations:sidekiq_jobs_queue_duration_seconds_bucket_rate30m{le="+Inf",shard="elasticsearch",type="sidekiq",urgency="low"}
+          sli_aggregations:sidekiq_jobs_queue_duration_seconds_bucket_rate30m{external_dependencies!="yes",le="+Inf",shard="elasticsearch",type="sidekiq",urgency="low"}
         )
         , "_c", "3", "", "")
         or
         label_replace(sum by (env,environment,stage) (
-          sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate30m{le="+Inf",shard="elasticsearch",type="sidekiq",urgency="throttled"}
+          sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate30m{external_dependencies!="yes",le="+Inf",shard="elasticsearch",type="sidekiq",urgency="throttled"}
         )
         , "_c", "4", "", "")
       )
@@ -2453,27 +2645,27 @@ groups:
     expr: |
       sum by (env,environment,stage) (
         label_replace(sum by (env,environment,stage) (
-          sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate30m{le="10",shard="gitaly-throttled",type="sidekiq",urgency="high"}
+          sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate30m{external_dependencies!="yes",le="10",shard="gitaly-throttled",type="sidekiq",urgency="high"}
         )
         , "_c", "0", "", "")
         or
         label_replace(sum by (env,environment,stage) (
-          sli_aggregations:sidekiq_jobs_queue_duration_seconds_bucket_rate30m{le="10",shard="gitaly-throttled",type="sidekiq",urgency="high"}
+          sli_aggregations:sidekiq_jobs_queue_duration_seconds_bucket_rate30m{external_dependencies!="yes",le="10",shard="gitaly-throttled",type="sidekiq",urgency="high"}
         )
         , "_c", "1", "", "")
         or
         label_replace(sum by (env,environment,stage) (
-          sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate30m{le="300",shard="gitaly-throttled",type="sidekiq",urgency="low"}
+          sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate30m{external_dependencies!="yes",le="300",shard="gitaly-throttled",type="sidekiq",urgency="low"}
         )
         , "_c", "2", "", "")
         or
         label_replace(sum by (env,environment,stage) (
-          sli_aggregations:sidekiq_jobs_queue_duration_seconds_bucket_rate30m{le="60",shard="gitaly-throttled",type="sidekiq",urgency="low"}
+          sli_aggregations:sidekiq_jobs_queue_duration_seconds_bucket_rate30m{external_dependencies!="yes",le="60",shard="gitaly-throttled",type="sidekiq",urgency="low"}
         )
         , "_c", "3", "", "")
         or
         label_replace(sum by (env,environment,stage) (
-          sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate30m{le="300",shard="gitaly-throttled",type="sidekiq",urgency="throttled"}
+          sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate30m{external_dependencies!="yes",le="300",shard="gitaly-throttled",type="sidekiq",urgency="throttled"}
         )
         , "_c", "4", "", "")
       )
@@ -2485,27 +2677,27 @@ groups:
     expr: |
       sum by (env,environment,stage) (
         label_replace(sum by (env,environment,stage) (
-          sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate30m{le="+Inf",shard="gitaly-throttled",type="sidekiq",urgency="high"}
+          sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate30m{external_dependencies!="yes",le="+Inf",shard="gitaly-throttled",type="sidekiq",urgency="high"}
         )
         , "_c", "0", "", "")
         or
         label_replace(sum by (env,environment,stage) (
-          sli_aggregations:sidekiq_jobs_queue_duration_seconds_bucket_rate30m{le="+Inf",shard="gitaly-throttled",type="sidekiq",urgency="high"}
+          sli_aggregations:sidekiq_jobs_queue_duration_seconds_bucket_rate30m{external_dependencies!="yes",le="+Inf",shard="gitaly-throttled",type="sidekiq",urgency="high"}
         )
         , "_c", "1", "", "")
         or
         label_replace(sum by (env,environment,stage) (
-          sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate30m{le="+Inf",shard="gitaly-throttled",type="sidekiq",urgency="low"}
+          sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate30m{external_dependencies!="yes",le="+Inf",shard="gitaly-throttled",type="sidekiq",urgency="low"}
         )
         , "_c", "2", "", "")
         or
         label_replace(sum by (env,environment,stage) (
-          sli_aggregations:sidekiq_jobs_queue_duration_seconds_bucket_rate30m{le="+Inf",shard="gitaly-throttled",type="sidekiq",urgency="low"}
+          sli_aggregations:sidekiq_jobs_queue_duration_seconds_bucket_rate30m{external_dependencies!="yes",le="+Inf",shard="gitaly-throttled",type="sidekiq",urgency="low"}
         )
         , "_c", "3", "", "")
         or
         label_replace(sum by (env,environment,stage) (
-          sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate30m{le="+Inf",shard="gitaly-throttled",type="sidekiq",urgency="throttled"}
+          sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate30m{external_dependencies!="yes",le="+Inf",shard="gitaly-throttled",type="sidekiq",urgency="throttled"}
         )
         , "_c", "4", "", "")
       )
@@ -2543,27 +2735,27 @@ groups:
     expr: |
       sum by (env,environment,stage) (
         label_replace(sum by (env,environment,stage) (
-          sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate30m{le="10",shard="low-urgency-cpu-bound",type="sidekiq",urgency="high"}
+          sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate30m{external_dependencies!="yes",le="10",shard="low-urgency-cpu-bound",type="sidekiq",urgency="high"}
         )
         , "_c", "0", "", "")
         or
         label_replace(sum by (env,environment,stage) (
-          sli_aggregations:sidekiq_jobs_queue_duration_seconds_bucket_rate30m{le="10",shard="low-urgency-cpu-bound",type="sidekiq",urgency="high"}
+          sli_aggregations:sidekiq_jobs_queue_duration_seconds_bucket_rate30m{external_dependencies!="yes",le="10",shard="low-urgency-cpu-bound",type="sidekiq",urgency="high"}
         )
         , "_c", "1", "", "")
         or
         label_replace(sum by (env,environment,stage) (
-          sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate30m{le="300",shard="low-urgency-cpu-bound",type="sidekiq",urgency="low"}
+          sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate30m{external_dependencies!="yes",le="300",shard="low-urgency-cpu-bound",type="sidekiq",urgency="low"}
         )
         , "_c", "2", "", "")
         or
         label_replace(sum by (env,environment,stage) (
-          sli_aggregations:sidekiq_jobs_queue_duration_seconds_bucket_rate30m{le="60",shard="low-urgency-cpu-bound",type="sidekiq",urgency="low"}
+          sli_aggregations:sidekiq_jobs_queue_duration_seconds_bucket_rate30m{external_dependencies!="yes",le="60",shard="low-urgency-cpu-bound",type="sidekiq",urgency="low"}
         )
         , "_c", "3", "", "")
         or
         label_replace(sum by (env,environment,stage) (
-          sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate30m{le="300",shard="low-urgency-cpu-bound",type="sidekiq",urgency="throttled"}
+          sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate30m{external_dependencies!="yes",le="300",shard="low-urgency-cpu-bound",type="sidekiq",urgency="throttled"}
         )
         , "_c", "4", "", "")
       )
@@ -2575,27 +2767,27 @@ groups:
     expr: |
       sum by (env,environment,stage) (
         label_replace(sum by (env,environment,stage) (
-          sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate30m{le="+Inf",shard="low-urgency-cpu-bound",type="sidekiq",urgency="high"}
+          sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate30m{external_dependencies!="yes",le="+Inf",shard="low-urgency-cpu-bound",type="sidekiq",urgency="high"}
         )
         , "_c", "0", "", "")
         or
         label_replace(sum by (env,environment,stage) (
-          sli_aggregations:sidekiq_jobs_queue_duration_seconds_bucket_rate30m{le="+Inf",shard="low-urgency-cpu-bound",type="sidekiq",urgency="high"}
+          sli_aggregations:sidekiq_jobs_queue_duration_seconds_bucket_rate30m{external_dependencies!="yes",le="+Inf",shard="low-urgency-cpu-bound",type="sidekiq",urgency="high"}
         )
         , "_c", "1", "", "")
         or
         label_replace(sum by (env,environment,stage) (
-          sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate30m{le="+Inf",shard="low-urgency-cpu-bound",type="sidekiq",urgency="low"}
+          sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate30m{external_dependencies!="yes",le="+Inf",shard="low-urgency-cpu-bound",type="sidekiq",urgency="low"}
         )
         , "_c", "2", "", "")
         or
         label_replace(sum by (env,environment,stage) (
-          sli_aggregations:sidekiq_jobs_queue_duration_seconds_bucket_rate30m{le="+Inf",shard="low-urgency-cpu-bound",type="sidekiq",urgency="low"}
+          sli_aggregations:sidekiq_jobs_queue_duration_seconds_bucket_rate30m{external_dependencies!="yes",le="+Inf",shard="low-urgency-cpu-bound",type="sidekiq",urgency="low"}
         )
         , "_c", "3", "", "")
         or
         label_replace(sum by (env,environment,stage) (
-          sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate30m{le="+Inf",shard="low-urgency-cpu-bound",type="sidekiq",urgency="throttled"}
+          sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate30m{external_dependencies!="yes",le="+Inf",shard="low-urgency-cpu-bound",type="sidekiq",urgency="throttled"}
         )
         , "_c", "4", "", "")
       )
@@ -2633,27 +2825,27 @@ groups:
     expr: |
       sum by (env,environment,stage) (
         label_replace(sum by (env,environment,stage) (
-          sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate30m{le="10",shard="memory-bound",type="sidekiq",urgency="high"}
+          sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate30m{external_dependencies!="yes",le="10",shard="memory-bound",type="sidekiq",urgency="high"}
         )
         , "_c", "0", "", "")
         or
         label_replace(sum by (env,environment,stage) (
-          sli_aggregations:sidekiq_jobs_queue_duration_seconds_bucket_rate30m{le="10",shard="memory-bound",type="sidekiq",urgency="high"}
+          sli_aggregations:sidekiq_jobs_queue_duration_seconds_bucket_rate30m{external_dependencies!="yes",le="10",shard="memory-bound",type="sidekiq",urgency="high"}
         )
         , "_c", "1", "", "")
         or
         label_replace(sum by (env,environment,stage) (
-          sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate30m{le="300",shard="memory-bound",type="sidekiq",urgency="low"}
+          sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate30m{external_dependencies!="yes",le="300",shard="memory-bound",type="sidekiq",urgency="low"}
         )
         , "_c", "2", "", "")
         or
         label_replace(sum by (env,environment,stage) (
-          sli_aggregations:sidekiq_jobs_queue_duration_seconds_bucket_rate30m{le="60",shard="memory-bound",type="sidekiq",urgency="low"}
+          sli_aggregations:sidekiq_jobs_queue_duration_seconds_bucket_rate30m{external_dependencies!="yes",le="60",shard="memory-bound",type="sidekiq",urgency="low"}
         )
         , "_c", "3", "", "")
         or
         label_replace(sum by (env,environment,stage) (
-          sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate30m{le="300",shard="memory-bound",type="sidekiq",urgency="throttled"}
+          sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate30m{external_dependencies!="yes",le="300",shard="memory-bound",type="sidekiq",urgency="throttled"}
         )
         , "_c", "4", "", "")
       )
@@ -2665,27 +2857,27 @@ groups:
     expr: |
       sum by (env,environment,stage) (
         label_replace(sum by (env,environment,stage) (
-          sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate30m{le="+Inf",shard="memory-bound",type="sidekiq",urgency="high"}
+          sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate30m{external_dependencies!="yes",le="+Inf",shard="memory-bound",type="sidekiq",urgency="high"}
         )
         , "_c", "0", "", "")
         or
         label_replace(sum by (env,environment,stage) (
-          sli_aggregations:sidekiq_jobs_queue_duration_seconds_bucket_rate30m{le="+Inf",shard="memory-bound",type="sidekiq",urgency="high"}
+          sli_aggregations:sidekiq_jobs_queue_duration_seconds_bucket_rate30m{external_dependencies!="yes",le="+Inf",shard="memory-bound",type="sidekiq",urgency="high"}
         )
         , "_c", "1", "", "")
         or
         label_replace(sum by (env,environment,stage) (
-          sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate30m{le="+Inf",shard="memory-bound",type="sidekiq",urgency="low"}
+          sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate30m{external_dependencies!="yes",le="+Inf",shard="memory-bound",type="sidekiq",urgency="low"}
         )
         , "_c", "2", "", "")
         or
         label_replace(sum by (env,environment,stage) (
-          sli_aggregations:sidekiq_jobs_queue_duration_seconds_bucket_rate30m{le="+Inf",shard="memory-bound",type="sidekiq",urgency="low"}
+          sli_aggregations:sidekiq_jobs_queue_duration_seconds_bucket_rate30m{external_dependencies!="yes",le="+Inf",shard="memory-bound",type="sidekiq",urgency="low"}
         )
         , "_c", "3", "", "")
         or
         label_replace(sum by (env,environment,stage) (
-          sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate30m{le="+Inf",shard="memory-bound",type="sidekiq",urgency="throttled"}
+          sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate30m{external_dependencies!="yes",le="+Inf",shard="memory-bound",type="sidekiq",urgency="throttled"}
         )
         , "_c", "4", "", "")
       )
@@ -2723,27 +2915,27 @@ groups:
     expr: |
       sum by (env,environment,stage) (
         label_replace(sum by (env,environment,stage) (
-          sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate30m{le="10",shard="quarantine",type="sidekiq",urgency="high"}
+          sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate30m{external_dependencies!="yes",le="10",shard="quarantine",type="sidekiq",urgency="high"}
         )
         , "_c", "0", "", "")
         or
         label_replace(sum by (env,environment,stage) (
-          sli_aggregations:sidekiq_jobs_queue_duration_seconds_bucket_rate30m{le="10",shard="quarantine",type="sidekiq",urgency="high"}
+          sli_aggregations:sidekiq_jobs_queue_duration_seconds_bucket_rate30m{external_dependencies!="yes",le="10",shard="quarantine",type="sidekiq",urgency="high"}
         )
         , "_c", "1", "", "")
         or
         label_replace(sum by (env,environment,stage) (
-          sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate30m{le="300",shard="quarantine",type="sidekiq",urgency="low"}
+          sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate30m{external_dependencies!="yes",le="300",shard="quarantine",type="sidekiq",urgency="low"}
         )
         , "_c", "2", "", "")
         or
         label_replace(sum by (env,environment,stage) (
-          sli_aggregations:sidekiq_jobs_queue_duration_seconds_bucket_rate30m{le="60",shard="quarantine",type="sidekiq",urgency="low"}
+          sli_aggregations:sidekiq_jobs_queue_duration_seconds_bucket_rate30m{external_dependencies!="yes",le="60",shard="quarantine",type="sidekiq",urgency="low"}
         )
         , "_c", "3", "", "")
         or
         label_replace(sum by (env,environment,stage) (
-          sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate30m{le="300",shard="quarantine",type="sidekiq",urgency="throttled"}
+          sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate30m{external_dependencies!="yes",le="300",shard="quarantine",type="sidekiq",urgency="throttled"}
         )
         , "_c", "4", "", "")
       )
@@ -2755,27 +2947,27 @@ groups:
     expr: |
       sum by (env,environment,stage) (
         label_replace(sum by (env,environment,stage) (
-          sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate30m{le="+Inf",shard="quarantine",type="sidekiq",urgency="high"}
+          sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate30m{external_dependencies!="yes",le="+Inf",shard="quarantine",type="sidekiq",urgency="high"}
         )
         , "_c", "0", "", "")
         or
         label_replace(sum by (env,environment,stage) (
-          sli_aggregations:sidekiq_jobs_queue_duration_seconds_bucket_rate30m{le="+Inf",shard="quarantine",type="sidekiq",urgency="high"}
+          sli_aggregations:sidekiq_jobs_queue_duration_seconds_bucket_rate30m{external_dependencies!="yes",le="+Inf",shard="quarantine",type="sidekiq",urgency="high"}
         )
         , "_c", "1", "", "")
         or
         label_replace(sum by (env,environment,stage) (
-          sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate30m{le="+Inf",shard="quarantine",type="sidekiq",urgency="low"}
+          sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate30m{external_dependencies!="yes",le="+Inf",shard="quarantine",type="sidekiq",urgency="low"}
         )
         , "_c", "2", "", "")
         or
         label_replace(sum by (env,environment,stage) (
-          sli_aggregations:sidekiq_jobs_queue_duration_seconds_bucket_rate30m{le="+Inf",shard="quarantine",type="sidekiq",urgency="low"}
+          sli_aggregations:sidekiq_jobs_queue_duration_seconds_bucket_rate30m{external_dependencies!="yes",le="+Inf",shard="quarantine",type="sidekiq",urgency="low"}
         )
         , "_c", "3", "", "")
         or
         label_replace(sum by (env,environment,stage) (
-          sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate30m{le="+Inf",shard="quarantine",type="sidekiq",urgency="throttled"}
+          sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate30m{external_dependencies!="yes",le="+Inf",shard="quarantine",type="sidekiq",urgency="throttled"}
         )
         , "_c", "4", "", "")
       )
@@ -2813,27 +3005,27 @@ groups:
     expr: |
       sum by (env,environment,stage) (
         label_replace(sum by (env,environment,stage) (
-          sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate30m{le="10",shard="urgent-authorized-projects",type="sidekiq",urgency="high"}
+          sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate30m{external_dependencies!="yes",le="10",shard="urgent-authorized-projects",type="sidekiq",urgency="high"}
         )
         , "_c", "0", "", "")
         or
         label_replace(sum by (env,environment,stage) (
-          sli_aggregations:sidekiq_jobs_queue_duration_seconds_bucket_rate30m{le="10",shard="urgent-authorized-projects",type="sidekiq",urgency="high"}
+          sli_aggregations:sidekiq_jobs_queue_duration_seconds_bucket_rate30m{external_dependencies!="yes",le="10",shard="urgent-authorized-projects",type="sidekiq",urgency="high"}
         )
         , "_c", "1", "", "")
         or
         label_replace(sum by (env,environment,stage) (
-          sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate30m{le="300",shard="urgent-authorized-projects",type="sidekiq",urgency="low"}
+          sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate30m{external_dependencies!="yes",le="300",shard="urgent-authorized-projects",type="sidekiq",urgency="low"}
         )
         , "_c", "2", "", "")
         or
         label_replace(sum by (env,environment,stage) (
-          sli_aggregations:sidekiq_jobs_queue_duration_seconds_bucket_rate30m{le="60",shard="urgent-authorized-projects",type="sidekiq",urgency="low"}
+          sli_aggregations:sidekiq_jobs_queue_duration_seconds_bucket_rate30m{external_dependencies!="yes",le="60",shard="urgent-authorized-projects",type="sidekiq",urgency="low"}
         )
         , "_c", "3", "", "")
         or
         label_replace(sum by (env,environment,stage) (
-          sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate30m{le="300",shard="urgent-authorized-projects",type="sidekiq",urgency="throttled"}
+          sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate30m{external_dependencies!="yes",le="300",shard="urgent-authorized-projects",type="sidekiq",urgency="throttled"}
         )
         , "_c", "4", "", "")
       )
@@ -2845,27 +3037,27 @@ groups:
     expr: |
       sum by (env,environment,stage) (
         label_replace(sum by (env,environment,stage) (
-          sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate30m{le="+Inf",shard="urgent-authorized-projects",type="sidekiq",urgency="high"}
+          sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate30m{external_dependencies!="yes",le="+Inf",shard="urgent-authorized-projects",type="sidekiq",urgency="high"}
         )
         , "_c", "0", "", "")
         or
         label_replace(sum by (env,environment,stage) (
-          sli_aggregations:sidekiq_jobs_queue_duration_seconds_bucket_rate30m{le="+Inf",shard="urgent-authorized-projects",type="sidekiq",urgency="high"}
+          sli_aggregations:sidekiq_jobs_queue_duration_seconds_bucket_rate30m{external_dependencies!="yes",le="+Inf",shard="urgent-authorized-projects",type="sidekiq",urgency="high"}
         )
         , "_c", "1", "", "")
         or
         label_replace(sum by (env,environment,stage) (
-          sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate30m{le="+Inf",shard="urgent-authorized-projects",type="sidekiq",urgency="low"}
+          sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate30m{external_dependencies!="yes",le="+Inf",shard="urgent-authorized-projects",type="sidekiq",urgency="low"}
         )
         , "_c", "2", "", "")
         or
         label_replace(sum by (env,environment,stage) (
-          sli_aggregations:sidekiq_jobs_queue_duration_seconds_bucket_rate30m{le="+Inf",shard="urgent-authorized-projects",type="sidekiq",urgency="low"}
+          sli_aggregations:sidekiq_jobs_queue_duration_seconds_bucket_rate30m{external_dependencies!="yes",le="+Inf",shard="urgent-authorized-projects",type="sidekiq",urgency="low"}
         )
         , "_c", "3", "", "")
         or
         label_replace(sum by (env,environment,stage) (
-          sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate30m{le="+Inf",shard="urgent-authorized-projects",type="sidekiq",urgency="throttled"}
+          sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate30m{external_dependencies!="yes",le="+Inf",shard="urgent-authorized-projects",type="sidekiq",urgency="throttled"}
         )
         , "_c", "4", "", "")
       )
@@ -2903,27 +3095,27 @@ groups:
     expr: |
       sum by (env,environment,stage) (
         label_replace(sum by (env,environment,stage) (
-          sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate30m{le="10",shard="urgent-cpu-bound",type="sidekiq",urgency="high"}
+          sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate30m{external_dependencies!="yes",le="10",shard="urgent-cpu-bound",type="sidekiq",urgency="high"}
         )
         , "_c", "0", "", "")
         or
         label_replace(sum by (env,environment,stage) (
-          sli_aggregations:sidekiq_jobs_queue_duration_seconds_bucket_rate30m{le="10",shard="urgent-cpu-bound",type="sidekiq",urgency="high"}
+          sli_aggregations:sidekiq_jobs_queue_duration_seconds_bucket_rate30m{external_dependencies!="yes",le="10",shard="urgent-cpu-bound",type="sidekiq",urgency="high"}
         )
         , "_c", "1", "", "")
         or
         label_replace(sum by (env,environment,stage) (
-          sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate30m{le="300",shard="urgent-cpu-bound",type="sidekiq",urgency="low"}
+          sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate30m{external_dependencies!="yes",le="300",shard="urgent-cpu-bound",type="sidekiq",urgency="low"}
         )
         , "_c", "2", "", "")
         or
         label_replace(sum by (env,environment,stage) (
-          sli_aggregations:sidekiq_jobs_queue_duration_seconds_bucket_rate30m{le="60",shard="urgent-cpu-bound",type="sidekiq",urgency="low"}
+          sli_aggregations:sidekiq_jobs_queue_duration_seconds_bucket_rate30m{external_dependencies!="yes",le="60",shard="urgent-cpu-bound",type="sidekiq",urgency="low"}
         )
         , "_c", "3", "", "")
         or
         label_replace(sum by (env,environment,stage) (
-          sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate30m{le="300",shard="urgent-cpu-bound",type="sidekiq",urgency="throttled"}
+          sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate30m{external_dependencies!="yes",le="300",shard="urgent-cpu-bound",type="sidekiq",urgency="throttled"}
         )
         , "_c", "4", "", "")
       )
@@ -2935,27 +3127,27 @@ groups:
     expr: |
       sum by (env,environment,stage) (
         label_replace(sum by (env,environment,stage) (
-          sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate30m{le="+Inf",shard="urgent-cpu-bound",type="sidekiq",urgency="high"}
+          sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate30m{external_dependencies!="yes",le="+Inf",shard="urgent-cpu-bound",type="sidekiq",urgency="high"}
         )
         , "_c", "0", "", "")
         or
         label_replace(sum by (env,environment,stage) (
-          sli_aggregations:sidekiq_jobs_queue_duration_seconds_bucket_rate30m{le="+Inf",shard="urgent-cpu-bound",type="sidekiq",urgency="high"}
+          sli_aggregations:sidekiq_jobs_queue_duration_seconds_bucket_rate30m{external_dependencies!="yes",le="+Inf",shard="urgent-cpu-bound",type="sidekiq",urgency="high"}
         )
         , "_c", "1", "", "")
         or
         label_replace(sum by (env,environment,stage) (
-          sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate30m{le="+Inf",shard="urgent-cpu-bound",type="sidekiq",urgency="low"}
+          sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate30m{external_dependencies!="yes",le="+Inf",shard="urgent-cpu-bound",type="sidekiq",urgency="low"}
         )
         , "_c", "2", "", "")
         or
         label_replace(sum by (env,environment,stage) (
-          sli_aggregations:sidekiq_jobs_queue_duration_seconds_bucket_rate30m{le="+Inf",shard="urgent-cpu-bound",type="sidekiq",urgency="low"}
+          sli_aggregations:sidekiq_jobs_queue_duration_seconds_bucket_rate30m{external_dependencies!="yes",le="+Inf",shard="urgent-cpu-bound",type="sidekiq",urgency="low"}
         )
         , "_c", "3", "", "")
         or
         label_replace(sum by (env,environment,stage) (
-          sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate30m{le="+Inf",shard="urgent-cpu-bound",type="sidekiq",urgency="throttled"}
+          sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate30m{external_dependencies!="yes",le="+Inf",shard="urgent-cpu-bound",type="sidekiq",urgency="throttled"}
         )
         , "_c", "4", "", "")
       )
@@ -2993,27 +3185,27 @@ groups:
     expr: |
       sum by (env,environment,stage) (
         label_replace(sum by (env,environment,stage) (
-          sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate30m{le="10",shard="urgent-other",type="sidekiq",urgency="high"}
+          sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate30m{external_dependencies!="yes",le="10",shard="urgent-other",type="sidekiq",urgency="high"}
         )
         , "_c", "0", "", "")
         or
         label_replace(sum by (env,environment,stage) (
-          sli_aggregations:sidekiq_jobs_queue_duration_seconds_bucket_rate30m{le="10",shard="urgent-other",type="sidekiq",urgency="high"}
+          sli_aggregations:sidekiq_jobs_queue_duration_seconds_bucket_rate30m{external_dependencies!="yes",le="10",shard="urgent-other",type="sidekiq",urgency="high"}
         )
         , "_c", "1", "", "")
         or
         label_replace(sum by (env,environment,stage) (
-          sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate30m{le="300",shard="urgent-other",type="sidekiq",urgency="low"}
+          sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate30m{external_dependencies!="yes",le="300",shard="urgent-other",type="sidekiq",urgency="low"}
         )
         , "_c", "2", "", "")
         or
         label_replace(sum by (env,environment,stage) (
-          sli_aggregations:sidekiq_jobs_queue_duration_seconds_bucket_rate30m{le="60",shard="urgent-other",type="sidekiq",urgency="low"}
+          sli_aggregations:sidekiq_jobs_queue_duration_seconds_bucket_rate30m{external_dependencies!="yes",le="60",shard="urgent-other",type="sidekiq",urgency="low"}
         )
         , "_c", "3", "", "")
         or
         label_replace(sum by (env,environment,stage) (
-          sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate30m{le="300",shard="urgent-other",type="sidekiq",urgency="throttled"}
+          sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate30m{external_dependencies!="yes",le="300",shard="urgent-other",type="sidekiq",urgency="throttled"}
         )
         , "_c", "4", "", "")
       )
@@ -3025,27 +3217,27 @@ groups:
     expr: |
       sum by (env,environment,stage) (
         label_replace(sum by (env,environment,stage) (
-          sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate30m{le="+Inf",shard="urgent-other",type="sidekiq",urgency="high"}
+          sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate30m{external_dependencies!="yes",le="+Inf",shard="urgent-other",type="sidekiq",urgency="high"}
         )
         , "_c", "0", "", "")
         or
         label_replace(sum by (env,environment,stage) (
-          sli_aggregations:sidekiq_jobs_queue_duration_seconds_bucket_rate30m{le="+Inf",shard="urgent-other",type="sidekiq",urgency="high"}
+          sli_aggregations:sidekiq_jobs_queue_duration_seconds_bucket_rate30m{external_dependencies!="yes",le="+Inf",shard="urgent-other",type="sidekiq",urgency="high"}
         )
         , "_c", "1", "", "")
         or
         label_replace(sum by (env,environment,stage) (
-          sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate30m{le="+Inf",shard="urgent-other",type="sidekiq",urgency="low"}
+          sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate30m{external_dependencies!="yes",le="+Inf",shard="urgent-other",type="sidekiq",urgency="low"}
         )
         , "_c", "2", "", "")
         or
         label_replace(sum by (env,environment,stage) (
-          sli_aggregations:sidekiq_jobs_queue_duration_seconds_bucket_rate30m{le="+Inf",shard="urgent-other",type="sidekiq",urgency="low"}
+          sli_aggregations:sidekiq_jobs_queue_duration_seconds_bucket_rate30m{external_dependencies!="yes",le="+Inf",shard="urgent-other",type="sidekiq",urgency="low"}
         )
         , "_c", "3", "", "")
         or
         label_replace(sum by (env,environment,stage) (
-          sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate30m{le="+Inf",shard="urgent-other",type="sidekiq",urgency="throttled"}
+          sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate30m{external_dependencies!="yes",le="+Inf",shard="urgent-other",type="sidekiq",urgency="throttled"}
         )
         , "_c", "4", "", "")
       )
@@ -3168,7 +3360,7 @@ groups:
       )
   - record: sli_aggregations:sidekiq_jobs_queue_duration_seconds_bucket_rate1h
     expr: |
-      sum by (environment,feature_category,job,le,queue,shard,stage,tier,type,urgency,worker) (
+      sum by (environment,error,external_dependencies,feature_category,job,le,queue,shard,stage,tier,type,urgency,worker) (
         rate(sidekiq_jobs_queue_duration_seconds_bucket[1h])
       )
   - record: sli_aggregations:sidekiq_jobs_failed_total_rate1h
@@ -3201,6 +3393,70 @@ groups:
         0 * group by(env,environment,stage) (
           gitlab_component_ops:rate_1h{component="email_receiver",tier="sv",type="sidekiq"}
         )
+      )
+  - record: gitlab_component_apdex:success:rate_1h
+    labels:
+      component: external_dependency
+      tier: sv
+      type: sidekiq
+    expr: |
+      sum by (env,environment,stage) (
+        label_replace(sum by (env,environment,stage) (
+          sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate1h{le="10",type="sidekiq",urgency="high"}
+        )
+        , "_c", "0", "", "")
+        or
+        label_replace(sum by (env,environment,stage) (
+          sli_aggregations:sidekiq_jobs_queue_duration_seconds_bucket_rate1h{le="10",type="sidekiq",urgency="high"}
+        )
+        , "_c", "1", "", "")
+        or
+        label_replace(sum by (env,environment,stage) (
+          sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate1h{le="300",type="sidekiq",urgency="low"}
+        )
+        , "_c", "2", "", "")
+        or
+        label_replace(sum by (env,environment,stage) (
+          sli_aggregations:sidekiq_jobs_queue_duration_seconds_bucket_rate1h{le="60",type="sidekiq",urgency="low"}
+        )
+        , "_c", "3", "", "")
+        or
+        label_replace(sum by (env,environment,stage) (
+          sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate1h{le="300",type="sidekiq",urgency="throttled"}
+        )
+        , "_c", "4", "", "")
+      )
+  - record: gitlab_component_apdex:weight:score_1h
+    labels:
+      component: external_dependency
+      tier: sv
+      type: sidekiq
+    expr: |
+      sum by (env,environment,stage) (
+        label_replace(sum by (env,environment,stage) (
+          sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate1h{le="+Inf",type="sidekiq",urgency="high"}
+        )
+        , "_c", "0", "", "")
+        or
+        label_replace(sum by (env,environment,stage) (
+          sli_aggregations:sidekiq_jobs_queue_duration_seconds_bucket_rate1h{le="+Inf",type="sidekiq",urgency="high"}
+        )
+        , "_c", "1", "", "")
+        or
+        label_replace(sum by (env,environment,stage) (
+          sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate1h{le="+Inf",type="sidekiq",urgency="low"}
+        )
+        , "_c", "2", "", "")
+        or
+        label_replace(sum by (env,environment,stage) (
+          sli_aggregations:sidekiq_jobs_queue_duration_seconds_bucket_rate1h{le="+Inf",type="sidekiq",urgency="low"}
+        )
+        , "_c", "3", "", "")
+        or
+        label_replace(sum by (env,environment,stage) (
+          sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate1h{le="+Inf",type="sidekiq",urgency="throttled"}
+        )
+        , "_c", "4", "", "")
       )
   - record: gitlab_component_ops:rate_1h
     labels:
@@ -3264,27 +3520,27 @@ groups:
     expr: |
       sum by (env,environment,stage) (
         label_replace(sum by (env,environment,stage) (
-          sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate1h{le="10",shard="catchall",type="sidekiq",urgency="high"}
+          sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate1h{external_dependencies!="yes",le="10",shard="catchall",type="sidekiq",urgency="high"}
         )
         , "_c", "0", "", "")
         or
         label_replace(sum by (env,environment,stage) (
-          sli_aggregations:sidekiq_jobs_queue_duration_seconds_bucket_rate1h{le="10",shard="catchall",type="sidekiq",urgency="high"}
+          sli_aggregations:sidekiq_jobs_queue_duration_seconds_bucket_rate1h{external_dependencies!="yes",le="10",shard="catchall",type="sidekiq",urgency="high"}
         )
         , "_c", "1", "", "")
         or
         label_replace(sum by (env,environment,stage) (
-          sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate1h{le="300",shard="catchall",type="sidekiq",urgency="low"}
+          sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate1h{external_dependencies!="yes",le="300",shard="catchall",type="sidekiq",urgency="low"}
         )
         , "_c", "2", "", "")
         or
         label_replace(sum by (env,environment,stage) (
-          sli_aggregations:sidekiq_jobs_queue_duration_seconds_bucket_rate1h{le="60",shard="catchall",type="sidekiq",urgency="low"}
+          sli_aggregations:sidekiq_jobs_queue_duration_seconds_bucket_rate1h{external_dependencies!="yes",le="60",shard="catchall",type="sidekiq",urgency="low"}
         )
         , "_c", "3", "", "")
         or
         label_replace(sum by (env,environment,stage) (
-          sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate1h{le="300",shard="catchall",type="sidekiq",urgency="throttled"}
+          sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate1h{external_dependencies!="yes",le="300",shard="catchall",type="sidekiq",urgency="throttled"}
         )
         , "_c", "4", "", "")
       )
@@ -3297,27 +3553,27 @@ groups:
     expr: |
       sum by (env,environment,stage) (
         label_replace(sum by (env,environment,stage) (
-          sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate1h{le="+Inf",shard="catchall",type="sidekiq",urgency="high"}
+          sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate1h{external_dependencies!="yes",le="+Inf",shard="catchall",type="sidekiq",urgency="high"}
         )
         , "_c", "0", "", "")
         or
         label_replace(sum by (env,environment,stage) (
-          sli_aggregations:sidekiq_jobs_queue_duration_seconds_bucket_rate1h{le="+Inf",shard="catchall",type="sidekiq",urgency="high"}
+          sli_aggregations:sidekiq_jobs_queue_duration_seconds_bucket_rate1h{external_dependencies!="yes",le="+Inf",shard="catchall",type="sidekiq",urgency="high"}
         )
         , "_c", "1", "", "")
         or
         label_replace(sum by (env,environment,stage) (
-          sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate1h{le="+Inf",shard="catchall",type="sidekiq",urgency="low"}
+          sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate1h{external_dependencies!="yes",le="+Inf",shard="catchall",type="sidekiq",urgency="low"}
         )
         , "_c", "2", "", "")
         or
         label_replace(sum by (env,environment,stage) (
-          sli_aggregations:sidekiq_jobs_queue_duration_seconds_bucket_rate1h{le="+Inf",shard="catchall",type="sidekiq",urgency="low"}
+          sli_aggregations:sidekiq_jobs_queue_duration_seconds_bucket_rate1h{external_dependencies!="yes",le="+Inf",shard="catchall",type="sidekiq",urgency="low"}
         )
         , "_c", "3", "", "")
         or
         label_replace(sum by (env,environment,stage) (
-          sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate1h{le="+Inf",shard="catchall",type="sidekiq",urgency="throttled"}
+          sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate1h{external_dependencies!="yes",le="+Inf",shard="catchall",type="sidekiq",urgency="throttled"}
         )
         , "_c", "4", "", "")
       )
@@ -3358,27 +3614,27 @@ groups:
     expr: |
       sum by (env,environment,stage) (
         label_replace(sum by (env,environment,stage) (
-          sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate1h{le="10",shard="database-throttled",type="sidekiq",urgency="high"}
+          sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate1h{external_dependencies!="yes",le="10",shard="database-throttled",type="sidekiq",urgency="high"}
         )
         , "_c", "0", "", "")
         or
         label_replace(sum by (env,environment,stage) (
-          sli_aggregations:sidekiq_jobs_queue_duration_seconds_bucket_rate1h{le="10",shard="database-throttled",type="sidekiq",urgency="high"}
+          sli_aggregations:sidekiq_jobs_queue_duration_seconds_bucket_rate1h{external_dependencies!="yes",le="10",shard="database-throttled",type="sidekiq",urgency="high"}
         )
         , "_c", "1", "", "")
         or
         label_replace(sum by (env,environment,stage) (
-          sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate1h{le="300",shard="database-throttled",type="sidekiq",urgency="low"}
+          sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate1h{external_dependencies!="yes",le="300",shard="database-throttled",type="sidekiq",urgency="low"}
         )
         , "_c", "2", "", "")
         or
         label_replace(sum by (env,environment,stage) (
-          sli_aggregations:sidekiq_jobs_queue_duration_seconds_bucket_rate1h{le="60",shard="database-throttled",type="sidekiq",urgency="low"}
+          sli_aggregations:sidekiq_jobs_queue_duration_seconds_bucket_rate1h{external_dependencies!="yes",le="60",shard="database-throttled",type="sidekiq",urgency="low"}
         )
         , "_c", "3", "", "")
         or
         label_replace(sum by (env,environment,stage) (
-          sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate1h{le="300",shard="database-throttled",type="sidekiq",urgency="throttled"}
+          sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate1h{external_dependencies!="yes",le="300",shard="database-throttled",type="sidekiq",urgency="throttled"}
         )
         , "_c", "4", "", "")
       )
@@ -3391,27 +3647,27 @@ groups:
     expr: |
       sum by (env,environment,stage) (
         label_replace(sum by (env,environment,stage) (
-          sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate1h{le="+Inf",shard="database-throttled",type="sidekiq",urgency="high"}
+          sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate1h{external_dependencies!="yes",le="+Inf",shard="database-throttled",type="sidekiq",urgency="high"}
         )
         , "_c", "0", "", "")
         or
         label_replace(sum by (env,environment,stage) (
-          sli_aggregations:sidekiq_jobs_queue_duration_seconds_bucket_rate1h{le="+Inf",shard="database-throttled",type="sidekiq",urgency="high"}
+          sli_aggregations:sidekiq_jobs_queue_duration_seconds_bucket_rate1h{external_dependencies!="yes",le="+Inf",shard="database-throttled",type="sidekiq",urgency="high"}
         )
         , "_c", "1", "", "")
         or
         label_replace(sum by (env,environment,stage) (
-          sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate1h{le="+Inf",shard="database-throttled",type="sidekiq",urgency="low"}
+          sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate1h{external_dependencies!="yes",le="+Inf",shard="database-throttled",type="sidekiq",urgency="low"}
         )
         , "_c", "2", "", "")
         or
         label_replace(sum by (env,environment,stage) (
-          sli_aggregations:sidekiq_jobs_queue_duration_seconds_bucket_rate1h{le="+Inf",shard="database-throttled",type="sidekiq",urgency="low"}
+          sli_aggregations:sidekiq_jobs_queue_duration_seconds_bucket_rate1h{external_dependencies!="yes",le="+Inf",shard="database-throttled",type="sidekiq",urgency="low"}
         )
         , "_c", "3", "", "")
         or
         label_replace(sum by (env,environment,stage) (
-          sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate1h{le="+Inf",shard="database-throttled",type="sidekiq",urgency="throttled"}
+          sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate1h{external_dependencies!="yes",le="+Inf",shard="database-throttled",type="sidekiq",urgency="throttled"}
         )
         , "_c", "4", "", "")
       )
@@ -3452,27 +3708,27 @@ groups:
     expr: |
       sum by (env,environment,stage) (
         label_replace(sum by (env,environment,stage) (
-          sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate1h{le="10",shard="elasticsearch",type="sidekiq",urgency="high"}
+          sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate1h{external_dependencies!="yes",le="10",shard="elasticsearch",type="sidekiq",urgency="high"}
         )
         , "_c", "0", "", "")
         or
         label_replace(sum by (env,environment,stage) (
-          sli_aggregations:sidekiq_jobs_queue_duration_seconds_bucket_rate1h{le="10",shard="elasticsearch",type="sidekiq",urgency="high"}
+          sli_aggregations:sidekiq_jobs_queue_duration_seconds_bucket_rate1h{external_dependencies!="yes",le="10",shard="elasticsearch",type="sidekiq",urgency="high"}
         )
         , "_c", "1", "", "")
         or
         label_replace(sum by (env,environment,stage) (
-          sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate1h{le="300",shard="elasticsearch",type="sidekiq",urgency="low"}
+          sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate1h{external_dependencies!="yes",le="300",shard="elasticsearch",type="sidekiq",urgency="low"}
         )
         , "_c", "2", "", "")
         or
         label_replace(sum by (env,environment,stage) (
-          sli_aggregations:sidekiq_jobs_queue_duration_seconds_bucket_rate1h{le="60",shard="elasticsearch",type="sidekiq",urgency="low"}
+          sli_aggregations:sidekiq_jobs_queue_duration_seconds_bucket_rate1h{external_dependencies!="yes",le="60",shard="elasticsearch",type="sidekiq",urgency="low"}
         )
         , "_c", "3", "", "")
         or
         label_replace(sum by (env,environment,stage) (
-          sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate1h{le="300",shard="elasticsearch",type="sidekiq",urgency="throttled"}
+          sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate1h{external_dependencies!="yes",le="300",shard="elasticsearch",type="sidekiq",urgency="throttled"}
         )
         , "_c", "4", "", "")
       )
@@ -3485,27 +3741,27 @@ groups:
     expr: |
       sum by (env,environment,stage) (
         label_replace(sum by (env,environment,stage) (
-          sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate1h{le="+Inf",shard="elasticsearch",type="sidekiq",urgency="high"}
+          sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate1h{external_dependencies!="yes",le="+Inf",shard="elasticsearch",type="sidekiq",urgency="high"}
         )
         , "_c", "0", "", "")
         or
         label_replace(sum by (env,environment,stage) (
-          sli_aggregations:sidekiq_jobs_queue_duration_seconds_bucket_rate1h{le="+Inf",shard="elasticsearch",type="sidekiq",urgency="high"}
+          sli_aggregations:sidekiq_jobs_queue_duration_seconds_bucket_rate1h{external_dependencies!="yes",le="+Inf",shard="elasticsearch",type="sidekiq",urgency="high"}
         )
         , "_c", "1", "", "")
         or
         label_replace(sum by (env,environment,stage) (
-          sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate1h{le="+Inf",shard="elasticsearch",type="sidekiq",urgency="low"}
+          sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate1h{external_dependencies!="yes",le="+Inf",shard="elasticsearch",type="sidekiq",urgency="low"}
         )
         , "_c", "2", "", "")
         or
         label_replace(sum by (env,environment,stage) (
-          sli_aggregations:sidekiq_jobs_queue_duration_seconds_bucket_rate1h{le="+Inf",shard="elasticsearch",type="sidekiq",urgency="low"}
+          sli_aggregations:sidekiq_jobs_queue_duration_seconds_bucket_rate1h{external_dependencies!="yes",le="+Inf",shard="elasticsearch",type="sidekiq",urgency="low"}
         )
         , "_c", "3", "", "")
         or
         label_replace(sum by (env,environment,stage) (
-          sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate1h{le="+Inf",shard="elasticsearch",type="sidekiq",urgency="throttled"}
+          sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate1h{external_dependencies!="yes",le="+Inf",shard="elasticsearch",type="sidekiq",urgency="throttled"}
         )
         , "_c", "4", "", "")
       )
@@ -3546,27 +3802,27 @@ groups:
     expr: |
       sum by (env,environment,stage) (
         label_replace(sum by (env,environment,stage) (
-          sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate1h{le="10",shard="gitaly-throttled",type="sidekiq",urgency="high"}
+          sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate1h{external_dependencies!="yes",le="10",shard="gitaly-throttled",type="sidekiq",urgency="high"}
         )
         , "_c", "0", "", "")
         or
         label_replace(sum by (env,environment,stage) (
-          sli_aggregations:sidekiq_jobs_queue_duration_seconds_bucket_rate1h{le="10",shard="gitaly-throttled",type="sidekiq",urgency="high"}
+          sli_aggregations:sidekiq_jobs_queue_duration_seconds_bucket_rate1h{external_dependencies!="yes",le="10",shard="gitaly-throttled",type="sidekiq",urgency="high"}
         )
         , "_c", "1", "", "")
         or
         label_replace(sum by (env,environment,stage) (
-          sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate1h{le="300",shard="gitaly-throttled",type="sidekiq",urgency="low"}
+          sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate1h{external_dependencies!="yes",le="300",shard="gitaly-throttled",type="sidekiq",urgency="low"}
         )
         , "_c", "2", "", "")
         or
         label_replace(sum by (env,environment,stage) (
-          sli_aggregations:sidekiq_jobs_queue_duration_seconds_bucket_rate1h{le="60",shard="gitaly-throttled",type="sidekiq",urgency="low"}
+          sli_aggregations:sidekiq_jobs_queue_duration_seconds_bucket_rate1h{external_dependencies!="yes",le="60",shard="gitaly-throttled",type="sidekiq",urgency="low"}
         )
         , "_c", "3", "", "")
         or
         label_replace(sum by (env,environment,stage) (
-          sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate1h{le="300",shard="gitaly-throttled",type="sidekiq",urgency="throttled"}
+          sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate1h{external_dependencies!="yes",le="300",shard="gitaly-throttled",type="sidekiq",urgency="throttled"}
         )
         , "_c", "4", "", "")
       )
@@ -3579,27 +3835,27 @@ groups:
     expr: |
       sum by (env,environment,stage) (
         label_replace(sum by (env,environment,stage) (
-          sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate1h{le="+Inf",shard="gitaly-throttled",type="sidekiq",urgency="high"}
+          sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate1h{external_dependencies!="yes",le="+Inf",shard="gitaly-throttled",type="sidekiq",urgency="high"}
         )
         , "_c", "0", "", "")
         or
         label_replace(sum by (env,environment,stage) (
-          sli_aggregations:sidekiq_jobs_queue_duration_seconds_bucket_rate1h{le="+Inf",shard="gitaly-throttled",type="sidekiq",urgency="high"}
+          sli_aggregations:sidekiq_jobs_queue_duration_seconds_bucket_rate1h{external_dependencies!="yes",le="+Inf",shard="gitaly-throttled",type="sidekiq",urgency="high"}
         )
         , "_c", "1", "", "")
         or
         label_replace(sum by (env,environment,stage) (
-          sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate1h{le="+Inf",shard="gitaly-throttled",type="sidekiq",urgency="low"}
+          sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate1h{external_dependencies!="yes",le="+Inf",shard="gitaly-throttled",type="sidekiq",urgency="low"}
         )
         , "_c", "2", "", "")
         or
         label_replace(sum by (env,environment,stage) (
-          sli_aggregations:sidekiq_jobs_queue_duration_seconds_bucket_rate1h{le="+Inf",shard="gitaly-throttled",type="sidekiq",urgency="low"}
+          sli_aggregations:sidekiq_jobs_queue_duration_seconds_bucket_rate1h{external_dependencies!="yes",le="+Inf",shard="gitaly-throttled",type="sidekiq",urgency="low"}
         )
         , "_c", "3", "", "")
         or
         label_replace(sum by (env,environment,stage) (
-          sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate1h{le="+Inf",shard="gitaly-throttled",type="sidekiq",urgency="throttled"}
+          sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate1h{external_dependencies!="yes",le="+Inf",shard="gitaly-throttled",type="sidekiq",urgency="throttled"}
         )
         , "_c", "4", "", "")
       )
@@ -3640,27 +3896,27 @@ groups:
     expr: |
       sum by (env,environment,stage) (
         label_replace(sum by (env,environment,stage) (
-          sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate1h{le="10",shard="low-urgency-cpu-bound",type="sidekiq",urgency="high"}
+          sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate1h{external_dependencies!="yes",le="10",shard="low-urgency-cpu-bound",type="sidekiq",urgency="high"}
         )
         , "_c", "0", "", "")
         or
         label_replace(sum by (env,environment,stage) (
-          sli_aggregations:sidekiq_jobs_queue_duration_seconds_bucket_rate1h{le="10",shard="low-urgency-cpu-bound",type="sidekiq",urgency="high"}
+          sli_aggregations:sidekiq_jobs_queue_duration_seconds_bucket_rate1h{external_dependencies!="yes",le="10",shard="low-urgency-cpu-bound",type="sidekiq",urgency="high"}
         )
         , "_c", "1", "", "")
         or
         label_replace(sum by (env,environment,stage) (
-          sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate1h{le="300",shard="low-urgency-cpu-bound",type="sidekiq",urgency="low"}
+          sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate1h{external_dependencies!="yes",le="300",shard="low-urgency-cpu-bound",type="sidekiq",urgency="low"}
         )
         , "_c", "2", "", "")
         or
         label_replace(sum by (env,environment,stage) (
-          sli_aggregations:sidekiq_jobs_queue_duration_seconds_bucket_rate1h{le="60",shard="low-urgency-cpu-bound",type="sidekiq",urgency="low"}
+          sli_aggregations:sidekiq_jobs_queue_duration_seconds_bucket_rate1h{external_dependencies!="yes",le="60",shard="low-urgency-cpu-bound",type="sidekiq",urgency="low"}
         )
         , "_c", "3", "", "")
         or
         label_replace(sum by (env,environment,stage) (
-          sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate1h{le="300",shard="low-urgency-cpu-bound",type="sidekiq",urgency="throttled"}
+          sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate1h{external_dependencies!="yes",le="300",shard="low-urgency-cpu-bound",type="sidekiq",urgency="throttled"}
         )
         , "_c", "4", "", "")
       )
@@ -3673,27 +3929,27 @@ groups:
     expr: |
       sum by (env,environment,stage) (
         label_replace(sum by (env,environment,stage) (
-          sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate1h{le="+Inf",shard="low-urgency-cpu-bound",type="sidekiq",urgency="high"}
+          sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate1h{external_dependencies!="yes",le="+Inf",shard="low-urgency-cpu-bound",type="sidekiq",urgency="high"}
         )
         , "_c", "0", "", "")
         or
         label_replace(sum by (env,environment,stage) (
-          sli_aggregations:sidekiq_jobs_queue_duration_seconds_bucket_rate1h{le="+Inf",shard="low-urgency-cpu-bound",type="sidekiq",urgency="high"}
+          sli_aggregations:sidekiq_jobs_queue_duration_seconds_bucket_rate1h{external_dependencies!="yes",le="+Inf",shard="low-urgency-cpu-bound",type="sidekiq",urgency="high"}
         )
         , "_c", "1", "", "")
         or
         label_replace(sum by (env,environment,stage) (
-          sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate1h{le="+Inf",shard="low-urgency-cpu-bound",type="sidekiq",urgency="low"}
+          sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate1h{external_dependencies!="yes",le="+Inf",shard="low-urgency-cpu-bound",type="sidekiq",urgency="low"}
         )
         , "_c", "2", "", "")
         or
         label_replace(sum by (env,environment,stage) (
-          sli_aggregations:sidekiq_jobs_queue_duration_seconds_bucket_rate1h{le="+Inf",shard="low-urgency-cpu-bound",type="sidekiq",urgency="low"}
+          sli_aggregations:sidekiq_jobs_queue_duration_seconds_bucket_rate1h{external_dependencies!="yes",le="+Inf",shard="low-urgency-cpu-bound",type="sidekiq",urgency="low"}
         )
         , "_c", "3", "", "")
         or
         label_replace(sum by (env,environment,stage) (
-          sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate1h{le="+Inf",shard="low-urgency-cpu-bound",type="sidekiq",urgency="throttled"}
+          sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate1h{external_dependencies!="yes",le="+Inf",shard="low-urgency-cpu-bound",type="sidekiq",urgency="throttled"}
         )
         , "_c", "4", "", "")
       )
@@ -3734,27 +3990,27 @@ groups:
     expr: |
       sum by (env,environment,stage) (
         label_replace(sum by (env,environment,stage) (
-          sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate1h{le="10",shard="memory-bound",type="sidekiq",urgency="high"}
+          sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate1h{external_dependencies!="yes",le="10",shard="memory-bound",type="sidekiq",urgency="high"}
         )
         , "_c", "0", "", "")
         or
         label_replace(sum by (env,environment,stage) (
-          sli_aggregations:sidekiq_jobs_queue_duration_seconds_bucket_rate1h{le="10",shard="memory-bound",type="sidekiq",urgency="high"}
+          sli_aggregations:sidekiq_jobs_queue_duration_seconds_bucket_rate1h{external_dependencies!="yes",le="10",shard="memory-bound",type="sidekiq",urgency="high"}
         )
         , "_c", "1", "", "")
         or
         label_replace(sum by (env,environment,stage) (
-          sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate1h{le="300",shard="memory-bound",type="sidekiq",urgency="low"}
+          sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate1h{external_dependencies!="yes",le="300",shard="memory-bound",type="sidekiq",urgency="low"}
         )
         , "_c", "2", "", "")
         or
         label_replace(sum by (env,environment,stage) (
-          sli_aggregations:sidekiq_jobs_queue_duration_seconds_bucket_rate1h{le="60",shard="memory-bound",type="sidekiq",urgency="low"}
+          sli_aggregations:sidekiq_jobs_queue_duration_seconds_bucket_rate1h{external_dependencies!="yes",le="60",shard="memory-bound",type="sidekiq",urgency="low"}
         )
         , "_c", "3", "", "")
         or
         label_replace(sum by (env,environment,stage) (
-          sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate1h{le="300",shard="memory-bound",type="sidekiq",urgency="throttled"}
+          sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate1h{external_dependencies!="yes",le="300",shard="memory-bound",type="sidekiq",urgency="throttled"}
         )
         , "_c", "4", "", "")
       )
@@ -3767,27 +4023,27 @@ groups:
     expr: |
       sum by (env,environment,stage) (
         label_replace(sum by (env,environment,stage) (
-          sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate1h{le="+Inf",shard="memory-bound",type="sidekiq",urgency="high"}
+          sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate1h{external_dependencies!="yes",le="+Inf",shard="memory-bound",type="sidekiq",urgency="high"}
         )
         , "_c", "0", "", "")
         or
         label_replace(sum by (env,environment,stage) (
-          sli_aggregations:sidekiq_jobs_queue_duration_seconds_bucket_rate1h{le="+Inf",shard="memory-bound",type="sidekiq",urgency="high"}
+          sli_aggregations:sidekiq_jobs_queue_duration_seconds_bucket_rate1h{external_dependencies!="yes",le="+Inf",shard="memory-bound",type="sidekiq",urgency="high"}
         )
         , "_c", "1", "", "")
         or
         label_replace(sum by (env,environment,stage) (
-          sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate1h{le="+Inf",shard="memory-bound",type="sidekiq",urgency="low"}
+          sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate1h{external_dependencies!="yes",le="+Inf",shard="memory-bound",type="sidekiq",urgency="low"}
         )
         , "_c", "2", "", "")
         or
         label_replace(sum by (env,environment,stage) (
-          sli_aggregations:sidekiq_jobs_queue_duration_seconds_bucket_rate1h{le="+Inf",shard="memory-bound",type="sidekiq",urgency="low"}
+          sli_aggregations:sidekiq_jobs_queue_duration_seconds_bucket_rate1h{external_dependencies!="yes",le="+Inf",shard="memory-bound",type="sidekiq",urgency="low"}
         )
         , "_c", "3", "", "")
         or
         label_replace(sum by (env,environment,stage) (
-          sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate1h{le="+Inf",shard="memory-bound",type="sidekiq",urgency="throttled"}
+          sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate1h{external_dependencies!="yes",le="+Inf",shard="memory-bound",type="sidekiq",urgency="throttled"}
         )
         , "_c", "4", "", "")
       )
@@ -3828,27 +4084,27 @@ groups:
     expr: |
       sum by (env,environment,stage) (
         label_replace(sum by (env,environment,stage) (
-          sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate1h{le="10",shard="quarantine",type="sidekiq",urgency="high"}
+          sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate1h{external_dependencies!="yes",le="10",shard="quarantine",type="sidekiq",urgency="high"}
         )
         , "_c", "0", "", "")
         or
         label_replace(sum by (env,environment,stage) (
-          sli_aggregations:sidekiq_jobs_queue_duration_seconds_bucket_rate1h{le="10",shard="quarantine",type="sidekiq",urgency="high"}
+          sli_aggregations:sidekiq_jobs_queue_duration_seconds_bucket_rate1h{external_dependencies!="yes",le="10",shard="quarantine",type="sidekiq",urgency="high"}
         )
         , "_c", "1", "", "")
         or
         label_replace(sum by (env,environment,stage) (
-          sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate1h{le="300",shard="quarantine",type="sidekiq",urgency="low"}
+          sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate1h{external_dependencies!="yes",le="300",shard="quarantine",type="sidekiq",urgency="low"}
         )
         , "_c", "2", "", "")
         or
         label_replace(sum by (env,environment,stage) (
-          sli_aggregations:sidekiq_jobs_queue_duration_seconds_bucket_rate1h{le="60",shard="quarantine",type="sidekiq",urgency="low"}
+          sli_aggregations:sidekiq_jobs_queue_duration_seconds_bucket_rate1h{external_dependencies!="yes",le="60",shard="quarantine",type="sidekiq",urgency="low"}
         )
         , "_c", "3", "", "")
         or
         label_replace(sum by (env,environment,stage) (
-          sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate1h{le="300",shard="quarantine",type="sidekiq",urgency="throttled"}
+          sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate1h{external_dependencies!="yes",le="300",shard="quarantine",type="sidekiq",urgency="throttled"}
         )
         , "_c", "4", "", "")
       )
@@ -3861,27 +4117,27 @@ groups:
     expr: |
       sum by (env,environment,stage) (
         label_replace(sum by (env,environment,stage) (
-          sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate1h{le="+Inf",shard="quarantine",type="sidekiq",urgency="high"}
+          sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate1h{external_dependencies!="yes",le="+Inf",shard="quarantine",type="sidekiq",urgency="high"}
         )
         , "_c", "0", "", "")
         or
         label_replace(sum by (env,environment,stage) (
-          sli_aggregations:sidekiq_jobs_queue_duration_seconds_bucket_rate1h{le="+Inf",shard="quarantine",type="sidekiq",urgency="high"}
+          sli_aggregations:sidekiq_jobs_queue_duration_seconds_bucket_rate1h{external_dependencies!="yes",le="+Inf",shard="quarantine",type="sidekiq",urgency="high"}
         )
         , "_c", "1", "", "")
         or
         label_replace(sum by (env,environment,stage) (
-          sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate1h{le="+Inf",shard="quarantine",type="sidekiq",urgency="low"}
+          sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate1h{external_dependencies!="yes",le="+Inf",shard="quarantine",type="sidekiq",urgency="low"}
         )
         , "_c", "2", "", "")
         or
         label_replace(sum by (env,environment,stage) (
-          sli_aggregations:sidekiq_jobs_queue_duration_seconds_bucket_rate1h{le="+Inf",shard="quarantine",type="sidekiq",urgency="low"}
+          sli_aggregations:sidekiq_jobs_queue_duration_seconds_bucket_rate1h{external_dependencies!="yes",le="+Inf",shard="quarantine",type="sidekiq",urgency="low"}
         )
         , "_c", "3", "", "")
         or
         label_replace(sum by (env,environment,stage) (
-          sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate1h{le="+Inf",shard="quarantine",type="sidekiq",urgency="throttled"}
+          sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate1h{external_dependencies!="yes",le="+Inf",shard="quarantine",type="sidekiq",urgency="throttled"}
         )
         , "_c", "4", "", "")
       )
@@ -3922,27 +4178,27 @@ groups:
     expr: |
       sum by (env,environment,stage) (
         label_replace(sum by (env,environment,stage) (
-          sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate1h{le="10",shard="urgent-authorized-projects",type="sidekiq",urgency="high"}
+          sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate1h{external_dependencies!="yes",le="10",shard="urgent-authorized-projects",type="sidekiq",urgency="high"}
         )
         , "_c", "0", "", "")
         or
         label_replace(sum by (env,environment,stage) (
-          sli_aggregations:sidekiq_jobs_queue_duration_seconds_bucket_rate1h{le="10",shard="urgent-authorized-projects",type="sidekiq",urgency="high"}
+          sli_aggregations:sidekiq_jobs_queue_duration_seconds_bucket_rate1h{external_dependencies!="yes",le="10",shard="urgent-authorized-projects",type="sidekiq",urgency="high"}
         )
         , "_c", "1", "", "")
         or
         label_replace(sum by (env,environment,stage) (
-          sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate1h{le="300",shard="urgent-authorized-projects",type="sidekiq",urgency="low"}
+          sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate1h{external_dependencies!="yes",le="300",shard="urgent-authorized-projects",type="sidekiq",urgency="low"}
         )
         , "_c", "2", "", "")
         or
         label_replace(sum by (env,environment,stage) (
-          sli_aggregations:sidekiq_jobs_queue_duration_seconds_bucket_rate1h{le="60",shard="urgent-authorized-projects",type="sidekiq",urgency="low"}
+          sli_aggregations:sidekiq_jobs_queue_duration_seconds_bucket_rate1h{external_dependencies!="yes",le="60",shard="urgent-authorized-projects",type="sidekiq",urgency="low"}
         )
         , "_c", "3", "", "")
         or
         label_replace(sum by (env,environment,stage) (
-          sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate1h{le="300",shard="urgent-authorized-projects",type="sidekiq",urgency="throttled"}
+          sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate1h{external_dependencies!="yes",le="300",shard="urgent-authorized-projects",type="sidekiq",urgency="throttled"}
         )
         , "_c", "4", "", "")
       )
@@ -3955,27 +4211,27 @@ groups:
     expr: |
       sum by (env,environment,stage) (
         label_replace(sum by (env,environment,stage) (
-          sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate1h{le="+Inf",shard="urgent-authorized-projects",type="sidekiq",urgency="high"}
+          sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate1h{external_dependencies!="yes",le="+Inf",shard="urgent-authorized-projects",type="sidekiq",urgency="high"}
         )
         , "_c", "0", "", "")
         or
         label_replace(sum by (env,environment,stage) (
-          sli_aggregations:sidekiq_jobs_queue_duration_seconds_bucket_rate1h{le="+Inf",shard="urgent-authorized-projects",type="sidekiq",urgency="high"}
+          sli_aggregations:sidekiq_jobs_queue_duration_seconds_bucket_rate1h{external_dependencies!="yes",le="+Inf",shard="urgent-authorized-projects",type="sidekiq",urgency="high"}
         )
         , "_c", "1", "", "")
         or
         label_replace(sum by (env,environment,stage) (
-          sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate1h{le="+Inf",shard="urgent-authorized-projects",type="sidekiq",urgency="low"}
+          sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate1h{external_dependencies!="yes",le="+Inf",shard="urgent-authorized-projects",type="sidekiq",urgency="low"}
         )
         , "_c", "2", "", "")
         or
         label_replace(sum by (env,environment,stage) (
-          sli_aggregations:sidekiq_jobs_queue_duration_seconds_bucket_rate1h{le="+Inf",shard="urgent-authorized-projects",type="sidekiq",urgency="low"}
+          sli_aggregations:sidekiq_jobs_queue_duration_seconds_bucket_rate1h{external_dependencies!="yes",le="+Inf",shard="urgent-authorized-projects",type="sidekiq",urgency="low"}
         )
         , "_c", "3", "", "")
         or
         label_replace(sum by (env,environment,stage) (
-          sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate1h{le="+Inf",shard="urgent-authorized-projects",type="sidekiq",urgency="throttled"}
+          sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate1h{external_dependencies!="yes",le="+Inf",shard="urgent-authorized-projects",type="sidekiq",urgency="throttled"}
         )
         , "_c", "4", "", "")
       )
@@ -4016,27 +4272,27 @@ groups:
     expr: |
       sum by (env,environment,stage) (
         label_replace(sum by (env,environment,stage) (
-          sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate1h{le="10",shard="urgent-cpu-bound",type="sidekiq",urgency="high"}
+          sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate1h{external_dependencies!="yes",le="10",shard="urgent-cpu-bound",type="sidekiq",urgency="high"}
         )
         , "_c", "0", "", "")
         or
         label_replace(sum by (env,environment,stage) (
-          sli_aggregations:sidekiq_jobs_queue_duration_seconds_bucket_rate1h{le="10",shard="urgent-cpu-bound",type="sidekiq",urgency="high"}
+          sli_aggregations:sidekiq_jobs_queue_duration_seconds_bucket_rate1h{external_dependencies!="yes",le="10",shard="urgent-cpu-bound",type="sidekiq",urgency="high"}
         )
         , "_c", "1", "", "")
         or
         label_replace(sum by (env,environment,stage) (
-          sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate1h{le="300",shard="urgent-cpu-bound",type="sidekiq",urgency="low"}
+          sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate1h{external_dependencies!="yes",le="300",shard="urgent-cpu-bound",type="sidekiq",urgency="low"}
         )
         , "_c", "2", "", "")
         or
         label_replace(sum by (env,environment,stage) (
-          sli_aggregations:sidekiq_jobs_queue_duration_seconds_bucket_rate1h{le="60",shard="urgent-cpu-bound",type="sidekiq",urgency="low"}
+          sli_aggregations:sidekiq_jobs_queue_duration_seconds_bucket_rate1h{external_dependencies!="yes",le="60",shard="urgent-cpu-bound",type="sidekiq",urgency="low"}
         )
         , "_c", "3", "", "")
         or
         label_replace(sum by (env,environment,stage) (
-          sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate1h{le="300",shard="urgent-cpu-bound",type="sidekiq",urgency="throttled"}
+          sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate1h{external_dependencies!="yes",le="300",shard="urgent-cpu-bound",type="sidekiq",urgency="throttled"}
         )
         , "_c", "4", "", "")
       )
@@ -4049,27 +4305,27 @@ groups:
     expr: |
       sum by (env,environment,stage) (
         label_replace(sum by (env,environment,stage) (
-          sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate1h{le="+Inf",shard="urgent-cpu-bound",type="sidekiq",urgency="high"}
+          sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate1h{external_dependencies!="yes",le="+Inf",shard="urgent-cpu-bound",type="sidekiq",urgency="high"}
         )
         , "_c", "0", "", "")
         or
         label_replace(sum by (env,environment,stage) (
-          sli_aggregations:sidekiq_jobs_queue_duration_seconds_bucket_rate1h{le="+Inf",shard="urgent-cpu-bound",type="sidekiq",urgency="high"}
+          sli_aggregations:sidekiq_jobs_queue_duration_seconds_bucket_rate1h{external_dependencies!="yes",le="+Inf",shard="urgent-cpu-bound",type="sidekiq",urgency="high"}
         )
         , "_c", "1", "", "")
         or
         label_replace(sum by (env,environment,stage) (
-          sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate1h{le="+Inf",shard="urgent-cpu-bound",type="sidekiq",urgency="low"}
+          sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate1h{external_dependencies!="yes",le="+Inf",shard="urgent-cpu-bound",type="sidekiq",urgency="low"}
         )
         , "_c", "2", "", "")
         or
         label_replace(sum by (env,environment,stage) (
-          sli_aggregations:sidekiq_jobs_queue_duration_seconds_bucket_rate1h{le="+Inf",shard="urgent-cpu-bound",type="sidekiq",urgency="low"}
+          sli_aggregations:sidekiq_jobs_queue_duration_seconds_bucket_rate1h{external_dependencies!="yes",le="+Inf",shard="urgent-cpu-bound",type="sidekiq",urgency="low"}
         )
         , "_c", "3", "", "")
         or
         label_replace(sum by (env,environment,stage) (
-          sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate1h{le="+Inf",shard="urgent-cpu-bound",type="sidekiq",urgency="throttled"}
+          sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate1h{external_dependencies!="yes",le="+Inf",shard="urgent-cpu-bound",type="sidekiq",urgency="throttled"}
         )
         , "_c", "4", "", "")
       )
@@ -4110,27 +4366,27 @@ groups:
     expr: |
       sum by (env,environment,stage) (
         label_replace(sum by (env,environment,stage) (
-          sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate1h{le="10",shard="urgent-other",type="sidekiq",urgency="high"}
+          sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate1h{external_dependencies!="yes",le="10",shard="urgent-other",type="sidekiq",urgency="high"}
         )
         , "_c", "0", "", "")
         or
         label_replace(sum by (env,environment,stage) (
-          sli_aggregations:sidekiq_jobs_queue_duration_seconds_bucket_rate1h{le="10",shard="urgent-other",type="sidekiq",urgency="high"}
+          sli_aggregations:sidekiq_jobs_queue_duration_seconds_bucket_rate1h{external_dependencies!="yes",le="10",shard="urgent-other",type="sidekiq",urgency="high"}
         )
         , "_c", "1", "", "")
         or
         label_replace(sum by (env,environment,stage) (
-          sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate1h{le="300",shard="urgent-other",type="sidekiq",urgency="low"}
+          sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate1h{external_dependencies!="yes",le="300",shard="urgent-other",type="sidekiq",urgency="low"}
         )
         , "_c", "2", "", "")
         or
         label_replace(sum by (env,environment,stage) (
-          sli_aggregations:sidekiq_jobs_queue_duration_seconds_bucket_rate1h{le="60",shard="urgent-other",type="sidekiq",urgency="low"}
+          sli_aggregations:sidekiq_jobs_queue_duration_seconds_bucket_rate1h{external_dependencies!="yes",le="60",shard="urgent-other",type="sidekiq",urgency="low"}
         )
         , "_c", "3", "", "")
         or
         label_replace(sum by (env,environment,stage) (
-          sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate1h{le="300",shard="urgent-other",type="sidekiq",urgency="throttled"}
+          sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate1h{external_dependencies!="yes",le="300",shard="urgent-other",type="sidekiq",urgency="throttled"}
         )
         , "_c", "4", "", "")
       )
@@ -4143,27 +4399,27 @@ groups:
     expr: |
       sum by (env,environment,stage) (
         label_replace(sum by (env,environment,stage) (
-          sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate1h{le="+Inf",shard="urgent-other",type="sidekiq",urgency="high"}
+          sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate1h{external_dependencies!="yes",le="+Inf",shard="urgent-other",type="sidekiq",urgency="high"}
         )
         , "_c", "0", "", "")
         or
         label_replace(sum by (env,environment,stage) (
-          sli_aggregations:sidekiq_jobs_queue_duration_seconds_bucket_rate1h{le="+Inf",shard="urgent-other",type="sidekiq",urgency="high"}
+          sli_aggregations:sidekiq_jobs_queue_duration_seconds_bucket_rate1h{external_dependencies!="yes",le="+Inf",shard="urgent-other",type="sidekiq",urgency="high"}
         )
         , "_c", "1", "", "")
         or
         label_replace(sum by (env,environment,stage) (
-          sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate1h{le="+Inf",shard="urgent-other",type="sidekiq",urgency="low"}
+          sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate1h{external_dependencies!="yes",le="+Inf",shard="urgent-other",type="sidekiq",urgency="low"}
         )
         , "_c", "2", "", "")
         or
         label_replace(sum by (env,environment,stage) (
-          sli_aggregations:sidekiq_jobs_queue_duration_seconds_bucket_rate1h{le="+Inf",shard="urgent-other",type="sidekiq",urgency="low"}
+          sli_aggregations:sidekiq_jobs_queue_duration_seconds_bucket_rate1h{external_dependencies!="yes",le="+Inf",shard="urgent-other",type="sidekiq",urgency="low"}
         )
         , "_c", "3", "", "")
         or
         label_replace(sum by (env,environment,stage) (
-          sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate1h{le="+Inf",shard="urgent-other",type="sidekiq",urgency="throttled"}
+          sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate1h{external_dependencies!="yes",le="+Inf",shard="urgent-other",type="sidekiq",urgency="throttled"}
         )
         , "_c", "4", "", "")
       )
@@ -4286,6 +4542,11 @@ groups:
       sum by (environment,error,external_dependencies,feature_category,job,le,queue,shard,stage,tier,type,urgency,worker) (
         rate(sidekiq_jobs_completion_seconds_bucket[6h])
       )
+  - record: sli_aggregations:sidekiq_jobs_queue_duration_seconds_bucket_rate6h
+    expr: |
+      sum by (environment,error,external_dependencies,feature_category,job,le,queue,shard,stage,tier,type,urgency,worker) (
+        rate(sidekiq_jobs_queue_duration_seconds_bucket[6h])
+      )
   - record: sli_aggregations:sidekiq_jobs_failed_total_rate6h
     expr: |
       sum by (environment,error,external_dependencies,feature_category,job,queue,shard,stage,tier,type,urgency,worker) (
@@ -4316,6 +4577,70 @@ groups:
         0 * group by(env,environment,stage) (
           gitlab_component_ops:rate_6h{component="email_receiver",tier="sv",type="sidekiq"}
         )
+      )
+  - record: gitlab_component_apdex:success:rate_6h
+    labels:
+      component: external_dependency
+      tier: sv
+      type: sidekiq
+    expr: |
+      sum by (env,environment,stage) (
+        label_replace(sum by (env,environment,stage) (
+          sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate6h{le="10",type="sidekiq",urgency="high"}
+        )
+        , "_c", "0", "", "")
+        or
+        label_replace(sum by (env,environment,stage) (
+          sli_aggregations:sidekiq_jobs_queue_duration_seconds_bucket_rate6h{le="10",type="sidekiq",urgency="high"}
+        )
+        , "_c", "1", "", "")
+        or
+        label_replace(sum by (env,environment,stage) (
+          sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate6h{le="300",type="sidekiq",urgency="low"}
+        )
+        , "_c", "2", "", "")
+        or
+        label_replace(sum by (env,environment,stage) (
+          sli_aggregations:sidekiq_jobs_queue_duration_seconds_bucket_rate6h{le="60",type="sidekiq",urgency="low"}
+        )
+        , "_c", "3", "", "")
+        or
+        label_replace(sum by (env,environment,stage) (
+          sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate6h{le="300",type="sidekiq",urgency="throttled"}
+        )
+        , "_c", "4", "", "")
+      )
+  - record: gitlab_component_apdex:weight:score_6h
+    labels:
+      component: external_dependency
+      tier: sv
+      type: sidekiq
+    expr: |
+      sum by (env,environment,stage) (
+        label_replace(sum by (env,environment,stage) (
+          sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate6h{le="+Inf",type="sidekiq",urgency="high"}
+        )
+        , "_c", "0", "", "")
+        or
+        label_replace(sum by (env,environment,stage) (
+          sli_aggregations:sidekiq_jobs_queue_duration_seconds_bucket_rate6h{le="+Inf",type="sidekiq",urgency="high"}
+        )
+        , "_c", "1", "", "")
+        or
+        label_replace(sum by (env,environment,stage) (
+          sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate6h{le="+Inf",type="sidekiq",urgency="low"}
+        )
+        , "_c", "2", "", "")
+        or
+        label_replace(sum by (env,environment,stage) (
+          sli_aggregations:sidekiq_jobs_queue_duration_seconds_bucket_rate6h{le="+Inf",type="sidekiq",urgency="low"}
+        )
+        , "_c", "3", "", "")
+        or
+        label_replace(sum by (env,environment,stage) (
+          sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate6h{le="+Inf",type="sidekiq",urgency="throttled"}
+        )
+        , "_c", "4", "", "")
       )
   - record: gitlab_component_ops:rate_6h
     labels:
