@@ -29,6 +29,15 @@ local annotation = grafana.annotation;
       builtIn=1,
       iconColor='#316CE6',
     ),
+  deploymentsForCustomersDot::
+    annotation.datasource(
+      'customers-dot-deploys',
+      '-- Grafana --',
+      enable=true,
+      tags=['customersdot-deploy', '$environment'],
+      builtIn=1,
+      iconColor='#96D90A',
+    ),
   featureFlags::
     annotation.datasource(
       'feature-flags',
