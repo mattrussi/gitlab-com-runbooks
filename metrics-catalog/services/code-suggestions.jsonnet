@@ -119,6 +119,9 @@ metricsCatalog.serviceDefinition({
       team: 'ai_assisted',
       featureCategory: 'code_suggestions',
       serviceAggregation: false,
+      description: |||
+        Ingress-NGINX Controller for Kubernetes to expose service to the internet. Fronted by Cloudflare.
+      |||,
 
       requestRate: rateMetric(
         counter='nginx_ingress_controller_requests',
@@ -152,38 +155,6 @@ metricsCatalog.serviceDefinition({
           region=gkeDeploymentDetails.region,
           cluster=gkeDeploymentDetails.cluster,
         ),
-      ],
-    },
-
-    waf: {
-      local wafSelector = { zone: 'gitlab.com', host: { re: 'codesuggestions.gitlab.com.*' } },
-      severity: 's4',  // NOTE: Do not page on-call SREs until production ready
-      userImpacting: true,
-      team: 'ai_assisted',
-      featureCategory: 'code_suggestions',
-      serviceAggregation: false,
-      staticLabels: {
-        env: 'ops',
-        environment: 'ops',
-      },
-
-      requestRate: rateMetric(
-        counter='cloudflare_zone_requests_status_country_host',
-        selector=wafSelector,
-        useRecordingRuleRegistry=false,
-      ),
-
-      errorRate: rateMetric(
-        counter='cloudflare_zone_requests_status_country_host',
-        selector=wafSelector {
-          status: { re: '^5.*' },
-        },
-        useRecordingRuleRegistry=false,
-      ),
-
-      significantLabels: ['status'],
-
-      toolingLinks: [
         toolingLinks.cloudflare(host='codesuggestions.gitlab.com'),
         toolingLinks.grafana(title='WAF Overview', dashboardUid='waf-main/waf-overview'),
       ],

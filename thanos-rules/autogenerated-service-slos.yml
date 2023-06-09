@@ -363,18 +363,6 @@ groups:
     expr: "0.001000"
   - record: slo:min:events:gitlab_service_apdex:ratio
     labels:
-      component: waf
-      tier: sv
-      type: code_suggestions
-    expr: "0.950000"
-  - record: slo:max:events:gitlab_service_errors:ratio
-    labels:
-      component: waf
-      tier: sv
-      type: code_suggestions
-    expr: "0.001000"
-  - record: slo:min:events:gitlab_service_apdex:ratio
-    labels:
       tier: sv
       type: consul
     expr: "0.999000"
@@ -2453,6 +2441,12 @@ groups:
       tier: inf
       type: vault
     expr: "0.001000"
+  - record: slo:max:events:gitlab_service_errors:ratio
+    labels:
+      component: code_suggestions_host
+      tier: lb
+      type: waf
+    expr: "0.001000"
   - record: slo:min:gitlab_service_apdex:ratio
     labels:
       tier: sv
@@ -4187,6 +4181,15 @@ groups:
       service_aggregation: "yes"
       tier: inf
       type: vault
+    expr: "1"
+  - record: gitlab_component_service:mapping
+    labels:
+      component: code_suggestions_host
+      global_aggregation: "no"
+      regional_aggregation: "no"
+      service_aggregation: "no"
+      tier: lb
+      type: waf
     expr: "1"
   - record: gitlab_component_service:mapping
     labels:
