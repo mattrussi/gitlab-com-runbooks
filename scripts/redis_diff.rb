@@ -4,6 +4,7 @@ require 'optparse'
 require 'redis'
 require 'yaml'
 
+# TODO more detailed instructions on usage
 # Usage: bundle exec ruby redis_diff.rb --migrate --keys=1000
 #
 # Pre-requisite: Create 2 files, source.yml and destination.yml with details of
@@ -72,8 +73,8 @@ end
 
 def compare_and_migrate(key, src, dst, migrate)
   ktype = src.type(key)
-  res = send("compare_#{ktype}", src, dst, key) # rubocop:disable GitlabSecurity/PublicSend
-  unless res
+  identical = send("compare_#{ktype}", src, dst, key) # rubocop:disable GitlabSecurity/PublicSend
+  unless identical
     puts "key #{key} differs"
 
     # alternatively we can run MIGRATE command but we need to know which port
@@ -84,23 +85,43 @@ def compare_and_migrate(key, src, dst, migrate)
     end
   end
 
-  !res
+  !identical
 end
 
 it = options[:cursor] || "0"
 checked = 0
 diffcount = 0
+migrated_count = 0
 
 src_db = ::Redis.new(YAML.load_file('source.yml', symbolize_names: true))
 dest_db = ::Redis.new(YAML.load_file('destination.yml', symbolize_names: true))
 
 loop do
   it, keys = src_db.scan(it, match: "*")
-  keys.each do |key|
-    diffcount += 1 if compare_and_migrate(key, src_db, dest_db, options[:migrate])
 
-    # recheck keys to confirm convergence
-    compare_and_migrate(key, src_db, dest_db, false) if options[:migrate]
+  keys_to_recheck = []
+
+  # first pass to compare and migrate keys if not identical
+  keys.each_with_index do |key, idx|
+    if compare_and_migrate(key, src_db, dest_db, options[:migrate])
+      diffcount += 1
+      keys_to_recheck << idx
+    end
+  end
+
+  # perform a 2nd iteraation to recheck keys to confirm convergence
+  # instead of immediately checking in the above loop
+  if options[:migrate]
+    keys.each_with_index do |key, idx|
+      next unless keys_to_recheck.include?(idx)
+
+      if !compare_and_migrate(key, src_db, dest_db, false)
+        migrated_count += 1
+      else
+        # TODO write persistent mismatches into a tmp file?
+        puts "Failed to migrate #{key}"
+      end
+    end
   end
 
   checked += keys.size
@@ -113,3 +134,4 @@ end
 
 puts "Checked #{checked}"
 puts "#{diffcount} different keys"
+puts "Migrated #{migrated_count} keys successfully"
