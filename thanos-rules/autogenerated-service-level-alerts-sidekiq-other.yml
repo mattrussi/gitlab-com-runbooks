@@ -302,7 +302,7 @@ groups:
       grafana_variables: environment,stage
       promql_template_1: |
         sum by (env,environment,tier,stage) (
-          sli_aggregations:sidekiq_jobs_failed_total_rate5m{environment="{{ $labels.environment }}",external_dependencies=~"yes",stage="{{ $labels.stage }}",type="sidekiq"}
+          sli_aggregations:sidekiq_jobs_failed_total_rate5m{environment="{{ $labels.environment }}",external_dependencies="yes",stage="{{ $labels.stage }}",type="sidekiq"}
         )
       runbook: docs/sidekiq/README.md
     labels:
@@ -349,7 +349,7 @@ groups:
       grafana_variables: environment,stage
       promql_template_1: |
         sum by (env,environment,tier,stage) (
-          sli_aggregations:sidekiq_jobs_failed_total_rate5m{environment="{{ $labels.environment }}",external_dependencies=~"yes",stage="{{ $labels.stage }}",type="sidekiq"}
+          sli_aggregations:sidekiq_jobs_failed_total_rate5m{environment="{{ $labels.environment }}",external_dependencies="yes",stage="{{ $labels.stage }}",type="sidekiq"}
         )
       runbook: docs/sidekiq/README.md
     labels:
@@ -396,7 +396,7 @@ groups:
       grafana_variables: environment,stage
       promql_template_1: |
         sum by (env,environment,tier,stage) (
-          sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate5m{environment="{{ $labels.environment }}",external_dependencies=~"yes",le="+Inf",stage="{{ $labels.stage }}",type="sidekiq"}
+          sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate5m{environment="{{ $labels.environment }}",external_dependencies="yes",le="+Inf",stage="{{ $labels.stage }}",type="sidekiq"}
         )
       runbook: docs/sidekiq/README.md
     labels:
@@ -432,7 +432,7 @@ groups:
       grafana_variables: environment,stage
       promql_template_1: |
         sum by (env,environment,tier,stage) (
-          sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate5m{environment="{{ $labels.environment }}",external_dependencies=~"yes",le="+Inf",stage="{{ $labels.stage }}",type="sidekiq"}
+          sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate5m{environment="{{ $labels.environment }}",external_dependencies="yes",le="+Inf",stage="{{ $labels.stage }}",type="sidekiq"}
         )
       runbook: docs/sidekiq/README.md
     labels:

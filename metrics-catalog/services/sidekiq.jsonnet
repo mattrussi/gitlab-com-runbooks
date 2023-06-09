@@ -216,12 +216,12 @@ metricsCatalog.serviceDefinition({
 
       requestRate: rateMetric(
         counter='sidekiq_jobs_completion_seconds_bucket',
-        selector=baseSelector { le: '+Inf' , external_dependencies: { re: 'yes' } },
+        selector=baseSelector { le: '+Inf' , external_dependencies: 'yes' },
       ),
 
       errorRate: rateMetric(
         counter='sidekiq_jobs_failed_total',
-        selector=baseSelector { external_dependencies: { re: 'yes' } },
+        selector=baseSelector { external_dependencies: 'yes' },
       ),
 
       monitoringThresholds+: {
