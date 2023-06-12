@@ -34,6 +34,15 @@ OptionParser.new do |opts|
   end
 end.parse!
 
+# Ensure the ttl is also migrated for a key
+def migrate_ttl(src, dst, key)
+  ttl = src.ttl(key)
+  return if ttl == -1 # key does not have associated ttl
+  return dst.del(key) if ttl == -2 # expired in src db
+
+  dst.expire(key, ttl)
+end
+
 # Strings
 def compare_string(src, dst, key)
   src.get(key) == dst.get(key)
@@ -41,11 +50,7 @@ end
 
 def migrate_string(src, dst, key)
   dst.set(key, src.get(key))
-  ttl = src.ttl(key)
-  return if ttl == -1 # key does not have associated ttl
-  return dst.del(key) if ttl == -2 # expired in src db
-
-  dst.expire(ttl)
+  migrate_ttl(src, dst, key)
 end
 
 # Hash
@@ -55,6 +60,7 @@ end
 
 def migrate_hash(src, dst, key)
   dst.hset(key, src.hgetall(key))
+  migrate_ttl(src, dst, key)
 end
 
 # Set
@@ -67,6 +73,7 @@ end
 
 def migrate_set(src, dst, key)
   dst.sadd(key, src.smembers(key))
+  migrate_ttl(src, dst, key)
 end
 
 # TODO list, sorted sets
