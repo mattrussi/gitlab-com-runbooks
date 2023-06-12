@@ -85,7 +85,7 @@ remoteWrite:
 ```
 
 Unfortunately prometheus doesn't support ENV var substition in the config file, however if using via prometheus-operator it does support a kubernetes secret reference.
-In the above example we point the auth to a secret named `remote-write-auth` and the respending object keys for both `username` and `password`. 
+In the above example we point the auth to a secret named `remote-write-auth` and the respending object keys for both `username` and `password`.
 
 Here is a [example config](https://gitlab.com/gitlab-org/modelops/applied-ml/code-suggestions/ai-assist/-/blob/main/manifests/prometheus/values-ai-assist.yaml)
 from Code Suggestions.
