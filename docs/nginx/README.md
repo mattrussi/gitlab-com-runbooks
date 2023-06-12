@@ -25,6 +25,7 @@
 * [Service Operation Rate](../monitoring/definition-service-ops-rate.md)
 * [Filesystem errors are reported in LOG files](../monitoring/filesystem_alerts.md)
 * [monitor.gitlab.net not accessible or return 5xx errors](../monitoring/monitor-gitlab-net-not-accessible.md)
+* [Thanos Receive](../monitoring/thanos-receive.md)
 * [Gitlab.com on Kubernetes](../onboarding/gitlab.com_on_k8s.md)
 * [Sentry is down and gives error 500](../sentry/sentry-is-down.md)
 * [Thanos Architecture Overview](../thanos/architecture.md)
