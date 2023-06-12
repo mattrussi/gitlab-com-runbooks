@@ -55,7 +55,7 @@ proxy() {
 
   if [ -n "${TMUX}" ]; then
     echo "VAULT_PROXY_ADDR=\"${proxy_addr}\"; export VAULT_PROXY_ADDR"
-    tmux split-pane -d -v -l 3 "echo \"${msg}\"; exec ssh -D \"${port}\" \"${BASTION_HOST}\" 'echo \"Connected! Press Enter to disconnect.\"; read disconnect'"
+    tmux split-pane -d -v -l 3 "echo \"${msg}\"; exec ssh -v -D \"${port}\" \"${BASTION_HOST}\" 'echo \"Connected! Press Enter to disconnect.\"; read disconnect'"
   else
     echo >&2 "Open a new shell and run the following before using Vault:"
     echo >&2
