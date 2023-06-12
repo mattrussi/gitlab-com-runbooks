@@ -22,6 +22,7 @@ The distributor (AKA router) is responsible for routing requests to downstream r
 It leverages a hashring config file `hashring.json` which instructs the distibutor what tenants should be sent to which receiver.
 
 Example File:
+
 ```json
 [
     {
@@ -63,8 +64,30 @@ Tenants for Thanos Receive are configured in two parts:
 1. An entry for the tenant and limits in [k8s-workloads](https://gitlab.com/gitlab-com/gl-infra/k8s-workloads/gitlab-helmfiles/-/blob/master/releases/thanos/ops.yaml.gotmpl#L22)
 2. Tenant Credentials in [Vault](https://vault.gitlab.net/ui/vault/secrets/k8s/show/env/ops/ns/thanos/htpasswd)
 
-After you have set up the tenant, you can give the auth credentials and the Thanos receive endpoint URL to the team. Here is a
-[example config](https://gitlab.com/gitlab-org/modelops/applied-ml/code-suggestions/ai-assist/-/blob/main/manifests/prometheus/values-ai-assist.yaml)
+## Adding A New Prometheus Client
+
+After you have set up the tenant (or use an existing), you can give the auth credentials and the Thanos receive endpoint URL to the team.
+Prometheus configuration is done via the [remote_write config](https://prometheus.io/docs/prometheus/latest/configuration/configuration/#remote_write).
+
+Example:
+
+```yaml
+remoteWrite:
+  - url: https://remote-write.ops.gke.gitlab.net/api/v1/receive
+    name: thanos
+    basicAuth:
+      username:
+        name: remote-write-auth
+        key: username
+      password:
+        name: remote-write-auth
+        key: password
+```
+
+Unfortunately prometheus doesn't support ENV var substition in the config file, however if using via prometheus-operator it does support a kubernetes secret reference.
+In the above example we point the auth to a secret named `remote-write-auth` and the respending object keys for both `username` and `password`. 
+
+Here is a [example config](https://gitlab.com/gitlab-org/modelops/applied-ml/code-suggestions/ai-assist/-/blob/main/manifests/prometheus/values-ai-assist.yaml)
 from Code Suggestions.
 
 Note that the current usage of htpasswd/basicAuth will be replaced in a future iteration.
@@ -104,3 +127,8 @@ Likely resuting in 500 errors, we have a few things we can check on.
 - Make sure the receive distributor pods are running.
 - Check the receive statefulset pods are running and have quorum. We use a replication of 3, so we must have 2 pods at any given time.
 - Lastly ensure the generated config matches the state of the active receivers `kubectl -n thanos get cm thanos-thanos-stack-tenants-generated -o yaml`.
+
+## Current Limitations
+
+Currently the main limitation or drawback with the solution is the use of basicAuth via nginx.
+This will be replaced with OAuth in a future itteration.
