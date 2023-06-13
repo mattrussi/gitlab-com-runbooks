@@ -105,7 +105,7 @@
           "format": "time_series",
           "instant": true,
           "interval": "1m",
-          "intervalFactor": 3,
+          "intervalFactor": 1,
           "legendFormat": "",
           "refId": "A"
         }
@@ -166,7 +166,7 @@
           "format": "time_series",
           "instant": true,
           "interval": "1m",
-          "intervalFactor": 3,
+          "intervalFactor": 1,
           "legendFormat": "",
           "refId": "A"
         }
@@ -291,7 +291,7 @@
           "expr": "clamp_min(clamp_max(clamp_max(\n  clamp_min(\n    sum(\n      sum by (type)(\n        sum_over_time(gitlab:availability:success:rate_1h{type=\"registry\"}[$__interval]) * $registry_weight\n      )\n      or\n      sum by (type)(\n        sum_over_time(gitlab:availability:success:rate_1h{type=\"webservice\"}[$__interval]) * $webservice_weight\n      )\n    )\n    /\n    sum(\n      sum by (type)(\n        sum_over_time(gitlab:availability:ops:rate_1h{type=\"registry\"}[$__interval]) * $registry_weight\n      )\n      or\n      sum by (type)(\n        sum_over_time(gitlab:availability:ops:rate_1h{type=\"webservice\"}[$__interval]) * $webservice_weight\n      )\n    ),\n    0\n  ),\n  1\n)\n,1),0)\n",
           "format": "time_series",
           "interval": "1m",
-          "intervalFactor": 3,
+          "intervalFactor": 1,
           "legendFormat": "Overall SLA",
           "refId": "A"
         }
@@ -426,7 +426,7 @@
           "format": "time_series",
           "instant": true,
           "interval": "1m",
-          "intervalFactor": 3,
+          "intervalFactor": 1,
           "legendFormat": "",
           "refId": "A"
         }
@@ -487,7 +487,7 @@
           "format": "time_series",
           "instant": true,
           "interval": "1m",
-          "intervalFactor": 3,
+          "intervalFactor": 1,
           "legendFormat": "",
           "refId": "A"
         }
@@ -612,7 +612,7 @@
           "expr": "clamp_min(clamp_max(clamp_max(\n  clamp_min(\n    sum by () (\n      sum_over_time(gitlab:availability:success:rate_1h{type=~\"webservice\"}[$__interval])\n    )\n    /\n    sum by () (\n      sum_over_time(gitlab:availability:ops:rate_1h{type=~\"webservice\"}[$__interval])\n    ),\n    0\n  ),\n  1\n)\n,1),0)\n",
           "format": "time_series",
           "interval": "1m",
-          "intervalFactor": 3,
+          "intervalFactor": 1,
           "legendFormat": "webservice SLA",
           "refId": "A"
         }
@@ -728,7 +728,7 @@
           "format": "time_series",
           "instant": true,
           "interval": "1m",
-          "intervalFactor": 3,
+          "intervalFactor": 1,
           "legendFormat": "",
           "refId": "A"
         }
@@ -789,7 +789,7 @@
           "format": "time_series",
           "instant": true,
           "interval": "1m",
-          "intervalFactor": 3,
+          "intervalFactor": 1,
           "legendFormat": "",
           "refId": "A"
         }
@@ -914,7 +914,7 @@
           "expr": "clamp_min(clamp_max(clamp_max(\n  clamp_min(\n    sum by () (\n      sum_over_time(gitlab:availability:success:rate_1h{type=~\"registry\"}[$__interval])\n    )\n    /\n    sum by () (\n      sum_over_time(gitlab:availability:ops:rate_1h{type=~\"registry\"}[$__interval])\n    ),\n    0\n  ),\n  1\n)\n,1),0)\n",
           "format": "time_series",
           "interval": "1m",
-          "intervalFactor": 3,
+          "intervalFactor": 1,
           "legendFormat": "registry SLA",
           "refId": "A"
         }

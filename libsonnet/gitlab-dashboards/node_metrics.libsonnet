@@ -62,7 +62,7 @@ local nodeLoadForDuration(duration, nodeSelector) =
             avg(instance:node_cpu_utilization:ratio{%(nodeSelector)s}) by (fqdn)
           ||| % formatConfig,
           legendFormat='{{ fqdn }}',
-          intervalFactor=5,
+          intervalFactor=1,
         )
       )
       .resetYaxes()
@@ -108,7 +108,7 @@ local nodeLoadForDuration(duration, nodeSelector) =
             sum(rate(node_network_transmit_bytes_total{%(nodeSelector)s}[$__interval])) by (fqdn)
           ||| % formatConfig,
           legendFormat='send {{ fqdn }}',
-          intervalFactor=5,
+          intervalFactor=1,
         )
       )
       .addTarget(
@@ -117,7 +117,7 @@ local nodeLoadForDuration(duration, nodeSelector) =
             sum(rate(node_network_receive_bytes_total{%(nodeSelector)s}[$__interval])) by (fqdn)
           ||| % formatConfig,
           legendFormat='receive {{ fqdn }}',
-          intervalFactor=5,
+          intervalFactor=1,
         )
       )
       .resetYaxes()
