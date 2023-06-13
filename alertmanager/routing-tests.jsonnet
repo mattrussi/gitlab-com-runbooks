@@ -93,17 +93,17 @@ generateTests([
   },
 
   {
-    name: 'team=gitaly_git, pager=pagerduty, rules_domain=general',
+    name: 'team=gitaly, pager=pagerduty, rules_domain=general',
     labels: {
       pager: 'pagerduty',
       rules_domain: 'general',
-      team: 'gitaly_git',
+      team: 'gitaly',
       env: 'gprd',
     },
     receivers: [
       'prod_pagerduty',
       'slack_bridge-prod',
-      'team_gitaly_git_alerts_channel',
+      'team_gitaly_alerts_channel',
       'production_slack_channel',
     ],
   },
@@ -112,7 +112,7 @@ generateTests([
     labels: {
       pager: 'pagerduty',
       rules_domain: 'general',
-      team: 'gitaly_git',
+      team: 'gitaly',
       env: 'gstg',
     },
     receivers: [
@@ -215,11 +215,11 @@ generateTests([
     ],
   },
   {
-    name: 'pager=pagerduty, team=gitaly_git, env=gprd, slo_alert=yes, stage=cny, rules_domain=general',
+    name: 'pager=pagerduty, team=gitaly, env=gprd, slo_alert=yes, stage=cny, rules_domain=general',
     labels: {
       pager: 'pagerduty',
       rules_domain: 'general',
-      team: 'gitaly_git',
+      team: 'gitaly',
       env: 'gprd',
       slo_alert: 'yes',
       stage: 'cny',
@@ -227,7 +227,7 @@ generateTests([
     receivers: [
       'prod_pagerduty',
       'slack_bridge-prod',  // Slackline
-      'team_gitaly_git_alerts_channel',  // Gitaly team alerts channel
+      'team_gitaly_alerts_channel',  // Gitaly team alerts channel
       'production_slack_channel',  // production channel for pager alerts
     ],
   },

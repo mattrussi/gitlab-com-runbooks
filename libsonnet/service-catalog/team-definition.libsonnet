@@ -1,6 +1,5 @@
 local metricsConfig = import 'gitlab-metrics-config.libsonnet';
 local allServices = metricsConfig.monitoredServices;
-local stageGroupMapping = metricsConfig.stageGroupMapping;
 local miscUtils = import 'utils/misc.libsonnet';
 local validator = import 'utils/validator.libsonnet';
 
@@ -23,7 +22,7 @@ local ignoredComponentsValidator = validator.validator(
 
 local productStageGroupValidator = validator.validator(
   function(stageGroup)
-    std.prune(stageGroup) == null || std.objectHas(stageGroupMapping, stageGroup),
+    std.prune(stageGroup) == null || std.objectHas(metricsConfig.stageGroupMapping, stageGroup),
   'unknown stage group'
 );
 

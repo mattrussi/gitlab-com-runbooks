@@ -83,7 +83,7 @@ groups:
     expr: up{job="gitaly",tier="stor",type="gitaly"} == 0
     for: 15m
     labels:
-      team: gitaly_git
+      team: gitaly
       pager: pagerduty
       severity: s1
       alert_type: cause
@@ -101,7 +101,7 @@ groups:
       ) > 1
     for: 60m
     labels:
-      team: gitaly_git
+      team: gitaly
       pager: pagerduty
       severity: s1
       alert_type: cause

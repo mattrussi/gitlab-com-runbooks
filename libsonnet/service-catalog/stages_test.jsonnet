@@ -1,5 +1,5 @@
-local test = import 'github.com/yugui/jsonnetunit/jsonnetunit/test.libsonnet';
 local stages = import 'service-catalog/stages.libsonnet';
+local test = import 'test.libsonnet';
 
 test.suite({
   testBlank: {
@@ -27,7 +27,7 @@ test.suite({
     expect: 'feed_alerts_access',
   },
   testStageGroupNotOwnedLookup: {
-    actual: stages.stageGroup('not_owned'),
+    actual: stages.notOwned,
     expect: {
       key: 'not_owned',
       name: 'not_owned',

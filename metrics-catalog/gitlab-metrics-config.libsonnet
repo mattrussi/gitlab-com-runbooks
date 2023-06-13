@@ -5,6 +5,7 @@ local allUtilizationMetrics = import './utilization/all.libsonnet';
 local labelSet = import 'label-taxonomy/label-set.libsonnet';
 local rawServiceCatalog = import 'raw-catalog.jsonnet';
 local serviceCatalog = import 'service-catalog/service-catalog.libsonnet';
+local overridenStageGroupMapping = import 'stage-group-mapping-with-overrides.jsonnet';
 local objects = import 'utils/objects.libsonnet';
 
 // Site-wide configuration options
@@ -30,8 +31,7 @@ local objects = import 'utils/objects.libsonnet';
     local keyServices = serviceCatalog.findKeyBusinessServices(includeZeroScore=true);
     std.map(function(service) service.name, keyServices),
 
-  // stage-group-mapping.jsonnet is generated file, stored in the `services` directory
-  stageGroupMapping:: import 'stage-group-mapping.jsonnet',
+  stageGroupMapping:: overridenStageGroupMapping,
 
   // stage-group-mapping-crossover.jsonnet is generated file, stored in the `services` directory
   stageGroupMappingCrossover:: import 'stage-group-mapping-crossover.jsonnet',
