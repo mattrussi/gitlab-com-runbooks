@@ -243,7 +243,7 @@
           "expr": "min_over_time(gitlab_service_apdex:ratio_5m{type=\"sidekiq\"}[$__interval])\n",
           "format": "time_series",
           "interval": "1m",
-          "intervalFactor": 3,
+          "intervalFactor": 1,
           "legendFormat": "sidekiq apdex",
           "refId": "A"
         },
@@ -251,7 +251,7 @@
           "expr": "(1 - 6 * (1 - avg(slo:min:events:gitlab_service_apdex:ratio{component=\"\",type=\"sidekiq\"})\n))\n",
           "format": "time_series",
           "interval": "5m",
-          "intervalFactor": 3,
+          "intervalFactor": 1,
           "legendFormat": "6h Degradation SLO (5% of monthly error budget)",
           "refId": "B"
         },
@@ -259,7 +259,7 @@
           "expr": "(1 - 14.4 * (1 - avg(slo:min:events:gitlab_service_apdex:ratio{component=\"\",type=\"sidekiq\"})\n))\n",
           "format": "time_series",
           "interval": "5m",
-          "intervalFactor": 3,
+          "intervalFactor": 1,
           "legendFormat": "1h Outage SLO (2% of monthly error budget)",
           "refId": "C"
         },
@@ -267,7 +267,7 @@
           "expr": "avg_over_time(gitlab_service_apdex:ratio_5m{type=\"sidekiq\"}[$__interval])\n",
           "format": "time_series",
           "interval": "1m",
-          "intervalFactor": 3,
+          "intervalFactor": 1,
           "legendFormat": "sidekiq apdex avg",
           "refId": "D"
         },
@@ -275,7 +275,7 @@
           "expr": "clamp_min(\n  gitlab_service_apdex:ratio_5m{type=\"sidekiq\"} offset 1w\n,\n  scalar(min((1 - 14.4 * (1 - avg(slo:min:events:gitlab_service_apdex:ratio{component=\"\",type=\"sidekiq\"})\n))\n))\n)\n",
           "format": "time_series",
           "interval": "1m",
-          "intervalFactor": 3,
+          "intervalFactor": 1,
           "legendFormat": "last week",
           "refId": "E"
         }
@@ -500,7 +500,7 @@
           "format": "time_series",
           "instant": true,
           "interval": "1m",
-          "intervalFactor": 3,
+          "intervalFactor": 1,
           "legendFormat": "sidekiq Service | Latency/Apdex",
           "refId": "A"
         }
@@ -616,7 +616,7 @@
           "expr": "clamp_max(\n  max_over_time(gitlab_service_errors:ratio_5m{type=\"sidekiq\"}[$__interval])\n,\n  1\n)\n",
           "format": "time_series",
           "interval": "1m",
-          "intervalFactor": 3,
+          "intervalFactor": 1,
           "legendFormat": "sidekiq error ratio",
           "refId": "A"
         },
@@ -624,7 +624,7 @@
           "expr": "(6 * avg(slo:max:events:gitlab_service_errors:ratio{component=\"\",type=\"sidekiq\"})\n)\n",
           "format": "time_series",
           "interval": "5m",
-          "intervalFactor": 3,
+          "intervalFactor": 1,
           "legendFormat": "6h Degradation SLO (5% of monthly error budget)",
           "refId": "B"
         },
@@ -632,7 +632,7 @@
           "expr": "(14.4 * avg(slo:max:events:gitlab_service_errors:ratio{component=\"\",type=\"sidekiq\"})\n)\n",
           "format": "time_series",
           "interval": "5m",
-          "intervalFactor": 3,
+          "intervalFactor": 1,
           "legendFormat": "1h Outage SLO (2% of monthly error budget)",
           "refId": "C"
         },
@@ -640,7 +640,7 @@
           "expr": "clamp_max(\n  avg_over_time(gitlab_service_errors:ratio_5m{type=\"sidekiq\"}[$__interval])\n,\n  1\n)\n",
           "format": "time_series",
           "interval": "1m",
-          "intervalFactor": 3,
+          "intervalFactor": 1,
           "legendFormat": "sidekiq error ratio avg",
           "refId": "D"
         },
@@ -648,7 +648,7 @@
           "expr": "clamp_max(\n  gitlab_service_errors:ratio_5m{type=\"sidekiq\"} offset 1w\n,\n  scalar(max((14.4 * avg(slo:max:events:gitlab_service_errors:ratio{component=\"\",type=\"sidekiq\"})\n)\n))\n)\n",
           "format": "time_series",
           "interval": "1m",
-          "intervalFactor": 3,
+          "intervalFactor": 1,
           "legendFormat": "last week",
           "refId": "E"
         }
@@ -873,7 +873,7 @@
           "format": "time_series",
           "instant": true,
           "interval": "1m",
-          "intervalFactor": 3,
+          "intervalFactor": 1,
           "legendFormat": "sidekiq Service | Errors",
           "refId": "A"
         }
@@ -971,7 +971,7 @@
           "expr": "avg_over_time(gitlab_service_ops:rate_5m{type=\"sidekiq\"}[$__interval])\n",
           "format": "time_series",
           "interval": "1m",
-          "intervalFactor": 3,
+          "intervalFactor": 1,
           "legendFormat": "sidekiq RPS",
           "refId": "A"
         },
@@ -979,7 +979,7 @@
           "expr": "gitlab_service_ops:rate_5m{type=\"sidekiq\"} offset 1w\n",
           "format": "time_series",
           "interval": "1m",
-          "intervalFactor": 3,
+          "intervalFactor": 1,
           "legendFormat": "last week",
           "refId": "B"
         },
@@ -987,7 +987,7 @@
           "expr": "clamp_min(\n  avg by (type) (\n    gitlab_service_ops:rate:prediction{type=\"sidekiq\"}\n    + (1) *\n    gitlab_service_ops:rate:stddev_over_time_1w{type=\"sidekiq\"}\n  ),\n  0\n)\n",
           "format": "time_series",
           "interval": "1m",
-          "intervalFactor": 3,
+          "intervalFactor": 1,
           "legendFormat": "upper normal",
           "refId": "C"
         },
@@ -995,7 +995,7 @@
           "expr": "clamp_min(\n  avg by (type) (\n    gitlab_service_ops:rate:prediction{type=\"sidekiq\"}\n    + (-1) *\n    gitlab_service_ops:rate:stddev_over_time_1w{type=\"sidekiq\"}\n  ),\n  0\n)\n",
           "format": "time_series",
           "interval": "1m",
-          "intervalFactor": 3,
+          "intervalFactor": 1,
           "legendFormat": "lower normal",
           "refId": "D"
         }
@@ -1072,7 +1072,7 @@
           "expr": "max(\n  max_over_time(\n    gitlab_component_saturation:ratio{type=\"sidekiq\"}[$__interval]\n  )\n) by (component)\n",
           "format": "time_series",
           "interval": "1m",
-          "intervalFactor": 3,
+          "intervalFactor": 1,
           "legendFormat": "{{ component }} component",
           "refId": "A"
         }
@@ -1231,7 +1231,7 @@
           "expr": "clamp_max(\n  max_over_time(gitlab_component_errors:ratio_5m{component=\"email_receiver\",type=\"sidekiq\"}[$__interval])\n,\n  1\n)\n",
           "format": "time_series",
           "interval": "1m",
-          "intervalFactor": 3,
+          "intervalFactor": 1,
           "legendFormat": "email_receiver error ratio",
           "refId": "A"
         },
@@ -1239,7 +1239,7 @@
           "expr": "(6 * avg(slo:max:events:gitlab_service_errors:ratio{component=\"email_receiver\",type=\"sidekiq\"})\n)\n",
           "format": "time_series",
           "interval": "5m",
-          "intervalFactor": 3,
+          "intervalFactor": 1,
           "legendFormat": "6h Degradation SLO (5% of monthly error budget)",
           "refId": "B"
         },
@@ -1247,7 +1247,7 @@
           "expr": "(14.4 * avg(slo:max:events:gitlab_service_errors:ratio{component=\"email_receiver\",type=\"sidekiq\"})\n)\n",
           "format": "time_series",
           "interval": "5m",
-          "intervalFactor": 3,
+          "intervalFactor": 1,
           "legendFormat": "1h Outage SLO (2% of monthly error budget)",
           "refId": "C"
         },
@@ -1255,7 +1255,7 @@
           "expr": "clamp_max(\n  avg_over_time(gitlab_component_errors:ratio_5m{component=\"email_receiver\",type=\"sidekiq\"}[$__interval])\n,\n  1\n)\n",
           "format": "time_series",
           "interval": "1m",
-          "intervalFactor": 3,
+          "intervalFactor": 1,
           "legendFormat": "email_receiver error ratio avg",
           "refId": "D"
         },
@@ -1263,7 +1263,7 @@
           "expr": "clamp_max(\n  gitlab_component_errors:ratio_5m{component=\"email_receiver\",type=\"sidekiq\"} offset 1w\n,\n  scalar(max((14.4 * avg(slo:max:events:gitlab_service_errors:ratio{component=\"email_receiver\",type=\"sidekiq\"})\n)\n))\n)\n",
           "format": "time_series",
           "interval": "1m",
-          "intervalFactor": 3,
+          "intervalFactor": 1,
           "legendFormat": "last week",
           "refId": "E"
         }
@@ -1488,7 +1488,7 @@
           "format": "time_series",
           "instant": true,
           "interval": "1m",
-          "intervalFactor": 3,
+          "intervalFactor": 1,
           "legendFormat": "email_receiver SLI | Errors",
           "refId": "A"
         }
@@ -1561,7 +1561,7 @@
           "expr": "avg_over_time(gitlab_component_ops:rate_5m{component=\"email_receiver\",type=\"sidekiq\"}[$__interval])\n",
           "format": "time_series",
           "interval": "1m",
-          "intervalFactor": 3,
+          "intervalFactor": 1,
           "legendFormat": "email_receiver RPS",
           "refId": "A"
         },
@@ -1569,7 +1569,7 @@
           "expr": "gitlab_component_ops:rate_5m{component=\"email_receiver\",type=\"sidekiq\"} offset 1w\n",
           "format": "time_series",
           "interval": "1m",
-          "intervalFactor": 3,
+          "intervalFactor": 1,
           "legendFormat": "last week",
           "refId": "B"
         }
@@ -1733,7 +1733,7 @@
           "expr": "min_over_time(gitlab_component_apdex:ratio_5m{component=\"shard_catchall\",type=\"sidekiq\"}[$__interval])\n",
           "format": "time_series",
           "interval": "1m",
-          "intervalFactor": 3,
+          "intervalFactor": 1,
           "legendFormat": "shard_catchall apdex",
           "refId": "A"
         },
@@ -1741,7 +1741,7 @@
           "expr": "(1 - 6 * (1 - avg(slo:min:events:gitlab_service_apdex:ratio{component=\"shard_catchall\",type=\"sidekiq\"})\n))\n",
           "format": "time_series",
           "interval": "5m",
-          "intervalFactor": 3,
+          "intervalFactor": 1,
           "legendFormat": "6h Degradation SLO (5% of monthly error budget)",
           "refId": "B"
         },
@@ -1749,7 +1749,7 @@
           "expr": "(1 - 14.4 * (1 - avg(slo:min:events:gitlab_service_apdex:ratio{component=\"shard_catchall\",type=\"sidekiq\"})\n))\n",
           "format": "time_series",
           "interval": "5m",
-          "intervalFactor": 3,
+          "intervalFactor": 1,
           "legendFormat": "1h Outage SLO (2% of monthly error budget)",
           "refId": "C"
         },
@@ -1757,7 +1757,7 @@
           "expr": "avg_over_time(gitlab_component_apdex:ratio_5m{component=\"shard_catchall\",type=\"sidekiq\"}[$__interval])\n",
           "format": "time_series",
           "interval": "1m",
-          "intervalFactor": 3,
+          "intervalFactor": 1,
           "legendFormat": "shard_catchall apdex avg",
           "refId": "D"
         },
@@ -1765,7 +1765,7 @@
           "expr": "clamp_min(\n  gitlab_component_apdex:ratio_5m{component=\"shard_catchall\",type=\"sidekiq\"} offset 1w\n,\n  scalar(min((1 - 14.4 * (1 - avg(slo:min:events:gitlab_service_apdex:ratio{component=\"shard_catchall\",type=\"sidekiq\"})\n))\n))\n)\n",
           "format": "time_series",
           "interval": "1m",
-          "intervalFactor": 3,
+          "intervalFactor": 1,
           "legendFormat": "last week",
           "refId": "E"
         }
@@ -1990,7 +1990,7 @@
           "format": "time_series",
           "instant": true,
           "interval": "1m",
-          "intervalFactor": 3,
+          "intervalFactor": 1,
           "legendFormat": "shard_catchall SLI | Latency/Apdex",
           "refId": "A"
         }
@@ -2106,7 +2106,7 @@
           "expr": "clamp_max(\n  max_over_time(gitlab_component_errors:ratio_5m{component=\"shard_catchall\",type=\"sidekiq\"}[$__interval])\n,\n  1\n)\n",
           "format": "time_series",
           "interval": "1m",
-          "intervalFactor": 3,
+          "intervalFactor": 1,
           "legendFormat": "shard_catchall error ratio",
           "refId": "A"
         },
@@ -2114,7 +2114,7 @@
           "expr": "(6 * avg(slo:max:events:gitlab_service_errors:ratio{component=\"shard_catchall\",type=\"sidekiq\"})\n)\n",
           "format": "time_series",
           "interval": "5m",
-          "intervalFactor": 3,
+          "intervalFactor": 1,
           "legendFormat": "6h Degradation SLO (5% of monthly error budget)",
           "refId": "B"
         },
@@ -2122,7 +2122,7 @@
           "expr": "(14.4 * avg(slo:max:events:gitlab_service_errors:ratio{component=\"shard_catchall\",type=\"sidekiq\"})\n)\n",
           "format": "time_series",
           "interval": "5m",
-          "intervalFactor": 3,
+          "intervalFactor": 1,
           "legendFormat": "1h Outage SLO (2% of monthly error budget)",
           "refId": "C"
         },
@@ -2130,7 +2130,7 @@
           "expr": "clamp_max(\n  avg_over_time(gitlab_component_errors:ratio_5m{component=\"shard_catchall\",type=\"sidekiq\"}[$__interval])\n,\n  1\n)\n",
           "format": "time_series",
           "interval": "1m",
-          "intervalFactor": 3,
+          "intervalFactor": 1,
           "legendFormat": "shard_catchall error ratio avg",
           "refId": "D"
         },
@@ -2138,7 +2138,7 @@
           "expr": "clamp_max(\n  gitlab_component_errors:ratio_5m{component=\"shard_catchall\",type=\"sidekiq\"} offset 1w\n,\n  scalar(max((14.4 * avg(slo:max:events:gitlab_service_errors:ratio{component=\"shard_catchall\",type=\"sidekiq\"})\n)\n))\n)\n",
           "format": "time_series",
           "interval": "1m",
-          "intervalFactor": 3,
+          "intervalFactor": 1,
           "legendFormat": "last week",
           "refId": "E"
         }
@@ -2363,7 +2363,7 @@
           "format": "time_series",
           "instant": true,
           "interval": "1m",
-          "intervalFactor": 3,
+          "intervalFactor": 1,
           "legendFormat": "shard_catchall SLI | Errors",
           "refId": "A"
         }
@@ -2436,7 +2436,7 @@
           "expr": "avg_over_time(gitlab_component_ops:rate_5m{component=\"shard_catchall\",type=\"sidekiq\"}[$__interval])\n",
           "format": "time_series",
           "interval": "1m",
-          "intervalFactor": 3,
+          "intervalFactor": 1,
           "legendFormat": "shard_catchall RPS",
           "refId": "A"
         },
@@ -2444,7 +2444,7 @@
           "expr": "gitlab_component_ops:rate_5m{component=\"shard_catchall\",type=\"sidekiq\"} offset 1w\n",
           "format": "time_series",
           "interval": "1m",
-          "intervalFactor": 3,
+          "intervalFactor": 1,
           "legendFormat": "last week",
           "refId": "B"
         }
@@ -2544,7 +2544,7 @@
               "expr": "sum by () (\n  rate(gitlab_transaction_event_email_receiver_error_total{error!=\"Gitlab::Email::AutoGeneratedEmailError\"}[$__interval])\n)\n \u003e 0",
               "format": "time_series",
               "interval": "1m",
-              "intervalFactor": 2,
+              "intervalFactor": 1,
               "legendFormat": "overall",
               "refId": "A"
             }
@@ -2620,7 +2620,7 @@
               "expr": "sum by () (\n  rate(sidekiq_jobs_completion_seconds_count{worker=~\"EmailReceiverWorker|ServiceDeskEmailReceiverWorker\"}[$__interval])\n)\n \u003e 0",
               "format": "time_series",
               "interval": "1m",
-              "intervalFactor": 2,
+              "intervalFactor": 1,
               "legendFormat": "overall",
               "refId": "A"
             }
@@ -2696,7 +2696,7 @@
               "expr": "sum by (error) (\n  rate(gitlab_transaction_event_email_receiver_error_total{error!=\"\"}[$__interval])\n)\n \u003e 0",
               "format": "time_series",
               "interval": "1m",
-              "intervalFactor": 2,
+              "intervalFactor": 1,
               "legendFormat": "{{error}}",
               "refId": "A"
             }
@@ -2772,7 +2772,7 @@
               "expr": "sum by (error) (\n  rate(sidekiq_jobs_completion_seconds_count{error!=\"\",worker=~\"EmailReceiverWorker|ServiceDeskEmailReceiverWorker\"}[$__interval])\n)\n \u003e 0",
               "format": "time_series",
               "interval": "1m",
-              "intervalFactor": 2,
+              "intervalFactor": 1,
               "legendFormat": "{{error}}",
               "refId": "A"
             }
@@ -2868,7 +2868,7 @@
               "expr": "histogram_quantile(\n  0.950000,\n  sum by (le) (\n    sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate5m{urgency=\"high\"}\n    or\n    sli_aggregations:sidekiq_jobs_queue_duration_seconds_bucket_rate5m{urgency=\"high\"}\n    or\n    sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate5m{urgency=\"low\"}\n    or\n    sli_aggregations:sidekiq_jobs_queue_duration_seconds_bucket_rate5m{urgency=\"low\"}\n    or\n    sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate5m{urgency=\"throttled\"}\n    or\n    sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate5m{urgency=\"\"}\n    or\n    sli_aggregations:sidekiq_jobs_queue_duration_seconds_bucket_rate5m{urgency=\"\"}\n  )\n)\n \u003e 0",
               "format": "time_series",
               "interval": "1m",
-              "intervalFactor": 2,
+              "intervalFactor": 1,
               "legendFormat": "p95 overall",
               "refId": "A"
             }
@@ -2963,7 +2963,7 @@
               "expr": "sum by () (\n  sli_aggregations:sidekiq_jobs_failed_total_rate5m{}\n)\n \u003e 0",
               "format": "time_series",
               "interval": "1m",
-              "intervalFactor": 2,
+              "intervalFactor": 1,
               "legendFormat": "overall",
               "refId": "A"
             }
@@ -3039,7 +3039,7 @@
               "expr": "sum by () (\n  sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate5m{le=\"+Inf\"}\n)\n \u003e 0",
               "format": "time_series",
               "interval": "1m",
-              "intervalFactor": 2,
+              "intervalFactor": 1,
               "legendFormat": "overall",
               "refId": "A"
             }
@@ -3115,7 +3115,7 @@
               "expr": "histogram_quantile(\n  0.950000,\n  sum by (feature_category,le) (\n    sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate5m{feature_category!=\"\",urgency=\"high\"}\n    or\n    sli_aggregations:sidekiq_jobs_queue_duration_seconds_bucket_rate5m{feature_category!=\"\",urgency=\"high\"}\n    or\n    sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate5m{feature_category!=\"\",urgency=\"low\"}\n    or\n    sli_aggregations:sidekiq_jobs_queue_duration_seconds_bucket_rate5m{feature_category!=\"\",urgency=\"low\"}\n    or\n    sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate5m{feature_category!=\"\",urgency=\"throttled\"}\n    or\n    sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate5m{feature_category!=\"\",urgency=\"\"}\n    or\n    sli_aggregations:sidekiq_jobs_queue_duration_seconds_bucket_rate5m{feature_category!=\"\",urgency=\"\"}\n  )\n)\n \u003e 0",
               "format": "time_series",
               "interval": "1m",
-              "intervalFactor": 2,
+              "intervalFactor": 1,
               "legendFormat": "p95 {{feature_category}}",
               "refId": "A"
             }
@@ -3210,7 +3210,7 @@
               "expr": "sum by (feature_category) (\n  sli_aggregations:sidekiq_jobs_failed_total_rate5m{feature_category!=\"\"}\n)\n \u003e 0",
               "format": "time_series",
               "interval": "1m",
-              "intervalFactor": 2,
+              "intervalFactor": 1,
               "legendFormat": "{{feature_category}}",
               "refId": "A"
             }
@@ -3286,7 +3286,7 @@
               "expr": "sum by (feature_category) (\n  sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate5m{feature_category!=\"\",le=\"+Inf\"}\n)\n \u003e 0",
               "format": "time_series",
               "interval": "1m",
-              "intervalFactor": 2,
+              "intervalFactor": 1,
               "legendFormat": "{{feature_category}}",
               "refId": "A"
             }
@@ -3362,7 +3362,7 @@
               "expr": "histogram_quantile(\n  0.950000,\n  sum by (le,queue) (\n    sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate5m{queue!=\"\",urgency=\"high\"}\n    or\n    sli_aggregations:sidekiq_jobs_queue_duration_seconds_bucket_rate5m{queue!=\"\",urgency=\"high\"}\n    or\n    sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate5m{queue!=\"\",urgency=\"low\"}\n    or\n    sli_aggregations:sidekiq_jobs_queue_duration_seconds_bucket_rate5m{queue!=\"\",urgency=\"low\"}\n    or\n    sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate5m{queue!=\"\",urgency=\"throttled\"}\n    or\n    sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate5m{queue!=\"\",urgency=\"\"}\n    or\n    sli_aggregations:sidekiq_jobs_queue_duration_seconds_bucket_rate5m{queue!=\"\",urgency=\"\"}\n  )\n)\n \u003e 0",
               "format": "time_series",
               "interval": "1m",
-              "intervalFactor": 2,
+              "intervalFactor": 1,
               "legendFormat": "p95 {{queue}}",
               "refId": "A"
             }
@@ -3457,7 +3457,7 @@
               "expr": "sum by (queue) (\n  sli_aggregations:sidekiq_jobs_failed_total_rate5m{queue!=\"\"}\n)\n \u003e 0",
               "format": "time_series",
               "interval": "1m",
-              "intervalFactor": 2,
+              "intervalFactor": 1,
               "legendFormat": "{{queue}}",
               "refId": "A"
             }
@@ -3533,7 +3533,7 @@
               "expr": "sum by (queue) (\n  sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate5m{le=\"+Inf\",queue!=\"\"}\n)\n \u003e 0",
               "format": "time_series",
               "interval": "1m",
-              "intervalFactor": 2,
+              "intervalFactor": 1,
               "legendFormat": "{{queue}}",
               "refId": "A"
             }
@@ -3609,7 +3609,7 @@
               "expr": "histogram_quantile(\n  0.950000,\n  sum by (le,urgency) (\n    sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate5m{urgency!=\"\"}\n    or\n    sli_aggregations:sidekiq_jobs_queue_duration_seconds_bucket_rate5m{urgency!=\"\"}\n    or\n    sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate5m{urgency!=\"\"}\n    or\n    sli_aggregations:sidekiq_jobs_queue_duration_seconds_bucket_rate5m{urgency!=\"\"}\n    or\n    sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate5m{urgency!=\"\"}\n    or\n    sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate5m{urgency!=\"\"}\n    or\n    sli_aggregations:sidekiq_jobs_queue_duration_seconds_bucket_rate5m{urgency!=\"\"}\n  )\n)\n \u003e 0",
               "format": "time_series",
               "interval": "1m",
-              "intervalFactor": 2,
+              "intervalFactor": 1,
               "legendFormat": "p95 {{urgency}}",
               "refId": "A"
             }
@@ -3704,7 +3704,7 @@
               "expr": "sum by (urgency) (\n  sli_aggregations:sidekiq_jobs_failed_total_rate5m{urgency!=\"\"}\n)\n \u003e 0",
               "format": "time_series",
               "interval": "1m",
-              "intervalFactor": 2,
+              "intervalFactor": 1,
               "legendFormat": "{{urgency}}",
               "refId": "A"
             }
@@ -3780,7 +3780,7 @@
               "expr": "sum by (urgency) (\n  sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate5m{le=\"+Inf\",urgency!=\"\"}\n)\n \u003e 0",
               "format": "time_series",
               "interval": "1m",
-              "intervalFactor": 2,
+              "intervalFactor": 1,
               "legendFormat": "{{urgency}}",
               "refId": "A"
             }
@@ -3856,7 +3856,7 @@
               "expr": "histogram_quantile(\n  0.950000,\n  sum by (le,worker) (\n    sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate5m{urgency=\"high\",worker!=\"\"}\n    or\n    sli_aggregations:sidekiq_jobs_queue_duration_seconds_bucket_rate5m{urgency=\"high\",worker!=\"\"}\n    or\n    sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate5m{urgency=\"low\",worker!=\"\"}\n    or\n    sli_aggregations:sidekiq_jobs_queue_duration_seconds_bucket_rate5m{urgency=\"low\",worker!=\"\"}\n    or\n    sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate5m{urgency=\"throttled\",worker!=\"\"}\n    or\n    sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate5m{urgency=\"\",worker!=\"\"}\n    or\n    sli_aggregations:sidekiq_jobs_queue_duration_seconds_bucket_rate5m{urgency=\"\",worker!=\"\"}\n  )\n)\n \u003e 0",
               "format": "time_series",
               "interval": "1m",
-              "intervalFactor": 2,
+              "intervalFactor": 1,
               "legendFormat": "p95 {{worker}}",
               "refId": "A"
             }
@@ -3951,7 +3951,7 @@
               "expr": "sum by (worker) (\n  sli_aggregations:sidekiq_jobs_failed_total_rate5m{worker!=\"\"}\n)\n \u003e 0",
               "format": "time_series",
               "interval": "1m",
-              "intervalFactor": 2,
+              "intervalFactor": 1,
               "legendFormat": "{{worker}}",
               "refId": "A"
             }
@@ -4027,7 +4027,7 @@
               "expr": "sum by (worker) (\n  sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate5m{le=\"+Inf\",worker!=\"\"}\n)\n \u003e 0",
               "format": "time_series",
               "interval": "1m",
-              "intervalFactor": 2,
+              "intervalFactor": 1,
               "legendFormat": "{{worker}}",
               "refId": "A"
             }
@@ -4186,7 +4186,7 @@
               "expr": "clamp_min(\n  clamp_max(\n    max by(type, pod, container) (\n  clamp_min(\n    clamp_max(\n      sum by (type, pod, container) (\n        rate(container_cpu_usage_seconds_total:labeled{container!=\"\", container!=\"POD\", type=\"sidekiq\"}[5m])\n      )\n      /\n      sum by(type, pod, container) (\n        container_spec_cpu_quota:labeled{container!=\"\", container!=\"POD\", type=\"sidekiq\"}\n        /\n        container_spec_cpu_period:labeled{container!=\"\", container!=\"POD\", type=\"sidekiq\"}\n      )\n      ,\n      1)\n  ,\n  0)\n)\n\n  ,1)\n,0)\n",
               "format": "time_series",
               "interval": "1m",
-              "intervalFactor": 3,
+              "intervalFactor": 1,
               "legendFormat": "{{ pod }} {{ container }}",
               "refId": "A"
             },
@@ -4194,7 +4194,7 @@
               "expr": "clamp_min(\n  clamp_max(\n    max(\n      max_over_time(gitlab_component_saturation:ratio{type=\"sidekiq\", component=\"kube_container_cpu\"}[$__interval])\n    ) by (component)\n  ,1)\n,0)\n",
               "format": "time_series",
               "interval": "1m",
-              "intervalFactor": 3,
+              "intervalFactor": 1,
               "legendFormat": "aggregated {{ component }}",
               "refId": "B"
             },
@@ -4202,7 +4202,7 @@
               "expr": "max(\n  gitlab_component_saturation:ratio_quantile95_1w{type=\"sidekiq\", component=\"kube_container_cpu\"}\n)\n",
               "format": "time_series",
               "interval": "1m",
-              "intervalFactor": 3,
+              "intervalFactor": 1,
               "legendFormat": "95th quantile for week {{ component }}",
               "refId": "C"
             },
@@ -4210,7 +4210,7 @@
               "expr": "max(\n  gitlab_component_saturation:ratio_quantile99_1w{type=\"sidekiq\", component=\"kube_container_cpu\"}\n)\n",
               "format": "time_series",
               "interval": "1m",
-              "intervalFactor": 3,
+              "intervalFactor": 1,
               "legendFormat": "99th quantile for week {{ component }}",
               "refId": "D"
             },
@@ -4218,7 +4218,7 @@
               "expr": "avg(slo:max:soft:gitlab_component_saturation:ratio{component=\"kube_container_cpu\"}) by (component)\n",
               "format": "time_series",
               "interval": "1m",
-              "intervalFactor": 3,
+              "intervalFactor": 1,
               "legendFormat": "Soft SLO: {{ component }}",
               "refId": "E"
             },
@@ -4226,7 +4226,7 @@
               "expr": "avg(slo:max:hard:gitlab_component_saturation:ratio{component=\"kube_container_cpu\"}) by (component)\n",
               "format": "time_series",
               "interval": "1m",
-              "intervalFactor": 3,
+              "intervalFactor": 1,
               "legendFormat": "Hard SLO: {{ component }}",
               "refId": "F"
             }
@@ -4373,7 +4373,7 @@
               "expr": "clamp_min(\n  clamp_max(\n    max by(type) (\n  clamp_min(\n    clamp_max(\n      container_memory_working_set_bytes:labeled{container!=\"\", container!=\"POD\", type=\"sidekiq\"}\n      /\n      (container_spec_memory_limit_bytes:labeled{container!=\"\", container!=\"POD\", type=\"sidekiq\"} \u003e 0)\n      ,\n      1)\n  ,\n  0)\n)\n\n  ,1)\n,0)\n",
               "format": "time_series",
               "interval": "1m",
-              "intervalFactor": 3,
+              "intervalFactor": 1,
               "legendFormat": "{{ type }}",
               "refId": "A"
             },
@@ -4381,7 +4381,7 @@
               "expr": "clamp_min(\n  clamp_max(\n    max(\n      max_over_time(gitlab_component_saturation:ratio{type=\"sidekiq\", component=\"kube_container_memory\"}[$__interval])\n    ) by (component)\n  ,1)\n,0)\n",
               "format": "time_series",
               "interval": "1m",
-              "intervalFactor": 3,
+              "intervalFactor": 1,
               "legendFormat": "aggregated {{ component }}",
               "refId": "B"
             },
@@ -4389,7 +4389,7 @@
               "expr": "max(\n  gitlab_component_saturation:ratio_quantile95_1w{type=\"sidekiq\", component=\"kube_container_memory\"}\n)\n",
               "format": "time_series",
               "interval": "1m",
-              "intervalFactor": 3,
+              "intervalFactor": 1,
               "legendFormat": "95th quantile for week {{ component }}",
               "refId": "C"
             },
@@ -4397,7 +4397,7 @@
               "expr": "max(\n  gitlab_component_saturation:ratio_quantile99_1w{type=\"sidekiq\", component=\"kube_container_memory\"}\n)\n",
               "format": "time_series",
               "interval": "1m",
-              "intervalFactor": 3,
+              "intervalFactor": 1,
               "legendFormat": "99th quantile for week {{ component }}",
               "refId": "D"
             },
@@ -4405,7 +4405,7 @@
               "expr": "avg(slo:max:soft:gitlab_component_saturation:ratio{component=\"kube_container_memory\"}) by (component)\n",
               "format": "time_series",
               "interval": "1m",
-              "intervalFactor": 3,
+              "intervalFactor": 1,
               "legendFormat": "Soft SLO: {{ component }}",
               "refId": "E"
             },
@@ -4413,7 +4413,7 @@
               "expr": "avg(slo:max:hard:gitlab_component_saturation:ratio{component=\"kube_container_memory\"}) by (component)\n",
               "format": "time_series",
               "interval": "1m",
-              "intervalFactor": 3,
+              "intervalFactor": 1,
               "legendFormat": "Hard SLO: {{ component }}",
               "refId": "F"
             }
@@ -4560,7 +4560,7 @@
               "expr": "clamp_min(\n  clamp_max(\n    max by(type) (\n  clamp_min(\n    clamp_max(\n      1 - avg by (type) (\n        rate(node_cpu_seconds_total:labeled{mode=\"idle\", type=\"sidekiq\"}[5m])\n      )\n      ,\n      1)\n  ,\n  0)\n)\n\n  ,1)\n,0)\n",
               "format": "time_series",
               "interval": "1m",
-              "intervalFactor": 3,
+              "intervalFactor": 1,
               "legendFormat": "{{ type }}",
               "refId": "A"
             },
@@ -4568,7 +4568,7 @@
               "expr": "clamp_min(\n  clamp_max(\n    max(\n      max_over_time(gitlab_component_saturation:ratio{type=\"sidekiq\", component=\"kube_pool_cpu\"}[$__interval])\n    ) by (component)\n  ,1)\n,0)\n",
               "format": "time_series",
               "interval": "1m",
-              "intervalFactor": 3,
+              "intervalFactor": 1,
               "legendFormat": "aggregated {{ component }}",
               "refId": "B"
             },
@@ -4576,7 +4576,7 @@
               "expr": "max(\n  gitlab_component_saturation:ratio_quantile95_1w{type=\"sidekiq\", component=\"kube_pool_cpu\"}\n)\n",
               "format": "time_series",
               "interval": "1m",
-              "intervalFactor": 3,
+              "intervalFactor": 1,
               "legendFormat": "95th quantile for week {{ component }}",
               "refId": "C"
             },
@@ -4584,7 +4584,7 @@
               "expr": "max(\n  gitlab_component_saturation:ratio_quantile99_1w{type=\"sidekiq\", component=\"kube_pool_cpu\"}\n)\n",
               "format": "time_series",
               "interval": "1m",
-              "intervalFactor": 3,
+              "intervalFactor": 1,
               "legendFormat": "99th quantile for week {{ component }}",
               "refId": "D"
             },
@@ -4592,7 +4592,7 @@
               "expr": "avg(slo:max:soft:gitlab_component_saturation:ratio{component=\"kube_pool_cpu\"}) by (component)\n",
               "format": "time_series",
               "interval": "1m",
-              "intervalFactor": 3,
+              "intervalFactor": 1,
               "legendFormat": "Soft SLO: {{ component }}",
               "refId": "E"
             },
@@ -4600,7 +4600,7 @@
               "expr": "avg(slo:max:hard:gitlab_component_saturation:ratio{component=\"kube_pool_cpu\"}) by (component)\n",
               "format": "time_series",
               "interval": "1m",
-              "intervalFactor": 3,
+              "intervalFactor": 1,
               "legendFormat": "Hard SLO: {{ component }}",
               "refId": "F"
             }
