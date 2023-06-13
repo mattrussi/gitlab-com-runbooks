@@ -413,6 +413,11 @@ Every new CIDR should start at directly after the previously reserved one ends.
 | `GCP/gitlab-r-saas-l-m-amd64-gpu-1`        | `ephemeral-runners/tmp-ephemeral-runners`  | `10.11.80.0/21`  |
 | `GCP/gitlab-r-saas-l-m-amd64-gpu-2`        | `ephemeral-runners/tmp-ephemeral-runners`  | `10.11.88.0/21`  |
 | `GCP/gitlab-r-saas-l-m-amd64-gpu-3`        | `ephemeral-runners/tmp-ephemeral-runners`  | `10.11.96.0/21`  |
+| `GCP/gitlab-r-saas-l-xl-amd64-1`           | `ephemeral-runners/ephemeral-runners`      | `10.11.104.0/21` |
+| `GCP/gitlab-r-saas-l-xl-amd64-2`           | `ephemeral-runners/ephemeral-runners`      | `10.11.112.0/21` |
+| `GCP/gitlab-r-saas-l-xl-amd64-3`           | `ephemeral-runners/ephemeral-runners`      | `10.11.120.0/21` |
+| `GCP/gitlab-r-saas-l-xl-amd64-4`           | `ephemeral-runners/ephemeral-runners`      | `10.11.128.0/21` |
+| `GCP/gitlab-r-saas-l-xl-amd64-5`           | `ephemeral-runners/ephemeral-runners`      | `10.11.136.0/21` |
 | `AWS/r-saas-m-staging`                     | `jobs-vpc/saas-macos-staging-blue-1`       | `10.20.0.0/21`   |
 | `AWS/r-saas-m-staging`                     | `jobs-vpc/saas-macos-staging-blue-2`       | `10.20.8.0/21`   |
 | `AWS/r-saas-m-staging`                     | `jobs-vpc/saas-macos-staging-green-1`      | `10.20.16.0/21`  |
