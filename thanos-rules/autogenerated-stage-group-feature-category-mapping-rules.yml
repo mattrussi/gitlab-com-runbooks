@@ -351,7 +351,7 @@ groups:
     labels:
       feature_category: gitaly
       product_stage: systems
-      stage_group: gitaly_cluster
+      stage_group: gitaly
     expr: "1"
   - record: gitlab:feature_category:stage_group:mapping
     labels:

@@ -7,7 +7,14 @@ local toolingLinks = import 'toolinglinks/toolinglinks.libsonnet';
 local strings = import 'utils/strings.libsonnet';
 
 local featureCategoryFromSourceMetrics = 'featureCategoryFromSourceMetrics';
-local featureCategoryNotOwned = stages.notOwned.key;
+
+/*
+Given the reference architecture does not record metrics per group, the stage groups mapping will be empty:
+https://gitlab.com/gitlab-com/runbooks/-/blob/master/reference-architectures/get-hybrid/src/gitlab-metrics-config.libsonnet#L64
+
+Not owned category key should be kept hardcoded here for this reason.
+*/
+local featureCategoryNotOwned = 'not_owned';
 
 // For now we assume that services are provisioned on vms and not kubernetes
 // Please consult the README.md file for details of team and feature_category

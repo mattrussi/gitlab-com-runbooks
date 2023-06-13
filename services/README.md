@@ -6,6 +6,8 @@ The `stage-group-mapping.jsonnet` file is generated from
 [`stages.yml`](https://gitlab.com/gitlab-com/www-gitlab-com/-/blob/master/data/stages.yml)
 in the handbook by running `scripts/update-stage-groups-feature-categories`.
 
+The `stage-group-mapping-overrides.jsonnet` file can be updated manually in order to transform one stage group into another, or merge two or more stage groups into one. The feature categories of the selected groups will be associated with the new group. All the groups being merged need to belong to the same stage.
+
 ## Teams.yml
 
 The `teams.yml` file can contain a definition of a team responsible

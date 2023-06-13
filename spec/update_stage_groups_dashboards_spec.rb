@@ -72,9 +72,6 @@ describe UpdateStageGroupsDashboard do
       let(:long_file) { "#{dashboard_dir}/this-is-really-long-long-lo.dashboard.jsonnet" }
       let(:long_template) { described_class.render_template('this-is-really-long-long-long-long-long-long-stage') }
 
-      let(:not_owned_file) { "#{dashboard_dir}/not_owned.dashboard.jsonnet" }
-      let(:not_owned_template) { described_class.render_template('not_owned') }
-
       before do
         File.write(mapping_path, groups_jsonnet)
 
@@ -104,9 +101,6 @@ describe UpdateStageGroupsDashboard do
 
         expect(File.exist?(long_file)).to be(true)
         expect(File.read(long_file)).to eql(long_template)
-
-        expect(File.exist?(not_owned_file)).to be(true)
-        expect(File.read(not_owned_file)).to eql(not_owned_template)
       end
     end
   end

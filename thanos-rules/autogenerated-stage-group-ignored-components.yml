@@ -221,7 +221,7 @@ groups:
       product_stage: systems
       stage_group: geo
     expr: "1"
-- name: 'Stage group Ignored components: systems - Gitaly::Cluster'
+- name: 'Stage group Ignored components: systems - Gitaly'
   interval: 1m
   partial_response_strategy: warn
   rules:
@@ -229,17 +229,7 @@ groups:
     labels:
       component: graphql_query
       product_stage: systems
-      stage_group: gitaly_cluster
-    expr: "1"
-- name: 'Stage group Ignored components: systems - Gitaly::Git'
-  interval: 1m
-  partial_response_strategy: warn
-  rules:
-  - record: gitlab:ignored_component:stage_group
-    labels:
-      component: graphql_query
-      product_stage: systems
-      stage_group: gitaly_git
+      stage_group: gitaly
     expr: "1"
 - name: 'Stage group Ignored components: data_stores - Global Search'
   interval: 1m

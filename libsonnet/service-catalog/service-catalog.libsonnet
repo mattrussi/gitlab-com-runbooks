@@ -1,7 +1,6 @@
 local metricsConfig = import 'gitlab-metrics-config.libsonnet';
 local rawCatalog = metricsConfig.serviceCatalog;
 local allServices = metricsConfig.monitoredServices;
-local stageGroupMapping = metricsConfig.stageGroupMapping;
 local miscUtils = import 'utils/misc.libsonnet';
 local teamDefinition = import 'team-definition.libsonnet';
 
