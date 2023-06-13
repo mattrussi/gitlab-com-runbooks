@@ -22,7 +22,7 @@ groups:
       grafana_variables: environment,stage
       promql_template_1: |
         sum by (env,environment,tier,stage) (
-          clamp_min(deriv(elasticsearch_indices_indexing_index_total{type="logging", environment="{{ $labels.environment }}",stage="{{ $labels.stage }}"}[5m]), 0)
+          clamp_min(deriv(elasticsearch_indices_indexing_index_total{environment="{{ $labels.environment }}",stage="{{ $labels.stage }}", type="logging"}[5m]), 0)
         )
       runbook: docs/logging/README.md
     labels:
@@ -59,7 +59,7 @@ groups:
       grafana_variables: environment,stage
       promql_template_1: |
         sum by (env,environment,tier,stage) (
-          clamp_min(deriv(elasticsearch_indices_indexing_index_total{type="logging", environment="{{ $labels.environment }}",stage="{{ $labels.stage }}"}[5m]), 0)
+          clamp_min(deriv(elasticsearch_indices_indexing_index_total{environment="{{ $labels.environment }}",stage="{{ $labels.stage }}", type="logging"}[5m]), 0)
         )
       runbook: docs/logging/README.md
     labels:
@@ -94,7 +94,7 @@ groups:
       grafana_variables: environment,stage
       promql_template_1: |
         sum by (env,environment,tier,stage) (
-          clamp_min(deriv(elasticsearch_index_stats_indexing_index_total{type="logging", environment="{{ $labels.environment }}",stage="{{ $labels.stage }}"}[5m]), 0)
+          clamp_min(deriv(elasticsearch_index_stats_indexing_index_total{environment="{{ $labels.environment }}",stage="{{ $labels.stage }}", type="logging"}[5m]), 0)
         )
       runbook: docs/logging/README.md
     labels:
@@ -131,7 +131,7 @@ groups:
       grafana_variables: environment,stage
       promql_template_1: |
         sum by (env,environment,tier,stage) (
-          clamp_min(deriv(elasticsearch_index_stats_indexing_index_total{type="logging", environment="{{ $labels.environment }}",stage="{{ $labels.stage }}"}[5m]), 0)
+          clamp_min(deriv(elasticsearch_index_stats_indexing_index_total{environment="{{ $labels.environment }}",stage="{{ $labels.stage }}", type="logging"}[5m]), 0)
         )
       runbook: docs/logging/README.md
     labels:
@@ -166,7 +166,7 @@ groups:
       grafana_variables: environment,stage
       promql_template_1: |
         sum by (env,environment,tier,stage) (
-          clamp_min(deriv(elasticsearch_indices_search_query_total{type="logging", environment="{{ $labels.environment }}",stage="{{ $labels.stage }}"}[5m]), 0)
+          clamp_min(deriv(elasticsearch_indices_search_query_total{environment="{{ $labels.environment }}",stage="{{ $labels.stage }}", type="logging"}[5m]), 0)
         )
       runbook: docs/logging/README.md
     labels:
@@ -203,7 +203,7 @@ groups:
       grafana_variables: environment,stage
       promql_template_1: |
         sum by (env,environment,tier,stage) (
-          clamp_min(deriv(elasticsearch_indices_search_query_total{type="logging", environment="{{ $labels.environment }}",stage="{{ $labels.stage }}"}[5m]), 0)
+          clamp_min(deriv(elasticsearch_indices_search_query_total{environment="{{ $labels.environment }}",stage="{{ $labels.stage }}", type="logging"}[5m]), 0)
         )
       runbook: docs/logging/README.md
     labels:
@@ -238,7 +238,7 @@ groups:
       grafana_variables: environment,stage
       promql_template_1: |
         sum by (env,environment,tier,stage) (
-          clamp_min(deriv(elasticsearch_index_stats_search_query_total{type="logging", environment="{{ $labels.environment }}",stage="{{ $labels.stage }}"}[5m]), 0)
+          clamp_min(deriv(elasticsearch_index_stats_search_query_total{environment="{{ $labels.environment }}",stage="{{ $labels.stage }}", type="logging"}[5m]), 0)
         )
       runbook: docs/logging/README.md
     labels:
@@ -275,7 +275,7 @@ groups:
       grafana_variables: environment,stage
       promql_template_1: |
         sum by (env,environment,tier,stage) (
-          clamp_min(deriv(elasticsearch_index_stats_search_query_total{type="logging", environment="{{ $labels.environment }}",stage="{{ $labels.stage }}"}[5m]), 0)
+          clamp_min(deriv(elasticsearch_index_stats_search_query_total{environment="{{ $labels.environment }}",stage="{{ $labels.stage }}", type="logging"}[5m]), 0)
         )
       runbook: docs/logging/README.md
     labels:
@@ -570,7 +570,7 @@ groups:
       grafana_variables: environment,stage
       promql_template_1: |
         sum by (env,environment,tier,stage) (
-          rate(stackdriver_pubsub_subscription_pubsub_googleapis_com_subscription_byte_cost{type="monitoring", environment="{{ $labels.environment }}",stage="{{ $labels.stage }}"}[5m])
+          rate(stackdriver_pubsub_subscription_pubsub_googleapis_com_subscription_byte_cost{environment="{{ $labels.environment }}",stage="{{ $labels.stage }}", type="monitoring"}[5m])
         )
       runbook: docs/logging/README.md
     labels:
@@ -607,7 +607,7 @@ groups:
       grafana_variables: environment,stage
       promql_template_1: |
         sum by (env,environment,tier,stage) (
-          rate(stackdriver_pubsub_subscription_pubsub_googleapis_com_subscription_byte_cost{type="monitoring", environment="{{ $labels.environment }}",stage="{{ $labels.stage }}"}[5m])
+          rate(stackdriver_pubsub_subscription_pubsub_googleapis_com_subscription_byte_cost{environment="{{ $labels.environment }}",stage="{{ $labels.stage }}", type="monitoring"}[5m])
         )
       runbook: docs/logging/README.md
     labels:
@@ -642,7 +642,7 @@ groups:
       grafana_variables: environment,stage
       promql_template_1: |
         sum by (env,environment,tier,stage) (
-          rate(stackdriver_pubsub_topic_pubsub_googleapis_com_topic_byte_cost{type="monitoring", environment="{{ $labels.environment }}",stage="{{ $labels.stage }}"}[5m])
+          rate(stackdriver_pubsub_topic_pubsub_googleapis_com_topic_byte_cost{environment="{{ $labels.environment }}",stage="{{ $labels.stage }}", type="monitoring"}[5m])
         )
       runbook: docs/logging/README.md
     labels:
@@ -679,7 +679,7 @@ groups:
       grafana_variables: environment,stage
       promql_template_1: |
         sum by (env,environment,tier,stage) (
-          rate(stackdriver_pubsub_topic_pubsub_googleapis_com_topic_byte_cost{type="monitoring", environment="{{ $labels.environment }}",stage="{{ $labels.stage }}"}[5m])
+          rate(stackdriver_pubsub_topic_pubsub_googleapis_com_topic_byte_cost{environment="{{ $labels.environment }}",stage="{{ $labels.stage }}", type="monitoring"}[5m])
         )
       runbook: docs/logging/README.md
     labels:
