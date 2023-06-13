@@ -22,7 +22,7 @@ E.g. We have `redis-cluster-chat-cache` service but in GitLab Rails, the object 
 Generate four passwords, `REPLICA_REDACTED`, `RAILS_REDACTED`, `EXPORTER_REDACTED`, and `CONSOLE_REDACTED` using:
 
 ```
-openssl rand -hex 32
+for I in REPLICA_REDACTED RAILS_REDACTED EXPORTER_REDACTED CONSOLE_REDACTED; do echo $I; openssl rand -hex 32; done
 ```
 
 Update the gkms vault secrets using this command in the chef-repo:
