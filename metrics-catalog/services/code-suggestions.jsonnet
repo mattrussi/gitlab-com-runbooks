@@ -154,5 +154,65 @@ metricsCatalog.serviceDefinition({
         ),
       ],
     },
+
+    native_model_inference: {
+      local inferenceSelector = baseSelector { container: 'model-gateway', model_engine: 'codegen' },
+      severity: 's4',  // NOTE: Do not page on-call SREs until production ready
+      userImpacting: true,
+      team: 'ai_assisted',
+      featureCategory: 'code_suggestions',
+      trafficCessationAlertConfig: false,  // NOTE: traffic can be routed 100% to either native vs third party
+      description: |||
+        Inference requests performed by native models.
+      |||,
+
+      apdex: histogramApdex(
+        histogram='code_suggestions_inference_request_duration_seconds_bucket',
+        selector=inferenceSelector,
+        satisfiedThreshold=5,
+        toleratedThreshold=10
+      ),
+
+      requestRate: rateMetric(
+        counter='code_suggestions_inference_requests_total',
+        selector=inferenceSelector,
+      ),
+
+      significantLabels: ['model_engine', 'model_name'],
+
+      toolingLinks: [
+        toolingLinks.kibana(title='Native Models', index='mlops', matches={ 'json.jsonPayload.model_engine': 'codegen' }),
+      ],
+    },
+
+    third_party_model_inference: {
+      local inferenceSelector = baseSelector { container: 'model-gateway', model_engine: { ne: 'codegen' } },
+      severity: 's4',  // NOTE: Do not page on-call SREs until production ready
+      userImpacting: true,
+      team: 'ai_assisted',
+      featureCategory: 'code_suggestions',
+      trafficCessationAlertConfig: false,  // NOTE: traffic can be routed 100% to either native vs third party
+      description: |||
+        Inference requests performed by third party models.
+      |||,
+
+      apdex: histogramApdex(
+        histogram='code_suggestions_inference_request_duration_seconds_bucket',
+        selector=inferenceSelector,
+        satisfiedThreshold=5,
+        toleratedThreshold=10
+      ),
+
+      requestRate: rateMetric(
+        counter='code_suggestions_inference_requests_total',
+        selector=inferenceSelector,
+      ),
+
+      significantLabels: ['model_engine', 'model_name'],
+
+      toolingLinks: [
+        toolingLinks.kibana(title='Third Party Models', index='mlops', matches={ 'json.jsonPayload.model_engine': 'vertex-ai' }),
+      ],
+    },
   },
 })
