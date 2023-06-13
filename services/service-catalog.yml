@@ -684,6 +684,7 @@ services:
         - https://gitlab.com/groups/gitlab-org/modelops/applied-ml/code-suggestions
       documents:
         architecture: https://gitlab.com/gitlab-org/modelops/applied-ml/code-suggestions/ai-assist/-/blob/main/docs/architecture.md
+        readiness_review: https://gitlab.com/gitlab-com/gl-infra/readiness/-/merge_requests/161
       logging:
         - name: mlops
           permalink: https://log.gprd.gitlab.net/goto/d21f8880-f0a7-11ed-a017-0d32180b1390

@@ -20,6 +20,7 @@ local generateMarkdown(toolingLinks, options={}) =
   std.join('', generateMarkdownLinks(renderLinks(toolingLinks, options)));
 
 {
+  cloudflare:: (import './cloudflare.libsonnet').cloudflare,
   cloudSQL: (import './cloud_sql.libsonnet').cloudSQL,
   continuousProfiler:: (import './continuous_profiler.libsonnet').continuousProfiler,
   elasticAPM:: (import './elastic_apm.libsonnet').elasticAPM,

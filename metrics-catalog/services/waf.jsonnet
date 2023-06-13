@@ -1,5 +1,6 @@
 local metricsCatalog = import 'servicemetrics/metrics.libsonnet';
 local rateMetric = metricsCatalog.rateMetric;
+local toolingLinks = import 'toolinglinks/toolinglinks.libsonnet';
 
 metricsCatalog.serviceDefinition({
   type: 'waf',
@@ -78,6 +79,42 @@ metricsCatalog.serviceDefinition({
       ),
 
       significantLabels: [],
+    },
+
+    code_suggestions_host: {
+      local hostSelector = { zone: 'gitlab.com', host: { re: 'codesuggestions.gitlab.com.*' } },
+      severity: 's4',  // NOTE: Do not page on-call SREs until production ready
+      userImpacting: true,
+      team: 'ai_assisted',
+      featureCategory: 'code_suggestions',
+      serviceAggregation: false,
+      monitoringThresholds+: {
+        errorRatio: 0.999,
+      },
+      description: |||
+        WAF and rate limit rules for codesuggestions.gitlab.com host.
+      |||,
+
+      requestRate: rateMetric(
+        counter='cloudflare_zone_requests_status_country_host',
+        selector=hostSelector,
+        useRecordingRuleRegistry=false,
+      ),
+
+      errorRate: rateMetric(
+        counter='cloudflare_zone_requests_status_country_host',
+        selector=hostSelector {
+          status: { re: '^5.*' },
+        },
+        useRecordingRuleRegistry=false,
+      ),
+
+      significantLabels: ['status'],
+
+      toolingLinks: [
+        toolingLinks.cloudflare(host='codesuggestions.gitlab.com'),
+        toolingLinks.grafana(title='Code Suggestions Overview', dashboardUid='code_suggestions-main/code-suggestions-overview'),
+      ],
     },
   },
   skippedMaturityCriteria: {
