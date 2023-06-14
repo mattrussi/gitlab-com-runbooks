@@ -147,7 +147,7 @@ basic.dashboard(
       promQuery.target(
         |||
           max_over_time(
-            gitlab_component_saturation:ratio{type="patroni-registry", environment="$environment", component="pg_table_bloat"}[$__interval]
+            gitlab_component_saturation:ratio{type="patroni-registry", environment="$environment", component="pg_table_bloat", shard=~"$shard"}[$__interval]
           )
         |||,
       )
@@ -164,7 +164,7 @@ basic.dashboard(
       promQuery.target(
         |||
           max_over_time(
-            gitlab_component_saturation:ratio{type="patroni-registry", environment="$environment", component="pg_btree_bloat"}[$__interval]
+            gitlab_component_saturation:ratio{type="patroni-registry", environment="$environment", component="pg_btree_bloat", shard=~"$shard"}[$__interval]
           )
         |||,
       )
