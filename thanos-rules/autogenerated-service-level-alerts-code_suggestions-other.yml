@@ -521,6 +521,206 @@ groups:
       gitlab_component_ops:rate_5m{component="model_gateway",env!~"gprd|ops",monitor="global",stage="main",type="code_suggestions"} offset 1h
       unless
       gitlab_component_ops:rate_5m{component="model_gateway",env!~"gprd|ops",monitor="global",stage="main",type="code_suggestions"}
+  - alert: CodeSuggestionsServiceNativeModelInferenceApdexSLOViolation
+    for: 2m
+    annotations:
+      title: The native_model_inference SLI of the code_suggestions service (`{{ $labels.stage
+        }}` stage) has an apdex violating SLO
+      description: |
+        Inference requests performed by native models.
+
+        Currently the apdex value is {{ $value | humanizePercentage }}.
+      grafana_dashboard_id: code_suggestions-main/code_suggestions-overview
+      grafana_dashboard_link: https://dashboards.gitlab.net/d/code_suggestions-main/code_suggestions-overview?from=now-6h/m&to=now-1m/m&var-environment={{
+        $labels.environment }}&var-stage={{ $labels.stage }}
+      grafana_min_zoom_hours: "6"
+      grafana_panel_id: "3061278412"
+      grafana_variables: environment,stage
+      promql_template_1: |
+        histogram_quantile(
+          0.950000,
+          sum by (env,environment,tier,stage,le) (
+            rate(code_suggestions_inference_request_duration_seconds_bucket{container="model-gateway",environment="{{ $labels.environment }}",model_engine="codegen",stage="{{ $labels.stage }}",type="code_suggestions"}[5m])
+          )
+        )
+      runbook: docs/code_suggestions/README.md
+    labels:
+      aggregation: component
+      alert_class: slo_violation
+      alert_type: symptom
+      feature_category: code_suggestions
+      rules_domain: general
+      severity: s4
+      sli_type: apdex
+      slo_alert: "yes"
+      user_impacting: "yes"
+      window: 1h
+    expr: |
+      (
+        (
+          gitlab_component_apdex:ratio_1h{component="native_model_inference",env!~"gprd|ops",monitor="global",type="code_suggestions"}
+          < (1 - 14.4 * 0.050000)
+        )
+        and
+        (
+          gitlab_component_apdex:ratio_5m{component="native_model_inference",env!~"gprd|ops",monitor="global",type="code_suggestions"}
+          < (1 - 14.4 * 0.050000)
+        )
+      )
+      and on(env,environment,tier,type,stage,component)
+      (
+        sum by(env,environment,tier,type,stage,component) (gitlab_component_ops:rate_1h{component="native_model_inference",env!~"gprd|ops",monitor="global",type="code_suggestions"}) >= 1
+      )
+  - alert: CodeSuggestionsServiceNativeModelInferenceApdexSLOViolation
+    for: 2m
+    annotations:
+      title: The native_model_inference SLI of the code_suggestions service (`{{ $labels.stage
+        }}` stage) has an apdex violating SLO
+      description: |
+        Inference requests performed by native models.
+
+        Currently the apdex value is {{ $value | humanizePercentage }}.
+      grafana_dashboard_id: code_suggestions-main/code_suggestions-overview
+      grafana_dashboard_link: https://dashboards.gitlab.net/d/code_suggestions-main/code_suggestions-overview?from=now-6h/m&to=now-1m/m&var-environment={{
+        $labels.environment }}&var-stage={{ $labels.stage }}
+      grafana_min_zoom_hours: "6"
+      grafana_panel_id: "3061278412"
+      grafana_variables: environment,stage
+      promql_template_1: |
+        histogram_quantile(
+          0.950000,
+          sum by (env,environment,tier,stage,le) (
+            rate(code_suggestions_inference_request_duration_seconds_bucket{container="model-gateway",environment="{{ $labels.environment }}",model_engine="codegen",stage="{{ $labels.stage }}",type="code_suggestions"}[5m])
+          )
+        )
+      runbook: docs/code_suggestions/README.md
+    labels:
+      aggregation: component
+      alert_class: slo_violation
+      alert_type: symptom
+      feature_category: code_suggestions
+      rules_domain: general
+      severity: s4
+      sli_type: apdex
+      slo_alert: "yes"
+      user_impacting: "yes"
+      window: 6h
+    expr: |
+      (
+        (
+          gitlab_component_apdex:ratio_6h{component="native_model_inference",env!~"gprd|ops",monitor="global",type="code_suggestions"}
+          < (1 - 6 * 0.050000)
+        )
+        and
+        (
+          gitlab_component_apdex:ratio_30m{component="native_model_inference",env!~"gprd|ops",monitor="global",type="code_suggestions"}
+          < (1 - 6 * 0.050000)
+        )
+      )
+      and on(env,environment,tier,type,stage,component)
+      (
+        sum by(env,environment,tier,type,stage,component) (gitlab_component_ops:rate_6h{component="native_model_inference",env!~"gprd|ops",monitor="global",type="code_suggestions"}) >= 0.16667
+      )
+  - alert: CodeSuggestionsServiceThirdPartyModelInferenceApdexSLOViolation
+    for: 2m
+    annotations:
+      title: The third_party_model_inference SLI of the code_suggestions service (`{{
+        $labels.stage }}` stage) has an apdex violating SLO
+      description: |
+        Inference requests performed by third party models.
+
+        Currently the apdex value is {{ $value | humanizePercentage }}.
+      grafana_dashboard_id: code_suggestions-main/code_suggestions-overview
+      grafana_dashboard_link: https://dashboards.gitlab.net/d/code_suggestions-main/code_suggestions-overview?from=now-6h/m&to=now-1m/m&var-environment={{
+        $labels.environment }}&var-stage={{ $labels.stage }}
+      grafana_min_zoom_hours: "6"
+      grafana_panel_id: "1588199131"
+      grafana_variables: environment,stage
+      promql_template_1: |
+        histogram_quantile(
+          0.950000,
+          sum by (env,environment,tier,stage,le) (
+            rate(code_suggestions_inference_request_duration_seconds_bucket{container="model-gateway",environment="{{ $labels.environment }}",model_engine!="codegen",stage="{{ $labels.stage }}",type="code_suggestions"}[5m])
+          )
+        )
+      runbook: docs/code_suggestions/README.md
+    labels:
+      aggregation: component
+      alert_class: slo_violation
+      alert_type: symptom
+      feature_category: code_suggestions
+      rules_domain: general
+      severity: s4
+      sli_type: apdex
+      slo_alert: "yes"
+      user_impacting: "yes"
+      window: 1h
+    expr: |
+      (
+        (
+          gitlab_component_apdex:ratio_1h{component="third_party_model_inference",env!~"gprd|ops",monitor="global",type="code_suggestions"}
+          < (1 - 14.4 * 0.050000)
+        )
+        and
+        (
+          gitlab_component_apdex:ratio_5m{component="third_party_model_inference",env!~"gprd|ops",monitor="global",type="code_suggestions"}
+          < (1 - 14.4 * 0.050000)
+        )
+      )
+      and on(env,environment,tier,type,stage,component)
+      (
+        sum by(env,environment,tier,type,stage,component) (gitlab_component_ops:rate_1h{component="third_party_model_inference",env!~"gprd|ops",monitor="global",type="code_suggestions"}) >= 1
+      )
+  - alert: CodeSuggestionsServiceThirdPartyModelInferenceApdexSLOViolation
+    for: 2m
+    annotations:
+      title: The third_party_model_inference SLI of the code_suggestions service (`{{
+        $labels.stage }}` stage) has an apdex violating SLO
+      description: |
+        Inference requests performed by third party models.
+
+        Currently the apdex value is {{ $value | humanizePercentage }}.
+      grafana_dashboard_id: code_suggestions-main/code_suggestions-overview
+      grafana_dashboard_link: https://dashboards.gitlab.net/d/code_suggestions-main/code_suggestions-overview?from=now-6h/m&to=now-1m/m&var-environment={{
+        $labels.environment }}&var-stage={{ $labels.stage }}
+      grafana_min_zoom_hours: "6"
+      grafana_panel_id: "1588199131"
+      grafana_variables: environment,stage
+      promql_template_1: |
+        histogram_quantile(
+          0.950000,
+          sum by (env,environment,tier,stage,le) (
+            rate(code_suggestions_inference_request_duration_seconds_bucket{container="model-gateway",environment="{{ $labels.environment }}",model_engine!="codegen",stage="{{ $labels.stage }}",type="code_suggestions"}[5m])
+          )
+        )
+      runbook: docs/code_suggestions/README.md
+    labels:
+      aggregation: component
+      alert_class: slo_violation
+      alert_type: symptom
+      feature_category: code_suggestions
+      rules_domain: general
+      severity: s4
+      sli_type: apdex
+      slo_alert: "yes"
+      user_impacting: "yes"
+      window: 6h
+    expr: |
+      (
+        (
+          gitlab_component_apdex:ratio_6h{component="third_party_model_inference",env!~"gprd|ops",monitor="global",type="code_suggestions"}
+          < (1 - 6 * 0.050000)
+        )
+        and
+        (
+          gitlab_component_apdex:ratio_30m{component="third_party_model_inference",env!~"gprd|ops",monitor="global",type="code_suggestions"}
+          < (1 - 6 * 0.050000)
+        )
+      )
+      and on(env,environment,tier,type,stage,component)
+      (
+        sum by(env,environment,tier,type,stage,component) (gitlab_component_ops:rate_6h{component="third_party_model_inference",env!~"gprd|ops",monitor="global",type="code_suggestions"}) >= 0.16667
+      )
   - alert: CodeSuggestionsServiceTritonServerErrorSLOViolation
     for: 2m
     annotations:

@@ -109,6 +109,82 @@ groups:
           gitlab_component_ops:rate{component="model_gateway",stage="main",tier="sv",type="code_suggestions"}
         )
       )
+  - record: gitlab_component_apdex:success:rate
+    labels:
+      component: native_model_inference
+      stage: main
+      tier: sv
+      type: code_suggestions
+    expr: |
+      (
+        sum by (env,environment) (
+          rate(code_suggestions_inference_request_duration_seconds_bucket{container="model-gateway",le="5",model_engine="codegen",type="code_suggestions"}[1m])
+        )
+        +
+        sum by (env,environment) (
+          rate(code_suggestions_inference_request_duration_seconds_bucket{container="model-gateway",le="10",model_engine="codegen",type="code_suggestions"}[1m])
+        )
+      )
+      /
+      2
+  - record: gitlab_component_apdex:weight:score
+    labels:
+      component: native_model_inference
+      stage: main
+      tier: sv
+      type: code_suggestions
+    expr: |
+      sum by (env,environment) (
+        rate(code_suggestions_inference_request_duration_seconds_bucket{container="model-gateway",le="+Inf",model_engine="codegen",type="code_suggestions"}[1m])
+      )
+  - record: gitlab_component_ops:rate
+    labels:
+      component: native_model_inference
+      stage: main
+      tier: sv
+      type: code_suggestions
+    expr: |
+      sum by (env,environment) (
+        rate(code_suggestions_inference_requests_total{container="model-gateway",model_engine="codegen",type="code_suggestions"}[1m])
+      )
+  - record: gitlab_component_apdex:success:rate
+    labels:
+      component: third_party_model_inference
+      stage: main
+      tier: sv
+      type: code_suggestions
+    expr: |
+      (
+        sum by (env,environment) (
+          rate(code_suggestions_inference_request_duration_seconds_bucket{container="model-gateway",le="5",model_engine!="codegen",type="code_suggestions"}[1m])
+        )
+        +
+        sum by (env,environment) (
+          rate(code_suggestions_inference_request_duration_seconds_bucket{container="model-gateway",le="10",model_engine!="codegen",type="code_suggestions"}[1m])
+        )
+      )
+      /
+      2
+  - record: gitlab_component_apdex:weight:score
+    labels:
+      component: third_party_model_inference
+      stage: main
+      tier: sv
+      type: code_suggestions
+    expr: |
+      sum by (env,environment) (
+        rate(code_suggestions_inference_request_duration_seconds_bucket{container="model-gateway",le="+Inf",model_engine!="codegen",type="code_suggestions"}[1m])
+      )
+  - record: gitlab_component_ops:rate
+    labels:
+      component: third_party_model_inference
+      stage: main
+      tier: sv
+      type: code_suggestions
+    expr: |
+      sum by (env,environment) (
+        rate(code_suggestions_inference_requests_total{container="model-gateway",model_engine!="codegen",type="code_suggestions"}[1m])
+      )
   - record: gitlab_component_ops:rate
     labels:
       component: triton_server
@@ -244,6 +320,82 @@ groups:
         0 * group by(env,environment) (
           gitlab_component_ops:rate_5m{component="model_gateway",stage="main",tier="sv",type="code_suggestions"}
         )
+      )
+  - record: gitlab_component_apdex:success:rate_5m
+    labels:
+      component: native_model_inference
+      stage: main
+      tier: sv
+      type: code_suggestions
+    expr: |
+      (
+        sum by (env,environment) (
+          rate(code_suggestions_inference_request_duration_seconds_bucket{container="model-gateway",le="5",model_engine="codegen",type="code_suggestions"}[5m])
+        )
+        +
+        sum by (env,environment) (
+          rate(code_suggestions_inference_request_duration_seconds_bucket{container="model-gateway",le="10",model_engine="codegen",type="code_suggestions"}[5m])
+        )
+      )
+      /
+      2
+  - record: gitlab_component_apdex:weight:score_5m
+    labels:
+      component: native_model_inference
+      stage: main
+      tier: sv
+      type: code_suggestions
+    expr: |
+      sum by (env,environment) (
+        rate(code_suggestions_inference_request_duration_seconds_bucket{container="model-gateway",le="+Inf",model_engine="codegen",type="code_suggestions"}[5m])
+      )
+  - record: gitlab_component_ops:rate_5m
+    labels:
+      component: native_model_inference
+      stage: main
+      tier: sv
+      type: code_suggestions
+    expr: |
+      sum by (env,environment) (
+        rate(code_suggestions_inference_requests_total{container="model-gateway",model_engine="codegen",type="code_suggestions"}[5m])
+      )
+  - record: gitlab_component_apdex:success:rate_5m
+    labels:
+      component: third_party_model_inference
+      stage: main
+      tier: sv
+      type: code_suggestions
+    expr: |
+      (
+        sum by (env,environment) (
+          rate(code_suggestions_inference_request_duration_seconds_bucket{container="model-gateway",le="5",model_engine!="codegen",type="code_suggestions"}[5m])
+        )
+        +
+        sum by (env,environment) (
+          rate(code_suggestions_inference_request_duration_seconds_bucket{container="model-gateway",le="10",model_engine!="codegen",type="code_suggestions"}[5m])
+        )
+      )
+      /
+      2
+  - record: gitlab_component_apdex:weight:score_5m
+    labels:
+      component: third_party_model_inference
+      stage: main
+      tier: sv
+      type: code_suggestions
+    expr: |
+      sum by (env,environment) (
+        rate(code_suggestions_inference_request_duration_seconds_bucket{container="model-gateway",le="+Inf",model_engine!="codegen",type="code_suggestions"}[5m])
+      )
+  - record: gitlab_component_ops:rate_5m
+    labels:
+      component: third_party_model_inference
+      stage: main
+      tier: sv
+      type: code_suggestions
+    expr: |
+      sum by (env,environment) (
+        rate(code_suggestions_inference_requests_total{container="model-gateway",model_engine!="codegen",type="code_suggestions"}[5m])
       )
   - record: gitlab_component_ops:rate_5m
     labels:
@@ -381,6 +533,82 @@ groups:
           gitlab_component_ops:rate_30m{component="model_gateway",stage="main",tier="sv",type="code_suggestions"}
         )
       )
+  - record: gitlab_component_apdex:success:rate_30m
+    labels:
+      component: native_model_inference
+      stage: main
+      tier: sv
+      type: code_suggestions
+    expr: |
+      (
+        sum by (env,environment) (
+          rate(code_suggestions_inference_request_duration_seconds_bucket{container="model-gateway",le="5",model_engine="codegen",type="code_suggestions"}[30m])
+        )
+        +
+        sum by (env,environment) (
+          rate(code_suggestions_inference_request_duration_seconds_bucket{container="model-gateway",le="10",model_engine="codegen",type="code_suggestions"}[30m])
+        )
+      )
+      /
+      2
+  - record: gitlab_component_apdex:weight:score_30m
+    labels:
+      component: native_model_inference
+      stage: main
+      tier: sv
+      type: code_suggestions
+    expr: |
+      sum by (env,environment) (
+        rate(code_suggestions_inference_request_duration_seconds_bucket{container="model-gateway",le="+Inf",model_engine="codegen",type="code_suggestions"}[30m])
+      )
+  - record: gitlab_component_ops:rate_30m
+    labels:
+      component: native_model_inference
+      stage: main
+      tier: sv
+      type: code_suggestions
+    expr: |
+      sum by (env,environment) (
+        rate(code_suggestions_inference_requests_total{container="model-gateway",model_engine="codegen",type="code_suggestions"}[30m])
+      )
+  - record: gitlab_component_apdex:success:rate_30m
+    labels:
+      component: third_party_model_inference
+      stage: main
+      tier: sv
+      type: code_suggestions
+    expr: |
+      (
+        sum by (env,environment) (
+          rate(code_suggestions_inference_request_duration_seconds_bucket{container="model-gateway",le="5",model_engine!="codegen",type="code_suggestions"}[30m])
+        )
+        +
+        sum by (env,environment) (
+          rate(code_suggestions_inference_request_duration_seconds_bucket{container="model-gateway",le="10",model_engine!="codegen",type="code_suggestions"}[30m])
+        )
+      )
+      /
+      2
+  - record: gitlab_component_apdex:weight:score_30m
+    labels:
+      component: third_party_model_inference
+      stage: main
+      tier: sv
+      type: code_suggestions
+    expr: |
+      sum by (env,environment) (
+        rate(code_suggestions_inference_request_duration_seconds_bucket{container="model-gateway",le="+Inf",model_engine!="codegen",type="code_suggestions"}[30m])
+      )
+  - record: gitlab_component_ops:rate_30m
+    labels:
+      component: third_party_model_inference
+      stage: main
+      tier: sv
+      type: code_suggestions
+    expr: |
+      sum by (env,environment) (
+        rate(code_suggestions_inference_requests_total{container="model-gateway",model_engine!="codegen",type="code_suggestions"}[30m])
+      )
   - record: gitlab_component_ops:rate_30m
     labels:
       component: triton_server
@@ -516,6 +744,82 @@ groups:
         0 * group by(env,environment) (
           gitlab_component_ops:rate_1h{component="model_gateway",stage="main",tier="sv",type="code_suggestions"}
         )
+      )
+  - record: gitlab_component_apdex:success:rate_1h
+    labels:
+      component: native_model_inference
+      stage: main
+      tier: sv
+      type: code_suggestions
+    expr: |
+      (
+        sum by (env,environment) (
+          rate(code_suggestions_inference_request_duration_seconds_bucket{container="model-gateway",le="5",model_engine="codegen",type="code_suggestions"}[1h])
+        )
+        +
+        sum by (env,environment) (
+          rate(code_suggestions_inference_request_duration_seconds_bucket{container="model-gateway",le="10",model_engine="codegen",type="code_suggestions"}[1h])
+        )
+      )
+      /
+      2
+  - record: gitlab_component_apdex:weight:score_1h
+    labels:
+      component: native_model_inference
+      stage: main
+      tier: sv
+      type: code_suggestions
+    expr: |
+      sum by (env,environment) (
+        rate(code_suggestions_inference_request_duration_seconds_bucket{container="model-gateway",le="+Inf",model_engine="codegen",type="code_suggestions"}[1h])
+      )
+  - record: gitlab_component_ops:rate_1h
+    labels:
+      component: native_model_inference
+      stage: main
+      tier: sv
+      type: code_suggestions
+    expr: |
+      sum by (env,environment) (
+        rate(code_suggestions_inference_requests_total{container="model-gateway",model_engine="codegen",type="code_suggestions"}[1h])
+      )
+  - record: gitlab_component_apdex:success:rate_1h
+    labels:
+      component: third_party_model_inference
+      stage: main
+      tier: sv
+      type: code_suggestions
+    expr: |
+      (
+        sum by (env,environment) (
+          rate(code_suggestions_inference_request_duration_seconds_bucket{container="model-gateway",le="5",model_engine!="codegen",type="code_suggestions"}[1h])
+        )
+        +
+        sum by (env,environment) (
+          rate(code_suggestions_inference_request_duration_seconds_bucket{container="model-gateway",le="10",model_engine!="codegen",type="code_suggestions"}[1h])
+        )
+      )
+      /
+      2
+  - record: gitlab_component_apdex:weight:score_1h
+    labels:
+      component: third_party_model_inference
+      stage: main
+      tier: sv
+      type: code_suggestions
+    expr: |
+      sum by (env,environment) (
+        rate(code_suggestions_inference_request_duration_seconds_bucket{container="model-gateway",le="+Inf",model_engine!="codegen",type="code_suggestions"}[1h])
+      )
+  - record: gitlab_component_ops:rate_1h
+    labels:
+      component: third_party_model_inference
+      stage: main
+      tier: sv
+      type: code_suggestions
+    expr: |
+      sum by (env,environment) (
+        rate(code_suggestions_inference_requests_total{container="model-gateway",model_engine!="codegen",type="code_suggestions"}[1h])
       )
   - record: gitlab_component_ops:rate_1h
     labels:
@@ -653,6 +957,82 @@ groups:
           gitlab_component_ops:rate_6h{component="model_gateway",stage="main",tier="sv",type="code_suggestions"}
         )
       )
+  - record: gitlab_component_apdex:success:rate_6h
+    labels:
+      component: native_model_inference
+      stage: main
+      tier: sv
+      type: code_suggestions
+    expr: |
+      (
+        sum by (env,environment) (
+          rate(code_suggestions_inference_request_duration_seconds_bucket{container="model-gateway",le="5",model_engine="codegen",type="code_suggestions"}[6h])
+        )
+        +
+        sum by (env,environment) (
+          rate(code_suggestions_inference_request_duration_seconds_bucket{container="model-gateway",le="10",model_engine="codegen",type="code_suggestions"}[6h])
+        )
+      )
+      /
+      2
+  - record: gitlab_component_apdex:weight:score_6h
+    labels:
+      component: native_model_inference
+      stage: main
+      tier: sv
+      type: code_suggestions
+    expr: |
+      sum by (env,environment) (
+        rate(code_suggestions_inference_request_duration_seconds_bucket{container="model-gateway",le="+Inf",model_engine="codegen",type="code_suggestions"}[6h])
+      )
+  - record: gitlab_component_ops:rate_6h
+    labels:
+      component: native_model_inference
+      stage: main
+      tier: sv
+      type: code_suggestions
+    expr: |
+      sum by (env,environment) (
+        rate(code_suggestions_inference_requests_total{container="model-gateway",model_engine="codegen",type="code_suggestions"}[6h])
+      )
+  - record: gitlab_component_apdex:success:rate_6h
+    labels:
+      component: third_party_model_inference
+      stage: main
+      tier: sv
+      type: code_suggestions
+    expr: |
+      (
+        sum by (env,environment) (
+          rate(code_suggestions_inference_request_duration_seconds_bucket{container="model-gateway",le="5",model_engine!="codegen",type="code_suggestions"}[6h])
+        )
+        +
+        sum by (env,environment) (
+          rate(code_suggestions_inference_request_duration_seconds_bucket{container="model-gateway",le="10",model_engine!="codegen",type="code_suggestions"}[6h])
+        )
+      )
+      /
+      2
+  - record: gitlab_component_apdex:weight:score_6h
+    labels:
+      component: third_party_model_inference
+      stage: main
+      tier: sv
+      type: code_suggestions
+    expr: |
+      sum by (env,environment) (
+        rate(code_suggestions_inference_request_duration_seconds_bucket{container="model-gateway",le="+Inf",model_engine!="codegen",type="code_suggestions"}[6h])
+      )
+  - record: gitlab_component_ops:rate_6h
+    labels:
+      component: third_party_model_inference
+      stage: main
+      tier: sv
+      type: code_suggestions
+    expr: |
+      sum by (env,environment) (
+        rate(code_suggestions_inference_requests_total{container="model-gateway",model_engine!="codegen",type="code_suggestions"}[6h])
+      )
   - record: gitlab_component_ops:rate_6h
     labels:
       component: triton_server
@@ -697,6 +1077,24 @@ groups:
   - record: gitlab_component_service:mapping
     labels:
       component: model_gateway
+      global_aggregation: "yes"
+      regional_aggregation: "no"
+      service_aggregation: "yes"
+      tier: sv
+      type: code_suggestions
+    expr: "1"
+  - record: gitlab_component_service:mapping
+    labels:
+      component: native_model_inference
+      global_aggregation: "yes"
+      regional_aggregation: "no"
+      service_aggregation: "yes"
+      tier: sv
+      type: code_suggestions
+    expr: "1"
+  - record: gitlab_component_service:mapping
+    labels:
+      component: third_party_model_inference
       global_aggregation: "yes"
       regional_aggregation: "no"
       service_aggregation: "yes"
