@@ -6,5 +6,5 @@
 # Assigning MRs to groups (see https://gitlab.com/gitlab-org/gitlab/-/issues/197169)
 # and Renovate doesn't support resolving from groups to users
 # (https://github.com/renovatebot/renovate/issues/14777)
-.tool-versions @andrewn @pguinoiseau @steveazz @f_santos @jarv @reprazent
-.gitlab-ci-asdf-versions.yml @andrewn @pguinoiseau @steveazz @f_santos @jarv @reprazent
+.tool-versions @andrewn @pguinoiseau @sxuereb @f_santos @jarv @reprazent
+.gitlab-ci-asdf-versions.yml @andrewn @pguinoiseau @sxuereb @f_santos @jarv @reprazent
