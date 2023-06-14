@@ -188,15 +188,15 @@ groups:
         histogram_quantile(
           0.950000,
           sum by (env,environment,tier,stage,le) (
-            sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate5m{environment="{{ $labels.environment }}",stage="{{ $labels.stage }}",type="sidekiq",urgency="high"}
+            sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate5m{environment="{{ $labels.environment }}",external_dependencies="yes",stage="{{ $labels.stage }}",type="sidekiq",urgency="high"}
             or
-            sli_aggregations:sidekiq_jobs_queue_duration_seconds_bucket_rate5m{environment="{{ $labels.environment }}",stage="{{ $labels.stage }}",type="sidekiq",urgency="high"}
+            sli_aggregations:sidekiq_jobs_queue_duration_seconds_bucket_rate5m{environment="{{ $labels.environment }}",external_dependencies="yes",stage="{{ $labels.stage }}",type="sidekiq",urgency="high"}
             or
-            sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate5m{environment="{{ $labels.environment }}",stage="{{ $labels.stage }}",type="sidekiq",urgency="low"}
+            sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate5m{environment="{{ $labels.environment }}",external_dependencies="yes",stage="{{ $labels.stage }}",type="sidekiq",urgency="low"}
             or
-            sli_aggregations:sidekiq_jobs_queue_duration_seconds_bucket_rate5m{environment="{{ $labels.environment }}",stage="{{ $labels.stage }}",type="sidekiq",urgency="low"}
+            sli_aggregations:sidekiq_jobs_queue_duration_seconds_bucket_rate5m{environment="{{ $labels.environment }}",external_dependencies="yes",stage="{{ $labels.stage }}",type="sidekiq",urgency="low"}
             or
-            sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate5m{environment="{{ $labels.environment }}",stage="{{ $labels.stage }}",type="sidekiq",urgency="throttled"}
+            sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate5m{environment="{{ $labels.environment }}",external_dependencies="yes",stage="{{ $labels.stage }}",type="sidekiq",urgency="throttled"}
           )
         )
       runbook: docs/sidekiq/README.md
@@ -246,15 +246,15 @@ groups:
         histogram_quantile(
           0.950000,
           sum by (env,environment,tier,stage,le) (
-            sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate5m{environment="{{ $labels.environment }}",stage="{{ $labels.stage }}",type="sidekiq",urgency="high"}
+            sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate5m{environment="{{ $labels.environment }}",external_dependencies="yes",stage="{{ $labels.stage }}",type="sidekiq",urgency="high"}
             or
-            sli_aggregations:sidekiq_jobs_queue_duration_seconds_bucket_rate5m{environment="{{ $labels.environment }}",stage="{{ $labels.stage }}",type="sidekiq",urgency="high"}
+            sli_aggregations:sidekiq_jobs_queue_duration_seconds_bucket_rate5m{environment="{{ $labels.environment }}",external_dependencies="yes",stage="{{ $labels.stage }}",type="sidekiq",urgency="high"}
             or
-            sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate5m{environment="{{ $labels.environment }}",stage="{{ $labels.stage }}",type="sidekiq",urgency="low"}
+            sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate5m{environment="{{ $labels.environment }}",external_dependencies="yes",stage="{{ $labels.stage }}",type="sidekiq",urgency="low"}
             or
-            sli_aggregations:sidekiq_jobs_queue_duration_seconds_bucket_rate5m{environment="{{ $labels.environment }}",stage="{{ $labels.stage }}",type="sidekiq",urgency="low"}
+            sli_aggregations:sidekiq_jobs_queue_duration_seconds_bucket_rate5m{environment="{{ $labels.environment }}",external_dependencies="yes",stage="{{ $labels.stage }}",type="sidekiq",urgency="low"}
             or
-            sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate5m{environment="{{ $labels.environment }}",stage="{{ $labels.stage }}",type="sidekiq",urgency="throttled"}
+            sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate5m{environment="{{ $labels.environment }}",external_dependencies="yes",stage="{{ $labels.stage }}",type="sidekiq",urgency="throttled"}
           )
         )
       runbook: docs/sidekiq/README.md
@@ -320,12 +320,12 @@ groups:
       (
         (
           gitlab_component_errors:ratio_1h{component="external_dependency",env="gprd",monitor="global",type="sidekiq"}
-          > (14.4 * 0.500000)
+          > (14.4 * 0.005000)
         )
         and
         (
           gitlab_component_errors:ratio_5m{component="external_dependency",env="gprd",monitor="global",type="sidekiq"}
-          > (14.4 * 0.500000)
+          > (14.4 * 0.005000)
         )
       )
       and on(env,environment,tier,type,stage,component)
@@ -367,12 +367,12 @@ groups:
       (
         (
           gitlab_component_errors:ratio_6h{component="external_dependency",env="gprd",monitor="global",type="sidekiq"}
-          > (6 * 0.500000)
+          > (6 * 0.005000)
         )
         and
         (
           gitlab_component_errors:ratio_30m{component="external_dependency",env="gprd",monitor="global",type="sidekiq"}
-          > (6 * 0.500000)
+          > (6 * 0.005000)
         )
       )
       and on(env,environment,tier,type,stage,component)

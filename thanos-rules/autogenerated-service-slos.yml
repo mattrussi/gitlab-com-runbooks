@@ -2182,7 +2182,7 @@ groups:
       component: external_dependency
       tier: sv
       type: sidekiq
-    expr: "0.500000"
+    expr: "0.005000"
   - record: slo:min:events:gitlab_service_apdex:ratio
     labels:
       component: global_search_indexing

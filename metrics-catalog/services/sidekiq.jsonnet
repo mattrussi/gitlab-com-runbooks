@@ -175,10 +175,11 @@ metricsCatalog.serviceDefinition({
     for shard in sidekiqHelpers.shards.listAll()
   } + {
     external_dependency: {
+      local externalDependencySelector = baseSelector { external_dependencies: 'yes' },
       userImpacting: true,
       severity: 's3',
       feature_category: 'not_owned',
-      team: 'scalability',
+      team: 'sre_reliability',
       description: |||
         Cross shard jobs with external dependencies.
       |||,
@@ -187,27 +188,27 @@ metricsCatalog.serviceDefinition({
         [
           histogramApdex(
             histogram='sidekiq_jobs_completion_seconds_bucket',
-            selector=highUrgencySelector + baseSelector,
+            selector=highUrgencySelector + externalDependencySelector,
             satisfiedThreshold=sidekiqHelpers.slos.urgent.executionDurationSeconds,
           ),
           histogramApdex(
             histogram='sidekiq_jobs_queue_duration_seconds_bucket',
-            selector=highUrgencySelector + baseSelector,
+            selector=highUrgencySelector + externalDependencySelector,
             satisfiedThreshold=sidekiqHelpers.slos.urgent.queueingDurationSeconds,
           ),
           histogramApdex(
             histogram='sidekiq_jobs_completion_seconds_bucket',
-            selector=lowUrgencySelector + baseSelector,
+            selector=lowUrgencySelector + externalDependencySelector,
             satisfiedThreshold=sidekiqHelpers.slos.lowUrgency.executionDurationSeconds,
           ),
           histogramApdex(
             histogram='sidekiq_jobs_queue_duration_seconds_bucket',
-            selector=lowUrgencySelector + baseSelector,
+            selector=lowUrgencySelector + externalDependencySelector,
             satisfiedThreshold=sidekiqHelpers.slos.lowUrgency.queueingDurationSeconds,
           ),
           histogramApdex(
             histogram='sidekiq_jobs_completion_seconds_bucket',
-            selector=throttledUrgencySelector + baseSelector,
+            selector=throttledUrgencySelector + externalDependencySelector,
             satisfiedThreshold=sidekiqHelpers.slos.throttled.executionDurationSeconds,
           ),
           // No queueing apdex for throttled jobs
@@ -216,19 +217,19 @@ metricsCatalog.serviceDefinition({
 
       requestRate: rateMetric(
         counter='sidekiq_jobs_completion_seconds_bucket',
-        selector=baseSelector { le: '+Inf' , external_dependencies: 'yes' },
+        selector=externalDependencySelector { le: '+Inf' },
       ),
 
       errorRate: rateMetric(
         counter='sidekiq_jobs_failed_total',
-        selector=baseSelector { external_dependencies: 'yes' },
+        selector=externalDependencySelector,
       ),
 
-      monitoringThresholds+: {
+      contractualThresholds+: {
         errorRatio: 0.5,
       },
 
-      significantLabels: ['error'],
+      significantLabels: ['feature_category', 'queue', 'urgency', 'worker'],
     },
   } + {
     email_receiver: {
