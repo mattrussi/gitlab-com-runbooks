@@ -23,6 +23,7 @@ GEM
     colored2 (3.1.2)
     colorize (0.8.1)
     concurrent-ruby (1.2.2)
+    connection_pool (2.4.1)
     cork (0.3.0)
       colored2 (~> 3.1)
     crack (0.4.5)
@@ -150,6 +151,7 @@ GEM
     rainbow (3.1.1)
     rake (13.0.6)
     rchardet (1.8.0)
+    redis (4.8.1)
     regexp_parser (2.8.0)
     representable (3.2.0)
       declarative (< 0.1.0)
@@ -247,6 +249,7 @@ DEPENDENCIES
   bigdecimal
   byebug
   colorize
+  connection_pool (~> 2.0)
   digest-crc
   etc
   gitlab-dangerfiles (~> 3.0)
@@ -256,6 +259,7 @@ DEPENDENCIES
   json
   pry (~> 0.13)
   rake
+  redis (~> 4.8.0)
   rspec
   rspec-parameterized (>= 1.0.0)
   rubocop

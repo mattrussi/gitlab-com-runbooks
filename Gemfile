@@ -9,6 +9,8 @@ gem 'io-console'
 gem 'json'
 gem 'digest-crc'
 gem 'terminal-table', '~> 3.0'
+gem 'redis', '~> 4.8.0'
+gem 'connection_pool', '~> 2.0'
 
 group :development, :test do
   gem 'rake'
