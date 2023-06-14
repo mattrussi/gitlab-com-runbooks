@@ -23,7 +23,6 @@
 * [Frontend (HAProxy) Logging](haproxy-logging.md)
 * [HAProxy management at GitLab](haproxy.md)
 * [Deploying a change to gitlab.rb](../git/deploy-gitlab-rb-change.md)
-* [GitLab Hosted CodeSandbox](../git/gitlab-hosted-codesandbox.md)
 * [Gitaly latency is too high](../gitaly/gitaly-latency.md)
 * [Tuning and Modifying Alerts](../monitoring/alert_tuning.md)
 * [An impatient SRE's guide to deleting alerts](../monitoring/deleting-alerts.md)

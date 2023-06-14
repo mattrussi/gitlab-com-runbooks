@@ -33,7 +33,6 @@
 * [Frontend (HAProxy) Logging](../frontend/haproxy-logging.md)
 * [HAProxy management at GitLab](../frontend/haproxy.md)
 * [Deploying a change to gitlab.rb](../git/deploy-gitlab-rb-change.md)
-* [GitLab Hosted CodeSandbox](../git/gitlab-hosted-codesandbox.md)
 * [../gitaly/git-high-cpu-and-memory-usage.md](../gitaly/git-high-cpu-and-memory-usage.md)
 * [Gitaly is down](../gitaly/gitaly-down.md)
 * [Gitaly latency is too high](../gitaly/gitaly-latency.md)
