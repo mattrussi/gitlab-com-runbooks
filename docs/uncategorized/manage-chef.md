@@ -7,7 +7,7 @@ To add a user you will need ssh and root access to the chef server.
 The steps to create a new chef user are:
 
 1. ssh into the chef server
-    * `ssh chef-01-inf-ops.c.gitlab-ops.internal`
+    * `ssh cinc-01-inf-ops.c.gitlab-ops.internal`
 1. run `sudo -i chef-server-ctl user-create USERNAME FIRSTNAME SURNAME GITLAB_EMAIL $(openssl rand -hex 20)`
     * where all-caps words should be replace with the real user information
     * see **NOTE** below if surname contains white-spaces
