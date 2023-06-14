@@ -4397,7 +4397,7 @@
           "steppedLine": false,
           "targets": [
             {
-              "expr": "sum by (route) (\n  rate(gitlab_workhorse_http_requests_total{code=~\"^5.*\",route!=\"\"}[$__interval])\n)\n \u003e 0",
+              "expr": "sum by (route) (\n  rate(gitlab_workhorse_http_requests_total{code=~\"^5.*\",route!=\"^/-/health$\",route!=\"^/-/(readiness|liveness)$\",route!~\"^\\\\^/api/.*\"}[$__interval])\n)\n \u003e 0",
               "format": "time_series",
               "interval": "1m",
               "intervalFactor": 1,
@@ -4473,7 +4473,7 @@
           "steppedLine": false,
           "targets": [
             {
-              "expr": "sum by (route) (\n  rate(gitlab_workhorse_http_requests_total{route!=\"\"}[$__interval])\n)\n \u003e 0",
+              "expr": "sum by (route) (\n  rate(gitlab_workhorse_http_requests_total{route!=\"^/-/health$\",route!=\"^/-/(readiness|liveness)$\",route!~\"^\\\\^/api/.*\"}[$__interval])\n)\n \u003e 0",
               "format": "time_series",
               "interval": "1m",
               "intervalFactor": 1,
@@ -4992,7 +4992,7 @@
           "steppedLine": false,
           "targets": [
             {
-              "expr": "sum by (route) (\n  rate(gitlab_workhorse_http_requests_total{code=~\"^5.*\",route!=\"\"}[$__interval])\n)\n \u003e 0",
+              "expr": "sum by (route) (\n  rate(gitlab_workhorse_http_requests_total{code=~\"^5.*\",route!=\"^/-/health$\",route!=\"^/-/(readiness|liveness)$\",route=~\"^\\\\^/api/.*\"}[$__interval])\n)\n \u003e 0",
               "format": "time_series",
               "interval": "1m",
               "intervalFactor": 1,
@@ -5068,7 +5068,7 @@
           "steppedLine": false,
           "targets": [
             {
-              "expr": "sum by (route) (\n  rate(gitlab_workhorse_http_requests_total{route!=\"\"}[$__interval])\n)\n \u003e 0",
+              "expr": "sum by (route) (\n  rate(gitlab_workhorse_http_requests_total{route!=\"^/-/health$\",route!=\"^/-/(readiness|liveness)$\",route=~\"^\\\\^/api/.*\"}[$__interval])\n)\n \u003e 0",
               "format": "time_series",
               "interval": "1m",
               "intervalFactor": 1,

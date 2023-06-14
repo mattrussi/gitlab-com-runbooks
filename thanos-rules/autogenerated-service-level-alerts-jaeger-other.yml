@@ -20,7 +20,7 @@ groups:
       grafana_variables: environment,stage
       promql_template_1: |
         sum by (env,environment,tier,stage) (
-          rate(jaeger_agent_reporter_spans_failures_total{type="jaeger", environment="{{ $labels.environment }}",stage="{{ $labels.stage }}"}[5m])
+          rate(jaeger_agent_reporter_spans_failures_total{environment="{{ $labels.environment }}",stage="{{ $labels.stage }}", type="jaeger"}[5m])
         )
       runbook: docs/jaeger/README.md
     labels:
@@ -66,7 +66,7 @@ groups:
       grafana_variables: environment,stage
       promql_template_1: |
         sum by (env,environment,tier,stage) (
-          rate(jaeger_agent_reporter_spans_failures_total{type="jaeger", environment="{{ $labels.environment }}",stage="{{ $labels.stage }}"}[5m])
+          rate(jaeger_agent_reporter_spans_failures_total{environment="{{ $labels.environment }}",stage="{{ $labels.stage }}", type="jaeger"}[5m])
         )
       runbook: docs/jaeger/README.md
     labels:
@@ -112,7 +112,7 @@ groups:
       grafana_variables: environment,stage
       promql_template_1: |
         sum by (env,environment,tier,stage) (
-          rate(jaeger_agent_reporter_spans_submitted_total{type="jaeger", environment="{{ $labels.environment }}",stage="{{ $labels.stage }}"}[5m])
+          rate(jaeger_agent_reporter_spans_submitted_total{environment="{{ $labels.environment }}",stage="{{ $labels.stage }}", type="jaeger"}[5m])
         )
       runbook: docs/jaeger/README.md
     labels:
@@ -147,7 +147,7 @@ groups:
       grafana_variables: environment,stage
       promql_template_1: |
         sum by (env,environment,tier,stage) (
-          rate(jaeger_agent_reporter_spans_submitted_total{type="jaeger", environment="{{ $labels.environment }}",stage="{{ $labels.stage }}"}[5m])
+          rate(jaeger_agent_reporter_spans_submitted_total{environment="{{ $labels.environment }}",stage="{{ $labels.stage }}", type="jaeger"}[5m])
         )
       runbook: docs/jaeger/README.md
     labels:
@@ -180,7 +180,7 @@ groups:
       grafana_variables: environment,stage
       promql_template_1: |
         sum by (env,environment,tier,stage) (
-          rate(jaeger_collector_spans_dropped_total{type="jaeger", environment="{{ $labels.environment }}",stage="{{ $labels.stage }}"}[5m])
+          rate(jaeger_collector_spans_dropped_total{environment="{{ $labels.environment }}",stage="{{ $labels.stage }}", type="jaeger"}[5m])
         )
       runbook: docs/jaeger/README.md
     labels:
@@ -226,7 +226,7 @@ groups:
       grafana_variables: environment,stage
       promql_template_1: |
         sum by (env,environment,tier,stage) (
-          rate(jaeger_collector_spans_dropped_total{type="jaeger", environment="{{ $labels.environment }}",stage="{{ $labels.stage }}"}[5m])
+          rate(jaeger_collector_spans_dropped_total{environment="{{ $labels.environment }}",stage="{{ $labels.stage }}", type="jaeger"}[5m])
         )
       runbook: docs/jaeger/README.md
     labels:
@@ -272,7 +272,7 @@ groups:
       grafana_variables: environment,stage
       promql_template_1: |
         sum by (env,environment,tier,stage) (
-          rate(jaeger_collector_spans_received_total{type="jaeger", environment="{{ $labels.environment }}",stage="{{ $labels.stage }}"}[5m])
+          rate(jaeger_collector_spans_received_total{environment="{{ $labels.environment }}",stage="{{ $labels.stage }}", type="jaeger"}[5m])
         )
       runbook: docs/jaeger/README.md
     labels:
@@ -307,7 +307,7 @@ groups:
       grafana_variables: environment,stage
       promql_template_1: |
         sum by (env,environment,tier,stage) (
-          rate(jaeger_collector_spans_received_total{type="jaeger", environment="{{ $labels.environment }}",stage="{{ $labels.stage }}"}[5m])
+          rate(jaeger_collector_spans_received_total{environment="{{ $labels.environment }}",stage="{{ $labels.stage }}", type="jaeger"}[5m])
         )
       runbook: docs/jaeger/README.md
     labels:
@@ -340,7 +340,7 @@ groups:
       grafana_variables: environment,stage
       promql_template_1: |
         sum by (env,environment,tier,stage) (
-          rate(jaeger_query_requests_total{result="err", environment="{{ $labels.environment }}",stage="{{ $labels.stage }}"}[5m])
+          rate(jaeger_query_requests_total{environment="{{ $labels.environment }}",stage="{{ $labels.stage }}", result="err"}[5m])
         )
       runbook: docs/jaeger/README.md
     labels:
@@ -386,7 +386,7 @@ groups:
       grafana_variables: environment,stage
       promql_template_1: |
         sum by (env,environment,tier,stage) (
-          rate(jaeger_query_requests_total{result="err", environment="{{ $labels.environment }}",stage="{{ $labels.stage }}"}[5m])
+          rate(jaeger_query_requests_total{environment="{{ $labels.environment }}",stage="{{ $labels.stage }}", result="err"}[5m])
         )
       runbook: docs/jaeger/README.md
     labels:
@@ -432,7 +432,7 @@ groups:
       grafana_variables: environment,stage
       promql_template_1: |
         sum by (env,environment,tier,stage) (
-          rate(jaeger_query_requests_total{type="jaeger", environment="{{ $labels.environment }}",stage="{{ $labels.stage }}"}[5m])
+          rate(jaeger_query_requests_total{environment="{{ $labels.environment }}",stage="{{ $labels.stage }}", type="jaeger"}[5m])
         )
       runbook: docs/jaeger/README.md
     labels:
@@ -467,7 +467,7 @@ groups:
       grafana_variables: environment,stage
       promql_template_1: |
         sum by (env,environment,tier,stage) (
-          rate(jaeger_query_requests_total{type="jaeger", environment="{{ $labels.environment }}",stage="{{ $labels.stage }}"}[5m])
+          rate(jaeger_query_requests_total{environment="{{ $labels.environment }}",stage="{{ $labels.stage }}", type="jaeger"}[5m])
         )
       runbook: docs/jaeger/README.md
     labels:

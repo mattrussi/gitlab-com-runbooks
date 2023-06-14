@@ -118,7 +118,7 @@ groups:
       grafana_variables: environment,stage
       promql_template_1: |
         sum by (env,environment,tier,stage) (
-          rate(haproxy_backend_response_errors_total{type="frontend", backend=~"canary_.*", environment="{{ $labels.environment }}",stage="{{ $labels.stage }}"}[5m])
+          rate(haproxy_backend_response_errors_total{environment="{{ $labels.environment }}",stage="{{ $labels.stage }}", type="frontend", backend=~"canary_.*"}[5m])
         )
       runbook: docs/frontend/README.md
     labels:
@@ -164,7 +164,7 @@ groups:
       grafana_variables: environment,stage
       promql_template_1: |
         sum by (env,environment,tier,stage) (
-          rate(haproxy_backend_response_errors_total{type="frontend", backend=~"canary_.*", environment="{{ $labels.environment }}",stage="{{ $labels.stage }}"}[5m])
+          rate(haproxy_backend_response_errors_total{environment="{{ $labels.environment }}",stage="{{ $labels.stage }}", type="frontend", backend=~"canary_.*"}[5m])
         )
       runbook: docs/frontend/README.md
     labels:
@@ -210,7 +210,7 @@ groups:
       grafana_variables: environment,stage
       promql_template_1: |
         sum by (env,environment,tier,stage) (
-          rate(haproxy_backend_http_responses_total{type="frontend", backend=~"canary_.*", environment="{{ $labels.environment }}",stage="{{ $labels.stage }}"}[5m])
+          rate(haproxy_backend_http_responses_total{environment="{{ $labels.environment }}",stage="{{ $labels.stage }}", type="frontend", backend=~"canary_.*"}[5m])
         )
       runbook: docs/frontend/README.md
     labels:
@@ -245,7 +245,7 @@ groups:
       grafana_variables: environment,stage
       promql_template_1: |
         sum by (env,environment,tier,stage) (
-          rate(haproxy_backend_http_responses_total{type="frontend", backend=~"canary_.*", environment="{{ $labels.environment }}",stage="{{ $labels.stage }}"}[5m])
+          rate(haproxy_backend_http_responses_total{environment="{{ $labels.environment }}",stage="{{ $labels.stage }}", type="frontend", backend=~"canary_.*"}[5m])
         )
       runbook: docs/frontend/README.md
     labels:
@@ -376,7 +376,7 @@ groups:
       grafana_variables: environment,stage
       promql_template_1: |
         sum by (env,environment,tier,stage) (
-          rate(haproxy_backend_response_errors_total{type="frontend", backend!~"canary_.*|api_rate_limit", environment="{{ $labels.environment }}",stage="{{ $labels.stage }}"}[5m])
+          rate(haproxy_backend_response_errors_total{environment="{{ $labels.environment }}",stage="{{ $labels.stage }}", type="frontend", backend!~"canary_.*|api_rate_limit"}[5m])
         )
       runbook: docs/frontend/README.md
     labels:
@@ -422,7 +422,7 @@ groups:
       grafana_variables: environment,stage
       promql_template_1: |
         sum by (env,environment,tier,stage) (
-          rate(haproxy_backend_response_errors_total{type="frontend", backend!~"canary_.*|api_rate_limit", environment="{{ $labels.environment }}",stage="{{ $labels.stage }}"}[5m])
+          rate(haproxy_backend_response_errors_total{environment="{{ $labels.environment }}",stage="{{ $labels.stage }}", type="frontend", backend!~"canary_.*|api_rate_limit"}[5m])
         )
       runbook: docs/frontend/README.md
     labels:
@@ -468,7 +468,7 @@ groups:
       grafana_variables: environment,stage
       promql_template_1: |
         sum by (env,environment,tier,stage) (
-          rate(haproxy_backend_http_responses_total{type="frontend", backend!~"canary_.*|api_rate_limit", environment="{{ $labels.environment }}",stage="{{ $labels.stage }}"}[5m])
+          rate(haproxy_backend_http_responses_total{environment="{{ $labels.environment }}",stage="{{ $labels.stage }}", type="frontend", backend!~"canary_.*|api_rate_limit"}[5m])
         )
       runbook: docs/frontend/README.md
     labels:
@@ -503,7 +503,7 @@ groups:
       grafana_variables: environment,stage
       promql_template_1: |
         sum by (env,environment,tier,stage) (
-          rate(haproxy_backend_http_responses_total{type="frontend", backend!~"canary_.*|api_rate_limit", environment="{{ $labels.environment }}",stage="{{ $labels.stage }}"}[5m])
+          rate(haproxy_backend_http_responses_total{environment="{{ $labels.environment }}",stage="{{ $labels.stage }}", type="frontend", backend!~"canary_.*|api_rate_limit"}[5m])
         )
       runbook: docs/frontend/README.md
     labels:
@@ -634,7 +634,7 @@ groups:
       grafana_variables: environment,stage
       promql_template_1: |
         sum by (env,environment,tier,stage) (
-          rate(haproxy_ssh_requests_terminated_total{type="frontend", cause=~"K|S|s|P|I|D", environment="{{ $labels.environment }}",stage="{{ $labels.stage }}"}[5m])
+          rate(haproxy_ssh_requests_terminated_total{environment="{{ $labels.environment }}",stage="{{ $labels.stage }}", type="frontend", cause=~"K|S|s|P|I|D"}[5m])
         )
       runbook: docs/frontend/README.md
     labels:
@@ -680,7 +680,7 @@ groups:
       grafana_variables: environment,stage
       promql_template_1: |
         sum by (env,environment,tier,stage) (
-          rate(haproxy_ssh_requests_terminated_total{type="frontend", cause=~"K|S|s|P|I|D", environment="{{ $labels.environment }}",stage="{{ $labels.stage }}"}[5m])
+          rate(haproxy_ssh_requests_terminated_total{environment="{{ $labels.environment }}",stage="{{ $labels.stage }}", type="frontend", cause=~"K|S|s|P|I|D"}[5m])
         )
       runbook: docs/frontend/README.md
     labels:
@@ -726,7 +726,7 @@ groups:
       grafana_variables: environment,stage
       promql_template_1: |
         sum by (env,environment,tier,stage) (
-          rate(haproxy_ssh_requests_total{type="frontend", environment="{{ $labels.environment }}",stage="{{ $labels.stage }}"}[5m])
+          rate(haproxy_ssh_requests_total{environment="{{ $labels.environment }}",stage="{{ $labels.stage }}", type="frontend"}[5m])
         )
       runbook: docs/frontend/README.md
     labels:
@@ -761,7 +761,7 @@ groups:
       grafana_variables: environment,stage
       promql_template_1: |
         sum by (env,environment,tier,stage) (
-          rate(haproxy_ssh_requests_total{type="frontend", environment="{{ $labels.environment }}",stage="{{ $labels.stage }}"}[5m])
+          rate(haproxy_ssh_requests_total{environment="{{ $labels.environment }}",stage="{{ $labels.stage }}", type="frontend"}[5m])
         )
       runbook: docs/frontend/README.md
     labels:

@@ -11,7 +11,7 @@ local generateInstanceFilterQuery(instanceFilter) =
 
 // Generates a range-vector function using the provided functions
 local generateRangeFunctionQuery(rate, rangeFunction, additionalSelectors, rangeInterval, withoutLabels) =
-  local selector = selectors.merge(rate.selector, additionalSelectors);
+  local selector = selectors.merge(additionalSelectors, rate.selector);
   local selectorWithout = selectors.without(selector, withoutLabels);
 
   '%(rangeFunction)s(%(counter)s{%(selector)s}[%(rangeInterval)s])%(instanceFilterQuery)s' % {
