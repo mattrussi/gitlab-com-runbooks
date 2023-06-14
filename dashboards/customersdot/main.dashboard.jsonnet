@@ -21,7 +21,7 @@ serviceDashboard.overview('customersdot')
         title='Client error rate',
         description='Rate of Zuora errors',
         query=|||
-          rate(customers_dot_zuora_error{%(selector)s}[$__rate_interval])
+          rate(customers_dot_zuora_error_total{%(selector)s}[$__rate_interval])
         ||| % { selector: selectorSerialized },
         interval='1m',
         linewidth=1,
