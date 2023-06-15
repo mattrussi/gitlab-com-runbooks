@@ -176,12 +176,13 @@ metricsCatalog.serviceDefinition({
   } + {
     external_dependency: {
       local externalDependencySelector = baseSelector { external_dependencies: 'yes' },
+      serviceAggregation: false,
       userImpacting: true,
       severity: 's3',
       feature_category: 'not_owned',
       team: 'sre_reliability',
       description: |||
-        Cross shard jobs with external dependencies.
+        Jobs with external dependencies across all shards.
       |||,
 
       apdex: combined(
@@ -225,8 +226,8 @@ metricsCatalog.serviceDefinition({
         selector=externalDependencySelector,
       ),
 
-      contractualThresholds+: {
-        errorRatio: 0.5,
+      monitoringThresholds+: {
+        errorRatio: 0.2,
       },
 
       significantLabels: ['feature_category', 'queue', 'urgency', 'worker'],
