@@ -10,13 +10,46 @@ Groups/Repositories of interest:
 ## Cluster Configurations
 
 * Configurations for how our GKE clusters and associated node pools are defined
-  are stored in <https://ops.gitlab.net/gitlab-com/gitlab-com-infrastructure/>
+  are stored in <https://ops.gitlab.net/gitlab-com/gl-infra/config-mgmt/>
 * For our staging and production environments, we run 1 regional cluster, and 3
   zonal clusters
 * The 3 zonal clusters are clusters that are locked into the zone for which
   Google provides for the chosen region we are operating out of
 * These cluster splits allow us to perform some cost savings and limiting blast
   radius in the case of cluster failures
+
+### Naming Conventions
+
+We're leveraging a similar setup to how GKE names clusters.  The overall template looks like this: `<provider>_<project>_<location>_<cluster_name>`.  Where:
+
+* `provider` refers to the Cloud Provider hosting our cluster
+* `project` refers to the logical location or account where the cluster can be found
+* `location` the physical location of said cloud provider where the cluster exists; we make no special declaration as to whether the cluster is a regional or zonal cluster, it is assumed the user will either leverage the labels/tags applied to the cluster, or careful inspection of the name here to provide the differnetiation
+* `cluster_name` is the name/id of the cluster as its defined in the provider, it should follow the format `<purpose>-<uid>`:
+  * `purpose` is a loosely defined mechanism to help deliniate the intention for the cluster
+  * `uid` is a unique identifier as it may be common to spin up multiple clusters with the same purpose in the same location
+
+Examples:
+
+* `gke_gitlab-staging-1_us-east1_gitlab-7vrx8` - where:
+  * `provider` - is GKE
+  * `project` - `gitlab-staging-1`
+  * `location` - this is a regional cluster that resides in `us-east1`
+  * `cluster_name` - hosting of `gitlab` related services with UID`7vrx8`
+* `gke_gitlab-production_us-east1-b_gitlab-rw5e2` - where:
+  * `provider` - is GKE
+  * `project` - `gitlab-production`
+  * `location` - this is a zonal cluster located in `us-east1-b`
+  * `cluster_name` - hosting of `gitlab` related services with UID`rw5e2`
+
+This is an enhancement that was enacted 2023-06-14.  Thus our older naming convention may remain in some areas.
+
+### DNS Naming Schema
+
+We'll leverage the above name but reverse it for the purposes of DNS.  This enables us to more logically follow DNS standards and prevent ourselves from running into limitations.  The above examples translated:
+
+* `gke_gitlab-staging-1_us-east1_gitlab-7vrx8` - `gitlab-7vrx8.us-east1.gitlab-staging-1.gke.gitlab.net`
+* `gke_gitlab-production_us-east1-b_gitlab-rw5e2` - `gitlab-rw5e2.us-east1-b.gitlab-production.gke.gitlab.net`
 
 ### Typical Deployments
 
