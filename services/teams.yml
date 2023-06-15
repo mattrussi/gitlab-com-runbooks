@@ -177,6 +177,8 @@ teams:
   manager: mray2020
   label: group::ai assisted
   slack_alerts_channel: g_mlops-alerts
+  alerts:
+  - ops  # Used for WAF code_suggestions_host SLI
   product_stage_group: ai_assisted
   ignored_components:
   - graphql_query
