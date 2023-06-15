@@ -118,11 +118,11 @@ groups:
     expr: |
       (
         sum by (env,environment) (
-          rate(code_suggestions_inference_request_duration_seconds_bucket{container="model-gateway",le="5",model_engine="codegen",type="code_suggestions"}[1m])
+          rate(code_suggestions_inference_request_duration_seconds_bucket{container="model-gateway",le="5.0",model_engine="codegen",type="code_suggestions"}[1m])
         )
         +
         sum by (env,environment) (
-          rate(code_suggestions_inference_request_duration_seconds_bucket{container="model-gateway",le="10",model_engine="codegen",type="code_suggestions"}[1m])
+          rate(code_suggestions_inference_request_duration_seconds_bucket{container="model-gateway",le="10.0",model_engine="codegen",type="code_suggestions"}[1m])
         )
       )
       /
@@ -156,11 +156,11 @@ groups:
     expr: |
       (
         sum by (env,environment) (
-          rate(code_suggestions_inference_request_duration_seconds_bucket{container="model-gateway",le="5",model_engine!="codegen",type="code_suggestions"}[1m])
+          rate(code_suggestions_inference_request_duration_seconds_bucket{container="model-gateway",le="5.0",model_engine!="codegen",type="code_suggestions"}[1m])
         )
         +
         sum by (env,environment) (
-          rate(code_suggestions_inference_request_duration_seconds_bucket{container="model-gateway",le="10",model_engine!="codegen",type="code_suggestions"}[1m])
+          rate(code_suggestions_inference_request_duration_seconds_bucket{container="model-gateway",le="10.0",model_engine!="codegen",type="code_suggestions"}[1m])
         )
       )
       /
@@ -330,11 +330,11 @@ groups:
     expr: |
       (
         sum by (env,environment) (
-          rate(code_suggestions_inference_request_duration_seconds_bucket{container="model-gateway",le="5",model_engine="codegen",type="code_suggestions"}[5m])
+          rate(code_suggestions_inference_request_duration_seconds_bucket{container="model-gateway",le="5.0",model_engine="codegen",type="code_suggestions"}[5m])
         )
         +
         sum by (env,environment) (
-          rate(code_suggestions_inference_request_duration_seconds_bucket{container="model-gateway",le="10",model_engine="codegen",type="code_suggestions"}[5m])
+          rate(code_suggestions_inference_request_duration_seconds_bucket{container="model-gateway",le="10.0",model_engine="codegen",type="code_suggestions"}[5m])
         )
       )
       /
@@ -368,11 +368,11 @@ groups:
     expr: |
       (
         sum by (env,environment) (
-          rate(code_suggestions_inference_request_duration_seconds_bucket{container="model-gateway",le="5",model_engine!="codegen",type="code_suggestions"}[5m])
+          rate(code_suggestions_inference_request_duration_seconds_bucket{container="model-gateway",le="5.0",model_engine!="codegen",type="code_suggestions"}[5m])
         )
         +
         sum by (env,environment) (
-          rate(code_suggestions_inference_request_duration_seconds_bucket{container="model-gateway",le="10",model_engine!="codegen",type="code_suggestions"}[5m])
+          rate(code_suggestions_inference_request_duration_seconds_bucket{container="model-gateway",le="10.0",model_engine!="codegen",type="code_suggestions"}[5m])
         )
       )
       /
@@ -542,11 +542,11 @@ groups:
     expr: |
       (
         sum by (env,environment) (
-          rate(code_suggestions_inference_request_duration_seconds_bucket{container="model-gateway",le="5",model_engine="codegen",type="code_suggestions"}[30m])
+          rate(code_suggestions_inference_request_duration_seconds_bucket{container="model-gateway",le="5.0",model_engine="codegen",type="code_suggestions"}[30m])
         )
         +
         sum by (env,environment) (
-          rate(code_suggestions_inference_request_duration_seconds_bucket{container="model-gateway",le="10",model_engine="codegen",type="code_suggestions"}[30m])
+          rate(code_suggestions_inference_request_duration_seconds_bucket{container="model-gateway",le="10.0",model_engine="codegen",type="code_suggestions"}[30m])
         )
       )
       /
@@ -580,11 +580,11 @@ groups:
     expr: |
       (
         sum by (env,environment) (
-          rate(code_suggestions_inference_request_duration_seconds_bucket{container="model-gateway",le="5",model_engine!="codegen",type="code_suggestions"}[30m])
+          rate(code_suggestions_inference_request_duration_seconds_bucket{container="model-gateway",le="5.0",model_engine!="codegen",type="code_suggestions"}[30m])
         )
         +
         sum by (env,environment) (
-          rate(code_suggestions_inference_request_duration_seconds_bucket{container="model-gateway",le="10",model_engine!="codegen",type="code_suggestions"}[30m])
+          rate(code_suggestions_inference_request_duration_seconds_bucket{container="model-gateway",le="10.0",model_engine!="codegen",type="code_suggestions"}[30m])
         )
       )
       /
@@ -754,11 +754,11 @@ groups:
     expr: |
       (
         sum by (env,environment) (
-          rate(code_suggestions_inference_request_duration_seconds_bucket{container="model-gateway",le="5",model_engine="codegen",type="code_suggestions"}[1h])
+          rate(code_suggestions_inference_request_duration_seconds_bucket{container="model-gateway",le="5.0",model_engine="codegen",type="code_suggestions"}[1h])
         )
         +
         sum by (env,environment) (
-          rate(code_suggestions_inference_request_duration_seconds_bucket{container="model-gateway",le="10",model_engine="codegen",type="code_suggestions"}[1h])
+          rate(code_suggestions_inference_request_duration_seconds_bucket{container="model-gateway",le="10.0",model_engine="codegen",type="code_suggestions"}[1h])
         )
       )
       /
@@ -792,11 +792,11 @@ groups:
     expr: |
       (
         sum by (env,environment) (
-          rate(code_suggestions_inference_request_duration_seconds_bucket{container="model-gateway",le="5",model_engine!="codegen",type="code_suggestions"}[1h])
+          rate(code_suggestions_inference_request_duration_seconds_bucket{container="model-gateway",le="5.0",model_engine!="codegen",type="code_suggestions"}[1h])
         )
         +
         sum by (env,environment) (
-          rate(code_suggestions_inference_request_duration_seconds_bucket{container="model-gateway",le="10",model_engine!="codegen",type="code_suggestions"}[1h])
+          rate(code_suggestions_inference_request_duration_seconds_bucket{container="model-gateway",le="10.0",model_engine!="codegen",type="code_suggestions"}[1h])
         )
       )
       /
@@ -966,11 +966,11 @@ groups:
     expr: |
       (
         sum by (env,environment) (
-          rate(code_suggestions_inference_request_duration_seconds_bucket{container="model-gateway",le="5",model_engine="codegen",type="code_suggestions"}[6h])
+          rate(code_suggestions_inference_request_duration_seconds_bucket{container="model-gateway",le="5.0",model_engine="codegen",type="code_suggestions"}[6h])
         )
         +
         sum by (env,environment) (
-          rate(code_suggestions_inference_request_duration_seconds_bucket{container="model-gateway",le="10",model_engine="codegen",type="code_suggestions"}[6h])
+          rate(code_suggestions_inference_request_duration_seconds_bucket{container="model-gateway",le="10.0",model_engine="codegen",type="code_suggestions"}[6h])
         )
       )
       /
@@ -1004,11 +1004,11 @@ groups:
     expr: |
       (
         sum by (env,environment) (
-          rate(code_suggestions_inference_request_duration_seconds_bucket{container="model-gateway",le="5",model_engine!="codegen",type="code_suggestions"}[6h])
+          rate(code_suggestions_inference_request_duration_seconds_bucket{container="model-gateway",le="5.0",model_engine!="codegen",type="code_suggestions"}[6h])
         )
         +
         sum by (env,environment) (
-          rate(code_suggestions_inference_request_duration_seconds_bucket{container="model-gateway",le="10",model_engine!="codegen",type="code_suggestions"}[6h])
+          rate(code_suggestions_inference_request_duration_seconds_bucket{container="model-gateway",le="10.0",model_engine!="codegen",type="code_suggestions"}[6h])
         )
       )
       /

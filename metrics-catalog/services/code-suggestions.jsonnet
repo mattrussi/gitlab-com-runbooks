@@ -174,8 +174,8 @@ metricsCatalog.serviceDefinition({
       apdex: histogramApdex(
         histogram='code_suggestions_inference_request_duration_seconds_bucket',
         selector=inferenceSelector,
-        satisfiedThreshold=5,
-        toleratedThreshold=10
+        satisfiedThreshold='5.0',
+        toleratedThreshold='10.0'
       ),
 
       requestRate: rateMetric(
@@ -204,8 +204,8 @@ metricsCatalog.serviceDefinition({
       apdex: histogramApdex(
         histogram='code_suggestions_inference_request_duration_seconds_bucket',
         selector=inferenceSelector,
-        satisfiedThreshold=5,
-        toleratedThreshold=10
+        satisfiedThreshold='5.0',
+        toleratedThreshold='10.0'
       ),
 
       requestRate: rateMetric(
