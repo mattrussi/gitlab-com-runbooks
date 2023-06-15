@@ -77,6 +77,22 @@ basic.dashboard(
       )
     ),
     statPanel.new(
+      title='Key Count',
+      description='The number of Redis keys.',
+      unit='short',
+    )
+    .addTarget(
+      promQuery.target(
+        |||
+          avg(
+            max_over_time(
+              redis_db_keys{deployment="redis-registry-cache", db="db0", env="$environment", cluster=~"$cluster", stage="$stage", exported_instance=~"$instance"}[$__interval]
+            )
+          )
+        |||
+      )
+    ),
+    statPanel.new(
       title='Latency',
       description='The p90 latency of all Redis operations performed on the application side.',
       decimals=2,
@@ -157,7 +173,7 @@ basic.dashboard(
         |||
       )
     ),
-  ], cols=5, rowHeight=4, startRow=1)
+  ], cols=6, rowHeight=4, startRow=1)
 )
 
 
