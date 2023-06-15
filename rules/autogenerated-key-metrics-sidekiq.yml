@@ -4712,7 +4712,7 @@ groups:
       component: external_dependency
       global_aggregation: "no"
       regional_aggregation: "no"
-      service_aggregation: "yes"
+      service_aggregation: "no"
       tier: sv
       type: sidekiq
     expr: "1"
