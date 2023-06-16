@@ -80,6 +80,23 @@ groups:
       )
   - record: gitlab_component_saturation:ratio
     labels:
+      component: gcp_quota_limit
+    expr: |
+      max by(env, environment, tier, type, stage, shard) (
+        clamp_min(
+          clamp_max(
+            (
+              gcp_quota_usage{env="gprd",type="code_suggestions"}
+            /
+              gcp_quota_limit{env="gprd",type="code_suggestions"}
+            ) > 0
+            ,
+            1)
+        ,
+        0)
+      )
+  - record: gitlab_component_saturation:ratio
+    labels:
       component: go_memory
     expr: |
       max by(env, environment, tier, type, stage, shard) (
@@ -571,6 +588,52 @@ groups:
     expr: |
       gitlab_component_saturation:ratio{component="filestore_disk_write_throughput_saturation",env="gprd",monitor="global"} > on(component) group_left
       slo:max:hard:gitlab_component_saturation:ratio{component="filestore_disk_write_throughput_saturation",env="gprd",monitor="global"}
+  - alert: component_saturation_slo_out_of_bounds
+    for: 15m
+    annotations:
+      title: The GCP Quota utilization per environment resource of the {{ $labels.type
+        }} service ({{ $labels.stage }} stage) has a saturation exceeding SLO and
+        is close to its capacity limit.
+      description: |
+        This means that this resource is running close to capacity and is at risk of exceeding its current capacity limit.
+
+        Details of the GCP Quota utilization per environment resource:
+
+        GCP Quota utilization / limit ratio
+
+        Saturation on a quota may cause problems with creating infrastructure resources on GCP.
+
+        To fix, we can request a quota increase for the specific resource to the GCP support team.
+      grafana_dashboard_id: alerts-gcp_quota_limit
+      grafana_dashboard_link: https://dashboards.gitlab.net/d/alerts-gcp_quota_limit?from=now-6h/m&to=now-1m/m&var-environment={{
+        $labels.environment }}&var-type={{ $labels.type }}&var-stage={{ $labels.stage
+        }}
+      grafana_min_zoom_hours: "6"
+      grafana_panel_id: "2585628061"
+      grafana_variables: environment,type,stage
+      promql_query: |
+        max by(environment, tier, type, stage, shard, metric, quotaregion) (
+          clamp_min(
+            clamp_max(
+              (
+                gcp_quota_usage{environment="{{ $labels.environment }}",stage="{{ $labels.stage }}",type="{{ $labels.type }}"}
+              /
+                gcp_quota_limit{environment="{{ $labels.environment }}",stage="{{ $labels.stage }}",type="{{ $labels.type }}"}
+              ) > 0
+              ,
+              1)
+          ,
+          0)
+        )
+      runbook: docs/{{ $labels.type }}/README.md
+    labels:
+      alert_type: cause
+      pager: pagerduty
+      rules_domain: general
+      severity: s2
+    expr: |
+      gitlab_component_saturation:ratio{component="gcp_quota_limit",env="gprd",monitor="global"} > on(component) group_left
+      slo:max:hard:gitlab_component_saturation:ratio{component="gcp_quota_limit",env="gprd",monitor="global"}
   - alert: component_saturation_slo_out_of_bounds
     for: 5m
     annotations:
