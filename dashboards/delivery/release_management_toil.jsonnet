@@ -486,8 +486,8 @@ basic.dashboard(
     [
       totalJobsFailedStatPanel,
       barGaugePanel(
-        'Total Number of Job Failures Per Auto-Deploy Version',
-        description='For all the auto-deploy pipelines in the time range, display total number of job failures',
+        'Total Number of Job Failures Per Auto-Deploy Version (25 max)',
+        description='For up to 25 latest auto-deploy versions in the time range, display the total number of job failures per version',
         fieldColor={
           fixedColor: 'green',
           mode: 'palette-classic',
