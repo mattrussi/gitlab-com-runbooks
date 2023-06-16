@@ -1,9 +1,12 @@
+local aggregations = import '../../libsonnet/promql/aggregations.libsonnet';
 local errorBudgetUtils = import '../../libsonnet/stage-groups/error-budget/utils.libsonnet';
 local errorBudget = import '../../libsonnet/stage-groups/error_budget.libsonnet';
+local library = import 'gitlab-slis/library.libsonnet';
 local basic = import 'grafana/basic.libsonnet';
 local layout = import 'grafana/layout.libsonnet';
 local prebuiltTemplates = import 'grafana/templates.libsonnet';
 local selectors = import 'promql/selectors.libsonnet';
+
 
 local baseSelector = {
   monitor: 'global',
@@ -20,7 +23,7 @@ local groupSelector = {
 };
 
 local componentSelector = {
-  component: 'rails_request',
+  component: { re: '$component' },
 };
 
 local queries = errorBudget('$__range').queries;
@@ -29,66 +32,82 @@ local availabilityQuery = queries.errorBudgetRatio(baseSelector + envSelector + 
 local apdexQuery = queries.errorBudgetApdexRatio(baseSelector + envSelector + groupSelector + componentSelector);
 local errorRatioQuery = queries.errorBudgetErrorRatio(baseSelector + envSelector + groupSelector + componentSelector);
 
-local endpointsApdex =
-  |||
-    clamp_max(
-      sum by(endpoint_id, feature_category, request_urgency) (
-        (sum_over_time(application_sli_aggregation:rails_request:apdex:success:rate_1h{%(baseSelector)s}[$__range]) > 0)
-        * on (feature_category) group_left(stage_group) gitlab:feature_category:stage_group:mapping{%(groupSelector)s}
-      )
-      /
-      sum by(endpoint_id, feature_category, request_urgency) (
-        (sum_over_time(application_sli_aggregation:rails_request:apdex:weight:score_1h{%(baseSelector)s}[$__range]) > 0)
-        * on (feature_category) group_left(stage_group) gitlab:feature_category:stage_group:mapping{%(groupSelector)s}
-      )
-    , 1
-    )
-  ||| % {
-    baseSelector: selectors.serializeHash(baseSelector + envSelector),
-    groupSelector: selectors.serializeHash(baseSelector + groupSelector),
-  }
-;
+local significantLabels = aggregations.join(
+  std.flatMap(
+    function(sli) sli.significantLabels,
+    library.all
+  )
+);
 
-local endpointsRequests =
+local leftJoinStageGroup(query) =
   |||
-    sum by(endpoint_id, feature_category, request_urgency) (
-      sum_over_time(application_sli_aggregation:rails_request:ops:rate_1h{%(baseSelector)s}[$__range])
-    )
+    %(query)s
     * on (feature_category) group_left(stage_group) gitlab:feature_category:stage_group:mapping{%(groupSelector)s}
+    or on () (%(query)s)
   ||| % {
-    baseSelector: selectors.serializeHash(baseSelector + envSelector),
+    query: query,
     groupSelector: selectors.serializeHash(baseSelector + groupSelector),
-  }
-;
+  };
 
-local endpointsErrorRatio =
-  |||
-    clamp_max(
-      sum by(endpoint_id, feature_category, request_urgency) (
-        sum_over_time(application_sli_aggregation:rails_request:error:rate_1h{%(baseSelector)s}[$__range])
-        * on (feature_category) group_left(stage_group) gitlab:feature_category:stage_group:mapping{%(groupSelector)s}
+local operationsApdex =
+  leftJoinStageGroup(
+    |||
+      clamp_max(
+        sum by(%(labels)s) (
+          sum_over_time(application_sli_aggregation:$component:apdex:success:rate_1h{%(baseSelector)s}[$__range]) > 0
+        )
+        /
+        sum by(%(labels)s) (
+          sum_over_time(application_sli_aggregation:$component:apdex:weight:score_1h{%(baseSelector)s}[$__range]) > 0
+        )
+      , 1
       )
-      /
-      sum by(endpoint_id, feature_category, request_urgency) (
-        sum_over_time(application_sli_aggregation:rails_request:ops:rate_1h{%(baseSelector)s}[$__range])
-        * on (feature_category) group_left(stage_group) gitlab:feature_category:stage_group:mapping{%(groupSelector)s}
-      )
-    , 1
-    )
-  ||| % {
-    baseSelector: selectors.serializeHash(baseSelector + envSelector),
-    groupSelector: selectors.serializeHash(baseSelector + groupSelector),
-  }
-;
+    ||| % {
+      labels: significantLabels,
+      baseSelector: selectors.serializeHash(baseSelector + envSelector),
+    }
 
-local endpointsTable =
+  );
+
+local operations =
+  leftJoinStageGroup(
+    |||
+      sum by(%(labels)s) (
+        sum_over_time(application_sli_aggregation:$component:ops:rate_1h{%(baseSelector)s}[$__range])
+      )
+    ||| % {
+      labels: significantLabels,
+      baseSelector: selectors.serializeHash(baseSelector + envSelector),
+    }
+  );
+
+local operationsErrorRatio =
+  leftJoinStageGroup(
+    |||
+      clamp_max(
+        sum by(%(labels)s) (
+          sum_over_time(application_sli_aggregation:$component:error:rate_1h{%(baseSelector)s}[$__range])
+        )
+        /
+        sum by(%(labels)s) (
+          sum_over_time(application_sli_aggregation:$component:ops:rate_1h{%(baseSelector)s}[$__range])
+        )
+      , 1
+      )
+    ||| % {
+      labels: significantLabels,
+      baseSelector: selectors.serializeHash(baseSelector + envSelector),
+      groupSelector: selectors.serializeHash(baseSelector + groupSelector),
+    }
+  );
+
+local significantLabelsTable =
   basic.table(
-    title='Endpoints',
     styles=null,
     queries=[
-      errorBudgetUtils.rateToOperationCount(endpointsRequests),
-      endpointsApdex,
-      endpointsErrorRatio,
+      errorBudgetUtils.rateToOperationCount(operations),
+      operationsApdex,
+      operationsErrorRatio,
     ],
     transformations=[
       {
@@ -98,7 +117,7 @@ local endpointsTable =
         id: 'renameByRegex',
         options: {
           regex: 'Value #A',
-          renamePattern: 'Requests',
+          renamePattern: 'Operations',
         },
       },
       {
@@ -118,6 +137,13 @@ local endpointsTable =
       {
         id: 'renameByRegex',
         options: {
+          regex: 'feature_category',
+          renamePattern: 'Category',
+        },
+      },
+      {
+        id: 'renameByRegex',
+        options: {
           regex: 'stage_group',
           renamePattern: 'Stage Group',
         },
@@ -130,20 +156,31 @@ local endpointsTable =
         },
       },
       {
+        id: 'renameByRegex',
+        options: {
+          regex: 'query_urgency',
+          renamePattern: 'Urgency',
+        },
+      },
+      {
         id: 'organize',
         options: {
           excludeByName: {
             Time: true,
             env: true,
-            feature_category: true,
           },
           indexByName: {
             endpoint_id: 1,
-            'Stage Group': 2,
-            Urgency: 3,
-            Requests: 4,
-            Apdex: 5,
-            Errors: 6,
+            Category: 2,
+            'Stage Group': 3,
+            Urgency: 4,
+            search_level: 5,
+            search_scope: 6,
+            search_type: 7,
+            document_type: 8,
+            Operations: 9,
+            Apdex: 10,
+            Errors: 11,
           },
         },
       },
@@ -151,11 +188,23 @@ local endpointsTable =
   ) + {
     options: {
       sortBy: [
-        { displayName: 'Requests', desc: true },
+        { displayName: 'Operations', desc: true },
       ],
     },
     fieldConfig+: {
       overrides: [
+        {
+          matcher: {
+            id: 'byName',
+            options: 'Category',
+          },
+          properties: [
+            {
+              id: 'custom.width',
+              value: 300,
+            },
+          ],
+        },
         {
           matcher: {
             id: 'byName',
@@ -205,12 +254,48 @@ local endpointsTable =
         {
           matcher: {
             id: 'byName',
-            options: 'Requests',
+            options: 'search_level',
           },
           properties: [
             {
               id: 'custom.width',
-              value: 100,
+              value: 150,
+            },
+          ],
+        },
+        {
+          matcher: {
+            id: 'byName',
+            options: 'search_scope',
+          },
+          properties: [
+            {
+              id: 'custom.width',
+              value: 150,
+            },
+          ],
+        },
+        {
+          matcher: {
+            id: 'byName',
+            options: 'search_type',
+          },
+          properties: [
+            {
+              id: 'custom.width',
+              value: 150,
+            },
+          ],
+        },
+        {
+          matcher: {
+            id: 'byName',
+            options: 'Operations',
+          },
+          properties: [
+            {
+              id: 'custom.width',
+              value: 120,
             },
             {
               id: 'unit',
@@ -301,7 +386,7 @@ local endpointsTable =
   };
 
 basic.dashboard(
-  'Rails Endpoints Violations',
+  'Application SLI Violations',
   tags=[],
   time_from='now-7d/m',
   time_to='now/m',
@@ -309,12 +394,13 @@ basic.dashboard(
 .addTemplate(prebuiltTemplates.stage)
 .addTemplate(prebuiltTemplates.productStage())
 .addTemplate(prebuiltTemplates.stageGroup())
+.addTemplate(prebuiltTemplates.sli())
 .addPanels(
   layout.grid(
     [
       basic.statPanel(
         title='',
-        panelTitle='Rails Request Availability',
+        panelTitle='$component availability',
         query=availabilityQuery,
         decimals=2,
         unit='percentunit',
@@ -325,7 +411,7 @@ basic.dashboard(
       ),
       basic.statPanel(
         title='',
-        panelTitle='Rails Request Apdex',
+        panelTitle='$component apdex',
         query=apdexQuery,
         decimals=2,
         unit='percentunit',
@@ -336,7 +422,7 @@ basic.dashboard(
       ),
       basic.statPanel(
         title='',
-        panelTitle='Rails Request Errors',
+        panelTitle='$component errors',
         query=errorRatioQuery,
         decimals=2,
         unit='percentunit',
@@ -350,8 +436,8 @@ basic.dashboard(
 )
 .addPanels(
   layout.rowGrid(
-    'Apdex by endpoints',
-    [endpointsTable],
+    '$component by significant labels',
+    [significantLabelsTable],
     collapse=true,
     rowHeight=10,
     startRow=200,

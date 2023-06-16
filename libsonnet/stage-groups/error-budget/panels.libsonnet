@@ -539,7 +539,7 @@ local logLinks(featureCategories, stageGroup) =
       railsRequestsApdexLink: railsRequestsApdexTable,
       requestUrgencyLink: 'https://docs.gitlab.com/ee/development/application_slis/rails_request_apdex.html#adjusting-request-urgency',
       pumaErrorsLink: pumaErrorsTable,
-      allRequestViolations: 'https://dashboards.gitlab.net/d/general-rails-endpoints-violations/general-rails-endpoints-violations?orgId=1&from=${__from}&to=${__to}&var-stage_group=' + stageGroup,
+      allRequestViolations: 'https://dashboards.gitlab.net/d/general-application-sli-violations/general-application-sli-violations?orgId=1&var-component=rails_request&from=${__from}&to=${__to}&var-stage_group=' + stageGroup,
       sidekiqErrorsLink: sidekiqErrorsTable,
       sidekiqApdexLink: sidekiqApdexTables,
       sidekiqUrgentThreshold: sidekiqHelpers.slos.urgent.executionDurationSeconds,

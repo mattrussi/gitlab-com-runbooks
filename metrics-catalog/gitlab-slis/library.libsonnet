@@ -92,4 +92,5 @@ local definitionsByName = std.foldl(
 {
   get(name):: definitionsByName[name],
   all:: list,
+  names:: std.map(function(sli) sli.name, list),
 }

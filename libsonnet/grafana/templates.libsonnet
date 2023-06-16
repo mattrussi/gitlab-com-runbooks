@@ -1,6 +1,7 @@
 local grafana = import 'github.com/grafana/grafonnet-lib/grafonnet/grafana.libsonnet';
 local template = grafana.template;
 local defaultPrometheusDatasource = (import 'gitlab-metrics-config.libsonnet').defaultPrometheusDatasource;
+local library = import 'gitlab-slis/library.libsonnet';
 
 {
   gkeCluster::
@@ -228,5 +229,16 @@ local defaultPrometheusDatasource = (import 'gitlab-metrics-config.libsonnet').d
       current='weighted_v2.1',
       refresh='load',
       sort=1,
+    ),
+  sli(current='rails_request')::
+    template.new(
+      'component',
+      '$PROMETHEUS_DS',
+      'label_values(gitlab:component:stage_group:execution:ops:rate_1h{environment="$environment", monitor="global", component=~"%(sli)s"}), component)' % {
+        sli: std.join('|', library.names),
+      },
+      refresh='load',
+      sort=1,
+      current=current
     ),
 }
