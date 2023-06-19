@@ -106,11 +106,7 @@ metricsCatalog.serviceDefinition({
 
       errorRate: rateMetric(
         counter='gitlab_runner_failed_jobs_total',
-        selector={
-          failure_reason: 'runner_system_failure',
-          job: 'runners-manager',
-          shard: 'shared',
-        },
+        selector='failure_reason~="runner_system_failure|image_pull_failure", job: "runners-manager", shard: "shared"'
       ),
 
       significantLabels: ['jobs_running_for_project'],

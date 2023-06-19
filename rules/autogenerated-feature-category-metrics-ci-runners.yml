@@ -131,7 +131,7 @@ groups:
     expr: |
       (
         sum by (env,environment,stage) (
-          rate(gitlab_runner_failed_jobs_total{failure_reason="runner_system_failure",job="runners-manager",shard="shared"}[5m])
+          rate(gitlab_runner_failed_jobs_total{failure_reason~="runner_system_failure|image_pull_failure", job: "runners-manager", shard: "shared"}[5m])
         )
       )
       or
@@ -298,7 +298,7 @@ groups:
     expr: |
       (
         sum by (env,environment,stage) (
-          rate(gitlab_runner_failed_jobs_total{failure_reason="runner_system_failure",job="runners-manager",shard="shared"}[30m])
+          rate(gitlab_runner_failed_jobs_total{failure_reason~="runner_system_failure|image_pull_failure", job: "runners-manager", shard: "shared"}[30m])
         )
       )
       or
@@ -465,7 +465,7 @@ groups:
     expr: |
       (
         sum by (env,environment,stage) (
-          rate(gitlab_runner_failed_jobs_total{failure_reason="runner_system_failure",job="runners-manager",shard="shared"}[1h])
+          rate(gitlab_runner_failed_jobs_total{failure_reason~="runner_system_failure|image_pull_failure", job: "runners-manager", shard: "shared"}[1h])
         )
       )
       or

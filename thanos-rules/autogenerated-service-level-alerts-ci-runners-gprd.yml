@@ -650,7 +650,7 @@ groups:
       grafana_variables: environment,stage
       promql_template_1: |
         sum by (env,environment,tier,stage) (
-          rate(gitlab_runner_failed_jobs_total{environment="{{ $labels.environment }}",failure_reason="runner_system_failure",job="runners-manager",shard="shared",stage="{{ $labels.stage }}"}[5m])
+          rate(gitlab_runner_failed_jobs_total{environment="{{ $labels.environment }}",stage="{{ $labels.stage }}", failure_reason~="runner_system_failure|image_pull_failure", job: "runners-manager", shard: "shared"}[5m])
         )
       runbook: docs/ci-runners/README.md
     labels:
@@ -702,7 +702,7 @@ groups:
       grafana_variables: environment,stage
       promql_template_1: |
         sum by (env,environment,tier,stage) (
-          rate(gitlab_runner_failed_jobs_total{environment="{{ $labels.environment }}",failure_reason="runner_system_failure",job="runners-manager",shard="shared",stage="{{ $labels.stage }}"}[5m])
+          rate(gitlab_runner_failed_jobs_total{environment="{{ $labels.environment }}",stage="{{ $labels.stage }}", failure_reason~="runner_system_failure|image_pull_failure", job: "runners-manager", shard: "shared"}[5m])
         )
       runbook: docs/ci-runners/README.md
     labels:
