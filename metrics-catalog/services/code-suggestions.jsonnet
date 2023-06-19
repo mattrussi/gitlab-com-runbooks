@@ -10,7 +10,7 @@ metricsCatalog.serviceDefinition({
   type: 'code_suggestions',
   tier: 'sv',
   monitoringThresholds: {
-    apdexScore: 0.95,
+    apdexScore: 0.9,
     errorRatio: 0.999,
   },
   provisioning: {
@@ -59,7 +59,8 @@ metricsCatalog.serviceDefinition({
       apdex: histogramApdex(
         histogram='http_request_duration_seconds_bucket',
         selector=modelGatewaySelector { status: { noneOf: ['4xx', '5xx'] } },
-        satisfiedThreshold='10.0',
+        satisfiedThreshold='2.5',
+        toleratedThreshold='10.0'
       ),
 
       significantLabels: ['status', 'handler', 'method'],
@@ -140,8 +141,8 @@ metricsCatalog.serviceDefinition({
       apdex: histogramApdex(
         histogram='nginx_ingress_controller_request_duration_seconds_bucket',
         selector=ingressSelector { status: { noneOf: ['4.*', '5.*'] } },
-        satisfiedThreshold=5,
-        toleratedThreshold=10
+        satisfiedThreshold='2.5',
+        toleratedThreshold='10'
       ),
 
       significantLabels: ['path', 'status', 'method'],
