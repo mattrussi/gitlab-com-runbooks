@@ -80,7 +80,7 @@ groups:
       )
   - record: gitlab_component_saturation:ratio
     labels:
-      component: gcp_quota_limit
+      component: gcp_quota_limit_s4
     expr: |
       max by(env, environment, tier, type, stage, shard) (
         clamp_min(
@@ -604,12 +604,12 @@ groups:
         Saturation on a quota may cause problems with creating infrastructure resources on GCP.
 
         To fix, we can request a quota increase for the specific resource to the GCP support team.
-      grafana_dashboard_id: alerts-gcp_quota_limit
-      grafana_dashboard_link: https://dashboards.gitlab.net/d/alerts-gcp_quota_limit?from=now-6h/m&to=now-1m/m&var-environment={{
+      grafana_dashboard_id: alerts-gcp_quota_limit_s4
+      grafana_dashboard_link: https://dashboards.gitlab.net/d/alerts-gcp_quota_limit_s4?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-type={{ $labels.type }}&var-stage={{ $labels.stage
         }}
       grafana_min_zoom_hours: "6"
-      grafana_panel_id: "2585628061"
+      grafana_panel_id: "2689014013"
       grafana_variables: environment,type,stage
       promql_query: |
         max by(environment, tier, type, stage, shard, metric, quotaregion) (
@@ -628,12 +628,11 @@ groups:
       runbook: docs/{{ $labels.type }}/README.md
     labels:
       alert_type: cause
-      pager: pagerduty
       rules_domain: general
-      severity: s2
+      severity: s4
     expr: |
-      gitlab_component_saturation:ratio{component="gcp_quota_limit",env!~"gprd|ops",monitor="global"} > on(component) group_left
-      slo:max:hard:gitlab_component_saturation:ratio{component="gcp_quota_limit",env!~"gprd|ops",monitor="global"}
+      gitlab_component_saturation:ratio{component="gcp_quota_limit_s4",env!~"gprd|ops",monitor="global"} > on(component) group_left
+      slo:max:hard:gitlab_component_saturation:ratio{component="gcp_quota_limit_s4",env!~"gprd|ops",monitor="global"}
   - alert: component_saturation_slo_out_of_bounds
     for: 5m
     annotations:
