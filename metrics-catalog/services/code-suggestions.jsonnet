@@ -43,6 +43,7 @@ metricsCatalog.serviceDefinition({
       userImpacting: true,
       team: 'ai_assisted',
       featureCategory: 'code_suggestions',
+      serviceAggregation: false,
 
       requestRate: rateMetric(
         counter='http_request_duration_seconds_count',
@@ -119,7 +120,7 @@ metricsCatalog.serviceDefinition({
       userImpacting: true,
       team: 'ai_assisted',
       featureCategory: 'code_suggestions',
-      serviceAggregation: false,
+      serviceAggregation: true,
       description: |||
         Ingress-NGINX Controller for Kubernetes to expose service to the internet. Fronted by Cloudflare.
       |||,

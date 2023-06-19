@@ -1110,7 +1110,7 @@ groups:
       component: ingress
       global_aggregation: "yes"
       regional_aggregation: "no"
-      service_aggregation: "no"
+      service_aggregation: "yes"
       tier: sv
       type: code_suggestions
     expr: "1"
@@ -1119,7 +1119,7 @@ groups:
       component: model_gateway
       global_aggregation: "yes"
       regional_aggregation: "no"
-      service_aggregation: "yes"
+      service_aggregation: "no"
       tier: sv
       type: code_suggestions
     expr: "1"
