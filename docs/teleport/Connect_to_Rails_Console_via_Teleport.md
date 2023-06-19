@@ -67,7 +67,10 @@ If the command is stopped or times out, but the request is approved, you don't n
 3. Connect to the Rails Console
 
 ```shell
+# Login with the request ID if you have a different session (e.g. made a request using the web)
 tsh login --proxy=production.teleport.gitlab.net --request-id=<request-id>
+# Connect to Rails Console
+tsh ssh rails-ro@console-ro-01-sv-gprd
 ```
 
 The request ID is shown in the output of `tsh login` when making the initial request, and can also be found attached to your request notification in `#infrastructure-lounge`.
