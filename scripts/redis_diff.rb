@@ -106,7 +106,7 @@ def compare_and_migrate(key, src, dst, migrate)
   !identical
 end
 
-desired_rate = (options[:desired_rate]|| 500.0).to_f
+desired_rate = (options[:desired_rate] || 500.0).to_f
 it = options[:cursor] || "0"
 checked = 0
 diffcount = 0
@@ -146,8 +146,8 @@ loop do
 
   checked += keys.size
   duration = Time.now - start
-  wait = keys.size / desired_rate - duration
-  sleep(wait) if wait > 0
+  wait = (keys.size / desired_rate) - duration
+  sleep(wait) if wait.positive?
 
   puts "Checked #{keys.size} keys from cursor #{it}"
 
