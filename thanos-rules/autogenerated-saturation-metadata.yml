@@ -47,11 +47,11 @@ groups:
     expr: "0.9"
   - record: slo:max:soft:gitlab_component_saturation:ratio
     labels:
-      component: gcp_quota_limit
+      component: gcp_quota_limit_s4
     expr: "0.85"
   - record: slo:max:hard:gitlab_component_saturation:ratio
     labels:
-      component: gcp_quota_limit
+      component: gcp_quota_limit_s4
     expr: "0.9"
   - record: slo:max:soft:gitlab_component_saturation:ratio
     labels:
@@ -212,10 +212,10 @@ groups:
   - record: gitlab_component_saturation_info
     labels:
       capacity_planning_strategy: quantile95_1h
-      component: gcp_quota_limit
+      component: gcp_quota_limit_s4
       horiz_scaling: "no"
       quantile: max
-      severity: s2
+      severity: s4
     expr: "1"
   - record: gitlab_component_saturation_info
     labels:

@@ -6,7 +6,7 @@ local resourceSaturationPoint = metricsCatalog.resourceSaturationPoint;
     title: 'GCP Quota utilization per environment',
     severity: 's2',
     horizontallyScalable: false,
-    appliesTo: ['monitoring', 'code_suggestions'],
+    appliesTo: ['monitoring'],
     burnRatePeriod: '5m',
     description: |||
       GCP Quota utilization / limit ratio
@@ -29,5 +29,13 @@ local resourceSaturationPoint = metricsCatalog.resourceSaturationPoint;
       hard: 0.90,
       alertTriggerDuration: '15m',
     },
+  }),
+
+  // Code suggestions is currently not yet production ready. Remove this once it
+  // is https://gitlab.com/gitlab-com/gl-infra/readiness/-/merge_requests/161
+  gcp_quota_limit_s4: resourceSaturationPoint(self.gcp_quota_limit {
+    severity: 's4',
+    appliesTo: ['code_suggestions'],
+    grafana_dashboard_uid: 'gcp_quota_limit_s4',
   }),
 }
