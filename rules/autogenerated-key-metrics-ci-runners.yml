@@ -120,7 +120,7 @@ groups:
     expr: |
       (
         sum by (env,environment,stage) (
-          rate(gitlab_runner_failed_jobs_total{failure_reason~="runner_system_failure|image_pull_failure", job: "runners-manager", shard: "shared"}[1m])
+          rate(gitlab_runner_failed_jobs_total{failure_reason=~"image_pull_failure|runner_system_failure",job="runners-manager",shard="shared"}[1m])
         )
       )
       or
@@ -274,7 +274,7 @@ groups:
     expr: |
       (
         sum by (env,environment,stage) (
-          rate(gitlab_runner_failed_jobs_total{failure_reason~="runner_system_failure|image_pull_failure", job: "runners-manager", shard: "shared"}[5m])
+          rate(gitlab_runner_failed_jobs_total{failure_reason=~"image_pull_failure|runner_system_failure",job="runners-manager",shard="shared"}[5m])
         )
       )
       or
@@ -428,7 +428,7 @@ groups:
     expr: |
       (
         sum by (env,environment,stage) (
-          rate(gitlab_runner_failed_jobs_total{failure_reason~="runner_system_failure|image_pull_failure", job: "runners-manager", shard: "shared"}[30m])
+          rate(gitlab_runner_failed_jobs_total{failure_reason=~"image_pull_failure|runner_system_failure",job="runners-manager",shard="shared"}[30m])
         )
       )
       or
@@ -582,7 +582,7 @@ groups:
     expr: |
       (
         sum by (env,environment,stage) (
-          rate(gitlab_runner_failed_jobs_total{failure_reason~="runner_system_failure|image_pull_failure", job: "runners-manager", shard: "shared"}[1h])
+          rate(gitlab_runner_failed_jobs_total{failure_reason=~"image_pull_failure|runner_system_failure",job="runners-manager",shard="shared"}[1h])
         )
       )
       or
@@ -736,7 +736,7 @@ groups:
     expr: |
       (
         sum by (env,environment,stage) (
-          rate(gitlab_runner_failed_jobs_total{failure_reason~="runner_system_failure|image_pull_failure", job: "runners-manager", shard: "shared"}[6h])
+          rate(gitlab_runner_failed_jobs_total{failure_reason=~"image_pull_failure|runner_system_failure",job="runners-manager",shard="shared"}[6h])
         )
       )
       or
