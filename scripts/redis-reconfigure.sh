@@ -127,6 +127,13 @@ gitlab_ctl_restart_sentinel() {
   ssh "$fqdn" "sudo gitlab-ctl restart sentinel"
 }
 
+restart_process_exporter() {
+  # restart process-exporter service to ensure metrics are picked up
+  # from the restarted service
+  echo systemctl restart process-exporter
+  ssh "$fqdn" "sudo systemctl restart process-exporter"
+}
+
 reconfigure() {
   export i=$1
   export fqdn="${gitlab_redis_cluster}-$i-db-${gitlab_env}.c.${gitlab_project}.internal"
@@ -179,6 +186,8 @@ reconfigure() {
 
   # check sentinel status
   check_sentinel_quorum
+
+  restart_process_exporter
 
   echo "< reconfigure $fqdn"
 }
