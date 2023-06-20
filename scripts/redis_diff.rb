@@ -4,8 +4,15 @@ require 'optparse'
 require 'redis'
 require 'yaml'
 
-# TODO more detailed instructions on usage
-# Usage: bundle exec ruby redis_diff.rb --migrate --keys=1000
+# This file requires the `redis` and `connection_pool` gems.
+#
+# On a VM node, run the following to setup
+# ```
+# gem install redis -v '~> 4.8.0'
+# gem install connection_pool -v '~> 2.0'
+# ```
+#
+# Usage: ruby redis_diff.rb --migrate --keys=1000
 #
 # Pre-requisite: Create 2 files, source.yml and destination.yml with details of
 # the source and destination redis instances.
@@ -26,6 +33,10 @@ OptionParser.new do |opts|
 
   opts.on("-c", "--cursor=<cursor>", "Cursor to start from") do |cursor|
     options[:cursor] = cursor
+  end
+
+  opts.on("-r", "--rate=<rate>", "Desired rate of keys being migrated per second") do |rate|
+    options[:desired_rate] = rate
   end
 
   # TODO implement concurrency to speed up lookup
@@ -95,17 +106,19 @@ def compare_and_migrate(key, src, dst, migrate)
   !identical
 end
 
+desired_rate = (options[:desired_rate] || 500.0).to_f
 it = options[:cursor] || "0"
 checked = 0
 diffcount = 0
 migrated_count = 0
 
-src_db = ::Redis.new(YAML.load_file('source.yml', symbolize_names: true))
-dest_db = ::Redis.new(YAML.load_file('destination.yml', symbolize_names: true))
+src_db = ::Redis.new(YAML.load_file('source.yml').transform_keys(&:to_sym))
+dest_db = ::Redis.new(YAML.load_file('destination.yml').transform_keys(&:to_sym))
 
 loop do
   it, keys = src_db.scan(it, match: "*")
 
+  start = Time.now
   keys_to_recheck = []
 
   # first pass to compare and migrate keys if not identical
@@ -132,6 +145,9 @@ loop do
   end
 
   checked += keys.size
+  duration = Time.now - start
+  wait = (keys.size / desired_rate) - duration
+  sleep(wait) if wait.positive?
 
   puts "Checked #{keys.size} keys from cursor #{it}"
 
