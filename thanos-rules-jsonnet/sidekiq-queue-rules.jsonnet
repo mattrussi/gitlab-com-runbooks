@@ -132,11 +132,11 @@ local sidekiqThanosAlerts(extraSelector) =
       },
     },
     {
-      alert: 'SidekiqJobsDeferredTooLong',
+      alert: 'SidekiqJobsSkippedTooLong',
       expr: |||
-        sum by (environment, worker)  (
+        sum by (environment, worker, action)  (
           rate(
-            sidekiq_jobs_deferred_total{%(selector)s}[1h]
+            sidekiq_jobs_skipped_total{%(selector)s}[1h]
             )
           )
           > 0
@@ -150,16 +150,16 @@ local sidekiqThanosAlerts(extraSelector) =
         alert_type: 'cause',
       },
       annotations: {
-        title: 'Sidekiq jobs from `{{ $labels.worker }}` are intentionally being deferred for too long',
+        title: 'Sidekiq jobs from `{{ $labels.worker }}` are intentionally being `{{ $labels.action }}` for too long',
         description: |||
-          Sidekiq jobs from `{{ $labels.worker }}` are being deferred indefinitely via feature flag `defer_sidekiq_jobs_<worker_name>`. This feature flag might be enabled during an incident and forgotten
-          to be disabled.
-          Ignore if this is still intentionally left enabled.
+          Sidekiq jobs from `{{ $labels.worker }}` are being `{{ $labels.action }}` indefinitely via feature flag `run_sidekiq_jobs_<worker_name>` or `drop_sidekiq_jobs_<worker_name>`. This feature flag might be used during an incident and forgotten
+          to be removed.
+          Ignore if this is still intentionally left.
 
-          Run `/chatops run feature list --match defer_sidekiq_jobs` to list all enabled feature flags.
+          Run `/chatops run feature list --match run_sidekiq_jobs` and `/chatops run feature list --match drop_sidekiq_jobs` to list currently used feature flags.
         |||,
         grafana_dashboard_id: 'sidekiq-worker-detail',
-        grafana_panel_id: stableIds.hashStableId('jobs-deferred'),
+        grafana_panel_id: stableIds.hashStableId('jobs-skipped'),
         grafana_min_zoom_hours: '6',
         grafana_variables: 'environment,worker',
       },
