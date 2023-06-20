@@ -451,20 +451,20 @@ basic.dashboard(
     ),
   ], startRow=701)
   +
-  layout.rowGrid('Deferred Jobs', [
+  layout.rowGrid('Skipped Jobs', [
     basic.timeseries(
-      stableId='jobs-deferred',
-      title='Jobs Deferred',
-      description='Jobs deferred intentionally via feature flag `defer_sidekiq_jobs_<worker_name>`',
+      stableId='jobs-skipped',
+      title='Jobs Skipped',
+      description='Jobs skipped (dropped/deferred) intentionally via feature flag `drop_sidekiq_jobs_<worker_name>` or `run_sidekiq_jobs_<worker_name>`',
       query=|||
-        sum by (environment, worker)  (
+        sum by (environment, worker, action)  (
           rate(
-            sidekiq_jobs_deferred_total{environment="$environment", worker=~"$worker"}[$__interval]
+            sidekiq_jobs_skipped_total{environment="$environment", worker=~"$worker"}[$__interval]
             )
           )
           > 0
       |||,
-      legendFormat='{{ worker }}',
+      legendFormat='{{ worker }} - {{ action }}',
     ),
   ], startRow=801)
 )
