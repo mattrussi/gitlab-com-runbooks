@@ -1083,7 +1083,7 @@ groups:
       component: workhorse
       tier: sv
       type: ops-gitlab-net
-    expr: "0.001000"
+    expr: "0.005000"
   - record: slo:min:events:gitlab_service_apdex:ratio
     labels:
       tier: db

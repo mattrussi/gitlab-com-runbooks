@@ -122,6 +122,10 @@ metricsCatalog.serviceDefinition({
         are excluded from the apdex score.
       |||,
 
+      monitoringThresholds+: {
+        errorRatio: 0.995,
+      },
+
       local workhorseWebSelector = baseSelector { job: 'gitlab-workhorse' },
 
       apdex: histogramApdex(
