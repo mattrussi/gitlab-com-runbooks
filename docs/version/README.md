@@ -65,7 +65,6 @@
 * [High Number of Overdue Online GC Tasks](../registry/online-gc-high-overdue-tasks.md)
 * [Managing Sentry in Kubernetes](../sentry/sentry-in-kube.md)
 * [Teleport Administration](../teleport/teleport_admin.md)
-* [../uncategorized/about-gitlab-com.md](../uncategorized/about-gitlab-com.md)
 * [Aptly](../uncategorized/aptly.md)
 * [Auto DevOps](../uncategorized/auto-devops.md)
 * [Summary](../uncategorized/cloudsql-data-export.md)
