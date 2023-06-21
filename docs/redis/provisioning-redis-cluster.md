@@ -214,7 +214,7 @@ vault kv put k8s/env/<ENV>/ns/gitlab/redis-cluster-<INSTANCE_TYPE>-rails passwor
 For example,
 
 ```
-vault kv get k8s/env/<ENV>/ns/gitlab/redis-<INSTANCE_TYPE>
+vault kv get k8s/env/<ENV>/ns/gitlab/redis-cluster-<INSTANCE_TYPE>-rails
 
 ======================== Secret Path ========================
 k8s/data/env/gprd/ns/gitlab/redis-cluster-ratelimiting-rails
@@ -246,7 +246,7 @@ gitlab-redis-cluster-<INSTANCE_TYPE>-rails-credential-v1:
     deletionPolicy: Delete
   data:
     - remoteRef:
-        key: env/{{ $env }}/ns/gitlab/redis-cluster-<INSTANCE_TYPE>
+        key: env/{{ $env }}/ns/gitlab/redis-cluster-<INSTANCE_TYPE>-rails
         property: password
         version: "1"
       secretKey: password
