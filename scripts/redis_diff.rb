@@ -31,8 +31,16 @@ OptionParser.new do |opts|
     options[:keys] = number_of_keys
   end
 
+  opts.on("-t", "--type=<number_of_keys>", "Type of keys to check") do |key_type|
+    options[:key_type] = key_type
+  end
+
   opts.on("-c", "--cursor=<cursor>", "Cursor to start from") do |cursor|
     options[:cursor] = cursor
+  end
+
+  opts.on("-p", "--pattern=<pattern>", "Keys to match pattern") do |pattern|
+    options[:match] = pattern
   end
 
   opts.on("-r", "--rate=<rate>", "Desired rate of keys being migrated per second") do |rate|
@@ -115,8 +123,12 @@ migrated_count = 0
 src_db = ::Redis.new(YAML.load_file('source.yml').transform_keys(&:to_sym))
 dest_db = ::Redis.new(YAML.load_file('destination.yml').transform_keys(&:to_sym))
 
+scan_params = { match: "*" }
+scan_params[:type] = options[:key_type] if options[:key_type]
+scan_params[:match] = options[:match] if options[:match]
+
 loop do
-  it, keys = src_db.scan(it, match: "*")
+  it, keys = src_db.scan(it, **scan_params)
 
   start = Time.now
   keys_to_recheck = []
