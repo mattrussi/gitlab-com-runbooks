@@ -37,6 +37,7 @@ separateGlobalRecordingFiles(filesForSeparateSelector) {
     groups:
       saturationRules.generateSaturationRulesGroup(
         saturationResources=saturationResources,
+        extraSourceSelector={ env: 'ops' },
         evaluation='thanos',
         thanosSelfMonitoring=true,
         staticLabels={

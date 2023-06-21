@@ -103,12 +103,9 @@ local resourceSaturationPoint = function(options)
       local maxAggregationLabelsExcludingStaticLabels = std.filter(function(label) !std.objectHas(staticLabels, label), allMaxAggregationLabels);
       local queryFormatConfig = self.queryFormatConfig;
 
-      // Remove any statically defined labels from the selectors, if they are defined
-      local selectorWithoutStaticLabels = if staticLabels == {} then selectorHash else selectors.without(selectorHash, staticLabels);
-
       local preaggregation = self.query % queryFormatConfig {
         rangeInterval: rangeInterval,
-        selector: selectors.serializeHash(selectorWithoutStaticLabels),
+        selector: selectors.serializeHash(selectorHash),
         aggregationLabels: std.join(', ', queryAggregationLabelsExcludingStaticLabels),
       };
 
@@ -172,7 +169,12 @@ local resourceSaturationPoint = function(options)
       };
 
       if std.length(services) > 0 then
-        local selectorHash = oneOfType(services) + extraSelector;
+        local allStaticLabels = self.getStaticLabels() + staticLabels;
+        local typeSelector = selectors.without(oneOfType(services), allStaticLabels);
+        // The extraselector here should take precedence over automatic ones.
+        // For example, we might want to filter for labels in the source metrics that
+        // are overridden by static labels in the recording.
+        local selectorHash = typeSelector + extraSelector;
         local query = definition.getQuery(selectorHash, definition.getBurnRatePeriod(), extraStaticLabels=staticLabels);
 
         {
@@ -257,6 +259,9 @@ local resourceSaturationPoint = function(options)
         labels,
         {}
       );
+      // Don't filter with the static labels included, the static labels will overwrite
+      // anything that is on the source metrics, so won't match the labels on the alert
+      local labelsHashWithoutStaticLabels = selectors.without(labelsHash, self.getStaticLabels());
 
       local stageLabel = labelTaxonomy.getLabelFor(labelTaxonomy.labels.stage, default='');
 
@@ -301,7 +306,7 @@ local resourceSaturationPoint = function(options)
           grafana_panel_id: stableIds.hashStableId('saturation-' + componentName),
           grafana_variables: labelTaxonomy.labelTaxonomySerialized(defaultAlertingLabels),
           grafana_min_zoom_hours: '6',
-          promql_query: definition.getQuery(labelsHash, definition.getBurnRatePeriod(), definition.resourceLabels),
+          promql_query: definition.getQuery(labelsHashWithoutStaticLabels, definition.getBurnRatePeriod(), definition.resourceLabels),
         },
       })],
 

@@ -17,7 +17,7 @@ groups:
         clamp_min(
           clamp_max(
             1 - avg by (type, shard) (
-              rate(node_cpu_seconds_total{mode="idle", type="thanos"}[5m])
+              rate(node_cpu_seconds_total{mode="idle", env="ops",type="thanos"}[5m])
             )
             ,
             1)
@@ -36,9 +36,9 @@ groups:
         clamp_min(
           clamp_max(
             1 - (
-              node_filesystem_files_free{fstype=~"(ext.|xfs)", type="thanos"}
+              node_filesystem_files_free{fstype=~"(ext.|xfs)", env="ops",type="thanos"}
               /
-              node_filesystem_files{fstype=~"(ext.|xfs)", type="thanos"}
+              node_filesystem_files{fstype=~"(ext.|xfs)", env="ops",type="thanos"}
             )
             ,
             1)
@@ -57,7 +57,7 @@ groups:
         clamp_min(
           clamp_max(
             (
-              1 - node_filesystem_avail_bytes{fstype=~"ext.|xfs", type="thanos"} / node_filesystem_size_bytes{fstype=~"ext.|xfs", type="thanos"}
+              1 - node_filesystem_avail_bytes{fstype=~"ext.|xfs", env="ops",type="thanos"} / node_filesystem_size_bytes{fstype=~"ext.|xfs", env="ops",type="thanos"}
             )
             ,
             1)
@@ -76,11 +76,11 @@ groups:
         clamp_min(
           clamp_max(
             sum by (type, shard, fqdn) (
-              go_memstats_alloc_bytes{type="thanos"}
+              go_memstats_alloc_bytes{env="ops",type="thanos"}
             )
             /
             sum by (type, shard, fqdn) (
-              node_memory_MemTotal_bytes{type="thanos"}
+              node_memory_MemTotal_bytes{env="ops",type="thanos"}
             )
             ,
             1)
@@ -99,13 +99,13 @@ groups:
         clamp_min(
           clamp_max(
             sum by (type, shard, pod, container) (
-              rate(container_cpu_usage_seconds_total:labeled{container!="", container!="POD", type="thanos"}[5m])
+              rate(container_cpu_usage_seconds_total:labeled{container!="", container!="POD", env="ops",type="thanos"}[5m])
             )
             /
             sum by(type, shard, pod, container) (
-              container_spec_cpu_quota:labeled{container!="", container!="POD", type="thanos"}
+              container_spec_cpu_quota:labeled{container!="", container!="POD", env="ops",type="thanos"}
               /
-              container_spec_cpu_period:labeled{container!="", container!="POD", type="thanos"}
+              container_spec_cpu_period:labeled{container!="", container!="POD", env="ops",type="thanos"}
             )
             ,
             1)
@@ -123,9 +123,9 @@ groups:
       max by(type, shard) (
         clamp_min(
           clamp_max(
-            container_memory_working_set_bytes:labeled{container!="", container!="POD", type="thanos"}
+            container_memory_working_set_bytes:labeled{container!="", container!="POD", env="ops",type="thanos"}
             /
-            (container_spec_memory_limit_bytes:labeled{container!="", container!="POD", type="thanos"} > 0)
+            (container_spec_memory_limit_bytes:labeled{container!="", container!="POD", env="ops",type="thanos"} > 0)
             ,
             1)
         ,
@@ -142,10 +142,10 @@ groups:
       max by(type, shard) (
         clamp_min(
           clamp_max(
-            go_memstats_alloc_bytes{type="thanos"}
+            go_memstats_alloc_bytes{env="ops",type="thanos"}
             / on(type, shard, cluster, pod) group_left()
             topk by(type, shard, cluster, pod) (1,
-              container_spec_memory_limit_bytes:labeled{container=~"gitlab-pages|gitlab-workhorse|kas|registry|thanos-store",type="thanos"}
+              container_spec_memory_limit_bytes:labeled{container=~"gitlab-pages|gitlab-workhorse|kas|registry|thanos-store",env="ops",type="thanos"}
             )
             ,
             1)
@@ -163,9 +163,9 @@ groups:
       max by(type, shard) (
         clamp_min(
           clamp_max(
-            kube_horizontalpodautoscaler_status_desired_replicas:labeled{type="thanos", shard!~"database-throttled|elasticsearch|gitaly-throttled|urgent-authorized-projects|urgent-other", namespace!~"pubsubbeat"}
+            kube_horizontalpodautoscaler_status_desired_replicas:labeled{env="ops",type="thanos", shard!~"database-throttled|elasticsearch|gitaly-throttled|urgent-authorized-projects|urgent-other", namespace!~"pubsubbeat"}
             /
-            kube_horizontalpodautoscaler_spec_max_replicas:labeled{type="thanos", shard!~"database-throttled|elasticsearch|gitaly-throttled|urgent-authorized-projects|urgent-other", namespace!~"pubsubbeat"}
+            kube_horizontalpodautoscaler_spec_max_replicas:labeled{env="ops",type="thanos", shard!~"database-throttled|elasticsearch|gitaly-throttled|urgent-authorized-projects|urgent-other", namespace!~"pubsubbeat"}
             ,
             1)
         ,
@@ -182,7 +182,7 @@ groups:
       max by(type, shard) (
         clamp_min(
           clamp_max(
-            instance:node_memory_utilization:ratio{type="thanos"} or instance:node_memory_utilisation:ratio{type="thanos"}
+            instance:node_memory_utilization:ratio{env="ops",type="thanos"} or instance:node_memory_utilisation:ratio{env="ops",type="thanos"}
             ,
             1)
         ,
@@ -199,9 +199,9 @@ groups:
       max by(type, shard) (
         clamp_min(
           clamp_max(
-            max_over_time(node_nf_conntrack_entries{type="thanos"}[1m])
+            max_over_time(node_nf_conntrack_entries{env="ops",type="thanos"}[1m])
             /
-            node_nf_conntrack_entries_limit{type="thanos"}
+            node_nf_conntrack_entries_limit{env="ops",type="thanos"}
             ,
             1)
         ,
@@ -218,7 +218,7 @@ groups:
       max by(type, shard) (
         clamp_min(
           clamp_max(
-            avg without (cpu) (rate(node_schedstat_waiting_seconds_total{type="thanos"}[1h]))
+            avg without (cpu) (rate(node_schedstat_waiting_seconds_total{env="ops",type="thanos"}[1h]))
             ,
             1)
         ,
@@ -236,15 +236,15 @@ groups:
         clamp_min(
           clamp_max(
             (
-              process_open_fds{type="thanos"}
+              process_open_fds{env="ops",type="thanos"}
               /
-              process_max_fds{type="thanos"}
+              process_max_fds{env="ops",type="thanos"}
             )
             or
             (
-              ruby_file_descriptors{type="thanos"}
+              ruby_file_descriptors{env="ops",type="thanos"}
               /
-              ruby_process_max_fds{type="thanos"}
+              ruby_process_max_fds{env="ops",type="thanos"}
             )
             ,
             1)
@@ -263,7 +263,7 @@ groups:
         clamp_min(
           clamp_max(
             1 - avg by (type, shard, shard) (
-              rate(node_cpu_seconds_total{mode="idle", type="thanos"}[5m])
+              rate(node_cpu_seconds_total{mode="idle", env="ops",type="thanos"}[5m])
             )
             ,
             1)
@@ -281,7 +281,7 @@ groups:
       max by(type, shard) (
         clamp_min(
           clamp_max(
-            avg without(cpu, mode) (1 - rate(node_cpu_seconds_total{mode="idle", type="thanos"}[5m]))
+            avg without(cpu, mode) (1 - rate(node_cpu_seconds_total{mode="idle", env="ops",type="thanos"}[5m]))
             ,
             1)
         ,
