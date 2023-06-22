@@ -320,12 +320,12 @@ groups:
       (
         (
           gitlab_component_errors:ratio_1h{component="external_dependency",env="ops",monitor="global",type="sidekiq"}
-          > (14.4 * 0.800000)
+          > (14.4 * 0.100000)
         )
         and
         (
           gitlab_component_errors:ratio_5m{component="external_dependency",env="ops",monitor="global",type="sidekiq"}
-          > (14.4 * 0.800000)
+          > (14.4 * 0.100000)
         )
       )
       and on(env,environment,tier,type,stage,component)
@@ -367,12 +367,12 @@ groups:
       (
         (
           gitlab_component_errors:ratio_6h{component="external_dependency",env="ops",monitor="global",type="sidekiq"}
-          > (6 * 0.800000)
+          > (6 * 0.100000)
         )
         and
         (
           gitlab_component_errors:ratio_30m{component="external_dependency",env="ops",monitor="global",type="sidekiq"}
-          > (6 * 0.800000)
+          > (6 * 0.100000)
         )
       )
       and on(env,environment,tier,type,stage,component)

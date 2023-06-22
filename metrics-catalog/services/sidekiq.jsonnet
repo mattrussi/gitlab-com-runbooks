@@ -227,7 +227,7 @@ metricsCatalog.serviceDefinition({
       ),
 
       monitoringThresholds+: {
-        errorRatio: 0.2,
+        errorRatio: 0.9,
       },
 
       significantLabels: ['feature_category', 'queue', 'urgency', 'worker'],
