@@ -21,6 +21,7 @@ local filesForService(service) =
           service,
           componentAggregationSet=aggregationSets.promSourceSLIs,
           nodeAggregationSet=aggregationSets.promSourceNodeComponentSLIs,
+          shardAggregationSet=aggregationSets.promSourceShardComponentSLIs,
         )
       ),
   };

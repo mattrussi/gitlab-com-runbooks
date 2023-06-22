@@ -2,14 +2,13 @@ local intervalForDuration = import './interval-for-duration.libsonnet';
 local recordingRuleRegistry = import './recording-rule-registry.libsonnet';
 local recordingRules = import 'recording-rules/recording-rules.libsonnet';
 
-local recordingRuleGroupsForServiceForBurnRate(serviceDefinition, componentAggregationSet, nodeAggregationSet, burnRate) =
+local recordingRuleGroupsForServiceForBurnRate(serviceDefinition, componentAggregationSet, nodeAggregationSet, shardAggregationSet, burnRate) =
   local rulesetGenerators =
     [
       recordingRules.sliRecordingRulesSetGenerator(burnRate, recordingRuleRegistry),
       recordingRules.componentMetricsRuleSetGenerator(
         burnRate=burnRate,
         aggregationSet=componentAggregationSet,
-        respectShardLevelMonitoring=true,
       ),
       recordingRules.extraRecordingRuleSetGenerator(burnRate),
     ]
@@ -20,7 +19,18 @@ local recordingRuleGroupsForServiceForBurnRate(serviceDefinition, componentAggre
           recordingRules.componentMetricsRuleSetGenerator(
             burnRate=burnRate,
             aggregationSet=nodeAggregationSet,
-            respectShardLevelMonitoring=false,
+          ),
+        ]
+      else
+        []
+    )
+    +
+    (
+      if serviceDefinition.shardLevelMonitoring then
+        [
+          recordingRules.componentMetricsRuleSetGenerator(
+            burnRate=burnRate,
+            aggregationSet=shardAggregationSet,
           ),
         ]
       else
@@ -38,7 +48,7 @@ local recordingRuleGroupsForServiceForBurnRate(serviceDefinition, componentAggre
   };
 
 local featureCategoryRecordingRuleGroupsForService(serviceDefinition, aggregationSet, burnRate) =
-  local generator = recordingRules.componentMetricsRuleSetGenerator(burnRate, aggregationSet, respectShardLevelMonitoring=false);
+  local generator = recordingRules.componentMetricsRuleSetGenerator(burnRate, aggregationSet);
   local indicators = std.filter(function(indicator) indicator.hasFeatureCategory(), serviceDefinition.listServiceLevelIndicators());
   {
     name: 'Prometheus Intermediate Metrics per feature: %s - burn-rate %s' % [serviceDefinition.type, burnRate],
@@ -52,13 +62,13 @@ local featureCategoryRecordingRuleGroupsForService(serviceDefinition, aggregatio
    * These are the first level aggregation, for normalizing source metrics
    * into a consistent format
    */
-  recordingRuleGroupsForService(serviceDefinition, componentAggregationSet, nodeAggregationSet)::
+  recordingRuleGroupsForService(serviceDefinition, componentAggregationSet, nodeAggregationSet, shardAggregationSet)::
     local componentMappingRuleSetGenerator = recordingRules.componentMappingRuleSetGenerator();
 
     local burnRates = componentAggregationSet.getBurnRates();
 
     [
-      recordingRuleGroupsForServiceForBurnRate(serviceDefinition, componentAggregationSet, nodeAggregationSet, burnRate)
+      recordingRuleGroupsForServiceForBurnRate(serviceDefinition, componentAggregationSet, nodeAggregationSet, shardAggregationSet, burnRate)
       for burnRate in burnRates
     ]
     +

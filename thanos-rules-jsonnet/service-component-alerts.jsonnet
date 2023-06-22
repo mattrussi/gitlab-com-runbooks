@@ -42,6 +42,16 @@ local alertDescriptors = [{
   trafficCessationSelector: {},
   minimumSamplesForTrafficCessation: minimumSamplesForTrafficCessation,
 }, {
+  predicate: function(service) service.shardLevelMonitoring,
+  alertSuffix: 'SingleNode',
+  alertTitleTemplate: 'The %(sliName)s SLI of the %(serviceType)s service on shard `{{ $labels.shard }}`',
+  alertExtraDetail: 'Since the `{{ $labels.type }}` service is not fully redundant, SLI violations on a single shard may represent a user-impacting service degradation.',
+  aggregationSet: aggregationSets.shardComponentSLIs,
+  minimumSamplesForMonitoring: minimumSamplesForMonitoring,
+  alertForDuration: nodeAlertWaitPeriod,
+  trafficCessationSelector: {},
+  minimumSamplesForTrafficCessation: minimumSamplesForTrafficCessation,
+}, {
   predicate: function(service) service.regional,
   alertSuffix: 'Regional',
   alertTitleTemplate: 'The %(sliName)s SLI of the %(serviceType)s service in region `{{ $labels.region }}`',

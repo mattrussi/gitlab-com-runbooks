@@ -17,6 +17,7 @@ metricsCatalog.serviceDefinition({
   type: 'sidekiq',
   tier: 'sv',
   tags: ['rails'],
+  shardLevelMonitoring: true,
 
   contractualThresholds: {
     apdexRatio: 0.9,
@@ -209,8 +210,7 @@ metricsCatalog.serviceDefinition({
     severity: 's3',  // Don't page SREs for this SLI
   }) + sliLibrary.get('sidekiq_execution').generateServiceLevelIndicator(baseSelector, {
     serviceAggregation: false,  // Don't add this to the request rate of the service
-    severity: 's2',  // page SREs for this SLI
-    shardLevelMonitoring: true,  // Aggregated by shard level
+    severity: 's4',  // page SREs for this SLI
   }),
 
   // Special per-worker recording rules
