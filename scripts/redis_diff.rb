@@ -1,5 +1,6 @@
 # frozen_string_literal: true
 
+require 'connection_pool'
 require 'optparse'
 require 'redis'
 require 'yaml'
@@ -43,63 +44,76 @@ OptionParser.new do |opts|
     options[:match] = pattern
   end
 
-  opts.on("-r", "--rate=<rate>", "Desired rate of keys being migrated per second") do |rate|
-    options[:desired_rate] = rate
+  opts.on("-r", "--rate=<rate>", "Maximum allowed rate of keys being migrated per second") do |rate|
+    options[:max_allowed_rate] = rate
   end
 
-  # TODO implement concurrency to speed up lookup
-  opts.on("-c", "--concurrency=<nbr>", "Number of keys to check") do |nbr|
-    options[:concurrency] = nbr
+  opts.on("-ps", "--pool_size=<nbr>", "Redis connection pool size") do |nbr|
+    options[:pool_size] = nbr
+  end
+
+  opts.on("-b", "--batch=<nbr>", "SCAN count, controls number of threads") do |nbr|
+    options[:batch] = nbr
+  end
+
+  opts.on("-i", "--ignore=<ignore_pattern>", "Key pattern to ignore") do |ignore_pattern|
+    options[:ignore_pattern] = ignore_pattern
   end
 end.parse!
 
 # Ensure the ttl is also migrated for a key
 def migrate_ttl(src, dst, key)
-  ttl = src.ttl(key)
+  ttl = src.with { |c| c.ttl(key) }
   return if ttl == -1 # key does not have associated ttl
-  return dst.del(key) if ttl == -2 # expired in src db
+  return dst.with { |c| c.del(key) } if ttl == -2 # expired in src db
 
-  dst.expire(key, ttl)
+  dst.with { |c| c.expire(key, ttl) }
 end
 
 # Strings
 def compare_string(src, dst, key)
-  src.get(key) == dst.get(key)
+  src.with { |c| c.get(key) } == dst.with { |c| c.get(key) }
 end
 
 def migrate_string(src, dst, key)
-  dst.set(key, src.get(key))
+  dst.with { |c| c.set(key, src.with { |c| c.get(key) }) }
   migrate_ttl(src, dst, key)
 end
 
 # Hash
 def compare_hash(src, dst, key)
-  src.hgetall(key) == dst.hgetall(key)
+  src.with { |c| c.hgetall(key) } == dst.with { |c| c.hgetall(key) }
 end
 
 def migrate_hash(src, dst, key)
-  dst.hset(key, src.hgetall(key))
+  hash_details = src.with { |c| c.hgetall(key) }
+  dst.with { |c| c.hset(key, hash_details) }
   migrate_ttl(src, dst, key)
 end
 
 # Set
 def compare_set(src, dst, key)
-  src_list = src.smembers(key)
-  dst_list = dst.smembers(key)
+  src_list = src.with { |c| c.smembers(key) }
+  dst_list = dst.with { |c| c.smembers(key) }
 
   src_list & dst_list == src_list
 end
 
 def migrate_set(src, dst, key)
-  dst.sadd(key, src.smembers(key))
+  members = src.with { |c| c.smembers(key) }
+  dst.with { |c| c.sadd(key, members) }
   migrate_ttl(src, dst, key)
 end
 
 # TODO list, sorted sets
 
 def compare_and_migrate(key, src, dst, migrate)
-  ktype = src.type(key)
+  ktype = src.with { |r| r.type(key) }
+
+  return nil unless %w[hash set string].include?(ktype)
+
   identical = send("compare_#{ktype}", src, dst, key) # rubocop:disable GitlabSecurity/PublicSend
+
   unless identical
     puts "key #{key} differs"
 
@@ -114,52 +128,91 @@ def compare_and_migrate(key, src, dst, migrate)
   !identical
 end
 
-desired_rate = (options[:desired_rate] || 500.0).to_f
-it = options[:cursor] || "0"
+def src_redis
+  puts "creating src_redis object"
+  ::Redis.new(YAML.load_file('source.yml').transform_keys(&:to_sym))
+end
+
+def dest_redis
+  puts "creating dest_redis object"
+  ::Redis.new(YAML.load_file('destination.yml').transform_keys(&:to_sym))
+end
+
 checked = 0
 diffcount = 0
 migrated_count = 0
+unsupported_count = 0
+ignored_count = 0
 
-src_db = ::Redis.new(YAML.load_file('source.yml').transform_keys(&:to_sym))
-dest_db = ::Redis.new(YAML.load_file('destination.yml').transform_keys(&:to_sym))
+max_allowed_rate = (options[:max_allowed_rate] || 500.0).to_f
+it = options[:cursor] || "0"
+batch = (options[:batch] || 10).to_i
+pool_size = (options[:pool_size] || 10).to_i
 
-scan_params = { match: "*" }
+src_db = ConnectionPool.new(size: pool_size, timeout: 60) { src_redis }
+dest_db = ConnectionPool.new(size: pool_size, timeout: 60) { dest_redis }
+
+scan_params = { match: "*", count: batch }
 scan_params[:type] = options[:key_type] if options[:key_type]
 scan_params[:match] = options[:match] if options[:match]
 
+ignore_regexp = /#{options[:ignore_pattern]}/ if options[:ignore_pattern]
+
 loop do
-  it, keys = src_db.scan(it, **scan_params)
+  it, keys = src_db.with { |r| r.scan(it, **scan_params) }
+
+  puts "Scanned #{keys.size}"
 
   start = Time.now
   keys_to_recheck = []
 
+  threads = []
   # first pass to compare and migrate keys if not identical
   keys.each_with_index do |key, idx|
-    if compare_and_migrate(key, src_db, dest_db, options[:migrate])
-      diffcount += 1
-      keys_to_recheck << idx
+    if ignore_regexp && key.match?(ignore_regexp)
+      ignored_count += 1
+      next
+    end
+
+    threads << Thread.new do
+      result = compare_and_migrate(key, src_db, dest_db, options[:migrate])
+
+      unsupported_count += 1 if result.nil?
+
+      if result
+        diffcount += 1
+        keys_to_recheck << idx
+      end
     end
   end
+  threads.each(&:join)
 
+  threads = []
   # perform a 2nd iteraation to recheck keys to confirm convergence
   # instead of immediately checking in the above loop
   if options[:migrate]
     keys.each_with_index do |key, idx|
       next unless keys_to_recheck.include?(idx)
 
-      if !compare_and_migrate(key, src_db, dest_db, false)
-        migrated_count += 1
-      else
-        # TODO write persistent mismatches into a tmp file?
-        puts "Failed to migrate #{key}"
+      threads << Thread.new do
+        if !compare_and_migrate(key, src_db, dest_db, false)
+          migrated_count += 1
+        else
+          # TODO write persistent mismatches into a tmp file?
+          puts "Failed to migrate #{key}"
+        end
       end
     end
+    threads.each(&:join)
   end
 
   checked += keys.size
   duration = Time.now - start
-  wait = (keys.size / desired_rate) - duration
-  sleep(wait) if wait.positive?
+  wait = (keys.size / max_allowed_rate) - duration
+  if wait.positive?
+    puts "Processing at #{keys.size / duration} ops per second. Sleeping for #{wait} to maintain max of #{max_allowed_rate}"
+    sleep(wait)
+  end
 
   puts "Checked #{keys.size} keys from cursor #{it}"
 
@@ -169,4 +222,6 @@ end
 
 puts "Checked #{checked}"
 puts "#{diffcount} different keys"
+puts "#{unsupported_count} unsupported type keys"
+puts "#{ignored_count} ignored keys"
 puts "Migrated #{migrated_count} keys successfully"
