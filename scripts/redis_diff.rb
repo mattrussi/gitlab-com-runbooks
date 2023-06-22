@@ -55,6 +55,10 @@ OptionParser.new do |opts|
   opts.on("-b", "--batch=<nbr>", "SCAN count, controls number of threads") do |nbr|
     options[:batch] = nbr
   end
+
+  opts.on("-i", "--ignore=<ignore_pattern>", "Key pattern to ignore") do |ignore_pattern|
+    options[:ignore_pattern] = ignore_pattern
+  end
 end.parse!
 
 # Ensure the ttl is also migrated for a key
@@ -138,6 +142,7 @@ checked = 0
 diffcount = 0
 migrated_count = 0
 unsupported_count = 0
+ignored_count = 0
 
 max_allowed_rate = (options[:max_allowed_rate] || 500.0).to_f
 it = options[:cursor] || "0"
@@ -151,6 +156,8 @@ scan_params = { match: "*", count: batch }
 scan_params[:type] = options[:key_type] if options[:key_type]
 scan_params[:match] = options[:match] if options[:match]
 
+ignore_regexp = /#{options[:ignore_pattern]}/ if options[:ignore_pattern]
+
 loop do
   it, keys = src_db.with { |r| r.scan(it, **scan_params) }
 
@@ -162,6 +169,11 @@ loop do
   threads = []
   # first pass to compare and migrate keys if not identical
   keys.each_with_index do |key, idx|
+    if ignore_regexp && key.match?(ignore_regexp)
+      ignored_count += 1
+      next
+    end
+
     threads << Thread.new do
       result = compare_and_migrate(key, src_db, dest_db, options[:migrate])
 
@@ -211,4 +223,5 @@ end
 puts "Checked #{checked}"
 puts "#{diffcount} different keys"
 puts "#{unsupported_count} unsupported type keys"
+puts "#{ignored_count} ignored keys"
 puts "Migrated #{migrated_count} keys successfully"
