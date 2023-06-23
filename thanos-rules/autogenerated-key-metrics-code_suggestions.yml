@@ -14,7 +14,7 @@ groups:
     expr: |
       (
         sum by (env,environment) (
-          rate(nginx_ingress_controller_request_duration_seconds_bucket{container="controller",le="5",path!="/",status!~"4.*|5.*",type="code_suggestions"}[1m])
+          rate(nginx_ingress_controller_request_duration_seconds_bucket{container="controller",le="2.5",path!="/",status!~"4.*|5.*",type="code_suggestions"}[1m])
         )
         +
         sum by (env,environment) (
@@ -68,9 +68,17 @@ groups:
       tier: sv
       type: code_suggestions
     expr: |
-      sum by (env,environment) (
-        rate(http_request_duration_seconds_bucket{container="model-gateway",le="10.0",status!~"4xx|5xx",type="code_suggestions"}[1m])
+      (
+        sum by (env,environment) (
+          rate(http_request_duration_seconds_bucket{container="model-gateway",le="2.5",status!~"4xx|5xx",type="code_suggestions"}[1m])
+        )
+        +
+        sum by (env,environment) (
+          rate(http_request_duration_seconds_bucket{container="model-gateway",le="10.0",status!~"4xx|5xx",type="code_suggestions"}[1m])
+        )
       )
+      /
+      2
   - record: gitlab_component_apdex:weight:score
     labels:
       component: model_gateway
@@ -226,7 +234,7 @@ groups:
     expr: |
       (
         sum by (env,environment) (
-          rate(nginx_ingress_controller_request_duration_seconds_bucket{container="controller",le="5",path!="/",status!~"4.*|5.*",type="code_suggestions"}[5m])
+          rate(nginx_ingress_controller_request_duration_seconds_bucket{container="controller",le="2.5",path!="/",status!~"4.*|5.*",type="code_suggestions"}[5m])
         )
         +
         sum by (env,environment) (
@@ -280,9 +288,17 @@ groups:
       tier: sv
       type: code_suggestions
     expr: |
-      sum by (env,environment) (
-        rate(http_request_duration_seconds_bucket{container="model-gateway",le="10.0",status!~"4xx|5xx",type="code_suggestions"}[5m])
+      (
+        sum by (env,environment) (
+          rate(http_request_duration_seconds_bucket{container="model-gateway",le="2.5",status!~"4xx|5xx",type="code_suggestions"}[5m])
+        )
+        +
+        sum by (env,environment) (
+          rate(http_request_duration_seconds_bucket{container="model-gateway",le="10.0",status!~"4xx|5xx",type="code_suggestions"}[5m])
+        )
       )
+      /
+      2
   - record: gitlab_component_apdex:weight:score_5m
     labels:
       component: model_gateway
@@ -438,7 +454,7 @@ groups:
     expr: |
       (
         sum by (env,environment) (
-          rate(nginx_ingress_controller_request_duration_seconds_bucket{container="controller",le="5",path!="/",status!~"4.*|5.*",type="code_suggestions"}[30m])
+          rate(nginx_ingress_controller_request_duration_seconds_bucket{container="controller",le="2.5",path!="/",status!~"4.*|5.*",type="code_suggestions"}[30m])
         )
         +
         sum by (env,environment) (
@@ -492,9 +508,17 @@ groups:
       tier: sv
       type: code_suggestions
     expr: |
-      sum by (env,environment) (
-        rate(http_request_duration_seconds_bucket{container="model-gateway",le="10.0",status!~"4xx|5xx",type="code_suggestions"}[30m])
+      (
+        sum by (env,environment) (
+          rate(http_request_duration_seconds_bucket{container="model-gateway",le="2.5",status!~"4xx|5xx",type="code_suggestions"}[30m])
+        )
+        +
+        sum by (env,environment) (
+          rate(http_request_duration_seconds_bucket{container="model-gateway",le="10.0",status!~"4xx|5xx",type="code_suggestions"}[30m])
+        )
       )
+      /
+      2
   - record: gitlab_component_apdex:weight:score_30m
     labels:
       component: model_gateway
@@ -650,7 +674,7 @@ groups:
     expr: |
       (
         sum by (env,environment) (
-          rate(nginx_ingress_controller_request_duration_seconds_bucket{container="controller",le="5",path!="/",status!~"4.*|5.*",type="code_suggestions"}[1h])
+          rate(nginx_ingress_controller_request_duration_seconds_bucket{container="controller",le="2.5",path!="/",status!~"4.*|5.*",type="code_suggestions"}[1h])
         )
         +
         sum by (env,environment) (
@@ -704,9 +728,17 @@ groups:
       tier: sv
       type: code_suggestions
     expr: |
-      sum by (env,environment) (
-        rate(http_request_duration_seconds_bucket{container="model-gateway",le="10.0",status!~"4xx|5xx",type="code_suggestions"}[1h])
+      (
+        sum by (env,environment) (
+          rate(http_request_duration_seconds_bucket{container="model-gateway",le="2.5",status!~"4xx|5xx",type="code_suggestions"}[1h])
+        )
+        +
+        sum by (env,environment) (
+          rate(http_request_duration_seconds_bucket{container="model-gateway",le="10.0",status!~"4xx|5xx",type="code_suggestions"}[1h])
+        )
       )
+      /
+      2
   - record: gitlab_component_apdex:weight:score_1h
     labels:
       component: model_gateway
@@ -862,7 +894,7 @@ groups:
     expr: |
       (
         sum by (env,environment) (
-          rate(nginx_ingress_controller_request_duration_seconds_bucket{container="controller",le="5",path!="/",status!~"4.*|5.*",type="code_suggestions"}[6h])
+          rate(nginx_ingress_controller_request_duration_seconds_bucket{container="controller",le="2.5",path!="/",status!~"4.*|5.*",type="code_suggestions"}[6h])
         )
         +
         sum by (env,environment) (
@@ -916,9 +948,17 @@ groups:
       tier: sv
       type: code_suggestions
     expr: |
-      sum by (env,environment) (
-        rate(http_request_duration_seconds_bucket{container="model-gateway",le="10.0",status!~"4xx|5xx",type="code_suggestions"}[6h])
+      (
+        sum by (env,environment) (
+          rate(http_request_duration_seconds_bucket{container="model-gateway",le="2.5",status!~"4xx|5xx",type="code_suggestions"}[6h])
+        )
+        +
+        sum by (env,environment) (
+          rate(http_request_duration_seconds_bucket{container="model-gateway",le="10.0",status!~"4xx|5xx",type="code_suggestions"}[6h])
+        )
       )
+      /
+      2
   - record: gitlab_component_apdex:weight:score_6h
     labels:
       component: model_gateway
@@ -1070,7 +1110,7 @@ groups:
       component: ingress
       global_aggregation: "yes"
       regional_aggregation: "no"
-      service_aggregation: "no"
+      service_aggregation: "yes"
       tier: sv
       type: code_suggestions
     expr: "1"
@@ -1079,7 +1119,7 @@ groups:
       component: model_gateway
       global_aggregation: "yes"
       regional_aggregation: "no"
-      service_aggregation: "yes"
+      service_aggregation: "no"
       tier: sv
       type: code_suggestions
     expr: "1"
