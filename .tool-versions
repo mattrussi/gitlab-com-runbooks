@@ -16,5 +16,5 @@ shellcheck 0.9.0 # datasource=github-releases depName=koalaman/shellcheck
 shfmt 3.6.0 # datasource=github-releases depName=mvdan/sh
 terraform 1.5.0 # datasource=github-releases depName=hashicorp/terraform
 thanos 0.26.0 # datasource=github-releases depName=thanos-io/thanos
-vault 1.13.3 # datasource=github-releases depName=hashicorp/vault
+vault 1.14.0 # datasource=github-releases depName=hashicorp/vault
 yq 4.34.1 # datasource=github-releases depName=mikefarah/yq
