@@ -46,6 +46,11 @@ local es_query = {
                     'json.class': 'PostReceive',
                   },
                 },
+                {
+                  match_phrase: {
+                    'json.exception.message': 'Integrations::ExecuteWorker job exceeds payload size limit',
+                  },
+                },
               ],
             },
           },
