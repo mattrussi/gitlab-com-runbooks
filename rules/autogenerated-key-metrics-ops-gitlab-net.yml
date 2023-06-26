@@ -6,17 +6,17 @@ groups:
   rules:
   - record: sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate1m
     expr: |
-      sum by (environment,feature_category,job,le,queue,shard,stage,tier,type,urgency,worker) (
+      sum by (environment,external_dependencies,feature_category,job,le,queue,shard,stage,tier,type,urgency,worker) (
         rate(sidekiq_jobs_completion_seconds_bucket[1m])
       )
   - record: sli_aggregations:sidekiq_jobs_queue_duration_seconds_bucket_rate1m
     expr: |
-      sum by (environment,feature_category,job,le,queue,shard,stage,tier,type,urgency,worker) (
+      sum by (environment,external_dependencies,feature_category,job,le,queue,shard,stage,tier,type,urgency,worker) (
         rate(sidekiq_jobs_queue_duration_seconds_bucket[1m])
       )
   - record: sli_aggregations:sidekiq_jobs_failed_total_rate1m
     expr: |
-      sum by (environment,feature_category,job,queue,shard,stage,tier,type,urgency,worker) (
+      sum by (environment,external_dependencies,feature_category,job,queue,shard,stage,tier,type,urgency,worker) (
         rate(sidekiq_jobs_failed_total[1m])
       )
   - record: gitlab_component_apdex:success:rate
@@ -472,17 +472,17 @@ groups:
   rules:
   - record: sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate5m
     expr: |
-      sum by (environment,feature_category,job,le,queue,shard,stage,tier,type,urgency,worker) (
+      sum by (environment,external_dependencies,feature_category,job,le,queue,shard,stage,tier,type,urgency,worker) (
         rate(sidekiq_jobs_completion_seconds_bucket[5m])
       )
   - record: sli_aggregations:sidekiq_jobs_queue_duration_seconds_bucket_rate5m
     expr: |
-      sum by (environment,feature_category,job,le,queue,shard,stage,tier,type,urgency,worker) (
+      sum by (environment,external_dependencies,feature_category,job,le,queue,shard,stage,tier,type,urgency,worker) (
         rate(sidekiq_jobs_queue_duration_seconds_bucket[5m])
       )
   - record: sli_aggregations:sidekiq_jobs_failed_total_rate5m
     expr: |
-      sum by (environment,feature_category,job,queue,shard,stage,tier,type,urgency,worker) (
+      sum by (environment,external_dependencies,feature_category,job,queue,shard,stage,tier,type,urgency,worker) (
         rate(sidekiq_jobs_failed_total[5m])
       )
   - record: gitlab_component_apdex:success:rate_5m
@@ -938,17 +938,17 @@ groups:
   rules:
   - record: sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate30m
     expr: |
-      sum by (environment,feature_category,job,le,queue,shard,stage,tier,type,urgency,worker) (
+      sum by (environment,external_dependencies,feature_category,job,le,queue,shard,stage,tier,type,urgency,worker) (
         rate(sidekiq_jobs_completion_seconds_bucket[30m])
       )
   - record: sli_aggregations:sidekiq_jobs_queue_duration_seconds_bucket_rate30m
     expr: |
-      sum by (environment,feature_category,job,le,queue,shard,stage,tier,type,urgency,worker) (
+      sum by (environment,external_dependencies,feature_category,job,le,queue,shard,stage,tier,type,urgency,worker) (
         rate(sidekiq_jobs_queue_duration_seconds_bucket[30m])
       )
   - record: sli_aggregations:sidekiq_jobs_failed_total_rate30m
     expr: |
-      sum by (environment,feature_category,job,queue,shard,stage,tier,type,urgency,worker) (
+      sum by (environment,external_dependencies,feature_category,job,queue,shard,stage,tier,type,urgency,worker) (
         rate(sidekiq_jobs_failed_total[30m])
       )
   - record: gitlab_component_apdex:success:rate_30m
@@ -1404,17 +1404,17 @@ groups:
   rules:
   - record: sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate1h
     expr: |
-      sum by (environment,feature_category,job,le,queue,shard,stage,tier,type,urgency,worker) (
+      sum by (environment,external_dependencies,feature_category,job,le,queue,shard,stage,tier,type,urgency,worker) (
         rate(sidekiq_jobs_completion_seconds_bucket[1h])
       )
   - record: sli_aggregations:sidekiq_jobs_queue_duration_seconds_bucket_rate1h
     expr: |
-      sum by (environment,feature_category,job,le,queue,shard,stage,tier,type,urgency,worker) (
+      sum by (environment,external_dependencies,feature_category,job,le,queue,shard,stage,tier,type,urgency,worker) (
         rate(sidekiq_jobs_queue_duration_seconds_bucket[1h])
       )
   - record: sli_aggregations:sidekiq_jobs_failed_total_rate1h
     expr: |
-      sum by (environment,feature_category,job,queue,shard,stage,tier,type,urgency,worker) (
+      sum by (environment,external_dependencies,feature_category,job,queue,shard,stage,tier,type,urgency,worker) (
         rate(sidekiq_jobs_failed_total[1h])
       )
   - record: gitlab_component_apdex:success:rate_1h
@@ -1875,6 +1875,21 @@ groups:
 - name: 'Component-Level SLIs: ops-gitlab-net - 6h burn-rate'
   interval: 2m
   rules:
+  - record: sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate6h
+    expr: |
+      sum by (environment,external_dependencies,feature_category,job,le,queue,shard,stage,tier,type,urgency,worker) (
+        rate(sidekiq_jobs_completion_seconds_bucket[6h])
+      )
+  - record: sli_aggregations:sidekiq_jobs_queue_duration_seconds_bucket_rate6h
+    expr: |
+      sum by (environment,external_dependencies,feature_category,job,le,queue,shard,stage,tier,type,urgency,worker) (
+        rate(sidekiq_jobs_queue_duration_seconds_bucket[6h])
+      )
+  - record: sli_aggregations:sidekiq_jobs_failed_total_rate6h
+    expr: |
+      sum by (environment,external_dependencies,feature_category,job,queue,shard,stage,tier,type,urgency,worker) (
+        rate(sidekiq_jobs_failed_total[6h])
+      )
   - record: gitlab_component_apdex:success:rate_6h
     labels:
       component: gitlab_sshd
