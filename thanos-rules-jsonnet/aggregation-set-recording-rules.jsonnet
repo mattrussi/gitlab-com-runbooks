@@ -120,12 +120,44 @@ local filesForSeparateSelector(selector) = {
       ),
     ),
 
+
+  local services = (import 'gitlab-metrics-config.libsonnet').monitoredServices,
+  local dangerouslyThanosEvaluatedServices = std.filter(
+    function(service) service.dangerouslyThanosEvaluated && service.hasFeatureCategorySLIs(),
+    services
+  ),
+  local thanosEvaluatedServiceNames = std.map(function(s) s.type, dangerouslyThanosEvaluatedServices),
+
+  'globally-aggregated-service-component-stage-group-metrics':
+    outputPromYaml(
+      transformRuleGroups(
+        sourceAggregationSet=aggregationSets.featureCategorySLIs,
+        targetAggregationSet=aggregationSets.serviceComponentStageGroupSLIs,
+        extraSourceSelector=selector {
+          type: { oneOf: thanosEvaluatedServiceNames },
+        },
+        extrasForGroup={ partial_response_strategy: 'abort' },
+      ),
+    ),
+
   'aggregated-stage-group-metrics':
     outputPromYaml(
       transformRuleGroups(
         sourceAggregationSet=aggregationSets.featureCategorySourceSLIs,
         targetAggregationSet=aggregationSets.stageGroupSLIs,
         extraSourceSelector=selector,
+        extrasForGroup={ partial_response_strategy: 'abort' },
+      ),
+    ),
+
+  'globally-aggregated-stage-group-metrics':
+    outputPromYaml(
+      transformRuleGroups(
+        sourceAggregationSet=aggregationSets.featureCategorySLIs,
+        targetAggregationSet=aggregationSets.stageGroupSLIs,
+        extraSourceSelector=selector {
+          type: { oneOf: thanosEvaluatedServiceNames },
+        },
         extrasForGroup={ partial_response_strategy: 'abort' },
       ),
     ),
