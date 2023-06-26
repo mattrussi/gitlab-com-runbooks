@@ -23,7 +23,17 @@ local filesForService(service) =
           nodeAggregationSet=aggregationSets.promSourceNodeComponentSLIs,
         )
       ),
-  };
+  } + if service.hasFeatureCategorySLIs() then
+    {
+      ['feature-category-metrics-%s.yml' % [service.type]]:
+        outputPromYaml(
+          prometheusServiceGroupGenerator.featureCategoryRecordingRuleGroupsForService(
+            service,
+            aggregationSet=aggregationSets.featureCategorySLIs,
+          )
+        ),
+    }
+  else {};
 
 /**
  * The source SLI recording rules are each kept in their own files, generated from this
