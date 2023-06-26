@@ -61,6 +61,7 @@ local getTrafficCessationAlertSelector(service, sli, alertDescriptor) =
 
 // Generates traffic cessation alerts for a service/sli/alertDescriptor combination
 local generateTrafficCessationAlerts(service, sli, alertDescriptor, trafficCessationAlertSelector) =
+  local shardLevelMonitoring = sli.hasShardLevelMonitoring();
   local aggregationSet = alertDescriptor.aggregationSet;
 
   // Returns burn rate periods, in order of ascending duration

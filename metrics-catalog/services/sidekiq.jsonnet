@@ -17,6 +17,7 @@ metricsCatalog.serviceDefinition({
   type: 'sidekiq',
   tier: 'sv',
   tags: ['rails'],
+  shardLevelMonitoring: true,
 
   contractualThresholds: {
     apdexRatio: 0.9,
@@ -62,7 +63,7 @@ metricsCatalog.serviceDefinition({
     'sidekiq_jobs_completion_seconds_bucket',
     'sidekiq_jobs_queue_duration_seconds_bucket',
     'sidekiq_jobs_failed_total',
-  ],
+  ] + sliLibrary.get('sidekiq_execution').recordingRuleMetrics,
   kubeConfig: {
     labelSelectors: kubeLabelSelectors(
       ingressSelector=null,  // no ingress for sidekiq
@@ -207,6 +208,9 @@ metricsCatalog.serviceDefinition({
   } + sliLibrary.get('global_search_indexing').generateServiceLevelIndicator(baseSelector, {
     serviceAggregation: false,  // Don't add this to the request rate of the service
     severity: 's3',  // Don't page SREs for this SLI
+  }) + sliLibrary.get('sidekiq_execution').generateServiceLevelIndicator(baseSelector, {
+    serviceAggregation: false,  // Don't add this to the request rate of the service
+    severity: 's4',  // page SREs for this SLI
   }),
 
   // Special per-worker recording rules

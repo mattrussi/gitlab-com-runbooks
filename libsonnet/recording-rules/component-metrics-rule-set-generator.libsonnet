@@ -52,7 +52,8 @@ local generateErrorRateRules(burnRate, aggregationSet, aggregationLabels, sliDef
     [];
 
 // Generates the recording rules given a component definition
-local generateRecordingRulesForComponent(burnRate, aggregationSet, serviceDefinition, sliDefinition, aggregationLabels) =
+local generateRecordingRulesForComponent(burnRate, aggregationSet, serviceDefinition, sliDefinition) =
+  local aggregationLabels = aggregationSet.labels;
   local recordingRuleStaticLabels = staticLabelsForAggregation(serviceDefinition, sliDefinition, aggregationLabels);
 
   std.flatMap(
@@ -80,7 +81,6 @@ local generateRecordingRulesForComponent(burnRate, aggregationSet, serviceDefini
             aggregationSet=aggregationSet,
             serviceDefinition=serviceDefinition,
             sliDefinition=sliDefinition,
-            aggregationLabels=aggregationSet.labels,
           ),
           serviceLevelIndicators,
         ),

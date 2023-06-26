@@ -2,13 +2,13 @@ local intervalForDuration = import './interval-for-duration.libsonnet';
 local recordingRuleRegistry = import './recording-rule-registry.libsonnet';
 local recordingRules = import 'recording-rules/recording-rules.libsonnet';
 
-local recordingRuleGroupsForServiceForBurnRate(serviceDefinition, componentAggregationSet, nodeAggregationSet, burnRate) =
+local recordingRuleGroupsForServiceForBurnRate(serviceDefinition, componentAggregationSet, nodeAggregationSet, shardAggregationSet, burnRate) =
   local rulesetGenerators =
     [
       recordingRules.sliRecordingRulesSetGenerator(burnRate, recordingRuleRegistry),
       recordingRules.componentMetricsRuleSetGenerator(
         burnRate=burnRate,
-        aggregationSet=componentAggregationSet
+        aggregationSet=componentAggregationSet,
       ),
       recordingRules.extraRecordingRuleSetGenerator(burnRate),
     ]
@@ -19,6 +19,18 @@ local recordingRuleGroupsForServiceForBurnRate(serviceDefinition, componentAggre
           recordingRules.componentMetricsRuleSetGenerator(
             burnRate=burnRate,
             aggregationSet=nodeAggregationSet,
+          ),
+        ]
+      else
+        []
+    )
+    +
+    (
+      if serviceDefinition.shardLevelMonitoring then
+        [
+          recordingRules.componentMetricsRuleSetGenerator(
+            burnRate=burnRate,
+            aggregationSet=shardAggregationSet,
           ),
         ]
       else
@@ -50,13 +62,13 @@ local featureCategoryRecordingRuleGroupsForService(serviceDefinition, aggregatio
    * These are the first level aggregation, for normalizing source metrics
    * into a consistent format
    */
-  recordingRuleGroupsForService(serviceDefinition, componentAggregationSet, nodeAggregationSet)::
+  recordingRuleGroupsForService(serviceDefinition, componentAggregationSet, nodeAggregationSet, shardAggregationSet)::
     local componentMappingRuleSetGenerator = recordingRules.componentMappingRuleSetGenerator();
 
     local burnRates = componentAggregationSet.getBurnRates();
 
     [
-      recordingRuleGroupsForServiceForBurnRate(serviceDefinition, componentAggregationSet, nodeAggregationSet, burnRate)
+      recordingRuleGroupsForServiceForBurnRate(serviceDefinition, componentAggregationSet, nodeAggregationSet, shardAggregationSet, burnRate)
       for burnRate in burnRates
     ]
     +
