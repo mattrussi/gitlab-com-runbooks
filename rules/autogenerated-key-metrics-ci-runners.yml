@@ -87,6 +87,50 @@ groups:
       )
   - record: gitlab_component_apdex:success:rate
     labels:
+      component: shared_runner_image_pull_failures
+      tier: runners
+      type: ci-runners
+    expr: |
+      sum by (env,environment,stage) (
+        rate(job_queue_duration_seconds_bucket{jobs_running_for_project=~"^(0|1|2|3|4)$",le="60",shared_runner="true"}[1m])
+      )
+  - record: gitlab_component_apdex:weight:score
+    labels:
+      component: shared_runner_image_pull_failures
+      tier: runners
+      type: ci-runners
+    expr: |
+      sum by (env,environment,stage) (
+        rate(job_queue_duration_seconds_bucket{jobs_running_for_project=~"^(0|1|2|3|4)$",le="+Inf",shared_runner="true"}[1m])
+      )
+  - record: gitlab_component_ops:rate
+    labels:
+      component: shared_runner_image_pull_failures
+      tier: runners
+      type: ci-runners
+    expr: |
+      sum by (env,environment,stage) (
+        rate(gitlab_runner_jobs_total{job="runners-manager",shard="shared"}[1m])
+      )
+  - record: gitlab_component_errors:rate
+    labels:
+      component: shared_runner_image_pull_failures
+      tier: runners
+      type: ci-runners
+    expr: |
+      (
+        sum by (env,environment,stage) (
+          rate(gitlab_runner_failed_jobs_total{failure_reason="image_pull_failure",job="runners-manager",shard="shared"}[1m])
+        )
+      )
+      or
+      (
+        0 * group by(env,environment,stage) (
+          gitlab_component_ops:rate{component="shared_runner_image_pull_failures",tier="runners",type="ci-runners"}
+        )
+      )
+  - record: gitlab_component_apdex:success:rate
+    labels:
       component: shared_runner_queues
       tier: runners
       type: ci-runners
@@ -238,6 +282,50 @@ groups:
     expr: |
       sum by (env,environment,stage) (
         rate(gitlab_ci_queue_retrieval_duration_seconds_count{}[5m])
+      )
+  - record: gitlab_component_apdex:success:rate_5m
+    labels:
+      component: shared_runner_image_pull_failures
+      tier: runners
+      type: ci-runners
+    expr: |
+      sum by (env,environment,stage) (
+        rate(job_queue_duration_seconds_bucket{jobs_running_for_project=~"^(0|1|2|3|4)$",le="60",shared_runner="true"}[5m])
+      )
+  - record: gitlab_component_apdex:weight:score_5m
+    labels:
+      component: shared_runner_image_pull_failures
+      tier: runners
+      type: ci-runners
+    expr: |
+      sum by (env,environment,stage) (
+        rate(job_queue_duration_seconds_bucket{jobs_running_for_project=~"^(0|1|2|3|4)$",le="+Inf",shared_runner="true"}[5m])
+      )
+  - record: gitlab_component_ops:rate_5m
+    labels:
+      component: shared_runner_image_pull_failures
+      tier: runners
+      type: ci-runners
+    expr: |
+      sum by (env,environment,stage) (
+        rate(gitlab_runner_jobs_total{job="runners-manager",shard="shared"}[5m])
+      )
+  - record: gitlab_component_errors:rate_5m
+    labels:
+      component: shared_runner_image_pull_failures
+      tier: runners
+      type: ci-runners
+    expr: |
+      (
+        sum by (env,environment,stage) (
+          rate(gitlab_runner_failed_jobs_total{failure_reason="image_pull_failure",job="runners-manager",shard="shared"}[5m])
+        )
+      )
+      or
+      (
+        0 * group by(env,environment,stage) (
+          gitlab_component_ops:rate_5m{component="shared_runner_image_pull_failures",tier="runners",type="ci-runners"}
+        )
       )
   - record: gitlab_component_apdex:success:rate_5m
     labels:
@@ -395,6 +483,50 @@ groups:
       )
   - record: gitlab_component_apdex:success:rate_30m
     labels:
+      component: shared_runner_image_pull_failures
+      tier: runners
+      type: ci-runners
+    expr: |
+      sum by (env,environment,stage) (
+        rate(job_queue_duration_seconds_bucket{jobs_running_for_project=~"^(0|1|2|3|4)$",le="60",shared_runner="true"}[30m])
+      )
+  - record: gitlab_component_apdex:weight:score_30m
+    labels:
+      component: shared_runner_image_pull_failures
+      tier: runners
+      type: ci-runners
+    expr: |
+      sum by (env,environment,stage) (
+        rate(job_queue_duration_seconds_bucket{jobs_running_for_project=~"^(0|1|2|3|4)$",le="+Inf",shared_runner="true"}[30m])
+      )
+  - record: gitlab_component_ops:rate_30m
+    labels:
+      component: shared_runner_image_pull_failures
+      tier: runners
+      type: ci-runners
+    expr: |
+      sum by (env,environment,stage) (
+        rate(gitlab_runner_jobs_total{job="runners-manager",shard="shared"}[30m])
+      )
+  - record: gitlab_component_errors:rate_30m
+    labels:
+      component: shared_runner_image_pull_failures
+      tier: runners
+      type: ci-runners
+    expr: |
+      (
+        sum by (env,environment,stage) (
+          rate(gitlab_runner_failed_jobs_total{failure_reason="image_pull_failure",job="runners-manager",shard="shared"}[30m])
+        )
+      )
+      or
+      (
+        0 * group by(env,environment,stage) (
+          gitlab_component_ops:rate_30m{component="shared_runner_image_pull_failures",tier="runners",type="ci-runners"}
+        )
+      )
+  - record: gitlab_component_apdex:success:rate_30m
+    labels:
       component: shared_runner_queues
       tier: runners
       type: ci-runners
@@ -546,6 +678,50 @@ groups:
     expr: |
       sum by (env,environment,stage) (
         rate(gitlab_ci_queue_retrieval_duration_seconds_count{}[1h])
+      )
+  - record: gitlab_component_apdex:success:rate_1h
+    labels:
+      component: shared_runner_image_pull_failures
+      tier: runners
+      type: ci-runners
+    expr: |
+      sum by (env,environment,stage) (
+        rate(job_queue_duration_seconds_bucket{jobs_running_for_project=~"^(0|1|2|3|4)$",le="60",shared_runner="true"}[1h])
+      )
+  - record: gitlab_component_apdex:weight:score_1h
+    labels:
+      component: shared_runner_image_pull_failures
+      tier: runners
+      type: ci-runners
+    expr: |
+      sum by (env,environment,stage) (
+        rate(job_queue_duration_seconds_bucket{jobs_running_for_project=~"^(0|1|2|3|4)$",le="+Inf",shared_runner="true"}[1h])
+      )
+  - record: gitlab_component_ops:rate_1h
+    labels:
+      component: shared_runner_image_pull_failures
+      tier: runners
+      type: ci-runners
+    expr: |
+      sum by (env,environment,stage) (
+        rate(gitlab_runner_jobs_total{job="runners-manager",shard="shared"}[1h])
+      )
+  - record: gitlab_component_errors:rate_1h
+    labels:
+      component: shared_runner_image_pull_failures
+      tier: runners
+      type: ci-runners
+    expr: |
+      (
+        sum by (env,environment,stage) (
+          rate(gitlab_runner_failed_jobs_total{failure_reason="image_pull_failure",job="runners-manager",shard="shared"}[1h])
+        )
+      )
+      or
+      (
+        0 * group by(env,environment,stage) (
+          gitlab_component_ops:rate_1h{component="shared_runner_image_pull_failures",tier="runners",type="ci-runners"}
+        )
       )
   - record: gitlab_component_apdex:success:rate_1h
     labels:
@@ -703,6 +879,50 @@ groups:
       )
   - record: gitlab_component_apdex:success:rate_6h
     labels:
+      component: shared_runner_image_pull_failures
+      tier: runners
+      type: ci-runners
+    expr: |
+      sum by (env,environment,stage) (
+        rate(job_queue_duration_seconds_bucket{jobs_running_for_project=~"^(0|1|2|3|4)$",le="60",shared_runner="true"}[6h])
+      )
+  - record: gitlab_component_apdex:weight:score_6h
+    labels:
+      component: shared_runner_image_pull_failures
+      tier: runners
+      type: ci-runners
+    expr: |
+      sum by (env,environment,stage) (
+        rate(job_queue_duration_seconds_bucket{jobs_running_for_project=~"^(0|1|2|3|4)$",le="+Inf",shared_runner="true"}[6h])
+      )
+  - record: gitlab_component_ops:rate_6h
+    labels:
+      component: shared_runner_image_pull_failures
+      tier: runners
+      type: ci-runners
+    expr: |
+      sum by (env,environment,stage) (
+        rate(gitlab_runner_jobs_total{job="runners-manager",shard="shared"}[6h])
+      )
+  - record: gitlab_component_errors:rate_6h
+    labels:
+      component: shared_runner_image_pull_failures
+      tier: runners
+      type: ci-runners
+    expr: |
+      (
+        sum by (env,environment,stage) (
+          rate(gitlab_runner_failed_jobs_total{failure_reason="image_pull_failure",job="runners-manager",shard="shared"}[6h])
+        )
+      )
+      or
+      (
+        0 * group by(env,environment,stage) (
+          gitlab_component_ops:rate_6h{component="shared_runner_image_pull_failures",tier="runners",type="ci-runners"}
+        )
+      )
+  - record: gitlab_component_apdex:success:rate_6h
+    labels:
       component: shared_runner_queues
       tier: runners
       type: ci-runners
@@ -795,6 +1015,15 @@ groups:
   - record: gitlab_component_service:mapping
     labels:
       component: queuing_queries_duration
+      global_aggregation: "no"
+      regional_aggregation: "no"
+      service_aggregation: "yes"
+      tier: runners
+      type: ci-runners
+    expr: "1"
+  - record: gitlab_component_service:mapping
+    labels:
+      component: shared_runner_image_pull_failures
       global_aggregation: "no"
       regional_aggregation: "no"
       service_aggregation: "yes"

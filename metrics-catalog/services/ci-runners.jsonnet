@@ -120,6 +120,52 @@ metricsCatalog.serviceDefinition({
       ],
     },
 
+    shared_runner_image_pull_failures: {
+      monitoringThresholds: {
+        apdexScore: 0.997,
+        errorRatio: 0.95,
+      },
+
+      userImpacting: true,
+      featureCategory: 'runner',
+      description: |||
+        This SLI monitors the shared runner queues on GitLab.com. Each job is an operation.
+
+        Apdex uses queueing latencies for jobs which are considered to be fair-usage (less than 5 concurrently running jobs).
+
+        Jobs marked as failing with runner system failures are considered to be in error.
+      |||,
+
+      apdex: histogramApdex(
+        histogram='job_queue_duration_seconds_bucket',
+        selector={ shared_runner: 'true', jobs_running_for_project: { re: '^(0|1|2|3|4)$' } },
+        satisfiedThreshold=60,
+      ),
+
+      requestRate: rateMetric(
+        counter='gitlab_runner_jobs_total',
+        selector={
+          job: 'runners-manager',
+          shard: 'shared',
+        },
+      ),
+
+      errorRate: rateMetric(
+        counter='gitlab_runner_failed_jobs_total',
+        selector={
+          failure_reason: 'image_pull_failure',
+          job: 'runners-manager',
+          shard: 'shared',
+        },
+      ),
+
+      significantLabels: ['jobs_running_for_project'],
+
+      toolingLinks: [
+        toolingLinks.kibana(title='CI Runners', index='runners', slowRequestSeconds=60),
+      ],
+    },
+
     queuing_queries_duration: {
       userImpacting: false,
       featureCategory: 'continuous_integration',
