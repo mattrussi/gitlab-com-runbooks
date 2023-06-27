@@ -105,12 +105,43 @@ def migrate_set(src, dst, key)
   migrate_ttl(src, dst, key)
 end
 
-# TODO list, sorted sets
+# List
+def compare_list(src, dst, key)
+  src_list = src.with { |c| c.lrange(key, 0, -1) }
+  dst_list = dst.with { |c| c.lrange(key, 0, -1) }
+
+  src_list & dst_list == src_list
+end
+
+def migrate_list(src, dst, key)
+  src_list = src.with { |c| c.lrange(key, 0, -1) }
+  dst.with { |c| c.rpush(key, src_list) } # rpush to maintain order
+  migrate_ttl(src, dst, key)
+end
+
+# Zset
+def compare_zset(src, dst, key)
+  src_list = src.with { |c| c.zrange(key, 0, -1, withscores: true) }
+  dst_list = dst.with { |c| c.zrange(key, 0, -1, withscores: true) }
+
+  src_list & dst_list == src_list
+end
+
+def migrate_zset(src, dst, key)
+  # map to switch order of score and member as zrange returns <member, score>
+  # but zadd expects <score, member>
+  source_zset = src.with { |c| c.zrange(key, 0, -1, withscores: true) }.map { |x, y| [y, x] }
+  dst.with { |c| c.zadd(key, source_zset) }
+  migrate_ttl(src, dst, key)
+end
 
 def compare_and_migrate(key, src, dst, migrate)
   ktype = src.with { |r| r.type(key) }
 
-  return nil unless %w[hash set string].include?(ktype)
+  unless %w[hash set string list zset].include?(ktype)
+    puts "Unsupported #{key} of #{ktype}"
+    return nil
+  end
 
   identical = send("compare_#{ktype}", src, dst, key) # rubocop:disable GitlabSecurity/PublicSend
 
