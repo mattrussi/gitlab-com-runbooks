@@ -1,45 +1,32 @@
 local services = (import 'gitlab-metrics-config.libsonnet').monitoredServices;
+
+local filesForServices = (import 'recording-rules/service-key-metrics-rule-files.libsonnet').filesForServices;
+
 local aggregationSets = (import 'gitlab-metrics-config.libsonnet').aggregationSets;
-local prometheusServiceGroupGenerator = import 'servicemetrics/prometheus-service-group-generator.libsonnet';
-
-// This file is similar to rules-jsonnet/service-key-metrics.jsonnet
-// but focuses only on services with dangerouslyThanosEvaluated=true
-
-local outputPromYaml(groups) =
-  std.manifestYamlDoc({
-    groups: [
-      group { partial_response_strategy: 'warn' }
-      for group in groups
-    ],
-  });
-
-local filesForService(service) =
-  {
-    ['key-metrics-%s.yml' % [service.type]]:
-      outputPromYaml(
-        prometheusServiceGroupGenerator.recordingRuleGroupsForService(
-          service,
-          componentAggregationSet=aggregationSets.promSourceSLIs,
-          nodeAggregationSet=aggregationSets.promSourceNodeComponentSLIs,
-        )
-      ),
-  } + if service.hasFeatureCategorySLIs() then
-    {
-      ['feature-category-metrics-%s.yml' % [service.type]]:
-        outputPromYaml(
-          prometheusServiceGroupGenerator.featureCategoryRecordingRuleGroupsForService(
-            service,
-            aggregationSet=aggregationSets.featureCategorySLIs,
-          )
-        ),
-    }
-  else {};
 
 /**
  * The source SLI recording rules are each kept in their own files, generated from this
  */
 local dangerouslyThanosEvaluatedServices = std.filter(function(service) service.dangerouslyThanosEvaluated, services);
 
-// These are not separated by environment, as they are only globally evaluated. The environment could be
-// anything, in the resulting rules we have a separate `env:` as a static label
-std.foldl(function(memo, service) memo + filesForService(service), dangerouslyThanosEvaluatedServices, {})
+/**
+ *  These are not separated by environment, as they are only globally evaluated.
+ * Currently, this is only used for 2 services:
+ *
+ * - Thanos: This service has a static environment configured in the recording rules
+ * - code-suggestions: this service currently only runs in a gprd-environment. We don't
+ *   have metrics for any other environment
+ *
+ * When more service start using thanos-receive to get their metrics into our global
+ * view, we'll need to extend this to record per separate environment.
+ */
+filesForServices(
+  services=dangerouslyThanosEvaluatedServices,
+  // This is using `promSource` as the aggregation sets here, which is not entirely
+  // accurate since this is a global view, and not a source view.
+  // However, the aggregation sets aren't exactly the same
+  componentAggregationSet=aggregationSets.promSourceSLIs,
+  nodeAggregationSet=aggregationSets.promSourceNodeComponentSLIs,
+  featureCategoryAggregationSet=aggregationSets.featureCategorySLIs,
+  groupExtras={ partial_response_strategy: 'warn' }
+)
