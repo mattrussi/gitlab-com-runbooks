@@ -2949,7 +2949,7 @@ groups:
       component: shared_runner_image_pull_failures
       global_aggregation: "no"
       regional_aggregation: "no"
-      service_aggregation: "yes"
+      service_aggregation: "no"
       tier: runners
       type: ci-runners
     expr: "1"

@@ -4,6 +4,10 @@ local rateMetric = metricsCatalog.rateMetric;
 local toolingLinks = import 'toolinglinks/toolinglinks.libsonnet';
 local haproxyComponents = import './lib/haproxy_components.libsonnet';
 local dependOnRedisSidekiq = import 'inhibit-rules/depend_on_redis_sidekiq.libsonnet';
+local runner_failure_selector = {
+  job: 'runners-manager',
+  shard: 'shared',
+};
 
 metricsCatalog.serviceDefinition({
   type: 'ci-runners',
@@ -106,11 +110,7 @@ metricsCatalog.serviceDefinition({
 
       errorRate: rateMetric(
         counter='gitlab_runner_failed_jobs_total',
-        selector={
-          failure_reason: 'runner_system_failure',
-          job: 'runners-manager',
-          shard: 'shared',
-        },
+        selector=runner_failure_selector { failure_reason: 'runner_system_failure' },
       ),
 
       significantLabels: ['jobs_running_for_project'],
@@ -121,6 +121,7 @@ metricsCatalog.serviceDefinition({
     },
 
     shared_runner_image_pull_failures: {
+      serviceAggregation: false,
       monitoringThresholds: {
         apdexScore: 0.997,
         errorRatio: 0.95,
@@ -133,14 +134,8 @@ metricsCatalog.serviceDefinition({
 
         Apdex uses queueing latencies for jobs which are considered to be fair-usage (less than 5 concurrently running jobs).
 
-        Jobs marked as failing with runner system failures are considered to be in error.
+        Jobs marked as failing with image pull failures are considered to be in error.
       |||,
-
-      apdex: histogramApdex(
-        histogram='job_queue_duration_seconds_bucket',
-        selector={ shared_runner: 'true', jobs_running_for_project: { re: '^(0|1|2|3|4)$' } },
-        satisfiedThreshold=60,
-      ),
 
       requestRate: rateMetric(
         counter='gitlab_runner_jobs_total',
@@ -152,11 +147,7 @@ metricsCatalog.serviceDefinition({
 
       errorRate: rateMetric(
         counter='gitlab_runner_failed_jobs_total',
-        selector={
-          failure_reason: 'image_pull_failure',
-          job: 'runners-manager',
-          shard: 'shared',
-        },
+        selector=runner_failure_selector { failure_reason: 'image_pull_failure' },
       ),
 
       significantLabels: ['jobs_running_for_project'],
