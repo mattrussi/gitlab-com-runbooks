@@ -107,12 +107,26 @@ To initialize a cluster, see the [official Redis guide](https://redis.io/docs/ma
 
 An example of how previous clusters were set up can be found in [here](https://gitlab.com/gitlab-com/gl-infra/scalability/-/issues/2210#note_1287069028).
 
+### How to recover from all nodes going down
+
+As the [gitlab-redis-cluster cookbook](https://gitlab.com/gitlab-cookbooks/gitlab-redis-cluster/-/blob/3dd0f008677d7e85121fe659428adcfc1277e904/attributes/default.rb#L14) defines a `cluster-config-file`, the nodes will attempt to recreate the original cluster topology using previously stored information from the file after a restart.
+
 ### How to force promotion of a replica in an emergency where Redis cannot heal itself
 
-Use the [`CLUSTER FAILOVER`](https://redis.io/commands/cluster-failover/) command on the desired slave node to promote that node into a master.
+There is a sidecar process in each VM which checks the cluster health and forces a failover. See the [originating issue](https://gitlab.com/gitlab-com/gl-infra/scalability/-/issues/2140) for more information.
 
-TODO: add links to helper script
+In the event where the sidecar processes are not working, the SRE/EOC will need to run the [`CLUSTER FAILOVER`](https://redis.io/commands/cluster-failover/) command on the desired slave node to promote that node into a master.
+
+Run the following command on the desired node:
+
+```
+sudo gitlab-redis-cli CLUSTER FAILOVER TAKEOVER
+```
 
 ### How to do online resharding (with warnings)?
 
 See the [official Redis guide](https://redis.io/docs/management/scaling/#reshard-the-cluster).
+
+### How do we rotate passwords in the ACL list?
+
+TODO
