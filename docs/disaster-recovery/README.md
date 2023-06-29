@@ -4,7 +4,7 @@ This contains the relevant information for Disaster Recovery on GitLab.com as it
 
 [GitLab backups](https://about.gitlab.com/handbook/engineering/infrastructure/production/#backups) are designed to be tolerant for both zonal and regional outages by storing data in global (multi-region) object storage.
 
-The [DR strategy](https://internal-handbook.gitlab.io/handbook/engineering/gitlab-com-disaster-recovery/) for SaaS is based on our current backup strategy:
+The [DR strategy](https://internal-handbook.gitlab.io/handbook/engineering/disaster-recovery/) for SaaS is based on our current backup strategy:
 
 - [Postgresql backups using WAL-G](https://gitlab.com/gitlab-com/runbooks/-/blob/master/docs/patroni/postgresql-backups-wale-walg.md)
 - [GCP disk snapshots](https://gitlab.com/gitlab-com/runbooks/-/blob/master/docs/uncategorized/gcp-snapshots.md)
@@ -14,11 +14,14 @@ Validation of restores happen in CI pipelines for both the Postgresql database a
 - [Postgresql restore testing](https://about.gitlab.com/handbook/engineering/infrastructure/database/disaster_recovery.html#restore-testing)
 - [GitLab production snapshot restores](https://gitlab.com/gitlab-com/gl-infra/gitlab-restore/gitlab-production-snapshots)
 
+## Recovery from a regional outage
+
+GitLab.com is deployed in single region, [us-east1 in GCP](https://about.gitlab.com/handbook/engineering/infrastructure/production/architecture/), a regional outage is not currently in scope for Infrastructure disaster recovery validation.
+In the [discovery issue for regional recovery](https://gitlab.com/gitlab-com/gl-infra/reliability/-/issues/16250) we proposed what steps would be necessary to validate a regional recovery.
+
 ## Recovery from a zonal outage
 
 The Reliability team validates the ability of recovery from a disaster that impacts a single availability zone.
-
-GitLab.com is deployed in single region, [us-east1 in GCP](https://about.gitlab.com/handbook/engineering/infrastructure/production/architecture/), a regional outage is not currently in scope for Infrastructure disaster recovery validation; for more information, see the [discovery issue for regional recovery](https://gitlab.com/gitlab-com/gl-infra/reliability/-/issues/16250).
 
 ### Zonal recovery checklist
 
