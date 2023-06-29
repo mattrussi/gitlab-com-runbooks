@@ -1,7 +1,20 @@
 local grafana = import 'github.com/grafana/grafonnet-lib/grafonnet/grafana.libsonnet';
 local basic = import 'grafana/basic.libsonnet';
 local layout = import 'grafana/layout.libsonnet';
+local selectors = import 'promql/selectors.libsonnet';
 local row = grafana.row;
+
+local clusterSelector = {
+  cluster: 'ops-gitlab-gke',
+  env: 'ops',
+  namespace: 'sentry',
+};
+local clusterSelectorSerialized = selectors.serializeHash(clusterSelector);
+
+local clickhouseSelector = {
+  chi: 'sentry',
+};
+local clickhouseSelectorSerialized = selectors.serializeHash(clickhouseSelector);
 
 basic.dashboard(
   'Kube Sentry main',
@@ -23,22 +36,22 @@ basic.dashboard(
   layout.grid([
     basic.timeseries(
       title='Events processed per minute',
-      query='rate(sentry_ingest_consumer_process_event_count[1m])',
+      query='rate(sentry_ingest_consumer_process_event_count{%(selector)s}[1m])' % { selector: clusterSelectorSerialized },
       legendFormat='__auto',
       legend_show=true,
       linewidth=2
     ),
     basic.timeseries(
       title='Job duration',
-      query='sentry_jobs_duration',
-      legendFormat='{{ pod }}',
+      query='sentry_jobs_duration{%(selector)s}' % { selector: clusterSelectorSerialized },
+      legendFormat='{{ quantile }}',
       legend_show=true,
       format='ms',
       linewidth=2
     ),
     basic.timeseries(
       title='Time to process events',
-      query='sentry_ingest_consumer_process_event',
+      query='sentry_ingest_consumer_process_event{%(selector)s}' % { selector: clusterSelectorSerialized },
       legendFormat='{{ quantile }}',
       legend_show=true,
       format='ms',
@@ -59,14 +72,14 @@ basic.dashboard(
   layout.grid([
     basic.timeseries(
       title='Active connections',
-      query='sum by(pod) (nginx_ingress_controller_nginx_process_connections{namespace="sentry"})',
+      query='sum by(pod) (nginx_ingress_controller_nginx_process_connections{%(selector)s}' % { selector: clusterSelectorSerialized },
       legendFormat='__auto',
       legend_show=true,
       linewidth=2
     ),
     basic.timeseries(
       title='Requests in 5 minutes',
-      query='sum by(exported_service) (rate(nginx_ingress_controller_requests{namespace="sentry", exported_service=~"sentry-relay|sentry-web"}[5m]))',
+      query='sum by(exported_service) (rate(nginx_ingress_controller_requests{%(selector)s, exported_service=~"sentry-relay|sentry-web"}[5m]))' % { selector: clusterSelectorSerialized },
       legendFormat='{{ exported_service }}',
       legend_show=true,
       linewidth=2
@@ -86,45 +99,22 @@ basic.dashboard(
   layout.grid([
     basic.timeseries(
       title='Active connections',
-      query='sum(ClickHouseMetrics_TCPConnection)',
+      query='sum by(hostname)(chi_clickhouse_metric_TCPConnection{%(selector)s})' % { selector: clickhouseSelectorSerialized },
       legendFormat='__auto',
       legend_show=true,
       linewidth=2
     ),
     basic.timeseries(
       title='Replica delay',
-      query='ClickHouseAsyncMetrics_ReplicasMaxAbsoluteDelay',
-      legendFormat='{{ pod }}',
+      query='chi_clickhouse_metric_ReplicasMaxAbsoluteDelay{%(selector)s}' % { selector: clickhouseSelectorSerialized },
+      legendFormat='{{ hostname }}',
       format='s',
-      legend_show=true,
-      linewidth=2
-    ),
-    basic.multiTimeseries(
-      title='Active vs Waiting Readers/Writers',
-      queries=[
-        {
-          query: 'sum(ClickHouseMetrics_RWLockActiveReaders)',
-          legendFormat: 'Active Readers',
-        },
-        {
-          query: 'sum(ClickHouseMetrics_RWLockActiveWriters)',
-          legendFormat: 'Active Writers',
-        },
-        {
-          query: 'sum(ClickHouseMetrics_RWLockWaitingReaders)',
-          legendFormat: 'Waiting Readers',
-        },
-        {
-          query: 'sum(ClickHouseMetrics_RWLockWaitingWriters)',
-          legendFormat: 'Waiting Writers',
-        },
-      ],
       legend_show=true,
       linewidth=2
     ),
     basic.timeseries(
       title='Zookeeper requests',
-      query='sum(ClickHouseMetrics_ZooKeeperRequest)',
+      query='sum by(hostname)(chi_clickhouse_metric_ZooKeeperRequest{%(selector)s})' % { selector: clickhouseSelectorSerialized },
       legendFormat='__auto',
       legend_show=true,
       linewidth=2
