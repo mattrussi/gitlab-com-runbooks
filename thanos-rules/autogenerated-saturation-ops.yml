@@ -97,6 +97,23 @@ groups:
       )
   - record: gitlab_component_saturation:ratio
     labels:
+      component: gcp_quota_limit_vertex_ai
+    expr: |
+      max by(env, environment, tier, type, stage, shard) (
+        clamp_min(
+          clamp_max(
+            (
+              rate(code_suggestions_inference_requests_total{model_engine="vertex-ai",model_name="PalmModel.CODE_GECKO", env="ops",type="code_suggestions"}[1m]) * 60
+              /
+              1000
+            ) > 0
+            ,
+            1)
+        ,
+        0)
+      )
+  - record: gitlab_component_saturation:ratio
+    labels:
       component: go_memory
     expr: |
       max by(env, environment, tier, type, stage, shard) (
@@ -633,6 +650,51 @@ groups:
     expr: |
       gitlab_component_saturation:ratio{component="gcp_quota_limit_s4",env="ops",monitor="global"} > on(component) group_left
       slo:max:hard:gitlab_component_saturation:ratio{component="gcp_quota_limit_s4",env="ops",monitor="global"}
+  - alert: component_saturation_slo_out_of_bounds
+    for: 15m
+    annotations:
+      title: The GCP Quota utilization per environment resource of the {{ $labels.type
+        }} service ({{ $labels.stage }} stage) has a saturation exceeding SLO and
+        is close to its capacity limit.
+      description: |
+        This means that this resource is running close to capacity and is at risk of exceeding its current capacity limit.
+
+        Details of the GCP Quota utilization per environment resource:
+
+        GCP Quota utilization / limit ratio
+
+        Saturation on a quota may cause problems with creating infrastructure resources on GCP.
+
+        To fix, we can request a quota increase for the specific resource to the GCP support team.
+      grafana_dashboard_id: alerts-sat_gcp_quota_limit_vertex_ai
+      grafana_dashboard_link: https://dashboards.gitlab.net/d/alerts-sat_gcp_quota_limit_vertex_ai?from=now-6h/m&to=now-1m/m&var-environment={{
+        $labels.environment }}&var-type={{ $labels.type }}&var-stage={{ $labels.stage
+        }}
+      grafana_min_zoom_hours: "6"
+      grafana_panel_id: "1515902021"
+      grafana_variables: environment,type,stage
+      promql_query: |
+        max by(environment, tier, type, stage, shard, model_engine, model_name) (
+          clamp_min(
+            clamp_max(
+              (
+                rate(code_suggestions_inference_requests_total{model_engine="vertex-ai",model_name="PalmModel.CODE_GECKO", environment="{{ $labels.environment }}",stage="{{ $labels.stage }}",type="{{ $labels.type }}"}[1m]) * 60
+                /
+                1000
+              ) > 0
+              ,
+              1)
+          ,
+          0)
+        )
+      runbook: docs/{{ $labels.type }}/README.md
+    labels:
+      alert_type: cause
+      rules_domain: general
+      severity: s4
+    expr: |
+      gitlab_component_saturation:ratio{component="gcp_quota_limit_vertex_ai",env="ops",monitor="global"} > on(component) group_left
+      slo:max:hard:gitlab_component_saturation:ratio{component="gcp_quota_limit_vertex_ai",env="ops",monitor="global"}
   - alert: component_saturation_slo_out_of_bounds
     for: 5m
     annotations:
