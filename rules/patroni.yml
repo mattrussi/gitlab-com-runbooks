@@ -34,3 +34,27 @@ groups:
           description: The xmin horizon is too old on {{$labels.fqdn}}.
           title: Long-running transactions detected on Patroni
           runbook: docs/patroni/pg_xid_xmin_age_alert.md
+      - alert: PatroniConsulMultipleMaster
+        expr: sum by (env, service_id, service_name) (consul_catalog_service_node_healthy{service_id=~".+-master", service_id!~".+(delayed|archive).+"}) > 1
+        for: 1m
+        labels:
+          severity: s1
+          pager: pagerduty
+          alert_type: cause
+          incident_project: gitlab.com/gitlab-com/gl-infra/production
+        annotations:
+          description: The patroni consul service {{$labels.service_id}} has more than one master.
+          title: Patroni Consul service has more than one master registered.
+          runbook: docs/patroni/patroni-management.md
+      - alert: PostgresSplitBrain
+        expr: count by(env, type, job) (pg_replication_is_replica{type!=""} == 0) > 1
+        for: 1m
+        labels:
+          severity: s1
+          pager: pagerduty
+          alert_type: cause
+          incident_project: gitlab.com/gitlab-com/gl-infra/production
+        annotations:
+          description: More than one postgres instance in read-write mode for cluster {{$labels.type}} in {{$labels.env}}.
+          title: More than one postgres instance in read-write mode.
+          runbook: docs/patroni/patroni-management.md
