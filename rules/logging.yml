@@ -38,20 +38,3 @@ groups:
         Logs send rate is lower than usual.
       runbook: docs/logging/troubleshooting/README.md
       title: Logs send rate is unusually low
-
-  - alert: LoggingVisibilityDiminished
-    expr: |
-      avg_over_time(stackdriver_pubsub_subscription_pubsub_googleapis_com_subscription_oldest_unacked_message_age[30m]) > 1000
-    for: 1h
-    labels:
-      severity: s2
-      pager: 'pagerduty'
-      alert_type: symptom
-      type: logging
-    annotations:
-      description: >
-        PubSub messages are queuing up.  Messages in {{ $labels.subscription_id }} have been
-        un-acked for {{ $value | humanizeDuration }} in the queue for the last 5 minutes.
-        This will lead to Elastic lagging behind with the log data.
-      runbook: docs/logging/troubleshooting/README.md
-      title: PubSub queuing high
