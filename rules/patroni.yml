@@ -35,7 +35,7 @@ groups:
           title: Long-running transactions detected on Patroni
           runbook: docs/patroni/pg_xid_xmin_age_alert.md
       - alert: PatroniConsulMultipleMaster
-        expr: sum by (service_id, service_name) (consul_catalog_service_node_healthy{service_id=~".+-master", service_id!~".+(delayed|archive).+"}) > 1
+        expr: sum by (env, service_id, service_name) (consul_catalog_service_node_healthy{service_id=~".+-master"}) > 1
         for: 1m
         labels:
           severity: s1
