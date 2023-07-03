@@ -43,12 +43,12 @@ groups:
       (
         (
           gitlab_component_apdex:ratio_1h{component="ingress",env="ops",monitor="global",type="code_suggestions"}
-          < (1 - 14.4 * 0.100000)
+          < (1 - 14.4 * 0.001000)
         )
         and
         (
           gitlab_component_apdex:ratio_5m{component="ingress",env="ops",monitor="global",type="code_suggestions"}
-          < (1 - 14.4 * 0.100000)
+          < (1 - 14.4 * 0.001000)
         )
       )
       and on(env,environment,tier,type,stage,component)
@@ -93,12 +93,12 @@ groups:
       (
         (
           gitlab_component_apdex:ratio_6h{component="ingress",env="ops",monitor="global",type="code_suggestions"}
-          < (1 - 6 * 0.100000)
+          < (1 - 6 * 0.001000)
         )
         and
         (
           gitlab_component_apdex:ratio_30m{component="ingress",env="ops",monitor="global",type="code_suggestions"}
-          < (1 - 6 * 0.100000)
+          < (1 - 6 * 0.001000)
         )
       )
       and on(env,environment,tier,type,stage,component)
@@ -305,12 +305,12 @@ groups:
       (
         (
           gitlab_component_apdex:ratio_1h{component="model_gateway",env="ops",monitor="global",type="code_suggestions"}
-          < (1 - 14.4 * 0.100000)
+          < (1 - 14.4 * 0.001000)
         )
         and
         (
           gitlab_component_apdex:ratio_5m{component="model_gateway",env="ops",monitor="global",type="code_suggestions"}
-          < (1 - 14.4 * 0.100000)
+          < (1 - 14.4 * 0.001000)
         )
       )
       and on(env,environment,tier,type,stage,component)
@@ -353,12 +353,12 @@ groups:
       (
         (
           gitlab_component_apdex:ratio_6h{component="model_gateway",env="ops",monitor="global",type="code_suggestions"}
-          < (1 - 6 * 0.100000)
+          < (1 - 6 * 0.001000)
         )
         and
         (
           gitlab_component_apdex:ratio_30m{component="model_gateway",env="ops",monitor="global",type="code_suggestions"}
-          < (1 - 6 * 0.100000)
+          < (1 - 6 * 0.001000)
         )
       )
       and on(env,environment,tier,type,stage,component)
@@ -559,12 +559,12 @@ groups:
       (
         (
           gitlab_component_apdex:ratio_1h{component="native_model_inference",env="ops",monitor="global",type="code_suggestions"}
-          < (1 - 14.4 * 0.100000)
+          < (1 - 14.4 * 0.001000)
         )
         and
         (
           gitlab_component_apdex:ratio_5m{component="native_model_inference",env="ops",monitor="global",type="code_suggestions"}
-          < (1 - 14.4 * 0.100000)
+          < (1 - 14.4 * 0.001000)
         )
       )
       and on(env,environment,tier,type,stage,component)
@@ -609,12 +609,12 @@ groups:
       (
         (
           gitlab_component_apdex:ratio_6h{component="native_model_inference",env="ops",monitor="global",type="code_suggestions"}
-          < (1 - 6 * 0.100000)
+          < (1 - 6 * 0.001000)
         )
         and
         (
           gitlab_component_apdex:ratio_30m{component="native_model_inference",env="ops",monitor="global",type="code_suggestions"}
-          < (1 - 6 * 0.100000)
+          < (1 - 6 * 0.001000)
         )
       )
       and on(env,environment,tier,type,stage,component)
@@ -659,12 +659,12 @@ groups:
       (
         (
           gitlab_component_apdex:ratio_1h{component="third_party_model_inference",env="ops",monitor="global",type="code_suggestions"}
-          < (1 - 14.4 * 0.100000)
+          < (1 - 14.4 * 0.001000)
         )
         and
         (
           gitlab_component_apdex:ratio_5m{component="third_party_model_inference",env="ops",monitor="global",type="code_suggestions"}
-          < (1 - 14.4 * 0.100000)
+          < (1 - 14.4 * 0.001000)
         )
       )
       and on(env,environment,tier,type,stage,component)
@@ -709,12 +709,12 @@ groups:
       (
         (
           gitlab_component_apdex:ratio_6h{component="third_party_model_inference",env="ops",monitor="global",type="code_suggestions"}
-          < (1 - 6 * 0.100000)
+          < (1 - 6 * 0.001000)
         )
         and
         (
           gitlab_component_apdex:ratio_30m{component="third_party_model_inference",env="ops",monitor="global",type="code_suggestions"}
-          < (1 - 6 * 0.100000)
+          < (1 - 6 * 0.001000)
         )
       )
       and on(env,environment,tier,type,stage,component)
