@@ -44,8 +44,8 @@ groups:
       avg_over_time(stackdriver_pubsub_subscription_pubsub_googleapis_com_subscription_oldest_unacked_message_age[30m]) > 1000
     for: 1h
     labels:
-      severity: s2
-      pager: 'pagerduty'
+      severity: s3
+      team: reliability_observability
       alert_type: symptom
       type: logging
     annotations:
