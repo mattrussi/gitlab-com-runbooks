@@ -117,7 +117,7 @@ groups:
     expr: |
       (
         sum by (env,environment) (
-          rate(http_requests_total{container="model-gateway",status="5xx",type="code_suggestions"}[5m])
+          rate(http_request_duration_seconds_count{container="model-gateway",status="5xx",type="code_suggestions"}[5m])
         )
       )
       or
@@ -354,7 +354,7 @@ groups:
     expr: |
       (
         sum by (env,environment) (
-          rate(http_requests_total{container="model-gateway",status="5xx",type="code_suggestions"}[30m])
+          rate(http_request_duration_seconds_count{container="model-gateway",status="5xx",type="code_suggestions"}[30m])
         )
       )
       or
@@ -591,7 +591,7 @@ groups:
     expr: |
       (
         sum by (env,environment) (
-          rate(http_requests_total{container="model-gateway",status="5xx",type="code_suggestions"}[1h])
+          rate(http_request_duration_seconds_count{container="model-gateway",status="5xx",type="code_suggestions"}[1h])
         )
       )
       or
@@ -828,7 +828,7 @@ groups:
     expr: |
       (
         sum by (env,environment) (
-          rate(http_requests_total{container="model-gateway",status="5xx",type="code_suggestions"}[6h])
+          rate(http_request_duration_seconds_count{container="model-gateway",status="5xx",type="code_suggestions"}[6h])
         )
       )
       or
@@ -1065,7 +1065,7 @@ groups:
     expr: |
       (
         sum by (env,environment) (
-          rate(http_requests_total{container="model-gateway",status="5xx",type="code_suggestions"}[3d])
+          rate(http_request_duration_seconds_count{container="model-gateway",status="5xx",type="code_suggestions"}[3d])
         )
       )
       or

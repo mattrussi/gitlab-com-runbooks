@@ -4,6 +4,10 @@ local rateMetric = metricsCatalog.rateMetric;
 local toolingLinks = import 'toolinglinks/toolinglinks.libsonnet';
 local haproxyComponents = import './lib/haproxy_components.libsonnet';
 local dependOnRedisSidekiq = import 'inhibit-rules/depend_on_redis_sidekiq.libsonnet';
+local runner_failure_selector = {
+  job: 'runners-manager',
+  shard: 'shared',
+};
 
 metricsCatalog.serviceDefinition({
   type: 'ci-runners',
@@ -106,11 +110,41 @@ metricsCatalog.serviceDefinition({
 
       errorRate: rateMetric(
         counter='gitlab_runner_failed_jobs_total',
+        selector=runner_failure_selector { failure_reason: 'runner_system_failure' },
+      ),
+
+      significantLabels: ['jobs_running_for_project'],
+
+      toolingLinks: [
+        toolingLinks.kibana(title='CI Runners', index='runners', slowRequestSeconds=60),
+      ],
+    },
+
+    shared_runner_image_pull_failures: {
+      serviceAggregation: false,
+      monitoringThresholds+: {
+        errorRatio: 0.95,
+      },
+
+      userImpacting: true,
+      featureCategory: 'runner',
+      description: |||
+        This SLI monitors the shared runner queues on GitLab.com. Each job is an operation.
+
+        Jobs marked as failing with image pull failures are considered to be in error.
+      |||,
+
+      requestRate: rateMetric(
+        counter='gitlab_runner_jobs_total',
         selector={
-          failure_reason: 'runner_system_failure',
           job: 'runners-manager',
           shard: 'shared',
         },
+      ),
+
+      errorRate: rateMetric(
+        counter='gitlab_runner_failed_jobs_total',
+        selector=runner_failure_selector { failure_reason: 'image_pull_failure' },
       ),
 
       significantLabels: ['jobs_running_for_project'],
