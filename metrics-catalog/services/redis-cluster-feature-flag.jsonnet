@@ -10,7 +10,8 @@ metricsCatalog.serviceDefinition(
   redisArchetype(
     type='redis-cluster-feature-flag',
     railsStorageSelector={ storage: 'feature_flag' },
-    descriptiveName='Redis Cluster Feature Flag'
+    descriptiveName='Redis Cluster Feature Flag',
+    redisCluster=true
   )
   {
     monitoringThresholds+: {
