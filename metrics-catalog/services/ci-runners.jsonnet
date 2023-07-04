@@ -122,8 +122,7 @@ metricsCatalog.serviceDefinition({
 
     shared_runner_image_pull_failures: {
       serviceAggregation: false,
-      monitoringThresholds: {
-        apdexScore: 0.997,
+      monitoringThresholds+: {
         errorRatio: 0.95,
       },
 
@@ -131,8 +130,6 @@ metricsCatalog.serviceDefinition({
       featureCategory: 'runner',
       description: |||
         This SLI monitors the shared runner queues on GitLab.com. Each job is an operation.
-
-        Apdex uses queueing latencies for jobs which are considered to be fair-usage (less than 5 concurrently running jobs).
 
         Jobs marked as failing with image pull failures are considered to be in error.
       |||,
