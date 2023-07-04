@@ -8,7 +8,8 @@ metricsCatalog.serviceDefinition(
   redisArchetype(
     type='redis-cluster-cache',
     railsStorageSelector=redisHelpers.storageSelector('cluster_cache'),
-    descriptiveName='Redis Cache in Redis Cluster'
+    descriptiveName='Redis Cache in Redis Cluster',
+    redisCluster=true
   )
   {
     monitoringThresholds+: {
