@@ -244,6 +244,22 @@ This process is automated via a script in the `runbooks` repository:
 scripts/redis-reconfigure.sh gstg redis-cache
 ```
 
+For Redis Cluster, the reconfiguration process is similar. But due to the varied cluster topologies, fetch the list of node FQDNs by run the following `knife` command in [chef-repo](https://gitlab.com/gitlab-com/gl-infra/chef-repo/):
+
+```
+knife search -i 'roles:<ENV>-base-db-redis-cluster-<INSTANCE NAME>' | sort -V  > tmp.txt
+
+# for example
+knife search -i 'roles:pre-base-db-redis-cluster-cache' | sort -V  > tmp.txt
+```
+
+Run the reconfiguration script with the file path as an argument.
+
+```
+scripts/redis-cluster-reconfigure.sh path/to/tmp.txt
+
+```
+
 ## Debugging and Diagnosis
 
 So you think something is wrong with Redis, either as a cause or a symptom.  What can you do to find out more?
