@@ -380,7 +380,7 @@ groups:
       grafana_variables: environment,stage
       promql_template_1: |
         sum by (env,environment,tier,stage) (
-          rate(http_requests_total{container="model-gateway",environment="{{ $labels.environment }}",stage="{{ $labels.stage }}",status="5xx",type="code_suggestions"}[5m])
+          rate(http_request_duration_seconds_count{container="model-gateway",environment="{{ $labels.environment }}",stage="{{ $labels.stage }}",status="5xx",type="code_suggestions"}[5m])
         )
       runbook: docs/code_suggestions/README.md
     labels:
@@ -425,7 +425,7 @@ groups:
       grafana_variables: environment,stage
       promql_template_1: |
         sum by (env,environment,tier,stage) (
-          rate(http_requests_total{container="model-gateway",environment="{{ $labels.environment }}",stage="{{ $labels.stage }}",status="5xx",type="code_suggestions"}[5m])
+          rate(http_request_duration_seconds_count{container="model-gateway",environment="{{ $labels.environment }}",stage="{{ $labels.stage }}",status="5xx",type="code_suggestions"}[5m])
         )
       runbook: docs/code_suggestions/README.md
     labels:

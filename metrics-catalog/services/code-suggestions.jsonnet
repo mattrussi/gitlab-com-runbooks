@@ -52,7 +52,7 @@ metricsCatalog.serviceDefinition({
       ),
 
       errorRate: rateMetric(
-        counter='http_requests_total',
+        counter='http_request_duration_seconds_count',
         selector=modelGatewaySelector { status: '5xx' },
         useRecordingRuleRegistry=false,
       ),
