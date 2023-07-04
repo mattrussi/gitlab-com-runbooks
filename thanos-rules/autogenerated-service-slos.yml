@@ -276,7 +276,7 @@ groups:
       component: shared_runner_image_pull_failures
       tier: runners
       type: ci-runners
-    expr: "0.997000"
+    expr: "0.970000"
   - record: slo:max:events:gitlab_service_errors:ratio
     labels:
       component: shared_runner_image_pull_failures
