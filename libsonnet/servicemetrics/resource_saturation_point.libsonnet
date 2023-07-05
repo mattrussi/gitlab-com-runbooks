@@ -28,6 +28,8 @@ local sloValidator = validator.validator(function(v) v > 0 && v <= 1, 'SLO thres
 
 local quantileValidator = validator.validator(function(v) std.isNumber(v) && (v > 0 && v < 1) || v == 'max', 'value should be in the range (0,1) or the string "max"');
 
+local positiveNumber = validator.validator(function(v) v >= 0, 'Number should be >= 0');
+
 local definitionValidor = validator.new({
   title: validator.string,
   severity: validator.setMember(severities),
@@ -38,7 +40,12 @@ local definitionValidor = validator.new({
   resourceLabels: validator.array,
   query: validator.string,
   quantileAggregation: quantileValidator,
-  capacityPlanningStrategy: validator.setMember(capacityPlanningStrategies),
+  capacityPlanningStrategy: validator.setMember(capacityPlanningStrategies),  // deprecated
+  capacityPlanning: {
+    strategy: validator.setMember(capacityPlanningStrategies),
+    forecast_days: positiveNumber,
+    historical_days: positiveNumber,
+  },
   slos: {
     soft: sloValidator,
     hard: sloValidator,
@@ -50,11 +57,16 @@ local defaults = {
   alertRunbook: 'docs/{{ $labels.type }}/README.md',
   dangerouslyThanosEvaluated: false,
   quantileAggregation: 'max',
-  capacityPlanningStrategy: 'quantile95_1h',
+  capacityPlanningStrategy: 'quantile95_1h',  // deprecated
+  capacityPlanning: {
+    strategy: 'quantile95_1h',
+    forecast_days: 90,
+    historical_days: 365,
+  },
 };
 
 local validateAndApplyDefaults(definition) =
-  definitionValidor.assertValid(defaults + definition) + {
+  definitionValidor.assertValid(std.mergePatch(defaults, definition)) + {
     slos: {
       alertTriggerDuration: '5m',
     } + definition.slos,
@@ -233,7 +245,7 @@ local resourceSaturationPoint = function(options)
           component: componentName,
           horiz_scaling: if definition.horizontallyScalable then 'yes' else 'no',
           severity: definition.severity,
-          capacity_planning_strategy: definition.capacityPlanningStrategy,
+          capacity_planning_strategy: definition.capacityPlanning.strategy,
           quantile: if std.isNumber(definition.quantileAggregation) then
             '%g' % [definition.quantileAggregation]
           else

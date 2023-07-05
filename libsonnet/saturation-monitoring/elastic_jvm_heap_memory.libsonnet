@@ -6,7 +6,10 @@ local resourceSaturationPoint = metricsCatalog.resourceSaturationPoint;
     title: 'JVM Heap Utilization per Node',
     severity: 's4',
     horizontallyScalable: true,
-    capacityPlanningStrategy: 'exclude',
+    capacityPlanningStrategy: 'exclude',  // deprecated
+    capacityPlanning: {
+      strategy: 'exclude',
+    },
     appliesTo: ['logging', 'search'],
     description: |||
       JVM heap memory utilization per node.

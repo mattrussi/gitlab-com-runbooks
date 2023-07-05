@@ -8,7 +8,10 @@ local saturationPoints = {
     title: 'Michael Scott',
     severity: 's4',
     horizontallyScalable: true,
-    capacityPlanningStrategy: 'exclude',
+    capacityPlanningStrategy: 'exclude',  // deprecated
+    capacityPlanning: {
+      strategy: 'exclude',
+    },
     appliesTo: ['thanos', 'web', 'api'],
     description: |||
       Just Mr Tamland chart
@@ -29,7 +32,10 @@ local saturationPoints = {
     title: 'Jimbo',
     severity: 's4',
     horizontallyScalable: true,
-    capacityPlanningStrategy: 'exclude',
+    capacityPlanningStrategy: 'exclude',  // deprecated
+    capacityPlanning: {
+      strategy: 'exclude',
+    },
     appliesTo: ['thanos', 'redis'],
     description: |||
       Just Mr Jimbo
