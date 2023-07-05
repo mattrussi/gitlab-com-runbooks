@@ -99,7 +99,7 @@
 * [Life of a Git Request](../tutorials/overview_life_of_a_git_request.md)
 * [Life of a Web Request](../tutorials/overview_life_of_a_web_request.md)
 * [Tips for writing tutorials](../tutorials/tips_for_tutorial_writing.md)
-* [../uncategorized/about-gitlab-com.md](../uncategorized/about-gitlab-com.md)
+* [about.gitlab.com](../uncategorized/about-gitlab-com.md)
 * [Alert about SSL certificate expiration](../uncategorized/alert-for-ssl-certificate-expiration.md)
 * [Blocked user login attempts are high](../uncategorized/blocked-user-logins.md)
 * [Canary in GCP production and staging](../uncategorized/canary.md)

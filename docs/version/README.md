@@ -66,7 +66,6 @@
 * [Managing Sentry in Kubernetes](../sentry/sentry-in-kube.md)
 * [How to connect to a Database console using Teleport](../teleport/Connect_to_Database_Console_via_Teleport.md)
 * [Teleport Administration](../teleport/teleport_admin.md)
-* [../uncategorized/about-gitlab-com.md](../uncategorized/about-gitlab-com.md)
 * [Aptly](../uncategorized/aptly.md)
 * [Auto DevOps](../uncategorized/auto-devops.md)
 * [Summary](../uncategorized/cloudsql-data-export.md)

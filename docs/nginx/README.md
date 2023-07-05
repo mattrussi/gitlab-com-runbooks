@@ -31,7 +31,6 @@
 * [Thanos Architecture Overview](../thanos/architecture.md)
 * [Life of a Git Request](../tutorials/overview_life_of_a_git_request.md)
 * [Life of a Web Request](../tutorials/overview_life_of_a_web_request.md)
-* [../uncategorized/about-gitlab-com.md](../uncategorized/about-gitlab-com.md)
 * [Managing Chef](../uncategorized/manage-chef.md)
 * [Google mtail for prometheus metrics](../uncategorized/mtail.md)
 * [../uncategorized/namespace-restore.md](../uncategorized/namespace-restore.md)
