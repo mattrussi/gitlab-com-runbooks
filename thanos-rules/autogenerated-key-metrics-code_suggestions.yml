@@ -1128,7 +1128,7 @@ groups:
       component: native_model_inference
       global_aggregation: "yes"
       regional_aggregation: "no"
-      service_aggregation: "yes"
+      service_aggregation: "no"
       tier: sv
       type: code_suggestions
     expr: "1"
@@ -1137,7 +1137,7 @@ groups:
       component: third_party_model_inference
       global_aggregation: "yes"
       regional_aggregation: "no"
-      service_aggregation: "yes"
+      service_aggregation: "no"
       tier: sv
       type: code_suggestions
     expr: "1"
