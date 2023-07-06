@@ -166,6 +166,7 @@ metricsCatalog.serviceDefinition({
       local inferenceSelector = baseSelector { container: 'model-gateway', model_engine: 'codegen' },
       severity: 's4',  // NOTE: Do not page on-call SREs until production ready
       userImpacting: true,
+      serviceAggregation: false,
       team: 'ai_assisted',
       featureCategory: 'code_suggestions',
       trafficCessationAlertConfig: false,  // NOTE: traffic can be routed 100% to either native vs third party
@@ -196,6 +197,7 @@ metricsCatalog.serviceDefinition({
       local inferenceSelector = baseSelector { container: 'model-gateway', model_engine: { ne: 'codegen' } },
       severity: 's4',  // NOTE: Do not page on-call SREs until production ready
       userImpacting: true,
+      serviceAggregation: false,
       team: 'ai_assisted',
       featureCategory: 'code_suggestions',
       trafficCessationAlertConfig: false,  // NOTE: traffic can be routed 100% to either native vs third party
