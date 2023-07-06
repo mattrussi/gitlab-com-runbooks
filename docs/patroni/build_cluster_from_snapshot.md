@@ -94,6 +94,8 @@ data "google_compute_snapshot" "gcp_database_snapshot_gprd_main_2004" {
 }
 ```
 
+:warning: IMPORTANT: Use an existing snapshot or create a new one manually – to do the latter properly, follow the procedure defined in [gcs-snapshots.md](gcs-snapshots.md#manual-gcs-snapshots). If you create a new GCS snapshot without proper additional actions, Postgres might not be able to reach the consistency point (it won't start).
+
 When defining the target cluster module in Terraform, define the storage size and settings similar to the source, and then define the `data_disk_snapshot` pointing to the source snapshot and a large amount of time for `data_disk_create_timeout`, like for example:
 
 ```
