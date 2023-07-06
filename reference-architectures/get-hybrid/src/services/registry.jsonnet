@@ -68,5 +68,5 @@ metricsCatalog.serviceDefinition({
       toolingLinks: [
       ],
     },
-  },
+  } + registryHelpers.apdexPerRoute,
 })
