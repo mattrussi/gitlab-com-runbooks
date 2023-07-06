@@ -113,7 +113,6 @@ local customRouteSLIs = [
 
 local defaultRegistrySLIProperties = {
   userImpacting: true,
-  featureCategory: 'container_registry',
 };
 
 local registryBaseSelector = {
