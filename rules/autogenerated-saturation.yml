@@ -839,11 +839,11 @@ groups:
       max by(environment, shard) (
         clamp_min(
           clamp_max(
-            sum without(executor_stage, exported_stage, state) (
+            sum without(executor_stage, exported_stage, state, runner) (
               max_over_time(gitlab_runner_jobs{job="runners-manager",shard="private"}[1m])
             )
             /
-            gitlab_runner_limit{job="runners-manager",shard="private"} > 0
+            gitlab_runner_concurrent{job="runners-manager",shard="private"} > 0
             ,
             1)
         ,
@@ -1081,6 +1081,126 @@ groups:
       )
   - record: gitlab_component_saturation:ratio
     labels:
+      component: saas_linux_large_amd64_runners
+      stage: main
+      tier: runners
+      type: ci-runners
+    expr: |
+      max by(environment, shard) (
+        clamp_min(
+          clamp_max(
+            sum without(executor_stage, exported_stage, state, runner) (
+              max_over_time(gitlab_runner_jobs{job="runners-manager",shard="saas-linux-large-amd64"}[1m])
+            )
+            /
+            gitlab_runner_concurrent{job="runners-manager",shard="saas-linux-large-amd64"} > 0
+            ,
+            1)
+        ,
+        0)
+      )
+  - record: gitlab_component_saturation:ratio
+    labels:
+      component: saas_linux_medium_amd64_gpu_standard_runners
+      stage: main
+      tier: runners
+      type: ci-runners
+    expr: |
+      max by(environment, shard) (
+        clamp_min(
+          clamp_max(
+            sum without(executor_stage, exported_stage, state, runner) (
+              max_over_time(gitlab_runner_jobs{job="runners-manager",shard="saas-linux-medium-amd64-gpu-standard"}[1m])
+            )
+            /
+            gitlab_runner_concurrent{job="runners-manager",shard="saas-linux-medium-amd64-gpu-standard"} > 0
+            ,
+            1)
+        ,
+        0)
+      )
+  - record: gitlab_component_saturation:ratio
+    labels:
+      component: saas_linux_medium_amd64_runners
+      stage: main
+      tier: runners
+      type: ci-runners
+    expr: |
+      max by(environment, shard) (
+        clamp_min(
+          clamp_max(
+            sum without(executor_stage, exported_stage, state, runner) (
+              max_over_time(gitlab_runner_jobs{job="runners-manager",shard="saas-linux-medium-amd64"}[1m])
+            )
+            /
+            gitlab_runner_concurrent{job="runners-manager",shard="saas-linux-medium-amd64"} > 0
+            ,
+            1)
+        ,
+        0)
+      )
+  - record: gitlab_component_saturation:ratio
+    labels:
+      component: saas_linux_small_amd64_runners
+      stage: main
+      tier: runners
+      type: ci-runners
+    expr: |
+      max by(environment, shard) (
+        clamp_min(
+          clamp_max(
+            sum without(executor_stage, exported_stage, state, runner) (
+              max_over_time(gitlab_runner_jobs{job="runners-manager",shard="saas-linux-small-amd64"}[1m])
+            )
+            /
+            gitlab_runner_concurrent{job="runners-manager",shard="saas-linux-small-amd64"} > 0
+            ,
+            1)
+        ,
+        0)
+      )
+  - record: gitlab_component_saturation:ratio
+    labels:
+      component: saas_macos_medium_m1_runners
+      stage: main
+      tier: runners
+      type: ci-runners
+    expr: |
+      max by(environment, shard) (
+        clamp_min(
+          clamp_max(
+            sum without(executor_stage, exported_stage, state, runner) (
+              max_over_time(gitlab_runner_jobs{job="runners-manager",shard="saas-macos-medium-m1"}[1m])
+            )
+            /
+            gitlab_runner_concurrent{job="runners-manager",shard="saas-macos-medium-m1"} > 0
+            ,
+            1)
+        ,
+        0)
+      )
+  - record: gitlab_component_saturation:ratio
+    labels:
+      component: saas_macos_staging_runners
+      stage: main
+      tier: runners
+      type: ci-runners
+    expr: |
+      max by(environment, shard) (
+        clamp_min(
+          clamp_max(
+            sum without(executor_stage, exported_stage, state, runner) (
+              max_over_time(gitlab_runner_jobs{job="runners-manager",shard="saas-macos-staging"}[1m])
+            )
+            /
+            gitlab_runner_concurrent{job="runners-manager",shard="saas-macos-staging"} > 0
+            ,
+            1)
+        ,
+        0)
+      )
+  - record: gitlab_component_saturation:ratio
+    labels:
       component: shard_cpu
     expr: |
       max by(environment, tier, type, stage, shard) (
@@ -1096,7 +1216,7 @@ groups:
       )
   - record: gitlab_component_saturation:ratio
     labels:
-      component: shared_runners
+      component: shared_runners_gitlab
       stage: main
       tier: runners
       type: ci-runners
@@ -1105,27 +1225,10 @@ groups:
         clamp_min(
           clamp_max(
             sum without(executor_stage, exported_stage, state, runner) (
-              max_over_time(gitlab_runner_jobs{job="runners-manager",shard="shared"}[1m])
-            )
-            /
-            gitlab_runner_concurrent{job="runners-manager",shard="shared"} > 0
-            ,
-            1)
-        ,
-        0)
-      )
-  - record: gitlab_component_saturation:ratio
-    labels:
-      component: shared_runners_gitlab
-    expr: |
-      max by(environment, tier, type, stage, shard) (
-        clamp_min(
-          clamp_max(
-            sum without(executor_stage, exported_stage, state) (
               max_over_time(gitlab_runner_jobs{job="runners-manager",shard="shared-gitlab-org"}[1m])
             )
             /
-            gitlab_runner_limit{job="runners-manager",shard="shared-gitlab-org"} > 0
+            gitlab_runner_concurrent{job="runners-manager",shard="shared-gitlab-org"} > 0
             ,
             1)
         ,
@@ -1173,6 +1276,26 @@ groups:
             sum by(environment, tier, type, stage, shard, fqdn) (avg_over_time(instance:puma_active_connections:sum{type=~"web|api|git|sidekiq|websockets"}[1m]))
             /
             sum by(environment, tier, type, stage, shard, fqdn) (instance:puma_max_threads:sum{type=~"web|api|git|sidekiq|websockets"})
+            ,
+            1)
+        ,
+        0)
+      )
+  - record: gitlab_component_saturation:ratio
+    labels:
+      component: windows_shared_runners
+      stage: main
+      tier: runners
+      type: ci-runners
+    expr: |
+      max by(environment, shard) (
+        clamp_min(
+          clamp_max(
+            sum without(executor_stage, exported_stage, state, runner) (
+              max_over_time(gitlab_runner_jobs{job="runners-manager",shard="windows-shared"}[1m])
+            )
+            /
+            gitlab_runner_concurrent{job="runners-manager",shard="windows-shared"} > 0
             ,
             1)
         ,
@@ -1716,19 +1839,59 @@ groups:
     expr: "0.95"
   - record: slo:max:soft:gitlab_component_saturation:ratio
     labels:
+      component: saas_linux_large_amd64_runners
+    expr: "0.9"
+  - record: slo:max:hard:gitlab_component_saturation:ratio
+    labels:
+      component: saas_linux_large_amd64_runners
+    expr: "0.95"
+  - record: slo:max:soft:gitlab_component_saturation:ratio
+    labels:
+      component: saas_linux_medium_amd64_gpu_standard_runners
+    expr: "0.9"
+  - record: slo:max:hard:gitlab_component_saturation:ratio
+    labels:
+      component: saas_linux_medium_amd64_gpu_standard_runners
+    expr: "0.95"
+  - record: slo:max:soft:gitlab_component_saturation:ratio
+    labels:
+      component: saas_linux_medium_amd64_runners
+    expr: "0.9"
+  - record: slo:max:hard:gitlab_component_saturation:ratio
+    labels:
+      component: saas_linux_medium_amd64_runners
+    expr: "0.95"
+  - record: slo:max:soft:gitlab_component_saturation:ratio
+    labels:
+      component: saas_linux_small_amd64_runners
+    expr: "0.9"
+  - record: slo:max:hard:gitlab_component_saturation:ratio
+    labels:
+      component: saas_linux_small_amd64_runners
+    expr: "0.95"
+  - record: slo:max:soft:gitlab_component_saturation:ratio
+    labels:
+      component: saas_macos_medium_m1_runners
+    expr: "0.9"
+  - record: slo:max:hard:gitlab_component_saturation:ratio
+    labels:
+      component: saas_macos_medium_m1_runners
+    expr: "0.95"
+  - record: slo:max:soft:gitlab_component_saturation:ratio
+    labels:
+      component: saas_macos_staging_runners
+    expr: "0.9"
+  - record: slo:max:hard:gitlab_component_saturation:ratio
+    labels:
+      component: saas_macos_staging_runners
+    expr: "0.95"
+  - record: slo:max:soft:gitlab_component_saturation:ratio
+    labels:
       component: shard_cpu
     expr: "0.85"
   - record: slo:max:hard:gitlab_component_saturation:ratio
     labels:
       component: shard_cpu
-    expr: "0.95"
-  - record: slo:max:soft:gitlab_component_saturation:ratio
-    labels:
-      component: shared_runners
-    expr: "0.9"
-  - record: slo:max:hard:gitlab_component_saturation:ratio
-    labels:
-      component: shared_runners
     expr: "0.95"
   - record: slo:max:soft:gitlab_component_saturation:ratio
     labels:
@@ -1762,6 +1925,14 @@ groups:
     labels:
       component: single_node_puma_workers
     expr: "0.9"
+  - record: slo:max:soft:gitlab_component_saturation:ratio
+    labels:
+      component: windows_shared_runners
+    expr: "0.9"
+  - record: slo:max:hard:gitlab_component_saturation:ratio
+    labels:
+      component: windows_shared_runners
+    expr: "0.95"
   - record: slo:max:soft:gitlab_component_saturation:ratio
     labels:
       component: workhorse_image_scaling
@@ -2272,18 +2443,58 @@ groups:
   - record: gitlab_component_saturation_info
     labels:
       capacity_planning_strategy: quantile95_1h
-      component: shard_cpu
+      component: saas_linux_large_amd64_runners
       horiz_scaling: "yes"
       quantile: max
-      severity: s3
+      severity: s4
     expr: "1"
   - record: gitlab_component_saturation_info
     labels:
       capacity_planning_strategy: quantile95_1h
-      component: shared_runners
+      component: saas_linux_medium_amd64_gpu_standard_runners
       horiz_scaling: "yes"
       quantile: max
       severity: s4
+    expr: "1"
+  - record: gitlab_component_saturation_info
+    labels:
+      capacity_planning_strategy: quantile95_1h
+      component: saas_linux_medium_amd64_runners
+      horiz_scaling: "yes"
+      quantile: max
+      severity: s4
+    expr: "1"
+  - record: gitlab_component_saturation_info
+    labels:
+      capacity_planning_strategy: quantile95_1h
+      component: saas_linux_small_amd64_runners
+      horiz_scaling: "yes"
+      quantile: max
+      severity: s4
+    expr: "1"
+  - record: gitlab_component_saturation_info
+    labels:
+      capacity_planning_strategy: quantile95_1h
+      component: saas_macos_medium_m1_runners
+      horiz_scaling: "yes"
+      quantile: max
+      severity: s4
+    expr: "1"
+  - record: gitlab_component_saturation_info
+    labels:
+      capacity_planning_strategy: quantile95_1h
+      component: saas_macos_staging_runners
+      horiz_scaling: "yes"
+      quantile: max
+      severity: s4
+    expr: "1"
+  - record: gitlab_component_saturation_info
+    labels:
+      capacity_planning_strategy: quantile95_1h
+      component: shard_cpu
+      horiz_scaling: "yes"
+      quantile: max
+      severity: s3
     expr: "1"
   - record: gitlab_component_saturation_info
     labels:
@@ -2316,6 +2527,14 @@ groups:
       horiz_scaling: "yes"
       quantile: max
       severity: s2
+    expr: "1"
+  - record: gitlab_component_saturation_info
+    labels:
+      capacity_planning_strategy: quantile95_1h
+      component: windows_shared_runners
+      horiz_scaling: "yes"
+      quantile: max
+      severity: s4
     expr: "1"
   - record: gitlab_component_saturation_info
     labels:
@@ -4488,15 +4707,15 @@ groups:
   - alert: component_saturation_slo_out_of_bounds
     for: 5m
     annotations:
-      title: The Private Runners utilization resource of the {{ $labels.type }} service
+      title: The private Runner utilization resource of the {{ $labels.type }} service
         ({{ $labels.stage }} stage) has a saturation exceeding SLO and is close to
         its capacity limit.
       description: |
         This means that this resource is running close to capacity and is at risk of exceeding its current capacity limit.
 
-        Details of the Private Runners utilization resource:
+        Details of the private Runner utilization resource:
 
-        Private runners utilization per instance.
+        private runner utilization per instance.
 
         Each runner manager has a maximum number of runners that it can coordinate at any single moment.
 
@@ -4512,11 +4731,11 @@ groups:
         max by(environment, shard, instance) (
           clamp_min(
             clamp_max(
-              sum without(executor_stage, exported_stage, state) (
+              sum without(executor_stage, exported_stage, state, runner) (
                 max_over_time(gitlab_runner_jobs{job="runners-manager",shard="private"}[1m])
               )
               /
-              gitlab_runner_limit{job="runners-manager",shard="private"} > 0
+              gitlab_runner_concurrent{job="runners-manager",shard="private"} > 0
               ,
               1)
           ,
@@ -5138,6 +5357,276 @@ groups:
   - alert: component_saturation_slo_out_of_bounds
     for: 5m
     annotations:
+      title: The saas-linux-large-amd64 Runner utilization resource of the {{ $labels.type
+        }} service ({{ $labels.stage }} stage) has a saturation exceeding SLO and
+        is close to its capacity limit.
+      description: |
+        This means that this resource is running close to capacity and is at risk of exceeding its current capacity limit.
+
+        Details of the saas-linux-large-amd64 Runner utilization resource:
+
+        saas-linux-large-amd64 runner utilization per instance.
+
+        Each runner manager has a maximum number of runners that it can coordinate at any single moment.
+
+        When this metric is saturated, new CI jobs will queue. When this occurs we should consider adding more runner managers, or scaling the runner managers vertically and increasing their maximum runner capacity.
+      grafana_dashboard_id: alerts-sat_r_saas_l_l_amd64
+      grafana_dashboard_link: https://dashboards.gitlab.net/d/alerts-sat_r_saas_l_l_amd64?from=now-6h/m&to=now-1m/m&var-environment={{
+        $labels.environment }}&var-type={{ $labels.type }}&var-stage={{ $labels.stage
+        }}
+      grafana_min_zoom_hours: "6"
+      grafana_panel_id: "3579321365"
+      grafana_variables: environment,type,stage
+      promql_query: |
+        max by(environment, shard, instance) (
+          clamp_min(
+            clamp_max(
+              sum without(executor_stage, exported_stage, state, runner) (
+                max_over_time(gitlab_runner_jobs{job="runners-manager",shard="saas-linux-large-amd64"}[1m])
+              )
+              /
+              gitlab_runner_concurrent{job="runners-manager",shard="saas-linux-large-amd64"} > 0
+              ,
+              1)
+          ,
+          0)
+        )
+      runbook: docs/{{ $labels.type }}/README.md
+    labels:
+      alert_type: cause
+      rules_domain: general
+      severity: s4
+    expr: |
+      gitlab_component_saturation:ratio{component="saas_linux_large_amd64_runners"} > on(component) group_left
+      slo:max:hard:gitlab_component_saturation:ratio{component="saas_linux_large_amd64_runners"}
+  - alert: component_saturation_slo_out_of_bounds
+    for: 5m
+    annotations:
+      title: The saas-linux-medium-amd64-gpu-standard Runner utilization resource
+        of the {{ $labels.type }} service ({{ $labels.stage }} stage) has a saturation
+        exceeding SLO and is close to its capacity limit.
+      description: |
+        This means that this resource is running close to capacity and is at risk of exceeding its current capacity limit.
+
+        Details of the saas-linux-medium-amd64-gpu-standard Runner utilization resource:
+
+        saas-linux-medium-amd64-gpu-standard runner utilization per instance.
+
+        Each runner manager has a maximum number of runners that it can coordinate at any single moment.
+
+        When this metric is saturated, new CI jobs will queue. When this occurs we should consider adding more runner managers, or scaling the runner managers vertically and increasing their maximum runner capacity.
+      grafana_dashboard_id: alerts-sat_r_saas_l_m_amd64_g_s
+      grafana_dashboard_link: https://dashboards.gitlab.net/d/alerts-sat_r_saas_l_m_amd64_g_s?from=now-6h/m&to=now-1m/m&var-environment={{
+        $labels.environment }}&var-type={{ $labels.type }}&var-stage={{ $labels.stage
+        }}
+      grafana_min_zoom_hours: "6"
+      grafana_panel_id: "398921284"
+      grafana_variables: environment,type,stage
+      promql_query: |
+        max by(environment, shard, instance) (
+          clamp_min(
+            clamp_max(
+              sum without(executor_stage, exported_stage, state, runner) (
+                max_over_time(gitlab_runner_jobs{job="runners-manager",shard="saas-linux-medium-amd64-gpu-standard"}[1m])
+              )
+              /
+              gitlab_runner_concurrent{job="runners-manager",shard="saas-linux-medium-amd64-gpu-standard"} > 0
+              ,
+              1)
+          ,
+          0)
+        )
+      runbook: docs/{{ $labels.type }}/README.md
+    labels:
+      alert_type: cause
+      rules_domain: general
+      severity: s4
+    expr: |
+      gitlab_component_saturation:ratio{component="saas_linux_medium_amd64_gpu_standard_runners"} > on(component) group_left
+      slo:max:hard:gitlab_component_saturation:ratio{component="saas_linux_medium_amd64_gpu_standard_runners"}
+  - alert: component_saturation_slo_out_of_bounds
+    for: 5m
+    annotations:
+      title: The saas-linux-medium-amd64 Runner utilization resource of the {{ $labels.type
+        }} service ({{ $labels.stage }} stage) has a saturation exceeding SLO and
+        is close to its capacity limit.
+      description: |
+        This means that this resource is running close to capacity and is at risk of exceeding its current capacity limit.
+
+        Details of the saas-linux-medium-amd64 Runner utilization resource:
+
+        saas-linux-medium-amd64 runner utilization per instance.
+
+        Each runner manager has a maximum number of runners that it can coordinate at any single moment.
+
+        When this metric is saturated, new CI jobs will queue. When this occurs we should consider adding more runner managers, or scaling the runner managers vertically and increasing their maximum runner capacity.
+      grafana_dashboard_id: alerts-sat_r_saas_l_m_amd64
+      grafana_dashboard_link: https://dashboards.gitlab.net/d/alerts-sat_r_saas_l_m_amd64?from=now-6h/m&to=now-1m/m&var-environment={{
+        $labels.environment }}&var-type={{ $labels.type }}&var-stage={{ $labels.stage
+        }}
+      grafana_min_zoom_hours: "6"
+      grafana_panel_id: "1447099375"
+      grafana_variables: environment,type,stage
+      promql_query: |
+        max by(environment, shard, instance) (
+          clamp_min(
+            clamp_max(
+              sum without(executor_stage, exported_stage, state, runner) (
+                max_over_time(gitlab_runner_jobs{job="runners-manager",shard="saas-linux-medium-amd64"}[1m])
+              )
+              /
+              gitlab_runner_concurrent{job="runners-manager",shard="saas-linux-medium-amd64"} > 0
+              ,
+              1)
+          ,
+          0)
+        )
+      runbook: docs/{{ $labels.type }}/README.md
+    labels:
+      alert_type: cause
+      rules_domain: general
+      severity: s4
+    expr: |
+      gitlab_component_saturation:ratio{component="saas_linux_medium_amd64_runners"} > on(component) group_left
+      slo:max:hard:gitlab_component_saturation:ratio{component="saas_linux_medium_amd64_runners"}
+  - alert: component_saturation_slo_out_of_bounds
+    for: 5m
+    annotations:
+      title: The saas-linux-small-amd64 Runner utilization resource of the {{ $labels.type
+        }} service ({{ $labels.stage }} stage) has a saturation exceeding SLO and
+        is close to its capacity limit.
+      description: |
+        This means that this resource is running close to capacity and is at risk of exceeding its current capacity limit.
+
+        Details of the saas-linux-small-amd64 Runner utilization resource:
+
+        saas-linux-small-amd64 runner utilization per instance.
+
+        Each runner manager has a maximum number of runners that it can coordinate at any single moment.
+
+        When this metric is saturated, new CI jobs will queue. When this occurs we should consider adding more runner managers, or scaling the runner managers vertically and increasing their maximum runner capacity.
+      grafana_dashboard_id: alerts-sat_r_saas_l_s_amd64
+      grafana_dashboard_link: https://dashboards.gitlab.net/d/alerts-sat_r_saas_l_s_amd64?from=now-6h/m&to=now-1m/m&var-environment={{
+        $labels.environment }}&var-type={{ $labels.type }}&var-stage={{ $labels.stage
+        }}
+      grafana_min_zoom_hours: "6"
+      grafana_panel_id: "1323503221"
+      grafana_variables: environment,type,stage
+      promql_query: |
+        max by(environment, shard, instance) (
+          clamp_min(
+            clamp_max(
+              sum without(executor_stage, exported_stage, state, runner) (
+                max_over_time(gitlab_runner_jobs{job="runners-manager",shard="saas-linux-small-amd64"}[1m])
+              )
+              /
+              gitlab_runner_concurrent{job="runners-manager",shard="saas-linux-small-amd64"} > 0
+              ,
+              1)
+          ,
+          0)
+        )
+      runbook: docs/{{ $labels.type }}/README.md
+    labels:
+      alert_type: cause
+      rules_domain: general
+      severity: s4
+    expr: |
+      gitlab_component_saturation:ratio{component="saas_linux_small_amd64_runners"} > on(component) group_left
+      slo:max:hard:gitlab_component_saturation:ratio{component="saas_linux_small_amd64_runners"}
+  - alert: component_saturation_slo_out_of_bounds
+    for: 5m
+    annotations:
+      title: The saas-macos-medium-m1 Runner utilization resource of the {{ $labels.type
+        }} service ({{ $labels.stage }} stage) has a saturation exceeding SLO and
+        is close to its capacity limit.
+      description: |
+        This means that this resource is running close to capacity and is at risk of exceeding its current capacity limit.
+
+        Details of the saas-macos-medium-m1 Runner utilization resource:
+
+        saas-macos-medium-m1 runner utilization per instance.
+
+        Each runner manager has a maximum number of runners that it can coordinate at any single moment.
+
+        When this metric is saturated, new CI jobs will queue. When this occurs we should consider adding more runner managers, or scaling the runner managers vertically and increasing their maximum runner capacity.
+      grafana_dashboard_id: alerts-sat_r_saas_m_m_m1
+      grafana_dashboard_link: https://dashboards.gitlab.net/d/alerts-sat_r_saas_m_m_m1?from=now-6h/m&to=now-1m/m&var-environment={{
+        $labels.environment }}&var-type={{ $labels.type }}&var-stage={{ $labels.stage
+        }}
+      grafana_min_zoom_hours: "6"
+      grafana_panel_id: "736478168"
+      grafana_variables: environment,type,stage
+      promql_query: |
+        max by(environment, shard, instance) (
+          clamp_min(
+            clamp_max(
+              sum without(executor_stage, exported_stage, state, runner) (
+                max_over_time(gitlab_runner_jobs{job="runners-manager",shard="saas-macos-medium-m1"}[1m])
+              )
+              /
+              gitlab_runner_concurrent{job="runners-manager",shard="saas-macos-medium-m1"} > 0
+              ,
+              1)
+          ,
+          0)
+        )
+      runbook: docs/{{ $labels.type }}/README.md
+    labels:
+      alert_type: cause
+      rules_domain: general
+      severity: s4
+    expr: |
+      gitlab_component_saturation:ratio{component="saas_macos_medium_m1_runners"} > on(component) group_left
+      slo:max:hard:gitlab_component_saturation:ratio{component="saas_macos_medium_m1_runners"}
+  - alert: component_saturation_slo_out_of_bounds
+    for: 5m
+    annotations:
+      title: The saas-macos-staging Runner utilization resource of the {{ $labels.type
+        }} service ({{ $labels.stage }} stage) has a saturation exceeding SLO and
+        is close to its capacity limit.
+      description: |
+        This means that this resource is running close to capacity and is at risk of exceeding its current capacity limit.
+
+        Details of the saas-macos-staging Runner utilization resource:
+
+        saas-macos-staging runner utilization per instance.
+
+        Each runner manager has a maximum number of runners that it can coordinate at any single moment.
+
+        When this metric is saturated, new CI jobs will queue. When this occurs we should consider adding more runner managers, or scaling the runner managers vertically and increasing their maximum runner capacity.
+      grafana_dashboard_id: alerts-sat_r_saas_m_s
+      grafana_dashboard_link: https://dashboards.gitlab.net/d/alerts-sat_r_saas_m_s?from=now-6h/m&to=now-1m/m&var-environment={{
+        $labels.environment }}&var-type={{ $labels.type }}&var-stage={{ $labels.stage
+        }}
+      grafana_min_zoom_hours: "6"
+      grafana_panel_id: "2529444096"
+      grafana_variables: environment,type,stage
+      promql_query: |
+        max by(environment, shard, instance) (
+          clamp_min(
+            clamp_max(
+              sum without(executor_stage, exported_stage, state, runner) (
+                max_over_time(gitlab_runner_jobs{job="runners-manager",shard="saas-macos-staging"}[1m])
+              )
+              /
+              gitlab_runner_concurrent{job="runners-manager",shard="saas-macos-staging"} > 0
+              ,
+              1)
+          ,
+          0)
+        )
+      runbook: docs/{{ $labels.type }}/README.md
+    labels:
+      alert_type: cause
+      rules_domain: general
+      severity: s4
+    expr: |
+      gitlab_component_saturation:ratio{component="saas_macos_staging_runners"} > on(component) group_left
+      slo:max:hard:gitlab_component_saturation:ratio{component="saas_macos_staging_runners"}
+  - alert: component_saturation_slo_out_of_bounds
+    for: 5m
+    annotations:
       title: The Average CPU Utilization per Shard resource of the {{ $labels.type
         }} service ({{ $labels.stage }} stage) has a saturation exceeding SLO and
         is close to its capacity limit.
@@ -5177,60 +5666,15 @@ groups:
   - alert: component_saturation_slo_out_of_bounds
     for: 5m
     annotations:
-      title: The Shared Runner utilization resource of the {{ $labels.type }} service
-        ({{ $labels.stage }} stage) has a saturation exceeding SLO and is close to
-        its capacity limit.
-      description: |
-        This means that this resource is running close to capacity and is at risk of exceeding its current capacity limit.
-
-        Details of the Shared Runner utilization resource:
-
-        Shared runner utilization per instance.
-
-        Each runner manager has a maximum number of runners that it can coordinate at any single moment.
-
-        When this metric is saturated, new CI jobs will queue. When this occurs we should consider adding more runner managers, or scaling the runner managers vertically and increasing their maximum runner capacity.
-      grafana_dashboard_id: alerts-sat_shared_runners
-      grafana_dashboard_link: https://dashboards.gitlab.net/d/alerts-sat_shared_runners?from=now-6h/m&to=now-1m/m&var-environment={{
-        $labels.environment }}&var-type={{ $labels.type }}&var-stage={{ $labels.stage
-        }}
-      grafana_min_zoom_hours: "6"
-      grafana_panel_id: "2853615952"
-      grafana_variables: environment,type,stage
-      promql_query: |
-        max by(environment, shard, instance) (
-          clamp_min(
-            clamp_max(
-              sum without(executor_stage, exported_stage, state, runner) (
-                max_over_time(gitlab_runner_jobs{job="runners-manager",shard="shared"}[1m])
-              )
-              /
-              gitlab_runner_concurrent{job="runners-manager",shard="shared"} > 0
-              ,
-              1)
-          ,
-          0)
-        )
-      runbook: docs/{{ $labels.type }}/README.md
-    labels:
-      alert_type: cause
-      rules_domain: general
-      severity: s4
-    expr: |
-      gitlab_component_saturation:ratio{component="shared_runners"} > on(component) group_left
-      slo:max:hard:gitlab_component_saturation:ratio{component="shared_runners"}
-  - alert: component_saturation_slo_out_of_bounds
-    for: 5m
-    annotations:
-      title: The Shared Runner GitLab Utilization resource of the {{ $labels.type
+      title: The shared-gitlab-org Runner utilization resource of the {{ $labels.type
         }} service ({{ $labels.stage }} stage) has a saturation exceeding SLO and
         is close to its capacity limit.
       description: |
         This means that this resource is running close to capacity and is at risk of exceeding its current capacity limit.
 
-        Details of the Shared Runner GitLab Utilization resource:
+        Details of the shared-gitlab-org Runner utilization resource:
 
-        Shared runners utilization per instance.
+        shared-gitlab-org runner utilization per instance.
 
         Each runner manager has a maximum number of runners that it can coordinate at any single moment.
 
@@ -5243,14 +5687,14 @@ groups:
       grafana_panel_id: "3295582630"
       grafana_variables: environment,type,stage
       promql_query: |
-        max by(environment, tier, type, stage, shard, instance) (
+        max by(environment, shard, instance) (
           clamp_min(
             clamp_max(
-              sum without(executor_stage, exported_stage, state) (
+              sum without(executor_stage, exported_stage, state, runner) (
                 max_over_time(gitlab_runner_jobs{job="runners-manager",shard="shared-gitlab-org"}[1m])
               )
               /
-              gitlab_runner_limit{job="runners-manager",shard="shared-gitlab-org"} > 0
+              gitlab_runner_concurrent{job="runners-manager",shard="shared-gitlab-org"} > 0
               ,
               1)
           ,
@@ -5394,6 +5838,51 @@ groups:
     expr: |
       gitlab_component_saturation:ratio{component="single_node_puma_workers"} > on(component) group_left
       slo:max:hard:gitlab_component_saturation:ratio{component="single_node_puma_workers"}
+  - alert: component_saturation_slo_out_of_bounds
+    for: 5m
+    annotations:
+      title: The windows-shared Runner utilization resource of the {{ $labels.type
+        }} service ({{ $labels.stage }} stage) has a saturation exceeding SLO and
+        is close to its capacity limit.
+      description: |
+        This means that this resource is running close to capacity and is at risk of exceeding its current capacity limit.
+
+        Details of the windows-shared Runner utilization resource:
+
+        windows-shared runner utilization per instance.
+
+        Each runner manager has a maximum number of runners that it can coordinate at any single moment.
+
+        When this metric is saturated, new CI jobs will queue. When this occurs we should consider adding more runner managers, or scaling the runner managers vertically and increasing their maximum runner capacity.
+      grafana_dashboard_id: alerts-sat_windows_shared_runners
+      grafana_dashboard_link: https://dashboards.gitlab.net/d/alerts-sat_windows_shared_runners?from=now-6h/m&to=now-1m/m&var-environment={{
+        $labels.environment }}&var-type={{ $labels.type }}&var-stage={{ $labels.stage
+        }}
+      grafana_min_zoom_hours: "6"
+      grafana_panel_id: "4225856541"
+      grafana_variables: environment,type,stage
+      promql_query: |
+        max by(environment, shard, instance) (
+          clamp_min(
+            clamp_max(
+              sum without(executor_stage, exported_stage, state, runner) (
+                max_over_time(gitlab_runner_jobs{job="runners-manager",shard="windows-shared"}[1m])
+              )
+              /
+              gitlab_runner_concurrent{job="runners-manager",shard="windows-shared"} > 0
+              ,
+              1)
+          ,
+          0)
+        )
+      runbook: docs/{{ $labels.type }}/README.md
+    labels:
+      alert_type: cause
+      rules_domain: general
+      severity: s4
+    expr: |
+      gitlab_component_saturation:ratio{component="windows_shared_runners"} > on(component) group_left
+      slo:max:hard:gitlab_component_saturation:ratio{component="windows_shared_runners"}
   - alert: component_saturation_slo_out_of_bounds
     for: 15m
     annotations:
