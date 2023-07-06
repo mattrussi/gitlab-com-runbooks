@@ -23,11 +23,11 @@ local runner_saturation(shard, gduid='', slot_soft=0.90, slot_hard=0.95) =
       stage: 'main',
     },
     query: |||
-      sum without(executor_stage, exported_stage, state, runner) (
+      sum without(executor_stage, exported_stage, state) (
         max_over_time(gitlab_runner_jobs{job="runners-manager",shard="%(shard)s"}[%(rangeInterval)s])
       )
       /
-      gitlab_runner_concurrent{job="runners-manager",shard="%(shard)s"} > 0
+      gitlab_runner_limit{job="runners-manager",shard="%(shard)s"} > 0
     ||| % {
       shard: shard,
       // hack around the fact that `query` is passed through formatting again internally in resourceSaturationPoint()
