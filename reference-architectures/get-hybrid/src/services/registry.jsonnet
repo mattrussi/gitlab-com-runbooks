@@ -50,11 +50,6 @@ metricsCatalog.serviceDefinition({
       |||,
 
       apdex: registryHelpers.mainApdex(),
-      // histogramApdex(
-      //   histogram='registry_http_request_duration_seconds_bucket',
-      //   satisfiedThreshold=2.5,
-      //   toleratedThreshold=25
-      // ),
 
       requestRate: rateMetric(
         counter='registry_http_requests_total',

@@ -92,7 +92,7 @@ local customRouteSLIs = [
     route: '/v2/{name}/blobs/{digest}',
     methods: ['get', 'head'],
   },
-    {
+  {
     name: 'server_route_blob_digest_writes',
     description: |||
       Write requests (PUT or PATCH or POST) for the registry blob digest endpoints.
