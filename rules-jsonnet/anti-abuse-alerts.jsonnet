@@ -10,7 +10,7 @@ local rules = {
           expr: |||
             sum by (environment, tier, type)  (
               rate(
-                gitlab_runner_job_duration_seconds_sum{shard="shared"}[5m]
+                gitlab_runner_job_duration_seconds_sum{shard=~"saas-.*"}[5m]
                )
              )
              > 15000

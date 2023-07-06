@@ -87,33 +87,33 @@ groups:
       )
   - record: gitlab_component_ops:rate
     labels:
-      component: shared_runner_image_pull_failures
+      component: saas_linux_runner_image_pull_failures
       tier: runners
       type: ci-runners
     expr: |
       sum by (env,environment,stage) (
-        rate(gitlab_runner_jobs_total{job="runners-manager",shard="shared"}[1m])
+        rate(gitlab_runner_jobs_total{job="runners-manager",shard=~"shared-gitlab-org|private|saas-linux-.*"}[1m])
       )
   - record: gitlab_component_errors:rate
     labels:
-      component: shared_runner_image_pull_failures
+      component: saas_linux_runner_image_pull_failures
       tier: runners
       type: ci-runners
     expr: |
       (
         sum by (env,environment,stage) (
-          rate(gitlab_runner_failed_jobs_total{failure_reason="image_pull_failure",job="runners-manager",shard="shared"}[1m])
+          rate(gitlab_runner_failed_jobs_total{failure_reason="image_pull_failure",job="runners-manager",shard=~"shared-gitlab-org|private|saas-linux-.*"}[1m])
         )
       )
       or
       (
         0 * group by(env,environment,stage) (
-          gitlab_component_ops:rate{component="shared_runner_image_pull_failures",tier="runners",type="ci-runners"}
+          gitlab_component_ops:rate{component="saas_linux_runner_image_pull_failures",tier="runners",type="ci-runners"}
         )
       )
   - record: gitlab_component_apdex:success:rate
     labels:
-      component: shared_runner_queues
+      component: saas_runner_queues
       tier: runners
       type: ci-runners
     expr: |
@@ -122,7 +122,7 @@ groups:
       )
   - record: gitlab_component_apdex:weight:score
     labels:
-      component: shared_runner_queues
+      component: saas_runner_queues
       tier: runners
       type: ci-runners
     expr: |
@@ -131,28 +131,28 @@ groups:
       )
   - record: gitlab_component_ops:rate
     labels:
-      component: shared_runner_queues
+      component: saas_runner_queues
       tier: runners
       type: ci-runners
     expr: |
       sum by (env,environment,stage) (
-        rate(gitlab_runner_jobs_total{job="runners-manager",shard="shared"}[1m])
+        rate(gitlab_runner_jobs_total{job="runners-manager",shard=~"shared-gitlab-org|private|saas-.*|windows-shared"}[1m])
       )
   - record: gitlab_component_errors:rate
     labels:
-      component: shared_runner_queues
+      component: saas_runner_queues
       tier: runners
       type: ci-runners
     expr: |
       (
         sum by (env,environment,stage) (
-          rate(gitlab_runner_failed_jobs_total{failure_reason="runner_system_failure",job="runners-manager",shard="shared"}[1m])
+          rate(gitlab_runner_failed_jobs_total{failure_reason="runner_system_failure",job="runners-manager",shard=~"shared-gitlab-org|private|saas-.*|windows-shared"}[1m])
         )
       )
       or
       (
         0 * group by(env,environment,stage) (
-          gitlab_component_ops:rate{component="shared_runner_queues",tier="runners",type="ci-runners"}
+          gitlab_component_ops:rate{component="saas_runner_queues",tier="runners",type="ci-runners"}
         )
       )
   - record: gitlab_component_ops:rate
@@ -267,33 +267,33 @@ groups:
       )
   - record: gitlab_component_ops:rate_5m
     labels:
-      component: shared_runner_image_pull_failures
+      component: saas_linux_runner_image_pull_failures
       tier: runners
       type: ci-runners
     expr: |
       sum by (env,environment,stage) (
-        rate(gitlab_runner_jobs_total{job="runners-manager",shard="shared"}[5m])
+        rate(gitlab_runner_jobs_total{job="runners-manager",shard=~"shared-gitlab-org|private|saas-linux-.*"}[5m])
       )
   - record: gitlab_component_errors:rate_5m
     labels:
-      component: shared_runner_image_pull_failures
+      component: saas_linux_runner_image_pull_failures
       tier: runners
       type: ci-runners
     expr: |
       (
         sum by (env,environment,stage) (
-          rate(gitlab_runner_failed_jobs_total{failure_reason="image_pull_failure",job="runners-manager",shard="shared"}[5m])
+          rate(gitlab_runner_failed_jobs_total{failure_reason="image_pull_failure",job="runners-manager",shard=~"shared-gitlab-org|private|saas-linux-.*"}[5m])
         )
       )
       or
       (
         0 * group by(env,environment,stage) (
-          gitlab_component_ops:rate_5m{component="shared_runner_image_pull_failures",tier="runners",type="ci-runners"}
+          gitlab_component_ops:rate_5m{component="saas_linux_runner_image_pull_failures",tier="runners",type="ci-runners"}
         )
       )
   - record: gitlab_component_apdex:success:rate_5m
     labels:
-      component: shared_runner_queues
+      component: saas_runner_queues
       tier: runners
       type: ci-runners
     expr: |
@@ -302,7 +302,7 @@ groups:
       )
   - record: gitlab_component_apdex:weight:score_5m
     labels:
-      component: shared_runner_queues
+      component: saas_runner_queues
       tier: runners
       type: ci-runners
     expr: |
@@ -311,28 +311,28 @@ groups:
       )
   - record: gitlab_component_ops:rate_5m
     labels:
-      component: shared_runner_queues
+      component: saas_runner_queues
       tier: runners
       type: ci-runners
     expr: |
       sum by (env,environment,stage) (
-        rate(gitlab_runner_jobs_total{job="runners-manager",shard="shared"}[5m])
+        rate(gitlab_runner_jobs_total{job="runners-manager",shard=~"shared-gitlab-org|private|saas-.*|windows-shared"}[5m])
       )
   - record: gitlab_component_errors:rate_5m
     labels:
-      component: shared_runner_queues
+      component: saas_runner_queues
       tier: runners
       type: ci-runners
     expr: |
       (
         sum by (env,environment,stage) (
-          rate(gitlab_runner_failed_jobs_total{failure_reason="runner_system_failure",job="runners-manager",shard="shared"}[5m])
+          rate(gitlab_runner_failed_jobs_total{failure_reason="runner_system_failure",job="runners-manager",shard=~"shared-gitlab-org|private|saas-.*|windows-shared"}[5m])
         )
       )
       or
       (
         0 * group by(env,environment,stage) (
-          gitlab_component_ops:rate_5m{component="shared_runner_queues",tier="runners",type="ci-runners"}
+          gitlab_component_ops:rate_5m{component="saas_runner_queues",tier="runners",type="ci-runners"}
         )
       )
   - record: gitlab_component_ops:rate_5m
@@ -447,33 +447,33 @@ groups:
       )
   - record: gitlab_component_ops:rate_30m
     labels:
-      component: shared_runner_image_pull_failures
+      component: saas_linux_runner_image_pull_failures
       tier: runners
       type: ci-runners
     expr: |
       sum by (env,environment,stage) (
-        rate(gitlab_runner_jobs_total{job="runners-manager",shard="shared"}[30m])
+        rate(gitlab_runner_jobs_total{job="runners-manager",shard=~"shared-gitlab-org|private|saas-linux-.*"}[30m])
       )
   - record: gitlab_component_errors:rate_30m
     labels:
-      component: shared_runner_image_pull_failures
+      component: saas_linux_runner_image_pull_failures
       tier: runners
       type: ci-runners
     expr: |
       (
         sum by (env,environment,stage) (
-          rate(gitlab_runner_failed_jobs_total{failure_reason="image_pull_failure",job="runners-manager",shard="shared"}[30m])
+          rate(gitlab_runner_failed_jobs_total{failure_reason="image_pull_failure",job="runners-manager",shard=~"shared-gitlab-org|private|saas-linux-.*"}[30m])
         )
       )
       or
       (
         0 * group by(env,environment,stage) (
-          gitlab_component_ops:rate_30m{component="shared_runner_image_pull_failures",tier="runners",type="ci-runners"}
+          gitlab_component_ops:rate_30m{component="saas_linux_runner_image_pull_failures",tier="runners",type="ci-runners"}
         )
       )
   - record: gitlab_component_apdex:success:rate_30m
     labels:
-      component: shared_runner_queues
+      component: saas_runner_queues
       tier: runners
       type: ci-runners
     expr: |
@@ -482,7 +482,7 @@ groups:
       )
   - record: gitlab_component_apdex:weight:score_30m
     labels:
-      component: shared_runner_queues
+      component: saas_runner_queues
       tier: runners
       type: ci-runners
     expr: |
@@ -491,28 +491,28 @@ groups:
       )
   - record: gitlab_component_ops:rate_30m
     labels:
-      component: shared_runner_queues
+      component: saas_runner_queues
       tier: runners
       type: ci-runners
     expr: |
       sum by (env,environment,stage) (
-        rate(gitlab_runner_jobs_total{job="runners-manager",shard="shared"}[30m])
+        rate(gitlab_runner_jobs_total{job="runners-manager",shard=~"shared-gitlab-org|private|saas-.*|windows-shared"}[30m])
       )
   - record: gitlab_component_errors:rate_30m
     labels:
-      component: shared_runner_queues
+      component: saas_runner_queues
       tier: runners
       type: ci-runners
     expr: |
       (
         sum by (env,environment,stage) (
-          rate(gitlab_runner_failed_jobs_total{failure_reason="runner_system_failure",job="runners-manager",shard="shared"}[30m])
+          rate(gitlab_runner_failed_jobs_total{failure_reason="runner_system_failure",job="runners-manager",shard=~"shared-gitlab-org|private|saas-.*|windows-shared"}[30m])
         )
       )
       or
       (
         0 * group by(env,environment,stage) (
-          gitlab_component_ops:rate_30m{component="shared_runner_queues",tier="runners",type="ci-runners"}
+          gitlab_component_ops:rate_30m{component="saas_runner_queues",tier="runners",type="ci-runners"}
         )
       )
   - record: gitlab_component_ops:rate_30m
@@ -627,33 +627,33 @@ groups:
       )
   - record: gitlab_component_ops:rate_1h
     labels:
-      component: shared_runner_image_pull_failures
+      component: saas_linux_runner_image_pull_failures
       tier: runners
       type: ci-runners
     expr: |
       sum by (env,environment,stage) (
-        rate(gitlab_runner_jobs_total{job="runners-manager",shard="shared"}[1h])
+        rate(gitlab_runner_jobs_total{job="runners-manager",shard=~"shared-gitlab-org|private|saas-linux-.*"}[1h])
       )
   - record: gitlab_component_errors:rate_1h
     labels:
-      component: shared_runner_image_pull_failures
+      component: saas_linux_runner_image_pull_failures
       tier: runners
       type: ci-runners
     expr: |
       (
         sum by (env,environment,stage) (
-          rate(gitlab_runner_failed_jobs_total{failure_reason="image_pull_failure",job="runners-manager",shard="shared"}[1h])
+          rate(gitlab_runner_failed_jobs_total{failure_reason="image_pull_failure",job="runners-manager",shard=~"shared-gitlab-org|private|saas-linux-.*"}[1h])
         )
       )
       or
       (
         0 * group by(env,environment,stage) (
-          gitlab_component_ops:rate_1h{component="shared_runner_image_pull_failures",tier="runners",type="ci-runners"}
+          gitlab_component_ops:rate_1h{component="saas_linux_runner_image_pull_failures",tier="runners",type="ci-runners"}
         )
       )
   - record: gitlab_component_apdex:success:rate_1h
     labels:
-      component: shared_runner_queues
+      component: saas_runner_queues
       tier: runners
       type: ci-runners
     expr: |
@@ -662,7 +662,7 @@ groups:
       )
   - record: gitlab_component_apdex:weight:score_1h
     labels:
-      component: shared_runner_queues
+      component: saas_runner_queues
       tier: runners
       type: ci-runners
     expr: |
@@ -671,28 +671,28 @@ groups:
       )
   - record: gitlab_component_ops:rate_1h
     labels:
-      component: shared_runner_queues
+      component: saas_runner_queues
       tier: runners
       type: ci-runners
     expr: |
       sum by (env,environment,stage) (
-        rate(gitlab_runner_jobs_total{job="runners-manager",shard="shared"}[1h])
+        rate(gitlab_runner_jobs_total{job="runners-manager",shard=~"shared-gitlab-org|private|saas-.*|windows-shared"}[1h])
       )
   - record: gitlab_component_errors:rate_1h
     labels:
-      component: shared_runner_queues
+      component: saas_runner_queues
       tier: runners
       type: ci-runners
     expr: |
       (
         sum by (env,environment,stage) (
-          rate(gitlab_runner_failed_jobs_total{failure_reason="runner_system_failure",job="runners-manager",shard="shared"}[1h])
+          rate(gitlab_runner_failed_jobs_total{failure_reason="runner_system_failure",job="runners-manager",shard=~"shared-gitlab-org|private|saas-.*|windows-shared"}[1h])
         )
       )
       or
       (
         0 * group by(env,environment,stage) (
-          gitlab_component_ops:rate_1h{component="shared_runner_queues",tier="runners",type="ci-runners"}
+          gitlab_component_ops:rate_1h{component="saas_runner_queues",tier="runners",type="ci-runners"}
         )
       )
   - record: gitlab_component_ops:rate_1h
@@ -807,33 +807,33 @@ groups:
       )
   - record: gitlab_component_ops:rate_6h
     labels:
-      component: shared_runner_image_pull_failures
+      component: saas_linux_runner_image_pull_failures
       tier: runners
       type: ci-runners
     expr: |
       sum by (env,environment,stage) (
-        rate(gitlab_runner_jobs_total{job="runners-manager",shard="shared"}[6h])
+        rate(gitlab_runner_jobs_total{job="runners-manager",shard=~"shared-gitlab-org|private|saas-linux-.*"}[6h])
       )
   - record: gitlab_component_errors:rate_6h
     labels:
-      component: shared_runner_image_pull_failures
+      component: saas_linux_runner_image_pull_failures
       tier: runners
       type: ci-runners
     expr: |
       (
         sum by (env,environment,stage) (
-          rate(gitlab_runner_failed_jobs_total{failure_reason="image_pull_failure",job="runners-manager",shard="shared"}[6h])
+          rate(gitlab_runner_failed_jobs_total{failure_reason="image_pull_failure",job="runners-manager",shard=~"shared-gitlab-org|private|saas-linux-.*"}[6h])
         )
       )
       or
       (
         0 * group by(env,environment,stage) (
-          gitlab_component_ops:rate_6h{component="shared_runner_image_pull_failures",tier="runners",type="ci-runners"}
+          gitlab_component_ops:rate_6h{component="saas_linux_runner_image_pull_failures",tier="runners",type="ci-runners"}
         )
       )
   - record: gitlab_component_apdex:success:rate_6h
     labels:
-      component: shared_runner_queues
+      component: saas_runner_queues
       tier: runners
       type: ci-runners
     expr: |
@@ -842,7 +842,7 @@ groups:
       )
   - record: gitlab_component_apdex:weight:score_6h
     labels:
-      component: shared_runner_queues
+      component: saas_runner_queues
       tier: runners
       type: ci-runners
     expr: |
@@ -851,28 +851,28 @@ groups:
       )
   - record: gitlab_component_ops:rate_6h
     labels:
-      component: shared_runner_queues
+      component: saas_runner_queues
       tier: runners
       type: ci-runners
     expr: |
       sum by (env,environment,stage) (
-        rate(gitlab_runner_jobs_total{job="runners-manager",shard="shared"}[6h])
+        rate(gitlab_runner_jobs_total{job="runners-manager",shard=~"shared-gitlab-org|private|saas-.*|windows-shared"}[6h])
       )
   - record: gitlab_component_errors:rate_6h
     labels:
-      component: shared_runner_queues
+      component: saas_runner_queues
       tier: runners
       type: ci-runners
     expr: |
       (
         sum by (env,environment,stage) (
-          rate(gitlab_runner_failed_jobs_total{failure_reason="runner_system_failure",job="runners-manager",shard="shared"}[6h])
+          rate(gitlab_runner_failed_jobs_total{failure_reason="runner_system_failure",job="runners-manager",shard=~"shared-gitlab-org|private|saas-.*|windows-shared"}[6h])
         )
       )
       or
       (
         0 * group by(env,environment,stage) (
-          gitlab_component_ops:rate_6h{component="shared_runner_queues",tier="runners",type="ci-runners"}
+          gitlab_component_ops:rate_6h{component="saas_runner_queues",tier="runners",type="ci-runners"}
         )
       )
   - record: gitlab_component_ops:rate_6h
@@ -933,7 +933,7 @@ groups:
     expr: "1"
   - record: gitlab_component_service:mapping
     labels:
-      component: shared_runner_image_pull_failures
+      component: saas_linux_runner_image_pull_failures
       global_aggregation: "no"
       regional_aggregation: "no"
       service_aggregation: "no"
@@ -942,7 +942,7 @@ groups:
     expr: "1"
   - record: gitlab_component_service:mapping
     labels:
-      component: shared_runner_queues
+      component: saas_runner_queues
       global_aggregation: "no"
       regional_aggregation: "no"
       service_aggregation: "yes"

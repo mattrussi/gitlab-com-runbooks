@@ -4,10 +4,6 @@ local rateMetric = metricsCatalog.rateMetric;
 local toolingLinks = import 'toolinglinks/toolinglinks.libsonnet';
 local haproxyComponents = import './lib/haproxy_components.libsonnet';
 local dependOnRedisSidekiq = import 'inhibit-rules/depend_on_redis_sidekiq.libsonnet';
-local runner_failure_selector = {
-  job: 'runners-manager',
-  shard: 'shared',
-};
 
 metricsCatalog.serviceDefinition({
   type: 'ci-runners',
@@ -83,7 +79,7 @@ metricsCatalog.serviceDefinition({
       ],
     },
 
-    shared_runner_queues: {
+    saas_runner_queues: {
       userImpacting: true,
       featureCategory: 'runner',
       description: |||
@@ -104,13 +100,17 @@ metricsCatalog.serviceDefinition({
         counter='gitlab_runner_jobs_total',
         selector={
           job: 'runners-manager',
-          shard: 'shared',
+          shard: { re: 'shared-gitlab-org|private|saas-.*|windows-shared' },
         },
       ),
 
       errorRate: rateMetric(
         counter='gitlab_runner_failed_jobs_total',
-        selector=runner_failure_selector { failure_reason: 'runner_system_failure' },
+        selector={
+          job: 'runners-manager',
+          shard: { re: 'shared-gitlab-org|private|saas-.*|windows-shared' },
+          failure_reason: 'runner_system_failure'
+        },
       ),
 
       significantLabels: ['jobs_running_for_project'],
@@ -120,7 +120,7 @@ metricsCatalog.serviceDefinition({
       ],
     },
 
-    shared_runner_image_pull_failures: {
+    saas_linux_runner_image_pull_failures: {
       serviceAggregation: false,
       monitoringThresholds+: {
         errorRatio: 0.95,
@@ -129,7 +129,7 @@ metricsCatalog.serviceDefinition({
       userImpacting: true,
       featureCategory: 'runner',
       description: |||
-        This SLI monitors the shared runner queues on GitLab.com. Each job is an operation.
+        This SLI monitors the saas runner queues on GitLab.com. Each job is an operation.
 
         Jobs marked as failing with image pull failures are considered to be in error.
       |||,
@@ -138,13 +138,17 @@ metricsCatalog.serviceDefinition({
         counter='gitlab_runner_jobs_total',
         selector={
           job: 'runners-manager',
-          shard: 'shared',
+          shard: { re: 'shared-gitlab-org|private|saas-linux-.*' },
         },
       ),
 
       errorRate: rateMetric(
         counter='gitlab_runner_failed_jobs_total',
-        selector=runner_failure_selector { failure_reason: 'image_pull_failure' },
+        selector={
+          job: 'runners-manager',
+          shard: { re: 'shared-gitlab-org|private|saas-linux-.*' },
+          failure_reason: 'image_pull_failure'
+        },
       ),
 
       significantLabels: ['jobs_running_for_project'],
