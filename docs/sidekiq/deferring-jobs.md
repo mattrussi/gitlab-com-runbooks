@@ -97,7 +97,7 @@ Example:
 /chatops run feature delete drop_sidekiq_jobs_SlowRunningWorker --ignore-feature-flag-consistency-check
 ```
 
-Note that `drop_sidekiq_jobs` FF has precedence over `defer_sidekiq_jobs` FF. This means when `drop_sidekiq_jobs` FF is enabled and `run_sidekiq_jobs` FF is disabled,
+Note that `drop_sidekiq_jobs` FF has precedence over the `run_sidekiq_jobs` FF. This means when `drop_sidekiq_jobs` FF is enabled and `run_sidekiq_jobs` FF is disabled,
 `drop_sidekiq_jobs` FF takes priority, thus the job is dropped. Once `drop_sidekiq_jobs` FF is back to disabled, jobs are then deferred due to `run_sidekiq_jobs` still disabled.
 
 ### Disabling the SkipJobs middleware
