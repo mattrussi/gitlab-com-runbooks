@@ -8,7 +8,6 @@ local saturationPoints = {
     title: 'Michael Scott',
     severity: 's4',
     horizontallyScalable: true,
-    capacityPlanningStrategy: 'exclude',  // deprecated
     capacityPlanning: {
       strategy: 'exclude',
     },
@@ -32,7 +31,6 @@ local saturationPoints = {
     title: 'Jimbo',
     severity: 's4',
     horizontallyScalable: true,
-    capacityPlanningStrategy: 'exclude',  // deprecated
     capacityPlanning: {
       strategy: 'exclude',
     },

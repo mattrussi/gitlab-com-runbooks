@@ -30,7 +30,6 @@ local memoryDefinition = {
   memory_redis_cache: resourceSaturationPoint(memoryDefinition {
     // Give redis-cache its own non-capacity-planning saturation point.
     appliesTo: ['redis-cache'],
-    capacityPlanningStrategy: 'exclude',  // deprecated
     capacityPlanning: {
       strategy: 'exclude',
     },

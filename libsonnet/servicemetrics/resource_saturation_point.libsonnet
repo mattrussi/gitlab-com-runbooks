@@ -40,7 +40,6 @@ local definitionValidor = validator.new({
   resourceLabels: validator.array,
   query: validator.string,
   quantileAggregation: quantileValidator,
-  capacityPlanningStrategy: validator.setMember(capacityPlanningStrategies),  // deprecated
   capacityPlanning: {
     strategy: validator.setMember(capacityPlanningStrategies),
     forecast_days: positiveNumber,
@@ -57,7 +56,6 @@ local defaults = {
   alertRunbook: 'docs/{{ $labels.type }}/README.md',
   dangerouslyThanosEvaluated: false,
   quantileAggregation: 'max',
-  capacityPlanningStrategy: 'quantile95_1h',  // deprecated
   capacityPlanning: {
     strategy: 'quantile95_1h',
     forecast_days: 90,
