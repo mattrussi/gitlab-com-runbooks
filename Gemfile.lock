@@ -47,7 +47,7 @@ GEM
     debug_inspector (1.1.0)
     declarative (0.0.20)
     diff-lcs (1.5.0)
-    digest-crc (0.6.4)
+    digest-crc (0.6.5)
       rake (>= 12.0.0, < 14.0.0)
     etc (1.4.2)
     faraday (2.7.7)
