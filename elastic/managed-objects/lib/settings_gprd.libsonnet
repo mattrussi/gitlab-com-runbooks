@@ -36,8 +36,9 @@ local setting(index, env) = if std.member(VERY_HIGH_THROUGHPUT, index) then {
             info: '30s',
             debug: '30s',
             trace: '30s',
-          },
+          }
         }
+      }
     },
     refresh_interval: '10s',  // see: https://gitlab.com/gitlab-com/gl-infra/production/-/issues/3006#note_445081437
   },
