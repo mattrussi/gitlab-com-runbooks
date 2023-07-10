@@ -22,11 +22,6 @@ Refer to the flowchart below to better understand the scenarios between dropping
 
 ```mermaid
 flowchart TD
-    can_drop?{Can we drop the jobs from SlowWorker?}
-    can_drop? -->|yes, drop them| drop[Enable drop_sidekiq_jobs_SlowWorker FF]
-    can_drop? -->|no, defer them| defer[Disable run_sidekiq_jobs_SlowWorker FF]
-    drop --> wait1((Wait for SlowWorker to be fixed))
-    defer --> wait2((flowchart TD
     defer_jobs[Defer jobs] --> defer[Disable run_sidekiq_jobs_SlowWorker FF]
     defer --> wait((Wait for SlowWorker to be fixed))
     wait --> can_drop?{Can we drop the backlog jobs from SlowWorker?}
