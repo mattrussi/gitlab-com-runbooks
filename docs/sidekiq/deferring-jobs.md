@@ -7,11 +7,36 @@ If we let these workers to keep running, the entire system performance can be si
 
 ## Deferring jobs using feature flags via ChatOps
 
-We have a mechanism to defer jobs from a Worker class by enabling a feature flag `defer_sidekiq_jobs_{WorkerName}` via ChatOps.
-By default, the jobs are **delayed for 5 minutes** indefinitely until the feature flag is disabled. The delay can be set via
+We have a mechanism to defer jobs from a Worker class by disabling a feature flag `run_sidekiq_jobs_{WorkerName}` via ChatOps.
+This feature flag is enabled for all workers by default.
+
+By default, jobs are **delayed for 5 minutes** indefinitely until the feature flag is enabled. The delay can be set via
 setting environment variable `SIDEKIQ_DEFER_JOBS_DELAY` in seconds.
 
-The implementation can be found at [DeferJobs Sidekiq server middleware](https://gitlab.com/gitlab-org/gitlab/-/blob/master/lib/gitlab/sidekiq_middleware/defer_jobs.rb).
+Be aware that having massive backlog of deferred jobs to be run all at once may cause thunderring herd which blocks other workers in the queue.
+We've seen this happened during [incident 14758](https://gitlab.com/gitlab-com/gl-infra/production/-/issues/14758#note_1426042281) on 2023-06-07.
+
+If we could get away with not processing the backlog jobs at all, we can [drop the jobs](#dropping-jobs-using-feature-flags-via-chatops) entirely instead of deferring them.
+
+Refer to the flowchart below to better understand the scenarios between dropping and deferring jobs:
+
+```mermaid
+flowchart TD
+    defer_jobs[Defer jobs] --> defer[Disable run_sidekiq_jobs_SlowWorker FF]
+    defer --> wait((Wait for SlowWorker to be fixed))
+    wait --> can_drop?{Can we drop the backlog jobs from SlowWorker?}
+    can_drop? --> |yes, drop backlogs| drop[Enable drop_sidekiq_jobs_SlowWorker FF]
+    drop --> monitor[<a href='https://dashboards.gitlab.net/d/sidekiq-worker-detail/sidekiq-worker-detail?orgId=1&viewPanel=2019205131'>Monitor Skipped Jobs dashboard</a>]
+    monitor --> stabilized?((Wait until rate of dropped jobs stabilized))
+    stabilized? --> stop_defer[Disable drop_sidekiq_jobs_SlowWorker FF]
+    stop_defer --> |progressively rolls out execution| release_10
+    can_drop? --> |no, slowly process backlogs| release_10[Enable run_sidekiq_jobs_SlowWorker FF to 10%]
+    release_10 --> release_50[Enable run_sidekiq_jobs_SlowWorker FF to 50%]
+    release_50 --> full_release[Fully enable run_sidekiq_jobs_SlowWorker FF]
+    full_release --> normal([Jobs are running normally])
+```
+
+The implementation can be found at [SkipJobs Sidekiq server middleware](https://gitlab.com/gitlab-org/gitlab/-/blob/master/lib/gitlab/sidekiq_middleware/skip_jobs.rb).
 
 More details can be found [here](https://docs.gitlab.com/ee/development/feature_flags/#deferring-sidekiq-jobs)
 
@@ -21,26 +46,26 @@ When the feature flag is set to true, 100% of the jobs will be deferred. Then, w
 to progressively let the jobs processed. For example:
 
 ```shell
-# defer 100% of the jobs
-/chatops run feature set defer_sidekiq_jobs_SlowRunningWorker true --ignore-feature-flag-consistency-check
+# not running any jobs, deferring all 100% of the jobs
+/chatops run feature set run_sidekiq_jobs_SlowRunningWorker false --ignore-feature-flag-consistency-check
 
-# defer 99% of the jobs, only letting 1% processed
-/chatops run feature set defer_sidekiq_jobs_SlowRunningWorker 99 --ignore-feature-flag-consistency-check
+# only running 10% of the jobs, deferring 90% of the jobs
+/chatops run feature set run_sidekiq_jobs_SlowRunningWorker --random 10 --ignore-feature-flag-consistency-check
 
-# defer 50% of the jobs
-/chatops run feature set defer_sidekiq_jobs_SlowRunningWorker 50 --ignore-feature-flag-consistency-check
+# running 50% of the jobs, deferring 50% of the jobs
+/chatops run feature set run_sidekiq_jobs_SlowRunningWorker --random 50 --ignore-feature-flag-consistency-check
 
-# stop deferring the jobs, jobs are being processed normally
-/chatops run feature set defer_sidekiq_jobs_SlowRunningWorker false --ignore-feature-flag-consistency-check
+# back to running all jobs normally
+/chatops run feature delete run_sidekiq_jobs_SlowRunningWorker --ignore-feature-flag-consistency-check
 ```
 
 Note that `--ignore-feature-flag-consistency-check` is necessary as it bypasses the consistency check between staging and production.
 It is totally safe to pass this flag as we don't need to turn on the feature flag in staging during an incident.
 
-To ensure we are not leaving any worker being deferred forever, check all feature flags matching `defer_sidekiq_jobs`:
+To ensure we are not leaving any worker being deferred forever, check all feature flags matching `run_sidekiq_jobs`:
 
 ```shell
-/chatops run feature list --match defer_sidekiq_jobs
+/chatops run feature list --match run_sidekiq_jobs
 ````
 
 ### Production check in ChatOps
@@ -56,12 +81,29 @@ This production check might fail in case of:
 In this case, we can use `--ignore-production-check` in case the ongoing incident itself has ~"blocks feature-flags":
 
 ```
-/chatops run feature set defer_sidekiq_jobs_SlowRunningWorker true --ignore-feature-flag-consistency-check --ignore-production-check
+/chatops run feature set run_sidekiq_jobs_SlowRunningWorker false --ignore-feature-flag-consistency-check --ignore-production-check
 ```
 
-### Disabling the DeferJobs middleware
+## Dropping jobs using feature flags via ChatOps
 
-The [DeferJobs Sidekiq server middleware](https://gitlab.com/gitlab-org/gitlab/-/blob/master/lib/gitlab/sidekiq_middleware/defer_jobs.rb)
+Similar to deferring the jobs, we could enable `drop_sidekiq_jobs_{WorkerName}` FF (disabled by default) to drop the jobs entirely (removed from the queue).
+
+Example:
+
+```shell
+# drop all jobs
+/chatops run feature set drop_sidekiq_jobs_SlowRunningWorker true --ignore-feature-flag-consistency-check
+
+# back to running all jobs normally
+/chatops run feature delete drop_sidekiq_jobs_SlowRunningWorker --ignore-feature-flag-consistency-check
+```
+
+Note that `drop_sidekiq_jobs` FF has precedence over the `run_sidekiq_jobs` FF. This means when `drop_sidekiq_jobs` FF is enabled and `run_sidekiq_jobs` FF is disabled,
+`drop_sidekiq_jobs` FF takes priority, thus the job is dropped. Once `drop_sidekiq_jobs` FF is back to disabled, jobs are then deferred due to `run_sidekiq_jobs` still disabled.
+
+### Disabling the SkipJobs middleware
+
+The [SkipJobs Sidekiq server middleware](https://gitlab.com/gitlab-org/gitlab/-/blob/master/lib/gitlab/sidekiq_middleware/skip_jobs.rb)
 introduces overhead for checking feature flag first (`Feature.enabled?`) before running every job.
 
 The overhead includes:
@@ -70,21 +112,23 @@ The overhead includes:
 - 1 Redis call per pod per worker per minute ([since thread local cache TTL is 1 minute](https://gitlab.com/gitlab-org/gitlab/-/blob/47c8eca764c926ecdf0897f7b992353bb231b7c1/lib/feature.rb#L310-310))
 
 If the overhead turns out significantly impacting all workers performance, we can disable the middleware
-by setting the environment variable `SIDEKIQ_DEFER_JOBS` to `false` or `1` and restart the Sidekiq pods.
+by setting the environment variable `SIDEKIQ_SKIP_JOBS` to `false` or `1` and restart the Sidekiq pods.
 
 ## Observability
 
 ### Logging
 
-Jobs deferred will be logged as `{"job_status": "deferred"}` instead of `done` or `fail`.
+- Jobs deferred will be logged as `{"job_status": "deferred"}` instead of `done` or `fail`.
+- Jobs dropped will be logged as `{"job_status": "dropped"}`.
+- `deferred_count` field increases whenever a job is deferred.
 
 ### Alert
 
-Whenever a job is deferred, a counter `sidekiq_jobs_deferred_total` is incremented. An alert will fire
+Whenever a job is skipped (deferred or dropped), a counter `sidekiq_jobs_skipped_total` is incremented. An alert will fire
 if jobs are being deferred consecutively for a long period of time (currently 3 hours). This alert helps to
-prevent when jobs are unintentionally being deferred for a long time (i.e. when someone forgets to turn off
+prevent when jobs are unintentionally being skipped for a long time (i.e. when someone forgets to remove
 the feature flag).
 
-The dashboard for this alert can be found at [sidekiq: Worker Detail](https://dashboards.gitlab.net/d/sidekiq-worker-detail/sidekiq-worker-detail?orgId=1&viewPanel=1760026825).
-Note that deferred jobs are still counted in the [Execution Rate (RPS)](https://dashboards.gitlab.net/d/sidekiq-worker-detail/sidekiq-worker-detail?orgId=1&viewPanel=3168042924)
+The dashboard for this alert can be found at [sidekiq: Worker Detail](https://dashboards.gitlab.net/d/sidekiq-worker-detail/sidekiq-worker-detail?orgId=1&viewPanel=2019205131).
+Note that skipped jobs are still counted in the [Execution Rate (RPS)](https://dashboards.gitlab.net/d/sidekiq-worker-detail/sidekiq-worker-detail?orgId=1&viewPanel=3168042924)
 panel.
