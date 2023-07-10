@@ -1,4 +1,4 @@
-## Re-indexing a package
+# Re-indexing a package
 
 If the indexing of a package in PackageCloud fails, someone will need to re-index the package.
 
@@ -6,7 +6,7 @@ Failed indexing will show stack traces in the `/var/log/packagecloud/packageclou
 And will still have the 'Indexing' yellow label in the UI. (Note that sometimes indexing can take an hour or two if the
 node is busy (if its in the middle of a backup for example), so verify that errors are occurring by checking the logs before re-indexing)
 
-### Manually trigger a re-index
+## Manually trigger a re-index
 
 Once sshed into the node, switch to the `packagecloud` user, navigate to the packagecloud rails service, and launch the rails console:
 
