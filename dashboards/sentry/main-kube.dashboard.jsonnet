@@ -121,3 +121,23 @@ basic.dashboard(
     ),
   ], cols=2, rowHeight=10, startRow=201)
 )
+.addPanel(
+  row.new(title='Kafka'),
+  gridPos={
+    x: 0,
+    y: 300,
+    w: 24,
+    h: 1,
+  }
+)
+.addPanels(
+  layout.grid([
+    basic.timeseries(
+      title='Consumer group lag by topic',
+      query='kafka_consumergroup_lag{%(selector)s}' % { selector: clusterSelectorSerialized },
+      legendFormat='{{ topic }}',
+      legend_show=true,
+      linewidth=2
+    ),
+  ], cols=2, rowHeight=10, startRow=301)
+)
