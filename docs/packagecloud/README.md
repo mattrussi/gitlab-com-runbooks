@@ -15,10 +15,9 @@
 
 ## Troubleshooting Pointers
 
+* [PackageCloud Infrastructure and Backups](infrastructure.md)
+* [Re-indexing a package](reindex-package.md)
 * [GPG Keys for Package Signing](../packaging/manage-package-signing-keys.md)
-* [PackageCloud Infrastructure and Backups](../uncategorized/packagecloud-infrastructure.md)
-* [../uncategorized/reindex-package-in-packagecloud.md](../uncategorized/reindex-package-in-packagecloud.md)
-* [PackageCloud [SCRAM](https://en.wikipedia.org/wiki/Scram) Button](../uncategorized/stop-or-start-packagecloud.md)
 <!-- END_MARKER -->
 
 <!-- ## Summary -->

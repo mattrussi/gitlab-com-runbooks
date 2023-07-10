@@ -27,6 +27,7 @@
 * [Service Apdex](../monitoring/definition-service-apdex.md)
 * [Session: Application architecture](../onboarding/architecture.md)
 * [Diagnosis with Kibana](../onboarding/kibana-diagnosis.md)
+* [PackageCloud Infrastructure and Backups](../packagecloud/infrastructure.md)
 * [Rotating Rails' PostgreSQL password](../patroni/rotating-rails-postgresql-password.md)
 * [Removing cache entries from Redis](../redis-cache/remove-cache-entries.md)
 * [Blocking individual IPs using Redis and Rack Attack](ban-an-IP-with-redis.md)
@@ -52,7 +53,6 @@
 * [Deleted Project Restoration](../uncategorized/deleted-project-restore.md)
 * [../uncategorized/namespace-restore.md](../uncategorized/namespace-restore.md)
 * [Node CPU alerts](../uncategorized/node_cpu.md)
-* [PackageCloud Infrastructure and Backups](../uncategorized/packagecloud-infrastructure.md)
 * [GitLab staging environment](../uncategorized/staging-environment.md)
 * [How to Use Vault for Secrets Management in Infrastructure](../vault/usage.md)
 <!-- END_MARKER -->

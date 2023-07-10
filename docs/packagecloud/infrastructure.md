@@ -26,8 +26,7 @@ omnibus package contains:
 * resque
 * unicorn
 
-Most notably, PackageCloud uses MySQL, not PostgreSQL like most of our
-applications.
+Most notably, PackageCloud uses MySQL, not PostgreSQL like most of our applications.
 
 **NOTE**: We do not use the redis or mysql local instances. Instead, we depend on configured
 RDS cloud database and ElastiCache instances in AWS.
