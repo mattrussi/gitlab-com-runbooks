@@ -71,6 +71,7 @@ metricsCatalog.serviceDefinition({
   serviceLevelIndicators: {
     workhorse: {
       userImpacting: false,
+      serviceAggregation: false,
       featureCategory: 'not_owned',
       team: 'workhorse',
       description: |||
