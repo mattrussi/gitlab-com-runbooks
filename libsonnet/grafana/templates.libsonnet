@@ -238,6 +238,7 @@ local library = import 'gitlab-slis/library.libsonnet';
         sli: std.join('|', library.names),
       },
       refresh='load',
+      multi=true,
       sort=1,
       current=current
     ),
