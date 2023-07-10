@@ -26,13 +26,19 @@ flowchart TD
     can_drop? -->|yes, drop them| drop[Enable drop_sidekiq_jobs_SlowWorker FF]
     can_drop? -->|no, defer them| defer[Disable run_sidekiq_jobs_SlowWorker FF]
     drop --> wait1((Wait for SlowWorker to be fixed))
-    defer --> wait2((Wait for SlowWorker to be fixed))
-    wait1 --> disable_drop[Disable drop_sidekiq_jobs_SlowWorker FF]
-    wait2 --> |Slowly process job backlogs| release_10[Enable run_sidekiq_jobs_SlowWorker FF to 10%]
+    defer --> wait2((flowchart TD
+    defer_jobs[Defer jobs] --> defer[Disable run_sidekiq_jobs_SlowWorker FF]
+    defer --> wait((Wait for SlowWorker to be fixed))
+    wait --> can_drop?{Can we drop the backlog jobs from SlowWorker?}
+    can_drop? --> |yes, drop backlogs| drop[Enable drop_sidekiq_jobs_SlowWorker FF]
+    drop --> monitor[<a href='https://dashboards.gitlab.net/d/sidekiq-worker-detail/sidekiq-worker-detail?orgId=1&viewPanel=2019205131'>Monitor Skipped Jobs dashboard</a>]
+    monitor --> stabilized?((Wait until rate of dropped jobs stabilized))
+    stabilized? --> stop_defer[Disable drop_sidekiq_jobs_SlowWorker FF]
+    stop_defer --> |progressively rolls out execution| release_10
+    can_drop? --> |no, slowly process backlogs| release_10[Enable run_sidekiq_jobs_SlowWorker FF to 10%]
     release_10 --> release_50[Enable run_sidekiq_jobs_SlowWorker FF to 50%]
-    release_50 --> full_release[Fully enable run_sidekiq_jobs_SlowWorker FF to true]
-    disable_drop --> normal([Jobs are running normally])
-    full_release --> normal
+    release_50 --> full_release[Fully enable run_sidekiq_jobs_SlowWorker FF]
+    full_release --> normal([Jobs are running normally])
 ```
 
 The implementation can be found at [SkipJobs Sidekiq server middleware](https://gitlab.com/gitlab-org/gitlab/-/blob/master/lib/gitlab/sidekiq_middleware/skip_jobs.rb).
