@@ -36,7 +36,7 @@ local significantLabels = aggregations.join(
   std.flatMap(
     function(sli) sli.significantLabels,
     library.all
-  )
+  ) + ['type']
 );
 
 local leftJoinStageGroup(query) =
@@ -54,17 +54,22 @@ local operationsApdex =
     |||
       clamp_max(
         sum by(%(labels)s) (
-          sum_over_time(application_sli_aggregation:$component:apdex:success:rate_1h{%(baseSelector)s}[$__range]) > 0
+          sum_over_time({%(numeratorSelector)s}[$__range]) > 0
         )
         /
         sum by(%(labels)s) (
-          sum_over_time(application_sli_aggregation:$component:apdex:weight:score_1h{%(baseSelector)s}[$__range]) > 0
+          sum_over_time({%(denominatorSelector)s}[$__range]) > 0
         )
       , 1
       )
     ||| % {
       labels: significantLabels,
-      baseSelector: selectors.serializeHash(baseSelector + envSelector),
+      numeratorSelector: selectors.serializeHash(baseSelector + envSelector + {
+        __name__: { re: 'application_sli_aggregation:($component):apdex:success:rate_1h' },
+      }),
+      denominatorSelector: selectors.serializeHash(baseSelector + envSelector + {
+        __name__: { re: 'application_sli_aggregation:($component):apdex:weight:score_1h' },
+      }),
     }
 
   );
@@ -73,11 +78,13 @@ local operations =
   leftJoinStageGroup(
     |||
       sum by(%(labels)s) (
-        sum_over_time(application_sli_aggregation:$component:ops:rate_1h{%(baseSelector)s}[$__range])
+        sum_over_time({%(baseSelector)s}[$__range])
       )
     ||| % {
       labels: significantLabels,
-      baseSelector: selectors.serializeHash(baseSelector + envSelector),
+      baseSelector: selectors.serializeHash(baseSelector + envSelector + {
+        __name__: { re: 'application_sli_aggregation:($component):ops:rate_1h' },
+      }),
     }
   );
 
@@ -86,17 +93,22 @@ local operationsErrorRatio =
     |||
       clamp_max(
         sum by(%(labels)s) (
-          sum_over_time(application_sli_aggregation:$component:error:rate_1h{%(baseSelector)s}[$__range])
+          sum_over_time({%(numeratorSelector)s}[$__range])
         )
         /
         sum by(%(labels)s) (
-          sum_over_time(application_sli_aggregation:$component:ops:rate_1h{%(baseSelector)s}[$__range])
+          sum_over_time({%(denominatorSelector)s}[$__range])
         )
       , 1
       )
     ||| % {
       labels: significantLabels,
-      baseSelector: selectors.serializeHash(baseSelector + envSelector),
+      numeratorSelector: selectors.serializeHash(baseSelector + envSelector + {
+        __name__: { re: 'application_sli_aggregation:($component):error:rate_1h' },
+      }),
+      denominatorSelector: selectors.serializeHash(baseSelector + envSelector + {
+        __name__: { re: 'application_sli_aggregation:($component):ops:rate_1h' },
+      }),
       groupSelector: selectors.serializeHash(baseSelector + groupSelector),
     }
   );
@@ -117,49 +129,21 @@ local significantLabelsTable =
         id: 'renameByRegex',
         options: {
           regex: 'Value #A',
-          renamePattern: 'Operations',
+          renamePattern: 'operations',
         },
       },
       {
         id: 'renameByRegex',
         options: {
           regex: 'Value #B',
-          renamePattern: 'Apdex',
+          renamePattern: 'apdex',
         },
       },
       {
         id: 'renameByRegex',
         options: {
           regex: 'Value #C',
-          renamePattern: 'Errors',
-        },
-      },
-      {
-        id: 'renameByRegex',
-        options: {
-          regex: 'feature_category',
-          renamePattern: 'Category',
-        },
-      },
-      {
-        id: 'renameByRegex',
-        options: {
-          regex: 'stage_group',
-          renamePattern: 'Stage Group',
-        },
-      },
-      {
-        id: 'renameByRegex',
-        options: {
-          regex: 'request_urgency',
-          renamePattern: 'Urgency',
-        },
-      },
-      {
-        id: 'renameByRegex',
-        options: {
-          regex: 'query_urgency',
-          renamePattern: 'Urgency',
+          renamePattern: 'errors',
         },
       },
       {
@@ -171,16 +155,18 @@ local significantLabelsTable =
           },
           indexByName: {
             endpoint_id: 1,
-            Category: 2,
-            'Stage Group': 3,
-            Urgency: 4,
-            search_level: 5,
-            search_scope: 6,
-            search_type: 7,
-            document_type: 8,
-            Operations: 9,
-            Apdex: 10,
-            Errors: 11,
+            feature_category: 2,
+            stage_group: 3,
+            request_urgency: 4,
+            query_urgency: 5,
+            search_level: 6,
+            search_scope: 7,
+            search_type: 8,
+            document_type: 9,
+            type: 10,
+            operations: 11,
+            apdex: 12,
+            errors: 13,
           },
         },
       },
@@ -188,7 +174,7 @@ local significantLabelsTable =
   ) + {
     options: {
       sortBy: [
-        { displayName: 'Operations', desc: true },
+        { displayName: 'operations', desc: true },
       ],
     },
     fieldConfig+: {
@@ -196,7 +182,7 @@ local significantLabelsTable =
         {
           matcher: {
             id: 'byName',
-            options: 'Category',
+            options: 'feature_category',
           },
           properties: [
             {
@@ -208,7 +194,7 @@ local significantLabelsTable =
         {
           matcher: {
             id: 'byName',
-            options: 'Stage Group',
+            options: 'stage_group',
           },
           properties: [
             {
@@ -220,7 +206,7 @@ local significantLabelsTable =
         {
           matcher: {
             id: 'byName',
-            options: 'Urgency',
+            options: 'request_urgency',
           },
           properties: [
             {
@@ -247,7 +233,41 @@ local significantLabelsTable =
             },
             {
               id: 'custom.width',
-              value: 120,
+              value: 150,
+            },
+          ],
+        },
+        {
+          matcher: {
+            id: 'byName',
+            options: 'query_urgency',
+          },
+          properties: [
+            {
+              id: 'mappings',
+              value: [
+                {
+                  type: 'value',
+                  options: {
+                    low: {
+                      text: '🔴 low',
+                    },
+                    default: {
+                      text: '🟠 default',
+                    },
+                    medium: {
+                      text: '🟡 medium',
+                    },
+                    high: {
+                      text: '🟢 high',
+                    },
+                  },
+                },
+              ],
+            },
+            {
+              id: 'custom.width',
+              value: 150,
             },
           ],
         },
@@ -290,7 +310,19 @@ local significantLabelsTable =
         {
           matcher: {
             id: 'byName',
-            options: 'Operations',
+            options: 'type',
+          },
+          properties: [
+            {
+              id: 'custom.width',
+              value: 120,
+            },
+          ],
+        },
+        {
+          matcher: {
+            id: 'byName',
+            options: 'operations',
           },
           properties: [
             {
@@ -306,7 +338,7 @@ local significantLabelsTable =
         {
           matcher: {
             id: 'byName',
-            options: 'Apdex',
+            options: 'apdex',
           },
           properties: [
             {
@@ -345,7 +377,7 @@ local significantLabelsTable =
         {
           matcher: {
             id: 'byName',
-            options: 'Errors',
+            options: 'errors',
           },
           properties: [
             {
