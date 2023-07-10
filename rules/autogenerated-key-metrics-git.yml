@@ -1558,7 +1558,7 @@ groups:
       component: workhorse
       global_aggregation: "no"
       regional_aggregation: "yes"
-      service_aggregation: "yes"
+      service_aggregation: "no"
       tier: sv
       type: git
     expr: "1"
@@ -1567,7 +1567,7 @@ groups:
       component: workhorse_auth_api
       global_aggregation: "no"
       regional_aggregation: "yes"
-      service_aggregation: "yes"
+      service_aggregation: "no"
       tier: sv
       type: git
     expr: "1"

@@ -1278,7 +1278,7 @@ groups:
       component: imagescaler
       global_aggregation: "no"
       regional_aggregation: "yes"
-      service_aggregation: "yes"
+      service_aggregation: "no"
       tier: sv
       type: web
     expr: "1"
@@ -1305,7 +1305,7 @@ groups:
       component: workhorse
       global_aggregation: "no"
       regional_aggregation: "yes"
-      service_aggregation: "yes"
+      service_aggregation: "no"
       tier: sv
       type: web
     expr: "1"
