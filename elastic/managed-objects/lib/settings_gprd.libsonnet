@@ -28,18 +28,17 @@ local setting(index, env) = if std.member(VERY_HIGH_THROUGHPUT, index) then {
           query: {
             warn: '30s',
             info: '30s',
-            debug: '30s',
-            trace: '30s',
+            debug: '-1',
+            trace: '-1',
           },
           fetch: {
             warn: '30s',
             info: '30s',
-            debug: '30s',
-            trace: '30s',
-          },
-        },
-        level: 'info',
-      },
+            debug: '-1',
+            trace: '-1',
+          }
+        }
+      }
     },
     refresh_interval: '10s',  // see: https://gitlab.com/gitlab-com/gl-infra/production/-/issues/3006#note_445081437
   },
