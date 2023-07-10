@@ -513,7 +513,7 @@ groups:
       component: workhorse
       global_aggregation: "no"
       regional_aggregation: "yes"
-      service_aggregation: "yes"
+      service_aggregation: "no"
       tier: sv
       type: internal-api
     expr: "1"

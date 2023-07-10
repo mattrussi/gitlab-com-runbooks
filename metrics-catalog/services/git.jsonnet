@@ -124,6 +124,7 @@ metricsCatalog.serviceDefinition({
 
     workhorse: {
       userImpacting: true,
+      serviceAggregation: false,
       featureCategory: 'not_owned',
       team: 'workhorse',
       description: |||
@@ -181,6 +182,7 @@ metricsCatalog.serviceDefinition({
      */
     workhorse_auth_api: {
       userImpacting: true,
+      serviceAggregation: false,
       featureCategory: 'not_owned',
       team: 'workhorse',
       description: |||
@@ -267,8 +269,8 @@ metricsCatalog.serviceDefinition({
 
       // Unfortunately we don't have a better way of measuring this at present, so we rely on HAProxy metrics.
       requestRate: rateMetric(
-        counter="haproxy_backend_sessions_total",
-        selector= { backend: { oneOf: ['ssh', 'altssh'] } },
+        counter='haproxy_backend_sessions_total',
+        selector={ backend: { oneOf: ['ssh', 'altssh'] } },
       ),
 
       significantLabels: [],

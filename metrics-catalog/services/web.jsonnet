@@ -101,6 +101,7 @@ metricsCatalog.serviceDefinition({
 
     local workhorseWebSelector = { job: { re: 'gitlab-workhorse|gitlab-workhorse-web' }, type: 'web' },
     workhorse: {
+      serviceAggregation: false,
       userImpacting: true,
       featureCategory: 'not_owned',
       team: 'workhorse',
@@ -156,6 +157,7 @@ metricsCatalog.serviceDefinition({
     },
 
     imagescaler: {
+      serviceAggregation: false,
       userImpacting: false,
       featureCategory: 'user_profile',
       description: |||

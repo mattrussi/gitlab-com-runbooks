@@ -131,6 +131,7 @@ metricsCatalog.serviceDefinition({
 
     workhorse: {
       userImpacting: true,
+      serviceAggregation: false,
       featureCategory: 'not_owned',
       team: 'workhorse',
       description: |||
@@ -179,6 +180,7 @@ metricsCatalog.serviceDefinition({
     ],
     dependsOn: dependOnPatroni.sqlComponents,
   }) + sliLibrary.get('graphql_query').generateServiceLevelIndicator(railsSelector, {
+    serviceAggregation: false,
     toolingLinks: [
       toolingLinks.kibana(title='Rails', index='rails_graphql'),
     ],
