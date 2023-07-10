@@ -4,6 +4,7 @@ local basic = import 'grafana/basic.libsonnet';
 local layout = import 'grafana/layout.libsonnet';
 local seriesOverrides = import 'grafana/series_overrides.libsonnet';
 local singleMetricRow = import 'key-metric-panels/single-metric-row.libsonnet';
+local aggregationSets = (import 'gitlab-metrics-config.libsonnet').aggregationSets;
 local selectors = import 'promql/selectors.libsonnet';
 local metricsCatalog = import 'servicemetrics/metrics-catalog.libsonnet';
 local toolingLinks = import 'toolinglinks/toolinglinks.libsonnet';
@@ -65,17 +66,27 @@ local sliOverviewMatrixRow(
   expectMultipleSeries,
       ) =
   local typeSelector = if serviceType == null then {} else { type: serviceType };
-  local selectorHashWithExtras = selectorHash { component: sli.name } + typeSelector;
+  local shardSelector = if sli.shardLevelMonitoring then
+    { shard: { re: '$shard' } }
+  else
+    {};
+  local selectorHashWithExtras = selectorHash { component: sli.name } + typeSelector + shardSelector;
+
+  local legendFormatPrefixWithShard = if sli.shardLevelMonitoring then
+    '%(sliName)s - %(shard)s' % { sliName: sli.name, shard: '{{ shard }}' }
+  else
+    sli.name;
+
   local formatConfig = {
     serviceType: serviceType,
     sliName: sli.name,
-    legendFormatPrefix: if legendFormatPrefix != '' then legendFormatPrefix else sli.name,
+    legendFormatPrefix: if legendFormatPrefix != '' then legendFormatPrefix else legendFormatPrefixWithShard,
   };
 
   local columns =
     singleMetricRow.row(
       serviceType=serviceType,
-      aggregationSet=aggregationSet,
+      aggregationSet=if sli.shardLevelMonitoring then aggregationSets.shardComponentSLIs else aggregationSet,
       selectorHash=selectorHashWithExtras,
       titlePrefix='%(sliName)s SLI' % formatConfig,
       stableIdPrefix='sli-%(sliName)s' % formatConfig,

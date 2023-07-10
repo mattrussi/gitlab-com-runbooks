@@ -72,6 +72,7 @@ local overviewDashboard(
   // Features
   showProvisioningDetails=true,
   showSystemDiagrams=true,
+  expectMultipleSeries=false,
       ) =
 
   local metricsCatalogServiceInfo = metricsCatalog.getService(type);

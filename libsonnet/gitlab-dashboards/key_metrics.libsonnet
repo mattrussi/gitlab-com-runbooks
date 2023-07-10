@@ -3,6 +3,7 @@ local grafana = import 'github.com/grafana/grafonnet-lib/grafonnet/grafana.libso
 local layout = import 'grafana/layout.libsonnet';
 local singleMetricRow = import 'key-metric-panels/single-metric-row.libsonnet';
 local utilizationRatesPanel = import 'key-metric-panels/utilization-rates-panel.libsonnet';
+local metricsCatalog = import 'servicemetrics/metrics-catalog.libsonnet';
 local row = grafana.row;
 
 local managedDashboardsForService(serviceType) =
@@ -78,6 +79,15 @@ local getColumnWidths(
     local selectorHashWithExtras = selectorHash + typeHash;
     local formatConfig = { serviceType: serviceType, stableIdPrefix: stableIdPrefix };
     local titlePrefix = if staticTitlePrefix == null then '%(serviceType)s Service' % formatConfig else staticTitlePrefix;
+
+    local metricsCatalogServiceInfo = metricsCatalog.getServiceOptional(serviceType);
+    local shardLabels =
+      if metricsCatalogServiceInfo != null && metricsCatalogServiceInfo.shardLevelMonitoring then
+        { shard: { re: '$shard' } }
+      else
+        {};
+    local selectorHashWithShard = selectorHashWithExtras + shardLabels;
+
     local columns =
       singleMetricRow.row(
         serviceType=serviceType,
@@ -101,7 +111,7 @@ local getColumnWidths(
           [[
             utilizationRatesPanel.panel(
               serviceType,
-              selectorHash=selectorHashWithExtras,
+              selectorHash=selectorHashWithShard,
               compact=compact,
               stableId='%(stableIdPrefix)sservice-utilization' % formatConfig
             ),
