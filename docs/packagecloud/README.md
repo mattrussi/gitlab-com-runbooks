@@ -16,8 +16,8 @@
 ## Troubleshooting Pointers
 
 * [PackageCloud Infrastructure and Backups](infrastructure.md)
+* [Re-indexing a package](reindex-package.md)
 * [GPG Keys for Package Signing](../packaging/manage-package-signing-keys.md)
-* [../uncategorized/reindex-package-in-packagecloud.md](../uncategorized/reindex-package-in-packagecloud.md)
 <!-- END_MARKER -->
 
 <!-- ## Summary -->
