@@ -27,6 +27,7 @@
 * [monitor.gitlab.net not accessible or return 5xx errors](../monitoring/monitor-gitlab-net-not-accessible.md)
 * [Thanos Receive](../monitoring/thanos-receive.md)
 * [Gitlab.com on Kubernetes](../onboarding/gitlab.com_on_k8s.md)
+* [PackageCloud Infrastructure and Backups](../packagecloud/infrastructure.md)
 * [Sentry is down and gives error 500](../sentry/sentry-is-down.md)
 * [Thanos Architecture Overview](../thanos/architecture.md)
 * [Life of a Git Request](../tutorials/overview_life_of_a_git_request.md)
@@ -34,7 +35,6 @@
 * [Managing Chef](../uncategorized/manage-chef.md)
 * [Google mtail for prometheus metrics](../uncategorized/mtail.md)
 * [../uncategorized/namespace-restore.md](../uncategorized/namespace-restore.md)
-* [PackageCloud Infrastructure and Backups](../uncategorized/packagecloud-infrastructure.md)
 * [version.gitlab.com Runbook](../version/version-gitlab-com.md)
 * [Nginx is down](../web/nginx-is-down.md)
 <!-- END_MARKER -->
