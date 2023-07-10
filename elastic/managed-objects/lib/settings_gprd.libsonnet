@@ -28,14 +28,14 @@ local setting(index, env) = if std.member(VERY_HIGH_THROUGHPUT, index) then {
           query: {
             warn: '30s',
             info: '30s',
-            debug: '30s',
-            trace: '30s',
+            debug: '-1',
+            trace: '-1',
           },
           fetch: {
             warn: '30s',
             info: '30s',
-            debug: '30s',
-            trace: '30s',
+            debug: '-1',
+            trace: '-1',
           }
         }
       }
