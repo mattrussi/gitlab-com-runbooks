@@ -24,7 +24,7 @@ local resourceSaturationPoint = metricsCatalog.resourceSaturationPoint;
       sum by(%(aggregationLabels)s) (instance:puma_max_threads:sum{%(selector)s})
     |||,
     slos: {
-      soft: 0.85,
+      capacity_planning: 0.85,
       hard: 0.90,
     },
   }),

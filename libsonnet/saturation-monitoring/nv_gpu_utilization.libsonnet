@@ -24,7 +24,7 @@ local resourceSaturationPoint = (import 'servicemetrics/resource_saturation_poin
       avg_over_time(nv_gpu_utilization{%(selector)s}[%(rangeInterval)s])
     |||,
     slos: {
-      soft: 0.80,
+      capacity_planning: 0.80,
       hard: 0.90,
     },
   }),

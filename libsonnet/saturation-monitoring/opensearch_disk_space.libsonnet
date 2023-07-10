@@ -16,7 +16,7 @@ local resourceSaturationPoint = metricsCatalog.resourceSaturationPoint;
       aws_es_cluster_used_space_average/(aws_es_free_storage_space_average+aws_es_cluster_used_space_average)
     |||,
     slos: {
-      soft: 0.60,
+      capacity_planning: 0.60,
       hard: 0.75,
     },
   }),

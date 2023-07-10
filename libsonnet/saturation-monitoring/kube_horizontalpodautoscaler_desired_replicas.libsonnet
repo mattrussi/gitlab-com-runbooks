@@ -30,7 +30,7 @@ local sidekiqHelpers = import './services/lib/sidekiq-helpers.libsonnet';
       ignored_namespaces: 'pubsubbeat',
     },
     slos: {
-      soft: 0.90,
+      capacity_planning: 0.90,
       hard: 0.95,
       alertTriggerDuration: '25m',
     },

@@ -19,7 +19,7 @@ local resourceSaturationPoint = metricsCatalog.resourceSaturationPoint;
       avg_over_time(aws_es_cpuutilization_average[%(rangeInterval)s])/100
     |||,
     slos: {
-      soft: 0.65,
+      capacity_planning: 0.65,
       hard: 0.80,
     },
   }),

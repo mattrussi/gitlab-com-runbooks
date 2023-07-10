@@ -21,7 +21,7 @@ local labelTaxonomy = import 'label-taxonomy/label-taxonomy.libsonnet';
       avg without(cpu, mode) (1 - rate(node_cpu_seconds_total{mode="idle", %(selector)s}[%(rangeInterval)s]))
     |||,
     slos: {
-      soft: 0.90,
+      capacity_planning: 0.90,
       hard: 0.95,
       alertTriggerDuration: '10m',
     },

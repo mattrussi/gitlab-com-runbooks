@@ -20,7 +20,7 @@ local commonDefinition = {
     redis_config_maxclients{%(selector)s}
   |||,
   slos: {
-    soft: 0.80,
+    capacity_planning: 0.80,
     hard: 0.90,
   },
 };

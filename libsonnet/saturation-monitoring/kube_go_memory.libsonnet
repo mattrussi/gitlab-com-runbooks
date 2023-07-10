@@ -37,7 +37,7 @@ local goContainers = ['gitlab-pages', 'gitlab-workhorse', 'kas', 'registry', 'th
       )
     |||,
     slos: {
-      soft: 0.90,
+      capacity_planning: 0.90,
       hard: 0.98,
     },
   }),

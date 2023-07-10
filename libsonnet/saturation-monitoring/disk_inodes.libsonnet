@@ -24,7 +24,7 @@ local resourceSaturationPoint = (import 'servicemetrics/resource_saturation_poin
       )
     |||,
     slos: {
-      soft: 0.75,
+      capacity_planning: 0.75,
       hard: 0.80,
       alertTriggerDuration: '15m',
     },

@@ -53,7 +53,7 @@ local metricsCatalog = import 'servicemetrics/metrics-catalog.libsonnet';
       (%(wraparoundValue)s)
     |||,
     slos: {
-      soft: 0.60,
+      capacity_planning: 0.60,
       hard: 0.70,
     },
   }),

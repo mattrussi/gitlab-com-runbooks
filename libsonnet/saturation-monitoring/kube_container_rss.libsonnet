@@ -40,7 +40,7 @@ local resourceSaturationPoint = (import 'servicemetrics/resource_saturation_poin
       (container_spec_memory_limit_bytes:labeled{container!="", container!="POD", %(selector)s} > 0)
     |||,
     slos: {
-      soft: 0.80,
+      capacity_planning: 0.80,
       hard: 0.90,
       alertTriggerDuration: '15m',
     },

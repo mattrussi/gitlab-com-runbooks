@@ -31,7 +31,7 @@ local runnerSaturation(aggregators, saturationType) =
   ).addTarget(
     promQuery.target(
       expr='0.85',
-      legendFormat='Soft SLO',
+      legendFormat='Capacity Planning SLO',
     )
   ).addTarget(
     promQuery.target(
@@ -41,7 +41,7 @@ local runnerSaturation(aggregators, saturationType) =
   ).addSeriesOverride(
     seriesOverrides.hardSlo
   ).addSeriesOverride(
-    seriesOverrides.softSlo
+    seriesOverrides.capacityPlanningSlo
   );
 
 local runnerSaturationCounter =

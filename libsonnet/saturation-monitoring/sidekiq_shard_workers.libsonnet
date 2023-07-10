@@ -33,7 +33,7 @@ local sidekiqHelpers = import './services/lib/sidekiq-helpers.libsonnet';
       throttledSidekiqShardsRegexp: std.join('|', sidekiqHelpers.shards.listFiltered(function(shard) shard.urgency == 'throttled')),
     },
     slos: {
-      soft: 0.85,
+      capacity_planning: 0.85,
       hard: 0.90,
       alertTriggerDuration: '10m',
     },

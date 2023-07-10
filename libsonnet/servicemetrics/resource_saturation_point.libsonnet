@@ -40,7 +40,7 @@ local definitionValidor = validator.new({
   quantileAggregation: quantileValidator,
   capacityPlanningStrategy: validator.setMember(capacityPlanningStrategies),
   slos: {
-    soft: sloValidator,
+    capacity_planning: sloValidator,
     hard: sloValidator,
   },
 });
@@ -215,9 +215,9 @@ local resourceSaturationPoint = function(options)
       };
 
       [{
-        record: 'slo:max:soft:gitlab_component_saturation:ratio',
+        record: 'slo:max:capacity_planning:gitlab_component_saturation:ratio',
         labels: labels,
-        expr: '%g' % [definition.slos.soft],
+        expr: '%g' % [definition.slos.capacity_planning],
       }, {
         record: 'slo:max:hard:gitlab_component_saturation:ratio',
         labels: labels,

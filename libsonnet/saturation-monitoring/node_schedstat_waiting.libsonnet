@@ -26,7 +26,7 @@ local resourceSaturationPoint = (import 'servicemetrics/resource_saturation_poin
       avg without (cpu) (rate(node_schedstat_waiting_seconds_total{%(selector)s}[%(rangeInterval)s]))
     |||,
     slos: {
-      soft: 0.10,
+      capacity_planning: 0.10,
       hard: 0.15,
       alertTriggerDuration: '90m',
     },

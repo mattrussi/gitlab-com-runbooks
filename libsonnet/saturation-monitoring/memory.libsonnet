@@ -16,7 +16,7 @@ local memoryDefinition = {
     instance:node_memory_utilization:ratio{%(selector)s} or instance:node_memory_utilisation:ratio{%(selector)s}
   |||,
   slos: {
-    soft: 0.90,
+    capacity_planning: 0.90,
     hard: 0.98,
   },
 };

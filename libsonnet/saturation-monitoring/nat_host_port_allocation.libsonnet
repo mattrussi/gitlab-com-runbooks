@@ -57,7 +57,7 @@ local resourceSaturationPoint = metricsCatalog.resourceSaturationPoint;
       )
     |||,
     slos: {
-      soft: 0.80,
+      capacity_planning: 0.80,
       hard: 0.90,
       alertTriggerDuration: '10m',  // Can be bursty, so only trigger after 10m
     },

@@ -23,7 +23,7 @@ local metricsCatalog = import 'servicemetrics/metrics-catalog.libsonnet';
       pg_settings_max_connections{%(selector)s}
     |||,
     slos: {
-      soft: 0.80,
+      capacity_planning: 0.80,
       hard: 0.90,
     },
   }),

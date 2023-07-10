@@ -2826,7 +2826,7 @@ groups:
   - expr: "0.8"
     labels:
       component: cpu
-    record: slo:max:soft:gitlab_component_saturation:ratio
+    record: slo:max:capacity_planning:gitlab_component_saturation:ratio
   - expr: "0.9"
     labels:
       component: cpu
@@ -2834,7 +2834,7 @@ groups:
   - expr: "0.75"
     labels:
       component: disk_inodes
-    record: slo:max:soft:gitlab_component_saturation:ratio
+    record: slo:max:capacity_planning:gitlab_component_saturation:ratio
   - expr: "0.8"
     labels:
       component: disk_inodes
@@ -2842,7 +2842,7 @@ groups:
   - expr: "0.85"
     labels:
       component: disk_space
-    record: slo:max:soft:gitlab_component_saturation:ratio
+    record: slo:max:capacity_planning:gitlab_component_saturation:ratio
   - expr: "0.9"
     labels:
       component: disk_space
@@ -2850,7 +2850,7 @@ groups:
   - expr: "0.9"
     labels:
       component: go_memory
-    record: slo:max:soft:gitlab_component_saturation:ratio
+    record: slo:max:capacity_planning:gitlab_component_saturation:ratio
   - expr: "0.98"
     labels:
       component: go_memory
@@ -2858,7 +2858,7 @@ groups:
   - expr: "0.9"
     labels:
       component: kube_container_cpu
-    record: slo:max:soft:gitlab_component_saturation:ratio
+    record: slo:max:capacity_planning:gitlab_component_saturation:ratio
   - expr: "0.99"
     labels:
       component: kube_container_cpu
@@ -2866,7 +2866,7 @@ groups:
   - expr: "0.8"
     labels:
       component: kube_container_memory
-    record: slo:max:soft:gitlab_component_saturation:ratio
+    record: slo:max:capacity_planning:gitlab_component_saturation:ratio
   - expr: "0.9"
     labels:
       component: kube_container_memory
@@ -2874,7 +2874,7 @@ groups:
   - expr: "0.8"
     labels:
       component: kube_pool_cpu
-    record: slo:max:soft:gitlab_component_saturation:ratio
+    record: slo:max:capacity_planning:gitlab_component_saturation:ratio
   - expr: "0.9"
     labels:
       component: kube_pool_cpu
@@ -2882,7 +2882,7 @@ groups:
   - expr: "0.9"
     labels:
       component: memory
-    record: slo:max:soft:gitlab_component_saturation:ratio
+    record: slo:max:capacity_planning:gitlab_component_saturation:ratio
   - expr: "0.98"
     labels:
       component: memory
@@ -2890,7 +2890,7 @@ groups:
   - expr: "0.1"
     labels:
       component: node_schedstat_waiting
-    record: slo:max:soft:gitlab_component_saturation:ratio
+    record: slo:max:capacity_planning:gitlab_component_saturation:ratio
   - expr: "0.15"
     labels:
       component: node_schedstat_waiting
@@ -2898,7 +2898,7 @@ groups:
   - expr: "0.9"
     labels:
       component: single_node_cpu
-    record: slo:max:soft:gitlab_component_saturation:ratio
+    record: slo:max:capacity_planning:gitlab_component_saturation:ratio
   - expr: "0.95"
     labels:
       component: single_node_cpu

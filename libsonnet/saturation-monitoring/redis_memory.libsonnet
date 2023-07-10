@@ -55,7 +55,7 @@ local redisMemoryDefinition = commonDefinition {
   |||,
   grafana_dashboard_uid: 'sat_redis_memory',
   slos: {
-    soft: 0.65,
+    capacity_planning: 0.65,
     // Keep this low, since processes like the Redis RDB snapshot can put sort-term memory pressure
     // Ideally we don't want to go over 75%, so alerting at 70% gives us due warning before we hit
     //
@@ -92,7 +92,7 @@ local excludedRedisInstances = ['redis-tracechunks'];
     |||,
     grafana_dashboard_uid: 'sat_redis_memory_cache',
     slos: {
-      soft: 0.70,
+      capacity_planning: 0.70,
       hard: 0.75,
     },
   }),
@@ -117,7 +117,7 @@ local excludedRedisInstances = ['redis-tracechunks'];
     grafana_dashboard_uid: 'sat_redis_memory_tracechunks',
     slos: {
       // Intentionally very low, maybe able to go lower.  See description above
-      soft: 0.40,
+      capacity_planning: 0.40,
       hard: 0.50,
     },
   }),
@@ -134,7 +134,7 @@ local excludedRedisInstances = ['redis-tracechunks'];
     |||,
     grafana_dashboard_uid: 'sat_redis_memory_sessions',
     slos: {
-      soft: 0.70,
+      capacity_planning: 0.70,
       hard: 0.75,
     },
   }),

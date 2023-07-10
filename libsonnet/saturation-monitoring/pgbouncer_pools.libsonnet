@@ -29,7 +29,7 @@ local pgbouncerAsyncPool(tag, role) =
       )
     |||,
     slos: {
-      soft: 0.90,
+      capacity_planning: 0.90,
       hard: 0.95,
       alertTriggerDuration: '10m',
     },
@@ -65,7 +65,7 @@ local pgbouncerSyncPool(tag, role) =
       )
     |||,
     slos: {
-      soft: 0.85,
+      capacity_planning: 0.85,
       hard: 0.95,
       alertTriggerDuration: '10m',
     },

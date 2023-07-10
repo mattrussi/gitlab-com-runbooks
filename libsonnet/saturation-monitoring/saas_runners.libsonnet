@@ -1,7 +1,7 @@
 local metricsCatalog = import 'servicemetrics/metrics.libsonnet';
 local resourceSaturationPoint = metricsCatalog.resourceSaturationPoint;
 
-local runner_saturation(shard, gduid='', slot_soft=0.90, slot_hard=0.95) =
+local runner_saturation(shard, gduid='', slot_capacity_planning=0.90, slot_hard=0.95) =
   resourceSaturationPoint({
     title: '%s Runner utilization' % shard,
     severity: 's4',
@@ -15,7 +15,7 @@ local runner_saturation(shard, gduid='', slot_soft=0.90, slot_hard=0.95) =
       When this metric is saturated, new CI jobs will queue. When this occurs we should consider adding more runner managers,
       or scaling the runner managers vertically and increasing their maximum runner capacity.
     ||| % shard,
-    grafana_dashboard_uid: if gduid != '' then gduid else 'sat_%s_runners' % std.strReplace(shard, "-", "_"),
+    grafana_dashboard_uid: if gduid != '' then gduid else 'sat_%s_runners' % std.strReplace(shard, '-', '_'),
     resourceLabels: ['instance'],
     staticLabels: {
       type: 'ci-runners',
@@ -34,7 +34,7 @@ local runner_saturation(shard, gduid='', slot_soft=0.90, slot_hard=0.95) =
       rangeInterval: '%(rangeInterval)s',
     },
     slos: {
-      soft: slot_soft,
+      capacity_planning: slot_capacity_planning,
       hard: slot_hard,
     },
   });
@@ -43,7 +43,7 @@ local runner_saturation(shard, gduid='', slot_soft=0.90, slot_hard=0.95) =
   // shared-gitlab-org and private runners are also part of our SaaS fleet,
   // dedicated to our internal usage though (and in case of shared-gitlab-org
   // also shared with the community contributors)
-  private_runners: runner_saturation('private', slot_soft=0.85),
+  private_runners: runner_saturation('private', slot_capacity_planning=0.85),
   shared_runners_gitlab: runner_saturation('shared-gitlab-org', gduid='sat_shared_runners_gitlab'),
 
   // Customer facing SaaS runner fleet

@@ -28,7 +28,7 @@ local resourceSaturationPoint = metricsCatalog.resourceSaturationPoint;
       container_spec_memory_limit_bytes{id="/system.slice/gitlab-runsvdir.service", %(selector)s}
     |||,
     slos: {
-      soft: 0.80,
+      capacity_planning: 0.80,
       hard: 0.90,
     },
   }),

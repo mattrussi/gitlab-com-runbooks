@@ -29,7 +29,7 @@ local resourceSaturationPoint = metricsCatalog.resourceSaturationPoint;
     |||,
     grafana_dashboard_uid: 'sat_nat_gw_port_allocation',
     resourceLabels: ['gateway_name', 'project_id'],
-    burnRatePeriod: '1h', // This needs to be high, since the StackDriver export only updates infrequently
+    burnRatePeriod: '1h',  // This needs to be high, since the StackDriver export only updates infrequently
     queryFormatConfig: {
       // From https://cloud.google.com/nat/docs/ports-and-addresses#ports
       // Each NAT IP address on a Cloud NAT gateway offers 64,512 TCP source ports
@@ -51,7 +51,7 @@ local resourceSaturationPoint = metricsCatalog.resourceSaturationPoint;
       ))
     |||,
     slos: {
-      soft: 0.85,
+      capacity_planning: 0.85,
       hard: 0.90,
     },
   }),

@@ -26,7 +26,7 @@ local selectors = import 'promql/selectors.libsonnet';
       ) > 0
     |||,
     slos: {
-      soft: 0.85,
+      capacity_planning: 0.85,
       hard: 0.90,
       alertTriggerDuration: '15m',
     },

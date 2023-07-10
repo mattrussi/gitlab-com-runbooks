@@ -148,8 +148,8 @@ local capacityComponentColors = {
     alias: '/receive .*/',
     transform: 'negative-Y',
   },
-  softSlo:: {
-    alias: '/^Soft SLO/',
+  capacityPlanningSlo:: {
+    alias: '/^Capacity Planning SLO/',
     color: '#FF4500',  // "Orange red"
     dashes: true,
     legend: true,

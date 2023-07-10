@@ -25,7 +25,7 @@ local metricsCatalog = import 'servicemetrics/metrics-catalog.libsonnet';
       sum by (%(aggregationLabels)s) (last_over_time(gitlab_database_bloat_btree_real_size{job="gitlab-monitor-database-bloat", %(selector)s}[1h]))
     |||,
     slos: {
-      soft: 0.50,
+      capacity_planning: 0.50,
       hard: 0.70,
     },
   }),

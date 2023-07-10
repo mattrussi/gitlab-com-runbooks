@@ -25,7 +25,7 @@ local resourceSaturationPoint = metricsCatalog.resourceSaturationPoint;
       gitlab_workhorse_image_resize_max_processes{%(selector)s}
     |||,
     slos: {
-      soft: 0.90,
+      capacity_planning: 0.90,
       hard: 0.95,
       alertTriggerDuration: '15m',
     },

@@ -31,7 +31,7 @@ local resourceSaturationPoint = metricsCatalog.resourceSaturationPoint;
       gitlab_database_connection_pool_size{class="ActiveRecord::Base", %(selector)s}
     |||,
     slos: {
-      soft: 0.90,
+      capacity_planning: 0.90,
       hard: 0.99,
       alertTriggerDuration: '15m',
     },

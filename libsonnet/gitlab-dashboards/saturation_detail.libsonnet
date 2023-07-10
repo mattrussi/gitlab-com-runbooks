@@ -97,12 +97,12 @@ local maxOverTime(query) =
         legendFormat='99th quantile for week {{ component }}',
       )
     )
-    .addTarget(  // Soft SLO
+    .addTarget(  // Capacity Planning SLO
       promQuery.target(
         |||
-          avg(slo:max:soft:gitlab_component_saturation:ratio{component="%(component)s"}) by (component)
+          avg(slo:max:capacity_planning:gitlab_component_saturation:ratio{component="%(component)s"}) by (component)
         ||| % formatConfig,
-        legendFormat='Soft SLO: {{ component }}',
+        legendFormat='Capacity Planning SLO: {{ component }}',
       )
     )
     .addTarget(  // Hard SLO
@@ -125,7 +125,7 @@ local maxOverTime(query) =
       min=0,
       show=false,
     )
-    .addSeriesOverride(seriesOverrides.softSlo)
+    .addSeriesOverride(seriesOverrides.capacityPlanningSlo)
     .addSeriesOverride(seriesOverrides.hardSlo)
     .addSeriesOverride(seriesOverrides.goldenMetric('/aggregated /', { linewidth: 2 },))
     .addSeriesOverride({

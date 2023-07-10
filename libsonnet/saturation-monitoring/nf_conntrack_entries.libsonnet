@@ -20,7 +20,7 @@ local resourceSaturationPoint = (import 'servicemetrics/resource_saturation_poin
       node_nf_conntrack_entries_limit{%(selector)s}
     |||,
     slos: {
-      soft: 0.95,
+      capacity_planning: 0.95,
       hard: 0.98,
     },
   }),

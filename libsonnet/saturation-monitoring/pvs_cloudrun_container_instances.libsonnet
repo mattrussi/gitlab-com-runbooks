@@ -37,7 +37,7 @@ local resourceSaturationPoint = metricsCatalog.resourceSaturationPoint;
       %(maximumContainerConcurrency)g
     |||,
     slos: {
-      soft: 0.80,
+      capacity_planning: 0.80,
       hard: 0.90,
     },
   }),

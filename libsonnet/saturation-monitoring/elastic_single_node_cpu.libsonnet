@@ -20,7 +20,7 @@ local resourceSaturationPoint = metricsCatalog.resourceSaturationPoint;
       avg_over_time(elasticsearch_process_cpu_percent{%(selector)s}[%(rangeInterval)s]) / 100
     |||,
     slos: {
-      soft: 0.80,
+      capacity_planning: 0.80,
       hard: 0.90,
     },
   }),

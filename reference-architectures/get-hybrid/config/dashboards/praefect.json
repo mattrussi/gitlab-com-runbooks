@@ -3847,7 +3847,7 @@
           "repeat": null,
           "seriesOverrides": [
             {
-              "alias": "/^Soft SLO/",
+              "alias": "/^Capacity Planning SLO/",
               "color": "#FF4500",
               "dashLength": 4,
               "dashes": true,
@@ -3939,11 +3939,11 @@
               "refId": "D"
             },
             {
-              "expr": "avg(slo:max:soft:gitlab_component_saturation:ratio{component=\"cpu\"}) by (component)\n",
+              "expr": "avg(slo:max:capacity_planning:gitlab_component_saturation:ratio{component=\"cpu\"}) by (component)\n",
               "format": "time_series",
               "interval": "1m",
               "intervalFactor": 1,
-              "legendFormat": "Soft SLO: {{ component }}",
+              "legendFormat": "Capacity Planning SLO: {{ component }}",
               "refId": "E"
             },
             {
@@ -4034,7 +4034,7 @@
           "repeat": null,
           "seriesOverrides": [
             {
-              "alias": "/^Soft SLO/",
+              "alias": "/^Capacity Planning SLO/",
               "color": "#FF4500",
               "dashLength": 4,
               "dashes": true,
@@ -4126,11 +4126,11 @@
               "refId": "D"
             },
             {
-              "expr": "avg(slo:max:soft:gitlab_component_saturation:ratio{component=\"disk_inodes\"}) by (component)\n",
+              "expr": "avg(slo:max:capacity_planning:gitlab_component_saturation:ratio{component=\"disk_inodes\"}) by (component)\n",
               "format": "time_series",
               "interval": "1m",
               "intervalFactor": 1,
-              "legendFormat": "Soft SLO: {{ component }}",
+              "legendFormat": "Capacity Planning SLO: {{ component }}",
               "refId": "E"
             },
             {
@@ -4221,7 +4221,7 @@
           "repeat": null,
           "seriesOverrides": [
             {
-              "alias": "/^Soft SLO/",
+              "alias": "/^Capacity Planning SLO/",
               "color": "#FF4500",
               "dashLength": 4,
               "dashes": true,
@@ -4313,11 +4313,11 @@
               "refId": "D"
             },
             {
-              "expr": "avg(slo:max:soft:gitlab_component_saturation:ratio{component=\"disk_space\"}) by (component)\n",
+              "expr": "avg(slo:max:capacity_planning:gitlab_component_saturation:ratio{component=\"disk_space\"}) by (component)\n",
               "format": "time_series",
               "interval": "1m",
               "intervalFactor": 1,
-              "legendFormat": "Soft SLO: {{ component }}",
+              "legendFormat": "Capacity Planning SLO: {{ component }}",
               "refId": "E"
             },
             {
@@ -4408,7 +4408,7 @@
           "repeat": null,
           "seriesOverrides": [
             {
-              "alias": "/^Soft SLO/",
+              "alias": "/^Capacity Planning SLO/",
               "color": "#FF4500",
               "dashLength": 4,
               "dashes": true,
@@ -4500,11 +4500,11 @@
               "refId": "D"
             },
             {
-              "expr": "avg(slo:max:soft:gitlab_component_saturation:ratio{component=\"go_memory\"}) by (component)\n",
+              "expr": "avg(slo:max:capacity_planning:gitlab_component_saturation:ratio{component=\"go_memory\"}) by (component)\n",
               "format": "time_series",
               "interval": "1m",
               "intervalFactor": 1,
-              "legendFormat": "Soft SLO: {{ component }}",
+              "legendFormat": "Capacity Planning SLO: {{ component }}",
               "refId": "E"
             },
             {
@@ -4595,7 +4595,7 @@
           "repeat": null,
           "seriesOverrides": [
             {
-              "alias": "/^Soft SLO/",
+              "alias": "/^Capacity Planning SLO/",
               "color": "#FF4500",
               "dashLength": 4,
               "dashes": true,
@@ -4687,11 +4687,11 @@
               "refId": "D"
             },
             {
-              "expr": "avg(slo:max:soft:gitlab_component_saturation:ratio{component=\"memory\"}) by (component)\n",
+              "expr": "avg(slo:max:capacity_planning:gitlab_component_saturation:ratio{component=\"memory\"}) by (component)\n",
               "format": "time_series",
               "interval": "1m",
               "intervalFactor": 1,
-              "legendFormat": "Soft SLO: {{ component }}",
+              "legendFormat": "Capacity Planning SLO: {{ component }}",
               "refId": "E"
             },
             {
@@ -4782,7 +4782,7 @@
           "repeat": null,
           "seriesOverrides": [
             {
-              "alias": "/^Soft SLO/",
+              "alias": "/^Capacity Planning SLO/",
               "color": "#FF4500",
               "dashLength": 4,
               "dashes": true,
@@ -4874,11 +4874,11 @@
               "refId": "D"
             },
             {
-              "expr": "avg(slo:max:soft:gitlab_component_saturation:ratio{component=\"node_schedstat_waiting\"}) by (component)\n",
+              "expr": "avg(slo:max:capacity_planning:gitlab_component_saturation:ratio{component=\"node_schedstat_waiting\"}) by (component)\n",
               "format": "time_series",
               "interval": "1m",
               "intervalFactor": 1,
-              "legendFormat": "Soft SLO: {{ component }}",
+              "legendFormat": "Capacity Planning SLO: {{ component }}",
               "refId": "E"
             },
             {
@@ -4969,7 +4969,7 @@
           "repeat": null,
           "seriesOverrides": [
             {
-              "alias": "/^Soft SLO/",
+              "alias": "/^Capacity Planning SLO/",
               "color": "#FF4500",
               "dashLength": 4,
               "dashes": true,
@@ -5061,11 +5061,11 @@
               "refId": "D"
             },
             {
-              "expr": "avg(slo:max:soft:gitlab_component_saturation:ratio{component=\"single_node_cpu\"}) by (component)\n",
+              "expr": "avg(slo:max:capacity_planning:gitlab_component_saturation:ratio{component=\"single_node_cpu\"}) by (component)\n",
               "format": "time_series",
               "interval": "1m",
               "intervalFactor": 1,
-              "legendFormat": "Soft SLO: {{ component }}",
+              "legendFormat": "Capacity Planning SLO: {{ component }}",
               "refId": "E"
             },
             {

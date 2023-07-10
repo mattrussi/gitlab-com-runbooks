@@ -22,7 +22,7 @@ local resourceSaturationPoint = metricsCatalog.resourceSaturationPoint;
       )
     |||,
     slos: {
-      soft: 0.70,
+      capacity_planning: 0.70,
       hard: 0.90,
     },
   }),

@@ -125,7 +125,7 @@ local generateSaturationMetadataRulesGroup(
   local saturationMetadataRecordingRules = std.map(function(key) saturationResources[key].getMetadataRecordingRuleDefinition(key), filtered);
 
   prepareGroups([{
-    // Recording rules defining the soft and hard SLO thresholds
+    // Recording rules defining the capacity planning and hard SLO thresholds
     name: 'GitLab Component Saturation Max SLOs',
     interval: '5m',
     rules: sloThresholdRecordingRules,

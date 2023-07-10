@@ -29,7 +29,7 @@ local gcpLimits = {
       avg_over_time(stackdriver_filestore_instance_file_googleapis_com_nfs_server_used_bytes_percent{%(selector)s}[%(rangeInterval)s]) / 100
     |||,
     slos: {
-      soft: 0.85,
+      capacity_planning: 0.85,
       hard: 0.90,
     },
   }),
@@ -56,7 +56,7 @@ local gcpLimits = {
       readIOPS: gcpLimits.basicHDD.readIOPS,
     },
     slos: {
-      soft: 0.85,
+      capacity_planning: 0.85,
       hard: 0.9,
     },
   }),
@@ -83,7 +83,7 @@ local gcpLimits = {
       writeIOPS: gcpLimits.basicHDD.writeIOPS,
     },
     slos: {
-      soft: 0.85,
+      capacity_planning: 0.85,
       hard: 0.9,
     },
   }),
@@ -110,7 +110,7 @@ local gcpLimits = {
       readThroughput: gcpLimits.basicHDD.readThroughput,
     },
     slos: {
-      soft: 0.85,
+      capacity_planning: 0.85,
       hard: 0.9,
     },
   }),
@@ -138,7 +138,7 @@ local gcpLimits = {
       writeThroughput: gcpLimits.basicHDD.writeThroughput,
     },
     slos: {
-      soft: 0.85,
+      capacity_planning: 0.85,
       hard: 0.9,
     },
   }),

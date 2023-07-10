@@ -25,7 +25,7 @@ local resourceSaturationPoint = (import 'servicemetrics/resource_saturation_poin
       avg_over_time(stackdriver_cloudsql_database_cloudsql_googleapis_com_database_disk_utilization{%(selector)s}[%(rangeInterval)s])
     |||,
     slos: {
-      soft: 0.85,
+      capacity_planning: 0.85,
       hard: 0.90,
     },
   }),

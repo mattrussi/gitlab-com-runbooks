@@ -45,7 +45,7 @@ local selectors = import 'promql/selectors.libsonnet';
       }),
     },
     slos: {
-      soft: 0.92,
+      capacity_planning: 0.92,
       hard: 0.97,
     },
   }),

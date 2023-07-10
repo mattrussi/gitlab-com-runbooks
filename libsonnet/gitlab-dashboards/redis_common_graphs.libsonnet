@@ -295,7 +295,7 @@ local processExporter = import 'gitlab-dashboards/process_exporter.libsonnet';
                      .addTarget(
                        promQuery.target(
                          |||
-                           max(slo:max:soft:gitlab_component_saturation:ratio{component="redis_memory", environment="$environment"})
+                           max(slo:max:capacity_planning:gitlab_component_saturation:ratio{component="redis_memory", environment="$environment"})
                          ||| % formatConfig,
                          interval='5m',
                          legendFormat='Degradation SLO',
