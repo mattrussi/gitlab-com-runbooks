@@ -113,18 +113,13 @@ module "patroni-main-standby_cluster" {
 
 ## 4. <a name='StepstoDestroyaStandbyClusterifyouwanttorecreateit'></a>Steps to Destroy a Standby Cluster if you want to recreate it
 
-**IMPORTANT: make sure to review this command or perform the execution with a peer**
+**IMPORTANT: make sure to review the MRs and commands or perform the execution with a peer**
 
 **IMPORTANT: You should NEVER perform this operation for existing clusters PRODUCTION clusters that are in use by the application**, only destroy new clusters you are rebuilding for new projects;
 
-If the cluster exists and is not operational, in sync, or has issues with the source replication, perform a TF destroy locally using `-target`
+If the cluster exists and is not operational, in sync, or has issues with the source replication, create an MR to destroy the cluster. As a standard practice, always rebase MR before merging it and review MR's Terraform plan job for accuracy.
 
-```
-cd /config-mgmt/environments/<environment>
-tf destroy -target="module.<standby_cluster_tf_module>"
-```
-
-Clean out any remaining Chef client/nodes using `knife`, like for example:
+Once MR is merged, clean out any remaining Chef client/nodes using `knife`, like for example:
 
 ```
 knife node delete --yes patroni-main-standby_cluster-10{1..5}-db-$env.c.gitlab-$gcp_project.internal
@@ -133,16 +128,11 @@ knife client delete --yes patroni-main-standby_cluster-10{1..5}-db-$env.c.gitlab
 
 ## 5. <a name='CreatethePatroniCIStandbyClusterinstances'></a>Create the Patroni CI Standby Cluster instances
 
-### 5.1. <a name='CreatetheclusterwithTF'></a>Create the cluster with TF
+### 5.1. <a name='CreatetheclusterwithTF'></a>Create the cluster with Terraform MR
 
 If you are creating the nodes for the first time, **they should be created by our CI/CO pipeline** when you merge the changes in `main.tf` in the repository.
 
-Otherwise, if you have destroyed using `tf destroy` you can manually create them with:
-
-```
-cd /config-mgmt/environments/<environment>
-tf apply -target="module.<standby_cluster_tf_module>"
-```
+Otherwise, create a new MR to revert the changes performed by the earlier MR that destroyed it. Again, as a standard practice, always rebase MR before merging it and review MR's Terraform plan job for accuracy. Merge the MR to create cluster nodes.
 
 ### 5.2. <a name='StoppatroniandresetWALdirectoryfromoldfiles'></a>Stop patroni and reset WAL directory from old files
 
