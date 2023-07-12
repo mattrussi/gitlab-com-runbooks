@@ -1,8 +1,10 @@
 local basic = import 'grafana/basic.libsonnet';
 local layout = import 'grafana/layout.libsonnet';
 local templates = import 'grafana/templates.libsonnet';
+local selectors = import 'promql/selectors.libsonnet';
 
-local env_stage_app = 'env="$environment", stage="$stage", app="kas"';
+local selector = { env: '$environment', stage: '$stage', type: 'kas' };
+local selectorString = selectors.serializeHash(selector);
 
 basic.dashboard(
   'CI tunnel',
@@ -16,7 +18,7 @@ basic.dashboard(
     basic.heatmap(
       title='Routing latency (success)',
       description='Time it takes kas to find a suitable reverse tunnel from an agent',
-      query='sum by (le) (rate(k8s_api_proxy_routing_duration_seconds_bucket{%s, status="success"}[$__rate_interval]))' % env_stage_app,
+      query='sum by (le) (rate(k8s_api_proxy_routing_duration_seconds_bucket{%s, status="success"}[$__rate_interval]))' % selectorString,
       dataFormat='tsbuckets',
       color_cardColor='#00ff00',
       legendFormat='__auto',
@@ -24,7 +26,7 @@ basic.dashboard(
     basic.heatmap(
       title='Routing latency (request aborted)',
       description='Time it takes kas to find a suitable reverse tunnel from an agent',
-      query='sum by (le) (rate(k8s_api_proxy_routing_duration_seconds_bucket{%s, status="aborted"}[$__rate_interval]))' % env_stage_app,
+      query='sum by (le) (rate(k8s_api_proxy_routing_duration_seconds_bucket{%s, status="aborted"}[$__rate_interval]))' % selectorString,
       dataFormat='tsbuckets',
       color_cardColor='#0000ff',
       legendFormat='__auto',
@@ -34,7 +36,7 @@ basic.dashboard(
       description='CI tunnel request routing took longer than 20s',
       query=|||
         sum (increase(k8s_api_proxy_routing_timeout_total{%s}[$__rate_interval]))
-      ||| % env_stage_app,
+      ||| % selectorString,
       yAxisLabel='requests',
       legend_show=false,
     ),
@@ -47,7 +49,7 @@ basic.dashboard(
             grpc_service=~"gitlab.agent.reverse_tunnel.rpc.ReverseTunnel|gitlab.agent.kubernetes_api.rpc.KubernetesApi"
           }[$__rate_interval])
         )
-      ||| % env_stage_app,
+      ||| % selectorString,
       legendFormat='{{grpc_service}}/{{grpc_method}}',
       yAxisLabel='rps',
       linewidth=1,
@@ -61,7 +63,7 @@ basic.dashboard(
             grpc_service=~"gitlab.agent.reverse_tunnel.rpc.ReverseTunnel|gitlab.agent.kubernetes_api.rpc.KubernetesApi"
           }[$__rate_interval])
         )
-      ||| % env_stage_app,
+      ||| % selectorString,
       legendFormat='{{grpc_service}}/{{grpc_method}} {{grpc_code}}',
       yAxisLabel='rps',
       linewidth=1,
