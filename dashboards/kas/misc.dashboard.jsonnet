@@ -16,6 +16,30 @@ basic.dashboard(
 .addPanels(
   layout.grid([
     basic.timeseries(
+      title='OK gRPC calls/second',
+      description='OK gRPC calls',
+      query=|||
+        sum by (grpc_service, grpc_method) (
+          rate(grpc_server_handled_total{%s, grpc_code="OK"}[$__rate_interval])
+        )
+      ||| % selectorString,
+      legendFormat='{{grpc_service}}/{{grpc_method}}',
+      yAxisLabel='rps',
+      linewidth=1,
+    ),
+    basic.timeseries(
+      title='Not OK gRPC calls/second',
+      description='Not OK gRPC calls',
+      query=|||
+        sum by (grpc_service, grpc_method, grpc_code) (
+          rate(grpc_server_handled_total{%s, grpc_code!="OK"}[$__rate_interval])
+        )
+      ||| % selectorString,
+      legendFormat='{{grpc_service}}/{{grpc_method}} {{grpc_code}}',
+      yAxisLabel='rps',
+      linewidth=1,
+    ),
+    basic.timeseries(
       title='Agent connections rate limit exceeded',
       description='The total number of times configured rate limit of new agent connections was exceeded',
       query=|||
@@ -23,6 +47,7 @@ basic.dashboard(
       ||| % selectorString,
       yAxisLabel='times',
       legend_show=false,
+      linewidth=1,
     ),
   ], cols=2, rowHeight=10)
 )
