@@ -338,7 +338,6 @@ local indexDefaults = {
     latencyFieldUnitMultiplier: 1,
   },
 
-
   sidekiq_execution: indexDefaults {
     timestamp: 'json.time',
     indexPattern: 'AWNABDRwNDuQHTm2tH6l',
@@ -363,6 +362,31 @@ local indexDefaults = {
       existsFilter('json.target_duration_s'),
       existsFilter('json.duration_s'),
       matching.matchers({ anyScript: ["doc['json.duration_s'].value > doc['json.target_duration_s'].value"] }),
+    ],
+  },
+
+  sidekiq_queueing: indexDefaults {
+    timestamp: 'json.time',
+    indexPattern: 'AWNABDRwNDuQHTm2tH6l',
+    defaultColumns: [
+      'json.class',
+      'json.queue',
+      'json.meta.project',
+      'json.job_status',
+      'json.urgency',
+      'json.scheduling_latency_s',
+      'json.target_scheduling_latency_s',
+      'json.duration_s',
+    ],
+    defaultSeriesSplitField: 'json.meta.project.keyword',
+    defaultLatencyField: 'json.scheduling_latency_s',
+    latencyFieldUnitMultiplier: 1,
+    slowRequestFilter: [
+      // These need to be present for the script to work.
+      // Only job completion logs have target_duration_s and duration_s
+      existsFilter('json.target_scheduling_latency_s'),
+      existsFilter('json.scheduling_latency_s'),
+      matching.matchers({ anyScript: ["doc['json.scheduling_latency_s'].value > doc['json.target_scheduling_latency_s'].value"] }),
     ],
   },
 

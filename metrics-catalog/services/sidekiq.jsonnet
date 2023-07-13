@@ -65,7 +65,10 @@ metricsCatalog.serviceDefinition({
     'sidekiq_jobs_completion_seconds_bucket',
     'sidekiq_jobs_queue_duration_seconds_bucket',
     'sidekiq_jobs_failed_total',
-  ] + sliLibrary.get('sidekiq_execution').recordingRuleMetrics,
+  ] + (
+    sliLibrary.get('sidekiq_execution').recordingRuleMetrics
+    + sliLibrary.get('sidekiq_queueing').recordingRuleMetrics
+  ),
   kubeConfig: {
     labelSelectors: kubeLabelSelectors(
       ingressSelector=null,  // no ingress for sidekiq
@@ -267,6 +270,13 @@ metricsCatalog.serviceDefinition({
       // Improve sentry link once https://gitlab.com/gitlab-com/gl-infra/scalability/-/issues/532 arrives
       toolingLinks.sentry(slug='gitlab/gitlabcom', type='sidekiq'),
       toolingLinks.kibana(title='Sidekiq execution', index='sidekiq_execution', type='sidekiq'),
+    ],
+  }) + sliLibrary.get('sidekiq_queueing').generateServiceLevelIndicator(baseSelector { external_dependencies: { ne: 'yes' } }, {
+    serviceAggregation: false,  // Don't add this to the request rate of the service
+    // TODO: Bump to S2 once the per-shard SLIs (shard_*) are removed
+    severity: 's4',  // Don't page SREs for this SLI
+    toolingLinks: [
+      toolingLinks.kibana(title='Sidekiq queueing', index='sidekiq_queueing', type='sidekiq'),
     ],
   }),
 
