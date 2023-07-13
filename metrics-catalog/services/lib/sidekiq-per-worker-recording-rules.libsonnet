@@ -137,9 +137,6 @@ local queueRulesForBurnRate(aggregationSet, burnRate, staticLabels={}) =
   );
 
 {
-  perWorkerRecordingRulesForAggregationSet(aggregationSet, staticLabels={})::
-    std.flatMap(function(burnRate) executionRulesForBurnRate(aggregationSet, burnRate, staticLabels), aggregationSet.getBurnRates()),
-
   // Record queue apdex, execution apdex, error rates, QPS metrics
   // for each worker, similar to how we record these for each
   // service
