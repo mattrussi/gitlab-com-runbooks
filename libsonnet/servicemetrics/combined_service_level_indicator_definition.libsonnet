@@ -92,6 +92,8 @@ local combinedServiceLevelIndicatorDefinition(
         // Significant labels are the union of all significantLabels from the components
         significantLabels:
           std.set(std.flatMap(function(c) c.significantLabels, componentsInitialised)),
+
+        shardLevelMonitoring: false,
       },
   };
 

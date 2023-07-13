@@ -54,7 +54,7 @@ local errorAlertForSLIForAlertDescriptor(service, sli, alertDescriptor, extraSel
 local apdexAlertForSLI(service, sli, alertDescriptors, extraSelector) =
   std.flatMap(
     function(descriptor)
-      if descriptor.predicate(service) then
+      if descriptor.predicate(service, sli) then
         apdexAlertForSLIForAlertDescriptor(service, sli, descriptor, extraSelector)
       else
         [],
@@ -65,7 +65,7 @@ local apdexAlertForSLI(service, sli, alertDescriptors, extraSelector) =
 local errorRateAlertsForSLI(service, sli, alertDescriptors, extraSelector) =
   std.flatMap(
     function(descriptor)
-      if descriptor.predicate(service) then
+      if descriptor.predicate(service, sli) then
         errorAlertForSLIForAlertDescriptor(service, sli, descriptor, extraSelector)
       else
         [],
@@ -75,7 +75,7 @@ local errorRateAlertsForSLI(service, sli, alertDescriptors, extraSelector) =
 local trafficCessationAlertsForSLI(service, sli, alertDescriptors, extraSelector) =
   std.flatMap(
     function(descriptor)
-      if descriptor.predicate(service) then
+      if descriptor.predicate(service, sli) then
         trafficCessationAlertForSLIForAlertDescriptor(service, sli, descriptor, extraSelector)
       else
         [],
