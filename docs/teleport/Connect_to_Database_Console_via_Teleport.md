@@ -53,6 +53,7 @@ There are two Teleport cluster/servers:
 ```shell
 tsh login --proxy=staging.teleport.gitlab.net
 ```
+
 2. Request approval for the database role that you need
 
 > Note: The `database-ro-gstg` role in the `gstg` environment does not require a request or approval, so you can skip the next step. Use the `database-ro-gstg` role unless you know for sure that you need something else. For Package Team members, they additionaly have `database-registry-ro-gstg` role in the `gstg`, which gives them access to registry database without approval.
@@ -68,7 +69,6 @@ Staging `registry` database roles:
 
 - `database-registry-ro-gstg`
 - `database-registry-rw-gstg`
-
 
 ```shell
 tsh login --proxy=staging.teleport.gitlab.net --request-roles=database-ro-gstg --request-reason="Issue-URL or explanation"
@@ -248,7 +248,6 @@ to spread out the workload please try to allow some time for others to review fi
 `#infrastructure-lounge` feel free to ask someone in that channel to take a look at your request, and provide the request ID.
 
 Approvers will review the issue URL in the request and if database access seems like a reasonable step to address that issue, they will approve it.
-
 
 ## Support
 
