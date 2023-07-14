@@ -18,7 +18,7 @@ class ValidateServiceMappings
     teams = service_catalog["teams"]
     services = service_catalog["services"]
 
-    team_map = teams.each_with_object({}) { |team, map| map[team["name"]] = team; }
+    team_map = teams.each_with_object({}) { |team, map| map[team["name"]] = team }
 
     labels_downcase_set = Set.new
 
