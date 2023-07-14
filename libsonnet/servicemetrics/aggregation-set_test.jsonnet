@@ -59,13 +59,17 @@ local isValid(definition) =
   aggregationSet._UnvalidatedAggregationSet(definition).isValid(definition);
 
 test.suite({
-  testDefaults: {
+  testDefaultAggregationFilter: {
     actual: fixture1.aggregationFilter,
     expect: null,
   },
   testDefaultSupportedBurnRates: {
     actual: fixture1.supportedBurnRates,
     expect: ['5m', '30m', '1h'],
+  },
+  testDefaultRecordingRuleStaticLabels: {
+    actual: fixture1.recordingRuleStaticLabels,
+    expect: {},
   },
   testAggregationFilter: {
     actual: aggregationSet.AggregationSet(fixture1 { aggregationFilter: 'regional' }).aggregationFilter,

@@ -46,10 +46,15 @@ local getRecordingRuleDefinitions(sourceAggregationSet, targetAggregationSet, bu
   if targetMetric == null then
     []
   else
-    [{
-      record: targetMetric,
-      expr: visitor.getRateExpression(sourceAggregationSet, targetAggregationSet, burnRate),
-    }];
+    [
+      std.prune(
+        {
+          record: targetMetric,
+          labels: targetAggregationSet.recordingRuleStaticLabels,
+          expr: visitor.getRateExpression(sourceAggregationSet, targetAggregationSet, burnRate),
+        },
+      ),
+    ];
 
 {
   /** Aggregates Ops Rates and Error Rates between aggregation sets  */

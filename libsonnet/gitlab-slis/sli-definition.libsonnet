@@ -96,6 +96,11 @@ local validateAndApplyDefaults(definition) =
       self.recordingRuleMetrics,
     ),
 
+    recordingRuleStaticLabels:
+      if std.objectHas(sli, 'featureCategory') && sli.featureCategory != serviceLevelIndicatorDefinition.featureCategoryFromSourceMetrics
+      then { feature_category: sli.featureCategory }
+      else {},
+
     local parent = self,
 
     generateServiceLevelIndicator(extraSelector, extraFields={}):: {
