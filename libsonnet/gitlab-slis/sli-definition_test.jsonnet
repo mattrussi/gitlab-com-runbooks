@@ -38,6 +38,18 @@ test.suite({
     expectContains: {
       featureCategory: 'featureCategoryFromSourceMetrics',
       significantLabels: ['world', 'feature_category'],
+      recordingRuleStaticLabels: {},
+    },
+  },
+
+  testNewWithFeatureCategory: {
+    local definitionWithFeatureCategory = validDefinition {
+      featureCategory: 'not_owned',
+    },
+    actual: sliDefinition.new(definitionWithFeatureCategory),
+    expectContains: {
+      featureCategory: 'not_owned',
+      recordingRuleStaticLabels: { feature_category: 'not_owned' },
     },
   },
 

@@ -59,8 +59,11 @@ local getDirectExpr(sourceAggregationSet, targetAggregationSet, burnRate) =
       local sourceHasBurnRate = std.member(sourceAggregationSet.getBurnRates(), burnRate);
       local directExpr = if sourceHasBurnRate then
         getDirectExpr(sourceAggregationSet, targetAggregationSet, burnRate);
-      [{
-        record: targetErrorRatioMetric,
-        expr: helpers.combinedErrorRatioExpression(sourceAggregationSet, targetAggregationSet, burnRate, directExpr),
-      }],
+      [
+        std.prune({
+          record: targetErrorRatioMetric,
+          labels: targetAggregationSet.recordingRuleStaticLabels,
+          expr: helpers.combinedErrorRatioExpression(sourceAggregationSet, targetAggregationSet, burnRate, directExpr),
+        }),
+      ],
 }

@@ -82,6 +82,7 @@ local targetAggregationSet(sli) =
     selector: { monitor: 'global' },
     supportedBurnRates: ['5m', '1h'],
     metricFormats: aggregationFormats(sli),
+    recordingRuleStaticLabels: sli.recordingRuleStaticLabels,
   });
 
 {

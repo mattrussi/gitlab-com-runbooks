@@ -234,11 +234,12 @@ local library = import 'gitlab-slis/library.libsonnet';
     template.new(
       'component',
       '$PROMETHEUS_DS',
-      'label_values(gitlab:component:stage_group:execution:ops:rate_1h{environment="$environment", monitor="global", component=~"%(sli)s"}), component)' % {
+      'label_values(gitlab:component:stage_group:execution:ops:rate_1h{environment="$environment", monitor="global", component=~"%(sli)s"}, component)' % {
         sli: std.join('|', library.names),
       },
       refresh='load',
       multi=true,
+      includeAll=true,
       sort=1,
       current=current
     ),

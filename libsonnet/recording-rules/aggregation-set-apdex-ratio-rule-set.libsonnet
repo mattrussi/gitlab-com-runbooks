@@ -76,30 +76,39 @@ local getApdexRatioExpression(sourceAggregationSet, targetAggregationSet, burnRa
       if targetApdexWeightMetric == null then
         []
       else
-        [{
-          record: targetApdexWeightMetric,
-          expr: getApdexWeightTransformExpression(sourceAggregationSet, targetAggregationSet, burnRate),
-        }]
+        [
+          std.prune({
+            record: targetApdexWeightMetric,
+            labels: targetAggregationSet.recordingRuleStaticLabels,
+            expr: getApdexWeightTransformExpression(sourceAggregationSet, targetAggregationSet, burnRate),
+          }),
+        ]
     )
     +
     (
       if targetApdexSuccessRateMetric == null then
         []
       else
-        [{
-          record: targetApdexSuccessRateMetric,
-          expr: getApdexSuccessRateTransformExpression(sourceAggregationSet, targetAggregationSet, burnRate),
-        }]
+        [
+          std.prune({
+            record: targetApdexSuccessRateMetric,
+            labels: targetAggregationSet.recordingRuleStaticLabels,
+            expr: getApdexSuccessRateTransformExpression(sourceAggregationSet, targetAggregationSet, burnRate),
+          }),
+        ]
     )
     +
     (
       if targetApdexRatioMetric == null then
         []
       else
-        [{
-          record: targetApdexRatioMetric,
-          expr: getApdexRatioExpression(sourceAggregationSet, targetAggregationSet, burnRate),
-        }]
+        [
+          std.prune({
+            record: targetApdexRatioMetric,
+            labels: targetAggregationSet.recordingRuleStaticLabels,
+            expr: getApdexRatioExpression(sourceAggregationSet, targetAggregationSet, burnRate),
+          }),
+        ]
     ),
 
 
