@@ -81,7 +81,7 @@ ARGV.each do |idx_filename|
             keys:,
             patterns:,
             bytes:,
-            patterns_uniq: patterns.sort.uniq,
+            patterns_uniq: patterns.sort.uniq
           }
           # rubocop:disable GitlabSecurity/JsonSerialization
           puts data.to_json
