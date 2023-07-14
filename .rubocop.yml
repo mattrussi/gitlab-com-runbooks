@@ -47,3 +47,9 @@ GitlabSecurity/JsonSerialization:
 GitlabSecurity/PublicSend:
   Exclude:
     - 'spec/**/*.rb'
+
+InternalAffairs/MissingCopDepartment:
+  Enabled: false
+
+Lint/AssignmentInCondition:
+  Enabled: false

@@ -7,7 +7,7 @@ module RedisTrace
       when 'persistent'
         # multiline (m) modifier because gitlab-kas:agent_limit can have keynames with binary in them including newlines
         key = key
-          .gsub(%r{^(session:lookup:ip:gitlab2:|etag:|action_cable/|sidekiq:cancel:|database-load-balancing/write-location(/main)?/[a-z]+/|runner:build_queue:|gitlab:exclusive_lease:|issues:|gitlab-kas:agent_limit:|gitlab-kas:agent_tracker:conn_by_(project|agent)_id:|gitlab-kas:tunnel_tracker:conn_by_agent_id:|graphql-subscription:|graphql-event::issuableAssigneesUpdated:issuableId:)(.+)}m, '\1$PATTERN')
+          .gsub(%r{^(session:lookup:ip:gitlab2:|etag:|action_cable/|sidekiq:cancel:|database-load-balancing/write-location(/main)?/[a-z]+/|runner:build_queue:|gitlab:exclusive_lease:|issues:|gitlab-kas:agent_limit:|gitlab-kas:agent_tracker:conn_by_(project|agent)_id:|gitlab-kas:tunnel_tracker:conn_by_agent_id:|graphql-subscription:|graphql-event::issuableAssigneesUpdated:issuableId:|gitlab-sidekiq-status:|gitlab-kas:agent_info_errs:|gitlab-kas:project_info_errs:|workhorse:notifications:runner:build_queue:)(.+)}m, '\1$PATTERN')
       when 'cache'
         key = key
           .gsub(%r{^(highlighted-diff-files:merge_request_diffs/)(.+)}, '\1$PATTERN')

@@ -56,7 +56,7 @@ ARGV.each do |idx_filename|
 
         cmd = args[0].downcase
         ts = Time.at(index_vals[i]).to_datetime.new_offset(0)
-        # kbytes = args.reject(&:nil?).map(&:size).reduce(&:+) / 1024
+        bytes = args.reject(&:nil?).map(&:size).reduce(&:+)
 
         raise unless File.basename(filename).match(/^([0-9]+\.[0-9]+\.[0-9]+\.[0-9]+)\.([0-9]+)-([0-9]+\.[0-9]+\.[0-9]+\.[0-9]+)\.([0-9]+)$/)
 
@@ -69,6 +69,8 @@ ARGV.each do |idx_filename|
 
         first_key, last_key = command_key_mappings[cmd]
         keys = first_key.zero? && last_key.zero? ? [] : args[first_key..last_key]
+        keys = args[1..1] if cmd == "publish"
+        keys = keys.map { |key| key.force_encoding("ISO-8859-1").encode("UTF-8") }
 
         if ENV['OUTPUT_FORMAT'] == 'json'
           patterns = keys.map { |key| RedisTrace::KeyPattern.filter_key(key).gsub(' ', '_') }
@@ -78,6 +80,7 @@ ARGV.each do |idx_filename|
             src_host:,
             keys:,
             patterns:,
+            bytes:,
             patterns_uniq: patterns.sort.uniq
           }
           # rubocop:disable GitlabSecurity/JsonSerialization
