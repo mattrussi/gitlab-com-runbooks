@@ -19,6 +19,8 @@ local definitionDefaults = {
   supportedBurnRates: if self.intermediateSource then
     defaultSourceBurnRates
   else defaultGlobalBurnRates,
+
+  recordingRuleStaticLabels: {},
 };
 
 local arrayOfStringsValidator = validator.validator(
