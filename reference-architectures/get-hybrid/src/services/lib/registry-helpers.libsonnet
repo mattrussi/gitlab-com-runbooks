@@ -115,9 +115,7 @@ local defaultRegistrySLIProperties = {
   userImpacting: true,
 };
 
-local registryBaseSelector = {
-  type: 'registry',
-};
+local registryBaseSelector = {};
 
 local registryApdex(selector, satisfiedThreshold, toleratedThreshold=null) =
   histogramApdex(

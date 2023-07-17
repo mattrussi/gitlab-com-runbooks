@@ -109,7 +109,7 @@ metricsCatalog.serviceDefinition({
         selector={
           job: 'runners-manager',
           shard: { re: 'shared-gitlab-org|private|saas-.*|windows-shared' },
-          failure_reason: 'runner_system_failure'
+          failure_reason: 'runner_system_failure',
         },
       ),
 
@@ -147,7 +147,7 @@ metricsCatalog.serviceDefinition({
         selector={
           job: 'runners-manager',
           shard: { re: 'shared-gitlab-org|private|saas-linux-.*' },
-          failure_reason: 'image_pull_failure'
+          failure_reason: 'image_pull_failure',
         },
       ),
 

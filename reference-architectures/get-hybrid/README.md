@@ -32,6 +32,12 @@ Here are some examples of the dashboards generated for this reference architectu
 | `praefect` | `proxy` | All Gitaly operations pass through the Praefect proxy on the way to a Gitaly instance. This SLI monitors those operations in aggregate.  | ✅ SLO: 99.5% | ✅ SLO: 99.95% | ✅ |
 | `praefect` | `replicator_queue` | Praefect replication operations. Latency represents the queuing delay before replication is carried out.  | ✅ SLO: 99.5% | - | ✅ |
 | `registry` | `server` | Aggregation of all registry HTTP requests.  | ✅ SLO: 99.7% | ✅ SLO: 99.99% | ✅ |
+| `registry` | `server_route_blob_digest_deletes` | Delete requests for the blob digest endpoints on the registry.  Used to delete blobs identified by name and digest.  | ✅ SLO: 99.9% | - | ✅ |
+| `registry` | `server_route_blob_digest_reads` | All read-requests (GET or HEAD) for the blob endpoints on the registry.  GET is used to pull a layer gated by the name of repository and uniquely identified by the digest in the registry.  HEAD is used to check the existence of a layer.  | ✅ SLO: 95% | - | ✅ |
+| `registry` | `server_route_blob_digest_writes` | Write requests (PUT or PATCH or POST) for the registry blob digest endpoints.  Currently not part of the spec.  | ✅ SLO: 99.7% | - | ✅ |
+| `registry` | `server_route_blob_upload_uuid_deletes` | Delete requests for the registry blob upload endpoints.  Used to cancel outstanding upload processes, releasing associated resources.  | ✅ SLO: 99.7% | - | ✅ |
+| `registry` | `server_route_blob_upload_uuid_reads` | Read requests (GET) for the registry blob upload endpoints.  GET is used to retrieve the current status of a resumable upload.  | ✅ SLO: 99.7% | - | ✅ |
+| `registry` | `server_route_blob_upload_uuid_writes` | Write requests (PUT or PATCH) for the registry blob upload endpoints.  PUT is used to complete the upload specified by uuid, optionally appending the body as the final chunk.  PATCH is used to upload a chunk of data for the specified upload.  | ✅ SLO: 97% | - | ✅ |
 | `sidekiq` | `email_receiver` | Monitors ratio between all received emails and received emails which could not be processed for some reason.  | - | ✅ SLO: 70% | ✅ |
 | `sidekiq` | `shard_catchall` | All Sidekiq jobs  | ✅ SLO: 99.5% | ✅ SLO: 99.5% | ✅ |
 | `webservice` | `puma` | Aggregation of most web requests that pass through the puma to the GitLab rails monolith. Healthchecks are excluded.  | ✅ SLO: 99.8% | ✅ SLO: 99.99% | ✅ |

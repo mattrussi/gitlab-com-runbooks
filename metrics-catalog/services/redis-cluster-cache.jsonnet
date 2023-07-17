@@ -28,7 +28,7 @@ metricsCatalog.serviceDefinition(
         userImpacting: true,
         severity: 's4',
       },
-      # TODO: add rails_cache SLI after migration
+      // TODO: add rails_cache SLI after migration
     },
   }
   + redisHelpers.gitlabcomObservabilityToolingForRedis('redis-cluster-cache')
