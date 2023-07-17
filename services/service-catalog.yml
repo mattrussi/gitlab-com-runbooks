@@ -912,6 +912,15 @@ services:
       monitors:
         grafana_folder: RNfEDpLmz
         primary_grafana_dashboard: patroni-main/patroni-overview
+    tamland:
+      events:  # No support for this yet, just sketching. Will be useful for annotations and context information
+        - '2023-07-01': Something happened here!
+      components:
+        memory: # This contains component (= service + abstract saturationPoint) overrides/additional information for Tamland
+          forecast_days: 180   # overrides saturation point definition
+          trend_changepoints:  # additional information we currently store in Tamland directly (and would like to remove it from there)
+              - '2023-04-26' # https://gitlab.com/gitlab-com/gl-infra/capacity-planning/-/issues/1026#note_1404708663
+              - '2023-04-28'
 
   - name: patroni-registry
     tier: db
