@@ -2279,121 +2279,121 @@ groups:
     expr: "0.005000"
   - record: slo:min:events:gitlab_service_apdex:ratio
     labels:
-      component: shard_catchall
+      component: shard_catchall_queueing
       tier: sv
       type: sidekiq
     expr: "0.995000"
   - record: slo:max:events:gitlab_service_errors:ratio
     labels:
-      component: shard_catchall
+      component: shard_catchall_queueing
       tier: sv
       type: sidekiq
     expr: "0.005000"
   - record: slo:min:events:gitlab_service_apdex:ratio
     labels:
-      component: shard_database_throttled
+      component: shard_database_throttled_queueing
       tier: sv
       type: sidekiq
     expr: "0.995000"
   - record: slo:max:events:gitlab_service_errors:ratio
     labels:
-      component: shard_database_throttled
+      component: shard_database_throttled_queueing
       tier: sv
       type: sidekiq
     expr: "0.005000"
   - record: slo:min:events:gitlab_service_apdex:ratio
     labels:
-      component: shard_elasticsearch
+      component: shard_elasticsearch_queueing
       tier: sv
       type: sidekiq
     expr: "0.995000"
   - record: slo:max:events:gitlab_service_errors:ratio
     labels:
-      component: shard_elasticsearch
+      component: shard_elasticsearch_queueing
       tier: sv
       type: sidekiq
     expr: "0.005000"
   - record: slo:min:events:gitlab_service_apdex:ratio
     labels:
-      component: shard_gitaly_throttled
+      component: shard_gitaly_throttled_queueing
       tier: sv
       type: sidekiq
     expr: "0.995000"
   - record: slo:max:events:gitlab_service_errors:ratio
     labels:
-      component: shard_gitaly_throttled
+      component: shard_gitaly_throttled_queueing
       tier: sv
       type: sidekiq
     expr: "0.005000"
   - record: slo:min:events:gitlab_service_apdex:ratio
     labels:
-      component: shard_low_urgency_cpu_bound
+      component: shard_low_urgency_cpu_bound_queueing
       tier: sv
       type: sidekiq
     expr: "0.995000"
   - record: slo:max:events:gitlab_service_errors:ratio
     labels:
-      component: shard_low_urgency_cpu_bound
+      component: shard_low_urgency_cpu_bound_queueing
       tier: sv
       type: sidekiq
     expr: "0.005000"
   - record: slo:min:events:gitlab_service_apdex:ratio
     labels:
-      component: shard_memory_bound
+      component: shard_memory_bound_queueing
       tier: sv
       type: sidekiq
     expr: "0.920000"
   - record: slo:max:events:gitlab_service_errors:ratio
     labels:
-      component: shard_memory_bound
+      component: shard_memory_bound_queueing
       tier: sv
       type: sidekiq
     expr: "0.005000"
   - record: slo:min:events:gitlab_service_apdex:ratio
     labels:
-      component: shard_quarantine
+      component: shard_quarantine_queueing
       tier: sv
       type: sidekiq
     expr: "0.995000"
   - record: slo:max:events:gitlab_service_errors:ratio
     labels:
-      component: shard_quarantine
+      component: shard_quarantine_queueing
       tier: sv
       type: sidekiq
     expr: "0.005000"
   - record: slo:min:events:gitlab_service_apdex:ratio
     labels:
-      component: shard_urgent_authorized_projects
+      component: shard_urgent_authorized_projects_queueing
       tier: sv
       type: sidekiq
     expr: "0.995000"
   - record: slo:max:events:gitlab_service_errors:ratio
     labels:
-      component: shard_urgent_authorized_projects
+      component: shard_urgent_authorized_projects_queueing
       tier: sv
       type: sidekiq
     expr: "0.005000"
   - record: slo:min:events:gitlab_service_apdex:ratio
     labels:
-      component: shard_urgent_cpu_bound
+      component: shard_urgent_cpu_bound_queueing
       tier: sv
       type: sidekiq
     expr: "0.995000"
   - record: slo:max:events:gitlab_service_errors:ratio
     labels:
-      component: shard_urgent_cpu_bound
+      component: shard_urgent_cpu_bound_queueing
       tier: sv
       type: sidekiq
     expr: "0.005000"
   - record: slo:min:events:gitlab_service_apdex:ratio
     labels:
-      component: shard_urgent_other
+      component: shard_urgent_other_queueing
       tier: sv
       type: sidekiq
     expr: "0.995000"
   - record: slo:max:events:gitlab_service_errors:ratio
     labels:
-      component: shard_urgent_other
+      component: shard_urgent_other_queueing
       tier: sv
       type: sidekiq
     expr: "0.005000"
@@ -4227,91 +4227,91 @@ groups:
     expr: "1"
   - record: gitlab_component_service:mapping
     labels:
-      component: shard_catchall
+      component: shard_catchall_queueing
       global_aggregation: "no"
       regional_aggregation: "no"
-      service_aggregation: "yes"
+      service_aggregation: "no"
       tier: sv
       type: sidekiq
     expr: "1"
   - record: gitlab_component_service:mapping
     labels:
-      component: shard_database_throttled
+      component: shard_database_throttled_queueing
       global_aggregation: "no"
       regional_aggregation: "no"
-      service_aggregation: "yes"
+      service_aggregation: "no"
       tier: sv
       type: sidekiq
     expr: "1"
   - record: gitlab_component_service:mapping
     labels:
-      component: shard_elasticsearch
+      component: shard_elasticsearch_queueing
       global_aggregation: "no"
       regional_aggregation: "no"
-      service_aggregation: "yes"
+      service_aggregation: "no"
       tier: sv
       type: sidekiq
     expr: "1"
   - record: gitlab_component_service:mapping
     labels:
-      component: shard_gitaly_throttled
+      component: shard_gitaly_throttled_queueing
       global_aggregation: "no"
       regional_aggregation: "no"
-      service_aggregation: "yes"
+      service_aggregation: "no"
       tier: sv
       type: sidekiq
     expr: "1"
   - record: gitlab_component_service:mapping
     labels:
-      component: shard_low_urgency_cpu_bound
+      component: shard_low_urgency_cpu_bound_queueing
       global_aggregation: "no"
       regional_aggregation: "no"
-      service_aggregation: "yes"
+      service_aggregation: "no"
       tier: sv
       type: sidekiq
     expr: "1"
   - record: gitlab_component_service:mapping
     labels:
-      component: shard_memory_bound
+      component: shard_memory_bound_queueing
       global_aggregation: "no"
       regional_aggregation: "no"
-      service_aggregation: "yes"
+      service_aggregation: "no"
       tier: sv
       type: sidekiq
     expr: "1"
   - record: gitlab_component_service:mapping
     labels:
-      component: shard_quarantine
+      component: shard_quarantine_queueing
       global_aggregation: "no"
       regional_aggregation: "no"
-      service_aggregation: "yes"
+      service_aggregation: "no"
       tier: sv
       type: sidekiq
     expr: "1"
   - record: gitlab_component_service:mapping
     labels:
-      component: shard_urgent_authorized_projects
+      component: shard_urgent_authorized_projects_queueing
       global_aggregation: "no"
       regional_aggregation: "no"
-      service_aggregation: "yes"
+      service_aggregation: "no"
       tier: sv
       type: sidekiq
     expr: "1"
   - record: gitlab_component_service:mapping
     labels:
-      component: shard_urgent_cpu_bound
+      component: shard_urgent_cpu_bound_queueing
       global_aggregation: "no"
       regional_aggregation: "no"
-      service_aggregation: "yes"
+      service_aggregation: "no"
       tier: sv
       type: sidekiq
     expr: "1"
   - record: gitlab_component_service:mapping
     labels:
-      component: shard_urgent_other
+      component: shard_urgent_other_queueing
       global_aggregation: "no"
       regional_aggregation: "no"
-      service_aggregation: "yes"
+      service_aggregation: "no"
       tier: sv
       type: sidekiq
     expr: "1"
@@ -4320,7 +4320,7 @@ groups:
       component: sidekiq_execution
       global_aggregation: "no"
       regional_aggregation: "no"
-      service_aggregation: "no"
+      service_aggregation: "yes"
       tier: sv
       type: sidekiq
     expr: "1"

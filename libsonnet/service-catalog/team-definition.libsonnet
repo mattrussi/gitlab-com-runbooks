@@ -8,7 +8,7 @@ local serviceComponents = std.set(
     function(o) std.objectFields(o.serviceLevelIndicators),
     allServices
   )
-) + ['sidekiq_execution_per_shard'];  // TODO: This is to make the test pass, remove this once rollout plan finished https://gitlab.com/gitlab-com/gl-infra/scalability/-/issues/2415
+);
 
 local ignoredComponentsValidator = validator.validator(
   function(teamIgnoredComponents)

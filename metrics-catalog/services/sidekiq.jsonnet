@@ -60,6 +60,8 @@ metricsCatalog.serviceDefinition({
   // the appropriate aggregations based on this set.
   // Use sparingly, and don't overuse.
   recordingRuleMetrics: [
+    // TODO: Remove 'sidekiq_jobs_completion_seconds_bucket' intermediate rule once
+    // external_dependency SLI has been replaced to use the sidekiq_execution SLI
     'sidekiq_jobs_completion_seconds_bucket',
     'sidekiq_jobs_queue_duration_seconds_bucket',
     'sidekiq_jobs_failed_total',
@@ -88,9 +90,12 @@ metricsCatalog.serviceDefinition({
     {},
   ),
   serviceLevelIndicators: {
-    ['shard_' + std.strReplace(shard.name, '-', '_')]: {
+    // TODO: This SLI now only consists of queueing, will be removed once `sidekiq_queueing` SLI has been rolled out in
+    // https://gitlab.com/gitlab-com/gl-infra/scalability/-/issues/2415
+    ['shard_' + std.strReplace(shard.name, '-', '_') + '_queueing']: {
       local shardSelector = baseSelector { shard: shard.name, external_dependencies: { ne: 'yes' } },
 
+      serviceAggregation: false,
       userImpacting: shard.userImpacting,
       featureCategory: 'not_owned',
       team: 'scalability',
@@ -105,29 +110,14 @@ metricsCatalog.serviceDefinition({
       apdex: combined(
         [
           histogramApdex(
-            histogram='sidekiq_jobs_completion_seconds_bucket',
-            selector=highUrgencySelector + shardSelector,
-            satisfiedThreshold=sidekiqHelpers.slos.urgent.executionDurationSeconds,
-          ),
-          histogramApdex(
             histogram='sidekiq_jobs_queue_duration_seconds_bucket',
             selector=highUrgencySelector + shardSelector,
             satisfiedThreshold=sidekiqHelpers.slos.urgent.queueingDurationSeconds,
           ),
           histogramApdex(
-            histogram='sidekiq_jobs_completion_seconds_bucket',
-            selector=lowUrgencySelector + shardSelector,
-            satisfiedThreshold=sidekiqHelpers.slos.lowUrgency.executionDurationSeconds,
-          ),
-          histogramApdex(
             histogram='sidekiq_jobs_queue_duration_seconds_bucket',
             selector=lowUrgencySelector + shardSelector,
             satisfiedThreshold=sidekiqHelpers.slos.lowUrgency.queueingDurationSeconds,
-          ),
-          histogramApdex(
-            histogram='sidekiq_jobs_completion_seconds_bucket',
-            selector=throttledUrgencySelector + shardSelector,
-            satisfiedThreshold=sidekiqHelpers.slos.throttled.executionDurationSeconds,
           ),
           // No queueing apdex for throttled jobs
         ]
@@ -136,11 +126,6 @@ metricsCatalog.serviceDefinition({
       requestRate: rateMetric(
         counter='sidekiq_jobs_completion_seconds_bucket',
         selector=shardSelector { le: '+Inf' },
-      ),
-
-      errorRate: rateMetric(
-        counter='sidekiq_jobs_failed_total',
-        selector=shardSelector,
       ),
 
       // Note: these labels will also be included in the
@@ -272,9 +257,12 @@ metricsCatalog.serviceDefinition({
     severity: 's3',  // Don't page SREs for this SLI
     shardLevelMonitoring: false,
   }) + sliLibrary.get('sidekiq_execution').generateServiceLevelIndicator(baseSelector { external_dependencies: { ne: 'yes' } }, {
-    // TODO: change serviceAggregation to true and increase severity to s2 once the SLI per shard has been removed
-    serviceAggregation: false,  // Don't add this to the request rate of the service
-    severity: 's4',  // Don't page SREs for this SLI
+    // TODO: For now, only sidekiq execution is considered towards service aggregation
+    // which means queueing is not part of the service aggregation & SLA.
+    // Future plan is to be able to specify either apdex, errors, or ops to be included in service aggregaiton.
+    // See https://gitlab.com/gitlab-com/gl-infra/scalability/-/issues/2423.
+    serviceAggregation: true,
+    severity: 's2',
   }),
 
   // Special per-worker recording rules
