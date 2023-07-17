@@ -25,5 +25,8 @@ local metricsCatalog = import 'servicemetrics/metrics-catalog.libsonnet';
       soft: 0.50,
       hard: 0.90,
     },
+    capacityPlanning: {
+      forecast_days: 365,
+    },
   }),
 }

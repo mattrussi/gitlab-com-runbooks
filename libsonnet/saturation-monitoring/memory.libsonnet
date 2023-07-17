@@ -30,7 +30,9 @@ local memoryDefinition = {
   memory_redis_cache: resourceSaturationPoint(memoryDefinition {
     // Give redis-cache its own non-capacity-planning saturation point.
     appliesTo: ['redis-cache'],
-    capacityPlanningStrategy: 'exclude',
+    capacityPlanning: {
+      strategy: 'exclude',
+    },
     grafana_dashboard_uid: 'sat_memory_redis_cache',
     description: |||
       %s
