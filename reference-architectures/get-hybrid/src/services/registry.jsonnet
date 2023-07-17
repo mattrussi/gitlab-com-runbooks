@@ -1,6 +1,9 @@
 local metricsCatalog = import 'servicemetrics/metrics.libsonnet';
 local rateMetric = metricsCatalog.rateMetric;
 local gitalyHelper = import 'service-archetypes/helpers/gitaly.libsonnet';
+local registryHelpers = import './lib/registry-helpers.libsonnet';
+local registryBaseSelector = registryHelpers.registryBaseSelector;
+local defaultRegistrySLIProperties = registryHelpers.defaultRegistrySLIProperties;
 local kubeLabelSelectors = metricsCatalog.kubeLabelSelectors;
 local histogramApdex = metricsCatalog.histogramApdex;
 
@@ -40,25 +43,24 @@ metricsCatalog.serviceDefinition({
   },
 
   serviceLevelIndicators: {
-    server: {
+    server: defaultRegistrySLIProperties {
       userImpacting: true,
       description: |||
         Aggregation of all registry HTTP requests.
       |||,
 
-      apdex: histogramApdex(
-        histogram='registry_http_request_duration_seconds_bucket',
-        satisfiedThreshold=2.5,
-        toleratedThreshold=25
-      ),
+      apdex: registryHelpers.mainApdex(),
 
       requestRate: rateMetric(
         counter='registry_http_requests_total',
+        selector=registryBaseSelector
       ),
 
       errorRate: rateMetric(
         counter='registry_http_requests_total',
-        selector={ code: { re: '5..' } }
+        selector=registryBaseSelector {
+          code: { re: '5..' },
+        }
       ),
 
       significantLabels: ['route', 'method'],
@@ -66,5 +68,5 @@ metricsCatalog.serviceDefinition({
       toolingLinks: [
       ],
     },
-  },
+  } + registryHelpers.apdexPerRoute,
 })
