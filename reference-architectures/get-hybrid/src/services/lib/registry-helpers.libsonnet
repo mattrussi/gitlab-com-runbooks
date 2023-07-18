@@ -87,7 +87,7 @@ local customRouteSLIs = [
     monitoringThresholds+: {
       apdexScore: 0.95,
     },
-    satisfiedThreshold: 7,
+    satisfiedThreshold: 10,
     toleratedThreshold: 45,
     route: '/v2/{name}/blobs/{digest}',
     methods: ['get', 'head'],

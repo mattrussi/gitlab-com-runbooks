@@ -925,7 +925,7 @@ groups:
   - expr: |
       (
         sum by () (
-          rate(registry_http_request_duration_seconds_bucket{le="7",method=~"get|head",route="/v2/{name}/blobs/{digest}"}[5m])
+          rate(registry_http_request_duration_seconds_bucket{le="10",method=~"get|head",route="/v2/{name}/blobs/{digest}"}[5m])
         )
         +
         sum by () (
@@ -1190,7 +1190,7 @@ groups:
   - expr: |
       (
         sum by () (
-          rate(registry_http_request_duration_seconds_bucket{le="7",method=~"get|head",route="/v2/{name}/blobs/{digest}"}[30m])
+          rate(registry_http_request_duration_seconds_bucket{le="10",method=~"get|head",route="/v2/{name}/blobs/{digest}"}[30m])
         )
         +
         sum by () (
@@ -1455,7 +1455,7 @@ groups:
   - expr: |
       (
         sum by () (
-          rate(registry_http_request_duration_seconds_bucket{le="7",method=~"get|head",route="/v2/{name}/blobs/{digest}"}[1h])
+          rate(registry_http_request_duration_seconds_bucket{le="10",method=~"get|head",route="/v2/{name}/blobs/{digest}"}[1h])
         )
         +
         sum by () (
@@ -1720,7 +1720,7 @@ groups:
   - expr: |
       (
         sum by () (
-          rate(registry_http_request_duration_seconds_bucket{le="7",method=~"get|head",route="/v2/{name}/blobs/{digest}"}[6h])
+          rate(registry_http_request_duration_seconds_bucket{le="10",method=~"get|head",route="/v2/{name}/blobs/{digest}"}[6h])
         )
         +
         sum by () (

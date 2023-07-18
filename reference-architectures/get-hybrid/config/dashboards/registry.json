@@ -6457,7 +6457,7 @@
               "fillColor": "rgba(242, 73, 92, 0.25)",
               "line": false,
               "op": "gt",
-              "value": 7,
+              "value": 10,
               "yaxis": "left"
             }
           ],
@@ -6629,7 +6629,7 @@
               "fillColor": "rgba(242, 73, 92, 0.25)",
               "line": false,
               "op": "gt",
-              "value": 7,
+              "value": 10,
               "yaxis": "left"
             }
           ],
@@ -6707,7 +6707,7 @@
           "steppedLine": false,
           "targets": [
             {
-              "expr": "clamp_min(clamp_max((\n  (\n    sum by (method) (\n  rate(registry_http_request_duration_seconds_bucket{le=\"+Inf\",method!=\"\",route=\"/v2/{name}/blobs/{digest}\"}[$__interval])\n)\n\n    -\n    (\n      (\n  sum by (method) (\n    rate(registry_http_request_duration_seconds_bucket{le=\"7\",method!=\"\",route=\"/v2/{name}/blobs/{digest}\"}[$__interval])\n  )\n  +\n  sum by (method) (\n    rate(registry_http_request_duration_seconds_bucket{le=\"45\",method!=\"\",route=\"/v2/{name}/blobs/{digest}\"}[$__interval])\n  )\n)\n/\n2\n\n    )\n  )\n  / ignoring(method) group_left()\n  (\n    sum by () (\n  rate(registry_http_request_duration_seconds_bucket{le=\"+Inf\",method!=\"\",route=\"/v2/{name}/blobs/{digest}\"}[$__interval])\n)\n\n  )\n) \u003e 0\n,1),0)\n",
+              "expr": "clamp_min(clamp_max((\n  (\n    sum by (method) (\n  rate(registry_http_request_duration_seconds_bucket{le=\"+Inf\",method!=\"\",route=\"/v2/{name}/blobs/{digest}\"}[$__interval])\n)\n\n    -\n    (\n      (\n  sum by (method) (\n    rate(registry_http_request_duration_seconds_bucket{le=\"10\",method!=\"\",route=\"/v2/{name}/blobs/{digest}\"}[$__interval])\n  )\n  +\n  sum by (method) (\n    rate(registry_http_request_duration_seconds_bucket{le=\"45\",method!=\"\",route=\"/v2/{name}/blobs/{digest}\"}[$__interval])\n  )\n)\n/\n2\n\n    )\n  )\n  / ignoring(method) group_left()\n  (\n    sum by () (\n  rate(registry_http_request_duration_seconds_bucket{le=\"+Inf\",method!=\"\",route=\"/v2/{name}/blobs/{digest}\"}[$__interval])\n)\n\n  )\n) \u003e 0\n,1),0)\n",
               "format": "time_series",
               "interval": "1m",
               "intervalFactor": 1,
