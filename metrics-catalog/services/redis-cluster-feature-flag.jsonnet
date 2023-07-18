@@ -4,12 +4,10 @@ local rateMetric = metricsCatalog.rateMetric;
 local redisArchetype = import 'service-archetypes/redis-rails-archetype.libsonnet';
 local redisHelpers = import './lib/redis-helpers.libsonnet';
 
-local railsCacheSelector = { store: 'FeatureFlagStore' };
-
 metricsCatalog.serviceDefinition(
   redisArchetype(
     type='redis-cluster-feature-flag',
-    railsStorageSelector={ storage: 'feature_flag' },
+    railsStorageSelector=redisHelpers.storageSelector('feature_flag'),
     descriptiveName='Redis Cluster Feature Flag',
     redisCluster=true
   )
@@ -30,14 +28,14 @@ metricsCatalog.serviceDefinition(
 
         apdex: histogramApdex(
           histogram='gitlab_cache_operation_duration_seconds_bucket',
-          selector=railsCacheSelector,
+          selector=redisHelpers.storeSelector('FeatureFlagStore'),
           satisfiedThreshold=0.1,
           toleratedThreshold=0.25
         ),
 
         requestRate: rateMetric(
           counter='gitlab_cache_operation_duration_seconds_count',
-          selector=railsCacheSelector,
+          selector=redisHelpers.storeSelector('FeatureFlagStore'),
         ),
 
         significantLabels: [],

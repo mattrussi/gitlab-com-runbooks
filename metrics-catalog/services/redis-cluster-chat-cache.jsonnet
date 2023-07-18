@@ -5,7 +5,7 @@ local metricsCatalog = import 'servicemetrics/metrics.libsonnet';
 metricsCatalog.serviceDefinition(
   redisArchetype(
     type='redis-cluster-chat-cache',
-    railsStorageSelector={ storage: 'chat' },
+    railsStorageSelector=redisHelpers.storageSelector('chat'),
     descriptiveName='Redis Cluster Chat Cache',
     redisCluster=true
   )
@@ -28,8 +28,6 @@ metricsCatalog.serviceDefinition(
         severity: 's4',
       },
     },
-
-
   }
   + redisHelpers.gitlabcomObservabilityToolingForRedis('redis-cluster-chat-cache')
 )
