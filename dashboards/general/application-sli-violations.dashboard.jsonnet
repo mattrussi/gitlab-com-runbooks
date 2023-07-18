@@ -147,6 +147,20 @@ local significantLabelsTable =
         },
       },
       {
+        id: 'renameByRegex',
+        options: {
+          regex: 'urgency',
+          renamePattern: 'job_urgency',
+        },
+      },
+      {
+        id: 'renameByRegex',
+        options: {
+          regex: 'external_dependencies',
+          renamePattern: 'ext. dep.',
+        },
+      },
+      {
         id: 'organize',
         options: {
           excludeByName: {
@@ -155,18 +169,21 @@ local significantLabelsTable =
           },
           indexByName: {
             endpoint_id: 1,
-            feature_category: 2,
-            stage_group: 3,
-            request_urgency: 4,
-            query_urgency: 5,
-            search_level: 6,
-            search_scope: 7,
-            search_type: 8,
-            document_type: 9,
-            type: 10,
-            operations: 11,
-            apdex: 12,
-            errors: 13,
+            worker: 2,
+            'ext. dep.': 3,
+            feature_category: 4,
+            stage_group: 5,
+            request_urgency: 6,
+            query_urgency: 7,
+            job_urgency: 8,
+            search_level: 9,
+            search_scope: 10,
+            search_type: 11,
+            document_type: 12,
+            type: 13,
+            operations: 14,
+            apdex: 15,
+            errors: 16,
           },
         },
       },
@@ -179,6 +196,18 @@ local significantLabelsTable =
     },
     fieldConfig+: {
       overrides: [
+        {
+          matcher: {
+            id: 'byName',
+            options: 'ext. dep.',
+          },
+          properties: [
+            {
+              id: 'custom.width',
+              value: 80,
+            },
+          ],
+        },
         {
           matcher: {
             id: 'byName',
@@ -260,6 +289,43 @@ local significantLabelsTable =
                     },
                     high: {
                       text: '🟢 high',
+                    },
+                  },
+                },
+              ],
+            },
+            {
+              id: 'custom.width',
+              value: 150,
+            },
+          ],
+        },
+        {
+          matcher: {
+            id: 'byName',
+            options: 'job_urgency',
+          },
+          properties: [
+            {
+              id: 'mappings',
+              value: [
+                {
+                  type: 'value',
+                  options: {
+                    low: {
+                      text: '🔴 low',
+                    },
+                    default: {
+                      text: '🟠 default',
+                    },
+                    medium: {
+                      text: '🟡 medium',
+                    },
+                    high: {
+                      text: '🟢 high',
+                    },
+                    throttled: {
+                      text: '⚪ throttled',
                     },
                   },
                 },
