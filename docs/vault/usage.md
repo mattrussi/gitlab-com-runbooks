@@ -7,7 +7,7 @@
 ### Web UI
 
 * Go to <https://vault.gitlab.net/>
-* Select `oidc`, leave `Role` empty and click `Sign in with GitLab`
+* Select `oidc`, leave `Role` empty and click `Sign in with Okta`
 * Don't forget to allow pop-ups for this site in your browser.
 * You should now be logged in
 
@@ -39,11 +39,11 @@ ttl                            21h39m34s
 
 The Hashicorp Vault client is available for most OSes and package managers, see <https://developer.hashicorp.com/vault/downloads> for more information.
 
-The non-official client [`safe`](https://github.com/starkandwayne/safe) is also more user-friendly and convenient for key/value secrets operations, however you will still need the official client above to be able to login. See the [releases](https://github.com/starkandwayne/safe/releases) for prebuilt binaries, and MacOS users will want to read <https://github.com/starkandwayne/safe#attention-homebrew-users> for installing via Homebrew.
+The non-official client [`safe`](https://github.com/starkandwayne/safe) is also more user-friendly and convenient for key/value secrets operations, however you will still need the official client above to be able to login. See the [releases](https://github.com/starkandwayne/safe/releases) for pre-built binaries, and MacOS users will want to read <https://github.com/starkandwayne/safe#attention-homebrew-users> for installing via Homebrew.
 
 #### Access
 
-*Access via Teleport is not implemented yet at the time of this writing (see <https://gitlab.com/gitlab-com/gl-infra/reliability/-/issues/15898>) but will eventually be the prefered method for accessing Vault from CLI.*
+*Access via Teleport is not implemented yet at the time of this writing (see <https://gitlab.com/gitlab-com/gl-infra/reliability/-/issues/15898>) but will eventually be the preferred method for accessing Vault from CLI.*
 
 ```shell
 eval "$(glsh vault init -)"
@@ -168,7 +168,7 @@ CI secrets are available under the following paths:
 * `ci/<gitlab-instance>/<project-full-path>/<environment>/outputs/...`: to be used for *writing* secrets to Vault scoped to an environment (primarily from Terraform but it can be from other tools), this path is only readable/writable from CI jobs running for protected branches/environments;
 * `ci/<gitlab-instance>/<project-full-path>/outputs/...`: to be used for *writing* secrets to Vault (primarily from Terraform but it can be from other tools), this path is only readable/writable by CI jobs running from protected branches;
 
-Additional, a Transit key is created under `transit/ci/<gitlab-instance>-<project-full-path>`, which can be used for encryption, decryption and signing of CI artifacts and anything else. Decryption and signing is restricted to the project, while encryption and signature verification is allowed for all, this can be useful for sharing artifacts securirely between projects. See [the Vault documentation about the Transit secrets engine](https://developer.hashicorp.com/vault/docs/secrets/transit) to learn more about it.
+Additional, a Transit key is created under `transit/ci/<gitlab-instance>-<project-full-path>`, which can be used for encryption, decryption and signing of CI artifacts and anything else. Decryption and signing is restricted to the project, while encryption and signature verification is allowed for all, this can be useful for sharing artifacts securely between projects. See [the Vault documentation about the Transit secrets engine](https://developer.hashicorp.com/vault/docs/secrets/transit) to learn more about it.
 
 _Terminology:_
 
@@ -951,7 +951,7 @@ Examples:
 
 #### Authorizing a GCP Project and Cookbooks
 
-We use the [GCP authentication method](https://developer.hashicorp.com/vault/docs/auth/gcp) for GCE instancess to authenticate to Vault.
+We use the [GCP authentication method](https://developer.hashicorp.com/vault/docs/auth/gcp) for GCE instances to authenticate to Vault.
 To enable instances on a GCP Project to access Vault, add the project and roles for each cookbook, to the `chef_environments` locals at the [Chef Vault Configuration on Terraform](https://ops.gitlab.net/gitlab-com/gl-infra/config-mgmt/-/blob/master/environments/vault-production/chef.tf)
 
 Example of Vault Config for allowing Chef access:
@@ -1028,6 +1028,352 @@ In `chef-repo` we define its default attributes for the `env-base.json` role as 
 ```
 
 Example of the attribute definition on [db-benchmarking-base.json role](https://gitlab.com/gitlab-com/gl-infra/chef-repo/-/blob/master/roles/db-benchmarking-base.json#L65-73)
+
+### GCP credentials
+
+The [Google Cloud Vault secrets engine](https://developer.hashicorp.com/vault/docs/secrets/gcp) generates temporary OAuth tokens or service account keys that can be used to gain access to Google Cloud resources. The created OAuth tokens and service account keys are automatically deleted when the Vault lease expires.
+
+It is mounted on `/gcp` in Vault, and uses Vault's service account via [Workload Identity](https://cloud.google.com/kubernetes-engine/docs/concepts/workload-identity).
+
+#### Rolesets, static accounts or impersonated accounts?
+
+The Google Cloud Vault secrets engine can be configured 3 different ways with 2 different credential types:
+
+* **[Rolesets](https://developer.hashicorp.com/vault/docs/secrets/gcp#rolesets):** Vault provisions and fully manages a service account and its IAM permissions. This avoids the need for external configuration (e.g. Terraform) but also makes it near-impossible to give additional permissions to the service account outside of Vault due to the service account ID being auto-generated.
+  * OAuth2 Access token:* Vault generates a single service account key at creation (not rotated automatically, but [can be rotated manually](https://developer.hashicorp.com/vault/api-docs/secret/gcp#rotate-roleset-account-key-access_token-roleset-only)) and then generates OAuth2 access tokens from it with a fixed TTL of 1 hour;
+  * *Service account key:* Vault generates temporary service account keys, they are deleted when the Vault lease expires. There is a hard limit of 10 keys maximum at a time per service account (GCP limitation);
+* **[Static accounts](https://developer.hashicorp.com/vault/docs/secrets/gcp#static-accounts):** Vault uses a service account provisioned externally (e.g. Terraform) and can optionally manage its IAM permissions.
+  * *OAuth2 Access token:* Vault generates a single service account key at creation (not rotated automatically, but [can be rotated manually](https://developer.hashicorp.com/vault/api-docs/secret/gcp#rotate-static-account-key-access_token-static-account-only)) and then generates OAuth2 access tokens from it with a fixed TTL of 1 hour;
+  * *Service account key:* Vault generates temporary service account keys, they are deleted when the Vault lease expires. There is a hard limit of 10 keys maximum at a time per service account (GCP limitation);
+* **[Impersonated accounts](https://developer.hashicorp.com/vault/docs/secrets/gcp#impersonated-accounts):** Vault impersonates a service account provisioned externally (e.g. Terraform)
+  * *OAuth2 Access token:* Vault generates OAuth2 access tokens by impersonation with a configurable TTL of up to 12 hours (1 hour by default).
+
+Service account impersonation is the preferred method as it doesn't use service account keys, gives control over the OAuth2 access token TTL and requires the fewest permissions in GCP.
+
+The required permissions for each method [can be found in the official documentation](https://developer.hashicorp.com/vault/docs/secrets/gcp#required-permissions) and must be given to Vault's service account `vault-ops-k8s@gitlab-ops.iam.gserviceaccount.com`.
+
+#### Configuration
+
+##### 1. Grant necessary permissions in GCP to Vault
+
+###### Rolesets
+
+Bind the service account `vault-ops-k8s@gitlab-ops.iam.gserviceaccount.com` to the following roles at the project level:
+
+* `roles/iam.serviceAccountKeyAdmin`
+* `roles/iam.serviceAccountAdmin`
+* `roles/iam.securityAdmin`
+
+In [`config-mgmt`](https://ops.gitlab.net/gitlab-com/gl-infra/config-mgmt/) this can be done with the following in `environments/env-projects`:
+
+```terraform
+module "gitlab-my-project" {
+  source  = "ops.gitlab.net/gitlab-com/project/google"
+  version = "14.3.0"
+
+  ...
+
+  iam = {
+    bindings = transpose(local.vault_iam_bindings)
+  }
+}
+```
+
+###### Static accounts
+
+Bind the service account `vault-ops-k8s@gitlab-ops.iam.gserviceaccount.com` to the following roles at the service account level:
+
+* `roles/iam.serviceAccountKeyAdmin`
+* `roles/iam.serviceAccountTokenCreator`
+
+In [`config-mgmt`](https://ops.gitlab.net/gitlab-com/gl-infra/config-mgmt/) this can be done with the following:
+
+```terraform
+locals {
+  vault_service_account_email = "vault-ops-k8s@gitlab-ops.iam.gserviceaccount.com"
+}
+
+resource "google_service_account_iam_member" "my-service-account-vault" {
+  for_each = ["roles/iam.serviceAccountTokenCreator", "roles/iam.serviceAccountTokenCreator"]
+
+  service_account_id = google_service_account.my-service-account.name
+  role               = each.value
+  member             = "serviceAccount:${local.vault_service_account_email}"
+}
+```
+
+###### Impersonated accounts
+
+Bind the service account `vault-ops-k8s@gitlab-ops.iam.gserviceaccount.com` to the following roles at the service account level:
+
+* `roles/iam.serviceAccountTokenCreator`
+
+In [`config-mgmt`](https://ops.gitlab.net/gitlab-com/gl-infra/config-mgmt/) this can be done with the following:
+
+```terraform
+locals {
+  vault_service_account_email = "vault-ops-k8s@gitlab-ops.iam.gserviceaccount.com"
+}
+
+resource "google_service_account_iam_member" "my-service-account-vault" {
+  service_account_id = google_service_account.my-service-account.name
+  role               = "roles/iam.serviceAccountTokenCreator"
+  member             = "serviceAccount:${local.vault_service_account_email}"
+}
+```
+
+##### 2. Add GCP roles in Vault
+
+In the [`vault-production` environment](https://ops.gitlab.net/gitlab-com/gl-infra/config-mgmt/-/tree/master/environments/vault-production), add your roleset / static account / impersonated account to the variable `gcp_projects` in `gcp_projects.tf`:
+
+```terraform
+  gcp_projects = {
+    gitlab-my-project = {
+      impersonated_accounts = {
+        my-service-account-foo = {}
+      }
+      static_accounts = {
+        my-service-account-bar = {}
+      }
+      rolesets = {
+        "my-roleset-baz" = {
+          roles = [
+            "roles/compute.admin",
+          ]
+          type = "service_account_key"
+        }
+      }
+    }
+  }
+```
+
+Several optional attributes are supported, see [the `vault-configuration` module documentation](https://ops.gitlab.net/gitlab-com/gl-infra/terraform-modules/vault-configuration/#input_gcp) for more information.
+
+The credentials for the service accounts defined above would then be available under those paths:
+
+* `gcp/impersonated-account/<project ID>--<service account ID>/token`, for example `gcp/impersonated-account/gitlab-my-project--my-service-account-foo/token`
+* `gcp/static-account/<project ID>--<service account ID>/<key|token>`, for example `gcp/static-account/gitlab-my-project--my-service-account-bar/token`
+* `gcp/roleset/<project ID>--<roleset name>/<key|token>`, for example `gcp/roleset/gitlab-my-project--my-roleset-baz/key`
+
+Each impersonated account, static account and roleset also has a policy created for it allowing its usage, ready to be assigned to any Vault identity that needs it:
+
+* `gcp_impersonated_account_<project ID>--<service account ID>`, for example `gcp_impersonated_account_gitlab-my-project--my-service-account-foo`
+* `gcp_static_account_<project ID>--<service account ID>`, for example `gcp_static_account_gitlab-my-project--my-service-account-bar`
+* `gcp_roleset_<project ID>--<roleset name>`, for example `gcp_roleset_gitlab-my-project--my-roleset-baz`
+
+##### 3. Grant access to GCP roles to GitLab project CI pipelines
+
+GitLab projects can be granted access to GCP impersonated accounts, static accounts and rolesets in Vault in the [`infra-mgmt`](https://gitlab.com/gitlab-com/gl-infra/infra-mgmt/) project. For this, the project needs to already be managed by `infra-mgmt`, see [`CONTRIBUTING`](https://gitlab.com/gitlab-com/gl-infra/infra-mgmt/-/blob/main/CONTRIBUTING.md) to learn more about it.
+
+Add your impersonated account(s), static account(s) and/or roleset(s) in the corresponding YAML file under [`data/gcp/`](https://gitlab.com/gitlab-com/gl-infra/infra-mgmt/-/tree/main/data/gcp)
+
+```yaml
+# data/gcp/impersonated-accounts.yaml / data/gcp/static-accounts.yaml
+my-project:                         # GitLab project identifier, can be any name but should ideally match the actual project name
+  something:                        # Name of this set of projects + service accounts, can be anything
+    - projects:                     # GCP project IDs
+        - gitlab-my-project
+        - gitlab-my-other-project
+      service_accounts:             # Service account IDs
+        - my-service-account-foo
+  something-else:
+    - projects:
+        - gitlab-my-project
+      service_accounts:
+        - my-service-account-bar
+    - projects:
+        - gitlab-my-other-project
+      service_accounts:
+        - my-service-account-baz
+
+# data/gcp/rolesets.yaml
+my-project:                         # GitLab project identifier, can be any name but should be unique and ideally match the actual project name
+  something:                        # Name of this set of projects + rolesets, can be anything
+    - projects:                     # GCP project IDs
+        - gitlab-my-project
+        - gitlab-my-other-project
+      rolesets:                     # Roleset names
+        - my-roleset-baz
+```
+
+Then in the Terraform configuration those files are used to compute sets of Vault policies for each projects in the local variables `local.gcp_impersonated_account_policies`, `local.gcp_static_account_policies` and `local.gcp_roleset_policies`, which can be used with the `vault.extra_readonly_policies` and `vault.extra_readwrite_policies` parameters of each GitLab project like so:
+
+```terraform
+module "project_my-project" {
+  source = "../../modules/project"
+
+  path     = "my-project"
+
+  [...]
+
+  vault = {
+    enabled   = true
+    auth_path = local.vault_auth_path
+
+    extra_readonly_policies = setunion(
+      local.gcp_impersonated_account_policies.my-project.something,
+      local.gcp_roleset_policies.my-project.something,
+    )
+    extra_readwrite_policies = setunion(
+      local.gcp_impersonated_account_policies.my-project.something,
+      local.gcp_static_account_policies.my-project.something-else,
+      local.gcp_roleset_policies.my-project.something,
+    )
+  }
+}
+```
+
+##### 4. Use the Vault GCP roles to generate GCP credentials
+
+To get an OAuth access token:
+
+```shell
+# Impersonated account
+CLOUDSDK_AUTH_ACCESS_TOKEN="$(vault read -field=token "gcp/impersonated-account/my-project--service-account-foo/token)"; export CLOUDSDK_AUTH_ACCESS_TOKEN"
+# Static account
+CLOUDSDK_AUTH_ACCESS_TOKEN="$(vault read -field=token "gcp/static-account/my-project--service-account-bar/token)"; export CLOUDSDK_AUTH_ACCESS_TOKEN"
+# Roleset
+CLOUDSDK_AUTH_ACCESS_TOKEN="$(vault read -field=token "gcp/roleset/my-project--service-account-bar/token)"; export CLOUDSDK_AUTH_ACCESS_TOKEN"
+```
+
+To get a service account key:
+
+```shell
+# Static account
+vault read -field=private_key_data "gcp/static-account/my-project--service-account-bar/key" | base64 -d > service-account-key.json
+# Roleset
+vault read -field=private_key_data "gcp/roleset/my-project--service-account-bar/key" | base64 -d > service-account-key.json
+```
+
+### Kubernetes credentials
+
+The [Kubernetes Vault secrets engine](https://developer.hashicorp.com/vault/docs/secrets/kubernetes) generates Kubernetes service account tokens, and optionally service accounts, role bindings, and roles. The created service account tokens have a configurable TTL and any objects created are automatically deleted when the Vault lease expires.
+
+It is mounted on `/kubernetes` in Vault.
+
+#### Role rules, roles or service accounts
+
+The Kubernetes Vault secrets engine can be configured 3 different ways:
+
+* **Role rules:** Vault creates a temporary `Role` or `ClusterRole` from a given list of [`PolicyRules`](https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.23/#policyrule-v1-rbac-authorization-k8s-io) and a temporary `ServiceAccount` bound to this role
+* **Role:** Vault creates a temporary `ServiceAccount` bound to a given pre-existing `Role` or `ClusterRole`
+* **Service account:** Vault uses a given pre-existing `ServiceAccount`
+
+#### Configuration
+
+##### 1. Grant necessary permissions in a Kubernetes cluster to Vault
+
+See [Kubernetes Authentication secrets](administration.md#kubernetes-authentication-secrets).
+
+##### 2. Add Kubernetes roles in Vault
+
+In the [`vault-production` environment](https://ops.gitlab.net/gitlab-com/gl-infra/config-mgmt/-/tree/master/environments/vault-production), add your role to the variable `kubernetes_clusters.<cluster>.secrets_roles` in `kubernetes.tf`:
+
+```terraform
+  kubernetes_clusters = {
+    my-cluster = {
+      secrets_roles = {
+        view = {
+          allowed_kubernetes_namespaces = ["*"]
+          role_name                     = "view"
+          role_type                     = "ClusterRole"
+        }
+        my-service-configmap-edit = {
+          allowed_kubernetes_namespaces = ["my-namespace"]
+          role_rules = [
+            {
+              apiGroups     = [""]
+              resources     = ["configmaps"]
+              resourceNames = ["my-service-config"]
+              verbs         = ["get", "list", "watch", "create", "update", "patch", "delete"]
+            }
+          ]
+          role_type = "Role"
+        }
+        my-service-account = {
+          allowed_kubernetes_namespaces = ["my-other-namespace"]
+          service_account_name          = "my-service-account"
+        }
+      }
+    }
+  }
+```
+
+The credentials for the service accounts defined above would then be available under those paths:
+
+* `kubernetes/my-cluster/creds/view`
+* `kubernetes/my-cluster/creds/my-service-configmap-edit`
+* `kubernetes/my-cluster/creds/my-service-account`
+
+Several optional attributes are supported, see [the `vault-configuration` module documentation](https://ops.gitlab.net/gitlab-com/gl-infra/terraform-modules/vault-configuration/#input_kubernetes) for more information.
+
+The credentials for the roles defined above would then be available under the path `kubernetes/<cluster name>/creds/<role name>`, for example `kubernetes/my-cluster/creds/my-service-configmap-edit`.
+
+Each role also has a policy created for it allowing its usage, ready to be assigned to any Vault identity that needs it, named `kubernetes_<cluster name>--<role name>`, for example `kubernetes_my-cluster--my-service-configmap-edit`.
+
+##### 3. Grant access to Kubernetes roles to GitLab project CI pipelines
+
+GitLab projects can be granted access to Kubernetes roles in Vault in the [`infra-mgmt`](https://gitlab.com/gitlab-com/gl-infra/infra-mgmt/) project. For this, the project needs to already be managed by `infra-mgmt`, see [`CONTRIBUTING`](https://gitlab.com/gitlab-com/gl-infra/infra-mgmt/-/blob/main/CONTRIBUTING.md) to learn more about it.
+
+Add your role(s) in the YAML file [`data/kubernetes/roles.yaml`](https://gitlab.com/gitlab-com/gl-infra/infra-mgmt/-/tree/main/data/kubernetes/roles.yaml)
+
+```yaml
+# data/kubernetes/roles.yaml
+my-project:                         # GitLab project identifier, can be any name but should ideally match the actual project name
+  something:                        # Name of this set of clusters + roles, can be anything
+    - clusters:                     # Kubernetes cluster names
+        - my-cluster
+        - my-other-cluster
+      roles:                        # Role names
+        - view
+  something-else:
+    - clusters:
+        - my-cluster
+      roles:
+        - view
+        - my-service-configmap-edit
+    - clusters:
+        - my-other-cluster
+      roles:
+        - view
+        - my-service-account
+```
+
+Then in the Terraform configuration those files are used to compute sets of Vault policies for each cluster in the local variable `local.kubernetes_role_policies`, which can be used with the `vault.extra_readonly_policies` and `vault.extra_readwrite_policies` parameters of each GitLab project like so:
+
+```terraform
+module "project_my-project" {
+  source = "../../modules/project"
+
+  path     = "my-project"
+
+  [...]
+
+  vault = {
+    enabled   = true
+    auth_path = local.vault_auth_path
+
+    extra_readonly_policies = setunion(
+      local.kubernetes_role_policies.my-project.something,
+    )
+    extra_readwrite_policies = setunion(
+      local.kubernetes_role_policies.my-project.something-else,
+    )
+  }
+}
+```
+
+##### 4. Use the Vault Kubernetes roles to generate Kubernetes credentials
+
+To get a Kubernetes JWT:
+
+```shell
+# Cluster role
+HELM_KUBETOKEN="$(vault write -field=service_account_token "kubernetes/my-cluster/creds/view" kubernetes_namespace=vault-k8s-secrets cluster_role_binding=true ttl=30m)"; export HELM_KUBETOKEN
+
+# Namespace role
+HELM_KUBETOKEN="$(vault write -field=service_account_token "kubernetes/my-cluster/creds/my-service-configmap-edit" kubernetes_namespace=my-namespace ttl=30m)"; export HELM_KUBETOKEN
+```
 
 ### Interact with Vault Secrets
 
