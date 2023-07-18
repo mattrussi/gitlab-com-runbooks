@@ -35,7 +35,7 @@ test.suite({
   testHasServiceCatalogServicesFields: {
     actual: tamlandSaturation,
     expectThat: {
-      result: std.sort(std.objectFields(self.actual.serviceCatalog.services[0])) == std.sort(['name', 'label', 'owner']),
+      result: std.sort(std.objectFields(self.actual.serviceCatalog.services[0])) == std.sort(['name', 'label', 'owner', 'capacity_planning']),
       description: 'Expect object to have serviceCatalog.services fields',
     },
   },

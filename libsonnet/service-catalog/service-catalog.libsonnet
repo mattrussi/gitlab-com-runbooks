@@ -66,6 +66,7 @@ local truncateRawCatalogService(service) =
     name: service.name,
     label: service.label,
     owner: service.owner,
+    capacity_planning: if std.objectHas(service, 'capacity_planning') then service.capacity_planning else {},
   };
 
 local truncateRawCatalogTeam(team) =

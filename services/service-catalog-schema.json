@@ -506,6 +506,35 @@
           },
           "additionalProperties": false
         },
+        "capacity_planning": {
+          "type": "object",
+          "properties": {
+            "components": {
+              "type": "array",
+              "items": [
+                {
+                  "type": "object",
+                  "properties": {
+                    "name": {
+                      "type": "string"
+                    },
+                    "changepoints": {
+                      "type": "array",
+                      "items": [
+                        {
+                          "type": "string"
+                        }
+                      ]
+                    }
+                  },
+                  "required": [
+                    "name"
+                  ]
+                }
+              ]
+            }
+          }
+        },
         "teams": {
           "description": "DEPRECATED: The list of the teams associated with the service",
           "type": "array",

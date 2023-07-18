@@ -912,6 +912,13 @@ services:
       monitors:
         grafana_folder: RNfEDpLmz
         primary_grafana_dashboard: patroni-main/patroni-overview
+    capacity_planning:
+      components:
+        - name: memory
+          parameters:
+            changepoints:
+              - '2023-04-26' # https://gitlab.com/gitlab-com/gl-infra/capacity_planning/-/issues/1026#note_1404708663
+              - '2023-04-28'
 
   - name: patroni-registry
     tier: db
@@ -1005,6 +1012,13 @@ services:
       monitors:
         grafana_folder: RNfEDpLmz # TODO: Update when provisioned
         primary_grafana_dashboard: patroni-ci-main/patroni-ci-overview
+    capacity_planning:
+      components:
+        - name: memory
+          parameters:
+            changepoints:
+              - '2023-04-26' # Introduction of backup node: https://gitlab.com/gitlab-com/gl-infra/capacity_planning/-/issues/1026#note_1404708663
+              - '2023-04-28'
 
   - name: plantuml
     tier: sv
@@ -1284,6 +1298,12 @@ services:
     observability:
       monitors:
         primary_grafana_dashboard: redis-cache-main/redis-cache-overview
+    capacity_planning:
+      components:
+        - name: redis_primary_cpu
+          parameters:
+            changepoints:
+              - '2023-02-01'  # repository-cache split
 
   - name: redis-cache-sentinel
     tier: db
@@ -1657,6 +1677,12 @@ services:
         grafana_folder: c7nMugpmz
         primary_grafana_dashboard: sidekiq-main/sidekiq-overview
         sentry_slug: gitlab/gitlabcom/?query=program%3A%22sidekiq%22
+    capacity_planning:
+      components:
+        - name: rails_db_connection_pool
+          parameters:
+            changepoints:
+              - '2023-04-03' # https://gitlab.com/gitlab-com/gl-infra/capacity_planning/-/issues/993
 
   - name: version
     tier: sv
