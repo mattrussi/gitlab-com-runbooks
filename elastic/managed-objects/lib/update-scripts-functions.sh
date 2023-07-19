@@ -22,8 +22,6 @@ function execute_jsonnet() {
   # Add vault envvars.
   vault_inject "VAULT_" 
 
-  set -x
-
   # MARQUEE_CUSTOMERS_TOP_LEVEL_DOMAINS should be comma-delimited
   jsonnet -J "${SCRIPT_DIR}/../../lib" \
     -J "${SCRIPT_DIR}/../../../../libsonnet" \
