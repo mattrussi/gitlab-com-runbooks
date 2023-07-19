@@ -8,9 +8,17 @@ local utilizationRatesPanel(
   compact=false,
   stableId=stableId
       ) =
+  local hasShardSelector = std.objectHas(selectorHash, 'shard');
+  local aggregationLabels = if !hasShardSelector then ['component'] else ['component', 'shard'];
+  local legendFormat = if !hasShardSelector then
+    '{{ component }} component'
+  else
+    '{{ component }} component - {{ shard }} shard';
+
   local formatConfig = {
     serviceType: serviceType,
     selector: selectors.serializeHash(selectorHash { type: serviceType }),
+    aggregationLabels: std.join(', ', aggregationLabels),
   };
   basic.graphPanel(
     title='Saturation',
@@ -27,9 +35,9 @@ local utilizationRatesPanel(
           max_over_time(
             gitlab_component_saturation:ratio{%(selector)s}[$__interval]
           )
-        ) by (component)
+        ) by (%(aggregationLabels)s)
       ||| % formatConfig,
-      legendFormat='{{ component }} component',
+      legendFormat=legendFormat,
     )
   )
   .resetYaxes()
