@@ -46,7 +46,7 @@ basic.dashboard(
           }[$__rate_interval])
         )
       ||| % selectorString,
-      legendFormat='{{grpc_service}}/{{grpc_method}} {{grpc_code}}',
+      legendFormat='gitlab.agent.notifications.rpc.Notifications/GitPushEvent {{grpc_code}}',
       yAxisLabel='rps',
       linewidth=1,
     ),
