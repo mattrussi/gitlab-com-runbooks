@@ -20,7 +20,7 @@ function execute_jsonnet() {
   execute_jsonnet_args=()
 
   # Add vault envvars.
-  vault_inject "VAULT_" 
+  vault_inject "VAULT_"
 
   # MARQUEE_CUSTOMERS_TOP_LEVEL_DOMAINS should be comma-delimited
   jsonnet -J "${SCRIPT_DIR}/../../lib" \
@@ -30,7 +30,7 @@ function execute_jsonnet() {
     "$@"
 }
 
-# Given a prefix, $1 vault_inject will append all environment variables with the prefix to 
+# Given a prefix, $1 vault_inject will append all environment variables with the prefix to
 # execute_jsonnet_args with the format: --ext-str="$name=$value"
 # the name to use in jsonnet is the lowercase form of the environment variable, eg
 # VAULT_MY_TOP_SECRET_THING becomes vault_my_top_secret_thing
