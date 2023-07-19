@@ -16,11 +16,39 @@ function kibana_client() {
 }
 
 function execute_jsonnet() {
+  # A set of additional args to add to the jsonnet invocation.
+  execute_jsonnet_args=()
+
+  # Add vault envvars.
+  vault_inject "VAULT_" 
+
+  set -x
+
   # MARQUEE_CUSTOMERS_TOP_LEVEL_DOMAINS should be comma-delimited
   jsonnet -J "${SCRIPT_DIR}/../../lib" \
     -J "${SCRIPT_DIR}/../../../../libsonnet" \
     --ext-str "marquee_customers_top_level_domains=${MARQUEE_CUSTOMERS_TOP_LEVEL_DOMAINS:-}" \
+    ${execute_jsonnet_args[@]} \
     "$@"
+}
+
+# Given a prefix, $1 vault_inject will append all environment variables with the prefix to 
+# execute_jsonnet_args with the format: --ext-str="$name=$value"
+# the name to use in jsonnet is the lowercase form of the environment variable, eg
+# VAULT_MY_TOP_SECRET_THING becomes vault_my_top_secret_thing
+function vault_inject() {
+  prefix=$1
+  vault_vars=$(typeset -p \
+    | awk '$3 ~ "^"pfx { print $3 }' pfx=$prefix \
+    | grep -v "VAULT_ADDR" \
+    | grep -v "VAULT_TLS_SERVER_NAME")
+
+  for e in $vault_vars; do
+    name=$(awk -F= '{ print tolower($1) }' <<< $e | sed -e 's/"//g')
+    value=$(awk -F= '{ print $2 }' <<< $e | sed -e 's/"//g')
+    execute_jsonnet_args+=("--ext-str")
+    execute_jsonnet_args+=(\"$name=$value\")
+  done
 }
 
 function matches_exist() {
