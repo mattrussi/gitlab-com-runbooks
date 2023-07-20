@@ -778,7 +778,7 @@ validate-kibana-urls:
       vault: ${VAULT_SECRETS_PATH}/elastic-monitoring-es7/elastic/url@ci
     ES_MONITORING_ES7_OIDC:
       file: true
-      vault: ${VAULT_SECRETS_PATH}/elastic-monitoring-es7/elastic/oidc@ci
+      vault: ${VAULT_SECRETS_PATH}/elastic-monitoring-es7/elastic-auth-oidc/google@ci
 
 # log.gprd.gitlab.net
 update-elastic-ilm:log-gprd:
