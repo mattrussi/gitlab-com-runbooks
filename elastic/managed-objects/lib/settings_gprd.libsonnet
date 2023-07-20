@@ -81,7 +81,6 @@ else if std.member(HIGH_THROUGHPUT, index) then {
             trace: '30s',
           },
         },
-        level: 'info',
       },
     },
     refresh_interval: '30s',  // see: https://gitlab.com/gitlab-com/gl-infra/production/-/issues/3006#note_445081437
@@ -122,7 +121,6 @@ else if std.member(MEDIUM_THROUGHPUT, index) then {
             trace: '30s',
           },
         },
-        level: 'info',
       },
     },
     refresh_interval: '30s',
@@ -157,7 +155,6 @@ else if std.member(MEDIUM_THROUGHPUT, index) then {
             trace: '30s',
           },
         },
-        level: 'info',
       },
     },
     refresh_interval: '30s',
