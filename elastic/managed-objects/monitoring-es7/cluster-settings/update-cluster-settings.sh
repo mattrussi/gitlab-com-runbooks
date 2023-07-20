@@ -13,6 +13,7 @@ if [[ ! -v ES_MONITORING_ES7_OIDC ]]; then
 {
   "google": {
     "client_id": "some_id",
+    "client_secret": "some_secret",
   }
 }
 EOF

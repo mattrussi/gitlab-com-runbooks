@@ -7,6 +7,7 @@ local oidc = import 'oidc.libjsonnet';
       'google': {
         'order': 2,
         'rp.client_id': oidc.google.client_id,
+        'rp.client_secret': oidc.google.client_secret,
         'rp.response_type': 'code',
         'rp.requested_scopes': ['openid', 'email'],
         'rp.redirect_uri': 'https://00a4ef3362214c44a044feaa539b4686.us-central1.gcp.cloud.es.io:9243/api/security/oidc/callback',
