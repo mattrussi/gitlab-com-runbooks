@@ -263,6 +263,11 @@ metricsCatalog.serviceDefinition({
     // See https://gitlab.com/gitlab-com/gl-infra/scalability/-/issues/2423.
     serviceAggregation: true,
     severity: 's2',
+    toolingLinks: [
+      // Improve sentry link once https://gitlab.com/gitlab-com/gl-infra/scalability/-/issues/532 arrives
+      toolingLinks.sentry(slug='gitlab/gitlabcom', type='sidekiq'),
+      toolingLinks.kibana(title='Sidekiq execution', index='sidekiq_execution', type='sidekiq'),
+    ],
   }),
 
   // Special per-worker recording rules
