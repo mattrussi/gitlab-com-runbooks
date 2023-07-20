@@ -209,6 +209,17 @@ checks:
   # integrations:
   #   - pagerduty
 
+  - url: https://health-check.cdn.web-ide.gitlab-static.net/-/ping
+    timeout_ms: 20000
+    resolution_minutes: 5
+    notify_when_restored: true
+    tags:
+      - cloudflare
+    teams:
+      - Infrastructure
+    integrations:
+      - pagerduty
+
   #######################################
   # Ancillary Properties
   #######################################
