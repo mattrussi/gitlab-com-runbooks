@@ -80,6 +80,7 @@
 * [Gemnasium is down](../uncategorized/gemnasium_is_down.md)
 * [Project exports](../uncategorized/project-export.md)
 * [Ruby profiling](../uncategorized/ruby-profiling.md)
+* [Web IDE Assets](../uncategorized/web-ide-vscode-cdn.md)
 * [How to Use Vault for Secrets Management in Infrastructure](../vault/usage.md)
 * [Vault Secrets Management](../vault/vault.md)
 * [Workhorse Image Scaler](workhorse-image-scaler.md)
