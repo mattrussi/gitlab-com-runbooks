@@ -9,7 +9,7 @@ source "${SCRIPT_DIR}"/../../lib/update-scripts-functions.sh
 # catchall in elastic/managed-objects/lib/update-scripts-functions.sh
 if [[ ! -v ES_MONITORING_ES7_OIDC ]]; then
   # Not set, just create a dummy file for now
-  cat << EOF > oidc.libjsonnet
+  cat << EOF > ${SCRIPT_DIR}/oidc.libjsonnet
 {
   "google": {
     "client_id": "some_id",
@@ -20,7 +20,7 @@ EOF
 else
   # If this envvar is set, then we'll use the file at this path as the oidc
   # configuration
-  cp "${ES_MONITORING_ES7_OIDC}" oidc.libjsonnet
+  cp "${ES_MONITORING_ES7_OIDC}" ${SCRIPT_DIR}/oidc.libjsonnet
 fi
 
 ES7_set_cluster_settings
