@@ -15,21 +15,7 @@ metricsCatalog.serviceDefinition(
     monitoringThresholds+: {
       apdexScore: 0.9995,
     },
-    serviceLevelIndicators+: {
-      rails_redis_client+: {
-        userImpacting: true,
-        severity: 's4',
-      },
-      primary_server+: {
-        userImpacting: true,
-        severity: 's4',
-      },
-      secondary_servers+: {
-        userImpacting: true,
-        severity: 's4',
-      },
-      # TODO: add rails_cache SLI after migration
-    },
+    # TODO: add rails_cache SLI after migration
   }
   + redisHelpers.gitlabcomObservabilityToolingForRedis('redis-cluster-cache')
 )
