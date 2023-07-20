@@ -96,7 +96,7 @@ tsh db login --db-user=console-ro --db-name=gitlabhq_production db-ci-replica-gs
 # Registry Database:
 tsh db login --db-user=console-ro --db-name=gitlabhq_registry db-registry-replica-gstg
 
-# elayed Replica (DR) archive of main Database:
+# Delayed Replica (DR) archive of main Database:
 tsh db login --db-user=console-ro --db-name=gitlabhq_production db-main-dr-archive-gstg
 
 # Delayed Replica (DR) archive of CI Database:
@@ -182,7 +182,7 @@ tsh db login --db-user=console-ro --db-name=gitlabhq_production db-ci-replica-gp
 # Registry Database:
 tsh db login --db-user=console-ro --db-name=gitlabhq_registry db-registry-replica-gprd
 
-# elayed Replica (DR) archive of main Database:
+# Delayed Replica (DR) archive of main Database:
 tsh db login --db-user=console-ro --db-name=gitlabhq_production db-main-dr-archive-gprd
 
 # Delayed Replica (DR) archive of CI Database:
