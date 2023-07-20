@@ -34,6 +34,12 @@
             },
             client_ip: {
               type: 'text',
+              fields: {
+                keyword: {
+                  type: 'keyword',
+                  ignore_above: 256,
+                },
+              },
             },
             client_port: {
               type: 'long',
