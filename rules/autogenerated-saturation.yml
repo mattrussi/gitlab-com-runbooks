@@ -490,10 +490,12 @@ groups:
       type: nat
     expr: "max by(environment, shard) (\n  clamp_min(\n    clamp_max(\n      sum without(nat_ip)
       (\n        stackdriver_nat_gateway_router_googleapis_com_nat_allocated_ports{\n
-      \         job=\"stackdriver\",\n          \n        }\n      )\n      /\n      on(router_id)
-      group_left() (\n        64512 * (count by (router_id) (stackdriver_nat_gateway_router_googleapis_com_nat_allocated_ports{\n
-      \         job=\"stackdriver\",\n          \n        })\n      ))\n      ,\n
-      \     1)\n  ,\n  0)\n)\n"
+      \         job=\"stackdriver\",\n          project_id=\"gitlab-production\",\n
+      \         \n        }\n      )\n      /\n      ( 64512 * 48 )\n      or\n      sum
+      without(nat_ip) (\n        stackdriver_nat_gateway_router_googleapis_com_nat_allocated_ports{\n
+      \         job=\"stackdriver\",\n          project_id=\"gitlab-staging-1\",\n
+      \         \n        }\n      )\n      /\n      ( 64512 * 16 )\n      ,\n      1)\n
+      \ ,\n  0)\n)\n"
   - record: gitlab_component_saturation:ratio
     labels:
       component: nat_host_port_allocation
@@ -1576,7 +1578,7 @@ groups:
   - record: slo:max:soft:gitlab_component_saturation:ratio
     labels:
       component: nat_gateway_port_allocation
-    expr: "0.85"
+    expr: "0.8"
   - record: slo:max:hard:gitlab_component_saturation:ratio
     labels:
       component: nat_gateway_port_allocation
@@ -3811,16 +3813,22 @@ groups:
               sum without(nat_ip) (
                 stackdriver_nat_gateway_router_googleapis_com_nat_allocated_ports{
                   job="stackdriver",
+                  project_id="gitlab-production",
                   environment="{{ $labels.environment }}"
                 }
               )
               /
-              on(router_id) group_left() (
-                64512 * (count by (router_id) (stackdriver_nat_gateway_router_googleapis_com_nat_allocated_ports{
+              ( 64512 * 48 )
+              or
+              sum without(nat_ip) (
+                stackdriver_nat_gateway_router_googleapis_com_nat_allocated_ports{
                   job="stackdriver",
+                  project_id="gitlab-staging-1",
                   environment="{{ $labels.environment }}"
-                })
-              ))
+                }
+              )
+              /
+              ( 64512 * 16 )
               ,
               1)
           ,
