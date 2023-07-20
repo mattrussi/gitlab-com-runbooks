@@ -77,12 +77,16 @@ function(serviceType, sli, aggregationSet, metricName)
     else error 'unrecognised metric type: metricName="%s"' % [metricName];
 
   local panelStableId = 'sli-%s-%s' % [sli.name, panelSuffix];
+  local grafanaVariables = if std.member(aggregationSet.labels, 'shard') then
+    ['environment', 'stage', 'shard']
+  else
+    ['environment', 'stage'];
 
   {
     // TODO: improve on grafana dashboard links
     grafana_dashboard_id: dashboardForService(serviceType),
     grafana_panel_id: stableIds.hashStableId(panelStableId),
-    grafana_variables: 'environment,stage',
+    grafana_variables: std.join(',', grafanaVariables),
     grafana_min_zoom_hours: '6',
 
     promql_template_1: promQueryForSelector(serviceType, sli, aggregationSet, metricName),

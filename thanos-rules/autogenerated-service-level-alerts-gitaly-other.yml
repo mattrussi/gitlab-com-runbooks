@@ -128,10 +128,11 @@ groups:
         Currently the apdex value is {{ $value | humanizePercentage }}.
       grafana_dashboard_id: gitaly-main/gitaly-overview
       grafana_dashboard_link: https://dashboards.gitlab.net/d/gitaly-main/gitaly-overview?from=now-6h/m&to=now-1m/m&var-environment={{
-        $labels.environment }}&var-stage={{ $labels.stage }}
+        $labels.environment }}&var-stage={{ $labels.stage }}&var-shard={{ $labels.shard
+        }}
       grafana_min_zoom_hours: "6"
       grafana_panel_id: "877804374"
-      grafana_variables: environment,stage
+      grafana_variables: environment,stage,shard
       promql_template_1: |
         histogram_quantile(
           0.950000,
@@ -185,10 +186,11 @@ groups:
         Currently the apdex value is {{ $value | humanizePercentage }}.
       grafana_dashboard_id: gitaly-main/gitaly-overview
       grafana_dashboard_link: https://dashboards.gitlab.net/d/gitaly-main/gitaly-overview?from=now-6h/m&to=now-1m/m&var-environment={{
-        $labels.environment }}&var-stage={{ $labels.stage }}
+        $labels.environment }}&var-stage={{ $labels.stage }}&var-shard={{ $labels.shard
+        }}
       grafana_min_zoom_hours: "6"
       grafana_panel_id: "877804374"
-      grafana_variables: environment,stage
+      grafana_variables: environment,stage,shard
       promql_template_1: |
         histogram_quantile(
           0.950000,
@@ -342,10 +344,11 @@ groups:
         Currently the error-rate is {{ $value | humanizePercentage }}.
       grafana_dashboard_id: gitaly-main/gitaly-overview
       grafana_dashboard_link: https://dashboards.gitlab.net/d/gitaly-main/gitaly-overview?from=now-6h/m&to=now-1m/m&var-environment={{
-        $labels.environment }}&var-stage={{ $labels.stage }}
+        $labels.environment }}&var-stage={{ $labels.stage }}&var-shard={{ $labels.shard
+        }}
       grafana_min_zoom_hours: "6"
       grafana_panel_id: "594670537"
-      grafana_variables: environment,stage
+      grafana_variables: environment,stage,shard
       promql_template_1: |
         sum by (env,environment,tier,stage,shard,fqdn) (
           label_replace(rate(gitaly_service_client_requests_total{environment="{{ $labels.environment }}",fqdn="{{ $labels.fqdn }}",grpc_code!~"AlreadyExists|Canceled|DeadlineExceeded|FailedPrecondition|InvalidArgument|NotFound|OK|PermissionDenied|ResourceExhausted|Unauthenticated",job="gitaly",shard="{{ $labels.shard }}",stage="{{ $labels.stage }}",type="gitaly"}[5m]), "_c", "0", "", "")
@@ -394,10 +397,11 @@ groups:
         Currently the error-rate is {{ $value | humanizePercentage }}.
       grafana_dashboard_id: gitaly-main/gitaly-overview
       grafana_dashboard_link: https://dashboards.gitlab.net/d/gitaly-main/gitaly-overview?from=now-6h/m&to=now-1m/m&var-environment={{
-        $labels.environment }}&var-stage={{ $labels.stage }}
+        $labels.environment }}&var-stage={{ $labels.stage }}&var-shard={{ $labels.shard
+        }}
       grafana_min_zoom_hours: "6"
       grafana_panel_id: "594670537"
-      grafana_variables: environment,stage
+      grafana_variables: environment,stage,shard
       promql_template_1: |
         sum by (env,environment,tier,stage,shard,fqdn) (
           label_replace(rate(gitaly_service_client_requests_total{environment="{{ $labels.environment }}",fqdn="{{ $labels.fqdn }}",grpc_code!~"AlreadyExists|Canceled|DeadlineExceeded|FailedPrecondition|InvalidArgument|NotFound|OK|PermissionDenied|ResourceExhausted|Unauthenticated",job="gitaly",shard="{{ $labels.shard }}",stage="{{ $labels.stage }}",type="gitaly"}[5m]), "_c", "0", "", "")
@@ -518,10 +522,11 @@ groups:
         Since the `{{ $labels.type }}` service is not fully redundant, SLI violations on a single node may represent a user-impacting service degradation.
       grafana_dashboard_id: gitaly-main/gitaly-overview
       grafana_dashboard_link: https://dashboards.gitlab.net/d/gitaly-main/gitaly-overview?from=now-6h/m&to=now-1m/m&var-environment={{
-        $labels.environment }}&var-stage={{ $labels.stage }}
+        $labels.environment }}&var-stage={{ $labels.stage }}&var-shard={{ $labels.shard
+        }}
       grafana_min_zoom_hours: "6"
       grafana_panel_id: "1687078843"
-      grafana_variables: environment,stage
+      grafana_variables: environment,stage,shard
       promql_template_1: |
         sum by (env,environment,tier,stage,shard,fqdn) (
           rate(gitaly_service_client_requests_total{environment="{{ $labels.environment }}",fqdn="{{ $labels.fqdn }}",job="gitaly",shard="{{ $labels.shard }}",stage="{{ $labels.stage }}",type="gitaly"}[5m])
@@ -557,10 +562,11 @@ groups:
         Since the `{{ $labels.type }}` service is not fully redundant, SLI violations on a single node may represent a user-impacting service degradation.
       grafana_dashboard_id: gitaly-main/gitaly-overview
       grafana_dashboard_link: https://dashboards.gitlab.net/d/gitaly-main/gitaly-overview?from=now-6h/m&to=now-1m/m&var-environment={{
-        $labels.environment }}&var-stage={{ $labels.stage }}
+        $labels.environment }}&var-stage={{ $labels.stage }}&var-shard={{ $labels.shard
+        }}
       grafana_min_zoom_hours: "6"
       grafana_panel_id: "1687078843"
-      grafana_variables: environment,stage
+      grafana_variables: environment,stage,shard
       promql_template_1: |
         sum by (env,environment,tier,stage,shard,fqdn) (
           rate(gitaly_service_client_requests_total{environment="{{ $labels.environment }}",fqdn="{{ $labels.fqdn }}",job="gitaly",shard="{{ $labels.shard }}",stage="{{ $labels.stage }}",type="gitaly"}[5m])
