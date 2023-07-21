@@ -1,73 +1,93 @@
-local mapping = import './tamland_service_env_mapping.libsonnet';
+local metricsCatalog = import 'servicemetrics/metrics.libsonnet';
 local saturation = import 'servicemetrics/saturation-resources.libsonnet';
-local tamlandSaturation = import 'tamland.jsonnet';
+local manifest = import 'tamland.jsonnet';
 local test = import 'test.libsonnet';
 
+local resourceSaturationPoint = metricsCatalog.resourceSaturationPoint;
+
+local saturationPoints = {
+  michael_scott: resourceSaturationPoint({
+    title: 'Michael Scott',
+    severity: 's4',
+    horizontallyScalable: true,
+    capacityPlanning: {
+      strategy: 'exclude',
+    },
+    appliesTo: ['thanos', 'web', 'api'],
+    description: |||
+      Just Mr Tamland chart
+    |||,
+    grafana_dashboard_uid: 'just testing',
+    resourceLabels: ['name'],
+    query: |||
+      memory_used_bytes{area="heap", %(selector)s}
+      /
+      memory_max_bytes{area="heap", %(selector)s}
+    |||,
+    slos: {
+      soft: 0.80,
+      hard: 0.90,
+    },
+  }),
+  jimbo: resourceSaturationPoint({
+    title: 'Jimbo',
+    severity: 's4',
+    horizontallyScalable: true,
+    capacityPlanning: {
+      strategy: 'exclude',
+    },
+    appliesTo: ['thanos', 'redis'],
+    description: |||
+      Just Mr Jimbo
+    |||,
+    grafana_dashboard_uid: 'just testing',
+    resourceLabels: ['name'],
+    query: |||
+      memory_used_bytes{area="heap", %(selector)s}
+      /
+      memory_max_bytes{area="heap", %(selector)s}
+    |||,
+    slos: {
+      soft: 0.80,
+      hard: 0.90,
+    },
+  }),
+};
+
 test.suite({
-  testHasServiceEnvMappingObject: {
-    actual: tamlandSaturation,
+  testHasDefaultEnvironment: {
+    actual: manifest,
     expectThat: {
-      result: std.objectHas(self.actual, 'servicesEnvMapping') == true,
-      description: 'Expect object to have servicesEnvMapping field',
-    },
-  },
-  testServiceEnvMappingObjectNotEmpty: {
-    actual: tamlandSaturation,
-    expectThat: {
-      result: std.length(self.actual.servicesEnvMapping) > 0,
-      description: 'Expect servicesEnvMapping object to be not empty',
-    },
-  },
-  testHasServiceCatalogObject: {
-    actual: tamlandSaturation,
-    expectThat: {
-      result: std.objectHas(self.actual, 'serviceCatalog') == true,
+      result: std.objectHas(self.actual.defaults, 'environment') == true,
       description: 'Expect object to have serviceCatalog field',
     },
   },
-  testHasServiceCatalogServicesField: {
-    actual: tamlandSaturation,
+  testHasSaturationPoints: {
+    actual: manifest,
     expectThat: {
-      result: std.objectHas(self.actual.serviceCatalog, 'services') == true,
-      description: 'Expect object to have serviceCatalog.services field',
+      result: std.objectHas(self.actual, 'saturationPoints') == true,
+      description: 'Expect object to have saturationPoints field',
     },
   },
-  testHasServiceCatalogServicesFields: {
-    actual: tamlandSaturation,
+  testHasServices: {
+    actual: manifest,
     expectThat: {
-      result: std.sort(std.objectFields(self.actual.serviceCatalog.services[0])) == std.sort(['name', 'label', 'owner']),
-      description: 'Expect object to have serviceCatalog.services fields',
+      result: std.objectHas(self.actual, 'services') == true,
+      description: 'Expect object to have serviceCatalog field',
     },
   },
   testHasServiceCatalogTeamsField: {
-    actual: tamlandSaturation,
+    actual: manifest,
     expectThat: {
-      result: std.objectHas(self.actual.serviceCatalog, 'teams') == true,
+      result: std.objectHas(self.actual, 'teams') == true,
       description: 'Expect object to have serviceCatalog.teams field',
     },
   },
   testHasServiceCatalogTeamsFields: {
-    actual: tamlandSaturation,
+    actual: manifest,
     expectThat: {
-      result: std.sort(std.objectFields(self.actual.serviceCatalog.teams[0])) == std.sort(['name', 'label', 'manager']),
+      result: std.sort(std.objectFields(self.actual.teams[0])) == std.sort(['name', 'label', 'manager']),
       description: 'Expect object to have serviceCatalog.teams fields',
-    },
-  },
-  testServiceCatalogServicesSubset: {
-    actual: tamlandSaturation,
-    expectThat: {
-      result:
-        local metricsCatalogServices = std.sort(mapping.uniqServices(saturation));
-        local serviceCatalogServices = std.sort(
-          std.map(
-            function(service)
-              service.name
-            , self.actual.serviceCatalog.services
-          )
-        );
-        local unknownServices = std.setDiff(metricsCatalogServices, serviceCatalogServices);
-        std.length(unknownServices) == 0,
-      description: 'Expected metricsCatalog services to be subset of serviceCatalog services',
     },
   },
 })

@@ -59,15 +59,6 @@ local buildServiceGraph(services) =
     )
   );
 
-// To reduce the size of saturation manifest, truncate raw catalog to essential fields required by Tamland.
-// Service catalog is not to be confused with metrics catalog, refer to https://gitlab.com/gitlab-com/runbooks/-/tree/master/services#schema
-local truncateRawCatalogService(service) =
-  {
-    name: service.name,
-    label: service.label,
-    owner: service.owner,
-  };
-
 local truncateRawCatalogTeam(team) =
   {
     name: team.name,
@@ -101,13 +92,6 @@ local truncateRawCatalogTeam(team) =
         std.objectHas(service.business.SLA, 'overall_sla_weighting') &&
         (if includeZeroScore then service.business.SLA.overall_sla_weighting >= 0 else service.business.SLA.overall_sla_weighting > 0),
       rawCatalog.services
-    ),
-
-  getRawCatalogServices()::
-    std.map(
-      function(service)
-        truncateRawCatalogService(service)
-      , rawCatalog.services
     ),
 
   getRawCatalogTeams()::

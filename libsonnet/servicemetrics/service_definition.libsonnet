@@ -18,7 +18,9 @@ local serviceDefaults = {
   alertWindows: multiburnExpression.defaultWindows,
   skippedMaturityCriteria: {},
   dangerouslyThanosEvaluated: false,  // This is only used for thanos self-monitoring
-  capacityPlanningEnvironment: 'gprd',  // Default is gprd, but thanos runs in it's own environment
+  capacityPlanning: {  // Consumed by Tamland
+    environment: 'gprd',
+  },
 };
 
 // Convience method, will wrap a raw definition in a serviceLevelIndicatorDefinition if needed
