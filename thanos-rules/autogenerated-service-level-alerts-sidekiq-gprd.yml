@@ -1969,6 +1969,8 @@ groups:
       description: |
         The number of Sidekiq jobs meeting their execution duration target based on the urgency of the worker. By default, execution of a job should take no more than 300 seconds. But this can be adjusted by the urgency of the worker.
 
+        Read more about this in the [runbooks doc](https://gitlab.com/gitlab-com/runbooks/-/blob/master/docs/sidekiq/sidekiq-slis.md).
+
         Since the `{{ $labels.type }}` service is not fully redundant, SLI violations on a single shard may represent a user-impacting service degradation.
 
         Currently the apdex value is {{ $value | humanizePercentage }}.
@@ -2015,6 +2017,8 @@ groups:
       description: |
         The number of Sidekiq jobs meeting their execution duration target based on the urgency of the worker. By default, execution of a job should take no more than 300 seconds. But this can be adjusted by the urgency of the worker.
 
+        Read more about this in the [runbooks doc](https://gitlab.com/gitlab-com/runbooks/-/blob/master/docs/sidekiq/sidekiq-slis.md).
+
         Since the `{{ $labels.type }}` service is not fully redundant, SLI violations on a single shard may represent a user-impacting service degradation.
 
         Currently the apdex value is {{ $value | humanizePercentage }}.
@@ -2060,6 +2064,8 @@ groups:
         }}` has an error rate violating SLO
       description: |
         The number of Sidekiq jobs meeting their execution duration target based on the urgency of the worker. By default, execution of a job should take no more than 300 seconds. But this can be adjusted by the urgency of the worker.
+
+        Read more about this in the [runbooks doc](https://gitlab.com/gitlab-com/runbooks/-/blob/master/docs/sidekiq/sidekiq-slis.md).
 
         Since the `{{ $labels.type }}` service is not fully redundant, SLI violations on a single shard may represent a user-impacting service degradation.
 
@@ -2111,6 +2117,8 @@ groups:
       description: |
         The number of Sidekiq jobs meeting their execution duration target based on the urgency of the worker. By default, execution of a job should take no more than 300 seconds. But this can be adjusted by the urgency of the worker.
 
+        Read more about this in the [runbooks doc](https://gitlab.com/gitlab-com/runbooks/-/blob/master/docs/sidekiq/sidekiq-slis.md).
+
         Since the `{{ $labels.type }}` service is not fully redundant, SLI violations on a single shard may represent a user-impacting service degradation.
 
         Currently the error-rate is {{ $value | humanizePercentage }}.
@@ -2161,6 +2169,8 @@ groups:
       description: |
         The number of Sidekiq jobs meeting their execution duration target based on the urgency of the worker. By default, execution of a job should take no more than 300 seconds. But this can be adjusted by the urgency of the worker.
 
+        Read more about this in the [runbooks doc](https://gitlab.com/gitlab-com/runbooks/-/blob/master/docs/sidekiq/sidekiq-slis.md).
+
         This alert signifies that the SLI is reporting a cessation of traffic; the signal is present, but is zero.
 
         Since the `{{ $labels.type }}` service is not fully redundant, SLI violations on a single shard may represent a user-impacting service degradation.
@@ -2197,6 +2207,8 @@ groups:
         }}` has not reported any traffic in the past 30m
       description: |
         The number of Sidekiq jobs meeting their execution duration target based on the urgency of the worker. By default, execution of a job should take no more than 300 seconds. But this can be adjusted by the urgency of the worker.
+
+        Read more about this in the [runbooks doc](https://gitlab.com/gitlab-com/runbooks/-/blob/master/docs/sidekiq/sidekiq-slis.md).
 
         This alert signifies that the SLI was previously reporting traffic, but is no longer - the signal is absent.
 
@@ -2236,6 +2248,8 @@ groups:
         }}` has an apdex violating SLO
       description: |
         The number of Sidekiq jobs meeting their queueing duration target based on the urgency of the worker. By default, queueing of a job should take no more than 60 seconds. But this can be adjusted by the urgency of the worker.
+
+        Read more about this in the [runbooks doc](https://gitlab.com/gitlab-com/runbooks/-/blob/master/docs/sidekiq/sidekiq-slis.md).
 
         Since the `{{ $labels.type }}` service is not fully redundant, SLI violations on a single shard may represent a user-impacting service degradation.
 
@@ -2282,6 +2296,8 @@ groups:
       description: |
         The number of Sidekiq jobs meeting their queueing duration target based on the urgency of the worker. By default, queueing of a job should take no more than 60 seconds. But this can be adjusted by the urgency of the worker.
 
+        Read more about this in the [runbooks doc](https://gitlab.com/gitlab-com/runbooks/-/blob/master/docs/sidekiq/sidekiq-slis.md).
+
         Since the `{{ $labels.type }}` service is not fully redundant, SLI violations on a single shard may represent a user-impacting service degradation.
 
         Currently the apdex value is {{ $value | humanizePercentage }}.
@@ -2327,6 +2343,8 @@ groups:
       description: |
         The number of Sidekiq jobs meeting their queueing duration target based on the urgency of the worker. By default, queueing of a job should take no more than 60 seconds. But this can be adjusted by the urgency of the worker.
 
+        Read more about this in the [runbooks doc](https://gitlab.com/gitlab-com/runbooks/-/blob/master/docs/sidekiq/sidekiq-slis.md).
+
         This alert signifies that the SLI is reporting a cessation of traffic; the signal is present, but is zero.
 
         Since the `{{ $labels.type }}` service is not fully redundant, SLI violations on a single shard may represent a user-impacting service degradation.
@@ -2362,6 +2380,8 @@ groups:
         }}` has not reported any traffic in the past 30m
       description: |
         The number of Sidekiq jobs meeting their queueing duration target based on the urgency of the worker. By default, queueing of a job should take no more than 60 seconds. But this can be adjusted by the urgency of the worker.
+
+        Read more about this in the [runbooks doc](https://gitlab.com/gitlab-com/runbooks/-/blob/master/docs/sidekiq/sidekiq-slis.md).
 
         This alert signifies that the SLI was previously reporting traffic, but is no longer - the signal is absent.
 
