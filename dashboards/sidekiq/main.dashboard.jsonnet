@@ -288,7 +288,7 @@ serviceDashboard.overview('sidekiq', expectMultipleSeries=true)
       title='Sidekiq Aggregated Throughput',
       description='The total number of jobs being completed',
       query=|||
-        sum(gitlab_background_jobs:execution:ops:rate_5m{monitor="global", environment="$environment"})
+        sum(application_sli_aggregation:sidekiq_execution:ops:rate_5m{monitor="global", environment="$environment"})
       |||,
       legendFormat='Total',
       interval='1m',
@@ -300,7 +300,7 @@ serviceDashboard.overview('sidekiq', expectMultipleSeries=true)
       title='Sidekiq Throughput per Shard',
       description='The total number of jobs being completed per shard',
       query=|||
-        sum(gitlab_background_jobs:execution:ops:rate_5m{monitor="global", environment="$environment"}) by (shard)
+        gitlab_component_shard_ops:rate_5m{monitor="global", environment="$environment", component="sidekiq_execution"}
       |||,
       legendFormat='{{ shard }}',
       interval='1m',
@@ -314,7 +314,7 @@ serviceDashboard.overview('sidekiq', expectMultipleSeries=true)
       title='Sidekiq Throughput per Job',
       description='The total number of jobs being completed per worker',
       query=|||
-        sum(gitlab_background_jobs:execution:ops:rate_5m{monitor="global", environment="$environment"}) by (worker)
+        sum(application_sli_aggregation:sidekiq_execution:ops:rate_5m{monitor="global", environment="$environment"}) by (worker)
       |||,
       legendFormat='{{ queue }}',
       interval='1m',

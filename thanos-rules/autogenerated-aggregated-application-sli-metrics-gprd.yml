@@ -300,22 +300,22 @@ groups:
   rules:
   - record: application_sli_aggregation:sidekiq_queueing:apdex:weight:score_5m
     expr: |
-      sum by (env,environment,tier,type,stage,worker,feature_category,urgency,external_dependencies) (
+      sum by (env,environment,tier,type,stage,worker,feature_category,urgency,external_dependencies,queue) (
         (sli_aggregations:gitlab_sli_sidekiq_queueing_apdex_total_rate5m{env="gprd",monitor!="global"} >= 0)
       )
   - record: application_sli_aggregation:sidekiq_queueing:apdex:success:rate_5m
     expr: |
-      sum by (env,environment,tier,type,stage,worker,feature_category,urgency,external_dependencies) (
+      sum by (env,environment,tier,type,stage,worker,feature_category,urgency,external_dependencies,queue) (
         (sli_aggregations:gitlab_sli_sidekiq_queueing_apdex_success_total_rate5m{env="gprd",monitor!="global"} >= 0)
       )
   - record: application_sli_aggregation:sidekiq_queueing:apdex:weight:score_1h
     expr: |
-      sum by (env,environment,tier,type,stage,worker,feature_category,urgency,external_dependencies) (
+      sum by (env,environment,tier,type,stage,worker,feature_category,urgency,external_dependencies,queue) (
         (sli_aggregations:gitlab_sli_sidekiq_queueing_apdex_total_rate1h{env="gprd",monitor!="global"} >= 0)
       )
   - record: application_sli_aggregation:sidekiq_queueing:apdex:success:rate_1h
     expr: |
-      sum by (env,environment,tier,type,stage,worker,feature_category,urgency,external_dependencies) (
+      sum by (env,environment,tier,type,stage,worker,feature_category,urgency,external_dependencies,queue) (
         (sli_aggregations:gitlab_sli_sidekiq_queueing_apdex_success_total_rate1h{env="gprd",monitor!="global"} >= 0)
       )
 - name: 'Application Defined SLI Global metrics: sidekiq_execution_with_external_dependency

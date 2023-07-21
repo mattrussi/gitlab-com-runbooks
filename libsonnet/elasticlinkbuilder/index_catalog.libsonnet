@@ -390,9 +390,54 @@ local indexDefaults = {
     ],
   },
 
-  sidekiq_ops: self.sidekiq {
+  sidekiq_execution_ops: self.sidekiq_execution {
     kibanaEndpoint: 'https://nonprod-log.gitlab.net/app/kibana',
     indexPattern: 'pubsub-sidekiq-inf-ops',
+  },
+
+  sidekiq_queueing_ops: self.sidekiq_queueing {
+    kibanaEndpoint: 'https://nonprod-log.gitlab.net/app/kibana',
+    indexPattern: 'pubsub-sidekiq-inf-ops',
+  },
+
+  local sidekiq_viz = indexDefaults {
+    defaultFilters: [
+      matchFilter('json.type.keyword', 'sidekiq'),
+    ],
+    indexPattern: 'AWNABDRwNDuQHTm2tH6l',
+    timestamp: 'json.time',
+  },
+
+  sidekiq_queueing_viz: sidekiq_viz {
+    defaultLatencyField: 'json.scheduling_latency_s',
+  },
+
+  sidekiq_queueing_viz_by_shard: self.sidekiq_queueing_viz {
+    defaultSeriesSplitField: 'json.shard.keyword',
+  },
+
+  sidekiq_queueing_viz_by_queue: self.sidekiq_queueing_viz {
+    defaultSeriesSplitField: 'json.queue.keyword',
+  },
+
+  sidekiq_queueing_viz_by_worker: self.sidekiq_queueing_viz {
+    defaultSeriesSplitField: 'json.class.keyword',
+  },
+
+  sidekiq_execution_viz: sidekiq_viz {
+    defaultLatencyField: 'json.duration_s',
+  },
+
+  sidekiq_execution_viz_by_worker: self.sidekiq_execution_viz {
+    defaultSeriesSplitField: 'json.class.keyword',
+  },
+
+  sidekiq_execution_viz_by_shard: self.sidekiq_execution_viz {
+    defaultSeriesSplitField: 'json.shard.keyword',
+  },
+
+  sidekiq_execution_viz_by_queue: self.sidekiq_execution_viz {
+    defaultSeriesSplitField: 'json.queue.keyword',
   },
 
   workhorse: indexDefaults {

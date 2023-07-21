@@ -48,12 +48,12 @@ metricsCatalog.serviceDefinition({
       |||,
 
       requestRate: rateMetric(
-        counter='sidekiq_jobs_completion_seconds_bucket',  // Use the histogram bucket allows us to use Sidekiq's intermediate SLI recording rules here
-        selector=queueSelector { le: '+Inf' },
+        counter='gitlab_sli_sidekiq_execution_apdex_total',
+        selector=queueSelector,
       ),
 
       errorRate: rateMetric(
-        counter='sidekiq_jobs_failed_total',
+        counter='gitlab_sli_sidekiq_execution_error_total',
         selector=queueSelector,
       ),
 

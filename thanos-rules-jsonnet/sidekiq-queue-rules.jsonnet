@@ -5,6 +5,8 @@ local serviceLevelAlerts = import 'slo-alerts/service-level-alerts.libsonnet';
 local stableIds = import 'stable-ids/stable-ids.libsonnet';
 local separateGlobalRecordingFiles = (import './lib/separate-global-recording-files.libsonnet').separateGlobalRecordingFiles;
 local selectors = import 'promql/selectors.libsonnet';
+local applicationSlis = (import 'gitlab-slis/library.libsonnet');
+local applicationSliAggregations = import 'gitlab-slis/aggregation-sets.libsonnet';
 
 /* TODO: having some sort of criticality label on sidekiq jobs would allow us to
    define different criticality labels for each worker. For now we need to use
@@ -165,6 +167,8 @@ local sidekiqThanosAlerts(extraSelector) =
       },
     },
   ] +
+  // NOTE: The application SLIs `application_sli_aggregation:sidekiq_execution` don't support 3d windows.
+  // Can we remove this or use smaller window?
   serviceLevelAlerts.apdexAlertsForSLI(
     alertName=serviceLevelAlerts.nameSLOViolationAlert('sidekiq', 'WorkerExecution', 'ApdexSLOViolation'),
     alertTitle='The `{{ $labels.worker }}` Sidekiq worker, `{{ $labels.stage }}` stage, has an apdex violating SLO',
@@ -174,6 +178,7 @@ local sidekiqThanosAlerts(extraSelector) =
     serviceType='sidekiq',
     severity='s4',
     thresholdSLOValue=fixedApdexThreshold,
+    // aggregationSet=applicationSliAggregations.targetAggregationSet(applicationSlis.get('sidekiq_execution')),
     aggregationSet=aggregationSets.sidekiqWorkerExecutionSLIs,
     windows=['3d'],
     metricSelectorHash=extraSelector,
@@ -195,6 +200,7 @@ local sidekiqThanosAlerts(extraSelector) =
     serviceType='sidekiq',
     severity='s4',
     thresholdSLOValue=fixedErrorRateThreshold,
+    // aggregationSet=applicationSliAggregations.targetAggregationSet(applicationSlis.get('sidekiq_execution')),
     aggregationSet=aggregationSets.sidekiqWorkerExecutionSLIs,
     windows=['3d'],
     metricSelectorHash=extraSelector,

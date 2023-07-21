@@ -299,11 +299,11 @@ local sidekiqJobRate(counter, title, description, featureCategoriesSelector) =
     legendFormat='{{worker]}}',
     query=|||
       sum by (worker) (
-        rate(%(counter)s{
+        %(counter)s{
           environment="$environment",
           stage='$stage',
           feature_category=~'(%(featureCategories)s)'
-        }[$__interval])
+        }
       )
     ||| % {
       counter: counter,
@@ -561,13 +561,13 @@ local dashboard(groupKey, components=defaultComponents, displayEmptyGuidance=fal
           'Sidekiq',
           [
             sidekiqJobRate(
-              'sidekiq_jobs_completion_seconds_count',
+              'application_sli_aggregation:sidekiq_execution:ops:rate_5m',
               'Sidekiq Completion Rate',
               'The rate (Jobs per Second) at which jobs are completed after dequeue',
               featureCategoriesSelector
             ),
             sidekiqJobRate(
-              'sidekiq_jobs_failed_total',
+              'application_sli_aggregation:sidekiq_execution:error:rate_5m',
               'Sidekiq Error Rate',
               'The rate (Jobs per Second) at which jobs fail after dequeue',
               featureCategoriesSelector

@@ -1,3 +1,4 @@
+// TODO: Can we remove this?
 local executionTime(window) = {
   record: 'sidekiq_jobs_execution_time:%s' % [window],
   expr: 'sum by (environment, stage, shard) (rate(sidekiq_jobs_completion_seconds_sum[%s]))' % [window],

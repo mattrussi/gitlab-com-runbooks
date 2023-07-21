@@ -304,97 +304,81 @@ groups:
       )
   - record: gitlab_component_apdex:success:rate
     labels:
-      component: shard_default
+      component: sidekiq_execution
       stage: main
       tier: sv
       type: ops-gitlab-net
     expr: |
       sum by (env,environment) (
-        label_replace(sum by (env,environment) (
-          sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate1m{job="sidekiq",le="10",type="ops-gitlab-net",urgency="high"}
-        )
-        , "_c", "0", "", "")
-        or
-        label_replace(sum by (env,environment) (
-          sli_aggregations:sidekiq_jobs_queue_duration_seconds_bucket_rate1m{job="sidekiq",le="10",type="ops-gitlab-net",urgency="high"}
-        )
-        , "_c", "1", "", "")
-        or
-        label_replace(sum by (env,environment) (
-          sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate1m{job="sidekiq",le="300",type="ops-gitlab-net",urgency="low"}
-        )
-        , "_c", "2", "", "")
-        or
-        label_replace(sum by (env,environment) (
-          sli_aggregations:sidekiq_jobs_queue_duration_seconds_bucket_rate1m{job="sidekiq",le="60",type="ops-gitlab-net",urgency="low"}
-        )
-        , "_c", "3", "", "")
-        or
-        label_replace(sum by (env,environment) (
-          sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate1m{job="sidekiq",le="300",type="ops-gitlab-net",urgency="throttled"}
-        )
-        , "_c", "4", "", "")
+        sli_aggregations:gitlab_sli_sidekiq_execution_apdex_success_total_rate1m{type="ops-gitlab-net"}
       )
   - record: gitlab_component_apdex:weight:score
     labels:
-      component: shard_default
+      component: sidekiq_execution
       stage: main
       tier: sv
       type: ops-gitlab-net
     expr: |
       sum by (env,environment) (
-        label_replace(sum by (env,environment) (
-          sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate1m{job="sidekiq",le="+Inf",type="ops-gitlab-net",urgency="high"}
-        )
-        , "_c", "0", "", "")
-        or
-        label_replace(sum by (env,environment) (
-          sli_aggregations:sidekiq_jobs_queue_duration_seconds_bucket_rate1m{job="sidekiq",le="+Inf",type="ops-gitlab-net",urgency="high"}
-        )
-        , "_c", "1", "", "")
-        or
-        label_replace(sum by (env,environment) (
-          sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate1m{job="sidekiq",le="+Inf",type="ops-gitlab-net",urgency="low"}
-        )
-        , "_c", "2", "", "")
-        or
-        label_replace(sum by (env,environment) (
-          sli_aggregations:sidekiq_jobs_queue_duration_seconds_bucket_rate1m{job="sidekiq",le="+Inf",type="ops-gitlab-net",urgency="low"}
-        )
-        , "_c", "3", "", "")
-        or
-        label_replace(sum by (env,environment) (
-          sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate1m{job="sidekiq",le="+Inf",type="ops-gitlab-net",urgency="throttled"}
-        )
-        , "_c", "4", "", "")
+        sli_aggregations:gitlab_sli_sidekiq_execution_apdex_total_rate1m{type="ops-gitlab-net"}
       )
   - record: gitlab_component_ops:rate
     labels:
-      component: shard_default
+      component: sidekiq_execution
       stage: main
       tier: sv
       type: ops-gitlab-net
     expr: |
       sum by (env,environment) (
-        sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate1m{job="sidekiq",le="+Inf",type="ops-gitlab-net"}
+        sli_aggregations:gitlab_sli_sidekiq_execution_total_rate1m{type="ops-gitlab-net"}
       )
   - record: gitlab_component_errors:rate
     labels:
-      component: shard_default
+      component: sidekiq_execution
       stage: main
       tier: sv
       type: ops-gitlab-net
     expr: |
       (
         sum by (env,environment) (
-          sli_aggregations:sidekiq_jobs_failed_total_rate1m{job="sidekiq",type="ops-gitlab-net"}
+          sli_aggregations:gitlab_sli_sidekiq_execution_error_total_rate1m{type="ops-gitlab-net"}
         )
       )
       or
       (
         0 * group by(env,environment) (
-          gitlab_component_ops:rate{component="shard_default",stage="main",tier="sv",type="ops-gitlab-net"}
+          gitlab_component_ops:rate{component="sidekiq_execution",stage="main",tier="sv",type="ops-gitlab-net"}
         )
+      )
+  - record: gitlab_component_apdex:success:rate
+    labels:
+      component: sidekiq_queueing
+      stage: main
+      tier: sv
+      type: ops-gitlab-net
+    expr: |
+      sum by (env,environment) (
+        sli_aggregations:gitlab_sli_sidekiq_queueing_apdex_success_total_rate1m{type="ops-gitlab-net"}
+      )
+  - record: gitlab_component_apdex:weight:score
+    labels:
+      component: sidekiq_queueing
+      stage: main
+      tier: sv
+      type: ops-gitlab-net
+    expr: |
+      sum by (env,environment) (
+        sli_aggregations:gitlab_sli_sidekiq_queueing_apdex_total_rate1m{type="ops-gitlab-net"}
+      )
+  - record: gitlab_component_ops:rate
+    labels:
+      component: sidekiq_queueing
+      stage: main
+      tier: sv
+      type: ops-gitlab-net
+    expr: |
+      sum by (env,environment) (
+        sli_aggregations:gitlab_sli_sidekiq_queueing_apdex_total_rate1m{type="ops-gitlab-net"}
       )
   - record: gitlab_component_apdex:success:rate
     labels:
@@ -755,97 +739,81 @@ groups:
       )
   - record: gitlab_component_apdex:success:rate_5m
     labels:
-      component: shard_default
+      component: sidekiq_execution
       stage: main
       tier: sv
       type: ops-gitlab-net
     expr: |
       sum by (env,environment) (
-        label_replace(sum by (env,environment) (
-          sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate5m{job="sidekiq",le="10",type="ops-gitlab-net",urgency="high"}
-        )
-        , "_c", "0", "", "")
-        or
-        label_replace(sum by (env,environment) (
-          sli_aggregations:sidekiq_jobs_queue_duration_seconds_bucket_rate5m{job="sidekiq",le="10",type="ops-gitlab-net",urgency="high"}
-        )
-        , "_c", "1", "", "")
-        or
-        label_replace(sum by (env,environment) (
-          sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate5m{job="sidekiq",le="300",type="ops-gitlab-net",urgency="low"}
-        )
-        , "_c", "2", "", "")
-        or
-        label_replace(sum by (env,environment) (
-          sli_aggregations:sidekiq_jobs_queue_duration_seconds_bucket_rate5m{job="sidekiq",le="60",type="ops-gitlab-net",urgency="low"}
-        )
-        , "_c", "3", "", "")
-        or
-        label_replace(sum by (env,environment) (
-          sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate5m{job="sidekiq",le="300",type="ops-gitlab-net",urgency="throttled"}
-        )
-        , "_c", "4", "", "")
+        sli_aggregations:gitlab_sli_sidekiq_execution_apdex_success_total_rate5m{type="ops-gitlab-net"}
       )
   - record: gitlab_component_apdex:weight:score_5m
     labels:
-      component: shard_default
+      component: sidekiq_execution
       stage: main
       tier: sv
       type: ops-gitlab-net
     expr: |
       sum by (env,environment) (
-        label_replace(sum by (env,environment) (
-          sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate5m{job="sidekiq",le="+Inf",type="ops-gitlab-net",urgency="high"}
-        )
-        , "_c", "0", "", "")
-        or
-        label_replace(sum by (env,environment) (
-          sli_aggregations:sidekiq_jobs_queue_duration_seconds_bucket_rate5m{job="sidekiq",le="+Inf",type="ops-gitlab-net",urgency="high"}
-        )
-        , "_c", "1", "", "")
-        or
-        label_replace(sum by (env,environment) (
-          sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate5m{job="sidekiq",le="+Inf",type="ops-gitlab-net",urgency="low"}
-        )
-        , "_c", "2", "", "")
-        or
-        label_replace(sum by (env,environment) (
-          sli_aggregations:sidekiq_jobs_queue_duration_seconds_bucket_rate5m{job="sidekiq",le="+Inf",type="ops-gitlab-net",urgency="low"}
-        )
-        , "_c", "3", "", "")
-        or
-        label_replace(sum by (env,environment) (
-          sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate5m{job="sidekiq",le="+Inf",type="ops-gitlab-net",urgency="throttled"}
-        )
-        , "_c", "4", "", "")
+        sli_aggregations:gitlab_sli_sidekiq_execution_apdex_total_rate5m{type="ops-gitlab-net"}
       )
   - record: gitlab_component_ops:rate_5m
     labels:
-      component: shard_default
+      component: sidekiq_execution
       stage: main
       tier: sv
       type: ops-gitlab-net
     expr: |
       sum by (env,environment) (
-        sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate5m{job="sidekiq",le="+Inf",type="ops-gitlab-net"}
+        sli_aggregations:gitlab_sli_sidekiq_execution_total_rate5m{type="ops-gitlab-net"}
       )
   - record: gitlab_component_errors:rate_5m
     labels:
-      component: shard_default
+      component: sidekiq_execution
       stage: main
       tier: sv
       type: ops-gitlab-net
     expr: |
       (
         sum by (env,environment) (
-          sli_aggregations:sidekiq_jobs_failed_total_rate5m{job="sidekiq",type="ops-gitlab-net"}
+          sli_aggregations:gitlab_sli_sidekiq_execution_error_total_rate5m{type="ops-gitlab-net"}
         )
       )
       or
       (
         0 * group by(env,environment) (
-          gitlab_component_ops:rate_5m{component="shard_default",stage="main",tier="sv",type="ops-gitlab-net"}
+          gitlab_component_ops:rate_5m{component="sidekiq_execution",stage="main",tier="sv",type="ops-gitlab-net"}
         )
+      )
+  - record: gitlab_component_apdex:success:rate_5m
+    labels:
+      component: sidekiq_queueing
+      stage: main
+      tier: sv
+      type: ops-gitlab-net
+    expr: |
+      sum by (env,environment) (
+        sli_aggregations:gitlab_sli_sidekiq_queueing_apdex_success_total_rate5m{type="ops-gitlab-net"}
+      )
+  - record: gitlab_component_apdex:weight:score_5m
+    labels:
+      component: sidekiq_queueing
+      stage: main
+      tier: sv
+      type: ops-gitlab-net
+    expr: |
+      sum by (env,environment) (
+        sli_aggregations:gitlab_sli_sidekiq_queueing_apdex_total_rate5m{type="ops-gitlab-net"}
+      )
+  - record: gitlab_component_ops:rate_5m
+    labels:
+      component: sidekiq_queueing
+      stage: main
+      tier: sv
+      type: ops-gitlab-net
+    expr: |
+      sum by (env,environment) (
+        sli_aggregations:gitlab_sli_sidekiq_queueing_apdex_total_rate5m{type="ops-gitlab-net"}
       )
   - record: gitlab_component_apdex:success:rate_5m
     labels:
@@ -1206,97 +1174,81 @@ groups:
       )
   - record: gitlab_component_apdex:success:rate_30m
     labels:
-      component: shard_default
+      component: sidekiq_execution
       stage: main
       tier: sv
       type: ops-gitlab-net
     expr: |
       sum by (env,environment) (
-        label_replace(sum by (env,environment) (
-          sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate30m{job="sidekiq",le="10",type="ops-gitlab-net",urgency="high"}
-        )
-        , "_c", "0", "", "")
-        or
-        label_replace(sum by (env,environment) (
-          sli_aggregations:sidekiq_jobs_queue_duration_seconds_bucket_rate30m{job="sidekiq",le="10",type="ops-gitlab-net",urgency="high"}
-        )
-        , "_c", "1", "", "")
-        or
-        label_replace(sum by (env,environment) (
-          sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate30m{job="sidekiq",le="300",type="ops-gitlab-net",urgency="low"}
-        )
-        , "_c", "2", "", "")
-        or
-        label_replace(sum by (env,environment) (
-          sli_aggregations:sidekiq_jobs_queue_duration_seconds_bucket_rate30m{job="sidekiq",le="60",type="ops-gitlab-net",urgency="low"}
-        )
-        , "_c", "3", "", "")
-        or
-        label_replace(sum by (env,environment) (
-          sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate30m{job="sidekiq",le="300",type="ops-gitlab-net",urgency="throttled"}
-        )
-        , "_c", "4", "", "")
+        sli_aggregations:gitlab_sli_sidekiq_execution_apdex_success_total_rate30m{type="ops-gitlab-net"}
       )
   - record: gitlab_component_apdex:weight:score_30m
     labels:
-      component: shard_default
+      component: sidekiq_execution
       stage: main
       tier: sv
       type: ops-gitlab-net
     expr: |
       sum by (env,environment) (
-        label_replace(sum by (env,environment) (
-          sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate30m{job="sidekiq",le="+Inf",type="ops-gitlab-net",urgency="high"}
-        )
-        , "_c", "0", "", "")
-        or
-        label_replace(sum by (env,environment) (
-          sli_aggregations:sidekiq_jobs_queue_duration_seconds_bucket_rate30m{job="sidekiq",le="+Inf",type="ops-gitlab-net",urgency="high"}
-        )
-        , "_c", "1", "", "")
-        or
-        label_replace(sum by (env,environment) (
-          sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate30m{job="sidekiq",le="+Inf",type="ops-gitlab-net",urgency="low"}
-        )
-        , "_c", "2", "", "")
-        or
-        label_replace(sum by (env,environment) (
-          sli_aggregations:sidekiq_jobs_queue_duration_seconds_bucket_rate30m{job="sidekiq",le="+Inf",type="ops-gitlab-net",urgency="low"}
-        )
-        , "_c", "3", "", "")
-        or
-        label_replace(sum by (env,environment) (
-          sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate30m{job="sidekiq",le="+Inf",type="ops-gitlab-net",urgency="throttled"}
-        )
-        , "_c", "4", "", "")
+        sli_aggregations:gitlab_sli_sidekiq_execution_apdex_total_rate30m{type="ops-gitlab-net"}
       )
   - record: gitlab_component_ops:rate_30m
     labels:
-      component: shard_default
+      component: sidekiq_execution
       stage: main
       tier: sv
       type: ops-gitlab-net
     expr: |
       sum by (env,environment) (
-        sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate30m{job="sidekiq",le="+Inf",type="ops-gitlab-net"}
+        sli_aggregations:gitlab_sli_sidekiq_execution_total_rate30m{type="ops-gitlab-net"}
       )
   - record: gitlab_component_errors:rate_30m
     labels:
-      component: shard_default
+      component: sidekiq_execution
       stage: main
       tier: sv
       type: ops-gitlab-net
     expr: |
       (
         sum by (env,environment) (
-          sli_aggregations:sidekiq_jobs_failed_total_rate30m{job="sidekiq",type="ops-gitlab-net"}
+          sli_aggregations:gitlab_sli_sidekiq_execution_error_total_rate30m{type="ops-gitlab-net"}
         )
       )
       or
       (
         0 * group by(env,environment) (
-          gitlab_component_ops:rate_30m{component="shard_default",stage="main",tier="sv",type="ops-gitlab-net"}
+          gitlab_component_ops:rate_30m{component="sidekiq_execution",stage="main",tier="sv",type="ops-gitlab-net"}
         )
+      )
+  - record: gitlab_component_apdex:success:rate_30m
+    labels:
+      component: sidekiq_queueing
+      stage: main
+      tier: sv
+      type: ops-gitlab-net
+    expr: |
+      sum by (env,environment) (
+        sli_aggregations:gitlab_sli_sidekiq_queueing_apdex_success_total_rate30m{type="ops-gitlab-net"}
+      )
+  - record: gitlab_component_apdex:weight:score_30m
+    labels:
+      component: sidekiq_queueing
+      stage: main
+      tier: sv
+      type: ops-gitlab-net
+    expr: |
+      sum by (env,environment) (
+        sli_aggregations:gitlab_sli_sidekiq_queueing_apdex_total_rate30m{type="ops-gitlab-net"}
+      )
+  - record: gitlab_component_ops:rate_30m
+    labels:
+      component: sidekiq_queueing
+      stage: main
+      tier: sv
+      type: ops-gitlab-net
+    expr: |
+      sum by (env,environment) (
+        sli_aggregations:gitlab_sli_sidekiq_queueing_apdex_total_rate30m{type="ops-gitlab-net"}
       )
   - record: gitlab_component_apdex:success:rate_30m
     labels:
@@ -1660,101 +1612,81 @@ groups:
       )
   - record: gitlab_component_apdex:success:rate_1h
     labels:
-      component: shard_default
+      component: sidekiq_execution
       stage: main
       tier: sv
       type: ops-gitlab-net
-      upscale_source: "yes"
     expr: |
       sum by (env,environment) (
-        label_replace(sum by (env,environment) (
-          sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate1h{job="sidekiq",le="10",type="ops-gitlab-net",urgency="high"}
-        )
-        , "_c", "0", "", "")
-        or
-        label_replace(sum by (env,environment) (
-          sli_aggregations:sidekiq_jobs_queue_duration_seconds_bucket_rate1h{job="sidekiq",le="10",type="ops-gitlab-net",urgency="high"}
-        )
-        , "_c", "1", "", "")
-        or
-        label_replace(sum by (env,environment) (
-          sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate1h{job="sidekiq",le="300",type="ops-gitlab-net",urgency="low"}
-        )
-        , "_c", "2", "", "")
-        or
-        label_replace(sum by (env,environment) (
-          sli_aggregations:sidekiq_jobs_queue_duration_seconds_bucket_rate1h{job="sidekiq",le="60",type="ops-gitlab-net",urgency="low"}
-        )
-        , "_c", "3", "", "")
-        or
-        label_replace(sum by (env,environment) (
-          sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate1h{job="sidekiq",le="300",type="ops-gitlab-net",urgency="throttled"}
-        )
-        , "_c", "4", "", "")
+        sli_aggregations:gitlab_sli_sidekiq_execution_apdex_success_total_rate1h{type="ops-gitlab-net"}
       )
   - record: gitlab_component_apdex:weight:score_1h
     labels:
-      component: shard_default
+      component: sidekiq_execution
       stage: main
       tier: sv
       type: ops-gitlab-net
-      upscale_source: "yes"
     expr: |
       sum by (env,environment) (
-        label_replace(sum by (env,environment) (
-          sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate1h{job="sidekiq",le="+Inf",type="ops-gitlab-net",urgency="high"}
-        )
-        , "_c", "0", "", "")
-        or
-        label_replace(sum by (env,environment) (
-          sli_aggregations:sidekiq_jobs_queue_duration_seconds_bucket_rate1h{job="sidekiq",le="+Inf",type="ops-gitlab-net",urgency="high"}
-        )
-        , "_c", "1", "", "")
-        or
-        label_replace(sum by (env,environment) (
-          sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate1h{job="sidekiq",le="+Inf",type="ops-gitlab-net",urgency="low"}
-        )
-        , "_c", "2", "", "")
-        or
-        label_replace(sum by (env,environment) (
-          sli_aggregations:sidekiq_jobs_queue_duration_seconds_bucket_rate1h{job="sidekiq",le="+Inf",type="ops-gitlab-net",urgency="low"}
-        )
-        , "_c", "3", "", "")
-        or
-        label_replace(sum by (env,environment) (
-          sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate1h{job="sidekiq",le="+Inf",type="ops-gitlab-net",urgency="throttled"}
-        )
-        , "_c", "4", "", "")
+        sli_aggregations:gitlab_sli_sidekiq_execution_apdex_total_rate1h{type="ops-gitlab-net"}
       )
   - record: gitlab_component_ops:rate_1h
     labels:
-      component: shard_default
+      component: sidekiq_execution
       stage: main
       tier: sv
       type: ops-gitlab-net
-      upscale_source: "yes"
     expr: |
       sum by (env,environment) (
-        sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate1h{job="sidekiq",le="+Inf",type="ops-gitlab-net"}
+        sli_aggregations:gitlab_sli_sidekiq_execution_total_rate1h{type="ops-gitlab-net"}
       )
   - record: gitlab_component_errors:rate_1h
     labels:
-      component: shard_default
+      component: sidekiq_execution
       stage: main
       tier: sv
       type: ops-gitlab-net
-      upscale_source: "yes"
     expr: |
       (
         sum by (env,environment) (
-          sli_aggregations:sidekiq_jobs_failed_total_rate1h{job="sidekiq",type="ops-gitlab-net"}
+          sli_aggregations:gitlab_sli_sidekiq_execution_error_total_rate1h{type="ops-gitlab-net"}
         )
       )
       or
       (
         0 * group by(env,environment) (
-          gitlab_component_ops:rate_1h{component="shard_default",stage="main",tier="sv",type="ops-gitlab-net",upscale_source="yes"}
+          gitlab_component_ops:rate_1h{component="sidekiq_execution",stage="main",tier="sv",type="ops-gitlab-net"}
         )
+      )
+  - record: gitlab_component_apdex:success:rate_1h
+    labels:
+      component: sidekiq_queueing
+      stage: main
+      tier: sv
+      type: ops-gitlab-net
+    expr: |
+      sum by (env,environment) (
+        sli_aggregations:gitlab_sli_sidekiq_queueing_apdex_success_total_rate1h{type="ops-gitlab-net"}
+      )
+  - record: gitlab_component_apdex:weight:score_1h
+    labels:
+      component: sidekiq_queueing
+      stage: main
+      tier: sv
+      type: ops-gitlab-net
+    expr: |
+      sum by (env,environment) (
+        sli_aggregations:gitlab_sli_sidekiq_queueing_apdex_total_rate1h{type="ops-gitlab-net"}
+      )
+  - record: gitlab_component_ops:rate_1h
+    labels:
+      component: sidekiq_queueing
+      stage: main
+      tier: sv
+      type: ops-gitlab-net
+    expr: |
+      sum by (env,environment) (
+        sli_aggregations:gitlab_sli_sidekiq_queueing_apdex_total_rate1h{type="ops-gitlab-net"}
       )
   - record: gitlab_component_apdex:success:rate_1h
     labels:
@@ -2077,6 +2009,84 @@ groups:
       )
   - record: gitlab_component_apdex:success:rate_6h
     labels:
+      component: sidekiq_execution
+      stage: main
+      tier: sv
+      type: ops-gitlab-net
+    expr: |
+      sum by (env,environment) (
+        sli_aggregations:gitlab_sli_sidekiq_execution_apdex_success_total_rate6h{type="ops-gitlab-net"}
+      )
+  - record: gitlab_component_apdex:weight:score_6h
+    labels:
+      component: sidekiq_execution
+      stage: main
+      tier: sv
+      type: ops-gitlab-net
+    expr: |
+      sum by (env,environment) (
+        sli_aggregations:gitlab_sli_sidekiq_execution_apdex_total_rate6h{type="ops-gitlab-net"}
+      )
+  - record: gitlab_component_ops:rate_6h
+    labels:
+      component: sidekiq_execution
+      stage: main
+      tier: sv
+      type: ops-gitlab-net
+    expr: |
+      sum by (env,environment) (
+        sli_aggregations:gitlab_sli_sidekiq_execution_total_rate6h{type="ops-gitlab-net"}
+      )
+  - record: gitlab_component_errors:rate_6h
+    labels:
+      component: sidekiq_execution
+      stage: main
+      tier: sv
+      type: ops-gitlab-net
+    expr: |
+      (
+        sum by (env,environment) (
+          sli_aggregations:gitlab_sli_sidekiq_execution_error_total_rate6h{type="ops-gitlab-net"}
+        )
+      )
+      or
+      (
+        0 * group by(env,environment) (
+          gitlab_component_ops:rate_6h{component="sidekiq_execution",stage="main",tier="sv",type="ops-gitlab-net"}
+        )
+      )
+  - record: gitlab_component_apdex:success:rate_6h
+    labels:
+      component: sidekiq_queueing
+      stage: main
+      tier: sv
+      type: ops-gitlab-net
+    expr: |
+      sum by (env,environment) (
+        sli_aggregations:gitlab_sli_sidekiq_queueing_apdex_success_total_rate6h{type="ops-gitlab-net"}
+      )
+  - record: gitlab_component_apdex:weight:score_6h
+    labels:
+      component: sidekiq_queueing
+      stage: main
+      tier: sv
+      type: ops-gitlab-net
+    expr: |
+      sum by (env,environment) (
+        sli_aggregations:gitlab_sli_sidekiq_queueing_apdex_total_rate6h{type="ops-gitlab-net"}
+      )
+  - record: gitlab_component_ops:rate_6h
+    labels:
+      component: sidekiq_queueing
+      stage: main
+      tier: sv
+      type: ops-gitlab-net
+    expr: |
+      sum by (env,environment) (
+        sli_aggregations:gitlab_sli_sidekiq_queueing_apdex_total_rate6h{type="ops-gitlab-net"}
+      )
+  - record: gitlab_component_apdex:success:rate_6h
+    labels:
       component: workhorse
       stage: main
       tier: sv
@@ -2181,7 +2191,16 @@ groups:
     expr: "1"
   - record: gitlab_component_service:mapping
     labels:
-      component: shard_default
+      component: sidekiq_execution
+      global_aggregation: "no"
+      regional_aggregation: "no"
+      service_aggregation: "yes"
+      tier: sv
+      type: ops-gitlab-net
+    expr: "1"
+  - record: gitlab_component_service:mapping
+    labels:
+      component: sidekiq_queueing
       global_aggregation: "no"
       regional_aggregation: "no"
       service_aggregation: "yes"

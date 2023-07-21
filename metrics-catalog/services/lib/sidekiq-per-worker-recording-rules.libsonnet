@@ -8,39 +8,6 @@ local histogramApdex = metricsCatalog.histogramApdex;
 local rateMetric = metricsCatalog.rateMetric;
 local combined = metricsCatalog.combined;
 
-
-// This is used to calculate the queue apdex across all queues
-local combinedQueueApdex = combined([
-  histogramApdex(
-    histogram='sidekiq_jobs_queue_duration_seconds_bucket',
-    selector={ urgency: 'high' },
-    satisfiedThreshold=sidekiqHelpers.slos.urgent.queueingDurationSeconds,
-  ),
-  histogramApdex(
-    histogram='sidekiq_jobs_queue_duration_seconds_bucket',
-    selector={ urgency: 'low' },
-    satisfiedThreshold=sidekiqHelpers.slos.lowUrgency.queueingDurationSeconds,
-  ),
-]);
-
-local combinedExecutionApdex = combined([
-  histogramApdex(
-    histogram='sidekiq_jobs_completion_seconds_bucket',
-    selector={ urgency: 'high' },
-    satisfiedThreshold=sidekiqHelpers.slos.urgent.executionDurationSeconds,
-  ),
-  histogramApdex(
-    histogram='sidekiq_jobs_completion_seconds_bucket',
-    selector={ urgency: 'low' },
-    satisfiedThreshold=sidekiqHelpers.slos.lowUrgency.executionDurationSeconds,
-  ),
-  histogramApdex(
-    histogram='sidekiq_jobs_completion_seconds_bucket',
-    selector={ urgency: 'throttled' },
-    satisfiedThreshold=sidekiqHelpers.slos.throttled.executionDurationSeconds,
-  ),
-]);
-
 local queueRate = rateMetric(
   counter='sidekiq_enqueued_jobs_total',
   selector={},
@@ -49,11 +16,6 @@ local queueRate = rateMetric(
 local requestRate = rateMetric(
   counter='sidekiq_jobs_completion_seconds_bucket',
   selector={ le: '+Inf' },
-);
-
-local errorRate = rateMetric(
-  counter='sidekiq_jobs_failed_total',
-  selector={},
 );
 
 local executionRulesForBurnRate(aggregationSet, burnRate, staticLabels={}) =
@@ -72,42 +34,12 @@ local executionRulesForBurnRate(aggregationSet, burnRate, staticLabels={}) =
         expr: expr,
       }];
 
-  // Key metric: Execution apdex success (rate)
-  conditionalAppend(
-    record=aggregationSet.getApdexSuccessRateMetricForBurnRate(burnRate, required=false),
-    expr=combinedExecutionApdex.apdexSuccessRateQuery(aggregationLabelsWithoutStaticLabels, {}, burnRate)
-  )
-  +
-  // Key metric: Execution apdex (weight score)
-  conditionalAppend(
-    record=aggregationSet.getApdexWeightMetricForBurnRate(burnRate, required=false),
-    expr=combinedExecutionApdex.apdexWeightQuery(aggregationLabelsWithoutStaticLabels, {}, burnRate),
-  )
-  +
   // Key metric: QPS
   conditionalAppend(
     record=aggregationSet.getOpsRateMetricForBurnRate(burnRate, required=false),
     expr=requestRate.aggregatedRateQuery(aggregationLabelsWithoutStaticLabels, {}, burnRate)
   )
-  +
-  // Key metric: Errors per Second
-  conditionalAppend(
-    record=aggregationSet.getErrorRateMetricForBurnRate(burnRate, required=false),
-    expr=|||
-      %(errorRate)s
-      or
-      (
-        0 * group by (%(aggregationLabels)s) (
-          %(executionRate)s{%(staticLabels)s}
-        )
-      )
-    ||| % {
-      errorRate: strings.chomp(errorRate.aggregatedRateQuery(aggregationLabelsWithoutStaticLabels, {}, burnRate)),
-      aggregationLabels: aggregations.serialize(aggregationLabelsWithoutStaticLabels),
-      executionRate: aggregationSet.getOpsRateMetricForBurnRate(burnRate, required=true),
-      staticLabels: selectors.serializeHash(staticLabels),
-    }
-  );
+;
 
 local queueRulesForBurnRate(aggregationSet, burnRate, staticLabels={}) =
   local conditionalAppend(record, expr) =
@@ -118,18 +50,6 @@ local queueRulesForBurnRate(aggregationSet, burnRate, staticLabels={}) =
         expr: expr,
       }];
 
-  // Key metric: Queueing apdex success (rate)
-  conditionalAppend(
-    record=aggregationSet.getApdexSuccessRateMetricForBurnRate(burnRate, required=false),
-    expr=combinedQueueApdex.apdexSuccessRateQuery(aggregationSet.labels, staticLabels, burnRate)
-  )
-  +
-  // Key metric: Queueing apdex (weight score)
-  conditionalAppend(
-    record=aggregationSet.getApdexWeightMetricForBurnRate(burnRate, required=false),
-    expr=combinedQueueApdex.apdexWeightQuery(aggregationSet.labels, staticLabels, burnRate)
-  )
-  +
   // Key metric: Queueing operations/second
   conditionalAppend(
     record=aggregationSet.getOpsRateMetricForBurnRate(burnRate, required=false),
@@ -137,9 +57,7 @@ local queueRulesForBurnRate(aggregationSet, burnRate, staticLabels={}) =
   );
 
 {
-  // Record queue apdex, execution apdex, error rates, QPS metrics
-  // for each worker, similar to how we record these for each
-  // service
+  // Record enqueueing RPS and job execution RPS
   perWorkerRecordingRules(rangeInterval)::
     queueRulesForBurnRate(aggregationSets.sidekiqWorkerQueueSourceSLIs, rangeInterval)
     +

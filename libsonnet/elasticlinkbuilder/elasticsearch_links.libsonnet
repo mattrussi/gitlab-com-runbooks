@@ -301,7 +301,7 @@ local buildElasticLineTotalDurationVizURL(index, filters, luceneQueries=[], late
 
   indexCatalog[index].kibanaEndpoint + '#/visualize/create?type=line&indexPattern=' + indexCatalog[index].indexPattern + '&_a=' + rison.encode(applicationState) + globalState(grafanaTimeRange);
 
-local buildElasticLinePercentileVizURL(index, filters, luceneQueries=[], latencyField, splitSeries=false) =
+local buildElasticLinePercentileVizURL(index, filters, luceneQueries=[], latencyField, splitSeries=false, percentile) =
   local ic = indexCatalog[index];
 
   local aggs =
@@ -312,7 +312,7 @@ local buildElasticLinePercentileVizURL(index, filters, luceneQueries=[], latency
         params: {
           field: latencyField,
           percents: [
-            95,
+            percentile,
           ],
         },
         schema: 'metric',
@@ -473,12 +473,12 @@ local buildElasticLinePercentileVizURL(index, filters, luceneQueries=[], latency
     buildElasticLineTotalDurationVizURL(index, filters, luceneQueries, fieldWithDefault, splitSeries=splitSeries),
 
   // Given an index, and a set of filters, returns a URL to a Kibana percentile visualization
-  buildElasticLinePercentileVizURL(index, filters, luceneQueries=[], field=null, splitSeries=false)::
+  buildElasticLinePercentileVizURL(index, filters, luceneQueries=[], field=null, splitSeries=false, percentile=95)::
     local fieldWithDefault = if field == null then
       indexCatalog[index].defaultLatencyField
     else
       field;
-    buildElasticLinePercentileVizURL(index, filters, luceneQueries, fieldWithDefault, splitSeries=splitSeries),
+    buildElasticLinePercentileVizURL(index, filters, luceneQueries, fieldWithDefault, splitSeries=splitSeries, percentile=percentile),
 
   // Returns true iff the named index supports request graphs (some do not have a concept of 'requests')
   indexSupportsRequestGraphs(index)::

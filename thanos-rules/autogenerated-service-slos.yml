@@ -1074,13 +1074,25 @@ groups:
     expr: "0.001000"
   - record: slo:min:events:gitlab_service_apdex:ratio
     labels:
-      component: shard_default
+      component: sidekiq_execution
       tier: sv
       type: ops-gitlab-net
     expr: "0.998000"
   - record: slo:max:events:gitlab_service_errors:ratio
     labels:
-      component: shard_default
+      component: sidekiq_execution
+      tier: sv
+      type: ops-gitlab-net
+    expr: "0.001000"
+  - record: slo:min:events:gitlab_service_apdex:ratio
+    labels:
+      component: sidekiq_queueing
+      tier: sv
+      type: ops-gitlab-net
+    expr: "0.998000"
+  - record: slo:max:events:gitlab_service_errors:ratio
+    labels:
+      component: sidekiq_queueing
       tier: sv
       type: ops-gitlab-net
     expr: "0.001000"
@@ -3390,7 +3402,16 @@ groups:
     expr: "1"
   - record: gitlab_component_service:mapping
     labels:
-      component: shard_default
+      component: sidekiq_execution
+      global_aggregation: "no"
+      regional_aggregation: "no"
+      service_aggregation: "yes"
+      tier: sv
+      type: ops-gitlab-net
+    expr: "1"
+  - record: gitlab_component_service:mapping
+    labels:
+      component: sidekiq_queueing
       global_aggregation: "no"
       regional_aggregation: "no"
       service_aggregation: "yes"

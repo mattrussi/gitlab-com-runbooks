@@ -60,11 +60,10 @@ metricsCatalog.serviceDefinition({
   // the appropriate aggregations based on this set.
   // Use sparingly, and don't overuse.
   recordingRuleMetrics: [
-    // Although not used here, below 3 intermediate rules are still being used in
+    // TODO: Although not used here, below 3 intermediate rules are still being used in
     // mailroom, ops-gitlab-net, and various dashboards
     'sidekiq_jobs_completion_seconds_bucket',
     'sidekiq_jobs_queue_duration_seconds_bucket',
-    'sidekiq_jobs_failed_total',
   ] + (
     sliLibrary.get('sidekiq_execution').recordingRuleMetrics
     + sliLibrary.get('sidekiq_queueing').recordingRuleMetrics
