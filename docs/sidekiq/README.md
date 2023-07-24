@@ -53,6 +53,7 @@
 * [Sidekiq queue migration](queue-migration.md)
 * [Poking around at sidekiq's running state](sidekiq-inspection.md)
 * [Sidekiq queue no longer being processed](sidekiq-queue-not-being-processed.md)
+* [Sidekiq SLIs](sidekiq-slis.md)
 * [A survival guide for SREs to working with Sidekiq at GitLab](sidekiq-survival-guide-for-sres.md)
 * [sidekiq_error_rate_high.md](sidekiq_error_rate_high.md)
 * [sidekiq_stats_no_longer_showing.md](sidekiq_stats_no_longer_showing.md)
