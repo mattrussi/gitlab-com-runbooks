@@ -206,6 +206,7 @@ metricsCatalog.serviceDefinition({
     toolingLinks: [
       toolingLinks.kibana(title='Sidekiq queueing', index='sidekiq_queueing', type='sidekiq'),
     ],
+    featureCategory: 'not_owned',
   }),
 
   // Special per-worker recording rules

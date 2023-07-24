@@ -109,7 +109,9 @@ local overviewDashboard(
         serviceType=type,
         aggregationSet=aggregationSets.componentSLIs,
         startRow=20,
-        selectorHash=selectorHash
+        selectorHash=selectorHash,
+        expectMultipleSeries=expectMultipleSeries,
+        shardAggregationSet=std.get(aggregationSets, 'shardComponentSLIs'),
       )
     )
     .addPanels(

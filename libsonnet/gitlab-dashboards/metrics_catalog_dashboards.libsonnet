@@ -64,16 +64,17 @@ local sliOverviewMatrixRow(
   aggregationSet,
   legendFormatPrefix,
   expectMultipleSeries,
+  shardAggregationSet=null,  // replaces aggregationSet if exists
       ) =
   local typeSelector = if serviceType == null then {} else { type: serviceType };
-  local shardSelector = if sli.shardLevelMonitoring then
+  local shardSelector = if shardAggregationSet != null && sli.shardLevelMonitoring then
     { shard: { re: '$shard' } }
   else
     {};
   local selectorHashWithExtras = selectorHash { component: sli.name } + typeSelector + shardSelector;
 
-  local legendFormatPrefixWithShard = if sli.shardLevelMonitoring then
-    '%(sliName)s - %(shard)s' % { sliName: sli.name, shard: '{{ shard }}' }
+  local legendFormatPrefixWithShard = if shardAggregationSet != null && sli.shardLevelMonitoring then
+    '%(sliName)s - %(shard)s shard' % { sliName: sli.name, shard: '{{ shard }}' }
   else
     sli.name;
 
@@ -86,7 +87,7 @@ local sliOverviewMatrixRow(
   local columns =
     singleMetricRow.row(
       serviceType=serviceType,
-      aggregationSet=if sli.shardLevelMonitoring then aggregationSets.shardComponentSLIs else aggregationSet,
+      aggregationSet=if shardAggregationSet != null && sli.shardLevelMonitoring then shardAggregationSet else aggregationSet,
       selectorHash=selectorHashWithExtras,
       titlePrefix='%(sliName)s SLI' % formatConfig,
       stableIdPrefix='sli-%(sliName)s' % formatConfig,
@@ -205,7 +206,8 @@ local sliDetailErrorRatePanel(
     startRow,
     selectorHash,
     legendFormatPrefix='',
-    expectMultipleSeries=false
+    expectMultipleSeries=false,
+    shardAggregationSet=null,
   )::
     local service = metricsCatalog.getService(serviceType);
     [
@@ -223,6 +225,7 @@ local sliDetailErrorRatePanel(
               startRow=startRow + 1 + i * 10,
               legendFormatPrefix=legendFormatPrefix,
               expectMultipleSeries=expectMultipleSeries,
+              shardAggregationSet=shardAggregationSet,
             ), std.objectFields(service.serviceLevelIndicators)
         )
       )
