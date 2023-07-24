@@ -557,12 +557,12 @@ groups:
       (
         (
           gitlab_component_errors:ratio_1h{component="saas_linux_runner_image_pull_failures",env="gprd",monitor="global",type="ci-runners"}
-          > (14.4 * 0.050000)
+          > (14.4 * 0.010000)
         )
         and
         (
           gitlab_component_errors:ratio_5m{component="saas_linux_runner_image_pull_failures",env="gprd",monitor="global",type="ci-runners"}
-          > (14.4 * 0.050000)
+          > (14.4 * 0.010000)
         )
       )
       and on(env,environment,tier,type,stage,component)
@@ -607,12 +607,12 @@ groups:
       (
         (
           gitlab_component_errors:ratio_6h{component="saas_linux_runner_image_pull_failures",env="gprd",monitor="global",type="ci-runners"}
-          > (6 * 0.050000)
+          > (6 * 0.010000)
         )
         and
         (
           gitlab_component_errors:ratio_30m{component="saas_linux_runner_image_pull_failures",env="gprd",monitor="global",type="ci-runners"}
-          > (6 * 0.050000)
+          > (6 * 0.010000)
         )
       )
       and on(env,environment,tier,type,stage,component)
