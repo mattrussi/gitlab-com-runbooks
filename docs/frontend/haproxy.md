@@ -176,7 +176,7 @@ the backend:
 ### get-server-state
 
 ```
-chef-repo % ./bin/get-server-state gstg
+chef-repo$ ./bin/get-server-state gstg
 Fetching server state...
       3 fe #:
       3 fe 429_slow_down/BACKEND: UP
@@ -283,12 +283,12 @@ Example Matchers:
 Be sure to put a link to an issue in the alert silence comment.
 
 ```
-Sets server state on frontend lbs
-./bin/set-server-state {gprd,gstg} <ready|drain|maint> [filter]
+# Sets server state on frontend lbs
+chef-repo$ ./bin/set-server-state {gprd,gstg} <ready|drain|maint> [filter]
 
 Examples:
-   ./bin/set-server-state gstg drain git-10  # set git-10 to drain
-   ./bin/set-server-state gstg ready git-10  # set git-10 to ready
+   chef-repo$ ./bin/set-server-state gstg drain git-10  # set git-10 to drain
+   chef-repo$ ./bin/set-server-state gstg ready git-10  # set git-10 to ready
 ```
 
 Here is a full example of setting server git-01 in gstg to the `DRAIN` state:
