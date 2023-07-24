@@ -11,8 +11,7 @@
     - [Elastic Query DSL](#elastic-query-dsl)
     - [Lucene Query Language](#lucene-query-language)
     - [Kibana Query Language](#kibana-query-language)
-  - [Visualize application](#visualize-application)
-  - [Dashboard application](#dashboard-application)
+  - [Dashboard and Visualizations](#dashboard-and-visualizations)
   - [Kubernetes](#kubernetes)
 
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
@@ -30,7 +29,11 @@ Kibana for other (e.g. indexing) clusters can be reached by going to Elastic Clo
 
 ## Timezone in Kibana
 
-Before providing screens/information from Kibana, set/check that your timezone in Kibana is UTC. It will be easier to understand provided information for you and other team members. Timezone can be set in `Settings->Advanced->dateFormat:tz->UTC`.
+Before providing screens/information from Kibana, set/check that your timezone in Kibana is UTC. It will be easier to understand provided information for you and other team members.
+
+  1. Click on `≡` icon on the top right corner.
+  1. Expand `Management` section and under `Kibana` click on `Advanced Settings`.
+  1. Make sure *Time zone* (`dateFormat:tz`) is set to `UTC`.
 
 # How-to guides
 
@@ -50,9 +53,11 @@ Before providing screens/information from Kibana, set/check that your timezone i
 
 ### Kibana Query Language
 
-## Visualize application
+<https://www.elastic.co/guide/en/kibana/8.7/kuery-query.html>
 
-## Dashboard application
+## Dashboard and Visualizations
+
+<https://www.elastic.co/guide/en/kibana/8.7/dashboard.html>
 
 ## Kubernetes
 
