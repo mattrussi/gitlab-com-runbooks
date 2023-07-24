@@ -6,4 +6,8 @@
 //
 // Blank values will be ignored.
 {
+  product_analytics: [
+    'product_analytics_visualization',
+    'product_analytics_data_management',
+  ],
 }

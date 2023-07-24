@@ -281,14 +281,14 @@ groups:
       product_stage: mobile
       stage_group: mobile_devops
     expr: "1"
-- name: 'Stage group Ignored components: monitor - Observability'
+- name: 'Stage group Ignored components: analytics - Observability'
   interval: 1m
   partial_response_strategy: warn
   rules:
   - record: gitlab:ignored_component:stage_group
     labels:
       component: graphql_query
-      product_stage: monitor
+      product_stage: analytics
       stage_group: observability
     expr: "1"
 - name: 'Stage group Ignored components: plan - Optimize'

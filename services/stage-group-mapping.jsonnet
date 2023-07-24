@@ -212,16 +212,6 @@
       'service_desk',
     ],
   },
-  observability: {
-    name: 'Observability',
-    stage: 'monitor',
-    feature_categories: [
-      'metrics',
-      'tracing',
-      'logging',
-      'error_tracking',
-    ],
-  },
   security_policies: {
     name: 'Security Policies',
     stage: 'govern',
@@ -259,7 +249,18 @@
     name: 'Product Analytics',
     stage: 'analytics',
     feature_categories: [
-      'product_analytics',
+      'product_analytics_visualization',
+      'product_analytics_data_management',
+    ],
+  },
+  observability: {
+    name: 'Observability',
+    stage: 'analytics',
+    feature_categories: [
+      'metrics',
+      'tracing',
+      'logging',
+      'error_tracking',
     ],
   },
   purchase: {
@@ -429,6 +430,14 @@
     stage: 'platforms',
     feature_categories: [
       'pubsec_services',
+    ],
+  },
+  ai_framework: {
+    name: 'AI Framework',
+    stage: 'modelops',
+    feature_categories: [
+      'ai_abstraction_layer',
+      'gitlab_duo_chat',
     ],
   },
   ai_assisted: {
