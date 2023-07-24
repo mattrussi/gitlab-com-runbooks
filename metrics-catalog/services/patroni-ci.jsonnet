@@ -42,4 +42,20 @@ metricsCatalog.serviceDefinition(
     },
   }
   + patroniHelpers.gitlabcomObservabilityToolingForPatroni('patroni-ci')
+  +
+  {
+    capacityPlanning: {
+      components: [
+        {
+          name: 'memory',
+          parameters: {
+            changepoints: [
+              '2023-04-26',  // Introduction of backup node: https://gitlab.com/gitlab-com/gl-infra/capacity-planning/-/issues/1026#note_1404708663
+              '2023-04-28',
+            ],
+          },
+        },
+      ],
+    },
+  }
 )

@@ -44,4 +44,19 @@ metricsCatalog.serviceDefinition(
     },
   }
   + redisHelpers.gitlabcomObservabilityToolingForRedis('redis-cache')
+  +
+  {
+    capacityPlanning: {
+      components: [
+        {
+          name: 'redis_primary_cpu',
+          parameters: {
+            changepoints: [
+              '2023-02-01',  // repository-cache split
+            ],
+          },
+        },
+      ],
+    },
+  }
 )

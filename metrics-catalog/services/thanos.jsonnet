@@ -26,7 +26,9 @@ metricsCatalog.serviceDefinition({
 
   tags: ['golang', 'thanos'],
 
-  capacityPlanningEnvironment: staticLabels.environment,
+  capacityPlanning: {
+    environment: staticLabels.environment,
+  },
 
   monitoringThresholds: {
     apdexScore: 0.999,

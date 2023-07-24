@@ -215,4 +215,16 @@ metricsCatalog.serviceDefinition({
     // across multiple burn rates
     perWorkerRecordingRules,
   ],
+  capacityPlanning: {
+    components: [
+      {
+        name: 'rails_db_connection_pool',
+        parameters: {
+          changepoints: [
+            '2023-04-03',  // https://gitlab.com/gitlab-com/gl-infra/capacity-planning/-/issues/993
+          ],
+        },
+      },
+    ],
+  },
 })
