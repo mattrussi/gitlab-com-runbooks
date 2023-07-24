@@ -318,3 +318,97 @@ groups:
       sum by (env,environment,tier,type,stage,worker,feature_category,urgency,external_dependencies) (
         (sli_aggregations:gitlab_sli_sidekiq_queueing_apdex_success_total_rate1h{env="ops",monitor!="global"} >= 0)
       )
+- name: 'Application Defined SLI Global metrics: sidekiq_execution_with_external_dependency
+    (fast burn)'
+  interval: 1m
+  partial_response_strategy: warn
+  rules:
+  - record: application_sli_aggregation:sidekiq_execution_with_external_dependency:error:rate_5m
+    labels:
+      feature_category: not_owned
+    expr: |
+      sum by (env,environment,tier,type,stage,worker,feature_category,urgency,external_dependencies) (
+        (sli_aggregations:gitlab_sli_sidekiq_execution_error_total_rate5m{env="ops",monitor!="global"} >= 0)
+      )
+  - record: application_sli_aggregation:sidekiq_execution_with_external_dependency:ops:rate_5m
+    labels:
+      feature_category: not_owned
+    expr: |
+      sum by (env,environment,tier,type,stage,worker,feature_category,urgency,external_dependencies) (
+        (sli_aggregations:gitlab_sli_sidekiq_execution_total_rate5m{env="ops",monitor!="global"} >= 0)
+      )
+  - record: application_sli_aggregation:sidekiq_execution_with_external_dependency:apdex:weight:score_5m
+    labels:
+      feature_category: not_owned
+    expr: |
+      sum by (env,environment,tier,type,stage,worker,feature_category,urgency,external_dependencies) (
+        (sli_aggregations:gitlab_sli_sidekiq_execution_apdex_total_rate5m{env="ops",monitor!="global"} >= 0)
+      )
+  - record: application_sli_aggregation:sidekiq_execution_with_external_dependency:apdex:success:rate_5m
+    labels:
+      feature_category: not_owned
+    expr: |
+      sum by (env,environment,tier,type,stage,worker,feature_category,urgency,external_dependencies) (
+        (sli_aggregations:gitlab_sli_sidekiq_execution_apdex_success_total_rate5m{env="ops",monitor!="global"} >= 0)
+      )
+  - record: application_sli_aggregation:sidekiq_execution_with_external_dependency:error:rate_1h
+    labels:
+      feature_category: not_owned
+    expr: |
+      sum by (env,environment,tier,type,stage,worker,feature_category,urgency,external_dependencies) (
+        (sli_aggregations:gitlab_sli_sidekiq_execution_error_total_rate1h{env="ops",monitor!="global"} >= 0)
+      )
+  - record: application_sli_aggregation:sidekiq_execution_with_external_dependency:ops:rate_1h
+    labels:
+      feature_category: not_owned
+    expr: |
+      sum by (env,environment,tier,type,stage,worker,feature_category,urgency,external_dependencies) (
+        (sli_aggregations:gitlab_sli_sidekiq_execution_total_rate1h{env="ops",monitor!="global"} >= 0)
+      )
+  - record: application_sli_aggregation:sidekiq_execution_with_external_dependency:apdex:weight:score_1h
+    labels:
+      feature_category: not_owned
+    expr: |
+      sum by (env,environment,tier,type,stage,worker,feature_category,urgency,external_dependencies) (
+        (sli_aggregations:gitlab_sli_sidekiq_execution_apdex_total_rate1h{env="ops",monitor!="global"} >= 0)
+      )
+  - record: application_sli_aggregation:sidekiq_execution_with_external_dependency:apdex:success:rate_1h
+    labels:
+      feature_category: not_owned
+    expr: |
+      sum by (env,environment,tier,type,stage,worker,feature_category,urgency,external_dependencies) (
+        (sli_aggregations:gitlab_sli_sidekiq_execution_apdex_success_total_rate1h{env="ops",monitor!="global"} >= 0)
+      )
+- name: 'Application Defined SLI Global metrics: sidekiq_queueing_with_external_dependency
+    (fast burn)'
+  interval: 1m
+  partial_response_strategy: warn
+  rules:
+  - record: application_sli_aggregation:sidekiq_queueing_with_external_dependency:apdex:weight:score_5m
+    labels:
+      feature_category: not_owned
+    expr: |
+      sum by (env,environment,tier,type,stage,worker,feature_category,urgency,external_dependencies) (
+        (sli_aggregations:gitlab_sli_sidekiq_queueing_apdex_total_rate5m{env="ops",monitor!="global"} >= 0)
+      )
+  - record: application_sli_aggregation:sidekiq_queueing_with_external_dependency:apdex:success:rate_5m
+    labels:
+      feature_category: not_owned
+    expr: |
+      sum by (env,environment,tier,type,stage,worker,feature_category,urgency,external_dependencies) (
+        (sli_aggregations:gitlab_sli_sidekiq_queueing_apdex_success_total_rate5m{env="ops",monitor!="global"} >= 0)
+      )
+  - record: application_sli_aggregation:sidekiq_queueing_with_external_dependency:apdex:weight:score_1h
+    labels:
+      feature_category: not_owned
+    expr: |
+      sum by (env,environment,tier,type,stage,worker,feature_category,urgency,external_dependencies) (
+        (sli_aggregations:gitlab_sli_sidekiq_queueing_apdex_total_rate1h{env="ops",monitor!="global"} >= 0)
+      )
+  - record: application_sli_aggregation:sidekiq_queueing_with_external_dependency:apdex:success:rate_1h
+    labels:
+      feature_category: not_owned
+    expr: |
+      sum by (env,environment,tier,type,stage,worker,feature_category,urgency,external_dependencies) (
+        (sli_aggregations:gitlab_sli_sidekiq_queueing_apdex_success_total_rate1h{env="ops",monitor!="global"} >= 0)
+      )

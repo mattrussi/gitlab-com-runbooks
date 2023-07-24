@@ -25,6 +25,7 @@ local validateFeatureCategory(value) =
 
 local sliValidator = validator.new({
   name: validator.string,
+  counterName: validator.string,
   significantLabels: validator.array,
   description: validator.string,
   kinds: validator.and(
@@ -54,6 +55,7 @@ local applyDefaults(definition) = {
   hasErrorRate():: std.member(definition.kinds, errorRateKind),
   dashboardFeatureCategories: [],
   excludeKindsFromSLI: [],
+  counterName: if std.get(definition, 'counterName') == null then definition.name else definition.counterName,
 } + definition;
 
 local validateDashboardFeatureCategories(definition) =
@@ -69,10 +71,10 @@ local validateAndApplyDefaults(definition) =
   local sli = validateDashboardFeatureCategories(sliValidator.assertValid(definitionWithDefaults));
 
   sli {
-    [if sli.hasApdex() then 'apdexTotalCounterName']: 'gitlab_sli_%s_apdex_total' % [self.name],
-    [if sli.hasApdex() then 'apdexSuccessCounterName']: 'gitlab_sli_%s_apdex_success_total' % [self.name],
-    [if sli.hasErrorRate() then 'errorTotalCounterName']: 'gitlab_sli_%s_total' % [self.name],
-    [if sli.hasErrorRate() then 'errorCounterName']: 'gitlab_sli_%s_error_total' % [self.name],
+    [if sli.hasApdex() then 'apdexTotalCounterName']: 'gitlab_sli_%s_apdex_total' % [self.counterName],
+    [if sli.hasApdex() then 'apdexSuccessCounterName']: 'gitlab_sli_%s_apdex_success_total' % [self.counterName],
+    [if sli.hasErrorRate() then 'errorTotalCounterName']: 'gitlab_sli_%s_total' % [self.counterName],
+    [if sli.hasErrorRate() then 'errorCounterName']: 'gitlab_sli_%s_error_total' % [self.counterName],
     totalCounterName:
       if sli.hasErrorRate() && !std.member(parent.excludeKindsFromSLI, errorRateKind) then
         self.errorTotalCounterName

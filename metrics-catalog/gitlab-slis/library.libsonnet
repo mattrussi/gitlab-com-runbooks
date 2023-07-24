@@ -103,6 +103,35 @@ local list = [
       Read more about this in the [runbooks doc](https://gitlab.com/gitlab-com/runbooks/-/blob/master/docs/sidekiq/sidekiq-slis.md).
     |||,
   }),
+  sliDefinition.new({
+    name: 'sidekiq_execution_with_external_dependency',
+    counterName: 'sidekiq_execution',  // Reusing sidekiq_execution as counter name
+    significantLabels: ['worker', 'feature_category', 'urgency', 'external_dependencies'],
+    featureCategory: 'not_owned',
+
+    kinds: [sliDefinition.apdexKind, sliDefinition.errorRateKind],
+    description: |||
+      The number of Sidekiq jobs with external dependencies across all shards meeting their execution duration target based on the urgency of the worker.
+      By default, execution of a job should take no more than 300 seconds. But this can be adjusted by the
+      urgency of the worker.
+
+      Read more about this in the [runbooks doc](https://gitlab.com/gitlab-com/runbooks/-/blob/master/docs/sidekiq/sidekiq-slis.md).
+    |||,
+  }),
+  sliDefinition.new({
+    name: 'sidekiq_queueing_with_external_dependency',
+    counterName: 'sidekiq_queueing',  // Reusing sidekiq_queueing as counter name
+    significantLabels: ['worker', 'feature_category', 'urgency', 'external_dependencies'],
+    featureCategory: 'not_owned',
+    kinds: [sliDefinition.apdexKind],
+    description: |||
+      The number of Sidekiq jobs with external dependencies across all shards meeting their queueing duration target based on the urgency of the worker.
+      By default, queueing of a job should take no more than 60 seconds. But this can be adjusted by the
+      urgency of the worker.
+
+      Read more about this in the [runbooks doc](https://gitlab.com/gitlab-com/runbooks/-/blob/master/docs/sidekiq/sidekiq-slis.md).
+    |||,
+  }),
 ];
 
 local definitionsByName = std.foldl(
