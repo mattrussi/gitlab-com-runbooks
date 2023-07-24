@@ -13,7 +13,7 @@ local shardDetailDataLink = {
 };
 
 serviceDashboard.overview('sidekiq', expectMultipleSeries=true)
-.addTemplate(templates.sidekiqShard(current='all'))
+.addTemplate(templates.sidekiqShard(current='catchall'))
 .addPanel(
   row.new(title='Sidekiq Queues'),
   gridPos={

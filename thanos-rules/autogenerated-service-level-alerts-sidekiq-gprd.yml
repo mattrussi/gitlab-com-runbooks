@@ -628,10 +628,11 @@ groups:
         Currently the apdex value is {{ $value | humanizePercentage }}.
       grafana_dashboard_id: sidekiq-main/sidekiq-overview
       grafana_dashboard_link: https://dashboards.gitlab.net/d/sidekiq-main/sidekiq-overview?from=now-6h/m&to=now-1m/m&var-environment={{
-        $labels.environment }}&var-stage={{ $labels.stage }}
+        $labels.environment }}&var-stage={{ $labels.stage }}&var-shard={{ $labels.shard
+        }}
       grafana_min_zoom_hours: "6"
       grafana_panel_id: "1200908149"
-      grafana_variables: environment,stage
+      grafana_variables: environment,stage,shard
       runbook: docs/sidekiq/README.md
     labels:
       aggregation: component_shard
@@ -676,10 +677,11 @@ groups:
         Currently the apdex value is {{ $value | humanizePercentage }}.
       grafana_dashboard_id: sidekiq-main/sidekiq-overview
       grafana_dashboard_link: https://dashboards.gitlab.net/d/sidekiq-main/sidekiq-overview?from=now-6h/m&to=now-1m/m&var-environment={{
-        $labels.environment }}&var-stage={{ $labels.stage }}
+        $labels.environment }}&var-stage={{ $labels.stage }}&var-shard={{ $labels.shard
+        }}
       grafana_min_zoom_hours: "6"
       grafana_panel_id: "1200908149"
-      grafana_variables: environment,stage
+      grafana_variables: environment,stage,shard
       runbook: docs/sidekiq/README.md
     labels:
       aggregation: component_shard
@@ -724,10 +726,11 @@ groups:
         Currently the error-rate is {{ $value | humanizePercentage }}.
       grafana_dashboard_id: sidekiq-main/sidekiq-overview
       grafana_dashboard_link: https://dashboards.gitlab.net/d/sidekiq-main/sidekiq-overview?from=now-6h/m&to=now-1m/m&var-environment={{
-        $labels.environment }}&var-stage={{ $labels.stage }}
+        $labels.environment }}&var-stage={{ $labels.stage }}&var-shard={{ $labels.shard
+        }}
       grafana_min_zoom_hours: "6"
       grafana_panel_id: "4267233911"
-      grafana_variables: environment,stage
+      grafana_variables: environment,stage,shard
       promql_template_1: |
         sum by (env,environment,tier,stage,shard) (
           sli_aggregations:gitlab_sli_sidekiq_execution_error_total_rate5m{environment="{{ $labels.environment }}",external_dependencies!="yes",shard="{{ $labels.shard }}",stage="{{ $labels.stage }}",type="sidekiq"}
@@ -776,10 +779,11 @@ groups:
         Currently the error-rate is {{ $value | humanizePercentage }}.
       grafana_dashboard_id: sidekiq-main/sidekiq-overview
       grafana_dashboard_link: https://dashboards.gitlab.net/d/sidekiq-main/sidekiq-overview?from=now-6h/m&to=now-1m/m&var-environment={{
-        $labels.environment }}&var-stage={{ $labels.stage }}
+        $labels.environment }}&var-stage={{ $labels.stage }}&var-shard={{ $labels.shard
+        }}
       grafana_min_zoom_hours: "6"
       grafana_panel_id: "4267233911"
-      grafana_variables: environment,stage
+      grafana_variables: environment,stage,shard
       promql_template_1: |
         sum by (env,environment,tier,stage,shard) (
           sli_aggregations:gitlab_sli_sidekiq_execution_error_total_rate5m{environment="{{ $labels.environment }}",external_dependencies!="yes",shard="{{ $labels.shard }}",stage="{{ $labels.stage }}",type="sidekiq"}
@@ -828,10 +832,11 @@ groups:
         Since the `{{ $labels.type }}` service is not fully redundant, SLI violations on a single shard may represent a user-impacting service degradation.
       grafana_dashboard_id: sidekiq-main/sidekiq-overview
       grafana_dashboard_link: https://dashboards.gitlab.net/d/sidekiq-main/sidekiq-overview?from=now-6h/m&to=now-1m/m&var-environment={{
-        $labels.environment }}&var-stage={{ $labels.stage }}
+        $labels.environment }}&var-stage={{ $labels.stage }}&var-shard={{ $labels.shard
+        }}
       grafana_min_zoom_hours: "6"
       grafana_panel_id: "597131258"
-      grafana_variables: environment,stage
+      grafana_variables: environment,stage,shard
       promql_template_1: |
         sum by (env,environment,tier,stage,shard) (
           sli_aggregations:gitlab_sli_sidekiq_execution_total_rate5m{environment="{{ $labels.environment }}",external_dependencies!="yes",shard="{{ $labels.shard }}",stage="{{ $labels.stage }}",type="sidekiq"}
@@ -869,10 +874,11 @@ groups:
         Since the `{{ $labels.type }}` service is not fully redundant, SLI violations on a single shard may represent a user-impacting service degradation.
       grafana_dashboard_id: sidekiq-main/sidekiq-overview
       grafana_dashboard_link: https://dashboards.gitlab.net/d/sidekiq-main/sidekiq-overview?from=now-6h/m&to=now-1m/m&var-environment={{
-        $labels.environment }}&var-stage={{ $labels.stage }}
+        $labels.environment }}&var-stage={{ $labels.stage }}&var-shard={{ $labels.shard
+        }}
       grafana_min_zoom_hours: "6"
       grafana_panel_id: "597131258"
-      grafana_variables: environment,stage
+      grafana_variables: environment,stage,shard
       promql_template_1: |
         sum by (env,environment,tier,stage,shard) (
           sli_aggregations:gitlab_sli_sidekiq_execution_total_rate5m{environment="{{ $labels.environment }}",external_dependencies!="yes",shard="{{ $labels.shard }}",stage="{{ $labels.stage }}",type="sidekiq"}
@@ -908,10 +914,11 @@ groups:
         Currently the apdex value is {{ $value | humanizePercentage }}.
       grafana_dashboard_id: sidekiq-main/sidekiq-overview
       grafana_dashboard_link: https://dashboards.gitlab.net/d/sidekiq-main/sidekiq-overview?from=now-6h/m&to=now-1m/m&var-environment={{
-        $labels.environment }}&var-stage={{ $labels.stage }}
+        $labels.environment }}&var-stage={{ $labels.stage }}&var-shard={{ $labels.shard
+        }}
       grafana_min_zoom_hours: "6"
       grafana_panel_id: "3643825112"
-      grafana_variables: environment,stage
+      grafana_variables: environment,stage,shard
       runbook: docs/sidekiq/README.md
     labels:
       aggregation: component_shard
@@ -956,10 +963,11 @@ groups:
         Currently the apdex value is {{ $value | humanizePercentage }}.
       grafana_dashboard_id: sidekiq-main/sidekiq-overview
       grafana_dashboard_link: https://dashboards.gitlab.net/d/sidekiq-main/sidekiq-overview?from=now-6h/m&to=now-1m/m&var-environment={{
-        $labels.environment }}&var-stage={{ $labels.stage }}
+        $labels.environment }}&var-stage={{ $labels.stage }}&var-shard={{ $labels.shard
+        }}
       grafana_min_zoom_hours: "6"
       grafana_panel_id: "3643825112"
-      grafana_variables: environment,stage
+      grafana_variables: environment,stage,shard
       runbook: docs/sidekiq/README.md
     labels:
       aggregation: component_shard
@@ -1004,10 +1012,11 @@ groups:
         Since the `{{ $labels.type }}` service is not fully redundant, SLI violations on a single shard may represent a user-impacting service degradation.
       grafana_dashboard_id: sidekiq-main/sidekiq-overview
       grafana_dashboard_link: https://dashboards.gitlab.net/d/sidekiq-main/sidekiq-overview?from=now-6h/m&to=now-1m/m&var-environment={{
-        $labels.environment }}&var-stage={{ $labels.stage }}
+        $labels.environment }}&var-stage={{ $labels.stage }}&var-shard={{ $labels.shard
+        }}
       grafana_min_zoom_hours: "6"
       grafana_panel_id: "330011744"
-      grafana_variables: environment,stage
+      grafana_variables: environment,stage,shard
       promql_template_1: |
         sum by (env,environment,tier,stage,shard) (
           sli_aggregations:gitlab_sli_sidekiq_queueing_apdex_total_rate5m{environment="{{ $labels.environment }}",external_dependencies!="yes",shard="{{ $labels.shard }}",stage="{{ $labels.stage }}",type="sidekiq"}
@@ -1045,10 +1054,11 @@ groups:
         Since the `{{ $labels.type }}` service is not fully redundant, SLI violations on a single shard may represent a user-impacting service degradation.
       grafana_dashboard_id: sidekiq-main/sidekiq-overview
       grafana_dashboard_link: https://dashboards.gitlab.net/d/sidekiq-main/sidekiq-overview?from=now-6h/m&to=now-1m/m&var-environment={{
-        $labels.environment }}&var-stage={{ $labels.stage }}
+        $labels.environment }}&var-stage={{ $labels.stage }}&var-shard={{ $labels.shard
+        }}
       grafana_min_zoom_hours: "6"
       grafana_panel_id: "330011744"
-      grafana_variables: environment,stage
+      grafana_variables: environment,stage,shard
       promql_template_1: |
         sum by (env,environment,tier,stage,shard) (
           sli_aggregations:gitlab_sli_sidekiq_queueing_apdex_total_rate5m{environment="{{ $labels.environment }}",external_dependencies!="yes",shard="{{ $labels.shard }}",stage="{{ $labels.stage }}",type="sidekiq"}
