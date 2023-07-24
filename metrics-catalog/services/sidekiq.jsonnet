@@ -93,77 +93,6 @@ metricsCatalog.serviceDefinition({
     {},
   ),
   serviceLevelIndicators: {
-    // TODO: This SLI now only consists of queueing, will be removed once `sidekiq_queueing` SLI has been rolled out in
-    // https://gitlab.com/gitlab-com/gl-infra/scalability/-/issues/2415
-    ['shard_' + std.strReplace(shard.name, '-', '_') + '_queueing']: {
-      local shardSelector = baseSelector { shard: shard.name, external_dependencies: { ne: 'yes' } },
-
-      serviceAggregation: false,
-      userImpacting: shard.userImpacting,
-      featureCategory: 'not_owned',
-      team: 'scalability',
-      trafficCessationAlertConfig: shard.trafficCessationAlertConfig,
-      upscaleLongerBurnRates: true,
-      monitoringThresholds+: shard.monitoringThresholds,
-      shardLevelMonitoring: false,
-
-      description: |||
-        Aggregation of all jobs for the %(shard)s Sidekiq shard.
-      ||| % shardSelector,
-      apdex: combined(
-        [
-          histogramApdex(
-            histogram='sidekiq_jobs_queue_duration_seconds_bucket',
-            selector=highUrgencySelector + shardSelector,
-            satisfiedThreshold=sidekiqHelpers.slos.urgent.queueingDurationSeconds,
-          ),
-          histogramApdex(
-            histogram='sidekiq_jobs_queue_duration_seconds_bucket',
-            selector=lowUrgencySelector + shardSelector,
-            satisfiedThreshold=sidekiqHelpers.slos.lowUrgency.queueingDurationSeconds,
-          ),
-          // No queueing apdex for throttled jobs
-        ]
-      ),
-
-      requestRate: rateMetric(
-        counter='sidekiq_jobs_completion_seconds_bucket',
-        selector=shardSelector { le: '+Inf' },
-      ),
-
-      // Note: these labels will also be included in the
-      // intermediate recording rules specified in the
-      // `recordingRuleMetrics` stanza above
-      significantLabels: ['feature_category', 'queue', 'urgency', 'worker'],
-
-      // We don't have an `urgency` field in Sidekiq logs. Improve this in
-      // https://gitlab.com/groups/gitlab-com/gl-infra/-/epics/700
-      local slowRequestSeconds =
-        if shard.urgency == 'high' then
-          sidekiqHelpers.slos.urgent.executionDurationSeconds
-        else if shard.urgency == 'low' then
-          sidekiqHelpers.slos.lowUrgency.executionDurationSeconds
-        else if shard.urgency == 'throttled' then
-          sidekiqHelpers.slos.throttled.executionDurationSeconds
-        else
-          // Default to low urgency threshold
-          sidekiqHelpers.slos.lowUrgency.executionDurationSeconds,
-
-      toolingLinks: [
-        // Improve sentry link once https://gitlab.com/gitlab-com/gl-infra/scalability/-/issues/532 arrives
-        toolingLinks.sentry(slug='gitlab/gitlabcom', type='sidekiq'),
-        toolingLinks.kibana(title=shard.name, index='sidekiq', type='sidekiq', shard=shard.name, slowRequestSeconds=slowRequestSeconds),
-      ] + (
-        if std.objectHas(shard, 'gkeDeployment') then
-          [
-            toolingLinks.gkeDeployment(shard.gkeDeployment, type='sidekiq', shard=shard.name, containerName='sidekiq'),
-          ]
-        else
-          []
-      ),
-    }
-    for shard in sidekiqHelpers.shards.listAll()
-  } + {
     external_dependency: {
       local externalDependencySelector = baseSelector { external_dependencies: 'yes' },
       serviceAggregation: false,
@@ -273,11 +202,11 @@ metricsCatalog.serviceDefinition({
     ],
   }) + sliLibrary.get('sidekiq_queueing').generateServiceLevelIndicator(baseSelector { external_dependencies: { ne: 'yes' } }, {
     serviceAggregation: false,  // Don't add this to the request rate of the service
-    // TODO: Bump to S2 once the per-shard SLIs (shard_*) are removed
-    severity: 's4',  // Don't page SREs for this SLI
+    severity: 's2',
     toolingLinks: [
       toolingLinks.kibana(title='Sidekiq queueing', index='sidekiq_queueing', type='sidekiq'),
     ],
+    featureCategory: 'not_owned',
   }),
 
   // Special per-worker recording rules

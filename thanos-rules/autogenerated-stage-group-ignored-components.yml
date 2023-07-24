@@ -11,12 +11,6 @@ groups:
       product_stage: 5-min-app
       stage_group: 5-min-app
     expr: "1"
-  - record: gitlab:ignored_component:stage_group
-    labels:
-      component: sidekiq_queueing
-      product_stage: 5-min-app
-      stage_group: 5-min-app
-    expr: "1"
 - name: 'Stage group Ignored components: growth - Acquisition'
   interval: 1m
   partial_response_strategy: warn
@@ -24,12 +18,6 @@ groups:
   - record: gitlab:ignored_component:stage_group
     labels:
       component: graphql_query
-      product_stage: growth
-      stage_group: acquisition
-    expr: "1"
-  - record: gitlab:ignored_component:stage_group
-    labels:
-      component: sidekiq_queueing
       product_stage: growth
       stage_group: acquisition
     expr: "1"
@@ -43,12 +31,6 @@ groups:
       product_stage: growth
       stage_group: activation
     expr: "1"
-  - record: gitlab:ignored_component:stage_group
-    labels:
-      component: sidekiq_queueing
-      product_stage: growth
-      stage_group: activation
-    expr: "1"
 - name: 'Stage group Ignored components: modelops - AI Assisted'
   interval: 1m
   partial_response_strategy: warn
@@ -56,12 +38,6 @@ groups:
   - record: gitlab:ignored_component:stage_group
     labels:
       component: graphql_query
-      product_stage: modelops
-      stage_group: ai_assisted
-    expr: "1"
-  - record: gitlab:ignored_component:stage_group
-    labels:
-      component: sidekiq_queueing
       product_stage: modelops
       stage_group: ai_assisted
     expr: "1"
@@ -75,22 +51,6 @@ groups:
       product_stage: analytics
       stage_group: analytics_instrumentation
     expr: "1"
-  - record: gitlab:ignored_component:stage_group
-    labels:
-      component: sidekiq_queueing
-      product_stage: analytics
-      stage_group: analytics_instrumentation
-    expr: "1"
-- name: 'Stage group Ignored components: anti-abuse - Anti-Abuse'
-  interval: 1m
-  partial_response_strategy: warn
-  rules:
-  - record: gitlab:ignored_component:stage_group
-    labels:
-      component: sidekiq_queueing
-      product_stage: anti-abuse
-      stage_group: anti-abuse
-    expr: "1"
 - name: 'Stage group Ignored components: data_stores - Application Performance'
   interval: 1m
   partial_response_strategy: warn
@@ -98,12 +58,6 @@ groups:
   - record: gitlab:ignored_component:stage_group
     labels:
       component: graphql_query
-      product_stage: data_stores
-      stage_group: application_performance
-    expr: "1"
-  - record: gitlab:ignored_component:stage_group
-    labels:
-      component: sidekiq_queueing
       product_stage: data_stores
       stage_group: application_performance
     expr: "1"
@@ -117,12 +71,6 @@ groups:
       product_stage: manage
       stage_group: authentication_and_authorization
     expr: "1"
-  - record: gitlab:ignored_component:stage_group
-    labels:
-      component: sidekiq_queueing
-      product_stage: manage
-      stage_group: authentication_and_authorization
-    expr: "1"
 - name: 'Stage group Ignored components: fulfillment - Billing and Subscription Management'
   interval: 1m
   partial_response_strategy: warn
@@ -130,12 +78,6 @@ groups:
   - record: gitlab:ignored_component:stage_group
     labels:
       component: graphql_query
-      product_stage: fulfillment
-      stage_group: billing_and_subscription_management
-    expr: "1"
-  - record: gitlab:ignored_component:stage_group
-    labels:
-      component: sidekiq_queueing
       product_stage: fulfillment
       stage_group: billing_and_subscription_management
     expr: "1"
@@ -149,12 +91,6 @@ groups:
       product_stage: create
       stage_group: code_review
     expr: "1"
-  - record: gitlab:ignored_component:stage_group
-    labels:
-      component: sidekiq_queueing
-      product_stage: create
-      stage_group: code_review
-    expr: "1"
 - name: 'Stage group Ignored components: govern - Compliance'
   interval: 1m
   partial_response_strategy: warn
@@ -162,12 +98,6 @@ groups:
   - record: gitlab:ignored_component:stage_group
     labels:
       component: graphql_query
-      product_stage: govern
-      stage_group: compliance
-    expr: "1"
-  - record: gitlab:ignored_component:stage_group
-    labels:
-      component: sidekiq_queueing
       product_stage: govern
       stage_group: compliance
     expr: "1"
@@ -181,12 +111,6 @@ groups:
       product_stage: secure
       stage_group: composition_analysis
     expr: "1"
-  - record: gitlab:ignored_component:stage_group
-    labels:
-      component: sidekiq_queueing
-      product_stage: secure
-      stage_group: composition_analysis
-    expr: "1"
 - name: 'Stage group Ignored components: package - Container Registry'
   interval: 1m
   partial_response_strategy: warn
@@ -194,12 +118,6 @@ groups:
   - record: gitlab:ignored_component:stage_group
     labels:
       component: graphql_query
-      product_stage: package
-      stage_group: container_registry
-    expr: "1"
-  - record: gitlab:ignored_component:stage_group
-    labels:
-      component: sidekiq_queueing
       product_stage: package
       stage_group: container_registry
     expr: "1"
@@ -213,12 +131,6 @@ groups:
       product_stage: data_stores
       stage_group: database
     expr: "1"
-  - record: gitlab:ignored_component:stage_group
-    labels:
-      component: sidekiq_queueing
-      product_stage: data_stores
-      stage_group: database
-    expr: "1"
 - name: 'Stage group Ignored components: modelops - DataOps'
   interval: 1m
   partial_response_strategy: warn
@@ -226,12 +138,6 @@ groups:
   - record: gitlab:ignored_component:stage_group
     labels:
       component: graphql_query
-      product_stage: modelops
-      stage_group: dataops
-    expr: "1"
-  - record: gitlab:ignored_component:stage_group
-    labels:
-      component: sidekiq_queueing
       product_stage: modelops
       stage_group: dataops
     expr: "1"
@@ -245,12 +151,6 @@ groups:
       product_stage: platforms
       stage_group: dedicated
     expr: "1"
-  - record: gitlab:ignored_component:stage_group
-    labels:
-      component: sidekiq_queueing
-      product_stage: platforms
-      stage_group: dedicated
-    expr: "1"
 - name: 'Stage group Ignored components: platforms - Delivery'
   interval: 1m
   partial_response_strategy: warn
@@ -258,12 +158,6 @@ groups:
   - record: gitlab:ignored_component:stage_group
     labels:
       component: graphql_query
-      product_stage: platforms
-      stage_group: delivery
-    expr: "1"
-  - record: gitlab:ignored_component:stage_group
-    labels:
-      component: sidekiq_queueing
       product_stage: platforms
       stage_group: delivery
     expr: "1"
@@ -277,12 +171,6 @@ groups:
       product_stage: systems
       stage_group: distribution_deploy
     expr: "1"
-  - record: gitlab:ignored_component:stage_group
-    labels:
-      component: sidekiq_queueing
-      product_stage: systems
-      stage_group: distribution_deploy
-    expr: "1"
 - name: 'Stage group Ignored components: secure - Dynamic Analysis'
   interval: 1m
   partial_response_strategy: warn
@@ -290,12 +178,6 @@ groups:
   - record: gitlab:ignored_component:stage_group
     labels:
       component: graphql_query
-      product_stage: secure
-      stage_group: dynamic_analysis
-    expr: "1"
-  - record: gitlab:ignored_component:stage_group
-    labels:
-      component: sidekiq_queueing
       product_stage: secure
       stage_group: dynamic_analysis
     expr: "1"
@@ -309,12 +191,6 @@ groups:
       product_stage: deploy
       stage_group: environments
     expr: "1"
-  - record: gitlab:ignored_component:stage_group
-    labels:
-      component: sidekiq_queueing
-      product_stage: deploy
-      stage_group: environments
-    expr: "1"
 - name: 'Stage group Ignored components: manage - Foundations'
   interval: 1m
   partial_response_strategy: warn
@@ -322,12 +198,6 @@ groups:
   - record: gitlab:ignored_component:stage_group
     labels:
       component: graphql_query
-      product_stage: manage
-      stage_group: foundations
-    expr: "1"
-  - record: gitlab:ignored_component:stage_group
-    labels:
-      component: sidekiq_queueing
       product_stage: manage
       stage_group: foundations
     expr: "1"
@@ -341,12 +211,6 @@ groups:
       product_stage: fulfillment
       stage_group: fulfillment_platform
     expr: "1"
-  - record: gitlab:ignored_component:stage_group
-    labels:
-      component: sidekiq_queueing
-      product_stage: fulfillment
-      stage_group: fulfillment_platform
-    expr: "1"
 - name: 'Stage group Ignored components: systems - Geo'
   interval: 1m
   partial_response_strategy: warn
@@ -354,12 +218,6 @@ groups:
   - record: gitlab:ignored_component:stage_group
     labels:
       component: graphql_query
-      product_stage: systems
-      stage_group: geo
-    expr: "1"
-  - record: gitlab:ignored_component:stage_group
-    labels:
-      component: sidekiq_queueing
       product_stage: systems
       stage_group: geo
     expr: "1"
@@ -373,12 +231,6 @@ groups:
       product_stage: systems
       stage_group: gitaly
     expr: "1"
-  - record: gitlab:ignored_component:stage_group
-    labels:
-      component: sidekiq_queueing
-      product_stage: systems
-      stage_group: gitaly
-    expr: "1"
 - name: 'Stage group Ignored components: data_stores - Global Search'
   interval: 1m
   partial_response_strategy: warn
@@ -386,12 +238,6 @@ groups:
   - record: gitlab:ignored_component:stage_group
     labels:
       component: graphql_query
-      product_stage: data_stores
-      stage_group: global_search
-    expr: "1"
-  - record: gitlab:ignored_component:stage_group
-    labels:
-      component: sidekiq_queueing
       product_stage: data_stores
       stage_group: global_search
     expr: "1"
@@ -405,12 +251,6 @@ groups:
       product_stage: create
       stage_group: ide
     expr: "1"
-  - record: gitlab:ignored_component:stage_group
-    labels:
-      component: sidekiq_queueing
-      product_stage: create
-      stage_group: ide
-    expr: "1"
 - name: 'Stage group Ignored components: manage - Import and Integrate'
   interval: 1m
   partial_response_strategy: warn
@@ -418,12 +258,6 @@ groups:
   - record: gitlab:ignored_component:stage_group
     labels:
       component: graphql_query
-      product_stage: manage
-      stage_group: import_and_integrate
-    expr: "1"
-  - record: gitlab:ignored_component:stage_group
-    labels:
-      component: sidekiq_queueing
       product_stage: manage
       stage_group: import_and_integrate
     expr: "1"
@@ -437,12 +271,6 @@ groups:
       product_stage: modelops
       stage_group: mlops
     expr: "1"
-  - record: gitlab:ignored_component:stage_group
-    labels:
-      component: sidekiq_queueing
-      product_stage: modelops
-      stage_group: mlops
-    expr: "1"
 - name: 'Stage group Ignored components: mobile - Mobile DevOps'
   interval: 1m
   partial_response_strategy: warn
@@ -450,12 +278,6 @@ groups:
   - record: gitlab:ignored_component:stage_group
     labels:
       component: graphql_query
-      product_stage: mobile
-      stage_group: mobile_devops
-    expr: "1"
-  - record: gitlab:ignored_component:stage_group
-    labels:
-      component: sidekiq_queueing
       product_stage: mobile
       stage_group: mobile_devops
     expr: "1"
@@ -469,12 +291,6 @@ groups:
       product_stage: monitor
       stage_group: observability
     expr: "1"
-  - record: gitlab:ignored_component:stage_group
-    labels:
-      component: sidekiq_queueing
-      product_stage: monitor
-      stage_group: observability
-    expr: "1"
 - name: 'Stage group Ignored components: plan - Optimize'
   interval: 1m
   partial_response_strategy: warn
@@ -482,12 +298,6 @@ groups:
   - record: gitlab:ignored_component:stage_group
     labels:
       component: graphql_query
-      product_stage: plan
-      stage_group: optimize
-    expr: "1"
-  - record: gitlab:ignored_component:stage_group
-    labels:
-      component: sidekiq_queueing
       product_stage: plan
       stage_group: optimize
     expr: "1"
@@ -501,12 +311,6 @@ groups:
       product_stage: package
       stage_group: package_registry
     expr: "1"
-  - record: gitlab:ignored_component:stage_group
-    labels:
-      component: sidekiq_queueing
-      product_stage: package
-      stage_group: package_registry
-    expr: "1"
 - name: 'Stage group Ignored components: verify - Pipeline Authoring'
   interval: 1m
   partial_response_strategy: warn
@@ -514,12 +318,6 @@ groups:
   - record: gitlab:ignored_component:stage_group
     labels:
       component: graphql_query
-      product_stage: verify
-      stage_group: pipeline_authoring
-    expr: "1"
-  - record: gitlab:ignored_component:stage_group
-    labels:
-      component: sidekiq_queueing
       product_stage: verify
       stage_group: pipeline_authoring
     expr: "1"
@@ -533,12 +331,6 @@ groups:
       product_stage: verify
       stage_group: pipeline_execution
     expr: "1"
-  - record: gitlab:ignored_component:stage_group
-    labels:
-      component: sidekiq_queueing
-      product_stage: verify
-      stage_group: pipeline_execution
-    expr: "1"
 - name: 'Stage group Ignored components: verify - Pipeline Security'
   interval: 1m
   partial_response_strategy: warn
@@ -546,12 +338,6 @@ groups:
   - record: gitlab:ignored_component:stage_group
     labels:
       component: graphql_query
-      product_stage: verify
-      stage_group: pipeline_security
-    expr: "1"
-  - record: gitlab:ignored_component:stage_group
-    labels:
-      component: sidekiq_queueing
       product_stage: verify
       stage_group: pipeline_security
     expr: "1"
@@ -565,12 +351,6 @@ groups:
       product_stage: plan
       stage_group: product_planning
     expr: "1"
-  - record: gitlab:ignored_component:stage_group
-    labels:
-      component: sidekiq_queueing
-      product_stage: plan
-      stage_group: product_planning
-    expr: "1"
 - name: 'Stage group Ignored components: plan - Project Management'
   interval: 1m
   partial_response_strategy: warn
@@ -578,12 +358,6 @@ groups:
   - record: gitlab:ignored_component:stage_group
     labels:
       component: graphql_query
-      product_stage: plan
-      stage_group: project_management
-    expr: "1"
-  - record: gitlab:ignored_component:stage_group
-    labels:
-      component: sidekiq_queueing
       product_stage: plan
       stage_group: project_management
     expr: "1"
@@ -597,12 +371,6 @@ groups:
       product_stage: fulfillment
       stage_group: provision
     expr: "1"
-  - record: gitlab:ignored_component:stage_group
-    labels:
-      component: sidekiq_queueing
-      product_stage: fulfillment
-      stage_group: provision
-    expr: "1"
 - name: 'Stage group Ignored components: fulfillment - Purchase'
   interval: 1m
   partial_response_strategy: warn
@@ -610,12 +378,6 @@ groups:
   - record: gitlab:ignored_component:stage_group
     labels:
       component: graphql_query
-      product_stage: fulfillment
-      stage_group: purchase
-    expr: "1"
-  - record: gitlab:ignored_component:stage_group
-    labels:
-      component: sidekiq_queueing
       product_stage: fulfillment
       stage_group: purchase
     expr: "1"
@@ -629,12 +391,6 @@ groups:
       product_stage: monitor
       stage_group: respond
     expr: "1"
-  - record: gitlab:ignored_component:stage_group
-    labels:
-      component: sidekiq_queueing
-      product_stage: monitor
-      stage_group: respond
-    expr: "1"
 - name: 'Stage group Ignored components: verify - Runner'
   interval: 1m
   partial_response_strategy: warn
@@ -642,12 +398,6 @@ groups:
   - record: gitlab:ignored_component:stage_group
     labels:
       component: graphql_query
-      product_stage: verify
-      stage_group: runner
-    expr: "1"
-  - record: gitlab:ignored_component:stage_group
-    labels:
-      component: sidekiq_queueing
       product_stage: verify
       stage_group: runner
     expr: "1"
@@ -661,22 +411,6 @@ groups:
       product_stage: platforms
       stage_group: scalability
     expr: "1"
-  - record: gitlab:ignored_component:stage_group
-    labels:
-      component: sidekiq_queueing
-      product_stage: platforms
-      stage_group: scalability
-    expr: "1"
-- name: 'Stage group Ignored components: govern - Security Policies'
-  interval: 1m
-  partial_response_strategy: warn
-  rules:
-  - record: gitlab:ignored_component:stage_group
-    labels:
-      component: sidekiq_queueing
-      product_stage: govern
-      stage_group: security_policies
-    expr: "1"
 - name: 'Stage group Ignored components: create - Source Code'
   interval: 1m
   partial_response_strategy: warn
@@ -687,22 +421,6 @@ groups:
       product_stage: create
       stage_group: source_code
     expr: "1"
-  - record: gitlab:ignored_component:stage_group
-    labels:
-      component: sidekiq_queueing
-      product_stage: create
-      stage_group: source_code
-    expr: "1"
-- name: 'Stage group Ignored components: secure - Static Analysis'
-  interval: 1m
-  partial_response_strategy: warn
-  rules:
-  - record: gitlab:ignored_component:stage_group
-    labels:
-      component: sidekiq_queueing
-      product_stage: secure
-      stage_group: static_analysis
-    expr: "1"
 - name: 'Stage group Ignored components: data_stores - Tenant Scale'
   interval: 1m
   partial_response_strategy: warn
@@ -710,12 +428,6 @@ groups:
   - record: gitlab:ignored_component:stage_group
     labels:
       component: graphql_query
-      product_stage: data_stores
-      stage_group: tenant_scale
-    expr: "1"
-  - record: gitlab:ignored_component:stage_group
-    labels:
-      component: sidekiq_queueing
       product_stage: data_stores
       stage_group: tenant_scale
     expr: "1"
@@ -729,12 +441,6 @@ groups:
       product_stage: govern
       stage_group: threat_insights
     expr: "1"
-  - record: gitlab:ignored_component:stage_group
-    labels:
-      component: sidekiq_queueing
-      product_stage: govern
-      stage_group: threat_insights
-    expr: "1"
 - name: 'Stage group Ignored components: fulfillment - Utilization'
   interval: 1m
   partial_response_strategy: warn
@@ -745,12 +451,6 @@ groups:
       product_stage: fulfillment
       stage_group: utilization
     expr: "1"
-  - record: gitlab:ignored_component:stage_group
-    labels:
-      component: sidekiq_queueing
-      product_stage: fulfillment
-      stage_group: utilization
-    expr: "1"
 - name: 'Stage group Ignored components: secure - Vulnerability Research'
   interval: 1m
   partial_response_strategy: warn
@@ -758,12 +458,6 @@ groups:
   - record: gitlab:ignored_component:stage_group
     labels:
       component: graphql_query
-      product_stage: secure
-      stage_group: vulnerability_research
-    expr: "1"
-  - record: gitlab:ignored_component:stage_group
-    labels:
-      component: sidekiq_queueing
       product_stage: secure
       stage_group: vulnerability_research
     expr: "1"
