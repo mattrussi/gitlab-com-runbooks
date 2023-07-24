@@ -128,19 +128,29 @@ Run the commands:
 Updates based on the [definition of production](https://gitlab.com/gitlab-com/gl-security/security-assurance/sec-compliance/compliance/-/blob/master/production_definition.md) for how to list machines (compute) that meet this definition:
 
 GitLab.com:
-- `gcloud config set project gitlab-ops && gcloud compute instances list`
-- `gcloud config set project gitlab-production && gcloud compute instances list` 
-- `gcloud config set project gemnasium-production && gcloud compute instances list`
+
+```shell
+gcloud config set project gitlab-ops && gcloud compute instances list
+gcloud config set project gitlab-production && gcloud compute instances list
+gcloud config set project gemnasium-production && gcloud compute instances list
+```
 
 CI:
-- `gcloud config set project gitlab-ci-155816 && gcloud compute instances list --filter="name~'manager'"`
-- `gcloud config set project gitlab-org-ci-0d24e2 && gcloud compute instances list --filter="name~'manager'"`
-- `gcloud config set project gitlab-ci-plan-free-7-7fe256 && gcloud compute instances list --filter="name~'manager'"`
-- `gcloud config set project gitlab-ci-windows && gcloud compute instances list --filter="name~'manager'"`
+
+```shell
+gcloud config set project gitlab-ci-155816 && gcloud compute instances list --filter="name~'manager'"
+gcloud config set project gitlab-org-ci-0d24e2 && gcloud compute instances list --filter="name~'manager'"
+gcloud config set project gitlab-ci-plan-free-7-7fe256 && gcloud compute instances list --filter="name~'manager'"
+gcloud config set project gitlab-ci-windows && gcloud compute instances list --filter="name~'manager'"
+```
 
 License, Version:
-- `gcloud config set project gs-production-efd5e8 && gcloud compute instances list` #home of version.gitlab.com
-- `gcloud config set project license-prd-bfe85b && gcloud compute instances list`   #home of license.gitlab.com
+
+```shell
+gcloud config set project gs-production-efd5e8 && gcloud compute instances list # home of version.gitlab.com
+gcloud config set project license-prd-bfe85b && gcloud compute instances list   # home of license.gitlab.com
+```
 
 dev.gitlab.org and customers.gitlab.com:
+
 - as of 2021-03-18, still in Azure as single VMs, get IP/VM information from the Azure portal
