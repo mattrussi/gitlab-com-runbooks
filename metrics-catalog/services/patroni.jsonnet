@@ -38,7 +38,25 @@ metricsCatalog.serviceDefinition(
               '2023-04-26',  // https://gitlab.com/gitlab-com/gl-infra/capacity-planning/-/issues/1026#note_1404708663
               '2023-04-28',
             ],
+
           },
+        },
+        {
+          name: 'pg_int4_id',
+          events: [
+            {
+              date: '2023-03-20',
+              name: 'Migration to int8 column to address int4 capacity saturation',
+            },
+            {
+              date: '2023-04-06',
+              name: 'Migration to int8 column to address int4 capacity saturation',
+            },
+            {
+              date: '2023-06-15',
+              name: 'Migration to int8 column to address int4 capacity saturation',
+            },
+          ],
         },
       ],
     },
