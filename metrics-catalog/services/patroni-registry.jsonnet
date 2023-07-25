@@ -22,4 +22,21 @@ metricsCatalog.serviceDefinition(
     },
   }
   + patroniHelpers.gitlabcomObservabilityToolingForPatroni('patroni-registry')
+  +
+  {
+    capacityPlanning: {
+      events: [
+        {
+          date: '2023-06-10',
+          name: 'Upgrade of PG database cluster',
+          references: [
+            {
+              title: 'Production change issue',
+              ref: 'https://gitlab.com/gitlab-com/gl-infra/production/-/issues/11375',
+            },
+          ],
+        },
+      ],
+    },
+  }
 )
