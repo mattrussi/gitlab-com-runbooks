@@ -83,6 +83,44 @@ local gitalySpawnTimeoutsPerNode(selector) =
     legend_show=false,
   );
 
+local gitalySpawnTokenQueueLengthPerNode(selector) =
+  basic.timeseries(
+    title='Gitaly Spawn Token queue length per Node',
+    query=|||
+      sum(gitaly_spawn_token_waiting_length{%(selector)s}) by (fqdn)
+    ||| % { selector: selector },
+    legendFormat='{{ fqdn }}',
+    interval='1m',
+    linewidth=1,
+    legend_show=false,
+  );
+
+local gitalySpawnTokenForkingTimePerNode(selector) =
+  basic.timeseries(
+    title='Gitaly Spawn Token P99 forking time per Node',
+    query=|||
+      histogram_quantile(0.99, sum(rate(gitaly_spawn_forking_time_seconds_bucket{%(selector)s}[$__interval])) by (le))
+    ||| % { selector: selector },
+    format='s',
+    legendFormat='{{ fqdn }}',
+    interval='1m',
+    linewidth=1,
+    legend_show=false,
+  );
+
+local gitalySpawnTokenWaitingTimePerNode(selector) =
+  basic.timeseries(
+    title='Gitaly Spawn Token P99 waiting time per Node',
+    query=|||
+      histogram_quantile(0.99, sum(rate(gitaly_spawn_waiting_time_seconds_bucket{%(selector)s}[$__interval])) by (le))
+    ||| % { selector: selector },
+    format='s',
+    legendFormat='{{ fqdn }}',
+    interval='1m',
+    linewidth=1,
+    legend_show=false,
+  );
+
 local gitalyRPCRequestRateByMethod(selector) =
   basic.timeseries(
     title='Request rate by grpc_method',
@@ -266,6 +304,9 @@ basic.dashboard(
   .addPanels(
     layout.grid([
       gitalySpawnTimeoutsPerNode(selectorSerialized),
+      gitalySpawnTokenQueueLengthPerNode(selectorSerialized),
+      gitalySpawnTokenWaitingTimePerNode(selectorSerialized),
+      gitalySpawnTokenForkingTimePerNode(selectorSerialized),
       ratelimitLockPercentage(selectorSerialized),
     ], startRow=5101)
   ),
