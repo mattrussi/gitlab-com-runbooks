@@ -14,7 +14,7 @@ groups:
       alert_type: cause
     annotations:
       description: Recent GCP scheduled snapshot are missing for {{ $labels.env }}. Please follow the runbook to review the problem.
-      runbook: docs/uncategorized/gcp-snapshots.md
+      runbook: docs/disaster-recovery/gcp-snapshots.md
       title: GCP scheduled snapshots are delayed
   - alert: GCPScheduledSnapshotsFailed
     expr: |
@@ -26,5 +26,5 @@ groups:
       alert_type: cause
     annotations:
       description: GCP scheduled snapshots are reporting failures for {{ $labels.env }}. Please follow the runbook to review the problem.
-      runbook: docs/uncategorized/gcp-snapshots.md
+      runbook: docs/disaster-recovery/gcp-snapshots.md
       title: GCP scheduled snapshots are failing

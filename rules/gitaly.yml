@@ -113,3 +113,16 @@ groups:
         for details of versions deployed across the fleet.
       runbook: docs/version/gitaly-version-mismatch.md
       title: 'Multiple versions of Gitaly have been running alongside one another'
+  - alert: GCPScheduledSnapshotMissingForGitaly
+    expr: |
+      count(up{type="gitaly", job="gitaly", env="gprd", shard!="praefect"} == 1) > count(present_over_time(stackdriver_gce_disk_logging_googleapis_com_user_scheduled_snapshots{env="gprd", disk_name=~"(file|gitaly)-.*-stor-gprd-data$"}[2h]))
+    for: 1h
+    labels:
+      severity: s4
+      alert_type: cause
+      type: gitaly
+    annotations:
+      description: Recent GCP scheduled snapshot are missing for one or more disks. Please follow the runbook to review the problem.
+      runbook: docs/disaster-recovery/gcp-snapshots.md
+      title: GCP scheduled snapshots are missing for at least one Gitaly data disk in Production
+      promql_template_1: present_over_time(stackdriver_gce_disk_logging_googleapis_com_user_scheduled_snapshots{env="gprd", disk_name=~"(file|gitaly)-.*-stor-gprd-data$"}[2h]) == 0
