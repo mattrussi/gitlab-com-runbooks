@@ -60,8 +60,8 @@ metricsCatalog.serviceDefinition({
   // the appropriate aggregations based on this set.
   // Use sparingly, and don't overuse.
   recordingRuleMetrics: [
-    // TODO: Remove 'sidekiq_jobs_completion_seconds_bucket' intermediate rule once
-    // external_dependency SLI has been replaced to use the sidekiq_execution SLI
+    // Although not used here, below 3 intermediate rules are still being used in
+    // mailroom, ops-gitlab-net, and various dashboards
     'sidekiq_jobs_completion_seconds_bucket',
     'sidekiq_jobs_queue_duration_seconds_bucket',
     'sidekiq_jobs_failed_total',
@@ -93,66 +93,6 @@ metricsCatalog.serviceDefinition({
     {},
   ),
   serviceLevelIndicators: {
-    external_dependency: {
-      local externalDependencySelector = baseSelector { external_dependencies: 'yes' },
-      serviceAggregation: false,
-      userImpacting: true,
-      severity: 's3',
-      feature_category: 'not_owned',
-      team: 'sre_reliability',
-      description: |||
-        Jobs with external dependencies across all shards.
-      |||,
-      shardLevelMonitoring: false,
-
-      apdex: combined(
-        [
-          histogramApdex(
-            histogram='sidekiq_jobs_completion_seconds_bucket',
-            selector=highUrgencySelector + externalDependencySelector,
-            satisfiedThreshold=sidekiqHelpers.slos.urgent.executionDurationSeconds,
-          ),
-          histogramApdex(
-            histogram='sidekiq_jobs_queue_duration_seconds_bucket',
-            selector=highUrgencySelector + externalDependencySelector,
-            satisfiedThreshold=sidekiqHelpers.slos.urgent.queueingDurationSeconds,
-          ),
-          histogramApdex(
-            histogram='sidekiq_jobs_completion_seconds_bucket',
-            selector=lowUrgencySelector + externalDependencySelector,
-            satisfiedThreshold=sidekiqHelpers.slos.lowUrgency.executionDurationSeconds,
-          ),
-          histogramApdex(
-            histogram='sidekiq_jobs_queue_duration_seconds_bucket',
-            selector=lowUrgencySelector + externalDependencySelector,
-            satisfiedThreshold=sidekiqHelpers.slos.lowUrgency.queueingDurationSeconds,
-          ),
-          histogramApdex(
-            histogram='sidekiq_jobs_completion_seconds_bucket',
-            selector=throttledUrgencySelector + externalDependencySelector,
-            satisfiedThreshold=sidekiqHelpers.slos.throttled.executionDurationSeconds,
-          ),
-          // No queueing apdex for throttled jobs
-        ]
-      ),
-
-      requestRate: rateMetric(
-        counter='sidekiq_jobs_completion_seconds_bucket',
-        selector=externalDependencySelector { le: '+Inf' },
-      ),
-
-      errorRate: rateMetric(
-        counter='sidekiq_jobs_failed_total',
-        selector=externalDependencySelector,
-      ),
-
-      monitoringThresholds+: {
-        errorRatio: 0.9,
-      },
-
-      significantLabels: ['feature_category', 'queue', 'urgency', 'worker'],
-    },
-  } + {
     email_receiver: {
       userImpacting: true,
       severity: 's3',
@@ -207,6 +147,18 @@ metricsCatalog.serviceDefinition({
       toolingLinks.kibana(title='Sidekiq queueing', index='sidekiq_queueing', type='sidekiq'),
     ],
     featureCategory: 'not_owned',
+  }) + sliLibrary.get('sidekiq_execution_with_external_dependency').generateServiceLevelIndicator(baseSelector { external_dependencies: { eq: 'yes' } }, {
+    serviceAggregation: false,  // Don't add this to the request rate of the service
+    shardLevelMonitoring: false,
+    severity: 's3',
+    monitoringThresholds+: {
+      errorRatio: 0.9,
+    },
+  }) + sliLibrary.get('sidekiq_queueing_with_external_dependency').generateServiceLevelIndicator(baseSelector { external_dependencies: { eq: 'yes' } }, {
+    serviceAggregation: false,  // Don't add this to the request rate of the service
+    shardLevelMonitoring: false,
+    team: 'sre_reliability',
+    severity: 's3',
   }),
 
   // Special per-worker recording rules

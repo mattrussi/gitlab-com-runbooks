@@ -2255,42 +2255,42 @@ groups:
     expr: "0.300000"
   - record: slo:min:events:gitlab_service_apdex:ratio
     labels:
-      component: external_dependency
+      component: global_search_indexing
       tier: sv
       type: sidekiq
     expr: "0.995000"
   - record: slo:max:events:gitlab_service_errors:ratio
     labels:
-      component: external_dependency
+      component: global_search_indexing
+      tier: sv
+      type: sidekiq
+    expr: "0.005000"
+  - record: slo:min:events:gitlab_service_apdex:ratio
+    labels:
+      component: sidekiq_execution
+      tier: sv
+      type: sidekiq
+    expr: "0.995000"
+  - record: slo:max:events:gitlab_service_errors:ratio
+    labels:
+      component: sidekiq_execution
+      tier: sv
+      type: sidekiq
+    expr: "0.005000"
+  - record: slo:min:events:gitlab_service_apdex:ratio
+    labels:
+      component: sidekiq_execution_with_external_dependency
+      tier: sv
+      type: sidekiq
+    expr: "0.995000"
+  - record: slo:max:events:gitlab_service_errors:ratio
+    labels:
+      component: sidekiq_execution_with_external_dependency
       tier: sv
       type: sidekiq
     expr: "0.100000"
   - record: slo:min:events:gitlab_service_apdex:ratio
     labels:
-      component: global_search_indexing
-      tier: sv
-      type: sidekiq
-    expr: "0.995000"
-  - record: slo:max:events:gitlab_service_errors:ratio
-    labels:
-      component: global_search_indexing
-      tier: sv
-      type: sidekiq
-    expr: "0.005000"
-  - record: slo:min:events:gitlab_service_apdex:ratio
-    labels:
-      component: sidekiq_execution
-      tier: sv
-      type: sidekiq
-    expr: "0.995000"
-  - record: slo:max:events:gitlab_service_errors:ratio
-    labels:
-      component: sidekiq_execution
-      tier: sv
-      type: sidekiq
-    expr: "0.005000"
-  - record: slo:min:events:gitlab_service_apdex:ratio
-    labels:
       component: sidekiq_queueing
       tier: sv
       type: sidekiq
@@ -2298,6 +2298,18 @@ groups:
   - record: slo:max:events:gitlab_service_errors:ratio
     labels:
       component: sidekiq_queueing
+      tier: sv
+      type: sidekiq
+    expr: "0.005000"
+  - record: slo:min:events:gitlab_service_apdex:ratio
+    labels:
+      component: sidekiq_queueing_with_external_dependency
+      tier: sv
+      type: sidekiq
+    expr: "0.995000"
+  - record: slo:max:events:gitlab_service_errors:ratio
+    labels:
+      component: sidekiq_queueing_with_external_dependency
       tier: sv
       type: sidekiq
     expr: "0.005000"
@@ -4101,15 +4113,6 @@ groups:
     expr: "1"
   - record: gitlab_component_service:mapping
     labels:
-      component: external_dependency
-      global_aggregation: "no"
-      regional_aggregation: "no"
-      service_aggregation: "no"
-      tier: sv
-      type: sidekiq
-    expr: "1"
-  - record: gitlab_component_service:mapping
-    labels:
       component: global_search_indexing
       global_aggregation: "no"
       regional_aggregation: "no"
@@ -4128,7 +4131,25 @@ groups:
     expr: "1"
   - record: gitlab_component_service:mapping
     labels:
+      component: sidekiq_execution_with_external_dependency
+      global_aggregation: "no"
+      regional_aggregation: "no"
+      service_aggregation: "no"
+      tier: sv
+      type: sidekiq
+    expr: "1"
+  - record: gitlab_component_service:mapping
+    labels:
       component: sidekiq_queueing
+      global_aggregation: "no"
+      regional_aggregation: "no"
+      service_aggregation: "no"
+      tier: sv
+      type: sidekiq
+    expr: "1"
+  - record: gitlab_component_service:mapping
+    labels:
+      component: sidekiq_queueing_with_external_dependency
       global_aggregation: "no"
       regional_aggregation: "no"
       service_aggregation: "no"
