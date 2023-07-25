@@ -162,6 +162,23 @@ basic.dashboard(
         )
       ||| % formatConfig,
     ),
+    bargaugePanel(
+      'Acceptance by Language',
+      query=|||
+        topk(
+          10,
+          100 *
+            sum by(lang) (
+              increase(code_suggestions_accepts_total{%(selector)s,lang=~".+"}[$__range])
+            )
+            / on(lang) group_left()
+            sum by(lang) (
+              increase(code_suggestions_requests_total{%(selector)s,lang=~".+"}[$__range])
+            )
+        )
+      ||| % formatConfig,
+      unit='percent',
+    ),
   ], cols=2, rowHeight=10, startRow=0)
 )
 .trailer()
