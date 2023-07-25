@@ -405,8 +405,7 @@ basic.dashboard(
   row.new(title='gitaly pack-objects metrics', collapse=true)
   .addPanels(
     layout.grid([
-      gitalyPackObjectsDashboards.process_active_callers(selectorHash, 'concurrency by repository', segment='repository'),
-      gitalyPackObjectsDashboards.process_active_callers(selectorHash, 'concurrency by remote_ip', segment='remote_ip'),
+      gitalyPackObjectsDashboards.in_process(selectorHash, 'concurrency by repository'),
       gitalyPackObjectsDashboards.queued_commands(selectorHash, 'queued commands'),
       gitalyPackObjectsDashboards.dropped_commands(selectorHash, 'dropped commands'),
       gitalyPackObjectsDashboards.cache_served(selectorHash, 'cache served'),
