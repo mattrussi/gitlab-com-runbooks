@@ -123,7 +123,7 @@ metricsCatalog.serviceDefinition({
     saas_linux_runner_image_pull_failures: {
       serviceAggregation: false,
       monitoringThresholds+: {
-        errorRatio: 0.95,
+        errorRatio: 0.99,
       },
 
       userImpacting: true,

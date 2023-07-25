@@ -282,7 +282,7 @@ groups:
       component: saas_linux_runner_image_pull_failures
       tier: runners
       type: ci-runners
-    expr: "0.050000"
+    expr: "0.010000"
   - record: slo:min:events:gitlab_service_apdex:ratio
     labels:
       component: saas_runner_queues
