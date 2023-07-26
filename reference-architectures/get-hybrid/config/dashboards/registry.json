@@ -6003,7 +6003,7 @@
               "fillColor": "rgba(242, 73, 92, 0.5)",
               "line": false,
               "op": "gt",
-              "value": 2,
+              "value": 2.5,
               "yaxis": "left"
             },
             {
@@ -6012,7 +6012,7 @@
               "fillColor": "rgba(242, 73, 92, 0.25)",
               "line": false,
               "op": "gt",
-              "value": 0.6,
+              "value": 0.5,
               "yaxis": "left"
             }
           ],
@@ -6175,7 +6175,7 @@
               "fillColor": "rgba(242, 73, 92, 0.5)",
               "line": false,
               "op": "gt",
-              "value": 2,
+              "value": 2.5,
               "yaxis": "left"
             },
             {
@@ -6184,7 +6184,7 @@
               "fillColor": "rgba(242, 73, 92, 0.25)",
               "line": false,
               "op": "gt",
-              "value": 0.6,
+              "value": 0.5,
               "yaxis": "left"
             }
           ],
@@ -6262,7 +6262,7 @@
           "steppedLine": false,
           "targets": [
             {
-              "expr": "clamp_min(clamp_max((\n  (\n    sum by (method) (\n  rate(registry_http_request_duration_seconds_bucket{le=\"+Inf\",method!=\"\",route=\"/v2/{name}/blobs/{digest}\"}[$__interval])\n)\n\n    -\n    (\n      (\n  sum by (method) (\n    rate(registry_http_request_duration_seconds_bucket{le=\"0.6\",method!=\"\",route=\"/v2/{name}/blobs/{digest}\"}[$__interval])\n  )\n  +\n  sum by (method) (\n    rate(registry_http_request_duration_seconds_bucket{le=\"2\",method!=\"\",route=\"/v2/{name}/blobs/{digest}\"}[$__interval])\n  )\n)\n/\n2\n\n    )\n  )\n  / ignoring(method) group_left()\n  (\n    sum by () (\n  rate(registry_http_request_duration_seconds_bucket{le=\"+Inf\",method!=\"\",route=\"/v2/{name}/blobs/{digest}\"}[$__interval])\n)\n\n  )\n) \u003e 0\n,1),0)\n",
+              "expr": "clamp_min(clamp_max((\n  (\n    sum by (method) (\n  rate(registry_http_request_duration_seconds_bucket{le=\"+Inf\",method!=\"\",route=\"/v2/{name}/blobs/{digest}\"}[$__interval])\n)\n\n    -\n    (\n      (\n  sum by (method) (\n    rate(registry_http_request_duration_seconds_bucket{le=\"0.5\",method!=\"\",route=\"/v2/{name}/blobs/{digest}\"}[$__interval])\n  )\n  +\n  sum by (method) (\n    rate(registry_http_request_duration_seconds_bucket{le=\"2.5\",method!=\"\",route=\"/v2/{name}/blobs/{digest}\"}[$__interval])\n  )\n)\n/\n2\n\n    )\n  )\n  / ignoring(method) group_left()\n  (\n    sum by () (\n  rate(registry_http_request_duration_seconds_bucket{le=\"+Inf\",method!=\"\",route=\"/v2/{name}/blobs/{digest}\"}[$__interval])\n)\n\n  )\n) \u003e 0\n,1),0)\n",
               "format": "time_series",
               "interval": "1m",
               "intervalFactor": 1,
@@ -6448,7 +6448,7 @@
               "fillColor": "rgba(242, 73, 92, 0.5)",
               "line": false,
               "op": "gt",
-              "value": 45,
+              "value": 60,
               "yaxis": "left"
             },
             {
@@ -6620,7 +6620,7 @@
               "fillColor": "rgba(242, 73, 92, 0.5)",
               "line": false,
               "op": "gt",
-              "value": 45,
+              "value": 60,
               "yaxis": "left"
             },
             {
@@ -6707,7 +6707,7 @@
           "steppedLine": false,
           "targets": [
             {
-              "expr": "clamp_min(clamp_max((\n  (\n    sum by (method) (\n  rate(registry_http_request_duration_seconds_bucket{le=\"+Inf\",method!=\"\",route=\"/v2/{name}/blobs/{digest}\"}[$__interval])\n)\n\n    -\n    (\n      (\n  sum by (method) (\n    rate(registry_http_request_duration_seconds_bucket{le=\"10\",method!=\"\",route=\"/v2/{name}/blobs/{digest}\"}[$__interval])\n  )\n  +\n  sum by (method) (\n    rate(registry_http_request_duration_seconds_bucket{le=\"45\",method!=\"\",route=\"/v2/{name}/blobs/{digest}\"}[$__interval])\n  )\n)\n/\n2\n\n    )\n  )\n  / ignoring(method) group_left()\n  (\n    sum by () (\n  rate(registry_http_request_duration_seconds_bucket{le=\"+Inf\",method!=\"\",route=\"/v2/{name}/blobs/{digest}\"}[$__interval])\n)\n\n  )\n) \u003e 0\n,1),0)\n",
+              "expr": "clamp_min(clamp_max((\n  (\n    sum by (method) (\n  rate(registry_http_request_duration_seconds_bucket{le=\"+Inf\",method!=\"\",route=\"/v2/{name}/blobs/{digest}\"}[$__interval])\n)\n\n    -\n    (\n      (\n  sum by (method) (\n    rate(registry_http_request_duration_seconds_bucket{le=\"10\",method!=\"\",route=\"/v2/{name}/blobs/{digest}\"}[$__interval])\n  )\n  +\n  sum by (method) (\n    rate(registry_http_request_duration_seconds_bucket{le=\"60\",method!=\"\",route=\"/v2/{name}/blobs/{digest}\"}[$__interval])\n  )\n)\n/\n2\n\n    )\n  )\n  / ignoring(method) group_left()\n  (\n    sum by () (\n  rate(registry_http_request_duration_seconds_bucket{le=\"+Inf\",method!=\"\",route=\"/v2/{name}/blobs/{digest}\"}[$__interval])\n)\n\n  )\n) \u003e 0\n,1),0)\n",
               "format": "time_series",
               "interval": "1m",
               "intervalFactor": 1,
