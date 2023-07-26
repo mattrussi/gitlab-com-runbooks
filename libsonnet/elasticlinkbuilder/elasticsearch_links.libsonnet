@@ -275,6 +275,12 @@ local buildElasticLineTotalDurationVizURL(index, filters, luceneQueries=[], late
         valueAxes: [
           {
             id: 'ValueAxis-1',
+            labels: {
+              filter: true,
+              rotate: 0,
+              show: true,
+              truncate: 100,
+            },
             name: 'LeftAxis-1',
             position: 'left',
             scale: {
@@ -377,6 +383,12 @@ local buildElasticLinePercentileVizURL(index, filters, luceneQueries=[], latency
         valueAxes: [
           {
             id: 'ValueAxis-1',
+            labels: {
+              filter: true,
+              rotate: 0,
+              show: true,
+              truncate: 100,
+            },
             name: 'LeftAxis-1',
             position: 'left',
             scale: {

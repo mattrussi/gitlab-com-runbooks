@@ -119,7 +119,7 @@ local matching = import 'elasticlinkbuilder/matching.libsonnet';
           [
             toolingLinkDefinition({
               title: '📈 Kibana: ' + title + ' sum latency aggregated',
-              url: elasticsearchLinks.buildElasticLineTotalDurationVizURL(index, filters, splitSeries=true),
+              url: elasticsearchLinks.buildElasticLineTotalDurationVizURL(index, filters, splitSeries=false),
               type:: 'chart',
             }),
             toolingLinkDefinition({
