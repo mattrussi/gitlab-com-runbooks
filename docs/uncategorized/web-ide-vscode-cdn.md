@@ -1,13 +1,56 @@
 # Web IDE Assets
 
-The Web IDE requires external assets that it would normally fetch from
-a third-party controlled domain. In order to prevent our customers from
-having to fetch resources from a 3rd party, we self-host those assets.
+The [Web IDE](https://docs.gitlab.com/ee/user/project/web_ide/) requires external assets that would previously be fetched from
+`*.vscode-cdn.net`, however in order to prevent our customers from having to fetch resources from a 3rd party, we self-host those assets.
 
-The assets are currently hosted in Cloudflare R2 storage. They are synced from the [gitlab-web-ide-vscode-fork](https://gitlab.com/gitlab-org/gitlab-web-ide-vscode-fork) repository with CI.
-We serve these files via Cloudflare workers that are defined in and deployed from the [cloudflare directory](https://gitlab.com/gitlab-org/gitlab-web-ide-vscode-fork/-/tree/main/cloudflare) of the `gitlab-web-ide-vscode-fork`.
+## Traffic routing
 
-The domains that host these assets are as follows.
+The diagram below applies to the following:
 
-- `*.cdn.web-ide.gitlab-static.net`
-- `*.staging.cdn.web-ide.gitlab-static.net`
+- `{UUID}.cdn.web-ide.gitlab-static.net`
+- `{UUID}.staging.cdn.web-ide.gitlab-static.net`
+
+The only difference between the two is the name of the R2 bucket that hosts the assets and the cache expiration time (we cache production assets for up to a year).
+
+```mermaid
+graph TD
+  Z(fa:fa-user User) ==> |Open Web IDE| UI(https://gitlab.com/-/ide/project/some-group/some-repo/merge_requests/1234)
+  UI ==> |"fetch assets from:\nhttps://{UUID}.cdn.web-ide.gitlab-static.net/web-ide-vscode/..."| CZ(Cloudflare Zone:\ngitlab-static.net):::orange
+  subgraph Cloudflare[" "]
+    CZ ==> |Worker Route\n*.cdn.web-ide.gitlab-static.net/*| Worker(Worker: gitlab-web-ide-vscode-production):::worker
+    Worker ==> IsCached{"Is requested URL (minus UUID)\nin cache?"}
+    IsCached ==> |Yes| ReturnCache[[Return content from cache]]:::finish
+    IsCached ==> |No| R2[("Fetch from R2 bucket:\ngitlab-web-ide-{env}")]
+    R2 ==> |Object found| CacheIt[Cache response]
+    R2 ==> |Object not found| Error[[Return 404]]:::finish
+    R2 ==> CacheIt(Cache response)
+    CacheIt ==> ReturnContent[[Return content to user]]:::finish
+  end
+
+  click Worker "https://gitlab.com/gitlab-org/gitlab-web-ide-vscode-fork/-/tree/main/cloudflare" _blank
+
+  %% Styling
+  classDef orange fill:#f96,stroke:#000,stroke-width:2px;
+  classDef worker fill:#ffedd4,stroke:#000,stroke-width:2px;
+  classDef finish fill:cyan,stroke:#000,stroke-width:2px;
+```
+
+## CI Jobs
+
+### Deploying assets
+
+Cloudflare R2 buckets are S3 API compatible and we use `rclone` to recursively copy assets from CI jobs into the buckets.
+
+Take a look at the `.gitlab-ci.yml` file: <https://gitlab.com/gitlab-org/gitlab-web-ide-vscode-fork/-/blob/main/.gitlab-ci.yml>
+
+Look for the `deploy-assets-*` jobs. You'll notice that production & staging assets are only deployed when it's a tagged commit on the default branch, however
+staging assets can also be deployed on demand from an MR by triggering the job manually.
+
+### Cloudflare Worker changes
+
+All the Cloudflare Worker configuration and logic lives here: <https://gitlab.com/gitlab-org/gitlab-web-ide-vscode-fork/-/tree/main/cloudflare>
+
+Any changes made to this directory will trigger one of the `deploy-cloudflare-worker-*` jobs.
+
+Refer to the [`README.md`](https://gitlab.com/gitlab-org/gitlab-web-ide-vscode-fork/-/blob/main/cloudflare/README.md) for more info on the Cloudflare Wrangler
+CLI tool and how to inspect logs, test changes locally, etc.
