@@ -78,21 +78,21 @@ basic.dashboard(
 )
 .addPanels(
   layout.grid([
-    basic.timeseries(
+    basic.percentageTimeseries(
       stableId='acceptance-rate',
       title='Acceptance Rate / sec',
       query=|||
-        100 *
-          sum by(lang) (
-            rate(code_suggestions_accepts_total{%(selector)s,lang=~".+"}[$__rate_interval])
-          )
-          / on(lang) group_left()
-          sum by(lang) (
-            rate(code_suggestions_requests_total{%(selector)s,lang=~".+"}[$__rate_interval]) > 0
-          )
+        sum by(lang) (
+          rate(code_suggestions_accepts_total{%(selector)s,lang=~".+"}[$__rate_interval])
+        )
+        / on(lang) group_left()
+        sum by(lang) (
+          rate(code_suggestions_requests_total{%(selector)s,lang=~".+"}[$__rate_interval]) > 0
+        )
       ||| % formatConfig,
       legendFormat='{{lang}}',
       yAxisLabel='Acceptance Rates per Second',
+      interval='5m',
       decimals=1,
     ),
     bargaugePanel(
