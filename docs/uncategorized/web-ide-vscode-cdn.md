@@ -14,7 +14,7 @@ The only difference between the two is the name of the R2 bucket that hosts the 
 
 ```mermaid
 graph TD
-  Z(fa:fa-user User) ==> |Open Web IDE| UI(https://gitlab.com/-/ide/project/some-group/some-repo/merge_requests/1234)
+  Z(User) ==> |Open Web IDE| UI(https://gitlab.com/-/ide/project/some-group/some-repo/merge_requests/1234)
   UI ==> |"fetch assets from:\nhttps://{UUID}.cdn.web-ide.gitlab-static.net/web-ide-vscode/..."| CZ(Cloudflare Zone:\ngitlab-static.net):::orange
   subgraph Cloudflare[" "]
     CZ ==> |Worker Route\n*.cdn.web-ide.gitlab-static.net/*| Worker(Worker: gitlab-web-ide-vscode-production):::worker
@@ -23,7 +23,6 @@ graph TD
     IsCached ==> |No| R2[("Fetch from R2 bucket:\ngitlab-web-ide-{env}")]
     R2 ==> |Object found| CacheIt[Cache response]
     R2 ==> |Object not found| Error[[Return 404]]:::finish
-    R2 ==> CacheIt(Cache response)
     CacheIt ==> ReturnContent[[Return content to user]]:::finish
   end
 
