@@ -78,6 +78,40 @@ basic.dashboard(
 )
 .addPanels(
   layout.grid([
+    basic.percentageTimeseries(
+      stableId='acceptance-rate',
+      title='Acceptance Rate / sec',
+      query=|||
+        sum by(lang) (
+          rate(code_suggestions_accepts_total{%(selector)s,lang=~".+"}[$__rate_interval])
+        )
+        / on(lang) group_left()
+        sum by(lang) (
+          rate(code_suggestions_requests_total{%(selector)s,lang=~".+"}[$__rate_interval]) > 0
+        )
+      ||| % formatConfig,
+      legendFormat='{{lang}}',
+      yAxisLabel='Acceptance Rates per Second',
+      interval='5m',
+      decimals=1,
+    ),
+    bargaugePanel(
+      'Acceptance by Language',
+      query=|||
+        topk(
+          10,
+          100 *
+            sum by(lang) (
+              increase(code_suggestions_accepts_total{%(selector)s,lang=~".+"}[$__range])
+            )
+            / on(lang) group_left()
+            sum by(lang) (
+              increase(code_suggestions_requests_total{%(selector)s,lang=~".+"}[$__range]) > 0
+            )
+        )
+      ||| % formatConfig,
+      unit='percent',
+    ),
     basic.timeseries(
       stableId='request-language',
       title='Request Language / sec',
@@ -161,23 +195,6 @@ basic.dashboard(
           )
         )
       ||| % formatConfig,
-    ),
-    bargaugePanel(
-      'Acceptance by Language',
-      query=|||
-        topk(
-          10,
-          100 *
-            sum by(lang) (
-              increase(code_suggestions_accepts_total{%(selector)s,lang=~".+"}[$__range])
-            )
-            / on(lang) group_left()
-            sum by(lang) (
-              increase(code_suggestions_requests_total{%(selector)s,lang=~".+"}[$__range])
-            )
-        )
-      ||| % formatConfig,
-      unit='percent',
     ),
   ], cols=2, rowHeight=10, startRow=0)
 )
