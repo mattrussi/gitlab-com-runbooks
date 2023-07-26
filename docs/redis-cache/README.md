@@ -18,6 +18,7 @@
 
 * [A survival guide for SREs to working with Redis at GitLab](../redis/redis-survival-guide-for-sres.md)
 * [../redis/redis.md](../redis/redis.md)
+* [Rails is down](../uncategorized/rails-is-down.md)
 <!-- END_MARKER -->
 
 <!-- ## Summary -->

@@ -123,6 +123,7 @@
 * [Node CPU alerts](../uncategorized/node_cpu.md)
 * [../uncategorized/osquery.md](../uncategorized/osquery.md)
 * [Project exports](../uncategorized/project-export.md)
+* [Rails is down](../uncategorized/rails-is-down.md)
 * [Ruby profiling](../uncategorized/ruby-profiling.md)
 * [Shared Configurations](../uncategorized/shared-configurations.md)
 * [GitLab staging environment](../uncategorized/staging-environment.md)

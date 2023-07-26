@@ -53,6 +53,7 @@
 * [Deleted Project Restoration](../uncategorized/deleted-project-restore.md)
 * [../uncategorized/namespace-restore.md](../uncategorized/namespace-restore.md)
 * [Node CPU alerts](../uncategorized/node_cpu.md)
+* [Rails is down](../uncategorized/rails-is-down.md)
 * [GitLab staging environment](../uncategorized/staging-environment.md)
 * [How to Use Vault for Secrets Management in Infrastructure](../vault/usage.md)
 <!-- END_MARKER -->
