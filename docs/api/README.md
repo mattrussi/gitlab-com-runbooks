@@ -86,6 +86,7 @@
 * [../uncategorized/namespace-restore.md](../uncategorized/namespace-restore.md)
 * [OPS-GITLAB-NET Users and Access Tokens](../uncategorized/ops-gitlab-net-pat.md)
 * [Pingdom](../uncategorized/pingdom.md)
+* [Rails is down](../uncategorized/rails-is-down.md)
 * [Ruby profiling](../uncategorized/ruby-profiling.md)
 * [Shared Configurations](../uncategorized/shared-configurations.md)
 * [Application Database Queries](../uncategorized/tracing-app-db-queries.md)

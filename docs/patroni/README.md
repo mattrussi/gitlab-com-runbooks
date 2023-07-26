@@ -75,6 +75,7 @@
 * [Container Registry database post-deployment migrations](../registry/db-post-deployment-migrations.md)
 * [How to use flamegraphs for performance profiling](../tutorials/how_to_use_flamegraphs_for_perf_profiling.md)
 * [Deleted Project Restoration](../uncategorized/deleted-project-restore.md)
+* [Rails is down](../uncategorized/rails-is-down.md)
 * [Application Database Queries](../uncategorized/tracing-app-db-queries.md)
 <!-- END_MARKER -->
 
