@@ -19,31 +19,6 @@ local gitalyCommandStats = import 'gitlab-dashboards/gitaly/command_stats.libson
 local gitalyPackObjectsDashboards = import 'gitlab-dashboards/gitaly/pack_objects.libsonnet';
 
 local serviceType = 'gitaly';
-local ratelimitLockPercentage(selector) =
-  basic.percentageTimeseries(
-    'Request % acquiring rate-limit lock within 1m, by host + method',
-    description='Percentage of requests that acquire a Gitaly rate-limit lock within 1 minute, by host and method',
-    query=|||
-      sum(
-        rate(
-          gitaly_rate_limiting_acquiring_seconds_bucket{
-            %(selector)s,
-            le="60"
-          }[$__interval]
-        )
-      ) by (environment, type, stage, fqdn, grpc_method)
-      /
-      sum(
-        rate(
-          gitaly_rate_limiting_acquiring_seconds_bucket{
-            %(selector)s,
-            le="+Inf"
-          }[$__interval]
-        )
-      ) by (environment, type, stage, fqdn, grpc_method)
-    ||| % { selector: selector },
-    legendFormat='{{fqdn}} - {{grpc_method}}'
-  );
 
 local inflightGitalyCommandsPerNode(selector) =
   basic.timeseries(
@@ -307,7 +282,6 @@ basic.dashboard(
       gitalySpawnTokenQueueLengthPerNode(selectorSerialized),
       gitalySpawnTokenWaitingTimePerNode(selectorSerialized),
       gitalySpawnTokenForkingTimePerNode(selectorSerialized),
-      ratelimitLockPercentage(selectorSerialized),
     ], startRow=5101)
   ),
   gridPos={
