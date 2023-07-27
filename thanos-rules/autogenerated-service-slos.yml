@@ -2429,6 +2429,30 @@ groups:
     expr: "0.001000"
   - record: slo:min:events:gitlab_service_apdex:ratio
     labels:
+      component: istio_internal_ingress
+      tier: inf
+      type: vault
+    expr: "0.999000"
+  - record: slo:max:events:gitlab_service_errors:ratio
+    labels:
+      component: istio_internal_ingress
+      tier: inf
+      type: vault
+    expr: "0.001000"
+  - record: slo:min:events:gitlab_service_apdex:ratio
+    labels:
+      component: istio_public_ingress
+      tier: inf
+      type: vault
+    expr: "0.999000"
+  - record: slo:max:events:gitlab_service_errors:ratio
+    labels:
+      component: istio_public_ingress
+      tier: inf
+      type: vault
+    expr: "0.001000"
+  - record: slo:min:events:gitlab_service_apdex:ratio
+    labels:
       component: vault
       tier: inf
       type: vault
@@ -4155,6 +4179,24 @@ groups:
       service_aggregation: "no"
       tier: sv
       type: sidekiq
+    expr: "1"
+  - record: gitlab_component_service:mapping
+    labels:
+      component: istio_internal_ingress
+      global_aggregation: "no"
+      regional_aggregation: "no"
+      service_aggregation: "yes"
+      tier: inf
+      type: vault
+    expr: "1"
+  - record: gitlab_component_service:mapping
+    labels:
+      component: istio_public_ingress
+      global_aggregation: "no"
+      regional_aggregation: "no"
+      service_aggregation: "yes"
+      tier: inf
+      type: vault
     expr: "1"
   - record: gitlab_component_service:mapping
     labels:

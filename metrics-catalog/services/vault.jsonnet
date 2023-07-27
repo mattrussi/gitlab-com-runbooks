@@ -1,4 +1,5 @@
 local metricsCatalog = import 'servicemetrics/metrics.libsonnet';
+local histogramApdex = metricsCatalog.histogramApdex;
 local kubeLabelSelectors = metricsCatalog.kubeLabelSelectors;
 local rateMetric = metricsCatalog.rateMetric;
 local googleLoadBalancerComponents = import './lib/google_load_balancer_components.libsonnet';
@@ -49,6 +50,68 @@ metricsCatalog.serviceDefinition({
       projectId='gitlab-ops',
       trafficCessationAlertConfig=false
     ),
+
+    istio_public_ingress: {
+      userImpacting: true,
+      featureCategory: 'not_owned',
+      trafficCessationAlertConfig: false,
+
+      local selector = {
+        source_workload: 'istio-gateway',
+        destination_workload: 'vault',
+      },
+
+      apdex: histogramApdex(
+        histogram='istio_request_duration_milliseconds_bucket',
+        selector=selector,
+        satisfiedThreshold=1000,
+      ),
+
+      requestRate: rateMetric(
+        counter='istio_requests_total',
+        selector=selector
+      ),
+
+      errorRate: rateMetric(
+        counter='istio_requests_total',
+        selector=selector {
+          response_code: { re: '^5.*' },
+        }
+      ),
+
+      significantLabels: ['destination_service', 'response_code'],
+    },
+
+    istio_internal_ingress: {
+      userImpacting: true,
+      featureCategory: 'not_owned',
+      trafficCessationAlertConfig: false,
+
+      local selector = {
+        source_workload: 'istio-internal-gateway',
+        destination_workload: 'vault',
+      },
+
+      apdex: histogramApdex(
+        histogram='istio_request_duration_milliseconds_bucket',
+        selector=selector,
+        satisfiedThreshold=1000,
+      ),
+
+      requestRate: rateMetric(
+        counter='istio_requests_total',
+        selector=selector
+      ),
+
+      errorRate: rateMetric(
+        counter='istio_requests_total',
+        selector=selector {
+          response_code: { re: '^5.*' },
+        }
+      ),
+
+      significantLabels: ['destination_service', 'response_code'],
+    },
 
     vault: {
       userImpacting: false,

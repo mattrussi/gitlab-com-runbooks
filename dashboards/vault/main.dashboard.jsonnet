@@ -16,7 +16,7 @@ serviceDashboard.overview('vault', startRow=1)
       title='',
       panelTitle='Vault Leader Node',
       color='blue',
-      query='vault_core_active{environment="$environment"}',
+      query='sum by (pod) (vault_core_active{environment="$environment"})',
       legendFormat='{{ pod }}',
       colorMode='value',
       textMode='name',
@@ -173,7 +173,7 @@ serviceDashboard.overview('vault', startRow=1)
       ),
     ], cols=2, rowHeight=10, startRow=1),
   ),
-  gridPos={ x: 0, y: 200, w: 24, h: 1 },
+  gridPos={ x: 0, y: 300, w: 24, h: 1 },
 )
 .addPanel(
   row.new(title='Vault Integrated Storage (Raft)', collapse=true)
@@ -319,7 +319,7 @@ serviceDashboard.overview('vault', startRow=1)
       ),
     ], cols=5, rowHeight=10, startRow=4),
   ),
-  gridPos={ x: 0, y: 210, w: 24, h: 1 },
+  gridPos={ x: 0, y: 310, w: 24, h: 1 },
 )
 .addPanel(
   row.new(title='Vault Integrated Storage (Raft) Leadership Changes', collapse=true)
@@ -361,6 +361,6 @@ serviceDashboard.overview('vault', startRow=1)
       ),
     ], cols=2, rowHeight=10, startRow=0),
   ),
-  gridPos={ x: 0, y: 210, w: 24, h: 1 },
+  gridPos={ x: 0, y: 320, w: 24, h: 1 },
 )
 .overviewTrailer()
