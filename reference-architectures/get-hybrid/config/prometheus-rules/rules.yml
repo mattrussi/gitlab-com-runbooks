@@ -890,11 +890,11 @@ groups:
   - expr: |
       (
         sum by () (
-          rate(registry_http_request_duration_seconds_bucket{le="0.6",method=~"delete",route="/v2/{name}/blobs/{digest}"}[5m])
+          rate(registry_http_request_duration_seconds_bucket{le="0.5",method=~"delete",route="/v2/{name}/blobs/{digest}"}[5m])
         )
         +
         sum by () (
-          rate(registry_http_request_duration_seconds_bucket{le="2",method=~"delete",route="/v2/{name}/blobs/{digest}"}[5m])
+          rate(registry_http_request_duration_seconds_bucket{le="2.5",method=~"delete",route="/v2/{name}/blobs/{digest}"}[5m])
         )
       )
       /
@@ -929,7 +929,7 @@ groups:
         )
         +
         sum by () (
-          rate(registry_http_request_duration_seconds_bucket{le="45",method=~"get|head",route="/v2/{name}/blobs/{digest}"}[5m])
+          rate(registry_http_request_duration_seconds_bucket{le="60",method=~"get|head",route="/v2/{name}/blobs/{digest}"}[5m])
         )
       )
       /
@@ -1155,11 +1155,11 @@ groups:
   - expr: |
       (
         sum by () (
-          rate(registry_http_request_duration_seconds_bucket{le="0.6",method=~"delete",route="/v2/{name}/blobs/{digest}"}[30m])
+          rate(registry_http_request_duration_seconds_bucket{le="0.5",method=~"delete",route="/v2/{name}/blobs/{digest}"}[30m])
         )
         +
         sum by () (
-          rate(registry_http_request_duration_seconds_bucket{le="2",method=~"delete",route="/v2/{name}/blobs/{digest}"}[30m])
+          rate(registry_http_request_duration_seconds_bucket{le="2.5",method=~"delete",route="/v2/{name}/blobs/{digest}"}[30m])
         )
       )
       /
@@ -1194,7 +1194,7 @@ groups:
         )
         +
         sum by () (
-          rate(registry_http_request_duration_seconds_bucket{le="45",method=~"get|head",route="/v2/{name}/blobs/{digest}"}[30m])
+          rate(registry_http_request_duration_seconds_bucket{le="60",method=~"get|head",route="/v2/{name}/blobs/{digest}"}[30m])
         )
       )
       /
@@ -1420,11 +1420,11 @@ groups:
   - expr: |
       (
         sum by () (
-          rate(registry_http_request_duration_seconds_bucket{le="0.6",method=~"delete",route="/v2/{name}/blobs/{digest}"}[1h])
+          rate(registry_http_request_duration_seconds_bucket{le="0.5",method=~"delete",route="/v2/{name}/blobs/{digest}"}[1h])
         )
         +
         sum by () (
-          rate(registry_http_request_duration_seconds_bucket{le="2",method=~"delete",route="/v2/{name}/blobs/{digest}"}[1h])
+          rate(registry_http_request_duration_seconds_bucket{le="2.5",method=~"delete",route="/v2/{name}/blobs/{digest}"}[1h])
         )
       )
       /
@@ -1459,7 +1459,7 @@ groups:
         )
         +
         sum by () (
-          rate(registry_http_request_duration_seconds_bucket{le="45",method=~"get|head",route="/v2/{name}/blobs/{digest}"}[1h])
+          rate(registry_http_request_duration_seconds_bucket{le="60",method=~"get|head",route="/v2/{name}/blobs/{digest}"}[1h])
         )
       )
       /
@@ -1685,11 +1685,11 @@ groups:
   - expr: |
       (
         sum by () (
-          rate(registry_http_request_duration_seconds_bucket{le="0.6",method=~"delete",route="/v2/{name}/blobs/{digest}"}[6h])
+          rate(registry_http_request_duration_seconds_bucket{le="0.5",method=~"delete",route="/v2/{name}/blobs/{digest}"}[6h])
         )
         +
         sum by () (
-          rate(registry_http_request_duration_seconds_bucket{le="2",method=~"delete",route="/v2/{name}/blobs/{digest}"}[6h])
+          rate(registry_http_request_duration_seconds_bucket{le="2.5",method=~"delete",route="/v2/{name}/blobs/{digest}"}[6h])
         )
       )
       /
@@ -1724,7 +1724,7 @@ groups:
         )
         +
         sum by () (
-          rate(registry_http_request_duration_seconds_bucket{le="45",method=~"get|head",route="/v2/{name}/blobs/{digest}"}[6h])
+          rate(registry_http_request_duration_seconds_bucket{le="60",method=~"get|head",route="/v2/{name}/blobs/{digest}"}[6h])
         )
       )
       /
