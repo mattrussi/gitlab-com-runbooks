@@ -2,12 +2,12 @@ local basic = import 'grafana/basic.libsonnet';
 local selectors = import 'promql/selectors.libsonnet';
 
 {
-  process_active_callers(selectorHash, legend, segment='repository')::
+  in_process(selectorHash, legend)::
     basic.timeseries(
-      title='Gitaly pack-objects concurrency by %s' % segment,
+      title='Gitaly pack-objects concurrency',
       query=|||
-        max(gitaly_pack_objects_process_active_callers{%(selector)s}) by (fqdn)
-      ||| % { selector: selectors.serializeHash(selectorHash { segment: segment }) },
+        max(gitaly_pack_objects_in_progress{%(selector)s}) by (fqdn)
+      ||| % { selector: selectors.serializeHash(selectorHash) },
       legendFormat=legend,
       interval='$__interval',
       linewidth=1,

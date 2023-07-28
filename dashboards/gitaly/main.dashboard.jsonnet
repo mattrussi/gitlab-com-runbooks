@@ -206,8 +206,7 @@ serviceDashboard.overview('gitaly')
 )
 .addPanels(
   layout.grid([
-    gitalyPackObjectsDashboards.process_active_callers(selector, '{{ fqdn }}', segment='repository'),
-    gitalyPackObjectsDashboards.process_active_callers(selector, '{{ fqdn }}', segment='remote_ip'),
+    gitalyPackObjectsDashboards.in_process(selector, '{{ fqdn }}'),
     gitalyPackObjectsDashboards.cache_lookup(selector, '{{ result }}'),
   ], startRow=4001)
 )

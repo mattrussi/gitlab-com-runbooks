@@ -19,31 +19,6 @@ local gitalyCommandStats = import 'gitlab-dashboards/gitaly/command_stats.libson
 local gitalyPackObjectsDashboards = import 'gitlab-dashboards/gitaly/pack_objects.libsonnet';
 
 local serviceType = 'gitaly';
-local ratelimitLockPercentage(selector) =
-  basic.percentageTimeseries(
-    'Request % acquiring rate-limit lock within 1m, by host + method',
-    description='Percentage of requests that acquire a Gitaly rate-limit lock within 1 minute, by host and method',
-    query=|||
-      sum(
-        rate(
-          gitaly_rate_limiting_acquiring_seconds_bucket{
-            %(selector)s,
-            le="60"
-          }[$__interval]
-        )
-      ) by (environment, type, stage, fqdn, grpc_method)
-      /
-      sum(
-        rate(
-          gitaly_rate_limiting_acquiring_seconds_bucket{
-            %(selector)s,
-            le="+Inf"
-          }[$__interval]
-        )
-      ) by (environment, type, stage, fqdn, grpc_method)
-    ||| % { selector: selector },
-    legendFormat='{{fqdn}} - {{grpc_method}}'
-  );
 
 local inflightGitalyCommandsPerNode(selector) =
   basic.timeseries(
@@ -77,6 +52,44 @@ local gitalySpawnTimeoutsPerNode(selector) =
     query=|||
       increase(gitaly_spawn_timeouts_total{%(selector)s}[$__interval])
     ||| % { selector: selector },
+    legendFormat='{{ fqdn }}',
+    interval='1m',
+    linewidth=1,
+    legend_show=false,
+  );
+
+local gitalySpawnTokenQueueLengthPerNode(selector) =
+  basic.timeseries(
+    title='Gitaly Spawn Token queue length per Node',
+    query=|||
+      sum(gitaly_spawn_token_waiting_length{%(selector)s}) by (fqdn)
+    ||| % { selector: selector },
+    legendFormat='{{ fqdn }}',
+    interval='1m',
+    linewidth=1,
+    legend_show=false,
+  );
+
+local gitalySpawnTokenForkingTimePerNode(selector) =
+  basic.timeseries(
+    title='Gitaly Spawn Token P99 forking time per Node',
+    query=|||
+      histogram_quantile(0.99, sum(rate(gitaly_spawn_forking_time_seconds_bucket{%(selector)s}[$__interval])) by (le))
+    ||| % { selector: selector },
+    format='s',
+    legendFormat='{{ fqdn }}',
+    interval='1m',
+    linewidth=1,
+    legend_show=false,
+  );
+
+local gitalySpawnTokenWaitingTimePerNode(selector) =
+  basic.timeseries(
+    title='Gitaly Spawn Token P99 waiting time per Node',
+    query=|||
+      histogram_quantile(0.99, sum(rate(gitaly_spawn_waiting_time_seconds_bucket{%(selector)s}[$__interval])) by (le))
+    ||| % { selector: selector },
+    format='s',
     legendFormat='{{ fqdn }}',
     interval='1m',
     linewidth=1,
@@ -266,7 +279,9 @@ basic.dashboard(
   .addPanels(
     layout.grid([
       gitalySpawnTimeoutsPerNode(selectorSerialized),
-      ratelimitLockPercentage(selectorSerialized),
+      gitalySpawnTokenQueueLengthPerNode(selectorSerialized),
+      gitalySpawnTokenWaitingTimePerNode(selectorSerialized),
+      gitalySpawnTokenForkingTimePerNode(selectorSerialized),
     ], startRow=5101)
   ),
   gridPos={
@@ -405,8 +420,7 @@ basic.dashboard(
   row.new(title='gitaly pack-objects metrics', collapse=true)
   .addPanels(
     layout.grid([
-      gitalyPackObjectsDashboards.process_active_callers(selectorHash, 'concurrency by repository', segment='repository'),
-      gitalyPackObjectsDashboards.process_active_callers(selectorHash, 'concurrency by remote_ip', segment='remote_ip'),
+      gitalyPackObjectsDashboards.in_process(selectorHash, 'concurrency by repository'),
       gitalyPackObjectsDashboards.queued_commands(selectorHash, 'queued commands'),
       gitalyPackObjectsDashboards.dropped_commands(selectorHash, 'dropped commands'),
       gitalyPackObjectsDashboards.cache_served(selectorHash, 'cache served'),
