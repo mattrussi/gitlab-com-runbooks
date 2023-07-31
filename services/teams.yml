@@ -169,6 +169,8 @@ teams:
   - graphql_query
 - name: activation
   product_stage_group: activation
+  slack_error_budget_channel: g_activation
+  send_error_budget_weekly_to_slack: true
   ignored_components:
   - graphql_query
 
@@ -201,6 +203,8 @@ teams:
   - graphql_query
 - name: acquisition
   product_stage_group: acquisition
+  slack_error_budget_channel: g_acquisition
+  send_error_budget_weekly_to_slack: true
   ignored_components:
   - graphql_query
 - name: database
