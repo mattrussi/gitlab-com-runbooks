@@ -1229,11 +1229,11 @@ To get an OAuth access token:
 
 ```shell
 # Impersonated account
-CLOUDSDK_AUTH_ACCESS_TOKEN="$(vault read -field=token "gcp/impersonated-account/my-project--service-account-foo/token)"; export CLOUDSDK_AUTH_ACCESS_TOKEN"
+CLOUDSDK_AUTH_ACCESS_TOKEN="$(vault read -field=token "gcp/impersonated-account/my-project--service-account-foo/token")"; export CLOUDSDK_AUTH_ACCESS_TOKEN
 # Static account
-CLOUDSDK_AUTH_ACCESS_TOKEN="$(vault read -field=token "gcp/static-account/my-project--service-account-bar/token)"; export CLOUDSDK_AUTH_ACCESS_TOKEN"
+CLOUDSDK_AUTH_ACCESS_TOKEN="$(vault read -field=token "gcp/static-account/my-project--service-account-bar/token")"; export CLOUDSDK_AUTH_ACCESS_TOKEN
 # Roleset
-CLOUDSDK_AUTH_ACCESS_TOKEN="$(vault read -field=token "gcp/roleset/my-project--service-account-bar/token)"; export CLOUDSDK_AUTH_ACCESS_TOKEN"
+CLOUDSDK_AUTH_ACCESS_TOKEN="$(vault read -field=token "gcp/roleset/my-project--service-account-bar/token")"; export CLOUDSDK_AUTH_ACCESS_TOKEN
 ```
 
 To get a service account key:
@@ -1243,6 +1243,42 @@ To get a service account key:
 vault read -field=private_key_data "gcp/static-account/my-project--service-account-bar/key" | base64 -d > service-account-key.json
 # Roleset
 vault read -field=private_key_data "gcp/roleset/my-project--service-account-bar/key" | base64 -d > service-account-key.json
+```
+
+#### GitLab CI configuration example
+
+```yaml
+variables:
+  GOOGLE_PROJECT: my-project
+
+.vault-auth-gcp:
+  id_tokens:
+    VAULT_ID_TOKEN:
+      aud: https://vault.gitlab.net
+  variables:
+    FOO_VAULT_AUTH_ROLE: ${VAULT_AUTH_ROLE}
+    VAULT_GCP_IMPERSONATED_ACCOUNT: ${GOOGLE_PROJECT}--foo-readonly
+    GCP_SERVICE_ACCOUNT_FILE: ${CI_BUILDS_DIR}/.google-service-account-key.json
+  before_script:
+    # Log into Vault
+    - VAULT_TOKEN="$(vault write -field=token "auth/${VAULT_AUTH_PATH}/login" role="${FOO_VAULT_AUTH_ROLE}" jwt="${VAULT_ID_TOKEN}")"; export VAULT_TOKEN
+    # Generate a temporary OAuth token
+    - CLOUDSDK_AUTH_ACCESS_TOKEN="$(vault read -field=token "gcp/impersonated-account/${VAULT_GCP_IMPERSONATED_ACCOUNT}/token")"; export CLOUDSDK_AUTH_ACCESS_TOKEN
+    # Generate a temporary service account key
+    - vault read -field=private_key_data "gcp/static-account/${VAULT_GCP_IMPERSONATED_ACCOUNT}/key" | base64 -d > "${GCP_SERVICE_ACCOUNT_FILE}"
+
+diff:
+  extends: .vault-auth-gcp
+  script:
+    - foo diff
+
+apply:
+  extends: .vault-auth-gcp
+  variables:
+    VAULT_GCP_IMPERSONATED_ACCOUNT: ${GOOGLE_PROJECT}--foo-readwrite
+    FOO_VAULT_AUTH_ROLE: ${VAULT_AUTH_ROLE}-rw
+  script:
+    - foo apply
 ```
 
 ### Kubernetes credentials
@@ -1373,6 +1409,54 @@ HELM_KUBETOKEN="$(vault write -field=service_account_token "kubernetes/my-cluste
 
 # Namespace role
 HELM_KUBETOKEN="$(vault write -field=service_account_token "kubernetes/my-cluster/creds/my-service-configmap-edit" kubernetes_namespace=my-namespace ttl=30m)"; export HELM_KUBETOKEN
+```
+
+#### GitLab CI configuration example
+
+```yaml
+variables:
+  GKE_CLUSTER: my-cluster
+  GOOGLE_PROJECT: my-project
+  GOOGLE_LOCATION: us-east1
+
+.vault-auth-k8s:
+  id_tokens:
+    VAULT_ID_TOKEN:
+      aud: https://vault.gitlab.net
+  variables:
+    FOO_VAULT_AUTH_ROLE: ${VAULT_AUTH_ROLE}
+    VAULT_GCP_IMPERSONATED_ACCOUNT: ${GOOGLE_PROJECT}--foo-readonly
+    VAULT_KUBERNETES_ROLE: foo-readonly
+  before_script:
+    # Log into Vault
+    - VAULT_TOKEN="$(vault write -field=token "auth/${VAULT_AUTH_PATH}/login" role="${FOO_VAULT_AUTH_ROLE}" jwt="${VAULT_ID_TOKEN}")"; export VAULT_TOKEN
+    # If the cluster details (IP, CA certificate) are not retrieved by any other way, get them via gcloud
+    - CLOUDSDK_AUTH_ACCESS_TOKEN="$(vault read -field=token "gcp/impersonated-account/${VAULT_GCP_IMPERSONATED_ACCOUNT}/token")"; export CLOUDSDK_AUTH_ACCESS_TOKEN
+    - gcloud container clusters get-credentials "${GKE_CLUSTER}" --project "${GOOGLE_PROJECT}" --location "${GOOGLE_LOCATION}"
+    # Generate a temporary Kubernetes service account token
+    # ..if a cluster role binding is needeed
+    - KUBE_TOKEN="$(vault write -field=service_account_token "kubernetes/${GKE_CLUSTER}/creds/${VAULT_KUBERNETES_ROLE}" kubernetes_namespace=vault-k8s-secrets cluster_role_binding=true ttl=30m)"
+    # ..if a cluster role binding is NOT needed
+    - KUBE_TOKEN="$(vault write -field=service_account_token "kubernetes/${GKE_CLUSTER}/creds/${VAULT_KUBERNETES_ROLE}" kubernetes_namespace=my-namespace ttl=30m)"
+    # Use the token with Helm / Helmfile
+    - HELM_KUBETOKEN="${KUBE_TOKEN}"; export HELM_KUBETOKEN
+    # Use the token with kubectl / Flux / Tanka
+    - kubectl config set-credentials foo --token="${KUBE_TOKEN}"
+    - kubectl config set-context "$(kubectl config current-context)" --user foo
+
+diff:
+  extends: .vault-auth-k8s
+  script:
+    - foo diff
+
+apply:
+  extends: .vault-auth-k8s
+  variables:
+    FOO_VAULT_AUTH_ROLE: ${VAULT_AUTH_ROLE}-rw
+    VAULT_GCP_IMPERSONATED_ACCOUNT: ${GOOGLE_PROJECT}--foo-readwrite
+    VAULT_KUBERNETES_ROLE: foo-readwrite
+  script:
+    - foo apply
 ```
 
 ### Interact with Vault Secrets
