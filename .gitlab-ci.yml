@@ -261,11 +261,11 @@ notify-mirror-source:
 ################
 
 .docker-image:
-  image: docker:24.0.4
+  image: docker:24.0.5
   tags:
     - gitlab-org-docker
   services:
-    - docker:24.0.4-dind
+    - docker:24.0.5-dind
   retry: 2
   variables:
     DOCKER_TLS_CERTDIR: ""
