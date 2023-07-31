@@ -7,7 +7,7 @@ local redisHelpers = import './lib/redis-helpers.libsonnet';
 metricsCatalog.serviceDefinition(
   redisArchetype(
     type='redis-cluster-cache',
-    railsStorageSelector=redisHelpers.storageSelector('cluster_cache'),
+    railsStorageSelector=redisHelpers.storageSelector({ oneOf: ['cluster_cache', 'cache'] }),
     descriptiveName='Redis Cache in Redis Cluster',
     redisCluster=true
   )
