@@ -177,7 +177,7 @@ basic.dashboard(
       title='Request Symbol / sec',
       query=|||
         sum by(lang) (
-          rate(code_suggestions_prompt_symbols_total{%(selector)s,symbol="imports"}[$__rate_interval])
+          rate(code_suggestions_prompt_symbols_total{%(selector)s}[$__rate_interval])
         )
       ||| % formatConfig,
       legendFormat='__auto',
