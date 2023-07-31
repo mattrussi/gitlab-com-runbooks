@@ -11,10 +11,11 @@
 
 ## Logging
 
-* [Rails](/home/contributors/app/log/production.log)
+* []()
 
 ## Troubleshooting Pointers
 
+* [contributors.gitlab.com](contributors-dashboard.md)
 * [../kube/k8s-operations.md](../kube/k8s-operations.md)
 * [Life of a Git Request](../tutorials/overview_life_of_a_git_request.md)
 <!-- END_MARKER -->
