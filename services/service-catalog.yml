@@ -165,24 +165,12 @@ services:
   - name: contributors
     tier: sv
     friendly_name: contributors.gitlab.com
-    teams:
-      - verify
     label: Contributors
-    owner: reliability_general
+    owner: developer_relations
     technical:
-      project:
-        - https://gitlab.com/gitlab-com/gitlab-contributors
-      documents:
-        design: https://github.com/rails/rails-contributors/blob/master/doc/design.md
-        architecture:
-        readiness_review:
-        service:
-          - https://gitlab.com/gitlab-com/gitlab-contributors/blob/master/README.md
-        security:
-      dependencies:
       logging:
-        - name: Rails
-          permalink: /home/contributors/app/log/production.log
+        - name:
+          permalink:
     observability:
       monitors:
         primary_grafana_dashboard:

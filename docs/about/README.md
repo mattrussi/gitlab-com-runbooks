@@ -27,6 +27,7 @@
 * [Cloudflare: Managing Traffic](../cloudflare/managing-traffic.md)
 * [Service Locations](../cloudflare/services-locations.md)
 * [Chef Guidelines](../config_management/chef-guidelines.md)
+* [contributors.gitlab.com](../contributors/contributors-dashboard.md)
 * [Backups](../customersdot/backups.md)
 * [CustomersDot main troubleshoot documentation](../customersdot/overview.md)
 * [CI Mirrored Tables](../decomposition/ci-mirrored-tables.md)
