@@ -34,6 +34,7 @@
 * [What is Programmable Search Engine?](../docs.gitlab.com/programmableSearch.md)
 * [../elastic/elasticsearch-integration-in-gitlab.md](../elastic/elasticsearch-integration-in-gitlab.md)
 * [ErrorTracking main troubleshooting document](../errortracking/overview.md)
+* [Management for forum.gitlab.com](../forum/discourse-forum.md)
 * [SSL Certificate expiring or expired](../frontend/ssl_cert.md)
 * [Upgrading the OS of Gitaly VMs](../gitaly/gitaly-os-upgrade.md)
 * [Gitaly repository cgroups](../gitaly/gitaly-repos-cgroup.md)

@@ -236,28 +236,12 @@ services:
   - name: forum
     tier: sv
     friendly_name: forum.gitlab.com
-    teams:
-      - support
     label: forum.gitlab.com
-    owner: reliability_general
+    owner: developer_relations
     technical:
-      project:
-      documents:
-        design:
-        architecture:
-        readiness_review: https://gitlab.com/gitlab-com/gl-infra/readiness/-/issues/8
-        service:
-          - https://github.com/discourse/discourse_docker
-        security:
-      dependencies:
       logging:
-        - name: production.log
-          permalink: /var/discourse/shared/standalone/log/rails
-    observability:
-      monitors:
-        grafana_folder:
-        primary_grafana_dashboard: bd2Kl9Imk/host-stats?orgId=1&var-environment=ops&var-node=forum.gitlab.com
-        sentry_slug:
+        - name:
+          permalink:
 
   - name: kube
     tier: inf
