@@ -29,7 +29,6 @@
 * [Chef Vault Basics](../config_management/chef-vault.md)
 * [Chef Tips and Tools](../config_management/chef-workflow.md)
 * [../elastic/elasticsearch-integration-in-gitlab.md](../elastic/elasticsearch-integration-in-gitlab.md)
-* [Management for forum.gitlab.com](../forum/discourse-forum.md)
 * [Blocking and disabling things in the HAProxy load balancers](../frontend/block-things-in-haproxy.md)
 * [HAProxy management at GitLab](../frontend/haproxy.md)
 * [Possible breach of SSH MaxStartups](../frontend/ssh-maxstartups-breach.md)

@@ -30,7 +30,6 @@
 * [CustomersDot main troubleshoot documentation](../customersdot/overview.md)
 * [../elastic/elastic-cloud.md](../elastic/elastic-cloud.md)
 * [../elastic/kibana.md](../elastic/kibana.md)
-* [Management for forum.gitlab.com](../forum/discourse-forum.md)
 * [Frontend (HAProxy) Logging](../frontend/haproxy-logging.md)
 * [HAProxy management at GitLab](../frontend/haproxy.md)
 * [Deploying a change to gitlab.rb](../git/deploy-gitlab-rb-change.md)
