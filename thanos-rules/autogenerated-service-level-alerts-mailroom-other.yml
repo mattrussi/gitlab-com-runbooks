@@ -22,7 +22,7 @@ groups:
       grafana_variables: environment,stage
       promql_template_1: |
         sum by (env,environment,tier,stage) (
-          sli_aggregations:sidekiq_jobs_failed_total_rate5m{environment="{{ $labels.environment }}",stage="{{ $labels.stage }}",worker="EmailReceiverWorker"}
+          sli_aggregations:gitlab_sli_sidekiq_execution_error_total_rate5m{environment="{{ $labels.environment }}",stage="{{ $labels.stage }}",worker="EmailReceiverWorker"}
         )
       runbook: docs/mailroom/README.md
     labels:
@@ -70,7 +70,7 @@ groups:
       grafana_variables: environment,stage
       promql_template_1: |
         sum by (env,environment,tier,stage) (
-          sli_aggregations:sidekiq_jobs_failed_total_rate5m{environment="{{ $labels.environment }}",stage="{{ $labels.stage }}",worker="EmailReceiverWorker"}
+          sli_aggregations:gitlab_sli_sidekiq_execution_error_total_rate5m{environment="{{ $labels.environment }}",stage="{{ $labels.stage }}",worker="EmailReceiverWorker"}
         )
       runbook: docs/mailroom/README.md
     labels:
@@ -118,7 +118,7 @@ groups:
       grafana_variables: environment,stage
       promql_template_1: |
         sum by (env,environment,tier,stage) (
-          sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate5m{environment="{{ $labels.environment }}",le="+Inf",stage="{{ $labels.stage }}",worker="EmailReceiverWorker"}
+          sli_aggregations:gitlab_sli_sidekiq_execution_total_rate5m{environment="{{ $labels.environment }}",stage="{{ $labels.stage }}",worker="EmailReceiverWorker"}
         )
       runbook: docs/mailroom/README.md
     labels:
@@ -155,7 +155,7 @@ groups:
       grafana_variables: environment,stage
       promql_template_1: |
         sum by (env,environment,tier,stage) (
-          sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate5m{environment="{{ $labels.environment }}",le="+Inf",stage="{{ $labels.stage }}",worker="EmailReceiverWorker"}
+          sli_aggregations:gitlab_sli_sidekiq_execution_total_rate5m{environment="{{ $labels.environment }}",stage="{{ $labels.stage }}",worker="EmailReceiverWorker"}
         )
       runbook: docs/mailroom/README.md
     labels:

@@ -59,13 +59,7 @@ metricsCatalog.serviceDefinition({
   // cardinality. The metrics catalog will generate recording rules with
   // the appropriate aggregations based on this set.
   // Use sparingly, and don't overuse.
-  recordingRuleMetrics: [
-    // Although not used here, below 3 intermediate rules are still being used in
-    // mailroom, ops-gitlab-net, and various dashboards
-    'sidekiq_jobs_completion_seconds_bucket',
-    'sidekiq_jobs_queue_duration_seconds_bucket',
-    'sidekiq_jobs_failed_total',
-  ] + (
+  recordingRuleMetrics: (
     sliLibrary.get('sidekiq_execution').recordingRuleMetrics
     + sliLibrary.get('sidekiq_queueing').recordingRuleMetrics
   ),
@@ -105,7 +99,7 @@ metricsCatalog.serviceDefinition({
       shardLevelMonitoring: false,
 
       requestRate: rateMetric(
-        counter='sidekiq_jobs_completion_seconds_count',
+        counter='gitlab_sli_sidekiq_execution_total',
         selector=baseSelector { worker: { re: 'EmailReceiverWorker|ServiceDeskEmailReceiverWorker' } }
       ),
 
@@ -118,7 +112,7 @@ metricsCatalog.serviceDefinition({
         errorRatio: 0.7,
       },
 
-      significantLabels: ['error'],
+      significantLabels: [],
 
       toolingLinks: [
         toolingLinks.kibana(title='Email receiver errors', index='sidekiq', type='sidekiq', message='Error processing message'),
