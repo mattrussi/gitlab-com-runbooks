@@ -12,7 +12,7 @@ groups:
       type: sidekiq
     expr: |
       sum by (env,environment,stage) (
-        rate(sidekiq_jobs_completion_seconds_count{type="sidekiq",worker=~"EmailReceiverWorker|ServiceDeskEmailReceiverWorker"}[5m])
+        sli_aggregations:gitlab_sli_sidekiq_execution_apdex_total_rate5m{type="sidekiq",worker=~"EmailReceiverWorker|ServiceDeskEmailReceiverWorker"}
       )
   - record: gitlab:component:feature_category:execution:error:rate_5m
     labels:
@@ -117,7 +117,7 @@ groups:
       type: sidekiq
     expr: |
       sum by (env,environment,stage) (
-        rate(sidekiq_jobs_completion_seconds_count{type="sidekiq",worker=~"EmailReceiverWorker|ServiceDeskEmailReceiverWorker"}[30m])
+        sli_aggregations:gitlab_sli_sidekiq_execution_apdex_total_rate30m{type="sidekiq",worker=~"EmailReceiverWorker|ServiceDeskEmailReceiverWorker"}
       )
   - record: gitlab:component:feature_category:execution:error:rate_30m
     labels:
@@ -222,7 +222,7 @@ groups:
       type: sidekiq
     expr: |
       sum by (env,environment,stage) (
-        rate(sidekiq_jobs_completion_seconds_count{type="sidekiq",worker=~"EmailReceiverWorker|ServiceDeskEmailReceiverWorker"}[1h])
+        sli_aggregations:gitlab_sli_sidekiq_execution_apdex_total_rate1h{type="sidekiq",worker=~"EmailReceiverWorker|ServiceDeskEmailReceiverWorker"}
       )
   - record: gitlab:component:feature_category:execution:error:rate_1h
     labels:

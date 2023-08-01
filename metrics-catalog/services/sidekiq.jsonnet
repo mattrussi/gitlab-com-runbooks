@@ -104,7 +104,7 @@ metricsCatalog.serviceDefinition({
       shardLevelMonitoring: false,
 
       requestRate: rateMetric(
-        counter='sidekiq_jobs_completion_seconds_count',
+        counter='gitlab_sli_sidekiq_execution_apdex_total',
         selector=baseSelector { worker: { re: 'EmailReceiverWorker|ServiceDeskEmailReceiverWorker' } }
       ),
 

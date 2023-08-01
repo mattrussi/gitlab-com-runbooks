@@ -162,7 +162,7 @@ groups:
       type: ci-runners
     expr: |
       sum by (env,environment,stage) (
-        rate(sidekiq_jobs_completion_seconds_count{worker="Ci::ArchiveTraceWorker"}[1m])
+        sli_aggregations:gitlab_sli_sidekiq_execution_apdex_total_rate1m{worker="Ci::ArchiveTraceWorker"}
       )
   - record: gitlab_component_errors:rate
     labels:
@@ -342,7 +342,7 @@ groups:
       type: ci-runners
     expr: |
       sum by (env,environment,stage) (
-        rate(sidekiq_jobs_completion_seconds_count{worker="Ci::ArchiveTraceWorker"}[5m])
+        sli_aggregations:gitlab_sli_sidekiq_execution_apdex_total_rate5m{worker="Ci::ArchiveTraceWorker"}
       )
   - record: gitlab_component_errors:rate_5m
     labels:
@@ -522,7 +522,7 @@ groups:
       type: ci-runners
     expr: |
       sum by (env,environment,stage) (
-        rate(sidekiq_jobs_completion_seconds_count{worker="Ci::ArchiveTraceWorker"}[30m])
+        sli_aggregations:gitlab_sli_sidekiq_execution_apdex_total_rate30m{worker="Ci::ArchiveTraceWorker"}
       )
   - record: gitlab_component_errors:rate_30m
     labels:
@@ -702,7 +702,7 @@ groups:
       type: ci-runners
     expr: |
       sum by (env,environment,stage) (
-        rate(sidekiq_jobs_completion_seconds_count{worker="Ci::ArchiveTraceWorker"}[1h])
+        sli_aggregations:gitlab_sli_sidekiq_execution_apdex_total_rate1h{worker="Ci::ArchiveTraceWorker"}
       )
   - record: gitlab_component_errors:rate_1h
     labels:
@@ -882,7 +882,7 @@ groups:
       type: ci-runners
     expr: |
       sum by (env,environment,stage) (
-        rate(sidekiq_jobs_completion_seconds_count{worker="Ci::ArchiveTraceWorker"}[6h])
+        sli_aggregations:gitlab_sli_sidekiq_execution_apdex_total_rate6h{worker="Ci::ArchiveTraceWorker"}
       )
   - record: gitlab_component_errors:rate_6h
     labels:
