@@ -1,4 +1,5 @@
 local aggregationSets = (import 'gitlab-metrics-config.libsonnet').aggregationSets;
+local minimumOpRate = import 'slo-alerts/minimum-op-rate.libsonnet';
 local alerts = import 'alerts/alerts.libsonnet';
 local aggregationSetTransformer = import 'servicemetrics/aggregation-set-transformer.libsonnet';
 local serviceLevelAlerts = import 'slo-alerts/service-level-alerts.libsonnet';
@@ -42,7 +43,7 @@ local sidekiqThanosAlerts(extraSelector) =
         unless
         (
           sum by (environment, queue, feature_category, worker) (
-            gitlab_background_jobs:execution:ops:rate_1h{%(selector)s}
+            sli_aggregations:gitlab_sli_sidekiq_execution_apdex_success_total_rate1h{%(selector)s}
           ) > 0
         )
       ||| % {
@@ -78,7 +79,7 @@ local sidekiqThanosAlerts(extraSelector) =
       expr: |||
         (sum by(environment, queue) (gitlab_background_jobs:queue:ops:rate_6h{%(selector)s})> 0.001)
         unless
-        (sum by(environment, queue) (gitlab_background_jobs:execution:ops:rate_6h{%(selector)s}) > 0)
+        (sum by(environment, queue) (sli_aggregations:gitlab_sli_sidekiq_execution_apdex_success_total_rate6h{%(selector)s}) > 0)
       ||| % {
         selector: selectors.serializeHash(extraSelector),
       },
@@ -99,7 +100,7 @@ local sidekiqThanosAlerts(extraSelector) =
         grafana_panel_id: stableIds.hashStableId('request-rate'),
         grafana_variables: 'environment,stage,queue',
         grafana_min_zoom_hours: '6',
-        promql_template_1: 'gitlab_background_jobs:execution:ops:rate_6h{environment="$environment", queue="$queue"}',
+        promql_template_1: 'sli_aggregations:gitlab_sli_sidekiq_execution_apdex_success_total_rate6h{environment="$environment", queue="$queue"}',
       },
     },
     {
@@ -107,7 +108,7 @@ local sidekiqThanosAlerts(extraSelector) =
       expr: |||
         (sum by(environment, worker) (gitlab_background_jobs:queue:ops:rate_6h{%(selector)s})> 0.001)
         unless
-        (sum by(environment, worker) (gitlab_background_jobs:execution:ops:rate_6h{%(selector)s})  > 0)
+        (sum by(environment, worker) (sli_aggregations:gitlab_sli_sidekiq_execution_apdex_success_total_rate6h{%(selector)s})  > 0)
       ||| % {
         selector: selectors.serializeHash(extraSelector),
       },
@@ -128,7 +129,7 @@ local sidekiqThanosAlerts(extraSelector) =
         grafana_panel_id: stableIds.hashStableId('request-rate'),
         grafana_variables: 'environment,stage,worker',
         grafana_min_zoom_hours: '6',
-        promql_template_1: 'gitlab_background_jobs:execution:ops:rate_6h{environment="$environment", worker="$worker"}',
+        promql_template_1: 'sli_aggregations:gitlab_sli_sidekiq_execution_apdex_success_total_rate6h{environment="$environment", worker="$worker"}',
       },
     },
     {
@@ -164,48 +165,111 @@ local sidekiqThanosAlerts(extraSelector) =
         grafana_variables: 'environment,worker',
       },
     },
-  ] +
-  serviceLevelAlerts.apdexAlertsForSLI(
-    alertName=serviceLevelAlerts.nameSLOViolationAlert('sidekiq', 'WorkerExecution', 'ApdexSLOViolation'),
-    alertTitle='The `{{ $labels.worker }}` Sidekiq worker, `{{ $labels.stage }}` stage, has an apdex violating SLO',
-    alertDescriptionLines=[|||
-      The `{{ $labels.worker }}` worker is not meeting its apdex SLO.
-    |||],
-    serviceType='sidekiq',
-    severity='s4',
-    thresholdSLOValue=fixedApdexThreshold,
-    aggregationSet=aggregationSets.sidekiqWorkerExecutionSLIs,
-    windows=['3d'],
-    metricSelectorHash=extraSelector,
-    minimumSamplesForMonitoring=minimumSamplesForMonitoringApdex,
-    extraAnnotations={
-      grafana_dashboard_id: 'sidekiq-worker-detail/sidekiq-worker-detail',
-      grafana_panel_id: stableIds.hashStableId('execution-apdex'),
-      grafana_variables: 'environment,stage,worker',
-      grafana_min_zoom_hours: '6',
+    {
+      alert: serviceLevelAlerts.nameSLOViolationAlert('sidekiq', 'WorkerExecution', 'ApdexSLOViolation'),
+      expr: |||
+        (
+          (
+            sli_aggregations:gitlab_sli_sidekiq_execution_apdex_success_total_rate6h{%(selector)s}
+            /
+            sli_aggregations:gitlab_sli_sidekiq_execution_apdex_total_rate6h{%(selector)s}
+          ) < %(apdexThreshold)s
+          and
+          (
+            sli_aggregations:gitlab_sli_sidekiq_execution_apdex_success_total_rate30m{%(selector)s}
+            /
+            sli_aggregations:gitlab_sli_sidekiq_execution_apdex_total_rate30m{%(selector)s}
+          ) < %(apdexThreshold)s
+        )
+        and on (env, environment, tier, type, stage, shard, queue, feature_category, urgency, worker)
+        (
+          sum by (env, environment, tier, type, stage, shard, queue, feature_category, urgency, worker) (
+            sli_aggregations:gitlab_sli_sidekiq_execution_total_rate6h{%(selector)s}
+          ) >= %(minimumOpRate)s
+        )
+      ||| % {
+        selector: selectors.serializeHash(extraSelector),
+        minimumOpRate: minimumOpRate.calculateFromSamplesForDuration('6h', minimumSamplesForMonitoringApdex),
+        apdexThreshold: fixedApdexThreshold,
+      },
+      'for': '1h',
+      labels: {
+        aggregation: 'sidekiq_execution',
+        alert_class: 'slo_violation',
+        alert_type: 'symptom',
+        rules_domain: 'general',
+        severity: 's4',
+        sli_type: 'apdex',
+        slo_alert: 'yes',
+        window: '6h',
+      },
+      annotations: {
+        title: 'The `{{ $labels.worker }}` Sidekiq worker, `{{ $labels.stage }}` stage, has an apdex violating SLO',
+        description: |||
+          The `{{ $labels.worker }}` worker is not meeting its apdex SLO.
+
+          Currently the apdex value is {{ $value | humanizePercentage }}.
+        |||,
+        runbook: 'docs/sidekiq/README.md',
+        grafana_dashboard_id: 'sidekiq-worker-detail/sidekiq-worker-detail',
+        grafana_panel_id: stableIds.hashStableId('execution-apdex'),
+        grafana_variables: 'environment,stage,worker',
+        grafana_min_zoom_hours: '6',
+      },
     },
-  )
-  +
-  serviceLevelAlerts.errorAlertsForSLI(
-    alertName=serviceLevelAlerts.nameSLOViolationAlert('sidekiq', 'WorkerExecution', 'ErrorSLOViolation'),
-    alertTitle='The `{{ $labels.worker }}` Sidekiq worker, `{{ $labels.stage }}` stage, has an error rate violating SLO',
-    alertDescriptionLines=[|||
-      The `{{ $labels.worker }}` worker is not meeting its error-rate SLO.
-    |||],
-    serviceType='sidekiq',
-    severity='s4',
-    thresholdSLOValue=fixedErrorRateThreshold,
-    aggregationSet=aggregationSets.sidekiqWorkerExecutionSLIs,
-    windows=['3d'],
-    metricSelectorHash=extraSelector,
-    minimumSamplesForMonitoring=minimumSamplesForMonitoringErrors,
-    extraAnnotations={
-      grafana_dashboard_id: 'sidekiq-worker-detail/sidekiq-worker-detail',
-      grafana_panel_id: stableIds.hashStableId('error-ratio'),
-      grafana_variables: 'environment,stage,worker',
-      grafana_min_zoom_hours: '6',
+    {
+      alert: serviceLevelAlerts.nameSLOViolationAlert('sidekiq', 'WorkerExecution', 'ErrorSLOViolation'),
+      expr: |||
+        (
+          (
+            sli_aggregations:gitlab_sli_sidekiq_execution_error_total_rate6h{%(selector)s}
+            /
+            sli_aggregations:gitlab_sli_sidekiq_execution_total_rate6h{%(selector)s}
+          ) < %(errorThreshold)s
+          and
+          (
+            sli_aggregations:gitlab_sli_sidekiq_execution_error_total_rate30m{%(selector)s}
+            /
+            sli_aggregations:gitlab_sli_sidekiq_execution_total_rate30m{%(selector)s}
+          ) < %(errorThreshold)s
+        )
+        and on (env, environment, tier, type, stage, shard, queue, feature_category, urgency, worker)
+        (
+          sum by (env, environment, tier, type, stage, shard, queue, feature_category, urgency, worker) (
+            sli_aggregations:gitlab_sli_sidekiq_execution_total_rate6h{%(selector)s}
+          ) >= %(errorThreshold)s
+        )
+      ||| % {
+        selector: selectors.serializeHash(extraSelector),
+        minimumOpRate: minimumOpRate.calculateFromSamplesForDuration('6h', minimumSamplesForMonitoringErrors),
+        errorThreshold: fixedErrorRateThreshold,
+      },
+      'for': '1h',
+      labels: {
+        aggregation: 'sidekiq_execution',
+        alert_class: 'slo_violation',
+        alert_type: 'symptom',
+        rules_domain: 'general',
+        severity: 's4',
+        sli_type: 'error',
+        slo_alert: 'yes',
+        window: '6h',
+      },
+      annotations: {
+        title: 'The `{{ $labels.worker }}` Sidekiq worker, `{{ $labels.stage }}` stage, has an error rate violating SLO',
+        description: |||
+          The `{{ $labels.worker }}` worker is not meeting its error-rate SLO.
+
+          Currently the error-rate is {{ $value | humanizePercentage }}.
+        |||,
+        runbook: 'docs/sidekiq/README.md',
+        grafana_dashboard_id: 'sidekiq-worker-detail/sidekiq-worker-detail',
+        grafana_panel_id: stableIds.hashStableId('error-ratio'),
+        grafana_variables: 'environment,stage,worker',
+        grafana_min_zoom_hours: '6',
+      },
     },
-  );
+  ];
 
 
 local rules(extraSelector) = {
@@ -213,11 +277,6 @@ local rules(extraSelector) = {
     aggregationSetTransformer.generateRecordingRuleGroups(
       sourceAggregationSet=aggregationSets.sidekiqWorkerQueueSourceSLIs { selector+: extraSelector },
       targetAggregationSet=aggregationSets.sidekiqWorkerQueueSLIs,
-      extrasForGroup={ partial_response_strategy: 'warn' },
-    ) +
-    aggregationSetTransformer.generateRecordingRuleGroups(
-      sourceAggregationSet=aggregationSets.sidekiqWorkerExecutionSourceSLIs { selector+: extraSelector },
-      targetAggregationSet=aggregationSets.sidekiqWorkerExecutionSLIs,
       extrasForGroup={ partial_response_strategy: 'warn' },
     )
     + [{
