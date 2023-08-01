@@ -5,14 +5,16 @@ local railsCommon = import 'gitlab-dashboards/rails_common_graphs.libsonnet';
 local basic = import 'grafana/basic.libsonnet';
 local layout = import 'grafana/layout.libsonnet';
 local templates = import 'grafana/templates.libsonnet';
+local toolingLinks = import 'toolinglinks/toolinglinks.libsonnet';
 local row = grafana.row;
 local template = grafana.template;
 local saturationDetail = import 'gitlab-dashboards/saturation_detail.libsonnet';
 local thresholds = import 'gitlab-dashboards/thresholds.libsonnet';
 local promQuery = import 'grafana/prom_query.libsonnet';
 local link = grafana.link;
-local elasticsearchLinks = import 'elasticlinkbuilder/elasticsearch_links.libsonnet';
 local matching = import 'elasticlinkbuilder/matching.libsonnet';
+local toolingLinkDefinition = (import 'toolinglinks/tooling_link_definition.libsonnet').toolingLinkDefinition({ tool:: 'kibana', type:: 'log' });
+local elasticsearchLinks = import 'elasticlinkbuilder/elasticsearch_links.libsonnet';
 
 local selectors = import 'promql/selectors.libsonnet';
 
@@ -27,23 +29,18 @@ local workerDetailDataLink = {
   title: 'Worker Detail: ${__field.labels.worker}',
 };
 
-local queueTimeLatencyTimeseries(title, aggregator) =
-  basic.latencyTimeseries(
-    title=title,
-    description='Estimated queue time, between when the job is enqueued and executed. Lower is better.',
-    query=|||
-      histogram_quantile(0.95, sum(sli_aggregations:sidekiq_jobs_queue_duration_seconds_bucket_rate5m{environment="$environment", shard=~"$shard"}) by (le, %s))
-    ||| % [aggregator],
-    legendFormat='{{ %s }}' % [aggregator],
-    format='s',
-    yAxisLabel='Queue Duration',
-    interval='1m',
-    intervalFactor=3,
-    legend_show=true,
-    logBase=10,
-    linewidth=1,
-    min=0.01,
-  );
+local latencyKibanaViz(index, title, percentile) =
+  function(options)
+    [
+      toolingLinkDefinition({
+        title: title,
+        url: elasticsearchLinks.buildElasticLinePercentileVizURL(index,
+                                                                 [matching.matchFilter('json.shard.keyword', '$shard')],
+                                                                 splitSeries=true,
+                                                                 percentile=percentile),
+        type:: 'chart',
+      }),
+    ];
 
 local inflightJobsTimeseries(title, aggregator) =
   basic.timeseries(
@@ -81,7 +78,7 @@ basic.dashboard(
           and on (queue)
           (
             max by (queue) (
-              sli_aggregations:sidekiq_jobs_queue_duration_seconds_bucket_rate1m{environment="$environment", shard=~"$shard"} > 0
+              sli_aggregations:gitlab_sli_sidekiq_queueing_apdex_total_rate1m{environment="$environment", shard=~"$shard"} > 0
             )
           )
         )
@@ -107,7 +104,7 @@ basic.dashboard(
           and on (queue)
           (
             max by (queue) (
-              sli_aggregations:sidekiq_jobs_queue_duration_seconds_bucket_rate1m{environment="$environment", shard=~"$shard"} > 0
+              sli_aggregations:gitlab_sli_sidekiq_queueing_apdex_total_rate1m{environment="$environment", shard=~"$shard"} > 0
             )
           )
         )
@@ -120,21 +117,36 @@ basic.dashboard(
     ),
   ], startRow=101)
   +
-  layout.rowGrid('Queue Time - time spend queueing', [
-    queueTimeLatencyTimeseries(
-      title='Sidekiq Estimated p95 Job Queue Time for $shard shard',
-      aggregator='shard'
+  layout.rowGrid('Queue Time & Execution Time', [
+    grafana.text.new(
+      title='Queue Time - time spend queueing',
+      mode='markdown',
+      description='Estimated queue time, between when the job is enqueued and executed. Lower is better.',
+      content=toolingLinks.generateMarkdown([
+        latencyKibanaViz('sidekiq_queueing_viz_by_shard', '📈 Kibana: Sidekiq queue time p95 percentile latency', 95),
+        latencyKibanaViz('sidekiq_queueing_viz_by_worker', '📈 Kibana: Sidekiq queue time p95 percentile latency aggregated (split by worker)', 95),
+        latencyKibanaViz('sidekiq_queueing_viz_by_queue', '📈 Kibana: Sidekiq queue time p95 percentile latency aggregated (split by queue)', 95),
+      ]) + |||
+
+        Warning: Kibana links don't work when multiple shards are selected.
+      |||
     ),
-    queueTimeLatencyTimeseries(
-      title='Sidekiq Estimated p95 Job Queue Time per Queue, $shard shard',
-      aggregator='queue'
+    grafana.text.new(
+      title='Individual Execution Time - time taken for individual jobs to complete',
+      mode='markdown',
+      description='The duration, once a job starts executing, that it runs for, by shard. Lower is better.',
+      content=toolingLinks.generateMarkdown([
+        latencyKibanaViz('sidekiq_execution_viz_by_shard', '📈 Kibana: Sidekiq execution time median latency', 50),
+        latencyKibanaViz('sidekiq_execution_viz_by_shard', '📈 Kibana: Sidekiq execution time p95 percentile latency', 95),
+        latencyKibanaViz('sidekiq_execution_viz_by_worker', '📈 Kibana: Sidekiq execution time p95 percentile latency aggregated (split by worker)', 95),
+        latencyKibanaViz('sidekiq_execution_viz_by_queue', '📈 Kibana: Sidekiq execution time p95 percentile latency aggregated (split by queue)', 95),
+      ]) + |||
+
+        Warning: Kibana links don't work when multiple shards are selected.
+      |||
+
     ),
-    queueTimeLatencyTimeseries(
-      title='Sidekiq Estimated p95 Job Queue Time per Worker, $shard shard',
-      aggregator='worker'
-    )
-    .addDataLink(workerDetailDataLink),
-  ], startRow=201)
+  ], startRow=201, rowHeight=5)
   +
   layout.rowGrid('Inflight Jobs - jobs currently running', [
     inflightJobsTimeseries(
@@ -151,91 +163,6 @@ basic.dashboard(
     )
     .addDataLink(workerDetailDataLink),
   ], startRow=301)
-  +
-  layout.rowGrid('Individual Execution Time - time taken for individual jobs to complete', [
-    basic.multiTimeseries(
-      title='Sidekiq Estimated Median Job Latency for $shard shard',
-      description='The median duration, once a job starts executing, that it runs for, by shard. Lower is better.',
-      queries=[
-        {
-          query: |||
-            histogram_quantile(0.50,
-              sum by (shard, le) (
-                sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate5m{
-                  environment="$environment",
-                  shard=~"$shard"
-                }
-              )
-            )
-          |||,
-          legendFormat: '{{ shard }} p50',
-        },
-        {
-          query: |||
-            histogram_quantile(0.95,
-              sum by (shard, le) (
-                sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate5m{
-                  environment="$environment",
-                  shard=~"$shard"
-                }
-              )
-            )
-          |||,
-          legendFormat: '{{ shard }} p95',
-        },
-      ],
-      format='s',
-      yAxisLabel='Duration',
-      interval='1m',
-      intervalFactor=3,
-      legend_show=true,
-      linewidth=1,
-    ),
-    basic.latencyTimeseries(
-      title='Sidekiq Estimated p95 Job Latency per Queue, for $shard shard',
-      description='The 95th percentile duration, once a job starts executing, that it runs for, by queue. Lower is better.',
-      query=|||
-        histogram_quantile(0.95,
-          sum by (queue, le) (
-            sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate5m{
-              environment="$environment",
-              shard=~"$shard"
-            }
-          )
-        )
-      |||,
-      legendFormat='p95 {{ queue }}',
-      format='s',
-      yAxisLabel='Duration',
-      interval='2m',
-      intervalFactor=5,
-      legend_show=true,
-      logBase=10,
-      linewidth=1,
-    ),
-    basic.latencyTimeseries(
-      title='Sidekiq Estimated p95 Job Latency per Worker, for $shard shard',
-      description='The 95th percentile duration, once a job starts executing, that it runs for, by worker. Lower is better.',
-      query=|||
-        histogram_quantile(0.95,
-          sum by (worker, le) (
-            sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate5m{
-              environment="$environment",
-              shard=~"$shard"
-            }
-          )
-        )
-      |||,
-      legendFormat='p95 {{ worker }}',
-      format='s',
-      yAxisLabel='Duration',
-      interval='2m',
-      intervalFactor=5,
-      legend_show=true,
-      logBase=10,
-      linewidth=1,
-    ),
-  ], startRow=401)
   +
   layout.rowGrid('Total Execution Time - total time consumed processing jobs', [
     basic.timeseries(

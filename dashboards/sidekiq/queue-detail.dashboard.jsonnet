@@ -12,6 +12,8 @@ local elasticsearchLinks = import 'elasticlinkbuilder/elasticsearch_links.libson
 local matching = import 'elasticlinkbuilder/matching.libsonnet';
 local issueSearch = import 'gitlab-dashboards/issue_search.libsonnet';
 local selectors = import 'promql/selectors.libsonnet';
+local toolingLinkDefinition = (import 'toolinglinks/tooling_link_definition.libsonnet').toolingLinkDefinition({ tool:: 'kibana', type:: 'log' });
+local toolingLinks = import 'toolinglinks/toolinglinks.libsonnet';
 
 local selector = {
   environment: '$environment',
@@ -20,17 +22,23 @@ local selector = {
   queue: { re: '$queue' },
 };
 
-local recordingRuleLatencyHistogramQuery(percentile, recordingRule, selector, aggregator) =
-  |||
-    histogram_quantile(%(percentile)g, sum by (%(aggregator)s, le) (
-      %(recordingRule)s{%(selector)s}
-    ))
-  ||| % {
-    percentile: percentile,
-    aggregator: aggregator,
-    selector: selectors.serializeHash(selector),
-    recordingRule: recordingRule,
-  };
+local latencyKibanaViz(index, title, percentile, splitSeries) =
+  local queueFilter = if splitSeries then
+    []
+  else
+    [matching.matchFilter('json.queue.keyword', '$worker')];
+
+  function(options)
+    [
+      toolingLinkDefinition({
+        title: title,
+        url: elasticsearchLinks.buildElasticLinePercentileVizURL(index,
+                                                                 queueFilter,
+                                                                 splitSeries=splitSeries,
+                                                                 percentile=percentile),
+        type:: 'chart',
+      }),
+    ];
 
 local recordingRuleRateQuery(recordingRule, selector, aggregator) =
   |||
@@ -42,21 +50,6 @@ local recordingRuleRateQuery(recordingRule, selector, aggregator) =
     selector: selectors.serializeHash(selector),
     recordingRule: recordingRule,
   };
-
-local queuelatencyTimeseries(title, aggregators, legendFormat) =
-  basic.latencyTimeseries(
-    title=title,
-    query=recordingRuleLatencyHistogramQuery(0.95, 'sli_aggregations:sidekiq_jobs_queue_duration_seconds_bucket_rate5m', selector, aggregators),
-    legendFormat=legendFormat,
-  );
-
-
-local latencyTimeseries(title, aggregators, legendFormat) =
-  basic.latencyTimeseries(
-    title=title,
-    query=recordingRuleLatencyHistogramQuery(0.95, 'sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate5m', selector, aggregators),
-    legendFormat=legendFormat,
-  );
 
 local enqueueCountTimeseries(title, aggregators, legendFormat) =
   basic.timeseries(
@@ -340,13 +333,32 @@ basic.dashboard(
     ),
   ], startRow=201)
   +
-  layout.rowGrid('Queue Latency (the amount of time spent queueing)', [
-    queuelatencyTimeseries('Queue Time', aggregators='queue', legendFormat='p95 {{ queue }}'),
-  ], startRow=301)
-  +
-  layout.rowGrid('Execution Latency (the amount of time the job takes to execute after dequeue)', [
-    latencyTimeseries('Execution Time', aggregators='queue', legendFormat='p95 {{ queue }}'),
-  ], startRow=401)
+  layout.rowGrid('Queue Time & Execution Time', [
+    grafana.text.new(
+      title='Queue Time - time spend queueing',
+      mode='markdown',
+      description='Estimated queue time, between when the job is enqueued and executed. Lower is better.',
+      content=toolingLinks.generateMarkdown([
+        latencyKibanaViz('sidekiq_queueing_viz', '📈 Kibana: Sidekiq queue time p95 percentile latency', 95, false),
+        latencyKibanaViz('sidekiq_queueing_viz_by_queue', '📈 Kibana: Sidekiq queue time p95 percentile latency aggregated (split by queue)', 95, true),
+      ]) + |||
+
+        Warning: Kibana links don't work when multiple queues are selected.
+      |||
+    ),
+    grafana.text.new(
+      title='Individual Execution Time - time taken for individual jobs to complete',
+      mode='markdown',
+      description='The duration, once a job starts executing, that it runs for, by shard. Lower is better.',
+      content=toolingLinks.generateMarkdown([
+        latencyKibanaViz('sidekiq_execution_viz', '📈 Kibana: Sidekiq execution time p95 percentile latency', 95, false),
+        latencyKibanaViz('sidekiq_execution_viz_by_queue', '📈 Kibana: Sidekiq execution time p95 percentile latency aggregated (split by queue)', 95, true),
+      ]) + |||
+
+        Warning: Kibana links don't work when multiple queues are selected.
+      |||
+    ),
+  ], startRow=301, rowHeight=5)
   +
   layout.rowGrid('Execution RPS (the rate at which jobs are completed after dequeue)', [
     rpsTimeseries('RPS', aggregators='queue', legendFormat='{{ queue }}'),
