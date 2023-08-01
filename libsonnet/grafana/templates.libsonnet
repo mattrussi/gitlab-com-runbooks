@@ -139,15 +139,6 @@ local library = import 'gitlab-slis/library.libsonnet';
       refresh='load',
       sort=1,
     ),
-  sidekiqQueue::
-    template.new(
-      'queue',
-      '$PROMETHEUS_DS',
-      'label_values(sidekiq_jobs_completion_seconds_bucket{environment="$environment"}, queue)',
-      current='new_merge_request',
-      refresh='load',
-      sort=1,
-    ),
   railsController(default)::
     template.new(
       'controller',
