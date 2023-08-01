@@ -180,6 +180,7 @@ basic.dashboard(
       description='The sum of job execution times',
       // TODO: Can we remove this? The rule depends on the metrics from the histogram sidekiq_jobs_completion_seconds_sum
       // which we want to stop emitting
+      // We can still have this by emitting a new`sidekiq_jobs_completion_seconds_sum` bare counter.
       query=|||
         sum(sidekiq_jobs_execution_time:1m{environment="$environment", shard=~"$shard"}) by (shard)
       |||,
@@ -246,6 +247,7 @@ basic.dashboard(
       description='How heavily utilized is this shard? Ideally this should be around 33% plus minus 10%. If outside this range for long periods, consider scaling fleet appropriately.',
       // TODO: Can we remove this? The rule depends on the metrics from the histogram sidekiq_jobs_completion_seconds_sum
       // and can't be moved over to Kibana as we don't have sidekiq_concurrency log (unless we add in logs)
+      // We can still have this by emitting a new`sidekiq_jobs_completion_seconds_sum` bare counter.
       query=|||
         sum by (shard, stage) (sidekiq_jobs_execution_time:1h{environment="$environment", shard=~"$shard"})
         /

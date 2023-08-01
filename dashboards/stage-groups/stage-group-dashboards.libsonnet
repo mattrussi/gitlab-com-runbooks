@@ -322,6 +322,7 @@ local sidekiqJobDurationP95(featureCategories, urgency, threshold) =
     yAxisLabel='Job Duration seconds',
     legendFormat='{{ worker }}',
     thresholds=[thresholds.errorLevel('gt', threshold)],
+    // TODO: This wouldn't load anyway, generate Kibana link with multiple feature category matching, split by worker
     query=|||
       histogram_quantile(0.95,
         sum by (worker, le) (

@@ -350,6 +350,7 @@ serviceDashboard.overview('sidekiq', expectMultipleSeries=true)
     basic.latencyTimeseries(
       title='Sidekiq Estimated Median Job Latency per shard',
       description='The median duration, once a job starts executing, that it runs for, by shard. Lower is better.',
+      // TODO: Replace with kibana
       query=|||
         histogram_quantile(0.50,
           sum by (shard, le) (
@@ -373,6 +374,7 @@ serviceDashboard.overview('sidekiq', expectMultipleSeries=true)
     basic.latencyTimeseries(
       title='Sidekiq Estimated p95 Job Latency per shard',
       description='The 95th percentile duration, once a job starts executing, that it runs for, by shard. Lower is better.',
+      // TODO: Replace with kibana
       query=|||
         histogram_quantile(0.95,
           sum by (shard, le) (
