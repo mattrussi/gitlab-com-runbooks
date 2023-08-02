@@ -7,13 +7,11 @@ local layout = import 'grafana/layout.libsonnet';
 local templates = import 'grafana/templates.libsonnet';
 local toolingLinks = import 'toolinglinks/toolinglinks.libsonnet';
 local row = grafana.row;
-local template = grafana.template;
 local saturationDetail = import 'gitlab-dashboards/saturation_detail.libsonnet';
 local thresholds = import 'gitlab-dashboards/thresholds.libsonnet';
 local promQuery = import 'grafana/prom_query.libsonnet';
 local link = grafana.link;
 local matching = import 'elasticlinkbuilder/matching.libsonnet';
-local toolingLinkDefinition = (import 'toolinglinks/tooling_link_definition.libsonnet').toolingLinkDefinition({ tool:: 'kibana', type:: 'log' });
 local elasticsearchLinks = import 'elasticlinkbuilder/elasticsearch_links.libsonnet';
 
 local selectors = import 'promql/selectors.libsonnet';
@@ -23,24 +21,14 @@ local optimalMargin = 0.10;
 
 local selectorHash = { type: 'sidekiq', environment: '$environment', stage: '$stage', shard: { re: '$shard' } };
 local selector = selectors.serializeHash(selectorHash);
+local sidekiq = import 'sidekiq.libsonnet';
 
 local workerDetailDataLink = {
   url: '/d/sidekiq-worker-detail?${__url_time_range}&${__all_variables}&var-worker=${__field.label.worker}',
   title: 'Worker Detail: ${__field.labels.worker}',
 };
 
-local latencyKibanaViz(index, title, percentile) =
-  function(options)
-    [
-      toolingLinkDefinition({
-        title: title,
-        url: elasticsearchLinks.buildElasticLinePercentileVizURL(index,
-                                                                 [matching.matchFilter('json.shard.keyword', '$shard')],
-                                                                 splitSeries=true,
-                                                                 percentile=percentile),
-        type:: 'chart',
-      }),
-    ];
+local latencyKibanaViz(index, title, percentile) = sidekiq.latencyKibanaViz(index, title, 'shard', percentile);
 
 local inflightJobsTimeseries(title, aggregator) =
   basic.timeseries(
@@ -123,28 +111,21 @@ basic.dashboard(
       mode='markdown',
       description='Estimated queue time, between when the job is enqueued and executed. Lower is better.',
       content=toolingLinks.generateMarkdown([
-        latencyKibanaViz('sidekiq_queueing_viz_by_shard', '📈 Kibana: Sidekiq queue time p95 percentile latency', 95),
+        latencyKibanaViz('sidekiq_queueing_viz_by_shard', '📈 Kibana: Sidekiq queue time p95 percentile latency (split by shard)', 95),
         latencyKibanaViz('sidekiq_queueing_viz_by_worker', '📈 Kibana: Sidekiq queue time p95 percentile latency aggregated (split by worker)', 95),
         latencyKibanaViz('sidekiq_queueing_viz_by_queue', '📈 Kibana: Sidekiq queue time p95 percentile latency aggregated (split by queue)', 95),
-      ]) + |||
-
-        Warning: Kibana links don't work when multiple shards are selected.
-      |||
+      ])
     ),
     grafana.text.new(
       title='Individual Execution Time - time taken for individual jobs to complete',
       mode='markdown',
       description='The duration, once a job starts executing, that it runs for, by shard. Lower is better.',
       content=toolingLinks.generateMarkdown([
-        latencyKibanaViz('sidekiq_execution_viz_by_shard', '📈 Kibana: Sidekiq execution time median latency', 50),
-        latencyKibanaViz('sidekiq_execution_viz_by_shard', '📈 Kibana: Sidekiq execution time p95 percentile latency', 95),
+        latencyKibanaViz('sidekiq_execution_viz_by_shard', '📈 Kibana: Sidekiq execution time median latency (split by shard)', 50),
+        latencyKibanaViz('sidekiq_execution_viz_by_shard', '📈 Kibana: Sidekiq execution time p95 percentile latency (split by shard)', 95),
         latencyKibanaViz('sidekiq_execution_viz_by_worker', '📈 Kibana: Sidekiq execution time p95 percentile latency aggregated (split by worker)', 95),
         latencyKibanaViz('sidekiq_execution_viz_by_queue', '📈 Kibana: Sidekiq execution time p95 percentile latency aggregated (split by queue)', 95),
-      ]) + |||
-
-        Warning: Kibana links don't work when multiple shards are selected.
-      |||
-
+      ])
     ),
   ], startRow=201, rowHeight=5)
   +

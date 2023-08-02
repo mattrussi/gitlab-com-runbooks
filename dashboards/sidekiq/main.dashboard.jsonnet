@@ -10,6 +10,7 @@ local templates = import 'grafana/templates.libsonnet';
 local toolingLinkDefinition = (import 'toolinglinks/tooling_link_definition.libsonnet').toolingLinkDefinition({ tool:: 'kibana', type:: 'log' });
 local elasticsearchLinks = import 'elasticlinkbuilder/elasticsearch_links.libsonnet';
 local matching = import 'elasticlinkbuilder/matching.libsonnet';
+local sidekiq = import 'sidekiq.libsonnet';
 
 local shardDetailDataLink = {
   url: '/d/sidekiq-shard-detail?${__url_time_range}&${__all_variables}&var-shard=${__field.label.shard}&var-shard=${__field.label.shard}',

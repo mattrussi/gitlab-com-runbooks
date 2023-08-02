@@ -8,13 +8,12 @@ local template = grafana.template;
 local sidekiqHelpers = import 'services/lib/sidekiq-helpers.libsonnet';
 local seriesOverrides = import 'grafana/series_overrides.libsonnet';
 local row = grafana.row;
-local elasticsearchLinks = import 'elasticlinkbuilder/elasticsearch_links.libsonnet';
 local matching = import 'elasticlinkbuilder/matching.libsonnet';
 local issueSearch = import 'gitlab-dashboards/issue_search.libsonnet';
 local selectors = import 'promql/selectors.libsonnet';
-local toolingLinkDefinition = (import 'toolinglinks/tooling_link_definition.libsonnet').toolingLinkDefinition({ tool:: 'kibana', type:: 'log' });
 local elasticsearchLinks = import 'elasticlinkbuilder/elasticsearch_links.libsonnet';
 local toolingLinks = import 'toolinglinks/toolinglinks.libsonnet';
+local sidekiq = import 'sidekiq.libsonnet';
 
 local selector = {
   environment: '$environment',
@@ -30,23 +29,7 @@ local transactionSelector = {
   endpoint_id: { re: '$worker' },  //gitlab_transaction_* metrics have worker encoded in the endpoint_id label
 };
 
-local latencyKibanaViz(index, title, percentile, splitSeries) =
-  local workerFilter = if splitSeries then
-    []
-  else
-    [matching.matchFilter('json.class.keyword', '$worker')];
-
-  function(options)
-    [
-      toolingLinkDefinition({
-        title: title,
-        url: elasticsearchLinks.buildElasticLinePercentileVizURL(index,
-                                                                 workerFilter,
-                                                                 splitSeries=splitSeries,
-                                                                 percentile=percentile),
-        type:: 'chart',
-      }),
-    ];
+local latencyKibanaViz(index, title, percentile) = sidekiq.latencyKibanaViz(index, title, 'class', percentile, templateField='worker');
 
 local recordingRuleRateQuery(recordingRule, selector, aggregator) =
   |||
@@ -335,24 +318,16 @@ basic.dashboard(
       mode='markdown',
       description='Estimated queue time, between when the job is enqueued and executed. Lower is better.',
       content=toolingLinks.generateMarkdown([
-        latencyKibanaViz('sidekiq_queueing_viz', '📈 Kibana: Sidekiq queue time p95 percentile latency', 95, false),
-        latencyKibanaViz('sidekiq_queueing_viz_by_worker', '📈 Kibana: Sidekiq queue time p95 percentile latency aggregated (split by worker)', 95, true),
-      ]) + |||
-
-        Warning: Kibana links don't work when multiple workers are selected.
-      |||
+        latencyKibanaViz('sidekiq_queueing_viz_by_worker', '📈 Kibana: Sidekiq queue time p95 percentile latency aggregated (split by worker)', 95),
+      ])
     ),
     grafana.text.new(
       title='Individual Execution Time - time taken for individual jobs to complete',
       mode='markdown',
       description='The duration, once a job starts executing, that it runs for, by shard. Lower is better.',
       content=toolingLinks.generateMarkdown([
-        latencyKibanaViz('sidekiq_execution_viz', '📈 Kibana: Sidekiq execution time p95 percentile latency', 95, false),
-        latencyKibanaViz('sidekiq_execution_viz_by_worker', '📈 Kibana: Sidekiq execution time p95 percentile latency aggregated (split by worker)', 95, true),
-      ]) + |||
-
-        Warning: Kibana links don't work when multiple workers are selected.
-      |||
+        latencyKibanaViz('sidekiq_execution_viz_by_worker', '📈 Kibana: Sidekiq execution time p95 percentile latency aggregated (split by worker)', 95),
+      ])
     ),
   ], startRow=301, rowHeight=5)
   +
