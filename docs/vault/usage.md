@@ -473,7 +473,7 @@ Before using the operator, a role has to be created in Vault for the namespace t
 
 ```terraform
 locals {
-  kubernetes_common_roles = {
+  kubernetes_common_auth_roles = {
     [...]
 
     my-app = {
