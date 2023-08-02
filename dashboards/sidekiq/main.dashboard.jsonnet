@@ -2,15 +2,33 @@ local grafana = import 'github.com/grafana/grafonnet-lib/grafonnet/grafana.libso
 local railsCommon = import 'gitlab-dashboards/rails_common_graphs.libsonnet';
 local basic = import 'grafana/basic.libsonnet';
 local layout = import 'grafana/layout.libsonnet';
+local toolingLinks = import 'toolinglinks/toolinglinks.libsonnet';
 local row = grafana.row;
 local sidekiq = import 'sidekiq.libsonnet';
 local serviceDashboard = import 'gitlab-dashboards/service_dashboard.libsonnet';
 local templates = import 'grafana/templates.libsonnet';
+local toolingLinkDefinition = (import 'toolinglinks/tooling_link_definition.libsonnet').toolingLinkDefinition({ tool:: 'kibana', type:: 'log' });
+local elasticsearchLinks = import 'elasticlinkbuilder/elasticsearch_links.libsonnet';
+local matching = import 'elasticlinkbuilder/matching.libsonnet';
+local sidekiq = import 'sidekiq.libsonnet';
 
 local shardDetailDataLink = {
   url: '/d/sidekiq-shard-detail?${__url_time_range}&${__all_variables}&var-shard=${__field.label.shard}&var-shard=${__field.label.shard}',
   title: 'Shard Detail: ${__field.label.shard}',
 };
+
+local latencyKibanaViz(index, title, percentile) =
+  function(options)
+    [
+      toolingLinkDefinition({
+        title: title,
+        url: elasticsearchLinks.buildElasticLinePercentileVizURL(index,
+                                                                 [],
+                                                                 splitSeries=true,
+                                                                 percentile=percentile),
+        type:: 'chart',
+      }),
+    ];
 
 serviceDashboard.overview('sidekiq', expectMultipleSeries=true)
 .addTemplate(templates.sidekiqShard(current='catchall'))
@@ -347,52 +365,15 @@ serviceDashboard.overview('sidekiq', expectMultipleSeries=true)
       linewidth=1,
     )
     .addDataLink(shardDetailDataLink),
-    basic.latencyTimeseries(
-      title='Sidekiq Estimated Median Job Latency per shard',
-      description='The median duration, once a job starts executing, that it runs for, by shard. Lower is better.',
-      query=|||
-        histogram_quantile(0.50,
-          sum by (shard, le) (
-            rate(sidekiq_jobs_completion_seconds_bucket{
-              environment="$environment",
-            }[$__interval])
-          )
-        )
-      |||,
-      legendFormat='{{ shard }}',
-      format='s',
-      yAxisLabel='Duration',
-      interval='1m',
-      intervalFactor=3,
-      legend_show=true,
-      logBase=10,
-      linewidth=1,
-      min=0.01,
-    )
-    .addDataLink(shardDetailDataLink),
-    basic.latencyTimeseries(
-      title='Sidekiq Estimated p95 Job Latency per shard',
-      description='The 95th percentile duration, once a job starts executing, that it runs for, by shard. Lower is better.',
-      query=|||
-        histogram_quantile(0.95,
-          sum by (shard, le) (
-            rate(sidekiq_jobs_completion_seconds_bucket{
-              environment="$environment",
-            }[$__interval])
-          )
-        )
-      |||,
-      legendFormat='{{ shard }}',
-      format='s',
-      yAxisLabel='Duration',
-      interval='2m',
-      intervalFactor=5,
-      legend_show=true,
-      logBase=10,
-      linewidth=1,
-      min=0.01,
-    )
-    .addDataLink(shardDetailDataLink),
+    grafana.text.new(
+      title='Sidekiq Job Latency per shard',
+      mode='markdown',
+      description='The duration, once a job starts executing, that it runs for, by shard. Lower is better.',
+      content=toolingLinks.generateMarkdown([
+        latencyKibanaViz('sidekiq_execution_viz_by_shard', '📈 Kibana: Sidekiq execution time median latency (aggregated by shard)', 50),
+        latencyKibanaViz('sidekiq_execution_viz_by_shard', '📈 Kibana: Sidekiq execution time p95 percentile latency (aggregated by shard)', 95),
+      ])
+    ),
   ], cols=2, rowHeight=10, startRow=2501),
 )
 .addPanel(

@@ -1,4 +1,7 @@
+local elasticsearchLinks = import 'elasticlinkbuilder/elasticsearch_links.libsonnet';
+local matching = import 'elasticlinkbuilder/matching.libsonnet';
 local grafana = import 'github.com/grafana/grafonnet-lib/grafonnet/grafana.libsonnet';
+local toolingLinkDefinition = (import 'toolinglinks/tooling_link_definition.libsonnet').toolingLinkDefinition({ tool:: 'kibana', type:: 'log' });
 local stages = (import 'service-catalog/stages.libsonnet');
 local template = grafana.template;
 local prebuiltTemplates = import 'grafana/templates.libsonnet';
@@ -299,11 +302,11 @@ local sidekiqJobRate(counter, title, description, featureCategoriesSelector) =
     legendFormat='{{worker]}}',
     query=|||
       sum by (worker) (
-        rate(%(counter)s{
+        %(counter)s{
           environment="$environment",
           stage='$stage',
           feature_category=~'(%(featureCategories)s)'
-        }[$__interval])
+        }
       )
     ||| % {
       counter: counter,
@@ -311,35 +314,21 @@ local sidekiqJobRate(counter, title, description, featureCategoriesSelector) =
     }
   );
 
-local sidekiqJobDurationP95(featureCategories, urgency, threshold) =
-  basic.timeseries(
-    title='%s urgency jobs' % urgency,
-    description='%(urgency)s urgency jobs (%(threshold)i seconds max duration)' % {
-      urgency: urgency,
-      threshold: threshold,
-    },
-    decimals=2,
-    yAxisLabel='Job Duration seconds',
-    legendFormat='{{ worker }}',
-    thresholds=[thresholds.errorLevel('gt', threshold)],
-    query=|||
-      histogram_quantile(0.95,
-        sum by (worker, le) (
-          rate(
-            sidekiq_jobs_completion_seconds_bucket{
-              environment="$environment",
-              stage='$stage',
-              feature_category=~'(%(featureCategories)s)',
-              urgency='%(urgency)s'
-            }[$__interval]
-          )
-        )
-      )
-    ||| % {
-      featureCategories: featureCategories,
-      urgency: urgency,
-    }
-  );
+local latencyKibanaViz(index, title, percentile, feature_categories, urgency) =
+  function(options)
+    [
+      toolingLinkDefinition({
+        title: title,
+        url: elasticsearchLinks.buildElasticLinePercentileVizURL(index,
+                                                                 [
+                                                                   matching.matchFilter('json.urgency.keyword', urgency),
+                                                                   matching.matchInFilter('json.meta.feature_category.keyword', feature_categories),
+                                                                 ],
+                                                                 splitSeries=true,
+                                                                 percentile=percentile),
+        type:: 'chart',
+      }),
+    ];
 
 local sidekiqJobDurationByUrgency(urgencies, featureCategoriesSelector) =
   // mapping an urgency to the slo key in `services/lib/sidekiq-helpers.libsonnet`
@@ -352,16 +341,27 @@ local sidekiqJobDurationByUrgency(urgencies, featureCategoriesSelector) =
   assert std.length(unknownUrgencies) == 0 :
          'Unknown urgency %s' % unknownUrgencies;
   local slos = sidekiqHelpers.slos;
+  local featureCategoriesArr = std.split(featureCategoriesSelector, '|');
 
-  layout.rowGrid(
-    'Sidekiq job duration',
-    [
-      sidekiqJobDurationP95(featureCategoriesSelector, urgency, slos[urgencySLOMapping[urgency]].executionDurationSeconds)
-      for urgency in urgencies
-    ],
-    // Just after the sidekiq panels
-    startRow=950,
-  );
+  layout.rowGrid('Sidekiq job duration', [
+    grafana.text.new(
+      title='Sidekiq job duration by urgency',
+      mode='markdown',
+      description='',
+      content=toolingLinks.generateMarkdown([
+        latencyKibanaViz(
+          'sidekiq_execution_viz_by_worker',
+          '📈 Kibana: Sidekiq execution time %(urgency)s urgency - p95 percentile latency aggregated (split by worker)' % {
+            urgency: urgency,
+          },
+          95,
+          featureCategoriesArr,
+          urgency
+        )
+        for urgency in urgencies
+      ])
+    ),
+  ], startRow=950, rowHeight=5);
 
 local requestComponents = std.set(['web', 'api', 'git']);
 local backgroundComponents = std.set(['sidekiq']);
@@ -561,13 +561,13 @@ local dashboard(groupKey, components=defaultComponents, displayEmptyGuidance=fal
           'Sidekiq',
           [
             sidekiqJobRate(
-              'sidekiq_jobs_completion_seconds_count',
+              'application_sli_aggregation:sidekiq_execution:ops:rate_5m',
               'Sidekiq Completion Rate',
               'The rate (Jobs per Second) at which jobs are completed after dequeue',
               featureCategoriesSelector
             ),
             sidekiqJobRate(
-              'sidekiq_jobs_failed_total',
+              'application_sli_aggregation:sidekiq_execution:error:rate_5m',
               'Sidekiq Error Rate',
               'The rate (Jobs per Second) at which jobs fail after dequeue',
               featureCategoriesSelector

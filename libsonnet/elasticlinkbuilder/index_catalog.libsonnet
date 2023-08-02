@@ -395,6 +395,46 @@ local indexDefaults = {
     indexPattern: 'pubsub-sidekiq-inf-ops',
   },
 
+  local sidekiq_viz = indexDefaults {
+    defaultFilters: [
+      matchFilter('json.type.keyword', 'sidekiq'),
+    ],
+    indexPattern: 'AWNABDRwNDuQHTm2tH6l',
+    timestamp: 'json.time',
+  },
+
+  sidekiq_queueing_viz: sidekiq_viz {
+    defaultLatencyField: 'json.scheduling_latency_s',
+  },
+
+  sidekiq_queueing_viz_by_shard: self.sidekiq_queueing_viz {
+    defaultSeriesSplitField: 'json.shard.keyword',
+  },
+
+  sidekiq_queueing_viz_by_queue: self.sidekiq_queueing_viz {
+    defaultSeriesSplitField: 'json.queue.keyword',
+  },
+
+  sidekiq_queueing_viz_by_worker: self.sidekiq_queueing_viz {
+    defaultSeriesSplitField: 'json.class.keyword',
+  },
+
+  sidekiq_execution_viz: sidekiq_viz {
+    defaultLatencyField: 'json.duration_s',
+  },
+
+  sidekiq_execution_viz_by_worker: self.sidekiq_execution_viz {
+    defaultSeriesSplitField: 'json.class.keyword',
+  },
+
+  sidekiq_execution_viz_by_shard: self.sidekiq_execution_viz {
+    defaultSeriesSplitField: 'json.shard.keyword',
+  },
+
+  sidekiq_execution_viz_by_queue: self.sidekiq_execution_viz {
+    defaultSeriesSplitField: 'json.queue.keyword',
+  },
+
   workhorse: indexDefaults {
     timestamp: 'json.time',
     indexPattern: 'a4f5b470-edde-11ea-81e5-155ba78758d4',

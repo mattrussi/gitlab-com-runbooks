@@ -93,6 +93,20 @@ local matchAnyScriptFilter(scripts) =
     },
   };
 
+local matchRegexFilter(field, value) =
+  {
+    query: {
+      regexp: {
+        [field]: value,
+      },
+    },
+    meta: {
+      key: field,
+      type: 'custom',
+      params: value,
+    },
+  };
+
 local matchObject(fieldName, matchInfo) =
   local gte = if std.objectHas(matchInfo, 'gte') then matchInfo.gte else null;
   local lte = if std.objectHas(matchInfo, 'lte') then matchInfo.lte else null;
@@ -125,6 +139,7 @@ local matchers(matches) =
   matchers:: matchers,
   matchFilter:: matchFilter,
   matchInFilter:: matchInFilter,
+  matchRegexFilter:: matchRegexFilter,
   existsFilter:: existsFilter,
   rangeFilter:: rangeFilter,
   mustNot:: mustNot,
