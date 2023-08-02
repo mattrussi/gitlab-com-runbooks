@@ -21,32 +21,32 @@ groups:
       )
   - record: sli_aggregations:gitlab_sli_sidekiq_execution_apdex_total_rate1m
     expr: |
-      sum by (environment,external_dependencies,feature_category,shard,stage,tier,type,urgency,worker) (
+      sum by (environment,external_dependencies,feature_category,queue,shard,stage,tier,type,urgency,worker) (
         rate(gitlab_sli_sidekiq_execution_apdex_total[1m])
       )
   - record: sli_aggregations:gitlab_sli_sidekiq_execution_apdex_success_total_rate1m
     expr: |
-      sum by (environment,external_dependencies,feature_category,shard,stage,tier,type,urgency,worker) (
+      sum by (environment,external_dependencies,feature_category,queue,shard,stage,tier,type,urgency,worker) (
         rate(gitlab_sli_sidekiq_execution_apdex_success_total[1m])
       )
   - record: sli_aggregations:gitlab_sli_sidekiq_execution_total_rate1m
     expr: |
-      sum by (environment,external_dependencies,feature_category,shard,stage,tier,type,urgency,worker) (
+      sum by (environment,external_dependencies,feature_category,queue,shard,stage,tier,type,urgency,worker) (
         rate(gitlab_sli_sidekiq_execution_total[1m])
       )
   - record: sli_aggregations:gitlab_sli_sidekiq_execution_error_total_rate1m
     expr: |
-      sum by (environment,external_dependencies,feature_category,shard,stage,tier,type,urgency,worker) (
+      sum by (environment,external_dependencies,feature_category,queue,shard,stage,tier,type,urgency,worker) (
         rate(gitlab_sli_sidekiq_execution_error_total[1m])
       )
   - record: sli_aggregations:gitlab_sli_sidekiq_queueing_apdex_total_rate1m
     expr: |
-      sum by (environment,external_dependencies,feature_category,shard,stage,tier,type,urgency,worker) (
+      sum by (environment,external_dependencies,feature_category,queue,shard,stage,tier,type,urgency,worker) (
         rate(gitlab_sli_sidekiq_queueing_apdex_total[1m])
       )
   - record: sli_aggregations:gitlab_sli_sidekiq_queueing_apdex_success_total_rate1m
     expr: |
-      sum by (environment,external_dependencies,feature_category,shard,stage,tier,type,urgency,worker) (
+      sum by (environment,external_dependencies,feature_category,queue,shard,stage,tier,type,urgency,worker) (
         rate(gitlab_sli_sidekiq_queueing_apdex_success_total[1m])
       )
   - record: gitlab_component_ops:rate
@@ -264,32 +264,32 @@ groups:
       )
   - record: sli_aggregations:gitlab_sli_sidekiq_execution_apdex_total_rate5m
     expr: |
-      sum by (environment,external_dependencies,feature_category,shard,stage,tier,type,urgency,worker) (
+      sum by (environment,external_dependencies,feature_category,queue,shard,stage,tier,type,urgency,worker) (
         rate(gitlab_sli_sidekiq_execution_apdex_total[5m])
       )
   - record: sli_aggregations:gitlab_sli_sidekiq_execution_apdex_success_total_rate5m
     expr: |
-      sum by (environment,external_dependencies,feature_category,shard,stage,tier,type,urgency,worker) (
+      sum by (environment,external_dependencies,feature_category,queue,shard,stage,tier,type,urgency,worker) (
         rate(gitlab_sli_sidekiq_execution_apdex_success_total[5m])
       )
   - record: sli_aggregations:gitlab_sli_sidekiq_execution_total_rate5m
     expr: |
-      sum by (environment,external_dependencies,feature_category,shard,stage,tier,type,urgency,worker) (
+      sum by (environment,external_dependencies,feature_category,queue,shard,stage,tier,type,urgency,worker) (
         rate(gitlab_sli_sidekiq_execution_total[5m])
       )
   - record: sli_aggregations:gitlab_sli_sidekiq_execution_error_total_rate5m
     expr: |
-      sum by (environment,external_dependencies,feature_category,shard,stage,tier,type,urgency,worker) (
+      sum by (environment,external_dependencies,feature_category,queue,shard,stage,tier,type,urgency,worker) (
         rate(gitlab_sli_sidekiq_execution_error_total[5m])
       )
   - record: sli_aggregations:gitlab_sli_sidekiq_queueing_apdex_total_rate5m
     expr: |
-      sum by (environment,external_dependencies,feature_category,shard,stage,tier,type,urgency,worker) (
+      sum by (environment,external_dependencies,feature_category,queue,shard,stage,tier,type,urgency,worker) (
         rate(gitlab_sli_sidekiq_queueing_apdex_total[5m])
       )
   - record: sli_aggregations:gitlab_sli_sidekiq_queueing_apdex_success_total_rate5m
     expr: |
-      sum by (environment,external_dependencies,feature_category,shard,stage,tier,type,urgency,worker) (
+      sum by (environment,external_dependencies,feature_category,queue,shard,stage,tier,type,urgency,worker) (
         rate(gitlab_sli_sidekiq_queueing_apdex_success_total[5m])
       )
   - record: gitlab_component_ops:rate_5m
@@ -661,32 +661,32 @@ groups:
       )
   - record: sli_aggregations:gitlab_sli_sidekiq_execution_apdex_total_rate30m
     expr: |
-      sum by (environment,external_dependencies,feature_category,shard,stage,tier,type,urgency,worker) (
+      sum by (environment,external_dependencies,feature_category,queue,shard,stage,tier,type,urgency,worker) (
         rate(gitlab_sli_sidekiq_execution_apdex_total[30m])
       )
   - record: sli_aggregations:gitlab_sli_sidekiq_execution_apdex_success_total_rate30m
     expr: |
-      sum by (environment,external_dependencies,feature_category,shard,stage,tier,type,urgency,worker) (
+      sum by (environment,external_dependencies,feature_category,queue,shard,stage,tier,type,urgency,worker) (
         rate(gitlab_sli_sidekiq_execution_apdex_success_total[30m])
       )
   - record: sli_aggregations:gitlab_sli_sidekiq_execution_total_rate30m
     expr: |
-      sum by (environment,external_dependencies,feature_category,shard,stage,tier,type,urgency,worker) (
+      sum by (environment,external_dependencies,feature_category,queue,shard,stage,tier,type,urgency,worker) (
         rate(gitlab_sli_sidekiq_execution_total[30m])
       )
   - record: sli_aggregations:gitlab_sli_sidekiq_execution_error_total_rate30m
     expr: |
-      sum by (environment,external_dependencies,feature_category,shard,stage,tier,type,urgency,worker) (
+      sum by (environment,external_dependencies,feature_category,queue,shard,stage,tier,type,urgency,worker) (
         rate(gitlab_sli_sidekiq_execution_error_total[30m])
       )
   - record: sli_aggregations:gitlab_sli_sidekiq_queueing_apdex_total_rate30m
     expr: |
-      sum by (environment,external_dependencies,feature_category,shard,stage,tier,type,urgency,worker) (
+      sum by (environment,external_dependencies,feature_category,queue,shard,stage,tier,type,urgency,worker) (
         rate(gitlab_sli_sidekiq_queueing_apdex_total[30m])
       )
   - record: sli_aggregations:gitlab_sli_sidekiq_queueing_apdex_success_total_rate30m
     expr: |
-      sum by (environment,external_dependencies,feature_category,shard,stage,tier,type,urgency,worker) (
+      sum by (environment,external_dependencies,feature_category,queue,shard,stage,tier,type,urgency,worker) (
         rate(gitlab_sli_sidekiq_queueing_apdex_success_total[30m])
       )
   - record: gitlab_component_ops:rate_30m
@@ -1058,32 +1058,32 @@ groups:
       )
   - record: sli_aggregations:gitlab_sli_sidekiq_execution_apdex_total_rate1h
     expr: |
-      sum by (environment,external_dependencies,feature_category,shard,stage,tier,type,urgency,worker) (
+      sum by (environment,external_dependencies,feature_category,queue,shard,stage,tier,type,urgency,worker) (
         rate(gitlab_sli_sidekiq_execution_apdex_total[1h])
       )
   - record: sli_aggregations:gitlab_sli_sidekiq_execution_apdex_success_total_rate1h
     expr: |
-      sum by (environment,external_dependencies,feature_category,shard,stage,tier,type,urgency,worker) (
+      sum by (environment,external_dependencies,feature_category,queue,shard,stage,tier,type,urgency,worker) (
         rate(gitlab_sli_sidekiq_execution_apdex_success_total[1h])
       )
   - record: sli_aggregations:gitlab_sli_sidekiq_execution_total_rate1h
     expr: |
-      sum by (environment,external_dependencies,feature_category,shard,stage,tier,type,urgency,worker) (
+      sum by (environment,external_dependencies,feature_category,queue,shard,stage,tier,type,urgency,worker) (
         rate(gitlab_sli_sidekiq_execution_total[1h])
       )
   - record: sli_aggregations:gitlab_sli_sidekiq_execution_error_total_rate1h
     expr: |
-      sum by (environment,external_dependencies,feature_category,shard,stage,tier,type,urgency,worker) (
+      sum by (environment,external_dependencies,feature_category,queue,shard,stage,tier,type,urgency,worker) (
         rate(gitlab_sli_sidekiq_execution_error_total[1h])
       )
   - record: sli_aggregations:gitlab_sli_sidekiq_queueing_apdex_total_rate1h
     expr: |
-      sum by (environment,external_dependencies,feature_category,shard,stage,tier,type,urgency,worker) (
+      sum by (environment,external_dependencies,feature_category,queue,shard,stage,tier,type,urgency,worker) (
         rate(gitlab_sli_sidekiq_queueing_apdex_total[1h])
       )
   - record: sli_aggregations:gitlab_sli_sidekiq_queueing_apdex_success_total_rate1h
     expr: |
-      sum by (environment,external_dependencies,feature_category,shard,stage,tier,type,urgency,worker) (
+      sum by (environment,external_dependencies,feature_category,queue,shard,stage,tier,type,urgency,worker) (
         rate(gitlab_sli_sidekiq_queueing_apdex_success_total[1h])
       )
   - record: gitlab_component_ops:rate_1h
@@ -1440,32 +1440,32 @@ groups:
   rules:
   - record: sli_aggregations:gitlab_sli_sidekiq_execution_apdex_total_rate6h
     expr: |
-      sum by (environment,external_dependencies,feature_category,shard,stage,tier,type,urgency,worker) (
+      sum by (environment,external_dependencies,feature_category,queue,shard,stage,tier,type,urgency,worker) (
         rate(gitlab_sli_sidekiq_execution_apdex_total[6h])
       )
   - record: sli_aggregations:gitlab_sli_sidekiq_execution_apdex_success_total_rate6h
     expr: |
-      sum by (environment,external_dependencies,feature_category,shard,stage,tier,type,urgency,worker) (
+      sum by (environment,external_dependencies,feature_category,queue,shard,stage,tier,type,urgency,worker) (
         rate(gitlab_sli_sidekiq_execution_apdex_success_total[6h])
       )
   - record: sli_aggregations:gitlab_sli_sidekiq_execution_total_rate6h
     expr: |
-      sum by (environment,external_dependencies,feature_category,shard,stage,tier,type,urgency,worker) (
+      sum by (environment,external_dependencies,feature_category,queue,shard,stage,tier,type,urgency,worker) (
         rate(gitlab_sli_sidekiq_execution_total[6h])
       )
   - record: sli_aggregations:gitlab_sli_sidekiq_execution_error_total_rate6h
     expr: |
-      sum by (environment,external_dependencies,feature_category,shard,stage,tier,type,urgency,worker) (
+      sum by (environment,external_dependencies,feature_category,queue,shard,stage,tier,type,urgency,worker) (
         rate(gitlab_sli_sidekiq_execution_error_total[6h])
       )
   - record: sli_aggregations:gitlab_sli_sidekiq_queueing_apdex_total_rate6h
     expr: |
-      sum by (environment,external_dependencies,feature_category,shard,stage,tier,type,urgency,worker) (
+      sum by (environment,external_dependencies,feature_category,queue,shard,stage,tier,type,urgency,worker) (
         rate(gitlab_sli_sidekiq_queueing_apdex_total[6h])
       )
   - record: sli_aggregations:gitlab_sli_sidekiq_queueing_apdex_success_total_rate6h
     expr: |
-      sum by (environment,external_dependencies,feature_category,shard,stage,tier,type,urgency,worker) (
+      sum by (environment,external_dependencies,feature_category,queue,shard,stage,tier,type,urgency,worker) (
         rate(gitlab_sli_sidekiq_queueing_apdex_success_total[6h])
       )
   - record: gitlab_component_ops:rate_6h
