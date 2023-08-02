@@ -158,11 +158,9 @@ basic.dashboard(
       legendFormat='{{ namespace }}',
     ),
     basic.timeseries(
-      title='Memory - otel-collector (GBs)',
+      title='Memory Usage (max) - otel-collector (GBs)',
       query=|||
-        sum(
-          rate(container_memory_working_set_bytes{%(selector)s}[2m])
-        ) by (namespace) / (1024*1024*1024)
+        max(container_memory_working_set_bytes{%(selector)s}) / (1024*1024*1024)
       ||| % { selector: collectorSelectorSerialized },
       legendFormat='{{ namespace }}',
     )
