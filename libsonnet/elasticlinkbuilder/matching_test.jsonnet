@@ -102,4 +102,19 @@ test.suite({
       },
     ],
   },
+  testMatchRegexFilter: {
+    actual: matching.matchRegexFilter('fieldName', '(hello|its|me)'),
+    expect: {
+      meta: {
+        key: 'fieldName',
+        params: '(hello|its|me)',
+        type: 'custom',
+      },
+      query: {
+        regexp: {
+          fieldName: '(hello|its|me)',
+        },
+      },
+    },
+  },
 })
