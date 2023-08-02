@@ -81,7 +81,7 @@ basic.dashboard(
           and on (queue)
           (
             max by (queue) (
-              sli_aggregations:sidekiq_jobs_queue_duration_seconds_bucket_rate1m{environment="$environment", shard=~"$shard"} > 0
+              sli_aggregations:gitlab_sli_sidekiq_queueing_apdex_total_rate1m{environment="$environment", shard=~"$shard"} > 0
             )
           )
         )
@@ -107,7 +107,7 @@ basic.dashboard(
           and on (queue)
           (
             max by (queue) (
-              sli_aggregations:sidekiq_jobs_queue_duration_seconds_bucket_rate1m{environment="$environment", shard=~"$shard"} > 0
+              sli_aggregations:gitlab_sli_sidekiq_queueing_apdex_total_rate1m{environment="$environment", shard=~"$shard"} > 0
             )
           )
         )
@@ -258,7 +258,7 @@ basic.dashboard(
       title='Sidekiq Aggregated Throughput for $shard Shard',
       description='The total number of jobs being completed',
       query=|||
-        sum(gitlab_background_jobs:execution:ops:rate_5m{monitor="global", environment="$environment", shard=~"$shard"}) by (shard)
+        sum(sli_aggregations:gitlab_sli_sidekiq_execution_total_rate5m{environment="$environment", shard=~"$shard"}) by (shard)
       |||,
       legendFormat='{{ shard }}',
       interval='1m',
@@ -270,7 +270,7 @@ basic.dashboard(
       title='Sidekiq Throughput per Queue for $shard Shard',
       description='The total number of jobs being completed per queue for shard',
       query=|||
-        sum(gitlab_background_jobs:execution:ops:rate_5m{monitor="global", environment="$environment", shard=~"$shard"}) by (queue)
+        sum(sli_aggregations:gitlab_sli_sidekiq_execution_total_rate5m{environment="$environment", shard=~"$shard"}) by (queue)
       |||,
       legendFormat='{{ queue }}',
       interval='1m',
@@ -283,7 +283,13 @@ basic.dashboard(
       title='Sidekiq Throughput per Worker for $shard Shard',
       description='The total number of jobs being completed per worker for shard',
       query=|||
-        sum(gitlab_background_jobs:execution:ops:rate_5m{monitor="global", environment="$environment", shard=~"$shard"}) by (worker)
+        application_sli_aggregation:sidekiq_execution:ops:rate_5m{environment="$environment"}
+        and on (worker)
+        (
+          sum by (worker) (
+            sli_aggregations:gitlab_sli_sidekiq_execution_apdex_total_rate1m{env="gprd",shard=~"$shard"} > 0
+          )
+        )
       |||,
       legendFormat='{{ worker }}',
       interval='1m',

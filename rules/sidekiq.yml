@@ -9,6 +9,6 @@ groups:
         )
         -
         sum by (environment, stage, feature_category, worker) (
-          gitlab_background_jobs:execution:ops:rate_5m{feature_category=~"continuous_integration|runner"}
+          application_sli_aggregation:sidekiq_execution:ops:rate_5m{feature_category=~"continuous_integration|runner"}
         )
       )

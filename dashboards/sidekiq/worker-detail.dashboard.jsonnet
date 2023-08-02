@@ -75,14 +75,14 @@ local enqueueCountTimeseries(title, aggregators, legendFormat) =
 local rpsTimeseries(title, aggregators, legendFormat) =
   basic.timeseries(
     title=title,
-    query=recordingRuleRateQuery('gitlab_background_jobs:execution:ops:rate_5m', 'environment="$environment", worker=~"$worker"', aggregators),
+    query=recordingRuleRateQuery('application_sli_aggregation:sidekiq_execution:ops:rate_5m', 'environment="$environment", worker=~"$worker"', aggregators),
     legendFormat=legendFormat,
   );
 
 local errorRateTimeseries(title, aggregators, legendFormat) =
   basic.timeseries(
     title=title,
-    query=recordingRuleRateQuery('gitlab_background_jobs:execution:error:rate_5m', 'environment="$environment", worker=~"$worker"', aggregators),
+    query=recordingRuleRateQuery('application_sli_aggregation:sidekiq_execution:error:rate_5m', 'environment="$environment", worker=~"$worker"', aggregators),
     legendFormat=legendFormat,
   );
 
@@ -103,7 +103,7 @@ basic.dashboard(
 .addTemplate(template.new(
   'worker',
   '$PROMETHEUS_DS',
-  'label_values(gitlab_background_jobs:execution:ops:rate_1h{environment="$environment", type="sidekiq"}, worker)',
+  'label_values(application_sli_aggregation:sidekiq_execution:ops:rate_1h{environment="$environment", type="sidekiq"}, worker)',
   current='PostReceive',
   refresh='load',
   sort=1,
@@ -209,13 +209,11 @@ basic.dashboard(
       description='Queue apdex monitors the percentage of jobs that are dequeued within their queue threshold. Higher is better. Different jobs have different thresholds.',
       query=|||
         sum by (worker) (
-          (gitlab_background_jobs:queue:apdex:ratio_5m{environment="$environment", worker=~"$worker"} >= 0)
-          *
-          (gitlab_background_jobs:queue:apdex:weight:score_5m{environment="$environment", worker=~"$worker"} >= 0)
-        )
-        /
-        sum by (worker) (
-          (gitlab_background_jobs:queue:apdex:weight:score_5m{environment="$environment", worker=~"$worker"})
+          clamp_max(
+            (application_sli_aggregation:sidekiq_queueing:apdex:success:rate_5m{environment="$environment", worker=~"$worker"} >= 0)
+            /
+            (application_sli_aggregation:sidekiq_queueing:apdex:weight:score_5m{environment="$environment", worker=~"$worker"} >= 0)
+          , 1)
         )
       |||,
       yAxisLabel='% Jobs within Max Queuing Duration SLO',
@@ -235,13 +233,11 @@ basic.dashboard(
       description='Execution apdex monitors the percentage of jobs that run within their execution (run-time) threshold. Higher is better. Different jobs have different thresholds.',
       query=|||
         sum by (worker) (
-          (gitlab_background_jobs:execution:apdex:ratio_5m{environment="$environment", worker=~"$worker"} >= 0)
-          *
-          (gitlab_background_jobs:execution:apdex:weight:score_5m{environment="$environment", worker=~"$worker"} >= 0)
-        )
-        /
-        sum by (worker) (
-          (gitlab_background_jobs:execution:apdex:weight:score_5m{environment="$environment", worker=~"$worker"})
+          clamp_max(
+            (application_sli_aggregation:sidekiq_execution:apdex:success:rate_5m{environment="$environment", worker=~"$worker"} >= 0)
+            /
+            (application_sli_aggregation:sidekiq_execution:apdex:weight:score_5m{environment="$environment", worker=~"$worker"} >= 0)
+          , 1)
         )
       |||,
       yAxisLabel='% Jobs within Max Execution Duration SLO',
@@ -261,7 +257,7 @@ basic.dashboard(
       title='Execution Rate (RPS)',
       description='Jobs executed per second',
       query=|||
-        sum by (worker) (gitlab_background_jobs:execution:ops:rate_5m{environment="$environment", worker=~"$worker"})
+        sum by (worker) (application_sli_aggregation:sidekiq_execution:ops:rate_5m{environment="$environment", worker=~"$worker"})
       |||,
       legendFormat='{{ worker }} rps',
       format='ops',
@@ -281,11 +277,11 @@ basic.dashboard(
       description='Percentage of jobs that fail with an error. Lower is better.',
       query=|||
         sum by (worker) (
-          (gitlab_background_jobs:execution:error:rate_5m{environment="$environment", worker=~"$worker"} >= 0)
+          (application_sli_aggregation:sidekiq_execution:error:rate_5m{environment="$environment", worker=~"$worker"} >= 0)
         )
         /
         sum by (worker) (
-          (gitlab_background_jobs:execution:ops:rate_5m{environment="$environment", worker=~"$worker"} >= 0)
+          (application_sli_aggregation:sidekiq_execution:ops:rate_5m{environment="$environment", worker=~"$worker"} >= 0)
         )
       |||,
       legendFormat='{{ worker }} error ratio',
