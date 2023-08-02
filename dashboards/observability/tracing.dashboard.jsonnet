@@ -4,11 +4,15 @@ local templates = import 'grafana/templates.libsonnet';
 local row = grafana.row;
 local basic = import 'grafana/basic.libsonnet';
 local layout = import 'grafana/layout.libsonnet';
+local selectors = import 'promql/selectors.libsonnet';
 
-local k8sPodsCommon = import 'gitlab-dashboards/kubernetes_pods_common.libsonnet';
-local promQuery = import 'grafana/prom_query.libsonnet';
-
-local env_cluster_ns = 'env=~"$environment", cluster="$cluster", namespace="$namespace"';
+local collectorSelector = {
+  env: '$environment',
+  cluster: '$cluster',
+  namespace: '$namespace',
+  container: 'otel-collector'
+};
+local collectorSelectorSerialized = selectors.serializeHash(collectorSelector);
 
 basic.dashboard(
   'Tracing',
@@ -56,23 +60,23 @@ basic.dashboard(
       title='Active Version - otel-collector',
       query=|||
         count(
-          kube_pod_container_info{%(env_cluster_ns)s, container="otel-collector"}
+          kube_pod_container_info{%(selector)s}
         ) by (image)
-      ||| % { env_cluster_ns: env_cluster_ns },
+      ||| % { selector: collectorSelectorSerialized },
       legendFormat='{{ image }}',
     ),
     basic.timeseries(
       title='Up - otel-collector/metrics',
       query=|||
-        up{%(env_cluster_ns)s, container="otel-collector", job="otel-collector", endpoint="metrics"}
-      ||| % { env_cluster_ns: env_cluster_ns },
+        up{%(selector)s, job="otel-collector", endpoint="metrics"}
+      ||| % { selector: collectorSelectorSerialized },
       legendFormat='{{ namespace }}',
     ),
     basic.timeseries(
       title='Process uptime - otel-collector',
       query=|||
-        otelcol_process_uptime{%(env_cluster_ns)s, container="otel-collector"}
-      ||| % { env_cluster_ns: env_cluster_ns },
+        otelcol_process_uptime{%(selector)s}
+      ||| % { selector: collectorSelectorSerialized },
       legendFormat='{{ namespace }}',
     )
   ], cols=3, rowHeight=8, startRow=1)
@@ -87,18 +91,18 @@ basic.dashboard(
       title='Accepted Spans',
       query=|||
         sum (
-          rate(otelcol_receiver_accepted_spans{%(env_cluster_ns)s, container="otel-collector"}[1m])
+          rate(otelcol_receiver_accepted_spans{%(selector)s}[1m])
         ) by (namespace)
-      ||| % { env_cluster_ns: env_cluster_ns },
+      ||| % { selector: collectorSelectorSerialized },
       legendFormat='{{ namespace }}',
     ),
     basic.timeseries(
       title='Refused Spans',
       query=|||
         sum (
-          rate(otelcol_receiver_refused_spans{%(env_cluster_ns)s, container="otel-collector"}[1m])
+          rate(otelcol_receiver_refused_spans{%(selector)s}[1m])
         ) by (namespace)
-      ||| % { env_cluster_ns: env_cluster_ns },
+      ||| % { selector: collectorSelectorSerialized },
       legendFormat='{{ namespace }}',
     ),
   ], cols=2, rowHeight=8, startRow=101)
@@ -113,28 +117,28 @@ basic.dashboard(
       title='Spans Received',
       query=|||
         sum (
-          rate(custom_spans_received{%(env_cluster_ns)s, container="otel-collector"}[1m])
-        ) by (group)
-      ||| % { env_cluster_ns: env_cluster_ns },
-      legendFormat='{{ group }}',
+          rate(custom_spans_received{%(selector)s}[1m])
+        ) by (namespace)
+      ||| % { selector: collectorSelectorSerialized },
+      legendFormat='{{ namespace }}',
     ),
     basic.timeseries(
       title='Spans Ingested',
       query=|||
         sum (
-          rate(custom_spans_ingested{%(env_cluster_ns)s, container="otel-collector"}[1m])
-        ) by (group)
-      ||| % { env_cluster_ns: env_cluster_ns },
-      legendFormat='{{ group }}',
+          rate(custom_spans_ingested{%(selector)s}[1m])
+        ) by (namespace)
+      ||| % { selector: collectorSelectorSerialized },
+      legendFormat='{{ namespace }}',
     ),
     basic.timeseries(
       title='Traces Total Bytes',
       query=|||
         sum (
-          rate(custom_traces_size_bytes{%(env_cluster_ns)s, container="otel-collector"}[1m])
-        ) by (group)
-      ||| % { env_cluster_ns: env_cluster_ns },
-      legendFormat='{{ group }}',
+          rate(custom_traces_size_bytes{%(selector)s}[1m])
+        ) by (namespace)
+      ||| % { selector: collectorSelectorSerialized },
+      legendFormat='{{ namespace }}',
     )
   ], cols=3, rowHeight=8, startRow=201)
 )
@@ -148,18 +152,18 @@ basic.dashboard(
       title='CPU - otel-collector (millicores)',
       query=|||
         sum(
-          rate(container_cpu_usage_seconds_total{%(env_cluster_ns)s, container="otel-collector"}[2m])
+          rate(container_cpu_usage_seconds_total{%(selector)s}[2m])
         ) by (namespace) * 1000
-      ||| % { env_cluster_ns: env_cluster_ns },
+      ||| % { selector: collectorSelectorSerialized },
       legendFormat='{{ namespace }}',
     ),
     basic.timeseries(
       title='Memory - otel-collector (GBs)',
       query=|||
         sum(
-          rate(container_memory_working_set_bytes{%(env_cluster_ns)s, container="otel-collector"}[2m])
+          rate(container_memory_working_set_bytes{%(selector)s}[2m])
         ) by (namespace) / (1024*1024*1024)
-      ||| % { env_cluster_ns: env_cluster_ns },
+      ||| % { selector: collectorSelectorSerialized },
       legendFormat='{{ namespace }}',
     )
   ], cols=2, rowHeight=8, startRow=301)
@@ -174,32 +178,32 @@ basic.dashboard(
       title='Memory-Limiter Refused Spans',
       query=|||
         sum (
-          rate(otelcol_processor_refused_spans{%(env_cluster_ns)s, container="otel-collector"}[1m])
+          rate(otelcol_processor_refused_spans{%(selector)s}[1m])
         ) by (namespace)
-      ||| % { env_cluster_ns: env_cluster_ns },
+      ||| % { selector: collectorSelectorSerialized },
       legendFormat='{{ namespace }}',
     ),
     basic.timeseries(
       title='Exporter Queue Capacity',
       query=|||
-        otelcol_exporter_queue_capacity{%(env_cluster_ns)s, container="otel-collector"}
-      ||| % { env_cluster_ns: env_cluster_ns },
+        otelcol_exporter_queue_capacity{%(selector)s}
+      ||| % { selector: collectorSelectorSerialized },
       legendFormat='{{ namespace }}',
     ),
     basic.timeseries(
       title='Exporter Queue Size',
       query=|||
-        otelcol_exporter_queue_size{%(env_cluster_ns)s, container="otel-collector"}
-      ||| % { env_cluster_ns: env_cluster_ns },
+        otelcol_exporter_queue_size{%(selector)s}
+      ||| % { selector: collectorSelectorSerialized },
       legendFormat='{{ namespace }}',
     ),
     basic.timeseries(
       title='Exporter Enqueue Failed Spans',
       query=|||
         sum (
-          rate(otelcol_exporter_enqueue_failed_spans{%(env_cluster_ns)s, container="otel-collector"}[1m])
+          rate(otelcol_exporter_enqueue_failed_spans{%(selector)s}[1m])
         ) by (namespace)
-      ||| % { env_cluster_ns: env_cluster_ns },
+      ||| % { selector: collectorSelectorSerialized },
       legendFormat='{{ namespace }}',
     ),
   ], cols=4, rowHeight=8, startRow=401)
