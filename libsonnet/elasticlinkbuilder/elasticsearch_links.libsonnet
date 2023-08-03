@@ -45,6 +45,16 @@ local appendUnion(array, newItems) =
     array
   );
 
+local insertIndexToFiltersMeta(filters, ic) =
+  std.map(
+    function(filter)
+      if std.isObject(filter) then
+        filter { meta+: { index: ic.indexPattern } }
+      else if std.isArray(filter) then
+        insertIndexToFiltersMeta(filter, ic),
+    filters,
+  );
+
 local buildElasticDiscoverSearchQueryURL(index, filters=[], luceneQueries=[], timeRange=grafanaTimeRange, sort=[], extraColumns=[]) =
   local ic = indexCatalog[index];
 
@@ -52,7 +62,7 @@ local buildElasticDiscoverSearchQueryURL(index, filters=[], luceneQueries=[], ti
 
   local applicationState = {
     columns: columnsWithExtras,
-    filters: ic.defaultFilters + filters,
+    filters: insertIndexToFiltersMeta(ic.defaultFilters + filters, ic),
     index: ic.indexPattern,
     [if std.length(luceneQueries) > 0 then 'query']: {
       language: 'kuery',
@@ -118,7 +128,7 @@ local buildElasticLineCountVizURL(index, filters, luceneQueries=[], splitSeries=
     );
 
   local applicationState = {
-    filters: ic.defaultFilters + filters,
+    filters: insertIndexToFiltersMeta(ic.defaultFilters + filters, ic),
     query: {
       language: 'kuery',
       query: std.join(' AND ', luceneQueries),
@@ -193,7 +203,7 @@ local buildElasticTableCountVizURL(index, filters, luceneQueries=[], splitSeries
     extraAggs;
 
   local applicationState = {
-    filters: ic.defaultFilters + filters,
+    filters: insertIndexToFiltersMeta(ic.defaultFilters + filters, ic),
     query: {
       language: 'kuery',
       query: std.join(' AND ', luceneQueries),
@@ -264,7 +274,7 @@ local buildElasticLineTotalDurationVizURL(index, filters, luceneQueries=[], late
     );
 
   local applicationState = {
-    filters: ic.defaultFilters + filters,
+    filters: insertIndexToFiltersMeta(ic.defaultFilters + filters, ic),
     query: {
       language: 'kuery',
       query: std.join(' AND ', luceneQueries),
@@ -372,7 +382,7 @@ local buildElasticLinePercentileVizURL(index, filters, luceneQueries=[], latency
     );
 
   local applicationState = {
-    filters: ic.defaultFilters + filters,
+    filters: insertIndexToFiltersMeta(ic.defaultFilters + filters, ic),
     query: {
       language: 'kuery',
       query: std.join(' AND ', luceneQueries),
