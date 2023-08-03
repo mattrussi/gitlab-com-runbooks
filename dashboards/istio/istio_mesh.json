@@ -1162,7 +1162,7 @@
           "decimals": 2,
           "link": true,
           "linkTooltip": "$__cell dashboard",
-          "linkUrl": "/dashboard/db/istio-workload-dashboard?var-workload=${__cell_2:raw}&var-namespace=${__cell_3:raw}",
+          "linkUrl": "/d/istio-istio_workload/istio-workload-dashboard?var-workload=${__cell_2:raw}&var-namespace=${__cell_3:raw}",
           "pattern": "destination_workload_var",
           "thresholds": [],
           "type": "number",
@@ -1180,7 +1180,7 @@
           "decimals": 2,
           "link": true,
           "linkTooltip": "$__cell dashboard",
-          "linkUrl": "/dashboard/db/istio-service-dashboard?var-service=${__cell_1:raw}",
+          "linkUrl": "/d/istio-istio_service/istio-service-dashboard?var-service=${__cell_1:raw}",
           "pattern": "destination_service",
           "thresholds": [],
           "type": "string",
@@ -1537,10 +1537,7 @@
   "refresh": "5m",
   "schemaVersion": 38,
   "style": "dark",
-  "tags": [
-    "protected",
-    "unmanaged"
-  ],
+  "tags": [],
   "templating": {
     "list": [
       {
