@@ -2147,3 +2147,28 @@ services:
       monitors:
         grafana_folder: ops-gitlab-net
         primary_grafana_dashboard: ops-gitlab-net-main/ops-gitlab-net-overview
+
+  - name: istio
+    tier: inf
+    friendly_name: Istio
+    label: Istio
+    owner: reliability_foundations
+    technical:
+      project:
+        - https://github.com/istio/istio
+      documents:
+        design:
+        architecture: https://istio.io/latest/docs/ops/deployment/architecture/
+        readiness_review: TBD
+        sre_guide: https://gitlab.com/gitlab-com/runbooks/-/tree/master/docs/istio
+        developer_guide:
+        service:
+          - https://gitlab.com/gitlab-com/gl-infra/k8s-mgmt/components/-/tree/main/istio
+        security: https://istio.io/latest/docs/concepts/security/
+      dependencies:
+      logging:
+        - name: Istio
+          permalink:
+    observability:
+      monitors:
+        primary_grafana_dashboard: istio-istio_control_plane/istio-istio-control-plane-dashboard
