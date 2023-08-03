@@ -13,6 +13,13 @@ local collectorSelector = {
   container: 'otel-collector'
 };
 local collectorSelectorSerialized = selectors.serializeHash(collectorSelector);
+local queryAPISelector = {
+  env: '$environment',
+  cluster: '$cluster',
+  namespace: 'default',
+  container: 'trace-query-api'
+};
+local queryAPISelectorSerialized = selectors.serializeHash(queryAPISelector);
 
 basic.dashboard(
   'Tracing',
@@ -78,8 +85,15 @@ basic.dashboard(
         otelcol_process_uptime{%(selector)s}
       ||| % { selector: collectorSelectorSerialized },
       legendFormat='{{ namespace }}',
+    ),
+    basic.timeseries(
+      title='Query API uptime',
+      query=|||
+        up{%(selector)s, endpoint="metrics"}
+      ||| % { selector: queryAPISelectorSerialized },
+      legendFormat='{{ container }}',
     )
-  ], cols=3, rowHeight=8, startRow=1)
+  ], cols=4, rowHeight=8, startRow=1)
 )
 .addPanel(
   row.new(title='HTTP Receiver'),
@@ -163,8 +177,24 @@ basic.dashboard(
         max(container_memory_working_set_bytes{%(selector)s}) / (1024*1024*1024)
       ||| % { selector: collectorSelectorSerialized },
       legendFormat='{{ namespace }}',
+    ),
+    basic.timeseries(
+      title='CPU - trace-query-api (millicores)',
+      query=|||
+        sum(
+          rate(container_cpu_usage_seconds_total{%(selector)s}[2m])
+        ) * 1000
+      ||| % { selector: queryAPISelectorSerialized },
+      legendFormat='{{ container }}',
+    ),
+    basic.timeseries(
+      title='Memory Usage (max) - trace-query-api (GBs)',
+      query=|||
+        max(container_memory_working_set_bytes{%(selector)s}) / (1024*1024*1024)
+      ||| % { selector: queryAPISelectorSerialized },
+      legendFormat='{{ container }}'
     )
-  ], cols=2, rowHeight=8, startRow=301)
+  ], cols=4, rowHeight=8, startRow=301)
 )
 .addPanel(
   row.new(title='Pipeline Scalability'),
@@ -205,4 +235,45 @@ basic.dashboard(
       legendFormat='{{ namespace }}',
     ),
   ], cols=4, rowHeight=8, startRow=401)
+)
+.addPanel(
+  row.new(title='Trace Query API'),
+  gridPos={ x: 0, y: 500, w: 24, h: 1 },
+)
+.addPanels(
+  layout.grid([
+    basic.timeseries(
+      title='Request rate',
+      query=|||
+        sum(
+          rate(http_requests_total{%(selector)s}[1m])
+        ) by (path, code)
+      ||| % { selector: queryAPISelectorSerialized },
+      legendFormat='{{ container }}',
+    ),
+    basic.timeseries(
+      title='95th percentile Request Latency',
+      query=|||
+        histogram_quantile(
+          0.95,
+          sum(
+            rate(http_requests_duration_seconds_bucket{%(selector)s}[1m])
+          ) by (le)
+        )
+      ||| % { selector: queryAPISelectorSerialized },
+      legendFormat='{{ container }}',
+    ),
+    basic.timeseries(
+      title='95th percentile Response Size',
+      query=|||
+        histogram_quantile(
+          0.95,
+          sum(
+            rate(http_response_size_bucket{%(selector)s}[1m])
+          ) by (le)
+        )
+      ||| % { selector: queryAPISelectorSerialized },
+      legendFormat='{{ container }}',
+    )
+  ], cols=3, rowHeight=8, startRow=501)
 )
