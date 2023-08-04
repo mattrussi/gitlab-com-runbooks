@@ -237,7 +237,7 @@ local sidekiqThanosAlerts(extraSelector) =
         (
           sum by (env, environment, tier, type, stage, shard, queue, feature_category, urgency, worker) (
             sli_aggregations:gitlab_sli_sidekiq_execution_total_rate6h{%(selector)s}
-          ) >= %(errorThreshold)s
+          ) >= %(minimumOpRate)s
         )
       ||| % {
         selector: selectors.serializeHash(extraSelector),
