@@ -232,17 +232,17 @@ groups:
           sli_aggregations:gitlab_sli_sidekiq_execution_error_total_rate6h{env="ops"}
           /
           sli_aggregations:gitlab_sli_sidekiq_execution_total_rate6h{env="ops"}
-        ) < 0.90000000000000002
+        ) > 0.10000000000000001
         and
         (
           sli_aggregations:gitlab_sli_sidekiq_execution_error_total_rate30m{env="ops"}
           /
           sli_aggregations:gitlab_sli_sidekiq_execution_total_rate30m{env="ops"}
-        ) < 0.90000000000000002
+        ) > 0.10000000000000001
       )
       and on (env, environment, tier, type, stage, shard, queue, feature_category, urgency, worker)
       (
         sum by (env, environment, tier, type, stage, shard, queue, feature_category, urgency, worker) (
           sli_aggregations:gitlab_sli_sidekiq_execution_total_rate6h{env="ops"}
-        ) >= 0.90000000000000002
+        ) >= 0.00013888888888888889
       )
