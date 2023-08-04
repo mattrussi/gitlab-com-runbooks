@@ -9,7 +9,6 @@ groups:
     # This is a raw metrics calculation for Gitaly based on its very complex metrics calculations.
     labels:
       type: gitaly
-      env: gprd
     expr: |
      ( sum by (env,environment,stage) (
         label_replace((
