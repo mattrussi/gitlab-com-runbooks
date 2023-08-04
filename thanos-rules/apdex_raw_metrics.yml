@@ -66,23 +66,6 @@ groups:
         )
         , "_c", "2", "", "")
       ))
-- name: Web raw metrics apdex calculation
-  interval: 1m
-  partial_response_strategy: warn
-  rules:
-  - record: raw_metrics_apdex_calculation
-    # This is a raw metrics calculation for web based on the apdex calculations for web/rails_requests.
-    labels:
-      type: web
-    expr: |
-       sum by (env, environment, stage)
-         (sum by (endpoint_id,environment,job,search_level,search_scope,search_type,shard,stage,tier,type) (
-            rate(gitlab_sli_rails_request_apdex_success_total{environment="gprd"}[1m])
-        )
-       )
-       /
-       sum by (env, environment, stage) (sum by (endpoint_id,environment,feature_category,job,request_urgency,shard,stage,tier,type) (
-        rate(gitlab_sli_rails_request_total{environment="gprd"}[1m])))
 - name: redis ratelimiting raw metrics apdex calculation
   interval: 1m
   partial_response_strategy: warn
