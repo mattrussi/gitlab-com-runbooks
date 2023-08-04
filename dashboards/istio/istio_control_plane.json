@@ -1060,7 +1060,7 @@
             "type": "prometheus",
             "uid": "PA258B30F88C30650"
           },
-          "expr": "histogram_quantile(0.5, sum(rate(pilot_proxy_convergence_time_bucket[1m])) by (le))",
+          "expr": "histogram_quantile(0.5, sum(rate(pilot_proxy_convergence_time_bucket{environment=\"$environment\"}[1m])) by (le))",
           "format": "time_series",
           "intervalFactor": 1,
           "legendFormat": "p50 ",
@@ -1071,7 +1071,7 @@
             "type": "prometheus",
             "uid": "PA258B30F88C30650"
           },
-          "expr": "histogram_quantile(0.9, sum(rate(pilot_proxy_convergence_time_bucket[1m])) by (le))",
+          "expr": "histogram_quantile(0.9, sum(rate(pilot_proxy_convergence_time_bucket{environment=\"$environment\"}[1m])) by (le))",
           "format": "time_series",
           "intervalFactor": 1,
           "legendFormat": "p90",
@@ -1082,7 +1082,7 @@
             "type": "prometheus",
             "uid": "PA258B30F88C30650"
           },
-          "expr": "histogram_quantile(0.99, sum(rate(pilot_proxy_convergence_time_bucket[1m])) by (le))",
+          "expr": "histogram_quantile(0.99, sum(rate(pilot_proxy_convergence_time_bucket{environment=\"$environment\"}[1m])) by (le))",
           "format": "time_series",
           "intervalFactor": 1,
           "legendFormat": "p99",
@@ -1093,7 +1093,7 @@
             "type": "prometheus",
             "uid": "PA258B30F88C30650"
           },
-          "expr": "histogram_quantile(0.999, sum(rate(pilot_proxy_convergence_time_bucket[1m])) by (le))",
+          "expr": "histogram_quantile(0.999, sum(rate(pilot_proxy_convergence_time_bucket{environment=\"$environment\"}[1m])) by (le))",
           "format": "time_series",
           "intervalFactor": 1,
           "legendFormat": "p99.9",
