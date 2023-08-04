@@ -74,7 +74,6 @@ groups:
     # This is a raw metrics calculation for web based on the apdex calculations for web/rails_requests.
     labels:
       type: web
-      env: gprd
     expr: |
        sum by (env, environment, stage)
          (sum by (endpoint_id,environment,job,search_level,search_scope,search_type,shard,stage,tier,type) (
@@ -94,7 +93,6 @@ groups:
     #   env="gprd"
     labels:
       type: redis-ratelimiting
-      env: gprd
     expr: |
       sum by (env,environment,tier,type,stage) (
         (
