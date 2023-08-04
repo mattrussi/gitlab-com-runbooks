@@ -11,7 +11,7 @@ local selectors = import 'promql/selectors.libsonnet';
     useRecordingRuleRegistry:: false,
 
     local baseSelector = selector,  // alias
-    aggregatedRateQuery(aggregationLabels, selector, rangeInterval, withoutLabels=[])::
+    aggregatedRateQuery(aggregationLabels, selector, rangeInterval, useRecordingRuleRegistry=self.useRecordingRuleRegistry, withoutLabels=[])::
       local mergedSelectors = selectors.without(selectors.merge(baseSelector, selector), withoutLabels);
       local query = 'avg_over_time(%(gauge)s{%(selectors)s}[%(rangeInterval)s])' % {
         gauge: gauge,

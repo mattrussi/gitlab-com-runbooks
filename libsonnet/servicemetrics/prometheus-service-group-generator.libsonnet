@@ -1,11 +1,22 @@
 local intervalForDuration = import './interval-for-duration.libsonnet';
 local recordingRuleRegistry = import './recording-rule-registry.libsonnet';
 local recordingRules = import 'recording-rules/recording-rules.libsonnet';
+local misc = import 'utils/misc.libsonnet';
 
 local recordingRuleGroupsForServiceForBurnRate(serviceDefinition, componentAggregationSet, nodeAggregationSet, shardAggregationSet, burnRate) =
+  local recordSliRegistryRules = misc.any(
+    function(aggSet) if aggSet != null then std.get(aggSet, 'useRecordingRuleRegistry', true) else false,
+    [componentAggregationSet, nodeAggregationSet, shardAggregationSet]
+  );
   local rulesetGenerators =
+    (
+      if recordSliRegistryRules then
+        [recordingRules.sliRecordingRulesSetGenerator(burnRate, recordingRuleRegistry)]
+      else
+        []
+    )
+    +
     [
-      recordingRules.sliRecordingRulesSetGenerator(burnRate, recordingRuleRegistry),
       recordingRules.componentMetricsRuleSetGenerator(
         burnRate=burnRate,
         aggregationSet=componentAggregationSet

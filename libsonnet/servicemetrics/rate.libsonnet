@@ -36,7 +36,8 @@ local generateRangeFunctionQuery(rate, rangeFunction, additionalSelectors, range
 
     // This creates a rate query of the form
     // rate(....{<selector>}[<rangeInterval>])
-    rateQuery(selector, rangeInterval, withoutLabels=[])::
+    // useRecordingRuleRegistry is unused by generateRangeFunctionQuery as it does not resolve recording rules
+    rateQuery(selector, rangeInterval, useRecordingRuleRegistry=self.useRecordingRuleRegistry, withoutLabels=[])::
       generateRangeFunctionQuery(self, 'rate', selector, rangeInterval, withoutLabels=withoutLabels),
 
     // This creates a increase query of the form
@@ -46,7 +47,7 @@ local generateRangeFunctionQuery(rate, rangeFunction, additionalSelectors, range
 
     // This creates an aggregated rate query of the form
     // sum by(<aggregationLabels>) (rate(....{<selector>}[<rangeInterval>]))
-    aggregatedRateQuery(aggregationLabels, selector, rangeInterval, withoutLabels=[])::
+    aggregatedRateQuery(aggregationLabels, selector, rangeInterval, useRecordingRuleRegistry=self.useRecordingRuleRegistry, withoutLabels=[], useRecordingRuleRegistry=self.useRecordingRuleRegistry)::
       local combinedSelector = selectors.without(selectors.merge(self.selector, selector), withoutLabels);
 
       local resolvedRecordingRule = recordingRuleRegistry.resolveRecordingRuleFor(
@@ -115,7 +116,7 @@ local generateRangeFunctionQuery(rate, rangeFunction, additionalSelectors, range
 
     // This creates an aggregated rate query of the form
     // sum by(<aggregationLabels>) (deriv(....{<selector>}[<rangeInterval>]))
-    aggregatedRateQuery(aggregationLabels, selector, rangeInterval, withoutLabels=[])::
+    aggregatedRateQuery(aggregationLabels, selector, rangeInterval, useRecordingRuleRegistry=self.useRecordingRuleRegistry, withoutLabels=[])::
       local query = generateRangeFunctionQuery(self, 'deriv', selector, rangeInterval, withoutLabels=withoutLabels);
       local clampedQuery = if self.clampMinZero then
         'clamp_min(%(query)s, 0)' % { query: query }

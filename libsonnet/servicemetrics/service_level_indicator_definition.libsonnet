@@ -166,13 +166,15 @@ local serviceLevelIndicatorDefinition(sliName, serviceLevelIndicator) =
         local apdexSuccessRateExpr = serviceLevelIndicator.apdex.apdexSuccessRateQuery(
           aggregationLabels=aggregationLabelsWithoutStaticLabels,
           selector={},
-          rangeInterval=burnRate
+          rangeInterval=burnRate,
+          useRecordingRuleRegistry=aggregationSet.useRecordingRuleRegistry,
         );
 
         local apdexWeightExpr = serviceLevelIndicator.apdex.apdexWeightQuery(
           aggregationLabels=aggregationLabelsWithoutStaticLabels,
           selector={},
-          rangeInterval=burnRate
+          rangeInterval=burnRate,
+          useRecordingRuleRegistry=aggregationSet.useRecordingRuleRegistry,
         );
 
         (
@@ -212,7 +214,8 @@ local serviceLevelIndicatorDefinition(sliName, serviceLevelIndicator) =
           expr: serviceLevelIndicator.requestRate.aggregatedRateQuery(
             aggregationLabels=filterStaticLabelsFromAggregationLabels(aggregationLabels, allStaticLabels),
             selector={},
-            rangeInterval=burnRate
+            rangeInterval=burnRate,
+            useRecordingRuleRegistry=aggregationSet.useRecordingRuleRegistry,
           ),
         }]
       else
@@ -230,7 +233,8 @@ local serviceLevelIndicatorDefinition(sliName, serviceLevelIndicator) =
         local expr = serviceLevelIndicator.errorRate.aggregatedRateQuery(
           aggregationLabels=filterStaticLabelsFromAggregationLabels(aggregationLabels, allStaticLabels),
           selector={},
-          rangeInterval=burnRate
+          rangeInterval=burnRate,
+          useRecordingRuleRegistry=aggregationSet.useRecordingRuleRegistry,
         );
 
         [{

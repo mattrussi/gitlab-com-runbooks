@@ -21,6 +21,9 @@ local definitionDefaults = {
   else defaultGlobalBurnRates,
 
   recordingRuleStaticLabels: {},
+
+  useRecordingRuleRegistry: true,
+  reflectedRatios: false,
 };
 
 local arrayOfStringsValidator = validator.validator(
@@ -180,6 +183,13 @@ local buildValidator(definition) =
             memo { [typeForBurnRate]: existingBurnRatesForType + [burnRate] },
           self.getBurnRates(),
           {}
+        ),
+
+      hasRatios()::
+        misc.any(
+          function(burnRate)
+            getMetricNameForBurnRate(burnRate, 'errorRatio', required=false) != null || getMetricNameForBurnRate(burnRate, 'apdexRatio', required=false) != null,
+          self.getBurnRates()
         ),
     },
 }

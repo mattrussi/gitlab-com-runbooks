@@ -3,7 +3,7 @@ local selectors = import 'promql/selectors.libsonnet';
 
 // Returns a direct apdex ratio transformation expression or null if one cannot be generated because the source
 // does not contain the correct recording rules
-local getApdexRatioExpression(aggregationSet, burnRate) =
+local getApdexRatioExpression(aggregationSet, burnRate, extraSelector) =
   local apdexSuccessRateMetric = aggregationSet.getApdexSuccessRateMetricForBurnRate(burnRate, required=false);
   local apdexWeightMetric = aggregationSet.getApdexWeightMetricForBurnRate(burnRate, required=false);
 
@@ -18,7 +18,7 @@ local getApdexRatioExpression(aggregationSet, burnRate) =
       )
     ||| % {
       aggregationLabels: aggregations.serialize(aggregationSet.labels),
-      selector: selectors.serializeHash(aggregationSet.selector),
+      selector: selectors.serializeHash(aggregationSet.selector + extraSelector),
       apdexSuccessRateMetric: apdexSuccessRateMetric,
       apdexWeightMetric: apdexWeightMetric,
     }
@@ -28,7 +28,7 @@ local getApdexRatioExpression(aggregationSet, burnRate) =
   // Aggregates apdex scores internally within an aggregation set
   // intended to be used when all metrics are stored within a single
   // Prometheus instance, with no Thanos layer
-  aggregationSetApdexRatioReflectedRuleSet(aggregationSet, burnRate)::
+  aggregationSetApdexRatioReflectedRuleSet(aggregationSet, burnRate, extraSelector={})::
     local apdexRatioMetric = aggregationSet.getApdexRatioMetricForBurnRate(burnRate);
 
     (
@@ -37,7 +37,7 @@ local getApdexRatioExpression(aggregationSet, burnRate) =
       else
         [{
           record: apdexRatioMetric,
-          expr: getApdexRatioExpression(aggregationSet, burnRate),
+          expr: getApdexRatioExpression(aggregationSet, burnRate, extraSelector),
         }]
     ),
 }

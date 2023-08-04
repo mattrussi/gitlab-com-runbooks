@@ -48,7 +48,7 @@ local transformErrorRateToSuccessRate(errorRateMetric, operationRateMetric, sele
     selector: selector,
     useRecordingRuleRegistry:: useRecordingRuleRegistry,
 
-    apdexSuccessRateQuery(aggregationLabels, selector, rangeInterval, withoutLabels=[])::
+    apdexSuccessRateQuery(aggregationLabels, selector, rangeInterval, useRecordingRuleRegistry=self.useRecordingRuleRegistry, withoutLabels=[])::
       transformErrorRateToSuccessRate(
         self.errorRateMetric,
         self.operationRateMetric,
@@ -57,7 +57,7 @@ local transformErrorRateToSuccessRate(errorRateMetric, operationRateMetric, sele
         aggregationLabels,
         useRecordingRuleRegistry,
       ),
-    apdexWeightQuery(aggregationLabels, selector, rangeInterval, withoutLabels=[])::
+    apdexWeightQuery(aggregationLabels, selector, rangeInterval, useRecordingRuleRegistry=self.useRecordingRuleRegistry, withoutLabels=[])::
       resolveRateQuery(
         self.operationRateMetric,
         selectors.without(selectors.merge(self.selector, selector), withoutLabels),

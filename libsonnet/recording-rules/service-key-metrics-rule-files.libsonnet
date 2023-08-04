@@ -1,3 +1,4 @@
+local aggregationSetTransformer = import 'servicemetrics/aggregation-set-transformer.libsonnet';
 local prometheusServiceGroupGenerator = import 'servicemetrics/prometheus-service-group-generator.libsonnet';
 
 local outputPromYaml(groups, groupExtras) =
@@ -8,36 +9,52 @@ local outputPromYaml(groups, groupExtras) =
     ],
   });
 
-local filesForService(service, componentAggregationSet, nodeAggregationSet, featureCategoryAggregationSet, shardAggregationSet, groupExtras) =
-  {
-    ['key-metrics-%s.yml' % [service.type]]:
-      outputPromYaml(
-        prometheusServiceGroupGenerator.recordingRuleGroupsForService(
-          service,
-          componentAggregationSet=componentAggregationSet,
-          nodeAggregationSet=nodeAggregationSet,
-          shardAggregationSet=shardAggregationSet
-        ),
-        groupExtras
-      ),
-  } + if service.hasFeatureCategorySLIs() then
-    {
-      ['feature-category-metrics-%s.yml' % [service.type]]:
-        outputPromYaml(
-          prometheusServiceGroupGenerator.featureCategoryRecordingRuleGroupsForService(
-            service,
-            aggregationSet=featureCategoryAggregationSet,
+local optionalReflectedRuleSet(aggregationSet, service) =
+  if aggregationSet != null && aggregationSet.reflectedRatios && aggregationSet.hasRatios() then
+    aggregationSetTransformer.generateReflectedRecordingRuleGroups(aggregationSet, extraSelector={ type: service.type })
+  else
+    [];
+
+local filesForService(service, componentAggregationSet, nodeAggregationSet, featureCategoryAggregationSet, shardAggregationSet, groupExtras, filenamePrefix) =
+  (
+    if componentAggregationSet != null then
+      {
+        ['%skey-metrics-%s.yml' % [filenamePrefix, service.type]]:
+          outputPromYaml(
+            prometheusServiceGroupGenerator.recordingRuleGroupsForService(
+              service,
+              componentAggregationSet=componentAggregationSet,
+              nodeAggregationSet=nodeAggregationSet,
+              shardAggregationSet=shardAggregationSet
+            ) +
+            optionalReflectedRuleSet(componentAggregationSet, service) +
+            optionalReflectedRuleSet(nodeAggregationSet, service) +
+            optionalReflectedRuleSet(shardAggregationSet, service),
+            groupExtras
           ),
-          groupExtras
-        ),
-    }
-  else {};
+      } else {}
+  )
+  +
+  (
+    if service.hasFeatureCategorySLIs() && featureCategoryAggregationSet != null then
+      {
+        ['%sfeature-category-metrics-%s.yml' % [filenamePrefix, service.type]]:
+          outputPromYaml(
+            prometheusServiceGroupGenerator.featureCategoryRecordingRuleGroupsForService(
+              service,
+              aggregationSet=featureCategoryAggregationSet,
+            ) + optionalReflectedRuleSet(featureCategoryAggregationSet, service),
+            groupExtras
+          ),
+      }
+    else {}
+  );
 
 
-local filesForServices(services, componentAggregationSet, nodeAggregationSet, featureCategoryAggregationSet, shardAggregationSet, groupExtras={}) =
+local filesForServices(services, componentAggregationSet, nodeAggregationSet, featureCategoryAggregationSet, shardAggregationSet, groupExtras={}, filenamePrefix='') =
   std.foldl(
     function(memo, service)
-      memo + filesForService(service, componentAggregationSet, nodeAggregationSet, featureCategoryAggregationSet, shardAggregationSet, groupExtras),
+      memo + filesForService(service, componentAggregationSet, nodeAggregationSet, featureCategoryAggregationSet, shardAggregationSet, groupExtras, filenamePrefix),
     services,
     {}
   );

@@ -15,14 +15,14 @@ local generateRecordingRules(sourceAggregationSet, targetAggregationSet, burnRat
     burnRates
   );
 
-local generateReflectedRecordingRules(aggregationSet, burnRates) =
+local generateReflectedRecordingRules(aggregationSet, burnRates, extraSelector) =
   std.flatMap(
     function(burnRate)
       // Error Ratio
-      recordingRules.aggregationSetErrorRatioReflectedRuleSet(aggregationSet=aggregationSet, burnRate=burnRate)
+      recordingRules.aggregationSetErrorRatioReflectedRuleSet(aggregationSet=aggregationSet, burnRate=burnRate, extraSelector=extraSelector)
       +
       // Apdex Score and Apdex Weight and Apdex SuccessRate
-      recordingRules.aggregationSetApdexRatioReflectedRuleSet(aggregationSet=aggregationSet, burnRate=burnRate),
+      recordingRules.aggregationSetApdexRatioReflectedRuleSet(aggregationSet=aggregationSet, burnRate=burnRate, extraSelector=extraSelector),
     burnRates
   );
 
@@ -43,12 +43,12 @@ local generateRecordingRuleGroups(sourceAggregationSet, targetAggregationSet, ex
     std.objectFields(burnRatesByType)
   );
 
-local generateReflectedRecordingRuleGroups(aggregationSet, extrasForGroup={}) =
+local generateReflectedRecordingRuleGroups(aggregationSet, extrasForGroup={}, extraSelector={}) =
   local burnRatesByType = aggregationSet.getBurnRatesByType();
   std.map(
     function(burnType)
       groupForSetAndType(aggregationSet, burnType) {
-        rules: generateReflectedRecordingRules(aggregationSet, burnRatesByType[burnType]),
+        rules: generateReflectedRecordingRules(aggregationSet, burnRatesByType[burnType], extraSelector),
       } + extrasForGroup,
     std.objectFields(burnRatesByType)
   );

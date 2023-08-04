@@ -65,6 +65,29 @@ local aggregationSet = import 'servicemetrics/aggregation-set.libsonnet';
   }),
 
   /**
+   * componentSLIs consumes promSourceSLIs and is the primary
+   * aggregation used for alerting, monitoring, visualizations, etc.
+   */
+  experimentalComponentSLIs: aggregationSet.AggregationSet({
+    id: 'experimental_component',
+    name: 'Global Experimental SLI Metrics',
+    intermediateSource: false,  // Used in dashboards and alerts
+    useRecordingRuleRegistry: false,
+    reflectedRatios: true,
+    selector: { monitor: 'global' },  // Thanos Ruler
+    labels: ['env', 'environment', 'tier', 'type', 'stage', 'component'],
+    metricFormats: {
+      apdexSuccessRate: 'experiment:gitlab_component_apdex:success:rate_%s',
+      apdexWeight: 'experiment:gitlab_component_apdex:weight:score_%s',
+      apdexRatio: 'experiment:gitlab_component_apdex:ratio_%s',
+      opsRate: 'experiment:gitlab_component_ops:rate_%s',
+      errorRate: 'experiment:gitlab_component_errors:rate_%s',
+      errorRatio: 'experiment:gitlab_component_errors:ratio_%s',
+    },
+  }),
+
+
+  /**
    * regionalComponentSLIs consumes promSourceSLIs and is the primary
    * aggregation used for alerting, monitoring, visualizations, etc.
    */
@@ -395,6 +418,25 @@ local aggregationSet = import 'servicemetrics/aggregation-set.libsonnet';
       opsRate: 'gitlab:component:feature_category:execution:ops:rate_%s',
       errorRate: 'gitlab:component:feature_category:execution:error:rate_%s',
       errorRatio: 'gitlab:component:feature_category:execution:error:ratio_%s',
+    },
+  }),
+
+  experimentalFeatureCategorySLIs: aggregationSet.AggregationSet({
+    id: 'experimental_feature_category',
+    name: 'Experimental Feature Category Metrics',
+    intermediateSource: false,
+    useRecordingRuleRegistry: false,
+    reflectedRatios: true,
+    selector: { monitor: 'global' },
+    labels: ['env', 'environment', 'tier', 'type', 'stage', 'component', 'feature_category'],
+    upscaleLongerBurnRates: true,
+    metricFormats: {
+      apdexSuccessRate: 'experiment:component:feature_category:execution:apdex:success:rate_%s',
+      apdexWeight: 'experiment:component:feature_category:execution:apdex:weight:score_%s',
+      apdexRatio: 'experiment:component:feature_category:execution:apdex:ratio_%s',
+      opsRate: 'experiment:component:feature_category:execution:ops:rate_%s',
+      errorRate: 'experiment:component:feature_category:execution:error:rate_%s',
+      errorRatio: 'experiment:component:feature_category:execution:error:ratio_%s',
     },
   }),
 

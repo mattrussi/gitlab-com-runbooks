@@ -22,7 +22,7 @@ local generateApdexRatio(successCounterApdex, aggregationLabels, additionalSelec
     selector: selector,
     useRecordingRuleRegistry:: useRecordingRuleRegistry,
 
-    apdexSuccessRateQuery(aggregationLabels, selector, rangeInterval, withoutLabels=[])::
+    apdexSuccessRateQuery(aggregationLabels, selector, rangeInterval, useRecordingRuleRegistry=self.useRecordingRuleRegistry, withoutLabels=[])::
       resolveRateQuery(
         self.successRateMetric,
         selectors.without(selectors.merge(self.selector, selector), withoutLabels),
@@ -31,7 +31,7 @@ local generateApdexRatio(successCounterApdex, aggregationLabels, additionalSelec
         aggregationLabels=aggregationLabels,
         aggregationFunction='sum',
       ),
-    apdexWeightQuery(aggregationLabels, selector, rangeInterval, withoutLabels=[])::
+    apdexWeightQuery(aggregationLabels, selector, rangeInterval, useRecordingRuleRegistry=self.useRecordingRuleRegistry, withoutLabels=[])::
       resolveRateQuery(
         self.operationRateMetric,
         selectors.without(selectors.merge(self.selector, selector), withoutLabels),

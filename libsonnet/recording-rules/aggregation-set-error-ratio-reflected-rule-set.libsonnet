@@ -2,7 +2,7 @@ local aggregations = import 'promql/aggregations.libsonnet';
 local selectors = import 'promql/selectors.libsonnet';
 
 {
-  aggregationSetErrorRatioReflectedRuleSet(aggregationSet, burnRate)::
+  aggregationSetErrorRatioReflectedRuleSet(aggregationSet, burnRate, extraSelector={})::
     local errorRatioMetric = aggregationSet.getErrorRatioMetricForBurnRate(burnRate);
 
     if errorRatioMetric == null then
@@ -16,7 +16,7 @@ local selectors = import 'promql/selectors.libsonnet';
         burnRate: burnRate,
         opsRateMetric: opsRateMetric,
         errorRateMetric: errorRateMetric,
-        selector: selectors.serializeHash(aggregationSet.selector),
+        selector: selectors.serializeHash(aggregationSet.selector + extraSelector),
         aggregationLabels: aggregationLabels,
       };
 
