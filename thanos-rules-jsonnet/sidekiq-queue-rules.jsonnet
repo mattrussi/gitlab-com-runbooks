@@ -11,7 +11,7 @@ local selectors = import 'promql/selectors.libsonnet';
    define different criticality labels for each worker. For now we need to use
    a fixed value, which also needs to be a lower-common-denominator */
 local fixedApdexThreshold = 0.90;
-local fixedErrorRateThreshold = 0.90;
+local fixedErrorRateThreshold = 0.10;
 
 local minimumSamplesForMonitoringApdex = 1200; /* We don't really care if something runs only very infrequently, but is slow */
 
@@ -225,13 +225,13 @@ local sidekiqThanosAlerts(extraSelector) =
             sli_aggregations:gitlab_sli_sidekiq_execution_error_total_rate6h{%(selector)s}
             /
             sli_aggregations:gitlab_sli_sidekiq_execution_total_rate6h{%(selector)s}
-          ) < %(errorThreshold)s
+          ) > %(errorThreshold)s
           and
           (
             sli_aggregations:gitlab_sli_sidekiq_execution_error_total_rate30m{%(selector)s}
             /
             sli_aggregations:gitlab_sli_sidekiq_execution_total_rate30m{%(selector)s}
-          ) < %(errorThreshold)s
+          ) > %(errorThreshold)s
         )
         and on (env, environment, tier, type, stage, shard, queue, feature_category, urgency, worker)
         (
