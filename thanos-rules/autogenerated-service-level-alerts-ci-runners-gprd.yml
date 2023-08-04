@@ -1102,7 +1102,7 @@ groups:
       grafana_variables: environment,stage
       promql_template_1: |
         sum by (env,environment,tier,stage) (
-          rate(sidekiq_jobs_completion_seconds_count{environment="{{ $labels.environment }}",stage="{{ $labels.stage }}",worker="Ci::ArchiveTraceWorker"}[5m])
+          sli_aggregations:gitlab_sli_sidekiq_execution_total_rate5m{environment="{{ $labels.environment }}",stage="{{ $labels.stage }}",worker="Ci::ArchiveTraceWorker"}
         )
       runbook: docs/ci-runners/README.md
     labels:
@@ -1139,7 +1139,7 @@ groups:
       grafana_variables: environment,stage
       promql_template_1: |
         sum by (env,environment,tier,stage) (
-          rate(sidekiq_jobs_completion_seconds_count{environment="{{ $labels.environment }}",stage="{{ $labels.stage }}",worker="Ci::ArchiveTraceWorker"}[5m])
+          sli_aggregations:gitlab_sli_sidekiq_execution_total_rate5m{environment="{{ $labels.environment }}",stage="{{ $labels.stage }}",worker="Ci::ArchiveTraceWorker"}
         )
       runbook: docs/ci-runners/README.md
     labels:

@@ -390,7 +390,12 @@ local indexDefaults = {
     ],
   },
 
-  sidekiq_ops: self.sidekiq {
+  sidekiq_execution_ops: self.sidekiq_execution {
+    kibanaEndpoint: 'https://nonprod-log.gitlab.net/app/kibana',
+    indexPattern: 'pubsub-sidekiq-inf-ops',
+  },
+
+  sidekiq_queueing_ops: self.sidekiq_queueing {
     kibanaEndpoint: 'https://nonprod-log.gitlab.net/app/kibana',
     indexPattern: 'pubsub-sidekiq-inf-ops',
   },
