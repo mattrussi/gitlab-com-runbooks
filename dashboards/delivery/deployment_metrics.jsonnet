@@ -81,10 +81,76 @@ basic.dashboard(
   )
 )
 .addPanel(
-  row.new(title='🚀 Downstream Pipeline statistics'),
+  row.new(title='MTTP'),
   gridPos={
     x: 0,
     y: 0,
+    w: 24,
+    h: 1,
+  }
+)
+.addPanels(
+  layout.columnGrid([
+    [
+      basic.statPanel(
+        title='',
+        panelTitle='MTTP over selected time range',
+        color='blue',
+        query='avg(
+                last_over_time(delivery_deployment_merge_request_lead_time_seconds{target_env="gprd", target_stage="main"}[$__range])
+                  unless
+                (
+                  last_over_time(
+                    delivery_deployment_merge_request_lead_time_seconds{target_env="gprd", target_stage="main"}[12h] offset $__range
+                  )
+                )
+              )',
+        legendFormat='__auto',
+        colorMode='background',
+        textMode='value',
+        unit='s',
+        decimals=2,
+      )
+      .addThresholds([
+        { color: colorScheme.normalRangeColor, value: 0 },
+        { color: colorScheme.warningColor, value: 39600 },
+        { color: colorScheme.errorColor, value: 43200 },
+        { color: colorScheme.criticalColor, value: 46800 },
+      ]),
+      basic.statPanel(
+        title='',
+        panelTitle='Adjusted MTTP over selected time range',
+        description='MTTP over selected time range when ignoring weekends',
+        color='blue',
+        query='avg(
+                last_over_time(delivery_deployment_merge_request_adjusted_lead_time_seconds{target_env="gprd", target_stage="main"}[$__range])
+                  unless
+                (
+                  last_over_time(
+                    delivery_deployment_merge_request_adjusted_lead_time_seconds{target_env="gprd", target_stage="main"}[12h] offset $__range
+                  )
+                )
+              )',
+        legendFormat='__auto',
+        colorMode='background',
+        textMode='value',
+        unit='s',
+        decimals=2,
+      )
+      .addThresholds([
+        { color: colorScheme.normalRangeColor, value: 0 },
+        { color: colorScheme.warningColor, value: 39600 },
+        { color: colorScheme.errorColor, value: 43200 },
+        { color: colorScheme.criticalColor, value: 46800 },
+      ]),
+    ],
+  ], [5, 5], rowHeight=10, startRow=1)
+)
+.addPanel(
+  row.new(title='🚀 Downstream Pipeline statistics'),
+  gridPos={
+    x: 0,
+    y: 11,
     w: 24,
     h: 1,
   }
@@ -176,14 +242,14 @@ basic.dashboard(
       ]),
     ],
     [pipelineOverview],
-  ], [19, 5], rowHeight=10, startRow=1)
+  ], [19, 5], rowHeight=10, startRow=12)
 )
 
 .addPanel(
   row.new(title='📊 Merge requests statistics'),
   gridPos={
     x: 0,
-    y: 11,
+    y: 22,
     w: 24,
     h: 1,
   }
@@ -214,13 +280,14 @@ basic.dashboard(
       ),
       basic.statPanel(
         title='',
-        panelTitle='Average MR lead time to production',
+        panelTitle='Average MR lead time to production for selected version',
         color='blue',
         query='avg(last_over_time(delivery_deployment_merge_request_lead_time_seconds{target_env="gprd", target_stage="main", deploy_version="$deploy_version"}[$__range]))',
         legendFormat='__auto',
         colorMode='background',
         textMode='value',
         unit='s',
+        decimals=2,
       )
       .addThresholds([
         { color: colorScheme.normalRangeColor, value: 0 },
@@ -229,7 +296,51 @@ basic.dashboard(
         { color: colorScheme.criticalColor, value: 46800 },
       ]),
     ],
-  ], [19, 5], rowHeight=10, startRow=12)
+  ], [19, 5], rowHeight=10, startRow=24)
+)
+.addPanels(
+  layout.columnGrid([
+    [
+      bargaugePanel(
+        'Adjusted merge requests lead time to production',
+        description='Time it takes merge requests from being merged to production, adjusted to ignore weekends',
+        query='last_over_time(delivery_deployment_merge_request_adjusted_lead_time_seconds{target_env="gprd", target_stage="main", deploy_version="$deploy_version"}[$__range])',
+        legendFormat='{{mr_id}}',
+        fieldLinks=[
+          {
+            title: 'View merge request',
+            url: 'https://gitlab.com/gitlab-org/gitlab/-/merge_requests/${__field.labels.mr_id}',
+            targetBlank: true,
+          },
+        ],
+        thresholds={
+          steps: [
+            { color: colorScheme.normalRangeColor, value: 0 },
+            { color: colorScheme.warningColor, value: 39600 },
+            { color: colorScheme.errorColor, value: 43200 },
+            { color: colorScheme.criticalColor, value: 46800 },
+          ],
+        },
+      ),
+      basic.statPanel(
+        title='',
+        panelTitle='Average adjusted MR lead time to production for selected version',
+        color='blue',
+        query='avg(last_over_time(delivery_deployment_merge_request_adjusted_lead_time_seconds{target_env="gprd", target_stage="main", deploy_version="$deploy_version"}[$__range]))',
+        legendFormat='__auto',
+        colorMode='background',
+        textMode='value',
+        unit='s',
+        decimals=2,
+      )
+      .addThresholds([
+        { color: colorScheme.normalRangeColor, value: 0 },
+        { color: colorScheme.warningColor, value: 39600 },
+        { color: colorScheme.errorColor, value: 43200 },
+        { color: colorScheme.criticalColor, value: 46800 },
+      ]),
+    ],
+  ], [19, 5], rowHeight=10, startRow=24)
 )
 
 .trailer()
