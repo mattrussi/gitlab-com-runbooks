@@ -40,7 +40,6 @@ esac
 
 export redis_cli='REDISCLI_AUTH="$(sudo grep ^requirepass /var/opt/gitlab/redis/redis.conf|cut -d" " -f2|tr -d \")" /opt/gitlab/embedded/bin/redis-cli'
 
-export hosts=$(seq -f "${gitlab_redis_cluster}-%02g-db-${gitlab_env}" 1 3)
 if [[ "$gitlab_redis_cluster" = "redis-cache" ]]; then
   export sentinel="${gitlab_redis_cluster}-sentinel-01-db-${gitlab_env}.c.${gitlab_project}.internal"
 else
@@ -175,7 +174,10 @@ reconfigure() {
   ssh "$fqdn" "$redis_cli config get save"
 
   # check sync status
-  echo $hosts | xargs -n1 -I{} ssh "{}.c.${gitlab_project}.internal" 'hostname; '$redis_cli' role | head -n1; echo'
+  echo check redis role for each node
+  for host in $(seq -f "${gitlab_redis_cluster}-%02g-db-${gitlab_env}.c.${gitlab_project}.internal" 1 3) ; do
+    ssh "$host" 'hostname; '$redis_cli' role | head -n1; echo'
+  done
 
   # check sentinel status
   check_sentinel_quorum
