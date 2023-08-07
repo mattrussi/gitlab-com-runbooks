@@ -21,7 +21,8 @@ local selectors = import 'promql/selectors.libsonnet';
       to have at least 8% of the total storage to be available for new projects.
       When this resource gets saturated, we could be creating to many projects on
       a limited set of nodes, which could cause these nodes to be busier than
-      usual. To add new nodes follow our [issue template](https://gitlab.com/gitlab-com/gl-infra/reliability/-/blob/master/.gitlab/issue_templates/storage_shard_creation.md)
+      usual. To add new nodes start a new change issue with `/change declare` in Slack,
+      and select the `change_storage_shard_creation.md` template.
     |||,
     grafana_dashboard_uid: 'sat_gitaly_active_available_space',
     resourceLabels: ['shard'],
