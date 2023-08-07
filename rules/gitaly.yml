@@ -118,7 +118,8 @@ groups:
       count(up{type="gitaly", job="gitaly", env="gprd", shard!="praefect"} == 1) > count(present_over_time(stackdriver_gce_disk_logging_googleapis_com_user_scheduled_snapshots{env="gprd", disk_name=~"(file|gitaly)-.*-stor-gprd-data$"}[2h]))
     for: 1h
     labels:
-      severity: s4
+      severity: s2
+      pager: pagerduty
       alert_type: cause
       type: gitaly
     annotations:
