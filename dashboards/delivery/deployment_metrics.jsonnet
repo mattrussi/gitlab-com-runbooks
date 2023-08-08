@@ -120,15 +120,20 @@ basic.dashboard(
       basic.statPanel(
         title='',
         panelTitle='Adjusted MTTP over selected time range',
-        description='MTTP over selected time range when ignoring weekends',
+        description='MTTP over selected time range when ignoring weekends. If the adjusted metric is not available, it
+                    will use the regular (unadjusted) metric. The adjusted metric is available from 7th Aug 2023 onwards.',
         color='blue',
         query='avg(
-                last_over_time(delivery_deployment_merge_request_adjusted_lead_time_seconds{target_env="gprd", target_stage="main"}[$__range])
+                (
+                  last_over_time(delivery_deployment_merge_request_adjusted_lead_time_seconds{target_env="gprd", target_stage="main"}[$__range])
+                    or
+                  last_over_time(delivery_deployment_merge_request_lead_time_seconds{target_env="gprd", target_stage="main"}[$__range])
+                )
                   unless
                 (
-                  last_over_time(
-                    delivery_deployment_merge_request_adjusted_lead_time_seconds{target_env="gprd", target_stage="main"}[12h] offset $__range
-                  )
+                  last_over_time(delivery_deployment_merge_request_adjusted_lead_time_seconds{target_env="gprd", target_stage="main"}[12h] offset $__range)
+                    or
+                  last_over_time(delivery_deployment_merge_request_lead_time_seconds{target_env="gprd", target_stage="main"}[12h] offset $__range)
                 )
               )',
         legendFormat='__auto',
