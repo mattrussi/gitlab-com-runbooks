@@ -492,7 +492,7 @@ local routingTree = Route(
     ),
     Route(
       receiver='blackhole',
-      matchers={ env: { re: 'db-(benchmarking|integration)|dr|gstg(-ref)?|pre|testbed' } },
+      matchers={ env: { re: 'db-benchmarking|gstg(-ref)?|pre' } },
       continue=false,
     ),
     // Pager alerts should appear in the production channel

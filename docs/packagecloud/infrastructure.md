@@ -95,7 +95,6 @@ and unreleased builds before they are released.
     ./bin/gkms-vault-edit gitlab-omnibus-secrets dev
     ./bin/gkms-vault-edit gitlab-omnibus-secrets dr
     ./bin/gkms-vault-edit gitlab-omnibus-secrets pre
-    ./bin/gkms-vault-edit gitlab-omnibus-secrets testbed
 
 # ... and change the following
 
