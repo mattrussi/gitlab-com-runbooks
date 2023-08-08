@@ -85,7 +85,7 @@ local customRouteSLIs = [
       HEAD is used to check the existence of a layer.
     |||,
     monitoringThresholds+: {
-      apdexScore: 0.95,
+      apdexScore: 0.98,
     },
     satisfiedThreshold: 10,
     toleratedThreshold: 60,
