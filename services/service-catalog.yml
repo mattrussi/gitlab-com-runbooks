@@ -2172,3 +2172,27 @@ services:
     observability:
       monitors:
         primary_grafana_dashboard: istio-istio_control_plane/istio-istio-control-plane-dashboard
+
+  - name: gitlab-static
+    tier: inf
+    friendly_name: gitlab-static.net zone hosted on Cloudflare
+    label: GitlabStaticNet
+    owner: reliability_general
+    technical:
+      project:
+      documents:
+        design:
+        architecture:
+        readiness_review: https://gitlab.com/gitlab-com/gl-infra/readiness/-/tree/master/gitlab-static
+        sre_guide: https://gitlab.com/gitlab-com/runbooks/-/tree/master/docs/gitlab-static
+        developer_guide:
+        service:
+        security:
+      dependencies:
+      logging:
+        - name:
+          permalink:
+    observability:
+      monitors:
+        primary_grafana_dashboard: gitlab-static-main
+        sentry_slug:

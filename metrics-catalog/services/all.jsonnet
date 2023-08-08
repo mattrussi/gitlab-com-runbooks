@@ -17,6 +17,7 @@
   import 'google-cloud-storage.jsonnet',
   import 'git.jsonnet',
   import 'gitaly.jsonnet',
+  import 'gitlab-static.jsonnet',
   import 'jaeger.jsonnet',
   import 'kas.jsonnet',
   import 'kube.jsonnet',

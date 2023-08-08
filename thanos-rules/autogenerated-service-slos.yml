@@ -3114,6 +3114,24 @@ groups:
     expr: "1"
   - record: gitlab_component_service:mapping
     labels:
+      component: gitlab_static_net_zone
+      global_aggregation: "no"
+      regional_aggregation: "no"
+      service_aggregation: "yes"
+      tier: inf
+      type: gitlab-static
+    expr: "1"
+  - record: gitlab_component_service:mapping
+    labels:
+      component: web_ide_worker
+      global_aggregation: "no"
+      regional_aggregation: "no"
+      service_aggregation: "yes"
+      tier: inf
+      type: gitlab-static
+    expr: "1"
+  - record: gitlab_component_service:mapping
+    labels:
       component: jaeger_agent
       global_aggregation: "no"
       regional_aggregation: "no"
