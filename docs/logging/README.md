@@ -139,6 +139,8 @@ There are many entries missing from this list:
 | rails.service_measurement     | gitlab-rails/service_measurement.log             | JSON             | pubsub-rails-inf        |
 | rails.integrations            | gitlab-rails/integrations\_json.log              | JSON             | pubsub-rails-inf        |
 | rails.kubernetes              | gitlab-rails/kubernetes.log                      | JSON             | pubsub-rails-inf        |
+| rails.web_exporter            | gitlab-rails/web_exporter.log                    | JSON             | pubsub-rails-inf        |
+| rails.web_hooks               | gitlab-rails/web_hooks.log                       | JSON             | pubsub-rails-inf        |
 | rails.exceptions              | /var/log/gitlab/gitlab-rails/exceptions_json.log | JSON             | pubsub-rails-inf        |
 | rails.features                | /var/log/gitlab/gitlab-rails/features_json.log   | JSON             | pubsub-rails-inf        |
 | rails.production              | gitlab-rails/production\_json.log                | JSON             | pubsub-rails-inf        |
