@@ -21,7 +21,6 @@
 * [../bastions/ops-bastions.md](../bastions/ops-bastions.md)
 * [../bastions/pre-bastions.md](../bastions/pre-bastions.md)
 * [Set up bastions for Release managers](../bastions/rm-bastion-access.md)
-* [../bastions/testbed-bastion.md](../bastions/testbed-bastion.md)
 * [../certificates/chef_hybrid.md](../certificates/chef_hybrid.md)
 * [../certificates/chef_vault.md](../certificates/chef_vault.md)
 * [../certificates/fastly.md](../certificates/fastly.md)

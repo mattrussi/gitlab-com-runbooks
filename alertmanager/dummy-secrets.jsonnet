@@ -31,7 +31,6 @@
     { name: 'gstg', apiKey: 'secret', cluster: '' },
     { name: 'gstg-ref', apiKey: 'secret', cluster: 'staging-ref-3k-hybrid-us' },
     { name: 'pre', apiKey: 'secret', cluster: '' },
-    { name: 'testbed', apiKey: 'secret', cluster: '' },
     { name: 'thanos-rule', apiKey: 'secret', cluster: '' },
     { name: 'other-rule', apiKey: 'secret', cluster: '', sendResolved: true },
   ],
