@@ -26,6 +26,15 @@ local v4 = validator.new({
   stringAndMatches: validator.and(validator.string, matches),
 });
 
+local durationValidator = validator.new({
+  durationString: validator.duration,
+});
+
+local optionalValidator = validator.new({
+  optionalString: validator.optional(validator.string),
+  optionalNumber: validator.optional(validator.number),
+});
+
 test.suite({
   testV1Basic: {
     actual: v1.assertValid(v1Valid),
@@ -89,5 +98,36 @@ test.suite({
   testV4InvalidSecond: {
     actual: v4._validationMessages({ stringAndMatches: 'bar' }),
     expect: ['field stringAndMatches: does not match "foo"'],
+  },
+
+  testDurationValidatorMissing: {
+    actual: durationValidator._validationMessages({}),
+    expect: ['field durationString is required'],
+  },
+} + {
+  // Table test valid durations
+  ['testValueValid_' + d]: {
+    local duration = '3' + d,
+    actual: durationValidator.isValid({ durationString: duration }),
+    expect: true,
+  }
+  for d in ['w', 'm', 'd', 'h', 's']
+} + {
+  testDurationValidatorNull: {
+    actual: durationValidator._validationMessages({ durationString: null }),
+    expect: ['field durationString: expected a promql duration'],
+  },
+  testDurationValidatorNumber: {
+    actual: durationValidator._validationMessages({ durationString: 11 }),
+    expect: ['field durationString: expected a promql duration'],
+  },
+
+  testOptionalValidatorNulls: {
+    actual: optionalValidator.isValid({ optionalString: null, optionalNumber: null }),
+    expect: true,
+  },
+  testOptionalValidatorMissing: {
+    actual: optionalValidator._validationMessages({ optionalString: 1, optionalNumber: 'a' }),
+    expect: ['field optionalNumber: expected a number or null', 'field optionalString: expected a string or null'],
   },
 })
