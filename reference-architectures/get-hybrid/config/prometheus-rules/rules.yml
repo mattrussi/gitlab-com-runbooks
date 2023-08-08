@@ -3481,7 +3481,7 @@ groups:
       tier: sv
       type: registry
     record: slo:max:events:gitlab_service_errors:ratio
-  - expr: "0.950000"
+  - expr: "0.980000"
     labels:
       component: server_route_blob_digest_reads
       tier: sv
@@ -6464,12 +6464,12 @@ groups:
       (
         (
           gitlab_component_apdex:ratio_1h{component="server_route_blob_digest_reads",type="registry"}
-          < (1 - 14.4 * 0.050000)
+          < (1 - 14.4 * 0.020000)
         )
         and
         (
           gitlab_component_apdex:ratio_5m{component="server_route_blob_digest_reads",type="registry"}
-          < (1 - 14.4 * 0.050000)
+          < (1 - 14.4 * 0.020000)
         )
       )
       and on(type,component)
@@ -6519,12 +6519,12 @@ groups:
       (
         (
           gitlab_component_apdex:ratio_6h{component="server_route_blob_digest_reads",type="registry"}
-          < (1 - 6 * 0.050000)
+          < (1 - 6 * 0.020000)
         )
         and
         (
           gitlab_component_apdex:ratio_30m{component="server_route_blob_digest_reads",type="registry"}
-          < (1 - 6 * 0.050000)
+          < (1 - 6 * 0.020000)
         )
       )
       and on(type,component)
