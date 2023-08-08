@@ -2183,7 +2183,7 @@ services:
       documents:
         design:
         architecture:
-        readiness_review:
+        readiness_review: https://gitlab.com/gitlab-com/gl-infra/readiness/-/tree/master/gitlab-static
         sre_guide: https://gitlab.com/gitlab-com/runbooks/-/tree/master/docs/gitlab-static
         developer_guide:
         service:
