@@ -5,7 +5,7 @@ local utilizationMetric = metricsCatalog.utilizationMetric;
   cloudflare_data_transfer: utilizationMetric({
     title: 'Cloudflare Network Total Data Transfer',
     unit: 'bytes',
-    appliesTo: ['waf'],
+    appliesTo: ['cloudflare'],
     description: |||
       Tracks total data transfer across the cloudflare network
     |||,
