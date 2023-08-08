@@ -363,6 +363,10 @@ teams:
   url: https://about.gitlab.com/handbook/engineering/infrastructure/team/reliability/general.html
   manager: afappiano
   label: team::General
+  slack_alerts_channel: g_infra_general_alerts
+  send_slo_alerts_to_team_slack_channel: true
+  alerts:
+  - ops
 
 - name: reliability_observability
   url: https://about.gitlab.com/handbook/engineering/infrastructure/team/reliability/observability.html
