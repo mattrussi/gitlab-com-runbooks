@@ -43,6 +43,7 @@
 * [Purge Git data](../git/purge-git-data.md)
 * [../gitaly/git-high-cpu-and-memory-usage.md](../gitaly/git-high-cpu-and-memory-usage.md)
 * [GitLab Storage Re-balancing](../gitaly/storage-rebalancing.md)
+* [Web IDE Assets](../gitlab-static/web-ide-assets.md)
 * [Kubernetes-Agent Basic Troubleshooting](../kas/kubernetes-agent-basic-troubleshooting.md)
 * [Kubernetes-Agent Disable Integrations](../kas/kubernetes-agent-disable-integrations.md)
 * [Helm Upgrade is Stuck](../kube/helm-upgrade-stuck.md)
