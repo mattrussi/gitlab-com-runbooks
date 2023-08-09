@@ -432,12 +432,12 @@ groups:
     expr: |
       sum by (env, environment, stage)
          (sum by (endpoint_id,environment,job,search_level,search_scope,search_type,shard,stage,tier,type) (
-            rate(gitlab_sli_rails_request_apdex_success_total{environment="gprd"}[1h] offset 1m)
+            rate(gitlab_sli_rails_request_apdex_success_total{environment="gprd", type="web"}[1h] offset 1m)
         )
        )
        /
        sum by (env, environment, stage) (sum by (endpoint_id,environment,feature_category,job,request_urgency,shard,stage,tier,type) (
-        rate(gitlab_sli_rails_request_total{environment="gprd"}[1h] offset 1m)))
+        rate(gitlab_sli_rails_request_total{environment="gprd", type="web"}[1h] offset 1m)))
 - name: web Apdex calculation with offset numerator and denominator
   interval: 1m
   partial_response_strategy: abort
@@ -450,7 +450,7 @@ groups:
     expr: |
       sum by (env, environment, stage)
          (sum by (endpoint_id,environment,job,search_level,search_scope,search_type,shard,stage,tier,type) (
-            rate(gitlab_sli_rails_request_apdex_success_total{environment="gprd"}[1h] offset 1m)))
+            rate(gitlab_sli_rails_request_apdex_success_total{environment="gprd", type="web"}[1h] offset 1m)))
   - record: offset_apdex_denominator
     # This is a raw metrics calculation for web based on its very complex metrics calculations.
     labels:
@@ -458,7 +458,7 @@ groups:
       rate: 1h_offset_1m
     expr: |
       sum by (env, environment, stage) (sum by (endpoint_id,environment,feature_category,job,request_urgency,shard,stage,tier,type) (
-        rate(gitlab_sli_rails_request_total{environment="gprd"}[1h] offset 1m)))
+        rate(gitlab_sli_rails_request_total{environment="gprd", type="web"}[1h] offset 1m)))
   - record: offset_apdex_calculation
     labels:
       type: web
