@@ -50,7 +50,6 @@
 * [Gitaly unusual activity alert](../gitaly/gitaly-unusual-activity.md)
 * [Moving repositories from one Gitaly node to another](../gitaly/move-repositories.md)
 * [GitLab Storage Re-balancing](../gitaly/storage-rebalancing.md)
-* [Git Storage Servers](../gitaly/storage-servers.md)
 * [Managing GitLab Storage Shards (Gitaly)](../gitaly/storage-sharding.md)
 * [When GitLab.com is down](../incidents/when-gitlab-com-is-down.md)
 * [Ad hoc observability tools on Kubernetes nodes](../kube/k8s-adhoc-observability.md)

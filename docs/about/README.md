@@ -41,7 +41,6 @@
 * [Gitaly repository cgroups](../gitaly/gitaly-repos-cgroup.md)
 * [Restoring gitaly data corruption on a project after an unclean shutdown](../gitaly/gitaly-repository-corruption.md)
 * [GitLab Storage Re-balancing](../gitaly/storage-rebalancing.md)
-* [Git Storage Servers](../gitaly/storage-servers.md)
 * [GKE Cluster Upgrade Procedure](../kube/k8s-cluster-upgrade.md)
 * [GitLab.com on Kubernetes](../kube/k8s-new-cluster.md)
 * [../kube/k8s-oncall-setup.md](../kube/k8s-oncall-setup.md)
