@@ -48,7 +48,7 @@ metricsCatalog.serviceDefinition({
       severity: 's3',
       team: 'reliability_general',
       userImpacting: true,
-      featureCategory: 'not_owned',
+      featureCategory: 'web_ide',
       description: |||
         Cloudflare Worker used by our VS Code-based Web IDE to pull assets from *.cdn.web-ide.gitlab-static.net.
       |||,
