@@ -452,7 +452,7 @@ groups:
         rate(gitlab_sli_rails_request_total{environment="gprd"}[1h] offset 1m)))
   - record: offset_apdex_calculation
     labels:
-      type: gitaly
+      type: web
       rate: 1h_offset_1m
     expr: |
       offset_apdex_numerator{type="web", rate="1h_offset_1m"}
