@@ -13,6 +13,7 @@ local labelTaxonomy = import 'label-taxonomy/label-taxonomy.libsonnet';
     |||,
     grafana_dashboard_uid: 'sat_disk_space',
     resourceLabels: [labelTaxonomy.getLabelFor(labelTaxonomy.labels.node), 'device'],
+    linear_prediction_saturation_alert: '6h',  // Alert if this is going to exceed the hard threshold within 6h
     // We filter on `fqdn!=""` to filter out any nameless workers. This is done mostly for the ci-runner fleet
     query: |||
       (

@@ -71,6 +71,38 @@ local and(validatorA, validatorB) =
       if b == null then null else b
     else a;
 
+// Optional means that value can be null
+// if its not null, we delegate to the underlying validator
+local optional(validator) =
+  function(v)
+    if v == null then
+      null
+    else
+      local result = validator(v);
+      if result == null then
+        null
+      else
+        // Extend the message to include the null optional
+        result + ' or null';
+
+local durationSuffixes = std.set(std.stringChars('wdhms'));
+local isDuration(v) =
+  local len = std.length(v);
+  std.isString(v) && len >= 2 &&
+  // Validate that all characters are valid
+  std.all(
+    // Check that each character is valid given its position in the string
+    // My kingdom for a regexp
+    std.mapWithIndex(
+      function(index, c)
+        if index == len - 1 then
+          std.setMember(c, durationSuffixes)
+        else
+          c >= '0' && c <= '9',
+      std.stringChars(v)
+    )
+  );
+
 {
   new:: newValidator,
   array:: validator(std.isArray, 'expected an array'),
@@ -79,6 +111,8 @@ local and(validatorA, validatorB) =
   number:: validator(std.isNumber, 'expected a number'),
   object:: validator(std.isObject, 'expected an object'),
   string:: validator(std.isString, 'expected a string'),
+  duration:: validator(isDuration, 'expected a promql duration'),
+  optional:: optional,
   or:: or,
   and:: and,
   setMember(set):: validator(function(v) std.setMember(v, set), 'value not in valid set'),
