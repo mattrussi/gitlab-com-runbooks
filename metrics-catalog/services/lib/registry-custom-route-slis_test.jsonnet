@@ -1,4 +1,4 @@
-local registry = import './registry.jsonnet';
+local registry = import './registry-custom-route-slis.libsonnet';
 local test = import 'github.com/yugui/jsonnetunit/jsonnetunit/test.libsonnet';
 
 local allMethodsForRoute(config, route) =
