@@ -131,6 +131,20 @@ imap.uid_search("DELETED").length # Informational, shows how many messages are d
 imap.expunge()
 ```
 
+### Infrastructure accounts
+
+The following emails are used by our various environments for incoming email features:
+
+* `incoming@gitlab.com`
+* `contact-project@incoming.gitlab.com`
+* `incoming-staging@gitlab.com`
+* `contact-project-staging@incoming.gitlab.com`
+* `incoming-pre@incoming.gitlab.com`
+
+If the Mailroom pod has trouble accessing these mailboxes for any reason (incorrect credentials, access restrictions, etc.), it will crashloop.
+
+These accounts are administered by IT, so reach out to [#it_help](https://gitlab.slack.com/archives/CK4EQH50E) for domain administration or IMAP configuration questions.
+
 <!-- ## Summary -->
 
 <!-- ## Architecture -->
