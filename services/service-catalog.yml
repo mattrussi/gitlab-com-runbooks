@@ -2041,8 +2041,8 @@ services:
 
   - name: packagecloud
     tier: inf
-    friendly_name: PackageCloud
-    label: Packagecloud
+    friendly_name: PackageCloud (packages.gitlab.com)
+    label: PackageCloud
     owner: reliability_general
     technical:
       project:

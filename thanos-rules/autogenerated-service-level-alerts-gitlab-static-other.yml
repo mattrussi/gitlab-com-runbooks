@@ -105,7 +105,7 @@ groups:
       aggregation: component
       alert_class: traffic_cessation
       alert_type: cause
-      feature_category: not_owned
+      feature_category: web_ide
       rules_domain: general
       severity: s3
       sli_type: ops
@@ -142,7 +142,7 @@ groups:
       aggregation: component
       alert_class: traffic_cessation
       alert_type: cause
-      feature_category: not_owned
+      feature_category: web_ide
       rules_domain: general
       severity: s3
       sli_type: ops

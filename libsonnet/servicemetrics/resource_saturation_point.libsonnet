@@ -3,6 +3,7 @@ local alerts = import 'alerts/alerts.libsonnet';
 local labelTaxonomy = import 'label-taxonomy/label-taxonomy.libsonnet';
 local selectors = import 'promql/selectors.libsonnet';
 local stableIds = import 'stable-ids/stable-ids.libsonnet';
+local durationParser = import 'utils/duration-parser.libsonnet';
 local strings = import 'utils/strings.libsonnet';
 local validator = import 'utils/validator.libsonnet';
 
@@ -40,6 +41,7 @@ local definitionValidor = validator.new({
   resourceLabels: validator.array,
   query: validator.string,
   quantileAggregation: quantileValidator,
+  linear_prediction_saturation_alert: validator.optional(validator.duration),
   capacityPlanning: {
     strategy: validator.setMember(capacityPlanningStrategies),
     forecast_days: positiveNumber,
@@ -52,25 +54,29 @@ local definitionValidor = validator.new({
   },
 });
 
-local defaults = {
+local simpleDefaults = {
   queryFormatConfig: {},
   alertRunbook: 'docs/{{ $labels.type }}/README.md',
   dangerouslyThanosEvaluated: false,
   quantileAggregation: 'max',
+  linear_prediction_saturation_alert: null,  // No linear interpolation by default
+};
+
+local nestedDefaults = {
   capacityPlanning: {
     strategy: 'quantile95_1h',
     forecast_days: 90,
     historical_days: 365,
     changepoints_count: 25,
   },
+  slos: {
+    alertTriggerDuration: '5m',
+  },
 };
 
 local validateAndApplyDefaults(definition) =
-  definitionValidor.assertValid(std.mergePatch(defaults, definition)) + {
-    slos: {
-      alertTriggerDuration: '5m',
-    } + definition.slos,
-  };
+  local merged = simpleDefaults + std.mergePatch(nestedDefaults, definition);
+  definitionValidor.assertValid(merged);
 
 local filterServicesForResource(definition, evaluation, thanosSelfMonitoring) =
   std.filter(
@@ -293,18 +299,29 @@ local resourceSaturationPoint = function(options)
         else
           {};
 
-      [alerts.processAlertRule({
-        alert: 'component_saturation_slo_out_of_bounds',
-        expr: |||
-          gitlab_component_saturation:ratio{%(selector)s} > on(component) group_left
-          slo:max:hard:gitlab_component_saturation:ratio{%(selector)s}
-        ||| % formatConfig,
+      local commonAlertDefinition = {
         'for': triggerDuration,
         labels: {
           rules_domain: 'general',
           alert_type: 'cause',
         } + severityLabels,
         annotations: {
+          runbook: definition.alertRunbook,
+          grafana_dashboard_id: 'alerts-' + definition.grafana_dashboard_uid,
+          grafana_panel_id: stableIds.hashStableId('saturation-' + componentName),
+          grafana_variables: labelTaxonomy.labelTaxonomySerialized(defaultAlertingLabels),
+          grafana_min_zoom_hours: '6',
+          promql_query: definition.getQuery(labelsHashWithoutStaticLabels, definition.getBurnRatePeriod(), definition.resourceLabels),
+        },
+      };
+
+      [alerts.processAlertRule(commonAlertDefinition {
+        alert: 'component_saturation_slo_out_of_bounds',
+        expr: |||
+          gitlab_component_saturation:ratio{%(selector)s} > on(component) group_left
+          slo:max:hard:gitlab_component_saturation:ratio{%(selector)s}
+        ||| % formatConfig,
+        annotations+: {
           title: 'The %(title)s resource of the {{ $labels.type }} service%(titleStage)s has a saturation exceeding SLO and is close to its capacity limit.' % formatConfig,
           description: |||
             This means that this resource is running close to capacity and is at risk of exceeding its current capacity limit.
@@ -313,14 +330,36 @@ local resourceSaturationPoint = function(options)
 
             %(description)s
           ||| % formatConfig,
-          runbook: definition.alertRunbook,
-          grafana_dashboard_id: 'alerts-' + definition.grafana_dashboard_uid,
-          grafana_panel_id: stableIds.hashStableId('saturation-' + componentName),
-          grafana_variables: labelTaxonomy.labelTaxonomySerialized(defaultAlertingLabels),
-          grafana_min_zoom_hours: '6',
-          promql_query: definition.getQuery(labelsHashWithoutStaticLabels, definition.getBurnRatePeriod(), definition.resourceLabels),
         },
-      })],
+      })] +
+      (if definition.linear_prediction_saturation_alert != null then
+         local formatConfig2 = formatConfig {
+           linearPredictionDuration: definition.linear_prediction_saturation_alert,
+           linearPredictionDurationSeconds: durationParser.toSeconds(definition.linear_prediction_saturation_alert),
+         };
+         [alerts.processAlertRule(commonAlertDefinition {
+           alert: 'ComponentResourceRunningOut_' + componentName,
+           expr: |||
+             predict_linear(gitlab_component_saturation:ratio{%(selector)s}[%(linearPredictionDuration)s], %(linearPredictionDurationSeconds)d)
+             > on (component) group_left
+             slo:max:hard:gitlab_component_saturation:ratio{%(selector)s}
+           ||| % formatConfig2,
+           labels+: {
+             linear_prediction_saturation_alert: definition.linear_prediction_saturation_alert,
+           },
+           annotations+: {
+             title: 'The %(title)s resource of the {{ $labels.type }} service%(titleStage)s is on track to hit capacity within %(linearPredictionDuration)s' % formatConfig2,
+             description: |||
+               This means that this resource is growing rapidly and is predicted to exceed saturation threshold within %(linearPredictionDuration)s.
+
+               Details of the %(title)s resource:
+
+               %(description)s
+             ||| % formatConfig2,
+           },
+         })]
+       else
+         []),
 
     // Returns a boolean to indicate whether this saturation point applies to
     // a given service

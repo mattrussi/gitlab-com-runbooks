@@ -381,6 +381,52 @@ groups:
         2
         , "_c", "2", "", "")
       )
+  - record: offset_apdex_numerator
+    # This is a raw metrics calculation for Gitaly based on its very complex metrics calculations.
+    labels:
+      type: gitaly
+      rate: 1h_offset_30s
+    expr: |
+      sum by (env,environment,stage) (
+        label_replace((
+          sum by (env,environment,stage) (
+            rate(grpc_server_handling_seconds_bucket{grpc_method!~"CalculateChecksum|CommitLanguages|CommitStats|CreateFork|CreateRepositoryFromURL|FetchInternalRemote|FetchIntoObjectPool|FetchRemote|FetchSourceBranch|FindCommit|FindRemoteRepository|FindRemoteRootRef|Fsck|GarbageCollect|GetArchive|LastCommitForPath|OptimizeRepository|PackObjectsHookWithSidechannel|PostReceiveHook|PostUploadPackWithSidechannel|PreReceiveHook|RepackFull|RepackIncremental|ReplicateRepository|RepositorySize|SSHUploadPackWithSidechannel|UpdateHook|WriteRef",grpc_service!="gitaly.OperationService",grpc_type="unary",job="gitaly",le="0.5",type="gitaly"}[1h] offset 30s)
+          )
+          +
+          sum by (env,environment,stage) (
+            rate(grpc_server_handling_seconds_bucket{grpc_method!~"CalculateChecksum|CommitLanguages|CommitStats|CreateFork|CreateRepositoryFromURL|FetchInternalRemote|FetchIntoObjectPool|FetchRemote|FetchSourceBranch|FindCommit|FindRemoteRepository|FindRemoteRootRef|Fsck|GarbageCollect|GetArchive|LastCommitForPath|OptimizeRepository|PackObjectsHookWithSidechannel|PostReceiveHook|PostUploadPackWithSidechannel|PreReceiveHook|RepackFull|RepackIncremental|ReplicateRepository|RepositorySize|SSHUploadPackWithSidechannel|UpdateHook|WriteRef",grpc_service!="gitaly.OperationService",grpc_type="unary",job="gitaly",le="1",type="gitaly"}[1h] offset 30s)
+          )
+        )
+        /
+        2
+        , "_c", "0", "", "")
+        or
+        label_replace((
+          sum by (env,environment,stage) (
+            rate(grpc_server_handling_seconds_bucket{grpc_method=~"FindCommit|GetArchive|LastCommitForPath|RepositorySize|WriteRef",grpc_service!="gitaly.OperationService",grpc_type="unary",job="gitaly",le="10",type="gitaly"}[1h] offset 30s)
+          )
+          +
+          sum by (env,environment,stage) (
+            rate(grpc_server_handling_seconds_bucket{grpc_method=~"FindCommit|GetArchive|LastCommitForPath|RepositorySize|WriteRef",grpc_service!="gitaly.OperationService",grpc_type="unary",job="gitaly",le="30",type="gitaly"}[1h] offset 30s)
+          )
+        )
+        /
+        2
+        , "_c", "1", "", "")
+        or
+        label_replace((
+          sum by (env,environment,stage) (
+            rate(grpc_server_handling_seconds_bucket{grpc_service="gitaly.OperationService",grpc_type="unary",job="gitaly",le="10",type="gitaly"}[1h] offset 30s)
+          )
+          +
+          sum by (env,environment,stage) (
+            rate(grpc_server_handling_seconds_bucket{grpc_service="gitaly.OperationService",grpc_type="unary",job="gitaly",le="30",type="gitaly"}[1h] offset 30s)
+          )
+        )
+        /
+        2
+        , "_c", "2", "", "")
+      )
   - record: offset_apdex_denominator
     # This is a raw metrics calculation for Gitaly based on its very complex metrics calculations.
     labels:
@@ -403,15 +449,82 @@ groups:
         )
         , "_c", "2", "", "")
       )
+  - record: offset_apdex_denominator
+    # This is a raw metrics calculation for Gitaly based on its very complex metrics calculations.
+    labels:
+      type: gitaly
+      rate: 1h_offset_30s
+    expr: |
+      sum by (env,environment,stage) (
+        label_replace(sum by (env,environment,stage) (
+          rate(grpc_server_handling_seconds_bucket{grpc_method!~"CalculateChecksum|CommitLanguages|CommitStats|CreateFork|CreateRepositoryFromURL|FetchInternalRemote|FetchIntoObjectPool|FetchRemote|FetchSourceBranch|FindCommit|FindRemoteRepository|FindRemoteRootRef|Fsck|GarbageCollect|GetArchive|LastCommitForPath|OptimizeRepository|PackObjectsHookWithSidechannel|PostReceiveHook|PostUploadPackWithSidechannel|PreReceiveHook|RepackFull|RepackIncremental|ReplicateRepository|RepositorySize|SSHUploadPackWithSidechannel|UpdateHook|WriteRef",grpc_service!="gitaly.OperationService",grpc_type="unary",job="gitaly",le="+Inf",type="gitaly"}[1h] offset 30s)
+        )
+        , "_c", "0", "", "")
+        or
+        label_replace(sum by (env,environment,stage) (
+          rate(grpc_server_handling_seconds_bucket{grpc_method=~"FindCommit|GetArchive|LastCommitForPath|RepositorySize|WriteRef",grpc_service!="gitaly.OperationService",grpc_type="unary",job="gitaly",le="+Inf",type="gitaly"}[1h] offset 30s)
+        )
+        , "_c", "1", "", "")
+        or
+        label_replace(sum by (env,environment,stage) (
+          rate(grpc_server_handling_seconds_bucket{grpc_service="gitaly.OperationService",grpc_type="unary",job="gitaly",le="+Inf",type="gitaly"}[1h] offset 30s)
+        )
+        , "_c", "2", "", "")
+      )
   - record: offset_apdex_calculation
     labels:
       type: gitaly
-      rate: 1h_offset_1m
+      rate: 1h_double_offset_1m
     expr: |
-      offset_apdex_numerator{type="gitaly", rate="1h_offset_1m"}
+      offset_apdex_numerator{type="gitaly", rate="1h_offset_1m"} offset 1m
       /
-      offset_apdex_denominator{type="gitaly", rate="1h_offset_1m"}
-- name: web raw metrics apdex calculation
+      offset_apdex_denominator{type="gitaly", rate="1h_offset_1m"} offset 1m
+  - record: offset_apdex_calculation
+    labels:
+      type: gitaly
+      rate: 1h_double_offset_30s
+    expr: |
+      offset_apdex_numerator{type="gitaly", rate="1h_offset_30s"} offset 30s
+      /
+      offset_apdex_denominator{type="gitaly", rate="1h_offset_30s"} offset 30s
+
+- name: web raw metrics apdex calculation 5 seconds
+  interval: 1m
+  partial_response_strategy: abort
+  rules:
+  - record: raw_metrics_apdex_calculation
+    # This is a raw metrics calculation for web with a 5s offset.
+    labels:
+      type: web
+      rate: 1h_offset_5s
+    expr: |
+      sum by (env, environment, stage)
+         (sum by (endpoint_id,environment,job,search_level,search_scope,search_type,shard,stage,tier,type) (
+            rate(gitlab_sli_rails_request_apdex_success_total{environment="gprd", type="web"}[1h] offset 5s)
+        )
+       )
+       /
+       sum by (env, environment, stage) (sum by (endpoint_id,environment,feature_category,job,request_urgency,shard,stage,tier,type) (
+        rate(gitlab_sli_rails_request_total{environment="gprd", type="web"}[1h] offset 5s)))
+- name: web raw metrics apdex calculation 30 seconds
+  interval: 1m
+  partial_response_strategy: abort
+  rules:
+  - record: raw_metrics_apdex_calculation
+    # This is a raw metrics calculation for web with a 30s offset.
+    labels:
+      type: web
+      rate: 1h_offset_30s
+    expr: |
+      sum by (env, environment, stage)
+         (sum by (endpoint_id,environment,job,search_level,search_scope,search_type,shard,stage,tier,type) (
+            rate(gitlab_sli_rails_request_apdex_success_total{environment="gprd", type="web"}[1h] offset 30s)
+        )
+       )
+       /
+       sum by (env, environment, stage) (sum by (endpoint_id,environment,feature_category,job,request_urgency,shard,stage,tier,type) (
+        rate(gitlab_sli_rails_request_total{environment="gprd", type="web"}[1h] offset 30s)))
+- name: web raw metrics apdex calculation 1 minute
   interval: 1m
   partial_response_strategy: abort
   rules:
@@ -423,41 +536,41 @@ groups:
     expr: |
       sum by (env, environment, stage)
          (sum by (endpoint_id,environment,job,search_level,search_scope,search_type,shard,stage,tier,type) (
-            rate(gitlab_sli_rails_request_apdex_success_total{environment="gprd"}[1h] offset 1m)
+            rate(gitlab_sli_rails_request_apdex_success_total{environment="gprd", type="web"}[1h] offset 1m)
         )
        )
        /
        sum by (env, environment, stage) (sum by (endpoint_id,environment,feature_category,job,request_urgency,shard,stage,tier,type) (
-        rate(gitlab_sli_rails_request_total{environment="gprd"}[1h] offset 1m)))
+        rate(gitlab_sli_rails_request_total{environment="gprd", type="web"}[1h] offset 1m)))
 - name: web Apdex calculation with offset numerator and denominator
   interval: 1m
   partial_response_strategy: abort
   rules:
   - record: offset_apdex_numerator
-    # This is a raw metrics calculation for Gitaly based on its very complex metrics calculations.
+    # This is a raw metrics calculation for web based on its very complex metrics calculations.
     labels:
       type: web
       rate: 1h_offset_1m
     expr: |
       sum by (env, environment, stage)
          (sum by (endpoint_id,environment,job,search_level,search_scope,search_type,shard,stage,tier,type) (
-            rate(gitlab_sli_rails_request_apdex_success_total{environment="gprd"}[1h] offset 1m)))
+            rate(gitlab_sli_rails_request_apdex_success_total{environment="gprd", type="web"}[1h] offset 1m)))
   - record: offset_apdex_denominator
-    # This is a raw metrics calculation for Gitaly based on its very complex metrics calculations.
+    # This is a raw metrics calculation for web based on its very complex metrics calculations.
     labels:
       type: web
       rate: 1h_offset_1m
     expr: |
       sum by (env, environment, stage) (sum by (endpoint_id,environment,feature_category,job,request_urgency,shard,stage,tier,type) (
-        rate(gitlab_sli_rails_request_total{environment="gprd"}[1h] offset 1m)))
+        rate(gitlab_sli_rails_request_total{environment="gprd", type="web"}[1h] offset 1m)))
   - record: offset_apdex_calculation
     labels:
-      type: gitaly
-      rate: 1h_offset_1m
+      type: web
+      rate: 1h_double_offset_1m
     expr: |
-      offset_apdex_numerator{type="web", rate="1h_offset_1m"}
+      offset_apdex_numerator{type="web", rate="1h_offset_1m"} offset 1m
       /
-      offset_apdex_denominator{type="web", rate="1h_offset_1m"}
+      offset_apdex_denominator{type="web", rate="1h_offset_1m"} offset 1m
 - name: redis ratelimiting raw metrics apdex calculation
   interval: 1m
   partial_response_strategy: abort

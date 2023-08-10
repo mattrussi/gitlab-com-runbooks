@@ -37,7 +37,6 @@
 * [Gitaly is down](../gitaly/gitaly-down.md)
 * [Gitaly latency is too high](../gitaly/gitaly-latency.md)
 * [Gitaly unusual activity alert](../gitaly/gitaly-unusual-activity.md)
-* [Git Storage Servers](../gitaly/storage-servers.md)
 * [Web IDE Assets](../gitlab-static/web-ide-assets.md)
 * [Kubernetes-Agent Basic Troubleshooting](../kas/kubernetes-agent-basic-troubleshooting.md)
 * [../kube/k8s-oncall-setup.md](../kube/k8s-oncall-setup.md)

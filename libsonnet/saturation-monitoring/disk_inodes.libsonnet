@@ -14,6 +14,7 @@ local resourceSaturationPoint = (import 'servicemetrics/resource_saturation_poin
       files. Consider logging in an checking temp directories for large numbers
       of files
     |||,
+    linear_prediction_saturation_alert: '6h',  // Alert if this is going to exceed the hard threshold within 6h
     grafana_dashboard_uid: 'sat_disk_inodes',
     resourceLabels: ['fqdn', 'device'],
     query: |||
