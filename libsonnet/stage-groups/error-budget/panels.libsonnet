@@ -527,8 +527,8 @@ local logLinks(featureCategories, stageGroup) =
 
       This shows the number of jobs per worker that took longer than their threshold to
       execute over the past 7 days.
-      For urgent jobs the threshold is %(sidekiqUrgentThreshold)is, this is the table on the left.
-      For other jobs the threshold is %(sidekiqNormalThreshold)is, this is the table on the right.
+
+      The threshold depends on the [configurable job urgency](%(jobUrgencyLink)s).
 
       ##### [Sidekiq Execution Errors](%(sidekiqErrorsLink)s): failing jobs
 
@@ -537,13 +537,12 @@ local logLinks(featureCategories, stageGroup) =
       its retries, this counts as 3 failures towards the budget.
     ||| % {
       railsRequestsApdexLink: railsRequestsApdexTable,
-      requestUrgencyLink: 'https://docs.gitlab.com/ee/development/application_slis/rails_request_apdex.html#adjusting-request-urgency',
+      requestUrgencyLink: 'https://docs.gitlab.com/ee/development/application_slis/rails_request.html#adjusting-request-urgency',
       pumaErrorsLink: pumaErrorsTable,
       allRequestViolations: 'https://dashboards.gitlab.net/d/general-application-sli-violations/general-application-sli-violations?orgId=1&var-component=rails_request&from=${__from}&to=${__to}&var-stage_group=' + stageGroup,
       sidekiqErrorsLink: sidekiqErrorsTable,
       sidekiqApdexLink: sidekiqApdexTables,
-      sidekiqUrgentThreshold: sidekiqHelpers.slos.urgent.executionDurationSeconds,
-      sidekiqNormalThreshold: sidekiqHelpers.slos.lowUrgency.executionDurationSeconds,
+      jobUrgencyLink: 'https://docs.gitlab.com/ee/development/application_slis/sidekiq_execution.html#adjusting-job-urgency',
     },
   );
 
