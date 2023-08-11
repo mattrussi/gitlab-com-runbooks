@@ -917,9 +917,9 @@ groups:
       max by(environment, tier, type, stage, shard) (
         clamp_min(
           clamp_max(
-            max_over_time(redis_connected_clients{type=~"redis-cluster-cache|redis-cluster-feature-flag|redis-cluster-ratelimiting|redis-cluster-chat-cache"}[1m])
+            max_over_time(redis_connected_clients{type=~"redis-cluster-cache|redis-cluster-feature-flag|redis-cluster-shared-state|redis-cluster-ratelimiting|redis-cluster-chat-cache"}[1m])
             /
-            redis_config_maxclients{type=~"redis-cluster-cache|redis-cluster-feature-flag|redis-cluster-ratelimiting|redis-cluster-chat-cache"}
+            redis_config_maxclients{type=~"redis-cluster-cache|redis-cluster-feature-flag|redis-cluster-shared-state|redis-cluster-ratelimiting|redis-cluster-chat-cache"}
             ,
             1)
         ,
@@ -933,13 +933,13 @@ groups:
         clamp_min(
           clamp_max(
             max by (environment, tier, type, stage, shard, fqdn, instance, shard) (
-              label_replace(redis_memory_used_rss_bytes{type=~"redis-cluster-cache|redis-cluster-feature-flag|redis-cluster-ratelimiting|redis-cluster-chat-cache"}, "memtype", "rss","","")
+              label_replace(redis_memory_used_rss_bytes{type=~"redis-cluster-cache|redis-cluster-feature-flag|redis-cluster-shared-state|redis-cluster-ratelimiting|redis-cluster-chat-cache"}, "memtype", "rss","","")
               or
-              label_replace(redis_memory_used_bytes{type=~"redis-cluster-cache|redis-cluster-feature-flag|redis-cluster-ratelimiting|redis-cluster-chat-cache"}, "memtype", "used","","")
+              label_replace(redis_memory_used_bytes{type=~"redis-cluster-cache|redis-cluster-feature-flag|redis-cluster-shared-state|redis-cluster-ratelimiting|redis-cluster-chat-cache"}, "memtype", "used","","")
             )
             /
             avg by (environment, tier, type, stage, shard, fqdn, instance, shard) (
-              node_memory_MemTotal_bytes{type=~"redis-cluster-cache|redis-cluster-feature-flag|redis-cluster-ratelimiting|redis-cluster-chat-cache"}
+              node_memory_MemTotal_bytes{type=~"redis-cluster-cache|redis-cluster-feature-flag|redis-cluster-shared-state|redis-cluster-ratelimiting|redis-cluster-chat-cache"}
             )
             ,
             1)
@@ -955,7 +955,7 @@ groups:
           clamp_max(
             sum by (environment, tier, type, stage, shard, fqdn, instance, shard) (
               rate(
-                namedprocess_namegroup_thread_cpu_seconds_total{type=~"redis-cluster-cache|redis-cluster-feature-flag|redis-cluster-ratelimiting|redis-cluster-chat-cache", groupname="redis-server", threadname="redis-server"}[5m])
+                namedprocess_namegroup_thread_cpu_seconds_total{type=~"redis-cluster-cache|redis-cluster-feature-flag|redis-cluster-shared-state|redis-cluster-ratelimiting|redis-cluster-chat-cache", groupname="redis-server", threadname="redis-server"}[5m])
             )
             and on (fqdn) redis_instance_info{role="master"}
             ,
