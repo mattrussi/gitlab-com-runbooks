@@ -1,4 +1,4 @@
-local registry = import './registry-custom-route-slis.libsonnet';
+local registryCustomRouteSLIs = import './registry-custom-route-slis.libsonnet';
 local test = import 'github.com/yugui/jsonnetunit/jsonnetunit/test.libsonnet';
 
 local allMethodsForRoute(config, route) =
@@ -34,7 +34,7 @@ local describeMissingMethods(missingMethodsPerRoute) =
 
 test.suite({
   testNoMissingMethods: {
-    actual: routesMissingMethods(registry.customApdexRouteConfig),
+    actual: routesMissingMethods(registryCustomRouteSLIs.customApdexRouteConfig),
     expectThat: {
       actual: error 'overridden',
       result: self.actual == {},
