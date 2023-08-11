@@ -114,6 +114,42 @@ metricsCatalog.serviceDefinition({
       ],
     },
 
+    waf: {
+      local hostSelector = { zone: 'gitlab.com', host: { re: 'codesuggestions.gitlab.com.*' } },
+      severity: 's4',  // NOTE: Do not page on-call SREs until production ready
+      userImpacting: true,
+      team: 'ai_assisted',
+      featureCategory: 'code_suggestions',
+      serviceAggregation: false,
+      monitoringThresholds+: {
+        errorRatio: 0.999,
+      },
+      description: |||
+        Cloudflare WAF and rate limit rules for codesuggestions.gitlab.com host.
+      |||,
+
+      requestRate: rateMetric(
+        counter='cloudflare_zone_requests_status_country_host',
+        selector=hostSelector,
+        useRecordingRuleRegistry=false,
+      ),
+
+      errorRate: rateMetric(
+        counter='cloudflare_zone_requests_status_country_host',
+        selector=hostSelector {
+          status: { re: '^5.*' },
+        },
+        useRecordingRuleRegistry=false,
+      ),
+
+      significantLabels: ['status'],
+
+      toolingLinks: [
+        toolingLinks.cloudflare(host='codesuggestions.gitlab.com'),
+        toolingLinks.grafana(title='Code Suggestions Overview', dashboardUid='code_suggestions-main/code-suggestions-overview'),
+      ],
+    },
+
     ingress: {
       local ingressSelector = baseSelector { container: 'controller', path: { ne: '/' } },
       severity: 's4',  // NOTE: Do not page on-call SREs until production ready
@@ -122,7 +158,7 @@ metricsCatalog.serviceDefinition({
       featureCategory: 'code_suggestions',
       serviceAggregation: true,
       description: |||
-        Ingress-NGINX Controller for Kubernetes to expose service to the internet. Fronted by Cloudflare.
+        Ingress-NGINX Controller for Kubernetes to expose service to the internet. Fronted by Cloudflare WAF.
       |||,
 
       requestRate: rateMetric(
