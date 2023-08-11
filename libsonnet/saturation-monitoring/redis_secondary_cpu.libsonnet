@@ -16,7 +16,7 @@ local metricsCatalog = import 'servicemetrics/metrics-catalog.libsonnet';
     |||,
     grafana_dashboard_uid: 'sat_redis_secondary_cpu',
     resourceLabels: ['fqdn', 'instance', 'shard'],
-    burnRate: '5m',
+    burnRatePeriod: '5m',
     query: |||
       (
         rate(redis_cpu_user_seconds_total{%(selector)s}[%(rangeInterval)s])
