@@ -40,26 +40,15 @@ local selectors = import 'promql/selectors.libsonnet';
     grafana_dashboard_uid: 'gcp_quota_limit_s4',
   }),
 
-  // Due to discrepancies in GCP console, temporarily hardcode quota limit for saturation monitoring
-  // Remove saturation resource when https://gitlab.com/gitlab-com/gl-infra/reliability/-/issues/24052 is complete
   gcp_quota_limit_vertex_ai: resourceSaturationPoint(self.gcp_quota_limit_s4 {
     grafana_dashboard_uid: 'sat_gcp_quota_limit_vertex_ai',
-    resourceLabels: ['model_engine', 'model_name'],
-    queryFormatConfig: {
-      // Must manually update quota limit here after any increase requests approved in
-      // https://console.cloud.google.com/iam-admin/quotas/qirs?project=unreview-poc-390200e5
-      quotaLimit: 1000,
-      modelSelector: selectors.serializeHash({
-        model_engine: 'vertex-ai',
-        model_name: 'PalmModel.CODE_GECKO',
-      }),
-    },
-    burnRatePeriod: '1m',
+    resourceLabels: ['base_model'],
+    burnRatePeriod: '5m',
     query: |||
       (
-        rate(code_suggestions_inference_requests_total{%(modelSelector)s, %(selector)s}[%(rangeInterval)s]) * 60
-        /
-        %(quotaLimit)i
+        stackdriver_aiplatform_googleapis_com_location_aiplatform_googleapis_com_quota_online_prediction_requests_per_base_model_usage{%(selector)s}
+      / ignoring (method)
+        stackdriver_aiplatform_googleapis_com_location_aiplatform_googleapis_com_quota_online_prediction_requests_per_base_model_limit{%(selector)s}
       ) > 0
     |||,
   }),

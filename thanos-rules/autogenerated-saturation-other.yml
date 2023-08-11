@@ -103,9 +103,9 @@ groups:
         clamp_min(
           clamp_max(
             (
-              rate(code_suggestions_inference_requests_total{model_engine="vertex-ai",model_name="PalmModel.CODE_GECKO", env!~"gprd|ops",type="code_suggestions"}[1m]) * 60
-              /
-              1000
+              stackdriver_aiplatform_googleapis_com_location_aiplatform_googleapis_com_quota_online_prediction_requests_per_base_model_usage{env!~"gprd|ops",type="code_suggestions"}
+            / ignoring (method)
+              stackdriver_aiplatform_googleapis_com_location_aiplatform_googleapis_com_quota_online_prediction_requests_per_base_model_limit{env!~"gprd|ops",type="code_suggestions"}
             ) > 0
             ,
             1)
@@ -674,13 +674,13 @@ groups:
       grafana_panel_id: "1515902021"
       grafana_variables: environment,type,stage
       promql_query: |
-        max by(environment, tier, type, stage, shard, model_engine, model_name) (
+        max by(environment, tier, type, stage, shard, base_model) (
           clamp_min(
             clamp_max(
               (
-                rate(code_suggestions_inference_requests_total{model_engine="vertex-ai",model_name="PalmModel.CODE_GECKO", environment="{{ $labels.environment }}",stage="{{ $labels.stage }}",type="{{ $labels.type }}"}[1m]) * 60
-                /
-                1000
+                stackdriver_aiplatform_googleapis_com_location_aiplatform_googleapis_com_quota_online_prediction_requests_per_base_model_usage{environment="{{ $labels.environment }}",stage="{{ $labels.stage }}",type="{{ $labels.type }}"}
+              / ignoring (method)
+                stackdriver_aiplatform_googleapis_com_location_aiplatform_googleapis_com_quota_online_prediction_requests_per_base_model_limit{environment="{{ $labels.environment }}",stage="{{ $labels.stage }}",type="{{ $labels.type }}"}
               ) > 0
               ,
               1)
