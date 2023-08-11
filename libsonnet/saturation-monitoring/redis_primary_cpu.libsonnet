@@ -13,7 +13,7 @@ local commonDefinition = {
     possible.
   |||,
   resourceLabels: ['fqdn', 'instance', 'shard'],
-  burnRate: '5m',
+  burnRatePeriod: '5m',
   query: |||
     sum by (%(aggregationLabels)s) (
       rate(

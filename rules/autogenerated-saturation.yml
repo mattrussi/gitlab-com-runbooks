@@ -940,7 +940,7 @@ groups:
           clamp_max(
             sum by (environment, tier, type, stage, shard, fqdn, instance, shard) (
               rate(
-                namedprocess_namegroup_thread_cpu_seconds_total{type=~"redis-cluster-cache|redis-cluster-feature-flag|redis-cluster-ratelimiting|redis-cluster-chat-cache", groupname="redis-server", threadname="redis-server"}[1m])
+                namedprocess_namegroup_thread_cpu_seconds_total{type=~"redis-cluster-cache|redis-cluster-feature-flag|redis-cluster-ratelimiting|redis-cluster-chat-cache", groupname="redis-server", threadname="redis-server"}[5m])
             )
             and on (fqdn) redis_instance_info{role="master"}
             ,
@@ -1041,7 +1041,7 @@ groups:
           clamp_max(
             sum by (environment, tier, type, stage, shard, fqdn, instance, shard) (
               rate(
-                namedprocess_namegroup_thread_cpu_seconds_total{type=~"redis-cache|redis-sidekiq|redis-tracechunks|redis-sessions|redis-registry-cache|redis-repository-cache|redis-db-load-balancing|redis", groupname="redis-server", threadname="redis-server"}[1m])
+                namedprocess_namegroup_thread_cpu_seconds_total{type=~"redis-cache|redis-sidekiq|redis-tracechunks|redis-sessions|redis-registry-cache|redis-repository-cache|redis-db-load-balancing|redis", groupname="redis-server", threadname="redis-server"}[5m])
             )
             and on (fqdn) redis_instance_info{role="master"}
             ,
@@ -5103,7 +5103,7 @@ groups:
             clamp_max(
               sum by (environment, tier, type, stage, shard, fqdn, instance, shard) (
                 rate(
-                  namedprocess_namegroup_thread_cpu_seconds_total{environment="{{ $labels.environment }}",stage="{{ $labels.stage }}",type="{{ $labels.type }}", groupname="redis-server", threadname="redis-server"}[1m])
+                  namedprocess_namegroup_thread_cpu_seconds_total{environment="{{ $labels.environment }}",stage="{{ $labels.stage }}",type="{{ $labels.type }}", groupname="redis-server", threadname="redis-server"}[5m])
               )
               and on (fqdn) redis_instance_info{role="master"}
               ,
@@ -5347,7 +5347,7 @@ groups:
             clamp_max(
               sum by (environment, tier, type, stage, shard, fqdn, instance, shard) (
                 rate(
-                  namedprocess_namegroup_thread_cpu_seconds_total{environment="{{ $labels.environment }}",stage="{{ $labels.stage }}",type="{{ $labels.type }}", groupname="redis-server", threadname="redis-server"}[1m])
+                  namedprocess_namegroup_thread_cpu_seconds_total{environment="{{ $labels.environment }}",stage="{{ $labels.stage }}",type="{{ $labels.type }}", groupname="redis-server", threadname="redis-server"}[5m])
               )
               and on (fqdn) redis_instance_info{role="master"}
               ,
