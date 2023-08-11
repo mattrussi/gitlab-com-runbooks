@@ -19,7 +19,6 @@ function(
   defaultRegistryComponent='registry_server',
   kubeConfig,
   kubeResourceName='registry',
-  nodeLevelMonitoring=true,
   otherThresholds={},
   provisioning={
     kubernetes: true,
@@ -48,7 +47,7 @@ function(
       ],
     },
   },
-  nodeLevelMonitoring: nodeLevelMonitoring,
+  nodeLevelMonitoring: false,
   provisioning: provisioning,
   serviceDependencies: serviceDependencies,
   serviceLevelIndicators: additionalServiceLevelIndicators {

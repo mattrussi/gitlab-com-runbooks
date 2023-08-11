@@ -23,6 +23,5 @@ metricsCatalog.serviceDefinition(
       ),
     },
     kubeResourceName=kubeResourceName,
-    nodeLevelMonitoring=false,
   )
 )
