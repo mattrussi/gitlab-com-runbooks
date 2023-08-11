@@ -331,6 +331,89 @@ groups:
         )
         , "_c", "2", "", "")
       ))
+
+- name: Gitaly Apdex calculation with offset numerator and denominator in same transaction
+  interval: 1m
+  partial_response_strategy: abort
+  rules:
+  - record: offset_apdex_numerator_and_denominator
+    # This is a raw metrics calculation for Gitaly based on its very complex metrics calculations.
+    labels:
+      type: gitaly
+      rate: 1h_offset_30s
+    expr: |
+      label_replace(
+        sum by (env,environment,stage) (
+          label_replace((
+            sum by (env,environment,stage) (
+              rate(grpc_server_handling_seconds_bucket{grpc_method!~"CalculateChecksum|CommitLanguages|CommitStats|CreateFork|CreateRepositoryFromURL|FetchInternalRemote|FetchIntoObjectPool|FetchRemote|FetchSourceBranch|FindCommit|FindRemoteRepository|FindRemoteRootRef|Fsck|GarbageCollect|GetArchive|LastCommitForPath|OptimizeRepository|PackObjectsHookWithSidechannel|PostReceiveHook|PostUploadPackWithSidechannel|PreReceiveHook|RepackFull|RepackIncremental|ReplicateRepository|RepositorySize|SSHUploadPackWithSidechannel|UpdateHook|WriteRef",grpc_service!="gitaly.OperationService",grpc_type="unary",job="gitaly",le="0.5",type="gitaly"}[1h] offset 30s)
+            )
+            +
+            sum by (env,environment,stage) (
+              rate(grpc_server_handling_seconds_bucket{grpc_method!~"CalculateChecksum|CommitLanguages|CommitStats|CreateFork|CreateRepositoryFromURL|FetchInternalRemote|FetchIntoObjectPool|FetchRemote|FetchSourceBranch|FindCommit|FindRemoteRepository|FindRemoteRootRef|Fsck|GarbageCollect|GetArchive|LastCommitForPath|OptimizeRepository|PackObjectsHookWithSidechannel|PostReceiveHook|PostUploadPackWithSidechannel|PreReceiveHook|RepackFull|RepackIncremental|ReplicateRepository|RepositorySize|SSHUploadPackWithSidechannel|UpdateHook|WriteRef",grpc_service!="gitaly.OperationService",grpc_type="unary",job="gitaly",le="1",type="gitaly"}[1h] offset 30s)
+            )
+          )
+          /
+          2
+          , "_c", "0", "", "")
+          or
+          label_replace((
+            sum by (env,environment,stage) (
+              rate(grpc_server_handling_seconds_bucket{grpc_method=~"FindCommit|GetArchive|LastCommitForPath|RepositorySize|WriteRef",grpc_service!="gitaly.OperationService",grpc_type="unary",job="gitaly",le="10",type="gitaly"}[1h] offset 30s)
+            )
+            +
+            sum by (env,environment,stage) (
+              rate(grpc_server_handling_seconds_bucket{grpc_method=~"FindCommit|GetArchive|LastCommitForPath|RepositorySize|WriteRef",grpc_service!="gitaly.OperationService",grpc_type="unary",job="gitaly",le="30",type="gitaly"}[1h] offset 30s)
+            )
+          )
+          /
+          2
+          , "_c", "1", "", "")
+          or
+          label_replace((
+            sum by (env,environment,stage) (
+              rate(grpc_server_handling_seconds_bucket{grpc_service="gitaly.OperationService",grpc_type="unary",job="gitaly",le="10",type="gitaly"}[1h] offset 30s)
+            )
+            +
+            sum by (env,environment,stage) (
+              rate(grpc_server_handling_seconds_bucket{grpc_service="gitaly.OperationService",grpc_type="unary",job="gitaly",le="30",type="gitaly"}[1h] offset 30s)
+            )
+          )
+          /
+          2
+          , "_c", "2", "", "")
+        )
+        , "ratio_part", "numerator", "", ""
+      )
+      or
+      label_replace(
+        sum by (env,environment,stage) (
+          label_replace(sum by (env,environment,stage) (
+            rate(grpc_server_handling_seconds_bucket{grpc_method!~"CalculateChecksum|CommitLanguages|CommitStats|CreateFork|CreateRepositoryFromURL|FetchInternalRemote|FetchIntoObjectPool|FetchRemote|FetchSourceBranch|FindCommit|FindRemoteRepository|FindRemoteRootRef|Fsck|GarbageCollect|GetArchive|LastCommitForPath|OptimizeRepository|PackObjectsHookWithSidechannel|PostReceiveHook|PostUploadPackWithSidechannel|PreReceiveHook|RepackFull|RepackIncremental|ReplicateRepository|RepositorySize|SSHUploadPackWithSidechannel|UpdateHook|WriteRef",grpc_service!="gitaly.OperationService",grpc_type="unary",job="gitaly",le="+Inf",type="gitaly"}[1h] offset 30s)
+          )
+          , "_c", "0", "", "")
+          or
+          label_replace(sum by (env,environment,stage) (
+            rate(grpc_server_handling_seconds_bucket{grpc_method=~"FindCommit|GetArchive|LastCommitForPath|RepositorySize|WriteRef",grpc_service!="gitaly.OperationService",grpc_type="unary",job="gitaly",le="+Inf",type="gitaly"}[1h] offset 30s)
+          )
+          , "_c", "1", "", "")
+          or
+          label_replace(sum by (env,environment,stage) (
+            rate(grpc_server_handling_seconds_bucket{grpc_service="gitaly.OperationService",grpc_type="unary",job="gitaly",le="+Inf",type="gitaly"}[1h] offset 30s)
+          )
+          , "_c", "2", "", "")
+        )
+        , "ratio_part", "denominator", "", ""
+      )
+  - record: offset_apdex_calculation
+    labels:
+      type: gitaly
+      rate: 1h_double_offset_30s_with_transactionally_consistent_inputs
+    expr: |
+      sum without (ratio_part) (offset_apdex_numerator_and_denominator{type="gitaly", rate="1h_offset_30s", ratio_part="numerator"} offset 30s)
+      /
+      sum without (ratio_part) (offset_apdex_numerator_and_denominator{type="gitaly", rate="1h_offset_30s", ratio_part="denominator"} offset 30s)
+
 - name: Gitaly Apdex calculation with offset numerator and denominator
   interval: 1m
   partial_response_strategy: abort
