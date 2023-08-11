@@ -535,6 +535,10 @@ local logLinks(featureCategories, stageGroup) =
       This shows the number of jobs per worker that failed over the past 7 days.
       This includes retries: if a job with a was retried 3 times, before exhausting
       its retries, this counts as 3 failures towards the budget.
+
+      ##### <a href="%(allJobsViolations)s" target="_blank">All Sidekiq job violations</a>: slow jobs + failing jobs
+
+      This dashboard shows the jobs that are violating the apdex.
     ||| % {
       railsRequestsApdexLink: railsRequestsApdexTable,
       requestUrgencyLink: 'https://docs.gitlab.com/ee/development/application_slis/rails_request.html#adjusting-request-urgency',
@@ -543,6 +547,7 @@ local logLinks(featureCategories, stageGroup) =
       sidekiqErrorsLink: sidekiqErrorsTable,
       sidekiqApdexLink: sidekiqApdexTables,
       jobUrgencyLink: 'https://docs.gitlab.com/ee/development/application_slis/sidekiq_execution.html#adjusting-job-urgency',
+      allJobsViolations: 'https://dashboards.gitlab.net/d/general-application-sli-violations/general-application-sli-violations?orgId=1&var-component=sidekiq_execution&from=${__from}&to=${__to}&var-stage_group=' + stageGroup,
     },
   );
 
