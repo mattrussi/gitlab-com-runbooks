@@ -1057,9 +1057,9 @@ groups:
         clamp_min(
           clamp_max(
             (
-              rate(redis_cpu_user_seconds_total{type=~"redis-cache|redis-cluster-cache|redis-cluster-feature-flag|redis-sidekiq|redis-tracechunks|redis-cluster-ratelimiting|redis-cluster-chat-cache|redis-sessions|redis-registry-cache|redis-repository-cache|redis-db-load-balancing|redis"}[1m])
+              rate(redis_cpu_user_seconds_total{type=~"redis-cache|redis-cluster-cache|redis-cluster-feature-flag|redis-sidekiq|redis-tracechunks|redis-cluster-ratelimiting|redis-cluster-chat-cache|redis-sessions|redis-registry-cache|redis-repository-cache|redis-db-load-balancing|redis"}[5m])
               +
-              rate(redis_cpu_sys_seconds_total{type=~"redis-cache|redis-cluster-cache|redis-cluster-feature-flag|redis-sidekiq|redis-tracechunks|redis-cluster-ratelimiting|redis-cluster-chat-cache|redis-sessions|redis-registry-cache|redis-repository-cache|redis-db-load-balancing|redis"}[1m])
+              rate(redis_cpu_sys_seconds_total{type=~"redis-cache|redis-cluster-cache|redis-cluster-feature-flag|redis-sidekiq|redis-tracechunks|redis-cluster-ratelimiting|redis-cluster-chat-cache|redis-sessions|redis-registry-cache|redis-repository-cache|redis-db-load-balancing|redis"}[5m])
             )
             and on (instance) redis_instance_info{role!="master"}
             ,
@@ -5390,9 +5390,9 @@ groups:
           clamp_min(
             clamp_max(
               (
-                rate(redis_cpu_user_seconds_total{environment="{{ $labels.environment }}",stage="{{ $labels.stage }}",type="{{ $labels.type }}"}[1m])
+                rate(redis_cpu_user_seconds_total{environment="{{ $labels.environment }}",stage="{{ $labels.stage }}",type="{{ $labels.type }}"}[5m])
                 +
-                rate(redis_cpu_sys_seconds_total{environment="{{ $labels.environment }}",stage="{{ $labels.stage }}",type="{{ $labels.type }}"}[1m])
+                rate(redis_cpu_sys_seconds_total{environment="{{ $labels.environment }}",stage="{{ $labels.stage }}",type="{{ $labels.type }}"}[5m])
               )
               and on (instance) redis_instance_info{role!="master"}
               ,
