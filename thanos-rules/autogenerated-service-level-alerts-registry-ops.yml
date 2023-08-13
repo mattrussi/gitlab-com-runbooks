@@ -2099,7 +2099,7 @@ groups:
       title: The registry_server SLI of the registry service (`{{ $labels.stage }}`
         stage) has an apdex violating SLO
       description: |
-        Aggregation of all registry requests.
+        Aggregation of all registry HTTP requests.
 
         Currently the apdex value is {{ $value | humanizePercentage }}.
       grafana_dashboard_id: registry-main/registry-overview
@@ -2150,7 +2150,7 @@ groups:
       title: The registry_server SLI of the registry service (`{{ $labels.stage }}`
         stage) has an apdex violating SLO
       description: |
-        Aggregation of all registry requests.
+        Aggregation of all registry HTTP requests.
 
         Currently the apdex value is {{ $value | humanizePercentage }}.
       grafana_dashboard_id: registry-main/registry-overview
@@ -2201,7 +2201,7 @@ groups:
       title: The registry_server SLI of the registry service in region `{{ $labels.region
         }}` has an apdex violating SLO
       description: |
-        Aggregation of all registry requests.
+        Aggregation of all registry HTTP requests.
 
         Note that this alert is specific to the `{{ $labels.region }}` region.
 
@@ -2254,7 +2254,7 @@ groups:
       title: The registry_server SLI of the registry service in region `{{ $labels.region
         }}` has an apdex violating SLO
       description: |
-        Aggregation of all registry requests.
+        Aggregation of all registry HTTP requests.
 
         Note that this alert is specific to the `{{ $labels.region }}` region.
 
@@ -2307,7 +2307,7 @@ groups:
       title: The registry_server SLI of the registry service (`{{ $labels.stage }}`
         stage) has an error rate violating SLO
       description: |
-        Aggregation of all registry requests.
+        Aggregation of all registry HTTP requests.
 
         Currently the error-rate is {{ $value | humanizePercentage }}.
       grafana_dashboard_id: registry-main/registry-overview
@@ -2355,7 +2355,7 @@ groups:
       title: The registry_server SLI of the registry service (`{{ $labels.stage }}`
         stage) has an error rate violating SLO
       description: |
-        Aggregation of all registry requests.
+        Aggregation of all registry HTTP requests.
 
         Currently the error-rate is {{ $value | humanizePercentage }}.
       grafana_dashboard_id: registry-main/registry-overview
@@ -2403,7 +2403,7 @@ groups:
       title: The registry_server SLI of the registry service in region `{{ $labels.region
         }}` has an error rate violating SLO
       description: |
-        Aggregation of all registry requests.
+        Aggregation of all registry HTTP requests.
 
         Note that this alert is specific to the `{{ $labels.region }}` region.
 
@@ -2453,7 +2453,7 @@ groups:
       title: The registry_server SLI of the registry service in region `{{ $labels.region
         }}` has an error rate violating SLO
       description: |
-        Aggregation of all registry requests.
+        Aggregation of all registry HTTP requests.
 
         Note that this alert is specific to the `{{ $labels.region }}` region.
 
@@ -2503,7 +2503,7 @@ groups:
       title: The registry_server SLI of the registry service (`{{ $labels.stage }}`
         stage) has not received any traffic in the past 30m
       description: |
-        Aggregation of all registry requests.
+        Aggregation of all registry HTTP requests.
 
         This alert signifies that the SLI is reporting a cessation of traffic; the signal is present, but is zero.
       grafana_dashboard_id: registry-main/registry-overview
@@ -2538,7 +2538,7 @@ groups:
       title: The registry_server SLI of the registry service (`{{ $labels.stage }}`
         stage) has not reported any traffic in the past 30m
       description: |
-        Aggregation of all registry requests.
+        Aggregation of all registry HTTP requests.
 
         This alert signifies that the SLI was previously reporting traffic, but is no longer - the signal is absent.
 
@@ -2575,7 +2575,7 @@ groups:
       title: The registry_server SLI of the registry service in region `{{ $labels.region
         }}` has not received any traffic in the past 30m
       description: |
-        Aggregation of all registry requests.
+        Aggregation of all registry HTTP requests.
 
         This alert signifies that the SLI is reporting a cessation of traffic; the signal is present, but is zero.
 
@@ -2612,7 +2612,7 @@ groups:
       title: The registry_server SLI of the registry service in region `{{ $labels.region
         }}` has not reported any traffic in the past 30m
       description: |
-        Aggregation of all registry requests.
+        Aggregation of all registry HTTP requests.
 
         This alert signifies that the SLI was previously reporting traffic, but is no longer - the signal is absent.
 
