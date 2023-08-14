@@ -20,4 +20,22 @@ metricsCatalog.serviceDefinition(
     },
   }
   + redisHelpers.gitlabcomObservabilityToolingForRedis('redis-sessions')
+  +
+  {
+    capacityPlanning: {
+      components: [
+        {
+          name: 'disk_space',
+          parameters: {
+            ignore_outliers: [
+              {
+                start: '2023-03-01',
+                end: '2023-03-15',
+              },
+            ],
+          },
+        },
+      ],
+    },
+  }
 )
