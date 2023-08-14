@@ -112,3 +112,30 @@ groups:
         More CI Jobs are in state docker_pulling_image than are in state docker_run
         for over 5 minutes. This could mean connectivity to docker hub is broken.
         Plese check https://dashboards.gitlab.net/d/000000159/ci?viewPanel=46&orgId=1&from=now-1h&to=now&fullscreen
+  - alert: FleetingPendingInstancesTooHigh
+    expr: |
+      (
+        sum by(environment, tier, type, stage, shard) (
+          fleeting_provisioner_instances{state="pending"}
+        ) > 0
+        and
+        sum by(environment, tier, type, stage, shard) (
+          fleeting_provisioner_instances{state="pending"}
+          -
+          fleeting_provisioner_instances{state="pending"} offset 15m
+        ) >= 0
+      )
+    for: 15m
+    labels:
+      team: runner
+      severity: s3
+      alert_type: cause
+    annotations:
+      title: 'Number of Fleeting pending instances is constantly growing'
+      description: |
+        Constantly growing number of Fleeting's pending instances usually means that something
+        odd happens with our autoscaling. We've identified (and as for now didn't found the root
+        cause) that occasionally Runner asks autoscaling groups to increase the number of instances,
+        but these requests are never recognized by the ASGs. Runner, however, awaits these instances
+        which at some moment brings it to clog in the scaling mechanism.
+        Please check https://dashboards.gitlab.net/d/ci-runners-incident-autoscaling-new/ci-runners-incident-support-autoscaling-new?viewPanel=17&orgId=1&from=now-1h&to=now&fullscrean
