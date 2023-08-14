@@ -280,6 +280,20 @@ groups:
       )
   - record: gitlab_component_saturation:ratio
     labels:
+      component: excluded_sidekiq_thread_contention
+    expr: |
+      quantile by(environment, tier, type, stage, shard) (
+        0.99,
+        clamp_min(
+          clamp_max(
+            rate(ruby_process_cpu_seconds_total{type="sidekiq", shard="memory-bound"}[1h])
+            ,
+            1)
+        ,
+        0)
+      )
+  - record: gitlab_component_saturation:ratio
+    labels:
       component: gcp_quota_limit
     expr: |
       max by(environment, tier, type, stage, shard) (
@@ -367,9 +381,9 @@ groups:
       max by(environment, tier, type, stage, shard) (
         clamp_min(
           clamp_max(
-            container_memory_working_set_bytes:labeled{container!="", container!="POD", type=~"camoproxy|consul|external-dns|kas|kube|logging|mailroom|monitoring|nginx|plantuml|redis-cache|redis-cluster-cache|redis-cluster-feature-flag|redis-sidekiq|redis-tracechunks|redis-cluster-ratelimiting|redis-cluster-chat-cache|redis-sessions|redis-registry-cache|redis-repository-cache|redis-db-load-balancing|redis|registry|vault|web-pages|websockets|woodhouse"}
+            container_memory_working_set_bytes:labeled{container!="", container!="POD", type=~"camoproxy|consul|external-dns|kas|kube|logging|mailroom|monitoring|nginx|plantuml|redis-cache|redis-cluster-cache|redis-cluster-feature-flag|redis-sidekiq|redis-tracechunks|redis-cluster-ratelimiting|redis-cluster-chat-cache|redis-sessions|redis-registry-cache|redis-repository-cache|redis-db-load-balancing|redis|registry|vault|web-pages|woodhouse"}
             /
-            (container_spec_memory_limit_bytes:labeled{container!="", container!="POD", type=~"camoproxy|consul|external-dns|kas|kube|logging|mailroom|monitoring|nginx|plantuml|redis-cache|redis-cluster-cache|redis-cluster-feature-flag|redis-sidekiq|redis-tracechunks|redis-cluster-ratelimiting|redis-cluster-chat-cache|redis-sessions|redis-registry-cache|redis-repository-cache|redis-db-load-balancing|redis|registry|vault|web-pages|websockets|woodhouse"} > 0)
+            (container_spec_memory_limit_bytes:labeled{container!="", container!="POD", type=~"camoproxy|consul|external-dns|kas|kube|logging|mailroom|monitoring|nginx|plantuml|redis-cache|redis-cluster-cache|redis-cluster-feature-flag|redis-sidekiq|redis-tracechunks|redis-cluster-ratelimiting|redis-cluster-chat-cache|redis-sessions|redis-registry-cache|redis-repository-cache|redis-db-load-balancing|redis|registry|vault|web-pages|woodhouse"} > 0)
             ,
             1)
         ,
@@ -382,9 +396,9 @@ groups:
       max by(environment, tier, type, stage, shard) (
         clamp_min(
           clamp_max(
-            container_memory_rss:labeled{container!="", container!="POD", type=~"api|internal-api|git|ops-gitlab-net|sidekiq|web"}
+            container_memory_rss:labeled{container!="", container!="POD", type=~"api|internal-api|git|ops-gitlab-net|sidekiq|web|websockets"}
             /
-            (container_spec_memory_limit_bytes:labeled{container!="", container!="POD", type=~"api|internal-api|git|ops-gitlab-net|sidekiq|web"} > 0)
+            (container_spec_memory_limit_bytes:labeled{container!="", container!="POD", type=~"api|internal-api|git|ops-gitlab-net|sidekiq|web|websockets"} > 0)
             ,
             1)
         ,
@@ -1075,7 +1089,7 @@ groups:
         0.99,
         clamp_min(
           clamp_max(
-            rate(ruby_process_cpu_seconds_total{type=~"web|sidekiq|api|git|websockets"}[1h])
+            rate(ruby_process_cpu_seconds_total{type=~"api|internal-api|git|ops-gitlab-net|web|websockets"}[1h])
             ,
             1)
         ,
@@ -1250,6 +1264,20 @@ groups:
             sum by (environment, tier, type, stage, shard, shard) (
               avg_over_time(sidekiq_concurrency{shard!~"database-throttled|elasticsearch|gitaly-throttled|urgent-authorized-projects", type="sidekiq"}[5m])
             )
+            ,
+            1)
+        ,
+        0)
+      )
+  - record: gitlab_component_saturation:ratio
+    labels:
+      component: sidekiq_thread_contention
+    expr: |
+      quantile by(environment, tier, type, stage, shard) (
+        0.99,
+        clamp_min(
+          clamp_max(
+            rate(ruby_process_cpu_seconds_total{type="sidekiq", shard!~"memory-bound"}[1h])
             ,
             1)
         ,
@@ -1479,6 +1507,14 @@ groups:
     labels:
       component: elastic_thread_pools
     expr: "0.9"
+  - record: slo:max:soft:gitlab_component_saturation:ratio
+    labels:
+      component: excluded_sidekiq_thread_contention
+    expr: "0.85"
+  - record: slo:max:hard:gitlab_component_saturation:ratio
+    labels:
+      component: excluded_sidekiq_thread_contention
+    expr: "0.95"
   - record: slo:max:soft:gitlab_component_saturation:ratio
     labels:
       component: gcp_quota_limit
@@ -1913,6 +1949,14 @@ groups:
     expr: "0.9"
   - record: slo:max:soft:gitlab_component_saturation:ratio
     labels:
+      component: sidekiq_thread_contention
+    expr: "0.85"
+  - record: slo:max:hard:gitlab_component_saturation:ratio
+    labels:
+      component: sidekiq_thread_contention
+    expr: "0.95"
+  - record: slo:max:soft:gitlab_component_saturation:ratio
+    labels:
       component: single_node_cpu
     expr: "0.9"
   - record: slo:max:hard:gitlab_component_saturation:ratio
@@ -2081,6 +2125,14 @@ groups:
       horiz_scaling: "yes"
       quantile: max
       severity: s4
+    expr: "1"
+  - record: gitlab_component_saturation_info
+    labels:
+      capacity_planning_strategy: exclude
+      component: excluded_sidekiq_thread_contention
+      horiz_scaling: "yes"
+      quantile: "0.99"
+      severity: s3
     expr: "1"
   - record: gitlab_component_saturation_info
     labels:
@@ -2513,6 +2565,14 @@ groups:
       horiz_scaling: "yes"
       quantile: max
       severity: s4
+    expr: "1"
+  - record: gitlab_component_saturation_info
+    labels:
+      capacity_planning_strategy: quantile95_1h
+      component: sidekiq_thread_contention
+      horiz_scaling: "yes"
+      quantile: "0.99"
+      severity: s3
     expr: "1"
   - record: gitlab_component_saturation_info
     labels:
@@ -3352,6 +3412,48 @@ groups:
     expr: |
       gitlab_component_saturation:ratio{component="elastic_thread_pools"} > on(component) group_left
       slo:max:hard:gitlab_component_saturation:ratio{component="elastic_thread_pools"}
+  - alert: component_saturation_slo_out_of_bounds
+    for: 5m
+    annotations:
+      title: The Excluded Shards Sidekiq Ruby Thread Contention resource of the {{
+        $labels.type }} service ({{ $labels.stage }} stage) has a saturation exceeding
+        SLO and is close to its capacity limit.
+      description: |
+        This means that this resource is running close to capacity and is at risk of exceeding its current capacity limit.
+
+        Details of the Excluded Shards Sidekiq Ruby Thread Contention resource:
+
+        Ruby (technically Ruby MRI), like some other scripting languages, uses a Global VM lock (GVL) also known as a Global Interpreter Lock (GIL) to ensure that multiple threads can execute safely. Ruby code is only allowed to execute in one thread in a process at a time. When calling out to c extensions, the thread can cede the lock to other thread while it continues to execute.
+
+        This means that when CPU-bound workloads run in a multithreaded environment such as Puma or Sidekiq, contention with other Ruby worker threads running in the same process can occur, effectively slowing thoses threads down as they await GVL entry.
+
+        Often the best fix for this situation is to add more workers by scaling up the fleet.
+      grafana_dashboard_id: alerts-exclude_sidekiq_thread_contention
+      grafana_dashboard_link: https://dashboards.gitlab.net/d/alerts-exclude_sidekiq_thread_contention?from=now-6h/m&to=now-1m/m&var-environment={{
+        $labels.environment }}&var-type={{ $labels.type }}&var-stage={{ $labels.stage
+        }}
+      grafana_min_zoom_hours: "6"
+      grafana_panel_id: "2769937795"
+      grafana_variables: environment,type,stage
+      promql_query: |
+        quantile by(environment, tier, type, stage, shard, fqdn, pod) (
+          0.99,
+          clamp_min(
+            clamp_max(
+              rate(ruby_process_cpu_seconds_total{environment="{{ $labels.environment }}",stage="{{ $labels.stage }}",type="{{ $labels.type }}", shard="memory-bound"}[1h])
+              ,
+              1)
+          ,
+          0)
+        )
+      runbook: docs/{{ $labels.type }}/README.md
+    labels:
+      alert_type: cause
+      rules_domain: general
+      severity: s3
+    expr: |
+      gitlab_component_saturation:ratio{component="excluded_sidekiq_thread_contention"} > on(component) group_left
+      slo:max:hard:gitlab_component_saturation:ratio{component="excluded_sidekiq_thread_contention"}
   - alert: component_saturation_slo_out_of_bounds
     for: 15m
     annotations:
@@ -5851,6 +5953,48 @@ groups:
     expr: |
       gitlab_component_saturation:ratio{component="sidekiq_shard_workers"} > on(component) group_left
       slo:max:hard:gitlab_component_saturation:ratio{component="sidekiq_shard_workers"}
+  - alert: component_saturation_slo_out_of_bounds
+    for: 5m
+    annotations:
+      title: The Sidekiq Ruby Thread Contention resource of the {{ $labels.type }}
+        service ({{ $labels.stage }} stage) has a saturation exceeding SLO and is
+        close to its capacity limit.
+      description: |
+        This means that this resource is running close to capacity and is at risk of exceeding its current capacity limit.
+
+        Details of the Sidekiq Ruby Thread Contention resource:
+
+        Ruby (technically Ruby MRI), like some other scripting languages, uses a Global VM lock (GVL) also known as a Global Interpreter Lock (GIL) to ensure that multiple threads can execute safely. Ruby code is only allowed to execute in one thread in a process at a time. When calling out to c extensions, the thread can cede the lock to other thread while it continues to execute.
+
+        This means that when CPU-bound workloads run in a multithreaded environment such as Puma or Sidekiq, contention with other Ruby worker threads running in the same process can occur, effectively slowing thoses threads down as they await GVL entry.
+
+        Often the best fix for this situation is to add more workers by scaling up the fleet.
+      grafana_dashboard_id: alerts-sat_sidekiq_thread_contention
+      grafana_dashboard_link: https://dashboards.gitlab.net/d/alerts-sat_sidekiq_thread_contention?from=now-6h/m&to=now-1m/m&var-environment={{
+        $labels.environment }}&var-type={{ $labels.type }}&var-stage={{ $labels.stage
+        }}
+      grafana_min_zoom_hours: "6"
+      grafana_panel_id: "2783215903"
+      grafana_variables: environment,type,stage
+      promql_query: |
+        quantile by(environment, tier, type, stage, shard, fqdn, pod) (
+          0.99,
+          clamp_min(
+            clamp_max(
+              rate(ruby_process_cpu_seconds_total{environment="{{ $labels.environment }}",stage="{{ $labels.stage }}",type="{{ $labels.type }}", shard!~"memory-bound"}[1h])
+              ,
+              1)
+          ,
+          0)
+        )
+      runbook: docs/{{ $labels.type }}/README.md
+    labels:
+      alert_type: cause
+      rules_domain: general
+      severity: s3
+    expr: |
+      gitlab_component_saturation:ratio{component="sidekiq_thread_contention"} > on(component) group_left
+      slo:max:hard:gitlab_component_saturation:ratio{component="sidekiq_thread_contention"}
   - alert: component_saturation_slo_out_of_bounds
     for: 10m
     annotations:

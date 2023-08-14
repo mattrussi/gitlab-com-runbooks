@@ -13,7 +13,7 @@ metricsCatalog.serviceDefinition({
   type: 'websockets',
   tier: 'sv',
 
-  tags: ['golang'],
+  tags: ['golang', 'rails'],
 
   monitoringThresholds: {
     apdexScore: 0.998,
