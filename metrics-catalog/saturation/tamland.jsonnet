@@ -29,6 +29,13 @@ local services(services) = {
   for service in services
 };
 
+local page(path, title, service_pattern) =
+  {
+    path: path,
+    title: title,
+    service_pattern: service_pattern,
+  };
+
 {
   defaults: {
     environment: 'gprd',
@@ -39,4 +46,19 @@ local services(services) = {
     sidekiq: sidekiqHelpers.shards.listByName(),
   },
   teams: serviceCatalog.getRawCatalogTeams(),
+  report: {
+    pages: [
+      page('api-git-web.md', 'API, Git, and Web', 'api|git|internal-api|web|websockets'),
+      page('ci-runners.md', 'CI Runners', 'ci-runners'),
+      page('customersdot.md', 'Customersdot', 'customersdot'),
+      page('gitaly.md', 'Gitaly', 'gitaly|praefect'),
+      page('kube.md', 'Kubernetes', 'kube|external-dns'),
+      page('monitoring-logging.md', 'Monitoring and Logging', 'monitoring|logging|thanos'),
+      page('patroni.md', 'Postgres (Patroni and PgBouncer)', 'patroni.*|pgbouncer.*|postgres.*'),
+      page('redis.md', 'Redis', 'redis.*'),
+      page('search.md', 'Search', 'search'),
+      page('sidekiq.md', 'Sidekiq', 'sidekiq'),
+      page('saturation.md', 'Other Utilization and Saturation Forecasting', 'camoproxy|cloud-sql|consul|frontend|google-cloud-storage|jaeger|kas|mailroom|nat|nginx|plantuml|pvs|registry|sentry|vault|web-pages|woodhouse|code_suggestions|ops-gitlab-net'),
+    ],
+  },
 }
