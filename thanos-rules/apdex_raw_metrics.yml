@@ -34,7 +34,7 @@ groups:
   interval: 1m
   partial_response_strategy: abort
   rules:
-  - record: gitlab_service_apdex:ratio_1h
+  - record: offset_experiment_gitlab_service_apdex:ratio_1h
     expr: |
       sum by (env,environment,tier,type,stage,component) (
         (gitlab_component_apdex:success:rate_1h{env="gprd",monitor!="global", type="web", component="rails_request"} offset 30s >= 0)
