@@ -6,7 +6,8 @@ groups:
   partial_response_strategy: abort
   rules:
   - record: offset_apdex_numerator_and_denominator
-    # This is a raw metrics calculation for Gitaly based on its very complex metrics calculations.  labels:
+    # This is a raw metrics calculation for Gitaly based on its very complex metrics calculations.
+    labels:
       type: web
       rate: 1h_offset_30s
     expr: |
