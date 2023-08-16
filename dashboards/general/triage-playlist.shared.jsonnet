@@ -35,7 +35,7 @@ local playlistDefinitions = {
     title: 'Databases',
     services: [
       'redis',
-      'redis-cache',
+      'redis-cluster-cache',
       'redis-sidekiq',
       'patroni',
       'pgbouncer',
