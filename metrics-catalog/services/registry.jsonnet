@@ -1,6 +1,6 @@
-local registryArchetype = import 'service-archetypes/registry-archetype.libsonnet';
-local registryCustomRouteSLIs = import './lib/registry-custom-route-slis.libsonnet';
 local googleLoadBalancerComponents = import './lib/google_load_balancer_components.libsonnet';
+local registryCustomRouteSLIs = import './lib/registry-custom-route-slis.libsonnet';
+local registryArchetype = import 'service-archetypes/registry-archetype.libsonnet';
 local metricsCatalog = import 'servicemetrics/metrics.libsonnet';
 local histogramApdex = metricsCatalog.histogramApdex;
 local rateMetric = metricsCatalog.rateMetric;
@@ -174,4 +174,22 @@ metricsCatalog.serviceDefinition(
       },
     },
   )
+  +
+  {
+    capacityPlanning: {
+      components: [
+        {
+          name: 'node_schedstat_waiting',
+          parameters: {
+            ignore_outliers: [
+              {
+                start: '2022-10-30',  // https://gitlab.com/groups/gitlab-org/-/epics/5523
+                end: '2023-01-30',
+              },
+            ],
+          },
+        },
+      ],
+    },
+  }
 )

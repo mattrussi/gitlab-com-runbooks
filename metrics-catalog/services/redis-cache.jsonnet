@@ -30,6 +30,21 @@ metricsCatalog.serviceDefinition(
             ],
           },
         },
+        {
+          name: 'disk_space',
+          parameters: {
+            ignore_outliers: [
+              {
+                start: '2023-03-01',
+                end: '2023-03-15',
+              },
+              {
+                start: '2023-05-09',  // https://gitlab.com/gitlab-com/gl-infra/production/-/issues/13813
+                end: '2023-05-22',  // https://gitlab.com/gitlab-com/gl-infra/production/-/issues/14497
+              },
+            ],
+          },
+        },
       ],
     },
   }

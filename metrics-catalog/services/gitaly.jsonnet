@@ -82,4 +82,27 @@ metricsCatalog.serviceDefinition({
       ],
     },
   },
+  capacityPlanning: {
+    components: [
+      {
+        name: 'node_schedstat_waiting',
+        parameters: {
+          ignore_outliers: [
+            {
+              start: '2022-05-23',
+              end: '2022-06-15',
+            },
+            {
+              start: '2022-06-25',
+              end: '2022-07-01',
+            },
+            {
+              start: '2023-03-31',  // https://gitlab.com/gitlab-com/gl-infra/capacity-planning/-/issues/955#note_1378508854
+              end: '2023-05-10',
+            },
+          ],
+        },
+      },
+    ],
+  },
 })
