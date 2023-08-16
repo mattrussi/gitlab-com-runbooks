@@ -86,7 +86,7 @@
 * [Sidekiq or Web/API is using most of its PgBouncer connections](../pgbouncer/pgbouncer-saturation.md)
 * [Praefect Database](../praefect/praefect-database.md)
 * [Praefect Database User Password Rotation](../praefect/praefect-password-rotation.md)
-* [Removing cache entries from Redis](../redis-cache/remove-cache-entries.md)
+* [Removing cache entries from Redis](../redis-cluster-cache/remove-cache-entries.md)
 * [Clearing sessions for anonymous users](../redis/clear_anonymous_sessions.md)
 * [Provisioning Redis Cluster](../redis/provisioning-redis-cluster.md)
 * [Redis-Sidekiq catchall workloads reduction](../redis/redis-sidekiq-catchall-workloads-reduction.md)
