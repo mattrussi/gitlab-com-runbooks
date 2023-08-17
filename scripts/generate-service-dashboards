@@ -10,10 +10,10 @@ def generate(service)
   puts "Generating missing #{file}"
 
   content = if service.start_with?("redis")
-    generate_redis(service)
-  else
-    generate_common_service(service)
-  end
+              generate_redis(service)
+            else
+              generate_common_service(service)
+            end
 
   dirname = File.dirname(file)
   FileUtils.mkdir_p(dirname) unless File.directory?(dirname)

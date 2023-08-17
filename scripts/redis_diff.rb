@@ -292,7 +292,7 @@ begin
   end
 rescue StandardError => e
   puts "Error: #{e.message}"
-  puts e.backtrace.to_s
+  puts e.backtrace
 end
 
 puts "Checked #{checked}"
