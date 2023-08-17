@@ -97,7 +97,11 @@ def migrate_hash(src, dst, key)
   # the hash could be expired/deleted between comparison and migration
   return if hash_details.empty?
 
-  dst.with { |c| c.hset(key, hash_details) }
+  # to ensure that destination hash does not have excess fields
+  dst.pipelined do |p|
+    p.del(key)
+    p.hset(key, hash_details)
+  end
   migrate_ttl(src, dst, key)
 end
 
@@ -115,7 +119,11 @@ def migrate_set(src, dst, key)
   # the hash could be expired/deleted between comparison and migration
   return if members.empty?
 
-  dst.with { |c| c.sadd(key, members) }
+  # to ensure that destination hash does not have excess fields
+  dst.pipelined do |p|
+    p.del(key)
+    p.sadd(key, members)
+  end
   migrate_ttl(src, dst, key)
 end
 
@@ -129,7 +137,10 @@ end
 
 def migrate_list(src, dst, key)
   src_list = src.with { |c| c.lrange(key, 0, -1) }
-  dst.with { |c| c.rpush(key, src_list) } # rpush to maintain order
+  dst.pipelined do |p|
+    p.del(key)
+    p.rpush(key, src_list) # rpush to maintain order
+  end
   migrate_ttl(src, dst, key)
 end
 
@@ -145,7 +156,10 @@ def migrate_zset(src, dst, key)
   # map to switch order of score and member as zrange returns <member, score>
   # but zadd expects <score, member>
   source_zset = src.with { |c| c.zrange(key, 0, -1, withscores: true) }.map { |x, y| [y, x] }
-  dst.with { |c| c.zadd(key, source_zset) }
+  dst.pipelined do |p|
+    p.del(key)
+    p.zadd(key, source_zset)
+  end
   migrate_ttl(src, dst, key)
 end
 
