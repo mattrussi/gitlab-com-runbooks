@@ -238,6 +238,36 @@ groups:
           gitlab:component:feature_category:execution:ops:rate_5m{component="triton_server",feature_category="code_suggestions",stage="main",tier="sv",type="code_suggestions"}
         )
       )
+  - record: gitlab:component:feature_category:execution:ops:rate_5m
+    labels:
+      component: waf
+      feature_category: code_suggestions
+      stage: main
+      tier: sv
+      type: code_suggestions
+    expr: |
+      sum by (env,environment) (
+        rate(cloudflare_zone_requests_status_country_host{host=~"codesuggestions.gitlab.com.*",zone="gitlab.com"}[5m])
+      )
+  - record: gitlab:component:feature_category:execution:error:rate_5m
+    labels:
+      component: waf
+      feature_category: code_suggestions
+      stage: main
+      tier: sv
+      type: code_suggestions
+    expr: |
+      (
+        sum by (env,environment) (
+          rate(cloudflare_zone_requests_status_country_host{host=~"codesuggestions.gitlab.com.*",status=~"^5.*",zone="gitlab.com"}[5m])
+        )
+      )
+      or
+      (
+        0 * group by(env,environment) (
+          gitlab:component:feature_category:execution:ops:rate_5m{component="waf",feature_category="code_suggestions",stage="main",tier="sv",type="code_suggestions"}
+        )
+      )
 - name: 'Prometheus Intermediate Metrics per feature: code_suggestions - burn-rate
     30m'
   interval: 2m
@@ -473,6 +503,36 @@ groups:
       (
         0 * group by(env,environment) (
           gitlab:component:feature_category:execution:ops:rate_30m{component="triton_server",feature_category="code_suggestions",stage="main",tier="sv",type="code_suggestions"}
+        )
+      )
+  - record: gitlab:component:feature_category:execution:ops:rate_30m
+    labels:
+      component: waf
+      feature_category: code_suggestions
+      stage: main
+      tier: sv
+      type: code_suggestions
+    expr: |
+      sum by (env,environment) (
+        rate(cloudflare_zone_requests_status_country_host{host=~"codesuggestions.gitlab.com.*",zone="gitlab.com"}[30m])
+      )
+  - record: gitlab:component:feature_category:execution:error:rate_30m
+    labels:
+      component: waf
+      feature_category: code_suggestions
+      stage: main
+      tier: sv
+      type: code_suggestions
+    expr: |
+      (
+        sum by (env,environment) (
+          rate(cloudflare_zone_requests_status_country_host{host=~"codesuggestions.gitlab.com.*",status=~"^5.*",zone="gitlab.com"}[30m])
+        )
+      )
+      or
+      (
+        0 * group by(env,environment) (
+          gitlab:component:feature_category:execution:ops:rate_30m{component="waf",feature_category="code_suggestions",stage="main",tier="sv",type="code_suggestions"}
         )
       )
 - name: 'Prometheus Intermediate Metrics per feature: code_suggestions - burn-rate
@@ -712,6 +772,36 @@ groups:
           gitlab:component:feature_category:execution:ops:rate_1h{component="triton_server",feature_category="code_suggestions",stage="main",tier="sv",type="code_suggestions"}
         )
       )
+  - record: gitlab:component:feature_category:execution:ops:rate_1h
+    labels:
+      component: waf
+      feature_category: code_suggestions
+      stage: main
+      tier: sv
+      type: code_suggestions
+    expr: |
+      sum by (env,environment) (
+        rate(cloudflare_zone_requests_status_country_host{host=~"codesuggestions.gitlab.com.*",zone="gitlab.com"}[1h])
+      )
+  - record: gitlab:component:feature_category:execution:error:rate_1h
+    labels:
+      component: waf
+      feature_category: code_suggestions
+      stage: main
+      tier: sv
+      type: code_suggestions
+    expr: |
+      (
+        sum by (env,environment) (
+          rate(cloudflare_zone_requests_status_country_host{host=~"codesuggestions.gitlab.com.*",status=~"^5.*",zone="gitlab.com"}[1h])
+        )
+      )
+      or
+      (
+        0 * group by(env,environment) (
+          gitlab:component:feature_category:execution:ops:rate_1h{component="waf",feature_category="code_suggestions",stage="main",tier="sv",type="code_suggestions"}
+        )
+      )
 - name: 'Prometheus Intermediate Metrics per feature: code_suggestions - burn-rate
     6h'
   interval: 2m
@@ -949,6 +1039,36 @@ groups:
           gitlab:component:feature_category:execution:ops:rate_6h{component="triton_server",feature_category="code_suggestions",stage="main",tier="sv",type="code_suggestions"}
         )
       )
+  - record: gitlab:component:feature_category:execution:ops:rate_6h
+    labels:
+      component: waf
+      feature_category: code_suggestions
+      stage: main
+      tier: sv
+      type: code_suggestions
+    expr: |
+      sum by (env,environment) (
+        rate(cloudflare_zone_requests_status_country_host{host=~"codesuggestions.gitlab.com.*",zone="gitlab.com"}[6h])
+      )
+  - record: gitlab:component:feature_category:execution:error:rate_6h
+    labels:
+      component: waf
+      feature_category: code_suggestions
+      stage: main
+      tier: sv
+      type: code_suggestions
+    expr: |
+      (
+        sum by (env,environment) (
+          rate(cloudflare_zone_requests_status_country_host{host=~"codesuggestions.gitlab.com.*",status=~"^5.*",zone="gitlab.com"}[6h])
+        )
+      )
+      or
+      (
+        0 * group by(env,environment) (
+          gitlab:component:feature_category:execution:ops:rate_6h{component="waf",feature_category="code_suggestions",stage="main",tier="sv",type="code_suggestions"}
+        )
+      )
 - name: 'Prometheus Intermediate Metrics per feature: code_suggestions - burn-rate
     3d'
   interval: 2m
@@ -1184,5 +1304,35 @@ groups:
       (
         0 * group by(env,environment) (
           gitlab:component:feature_category:execution:ops:rate_3d{component="triton_server",feature_category="code_suggestions",stage="main",tier="sv",type="code_suggestions"}
+        )
+      )
+  - record: gitlab:component:feature_category:execution:ops:rate_3d
+    labels:
+      component: waf
+      feature_category: code_suggestions
+      stage: main
+      tier: sv
+      type: code_suggestions
+    expr: |
+      sum by (env,environment) (
+        rate(cloudflare_zone_requests_status_country_host{host=~"codesuggestions.gitlab.com.*",zone="gitlab.com"}[3d])
+      )
+  - record: gitlab:component:feature_category:execution:error:rate_3d
+    labels:
+      component: waf
+      feature_category: code_suggestions
+      stage: main
+      tier: sv
+      type: code_suggestions
+    expr: |
+      (
+        sum by (env,environment) (
+          rate(cloudflare_zone_requests_status_country_host{host=~"codesuggestions.gitlab.com.*",status=~"^5.*",zone="gitlab.com"}[3d])
+        )
+      )
+      or
+      (
+        0 * group by(env,environment) (
+          gitlab:component:feature_category:execution:ops:rate_3d{component="waf",feature_category="code_suggestions",stage="main",tier="sv",type="code_suggestions"}
         )
       )

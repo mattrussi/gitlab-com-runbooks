@@ -6,34 +6,6 @@ groups:
   rules:
   - record: gitlab_component_ops:rate
     labels:
-      component: code_suggestions_host
-      stage: main
-      tier: lb
-      type: waf
-    expr: |
-      sum by (env,environment) (
-        rate(cloudflare_zone_requests_status_country_host{host=~"codesuggestions.gitlab.com.*",zone="gitlab.com"}[1m])
-      )
-  - record: gitlab_component_errors:rate
-    labels:
-      component: code_suggestions_host
-      stage: main
-      tier: lb
-      type: waf
-    expr: |
-      (
-        sum by (env,environment) (
-          rate(cloudflare_zone_requests_status_country_host{host=~"codesuggestions.gitlab.com.*",status=~"^5.*",zone="gitlab.com"}[1m])
-        )
-      )
-      or
-      (
-        0 * group by(env,environment) (
-          gitlab_component_ops:rate{component="code_suggestions_host",stage="main",tier="lb",type="waf"}
-        )
-      )
-  - record: gitlab_component_ops:rate
-    labels:
       component: gitlab_net_zone
       stage: main
       tier: lb
@@ -91,34 +63,6 @@ groups:
 - name: 'Component-Level SLIs: waf - 5m burn-rate'
   interval: 1m
   rules:
-  - record: gitlab_component_ops:rate_5m
-    labels:
-      component: code_suggestions_host
-      stage: main
-      tier: lb
-      type: waf
-    expr: |
-      sum by (env,environment) (
-        rate(cloudflare_zone_requests_status_country_host{host=~"codesuggestions.gitlab.com.*",zone="gitlab.com"}[5m])
-      )
-  - record: gitlab_component_errors:rate_5m
-    labels:
-      component: code_suggestions_host
-      stage: main
-      tier: lb
-      type: waf
-    expr: |
-      (
-        sum by (env,environment) (
-          rate(cloudflare_zone_requests_status_country_host{host=~"codesuggestions.gitlab.com.*",status=~"^5.*",zone="gitlab.com"}[5m])
-        )
-      )
-      or
-      (
-        0 * group by(env,environment) (
-          gitlab_component_ops:rate_5m{component="code_suggestions_host",stage="main",tier="lb",type="waf"}
-        )
-      )
   - record: gitlab_component_ops:rate_5m
     labels:
       component: gitlab_net_zone
@@ -180,34 +124,6 @@ groups:
   rules:
   - record: gitlab_component_ops:rate_30m
     labels:
-      component: code_suggestions_host
-      stage: main
-      tier: lb
-      type: waf
-    expr: |
-      sum by (env,environment) (
-        rate(cloudflare_zone_requests_status_country_host{host=~"codesuggestions.gitlab.com.*",zone="gitlab.com"}[30m])
-      )
-  - record: gitlab_component_errors:rate_30m
-    labels:
-      component: code_suggestions_host
-      stage: main
-      tier: lb
-      type: waf
-    expr: |
-      (
-        sum by (env,environment) (
-          rate(cloudflare_zone_requests_status_country_host{host=~"codesuggestions.gitlab.com.*",status=~"^5.*",zone="gitlab.com"}[30m])
-        )
-      )
-      or
-      (
-        0 * group by(env,environment) (
-          gitlab_component_ops:rate_30m{component="code_suggestions_host",stage="main",tier="lb",type="waf"}
-        )
-      )
-  - record: gitlab_component_ops:rate_30m
-    labels:
       component: gitlab_net_zone
       stage: main
       tier: lb
@@ -265,34 +181,6 @@ groups:
 - name: 'Component-Level SLIs: waf - 1h burn-rate'
   interval: 1m
   rules:
-  - record: gitlab_component_ops:rate_1h
-    labels:
-      component: code_suggestions_host
-      stage: main
-      tier: lb
-      type: waf
-    expr: |
-      sum by (env,environment) (
-        rate(cloudflare_zone_requests_status_country_host{host=~"codesuggestions.gitlab.com.*",zone="gitlab.com"}[1h])
-      )
-  - record: gitlab_component_errors:rate_1h
-    labels:
-      component: code_suggestions_host
-      stage: main
-      tier: lb
-      type: waf
-    expr: |
-      (
-        sum by (env,environment) (
-          rate(cloudflare_zone_requests_status_country_host{host=~"codesuggestions.gitlab.com.*",status=~"^5.*",zone="gitlab.com"}[1h])
-        )
-      )
-      or
-      (
-        0 * group by(env,environment) (
-          gitlab_component_ops:rate_1h{component="code_suggestions_host",stage="main",tier="lb",type="waf"}
-        )
-      )
   - record: gitlab_component_ops:rate_1h
     labels:
       component: gitlab_net_zone
@@ -354,34 +242,6 @@ groups:
   rules:
   - record: gitlab_component_ops:rate_6h
     labels:
-      component: code_suggestions_host
-      stage: main
-      tier: lb
-      type: waf
-    expr: |
-      sum by (env,environment) (
-        rate(cloudflare_zone_requests_status_country_host{host=~"codesuggestions.gitlab.com.*",zone="gitlab.com"}[6h])
-      )
-  - record: gitlab_component_errors:rate_6h
-    labels:
-      component: code_suggestions_host
-      stage: main
-      tier: lb
-      type: waf
-    expr: |
-      (
-        sum by (env,environment) (
-          rate(cloudflare_zone_requests_status_country_host{host=~"codesuggestions.gitlab.com.*",status=~"^5.*",zone="gitlab.com"}[6h])
-        )
-      )
-      or
-      (
-        0 * group by(env,environment) (
-          gitlab_component_ops:rate_6h{component="code_suggestions_host",stage="main",tier="lb",type="waf"}
-        )
-      )
-  - record: gitlab_component_ops:rate_6h
-    labels:
       component: gitlab_net_zone
       stage: main
       tier: lb
@@ -439,15 +299,6 @@ groups:
 - name: 'Component mapping: waf'
   interval: 1m
   rules:
-  - record: gitlab_component_service:mapping
-    labels:
-      component: code_suggestions_host
-      global_aggregation: "no"
-      regional_aggregation: "no"
-      service_aggregation: "no"
-      tier: lb
-      type: waf
-    expr: "1"
   - record: gitlab_component_service:mapping
     labels:
       component: gitlab_net_zone
