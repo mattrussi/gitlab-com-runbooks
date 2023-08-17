@@ -3,6 +3,7 @@
 require 'connection_pool'
 require 'optparse'
 require 'redis'
+require 'redis-clustering'
 require 'yaml'
 
 # This file requires the `redis` and `connection_pool` gems.
@@ -174,12 +175,22 @@ end
 
 def src_redis
   puts "creating src_redis object"
-  ::Redis.new(YAML.load_file('source.yml').transform_keys(&:to_sym))
+  config = YAML.load_file('source.yml').transform_keys(&:to_sym)
+  if config[:nodes]
+    ::Redis::Cluster.new(config)
+  else
+    ::Redis.new(config)
+  end
 end
 
 def dest_redis
   puts "creating dest_redis object"
-  ::Redis.new(YAML.load_file('destination.yml').transform_keys(&:to_sym))
+  config = YAML.load_file('destination.yml').transform_keys(&:to_sym)
+  if config[:nodes]
+    ::Redis::Cluster.new(config)
+  else
+    ::Redis.new(config)
+  end
 end
 
 checked = 0
