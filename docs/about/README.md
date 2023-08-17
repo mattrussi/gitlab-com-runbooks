@@ -116,6 +116,7 @@
 * [../uncategorized/osquery.md](../uncategorized/osquery.md)
 * [Periodic Job Monitoring](../uncategorized/periodic_job_monitoring.md)
 * [Renaming Nodes](../uncategorized/rename-nodes.md)
+* [Runway Observability](../uncategorized/runway.md)
 * [Shared Configurations](../uncategorized/shared-configurations.md)
 * [GitLab staging environment](../uncategorized/staging-environment.md)
 * [../uncategorized/subnet-allocations.md](../uncategorized/subnet-allocations.md)

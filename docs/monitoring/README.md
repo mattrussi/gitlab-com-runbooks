@@ -66,6 +66,7 @@
 * [GitLab Job Completion](../uncategorized/job_completion.md)
 * [../uncategorized/osquery.md](../uncategorized/osquery.md)
 * [Periodic Job Monitoring](../uncategorized/periodic_job_monitoring.md)
+* [Runway Observability](../uncategorized/runway.md)
 * [../uncategorized/subnet-allocations.md](../uncategorized/subnet-allocations.md)
 * [version.gitlab.com Runbook](../version/version-gitlab-com.md)
 * [Diagnostic Reports](../web/diagnostic-reports.md)
