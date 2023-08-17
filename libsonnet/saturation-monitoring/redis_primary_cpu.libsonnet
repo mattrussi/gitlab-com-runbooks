@@ -37,5 +37,9 @@ local commonDefinition = {
     appliesTo: metricsCatalog.findServicesWithTag(tag='redis-cluster'),
     grafana_dashboard_uid: 'sat_redis_cluster_primary_cpu',
     horizontallyScalable: true,
+
+    capacityPlanning: {
+      forecast_days: 180,
+    },
   }),
 }
