@@ -35,6 +35,10 @@ function(
     // Runway splits traffic between multiple revisions for canary deployments
     serviceIsStageless: true,
 
+    runwayConfig: {
+      id: runwayServiceID,
+    },
+
     serviceLevelIndicators: {
       runway_ingress: {
         description: |||
