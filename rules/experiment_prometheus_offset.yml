@@ -10,7 +10,7 @@ groups:
       type: web
     expr: |
       sum by (env,environment,stage) (
-        offset_experiment:sli_aggregations:gitlab_sli_rails_request_apdex_success_total_rate1h{job="gitlab-rails",type="web", environment="gprd"} offset 30s
+        offset_experiment:sli_aggregations:gitlab_sli_rails_request_apdex_success_total_rate1h{job="gitlab-rails",type="web"} offset 30s
       )
   - record: offset_experiment:gitlab_component_apdex:weight:score_1h
     labels:
@@ -19,15 +19,15 @@ groups:
       type: web
     expr: |
       sum by (env,environment,stage) (
-        offset_experiment:sli_aggregations:gitlab_sli_rails_request_apdex_total_rate1h{job="gitlab-rails",type="web", environment="gprd"} offset 30s
+        offset_experiment:sli_aggregations:gitlab_sli_rails_request_apdex_total_rate1h{job="gitlab-rails",type="web"} offset 30s
       )
   - record: offset_experiment:sli_aggregations:gitlab_sli_rails_request_apdex_total_rate1h
     expr: |
       sum by (endpoint_id,environment,feature_category,job,request_urgency,shard,stage,tier,type) (
-        rate(gitlab_sli_rails_request_apdex_total{environment="gprd", type="web"}[1h] offset 30s)
+        rate(gitlab_sli_rails_request_apdex_total{ type="web"}[1h] offset 30s)
       )
   - record: offset_experiment:sli_aggregations:gitlab_sli_rails_request_apdex_success_total_rate1h
     expr: |
       sum by (endpoint_id,environment,feature_category,job,request_urgency,shard,stage,tier,type) (
-        rate(gitlab_sli_rails_request_apdex_success_total{environment="gprd", type="web"}[1h] offset 30s)
+        rate(gitlab_sli_rails_request_apdex_success_total{ type="web"}[1h] offset 30s)
       )
