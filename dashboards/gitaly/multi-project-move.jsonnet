@@ -152,7 +152,7 @@ basic.dashboard(
   ], startRow=1101, cols=4)
 )
 .addPanel(
-  row.new(title='gitalyctl projects repositories'),
+  row.new(title='gitalyctl logs'),
   gridPos={
     x: 0,
     y: 1200,
@@ -161,10 +161,29 @@ basic.dashboard(
   }
 )
 .addPanels(
-  layout.grid(repsitoryTypeRates('projects'), startRow=1201, cols=4)
+  layout.grid([
+    basic.timeseries(
+      title='Info Logs',
+      description='How many info logs we have for gitalyctl',
+      datasource='ops',
+      query=|||
+        count_over_time({namespace="gitalyctl", container="gitalyctl"} |= `info` [$__interval])
+      |||,
+      legendFormat='{{ storage }}'
+    ),
+    basic.timeseries(
+      title='Error Logs',
+      description='How many error logs we have for gitalyctl',
+      datasource='ops',
+      query=|||
+        count_over_time({namespace="gitalyctl", container="gitalyctl"} |= `error` [$__interval])
+      |||,
+      legendFormat='{{ storage }}'
+    ),
+  ], startRow=1201, cols=2)
 )
 .addPanel(
-  row.new(title='gitalyctl groups repositories'),
+  row.new(title='gitalyctl projects repositories'),
   gridPos={
     x: 0,
     y: 1300,
@@ -173,10 +192,10 @@ basic.dashboard(
   }
 )
 .addPanels(
-  layout.grid(repsitoryTypeRates('groups'), startRow=1301, cols=4)
+  layout.grid(repsitoryTypeRates('projects'), startRow=1301, cols=4)
 )
 .addPanel(
-  row.new(title='gitalyctl snippets repositories'),
+  row.new(title='gitalyctl groups repositories'),
   gridPos={
     x: 0,
     y: 1400,
@@ -185,13 +204,25 @@ basic.dashboard(
   }
 )
 .addPanels(
-  layout.grid(repsitoryTypeRates('snippets'), startRow=1401, cols=4)
+  layout.grid(repsitoryTypeRates('groups'), startRow=1401, cols=4)
+)
+.addPanel(
+  row.new(title='gitalyctl snippets repositories'),
+  gridPos={
+    x: 0,
+    y: 1500,
+    w: 24,
+    h: 1,
+  }
+)
+.addPanels(
+  layout.grid(repsitoryTypeRates('snippets'), startRow=1501, cols=4)
 )
 .addPanel(
   row.new(title='USE method gitalyctl deployment'),
   gridPos={
     x: 0,
-    y: 1500,
+    y: 1600,
     w: 24,
     h: 1,
   }
@@ -245,6 +276,6 @@ basic.dashboard(
       ],
       format='bytes',
     ),
-  ], startRow=1501, cols=2)
+  ], startRow=1601, cols=2)
 )
 .trailer()
