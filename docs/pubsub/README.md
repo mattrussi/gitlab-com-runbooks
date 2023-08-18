@@ -31,6 +31,7 @@
 * [PubSub Queuing Rate Increasing](pubsub-queing.md)
 * [A survival guide for SREs to working with Redis at GitLab](../redis/redis-survival-guide-for-sres.md)
 * [A survival guide for SREs to working with Sidekiq at GitLab](../sidekiq/sidekiq-survival-guide-for-sres.md)
+* [Teleport Administration](../teleport/teleport_admin.md)
 * [Life of a Git Request](../tutorials/overview_life_of_a_git_request.md)
 <!-- END_MARKER -->
 

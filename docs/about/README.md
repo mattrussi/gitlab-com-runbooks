@@ -95,6 +95,7 @@
 * [GET Monitoring Setup](../staging-ref/get-monitoring-setup.md)
 * [How to connect to a Database console using Teleport](../teleport/Connect_to_Database_Console_via_Teleport.md)
 * [How to connect to a Rails Console using Teleport](../teleport/Connect_to_Rails_Console_via_Teleport.md)
+* [Teleport Administration](../teleport/teleport_admin.md)
 * [Teleport Approver Workflow](../teleport/teleport_approval_workflow.md)
 * [Example Tutorial Template](../tutorials/example_tutorial_template.md)
 * [How to use flamegraphs for performance profiling](../tutorials/how_to_use_flamegraphs_for_perf_profiling.md)
