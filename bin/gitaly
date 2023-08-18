@@ -31,14 +31,16 @@ Creates a test project on a storage, moves it to a new storage and does some val
 the new storage is functioning properly.
 
 USAGE:
-  glsh gitaly storages validate -e [gstg,gprd] -s [source storage] <destination storage names>
+  glsh gitaly storages validate -e [gstg,gprd] -s [source storage] <storage names>
 
-  source storage: Create a project on a source storages
-  destination storage names: One or more storage names to validate
+  source storage: Create a project on a source storages and then move it to the destination storage
+  storage names: One or more storage names to validate
 
 Example:
   # Create a test project on the storage named nfs-file24 and move it to gitaly-01-stor-gstg.c.gitlab-gitaly-gstg-164c.internal
-  glsh gitaly-test storages validate -e gstg -s nfs-file24 gitaly-01-stor-gstg.c.gitlab-gitaly-gstg-164c.internal
+  glsh gitaly storages validate -e gstg -s nfs-file24 gitaly-01-stor-gstg.c.gitlab-gitaly-gstg-164c.internal
+  # Create a test project on the storage named nfs-file24 and validate it
+  glsh gitaly storages validate -e gstg nfs-file24
 
 Note:
   To list available storages use \`glsh gitaly storage list -e [gstg,gprd]\`
@@ -100,7 +102,6 @@ storages_list() {
     case "$opt" in
       h | \?)
         usage "${FUNCNAME[0]}"
-        exit 0
         ;;
       e)
         env=${OPTARG}
@@ -164,7 +165,6 @@ storages_validate() {
     case "$opt" in
       h | \?)
         usage "${FUNCNAME[0]}"
-        exit 0
         ;;
       e)
         env=${OPTARG}
@@ -177,8 +177,14 @@ storages_validate() {
   shift "$((OPTIND - 1))"
 
   [[ -z "${env:-}" ]] && usage "${FUNCNAME[0]}"
+
+  if [[ $# -eq 0 ]]; then
+    echo_err "No destination storages specified!"
+    echo_err ""
+    usage "${FUNCNAME[0]}"
+  fi
+
   pat=$(admin_pat)
-  [[ -z "${src_storage:-}" ]] && usage "${FUNCNAME[0]}"
 
   local curl_opts=(
     --silent --fail --show-error
@@ -187,16 +193,22 @@ storages_validate() {
   )
 
   trap cleanup_projects EXIT
-  echo "Creating projects on storage '$src_storage' and moving them to the following storages:"
+  echo "Creating projects:"
   echo ""
 
   for dst_storage in "$@"; do
     local project_name="${dst_storage}-${date_ts}"
     echo "  $dst_storage:"
 
-    printf "    creating..."
+    local storage_create
+    if [[ -n "${src_storage}" ]]; then
+      storage_create="$src_storage"
+    else
+      storage_create="$dst_storage"
+    fi
+    printf "    creating on %s..." "$storage_create"
     local create_resp project_id path_with_namespace
-    create_resp=$(create_project "$project_name" "$src_storage")
+    create_resp=$(create_project "$project_name" "$storage_create")
     echo "✔"
     project_id="$(jq -r '.id' <<<"$create_resp")"
     path_with_namespace="$(jq -r '.path_with_namespace' <<<"$create_resp")"
@@ -207,23 +219,25 @@ storages_validate() {
     created_project_ids+=("$project_id")
     created_project_paths+=("$path_with_namespace")
 
-    printf "    moving..."
-    local move_resp move_id
-    move_resp=$(move_project "$project_id" "$dst_storage")
-    move_id="$(jq -r '.id' <<<"$move_resp")"
-    move_status "$project_id" "$move_id" "$web_url"
+    if [[ -n "$src_storage" ]]; then
+      printf "    moving to %s..." "$dst_storage"
+      local move_resp move_id
+      move_resp=$(move_project "$project_id" "$dst_storage")
+      move_id="$(jq -r '.id' <<<"$move_resp")"
+      move_status "$project_id" "$move_id" "$web_url"
+    fi
 
-    printf "    confirming move..."
-    local info_resp new_storage ssh_url_to_repo
+    printf "    checking project..."
+    local info_resp storage_chk ssh_url_to_repo
     info_resp=$(project_info "$project_id")
-    new_storage="$(jq -r '.repository_storage' <<<"$info_resp")"
+    storage_chk="$(jq -r '.repository_storage' <<<"$info_resp")"
     ssh_url_to_repo="$(jq -r '.ssh_url_to_repo' <<<"$info_resp")"
-    if [[ $new_storage == "$dst_storage" ]]; then
+    if [[ $storage_chk == "$dst_storage" ]]; then
       echo "✔"
     else
       echo "✘"
       echo ""
-      echo "    New storage '$new_storage' for $project_name doesn't match destination storage '$dst_storage'!"
+      echo "    Storage '$storage_chk' for $project_name doesn't match destination storage '$dst_storage'!"
       exit 1
     fi
 
@@ -245,7 +259,6 @@ repositories_move() {
     case "$opt" in
       h | \?)
         usage "${FUNCNAME[0]}"
-        exit 0
         ;;
       e)
         env=${OPTARG}
@@ -264,7 +277,6 @@ repositories_move() {
   if [[ $# -eq 0 ]]; then
     echo "No projects specified!" >&2
     usage "${FUNCNAME[0]}"
-    exit 2
   fi
 
   local info_resp path_with_namespace cur_storage web_url project_id
@@ -365,20 +377,32 @@ validate_project() {
 #
 # Arguments:
 #   project_name: project name to create
-#   repository_storage: storage to place the project
+#   repository_storage: (optional) storage to place
+#                       the project
+#
+# Notes:
+#   If $repository_storage is not set the repository
+#   will be created on any available storage
+#
 ###################################################
 create_project() {
   local project_name="$1"
-  local repository_storage="$2"
-  local url
+  local repository_storage="${2:-}"
   local curl_opts
+
+  local storage_json_fragment=""
+
+  if [[ -n "$repository_storage" ]]; then
+    storage_json_fragment=$(printf '"repository_storage": "%s", ' "$repository_storage")
+  fi
+
   curl_opts=(
     --silent --fail --show-error
     --request POST
     --header "PRIVATE-TOKEN: $pat"
     --header "Content-Type: application/json"
     --data
-    "$(printf '{"name": "%s", "repository_storage": "%s", "description": "test project", "initialize_with_readme": "true"}' "$project_name" "$repository_storage")"
+    "$(printf '{"name": "%s", %s "description": "test project", "initialize_with_readme": "true"}' "$project_name" "$storage_json_fragment")"
     "$(api_for_env)/projects"
   )
 
@@ -617,7 +641,6 @@ main() {
           ;;
         *)
           usage storages
-          exit 2
           ;;
       esac
       ;;
@@ -630,13 +653,11 @@ main() {
 
         *)
           usage repositories
-          exit 2
           ;;
       esac
       ;;
     *)
       usage
-      exit 2
       ;;
   esac
 }
