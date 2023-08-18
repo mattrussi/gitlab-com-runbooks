@@ -310,12 +310,13 @@ local validateTags(tags) =
     stableId=null,
     dataFormat='timeseries',
     color_cardColor='#b4ff00',
-    hideZeroBuckets=true
+    hideZeroBuckets=true,
+    datasource='$PROMETHEUS_DS',
   )::
     heatmapPanel.new(
       title,
       description=description,
-      datasource='$PROMETHEUS_DS',
+      datasource=datasource,
       legend_show=legend_show,
       yAxis_format=yAxis_format,
       color_mode='opacity',
@@ -383,6 +384,7 @@ local validateTags(tags) =
     stableId=null,
     fill=0,
     stack=false,
+    datasource='$PROMETHEUS_DS',
   )::
     local panel = self.graphPanel(
       title,
@@ -390,7 +392,7 @@ local validateTags(tags) =
       sort=sort,
       linewidth=linewidth,
       fill=fill,
-      datasource='$PROMETHEUS_DS',
+      datasource=datasource,
       decimals=decimals,
       legend_rightSide=legend_rightSide,
       legend_show=legend_show,
@@ -446,6 +448,7 @@ local validateTags(tags) =
     stableId=null,
     fill=0,
     stack=false,
+    datasource='$PROMETHEUS_DS',
   )::
     self.multiTimeseries(
       queries=[{ query: query, legendFormat: legendFormat }],
@@ -467,6 +470,7 @@ local validateTags(tags) =
       stableId=stableId,
       fill=fill,
       stack=stack,
+      datasource=datasource,
     ),
 
   queueLengthTimeseries(
@@ -480,6 +484,7 @@ local validateTags(tags) =
     yAxisLabel='Queue Length',
     linewidth=2,
     stableId=null,
+    datasource='$PROMETHEUS_DS',
   )::
     self.graphPanel(
       title,
@@ -487,7 +492,7 @@ local validateTags(tags) =
       sort='decreasing',
       linewidth=linewidth,
       fill=0,
-      datasource='$PROMETHEUS_DS',
+      datasource=datasource,
       decimals=0,
       legend_show=true,
       legend_values=true,
@@ -530,7 +535,8 @@ local validateTags(tags) =
     decimals=0,
     thresholds=null,
     stableId=null,
-    stack=false
+    stack=false,
+    datasource='$PROMETHEUS_DS',
   )::
     local formatConfig = {
       query: query,
@@ -541,7 +547,7 @@ local validateTags(tags) =
       sort='decreasing',
       linewidth=linewidth,
       fill=fill,
-      datasource='$PROMETHEUS_DS',
+      datasource=datasource,
       decimals=decimals,
       legend_show=legend_show,
       legend_values=true,
@@ -621,6 +627,7 @@ local validateTags(tags) =
     min=null,
     legend_show=true,
     stableId=null,
+    datasource='$PROMETHEUS_DS',
   )::
     local formatConfig = {
       query: query,
@@ -631,7 +638,7 @@ local validateTags(tags) =
       sort='increasing',
       linewidth=linewidth,
       fill=0,
-      datasource='$PROMETHEUS_DS',
+      datasource=datasource,
       decimals=0,
       legend_show=legend_show,
       legend_values=true,
@@ -683,6 +690,7 @@ local validateTags(tags) =
     linewidth=2,
     min=0,
     stableId=null,
+    datasource='$PROMETHEUS_DS',
   )::
     self.graphPanel(
       title,
@@ -690,7 +698,7 @@ local validateTags(tags) =
       sort='decreasing',
       linewidth=linewidth,
       fill=0,
-      datasource='$PROMETHEUS_DS',
+      datasource=datasource,
       decimals=decimals,
       legend_show=legend_show,
       legend_values=true,
@@ -730,6 +738,7 @@ local validateTags(tags) =
     pointradius=3,
     stableId=null,
     legend_show=true,
+    datasource='$PROMETHEUS_DS',
   )::
     local formatConfig = {
       query: query,
@@ -740,7 +749,7 @@ local validateTags(tags) =
       sort='decreasing',
       linewidth=2,
       fill=0,
-      datasource='$PROMETHEUS_DS',
+      datasource=datasource,
       decimals=2,
       legend_show=legend_show,
       legend_values=true,
@@ -806,13 +815,14 @@ local validateTags(tags) =
     intervalFactor=1,
     legend_show=true,
     stableId=null,
+    datasource='$PROMETHEUS_DS',
   )::
     self.graphPanel(
       title,
       linewidth=1,
       fill=0,
       description=description,
-      datasource='$PROMETHEUS_DS',
+      datasource=datasource,
       decimals=2,
       sort='decreasing',
       legend_show=legend_show,
@@ -862,11 +872,12 @@ local validateTags(tags) =
     colors=getDefaultAvailabilityColorScale(invertColors, if unit == 'percentunit' then 1 else 100),
     colorMode='background',
     intervalFactor=1,
+    datasource='$PROMETHEUS_DS',
   )::
     statPanel.new(
       title,
       description=description,
-      datasource='$PROMETHEUS_DS',
+      datasource=datasource,
       reducerFunction='last',
       allValues=true,
       orientation='auto',
