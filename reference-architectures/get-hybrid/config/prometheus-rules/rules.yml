@@ -3989,6 +3989,18 @@ groups:
           ,
           0)
         )
+      promql_template_1: |
+        max by(type) (
+          clamp_min(
+            clamp_max(
+              1 - avg by (type) (
+                rate(node_cpu_seconds_total{mode="idle", type="{{ $labels.type }}"}[5m])
+              )
+              ,
+              1)
+          ,
+          0)
+        )
       runbook: docs/{{ $labels.type }}/README.md
       title: The Average Service CPU Utilization resource of the {{ $labels.type }}
         service has a saturation exceeding SLO and is close to its capacity limit.
@@ -4018,6 +4030,20 @@ groups:
       grafana_panel_id: "39965907"
       grafana_variables: type
       promql_query: |
+        max by(type, fqdn, device) (
+          clamp_min(
+            clamp_max(
+              1 - (
+                node_filesystem_files_free{fstype=~"(ext.|xfs)", type="{{ $labels.type }}"}
+                /
+                node_filesystem_files{fstype=~"(ext.|xfs)", type="{{ $labels.type }}"}
+              )
+              ,
+              1)
+          ,
+          0)
+        )
+      promql_template_1: |
         max by(type, fqdn, device) (
           clamp_min(
             clamp_max(
@@ -4074,6 +4100,20 @@ groups:
           ,
           0)
         )
+      promql_template_1: |
+        max by(type, fqdn, device) (
+          clamp_min(
+            clamp_max(
+              1 - (
+                node_filesystem_files_free{fstype=~"(ext.|xfs)", type="{{ $labels.type }}"}
+                /
+                node_filesystem_files{fstype=~"(ext.|xfs)", type="{{ $labels.type }}"}
+              )
+              ,
+              1)
+          ,
+          0)
+        )
       runbook: docs/{{ $labels.type }}/README.md
       title: The Disk inode Utilization per Device per Node resource of the {{ $labels.type
         }} service is on track to hit capacity within 6h
@@ -4104,6 +4144,18 @@ groups:
       grafana_panel_id: "2661375984"
       grafana_variables: type
       promql_query: |
+        max by(type, node, device) (
+          clamp_min(
+            clamp_max(
+              (
+                1 - node_filesystem_avail_bytes{fstype=~"ext.|xfs", type="{{ $labels.type }}"} / node_filesystem_size_bytes{fstype=~"ext.|xfs", type="{{ $labels.type }}"}
+              )
+              ,
+              1)
+          ,
+          0)
+        )
+      promql_template_1: |
         max by(type, node, device) (
           clamp_min(
             clamp_max(
@@ -4154,6 +4206,18 @@ groups:
           ,
           0)
         )
+      promql_template_1: |
+        max by(type, node, device) (
+          clamp_min(
+            clamp_max(
+              (
+                1 - node_filesystem_avail_bytes{fstype=~"ext.|xfs", type="{{ $labels.type }}"} / node_filesystem_size_bytes{fstype=~"ext.|xfs", type="{{ $labels.type }}"}
+              )
+              ,
+              1)
+          ,
+          0)
+        )
       runbook: docs/{{ $labels.type }}/README.md
       title: The Disk Space Utilization per Device per Node resource of the {{ $labels.type
         }} service is on track to hit capacity within 6h
@@ -4184,6 +4248,22 @@ groups:
       grafana_panel_id: "3631721613"
       grafana_variables: type
       promql_query: |
+        max by(type, fqdn) (
+          clamp_min(
+            clamp_max(
+              sum by (type, fqdn) (
+                go_memstats_alloc_bytes{type="{{ $labels.type }}"}
+              )
+              /
+              sum by (type, fqdn) (
+                node_memory_MemTotal_bytes{type="{{ $labels.type }}"}
+              )
+              ,
+              1)
+          ,
+          0)
+        )
+      promql_template_1: |
         max by(type, fqdn) (
           clamp_min(
             clamp_max(
@@ -4243,6 +4323,24 @@ groups:
           ,
           0)
         )
+      promql_template_1: |
+        max by(type, pod, container) (
+          clamp_min(
+            clamp_max(
+              sum by (type, pod, container) (
+                rate(container_cpu_usage_seconds_total:labeled{container!="", container!="POD", type="{{ $labels.type }}"}[5m])
+              )
+              /
+              sum by(type, pod, container) (
+                container_spec_cpu_quota:labeled{container!="", container!="POD", type="{{ $labels.type }}"}
+                /
+                container_spec_cpu_period:labeled{container!="", container!="POD", type="{{ $labels.type }}"}
+              )
+              ,
+              1)
+          ,
+          0)
+        )
       runbook: docs/{{ $labels.type }}/README.md
       title: The Kube Container CPU Utilization resource of the {{ $labels.type }}
         service has a saturation exceeding SLO and is close to its capacity limit.
@@ -4270,6 +4368,18 @@ groups:
       grafana_panel_id: "172578411"
       grafana_variables: type
       promql_query: |
+        max by(type) (
+          clamp_min(
+            clamp_max(
+              container_memory_working_set_bytes:labeled{container!="", container!="POD", type="{{ $labels.type }}"}
+              /
+              (container_spec_memory_limit_bytes:labeled{container!="", container!="POD", type="{{ $labels.type }}"} > 0)
+              ,
+              1)
+          ,
+          0)
+        )
+      promql_template_1: |
         max by(type) (
           clamp_min(
             clamp_max(
@@ -4321,6 +4431,18 @@ groups:
           ,
           0)
         )
+      promql_template_1: |
+        max by(type) (
+          clamp_min(
+            clamp_max(
+              1 - avg by (type) (
+                rate(node_cpu_seconds_total:labeled{mode="idle", type="{{ $labels.type }}"}[5m])
+              )
+              ,
+              1)
+          ,
+          0)
+        )
       runbook: docs/{{ $labels.type }}/README.md
       title: The Average Node Pool CPU Utilization resource of the {{ $labels.type
         }} service has a saturation exceeding SLO and is close to its capacity limit.
@@ -4348,6 +4470,16 @@ groups:
       grafana_panel_id: "1955556769"
       grafana_variables: type
       promql_query: |
+        max by(type, node) (
+          clamp_min(
+            clamp_max(
+              instance:node_memory_utilization:ratio{type="{{ $labels.type }}"} or instance:node_memory_utilisation:ratio{type="{{ $labels.type }}"}
+              ,
+              1)
+          ,
+          0)
+        )
+      promql_template_1: |
         max by(type, node) (
           clamp_min(
             clamp_max(
@@ -4397,6 +4529,16 @@ groups:
           ,
           0)
         )
+      promql_template_1: |
+        max by(type, fqdn, shard) (
+          clamp_min(
+            clamp_max(
+              avg without (cpu) (rate(node_schedstat_waiting_seconds_total{type="{{ $labels.type }}"}[1h]))
+              ,
+              1)
+          ,
+          0)
+        )
       runbook: docs/{{ $labels.type }}/README.md
       title: The Node Scheduler Waiting Time resource of the {{ $labels.type }} service
         has a saturation exceeding SLO and is close to its capacity limit.
@@ -4426,6 +4568,16 @@ groups:
       grafana_panel_id: "3372411356"
       grafana_variables: type
       promql_query: |
+        max by(type, node) (
+          clamp_min(
+            clamp_max(
+              avg without(cpu, mode) (1 - rate(node_cpu_seconds_total{mode="idle", type="{{ $labels.type }}"}[5m]))
+              ,
+              1)
+          ,
+          0)
+        )
+      promql_template_1: |
         max by(type, node) (
           clamp_min(
             clamp_max(
