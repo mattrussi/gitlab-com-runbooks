@@ -75,7 +75,7 @@ metricsCatalog.serviceDefinition({
           region=gkeDeploymentDetails.region,
           cluster=gkeDeploymentDetails.cluster,
         ),
-        toolingLinks.kibana(title='MLOps', index='mlops'),
+        toolingLinks.kibana(title='MLOps', index='mlops', includeMatchersForPrometheusSelector=false),
       ],
     },
 
