@@ -66,7 +66,6 @@ have privileged mode on. See [`gitlab-ci` network](#gitlab-ci-project) for subne
 These are the newest runners we have. They are used for all of our open source projects under
 the `gitlab-org` group. They are also referred to as `org-ci` runners. These are housed in the
 `gitlab-org-ci` project. For further info please see the [org-ci README](./cicd/org-ci/README.md).
-For network information see [gitlab-org-ci networking](#gitlab-org-ci-project).
 
 ### windows-shared-runners-manager (WSRM)
 
@@ -457,17 +456,9 @@ Here you can find details about networking in different projects used by CI Runn
 | Network Name   | Subnet Name                 | CIDR            | Purpose                                                |
 | -------------- | --------------------------- | --------------- | ------------------------------------------------------ |
 | `default`      | `default`                   | `10.142.0.0/20` | all non-runner machines (managers, prometheus, etc.). In `us-east1` - we don't use this subnetwork in any other region. |
-| `default`      | `shared-runners`            | `10.0.32.0/20`  | shared runner (SRM) machines                           |
-| `default`      | `private-runners`           | `10.0.0.0/20`   | private runner (PRM) machines                          |
-| `default`      | `gitlab-shared-runners`    | `10.0.16.0/20`  | gitlab shared runner (GSRM) machines                   |
+| `ci`           | `sd-exporter-ci`            | `10.142.16.0/24`| Monitoring subnetwork                                  |
 | `ci`           | `bastion-ci`                | `10.1.4.0/24`   | Bastion network                                        |
 | `ci`           | `runner-managers`           | `10.1.5.0/24`   | Network for Runner Managers ([new ones](https://gitlab.com/groups/gitlab-com/gl-infra/-/epics/456))                 |
-| `ci`           | `ephemeral-runners-private` | `10.10.40.0/21` | Ephemeral runner machines for the new `private` shard. See [`ephemeral-runnes` unique CIDRs list](#ephemeral-runners-unique-cidrs-list) above |
-| `ci`           | `ephemeral-runners-private-2` | `10.10.56.0/21` | Second range used by ephemeral runner machines for the new `private` shard. See [`ephemeral-runnes` unique CIDRs list](#ephemeral-runners-unique-cidrs-list) above |
-| `ci`           | `ephemeral-runners-shared-gitlab-org` | `10.10.48.0/21` | Ephemeral runner machines for the new `shared-gitlab-org` shard. See [`ephemeral-runners` unique CIDRs list](#ephemeral-runners-unique-cidrs-list) above |
-| `ci`           | `ephemeral-runners-shared-gitlab-org-2` | `10.10.96.0/21` | Second range for ephemeral runner machines for the new `shared-gitlab-org` shard. See [`ephemeral-runners` unique CIDRs list](#ephemeral-runners-unique-cidrs-list) above |
-| `ci`           | `ephemeral-runners-shared-gitlab-org-3` | `10.10.104.0/21` | Third range for ephemeral runner machines for the new `shared-gitlab-org` shard. See [`ephemeral-runners` unique CIDRs list](#ephemeral-runners-unique-cidrs-list) above |
-| `ci`           | `ephemeral-runners-shared-gitlab-org-4` | `10.10.112.0/21` | Fourth range for ephemeral runner machines for the new `shared-gitlab-org` shard. See [`ephemeral-runners` unique CIDRs list](#ephemeral-runners-unique-cidrs-list) above |
 | `runners-gke`  | `runners-gke`               | `10.9.4.0/24`   | Primary; GKE nodes range      |
 | `runners-gke`  | `runners-gke`               | `10.8.0.0/16`   | Secondary; GKE pods range     |
 | `runners-gke`  | `runners-gke`               | `10.9.0.0/22`   | secondary; GKE services range |
@@ -479,24 +470,6 @@ The `ci` network will be getting new subnetworks for `ephemeral-runners-X` while
 [this epic](https://gitlab.com/groups/gitlab-com/gl-infra/-/epics/456).
 
 The `runners-gke` network, at least for now, is in the expected state.
-
-#### gitlab-org-ci project
-
-| Network Name   | Subnet Name               | CIDR          | Purpose                               |
-| -------------- | ------------------------- | ------------- | ------------------------------------- |
-| `org-ci`       | `manager`                 | `10.1.0.0/24` | Runner manager machines               |
-| `org-ci`       | `bastion-org-ci`          | `10.1.2.0/24` | Bastion network                       |
-| `org-ci`       | `gitlab-gke-org-ci`       | `10.1.3.0/24` | GKE network                           |
-| `org-ci`       | `gitlab-gke-org-ci`       | `10.3.0.0/16` | GKE network                           |
-| `org-ci`       | `gitlab-gke-org-ci`       | `10.1.8.0/23` | GKE network                           |
-| `org-ci`       | `shared-runner`           | `10.2.0.0/16` | Ephemeral runner machines             |
-
-We are considering removing this environment at all when the
-[Linux CI Runners Continuous Delivery](https://gitlab.com/groups/gitlab-com/gl-infra/-/epics/456) will be done.
-Our current plan is to add the `gitlab-docker-shared-runners-manager` as another entry in the `shared-gitlab-org`
-runner managers. Since we've moved a lot of load from the `ci` project to the `ci-plan-free-X` projects, it should
-have a lot of space for load currently handled by `gitlab-org-ci` project. Removing it will make our configuration
-a little more simple.
 
 #### gitlab-ci-windows project
 
