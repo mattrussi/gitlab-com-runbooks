@@ -12,7 +12,7 @@ groups:
       type: ai_gateway
     expr: |
       sum by (env,environment) (
-        rate(stackdriver_cloud_run_revision_run_googleapis_com_request_latencies_bucket{le="1024",service_name="model-gateway-n2bsxg"}[1m])
+        rate(stackdriver_cloud_run_revision_run_googleapis_com_request_latencies_bucket{le="2048",service_name="model-gateway-n2bsxg"}[1m])
       )
   - record: gitlab_component_apdex:weight:score
     labels:
@@ -63,7 +63,7 @@ groups:
       type: ai_gateway
     expr: |
       sum by (env,environment) (
-        rate(stackdriver_cloud_run_revision_run_googleapis_com_request_latencies_bucket{le="1024",service_name="model-gateway-n2bsxg"}[5m])
+        rate(stackdriver_cloud_run_revision_run_googleapis_com_request_latencies_bucket{le="2048",service_name="model-gateway-n2bsxg"}[5m])
       )
   - record: gitlab_component_apdex:weight:score_5m
     labels:
@@ -114,7 +114,7 @@ groups:
       type: ai_gateway
     expr: |
       sum by (env,environment) (
-        rate(stackdriver_cloud_run_revision_run_googleapis_com_request_latencies_bucket{le="1024",service_name="model-gateway-n2bsxg"}[30m])
+        rate(stackdriver_cloud_run_revision_run_googleapis_com_request_latencies_bucket{le="2048",service_name="model-gateway-n2bsxg"}[30m])
       )
   - record: gitlab_component_apdex:weight:score_30m
     labels:
@@ -165,7 +165,7 @@ groups:
       type: ai_gateway
     expr: |
       sum by (env,environment) (
-        rate(stackdriver_cloud_run_revision_run_googleapis_com_request_latencies_bucket{le="1024",service_name="model-gateway-n2bsxg"}[1h])
+        rate(stackdriver_cloud_run_revision_run_googleapis_com_request_latencies_bucket{le="2048",service_name="model-gateway-n2bsxg"}[1h])
       )
   - record: gitlab_component_apdex:weight:score_1h
     labels:
@@ -216,7 +216,7 @@ groups:
       type: ai_gateway
     expr: |
       sum by (env,environment) (
-        rate(stackdriver_cloud_run_revision_run_googleapis_com_request_latencies_bucket{le="1024",service_name="model-gateway-n2bsxg"}[6h])
+        rate(stackdriver_cloud_run_revision_run_googleapis_com_request_latencies_bucket{le="2048",service_name="model-gateway-n2bsxg"}[6h])
       )
   - record: gitlab_component_apdex:weight:score_6h
     labels:

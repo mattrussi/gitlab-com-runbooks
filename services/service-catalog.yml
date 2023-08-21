@@ -673,7 +673,7 @@ services:
     friendly_name: AI Gateway
     label: AIGateway
     # TODO: Change owner to ai_assisted after https://gitlab.com/gitlab-com/gl-infra/readiness/-/issues/81
-    owner: scalability
+    owner: scalability-runway-core
     technical:
       project:
         - https://gitlab.com/groups/gitlab-org/modelops/applied-ml/code-suggestions
