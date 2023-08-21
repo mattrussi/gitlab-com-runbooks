@@ -294,6 +294,8 @@ If you have issues connecting, try using the `--debug` flag to display more verb
 
 `tsh db` is a wrapper over `psql` and this likely means that your installed psql version was not configured with OpenSSL options. You can consider taking steps like [this blog post](https://dev.to/jbranchaud/reinstall-postgresql-with-openssl-using-asdf-cmj) if psql was installed via asdf. Ideally, use the brew installed psql version.
 
+### `failed to add one or more keys to the agent`
+
 If you encounter the error
 
 ```
