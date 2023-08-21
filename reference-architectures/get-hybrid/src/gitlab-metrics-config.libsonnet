@@ -33,7 +33,9 @@ local options = validateReferenceArchitectureOptions(import 'gitlab-metrics-opti
     import 'saturation-monitoring/memory.libsonnet',
     import 'saturation-monitoring/node_schedstat_waiting.libsonnet',
     import 'saturation-monitoring/single_node_cpu.libsonnet',
-  ]),
+  ] +
+  std.get(options, 'saturationMonitoring', [])
+  ),
 
   // Hash of all utilization metric types that are monitored on gitlab.com
   utilizationMonitoring:: objects.mergeAll([
