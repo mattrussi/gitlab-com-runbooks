@@ -275,7 +275,7 @@ basic.dashboard(
   },
 )
 .addPanel(
-  row.new(title='Gitaly Safety Mechanisms', collapse=true)
+  row.new(title='gitaly spawn tokens', collapse=true)
   .addPanels(
     layout.grid([
       gitalySpawnTimeoutsPerNode(selectorSerialized),
@@ -422,7 +422,7 @@ basic.dashboard(
     layout.grid([
       gitalyPackObjectsDashboards.in_process(selectorHash, 'concurrency by repository'),
       gitalyPackObjectsDashboards.queued_commands(selectorHash, 'queued commands'),
-      gitalyPackObjectsDashboards.dropped_commands(selectorHash, 'dropped commands'),
+      gitalyPackObjectsDashboards.dropped_commands(selectorHash, '{{ reason }}'),
       gitalyPackObjectsDashboards.cache_served(selectorHash, 'cache served'),
       gitalyPackObjectsDashboards.cache_generated(selectorHash, 'cache generated'),
       gitalyPackObjectsDashboards.cache_lookup(selectorHash, '{{ result }}'),
