@@ -293,3 +293,18 @@ If you have issues connecting, try using the `--debug` flag to display more verb
 ### `psql: error: sslmode value "verify-full" invalid when SSL support is not compiled in`
 
 `tsh db` is a wrapper over `psql` and this likely means that your installed psql version was not configured with OpenSSL options. You can consider taking steps like [this blog post](https://dev.to/jbranchaud/reinstall-postgresql-with-openssl-using-asdf-cmj) if psql was installed via asdf. Ideally, use the brew installed psql version.
+
+If you encounter the error
+
+```
+ERROR: failed to add one or more keys to the agent.
+agent: failure, agent: failure
+```
+
+Try running the same command and passing in the flag `--add-keys-to-agent=no`
+
+```
+tsh login --add-keys-to-agent=no --proxy=staging.teleport.gitlab.net
+```
+
+There is an open issue about [this](https://github.com/gravitational/teleport/issues/22326)
