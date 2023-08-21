@@ -17,6 +17,7 @@ local textPanel = grafana.text;
 
 local gitalyCommandStats = import 'gitlab-dashboards/gitaly/command_stats.libsonnet';
 local gitalyPackObjectsDashboards = import 'gitlab-dashboards/gitaly/pack_objects.libsonnet';
+local gitalyPerRPCDashboards = import 'gitlab-dashboards/gitaly/per_rpc.libsonnet';
 
 local serviceType = 'gitaly';
 
@@ -94,28 +95,6 @@ local gitalySpawnTokenWaitingTimePerNode(selector) =
     interval='1m',
     linewidth=1,
     legend_show=false,
-  );
-
-local gitalyRPCRequestRateByMethod(selector) =
-  basic.timeseries(
-    title='Request rate by grpc_method',
-    description='Request rate for the Gitaly server',
-    query=|||
-      sum by (grpc_method, grpc_service) (rate(grpc_server_handled_total{%(selector)s}[$__rate_interval]))
-    ||| % { selector: selector },
-    interval='1m',
-    legendFormat='/{{ grpc_service}}/{{ grpc_method }}'
-  );
-
-local gitalyRPCRequestRateByCode(selector) =
-  basic.timeseries(
-    title='Response rate by grpc_code',
-    description='Response rate for the Gitaly server',
-    query=|||
-      sum by (grpc_code) (rate(grpc_server_handled_total{%(selector)s}[$__rate_interval]))
-    ||| % { selector: selector },
-    interval='1m',
-    legendFormat='{{grpc_cdoe}}',
   );
 
 local gitalyCGroupCPUUsagePerCGroup(selector) =
@@ -402,11 +381,14 @@ basic.dashboard(
   }
 )
 .addPanel(
-  row.new(title='gitaly RPC request rate', collapse=true)
+  row.new(title='gitaly per-RPC metrics', collapse=true)
   .addPanels(
     layout.grid([
-      gitalyRPCRequestRateByMethod(selectorSerialized),
-      gitalyRPCRequestRateByCode(selectorSerialized),
+      gitalyPerRPCDashboards.request_rate_by_method(selectorHash),
+      gitalyPerRPCDashboards.request_rate_by_code(selectorHash),
+      gitalyPerRPCDashboards.in_progress_requests(selectorHash),
+      gitalyPerRPCDashboards.queued_requests(selectorHash),
+      gitalyPerRPCDashboards.dropped_requests(selectorHash),
     ], startRow=5802)
   ),
   gridPos={
