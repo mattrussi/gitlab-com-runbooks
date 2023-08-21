@@ -4,6 +4,7 @@
 //
 // NOTE: PLEASE KEEP THIS FILE IN ALPHABETICAL ORDER
 [
+  import 'ai-gateway.jsonnet',
   import 'api.jsonnet',
   import 'internal-api.jsonnet',
   import 'camoproxy.jsonnet',

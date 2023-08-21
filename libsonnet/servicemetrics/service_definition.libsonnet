@@ -4,7 +4,7 @@ local maturityLevels = import 'service-maturity/levels.libsonnet';
 local serviceLevelIndicatorDefinition = import 'service_level_indicator_definition.libsonnet';
 
 // For now we assume that services are provisioned on vms and not kubernetes
-local provisioningDefaults = { vms: true, kubernetes: false };
+local provisioningDefaults = { vms: true, kubernetes: false, runway: false };
 local serviceDefaults = {
   tags: [],
   serviceIsStageless: false,  // Set to true for services that don't use stage labels
@@ -14,6 +14,7 @@ local serviceDefaults = {
   shardLevelMonitoring: false,  // By default we do not use shard-level monitoring
   kubeConfig: {},
   kubeResources: {},
+  runwayConfig: {},
   regional: false,  // By default we don't support regional monitoring for services
   alertWindows: multiburnExpression.defaultWindows,
   skippedMaturityCriteria: {},

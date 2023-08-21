@@ -5,6 +5,28 @@ groups:
   interval: 5m
   partial_response_strategy: warn
   rules:
+  - record: slo:min:events:gitlab_service_apdex:ratio
+    labels:
+      tier: sv
+      type: ai_gateway
+    expr: "0.999000"
+  - record: slo:max:events:gitlab_service_errors:ratio
+    labels:
+      tier: sv
+      type: ai_gateway
+    expr: "0.001000"
+  - record: slo:min:events:gitlab_service_apdex:ratio
+    labels:
+      component: runway_ingress
+      tier: sv
+      type: ai_gateway
+    expr: "0.999000"
+  - record: slo:max:events:gitlab_service_errors:ratio
+    labels:
+      component: runway_ingress
+      tier: sv
+      type: ai_gateway
+    expr: "0.001000"
   - record: slo:min:gitlab_service_apdex:ratio
     labels:
       tier: sv
@@ -2784,6 +2806,15 @@ groups:
     labels:
       tier: inf
       type: thanos
+    expr: "1"
+  - record: gitlab_component_service:mapping
+    labels:
+      component: runway_ingress
+      global_aggregation: "no"
+      regional_aggregation: "no"
+      service_aggregation: "yes"
+      tier: sv
+      type: ai_gateway
     expr: "1"
   - record: gitlab_component_service:mapping
     labels:
