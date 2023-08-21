@@ -32,6 +32,16 @@ local selectors = import 'promql/selectors.libsonnet';
       interval='$__interval',
       linewidth=1,
     ),
+  in_progress_requests_by_node(selectorHash)::
+    basic.timeseries(
+      title='In progress requests',
+      query=|||
+        sum(gitaly_concurrency_limiting_in_progress{%(selector)s}) by (fqdn)
+      ||| % { selector: selectors.serializeHash(selectorHash) },
+      legendFormat='{{ fqdn }}',
+      interval='$__interval',
+      linewidth=1,
+    ),
   queued_requests(selectorHash)::
     basic.timeseries(
       title='Queued requests',
@@ -42,6 +52,16 @@ local selectors = import 'promql/selectors.libsonnet';
       interval='$__interval',
       linewidth=1,
     ),
+  queued_requests_by_node(selectorHash)::
+    basic.timeseries(
+      title='Queued requests',
+      query=|||
+        sum(gitaly_concurrency_limiting_queued{%(selector)s}) by (fqdn)
+      ||| % { selector: selectors.serializeHash(selectorHash) },
+      legendFormat='{{ fqdn }}',
+      interval='$__interval',
+      linewidth=1,
+    ),
   dropped_requests(selectorHash)::
     basic.timeseries(
       title='Dropped requests (RPS)',
@@ -49,6 +69,16 @@ local selectors = import 'promql/selectors.libsonnet';
         sum(rate(gitaly_requests_dropped_total{%(selector)s}[$__rate_interval])) by (fqdn, grpc_service, grpc_method, reason)
       ||| % { selector: selectors.serializeHash(selectorHash) },
       legendFormat='/{{ grpc_service}}/{{ grpc_method }} ({{ reason }})',
+      interval='$__interval',
+      linewidth=1,
+    ),
+  dropped_requests_by_node(selectorHash)::
+    basic.timeseries(
+      title='Dropped requests (RPS)',
+      query=|||
+        sum(rate(gitaly_requests_dropped_total{%(selector)s}[$__rate_interval])) by (fqdn, reason)
+      ||| % { selector: selectors.serializeHash(selectorHash) },
+      legendFormat='{{ reason }} - {{ fqdn }}',
       interval='$__interval',
       linewidth=1,
     ),

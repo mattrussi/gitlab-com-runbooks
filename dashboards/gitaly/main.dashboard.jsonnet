@@ -10,6 +10,7 @@ local multiburnFactors = import 'mwmbr/multiburn_factors.libsonnet';
 local selectors = import 'promql/selectors.libsonnet';
 
 local gitalyPackObjectsDashboards = import 'gitlab-dashboards/gitaly/pack_objects.libsonnet';
+local gitalyPerRPCDashboards = import 'gitlab-dashboards/gitaly/per_rpc.libsonnet';
 
 local selector = {
   environment: '$environment',
@@ -209,5 +210,21 @@ serviceDashboard.overview('gitaly')
     gitalyPackObjectsDashboards.in_process(selector, '{{ fqdn }}'),
     gitalyPackObjectsDashboards.cache_lookup(selector, '{{ result }}'),
   ], startRow=4001)
+)
+.addPanel(
+  row.new(title='Per-RPC metrics'),
+  gridPos={
+    x: 0,
+    y: 5000,
+    w: 24,
+    h: 1,
+  }
+)
+.addPanels(
+  layout.grid([
+    gitalyPerRPCDashboards.in_progress_requests_by_node(selector),
+    gitalyPerRPCDashboards.queued_requests_by_node(selector),
+    gitalyPerRPCDashboards.dropped_requests_by_node(selector),
+  ], startRow=5001)
 )
 .overviewTrailer()
