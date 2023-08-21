@@ -60,9 +60,9 @@ Follow the Teleport documentation for [generating a new identity](https://gotele
 
 ## Event Handler Plugin
 
-`teleport-event-handler` plugin is used for handling Teleport audit events and sending them to a [Fluentd](https://www.fluentd.org/) instance,
+`teleport-plugin-event-handler` is used for handling Teleport audit events and sending them to a [Fluentd](https://www.fluentd.org/) instance,
 so such events can be further shipped to other systems (i.e. SIEM) for security and auditing purposes.
-Read me about exporting exporting Teleport audit events [here](https://goteleport.com/docs/management/export-audit-events/).
+Read more about exporting exporting Teleport audit events [here](https://goteleport.com/docs/management/export-audit-events/).
 
 - This plugin is installed using
   [teleport-plugin-event-handler](https://goteleport.com/docs/reference/helm-reference/teleport-plugin-event-handler/) Helm chart
@@ -135,7 +135,7 @@ Get the lastest secret version from Vault and update the `teleport-cluster` rele
 
 ### Configuring mTLS Communication
 
-The `teleport-event-handler` plugin requires Mutual TLS connection be enabled on `fluentd` instance for security purposes.
+The `teleport-plugin-event-handler` requires *Mutual TLS* connection be enabled on `fluentd` instance for security purposes.
 The certificate authority, server key and certificate, and client key and certificate are stored in Vault at
 `k8s/ops-gitlab-gke/teleport-cluster-staging/fluentd-certs` and `k8s/ops-gitlab-gke/teleport-cluster-production/fluentd-certs`.
 
