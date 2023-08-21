@@ -95,8 +95,10 @@ local finishedJobsDurationHistogram = panels.heatmap(
       rate(gitlab_runner_job_duration_seconds_bucket{environment=~"$environment",stage=~"$stage",instance=~"${runner_manager:pipe}"}[$__rate_interval])
     )
   |||,
+  color_mode='spectrum',
+  color_colorScheme='Blues',
+  legend_show=true,
   intervalFactor=1,
-  color_cardColor='blue',
 );
 
 local finishedJobsMinutesIncreaseGraph =

@@ -8,6 +8,9 @@ local durationHistogram = panels.heatmap(
       rate(job_queue_duration_seconds_bucket{environment=~"$environment", stage=~"$stage", jobs_running_for_project=~"$jobs_running_for_project"}[$__rate_interval])
     )
   |||,
+  color_mode='spectrum',
+  color_colorScheme='Oranges',
+  legend_show=true,
   intervalFactor=1,
 );
 

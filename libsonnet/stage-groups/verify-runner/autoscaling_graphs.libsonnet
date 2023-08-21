@@ -37,8 +37,9 @@ local vmCreationTiming =
         increase(gitlab_runner_autoscaling_machine_creation_duration_seconds_bucket{environment=~"$environment", stage=~"$stage", executor="docker+machine",instance=~"${runner_manager:pipe}"}[$__rate_interval])
       )
     |||,
-    color_cardColor='#00DD33',
-    color_exponent=0.1,
+    color_mode='spectrum',
+    color_colorScheme='Greens',
+    legend_show=true,
     intervalFactor=2,
   );
 
