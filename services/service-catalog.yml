@@ -2192,3 +2192,30 @@ services:
       monitors:
         primary_grafana_dashboard: gitlab-static-main
         sentry_slug:
+
+  - name: omnibus
+    tier: inf
+    friendly_name: GitLab Omnibus Package
+    label: omnibus
+    owner: reliability_general
+    teams:
+      - distribution_deploy
+    technical:
+      project:
+        - https://gitlab.com/gitlab-org/omnibus-gitlab
+      documents:
+        design:
+        architecture: https://docs.gitlab.com/omnibus/architecture/
+        readiness_review:
+        sre_guide:
+        developer_guide: https://gitlab.com/gitlab-org/omnibus-gitlab/-/blob/master/doc/development/index.md
+        service:
+        security:
+      dependencies:
+      logging:
+        - name:
+          permalink:
+    observability:
+      monitors:
+        primary_grafana_dashboard: gitlab-omnibus-versions
+        sentry_slug:
