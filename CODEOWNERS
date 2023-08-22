@@ -8,3 +8,4 @@
 # (https://github.com/renovatebot/renovate/issues/14777)
 .tool-versions @andrewn @pguinoiseau @sxuereb @f_santos @jarv @reprazent
 .gitlab-ci-asdf-versions.yml @andrewn @pguinoiseau @sxuereb @f_santos @jarv @reprazent
+docs/ci-runners/* @gitlab-com/runner-group/saas @gitlab-org/reliability
