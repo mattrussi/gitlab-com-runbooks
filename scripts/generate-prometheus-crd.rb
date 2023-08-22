@@ -50,6 +50,5 @@ rule_files.each do |rule_file|
   shard_counter = (shard_counter + 1) % (shards + 1)
 
   # Write the merged YAML content to an output file
-  output_file_path = File.join(source_dir, filename_base)
-  File.open(output_file_path, 'w') { |file| file.write(rule_yaml.to_yaml) }
+  File.open(rule_file, 'w') { |file| file.write(rule_yaml.to_yaml) }
 end
