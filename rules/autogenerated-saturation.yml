@@ -6677,6 +6677,18 @@ groups:
           ,
           0)
         )
+      promql_template_1: |
+        max by(environment, shard, service_name) (
+          clamp_min(
+            clamp_max(
+              sum by (environment, shard, service_name) (
+                avg_over_time(stackdriver_cloud_run_revision_run_googleapis_com_container_cpu_utilizations_sum{job="runway-exporter",environment="{{ $labels.environment }}"}[30m])
+              )
+              ,
+              1)
+          ,
+          0)
+        )
       runbook: docs/{{ $labels.type }}/README.md
     labels:
       alert_type: cause
@@ -6707,6 +6719,20 @@ groups:
       grafana_panel_id: "1738137433"
       grafana_variables: environment,type,stage
       promql_query: |
+        max by(environment, shard, service_name) (
+          clamp_min(
+            clamp_max(
+              sum by (environment, shard, service_name) (
+                stackdriver_cloud_run_revision_run_googleapis_com_container_instance_count{job="runway-exporter",state="active",environment="{{ $labels.environment }}"}
+              )
+              /
+              100
+              ,
+              1)
+          ,
+          0)
+        )
+      promql_template_1: |
         max by(environment, shard, service_name) (
           clamp_min(
             clamp_max(
@@ -6761,6 +6787,18 @@ groups:
           ,
           0)
         )
+      promql_template_1: |
+        max by(environment, shard, service_name) (
+          clamp_min(
+            clamp_max(
+              sum by (environment, shard, service_name) (
+                avg_over_time(stackdriver_cloud_run_revision_run_googleapis_com_container_max_request_concurrencies_sum{job="runway-exporter",environment="{{ $labels.environment }}"}[30m])
+              )
+              ,
+              1)
+          ,
+          0)
+        )
       runbook: docs/{{ $labels.type }}/README.md
     labels:
       alert_type: cause
@@ -6791,6 +6829,18 @@ groups:
       grafana_panel_id: "377718254"
       grafana_variables: environment,type,stage
       promql_query: |
+        max by(environment, shard, service_name) (
+          clamp_min(
+            clamp_max(
+              sum by (environment, shard, service_name) (
+                avg_over_time(stackdriver_cloud_run_revision_run_googleapis_com_container_memory_utilizations_sum{job="runway-exporter",environment="{{ $labels.environment }}"}[30m])
+              )
+              ,
+              1)
+          ,
+          0)
+        )
+      promql_template_1: |
         max by(environment, shard, service_name) (
           clamp_min(
             clamp_max(
