@@ -312,7 +312,6 @@ local resourceSaturationPoint = function(options)
           grafana_variables: labelTaxonomy.labelTaxonomySerialized(defaultAlertingLabels),
           grafana_min_zoom_hours: '6',
           promql_query: definition.getQuery(labelsHashWithoutStaticLabels, definition.getBurnRatePeriod(), definition.resourceLabels),
-          promql_template_1: definition.getQuery(labelsHashWithoutStaticLabels, definition.getBurnRatePeriod(), definition.resourceLabels),
         },
       };
 
