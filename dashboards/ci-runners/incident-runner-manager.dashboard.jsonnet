@@ -80,18 +80,18 @@ dashboardIncident.incidentDashboard(
 .addRowGrid(
   'Workers & Slots',
   panels=[
-    workerGraphs.workerFeedRate,
-    workerGraphs.workerSlots,
-    workerGraphs.workerSlotOperationsRate,
+    workerGraphs.workerFeedRate(),
+    workerGraphs.workerSlots(),
+    workerGraphs.workerSlotOperationsRate(),
   ],
   startRow=8000,
 )
 .addRowGrid(
   'Workers & Slots failures',
   panels=[
-    workerGraphs.workerFeedFailuresRate,
-    workerGraphs.workerProcessingFailuresRate,
-    workerGraphs.workerHealthCheckFailuresRate,
+    workerGraphs.workerFeedFailuresRate(),
+    workerGraphs.workerProcessingFailuresRate(),
+    workerGraphs.workerHealthCheckFailuresRate(),
   ],
   startRow=9000,
 )
