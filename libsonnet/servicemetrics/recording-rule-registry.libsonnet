@@ -126,7 +126,7 @@ local resolveRecordingRuleFor(metricName, requiredAggregationLabels, selector, d
   recordingRuleExpressionFor(metricName, rangeInterval)::
     local aggregationLabels = metricsLabelRegistry.lookupLabelsForMetricName(metricName);
     local allRequiredLabelsPlusStandards = std.setUnion(aggregationLabels, standardEnvironmentLabels);
-    local query = 'rate(%(metricName)s[%(rangeInterval)s])' % {
+    local query = 'rate(%(metricName)s[%(rangeInterval)s] offset 30s)' % {
       metricName: metricName,
       rangeInterval: rangeInterval,
     };
