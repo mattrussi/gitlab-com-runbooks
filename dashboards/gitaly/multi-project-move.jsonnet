@@ -145,6 +145,7 @@ basic.dashboard(
         gitalyctl_projects_storage_concurrency{%(gitalyctlSelector)s}
       ||| % { gitalyctlSelector: gitalyctlSelector },
       colorMode='none',
+      noValue='Not Configured'
     ),
     concurrencyByRepositoryType('projects'),
     concurrencyByRepositoryType('groups'),
