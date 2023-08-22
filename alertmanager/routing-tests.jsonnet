@@ -474,18 +474,18 @@ generateTests([
     receivers: ['blackhole'],
   },
   {
-    name: 'slo_alert=yes, env=gprd, team=ai_assisted should go to g_mlops-alerts',
-    labels: { env: 'gprd', team: 'ai_assisted' },
+    name: 'slo_alert=yes, env=gprd, team=ai_model_validation should go to g_mlops-alerts',
+    labels: { env: 'gprd', team: 'ai_model_validation' },
     receivers: [
-      'team_ai_assisted_alerts_channel',
+      'team_ai_model_validation_alerts_channel',
       'prod_alerts_slack_channel',
     ],
   },
   {
-    name: 'slo_alert=yes, env=gprd, team=ai_assisted should go to g_mlops-alerts',
-    labels: { env: 'gprd', team: 'ai_assisted' },
+    name: 'slo_alert=yes, env=gprd, team=ai_model_validation should go to g_mlops-alerts',
+    labels: { env: 'gprd', team: 'ai_model_validation' },
     receivers: [
-      'team_ai_assisted_alerts_channel',
+      'team_ai_model_validation_alerts_channel',
       'prod_alerts_slack_channel',
     ],
   },
@@ -493,15 +493,15 @@ generateTests([
     name: 'env=gprd, feature_category=code_suggestions should go to g_mlops-alerts',
     labels: { env: 'gprd', feature_category: 'code_suggestions' },
     receivers: [
-      'team_ai_assisted_alerts_channel',
+      'team_code_creation_alerts_channel',
       'prod_alerts_slack_channel',
     ],
   },
   {
-    name: 'env=gprd, product_stage_group=ai_assisted should go to g_mlops-alerts',
-    labels: { env: 'gprd', product_stage_group: 'ai_assisted' },
+    name: 'env=gprd, product_stage_group=ai_model_validation should go to g_mlops-alerts',
+    labels: { env: 'gprd', product_stage_group: 'ai_model_validation' },
     receivers: [
-      'team_ai_assisted_alerts_channel',
+      'team_ai_model_validation_alerts_channel',
       'prod_alerts_slack_channel',
     ],
   },

@@ -650,7 +650,7 @@ services:
     teams:
       - trust_and_safety
     label: CodeSuggestions
-    owner: ai_assisted
+    owner: code_creation
     technical:
       project:
         - https://gitlab.com/groups/gitlab-org/modelops/applied-ml/code-suggestions

@@ -76,7 +76,6 @@
     feature_categories: [
       'code_review_workflow',
       'gitlab_cli',
-      'editor_extensions',
     ],
   },
   ide: {
@@ -85,6 +84,20 @@
     feature_categories: [
       'web_ide',
       'remote_development',
+    ],
+  },
+  editor_extensions: {
+    name: 'Editor Extensions',
+    stage: 'create',
+    feature_categories: [
+      'editor_extensions',
+    ],
+  },
+  code_creation: {
+    name: 'Code Creation',
+    stage: 'create',
+    feature_categories: [
+      'code_suggestions',
     ],
   },
   pipeline_execution: {
@@ -208,7 +221,6 @@
     feature_categories: [
       'incident_management',
       'on_call_schedule_management',
-      'runbooks',
       'service_desk',
     ],
   },
@@ -239,7 +251,7 @@
   },
   analytics_instrumentation: {
     name: 'Analytics Instrumentation',
-    stage: 'analytics',
+    stage: 'analyze',
     feature_categories: [
       'service_ping',
       'application_instrumentation',
@@ -247,7 +259,7 @@
   },
   product_analytics: {
     name: 'Product Analytics',
-    stage: 'analytics',
+    stage: 'analyze',
     feature_categories: [
       'product_analytics_visualization',
       'product_analytics_data_management',
@@ -255,7 +267,7 @@
   },
   observability: {
     name: 'Observability',
-    stage: 'analytics',
+    stage: 'analyze',
     feature_categories: [
       'metrics',
       'tracing',
@@ -365,8 +377,6 @@
     stage: 'data_stores',
     feature_categories: [
       'application_performance',
-      'redis',
-      'rate_limiting',
     ],
   },
   global_search: {
@@ -409,6 +419,8 @@
       'error_budgets',
       'infrastructure_cost_data',
       'capacity_planning',
+      'redis',
+      'rate_limiting',
     ],
   },
   dedicated: {
@@ -432,23 +444,6 @@
       'pubsec_services',
     ],
   },
-  ai_framework: {
-    name: 'AI Framework',
-    stage: 'modelops',
-    feature_categories: [
-      'ai_abstraction_layer',
-      'gitlab_duo_chat',
-    ],
-  },
-  ai_assisted: {
-    name: 'AI Assisted',
-    stage: 'modelops',
-    feature_categories: [
-      'workflow_automation',
-      'intel_code_security',
-      'code_suggestions',
-    ],
-  },
   mlops: {
     name: 'MLOps',
     stage: 'modelops',
@@ -461,6 +456,28 @@
     stage: 'modelops',
     feature_categories: [
       'dataops',
+    ],
+  },
+  ai_framework: {
+    name: 'AI Framework',
+    stage: 'ai-powered',
+    feature_categories: [
+      'ai_abstraction_layer',
+    ],
+  },
+  ai_model_validation: {
+    name: 'AI Model Validation',
+    stage: 'ai-powered',
+    feature_categories: [
+      'ai_evaluation',
+      'ai_research',
+    ],
+  },
+  duo_chat: {
+    name: 'Duo Chat',
+    stage: 'ai-powered',
+    feature_categories: [
+      'duo_chat',
     ],
   },
   mobile_devops: {
