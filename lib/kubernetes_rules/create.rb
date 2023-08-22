@@ -46,6 +46,7 @@ module KubernetesRules
           labels:
             app: prometheus-operator
             release: gitlab-monitoring
+            rule_source: runbooks
         spec:
           <%= template %>
       ENDOFEXPECT
