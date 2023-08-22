@@ -21,7 +21,7 @@ local repsitoryTypeRates(repoType) = [
     title='Active moves',
     description='Total number of moves per storage that are currently happening.',
     query=|||
-      gitalyctl_%(repoType)s_active_repository_moves{%(gitalyctlSelector)s}
+      sum by (storage) (gitalyctl_%(repoType)s_active_repository_moves{%(gitalyctlSelector)s})
     ||| % { repoType: repoType, gitalyctlSelector: gitalyctlSelector },
     legendFormat='{{ storage }}'
   ),
@@ -29,7 +29,7 @@ local repsitoryTypeRates(repoType) = [
     title='Success rate',
     description='Rate/sec of successful %(repoType)s repository moves.' % { repoType: repoType },
     query=|||
-      rate(gitalyctl_%(repoType)s_successful_repository_moves_total{%(gitalyctlSelector)s}[$__rate_interval])
+      sum by (storage) (rate(gitalyctl_%(repoType)s_successful_repository_moves_total{%(gitalyctlSelector)s}[$__rate_interval]))
     ||| % { repoType: repoType, gitalyctlSelector: gitalyctlSelector },
     legendFormat='{{ storage }}'
   ),
@@ -37,7 +37,7 @@ local repsitoryTypeRates(repoType) = [
     title='Failure rate',
     description='Rate/sec of failed %(repoType)s repository moves.' % { repoType: repoType },
     query=|||
-      rate(gitalyctl_%(repoType)s_failed_repository_moves_total{%(gitalyctlSelector)s}[$__rate_interval])
+      sum by (storage) (rate(gitalyctl_%(repoType)s_failed_repository_moves_total{%(gitalyctlSelector)s}[$__rate_interval]))
     ||| % { repoType: repoType, gitalyctlSelector: gitalyctlSelector },
     legendFormat='{{ storage }}'
   ),
@@ -45,7 +45,7 @@ local repsitoryTypeRates(repoType) = [
     title='Wait timeout rate',
     description="Rate/sec of %(repoType)s repository moves that tiemout. The timeout is set by project.move_timeout configuration. However, reaching this timeout doesn't necessarily indicate the success or failure of the repository move." % { repoType: repoType },
     query=|||
-      rate(gitalyctl_%(repoType)s_timed_out_repository_moves_total{%(gitalyctlSelector)s}[$__rate_interval])
+      sum by (storage) (rate(gitalyctl_%(repoType)s_timed_out_repository_moves_total{%(gitalyctlSelector)s}[$__rate_interval]))
     ||| % { repoType: repoType, gitalyctlSelector: gitalyctlSelector },
     legendFormat='{{ storage }}'
   ),
