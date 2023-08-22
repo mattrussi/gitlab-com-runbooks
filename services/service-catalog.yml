@@ -1252,58 +1252,6 @@ services:
       monitors:
         primary_grafana_dashboard: redis-cluster-cache-main/redis-cluster-cache-overview
 
-  - name: redis-cache
-    tier: db
-    friendly_name: Redis Cache
-    label: RedisCache
-    owner: scalability
-    technical:
-      project:
-        - https://github.com/antirez/redis/
-      documents:
-        design:
-        architecture:
-        readiness_review:
-        sre_guide: https://gitlab.com/gitlab-com/runbooks/-/tree/master/docs/redis-cache
-        developer_guide: https://docs.gitlab.com/ee/development/redis.html#redis-guidelines
-        service:
-          - https://redis.io/documentation
-          - https://docs.gitlab.com/omnibus/settings/redis.html
-        security:
-      dependencies:
-        - service:
-      logging:
-        - name: system
-          permalink: https://log.gprd.gitlab.net/goto/1a4342231de57c0ceabc8f5e0e402909
-    observability:
-      monitors:
-        primary_grafana_dashboard: redis-cache-main/redis-cache-overview
-
-  - name: redis-cache-sentinel
-    tier: db
-    friendly_name: Redis Cache Sentinel
-    label: RedisCacheSentinel
-    owner: scalability
-    technical:
-      project:
-        - https://github.com/antirez/redis/
-      documents:
-        design:
-        architecture:
-        readiness_review:
-        service:
-          - https://redis.io/topics/sentinel
-          - https://docs.gitlab.com/omnibus/settings/redis.html#redis-sentinel
-        security:
-      dependencies:
-        - service:
-      logging:
-        - name: system
-          permalink: https://log.gprd.gitlab.net/goto/0b28cb1d20663b4359f8bc05995a22ad
-    observability:
-      monitors:
-        primary_grafana_dashboard: wccEP9Imk/redis
-
   - name: redis-cluster-ratelimiting
     tier: db
     friendly_name: Redis Cluster RateLimiting

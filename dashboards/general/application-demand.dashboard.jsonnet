@@ -41,9 +41,9 @@ basic.dashboard(
     basic.timeseries(
       title='Redis - average operations per week',
       query=|||
-        (sum by (env, type) (avg_over_time(gitlab_service_ops:rate{type=~"redis|redis-cache|redis-sidekiq", stage="main", env="gprd", monitor="global"}[1w]))
+        (sum by (env, type) (avg_over_time(gitlab_service_ops:rate{type=~"redis|redis-cluster-cache|redis-sidekiq", stage="main", env="gprd", monitor="global"}[1w]))
         or
-        sum by (env, type) (avg_over_time(gitlab_service_ops:rate{type=~"redis(-cache|-sidekiq)?", stage="main", env="gprd", monitor!="global"}[1w]))
+        sum by (env, type) (avg_over_time(gitlab_service_ops:rate{type=~"redis(-cluster-cache|-sidekiq)?", stage="main", env="gprd", monitor!="global"}[1w]))
         ) * 86400 * 7
       |||,
       legendFormat='{{env}} - {{type}}'

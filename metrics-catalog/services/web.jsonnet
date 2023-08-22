@@ -47,7 +47,6 @@ metricsCatalog.serviceDefinition({
     'redis-cluster-chat-cache': true,
     'redis-cluster-feature-flag': true,
     'redis-sidekiq': true,
-    'redis-cache': true,
     'redis-repository-cache': true,
     'redis-sessions': true,
     'redis-db-load-balancing': true,

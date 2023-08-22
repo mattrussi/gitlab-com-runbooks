@@ -23,13 +23,13 @@ local memoryDefinition = {
 
 {
   memory: resourceSaturationPoint(memoryDefinition {
-    // Exclude redis-cache because it always runs at its maxmemory
+    // Exclude redis-cluster-cache because it always runs at its maxmemory
     // level, and the oscillations mean the forecasts aren't useful
-    appliesTo: std.filter(function(s) s != 'redis-cache', metricsCatalog.findVMProvisionedServices(first='gitaly')),
+    appliesTo: std.filter(function(s) s != 'redis-cluster-cache', metricsCatalog.findVMProvisionedServices(first='gitaly')),
   }),
   memory_redis_cache: resourceSaturationPoint(memoryDefinition {
-    // Give redis-cache its own non-capacity-planning saturation point.
-    appliesTo: ['redis-cache'],
+    // Give redis-cluster-cache its own non-capacity-planning saturation point.
+    appliesTo: ['redis-cluster-cache'],
     capacityPlanning: {
       strategy: 'exclude',
     },
@@ -37,7 +37,7 @@ local memoryDefinition = {
     description: |||
       %s
 
-      redis-cache has a separate saturation point for this to exclude it from capacity planning calculations.
+      redis-cluster-cache has a separate saturation point for this to exclude it from capacity planning calculations.
     ||| % memoryDefinition.description,
   }),
 }

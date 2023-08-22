@@ -29,7 +29,7 @@
 * [Diagnosis with Kibana](../onboarding/kibana-diagnosis.md)
 * [PackageCloud Infrastructure and Backups](../packagecloud/infrastructure.md)
 * [Rotating Rails' PostgreSQL password](../patroni/rotating-rails-postgresql-password.md)
-* [Removing cache entries from Redis](../redis-cache/remove-cache-entries.md)
+* [Removing cache entries from Redis](../redis-cluster-cache/remove-cache-entries.md)
 * [Blocking individual IPs using Redis and Rack Attack](ban-an-IP-with-redis.md)
 * [Clearing sessions for anonymous users](clear_anonymous_sessions.md)
 * [Redis on Kubernetes](kubernetes.md)

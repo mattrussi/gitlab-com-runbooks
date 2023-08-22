@@ -67,7 +67,7 @@
 * [../pgbouncer/patroni-consul-postgres-pgbouncer-interactions.md](../pgbouncer/patroni-consul-postgres-pgbouncer-interactions.md)
 * [PgBouncer connection management and troubleshooting](../pgbouncer/pgbouncer-connections.md)
 * [Sidekiq or Web/API is using most of its PgBouncer connections](../pgbouncer/pgbouncer-saturation.md)
-* [Removing cache entries from Redis](../redis-cache/remove-cache-entries.md)
+* [Removing cache entries from Redis](../redis-cluster-cache/remove-cache-entries.md)
 * [A survival guide for SREs to working with Redis at GitLab](../redis/redis-survival-guide-for-sres.md)
 * [Database Connection Pool Saturation](../registry/app-db-conn-pool-saturation.md)
 * [Container Registry database post-deployment migrations](../registry/db-post-deployment-migrations.md)

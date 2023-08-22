@@ -48,7 +48,6 @@ metricsCatalog.serviceDefinition({
     'redis-cluster-feature-flag': true,
     'redis-tracechunks': true,
     'redis-sidekiq': true,
-    'redis-cache': true,
     'redis-repository-cache': true,
     'redis-sessions': true,
     redis: true,
