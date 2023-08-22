@@ -39,8 +39,7 @@ rule_files.each do |rule_file|
   next if source_yaml.key?('kind') && source_yaml['kind'] == 'PrometheusRule'
 
   # Get source filename without extension
-  filename_base = File.basename(rule_file)
-  filename = filename_base.sub(/\.ya?ml$/, '')
+  filename_base = File.basename(rule_file, File.extname(rule_file))
 
   # Create new yaml
   rule_yaml = YAML.safe_load(prometheus_rule_yaml)
