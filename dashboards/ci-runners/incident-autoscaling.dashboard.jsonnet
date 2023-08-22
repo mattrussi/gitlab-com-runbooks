@@ -43,9 +43,9 @@ dashboardIncident.incidentDashboard(
 ])
 .addGrid(
   panels=[
-    autoscalingGraphs.vmStates,
-    autoscalingGraphs.vmOperationsRate,
-    autoscalingGraphs.vmCreationTiming,
+    autoscalingGraphs.vmStates(),
+    autoscalingGraphs.vmOperationsRate(),
+    autoscalingGraphs.vmCreationTiming(),
   ],
   rowHeight=8,
   startRow=3000,

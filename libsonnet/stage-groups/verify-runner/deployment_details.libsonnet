@@ -2,6 +2,8 @@ local grafana = import 'github.com/grafana/grafonnet-lib/grafonnet/grafana.libso
 local basic = import 'grafana/basic.libsonnet';
 local text = grafana.text;
 
+local runnersManagerMatching = import './runner_managers_matching.libsonnet';
+
 local table(title, query, sortBy=[], transform_organize={}, transform_groupBy={}) = (
   basic.table(
     title=title,
@@ -26,9 +28,12 @@ local table(title, query, sortBy=[], transform_organize={}, transform_groupBy={}
   }
 );
 
-local versionsTable = table(
+local versionsTable(partition=runnersManagerMatching.defaultPartition) = table(
   title='GitLab Runner Versions',
-  query='gitlab_runner_version_info{environment=~"$environment",stage=~"$stage",instance=~"${runner_manager:pipe}"}',
+  query=runnersManagerMatching.formatQuery(
+    'gitlab_runner_version_info{environment=~"$environment",stage=~"$stage",%(runnerManagersMatcher)s}',
+    partition,
+  ),
   sortBy=[{
     desc: true,
     displayName: 'version',
@@ -104,9 +109,12 @@ local versionsTable = table(
   },
 };
 
-local uptimeTable = table(
+local uptimeTable(partition=runnersManagerMatching.defaultPartition) = table(
   'GitLab Runner Uptime',
-  query='time() - process_start_time_seconds{environment=~"$environment",stage=~"$stage",instance=~"${runner_manager:pipe}",job="runners-manager"}',
+  query=runnersManagerMatching.formatQuery(
+    'time() - process_start_time_seconds{environment=~"$environment",stage=~"$stage",%(runnerManagersMatcher)s,job="runners-manager"}',
+    partition,
+  ),
   sortBy=[{
     asc: true,
     displayName: 'Uptime (last)',
@@ -162,12 +170,15 @@ local uptimeTable = table(
   },
 };
 
-local runnerManagersCounter =
+local runnerManagersCounter(partition=runnersManagerMatching.defaultPartition) =
   basic.statPanel(
     title=null,
     panelTitle='Runner managers count',
     color='green',
-    query='count by(shard) (gitlab_runner_version_info{environment=~"$environment",stage=~"$stage",instance=~"${runner_manager:pipe}"})',
+    query=runnersManagerMatching.formatQuery(
+      'count by(shard) (gitlab_runner_version_info{environment=~"$environment",stage=~"$stage",%(runnerManagersMatcher)s})',
+      partition
+    ),
     legendFormat='{{shard}}',
     unit='short',
     decimals=0,
