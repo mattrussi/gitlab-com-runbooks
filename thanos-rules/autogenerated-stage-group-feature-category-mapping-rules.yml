@@ -14,8 +14,20 @@ groups:
   - record: gitlab:feature_category:stage_group:mapping
     labels:
       feature_category: ai_abstraction_layer
-      product_stage: modelops
+      product_stage: ai-powered
       stage_group: ai_framework
+    expr: "1"
+  - record: gitlab:feature_category:stage_group:mapping
+    labels:
+      feature_category: ai_evaluation
+      product_stage: ai-powered
+      stage_group: ai_model_validation
+    expr: "1"
+  - record: gitlab:feature_category:stage_group:mapping
+    labels:
+      feature_category: ai_research
+      product_stage: ai-powered
+      stage_group: ai_model_validation
     expr: "1"
   - record: gitlab:feature_category:stage_group:mapping
     labels:
@@ -32,7 +44,7 @@ groups:
   - record: gitlab:feature_category:stage_group:mapping
     labels:
       feature_category: application_instrumentation
-      product_stage: analytics
+      product_stage: analyze
       stage_group: analytics_instrumentation
     expr: "1"
   - record: gitlab:feature_category:stage_group:mapping
@@ -121,6 +133,12 @@ groups:
     expr: "1"
   - record: gitlab:feature_category:stage_group:mapping
     labels:
+      feature_category: workflow_automation
+      product_stage: create
+      stage_group: code_review
+    expr: "1"
+  - record: gitlab:feature_category:stage_group:mapping
+    labels:
       feature_category: code_search
       product_stage: data_stores
       stage_group: global_search
@@ -128,8 +146,8 @@ groups:
   - record: gitlab:feature_category:stage_group:mapping
     labels:
       feature_category: code_suggestions
-      product_stage: modelops
-      stage_group: ai_assisted
+      product_stage: create
+      stage_group: code_creation
     expr: "1"
   - record: gitlab:feature_category:stage_group:mapping
     labels:
@@ -265,6 +283,18 @@ groups:
     expr: "1"
   - record: gitlab:feature_category:stage_group:mapping
     labels:
+      feature_category: duo_chat
+      product_stage: ai-powered
+      stage_group: duo_chat
+    expr: "1"
+  - record: gitlab:feature_category:stage_group:mapping
+    labels:
+      feature_category: gitlab_duo_chat
+      product_stage: ai-powered
+      stage_group: duo_chat
+    expr: "1"
+  - record: gitlab:feature_category:stage_group:mapping
+    labels:
       feature_category: dynamic_application_security_testing
       product_stage: secure
       stage_group: dynamic_analysis
@@ -273,7 +303,7 @@ groups:
     labels:
       feature_category: editor_extensions
       product_stage: create
-      stage_group: code_review
+      stage_group: editor_extensions
     expr: "1"
   - record: gitlab:feature_category:stage_group:mapping
     labels:
@@ -290,7 +320,7 @@ groups:
   - record: gitlab:feature_category:stage_group:mapping
     labels:
       feature_category: error_tracking
-      product_stage: analytics
+      product_stage: analyze
       stage_group: observability
     expr: "1"
   - record: gitlab:feature_category:stage_group:mapping
@@ -373,12 +403,6 @@ groups:
     expr: "1"
   - record: gitlab:feature_category:stage_group:mapping
     labels:
-      feature_category: gitlab_duo_chat
-      product_stage: modelops
-      stage_group: ai_framework
-    expr: "1"
-  - record: gitlab:feature_category:stage_group:mapping
-    labels:
       feature_category: global_search
       product_stage: data_stores
       stage_group: global_search
@@ -439,12 +463,6 @@ groups:
     expr: "1"
   - record: gitlab:feature_category:stage_group:mapping
     labels:
-      feature_category: intel_code_security
-      product_stage: modelops
-      stage_group: ai_assisted
-    expr: "1"
-  - record: gitlab:feature_category:stage_group:mapping
-    labels:
       feature_category: interactive_application_security_testing
       product_stage: secure
       stage_group: dynamic_analysis
@@ -458,7 +476,7 @@ groups:
   - record: gitlab:feature_category:stage_group:mapping
     labels:
       feature_category: logging
-      product_stage: analytics
+      product_stage: analyze
       stage_group: observability
     expr: "1"
   - record: gitlab:feature_category:stage_group:mapping
@@ -476,7 +494,7 @@ groups:
   - record: gitlab:feature_category:stage_group:mapping
     labels:
       feature_category: metrics
-      product_stage: analytics
+      product_stage: analyze
       stage_group: observability
     expr: "1"
   - record: gitlab:feature_category:stage_group:mapping
@@ -560,13 +578,13 @@ groups:
   - record: gitlab:feature_category:stage_group:mapping
     labels:
       feature_category: product_analytics_data_management
-      product_stage: analytics
+      product_stage: analyze
       stage_group: product_analytics
     expr: "1"
   - record: gitlab:feature_category:stage_group:mapping
     labels:
       feature_category: product_analytics_visualization
-      product_stage: analytics
+      product_stage: analyze
       stage_group: product_analytics
     expr: "1"
   - record: gitlab:feature_category:stage_group:mapping
@@ -590,14 +608,14 @@ groups:
   - record: gitlab:feature_category:stage_group:mapping
     labels:
       feature_category: rate_limiting
-      product_stage: data_stores
-      stage_group: application_performance
+      product_stage: platforms
+      stage_group: scalability
     expr: "1"
   - record: gitlab:feature_category:stage_group:mapping
     labels:
       feature_category: redis
-      product_stage: data_stores
-      stage_group: application_performance
+      product_stage: platforms
+      stage_group: scalability
     expr: "1"
   - record: gitlab:feature_category:stage_group:mapping
     labels:
@@ -628,12 +646,6 @@ groups:
       feature_category: review_apps
       product_stage: verify
       stage_group: pipeline_execution
-    expr: "1"
-  - record: gitlab:feature_category:stage_group:mapping
-    labels:
-      feature_category: runbooks
-      product_stage: monitor
-      stage_group: respond
     expr: "1"
   - record: gitlab:feature_category:stage_group:mapping
     labels:
@@ -710,7 +722,7 @@ groups:
   - record: gitlab:feature_category:stage_group:mapping
     labels:
       feature_category: service_ping
-      product_stage: analytics
+      product_stage: analyze
       stage_group: analytics_instrumentation
     expr: "1"
   - record: gitlab:feature_category:stage_group:mapping
@@ -764,7 +776,7 @@ groups:
   - record: gitlab:feature_category:stage_group:mapping
     labels:
       feature_category: tracing
-      product_stage: analytics
+      product_stage: analyze
       stage_group: observability
     expr: "1"
   - record: gitlab:feature_category:stage_group:mapping
@@ -814,10 +826,4 @@ groups:
       feature_category: wiki
       product_stage: plan
       stage_group: knowledge
-    expr: "1"
-  - record: gitlab:feature_category:stage_group:mapping
-    labels:
-      feature_category: workflow_automation
-      product_stage: modelops
-      stage_group: ai_assisted
     expr: "1"

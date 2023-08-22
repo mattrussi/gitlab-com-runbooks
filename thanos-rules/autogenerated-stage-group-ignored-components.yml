@@ -31,24 +31,24 @@ groups:
       product_stage: growth
       stage_group: activation
     expr: "1"
-- name: 'Stage group Ignored components: modelops - AI Assisted'
+- name: 'Stage group Ignored components: ai-powered - AI Model Validation'
   interval: 1m
   partial_response_strategy: warn
   rules:
   - record: gitlab:ignored_component:stage_group
     labels:
       component: graphql_query
-      product_stage: modelops
-      stage_group: ai_assisted
+      product_stage: ai-powered
+      stage_group: ai_model_validation
     expr: "1"
-- name: 'Stage group Ignored components: analytics - Analytics Instrumentation'
+- name: 'Stage group Ignored components: analyze - Analytics Instrumentation'
   interval: 1m
   partial_response_strategy: warn
   rules:
   - record: gitlab:ignored_component:stage_group
     labels:
       component: graphql_query
-      product_stage: analytics
+      product_stage: analyze
       stage_group: analytics_instrumentation
     expr: "1"
 - name: 'Stage group Ignored components: data_stores - Application Performance'
@@ -80,6 +80,16 @@ groups:
       component: graphql_query
       product_stage: fulfillment
       stage_group: billing_and_subscription_management
+    expr: "1"
+- name: 'Stage group Ignored components: create - Code Creation'
+  interval: 1m
+  partial_response_strategy: warn
+  rules:
+  - record: gitlab:ignored_component:stage_group
+    labels:
+      component: graphql_query
+      product_stage: create
+      stage_group: code_creation
     expr: "1"
 - name: 'Stage group Ignored components: create - Code Review'
   interval: 1m
@@ -281,14 +291,14 @@ groups:
       product_stage: mobile
       stage_group: mobile_devops
     expr: "1"
-- name: 'Stage group Ignored components: analytics - Observability'
+- name: 'Stage group Ignored components: analyze - Observability'
   interval: 1m
   partial_response_strategy: warn
   rules:
   - record: gitlab:ignored_component:stage_group
     labels:
       component: graphql_query
-      product_stage: analytics
+      product_stage: analyze
       stage_group: observability
     expr: "1"
 - name: 'Stage group Ignored components: plan - Optimize'
