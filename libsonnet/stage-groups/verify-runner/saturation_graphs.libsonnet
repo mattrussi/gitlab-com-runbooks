@@ -2,6 +2,7 @@ local grafana = import 'github.com/grafana/grafonnet-lib/grafonnet/grafana.libso
 local gaugePanel = grafana.gaugePanel;
 local basic = import 'grafana/basic.libsonnet';
 local promQuery = import 'grafana/prom_query.libsonnet';
+local runnersManagerMatching = import './runner_managers_matching.libsonnet';
 local seriesOverrides = import 'grafana/series_overrides.libsonnet';
 local aggregations = import 'promql/aggregations.libsonnet';
 
@@ -12,19 +13,21 @@ local jobSaturationMetrics = {
 
 local aggregatorLegendFormat(aggregator) = '{{ %s }}' % aggregator;
 
-local runnerSaturation(aggregators, saturationType) =
+local runnerSaturation(aggregators, saturationType, partition=runnersManagerMatching.defaultPartition) =
   local serializedAggregation = aggregations.serialize(aggregators);
   basic.timeseries(
     title='Runner saturation of %(type)s by %(aggregator)s' % { aggregator: serializedAggregation, type: saturationType },
     legendFormat='%(aggregators)s' % { aggregators: std.join(' - ', std.map(aggregatorLegendFormat, aggregators)) },
     format='percentunit',
-    query=|||
-      sum by (%(aggregator)s) (
-        gitlab_runner_jobs{environment="$environment", stage="$stage", job="runners-manager", instance=~"${runner_manager:pipe}"}
-      ) / sum by (%(aggregator)s) (
-        %(maxJobsMetric)s{environment="$environment", stage="$stage", job="runners-manager", instance=~"${runner_manager:pipe}"}
+    query=runnersManagerMatching.formatQuery(|||
+      sum by (%%(aggregator)s) (
+        gitlab_runner_jobs{environment="$environment", stage="$stage", job="runners-manager", %(runnerManagersMatcher)s}
       )
-    ||| % {
+      /
+      sum by (%%(aggregator)s) (
+        %%(maxJobsMetric)s{environment="$environment", stage="$stage", job="runners-manager", %(runnerManagersMatcher)s}
+      )
+    |||, partition) % {
       aggregator: serializedAggregation,
       maxJobsMetric: jobSaturationMetrics[saturationType],
     }
@@ -44,7 +47,7 @@ local runnerSaturation(aggregators, saturationType) =
     seriesOverrides.softSlo
   );
 
-local runnerSaturationCounter =
+local runnerSaturationCounter(partition=runnersManagerMatching.defaultPartition) =
   gaugePanel.new(
     title='Runner managers mean saturation',
     datasource='$PROMETHEUS_DS',
@@ -57,11 +60,11 @@ local runnerSaturationCounter =
     pluginVersion='7.2.0',
   )
   .addTarget(promQuery.target(
-    expr=|||
-      sum by(shard) (gitlab_runner_jobs{environment="$environment", stage="$stage", job="runners-manager", instance=~"${runner_manager:pipe}"})
+    expr=runnersManagerMatching.formatQuery(|||
+      sum by(shard) (gitlab_runner_jobs{environment="$environment", stage="$stage", job="runners-manager", %(runnerManagersMatcher)s})
       /
-      sum by(shard) (gitlab_runner_concurrent{environment="$environment", stage="$stage", job="runners-manager", instance=~"${runner_manager:pipe}"})
-    |||,
+      sum by(shard) (gitlab_runner_concurrent{environment="$environment", stage="$stage", job="runners-manager", %(runnerManagersMatcher)s})
+    |||, partition),
     legendFormat='{{shard}}',
     interval='1d',
     intervalFactor=1,

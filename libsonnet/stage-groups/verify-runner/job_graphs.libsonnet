@@ -1,6 +1,7 @@
 local panels = import './panels.libsonnet';
 local basic = import 'grafana/basic.libsonnet';
 local aggregations = import 'promql/aggregations.libsonnet';
+local runnersManagerMatching = import './runner_managers_matching.libsonnet';
 
 local aggregatorLegendFormat(aggregator) = '{{ %s }}' % aggregator;
 local aggregatorsLegendFormat(aggregators) = '%s' % std.join(' - ', std.map(aggregatorLegendFormat, aggregators));
@@ -17,43 +18,47 @@ local aggregationTimeSeries(title, query, aggregators=[]) =
     query=(query % serializedAggregation),
   );
 
-local runningJobsGraph(aggregators=[]) =
+local runningJobsGraph(aggregators=[], partition=runnersManagerMatching.defaultPartition) =
   aggregationTimeSeries(
     'Jobs running on GitLab Inc. runners (by %s)',
-    'sum by(%s) (gitlab_runner_jobs{environment=~"$environment",stage=~"$stage",instance=~"${runner_manager:pipe}"})',
+    runnersManagerMatching.formatQuery(|||
+      sum by(%%s) (
+        gitlab_runner_jobs{environment=~"$environment",stage=~"$stage",%(runnerManagersMatcher)s}
+      )
+    |||, partition),
     aggregators,
   );
 
-local runnerJobFailuresGraph(aggregators=[]) =
+local runnerJobFailuresGraph(aggregators=[], partition=runnersManagerMatching.defaultPartition) =
   aggregationTimeSeries(
     'Failures on GitLab Inc. runners (by %s)',
-    |||
-      sum by (%s)
+    runnersManagerMatching.formatQuery(|||
+      sum by (%%s)
       (
-        increase(gitlab_runner_failed_jobs_total{environment=~"$environment",stage=~"$stage",instance=~"${runner_manager:pipe}",failure_reason=~"$runner_job_failure_reason"}[$__rate_interval])
+        increase(gitlab_runner_failed_jobs_total{environment=~"$environment",stage=~"$stage",%(runnerManagersMatcher)s,failure_reason=~"$runner_job_failure_reason"}[$__rate_interval])
       )
-    |||,
+    |||, partition),
     aggregators,
   );
 
-local startedJobsGraph(aggregators=[]) =
+local startedJobsGraph(aggregators=[], partition=runnersManagerMatching.defaultPartition) =
   aggregationTimeSeries(
     'Jobs started on runners (by %s)',
-    |||
-      sum by(%s) (
-        increase(gitlab_runner_jobs_total{environment=~"$environment",stage=~"$stage",instance=~"${runner_manager:pipe}"}[$__rate_interval])
+    runnersManagerMatching.formatQuery(|||
+      sum by(%%s) (
+        increase(gitlab_runner_jobs_total{environment=~"$environment",stage=~"$stage",%(runnerManagersMatcher)s}[$__rate_interval])
       )
-    |||,
+    |||, partition),
     aggregators,
   ) + {
     lines: false,
     bars: true,
     targets+: [{
-      expr: |||
+      expr: runnersManagerMatching.formatQuery(|||
         avg (
-          increase(gitlab_runner_jobs_total{environment=~"$environment",stage=~"$stage",instance=~"${runner_manager:pipe}"}[$__rate_interval])
+          increase(gitlab_runner_jobs_total{environment=~"$environment",stage=~"$stage",%(runnerManagersMatcher)s}[$__rate_interval])
         )
-      |||,
+      |||, partition),
       format: 'time_series',
       interval: '',
       intervalFactor: 10,
@@ -71,12 +76,18 @@ local startedJobsGraph(aggregators=[]) =
     }],
   };
 
-local startedJobsCounter =
+local startedJobsCounter(partition=runnersManagerMatching.defaultPartition) =
   basic.statPanel(
     title=null,
     panelTitle='Started jobs',
     color='green',
-    query='sum by(shard) (increase(gitlab_runner_jobs_total{environment=~"$environment",stage=~"$stage",instance=~"${runner_manager:pipe}"}[1d]))',
+    query=runnersManagerMatching.formatQuery(|||
+      sum by(shard) (
+        increase(
+          gitlab_runner_jobs_total{environment=~"$environment",stage=~"$stage",%(runnerManagersMatcher)s}[1d]
+        )
+      )
+    |||, partition),
     legendFormat='{{shard}}',
     unit='short',
     decimals=1,
@@ -88,20 +99,21 @@ local startedJobsCounter =
     justifyMode='center',
   );
 
-local finishedJobsDurationHistogram = panels.heatmap(
-  'Finished job durations histogram',
-  |||
-    sum by (le) (
-      rate(gitlab_runner_job_duration_seconds_bucket{environment=~"$environment",stage=~"$stage",instance=~"${runner_manager:pipe}"}[$__rate_interval])
-    )
-  |||,
-  color_mode='spectrum',
-  color_colorScheme='Blues',
-  legend_show=true,
-  intervalFactor=1,
-);
+local finishedJobsDurationHistogram(partition=runnersManagerMatching.defaultPartition) =
+  panels.heatmap(
+    'Finished job durations histogram',
+    runnersManagerMatching.formatQuery(|||
+      sum by (le) (
+        rate(gitlab_runner_job_duration_seconds_bucket{environment=~"$environment",stage=~"$stage",%(runnerManagersMatcher)s}[$__rate_interval])
+      )
+    |||, partition),
+    color_mode='spectrum',
+    color_colorScheme='Blues',
+    legend_show=true,
+    intervalFactor=1,
+  );
 
-local finishedJobsMinutesIncreaseGraph =
+local finishedJobsMinutesIncreaseGraph(partition=runnersManagerMatching.defaultPartition) =
   basic.timeseries(
     title='Finished job minutes increase',
     legendFormat='{{shard}}',
@@ -109,20 +121,20 @@ local finishedJobsMinutesIncreaseGraph =
     stack=true,
     interval='',
     intervalFactor=5,
-    query=|||
+    query=runnersManagerMatching.formatQuery(|||
       sum by(shard) (
-        increase(gitlab_runner_job_duration_seconds_sum{environment=~"$environment",stage=~"$stage",instance=~"${runner_manager:pipe}"}[$__rate_interval])
+        increase(gitlab_runner_job_duration_seconds_sum{environment=~"$environment",stage=~"$stage",%(runnerManagersMatcher)s}[$__rate_interval])
       )/60
-    |||,
+    |||, partition),
   ) + {
     lines: false,
     bars: true,
     targets+: [{
-      expr: |||
+      expr: runnersManagerMatching.formatQuery(|||
         avg (
-          increase(gitlab_runner_job_duration_seconds_sum{environment=~"$environment",stage=~"$stage",instance=~"${runner_manager:pipe}"}[$__rate_interval])
+          increase(gitlab_runner_job_duration_seconds_sum{environment=~"$environment",stage=~"$stage",%(runnerManagersMatcher)s}[$__rate_interval])
         )/60
-      |||,
+      |||, partition),
       format: 'time_series',
       interval: '',
       intervalFactor: 10,
@@ -140,16 +152,16 @@ local finishedJobsMinutesIncreaseGraph =
     }],
   };
 
-local finishedJobsMinutesIncreaseCounter =
+local finishedJobsMinutesIncreaseCounter(partition=runnersManagerMatching.defaultPartition) =
   basic.statPanel(
     title=null,
     panelTitle='Finished job minutes increase',
     color='green',
-    query=|||
+    query=runnersManagerMatching.formatQuery(|||
       sum by(shard) (
-        increase(gitlab_runner_job_duration_seconds_sum{environment=~"$environment",stage=~"$stage",instance=~"${runner_manager:pipe}"}[1d])
+        increase(gitlab_runner_job_duration_seconds_sum{environment=~"$environment",stage=~"$stage",%(runnerManagersMatcher)s}[1d])
       )/60
-    |||,
+    |||, partition),
     legendFormat='{{shard}}',
     unit='short',
     decimals=1,

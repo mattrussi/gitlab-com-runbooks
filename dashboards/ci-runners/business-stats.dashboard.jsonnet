@@ -1,4 +1,5 @@
 local dashboardHelpers = import 'stage-groups/verify-runner/dashboard_helpers.libsonnet';
+local runnersManagerMatching = import 'stage-groups/verify-runner/runner_managers_matching.libsonnet';
 local jobGraphs = import 'stage-groups/verify-runner/job_graphs.libsonnet';
 local saturationGraphs = import 'stage-groups/verify-runner/saturation_graphs.libsonnet';
 
@@ -11,21 +12,21 @@ dashboardHelpers.dashboard(
   startRow=1000,
   rowHeight=5,
   panels=[
-    jobGraphs.startedCounter,
+    jobGraphs.startedCounter(runnersManagerMatching.byShard),
   ],
 )
 .addGrid(
   startRow=2000,
   rowHeight=5,
   panels=[
-    jobGraphs.finishedJobsMinutesIncreaseCounter,
+    jobGraphs.finishedJobsMinutesIncreaseCounter(runnersManagerMatching.byShard),
   ],
 )
 .addGrid(
   startRow=3000,
   rowHeight=5,
   panels=[
-    saturationGraphs.runnerSaturationCounter,
+    saturationGraphs.runnerSaturationCounter(runnersManagerMatching.byShard),
   ],
 )
 .addRowGrid(
@@ -33,7 +34,7 @@ dashboardHelpers.dashboard(
   startRow=4000,
   collapse=true,
   panels=[
-    jobGraphs.started(['shard']),
+    jobGraphs.started(['shard'], runnersManagerMatching.byShard),
   ],
 )
 .addRowGrid(
@@ -41,7 +42,7 @@ dashboardHelpers.dashboard(
   startRow=4000,
   collapse=true,
   panels=[
-    jobGraphs.finishedJobsMinutesIncrease,
+    jobGraphs.finishedJobsMinutesIncrease(runnersManagerMatching.byShard),
   ],
 )
 .addRowGrid(
@@ -49,6 +50,6 @@ dashboardHelpers.dashboard(
   startRow=6000,
   collapse=true,
   panels=[
-    jobGraphs.finishedJobsDurationHistogram,
+    jobGraphs.finishedJobsDurationHistogram(runnersManagerMatching.byShard),
   ],
 )
