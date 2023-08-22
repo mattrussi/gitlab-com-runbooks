@@ -1172,7 +1172,7 @@ deploy-thanos-rules:staging:
   rules:
     - !reference [.default-job-rules, rules]
     - *ops-gitlab-net-only-rule
-    - if: $CI_COMMIT_BRANCH == staging
+    - <<: *if-main-branch-rule
       changes:
         paths:
           - thanos-staging-rules/**/*
