@@ -2,12 +2,12 @@ local byRunnerManager = 'by-runner';
 local byShard = 'by-shard';
 local defaultPartition = byRunnerManager;
 
-local formatQuery(query, partition) =
+local formatQuery(query, partition, arguments={}) =
   local matcher =
       if partition == byRunnerManager then 'instance=~"${runner_manager:pipe}"' else 'shard=~"${shard:pipe}"';
-  query % {
+  query % (arguments + {
     runnerManagersMatcher: matcher,
-  };
+  });
 
 {
   formatQuery:: formatQuery,
