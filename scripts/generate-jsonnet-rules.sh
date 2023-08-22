@@ -39,9 +39,15 @@ if [[ $# == 0 ]]; then
   for file in ./thanos-rules-jsonnet/*.jsonnet; do
     render_multi_jsonnet "${REPO_DIR}/thanos-rules" "${file}"
   done
+  for file in ./thanos-staging-rules-jsonnet/*.jsonnet; do
+    render_multi_jsonnet "${REPO_DIR}/thanos-staging-rules" "${file}"
+  done
 else
   for file in "$@"; do
     source_dir=$(dirname "${file}")
     render_multi_jsonnet "${source_dir%-jsonnet}" "${file}"
   done
 fi
+
+# Update generated rules to CRD spec
+${REPO_DIR}/scripts/generate-prometheus-crd.rb thanos-staging-rules
