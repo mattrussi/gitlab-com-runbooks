@@ -1131,6 +1131,7 @@ validate-prom-rules:
   variables:
     KUBE_NAMESPACE: monitoring
     VAULT_KUBERNETES_ROLE: prometheus-rules-edit
+    PROMETHEUS_RULE_DIR: rules-k8s
   rules:
     - !reference [.default-job-rules, rules]
     - *ops-gitlab-net-only-rule
@@ -1139,9 +1140,9 @@ validate-prom-rules:
         paths: *prometheus-rules-patterns
   script:
     # Delete orphaned PrometheusRules
-    - ./bin/delete_orphan_kubenetes_rules.sh
+    - ./bin/delete_orphan_kubernetes_rules.sh
     # Deploy PrometheusRules
-    - kubectl apply --server-side --namespace "${KUBE_NAMESPACE}" --filename "${CI_PROJECT_DIR}/rules-k8s/"
+    - kubectl apply --server-side --namespace "${KUBE_NAMESPACE}" --filename "${CI_PROJECT_DIR}/${PROMETHEUS_RULE_DIR}/"
   tags:
     - k8s-workloads
 
@@ -1157,6 +1158,26 @@ deploy-prometheus-rules:production:
   extends:
     - .deploy-prometheus-rules
     - .gke-clusters-production
+
+deploy-thanos-rules:staging:
+  stage: deploy
+  environment: $DEPLOY_ENV
+  variables:
+    DEPLOY_ENV: ops
+    GKE_CLUSTER: ops-gitlab-gke
+    LOCATION: us-east1
+    GOOGLE_PROJECT: gitlab-ops
+    KUBE_NAMESPACE: thanos-staging
+    PROMETHEUS_RULE_DIR: thanos-staging-rules
+  rules:
+    - !reference [.default-job-rules, rules]
+    - *ops-gitlab-net-only-rule
+    - if: $CI_COMMIT_BRANCH == staging
+      changes:
+        paths:
+          - thanos-staging-rules/**/*
+  extends:
+    - .deploy-prometheus-rules
 
 .deploy-thanos-rules:
   extends:
@@ -1177,15 +1198,6 @@ deploy-prometheus-rules:production:
   script:
     - tar -czvf thanos-rules.tar.gz thanos-rules
     - gcloud storage cp thanos-rules.tar.gz gs://${THANOS_RULES_BUCKET}
-
-deploy-thanos-rules:staging:
-  stage: deploy
-  environment: pre
-  needs: []
-  variables:
-    GOOGLE_PROJECT: gitlab-pre
-  extends:
-    - .deploy-thanos-rules
 
 deploy-thanos-rules:production:
   stage: deploy-rules-production
