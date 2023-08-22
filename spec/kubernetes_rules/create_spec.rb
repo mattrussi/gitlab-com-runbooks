@@ -37,6 +37,7 @@ describe KubernetesRules::Create do
           labels:
             app: prometheus-operator
             release: gitlab-monitoring
+            rule_source: runbooks
         spec:
           global:
           - rule: expression
