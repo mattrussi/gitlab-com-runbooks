@@ -42,18 +42,18 @@ dashboardIncident.incidentDashboard(
 )
 .addGrid(
   panels=[
-    resourcesGraphs.cpuUsage,
-    resourcesGraphs.memoryUsage,
-    resourcesGraphs.fdsUsage,
+    resourcesGraphs.cpuUsage(),
+    resourcesGraphs.memoryUsage(),
+    resourcesGraphs.fdsUsage(),
   ],
   rowHeight=8,
   startRow=4000,
 )
 .addGrid(
   panels=[
-    resourcesGraphs.diskAvailable,
-    resourcesGraphs.iopsUtilization,
-    resourcesGraphs.networkUtilization,
+    resourcesGraphs.diskAvailable(),
+    resourcesGraphs.iopsUtilization(),
+    resourcesGraphs.networkUtilization(),
   ],
   rowHeight=8,
   startRow=5000,
