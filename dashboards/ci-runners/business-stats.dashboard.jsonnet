@@ -7,6 +7,7 @@ dashboardHelpers.dashboard(
   'Business metrics',
   time_from='now-14d',
   includeStandardEnvironmentAnnotations=false,
+  includeRunnerManagerFilter=false,
 )
 .addGrid(
   startRow=1000,
