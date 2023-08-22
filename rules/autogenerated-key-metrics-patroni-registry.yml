@@ -7,12 +7,12 @@ groups:
   - record: sli_aggregations:gitlab_sql_primary_duration_seconds_bucket_rate1m
     expr: |
       sum by (db_config_name,environment,feature_category,job,le,shard,stage,tier,type) (
-        rate(gitlab_sql_primary_duration_seconds_bucket[1m])
+        rate(gitlab_sql_primary_duration_seconds_bucket[1m] offset 30s)
       )
   - record: sli_aggregations:gitlab_sql_replica_duration_seconds_bucket_rate1m
     expr: |
       sum by (db_config_name,environment,feature_category,le,shard,stage,tier,type) (
-        rate(gitlab_sql_replica_duration_seconds_bucket[1m])
+        rate(gitlab_sql_replica_duration_seconds_bucket[1m] offset 30s)
       )
   - record: gitlab_component_ops:rate
     labels:
@@ -110,12 +110,12 @@ groups:
   - record: sli_aggregations:gitlab_sql_primary_duration_seconds_bucket_rate5m
     expr: |
       sum by (db_config_name,environment,feature_category,job,le,shard,stage,tier,type) (
-        rate(gitlab_sql_primary_duration_seconds_bucket[5m])
+        rate(gitlab_sql_primary_duration_seconds_bucket[5m] offset 30s)
       )
   - record: sli_aggregations:gitlab_sql_replica_duration_seconds_bucket_rate5m
     expr: |
       sum by (db_config_name,environment,feature_category,le,shard,stage,tier,type) (
-        rate(gitlab_sql_replica_duration_seconds_bucket[5m])
+        rate(gitlab_sql_replica_duration_seconds_bucket[5m] offset 30s)
       )
   - record: gitlab_component_ops:rate_5m
     labels:
@@ -213,12 +213,12 @@ groups:
   - record: sli_aggregations:gitlab_sql_primary_duration_seconds_bucket_rate30m
     expr: |
       sum by (db_config_name,environment,feature_category,job,le,shard,stage,tier,type) (
-        rate(gitlab_sql_primary_duration_seconds_bucket[30m])
+        rate(gitlab_sql_primary_duration_seconds_bucket[30m] offset 30s)
       )
   - record: sli_aggregations:gitlab_sql_replica_duration_seconds_bucket_rate30m
     expr: |
       sum by (db_config_name,environment,feature_category,le,shard,stage,tier,type) (
-        rate(gitlab_sql_replica_duration_seconds_bucket[30m])
+        rate(gitlab_sql_replica_duration_seconds_bucket[30m] offset 30s)
       )
   - record: gitlab_component_ops:rate_30m
     labels:
@@ -316,12 +316,12 @@ groups:
   - record: sli_aggregations:gitlab_sql_primary_duration_seconds_bucket_rate1h
     expr: |
       sum by (db_config_name,environment,feature_category,job,le,shard,stage,tier,type) (
-        rate(gitlab_sql_primary_duration_seconds_bucket[1h])
+        rate(gitlab_sql_primary_duration_seconds_bucket[1h] offset 30s)
       )
   - record: sli_aggregations:gitlab_sql_replica_duration_seconds_bucket_rate1h
     expr: |
       sum by (db_config_name,environment,feature_category,le,shard,stage,tier,type) (
-        rate(gitlab_sql_replica_duration_seconds_bucket[1h])
+        rate(gitlab_sql_replica_duration_seconds_bucket[1h] offset 30s)
       )
   - record: gitlab_component_ops:rate_1h
     labels:
