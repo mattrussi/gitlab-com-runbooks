@@ -17,7 +17,7 @@ local selectors = import 'promql/selectors.libsonnet';
       To fix, we can request a quota increase for the specific resource to the GCP support team.
     |||,
     grafana_dashboard_uid: 'gcp_quota_limit',
-    resourceLabels: ['project', 'metric', 'quotaregion'],
+    resourceLabels: ['metric', 'quotaregion'],
     query: |||
       (
         gcp_quota_usage{%(selector)s}
