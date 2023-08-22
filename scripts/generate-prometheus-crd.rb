@@ -1,5 +1,6 @@
 #!/usr/bin/env ruby
 # frozen_string_literal: true
+
 require 'yaml'
 
 if ARGV.empty?
@@ -35,9 +36,7 @@ rule_files.each do |rule_file|
   source_dir = File.dirname(rule_file)
 
   # Don't merge yaml if its already in CRD format
-  if source_yaml.key?('kind') && source_yaml['kind'] == 'PrometheusRule'
-    next
-  end
+  next if source_yaml.key?('kind') && source_yaml['kind'] == 'PrometheusRule'
 
   # Get source filename without extension
   filename_base = File.basename(rule_file)
