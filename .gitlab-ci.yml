@@ -1140,7 +1140,7 @@ validate-prom-rules:
     # Delete orphaned PrometheusRules
     - ./bin/delete_orphan_kubenetes_rules.sh
     # Deploy PrometheusRules
-    - kubectl apply --namespace "${KUBE_NAMESPACE}" --filename "${CI_PROJECT_DIR}/rules-k8s/"
+    - kubectl apply --server-side --namespace "${KUBE_NAMESPACE}" --filename "${CI_PROJECT_DIR}/rules-k8s/"
   tags:
     - k8s-workloads
 
