@@ -176,7 +176,7 @@ basic.dashboard(
       description='How many error logs we have for gitalyctl',
       datasource='ops',
       query=|||
-        count_over_time({namespace="gitalyctl", container="gitalyctl"} |= `error` [$__interval])
+        count_over_time({namespace="gitalyctl", container="gitalyctl"} | json level="level" | level = `error` [$__interval])
       |||,
       legendFormat='{{ storage }}'
     ),
