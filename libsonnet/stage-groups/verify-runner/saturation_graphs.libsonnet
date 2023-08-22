@@ -19,18 +19,22 @@ local runnerSaturation(aggregators, saturationType, partition=runnersManagerMatc
     title='Runner saturation of %(type)s by %(aggregator)s' % { aggregator: serializedAggregation, type: saturationType },
     legendFormat='%(aggregators)s' % { aggregators: std.join(' - ', std.map(aggregatorLegendFormat, aggregators)) },
     format='percentunit',
-    query=runnersManagerMatching.formatQuery(|||
-      sum by (%%(aggregator)s) (
-        gitlab_runner_jobs{environment="$environment", stage="$stage", job="runners-manager", %(runnerManagersMatcher)s}
-      )
-      /
-      sum by (%%(aggregator)s) (
-        %%(maxJobsMetric)s{environment="$environment", stage="$stage", job="runners-manager", %(runnerManagersMatcher)s}
-      )
-    |||, partition) % {
-      aggregator: serializedAggregation,
-      maxJobsMetric: jobSaturationMetrics[saturationType],
-    }
+    query=runnersManagerMatching.formatQuery(
+      |||
+        sum by (%(aggregator)s) (
+          gitlab_runner_jobs{environment="$environment", stage="$stage", job="runners-manager", %(runnerManagersMatcher)s}
+        )
+        /
+        sum by (%(aggregator)s) (
+          %(maxJobsMetric)s{environment="$environment", stage="$stage", job="runners-manager", %(runnerManagersMatcher)s}
+        )
+      |||,
+      partition,
+      {
+        aggregator: serializedAggregation,
+        maxJobsMetric: jobSaturationMetrics[saturationType],
+      },
+    ),
   ).addTarget(
     promQuery.target(
       expr='0.85',
