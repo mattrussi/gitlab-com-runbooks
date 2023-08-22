@@ -223,20 +223,33 @@ local taskscalerScaleOperationsRate(partition=runnersManagerMatching.defaultPart
     |||, partition),
   );
 
+local taskscalerDesiredInstances(partition=runnersManagerMatching.defaultPartition) =
+  basic.timeseries(
+    'Taskscaler desired instances',
+    legendFormat='{{shard}}',
+    format='short',
+    query=runnersManagerMatching.formatQuery(|||
+      sum by(shard) (
+        fleeting_taskscaler_desired_instances{environment=~"$environment", stage=~"$stage", %(runnerManagersMatcher)s}
+      )
+    |||, partition),
+  );
+
 {
-  provisionerInstancesSaturation: provisionerInstancesSaturation,
-  provisionerInstancesStates: provisionerInstancesStates,
-  provisionerMissedUpdates: provisionerMissedUpdates,
-  provisionerInstanceOperationsRate: provisionerInstanceOperationsRate,
-  provisionerInternalOperationsRate: provisionerInternalOperationsRate,
-  provisionerCreationTiming: provisionerCreationTiming,
-  provisionerIsRunningTiming: provisionerIsRunningTiming,
-  provisionerDeletionTiming: provisionerDeletionTiming,
-  provisionerInstanceLifeDuration: provisionerInstanceLifeDuration,
-  taskscalerTasksSaturation: taskscalerTasksSaturation,
-  taskscalerMaxUseCountPerInstance: taskscalerMaxUseCountPerInstance,
-  taskscalerOperationsRate: taskscalerOperationsRate,
-  taskscalerTasks: taskscalerTasks,
-  taskscalerInstanceReadinessTiming: taskscalerInstanceReadinessTiming,
-  taskscalerScaleOperationsRate: taskscalerScaleOperationsRate,
+  provisionerInstancesSaturation:: provisionerInstancesSaturation,
+  provisionerInstancesStates:: provisionerInstancesStates,
+  provisionerMissedUpdates:: provisionerMissedUpdates,
+  provisionerInstanceOperationsRate:: provisionerInstanceOperationsRate,
+  provisionerInternalOperationsRate:: provisionerInternalOperationsRate,
+  provisionerCreationTiming:: provisionerCreationTiming,
+  provisionerIsRunningTiming:: provisionerIsRunningTiming,
+  provisionerDeletionTiming:: provisionerDeletionTiming,
+  provisionerInstanceLifeDuration:: provisionerInstanceLifeDuration,
+  taskscalerTasksSaturation:: taskscalerTasksSaturation,
+  taskscalerMaxUseCountPerInstance:: taskscalerMaxUseCountPerInstance,
+  taskscalerOperationsRate:: taskscalerOperationsRate,
+  taskscalerTasks:: taskscalerTasks,
+  taskscalerDesiredInstances:: taskscalerDesiredInstances,
+  taskscalerInstanceReadinessTiming:: taskscalerInstanceReadinessTiming,
+  taskscalerScaleOperationsRate:: taskscalerScaleOperationsRate,
 }
