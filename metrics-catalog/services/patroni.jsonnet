@@ -69,12 +69,14 @@ metricsCatalog.serviceDefinition(
         },
         {
           name: 'disk_space',
-          ignore_outliers: [
-            {
-              start: '2022-08-22',
-              end: '2022-12-15',
-            },
-          ],
+          parameters: {
+            ignore_outliers: [
+              {
+                start: '2022-08-22',
+                end: '2022-12-15',
+              },
+            ],
+          },
         },
       ],
     },
