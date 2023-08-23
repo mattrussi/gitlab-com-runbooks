@@ -1,6 +1,7 @@
 #!/usr/bin/env bash
 
 set -efo pipefail
+
 usage() {
   case $1 in
     storages)
@@ -30,11 +31,10 @@ Creates a test project on a storage, moves it to a new storage and does some val
 the new storage is functioning properly.
 
 USAGE:
-  glsh gitaly storages validate -e [gstg,gprd] [-s [source storage]] [-c] <storage names>
+  glsh gitaly storages validate -e [gstg,gprd] [-s [source storage]] <storage names>
 
   -e [gstg,gprd]           Environment to validate
   -s [source storage]      (optional) Create a project on a source storages and then move it to the destination storage
-  -c                       (optional) Delete test projects after the validation is complete
   <storage names>          One or more storage names to validate
 
 Example:
@@ -42,8 +42,6 @@ Example:
   glsh gitaly storages validate -e gstg -s nfs-file24 gitaly-01-stor-gstg.c.gitlab-gitaly-gstg-164c.internal
   # Create a test project on the storage named nfs-file24 and validate it
   glsh gitaly storages validate -e gstg nfs-file24
-  # Create a test project on the storage named nfs-file24 and validate it, perform a cleanup when complete
-  glsh gitaly storages validate -c -e gstg nfs-file24
 
 Note:
   To list available storages use \`glsh gitaly storage list -e [gstg,gprd]\`
@@ -103,7 +101,7 @@ HELP
 # glsh gitaly storages list
 ###################################################
 storages_list() {
-  local pat env
+  local env
 
   while getopts "h?e:" opt; do
     case "$opt" in
@@ -117,6 +115,7 @@ storages_list() {
   done
 
   [[ -z "${env:-}" ]] && usage "${FUNCNAME[0]}"
+  local pat
   pat=$(admin_pat)
 
   local curl_opts jq_opts
@@ -152,25 +151,14 @@ storages_list() {
 # project and moving it to the storages provided
 # on the commandline
 #
-# Globals:
-#  do_proj_cleanup,pat,env,
-#  created_project_ids,created_project_paths
-#
-#  are globals so we can cleanup created projects
-#  on exit or failure
-#
 # glsh gitaly storages validate
 ###################################################
 storages_validate() {
-  # Globals
-  pat=""
-  env=""
-  created_project_ids=()
-  created_project_paths=()
-
+  local env src_storage
+  local date_ts
   date_ts=$(date +%Y%M%d-%H%M%S)
 
-  while getopts "h?e:s:c" opt; do
+  while getopts "h?e:s:" opt; do
     case "$opt" in
       h | \?)
         usage "${FUNCNAME[0]}"
@@ -180,9 +168,6 @@ storages_validate() {
         ;;
       s)
         src_storage=${OPTARG}
-        ;;
-      c)
-        do_proj_cleanup=true
         ;;
     esac
   done
@@ -196,6 +181,7 @@ storages_validate() {
     usage "${FUNCNAME[0]}"
   fi
 
+  local pat
   pat=$(admin_pat)
 
   local curl_opts=(
@@ -204,7 +190,7 @@ storages_validate() {
     --header "Content-Type: application/json"
   )
 
-  trap cleanup_projects EXIT
+  trap cleanup_tmp_files EXIT
   echo "Creating projects:"
   echo ""
 
@@ -220,17 +206,10 @@ storages_validate() {
       storage_create="$dst_storage"
     fi
     printf "    creating on %s..." "$storage_create"
-    local create_resp project_id path_with_namespace
+    local create_resp project_id
     create_resp=$(create_project "$project_name" "$storage_create")
     echo "✔"
     project_id="$(jq -r '.id' <<<"$create_resp")"
-    path_with_namespace="$(jq -r '.path_with_namespace' <<<"$create_resp")"
-
-    # Append to globals $created_project_ids and
-    # $created_project_paths so that projects
-    # can be cleaned up on exit
-    created_project_ids+=("$project_id")
-    created_project_paths+=("$path_with_namespace")
 
     if [[ -n "$src_storage" ]]; then
       printf "    moving to %s..." "$dst_storage"
@@ -317,29 +296,13 @@ repositories_move() {
 ################## Helper Functions #####################
 
 ###################################################
-# Runs on script exit to cleanup any temporary projects
+# Runs on script exit to cleanup any temporary files
 # that were created for storage validation.
 #
-# Globals:
-#   Reads $created_project_ids and $created_project_paths
-#   for cleanup
 ###################################################
-cleanup_projects() {
+cleanup_tmp_files() {
   # If there are any temp files left, remove them
-  rm -rf "/tmp/glsh-validate-$$"
-
-  [[ -z "${do_proj_cleanup:-}" ]] && return
-
-  [[ ${#created_project_ids[@]} -gt 0 ]] && echo_err "Cleaning up temporary projects:"
-  for index in "${!created_project_ids[@]}"; do
-    local project_id="${created_project_ids[$index]}"
-    local project_path="${created_project_paths[$index]}"
-    printf "  %s: " "$project_path" >&2
-    local resp
-    resp=$(delete_project "$project_id")
-    [[ $(jq -r '.message' <<<"$resp") == "202 Accepted" ]] && echo ✔ >&2 || echo "✘ $resp" >&2
-  done
-
+  rm -rf /tmp/glsh-validate-*
 }
 
 ###################################################
@@ -424,17 +387,14 @@ create_project() {
     "$(api_for_env)/projects"
   )
 
-  local resp project_id path_with_namespace
+  local resp project_id
   if ! resp=$(curl "${curl_opts[@]}" 2>&1); then
     echo_err "✘ curl exited non-zero!"
     echo_err "        $resp"
     exit 1
   fi
   project_id="$(jq -r '.id' <<<"$resp")"
-  path_with_namespace="$(jq -r '.path_with_namespace' <<<"$create_resp")"
 
-  created_project_ids+=("$project_id")
-  created_project_paths+=("$path_with_namespace")
   echo "$resp"
 }
 
@@ -525,31 +485,6 @@ wait_move_finished() {
 }
 
 ###################################################
-# Deletes a project and echos the JSON response
-#
-# Arguments:
-#   project_id: Project ID to delete
-#
-# Note:
-#   curl does not use the --fail argument since
-#   we only make a best effort to delete and expect
-#   the caller to deal with it
-###################################################
-delete_project() {
-  local project_id="$1"
-  local curl_opts
-  curl_opts=(
-    --silent
-    --request DELETE
-    --header "PRIVATE-TOKEN: $pat"
-    --header "Content-Type: application/json"
-    "$(api_for_env)/projects/$project_id"
-  )
-
-  curl "${curl_opts[@]}" 2>&1
-}
-
-###################################################
 # Gets a single project and echos the JSON response
 #
 # Arguments:
@@ -610,9 +545,6 @@ gitlab_host() {
 # Asks the user to create an admin PAT if one has not
 # already been created
 #
-# Globals:
-#   sets $pat with the value of the token so it can
-#   be used globally
 # Note:
 #   It is the intention that this script asks for the admin
 #   token on every invocation to discourage storing an admin
