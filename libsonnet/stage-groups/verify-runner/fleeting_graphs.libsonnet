@@ -228,6 +228,7 @@ local taskscalerDesiredInstances(partition=runnersManagerMatching.defaultPartiti
     'Taskscaler desired instances',
     legendFormat='{{shard}}',
     format='short',
+    min=null,
     query=runnersManagerMatching.formatQuery(|||
       sum by(shard) (
         fleeting_taskscaler_desired_instances{environment=~"$environment", stage=~"$stage", %(runnerManagersMatcher)s}
