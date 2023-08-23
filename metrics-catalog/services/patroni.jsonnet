@@ -46,15 +46,15 @@ metricsCatalog.serviceDefinition(
           events: [
             {
               date: '2023-03-20',
-              name: 'Migration to int8 column to address int4 capacity saturation',
+              name: 'Migration to int8 column',
             },
             {
               date: '2023-04-06',
-              name: 'Migration to int8 column to address int4 capacity saturation',
+              name: 'Migration to int8 column',
             },
             {
               date: '2023-06-15',
-              name: 'Migration to int8 column to address int4 capacity saturation',
+              name: 'Migration to int8 column',
             },
           ],
         },
