@@ -51,6 +51,7 @@ dashboardIncident.incidentDashboard(
 .addGrid(
   panels=[
     fleetingGraphs.taskscalerTasks(),
+    fleetingGraphs.taskscalerDesiredInstances(),
     fleetingGraphs.taskscalerOperationsRate(),
     fleetingGraphs.taskscalerScaleOperationsRate(),
     fleetingGraphs.taskscalerInstanceReadinessTiming(),
