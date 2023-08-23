@@ -1144,7 +1144,11 @@ groups:
         clamp_min(
           clamp_max(
             sum by (environment, shard, revision_name) (
-              avg_over_time(stackdriver_cloud_run_revision_run_googleapis_com_container_max_request_concurrencies_sum{job="runway-exporter",}[30m])
+              avg_over_time(stackdriver_cloud_run_revision_run_googleapis_com_container_max_request_concurrencies_sum{job="runway-exporter",state="active",}[30m])
+            )
+            /
+            80 * sum by (environment, shard, revision_name) (
+              stackdriver_cloud_run_revision_run_googleapis_com_container_instance_count{job="runway-exporter",state="active",}
             )
             ,
             1)
@@ -6780,7 +6784,11 @@ groups:
           clamp_min(
             clamp_max(
               sum by (environment, shard, revision_name) (
-                avg_over_time(stackdriver_cloud_run_revision_run_googleapis_com_container_max_request_concurrencies_sum{job="runway-exporter",environment="{{ $labels.environment }}"}[30m])
+                avg_over_time(stackdriver_cloud_run_revision_run_googleapis_com_container_max_request_concurrencies_sum{job="runway-exporter",state="active",environment="{{ $labels.environment }}"}[30m])
+              )
+              /
+              80 * sum by (environment, shard, revision_name) (
+                stackdriver_cloud_run_revision_run_googleapis_com_container_instance_count{job="runway-exporter",state="active",environment="{{ $labels.environment }}"}
               )
               ,
               1)
@@ -6792,7 +6800,11 @@ groups:
           clamp_min(
             clamp_max(
               sum by (environment, shard, revision_name) (
-                avg_over_time(stackdriver_cloud_run_revision_run_googleapis_com_container_max_request_concurrencies_sum{job="runway-exporter",environment="{{ $labels.environment }}"}[30m])
+                avg_over_time(stackdriver_cloud_run_revision_run_googleapis_com_container_max_request_concurrencies_sum{job="runway-exporter",state="active",environment="{{ $labels.environment }}"}[30m])
+              )
+              /
+              80 * sum by (environment, shard, revision_name) (
+                stackdriver_cloud_run_revision_run_googleapis_com_container_instance_count{job="runway-exporter",state="active",environment="{{ $labels.environment }}"}
               )
               ,
               1)
