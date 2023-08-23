@@ -12,7 +12,7 @@ groups:
       type: logging
     expr: |
       sum by (env,environment) (
-        clamp_min(deriv(elasticsearch_indices_indexing_index_total{type="logging"}[1m]), 0)
+        clamp_min(deriv(elasticsearch_indices_indexing_index_total{type="logging"}[1m] offset 30s), 0)
       )
   - record: gitlab_component_ops:rate
     labels:
@@ -22,7 +22,7 @@ groups:
       type: logging
     expr: |
       sum by (env,environment) (
-        clamp_min(deriv(elasticsearch_index_stats_indexing_index_total{type="logging"}[1m]), 0)
+        clamp_min(deriv(elasticsearch_index_stats_indexing_index_total{type="logging"}[1m] offset 30s), 0)
       )
   - record: gitlab_component_ops:rate
     labels:
@@ -32,7 +32,7 @@ groups:
       type: logging
     expr: |
       sum by (env,environment) (
-        clamp_min(deriv(elasticsearch_indices_search_query_total{type="logging"}[1m]), 0)
+        clamp_min(deriv(elasticsearch_indices_search_query_total{type="logging"}[1m] offset 30s), 0)
       )
   - record: gitlab_component_ops:rate
     labels:
@@ -42,7 +42,7 @@ groups:
       type: logging
     expr: |
       sum by (env,environment) (
-        clamp_min(deriv(elasticsearch_index_stats_search_query_total{type="logging"}[1m]), 0)
+        clamp_min(deriv(elasticsearch_index_stats_search_query_total{type="logging"}[1m] offset 30s), 0)
       )
   - record: gitlab_component_ops:rate
     labels:
@@ -52,7 +52,7 @@ groups:
       type: logging
     expr: |
       sum by (env,environment) (
-        rate(fluentd_output_status_write_count{}[1m])
+        rate(fluentd_output_status_write_count{}[1m] offset 30s)
       )
   - record: gitlab_component_errors:rate
     labels:
@@ -63,7 +63,7 @@ groups:
     expr: |
       (
         sum by (env,environment) (
-          rate(fluentd_output_status_num_errors{}[1m])
+          rate(fluentd_output_status_num_errors{}[1m] offset 30s)
         )
       )
       or
@@ -80,7 +80,7 @@ groups:
       type: logging
     expr: |
       sum by (env,environment) (
-        rate(stackdriver_https_lb_rule_loadbalancing_googleapis_com_https_request_count{project_id="gitlab-ops",url_map_name="ops-prod-proxy"}[1m])
+        rate(stackdriver_https_lb_rule_loadbalancing_googleapis_com_https_request_count{project_id="gitlab-ops",url_map_name="ops-prod-proxy"}[1m] offset 30s)
       )
   - record: gitlab_component_errors:rate
     labels:
@@ -91,7 +91,7 @@ groups:
     expr: |
       (
         sum by (env,environment) (
-          rate(stackdriver_https_lb_rule_loadbalancing_googleapis_com_https_request_count{project_id="gitlab-ops",response_code_class="500",url_map_name="ops-prod-proxy"}[1m])
+          rate(stackdriver_https_lb_rule_loadbalancing_googleapis_com_https_request_count{project_id="gitlab-ops",response_code_class="500",url_map_name="ops-prod-proxy"}[1m] offset 30s)
         )
       )
       or
@@ -108,7 +108,7 @@ groups:
       type: logging
     expr: |
       sum by (env,environment) (
-        rate(stackdriver_pubsub_subscription_pubsub_googleapis_com_subscription_byte_cost{type="monitoring"}[1m])
+        rate(stackdriver_pubsub_subscription_pubsub_googleapis_com_subscription_byte_cost{type="monitoring"}[1m] offset 30s)
       )
   - record: gitlab_component_ops:rate
     labels:
@@ -118,7 +118,7 @@ groups:
       type: logging
     expr: |
       sum by (env,environment) (
-        rate(stackdriver_pubsub_topic_pubsub_googleapis_com_topic_byte_cost{type="monitoring"}[1m])
+        rate(stackdriver_pubsub_topic_pubsub_googleapis_com_topic_byte_cost{type="monitoring"}[1m] offset 30s)
       )
   - record: gitlab_component_ops:rate
     labels:
@@ -128,7 +128,7 @@ groups:
       type: logging
     expr: |
       sum by (env,environment) (
-        rate(pubsubbeat_libbeat_output_events{}[1m])
+        rate(pubsubbeat_libbeat_output_events{}[1m] offset 30s)
       )
   - record: gitlab_component_errors:rate
     labels:
@@ -139,7 +139,7 @@ groups:
     expr: |
       (
         sum by (env,environment) (
-          rate(pubsubbeat_errors_total{}[1m])
+          rate(pubsubbeat_errors_total{}[1m] offset 30s)
         )
       )
       or
@@ -156,7 +156,7 @@ groups:
       type: logging
     expr: |
       sum by (env,environment) (
-        rate(stackdriver_gce_instance_logging_googleapis_com_log_entry_count{}[1m])
+        rate(stackdriver_gce_instance_logging_googleapis_com_log_entry_count{}[1m] offset 30s)
       )
 - name: 'Component-Level SLIs: logging - 5m burn-rate'
   interval: 1m
@@ -169,7 +169,7 @@ groups:
       type: logging
     expr: |
       sum by (env,environment) (
-        clamp_min(deriv(elasticsearch_indices_indexing_index_total{type="logging"}[5m]), 0)
+        clamp_min(deriv(elasticsearch_indices_indexing_index_total{type="logging"}[5m] offset 30s), 0)
       )
   - record: gitlab_component_ops:rate_5m
     labels:
@@ -179,7 +179,7 @@ groups:
       type: logging
     expr: |
       sum by (env,environment) (
-        clamp_min(deriv(elasticsearch_index_stats_indexing_index_total{type="logging"}[5m]), 0)
+        clamp_min(deriv(elasticsearch_index_stats_indexing_index_total{type="logging"}[5m] offset 30s), 0)
       )
   - record: gitlab_component_ops:rate_5m
     labels:
@@ -189,7 +189,7 @@ groups:
       type: logging
     expr: |
       sum by (env,environment) (
-        clamp_min(deriv(elasticsearch_indices_search_query_total{type="logging"}[5m]), 0)
+        clamp_min(deriv(elasticsearch_indices_search_query_total{type="logging"}[5m] offset 30s), 0)
       )
   - record: gitlab_component_ops:rate_5m
     labels:
@@ -199,7 +199,7 @@ groups:
       type: logging
     expr: |
       sum by (env,environment) (
-        clamp_min(deriv(elasticsearch_index_stats_search_query_total{type="logging"}[5m]), 0)
+        clamp_min(deriv(elasticsearch_index_stats_search_query_total{type="logging"}[5m] offset 30s), 0)
       )
   - record: gitlab_component_ops:rate_5m
     labels:
@@ -209,7 +209,7 @@ groups:
       type: logging
     expr: |
       sum by (env,environment) (
-        rate(fluentd_output_status_write_count{}[5m])
+        rate(fluentd_output_status_write_count{}[5m] offset 30s)
       )
   - record: gitlab_component_errors:rate_5m
     labels:
@@ -220,7 +220,7 @@ groups:
     expr: |
       (
         sum by (env,environment) (
-          rate(fluentd_output_status_num_errors{}[5m])
+          rate(fluentd_output_status_num_errors{}[5m] offset 30s)
         )
       )
       or
@@ -237,7 +237,7 @@ groups:
       type: logging
     expr: |
       sum by (env,environment) (
-        rate(stackdriver_https_lb_rule_loadbalancing_googleapis_com_https_request_count{project_id="gitlab-ops",url_map_name="ops-prod-proxy"}[5m])
+        rate(stackdriver_https_lb_rule_loadbalancing_googleapis_com_https_request_count{project_id="gitlab-ops",url_map_name="ops-prod-proxy"}[5m] offset 30s)
       )
   - record: gitlab_component_errors:rate_5m
     labels:
@@ -248,7 +248,7 @@ groups:
     expr: |
       (
         sum by (env,environment) (
-          rate(stackdriver_https_lb_rule_loadbalancing_googleapis_com_https_request_count{project_id="gitlab-ops",response_code_class="500",url_map_name="ops-prod-proxy"}[5m])
+          rate(stackdriver_https_lb_rule_loadbalancing_googleapis_com_https_request_count{project_id="gitlab-ops",response_code_class="500",url_map_name="ops-prod-proxy"}[5m] offset 30s)
         )
       )
       or
@@ -265,7 +265,7 @@ groups:
       type: logging
     expr: |
       sum by (env,environment) (
-        rate(stackdriver_pubsub_subscription_pubsub_googleapis_com_subscription_byte_cost{type="monitoring"}[5m])
+        rate(stackdriver_pubsub_subscription_pubsub_googleapis_com_subscription_byte_cost{type="monitoring"}[5m] offset 30s)
       )
   - record: gitlab_component_ops:rate_5m
     labels:
@@ -275,7 +275,7 @@ groups:
       type: logging
     expr: |
       sum by (env,environment) (
-        rate(stackdriver_pubsub_topic_pubsub_googleapis_com_topic_byte_cost{type="monitoring"}[5m])
+        rate(stackdriver_pubsub_topic_pubsub_googleapis_com_topic_byte_cost{type="monitoring"}[5m] offset 30s)
       )
   - record: gitlab_component_ops:rate_5m
     labels:
@@ -285,7 +285,7 @@ groups:
       type: logging
     expr: |
       sum by (env,environment) (
-        rate(pubsubbeat_libbeat_output_events{}[5m])
+        rate(pubsubbeat_libbeat_output_events{}[5m] offset 30s)
       )
   - record: gitlab_component_errors:rate_5m
     labels:
@@ -296,7 +296,7 @@ groups:
     expr: |
       (
         sum by (env,environment) (
-          rate(pubsubbeat_errors_total{}[5m])
+          rate(pubsubbeat_errors_total{}[5m] offset 30s)
         )
       )
       or
@@ -313,7 +313,7 @@ groups:
       type: logging
     expr: |
       sum by (env,environment) (
-        rate(stackdriver_gce_instance_logging_googleapis_com_log_entry_count{}[5m])
+        rate(stackdriver_gce_instance_logging_googleapis_com_log_entry_count{}[5m] offset 30s)
       )
 - name: 'Component-Level SLIs: logging - 30m burn-rate'
   interval: 2m
@@ -326,7 +326,7 @@ groups:
       type: logging
     expr: |
       sum by (env,environment) (
-        clamp_min(deriv(elasticsearch_indices_indexing_index_total{type="logging"}[30m]), 0)
+        clamp_min(deriv(elasticsearch_indices_indexing_index_total{type="logging"}[30m] offset 30s), 0)
       )
   - record: gitlab_component_ops:rate_30m
     labels:
@@ -336,7 +336,7 @@ groups:
       type: logging
     expr: |
       sum by (env,environment) (
-        clamp_min(deriv(elasticsearch_index_stats_indexing_index_total{type="logging"}[30m]), 0)
+        clamp_min(deriv(elasticsearch_index_stats_indexing_index_total{type="logging"}[30m] offset 30s), 0)
       )
   - record: gitlab_component_ops:rate_30m
     labels:
@@ -346,7 +346,7 @@ groups:
       type: logging
     expr: |
       sum by (env,environment) (
-        clamp_min(deriv(elasticsearch_indices_search_query_total{type="logging"}[30m]), 0)
+        clamp_min(deriv(elasticsearch_indices_search_query_total{type="logging"}[30m] offset 30s), 0)
       )
   - record: gitlab_component_ops:rate_30m
     labels:
@@ -356,7 +356,7 @@ groups:
       type: logging
     expr: |
       sum by (env,environment) (
-        clamp_min(deriv(elasticsearch_index_stats_search_query_total{type="logging"}[30m]), 0)
+        clamp_min(deriv(elasticsearch_index_stats_search_query_total{type="logging"}[30m] offset 30s), 0)
       )
   - record: gitlab_component_ops:rate_30m
     labels:
@@ -366,7 +366,7 @@ groups:
       type: logging
     expr: |
       sum by (env,environment) (
-        rate(fluentd_output_status_write_count{}[30m])
+        rate(fluentd_output_status_write_count{}[30m] offset 30s)
       )
   - record: gitlab_component_errors:rate_30m
     labels:
@@ -377,7 +377,7 @@ groups:
     expr: |
       (
         sum by (env,environment) (
-          rate(fluentd_output_status_num_errors{}[30m])
+          rate(fluentd_output_status_num_errors{}[30m] offset 30s)
         )
       )
       or
@@ -394,7 +394,7 @@ groups:
       type: logging
     expr: |
       sum by (env,environment) (
-        rate(stackdriver_https_lb_rule_loadbalancing_googleapis_com_https_request_count{project_id="gitlab-ops",url_map_name="ops-prod-proxy"}[30m])
+        rate(stackdriver_https_lb_rule_loadbalancing_googleapis_com_https_request_count{project_id="gitlab-ops",url_map_name="ops-prod-proxy"}[30m] offset 30s)
       )
   - record: gitlab_component_errors:rate_30m
     labels:
@@ -405,7 +405,7 @@ groups:
     expr: |
       (
         sum by (env,environment) (
-          rate(stackdriver_https_lb_rule_loadbalancing_googleapis_com_https_request_count{project_id="gitlab-ops",response_code_class="500",url_map_name="ops-prod-proxy"}[30m])
+          rate(stackdriver_https_lb_rule_loadbalancing_googleapis_com_https_request_count{project_id="gitlab-ops",response_code_class="500",url_map_name="ops-prod-proxy"}[30m] offset 30s)
         )
       )
       or
@@ -422,7 +422,7 @@ groups:
       type: logging
     expr: |
       sum by (env,environment) (
-        rate(stackdriver_pubsub_subscription_pubsub_googleapis_com_subscription_byte_cost{type="monitoring"}[30m])
+        rate(stackdriver_pubsub_subscription_pubsub_googleapis_com_subscription_byte_cost{type="monitoring"}[30m] offset 30s)
       )
   - record: gitlab_component_ops:rate_30m
     labels:
@@ -432,7 +432,7 @@ groups:
       type: logging
     expr: |
       sum by (env,environment) (
-        rate(stackdriver_pubsub_topic_pubsub_googleapis_com_topic_byte_cost{type="monitoring"}[30m])
+        rate(stackdriver_pubsub_topic_pubsub_googleapis_com_topic_byte_cost{type="monitoring"}[30m] offset 30s)
       )
   - record: gitlab_component_ops:rate_30m
     labels:
@@ -442,7 +442,7 @@ groups:
       type: logging
     expr: |
       sum by (env,environment) (
-        rate(pubsubbeat_libbeat_output_events{}[30m])
+        rate(pubsubbeat_libbeat_output_events{}[30m] offset 30s)
       )
   - record: gitlab_component_errors:rate_30m
     labels:
@@ -453,7 +453,7 @@ groups:
     expr: |
       (
         sum by (env,environment) (
-          rate(pubsubbeat_errors_total{}[30m])
+          rate(pubsubbeat_errors_total{}[30m] offset 30s)
         )
       )
       or
@@ -470,7 +470,7 @@ groups:
       type: logging
     expr: |
       sum by (env,environment) (
-        rate(stackdriver_gce_instance_logging_googleapis_com_log_entry_count{}[30m])
+        rate(stackdriver_gce_instance_logging_googleapis_com_log_entry_count{}[30m] offset 30s)
       )
 - name: 'Component-Level SLIs: logging - 1h burn-rate'
   interval: 1m
@@ -483,7 +483,7 @@ groups:
       type: logging
     expr: |
       sum by (env,environment) (
-        clamp_min(deriv(elasticsearch_indices_indexing_index_total{type="logging"}[1h]), 0)
+        clamp_min(deriv(elasticsearch_indices_indexing_index_total{type="logging"}[1h] offset 30s), 0)
       )
   - record: gitlab_component_ops:rate_1h
     labels:
@@ -493,7 +493,7 @@ groups:
       type: logging
     expr: |
       sum by (env,environment) (
-        clamp_min(deriv(elasticsearch_index_stats_indexing_index_total{type="logging"}[1h]), 0)
+        clamp_min(deriv(elasticsearch_index_stats_indexing_index_total{type="logging"}[1h] offset 30s), 0)
       )
   - record: gitlab_component_ops:rate_1h
     labels:
@@ -503,7 +503,7 @@ groups:
       type: logging
     expr: |
       sum by (env,environment) (
-        clamp_min(deriv(elasticsearch_indices_search_query_total{type="logging"}[1h]), 0)
+        clamp_min(deriv(elasticsearch_indices_search_query_total{type="logging"}[1h] offset 30s), 0)
       )
   - record: gitlab_component_ops:rate_1h
     labels:
@@ -513,7 +513,7 @@ groups:
       type: logging
     expr: |
       sum by (env,environment) (
-        clamp_min(deriv(elasticsearch_index_stats_search_query_total{type="logging"}[1h]), 0)
+        clamp_min(deriv(elasticsearch_index_stats_search_query_total{type="logging"}[1h] offset 30s), 0)
       )
   - record: gitlab_component_ops:rate_1h
     labels:
@@ -523,7 +523,7 @@ groups:
       type: logging
     expr: |
       sum by (env,environment) (
-        rate(fluentd_output_status_write_count{}[1h])
+        rate(fluentd_output_status_write_count{}[1h] offset 30s)
       )
   - record: gitlab_component_errors:rate_1h
     labels:
@@ -534,7 +534,7 @@ groups:
     expr: |
       (
         sum by (env,environment) (
-          rate(fluentd_output_status_num_errors{}[1h])
+          rate(fluentd_output_status_num_errors{}[1h] offset 30s)
         )
       )
       or
@@ -551,7 +551,7 @@ groups:
       type: logging
     expr: |
       sum by (env,environment) (
-        rate(stackdriver_https_lb_rule_loadbalancing_googleapis_com_https_request_count{project_id="gitlab-ops",url_map_name="ops-prod-proxy"}[1h])
+        rate(stackdriver_https_lb_rule_loadbalancing_googleapis_com_https_request_count{project_id="gitlab-ops",url_map_name="ops-prod-proxy"}[1h] offset 30s)
       )
   - record: gitlab_component_errors:rate_1h
     labels:
@@ -562,7 +562,7 @@ groups:
     expr: |
       (
         sum by (env,environment) (
-          rate(stackdriver_https_lb_rule_loadbalancing_googleapis_com_https_request_count{project_id="gitlab-ops",response_code_class="500",url_map_name="ops-prod-proxy"}[1h])
+          rate(stackdriver_https_lb_rule_loadbalancing_googleapis_com_https_request_count{project_id="gitlab-ops",response_code_class="500",url_map_name="ops-prod-proxy"}[1h] offset 30s)
         )
       )
       or
@@ -579,7 +579,7 @@ groups:
       type: logging
     expr: |
       sum by (env,environment) (
-        rate(stackdriver_pubsub_subscription_pubsub_googleapis_com_subscription_byte_cost{type="monitoring"}[1h])
+        rate(stackdriver_pubsub_subscription_pubsub_googleapis_com_subscription_byte_cost{type="monitoring"}[1h] offset 30s)
       )
   - record: gitlab_component_ops:rate_1h
     labels:
@@ -589,7 +589,7 @@ groups:
       type: logging
     expr: |
       sum by (env,environment) (
-        rate(stackdriver_pubsub_topic_pubsub_googleapis_com_topic_byte_cost{type="monitoring"}[1h])
+        rate(stackdriver_pubsub_topic_pubsub_googleapis_com_topic_byte_cost{type="monitoring"}[1h] offset 30s)
       )
   - record: gitlab_component_ops:rate_1h
     labels:
@@ -599,7 +599,7 @@ groups:
       type: logging
     expr: |
       sum by (env,environment) (
-        rate(pubsubbeat_libbeat_output_events{}[1h])
+        rate(pubsubbeat_libbeat_output_events{}[1h] offset 30s)
       )
   - record: gitlab_component_errors:rate_1h
     labels:
@@ -610,7 +610,7 @@ groups:
     expr: |
       (
         sum by (env,environment) (
-          rate(pubsubbeat_errors_total{}[1h])
+          rate(pubsubbeat_errors_total{}[1h] offset 30s)
         )
       )
       or
@@ -627,7 +627,7 @@ groups:
       type: logging
     expr: |
       sum by (env,environment) (
-        rate(stackdriver_gce_instance_logging_googleapis_com_log_entry_count{}[1h])
+        rate(stackdriver_gce_instance_logging_googleapis_com_log_entry_count{}[1h] offset 30s)
       )
 - name: 'Component-Level SLIs: logging - 6h burn-rate'
   interval: 2m
@@ -640,7 +640,7 @@ groups:
       type: logging
     expr: |
       sum by (env,environment) (
-        clamp_min(deriv(elasticsearch_indices_indexing_index_total{type="logging"}[6h]), 0)
+        clamp_min(deriv(elasticsearch_indices_indexing_index_total{type="logging"}[6h] offset 30s), 0)
       )
   - record: gitlab_component_ops:rate_6h
     labels:
@@ -650,7 +650,7 @@ groups:
       type: logging
     expr: |
       sum by (env,environment) (
-        clamp_min(deriv(elasticsearch_index_stats_indexing_index_total{type="logging"}[6h]), 0)
+        clamp_min(deriv(elasticsearch_index_stats_indexing_index_total{type="logging"}[6h] offset 30s), 0)
       )
   - record: gitlab_component_ops:rate_6h
     labels:
@@ -660,7 +660,7 @@ groups:
       type: logging
     expr: |
       sum by (env,environment) (
-        clamp_min(deriv(elasticsearch_indices_search_query_total{type="logging"}[6h]), 0)
+        clamp_min(deriv(elasticsearch_indices_search_query_total{type="logging"}[6h] offset 30s), 0)
       )
   - record: gitlab_component_ops:rate_6h
     labels:
@@ -670,7 +670,7 @@ groups:
       type: logging
     expr: |
       sum by (env,environment) (
-        clamp_min(deriv(elasticsearch_index_stats_search_query_total{type="logging"}[6h]), 0)
+        clamp_min(deriv(elasticsearch_index_stats_search_query_total{type="logging"}[6h] offset 30s), 0)
       )
   - record: gitlab_component_ops:rate_6h
     labels:
@@ -680,7 +680,7 @@ groups:
       type: logging
     expr: |
       sum by (env,environment) (
-        rate(fluentd_output_status_write_count{}[6h])
+        rate(fluentd_output_status_write_count{}[6h] offset 30s)
       )
   - record: gitlab_component_errors:rate_6h
     labels:
@@ -691,7 +691,7 @@ groups:
     expr: |
       (
         sum by (env,environment) (
-          rate(fluentd_output_status_num_errors{}[6h])
+          rate(fluentd_output_status_num_errors{}[6h] offset 30s)
         )
       )
       or
@@ -708,7 +708,7 @@ groups:
       type: logging
     expr: |
       sum by (env,environment) (
-        rate(stackdriver_https_lb_rule_loadbalancing_googleapis_com_https_request_count{project_id="gitlab-ops",url_map_name="ops-prod-proxy"}[6h])
+        rate(stackdriver_https_lb_rule_loadbalancing_googleapis_com_https_request_count{project_id="gitlab-ops",url_map_name="ops-prod-proxy"}[6h] offset 30s)
       )
   - record: gitlab_component_errors:rate_6h
     labels:
@@ -719,7 +719,7 @@ groups:
     expr: |
       (
         sum by (env,environment) (
-          rate(stackdriver_https_lb_rule_loadbalancing_googleapis_com_https_request_count{project_id="gitlab-ops",response_code_class="500",url_map_name="ops-prod-proxy"}[6h])
+          rate(stackdriver_https_lb_rule_loadbalancing_googleapis_com_https_request_count{project_id="gitlab-ops",response_code_class="500",url_map_name="ops-prod-proxy"}[6h] offset 30s)
         )
       )
       or
@@ -736,7 +736,7 @@ groups:
       type: logging
     expr: |
       sum by (env,environment) (
-        rate(stackdriver_pubsub_subscription_pubsub_googleapis_com_subscription_byte_cost{type="monitoring"}[6h])
+        rate(stackdriver_pubsub_subscription_pubsub_googleapis_com_subscription_byte_cost{type="monitoring"}[6h] offset 30s)
       )
   - record: gitlab_component_ops:rate_6h
     labels:
@@ -746,7 +746,7 @@ groups:
       type: logging
     expr: |
       sum by (env,environment) (
-        rate(stackdriver_pubsub_topic_pubsub_googleapis_com_topic_byte_cost{type="monitoring"}[6h])
+        rate(stackdriver_pubsub_topic_pubsub_googleapis_com_topic_byte_cost{type="monitoring"}[6h] offset 30s)
       )
   - record: gitlab_component_ops:rate_6h
     labels:
@@ -756,7 +756,7 @@ groups:
       type: logging
     expr: |
       sum by (env,environment) (
-        rate(pubsubbeat_libbeat_output_events{}[6h])
+        rate(pubsubbeat_libbeat_output_events{}[6h] offset 30s)
       )
   - record: gitlab_component_errors:rate_6h
     labels:
@@ -767,7 +767,7 @@ groups:
     expr: |
       (
         sum by (env,environment) (
-          rate(pubsubbeat_errors_total{}[6h])
+          rate(pubsubbeat_errors_total{}[6h] offset 30s)
         )
       )
       or
@@ -784,7 +784,7 @@ groups:
       type: logging
     expr: |
       sum by (env,environment) (
-        rate(stackdriver_gce_instance_logging_googleapis_com_log_entry_count{}[6h])
+        rate(stackdriver_gce_instance_logging_googleapis_com_log_entry_count{}[6h] offset 30s)
       )
 - name: 'Component mapping: logging'
   interval: 1m

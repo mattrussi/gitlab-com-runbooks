@@ -14,11 +14,11 @@ groups:
     expr: |
       (
         sum by (env,environment) (
-          rate(gitlab_shell_sshd_session_established_duration_seconds_bucket{job="gitlab-shell",le="1",type="ops-gitlab-net"}[5m])
+          rate(gitlab_shell_sshd_session_established_duration_seconds_bucket{job="gitlab-shell",le="1",type="ops-gitlab-net"}[5m] offset 30s)
         )
         +
         sum by (env,environment) (
-          rate(gitlab_shell_sshd_session_established_duration_seconds_bucket{job="gitlab-shell",le="5",type="ops-gitlab-net"}[5m])
+          rate(gitlab_shell_sshd_session_established_duration_seconds_bucket{job="gitlab-shell",le="5",type="ops-gitlab-net"}[5m] offset 30s)
         )
       )
       /
@@ -32,7 +32,7 @@ groups:
       type: ops-gitlab-net
     expr: |
       sum by (env,environment) (
-        rate(gitlab_shell_sshd_session_established_duration_seconds_bucket{job="gitlab-shell",le="+Inf",type="ops-gitlab-net"}[5m])
+        rate(gitlab_shell_sshd_session_established_duration_seconds_bucket{job="gitlab-shell",le="+Inf",type="ops-gitlab-net"}[5m] offset 30s)
       )
   - record: gitlab:component:feature_category:execution:ops:rate_5m
     labels:
@@ -43,7 +43,7 @@ groups:
       type: ops-gitlab-net
     expr: |
       sum by (env,environment) (
-        rate(gitlab_sli:shell_sshd_sessions:total{job="gitlab-shell",type="ops-gitlab-net"}[5m])
+        rate(gitlab_sli:shell_sshd_sessions:total{job="gitlab-shell",type="ops-gitlab-net"}[5m] offset 30s)
       )
   - record: gitlab:component:feature_category:execution:error:rate_5m
     labels:
@@ -55,7 +55,7 @@ groups:
     expr: |
       (
         sum by (env,environment) (
-          rate(gitlab_sli:shell_sshd_sessions:errors_total{job="gitlab-shell",type="ops-gitlab-net"}[5m])
+          rate(gitlab_sli:shell_sshd_sessions:errors_total{job="gitlab-shell",type="ops-gitlab-net"}[5m] offset 30s)
         )
       )
       or
@@ -75,11 +75,11 @@ groups:
       sum by (env,environment) (
         label_replace((
           sum by (env,environment) (
-            rate(grpc_server_handling_seconds_bucket{grpc_method!~"CalculateChecksum|CommitLanguages|CommitStats|CreateFork|CreateRepositoryFromURL|FetchInternalRemote|FetchIntoObjectPool|FetchRemote|FetchSourceBranch|FindCommit|FindRemoteRepository|FindRemoteRootRef|Fsck|GarbageCollect|GetArchive|LastCommitForPath|OptimizeRepository|PackObjectsHookWithSidechannel|PostReceiveHook|PostUploadPackWithSidechannel|PreReceiveHook|RepackFull|RepackIncremental|ReplicateRepository|RepositorySize|SSHUploadPackWithSidechannel|UpdateHook|WriteRef",grpc_service!="gitaly.OperationService",grpc_type="unary",job="gitaly",le="0.5",type="ops-gitlab-net"}[5m])
+            rate(grpc_server_handling_seconds_bucket{grpc_method!~"CalculateChecksum|CommitLanguages|CommitStats|CreateFork|CreateRepositoryFromURL|FetchInternalRemote|FetchIntoObjectPool|FetchRemote|FetchSourceBranch|FindCommit|FindRemoteRepository|FindRemoteRootRef|Fsck|GarbageCollect|GetArchive|LastCommitForPath|OptimizeRepository|PackObjectsHookWithSidechannel|PostReceiveHook|PostUploadPackWithSidechannel|PreReceiveHook|RepackFull|RepackIncremental|ReplicateRepository|RepositorySize|SSHUploadPackWithSidechannel|UpdateHook|WriteRef",grpc_service!="gitaly.OperationService",grpc_type="unary",job="gitaly",le="0.5",type="ops-gitlab-net"}[5m] offset 30s)
           )
           +
           sum by (env,environment) (
-            rate(grpc_server_handling_seconds_bucket{grpc_method!~"CalculateChecksum|CommitLanguages|CommitStats|CreateFork|CreateRepositoryFromURL|FetchInternalRemote|FetchIntoObjectPool|FetchRemote|FetchSourceBranch|FindCommit|FindRemoteRepository|FindRemoteRootRef|Fsck|GarbageCollect|GetArchive|LastCommitForPath|OptimizeRepository|PackObjectsHookWithSidechannel|PostReceiveHook|PostUploadPackWithSidechannel|PreReceiveHook|RepackFull|RepackIncremental|ReplicateRepository|RepositorySize|SSHUploadPackWithSidechannel|UpdateHook|WriteRef",grpc_service!="gitaly.OperationService",grpc_type="unary",job="gitaly",le="1",type="ops-gitlab-net"}[5m])
+            rate(grpc_server_handling_seconds_bucket{grpc_method!~"CalculateChecksum|CommitLanguages|CommitStats|CreateFork|CreateRepositoryFromURL|FetchInternalRemote|FetchIntoObjectPool|FetchRemote|FetchSourceBranch|FindCommit|FindRemoteRepository|FindRemoteRootRef|Fsck|GarbageCollect|GetArchive|LastCommitForPath|OptimizeRepository|PackObjectsHookWithSidechannel|PostReceiveHook|PostUploadPackWithSidechannel|PreReceiveHook|RepackFull|RepackIncremental|ReplicateRepository|RepositorySize|SSHUploadPackWithSidechannel|UpdateHook|WriteRef",grpc_service!="gitaly.OperationService",grpc_type="unary",job="gitaly",le="1",type="ops-gitlab-net"}[5m] offset 30s)
           )
         )
         /
@@ -88,11 +88,11 @@ groups:
         or
         label_replace((
           sum by (env,environment) (
-            rate(grpc_server_handling_seconds_bucket{grpc_method=~"FindCommit|GetArchive|LastCommitForPath|RepositorySize|WriteRef",grpc_service!="gitaly.OperationService",grpc_type="unary",job="gitaly",le="10",type="ops-gitlab-net"}[5m])
+            rate(grpc_server_handling_seconds_bucket{grpc_method=~"FindCommit|GetArchive|LastCommitForPath|RepositorySize|WriteRef",grpc_service!="gitaly.OperationService",grpc_type="unary",job="gitaly",le="10",type="ops-gitlab-net"}[5m] offset 30s)
           )
           +
           sum by (env,environment) (
-            rate(grpc_server_handling_seconds_bucket{grpc_method=~"FindCommit|GetArchive|LastCommitForPath|RepositorySize|WriteRef",grpc_service!="gitaly.OperationService",grpc_type="unary",job="gitaly",le="30",type="ops-gitlab-net"}[5m])
+            rate(grpc_server_handling_seconds_bucket{grpc_method=~"FindCommit|GetArchive|LastCommitForPath|RepositorySize|WriteRef",grpc_service!="gitaly.OperationService",grpc_type="unary",job="gitaly",le="30",type="ops-gitlab-net"}[5m] offset 30s)
           )
         )
         /
@@ -101,11 +101,11 @@ groups:
         or
         label_replace((
           sum by (env,environment) (
-            rate(grpc_server_handling_seconds_bucket{grpc_service="gitaly.OperationService",grpc_type="unary",job="gitaly",le="10",type="ops-gitlab-net"}[5m])
+            rate(grpc_server_handling_seconds_bucket{grpc_service="gitaly.OperationService",grpc_type="unary",job="gitaly",le="10",type="ops-gitlab-net"}[5m] offset 30s)
           )
           +
           sum by (env,environment) (
-            rate(grpc_server_handling_seconds_bucket{grpc_service="gitaly.OperationService",grpc_type="unary",job="gitaly",le="30",type="ops-gitlab-net"}[5m])
+            rate(grpc_server_handling_seconds_bucket{grpc_service="gitaly.OperationService",grpc_type="unary",job="gitaly",le="30",type="ops-gitlab-net"}[5m] offset 30s)
           )
         )
         /
@@ -122,17 +122,17 @@ groups:
     expr: |
       sum by (env,environment) (
         label_replace(sum by (env,environment) (
-          rate(grpc_server_handling_seconds_bucket{grpc_method!~"CalculateChecksum|CommitLanguages|CommitStats|CreateFork|CreateRepositoryFromURL|FetchInternalRemote|FetchIntoObjectPool|FetchRemote|FetchSourceBranch|FindCommit|FindRemoteRepository|FindRemoteRootRef|Fsck|GarbageCollect|GetArchive|LastCommitForPath|OptimizeRepository|PackObjectsHookWithSidechannel|PostReceiveHook|PostUploadPackWithSidechannel|PreReceiveHook|RepackFull|RepackIncremental|ReplicateRepository|RepositorySize|SSHUploadPackWithSidechannel|UpdateHook|WriteRef",grpc_service!="gitaly.OperationService",grpc_type="unary",job="gitaly",le="+Inf",type="ops-gitlab-net"}[5m])
+          rate(grpc_server_handling_seconds_bucket{grpc_method!~"CalculateChecksum|CommitLanguages|CommitStats|CreateFork|CreateRepositoryFromURL|FetchInternalRemote|FetchIntoObjectPool|FetchRemote|FetchSourceBranch|FindCommit|FindRemoteRepository|FindRemoteRootRef|Fsck|GarbageCollect|GetArchive|LastCommitForPath|OptimizeRepository|PackObjectsHookWithSidechannel|PostReceiveHook|PostUploadPackWithSidechannel|PreReceiveHook|RepackFull|RepackIncremental|ReplicateRepository|RepositorySize|SSHUploadPackWithSidechannel|UpdateHook|WriteRef",grpc_service!="gitaly.OperationService",grpc_type="unary",job="gitaly",le="+Inf",type="ops-gitlab-net"}[5m] offset 30s)
         )
         , "_c", "0", "", "")
         or
         label_replace(sum by (env,environment) (
-          rate(grpc_server_handling_seconds_bucket{grpc_method=~"FindCommit|GetArchive|LastCommitForPath|RepositorySize|WriteRef",grpc_service!="gitaly.OperationService",grpc_type="unary",job="gitaly",le="+Inf",type="ops-gitlab-net"}[5m])
+          rate(grpc_server_handling_seconds_bucket{grpc_method=~"FindCommit|GetArchive|LastCommitForPath|RepositorySize|WriteRef",grpc_service!="gitaly.OperationService",grpc_type="unary",job="gitaly",le="+Inf",type="ops-gitlab-net"}[5m] offset 30s)
         )
         , "_c", "1", "", "")
         or
         label_replace(sum by (env,environment) (
-          rate(grpc_server_handling_seconds_bucket{grpc_service="gitaly.OperationService",grpc_type="unary",job="gitaly",le="+Inf",type="ops-gitlab-net"}[5m])
+          rate(grpc_server_handling_seconds_bucket{grpc_service="gitaly.OperationService",grpc_type="unary",job="gitaly",le="+Inf",type="ops-gitlab-net"}[5m] offset 30s)
         )
         , "_c", "2", "", "")
       )
@@ -145,7 +145,7 @@ groups:
       type: ops-gitlab-net
     expr: |
       sum by (env,environment) (
-        rate(gitaly_service_client_requests_total{job="gitaly",type="ops-gitlab-net"}[5m])
+        rate(gitaly_service_client_requests_total{job="gitaly",type="ops-gitlab-net"}[5m] offset 30s)
       )
   - record: gitlab:component:feature_category:execution:error:rate_5m
     labels:
@@ -157,9 +157,9 @@ groups:
     expr: |
       (
         sum by (env,environment) (
-          label_replace(rate(gitaly_service_client_requests_total{grpc_code!~"AlreadyExists|Canceled|DeadlineExceeded|FailedPrecondition|InvalidArgument|NotFound|OK|PermissionDenied|ResourceExhausted|Unauthenticated",job="gitaly",type="ops-gitlab-net"}[5m]), "_c", "0", "", "")
+          label_replace(rate(gitaly_service_client_requests_total{grpc_code!~"AlreadyExists|Canceled|DeadlineExceeded|FailedPrecondition|InvalidArgument|NotFound|OK|PermissionDenied|ResourceExhausted|Unauthenticated",job="gitaly",type="ops-gitlab-net"}[5m] offset 30s), "_c", "0", "", "")
           or
-          label_replace(rate(gitaly_service_client_requests_total{deadline_type!="limited",grpc_code="DeadlineExceeded",job="gitaly",type="ops-gitlab-net"}[5m]), "_c", "1", "", "")
+          label_replace(rate(gitaly_service_client_requests_total{deadline_type!="limited",grpc_code="DeadlineExceeded",job="gitaly",type="ops-gitlab-net"}[5m] offset 30s), "_c", "1", "", "")
         )
       )
       or
@@ -181,11 +181,11 @@ groups:
     expr: |
       (
         sum by (env,environment) (
-          rate(gitlab_shell_sshd_session_established_duration_seconds_bucket{job="gitlab-shell",le="1",type="ops-gitlab-net"}[30m])
+          rate(gitlab_shell_sshd_session_established_duration_seconds_bucket{job="gitlab-shell",le="1",type="ops-gitlab-net"}[30m] offset 30s)
         )
         +
         sum by (env,environment) (
-          rate(gitlab_shell_sshd_session_established_duration_seconds_bucket{job="gitlab-shell",le="5",type="ops-gitlab-net"}[30m])
+          rate(gitlab_shell_sshd_session_established_duration_seconds_bucket{job="gitlab-shell",le="5",type="ops-gitlab-net"}[30m] offset 30s)
         )
       )
       /
@@ -199,7 +199,7 @@ groups:
       type: ops-gitlab-net
     expr: |
       sum by (env,environment) (
-        rate(gitlab_shell_sshd_session_established_duration_seconds_bucket{job="gitlab-shell",le="+Inf",type="ops-gitlab-net"}[30m])
+        rate(gitlab_shell_sshd_session_established_duration_seconds_bucket{job="gitlab-shell",le="+Inf",type="ops-gitlab-net"}[30m] offset 30s)
       )
   - record: gitlab:component:feature_category:execution:ops:rate_30m
     labels:
@@ -210,7 +210,7 @@ groups:
       type: ops-gitlab-net
     expr: |
       sum by (env,environment) (
-        rate(gitlab_sli:shell_sshd_sessions:total{job="gitlab-shell",type="ops-gitlab-net"}[30m])
+        rate(gitlab_sli:shell_sshd_sessions:total{job="gitlab-shell",type="ops-gitlab-net"}[30m] offset 30s)
       )
   - record: gitlab:component:feature_category:execution:error:rate_30m
     labels:
@@ -222,7 +222,7 @@ groups:
     expr: |
       (
         sum by (env,environment) (
-          rate(gitlab_sli:shell_sshd_sessions:errors_total{job="gitlab-shell",type="ops-gitlab-net"}[30m])
+          rate(gitlab_sli:shell_sshd_sessions:errors_total{job="gitlab-shell",type="ops-gitlab-net"}[30m] offset 30s)
         )
       )
       or
@@ -242,11 +242,11 @@ groups:
       sum by (env,environment) (
         label_replace((
           sum by (env,environment) (
-            rate(grpc_server_handling_seconds_bucket{grpc_method!~"CalculateChecksum|CommitLanguages|CommitStats|CreateFork|CreateRepositoryFromURL|FetchInternalRemote|FetchIntoObjectPool|FetchRemote|FetchSourceBranch|FindCommit|FindRemoteRepository|FindRemoteRootRef|Fsck|GarbageCollect|GetArchive|LastCommitForPath|OptimizeRepository|PackObjectsHookWithSidechannel|PostReceiveHook|PostUploadPackWithSidechannel|PreReceiveHook|RepackFull|RepackIncremental|ReplicateRepository|RepositorySize|SSHUploadPackWithSidechannel|UpdateHook|WriteRef",grpc_service!="gitaly.OperationService",grpc_type="unary",job="gitaly",le="0.5",type="ops-gitlab-net"}[30m])
+            rate(grpc_server_handling_seconds_bucket{grpc_method!~"CalculateChecksum|CommitLanguages|CommitStats|CreateFork|CreateRepositoryFromURL|FetchInternalRemote|FetchIntoObjectPool|FetchRemote|FetchSourceBranch|FindCommit|FindRemoteRepository|FindRemoteRootRef|Fsck|GarbageCollect|GetArchive|LastCommitForPath|OptimizeRepository|PackObjectsHookWithSidechannel|PostReceiveHook|PostUploadPackWithSidechannel|PreReceiveHook|RepackFull|RepackIncremental|ReplicateRepository|RepositorySize|SSHUploadPackWithSidechannel|UpdateHook|WriteRef",grpc_service!="gitaly.OperationService",grpc_type="unary",job="gitaly",le="0.5",type="ops-gitlab-net"}[30m] offset 30s)
           )
           +
           sum by (env,environment) (
-            rate(grpc_server_handling_seconds_bucket{grpc_method!~"CalculateChecksum|CommitLanguages|CommitStats|CreateFork|CreateRepositoryFromURL|FetchInternalRemote|FetchIntoObjectPool|FetchRemote|FetchSourceBranch|FindCommit|FindRemoteRepository|FindRemoteRootRef|Fsck|GarbageCollect|GetArchive|LastCommitForPath|OptimizeRepository|PackObjectsHookWithSidechannel|PostReceiveHook|PostUploadPackWithSidechannel|PreReceiveHook|RepackFull|RepackIncremental|ReplicateRepository|RepositorySize|SSHUploadPackWithSidechannel|UpdateHook|WriteRef",grpc_service!="gitaly.OperationService",grpc_type="unary",job="gitaly",le="1",type="ops-gitlab-net"}[30m])
+            rate(grpc_server_handling_seconds_bucket{grpc_method!~"CalculateChecksum|CommitLanguages|CommitStats|CreateFork|CreateRepositoryFromURL|FetchInternalRemote|FetchIntoObjectPool|FetchRemote|FetchSourceBranch|FindCommit|FindRemoteRepository|FindRemoteRootRef|Fsck|GarbageCollect|GetArchive|LastCommitForPath|OptimizeRepository|PackObjectsHookWithSidechannel|PostReceiveHook|PostUploadPackWithSidechannel|PreReceiveHook|RepackFull|RepackIncremental|ReplicateRepository|RepositorySize|SSHUploadPackWithSidechannel|UpdateHook|WriteRef",grpc_service!="gitaly.OperationService",grpc_type="unary",job="gitaly",le="1",type="ops-gitlab-net"}[30m] offset 30s)
           )
         )
         /
@@ -255,11 +255,11 @@ groups:
         or
         label_replace((
           sum by (env,environment) (
-            rate(grpc_server_handling_seconds_bucket{grpc_method=~"FindCommit|GetArchive|LastCommitForPath|RepositorySize|WriteRef",grpc_service!="gitaly.OperationService",grpc_type="unary",job="gitaly",le="10",type="ops-gitlab-net"}[30m])
+            rate(grpc_server_handling_seconds_bucket{grpc_method=~"FindCommit|GetArchive|LastCommitForPath|RepositorySize|WriteRef",grpc_service!="gitaly.OperationService",grpc_type="unary",job="gitaly",le="10",type="ops-gitlab-net"}[30m] offset 30s)
           )
           +
           sum by (env,environment) (
-            rate(grpc_server_handling_seconds_bucket{grpc_method=~"FindCommit|GetArchive|LastCommitForPath|RepositorySize|WriteRef",grpc_service!="gitaly.OperationService",grpc_type="unary",job="gitaly",le="30",type="ops-gitlab-net"}[30m])
+            rate(grpc_server_handling_seconds_bucket{grpc_method=~"FindCommit|GetArchive|LastCommitForPath|RepositorySize|WriteRef",grpc_service!="gitaly.OperationService",grpc_type="unary",job="gitaly",le="30",type="ops-gitlab-net"}[30m] offset 30s)
           )
         )
         /
@@ -268,11 +268,11 @@ groups:
         or
         label_replace((
           sum by (env,environment) (
-            rate(grpc_server_handling_seconds_bucket{grpc_service="gitaly.OperationService",grpc_type="unary",job="gitaly",le="10",type="ops-gitlab-net"}[30m])
+            rate(grpc_server_handling_seconds_bucket{grpc_service="gitaly.OperationService",grpc_type="unary",job="gitaly",le="10",type="ops-gitlab-net"}[30m] offset 30s)
           )
           +
           sum by (env,environment) (
-            rate(grpc_server_handling_seconds_bucket{grpc_service="gitaly.OperationService",grpc_type="unary",job="gitaly",le="30",type="ops-gitlab-net"}[30m])
+            rate(grpc_server_handling_seconds_bucket{grpc_service="gitaly.OperationService",grpc_type="unary",job="gitaly",le="30",type="ops-gitlab-net"}[30m] offset 30s)
           )
         )
         /
@@ -289,17 +289,17 @@ groups:
     expr: |
       sum by (env,environment) (
         label_replace(sum by (env,environment) (
-          rate(grpc_server_handling_seconds_bucket{grpc_method!~"CalculateChecksum|CommitLanguages|CommitStats|CreateFork|CreateRepositoryFromURL|FetchInternalRemote|FetchIntoObjectPool|FetchRemote|FetchSourceBranch|FindCommit|FindRemoteRepository|FindRemoteRootRef|Fsck|GarbageCollect|GetArchive|LastCommitForPath|OptimizeRepository|PackObjectsHookWithSidechannel|PostReceiveHook|PostUploadPackWithSidechannel|PreReceiveHook|RepackFull|RepackIncremental|ReplicateRepository|RepositorySize|SSHUploadPackWithSidechannel|UpdateHook|WriteRef",grpc_service!="gitaly.OperationService",grpc_type="unary",job="gitaly",le="+Inf",type="ops-gitlab-net"}[30m])
+          rate(grpc_server_handling_seconds_bucket{grpc_method!~"CalculateChecksum|CommitLanguages|CommitStats|CreateFork|CreateRepositoryFromURL|FetchInternalRemote|FetchIntoObjectPool|FetchRemote|FetchSourceBranch|FindCommit|FindRemoteRepository|FindRemoteRootRef|Fsck|GarbageCollect|GetArchive|LastCommitForPath|OptimizeRepository|PackObjectsHookWithSidechannel|PostReceiveHook|PostUploadPackWithSidechannel|PreReceiveHook|RepackFull|RepackIncremental|ReplicateRepository|RepositorySize|SSHUploadPackWithSidechannel|UpdateHook|WriteRef",grpc_service!="gitaly.OperationService",grpc_type="unary",job="gitaly",le="+Inf",type="ops-gitlab-net"}[30m] offset 30s)
         )
         , "_c", "0", "", "")
         or
         label_replace(sum by (env,environment) (
-          rate(grpc_server_handling_seconds_bucket{grpc_method=~"FindCommit|GetArchive|LastCommitForPath|RepositorySize|WriteRef",grpc_service!="gitaly.OperationService",grpc_type="unary",job="gitaly",le="+Inf",type="ops-gitlab-net"}[30m])
+          rate(grpc_server_handling_seconds_bucket{grpc_method=~"FindCommit|GetArchive|LastCommitForPath|RepositorySize|WriteRef",grpc_service!="gitaly.OperationService",grpc_type="unary",job="gitaly",le="+Inf",type="ops-gitlab-net"}[30m] offset 30s)
         )
         , "_c", "1", "", "")
         or
         label_replace(sum by (env,environment) (
-          rate(grpc_server_handling_seconds_bucket{grpc_service="gitaly.OperationService",grpc_type="unary",job="gitaly",le="+Inf",type="ops-gitlab-net"}[30m])
+          rate(grpc_server_handling_seconds_bucket{grpc_service="gitaly.OperationService",grpc_type="unary",job="gitaly",le="+Inf",type="ops-gitlab-net"}[30m] offset 30s)
         )
         , "_c", "2", "", "")
       )
@@ -312,7 +312,7 @@ groups:
       type: ops-gitlab-net
     expr: |
       sum by (env,environment) (
-        rate(gitaly_service_client_requests_total{job="gitaly",type="ops-gitlab-net"}[30m])
+        rate(gitaly_service_client_requests_total{job="gitaly",type="ops-gitlab-net"}[30m] offset 30s)
       )
   - record: gitlab:component:feature_category:execution:error:rate_30m
     labels:
@@ -324,9 +324,9 @@ groups:
     expr: |
       (
         sum by (env,environment) (
-          label_replace(rate(gitaly_service_client_requests_total{grpc_code!~"AlreadyExists|Canceled|DeadlineExceeded|FailedPrecondition|InvalidArgument|NotFound|OK|PermissionDenied|ResourceExhausted|Unauthenticated",job="gitaly",type="ops-gitlab-net"}[30m]), "_c", "0", "", "")
+          label_replace(rate(gitaly_service_client_requests_total{grpc_code!~"AlreadyExists|Canceled|DeadlineExceeded|FailedPrecondition|InvalidArgument|NotFound|OK|PermissionDenied|ResourceExhausted|Unauthenticated",job="gitaly",type="ops-gitlab-net"}[30m] offset 30s), "_c", "0", "", "")
           or
-          label_replace(rate(gitaly_service_client_requests_total{deadline_type!="limited",grpc_code="DeadlineExceeded",job="gitaly",type="ops-gitlab-net"}[30m]), "_c", "1", "", "")
+          label_replace(rate(gitaly_service_client_requests_total{deadline_type!="limited",grpc_code="DeadlineExceeded",job="gitaly",type="ops-gitlab-net"}[30m] offset 30s), "_c", "1", "", "")
         )
       )
       or
@@ -348,11 +348,11 @@ groups:
     expr: |
       (
         sum by (env,environment) (
-          rate(gitlab_shell_sshd_session_established_duration_seconds_bucket{job="gitlab-shell",le="1",type="ops-gitlab-net"}[1h])
+          rate(gitlab_shell_sshd_session_established_duration_seconds_bucket{job="gitlab-shell",le="1",type="ops-gitlab-net"}[1h] offset 30s)
         )
         +
         sum by (env,environment) (
-          rate(gitlab_shell_sshd_session_established_duration_seconds_bucket{job="gitlab-shell",le="5",type="ops-gitlab-net"}[1h])
+          rate(gitlab_shell_sshd_session_established_duration_seconds_bucket{job="gitlab-shell",le="5",type="ops-gitlab-net"}[1h] offset 30s)
         )
       )
       /
@@ -366,7 +366,7 @@ groups:
       type: ops-gitlab-net
     expr: |
       sum by (env,environment) (
-        rate(gitlab_shell_sshd_session_established_duration_seconds_bucket{job="gitlab-shell",le="+Inf",type="ops-gitlab-net"}[1h])
+        rate(gitlab_shell_sshd_session_established_duration_seconds_bucket{job="gitlab-shell",le="+Inf",type="ops-gitlab-net"}[1h] offset 30s)
       )
   - record: gitlab:component:feature_category:execution:ops:rate_1h
     labels:
@@ -377,7 +377,7 @@ groups:
       type: ops-gitlab-net
     expr: |
       sum by (env,environment) (
-        rate(gitlab_sli:shell_sshd_sessions:total{job="gitlab-shell",type="ops-gitlab-net"}[1h])
+        rate(gitlab_sli:shell_sshd_sessions:total{job="gitlab-shell",type="ops-gitlab-net"}[1h] offset 30s)
       )
   - record: gitlab:component:feature_category:execution:error:rate_1h
     labels:
@@ -389,7 +389,7 @@ groups:
     expr: |
       (
         sum by (env,environment) (
-          rate(gitlab_sli:shell_sshd_sessions:errors_total{job="gitlab-shell",type="ops-gitlab-net"}[1h])
+          rate(gitlab_sli:shell_sshd_sessions:errors_total{job="gitlab-shell",type="ops-gitlab-net"}[1h] offset 30s)
         )
       )
       or
@@ -409,11 +409,11 @@ groups:
       sum by (env,environment) (
         label_replace((
           sum by (env,environment) (
-            rate(grpc_server_handling_seconds_bucket{grpc_method!~"CalculateChecksum|CommitLanguages|CommitStats|CreateFork|CreateRepositoryFromURL|FetchInternalRemote|FetchIntoObjectPool|FetchRemote|FetchSourceBranch|FindCommit|FindRemoteRepository|FindRemoteRootRef|Fsck|GarbageCollect|GetArchive|LastCommitForPath|OptimizeRepository|PackObjectsHookWithSidechannel|PostReceiveHook|PostUploadPackWithSidechannel|PreReceiveHook|RepackFull|RepackIncremental|ReplicateRepository|RepositorySize|SSHUploadPackWithSidechannel|UpdateHook|WriteRef",grpc_service!="gitaly.OperationService",grpc_type="unary",job="gitaly",le="0.5",type="ops-gitlab-net"}[1h])
+            rate(grpc_server_handling_seconds_bucket{grpc_method!~"CalculateChecksum|CommitLanguages|CommitStats|CreateFork|CreateRepositoryFromURL|FetchInternalRemote|FetchIntoObjectPool|FetchRemote|FetchSourceBranch|FindCommit|FindRemoteRepository|FindRemoteRootRef|Fsck|GarbageCollect|GetArchive|LastCommitForPath|OptimizeRepository|PackObjectsHookWithSidechannel|PostReceiveHook|PostUploadPackWithSidechannel|PreReceiveHook|RepackFull|RepackIncremental|ReplicateRepository|RepositorySize|SSHUploadPackWithSidechannel|UpdateHook|WriteRef",grpc_service!="gitaly.OperationService",grpc_type="unary",job="gitaly",le="0.5",type="ops-gitlab-net"}[1h] offset 30s)
           )
           +
           sum by (env,environment) (
-            rate(grpc_server_handling_seconds_bucket{grpc_method!~"CalculateChecksum|CommitLanguages|CommitStats|CreateFork|CreateRepositoryFromURL|FetchInternalRemote|FetchIntoObjectPool|FetchRemote|FetchSourceBranch|FindCommit|FindRemoteRepository|FindRemoteRootRef|Fsck|GarbageCollect|GetArchive|LastCommitForPath|OptimizeRepository|PackObjectsHookWithSidechannel|PostReceiveHook|PostUploadPackWithSidechannel|PreReceiveHook|RepackFull|RepackIncremental|ReplicateRepository|RepositorySize|SSHUploadPackWithSidechannel|UpdateHook|WriteRef",grpc_service!="gitaly.OperationService",grpc_type="unary",job="gitaly",le="1",type="ops-gitlab-net"}[1h])
+            rate(grpc_server_handling_seconds_bucket{grpc_method!~"CalculateChecksum|CommitLanguages|CommitStats|CreateFork|CreateRepositoryFromURL|FetchInternalRemote|FetchIntoObjectPool|FetchRemote|FetchSourceBranch|FindCommit|FindRemoteRepository|FindRemoteRootRef|Fsck|GarbageCollect|GetArchive|LastCommitForPath|OptimizeRepository|PackObjectsHookWithSidechannel|PostReceiveHook|PostUploadPackWithSidechannel|PreReceiveHook|RepackFull|RepackIncremental|ReplicateRepository|RepositorySize|SSHUploadPackWithSidechannel|UpdateHook|WriteRef",grpc_service!="gitaly.OperationService",grpc_type="unary",job="gitaly",le="1",type="ops-gitlab-net"}[1h] offset 30s)
           )
         )
         /
@@ -422,11 +422,11 @@ groups:
         or
         label_replace((
           sum by (env,environment) (
-            rate(grpc_server_handling_seconds_bucket{grpc_method=~"FindCommit|GetArchive|LastCommitForPath|RepositorySize|WriteRef",grpc_service!="gitaly.OperationService",grpc_type="unary",job="gitaly",le="10",type="ops-gitlab-net"}[1h])
+            rate(grpc_server_handling_seconds_bucket{grpc_method=~"FindCommit|GetArchive|LastCommitForPath|RepositorySize|WriteRef",grpc_service!="gitaly.OperationService",grpc_type="unary",job="gitaly",le="10",type="ops-gitlab-net"}[1h] offset 30s)
           )
           +
           sum by (env,environment) (
-            rate(grpc_server_handling_seconds_bucket{grpc_method=~"FindCommit|GetArchive|LastCommitForPath|RepositorySize|WriteRef",grpc_service!="gitaly.OperationService",grpc_type="unary",job="gitaly",le="30",type="ops-gitlab-net"}[1h])
+            rate(grpc_server_handling_seconds_bucket{grpc_method=~"FindCommit|GetArchive|LastCommitForPath|RepositorySize|WriteRef",grpc_service!="gitaly.OperationService",grpc_type="unary",job="gitaly",le="30",type="ops-gitlab-net"}[1h] offset 30s)
           )
         )
         /
@@ -435,11 +435,11 @@ groups:
         or
         label_replace((
           sum by (env,environment) (
-            rate(grpc_server_handling_seconds_bucket{grpc_service="gitaly.OperationService",grpc_type="unary",job="gitaly",le="10",type="ops-gitlab-net"}[1h])
+            rate(grpc_server_handling_seconds_bucket{grpc_service="gitaly.OperationService",grpc_type="unary",job="gitaly",le="10",type="ops-gitlab-net"}[1h] offset 30s)
           )
           +
           sum by (env,environment) (
-            rate(grpc_server_handling_seconds_bucket{grpc_service="gitaly.OperationService",grpc_type="unary",job="gitaly",le="30",type="ops-gitlab-net"}[1h])
+            rate(grpc_server_handling_seconds_bucket{grpc_service="gitaly.OperationService",grpc_type="unary",job="gitaly",le="30",type="ops-gitlab-net"}[1h] offset 30s)
           )
         )
         /
@@ -456,17 +456,17 @@ groups:
     expr: |
       sum by (env,environment) (
         label_replace(sum by (env,environment) (
-          rate(grpc_server_handling_seconds_bucket{grpc_method!~"CalculateChecksum|CommitLanguages|CommitStats|CreateFork|CreateRepositoryFromURL|FetchInternalRemote|FetchIntoObjectPool|FetchRemote|FetchSourceBranch|FindCommit|FindRemoteRepository|FindRemoteRootRef|Fsck|GarbageCollect|GetArchive|LastCommitForPath|OptimizeRepository|PackObjectsHookWithSidechannel|PostReceiveHook|PostUploadPackWithSidechannel|PreReceiveHook|RepackFull|RepackIncremental|ReplicateRepository|RepositorySize|SSHUploadPackWithSidechannel|UpdateHook|WriteRef",grpc_service!="gitaly.OperationService",grpc_type="unary",job="gitaly",le="+Inf",type="ops-gitlab-net"}[1h])
+          rate(grpc_server_handling_seconds_bucket{grpc_method!~"CalculateChecksum|CommitLanguages|CommitStats|CreateFork|CreateRepositoryFromURL|FetchInternalRemote|FetchIntoObjectPool|FetchRemote|FetchSourceBranch|FindCommit|FindRemoteRepository|FindRemoteRootRef|Fsck|GarbageCollect|GetArchive|LastCommitForPath|OptimizeRepository|PackObjectsHookWithSidechannel|PostReceiveHook|PostUploadPackWithSidechannel|PreReceiveHook|RepackFull|RepackIncremental|ReplicateRepository|RepositorySize|SSHUploadPackWithSidechannel|UpdateHook|WriteRef",grpc_service!="gitaly.OperationService",grpc_type="unary",job="gitaly",le="+Inf",type="ops-gitlab-net"}[1h] offset 30s)
         )
         , "_c", "0", "", "")
         or
         label_replace(sum by (env,environment) (
-          rate(grpc_server_handling_seconds_bucket{grpc_method=~"FindCommit|GetArchive|LastCommitForPath|RepositorySize|WriteRef",grpc_service!="gitaly.OperationService",grpc_type="unary",job="gitaly",le="+Inf",type="ops-gitlab-net"}[1h])
+          rate(grpc_server_handling_seconds_bucket{grpc_method=~"FindCommit|GetArchive|LastCommitForPath|RepositorySize|WriteRef",grpc_service!="gitaly.OperationService",grpc_type="unary",job="gitaly",le="+Inf",type="ops-gitlab-net"}[1h] offset 30s)
         )
         , "_c", "1", "", "")
         or
         label_replace(sum by (env,environment) (
-          rate(grpc_server_handling_seconds_bucket{grpc_service="gitaly.OperationService",grpc_type="unary",job="gitaly",le="+Inf",type="ops-gitlab-net"}[1h])
+          rate(grpc_server_handling_seconds_bucket{grpc_service="gitaly.OperationService",grpc_type="unary",job="gitaly",le="+Inf",type="ops-gitlab-net"}[1h] offset 30s)
         )
         , "_c", "2", "", "")
       )
@@ -479,7 +479,7 @@ groups:
       type: ops-gitlab-net
     expr: |
       sum by (env,environment) (
-        rate(gitaly_service_client_requests_total{job="gitaly",type="ops-gitlab-net"}[1h])
+        rate(gitaly_service_client_requests_total{job="gitaly",type="ops-gitlab-net"}[1h] offset 30s)
       )
   - record: gitlab:component:feature_category:execution:error:rate_1h
     labels:
@@ -491,9 +491,9 @@ groups:
     expr: |
       (
         sum by (env,environment) (
-          label_replace(rate(gitaly_service_client_requests_total{grpc_code!~"AlreadyExists|Canceled|DeadlineExceeded|FailedPrecondition|InvalidArgument|NotFound|OK|PermissionDenied|ResourceExhausted|Unauthenticated",job="gitaly",type="ops-gitlab-net"}[1h]), "_c", "0", "", "")
+          label_replace(rate(gitaly_service_client_requests_total{grpc_code!~"AlreadyExists|Canceled|DeadlineExceeded|FailedPrecondition|InvalidArgument|NotFound|OK|PermissionDenied|ResourceExhausted|Unauthenticated",job="gitaly",type="ops-gitlab-net"}[1h] offset 30s), "_c", "0", "", "")
           or
-          label_replace(rate(gitaly_service_client_requests_total{deadline_type!="limited",grpc_code="DeadlineExceeded",job="gitaly",type="ops-gitlab-net"}[1h]), "_c", "1", "", "")
+          label_replace(rate(gitaly_service_client_requests_total{deadline_type!="limited",grpc_code="DeadlineExceeded",job="gitaly",type="ops-gitlab-net"}[1h] offset 30s), "_c", "1", "", "")
         )
       )
       or

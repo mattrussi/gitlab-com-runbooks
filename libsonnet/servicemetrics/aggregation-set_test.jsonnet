@@ -56,7 +56,12 @@ local mixedFixture = aggregationSet.AggregationSet(fixture1 {
 });
 
 local isValid(definition) =
-  aggregationSet._UnvalidatedAggregationSet(definition).isValid(definition);
+  local unvalidated = aggregationSet._UnvalidatedAggregationSet(definition);
+  unvalidated.validator.isValid(unvalidated.definitionWithDefaults);
+
+local validationMessages(definition) =
+  local unvalidated = aggregationSet._UnvalidatedAggregationSet(definition);
+  unvalidated.validator._validationMessages(unvalidated.definitionWithDefaults);
 
 test.suite({
   testDefaultAggregationFilter: {
@@ -192,6 +197,42 @@ test.suite({
       supportedBurnRates: [1],
     }),
     expect: false,
+  },
+
+  testInValidOffset: {
+    actual: validationMessages({
+      labels: [],
+      selector: {},
+      upscaleLongerBurnRates: false,
+      generateSLODashboards: false,
+      supportedBurnRates: ['1m'],
+      offset: 'kapot',
+    }),
+    expect: ['field offset: expected a promql duration or null'],
+  },
+
+  testNullOffset: {
+    actual: validationMessages({
+      labels: [],
+      selector: {},
+      upscaleLongerBurnRates: false,
+      generateSLODashboards: false,
+      supportedBurnRates: ['1m'],
+      offset: null,
+    }),
+    expect: [],
+  },
+
+  testValidOffset: {
+    actual: validationMessages({
+      labels: [],
+      selector: {},
+      upscaleLongerBurnRates: false,
+      generateSLODashboards: false,
+      supportedBurnRates: ['1m'],
+      offset: '30s',
+    }),
+    expect: [],
   },
 
   testGetBurnRatesByType: {

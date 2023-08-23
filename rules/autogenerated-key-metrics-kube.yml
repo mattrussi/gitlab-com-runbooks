@@ -12,7 +12,7 @@ groups:
       type: kube
     expr: |
       sum by (env,environment) (
-        rate(apiserver_request_duration_seconds_bucket{job="apiserver",le="1",scope!="",verb!="WATCH"}[1m])
+        rate(apiserver_request_duration_seconds_bucket{job="apiserver",le="1",scope!="",verb!="WATCH"}[1m] offset 30s)
       )
   - record: gitlab_component_apdex:weight:score
     labels:
@@ -22,7 +22,7 @@ groups:
       type: kube
     expr: |
       sum by (env,environment) (
-        rate(apiserver_request_duration_seconds_bucket{job="apiserver",le="+Inf",scope!="",verb!="WATCH"}[1m])
+        rate(apiserver_request_duration_seconds_bucket{job="apiserver",le="+Inf",scope!="",verb!="WATCH"}[1m] offset 30s)
       )
   - record: gitlab_component_ops:rate
     labels:
@@ -32,7 +32,7 @@ groups:
       type: kube
     expr: |
       sum by (env,environment) (
-        rate(apiserver_request_total{job="apiserver",scope!=""}[1m])
+        rate(apiserver_request_total{job="apiserver",scope!=""}[1m] offset 30s)
       )
   - record: gitlab_component_errors:rate
     labels:
@@ -43,7 +43,7 @@ groups:
     expr: |
       (
         sum by (env,environment) (
-          rate(apiserver_request_total{code=~"5..",job="apiserver",scope!=""}[1m])
+          rate(apiserver_request_total{code=~"5..",job="apiserver",scope!=""}[1m] offset 30s)
         )
       )
       or
@@ -99,7 +99,7 @@ groups:
       type: kube
     expr: |
       sum by (env,environment) (
-        rate(apiserver_request_duration_seconds_bucket{job="apiserver",le="1",scope!="",verb!="WATCH"}[5m])
+        rate(apiserver_request_duration_seconds_bucket{job="apiserver",le="1",scope!="",verb!="WATCH"}[5m] offset 30s)
       )
   - record: gitlab_component_apdex:weight:score_5m
     labels:
@@ -109,7 +109,7 @@ groups:
       type: kube
     expr: |
       sum by (env,environment) (
-        rate(apiserver_request_duration_seconds_bucket{job="apiserver",le="+Inf",scope!="",verb!="WATCH"}[5m])
+        rate(apiserver_request_duration_seconds_bucket{job="apiserver",le="+Inf",scope!="",verb!="WATCH"}[5m] offset 30s)
       )
   - record: gitlab_component_ops:rate_5m
     labels:
@@ -119,7 +119,7 @@ groups:
       type: kube
     expr: |
       sum by (env,environment) (
-        rate(apiserver_request_total{job="apiserver",scope!=""}[5m])
+        rate(apiserver_request_total{job="apiserver",scope!=""}[5m] offset 30s)
       )
   - record: gitlab_component_errors:rate_5m
     labels:
@@ -130,7 +130,7 @@ groups:
     expr: |
       (
         sum by (env,environment) (
-          rate(apiserver_request_total{code=~"5..",job="apiserver",scope!=""}[5m])
+          rate(apiserver_request_total{code=~"5..",job="apiserver",scope!=""}[5m] offset 30s)
         )
       )
       or
@@ -186,7 +186,7 @@ groups:
       type: kube
     expr: |
       sum by (env,environment) (
-        rate(apiserver_request_duration_seconds_bucket{job="apiserver",le="1",scope!="",verb!="WATCH"}[30m])
+        rate(apiserver_request_duration_seconds_bucket{job="apiserver",le="1",scope!="",verb!="WATCH"}[30m] offset 30s)
       )
   - record: gitlab_component_apdex:weight:score_30m
     labels:
@@ -196,7 +196,7 @@ groups:
       type: kube
     expr: |
       sum by (env,environment) (
-        rate(apiserver_request_duration_seconds_bucket{job="apiserver",le="+Inf",scope!="",verb!="WATCH"}[30m])
+        rate(apiserver_request_duration_seconds_bucket{job="apiserver",le="+Inf",scope!="",verb!="WATCH"}[30m] offset 30s)
       )
   - record: gitlab_component_ops:rate_30m
     labels:
@@ -206,7 +206,7 @@ groups:
       type: kube
     expr: |
       sum by (env,environment) (
-        rate(apiserver_request_total{job="apiserver",scope!=""}[30m])
+        rate(apiserver_request_total{job="apiserver",scope!=""}[30m] offset 30s)
       )
   - record: gitlab_component_errors:rate_30m
     labels:
@@ -217,7 +217,7 @@ groups:
     expr: |
       (
         sum by (env,environment) (
-          rate(apiserver_request_total{code=~"5..",job="apiserver",scope!=""}[30m])
+          rate(apiserver_request_total{code=~"5..",job="apiserver",scope!=""}[30m] offset 30s)
         )
       )
       or
@@ -273,7 +273,7 @@ groups:
       type: kube
     expr: |
       sum by (env,environment) (
-        rate(apiserver_request_duration_seconds_bucket{job="apiserver",le="1",scope!="",verb!="WATCH"}[1h])
+        rate(apiserver_request_duration_seconds_bucket{job="apiserver",le="1",scope!="",verb!="WATCH"}[1h] offset 30s)
       )
   - record: gitlab_component_apdex:weight:score_1h
     labels:
@@ -283,7 +283,7 @@ groups:
       type: kube
     expr: |
       sum by (env,environment) (
-        rate(apiserver_request_duration_seconds_bucket{job="apiserver",le="+Inf",scope!="",verb!="WATCH"}[1h])
+        rate(apiserver_request_duration_seconds_bucket{job="apiserver",le="+Inf",scope!="",verb!="WATCH"}[1h] offset 30s)
       )
   - record: gitlab_component_ops:rate_1h
     labels:
@@ -293,7 +293,7 @@ groups:
       type: kube
     expr: |
       sum by (env,environment) (
-        rate(apiserver_request_total{job="apiserver",scope!=""}[1h])
+        rate(apiserver_request_total{job="apiserver",scope!=""}[1h] offset 30s)
       )
   - record: gitlab_component_errors:rate_1h
     labels:
@@ -304,7 +304,7 @@ groups:
     expr: |
       (
         sum by (env,environment) (
-          rate(apiserver_request_total{code=~"5..",job="apiserver",scope!=""}[1h])
+          rate(apiserver_request_total{code=~"5..",job="apiserver",scope!=""}[1h] offset 30s)
         )
       )
       or
@@ -360,7 +360,7 @@ groups:
       type: kube
     expr: |
       sum by (env,environment) (
-        rate(apiserver_request_duration_seconds_bucket{job="apiserver",le="1",scope!="",verb!="WATCH"}[6h])
+        rate(apiserver_request_duration_seconds_bucket{job="apiserver",le="1",scope!="",verb!="WATCH"}[6h] offset 30s)
       )
   - record: gitlab_component_apdex:weight:score_6h
     labels:
@@ -370,7 +370,7 @@ groups:
       type: kube
     expr: |
       sum by (env,environment) (
-        rate(apiserver_request_duration_seconds_bucket{job="apiserver",le="+Inf",scope!="",verb!="WATCH"}[6h])
+        rate(apiserver_request_duration_seconds_bucket{job="apiserver",le="+Inf",scope!="",verb!="WATCH"}[6h] offset 30s)
       )
   - record: gitlab_component_ops:rate_6h
     labels:
@@ -380,7 +380,7 @@ groups:
       type: kube
     expr: |
       sum by (env,environment) (
-        rate(apiserver_request_total{job="apiserver",scope!=""}[6h])
+        rate(apiserver_request_total{job="apiserver",scope!=""}[6h] offset 30s)
       )
   - record: gitlab_component_errors:rate_6h
     labels:
@@ -391,7 +391,7 @@ groups:
     expr: |
       (
         sum by (env,environment) (
-          rate(apiserver_request_total{code=~"5..",job="apiserver",scope!=""}[6h])
+          rate(apiserver_request_total{code=~"5..",job="apiserver",scope!=""}[6h] offset 30s)
         )
       )
       or

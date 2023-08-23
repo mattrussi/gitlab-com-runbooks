@@ -12,7 +12,7 @@ groups:
       type: mailroom
     expr: |
       sum by (env,environment) (
-        sli_aggregations:gitlab_sli_sidekiq_execution_total_rate1m{worker="EmailReceiverWorker"}
+        sli_aggregations:gitlab_sli_sidekiq_execution_total_rate1m{worker="EmailReceiverWorker"} offset 30s
       )
   - record: gitlab_component_errors:rate
     labels:
@@ -23,7 +23,7 @@ groups:
     expr: |
       (
         sum by (env,environment) (
-          sli_aggregations:gitlab_sli_sidekiq_execution_error_total_rate1m{worker="EmailReceiverWorker"}
+          sli_aggregations:gitlab_sli_sidekiq_execution_error_total_rate1m{worker="EmailReceiverWorker"} offset 30s
         )
       )
       or
@@ -43,7 +43,7 @@ groups:
       type: mailroom
     expr: |
       sum by (env,environment) (
-        sli_aggregations:gitlab_sli_sidekiq_execution_total_rate5m{worker="EmailReceiverWorker"}
+        sli_aggregations:gitlab_sli_sidekiq_execution_total_rate5m{worker="EmailReceiverWorker"} offset 30s
       )
   - record: gitlab_component_errors:rate_5m
     labels:
@@ -54,7 +54,7 @@ groups:
     expr: |
       (
         sum by (env,environment) (
-          sli_aggregations:gitlab_sli_sidekiq_execution_error_total_rate5m{worker="EmailReceiverWorker"}
+          sli_aggregations:gitlab_sli_sidekiq_execution_error_total_rate5m{worker="EmailReceiverWorker"} offset 30s
         )
       )
       or
@@ -74,7 +74,7 @@ groups:
       type: mailroom
     expr: |
       sum by (env,environment) (
-        sli_aggregations:gitlab_sli_sidekiq_execution_total_rate30m{worker="EmailReceiverWorker"}
+        sli_aggregations:gitlab_sli_sidekiq_execution_total_rate30m{worker="EmailReceiverWorker"} offset 30s
       )
   - record: gitlab_component_errors:rate_30m
     labels:
@@ -85,7 +85,7 @@ groups:
     expr: |
       (
         sum by (env,environment) (
-          sli_aggregations:gitlab_sli_sidekiq_execution_error_total_rate30m{worker="EmailReceiverWorker"}
+          sli_aggregations:gitlab_sli_sidekiq_execution_error_total_rate30m{worker="EmailReceiverWorker"} offset 30s
         )
       )
       or
@@ -106,7 +106,7 @@ groups:
       upscale_source: "yes"
     expr: |
       sum by (env,environment) (
-        sli_aggregations:gitlab_sli_sidekiq_execution_total_rate1h{worker="EmailReceiverWorker"}
+        sli_aggregations:gitlab_sli_sidekiq_execution_total_rate1h{worker="EmailReceiverWorker"} offset 30s
       )
   - record: gitlab_component_errors:rate_1h
     labels:
@@ -118,7 +118,7 @@ groups:
     expr: |
       (
         sum by (env,environment) (
-          sli_aggregations:gitlab_sli_sidekiq_execution_error_total_rate1h{worker="EmailReceiverWorker"}
+          sli_aggregations:gitlab_sli_sidekiq_execution_error_total_rate1h{worker="EmailReceiverWorker"} offset 30s
         )
       )
       or

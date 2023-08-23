@@ -11,9 +11,9 @@ groups:
       type: sentry
     expr: |
       sum by (env,environment,stage) (
-        label_replace(rate(pg_stat_database_xact_commit{datname="sentry",job="postgres",type="sentry"}[1m]), "_c", "0", "", "")
+        label_replace(rate(pg_stat_database_xact_commit{datname="sentry",job="postgres",type="sentry"}[1m] offset 30s), "_c", "0", "", "")
         or
-        label_replace(rate(pg_stat_database_xact_rollback{datname="sentry",job="postgres",type="sentry"}[1m]), "_c", "1", "", "")
+        label_replace(rate(pg_stat_database_xact_rollback{datname="sentry",job="postgres",type="sentry"}[1m] offset 30s), "_c", "1", "", "")
       )
   - record: gitlab_component_errors:rate
     labels:
@@ -23,7 +23,7 @@ groups:
     expr: |
       (
         sum by (env,environment,stage) (
-          rate(pg_stat_database_xact_rollback{datname="sentry",job="postgres",type="sentry"}[1m])
+          rate(pg_stat_database_xact_rollback{datname="sentry",job="postgres",type="sentry"}[1m] offset 30s)
         )
       )
       or
@@ -39,7 +39,7 @@ groups:
       type: sentry
     expr: |
       sum by (env,environment,stage) (
-        rate(sentry_events_latency_seconds_bucket{job="statsd_exporter",le="10",type="sentry"}[1m])
+        rate(sentry_events_latency_seconds_bucket{job="statsd_exporter",le="10",type="sentry"}[1m] offset 30s)
       )
   - record: gitlab_component_apdex:weight:score
     labels:
@@ -48,7 +48,7 @@ groups:
       type: sentry
     expr: |
       sum by (env,environment,stage) (
-        rate(sentry_events_latency_seconds_bucket{job="statsd_exporter",le="+Inf",type="sentry"}[1m])
+        rate(sentry_events_latency_seconds_bucket{job="statsd_exporter",le="+Inf",type="sentry"}[1m] offset 30s)
       )
   - record: gitlab_component_ops:rate
     labels:
@@ -57,7 +57,7 @@ groups:
       type: sentry
     expr: |
       sum by (env,environment,stage) (
-        rate(sentry_client_api_responses_total{job="statsd_exporter",type="sentry"}[1m])
+        rate(sentry_client_api_responses_total{job="statsd_exporter",type="sentry"}[1m] offset 30s)
       )
   - record: gitlab_component_errors:rate
     labels:
@@ -67,7 +67,7 @@ groups:
     expr: |
       (
         sum by (env,environment,stage) (
-          rate(sentry_client_api_responses_total{job="statsd_exporter",status=~"^5.*",type="sentry"}[1m])
+          rate(sentry_client_api_responses_total{job="statsd_exporter",status=~"^5.*",type="sentry"}[1m] offset 30s)
         )
       )
       or
@@ -86,9 +86,9 @@ groups:
       type: sentry
     expr: |
       sum by (env,environment,stage) (
-        label_replace(rate(pg_stat_database_xact_commit{datname="sentry",job="postgres",type="sentry"}[5m]), "_c", "0", "", "")
+        label_replace(rate(pg_stat_database_xact_commit{datname="sentry",job="postgres",type="sentry"}[5m] offset 30s), "_c", "0", "", "")
         or
-        label_replace(rate(pg_stat_database_xact_rollback{datname="sentry",job="postgres",type="sentry"}[5m]), "_c", "1", "", "")
+        label_replace(rate(pg_stat_database_xact_rollback{datname="sentry",job="postgres",type="sentry"}[5m] offset 30s), "_c", "1", "", "")
       )
   - record: gitlab_component_errors:rate_5m
     labels:
@@ -98,7 +98,7 @@ groups:
     expr: |
       (
         sum by (env,environment,stage) (
-          rate(pg_stat_database_xact_rollback{datname="sentry",job="postgres",type="sentry"}[5m])
+          rate(pg_stat_database_xact_rollback{datname="sentry",job="postgres",type="sentry"}[5m] offset 30s)
         )
       )
       or
@@ -114,7 +114,7 @@ groups:
       type: sentry
     expr: |
       sum by (env,environment,stage) (
-        rate(sentry_events_latency_seconds_bucket{job="statsd_exporter",le="10",type="sentry"}[5m])
+        rate(sentry_events_latency_seconds_bucket{job="statsd_exporter",le="10",type="sentry"}[5m] offset 30s)
       )
   - record: gitlab_component_apdex:weight:score_5m
     labels:
@@ -123,7 +123,7 @@ groups:
       type: sentry
     expr: |
       sum by (env,environment,stage) (
-        rate(sentry_events_latency_seconds_bucket{job="statsd_exporter",le="+Inf",type="sentry"}[5m])
+        rate(sentry_events_latency_seconds_bucket{job="statsd_exporter",le="+Inf",type="sentry"}[5m] offset 30s)
       )
   - record: gitlab_component_ops:rate_5m
     labels:
@@ -132,7 +132,7 @@ groups:
       type: sentry
     expr: |
       sum by (env,environment,stage) (
-        rate(sentry_client_api_responses_total{job="statsd_exporter",type="sentry"}[5m])
+        rate(sentry_client_api_responses_total{job="statsd_exporter",type="sentry"}[5m] offset 30s)
       )
   - record: gitlab_component_errors:rate_5m
     labels:
@@ -142,7 +142,7 @@ groups:
     expr: |
       (
         sum by (env,environment,stage) (
-          rate(sentry_client_api_responses_total{job="statsd_exporter",status=~"^5.*",type="sentry"}[5m])
+          rate(sentry_client_api_responses_total{job="statsd_exporter",status=~"^5.*",type="sentry"}[5m] offset 30s)
         )
       )
       or
@@ -161,9 +161,9 @@ groups:
       type: sentry
     expr: |
       sum by (env,environment,stage) (
-        label_replace(rate(pg_stat_database_xact_commit{datname="sentry",job="postgres",type="sentry"}[30m]), "_c", "0", "", "")
+        label_replace(rate(pg_stat_database_xact_commit{datname="sentry",job="postgres",type="sentry"}[30m] offset 30s), "_c", "0", "", "")
         or
-        label_replace(rate(pg_stat_database_xact_rollback{datname="sentry",job="postgres",type="sentry"}[30m]), "_c", "1", "", "")
+        label_replace(rate(pg_stat_database_xact_rollback{datname="sentry",job="postgres",type="sentry"}[30m] offset 30s), "_c", "1", "", "")
       )
   - record: gitlab_component_errors:rate_30m
     labels:
@@ -173,7 +173,7 @@ groups:
     expr: |
       (
         sum by (env,environment,stage) (
-          rate(pg_stat_database_xact_rollback{datname="sentry",job="postgres",type="sentry"}[30m])
+          rate(pg_stat_database_xact_rollback{datname="sentry",job="postgres",type="sentry"}[30m] offset 30s)
         )
       )
       or
@@ -189,7 +189,7 @@ groups:
       type: sentry
     expr: |
       sum by (env,environment,stage) (
-        rate(sentry_events_latency_seconds_bucket{job="statsd_exporter",le="10",type="sentry"}[30m])
+        rate(sentry_events_latency_seconds_bucket{job="statsd_exporter",le="10",type="sentry"}[30m] offset 30s)
       )
   - record: gitlab_component_apdex:weight:score_30m
     labels:
@@ -198,7 +198,7 @@ groups:
       type: sentry
     expr: |
       sum by (env,environment,stage) (
-        rate(sentry_events_latency_seconds_bucket{job="statsd_exporter",le="+Inf",type="sentry"}[30m])
+        rate(sentry_events_latency_seconds_bucket{job="statsd_exporter",le="+Inf",type="sentry"}[30m] offset 30s)
       )
   - record: gitlab_component_ops:rate_30m
     labels:
@@ -207,7 +207,7 @@ groups:
       type: sentry
     expr: |
       sum by (env,environment,stage) (
-        rate(sentry_client_api_responses_total{job="statsd_exporter",type="sentry"}[30m])
+        rate(sentry_client_api_responses_total{job="statsd_exporter",type="sentry"}[30m] offset 30s)
       )
   - record: gitlab_component_errors:rate_30m
     labels:
@@ -217,7 +217,7 @@ groups:
     expr: |
       (
         sum by (env,environment,stage) (
-          rate(sentry_client_api_responses_total{job="statsd_exporter",status=~"^5.*",type="sentry"}[30m])
+          rate(sentry_client_api_responses_total{job="statsd_exporter",status=~"^5.*",type="sentry"}[30m] offset 30s)
         )
       )
       or
@@ -236,9 +236,9 @@ groups:
       type: sentry
     expr: |
       sum by (env,environment,stage) (
-        label_replace(rate(pg_stat_database_xact_commit{datname="sentry",job="postgres",type="sentry"}[1h]), "_c", "0", "", "")
+        label_replace(rate(pg_stat_database_xact_commit{datname="sentry",job="postgres",type="sentry"}[1h] offset 30s), "_c", "0", "", "")
         or
-        label_replace(rate(pg_stat_database_xact_rollback{datname="sentry",job="postgres",type="sentry"}[1h]), "_c", "1", "", "")
+        label_replace(rate(pg_stat_database_xact_rollback{datname="sentry",job="postgres",type="sentry"}[1h] offset 30s), "_c", "1", "", "")
       )
   - record: gitlab_component_errors:rate_1h
     labels:
@@ -248,7 +248,7 @@ groups:
     expr: |
       (
         sum by (env,environment,stage) (
-          rate(pg_stat_database_xact_rollback{datname="sentry",job="postgres",type="sentry"}[1h])
+          rate(pg_stat_database_xact_rollback{datname="sentry",job="postgres",type="sentry"}[1h] offset 30s)
         )
       )
       or
@@ -264,7 +264,7 @@ groups:
       type: sentry
     expr: |
       sum by (env,environment,stage) (
-        rate(sentry_events_latency_seconds_bucket{job="statsd_exporter",le="10",type="sentry"}[1h])
+        rate(sentry_events_latency_seconds_bucket{job="statsd_exporter",le="10",type="sentry"}[1h] offset 30s)
       )
   - record: gitlab_component_apdex:weight:score_1h
     labels:
@@ -273,7 +273,7 @@ groups:
       type: sentry
     expr: |
       sum by (env,environment,stage) (
-        rate(sentry_events_latency_seconds_bucket{job="statsd_exporter",le="+Inf",type="sentry"}[1h])
+        rate(sentry_events_latency_seconds_bucket{job="statsd_exporter",le="+Inf",type="sentry"}[1h] offset 30s)
       )
   - record: gitlab_component_ops:rate_1h
     labels:
@@ -282,7 +282,7 @@ groups:
       type: sentry
     expr: |
       sum by (env,environment,stage) (
-        rate(sentry_client_api_responses_total{job="statsd_exporter",type="sentry"}[1h])
+        rate(sentry_client_api_responses_total{job="statsd_exporter",type="sentry"}[1h] offset 30s)
       )
   - record: gitlab_component_errors:rate_1h
     labels:
@@ -292,7 +292,7 @@ groups:
     expr: |
       (
         sum by (env,environment,stage) (
-          rate(sentry_client_api_responses_total{job="statsd_exporter",status=~"^5.*",type="sentry"}[1h])
+          rate(sentry_client_api_responses_total{job="statsd_exporter",status=~"^5.*",type="sentry"}[1h] offset 30s)
         )
       )
       or
@@ -311,9 +311,9 @@ groups:
       type: sentry
     expr: |
       sum by (env,environment,stage) (
-        label_replace(rate(pg_stat_database_xact_commit{datname="sentry",job="postgres",type="sentry"}[6h]), "_c", "0", "", "")
+        label_replace(rate(pg_stat_database_xact_commit{datname="sentry",job="postgres",type="sentry"}[6h] offset 30s), "_c", "0", "", "")
         or
-        label_replace(rate(pg_stat_database_xact_rollback{datname="sentry",job="postgres",type="sentry"}[6h]), "_c", "1", "", "")
+        label_replace(rate(pg_stat_database_xact_rollback{datname="sentry",job="postgres",type="sentry"}[6h] offset 30s), "_c", "1", "", "")
       )
   - record: gitlab_component_errors:rate_6h
     labels:
@@ -323,7 +323,7 @@ groups:
     expr: |
       (
         sum by (env,environment,stage) (
-          rate(pg_stat_database_xact_rollback{datname="sentry",job="postgres",type="sentry"}[6h])
+          rate(pg_stat_database_xact_rollback{datname="sentry",job="postgres",type="sentry"}[6h] offset 30s)
         )
       )
       or
@@ -339,7 +339,7 @@ groups:
       type: sentry
     expr: |
       sum by (env,environment,stage) (
-        rate(sentry_events_latency_seconds_bucket{job="statsd_exporter",le="10",type="sentry"}[6h])
+        rate(sentry_events_latency_seconds_bucket{job="statsd_exporter",le="10",type="sentry"}[6h] offset 30s)
       )
   - record: gitlab_component_apdex:weight:score_6h
     labels:
@@ -348,7 +348,7 @@ groups:
       type: sentry
     expr: |
       sum by (env,environment,stage) (
-        rate(sentry_events_latency_seconds_bucket{job="statsd_exporter",le="+Inf",type="sentry"}[6h])
+        rate(sentry_events_latency_seconds_bucket{job="statsd_exporter",le="+Inf",type="sentry"}[6h] offset 30s)
       )
   - record: gitlab_component_ops:rate_6h
     labels:
@@ -357,7 +357,7 @@ groups:
       type: sentry
     expr: |
       sum by (env,environment,stage) (
-        rate(sentry_client_api_responses_total{job="statsd_exporter",type="sentry"}[6h])
+        rate(sentry_client_api_responses_total{job="statsd_exporter",type="sentry"}[6h] offset 30s)
       )
   - record: gitlab_component_errors:rate_6h
     labels:
@@ -367,7 +367,7 @@ groups:
     expr: |
       (
         sum by (env,environment,stage) (
-          rate(sentry_client_api_responses_total{job="statsd_exporter",status=~"^5.*",type="sentry"}[6h])
+          rate(sentry_client_api_responses_total{job="statsd_exporter",status=~"^5.*",type="sentry"}[6h] offset 30s)
         )
       )
       or

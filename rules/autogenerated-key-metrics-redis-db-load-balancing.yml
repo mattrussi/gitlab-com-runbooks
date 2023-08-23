@@ -12,7 +12,7 @@ groups:
       type: redis-db-load-balancing
     expr: |
       sum by (env,environment) (
-        rate(redis_commands_processed_total{type="redis-db-load-balancing"}[1m]) and on (instance) redis_instance_info{role="master"}
+        rate(redis_commands_processed_total{type="redis-db-load-balancing"}[1m] offset 30s) and on (instance) redis_instance_info{role="master"}
       )
   - record: gitlab_component_apdex:success:rate
     labels:
@@ -23,11 +23,11 @@ groups:
     expr: |
       (
         sum by (env,environment) (
-          rate(gitlab_redis_client_requests_duration_seconds_bucket{le="0.5",storage="db_load_balancing"}[1m])
+          rate(gitlab_redis_client_requests_duration_seconds_bucket{le="0.5",storage="db_load_balancing"}[1m] offset 30s)
         )
         +
         sum by (env,environment) (
-          rate(gitlab_redis_client_requests_duration_seconds_bucket{le="0.75",storage="db_load_balancing"}[1m])
+          rate(gitlab_redis_client_requests_duration_seconds_bucket{le="0.75",storage="db_load_balancing"}[1m] offset 30s)
         )
       )
       /
@@ -40,7 +40,7 @@ groups:
       type: redis-db-load-balancing
     expr: |
       sum by (env,environment) (
-        rate(gitlab_redis_client_requests_duration_seconds_bucket{le="+Inf",storage="db_load_balancing"}[1m])
+        rate(gitlab_redis_client_requests_duration_seconds_bucket{le="+Inf",storage="db_load_balancing"}[1m] offset 30s)
       )
   - record: gitlab_component_ops:rate
     labels:
@@ -50,7 +50,7 @@ groups:
       type: redis-db-load-balancing
     expr: |
       sum by (env,environment) (
-        rate(gitlab_redis_client_requests_total{storage="db_load_balancing"}[1m])
+        rate(gitlab_redis_client_requests_total{storage="db_load_balancing"}[1m] offset 30s)
       )
   - record: gitlab_component_errors:rate
     labels:
@@ -61,7 +61,7 @@ groups:
     expr: |
       (
         sum by (env,environment) (
-          rate(gitlab_redis_client_exceptions_total{storage="db_load_balancing"}[1m])
+          rate(gitlab_redis_client_exceptions_total{storage="db_load_balancing"}[1m] offset 30s)
         )
       )
       or
@@ -78,7 +78,7 @@ groups:
       type: redis-db-load-balancing
     expr: |
       sum by (env,environment) (
-        rate(redis_commands_processed_total{type="redis-db-load-balancing"}[1m]) and on (instance) redis_instance_info{role="slave"}
+        rate(redis_commands_processed_total{type="redis-db-load-balancing"}[1m] offset 30s) and on (instance) redis_instance_info{role="slave"}
       )
 - name: 'Component-Level SLIs: redis-db-load-balancing - 5m burn-rate'
   interval: 1m
@@ -91,7 +91,7 @@ groups:
       type: redis-db-load-balancing
     expr: |
       sum by (env,environment) (
-        rate(redis_commands_processed_total{type="redis-db-load-balancing"}[5m]) and on (instance) redis_instance_info{role="master"}
+        rate(redis_commands_processed_total{type="redis-db-load-balancing"}[5m] offset 30s) and on (instance) redis_instance_info{role="master"}
       )
   - record: gitlab_component_apdex:success:rate_5m
     labels:
@@ -102,11 +102,11 @@ groups:
     expr: |
       (
         sum by (env,environment) (
-          rate(gitlab_redis_client_requests_duration_seconds_bucket{le="0.5",storage="db_load_balancing"}[5m])
+          rate(gitlab_redis_client_requests_duration_seconds_bucket{le="0.5",storage="db_load_balancing"}[5m] offset 30s)
         )
         +
         sum by (env,environment) (
-          rate(gitlab_redis_client_requests_duration_seconds_bucket{le="0.75",storage="db_load_balancing"}[5m])
+          rate(gitlab_redis_client_requests_duration_seconds_bucket{le="0.75",storage="db_load_balancing"}[5m] offset 30s)
         )
       )
       /
@@ -119,7 +119,7 @@ groups:
       type: redis-db-load-balancing
     expr: |
       sum by (env,environment) (
-        rate(gitlab_redis_client_requests_duration_seconds_bucket{le="+Inf",storage="db_load_balancing"}[5m])
+        rate(gitlab_redis_client_requests_duration_seconds_bucket{le="+Inf",storage="db_load_balancing"}[5m] offset 30s)
       )
   - record: gitlab_component_ops:rate_5m
     labels:
@@ -129,7 +129,7 @@ groups:
       type: redis-db-load-balancing
     expr: |
       sum by (env,environment) (
-        rate(gitlab_redis_client_requests_total{storage="db_load_balancing"}[5m])
+        rate(gitlab_redis_client_requests_total{storage="db_load_balancing"}[5m] offset 30s)
       )
   - record: gitlab_component_errors:rate_5m
     labels:
@@ -140,7 +140,7 @@ groups:
     expr: |
       (
         sum by (env,environment) (
-          rate(gitlab_redis_client_exceptions_total{storage="db_load_balancing"}[5m])
+          rate(gitlab_redis_client_exceptions_total{storage="db_load_balancing"}[5m] offset 30s)
         )
       )
       or
@@ -157,7 +157,7 @@ groups:
       type: redis-db-load-balancing
     expr: |
       sum by (env,environment) (
-        rate(redis_commands_processed_total{type="redis-db-load-balancing"}[5m]) and on (instance) redis_instance_info{role="slave"}
+        rate(redis_commands_processed_total{type="redis-db-load-balancing"}[5m] offset 30s) and on (instance) redis_instance_info{role="slave"}
       )
 - name: 'Component-Level SLIs: redis-db-load-balancing - 30m burn-rate'
   interval: 2m
@@ -170,7 +170,7 @@ groups:
       type: redis-db-load-balancing
     expr: |
       sum by (env,environment) (
-        rate(redis_commands_processed_total{type="redis-db-load-balancing"}[30m]) and on (instance) redis_instance_info{role="master"}
+        rate(redis_commands_processed_total{type="redis-db-load-balancing"}[30m] offset 30s) and on (instance) redis_instance_info{role="master"}
       )
   - record: gitlab_component_apdex:success:rate_30m
     labels:
@@ -181,11 +181,11 @@ groups:
     expr: |
       (
         sum by (env,environment) (
-          rate(gitlab_redis_client_requests_duration_seconds_bucket{le="0.5",storage="db_load_balancing"}[30m])
+          rate(gitlab_redis_client_requests_duration_seconds_bucket{le="0.5",storage="db_load_balancing"}[30m] offset 30s)
         )
         +
         sum by (env,environment) (
-          rate(gitlab_redis_client_requests_duration_seconds_bucket{le="0.75",storage="db_load_balancing"}[30m])
+          rate(gitlab_redis_client_requests_duration_seconds_bucket{le="0.75",storage="db_load_balancing"}[30m] offset 30s)
         )
       )
       /
@@ -198,7 +198,7 @@ groups:
       type: redis-db-load-balancing
     expr: |
       sum by (env,environment) (
-        rate(gitlab_redis_client_requests_duration_seconds_bucket{le="+Inf",storage="db_load_balancing"}[30m])
+        rate(gitlab_redis_client_requests_duration_seconds_bucket{le="+Inf",storage="db_load_balancing"}[30m] offset 30s)
       )
   - record: gitlab_component_ops:rate_30m
     labels:
@@ -208,7 +208,7 @@ groups:
       type: redis-db-load-balancing
     expr: |
       sum by (env,environment) (
-        rate(gitlab_redis_client_requests_total{storage="db_load_balancing"}[30m])
+        rate(gitlab_redis_client_requests_total{storage="db_load_balancing"}[30m] offset 30s)
       )
   - record: gitlab_component_errors:rate_30m
     labels:
@@ -219,7 +219,7 @@ groups:
     expr: |
       (
         sum by (env,environment) (
-          rate(gitlab_redis_client_exceptions_total{storage="db_load_balancing"}[30m])
+          rate(gitlab_redis_client_exceptions_total{storage="db_load_balancing"}[30m] offset 30s)
         )
       )
       or
@@ -236,7 +236,7 @@ groups:
       type: redis-db-load-balancing
     expr: |
       sum by (env,environment) (
-        rate(redis_commands_processed_total{type="redis-db-load-balancing"}[30m]) and on (instance) redis_instance_info{role="slave"}
+        rate(redis_commands_processed_total{type="redis-db-load-balancing"}[30m] offset 30s) and on (instance) redis_instance_info{role="slave"}
       )
 - name: 'Component-Level SLIs: redis-db-load-balancing - 1h burn-rate'
   interval: 1m
@@ -249,7 +249,7 @@ groups:
       type: redis-db-load-balancing
     expr: |
       sum by (env,environment) (
-        rate(redis_commands_processed_total{type="redis-db-load-balancing"}[1h]) and on (instance) redis_instance_info{role="master"}
+        rate(redis_commands_processed_total{type="redis-db-load-balancing"}[1h] offset 30s) and on (instance) redis_instance_info{role="master"}
       )
   - record: gitlab_component_apdex:success:rate_1h
     labels:
@@ -260,11 +260,11 @@ groups:
     expr: |
       (
         sum by (env,environment) (
-          rate(gitlab_redis_client_requests_duration_seconds_bucket{le="0.5",storage="db_load_balancing"}[1h])
+          rate(gitlab_redis_client_requests_duration_seconds_bucket{le="0.5",storage="db_load_balancing"}[1h] offset 30s)
         )
         +
         sum by (env,environment) (
-          rate(gitlab_redis_client_requests_duration_seconds_bucket{le="0.75",storage="db_load_balancing"}[1h])
+          rate(gitlab_redis_client_requests_duration_seconds_bucket{le="0.75",storage="db_load_balancing"}[1h] offset 30s)
         )
       )
       /
@@ -277,7 +277,7 @@ groups:
       type: redis-db-load-balancing
     expr: |
       sum by (env,environment) (
-        rate(gitlab_redis_client_requests_duration_seconds_bucket{le="+Inf",storage="db_load_balancing"}[1h])
+        rate(gitlab_redis_client_requests_duration_seconds_bucket{le="+Inf",storage="db_load_balancing"}[1h] offset 30s)
       )
   - record: gitlab_component_ops:rate_1h
     labels:
@@ -287,7 +287,7 @@ groups:
       type: redis-db-load-balancing
     expr: |
       sum by (env,environment) (
-        rate(gitlab_redis_client_requests_total{storage="db_load_balancing"}[1h])
+        rate(gitlab_redis_client_requests_total{storage="db_load_balancing"}[1h] offset 30s)
       )
   - record: gitlab_component_errors:rate_1h
     labels:
@@ -298,7 +298,7 @@ groups:
     expr: |
       (
         sum by (env,environment) (
-          rate(gitlab_redis_client_exceptions_total{storage="db_load_balancing"}[1h])
+          rate(gitlab_redis_client_exceptions_total{storage="db_load_balancing"}[1h] offset 30s)
         )
       )
       or
@@ -315,7 +315,7 @@ groups:
       type: redis-db-load-balancing
     expr: |
       sum by (env,environment) (
-        rate(redis_commands_processed_total{type="redis-db-load-balancing"}[1h]) and on (instance) redis_instance_info{role="slave"}
+        rate(redis_commands_processed_total{type="redis-db-load-balancing"}[1h] offset 30s) and on (instance) redis_instance_info{role="slave"}
       )
 - name: 'Component-Level SLIs: redis-db-load-balancing - 6h burn-rate'
   interval: 2m
@@ -328,7 +328,7 @@ groups:
       type: redis-db-load-balancing
     expr: |
       sum by (env,environment) (
-        rate(redis_commands_processed_total{type="redis-db-load-balancing"}[6h]) and on (instance) redis_instance_info{role="master"}
+        rate(redis_commands_processed_total{type="redis-db-load-balancing"}[6h] offset 30s) and on (instance) redis_instance_info{role="master"}
       )
   - record: gitlab_component_apdex:success:rate_6h
     labels:
@@ -339,11 +339,11 @@ groups:
     expr: |
       (
         sum by (env,environment) (
-          rate(gitlab_redis_client_requests_duration_seconds_bucket{le="0.5",storage="db_load_balancing"}[6h])
+          rate(gitlab_redis_client_requests_duration_seconds_bucket{le="0.5",storage="db_load_balancing"}[6h] offset 30s)
         )
         +
         sum by (env,environment) (
-          rate(gitlab_redis_client_requests_duration_seconds_bucket{le="0.75",storage="db_load_balancing"}[6h])
+          rate(gitlab_redis_client_requests_duration_seconds_bucket{le="0.75",storage="db_load_balancing"}[6h] offset 30s)
         )
       )
       /
@@ -356,7 +356,7 @@ groups:
       type: redis-db-load-balancing
     expr: |
       sum by (env,environment) (
-        rate(gitlab_redis_client_requests_duration_seconds_bucket{le="+Inf",storage="db_load_balancing"}[6h])
+        rate(gitlab_redis_client_requests_duration_seconds_bucket{le="+Inf",storage="db_load_balancing"}[6h] offset 30s)
       )
   - record: gitlab_component_ops:rate_6h
     labels:
@@ -366,7 +366,7 @@ groups:
       type: redis-db-load-balancing
     expr: |
       sum by (env,environment) (
-        rate(gitlab_redis_client_requests_total{storage="db_load_balancing"}[6h])
+        rate(gitlab_redis_client_requests_total{storage="db_load_balancing"}[6h] offset 30s)
       )
   - record: gitlab_component_errors:rate_6h
     labels:
@@ -377,7 +377,7 @@ groups:
     expr: |
       (
         sum by (env,environment) (
-          rate(gitlab_redis_client_exceptions_total{storage="db_load_balancing"}[6h])
+          rate(gitlab_redis_client_exceptions_total{storage="db_load_balancing"}[6h] offset 30s)
         )
       )
       or
@@ -394,7 +394,7 @@ groups:
       type: redis-db-load-balancing
     expr: |
       sum by (env,environment) (
-        rate(redis_commands_processed_total{type="redis-db-load-balancing"}[6h]) and on (instance) redis_instance_info{role="slave"}
+        rate(redis_commands_processed_total{type="redis-db-load-balancing"}[6h] offset 30s) and on (instance) redis_instance_info{role="slave"}
       )
 - name: 'Component mapping: redis-db-load-balancing'
   interval: 1m

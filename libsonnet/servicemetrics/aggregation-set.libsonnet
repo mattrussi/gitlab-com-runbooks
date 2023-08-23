@@ -12,6 +12,8 @@ local definitionDefaults = {
 
   upscaleLongerBurnRates: false,
 
+  offset: null,
+
   // By default we generate SLO Analysis dashboards when
   // the aggregation set is not an intermediate source
   generateSLODashboards: !self.intermediateSource,
@@ -42,6 +44,7 @@ local buildValidator(definition) =
     selector: validator.object,
     labels: arrayOfStringsValidator,
     upscaleLongerBurnRates: validator.boolean,
+    offset: validator.optional(validator.duration),
   };
   local optionalBurnRates =
     if std.objectHas(definition, 'burnRates') then
@@ -90,7 +93,11 @@ local buildValidator(definition) =
 
 {
   // For testing only.
-  _UnvalidatedAggregationSet(definition):: buildValidator(definitionDefaults + definition),
+  _UnvalidatedAggregationSet(definition):: {
+    local definitionWithDefaults = definitionDefaults + definition,
+    definitionWithDefaults: definitionWithDefaults,
+    validator: buildValidator(definitionDefaults + definition),
+  },
 
   AggregationSet(definition)::
     local unvalidatedDefinition = definitionDefaults + definition;

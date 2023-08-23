@@ -6,6 +6,7 @@
 // It will convert the expression into an equivalent expression that uses a recording rule,
 // if possible.
 //
+local optionalOffset = import 'lib/optional-offset.libsonnet';
 local aggregations = import 'promql/aggregations.libsonnet';
 local selectors = import 'promql/selectors.libsonnet';
 local metricsLabelRegistry = import 'servicemetrics/metric-label-registry.libsonnet';
@@ -105,6 +106,7 @@ local resolveRecordingRuleFor(metricName, requiredAggregationLabels, selector, d
     metricName=null,
     rangeInterval='5m',
     selector={},
+    offset=null
   )::
     // Currently only support sum/rate recording rules,
     // possibly support other options in future
@@ -112,14 +114,14 @@ local resolveRecordingRuleFor(metricName, requiredAggregationLabels, selector, d
       null
     else
       local resolvedRecordingRule = resolveRecordingRuleFor(metricName, aggregationLabels, selector, rangeInterval);
-
       if resolvedRecordingRule == null then
         null
       else
+        local recordingRuleWithOffset = resolvedRecordingRule + optionalOffset(offset);
         if aggregationFunction == 'sum' then
-          aggregations.aggregateOverQuery(aggregationFunction, aggregationLabels, resolvedRecordingRule)
+          aggregations.aggregateOverQuery(aggregationFunction, aggregationLabels, recordingRuleWithOffset)
         else if aggregationFunction == null then
-          resolvedRecordingRule
+          recordingRuleWithOffset
         else
           null,
 
