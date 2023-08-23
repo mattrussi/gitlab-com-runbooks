@@ -19,7 +19,7 @@ local incidentDashboard(incidentType, incidentTypeTag, description=null) =
   local commonPanels = [
     jobGraphs.running(['shard']),
     jobGraphs.started(['shard']),
-    jobQueueGraphs.durationHistogram,
+    jobQueueGraphs.durationHistogram(),
     jobQueueGraphs.pendingSize,
   ] + descriptionPanel;
 
@@ -34,7 +34,7 @@ local incidentDashboard(incidentType, incidentTypeTag, description=null) =
     ]
   )
   .addTemplates([
-    dashboardFilters.jobsRunningForProject,
+    dashboardFilters.projectJobsRunning,
   ])
   .addOverviewPanels(
     compact=false,
