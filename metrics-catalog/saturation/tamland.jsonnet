@@ -36,12 +36,32 @@ local page(path, title, service_pattern) =
     service_pattern: service_pattern,
   };
 
+// This is a Tamland saturation point definition
+local saturationPoint(point_name, point) =
+  {
+    title: point['title'],
+    description: point['description'],
+    // ... plus all the fields relevant for Tamland at the moment
+
+    // Depending on point.capacityPlanning.strategy, the query would look different
+    // see https://gitlab.com/gitlab-com/gl-infra/tamland/-/blob/33bfe60e5f548baede075d0735af7af36e76946e/forecaster.py#L48-48
+    query:'max(quantile_over_time(0.95, gitlab_component_saturation:ratio{component="' + point_name + '",type="{{ service.name }}",env="{{ defaults.env }}",environment="{{ defaults.env }}",stage=~"main|"}[1h]))',
+
+    // Want to see the entire thing?
+    //_all: point,
+  };
+
+local saturationPoints(points) = {
+  [point_name]: saturationPoint(point_name, points[point_name])
+  for point_name in std.objectFields(points)
+};
+
 {
   defaults: {
     environment: 'gprd',
   },
   services: services(uniqServices(saturation)),
-  saturationPoints: saturation,
+  saturationPoints: saturationPoints(saturation),
   shardMapping: {
     sidekiq: sidekiqHelpers.shards.listByName(),
   },

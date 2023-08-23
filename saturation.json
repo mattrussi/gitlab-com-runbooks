@@ -1,0 +1,1504 @@
+{
+   "defaults": {
+      "environment": "gprd"
+   },
+   "report": {
+      "pages": [
+         {
+            "path": "api-git-web.md",
+            "service_pattern": "api|git|internal-api|web|websockets",
+            "title": "API, Git, and Web"
+         },
+         {
+            "path": "ci-runners.md",
+            "service_pattern": "ci-runners",
+            "title": "CI Runners"
+         },
+         {
+            "path": "customersdot.md",
+            "service_pattern": "customersdot",
+            "title": "Customersdot"
+         },
+         {
+            "path": "gitaly.md",
+            "service_pattern": "gitaly|praefect",
+            "title": "Gitaly"
+         },
+         {
+            "path": "kube.md",
+            "service_pattern": "kube|external-dns",
+            "title": "Kubernetes"
+         },
+         {
+            "path": "monitoring-logging.md",
+            "service_pattern": "monitoring|logging|thanos",
+            "title": "Monitoring and Logging"
+         },
+         {
+            "path": "patroni.md",
+            "service_pattern": "patroni.*|pgbouncer.*|postgres.*",
+            "title": "Postgres (Patroni and PgBouncer)"
+         },
+         {
+            "path": "redis.md",
+            "service_pattern": "redis.*",
+            "title": "Redis"
+         },
+         {
+            "path": "search.md",
+            "service_pattern": "search",
+            "title": "Search"
+         },
+         {
+            "path": "sidekiq.md",
+            "service_pattern": "sidekiq",
+            "title": "Sidekiq"
+         },
+         {
+            "path": "ai-gateway.md",
+            "service_pattern": "ai_gateway",
+            "title": "AI gateway"
+         },
+         {
+            "path": "saturation.md",
+            "service_pattern": "camoproxy|cloud-sql|consul|frontend|google-cloud-storage|jaeger|kas|mailroom|nat|nginx|plantuml|pvs|registry|sentry|vault|web-pages|woodhouse|code_suggestions|ops-gitlab-net",
+            "title": "Other Utilization and Saturation Forecasting"
+         }
+      ]
+   },
+   "saturationPoints": {
+      "cgroup_memory": {
+         "description": "Cgroup memory utilization per node.\n\nSome services, notably Gitaly, are configured to run within a cgroup with a memory limit lower than the\nmemory limit for the node. This ensures that a traffic spike to Gitaly does not affect other services on the node.\n\nIf this resource is becoming saturated, this may indicate traffic spikes to Gitaly, abuse or possibly resource leaks in\nthe application. Gitaly or other git processes may be killed by the OOM killer when this resource is saturated.\n",
+         "query": "max(quantile_over_time(0.95, gitlab_component_saturation:ratio{component=\"cgroup_memory\",type=\"{{ service.name }}\",env=\"{{ defaults.env }}\",environment=\"{{ defaults.env }}\",stage=~\"main|\"}[1h]))",
+         "title": "Cgroup Memory Utilization per Node"
+      },
+      "cloudsql_cpu": {
+         "description": "CloudSQL CPU utilization.\n\nSee https://cloud.google.com/monitoring/api/metrics_gcp#gcp-cloudsql for\nmore details\n",
+         "query": "max(quantile_over_time(0.95, gitlab_component_saturation:ratio{component=\"cloudsql_cpu\",type=\"{{ service.name }}\",env=\"{{ defaults.env }}\",environment=\"{{ defaults.env }}\",stage=~\"main|\"}[1h]))",
+         "title": "CloudSQL CPU Utilization"
+      },
+      "cloudsql_disk": {
+         "description": "CloudSQL Disk utilization.\n\nSee https://cloud.google.com/monitoring/api/metrics_gcp#gcp-cloudsql for\nmore details\n",
+         "query": "max(quantile_over_time(0.95, gitlab_component_saturation:ratio{component=\"cloudsql_disk\",type=\"{{ service.name }}\",env=\"{{ defaults.env }}\",environment=\"{{ defaults.env }}\",stage=~\"main|\"}[1h]))",
+         "title": "CloudSQL Disk Utilization"
+      },
+      "cloudsql_memory": {
+         "description": "CloudSQL Memory utilization.\n\nSee https://cloud.google.com/monitoring/api/metrics_gcp#gcp-cloudsql for\nmore details\n",
+         "query": "max(quantile_over_time(0.95, gitlab_component_saturation:ratio{component=\"cloudsql_memory\",type=\"{{ service.name }}\",env=\"{{ defaults.env }}\",environment=\"{{ defaults.env }}\",stage=~\"main|\"}[1h]))",
+         "title": "CloudSQL Memory Utilization"
+      },
+      "cpu": {
+         "description": "This resource measures average CPU utilization across an all cores in a service fleet.\nIf it is becoming saturated, it may indicate that the fleet needs\nhorizontal or vertical scaling.\n",
+         "query": "max(quantile_over_time(0.95, gitlab_component_saturation:ratio{component=\"cpu\",type=\"{{ service.name }}\",env=\"{{ defaults.env }}\",environment=\"{{ defaults.env }}\",stage=~\"main|\"}[1h]))",
+         "title": "Average Service CPU Utilization"
+      },
+      "disk_inodes": {
+         "description": "Disk inode utilization per device per node.\n\nIf this is too high, its possible that a directory is filling up with\nfiles. Consider logging in an checking temp directories for large numbers\nof files\n",
+         "query": "max(quantile_over_time(0.95, gitlab_component_saturation:ratio{component=\"disk_inodes\",type=\"{{ service.name }}\",env=\"{{ defaults.env }}\",environment=\"{{ defaults.env }}\",stage=~\"main|\"}[1h]))",
+         "title": "Disk inode Utilization per Device per Node"
+      },
+      "disk_space": {
+         "description": "Disk space utilization per device per node.\n",
+         "query": "max(quantile_over_time(0.95, gitlab_component_saturation:ratio{component=\"disk_space\",type=\"{{ service.name }}\",env=\"{{ defaults.env }}\",environment=\"{{ defaults.env }}\",stage=~\"main|\"}[1h]))",
+         "title": "Disk Space Utilization per Device per Node"
+      },
+      "disk_sustained_read_iops": {
+         "description": "Disk sustained read IOPS utilization per node.\n",
+         "query": "max(quantile_over_time(0.95, gitlab_component_saturation:ratio{component=\"disk_sustained_read_iops\",type=\"{{ service.name }}\",env=\"{{ defaults.env }}\",environment=\"{{ defaults.env }}\",stage=~\"main|\"}[1h]))",
+         "title": "Disk Sustained Read IOPS Utilization per Node"
+      },
+      "disk_sustained_read_throughput": {
+         "description": "Disk sustained read throughput utilization per node.\n",
+         "query": "max(quantile_over_time(0.95, gitlab_component_saturation:ratio{component=\"disk_sustained_read_throughput\",type=\"{{ service.name }}\",env=\"{{ defaults.env }}\",environment=\"{{ defaults.env }}\",stage=~\"main|\"}[1h]))",
+         "title": "Disk Sustained Read Throughput Utilization per Node"
+      },
+      "disk_sustained_write_iops": {
+         "description": "Gitaly runs on Google Cloud's Persistent Disk product. This has a published sustained\nmaximum write IOPS value. This value can be exceeded for brief periods.\n\nIf a single node is consistently reaching saturation, it may indicate a noisy-neighbour repository,\npossible abuse or it may indicate that the node needs rebalancing.\n\nMore information can be found at\nhttps://cloud.google.com/compute/docs/disks/performance.\n",
+         "query": "max(quantile_over_time(0.95, gitlab_component_saturation:ratio{component=\"disk_sustained_write_iops\",type=\"{{ service.name }}\",env=\"{{ defaults.env }}\",environment=\"{{ defaults.env }}\",stage=~\"main|\"}[1h]))",
+         "title": "Disk Sustained Write IOPS Utilization per Node"
+      },
+      "disk_sustained_write_throughput": {
+         "description": "Gitaly runs on Google Cloud's Persistent Disk product. This has a published sustained\nmaximum write throughput value. This value can be exceeded for brief periods.\n\nIf a single node is consistently reaching saturation, it may indicate a noisy-neighbour repository,\npossible abuse or it may indicate that the node needs rebalancing.\n\nMore information can be found at\nhttps://cloud.google.com/compute/docs/disks/performance.\n",
+         "query": "max(quantile_over_time(0.95, gitlab_component_saturation:ratio{component=\"disk_sustained_write_throughput\",type=\"{{ service.name }}\",env=\"{{ defaults.env }}\",environment=\"{{ defaults.env }}\",stage=~\"main|\"}[1h]))",
+         "title": "Disk Sustained Write Throughput Utilization per Node"
+      },
+      "elastic_cpu": {
+         "description": "Average CPU utilization per Node.\n\nThis resource measures all CPU across a fleet. If it is becoming saturated, it may indicate that the fleet needs horizontal or\nvertical scaling. The metrics are coming from elasticsearch_exporter.\n",
+         "query": "max(quantile_over_time(0.95, gitlab_component_saturation:ratio{component=\"elastic_cpu\",type=\"{{ service.name }}\",env=\"{{ defaults.env }}\",environment=\"{{ defaults.env }}\",stage=~\"main|\"}[1h]))",
+         "title": "Average CPU Utilization per Node"
+      },
+      "elastic_disk_space": {
+         "description": "Disk utilization per device per node.\n",
+         "query": "max(quantile_over_time(0.95, gitlab_component_saturation:ratio{component=\"elastic_disk_space\",type=\"{{ service.name }}\",env=\"{{ defaults.env }}\",environment=\"{{ defaults.env }}\",stage=~\"main|\"}[1h]))",
+         "title": "Disk Utilization Overall"
+      },
+      "elastic_jvm_heap_memory": {
+         "description": "JVM heap memory utilization per node.\n",
+         "query": "max(quantile_over_time(0.95, gitlab_component_saturation:ratio{component=\"elastic_jvm_heap_memory\",type=\"{{ service.name }}\",env=\"{{ defaults.env }}\",environment=\"{{ defaults.env }}\",stage=~\"main|\"}[1h]))",
+         "title": "JVM Heap Utilization per Node"
+      },
+      "elastic_single_node_cpu": {
+         "description": "Average CPU per Node.\n\nThis resource measures all CPU across a fleet. If it is becoming saturated, it may indicate that the fleet needs horizontal or\nvertical scaling. The metrics are coming from elasticsearch_exporter.\n",
+         "query": "max(quantile_over_time(0.95, gitlab_component_saturation:ratio{component=\"elastic_single_node_cpu\",type=\"{{ service.name }}\",env=\"{{ defaults.env }}\",environment=\"{{ defaults.env }}\",stage=~\"main|\"}[1h]))",
+         "title": "Average CPU Utilization per Node"
+      },
+      "elastic_single_node_disk_space": {
+         "description": "Disk utilization per device per node.\n",
+         "query": "max(quantile_over_time(0.95, gitlab_component_saturation:ratio{component=\"elastic_single_node_disk_space\",type=\"{{ service.name }}\",env=\"{{ defaults.env }}\",environment=\"{{ defaults.env }}\",stage=~\"main|\"}[1h]))",
+         "title": "Disk Utilization per Device per Node"
+      },
+      "elastic_thread_pools": {
+         "description": "Utilization of each thread pool on each node.\n\nDescriptions of the threadpool types can be found at\nhttps://www.elastic.co/guide/en/elasticsearch/reference/current/modules-threadpool.html.\n",
+         "query": "max(quantile_over_time(0.95, gitlab_component_saturation:ratio{component=\"elastic_thread_pools\",type=\"{{ service.name }}\",env=\"{{ defaults.env }}\",environment=\"{{ defaults.env }}\",stage=~\"main|\"}[1h]))",
+         "title": "Thread pool utilization"
+      },
+      "excluded_sidekiq_thread_contention": {
+         "description": "Ruby (technically Ruby MRI), like some other scripting languages, uses a Global VM lock (GVL) also known as a\nGlobal Interpreter Lock (GIL) to ensure that multiple threads can execute safely. Ruby code is only allowed to\nexecute in one thread in a process at a time. When calling out to c extensions, the thread can cede the lock to\nother thread while it continues to execute.\n\nThis means that when CPU-bound workloads run in a multithreaded environment such as Puma or Sidekiq, contention\nwith other Ruby worker threads running in the same process can occur, effectively slowing thoses threads down as\nthey await GVL entry.\n\nOften the best fix for this situation is to add more workers by scaling up the fleet.\n",
+         "query": "max(quantile_over_time(0.95, gitlab_component_saturation:ratio{component=\"excluded_sidekiq_thread_contention\",type=\"{{ service.name }}\",env=\"{{ defaults.env }}\",environment=\"{{ defaults.env }}\",stage=~\"main|\"}[1h]))",
+         "title": "Excluded Shards Sidekiq Ruby Thread Contention"
+      },
+      "filestore_disk_read_iops_saturation": {
+         "description": "Filestore Disk Read IOPS Saturation.\n\nSee https://cloud.google.com/monitoring/api/metrics_gcp#gcp-file for\nmore details\n",
+         "query": "max(quantile_over_time(0.95, gitlab_component_saturation:ratio{component=\"filestore_disk_read_iops_saturation\",type=\"{{ service.name }}\",env=\"{{ defaults.env }}\",environment=\"{{ defaults.env }}\",stage=~\"main|\"}[1h]))",
+         "title": "Filestore Disk Read IOPS Saturation"
+      },
+      "filestore_disk_read_throughput_saturation": {
+         "description": "Filestore Disk Read Throughput Saturation.\n\nSee https://cloud.google.com/monitoring/api/metrics_gcp#gcp-file for\nmore details\n",
+         "query": "max(quantile_over_time(0.95, gitlab_component_saturation:ratio{component=\"filestore_disk_read_throughput_saturation\",type=\"{{ service.name }}\",env=\"{{ defaults.env }}\",environment=\"{{ defaults.env }}\",stage=~\"main|\"}[1h]))",
+         "title": "Filestore Disk Read Throughput Saturation"
+      },
+      "filestore_disk_utilization": {
+         "description": "Filestore Disk utilization.\n\nSee https://cloud.google.com/monitoring/api/metrics_gcp#gcp-file for\nmore details\n",
+         "query": "max(quantile_over_time(0.95, gitlab_component_saturation:ratio{component=\"filestore_disk_utilization\",type=\"{{ service.name }}\",env=\"{{ defaults.env }}\",environment=\"{{ defaults.env }}\",stage=~\"main|\"}[1h]))",
+         "title": "Filestore Disk Utilization"
+      },
+      "filestore_disk_write_iops_saturation": {
+         "description": "Filestore Disk Write IOPS Saturation.\n\nSee https://cloud.google.com/monitoring/api/metrics_gcp#gcp-file for\nmore details\n",
+         "query": "max(quantile_over_time(0.95, gitlab_component_saturation:ratio{component=\"filestore_disk_write_iops_saturation\",type=\"{{ service.name }}\",env=\"{{ defaults.env }}\",environment=\"{{ defaults.env }}\",stage=~\"main|\"}[1h]))",
+         "title": "Filestore Disk Write IOPS Saturation"
+      },
+      "filestore_disk_write_throughput_saturation": {
+         "description": "Filestore Disk Write Throughput Saturation.\n\nSee https://cloud.google.com/monitoring/api/metrics_gcp#gcp-file for\nmore details\n",
+         "query": "max(quantile_over_time(0.95, gitlab_component_saturation:ratio{component=\"filestore_disk_write_throughput_saturation\",type=\"{{ service.name }}\",env=\"{{ defaults.env }}\",environment=\"{{ defaults.env }}\",stage=~\"main|\"}[1h]))",
+         "title": "Filestore Disk Write Throughput Saturation"
+      },
+      "gcp_quota_limit": {
+         "description": "GCP Quota utilization / limit ratio\n\nSaturation on a quota may cause problems with creating infrastructure resources on GCP.\n\nTo fix, we can request a quota increase for the specific resource to the GCP support team.\n",
+         "query": "max(quantile_over_time(0.95, gitlab_component_saturation:ratio{component=\"gcp_quota_limit\",type=\"{{ service.name }}\",env=\"{{ defaults.env }}\",environment=\"{{ defaults.env }}\",stage=~\"main|\"}[1h]))",
+         "title": "GCP Quota utilization per environment"
+      },
+      "gcp_quota_limit_s4": {
+         "description": "GCP Quota utilization / limit ratio\n\nSaturation on a quota may cause problems with creating infrastructure resources on GCP.\n\nTo fix, we can request a quota increase for the specific resource to the GCP support team.\n",
+         "query": "max(quantile_over_time(0.95, gitlab_component_saturation:ratio{component=\"gcp_quota_limit_s4\",type=\"{{ service.name }}\",env=\"{{ defaults.env }}\",environment=\"{{ defaults.env }}\",stage=~\"main|\"}[1h]))",
+         "title": "GCP Quota utilization per environment"
+      },
+      "gcp_quota_limit_vertex_ai": {
+         "description": "GCP Quota utilization / limit ratio\n\nSaturation on a quota may cause problems with creating infrastructure resources on GCP.\n\nTo fix, we can request a quota increase for the specific resource to the GCP support team.\n",
+         "query": "max(quantile_over_time(0.95, gitlab_component_saturation:ratio{component=\"gcp_quota_limit_vertex_ai\",type=\"{{ service.name }}\",env=\"{{ defaults.env }}\",environment=\"{{ defaults.env }}\",stage=~\"main|\"}[1h]))",
+         "title": "GCP Quota utilization per environment"
+      },
+      "gitaly_active_node_available_space": {
+         "description": "Available space on active gitaly nodes\n\nActive nodes are Gitaly nodes that are currently receiving new repositories\n\nWe allow new Gitaly nodes to receive traffic until their disk is about 80%\nfull. After which we mark the weight of the node as 0 in the\n[Gitaly shard weights assigner](https://gitlab.com/gitlab-com/gl-infra/gitaly-shard-weights-assigner/-/blob/master/assigner.rb#L9).\n\nTo make sure we always have enough shards receiving new repositories, we want\nto have at least 8% of the total storage to be available for new projects.\nWhen this resource gets saturated, we could be creating to many projects on\na limited set of nodes, which could cause these nodes to be busier than\nusual. To add new nodes start a new change issue with `/change declare` in Slack,\nand select the `change_gitaly_storage_creation.md` template.\n",
+         "query": "max(quantile_over_time(0.95, gitlab_component_saturation:ratio{component=\"gitaly_active_node_available_space\",type=\"{{ service.name }}\",env=\"{{ defaults.env }}\",environment=\"{{ defaults.env }}\",stage=~\"main|\"}[1h]))",
+         "title": "Gitaly Active Node Available Space"
+      },
+      "gitaly_total_disk_space": {
+         "description": "Gitaly Total Disk Utilization.\n\nThis saturation metric monitors the total available capacity across the entire Gitaly fleet.\nBy ensuring that we keep sufficient headroom on the saturation resource, we are able to\nspread load across the fleet.\n\nWhen this alert fires, consider adding new Gitaly nodes. The [Gitaly Capacity Planner](https://dashboards.gitlab.net/d/alerts-gitaly_capacity_planner/alerts-gitaly-capacity-planner?orgId=1)\ndashboard can help determine how many new nodes will be needed.\n",
+         "query": "max(quantile_over_time(0.95, gitlab_component_saturation:ratio{component=\"gitaly_total_disk_space\",type=\"{{ service.name }}\",env=\"{{ defaults.env }}\",environment=\"{{ defaults.env }}\",stage=~\"main|\"}[1h]))",
+         "title": "Gitaly Total Disk Utilization"
+      },
+      "go_memory": {
+         "description": "Go's memory allocation strategy can make it look like a Go process is saturating memory when measured using RSS, when in fact\nthe process is not at risk of memory saturation. For this reason, we measure Go processes using the `go_memstat_alloc_bytes`\nmetric instead of RSS.\n",
+         "query": "max(quantile_over_time(0.95, gitlab_component_saturation:ratio{component=\"go_memory\",type=\"{{ service.name }}\",env=\"{{ defaults.env }}\",environment=\"{{ defaults.env }}\",stage=~\"main|\"}[1h]))",
+         "title": "Go Memory Utilization per Node"
+      },
+      "kube_container_cpu": {
+         "description": "Kubernetes containers are allocated a share of CPU. When this is exhausted, the container may be thottled.\n",
+         "query": "max(quantile_over_time(0.95, gitlab_component_saturation:ratio{component=\"kube_container_cpu\",type=\"{{ service.name }}\",env=\"{{ defaults.env }}\",environment=\"{{ defaults.env }}\",stage=~\"main|\"}[1h]))",
+         "title": "Kube Container CPU Utilization"
+      },
+      "kube_container_memory": {
+         "description": "This uses the working set size from cAdvisor for the cgroup's memory usage. That may\nnot be a good measure as it includes filesystem cache pages that are not necessarily\nattributable to the application inside the cgroup, and are permitted to be evicted\ninstead of being OOM killed.\n",
+         "query": "max(quantile_over_time(0.95, gitlab_component_saturation:ratio{component=\"kube_container_memory\",type=\"{{ service.name }}\",env=\"{{ defaults.env }}\",environment=\"{{ defaults.env }}\",stage=~\"main|\"}[1h]))",
+         "title": "Kube Container Memory Utilization"
+      },
+      "kube_container_rss": {
+         "description": "Records the total anonymous (unevictable) memory utilization for containers for this\nservice, as a percentage of the memory limit as configured through Kubernetes.\n\nThis is computed using the container's resident set size (RSS), as opposed to\nkube_container_memory which uses the working set size. For our purposes, RSS is the\nbetter metric as cAdvisor's working set calculation includes pages from the\nfilesystem cache that can (and will) be evicted before the OOM killer kills the\ncgroup.\n\nA container's RSS (anonymous memory usage) is still not precisely what the OOM\nkiller will use, but it's a better approximation of what the container's workload is\nactually using. RSS metrics can, however, be dramatically inflated if a process in\nthe container uses MADV_FREE (lazy-free) memory. RSS will include the memory that is\navailable to be reclaimed without a page fault, but not currently in use.\n\nThe most common case of OOM kills is for anonymous memory demand to overwhelm the\ncontainer's memory limit. On swapless hosts, anonymous memory cannot be evicted from\nthe page cache, so when a container's memory usage is mostly anonymous pages, the\nonly remaining option to relieve memory pressure may be the OOM killer.\n\nAs container RSS approaches container memory limit, OOM kills become much more\nlikely. Consequently, this ratio is a good leading indicator of memory saturation\nand OOM risk.\n",
+         "query": "max(quantile_over_time(0.95, gitlab_component_saturation:ratio{component=\"kube_container_rss\",type=\"{{ service.name }}\",env=\"{{ defaults.env }}\",environment=\"{{ defaults.env }}\",stage=~\"main|\"}[1h]))",
+         "title": "Kube Container Memory Utilization (RSS)"
+      },
+      "kube_go_memory": {
+         "description": "Measures Go memory usage as a percentage of container memory limit\n",
+         "query": "max(quantile_over_time(0.95, gitlab_component_saturation:ratio{component=\"kube_go_memory\",type=\"{{ service.name }}\",env=\"{{ defaults.env }}\",environment=\"{{ defaults.env }}\",stage=~\"main|\"}[1h]))",
+         "title": "Go Memory Utilization per Node"
+      },
+      "kube_horizontalpodautoscaler_desired_replicas": {
+         "description": "The [Horizontal Pod Autoscaler](https://kubernetes.io/docs/tasks/run-application/horizontal-pod-autoscale/)\nautomatically scales the number of Pods in a deployment based on metrics.\n\nThe Horizontal Pod Autoscaler has a configured upper maximum. When this\nlimit is reached, the HPA will not increase the number of pods and other\nresource saturation (eg, CPU, memory) may occur.\n",
+         "query": "max(quantile_over_time(0.95, gitlab_component_saturation:ratio{component=\"kube_horizontalpodautoscaler_desired_replicas\",type=\"{{ service.name }}\",env=\"{{ defaults.env }}\",environment=\"{{ defaults.env }}\",stage=~\"main|\"}[1h]))",
+         "title": "Horizontal Pod Autoscaler Desired Replicas"
+      },
+      "kube_node_ips": {
+         "description": "This resource measures the number of nodes per subnet.\n\nIf it is becoming saturated, it may indicate that clusters need to be rebuilt with\na larger subnet.\n",
+         "query": "max(quantile_over_time(0.95, gitlab_component_saturation:ratio{component=\"kube_node_ips\",type=\"{{ service.name }}\",env=\"{{ defaults.env }}\",environment=\"{{ defaults.env }}\",stage=~\"main|\"}[1h]))",
+         "title": "Node IP subnet saturation"
+      },
+      "kube_persistent_volume_claim_disk_space": {
+         "description": "disk space utilization on persistent volume claims.\n",
+         "query": "max(quantile_over_time(0.95, gitlab_component_saturation:ratio{component=\"kube_persistent_volume_claim_disk_space\",type=\"{{ service.name }}\",env=\"{{ defaults.env }}\",environment=\"{{ defaults.env }}\",stage=~\"main|\"}[1h]))",
+         "title": "Kube Persistent Volume Claim Space Utilisation"
+      },
+      "kube_persistent_volume_claim_inodes": {
+         "description": "inode utilization on persistent volume claims.\n",
+         "query": "max(quantile_over_time(0.95, gitlab_component_saturation:ratio{component=\"kube_persistent_volume_claim_inodes\",type=\"{{ service.name }}\",env=\"{{ defaults.env }}\",environment=\"{{ defaults.env }}\",stage=~\"main|\"}[1h]))",
+         "title": "Kube Persistent Volume Claim inode Utilisation"
+      },
+      "kube_pool_cpu": {
+         "description": "This resource measures average CPU utilization across an all cores in the node pool for\na service fleet.\n\nIf it is becoming saturated, it may indicate that the fleet needs horizontal scaling.\n",
+         "query": "max(quantile_over_time(0.95, gitlab_component_saturation:ratio{component=\"kube_pool_cpu\",type=\"{{ service.name }}\",env=\"{{ defaults.env }}\",environment=\"{{ defaults.env }}\",stage=~\"main|\"}[1h]))",
+         "title": "Average Node Pool CPU Utilization"
+      },
+      "kube_pool_max_nodes": {
+         "description": "A GKE kubernetes node pool is close to it's maximum number of nodes.\n\nThe maximum is defined in terraform, via the `max_node_count` field of a node pool. The limit is per-zone, so for\nsingle zone clusters the number of nodes will match the limit, for regional clusters, the limit is multiplied by\nthe number of zones the cluster is deployed over.\n",
+         "query": "max(quantile_over_time(0.95, gitlab_component_saturation:ratio{component=\"kube_pool_max_nodes\",type=\"{{ service.name }}\",env=\"{{ defaults.env }}\",environment=\"{{ defaults.env }}\",stage=~\"main|\"}[1h]))",
+         "title": "Kube Pool Max Node Limit"
+      },
+      "memory": {
+         "description": "Memory utilization per device per node.\n",
+         "query": "max(quantile_over_time(0.95, gitlab_component_saturation:ratio{component=\"memory\",type=\"{{ service.name }}\",env=\"{{ defaults.env }}\",environment=\"{{ defaults.env }}\",stage=~\"main|\"}[1h]))",
+         "title": "Memory Utilization per Node"
+      },
+      "memory_redis_cache": {
+         "description": "Memory utilization per device per node.\n\n\nredis-cluster-cache has a separate saturation point for this to exclude it from capacity planning calculations.\n",
+         "query": "max(quantile_over_time(0.95, gitlab_component_saturation:ratio{component=\"memory_redis_cache\",type=\"{{ service.name }}\",env=\"{{ defaults.env }}\",environment=\"{{ defaults.env }}\",stage=~\"main|\"}[1h]))",
+         "title": "Memory Utilization per Node"
+      },
+      "nat_gateway_port_allocation": {
+         "description": "Each NAT IP address on a Cloud NAT gateway offers 64,512 TCP source ports and 64,512 UDP source ports.\n\nWhen these are exhausted, processes may experience connection problems to external destinations. In the application these\nmay manifest as SMTP connection drops or webhook delivery failures. In Kubernetes, nodes may fail while\nattempting to download images from external repositories.\n\nMore details in the Cloud NAT documentation: https://cloud.google.com/nat/docs/ports-and-addresses\n",
+         "query": "max(quantile_over_time(0.95, gitlab_component_saturation:ratio{component=\"nat_gateway_port_allocation\",type=\"{{ service.name }}\",env=\"{{ defaults.env }}\",environment=\"{{ defaults.env }}\",stage=~\"main|\"}[1h]))",
+         "title": "Cloud NAT Gateway Port Allocation"
+      },
+      "nat_host_port_allocation": {
+         "description": "Cloud NAT will allocate a set of NAT ports to each host in a cluster. When these are all allocated,\nCloud NAT may be unable to allocate any more.\n\nWhen this happens, processes may experience connection problems to external destinations. In the application these\nmay manifest as SMTP connection drops or webhook delivery failures. In Kubernetes, nodes may fail while\nattempting to download images from external repositories.\n\nMore details in the Cloud NAT documentation: https://cloud.google.com/nat/docs/ports-and-addresses.\n\nNote: when reviewing the detail chart for this saturation point, the instance_id can be resolved using\n`gcloud compute instances list --project gitlab-production --filter \"id=$instance_id\"`.\n",
+         "query": "max(quantile_over_time(0.95, gitlab_component_saturation:ratio{component=\"nat_host_port_allocation\",type=\"{{ service.name }}\",env=\"{{ defaults.env }}\",environment=\"{{ defaults.env }}\",stage=~\"main|\"}[1h]))",
+         "title": "Cloud NAT Host Port Allocation"
+      },
+      "nf_conntrack_entries": {
+         "description": "Netfilter connection tracking table utilization per node.\n\nWhen saturated, new connection attempts (incoming SYN packets) are dropped with no reply, leaving clients to slowly retry (and typically fail again) over the next several seconds.  When packets are being dropped due to this condition, kernel will log the event as: \"nf_conntrack: table full, dropping packet\".\n",
+         "query": "max(quantile_over_time(0.95, gitlab_component_saturation:ratio{component=\"nf_conntrack_entries\",type=\"{{ service.name }}\",env=\"{{ defaults.env }}\",environment=\"{{ defaults.env }}\",stage=~\"main|\"}[1h]))",
+         "title": "conntrack Entries per Node"
+      },
+      "node_schedstat_waiting": {
+         "description": "Measures the amount of scheduler waiting time that processes are waiting\nto be scheduled, according to [`CPU Scheduling Metrics`](https://www.robustperception.io/cpu-scheduling-metrics-from-the-node-exporter).\n\nA high value indicates that a node has more processes to be run than CPU time available\nto handle them, and may lead to degraded responsiveness and performance from the application.\n\nAdditionally, it may indicate that the fleet is under-provisioned.\n",
+         "query": "max(quantile_over_time(0.95, gitlab_component_saturation:ratio{component=\"node_schedstat_waiting\",type=\"{{ service.name }}\",env=\"{{ defaults.env }}\",environment=\"{{ defaults.env }}\",stage=~\"main|\"}[1h]))",
+         "title": "Node Scheduler Waiting Time"
+      },
+      "nv_gpu_memory": {
+         "description": "This resource measures GPU memory utilization per GPU.\n\nIf this resource is becoming saturated, it may indicate that the fleet needs\nhorizontal or vertical scaling.\n\nFor metrics, refer to https://github.com/triton-inference-server/server/blob/main/docs/user_guide/metrics.md#gpu-metrics.\n\nFor scaling, refer to https://gitlab.com/gitlab-com/runbooks/-/tree/master/docs/code_suggestions#scalability.\n",
+         "query": "max(quantile_over_time(0.95, gitlab_component_saturation:ratio{component=\"nv_gpu_memory\",type=\"{{ service.name }}\",env=\"{{ defaults.env }}\",environment=\"{{ defaults.env }}\",stage=~\"main|\"}[1h]))",
+         "title": "GPU Memory Utilization"
+      },
+      "nv_gpu_power": {
+         "description": "This resource measures GPU power consumption per GPU.\n\nIf this resource is becoming saturated, it may indicate that the fleet needs\nhorizontal or vertical scaling.\n\nFor metrics, refer to https://github.com/triton-inference-server/server/blob/main/docs/user_guide/metrics.md#gpu-metrics.\n\nFor scaling, refer to https://gitlab.com/gitlab-com/runbooks/-/tree/master/docs/code_suggestions#scalability.\n",
+         "query": "max(quantile_over_time(0.95, gitlab_component_saturation:ratio{component=\"nv_gpu_power\",type=\"{{ service.name }}\",env=\"{{ defaults.env }}\",environment=\"{{ defaults.env }}\",stage=~\"main|\"}[1h]))",
+         "title": "GPU Power Consumption"
+      },
+      "nv_gpu_utilization": {
+         "description": "This resource measures GPU utilization per GPU.\n\nIf this resource is becoming saturated, it may indicate that the fleet needs\nhorizontal or vertical scaling.\n\nFor metrics, refer to https://github.com/triton-inference-server/server/blob/main/docs/user_guide/metrics.md#gpu-metrics.\n\nFor scaling, refer to https://gitlab.com/gitlab-com/runbooks/-/tree/master/docs/code_suggestions#scalability.\n",
+         "query": "max(quantile_over_time(0.95, gitlab_component_saturation:ratio{component=\"nv_gpu_utilization\",type=\"{{ service.name }}\",env=\"{{ defaults.env }}\",environment=\"{{ defaults.env }}\",stage=~\"main|\"}[1h]))",
+         "title": "GPU Utilization"
+      },
+      "open_fds": {
+         "description": "Open file descriptor utilization per instance.\n\nSaturation on file descriptor limits may indicate a resource-descriptor leak in the application.\n\nAs a temporary fix, you may want to consider restarting the affected process.\n",
+         "query": "max(quantile_over_time(0.95, gitlab_component_saturation:ratio{component=\"open_fds\",type=\"{{ service.name }}\",env=\"{{ defaults.env }}\",environment=\"{{ defaults.env }}\",stage=~\"main|\"}[1h]))",
+         "title": "Open file descriptor utilization per instance"
+      },
+      "pg_active_db_connections_primary": {
+         "description": "Active db connection utilization on the primary node.\n\nPostgres is configured to use a maximum number of connections.\nWhen this resource is saturated, connections may queue.\n",
+         "query": "max(quantile_over_time(0.95, gitlab_component_saturation:ratio{component=\"pg_active_db_connections_primary\",type=\"{{ service.name }}\",env=\"{{ defaults.env }}\",environment=\"{{ defaults.env }}\",stage=~\"main|\"}[1h]))",
+         "title": "Active Primary DB Connection Utilization"
+      },
+      "pg_active_db_connections_replica": {
+         "description": "Active db connection utilization per replica node\n\nPostgres is configured to use a maximum number of connections.\nWhen this resource is saturated, connections may queue.\n",
+         "query": "max(quantile_over_time(0.95, gitlab_component_saturation:ratio{component=\"pg_active_db_connections_replica\",type=\"{{ service.name }}\",env=\"{{ defaults.env }}\",environment=\"{{ defaults.env }}\",stage=~\"main|\"}[1h]))",
+         "title": "Active Secondary DB Connection Utilization"
+      },
+      "pg_btree_bloat": {
+         "description": "This estimates the total bloat in Postgres Btree indexes, as a percentage of total index size.\n\nIMPORTANT: bloat estimates are rough and depending on table/index structure, can be off for individual indexes,\nin some cases significantly (10-50%).\n\nThe larger this measure, the more pages will unnecessarily be retrieved during index scans.\n",
+         "query": "max(quantile_over_time(0.95, gitlab_component_saturation:ratio{component=\"pg_btree_bloat\",type=\"{{ service.name }}\",env=\"{{ defaults.env }}\",environment=\"{{ defaults.env }}\",stage=~\"main|\"}[1h]))",
+         "title": "Postgres btree bloat"
+      },
+      "pg_int4_id": {
+         "description": "This measures used int4 primary key capacity in selected postgres tables. It is critically important that we do not reach\nsaturation on this as GitLab will stop to work at this point.\n",
+         "query": "max(quantile_over_time(0.95, gitlab_component_saturation:ratio{component=\"pg_int4_id\",type=\"{{ service.name }}\",env=\"{{ defaults.env }}\",environment=\"{{ defaults.env }}\",stage=~\"main|\"}[1h]))",
+         "title": "Postgres int4 ID capacity"
+      },
+      "pg_primary_cpu": {
+         "description": "Average CPU utilization across all cores on the Postgres primary instance.\n",
+         "query": "max(quantile_over_time(0.95, gitlab_component_saturation:ratio{component=\"pg_primary_cpu\",type=\"{{ service.name }}\",env=\"{{ defaults.env }}\",environment=\"{{ defaults.env }}\",stage=~\"main|\"}[1h]))",
+         "title": "Average CPU Utilization on Postgres Primary Instance"
+      },
+      "pg_table_bloat": {
+         "description": "This measures the total bloat in Postgres Table pages, as a percentage of total size. This includes bloat in TOAST tables,\nand excludes extra space reserved due to fillfactor.\n",
+         "query": "max(quantile_over_time(0.95, gitlab_component_saturation:ratio{component=\"pg_table_bloat\",type=\"{{ service.name }}\",env=\"{{ defaults.env }}\",environment=\"{{ defaults.env }}\",stage=~\"main|\"}[1h]))",
+         "title": "Postgres Table Bloat"
+      },
+      "pg_txid_vacuum_to_wraparound": {
+         "description": "This saturation metric measures the capacity of the Postgres primary instance to perform autovacuum operations\non all tables.\n\nIt measures the total time spent in vacuum operations, over a 24 hour period divided the maximum number of autovacuum processes\nto give the total vacuum activity, in seconds. This value is divided by the TXID wraparound horizon for the database to\nproduce a percentage.\n\nThis value will approach 100% as two situation occur:\n\n1. The amount of time spent performing autovacuum operations goes up, due to high dead-tuple generation in the database.\n1. The write transaction volume goes up, decreasing the wraparound horizon.\n\nIf the total time spent vacuuming approached the wraparound time horizon, this would mean that the database would be at risk\nof being unable to complete a vacuum of all tables within the wraparound time horizon. This would put the database at risk of XID\nwraparound and immediate shutdown.\n",
+         "query": "max(quantile_over_time(0.95, gitlab_component_saturation:ratio{component=\"pg_txid_vacuum_to_wraparound\",type=\"{{ service.name }}\",env=\"{{ defaults.env }}\",environment=\"{{ defaults.env }}\",stage=~\"main|\"}[1h]))",
+         "title": "Total autovacuum time to TXID wraparound horizon"
+      },
+      "pg_vacuum_activity_v2": {
+         "description": "This measures the total amount of time spent each day by autovacuum workers, as a percentage of total autovacuum capacity.\n\nThis resource uses the `auto_vacuum_elapsed_seconds` value logged by the autovacuum worker, and aggregates this across all\nautovacuum jobs. In the case that there are 10 autovacuum workers, the total capacity is 10-days worth of autovacuum time per day.\n\nOnce the system is performing 10 days worth of autovacuum per day, the capacity will be saturated.\n\nThis resource is primarily intended to be used for long-term capacity planning.\n",
+         "query": "max(quantile_over_time(0.95, gitlab_component_saturation:ratio{component=\"pg_vacuum_activity_v2\",type=\"{{ service.name }}\",env=\"{{ defaults.env }}\",environment=\"{{ defaults.env }}\",stage=~\"main|\"}[1h]))",
+         "title": "Postgres Autovacuum Activity (non-sampled)"
+      },
+      "pg_walsender_cpu": {
+         "description": "This saturation metric measures the total amount of time that the primary postgres instance is spending sending WAL segments\nto replicas. It is expressed as a percentage of all CPU available on the primary postgres instance.\n\nThe more replicas connected, the higher this metric will be.\n\nSince it's expressed as a percentage of all CPU, this should always remain low, since the CPU primarily needs to be available for\nhandling SQL statements.\n",
+         "query": "max(quantile_over_time(0.95, gitlab_component_saturation:ratio{component=\"pg_walsender_cpu\",type=\"{{ service.name }}\",env=\"{{ defaults.env }}\",environment=\"{{ defaults.env }}\",stage=~\"main|\"}[1h]))",
+         "title": "Walsender CPU Saturation"
+      },
+      "pg_xid_wraparound": {
+         "description": "Risk of DB shutdown in the near future, approaching transaction ID wraparound.\n\nThis is a critical situation.\n\nThis saturation metric measures how close the database is to Transaction ID wraparound.\n\nWhen wraparound occurs, the database will automatically shutdown to prevent data loss, causing a full outage.\n\nRecovery would require entering single-user mode to run vacuum, taking the site down for a potentially multi-hour maintenance session.\n\nTo avoid reaching the db shutdown threshold, consider the following short-term actions:\n\n1. Escalate to the SRE Datastores team, and then,\n\n2. Find and terminate any very old transactions. The runbook for this alert has details.  Do this first.  It is the most critical step and may be all that is necessary to let autovacuum do its job.\n\n3. Run a manual vacuum on tables with oldest relfrozenxid.  Manual vacuums run faster than autovacuum.\n\n4. Add autovacuum workers or reduce autovacuum cost delay, if autovacuum is chronically unable to keep up with the transaction rate.\n\nLong running transaction dashboard: https://dashboards.gitlab.net/d/alerts-long_running_transactions/alerts-long-running-transactions?orgId=1\n",
+         "query": "max(quantile_over_time(0.95, gitlab_component_saturation:ratio{component=\"pg_xid_wraparound\",type=\"{{ service.name }}\",env=\"{{ defaults.env }}\",environment=\"{{ defaults.env }}\",stage=~\"main|\"}[1h]))",
+         "title": "Transaction ID Wraparound"
+      },
+      "pgbouncer_async_primary_pool": {
+         "description": "pgbouncer async connection pool utilization per database node, for primary database connections.\n\nSidekiq maintains it's own pgbouncer connection pool. When this resource is saturated,\ndatabase operations may queue, leading to additional latency in background processing.\n",
+         "query": "max(quantile_over_time(0.95, gitlab_component_saturation:ratio{component=\"pgbouncer_async_primary_pool\",type=\"{{ service.name }}\",env=\"{{ defaults.env }}\",environment=\"{{ defaults.env }}\",stage=~\"main|\"}[1h]))",
+         "title": "Postgres Async (Sidekiq) primary Connection Pool Utilization per Node"
+      },
+      "pgbouncer_async_replica_pool": {
+         "description": "pgbouncer async connection pool utilization per database node, for replica database connections.\n\nSidekiq maintains it's own pgbouncer connection pool. When this resource is saturated,\ndatabase operations may queue, leading to additional latency in background processing.\n",
+         "query": "max(quantile_over_time(0.95, gitlab_component_saturation:ratio{component=\"pgbouncer_async_replica_pool\",type=\"{{ service.name }}\",env=\"{{ defaults.env }}\",environment=\"{{ defaults.env }}\",stage=~\"main|\"}[1h]))",
+         "title": "Postgres Async (Sidekiq) replica Connection Pool Utilization per Node"
+      },
+      "pgbouncer_client_conn_primary": {
+         "description": "Client connections per pgbouncer process for Primary connections.\n\npgbouncer is configured to use a `max_client_conn` setting. This limits the total number of client connections per pgbouncer.\n\nWhen this limit is reached, client connections may be refused, and `max_client_conn` errors may appear in the pgbouncer logs.\n\nThis could affect users as Rails clients are left unable to connect to the database. Another potential knock-on effect\nis that Rails clients could fail their readiness checks for extended periods during a deployment, leading to saturation of\nthe older nodes.\n",
+         "query": "max(quantile_over_time(0.95, gitlab_component_saturation:ratio{component=\"pgbouncer_client_conn_primary\",type=\"{{ service.name }}\",env=\"{{ defaults.env }}\",environment=\"{{ defaults.env }}\",stage=~\"main|\"}[1h]))",
+         "title": "PGBouncer Client Connections per Process (Primary)"
+      },
+      "pgbouncer_client_conn_replicas": {
+         "description": "Client connections per pgbouncer process for Replicas connections.\n\npgbouncer is configured to use a `max_client_conn` setting. This limits the total number of client connections per pgbouncer.\n\nWhen this limit is reached, client connections may be refused, and `max_client_conn` errors may appear in the pgbouncer logs.\n\nThis could affect users as Rails clients are left unable to connect to the database. Another potential knock-on effect\nis that Rails clients could fail their readiness checks for extended periods during a deployment, leading to saturation of\nthe older nodes.\n",
+         "query": "max(quantile_over_time(0.95, gitlab_component_saturation:ratio{component=\"pgbouncer_client_conn_replicas\",type=\"{{ service.name }}\",env=\"{{ defaults.env }}\",environment=\"{{ defaults.env }}\",stage=~\"main|\"}[1h]))",
+         "title": "PGBouncer Client Connections per Process (Replicas)"
+      },
+      "pgbouncer_single_core": {
+         "description": "PGBouncer single core CPU utilization per node.\n\nPGBouncer is a single threaded application. Under high volumes this resource may become saturated,\nand additional pgbouncer nodes may need to be provisioned.\n",
+         "query": "max(quantile_over_time(0.95, gitlab_component_saturation:ratio{component=\"pgbouncer_single_core\",type=\"{{ service.name }}\",env=\"{{ defaults.env }}\",environment=\"{{ defaults.env }}\",stage=~\"main|\"}[1h]))",
+         "title": "PGBouncer Single Core per Node"
+      },
+      "pgbouncer_sync_primary_pool": {
+         "description": "pgbouncer sync connection pool Saturation per database node, for primary database connections.\n\nWeb/api/git applications use a separate connection pool to sidekiq.\n\nWhen this resource is saturated, web/api database operations may queue, leading to rails worker\nsaturation and 503 errors in the web.\n",
+         "query": "max(quantile_over_time(0.95, gitlab_component_saturation:ratio{component=\"pgbouncer_sync_primary_pool\",type=\"{{ service.name }}\",env=\"{{ defaults.env }}\",environment=\"{{ defaults.env }}\",stage=~\"main|\"}[1h]))",
+         "title": "Postgres Sync (Web/API/Git) primary Connection Pool Utilization per Node"
+      },
+      "pgbouncer_sync_replica_pool": {
+         "description": "pgbouncer sync connection pool Saturation per database node, for replica database connections.\n\nWeb/api/git applications use a separate connection pool to sidekiq.\n\nWhen this resource is saturated, web/api database operations may queue, leading to rails worker\nsaturation and 503 errors in the web.\n",
+         "query": "max(quantile_over_time(0.95, gitlab_component_saturation:ratio{component=\"pgbouncer_sync_replica_pool\",type=\"{{ service.name }}\",env=\"{{ defaults.env }}\",environment=\"{{ defaults.env }}\",stage=~\"main|\"}[1h]))",
+         "title": "Postgres Sync (Web/API/Git) replica Connection Pool Utilization per Node"
+      },
+      "private_runners": {
+         "description": "private runner utilization per instance.\n\nEach runner manager has a maximum number of runners that it can coordinate at any single moment.\n\nWhen this metric is saturated, new CI jobs will queue. When this occurs we should consider adding more runner managers,\nor scaling the runner managers vertically and increasing their maximum runner capacity.\n",
+         "query": "max(quantile_over_time(0.95, gitlab_component_saturation:ratio{component=\"private_runners\",type=\"{{ service.name }}\",env=\"{{ defaults.env }}\",environment=\"{{ defaults.env }}\",stage=~\"main|\"}[1h]))",
+         "title": "private Runner utilization"
+      },
+      "pvs_cloudrun_container_instances": {
+         "description": "Cloud Run is configured with a maximum number of container instances. When this is saturated, Google Cloud Run\nwill no longer scale up.\n\nMore information available at https://cloud.google.com/run/docs/configuring/max-instances.\n",
+         "query": "max(quantile_over_time(0.95, gitlab_component_saturation:ratio{component=\"pvs_cloudrun_container_instances\",type=\"{{ service.name }}\",env=\"{{ defaults.env }}\",environment=\"{{ defaults.env }}\",stage=~\"main|\"}[1h]))",
+         "title": "Cloud Run Container Instance Utilization"
+      },
+      "rails_db_connection_pool": {
+         "description": "Rails uses connection pools for its database connections. As each\nnode may have multiple connection pools, this is by node and by\ndatabase host.\n\nRead more about this resource in our [documentation](https://docs.gitlab.com/ee/development/database/client_side_connection_pool.html#client-side-connection-pool).\n\nIf this resource is saturated, it may indicate that our connection\npools are not correctly sized, perhaps because an unexpected\napplication thread is using a database connection.\n",
+         "query": "max(quantile_over_time(0.95, gitlab_component_saturation:ratio{component=\"rails_db_connection_pool\",type=\"{{ service.name }}\",env=\"{{ defaults.env }}\",environment=\"{{ defaults.env }}\",stage=~\"main|\"}[1h]))",
+         "title": "Rails DB Connection Pool Utilization"
+      },
+      "redis_clients": {
+         "description": "Redis client utilization per node.\n\nA redis server has a maximum number of clients that can connect. When this resource is saturated,\nnew clients may fail to connect.\n\nMore details at https://redis.io/topics/clients#maximum-number-of-clients\n",
+         "query": "max(quantile_over_time(0.95, gitlab_component_saturation:ratio{component=\"redis_clients\",type=\"{{ service.name }}\",env=\"{{ defaults.env }}\",environment=\"{{ defaults.env }}\",stage=~\"main|\"}[1h]))",
+         "title": "Redis Client Utilization per Node"
+      },
+      "redis_cluster_clients": {
+         "description": "Redis client utilization per node.\n\nA redis server has a maximum number of clients that can connect. When this resource is saturated,\nnew clients may fail to connect.\n\nMore details at https://redis.io/topics/clients#maximum-number-of-clients\n",
+         "query": "max(quantile_over_time(0.95, gitlab_component_saturation:ratio{component=\"redis_cluster_clients\",type=\"{{ service.name }}\",env=\"{{ defaults.env }}\",environment=\"{{ defaults.env }}\",stage=~\"main|\"}[1h]))",
+         "title": "Redis Client Utilization per Node"
+      },
+      "redis_cluster_memory": {
+         "description": "Redis memory utilization per node.\n\nAs Redis memory saturates node memory, the likelyhood of OOM kills, possibly to the Redis process,\nbecome more likely.\n\nFor caches, consider lowering the `maxmemory` setting in Redis. For non-caching Redis instances,\nthis has been caused in the past by credential stuffing, leading to large numbers of web sessions.\n\nThis threshold is kept deliberately low, since Redis RDB snapshots could consume a significant amount of memory,\nespecially when the rate of change in Redis is high, leading to copy-on-write consuming more memory than when the\nrate-of-change is low.\n",
+         "query": "max(quantile_over_time(0.95, gitlab_component_saturation:ratio{component=\"redis_cluster_memory\",type=\"{{ service.name }}\",env=\"{{ defaults.env }}\",environment=\"{{ defaults.env }}\",stage=~\"main|\"}[1h]))",
+         "title": "Redis Memory Utilization per Node"
+      },
+      "redis_cluster_primary_cpu": {
+         "description": "Redis Primary CPU Utilization per Node.\n\nThe core server of redis is single-threaded; this thread is only able to scale to full use of a single CPU on a given server.\nWhen the primary Redis thread is saturated, major slowdowns should be expected across the application, so avoid if at all\npossible.\n",
+         "query": "max(quantile_over_time(0.95, gitlab_component_saturation:ratio{component=\"redis_cluster_primary_cpu\",type=\"{{ service.name }}\",env=\"{{ defaults.env }}\",environment=\"{{ defaults.env }}\",stage=~\"main|\"}[1h]))",
+         "title": "Redis Primary CPU Utilization per Node"
+      },
+      "redis_memory": {
+         "description": "Redis memory utilization per node.\n\nAs Redis memory saturates node memory, the likelyhood of OOM kills, possibly to the Redis process,\nbecome more likely.\n\nFor caches, consider lowering the `maxmemory` setting in Redis. For non-caching Redis instances,\nthis has been caused in the past by credential stuffing, leading to large numbers of web sessions.\n\nThis threshold is kept deliberately low, since Redis RDB snapshots could consume a significant amount of memory,\nespecially when the rate of change in Redis is high, leading to copy-on-write consuming more memory than when the\nrate-of-change is low.\n",
+         "query": "max(quantile_over_time(0.95, gitlab_component_saturation:ratio{component=\"redis_memory\",type=\"{{ service.name }}\",env=\"{{ defaults.env }}\",environment=\"{{ defaults.env }}\",stage=~\"main|\"}[1h]))",
+         "title": "Redis Memory Utilization per Node"
+      },
+      "redis_memory_cache": {
+         "description": "Redis maxmemory utilization per node\n\nOn the cache Redis we have maxmemory and an eviction policy as a\nsafety-valve, but do not want or expect to reach that limit under\nnormal circumstances; if we start evicting we will experience\nperformance problems , so we want to be alerted some time before\nthat happens.\n",
+         "query": "max(quantile_over_time(0.95, gitlab_component_saturation:ratio{component=\"redis_memory_cache\",type=\"{{ service.name }}\",env=\"{{ defaults.env }}\",environment=\"{{ defaults.env }}\",stage=~\"main|\"}[1h]))",
+         "title": "Redis Memory Utilization of Max Memory"
+      },
+      "redis_memory_sessions": {
+         "description": "Redis maxmemory utilization per node\n\nOn the sessions Redis we have maxmemory and an eviction policy as a safety-valve, but\ndo not want or expect to reach that limit under normal circumstances; if we start\nevicting we will start logging out users slightly early (although only the longest\ninactive sessions), so we want to be alerted some time before that happens.\n",
+         "query": "max(quantile_over_time(0.95, gitlab_component_saturation:ratio{component=\"redis_memory_sessions\",type=\"{{ service.name }}\",env=\"{{ defaults.env }}\",environment=\"{{ defaults.env }}\",stage=~\"main|\"}[1h]))",
+         "title": "Redis Memory Utilization of Max Memory"
+      },
+      "redis_memory_tracechunks": {
+         "description": "Redis memory utilization per node.\n\nAs Redis memory saturates node memory, the likelyhood of OOM kills, possibly to the Redis process,\nbecome more likely.\n\nTrace chunks should be extremely transient (written to redis, then offloaded to objectstorage nearly immediately)\nso any uncontrolled growth in memory saturation implies a potentially significant problem.  Short term mitigation\nis usually to upsize the instances to have more memory while the underlying problem is identified, but low\nthresholds give us more time to investigate first\n\nThis threshold is kept deliberately very low; because we use C2 instances we are generally overprovisioned\nfor RAM, and because of the transient nature of the data here, it is advantageous to know early if there is any\nnon-trivial storage occurring\n",
+         "query": "max(quantile_over_time(0.95, gitlab_component_saturation:ratio{component=\"redis_memory_tracechunks\",type=\"{{ service.name }}\",env=\"{{ defaults.env }}\",environment=\"{{ defaults.env }}\",stage=~\"main|\"}[1h]))",
+         "title": "Redis Memory Utilization per Node"
+      },
+      "redis_primary_cpu": {
+         "description": "Redis Primary CPU Utilization per Node.\n\nThe core server of redis is single-threaded; this thread is only able to scale to full use of a single CPU on a given server.\nWhen the primary Redis thread is saturated, major slowdowns should be expected across the application, so avoid if at all\npossible.\n",
+         "query": "max(quantile_over_time(0.95, gitlab_component_saturation:ratio{component=\"redis_primary_cpu\",type=\"{{ service.name }}\",env=\"{{ defaults.env }}\",environment=\"{{ defaults.env }}\",stage=~\"main|\"}[1h]))",
+         "title": "Redis Primary CPU Utilization per Node"
+      },
+      "redis_secondary_cpu": {
+         "description": "Redis Secondary CPU Utilization per Node.\n\nRedis is single-threaded. A single Redis server is only able to scale as far as a single CPU on a single host.\nCPU saturation on a secondary is not as serious as critical as saturation on a primary, but could lead to\nreplication delays.\n",
+         "query": "max(quantile_over_time(0.95, gitlab_component_saturation:ratio{component=\"redis_secondary_cpu\",type=\"{{ service.name }}\",env=\"{{ defaults.env }}\",environment=\"{{ defaults.env }}\",stage=~\"main|\"}[1h]))",
+         "title": "Redis Secondary CPU Utilization per Node"
+      },
+      "ruby_thread_contention": {
+         "description": "Ruby (technically Ruby MRI), like some other scripting languages, uses a Global VM lock (GVL) also known as a\nGlobal Interpreter Lock (GIL) to ensure that multiple threads can execute safely. Ruby code is only allowed to\nexecute in one thread in a process at a time. When calling out to c extensions, the thread can cede the lock to\nother thread while it continues to execute.\n\nThis means that when CPU-bound workloads run in a multithreaded environment such as Puma or Sidekiq, contention\nwith other Ruby worker threads running in the same process can occur, effectively slowing thoses threads down as\nthey await GVL entry.\n\nOften the best fix for this situation is to add more workers by scaling up the fleet.\n",
+         "query": "max(quantile_over_time(0.95, gitlab_component_saturation:ratio{component=\"ruby_thread_contention\",type=\"{{ service.name }}\",env=\"{{ defaults.env }}\",environment=\"{{ defaults.env }}\",stage=~\"main|\"}[1h]))",
+         "title": "Ruby Thread Contention"
+      },
+      "runway_container_cpu_utilization": {
+         "description": "Container CPU utilization of the Runway service distributed across all container instances.\n\nFor scaling, refer to https://cloud.google.com/run/docs/configuring/services/cpu.\n",
+         "query": "max(quantile_over_time(0.95, gitlab_component_saturation:ratio{component=\"runway_container_cpu_utilization\",type=\"{{ service.name }}\",env=\"{{ defaults.env }}\",environment=\"{{ defaults.env }}\",stage=~\"main|\"}[1h]))",
+         "title": "Runway Container CPU Utilization"
+      },
+      "runway_container_instance_utilization": {
+         "description": "Container instance utilization of the Runway service.\n\nFor scaling, refer to https://cloud.google.com/run/docs/configuring/max-instances.\n",
+         "query": "max(quantile_over_time(0.95, gitlab_component_saturation:ratio{component=\"runway_container_instance_utilization\",type=\"{{ service.name }}\",env=\"{{ defaults.env }}\",environment=\"{{ defaults.env }}\",stage=~\"main|\"}[1h]))",
+         "title": "Runway Container Instance Utilization"
+      },
+      "runway_container_max_concurrent_requests": {
+         "description": "Max number of concurrent requests being served by each container instance of the Runway service.\n\nFor scaling, refer to https://cloud.google.com/run/docs/configuring/concurrency.\n",
+         "query": "max(quantile_over_time(0.95, gitlab_component_saturation:ratio{component=\"runway_container_max_concurrent_requests\",type=\"{{ service.name }}\",env=\"{{ defaults.env }}\",environment=\"{{ defaults.env }}\",stage=~\"main|\"}[1h]))",
+         "title": "Runway Max Concurrent Requests"
+      },
+      "runway_container_memory_utilization": {
+         "description": "Container memory utilization of the Runway service distributed across all container instances.\n\nFor scaling, refer to https://cloud.google.com/run/docs/configuring/services/memory-limits.\n",
+         "query": "max(quantile_over_time(0.95, gitlab_component_saturation:ratio{component=\"runway_container_memory_utilization\",type=\"{{ service.name }}\",env=\"{{ defaults.env }}\",environment=\"{{ defaults.env }}\",stage=~\"main|\"}[1h]))",
+         "title": "Runway Container Memory Utilization"
+      },
+      "saas_linux_large_amd64_runners": {
+         "description": "saas-linux-large-amd64 runner utilization per instance.\n\nEach runner manager has a maximum number of runners that it can coordinate at any single moment.\n\nWhen this metric is saturated, new CI jobs will queue. When this occurs we should consider adding more runner managers,\nor scaling the runner managers vertically and increasing their maximum runner capacity.\n",
+         "query": "max(quantile_over_time(0.95, gitlab_component_saturation:ratio{component=\"saas_linux_large_amd64_runners\",type=\"{{ service.name }}\",env=\"{{ defaults.env }}\",environment=\"{{ defaults.env }}\",stage=~\"main|\"}[1h]))",
+         "title": "saas-linux-large-amd64 Runner utilization"
+      },
+      "saas_linux_medium_amd64_gpu_standard_runners": {
+         "description": "saas-linux-medium-amd64-gpu-standard runner utilization per instance.\n\nEach runner manager has a maximum number of runners that it can coordinate at any single moment.\n\nWhen this metric is saturated, new CI jobs will queue. When this occurs we should consider adding more runner managers,\nor scaling the runner managers vertically and increasing their maximum runner capacity.\n",
+         "query": "max(quantile_over_time(0.95, gitlab_component_saturation:ratio{component=\"saas_linux_medium_amd64_gpu_standard_runners\",type=\"{{ service.name }}\",env=\"{{ defaults.env }}\",environment=\"{{ defaults.env }}\",stage=~\"main|\"}[1h]))",
+         "title": "saas-linux-medium-amd64-gpu-standard Runner utilization"
+      },
+      "saas_linux_medium_amd64_runners": {
+         "description": "saas-linux-medium-amd64 runner utilization per instance.\n\nEach runner manager has a maximum number of runners that it can coordinate at any single moment.\n\nWhen this metric is saturated, new CI jobs will queue. When this occurs we should consider adding more runner managers,\nor scaling the runner managers vertically and increasing their maximum runner capacity.\n",
+         "query": "max(quantile_over_time(0.95, gitlab_component_saturation:ratio{component=\"saas_linux_medium_amd64_runners\",type=\"{{ service.name }}\",env=\"{{ defaults.env }}\",environment=\"{{ defaults.env }}\",stage=~\"main|\"}[1h]))",
+         "title": "saas-linux-medium-amd64 Runner utilization"
+      },
+      "saas_linux_small_amd64_runners": {
+         "description": "saas-linux-small-amd64 runner utilization per instance.\n\nEach runner manager has a maximum number of runners that it can coordinate at any single moment.\n\nWhen this metric is saturated, new CI jobs will queue. When this occurs we should consider adding more runner managers,\nor scaling the runner managers vertically and increasing their maximum runner capacity.\n",
+         "query": "max(quantile_over_time(0.95, gitlab_component_saturation:ratio{component=\"saas_linux_small_amd64_runners\",type=\"{{ service.name }}\",env=\"{{ defaults.env }}\",environment=\"{{ defaults.env }}\",stage=~\"main|\"}[1h]))",
+         "title": "saas-linux-small-amd64 Runner utilization"
+      },
+      "saas_macos_medium_m1_runners": {
+         "description": "saas-macos-medium-m1 runner utilization per instance.\n\nEach runner manager has a maximum number of runners that it can coordinate at any single moment.\n\nWhen this metric is saturated, new CI jobs will queue. When this occurs we should consider adding more runner managers,\nor scaling the runner managers vertically and increasing their maximum runner capacity.\n",
+         "query": "max(quantile_over_time(0.95, gitlab_component_saturation:ratio{component=\"saas_macos_medium_m1_runners\",type=\"{{ service.name }}\",env=\"{{ defaults.env }}\",environment=\"{{ defaults.env }}\",stage=~\"main|\"}[1h]))",
+         "title": "saas-macos-medium-m1 Runner utilization"
+      },
+      "saas_macos_staging_runners": {
+         "description": "saas-macos-staging runner utilization per instance.\n\nEach runner manager has a maximum number of runners that it can coordinate at any single moment.\n\nWhen this metric is saturated, new CI jobs will queue. When this occurs we should consider adding more runner managers,\nor scaling the runner managers vertically and increasing their maximum runner capacity.\n",
+         "query": "max(quantile_over_time(0.95, gitlab_component_saturation:ratio{component=\"saas_macos_staging_runners\",type=\"{{ service.name }}\",env=\"{{ defaults.env }}\",environment=\"{{ defaults.env }}\",stage=~\"main|\"}[1h]))",
+         "title": "saas-macos-staging Runner utilization"
+      },
+      "shard_cpu": {
+         "description": "This resource measures average CPU utilization across an all cores in a shard of a\nservice fleet. If it is becoming saturated, it may indicate that the\nshard needs horizontal or vertical scaling.\n",
+         "query": "max(quantile_over_time(0.95, gitlab_component_saturation:ratio{component=\"shard_cpu\",type=\"{{ service.name }}\",env=\"{{ defaults.env }}\",environment=\"{{ defaults.env }}\",stage=~\"main|\"}[1h]))",
+         "title": "Average CPU Utilization per Shard"
+      },
+      "shared_runners_gitlab": {
+         "description": "shared-gitlab-org runner utilization per instance.\n\nEach runner manager has a maximum number of runners that it can coordinate at any single moment.\n\nWhen this metric is saturated, new CI jobs will queue. When this occurs we should consider adding more runner managers,\nor scaling the runner managers vertically and increasing their maximum runner capacity.\n",
+         "query": "max(quantile_over_time(0.95, gitlab_component_saturation:ratio{component=\"shared_runners_gitlab\",type=\"{{ service.name }}\",env=\"{{ defaults.env }}\",environment=\"{{ defaults.env }}\",stage=~\"main|\"}[1h]))",
+         "title": "shared-gitlab-org Runner utilization"
+      },
+      "sidekiq_shard_workers": {
+         "description": "Sidekiq worker utilization per shard.\n\nThis metric represents the percentage of available threads*workers that are actively processing jobs.\n\nWhen this metric is saturated, new Sidekiq jobs will queue. Depending on whether or not the jobs are latency sensitive,\nthis could impact user experience.\n",
+         "query": "max(quantile_over_time(0.95, gitlab_component_saturation:ratio{component=\"sidekiq_shard_workers\",type=\"{{ service.name }}\",env=\"{{ defaults.env }}\",environment=\"{{ defaults.env }}\",stage=~\"main|\"}[1h]))",
+         "title": "Sidekiq Worker Utilization per shard"
+      },
+      "sidekiq_thread_contention": {
+         "description": "Ruby (technically Ruby MRI), like some other scripting languages, uses a Global VM lock (GVL) also known as a\nGlobal Interpreter Lock (GIL) to ensure that multiple threads can execute safely. Ruby code is only allowed to\nexecute in one thread in a process at a time. When calling out to c extensions, the thread can cede the lock to\nother thread while it continues to execute.\n\nThis means that when CPU-bound workloads run in a multithreaded environment such as Puma or Sidekiq, contention\nwith other Ruby worker threads running in the same process can occur, effectively slowing thoses threads down as\nthey await GVL entry.\n\nOften the best fix for this situation is to add more workers by scaling up the fleet.\n",
+         "query": "max(quantile_over_time(0.95, gitlab_component_saturation:ratio{component=\"sidekiq_thread_contention\",type=\"{{ service.name }}\",env=\"{{ defaults.env }}\",environment=\"{{ defaults.env }}\",stage=~\"main|\"}[1h]))",
+         "title": "Sidekiq Ruby Thread Contention"
+      },
+      "single_node_cpu": {
+         "description": "Average CPU utilization per Node.\n\nIf average CPU is saturated, it may indicate that a fleet is in need to horizontal or vertical scaling. It may also indicate\nimbalances in load in a fleet.\n",
+         "query": "max(quantile_over_time(0.95, gitlab_component_saturation:ratio{component=\"single_node_cpu\",type=\"{{ service.name }}\",env=\"{{ defaults.env }}\",environment=\"{{ defaults.env }}\",stage=~\"main|\"}[1h]))",
+         "title": "Average CPU Utilization per Node"
+      },
+      "single_node_puma_workers": {
+         "description": "Puma thread utilization per node.\n\nPuma uses a fixed size thread pool to handle HTTP requests. This metric shows how many threads are busy handling requests. When this resource is saturated,\nwe will see puma queuing taking place. Leading to slowdowns across the application.\n\nPuma saturation is usually caused by latency problems in downstream services: usually Gitaly or Postgres, but possibly also Redis.\nPuma saturation can also be caused by traffic spikes.\n",
+         "query": "max(quantile_over_time(0.95, gitlab_component_saturation:ratio{component=\"single_node_puma_workers\",type=\"{{ service.name }}\",env=\"{{ defaults.env }}\",environment=\"{{ defaults.env }}\",stage=~\"main|\"}[1h]))",
+         "title": "Puma Worker Saturation per Node"
+      },
+      "windows_shared_runners": {
+         "description": "windows-shared runner utilization per instance.\n\nEach runner manager has a maximum number of runners that it can coordinate at any single moment.\n\nWhen this metric is saturated, new CI jobs will queue. When this occurs we should consider adding more runner managers,\nor scaling the runner managers vertically and increasing their maximum runner capacity.\n",
+         "query": "max(quantile_over_time(0.95, gitlab_component_saturation:ratio{component=\"windows_shared_runners\",type=\"{{ service.name }}\",env=\"{{ defaults.env }}\",environment=\"{{ defaults.env }}\",stage=~\"main|\"}[1h]))",
+         "title": "windows-shared Runner utilization"
+      },
+      "workhorse_image_scaling": {
+         "description": "Workhorse can scale images on-the-fly as requested. Since the actual work will be\nperformed by dedicated processes, we currently define a hard cap for how many\nsuch requests are allowed to be in the system concurrently.\n\nIf this resource is fully saturated, Workhorse will start ignoring image scaling\nrequests and serve the original image instead, which will ensure continued operation,\nbut comes at the cost of additional client latency and GCS egress traffic.\n",
+         "query": "max(quantile_over_time(0.95, gitlab_component_saturation:ratio{component=\"workhorse_image_scaling\",type=\"{{ service.name }}\",env=\"{{ defaults.env }}\",environment=\"{{ defaults.env }}\",stage=~\"main|\"}[1h]))",
+         "title": "Workhorse Image Scaler Exhaustion per Node"
+      }
+   },
+   "services": {
+      "ai_gateway": {
+         "capacityPlanning": {
+            "environment": "gprd"
+         },
+         "label": "AIGateway",
+         "name": "ai_gateway",
+         "owner": "scalability-runway-core"
+      },
+      "api": {
+         "capacityPlanning": {
+            "environment": "gprd"
+         },
+         "label": "API",
+         "name": "api",
+         "owner": "reliability_general"
+      },
+      "camoproxy": {
+         "capacityPlanning": {
+            "environment": "gprd"
+         },
+         "label": "Camoproxy",
+         "name": "camoproxy",
+         "owner": "reliability_general"
+      },
+      "ci-runners": {
+         "capacityPlanning": {
+            "environment": "gprd"
+         },
+         "label": "CI Runners",
+         "name": "ci-runners",
+         "owner": "reliability_practices"
+      },
+      "cloud-sql": {
+         "capacityPlanning": {
+            "environment": "gprd"
+         },
+         "label": "CloudSQL",
+         "name": "cloud-sql",
+         "owner": "reliability_database_reliability"
+      },
+      "code_suggestions": {
+         "capacityPlanning": {
+            "environment": "gprd"
+         },
+         "label": "CodeSuggestions",
+         "name": "code_suggestions",
+         "owner": "ai_assisted"
+      },
+      "consul": {
+         "capacityPlanning": {
+            "environment": "gprd"
+         },
+         "label": "Consul",
+         "name": "consul",
+         "owner": "reliability_foundations"
+      },
+      "customersdot": {
+         "capacityPlanning": {
+            "environment": "gprd"
+         },
+         "label": "CustomersDot",
+         "name": "customersdot",
+         "owner": "fulfillment_platform"
+      },
+      "external-dns": {
+         "capacityPlanning": {
+            "environment": "gprd"
+         },
+         "label": "ExternalDNS",
+         "name": "external-dns",
+         "owner": "reliability_foundations"
+      },
+      "frontend": {
+         "capacityPlanning": {
+            "environment": "gprd"
+         },
+         "label": "HAProxy",
+         "name": "frontend",
+         "owner": "reliability_foundations"
+      },
+      "git": {
+         "capacityPlanning": {
+            "environment": "gprd"
+         },
+         "label": "Git",
+         "name": "git",
+         "owner": "reliability_general"
+      },
+      "gitaly": {
+         "capacityPlanning": {
+            "components": [
+               {
+                  "name": "node_schedstat_waiting",
+                  "parameters": {
+                     "ignore_outliers": [
+                        {
+                           "end": "2022-06-15",
+                           "start": "2022-05-23"
+                        },
+                        {
+                           "end": "2022-07-01",
+                           "start": "2022-06-25"
+                        },
+                        {
+                           "end": "2023-05-10",
+                           "start": "2023-03-31"
+                        }
+                     ]
+                  }
+               }
+            ]
+         },
+         "label": "Gitaly",
+         "name": "gitaly",
+         "owner": "reliability_practices"
+      },
+      "google-cloud-storage": {
+         "capacityPlanning": {
+            "environment": "gprd"
+         },
+         "label": "GoogleCloudStorage",
+         "name": "google-cloud-storage",
+         "owner": "reliability_foundations"
+      },
+      "internal-api": {
+         "capacityPlanning": {
+            "environment": "gprd"
+         },
+         "label": "Internal-API",
+         "name": "internal-api",
+         "owner": "reliability_general"
+      },
+      "jaeger": {
+         "capacityPlanning": {
+            "environment": "gprd"
+         },
+         "label": "Jaeger",
+         "name": "jaeger",
+         "owner": "reliability_observability"
+      },
+      "kas": {
+         "capacityPlanning": {
+            "environment": "gprd"
+         },
+         "label": "KAS",
+         "name": "kas",
+         "owner": "reliability_general"
+      },
+      "kube": {
+         "capacityPlanning": {
+            "environment": "gprd"
+         },
+         "label": "Kube",
+         "name": "kube",
+         "owner": "reliability_foundations"
+      },
+      "logging": {
+         "capacityPlanning": {
+            "environment": "gprd"
+         },
+         "label": "Logging",
+         "name": "logging",
+         "owner": "reliability_observability"
+      },
+      "mailroom": {
+         "capacityPlanning": {
+            "environment": "gprd"
+         },
+         "label": "Mailroom",
+         "name": "mailroom",
+         "owner": "reliability_general"
+      },
+      "monitoring": {
+         "capacityPlanning": {
+            "components": [
+               {
+                  "name": "node_schedstat_waiting",
+                  "parameters": {
+                     "ignore_outliers": [
+                        {
+                           "end": "2022-12-31",
+                           "start": "2022-12-01"
+                        }
+                     ]
+                  }
+               }
+            ]
+         },
+         "label": "Prometheus",
+         "name": "monitoring",
+         "owner": "reliability_observability"
+      },
+      "nat": {
+         "capacityPlanning": {
+            "environment": "gprd"
+         },
+         "label": "NAT",
+         "name": "nat",
+         "owner": "reliability_foundations"
+      },
+      "nginx": {
+         "capacityPlanning": {
+            "environment": "gprd"
+         },
+         "label": "NGINX",
+         "name": "nginx",
+         "owner": "reliability_general"
+      },
+      "ops-gitlab-net": {
+         "capacityPlanning": {
+            "environment": "gprd"
+         },
+         "label": "OpsGitlabNet",
+         "name": "ops-gitlab-net",
+         "owner": "reliability_foundations"
+      },
+      "patroni": {
+         "capacityPlanning": {
+            "components": [
+               {
+                  "name": "memory",
+                  "parameters": {
+                     "changepoints": [
+                        "2023-04-26",
+                        "2023-04-28"
+                     ]
+                  }
+               },
+               {
+                  "events": [
+                     {
+                        "date": "2023-03-20",
+                        "name": "Migration to int8 column to address int4 capacity saturation"
+                     },
+                     {
+                        "date": "2023-04-06",
+                        "name": "Migration to int8 column to address int4 capacity saturation"
+                     },
+                     {
+                        "date": "2023-06-15",
+                        "name": "Migration to int8 column to address int4 capacity saturation"
+                     }
+                  ],
+                  "name": "pg_int4_id"
+               },
+               {
+                  "ignore_outliers": [
+                     {
+                        "end": "2022-12-15",
+                        "start": "2022-08-22"
+                     }
+                  ],
+                  "name": "disk_space"
+               }
+            ]
+         },
+         "label": "Patroni",
+         "name": "patroni",
+         "owner": "reliability_database_reliability"
+      },
+      "patroni-ci": {
+         "capacityPlanning": {
+            "components": [
+               {
+                  "name": "memory",
+                  "parameters": {
+                     "changepoints": [
+                        "2023-04-26",
+                        "2023-04-28"
+                     ]
+                  }
+               }
+            ]
+         },
+         "label": "PatroniCI",
+         "name": "patroni-ci",
+         "owner": "reliability_database_reliability"
+      },
+      "patroni-embedding": {
+         "capacityPlanning": {
+            "environment": "gprd"
+         },
+         "label": "PatroniEmbedding",
+         "name": "patroni-embedding",
+         "owner": "reliability_database_reliability"
+      },
+      "patroni-registry": {
+         "capacityPlanning": {
+            "events": [
+               {
+                  "date": "2023-06-10",
+                  "name": "Upgrade of PG database cluster",
+                  "references": [
+                     {
+                        "ref": "https://gitlab.com/gitlab-com/gl-infra/production/-/issues/11375",
+                        "title": "Production change issue"
+                     }
+                  ]
+               }
+            ]
+         },
+         "label": "PatroniRegistry",
+         "name": "patroni-registry",
+         "owner": "reliability_database_reliability"
+      },
+      "pgbouncer": {
+         "capacityPlanning": {
+            "environment": "gprd"
+         },
+         "label": "Pgbouncer",
+         "name": "pgbouncer",
+         "owner": "reliability_database_reliability"
+      },
+      "pgbouncer-ci": {
+         "capacityPlanning": {
+            "environment": "gprd"
+         },
+         "label": "pgbouncerCI",
+         "name": "pgbouncer-ci",
+         "owner": "reliability_database_reliability"
+      },
+      "pgbouncer-embedding": {
+         "capacityPlanning": {
+            "environment": "gprd"
+         },
+         "label": "PgbouncerEmbedding",
+         "name": "pgbouncer-embedding",
+         "owner": "reliability_database_reliability"
+      },
+      "pgbouncer-registry": {
+         "capacityPlanning": {
+            "environment": "gprd"
+         },
+         "label": "PgbouncerRegistry",
+         "name": "pgbouncer-registry",
+         "owner": "reliability_database_reliability"
+      },
+      "plantuml": {
+         "capacityPlanning": {
+            "environment": "gprd"
+         },
+         "label": "PlantUML",
+         "name": "plantuml",
+         "owner": "reliability_general"
+      },
+      "postgres-archive": {
+         "capacityPlanning": {
+            "environment": "gprd"
+         },
+         "label": "PostgresArchive",
+         "name": "postgres-archive",
+         "owner": "reliability_database_reliability"
+      },
+      "praefect": {
+         "capacityPlanning": {
+            "environment": "gprd"
+         },
+         "label": "Praefect",
+         "name": "praefect",
+         "owner": "reliability_practices"
+      },
+      "pvs": {
+         "capacityPlanning": {
+            "environment": "gprd"
+         },
+         "label": "PVS",
+         "name": "pvs",
+         "owner": "trust_and_safety"
+      },
+      "redis": {
+         "capacityPlanning": {
+            "environment": "gprd"
+         },
+         "label": "Redis",
+         "name": "redis",
+         "owner": "scalability"
+      },
+      "redis-cluster-cache": {
+         "capacityPlanning": {
+            "environment": "gprd"
+         },
+         "label": "RedisClusterCache",
+         "name": "redis-cluster-cache",
+         "owner": "scalability"
+      },
+      "redis-cluster-chat-cache": {
+         "capacityPlanning": {
+            "environment": "gprd"
+         },
+         "label": "RedisClusterChatCache",
+         "name": "redis-cluster-chat-cache",
+         "owner": "scalability"
+      },
+      "redis-cluster-feature-flag": {
+         "capacityPlanning": {
+            "environment": "gprd"
+         },
+         "label": "RedisClusterFeatureFlag",
+         "name": "redis-cluster-feature-flag",
+         "owner": "scalability"
+      },
+      "redis-cluster-ratelimiting": {
+         "capacityPlanning": {
+            "environment": "gprd"
+         },
+         "label": "RedisClusterRateLimiting",
+         "name": "redis-cluster-ratelimiting",
+         "owner": "scalability"
+      },
+      "redis-db-load-balancing": {
+         "capacityPlanning": {
+            "environment": "gprd"
+         },
+         "label": "RedisDbLoadBalancing",
+         "name": "redis-db-load-balancing",
+         "owner": "scalability"
+      },
+      "redis-registry-cache": {
+         "capacityPlanning": {
+            "environment": "gprd"
+         },
+         "label": "RedisRegistryCache",
+         "name": "redis-registry-cache",
+         "owner": "scalability"
+      },
+      "redis-repository-cache": {
+         "capacityPlanning": {
+            "environment": "gprd"
+         },
+         "label": "RedisRepositoryCache",
+         "name": "redis-repository-cache",
+         "owner": "scalability"
+      },
+      "redis-sessions": {
+         "capacityPlanning": {
+            "components": [
+               {
+                  "name": "disk_space",
+                  "parameters": {
+                     "ignore_outliers": [
+                        {
+                           "end": "2023-03-15",
+                           "start": "2023-03-01"
+                        }
+                     ]
+                  }
+               }
+            ]
+         },
+         "label": "RedisSessions",
+         "name": "redis-sessions",
+         "owner": "scalability"
+      },
+      "redis-sidekiq": {
+         "capacityPlanning": {
+            "environment": "gprd"
+         },
+         "label": "RedisSidekiq",
+         "name": "redis-sidekiq",
+         "owner": "scalability"
+      },
+      "redis-tracechunks": {
+         "capacityPlanning": {
+            "environment": "gprd"
+         },
+         "label": "RedisTraceChunks",
+         "name": "redis-tracechunks",
+         "owner": "scalability"
+      },
+      "registry": {
+         "capacityPlanning": {
+            "components": [
+               {
+                  "name": "node_schedstat_waiting",
+                  "parameters": {
+                     "ignore_outliers": [
+                        {
+                           "end": "2023-01-30",
+                           "start": "2022-10-30"
+                        }
+                     ]
+                  }
+               }
+            ]
+         },
+         "label": "Registry",
+         "name": "registry",
+         "owner": "reliability_general"
+      },
+      "search": {
+         "capacityPlanning": {
+            "environment": "gprd"
+         },
+         "label": "Elasticsearch",
+         "name": "search",
+         "owner": "global_search"
+      },
+      "sentry": {
+         "capacityPlanning": {
+            "environment": "gprd"
+         },
+         "label": "Sentry",
+         "name": "sentry",
+         "owner": "reliability_observability"
+      },
+      "sidekiq": {
+         "capacityPlanning": {
+            "components": [
+               {
+                  "name": "rails_db_connection_pool",
+                  "parameters": {
+                     "changepoints": [
+                        "2023-04-03"
+                     ]
+                  }
+               }
+            ]
+         },
+         "label": "Sidekiq",
+         "name": "sidekiq",
+         "owner": "reliability_general"
+      },
+      "thanos": {
+         "capacityPlanning": {
+            "environment": "thanos"
+         },
+         "label": "Thanos",
+         "name": "thanos",
+         "owner": "reliability_observability"
+      },
+      "vault": {
+         "capacityPlanning": {
+            "environment": "gprd"
+         },
+         "label": "Vault",
+         "name": "vault",
+         "owner": "reliability_foundations"
+      },
+      "web": {
+         "capacityPlanning": {
+            "environment": "gprd"
+         },
+         "label": "Web",
+         "name": "web",
+         "owner": "reliability_general"
+      },
+      "web-pages": {
+         "capacityPlanning": {
+            "environment": "gprd"
+         },
+         "label": "Pages",
+         "name": "web-pages",
+         "owner": "reliability_general"
+      },
+      "websockets": {
+         "capacityPlanning": {
+            "environment": "gprd"
+         },
+         "label": "Websockets",
+         "name": "websockets",
+         "owner": "reliability_general"
+      },
+      "woodhouse": {
+         "capacityPlanning": {
+            "environment": "gprd"
+         },
+         "label": "Woodhouse",
+         "name": "woodhouse",
+         "owner": "reliability_general"
+      }
+   },
+   "shardMapping": {
+      "sidekiq": [
+         "catchall",
+         "database-throttled",
+         "elasticsearch",
+         "gitaly-throttled",
+         "low-urgency-cpu-bound",
+         "memory-bound",
+         "quarantine",
+         "urgent-authorized-projects",
+         "urgent-cpu-bound",
+         "urgent-other"
+      ]
+   },
+   "teams": [
+      {
+         "label": null,
+         "manager": null,
+         "name": "sre_reliability"
+      },
+      {
+         "label": null,
+         "manager": null,
+         "name": "create"
+      },
+      {
+         "label": null,
+         "manager": null,
+         "name": "distribution_deploy"
+      },
+      {
+         "label": null,
+         "manager": null,
+         "name": "geo"
+      },
+      {
+         "label": null,
+         "manager": null,
+         "name": "gitaly"
+      },
+      {
+         "label": null,
+         "manager": null,
+         "name": "manage"
+      },
+      {
+         "label": null,
+         "manager": null,
+         "name": "plan"
+      },
+      {
+         "label": null,
+         "manager": null,
+         "name": "release"
+      },
+      {
+         "label": null,
+         "manager": null,
+         "name": "release-management"
+      },
+      {
+         "label": null,
+         "manager": null,
+         "name": "support"
+      },
+      {
+         "label": null,
+         "manager": null,
+         "name": "container_registry"
+      },
+      {
+         "label": null,
+         "manager": null,
+         "name": "package_registry"
+      },
+      {
+         "label": null,
+         "manager": null,
+         "name": "runner"
+      },
+      {
+         "label": null,
+         "manager": null,
+         "name": "gitlab-pages"
+      },
+      {
+         "label": null,
+         "manager": null,
+         "name": "data-analytics"
+      },
+      {
+         "label": null,
+         "manager": null,
+         "name": "delivery"
+      },
+      {
+         "label": "group::scalability",
+         "manager": "rnienaber",
+         "name": "scalability"
+      },
+      {
+         "label": null,
+         "manager": null,
+         "name": "scalability-runway-core"
+      },
+      {
+         "label": null,
+         "manager": null,
+         "name": "scalability-619-redis-k8s"
+      },
+      {
+         "label": null,
+         "manager": null,
+         "name": "workhorse"
+      },
+      {
+         "label": null,
+         "manager": null,
+         "name": "rapid-action-intercom"
+      },
+      {
+         "label": null,
+         "manager": null,
+         "name": "pipeline_validation"
+      },
+      {
+         "label": null,
+         "manager": null,
+         "name": "anti_abuse"
+      },
+      {
+         "label": null,
+         "manager": null,
+         "name": "subtransaction_troubleshooting"
+      },
+      {
+         "label": null,
+         "manager": null,
+         "name": "authentication_and_authorization"
+      },
+      {
+         "label": "group::global search",
+         "manager": "changzhengliu",
+         "name": "global_search"
+      },
+      {
+         "label": null,
+         "manager": null,
+         "name": "5-min-app"
+      },
+      {
+         "label": null,
+         "manager": null,
+         "name": "activation"
+      },
+      {
+         "label": "group::ai assisted",
+         "manager": "mray2020",
+         "name": "ai_assisted"
+      },
+      {
+         "label": null,
+         "manager": null,
+         "name": "code_review"
+      },
+      {
+         "label": null,
+         "manager": null,
+         "name": "compliance"
+      },
+      {
+         "label": null,
+         "manager": null,
+         "name": "composition_analysis"
+      },
+      {
+         "label": null,
+         "manager": null,
+         "name": "acquisition"
+      },
+      {
+         "label": null,
+         "manager": null,
+         "name": "database"
+      },
+      {
+         "label": null,
+         "manager": null,
+         "name": "dataops"
+      },
+      {
+         "label": null,
+         "manager": null,
+         "name": "dynamic_analysis"
+      },
+      {
+         "label": null,
+         "manager": null,
+         "name": "ide"
+      },
+      {
+         "label": null,
+         "manager": null,
+         "name": "foundations"
+      },
+      {
+         "label": null,
+         "manager": null,
+         "name": "dedicated"
+      },
+      {
+         "label": null,
+         "manager": null,
+         "name": "import_and_integrate"
+      },
+      {
+         "label": null,
+         "manager": null,
+         "name": "provision"
+      },
+      {
+         "label": null,
+         "manager": null,
+         "name": "application_performance"
+      },
+      {
+         "label": null,
+         "manager": null,
+         "name": "mlops"
+      },
+      {
+         "label": null,
+         "manager": null,
+         "name": "mobile_devops"
+      },
+      {
+         "label": null,
+         "manager": null,
+         "name": "respond"
+      },
+      {
+         "label": null,
+         "manager": null,
+         "name": "observability"
+      },
+      {
+         "label": null,
+         "manager": null,
+         "name": "optimize"
+      },
+      {
+         "label": null,
+         "manager": null,
+         "name": "pipeline_authoring"
+      },
+      {
+         "label": null,
+         "manager": null,
+         "name": "pipeline_execution"
+      },
+      {
+         "label": null,
+         "manager": null,
+         "name": "analytics_instrumentation"
+      },
+      {
+         "label": null,
+         "manager": null,
+         "name": "product_planning"
+      },
+      {
+         "label": null,
+         "manager": null,
+         "name": "project_management"
+      },
+      {
+         "label": null,
+         "manager": null,
+         "name": "purchase"
+      },
+      {
+         "label": null,
+         "manager": null,
+         "name": "tenant_scale"
+      },
+      {
+         "label": null,
+         "manager": null,
+         "name": "source_code"
+      },
+      {
+         "label": null,
+         "manager": null,
+         "name": "static_analysis"
+      },
+      {
+         "label": null,
+         "manager": null,
+         "name": "pipeline_security"
+      },
+      {
+         "label": null,
+         "manager": null,
+         "name": "threat_insights"
+      },
+      {
+         "label": null,
+         "manager": null,
+         "name": "billing_and_subscription_management"
+      },
+      {
+         "label": null,
+         "manager": null,
+         "name": "utilization"
+      },
+      {
+         "label": null,
+         "manager": null,
+         "name": "vulnerability_research"
+      },
+      {
+         "label": null,
+         "manager": null,
+         "name": "fulfillment_platform"
+      },
+      {
+         "label": null,
+         "manager": null,
+         "name": "security_policies"
+      },
+      {
+         "label": "team::General",
+         "manager": "afappiano",
+         "name": "reliability_general"
+      },
+      {
+         "label": "team::Observability",
+         "manager": "dawsmith",
+         "name": "reliability_observability"
+      },
+      {
+         "label": "team::Foundations",
+         "manager": "amoter",
+         "name": "reliability_foundations"
+      },
+      {
+         "label": "team::Practices",
+         "manager": "kwanyangu",
+         "name": "reliability_practices"
+      },
+      {
+         "label": "team::Database Reliability",
+         "manager": "kwanyangu",
+         "name": "reliability_database_reliability"
+      },
+      {
+         "label": null,
+         "manager": null,
+         "name": "trust_and_safety"
+      },
+      {
+         "label": null,
+         "manager": null,
+         "name": "anti-abuse"
+      },
+      {
+         "label": null,
+         "manager": null,
+         "name": "developer_relations"
+      }
+   ]
+}
