@@ -47,7 +47,7 @@ local jobsRunningForProject = template.new(
   query=|||
     label_values(job_queue_duration_seconds_sum{environment=~"$environment",stage=~"$stage"}, jobs_running_for_project)
   |||,
-  current='0',
+  current='(0|1|2|3|4)',
   refresh='load',
   sort=true,
   multi=true,
