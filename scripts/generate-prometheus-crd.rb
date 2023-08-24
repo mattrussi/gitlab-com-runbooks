@@ -33,7 +33,6 @@ YAML
 rule_files.each do |rule_file|
   # Load yaml file
   source_yaml = YAML.load_file(rule_file)
-  source_dir = File.dirname(rule_file)
 
   # Don't merge yaml if its already in CRD format
   next if source_yaml.key?('kind') && source_yaml['kind'] == 'PrometheusRule'
@@ -44,7 +43,7 @@ rule_files.each do |rule_file|
   # Create new yaml
   rule_yaml = YAML.safe_load(prometheus_rule_yaml)
   rule_yaml['spec'].merge!(source_yaml)
-  rule_yaml['metadata']['name'] = filename.gsub('_', '-')
+  rule_yaml['metadata']['name'] = filename_base.gsub('_', '-')
   rule_yaml['metadata']['labels']['shard'] = shard_counter.to_s
 
   shard_counter = (shard_counter + 1) % (shards + 1)
