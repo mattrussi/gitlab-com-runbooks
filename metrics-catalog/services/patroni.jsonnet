@@ -57,15 +57,26 @@ metricsCatalog.serviceDefinition(
               name: 'Migration to int8 column to address int4 capacity saturation',
             },
           ],
+          parameters: {
+            ignore_outliers: [
+              // This is a hack to improve the forecast for this jumpy series of data
+              {
+                start: '2021-01-01',
+                end: '2023-06-17',
+              },
+            ],
+          },
         },
         {
           name: 'disk_space',
-          ignore_outliers: [
-            {
-              start: '2022-08-22',
-              end: '2022-12-15',
-            },
-          ],
+          parameters: {
+            ignore_outliers: [
+              {
+                start: '2022-08-22',
+                end: '2022-12-15',
+              },
+            ],
+          },
         },
       ],
     },
