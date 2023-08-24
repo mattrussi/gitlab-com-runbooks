@@ -23,10 +23,6 @@
     {
       "matchFiles": [".tool-versions"],
       "semanticCommitType": "feat"
-    },
-    {
-      "matchPackageNames": ["redis"],
-      "rangeStrategy": "pin"
     }
   ]
 }

@@ -3,6 +3,7 @@
 require 'connection_pool'
 require 'optparse'
 require 'redis'
+require 'redis-clustering'
 require 'yaml'
 
 # This file requires the `redis` and `connection_pool` gems.
@@ -76,7 +77,12 @@ def compare_string(src, dst, key)
 end
 
 def migrate_string(src, dst, key)
-  dst.with { |c| c.set(key, src.with { |c| c.get(key) }) }
+  string_details = src.with { |c| c.get(key) }
+
+  # the hash could be expired/deleted between comparison and migration
+  return if string_details.nil?
+
+  dst.with { |c| c.set(key, string_details) }
   migrate_ttl(src, dst, key)
 end
 
@@ -87,7 +93,15 @@ end
 
 def migrate_hash(src, dst, key)
   hash_details = src.with { |c| c.hgetall(key) }
-  dst.with { |c| c.hset(key, hash_details) }
+
+  # the hash could be expired/deleted between comparison and migration
+  return if hash_details.empty?
+
+  # to ensure that destination hash does not have excess fields
+  dst.pipelined do |p|
+    p.del(key)
+    p.hset(key, hash_details)
+  end
   migrate_ttl(src, dst, key)
 end
 
@@ -101,7 +115,15 @@ end
 
 def migrate_set(src, dst, key)
   members = src.with { |c| c.smembers(key) }
-  dst.with { |c| c.sadd(key, members) }
+
+  # the hash could be expired/deleted between comparison and migration
+  return if members.empty?
+
+  # to ensure that destination hash does not have excess fields
+  dst.pipelined do |p|
+    p.del(key)
+    p.sadd(key, members)
+  end
   migrate_ttl(src, dst, key)
 end
 
@@ -115,7 +137,10 @@ end
 
 def migrate_list(src, dst, key)
   src_list = src.with { |c| c.lrange(key, 0, -1) }
-  dst.with { |c| c.rpush(key, src_list) } # rpush to maintain order
+  dst.pipelined do |p|
+    p.del(key)
+    p.rpush(key, src_list) # rpush to maintain order
+  end
   migrate_ttl(src, dst, key)
 end
 
@@ -131,7 +156,10 @@ def migrate_zset(src, dst, key)
   # map to switch order of score and member as zrange returns <member, score>
   # but zadd expects <score, member>
   source_zset = src.with { |c| c.zrange(key, 0, -1, withscores: true) }.map { |x, y| [y, x] }
-  dst.with { |c| c.zadd(key, source_zset) }
+  dst.pipelined do |p|
+    p.del(key)
+    p.zadd(key, source_zset)
+  end
   migrate_ttl(src, dst, key)
 end
 
@@ -161,12 +189,22 @@ end
 
 def src_redis
   puts "creating src_redis object"
-  ::Redis.new(YAML.load_file('source.yml').transform_keys(&:to_sym))
+  config = YAML.load_file('source.yml').transform_keys(&:to_sym)
+  if config[:nodes]
+    ::Redis::Cluster.new(config)
+  else
+    ::Redis.new(config)
+  end
 end
 
 def dest_redis
   puts "creating dest_redis object"
-  ::Redis.new(YAML.load_file('destination.yml').transform_keys(&:to_sym))
+  config = YAML.load_file('destination.yml').transform_keys(&:to_sym)
+  if config[:nodes]
+    ::Redis::Cluster.new(config)
+  else
+    ::Redis.new(config)
+  end
 end
 
 checked = 0
@@ -189,66 +227,72 @@ scan_params[:match] = options[:match] if options[:match]
 
 ignore_regexp = /#{options[:ignore_pattern]}/ if options[:ignore_pattern]
 
-loop do
-  it, keys = src_db.with { |r| r.scan(it, **scan_params) }
+begin
+  loop do
+    current_cursor = it
+    it, keys = src_db.with { |r| r.scan(it, **scan_params) }
 
-  puts "Scanned #{keys.size}"
+    puts "Scanned #{keys.size} for #{current_cursor}"
 
-  start = Time.now
-  keys_to_recheck = []
+    start = Time.now
+    keys_to_recheck = []
 
-  threads = []
-  # first pass to compare and migrate keys if not identical
-  keys.each_with_index do |key, idx|
-    if ignore_regexp && key.match?(ignore_regexp)
-      ignored_count += 1
-      next
-    end
-
-    threads << Thread.new do
-      result = compare_and_migrate(key, src_db, dest_db, options[:migrate])
-
-      unsupported_count += 1 if result.nil?
-
-      if result
-        diffcount += 1
-        keys_to_recheck << idx
-      end
-    end
-  end
-  threads.each(&:join)
-
-  threads = []
-  # perform a 2nd iteraation to recheck keys to confirm convergence
-  # instead of immediately checking in the above loop
-  if options[:migrate]
+    threads = []
+    # first pass to compare and migrate keys if not identical
     keys.each_with_index do |key, idx|
-      next unless keys_to_recheck.include?(idx)
+      if ignore_regexp && key.match?(ignore_regexp)
+        ignored_count += 1
+        next
+      end
 
       threads << Thread.new do
-        if !compare_and_migrate(key, src_db, dest_db, false)
-          migrated_count += 1
-        else
-          # TODO write persistent mismatches into a tmp file?
-          puts "Failed to migrate #{key}"
+        result = compare_and_migrate(key, src_db, dest_db, options[:migrate])
+
+        unsupported_count += 1 if result.nil?
+
+        if result
+          diffcount += 1
+          keys_to_recheck << idx
         end
       end
     end
     threads.each(&:join)
+
+    threads = []
+    # perform a 2nd iteraation to recheck keys to confirm convergence
+    # instead of immediately checking in the above loop
+    if options[:migrate]
+      keys.each_with_index do |key, idx|
+        next unless keys_to_recheck.include?(idx)
+
+        threads << Thread.new do
+          if !compare_and_migrate(key, src_db, dest_db, false)
+            migrated_count += 1
+          else
+            # TODO write persistent mismatches into a tmp file?
+            puts "Failed to migrate #{key}"
+          end
+        end
+      end
+      threads.each(&:join)
+    end
+
+    checked += keys.size
+    duration = Time.now - start
+    wait = (keys.size / max_allowed_rate) - duration
+    if wait.positive?
+      puts "Processing at #{keys.size / duration} ops per second. Sleeping for #{wait} to maintain max of #{max_allowed_rate}"
+      sleep(wait)
+    end
+
+    puts "Checked #{keys.size} keys from cursor #{current_cursor}"
+
+    break if options[:keys] && checked > options[:keys].to_i
+    break if it == "0"
   end
-
-  checked += keys.size
-  duration = Time.now - start
-  wait = (keys.size / max_allowed_rate) - duration
-  if wait.positive?
-    puts "Processing at #{keys.size / duration} ops per second. Sleeping for #{wait} to maintain max of #{max_allowed_rate}"
-    sleep(wait)
-  end
-
-  puts "Checked #{keys.size} keys from cursor #{it}"
-
-  break if options[:keys] && checked > options[:keys].to_i
-  break if it == "0"
+rescue StandardError => e
+  puts "Error: #{e.message}"
+  puts e.backtrace
 end
 
 puts "Checked #{checked}"
