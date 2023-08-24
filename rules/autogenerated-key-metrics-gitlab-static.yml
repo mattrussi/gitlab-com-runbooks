@@ -12,7 +12,7 @@ groups:
       type: gitlab-static
     expr: |
       sum by (env,environment) (
-        rate(cloudflare_zone_requests_total{zone="gitlab-static.net"}[1m])
+        rate(cloudflare_zone_requests_total{zone="gitlab-static.net"}[1m] offset 30s)
       )
   - record: gitlab_component_errors:rate
     labels:
@@ -23,7 +23,7 @@ groups:
     expr: |
       (
         sum by (env,environment) (
-          rate(cloudflare_zone_requests_status{status=~"5..",zone="gitlab-static.net"}[1m])
+          rate(cloudflare_zone_requests_status{status=~"5..",zone="gitlab-static.net"}[1m] offset 30s)
         )
       )
       or
@@ -40,7 +40,7 @@ groups:
       type: gitlab-static
     expr: |
       sum by (env,environment) (
-        rate(cloudflare_worker_requests_count{script_name="gitlab-web-ide-vscode-production"}[1m])
+        rate(cloudflare_worker_requests_count{script_name="gitlab-web-ide-vscode-production"}[1m] offset 30s)
       )
   - record: gitlab_component_errors:rate
     labels:
@@ -51,7 +51,7 @@ groups:
     expr: |
       (
         sum by (env,environment) (
-          rate(cloudflare_worker_errors_count{script_name="gitlab-web-ide-vscode-production"}[1m])
+          rate(cloudflare_worker_errors_count{script_name="gitlab-web-ide-vscode-production"}[1m] offset 30s)
         )
       )
       or
@@ -71,7 +71,7 @@ groups:
       type: gitlab-static
     expr: |
       sum by (env,environment) (
-        rate(cloudflare_zone_requests_total{zone="gitlab-static.net"}[5m])
+        rate(cloudflare_zone_requests_total{zone="gitlab-static.net"}[5m] offset 30s)
       )
   - record: gitlab_component_errors:rate_5m
     labels:
@@ -82,7 +82,7 @@ groups:
     expr: |
       (
         sum by (env,environment) (
-          rate(cloudflare_zone_requests_status{status=~"5..",zone="gitlab-static.net"}[5m])
+          rate(cloudflare_zone_requests_status{status=~"5..",zone="gitlab-static.net"}[5m] offset 30s)
         )
       )
       or
@@ -99,7 +99,7 @@ groups:
       type: gitlab-static
     expr: |
       sum by (env,environment) (
-        rate(cloudflare_worker_requests_count{script_name="gitlab-web-ide-vscode-production"}[5m])
+        rate(cloudflare_worker_requests_count{script_name="gitlab-web-ide-vscode-production"}[5m] offset 30s)
       )
   - record: gitlab_component_errors:rate_5m
     labels:
@@ -110,7 +110,7 @@ groups:
     expr: |
       (
         sum by (env,environment) (
-          rate(cloudflare_worker_errors_count{script_name="gitlab-web-ide-vscode-production"}[5m])
+          rate(cloudflare_worker_errors_count{script_name="gitlab-web-ide-vscode-production"}[5m] offset 30s)
         )
       )
       or
@@ -130,7 +130,7 @@ groups:
       type: gitlab-static
     expr: |
       sum by (env,environment) (
-        rate(cloudflare_zone_requests_total{zone="gitlab-static.net"}[30m])
+        rate(cloudflare_zone_requests_total{zone="gitlab-static.net"}[30m] offset 30s)
       )
   - record: gitlab_component_errors:rate_30m
     labels:
@@ -141,7 +141,7 @@ groups:
     expr: |
       (
         sum by (env,environment) (
-          rate(cloudflare_zone_requests_status{status=~"5..",zone="gitlab-static.net"}[30m])
+          rate(cloudflare_zone_requests_status{status=~"5..",zone="gitlab-static.net"}[30m] offset 30s)
         )
       )
       or
@@ -158,7 +158,7 @@ groups:
       type: gitlab-static
     expr: |
       sum by (env,environment) (
-        rate(cloudflare_worker_requests_count{script_name="gitlab-web-ide-vscode-production"}[30m])
+        rate(cloudflare_worker_requests_count{script_name="gitlab-web-ide-vscode-production"}[30m] offset 30s)
       )
   - record: gitlab_component_errors:rate_30m
     labels:
@@ -169,7 +169,7 @@ groups:
     expr: |
       (
         sum by (env,environment) (
-          rate(cloudflare_worker_errors_count{script_name="gitlab-web-ide-vscode-production"}[30m])
+          rate(cloudflare_worker_errors_count{script_name="gitlab-web-ide-vscode-production"}[30m] offset 30s)
         )
       )
       or
@@ -189,7 +189,7 @@ groups:
       type: gitlab-static
     expr: |
       sum by (env,environment) (
-        rate(cloudflare_zone_requests_total{zone="gitlab-static.net"}[1h])
+        rate(cloudflare_zone_requests_total{zone="gitlab-static.net"}[1h] offset 30s)
       )
   - record: gitlab_component_errors:rate_1h
     labels:
@@ -200,7 +200,7 @@ groups:
     expr: |
       (
         sum by (env,environment) (
-          rate(cloudflare_zone_requests_status{status=~"5..",zone="gitlab-static.net"}[1h])
+          rate(cloudflare_zone_requests_status{status=~"5..",zone="gitlab-static.net"}[1h] offset 30s)
         )
       )
       or
@@ -217,7 +217,7 @@ groups:
       type: gitlab-static
     expr: |
       sum by (env,environment) (
-        rate(cloudflare_worker_requests_count{script_name="gitlab-web-ide-vscode-production"}[1h])
+        rate(cloudflare_worker_requests_count{script_name="gitlab-web-ide-vscode-production"}[1h] offset 30s)
       )
   - record: gitlab_component_errors:rate_1h
     labels:
@@ -228,7 +228,7 @@ groups:
     expr: |
       (
         sum by (env,environment) (
-          rate(cloudflare_worker_errors_count{script_name="gitlab-web-ide-vscode-production"}[1h])
+          rate(cloudflare_worker_errors_count{script_name="gitlab-web-ide-vscode-production"}[1h] offset 30s)
         )
       )
       or
@@ -248,7 +248,7 @@ groups:
       type: gitlab-static
     expr: |
       sum by (env,environment) (
-        rate(cloudflare_zone_requests_total{zone="gitlab-static.net"}[6h])
+        rate(cloudflare_zone_requests_total{zone="gitlab-static.net"}[6h] offset 30s)
       )
   - record: gitlab_component_errors:rate_6h
     labels:
@@ -259,7 +259,7 @@ groups:
     expr: |
       (
         sum by (env,environment) (
-          rate(cloudflare_zone_requests_status{status=~"5..",zone="gitlab-static.net"}[6h])
+          rate(cloudflare_zone_requests_status{status=~"5..",zone="gitlab-static.net"}[6h] offset 30s)
         )
       )
       or
@@ -276,7 +276,7 @@ groups:
       type: gitlab-static
     expr: |
       sum by (env,environment) (
-        rate(cloudflare_worker_requests_count{script_name="gitlab-web-ide-vscode-production"}[6h])
+        rate(cloudflare_worker_requests_count{script_name="gitlab-web-ide-vscode-production"}[6h] offset 30s)
       )
   - record: gitlab_component_errors:rate_6h
     labels:
@@ -287,7 +287,7 @@ groups:
     expr: |
       (
         sum by (env,environment) (
-          rate(cloudflare_worker_errors_count{script_name="gitlab-web-ide-vscode-production"}[6h])
+          rate(cloudflare_worker_errors_count{script_name="gitlab-web-ide-vscode-production"}[6h] offset 30s)
         )
       )
       or

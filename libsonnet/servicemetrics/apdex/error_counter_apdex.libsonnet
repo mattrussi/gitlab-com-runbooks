@@ -4,7 +4,7 @@ local aggregations = import 'promql/aggregations.libsonnet';
 local selectors = import 'promql/selectors.libsonnet';
 local strings = import 'utils/strings.libsonnet';
 
-local transformErrorRateToSuccessRate(errorRateMetric, operationRateMetric, selector, rangeInterval, aggregationLabels, useRecordingRuleRegistry) =
+local transformErrorRateToSuccessRate(errorRateMetric, operationRateMetric, selector, rangeInterval, aggregationLabels, useRecordingRuleRegistry, offset) =
   |||
     %(operationRate)s - (
       %(errorRate)s or
@@ -17,7 +17,8 @@ local transformErrorRateToSuccessRate(errorRateMetric, operationRateMetric, sele
       rangeInterval,
       useRecordingRuleRegistry,
       aggregationFunction='sum',
-      aggregationLabels=aggregationLabels
+      aggregationLabels=aggregationLabels,
+      offset=offset,
     )),
     indentedOperationRate: strings.indent(strings.chomp(resolveRateQuery(
       operationRateMetric,
@@ -25,7 +26,9 @@ local transformErrorRateToSuccessRate(errorRateMetric, operationRateMetric, sele
       rangeInterval,
       useRecordingRuleRegistry,
       aggregationFunction='sum',
-      aggregationLabels=aggregationLabels
+      aggregationLabels=aggregationLabels,
+      offset=offset,
+
     )), 2),
     errorRate: strings.indent(strings.chomp(resolveRateQuery(
       errorRateMetric,
@@ -33,7 +36,8 @@ local transformErrorRateToSuccessRate(errorRateMetric, operationRateMetric, sele
       rangeInterval,
       useRecordingRuleRegistry,
       aggregationFunction='sum',
-      aggregationLabels=aggregationLabels
+      aggregationLabels=aggregationLabels,
+      offset=offset,
     )), 2),
   };
 
@@ -48,7 +52,7 @@ local transformErrorRateToSuccessRate(errorRateMetric, operationRateMetric, sele
     selector: selector,
     useRecordingRuleRegistry:: useRecordingRuleRegistry,
 
-    apdexSuccessRateQuery(aggregationLabels, selector, rangeInterval, withoutLabels=[])::
+    apdexSuccessRateQuery(aggregationLabels, selector, rangeInterval, withoutLabels=[], offset=null)::
       transformErrorRateToSuccessRate(
         self.errorRateMetric,
         self.operationRateMetric,
@@ -56,17 +60,19 @@ local transformErrorRateToSuccessRate(errorRateMetric, operationRateMetric, sele
         rangeInterval,
         aggregationLabels,
         useRecordingRuleRegistry,
+        offset,
       ),
-    apdexWeightQuery(aggregationLabels, selector, rangeInterval, withoutLabels=[])::
+    apdexWeightQuery(aggregationLabels, selector, rangeInterval, withoutLabels=[], offset=null)::
       resolveRateQuery(
         self.operationRateMetric,
         selectors.without(selectors.merge(self.selector, selector), withoutLabels),
         rangeInterval,
         useRecordingRuleRegistry,
         aggregationLabels=aggregationLabels,
-        aggregationFunction='sum'
+        aggregationFunction='sum',
+        offset=offset
       ),
-    apdexNumerator(selector, rangeInterval, withoutLabels=[])::
+    apdexNumerator(selector, rangeInterval, withoutLabels=[], offset=null)::
       transformErrorRateToSuccessRate(
         self.errorRateMetric,
         self.operationRateMetric,
@@ -74,14 +80,16 @@ local transformErrorRateToSuccessRate(errorRateMetric, operationRateMetric, sele
         rangeInterval,
         [],
         useRecordingRuleRegistry,
+        offset,
       ),
 
-    apdexDenominator(selector, rangeInterval, withoutLabels=[])::
+    apdexDenominator(selector, rangeInterval, withoutLabels=[], offset=null)::
       resolveRateQuery(
         self.operationRateMetric,
         selectors.without(selectors.merge(self.selector, selector), withoutLabels),
         rangeInterval,
         useRecordingRuleRegistry,
+        offset
       ),
 
     apdexAttribution(aggregationLabel, selector, rangeInterval, withoutLabels=[])::

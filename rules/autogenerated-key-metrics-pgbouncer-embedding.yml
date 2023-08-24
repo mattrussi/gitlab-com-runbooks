@@ -12,9 +12,9 @@ groups:
       type: pgbouncer-embedding
     expr: |
       sum by (env,environment) (
-        label_replace(rate(pgbouncer_stats_sql_transactions_pooled_total{tier="db",type="pgbouncer-embedding"}[1m]), "_c", "0", "", "")
+        label_replace(rate(pgbouncer_stats_sql_transactions_pooled_total{tier="db",type="pgbouncer-embedding"}[1m] offset 30s), "_c", "0", "", "")
         or
-        label_replace(rate(pgbouncer_stats_queries_pooled_total{tier="db",type="pgbouncer-embedding"}[1m]), "_c", "1", "", "")
+        label_replace(rate(pgbouncer_stats_queries_pooled_total{tier="db",type="pgbouncer-embedding"}[1m] offset 30s), "_c", "1", "", "")
       )
   - record: gitlab_component_errors:rate
     labels:
@@ -25,7 +25,7 @@ groups:
     expr: |
       (
         sum by (env,environment) (
-          rate(pgbouncer_pooler_errors_total{tier="db",type="pgbouncer-embedding"}[1m])
+          rate(pgbouncer_pooler_errors_total{tier="db",type="pgbouncer-embedding"}[1m] offset 30s)
         )
       )
       or
@@ -45,9 +45,9 @@ groups:
       type: pgbouncer-embedding
     expr: |
       sum by (env,environment) (
-        label_replace(rate(pgbouncer_stats_sql_transactions_pooled_total{tier="db",type="pgbouncer-embedding"}[5m]), "_c", "0", "", "")
+        label_replace(rate(pgbouncer_stats_sql_transactions_pooled_total{tier="db",type="pgbouncer-embedding"}[5m] offset 30s), "_c", "0", "", "")
         or
-        label_replace(rate(pgbouncer_stats_queries_pooled_total{tier="db",type="pgbouncer-embedding"}[5m]), "_c", "1", "", "")
+        label_replace(rate(pgbouncer_stats_queries_pooled_total{tier="db",type="pgbouncer-embedding"}[5m] offset 30s), "_c", "1", "", "")
       )
   - record: gitlab_component_errors:rate_5m
     labels:
@@ -58,7 +58,7 @@ groups:
     expr: |
       (
         sum by (env,environment) (
-          rate(pgbouncer_pooler_errors_total{tier="db",type="pgbouncer-embedding"}[5m])
+          rate(pgbouncer_pooler_errors_total{tier="db",type="pgbouncer-embedding"}[5m] offset 30s)
         )
       )
       or
@@ -78,9 +78,9 @@ groups:
       type: pgbouncer-embedding
     expr: |
       sum by (env,environment) (
-        label_replace(rate(pgbouncer_stats_sql_transactions_pooled_total{tier="db",type="pgbouncer-embedding"}[30m]), "_c", "0", "", "")
+        label_replace(rate(pgbouncer_stats_sql_transactions_pooled_total{tier="db",type="pgbouncer-embedding"}[30m] offset 30s), "_c", "0", "", "")
         or
-        label_replace(rate(pgbouncer_stats_queries_pooled_total{tier="db",type="pgbouncer-embedding"}[30m]), "_c", "1", "", "")
+        label_replace(rate(pgbouncer_stats_queries_pooled_total{tier="db",type="pgbouncer-embedding"}[30m] offset 30s), "_c", "1", "", "")
       )
   - record: gitlab_component_errors:rate_30m
     labels:
@@ -91,7 +91,7 @@ groups:
     expr: |
       (
         sum by (env,environment) (
-          rate(pgbouncer_pooler_errors_total{tier="db",type="pgbouncer-embedding"}[30m])
+          rate(pgbouncer_pooler_errors_total{tier="db",type="pgbouncer-embedding"}[30m] offset 30s)
         )
       )
       or
@@ -111,9 +111,9 @@ groups:
       type: pgbouncer-embedding
     expr: |
       sum by (env,environment) (
-        label_replace(rate(pgbouncer_stats_sql_transactions_pooled_total{tier="db",type="pgbouncer-embedding"}[1h]), "_c", "0", "", "")
+        label_replace(rate(pgbouncer_stats_sql_transactions_pooled_total{tier="db",type="pgbouncer-embedding"}[1h] offset 30s), "_c", "0", "", "")
         or
-        label_replace(rate(pgbouncer_stats_queries_pooled_total{tier="db",type="pgbouncer-embedding"}[1h]), "_c", "1", "", "")
+        label_replace(rate(pgbouncer_stats_queries_pooled_total{tier="db",type="pgbouncer-embedding"}[1h] offset 30s), "_c", "1", "", "")
       )
   - record: gitlab_component_errors:rate_1h
     labels:
@@ -124,7 +124,7 @@ groups:
     expr: |
       (
         sum by (env,environment) (
-          rate(pgbouncer_pooler_errors_total{tier="db",type="pgbouncer-embedding"}[1h])
+          rate(pgbouncer_pooler_errors_total{tier="db",type="pgbouncer-embedding"}[1h] offset 30s)
         )
       )
       or
@@ -144,9 +144,9 @@ groups:
       type: pgbouncer-embedding
     expr: |
       sum by (env,environment) (
-        label_replace(rate(pgbouncer_stats_sql_transactions_pooled_total{tier="db",type="pgbouncer-embedding"}[6h]), "_c", "0", "", "")
+        label_replace(rate(pgbouncer_stats_sql_transactions_pooled_total{tier="db",type="pgbouncer-embedding"}[6h] offset 30s), "_c", "0", "", "")
         or
-        label_replace(rate(pgbouncer_stats_queries_pooled_total{tier="db",type="pgbouncer-embedding"}[6h]), "_c", "1", "", "")
+        label_replace(rate(pgbouncer_stats_queries_pooled_total{tier="db",type="pgbouncer-embedding"}[6h] offset 30s), "_c", "1", "", "")
       )
   - record: gitlab_component_errors:rate_6h
     labels:
@@ -157,7 +157,7 @@ groups:
     expr: |
       (
         sum by (env,environment) (
-          rate(pgbouncer_pooler_errors_total{tier="db",type="pgbouncer-embedding"}[6h])
+          rate(pgbouncer_pooler_errors_total{tier="db",type="pgbouncer-embedding"}[6h] offset 30s)
         )
       )
       or

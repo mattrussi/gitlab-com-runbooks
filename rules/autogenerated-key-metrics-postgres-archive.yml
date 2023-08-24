@@ -11,9 +11,9 @@ groups:
       type: postgres-archive
     expr: |
       sum by (env,environment,stage) (
-        label_replace(rate(pg_stat_database_xact_commit{tier="db",type="postgres-archive"}[1m]), "_c", "0", "", "")
+        label_replace(rate(pg_stat_database_xact_commit{tier="db",type="postgres-archive"}[1m] offset 30s), "_c", "0", "", "")
         or
-        label_replace(rate(pg_stat_database_xact_rollback{tier="db",type="postgres-archive"}[1m]), "_c", "1", "", "")
+        label_replace(rate(pg_stat_database_xact_rollback{tier="db",type="postgres-archive"}[1m] offset 30s), "_c", "1", "", "")
       )
   - record: gitlab_component_errors:rate
     labels:
@@ -23,7 +23,7 @@ groups:
     expr: |
       (
         sum by (env,environment,stage) (
-          rate(pg_stat_database_xact_rollback{tier="db",type="postgres-archive"}[1m])
+          rate(pg_stat_database_xact_rollback{tier="db",type="postgres-archive"}[1m] offset 30s)
         )
       )
       or
@@ -42,9 +42,9 @@ groups:
       type: postgres-archive
     expr: |
       sum by (env,environment,stage) (
-        label_replace(rate(pg_stat_database_xact_commit{tier="db",type="postgres-archive"}[5m]), "_c", "0", "", "")
+        label_replace(rate(pg_stat_database_xact_commit{tier="db",type="postgres-archive"}[5m] offset 30s), "_c", "0", "", "")
         or
-        label_replace(rate(pg_stat_database_xact_rollback{tier="db",type="postgres-archive"}[5m]), "_c", "1", "", "")
+        label_replace(rate(pg_stat_database_xact_rollback{tier="db",type="postgres-archive"}[5m] offset 30s), "_c", "1", "", "")
       )
   - record: gitlab_component_errors:rate_5m
     labels:
@@ -54,7 +54,7 @@ groups:
     expr: |
       (
         sum by (env,environment,stage) (
-          rate(pg_stat_database_xact_rollback{tier="db",type="postgres-archive"}[5m])
+          rate(pg_stat_database_xact_rollback{tier="db",type="postgres-archive"}[5m] offset 30s)
         )
       )
       or
@@ -73,9 +73,9 @@ groups:
       type: postgres-archive
     expr: |
       sum by (env,environment,stage) (
-        label_replace(rate(pg_stat_database_xact_commit{tier="db",type="postgres-archive"}[30m]), "_c", "0", "", "")
+        label_replace(rate(pg_stat_database_xact_commit{tier="db",type="postgres-archive"}[30m] offset 30s), "_c", "0", "", "")
         or
-        label_replace(rate(pg_stat_database_xact_rollback{tier="db",type="postgres-archive"}[30m]), "_c", "1", "", "")
+        label_replace(rate(pg_stat_database_xact_rollback{tier="db",type="postgres-archive"}[30m] offset 30s), "_c", "1", "", "")
       )
   - record: gitlab_component_errors:rate_30m
     labels:
@@ -85,7 +85,7 @@ groups:
     expr: |
       (
         sum by (env,environment,stage) (
-          rate(pg_stat_database_xact_rollback{tier="db",type="postgres-archive"}[30m])
+          rate(pg_stat_database_xact_rollback{tier="db",type="postgres-archive"}[30m] offset 30s)
         )
       )
       or
@@ -104,9 +104,9 @@ groups:
       type: postgres-archive
     expr: |
       sum by (env,environment,stage) (
-        label_replace(rate(pg_stat_database_xact_commit{tier="db",type="postgres-archive"}[1h]), "_c", "0", "", "")
+        label_replace(rate(pg_stat_database_xact_commit{tier="db",type="postgres-archive"}[1h] offset 30s), "_c", "0", "", "")
         or
-        label_replace(rate(pg_stat_database_xact_rollback{tier="db",type="postgres-archive"}[1h]), "_c", "1", "", "")
+        label_replace(rate(pg_stat_database_xact_rollback{tier="db",type="postgres-archive"}[1h] offset 30s), "_c", "1", "", "")
       )
   - record: gitlab_component_errors:rate_1h
     labels:
@@ -116,7 +116,7 @@ groups:
     expr: |
       (
         sum by (env,environment,stage) (
-          rate(pg_stat_database_xact_rollback{tier="db",type="postgres-archive"}[1h])
+          rate(pg_stat_database_xact_rollback{tier="db",type="postgres-archive"}[1h] offset 30s)
         )
       )
       or
@@ -135,9 +135,9 @@ groups:
       type: postgres-archive
     expr: |
       sum by (env,environment,stage) (
-        label_replace(rate(pg_stat_database_xact_commit{tier="db",type="postgres-archive"}[6h]), "_c", "0", "", "")
+        label_replace(rate(pg_stat_database_xact_commit{tier="db",type="postgres-archive"}[6h] offset 30s), "_c", "0", "", "")
         or
-        label_replace(rate(pg_stat_database_xact_rollback{tier="db",type="postgres-archive"}[6h]), "_c", "1", "", "")
+        label_replace(rate(pg_stat_database_xact_rollback{tier="db",type="postgres-archive"}[6h] offset 30s), "_c", "1", "", "")
       )
   - record: gitlab_component_errors:rate_6h
     labels:
@@ -147,7 +147,7 @@ groups:
     expr: |
       (
         sum by (env,environment,stage) (
-          rate(pg_stat_database_xact_rollback{tier="db",type="postgres-archive"}[6h])
+          rate(pg_stat_database_xact_rollback{tier="db",type="postgres-archive"}[6h] offset 30s)
         )
       )
       or

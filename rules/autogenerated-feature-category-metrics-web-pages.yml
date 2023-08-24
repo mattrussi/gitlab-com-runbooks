@@ -13,7 +13,7 @@ groups:
       type: web-pages
     expr: |
       sum by (env,environment) (
-        rate(haproxy_backend_http_responses_total{backend="pages_http",type=~"pages|web-pages"}[5m])
+        rate(haproxy_backend_http_responses_total{backend="pages_http",type=~"pages|web-pages"}[5m] offset 30s)
       )
   - record: gitlab:component:feature_category:execution:error:rate_5m
     labels:
@@ -25,7 +25,7 @@ groups:
     expr: |
       (
         sum by (env,environment) (
-          rate(haproxy_backend_http_responses_total{backend="pages_http",code="5xx",type=~"pages|web-pages"}[5m])
+          rate(haproxy_backend_http_responses_total{backend="pages_http",code="5xx",type=~"pages|web-pages"}[5m] offset 30s)
         )
       )
       or
@@ -43,7 +43,7 @@ groups:
       type: web-pages
     expr: |
       sum by (env,environment) (
-        rate(haproxy_server_sessions_total{backend="pages_https",type=~"pages|web-pages"}[5m])
+        rate(haproxy_server_sessions_total{backend="pages_https",type=~"pages|web-pages"}[5m] offset 30s)
       )
   - record: gitlab:component:feature_category:execution:error:rate_5m
     labels:
@@ -55,7 +55,7 @@ groups:
     expr: |
       (
         sum by (env,environment) (
-          rate(haproxy_server_connection_errors_total{backend="pages_https",type=~"pages|web-pages"}[5m])
+          rate(haproxy_server_connection_errors_total{backend="pages_https",type=~"pages|web-pages"}[5m] offset 30s)
         )
       )
       or
@@ -72,7 +72,7 @@ groups:
       type: web-pages
     expr: |
       sum by (env,environment,stage) (
-        rate(gitlab_pages_http_time_to_write_header_seconds_bucket{le="0.5",type="web-pages"}[5m])
+        rate(gitlab_pages_http_time_to_write_header_seconds_bucket{le="0.5",type="web-pages"}[5m] offset 30s)
       )
   - record: gitlab:component:feature_category:execution:apdex:weight:score_5m
     labels:
@@ -82,7 +82,7 @@ groups:
       type: web-pages
     expr: |
       sum by (env,environment,stage) (
-        rate(gitlab_pages_http_time_to_write_header_seconds_bucket{le="+Inf",type="web-pages"}[5m])
+        rate(gitlab_pages_http_time_to_write_header_seconds_bucket{le="+Inf",type="web-pages"}[5m] offset 30s)
       )
   - record: gitlab:component:feature_category:execution:ops:rate_5m
     labels:
@@ -92,7 +92,7 @@ groups:
       type: web-pages
     expr: |
       sum by (env,environment,stage) (
-        rate(gitlab_pages_http_time_to_write_header_seconds_count{type="web-pages"}[5m])
+        rate(gitlab_pages_http_time_to_write_header_seconds_count{type="web-pages"}[5m] offset 30s)
       )
   - record: gitlab:component:feature_category:execution:error:rate_5m
     labels:
@@ -103,7 +103,7 @@ groups:
     expr: |
       (
         sum by (env,environment,stage) (
-          rate(gitlab_pages_http_requests_total{code=~"5.."}[5m])
+          rate(gitlab_pages_http_requests_total{code=~"5.."}[5m] offset 30s)
         )
       )
       or
@@ -124,7 +124,7 @@ groups:
       type: web-pages
     expr: |
       sum by (env,environment) (
-        rate(haproxy_backend_http_responses_total{backend="pages_http",type=~"pages|web-pages"}[30m])
+        rate(haproxy_backend_http_responses_total{backend="pages_http",type=~"pages|web-pages"}[30m] offset 30s)
       )
   - record: gitlab:component:feature_category:execution:error:rate_30m
     labels:
@@ -136,7 +136,7 @@ groups:
     expr: |
       (
         sum by (env,environment) (
-          rate(haproxy_backend_http_responses_total{backend="pages_http",code="5xx",type=~"pages|web-pages"}[30m])
+          rate(haproxy_backend_http_responses_total{backend="pages_http",code="5xx",type=~"pages|web-pages"}[30m] offset 30s)
         )
       )
       or
@@ -154,7 +154,7 @@ groups:
       type: web-pages
     expr: |
       sum by (env,environment) (
-        rate(haproxy_server_sessions_total{backend="pages_https",type=~"pages|web-pages"}[30m])
+        rate(haproxy_server_sessions_total{backend="pages_https",type=~"pages|web-pages"}[30m] offset 30s)
       )
   - record: gitlab:component:feature_category:execution:error:rate_30m
     labels:
@@ -166,7 +166,7 @@ groups:
     expr: |
       (
         sum by (env,environment) (
-          rate(haproxy_server_connection_errors_total{backend="pages_https",type=~"pages|web-pages"}[30m])
+          rate(haproxy_server_connection_errors_total{backend="pages_https",type=~"pages|web-pages"}[30m] offset 30s)
         )
       )
       or
@@ -183,7 +183,7 @@ groups:
       type: web-pages
     expr: |
       sum by (env,environment,stage) (
-        rate(gitlab_pages_http_time_to_write_header_seconds_bucket{le="0.5",type="web-pages"}[30m])
+        rate(gitlab_pages_http_time_to_write_header_seconds_bucket{le="0.5",type="web-pages"}[30m] offset 30s)
       )
   - record: gitlab:component:feature_category:execution:apdex:weight:score_30m
     labels:
@@ -193,7 +193,7 @@ groups:
       type: web-pages
     expr: |
       sum by (env,environment,stage) (
-        rate(gitlab_pages_http_time_to_write_header_seconds_bucket{le="+Inf",type="web-pages"}[30m])
+        rate(gitlab_pages_http_time_to_write_header_seconds_bucket{le="+Inf",type="web-pages"}[30m] offset 30s)
       )
   - record: gitlab:component:feature_category:execution:ops:rate_30m
     labels:
@@ -203,7 +203,7 @@ groups:
       type: web-pages
     expr: |
       sum by (env,environment,stage) (
-        rate(gitlab_pages_http_time_to_write_header_seconds_count{type="web-pages"}[30m])
+        rate(gitlab_pages_http_time_to_write_header_seconds_count{type="web-pages"}[30m] offset 30s)
       )
   - record: gitlab:component:feature_category:execution:error:rate_30m
     labels:
@@ -214,7 +214,7 @@ groups:
     expr: |
       (
         sum by (env,environment,stage) (
-          rate(gitlab_pages_http_requests_total{code=~"5.."}[30m])
+          rate(gitlab_pages_http_requests_total{code=~"5.."}[30m] offset 30s)
         )
       )
       or
@@ -235,7 +235,7 @@ groups:
       type: web-pages
     expr: |
       sum by (env,environment) (
-        rate(haproxy_backend_http_responses_total{backend="pages_http",type=~"pages|web-pages"}[1h])
+        rate(haproxy_backend_http_responses_total{backend="pages_http",type=~"pages|web-pages"}[1h] offset 30s)
       )
   - record: gitlab:component:feature_category:execution:error:rate_1h
     labels:
@@ -247,7 +247,7 @@ groups:
     expr: |
       (
         sum by (env,environment) (
-          rate(haproxy_backend_http_responses_total{backend="pages_http",code="5xx",type=~"pages|web-pages"}[1h])
+          rate(haproxy_backend_http_responses_total{backend="pages_http",code="5xx",type=~"pages|web-pages"}[1h] offset 30s)
         )
       )
       or
@@ -265,7 +265,7 @@ groups:
       type: web-pages
     expr: |
       sum by (env,environment) (
-        rate(haproxy_server_sessions_total{backend="pages_https",type=~"pages|web-pages"}[1h])
+        rate(haproxy_server_sessions_total{backend="pages_https",type=~"pages|web-pages"}[1h] offset 30s)
       )
   - record: gitlab:component:feature_category:execution:error:rate_1h
     labels:
@@ -277,7 +277,7 @@ groups:
     expr: |
       (
         sum by (env,environment) (
-          rate(haproxy_server_connection_errors_total{backend="pages_https",type=~"pages|web-pages"}[1h])
+          rate(haproxy_server_connection_errors_total{backend="pages_https",type=~"pages|web-pages"}[1h] offset 30s)
         )
       )
       or
@@ -294,7 +294,7 @@ groups:
       type: web-pages
     expr: |
       sum by (env,environment,stage) (
-        rate(gitlab_pages_http_time_to_write_header_seconds_bucket{le="0.5",type="web-pages"}[1h])
+        rate(gitlab_pages_http_time_to_write_header_seconds_bucket{le="0.5",type="web-pages"}[1h] offset 30s)
       )
   - record: gitlab:component:feature_category:execution:apdex:weight:score_1h
     labels:
@@ -304,7 +304,7 @@ groups:
       type: web-pages
     expr: |
       sum by (env,environment,stage) (
-        rate(gitlab_pages_http_time_to_write_header_seconds_bucket{le="+Inf",type="web-pages"}[1h])
+        rate(gitlab_pages_http_time_to_write_header_seconds_bucket{le="+Inf",type="web-pages"}[1h] offset 30s)
       )
   - record: gitlab:component:feature_category:execution:ops:rate_1h
     labels:
@@ -314,7 +314,7 @@ groups:
       type: web-pages
     expr: |
       sum by (env,environment,stage) (
-        rate(gitlab_pages_http_time_to_write_header_seconds_count{type="web-pages"}[1h])
+        rate(gitlab_pages_http_time_to_write_header_seconds_count{type="web-pages"}[1h] offset 30s)
       )
   - record: gitlab:component:feature_category:execution:error:rate_1h
     labels:
@@ -325,7 +325,7 @@ groups:
     expr: |
       (
         sum by (env,environment,stage) (
-          rate(gitlab_pages_http_requests_total{code=~"5.."}[1h])
+          rate(gitlab_pages_http_requests_total{code=~"5.."}[1h] offset 30s)
         )
       )
       or

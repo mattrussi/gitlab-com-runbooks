@@ -126,7 +126,7 @@ test.suite({
     actual: optionalValidator.isValid({ optionalString: null, optionalNumber: null }),
     expect: true,
   },
-  testOptionalValidatorMissing: {
+  testOptionalValidatorIncorrectType: {
     actual: optionalValidator._validationMessages({ optionalString: 1, optionalNumber: 'a' }),
     expect: ['field optionalNumber: expected a number or null', 'field optionalString: expected a string or null'],
   },

@@ -1,3 +1,4 @@
+local optionalOffset = import 'lib/optional-offset.libsonnet';
 local aggregations = import 'promql/aggregations.libsonnet';
 local selectors = import 'promql/selectors.libsonnet';
 local recordingRuleRegistry = import 'recording-rule-registry.libsonnet';  // TODO: fix circular dependency
@@ -10,16 +11,17 @@ local generateInstanceFilterQuery(instanceFilter) =
 
 
 // Generates a range-vector function using the provided functions
-local generateRangeFunctionQuery(rate, rangeFunction, additionalSelectors, rangeInterval, withoutLabels) =
+local generateRangeFunctionQuery(rate, rangeFunction, additionalSelectors, rangeInterval, withoutLabels, offset) =
   local selector = selectors.merge(additionalSelectors, rate.selector);
   local selectorWithout = selectors.without(selector, withoutLabels);
 
-  '%(rangeFunction)s(%(counter)s{%(selector)s}[%(rangeInterval)s])%(instanceFilterQuery)s' % {
+  '%(rangeFunction)s(%(counter)s{%(selector)s}[%(rangeInterval)s]%(optionalOffset)s)%(instanceFilterQuery)s' % {
     rangeFunction: rangeFunction,
     counter: rate.counter,
     selector: selectors.serializeHash(selectorWithout),
     rangeInterval: rangeInterval,
     instanceFilterQuery: generateInstanceFilterQuery(rate.instanceFilter),
+    optionalOffset: optionalOffset(offset),
   };
 
 {
@@ -36,8 +38,8 @@ local generateRangeFunctionQuery(rate, rangeFunction, additionalSelectors, range
 
     // This creates a rate query of the form
     // rate(....{<selector>}[<rangeInterval>])
-    rateQuery(selector, rangeInterval, withoutLabels=[])::
-      generateRangeFunctionQuery(self, 'rate', selector, rangeInterval, withoutLabels=withoutLabels),
+    rateQuery(selector, rangeInterval, withoutLabels=[], offset=null)::
+      generateRangeFunctionQuery(self, 'rate', selector, rangeInterval, withoutLabels=withoutLabels, offset=offset),
 
     // This creates a increase query of the form
     // increase(....{<selector>}[<rangeInterval>])
@@ -46,7 +48,7 @@ local generateRangeFunctionQuery(rate, rangeFunction, additionalSelectors, range
 
     // This creates an aggregated rate query of the form
     // sum by(<aggregationLabels>) (rate(....{<selector>}[<rangeInterval>]))
-    aggregatedRateQuery(aggregationLabels, selector, rangeInterval, withoutLabels=[])::
+    aggregatedRateQuery(aggregationLabels, selector, rangeInterval, withoutLabels=[], offset=null)::
       local combinedSelector = selectors.without(selectors.merge(self.selector, selector), withoutLabels);
 
       local resolvedRecordingRule = recordingRuleRegistry.resolveRecordingRuleFor(
@@ -56,10 +58,11 @@ local generateRangeFunctionQuery(rate, rangeFunction, additionalSelectors, range
         metricName=counter,
         rangeInterval=rangeInterval,
         selector=combinedSelector,
+        offset=offset,
       );
 
       if !useRecordingRuleRegistry || resolvedRecordingRule == null then
-        local query = generateRangeFunctionQuery(self, 'rate', selector, rangeInterval, withoutLabels);
+        local query = generateRangeFunctionQuery(self, 'rate', selector, rangeInterval, withoutLabels, offset);
         aggregations.aggregateOverQuery('sum', aggregationLabels, query)
       else
         resolvedRecordingRule,
@@ -101,8 +104,8 @@ local generateRangeFunctionQuery(rate, rangeFunction, additionalSelectors, range
 
     // This creates a rate query of the form
     // deriv(....{<selector>}[<rangeInterval>])
-    rateQuery(selector, rangeInterval, withoutLabels=[])::
-      local query = generateRangeFunctionQuery(self, 'deriv', selector, rangeInterval, withoutLabels=withoutLabels);
+    rateQuery(selector, rangeInterval, withoutLabels=[], offset=null)::
+      local query = generateRangeFunctionQuery(self, 'deriv', selector, rangeInterval, withoutLabels=withoutLabels, offset=offset);
       if self.clampMinZero then
         'clamp_min(%(query)s, 0)' % { query: query }
       else
@@ -115,8 +118,8 @@ local generateRangeFunctionQuery(rate, rangeFunction, additionalSelectors, range
 
     // This creates an aggregated rate query of the form
     // sum by(<aggregationLabels>) (deriv(....{<selector>}[<rangeInterval>]))
-    aggregatedRateQuery(aggregationLabels, selector, rangeInterval, withoutLabels=[])::
-      local query = generateRangeFunctionQuery(self, 'deriv', selector, rangeInterval, withoutLabels=withoutLabels);
+    aggregatedRateQuery(aggregationLabels, selector, rangeInterval, withoutLabels=[], offset=null)::
+      local query = generateRangeFunctionQuery(self, 'deriv', selector, rangeInterval, withoutLabels=withoutLabels, offset=offset);
       local clampedQuery = if self.clampMinZero then
         'clamp_min(%(query)s, 0)' % { query: query }
       else

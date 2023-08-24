@@ -11,7 +11,7 @@ groups:
       type: consul
     expr: |
       sum by (env,environment,stage) (
-        rate(consul_client_rpc{job="consul-gl-consul-ui"}[1m])
+        rate(consul_client_rpc{job="consul-gl-consul-ui"}[1m] offset 30s)
       )
   - record: gitlab_component_errors:rate
     labels:
@@ -21,7 +21,7 @@ groups:
     expr: |
       (
         sum by (env,environment,stage) (
-          rate(consul_client_rpc_failed{job="consul-gl-consul-ui"}[1m])
+          rate(consul_client_rpc_failed{job="consul-gl-consul-ui"}[1m] offset 30s)
         )
       )
       or
@@ -40,7 +40,7 @@ groups:
       type: consul
     expr: |
       sum by (env,environment,stage) (
-        rate(consul_client_rpc{job="consul-gl-consul-ui"}[5m])
+        rate(consul_client_rpc{job="consul-gl-consul-ui"}[5m] offset 30s)
       )
   - record: gitlab_component_errors:rate_5m
     labels:
@@ -50,7 +50,7 @@ groups:
     expr: |
       (
         sum by (env,environment,stage) (
-          rate(consul_client_rpc_failed{job="consul-gl-consul-ui"}[5m])
+          rate(consul_client_rpc_failed{job="consul-gl-consul-ui"}[5m] offset 30s)
         )
       )
       or
@@ -69,7 +69,7 @@ groups:
       type: consul
     expr: |
       sum by (env,environment,stage) (
-        rate(consul_client_rpc{job="consul-gl-consul-ui"}[30m])
+        rate(consul_client_rpc{job="consul-gl-consul-ui"}[30m] offset 30s)
       )
   - record: gitlab_component_errors:rate_30m
     labels:
@@ -79,7 +79,7 @@ groups:
     expr: |
       (
         sum by (env,environment,stage) (
-          rate(consul_client_rpc_failed{job="consul-gl-consul-ui"}[30m])
+          rate(consul_client_rpc_failed{job="consul-gl-consul-ui"}[30m] offset 30s)
         )
       )
       or
@@ -98,7 +98,7 @@ groups:
       type: consul
     expr: |
       sum by (env,environment,stage) (
-        rate(consul_client_rpc{job="consul-gl-consul-ui"}[1h])
+        rate(consul_client_rpc{job="consul-gl-consul-ui"}[1h] offset 30s)
       )
   - record: gitlab_component_errors:rate_1h
     labels:
@@ -108,7 +108,7 @@ groups:
     expr: |
       (
         sum by (env,environment,stage) (
-          rate(consul_client_rpc_failed{job="consul-gl-consul-ui"}[1h])
+          rate(consul_client_rpc_failed{job="consul-gl-consul-ui"}[1h] offset 30s)
         )
       )
       or
@@ -127,7 +127,7 @@ groups:
       type: consul
     expr: |
       sum by (env,environment,stage) (
-        rate(consul_client_rpc{job="consul-gl-consul-ui"}[6h])
+        rate(consul_client_rpc{job="consul-gl-consul-ui"}[6h] offset 30s)
       )
   - record: gitlab_component_errors:rate_6h
     labels:
@@ -137,7 +137,7 @@ groups:
     expr: |
       (
         sum by (env,environment,stage) (
-          rate(consul_client_rpc_failed{job="consul-gl-consul-ui"}[6h])
+          rate(consul_client_rpc_failed{job="consul-gl-consul-ui"}[6h] offset 30s)
         )
       )
       or

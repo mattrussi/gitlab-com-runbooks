@@ -12,7 +12,7 @@ groups:
       type: vault
     expr: |
       sum by (env,environment) (
-        rate(istio_request_duration_milliseconds_bucket{destination_workload="vault",le="1000",source_workload="istio-internal-gateway"}[1m])
+        rate(istio_request_duration_milliseconds_bucket{destination_workload="vault",le="1000",source_workload="istio-internal-gateway"}[1m] offset 30s)
       )
   - record: gitlab_component_apdex:weight:score
     labels:
@@ -22,7 +22,7 @@ groups:
       type: vault
     expr: |
       sum by (env,environment) (
-        rate(istio_request_duration_milliseconds_bucket{destination_workload="vault",le="+Inf",source_workload="istio-internal-gateway"}[1m])
+        rate(istio_request_duration_milliseconds_bucket{destination_workload="vault",le="+Inf",source_workload="istio-internal-gateway"}[1m] offset 30s)
       )
   - record: gitlab_component_ops:rate
     labels:
@@ -32,7 +32,7 @@ groups:
       type: vault
     expr: |
       sum by (env,environment) (
-        rate(istio_requests_total{destination_workload="vault",source_workload="istio-internal-gateway"}[1m])
+        rate(istio_requests_total{destination_workload="vault",source_workload="istio-internal-gateway"}[1m] offset 30s)
       )
   - record: gitlab_component_errors:rate
     labels:
@@ -43,7 +43,7 @@ groups:
     expr: |
       (
         sum by (env,environment) (
-          rate(istio_requests_total{destination_workload="vault",response_code=~"^5.*",source_workload="istio-internal-gateway"}[1m])
+          rate(istio_requests_total{destination_workload="vault",response_code=~"^5.*",source_workload="istio-internal-gateway"}[1m] offset 30s)
         )
       )
       or
@@ -60,7 +60,7 @@ groups:
       type: vault
     expr: |
       sum by (env,environment) (
-        rate(istio_request_duration_milliseconds_bucket{destination_workload="vault",le="1000",source_workload="istio-gateway"}[1m])
+        rate(istio_request_duration_milliseconds_bucket{destination_workload="vault",le="1000",source_workload="istio-gateway"}[1m] offset 30s)
       )
   - record: gitlab_component_apdex:weight:score
     labels:
@@ -70,7 +70,7 @@ groups:
       type: vault
     expr: |
       sum by (env,environment) (
-        rate(istio_request_duration_milliseconds_bucket{destination_workload="vault",le="+Inf",source_workload="istio-gateway"}[1m])
+        rate(istio_request_duration_milliseconds_bucket{destination_workload="vault",le="+Inf",source_workload="istio-gateway"}[1m] offset 30s)
       )
   - record: gitlab_component_ops:rate
     labels:
@@ -80,7 +80,7 @@ groups:
       type: vault
     expr: |
       sum by (env,environment) (
-        rate(istio_requests_total{destination_workload="vault",source_workload="istio-gateway"}[1m])
+        rate(istio_requests_total{destination_workload="vault",source_workload="istio-gateway"}[1m] offset 30s)
       )
   - record: gitlab_component_errors:rate
     labels:
@@ -91,7 +91,7 @@ groups:
     expr: |
       (
         sum by (env,environment) (
-          rate(istio_requests_total{destination_workload="vault",response_code=~"^5.*",source_workload="istio-gateway"}[1m])
+          rate(istio_requests_total{destination_workload="vault",response_code=~"^5.*",source_workload="istio-gateway"}[1m] offset 30s)
         )
       )
       or
@@ -108,7 +108,7 @@ groups:
       type: vault
     expr: |
       sum by (env,environment) (
-        rate(vault_core_handle_request_count{job="vault-active"}[1m])
+        rate(vault_core_handle_request_count{job="vault-active"}[1m] offset 30s)
       )
   - record: gitlab_component_ops:rate
     labels:
@@ -118,7 +118,7 @@ groups:
       type: vault
     expr: |
       sum by (env,environment) (
-        rate(stackdriver_https_lb_rule_loadbalancing_googleapis_com_https_request_count{project_id="gitlab-ops",url_map_name="k8s2-um-4zodnh0s-vault-vault-g7tjn6qu"}[1m])
+        rate(stackdriver_https_lb_rule_loadbalancing_googleapis_com_https_request_count{project_id="gitlab-ops",url_map_name="k8s2-um-4zodnh0s-vault-vault-g7tjn6qu"}[1m] offset 30s)
       )
   - record: gitlab_component_errors:rate
     labels:
@@ -129,7 +129,7 @@ groups:
     expr: |
       (
         sum by (env,environment) (
-          rate(stackdriver_https_lb_rule_loadbalancing_googleapis_com_https_request_count{project_id="gitlab-ops",response_code_class="500",url_map_name="k8s2-um-4zodnh0s-vault-vault-g7tjn6qu"}[1m])
+          rate(stackdriver_https_lb_rule_loadbalancing_googleapis_com_https_request_count{project_id="gitlab-ops",response_code_class="500",url_map_name="k8s2-um-4zodnh0s-vault-vault-g7tjn6qu"}[1m] offset 30s)
         )
       )
       or
@@ -149,7 +149,7 @@ groups:
       type: vault
     expr: |
       sum by (env,environment) (
-        rate(istio_request_duration_milliseconds_bucket{destination_workload="vault",le="1000",source_workload="istio-internal-gateway"}[5m])
+        rate(istio_request_duration_milliseconds_bucket{destination_workload="vault",le="1000",source_workload="istio-internal-gateway"}[5m] offset 30s)
       )
   - record: gitlab_component_apdex:weight:score_5m
     labels:
@@ -159,7 +159,7 @@ groups:
       type: vault
     expr: |
       sum by (env,environment) (
-        rate(istio_request_duration_milliseconds_bucket{destination_workload="vault",le="+Inf",source_workload="istio-internal-gateway"}[5m])
+        rate(istio_request_duration_milliseconds_bucket{destination_workload="vault",le="+Inf",source_workload="istio-internal-gateway"}[5m] offset 30s)
       )
   - record: gitlab_component_ops:rate_5m
     labels:
@@ -169,7 +169,7 @@ groups:
       type: vault
     expr: |
       sum by (env,environment) (
-        rate(istio_requests_total{destination_workload="vault",source_workload="istio-internal-gateway"}[5m])
+        rate(istio_requests_total{destination_workload="vault",source_workload="istio-internal-gateway"}[5m] offset 30s)
       )
   - record: gitlab_component_errors:rate_5m
     labels:
@@ -180,7 +180,7 @@ groups:
     expr: |
       (
         sum by (env,environment) (
-          rate(istio_requests_total{destination_workload="vault",response_code=~"^5.*",source_workload="istio-internal-gateway"}[5m])
+          rate(istio_requests_total{destination_workload="vault",response_code=~"^5.*",source_workload="istio-internal-gateway"}[5m] offset 30s)
         )
       )
       or
@@ -197,7 +197,7 @@ groups:
       type: vault
     expr: |
       sum by (env,environment) (
-        rate(istio_request_duration_milliseconds_bucket{destination_workload="vault",le="1000",source_workload="istio-gateway"}[5m])
+        rate(istio_request_duration_milliseconds_bucket{destination_workload="vault",le="1000",source_workload="istio-gateway"}[5m] offset 30s)
       )
   - record: gitlab_component_apdex:weight:score_5m
     labels:
@@ -207,7 +207,7 @@ groups:
       type: vault
     expr: |
       sum by (env,environment) (
-        rate(istio_request_duration_milliseconds_bucket{destination_workload="vault",le="+Inf",source_workload="istio-gateway"}[5m])
+        rate(istio_request_duration_milliseconds_bucket{destination_workload="vault",le="+Inf",source_workload="istio-gateway"}[5m] offset 30s)
       )
   - record: gitlab_component_ops:rate_5m
     labels:
@@ -217,7 +217,7 @@ groups:
       type: vault
     expr: |
       sum by (env,environment) (
-        rate(istio_requests_total{destination_workload="vault",source_workload="istio-gateway"}[5m])
+        rate(istio_requests_total{destination_workload="vault",source_workload="istio-gateway"}[5m] offset 30s)
       )
   - record: gitlab_component_errors:rate_5m
     labels:
@@ -228,7 +228,7 @@ groups:
     expr: |
       (
         sum by (env,environment) (
-          rate(istio_requests_total{destination_workload="vault",response_code=~"^5.*",source_workload="istio-gateway"}[5m])
+          rate(istio_requests_total{destination_workload="vault",response_code=~"^5.*",source_workload="istio-gateway"}[5m] offset 30s)
         )
       )
       or
@@ -245,7 +245,7 @@ groups:
       type: vault
     expr: |
       sum by (env,environment) (
-        rate(vault_core_handle_request_count{job="vault-active"}[5m])
+        rate(vault_core_handle_request_count{job="vault-active"}[5m] offset 30s)
       )
   - record: gitlab_component_ops:rate_5m
     labels:
@@ -255,7 +255,7 @@ groups:
       type: vault
     expr: |
       sum by (env,environment) (
-        rate(stackdriver_https_lb_rule_loadbalancing_googleapis_com_https_request_count{project_id="gitlab-ops",url_map_name="k8s2-um-4zodnh0s-vault-vault-g7tjn6qu"}[5m])
+        rate(stackdriver_https_lb_rule_loadbalancing_googleapis_com_https_request_count{project_id="gitlab-ops",url_map_name="k8s2-um-4zodnh0s-vault-vault-g7tjn6qu"}[5m] offset 30s)
       )
   - record: gitlab_component_errors:rate_5m
     labels:
@@ -266,7 +266,7 @@ groups:
     expr: |
       (
         sum by (env,environment) (
-          rate(stackdriver_https_lb_rule_loadbalancing_googleapis_com_https_request_count{project_id="gitlab-ops",response_code_class="500",url_map_name="k8s2-um-4zodnh0s-vault-vault-g7tjn6qu"}[5m])
+          rate(stackdriver_https_lb_rule_loadbalancing_googleapis_com_https_request_count{project_id="gitlab-ops",response_code_class="500",url_map_name="k8s2-um-4zodnh0s-vault-vault-g7tjn6qu"}[5m] offset 30s)
         )
       )
       or
@@ -286,7 +286,7 @@ groups:
       type: vault
     expr: |
       sum by (env,environment) (
-        rate(istio_request_duration_milliseconds_bucket{destination_workload="vault",le="1000",source_workload="istio-internal-gateway"}[30m])
+        rate(istio_request_duration_milliseconds_bucket{destination_workload="vault",le="1000",source_workload="istio-internal-gateway"}[30m] offset 30s)
       )
   - record: gitlab_component_apdex:weight:score_30m
     labels:
@@ -296,7 +296,7 @@ groups:
       type: vault
     expr: |
       sum by (env,environment) (
-        rate(istio_request_duration_milliseconds_bucket{destination_workload="vault",le="+Inf",source_workload="istio-internal-gateway"}[30m])
+        rate(istio_request_duration_milliseconds_bucket{destination_workload="vault",le="+Inf",source_workload="istio-internal-gateway"}[30m] offset 30s)
       )
   - record: gitlab_component_ops:rate_30m
     labels:
@@ -306,7 +306,7 @@ groups:
       type: vault
     expr: |
       sum by (env,environment) (
-        rate(istio_requests_total{destination_workload="vault",source_workload="istio-internal-gateway"}[30m])
+        rate(istio_requests_total{destination_workload="vault",source_workload="istio-internal-gateway"}[30m] offset 30s)
       )
   - record: gitlab_component_errors:rate_30m
     labels:
@@ -317,7 +317,7 @@ groups:
     expr: |
       (
         sum by (env,environment) (
-          rate(istio_requests_total{destination_workload="vault",response_code=~"^5.*",source_workload="istio-internal-gateway"}[30m])
+          rate(istio_requests_total{destination_workload="vault",response_code=~"^5.*",source_workload="istio-internal-gateway"}[30m] offset 30s)
         )
       )
       or
@@ -334,7 +334,7 @@ groups:
       type: vault
     expr: |
       sum by (env,environment) (
-        rate(istio_request_duration_milliseconds_bucket{destination_workload="vault",le="1000",source_workload="istio-gateway"}[30m])
+        rate(istio_request_duration_milliseconds_bucket{destination_workload="vault",le="1000",source_workload="istio-gateway"}[30m] offset 30s)
       )
   - record: gitlab_component_apdex:weight:score_30m
     labels:
@@ -344,7 +344,7 @@ groups:
       type: vault
     expr: |
       sum by (env,environment) (
-        rate(istio_request_duration_milliseconds_bucket{destination_workload="vault",le="+Inf",source_workload="istio-gateway"}[30m])
+        rate(istio_request_duration_milliseconds_bucket{destination_workload="vault",le="+Inf",source_workload="istio-gateway"}[30m] offset 30s)
       )
   - record: gitlab_component_ops:rate_30m
     labels:
@@ -354,7 +354,7 @@ groups:
       type: vault
     expr: |
       sum by (env,environment) (
-        rate(istio_requests_total{destination_workload="vault",source_workload="istio-gateway"}[30m])
+        rate(istio_requests_total{destination_workload="vault",source_workload="istio-gateway"}[30m] offset 30s)
       )
   - record: gitlab_component_errors:rate_30m
     labels:
@@ -365,7 +365,7 @@ groups:
     expr: |
       (
         sum by (env,environment) (
-          rate(istio_requests_total{destination_workload="vault",response_code=~"^5.*",source_workload="istio-gateway"}[30m])
+          rate(istio_requests_total{destination_workload="vault",response_code=~"^5.*",source_workload="istio-gateway"}[30m] offset 30s)
         )
       )
       or
@@ -382,7 +382,7 @@ groups:
       type: vault
     expr: |
       sum by (env,environment) (
-        rate(vault_core_handle_request_count{job="vault-active"}[30m])
+        rate(vault_core_handle_request_count{job="vault-active"}[30m] offset 30s)
       )
   - record: gitlab_component_ops:rate_30m
     labels:
@@ -392,7 +392,7 @@ groups:
       type: vault
     expr: |
       sum by (env,environment) (
-        rate(stackdriver_https_lb_rule_loadbalancing_googleapis_com_https_request_count{project_id="gitlab-ops",url_map_name="k8s2-um-4zodnh0s-vault-vault-g7tjn6qu"}[30m])
+        rate(stackdriver_https_lb_rule_loadbalancing_googleapis_com_https_request_count{project_id="gitlab-ops",url_map_name="k8s2-um-4zodnh0s-vault-vault-g7tjn6qu"}[30m] offset 30s)
       )
   - record: gitlab_component_errors:rate_30m
     labels:
@@ -403,7 +403,7 @@ groups:
     expr: |
       (
         sum by (env,environment) (
-          rate(stackdriver_https_lb_rule_loadbalancing_googleapis_com_https_request_count{project_id="gitlab-ops",response_code_class="500",url_map_name="k8s2-um-4zodnh0s-vault-vault-g7tjn6qu"}[30m])
+          rate(stackdriver_https_lb_rule_loadbalancing_googleapis_com_https_request_count{project_id="gitlab-ops",response_code_class="500",url_map_name="k8s2-um-4zodnh0s-vault-vault-g7tjn6qu"}[30m] offset 30s)
         )
       )
       or
@@ -423,7 +423,7 @@ groups:
       type: vault
     expr: |
       sum by (env,environment) (
-        rate(istio_request_duration_milliseconds_bucket{destination_workload="vault",le="1000",source_workload="istio-internal-gateway"}[1h])
+        rate(istio_request_duration_milliseconds_bucket{destination_workload="vault",le="1000",source_workload="istio-internal-gateway"}[1h] offset 30s)
       )
   - record: gitlab_component_apdex:weight:score_1h
     labels:
@@ -433,7 +433,7 @@ groups:
       type: vault
     expr: |
       sum by (env,environment) (
-        rate(istio_request_duration_milliseconds_bucket{destination_workload="vault",le="+Inf",source_workload="istio-internal-gateway"}[1h])
+        rate(istio_request_duration_milliseconds_bucket{destination_workload="vault",le="+Inf",source_workload="istio-internal-gateway"}[1h] offset 30s)
       )
   - record: gitlab_component_ops:rate_1h
     labels:
@@ -443,7 +443,7 @@ groups:
       type: vault
     expr: |
       sum by (env,environment) (
-        rate(istio_requests_total{destination_workload="vault",source_workload="istio-internal-gateway"}[1h])
+        rate(istio_requests_total{destination_workload="vault",source_workload="istio-internal-gateway"}[1h] offset 30s)
       )
   - record: gitlab_component_errors:rate_1h
     labels:
@@ -454,7 +454,7 @@ groups:
     expr: |
       (
         sum by (env,environment) (
-          rate(istio_requests_total{destination_workload="vault",response_code=~"^5.*",source_workload="istio-internal-gateway"}[1h])
+          rate(istio_requests_total{destination_workload="vault",response_code=~"^5.*",source_workload="istio-internal-gateway"}[1h] offset 30s)
         )
       )
       or
@@ -471,7 +471,7 @@ groups:
       type: vault
     expr: |
       sum by (env,environment) (
-        rate(istio_request_duration_milliseconds_bucket{destination_workload="vault",le="1000",source_workload="istio-gateway"}[1h])
+        rate(istio_request_duration_milliseconds_bucket{destination_workload="vault",le="1000",source_workload="istio-gateway"}[1h] offset 30s)
       )
   - record: gitlab_component_apdex:weight:score_1h
     labels:
@@ -481,7 +481,7 @@ groups:
       type: vault
     expr: |
       sum by (env,environment) (
-        rate(istio_request_duration_milliseconds_bucket{destination_workload="vault",le="+Inf",source_workload="istio-gateway"}[1h])
+        rate(istio_request_duration_milliseconds_bucket{destination_workload="vault",le="+Inf",source_workload="istio-gateway"}[1h] offset 30s)
       )
   - record: gitlab_component_ops:rate_1h
     labels:
@@ -491,7 +491,7 @@ groups:
       type: vault
     expr: |
       sum by (env,environment) (
-        rate(istio_requests_total{destination_workload="vault",source_workload="istio-gateway"}[1h])
+        rate(istio_requests_total{destination_workload="vault",source_workload="istio-gateway"}[1h] offset 30s)
       )
   - record: gitlab_component_errors:rate_1h
     labels:
@@ -502,7 +502,7 @@ groups:
     expr: |
       (
         sum by (env,environment) (
-          rate(istio_requests_total{destination_workload="vault",response_code=~"^5.*",source_workload="istio-gateway"}[1h])
+          rate(istio_requests_total{destination_workload="vault",response_code=~"^5.*",source_workload="istio-gateway"}[1h] offset 30s)
         )
       )
       or
@@ -519,7 +519,7 @@ groups:
       type: vault
     expr: |
       sum by (env,environment) (
-        rate(vault_core_handle_request_count{job="vault-active"}[1h])
+        rate(vault_core_handle_request_count{job="vault-active"}[1h] offset 30s)
       )
   - record: gitlab_component_ops:rate_1h
     labels:
@@ -529,7 +529,7 @@ groups:
       type: vault
     expr: |
       sum by (env,environment) (
-        rate(stackdriver_https_lb_rule_loadbalancing_googleapis_com_https_request_count{project_id="gitlab-ops",url_map_name="k8s2-um-4zodnh0s-vault-vault-g7tjn6qu"}[1h])
+        rate(stackdriver_https_lb_rule_loadbalancing_googleapis_com_https_request_count{project_id="gitlab-ops",url_map_name="k8s2-um-4zodnh0s-vault-vault-g7tjn6qu"}[1h] offset 30s)
       )
   - record: gitlab_component_errors:rate_1h
     labels:
@@ -540,7 +540,7 @@ groups:
     expr: |
       (
         sum by (env,environment) (
-          rate(stackdriver_https_lb_rule_loadbalancing_googleapis_com_https_request_count{project_id="gitlab-ops",response_code_class="500",url_map_name="k8s2-um-4zodnh0s-vault-vault-g7tjn6qu"}[1h])
+          rate(stackdriver_https_lb_rule_loadbalancing_googleapis_com_https_request_count{project_id="gitlab-ops",response_code_class="500",url_map_name="k8s2-um-4zodnh0s-vault-vault-g7tjn6qu"}[1h] offset 30s)
         )
       )
       or
@@ -560,7 +560,7 @@ groups:
       type: vault
     expr: |
       sum by (env,environment) (
-        rate(istio_request_duration_milliseconds_bucket{destination_workload="vault",le="1000",source_workload="istio-internal-gateway"}[6h])
+        rate(istio_request_duration_milliseconds_bucket{destination_workload="vault",le="1000",source_workload="istio-internal-gateway"}[6h] offset 30s)
       )
   - record: gitlab_component_apdex:weight:score_6h
     labels:
@@ -570,7 +570,7 @@ groups:
       type: vault
     expr: |
       sum by (env,environment) (
-        rate(istio_request_duration_milliseconds_bucket{destination_workload="vault",le="+Inf",source_workload="istio-internal-gateway"}[6h])
+        rate(istio_request_duration_milliseconds_bucket{destination_workload="vault",le="+Inf",source_workload="istio-internal-gateway"}[6h] offset 30s)
       )
   - record: gitlab_component_ops:rate_6h
     labels:
@@ -580,7 +580,7 @@ groups:
       type: vault
     expr: |
       sum by (env,environment) (
-        rate(istio_requests_total{destination_workload="vault",source_workload="istio-internal-gateway"}[6h])
+        rate(istio_requests_total{destination_workload="vault",source_workload="istio-internal-gateway"}[6h] offset 30s)
       )
   - record: gitlab_component_errors:rate_6h
     labels:
@@ -591,7 +591,7 @@ groups:
     expr: |
       (
         sum by (env,environment) (
-          rate(istio_requests_total{destination_workload="vault",response_code=~"^5.*",source_workload="istio-internal-gateway"}[6h])
+          rate(istio_requests_total{destination_workload="vault",response_code=~"^5.*",source_workload="istio-internal-gateway"}[6h] offset 30s)
         )
       )
       or
@@ -608,7 +608,7 @@ groups:
       type: vault
     expr: |
       sum by (env,environment) (
-        rate(istio_request_duration_milliseconds_bucket{destination_workload="vault",le="1000",source_workload="istio-gateway"}[6h])
+        rate(istio_request_duration_milliseconds_bucket{destination_workload="vault",le="1000",source_workload="istio-gateway"}[6h] offset 30s)
       )
   - record: gitlab_component_apdex:weight:score_6h
     labels:
@@ -618,7 +618,7 @@ groups:
       type: vault
     expr: |
       sum by (env,environment) (
-        rate(istio_request_duration_milliseconds_bucket{destination_workload="vault",le="+Inf",source_workload="istio-gateway"}[6h])
+        rate(istio_request_duration_milliseconds_bucket{destination_workload="vault",le="+Inf",source_workload="istio-gateway"}[6h] offset 30s)
       )
   - record: gitlab_component_ops:rate_6h
     labels:
@@ -628,7 +628,7 @@ groups:
       type: vault
     expr: |
       sum by (env,environment) (
-        rate(istio_requests_total{destination_workload="vault",source_workload="istio-gateway"}[6h])
+        rate(istio_requests_total{destination_workload="vault",source_workload="istio-gateway"}[6h] offset 30s)
       )
   - record: gitlab_component_errors:rate_6h
     labels:
@@ -639,7 +639,7 @@ groups:
     expr: |
       (
         sum by (env,environment) (
-          rate(istio_requests_total{destination_workload="vault",response_code=~"^5.*",source_workload="istio-gateway"}[6h])
+          rate(istio_requests_total{destination_workload="vault",response_code=~"^5.*",source_workload="istio-gateway"}[6h] offset 30s)
         )
       )
       or
@@ -656,7 +656,7 @@ groups:
       type: vault
     expr: |
       sum by (env,environment) (
-        rate(vault_core_handle_request_count{job="vault-active"}[6h])
+        rate(vault_core_handle_request_count{job="vault-active"}[6h] offset 30s)
       )
   - record: gitlab_component_ops:rate_6h
     labels:
@@ -666,7 +666,7 @@ groups:
       type: vault
     expr: |
       sum by (env,environment) (
-        rate(stackdriver_https_lb_rule_loadbalancing_googleapis_com_https_request_count{project_id="gitlab-ops",url_map_name="k8s2-um-4zodnh0s-vault-vault-g7tjn6qu"}[6h])
+        rate(stackdriver_https_lb_rule_loadbalancing_googleapis_com_https_request_count{project_id="gitlab-ops",url_map_name="k8s2-um-4zodnh0s-vault-vault-g7tjn6qu"}[6h] offset 30s)
       )
   - record: gitlab_component_errors:rate_6h
     labels:
@@ -677,7 +677,7 @@ groups:
     expr: |
       (
         sum by (env,environment) (
-          rate(stackdriver_https_lb_rule_loadbalancing_googleapis_com_https_request_count{project_id="gitlab-ops",response_code_class="500",url_map_name="k8s2-um-4zodnh0s-vault-vault-g7tjn6qu"}[6h])
+          rate(stackdriver_https_lb_rule_loadbalancing_googleapis_com_https_request_count{project_id="gitlab-ops",response_code_class="500",url_map_name="k8s2-um-4zodnh0s-vault-vault-g7tjn6qu"}[6h] offset 30s)
         )
       )
       or
