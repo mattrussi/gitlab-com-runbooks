@@ -17,7 +17,6 @@ local resourceSaturationPoint = (import 'servicemetrics/resource_saturation_poin
     resourceLabels: ['revision_name'],
     burnRatePeriod: '30m',
     staticLabels: {
-      type: 'sv',
       tier: 'inf',
       stage: 'main',
     },
@@ -45,7 +44,6 @@ local resourceSaturationPoint = (import 'servicemetrics/resource_saturation_poin
     resourceLabels: ['revision_name'],
     burnRatePeriod: '30m',
     staticLabels: {
-      type: 'sv',
       tier: 'inf',
       stage: 'main',
     },
@@ -73,7 +71,6 @@ local resourceSaturationPoint = (import 'servicemetrics/resource_saturation_poin
     resourceLabels: ['revision_name'],
     burnRatePeriod: '30m',
     staticLabels: {
-      type: 'sv',
       tier: 'inf',
       stage: 'main',
     },
@@ -106,7 +103,6 @@ local resourceSaturationPoint = (import 'servicemetrics/resource_saturation_poin
     resourceLabels: ['revision_name'],
     burnRatePeriod: '30m',
     staticLabels: {
-      type: 'sv',
       tier: 'inf',
       stage: 'main',
     },

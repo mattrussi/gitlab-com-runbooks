@@ -8,24 +8,24 @@ groups:
   - record: slo:min:events:gitlab_service_apdex:ratio
     labels:
       tier: sv
-      type: ai_gateway
+      type: ai-gateway
     expr: "0.999000"
   - record: slo:max:events:gitlab_service_errors:ratio
     labels:
       tier: sv
-      type: ai_gateway
+      type: ai-gateway
     expr: "0.001000"
   - record: slo:min:events:gitlab_service_apdex:ratio
     labels:
       component: runway_ingress
       tier: sv
-      type: ai_gateway
+      type: ai-gateway
     expr: "0.999000"
   - record: slo:max:events:gitlab_service_errors:ratio
     labels:
       component: runway_ingress
       tier: sv
-      type: ai_gateway
+      type: ai-gateway
     expr: "0.001000"
   - record: slo:min:gitlab_service_apdex:ratio
     labels:
@@ -2768,7 +2768,7 @@ groups:
       regional_aggregation: "no"
       service_aggregation: "yes"
       tier: sv
-      type: ai_gateway
+      type: ai-gateway
     expr: "1"
   - record: gitlab_component_service:mapping
     labels:

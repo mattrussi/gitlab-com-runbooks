@@ -7,10 +7,8 @@ local row = grafana.row;
 
 // Default service overview dashboard panels for Runway services
 local panelsForService(type) =
-  local service = metricsCatalog.getService(type);
-
   local formatConfig = {
-    selector: selectors.serializeHash({ env: '$environment', environment: '$environment', service_name: service.runwayConfig.id }),
+    selector: selectors.serializeHash({ env: '$environment', environment: '$environment', type: type }),
   };
 
   [

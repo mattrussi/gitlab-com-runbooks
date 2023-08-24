@@ -50,9 +50,8 @@ local metricsCatalog = import 'servicemetrics/metrics.libsonnet';
 
 metricsCatalog.serviceDefinition(
   runwayArchetype(
-    type='my_service',
-    team='my_team',
-    runwayServiceID='my_runway_service_id',
+    type='my-service',
+    team='my-team',
   )
 )
 ```
@@ -89,9 +88,8 @@ local rateMetric = metricsCatalog.rateMetric;
 metricsCatalog.serviceDefinition(
   // Default SLIs
   runwayArchetype(
-    type='my_service',
-    team='my_team',
-    runwayServiceID='my_service_runway_id',
+    type='my-service',
+    team='my-team',
   ),
   // Custom SLIs
   {
@@ -113,7 +111,7 @@ For more information on full configuration, refer to [documentation](../../metri
 
 In addition to default metrics, you can optionally configure custom metrics in `runway.yml`:
 
-```
+```yaml
 # .runway/runway.yml
 apiVersion: runway/v1.0.0-beta
 kind: RunwayService

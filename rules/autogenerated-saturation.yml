@@ -560,15 +560,15 @@ groups:
         clamp_min(
           clamp_max(
             (
-              process_open_fds{type=~"ai_gateway|api|internal-api|camoproxy|ci-runners|consul|customersdot|external-dns|frontend|google-cloud-storage|git|gitaly|jaeger|kas|logging|mailroom|monitoring|nginx|ops-gitlab-net|patroni|patroni-registry|patroni-embedding|patroni-ci|postgres-archive|pgbouncer|pgbouncer-registry|pgbouncer-embedding|pgbouncer-ci|plantuml|praefect|pvs|redis-cluster-cache|redis-cluster-feature-flag|redis-sidekiq|redis-tracechunks|redis-cluster-ratelimiting|redis-cluster-chat-cache|redis-sessions|redis-registry-cache|redis-repository-cache|redis-db-load-balancing|redis|registry|search|sentry|sidekiq|vault|web-pages|web|websockets|woodhouse"}
+              process_open_fds{type=~"ai-gateway|api|internal-api|camoproxy|ci-runners|consul|customersdot|external-dns|frontend|google-cloud-storage|git|gitaly|jaeger|kas|logging|mailroom|monitoring|nginx|ops-gitlab-net|patroni|patroni-registry|patroni-embedding|patroni-ci|postgres-archive|pgbouncer|pgbouncer-registry|pgbouncer-embedding|pgbouncer-ci|plantuml|praefect|pvs|redis-cluster-cache|redis-cluster-feature-flag|redis-sidekiq|redis-tracechunks|redis-cluster-ratelimiting|redis-cluster-chat-cache|redis-sessions|redis-registry-cache|redis-repository-cache|redis-db-load-balancing|redis|registry|search|sentry|sidekiq|vault|web-pages|web|websockets|woodhouse"}
               /
-              process_max_fds{type=~"ai_gateway|api|internal-api|camoproxy|ci-runners|consul|customersdot|external-dns|frontend|google-cloud-storage|git|gitaly|jaeger|kas|logging|mailroom|monitoring|nginx|ops-gitlab-net|patroni|patroni-registry|patroni-embedding|patroni-ci|postgres-archive|pgbouncer|pgbouncer-registry|pgbouncer-embedding|pgbouncer-ci|plantuml|praefect|pvs|redis-cluster-cache|redis-cluster-feature-flag|redis-sidekiq|redis-tracechunks|redis-cluster-ratelimiting|redis-cluster-chat-cache|redis-sessions|redis-registry-cache|redis-repository-cache|redis-db-load-balancing|redis|registry|search|sentry|sidekiq|vault|web-pages|web|websockets|woodhouse"}
+              process_max_fds{type=~"ai-gateway|api|internal-api|camoproxy|ci-runners|consul|customersdot|external-dns|frontend|google-cloud-storage|git|gitaly|jaeger|kas|logging|mailroom|monitoring|nginx|ops-gitlab-net|patroni|patroni-registry|patroni-embedding|patroni-ci|postgres-archive|pgbouncer|pgbouncer-registry|pgbouncer-embedding|pgbouncer-ci|plantuml|praefect|pvs|redis-cluster-cache|redis-cluster-feature-flag|redis-sidekiq|redis-tracechunks|redis-cluster-ratelimiting|redis-cluster-chat-cache|redis-sessions|redis-registry-cache|redis-repository-cache|redis-db-load-balancing|redis|registry|search|sentry|sidekiq|vault|web-pages|web|websockets|woodhouse"}
             )
             or
             (
-              ruby_file_descriptors{type=~"ai_gateway|api|internal-api|camoproxy|ci-runners|consul|customersdot|external-dns|frontend|google-cloud-storage|git|gitaly|jaeger|kas|logging|mailroom|monitoring|nginx|ops-gitlab-net|patroni|patroni-registry|patroni-embedding|patroni-ci|postgres-archive|pgbouncer|pgbouncer-registry|pgbouncer-embedding|pgbouncer-ci|plantuml|praefect|pvs|redis-cluster-cache|redis-cluster-feature-flag|redis-sidekiq|redis-tracechunks|redis-cluster-ratelimiting|redis-cluster-chat-cache|redis-sessions|redis-registry-cache|redis-repository-cache|redis-db-load-balancing|redis|registry|search|sentry|sidekiq|vault|web-pages|web|websockets|woodhouse"}
+              ruby_file_descriptors{type=~"ai-gateway|api|internal-api|camoproxy|ci-runners|consul|customersdot|external-dns|frontend|google-cloud-storage|git|gitaly|jaeger|kas|logging|mailroom|monitoring|nginx|ops-gitlab-net|patroni|patroni-registry|patroni-embedding|patroni-ci|postgres-archive|pgbouncer|pgbouncer-registry|pgbouncer-embedding|pgbouncer-ci|plantuml|praefect|pvs|redis-cluster-cache|redis-cluster-feature-flag|redis-sidekiq|redis-tracechunks|redis-cluster-ratelimiting|redis-cluster-chat-cache|redis-sessions|redis-registry-cache|redis-repository-cache|redis-db-load-balancing|redis|registry|search|sentry|sidekiq|vault|web-pages|web|websockets|woodhouse"}
               /
-              ruby_process_max_fds{type=~"ai_gateway|api|internal-api|camoproxy|ci-runners|consul|customersdot|external-dns|frontend|google-cloud-storage|git|gitaly|jaeger|kas|logging|mailroom|monitoring|nginx|ops-gitlab-net|patroni|patroni-registry|patroni-embedding|patroni-ci|postgres-archive|pgbouncer|pgbouncer-registry|pgbouncer-embedding|pgbouncer-ci|plantuml|praefect|pvs|redis-cluster-cache|redis-cluster-feature-flag|redis-sidekiq|redis-tracechunks|redis-cluster-ratelimiting|redis-cluster-chat-cache|redis-sessions|redis-registry-cache|redis-repository-cache|redis-db-load-balancing|redis|registry|search|sentry|sidekiq|vault|web-pages|web|websockets|woodhouse"}
+              ruby_process_max_fds{type=~"ai-gateway|api|internal-api|camoproxy|ci-runners|consul|customersdot|external-dns|frontend|google-cloud-storage|git|gitaly|jaeger|kas|logging|mailroom|monitoring|nginx|ops-gitlab-net|patroni|patroni-registry|patroni-embedding|patroni-ci|postgres-archive|pgbouncer|pgbouncer-registry|pgbouncer-embedding|pgbouncer-ci|plantuml|praefect|pvs|redis-cluster-cache|redis-cluster-feature-flag|redis-sidekiq|redis-tracechunks|redis-cluster-ratelimiting|redis-cluster-chat-cache|redis-sessions|redis-registry-cache|redis-repository-cache|redis-db-load-balancing|redis|registry|search|sentry|sidekiq|vault|web-pages|web|websockets|woodhouse"}
             )
             ,
             1)
@@ -1100,13 +1100,12 @@ groups:
       component: runway_container_cpu_utilization
       stage: main
       tier: inf
-      type: sv
     expr: |
-      max by(environment, shard) (
+      max by(environment, type, shard) (
         clamp_min(
           clamp_max(
-            sum by (environment, shard, revision_name) (
-              avg_over_time(stackdriver_cloud_run_revision_run_googleapis_com_container_cpu_utilizations_sum{job="runway-exporter",}[30m])
+            sum by (environment, type, shard, revision_name) (
+              avg_over_time(stackdriver_cloud_run_revision_run_googleapis_com_container_cpu_utilizations_sum{job="runway-exporter",type="ai-gateway"}[30m])
             )
             ,
             1)
@@ -1118,13 +1117,12 @@ groups:
       component: runway_container_instance_utilization
       stage: main
       tier: inf
-      type: sv
     expr: |
-      max by(environment, shard) (
+      max by(environment, type, shard) (
         clamp_min(
           clamp_max(
-            sum by (environment, shard, revision_name) (
-              stackdriver_cloud_run_revision_run_googleapis_com_container_instance_count{job="runway-exporter",state="active",}
+            sum by (environment, type, shard, revision_name) (
+              stackdriver_cloud_run_revision_run_googleapis_com_container_instance_count{job="runway-exporter",state="active",type="ai-gateway"}
             )
             /
             100
@@ -1138,17 +1136,16 @@ groups:
       component: runway_container_max_concurrent_requests
       stage: main
       tier: inf
-      type: sv
     expr: |
-      max by(environment, shard) (
+      max by(environment, type, shard) (
         clamp_min(
           clamp_max(
-            sum by (environment, shard, revision_name) (
-              avg_over_time(stackdriver_cloud_run_revision_run_googleapis_com_container_max_request_concurrencies_sum{job="runway-exporter",state="active",}[30m])
+            sum by (environment, type, shard, revision_name) (
+              avg_over_time(stackdriver_cloud_run_revision_run_googleapis_com_container_max_request_concurrencies_sum{job="runway-exporter",state="active",type="ai-gateway"}[30m])
             )
             /
-            80 * sum by (environment, shard, revision_name) (
-              stackdriver_cloud_run_revision_run_googleapis_com_container_instance_count{job="runway-exporter",state="active",}
+            80 * sum by (environment, type, shard, revision_name) (
+              stackdriver_cloud_run_revision_run_googleapis_com_container_instance_count{job="runway-exporter",state="active",type="ai-gateway"}
             )
             ,
             1)
@@ -1160,13 +1157,12 @@ groups:
       component: runway_container_memory_utilization
       stage: main
       tier: inf
-      type: sv
     expr: |
-      max by(environment, shard) (
+      max by(environment, type, shard) (
         clamp_min(
           clamp_max(
-            sum by (environment, shard, revision_name) (
-              avg_over_time(stackdriver_cloud_run_revision_run_googleapis_com_container_memory_utilizations_sum{job="runway-exporter",}[30m])
+            sum by (environment, type, shard, revision_name) (
+              avg_over_time(stackdriver_cloud_run_revision_run_googleapis_com_container_memory_utilizations_sum{job="runway-exporter",type="ai-gateway"}[30m])
             )
             ,
             1)
@@ -6670,11 +6666,11 @@ groups:
       grafana_panel_id: "1050857443"
       grafana_variables: environment,type,stage
       promql_query: |
-        max by(environment, shard, revision_name) (
+        max by(environment, type, shard, revision_name) (
           clamp_min(
             clamp_max(
-              sum by (environment, shard, revision_name) (
-                avg_over_time(stackdriver_cloud_run_revision_run_googleapis_com_container_cpu_utilizations_sum{job="runway-exporter",environment="{{ $labels.environment }}"}[30m])
+              sum by (environment, type, shard, revision_name) (
+                avg_over_time(stackdriver_cloud_run_revision_run_googleapis_com_container_cpu_utilizations_sum{job="runway-exporter",environment="{{ $labels.environment }}",type="{{ $labels.type }}"}[30m])
               )
               ,
               1)
@@ -6682,11 +6678,11 @@ groups:
           0)
         )
       promql_template_1: |
-        max by(environment, shard, revision_name) (
+        max by(environment, type, shard, revision_name) (
           clamp_min(
             clamp_max(
-              sum by (environment, shard, revision_name) (
-                avg_over_time(stackdriver_cloud_run_revision_run_googleapis_com_container_cpu_utilizations_sum{job="runway-exporter",environment="{{ $labels.environment }}"}[30m])
+              sum by (environment, type, shard, revision_name) (
+                avg_over_time(stackdriver_cloud_run_revision_run_googleapis_com_container_cpu_utilizations_sum{job="runway-exporter",environment="{{ $labels.environment }}",type="{{ $labels.type }}"}[30m])
               )
               ,
               1)
@@ -6723,11 +6719,11 @@ groups:
       grafana_panel_id: "1738137433"
       grafana_variables: environment,type,stage
       promql_query: |
-        max by(environment, shard, revision_name) (
+        max by(environment, type, shard, revision_name) (
           clamp_min(
             clamp_max(
-              sum by (environment, shard, revision_name) (
-                stackdriver_cloud_run_revision_run_googleapis_com_container_instance_count{job="runway-exporter",state="active",environment="{{ $labels.environment }}"}
+              sum by (environment, type, shard, revision_name) (
+                stackdriver_cloud_run_revision_run_googleapis_com_container_instance_count{job="runway-exporter",state="active",environment="{{ $labels.environment }}",type="{{ $labels.type }}"}
               )
               /
               100
@@ -6737,11 +6733,11 @@ groups:
           0)
         )
       promql_template_1: |
-        max by(environment, shard, revision_name) (
+        max by(environment, type, shard, revision_name) (
           clamp_min(
             clamp_max(
-              sum by (environment, shard, revision_name) (
-                stackdriver_cloud_run_revision_run_googleapis_com_container_instance_count{job="runway-exporter",state="active",environment="{{ $labels.environment }}"}
+              sum by (environment, type, shard, revision_name) (
+                stackdriver_cloud_run_revision_run_googleapis_com_container_instance_count{job="runway-exporter",state="active",environment="{{ $labels.environment }}",type="{{ $labels.type }}"}
               )
               /
               100
@@ -6780,15 +6776,15 @@ groups:
       grafana_panel_id: "4285373877"
       grafana_variables: environment,type,stage
       promql_query: |
-        max by(environment, shard, revision_name) (
+        max by(environment, type, shard, revision_name) (
           clamp_min(
             clamp_max(
-              sum by (environment, shard, revision_name) (
-                avg_over_time(stackdriver_cloud_run_revision_run_googleapis_com_container_max_request_concurrencies_sum{job="runway-exporter",state="active",environment="{{ $labels.environment }}"}[30m])
+              sum by (environment, type, shard, revision_name) (
+                avg_over_time(stackdriver_cloud_run_revision_run_googleapis_com_container_max_request_concurrencies_sum{job="runway-exporter",state="active",environment="{{ $labels.environment }}",type="{{ $labels.type }}"}[30m])
               )
               /
-              80 * sum by (environment, shard, revision_name) (
-                stackdriver_cloud_run_revision_run_googleapis_com_container_instance_count{job="runway-exporter",state="active",environment="{{ $labels.environment }}"}
+              80 * sum by (environment, type, shard, revision_name) (
+                stackdriver_cloud_run_revision_run_googleapis_com_container_instance_count{job="runway-exporter",state="active",environment="{{ $labels.environment }}",type="{{ $labels.type }}"}
               )
               ,
               1)
@@ -6796,15 +6792,15 @@ groups:
           0)
         )
       promql_template_1: |
-        max by(environment, shard, revision_name) (
+        max by(environment, type, shard, revision_name) (
           clamp_min(
             clamp_max(
-              sum by (environment, shard, revision_name) (
-                avg_over_time(stackdriver_cloud_run_revision_run_googleapis_com_container_max_request_concurrencies_sum{job="runway-exporter",state="active",environment="{{ $labels.environment }}"}[30m])
+              sum by (environment, type, shard, revision_name) (
+                avg_over_time(stackdriver_cloud_run_revision_run_googleapis_com_container_max_request_concurrencies_sum{job="runway-exporter",state="active",environment="{{ $labels.environment }}",type="{{ $labels.type }}"}[30m])
               )
               /
-              80 * sum by (environment, shard, revision_name) (
-                stackdriver_cloud_run_revision_run_googleapis_com_container_instance_count{job="runway-exporter",state="active",environment="{{ $labels.environment }}"}
+              80 * sum by (environment, type, shard, revision_name) (
+                stackdriver_cloud_run_revision_run_googleapis_com_container_instance_count{job="runway-exporter",state="active",environment="{{ $labels.environment }}",type="{{ $labels.type }}"}
               )
               ,
               1)
@@ -6841,11 +6837,11 @@ groups:
       grafana_panel_id: "377718254"
       grafana_variables: environment,type,stage
       promql_query: |
-        max by(environment, shard, revision_name) (
+        max by(environment, type, shard, revision_name) (
           clamp_min(
             clamp_max(
-              sum by (environment, shard, revision_name) (
-                avg_over_time(stackdriver_cloud_run_revision_run_googleapis_com_container_memory_utilizations_sum{job="runway-exporter",environment="{{ $labels.environment }}"}[30m])
+              sum by (environment, type, shard, revision_name) (
+                avg_over_time(stackdriver_cloud_run_revision_run_googleapis_com_container_memory_utilizations_sum{job="runway-exporter",environment="{{ $labels.environment }}",type="{{ $labels.type }}"}[30m])
               )
               ,
               1)
@@ -6853,11 +6849,11 @@ groups:
           0)
         )
       promql_template_1: |
-        max by(environment, shard, revision_name) (
+        max by(environment, type, shard, revision_name) (
           clamp_min(
             clamp_max(
-              sum by (environment, shard, revision_name) (
-                avg_over_time(stackdriver_cloud_run_revision_run_googleapis_com_container_memory_utilizations_sum{job="runway-exporter",environment="{{ $labels.environment }}"}[30m])
+              sum by (environment, type, shard, revision_name) (
+                avg_over_time(stackdriver_cloud_run_revision_run_googleapis_com_container_memory_utilizations_sum{job="runway-exporter",environment="{{ $labels.environment }}",type="{{ $labels.type }}"}[30m])
               )
               ,
               1)

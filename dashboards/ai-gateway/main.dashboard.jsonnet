@@ -2,5 +2,5 @@
 // Please feel free to customize this file.
 local serviceDashboard = import 'gitlab-dashboards/service_dashboard.libsonnet';
 
-serviceDashboard.overview('ai_gateway')
+serviceDashboard.overview('ai-gateway')
 .overviewTrailer()

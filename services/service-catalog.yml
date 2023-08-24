@@ -668,7 +668,7 @@ services:
       monitors:
         primary_grafana_dashboard: code_suggestions-main/code-suggestions-overview
 
-  - name: ai_gateway
+  - name: ai-gateway
     tier: sv
     friendly_name: AI Gateway
     label: AIGateway
