@@ -7,7 +7,6 @@ local toolingLinks = import 'toolinglinks/toolinglinks.libsonnet';
 function(
   type,
   team,
-  runwayServiceID,
   apdexScore=0.999,
   errorRatio=0.999,
   apdexSatisfiedThreshold=1024,
@@ -16,7 +15,7 @@ function(
   trafficCessationAlertConfig=true,
   severity='s4',
 )
-  local baseSelector = { service_name: runwayServiceID };
+  local baseSelector = { type: type };
   {
     type: type,
     tier: 'sv',
@@ -34,10 +33,6 @@ function(
 
     // Runway splits traffic between multiple revisions for canary deployments
     serviceIsStageless: true,
-
-    runwayConfig: {
-      id: runwayServiceID,
-    },
 
     serviceLevelIndicators: {
       runway_ingress: {
@@ -75,7 +70,7 @@ function(
 
         toolingLinks: [
           toolingLinks.googleCloudRun(
-            serviceName=runwayServiceID,
+            serviceName=type,
             project='gitlab-runway-production',
             gcpRegion='us-east1'
           ),

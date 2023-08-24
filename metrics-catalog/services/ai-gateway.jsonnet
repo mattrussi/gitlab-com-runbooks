@@ -7,7 +7,6 @@ metricsCatalog.serviceDefinition(
     type='ai-gateway',
     // TODO: Change team to ai_assisted after https://gitlab.com/gitlab-com/gl-infra/readiness/-/issues/81
     team='scalability-runway-core',
-    runwayServiceID='model-gateway-n2bsxg',
     apdexSatisfiedThreshold=2048
   )
 )

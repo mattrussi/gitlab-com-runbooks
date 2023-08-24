@@ -24,7 +24,7 @@ groups:
         histogram_quantile(
           0.950000,
           sum by (env,environment,tier,stage,le) (
-            rate(stackdriver_cloud_run_revision_run_googleapis_com_request_latencies_bucket{environment="{{ $labels.environment }}",service_name="model-gateway-n2bsxg",stage="{{ $labels.stage }}"}[5m])
+            rate(stackdriver_cloud_run_revision_run_googleapis_com_request_latencies_bucket{environment="{{ $labels.environment }}",stage="{{ $labels.stage }}",type="ai-gateway"}[5m])
           )
         )
       runbook: docs/ai-gateway/README.md
@@ -74,7 +74,7 @@ groups:
         histogram_quantile(
           0.950000,
           sum by (env,environment,tier,stage,le) (
-            rate(stackdriver_cloud_run_revision_run_googleapis_com_request_latencies_bucket{environment="{{ $labels.environment }}",service_name="model-gateway-n2bsxg",stage="{{ $labels.stage }}"}[5m])
+            rate(stackdriver_cloud_run_revision_run_googleapis_com_request_latencies_bucket{environment="{{ $labels.environment }}",stage="{{ $labels.stage }}",type="ai-gateway"}[5m])
           )
         )
       runbook: docs/ai-gateway/README.md
@@ -122,7 +122,7 @@ groups:
       grafana_variables: environment,stage
       promql_template_1: |
         sum by (env,environment,tier,stage) (
-          rate(stackdriver_cloud_run_revision_run_googleapis_com_request_count{environment="{{ $labels.environment }}",response_code_class="5xx",service_name="model-gateway-n2bsxg",stage="{{ $labels.stage }}"}[5m])
+          rate(stackdriver_cloud_run_revision_run_googleapis_com_request_count{environment="{{ $labels.environment }}",response_code_class="5xx",stage="{{ $labels.stage }}",type="ai-gateway"}[5m])
         )
       runbook: docs/ai-gateway/README.md
     labels:
@@ -169,7 +169,7 @@ groups:
       grafana_variables: environment,stage
       promql_template_1: |
         sum by (env,environment,tier,stage) (
-          rate(stackdriver_cloud_run_revision_run_googleapis_com_request_count{environment="{{ $labels.environment }}",response_code_class="5xx",service_name="model-gateway-n2bsxg",stage="{{ $labels.stage }}"}[5m])
+          rate(stackdriver_cloud_run_revision_run_googleapis_com_request_count{environment="{{ $labels.environment }}",response_code_class="5xx",stage="{{ $labels.stage }}",type="ai-gateway"}[5m])
         )
       runbook: docs/ai-gateway/README.md
     labels:
@@ -216,7 +216,7 @@ groups:
       grafana_variables: environment,stage
       promql_template_1: |
         sum by (env,environment,tier,stage) (
-          rate(stackdriver_cloud_run_revision_run_googleapis_com_request_count{environment="{{ $labels.environment }}",service_name="model-gateway-n2bsxg",stage="{{ $labels.stage }}"}[5m])
+          rate(stackdriver_cloud_run_revision_run_googleapis_com_request_count{environment="{{ $labels.environment }}",stage="{{ $labels.stage }}",type="ai-gateway"}[5m])
         )
       runbook: docs/ai-gateway/README.md
     labels:
@@ -252,7 +252,7 @@ groups:
       grafana_variables: environment,stage
       promql_template_1: |
         sum by (env,environment,tier,stage) (
-          rate(stackdriver_cloud_run_revision_run_googleapis_com_request_count{environment="{{ $labels.environment }}",service_name="model-gateway-n2bsxg",stage="{{ $labels.stage }}"}[5m])
+          rate(stackdriver_cloud_run_revision_run_googleapis_com_request_count{environment="{{ $labels.environment }}",stage="{{ $labels.stage }}",type="ai-gateway"}[5m])
         )
       runbook: docs/ai-gateway/README.md
     labels:
