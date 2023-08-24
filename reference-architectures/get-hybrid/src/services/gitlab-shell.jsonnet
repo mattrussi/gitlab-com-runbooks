@@ -62,7 +62,7 @@ metricsCatalog.serviceDefinition({
 
       errorRate: rateMetric(
         counter='grpc_server_handled_total',
-        selector=baseSelector { grpc_code: { ne: 'OK' } },
+        selector=baseSelector { grpc_code: { noneOf: gitalyHelper.gitalyGRPCErrorRateIgnoredCodes } },
       ),
 
       significantLabels: ['node'],
