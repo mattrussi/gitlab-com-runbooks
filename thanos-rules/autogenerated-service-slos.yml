@@ -2937,7 +2937,7 @@ groups:
       component: customers_dot_sidekiq_jobs
       global_aggregation: "no"
       regional_aggregation: "no"
-      service_aggregation: "yes"
+      service_aggregation: "no"
       tier: sv
       type: customersdot
     expr: "1"
