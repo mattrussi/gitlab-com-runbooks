@@ -95,7 +95,7 @@ test.suite({
     expectThat: {
       local runwayPage = std.filter(function(page) page.path == 'runway.md', self.actual.report.pages)[0],
       local runwayServices = std.split(runwayPage.service_pattern, '|'),
-      result: std.member(runwayServices, 'ai_gateway'),
+      result: std.member(runwayServices, 'ai-gateway'),
       description: 'Expect object to dynamically include Runway provisioned services',
     },
   },
