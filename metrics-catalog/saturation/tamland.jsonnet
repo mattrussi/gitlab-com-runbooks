@@ -58,7 +58,7 @@ local page(path, title, service_pattern) =
       page('redis.md', 'Redis', 'redis.*'),
       page('runway.md', 'Runway', std.join('|', metricsCatalog.findRunwayProvisionedServices())),
       page('search.md', 'Search', 'search'),
-      page('sidekiq.md', 'Sidekiq', 'sidegit stkiq'),
+      page('sidekiq.md', 'Sidekiq', 'sidekiq'),
       page('saturation.md', 'Other Utilization and Saturation Forecasting', 'camoproxy|cloud-sql|consul|frontend|google-cloud-storage|jaeger|kas|mailroom|nat|nginx|plantuml|pvs|registry|sentry|vault|web-pages|woodhouse|code_suggestions|ops-gitlab-net'),
     ],
   },
