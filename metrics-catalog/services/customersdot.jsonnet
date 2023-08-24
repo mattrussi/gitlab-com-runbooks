@@ -41,6 +41,7 @@ metricsCatalog.serviceDefinition({
     +
     sliLibrary.get('customers_dot_sidekiq_jobs').generateServiceLevelIndicator({ type: 'customersdot' }, {
       severity: 's3',
+      serviceAggregation: false,
     }),
   skippedMaturityCriteria: {
     'Structured logs available in Kibana': 'All logs are available in Stackdriver',
