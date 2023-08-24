@@ -108,3 +108,23 @@ metricsCatalog.serviceDefinition(
 ```
 
 For more information on full configuration, refer to [documentation](../../metrics-catalog/README.md).
+
+### Custom Metrics
+
+In addition to default metrics, you can optionally configure custom metrics in `runway.yml`:
+
+```
+# .runway/runway.yml
+apiVersion: runway/v1.0.0-beta
+kind: RunwayService
+metadata:
+  name: my_service
+  owner: my_team
+spec:
+  image: "$CI_REGISTRY_IMAGE/my_service:${CI_COMMIT_SHORT_SHA}"
+  observability:
+    scrape_targets:
+      - "localhost:8082"
+```
+
+When scrape targets are present, Runway will deploy sidecar container for OpenTelemetry Collector preconfigured to automatically scrape ingress container at your specified port(s). For more information on observibility configuration, refer to [JSON schema](https://gitlab.com/gitlab-com/gl-infra/platform/runway/runwayctl/-/blob/main/schemas/service-manifest/v1.0.0-beta/manifest.schema.json?ref_type=heads).

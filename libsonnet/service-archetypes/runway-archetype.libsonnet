@@ -61,7 +61,7 @@ function(
           selector=baseSelector { response_code_class: '5xx' },
         ),
 
-        significantLabels: ['revision_name', 'response_code', 'route'],
+        significantLabels: ['revision_name', 'response_code'],
 
         userImpacting: userImpacting,
 

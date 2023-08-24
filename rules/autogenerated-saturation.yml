@@ -1105,7 +1105,7 @@ groups:
       max by(environment, shard) (
         clamp_min(
           clamp_max(
-            sum by (environment, shard, service_name) (
+            sum by (environment, shard, revision_name) (
               avg_over_time(stackdriver_cloud_run_revision_run_googleapis_com_container_cpu_utilizations_sum{job="runway-exporter",}[30m])
             )
             ,
@@ -1123,7 +1123,7 @@ groups:
       max by(environment, shard) (
         clamp_min(
           clamp_max(
-            sum by (environment, shard, service_name) (
+            sum by (environment, shard, revision_name) (
               stackdriver_cloud_run_revision_run_googleapis_com_container_instance_count{job="runway-exporter",state="active",}
             )
             /
@@ -1143,8 +1143,12 @@ groups:
       max by(environment, shard) (
         clamp_min(
           clamp_max(
-            sum by (environment, shard, service_name) (
-              avg_over_time(stackdriver_cloud_run_revision_run_googleapis_com_container_max_request_concurrencies_sum{job="runway-exporter",}[30m])
+            sum by (environment, shard, revision_name) (
+              avg_over_time(stackdriver_cloud_run_revision_run_googleapis_com_container_max_request_concurrencies_sum{job="runway-exporter",state="active",}[30m])
+            )
+            /
+            80 * sum by (environment, shard, revision_name) (
+              stackdriver_cloud_run_revision_run_googleapis_com_container_instance_count{job="runway-exporter",state="active",}
             )
             ,
             1)
@@ -1161,7 +1165,7 @@ groups:
       max by(environment, shard) (
         clamp_min(
           clamp_max(
-            sum by (environment, shard, service_name) (
+            sum by (environment, shard, revision_name) (
               avg_over_time(stackdriver_cloud_run_revision_run_googleapis_com_container_memory_utilizations_sum{job="runway-exporter",}[30m])
             )
             ,
@@ -6666,10 +6670,10 @@ groups:
       grafana_panel_id: "1050857443"
       grafana_variables: environment,type,stage
       promql_query: |
-        max by(environment, shard, service_name) (
+        max by(environment, shard, revision_name) (
           clamp_min(
             clamp_max(
-              sum by (environment, shard, service_name) (
+              sum by (environment, shard, revision_name) (
                 avg_over_time(stackdriver_cloud_run_revision_run_googleapis_com_container_cpu_utilizations_sum{job="runway-exporter",environment="{{ $labels.environment }}"}[30m])
               )
               ,
@@ -6678,10 +6682,10 @@ groups:
           0)
         )
       promql_template_1: |
-        max by(environment, shard, service_name) (
+        max by(environment, shard, revision_name) (
           clamp_min(
             clamp_max(
-              sum by (environment, shard, service_name) (
+              sum by (environment, shard, revision_name) (
                 avg_over_time(stackdriver_cloud_run_revision_run_googleapis_com_container_cpu_utilizations_sum{job="runway-exporter",environment="{{ $labels.environment }}"}[30m])
               )
               ,
@@ -6719,10 +6723,10 @@ groups:
       grafana_panel_id: "1738137433"
       grafana_variables: environment,type,stage
       promql_query: |
-        max by(environment, shard, service_name) (
+        max by(environment, shard, revision_name) (
           clamp_min(
             clamp_max(
-              sum by (environment, shard, service_name) (
+              sum by (environment, shard, revision_name) (
                 stackdriver_cloud_run_revision_run_googleapis_com_container_instance_count{job="runway-exporter",state="active",environment="{{ $labels.environment }}"}
               )
               /
@@ -6733,10 +6737,10 @@ groups:
           0)
         )
       promql_template_1: |
-        max by(environment, shard, service_name) (
+        max by(environment, shard, revision_name) (
           clamp_min(
             clamp_max(
-              sum by (environment, shard, service_name) (
+              sum by (environment, shard, revision_name) (
                 stackdriver_cloud_run_revision_run_googleapis_com_container_instance_count{job="runway-exporter",state="active",environment="{{ $labels.environment }}"}
               )
               /
@@ -6776,11 +6780,15 @@ groups:
       grafana_panel_id: "4285373877"
       grafana_variables: environment,type,stage
       promql_query: |
-        max by(environment, shard, service_name) (
+        max by(environment, shard, revision_name) (
           clamp_min(
             clamp_max(
-              sum by (environment, shard, service_name) (
-                avg_over_time(stackdriver_cloud_run_revision_run_googleapis_com_container_max_request_concurrencies_sum{job="runway-exporter",environment="{{ $labels.environment }}"}[30m])
+              sum by (environment, shard, revision_name) (
+                avg_over_time(stackdriver_cloud_run_revision_run_googleapis_com_container_max_request_concurrencies_sum{job="runway-exporter",state="active",environment="{{ $labels.environment }}"}[30m])
+              )
+              /
+              80 * sum by (environment, shard, revision_name) (
+                stackdriver_cloud_run_revision_run_googleapis_com_container_instance_count{job="runway-exporter",state="active",environment="{{ $labels.environment }}"}
               )
               ,
               1)
@@ -6788,11 +6796,15 @@ groups:
           0)
         )
       promql_template_1: |
-        max by(environment, shard, service_name) (
+        max by(environment, shard, revision_name) (
           clamp_min(
             clamp_max(
-              sum by (environment, shard, service_name) (
-                avg_over_time(stackdriver_cloud_run_revision_run_googleapis_com_container_max_request_concurrencies_sum{job="runway-exporter",environment="{{ $labels.environment }}"}[30m])
+              sum by (environment, shard, revision_name) (
+                avg_over_time(stackdriver_cloud_run_revision_run_googleapis_com_container_max_request_concurrencies_sum{job="runway-exporter",state="active",environment="{{ $labels.environment }}"}[30m])
+              )
+              /
+              80 * sum by (environment, shard, revision_name) (
+                stackdriver_cloud_run_revision_run_googleapis_com_container_instance_count{job="runway-exporter",state="active",environment="{{ $labels.environment }}"}
               )
               ,
               1)
@@ -6829,10 +6841,10 @@ groups:
       grafana_panel_id: "377718254"
       grafana_variables: environment,type,stage
       promql_query: |
-        max by(environment, shard, service_name) (
+        max by(environment, shard, revision_name) (
           clamp_min(
             clamp_max(
-              sum by (environment, shard, service_name) (
+              sum by (environment, shard, revision_name) (
                 avg_over_time(stackdriver_cloud_run_revision_run_googleapis_com_container_memory_utilizations_sum{job="runway-exporter",environment="{{ $labels.environment }}"}[30m])
               )
               ,
@@ -6841,10 +6853,10 @@ groups:
           0)
         )
       promql_template_1: |
-        max by(environment, shard, service_name) (
+        max by(environment, shard, revision_name) (
           clamp_min(
             clamp_max(
-              sum by (environment, shard, service_name) (
+              sum by (environment, shard, revision_name) (
                 avg_over_time(stackdriver_cloud_run_revision_run_googleapis_com_container_memory_utilizations_sum{job="runway-exporter",environment="{{ $labels.environment }}"}[30m])
               )
               ,
