@@ -295,7 +295,7 @@ groups:
   - expr: |
       (
         sum by () (
-          rate(grpc_server_handled_total{grpc_code!="OK",grpc_service="gitaly.SSHService",job="gitaly"}[5m])
+          rate(grpc_server_handled_total{grpc_code!~"AlreadyExists|Canceled|DeadlineExceeded|FailedPrecondition|InvalidArgument|NotFound|OK|PermissionDenied|ResourceExhausted|Unauthenticated",grpc_service="gitaly.SSHService",job="gitaly"}[5m])
         )
       )
       or
@@ -350,7 +350,7 @@ groups:
   - expr: |
       (
         sum by () (
-          rate(grpc_server_handled_total{grpc_code!="OK",grpc_service="gitaly.SSHService",job="gitaly"}[30m])
+          rate(grpc_server_handled_total{grpc_code!~"AlreadyExists|Canceled|DeadlineExceeded|FailedPrecondition|InvalidArgument|NotFound|OK|PermissionDenied|ResourceExhausted|Unauthenticated",grpc_service="gitaly.SSHService",job="gitaly"}[30m])
         )
       )
       or
@@ -405,7 +405,7 @@ groups:
   - expr: |
       (
         sum by () (
-          rate(grpc_server_handled_total{grpc_code!="OK",grpc_service="gitaly.SSHService",job="gitaly"}[1h])
+          rate(grpc_server_handled_total{grpc_code!~"AlreadyExists|Canceled|DeadlineExceeded|FailedPrecondition|InvalidArgument|NotFound|OK|PermissionDenied|ResourceExhausted|Unauthenticated",grpc_service="gitaly.SSHService",job="gitaly"}[1h])
         )
       )
       or
@@ -460,7 +460,7 @@ groups:
   - expr: |
       (
         sum by () (
-          rate(grpc_server_handled_total{grpc_code!="OK",grpc_service="gitaly.SSHService",job="gitaly"}[6h])
+          rate(grpc_server_handled_total{grpc_code!~"AlreadyExists|Canceled|DeadlineExceeded|FailedPrecondition|InvalidArgument|NotFound|OK|PermissionDenied|ResourceExhausted|Unauthenticated",grpc_service="gitaly.SSHService",job="gitaly"}[6h])
         )
       )
       or
@@ -5618,7 +5618,7 @@ groups:
       grafana_variables: environment,stage
       promql_template_1: |
         sum by () (
-          rate(grpc_server_handled_total{grpc_code!="OK",grpc_service="gitaly.SSHService",job="gitaly"}[5m])
+          rate(grpc_server_handled_total{grpc_code!~"AlreadyExists|Canceled|DeadlineExceeded|FailedPrecondition|InvalidArgument|NotFound|OK|PermissionDenied|ResourceExhausted|Unauthenticated",grpc_service="gitaly.SSHService",job="gitaly"}[5m])
         )
       runbook: docs/gitlab-shell/README.md
       title: The grpc_requests SLI of the gitlab-shell service has an error rate violating
@@ -5668,7 +5668,7 @@ groups:
       grafana_variables: environment,stage
       promql_template_1: |
         sum by () (
-          rate(grpc_server_handled_total{grpc_code!="OK",grpc_service="gitaly.SSHService",job="gitaly"}[5m])
+          rate(grpc_server_handled_total{grpc_code!~"AlreadyExists|Canceled|DeadlineExceeded|FailedPrecondition|InvalidArgument|NotFound|OK|PermissionDenied|ResourceExhausted|Unauthenticated",grpc_service="gitaly.SSHService",job="gitaly"}[5m])
         )
       runbook: docs/gitlab-shell/README.md
       title: The grpc_requests SLI of the gitlab-shell service has an error rate violating

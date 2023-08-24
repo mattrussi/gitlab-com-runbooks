@@ -2146,7 +2146,7 @@
           "steppedLine": false,
           "targets": [
             {
-              "expr": "sum by () (\n  rate(grpc_server_handled_total{grpc_code!=\"OK\",grpc_service=\"gitaly.SSHService\",job=\"gitaly\"}[$__interval])\n)\n \u003e 0",
+              "expr": "sum by () (\n  rate(grpc_server_handled_total{grpc_code!~\"AlreadyExists|Canceled|DeadlineExceeded|FailedPrecondition|InvalidArgument|NotFound|OK|PermissionDenied|ResourceExhausted|Unauthenticated\",grpc_service=\"gitaly.SSHService\",job=\"gitaly\"}[$__interval])\n)\n \u003e 0",
               "format": "time_series",
               "interval": "1m",
               "intervalFactor": 1,
@@ -2475,7 +2475,7 @@
           "steppedLine": false,
           "targets": [
             {
-              "expr": "sum by (node) (\n  rate(grpc_server_handled_total{grpc_code!=\"OK\",grpc_service=\"gitaly.SSHService\",job=\"gitaly\",node!=\"\"}[$__interval])\n)\n \u003e 0",
+              "expr": "sum by (node) (\n  rate(grpc_server_handled_total{grpc_code!~\"AlreadyExists|Canceled|DeadlineExceeded|FailedPrecondition|InvalidArgument|NotFound|OK|PermissionDenied|ResourceExhausted|Unauthenticated\",grpc_service=\"gitaly.SSHService\",job=\"gitaly\",node!=\"\"}[$__interval])\n)\n \u003e 0",
               "format": "time_series",
               "interval": "1m",
               "intervalFactor": 1,

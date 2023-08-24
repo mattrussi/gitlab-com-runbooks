@@ -58,6 +58,23 @@ local praefectApdexSlowMethods = [
   'VoteTransaction',  // https://gitlab.com/gitlab-org/gitaly/-/issues/4456
 ];
 
+// This is a list of GRPC codes that should not be included in
+// our error rate SLIs as they are either not errors or result
+// from client side events that we should not be alerted on
+// https://pkg.go.dev/google.golang.org/grpc/codes
+local gitalyGRPCErrorRateIgnoredCodes = [
+  'OK',
+  'NotFound',
+  'Unauthenticated',
+  'AlreadyExists',
+  'FailedPrecondition',
+  'DeadlineExceeded',
+  'Canceled',
+  'InvalidArgument',
+  'PermissionDenied',
+  'ResourceExhausted',
+];
+
 // This calculates the apdex score for a Gitaly-like (Gitaly/Praefect)
 // GRPC service. Since this is an SLI only, not all operations are included,
 // only unary ones, and even then known slow operations are excluded from
@@ -77,7 +94,7 @@ local gitalyGRPCErrorRate(baseSelector) =
     rateMetric(
       counter='gitaly_service_client_requests_total',
       selector=baseSelector {
-        grpc_code: { noneOf: ['OK', 'NotFound', 'Unauthenticated', 'AlreadyExists', 'FailedPrecondition', 'DeadlineExceeded', 'Canceled', 'InvalidArgument', 'PermissionDenied', 'ResourceExhausted'] },
+        grpc_code: { noneOf: gitalyGRPCErrorRateIgnoredCodes },
       }
     ),
     // Include some errors for code `DeadlineExceeded`
@@ -98,4 +115,5 @@ local gitalyGRPCErrorRate(baseSelector) =
 
   grpcServiceApdex:: grpcServiceApdex,
   gitalyGRPCErrorRate:: gitalyGRPCErrorRate,
+  gitalyGRPCErrorRateIgnoredCodes:: gitalyGRPCErrorRateIgnoredCodes,
 }
