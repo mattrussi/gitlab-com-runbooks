@@ -1,6 +1,7 @@
 local aggregations = import 'promql/aggregations.libsonnet';
 local selectors = import 'promql/selectors.libsonnet';
 local aggregationFilterExpr = import 'recording-rules/lib/aggregation-filter-expr.libsonnet';
+local optionalOffset = import 'recording-rules/lib/optional-offset.libsonnet';
 local objects = import 'utils/objects.libsonnet';
 local strings = import 'utils/strings.libsonnet';
 
@@ -23,11 +24,11 @@ local strings = import 'utils/strings.libsonnet';
 //
 local upscaleRatioPromExpression = |||
   sum by (%(targetAggregationLabels)s) (
-    sum_over_time(%(numeratorMetricName)s{%(sourceSelectorWithExtras)s}[%(burnRate)s])%(aggregationFilterExpr)s
+    sum_over_time(%(numeratorMetricName)s{%(sourceSelectorWithExtras)s}[%(burnRate)s]%(optionalOffset)s)%(aggregationFilterExpr)s
   )
   /
   sum by (%(targetAggregationLabels)s) (
-    sum_over_time(%(denominatorMetricName)s{%(sourceSelectorWithExtras)s}[%(burnRate)s])%(aggregationFilterExpr)s%(accountForMissingNumerator)s
+    sum_over_time(%(denominatorMetricName)s{%(sourceSelectorWithExtras)s}[%(burnRate)s]%(optionalOffset)s)%(aggregationFilterExpr)s%(accountForMissingNumerator)s
   )
 |||;
 
@@ -36,7 +37,7 @@ local upscaleRatioPromExpression = |||
 // avg_over_time
 local upscaleRatePromExpression = |||
   sum by (%(targetAggregationLabels)s) (
-    avg_over_time(%(metricName)s{%(sourceSelectorWithExtras)s}[%(burnRate)s])%(aggregationFilterExpr)s
+    avg_over_time(%(metricName)s{%(sourceSelectorWithExtras)s}[%(burnRate)s]%(optionalOffset)s)%(aggregationFilterExpr)s
   )
 |||;
 
@@ -69,6 +70,7 @@ local upscaledRatioExpression(
     aggregationFilterExpr: aggregationFilterExpr(targetAggregationSet),
     accountForMissingNumerator: if accountForMissingNumerator then strings.indent(accountForMissingNumeratorExpr, 2)
     else '',
+    optionalOffset: optionalOffset(targetAggregationSet.offset),
   };
 
 // Upscale a RATE from source metrics to target at the given target burnRate
@@ -81,6 +83,7 @@ local upscaledRateExpression(sourceAggregationSet, targetAggregationSet, burnRat
     metricName: metricName,
     sourceSelectorWithExtras: selectors.serializeHash(sourceSelectorWithExtras),
     aggregationFilterExpr: aggregationFilterExpr(targetAggregationSet),
+    optionalOffset: optionalOffset(targetAggregationSet.offset),
   };
 
 // Upscale an apdex RATIO from source metrics to target at the given target burnRate

@@ -13,13 +13,14 @@ local getDirectRateExpression(sourceAggregationSet, targetAggregationSet, burnRa
   if sourceMetricName != null then
     |||
       sum by (%(targetAggregationLabels)s) (
-        (%(sourceMetricName)s{%(sourceSelector)s} >= 0)%(aggregationFilterExpr)s
+        (%(sourceMetricName)s{%(sourceSelector)s}%(optionalOffset)s >= 0)%(aggregationFilterExpr)s
       )
     ||| % {
       sourceMetricName: sourceMetricName,
       targetAggregationLabels: targetAggregationLabels,
       sourceSelector: sourceSelector,
       aggregationFilterExpr: aggregationFilterExpr(targetAggregationSet),
+      optionalOffset: optionalOffset(targetAggregationSet.offset),
     }
   else null;
 
