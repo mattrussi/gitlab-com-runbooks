@@ -1,7 +1,7 @@
-local optionalOffset = import '../../lib/optional-offset.libsonnet';
 local recordingRuleRegistry = import '../../recording-rule-registry.libsonnet';
 local aggregations = import 'promql/aggregations.libsonnet';
 local selectors = import 'promql/selectors.libsonnet';
+local optionalOffset = import 'recording-rules/lib/optional-offset.libsonnet';
 
 {
   resolveRateQuery(metricName, selector, rangeInterval, useRecordingRuleRegistry, offset, aggregationFunction=null, aggregationLabels=[])::

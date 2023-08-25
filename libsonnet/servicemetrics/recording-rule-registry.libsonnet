@@ -6,9 +6,9 @@
 // It will convert the expression into an equivalent expression that uses a recording rule,
 // if possible.
 //
-local optionalOffset = import 'lib/optional-offset.libsonnet';
 local aggregations = import 'promql/aggregations.libsonnet';
 local selectors = import 'promql/selectors.libsonnet';
+local optionalOffset = import 'recording-rules/lib/optional-offset.libsonnet';
 local metricsLabelRegistry = import 'servicemetrics/metric-label-registry.libsonnet';
 local metricsCatalog = import 'servicemetrics/metrics-catalog.libsonnet';
 local misc = import 'utils/misc.libsonnet';
