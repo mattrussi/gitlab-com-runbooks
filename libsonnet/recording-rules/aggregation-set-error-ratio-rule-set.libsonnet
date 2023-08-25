@@ -1,6 +1,7 @@
-local helpers = import './helpers.libsonnet';
 local aggregations = import 'promql/aggregations.libsonnet';
 local selectors = import 'promql/selectors.libsonnet';
+local aggregationFilterExpr = import 'recording-rules/lib/aggregation-filter-expr.libsonnet';
+local upscaling = import 'recording-rules/lib/upscaling.libsonnet';
 local strings = import 'utils/strings.libsonnet';
 
 local getDirectExpr(sourceAggregationSet, targetAggregationSet, burnRate) =
@@ -15,7 +16,7 @@ local getDirectExpr(sourceAggregationSet, targetAggregationSet, burnRate) =
     targetErrorRateMetric: targetErrorRateMetric,
     targetSelector: selectors.serializeHash(targetAggregationSet.selector),
     sourceSelector: sourceSelector,
-    aggregationFilterExpr: helpers.aggregationFilterExpr(targetAggregationSet),
+    aggregationFilterExpr: aggregationFilterExpr(targetAggregationSet),
   };
 
   local sourceErrorRateMetric = sourceAggregationSet.getErrorRateMetricForBurnRate(burnRate, required=true);
@@ -63,7 +64,7 @@ local getDirectExpr(sourceAggregationSet, targetAggregationSet, burnRate) =
         std.prune({
           record: targetErrorRatioMetric,
           labels: targetAggregationSet.recordingRuleStaticLabels,
-          expr: helpers.combinedErrorRatioExpression(sourceAggregationSet, targetAggregationSet, burnRate, directExpr),
+          expr: upscaling.combinedErrorRatioExpression(sourceAggregationSet, targetAggregationSet, burnRate, directExpr),
         }),
       ],
 }

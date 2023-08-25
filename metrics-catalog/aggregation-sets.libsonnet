@@ -48,6 +48,7 @@ local aggregationSet = import 'servicemetrics/aggregation-set.libsonnet';
     selector: { monitor: 'global' },  // Thanos Ruler
     labels: ['env', 'environment', 'tier', 'type', 'stage', 'component'],
     supportedBurnRates: ['1m', '5m', '30m', '1h', '6h', '3d'],  // Including 1m
+    offset: '30s',
     metricFormats: {
       apdexRatio: 'gitlab_component_apdex:ratio_%s',
       opsRate: 'gitlab_component_ops:rate_%s',
@@ -226,6 +227,7 @@ local aggregationSet = import 'servicemetrics/aggregation-set.libsonnet';
     intermediateSource: false,  // Used in dashboards and alerts
     selector: { monitor: 'global' },  // Thanos Ruler
     labels: ['env', 'environment', 'tier', 'type', 'stage'],
+    offset: '30s',
     metricFormats: {
       apdexSuccessRate: 'gitlab_service_apdex:success:rate_%s',
       apdexWeight: 'gitlab_service_apdex:weight:score_%s',
@@ -408,6 +410,7 @@ local aggregationSet = import 'servicemetrics/aggregation-set.libsonnet';
     labels: ['env', 'environment', 'tier', 'type', 'stage', 'component', 'stage_group', 'product_stage'],
     generateSLODashboards: false,
     upscaleLongerBurnRates: true,
+    offset: '30s',
     joinSource: {
       metric: 'gitlab:feature_category:stage_group:mapping',
       selector: { monitor: 'global' },
@@ -431,6 +434,7 @@ local aggregationSet = import 'servicemetrics/aggregation-set.libsonnet';
     selector: { monitor: 'global' },
     labels: ['env', 'environment', 'stage', 'stage_group', 'product_stage'],
     generateSLODashboards: false,
+    offset: '30s',
     joinSource: {
       metric: 'gitlab:feature_category:stage_group:mapping',
       selector: { monitor: 'global' },
