@@ -221,7 +221,14 @@ This runbook describes the whole procedure and several takeaways to help you to 
 
 ### 6.1 Create the cluster with Terraform MR
 
-You may be required to create the replica instances from scratch or you might be rebuilding an already exisitng instance.
+When building the delayed and archive replicas you may be required to create the replica instances from scratch or you might be rebuilding an already exisitng instance.
+
+If you are building from scratch you need to add a module in `config-mgmt` to provision the new instances [example MR](https://ops.gitlab.net/gitlab-com/gl-infra/config-mgmt/-/merge_requests/5590). If you are rebuilding an existing instance there are two steps:
+
+1. Create an MR to destroy the exisiting instance this can be done by commenting out the module that provisions the delayed and archive replicas.
+1. Create an MR to rebuild the replicas.
+
+**NOTE:** Remember to always rebase the MR and review the plan before merging.
 
 #### 6.1.1 Chef role for the replicas
 
@@ -314,9 +321,9 @@ Include th following `override_attributes` as well to both the delayed and archi
   }
 ```
 
-The role for the DR replicas are similar to the roles of other replicas but with the above `dcs` and override attributes. Remember to also set unique consul service names (for consul service discovery) as well as unique Prometheus type (for monitoring purposes).
+The role for the DR replicas are similar to the roles of other replicas but with the above `dcs` and override attributes. Remember to also set unique consul service names (for consul service discovery) as well as unique Prometheus type (for monitoring purposes) [example MR](https://gitlab.com/gitlab-com/gl-infra/chef-repo/-/merge_requests/3267). Since we are also specifying attributes for omnibus we should also include the `recipe[omnibus-gitlab::default]` recipe in the runlist.
 
-#### 6.1.2 Building the replica instance from scratch
+#### 6.1.2A Building the replica instance from scratch
 
 * Create an MR to add a module in [config-mgmt](https://ops.gitlab.net/gitlab-com/gl-infra/config-mgmt) in the environment's `main.tf` file, this module provisions the VM instance [refer here for more details on what to include in the module](#DefinethenewStandbyClusterinTerraform).
 * Merge the MR and wait for the apply pipline to complete.
@@ -333,7 +340,7 @@ postgres-ci-dr-delayed-v14-01-db-gprd.c.gitlab-production.internal
 
 * Once the nodes appear you can tail the serial output logs as you wait for chef to converge. `gcloud compute --project=<project> instances tail-serial-port-output <vm-instance> --zone=<zone> --port=1`
 
-### 6.1.3 Rebuilding an already existing replica
+### 6.1.2B Rebuilding an already existing replica
 
 You start by destroying the old replica using these [steps.](#4-steps-to-destroy-a-standby-cluster-if-you-want-to-recreate-it)
 
@@ -342,38 +349,38 @@ Before you recreate the VM instances you need to delete the OLD VMs from chef cl
 Get the nodes you wish to remove from chef client and node list.
 
 ```sh
-$ knife node list | grep "ci-dr-archive-v14\ci-dr-delayed-v14"
+$ knife node list | grep "ci-v14-dr-archive\|ci-v14-dr-delayed"
 
-postgres-ci-dr-archive-v14-01-db-gprd.c.gitlab-production.internal
-postgres-ci-dr-delayed-v14-01-db-gprd.c.gitlab-production.internal
+postgres-ci-v14-dr-archive-01-db-gstg.c.gitlab-staging-1.internal
+postgres-ci-v14-dr-delayed-01-db-gstg.c.gitlab-staging-1.internal
 ```
 
 Delete the nodes from chef client.
 
 ```sh
-$ knife client bulk delete "^postgres-ci-dr-[a-z]+-v14-01-db-gprd\.c\.gitlab-production\.internal$"
+$ knife client bulk delete "^postgres-ci-v14-dr-[a-z]+-01-db-gstg\.c\.gitlab-staging-1\.internal$"
 The following clients will be deleted:
 
-postgres-ci-dr-archive-v14-01-db-gprd.c.gitlab-production.internal
-postgres-ci-dr-delayed-v14-01-db-gprd.c.gitlab-production.internal
+postgres-ci-v14-dr-archive-01-db-gstg.c.gitlab-staging-1.internal
+postgres-ci-v14-dr-delayed-01-db-gstg.c.gitlab-staging-1.internal
 
 Are you sure you want to delete these clients? (Y/N) y
-Deleted client postgres-ci-dr-archive-v14-01-db-gprd.c.gitlab-production.internal
-Deleted client postgres-ci-dr-delayed-v14-01-db-gprd.c.gitlab-production.internal
+Deleted client postgres-ci-v14-dr-archive-01-db-gstg.c.gitlab-staging-1.internal
+Deleted client postgres-ci-v14-dr-delayed-01-db-gstg.c.gitlab-staging-1.internal
 ```
 
 Delete the nodes from chef node list.
 
 ```sh
-knife node bulk delete "^postgres-ci-dr-[a-z]+-v14-01-db-gprd\.c\.gitlab-production\.internal$"
+knife node bulk delete "^postgres-ci-v14-dr-[a-z]+-01-db-gstg\.c\.gitlab-staging-1\.internal$"                 3 ↵ ──(Fri,Sep08)─┘
 The following nodes will be deleted:
 
-postgres-ci-dr-archive-v14-01-db-gprd.c.gitlab-production.internal
-postgres-ci-dr-delayed-v14-01-db-gprd.c.gitlab-production.internal
+postgres-ci-v14-dr-archive-01-db-gstg.c.gitlab-staging-1.internal
+postgres-ci-v14-dr-delayed-01-db-gstg.c.gitlab-staging-1.internal
 
 Are you sure you want to delete these nodes? (Y/N) y
-Deleted node postgres-ci-dr-archive-v14-01-db-gprd.c.gitlab-production.internal
-Deleted node postgres-ci-dr-delayed-v14-01-db-gprd.c.gitlab-production.internal
+Deleted node postgres-ci-v14-dr-archive-01-db-gstg.c.gitlab-staging-1.internal
+Deleted node postgres-ci-v14-dr-delayed-01-db-gstg.c.gitlab-staging-1.internal
 ```
 
 After that follow the steps above to recreate it and wait for chef to converge.
@@ -388,8 +395,6 @@ sudo rm -f /var/opt/gitlab/postgresql/data14
 sudo systemctl start patroni
 sudo chef-client
 ```
-
-The command `sudo gitlab-patroni list` is used to get the cluster name
 
 Confirm that the patroni starts as `Standby Leader`:
 
