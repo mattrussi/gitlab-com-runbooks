@@ -28,6 +28,7 @@
 * [Gitlab.com on Kubernetes](../onboarding/gitlab.com_on_k8s.md)
 * [PackageCloud Infrastructure and Backups](../packagecloud/infrastructure.md)
 * [GPG Keys for Package Signing](../packaging/manage-package-signing-keys.md)
+* [Steps to create (or recreate) a Standby CLuster using a Snapshot from a Production cluster as Master cluster (instead of pg_basebackup)](../patroni/build_cluster_from_snapshot.md)
 * [Geo Patroni Cluster Management](../patroni/geo-patroni-cluster.md)
 * [GitLab application-side reindexing](../patroni/postgres-automatic-reindexing.md)
 * [Rotating Rails' PostgreSQL password](../patroni/rotating-rails-postgresql-password.md)

@@ -12,6 +12,7 @@
   * 5.4. [Check if the Patroni standby_cluster is healthy and replicating](#CheckifthePatronistandby_clusterishealthyandreplicating)
     * 5.4.1. [Check standby_cluster source configuration](#Checkstandby_clustersourceconfiguration)
     * 5.4.2. [Check Replication status](#CheckReplicationstatus)
+* 6. [Build DR Archive and Delayed replicas](#6-build-dr-archive-and-delayed-replicas)
 
 <!-- vscode-markdown-toc-config
 	numbering=true
@@ -25,7 +26,7 @@ From time to time we have to create Standby Clusters from a source/existing Gitl
 
 Standby Clusters are physically replicated clusters, that stream or recover WALs from the source Patroni/PostgreSQL database, but have an independent Patroni configuration and management, therefore can be promoted if required.
 
-This runbook describes the whole procedure and several takeaways to help you to create a new Patrony Standby Clusters from scratch.
+This runbook describes the whole procedure and several takeaways to help you to create a new Patroni Standby Clusters from scratch.
 
 ## 1. <a name='Pre-requisites'></a>Pre-requisites
 
@@ -64,7 +65,7 @@ Some `postgresql` settings need to be the SAME as the Source cluster for the phy
 The Chef role of the standby patroni cluster should have defined the `standby_cluster` settings under `override_attributes.gitlab-patroni.patroni.config.bootstrap.dcs` like the below example.
 Notice that `host` should point to the endpoint of the Primary/Master node of the source cluster, therefore if there's a failover we don't have to reconfigure the standby cluster.
 
-```
+```sh
   "override_attributes": {
     "gitlab-patroni": {
       "patroni": {
@@ -209,3 +210,220 @@ gitlab-patronictl list
 ```
 
 In the output, the leader node of the new standby cluster should have its `Role` defined as `Standby Leader`, the `TL` (timeline) should match the TL from the source cluster, and all replicas `State` should be `running`, which mean that they are replicating/streaming from their sources.
+
+## 6. Build DR Archive and Delayed replicas
+
+Once in a while we may find ourselves creating/rebuilding DR archive and delayed replicas from a source/existing Gitlab.com Patroni database, usually from GPRD or GSTG.
+
+DR archive and delayed replicas are physically replicated clusters, that stream or recover WALs from the source Patroni/PostgreSQL database, but have an independent Patroni configuration and management, therefore can be promoted if required.
+
+This runbook describes the whole procedure and several takeaways to help you to create a new Patroni DR archive and delayed replicas from scratch.
+
+### 6.1 Create the cluster with Terraform MR
+
+You may be required to create the replica instances from scratch or you might be rebuilding an already exisitng instance.
+
+#### 6.1.1 Chef role for the replicas
+
+Before you create a VM instance you need a chef role for the VM instance. In the [chef-repo](https://gitlab.com/gitlab-com/gl-infra/chef-repo/-/tree/master/roles) create a role for the DR replica.
+
+For the archive replica role make sure to include the following dcs (Distributed Configuration Store), the dcs stores the dynamic configurations to be applied on all cluster nodes [official patroni documentation](https://patroni.readthedocs.io/en/latest/dynamic_configuration.html).
+
+```terraform
+"dcs": {
+  "standby_cluster": {
+    "restore_command": "/usr/bin/envdir /etc/wal-g.d/env /opt/wal-g/bin/wal-g wal-fetch --turbo %f %p",
+    "create_replica_methods": [
+      "wal_g"
+    ]
+  },
+  "postgresql": {
+    "wal_g": {
+      "no_master": true,
+      "command": "bash -c '/usr/bin/envdir /etc/wal-g.d/env /opt/wal-g/bin/wal-g backup-list | grep base | sort -nk1 | tail -1 | cut -f1 -d\" \" | xargs -I{} /usr/bin/envdir /etc/wal-g.d/env /opt/wal-g/bin/wal-g backup-fetch /var/opt/gitlab/postgresql/data14 {}'"
+    }
+  }
+}
+```
+
+For the delayed replica use the following dcs
+
+```terraform
+"dcs": {
+  "standby_cluster": {
+    "restore_command": "/usr/bin/envdir /etc/wal-g.d/env /opt/wal-g/bin/wal-g wal-fetch --turbo %f %p",
+    "create_replica_methods": [
+      "wal_g"
+    ],
+    "recovery_min_apply_delay": "8h"
+  },
+  "postgresql": {
+   "wal_g": {
+      "no_master": true,
+      "command": "bash -c '/usr/bin/envdir /etc/wal-g.d/env /opt/wal-g/bin/wal-g backup-list | grep base | sort -nk1 | tail -1 | cut -f1 -d\" \" | xargs -I{} /usr/bin/envdir /etc/wal-g.d/env /opt/wal-g/bin/wal-g backup-fetch /var/opt/gitlab/postgresql/data14 {}'"
+    }
+  }
+}
+```
+
+**NOTE:** The inclusion of `"recovery_min_apply_delay": "8h"` for the delayed replica.
+
+Include th following `override_attributes` as well to both the delayed and archive replicas.
+
+```terraform
+"override_attributes": {
+    "gitlab-patroni": {
+      "postgresql": {
+        "parameters": {
+          "archive_command": "/bin/true",
+          "archive_mode": "off",
+          "shared_buffers": "8GB",
+          "max_standby_archive_delay": "120min",
+          "max_standby_streaming_delay": "120min",
+          "statement_timeout": "15min",
+          "idle_in_transaction_session_timeout": "10min",
+          "hot_standby_feedback": "off"
+        }
+      }
+    },
+    "omnibus-gitlab": {
+      "run_reconfigure": false,
+      "gitlab_rb": {
+        "gitlab-rails": {
+          "db_host": "/var/opt/gitlab/postgresql",
+          "db_port": 5432,
+          "db_load_balancing": false
+        },
+        "consul": {
+          "enable": false
+        },
+        "postgresql": {
+          "enable": false
+        },
+        "repmgr": {
+          "enable": false
+        },
+        "repmgrd": {
+          "enable": false
+        },
+        "pgbouncer": {
+          "enable": false
+        }
+      }
+    }
+  }
+```
+
+The role for the DR replicas are similar to the roles of other replicas but with the above dcs and override attribites. Rembember to also set unique consul service names (for consul service discovery) as well as unique prometheus type (for monitoring purposes).
+
+#### 6.1.2 Building the replica instance from scratch
+
+* Create an MR to add a module in [config-mgmt](https://ops.gitlab.net/gitlab-com/gl-infra/config-mgmt) in the environment's `main.tf` file, this module provisions the VM instance [refer here for more details on what to include in the module](#DefinethenewStandbyClusterinTerraform).
+* Merge the MR and wait for the apply pipline to complete.
+* Once apply has completed (sometimes it may take upto 40 minutes, if you are executing this in a CR remember to account for that) check if the nodes are available on chef using the `knife search "role:<role>"` command like in the example shown below.
+
+```sh
+knife search "role:gprd-base-db-patroni-ci-archive-v14 OR role:gprd-base-db-patroni-ci-delayed-v14" -i
+2 items found
+
+postgres-ci-dr-archive-v14-01-db-gprd.c.gitlab-production.internal
+postgres-ci-dr-delayed-v14-01-db-gprd.c.gitlab-production.internal
+
+```
+
+* Once the nodes appear you can tail the serial output logs as you wait for chef to converge. `gcloud compute --project=<project> instances tail-serial-port-output <vm-instance> --zone=<zone> --port=1`
+
+### 6.1.3 Rebuilding an already existing replica
+
+You start by destroying the old replica using these [steps.](#4-steps-to-destroy-a-standby-cluster-if-you-want-to-recreate-it)
+
+Before you recreate the VM instances you need to delete the OLD VMs from chef client and nodes as shown in the example below. Sometimes the nodes are deleted automatically this is just a precautionary step.
+
+Get the nodes you wish to remove from chef client and node list.
+
+```sh
+$ knife node list | grep "ci-dr-archive-v14\ci-dr-delayed-v14"
+
+postgres-ci-dr-archive-v14-01-db-gprd.c.gitlab-production.internal
+postgres-ci-dr-delayed-v14-01-db-gprd.c.gitlab-production.internal
+```
+
+Delete the nodes from chef client.
+
+```sh
+$ knife client bulk delete "^postgres-ci-dr-[a-z]+-v14-01-db-gprd\.c\.gitlab-production\.internal$"
+The following clients will be deleted:
+
+postgres-ci-dr-archive-v14-01-db-gprd.c.gitlab-production.internal
+postgres-ci-dr-delayed-v14-01-db-gprd.c.gitlab-production.internal
+
+Are you sure you want to delete these clients? (Y/N) y
+Deleted client postgres-ci-dr-archive-v14-01-db-gprd.c.gitlab-production.internal
+Deleted client postgres-ci-dr-delayed-v14-01-db-gprd.c.gitlab-production.internal
+```
+
+Delete the nodes from chef node list.
+
+```sh
+knife node bulk delete "^postgres-ci-dr-[a-z]+-v14-01-db-gprd\.c\.gitlab-production\.internal$"
+The following nodes will be deleted:
+
+postgres-ci-dr-archive-v14-01-db-gprd.c.gitlab-production.internal
+postgres-ci-dr-delayed-v14-01-db-gprd.c.gitlab-production.internal
+
+Are you sure you want to delete these nodes? (Y/N) y
+Deleted node postgres-ci-dr-archive-v14-01-db-gprd.c.gitlab-production.internal
+Deleted node postgres-ci-dr-delayed-v14-01-db-gprd.c.gitlab-production.internal
+```
+
+After that follow the steps above to recreate it and wait for chef to converge.
+
+### 6.2 Initialize the patroni DR replica
+
+Log into each of the VM instances and excute the following steps:
+
+```sh
+- sudo gitlab-patronictl list
+- consul kv delete -recurse service/<clustername>
+- sudo rm -f /var/opt/gitlab/postgresql/data14
+- sudo systemctl start patroni
+- sudo chef-client
+```
+
+The command `sudo gitlab-patroni list` is used to get the cluster name
+
+Confirm that the patroni starts as `Standby Leader`:
+
+Execute `sudo gitlab-patronictl show-config` You shoild see an output similar to the one below.
+
+```yml
+loop_wait: 10
+maximum_lag_on_failover: 1048576
+postgresql:
+  md5_auth_cidr_addresses:
+  - 10.0.0.0/8
+  parameters:
+    checkpoint_timeout: 10min
+    hot_standby: 'on'
+    max_connections: 670
+    max_locks_per_transaction: 128
+    max_replication_slots: 32
+    max_wal_senders: 32
+    max_wal_size: 16GB
+    wal_keep_segments: 8
+    wal_keep_size: 8192MB
+    wal_level: logical
+  use_pg_rewind: true
+  use_slots: true
+  wal_g:
+    command: bash -c '/usr/bin/envdir /etc/wal-g.d/env /opt/wal-g/bin/wal-g backup-list | grep base | sort -nk1 | tail -1 | cut -f1 -d" " | xargs -I{} /usr/bin/envdir /etc/wal-g.d/env /opt/wal-g/bin/wal-g
+      backup-fetch /var/opt/gitlab/postgresql/data14 {}'
+    no_master: true
+retry_timeout: 40
+standby_cluster:
+  create_replica_methods:
+  - wal_g
+  recovery_min_apply_delay: 8h
+  restore_command: /usr/bin/envdir /etc/wal-g.d/env /opt/wal-g/bin/wal-g wal-fetch --turbo %f %p
+ttl: 90
+```

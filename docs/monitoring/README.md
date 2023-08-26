@@ -42,6 +42,7 @@
 * [Thanos Receive](thanos-receive.md)
 * [Upgrading Monitoring Components](upgrades.md)
 * [Diagnosis with Kibana](../onboarding/kibana-diagnosis.md)
+* [Steps to create (or recreate) a Standby CLuster using a Snapshot from a Production cluster as Master cluster (instead of pg_basebackup)](../patroni/build_cluster_from_snapshot.md)
 * [Check the status of transaction wraparound Runbook](../patroni/check_wraparound.md)
 * [Log analysis on PostgreSQL, Pgbouncer, Patroni and consul Runbook](../patroni/log_analysis.md)
 * [Mapping Postgres Statements, Slowlogs, Activity Monitoring and Traces](../patroni/mapping_statements.md)
