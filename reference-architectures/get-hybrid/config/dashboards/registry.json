@@ -5988,7 +5988,7 @@
           "steppedLine": false,
           "targets": [
             {
-              "expr": "histogram_quantile(\n  0.950000,\n  sum by (le) (\n    rate(registry_http_request_duration_seconds_bucket{method=~\"delete\",route=\"/v2/{name}/blobs/{digest}\"}[$__interval])\n  )\n)\n \u003e 0",
+              "expr": "histogram_quantile(\n  0.950000,\n  sum by (le) (\n    rate(registry_http_request_duration_seconds_bucket{method=~\"delete\",route=\"/v2/{name}/blobs/{digest}\",type!=\"ops-gitlab-net\"}[$__interval])\n  )\n)\n \u003e 0",
               "format": "time_series",
               "interval": "1m",
               "intervalFactor": 1,
@@ -6084,7 +6084,7 @@
           "steppedLine": false,
           "targets": [
             {
-              "expr": "sum by () (\n  rate(registry_http_request_duration_seconds_count{method=~\"delete\",route=\"/v2/{name}/blobs/{digest}\"}[$__interval])\n)\n \u003e 0",
+              "expr": "sum by () (\n  rate(registry_http_request_duration_seconds_count{method=~\"delete\",route=\"/v2/{name}/blobs/{digest}\",type!=\"ops-gitlab-net\"}[$__interval])\n)\n \u003e 0",
               "format": "time_series",
               "interval": "1m",
               "intervalFactor": 1,
@@ -6160,7 +6160,7 @@
           "steppedLine": false,
           "targets": [
             {
-              "expr": "histogram_quantile(\n  0.950000,\n  sum by (le,method) (\n    rate(registry_http_request_duration_seconds_bucket{method!=\"\",route=\"/v2/{name}/blobs/{digest}\"}[$__interval])\n  )\n)\n \u003e 0",
+              "expr": "histogram_quantile(\n  0.950000,\n  sum by (le,method) (\n    rate(registry_http_request_duration_seconds_bucket{method!=\"\",route=\"/v2/{name}/blobs/{digest}\",type!=\"ops-gitlab-net\"}[$__interval])\n  )\n)\n \u003e 0",
               "format": "time_series",
               "interval": "1m",
               "intervalFactor": 1,
@@ -6262,7 +6262,7 @@
           "steppedLine": false,
           "targets": [
             {
-              "expr": "clamp_min(clamp_max((\n  (\n    sum by (method) (\n  rate(registry_http_request_duration_seconds_bucket{le=\"+Inf\",method!=\"\",route=\"/v2/{name}/blobs/{digest}\"}[$__interval])\n)\n\n    -\n    (\n      (\n  sum by (method) (\n    rate(registry_http_request_duration_seconds_bucket{le=\"0.5\",method!=\"\",route=\"/v2/{name}/blobs/{digest}\"}[$__interval])\n  )\n  +\n  sum by (method) (\n    rate(registry_http_request_duration_seconds_bucket{le=\"2.5\",method!=\"\",route=\"/v2/{name}/blobs/{digest}\"}[$__interval])\n  )\n)\n/\n2\n\n    )\n  )\n  / ignoring(method) group_left()\n  (\n    sum by () (\n  rate(registry_http_request_duration_seconds_bucket{le=\"+Inf\",method!=\"\",route=\"/v2/{name}/blobs/{digest}\"}[$__interval])\n)\n\n  )\n) \u003e 0\n,1),0)\n",
+              "expr": "clamp_min(clamp_max((\n  (\n    sum by (method) (\n  rate(registry_http_request_duration_seconds_bucket{le=\"+Inf\",method!=\"\",route=\"/v2/{name}/blobs/{digest}\",type!=\"ops-gitlab-net\"}[$__interval])\n)\n\n    -\n    (\n      (\n  sum by (method) (\n    rate(registry_http_request_duration_seconds_bucket{le=\"0.5\",method!=\"\",route=\"/v2/{name}/blobs/{digest}\",type!=\"ops-gitlab-net\"}[$__interval])\n  )\n  +\n  sum by (method) (\n    rate(registry_http_request_duration_seconds_bucket{le=\"2.5\",method!=\"\",route=\"/v2/{name}/blobs/{digest}\",type!=\"ops-gitlab-net\"}[$__interval])\n  )\n)\n/\n2\n\n    )\n  )\n  / ignoring(method) group_left()\n  (\n    sum by () (\n  rate(registry_http_request_duration_seconds_bucket{le=\"+Inf\",method!=\"\",route=\"/v2/{name}/blobs/{digest}\",type!=\"ops-gitlab-net\"}[$__interval])\n)\n\n  )\n) \u003e 0\n,1),0)\n",
               "format": "time_series",
               "interval": "1m",
               "intervalFactor": 1,
@@ -6337,7 +6337,7 @@
           "steppedLine": false,
           "targets": [
             {
-              "expr": "sum by (method) (\n  rate(registry_http_request_duration_seconds_count{method=~\"delete\",route=\"/v2/{name}/blobs/{digest}\"}[$__interval])\n)\n \u003e 0",
+              "expr": "sum by (method) (\n  rate(registry_http_request_duration_seconds_count{method=~\"delete\",route=\"/v2/{name}/blobs/{digest}\",type!=\"ops-gitlab-net\"}[$__interval])\n)\n \u003e 0",
               "format": "time_series",
               "interval": "1m",
               "intervalFactor": 1,
@@ -6433,7 +6433,7 @@
           "steppedLine": false,
           "targets": [
             {
-              "expr": "histogram_quantile(\n  0.950000,\n  sum by (le) (\n    rate(registry_http_request_duration_seconds_bucket{method=~\"get|head\",route=\"/v2/{name}/blobs/{digest}\"}[$__interval])\n  )\n)\n \u003e 0",
+              "expr": "histogram_quantile(\n  0.950000,\n  sum by (le) (\n    rate(registry_http_request_duration_seconds_bucket{method=~\"get|head\",route=\"/v2/{name}/blobs/{digest}\",type!=\"ops-gitlab-net\"}[$__interval])\n  )\n)\n \u003e 0",
               "format": "time_series",
               "interval": "1m",
               "intervalFactor": 1,
@@ -6529,7 +6529,7 @@
           "steppedLine": false,
           "targets": [
             {
-              "expr": "sum by () (\n  rate(registry_http_request_duration_seconds_count{method=~\"get|head\",route=\"/v2/{name}/blobs/{digest}\"}[$__interval])\n)\n \u003e 0",
+              "expr": "sum by () (\n  rate(registry_http_request_duration_seconds_count{method=~\"get|head\",route=\"/v2/{name}/blobs/{digest}\",type!=\"ops-gitlab-net\"}[$__interval])\n)\n \u003e 0",
               "format": "time_series",
               "interval": "1m",
               "intervalFactor": 1,
@@ -6605,7 +6605,7 @@
           "steppedLine": false,
           "targets": [
             {
-              "expr": "histogram_quantile(\n  0.950000,\n  sum by (le,method) (\n    rate(registry_http_request_duration_seconds_bucket{method!=\"\",route=\"/v2/{name}/blobs/{digest}\"}[$__interval])\n  )\n)\n \u003e 0",
+              "expr": "histogram_quantile(\n  0.950000,\n  sum by (le,method) (\n    rate(registry_http_request_duration_seconds_bucket{method!=\"\",route=\"/v2/{name}/blobs/{digest}\",type!=\"ops-gitlab-net\"}[$__interval])\n  )\n)\n \u003e 0",
               "format": "time_series",
               "interval": "1m",
               "intervalFactor": 1,
@@ -6707,7 +6707,7 @@
           "steppedLine": false,
           "targets": [
             {
-              "expr": "clamp_min(clamp_max((\n  (\n    sum by (method) (\n  rate(registry_http_request_duration_seconds_bucket{le=\"+Inf\",method!=\"\",route=\"/v2/{name}/blobs/{digest}\"}[$__interval])\n)\n\n    -\n    (\n      (\n  sum by (method) (\n    rate(registry_http_request_duration_seconds_bucket{le=\"10\",method!=\"\",route=\"/v2/{name}/blobs/{digest}\"}[$__interval])\n  )\n  +\n  sum by (method) (\n    rate(registry_http_request_duration_seconds_bucket{le=\"60\",method!=\"\",route=\"/v2/{name}/blobs/{digest}\"}[$__interval])\n  )\n)\n/\n2\n\n    )\n  )\n  / ignoring(method) group_left()\n  (\n    sum by () (\n  rate(registry_http_request_duration_seconds_bucket{le=\"+Inf\",method!=\"\",route=\"/v2/{name}/blobs/{digest}\"}[$__interval])\n)\n\n  )\n) \u003e 0\n,1),0)\n",
+              "expr": "clamp_min(clamp_max((\n  (\n    sum by (method) (\n  rate(registry_http_request_duration_seconds_bucket{le=\"+Inf\",method!=\"\",route=\"/v2/{name}/blobs/{digest}\",type!=\"ops-gitlab-net\"}[$__interval])\n)\n\n    -\n    (\n      (\n  sum by (method) (\n    rate(registry_http_request_duration_seconds_bucket{le=\"10\",method!=\"\",route=\"/v2/{name}/blobs/{digest}\",type!=\"ops-gitlab-net\"}[$__interval])\n  )\n  +\n  sum by (method) (\n    rate(registry_http_request_duration_seconds_bucket{le=\"60\",method!=\"\",route=\"/v2/{name}/blobs/{digest}\",type!=\"ops-gitlab-net\"}[$__interval])\n  )\n)\n/\n2\n\n    )\n  )\n  / ignoring(method) group_left()\n  (\n    sum by () (\n  rate(registry_http_request_duration_seconds_bucket{le=\"+Inf\",method!=\"\",route=\"/v2/{name}/blobs/{digest}\",type!=\"ops-gitlab-net\"}[$__interval])\n)\n\n  )\n) \u003e 0\n,1),0)\n",
               "format": "time_series",
               "interval": "1m",
               "intervalFactor": 1,
@@ -6782,7 +6782,7 @@
           "steppedLine": false,
           "targets": [
             {
-              "expr": "sum by (method) (\n  rate(registry_http_request_duration_seconds_count{method=~\"get|head\",route=\"/v2/{name}/blobs/{digest}\"}[$__interval])\n)\n \u003e 0",
+              "expr": "sum by (method) (\n  rate(registry_http_request_duration_seconds_count{method=~\"get|head\",route=\"/v2/{name}/blobs/{digest}\",type!=\"ops-gitlab-net\"}[$__interval])\n)\n \u003e 0",
               "format": "time_series",
               "interval": "1m",
               "intervalFactor": 1,
@@ -6878,7 +6878,7 @@
           "steppedLine": false,
           "targets": [
             {
-              "expr": "histogram_quantile(\n  0.950000,\n  sum by (le) (\n    rate(registry_http_request_duration_seconds_bucket{method=~\"patch|post|put\",route=\"/v2/{name}/blobs/{digest}\"}[$__interval])\n  )\n)\n \u003e 0",
+              "expr": "histogram_quantile(\n  0.950000,\n  sum by (le) (\n    rate(registry_http_request_duration_seconds_bucket{method=~\"patch|post|put\",route=\"/v2/{name}/blobs/{digest}\",type!=\"ops-gitlab-net\"}[$__interval])\n  )\n)\n \u003e 0",
               "format": "time_series",
               "interval": "1m",
               "intervalFactor": 1,
@@ -6974,7 +6974,7 @@
           "steppedLine": false,
           "targets": [
             {
-              "expr": "sum by () (\n  rate(registry_http_request_duration_seconds_count{method=~\"patch|post|put\",route=\"/v2/{name}/blobs/{digest}\"}[$__interval])\n)\n \u003e 0",
+              "expr": "sum by () (\n  rate(registry_http_request_duration_seconds_count{method=~\"patch|post|put\",route=\"/v2/{name}/blobs/{digest}\",type!=\"ops-gitlab-net\"}[$__interval])\n)\n \u003e 0",
               "format": "time_series",
               "interval": "1m",
               "intervalFactor": 1,
@@ -7050,7 +7050,7 @@
           "steppedLine": false,
           "targets": [
             {
-              "expr": "histogram_quantile(\n  0.950000,\n  sum by (le,method) (\n    rate(registry_http_request_duration_seconds_bucket{method!=\"\",route=\"/v2/{name}/blobs/{digest}\"}[$__interval])\n  )\n)\n \u003e 0",
+              "expr": "histogram_quantile(\n  0.950000,\n  sum by (le,method) (\n    rate(registry_http_request_duration_seconds_bucket{method!=\"\",route=\"/v2/{name}/blobs/{digest}\",type!=\"ops-gitlab-net\"}[$__interval])\n  )\n)\n \u003e 0",
               "format": "time_series",
               "interval": "1m",
               "intervalFactor": 1,
@@ -7152,7 +7152,7 @@
           "steppedLine": false,
           "targets": [
             {
-              "expr": "clamp_min(clamp_max((\n  (\n    sum by (method) (\n  rate(registry_http_request_duration_seconds_bucket{le=\"+Inf\",method!=\"\",route=\"/v2/{name}/blobs/{digest}\"}[$__interval])\n)\n\n    -\n    (\n      (\n  sum by (method) (\n    rate(registry_http_request_duration_seconds_bucket{le=\"2.5\",method!=\"\",route=\"/v2/{name}/blobs/{digest}\"}[$__interval])\n  )\n  +\n  sum by (method) (\n    rate(registry_http_request_duration_seconds_bucket{le=\"25\",method!=\"\",route=\"/v2/{name}/blobs/{digest}\"}[$__interval])\n  )\n)\n/\n2\n\n    )\n  )\n  / ignoring(method) group_left()\n  (\n    sum by () (\n  rate(registry_http_request_duration_seconds_bucket{le=\"+Inf\",method!=\"\",route=\"/v2/{name}/blobs/{digest}\"}[$__interval])\n)\n\n  )\n) \u003e 0\n,1),0)\n",
+              "expr": "clamp_min(clamp_max((\n  (\n    sum by (method) (\n  rate(registry_http_request_duration_seconds_bucket{le=\"+Inf\",method!=\"\",route=\"/v2/{name}/blobs/{digest}\",type!=\"ops-gitlab-net\"}[$__interval])\n)\n\n    -\n    (\n      (\n  sum by (method) (\n    rate(registry_http_request_duration_seconds_bucket{le=\"2.5\",method!=\"\",route=\"/v2/{name}/blobs/{digest}\",type!=\"ops-gitlab-net\"}[$__interval])\n  )\n  +\n  sum by (method) (\n    rate(registry_http_request_duration_seconds_bucket{le=\"25\",method!=\"\",route=\"/v2/{name}/blobs/{digest}\",type!=\"ops-gitlab-net\"}[$__interval])\n  )\n)\n/\n2\n\n    )\n  )\n  / ignoring(method) group_left()\n  (\n    sum by () (\n  rate(registry_http_request_duration_seconds_bucket{le=\"+Inf\",method!=\"\",route=\"/v2/{name}/blobs/{digest}\",type!=\"ops-gitlab-net\"}[$__interval])\n)\n\n  )\n) \u003e 0\n,1),0)\n",
               "format": "time_series",
               "interval": "1m",
               "intervalFactor": 1,
@@ -7227,7 +7227,7 @@
           "steppedLine": false,
           "targets": [
             {
-              "expr": "sum by (method) (\n  rate(registry_http_request_duration_seconds_count{method=~\"patch|post|put\",route=\"/v2/{name}/blobs/{digest}\"}[$__interval])\n)\n \u003e 0",
+              "expr": "sum by (method) (\n  rate(registry_http_request_duration_seconds_count{method=~\"patch|post|put\",route=\"/v2/{name}/blobs/{digest}\",type!=\"ops-gitlab-net\"}[$__interval])\n)\n \u003e 0",
               "format": "time_series",
               "interval": "1m",
               "intervalFactor": 1,
@@ -7323,7 +7323,7 @@
           "steppedLine": false,
           "targets": [
             {
-              "expr": "histogram_quantile(\n  0.950000,\n  sum by (le) (\n    rate(registry_http_request_duration_seconds_bucket{method=~\"delete\",route=\"/v2/{name}/blobs/uploads/{uuid}\"}[$__interval])\n  )\n)\n \u003e 0",
+              "expr": "histogram_quantile(\n  0.950000,\n  sum by (le) (\n    rate(registry_http_request_duration_seconds_bucket{method=~\"delete\",route=\"/v2/{name}/blobs/uploads/{uuid}\",type!=\"ops-gitlab-net\"}[$__interval])\n  )\n)\n \u003e 0",
               "format": "time_series",
               "interval": "1m",
               "intervalFactor": 1,
@@ -7419,7 +7419,7 @@
           "steppedLine": false,
           "targets": [
             {
-              "expr": "sum by () (\n  rate(registry_http_request_duration_seconds_count{method=~\"delete\",route=\"/v2/{name}/blobs/uploads/{uuid}\"}[$__interval])\n)\n \u003e 0",
+              "expr": "sum by () (\n  rate(registry_http_request_duration_seconds_count{method=~\"delete\",route=\"/v2/{name}/blobs/uploads/{uuid}\",type!=\"ops-gitlab-net\"}[$__interval])\n)\n \u003e 0",
               "format": "time_series",
               "interval": "1m",
               "intervalFactor": 1,
@@ -7495,7 +7495,7 @@
           "steppedLine": false,
           "targets": [
             {
-              "expr": "histogram_quantile(\n  0.950000,\n  sum by (le,method) (\n    rate(registry_http_request_duration_seconds_bucket{method!=\"\",route=\"/v2/{name}/blobs/uploads/{uuid}\"}[$__interval])\n  )\n)\n \u003e 0",
+              "expr": "histogram_quantile(\n  0.950000,\n  sum by (le,method) (\n    rate(registry_http_request_duration_seconds_bucket{method!=\"\",route=\"/v2/{name}/blobs/uploads/{uuid}\",type!=\"ops-gitlab-net\"}[$__interval])\n  )\n)\n \u003e 0",
               "format": "time_series",
               "interval": "1m",
               "intervalFactor": 1,
@@ -7597,7 +7597,7 @@
           "steppedLine": false,
           "targets": [
             {
-              "expr": "clamp_min(clamp_max((\n  (\n    sum by (method) (\n  rate(registry_http_request_duration_seconds_bucket{le=\"+Inf\",method!=\"\",route=\"/v2/{name}/blobs/uploads/{uuid}\"}[$__interval])\n)\n\n    -\n    (\n      (\n  sum by (method) (\n    rate(registry_http_request_duration_seconds_bucket{le=\"2.5\",method!=\"\",route=\"/v2/{name}/blobs/uploads/{uuid}\"}[$__interval])\n  )\n  +\n  sum by (method) (\n    rate(registry_http_request_duration_seconds_bucket{le=\"5\",method!=\"\",route=\"/v2/{name}/blobs/uploads/{uuid}\"}[$__interval])\n  )\n)\n/\n2\n\n    )\n  )\n  / ignoring(method) group_left()\n  (\n    sum by () (\n  rate(registry_http_request_duration_seconds_bucket{le=\"+Inf\",method!=\"\",route=\"/v2/{name}/blobs/uploads/{uuid}\"}[$__interval])\n)\n\n  )\n) \u003e 0\n,1),0)\n",
+              "expr": "clamp_min(clamp_max((\n  (\n    sum by (method) (\n  rate(registry_http_request_duration_seconds_bucket{le=\"+Inf\",method!=\"\",route=\"/v2/{name}/blobs/uploads/{uuid}\",type!=\"ops-gitlab-net\"}[$__interval])\n)\n\n    -\n    (\n      (\n  sum by (method) (\n    rate(registry_http_request_duration_seconds_bucket{le=\"2.5\",method!=\"\",route=\"/v2/{name}/blobs/uploads/{uuid}\",type!=\"ops-gitlab-net\"}[$__interval])\n  )\n  +\n  sum by (method) (\n    rate(registry_http_request_duration_seconds_bucket{le=\"5\",method!=\"\",route=\"/v2/{name}/blobs/uploads/{uuid}\",type!=\"ops-gitlab-net\"}[$__interval])\n  )\n)\n/\n2\n\n    )\n  )\n  / ignoring(method) group_left()\n  (\n    sum by () (\n  rate(registry_http_request_duration_seconds_bucket{le=\"+Inf\",method!=\"\",route=\"/v2/{name}/blobs/uploads/{uuid}\",type!=\"ops-gitlab-net\"}[$__interval])\n)\n\n  )\n) \u003e 0\n,1),0)\n",
               "format": "time_series",
               "interval": "1m",
               "intervalFactor": 1,
@@ -7672,7 +7672,7 @@
           "steppedLine": false,
           "targets": [
             {
-              "expr": "sum by (method) (\n  rate(registry_http_request_duration_seconds_count{method=~\"delete\",route=\"/v2/{name}/blobs/uploads/{uuid}\"}[$__interval])\n)\n \u003e 0",
+              "expr": "sum by (method) (\n  rate(registry_http_request_duration_seconds_count{method=~\"delete\",route=\"/v2/{name}/blobs/uploads/{uuid}\",type!=\"ops-gitlab-net\"}[$__interval])\n)\n \u003e 0",
               "format": "time_series",
               "interval": "1m",
               "intervalFactor": 1,
@@ -7768,7 +7768,7 @@
           "steppedLine": false,
           "targets": [
             {
-              "expr": "histogram_quantile(\n  0.950000,\n  sum by (le) (\n    rate(registry_http_request_duration_seconds_bucket{method=~\"get|head\",route=\"/v2/{name}/blobs/uploads/{uuid}\"}[$__interval])\n  )\n)\n \u003e 0",
+              "expr": "histogram_quantile(\n  0.950000,\n  sum by (le) (\n    rate(registry_http_request_duration_seconds_bucket{method=~\"get|head\",route=\"/v2/{name}/blobs/uploads/{uuid}\",type!=\"ops-gitlab-net\"}[$__interval])\n  )\n)\n \u003e 0",
               "format": "time_series",
               "interval": "1m",
               "intervalFactor": 1,
@@ -7864,7 +7864,7 @@
           "steppedLine": false,
           "targets": [
             {
-              "expr": "sum by () (\n  rate(registry_http_request_duration_seconds_count{method=~\"get|head\",route=\"/v2/{name}/blobs/uploads/{uuid}\"}[$__interval])\n)\n \u003e 0",
+              "expr": "sum by () (\n  rate(registry_http_request_duration_seconds_count{method=~\"get|head\",route=\"/v2/{name}/blobs/uploads/{uuid}\",type!=\"ops-gitlab-net\"}[$__interval])\n)\n \u003e 0",
               "format": "time_series",
               "interval": "1m",
               "intervalFactor": 1,
@@ -7940,7 +7940,7 @@
           "steppedLine": false,
           "targets": [
             {
-              "expr": "histogram_quantile(\n  0.950000,\n  sum by (le,method) (\n    rate(registry_http_request_duration_seconds_bucket{method!=\"\",route=\"/v2/{name}/blobs/uploads/{uuid}\"}[$__interval])\n  )\n)\n \u003e 0",
+              "expr": "histogram_quantile(\n  0.950000,\n  sum by (le,method) (\n    rate(registry_http_request_duration_seconds_bucket{method!=\"\",route=\"/v2/{name}/blobs/uploads/{uuid}\",type!=\"ops-gitlab-net\"}[$__interval])\n  )\n)\n \u003e 0",
               "format": "time_series",
               "interval": "1m",
               "intervalFactor": 1,
@@ -8042,7 +8042,7 @@
           "steppedLine": false,
           "targets": [
             {
-              "expr": "clamp_min(clamp_max((\n  (\n    sum by (method) (\n  rate(registry_http_request_duration_seconds_bucket{le=\"+Inf\",method!=\"\",route=\"/v2/{name}/blobs/uploads/{uuid}\"}[$__interval])\n)\n\n    -\n    (\n      (\n  sum by (method) (\n    rate(registry_http_request_duration_seconds_bucket{le=\"1\",method!=\"\",route=\"/v2/{name}/blobs/uploads/{uuid}\"}[$__interval])\n  )\n  +\n  sum by (method) (\n    rate(registry_http_request_duration_seconds_bucket{le=\"2.5\",method!=\"\",route=\"/v2/{name}/blobs/uploads/{uuid}\"}[$__interval])\n  )\n)\n/\n2\n\n    )\n  )\n  / ignoring(method) group_left()\n  (\n    sum by () (\n  rate(registry_http_request_duration_seconds_bucket{le=\"+Inf\",method!=\"\",route=\"/v2/{name}/blobs/uploads/{uuid}\"}[$__interval])\n)\n\n  )\n) \u003e 0\n,1),0)\n",
+              "expr": "clamp_min(clamp_max((\n  (\n    sum by (method) (\n  rate(registry_http_request_duration_seconds_bucket{le=\"+Inf\",method!=\"\",route=\"/v2/{name}/blobs/uploads/{uuid}\",type!=\"ops-gitlab-net\"}[$__interval])\n)\n\n    -\n    (\n      (\n  sum by (method) (\n    rate(registry_http_request_duration_seconds_bucket{le=\"1\",method!=\"\",route=\"/v2/{name}/blobs/uploads/{uuid}\",type!=\"ops-gitlab-net\"}[$__interval])\n  )\n  +\n  sum by (method) (\n    rate(registry_http_request_duration_seconds_bucket{le=\"2.5\",method!=\"\",route=\"/v2/{name}/blobs/uploads/{uuid}\",type!=\"ops-gitlab-net\"}[$__interval])\n  )\n)\n/\n2\n\n    )\n  )\n  / ignoring(method) group_left()\n  (\n    sum by () (\n  rate(registry_http_request_duration_seconds_bucket{le=\"+Inf\",method!=\"\",route=\"/v2/{name}/blobs/uploads/{uuid}\",type!=\"ops-gitlab-net\"}[$__interval])\n)\n\n  )\n) \u003e 0\n,1),0)\n",
               "format": "time_series",
               "interval": "1m",
               "intervalFactor": 1,
@@ -8117,7 +8117,7 @@
           "steppedLine": false,
           "targets": [
             {
-              "expr": "sum by (method) (\n  rate(registry_http_request_duration_seconds_count{method=~\"get|head\",route=\"/v2/{name}/blobs/uploads/{uuid}\"}[$__interval])\n)\n \u003e 0",
+              "expr": "sum by (method) (\n  rate(registry_http_request_duration_seconds_count{method=~\"get|head\",route=\"/v2/{name}/blobs/uploads/{uuid}\",type!=\"ops-gitlab-net\"}[$__interval])\n)\n \u003e 0",
               "format": "time_series",
               "interval": "1m",
               "intervalFactor": 1,
@@ -8213,7 +8213,7 @@
           "steppedLine": false,
           "targets": [
             {
-              "expr": "histogram_quantile(\n  0.950000,\n  sum by (le) (\n    rate(registry_http_request_duration_seconds_bucket{method=~\"put|patch|post\",route=\"/v2/{name}/blobs/uploads/{uuid}\"}[$__interval])\n  )\n)\n \u003e 0",
+              "expr": "histogram_quantile(\n  0.950000,\n  sum by (le) (\n    rate(registry_http_request_duration_seconds_bucket{method=~\"put|patch|post\",route=\"/v2/{name}/blobs/uploads/{uuid}\",type!=\"ops-gitlab-net\"}[$__interval])\n  )\n)\n \u003e 0",
               "format": "time_series",
               "interval": "1m",
               "intervalFactor": 1,
@@ -8309,7 +8309,7 @@
           "steppedLine": false,
           "targets": [
             {
-              "expr": "sum by () (\n  rate(registry_http_request_duration_seconds_count{method=~\"put|patch|post\",route=\"/v2/{name}/blobs/uploads/{uuid}\"}[$__interval])\n)\n \u003e 0",
+              "expr": "sum by () (\n  rate(registry_http_request_duration_seconds_count{method=~\"put|patch|post\",route=\"/v2/{name}/blobs/uploads/{uuid}\",type!=\"ops-gitlab-net\"}[$__interval])\n)\n \u003e 0",
               "format": "time_series",
               "interval": "1m",
               "intervalFactor": 1,
@@ -8385,7 +8385,7 @@
           "steppedLine": false,
           "targets": [
             {
-              "expr": "histogram_quantile(\n  0.950000,\n  sum by (le,method) (\n    rate(registry_http_request_duration_seconds_bucket{method!=\"\",route=\"/v2/{name}/blobs/uploads/{uuid}\"}[$__interval])\n  )\n)\n \u003e 0",
+              "expr": "histogram_quantile(\n  0.950000,\n  sum by (le,method) (\n    rate(registry_http_request_duration_seconds_bucket{method!=\"\",route=\"/v2/{name}/blobs/uploads/{uuid}\",type!=\"ops-gitlab-net\"}[$__interval])\n  )\n)\n \u003e 0",
               "format": "time_series",
               "interval": "1m",
               "intervalFactor": 1,
@@ -8487,7 +8487,7 @@
           "steppedLine": false,
           "targets": [
             {
-              "expr": "clamp_min(clamp_max((\n  (\n    sum by (method) (\n  rate(registry_http_request_duration_seconds_bucket{le=\"+Inf\",method!=\"\",route=\"/v2/{name}/blobs/uploads/{uuid}\"}[$__interval])\n)\n\n    -\n    (\n      (\n  sum by (method) (\n    rate(registry_http_request_duration_seconds_bucket{le=\"25\",method!=\"\",route=\"/v2/{name}/blobs/uploads/{uuid}\"}[$__interval])\n  )\n  +\n  sum by (method) (\n    rate(registry_http_request_duration_seconds_bucket{le=\"60\",method!=\"\",route=\"/v2/{name}/blobs/uploads/{uuid}\"}[$__interval])\n  )\n)\n/\n2\n\n    )\n  )\n  / ignoring(method) group_left()\n  (\n    sum by () (\n  rate(registry_http_request_duration_seconds_bucket{le=\"+Inf\",method!=\"\",route=\"/v2/{name}/blobs/uploads/{uuid}\"}[$__interval])\n)\n\n  )\n) \u003e 0\n,1),0)\n",
+              "expr": "clamp_min(clamp_max((\n  (\n    sum by (method) (\n  rate(registry_http_request_duration_seconds_bucket{le=\"+Inf\",method!=\"\",route=\"/v2/{name}/blobs/uploads/{uuid}\",type!=\"ops-gitlab-net\"}[$__interval])\n)\n\n    -\n    (\n      (\n  sum by (method) (\n    rate(registry_http_request_duration_seconds_bucket{le=\"25\",method!=\"\",route=\"/v2/{name}/blobs/uploads/{uuid}\",type!=\"ops-gitlab-net\"}[$__interval])\n  )\n  +\n  sum by (method) (\n    rate(registry_http_request_duration_seconds_bucket{le=\"60\",method!=\"\",route=\"/v2/{name}/blobs/uploads/{uuid}\",type!=\"ops-gitlab-net\"}[$__interval])\n  )\n)\n/\n2\n\n    )\n  )\n  / ignoring(method) group_left()\n  (\n    sum by () (\n  rate(registry_http_request_duration_seconds_bucket{le=\"+Inf\",method!=\"\",route=\"/v2/{name}/blobs/uploads/{uuid}\",type!=\"ops-gitlab-net\"}[$__interval])\n)\n\n  )\n) \u003e 0\n,1),0)\n",
               "format": "time_series",
               "interval": "1m",
               "intervalFactor": 1,
@@ -8562,7 +8562,7 @@
           "steppedLine": false,
           "targets": [
             {
-              "expr": "sum by (method) (\n  rate(registry_http_request_duration_seconds_count{method=~\"put|patch|post\",route=\"/v2/{name}/blobs/uploads/{uuid}\"}[$__interval])\n)\n \u003e 0",
+              "expr": "sum by (method) (\n  rate(registry_http_request_duration_seconds_count{method=~\"put|patch|post\",route=\"/v2/{name}/blobs/uploads/{uuid}\",type!=\"ops-gitlab-net\"}[$__interval])\n)\n \u003e 0",
               "format": "time_series",
               "interval": "1m",
               "intervalFactor": 1,

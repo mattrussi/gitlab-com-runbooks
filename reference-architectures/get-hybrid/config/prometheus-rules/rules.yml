@@ -890,11 +890,11 @@ groups:
   - expr: |
       (
         sum by () (
-          rate(registry_http_request_duration_seconds_bucket{le="0.5",method=~"delete",route="/v2/{name}/blobs/{digest}"}[5m])
+          rate(registry_http_request_duration_seconds_bucket{le="0.5",method=~"delete",route="/v2/{name}/blobs/{digest}",type!="ops-gitlab-net"}[5m])
         )
         +
         sum by () (
-          rate(registry_http_request_duration_seconds_bucket{le="2.5",method=~"delete",route="/v2/{name}/blobs/{digest}"}[5m])
+          rate(registry_http_request_duration_seconds_bucket{le="2.5",method=~"delete",route="/v2/{name}/blobs/{digest}",type!="ops-gitlab-net"}[5m])
         )
       )
       /
@@ -906,7 +906,7 @@ groups:
     record: gitlab_component_apdex:success:rate_5m
   - expr: |
       sum by () (
-        rate(registry_http_request_duration_seconds_bucket{le="+Inf",method=~"delete",route="/v2/{name}/blobs/{digest}"}[5m])
+        rate(registry_http_request_duration_seconds_bucket{le="+Inf",method=~"delete",route="/v2/{name}/blobs/{digest}",type!="ops-gitlab-net"}[5m])
       )
     labels:
       component: server_route_blob_digest_deletes
@@ -915,7 +915,7 @@ groups:
     record: gitlab_component_apdex:weight:score_5m
   - expr: |
       sum by () (
-        rate(registry_http_request_duration_seconds_count{method=~"delete",route="/v2/{name}/blobs/{digest}"}[5m])
+        rate(registry_http_request_duration_seconds_count{method=~"delete",route="/v2/{name}/blobs/{digest}",type!="ops-gitlab-net"}[5m])
       )
     labels:
       component: server_route_blob_digest_deletes
@@ -925,11 +925,11 @@ groups:
   - expr: |
       (
         sum by () (
-          rate(registry_http_request_duration_seconds_bucket{le="10",method=~"get|head",route="/v2/{name}/blobs/{digest}"}[5m])
+          rate(registry_http_request_duration_seconds_bucket{le="10",method=~"get|head",route="/v2/{name}/blobs/{digest}",type!="ops-gitlab-net"}[5m])
         )
         +
         sum by () (
-          rate(registry_http_request_duration_seconds_bucket{le="60",method=~"get|head",route="/v2/{name}/blobs/{digest}"}[5m])
+          rate(registry_http_request_duration_seconds_bucket{le="60",method=~"get|head",route="/v2/{name}/blobs/{digest}",type!="ops-gitlab-net"}[5m])
         )
       )
       /
@@ -941,7 +941,7 @@ groups:
     record: gitlab_component_apdex:success:rate_5m
   - expr: |
       sum by () (
-        rate(registry_http_request_duration_seconds_bucket{le="+Inf",method=~"get|head",route="/v2/{name}/blobs/{digest}"}[5m])
+        rate(registry_http_request_duration_seconds_bucket{le="+Inf",method=~"get|head",route="/v2/{name}/blobs/{digest}",type!="ops-gitlab-net"}[5m])
       )
     labels:
       component: server_route_blob_digest_reads
@@ -950,7 +950,7 @@ groups:
     record: gitlab_component_apdex:weight:score_5m
   - expr: |
       sum by () (
-        rate(registry_http_request_duration_seconds_count{method=~"get|head",route="/v2/{name}/blobs/{digest}"}[5m])
+        rate(registry_http_request_duration_seconds_count{method=~"get|head",route="/v2/{name}/blobs/{digest}",type!="ops-gitlab-net"}[5m])
       )
     labels:
       component: server_route_blob_digest_reads
@@ -960,11 +960,11 @@ groups:
   - expr: |
       (
         sum by () (
-          rate(registry_http_request_duration_seconds_bucket{le="2.5",method=~"patch|post|put",route="/v2/{name}/blobs/{digest}"}[5m])
+          rate(registry_http_request_duration_seconds_bucket{le="2.5",method=~"patch|post|put",route="/v2/{name}/blobs/{digest}",type!="ops-gitlab-net"}[5m])
         )
         +
         sum by () (
-          rate(registry_http_request_duration_seconds_bucket{le="25",method=~"patch|post|put",route="/v2/{name}/blobs/{digest}"}[5m])
+          rate(registry_http_request_duration_seconds_bucket{le="25",method=~"patch|post|put",route="/v2/{name}/blobs/{digest}",type!="ops-gitlab-net"}[5m])
         )
       )
       /
@@ -976,7 +976,7 @@ groups:
     record: gitlab_component_apdex:success:rate_5m
   - expr: |
       sum by () (
-        rate(registry_http_request_duration_seconds_bucket{le="+Inf",method=~"patch|post|put",route="/v2/{name}/blobs/{digest}"}[5m])
+        rate(registry_http_request_duration_seconds_bucket{le="+Inf",method=~"patch|post|put",route="/v2/{name}/blobs/{digest}",type!="ops-gitlab-net"}[5m])
       )
     labels:
       component: server_route_blob_digest_writes
@@ -985,7 +985,7 @@ groups:
     record: gitlab_component_apdex:weight:score_5m
   - expr: |
       sum by () (
-        rate(registry_http_request_duration_seconds_count{method=~"patch|post|put",route="/v2/{name}/blobs/{digest}"}[5m])
+        rate(registry_http_request_duration_seconds_count{method=~"patch|post|put",route="/v2/{name}/blobs/{digest}",type!="ops-gitlab-net"}[5m])
       )
     labels:
       component: server_route_blob_digest_writes
@@ -995,11 +995,11 @@ groups:
   - expr: |
       (
         sum by () (
-          rate(registry_http_request_duration_seconds_bucket{le="2.5",method=~"delete",route="/v2/{name}/blobs/uploads/{uuid}"}[5m])
+          rate(registry_http_request_duration_seconds_bucket{le="2.5",method=~"delete",route="/v2/{name}/blobs/uploads/{uuid}",type!="ops-gitlab-net"}[5m])
         )
         +
         sum by () (
-          rate(registry_http_request_duration_seconds_bucket{le="5",method=~"delete",route="/v2/{name}/blobs/uploads/{uuid}"}[5m])
+          rate(registry_http_request_duration_seconds_bucket{le="5",method=~"delete",route="/v2/{name}/blobs/uploads/{uuid}",type!="ops-gitlab-net"}[5m])
         )
       )
       /
@@ -1011,7 +1011,7 @@ groups:
     record: gitlab_component_apdex:success:rate_5m
   - expr: |
       sum by () (
-        rate(registry_http_request_duration_seconds_bucket{le="+Inf",method=~"delete",route="/v2/{name}/blobs/uploads/{uuid}"}[5m])
+        rate(registry_http_request_duration_seconds_bucket{le="+Inf",method=~"delete",route="/v2/{name}/blobs/uploads/{uuid}",type!="ops-gitlab-net"}[5m])
       )
     labels:
       component: server_route_blob_upload_uuid_deletes
@@ -1020,7 +1020,7 @@ groups:
     record: gitlab_component_apdex:weight:score_5m
   - expr: |
       sum by () (
-        rate(registry_http_request_duration_seconds_count{method=~"delete",route="/v2/{name}/blobs/uploads/{uuid}"}[5m])
+        rate(registry_http_request_duration_seconds_count{method=~"delete",route="/v2/{name}/blobs/uploads/{uuid}",type!="ops-gitlab-net"}[5m])
       )
     labels:
       component: server_route_blob_upload_uuid_deletes
@@ -1030,11 +1030,11 @@ groups:
   - expr: |
       (
         sum by () (
-          rate(registry_http_request_duration_seconds_bucket{le="1",method=~"get|head",route="/v2/{name}/blobs/uploads/{uuid}"}[5m])
+          rate(registry_http_request_duration_seconds_bucket{le="1",method=~"get|head",route="/v2/{name}/blobs/uploads/{uuid}",type!="ops-gitlab-net"}[5m])
         )
         +
         sum by () (
-          rate(registry_http_request_duration_seconds_bucket{le="2.5",method=~"get|head",route="/v2/{name}/blobs/uploads/{uuid}"}[5m])
+          rate(registry_http_request_duration_seconds_bucket{le="2.5",method=~"get|head",route="/v2/{name}/blobs/uploads/{uuid}",type!="ops-gitlab-net"}[5m])
         )
       )
       /
@@ -1046,7 +1046,7 @@ groups:
     record: gitlab_component_apdex:success:rate_5m
   - expr: |
       sum by () (
-        rate(registry_http_request_duration_seconds_bucket{le="+Inf",method=~"get|head",route="/v2/{name}/blobs/uploads/{uuid}"}[5m])
+        rate(registry_http_request_duration_seconds_bucket{le="+Inf",method=~"get|head",route="/v2/{name}/blobs/uploads/{uuid}",type!="ops-gitlab-net"}[5m])
       )
     labels:
       component: server_route_blob_upload_uuid_reads
@@ -1055,7 +1055,7 @@ groups:
     record: gitlab_component_apdex:weight:score_5m
   - expr: |
       sum by () (
-        rate(registry_http_request_duration_seconds_count{method=~"get|head",route="/v2/{name}/blobs/uploads/{uuid}"}[5m])
+        rate(registry_http_request_duration_seconds_count{method=~"get|head",route="/v2/{name}/blobs/uploads/{uuid}",type!="ops-gitlab-net"}[5m])
       )
     labels:
       component: server_route_blob_upload_uuid_reads
@@ -1065,11 +1065,11 @@ groups:
   - expr: |
       (
         sum by () (
-          rate(registry_http_request_duration_seconds_bucket{le="25",method=~"put|patch|post",route="/v2/{name}/blobs/uploads/{uuid}"}[5m])
+          rate(registry_http_request_duration_seconds_bucket{le="25",method=~"put|patch|post",route="/v2/{name}/blobs/uploads/{uuid}",type!="ops-gitlab-net"}[5m])
         )
         +
         sum by () (
-          rate(registry_http_request_duration_seconds_bucket{le="60",method=~"put|patch|post",route="/v2/{name}/blobs/uploads/{uuid}"}[5m])
+          rate(registry_http_request_duration_seconds_bucket{le="60",method=~"put|patch|post",route="/v2/{name}/blobs/uploads/{uuid}",type!="ops-gitlab-net"}[5m])
         )
       )
       /
@@ -1081,7 +1081,7 @@ groups:
     record: gitlab_component_apdex:success:rate_5m
   - expr: |
       sum by () (
-        rate(registry_http_request_duration_seconds_bucket{le="+Inf",method=~"put|patch|post",route="/v2/{name}/blobs/uploads/{uuid}"}[5m])
+        rate(registry_http_request_duration_seconds_bucket{le="+Inf",method=~"put|patch|post",route="/v2/{name}/blobs/uploads/{uuid}",type!="ops-gitlab-net"}[5m])
       )
     labels:
       component: server_route_blob_upload_uuid_writes
@@ -1090,7 +1090,7 @@ groups:
     record: gitlab_component_apdex:weight:score_5m
   - expr: |
       sum by () (
-        rate(registry_http_request_duration_seconds_count{method=~"put|patch|post",route="/v2/{name}/blobs/uploads/{uuid}"}[5m])
+        rate(registry_http_request_duration_seconds_count{method=~"put|patch|post",route="/v2/{name}/blobs/uploads/{uuid}",type!="ops-gitlab-net"}[5m])
       )
     labels:
       component: server_route_blob_upload_uuid_writes
@@ -1155,11 +1155,11 @@ groups:
   - expr: |
       (
         sum by () (
-          rate(registry_http_request_duration_seconds_bucket{le="0.5",method=~"delete",route="/v2/{name}/blobs/{digest}"}[30m])
+          rate(registry_http_request_duration_seconds_bucket{le="0.5",method=~"delete",route="/v2/{name}/blobs/{digest}",type!="ops-gitlab-net"}[30m])
         )
         +
         sum by () (
-          rate(registry_http_request_duration_seconds_bucket{le="2.5",method=~"delete",route="/v2/{name}/blobs/{digest}"}[30m])
+          rate(registry_http_request_duration_seconds_bucket{le="2.5",method=~"delete",route="/v2/{name}/blobs/{digest}",type!="ops-gitlab-net"}[30m])
         )
       )
       /
@@ -1171,7 +1171,7 @@ groups:
     record: gitlab_component_apdex:success:rate_30m
   - expr: |
       sum by () (
-        rate(registry_http_request_duration_seconds_bucket{le="+Inf",method=~"delete",route="/v2/{name}/blobs/{digest}"}[30m])
+        rate(registry_http_request_duration_seconds_bucket{le="+Inf",method=~"delete",route="/v2/{name}/blobs/{digest}",type!="ops-gitlab-net"}[30m])
       )
     labels:
       component: server_route_blob_digest_deletes
@@ -1180,7 +1180,7 @@ groups:
     record: gitlab_component_apdex:weight:score_30m
   - expr: |
       sum by () (
-        rate(registry_http_request_duration_seconds_count{method=~"delete",route="/v2/{name}/blobs/{digest}"}[30m])
+        rate(registry_http_request_duration_seconds_count{method=~"delete",route="/v2/{name}/blobs/{digest}",type!="ops-gitlab-net"}[30m])
       )
     labels:
       component: server_route_blob_digest_deletes
@@ -1190,11 +1190,11 @@ groups:
   - expr: |
       (
         sum by () (
-          rate(registry_http_request_duration_seconds_bucket{le="10",method=~"get|head",route="/v2/{name}/blobs/{digest}"}[30m])
+          rate(registry_http_request_duration_seconds_bucket{le="10",method=~"get|head",route="/v2/{name}/blobs/{digest}",type!="ops-gitlab-net"}[30m])
         )
         +
         sum by () (
-          rate(registry_http_request_duration_seconds_bucket{le="60",method=~"get|head",route="/v2/{name}/blobs/{digest}"}[30m])
+          rate(registry_http_request_duration_seconds_bucket{le="60",method=~"get|head",route="/v2/{name}/blobs/{digest}",type!="ops-gitlab-net"}[30m])
         )
       )
       /
@@ -1206,7 +1206,7 @@ groups:
     record: gitlab_component_apdex:success:rate_30m
   - expr: |
       sum by () (
-        rate(registry_http_request_duration_seconds_bucket{le="+Inf",method=~"get|head",route="/v2/{name}/blobs/{digest}"}[30m])
+        rate(registry_http_request_duration_seconds_bucket{le="+Inf",method=~"get|head",route="/v2/{name}/blobs/{digest}",type!="ops-gitlab-net"}[30m])
       )
     labels:
       component: server_route_blob_digest_reads
@@ -1215,7 +1215,7 @@ groups:
     record: gitlab_component_apdex:weight:score_30m
   - expr: |
       sum by () (
-        rate(registry_http_request_duration_seconds_count{method=~"get|head",route="/v2/{name}/blobs/{digest}"}[30m])
+        rate(registry_http_request_duration_seconds_count{method=~"get|head",route="/v2/{name}/blobs/{digest}",type!="ops-gitlab-net"}[30m])
       )
     labels:
       component: server_route_blob_digest_reads
@@ -1225,11 +1225,11 @@ groups:
   - expr: |
       (
         sum by () (
-          rate(registry_http_request_duration_seconds_bucket{le="2.5",method=~"patch|post|put",route="/v2/{name}/blobs/{digest}"}[30m])
+          rate(registry_http_request_duration_seconds_bucket{le="2.5",method=~"patch|post|put",route="/v2/{name}/blobs/{digest}",type!="ops-gitlab-net"}[30m])
         )
         +
         sum by () (
-          rate(registry_http_request_duration_seconds_bucket{le="25",method=~"patch|post|put",route="/v2/{name}/blobs/{digest}"}[30m])
+          rate(registry_http_request_duration_seconds_bucket{le="25",method=~"patch|post|put",route="/v2/{name}/blobs/{digest}",type!="ops-gitlab-net"}[30m])
         )
       )
       /
@@ -1241,7 +1241,7 @@ groups:
     record: gitlab_component_apdex:success:rate_30m
   - expr: |
       sum by () (
-        rate(registry_http_request_duration_seconds_bucket{le="+Inf",method=~"patch|post|put",route="/v2/{name}/blobs/{digest}"}[30m])
+        rate(registry_http_request_duration_seconds_bucket{le="+Inf",method=~"patch|post|put",route="/v2/{name}/blobs/{digest}",type!="ops-gitlab-net"}[30m])
       )
     labels:
       component: server_route_blob_digest_writes
@@ -1250,7 +1250,7 @@ groups:
     record: gitlab_component_apdex:weight:score_30m
   - expr: |
       sum by () (
-        rate(registry_http_request_duration_seconds_count{method=~"patch|post|put",route="/v2/{name}/blobs/{digest}"}[30m])
+        rate(registry_http_request_duration_seconds_count{method=~"patch|post|put",route="/v2/{name}/blobs/{digest}",type!="ops-gitlab-net"}[30m])
       )
     labels:
       component: server_route_blob_digest_writes
@@ -1260,11 +1260,11 @@ groups:
   - expr: |
       (
         sum by () (
-          rate(registry_http_request_duration_seconds_bucket{le="2.5",method=~"delete",route="/v2/{name}/blobs/uploads/{uuid}"}[30m])
+          rate(registry_http_request_duration_seconds_bucket{le="2.5",method=~"delete",route="/v2/{name}/blobs/uploads/{uuid}",type!="ops-gitlab-net"}[30m])
         )
         +
         sum by () (
-          rate(registry_http_request_duration_seconds_bucket{le="5",method=~"delete",route="/v2/{name}/blobs/uploads/{uuid}"}[30m])
+          rate(registry_http_request_duration_seconds_bucket{le="5",method=~"delete",route="/v2/{name}/blobs/uploads/{uuid}",type!="ops-gitlab-net"}[30m])
         )
       )
       /
@@ -1276,7 +1276,7 @@ groups:
     record: gitlab_component_apdex:success:rate_30m
   - expr: |
       sum by () (
-        rate(registry_http_request_duration_seconds_bucket{le="+Inf",method=~"delete",route="/v2/{name}/blobs/uploads/{uuid}"}[30m])
+        rate(registry_http_request_duration_seconds_bucket{le="+Inf",method=~"delete",route="/v2/{name}/blobs/uploads/{uuid}",type!="ops-gitlab-net"}[30m])
       )
     labels:
       component: server_route_blob_upload_uuid_deletes
@@ -1285,7 +1285,7 @@ groups:
     record: gitlab_component_apdex:weight:score_30m
   - expr: |
       sum by () (
-        rate(registry_http_request_duration_seconds_count{method=~"delete",route="/v2/{name}/blobs/uploads/{uuid}"}[30m])
+        rate(registry_http_request_duration_seconds_count{method=~"delete",route="/v2/{name}/blobs/uploads/{uuid}",type!="ops-gitlab-net"}[30m])
       )
     labels:
       component: server_route_blob_upload_uuid_deletes
@@ -1295,11 +1295,11 @@ groups:
   - expr: |
       (
         sum by () (
-          rate(registry_http_request_duration_seconds_bucket{le="1",method=~"get|head",route="/v2/{name}/blobs/uploads/{uuid}"}[30m])
+          rate(registry_http_request_duration_seconds_bucket{le="1",method=~"get|head",route="/v2/{name}/blobs/uploads/{uuid}",type!="ops-gitlab-net"}[30m])
         )
         +
         sum by () (
-          rate(registry_http_request_duration_seconds_bucket{le="2.5",method=~"get|head",route="/v2/{name}/blobs/uploads/{uuid}"}[30m])
+          rate(registry_http_request_duration_seconds_bucket{le="2.5",method=~"get|head",route="/v2/{name}/blobs/uploads/{uuid}",type!="ops-gitlab-net"}[30m])
         )
       )
       /
@@ -1311,7 +1311,7 @@ groups:
     record: gitlab_component_apdex:success:rate_30m
   - expr: |
       sum by () (
-        rate(registry_http_request_duration_seconds_bucket{le="+Inf",method=~"get|head",route="/v2/{name}/blobs/uploads/{uuid}"}[30m])
+        rate(registry_http_request_duration_seconds_bucket{le="+Inf",method=~"get|head",route="/v2/{name}/blobs/uploads/{uuid}",type!="ops-gitlab-net"}[30m])
       )
     labels:
       component: server_route_blob_upload_uuid_reads
@@ -1320,7 +1320,7 @@ groups:
     record: gitlab_component_apdex:weight:score_30m
   - expr: |
       sum by () (
-        rate(registry_http_request_duration_seconds_count{method=~"get|head",route="/v2/{name}/blobs/uploads/{uuid}"}[30m])
+        rate(registry_http_request_duration_seconds_count{method=~"get|head",route="/v2/{name}/blobs/uploads/{uuid}",type!="ops-gitlab-net"}[30m])
       )
     labels:
       component: server_route_blob_upload_uuid_reads
@@ -1330,11 +1330,11 @@ groups:
   - expr: |
       (
         sum by () (
-          rate(registry_http_request_duration_seconds_bucket{le="25",method=~"put|patch|post",route="/v2/{name}/blobs/uploads/{uuid}"}[30m])
+          rate(registry_http_request_duration_seconds_bucket{le="25",method=~"put|patch|post",route="/v2/{name}/blobs/uploads/{uuid}",type!="ops-gitlab-net"}[30m])
         )
         +
         sum by () (
-          rate(registry_http_request_duration_seconds_bucket{le="60",method=~"put|patch|post",route="/v2/{name}/blobs/uploads/{uuid}"}[30m])
+          rate(registry_http_request_duration_seconds_bucket{le="60",method=~"put|patch|post",route="/v2/{name}/blobs/uploads/{uuid}",type!="ops-gitlab-net"}[30m])
         )
       )
       /
@@ -1346,7 +1346,7 @@ groups:
     record: gitlab_component_apdex:success:rate_30m
   - expr: |
       sum by () (
-        rate(registry_http_request_duration_seconds_bucket{le="+Inf",method=~"put|patch|post",route="/v2/{name}/blobs/uploads/{uuid}"}[30m])
+        rate(registry_http_request_duration_seconds_bucket{le="+Inf",method=~"put|patch|post",route="/v2/{name}/blobs/uploads/{uuid}",type!="ops-gitlab-net"}[30m])
       )
     labels:
       component: server_route_blob_upload_uuid_writes
@@ -1355,7 +1355,7 @@ groups:
     record: gitlab_component_apdex:weight:score_30m
   - expr: |
       sum by () (
-        rate(registry_http_request_duration_seconds_count{method=~"put|patch|post",route="/v2/{name}/blobs/uploads/{uuid}"}[30m])
+        rate(registry_http_request_duration_seconds_count{method=~"put|patch|post",route="/v2/{name}/blobs/uploads/{uuid}",type!="ops-gitlab-net"}[30m])
       )
     labels:
       component: server_route_blob_upload_uuid_writes
@@ -1420,11 +1420,11 @@ groups:
   - expr: |
       (
         sum by () (
-          rate(registry_http_request_duration_seconds_bucket{le="0.5",method=~"delete",route="/v2/{name}/blobs/{digest}"}[1h])
+          rate(registry_http_request_duration_seconds_bucket{le="0.5",method=~"delete",route="/v2/{name}/blobs/{digest}",type!="ops-gitlab-net"}[1h])
         )
         +
         sum by () (
-          rate(registry_http_request_duration_seconds_bucket{le="2.5",method=~"delete",route="/v2/{name}/blobs/{digest}"}[1h])
+          rate(registry_http_request_duration_seconds_bucket{le="2.5",method=~"delete",route="/v2/{name}/blobs/{digest}",type!="ops-gitlab-net"}[1h])
         )
       )
       /
@@ -1436,7 +1436,7 @@ groups:
     record: gitlab_component_apdex:success:rate_1h
   - expr: |
       sum by () (
-        rate(registry_http_request_duration_seconds_bucket{le="+Inf",method=~"delete",route="/v2/{name}/blobs/{digest}"}[1h])
+        rate(registry_http_request_duration_seconds_bucket{le="+Inf",method=~"delete",route="/v2/{name}/blobs/{digest}",type!="ops-gitlab-net"}[1h])
       )
     labels:
       component: server_route_blob_digest_deletes
@@ -1445,7 +1445,7 @@ groups:
     record: gitlab_component_apdex:weight:score_1h
   - expr: |
       sum by () (
-        rate(registry_http_request_duration_seconds_count{method=~"delete",route="/v2/{name}/blobs/{digest}"}[1h])
+        rate(registry_http_request_duration_seconds_count{method=~"delete",route="/v2/{name}/blobs/{digest}",type!="ops-gitlab-net"}[1h])
       )
     labels:
       component: server_route_blob_digest_deletes
@@ -1455,11 +1455,11 @@ groups:
   - expr: |
       (
         sum by () (
-          rate(registry_http_request_duration_seconds_bucket{le="10",method=~"get|head",route="/v2/{name}/blobs/{digest}"}[1h])
+          rate(registry_http_request_duration_seconds_bucket{le="10",method=~"get|head",route="/v2/{name}/blobs/{digest}",type!="ops-gitlab-net"}[1h])
         )
         +
         sum by () (
-          rate(registry_http_request_duration_seconds_bucket{le="60",method=~"get|head",route="/v2/{name}/blobs/{digest}"}[1h])
+          rate(registry_http_request_duration_seconds_bucket{le="60",method=~"get|head",route="/v2/{name}/blobs/{digest}",type!="ops-gitlab-net"}[1h])
         )
       )
       /
@@ -1471,7 +1471,7 @@ groups:
     record: gitlab_component_apdex:success:rate_1h
   - expr: |
       sum by () (
-        rate(registry_http_request_duration_seconds_bucket{le="+Inf",method=~"get|head",route="/v2/{name}/blobs/{digest}"}[1h])
+        rate(registry_http_request_duration_seconds_bucket{le="+Inf",method=~"get|head",route="/v2/{name}/blobs/{digest}",type!="ops-gitlab-net"}[1h])
       )
     labels:
       component: server_route_blob_digest_reads
@@ -1480,7 +1480,7 @@ groups:
     record: gitlab_component_apdex:weight:score_1h
   - expr: |
       sum by () (
-        rate(registry_http_request_duration_seconds_count{method=~"get|head",route="/v2/{name}/blobs/{digest}"}[1h])
+        rate(registry_http_request_duration_seconds_count{method=~"get|head",route="/v2/{name}/blobs/{digest}",type!="ops-gitlab-net"}[1h])
       )
     labels:
       component: server_route_blob_digest_reads
@@ -1490,11 +1490,11 @@ groups:
   - expr: |
       (
         sum by () (
-          rate(registry_http_request_duration_seconds_bucket{le="2.5",method=~"patch|post|put",route="/v2/{name}/blobs/{digest}"}[1h])
+          rate(registry_http_request_duration_seconds_bucket{le="2.5",method=~"patch|post|put",route="/v2/{name}/blobs/{digest}",type!="ops-gitlab-net"}[1h])
         )
         +
         sum by () (
-          rate(registry_http_request_duration_seconds_bucket{le="25",method=~"patch|post|put",route="/v2/{name}/blobs/{digest}"}[1h])
+          rate(registry_http_request_duration_seconds_bucket{le="25",method=~"patch|post|put",route="/v2/{name}/blobs/{digest}",type!="ops-gitlab-net"}[1h])
         )
       )
       /
@@ -1506,7 +1506,7 @@ groups:
     record: gitlab_component_apdex:success:rate_1h
   - expr: |
       sum by () (
-        rate(registry_http_request_duration_seconds_bucket{le="+Inf",method=~"patch|post|put",route="/v2/{name}/blobs/{digest}"}[1h])
+        rate(registry_http_request_duration_seconds_bucket{le="+Inf",method=~"patch|post|put",route="/v2/{name}/blobs/{digest}",type!="ops-gitlab-net"}[1h])
       )
     labels:
       component: server_route_blob_digest_writes
@@ -1515,7 +1515,7 @@ groups:
     record: gitlab_component_apdex:weight:score_1h
   - expr: |
       sum by () (
-        rate(registry_http_request_duration_seconds_count{method=~"patch|post|put",route="/v2/{name}/blobs/{digest}"}[1h])
+        rate(registry_http_request_duration_seconds_count{method=~"patch|post|put",route="/v2/{name}/blobs/{digest}",type!="ops-gitlab-net"}[1h])
       )
     labels:
       component: server_route_blob_digest_writes
@@ -1525,11 +1525,11 @@ groups:
   - expr: |
       (
         sum by () (
-          rate(registry_http_request_duration_seconds_bucket{le="2.5",method=~"delete",route="/v2/{name}/blobs/uploads/{uuid}"}[1h])
+          rate(registry_http_request_duration_seconds_bucket{le="2.5",method=~"delete",route="/v2/{name}/blobs/uploads/{uuid}",type!="ops-gitlab-net"}[1h])
         )
         +
         sum by () (
-          rate(registry_http_request_duration_seconds_bucket{le="5",method=~"delete",route="/v2/{name}/blobs/uploads/{uuid}"}[1h])
+          rate(registry_http_request_duration_seconds_bucket{le="5",method=~"delete",route="/v2/{name}/blobs/uploads/{uuid}",type!="ops-gitlab-net"}[1h])
         )
       )
       /
@@ -1541,7 +1541,7 @@ groups:
     record: gitlab_component_apdex:success:rate_1h
   - expr: |
       sum by () (
-        rate(registry_http_request_duration_seconds_bucket{le="+Inf",method=~"delete",route="/v2/{name}/blobs/uploads/{uuid}"}[1h])
+        rate(registry_http_request_duration_seconds_bucket{le="+Inf",method=~"delete",route="/v2/{name}/blobs/uploads/{uuid}",type!="ops-gitlab-net"}[1h])
       )
     labels:
       component: server_route_blob_upload_uuid_deletes
@@ -1550,7 +1550,7 @@ groups:
     record: gitlab_component_apdex:weight:score_1h
   - expr: |
       sum by () (
-        rate(registry_http_request_duration_seconds_count{method=~"delete",route="/v2/{name}/blobs/uploads/{uuid}"}[1h])
+        rate(registry_http_request_duration_seconds_count{method=~"delete",route="/v2/{name}/blobs/uploads/{uuid}",type!="ops-gitlab-net"}[1h])
       )
     labels:
       component: server_route_blob_upload_uuid_deletes
@@ -1560,11 +1560,11 @@ groups:
   - expr: |
       (
         sum by () (
-          rate(registry_http_request_duration_seconds_bucket{le="1",method=~"get|head",route="/v2/{name}/blobs/uploads/{uuid}"}[1h])
+          rate(registry_http_request_duration_seconds_bucket{le="1",method=~"get|head",route="/v2/{name}/blobs/uploads/{uuid}",type!="ops-gitlab-net"}[1h])
         )
         +
         sum by () (
-          rate(registry_http_request_duration_seconds_bucket{le="2.5",method=~"get|head",route="/v2/{name}/blobs/uploads/{uuid}"}[1h])
+          rate(registry_http_request_duration_seconds_bucket{le="2.5",method=~"get|head",route="/v2/{name}/blobs/uploads/{uuid}",type!="ops-gitlab-net"}[1h])
         )
       )
       /
@@ -1576,7 +1576,7 @@ groups:
     record: gitlab_component_apdex:success:rate_1h
   - expr: |
       sum by () (
-        rate(registry_http_request_duration_seconds_bucket{le="+Inf",method=~"get|head",route="/v2/{name}/blobs/uploads/{uuid}"}[1h])
+        rate(registry_http_request_duration_seconds_bucket{le="+Inf",method=~"get|head",route="/v2/{name}/blobs/uploads/{uuid}",type!="ops-gitlab-net"}[1h])
       )
     labels:
       component: server_route_blob_upload_uuid_reads
@@ -1585,7 +1585,7 @@ groups:
     record: gitlab_component_apdex:weight:score_1h
   - expr: |
       sum by () (
-        rate(registry_http_request_duration_seconds_count{method=~"get|head",route="/v2/{name}/blobs/uploads/{uuid}"}[1h])
+        rate(registry_http_request_duration_seconds_count{method=~"get|head",route="/v2/{name}/blobs/uploads/{uuid}",type!="ops-gitlab-net"}[1h])
       )
     labels:
       component: server_route_blob_upload_uuid_reads
@@ -1595,11 +1595,11 @@ groups:
   - expr: |
       (
         sum by () (
-          rate(registry_http_request_duration_seconds_bucket{le="25",method=~"put|patch|post",route="/v2/{name}/blobs/uploads/{uuid}"}[1h])
+          rate(registry_http_request_duration_seconds_bucket{le="25",method=~"put|patch|post",route="/v2/{name}/blobs/uploads/{uuid}",type!="ops-gitlab-net"}[1h])
         )
         +
         sum by () (
-          rate(registry_http_request_duration_seconds_bucket{le="60",method=~"put|patch|post",route="/v2/{name}/blobs/uploads/{uuid}"}[1h])
+          rate(registry_http_request_duration_seconds_bucket{le="60",method=~"put|patch|post",route="/v2/{name}/blobs/uploads/{uuid}",type!="ops-gitlab-net"}[1h])
         )
       )
       /
@@ -1611,7 +1611,7 @@ groups:
     record: gitlab_component_apdex:success:rate_1h
   - expr: |
       sum by () (
-        rate(registry_http_request_duration_seconds_bucket{le="+Inf",method=~"put|patch|post",route="/v2/{name}/blobs/uploads/{uuid}"}[1h])
+        rate(registry_http_request_duration_seconds_bucket{le="+Inf",method=~"put|patch|post",route="/v2/{name}/blobs/uploads/{uuid}",type!="ops-gitlab-net"}[1h])
       )
     labels:
       component: server_route_blob_upload_uuid_writes
@@ -1620,7 +1620,7 @@ groups:
     record: gitlab_component_apdex:weight:score_1h
   - expr: |
       sum by () (
-        rate(registry_http_request_duration_seconds_count{method=~"put|patch|post",route="/v2/{name}/blobs/uploads/{uuid}"}[1h])
+        rate(registry_http_request_duration_seconds_count{method=~"put|patch|post",route="/v2/{name}/blobs/uploads/{uuid}",type!="ops-gitlab-net"}[1h])
       )
     labels:
       component: server_route_blob_upload_uuid_writes
@@ -1685,11 +1685,11 @@ groups:
   - expr: |
       (
         sum by () (
-          rate(registry_http_request_duration_seconds_bucket{le="0.5",method=~"delete",route="/v2/{name}/blobs/{digest}"}[6h])
+          rate(registry_http_request_duration_seconds_bucket{le="0.5",method=~"delete",route="/v2/{name}/blobs/{digest}",type!="ops-gitlab-net"}[6h])
         )
         +
         sum by () (
-          rate(registry_http_request_duration_seconds_bucket{le="2.5",method=~"delete",route="/v2/{name}/blobs/{digest}"}[6h])
+          rate(registry_http_request_duration_seconds_bucket{le="2.5",method=~"delete",route="/v2/{name}/blobs/{digest}",type!="ops-gitlab-net"}[6h])
         )
       )
       /
@@ -1701,7 +1701,7 @@ groups:
     record: gitlab_component_apdex:success:rate_6h
   - expr: |
       sum by () (
-        rate(registry_http_request_duration_seconds_bucket{le="+Inf",method=~"delete",route="/v2/{name}/blobs/{digest}"}[6h])
+        rate(registry_http_request_duration_seconds_bucket{le="+Inf",method=~"delete",route="/v2/{name}/blobs/{digest}",type!="ops-gitlab-net"}[6h])
       )
     labels:
       component: server_route_blob_digest_deletes
@@ -1710,7 +1710,7 @@ groups:
     record: gitlab_component_apdex:weight:score_6h
   - expr: |
       sum by () (
-        rate(registry_http_request_duration_seconds_count{method=~"delete",route="/v2/{name}/blobs/{digest}"}[6h])
+        rate(registry_http_request_duration_seconds_count{method=~"delete",route="/v2/{name}/blobs/{digest}",type!="ops-gitlab-net"}[6h])
       )
     labels:
       component: server_route_blob_digest_deletes
@@ -1720,11 +1720,11 @@ groups:
   - expr: |
       (
         sum by () (
-          rate(registry_http_request_duration_seconds_bucket{le="10",method=~"get|head",route="/v2/{name}/blobs/{digest}"}[6h])
+          rate(registry_http_request_duration_seconds_bucket{le="10",method=~"get|head",route="/v2/{name}/blobs/{digest}",type!="ops-gitlab-net"}[6h])
         )
         +
         sum by () (
-          rate(registry_http_request_duration_seconds_bucket{le="60",method=~"get|head",route="/v2/{name}/blobs/{digest}"}[6h])
+          rate(registry_http_request_duration_seconds_bucket{le="60",method=~"get|head",route="/v2/{name}/blobs/{digest}",type!="ops-gitlab-net"}[6h])
         )
       )
       /
@@ -1736,7 +1736,7 @@ groups:
     record: gitlab_component_apdex:success:rate_6h
   - expr: |
       sum by () (
-        rate(registry_http_request_duration_seconds_bucket{le="+Inf",method=~"get|head",route="/v2/{name}/blobs/{digest}"}[6h])
+        rate(registry_http_request_duration_seconds_bucket{le="+Inf",method=~"get|head",route="/v2/{name}/blobs/{digest}",type!="ops-gitlab-net"}[6h])
       )
     labels:
       component: server_route_blob_digest_reads
@@ -1745,7 +1745,7 @@ groups:
     record: gitlab_component_apdex:weight:score_6h
   - expr: |
       sum by () (
-        rate(registry_http_request_duration_seconds_count{method=~"get|head",route="/v2/{name}/blobs/{digest}"}[6h])
+        rate(registry_http_request_duration_seconds_count{method=~"get|head",route="/v2/{name}/blobs/{digest}",type!="ops-gitlab-net"}[6h])
       )
     labels:
       component: server_route_blob_digest_reads
@@ -1755,11 +1755,11 @@ groups:
   - expr: |
       (
         sum by () (
-          rate(registry_http_request_duration_seconds_bucket{le="2.5",method=~"patch|post|put",route="/v2/{name}/blobs/{digest}"}[6h])
+          rate(registry_http_request_duration_seconds_bucket{le="2.5",method=~"patch|post|put",route="/v2/{name}/blobs/{digest}",type!="ops-gitlab-net"}[6h])
         )
         +
         sum by () (
-          rate(registry_http_request_duration_seconds_bucket{le="25",method=~"patch|post|put",route="/v2/{name}/blobs/{digest}"}[6h])
+          rate(registry_http_request_duration_seconds_bucket{le="25",method=~"patch|post|put",route="/v2/{name}/blobs/{digest}",type!="ops-gitlab-net"}[6h])
         )
       )
       /
@@ -1771,7 +1771,7 @@ groups:
     record: gitlab_component_apdex:success:rate_6h
   - expr: |
       sum by () (
-        rate(registry_http_request_duration_seconds_bucket{le="+Inf",method=~"patch|post|put",route="/v2/{name}/blobs/{digest}"}[6h])
+        rate(registry_http_request_duration_seconds_bucket{le="+Inf",method=~"patch|post|put",route="/v2/{name}/blobs/{digest}",type!="ops-gitlab-net"}[6h])
       )
     labels:
       component: server_route_blob_digest_writes
@@ -1780,7 +1780,7 @@ groups:
     record: gitlab_component_apdex:weight:score_6h
   - expr: |
       sum by () (
-        rate(registry_http_request_duration_seconds_count{method=~"patch|post|put",route="/v2/{name}/blobs/{digest}"}[6h])
+        rate(registry_http_request_duration_seconds_count{method=~"patch|post|put",route="/v2/{name}/blobs/{digest}",type!="ops-gitlab-net"}[6h])
       )
     labels:
       component: server_route_blob_digest_writes
@@ -1790,11 +1790,11 @@ groups:
   - expr: |
       (
         sum by () (
-          rate(registry_http_request_duration_seconds_bucket{le="2.5",method=~"delete",route="/v2/{name}/blobs/uploads/{uuid}"}[6h])
+          rate(registry_http_request_duration_seconds_bucket{le="2.5",method=~"delete",route="/v2/{name}/blobs/uploads/{uuid}",type!="ops-gitlab-net"}[6h])
         )
         +
         sum by () (
-          rate(registry_http_request_duration_seconds_bucket{le="5",method=~"delete",route="/v2/{name}/blobs/uploads/{uuid}"}[6h])
+          rate(registry_http_request_duration_seconds_bucket{le="5",method=~"delete",route="/v2/{name}/blobs/uploads/{uuid}",type!="ops-gitlab-net"}[6h])
         )
       )
       /
@@ -1806,7 +1806,7 @@ groups:
     record: gitlab_component_apdex:success:rate_6h
   - expr: |
       sum by () (
-        rate(registry_http_request_duration_seconds_bucket{le="+Inf",method=~"delete",route="/v2/{name}/blobs/uploads/{uuid}"}[6h])
+        rate(registry_http_request_duration_seconds_bucket{le="+Inf",method=~"delete",route="/v2/{name}/blobs/uploads/{uuid}",type!="ops-gitlab-net"}[6h])
       )
     labels:
       component: server_route_blob_upload_uuid_deletes
@@ -1815,7 +1815,7 @@ groups:
     record: gitlab_component_apdex:weight:score_6h
   - expr: |
       sum by () (
-        rate(registry_http_request_duration_seconds_count{method=~"delete",route="/v2/{name}/blobs/uploads/{uuid}"}[6h])
+        rate(registry_http_request_duration_seconds_count{method=~"delete",route="/v2/{name}/blobs/uploads/{uuid}",type!="ops-gitlab-net"}[6h])
       )
     labels:
       component: server_route_blob_upload_uuid_deletes
@@ -1825,11 +1825,11 @@ groups:
   - expr: |
       (
         sum by () (
-          rate(registry_http_request_duration_seconds_bucket{le="1",method=~"get|head",route="/v2/{name}/blobs/uploads/{uuid}"}[6h])
+          rate(registry_http_request_duration_seconds_bucket{le="1",method=~"get|head",route="/v2/{name}/blobs/uploads/{uuid}",type!="ops-gitlab-net"}[6h])
         )
         +
         sum by () (
-          rate(registry_http_request_duration_seconds_bucket{le="2.5",method=~"get|head",route="/v2/{name}/blobs/uploads/{uuid}"}[6h])
+          rate(registry_http_request_duration_seconds_bucket{le="2.5",method=~"get|head",route="/v2/{name}/blobs/uploads/{uuid}",type!="ops-gitlab-net"}[6h])
         )
       )
       /
@@ -1841,7 +1841,7 @@ groups:
     record: gitlab_component_apdex:success:rate_6h
   - expr: |
       sum by () (
-        rate(registry_http_request_duration_seconds_bucket{le="+Inf",method=~"get|head",route="/v2/{name}/blobs/uploads/{uuid}"}[6h])
+        rate(registry_http_request_duration_seconds_bucket{le="+Inf",method=~"get|head",route="/v2/{name}/blobs/uploads/{uuid}",type!="ops-gitlab-net"}[6h])
       )
     labels:
       component: server_route_blob_upload_uuid_reads
@@ -1850,7 +1850,7 @@ groups:
     record: gitlab_component_apdex:weight:score_6h
   - expr: |
       sum by () (
-        rate(registry_http_request_duration_seconds_count{method=~"get|head",route="/v2/{name}/blobs/uploads/{uuid}"}[6h])
+        rate(registry_http_request_duration_seconds_count{method=~"get|head",route="/v2/{name}/blobs/uploads/{uuid}",type!="ops-gitlab-net"}[6h])
       )
     labels:
       component: server_route_blob_upload_uuid_reads
@@ -1860,11 +1860,11 @@ groups:
   - expr: |
       (
         sum by () (
-          rate(registry_http_request_duration_seconds_bucket{le="25",method=~"put|patch|post",route="/v2/{name}/blobs/uploads/{uuid}"}[6h])
+          rate(registry_http_request_duration_seconds_bucket{le="25",method=~"put|patch|post",route="/v2/{name}/blobs/uploads/{uuid}",type!="ops-gitlab-net"}[6h])
         )
         +
         sum by () (
-          rate(registry_http_request_duration_seconds_bucket{le="60",method=~"put|patch|post",route="/v2/{name}/blobs/uploads/{uuid}"}[6h])
+          rate(registry_http_request_duration_seconds_bucket{le="60",method=~"put|patch|post",route="/v2/{name}/blobs/uploads/{uuid}",type!="ops-gitlab-net"}[6h])
         )
       )
       /
@@ -1876,7 +1876,7 @@ groups:
     record: gitlab_component_apdex:success:rate_6h
   - expr: |
       sum by () (
-        rate(registry_http_request_duration_seconds_bucket{le="+Inf",method=~"put|patch|post",route="/v2/{name}/blobs/uploads/{uuid}"}[6h])
+        rate(registry_http_request_duration_seconds_bucket{le="+Inf",method=~"put|patch|post",route="/v2/{name}/blobs/uploads/{uuid}",type!="ops-gitlab-net"}[6h])
       )
     labels:
       component: server_route_blob_upload_uuid_writes
@@ -1885,7 +1885,7 @@ groups:
     record: gitlab_component_apdex:weight:score_6h
   - expr: |
       sum by () (
-        rate(registry_http_request_duration_seconds_count{method=~"put|patch|post",route="/v2/{name}/blobs/uploads/{uuid}"}[6h])
+        rate(registry_http_request_duration_seconds_count{method=~"put|patch|post",route="/v2/{name}/blobs/uploads/{uuid}",type!="ops-gitlab-net"}[6h])
       )
     labels:
       component: server_route_blob_upload_uuid_writes
@@ -6508,7 +6508,7 @@ groups:
         histogram_quantile(
           0.950000,
           sum by (le) (
-            rate(registry_http_request_duration_seconds_bucket{method=~"delete",route="/v2/{name}/blobs/{digest}"}[5m])
+            rate(registry_http_request_duration_seconds_bucket{method=~"delete",route="/v2/{name}/blobs/{digest}",type!="ops-gitlab-net"}[5m])
           )
         )
       runbook: docs/registry/README.md
@@ -6561,7 +6561,7 @@ groups:
         histogram_quantile(
           0.950000,
           sum by (le) (
-            rate(registry_http_request_duration_seconds_bucket{method=~"delete",route="/v2/{name}/blobs/{digest}"}[5m])
+            rate(registry_http_request_duration_seconds_bucket{method=~"delete",route="/v2/{name}/blobs/{digest}",type!="ops-gitlab-net"}[5m])
           )
         )
       runbook: docs/registry/README.md
@@ -6612,7 +6612,7 @@ groups:
       grafana_variables: environment,stage
       promql_template_1: |
         sum by () (
-          rate(registry_http_request_duration_seconds_count{method=~"delete",route="/v2/{name}/blobs/{digest}"}[5m])
+          rate(registry_http_request_duration_seconds_count{method=~"delete",route="/v2/{name}/blobs/{digest}",type!="ops-gitlab-net"}[5m])
         )
       runbook: docs/registry/README.md
       title: The server_route_blob_digest_deletes SLI of the registry service has
@@ -6651,7 +6651,7 @@ groups:
       grafana_variables: environment,stage
       promql_template_1: |
         sum by () (
-          rate(registry_http_request_duration_seconds_count{method=~"delete",route="/v2/{name}/blobs/{digest}"}[5m])
+          rate(registry_http_request_duration_seconds_count{method=~"delete",route="/v2/{name}/blobs/{digest}",type!="ops-gitlab-net"}[5m])
         )
       runbook: docs/registry/README.md
       title: The server_route_blob_digest_deletes SLI of the registry service has
@@ -6692,7 +6692,7 @@ groups:
         histogram_quantile(
           0.950000,
           sum by (le) (
-            rate(registry_http_request_duration_seconds_bucket{method=~"get|head",route="/v2/{name}/blobs/{digest}"}[5m])
+            rate(registry_http_request_duration_seconds_bucket{method=~"get|head",route="/v2/{name}/blobs/{digest}",type!="ops-gitlab-net"}[5m])
           )
         )
       runbook: docs/registry/README.md
@@ -6747,7 +6747,7 @@ groups:
         histogram_quantile(
           0.950000,
           sum by (le) (
-            rate(registry_http_request_duration_seconds_bucket{method=~"get|head",route="/v2/{name}/blobs/{digest}"}[5m])
+            rate(registry_http_request_duration_seconds_bucket{method=~"get|head",route="/v2/{name}/blobs/{digest}",type!="ops-gitlab-net"}[5m])
           )
         )
       runbook: docs/registry/README.md
@@ -6800,7 +6800,7 @@ groups:
       grafana_variables: environment,stage
       promql_template_1: |
         sum by () (
-          rate(registry_http_request_duration_seconds_count{method=~"get|head",route="/v2/{name}/blobs/{digest}"}[5m])
+          rate(registry_http_request_duration_seconds_count{method=~"get|head",route="/v2/{name}/blobs/{digest}",type!="ops-gitlab-net"}[5m])
         )
       runbook: docs/registry/README.md
       title: The server_route_blob_digest_reads SLI of the registry service has not
@@ -6841,7 +6841,7 @@ groups:
       grafana_variables: environment,stage
       promql_template_1: |
         sum by () (
-          rate(registry_http_request_duration_seconds_count{method=~"get|head",route="/v2/{name}/blobs/{digest}"}[5m])
+          rate(registry_http_request_duration_seconds_count{method=~"get|head",route="/v2/{name}/blobs/{digest}",type!="ops-gitlab-net"}[5m])
         )
       runbook: docs/registry/README.md
       title: The server_route_blob_digest_reads SLI of the registry service has not
@@ -6880,7 +6880,7 @@ groups:
         histogram_quantile(
           0.950000,
           sum by (le) (
-            rate(registry_http_request_duration_seconds_bucket{method=~"patch|post|put",route="/v2/{name}/blobs/{digest}"}[5m])
+            rate(registry_http_request_duration_seconds_bucket{method=~"patch|post|put",route="/v2/{name}/blobs/{digest}",type!="ops-gitlab-net"}[5m])
           )
         )
       runbook: docs/registry/README.md
@@ -6933,7 +6933,7 @@ groups:
         histogram_quantile(
           0.950000,
           sum by (le) (
-            rate(registry_http_request_duration_seconds_bucket{method=~"patch|post|put",route="/v2/{name}/blobs/{digest}"}[5m])
+            rate(registry_http_request_duration_seconds_bucket{method=~"patch|post|put",route="/v2/{name}/blobs/{digest}",type!="ops-gitlab-net"}[5m])
           )
         )
       runbook: docs/registry/README.md
@@ -6984,7 +6984,7 @@ groups:
       grafana_variables: environment,stage
       promql_template_1: |
         sum by () (
-          rate(registry_http_request_duration_seconds_count{method=~"patch|post|put",route="/v2/{name}/blobs/{digest}"}[5m])
+          rate(registry_http_request_duration_seconds_count{method=~"patch|post|put",route="/v2/{name}/blobs/{digest}",type!="ops-gitlab-net"}[5m])
         )
       runbook: docs/registry/README.md
       title: The server_route_blob_digest_writes SLI of the registry service has not
@@ -7023,7 +7023,7 @@ groups:
       grafana_variables: environment,stage
       promql_template_1: |
         sum by () (
-          rate(registry_http_request_duration_seconds_count{method=~"patch|post|put",route="/v2/{name}/blobs/{digest}"}[5m])
+          rate(registry_http_request_duration_seconds_count{method=~"patch|post|put",route="/v2/{name}/blobs/{digest}",type!="ops-gitlab-net"}[5m])
         )
       runbook: docs/registry/README.md
       title: The server_route_blob_digest_writes SLI of the registry service has not
@@ -7062,7 +7062,7 @@ groups:
         histogram_quantile(
           0.950000,
           sum by (le) (
-            rate(registry_http_request_duration_seconds_bucket{method=~"delete",route="/v2/{name}/blobs/uploads/{uuid}"}[5m])
+            rate(registry_http_request_duration_seconds_bucket{method=~"delete",route="/v2/{name}/blobs/uploads/{uuid}",type!="ops-gitlab-net"}[5m])
           )
         )
       runbook: docs/registry/README.md
@@ -7115,7 +7115,7 @@ groups:
         histogram_quantile(
           0.950000,
           sum by (le) (
-            rate(registry_http_request_duration_seconds_bucket{method=~"delete",route="/v2/{name}/blobs/uploads/{uuid}"}[5m])
+            rate(registry_http_request_duration_seconds_bucket{method=~"delete",route="/v2/{name}/blobs/uploads/{uuid}",type!="ops-gitlab-net"}[5m])
           )
         )
       runbook: docs/registry/README.md
@@ -7166,7 +7166,7 @@ groups:
       grafana_variables: environment,stage
       promql_template_1: |
         sum by () (
-          rate(registry_http_request_duration_seconds_count{method=~"delete",route="/v2/{name}/blobs/uploads/{uuid}"}[5m])
+          rate(registry_http_request_duration_seconds_count{method=~"delete",route="/v2/{name}/blobs/uploads/{uuid}",type!="ops-gitlab-net"}[5m])
         )
       runbook: docs/registry/README.md
       title: The server_route_blob_upload_uuid_deletes SLI of the registry service
@@ -7205,7 +7205,7 @@ groups:
       grafana_variables: environment,stage
       promql_template_1: |
         sum by () (
-          rate(registry_http_request_duration_seconds_count{method=~"delete",route="/v2/{name}/blobs/uploads/{uuid}"}[5m])
+          rate(registry_http_request_duration_seconds_count{method=~"delete",route="/v2/{name}/blobs/uploads/{uuid}",type!="ops-gitlab-net"}[5m])
         )
       runbook: docs/registry/README.md
       title: The server_route_blob_upload_uuid_deletes SLI of the registry service
@@ -7244,7 +7244,7 @@ groups:
         histogram_quantile(
           0.950000,
           sum by (le) (
-            rate(registry_http_request_duration_seconds_bucket{method=~"get|head",route="/v2/{name}/blobs/uploads/{uuid}"}[5m])
+            rate(registry_http_request_duration_seconds_bucket{method=~"get|head",route="/v2/{name}/blobs/uploads/{uuid}",type!="ops-gitlab-net"}[5m])
           )
         )
       runbook: docs/registry/README.md
@@ -7297,7 +7297,7 @@ groups:
         histogram_quantile(
           0.950000,
           sum by (le) (
-            rate(registry_http_request_duration_seconds_bucket{method=~"get|head",route="/v2/{name}/blobs/uploads/{uuid}"}[5m])
+            rate(registry_http_request_duration_seconds_bucket{method=~"get|head",route="/v2/{name}/blobs/uploads/{uuid}",type!="ops-gitlab-net"}[5m])
           )
         )
       runbook: docs/registry/README.md
@@ -7352,7 +7352,7 @@ groups:
         histogram_quantile(
           0.950000,
           sum by (le) (
-            rate(registry_http_request_duration_seconds_bucket{method=~"put|patch|post",route="/v2/{name}/blobs/uploads/{uuid}"}[5m])
+            rate(registry_http_request_duration_seconds_bucket{method=~"put|patch|post",route="/v2/{name}/blobs/uploads/{uuid}",type!="ops-gitlab-net"}[5m])
           )
         )
       runbook: docs/registry/README.md
@@ -7407,7 +7407,7 @@ groups:
         histogram_quantile(
           0.950000,
           sum by (le) (
-            rate(registry_http_request_duration_seconds_bucket{method=~"put|patch|post",route="/v2/{name}/blobs/uploads/{uuid}"}[5m])
+            rate(registry_http_request_duration_seconds_bucket{method=~"put|patch|post",route="/v2/{name}/blobs/uploads/{uuid}",type!="ops-gitlab-net"}[5m])
           )
         )
       runbook: docs/registry/README.md
@@ -7460,7 +7460,7 @@ groups:
       grafana_variables: environment,stage
       promql_template_1: |
         sum by () (
-          rate(registry_http_request_duration_seconds_count{method=~"put|patch|post",route="/v2/{name}/blobs/uploads/{uuid}"}[5m])
+          rate(registry_http_request_duration_seconds_count{method=~"put|patch|post",route="/v2/{name}/blobs/uploads/{uuid}",type!="ops-gitlab-net"}[5m])
         )
       runbook: docs/registry/README.md
       title: The server_route_blob_upload_uuid_writes SLI of the registry service
@@ -7501,7 +7501,7 @@ groups:
       grafana_variables: environment,stage
       promql_template_1: |
         sum by () (
-          rate(registry_http_request_duration_seconds_count{method=~"put|patch|post",route="/v2/{name}/blobs/uploads/{uuid}"}[5m])
+          rate(registry_http_request_duration_seconds_count{method=~"put|patch|post",route="/v2/{name}/blobs/uploads/{uuid}",type!="ops-gitlab-net"}[5m])
         )
       runbook: docs/registry/README.md
       title: The server_route_blob_upload_uuid_writes SLI of the registry service

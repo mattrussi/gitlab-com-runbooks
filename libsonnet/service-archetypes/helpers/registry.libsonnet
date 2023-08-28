@@ -1,7 +1,6 @@
 local metricsCatalog = import 'servicemetrics/metrics.libsonnet';
 local histogramApdex = metricsCatalog.histogramApdex;
 local rateMetric = metricsCatalog.rateMetric;
-local metricsConfig = import 'gitlab-metrics-config.libsonnet';
 
 local registryApdex(selector, satisfiedThreshold, toleratedThreshold=null) =
   histogramApdex(
@@ -23,6 +22,7 @@ local sliFromConfig(registryBaseSelector, defaultRegistrySLIProperties, config) 
   local selector = registryBaseSelector {
     route: { eq: config.route },
     method: { re: std.join('|', config.methods) },
+    type: { ne: 'ops-gitlab-net' },
   };
   local toleratedThreshold =
     if std.objectHas(config, 'toleratedThreshold') then
@@ -40,7 +40,7 @@ local sliFromConfig(registryBaseSelector, defaultRegistrySLIProperties, config) 
 
 local customRouteApdexes(selector, defaultRegistrySLIProperties, customRouteSLIs) =
   std.foldl(
-    function(memo, sliConfig) memo { [sliConfig.name]: sliFromConfig(selector + metricsConfig.baseSelector, defaultRegistrySLIProperties, sliConfig) },
+    function(memo, sliConfig) memo { [sliConfig.name]: sliFromConfig(selector, defaultRegistrySLIProperties, sliConfig) },
     customRouteSLIs,
     {}
   );
