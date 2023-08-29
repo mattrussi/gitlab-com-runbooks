@@ -1,6 +1,8 @@
-local helpers = import './helpers.libsonnet';
 local aggregations = import 'promql/aggregations.libsonnet';
 local selectors = import 'promql/selectors.libsonnet';
+local aggregationFilterExpr = import 'recording-rules/lib/aggregation-filter-expr.libsonnet';
+local optionalOffset = import 'recording-rules/lib/optional-offset.libsonnet';
+local upscaling = import 'recording-rules/lib/upscaling.libsonnet';
 local strings = import 'utils/strings.libsonnet';
 
 // Returns a direct apdex ratio transformation expression or null if one cannot be generated because the source
@@ -12,18 +14,19 @@ local getDirectApdexRatioExpression(sourceAggregationSet, targetAggregationSet, 
   if sourceApdexSuccessRateMetric != null && sourceApdexWeightMetric != null then
     |||
       sum by (%(targetAggregationLabels)s) (
-        (%(sourceApdexSuccessRateMetric)s{%(sourceSelector)s} >= 0)%(aggregationFilterExpr)s
+        (%(sourceApdexSuccessRateMetric)s{%(sourceSelector)s}%(optionalOffset)s >= 0)%(aggregationFilterExpr)s
       )
       /
       sum by (%(targetAggregationLabels)s) (
-        (%(sourceApdexWeightMetric)s{%(sourceSelector)s} >= 0)%(aggregationFilterExpr)s
+        (%(sourceApdexWeightMetric)s{%(sourceSelector)s}%(optionalOffset)s >= 0)%(aggregationFilterExpr)s
       )
     ||| % {
       targetAggregationLabels: aggregations.serialize(targetAggregationSet.labels),
       sourceSelector: selectors.serializeHash(sourceAggregationSet.selector),
-      aggregationFilterExpr: helpers.aggregationFilterExpr(targetAggregationSet),
+      aggregationFilterExpr: aggregationFilterExpr(targetAggregationSet),
       sourceApdexSuccessRateMetric: sourceApdexSuccessRateMetric,
       sourceApdexWeightMetric: sourceApdexWeightMetric,
+      optionalOffset: optionalOffset(targetAggregationSet.offset),
     }
   else null;
 
@@ -31,27 +34,28 @@ local getDirectRate(sourceAggregationSet, targetAggregationSet, burnRate, source
   if sourceMetric != null then
     |||
       sum by (%(targetAggregationLabels)s) (
-        (%(sourceMetric)s{%(sourceSelector)s} >= 0)%(aggregationFilterExpr)s
+        (%(sourceMetric)s{%(sourceSelector)s}%(optionalOffset)s >= 0)%(aggregationFilterExpr)s
       )
     ||| % {
       targetAggregationLabels: aggregations.serialize(targetAggregationSet.labels),
       sourceSelector: selectors.serializeHash(sourceAggregationSet.selector),
-      aggregationFilterExpr: helpers.aggregationFilterExpr(targetAggregationSet),
+      aggregationFilterExpr: aggregationFilterExpr(targetAggregationSet),
       sourceMetric: sourceMetric,
+      optionalOffset: optionalOffset(targetAggregationSet.offset),
     }
   else null;
 
 local getApdexSuccessRateTransformExpression(sourceAggregationSet, targetAggregationSet, burnRate) =
   local directExpr = getDirectRate(sourceAggregationSet, targetAggregationSet, burnRate, sourceMetric=sourceAggregationSet.getApdexSuccessRateMetricForBurnRate(burnRate, required=false));
-  helpers.combinedApdexSuccessRateExpression(sourceAggregationSet, targetAggregationSet, burnRate, directExpr);
+  upscaling.combinedApdexSuccessRateExpression(sourceAggregationSet, targetAggregationSet, burnRate, directExpr);
 
 local getApdexWeightTransformExpression(sourceAggregationSet, targetAggregationSet, burnRate) =
   local directExpr = getDirectRate(sourceAggregationSet, targetAggregationSet, burnRate, sourceMetric=sourceAggregationSet.getApdexWeightMetricForBurnRate(burnRate, required=false));
-  helpers.combinedApdexWeightExpression(sourceAggregationSet, targetAggregationSet, burnRate, directExpr);
+  upscaling.combinedApdexWeightExpression(sourceAggregationSet, targetAggregationSet, burnRate, directExpr);
 
 local getApdexRatioExpression(sourceAggregationSet, targetAggregationSet, burnRate) =
   local directExpr = getDirectApdexRatioExpression(sourceAggregationSet, targetAggregationSet, burnRate);
-  helpers.combinedApdexRatioExpression(sourceAggregationSet, targetAggregationSet, burnRate, directExpr);
+  upscaling.combinedApdexRatioExpression(sourceAggregationSet, targetAggregationSet, burnRate, directExpr);
 
 {
   // Aggregates apdex scores from one aggregation set to another. Intended to be used
@@ -63,14 +67,6 @@ local getApdexRatioExpression(sourceAggregationSet, targetAggregationSet, burnRa
 
     local targetAggregationLabels = aggregations.serialize(targetAggregationSet.labels);
     local sourceSelector = selectors.serializeHash(sourceAggregationSet.selector);
-
-    local formatConfig = {
-      targetApdexRatioMetric: targetApdexRatioMetric,
-      targetApdexWeightMetric: targetApdexWeightMetric,
-      targetAggregationLabels: targetAggregationLabels,
-      sourceSelector: sourceSelector,
-      aggregationFilterExpr: helpers.aggregationFilterExpr(targetAggregationSet),
-    };
 
     (
       if targetApdexWeightMetric == null then

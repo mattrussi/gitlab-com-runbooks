@@ -1,7 +1,7 @@
-local optionalOffset = import '../lib/optional-offset.libsonnet';
 local recordingRuleRegistry = import '../recording-rule-registry.libsonnet';  // TODO: fix circular dependency
 local aggregations = import 'promql/aggregations.libsonnet';
 local selectors = import 'promql/selectors.libsonnet';
+local optionalOffset = import 'recording-rules/lib/optional-offset.libsonnet';
 local strings = import 'utils/strings.libsonnet';
 
 // A general apdex query is:

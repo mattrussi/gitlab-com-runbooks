@@ -1,5 +1,7 @@
 local aggregations = import 'promql/aggregations.libsonnet';
 local selectors = import 'promql/selectors.libsonnet';
+local aggregationFilterExpr = import 'recording-rules/lib/aggregation-filter-expr.libsonnet';
+local optionalOffset = import 'recording-rules/lib/optional-offset.libsonnet';
 local objects = import 'utils/objects.libsonnet';
 local strings = import 'utils/strings.libsonnet';
 
@@ -22,11 +24,11 @@ local strings = import 'utils/strings.libsonnet';
 //
 local upscaleRatioPromExpression = |||
   sum by (%(targetAggregationLabels)s) (
-    sum_over_time(%(numeratorMetricName)s{%(sourceSelectorWithExtras)s}[%(burnRate)s])%(aggregationFilterExpr)s
+    sum_over_time(%(numeratorMetricName)s{%(sourceSelectorWithExtras)s}[%(burnRate)s]%(optionalOffset)s)%(aggregationFilterExpr)s
   )
   /
   sum by (%(targetAggregationLabels)s) (
-    sum_over_time(%(denominatorMetricName)s{%(sourceSelectorWithExtras)s}[%(burnRate)s])%(aggregationFilterExpr)s%(accountForMissingNumerator)s
+    sum_over_time(%(denominatorMetricName)s{%(sourceSelectorWithExtras)s}[%(burnRate)s]%(optionalOffset)s)%(aggregationFilterExpr)s%(accountForMissingNumerator)s
   )
 |||;
 
@@ -35,45 +37,9 @@ local upscaleRatioPromExpression = |||
 // avg_over_time
 local upscaleRatePromExpression = |||
   sum by (%(targetAggregationLabels)s) (
-    avg_over_time(%(metricName)s{%(sourceSelectorWithExtras)s}[%(burnRate)s])%(aggregationFilterExpr)s
+    avg_over_time(%(metricName)s{%(sourceSelectorWithExtras)s}[%(burnRate)s]%(optionalOffset)s)%(aggregationFilterExpr)s
   )
 |||;
-
-local joinExpr(targetAggregationSet) =
-  if !std.objectHas(targetAggregationSet, 'joinSource') then
-    ''
-  else
-    local selector = if std.objectHas(targetAggregationSet.joinSource, 'selector') then
-      targetAggregationSet.joinSource.selector
-    else
-      {};
-
-    local requiredLabelsFromJoin = targetAggregationSet.joinSource.labels + targetAggregationSet.joinSource.on;
-    ' * on(%(joinOn)s) group_left(%(labels)s) (group by (%(aggregatedLabels)s) (%(metric)s{%(selector)s}))' % {
-      joinOn: aggregations.serialize(std.set(targetAggregationSet.joinSource.on)),
-      labels: aggregations.serialize(std.set(targetAggregationSet.joinSource.labels)),
-      aggregatedLabels: aggregations.serialize(std.set(requiredLabelsFromJoin)),
-      metric: targetAggregationSet.joinSource.metric,
-      selector: selectors.serializeHash(selector),
-    };
-
-local aggregationFilterExpr(targetAggregationSet) =
-  local aggregationFilter = targetAggregationSet.aggregationFilter;
-
-  // For service level aggregations, we need to filter out any SLIs which we don't want to include
-  // in the service level aggregation.
-  // These are defined in the SLI with `aggregateToService:false`
-
-  // If multiple aggregation filters are defined, they are ANDed together
-  joinExpr(targetAggregationSet) + if aggregationFilter != null then
-    ' and on(component, type) (gitlab_component_service:mapping{%(selector)s})' % {
-      selector: selectors.serializeHash(targetAggregationSet.selector {
-        [f + '_aggregation']: 'yes'
-        for f in if std.isArray(aggregationFilter) then aggregationFilter else [aggregationFilter]
-      }),
-    }
-  else
-    '';
 
 // Upscale a RATIO from source metrics to target at the given target burnRate
 local upscaledRatioExpression(
@@ -104,6 +70,7 @@ local upscaledRatioExpression(
     aggregationFilterExpr: aggregationFilterExpr(targetAggregationSet),
     accountForMissingNumerator: if accountForMissingNumerator then strings.indent(accountForMissingNumeratorExpr, 2)
     else '',
+    optionalOffset: optionalOffset(targetAggregationSet.offset),
   };
 
 // Upscale a RATE from source metrics to target at the given target burnRate
@@ -116,6 +83,7 @@ local upscaledRateExpression(sourceAggregationSet, targetAggregationSet, burnRat
     metricName: metricName,
     sourceSelectorWithExtras: selectors.serializeHash(sourceSelectorWithExtras),
     aggregationFilterExpr: aggregationFilterExpr(targetAggregationSet),
+    optionalOffset: optionalOffset(targetAggregationSet.offset),
   };
 
 // Upscale an apdex RATIO from source metrics to target at the given target burnRate
@@ -241,8 +209,6 @@ local curry(upscaledExprType, upscaleExpressionFn) =
     );
 
 {
-  aggregationFilterExpr:: aggregationFilterExpr,
-
   // These functions generate either a direct or a upscaled transformation, or a combined expression
 
   // Ratios

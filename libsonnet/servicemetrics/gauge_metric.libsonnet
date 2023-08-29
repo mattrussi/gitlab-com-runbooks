@@ -1,6 +1,6 @@
-local optionalOffset = import 'lib/optional-offset.libsonnet';
 local aggregations = import 'promql/aggregations.libsonnet';
 local selectors = import 'promql/selectors.libsonnet';
+local optionalOffset = import 'recording-rules/lib/optional-offset.libsonnet';
 
 {
   // A rate that is precalcuated, not stored as a counter

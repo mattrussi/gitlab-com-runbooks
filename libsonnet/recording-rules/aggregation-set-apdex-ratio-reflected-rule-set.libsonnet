@@ -1,6 +1,6 @@
 local aggregations = import 'promql/aggregations.libsonnet';
 local selectors = import 'promql/selectors.libsonnet';
-
+local optionalOffset = import 'recording-rules/lib/optional-offset.libsonnet';
 // Returns a direct apdex ratio transformation expression or null if one cannot be generated because the source
 // does not contain the correct recording rules
 local getApdexRatioExpression(aggregationSet, burnRate) =
@@ -10,17 +10,18 @@ local getApdexRatioExpression(aggregationSet, burnRate) =
   if apdexSuccessRateMetric != null && apdexWeightMetric != null then
     |||
       sum by (%(aggregationLabels)s) (
-        %(apdexSuccessRateMetric)s{%(selector)s}
+        %(apdexSuccessRateMetric)s{%(selector)s}%(optionalOffset)s
       )
       /
       sum by (%(aggregationLabels)s) (
-        %(apdexWeightMetric)s{%(selector)s}
+        %(apdexWeightMetric)s{%(selector)s}%(optionalOffset)s
       )
     ||| % {
       aggregationLabels: aggregations.serialize(aggregationSet.labels),
       selector: selectors.serializeHash(aggregationSet.selector),
       apdexSuccessRateMetric: apdexSuccessRateMetric,
       apdexWeightMetric: apdexWeightMetric,
+      optionalOffset: optionalOffset(aggregationSet.offset),
     }
   else null;
 
