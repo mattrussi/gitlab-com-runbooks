@@ -290,6 +290,21 @@ Once approved, the server will replace your loally stored certificate with an up
 
 If you have issues connecting, try using the `--debug` flag to display more verbose information
 
+### `psql: error: could not connect to server: Connection refused Is the server running on host "localhost" (::1) and accepting TCP/IP connections on port X`
+
+This is possibly because the local `psql` client is overriding the user and database name. It can be resolved by running this more explicit command
+
+```
+tsh db connect <DATABASE_NAME> --db-user=console-ro --db-name=gitlabhq_production
+```
+
+For example:
+
+```
+tsh db connect db-main-replica-gprd --db-user=console-ro --db-name=gitlabhq_production
+
+```
+
 ### `psql: error: sslmode value "verify-full" invalid when SSL support is not compiled in`
 
 `tsh db` is a wrapper over `psql` and this likely means that your installed psql version was not configured with OpenSSL options. You can consider taking steps like [this blog post](https://dev.to/jbranchaud/reinstall-postgresql-with-openssl-using-asdf-cmj) if psql was installed via asdf. Ideally, use the brew installed psql version.
