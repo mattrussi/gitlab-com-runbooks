@@ -118,6 +118,8 @@ basic.dashboard(
         - [🔥 `gitalyctl` Error Logs](https://dashboards.gitlab.net/explore?orgId=1&left=%7B%22datasource%22:%22R8ugoM-Vk%22,%22queries%22:%5B%7B%22refId%22:%22A%22,%22expr%22:%22%7Bnamespace%3D%5C%22gitalyctl%5C%22%7D%20%7C%20json%20level%3D%5C%22level%5C%22%20%7C%20level%20%3D%20%60error%60%22,%22queryType%22:%22range%22,%22datasource%22:%7B%22type%22:%22loki%22,%22uid%22:%22R8ugoM-Vk%22%7D,%22editorMode%22:%22builder%22%7D%5D,%22range%22:%7B%22from%22:%22now-7d%22,%22to%22:%22now%22%7D%7D)
         - [💿 `gstg` API logs](https://nonprod-log.gitlab.net/app/r/s/mGwlo)
         - [💿 `gprd` API logs](https://log.gprd.gitlab.net/app/r/s/nVbro)
+        - [🦵 `gstg` sidekiq logs for repository moves](https://nonprod-log.gitlab.net/app/r/s/GS5F1)
+        - [🦵 `gprd` sidekiq logs for repository moves](https://log.gprd.gitlab.net/app/r/s/urrqF)
 
         ## References
 
