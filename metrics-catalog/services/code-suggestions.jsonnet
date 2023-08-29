@@ -6,6 +6,9 @@ local toolingLinks = import 'toolinglinks/toolinglinks.libsonnet';
 
 local baseSelector = { type: 'code_suggestions' };
 
+// DEPRECATION WARNING: `code_suggestions` service will be removed in https://gitlab.com/gitlab-com/runbooks/-/issues/133
+// Use `ai-gateway` service: https://gitlab.com/gitlab-com/runbooks/-/blob/master/metrics-catalog/services/ai-gateway.jsonnet
+
 metricsCatalog.serviceDefinition({
   type: 'code_suggestions',
   tier: 'sv',
