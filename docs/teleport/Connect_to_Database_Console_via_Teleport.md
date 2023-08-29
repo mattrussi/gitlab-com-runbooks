@@ -290,7 +290,7 @@ Once approved, the server will replace your loally stored certificate with an up
 
 If you have issues connecting, try using the `--debug` flag to display more verbose information
 
-### psql: error: could not connect to server: Connection refusedIs the server running on host "localhost" (::1) and accepting TCP/IP connections on port X
+### `psql: error: could not connect to server: Connection refused Is the server running on host "localhost" (::1) and accepting TCP/IP connections on port X`
 
 This is possibly because the local `psql` client is overriding the user and database name. It can be resolved by running this more explicit command
 
