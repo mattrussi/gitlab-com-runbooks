@@ -139,9 +139,7 @@ metricsCatalog.serviceDefinition({
       userImpacting: true,
       featureCategory: 'runner',
       description: |||
-        This SLI monitors the saas runner queues on GitLab.com. Each job is an operation.
-
-        Jobs marked as failing with image pull failures are considered to be in error.
+        This SLI monitors the image pulling failures on SaaS runner.
       |||,
 
       requestRate: rateMetric(
@@ -168,7 +166,7 @@ metricsCatalog.serviceDefinition({
       // in Mimir doesn't scope by `ci-runners` by default.
       emittedBy: [],
 
-      significantLabels: ['jobs_running_for_project'],
+      significantLabels: [],
 
       toolingLinks: [
         toolingLinks.kibana(title='CI Runners', index='runners', slowRequestSeconds=60),
