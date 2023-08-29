@@ -14,6 +14,7 @@ function(
   userImpacting=true,
   trafficCessationAlertConfig=true,
   severity='s4',
+  customToolingLinks=[]
 )
   local baseSelector = { type: type };
   {
@@ -74,7 +75,7 @@ function(
             project='gitlab-runway-production',
             gcpRegion='us-east1'
           ),
-        ],
+        ] + customToolingLinks,
       },
     },
 
