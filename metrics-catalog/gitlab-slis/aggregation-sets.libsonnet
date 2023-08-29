@@ -76,7 +76,9 @@ local targetAggregationSet(sli) =
   aggregationSet.AggregationSet({
     id: 'global_application_sli_%s' % sli.name,
     name: 'Application Defined SLI Global metrics: %s' % sli.name,
-    labels: globalLabels + defaultLabels + sli.significantLabels,
+    labels:
+      local allLabels = globalLabels + defaultLabels + sli.significantLabels;
+      std.filter(function(aggregationLabel) !std.member(std.objectFields(sli.recordingRuleStaticLabels), aggregationLabel), allLabels),
     intermediateSource: false,
     generateSLODashboards: false,
     selector: { monitor: 'global' },
