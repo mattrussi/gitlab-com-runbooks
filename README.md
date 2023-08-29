@@ -192,7 +192,7 @@ During an incident, we have [roles defined in the handbook](https://about.gitlab
 
 ### Alerting and monitoring
 
-- [GitLab monitoring overview](docs/monitoring/monitoring-overview.md)
+- [GitLab monitoring overview](docs/monitoring/README.md)
 - [How to add alerts: Alerts manual](docs/monitoring/alerts_manual.md)
 - [How to add/update deadman switches](docs/uncategorized/deadman-switches.md)
 - [How to silence alerts](howto/silence-alerts.md)

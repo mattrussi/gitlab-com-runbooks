@@ -2,7 +2,7 @@
 
 ## Overview
 
-videos and materials in `./runbooks/docs/monitoring/monitoring-overview.md`
+videos and materials in `./runbooks/docs/monitoring/README.md`
 
 [part V (chapters 18 and 19) of O'Reilly's "Prometheus up and running" book](https://learning.oreilly.com/library/view/prometheus-up/9781492034131/part05.html#part5)
 
