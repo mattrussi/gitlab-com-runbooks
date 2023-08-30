@@ -12,20 +12,18 @@ To start the maintenance:
 ```
 cd /opt/prometheus/node_exporter/metrics
 touch gitlab_maintenance_mode.prom
-cat << EOF
+### Edit gitlab_maintenance_mode.prom:
 # HELP gitlab_maintenance_mode record maintenance window
 # TYPE gitlab_maintenance_mode untyped
 gitlab_maintenance_mode 1
-EOF >> gitlab_maintenance_mode.prom
 ```
 
 When the maintenance mode is over:
 ```
-cat << EOF
+### Edit gitlab_maintenance_mode.prom:
 # HELP gitlab_maintenance_mode record maintenance window
 # TYPE gitlab_maintenance_mode untyped
 gitlab_maintenance_mode 0
-EOF >> /opt/prometheus/node_exporter/metrics/gitlab_maintenance_mode.prom
 ```
 
 We can use at jobs to start/finish the maintenance window:
