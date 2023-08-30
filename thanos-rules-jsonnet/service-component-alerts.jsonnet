@@ -8,7 +8,7 @@ local separateGlobalRecordingFiles = (import './lib/separate-global-recording-fi
 // See docs/metrics-catalog/service-level-monitoring.md for more details
 // of how minimumSamplesForMonitoring works
 local minimumSamplesForMonitoring = 3600;
-local minimumSamplesForNodeMonitoring = 1200;
+local minimumSamplesForNodeMonitoring = 3600;
 
 // 300 requests in 30m required an hour ago before we trigger cessation alerts
 // This is about 10 requests per minute, which is not that busy
@@ -37,7 +37,7 @@ local alertDescriptors = [{
   alertTitleTemplate: 'The %(sliName)s SLI of the %(serviceType)s service on node `{{ $labels.fqdn }}`',
   alertExtraDetail: 'Since the `{{ $labels.type }}` service is not fully redundant, SLI violations on a single node may represent a user-impacting service degradation.',
   aggregationSet: aggregationSets.nodeComponentSLIs,
-  minimumSamplesForMonitoring: minimumSamplesForNodeMonitoring,  // Note: lower minimum sample rate for node-level monitoring
+  minimumSamplesForMonitoring: minimumSamplesForNodeMonitoring,
   alertForDuration: nodeAlertWaitPeriod,
   trafficCessationSelector: {},
   minimumSamplesForTrafficCessation: minimumSamplesForTrafficCessation,
