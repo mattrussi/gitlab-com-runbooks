@@ -9,6 +9,7 @@ The node_exporter for prometheus has a directory configured for the textfile.dir
 --collector.textfile.directory=/opt/prometheus/node_exporter/metrics.
 
 To start the maintenance:
+
 ```
 cd /opt/prometheus/node_exporter/metrics
 touch gitlab_maintenance_mode.prom
@@ -19,6 +20,7 @@ gitlab_maintenance_mode 1
 ```
 
 When the maintenance mode is over:
+
 ```
 ### Edit gitlab_maintenance_mode.prom:
 # HELP gitlab_maintenance_mode record maintenance window
