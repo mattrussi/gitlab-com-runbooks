@@ -171,7 +171,7 @@ groups:
       )
       and on(env,environment,tier,type,stage,shard,fqdn,component)
       (
-        sum by(env,environment,tier,type,stage,shard,fqdn,component) (gitlab_component_node_ops:rate_1h{component="goserver",env="gprd",monitor="global",type="gitaly"}) >= 0.33333
+        sum by(env,environment,tier,type,stage,shard,fqdn,component) (gitlab_component_node_ops:rate_1h{component="goserver",env="gprd",monitor="global",type="gitaly"}) >= 1
       )
   - alert: GitalyServiceGoserverApdexSLOViolationSingleNode
     for: 10m
@@ -229,7 +229,7 @@ groups:
       )
       and on(env,environment,tier,type,stage,shard,fqdn,component)
       (
-        sum by(env,environment,tier,type,stage,shard,fqdn,component) (gitlab_component_node_ops:rate_6h{component="goserver",env="gprd",monitor="global",type="gitaly"}) >= 0.05556
+        sum by(env,environment,tier,type,stage,shard,fqdn,component) (gitlab_component_node_ops:rate_6h{component="goserver",env="gprd",monitor="global",type="gitaly"}) >= 0.16667
       )
   - alert: GitalyServiceGoserverErrorSLOViolation
     for: 2m
@@ -382,7 +382,7 @@ groups:
       )
       and on(env,environment,tier,type,stage,shard,fqdn,component)
       (
-        sum by(env,environment,tier,type,stage,shard,fqdn,component) (gitlab_component_node_ops:rate_1h{component="goserver",env="gprd",monitor="global",type="gitaly"}) >= 0.33333
+        sum by(env,environment,tier,type,stage,shard,fqdn,component) (gitlab_component_node_ops:rate_1h{component="goserver",env="gprd",monitor="global",type="gitaly"}) >= 1
       )
   - alert: GitalyServiceGoserverErrorSLOViolationSingleNode
     for: 10m
@@ -435,7 +435,7 @@ groups:
       )
       and on(env,environment,tier,type,stage,shard,fqdn,component)
       (
-        sum by(env,environment,tier,type,stage,shard,fqdn,component) (gitlab_component_node_ops:rate_6h{component="goserver",env="gprd",monitor="global",type="gitaly"}) >= 0.05556
+        sum by(env,environment,tier,type,stage,shard,fqdn,component) (gitlab_component_node_ops:rate_6h{component="goserver",env="gprd",monitor="global",type="gitaly"}) >= 0.16667
       )
   - alert: GitalyServiceGoserverTrafficCessation
     for: 5m
