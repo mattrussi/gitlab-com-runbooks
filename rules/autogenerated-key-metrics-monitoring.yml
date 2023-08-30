@@ -11,7 +11,7 @@ groups:
       type: monitoring
     expr: |
       sum by (env,environment,stage) (
-        rate(grafana_http_request_duration_seconds_bucket{job="grafana",le="5.0",shard="default",type="monitoring"}[1m])
+        rate(grafana_http_request_duration_seconds_bucket{job="grafana",le="5.0",shard="default",type="monitoring"}[1m] offset 30s)
       )
   - record: gitlab_component_apdex:weight:score
     labels:
@@ -20,7 +20,7 @@ groups:
       type: monitoring
     expr: |
       sum by (env,environment,stage) (
-        rate(grafana_http_request_duration_seconds_bucket{job="grafana",le="+Inf",shard="default",type="monitoring"}[1m])
+        rate(grafana_http_request_duration_seconds_bucket{job="grafana",le="+Inf",shard="default",type="monitoring"}[1m] offset 30s)
       )
   - record: gitlab_component_ops:rate
     labels:
@@ -29,7 +29,7 @@ groups:
       type: monitoring
     expr: |
       sum by (env,environment,stage) (
-        rate(grafana_http_request_duration_seconds_bucket{job="grafana",le="+Inf",shard="default",type="monitoring"}[1m])
+        rate(grafana_http_request_duration_seconds_bucket{job="grafana",le="+Inf",shard="default",type="monitoring"}[1m] offset 30s)
       )
   - record: gitlab_component_errors:rate
     labels:
@@ -39,7 +39,7 @@ groups:
     expr: |
       (
         sum by (env,environment,stage) (
-          rate(grafana_http_request_duration_seconds_bucket{code=~"^5.*",job="grafana",le="+Inf",shard="default",type="monitoring"}[1m])
+          rate(grafana_http_request_duration_seconds_bucket{code=~"^5.*",job="grafana",le="+Inf",shard="default",type="monitoring"}[1m] offset 30s)
         )
       )
       or
@@ -55,7 +55,7 @@ groups:
       type: monitoring
     expr: |
       sum by (env,environment,stage) (
-        rate(grafana_datasource_request_total{job="grafana",shard="default",type="monitoring"}[1m])
+        rate(grafana_datasource_request_total{job="grafana",shard="default",type="monitoring"}[1m] offset 30s)
       )
   - record: gitlab_component_errors:rate
     labels:
@@ -65,7 +65,7 @@ groups:
     expr: |
       (
         sum by (env,environment,stage) (
-          rate(grafana_datasource_request_total{code=~"^5.*",job="grafana",shard="default",type="monitoring"}[1m])
+          rate(grafana_datasource_request_total{code=~"^5.*",job="grafana",shard="default",type="monitoring"}[1m] offset 30s)
         )
       )
       or
@@ -82,7 +82,7 @@ groups:
       type: monitoring
     expr: |
       sum by (env,environment) (
-        rate(stackdriver_https_lb_rule_loadbalancing_googleapis_com_https_request_count{project_id="gitlab-ops",url_map_name="k8s2-um-4zodnh0s-grafana-grafana-cfagrqyu"}[1m])
+        rate(stackdriver_https_lb_rule_loadbalancing_googleapis_com_https_request_count{project_id="gitlab-ops",url_map_name="k8s2-um-4zodnh0s-grafana-grafana-cfagrqyu"}[1m] offset 30s)
       )
   - record: gitlab_component_errors:rate
     labels:
@@ -93,7 +93,7 @@ groups:
     expr: |
       (
         sum by (env,environment) (
-          rate(stackdriver_https_lb_rule_loadbalancing_googleapis_com_https_request_count{project_id="gitlab-ops",response_code_class="500",url_map_name="k8s2-um-4zodnh0s-grafana-grafana-cfagrqyu"}[1m])
+          rate(stackdriver_https_lb_rule_loadbalancing_googleapis_com_https_request_count{project_id="gitlab-ops",response_code_class="500",url_map_name="k8s2-um-4zodnh0s-grafana-grafana-cfagrqyu"}[1m] offset 30s)
         )
       )
       or
@@ -109,7 +109,7 @@ groups:
       type: monitoring
     expr: |
       sum by (env,environment,stage) (
-        rate(grafana_image_renderer_service_http_request_duration_seconds_bucket{job="grafana-image-renderer",le="30",shard="default",type="monitoring"}[1m])
+        rate(grafana_image_renderer_service_http_request_duration_seconds_bucket{job="grafana-image-renderer",le="30",shard="default",type="monitoring"}[1m] offset 30s)
       )
   - record: gitlab_component_apdex:weight:score
     labels:
@@ -118,7 +118,7 @@ groups:
       type: monitoring
     expr: |
       sum by (env,environment,stage) (
-        rate(grafana_image_renderer_service_http_request_duration_seconds_bucket{job="grafana-image-renderer",le="+Inf",shard="default",type="monitoring"}[1m])
+        rate(grafana_image_renderer_service_http_request_duration_seconds_bucket{job="grafana-image-renderer",le="+Inf",shard="default",type="monitoring"}[1m] offset 30s)
       )
   - record: gitlab_component_ops:rate
     labels:
@@ -127,7 +127,7 @@ groups:
       type: monitoring
     expr: |
       sum by (env,environment,stage) (
-        rate(grafana_image_renderer_service_http_request_duration_seconds_bucket{job="grafana-image-renderer",le="+Inf",shard="default",type="monitoring"}[1m])
+        rate(grafana_image_renderer_service_http_request_duration_seconds_bucket{job="grafana-image-renderer",le="+Inf",shard="default",type="monitoring"}[1m] offset 30s)
       )
   - record: gitlab_component_errors:rate
     labels:
@@ -137,7 +137,7 @@ groups:
     expr: |
       (
         sum by (env,environment,stage) (
-          rate(grafana_image_renderer_service_http_request_duration_seconds_bucket{job="grafana-image-renderer",le="+Inf",shard="default",status_code=~"^5.*",type="monitoring"}[1m])
+          rate(grafana_image_renderer_service_http_request_duration_seconds_bucket{job="grafana-image-renderer",le="+Inf",shard="default",status_code=~"^5.*",type="monitoring"}[1m] offset 30s)
         )
       )
       or
@@ -154,11 +154,11 @@ groups:
     expr: |
       (
         sum by (env,environment,stage) (
-          rate(prometheus_http_request_duration_seconds_bucket{job!="prometheus-metamon",job=~"prometheus.*",le="1",type="monitoring"}[1m])
+          rate(prometheus_http_request_duration_seconds_bucket{job!="prometheus-metamon",job=~"prometheus.*",le="1",type="monitoring"}[1m] offset 30s)
         )
         +
         sum by (env,environment,stage) (
-          rate(prometheus_http_request_duration_seconds_bucket{job!="prometheus-metamon",job=~"prometheus.*",le="3",type="monitoring"}[1m])
+          rate(prometheus_http_request_duration_seconds_bucket{job!="prometheus-metamon",job=~"prometheus.*",le="3",type="monitoring"}[1m] offset 30s)
         )
       )
       /
@@ -170,7 +170,7 @@ groups:
       type: monitoring
     expr: |
       sum by (env,environment,stage) (
-        rate(prometheus_http_request_duration_seconds_bucket{job!="prometheus-metamon",job=~"prometheus.*",le="+Inf",type="monitoring"}[1m])
+        rate(prometheus_http_request_duration_seconds_bucket{job!="prometheus-metamon",job=~"prometheus.*",le="+Inf",type="monitoring"}[1m] offset 30s)
       )
   - record: gitlab_component_ops:rate
     labels:
@@ -179,7 +179,7 @@ groups:
       type: monitoring
     expr: |
       sum by (env,environment,stage) (
-        rate(prometheus_http_requests_total{job!="prometheus-metamon",job=~"prometheus.*",type="monitoring"}[1m])
+        rate(prometheus_http_requests_total{job!="prometheus-metamon",job=~"prometheus.*",type="monitoring"}[1m] offset 30s)
       )
   - record: gitlab_component_errors:rate
     labels:
@@ -189,7 +189,7 @@ groups:
     expr: |
       (
         sum by (env,environment,stage) (
-          rate(prometheus_http_requests_total{code=~"^5.*",job!="prometheus-metamon",job=~"prometheus.*",type="monitoring"}[1m])
+          rate(prometheus_http_requests_total{code=~"^5.*",job!="prometheus-metamon",job=~"prometheus.*",type="monitoring"}[1m] offset 30s)
         )
       )
       or
@@ -205,7 +205,7 @@ groups:
       type: monitoring
     expr: |
       sum by (env,environment,stage) (
-        rate(prometheus_notifications_sent_total{job="prometheus",type="monitoring"}[1m])
+        rate(prometheus_notifications_sent_total{job="prometheus",type="monitoring"}[1m] offset 30s)
       )
   - record: gitlab_component_errors:rate
     labels:
@@ -215,7 +215,7 @@ groups:
     expr: |
       (
         sum by (env,environment,stage) (
-          rate(prometheus_notifications_errors_total{job="prometheus",type="monitoring"}[1m])
+          rate(prometheus_notifications_errors_total{job="prometheus",type="monitoring"}[1m] offset 30s)
         )
       )
       or
@@ -231,13 +231,13 @@ groups:
       type: monitoring
     expr: |
       sum by (env,environment,stage) (
-        rate(prometheus_rule_group_iterations_total{job!~"^thanos.*",type="monitoring"}[1m])
+        rate(prometheus_rule_group_iterations_total{job!~"^thanos.*",type="monitoring"}[1m] offset 30s)
       ) - (
         sum by (env,environment,stage) (
-          rate(prometheus_rule_group_iterations_missed_total{job!~"^thanos.*",type="monitoring"}[1m])
+          rate(prometheus_rule_group_iterations_missed_total{job!~"^thanos.*",type="monitoring"}[1m] offset 30s)
         ) or
         0 * sum by (env,environment,stage) (
-          rate(prometheus_rule_group_iterations_total{job!~"^thanos.*",type="monitoring"}[1m])
+          rate(prometheus_rule_group_iterations_total{job!~"^thanos.*",type="monitoring"}[1m] offset 30s)
         )
       )
   - record: gitlab_component_apdex:weight:score
@@ -247,7 +247,7 @@ groups:
       type: monitoring
     expr: |
       sum by (env,environment,stage) (
-        rate(prometheus_rule_group_iterations_total{job!~"^thanos.*",type="monitoring"}[1m])
+        rate(prometheus_rule_group_iterations_total{job!~"^thanos.*",type="monitoring"}[1m] offset 30s)
       )
   - record: gitlab_component_ops:rate
     labels:
@@ -256,7 +256,7 @@ groups:
       type: monitoring
     expr: |
       sum by (env,environment,stage) (
-        rate(prometheus_rule_evaluations_total{job!~"^thanos.*",type="monitoring"}[1m])
+        rate(prometheus_rule_evaluations_total{job!~"^thanos.*",type="monitoring"}[1m] offset 30s)
       )
   - record: gitlab_component_errors:rate
     labels:
@@ -266,7 +266,7 @@ groups:
     expr: |
       (
         sum by (env,environment,stage) (
-          rate(prometheus_rule_evaluation_failures_total{job!~"^thanos.*",type="monitoring"}[1m])
+          rate(prometheus_rule_evaluation_failures_total{job!~"^thanos.*",type="monitoring"}[1m] offset 30s)
         )
       )
       or
@@ -285,7 +285,7 @@ groups:
       type: monitoring
     expr: |
       sum by (env,environment,stage) (
-        rate(grafana_http_request_duration_seconds_bucket{job="grafana",le="5.0",shard="default",type="monitoring"}[5m])
+        rate(grafana_http_request_duration_seconds_bucket{job="grafana",le="5.0",shard="default",type="monitoring"}[5m] offset 30s)
       )
   - record: gitlab_component_apdex:weight:score_5m
     labels:
@@ -294,7 +294,7 @@ groups:
       type: monitoring
     expr: |
       sum by (env,environment,stage) (
-        rate(grafana_http_request_duration_seconds_bucket{job="grafana",le="+Inf",shard="default",type="monitoring"}[5m])
+        rate(grafana_http_request_duration_seconds_bucket{job="grafana",le="+Inf",shard="default",type="monitoring"}[5m] offset 30s)
       )
   - record: gitlab_component_ops:rate_5m
     labels:
@@ -303,7 +303,7 @@ groups:
       type: monitoring
     expr: |
       sum by (env,environment,stage) (
-        rate(grafana_http_request_duration_seconds_bucket{job="grafana",le="+Inf",shard="default",type="monitoring"}[5m])
+        rate(grafana_http_request_duration_seconds_bucket{job="grafana",le="+Inf",shard="default",type="monitoring"}[5m] offset 30s)
       )
   - record: gitlab_component_errors:rate_5m
     labels:
@@ -313,7 +313,7 @@ groups:
     expr: |
       (
         sum by (env,environment,stage) (
-          rate(grafana_http_request_duration_seconds_bucket{code=~"^5.*",job="grafana",le="+Inf",shard="default",type="monitoring"}[5m])
+          rate(grafana_http_request_duration_seconds_bucket{code=~"^5.*",job="grafana",le="+Inf",shard="default",type="monitoring"}[5m] offset 30s)
         )
       )
       or
@@ -329,7 +329,7 @@ groups:
       type: monitoring
     expr: |
       sum by (env,environment,stage) (
-        rate(grafana_datasource_request_total{job="grafana",shard="default",type="monitoring"}[5m])
+        rate(grafana_datasource_request_total{job="grafana",shard="default",type="monitoring"}[5m] offset 30s)
       )
   - record: gitlab_component_errors:rate_5m
     labels:
@@ -339,7 +339,7 @@ groups:
     expr: |
       (
         sum by (env,environment,stage) (
-          rate(grafana_datasource_request_total{code=~"^5.*",job="grafana",shard="default",type="monitoring"}[5m])
+          rate(grafana_datasource_request_total{code=~"^5.*",job="grafana",shard="default",type="monitoring"}[5m] offset 30s)
         )
       )
       or
@@ -356,7 +356,7 @@ groups:
       type: monitoring
     expr: |
       sum by (env,environment) (
-        rate(stackdriver_https_lb_rule_loadbalancing_googleapis_com_https_request_count{project_id="gitlab-ops",url_map_name="k8s2-um-4zodnh0s-grafana-grafana-cfagrqyu"}[5m])
+        rate(stackdriver_https_lb_rule_loadbalancing_googleapis_com_https_request_count{project_id="gitlab-ops",url_map_name="k8s2-um-4zodnh0s-grafana-grafana-cfagrqyu"}[5m] offset 30s)
       )
   - record: gitlab_component_errors:rate_5m
     labels:
@@ -367,7 +367,7 @@ groups:
     expr: |
       (
         sum by (env,environment) (
-          rate(stackdriver_https_lb_rule_loadbalancing_googleapis_com_https_request_count{project_id="gitlab-ops",response_code_class="500",url_map_name="k8s2-um-4zodnh0s-grafana-grafana-cfagrqyu"}[5m])
+          rate(stackdriver_https_lb_rule_loadbalancing_googleapis_com_https_request_count{project_id="gitlab-ops",response_code_class="500",url_map_name="k8s2-um-4zodnh0s-grafana-grafana-cfagrqyu"}[5m] offset 30s)
         )
       )
       or
@@ -383,7 +383,7 @@ groups:
       type: monitoring
     expr: |
       sum by (env,environment,stage) (
-        rate(grafana_image_renderer_service_http_request_duration_seconds_bucket{job="grafana-image-renderer",le="30",shard="default",type="monitoring"}[5m])
+        rate(grafana_image_renderer_service_http_request_duration_seconds_bucket{job="grafana-image-renderer",le="30",shard="default",type="monitoring"}[5m] offset 30s)
       )
   - record: gitlab_component_apdex:weight:score_5m
     labels:
@@ -392,7 +392,7 @@ groups:
       type: monitoring
     expr: |
       sum by (env,environment,stage) (
-        rate(grafana_image_renderer_service_http_request_duration_seconds_bucket{job="grafana-image-renderer",le="+Inf",shard="default",type="monitoring"}[5m])
+        rate(grafana_image_renderer_service_http_request_duration_seconds_bucket{job="grafana-image-renderer",le="+Inf",shard="default",type="monitoring"}[5m] offset 30s)
       )
   - record: gitlab_component_ops:rate_5m
     labels:
@@ -401,7 +401,7 @@ groups:
       type: monitoring
     expr: |
       sum by (env,environment,stage) (
-        rate(grafana_image_renderer_service_http_request_duration_seconds_bucket{job="grafana-image-renderer",le="+Inf",shard="default",type="monitoring"}[5m])
+        rate(grafana_image_renderer_service_http_request_duration_seconds_bucket{job="grafana-image-renderer",le="+Inf",shard="default",type="monitoring"}[5m] offset 30s)
       )
   - record: gitlab_component_errors:rate_5m
     labels:
@@ -411,7 +411,7 @@ groups:
     expr: |
       (
         sum by (env,environment,stage) (
-          rate(grafana_image_renderer_service_http_request_duration_seconds_bucket{job="grafana-image-renderer",le="+Inf",shard="default",status_code=~"^5.*",type="monitoring"}[5m])
+          rate(grafana_image_renderer_service_http_request_duration_seconds_bucket{job="grafana-image-renderer",le="+Inf",shard="default",status_code=~"^5.*",type="monitoring"}[5m] offset 30s)
         )
       )
       or
@@ -428,11 +428,11 @@ groups:
     expr: |
       (
         sum by (env,environment,stage) (
-          rate(prometheus_http_request_duration_seconds_bucket{job!="prometheus-metamon",job=~"prometheus.*",le="1",type="monitoring"}[5m])
+          rate(prometheus_http_request_duration_seconds_bucket{job!="prometheus-metamon",job=~"prometheus.*",le="1",type="monitoring"}[5m] offset 30s)
         )
         +
         sum by (env,environment,stage) (
-          rate(prometheus_http_request_duration_seconds_bucket{job!="prometheus-metamon",job=~"prometheus.*",le="3",type="monitoring"}[5m])
+          rate(prometheus_http_request_duration_seconds_bucket{job!="prometheus-metamon",job=~"prometheus.*",le="3",type="monitoring"}[5m] offset 30s)
         )
       )
       /
@@ -444,7 +444,7 @@ groups:
       type: monitoring
     expr: |
       sum by (env,environment,stage) (
-        rate(prometheus_http_request_duration_seconds_bucket{job!="prometheus-metamon",job=~"prometheus.*",le="+Inf",type="monitoring"}[5m])
+        rate(prometheus_http_request_duration_seconds_bucket{job!="prometheus-metamon",job=~"prometheus.*",le="+Inf",type="monitoring"}[5m] offset 30s)
       )
   - record: gitlab_component_ops:rate_5m
     labels:
@@ -453,7 +453,7 @@ groups:
       type: monitoring
     expr: |
       sum by (env,environment,stage) (
-        rate(prometheus_http_requests_total{job!="prometheus-metamon",job=~"prometheus.*",type="monitoring"}[5m])
+        rate(prometheus_http_requests_total{job!="prometheus-metamon",job=~"prometheus.*",type="monitoring"}[5m] offset 30s)
       )
   - record: gitlab_component_errors:rate_5m
     labels:
@@ -463,7 +463,7 @@ groups:
     expr: |
       (
         sum by (env,environment,stage) (
-          rate(prometheus_http_requests_total{code=~"^5.*",job!="prometheus-metamon",job=~"prometheus.*",type="monitoring"}[5m])
+          rate(prometheus_http_requests_total{code=~"^5.*",job!="prometheus-metamon",job=~"prometheus.*",type="monitoring"}[5m] offset 30s)
         )
       )
       or
@@ -479,7 +479,7 @@ groups:
       type: monitoring
     expr: |
       sum by (env,environment,stage) (
-        rate(prometheus_notifications_sent_total{job="prometheus",type="monitoring"}[5m])
+        rate(prometheus_notifications_sent_total{job="prometheus",type="monitoring"}[5m] offset 30s)
       )
   - record: gitlab_component_errors:rate_5m
     labels:
@@ -489,7 +489,7 @@ groups:
     expr: |
       (
         sum by (env,environment,stage) (
-          rate(prometheus_notifications_errors_total{job="prometheus",type="monitoring"}[5m])
+          rate(prometheus_notifications_errors_total{job="prometheus",type="monitoring"}[5m] offset 30s)
         )
       )
       or
@@ -505,13 +505,13 @@ groups:
       type: monitoring
     expr: |
       sum by (env,environment,stage) (
-        rate(prometheus_rule_group_iterations_total{job!~"^thanos.*",type="monitoring"}[5m])
+        rate(prometheus_rule_group_iterations_total{job!~"^thanos.*",type="monitoring"}[5m] offset 30s)
       ) - (
         sum by (env,environment,stage) (
-          rate(prometheus_rule_group_iterations_missed_total{job!~"^thanos.*",type="monitoring"}[5m])
+          rate(prometheus_rule_group_iterations_missed_total{job!~"^thanos.*",type="monitoring"}[5m] offset 30s)
         ) or
         0 * sum by (env,environment,stage) (
-          rate(prometheus_rule_group_iterations_total{job!~"^thanos.*",type="monitoring"}[5m])
+          rate(prometheus_rule_group_iterations_total{job!~"^thanos.*",type="monitoring"}[5m] offset 30s)
         )
       )
   - record: gitlab_component_apdex:weight:score_5m
@@ -521,7 +521,7 @@ groups:
       type: monitoring
     expr: |
       sum by (env,environment,stage) (
-        rate(prometheus_rule_group_iterations_total{job!~"^thanos.*",type="monitoring"}[5m])
+        rate(prometheus_rule_group_iterations_total{job!~"^thanos.*",type="monitoring"}[5m] offset 30s)
       )
   - record: gitlab_component_ops:rate_5m
     labels:
@@ -530,7 +530,7 @@ groups:
       type: monitoring
     expr: |
       sum by (env,environment,stage) (
-        rate(prometheus_rule_evaluations_total{job!~"^thanos.*",type="monitoring"}[5m])
+        rate(prometheus_rule_evaluations_total{job!~"^thanos.*",type="monitoring"}[5m] offset 30s)
       )
   - record: gitlab_component_errors:rate_5m
     labels:
@@ -540,7 +540,7 @@ groups:
     expr: |
       (
         sum by (env,environment,stage) (
-          rate(prometheus_rule_evaluation_failures_total{job!~"^thanos.*",type="monitoring"}[5m])
+          rate(prometheus_rule_evaluation_failures_total{job!~"^thanos.*",type="monitoring"}[5m] offset 30s)
         )
       )
       or
@@ -559,7 +559,7 @@ groups:
       type: monitoring
     expr: |
       sum by (env,environment,stage) (
-        rate(grafana_http_request_duration_seconds_bucket{job="grafana",le="5.0",shard="default",type="monitoring"}[30m])
+        rate(grafana_http_request_duration_seconds_bucket{job="grafana",le="5.0",shard="default",type="monitoring"}[30m] offset 30s)
       )
   - record: gitlab_component_apdex:weight:score_30m
     labels:
@@ -568,7 +568,7 @@ groups:
       type: monitoring
     expr: |
       sum by (env,environment,stage) (
-        rate(grafana_http_request_duration_seconds_bucket{job="grafana",le="+Inf",shard="default",type="monitoring"}[30m])
+        rate(grafana_http_request_duration_seconds_bucket{job="grafana",le="+Inf",shard="default",type="monitoring"}[30m] offset 30s)
       )
   - record: gitlab_component_ops:rate_30m
     labels:
@@ -577,7 +577,7 @@ groups:
       type: monitoring
     expr: |
       sum by (env,environment,stage) (
-        rate(grafana_http_request_duration_seconds_bucket{job="grafana",le="+Inf",shard="default",type="monitoring"}[30m])
+        rate(grafana_http_request_duration_seconds_bucket{job="grafana",le="+Inf",shard="default",type="monitoring"}[30m] offset 30s)
       )
   - record: gitlab_component_errors:rate_30m
     labels:
@@ -587,7 +587,7 @@ groups:
     expr: |
       (
         sum by (env,environment,stage) (
-          rate(grafana_http_request_duration_seconds_bucket{code=~"^5.*",job="grafana",le="+Inf",shard="default",type="monitoring"}[30m])
+          rate(grafana_http_request_duration_seconds_bucket{code=~"^5.*",job="grafana",le="+Inf",shard="default",type="monitoring"}[30m] offset 30s)
         )
       )
       or
@@ -603,7 +603,7 @@ groups:
       type: monitoring
     expr: |
       sum by (env,environment,stage) (
-        rate(grafana_datasource_request_total{job="grafana",shard="default",type="monitoring"}[30m])
+        rate(grafana_datasource_request_total{job="grafana",shard="default",type="monitoring"}[30m] offset 30s)
       )
   - record: gitlab_component_errors:rate_30m
     labels:
@@ -613,7 +613,7 @@ groups:
     expr: |
       (
         sum by (env,environment,stage) (
-          rate(grafana_datasource_request_total{code=~"^5.*",job="grafana",shard="default",type="monitoring"}[30m])
+          rate(grafana_datasource_request_total{code=~"^5.*",job="grafana",shard="default",type="monitoring"}[30m] offset 30s)
         )
       )
       or
@@ -630,7 +630,7 @@ groups:
       type: monitoring
     expr: |
       sum by (env,environment) (
-        rate(stackdriver_https_lb_rule_loadbalancing_googleapis_com_https_request_count{project_id="gitlab-ops",url_map_name="k8s2-um-4zodnh0s-grafana-grafana-cfagrqyu"}[30m])
+        rate(stackdriver_https_lb_rule_loadbalancing_googleapis_com_https_request_count{project_id="gitlab-ops",url_map_name="k8s2-um-4zodnh0s-grafana-grafana-cfagrqyu"}[30m] offset 30s)
       )
   - record: gitlab_component_errors:rate_30m
     labels:
@@ -641,7 +641,7 @@ groups:
     expr: |
       (
         sum by (env,environment) (
-          rate(stackdriver_https_lb_rule_loadbalancing_googleapis_com_https_request_count{project_id="gitlab-ops",response_code_class="500",url_map_name="k8s2-um-4zodnh0s-grafana-grafana-cfagrqyu"}[30m])
+          rate(stackdriver_https_lb_rule_loadbalancing_googleapis_com_https_request_count{project_id="gitlab-ops",response_code_class="500",url_map_name="k8s2-um-4zodnh0s-grafana-grafana-cfagrqyu"}[30m] offset 30s)
         )
       )
       or
@@ -657,7 +657,7 @@ groups:
       type: monitoring
     expr: |
       sum by (env,environment,stage) (
-        rate(grafana_image_renderer_service_http_request_duration_seconds_bucket{job="grafana-image-renderer",le="30",shard="default",type="monitoring"}[30m])
+        rate(grafana_image_renderer_service_http_request_duration_seconds_bucket{job="grafana-image-renderer",le="30",shard="default",type="monitoring"}[30m] offset 30s)
       )
   - record: gitlab_component_apdex:weight:score_30m
     labels:
@@ -666,7 +666,7 @@ groups:
       type: monitoring
     expr: |
       sum by (env,environment,stage) (
-        rate(grafana_image_renderer_service_http_request_duration_seconds_bucket{job="grafana-image-renderer",le="+Inf",shard="default",type="monitoring"}[30m])
+        rate(grafana_image_renderer_service_http_request_duration_seconds_bucket{job="grafana-image-renderer",le="+Inf",shard="default",type="monitoring"}[30m] offset 30s)
       )
   - record: gitlab_component_ops:rate_30m
     labels:
@@ -675,7 +675,7 @@ groups:
       type: monitoring
     expr: |
       sum by (env,environment,stage) (
-        rate(grafana_image_renderer_service_http_request_duration_seconds_bucket{job="grafana-image-renderer",le="+Inf",shard="default",type="monitoring"}[30m])
+        rate(grafana_image_renderer_service_http_request_duration_seconds_bucket{job="grafana-image-renderer",le="+Inf",shard="default",type="monitoring"}[30m] offset 30s)
       )
   - record: gitlab_component_errors:rate_30m
     labels:
@@ -685,7 +685,7 @@ groups:
     expr: |
       (
         sum by (env,environment,stage) (
-          rate(grafana_image_renderer_service_http_request_duration_seconds_bucket{job="grafana-image-renderer",le="+Inf",shard="default",status_code=~"^5.*",type="monitoring"}[30m])
+          rate(grafana_image_renderer_service_http_request_duration_seconds_bucket{job="grafana-image-renderer",le="+Inf",shard="default",status_code=~"^5.*",type="monitoring"}[30m] offset 30s)
         )
       )
       or
@@ -702,11 +702,11 @@ groups:
     expr: |
       (
         sum by (env,environment,stage) (
-          rate(prometheus_http_request_duration_seconds_bucket{job!="prometheus-metamon",job=~"prometheus.*",le="1",type="monitoring"}[30m])
+          rate(prometheus_http_request_duration_seconds_bucket{job!="prometheus-metamon",job=~"prometheus.*",le="1",type="monitoring"}[30m] offset 30s)
         )
         +
         sum by (env,environment,stage) (
-          rate(prometheus_http_request_duration_seconds_bucket{job!="prometheus-metamon",job=~"prometheus.*",le="3",type="monitoring"}[30m])
+          rate(prometheus_http_request_duration_seconds_bucket{job!="prometheus-metamon",job=~"prometheus.*",le="3",type="monitoring"}[30m] offset 30s)
         )
       )
       /
@@ -718,7 +718,7 @@ groups:
       type: monitoring
     expr: |
       sum by (env,environment,stage) (
-        rate(prometheus_http_request_duration_seconds_bucket{job!="prometheus-metamon",job=~"prometheus.*",le="+Inf",type="monitoring"}[30m])
+        rate(prometheus_http_request_duration_seconds_bucket{job!="prometheus-metamon",job=~"prometheus.*",le="+Inf",type="monitoring"}[30m] offset 30s)
       )
   - record: gitlab_component_ops:rate_30m
     labels:
@@ -727,7 +727,7 @@ groups:
       type: monitoring
     expr: |
       sum by (env,environment,stage) (
-        rate(prometheus_http_requests_total{job!="prometheus-metamon",job=~"prometheus.*",type="monitoring"}[30m])
+        rate(prometheus_http_requests_total{job!="prometheus-metamon",job=~"prometheus.*",type="monitoring"}[30m] offset 30s)
       )
   - record: gitlab_component_errors:rate_30m
     labels:
@@ -737,7 +737,7 @@ groups:
     expr: |
       (
         sum by (env,environment,stage) (
-          rate(prometheus_http_requests_total{code=~"^5.*",job!="prometheus-metamon",job=~"prometheus.*",type="monitoring"}[30m])
+          rate(prometheus_http_requests_total{code=~"^5.*",job!="prometheus-metamon",job=~"prometheus.*",type="monitoring"}[30m] offset 30s)
         )
       )
       or
@@ -753,7 +753,7 @@ groups:
       type: monitoring
     expr: |
       sum by (env,environment,stage) (
-        rate(prometheus_notifications_sent_total{job="prometheus",type="monitoring"}[30m])
+        rate(prometheus_notifications_sent_total{job="prometheus",type="monitoring"}[30m] offset 30s)
       )
   - record: gitlab_component_errors:rate_30m
     labels:
@@ -763,7 +763,7 @@ groups:
     expr: |
       (
         sum by (env,environment,stage) (
-          rate(prometheus_notifications_errors_total{job="prometheus",type="monitoring"}[30m])
+          rate(prometheus_notifications_errors_total{job="prometheus",type="monitoring"}[30m] offset 30s)
         )
       )
       or
@@ -779,13 +779,13 @@ groups:
       type: monitoring
     expr: |
       sum by (env,environment,stage) (
-        rate(prometheus_rule_group_iterations_total{job!~"^thanos.*",type="monitoring"}[30m])
+        rate(prometheus_rule_group_iterations_total{job!~"^thanos.*",type="monitoring"}[30m] offset 30s)
       ) - (
         sum by (env,environment,stage) (
-          rate(prometheus_rule_group_iterations_missed_total{job!~"^thanos.*",type="monitoring"}[30m])
+          rate(prometheus_rule_group_iterations_missed_total{job!~"^thanos.*",type="monitoring"}[30m] offset 30s)
         ) or
         0 * sum by (env,environment,stage) (
-          rate(prometheus_rule_group_iterations_total{job!~"^thanos.*",type="monitoring"}[30m])
+          rate(prometheus_rule_group_iterations_total{job!~"^thanos.*",type="monitoring"}[30m] offset 30s)
         )
       )
   - record: gitlab_component_apdex:weight:score_30m
@@ -795,7 +795,7 @@ groups:
       type: monitoring
     expr: |
       sum by (env,environment,stage) (
-        rate(prometheus_rule_group_iterations_total{job!~"^thanos.*",type="monitoring"}[30m])
+        rate(prometheus_rule_group_iterations_total{job!~"^thanos.*",type="monitoring"}[30m] offset 30s)
       )
   - record: gitlab_component_ops:rate_30m
     labels:
@@ -804,7 +804,7 @@ groups:
       type: monitoring
     expr: |
       sum by (env,environment,stage) (
-        rate(prometheus_rule_evaluations_total{job!~"^thanos.*",type="monitoring"}[30m])
+        rate(prometheus_rule_evaluations_total{job!~"^thanos.*",type="monitoring"}[30m] offset 30s)
       )
   - record: gitlab_component_errors:rate_30m
     labels:
@@ -814,7 +814,7 @@ groups:
     expr: |
       (
         sum by (env,environment,stage) (
-          rate(prometheus_rule_evaluation_failures_total{job!~"^thanos.*",type="monitoring"}[30m])
+          rate(prometheus_rule_evaluation_failures_total{job!~"^thanos.*",type="monitoring"}[30m] offset 30s)
         )
       )
       or
@@ -833,7 +833,7 @@ groups:
       type: monitoring
     expr: |
       sum by (env,environment,stage) (
-        rate(grafana_http_request_duration_seconds_bucket{job="grafana",le="5.0",shard="default",type="monitoring"}[1h])
+        rate(grafana_http_request_duration_seconds_bucket{job="grafana",le="5.0",shard="default",type="monitoring"}[1h] offset 30s)
       )
   - record: gitlab_component_apdex:weight:score_1h
     labels:
@@ -842,7 +842,7 @@ groups:
       type: monitoring
     expr: |
       sum by (env,environment,stage) (
-        rate(grafana_http_request_duration_seconds_bucket{job="grafana",le="+Inf",shard="default",type="monitoring"}[1h])
+        rate(grafana_http_request_duration_seconds_bucket{job="grafana",le="+Inf",shard="default",type="monitoring"}[1h] offset 30s)
       )
   - record: gitlab_component_ops:rate_1h
     labels:
@@ -851,7 +851,7 @@ groups:
       type: monitoring
     expr: |
       sum by (env,environment,stage) (
-        rate(grafana_http_request_duration_seconds_bucket{job="grafana",le="+Inf",shard="default",type="monitoring"}[1h])
+        rate(grafana_http_request_duration_seconds_bucket{job="grafana",le="+Inf",shard="default",type="monitoring"}[1h] offset 30s)
       )
   - record: gitlab_component_errors:rate_1h
     labels:
@@ -861,7 +861,7 @@ groups:
     expr: |
       (
         sum by (env,environment,stage) (
-          rate(grafana_http_request_duration_seconds_bucket{code=~"^5.*",job="grafana",le="+Inf",shard="default",type="monitoring"}[1h])
+          rate(grafana_http_request_duration_seconds_bucket{code=~"^5.*",job="grafana",le="+Inf",shard="default",type="monitoring"}[1h] offset 30s)
         )
       )
       or
@@ -877,7 +877,7 @@ groups:
       type: monitoring
     expr: |
       sum by (env,environment,stage) (
-        rate(grafana_datasource_request_total{job="grafana",shard="default",type="monitoring"}[1h])
+        rate(grafana_datasource_request_total{job="grafana",shard="default",type="monitoring"}[1h] offset 30s)
       )
   - record: gitlab_component_errors:rate_1h
     labels:
@@ -887,7 +887,7 @@ groups:
     expr: |
       (
         sum by (env,environment,stage) (
-          rate(grafana_datasource_request_total{code=~"^5.*",job="grafana",shard="default",type="monitoring"}[1h])
+          rate(grafana_datasource_request_total{code=~"^5.*",job="grafana",shard="default",type="monitoring"}[1h] offset 30s)
         )
       )
       or
@@ -904,7 +904,7 @@ groups:
       type: monitoring
     expr: |
       sum by (env,environment) (
-        rate(stackdriver_https_lb_rule_loadbalancing_googleapis_com_https_request_count{project_id="gitlab-ops",url_map_name="k8s2-um-4zodnh0s-grafana-grafana-cfagrqyu"}[1h])
+        rate(stackdriver_https_lb_rule_loadbalancing_googleapis_com_https_request_count{project_id="gitlab-ops",url_map_name="k8s2-um-4zodnh0s-grafana-grafana-cfagrqyu"}[1h] offset 30s)
       )
   - record: gitlab_component_errors:rate_1h
     labels:
@@ -915,7 +915,7 @@ groups:
     expr: |
       (
         sum by (env,environment) (
-          rate(stackdriver_https_lb_rule_loadbalancing_googleapis_com_https_request_count{project_id="gitlab-ops",response_code_class="500",url_map_name="k8s2-um-4zodnh0s-grafana-grafana-cfagrqyu"}[1h])
+          rate(stackdriver_https_lb_rule_loadbalancing_googleapis_com_https_request_count{project_id="gitlab-ops",response_code_class="500",url_map_name="k8s2-um-4zodnh0s-grafana-grafana-cfagrqyu"}[1h] offset 30s)
         )
       )
       or
@@ -931,7 +931,7 @@ groups:
       type: monitoring
     expr: |
       sum by (env,environment,stage) (
-        rate(grafana_image_renderer_service_http_request_duration_seconds_bucket{job="grafana-image-renderer",le="30",shard="default",type="monitoring"}[1h])
+        rate(grafana_image_renderer_service_http_request_duration_seconds_bucket{job="grafana-image-renderer",le="30",shard="default",type="monitoring"}[1h] offset 30s)
       )
   - record: gitlab_component_apdex:weight:score_1h
     labels:
@@ -940,7 +940,7 @@ groups:
       type: monitoring
     expr: |
       sum by (env,environment,stage) (
-        rate(grafana_image_renderer_service_http_request_duration_seconds_bucket{job="grafana-image-renderer",le="+Inf",shard="default",type="monitoring"}[1h])
+        rate(grafana_image_renderer_service_http_request_duration_seconds_bucket{job="grafana-image-renderer",le="+Inf",shard="default",type="monitoring"}[1h] offset 30s)
       )
   - record: gitlab_component_ops:rate_1h
     labels:
@@ -949,7 +949,7 @@ groups:
       type: monitoring
     expr: |
       sum by (env,environment,stage) (
-        rate(grafana_image_renderer_service_http_request_duration_seconds_bucket{job="grafana-image-renderer",le="+Inf",shard="default",type="monitoring"}[1h])
+        rate(grafana_image_renderer_service_http_request_duration_seconds_bucket{job="grafana-image-renderer",le="+Inf",shard="default",type="monitoring"}[1h] offset 30s)
       )
   - record: gitlab_component_errors:rate_1h
     labels:
@@ -959,7 +959,7 @@ groups:
     expr: |
       (
         sum by (env,environment,stage) (
-          rate(grafana_image_renderer_service_http_request_duration_seconds_bucket{job="grafana-image-renderer",le="+Inf",shard="default",status_code=~"^5.*",type="monitoring"}[1h])
+          rate(grafana_image_renderer_service_http_request_duration_seconds_bucket{job="grafana-image-renderer",le="+Inf",shard="default",status_code=~"^5.*",type="monitoring"}[1h] offset 30s)
         )
       )
       or
@@ -976,11 +976,11 @@ groups:
     expr: |
       (
         sum by (env,environment,stage) (
-          rate(prometheus_http_request_duration_seconds_bucket{job!="prometheus-metamon",job=~"prometheus.*",le="1",type="monitoring"}[1h])
+          rate(prometheus_http_request_duration_seconds_bucket{job!="prometheus-metamon",job=~"prometheus.*",le="1",type="monitoring"}[1h] offset 30s)
         )
         +
         sum by (env,environment,stage) (
-          rate(prometheus_http_request_duration_seconds_bucket{job!="prometheus-metamon",job=~"prometheus.*",le="3",type="monitoring"}[1h])
+          rate(prometheus_http_request_duration_seconds_bucket{job!="prometheus-metamon",job=~"prometheus.*",le="3",type="monitoring"}[1h] offset 30s)
         )
       )
       /
@@ -992,7 +992,7 @@ groups:
       type: monitoring
     expr: |
       sum by (env,environment,stage) (
-        rate(prometheus_http_request_duration_seconds_bucket{job!="prometheus-metamon",job=~"prometheus.*",le="+Inf",type="monitoring"}[1h])
+        rate(prometheus_http_request_duration_seconds_bucket{job!="prometheus-metamon",job=~"prometheus.*",le="+Inf",type="monitoring"}[1h] offset 30s)
       )
   - record: gitlab_component_ops:rate_1h
     labels:
@@ -1001,7 +1001,7 @@ groups:
       type: monitoring
     expr: |
       sum by (env,environment,stage) (
-        rate(prometheus_http_requests_total{job!="prometheus-metamon",job=~"prometheus.*",type="monitoring"}[1h])
+        rate(prometheus_http_requests_total{job!="prometheus-metamon",job=~"prometheus.*",type="monitoring"}[1h] offset 30s)
       )
   - record: gitlab_component_errors:rate_1h
     labels:
@@ -1011,7 +1011,7 @@ groups:
     expr: |
       (
         sum by (env,environment,stage) (
-          rate(prometheus_http_requests_total{code=~"^5.*",job!="prometheus-metamon",job=~"prometheus.*",type="monitoring"}[1h])
+          rate(prometheus_http_requests_total{code=~"^5.*",job!="prometheus-metamon",job=~"prometheus.*",type="monitoring"}[1h] offset 30s)
         )
       )
       or
@@ -1027,7 +1027,7 @@ groups:
       type: monitoring
     expr: |
       sum by (env,environment,stage) (
-        rate(prometheus_notifications_sent_total{job="prometheus",type="monitoring"}[1h])
+        rate(prometheus_notifications_sent_total{job="prometheus",type="monitoring"}[1h] offset 30s)
       )
   - record: gitlab_component_errors:rate_1h
     labels:
@@ -1037,7 +1037,7 @@ groups:
     expr: |
       (
         sum by (env,environment,stage) (
-          rate(prometheus_notifications_errors_total{job="prometheus",type="monitoring"}[1h])
+          rate(prometheus_notifications_errors_total{job="prometheus",type="monitoring"}[1h] offset 30s)
         )
       )
       or
@@ -1053,13 +1053,13 @@ groups:
       type: monitoring
     expr: |
       sum by (env,environment,stage) (
-        rate(prometheus_rule_group_iterations_total{job!~"^thanos.*",type="monitoring"}[1h])
+        rate(prometheus_rule_group_iterations_total{job!~"^thanos.*",type="monitoring"}[1h] offset 30s)
       ) - (
         sum by (env,environment,stage) (
-          rate(prometheus_rule_group_iterations_missed_total{job!~"^thanos.*",type="monitoring"}[1h])
+          rate(prometheus_rule_group_iterations_missed_total{job!~"^thanos.*",type="monitoring"}[1h] offset 30s)
         ) or
         0 * sum by (env,environment,stage) (
-          rate(prometheus_rule_group_iterations_total{job!~"^thanos.*",type="monitoring"}[1h])
+          rate(prometheus_rule_group_iterations_total{job!~"^thanos.*",type="monitoring"}[1h] offset 30s)
         )
       )
   - record: gitlab_component_apdex:weight:score_1h
@@ -1069,7 +1069,7 @@ groups:
       type: monitoring
     expr: |
       sum by (env,environment,stage) (
-        rate(prometheus_rule_group_iterations_total{job!~"^thanos.*",type="monitoring"}[1h])
+        rate(prometheus_rule_group_iterations_total{job!~"^thanos.*",type="monitoring"}[1h] offset 30s)
       )
   - record: gitlab_component_ops:rate_1h
     labels:
@@ -1078,7 +1078,7 @@ groups:
       type: monitoring
     expr: |
       sum by (env,environment,stage) (
-        rate(prometheus_rule_evaluations_total{job!~"^thanos.*",type="monitoring"}[1h])
+        rate(prometheus_rule_evaluations_total{job!~"^thanos.*",type="monitoring"}[1h] offset 30s)
       )
   - record: gitlab_component_errors:rate_1h
     labels:
@@ -1088,7 +1088,7 @@ groups:
     expr: |
       (
         sum by (env,environment,stage) (
-          rate(prometheus_rule_evaluation_failures_total{job!~"^thanos.*",type="monitoring"}[1h])
+          rate(prometheus_rule_evaluation_failures_total{job!~"^thanos.*",type="monitoring"}[1h] offset 30s)
         )
       )
       or
@@ -1107,7 +1107,7 @@ groups:
       type: monitoring
     expr: |
       sum by (env,environment,stage) (
-        rate(grafana_http_request_duration_seconds_bucket{job="grafana",le="5.0",shard="default",type="monitoring"}[6h])
+        rate(grafana_http_request_duration_seconds_bucket{job="grafana",le="5.0",shard="default",type="monitoring"}[6h] offset 30s)
       )
   - record: gitlab_component_apdex:weight:score_6h
     labels:
@@ -1116,7 +1116,7 @@ groups:
       type: monitoring
     expr: |
       sum by (env,environment,stage) (
-        rate(grafana_http_request_duration_seconds_bucket{job="grafana",le="+Inf",shard="default",type="monitoring"}[6h])
+        rate(grafana_http_request_duration_seconds_bucket{job="grafana",le="+Inf",shard="default",type="monitoring"}[6h] offset 30s)
       )
   - record: gitlab_component_ops:rate_6h
     labels:
@@ -1125,7 +1125,7 @@ groups:
       type: monitoring
     expr: |
       sum by (env,environment,stage) (
-        rate(grafana_http_request_duration_seconds_bucket{job="grafana",le="+Inf",shard="default",type="monitoring"}[6h])
+        rate(grafana_http_request_duration_seconds_bucket{job="grafana",le="+Inf",shard="default",type="monitoring"}[6h] offset 30s)
       )
   - record: gitlab_component_errors:rate_6h
     labels:
@@ -1135,7 +1135,7 @@ groups:
     expr: |
       (
         sum by (env,environment,stage) (
-          rate(grafana_http_request_duration_seconds_bucket{code=~"^5.*",job="grafana",le="+Inf",shard="default",type="monitoring"}[6h])
+          rate(grafana_http_request_duration_seconds_bucket{code=~"^5.*",job="grafana",le="+Inf",shard="default",type="monitoring"}[6h] offset 30s)
         )
       )
       or
@@ -1151,7 +1151,7 @@ groups:
       type: monitoring
     expr: |
       sum by (env,environment,stage) (
-        rate(grafana_datasource_request_total{job="grafana",shard="default",type="monitoring"}[6h])
+        rate(grafana_datasource_request_total{job="grafana",shard="default",type="monitoring"}[6h] offset 30s)
       )
   - record: gitlab_component_errors:rate_6h
     labels:
@@ -1161,7 +1161,7 @@ groups:
     expr: |
       (
         sum by (env,environment,stage) (
-          rate(grafana_datasource_request_total{code=~"^5.*",job="grafana",shard="default",type="monitoring"}[6h])
+          rate(grafana_datasource_request_total{code=~"^5.*",job="grafana",shard="default",type="monitoring"}[6h] offset 30s)
         )
       )
       or
@@ -1178,7 +1178,7 @@ groups:
       type: monitoring
     expr: |
       sum by (env,environment) (
-        rate(stackdriver_https_lb_rule_loadbalancing_googleapis_com_https_request_count{project_id="gitlab-ops",url_map_name="k8s2-um-4zodnh0s-grafana-grafana-cfagrqyu"}[6h])
+        rate(stackdriver_https_lb_rule_loadbalancing_googleapis_com_https_request_count{project_id="gitlab-ops",url_map_name="k8s2-um-4zodnh0s-grafana-grafana-cfagrqyu"}[6h] offset 30s)
       )
   - record: gitlab_component_errors:rate_6h
     labels:
@@ -1189,7 +1189,7 @@ groups:
     expr: |
       (
         sum by (env,environment) (
-          rate(stackdriver_https_lb_rule_loadbalancing_googleapis_com_https_request_count{project_id="gitlab-ops",response_code_class="500",url_map_name="k8s2-um-4zodnh0s-grafana-grafana-cfagrqyu"}[6h])
+          rate(stackdriver_https_lb_rule_loadbalancing_googleapis_com_https_request_count{project_id="gitlab-ops",response_code_class="500",url_map_name="k8s2-um-4zodnh0s-grafana-grafana-cfagrqyu"}[6h] offset 30s)
         )
       )
       or
@@ -1205,7 +1205,7 @@ groups:
       type: monitoring
     expr: |
       sum by (env,environment,stage) (
-        rate(grafana_image_renderer_service_http_request_duration_seconds_bucket{job="grafana-image-renderer",le="30",shard="default",type="monitoring"}[6h])
+        rate(grafana_image_renderer_service_http_request_duration_seconds_bucket{job="grafana-image-renderer",le="30",shard="default",type="monitoring"}[6h] offset 30s)
       )
   - record: gitlab_component_apdex:weight:score_6h
     labels:
@@ -1214,7 +1214,7 @@ groups:
       type: monitoring
     expr: |
       sum by (env,environment,stage) (
-        rate(grafana_image_renderer_service_http_request_duration_seconds_bucket{job="grafana-image-renderer",le="+Inf",shard="default",type="monitoring"}[6h])
+        rate(grafana_image_renderer_service_http_request_duration_seconds_bucket{job="grafana-image-renderer",le="+Inf",shard="default",type="monitoring"}[6h] offset 30s)
       )
   - record: gitlab_component_ops:rate_6h
     labels:
@@ -1223,7 +1223,7 @@ groups:
       type: monitoring
     expr: |
       sum by (env,environment,stage) (
-        rate(grafana_image_renderer_service_http_request_duration_seconds_bucket{job="grafana-image-renderer",le="+Inf",shard="default",type="monitoring"}[6h])
+        rate(grafana_image_renderer_service_http_request_duration_seconds_bucket{job="grafana-image-renderer",le="+Inf",shard="default",type="monitoring"}[6h] offset 30s)
       )
   - record: gitlab_component_errors:rate_6h
     labels:
@@ -1233,7 +1233,7 @@ groups:
     expr: |
       (
         sum by (env,environment,stage) (
-          rate(grafana_image_renderer_service_http_request_duration_seconds_bucket{job="grafana-image-renderer",le="+Inf",shard="default",status_code=~"^5.*",type="monitoring"}[6h])
+          rate(grafana_image_renderer_service_http_request_duration_seconds_bucket{job="grafana-image-renderer",le="+Inf",shard="default",status_code=~"^5.*",type="monitoring"}[6h] offset 30s)
         )
       )
       or
@@ -1250,11 +1250,11 @@ groups:
     expr: |
       (
         sum by (env,environment,stage) (
-          rate(prometheus_http_request_duration_seconds_bucket{job!="prometheus-metamon",job=~"prometheus.*",le="1",type="monitoring"}[6h])
+          rate(prometheus_http_request_duration_seconds_bucket{job!="prometheus-metamon",job=~"prometheus.*",le="1",type="monitoring"}[6h] offset 30s)
         )
         +
         sum by (env,environment,stage) (
-          rate(prometheus_http_request_duration_seconds_bucket{job!="prometheus-metamon",job=~"prometheus.*",le="3",type="monitoring"}[6h])
+          rate(prometheus_http_request_duration_seconds_bucket{job!="prometheus-metamon",job=~"prometheus.*",le="3",type="monitoring"}[6h] offset 30s)
         )
       )
       /
@@ -1266,7 +1266,7 @@ groups:
       type: monitoring
     expr: |
       sum by (env,environment,stage) (
-        rate(prometheus_http_request_duration_seconds_bucket{job!="prometheus-metamon",job=~"prometheus.*",le="+Inf",type="monitoring"}[6h])
+        rate(prometheus_http_request_duration_seconds_bucket{job!="prometheus-metamon",job=~"prometheus.*",le="+Inf",type="monitoring"}[6h] offset 30s)
       )
   - record: gitlab_component_ops:rate_6h
     labels:
@@ -1275,7 +1275,7 @@ groups:
       type: monitoring
     expr: |
       sum by (env,environment,stage) (
-        rate(prometheus_http_requests_total{job!="prometheus-metamon",job=~"prometheus.*",type="monitoring"}[6h])
+        rate(prometheus_http_requests_total{job!="prometheus-metamon",job=~"prometheus.*",type="monitoring"}[6h] offset 30s)
       )
   - record: gitlab_component_errors:rate_6h
     labels:
@@ -1285,7 +1285,7 @@ groups:
     expr: |
       (
         sum by (env,environment,stage) (
-          rate(prometheus_http_requests_total{code=~"^5.*",job!="prometheus-metamon",job=~"prometheus.*",type="monitoring"}[6h])
+          rate(prometheus_http_requests_total{code=~"^5.*",job!="prometheus-metamon",job=~"prometheus.*",type="monitoring"}[6h] offset 30s)
         )
       )
       or
@@ -1301,7 +1301,7 @@ groups:
       type: monitoring
     expr: |
       sum by (env,environment,stage) (
-        rate(prometheus_notifications_sent_total{job="prometheus",type="monitoring"}[6h])
+        rate(prometheus_notifications_sent_total{job="prometheus",type="monitoring"}[6h] offset 30s)
       )
   - record: gitlab_component_errors:rate_6h
     labels:
@@ -1311,7 +1311,7 @@ groups:
     expr: |
       (
         sum by (env,environment,stage) (
-          rate(prometheus_notifications_errors_total{job="prometheus",type="monitoring"}[6h])
+          rate(prometheus_notifications_errors_total{job="prometheus",type="monitoring"}[6h] offset 30s)
         )
       )
       or
@@ -1327,13 +1327,13 @@ groups:
       type: monitoring
     expr: |
       sum by (env,environment,stage) (
-        rate(prometheus_rule_group_iterations_total{job!~"^thanos.*",type="monitoring"}[6h])
+        rate(prometheus_rule_group_iterations_total{job!~"^thanos.*",type="monitoring"}[6h] offset 30s)
       ) - (
         sum by (env,environment,stage) (
-          rate(prometheus_rule_group_iterations_missed_total{job!~"^thanos.*",type="monitoring"}[6h])
+          rate(prometheus_rule_group_iterations_missed_total{job!~"^thanos.*",type="monitoring"}[6h] offset 30s)
         ) or
         0 * sum by (env,environment,stage) (
-          rate(prometheus_rule_group_iterations_total{job!~"^thanos.*",type="monitoring"}[6h])
+          rate(prometheus_rule_group_iterations_total{job!~"^thanos.*",type="monitoring"}[6h] offset 30s)
         )
       )
   - record: gitlab_component_apdex:weight:score_6h
@@ -1343,7 +1343,7 @@ groups:
       type: monitoring
     expr: |
       sum by (env,environment,stage) (
-        rate(prometheus_rule_group_iterations_total{job!~"^thanos.*",type="monitoring"}[6h])
+        rate(prometheus_rule_group_iterations_total{job!~"^thanos.*",type="monitoring"}[6h] offset 30s)
       )
   - record: gitlab_component_ops:rate_6h
     labels:
@@ -1352,7 +1352,7 @@ groups:
       type: monitoring
     expr: |
       sum by (env,environment,stage) (
-        rate(prometheus_rule_evaluations_total{job!~"^thanos.*",type="monitoring"}[6h])
+        rate(prometheus_rule_evaluations_total{job!~"^thanos.*",type="monitoring"}[6h] offset 30s)
       )
   - record: gitlab_component_errors:rate_6h
     labels:
@@ -1362,7 +1362,7 @@ groups:
     expr: |
       (
         sum by (env,environment,stage) (
-          rate(prometheus_rule_evaluation_failures_total{job!~"^thanos.*",type="monitoring"}[6h])
+          rate(prometheus_rule_evaluation_failures_total{job!~"^thanos.*",type="monitoring"}[6h] offset 30s)
         )
       )
       or

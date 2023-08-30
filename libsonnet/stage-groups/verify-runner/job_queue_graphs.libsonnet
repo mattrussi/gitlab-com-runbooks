@@ -1,13 +1,17 @@
 local panels = import './panels.libsonnet';
 local basic = import 'grafana/basic.libsonnet';
+local runnersManagerMatching = import './runner_managers_matching.libsonnet';
 
-local durationHistogram = panels.heatmap(
+local durationHistogram(partition=runnersManagerMatching.defaultPartition) = panels.heatmap(
   'Pending job queue duration histogram',
-  |||
+  runnersManagerMatching.formatQuery(|||
     sum by (le) (
-      rate(job_queue_duration_seconds_bucket{environment=~"$environment", stage=~"$stage", jobs_running_for_project=~"$jobs_running_for_project"}[$__rate_interval])
+      increase(gitlab_runner_job_queue_duration_seconds_bucket{environment=~"$environment", stage=~"$stage", project_jobs_running=~"$project_jobs_running", %(runnerManagersMatcher)s}[$__rate_interval])
     )
-  |||,
+  |||, partition),
+  color_mode='spectrum',
+  color_colorScheme='Oranges',
+  legend_show=true,
   intervalFactor=1,
 );
 

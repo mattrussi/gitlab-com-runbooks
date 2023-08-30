@@ -1,4 +1,3 @@
-local autoscalingGraphs = import 'stage-groups/verify-runner/autoscaling_graphs.libsonnet';
 local dashboardFilters = import 'stage-groups/verify-runner/dashboard_filters.libsonnet';
 local dashboardIncident = import 'stage-groups/verify-runner/dashboard_incident.libsonnet';
 local fleetingGraphs = import 'stage-groups/verify-runner/fleeting_graphs.libsonnet';
@@ -22,39 +21,40 @@ dashboardIncident.incidentDashboard(
 )
 .addGrid(
   panels=[
-    fleetingGraphs.provisionerInstancesSaturation,
-    fleetingGraphs.taskscalerTasksSaturation,
-    fleetingGraphs.taskscalerMaxUseCountPerInstance,
+    fleetingGraphs.provisionerInstancesSaturation(),
+    fleetingGraphs.taskscalerTasksSaturation(),
+    fleetingGraphs.taskscalerMaxUseCountPerInstance(),
   ],
   rowHeight=6,
   startRow=3000,
 )
 .addGrid(
   panels=[
-    fleetingGraphs.provisionerInstancesStates,
-    fleetingGraphs.provisionerInstanceOperationsRate,
-    fleetingGraphs.provisionerInternalOperationsRate,
-    fleetingGraphs.provisionerMissedUpdates,
+    fleetingGraphs.provisionerInstancesStates(),
+    fleetingGraphs.provisionerInstanceOperationsRate(),
+    fleetingGraphs.provisionerInternalOperationsRate(),
+    fleetingGraphs.provisionerMissedUpdates(),
   ],
   rowHeight=8,
   startRow=4000,
 )
 .addGrid(
   panels=[
-    fleetingGraphs.provisionerCreationTiming,
-    fleetingGraphs.provisionerIsRunningTiming,
-    fleetingGraphs.provisionerDeletionTiming,
-    fleetingGraphs.provisionerInstanceLifeDuration,
+    fleetingGraphs.provisionerCreationTiming(),
+    fleetingGraphs.provisionerIsRunningTiming(),
+    fleetingGraphs.provisionerDeletionTiming(),
+    fleetingGraphs.provisionerInstanceLifeDuration(),
   ],
   rowHeight=8,
   startRow=5000,
 )
 .addGrid(
   panels=[
-    fleetingGraphs.taskscalerTasks,
-    fleetingGraphs.taskscalerOperationsRate,
-    fleetingGraphs.taskscalerScaleOperationsRate,
-    fleetingGraphs.taskscalerInstanceReadinessTiming,
+    fleetingGraphs.taskscalerTasks(),
+    fleetingGraphs.taskscalerDesiredInstances(),
+    fleetingGraphs.taskscalerOperationsRate(),
+    fleetingGraphs.taskscalerScaleOperationsRate(),
+    fleetingGraphs.taskscalerInstanceReadinessTiming(),
   ],
   rowHeight=8,
   startRow=6000,

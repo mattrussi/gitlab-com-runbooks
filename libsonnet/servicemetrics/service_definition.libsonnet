@@ -14,7 +14,6 @@ local serviceDefaults = {
   shardLevelMonitoring: false,  // By default we do not use shard-level monitoring
   kubeConfig: {},
   kubeResources: {},
-  runwayConfig: {},
   regional: false,  // By default we don't support regional monitoring for services
   alertWindows: multiburnExpression.defaultWindows,
   skippedMaturityCriteria: {},

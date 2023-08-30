@@ -9,7 +9,7 @@ local services = [
       gitaly: true,
       'redis-tracechunks': true,
       'redis-sidekiq': true,
-      'redis-cache': true,
+      'redis-cluster-cache': true,
       redis: true,
     },
   },
@@ -48,7 +48,7 @@ local services = [
   { type: 'patroni' },
   { type: 'redis' },
   { type: 'redis-tracechunks' },
-  { type: 'redis-cache' },
+  { type: 'redis-cluster-cache' },
   { type: 'redis-sidekiq' },
 ];
 
@@ -56,14 +56,14 @@ test.suite({
   testBlank: {
     actual: serviceCatalog.buildServiceGraph(services),
     expect: {
-      api: { inward: ['frontend'], outward: ['gitaly', 'redis', 'redis-cache', 'redis-sidekiq', 'redis-tracechunks'] },
+      api: { inward: ['frontend'], outward: ['gitaly', 'redis', 'redis-cluster-cache', 'redis-sidekiq', 'redis-tracechunks'] },
       frontend: { inward: [], outward: ['api'] },
       gitaly: { inward: ['web', 'api'], outward: [] },  //  It does not include self-reference
       pages: { inward: [], outward: ['pgbouncer'] },
       patroni: { inward: ['pgbouncer'], outward: [] },
       pgbouncer: { inward: ['pages'], outward: ['patroni'] },
       redis: { inward: ['web', 'api'], outward: [] },
-      'redis-cache': { inward: ['api'], outward: [] },
+      'redis-cluster-cache': { inward: ['api'], outward: [] },
       'redis-sidekiq': { inward: ['api'], outward: [] },
       'redis-tracechunks': { inward: ['api'], outward: [] },
       web: { inward: [], outward: ['gitaly', 'redis'] },

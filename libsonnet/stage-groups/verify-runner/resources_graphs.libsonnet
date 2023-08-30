@@ -1,6 +1,8 @@
 local basic = import 'grafana/basic.libsonnet';
 
-local memoryUsage =
+local runnersManagerMatching = import './runner_managers_matching.libsonnet';
+
+local memoryUsage(partition=runnersManagerMatching.defaultPartition) =
   basic.timeseries(
     title='Memory usage by instance',
     legendFormat='{{instance}}',
@@ -8,12 +10,12 @@ local memoryUsage =
     linewidth=2,
     fill=0,
     stack=false,
-    query=|||
-      instance:node_memory_utilization:ratio{environment=~"$environment",stage=~"$stage",instance=~"${runner_manager:pipe}"}
-    |||,
+    query=runnersManagerMatching.formatQuery(|||
+      instance:node_memory_utilization:ratio{environment=~"$environment",stage=~"$stage",%(runnerManagersMatcher)s}
+    |||, partition),
   );
 
-local cpuUsage =
+local cpuUsage(partition=runnersManagerMatching.defaultPartition) =
   basic.timeseries(
     title='CPU usage by instance',
     legendFormat='{{instance}}',
@@ -21,12 +23,12 @@ local cpuUsage =
     linewidth=2,
     fill=0,
     stack=false,
-    query=|||
-      instance:node_cpu_utilization:ratio{environment=~"$environment",stage=~"$stage",instance=~"${runner_manager:pipe}"}
-    |||,
+    query=runnersManagerMatching.formatQuery(|||
+      instance:node_cpu_utilization:ratio{environment=~"$environment",stage=~"$stage",%(runnerManagersMatcher)s}
+    |||, partition),
   );
 
-local fdsUsage =
+local fdsUsage(partition=runnersManagerMatching.defaultPartition) =
   basic.timeseries(
     title='File Descriptiors usage by instance',
     legendFormat='{{instance}}',
@@ -34,14 +36,14 @@ local fdsUsage =
     linewidth=2,
     fill=0,
     stack=false,
-    query=|||
-      process_open_fds{environment=~"$environment",stage=~"$stage",instance=~"${runner_manager:pipe}",job="runners-manager"}
+    query=runnersManagerMatching.formatQuery(|||
+      process_open_fds{environment=~"$environment",stage=~"$stage",%(runnerManagersMatcher)s,job="runners-manager"}
       /
-      process_max_fds{environment=~"$environment",stage=~"$stage",instance=~"${runner_manager:pipe}",job="runners-manager"}
-    |||,
+      process_max_fds{environment=~"$environment",stage=~"$stage",%(runnerManagersMatcher)s,job="runners-manager"}
+    |||, partition),
   );
 
-local diskAvailable =
+local diskAvailable(partition=runnersManagerMatching.defaultPartition) =
   basic.timeseries(
     title='Disk available by instance and device',
     legendFormat='{{instance}} - {{device}}',
@@ -49,12 +51,12 @@ local diskAvailable =
     linewidth=2,
     fill=0,
     stack=false,
-    query=|||
-      instance:node_filesystem_avail:ratio{environment=~"$environment",stage=~"$stage",instance=~"${runner_manager:pipe}",fstype="ext4"}
-    |||,
+    query=runnersManagerMatching.formatQuery(|||
+      instance:node_filesystem_avail:ratio{environment=~"$environment",stage=~"$stage",%(runnerManagersMatcher)s,fstype="ext4"}
+    |||, partition),
   );
 
-local iopsUtilization =
+local iopsUtilization(partition=runnersManagerMatching.defaultPartition) =
   basic.multiTimeseries(
     title='IOPS',
     format='ops',
@@ -64,15 +66,15 @@ local iopsUtilization =
     queries=[
       {
         legendFormat: '{{instance}} - writes',
-        query: |||
-          instance:node_disk_writes_completed:irate1m{environment=~"$environment",stage=~"$stage",instance=~"${runner_manager:pipe}"}
-        |||,
+        query: runnersManagerMatching.formatQuery(|||
+          instance:node_disk_writes_completed:irate1m{environment=~"$environment",stage=~"$stage",%(runnerManagersMatcher)s}
+        |||, partition),
       },
       {
         legendFormat: '{{instance}} - reads',
-        query: |||
-          instance:node_disk_reads_completed:irate1m{environment=~"$environment",stage=~"$stage",instance=~"${runner_manager:pipe}"}
-        |||,
+        query: runnersManagerMatching.formatQuery(|||
+          instance:node_disk_reads_completed:irate1m{environment=~"$environment",stage=~"$stage",%(runnerManagersMatcher)s}
+        |||, partition),
       },
     ],
   ) + {
@@ -84,7 +86,7 @@ local iopsUtilization =
     ],
   };
 
-local networkUtilization =
+local networkUtilization(partition=runnersManagerMatching.defaultPartition) =
   basic.multiTimeseries(
     title='Network Utilization',
     format='bps',
@@ -94,19 +96,19 @@ local networkUtilization =
     queries=[
       {
         legendFormat: '{{instance}} - sent',
-        query: |||
+        query: runnersManagerMatching.formatQuery(|||
           sum by (instance) (
-            rate(node_network_transmit_bytes_total{environment=~"$environment",stage=~"$stage",instance=~"${runner_manager:pipe}"}[$__rate_interval])
+            rate(node_network_transmit_bytes_total{environment=~"$environment",stage=~"$stage",%(runnerManagersMatcher)s}[$__rate_interval])
           )
-        |||,
+        |||, partition),
       },
       {
         legendFormat: '{{instance}} - received',
-        query: |||
+        query: runnersManagerMatching.formatQuery(|||
           sum by (instance) (
-            rate(node_network_receive_bytes_total{environment=~"$environment",stage=~"$stage",instance=~"${runner_manager:pipe}"}[$__rate_interval])
+            rate(node_network_receive_bytes_total{environment=~"$environment",stage=~"$stage",%(runnerManagersMatcher)s}[$__rate_interval])
           )
-        |||,
+        |||, partition),
       },
     ],
   ) + {

@@ -8,24 +8,60 @@ groups:
   - record: slo:min:events:gitlab_service_apdex:ratio
     labels:
       tier: sv
-      type: ai_gateway
+      type: ai-gateway
     expr: "0.999000"
   - record: slo:max:events:gitlab_service_errors:ratio
     labels:
       tier: sv
-      type: ai_gateway
+      type: ai-gateway
+    expr: "0.001000"
+  - record: slo:min:events:gitlab_service_apdex:ratio
+    labels:
+      component: inference
+      tier: sv
+      type: ai-gateway
+    expr: "0.999000"
+  - record: slo:max:events:gitlab_service_errors:ratio
+    labels:
+      component: inference
+      tier: sv
+      type: ai-gateway
     expr: "0.001000"
   - record: slo:min:events:gitlab_service_apdex:ratio
     labels:
       component: runway_ingress
       tier: sv
-      type: ai_gateway
+      type: ai-gateway
     expr: "0.999000"
   - record: slo:max:events:gitlab_service_errors:ratio
     labels:
       component: runway_ingress
       tier: sv
-      type: ai_gateway
+      type: ai-gateway
+    expr: "0.001000"
+  - record: slo:min:events:gitlab_service_apdex:ratio
+    labels:
+      component: server
+      tier: sv
+      type: ai-gateway
+    expr: "0.999000"
+  - record: slo:max:events:gitlab_service_errors:ratio
+    labels:
+      component: server
+      tier: sv
+      type: ai-gateway
+    expr: "0.001000"
+  - record: slo:min:events:gitlab_service_apdex:ratio
+    labels:
+      component: waf
+      tier: sv
+      type: ai-gateway
+    expr: "0.999000"
+  - record: slo:max:events:gitlab_service_errors:ratio
+    labels:
+      component: waf
+      tier: sv
+      type: ai-gateway
     expr: "0.001000"
   - record: slo:min:gitlab_service_apdex:ratio
     labels:
@@ -1466,52 +1502,6 @@ groups:
   - record: slo:min:events:gitlab_service_apdex:ratio
     labels:
       tier: db
-      type: redis-cache
-    expr: "0.999500"
-  - record: slo:max:events:gitlab_service_errors:ratio
-    labels:
-      tier: db
-      type: redis-cache
-    expr: "0.001000"
-  - record: slo:min:events:gitlab_service_apdex:ratio
-    labels:
-      component: primary_server
-      tier: db
-      type: redis-cache
-    expr: "0.999500"
-  - record: slo:max:events:gitlab_service_errors:ratio
-    labels:
-      component: primary_server
-      tier: db
-      type: redis-cache
-    expr: "0.001000"
-  - record: slo:min:events:gitlab_service_apdex:ratio
-    labels:
-      component: rails_redis_client
-      tier: db
-      type: redis-cache
-    expr: "0.999500"
-  - record: slo:max:events:gitlab_service_errors:ratio
-    labels:
-      component: rails_redis_client
-      tier: db
-      type: redis-cache
-    expr: "0.001000"
-  - record: slo:min:events:gitlab_service_apdex:ratio
-    labels:
-      component: secondary_servers
-      tier: db
-      type: redis-cache
-    expr: "0.999500"
-  - record: slo:max:events:gitlab_service_errors:ratio
-    labels:
-      component: secondary_servers
-      tier: db
-      type: redis-cache
-    expr: "0.001000"
-  - record: slo:min:events:gitlab_service_apdex:ratio
-    labels:
-      tier: db
       type: redis-cluster-cache
     expr: "0.999500"
   - record: slo:max:events:gitlab_service_errors:ratio
@@ -2809,12 +2799,39 @@ groups:
     expr: "1"
   - record: gitlab_component_service:mapping
     labels:
+      component: inference
+      global_aggregation: "no"
+      regional_aggregation: "no"
+      service_aggregation: "no"
+      tier: sv
+      type: ai-gateway
+    expr: "1"
+  - record: gitlab_component_service:mapping
+    labels:
       component: runway_ingress
       global_aggregation: "no"
       regional_aggregation: "no"
       service_aggregation: "yes"
       tier: sv
-      type: ai_gateway
+      type: ai-gateway
+    expr: "1"
+  - record: gitlab_component_service:mapping
+    labels:
+      component: server
+      global_aggregation: "no"
+      regional_aggregation: "no"
+      service_aggregation: "no"
+      tier: sv
+      type: ai-gateway
+    expr: "1"
+  - record: gitlab_component_service:mapping
+    labels:
+      component: waf
+      global_aggregation: "no"
+      regional_aggregation: "no"
+      service_aggregation: "no"
+      tier: sv
+      type: ai-gateway
     expr: "1"
   - record: gitlab_component_service:mapping
     labels:
@@ -2983,7 +3000,7 @@ groups:
       component: customers_dot_sidekiq_jobs
       global_aggregation: "no"
       regional_aggregation: "no"
-      service_aggregation: "yes"
+      service_aggregation: "no"
       tier: sv
       type: customersdot
     expr: "1"
@@ -3715,33 +3732,6 @@ groups:
       service_aggregation: "yes"
       tier: sv
       type: pvs
-    expr: "1"
-  - record: gitlab_component_service:mapping
-    labels:
-      component: primary_server
-      global_aggregation: "no"
-      regional_aggregation: "no"
-      service_aggregation: "no"
-      tier: db
-      type: redis-cache
-    expr: "1"
-  - record: gitlab_component_service:mapping
-    labels:
-      component: rails_redis_client
-      global_aggregation: "no"
-      regional_aggregation: "no"
-      service_aggregation: "yes"
-      tier: db
-      type: redis-cache
-    expr: "1"
-  - record: gitlab_component_service:mapping
-    labels:
-      component: secondary_servers
-      global_aggregation: "no"
-      regional_aggregation: "no"
-      service_aggregation: "no"
-      tier: db
-      type: redis-cache
     expr: "1"
   - record: gitlab_component_service:mapping
     labels:

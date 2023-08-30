@@ -295,7 +295,7 @@ groups:
   - expr: |
       (
         sum by () (
-          rate(grpc_server_handled_total{grpc_code!="OK",grpc_service="gitaly.SSHService",job="gitaly"}[5m])
+          rate(grpc_server_handled_total{grpc_code!~"AlreadyExists|Canceled|DeadlineExceeded|FailedPrecondition|InvalidArgument|NotFound|OK|PermissionDenied|ResourceExhausted|Unauthenticated",grpc_service="gitaly.SSHService",job="gitaly"}[5m])
         )
       )
       or
@@ -350,7 +350,7 @@ groups:
   - expr: |
       (
         sum by () (
-          rate(grpc_server_handled_total{grpc_code!="OK",grpc_service="gitaly.SSHService",job="gitaly"}[30m])
+          rate(grpc_server_handled_total{grpc_code!~"AlreadyExists|Canceled|DeadlineExceeded|FailedPrecondition|InvalidArgument|NotFound|OK|PermissionDenied|ResourceExhausted|Unauthenticated",grpc_service="gitaly.SSHService",job="gitaly"}[30m])
         )
       )
       or
@@ -405,7 +405,7 @@ groups:
   - expr: |
       (
         sum by () (
-          rate(grpc_server_handled_total{grpc_code!="OK",grpc_service="gitaly.SSHService",job="gitaly"}[1h])
+          rate(grpc_server_handled_total{grpc_code!~"AlreadyExists|Canceled|DeadlineExceeded|FailedPrecondition|InvalidArgument|NotFound|OK|PermissionDenied|ResourceExhausted|Unauthenticated",grpc_service="gitaly.SSHService",job="gitaly"}[1h])
         )
       )
       or
@@ -460,7 +460,7 @@ groups:
   - expr: |
       (
         sum by () (
-          rate(grpc_server_handled_total{grpc_code!="OK",grpc_service="gitaly.SSHService",job="gitaly"}[6h])
+          rate(grpc_server_handled_total{grpc_code!~"AlreadyExists|Canceled|DeadlineExceeded|FailedPrecondition|InvalidArgument|NotFound|OK|PermissionDenied|ResourceExhausted|Unauthenticated",grpc_service="gitaly.SSHService",job="gitaly"}[6h])
         )
       )
       or
@@ -1956,17 +1956,17 @@ groups:
   rules:
   - expr: |
       sum by (environment,feature_category,le,queue,shard,stage,tier,type,urgency,worker) (
-        rate(sidekiq_jobs_completion_seconds_bucket[5m])
+        rate(sidekiq_jobs_completion_seconds_bucket[5m] offset 30s)
       )
     record: sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate5m
   - expr: |
       sum by (environment,feature_category,le,queue,shard,stage,tier,type,urgency,worker) (
-        rate(sidekiq_jobs_queue_duration_seconds_bucket[5m])
+        rate(sidekiq_jobs_queue_duration_seconds_bucket[5m] offset 30s)
       )
     record: sli_aggregations:sidekiq_jobs_queue_duration_seconds_bucket_rate5m
   - expr: |
       sum by (environment,feature_category,queue,shard,stage,tier,type,urgency,worker) (
-        rate(sidekiq_jobs_failed_total[5m])
+        rate(sidekiq_jobs_failed_total[5m] offset 30s)
       )
     record: sli_aggregations:sidekiq_jobs_failed_total_rate5m
   - expr: |
@@ -2110,17 +2110,17 @@ groups:
   rules:
   - expr: |
       sum by (environment,feature_category,le,queue,shard,stage,tier,type,urgency,worker) (
-        rate(sidekiq_jobs_completion_seconds_bucket[30m])
+        rate(sidekiq_jobs_completion_seconds_bucket[30m] offset 30s)
       )
     record: sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate30m
   - expr: |
       sum by (environment,feature_category,le,queue,shard,stage,tier,type,urgency,worker) (
-        rate(sidekiq_jobs_queue_duration_seconds_bucket[30m])
+        rate(sidekiq_jobs_queue_duration_seconds_bucket[30m] offset 30s)
       )
     record: sli_aggregations:sidekiq_jobs_queue_duration_seconds_bucket_rate30m
   - expr: |
       sum by (environment,feature_category,queue,shard,stage,tier,type,urgency,worker) (
-        rate(sidekiq_jobs_failed_total[30m])
+        rate(sidekiq_jobs_failed_total[30m] offset 30s)
       )
     record: sli_aggregations:sidekiq_jobs_failed_total_rate30m
   - expr: |
@@ -2264,17 +2264,17 @@ groups:
   rules:
   - expr: |
       sum by (environment,feature_category,le,queue,shard,stage,tier,type,urgency,worker) (
-        rate(sidekiq_jobs_completion_seconds_bucket[1h])
+        rate(sidekiq_jobs_completion_seconds_bucket[1h] offset 30s)
       )
     record: sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate1h
   - expr: |
       sum by (environment,feature_category,le,queue,shard,stage,tier,type,urgency,worker) (
-        rate(sidekiq_jobs_queue_duration_seconds_bucket[1h])
+        rate(sidekiq_jobs_queue_duration_seconds_bucket[1h] offset 30s)
       )
     record: sli_aggregations:sidekiq_jobs_queue_duration_seconds_bucket_rate1h
   - expr: |
       sum by (environment,feature_category,queue,shard,stage,tier,type,urgency,worker) (
-        rate(sidekiq_jobs_failed_total[1h])
+        rate(sidekiq_jobs_failed_total[1h] offset 30s)
       )
     record: sli_aggregations:sidekiq_jobs_failed_total_rate1h
   - expr: |
@@ -5618,7 +5618,7 @@ groups:
       grafana_variables: environment,stage
       promql_template_1: |
         sum by () (
-          rate(grpc_server_handled_total{grpc_code!="OK",grpc_service="gitaly.SSHService",job="gitaly"}[5m])
+          rate(grpc_server_handled_total{grpc_code!~"AlreadyExists|Canceled|DeadlineExceeded|FailedPrecondition|InvalidArgument|NotFound|OK|PermissionDenied|ResourceExhausted|Unauthenticated",grpc_service="gitaly.SSHService",job="gitaly"}[5m])
         )
       runbook: docs/gitlab-shell/README.md
       title: The grpc_requests SLI of the gitlab-shell service has an error rate violating
@@ -5668,7 +5668,7 @@ groups:
       grafana_variables: environment,stage
       promql_template_1: |
         sum by () (
-          rate(grpc_server_handled_total{grpc_code!="OK",grpc_service="gitaly.SSHService",job="gitaly"}[5m])
+          rate(grpc_server_handled_total{grpc_code!~"AlreadyExists|Canceled|DeadlineExceeded|FailedPrecondition|InvalidArgument|NotFound|OK|PermissionDenied|ResourceExhausted|Unauthenticated",grpc_service="gitaly.SSHService",job="gitaly"}[5m])
         )
       runbook: docs/gitlab-shell/README.md
       title: The grpc_requests SLI of the gitlab-shell service has an error rate violating

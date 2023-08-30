@@ -9,7 +9,7 @@ local railsCacheSelector = redisHelpers.storeSelector('RedisCacheStore');
 metricsCatalog.serviceDefinition(
   redisArchetype(
     type='redis-cluster-cache',
-    railsStorageSelector=redisHelpers.storageSelector({ oneOf: ['cluster_cache', 'cache'] }),
+    railsStorageSelector=redisHelpers.storageSelector('cache'),
     descriptiveName='Redis Cache in Redis Cluster',
     redisCluster=true
   )

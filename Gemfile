@@ -10,6 +10,7 @@ gem 'json'
 gem 'digest-crc'
 gem 'terminal-table', '~> 3.0'
 gem 'redis', '~> 5.0.0'
+gem 'redis-clustering'
 gem 'connection_pool', '~> 2.0'
 
 group :development, :test do

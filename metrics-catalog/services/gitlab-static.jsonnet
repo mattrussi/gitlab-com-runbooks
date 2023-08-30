@@ -18,6 +18,7 @@ metricsCatalog.serviceDefinition({
     gitlab_static_net_zone: {
       severity: 's3',
       team: 'reliability_general',
+      trafficCessationAlertConfig: false,
       userImpacting: true,
       featureCategory: 'not_owned',
       description: |||

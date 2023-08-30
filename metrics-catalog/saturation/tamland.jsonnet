@@ -56,6 +56,7 @@ local page(path, title, service_pattern) =
       page('monitoring-logging.md', 'Monitoring and Logging', 'monitoring|logging|thanos'),
       page('patroni.md', 'Postgres (Patroni and PgBouncer)', 'patroni.*|pgbouncer.*|postgres.*'),
       page('redis.md', 'Redis', 'redis.*'),
+      page('runway.md', 'Runway', std.join('|', metricsCatalog.findRunwayProvisionedServices())),
       page('search.md', 'Search', 'search'),
       page('sidekiq.md', 'Sidekiq', 'sidekiq'),
       page('saturation.md', 'Other Utilization and Saturation Forecasting', 'camoproxy|cloud-sql|consul|frontend|google-cloud-storage|jaeger|kas|mailroom|nat|nginx|plantuml|pvs|registry|sentry|vault|web-pages|woodhouse|code_suggestions|ops-gitlab-net'),

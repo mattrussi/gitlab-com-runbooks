@@ -42,7 +42,7 @@ metricsCatalog.serviceDefinition({
   serviceDependencies: {
     gitaly: true,
     'redis-sidekiq': true,
-    'redis-cache': true,
+    'redis-cluster-cache': true,
     redis: true,
     patroni: true,
     pgbouncer: true,

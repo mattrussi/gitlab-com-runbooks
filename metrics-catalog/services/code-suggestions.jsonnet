@@ -6,6 +6,9 @@ local toolingLinks = import 'toolinglinks/toolinglinks.libsonnet';
 
 local baseSelector = { type: 'code_suggestions' };
 
+// DEPRECATION WARNING: `code_suggestions` service will be removed in https://gitlab.com/gitlab-com/runbooks/-/issues/133
+// Use `ai-gateway` service: https://gitlab.com/gitlab-com/runbooks/-/blob/master/metrics-catalog/services/ai-gateway.jsonnet
+
 metricsCatalog.serviceDefinition({
   type: 'code_suggestions',
   tier: 'sv',
@@ -41,7 +44,7 @@ metricsCatalog.serviceDefinition({
       local modelGatewaySelector = baseSelector { container: 'model-gateway' },
       severity: 's4',  // NOTE: Do not page on-call SREs until production ready
       userImpacting: true,
-      team: 'ai_assisted',
+      team: 'code_creation',
       featureCategory: 'code_suggestions',
       serviceAggregation: false,
 
@@ -83,7 +86,7 @@ metricsCatalog.serviceDefinition({
       local tritonSelector = baseSelector { container: 'triton' },
       severity: 's4',  // NOTE: Do not page on-call SREs until production ready
       userImpacting: true,
-      team: 'ai_assisted',
+      team: 'code_creation',
       featureCategory: 'code_suggestions',
       serviceAggregation: false,
 
@@ -118,7 +121,7 @@ metricsCatalog.serviceDefinition({
       local hostSelector = { zone: 'gitlab.com', host: { re: 'codesuggestions.gitlab.com.*' } },
       severity: 's4',  // NOTE: Do not page on-call SREs until production ready
       userImpacting: true,
-      team: 'ai_assisted',
+      team: 'code_creation',
       featureCategory: 'code_suggestions',
       serviceAggregation: false,
       monitoringThresholds+: {
@@ -154,7 +157,7 @@ metricsCatalog.serviceDefinition({
       local ingressSelector = baseSelector { container: 'controller', path: { ne: '/' } },
       severity: 's4',  // NOTE: Do not page on-call SREs until production ready
       userImpacting: true,
-      team: 'ai_assisted',
+      team: 'code_creation',
       featureCategory: 'code_suggestions',
       serviceAggregation: true,
       description: |||
@@ -203,7 +206,7 @@ metricsCatalog.serviceDefinition({
       severity: 's4',  // NOTE: Do not page on-call SREs until production ready
       userImpacting: true,
       serviceAggregation: false,
-      team: 'ai_assisted',
+      team: 'code_creation',
       featureCategory: 'code_suggestions',
       trafficCessationAlertConfig: false,  // NOTE: traffic can be routed 100% to either native vs third party
       description: |||
@@ -234,7 +237,7 @@ metricsCatalog.serviceDefinition({
       severity: 's4',  // NOTE: Do not page on-call SREs until production ready
       userImpacting: true,
       serviceAggregation: false,
-      team: 'ai_assisted',
+      team: 'code_creation',
       featureCategory: 'code_suggestions',
       trafficCessationAlertConfig: false,  // NOTE: traffic can be routed 100% to either native vs third party
       description: |||

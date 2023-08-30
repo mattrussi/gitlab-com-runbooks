@@ -650,7 +650,7 @@ services:
     teams:
       - trust_and_safety
     label: CodeSuggestions
-    owner: ai_assisted
+    owner: code_creation
     technical:
       project:
         - https://gitlab.com/groups/gitlab-org/modelops/applied-ml/code-suggestions
@@ -668,12 +668,11 @@ services:
       monitors:
         primary_grafana_dashboard: code_suggestions-main/code-suggestions-overview
 
-  - name: ai_gateway
+  - name: ai-gateway
     tier: sv
     friendly_name: AI Gateway
     label: AIGateway
-    # TODO: Change owner to ai_assisted after https://gitlab.com/gitlab-com/gl-infra/readiness/-/issues/81
-    owner: scalability-runway-core
+    owner: code_creation
     technical:
       project:
         - https://gitlab.com/groups/gitlab-org/modelops/applied-ml/code-suggestions
@@ -1251,58 +1250,6 @@ services:
     observability:
       monitors:
         primary_grafana_dashboard: redis-cluster-cache-main/redis-cluster-cache-overview
-
-  - name: redis-cache
-    tier: db
-    friendly_name: Redis Cache
-    label: RedisCache
-    owner: scalability
-    technical:
-      project:
-        - https://github.com/antirez/redis/
-      documents:
-        design:
-        architecture:
-        readiness_review:
-        sre_guide: https://gitlab.com/gitlab-com/runbooks/-/tree/master/docs/redis-cache
-        developer_guide: https://docs.gitlab.com/ee/development/redis.html#redis-guidelines
-        service:
-          - https://redis.io/documentation
-          - https://docs.gitlab.com/omnibus/settings/redis.html
-        security:
-      dependencies:
-        - service:
-      logging:
-        - name: system
-          permalink: https://log.gprd.gitlab.net/goto/1a4342231de57c0ceabc8f5e0e402909
-    observability:
-      monitors:
-        primary_grafana_dashboard: redis-cache-main/redis-cache-overview
-
-  - name: redis-cache-sentinel
-    tier: db
-    friendly_name: Redis Cache Sentinel
-    label: RedisCacheSentinel
-    owner: scalability
-    technical:
-      project:
-        - https://github.com/antirez/redis/
-      documents:
-        design:
-        architecture:
-        readiness_review:
-        service:
-          - https://redis.io/topics/sentinel
-          - https://docs.gitlab.com/omnibus/settings/redis.html#redis-sentinel
-        security:
-      dependencies:
-        - service:
-      logging:
-        - name: system
-          permalink: https://log.gprd.gitlab.net/goto/0b28cb1d20663b4359f8bc05995a22ad
-    observability:
-      monitors:
-        primary_grafana_dashboard: wccEP9Imk/redis
 
   - name: redis-cluster-ratelimiting
     tier: db
@@ -1967,6 +1914,32 @@ services:
       monitors:
         primary_grafana_dashboard: websockets/websockets
 
+  - name: ai-assisted
+    tier: sv
+    friendly_name: AI-Assisted
+    label: AI-Assisted
+    owner: reliability_general
+    technical:
+      project:
+        - https://gitlab.com/gitlab-org/gitlab
+        - https://gitlab.com/gitlab-org/gitlab-workhorse
+      documents:
+        design:
+        architecture: TBD
+        readiness_review: TBD
+        sre_guide: https://gitlab.com/gitlab-com/runbooks/-/tree/master/docs/ai-assisted
+        developer_guide: https://docs.gitlab.com/ee/development/workhorse/channel.html
+        service:
+          - TBD
+        security:
+      dependencies:
+      logging:
+        - name: ai-assisted
+          permalink: TBD
+    observability:
+      monitors:
+        primary_grafana_dashboard: ai-assisted/ai-assisted
+
   - name: cloud-sql
     tier: inf
     friendly_name: Google Cloud SQL
@@ -2217,4 +2190,31 @@ services:
     observability:
       monitors:
         primary_grafana_dashboard: gitlab-static-main
+        sentry_slug:
+
+  - name: omnibus
+    tier: inf
+    friendly_name: GitLab Omnibus Package
+    label: omnibus
+    owner: reliability_general
+    teams:
+      - distribution_deploy
+    technical:
+      project:
+        - https://gitlab.com/gitlab-org/omnibus-gitlab
+      documents:
+        design:
+        architecture: https://docs.gitlab.com/omnibus/architecture/
+        readiness_review:
+        sre_guide:
+        developer_guide: https://gitlab.com/gitlab-org/omnibus-gitlab/-/blob/master/doc/development/index.md
+        service:
+        security:
+      dependencies:
+      logging:
+        - name:
+          permalink:
+    observability:
+      monitors:
+        primary_grafana_dashboard: gitlab-omnibus-versions
         sentry_slug:

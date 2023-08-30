@@ -8,6 +8,7 @@
 //
 local aggregations = import 'promql/aggregations.libsonnet';
 local selectors = import 'promql/selectors.libsonnet';
+local optionalOffset = import 'recording-rules/lib/optional-offset.libsonnet';
 local metricsLabelRegistry = import 'servicemetrics/metric-label-registry.libsonnet';
 local metricsCatalog = import 'servicemetrics/metrics-catalog.libsonnet';
 local misc = import 'utils/misc.libsonnet';
@@ -105,6 +106,7 @@ local resolveRecordingRuleFor(metricName, requiredAggregationLabels, selector, d
     metricName=null,
     rangeInterval='5m',
     selector={},
+    offset=null
   )::
     // Currently only support sum/rate recording rules,
     // possibly support other options in future
@@ -112,21 +114,21 @@ local resolveRecordingRuleFor(metricName, requiredAggregationLabels, selector, d
       null
     else
       local resolvedRecordingRule = resolveRecordingRuleFor(metricName, aggregationLabels, selector, rangeInterval);
-
       if resolvedRecordingRule == null then
         null
       else
+        local recordingRuleWithOffset = resolvedRecordingRule + optionalOffset(offset);
         if aggregationFunction == 'sum' then
-          aggregations.aggregateOverQuery(aggregationFunction, aggregationLabels, resolvedRecordingRule)
+          aggregations.aggregateOverQuery(aggregationFunction, aggregationLabels, recordingRuleWithOffset)
         else if aggregationFunction == null then
-          resolvedRecordingRule
+          recordingRuleWithOffset
         else
           null,
 
   recordingRuleExpressionFor(metricName, rangeInterval)::
     local aggregationLabels = metricsLabelRegistry.lookupLabelsForMetricName(metricName);
     local allRequiredLabelsPlusStandards = std.setUnion(aggregationLabels, standardEnvironmentLabels);
-    local query = 'rate(%(metricName)s[%(rangeInterval)s])' % {
+    local query = 'rate(%(metricName)s[%(rangeInterval)s] offset 30s)' % {
       metricName: metricName,
       rangeInterval: rangeInterval,
     };

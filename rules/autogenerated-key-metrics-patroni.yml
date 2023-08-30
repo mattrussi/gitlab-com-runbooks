@@ -7,12 +7,12 @@ groups:
   - record: sli_aggregations:gitlab_sql_primary_duration_seconds_bucket_rate1m
     expr: |
       sum by (db_config_name,environment,feature_category,job,le,shard,stage,tier,type) (
-        rate(gitlab_sql_primary_duration_seconds_bucket[1m])
+        rate(gitlab_sql_primary_duration_seconds_bucket[1m] offset 30s)
       )
   - record: sli_aggregations:gitlab_sql_replica_duration_seconds_bucket_rate1m
     expr: |
       sum by (db_config_name,environment,feature_category,le,shard,stage,tier,type) (
-        rate(gitlab_sql_replica_duration_seconds_bucket[1m])
+        rate(gitlab_sql_replica_duration_seconds_bucket[1m] offset 30s)
       )
   - record: gitlab_component_ops:rate
     labels:
@@ -22,9 +22,9 @@ groups:
       type: patroni
     expr: |
       sum by (env,environment) (
-        label_replace(rate(pgbouncer_stats_sql_transactions_pooled_total{tier="db",type="patroni"}[1m]), "_c", "0", "", "")
+        label_replace(rate(pgbouncer_stats_sql_transactions_pooled_total{tier="db",type="patroni"}[1m] offset 30s), "_c", "0", "", "")
         or
-        label_replace(rate(pgbouncer_stats_queries_pooled_total{tier="db",type="patroni"}[1m]), "_c", "1", "", "")
+        label_replace(rate(pgbouncer_stats_queries_pooled_total{tier="db",type="patroni"}[1m] offset 30s), "_c", "1", "", "")
       )
   - record: gitlab_component_errors:rate
     labels:
@@ -35,7 +35,7 @@ groups:
     expr: |
       (
         sum by (env,environment) (
-          rate(pgbouncer_pooler_errors_total{tier="db",type="patroni"}[1m])
+          rate(pgbouncer_pooler_errors_total{tier="db",type="patroni"}[1m] offset 30s)
         )
       )
       or
@@ -80,7 +80,7 @@ groups:
       type: patroni
     expr: |
       sum by (env,environment) (
-        sli_aggregations:gitlab_sql_primary_duration_seconds_bucket_rate1m{db_config_name="main",le="+Inf",type!="sidekiq",type!="ops-gitlab-net"}
+        sli_aggregations:gitlab_sql_primary_duration_seconds_bucket_rate1m{db_config_name="main",le="+Inf",type!="sidekiq",type!="ops-gitlab-net"} offset 30s
       )
   - record: gitlab_component_apdex:success:rate
     labels:
@@ -118,7 +118,7 @@ groups:
       type: patroni
     expr: |
       sum by (env,environment) (
-        sli_aggregations:gitlab_sql_replica_duration_seconds_bucket_rate1m{db_config_name="main_replica",le="+Inf",type!="sidekiq",type!="ops-gitlab-net"}
+        sli_aggregations:gitlab_sql_replica_duration_seconds_bucket_rate1m{db_config_name="main_replica",le="+Inf",type!="sidekiq",type!="ops-gitlab-net"} offset 30s
       )
   - record: gitlab_component_ops:rate
     labels:
@@ -128,9 +128,9 @@ groups:
       type: patroni
     expr: |
       sum by (env,environment) (
-        label_replace(rate(pg_stat_database_xact_commit{tier="db",type="patroni"}[1m]) and on (instance) (pg_replication_is_replica == 0), "_c", "0", "", "")
+        label_replace(rate(pg_stat_database_xact_commit{tier="db",type="patroni"}[1m] offset 30s) and on (instance) (pg_replication_is_replica == 0), "_c", "0", "", "")
         or
-        label_replace(rate(pg_stat_database_xact_rollback{tier="db",type="patroni"}[1m]) and on (instance) (pg_replication_is_replica == 0), "_c", "1", "", "")
+        label_replace(rate(pg_stat_database_xact_rollback{tier="db",type="patroni"}[1m] offset 30s) and on (instance) (pg_replication_is_replica == 0), "_c", "1", "", "")
       )
   - record: gitlab_component_errors:rate
     labels:
@@ -141,7 +141,7 @@ groups:
     expr: |
       (
         sum by (env,environment) (
-          rate(pg_stat_database_xact_rollback{tier="db",type="patroni"}[1m]) and on (instance) (pg_replication_is_replica == 0)
+          rate(pg_stat_database_xact_rollback{tier="db",type="patroni"}[1m] offset 30s) and on (instance) (pg_replication_is_replica == 0)
         )
       )
       or
@@ -158,9 +158,9 @@ groups:
       type: patroni
     expr: |
       sum by (env,environment) (
-        label_replace(rate(pg_stat_database_xact_commit{tier="db",type="patroni"}[1m]) and on (instance) (pg_replication_is_replica == 1), "_c", "0", "", "")
+        label_replace(rate(pg_stat_database_xact_commit{tier="db",type="patroni"}[1m] offset 30s) and on (instance) (pg_replication_is_replica == 1), "_c", "0", "", "")
         or
-        label_replace(rate(pg_stat_database_xact_rollback{tier="db",type="patroni"}[1m]) and on (instance) (pg_replication_is_replica == 1), "_c", "1", "", "")
+        label_replace(rate(pg_stat_database_xact_rollback{tier="db",type="patroni"}[1m] offset 30s) and on (instance) (pg_replication_is_replica == 1), "_c", "1", "", "")
       )
   - record: gitlab_component_errors:rate
     labels:
@@ -171,7 +171,7 @@ groups:
     expr: |
       (
         sum by (env,environment) (
-          rate(pg_stat_database_xact_rollback{tier="db",type="patroni"}[1m]) and on (instance) (pg_replication_is_replica == 1)
+          rate(pg_stat_database_xact_rollback{tier="db",type="patroni"}[1m] offset 30s) and on (instance) (pg_replication_is_replica == 1)
         )
       )
       or
@@ -186,12 +186,12 @@ groups:
   - record: sli_aggregations:gitlab_sql_primary_duration_seconds_bucket_rate5m
     expr: |
       sum by (db_config_name,environment,feature_category,job,le,shard,stage,tier,type) (
-        rate(gitlab_sql_primary_duration_seconds_bucket[5m])
+        rate(gitlab_sql_primary_duration_seconds_bucket[5m] offset 30s)
       )
   - record: sli_aggregations:gitlab_sql_replica_duration_seconds_bucket_rate5m
     expr: |
       sum by (db_config_name,environment,feature_category,le,shard,stage,tier,type) (
-        rate(gitlab_sql_replica_duration_seconds_bucket[5m])
+        rate(gitlab_sql_replica_duration_seconds_bucket[5m] offset 30s)
       )
   - record: gitlab_component_ops:rate_5m
     labels:
@@ -201,9 +201,9 @@ groups:
       type: patroni
     expr: |
       sum by (env,environment) (
-        label_replace(rate(pgbouncer_stats_sql_transactions_pooled_total{tier="db",type="patroni"}[5m]), "_c", "0", "", "")
+        label_replace(rate(pgbouncer_stats_sql_transactions_pooled_total{tier="db",type="patroni"}[5m] offset 30s), "_c", "0", "", "")
         or
-        label_replace(rate(pgbouncer_stats_queries_pooled_total{tier="db",type="patroni"}[5m]), "_c", "1", "", "")
+        label_replace(rate(pgbouncer_stats_queries_pooled_total{tier="db",type="patroni"}[5m] offset 30s), "_c", "1", "", "")
       )
   - record: gitlab_component_errors:rate_5m
     labels:
@@ -214,7 +214,7 @@ groups:
     expr: |
       (
         sum by (env,environment) (
-          rate(pgbouncer_pooler_errors_total{tier="db",type="patroni"}[5m])
+          rate(pgbouncer_pooler_errors_total{tier="db",type="patroni"}[5m] offset 30s)
         )
       )
       or
@@ -259,7 +259,7 @@ groups:
       type: patroni
     expr: |
       sum by (env,environment) (
-        sli_aggregations:gitlab_sql_primary_duration_seconds_bucket_rate5m{db_config_name="main",le="+Inf",type!="sidekiq",type!="ops-gitlab-net"}
+        sli_aggregations:gitlab_sql_primary_duration_seconds_bucket_rate5m{db_config_name="main",le="+Inf",type!="sidekiq",type!="ops-gitlab-net"} offset 30s
       )
   - record: gitlab_component_apdex:success:rate_5m
     labels:
@@ -297,7 +297,7 @@ groups:
       type: patroni
     expr: |
       sum by (env,environment) (
-        sli_aggregations:gitlab_sql_replica_duration_seconds_bucket_rate5m{db_config_name="main_replica",le="+Inf",type!="sidekiq",type!="ops-gitlab-net"}
+        sli_aggregations:gitlab_sql_replica_duration_seconds_bucket_rate5m{db_config_name="main_replica",le="+Inf",type!="sidekiq",type!="ops-gitlab-net"} offset 30s
       )
   - record: gitlab_component_ops:rate_5m
     labels:
@@ -307,9 +307,9 @@ groups:
       type: patroni
     expr: |
       sum by (env,environment) (
-        label_replace(rate(pg_stat_database_xact_commit{tier="db",type="patroni"}[5m]) and on (instance) (pg_replication_is_replica == 0), "_c", "0", "", "")
+        label_replace(rate(pg_stat_database_xact_commit{tier="db",type="patroni"}[5m] offset 30s) and on (instance) (pg_replication_is_replica == 0), "_c", "0", "", "")
         or
-        label_replace(rate(pg_stat_database_xact_rollback{tier="db",type="patroni"}[5m]) and on (instance) (pg_replication_is_replica == 0), "_c", "1", "", "")
+        label_replace(rate(pg_stat_database_xact_rollback{tier="db",type="patroni"}[5m] offset 30s) and on (instance) (pg_replication_is_replica == 0), "_c", "1", "", "")
       )
   - record: gitlab_component_errors:rate_5m
     labels:
@@ -320,7 +320,7 @@ groups:
     expr: |
       (
         sum by (env,environment) (
-          rate(pg_stat_database_xact_rollback{tier="db",type="patroni"}[5m]) and on (instance) (pg_replication_is_replica == 0)
+          rate(pg_stat_database_xact_rollback{tier="db",type="patroni"}[5m] offset 30s) and on (instance) (pg_replication_is_replica == 0)
         )
       )
       or
@@ -337,9 +337,9 @@ groups:
       type: patroni
     expr: |
       sum by (env,environment) (
-        label_replace(rate(pg_stat_database_xact_commit{tier="db",type="patroni"}[5m]) and on (instance) (pg_replication_is_replica == 1), "_c", "0", "", "")
+        label_replace(rate(pg_stat_database_xact_commit{tier="db",type="patroni"}[5m] offset 30s) and on (instance) (pg_replication_is_replica == 1), "_c", "0", "", "")
         or
-        label_replace(rate(pg_stat_database_xact_rollback{tier="db",type="patroni"}[5m]) and on (instance) (pg_replication_is_replica == 1), "_c", "1", "", "")
+        label_replace(rate(pg_stat_database_xact_rollback{tier="db",type="patroni"}[5m] offset 30s) and on (instance) (pg_replication_is_replica == 1), "_c", "1", "", "")
       )
   - record: gitlab_component_errors:rate_5m
     labels:
@@ -350,7 +350,7 @@ groups:
     expr: |
       (
         sum by (env,environment) (
-          rate(pg_stat_database_xact_rollback{tier="db",type="patroni"}[5m]) and on (instance) (pg_replication_is_replica == 1)
+          rate(pg_stat_database_xact_rollback{tier="db",type="patroni"}[5m] offset 30s) and on (instance) (pg_replication_is_replica == 1)
         )
       )
       or
@@ -365,12 +365,12 @@ groups:
   - record: sli_aggregations:gitlab_sql_primary_duration_seconds_bucket_rate30m
     expr: |
       sum by (db_config_name,environment,feature_category,job,le,shard,stage,tier,type) (
-        rate(gitlab_sql_primary_duration_seconds_bucket[30m])
+        rate(gitlab_sql_primary_duration_seconds_bucket[30m] offset 30s)
       )
   - record: sli_aggregations:gitlab_sql_replica_duration_seconds_bucket_rate30m
     expr: |
       sum by (db_config_name,environment,feature_category,le,shard,stage,tier,type) (
-        rate(gitlab_sql_replica_duration_seconds_bucket[30m])
+        rate(gitlab_sql_replica_duration_seconds_bucket[30m] offset 30s)
       )
   - record: gitlab_component_ops:rate_30m
     labels:
@@ -380,9 +380,9 @@ groups:
       type: patroni
     expr: |
       sum by (env,environment) (
-        label_replace(rate(pgbouncer_stats_sql_transactions_pooled_total{tier="db",type="patroni"}[30m]), "_c", "0", "", "")
+        label_replace(rate(pgbouncer_stats_sql_transactions_pooled_total{tier="db",type="patroni"}[30m] offset 30s), "_c", "0", "", "")
         or
-        label_replace(rate(pgbouncer_stats_queries_pooled_total{tier="db",type="patroni"}[30m]), "_c", "1", "", "")
+        label_replace(rate(pgbouncer_stats_queries_pooled_total{tier="db",type="patroni"}[30m] offset 30s), "_c", "1", "", "")
       )
   - record: gitlab_component_errors:rate_30m
     labels:
@@ -393,7 +393,7 @@ groups:
     expr: |
       (
         sum by (env,environment) (
-          rate(pgbouncer_pooler_errors_total{tier="db",type="patroni"}[30m])
+          rate(pgbouncer_pooler_errors_total{tier="db",type="patroni"}[30m] offset 30s)
         )
       )
       or
@@ -438,7 +438,7 @@ groups:
       type: patroni
     expr: |
       sum by (env,environment) (
-        sli_aggregations:gitlab_sql_primary_duration_seconds_bucket_rate30m{db_config_name="main",le="+Inf",type!="sidekiq",type!="ops-gitlab-net"}
+        sli_aggregations:gitlab_sql_primary_duration_seconds_bucket_rate30m{db_config_name="main",le="+Inf",type!="sidekiq",type!="ops-gitlab-net"} offset 30s
       )
   - record: gitlab_component_apdex:success:rate_30m
     labels:
@@ -476,7 +476,7 @@ groups:
       type: patroni
     expr: |
       sum by (env,environment) (
-        sli_aggregations:gitlab_sql_replica_duration_seconds_bucket_rate30m{db_config_name="main_replica",le="+Inf",type!="sidekiq",type!="ops-gitlab-net"}
+        sli_aggregations:gitlab_sql_replica_duration_seconds_bucket_rate30m{db_config_name="main_replica",le="+Inf",type!="sidekiq",type!="ops-gitlab-net"} offset 30s
       )
   - record: gitlab_component_ops:rate_30m
     labels:
@@ -486,9 +486,9 @@ groups:
       type: patroni
     expr: |
       sum by (env,environment) (
-        label_replace(rate(pg_stat_database_xact_commit{tier="db",type="patroni"}[30m]) and on (instance) (pg_replication_is_replica == 0), "_c", "0", "", "")
+        label_replace(rate(pg_stat_database_xact_commit{tier="db",type="patroni"}[30m] offset 30s) and on (instance) (pg_replication_is_replica == 0), "_c", "0", "", "")
         or
-        label_replace(rate(pg_stat_database_xact_rollback{tier="db",type="patroni"}[30m]) and on (instance) (pg_replication_is_replica == 0), "_c", "1", "", "")
+        label_replace(rate(pg_stat_database_xact_rollback{tier="db",type="patroni"}[30m] offset 30s) and on (instance) (pg_replication_is_replica == 0), "_c", "1", "", "")
       )
   - record: gitlab_component_errors:rate_30m
     labels:
@@ -499,7 +499,7 @@ groups:
     expr: |
       (
         sum by (env,environment) (
-          rate(pg_stat_database_xact_rollback{tier="db",type="patroni"}[30m]) and on (instance) (pg_replication_is_replica == 0)
+          rate(pg_stat_database_xact_rollback{tier="db",type="patroni"}[30m] offset 30s) and on (instance) (pg_replication_is_replica == 0)
         )
       )
       or
@@ -516,9 +516,9 @@ groups:
       type: patroni
     expr: |
       sum by (env,environment) (
-        label_replace(rate(pg_stat_database_xact_commit{tier="db",type="patroni"}[30m]) and on (instance) (pg_replication_is_replica == 1), "_c", "0", "", "")
+        label_replace(rate(pg_stat_database_xact_commit{tier="db",type="patroni"}[30m] offset 30s) and on (instance) (pg_replication_is_replica == 1), "_c", "0", "", "")
         or
-        label_replace(rate(pg_stat_database_xact_rollback{tier="db",type="patroni"}[30m]) and on (instance) (pg_replication_is_replica == 1), "_c", "1", "", "")
+        label_replace(rate(pg_stat_database_xact_rollback{tier="db",type="patroni"}[30m] offset 30s) and on (instance) (pg_replication_is_replica == 1), "_c", "1", "", "")
       )
   - record: gitlab_component_errors:rate_30m
     labels:
@@ -529,7 +529,7 @@ groups:
     expr: |
       (
         sum by (env,environment) (
-          rate(pg_stat_database_xact_rollback{tier="db",type="patroni"}[30m]) and on (instance) (pg_replication_is_replica == 1)
+          rate(pg_stat_database_xact_rollback{tier="db",type="patroni"}[30m] offset 30s) and on (instance) (pg_replication_is_replica == 1)
         )
       )
       or
@@ -544,12 +544,12 @@ groups:
   - record: sli_aggregations:gitlab_sql_primary_duration_seconds_bucket_rate1h
     expr: |
       sum by (db_config_name,environment,feature_category,job,le,shard,stage,tier,type) (
-        rate(gitlab_sql_primary_duration_seconds_bucket[1h])
+        rate(gitlab_sql_primary_duration_seconds_bucket[1h] offset 30s)
       )
   - record: sli_aggregations:gitlab_sql_replica_duration_seconds_bucket_rate1h
     expr: |
       sum by (db_config_name,environment,feature_category,le,shard,stage,tier,type) (
-        rate(gitlab_sql_replica_duration_seconds_bucket[1h])
+        rate(gitlab_sql_replica_duration_seconds_bucket[1h] offset 30s)
       )
   - record: gitlab_component_ops:rate_1h
     labels:
@@ -559,9 +559,9 @@ groups:
       type: patroni
     expr: |
       sum by (env,environment) (
-        label_replace(rate(pgbouncer_stats_sql_transactions_pooled_total{tier="db",type="patroni"}[1h]), "_c", "0", "", "")
+        label_replace(rate(pgbouncer_stats_sql_transactions_pooled_total{tier="db",type="patroni"}[1h] offset 30s), "_c", "0", "", "")
         or
-        label_replace(rate(pgbouncer_stats_queries_pooled_total{tier="db",type="patroni"}[1h]), "_c", "1", "", "")
+        label_replace(rate(pgbouncer_stats_queries_pooled_total{tier="db",type="patroni"}[1h] offset 30s), "_c", "1", "", "")
       )
   - record: gitlab_component_errors:rate_1h
     labels:
@@ -572,7 +572,7 @@ groups:
     expr: |
       (
         sum by (env,environment) (
-          rate(pgbouncer_pooler_errors_total{tier="db",type="patroni"}[1h])
+          rate(pgbouncer_pooler_errors_total{tier="db",type="patroni"}[1h] offset 30s)
         )
       )
       or
@@ -620,7 +620,7 @@ groups:
       upscale_source: "yes"
     expr: |
       sum by (env,environment) (
-        sli_aggregations:gitlab_sql_primary_duration_seconds_bucket_rate1h{db_config_name="main",le="+Inf",type!="sidekiq",type!="ops-gitlab-net"}
+        sli_aggregations:gitlab_sql_primary_duration_seconds_bucket_rate1h{db_config_name="main",le="+Inf",type!="sidekiq",type!="ops-gitlab-net"} offset 30s
       )
   - record: gitlab_component_apdex:success:rate_1h
     labels:
@@ -661,7 +661,7 @@ groups:
       upscale_source: "yes"
     expr: |
       sum by (env,environment) (
-        sli_aggregations:gitlab_sql_replica_duration_seconds_bucket_rate1h{db_config_name="main_replica",le="+Inf",type!="sidekiq",type!="ops-gitlab-net"}
+        sli_aggregations:gitlab_sql_replica_duration_seconds_bucket_rate1h{db_config_name="main_replica",le="+Inf",type!="sidekiq",type!="ops-gitlab-net"} offset 30s
       )
   - record: gitlab_component_ops:rate_1h
     labels:
@@ -671,9 +671,9 @@ groups:
       type: patroni
     expr: |
       sum by (env,environment) (
-        label_replace(rate(pg_stat_database_xact_commit{tier="db",type="patroni"}[1h]) and on (instance) (pg_replication_is_replica == 0), "_c", "0", "", "")
+        label_replace(rate(pg_stat_database_xact_commit{tier="db",type="patroni"}[1h] offset 30s) and on (instance) (pg_replication_is_replica == 0), "_c", "0", "", "")
         or
-        label_replace(rate(pg_stat_database_xact_rollback{tier="db",type="patroni"}[1h]) and on (instance) (pg_replication_is_replica == 0), "_c", "1", "", "")
+        label_replace(rate(pg_stat_database_xact_rollback{tier="db",type="patroni"}[1h] offset 30s) and on (instance) (pg_replication_is_replica == 0), "_c", "1", "", "")
       )
   - record: gitlab_component_errors:rate_1h
     labels:
@@ -684,7 +684,7 @@ groups:
     expr: |
       (
         sum by (env,environment) (
-          rate(pg_stat_database_xact_rollback{tier="db",type="patroni"}[1h]) and on (instance) (pg_replication_is_replica == 0)
+          rate(pg_stat_database_xact_rollback{tier="db",type="patroni"}[1h] offset 30s) and on (instance) (pg_replication_is_replica == 0)
         )
       )
       or
@@ -701,9 +701,9 @@ groups:
       type: patroni
     expr: |
       sum by (env,environment) (
-        label_replace(rate(pg_stat_database_xact_commit{tier="db",type="patroni"}[1h]) and on (instance) (pg_replication_is_replica == 1), "_c", "0", "", "")
+        label_replace(rate(pg_stat_database_xact_commit{tier="db",type="patroni"}[1h] offset 30s) and on (instance) (pg_replication_is_replica == 1), "_c", "0", "", "")
         or
-        label_replace(rate(pg_stat_database_xact_rollback{tier="db",type="patroni"}[1h]) and on (instance) (pg_replication_is_replica == 1), "_c", "1", "", "")
+        label_replace(rate(pg_stat_database_xact_rollback{tier="db",type="patroni"}[1h] offset 30s) and on (instance) (pg_replication_is_replica == 1), "_c", "1", "", "")
       )
   - record: gitlab_component_errors:rate_1h
     labels:
@@ -714,7 +714,7 @@ groups:
     expr: |
       (
         sum by (env,environment) (
-          rate(pg_stat_database_xact_rollback{tier="db",type="patroni"}[1h]) and on (instance) (pg_replication_is_replica == 1)
+          rate(pg_stat_database_xact_rollback{tier="db",type="patroni"}[1h] offset 30s) and on (instance) (pg_replication_is_replica == 1)
         )
       )
       or
@@ -734,9 +734,9 @@ groups:
       type: patroni
     expr: |
       sum by (env,environment) (
-        label_replace(rate(pgbouncer_stats_sql_transactions_pooled_total{tier="db",type="patroni"}[6h]), "_c", "0", "", "")
+        label_replace(rate(pgbouncer_stats_sql_transactions_pooled_total{tier="db",type="patroni"}[6h] offset 30s), "_c", "0", "", "")
         or
-        label_replace(rate(pgbouncer_stats_queries_pooled_total{tier="db",type="patroni"}[6h]), "_c", "1", "", "")
+        label_replace(rate(pgbouncer_stats_queries_pooled_total{tier="db",type="patroni"}[6h] offset 30s), "_c", "1", "", "")
       )
   - record: gitlab_component_errors:rate_6h
     labels:
@@ -747,7 +747,7 @@ groups:
     expr: |
       (
         sum by (env,environment) (
-          rate(pgbouncer_pooler_errors_total{tier="db",type="patroni"}[6h])
+          rate(pgbouncer_pooler_errors_total{tier="db",type="patroni"}[6h] offset 30s)
         )
       )
       or
@@ -764,9 +764,9 @@ groups:
       type: patroni
     expr: |
       sum by (env,environment) (
-        label_replace(rate(pg_stat_database_xact_commit{tier="db",type="patroni"}[6h]) and on (instance) (pg_replication_is_replica == 0), "_c", "0", "", "")
+        label_replace(rate(pg_stat_database_xact_commit{tier="db",type="patroni"}[6h] offset 30s) and on (instance) (pg_replication_is_replica == 0), "_c", "0", "", "")
         or
-        label_replace(rate(pg_stat_database_xact_rollback{tier="db",type="patroni"}[6h]) and on (instance) (pg_replication_is_replica == 0), "_c", "1", "", "")
+        label_replace(rate(pg_stat_database_xact_rollback{tier="db",type="patroni"}[6h] offset 30s) and on (instance) (pg_replication_is_replica == 0), "_c", "1", "", "")
       )
   - record: gitlab_component_errors:rate_6h
     labels:
@@ -777,7 +777,7 @@ groups:
     expr: |
       (
         sum by (env,environment) (
-          rate(pg_stat_database_xact_rollback{tier="db",type="patroni"}[6h]) and on (instance) (pg_replication_is_replica == 0)
+          rate(pg_stat_database_xact_rollback{tier="db",type="patroni"}[6h] offset 30s) and on (instance) (pg_replication_is_replica == 0)
         )
       )
       or
@@ -794,9 +794,9 @@ groups:
       type: patroni
     expr: |
       sum by (env,environment) (
-        label_replace(rate(pg_stat_database_xact_commit{tier="db",type="patroni"}[6h]) and on (instance) (pg_replication_is_replica == 1), "_c", "0", "", "")
+        label_replace(rate(pg_stat_database_xact_commit{tier="db",type="patroni"}[6h] offset 30s) and on (instance) (pg_replication_is_replica == 1), "_c", "0", "", "")
         or
-        label_replace(rate(pg_stat_database_xact_rollback{tier="db",type="patroni"}[6h]) and on (instance) (pg_replication_is_replica == 1), "_c", "1", "", "")
+        label_replace(rate(pg_stat_database_xact_rollback{tier="db",type="patroni"}[6h] offset 30s) and on (instance) (pg_replication_is_replica == 1), "_c", "1", "", "")
       )
   - record: gitlab_component_errors:rate_6h
     labels:
@@ -807,7 +807,7 @@ groups:
     expr: |
       (
         sum by (env,environment) (
-          rate(pg_stat_database_xact_rollback{tier="db",type="patroni"}[6h]) and on (instance) (pg_replication_is_replica == 1)
+          rate(pg_stat_database_xact_rollback{tier="db",type="patroni"}[6h] offset 30s) and on (instance) (pg_replication_is_replica == 1)
         )
       )
       or

@@ -124,9 +124,6 @@ teams:
   ignored_components:
   - graphql_query
 
-- name: scalability-runway-core
-  slack_alerts_channel: f_runway
-
 - name: scalability-619-redis-k8s
   slack_alerts_channel: scalability-619-redis-k8s
   send_slo_alerts_to_team_slack_channel: true
@@ -177,12 +174,23 @@ teams:
   ignored_components:
   - graphql_query
 
-- name: ai_assisted
+- name: ai_model_validation
   url: https://about.gitlab.com/handbook/engineering/development/data-science/ai-assisted/
   manager: mray2020
   label: group::ai assisted
   slack_alerts_channel: g_mlops-alerts
-  product_stage_group: ai_assisted
+  product_stage_group: ai_model_validation
+  ignored_components:
+  - graphql_query
+  slack_error_budget_channel: g_mlops-alerts
+  send_error_budget_weekly_to_slack: true
+
+- name: code_creation
+  url: https://about.gitlab.com/handbook/engineering/development/dev/create/code_creation/
+  manager: dsatcher
+  label: group::code creation
+  slack_alerts_channel: g_mlops-alerts
+  product_stage_group: code_creation
   ignored_components:
   - graphql_query
   slack_error_budget_channel: g_mlops-alerts

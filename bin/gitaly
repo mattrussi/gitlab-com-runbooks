@@ -3,110 +3,613 @@
 set -efo pipefail
 
 usage() {
-  cat <<HELP >&2
+  case $1 in
+    storages)
+      cat <<HELP >&2
+USAGE:
+  glsh gitaly storages [SUBCOMMAND]
+
+SUBCOMMANDS:
+  list       List storages and their weights
+  validate   Validate a storage by performing a project move
+HELP
+      ;;
+    storages_list)
+      cat <<HELP >&2
+USAGE:
+  glsh gitaly storages list -e [gstg,gprd]
+
+Example:
+  # list storages and their weights in staging
+  glsh gitaly storages list -e gstg
+HELP
+      exit 2
+      ;;
+    storages_validate)
+      cat <<HELP >&2
+Creates a test project on a storage, moves it to a new storage and does some validation to ensure
+the new storage is functioning properly.
+
+USAGE:
+  glsh gitaly storages validate -e [gstg,gprd] [-s [source storage]] <storage names>
+
+  -e [gstg,gprd]           Environment to validate
+  -s [source storage]      (optional) Create a project on a source storages and then move it to the destination storage
+  <storage names>          One or more storage names to validate
+
+Example:
+  # Create a test project on the storage named nfs-file24 and move it to gitaly-01-stor-gstg.c.gitlab-gitaly-gstg-164c.internal
+  glsh gitaly storages validate -e gstg -s nfs-file24 gitaly-01-stor-gstg.c.gitlab-gitaly-gstg-164c.internal
+  # Create a test project on the storage named nfs-file24 and validate it
+  glsh gitaly storages validate -e gstg nfs-file24
+
+Note:
+  To list available storages use \`glsh gitaly storage list -e [gstg,gprd]\`
+HELP
+      exit 2
+      ;;
+    repositories)
+      cat <<HELP >&2
+USAGE:
+  glsh gitaly repositories [SUBCOMMAND]
+
+SUBCOMMANDS:
+  move       Move repositories to a different storage
+HELP
+      ;;
+
+    repositories_move)
+      cat <<HELP >&2
+USAGE:
+  glsh gitaly repositories move -e [gstg,gprd] [-d [destination storage]] <project names>
+
+  -e [gstg,gprd]            Environment to validate
+  -d [destination storage]  (optional) Destination storage, if not specified will use weights for the move
+  <project names>           Full project path to move
+
+Example:
+  # Move a test project on staging
+  glsh gitaly repositories move -e gstg -d nfs-file-cny01 jarv/registry-test
+  # Move proj/path1 and proj/path2 to any available storage (weight>0)
+  glsh gitaly repositories move -e gstg proj/path1 proj/path2
+  # Move proj/path1 and proj/path2 to storage gitaly-02-stor-gstg.c.gitlab-gitaly-gstg-380a.internal
+  glsh gitaly repositories move -e gstg -d gitaly-02-stor-gstg.c.gitlab-gitaly-gstg-380a.internal proj/path1 proj/path2
+
+Note:
+  To list available storages use \`glsh gitaly storage list -e [gstg,gprd]\`
+HELP
+      exit 2
+      ;;
+    *)
+      cat <<HELP >&2
 USAGE:
   glsh gitaly [SUBCOMMAND]
 
 SUBCOMMANDS:
-  repository    Manage repositories
+  storages       Manage storages
+  repositories   Manage repositories
 HELP
+
+      ;;
+  esac
 }
 
-usage_repository() {
-  cat <<HELP >&2
-USAGE:
-  glsh gitaly repository [SUBCOMMAND]
+###################################################
+# Lists repository storages by querying
+# '/application/settings` via the API
+#
+# glsh gitaly storages list
+###################################################
+storages_list() {
+  local env
 
-SUBCOMMANDS:
-  move    Move a git Repository to another Gitaly file node.
-HELP
-}
+  while getopts "h?e:" opt; do
+    case "$opt" in
+      h | \?)
+        usage "${FUNCNAME[0]}"
+        ;;
+      e)
+        env=${OPTARG}
+        ;;
+    esac
+  done
 
-usage_move_repository() {
-  cat <<HELP >&2
-USAGE:
-  glsh gitaly repository move [gstg|gprd] [PROJECT_ID]
+  [[ -z "${env:-}" ]] && usage "${FUNCNAME[0]}"
+  local pat
+  pat=$(admin_pat)
 
-Example:
-  glsh gitaly repository move gstg 111
-HELP
-}
+  local curl_opts jq_opts
+  curl_opts=(
+    --silent --fail --show-error
+    --header "PRIVATE-TOKEN: $pat"
+    --header "Content-Type: application/json"
+    "$(api_for_env)/application/settings"
+  )
+  jq_opts=(
+    --raw-output
+    '.repository_storages_weighted | to_entries | map([.key, .value] | @tsv)[]'
+  )
 
-# move_repository schedule a repository storage move for a project, and waits
-# until it is finished.
-move_repository() {
-  GITLAB_API="https://staging.gitlab.com"
-  GITLAB_ENV=$3
-  GITLAB_PROJECT_ID=$4
-
-  if [[ -z ${GITLAB_ADMIN_PAT:-} ]]; then
-    echo >&2 "GITLAB_ADMIN_PAT variable is not defined."
+  local resp storages_csv
+  if ! resp=$(curl "${curl_opts[@]}" 2>&1); then
+    echo_err "✘ curl exited non-zero!"
+    echo_err "        $resp"
     exit 1
   fi
+  storages_csv=$(jq "${jq_opts[@]}" <<<"$resp")
 
-  if [[ "$3" == "gprd" ]]; then
-    GITLAB_API="https://gitlab.com"
+  printf "%-60s %s\n" "STORAGE" "WEIGHT"
+  printf -- '-%.0s' {1..67}
+  echo ""
+  while IFS= read -r line; do
+    printf "%-60s %s\n" "$(cut -f1 <<<"$line")" "$(cut -f2 <<<"$line")"
+  done <<<"$storages_csv"
+}
+
+###################################################
+# Validates a new storage by creating a test
+# project and moving it to the storages provided
+# on the commandline
+#
+# glsh gitaly storages validate
+###################################################
+storages_validate() {
+  local env src_storage
+  local date_ts
+  date_ts=$(date +%Y%M%d-%H%M%S)
+
+  while getopts "h?e:s:" opt; do
+    case "$opt" in
+      h | \?)
+        usage "${FUNCNAME[0]}"
+        ;;
+      e)
+        env=${OPTARG}
+        ;;
+      s)
+        src_storage=${OPTARG}
+        ;;
+    esac
+  done
+  shift "$((OPTIND - 1))"
+
+  [[ -z "${env:-}" ]] && usage "${FUNCNAME[0]}"
+
+  if [[ $# -eq 0 ]]; then
+    echo_err "No destination storages specified!"
+    echo_err ""
+    usage "${FUNCNAME[0]}"
   fi
 
-  # https://docs.gitlab.com/ee/api/project_repository_storage_moves.html#schedule-a-repository-storage-move-for-a-project
-  echo "env=${GITLAB_ENV} project_id=${GITLAB_PROJECT_ID} msg=scheduling repository for a storage move"
-  REPOSITORY_MOVE_RESP=$(curl -s --request POST \
-    --header "PRIVATE-TOKEN: ${GITLAB_ADMIN_PAT}" \
-    --header "Content-Type: application/json" \
-    "${GITLAB_API}/api/v4/projects/${GITLAB_PROJECT_ID}/repository_storage_moves")
-  REPOSITORY_MOVE_ID=$(jq --argjson resp "${REPOSITORY_MOVE_RESP}" -nr '$resp.id')
-  REPOSITORY_MOVE_SRC=$(jq --argjson resp "${REPOSITORY_MOVE_RESP}" -nr '$resp.source_storage_name')
-  REPOSITORY_MOVE_DEST=$(jq --argjson resp "${REPOSITORY_MOVE_RESP}" -nr '$resp.destination_storage_name')
+  local pat
+  pat=$(admin_pat)
 
-  if [[ "${REPOSITORY_MOVE_ID}" == "null" ]]; then
-    echo >&2 "env=${GITLAB_ENV} project_id=${GITLAB_PROJECT_ID} msg=failed to schedule repository for a storage move"
-    echo "${REPOSITORY_MOVE_RESP}"
-    exit 1
-  fi
-  echo "env=${GITLAB_ENV} project_id=${GITLAB_PROJECT_ID} src=${REPOSITORY_MOVE_SRC} dest=${REPOSITORY_MOVE_DEST} msg=schduled repository for a storage move"
+  local curl_opts=(
+    --silent --fail --show-error
+    --header "PRIVATE-TOKEN: $pat"
+    --header "Content-Type: application/json"
+  )
 
-  echo "env=${GITLAB_ENV} project_id=${GITLAB_PROJECT_ID} src=${REPOSITORY_MOVE_SRC} dest=${REPOSITORY_MOVE_DEST} msg=waiting for repository move to finish"
-  while true; do
-    # https://docs.gitlab.com/ee/api/project_repository_storage_moves.html#get-a-single-repository-storage-move-for-a-project
-    REPOSITORY_MOVE_STATUS_RESP=$(curl -s \
-      --header "PRIVATE-TOKEN: ${GITLAB_ADMIN_PAT}" \
-      --header "Content-Type: application/json" \
-      "${GITLAB_API}/api/v4/projects/${GITLAB_PROJECT_ID}/repository_storage_moves/${REPOSITORY_MOVE_ID}")
-    REPOSITROY_MOVE_STATE=$(jq --argjson resp "${REPOSITORY_MOVE_STATUS_RESP}" -nr '$resp.state')
-    echo "env=${GITLAB_ENV} project_id=${GITLAB_PROJECT_ID} src=${REPOSITORY_MOVE_SRC} dest=${REPOSITORY_MOVE_DEST} status=${REPOSITROY_MOVE_STATE} msg=repository storage move status"
+  trap cleanup_tmp_files EXIT
+  echo "Creating projects:"
+  echo ""
 
-    if [[ "${REPOSITROY_MOVE_STATE}" == "null" ]]; then
-      echo >&2 "env=${GITLAB_ENV} project_id=${GITLAB_PROJECT_ID} msg=failed to get repository storage move status"
-      echo "${REPOSITORY_MOVE_STATUS_RESP}"
+  for dst_storage in "$@"; do
+    local project_name
+    project_name="glsh-$(whoami)-${dst_storage}-${date_ts}"
+    echo "  $dst_storage:"
+
+    local storage_create
+    if [[ -n "${src_storage}" ]]; then
+      storage_create="$src_storage"
+    else
+      storage_create="$dst_storage"
+    fi
+    printf "    creating on %s..." "$storage_create"
+    local create_resp project_id
+    create_resp=$(create_project "$project_name" "$storage_create")
+    echo "✔"
+    project_id="$(jq -r '.id' <<<"$create_resp")"
+
+    if [[ -n "$src_storage" ]]; then
+      printf "    moving to %s..." "$dst_storage"
+      local move_resp move_id
+      move_resp=$(move_project "$project_id" "$dst_storage")
+      move_id="$(jq -r '.id' <<<"$move_resp")"
+      wait_move_finished "$project_id" "$move_id" "$web_url"
+    fi
+
+    printf "    checking project..."
+    local info_resp storage_chk http_url_to_repo
+    info_resp=$(project_info "$project_id")
+    storage_chk="$(jq -r '.repository_storage' <<<"$info_resp")"
+    http_url_to_repo="$(jq -r '.http_url_to_repo' <<<"$info_resp")"
+    if [[ $storage_chk == "$dst_storage" ]]; then
+      echo "✔"
+    else
+      echo "✘"
+      echo ""
+      echo "    Storage '$storage_chk' for $project_name doesn't match destination storage '$dst_storage'!"
       exit 1
     fi
 
-    if [[ "${REPOSITROY_MOVE_STATE}" == "finished" ]]; then
-      break
-    fi
-    sleep 5
+    printf "    validating..."
+    validate_project "$http_url_to_repo"
+    echo "✔"
   done
 }
 
-case $1 in
-  repository)
-    case $2 in
-      move)
-        if [[ $# -lt 4 ]]; then
-          usage_move_repository
-          exit 2
-        fi
-        move_repository "$@"
+###################################################
+# Moves an existing project to the one of the shards
+# taking new projects
+#
+# glsh repositories move
+###################################################
+repositories_move() {
+  local env dst_storage
+  while getopts "h?e:d:" opt; do
+    case "$opt" in
+      h | \?)
+        usage "${FUNCNAME[0]}"
         ;;
-      *)
-        usage_repository
-        exit 2
+      e)
+        env=${OPTARG}
+        ;;
+      d)
+        dst_storage=${OPTARG}
         ;;
     esac
+  done
+  shift "$((OPTIND - 1))"
 
-    ;;
-  *)
-    usage
-    exit 2
-    ;;
-esac
+  [[ -z "${env:-}" ]] && usage "${FUNCNAME[0]}"
+  local pat
+  pat=$(admin_pat)
+
+  if [[ $# -eq 0 ]]; then
+    echo "No projects specified!" >&2
+    usage "${FUNCNAME[0]}"
+  fi
+
+  local info_resp cur_storage web_url project_id
+  local move_resp move_id info_resp new_storage
+  echo "Moving the following projects to ${dst_storage:-any storage that is available}"
+  for proj in "$@"; do
+    echo "  $proj"
+    echo -n "    getting info..."
+    info_resp=$(project_info "$proj")
+    cur_storage="$(jq -r '.repository_storage' <<<"$info_resp")"
+    web_url="$(jq -r '.web_url' <<<"$info_resp")"
+    project_id="$(jq -r '.id' <<<"$info_resp")"
+    echo "[current_storage=$cur_storage]"
+    echo -n "    moving..."
+    move_resp=$(move_project "$project_id" "${dst_storage:-}")
+    move_id="$(jq -r '.id' <<<"$move_resp")"
+    wait_move_finished "$project_id" "$move_id" "$web_url"
+    echo -n "    confirming move..."
+    info_resp=$(project_info "$proj")
+    new_storage="$(jq -r '.repository_storage' <<<"$info_resp")"
+    echo "[new_storage=$new_storage]"
+  done
+}
+
+################## Helper Functions #####################
+
+###################################################
+# Runs on script exit to cleanup any temporary files
+# that were created for storage validation.
+#
+###################################################
+cleanup_tmp_files() {
+  # If there are any temp files left, remove them
+  rm -rf /tmp/glsh-validate-*
+}
+
+###################################################
+# Validates a project that has already been created
+# by cloning it into a temporary directory, making
+# a change to the README.md, pushing, then
+# clones it again and validates the change was made
+#
+# Arguments:
+#   http_url_to_repo: repository to clone
+#     e.g, "https://example.com:diaspora/diaspora-client.git"
+#
+###################################################
+validate_project() {
+  local http_url_to_repo="$1"
+  local proj_dir
+  local token_url="https://pat:${pat}@${http_url_to_repo/https:\/\//}"
+
+  proj_dir=$(mktemp -d /tmp/glsh-validate-XXXX)
+  test_string="Updating repository for test by $(whoami) using glsh"
+
+  printf "[cloning]."
+  git clone --quiet "$token_url" "${proj_dir}"
+  pushd "$proj_dir" >/dev/null
+  printf "[updating]."
+  echo -e "\n\n$test_string" >>"README.md"
+  git add "README.md"
+  git commit --quiet -am "Update README to test $new_storage"
+  printf "[pushing]."
+  git push --quiet "$token_url" main >/dev/null 2>&1
+  popd >/dev/null
+  rm -rf "$proj_dir"
+
+  printf "[re-cloning]."
+  git clone --quiet "${token_url}" "${proj_dir}"
+  pushd "$proj_dir" >/dev/null
+  printf "[checking]."
+  if ! grep -q "$test_string" README.md; then
+    echo ✘
+    echo ""
+    echo "Unable to find '$test_string' in README.md, validation failed!"
+    echo "full contents:"
+    cat "$proj_dir/README.md"
+    exit 1
+  fi
+  popd >/dev/null
+  rm -rf "$proj_dir"
+}
+
+###################################################
+# Creates a new project and echos the
+# JSON response
+#
+# Arguments:
+#   project_name: project name to create
+#   repository_storage: (optional) storage to place
+#                       the project
+#
+# Notes:
+#   If $repository_storage is not set the repository
+#   will be created on any available storage
+#
+###################################################
+create_project() {
+  local project_name="$1"
+  local repository_storage="${2:-}"
+  local curl_opts
+
+  local storage_json_fragment=""
+
+  if [[ -n "$repository_storage" ]]; then
+    storage_json_fragment=$(printf '"repository_storage": "%s", ' "$repository_storage")
+  fi
+
+  curl_opts=(
+    --silent --fail --show-error
+    --request POST
+    --header "PRIVATE-TOKEN: $pat"
+    --header "Content-Type: application/json"
+    --data
+    "$(printf '{"name": "%s", %s "description": "Created via [glsh](https://gitlab.com/gitlab-com/runbooks/-/blob/master/bin/gitaly)", "initialize_with_readme": "true"}' "$project_name" "$storage_json_fragment")"
+    "$(api_for_env)/projects"
+  )
+
+  local resp project_id
+  if ! resp=$(curl "${curl_opts[@]}" 2>&1); then
+    echo_err "✘ curl exited non-zero!"
+    echo_err "        $resp"
+    exit 1
+  fi
+  project_id="$(jq -r '.id' <<<"$resp")"
+
+  echo "$resp"
+}
+
+###################################################
+# Using the move API, moves a project to a new storage
+# and echos the JSON response
+#
+# Arguments:
+#   project_id: Project ID to move
+#   dst_storage: (optional) destination storage
+#
+# Note:
+#  If $dst_storage is unset the move api will move the
+#  project to any free storage using storage weights
+###################################################
+move_project() {
+  local project_id="$1"
+  local dst_storage="${2:-}"
+
+  local curl_opts
+  curl_opts=(
+    --silent --fail --show-error
+    --request POST
+    --header "PRIVATE-TOKEN: $pat"
+    --header "Content-Type: application/json"
+    "$(api_for_env)/projects/${project_id}/repository_storage_moves"
+  )
+  [[ -n "$dst_storage" ]] && curl_opts+=(--data "$(printf '{"destination_storage_name": "%s"}' "$dst_storage")")
+
+  local resp
+  if ! resp=$(curl "${curl_opts[@]}" 2>&1); then
+    echo_err "✘ curl exited non-zero!"
+    echo_err "        $resp"
+    exit 1
+  fi
+  echo "$resp"
+}
+
+###################################################
+# Checks the project move status using the move
+# API and waits for up to 1 hour for the move to succeed
+#
+# Arguments:
+#   project_id: Project ID to status
+#   move_id: Project Move ID to status
+#   web_url: Web URL (only used for logging in case of failure)
+###################################################
+wait_move_finished() {
+  local project_id="$1"
+  local move_id="$2"
+  local web_url="$3"
+  local curl_opts
+  curl_opts=(
+    --silent --fail --show-error
+    --header "PRIVATE-TOKEN: $pat"
+    --header "Content-Type: application/json"
+    "$(api_for_env)/projects/${project_id}/repository_storage_moves/${move_id}"
+  )
+
+  local resp move_state
+  for _ in {0..3600}; do
+    if ! resp=$(curl "${curl_opts[@]}" 2>&1); then
+      echo_err "✘ curl exited non-zero!"
+      echo_err "        $resp"
+      exit 1
+    fi
+    move_state="$(jq -r '.state' <<<"$resp")"
+    case $move_state in
+      finished)
+        echo "[$move_state].✔"
+        return
+        ;;
+      initial | scheduled | started | replicated)
+        echo -n "[$move_state]."
+        ;;
+      *)
+        echo_err ""
+        echo_err "Error moving project ${web_url}, got unexpected state: $move_state, aborting!"
+        exit 1
+        ;;
+    esac
+    sleep 1
+  done
+
+  echo_err ""
+  echo_err "Timeout waiting for the move to succeed for project ${web_url}, aborting! Note that the move will continue running in the background."
+  exit 1
+}
+
+###################################################
+# Gets a single project and echos the JSON response
+#
+# Arguments:
+#   proj: project ID OR full project path to retrieve
+#
+# Note:
+#   $proj will be URL encoded automatically
+###################################################
+project_info() {
+  local proj="$1"
+  # url encode the project name
+  proj=$(echo -n "$proj" | jq -sRr @uri)
+
+  local curl_opts
+  curl_opts=(
+    --silent --fail --show-error
+    --header "PRIVATE-TOKEN: $pat"
+    --header "Content-Type: application/json"
+    "$(api_for_env)/projects/$proj"
+  )
+
+  local resp
+  if ! resp=$(curl "${curl_opts[@]}" 2>&1); then
+    echo_err "✘ curl exited non-zero!"
+    echo_err "        $resp"
+    exit 1
+  fi
+  echo "$resp"
+}
+
+###################################################
+# echos the API URL depending on which environment
+# is set
+###################################################
+api_for_env() {
+  echo "https://$(gitlab_host)/api/v4"
+}
+
+###################################################
+# echos the host for the corresponding environment
+###################################################
+gitlab_host() {
+  case $env in
+    gprd)
+      echo "gitlab.com"
+      ;;
+    gstg)
+      echo "staging.gitlab.com"
+      ;;
+    *)
+      echo_err "Invalid environment '$env', must be 'gprd' or 'gstg'."
+      exit 1
+      ;;
+  esac
+}
+
+###################################################
+# Asks the user to create an admin PAT if one has not
+# already been created
+#
+# Note:
+#   It is the intention that this script asks for the admin
+#   token on every invocation to discourage storing an admin
+#   token on disk
+###################################################
+admin_pat() {
+  local pass
+  if [[ -n $pat ]]; then
+    echo "$pat"
+    return
+  fi
+
+  local token_url
+  token_url="https://$(gitlab_host)/-/profile/personal_access_tokens"
+
+  echo_err "This script requires an personal access token with admin API access."
+  echo_err "Create a new one by:"
+  echo_err " - Logging into GitLab with an admin account"
+  echo_err " - Visit $token_url"
+  echo_err " - Create a new token by selecting 'Add a new token' with API access"
+  echo_err ""
+  echo -n "enter token value: " >&2
+  read -rs pass
+  echo_err ""
+  echo_err ""
+  echo "$pass"
+}
+
+echo_err() {
+  echo "$1" >&2
+}
+
+main() {
+  case $1 in
+    storages)
+      case $2 in
+        list)
+          shift 2
+          storages_list "$@"
+          ;;
+        validate)
+          shift 2
+          storages_validate "$@"
+          ;;
+        *)
+          usage storages
+          ;;
+      esac
+      ;;
+    repositories)
+      case $2 in
+        move)
+          shift 2
+          repositories_move "$@"
+          ;;
+
+        *)
+          usage repositories
+          ;;
+      esac
+      ;;
+    *)
+      usage
+      ;;
+  esac
+}
+
+main "$@"

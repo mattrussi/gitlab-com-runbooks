@@ -12,11 +12,11 @@ groups:
     expr: |
       (
         sum by (env,environment,stage) (
-          rate(registry_database_query_duration_seconds_bucket{le="0.5",type="registry"}[1m])
+          rate(registry_database_query_duration_seconds_bucket{le="0.5",type="registry"}[1m] offset 30s)
         )
         +
         sum by (env,environment,stage) (
-          rate(registry_database_query_duration_seconds_bucket{le="1",type="registry"}[1m])
+          rate(registry_database_query_duration_seconds_bucket{le="1",type="registry"}[1m] offset 30s)
         )
       )
       /
@@ -28,7 +28,7 @@ groups:
       type: registry
     expr: |
       sum by (env,environment,stage) (
-        rate(registry_database_query_duration_seconds_bucket{le="+Inf",type="registry"}[1m])
+        rate(registry_database_query_duration_seconds_bucket{le="+Inf",type="registry"}[1m] offset 30s)
       )
   - record: gitlab_component_ops:rate
     labels:
@@ -37,7 +37,7 @@ groups:
       type: registry
     expr: |
       sum by (env,environment,stage) (
-        rate(registry_database_queries_total{type="registry"}[1m])
+        rate(registry_database_queries_total{type="registry"}[1m] offset 30s)
       )
   - record: gitlab_component_apdex:success:rate
     labels:
@@ -47,11 +47,11 @@ groups:
     expr: |
       (
         sum by (env,environment,stage) (
-          rate(registry_gc_run_duration_seconds_bucket{le="0.5",type="registry"}[1m])
+          rate(registry_gc_run_duration_seconds_bucket{le="0.5",type="registry"}[1m] offset 30s)
         )
         +
         sum by (env,environment,stage) (
-          rate(registry_gc_run_duration_seconds_bucket{le="1",type="registry"}[1m])
+          rate(registry_gc_run_duration_seconds_bucket{le="1",type="registry"}[1m] offset 30s)
         )
       )
       /
@@ -63,7 +63,7 @@ groups:
       type: registry
     expr: |
       sum by (env,environment,stage) (
-        rate(registry_gc_run_duration_seconds_bucket{le="+Inf",type="registry"}[1m])
+        rate(registry_gc_run_duration_seconds_bucket{le="+Inf",type="registry"}[1m] offset 30s)
       )
   - record: gitlab_component_ops:rate
     labels:
@@ -72,7 +72,7 @@ groups:
       type: registry
     expr: |
       sum by (env,environment,stage) (
-        rate(registry_gc_runs_total{type="registry"}[1m])
+        rate(registry_gc_runs_total{type="registry"}[1m] offset 30s)
       )
   - record: gitlab_component_errors:rate
     labels:
@@ -82,7 +82,7 @@ groups:
     expr: |
       (
         sum by (env,environment,stage) (
-          rate(registry_gc_runs_total{error="true",type="registry"}[1m])
+          rate(registry_gc_runs_total{error="true",type="registry"}[1m] offset 30s)
         )
       )
       or
@@ -99,7 +99,7 @@ groups:
       type: registry
     expr: |
       sum by (env,environment) (
-        rate(haproxy_backend_http_responses_total{backend="canary_registry",type="registry"}[1m])
+        rate(haproxy_backend_http_responses_total{backend="canary_registry",type="registry"}[1m] offset 30s)
       )
   - record: gitlab_component_ops:rate
     labels:
@@ -109,7 +109,7 @@ groups:
       type: registry
     expr: |
       sum by (env,environment) (
-        rate(haproxy_backend_http_responses_total{backend="registry",type="registry"}[1m])
+        rate(haproxy_backend_http_responses_total{backend="registry",type="registry"}[1m] offset 30s)
       )
   - record: gitlab_component_errors:rate
     labels:
@@ -120,7 +120,7 @@ groups:
     expr: |
       (
         sum by (env,environment) (
-          rate(haproxy_backend_http_responses_total{backend="canary_registry",code="5xx",type="registry"}[1m])
+          rate(haproxy_backend_http_responses_total{backend="canary_registry",code="5xx",type="registry"}[1m] offset 30s)
         )
       )
       or
@@ -138,7 +138,7 @@ groups:
     expr: |
       (
         sum by (env,environment) (
-          rate(haproxy_backend_http_responses_total{backend="registry",code="5xx",type="registry"}[1m])
+          rate(haproxy_backend_http_responses_total{backend="registry",code="5xx",type="registry"}[1m] offset 30s)
         )
       )
       or
@@ -155,11 +155,11 @@ groups:
     expr: |
       (
         sum by (env,environment,stage) (
-          rate(registry_redis_single_commands_bucket{le="0.25",type="registry"}[1m])
+          rate(registry_redis_single_commands_bucket{le="0.25",type="registry"}[1m] offset 30s)
         )
         +
         sum by (env,environment,stage) (
-          rate(registry_redis_single_commands_bucket{le="0.5",type="registry"}[1m])
+          rate(registry_redis_single_commands_bucket{le="0.5",type="registry"}[1m] offset 30s)
         )
       )
       /
@@ -171,7 +171,7 @@ groups:
       type: registry
     expr: |
       sum by (env,environment,stage) (
-        rate(registry_redis_single_commands_bucket{le="+Inf",type="registry"}[1m])
+        rate(registry_redis_single_commands_bucket{le="+Inf",type="registry"}[1m] offset 30s)
       )
   - record: gitlab_component_ops:rate
     labels:
@@ -180,7 +180,7 @@ groups:
       type: registry
     expr: |
       sum by (env,environment,stage) (
-        rate(registry_redis_single_commands_count{type="registry"}[1m])
+        rate(registry_redis_single_commands_count{type="registry"}[1m] offset 30s)
       )
   - record: gitlab_component_errors:rate
     labels:
@@ -190,7 +190,7 @@ groups:
     expr: |
       (
         sum by (env,environment,stage) (
-          rate(registry_redis_single_errors_count{type="registry"}[1m])
+          rate(registry_redis_single_errors_count{type="registry"}[1m] offset 30s)
         )
       )
       or
@@ -207,7 +207,7 @@ groups:
       type: registry
     expr: |
       sum by (env,environment) (
-        rate(stackdriver_https_lb_rule_loadbalancing_googleapis_com_https_request_count{project_id="gitlab-production",url_map_name="gprd-registry-cdn"}[1m])
+        rate(stackdriver_https_lb_rule_loadbalancing_googleapis_com_https_request_count{project_id="gitlab-production",url_map_name="gprd-registry-cdn"}[1m] offset 30s)
       )
   - record: gitlab_component_errors:rate
     labels:
@@ -218,7 +218,7 @@ groups:
     expr: |
       (
         sum by (env,environment) (
-          rate(stackdriver_https_lb_rule_loadbalancing_googleapis_com_https_request_count{project_id="gitlab-production",response_code_class="500",url_map_name="gprd-registry-cdn"}[1m])
+          rate(stackdriver_https_lb_rule_loadbalancing_googleapis_com_https_request_count{project_id="gitlab-production",response_code_class="500",url_map_name="gprd-registry-cdn"}[1m] offset 30s)
         )
       )
       or
@@ -235,11 +235,11 @@ groups:
     expr: |
       (
         sum by (env,environment,stage) (
-          rate(registry_http_request_duration_seconds_bucket{le="2.5",route!~"/v2/{name}/blobs/uploads/{uuid}|/v2/{name}/manifests/{reference}",type="registry"}[1m])
+          rate(registry_http_request_duration_seconds_bucket{le="2.5",route!~"/v2/{name}/blobs/uploads/{uuid}|/v2/{name}/manifests/{reference}",type="registry"}[1m] offset 30s)
         )
         +
         sum by (env,environment,stage) (
-          rate(registry_http_request_duration_seconds_bucket{le="25",route!~"/v2/{name}/blobs/uploads/{uuid}|/v2/{name}/manifests/{reference}",type="registry"}[1m])
+          rate(registry_http_request_duration_seconds_bucket{le="25",route!~"/v2/{name}/blobs/uploads/{uuid}|/v2/{name}/manifests/{reference}",type="registry"}[1m] offset 30s)
         )
       )
       /
@@ -251,7 +251,7 @@ groups:
       type: registry
     expr: |
       sum by (env,environment,stage) (
-        rate(registry_http_request_duration_seconds_bucket{le="+Inf",route!~"/v2/{name}/blobs/uploads/{uuid}|/v2/{name}/manifests/{reference}",type="registry"}[1m])
+        rate(registry_http_request_duration_seconds_bucket{le="+Inf",route!~"/v2/{name}/blobs/uploads/{uuid}|/v2/{name}/manifests/{reference}",type="registry"}[1m] offset 30s)
       )
   - record: gitlab_component_ops:rate
     labels:
@@ -260,7 +260,7 @@ groups:
       type: registry
     expr: |
       sum by (env,environment,stage) (
-        rate(registry_http_requests_total{type="registry"}[1m])
+        rate(registry_http_requests_total{type="registry"}[1m] offset 30s)
       )
   - record: gitlab_component_errors:rate
     labels:
@@ -270,7 +270,7 @@ groups:
     expr: |
       (
         sum by (env,environment,stage) (
-          rate(registry_http_requests_total{code=~"5..",type="registry"}[1m])
+          rate(registry_http_requests_total{code=~"5..",type="registry"}[1m] offset 30s)
         )
       )
       or
@@ -287,11 +287,11 @@ groups:
     expr: |
       (
         sum by (env,environment,stage) (
-          rate(registry_http_request_duration_seconds_bucket{le="2.5",method=~"delete",route="/v2/{name}/blobs/uploads/{uuid}",type="registry"}[1m])
+          rate(registry_http_request_duration_seconds_bucket{le="2.5",method=~"delete",route="/v2/{name}/blobs/uploads/{uuid}",type="registry"}[1m] offset 30s)
         )
         +
         sum by (env,environment,stage) (
-          rate(registry_http_request_duration_seconds_bucket{le="5",method=~"delete",route="/v2/{name}/blobs/uploads/{uuid}",type="registry"}[1m])
+          rate(registry_http_request_duration_seconds_bucket{le="5",method=~"delete",route="/v2/{name}/blobs/uploads/{uuid}",type="registry"}[1m] offset 30s)
         )
       )
       /
@@ -303,7 +303,7 @@ groups:
       type: registry
     expr: |
       sum by (env,environment,stage) (
-        rate(registry_http_request_duration_seconds_bucket{le="+Inf",method=~"delete",route="/v2/{name}/blobs/uploads/{uuid}",type="registry"}[1m])
+        rate(registry_http_request_duration_seconds_bucket{le="+Inf",method=~"delete",route="/v2/{name}/blobs/uploads/{uuid}",type="registry"}[1m] offset 30s)
       )
   - record: gitlab_component_ops:rate
     labels:
@@ -312,7 +312,7 @@ groups:
       type: registry
     expr: |
       sum by (env,environment,stage) (
-        rate(registry_http_request_duration_seconds_count{method=~"delete",route="/v2/{name}/blobs/uploads/{uuid}",type="registry"}[1m])
+        rate(registry_http_request_duration_seconds_count{method=~"delete",route="/v2/{name}/blobs/uploads/{uuid}",type="registry"}[1m] offset 30s)
       )
   - record: gitlab_component_apdex:success:rate
     labels:
@@ -322,11 +322,11 @@ groups:
     expr: |
       (
         sum by (env,environment,stage) (
-          rate(registry_http_request_duration_seconds_bucket{le="1",method=~"get|head",route="/v2/{name}/blobs/uploads/{uuid}",type="registry"}[1m])
+          rate(registry_http_request_duration_seconds_bucket{le="1",method=~"get|head",route="/v2/{name}/blobs/uploads/{uuid}",type="registry"}[1m] offset 30s)
         )
         +
         sum by (env,environment,stage) (
-          rate(registry_http_request_duration_seconds_bucket{le="2.5",method=~"get|head",route="/v2/{name}/blobs/uploads/{uuid}",type="registry"}[1m])
+          rate(registry_http_request_duration_seconds_bucket{le="2.5",method=~"get|head",route="/v2/{name}/blobs/uploads/{uuid}",type="registry"}[1m] offset 30s)
         )
       )
       /
@@ -338,7 +338,7 @@ groups:
       type: registry
     expr: |
       sum by (env,environment,stage) (
-        rate(registry_http_request_duration_seconds_bucket{le="+Inf",method=~"get|head",route="/v2/{name}/blobs/uploads/{uuid}",type="registry"}[1m])
+        rate(registry_http_request_duration_seconds_bucket{le="+Inf",method=~"get|head",route="/v2/{name}/blobs/uploads/{uuid}",type="registry"}[1m] offset 30s)
       )
   - record: gitlab_component_ops:rate
     labels:
@@ -347,7 +347,7 @@ groups:
       type: registry
     expr: |
       sum by (env,environment,stage) (
-        rate(registry_http_request_duration_seconds_count{method=~"get|head",route="/v2/{name}/blobs/uploads/{uuid}",type="registry"}[1m])
+        rate(registry_http_request_duration_seconds_count{method=~"get|head",route="/v2/{name}/blobs/uploads/{uuid}",type="registry"}[1m] offset 30s)
       )
   - record: gitlab_component_apdex:success:rate
     labels:
@@ -357,11 +357,11 @@ groups:
     expr: |
       (
         sum by (env,environment,stage) (
-          rate(registry_http_request_duration_seconds_bucket{le="25",method=~"put|patch|post",route="/v2/{name}/blobs/uploads/{uuid}",type="registry"}[1m])
+          rate(registry_http_request_duration_seconds_bucket{le="25",method=~"put|patch|post",route="/v2/{name}/blobs/uploads/{uuid}",type="registry"}[1m] offset 30s)
         )
         +
         sum by (env,environment,stage) (
-          rate(registry_http_request_duration_seconds_bucket{le="60",method=~"put|patch|post",route="/v2/{name}/blobs/uploads/{uuid}",type="registry"}[1m])
+          rate(registry_http_request_duration_seconds_bucket{le="60",method=~"put|patch|post",route="/v2/{name}/blobs/uploads/{uuid}",type="registry"}[1m] offset 30s)
         )
       )
       /
@@ -373,7 +373,7 @@ groups:
       type: registry
     expr: |
       sum by (env,environment,stage) (
-        rate(registry_http_request_duration_seconds_bucket{le="+Inf",method=~"put|patch|post",route="/v2/{name}/blobs/uploads/{uuid}",type="registry"}[1m])
+        rate(registry_http_request_duration_seconds_bucket{le="+Inf",method=~"put|patch|post",route="/v2/{name}/blobs/uploads/{uuid}",type="registry"}[1m] offset 30s)
       )
   - record: gitlab_component_ops:rate
     labels:
@@ -382,7 +382,7 @@ groups:
       type: registry
     expr: |
       sum by (env,environment,stage) (
-        rate(registry_http_request_duration_seconds_count{method=~"put|patch|post",route="/v2/{name}/blobs/uploads/{uuid}",type="registry"}[1m])
+        rate(registry_http_request_duration_seconds_count{method=~"put|patch|post",route="/v2/{name}/blobs/uploads/{uuid}",type="registry"}[1m] offset 30s)
       )
   - record: gitlab_component_apdex:success:rate
     labels:
@@ -392,11 +392,11 @@ groups:
     expr: |
       (
         sum by (env,environment,stage) (
-          rate(registry_http_request_duration_seconds_bucket{le="0.25",method=~"get|head",route="/v2/{name}/manifests/{reference}",type="registry"}[1m])
+          rate(registry_http_request_duration_seconds_bucket{le="0.25",method=~"get|head",route="/v2/{name}/manifests/{reference}",type="registry"}[1m] offset 30s)
         )
         +
         sum by (env,environment,stage) (
-          rate(registry_http_request_duration_seconds_bucket{le="0.5",method=~"get|head",route="/v2/{name}/manifests/{reference}",type="registry"}[1m])
+          rate(registry_http_request_duration_seconds_bucket{le="0.5",method=~"get|head",route="/v2/{name}/manifests/{reference}",type="registry"}[1m] offset 30s)
         )
       )
       /
@@ -408,7 +408,7 @@ groups:
       type: registry
     expr: |
       sum by (env,environment,stage) (
-        rate(registry_http_request_duration_seconds_bucket{le="+Inf",method=~"get|head",route="/v2/{name}/manifests/{reference}",type="registry"}[1m])
+        rate(registry_http_request_duration_seconds_bucket{le="+Inf",method=~"get|head",route="/v2/{name}/manifests/{reference}",type="registry"}[1m] offset 30s)
       )
   - record: gitlab_component_ops:rate
     labels:
@@ -417,7 +417,7 @@ groups:
       type: registry
     expr: |
       sum by (env,environment,stage) (
-        rate(registry_http_request_duration_seconds_count{method=~"get|head",route="/v2/{name}/manifests/{reference}",type="registry"}[1m])
+        rate(registry_http_request_duration_seconds_count{method=~"get|head",route="/v2/{name}/manifests/{reference}",type="registry"}[1m] offset 30s)
       )
   - record: gitlab_component_apdex:success:rate
     labels:
@@ -427,11 +427,11 @@ groups:
     expr: |
       (
         sum by (env,environment,stage) (
-          rate(registry_http_request_duration_seconds_bucket{le="1",method=~"put|delete|post|patch",route="/v2/{name}/manifests/{reference}",type="registry"}[1m])
+          rate(registry_http_request_duration_seconds_bucket{le="1",method=~"put|delete|post|patch",route="/v2/{name}/manifests/{reference}",type="registry"}[1m] offset 30s)
         )
         +
         sum by (env,environment,stage) (
-          rate(registry_http_request_duration_seconds_bucket{le="2.5",method=~"put|delete|post|patch",route="/v2/{name}/manifests/{reference}",type="registry"}[1m])
+          rate(registry_http_request_duration_seconds_bucket{le="2.5",method=~"put|delete|post|patch",route="/v2/{name}/manifests/{reference}",type="registry"}[1m] offset 30s)
         )
       )
       /
@@ -443,7 +443,7 @@ groups:
       type: registry
     expr: |
       sum by (env,environment,stage) (
-        rate(registry_http_request_duration_seconds_bucket{le="+Inf",method=~"put|delete|post|patch",route="/v2/{name}/manifests/{reference}",type="registry"}[1m])
+        rate(registry_http_request_duration_seconds_bucket{le="+Inf",method=~"put|delete|post|patch",route="/v2/{name}/manifests/{reference}",type="registry"}[1m] offset 30s)
       )
   - record: gitlab_component_ops:rate
     labels:
@@ -452,7 +452,7 @@ groups:
       type: registry
     expr: |
       sum by (env,environment,stage) (
-        rate(registry_http_request_duration_seconds_count{method=~"put|delete|post|patch",route="/v2/{name}/manifests/{reference}",type="registry"}[1m])
+        rate(registry_http_request_duration_seconds_count{method=~"put|delete|post|patch",route="/v2/{name}/manifests/{reference}",type="registry"}[1m] offset 30s)
       )
 - name: 'Component-Level SLIs: registry - 5m burn-rate'
   interval: 1m
@@ -465,11 +465,11 @@ groups:
     expr: |
       (
         sum by (env,environment,stage) (
-          rate(registry_database_query_duration_seconds_bucket{le="0.5",type="registry"}[5m])
+          rate(registry_database_query_duration_seconds_bucket{le="0.5",type="registry"}[5m] offset 30s)
         )
         +
         sum by (env,environment,stage) (
-          rate(registry_database_query_duration_seconds_bucket{le="1",type="registry"}[5m])
+          rate(registry_database_query_duration_seconds_bucket{le="1",type="registry"}[5m] offset 30s)
         )
       )
       /
@@ -481,7 +481,7 @@ groups:
       type: registry
     expr: |
       sum by (env,environment,stage) (
-        rate(registry_database_query_duration_seconds_bucket{le="+Inf",type="registry"}[5m])
+        rate(registry_database_query_duration_seconds_bucket{le="+Inf",type="registry"}[5m] offset 30s)
       )
   - record: gitlab_component_ops:rate_5m
     labels:
@@ -490,7 +490,7 @@ groups:
       type: registry
     expr: |
       sum by (env,environment,stage) (
-        rate(registry_database_queries_total{type="registry"}[5m])
+        rate(registry_database_queries_total{type="registry"}[5m] offset 30s)
       )
   - record: gitlab_component_apdex:success:rate_5m
     labels:
@@ -500,11 +500,11 @@ groups:
     expr: |
       (
         sum by (env,environment,stage) (
-          rate(registry_gc_run_duration_seconds_bucket{le="0.5",type="registry"}[5m])
+          rate(registry_gc_run_duration_seconds_bucket{le="0.5",type="registry"}[5m] offset 30s)
         )
         +
         sum by (env,environment,stage) (
-          rate(registry_gc_run_duration_seconds_bucket{le="1",type="registry"}[5m])
+          rate(registry_gc_run_duration_seconds_bucket{le="1",type="registry"}[5m] offset 30s)
         )
       )
       /
@@ -516,7 +516,7 @@ groups:
       type: registry
     expr: |
       sum by (env,environment,stage) (
-        rate(registry_gc_run_duration_seconds_bucket{le="+Inf",type="registry"}[5m])
+        rate(registry_gc_run_duration_seconds_bucket{le="+Inf",type="registry"}[5m] offset 30s)
       )
   - record: gitlab_component_ops:rate_5m
     labels:
@@ -525,7 +525,7 @@ groups:
       type: registry
     expr: |
       sum by (env,environment,stage) (
-        rate(registry_gc_runs_total{type="registry"}[5m])
+        rate(registry_gc_runs_total{type="registry"}[5m] offset 30s)
       )
   - record: gitlab_component_errors:rate_5m
     labels:
@@ -535,7 +535,7 @@ groups:
     expr: |
       (
         sum by (env,environment,stage) (
-          rate(registry_gc_runs_total{error="true",type="registry"}[5m])
+          rate(registry_gc_runs_total{error="true",type="registry"}[5m] offset 30s)
         )
       )
       or
@@ -552,7 +552,7 @@ groups:
       type: registry
     expr: |
       sum by (env,environment) (
-        rate(haproxy_backend_http_responses_total{backend="canary_registry",type="registry"}[5m])
+        rate(haproxy_backend_http_responses_total{backend="canary_registry",type="registry"}[5m] offset 30s)
       )
   - record: gitlab_component_ops:rate_5m
     labels:
@@ -562,7 +562,7 @@ groups:
       type: registry
     expr: |
       sum by (env,environment) (
-        rate(haproxy_backend_http_responses_total{backend="registry",type="registry"}[5m])
+        rate(haproxy_backend_http_responses_total{backend="registry",type="registry"}[5m] offset 30s)
       )
   - record: gitlab_component_errors:rate_5m
     labels:
@@ -573,7 +573,7 @@ groups:
     expr: |
       (
         sum by (env,environment) (
-          rate(haproxy_backend_http_responses_total{backend="canary_registry",code="5xx",type="registry"}[5m])
+          rate(haproxy_backend_http_responses_total{backend="canary_registry",code="5xx",type="registry"}[5m] offset 30s)
         )
       )
       or
@@ -591,7 +591,7 @@ groups:
     expr: |
       (
         sum by (env,environment) (
-          rate(haproxy_backend_http_responses_total{backend="registry",code="5xx",type="registry"}[5m])
+          rate(haproxy_backend_http_responses_total{backend="registry",code="5xx",type="registry"}[5m] offset 30s)
         )
       )
       or
@@ -608,11 +608,11 @@ groups:
     expr: |
       (
         sum by (env,environment,stage) (
-          rate(registry_redis_single_commands_bucket{le="0.25",type="registry"}[5m])
+          rate(registry_redis_single_commands_bucket{le="0.25",type="registry"}[5m] offset 30s)
         )
         +
         sum by (env,environment,stage) (
-          rate(registry_redis_single_commands_bucket{le="0.5",type="registry"}[5m])
+          rate(registry_redis_single_commands_bucket{le="0.5",type="registry"}[5m] offset 30s)
         )
       )
       /
@@ -624,7 +624,7 @@ groups:
       type: registry
     expr: |
       sum by (env,environment,stage) (
-        rate(registry_redis_single_commands_bucket{le="+Inf",type="registry"}[5m])
+        rate(registry_redis_single_commands_bucket{le="+Inf",type="registry"}[5m] offset 30s)
       )
   - record: gitlab_component_ops:rate_5m
     labels:
@@ -633,7 +633,7 @@ groups:
       type: registry
     expr: |
       sum by (env,environment,stage) (
-        rate(registry_redis_single_commands_count{type="registry"}[5m])
+        rate(registry_redis_single_commands_count{type="registry"}[5m] offset 30s)
       )
   - record: gitlab_component_errors:rate_5m
     labels:
@@ -643,7 +643,7 @@ groups:
     expr: |
       (
         sum by (env,environment,stage) (
-          rate(registry_redis_single_errors_count{type="registry"}[5m])
+          rate(registry_redis_single_errors_count{type="registry"}[5m] offset 30s)
         )
       )
       or
@@ -660,7 +660,7 @@ groups:
       type: registry
     expr: |
       sum by (env,environment) (
-        rate(stackdriver_https_lb_rule_loadbalancing_googleapis_com_https_request_count{project_id="gitlab-production",url_map_name="gprd-registry-cdn"}[5m])
+        rate(stackdriver_https_lb_rule_loadbalancing_googleapis_com_https_request_count{project_id="gitlab-production",url_map_name="gprd-registry-cdn"}[5m] offset 30s)
       )
   - record: gitlab_component_errors:rate_5m
     labels:
@@ -671,7 +671,7 @@ groups:
     expr: |
       (
         sum by (env,environment) (
-          rate(stackdriver_https_lb_rule_loadbalancing_googleapis_com_https_request_count{project_id="gitlab-production",response_code_class="500",url_map_name="gprd-registry-cdn"}[5m])
+          rate(stackdriver_https_lb_rule_loadbalancing_googleapis_com_https_request_count{project_id="gitlab-production",response_code_class="500",url_map_name="gprd-registry-cdn"}[5m] offset 30s)
         )
       )
       or
@@ -688,11 +688,11 @@ groups:
     expr: |
       (
         sum by (env,environment,stage) (
-          rate(registry_http_request_duration_seconds_bucket{le="2.5",route!~"/v2/{name}/blobs/uploads/{uuid}|/v2/{name}/manifests/{reference}",type="registry"}[5m])
+          rate(registry_http_request_duration_seconds_bucket{le="2.5",route!~"/v2/{name}/blobs/uploads/{uuid}|/v2/{name}/manifests/{reference}",type="registry"}[5m] offset 30s)
         )
         +
         sum by (env,environment,stage) (
-          rate(registry_http_request_duration_seconds_bucket{le="25",route!~"/v2/{name}/blobs/uploads/{uuid}|/v2/{name}/manifests/{reference}",type="registry"}[5m])
+          rate(registry_http_request_duration_seconds_bucket{le="25",route!~"/v2/{name}/blobs/uploads/{uuid}|/v2/{name}/manifests/{reference}",type="registry"}[5m] offset 30s)
         )
       )
       /
@@ -704,7 +704,7 @@ groups:
       type: registry
     expr: |
       sum by (env,environment,stage) (
-        rate(registry_http_request_duration_seconds_bucket{le="+Inf",route!~"/v2/{name}/blobs/uploads/{uuid}|/v2/{name}/manifests/{reference}",type="registry"}[5m])
+        rate(registry_http_request_duration_seconds_bucket{le="+Inf",route!~"/v2/{name}/blobs/uploads/{uuid}|/v2/{name}/manifests/{reference}",type="registry"}[5m] offset 30s)
       )
   - record: gitlab_component_ops:rate_5m
     labels:
@@ -713,7 +713,7 @@ groups:
       type: registry
     expr: |
       sum by (env,environment,stage) (
-        rate(registry_http_requests_total{type="registry"}[5m])
+        rate(registry_http_requests_total{type="registry"}[5m] offset 30s)
       )
   - record: gitlab_component_errors:rate_5m
     labels:
@@ -723,7 +723,7 @@ groups:
     expr: |
       (
         sum by (env,environment,stage) (
-          rate(registry_http_requests_total{code=~"5..",type="registry"}[5m])
+          rate(registry_http_requests_total{code=~"5..",type="registry"}[5m] offset 30s)
         )
       )
       or
@@ -740,11 +740,11 @@ groups:
     expr: |
       (
         sum by (env,environment,stage) (
-          rate(registry_http_request_duration_seconds_bucket{le="2.5",method=~"delete",route="/v2/{name}/blobs/uploads/{uuid}",type="registry"}[5m])
+          rate(registry_http_request_duration_seconds_bucket{le="2.5",method=~"delete",route="/v2/{name}/blobs/uploads/{uuid}",type="registry"}[5m] offset 30s)
         )
         +
         sum by (env,environment,stage) (
-          rate(registry_http_request_duration_seconds_bucket{le="5",method=~"delete",route="/v2/{name}/blobs/uploads/{uuid}",type="registry"}[5m])
+          rate(registry_http_request_duration_seconds_bucket{le="5",method=~"delete",route="/v2/{name}/blobs/uploads/{uuid}",type="registry"}[5m] offset 30s)
         )
       )
       /
@@ -756,7 +756,7 @@ groups:
       type: registry
     expr: |
       sum by (env,environment,stage) (
-        rate(registry_http_request_duration_seconds_bucket{le="+Inf",method=~"delete",route="/v2/{name}/blobs/uploads/{uuid}",type="registry"}[5m])
+        rate(registry_http_request_duration_seconds_bucket{le="+Inf",method=~"delete",route="/v2/{name}/blobs/uploads/{uuid}",type="registry"}[5m] offset 30s)
       )
   - record: gitlab_component_ops:rate_5m
     labels:
@@ -765,7 +765,7 @@ groups:
       type: registry
     expr: |
       sum by (env,environment,stage) (
-        rate(registry_http_request_duration_seconds_count{method=~"delete",route="/v2/{name}/blobs/uploads/{uuid}",type="registry"}[5m])
+        rate(registry_http_request_duration_seconds_count{method=~"delete",route="/v2/{name}/blobs/uploads/{uuid}",type="registry"}[5m] offset 30s)
       )
   - record: gitlab_component_apdex:success:rate_5m
     labels:
@@ -775,11 +775,11 @@ groups:
     expr: |
       (
         sum by (env,environment,stage) (
-          rate(registry_http_request_duration_seconds_bucket{le="1",method=~"get|head",route="/v2/{name}/blobs/uploads/{uuid}",type="registry"}[5m])
+          rate(registry_http_request_duration_seconds_bucket{le="1",method=~"get|head",route="/v2/{name}/blobs/uploads/{uuid}",type="registry"}[5m] offset 30s)
         )
         +
         sum by (env,environment,stage) (
-          rate(registry_http_request_duration_seconds_bucket{le="2.5",method=~"get|head",route="/v2/{name}/blobs/uploads/{uuid}",type="registry"}[5m])
+          rate(registry_http_request_duration_seconds_bucket{le="2.5",method=~"get|head",route="/v2/{name}/blobs/uploads/{uuid}",type="registry"}[5m] offset 30s)
         )
       )
       /
@@ -791,7 +791,7 @@ groups:
       type: registry
     expr: |
       sum by (env,environment,stage) (
-        rate(registry_http_request_duration_seconds_bucket{le="+Inf",method=~"get|head",route="/v2/{name}/blobs/uploads/{uuid}",type="registry"}[5m])
+        rate(registry_http_request_duration_seconds_bucket{le="+Inf",method=~"get|head",route="/v2/{name}/blobs/uploads/{uuid}",type="registry"}[5m] offset 30s)
       )
   - record: gitlab_component_ops:rate_5m
     labels:
@@ -800,7 +800,7 @@ groups:
       type: registry
     expr: |
       sum by (env,environment,stage) (
-        rate(registry_http_request_duration_seconds_count{method=~"get|head",route="/v2/{name}/blobs/uploads/{uuid}",type="registry"}[5m])
+        rate(registry_http_request_duration_seconds_count{method=~"get|head",route="/v2/{name}/blobs/uploads/{uuid}",type="registry"}[5m] offset 30s)
       )
   - record: gitlab_component_apdex:success:rate_5m
     labels:
@@ -810,11 +810,11 @@ groups:
     expr: |
       (
         sum by (env,environment,stage) (
-          rate(registry_http_request_duration_seconds_bucket{le="25",method=~"put|patch|post",route="/v2/{name}/blobs/uploads/{uuid}",type="registry"}[5m])
+          rate(registry_http_request_duration_seconds_bucket{le="25",method=~"put|patch|post",route="/v2/{name}/blobs/uploads/{uuid}",type="registry"}[5m] offset 30s)
         )
         +
         sum by (env,environment,stage) (
-          rate(registry_http_request_duration_seconds_bucket{le="60",method=~"put|patch|post",route="/v2/{name}/blobs/uploads/{uuid}",type="registry"}[5m])
+          rate(registry_http_request_duration_seconds_bucket{le="60",method=~"put|patch|post",route="/v2/{name}/blobs/uploads/{uuid}",type="registry"}[5m] offset 30s)
         )
       )
       /
@@ -826,7 +826,7 @@ groups:
       type: registry
     expr: |
       sum by (env,environment,stage) (
-        rate(registry_http_request_duration_seconds_bucket{le="+Inf",method=~"put|patch|post",route="/v2/{name}/blobs/uploads/{uuid}",type="registry"}[5m])
+        rate(registry_http_request_duration_seconds_bucket{le="+Inf",method=~"put|patch|post",route="/v2/{name}/blobs/uploads/{uuid}",type="registry"}[5m] offset 30s)
       )
   - record: gitlab_component_ops:rate_5m
     labels:
@@ -835,7 +835,7 @@ groups:
       type: registry
     expr: |
       sum by (env,environment,stage) (
-        rate(registry_http_request_duration_seconds_count{method=~"put|patch|post",route="/v2/{name}/blobs/uploads/{uuid}",type="registry"}[5m])
+        rate(registry_http_request_duration_seconds_count{method=~"put|patch|post",route="/v2/{name}/blobs/uploads/{uuid}",type="registry"}[5m] offset 30s)
       )
   - record: gitlab_component_apdex:success:rate_5m
     labels:
@@ -845,11 +845,11 @@ groups:
     expr: |
       (
         sum by (env,environment,stage) (
-          rate(registry_http_request_duration_seconds_bucket{le="0.25",method=~"get|head",route="/v2/{name}/manifests/{reference}",type="registry"}[5m])
+          rate(registry_http_request_duration_seconds_bucket{le="0.25",method=~"get|head",route="/v2/{name}/manifests/{reference}",type="registry"}[5m] offset 30s)
         )
         +
         sum by (env,environment,stage) (
-          rate(registry_http_request_duration_seconds_bucket{le="0.5",method=~"get|head",route="/v2/{name}/manifests/{reference}",type="registry"}[5m])
+          rate(registry_http_request_duration_seconds_bucket{le="0.5",method=~"get|head",route="/v2/{name}/manifests/{reference}",type="registry"}[5m] offset 30s)
         )
       )
       /
@@ -861,7 +861,7 @@ groups:
       type: registry
     expr: |
       sum by (env,environment,stage) (
-        rate(registry_http_request_duration_seconds_bucket{le="+Inf",method=~"get|head",route="/v2/{name}/manifests/{reference}",type="registry"}[5m])
+        rate(registry_http_request_duration_seconds_bucket{le="+Inf",method=~"get|head",route="/v2/{name}/manifests/{reference}",type="registry"}[5m] offset 30s)
       )
   - record: gitlab_component_ops:rate_5m
     labels:
@@ -870,7 +870,7 @@ groups:
       type: registry
     expr: |
       sum by (env,environment,stage) (
-        rate(registry_http_request_duration_seconds_count{method=~"get|head",route="/v2/{name}/manifests/{reference}",type="registry"}[5m])
+        rate(registry_http_request_duration_seconds_count{method=~"get|head",route="/v2/{name}/manifests/{reference}",type="registry"}[5m] offset 30s)
       )
   - record: gitlab_component_apdex:success:rate_5m
     labels:
@@ -880,11 +880,11 @@ groups:
     expr: |
       (
         sum by (env,environment,stage) (
-          rate(registry_http_request_duration_seconds_bucket{le="1",method=~"put|delete|post|patch",route="/v2/{name}/manifests/{reference}",type="registry"}[5m])
+          rate(registry_http_request_duration_seconds_bucket{le="1",method=~"put|delete|post|patch",route="/v2/{name}/manifests/{reference}",type="registry"}[5m] offset 30s)
         )
         +
         sum by (env,environment,stage) (
-          rate(registry_http_request_duration_seconds_bucket{le="2.5",method=~"put|delete|post|patch",route="/v2/{name}/manifests/{reference}",type="registry"}[5m])
+          rate(registry_http_request_duration_seconds_bucket{le="2.5",method=~"put|delete|post|patch",route="/v2/{name}/manifests/{reference}",type="registry"}[5m] offset 30s)
         )
       )
       /
@@ -896,7 +896,7 @@ groups:
       type: registry
     expr: |
       sum by (env,environment,stage) (
-        rate(registry_http_request_duration_seconds_bucket{le="+Inf",method=~"put|delete|post|patch",route="/v2/{name}/manifests/{reference}",type="registry"}[5m])
+        rate(registry_http_request_duration_seconds_bucket{le="+Inf",method=~"put|delete|post|patch",route="/v2/{name}/manifests/{reference}",type="registry"}[5m] offset 30s)
       )
   - record: gitlab_component_ops:rate_5m
     labels:
@@ -905,7 +905,7 @@ groups:
       type: registry
     expr: |
       sum by (env,environment,stage) (
-        rate(registry_http_request_duration_seconds_count{method=~"put|delete|post|patch",route="/v2/{name}/manifests/{reference}",type="registry"}[5m])
+        rate(registry_http_request_duration_seconds_count{method=~"put|delete|post|patch",route="/v2/{name}/manifests/{reference}",type="registry"}[5m] offset 30s)
       )
 - name: 'Component-Level SLIs: registry - 30m burn-rate'
   interval: 2m
@@ -918,11 +918,11 @@ groups:
     expr: |
       (
         sum by (env,environment,stage) (
-          rate(registry_database_query_duration_seconds_bucket{le="0.5",type="registry"}[30m])
+          rate(registry_database_query_duration_seconds_bucket{le="0.5",type="registry"}[30m] offset 30s)
         )
         +
         sum by (env,environment,stage) (
-          rate(registry_database_query_duration_seconds_bucket{le="1",type="registry"}[30m])
+          rate(registry_database_query_duration_seconds_bucket{le="1",type="registry"}[30m] offset 30s)
         )
       )
       /
@@ -934,7 +934,7 @@ groups:
       type: registry
     expr: |
       sum by (env,environment,stage) (
-        rate(registry_database_query_duration_seconds_bucket{le="+Inf",type="registry"}[30m])
+        rate(registry_database_query_duration_seconds_bucket{le="+Inf",type="registry"}[30m] offset 30s)
       )
   - record: gitlab_component_ops:rate_30m
     labels:
@@ -943,7 +943,7 @@ groups:
       type: registry
     expr: |
       sum by (env,environment,stage) (
-        rate(registry_database_queries_total{type="registry"}[30m])
+        rate(registry_database_queries_total{type="registry"}[30m] offset 30s)
       )
   - record: gitlab_component_apdex:success:rate_30m
     labels:
@@ -953,11 +953,11 @@ groups:
     expr: |
       (
         sum by (env,environment,stage) (
-          rate(registry_gc_run_duration_seconds_bucket{le="0.5",type="registry"}[30m])
+          rate(registry_gc_run_duration_seconds_bucket{le="0.5",type="registry"}[30m] offset 30s)
         )
         +
         sum by (env,environment,stage) (
-          rate(registry_gc_run_duration_seconds_bucket{le="1",type="registry"}[30m])
+          rate(registry_gc_run_duration_seconds_bucket{le="1",type="registry"}[30m] offset 30s)
         )
       )
       /
@@ -969,7 +969,7 @@ groups:
       type: registry
     expr: |
       sum by (env,environment,stage) (
-        rate(registry_gc_run_duration_seconds_bucket{le="+Inf",type="registry"}[30m])
+        rate(registry_gc_run_duration_seconds_bucket{le="+Inf",type="registry"}[30m] offset 30s)
       )
   - record: gitlab_component_ops:rate_30m
     labels:
@@ -978,7 +978,7 @@ groups:
       type: registry
     expr: |
       sum by (env,environment,stage) (
-        rate(registry_gc_runs_total{type="registry"}[30m])
+        rate(registry_gc_runs_total{type="registry"}[30m] offset 30s)
       )
   - record: gitlab_component_errors:rate_30m
     labels:
@@ -988,7 +988,7 @@ groups:
     expr: |
       (
         sum by (env,environment,stage) (
-          rate(registry_gc_runs_total{error="true",type="registry"}[30m])
+          rate(registry_gc_runs_total{error="true",type="registry"}[30m] offset 30s)
         )
       )
       or
@@ -1005,7 +1005,7 @@ groups:
       type: registry
     expr: |
       sum by (env,environment) (
-        rate(haproxy_backend_http_responses_total{backend="canary_registry",type="registry"}[30m])
+        rate(haproxy_backend_http_responses_total{backend="canary_registry",type="registry"}[30m] offset 30s)
       )
   - record: gitlab_component_ops:rate_30m
     labels:
@@ -1015,7 +1015,7 @@ groups:
       type: registry
     expr: |
       sum by (env,environment) (
-        rate(haproxy_backend_http_responses_total{backend="registry",type="registry"}[30m])
+        rate(haproxy_backend_http_responses_total{backend="registry",type="registry"}[30m] offset 30s)
       )
   - record: gitlab_component_errors:rate_30m
     labels:
@@ -1026,7 +1026,7 @@ groups:
     expr: |
       (
         sum by (env,environment) (
-          rate(haproxy_backend_http_responses_total{backend="canary_registry",code="5xx",type="registry"}[30m])
+          rate(haproxy_backend_http_responses_total{backend="canary_registry",code="5xx",type="registry"}[30m] offset 30s)
         )
       )
       or
@@ -1044,7 +1044,7 @@ groups:
     expr: |
       (
         sum by (env,environment) (
-          rate(haproxy_backend_http_responses_total{backend="registry",code="5xx",type="registry"}[30m])
+          rate(haproxy_backend_http_responses_total{backend="registry",code="5xx",type="registry"}[30m] offset 30s)
         )
       )
       or
@@ -1061,11 +1061,11 @@ groups:
     expr: |
       (
         sum by (env,environment,stage) (
-          rate(registry_redis_single_commands_bucket{le="0.25",type="registry"}[30m])
+          rate(registry_redis_single_commands_bucket{le="0.25",type="registry"}[30m] offset 30s)
         )
         +
         sum by (env,environment,stage) (
-          rate(registry_redis_single_commands_bucket{le="0.5",type="registry"}[30m])
+          rate(registry_redis_single_commands_bucket{le="0.5",type="registry"}[30m] offset 30s)
         )
       )
       /
@@ -1077,7 +1077,7 @@ groups:
       type: registry
     expr: |
       sum by (env,environment,stage) (
-        rate(registry_redis_single_commands_bucket{le="+Inf",type="registry"}[30m])
+        rate(registry_redis_single_commands_bucket{le="+Inf",type="registry"}[30m] offset 30s)
       )
   - record: gitlab_component_ops:rate_30m
     labels:
@@ -1086,7 +1086,7 @@ groups:
       type: registry
     expr: |
       sum by (env,environment,stage) (
-        rate(registry_redis_single_commands_count{type="registry"}[30m])
+        rate(registry_redis_single_commands_count{type="registry"}[30m] offset 30s)
       )
   - record: gitlab_component_errors:rate_30m
     labels:
@@ -1096,7 +1096,7 @@ groups:
     expr: |
       (
         sum by (env,environment,stage) (
-          rate(registry_redis_single_errors_count{type="registry"}[30m])
+          rate(registry_redis_single_errors_count{type="registry"}[30m] offset 30s)
         )
       )
       or
@@ -1113,7 +1113,7 @@ groups:
       type: registry
     expr: |
       sum by (env,environment) (
-        rate(stackdriver_https_lb_rule_loadbalancing_googleapis_com_https_request_count{project_id="gitlab-production",url_map_name="gprd-registry-cdn"}[30m])
+        rate(stackdriver_https_lb_rule_loadbalancing_googleapis_com_https_request_count{project_id="gitlab-production",url_map_name="gprd-registry-cdn"}[30m] offset 30s)
       )
   - record: gitlab_component_errors:rate_30m
     labels:
@@ -1124,7 +1124,7 @@ groups:
     expr: |
       (
         sum by (env,environment) (
-          rate(stackdriver_https_lb_rule_loadbalancing_googleapis_com_https_request_count{project_id="gitlab-production",response_code_class="500",url_map_name="gprd-registry-cdn"}[30m])
+          rate(stackdriver_https_lb_rule_loadbalancing_googleapis_com_https_request_count{project_id="gitlab-production",response_code_class="500",url_map_name="gprd-registry-cdn"}[30m] offset 30s)
         )
       )
       or
@@ -1141,11 +1141,11 @@ groups:
     expr: |
       (
         sum by (env,environment,stage) (
-          rate(registry_http_request_duration_seconds_bucket{le="2.5",route!~"/v2/{name}/blobs/uploads/{uuid}|/v2/{name}/manifests/{reference}",type="registry"}[30m])
+          rate(registry_http_request_duration_seconds_bucket{le="2.5",route!~"/v2/{name}/blobs/uploads/{uuid}|/v2/{name}/manifests/{reference}",type="registry"}[30m] offset 30s)
         )
         +
         sum by (env,environment,stage) (
-          rate(registry_http_request_duration_seconds_bucket{le="25",route!~"/v2/{name}/blobs/uploads/{uuid}|/v2/{name}/manifests/{reference}",type="registry"}[30m])
+          rate(registry_http_request_duration_seconds_bucket{le="25",route!~"/v2/{name}/blobs/uploads/{uuid}|/v2/{name}/manifests/{reference}",type="registry"}[30m] offset 30s)
         )
       )
       /
@@ -1157,7 +1157,7 @@ groups:
       type: registry
     expr: |
       sum by (env,environment,stage) (
-        rate(registry_http_request_duration_seconds_bucket{le="+Inf",route!~"/v2/{name}/blobs/uploads/{uuid}|/v2/{name}/manifests/{reference}",type="registry"}[30m])
+        rate(registry_http_request_duration_seconds_bucket{le="+Inf",route!~"/v2/{name}/blobs/uploads/{uuid}|/v2/{name}/manifests/{reference}",type="registry"}[30m] offset 30s)
       )
   - record: gitlab_component_ops:rate_30m
     labels:
@@ -1166,7 +1166,7 @@ groups:
       type: registry
     expr: |
       sum by (env,environment,stage) (
-        rate(registry_http_requests_total{type="registry"}[30m])
+        rate(registry_http_requests_total{type="registry"}[30m] offset 30s)
       )
   - record: gitlab_component_errors:rate_30m
     labels:
@@ -1176,7 +1176,7 @@ groups:
     expr: |
       (
         sum by (env,environment,stage) (
-          rate(registry_http_requests_total{code=~"5..",type="registry"}[30m])
+          rate(registry_http_requests_total{code=~"5..",type="registry"}[30m] offset 30s)
         )
       )
       or
@@ -1193,11 +1193,11 @@ groups:
     expr: |
       (
         sum by (env,environment,stage) (
-          rate(registry_http_request_duration_seconds_bucket{le="2.5",method=~"delete",route="/v2/{name}/blobs/uploads/{uuid}",type="registry"}[30m])
+          rate(registry_http_request_duration_seconds_bucket{le="2.5",method=~"delete",route="/v2/{name}/blobs/uploads/{uuid}",type="registry"}[30m] offset 30s)
         )
         +
         sum by (env,environment,stage) (
-          rate(registry_http_request_duration_seconds_bucket{le="5",method=~"delete",route="/v2/{name}/blobs/uploads/{uuid}",type="registry"}[30m])
+          rate(registry_http_request_duration_seconds_bucket{le="5",method=~"delete",route="/v2/{name}/blobs/uploads/{uuid}",type="registry"}[30m] offset 30s)
         )
       )
       /
@@ -1209,7 +1209,7 @@ groups:
       type: registry
     expr: |
       sum by (env,environment,stage) (
-        rate(registry_http_request_duration_seconds_bucket{le="+Inf",method=~"delete",route="/v2/{name}/blobs/uploads/{uuid}",type="registry"}[30m])
+        rate(registry_http_request_duration_seconds_bucket{le="+Inf",method=~"delete",route="/v2/{name}/blobs/uploads/{uuid}",type="registry"}[30m] offset 30s)
       )
   - record: gitlab_component_ops:rate_30m
     labels:
@@ -1218,7 +1218,7 @@ groups:
       type: registry
     expr: |
       sum by (env,environment,stage) (
-        rate(registry_http_request_duration_seconds_count{method=~"delete",route="/v2/{name}/blobs/uploads/{uuid}",type="registry"}[30m])
+        rate(registry_http_request_duration_seconds_count{method=~"delete",route="/v2/{name}/blobs/uploads/{uuid}",type="registry"}[30m] offset 30s)
       )
   - record: gitlab_component_apdex:success:rate_30m
     labels:
@@ -1228,11 +1228,11 @@ groups:
     expr: |
       (
         sum by (env,environment,stage) (
-          rate(registry_http_request_duration_seconds_bucket{le="1",method=~"get|head",route="/v2/{name}/blobs/uploads/{uuid}",type="registry"}[30m])
+          rate(registry_http_request_duration_seconds_bucket{le="1",method=~"get|head",route="/v2/{name}/blobs/uploads/{uuid}",type="registry"}[30m] offset 30s)
         )
         +
         sum by (env,environment,stage) (
-          rate(registry_http_request_duration_seconds_bucket{le="2.5",method=~"get|head",route="/v2/{name}/blobs/uploads/{uuid}",type="registry"}[30m])
+          rate(registry_http_request_duration_seconds_bucket{le="2.5",method=~"get|head",route="/v2/{name}/blobs/uploads/{uuid}",type="registry"}[30m] offset 30s)
         )
       )
       /
@@ -1244,7 +1244,7 @@ groups:
       type: registry
     expr: |
       sum by (env,environment,stage) (
-        rate(registry_http_request_duration_seconds_bucket{le="+Inf",method=~"get|head",route="/v2/{name}/blobs/uploads/{uuid}",type="registry"}[30m])
+        rate(registry_http_request_duration_seconds_bucket{le="+Inf",method=~"get|head",route="/v2/{name}/blobs/uploads/{uuid}",type="registry"}[30m] offset 30s)
       )
   - record: gitlab_component_ops:rate_30m
     labels:
@@ -1253,7 +1253,7 @@ groups:
       type: registry
     expr: |
       sum by (env,environment,stage) (
-        rate(registry_http_request_duration_seconds_count{method=~"get|head",route="/v2/{name}/blobs/uploads/{uuid}",type="registry"}[30m])
+        rate(registry_http_request_duration_seconds_count{method=~"get|head",route="/v2/{name}/blobs/uploads/{uuid}",type="registry"}[30m] offset 30s)
       )
   - record: gitlab_component_apdex:success:rate_30m
     labels:
@@ -1263,11 +1263,11 @@ groups:
     expr: |
       (
         sum by (env,environment,stage) (
-          rate(registry_http_request_duration_seconds_bucket{le="25",method=~"put|patch|post",route="/v2/{name}/blobs/uploads/{uuid}",type="registry"}[30m])
+          rate(registry_http_request_duration_seconds_bucket{le="25",method=~"put|patch|post",route="/v2/{name}/blobs/uploads/{uuid}",type="registry"}[30m] offset 30s)
         )
         +
         sum by (env,environment,stage) (
-          rate(registry_http_request_duration_seconds_bucket{le="60",method=~"put|patch|post",route="/v2/{name}/blobs/uploads/{uuid}",type="registry"}[30m])
+          rate(registry_http_request_duration_seconds_bucket{le="60",method=~"put|patch|post",route="/v2/{name}/blobs/uploads/{uuid}",type="registry"}[30m] offset 30s)
         )
       )
       /
@@ -1279,7 +1279,7 @@ groups:
       type: registry
     expr: |
       sum by (env,environment,stage) (
-        rate(registry_http_request_duration_seconds_bucket{le="+Inf",method=~"put|patch|post",route="/v2/{name}/blobs/uploads/{uuid}",type="registry"}[30m])
+        rate(registry_http_request_duration_seconds_bucket{le="+Inf",method=~"put|patch|post",route="/v2/{name}/blobs/uploads/{uuid}",type="registry"}[30m] offset 30s)
       )
   - record: gitlab_component_ops:rate_30m
     labels:
@@ -1288,7 +1288,7 @@ groups:
       type: registry
     expr: |
       sum by (env,environment,stage) (
-        rate(registry_http_request_duration_seconds_count{method=~"put|patch|post",route="/v2/{name}/blobs/uploads/{uuid}",type="registry"}[30m])
+        rate(registry_http_request_duration_seconds_count{method=~"put|patch|post",route="/v2/{name}/blobs/uploads/{uuid}",type="registry"}[30m] offset 30s)
       )
   - record: gitlab_component_apdex:success:rate_30m
     labels:
@@ -1298,11 +1298,11 @@ groups:
     expr: |
       (
         sum by (env,environment,stage) (
-          rate(registry_http_request_duration_seconds_bucket{le="0.25",method=~"get|head",route="/v2/{name}/manifests/{reference}",type="registry"}[30m])
+          rate(registry_http_request_duration_seconds_bucket{le="0.25",method=~"get|head",route="/v2/{name}/manifests/{reference}",type="registry"}[30m] offset 30s)
         )
         +
         sum by (env,environment,stage) (
-          rate(registry_http_request_duration_seconds_bucket{le="0.5",method=~"get|head",route="/v2/{name}/manifests/{reference}",type="registry"}[30m])
+          rate(registry_http_request_duration_seconds_bucket{le="0.5",method=~"get|head",route="/v2/{name}/manifests/{reference}",type="registry"}[30m] offset 30s)
         )
       )
       /
@@ -1314,7 +1314,7 @@ groups:
       type: registry
     expr: |
       sum by (env,environment,stage) (
-        rate(registry_http_request_duration_seconds_bucket{le="+Inf",method=~"get|head",route="/v2/{name}/manifests/{reference}",type="registry"}[30m])
+        rate(registry_http_request_duration_seconds_bucket{le="+Inf",method=~"get|head",route="/v2/{name}/manifests/{reference}",type="registry"}[30m] offset 30s)
       )
   - record: gitlab_component_ops:rate_30m
     labels:
@@ -1323,7 +1323,7 @@ groups:
       type: registry
     expr: |
       sum by (env,environment,stage) (
-        rate(registry_http_request_duration_seconds_count{method=~"get|head",route="/v2/{name}/manifests/{reference}",type="registry"}[30m])
+        rate(registry_http_request_duration_seconds_count{method=~"get|head",route="/v2/{name}/manifests/{reference}",type="registry"}[30m] offset 30s)
       )
   - record: gitlab_component_apdex:success:rate_30m
     labels:
@@ -1333,11 +1333,11 @@ groups:
     expr: |
       (
         sum by (env,environment,stage) (
-          rate(registry_http_request_duration_seconds_bucket{le="1",method=~"put|delete|post|patch",route="/v2/{name}/manifests/{reference}",type="registry"}[30m])
+          rate(registry_http_request_duration_seconds_bucket{le="1",method=~"put|delete|post|patch",route="/v2/{name}/manifests/{reference}",type="registry"}[30m] offset 30s)
         )
         +
         sum by (env,environment,stage) (
-          rate(registry_http_request_duration_seconds_bucket{le="2.5",method=~"put|delete|post|patch",route="/v2/{name}/manifests/{reference}",type="registry"}[30m])
+          rate(registry_http_request_duration_seconds_bucket{le="2.5",method=~"put|delete|post|patch",route="/v2/{name}/manifests/{reference}",type="registry"}[30m] offset 30s)
         )
       )
       /
@@ -1349,7 +1349,7 @@ groups:
       type: registry
     expr: |
       sum by (env,environment,stage) (
-        rate(registry_http_request_duration_seconds_bucket{le="+Inf",method=~"put|delete|post|patch",route="/v2/{name}/manifests/{reference}",type="registry"}[30m])
+        rate(registry_http_request_duration_seconds_bucket{le="+Inf",method=~"put|delete|post|patch",route="/v2/{name}/manifests/{reference}",type="registry"}[30m] offset 30s)
       )
   - record: gitlab_component_ops:rate_30m
     labels:
@@ -1358,7 +1358,7 @@ groups:
       type: registry
     expr: |
       sum by (env,environment,stage) (
-        rate(registry_http_request_duration_seconds_count{method=~"put|delete|post|patch",route="/v2/{name}/manifests/{reference}",type="registry"}[30m])
+        rate(registry_http_request_duration_seconds_count{method=~"put|delete|post|patch",route="/v2/{name}/manifests/{reference}",type="registry"}[30m] offset 30s)
       )
 - name: 'Component-Level SLIs: registry - 1h burn-rate'
   interval: 1m
@@ -1371,11 +1371,11 @@ groups:
     expr: |
       (
         sum by (env,environment,stage) (
-          rate(registry_database_query_duration_seconds_bucket{le="0.5",type="registry"}[1h])
+          rate(registry_database_query_duration_seconds_bucket{le="0.5",type="registry"}[1h] offset 30s)
         )
         +
         sum by (env,environment,stage) (
-          rate(registry_database_query_duration_seconds_bucket{le="1",type="registry"}[1h])
+          rate(registry_database_query_duration_seconds_bucket{le="1",type="registry"}[1h] offset 30s)
         )
       )
       /
@@ -1387,7 +1387,7 @@ groups:
       type: registry
     expr: |
       sum by (env,environment,stage) (
-        rate(registry_database_query_duration_seconds_bucket{le="+Inf",type="registry"}[1h])
+        rate(registry_database_query_duration_seconds_bucket{le="+Inf",type="registry"}[1h] offset 30s)
       )
   - record: gitlab_component_ops:rate_1h
     labels:
@@ -1396,7 +1396,7 @@ groups:
       type: registry
     expr: |
       sum by (env,environment,stage) (
-        rate(registry_database_queries_total{type="registry"}[1h])
+        rate(registry_database_queries_total{type="registry"}[1h] offset 30s)
       )
   - record: gitlab_component_apdex:success:rate_1h
     labels:
@@ -1406,11 +1406,11 @@ groups:
     expr: |
       (
         sum by (env,environment,stage) (
-          rate(registry_gc_run_duration_seconds_bucket{le="0.5",type="registry"}[1h])
+          rate(registry_gc_run_duration_seconds_bucket{le="0.5",type="registry"}[1h] offset 30s)
         )
         +
         sum by (env,environment,stage) (
-          rate(registry_gc_run_duration_seconds_bucket{le="1",type="registry"}[1h])
+          rate(registry_gc_run_duration_seconds_bucket{le="1",type="registry"}[1h] offset 30s)
         )
       )
       /
@@ -1422,7 +1422,7 @@ groups:
       type: registry
     expr: |
       sum by (env,environment,stage) (
-        rate(registry_gc_run_duration_seconds_bucket{le="+Inf",type="registry"}[1h])
+        rate(registry_gc_run_duration_seconds_bucket{le="+Inf",type="registry"}[1h] offset 30s)
       )
   - record: gitlab_component_ops:rate_1h
     labels:
@@ -1431,7 +1431,7 @@ groups:
       type: registry
     expr: |
       sum by (env,environment,stage) (
-        rate(registry_gc_runs_total{type="registry"}[1h])
+        rate(registry_gc_runs_total{type="registry"}[1h] offset 30s)
       )
   - record: gitlab_component_errors:rate_1h
     labels:
@@ -1441,7 +1441,7 @@ groups:
     expr: |
       (
         sum by (env,environment,stage) (
-          rate(registry_gc_runs_total{error="true",type="registry"}[1h])
+          rate(registry_gc_runs_total{error="true",type="registry"}[1h] offset 30s)
         )
       )
       or
@@ -1458,7 +1458,7 @@ groups:
       type: registry
     expr: |
       sum by (env,environment) (
-        rate(haproxy_backend_http_responses_total{backend="canary_registry",type="registry"}[1h])
+        rate(haproxy_backend_http_responses_total{backend="canary_registry",type="registry"}[1h] offset 30s)
       )
   - record: gitlab_component_ops:rate_1h
     labels:
@@ -1468,7 +1468,7 @@ groups:
       type: registry
     expr: |
       sum by (env,environment) (
-        rate(haproxy_backend_http_responses_total{backend="registry",type="registry"}[1h])
+        rate(haproxy_backend_http_responses_total{backend="registry",type="registry"}[1h] offset 30s)
       )
   - record: gitlab_component_errors:rate_1h
     labels:
@@ -1479,7 +1479,7 @@ groups:
     expr: |
       (
         sum by (env,environment) (
-          rate(haproxy_backend_http_responses_total{backend="canary_registry",code="5xx",type="registry"}[1h])
+          rate(haproxy_backend_http_responses_total{backend="canary_registry",code="5xx",type="registry"}[1h] offset 30s)
         )
       )
       or
@@ -1497,7 +1497,7 @@ groups:
     expr: |
       (
         sum by (env,environment) (
-          rate(haproxy_backend_http_responses_total{backend="registry",code="5xx",type="registry"}[1h])
+          rate(haproxy_backend_http_responses_total{backend="registry",code="5xx",type="registry"}[1h] offset 30s)
         )
       )
       or
@@ -1514,11 +1514,11 @@ groups:
     expr: |
       (
         sum by (env,environment,stage) (
-          rate(registry_redis_single_commands_bucket{le="0.25",type="registry"}[1h])
+          rate(registry_redis_single_commands_bucket{le="0.25",type="registry"}[1h] offset 30s)
         )
         +
         sum by (env,environment,stage) (
-          rate(registry_redis_single_commands_bucket{le="0.5",type="registry"}[1h])
+          rate(registry_redis_single_commands_bucket{le="0.5",type="registry"}[1h] offset 30s)
         )
       )
       /
@@ -1530,7 +1530,7 @@ groups:
       type: registry
     expr: |
       sum by (env,environment,stage) (
-        rate(registry_redis_single_commands_bucket{le="+Inf",type="registry"}[1h])
+        rate(registry_redis_single_commands_bucket{le="+Inf",type="registry"}[1h] offset 30s)
       )
   - record: gitlab_component_ops:rate_1h
     labels:
@@ -1539,7 +1539,7 @@ groups:
       type: registry
     expr: |
       sum by (env,environment,stage) (
-        rate(registry_redis_single_commands_count{type="registry"}[1h])
+        rate(registry_redis_single_commands_count{type="registry"}[1h] offset 30s)
       )
   - record: gitlab_component_errors:rate_1h
     labels:
@@ -1549,7 +1549,7 @@ groups:
     expr: |
       (
         sum by (env,environment,stage) (
-          rate(registry_redis_single_errors_count{type="registry"}[1h])
+          rate(registry_redis_single_errors_count{type="registry"}[1h] offset 30s)
         )
       )
       or
@@ -1566,7 +1566,7 @@ groups:
       type: registry
     expr: |
       sum by (env,environment) (
-        rate(stackdriver_https_lb_rule_loadbalancing_googleapis_com_https_request_count{project_id="gitlab-production",url_map_name="gprd-registry-cdn"}[1h])
+        rate(stackdriver_https_lb_rule_loadbalancing_googleapis_com_https_request_count{project_id="gitlab-production",url_map_name="gprd-registry-cdn"}[1h] offset 30s)
       )
   - record: gitlab_component_errors:rate_1h
     labels:
@@ -1577,7 +1577,7 @@ groups:
     expr: |
       (
         sum by (env,environment) (
-          rate(stackdriver_https_lb_rule_loadbalancing_googleapis_com_https_request_count{project_id="gitlab-production",response_code_class="500",url_map_name="gprd-registry-cdn"}[1h])
+          rate(stackdriver_https_lb_rule_loadbalancing_googleapis_com_https_request_count{project_id="gitlab-production",response_code_class="500",url_map_name="gprd-registry-cdn"}[1h] offset 30s)
         )
       )
       or
@@ -1594,11 +1594,11 @@ groups:
     expr: |
       (
         sum by (env,environment,stage) (
-          rate(registry_http_request_duration_seconds_bucket{le="2.5",route!~"/v2/{name}/blobs/uploads/{uuid}|/v2/{name}/manifests/{reference}",type="registry"}[1h])
+          rate(registry_http_request_duration_seconds_bucket{le="2.5",route!~"/v2/{name}/blobs/uploads/{uuid}|/v2/{name}/manifests/{reference}",type="registry"}[1h] offset 30s)
         )
         +
         sum by (env,environment,stage) (
-          rate(registry_http_request_duration_seconds_bucket{le="25",route!~"/v2/{name}/blobs/uploads/{uuid}|/v2/{name}/manifests/{reference}",type="registry"}[1h])
+          rate(registry_http_request_duration_seconds_bucket{le="25",route!~"/v2/{name}/blobs/uploads/{uuid}|/v2/{name}/manifests/{reference}",type="registry"}[1h] offset 30s)
         )
       )
       /
@@ -1610,7 +1610,7 @@ groups:
       type: registry
     expr: |
       sum by (env,environment,stage) (
-        rate(registry_http_request_duration_seconds_bucket{le="+Inf",route!~"/v2/{name}/blobs/uploads/{uuid}|/v2/{name}/manifests/{reference}",type="registry"}[1h])
+        rate(registry_http_request_duration_seconds_bucket{le="+Inf",route!~"/v2/{name}/blobs/uploads/{uuid}|/v2/{name}/manifests/{reference}",type="registry"}[1h] offset 30s)
       )
   - record: gitlab_component_ops:rate_1h
     labels:
@@ -1619,7 +1619,7 @@ groups:
       type: registry
     expr: |
       sum by (env,environment,stage) (
-        rate(registry_http_requests_total{type="registry"}[1h])
+        rate(registry_http_requests_total{type="registry"}[1h] offset 30s)
       )
   - record: gitlab_component_errors:rate_1h
     labels:
@@ -1629,7 +1629,7 @@ groups:
     expr: |
       (
         sum by (env,environment,stage) (
-          rate(registry_http_requests_total{code=~"5..",type="registry"}[1h])
+          rate(registry_http_requests_total{code=~"5..",type="registry"}[1h] offset 30s)
         )
       )
       or
@@ -1646,11 +1646,11 @@ groups:
     expr: |
       (
         sum by (env,environment,stage) (
-          rate(registry_http_request_duration_seconds_bucket{le="2.5",method=~"delete",route="/v2/{name}/blobs/uploads/{uuid}",type="registry"}[1h])
+          rate(registry_http_request_duration_seconds_bucket{le="2.5",method=~"delete",route="/v2/{name}/blobs/uploads/{uuid}",type="registry"}[1h] offset 30s)
         )
         +
         sum by (env,environment,stage) (
-          rate(registry_http_request_duration_seconds_bucket{le="5",method=~"delete",route="/v2/{name}/blobs/uploads/{uuid}",type="registry"}[1h])
+          rate(registry_http_request_duration_seconds_bucket{le="5",method=~"delete",route="/v2/{name}/blobs/uploads/{uuid}",type="registry"}[1h] offset 30s)
         )
       )
       /
@@ -1662,7 +1662,7 @@ groups:
       type: registry
     expr: |
       sum by (env,environment,stage) (
-        rate(registry_http_request_duration_seconds_bucket{le="+Inf",method=~"delete",route="/v2/{name}/blobs/uploads/{uuid}",type="registry"}[1h])
+        rate(registry_http_request_duration_seconds_bucket{le="+Inf",method=~"delete",route="/v2/{name}/blobs/uploads/{uuid}",type="registry"}[1h] offset 30s)
       )
   - record: gitlab_component_ops:rate_1h
     labels:
@@ -1671,7 +1671,7 @@ groups:
       type: registry
     expr: |
       sum by (env,environment,stage) (
-        rate(registry_http_request_duration_seconds_count{method=~"delete",route="/v2/{name}/blobs/uploads/{uuid}",type="registry"}[1h])
+        rate(registry_http_request_duration_seconds_count{method=~"delete",route="/v2/{name}/blobs/uploads/{uuid}",type="registry"}[1h] offset 30s)
       )
   - record: gitlab_component_apdex:success:rate_1h
     labels:
@@ -1681,11 +1681,11 @@ groups:
     expr: |
       (
         sum by (env,environment,stage) (
-          rate(registry_http_request_duration_seconds_bucket{le="1",method=~"get|head",route="/v2/{name}/blobs/uploads/{uuid}",type="registry"}[1h])
+          rate(registry_http_request_duration_seconds_bucket{le="1",method=~"get|head",route="/v2/{name}/blobs/uploads/{uuid}",type="registry"}[1h] offset 30s)
         )
         +
         sum by (env,environment,stage) (
-          rate(registry_http_request_duration_seconds_bucket{le="2.5",method=~"get|head",route="/v2/{name}/blobs/uploads/{uuid}",type="registry"}[1h])
+          rate(registry_http_request_duration_seconds_bucket{le="2.5",method=~"get|head",route="/v2/{name}/blobs/uploads/{uuid}",type="registry"}[1h] offset 30s)
         )
       )
       /
@@ -1697,7 +1697,7 @@ groups:
       type: registry
     expr: |
       sum by (env,environment,stage) (
-        rate(registry_http_request_duration_seconds_bucket{le="+Inf",method=~"get|head",route="/v2/{name}/blobs/uploads/{uuid}",type="registry"}[1h])
+        rate(registry_http_request_duration_seconds_bucket{le="+Inf",method=~"get|head",route="/v2/{name}/blobs/uploads/{uuid}",type="registry"}[1h] offset 30s)
       )
   - record: gitlab_component_ops:rate_1h
     labels:
@@ -1706,7 +1706,7 @@ groups:
       type: registry
     expr: |
       sum by (env,environment,stage) (
-        rate(registry_http_request_duration_seconds_count{method=~"get|head",route="/v2/{name}/blobs/uploads/{uuid}",type="registry"}[1h])
+        rate(registry_http_request_duration_seconds_count{method=~"get|head",route="/v2/{name}/blobs/uploads/{uuid}",type="registry"}[1h] offset 30s)
       )
   - record: gitlab_component_apdex:success:rate_1h
     labels:
@@ -1716,11 +1716,11 @@ groups:
     expr: |
       (
         sum by (env,environment,stage) (
-          rate(registry_http_request_duration_seconds_bucket{le="25",method=~"put|patch|post",route="/v2/{name}/blobs/uploads/{uuid}",type="registry"}[1h])
+          rate(registry_http_request_duration_seconds_bucket{le="25",method=~"put|patch|post",route="/v2/{name}/blobs/uploads/{uuid}",type="registry"}[1h] offset 30s)
         )
         +
         sum by (env,environment,stage) (
-          rate(registry_http_request_duration_seconds_bucket{le="60",method=~"put|patch|post",route="/v2/{name}/blobs/uploads/{uuid}",type="registry"}[1h])
+          rate(registry_http_request_duration_seconds_bucket{le="60",method=~"put|patch|post",route="/v2/{name}/blobs/uploads/{uuid}",type="registry"}[1h] offset 30s)
         )
       )
       /
@@ -1732,7 +1732,7 @@ groups:
       type: registry
     expr: |
       sum by (env,environment,stage) (
-        rate(registry_http_request_duration_seconds_bucket{le="+Inf",method=~"put|patch|post",route="/v2/{name}/blobs/uploads/{uuid}",type="registry"}[1h])
+        rate(registry_http_request_duration_seconds_bucket{le="+Inf",method=~"put|patch|post",route="/v2/{name}/blobs/uploads/{uuid}",type="registry"}[1h] offset 30s)
       )
   - record: gitlab_component_ops:rate_1h
     labels:
@@ -1741,7 +1741,7 @@ groups:
       type: registry
     expr: |
       sum by (env,environment,stage) (
-        rate(registry_http_request_duration_seconds_count{method=~"put|patch|post",route="/v2/{name}/blobs/uploads/{uuid}",type="registry"}[1h])
+        rate(registry_http_request_duration_seconds_count{method=~"put|patch|post",route="/v2/{name}/blobs/uploads/{uuid}",type="registry"}[1h] offset 30s)
       )
   - record: gitlab_component_apdex:success:rate_1h
     labels:
@@ -1751,11 +1751,11 @@ groups:
     expr: |
       (
         sum by (env,environment,stage) (
-          rate(registry_http_request_duration_seconds_bucket{le="0.25",method=~"get|head",route="/v2/{name}/manifests/{reference}",type="registry"}[1h])
+          rate(registry_http_request_duration_seconds_bucket{le="0.25",method=~"get|head",route="/v2/{name}/manifests/{reference}",type="registry"}[1h] offset 30s)
         )
         +
         sum by (env,environment,stage) (
-          rate(registry_http_request_duration_seconds_bucket{le="0.5",method=~"get|head",route="/v2/{name}/manifests/{reference}",type="registry"}[1h])
+          rate(registry_http_request_duration_seconds_bucket{le="0.5",method=~"get|head",route="/v2/{name}/manifests/{reference}",type="registry"}[1h] offset 30s)
         )
       )
       /
@@ -1767,7 +1767,7 @@ groups:
       type: registry
     expr: |
       sum by (env,environment,stage) (
-        rate(registry_http_request_duration_seconds_bucket{le="+Inf",method=~"get|head",route="/v2/{name}/manifests/{reference}",type="registry"}[1h])
+        rate(registry_http_request_duration_seconds_bucket{le="+Inf",method=~"get|head",route="/v2/{name}/manifests/{reference}",type="registry"}[1h] offset 30s)
       )
   - record: gitlab_component_ops:rate_1h
     labels:
@@ -1776,7 +1776,7 @@ groups:
       type: registry
     expr: |
       sum by (env,environment,stage) (
-        rate(registry_http_request_duration_seconds_count{method=~"get|head",route="/v2/{name}/manifests/{reference}",type="registry"}[1h])
+        rate(registry_http_request_duration_seconds_count{method=~"get|head",route="/v2/{name}/manifests/{reference}",type="registry"}[1h] offset 30s)
       )
   - record: gitlab_component_apdex:success:rate_1h
     labels:
@@ -1786,11 +1786,11 @@ groups:
     expr: |
       (
         sum by (env,environment,stage) (
-          rate(registry_http_request_duration_seconds_bucket{le="1",method=~"put|delete|post|patch",route="/v2/{name}/manifests/{reference}",type="registry"}[1h])
+          rate(registry_http_request_duration_seconds_bucket{le="1",method=~"put|delete|post|patch",route="/v2/{name}/manifests/{reference}",type="registry"}[1h] offset 30s)
         )
         +
         sum by (env,environment,stage) (
-          rate(registry_http_request_duration_seconds_bucket{le="2.5",method=~"put|delete|post|patch",route="/v2/{name}/manifests/{reference}",type="registry"}[1h])
+          rate(registry_http_request_duration_seconds_bucket{le="2.5",method=~"put|delete|post|patch",route="/v2/{name}/manifests/{reference}",type="registry"}[1h] offset 30s)
         )
       )
       /
@@ -1802,7 +1802,7 @@ groups:
       type: registry
     expr: |
       sum by (env,environment,stage) (
-        rate(registry_http_request_duration_seconds_bucket{le="+Inf",method=~"put|delete|post|patch",route="/v2/{name}/manifests/{reference}",type="registry"}[1h])
+        rate(registry_http_request_duration_seconds_bucket{le="+Inf",method=~"put|delete|post|patch",route="/v2/{name}/manifests/{reference}",type="registry"}[1h] offset 30s)
       )
   - record: gitlab_component_ops:rate_1h
     labels:
@@ -1811,7 +1811,7 @@ groups:
       type: registry
     expr: |
       sum by (env,environment,stage) (
-        rate(registry_http_request_duration_seconds_count{method=~"put|delete|post|patch",route="/v2/{name}/manifests/{reference}",type="registry"}[1h])
+        rate(registry_http_request_duration_seconds_count{method=~"put|delete|post|patch",route="/v2/{name}/manifests/{reference}",type="registry"}[1h] offset 30s)
       )
 - name: 'Component-Level SLIs: registry - 6h burn-rate'
   interval: 2m
@@ -1824,11 +1824,11 @@ groups:
     expr: |
       (
         sum by (env,environment,stage) (
-          rate(registry_database_query_duration_seconds_bucket{le="0.5",type="registry"}[6h])
+          rate(registry_database_query_duration_seconds_bucket{le="0.5",type="registry"}[6h] offset 30s)
         )
         +
         sum by (env,environment,stage) (
-          rate(registry_database_query_duration_seconds_bucket{le="1",type="registry"}[6h])
+          rate(registry_database_query_duration_seconds_bucket{le="1",type="registry"}[6h] offset 30s)
         )
       )
       /
@@ -1840,7 +1840,7 @@ groups:
       type: registry
     expr: |
       sum by (env,environment,stage) (
-        rate(registry_database_query_duration_seconds_bucket{le="+Inf",type="registry"}[6h])
+        rate(registry_database_query_duration_seconds_bucket{le="+Inf",type="registry"}[6h] offset 30s)
       )
   - record: gitlab_component_ops:rate_6h
     labels:
@@ -1849,7 +1849,7 @@ groups:
       type: registry
     expr: |
       sum by (env,environment,stage) (
-        rate(registry_database_queries_total{type="registry"}[6h])
+        rate(registry_database_queries_total{type="registry"}[6h] offset 30s)
       )
   - record: gitlab_component_apdex:success:rate_6h
     labels:
@@ -1859,11 +1859,11 @@ groups:
     expr: |
       (
         sum by (env,environment,stage) (
-          rate(registry_gc_run_duration_seconds_bucket{le="0.5",type="registry"}[6h])
+          rate(registry_gc_run_duration_seconds_bucket{le="0.5",type="registry"}[6h] offset 30s)
         )
         +
         sum by (env,environment,stage) (
-          rate(registry_gc_run_duration_seconds_bucket{le="1",type="registry"}[6h])
+          rate(registry_gc_run_duration_seconds_bucket{le="1",type="registry"}[6h] offset 30s)
         )
       )
       /
@@ -1875,7 +1875,7 @@ groups:
       type: registry
     expr: |
       sum by (env,environment,stage) (
-        rate(registry_gc_run_duration_seconds_bucket{le="+Inf",type="registry"}[6h])
+        rate(registry_gc_run_duration_seconds_bucket{le="+Inf",type="registry"}[6h] offset 30s)
       )
   - record: gitlab_component_ops:rate_6h
     labels:
@@ -1884,7 +1884,7 @@ groups:
       type: registry
     expr: |
       sum by (env,environment,stage) (
-        rate(registry_gc_runs_total{type="registry"}[6h])
+        rate(registry_gc_runs_total{type="registry"}[6h] offset 30s)
       )
   - record: gitlab_component_errors:rate_6h
     labels:
@@ -1894,7 +1894,7 @@ groups:
     expr: |
       (
         sum by (env,environment,stage) (
-          rate(registry_gc_runs_total{error="true",type="registry"}[6h])
+          rate(registry_gc_runs_total{error="true",type="registry"}[6h] offset 30s)
         )
       )
       or
@@ -1911,7 +1911,7 @@ groups:
       type: registry
     expr: |
       sum by (env,environment) (
-        rate(haproxy_backend_http_responses_total{backend="canary_registry",type="registry"}[6h])
+        rate(haproxy_backend_http_responses_total{backend="canary_registry",type="registry"}[6h] offset 30s)
       )
   - record: gitlab_component_ops:rate_6h
     labels:
@@ -1921,7 +1921,7 @@ groups:
       type: registry
     expr: |
       sum by (env,environment) (
-        rate(haproxy_backend_http_responses_total{backend="registry",type="registry"}[6h])
+        rate(haproxy_backend_http_responses_total{backend="registry",type="registry"}[6h] offset 30s)
       )
   - record: gitlab_component_errors:rate_6h
     labels:
@@ -1932,7 +1932,7 @@ groups:
     expr: |
       (
         sum by (env,environment) (
-          rate(haproxy_backend_http_responses_total{backend="canary_registry",code="5xx",type="registry"}[6h])
+          rate(haproxy_backend_http_responses_total{backend="canary_registry",code="5xx",type="registry"}[6h] offset 30s)
         )
       )
       or
@@ -1950,7 +1950,7 @@ groups:
     expr: |
       (
         sum by (env,environment) (
-          rate(haproxy_backend_http_responses_total{backend="registry",code="5xx",type="registry"}[6h])
+          rate(haproxy_backend_http_responses_total{backend="registry",code="5xx",type="registry"}[6h] offset 30s)
         )
       )
       or
@@ -1967,11 +1967,11 @@ groups:
     expr: |
       (
         sum by (env,environment,stage) (
-          rate(registry_redis_single_commands_bucket{le="0.25",type="registry"}[6h])
+          rate(registry_redis_single_commands_bucket{le="0.25",type="registry"}[6h] offset 30s)
         )
         +
         sum by (env,environment,stage) (
-          rate(registry_redis_single_commands_bucket{le="0.5",type="registry"}[6h])
+          rate(registry_redis_single_commands_bucket{le="0.5",type="registry"}[6h] offset 30s)
         )
       )
       /
@@ -1983,7 +1983,7 @@ groups:
       type: registry
     expr: |
       sum by (env,environment,stage) (
-        rate(registry_redis_single_commands_bucket{le="+Inf",type="registry"}[6h])
+        rate(registry_redis_single_commands_bucket{le="+Inf",type="registry"}[6h] offset 30s)
       )
   - record: gitlab_component_ops:rate_6h
     labels:
@@ -1992,7 +1992,7 @@ groups:
       type: registry
     expr: |
       sum by (env,environment,stage) (
-        rate(registry_redis_single_commands_count{type="registry"}[6h])
+        rate(registry_redis_single_commands_count{type="registry"}[6h] offset 30s)
       )
   - record: gitlab_component_errors:rate_6h
     labels:
@@ -2002,7 +2002,7 @@ groups:
     expr: |
       (
         sum by (env,environment,stage) (
-          rate(registry_redis_single_errors_count{type="registry"}[6h])
+          rate(registry_redis_single_errors_count{type="registry"}[6h] offset 30s)
         )
       )
       or
@@ -2019,7 +2019,7 @@ groups:
       type: registry
     expr: |
       sum by (env,environment) (
-        rate(stackdriver_https_lb_rule_loadbalancing_googleapis_com_https_request_count{project_id="gitlab-production",url_map_name="gprd-registry-cdn"}[6h])
+        rate(stackdriver_https_lb_rule_loadbalancing_googleapis_com_https_request_count{project_id="gitlab-production",url_map_name="gprd-registry-cdn"}[6h] offset 30s)
       )
   - record: gitlab_component_errors:rate_6h
     labels:
@@ -2030,7 +2030,7 @@ groups:
     expr: |
       (
         sum by (env,environment) (
-          rate(stackdriver_https_lb_rule_loadbalancing_googleapis_com_https_request_count{project_id="gitlab-production",response_code_class="500",url_map_name="gprd-registry-cdn"}[6h])
+          rate(stackdriver_https_lb_rule_loadbalancing_googleapis_com_https_request_count{project_id="gitlab-production",response_code_class="500",url_map_name="gprd-registry-cdn"}[6h] offset 30s)
         )
       )
       or
@@ -2047,11 +2047,11 @@ groups:
     expr: |
       (
         sum by (env,environment,stage) (
-          rate(registry_http_request_duration_seconds_bucket{le="2.5",route!~"/v2/{name}/blobs/uploads/{uuid}|/v2/{name}/manifests/{reference}",type="registry"}[6h])
+          rate(registry_http_request_duration_seconds_bucket{le="2.5",route!~"/v2/{name}/blobs/uploads/{uuid}|/v2/{name}/manifests/{reference}",type="registry"}[6h] offset 30s)
         )
         +
         sum by (env,environment,stage) (
-          rate(registry_http_request_duration_seconds_bucket{le="25",route!~"/v2/{name}/blobs/uploads/{uuid}|/v2/{name}/manifests/{reference}",type="registry"}[6h])
+          rate(registry_http_request_duration_seconds_bucket{le="25",route!~"/v2/{name}/blobs/uploads/{uuid}|/v2/{name}/manifests/{reference}",type="registry"}[6h] offset 30s)
         )
       )
       /
@@ -2063,7 +2063,7 @@ groups:
       type: registry
     expr: |
       sum by (env,environment,stage) (
-        rate(registry_http_request_duration_seconds_bucket{le="+Inf",route!~"/v2/{name}/blobs/uploads/{uuid}|/v2/{name}/manifests/{reference}",type="registry"}[6h])
+        rate(registry_http_request_duration_seconds_bucket{le="+Inf",route!~"/v2/{name}/blobs/uploads/{uuid}|/v2/{name}/manifests/{reference}",type="registry"}[6h] offset 30s)
       )
   - record: gitlab_component_ops:rate_6h
     labels:
@@ -2072,7 +2072,7 @@ groups:
       type: registry
     expr: |
       sum by (env,environment,stage) (
-        rate(registry_http_requests_total{type="registry"}[6h])
+        rate(registry_http_requests_total{type="registry"}[6h] offset 30s)
       )
   - record: gitlab_component_errors:rate_6h
     labels:
@@ -2082,7 +2082,7 @@ groups:
     expr: |
       (
         sum by (env,environment,stage) (
-          rate(registry_http_requests_total{code=~"5..",type="registry"}[6h])
+          rate(registry_http_requests_total{code=~"5..",type="registry"}[6h] offset 30s)
         )
       )
       or
@@ -2099,11 +2099,11 @@ groups:
     expr: |
       (
         sum by (env,environment,stage) (
-          rate(registry_http_request_duration_seconds_bucket{le="2.5",method=~"delete",route="/v2/{name}/blobs/uploads/{uuid}",type="registry"}[6h])
+          rate(registry_http_request_duration_seconds_bucket{le="2.5",method=~"delete",route="/v2/{name}/blobs/uploads/{uuid}",type="registry"}[6h] offset 30s)
         )
         +
         sum by (env,environment,stage) (
-          rate(registry_http_request_duration_seconds_bucket{le="5",method=~"delete",route="/v2/{name}/blobs/uploads/{uuid}",type="registry"}[6h])
+          rate(registry_http_request_duration_seconds_bucket{le="5",method=~"delete",route="/v2/{name}/blobs/uploads/{uuid}",type="registry"}[6h] offset 30s)
         )
       )
       /
@@ -2115,7 +2115,7 @@ groups:
       type: registry
     expr: |
       sum by (env,environment,stage) (
-        rate(registry_http_request_duration_seconds_bucket{le="+Inf",method=~"delete",route="/v2/{name}/blobs/uploads/{uuid}",type="registry"}[6h])
+        rate(registry_http_request_duration_seconds_bucket{le="+Inf",method=~"delete",route="/v2/{name}/blobs/uploads/{uuid}",type="registry"}[6h] offset 30s)
       )
   - record: gitlab_component_ops:rate_6h
     labels:
@@ -2124,7 +2124,7 @@ groups:
       type: registry
     expr: |
       sum by (env,environment,stage) (
-        rate(registry_http_request_duration_seconds_count{method=~"delete",route="/v2/{name}/blobs/uploads/{uuid}",type="registry"}[6h])
+        rate(registry_http_request_duration_seconds_count{method=~"delete",route="/v2/{name}/blobs/uploads/{uuid}",type="registry"}[6h] offset 30s)
       )
   - record: gitlab_component_apdex:success:rate_6h
     labels:
@@ -2134,11 +2134,11 @@ groups:
     expr: |
       (
         sum by (env,environment,stage) (
-          rate(registry_http_request_duration_seconds_bucket{le="1",method=~"get|head",route="/v2/{name}/blobs/uploads/{uuid}",type="registry"}[6h])
+          rate(registry_http_request_duration_seconds_bucket{le="1",method=~"get|head",route="/v2/{name}/blobs/uploads/{uuid}",type="registry"}[6h] offset 30s)
         )
         +
         sum by (env,environment,stage) (
-          rate(registry_http_request_duration_seconds_bucket{le="2.5",method=~"get|head",route="/v2/{name}/blobs/uploads/{uuid}",type="registry"}[6h])
+          rate(registry_http_request_duration_seconds_bucket{le="2.5",method=~"get|head",route="/v2/{name}/blobs/uploads/{uuid}",type="registry"}[6h] offset 30s)
         )
       )
       /
@@ -2150,7 +2150,7 @@ groups:
       type: registry
     expr: |
       sum by (env,environment,stage) (
-        rate(registry_http_request_duration_seconds_bucket{le="+Inf",method=~"get|head",route="/v2/{name}/blobs/uploads/{uuid}",type="registry"}[6h])
+        rate(registry_http_request_duration_seconds_bucket{le="+Inf",method=~"get|head",route="/v2/{name}/blobs/uploads/{uuid}",type="registry"}[6h] offset 30s)
       )
   - record: gitlab_component_ops:rate_6h
     labels:
@@ -2159,7 +2159,7 @@ groups:
       type: registry
     expr: |
       sum by (env,environment,stage) (
-        rate(registry_http_request_duration_seconds_count{method=~"get|head",route="/v2/{name}/blobs/uploads/{uuid}",type="registry"}[6h])
+        rate(registry_http_request_duration_seconds_count{method=~"get|head",route="/v2/{name}/blobs/uploads/{uuid}",type="registry"}[6h] offset 30s)
       )
   - record: gitlab_component_apdex:success:rate_6h
     labels:
@@ -2169,11 +2169,11 @@ groups:
     expr: |
       (
         sum by (env,environment,stage) (
-          rate(registry_http_request_duration_seconds_bucket{le="25",method=~"put|patch|post",route="/v2/{name}/blobs/uploads/{uuid}",type="registry"}[6h])
+          rate(registry_http_request_duration_seconds_bucket{le="25",method=~"put|patch|post",route="/v2/{name}/blobs/uploads/{uuid}",type="registry"}[6h] offset 30s)
         )
         +
         sum by (env,environment,stage) (
-          rate(registry_http_request_duration_seconds_bucket{le="60",method=~"put|patch|post",route="/v2/{name}/blobs/uploads/{uuid}",type="registry"}[6h])
+          rate(registry_http_request_duration_seconds_bucket{le="60",method=~"put|patch|post",route="/v2/{name}/blobs/uploads/{uuid}",type="registry"}[6h] offset 30s)
         )
       )
       /
@@ -2185,7 +2185,7 @@ groups:
       type: registry
     expr: |
       sum by (env,environment,stage) (
-        rate(registry_http_request_duration_seconds_bucket{le="+Inf",method=~"put|patch|post",route="/v2/{name}/blobs/uploads/{uuid}",type="registry"}[6h])
+        rate(registry_http_request_duration_seconds_bucket{le="+Inf",method=~"put|patch|post",route="/v2/{name}/blobs/uploads/{uuid}",type="registry"}[6h] offset 30s)
       )
   - record: gitlab_component_ops:rate_6h
     labels:
@@ -2194,7 +2194,7 @@ groups:
       type: registry
     expr: |
       sum by (env,environment,stage) (
-        rate(registry_http_request_duration_seconds_count{method=~"put|patch|post",route="/v2/{name}/blobs/uploads/{uuid}",type="registry"}[6h])
+        rate(registry_http_request_duration_seconds_count{method=~"put|patch|post",route="/v2/{name}/blobs/uploads/{uuid}",type="registry"}[6h] offset 30s)
       )
   - record: gitlab_component_apdex:success:rate_6h
     labels:
@@ -2204,11 +2204,11 @@ groups:
     expr: |
       (
         sum by (env,environment,stage) (
-          rate(registry_http_request_duration_seconds_bucket{le="0.25",method=~"get|head",route="/v2/{name}/manifests/{reference}",type="registry"}[6h])
+          rate(registry_http_request_duration_seconds_bucket{le="0.25",method=~"get|head",route="/v2/{name}/manifests/{reference}",type="registry"}[6h] offset 30s)
         )
         +
         sum by (env,environment,stage) (
-          rate(registry_http_request_duration_seconds_bucket{le="0.5",method=~"get|head",route="/v2/{name}/manifests/{reference}",type="registry"}[6h])
+          rate(registry_http_request_duration_seconds_bucket{le="0.5",method=~"get|head",route="/v2/{name}/manifests/{reference}",type="registry"}[6h] offset 30s)
         )
       )
       /
@@ -2220,7 +2220,7 @@ groups:
       type: registry
     expr: |
       sum by (env,environment,stage) (
-        rate(registry_http_request_duration_seconds_bucket{le="+Inf",method=~"get|head",route="/v2/{name}/manifests/{reference}",type="registry"}[6h])
+        rate(registry_http_request_duration_seconds_bucket{le="+Inf",method=~"get|head",route="/v2/{name}/manifests/{reference}",type="registry"}[6h] offset 30s)
       )
   - record: gitlab_component_ops:rate_6h
     labels:
@@ -2229,7 +2229,7 @@ groups:
       type: registry
     expr: |
       sum by (env,environment,stage) (
-        rate(registry_http_request_duration_seconds_count{method=~"get|head",route="/v2/{name}/manifests/{reference}",type="registry"}[6h])
+        rate(registry_http_request_duration_seconds_count{method=~"get|head",route="/v2/{name}/manifests/{reference}",type="registry"}[6h] offset 30s)
       )
   - record: gitlab_component_apdex:success:rate_6h
     labels:
@@ -2239,11 +2239,11 @@ groups:
     expr: |
       (
         sum by (env,environment,stage) (
-          rate(registry_http_request_duration_seconds_bucket{le="1",method=~"put|delete|post|patch",route="/v2/{name}/manifests/{reference}",type="registry"}[6h])
+          rate(registry_http_request_duration_seconds_bucket{le="1",method=~"put|delete|post|patch",route="/v2/{name}/manifests/{reference}",type="registry"}[6h] offset 30s)
         )
         +
         sum by (env,environment,stage) (
-          rate(registry_http_request_duration_seconds_bucket{le="2.5",method=~"put|delete|post|patch",route="/v2/{name}/manifests/{reference}",type="registry"}[6h])
+          rate(registry_http_request_duration_seconds_bucket{le="2.5",method=~"put|delete|post|patch",route="/v2/{name}/manifests/{reference}",type="registry"}[6h] offset 30s)
         )
       )
       /
@@ -2255,7 +2255,7 @@ groups:
       type: registry
     expr: |
       sum by (env,environment,stage) (
-        rate(registry_http_request_duration_seconds_bucket{le="+Inf",method=~"put|delete|post|patch",route="/v2/{name}/manifests/{reference}",type="registry"}[6h])
+        rate(registry_http_request_duration_seconds_bucket{le="+Inf",method=~"put|delete|post|patch",route="/v2/{name}/manifests/{reference}",type="registry"}[6h] offset 30s)
       )
   - record: gitlab_component_ops:rate_6h
     labels:
@@ -2264,7 +2264,7 @@ groups:
       type: registry
     expr: |
       sum by (env,environment,stage) (
-        rate(registry_http_request_duration_seconds_count{method=~"put|delete|post|patch",route="/v2/{name}/manifests/{reference}",type="registry"}[6h])
+        rate(registry_http_request_duration_seconds_count{method=~"put|delete|post|patch",route="/v2/{name}/manifests/{reference}",type="registry"}[6h] offset 30s)
       )
 - name: 'Component mapping: registry'
   interval: 1m

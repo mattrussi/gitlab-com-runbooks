@@ -1,6 +1,8 @@
-local helpers = import './helpers.libsonnet';
 local aggregations = import 'promql/aggregations.libsonnet';
 local selectors = import 'promql/selectors.libsonnet';
+local aggregationFilterExpr = import 'recording-rules/lib/aggregation-filter-expr.libsonnet';
+local optionalOffset = import 'recording-rules/lib/optional-offset.libsonnet';
+local upscaling = import 'recording-rules/lib/upscaling.libsonnet';
 local strings = import 'utils/strings.libsonnet';
 
 local getDirectRateExpression(sourceAggregationSet, targetAggregationSet, burnRate, visitor) =
@@ -11,13 +13,14 @@ local getDirectRateExpression(sourceAggregationSet, targetAggregationSet, burnRa
   if sourceMetricName != null then
     |||
       sum by (%(targetAggregationLabels)s) (
-        (%(sourceMetricName)s{%(sourceSelector)s} >= 0)%(aggregationFilterExpr)s
+        (%(sourceMetricName)s{%(sourceSelector)s}%(optionalOffset)s >= 0)%(aggregationFilterExpr)s
       )
     ||| % {
       sourceMetricName: sourceMetricName,
       targetAggregationLabels: targetAggregationLabels,
       sourceSelector: sourceSelector,
-      aggregationFilterExpr: helpers.aggregationFilterExpr(targetAggregationSet),
+      aggregationFilterExpr: aggregationFilterExpr(targetAggregationSet),
+      optionalOffset: optionalOffset(targetAggregationSet.offset),
     }
   else null;
 
@@ -27,7 +30,7 @@ local errorRateVisitor = {
 
   getRateExpression(sourceAggregationSet, targetAggregationSet, burnRate)::
     local directExpr = getDirectRateExpression(sourceAggregationSet, targetAggregationSet, burnRate, self);
-    helpers.combinedErrorRateExpression(sourceAggregationSet, targetAggregationSet, burnRate, directExpr),
+    upscaling.combinedErrorRateExpression(sourceAggregationSet, targetAggregationSet, burnRate, directExpr),
 };
 
 local opsRateVisitor = {
@@ -36,7 +39,7 @@ local opsRateVisitor = {
 
   getRateExpression(sourceAggregationSet, targetAggregationSet, burnRate)::
     local directExpr = getDirectRateExpression(sourceAggregationSet, targetAggregationSet, burnRate, self);
-    helpers.combinedOpsRateExpression(sourceAggregationSet, targetAggregationSet, burnRate, directExpr),
+    upscaling.combinedOpsRateExpression(sourceAggregationSet, targetAggregationSet, burnRate, directExpr),
 };
 
 // Generates the recording rule YAML when required. Returns an array of 0 or more definitions

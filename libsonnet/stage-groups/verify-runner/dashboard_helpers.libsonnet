@@ -28,7 +28,6 @@ local underConstructionNote = layout.singleRow(
 
 local commonFilters = [
   dashboardFilters.shard,
-  dashboardFilters.runnerManager,
 ];
 
 local runnerServiceDashboardsLinks = [
@@ -36,7 +35,14 @@ local runnerServiceDashboardsLinks = [
   platformLinks.dynamicLinks('%s Incident Dashboards' % runnerServiceType, '%s:incident-support' % runnerServiceType),
 ];
 
-local dashboard(title, tags=[], time_from='now-3h/m', includeStandardEnvironmentAnnotations=true) =
+local dashboard(
+  title,
+  tags=[],
+  time_from='now-3h/m',
+  includeStandardEnvironmentAnnotations=true,
+  includeRunnerManagerFilter=true
+  ) =
+  local filters = if includeRunnerManagerFilter then commonFilters + [dashboardFilters.runnerManager] else commonFilters;
   basic.dashboard(
     title,
     tags=[
@@ -50,7 +56,7 @@ local dashboard(title, tags=[], time_from='now-3h/m', includeStandardEnvironment
     includeEnvironmentTemplate=true,
   )
   .addTemplate(prebuiltTemplates.stage)
-  .addTemplates(commonFilters)
+  .addTemplates(filters)
   .trailer() + {
     links+: runnerServiceDashboardsLinks,
     addOverviewPanels(

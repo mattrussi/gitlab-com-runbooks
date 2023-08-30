@@ -1,5 +1,7 @@
 local basic = import 'grafana/basic.libsonnet';
 
+local runnersManagerMatching = import './runner_managers_matching.libsonnet';
+
 local jobRequestsOnWorkhorse =
   basic.timeseries(
     '`jobs/request` requests',
@@ -12,7 +14,7 @@ local jobRequestsOnWorkhorse =
     |||,
   );
 
-local runnerRequests(endpoint, statuses='.*') =
+local runnerRequests(endpoint, statuses='.*', partition=runnersManagerMatching.defaultPartition) =
   basic.timeseries(
     'Runner requests for %(endpoint)s [%(statuses)s]' % {
       endpoint: endpoint,
@@ -21,16 +23,20 @@ local runnerRequests(endpoint, statuses='.*') =
     format='ops',
     legendFormat='{{status}}',
     stack=true,
-    query=|||
-      sum by(status) (
-        increase(
-          gitlab_runner_api_request_statuses_total{environment=~"$environment",stage=~"$stage",instance=~"${runner_manager:pipe}",endpoint="%(endpoint)s",status=~"%(statuses)s"}[$__rate_interval]
+    query=runnersManagerMatching.formatQuery(
+      |||
+        sum by(status) (
+          increase(
+            gitlab_runner_api_request_statuses_total{environment=~"$environment",stage=~"$stage",%(runnerManagersMatcher)s,endpoint="%(endpoint)s",status=~"%(statuses)s"}[$__rate_interval]
+          )
         )
-      )
-    ||| % {
-      endpoint: endpoint,
-      statuses: statuses,
-    },
+      |||,
+      partition,
+      {
+        endpoint: endpoint,
+        statuses: statuses,
+      },
+    ),
   ) + {
     lines: false,
     bars: true,

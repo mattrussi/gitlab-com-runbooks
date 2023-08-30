@@ -21,7 +21,7 @@ local repsitoryTypeRates(repoType) = [
     title='Active moves',
     description='Total number of moves per storage that are currently happening.',
     query=|||
-      gitalyctl_%(repoType)s_active_repository_moves{%(gitalyctlSelector)s}
+      sum by (storage) (gitalyctl_%(repoType)s_active_repository_moves{%(gitalyctlSelector)s})
     ||| % { repoType: repoType, gitalyctlSelector: gitalyctlSelector },
     legendFormat='{{ storage }}'
   ),
@@ -29,7 +29,7 @@ local repsitoryTypeRates(repoType) = [
     title='Success rate',
     description='Rate/sec of successful %(repoType)s repository moves.' % { repoType: repoType },
     query=|||
-      rate(gitalyctl_%(repoType)s_successful_repository_moves_total{%(gitalyctlSelector)s}[$__rate_interval])
+      sum by (storage) (rate(gitalyctl_%(repoType)s_successful_repository_moves_total{%(gitalyctlSelector)s}[$__rate_interval]))
     ||| % { repoType: repoType, gitalyctlSelector: gitalyctlSelector },
     legendFormat='{{ storage }}'
   ),
@@ -37,7 +37,7 @@ local repsitoryTypeRates(repoType) = [
     title='Failure rate',
     description='Rate/sec of failed %(repoType)s repository moves.' % { repoType: repoType },
     query=|||
-      rate(gitalyctl_%(repoType)s_failed_repository_moves_total{%(gitalyctlSelector)s}[$__rate_interval])
+      sum by (storage) (rate(gitalyctl_%(repoType)s_failed_repository_moves_total{%(gitalyctlSelector)s}[$__rate_interval]))
     ||| % { repoType: repoType, gitalyctlSelector: gitalyctlSelector },
     legendFormat='{{ storage }}'
   ),
@@ -45,7 +45,7 @@ local repsitoryTypeRates(repoType) = [
     title='Wait timeout rate',
     description="Rate/sec of %(repoType)s repository moves that tiemout. The timeout is set by project.move_timeout configuration. However, reaching this timeout doesn't necessarily indicate the success or failure of the repository move." % { repoType: repoType },
     query=|||
-      rate(gitalyctl_%(repoType)s_timed_out_repository_moves_total{%(gitalyctlSelector)s}[$__rate_interval])
+      sum by (storage) (rate(gitalyctl_%(repoType)s_timed_out_repository_moves_total{%(gitalyctlSelector)s}[$__rate_interval]))
     ||| % { repoType: repoType, gitalyctlSelector: gitalyctlSelector },
     legendFormat='{{ storage }}'
   ),
@@ -116,6 +116,10 @@ basic.dashboard(
 
         - 🪵 [`gitalyctl` Logs](https://dashboards.gitlab.net/explore?orgId=1&left=%7B%22datasource%22:%22R8ugoM-Vk%22,%22queries%22:%5B%7B%22refId%22:%22A%22,%22expr%22:%22%7Bnamespace%3D%5C%22gitalyctl%5C%22%7D%20%7C%3D%20%60%60%22,%22queryType%22:%22range%22,%22datasource%22:%7B%22type%22:%22loki%22,%22uid%22:%22R8ugoM-Vk%22%7D,%22editorMode%22:%22builder%22%7D%5D,%22range%22:%7B%22from%22:%22now-7d%22,%22to%22:%22now%22%7D%7D)
         - [🔥 `gitalyctl` Error Logs](https://dashboards.gitlab.net/explore?orgId=1&left=%7B%22datasource%22:%22R8ugoM-Vk%22,%22queries%22:%5B%7B%22refId%22:%22A%22,%22expr%22:%22%7Bnamespace%3D%5C%22gitalyctl%5C%22%7D%20%7C%20json%20level%3D%5C%22level%5C%22%20%7C%20level%20%3D%20%60error%60%22,%22queryType%22:%22range%22,%22datasource%22:%7B%22type%22:%22loki%22,%22uid%22:%22R8ugoM-Vk%22%7D,%22editorMode%22:%22builder%22%7D%5D,%22range%22:%7B%22from%22:%22now-7d%22,%22to%22:%22now%22%7D%7D)
+        - [💿 `gstg` API logs](https://nonprod-log.gitlab.net/app/r/s/mGwlo)
+        - [💿 `gprd` API logs](https://log.gprd.gitlab.net/app/r/s/nVbro)
+        - [🦵 `gstg` sidekiq logs for repository moves](https://nonprod-log.gitlab.net/app/r/s/GS5F1)
+        - [🦵 `gprd` sidekiq logs for repository moves](https://log.gprd.gitlab.net/app/r/s/urrqF)
 
         ## References
 
@@ -145,6 +149,7 @@ basic.dashboard(
         gitalyctl_projects_storage_concurrency{%(gitalyctlSelector)s}
       ||| % { gitalyctlSelector: gitalyctlSelector },
       colorMode='none',
+      noValue='Not Configured'
     ),
     concurrencyByRepositoryType('projects'),
     concurrencyByRepositoryType('groups'),
@@ -176,7 +181,7 @@ basic.dashboard(
       description='How many error logs we have for gitalyctl',
       datasource='ops',
       query=|||
-        count_over_time({namespace="gitalyctl", container="gitalyctl"} |= `error` [$__interval])
+        count_over_time({namespace="gitalyctl", container="gitalyctl"} | json level="level" | level = `error` [$__interval])
       |||,
       legendFormat='{{ storage }}'
     ),

@@ -3,42 +3,45 @@ local basic = import 'grafana/basic.libsonnet';
 local promQuery = import 'grafana/prom_query.libsonnet';
 local seriesOverrides = import 'grafana/series_overrides.libsonnet';
 
-local vmStates =
+local runnersManagerMatching = import './runner_managers_matching.libsonnet';
+
+local vmStates(partition=runnersManagerMatching.defaultPartition) =
   basic.timeseries(
     'Autoscaled VMs states',
     legendFormat='{{shard}}: {{state}}',
     format='short',
-    query=|||
+    query=runnersManagerMatching.formatQuery(|||
       sum by(shard, state) (
-        gitlab_runner_autoscaling_machine_states{environment=~"$environment", stage=~"$stage", executor="docker+machine", instance=~"${runner_manager:pipe}"}
+        gitlab_runner_autoscaling_machine_states{environment=~"$environment", stage=~"$stage", executor="docker+machine", %(runnerManagersMatcher)s}
       )
-    |||,
+    |||, partition),
   );
 
-local vmOperationsRate =
+local vmOperationsRate(partition=runnersManagerMatching.defaultPartition) =
   basic.timeseries(
     'Autoscaled VM operations rate',
     legendFormat='{{shard}}: {{action}}',
     format='ops',
     fill=1,
     stack=true,
-    query=|||
+    query=runnersManagerMatching.formatQuery(|||
       sum by (shard, action) (
-        increase(gitlab_runner_autoscaling_actions_total{environment=~"$environment", stage=~"$stage", executor="docker+machine", instance=~"${runner_manager:pipe}"}[$__rate_interval])
+        increase(gitlab_runner_autoscaling_actions_total{environment=~"$environment", stage=~"$stage", executor="docker+machine", %(runnerManagersMatcher)s}[$__rate_interval])
       )
-    |||,
+    |||, partition),
   );
 
-local vmCreationTiming =
+local vmCreationTiming(partition=runnersManagerMatching.defaultPartition) =
   panels.heatmap(
     'Autoscaled VMs creation timing',
-    |||
+    runnersManagerMatching.formatQuery(|||
       sum by (le) (
-        increase(gitlab_runner_autoscaling_machine_creation_duration_seconds_bucket{environment=~"$environment", stage=~"$stage", executor="docker+machine",instance=~"${runner_manager:pipe}"}[$__rate_interval])
+        increase(gitlab_runner_autoscaling_machine_creation_duration_seconds_bucket{environment=~"$environment", stage=~"$stage", executor="docker+machine",%(runnerManagersMatcher)s}[$__rate_interval])
       )
-    |||,
-    color_cardColor='#00DD33',
-    color_exponent=0.1,
+    |||, partition),
+    color_mode='spectrum',
+    color_colorScheme='Greens',
+    legend_show=true,
     intervalFactor=2,
   );
 

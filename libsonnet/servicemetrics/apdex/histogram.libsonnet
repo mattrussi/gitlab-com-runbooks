@@ -1,6 +1,7 @@
 local recordingRuleRegistry = import '../recording-rule-registry.libsonnet';  // TODO: fix circular dependency
 local aggregations = import 'promql/aggregations.libsonnet';
 local selectors = import 'promql/selectors.libsonnet';
+local optionalOffset = import 'recording-rules/lib/optional-offset.libsonnet';
 local strings = import 'utils/strings.libsonnet';
 
 // A general apdex query is:
@@ -17,7 +18,7 @@ local strings = import 'utils/strings.libsonnet';
 // The other functions here all use this to generate the final apdex
 // query.
 
-local generateApdexComponentRateQuery(histogramApdex, additionalSelectors, rangeInterval, leSelector={}, aggregationFunction=null, aggregationLabels=[], withoutLabels=[]) =
+local generateApdexComponentRateQuery(histogramApdex, additionalSelectors, rangeInterval, leSelector={}, aggregationFunction=null, aggregationLabels=[], withoutLabels=[], offset=null) =
   local selector = selectors.merge(histogramApdex.selector, additionalSelectors);
   local selectorWithLe = selectors.merge(selector, leSelector);
   local selectorWithout = selectors.without(selectorWithLe, withoutLabels);
@@ -32,10 +33,11 @@ local generateApdexComponentRateQuery(histogramApdex, additionalSelectors, range
   );
 
   if !histogramApdex.useRecordingRuleRegistry || resolvedRecordingRule == null then
-    local query = 'rate(%(histogram)s{%(selector)s}[%(rangeInterval)s])' % {
+    local query = 'rate(%(histogram)s{%(selector)s}[%(rangeInterval)s]%(optionalOffset)s)' % {
       histogram: histogramApdex.histogram,
       selector: selectors.serializeHash(selectorWithout),
       rangeInterval: rangeInterval,
+      optionalOffset: optionalOffset(offset),
     };
 
     if aggregationFunction == null then
@@ -78,9 +80,9 @@ local representLe(histogramApdex, value) =
     { le: value };
 
 // A double threshold apdex score only has both SATISFACTORY threshold and TOLERABLE thresholds
-local generateDoubleThresholdApdexNumeratorQuery(histogramApdex, additionalSelectors, rangeInterval, aggregationFunction=null, aggregationLabels=[], withoutLabels=[]) =
-  local satisfiedQuery = generateApdexComponentRateQuery(histogramApdex, additionalSelectors, rangeInterval, representLe(histogramApdex, histogramApdex.satisfiedThreshold), aggregationFunction=aggregationFunction, aggregationLabels=aggregationLabels, withoutLabels=withoutLabels);
-  local toleratedQuery = generateApdexComponentRateQuery(histogramApdex, additionalSelectors, rangeInterval, representLe(histogramApdex, histogramApdex.toleratedThreshold), aggregationFunction=aggregationFunction, aggregationLabels=aggregationLabels, withoutLabels=withoutLabels);
+local generateDoubleThresholdApdexNumeratorQuery(histogramApdex, additionalSelectors, rangeInterval, offset, aggregationFunction=null, aggregationLabels=[], withoutLabels=[]) =
+  local satisfiedQuery = generateApdexComponentRateQuery(histogramApdex, additionalSelectors, rangeInterval, representLe(histogramApdex, histogramApdex.satisfiedThreshold), aggregationFunction=aggregationFunction, aggregationLabels=aggregationLabels, withoutLabels=withoutLabels, offset=offset);
+  local toleratedQuery = generateApdexComponentRateQuery(histogramApdex, additionalSelectors, rangeInterval, representLe(histogramApdex, histogramApdex.toleratedThreshold), aggregationFunction=aggregationFunction, aggregationLabels=aggregationLabels, withoutLabels=withoutLabels, offset=offset);
 
   |||
     (
@@ -95,14 +97,40 @@ local generateDoubleThresholdApdexNumeratorQuery(histogramApdex, additionalSelec
     tolerated: strings.indent(toleratedQuery, 2),
   };
 
-local generateApdexNumeratorQuery(histogramApdex, additionalSelectors, rangeInterval, aggregationFunction=null, aggregationLabels=[], histogramRates=false, withoutLabels=[]) =
+local generateApdexNumeratorQuery(histogramApdex, additionalSelectors, rangeInterval, offset, aggregationFunction=null, aggregationLabels=[], histogramRates=false, withoutLabels=[]) =
   if histogramRates then
-    generateApdexComponentRateQuery(histogramApdex, additionalSelectors, rangeInterval, {}, aggregationFunction=aggregationFunction, aggregationLabels=aggregationLabels, withoutLabels=withoutLabels)
+    generateApdexComponentRateQuery(
+      histogramApdex,
+      additionalSelectors,
+      rangeInterval,
+      {},
+      aggregationFunction=aggregationFunction,
+      aggregationLabels=aggregationLabels,
+      withoutLabels=withoutLabels,
+      offset=offset
+    )
   else if histogramApdex.toleratedThreshold == null then
     // A single threshold apdex score only has a SATISFACTORY threshold, no TOLERABLE threshold
-    generateApdexComponentRateQuery(histogramApdex, additionalSelectors, rangeInterval, representLe(histogramApdex, histogramApdex.satisfiedThreshold), aggregationFunction=aggregationFunction, aggregationLabels=aggregationLabels, withoutLabels=withoutLabels)
+    generateApdexComponentRateQuery(
+      histogramApdex,
+      additionalSelectors,
+      rangeInterval,
+      representLe(histogramApdex, histogramApdex.satisfiedThreshold),
+      aggregationFunction=aggregationFunction,
+      aggregationLabels=aggregationLabels,
+      withoutLabels=withoutLabels,
+      offset=offset
+    )
   else
-    generateDoubleThresholdApdexNumeratorQuery(histogramApdex, additionalSelectors, rangeInterval, aggregationFunction=aggregationFunction, aggregationLabels=aggregationLabels, withoutLabels=withoutLabels);
+    generateDoubleThresholdApdexNumeratorQuery(
+      histogramApdex,
+      additionalSelectors,
+      rangeInterval,
+      aggregationFunction=aggregationFunction,
+      aggregationLabels=aggregationLabels,
+      withoutLabels=withoutLabels,
+      offset=offset
+    );
 
 local generateApdexScoreQuery(histogramApdex, aggregationLabels, additionalSelectors, rangeInterval, aggregationFunction=null, withoutLabels=[]) =
   local numeratorQuery = generateApdexNumeratorQuery(histogramApdex, additionalSelectors, rangeInterval, aggregationFunction=aggregationFunction, aggregationLabels=aggregationLabels, withoutLabels=withoutLabels);
@@ -150,10 +178,10 @@ local generateApdexAttributionQuery(histogram, selector, rangeInterval, aggregat
       )
     ) > 0
   ||| % {
-    splitTotalQuery: generateApdexComponentRateQuery(histogram, selector, rangeInterval, { le: '+Inf' }, aggregationFunction='sum', aggregationLabels=[aggregationLabel], withoutLabels=withoutLabels),
-    numeratorQuery: generateApdexNumeratorQuery(histogram, selector, rangeInterval, aggregationFunction='sum', aggregationLabels=[aggregationLabel], withoutLabels=withoutLabels),
+    splitTotalQuery: generateApdexComponentRateQuery(histogram, selector, rangeInterval, { le: '+Inf' }, aggregationFunction='sum', aggregationLabels=[aggregationLabel], withoutLabels=withoutLabels, offset=null),
+    numeratorQuery: generateApdexNumeratorQuery(histogram, selector, rangeInterval, aggregationFunction='sum', aggregationLabels=[aggregationLabel], withoutLabels=withoutLabels, offset=null),
     aggregationLabel: aggregationLabel,
-    aggregatedTotalQuery: generateApdexComponentRateQuery(histogram, selector, rangeInterval, { le: '+Inf' }, aggregationFunction='sum', aggregationLabels=[], withoutLabels=withoutLabels),
+    aggregatedTotalQuery: generateApdexComponentRateQuery(histogram, selector, rangeInterval, { le: '+Inf' }, aggregationFunction='sum', aggregationLabels=[], withoutLabels=withoutLabels, offset=null),
   };
 
 {
@@ -183,18 +211,18 @@ local generateApdexAttributionQuery(histogram, selector, rangeInterval, aggregat
       ),
 
     /* apdexSuccessRateQuery measures the rate at which apdex successes occur */
-    apdexSuccessRateQuery(aggregationLabels, selector, rangeInterval, withoutLabels=[])::
-      generateApdexNumeratorQuery(self, selector, rangeInterval, aggregationFunction='sum', aggregationLabels=aggregationLabels, withoutLabels=withoutLabels),
+    apdexSuccessRateQuery(aggregationLabels, selector, rangeInterval, withoutLabels=[], offset=null)::
+      generateApdexNumeratorQuery(self, selector, rangeInterval, aggregationFunction='sum', aggregationLabels=aggregationLabels, withoutLabels=withoutLabels, offset=offset),
 
-    apdexWeightQuery(aggregationLabels, selector, rangeInterval, withoutLabels=[])::
-      generateApdexComponentRateQuery(self, selector, rangeInterval, { le: '+Inf' }, aggregationFunction='sum', aggregationLabels=aggregationLabels, withoutLabels=withoutLabels),
+    apdexWeightQuery(aggregationLabels, selector, rangeInterval, withoutLabels=[], offset=null)::
+      generateApdexComponentRateQuery(self, selector, rangeInterval, { le: '+Inf' }, aggregationFunction='sum', aggregationLabels=aggregationLabels, withoutLabels=withoutLabels, offset=offset),
 
     percentileLatencyQuery(percentile, aggregationLabels, selector, rangeInterval, withoutLabels=[])::
       generatePercentileLatencyQuery(self, percentile, aggregationLabels, selector, rangeInterval, withoutLabels=withoutLabels),
 
     // This is used to combine multiple apdex scores for a combined percentileLatencyQuery
-    aggregatedRateQuery(aggregationLabels, selector, rangeInterval, withoutLabels=[])::
-      generateApdexComponentRateQuery(self, selector, rangeInterval, aggregationFunction='sum', aggregationLabels=aggregationLabels, withoutLabels=withoutLabels),
+    aggregatedRateQuery(aggregationLabels, selector, rangeInterval, withoutLabels=[], offset=null)::
+      generateApdexComponentRateQuery(self, selector, rangeInterval, aggregationFunction='sum', aggregationLabels=aggregationLabels, withoutLabels=withoutLabels, offset=offset),
 
     describe()::
       local s = self;
@@ -207,7 +235,7 @@ local generateApdexAttributionQuery(histogram, selector, rangeInterval, aggregat
     // The preaggregated numerator expression
     // used for combinations
     apdexNumerator(selector, rangeInterval, histogramRates=false, withoutLabels=[])::
-      generateApdexNumeratorQuery(self, selector, rangeInterval, aggregationFunction=null, aggregationLabels=[], histogramRates=histogramRates, withoutLabels=withoutLabels),
+      generateApdexNumeratorQuery(self, selector, rangeInterval, aggregationFunction=null, aggregationLabels=[], histogramRates=histogramRates, withoutLabels=withoutLabels, offset=null),
 
     // The preaggregated denominator expression
     // used for combinations

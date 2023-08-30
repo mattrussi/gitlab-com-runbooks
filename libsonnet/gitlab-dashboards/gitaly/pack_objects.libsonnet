@@ -26,7 +26,7 @@ local selectors = import 'promql/selectors.libsonnet';
     basic.timeseries(
       title='Gitaly pack-objects dropped commands (RPS)',
       query=|||
-        sum(rate(gitaly_pack_objects_dropped_total{%(selector)s}[$__rate_interval])) by (fqdn)
+        sum(rate(gitaly_pack_objects_dropped_total{%(selector)s}[$__rate_interval])) by (fqdn, reason)
       ||| % { selector: selectors.serializeHash(selectorHash) },
       legendFormat=legend,
       interval='$__interval',

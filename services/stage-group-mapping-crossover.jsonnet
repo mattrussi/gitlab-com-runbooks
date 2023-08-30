@@ -6,8 +6,7 @@
 //
 // Blank values will be ignored.
 {
-  product_analytics: [
-    'product_analytics_visualization',
-    'product_analytics_data_management',
-  ],
+  workflow_automation: 'code_review_workflow',
+  intel_code_security: '',
+  gitlab_duo_chat: 'duo_chat',
 }

@@ -90,4 +90,13 @@ test.suite({
       description: 'Expect object to have serviceCatalog.teams fields',
     },
   },
+  testReportHasRunwayServices: {
+    actual: manifest,
+    expectThat: {
+      local runwayPage = std.filter(function(page) page.path == 'runway.md', self.actual.report.pages)[0],
+      local runwayServices = std.split(runwayPage.service_pattern, '|'),
+      result: std.member(runwayServices, 'ai-gateway'),
+      description: 'Expect object to dynamically include Runway provisioned services',
+    },
+  },
 })

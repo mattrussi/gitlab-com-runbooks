@@ -41,13 +41,13 @@ local runnerJobFailureReason = template.new(
   includeAll=true,
 );
 
-local jobsRunningForProject = template.new(
-  'jobs_running_for_project',
+local projectJobsRunning = template.new(
+  'project_jobs_running',
   '$PROMETHEUS_DS',
   query=|||
-    label_values(job_queue_duration_seconds_sum{environment=~"$environment",stage=~"$stage"}, jobs_running_for_project)
+    label_values(gitlab_runner_job_queue_duration_seconds_sum{environment=~"$environment",stage=~"$stage"}, project_jobs_running)
   |||,
-  current='0',
+  current='All',
   refresh='load',
   sort=true,
   multi=true,
@@ -155,7 +155,7 @@ local selectorHash = {
   shard:: shard,
   runnerManager:: runnerManager,
   runnerJobFailureReason:: runnerJobFailureReason,
-  jobsRunningForProject:: jobsRunningForProject,
+  projectJobsRunning:: projectJobsRunning,
   gcpExporter:: gcpExporter,
   gcpProject:: gcpProject,
   gcpRegion:: gcpRegion,

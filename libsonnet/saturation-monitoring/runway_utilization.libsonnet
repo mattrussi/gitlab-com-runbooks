@@ -14,10 +14,9 @@ local resourceSaturationPoint = (import 'servicemetrics/resource_saturation_poin
       For scaling, refer to https://cloud.google.com/run/docs/configuring/services/cpu.
     |||,
     grafana_dashboard_uid: 'sat_runway_container_cpu',
-    resourceLabels: ['service_name'],
+    resourceLabels: ['revision_name'],
     burnRatePeriod: '30m',
     staticLabels: {
-      type: 'sv',
       tier: 'inf',
       stage: 'main',
     },
@@ -42,10 +41,9 @@ local resourceSaturationPoint = (import 'servicemetrics/resource_saturation_poin
       For scaling, refer to https://cloud.google.com/run/docs/configuring/services/memory-limits.
     |||,
     grafana_dashboard_uid: 'sat_runway_container_memory',
-    resourceLabels: ['service_name'],
+    resourceLabels: ['revision_name'],
     burnRatePeriod: '30m',
     staticLabels: {
-      type: 'sv',
       tier: 'inf',
       stage: 'main',
     },
@@ -70,10 +68,9 @@ local resourceSaturationPoint = (import 'servicemetrics/resource_saturation_poin
       For scaling, refer to https://cloud.google.com/run/docs/configuring/max-instances.
     |||,
     grafana_dashboard_uid: 'sat_runway_container_instance',
-    resourceLabels: ['service_name'],
+    resourceLabels: ['revision_name'],
     burnRatePeriod: '30m',
     staticLabels: {
-      type: 'sv',
       tier: 'inf',
       stage: 'main',
     },
@@ -103,16 +100,22 @@ local resourceSaturationPoint = (import 'servicemetrics/resource_saturation_poin
       For scaling, refer to https://cloud.google.com/run/docs/configuring/concurrency.
     |||,
     grafana_dashboard_uid: 'sat_runway_container_max_con_reqs',
-    resourceLabels: ['service_name'],
+    resourceLabels: ['revision_name'],
     burnRatePeriod: '30m',
     staticLabels: {
-      type: 'sv',
       tier: 'inf',
       stage: 'main',
     },
+    queryFormatConfig: {
+      maximumRequestsPerContainer: 80,
+    },
     query: |||
       sum by (%(aggregationLabels)s) (
-        avg_over_time(stackdriver_cloud_run_revision_run_googleapis_com_container_max_request_concurrencies_sum{job="runway-exporter",%(selector)s}[%(rangeInterval)s])
+        avg_over_time(stackdriver_cloud_run_revision_run_googleapis_com_container_max_request_concurrencies_sum{job="runway-exporter",state="active",%(selector)s}[%(rangeInterval)s])
+      )
+      /
+      %(maximumRequestsPerContainer)g * sum by (%(aggregationLabels)s) (
+        stackdriver_cloud_run_revision_run_googleapis_com_container_instance_count{job="runway-exporter",state="active",%(selector)s}
       )
     |||,
     slos: {

@@ -80,7 +80,7 @@ local excludedRedisInstances = ['redis-tracechunks'];
   }),
 
   redis_memory_cache: resourceSaturationPoint(maxMemoryDefinition {
-    appliesTo: ['redis-cache'],
+    appliesTo: ['redis-cluster-cache'],
     description: |||
       Redis maxmemory utilization per node
 
