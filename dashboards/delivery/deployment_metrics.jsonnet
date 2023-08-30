@@ -15,6 +15,41 @@ local explainer = |||
 
 |||;
 
+local MTTPThreshold = 43200; // 12 hours
+
+local MRs = |||
+  (
+    last_over_time(%(metric)s{target_env="gprd", target_stage="main"}[$__range])
+      unless
+    last_over_time(
+      %(metric)s{target_env="gprd", target_stage="main"}[12h] offset $__range
+    )
+  )
+|||;
+
+local MRsWithDefaultMetric = MRs % { metric: 'delivery_deployment_merge_request_lead_time_seconds' };
+local MRsWithAdjustedMetric = MRs % { metric: 'delivery_deployment_merge_request_adjusted_lead_time_seconds' };
+
+local apdexQuery = |||
+  count(
+    %(MRs)s <= %(MTTPThreshold)d
+  )
+  /
+  count(
+    %(MRs)s
+  )
+|||;
+
+local defaultApdex = apdexQuery % {
+  MRs: MRsWithDefaultMetric,
+  MTTPThreshold: MTTPThreshold,
+};
+
+local adjustedApdex = apdexQuery % {
+  MRs: MRsWithAdjustedMetric,
+  MTTPThreshold: MTTPThreshold,
+};
+
 local bargaugePanel(
   title,
   description='',
@@ -94,17 +129,11 @@ basic.dashboard(
     [
       basic.statPanel(
         title='',
-        panelTitle='MTTP over selected time range',
+        panelTitle='Mean Time To Production over selected time range',
         color='blue',
-        query='avg(
-                last_over_time(delivery_deployment_merge_request_lead_time_seconds{target_env="gprd", target_stage="main"}[$__range])
-                  unless
-                (
-                  last_over_time(
-                    delivery_deployment_merge_request_lead_time_seconds{target_env="gprd", target_stage="main"}[12h] offset $__range
-                  )
-                )
-              )',
+        query = |||
+          avg(%(MRs)s)
+        ||| % { MRs: MRsWithDefaultMetric },
         legendFormat='__auto',
         colorMode='background',
         textMode='value',
@@ -119,18 +148,11 @@ basic.dashboard(
       ]),
       basic.statPanel(
         title='',
-        panelTitle='Adjusted MTTP over selected time range',
-        description='MTTP over selected time range when ignoring weekends',
+        panelTitle='Median Time To Production over selected time range',
         color='blue',
-        query='avg(
-                last_over_time(delivery_deployment_merge_request_adjusted_lead_time_seconds{target_env="gprd", target_stage="main"}[$__range])
-                  unless
-                (
-                  last_over_time(
-                    delivery_deployment_merge_request_adjusted_lead_time_seconds{target_env="gprd", target_stage="main"}[12h] offset $__range
-                  )
-                )
-              )',
+        query = |||
+          quantile(0.5, %(MRs)s)
+        ||| % { MRs: MRsWithDefaultMetric },
         legendFormat='__auto',
         colorMode='background',
         textMode='value',
@@ -143,14 +165,96 @@ basic.dashboard(
         { color: colorScheme.errorColor, value: 43200 },
         { color: colorScheme.criticalColor, value: 46800 },
       ]),
+      basic.statPanel(
+        title='',
+        panelTitle='Apdex score',
+        description='Percentage of MRs deployed within 12 hours of being merged.',
+        legendFormat='',
+        query=defaultApdex,
+        decimals=1,
+        unit='percentunit',
+        color=[
+          { color: 'red', value: null },
+          { color: 'yellow', value: 0.5 },
+          { color: 'green', value: 0.95 },
+        ]
+      ),
     ],
-  ], [5, 5], rowHeight=10, startRow=1)
+  ], [5, 5, 5], rowHeight=10, startRow=1)
+)
+.addPanel(
+  row.new(title='Adjusted MTTP'),
+  gridPos={
+    x: 0,
+    y: 11,
+    w: 24,
+    h: 1,
+  }
+)
+.addPanels(
+  layout.columnGrid([
+    [
+      basic.statPanel(
+        title='',
+        panelTitle='Adjusted Mean Time To Prod over selected time range',
+        description='MTTP over selected time range when ignoring weekends',
+        color='blue',
+        query = |||
+            avg(%(MRs)s)
+          ||| % { MRs: MRsWithAdjustedMetric },
+        legendFormat='__auto',
+        colorMode='background',
+        textMode='value',
+        unit='s',
+        decimals=2,
+      )
+      .addThresholds([
+        { color: colorScheme.normalRangeColor, value: 0 },
+        { color: colorScheme.warningColor, value: 39600 },
+        { color: colorScheme.errorColor, value: 43200 },
+        { color: colorScheme.criticalColor, value: 46800 },
+      ]),
+      basic.statPanel(
+        title='',
+        panelTitle='Adjusted Median Time To Production over selected time range',
+        color='blue',
+        query = |||
+          quantile(0.5, %(MRs)s)
+        ||| % { MRs: MRsWithAdjustedMetric },
+        legendFormat='__auto',
+        colorMode='background',
+        textMode='value',
+        unit='s',
+        decimals=2,
+      )
+      .addThresholds([
+        { color: colorScheme.normalRangeColor, value: 0 },
+        { color: colorScheme.warningColor, value: 39600 },
+        { color: colorScheme.errorColor, value: 43200 },
+        { color: colorScheme.criticalColor, value: 46800 },
+      ]),
+      basic.statPanel(
+        title='',
+        panelTitle='Adjusted apdex score',
+        description='Percentage of MRs deployed within 12 hours of being merged, ignoring weekends.',
+        legendFormat='',
+        query=adjustedApdex,
+        decimals=1,
+        unit='percentunit',
+        color=[
+          { color: 'red', value: null },
+          { color: 'yellow', value: 0.5 },
+          { color: 'green', value: 0.95 },
+        ]
+      ),
+    ],
+  ], [5, 5, 5], rowHeight=10, startRow=12)
 )
 .addPanel(
   row.new(title='🚀 Downstream Pipeline statistics'),
   gridPos={
     x: 0,
-    y: 11,
+    y: 22,
     w: 24,
     h: 1,
   }
@@ -242,14 +346,14 @@ basic.dashboard(
       ]),
     ],
     [pipelineOverview],
-  ], [19, 5], rowHeight=10, startRow=12)
+  ], [19, 5, 19], rowHeight=10, startRow=23)
 )
 
 .addPanel(
   row.new(title='📊 Merge requests statistics'),
   gridPos={
     x: 0,
-    y: 22,
+    y: 44,
     w: 24,
     h: 1,
   }
@@ -296,7 +400,7 @@ basic.dashboard(
         { color: colorScheme.criticalColor, value: 46800 },
       ]),
     ],
-  ], [19, 5], rowHeight=10, startRow=24)
+  ], [19, 5], rowHeight=10, startRow=45)
 )
 .addPanels(
   layout.columnGrid([
@@ -340,7 +444,7 @@ basic.dashboard(
         { color: colorScheme.criticalColor, value: 46800 },
       ]),
     ],
-  ], [19, 5], rowHeight=10, startRow=24)
+  ], [19, 5], rowHeight=10, startRow=55)
 )
 
 .trailer()
