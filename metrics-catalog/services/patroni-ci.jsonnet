@@ -67,6 +67,20 @@ metricsCatalog.serviceDefinition(
             ],
           },
         },
+        {
+          name: 'pg_btree_bloat',
+          parameters: {
+            changepoints: [
+              '2023-08-12',
+            ],
+          },
+          events: [
+            {
+              date: '2023-08-12',
+              name: 'PG Upgrade',
+            },
+          ],
+        },
       ],
     },
   }
