@@ -59,7 +59,6 @@ GitLab.com Production Database has the following attributes:
 
 Not yet provisioned
 
-
 <!-- ## Architecture -->
 
 <!-- ## Performance -->
