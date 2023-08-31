@@ -22,8 +22,8 @@ You will need to have access granted by a [ClickHouse Cloud admin](https://gitla
 
 Sidekiq and the Web tier will connect via HTTP on port 8443 via a public IP/host.  Inbound connection can be allow listed via IPv4 ranges.  See https://clickhouse.com/docs/en/manage/security/ip-access-list for details.
 
-* GitLab Development Docs: https://docs.gitlab.com/ee/development/database/clickhouse/clickhouse_within_gitlab.html#writing-database-queries
-* ClickHouse HTTPS interface docs: https://clickhouse.com/docs/en/interfaces/http
+* [GitLab Development Docs:](https://docs.gitlab.com/ee/development/database/clickhouse/clickhouse_within_gitlab.html#writing-database-queries)
+* [ClickHouse HTTPS interface docs:](https://clickhouse.com/docs/en/interfaces/http)
 * ClickHouse Cloud is configured to accept HTTPS connections on port 8443.
 
 ## GitLab.com Staging Database
