@@ -113,7 +113,7 @@ services:
     tier: inf
     friendly_name: ClickHouse Cloud
     label: Service::ClickHouseCloud
-    owner:
+    owner: sgoldstein
     technical:
       project:
       documents:
