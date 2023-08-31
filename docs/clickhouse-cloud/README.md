@@ -33,15 +33,11 @@ GitLab.com Staging Database has the following attributes:
 Name: gitlab-com-staging
 Console URL:https://clickhouse.cloud/service/ TBA after provisioning
 
-
-
 ## GitLab.com Production Database
 
 GitLab.com Production Database has the following attributes:
 
 Not yet provisioned
-
-
 
 ## Monitoring
 
