@@ -109,6 +109,32 @@ services:
       monitors:
         primary_grafana_dashboard: camoproxy-main/camoproxy-overview
 
+  - name: clickhouse
+    tier: inf
+    friendly_name: ClickHouse Cloud
+    label: Service::ClickHouseCloud
+    owner: ops
+    technical:
+      project:
+      documents:
+        design:
+        architecture: https://docs.gitlab.com/ee/architecture/blueprints/clickhouse_usage/
+        readiness_review: https://gitlab.com/gitlab-com/gl-infra/readiness/-/merge_requests/173
+        sre_guide: https://gitlab.com/gitlab-com/runbooks/-/tree/master/docs/clickhouse-cloud/README.md
+        developer_guide: https://docs.gitlab.com/ee/development/database/clickhouse/clickhouse_within_gitlab.html
+        service: []
+        security:
+      dependencies:
+        - service:
+      sub_components:
+      logging:
+        - name: ClickHouse Cloud monitoring
+          permalink: https://clickhouse.cloud/services
+    observability:
+      monitors:
+        grafana_folder:
+        primary_grafana_dashboard:
+
   - name: console
     tier: sv
     friendly_name: Console Access

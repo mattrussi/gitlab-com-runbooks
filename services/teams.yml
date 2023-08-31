@@ -365,6 +365,12 @@ teams:
   product_stage_group: security_policies
   slack_error_budget_channel: g_govern_security_policies
   send_error_budget_weekly_to_slack: true
+- name: ops
+  url: https://about.gitlab.com/handbook/engineering/development/ops
+  slack_channel: doe-ops
+  engagement_policy:  # Link to doc that talks about engagement and escalation policy
+  oncall_schedule:    # Link to pagerduty oncall schedule
+
 
 # Infrastructure Reliability
 
