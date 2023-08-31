@@ -1,6 +1,6 @@
 ### ClickHouse Cloud
 
-[ClickHouse Cloud](https://clickhouse.cloud) is a managed verion of [ClickHouse DB](https://github.com/ClickHouse/ClickHouse).  It is managed by [ClickHouse Inc.](https://clickhouse.com)  
+[ClickHouse Cloud](https://clickhouse.cloud) is a managed verion of [ClickHouse DB](https://github.com/ClickHouse/ClickHouse).  It is managed by [ClickHouse Inc.](https://clickhouse.com)
 
 We are adding ClickHouse Cloud databases to the GitLab.com staging and production environments.
 
@@ -31,7 +31,7 @@ Sidekiq and the Web tier will connect via HTTP on port 8443 via a public IP/host
 GitLab.com Staging Database has the following attributes:
 
 Name: gitlab-com-staging
-Console URL:https://clickhouse.cloud/service/ TBA after provisioning 
+Console URL:https://clickhouse.cloud/service/ TBA after provisioning
 
 
 
