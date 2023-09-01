@@ -138,17 +138,35 @@ basic.dashboard(
 )
 
 .addPanels(
-  layout.grid(
+  layout.columnGrid([
     [
       basic.statPanel(
-        title='Average Job Duration',
-        panelTitle='Average Job Duration',
-        query='avg_over_time(delivery_deployment_job_duration_seconds{deploy_version="$deploy_version", job_name="$job_name"}[$__range])',
-        legendFormat='__auto',
+        title='',
+        panelTitle='Job Duration',
+        description='Median duration over the selected time range',
+        query='
+          quantile(0.5,
+            last_over_time(delivery_deployment_job_duration_seconds{job_name="$job_name"}[$__range])
+              unless
+            last_over_time(delivery_deployment_job_duration_seconds{job_name="$job_name"}[12h] offset $__range)
+          )',
+        legendFormat='Median',
         colorMode='value',
         textMode='value',
         graphMode='area',
+        decimals=2,
         color='',
+      )
+      .addTarget(
+        promQuery.target(
+          'max(
+            last_over_time(delivery_deployment_job_duration_seconds{job_name="$job_name"}[$__range])
+              unless
+            last_over_time(delivery_deployment_job_duration_seconds{job_name="$job_name"}[12h] offset $__range)
+          )',
+          legendFormat='Max',
+          instant=true
+        )
       ) {
         fieldConfig+: {
           defaults+: {
@@ -159,27 +177,8 @@ basic.dashboard(
           },
         },
       },
-      basic.statPanel(
-        title='Max Job Duration',
-        panelTitle='Max Job Duration',
-        query='max_over_time(delivery_deployment_job_duration_seconds{deploy_version="$deploy_version", job_name="$job_name"}[$__range])',
-        legendFormat='__auto',
-        colorMode='value',
-        textMode='value',
-        graphMode='area',
-        color='',
-      ) {
-        fieldConfig+: {
-          defaults+: {
-            unit: 's',
-            color: {
-              mode: 'continuous-BlPu',
-            },
-          },
-        },
-      },
-    ], cols=2, startRow=0
-  )
+    ],
+  ], [7], rowHeight=10, startRow=0)
 )
 
 .addPanels(
