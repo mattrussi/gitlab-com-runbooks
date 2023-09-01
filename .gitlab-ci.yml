@@ -1097,6 +1097,7 @@ generate-prometheus-rules:
           - scripts/prometheus.yml
           - rules/**/*
           - thanos-rules/**/*
+          - thanos-staging-rules/**/*
   script:
     - gem install bundler --no-document -v "${BUNDLER_VERSION}"
     - bundle install
