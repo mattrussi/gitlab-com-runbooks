@@ -61,14 +61,14 @@ groups:
       product_stage: data_stores
       stage_group: application_performance
     expr: "1"
-- name: 'Stage group Ignored components: manage - Authentication and Authorization'
+- name: 'Stage group Ignored components: govern - Authentication and Authorization'
   interval: 1m
   partial_response_strategy: warn
   rules:
   - record: gitlab:ignored_component:stage_group
     labels:
       component: graphql_query
-      product_stage: manage
+      product_stage: govern
       stage_group: authentication_and_authorization
     expr: "1"
 - name: 'Stage group Ignored components: fulfillment - Billing and Subscription Management'
