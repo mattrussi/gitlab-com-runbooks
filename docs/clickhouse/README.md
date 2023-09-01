@@ -51,7 +51,7 @@ Sidekiq and the Web tier will connect via HTTP on port 8443 via a public IP/host
 GitLab.com Staging Database has the following attributes:
 
 Name: gitlab-com-staging
-Console URL: TBA after provisioning
+Console URL: [https://clickhouse.cloud/service/57fa3208-48a1-494b-9f44-ea895895a369](https://clickhouse.cloud/service/57fa3208-48a1-494b-9f44-ea895895a369)
 
 ### GitLab.com Production Database
 
