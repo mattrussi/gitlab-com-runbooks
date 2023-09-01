@@ -1058,6 +1058,16 @@
       },
       "lines": true,
       "linewidth": 1,
+      "links": [
+        {
+          "title": "registry Service | kube_container_cpu resource Dashboard",
+          "url": "https://dashboards.gitlab.net/d/alerts-sat_kube_container_cpu/?var-environment=gprd\u0026var-type=registry\u0026var-stage=main\u0026var-component=kube_container_cpu"
+        },
+        {
+          "title": "registry Service | kube_container_memory resource Dashboard",
+          "url": "https://dashboards.gitlab.net/d/alerts-sat_kube_container_memory/?var-environment=gprd\u0026var-type=registry\u0026var-stage=main\u0026var-component=kube_container_memory"
+        }
+      ],
       "nullPointMode": "null",
       "percentage": false,
       "pointradius": 5,

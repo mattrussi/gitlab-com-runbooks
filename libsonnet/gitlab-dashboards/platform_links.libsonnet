@@ -1,6 +1,7 @@
-local grafana = import 'github.com/grafana/grafonnet-lib/grafonnet/grafana.libsonnet';
-local link = grafana.link;
+local link = (import 'github.com/grafana/grafonnet-lib/grafonnet/grafana.libsonnet').link;
 local serviceCatalog = import 'service-catalog/service-catalog.libsonnet';
+local saturationResources = import '../servicemetrics/saturation-resources.libsonnet';
+local grafana = import '../../metrics-catalog/saturation/grafana.libsonnet';
 
 local GRAFANA_BASE_URL = 'https://dashboards.gitlab.net/d/';
 
@@ -14,6 +15,13 @@ local getServiceLink(serviceType) =
     'https://dashboards.gitlab.net/d/general-service/service-platform-metrics?orgId=1&var-type=' + serviceType
   else
     GRAFANA_BASE_URL + serviceCatalog.lookupService(serviceType).observability.monitors.primary_grafana_dashboard + '?orgId=1';
+
+local getSaturationDetailLink(service, component) =
+  local dashboard = grafana.resourceDashboard(service, saturationResources[component].grafana_dashboard_uid, component);
+  {
+    title: dashboard.name,
+    url: dashboard.url,
+  };
 
 {
   triage:: [
@@ -54,6 +62,12 @@ local getServiceLink(serviceType) =
   serviceLink(type):: [
     link.dashboards(type + ' service', '', type='link', keepTime=true, url=getServiceLink(type)),
   ],
+  saturationDetails(type)::
+    std.map(
+      function(resource) getSaturationDetailLink(type, resource),
+      saturationResources.listApplicableServicesFor(type)
+    )
+  ,
   dynamicLinks(title, tags, asDropdown=true, icon='dashboard', includeVars=true, keepTime=true)::
     link.dashboards(
       title,

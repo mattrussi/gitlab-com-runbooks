@@ -1058,6 +1058,40 @@
       },
       "lines": true,
       "linewidth": 1,
+      "links": [
+        {
+          "title": "gitaly Service | cpu resource Dashboard",
+          "url": "https://dashboards.gitlab.net/d/alerts-sat_cpu/?var-environment=gprd\u0026var-type=gitaly\u0026var-stage=main\u0026var-component=cpu"
+        },
+        {
+          "title": "gitaly Service | disk_inodes resource Dashboard",
+          "url": "https://dashboards.gitlab.net/d/alerts-sat_disk_inodes/?var-environment=gprd\u0026var-type=gitaly\u0026var-stage=main\u0026var-component=disk_inodes"
+        },
+        {
+          "title": "gitaly Service | disk_space resource Dashboard",
+          "url": "https://dashboards.gitlab.net/d/alerts-sat_disk_space/?var-environment=gprd\u0026var-type=gitaly\u0026var-stage=main\u0026var-component=disk_space"
+        },
+        {
+          "title": "gitaly Service | go_goroutines resource Dashboard",
+          "url": "https://dashboards.gitlab.net/d/alerts-sat_go_goroutines/?var-environment=gprd\u0026var-type=gitaly\u0026var-stage=main\u0026var-component=go_goroutines"
+        },
+        {
+          "title": "gitaly Service | go_memory resource Dashboard",
+          "url": "https://dashboards.gitlab.net/d/alerts-sat_go_memory/?var-environment=gprd\u0026var-type=gitaly\u0026var-stage=main\u0026var-component=go_memory"
+        },
+        {
+          "title": "gitaly Service | memory resource Dashboard",
+          "url": "https://dashboards.gitlab.net/d/alerts-sat_memory/?var-environment=gprd\u0026var-type=gitaly\u0026var-stage=main\u0026var-component=memory"
+        },
+        {
+          "title": "gitaly Service | node_schedstat_waiting resource Dashboard",
+          "url": "https://dashboards.gitlab.net/d/alerts-sat_node_schedstat_waiting/?var-environment=gprd\u0026var-type=gitaly\u0026var-stage=main\u0026var-component=node_schedstat_waiting"
+        },
+        {
+          "title": "gitaly Service | single_node_cpu resource Dashboard",
+          "url": "https://dashboards.gitlab.net/d/alerts-sat_single_node_cpu/?var-environment=gprd\u0026var-type=gitaly\u0026var-stage=main\u0026var-component=single_node_cpu"
+        }
+      ],
       "nullPointMode": "null",
       "percentage": false,
       "pointradius": 5,

@@ -1025,6 +1025,16 @@
       },
       "lines": true,
       "linewidth": 2,
+      "links": [
+        {
+          "title": "gitlab-shell Service | kube_container_cpu resource Dashboard",
+          "url": "https://dashboards.gitlab.net/d/alerts-sat_kube_container_cpu/?var-environment=gprd\u0026var-type=gitlab-shell\u0026var-stage=main\u0026var-component=kube_container_cpu"
+        },
+        {
+          "title": "gitlab-shell Service | kube_container_memory resource Dashboard",
+          "url": "https://dashboards.gitlab.net/d/alerts-sat_kube_container_memory/?var-environment=gprd\u0026var-type=gitlab-shell\u0026var-stage=main\u0026var-component=kube_container_memory"
+        }
+      ],
       "nullPointMode": "null",
       "percentage": false,
       "pointradius": 5,
@@ -2046,6 +2056,16 @@
       },
       "lines": true,
       "linewidth": 2,
+      "links": [
+        {
+          "title": "registry Service | kube_container_cpu resource Dashboard",
+          "url": "https://dashboards.gitlab.net/d/alerts-sat_kube_container_cpu/?var-environment=gprd\u0026var-type=registry\u0026var-stage=main\u0026var-component=kube_container_cpu"
+        },
+        {
+          "title": "registry Service | kube_container_memory resource Dashboard",
+          "url": "https://dashboards.gitlab.net/d/alerts-sat_kube_container_memory/?var-environment=gprd\u0026var-type=registry\u0026var-stage=main\u0026var-component=kube_container_memory"
+        }
+      ],
       "nullPointMode": "null",
       "percentage": false,
       "pointradius": 5,
@@ -3067,6 +3087,20 @@
       },
       "lines": true,
       "linewidth": 2,
+      "links": [
+        {
+          "title": "sidekiq Service | kube_container_cpu resource Dashboard",
+          "url": "https://dashboards.gitlab.net/d/alerts-sat_kube_container_cpu/?var-environment=gprd\u0026var-type=sidekiq\u0026var-stage=main\u0026var-component=kube_container_cpu"
+        },
+        {
+          "title": "sidekiq Service | kube_container_memory resource Dashboard",
+          "url": "https://dashboards.gitlab.net/d/alerts-sat_kube_container_memory/?var-environment=gprd\u0026var-type=sidekiq\u0026var-stage=main\u0026var-component=kube_container_memory"
+        },
+        {
+          "title": "sidekiq Service | kube_pool_cpu resource Dashboard",
+          "url": "https://dashboards.gitlab.net/d/alerts-sat_kube_pool_cpu/?var-environment=gprd\u0026var-type=sidekiq\u0026var-stage=main\u0026var-component=kube_pool_cpu"
+        }
+      ],
       "nullPointMode": "null",
       "percentage": false,
       "pointradius": 5,
@@ -4088,6 +4122,24 @@
       },
       "lines": true,
       "linewidth": 2,
+      "links": [
+        {
+          "title": "webservice Service | kube_container_cpu resource Dashboard",
+          "url": "https://dashboards.gitlab.net/d/alerts-sat_kube_container_cpu/?var-environment=gprd\u0026var-type=webservice\u0026var-stage=main\u0026var-component=kube_container_cpu"
+        },
+        {
+          "title": "webservice Service | kube_container_rss resource Dashboard",
+          "url": "https://dashboards.gitlab.net/d/alerts-sat_kube_container_rss/?var-environment=gprd\u0026var-type=webservice\u0026var-stage=main\u0026var-component=kube_container_rss"
+        },
+        {
+          "title": "webservice Service | kube_pool_cpu resource Dashboard",
+          "url": "https://dashboards.gitlab.net/d/alerts-sat_kube_pool_cpu/?var-environment=gprd\u0026var-type=webservice\u0026var-stage=main\u0026var-component=kube_pool_cpu"
+        },
+        {
+          "title": "webservice Service | puma_workers resource Dashboard",
+          "url": "https://dashboards.gitlab.net/d/alerts-sat_puma_workers/?var-environment=gprd\u0026var-type=webservice\u0026var-stage=main\u0026var-component=puma_workers"
+        }
+      ],
       "nullPointMode": "null",
       "percentage": false,
       "pointradius": 5,
@@ -5109,6 +5161,40 @@
       },
       "lines": true,
       "linewidth": 2,
+      "links": [
+        {
+          "title": "gitaly Service | cpu resource Dashboard",
+          "url": "https://dashboards.gitlab.net/d/alerts-sat_cpu/?var-environment=gprd\u0026var-type=gitaly\u0026var-stage=main\u0026var-component=cpu"
+        },
+        {
+          "title": "gitaly Service | disk_inodes resource Dashboard",
+          "url": "https://dashboards.gitlab.net/d/alerts-sat_disk_inodes/?var-environment=gprd\u0026var-type=gitaly\u0026var-stage=main\u0026var-component=disk_inodes"
+        },
+        {
+          "title": "gitaly Service | disk_space resource Dashboard",
+          "url": "https://dashboards.gitlab.net/d/alerts-sat_disk_space/?var-environment=gprd\u0026var-type=gitaly\u0026var-stage=main\u0026var-component=disk_space"
+        },
+        {
+          "title": "gitaly Service | go_goroutines resource Dashboard",
+          "url": "https://dashboards.gitlab.net/d/alerts-sat_go_goroutines/?var-environment=gprd\u0026var-type=gitaly\u0026var-stage=main\u0026var-component=go_goroutines"
+        },
+        {
+          "title": "gitaly Service | go_memory resource Dashboard",
+          "url": "https://dashboards.gitlab.net/d/alerts-sat_go_memory/?var-environment=gprd\u0026var-type=gitaly\u0026var-stage=main\u0026var-component=go_memory"
+        },
+        {
+          "title": "gitaly Service | memory resource Dashboard",
+          "url": "https://dashboards.gitlab.net/d/alerts-sat_memory/?var-environment=gprd\u0026var-type=gitaly\u0026var-stage=main\u0026var-component=memory"
+        },
+        {
+          "title": "gitaly Service | node_schedstat_waiting resource Dashboard",
+          "url": "https://dashboards.gitlab.net/d/alerts-sat_node_schedstat_waiting/?var-environment=gprd\u0026var-type=gitaly\u0026var-stage=main\u0026var-component=node_schedstat_waiting"
+        },
+        {
+          "title": "gitaly Service | single_node_cpu resource Dashboard",
+          "url": "https://dashboards.gitlab.net/d/alerts-sat_single_node_cpu/?var-environment=gprd\u0026var-type=gitaly\u0026var-stage=main\u0026var-component=single_node_cpu"
+        }
+      ],
       "nullPointMode": "null",
       "percentage": false,
       "pointradius": 5,
@@ -6130,6 +6216,40 @@
       },
       "lines": true,
       "linewidth": 2,
+      "links": [
+        {
+          "title": "praefect Service | cpu resource Dashboard",
+          "url": "https://dashboards.gitlab.net/d/alerts-sat_cpu/?var-environment=gprd\u0026var-type=praefect\u0026var-stage=main\u0026var-component=cpu"
+        },
+        {
+          "title": "praefect Service | disk_inodes resource Dashboard",
+          "url": "https://dashboards.gitlab.net/d/alerts-sat_disk_inodes/?var-environment=gprd\u0026var-type=praefect\u0026var-stage=main\u0026var-component=disk_inodes"
+        },
+        {
+          "title": "praefect Service | disk_space resource Dashboard",
+          "url": "https://dashboards.gitlab.net/d/alerts-sat_disk_space/?var-environment=gprd\u0026var-type=praefect\u0026var-stage=main\u0026var-component=disk_space"
+        },
+        {
+          "title": "praefect Service | go_goroutines resource Dashboard",
+          "url": "https://dashboards.gitlab.net/d/alerts-sat_go_goroutines/?var-environment=gprd\u0026var-type=praefect\u0026var-stage=main\u0026var-component=go_goroutines"
+        },
+        {
+          "title": "praefect Service | go_memory resource Dashboard",
+          "url": "https://dashboards.gitlab.net/d/alerts-sat_go_memory/?var-environment=gprd\u0026var-type=praefect\u0026var-stage=main\u0026var-component=go_memory"
+        },
+        {
+          "title": "praefect Service | memory resource Dashboard",
+          "url": "https://dashboards.gitlab.net/d/alerts-sat_memory/?var-environment=gprd\u0026var-type=praefect\u0026var-stage=main\u0026var-component=memory"
+        },
+        {
+          "title": "praefect Service | node_schedstat_waiting resource Dashboard",
+          "url": "https://dashboards.gitlab.net/d/alerts-sat_node_schedstat_waiting/?var-environment=gprd\u0026var-type=praefect\u0026var-stage=main\u0026var-component=node_schedstat_waiting"
+        },
+        {
+          "title": "praefect Service | single_node_cpu resource Dashboard",
+          "url": "https://dashboards.gitlab.net/d/alerts-sat_single_node_cpu/?var-environment=gprd\u0026var-type=praefect\u0026var-stage=main\u0026var-component=single_node_cpu"
+        }
+      ],
       "nullPointMode": "null",
       "percentage": false,
       "pointradius": 5,
@@ -6248,6 +6368,40 @@
       },
       "lines": true,
       "linewidth": 2,
+      "links": [
+        {
+          "title": "consul Service | cpu resource Dashboard",
+          "url": "https://dashboards.gitlab.net/d/alerts-sat_cpu/?var-environment=gprd\u0026var-type=consul\u0026var-stage=main\u0026var-component=cpu"
+        },
+        {
+          "title": "consul Service | disk_inodes resource Dashboard",
+          "url": "https://dashboards.gitlab.net/d/alerts-sat_disk_inodes/?var-environment=gprd\u0026var-type=consul\u0026var-stage=main\u0026var-component=disk_inodes"
+        },
+        {
+          "title": "consul Service | disk_space resource Dashboard",
+          "url": "https://dashboards.gitlab.net/d/alerts-sat_disk_space/?var-environment=gprd\u0026var-type=consul\u0026var-stage=main\u0026var-component=disk_space"
+        },
+        {
+          "title": "consul Service | kube_container_cpu resource Dashboard",
+          "url": "https://dashboards.gitlab.net/d/alerts-sat_kube_container_cpu/?var-environment=gprd\u0026var-type=consul\u0026var-stage=main\u0026var-component=kube_container_cpu"
+        },
+        {
+          "title": "consul Service | kube_container_memory resource Dashboard",
+          "url": "https://dashboards.gitlab.net/d/alerts-sat_kube_container_memory/?var-environment=gprd\u0026var-type=consul\u0026var-stage=main\u0026var-component=kube_container_memory"
+        },
+        {
+          "title": "consul Service | memory resource Dashboard",
+          "url": "https://dashboards.gitlab.net/d/alerts-sat_memory/?var-environment=gprd\u0026var-type=consul\u0026var-stage=main\u0026var-component=memory"
+        },
+        {
+          "title": "consul Service | node_schedstat_waiting resource Dashboard",
+          "url": "https://dashboards.gitlab.net/d/alerts-sat_node_schedstat_waiting/?var-environment=gprd\u0026var-type=consul\u0026var-stage=main\u0026var-component=node_schedstat_waiting"
+        },
+        {
+          "title": "consul Service | single_node_cpu resource Dashboard",
+          "url": "https://dashboards.gitlab.net/d/alerts-sat_single_node_cpu/?var-environment=gprd\u0026var-type=consul\u0026var-stage=main\u0026var-component=single_node_cpu"
+        }
+      ],
       "nullPointMode": "null",
       "percentage": false,
       "pointradius": 5,

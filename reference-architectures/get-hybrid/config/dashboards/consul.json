@@ -155,6 +155,40 @@
       },
       "lines": true,
       "linewidth": 1,
+      "links": [
+        {
+          "title": "consul Service | cpu resource Dashboard",
+          "url": "https://dashboards.gitlab.net/d/alerts-sat_cpu/?var-environment=gprd\u0026var-type=consul\u0026var-stage=main\u0026var-component=cpu"
+        },
+        {
+          "title": "consul Service | disk_inodes resource Dashboard",
+          "url": "https://dashboards.gitlab.net/d/alerts-sat_disk_inodes/?var-environment=gprd\u0026var-type=consul\u0026var-stage=main\u0026var-component=disk_inodes"
+        },
+        {
+          "title": "consul Service | disk_space resource Dashboard",
+          "url": "https://dashboards.gitlab.net/d/alerts-sat_disk_space/?var-environment=gprd\u0026var-type=consul\u0026var-stage=main\u0026var-component=disk_space"
+        },
+        {
+          "title": "consul Service | kube_container_cpu resource Dashboard",
+          "url": "https://dashboards.gitlab.net/d/alerts-sat_kube_container_cpu/?var-environment=gprd\u0026var-type=consul\u0026var-stage=main\u0026var-component=kube_container_cpu"
+        },
+        {
+          "title": "consul Service | kube_container_memory resource Dashboard",
+          "url": "https://dashboards.gitlab.net/d/alerts-sat_kube_container_memory/?var-environment=gprd\u0026var-type=consul\u0026var-stage=main\u0026var-component=kube_container_memory"
+        },
+        {
+          "title": "consul Service | memory resource Dashboard",
+          "url": "https://dashboards.gitlab.net/d/alerts-sat_memory/?var-environment=gprd\u0026var-type=consul\u0026var-stage=main\u0026var-component=memory"
+        },
+        {
+          "title": "consul Service | node_schedstat_waiting resource Dashboard",
+          "url": "https://dashboards.gitlab.net/d/alerts-sat_node_schedstat_waiting/?var-environment=gprd\u0026var-type=consul\u0026var-stage=main\u0026var-component=node_schedstat_waiting"
+        },
+        {
+          "title": "consul Service | single_node_cpu resource Dashboard",
+          "url": "https://dashboards.gitlab.net/d/alerts-sat_single_node_cpu/?var-environment=gprd\u0026var-type=consul\u0026var-stage=main\u0026var-component=single_node_cpu"
+        }
+      ],
       "nullPointMode": "null",
       "percentage": false,
       "pointradius": 5,
