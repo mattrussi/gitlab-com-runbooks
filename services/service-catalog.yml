@@ -120,7 +120,7 @@ services:
         design:
         architecture: https://docs.gitlab.com/ee/architecture/blueprints/clickhouse_usage/
         readiness_review: https://gitlab.com/gitlab-com/gl-infra/readiness/-/merge_requests/173
-        sre_guide: https://gitlab.com/gitlab-com/runbooks/-/tree/master/docs/clickhouse-cloud/README.md
+        sre_guide: https://gitlab.com/gitlab-com/runbooks/-/tree/master/docs/clickhouse/README.md
         developer_guide: https://docs.gitlab.com/ee/development/database/clickhouse/clickhouse_within_gitlab.html
         service: []
         security:
