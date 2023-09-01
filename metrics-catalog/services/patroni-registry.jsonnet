@@ -37,6 +37,19 @@ metricsCatalog.serviceDefinition(
           ],
         },
       ],
+      components: [
+        {
+          name: 'pg_btree_bloat',
+          parameters: {
+            ignore_outliers: [
+              {
+                end: '2023-02-01',
+                start: '2021-01-01',
+              },
+            ],
+          },
+        },
+      ],
     },
   }
 )
