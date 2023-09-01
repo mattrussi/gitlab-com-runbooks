@@ -41,6 +41,7 @@
 * [Gitaly unusual activity alert](gitaly-unusual-activity.md)
 * [Gracefully restart gitaly-ruby](gracefully-restart-gitaly-ruby.md)
 * [Moving repositories from one Gitaly node to another](move-repositories.md)
+* [Gitaly multi-project migration](multi-proect-migration.md)
 * [Adding new storage capacity](new-storage.md)
 * [GitLab Storage Re-balancing](storage-rebalancing.md)
 * [Managing GitLab Storage Shards (Gitaly)](storage-sharding.md)

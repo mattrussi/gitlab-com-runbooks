@@ -48,6 +48,7 @@
 * [Gitaly Repository Export](../gitaly/gitaly-repositry-export.md)
 * [Gitaly token rotation](../gitaly/gitaly-token-rotation.md)
 * [Moving repositories from one Gitaly node to another](../gitaly/move-repositories.md)
+* [Gitaly multi-project migration](../gitaly/multi-proect-migration.md)
 * [GitLab Storage Re-balancing](../gitaly/storage-rebalancing.md)
 * [Kubernetes-Agent Basic Troubleshooting](../kas/kubernetes-agent-basic-troubleshooting.md)
 * [GKE Cluster Upgrade Procedure](../kube/k8s-cluster-upgrade.md)
