@@ -6,7 +6,4 @@
 //
 // Blank values will be ignored.
 {
-  workflow_automation: 'code_review_workflow',
-  intel_code_security: '',
-  gitlab_duo_chat: 'duo_chat',
 }
