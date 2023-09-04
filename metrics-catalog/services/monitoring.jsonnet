@@ -302,6 +302,16 @@ metricsCatalog.serviceDefinition({
           ],
         },
       },
+      {
+        name: 'memory',
+        parameters: {
+          changepoints: [
+            '2023-08-02',
+            '2023-08-15',
+          ],
+        },
+      },
+
     ],
   },
 })
