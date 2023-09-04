@@ -23,18 +23,21 @@ as a side-effect than the direct reason.
 
 ## Architecture
 
-For gitlab.com, as at September 2021, we have 5 sets of Redis instances, each handling a distinct use case:
+For gitlab.com, as at September 2023, we have 11 sets of Redis instances, each handling a distinct use case:
 
-| Role                    | Nodes                | Clients                                  | Sentinel?                     | Persistence?               |
-| ----------------------- | -------------------- | ---------------------------------------- | ----------------------------- | -------------------------- |
-| Cache for `Rails.cache` | redis-cache-XX       | Puma workers, Sidekiq workers            | Yes (redis-cache-sentinel-XX) | None                       |
-| Sidekiq job queues      | redis-sidekiq-XX     | Puma workers, Sidekiq workers            | Yes (localhost)               | RDB dump every 900 seconds |
-| Persistent shared state | redis-XX             | Puma workers, Sidekiq workers, Workhorse | Yes (localhost)               | RDB dump every 900 seconds |
-| CI build trace chunks   | redis-tracechunks-XX | Puma workers (API), Sidekiq workers      | Yes (localhost)               | RDB dump every 900 seconds |
-| Ratelimiting (RackAttack/App) | redis-ratelimiting-XX | Puma workers                      | Yes (localhost)               | None |
-| Sessions                | redis-sessions-XX    | Puma workers                             | Yes (localhost)               | RDB dump every 900 seconds, but also an eviction policy |
-
-We do not yet have a separate actioncable instance.
+| Role                          | Nodes                            | Clients                                  | Sentinel?       | Persistence?                                            |
+| ----------------------------- | -------------------------------- | ---------------------------------------- | --------------- | ------------------------------------------------------- |
+| Cache for `Rails.cache`       | redis-cluster-cache-XX-YY        | Puma workers, Sidekiq workers            | No              | None                                                    |
+| Cache for Chat                | redis-cluster-chat-cache-XX-YY   | Puma workers                             | No              | None                                                    |
+| Cache for Feature flag        | redis-cluster-feature-flag-XX-YY | Puma workers                             | No              | None                                                    |
+| Cache for Repository data     | redis-repository-cache-XX        | Puma workers                             | Yes (localhost) | None                                                    |
+| Sidekiq job queues            | redis-sidekiq-XX                 | Puma workers, Sidekiq workers            | Yes (localhost) | RDB dump every 900 seconds                              |
+| Persistent shared state       | redis-XX                         | Puma workers, Sidekiq workers, Workhorse | Yes (localhost) | RDB dump every 900 seconds                              |
+| CI build trace chunks         | redis-tracechunks-XX             | Puma workers (API), Sidekiq workers      | Yes (localhost) | RDB dump every 900 seconds                              |
+| Ratelimiting (RackAttack/App) | redis-cluster-ratelimiting-XX-YY | Puma workers                             | No              | None                                                    |
+| Sessions                      | redis-sessions-XX                | Puma workers                             | Yes (localhost) | RDB dump every 900 seconds, but also an eviction policy |
+| Latest WAL pointer            | redis-db-load-balancing-XX       | Puma workers, Sidekiq workers            | Yes (localhost) | RDB dump every 900 seconds, but also an eviction policy |
+| Pub/Sub                       | redis-pubsub-XX                  | Puma workers, Workhorse                  | Yes (localhost) | No                                                      |
 
 The split is *largely* a form of functional partitioning for scalability (see single threaded comments above), but also
 because the application expects the non-cache instances to persist data across failures or restarts so those instances
@@ -217,13 +220,11 @@ See [High Availability](#high-availability) for some comments regarding connecti
 
 [Redis Cluster](https://redis.io/topics/cluster-spec) is a Redis feature that lets you horizontally shard data across
 multiple machines. If any one of our Redis clusters grows too large to fit in memory on a single machine or such that
-the single-threaded CPU becomes a hard limit, then Redis Cluster is a possible mitigation.   Manually sharding the data
+the single-threaded CPU becomes a hard limit, then Redis Cluster is a possible mitigation. Manually sharding the data
 is an alternative approach, e.g. having more than one cache cluster and dividing the types of keys up in some way using
 application controlled logic, or splitting the sidekiq processing onto multiple clusters.  Neither option is low effort.
 
-Supporting the use of Redis Cluster would require work on the core GitLab application to connect/use correctly and to
-ensure we do not run into CROSSSLOT (cross slot) hashing problems.  At this time (late 2020), we have been able to
-manage the performance of the existing redis clusters sufficiently that there is no urgent need.
+See the [Redis Cluster documentation for more details](../redis/redis-cluster.md).
 
 See:
 
@@ -275,13 +276,17 @@ Thankfully, Prometheus/Thanos has this information already, and you can find the
 
 There is 1 core dashboard for redis, with a variant for each cluster:
 
+* [Cache](https://dashboards.gitlab.net/d/redis-cluster-cache-main/redis-cluster-cache-overview?orgId=1)
+* [ChatCache](https://dashboards.gitlab.net/d/redis-cluster-chat-cache-main/redis-cluster-chat-cache-overview?orgId=1)
+* [DbLoadBalancing](https://dashboards.gitlab.net/d/redis-db-load-balancing-main/redis-db-load-balancing-overview?orgId=1)
+* [FeatureFlag](https://dashboards.gitlab.net/d/redis-cluster-feature-flag-main/redis-cluster-feature-flag-overview?orgId=1)
 * [Persistent/shared](https://dashboards.gitlab.net/d/redis-main/redis-overview?orgId=1)
-* [Cache](https://dashboards.gitlab.net/d/redis-cache-main/redis-cache-overview?orgId=1)
+* [Pubsub](https://dashboards.gitlab.net/d/redis-pubsub-main/redis-pubsub-overview?orgId=1)
+* [Ratelimiting](https://dashboards.gitlab.net/d/redis-cluster-ratelimiting-main/redis-cluster-ratelimiting-overview?orgId=1)
+* [RepositoryCache](https://dashboards.gitlab.net/d/redis-repository-cache-main/redis-repository-cache-overview?orgId=1)
+* [Sessions](https://dashboards.gitlab.net/d/redis-sessions-main/redis-sessions-overview?orgId=1)
 * [Sidekiq](https://dashboards.gitlab.net/d/redis-sidekiq-main/redis-sidekiq-overview?orgId=1)
 * [Tracechunks](https://dashboards.gitlab.net/d/redis-tracechunks-main/redis-tracechunks-overview?orgId=1)
-* [Ratelimiting](https://dashboards.gitlab.net/d/redis-ratelimiting-main/redis-ratelimiting-overview?orgId=1)
-* [ClusterRatelimiting](https://dashboards.gitlab.net/d/redis-cluster-ratelimiting-main/redis-cluster-ratelimiting-overview?orgId=1)
-* [Sessions](https://dashboards.gitlab.net/d/redis-sessions-main/redis-sessions-overview?orgId=1)
 
 Note that many of the panels are have both Primary and Secondary variants; because only the primary is active, usually
 only the primary graphs matter *and* the secondaries should be pretty quiet (other than some housekeeping/analysis

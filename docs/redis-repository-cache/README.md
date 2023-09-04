@@ -14,6 +14,9 @@
 
 * [system](https://log.gprd.gitlab.net/goto/3f634380-9547-11ed-9f43-e3784d7fe3ca)
 
+## Troubleshooting Pointers
+
+* [A survival guide for SREs to working with Redis at GitLab](../redis/redis-survival-guide-for-sres.md)
 <!-- END_MARKER -->
 
 <!-- ## Summary -->
