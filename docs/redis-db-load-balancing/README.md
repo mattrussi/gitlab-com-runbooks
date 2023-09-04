@@ -17,6 +17,7 @@
 ## Troubleshooting Pointers
 
 * [../redis/redis-functional-partitioning.md](../redis/redis-functional-partitioning.md)
+* [A survival guide for SREs to working with Redis at GitLab](../redis/redis-survival-guide-for-sres.md)
 <!-- END_MARKER -->
 
 <!-- ## Summary -->
