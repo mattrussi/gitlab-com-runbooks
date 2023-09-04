@@ -352,7 +352,10 @@ groups:
           clamp_max(
             1 - (
               sum by (environment, tier, type, stage, shard, shard) (
-                node_filesystem_avail_bytes{type="gitaly", mountpoint="/var/opt/gitlab",shard=~"default|praefect"}
+                (
+                  node_filesystem_avail_bytes{type="gitaly", mountpoint="/var/opt/gitlab",shard=~"default|praefect"} -
+                  (node_filesystem_size_bytes{type="gitaly", mountpoint="/var/opt/gitlab",shard=~"default|praefect"} * 0.2)
+                )
                 and
                 (instance:node_filesystem_avail:ratio{type="gitaly", mountpoint="/var/opt/gitlab",shard=~"default|praefect"} > 0.2)
               )
@@ -1650,7 +1653,7 @@ groups:
   - record: slo:max:soft:gitlab_component_saturation:ratio
     labels:
       component: gitaly_active_node_available_space
-    expr: "0.92"
+    expr: "0.96"
   - record: slo:max:hard:gitlab_component_saturation:ratio
     labels:
       component: gitaly_active_node_available_space
@@ -4118,7 +4121,10 @@ groups:
             clamp_max(
               1 - (
                 sum by (environment, tier, type, stage, shard, shard) (
-                  node_filesystem_avail_bytes{environment="{{ $labels.environment }}",stage="{{ $labels.stage }}",type="{{ $labels.type }}", mountpoint="/var/opt/gitlab",shard=~"default|praefect"}
+                  (
+                    node_filesystem_avail_bytes{environment="{{ $labels.environment }}",stage="{{ $labels.stage }}",type="{{ $labels.type }}", mountpoint="/var/opt/gitlab",shard=~"default|praefect"} -
+                    (node_filesystem_size_bytes{environment="{{ $labels.environment }}",stage="{{ $labels.stage }}",type="{{ $labels.type }}", mountpoint="/var/opt/gitlab",shard=~"default|praefect"} * 0.2)
+                  )
                   and
                   (instance:node_filesystem_avail:ratio{environment="{{ $labels.environment }}",stage="{{ $labels.stage }}",type="{{ $labels.type }}", mountpoint="/var/opt/gitlab",shard=~"default|praefect"} > 0.2)
                 )
@@ -4138,7 +4144,10 @@ groups:
             clamp_max(
               1 - (
                 sum by (environment, tier, type, stage, shard, shard) (
-                  node_filesystem_avail_bytes{environment="{{ $labels.environment }}",stage="{{ $labels.stage }}",type="{{ $labels.type }}", mountpoint="/var/opt/gitlab",shard=~"default|praefect"}
+                  (
+                    node_filesystem_avail_bytes{environment="{{ $labels.environment }}",stage="{{ $labels.stage }}",type="{{ $labels.type }}", mountpoint="/var/opt/gitlab",shard=~"default|praefect"} -
+                    (node_filesystem_size_bytes{environment="{{ $labels.environment }}",stage="{{ $labels.stage }}",type="{{ $labels.type }}", mountpoint="/var/opt/gitlab",shard=~"default|praefect"} * 0.2)
+                  )
                   and
                   (instance:node_filesystem_avail:ratio{environment="{{ $labels.environment }}",stage="{{ $labels.stage }}",type="{{ $labels.type }}", mountpoint="/var/opt/gitlab",shard=~"default|praefect"} > 0.2)
                 )

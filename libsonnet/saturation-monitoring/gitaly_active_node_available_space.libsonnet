@@ -29,7 +29,10 @@ local selectors = import 'promql/selectors.libsonnet';
     query: |||
       1 - (
         sum by (%(aggregationLabels)s) (
-          node_filesystem_avail_bytes{%(selector)s, %(gitalyDiskSelector)s}
+          (
+            node_filesystem_avail_bytes{%(selector)s, %(gitalyDiskSelector)s} -
+            (node_filesystem_size_bytes{%(selector)s, %(gitalyDiskSelector)s} * 0.2)
+          )
           and
           (instance:node_filesystem_avail:ratio{%(selector)s, %(gitalyDiskSelector)s} > 0.2)
         )
@@ -46,7 +49,7 @@ local selectors = import 'promql/selectors.libsonnet';
       }),
     },
     slos: {
-      soft: 0.92,
+      soft: 0.96,
       hard: 0.97,
     },
   }),
