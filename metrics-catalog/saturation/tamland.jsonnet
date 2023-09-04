@@ -38,7 +38,14 @@ local page(path, title, service_pattern) =
 
 {
   defaults: {
-    environment: 'gprd',
+    prometheus: {
+      baseURL: 'https://thanos.ops.gitlab.net',
+      defaultSelectors: {
+        env: 'gprd',
+        stage: 'main',
+      },
+      serviceLabel: 'type',
+    },
   },
   services: services(uniqServices(saturation)),
   saturationPoints: saturation,

@@ -55,11 +55,13 @@ local saturationPoints = {
 };
 
 test.suite({
-  testHasDefaultEnvironment: {
-    actual: manifest,
+  testDefaults: {
+    actual: manifest.defaults,
     expectThat: {
-      result: std.objectHas(self.actual.defaults, 'environment') == true,
-      description: 'Expect object to have serviceCatalog field',
+      local promFields = std.objectFields(self.actual.prometheus),
+      result: std.objectHas(self.actual, 'prometheus')
+        && promFields == ["baseURL", "defaultSelectors", "serviceLabel"],
+      description: 'Expect object to have default configurations',
     },
   },
   testHasSaturationPoints: {
