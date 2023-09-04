@@ -111,6 +111,7 @@ install_plugin promtool https://gitlab.com/gitlab-com/gl-infra/asdf-promtool.git
 install_plugin thanos https://gitlab.com/gitlab-com/gl-infra/asdf-promtool.git
 install_plugin amtool https://gitlab.com/gitlab-com/gl-infra/asdf-promtool.git
 install_plugin jsonnet-tool https://gitlab.com/gitlab-com/gl-infra/asdf-gl-infra.git
+install_plugin kubeconform https://github.com/lirlia/asdf-kubeconform.git 
 install_plugin ruby
 install_plugin nodejs
 install_plugin yq
