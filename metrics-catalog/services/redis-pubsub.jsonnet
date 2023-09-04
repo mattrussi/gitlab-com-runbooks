@@ -9,5 +9,21 @@ metricsCatalog.serviceDefinition(
     railsStorageSelector=redisHelpers.storageSelector({ oneOf: ['workhorse', 'pubsub'] }),
     descriptiveName='Redis that handles predominantly pub/sub operations',
   )
+  {
+    serviceLevelIndicators+: {
+      rails_redis_client+: {
+        userImpacting: true,
+        severity: 's4',
+      },
+      primary_server+: {
+        userImpacting: true,
+        severity: 's4',
+      },
+      secondary_servers+: {
+        userImpacting: true,
+        severity: 's4',
+      },
+    },
+  }
   + redisHelpers.gitlabcomObservabilityToolingForRedis('redis-pubsub')
 )
