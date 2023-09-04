@@ -597,8 +597,8 @@ generate-tamland-saturation-manifest:
   needs: []
   rules:
     - *avoid-stage-group-check-rule
-    - *gitlab-com-only-rule
     - if: $GENERATE_TAMLAND_SATURATION_MANIFEST == "1"
+    - *gitlab-com-only-rule
     - *if-merge-request-rule
   script:
     - make jsonnet-bundle
