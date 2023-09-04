@@ -10,6 +10,7 @@ ARG GL_ASDF_TERRAFORM_VERSION
 ARG GL_ASDF_THANOS_VERSION
 ARG GL_ASDF_VAULT_VERSION
 ARG GL_ASDF_YQ_VERSION
+ARG GL_ASDF_KUBECONFORM_VERSION
 
 # Referenced container images
 FROM docker.io/mikefarah/yq:${GL_ASDF_YQ_VERSION} as yq
@@ -41,6 +42,10 @@ RUN curl --silent -o /tmp/google-cloud-sdk.tar.gz -L --fail  https://dl.google.c
   rm /tmp/google-cloud-sdk.tar.gz && \
   /usr/local/gcloud/google-cloud-sdk/install.sh && \
   gcloud components install kubectl -q
+
+# Install kubeconform
+RUN curl --silent --fail --show-error -L https://github.com/yannh/kubeconform/releases/download/v${GL_ASDF_KUBECONFORM_VERSION}/kubeconform-linux-amd64.tar.gz | tar xvz --exclude "LICENSE" -C /usr/local/bin/ && \
+  chmod +x /usr/local/bin/kubeconform
 
 # Install binary tools
 COPY --from=amtool /bin/amtool /bin/amtool
