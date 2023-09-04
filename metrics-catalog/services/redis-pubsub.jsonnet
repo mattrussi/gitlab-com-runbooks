@@ -10,6 +10,7 @@ metricsCatalog.serviceDefinition(
     descriptiveName='Redis that handles predominantly pub/sub operations',
   )
   {
+    // TODO: set severity to s2 after migration is completed
     serviceLevelIndicators+: {
       rails_redis_client+: {
         userImpacting: true,
