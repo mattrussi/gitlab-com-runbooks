@@ -1239,7 +1239,7 @@ services:
         developer_guide: https://docs.gitlab.com/ee/development/redis.html#redis-guidelines
         service:
           - https://redis.io/documentation
-          - https://docs.gitlab.com/omnibus/settings/redis.html
+          - https://gitlab.com/gitlab-cookbooks/gitlab-redis-cluster
         security:
       dependencies:
         - service:
