@@ -124,6 +124,7 @@ local sliDetailLatencyPanel(
   logBase=10,
   legendFormat='%(percentile_humanized)s %(sliName)s',
   min=0.01,
+  interval='1m',
   intervalFactor=1,
   withoutLabels=[],
       ) =
@@ -142,6 +143,7 @@ local sliDetailLatencyPanel(
     logBase=logBase,
     legendFormat=legendFormat % formatConfig,
     min=min,
+    interval=interval,
     intervalFactor=intervalFactor,
   ) + {
     thresholds: [
@@ -287,7 +289,8 @@ local sliDetailErrorRatePanel(
     sliName,
     selectorHash,
     aggregationSets,
-    minLatency=0.01
+    minLatency=0.01,
+    interval="1m",
   )::
     local service = metricsCatalog.getService(serviceType);
     local sli = service.serviceLevelIndicators[sliName];
@@ -317,7 +320,8 @@ local sliDetailErrorRatePanel(
                       selector=filteredSelectorHash + aggregationSet.selector,
                       legendFormat='%(percentile_humanized)s ' + aggregationSet.legendFormat,
                       aggregationLabels=aggregationSet.aggregationLabels,
-                      min=minLatency
+                      min=minLatency,
+                      interval=interval,
                     )
                   else
                     null,
@@ -376,7 +380,8 @@ local sliDetailErrorRatePanel(
     sli,
     selectorHash,
     aggregationSets,
-    minLatency=0.01
+    minLatency=0.01,
+    interval="1m",
   )::
     // Note that we always want to ignore `type` filters, since the metricsCatalog selectors will
     // already have correctly filtered labels to ensure the right values, and if we inject the type
@@ -404,6 +409,7 @@ local sliDetailErrorRatePanel(
                       aggregationLabels=aggregationSet.aggregationLabels,
                       withoutLabels=withoutLabels,
                       min=minLatency,
+                      interval=interval,
                     )
                   else
                     null,
@@ -461,7 +467,7 @@ local sliDetailErrorRatePanel(
       )
     ),
 
-  autoDetailRows(serviceType, selectorHash, startRow)::
+  autoDetailRows(serviceType, selectorHash, startRow, sliInterval="1m")::
     local s = self;
     local service = metricsCatalog.getService(serviceType);
     local serviceLevelIndicators = service.listServiceLevelIndicators();
@@ -476,7 +482,7 @@ local sliDetailErrorRatePanel(
             ] +
             std.map(function(c) { title: 'per ' + c, aggregationLabels: c, selector: { [c]: { ne: '' } }, legendFormat: '{{' + c + '}}' }, sli.significantLabels);
 
-          s.sliDetailMatrix(serviceType, sli.name, selectorHash, aggregationSets),
+          s.sliDetailMatrix(serviceType, sli.name, selectorHash, aggregationSets, interval=sliInterval),
         serviceLevelIndicatorsFiltered
       )
       , cols=1, startRow=startRow

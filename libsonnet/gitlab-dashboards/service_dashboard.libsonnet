@@ -67,6 +67,7 @@ local overviewDashboard(
   title='Overview',
   uid=null,
   startRow=0,
+  sliInterval="1m",
   environmentSelectorHash=defaultEnvironmentSelector,
   saturationEnvironmentSelectorHash=defaultEnvironmentSelector,
 
@@ -116,7 +117,7 @@ local overviewDashboard(
       )
     )
     .addPanels(
-      metricsCatalogDashboards.autoDetailRows(type, selectorHash, startRow=200)
+      metricsCatalogDashboards.autoDetailRows(type, selectorHash, startRow=200, sliInterval=sliInterval)
     )
     .addPanelsIf(
       showProvisioningDetails && metricsCatalogServiceInfo.getProvisioning().vms == true,
