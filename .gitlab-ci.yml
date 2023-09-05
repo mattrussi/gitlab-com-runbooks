@@ -275,6 +275,7 @@ notify-mirror-source:
       --build-arg GL_ASDF_GO_JSONNET_VERSION
       --build-arg GL_ASDF_JB_VERSION
       --build-arg GL_ASDF_JSONNET_TOOL_VERSION
+      --build-arg GL_ASDF_KUBECONFORM_VERSION
       --build-arg GL_ASDF_PROMTOOL_VERSION
       --build-arg GL_ASDF_RUBY_VERSION
       --build-arg GL_ASDF_SHELLCHECK_VERSION
