@@ -10,7 +10,6 @@ ARG GL_ASDF_TERRAFORM_VERSION
 ARG GL_ASDF_THANOS_VERSION
 ARG GL_ASDF_VAULT_VERSION
 ARG GL_ASDF_YQ_VERSION
-ARG GL_ASDF_KUBECONFORM_VERSION
 
 # Referenced container images
 FROM docker.io/mikefarah/yq:${GL_ASDF_YQ_VERSION} as yq
@@ -27,6 +26,8 @@ FROM registry.gitlab.com/gitlab-com/gl-infra/third-party-container-images/jb:v${
 
 # Main stage build
 FROM ruby:${GL_ASDF_RUBY_VERSION}-alpine
+
+ARG GL_ASDF_KUBECONFORM_VERSION
 
 RUN apk add --no-cache \
   python3 curl bash build-base git jq make \
