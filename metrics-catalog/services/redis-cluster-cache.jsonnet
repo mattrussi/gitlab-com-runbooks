@@ -18,7 +18,7 @@ metricsCatalog.serviceDefinition(
       apdexScore: 0.9995,
     },
     serviceLevelIndicators+: {
-      // Rails Cache uses metrics from the main application to guage to performance of the Redis cache
+      // Rails Cache uses metrics from the main application to gauge to performance of the Redis cache
       // This is useful since it's not easy for us to directly calculate an apdex from the Redis metrics
       // directly
       rails_cache: {

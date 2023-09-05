@@ -156,7 +156,7 @@ local gitalyCGroupMemoryQuantile(selector) =
 local gitalyCgroupCPUThrottling(selector) =
   basic.timeseries(
     title='cgroup: CPU Throttling',
-    description='Cgroups that are getting CPU throttled. If the cgroup is not visable it is not getting throttled.',
+    description='Cgroups that are getting CPU throttled. If the cgroup is not visible it is not getting throttled.',
     query=|||
       rate(
         container_cpu_cfs_throttled_seconds_total{%(selector)s}[$__rate_interval]

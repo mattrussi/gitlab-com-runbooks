@@ -49,5 +49,15 @@ basic.dashboard(
       legend_show=false,
       linewidth=1,
     ),
+    basic.timeseries(
+      title='CPU throttling',
+      description='CPU throttling of kas',
+      query=|||
+        sum (rate(container_cpu_cfs_throttled_seconds_total{%s}[$__rate_interval]))
+      ||| % selectorString,
+      yAxisLabel='time',
+      legend_show=false,
+      linewidth=1,
+    ),
   ], cols=2, rowHeight=10)
 )
