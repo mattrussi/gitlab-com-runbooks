@@ -1,26 +1,32 @@
 local resourceSaturationPoint = (import 'servicemetrics/metrics.libsonnet').resourceSaturationPoint;
 local metricsCatalog = import 'servicemetrics/metrics-catalog.libsonnet';
+local selectors = import 'promql/selectors.libsonnet';
 
 {
-  pg_int4_id: resourceSaturationPoint({
+  pg_int4_id: resourceSaturationPoint({  // DEPRECATED, replaced by `pg_int4_column` and `pg_int4_sequence`
     title: 'Postgres int4 ID capacity',
     severity: 's1',
     horizontallyScalable: false,
     appliesTo: ['patroni', 'patroni-ci'],  // No point in using tags here: see https://gitlab.com/groups/gitlab-org/-/epics/4785
     description: |||
-      This measures used int4 primary key capacity in selected postgres tables. It is critically important that we do not reach
-      saturation on this as GitLab will stop to work at this point.
+      This measures used int4 columns capacity in all postgres tables. It is critically important that we do not reach
+      saturation on primary key columns as GitLab will stop to work at this point.
+
+      The saturation point tracks all integer columns, so also foreign keys that might not match their source.
+
+      IID columns are deliberatly ignored because they are scoped to a project/namespace.
     |||,
     grafana_dashboard_uid: 'sat_pg_int4_id',
-    resourceLabels: ['table_name'],
+    resourceLabels: ['column_name'],
     burnRatePeriod: '5m',
     query: |||
       max by (%(aggregationLabels)s) (
-        pg_integer_capacity_current{%(selector)s}
-        /
-        pg_integer_capacity_maximum{%(selector)s}
+        pg_int4_saturation_current_largest_value{%(selector)s,%(columnSelector)s} / pg_int4_saturation_column_max_value{%(selector)s,%(columnSelector)s}
       )
     |||,
+    queryFormatConfig: {
+      columnSelector: selectors.serializeHash({ column_name: { nre: '.+(.|-|_)iid' } }),
+    },
     slos: {
       soft: 0.50,
       hard: 0.90,

@@ -668,10 +668,8 @@ groups:
       max by(environment, tier, type, stage, shard) (
         clamp_min(
           clamp_max(
-            max by (environment, tier, type, stage, shard, table_name) (
-              pg_integer_capacity_current{type=~"patroni|patroni-ci"}
-              /
-              pg_integer_capacity_maximum{type=~"patroni|patroni-ci"}
+            max by (environment, tier, type, stage, shard, column_name) (
+              pg_int4_saturation_current_largest_value{type=~"patroni|patroni-ci",column_name!~".+(.|-|_)iid"} / pg_int4_saturation_column_max_value{type=~"patroni|patroni-ci",column_name!~".+(.|-|_)iid"}
             )
             ,
             1)
@@ -5250,7 +5248,11 @@ groups:
 
         Details of the Postgres int4 ID capacity resource:
 
-        This measures used int4 primary key capacity in selected postgres tables. It is critically important that we do not reach saturation on this as GitLab will stop to work at this point.
+        This measures used int4 columns capacity in all postgres tables. It is critically important that we do not reach saturation on primary key columns as GitLab will stop to work at this point.
+
+        The saturation point tracks all integer columns, so also foreign keys that might not match their source.
+
+        IID columns are deliberatly ignored because they are scoped to a project/namespace.
       grafana_dashboard_id: alerts-sat_pg_int4_id
       grafana_dashboard_link: https://dashboards.gitlab.net/d/alerts-sat_pg_int4_id?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-type={{ $labels.type }}&var-stage={{ $labels.stage
@@ -5259,13 +5261,11 @@ groups:
       grafana_panel_id: "3254820333"
       grafana_variables: environment,type,stage
       promql_query: |
-        max by(environment, tier, type, stage, shard, table_name) (
+        max by(environment, tier, type, stage, shard, column_name) (
           clamp_min(
             clamp_max(
-              max by (environment, tier, type, stage, shard, table_name) (
-                pg_integer_capacity_current{environment="{{ $labels.environment }}",stage="{{ $labels.stage }}",type="{{ $labels.type }}"}
-                /
-                pg_integer_capacity_maximum{environment="{{ $labels.environment }}",stage="{{ $labels.stage }}",type="{{ $labels.type }}"}
+              max by (environment, tier, type, stage, shard, column_name) (
+                pg_int4_saturation_current_largest_value{environment="{{ $labels.environment }}",stage="{{ $labels.stage }}",type="{{ $labels.type }}",column_name!~".+(.|-|_)iid"} / pg_int4_saturation_column_max_value{environment="{{ $labels.environment }}",stage="{{ $labels.stage }}",type="{{ $labels.type }}",column_name!~".+(.|-|_)iid"}
               )
               ,
               1)
@@ -5273,13 +5273,11 @@ groups:
           0)
         )
       promql_template_1: |
-        max by(environment, tier, type, stage, shard, table_name) (
+        max by(environment, tier, type, stage, shard, column_name) (
           clamp_min(
             clamp_max(
-              max by (environment, tier, type, stage, shard, table_name) (
-                pg_integer_capacity_current{environment="{{ $labels.environment }}",stage="{{ $labels.stage }}",type="{{ $labels.type }}"}
-                /
-                pg_integer_capacity_maximum{environment="{{ $labels.environment }}",stage="{{ $labels.stage }}",type="{{ $labels.type }}"}
+              max by (environment, tier, type, stage, shard, column_name) (
+                pg_int4_saturation_current_largest_value{environment="{{ $labels.environment }}",stage="{{ $labels.stage }}",type="{{ $labels.type }}",column_name!~".+(.|-|_)iid"} / pg_int4_saturation_column_max_value{environment="{{ $labels.environment }}",stage="{{ $labels.stage }}",type="{{ $labels.type }}",column_name!~".+(.|-|_)iid"}
               )
               ,
               1)
