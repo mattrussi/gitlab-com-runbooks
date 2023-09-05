@@ -63,6 +63,14 @@ groups:
     expr: "0.9"
   - record: slo:max:soft:gitlab_component_saturation:ratio
     labels:
+      component: go_goroutines
+    expr: "0.9"
+  - record: slo:max:hard:gitlab_component_saturation:ratio
+    labels:
+      component: go_goroutines
+    expr: "0.98"
+  - record: slo:max:soft:gitlab_component_saturation:ratio
+    labels:
       component: go_memory
     expr: "0.9"
   - record: slo:max:hard:gitlab_component_saturation:ratio
@@ -230,6 +238,14 @@ groups:
       capacity_planning_strategy: quantile95_1h
       component: gcp_quota_limit_vertex_ai
       horiz_scaling: "no"
+      quantile: max
+      severity: s4
+    expr: "1"
+  - record: gitlab_component_saturation_info
+    labels:
+      capacity_planning_strategy: quantile95_1h
+      component: go_goroutines
+      horiz_scaling: "yes"
       quantile: max
       severity: s4
     expr: "1"

@@ -114,6 +114,23 @@ groups:
       )
   - record: gitlab_component_saturation:ratio
     labels:
+      component: go_goroutines
+    expr: |
+      max by(env, environment, tier, type, stage, shard) (
+        clamp_min(
+          clamp_max(
+            sum by (env, environment, tier, type, stage, shard, fqdn) (
+              go_goroutines{env="ops",type=~"gitaly|monitoring|praefect|registry|web-pages"}
+            )
+            /
+            250000
+            ,
+            1)
+        ,
+        0)
+      )
+  - record: gitlab_component_saturation:ratio
+    labels:
       component: go_memory
     expr: |
       max by(env, environment, tier, type, stage, shard) (
@@ -781,6 +798,65 @@ groups:
     expr: |
       gitlab_component_saturation:ratio{component="gcp_quota_limit_vertex_ai",env="ops",monitor="global"} > on(component) group_left
       slo:max:hard:gitlab_component_saturation:ratio{component="gcp_quota_limit_vertex_ai",env="ops",monitor="global"}
+  - alert: component_saturation_slo_out_of_bounds
+    for: 5m
+    annotations:
+      title: The Go goroutines Utilization per Node resource of the {{ $labels.type
+        }} service ({{ $labels.stage }} stage) has a saturation exceeding SLO and
+        is close to its capacity limit.
+      description: |
+        This means that this resource is running close to capacity and is at risk of exceeding its current capacity limit.
+
+        Details of the Go goroutines Utilization per Node resource:
+
+        Go goroutines utilization per node.
+
+        Goroutines leaks can cause memory saturation which can cause service degradation.
+
+        A limit of 250k goroutines is very generous, so if a service exceeds this limit, it's a sign of a leak and it should be dealt with.
+      grafana_dashboard_id: alerts-sat_go_goroutines
+      grafana_dashboard_link: https://dashboards.gitlab.net/d/alerts-sat_go_goroutines?from=now-6h/m&to=now-1m/m&var-environment={{
+        $labels.environment }}&var-type={{ $labels.type }}&var-stage={{ $labels.stage
+        }}
+      grafana_min_zoom_hours: "6"
+      grafana_panel_id: "3712788301"
+      grafana_variables: environment,type,stage
+      promql_query: |
+        max by(env, environment, tier, type, stage, shard, fqdn) (
+          clamp_min(
+            clamp_max(
+              sum by (env, environment, tier, type, stage, shard, fqdn) (
+                go_goroutines{environment="{{ $labels.environment }}",stage="{{ $labels.stage }}",type="{{ $labels.type }}"}
+              )
+              /
+              250000
+              ,
+              1)
+          ,
+          0)
+        )
+      promql_template_1: |
+        max by(env, environment, tier, type, stage, shard, fqdn) (
+          clamp_min(
+            clamp_max(
+              sum by (env, environment, tier, type, stage, shard, fqdn) (
+                go_goroutines{environment="{{ $labels.environment }}",stage="{{ $labels.stage }}",type="{{ $labels.type }}"}
+              )
+              /
+              250000
+              ,
+              1)
+          ,
+          0)
+        )
+      runbook: docs/{{ $labels.type }}/README.md
+    labels:
+      alert_type: cause
+      rules_domain: general
+      severity: s4
+    expr: |
+      gitlab_component_saturation:ratio{component="go_goroutines",env="ops",monitor="global"} > on(component) group_left
+      slo:max:hard:gitlab_component_saturation:ratio{component="go_goroutines",env="ops",monitor="global"}
   - alert: component_saturation_slo_out_of_bounds
     for: 5m
     annotations:

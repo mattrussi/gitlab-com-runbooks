@@ -3676,6 +3676,23 @@ groups:
         clamp_min(
           clamp_max(
             sum by (type, fqdn) (
+              go_goroutines{type=~"gitaly|praefect"}
+            )
+            /
+            250000
+            ,
+            1)
+        ,
+        0)
+      )
+    labels:
+      component: go_goroutines
+    record: gitlab_component_saturation:ratio
+  - expr: |
+      max by(type) (
+        clamp_min(
+          clamp_max(
+            sum by (type, fqdn) (
               go_memstats_alloc_bytes{type=~"gitaly|praefect"}
             )
             /
@@ -3809,6 +3826,14 @@ groups:
     record: slo:max:hard:gitlab_component_saturation:ratio
   - expr: "0.9"
     labels:
+      component: go_goroutines
+    record: slo:max:soft:gitlab_component_saturation:ratio
+  - expr: "0.98"
+    labels:
+      component: go_goroutines
+    record: slo:max:hard:gitlab_component_saturation:ratio
+  - expr: "0.9"
+    labels:
       component: go_memory
     record: slo:max:soft:gitlab_component_saturation:ratio
   - expr: "0.98"
@@ -3889,6 +3914,14 @@ groups:
       horiz_scaling: "yes"
       quantile: max
       severity: s2
+    record: gitlab_component_saturation_info
+  - expr: "1"
+    labels:
+      capacity_planning_strategy: quantile95_1h
+      component: go_goroutines
+      horiz_scaling: "yes"
+      quantile: max
+      severity: s4
     record: gitlab_component_saturation_info
   - expr: "1"
     labels:
@@ -4232,6 +4265,64 @@ groups:
       pager: pagerduty
       rules_domain: general
       severity: s2
+  - alert: component_saturation_slo_out_of_bounds
+    annotations:
+      description: |+
+        This means that this resource is running close to capacity and is at risk of exceeding its current capacity limit.
+
+        Details of the Go goroutines Utilization per Node resource:
+
+        Go goroutines utilization per node.
+
+        Goroutines leaks can cause memory saturation which can cause service degradation.
+
+        A limit of 250k goroutines is very generous, so if a service exceeds this limit, it's a sign of a leak and it should be dealt with.
+
+      grafana_dashboard_id: alerts-sat_go_goroutines
+      grafana_dashboard_link: https://dashboards.gitlab.net/d/alerts-sat_go_goroutines?from=now-6h/m&to=now-1m/m&var-type={{
+        $labels.type }}
+      grafana_min_zoom_hours: "6"
+      grafana_panel_id: "3712788301"
+      grafana_variables: type
+      promql_query: |
+        max by(type, fqdn) (
+          clamp_min(
+            clamp_max(
+              sum by (type, fqdn) (
+                go_goroutines{type="{{ $labels.type }}"}
+              )
+              /
+              250000
+              ,
+              1)
+          ,
+          0)
+        )
+      promql_template_1: |
+        max by(type, fqdn) (
+          clamp_min(
+            clamp_max(
+              sum by (type, fqdn) (
+                go_goroutines{type="{{ $labels.type }}"}
+              )
+              /
+              250000
+              ,
+              1)
+          ,
+          0)
+        )
+      runbook: docs/{{ $labels.type }}/README.md
+      title: The Go goroutines Utilization per Node resource of the {{ $labels.type
+        }} service has a saturation exceeding SLO and is close to its capacity limit.
+    expr: |
+      gitlab_component_saturation:ratio{component="go_goroutines"} > on(component) group_left
+      slo:max:hard:gitlab_component_saturation:ratio{component="go_goroutines"}
+    for: 5m
+    labels:
+      alert_type: cause
+      rules_domain: general
+      severity: s4
   - alert: component_saturation_slo_out_of_bounds
     annotations:
       description: |+
