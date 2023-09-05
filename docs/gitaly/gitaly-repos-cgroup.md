@@ -135,7 +135,7 @@ the most interesting ones are:
 
 - `container_cpu_usage_seconds_total`: A counter which specifies the CPU usage of each cgroups, if it's a flat line it might indicate that the cgroup is not being used or it's being saturated.
 - `container_cpu_cfs_throttled_seconds_total`: A counter specifies how much we are throttling the cgroup. The high the more throttling we are doing.
-- `container_memory_usage_bytes`: A guage which specifies the usage of memory for that cgroup.
+- `container_memory_usage_bytes`: A gauge which specifies the usage of memory for that cgroup.
 
 Inside [Gitaly: Host Detail](https://dashboards.gitlab.net/d/gitaly-host-detail/gitaly-host-detail?orgId=1) you can find a `cgroup` panel that will give you information about cgroups:
 
