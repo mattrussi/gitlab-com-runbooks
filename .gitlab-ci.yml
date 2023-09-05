@@ -4,37 +4,37 @@ include:
 
   # variables needed for other tasks
   - project: gitlab-com/gl-infra/common-ci-tasks
-    ref: v1.78.0
+    ref: v1.78.1
     file: .gitlab-ci-other-versions.yml
 
   # automatically tag releases using semantic-releases, based on conventional commit messages
   - project: gitlab-com/gl-infra/common-ci-tasks
-    ref: v1.78.0
+    ref: v1.78.1
     file: semantic-release.yml
 
   # Checks that the `.tool-versions` file is synced with .gitlab-ci-asdf-versions.yml,
   # that all the plugins are declared in `./scripts/install-asdf-plugins.sh`
   # and that ASDF is generally working
   - project: gitlab-com/gl-infra/common-ci-tasks
-    ref: v1.78.0
+    ref: v1.78.1
     file: asdf-tool-versions.yml
 
   # Upgrades dependencies on a schedule
   # see https://gitlab.com/gitlab-com/gl-infra/common-ci-tasks/-/blob/main/renovate-bot.md
   - project: gitlab-com/gl-infra/common-ci-tasks
-    ref: v1.78.0
+    ref: v1.78.1
     file: renovate-bot.yml
 
   # validate .editorconfig
   # see https://gitlab.com/gitlab-com/gl-infra/common-ci-tasks/-/blob/main/editorconfig-check.md
   - project: gitlab-com/gl-infra/common-ci-tasks
-    ref: v1.78.0
+    ref: v1.78.1
     file: editorconfig-check.yml
 
   # validate YAML files
   # see https://gitlab.com/gitlab-com/gl-infra/common-ci-tasks/-/blob/main/yamllint.md
   - project: gitlab-com/gl-infra/common-ci-tasks
-    ref: v1.78.0
+    ref: v1.78.1
     file: yamllint.yml
 
   # Import the danger-review job
@@ -275,6 +275,7 @@ notify-mirror-source:
       --build-arg GL_ASDF_GO_JSONNET_VERSION
       --build-arg GL_ASDF_JB_VERSION
       --build-arg GL_ASDF_JSONNET_TOOL_VERSION
+      --build-arg GL_ASDF_KUBECONFORM_VERSION
       --build-arg GL_ASDF_PROMTOOL_VERSION
       --build-arg GL_ASDF_RUBY_VERSION
       --build-arg GL_ASDF_SHELLCHECK_VERSION
@@ -597,8 +598,8 @@ generate-tamland-saturation-manifest:
   needs: []
   rules:
     - *avoid-stage-group-check-rule
-    - *gitlab-com-only-rule
     - if: $GENERATE_TAMLAND_SATURATION_MANIFEST == "1"
+    - *gitlab-com-only-rule
     - *if-merge-request-rule
   script:
     - make jsonnet-bundle

@@ -4,15 +4,15 @@
 
 [[_TOC_]]
 
-# Redis-repository-cache Service
+# Redis-pubsub Service
 
-* [Service Overview](https://dashboards.gitlab.net/d/redis-repository-cache-main/redis-repository-cache-overview)
-* **Alerts**: <https://alerts.gitlab.net/#/alerts?filter=%7Btype%3D%22redis-repository-cache%22%2C%20tier%3D%22db%22%7D>
-* **Label**: gitlab-com/gl-infra/production~"Service::RedisRepositoryCache"
+* [Service Overview](https://dashboards.gitlab.net/d/redis-pubsub-main/redis-pubsub-overview)
+* **Alerts**: <https://alerts.gitlab.net/#/alerts?filter=%7Btype%3D%22redis-pubsub%22%2C%20tier%3D%22db%22%7D>
+* **Label**: gitlab-com/gl-infra/production~"Service::RedisPubsub"
 
 ## Logging
 
-* [system](https://log.gprd.gitlab.net/goto/3f634380-9547-11ed-9f43-e3784d7fe3ca)
+* [system]()
 
 ## Troubleshooting Pointers
 

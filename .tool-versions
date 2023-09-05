@@ -7,8 +7,9 @@ go-jsonnet 0.20.0 # datasource=github-releases depName=google/go-jsonnet
 golang 1.20 # datasource=golang-version depName=go
 jb 0.5.1 # datasource=github-releases depName=jsonnet-bundler/jsonnet-bundler
 jsonnet-tool 1.9.1 # datasource=gitlab-releases depName=gitlab-com/gl-infra/jsonnet-tool
+kubeconform 0.6.3 # datasource=github-releases depName=yannh/kubeconform
 nodejs 18.17.1 # datasource=node depName=nodejs/node
-pre-commit 3.3.3 # datasource=github-releases depName=pre-commit/pre-commit
+pre-commit 3.4.0 # datasource=github-releases depName=pre-commit/pre-commit
 promtool 2.46.0 # datasource=github-releases depName=prometheus/prometheus
 python system
 ruby 3.2.2 # datasource=ruby-version depName=ruby/ruby
@@ -16,5 +17,5 @@ shellcheck 0.9.0 # datasource=github-releases depName=koalaman/shellcheck
 shfmt 3.6.0 # datasource=github-releases depName=mvdan/sh
 terraform 1.5.6 # datasource=github-releases depName=hashicorp/terraform
 thanos 0.32.2 # datasource=github-releases depName=thanos-io/thanos
-vault 1.14.1 # datasource=github-releases depName=hashicorp/vault
+vault 1.14.2 # datasource=github-releases depName=hashicorp/vault
 yq 4.35.1 # datasource=github-releases depName=mikefarah/yq

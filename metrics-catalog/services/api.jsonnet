@@ -50,6 +50,7 @@ metricsCatalog.serviceDefinition({
     'redis-sidekiq': true,
     'redis-repository-cache': true,
     'redis-sessions': true,
+    'redis-pubsub': true,
     redis: true,
     patroni: true,
     pgbouncer: true,

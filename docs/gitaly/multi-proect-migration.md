@@ -30,7 +30,6 @@ Runbook:
     The `offset` will depend on which page is failing, for example, `page=12` is failing so calculating the offset `(page - 1) * 100 = 1100`.
 
     ```shell
-    Project.where("repository_storage = ?", "nfs-file02").order(id: :asc).offset(1100).limit(100).each {|p| puts "#{p.id} => #{p.valid?}"}
-    ...
-    219566 => false
+    Project.where("repository_storage = ?", "nfs-file02").order(id: :asc).offset(1100).limit(100).each {|p| puts "ID: #{p.id}, valid: #{p.valid?}, errors: #{p.errors.full_messages}" unless p.valid? }; 0
+    ID: 219566, valid: false, errors: ["Name can contain only letters..."]
     ```

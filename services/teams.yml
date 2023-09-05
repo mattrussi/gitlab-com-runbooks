@@ -420,7 +420,7 @@ teams:
 
 - name: anti-abuse
   product_stage_group: anti-abuse
-  slack_error_budget_channel: g_anti-abuse
+  slack_error_budget_channel: g_govern_anti-abuse
   send_error_budget_weekly_to_slack: true
 
 # Marketing

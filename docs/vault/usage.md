@@ -569,16 +569,10 @@ The chart [`vault-secrets`](https://gitlab.com/gitlab-com/gl-infra/charts/-/tree
 ```yaml
 # helmfile.yaml
 
-
-repositories:
-  - name: registry-ops-gl
-    url: registry.ops.gitlab.net
-    oci: true
-
 releases:
   - name: my-app-secrets
-    chart: registry-ops-gl/gitlab-com/gl-infra/charts/vault-secrets
-    version: 1.1.0
+    chart: oci://registry.ops.gitlab.net/gitlab-com/gl-infra/charts/vault-secrets
+    version: 1.x.x
     namespace: my-app
     installed: {{ .Values | getOrNil "my-app.installed" | default false }}
     values:
