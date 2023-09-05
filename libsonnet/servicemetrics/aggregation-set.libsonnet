@@ -159,6 +159,12 @@ local buildValidator(definition) =
       getErrorRatioMetricForBurnRate(burnRate, required=false)::
         getMetricNameForBurnRate(burnRate, 'errorRatio', required),
 
+      getErrorRatesMetricForBurnRate(burnRate, required=false)::
+        getMetricNameForBurnRate(burnRate, 'errorRates', required),
+
+      getApdexRatesMetricForBurnRate(burnRate, required=false)::
+        getMetricNameForBurnRate(burnRate, 'apdexRates', required),
+
       upscaleBurnRate(burnRate)::
         self.upscaleLongerBurnRates && std.member(upscaledBurnRates, burnRate),
       // Returns a set of burn rates for the aggregation set,

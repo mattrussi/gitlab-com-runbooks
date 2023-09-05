@@ -4,6 +4,9 @@
   aggregationSetErrorRatioRuleSet: (import 'aggregation-set-error-ratio-rule-set.libsonnet').aggregationSetErrorRatioRuleSet,
   aggregationSetErrorRatioReflectedRuleSet: (import 'aggregation-set-error-ratio-reflected-rule-set.libsonnet').aggregationSetErrorRatioReflectedRuleSet,
   aggregationSetRateRuleSet: (import 'aggregation-set-rate-rule-set.libsonnet').aggregationSetRateRuleSet,
+
+  aggregationSetTransactionalRatesRuleSet: (import './transactional-rates/transactional-rates.libsonnet').aggregationSetRuleSet,
+
   componentMappingRuleSetGenerator: (import 'component-mapping-rule-set-generator.libsonnet').componentMappingRuleSetGenerator,
   componentMetricsRuleSetGenerator: (import 'component-metrics-rule-set-generator.libsonnet').componentMetricsRuleSetGenerator,
   extraRecordingRuleSetGenerator: (import 'extra-recording-rule-set-generator.libsonnet').extraRecordingRuleSetGenerator,
