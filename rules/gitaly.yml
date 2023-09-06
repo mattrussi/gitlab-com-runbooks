@@ -127,3 +127,17 @@ groups:
       runbook: docs/disaster-recovery/gcp-snapshots.md
       title: GCP scheduled snapshots are missing for at least one Gitaly data disk in Production
       promql_template_1: present_over_time(stackdriver_gce_disk_logging_googleapis_com_user_scheduled_snapshots{env="gprd", disk_name=~"(file|gitaly)-.*-stor-gprd-data$"}[2h]) == 0
+  - alert: GitalyServiceGoserver3DayApdexViolationSingleNode
+    expr: |
+      gitlab_component_node_apdex:ratio_6h{component="goserver",env="gprd",monitor="global",type="gitaly"} < 0.97
+      and
+      gitlab_component_node_apdex:ratio_3d{component="goserver",env="gprd",monitor="global",type="gitaly"} < 0.97
+    for: 5m
+    labels:
+      severity: s3
+      alert_type: symptom
+      incident_project: gitlab.com/gitlab-com/gl-infra/production
+    annotations:
+      description: Gitaly single node 3 day burn-rate for Apdex violated for {{$labels.fqdn}}.
+      title: Gitaly 3 day burn-rate for apdex violation for single node
+      runbook: docs/gitaly/README.md
