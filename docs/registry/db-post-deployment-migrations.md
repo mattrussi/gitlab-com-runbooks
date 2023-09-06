@@ -10,6 +10,8 @@ Meanwhile, we're already feeling the need to ship post-deployment migrations, so
 
 This document provides instructions for SREs to apply post-deployment migrations.
 
+There's a private recording from delivery team for applying the migrations: [https://www.youtube.com/watch?v=QFH11OE91Vw](https://www.youtube.com/watch?v=QFH11OE91Vw)
+
 ## Applying post-deployment migrations
 
 This should be done from within a registry instance in K8s, using the built-in `registry` CLI. If needed, you can look at the relevant CLI documentation [here](https://gitlab.com/gitlab-org/container-registry/-/blob/master/docs-gitlab/database-migrations.md#administration).
