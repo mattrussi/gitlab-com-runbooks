@@ -77,7 +77,7 @@ metricsCatalog.serviceDefinition({
 
       toolingLinks: [
         toolingLinks.continuousProfiler(service='gitaly'),
-        toolingLinks.sentry(slug='gitlab/gitaly-production'),
+        toolingLinks.sentry(projectId=12, variables=['environment']),
         toolingLinks.kibana(title='Gitaly', index='gitaly', slowRequestSeconds=1),
       ],
     },

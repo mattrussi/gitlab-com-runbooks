@@ -26,8 +26,8 @@ local linkContent(config) =
     '🐞 Sentry issues' % config;
 
 local formatUrl(path, config, variables) =
-  local url = 'https://sentry.gitlab.net/%(slug)s/%(path)s' % {
-    slug: config.slug,
+  local url = 'https://new-sentry.gitlab.net/organizations/gitlab/%(path)s/?project=%(projectId)d' % {
+    projectId: config.projectId,
     path: path,
   };
   local query = {
@@ -44,17 +44,17 @@ local formatUrl(path, config, variables) =
   if std.length(params) == 0 then
     url
   else
-    '%(url)s?%(paramsString)s' % {
+    '%(url)s&%(paramsString)s' % {
       url: url,
       paramsString: joinObject(params, '=', '&'),
     };
 
-local issuesLinks(slug, featureCategories, type, variables) =
+local issuesLinks(projectId, featureCategories, type, variables) =
   if std.length(featureCategories) != 0 then
     [
       (
         local config = {
-          slug: slug,
+          projectId: projectId,
           type: type,
           featureCategory: featureCategory,
         };
@@ -67,7 +67,7 @@ local issuesLinks(slug, featureCategories, type, variables) =
     ]
   else
     local config = {
-      slug: slug,
+      projectId: projectId,
       type: type,
     };
     [
@@ -79,16 +79,16 @@ local issuesLinks(slug, featureCategories, type, variables) =
 
 
 {
-  sentry(slug, featureCategories=[], type=null, variables=['environment'])::
+  sentry(projectId, featureCategories=[], type=null, variables=['environment'])::
     function(options)
       local config = {
-        slug: slug,
+        projectId: projectId,
       };
       [
         toolingLinkDefinition({
-          title: '🐞 Sentry Releases: %(slug)s' % config,
+          title: '🐞 Sentry Releases' % config,
           url: formatUrl('releases', config, ['environment']),
         }),
       ] +
-      issuesLinks(slug, featureCategories, type, variables),
+      issuesLinks(projectId, featureCategories, type, variables),
 }

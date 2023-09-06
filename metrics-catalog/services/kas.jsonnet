@@ -82,7 +82,7 @@ metricsCatalog.serviceDefinition({
       significantLabels: ['grpc_method'],
 
       toolingLinks: [
-        toolingLinks.sentry(slug='gitlab/kas'),
+        toolingLinks.sentry(projectId=11, variables=['environment']),
         toolingLinks.kibana(title='Kubernetes Agent Server', index='kas', type='kas'),
       ],
     },

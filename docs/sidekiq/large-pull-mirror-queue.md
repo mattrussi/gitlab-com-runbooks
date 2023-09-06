@@ -26,7 +26,7 @@ As GitLab.com grows, the number of mirrored project is going to grow as well. We
    you may want to [investigate the state of PgBouncer](../pgbouncer/pgbouncer.md).
 1. Under "Running Jobs", pay attention to the `UpdateAllMirrorsWorker`. If that has gone flat, then
 you may need to log the state of the pending pull mirror queue.
-1. Check [Sentry](https://sentry.gitlab.net/gitlab/gitlabcom/) for new 500 errors relating to `UpdateAllMirrorsWorker`.
+1. Check [Sentry](https://new-sentry.gitlab.net/organizations/gitlab/issues/?project=3) for new 500 errors relating to `UpdateAllMirrorsWorker`.
 1. Check the [logs][mirror-worker-logs], to see if a big upstream (e.g. bitbucket.org, github.com) are down/returning errors
    Look for consistent hostnames, projects/repos, or errors; note that there is a low grade normal rate of failure here, so you're looking for outliers.
 1. Check the top long-running jobs using the script below, it displays how many minutes they have been running and the project ID.

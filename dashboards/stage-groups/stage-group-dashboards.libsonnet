@@ -492,7 +492,7 @@ local dashboard(groupKey, components=defaultComponents, displayEmptyGuidance=fal
                     'json.meta.feature_category': featureCategories,
                   },
                 ),
-                toolingLinks.sentry(slug='gitlab/gitlabcom', featureCategories=featureCategories, variables=['environment', 'stage']),
+                toolingLinks.sentry(projectId=3, featureCategories=featureCategories, variables=['environment', 'stage']),
               ], { prometheusSelectorHash: {} })
             ),
           ],
@@ -583,7 +583,7 @@ local dashboard(groupKey, components=defaultComponents, displayEmptyGuidance=fal
                     'json.meta.feature_category': featureCategories,
                   },
                 ),
-                toolingLinks.sentry(slug='gitlab/gitlabcom', type='sidekiq', featureCategories=featureCategories, variables=['environment', 'stage']),
+                toolingLinks.sentry(projectId=3, type='sidekiq', featureCategories=featureCategories, variables=['environment', 'stage']),
               ], { prometheusSelectorHash: {} })
             ),
           ],

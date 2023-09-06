@@ -169,7 +169,7 @@ metricsCatalog.serviceDefinition({
 
       toolingLinks: [
         toolingLinks.continuousProfiler(service='workhorse-git'),
-        toolingLinks.sentry(slug='gitlab/gitlab-workhorse-gitlabcom'),
+        toolingLinks.sentry(projectId=15),
         toolingLinks.kibana(title='Workhorse', index='workhorse', type='git', slowRequestSeconds=10),
       ],
       dependsOn: dependOnPatroni.sqlComponents,
@@ -219,7 +219,7 @@ metricsCatalog.serviceDefinition({
 
       toolingLinks: [
         toolingLinks.continuousProfiler(service='workhorse-git'),
-        toolingLinks.sentry(slug='gitlab/gitlab-workhorse-gitlabcom'),
+        toolingLinks.sentry(projectId=15),
         // TODO: filter kibana query on route once https://gitlab.com/gitlab-org/gitlab-workhorse/-/merge_requests/624 arrives
         toolingLinks.kibana(title='Workhorse', index='workhorse', type='git', slowRequestSeconds=10),
       ],

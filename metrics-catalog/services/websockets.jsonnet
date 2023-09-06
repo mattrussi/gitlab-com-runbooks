@@ -105,7 +105,7 @@ metricsCatalog.serviceDefinition({
 
       toolingLinks: [
         toolingLinks.continuousProfiler(service='workhorse-websockets'),
-        toolingLinks.sentry(slug='gitlab/gitlab-workhorse-gitlabcom'),
+        toolingLinks.sentry(projectId=15),
         toolingLinks.kibana(title='Workhorse', index='workhorse', type='websockets', slowRequestSeconds=10),
       ],
       dependsOn: dependOnPatroni.sqlComponents,
