@@ -287,17 +287,18 @@ metricsCatalog.serviceDefinition({
         name: 'node_schedstat_waiting',
         parameters: {
           ignore_outliers: [
+
             {
-              start: '2022-05-23',
               end: '2022-07-15',
-            }
+              start: '2022-05-23',
+            },
             {
+              end: '2022-09-25',
               start: '2022-09-01',
-              end: '2022-10-01',
-            }
+            },
             {
-              start: '2022-12-01',
               end: '2022-12-31',
+              start: '2022-12-01',
             },
           ],
         },
