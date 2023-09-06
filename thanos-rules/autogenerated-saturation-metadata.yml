@@ -181,6 +181,38 @@ groups:
     labels:
       component: pg_walsender_cpu
     expr: "0.2"
+  - record: slo:max:soft:gitlab_component_saturation:ratio
+    labels:
+      component: runway_container_cpu_utilization
+    expr: "0.8"
+  - record: slo:max:hard:gitlab_component_saturation:ratio
+    labels:
+      component: runway_container_cpu_utilization
+    expr: "0.9"
+  - record: slo:max:soft:gitlab_component_saturation:ratio
+    labels:
+      component: runway_container_instance_utilization
+    expr: "0.8"
+  - record: slo:max:hard:gitlab_component_saturation:ratio
+    labels:
+      component: runway_container_instance_utilization
+    expr: "0.9"
+  - record: slo:max:soft:gitlab_component_saturation:ratio
+    labels:
+      component: runway_container_max_concurrent_requests
+    expr: "0.8"
+  - record: slo:max:hard:gitlab_component_saturation:ratio
+    labels:
+      component: runway_container_max_concurrent_requests
+    expr: "0.9"
+  - record: slo:max:soft:gitlab_component_saturation:ratio
+    labels:
+      component: runway_container_memory_utilization
+    expr: "0.8"
+  - record: slo:max:hard:gitlab_component_saturation:ratio
+    labels:
+      component: runway_container_memory_utilization
+    expr: "0.9"
 - name: GitLab Component Saturation Metadata
   interval: 5m
   partial_response_strategy: warn
@@ -360,4 +392,36 @@ groups:
       horiz_scaling: "no"
       quantile: max
       severity: s3
+    expr: "1"
+  - record: gitlab_component_saturation_info
+    labels:
+      capacity_planning_strategy: quantile95_1h
+      component: runway_container_cpu_utilization
+      horiz_scaling: "yes"
+      quantile: max
+      severity: s4
+    expr: "1"
+  - record: gitlab_component_saturation_info
+    labels:
+      capacity_planning_strategy: quantile95_1h
+      component: runway_container_instance_utilization
+      horiz_scaling: "yes"
+      quantile: max
+      severity: s4
+    expr: "1"
+  - record: gitlab_component_saturation_info
+    labels:
+      capacity_planning_strategy: quantile95_1h
+      component: runway_container_max_concurrent_requests
+      horiz_scaling: "yes"
+      quantile: max
+      severity: s4
+    expr: "1"
+  - record: gitlab_component_saturation_info
+    labels:
+      capacity_planning_strategy: quantile95_1h
+      component: runway_container_memory_utilization
+      horiz_scaling: "yes"
+      quantile: max
+      severity: s4
     expr: "1"

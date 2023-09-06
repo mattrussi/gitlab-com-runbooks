@@ -38,8 +38,9 @@ metricsCatalog.serviceDefinition(
         apdex: histogramApdex(
           histogram='http_request_duration_seconds_bucket',
           selector=baseSelector { status: { noneOf: ['4xx', '5xx'] } },
-          satisfiedThreshold='2.5',
-          toleratedThreshold='10.0'
+          satisfiedThreshold=2.5,
+          toleratedThreshold=10,
+          metricsFormat='migrating'
         ),
 
         requestRate: rateMetric(
@@ -80,8 +81,9 @@ metricsCatalog.serviceDefinition(
         apdex: histogramApdex(
           histogram='code_suggestions_inference_request_duration_seconds_bucket',
           selector=baseSelector,
-          satisfiedThreshold='5.0',
-          toleratedThreshold='10.0'
+          satisfiedThreshold=5,
+          toleratedThreshold=10,
+          metricsFormat='migrating',
         ),
 
         requestRate: rateMetric(
