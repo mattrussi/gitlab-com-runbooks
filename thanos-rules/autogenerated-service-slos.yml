@@ -2907,42 +2907,6 @@ groups:
     expr: "1"
   - record: gitlab_component_service:mapping
     labels:
-      component: inference
-      global_aggregation: "no"
-      regional_aggregation: "no"
-      service_aggregation: "no"
-      tier: sv
-      type: ai-gateway
-    expr: "1"
-  - record: gitlab_component_service:mapping
-    labels:
-      component: runway_ingress
-      global_aggregation: "no"
-      regional_aggregation: "no"
-      service_aggregation: "yes"
-      tier: sv
-      type: ai-gateway
-    expr: "1"
-  - record: gitlab_component_service:mapping
-    labels:
-      component: server
-      global_aggregation: "no"
-      regional_aggregation: "no"
-      service_aggregation: "no"
-      tier: sv
-      type: ai-gateway
-    expr: "1"
-  - record: gitlab_component_service:mapping
-    labels:
-      component: waf
-      global_aggregation: "no"
-      regional_aggregation: "no"
-      service_aggregation: "no"
-      tier: sv
-      type: ai-gateway
-    expr: "1"
-  - record: gitlab_component_service:mapping
-    labels:
       component: global_search
       global_aggregation: "no"
       regional_aggregation: "yes"

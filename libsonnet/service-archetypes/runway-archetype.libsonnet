@@ -34,6 +34,7 @@ function(
 
     // Runway splits traffic between multiple revisions for canary deployments
     serviceIsStageless: true,
+    dangerouslyThanosEvaluated: true,
 
     serviceLevelIndicators: {
       runway_ingress: {
