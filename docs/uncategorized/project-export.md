@@ -5,13 +5,15 @@ exporting via UI fails for some reason. Are you looking for [Exporting a Gitaly 
 
 <!-- vim-markdown-toc GitLab -->
 
-* [From where to run the export](#from-where-to-run-the-export)
-* [Export a project via rails-console](#export-a-project-via-rails-console)
-  * [No download link and no download email](#no-download-link-and-no-download-email)
-  * [GCE credentials missing](#gce-credentials-missing)
-  * [Statement timeouts](#statement-timeouts)
-* [Debugging](#debugging)
-  * [Call exporters one-by-one](#call-exporters-one-by-one)
+- [Project exports](#project-exports)
+- [From where to run the export](#from-where-to-run-the-export)
+- [Export a project via rails-console](#export-a-project-via-rails-console)
+  - [No download link and no download email](#no-download-link-and-no-download-email)
+  - [GCE credentials missing](#gce-credentials-missing)
+  - [Statement timeouts](#statement-timeouts)
+  - [SendTimeoutError](#sendtimeouterror)
+- [Debugging](#debugging)
+  - [Call exporters one-by-one](#call-exporters-one-by-one)
 
 <!-- vim-markdown-toc -->
 
@@ -49,8 +51,8 @@ ssh $USER-rails@console-01-sv-gprd.c.gitlab-production.internal
 
 # Export a project via rails-console
 
-* ssh to the console node (or the file-node found above, if console doesn't work).
-* sudo gitlab-rails console
+- ssh to the console node (or the file-node found above, if console doesn't work).
+- sudo gitlab-rails console
 
 ```ruby
 u = User.find_by_any_email('<your_login>+admin@gitlab.com')
@@ -65,7 +67,7 @@ email and a cleanup job will remove locally created files later.
 
 But there are high chances, that things fail. If you get a failure with a sentry
 event id, you should look that up by going to
-`https://sentry.gitlab.net/gitlab/gitlabcom/?query=<long-sentry-id-number>`
+`https://new-sentry.gitlab.net/organizations/gitlab/issues/?project=3&query=<long-sentry-id-number>`
 
 ## No download link and no download email
 

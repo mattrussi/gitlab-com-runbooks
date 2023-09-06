@@ -72,7 +72,7 @@ basic.dashboard(
   layout.grid([
     basic.timeseries(
       title='Active connections',
-      query='sum by(pod) (nginx_ingress_controller_nginx_process_connections{%(selector)s}' % { selector: clusterSelectorSerialized },
+      query='sum by(pod) (nginx_ingress_controller_nginx_process_connections{%(selector)s})' % { selector: clusterSelectorSerialized },
       legendFormat='__auto',
       legend_show=true,
       linewidth=2

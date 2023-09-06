@@ -73,8 +73,8 @@ groups:
       description: |
         Traces archiving keeps failing for more than 5 minutes.
         Plese check https://dashboards.gitlab.net/d/000000159/ci?&orgId=1&panelId=153&fullscreen,
-        https://sentry.gitlab.net/gitlab/gitlabcom/?query=ArchiveTraceWorker, and
-        https://sentry.gitlab.net/gitlab/gitlabcom/?query=ArchiveTracesCronWorker to find out more details
+        https://new-sentry.gitlab.net/organizations/gitlab/issues/?project=3&query=ArchiveTraceWorker, and
+        https://new-sentry.gitlab.net/organizations/gitlab/issues/?project=3&query=ArchiveTracesCronWorker to find out more details
       runbook: docs/ci-runners/ci_too_many_archiving_trace_failures.md
 
   - alert: CICDSidekiqQueuesTooBig

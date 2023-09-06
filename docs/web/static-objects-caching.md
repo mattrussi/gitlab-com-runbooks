@@ -20,4 +20,4 @@ the application's [Sentry][app-sentry] for clues (most likely other alerts would
 [howto]: static-repository-objects-caching.md
 [caching-sentry]: https://sentry.gitlab.net/gitlab/static-objects-caching/
 [cache-disable]: static-repository-objects-caching.md#enablingdisabling-external-caching
-[app-sentry]: https://sentry.gitlab.net/gitlab/gitlabcom/
+[app-sentry]: https://new-sentry.gitlab.net/organizations/gitlab/issues/?project=3

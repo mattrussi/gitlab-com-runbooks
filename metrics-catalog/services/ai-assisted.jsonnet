@@ -80,7 +80,7 @@ metricsCatalog.serviceDefinition({
 
       toolingLinks: [
         toolingLinks.continuousProfiler(service='workhorse-api'),
-        toolingLinks.sentry(slug='gitlab/gitlab-workhorse-gitlabcom'),
+        toolingLinks.sentry(projectId=15),
         toolingLinks.kibana(title='Workhorse', index='workhorse', type='ai-assisted', slowRequestSeconds=10),
       ],
 

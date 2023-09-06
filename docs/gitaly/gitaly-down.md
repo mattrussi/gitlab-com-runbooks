@@ -46,7 +46,7 @@ git fsck --full
 
 ## 2. Check the Gitaly Logs
 
-* Check [Sentry](https://sentry.gitlab.net/gitlab/gitaly-production/) for unusual errors
+* Check [Sentry](https://new-sentry.gitlab.net/organizations/gitlab/issues/?environment=gprd&project=12) for unusual errors
 * Check [Kibana](https://log.gprd.gitlab.net/goto/4f0bd7f08b264e7de970bb0cc9530f9d) for increased error rates
 * Check the Gitaly service logs on the affected host
   * grep for `SIGSEGV` or `SIGILL` in `/var/log/gitlab/gitaly/`
