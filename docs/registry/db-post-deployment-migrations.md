@@ -10,7 +10,7 @@ Meanwhile, we're already feeling the need to ship post-deployment migrations, so
 
 This document provides instructions for SREs to apply post-deployment migrations.
 
-There's a private recording from delivery team for applying the migrations: https://www.youtube.com/watch?v=QFH11OE91Vw
+There's a private recording from delivery team for applying the migrations: [https://www.youtube.com/watch?v=QFH11OE91Vw](https://www.youtube.com/watch?v=QFH11OE91Vw)
 
 ## Applying post-deployment migrations
 
