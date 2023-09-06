@@ -125,6 +125,7 @@ local sliDetailLatencyPanel(
   legendFormat='%(percentile_humanized)s %(sliName)s',
   min=0.01,
   intervalFactor=1,
+  rangeInterval='$__interval',
   withoutLabels=[],
       ) =
   local percentile = getLatencyPercentileForService(serviceType);
@@ -136,7 +137,7 @@ local sliDetailLatencyPanel(
       percentile=percentile,
       aggregationLabels=aggregationLabels,
       selector=selector,
-      rangeInterval='$__interval',
+      rangeInterval=rangeInterval,
       withoutLabels=withoutLabels,
     )),
     logBase=logBase,
@@ -287,7 +288,8 @@ local sliDetailErrorRatePanel(
     sliName,
     selectorHash,
     aggregationSets,
-    minLatency=0.01
+    rangeInterval='$__interval',
+    minLatency=0.01,
   )::
     local service = metricsCatalog.getService(serviceType);
     local sli = service.serviceLevelIndicators[sliName];
@@ -317,7 +319,8 @@ local sliDetailErrorRatePanel(
                       selector=filteredSelectorHash + aggregationSet.selector,
                       legendFormat='%(percentile_humanized)s ' + aggregationSet.legendFormat,
                       aggregationLabels=aggregationSet.aggregationLabels,
-                      min=minLatency
+                      min=minLatency,
+                      rangeInterval=rangeInterval,
                     )
                   else
                     null,
@@ -461,7 +464,7 @@ local sliDetailErrorRatePanel(
       )
     ),
 
-  autoDetailRows(serviceType, selectorHash, startRow)::
+  autoDetailRows(serviceType, selectorHash, startRow, sliRangeInterval)::
     local s = self;
     local service = metricsCatalog.getService(serviceType);
     local serviceLevelIndicators = service.listServiceLevelIndicators();
@@ -476,7 +479,7 @@ local sliDetailErrorRatePanel(
             ] +
             std.map(function(c) { title: 'per ' + c, aggregationLabels: c, selector: { [c]: { ne: '' } }, legendFormat: '{{' + c + '}}' }, sli.significantLabels);
 
-          s.sliDetailMatrix(serviceType, sli.name, selectorHash, aggregationSets),
+          s.sliDetailMatrix(serviceType, sli.name, selectorHash, aggregationSets, sliRangeInterval),
         serviceLevelIndicatorsFiltered
       )
       , cols=1, startRow=startRow
