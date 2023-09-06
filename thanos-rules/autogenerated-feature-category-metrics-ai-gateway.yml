@@ -15,11 +15,11 @@ groups:
     expr: |
       (
         sum by (env,environment) (
-          rate(code_suggestions_inference_request_duration_seconds_bucket{le="5.0",type="ai-gateway"}[5m])
+          rate(code_suggestions_inference_request_duration_seconds_bucket{le=~"5|5\\.0",type="ai-gateway"}[5m])
         )
         +
         sum by (env,environment) (
-          rate(code_suggestions_inference_request_duration_seconds_bucket{le="10.0",type="ai-gateway"}[5m])
+          rate(code_suggestions_inference_request_duration_seconds_bucket{le=~"10|10\\.0",type="ai-gateway"}[5m])
         )
       )
       /
@@ -108,11 +108,11 @@ groups:
     expr: |
       (
         sum by (env,environment) (
-          rate(http_request_duration_seconds_bucket{le="2.5",status!~"4xx|5xx",type="ai-gateway"}[5m])
+          rate(http_request_duration_seconds_bucket{le=~"2\\.5",status!~"4xx|5xx",type="ai-gateway"}[5m])
         )
         +
         sum by (env,environment) (
-          rate(http_request_duration_seconds_bucket{le="10.0",status!~"4xx|5xx",type="ai-gateway"}[5m])
+          rate(http_request_duration_seconds_bucket{le=~"10|10\\.0",status!~"4xx|5xx",type="ai-gateway"}[5m])
         )
       )
       /
@@ -202,11 +202,11 @@ groups:
     expr: |
       (
         sum by (env,environment) (
-          rate(code_suggestions_inference_request_duration_seconds_bucket{le="5.0",type="ai-gateway"}[30m])
+          rate(code_suggestions_inference_request_duration_seconds_bucket{le=~"5|5\\.0",type="ai-gateway"}[30m])
         )
         +
         sum by (env,environment) (
-          rate(code_suggestions_inference_request_duration_seconds_bucket{le="10.0",type="ai-gateway"}[30m])
+          rate(code_suggestions_inference_request_duration_seconds_bucket{le=~"10|10\\.0",type="ai-gateway"}[30m])
         )
       )
       /
@@ -295,11 +295,11 @@ groups:
     expr: |
       (
         sum by (env,environment) (
-          rate(http_request_duration_seconds_bucket{le="2.5",status!~"4xx|5xx",type="ai-gateway"}[30m])
+          rate(http_request_duration_seconds_bucket{le=~"2\\.5",status!~"4xx|5xx",type="ai-gateway"}[30m])
         )
         +
         sum by (env,environment) (
-          rate(http_request_duration_seconds_bucket{le="10.0",status!~"4xx|5xx",type="ai-gateway"}[30m])
+          rate(http_request_duration_seconds_bucket{le=~"10|10\\.0",status!~"4xx|5xx",type="ai-gateway"}[30m])
         )
       )
       /
@@ -389,11 +389,11 @@ groups:
     expr: |
       (
         sum by (env,environment) (
-          rate(code_suggestions_inference_request_duration_seconds_bucket{le="5.0",type="ai-gateway"}[1h])
+          rate(code_suggestions_inference_request_duration_seconds_bucket{le=~"5|5\\.0",type="ai-gateway"}[1h])
         )
         +
         sum by (env,environment) (
-          rate(code_suggestions_inference_request_duration_seconds_bucket{le="10.0",type="ai-gateway"}[1h])
+          rate(code_suggestions_inference_request_duration_seconds_bucket{le=~"10|10\\.0",type="ai-gateway"}[1h])
         )
       )
       /
@@ -482,11 +482,11 @@ groups:
     expr: |
       (
         sum by (env,environment) (
-          rate(http_request_duration_seconds_bucket{le="2.5",status!~"4xx|5xx",type="ai-gateway"}[1h])
+          rate(http_request_duration_seconds_bucket{le=~"2\\.5",status!~"4xx|5xx",type="ai-gateway"}[1h])
         )
         +
         sum by (env,environment) (
-          rate(http_request_duration_seconds_bucket{le="10.0",status!~"4xx|5xx",type="ai-gateway"}[1h])
+          rate(http_request_duration_seconds_bucket{le=~"10|10\\.0",status!~"4xx|5xx",type="ai-gateway"}[1h])
         )
       )
       /
@@ -576,11 +576,11 @@ groups:
     expr: |
       (
         sum by (env,environment) (
-          rate(code_suggestions_inference_request_duration_seconds_bucket{le="5.0",type="ai-gateway"}[6h])
+          rate(code_suggestions_inference_request_duration_seconds_bucket{le=~"5|5\\.0",type="ai-gateway"}[6h])
         )
         +
         sum by (env,environment) (
-          rate(code_suggestions_inference_request_duration_seconds_bucket{le="10.0",type="ai-gateway"}[6h])
+          rate(code_suggestions_inference_request_duration_seconds_bucket{le=~"10|10\\.0",type="ai-gateway"}[6h])
         )
       )
       /
@@ -669,11 +669,11 @@ groups:
     expr: |
       (
         sum by (env,environment) (
-          rate(http_request_duration_seconds_bucket{le="2.5",status!~"4xx|5xx",type="ai-gateway"}[6h])
+          rate(http_request_duration_seconds_bucket{le=~"2\\.5",status!~"4xx|5xx",type="ai-gateway"}[6h])
         )
         +
         sum by (env,environment) (
-          rate(http_request_duration_seconds_bucket{le="10.0",status!~"4xx|5xx",type="ai-gateway"}[6h])
+          rate(http_request_duration_seconds_bucket{le=~"10|10\\.0",status!~"4xx|5xx",type="ai-gateway"}[6h])
         )
       )
       /
@@ -763,11 +763,11 @@ groups:
     expr: |
       (
         sum by (env,environment) (
-          rate(code_suggestions_inference_request_duration_seconds_bucket{le="5.0",type="ai-gateway"}[3d])
+          rate(code_suggestions_inference_request_duration_seconds_bucket{le=~"5|5\\.0",type="ai-gateway"}[3d])
         )
         +
         sum by (env,environment) (
-          rate(code_suggestions_inference_request_duration_seconds_bucket{le="10.0",type="ai-gateway"}[3d])
+          rate(code_suggestions_inference_request_duration_seconds_bucket{le=~"10|10\\.0",type="ai-gateway"}[3d])
         )
       )
       /
@@ -856,11 +856,11 @@ groups:
     expr: |
       (
         sum by (env,environment) (
-          rate(http_request_duration_seconds_bucket{le="2.5",status!~"4xx|5xx",type="ai-gateway"}[3d])
+          rate(http_request_duration_seconds_bucket{le=~"2\\.5",status!~"4xx|5xx",type="ai-gateway"}[3d])
         )
         +
         sum by (env,environment) (
-          rate(http_request_duration_seconds_bucket{le="10.0",status!~"4xx|5xx",type="ai-gateway"}[3d])
+          rate(http_request_duration_seconds_bucket{le=~"10|10\\.0",status!~"4xx|5xx",type="ai-gateway"}[3d])
         )
       )
       /
