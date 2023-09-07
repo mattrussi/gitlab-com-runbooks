@@ -132,6 +132,23 @@ local list = [
       Read more about this in the [runbooks doc](https://gitlab.com/gitlab-com/runbooks/-/blob/master/docs/sidekiq/sidekiq-slis.md).
     |||,
   }),
+  sliDefinition.new({
+    name: 'llm_completion',
+    significantLabels: ['feature_category', 'service_class'],
+    kinds: [sliDefinition.apdexKind, sliDefinition.errorRateKind],
+    description: |||
+      Read more about this in the [runbooks doc](https://gitlab.com/gitlab-com/runbooks/-/blob/master/docs/sidekiq/sidekiq-slis.md).
+    |||
+  }),
+  sliDefinition.new({
+    name: 'llm_client_request',
+    significantLabels: ['client'],
+    kinds: [sliDefinition.errorRateKind],
+    featureCategory: 'ai_abstraction_layer',
+    description: |||
+      Read more about this in the [runbooks doc](https://gitlab.com/gitlab-com/runbooks/-/blob/master/docs/sidekiq/sidekiq-slis.md).
+    |||
+  })
 ];
 
 local definitionsByName = std.foldl(
