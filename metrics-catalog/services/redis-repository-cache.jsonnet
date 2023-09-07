@@ -39,4 +39,25 @@ metricsCatalog.serviceDefinition(
     },
   }
   + redisHelpers.gitlabcomObservabilityToolingForRedis('redis-repository-cache')
+  + {
+    capacityPlanning: {
+      components: [
+        {
+          name: 'disk_space',
+          parameters: {
+            ignore_outliers: [
+              {
+                end: '2023-02-20',
+                start: '2023-01-01',
+              },
+              {
+                end: '2023-06-04',
+                start: '2023-06-01',
+              },
+            ],
+          },
+        },
+      ],
+    },
+  },
 )
