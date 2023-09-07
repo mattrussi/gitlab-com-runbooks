@@ -103,6 +103,10 @@ metricsCatalog.serviceDefinition({
               start: '2023-03-31',  // https://gitlab.com/gitlab-com/gl-infra/capacity-planning/-/issues/955#note_1378508854
               end: '2023-05-10',
             },
+            {
+              end: '2023-06-01',
+              start: '2023-05-20',
+            },
           ],
         },
       },
