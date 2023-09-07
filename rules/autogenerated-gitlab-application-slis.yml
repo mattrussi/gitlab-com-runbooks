@@ -153,3 +153,69 @@ groups:
       sum by (document_type,environment,stage,tier,type) (
         rate(gitlab_sli_global_search_indexing_apdex_success_total{monitor!="global"}[1h])
       )
+- name: 'Application Defined SLI Rules: llm_completion'
+  interval: 1m
+  rules:
+  - record: application_sli_aggregation:llm_completion:apdex:weight:score_5m
+    expr: |
+      sum by (environment,feature_category,service_class,stage,tier,type) (
+        rate(gitlab_sli_llm_completion_apdex_total{monitor!="global"}[5m])
+      )
+  - record: application_sli_aggregation:llm_completion:apdex:success:rate_5m
+    expr: |
+      sum by (environment,feature_category,service_class,stage,tier,type) (
+        rate(gitlab_sli_llm_completion_apdex_success_total{monitor!="global"}[5m])
+      )
+  - record: application_sli_aggregation:llm_completion:ops:rate_5m
+    expr: |
+      sum by (environment,feature_category,service_class,stage,tier,type) (
+        rate(gitlab_sli_llm_completion_total{monitor!="global"}[5m])
+      )
+  - record: application_sli_aggregation:llm_completion:error:rate_5m
+    expr: |
+      sum by (environment,feature_category,service_class,stage,tier,type) (
+        rate(gitlab_sli_llm_completion_error_total{monitor!="global"}[5m])
+      )
+  - record: application_sli_aggregation:llm_completion:apdex:weight:score_1h
+    expr: |
+      sum by (environment,feature_category,service_class,stage,tier,type) (
+        rate(gitlab_sli_llm_completion_apdex_total{monitor!="global"}[1h])
+      )
+  - record: application_sli_aggregation:llm_completion:apdex:success:rate_1h
+    expr: |
+      sum by (environment,feature_category,service_class,stage,tier,type) (
+        rate(gitlab_sli_llm_completion_apdex_success_total{monitor!="global"}[1h])
+      )
+  - record: application_sli_aggregation:llm_completion:ops:rate_1h
+    expr: |
+      sum by (environment,feature_category,service_class,stage,tier,type) (
+        rate(gitlab_sli_llm_completion_total{monitor!="global"}[1h])
+      )
+  - record: application_sli_aggregation:llm_completion:error:rate_1h
+    expr: |
+      sum by (environment,feature_category,service_class,stage,tier,type) (
+        rate(gitlab_sli_llm_completion_error_total{monitor!="global"}[1h])
+      )
+- name: 'Application Defined SLI Rules: llm_client_request'
+  interval: 1m
+  rules:
+  - record: application_sli_aggregation:llm_client_request:ops:rate_5m
+    expr: |
+      sum by (client,environment,stage,tier,type) (
+        rate(gitlab_sli_llm_client_request_total{monitor!="global"}[5m])
+      )
+  - record: application_sli_aggregation:llm_client_request:error:rate_5m
+    expr: |
+      sum by (client,environment,stage,tier,type) (
+        rate(gitlab_sli_llm_client_request_error_total{monitor!="global"}[5m])
+      )
+  - record: application_sli_aggregation:llm_client_request:ops:rate_1h
+    expr: |
+      sum by (client,environment,stage,tier,type) (
+        rate(gitlab_sli_llm_client_request_total{monitor!="global"}[1h])
+      )
+  - record: application_sli_aggregation:llm_client_request:error:rate_1h
+    expr: |
+      sum by (client,environment,stage,tier,type) (
+        rate(gitlab_sli_llm_client_request_error_total{monitor!="global"}[1h])
+      )
