@@ -1251,6 +1251,33 @@ services:
         grafana_folder: redis
         primary_grafana_dashboard: redis-pubsub-main/redis-pubsub-overview
 
+  - name: redis-cluster-shared-state
+    tier: db
+    friendly_name: Redis Cluster SharedState
+    label: RedisClusterSharedState
+    owner: scalability
+    technical:
+      project:
+        - https://github.com/antirez/redis/
+      documents:
+        design:
+        architecture:
+        readiness_review:
+        sre_guide: https://gitlab.com/gitlab-com/runbooks/-/tree/master/docs/redis-cluster-shared-state
+        developer_guide: https://docs.gitlab.com/ee/development/redis.html#redis-guidelines
+        service:
+          - https://redis.io/documentation
+          - https://gitlab.com/gitlab-cookbooks/gitlab-redis-cluster
+        security:
+      dependencies:
+        - service:
+      logging:
+        - name: system
+          permalink:
+    observability:
+      monitors:
+        primary_grafana_dashboard: redis-cluster-shared-state-main/redis-cluster-shared-state-overview
+
   - name: redis-cluster-feature-flag
     tier: db
     friendly_name: Redis Cluster Feature Flag
