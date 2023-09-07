@@ -40,7 +40,9 @@ if [[ $# == 0 ]]; then
     render_multi_jsonnet "${REPO_DIR}/thanos-rules" "${file}"
   done
   for file in ./thanos-staging-rules-jsonnet/*.jsonnet; do
-    render_multi_jsonnet "${REPO_DIR}/thanos-staging-rules" "${file}"
+    if [[ -f "${file}" ]]; then 
+      render_multi_jsonnet "${REPO_DIR}/thanos-staging-rules" "${file}"
+    fi
   done
 else
   for file in "$@"; do
