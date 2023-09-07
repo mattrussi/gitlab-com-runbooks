@@ -208,14 +208,19 @@ services:
     teams:
       - observability
     label: ErrorTracking
-    owner: reliability_observability
+    owner: observability
     technical:
       documents:
         architecture: https://gitlab.com/gitlab-org/opstrace/runbooks/#architecture
         readiness_review: https://gitlab.com/gitlab-com/gl-infra/readiness/-/tree/master/library/database/clickhouse
+        developer_guide: https://gitlab.com/gitlab-org/opstrace/opstrace/-/tree/main/docs
       logging:
-        - name: Rails
-          permalink: None
+        - name:
+          permalink:
+    observability:
+      monitors:
+        primary_grafana_dashboard: observability-errortracking/observability-errortracking-api
+        sentry_slug:
 
   - name: customersdot
     tier: sv
