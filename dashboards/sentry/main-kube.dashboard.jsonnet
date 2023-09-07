@@ -135,7 +135,7 @@ basic.dashboard(
     basic.timeseries(
       title='Consumer group lag by topic',
       query='kafka_consumergroup_lag{%(selector)s}' % { selector: clusterSelectorSerialized },
-      legendFormat='{{ topic }}',
+      legendFormat='{{ topic }} in group {{ consumergroup }}',
       legend_show=true,
       linewidth=2
     ),

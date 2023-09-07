@@ -47,6 +47,16 @@ Major upgrades usually involve database migrations.
 
 ## Application errors
 
+### UI
+
+#### Stats not reflecting new errors
+
+If the [stats page](https://new-sentry.gitlab.net/organizations/gitlab/stats/) looks like this:
+
+![Sentry stats page showing events aren't getting processed](https://gitlab.com/gitlab-com/gl-infra/k8s-workloads/gitlab-helmfiles/uploads/77e6be93c01bbca7d65759ff2013529a/image.png)
+
+Check if the Snuba outcomes consumers are stuck on something - tail their logs using `k9s` or by running `kubectl logs deployment/sentry-snuba-outcomes-consumer --namespace=sentry`.
+
 ### Kafka
 
 #### `OFFSET_OUT_OF_RANGE` Broker: Offset out of range
@@ -62,6 +72,7 @@ This means Kafka has gone out of sync with the consumers. According to the [offi
 **The resolution _does_ result in data loss!** However it can't be helped if the cluster isn't processing anything due to this error.
 
 1. Take note of what's failing. For example, if the pods in deployment `sentry-ingest-consumer-events` are crashlooping with the above log message, we know the relevant queue in Kafka would have something to do with the `events` `ingest-consumer`.
+    1. You can also run `JMX_PORT="" /opt/bitnami/kafka/bin/kafka-consumer-groups.sh --bootstrap-server localhost:9092 --all-groups -describe` to list all consumers and topics. Under normal circumstances, lag should ideally be well under 1000. A lag value in the tens of thousands or above is a sure sign something is wrong!
 1. Scale down the problem deployment to 0.
 1. Bring up a shell on one of the Kafka pods - doesn't matter which, in this example we'll just use `kafka-0`.
 1. Check the status of the problematic consumer group (in this example, `ingest-consumer` is our consumer group).
@@ -89,6 +100,37 @@ This means Kafka has gone out of sync with the consumers. According to the [offi
     ```
 
 1. Scale the deployments you scaled down before back up. They should no longer be stuck printing errors.
+
+#### Consumer lag increasing
+
+There are a few different reasons for this. Check the following:
+
+1. Is there enough free space on the Kafka data PVCs?
+
+1. If Sentry was upgraded recently and everything else is working (i.e. Sentry appears to be processing events promptly and stats look fine), it may simply be deprecated queues that need to be cleaned up. For example:
+
+    ```
+    Consumer group 'snuba-post-processor' has no active members.
+
+    GROUP                TOPIC           PARTITION  CURRENT-OFFSET  LOG-END-OFFSET  LAG             CONSUMER-ID     HOST            CLIENT-ID
+    snuba-post-processor events          6          64784           64784           0               -               -               -
+    snuba-post-processor transactions    0          4210372         4275501         65129           -               -               -
+    snuba-post-processor events          2          25461           26568           1107            -               -               -
+    snuba-post-processor transactions    4          4196411         4261798         65387           -               -               -
+    snuba-post-processor events          8          151041068       154115234       3074166         -               -               -
+    ...
+    ```
+
+    As per [this comment](https://github.com/getsentry/self-hosted/issues/2019#issuecomment-1470769713), the `snuba-post-processor` group was actually removed, so we shouldn't have this anymore. The ultimate fix here was to run `JMX_PORT="" /opt/bitnami/kafka/bin/kafka-consumer-groups.sh --bootstrap-server localhost:9092 --group snuba-post-processor --delete`
+
+1. We may not be processing messages fast enough on a particular topic. In that case, we will need to add partitions and consumers to that topic.
+    1. Decide how many consumers you want on the topic, then modify `values.yaml` so that the `replicaCount` of the consumer group and `TOPIC_PARTITION_COUNTS` (under `config.snubaSettingsPy`) match the new number of consumers.
+        1. You cannot decrease the number of consumers (without a lot of work), only increase!
+        1. Note that merging and deploying your changes at this stage doesn't actually affect the number of partitions yet, only the replica count of the consumer group.
+        1. If the consumers and partition counts don't match, we'll either have inactive consumers or one consumer processing messages from multiple partitions.
+    1. Bring up a shell on one of the Kafka pods (doesn't matter which).
+    1. Run `JMX_PORT="" /opt/bitnami/kafka/bin/kafka-topics.sh --bootstrap-server localhost:9092 --topic <topic> --partitions <num-partitions>`
+    1. Run `JMX_PORT="" /opt/bitnami/kafka/bin/kafka-consumer-groups.sh --bootstrap-server localhost:9092 --all-groups -describe`. If the repartitioning was successful, you should see a message like `Warning: Consumer group 'snuba-consumers' is rebalancing.`
 
 ### RabbitMQ
 
