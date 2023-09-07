@@ -73,6 +73,30 @@ groups:
     expr: "0.001000"
   - record: slo:min:events:gitlab_service_apdex:ratio
     labels:
+      component: llm_client_request
+      tier: sv
+      type: ai-gateway
+    expr: "0.999000"
+  - record: slo:max:events:gitlab_service_errors:ratio
+    labels:
+      component: llm_client_request
+      tier: sv
+      type: ai-gateway
+    expr: "0.001000"
+  - record: slo:min:events:gitlab_service_apdex:ratio
+    labels:
+      component: llm_completion
+      tier: sv
+      type: ai-gateway
+    expr: "0.999000"
+  - record: slo:max:events:gitlab_service_errors:ratio
+    labels:
+      component: llm_completion
+      tier: sv
+      type: ai-gateway
+    expr: "0.001000"
+  - record: slo:min:events:gitlab_service_apdex:ratio
+    labels:
       component: runway_ingress
       tier: sv
       type: ai-gateway

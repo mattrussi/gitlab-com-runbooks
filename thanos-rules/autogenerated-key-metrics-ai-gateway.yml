@@ -43,6 +43,82 @@ groups:
       sum by (env,environment) (
         rate(code_suggestions_inference_requests_total{type="ai-gateway"}[1m] offset 30s)
       )
+  - record: gitlab_component_ops:rate
+    labels:
+      component: llm_client_request
+      stage: main
+      tier: sv
+      type: ai-gateway
+    expr: |
+      sum by (env,environment) (
+        rate(gitlab_sli_llm_client_request_total{type="ai-gateway"}[1m] offset 30s)
+      )
+  - record: gitlab_component_errors:rate
+    labels:
+      component: llm_client_request
+      stage: main
+      tier: sv
+      type: ai-gateway
+    expr: |
+      (
+        sum by (env,environment) (
+          rate(gitlab_sli_llm_client_request_error_total{type="ai-gateway"}[1m] offset 30s)
+        )
+      )
+      or
+      (
+        0 * group by(env,environment) (
+          gitlab_component_ops:rate{component="llm_client_request",stage="main",tier="sv",type="ai-gateway"}
+        )
+      )
+  - record: gitlab_component_apdex:success:rate
+    labels:
+      component: llm_completion
+      stage: main
+      tier: sv
+      type: ai-gateway
+    expr: |
+      sum by (env,environment) (
+        rate(gitlab_sli_llm_completion_apdex_success_total{type="ai-gateway"}[1m] offset 30s)
+      )
+  - record: gitlab_component_apdex:weight:score
+    labels:
+      component: llm_completion
+      stage: main
+      tier: sv
+      type: ai-gateway
+    expr: |
+      sum by (env,environment) (
+        rate(gitlab_sli_llm_completion_apdex_total{type="ai-gateway"}[1m] offset 30s)
+      )
+  - record: gitlab_component_ops:rate
+    labels:
+      component: llm_completion
+      stage: main
+      tier: sv
+      type: ai-gateway
+    expr: |
+      sum by (env,environment) (
+        rate(gitlab_sli_llm_completion_total{type="ai-gateway"}[1m] offset 30s)
+      )
+  - record: gitlab_component_errors:rate
+    labels:
+      component: llm_completion
+      stage: main
+      tier: sv
+      type: ai-gateway
+    expr: |
+      (
+        sum by (env,environment) (
+          rate(gitlab_sli_llm_completion_error_total{type="ai-gateway"}[1m] offset 30s)
+        )
+      )
+      or
+      (
+        0 * group by(env,environment) (
+          gitlab_component_ops:rate{component="llm_completion",stage="main",tier="sv",type="ai-gateway"}
+        )
+      )
   - record: gitlab_component_apdex:success:rate
     labels:
       component: runway_ingress
@@ -216,6 +292,82 @@ groups:
     expr: |
       sum by (env,environment) (
         rate(code_suggestions_inference_requests_total{type="ai-gateway"}[5m] offset 30s)
+      )
+  - record: gitlab_component_ops:rate_5m
+    labels:
+      component: llm_client_request
+      stage: main
+      tier: sv
+      type: ai-gateway
+    expr: |
+      sum by (env,environment) (
+        rate(gitlab_sli_llm_client_request_total{type="ai-gateway"}[5m] offset 30s)
+      )
+  - record: gitlab_component_errors:rate_5m
+    labels:
+      component: llm_client_request
+      stage: main
+      tier: sv
+      type: ai-gateway
+    expr: |
+      (
+        sum by (env,environment) (
+          rate(gitlab_sli_llm_client_request_error_total{type="ai-gateway"}[5m] offset 30s)
+        )
+      )
+      or
+      (
+        0 * group by(env,environment) (
+          gitlab_component_ops:rate_5m{component="llm_client_request",stage="main",tier="sv",type="ai-gateway"}
+        )
+      )
+  - record: gitlab_component_apdex:success:rate_5m
+    labels:
+      component: llm_completion
+      stage: main
+      tier: sv
+      type: ai-gateway
+    expr: |
+      sum by (env,environment) (
+        rate(gitlab_sli_llm_completion_apdex_success_total{type="ai-gateway"}[5m] offset 30s)
+      )
+  - record: gitlab_component_apdex:weight:score_5m
+    labels:
+      component: llm_completion
+      stage: main
+      tier: sv
+      type: ai-gateway
+    expr: |
+      sum by (env,environment) (
+        rate(gitlab_sli_llm_completion_apdex_total{type="ai-gateway"}[5m] offset 30s)
+      )
+  - record: gitlab_component_ops:rate_5m
+    labels:
+      component: llm_completion
+      stage: main
+      tier: sv
+      type: ai-gateway
+    expr: |
+      sum by (env,environment) (
+        rate(gitlab_sli_llm_completion_total{type="ai-gateway"}[5m] offset 30s)
+      )
+  - record: gitlab_component_errors:rate_5m
+    labels:
+      component: llm_completion
+      stage: main
+      tier: sv
+      type: ai-gateway
+    expr: |
+      (
+        sum by (env,environment) (
+          rate(gitlab_sli_llm_completion_error_total{type="ai-gateway"}[5m] offset 30s)
+        )
+      )
+      or
+      (
+        0 * group by(env,environment) (
+          gitlab_component_ops:rate_5m{component="llm_completion",stage="main",tier="sv",type="ai-gateway"}
+        )
       )
   - record: gitlab_component_apdex:success:rate_5m
     labels:
@@ -391,6 +543,82 @@ groups:
       sum by (env,environment) (
         rate(code_suggestions_inference_requests_total{type="ai-gateway"}[30m] offset 30s)
       )
+  - record: gitlab_component_ops:rate_30m
+    labels:
+      component: llm_client_request
+      stage: main
+      tier: sv
+      type: ai-gateway
+    expr: |
+      sum by (env,environment) (
+        rate(gitlab_sli_llm_client_request_total{type="ai-gateway"}[30m] offset 30s)
+      )
+  - record: gitlab_component_errors:rate_30m
+    labels:
+      component: llm_client_request
+      stage: main
+      tier: sv
+      type: ai-gateway
+    expr: |
+      (
+        sum by (env,environment) (
+          rate(gitlab_sli_llm_client_request_error_total{type="ai-gateway"}[30m] offset 30s)
+        )
+      )
+      or
+      (
+        0 * group by(env,environment) (
+          gitlab_component_ops:rate_30m{component="llm_client_request",stage="main",tier="sv",type="ai-gateway"}
+        )
+      )
+  - record: gitlab_component_apdex:success:rate_30m
+    labels:
+      component: llm_completion
+      stage: main
+      tier: sv
+      type: ai-gateway
+    expr: |
+      sum by (env,environment) (
+        rate(gitlab_sli_llm_completion_apdex_success_total{type="ai-gateway"}[30m] offset 30s)
+      )
+  - record: gitlab_component_apdex:weight:score_30m
+    labels:
+      component: llm_completion
+      stage: main
+      tier: sv
+      type: ai-gateway
+    expr: |
+      sum by (env,environment) (
+        rate(gitlab_sli_llm_completion_apdex_total{type="ai-gateway"}[30m] offset 30s)
+      )
+  - record: gitlab_component_ops:rate_30m
+    labels:
+      component: llm_completion
+      stage: main
+      tier: sv
+      type: ai-gateway
+    expr: |
+      sum by (env,environment) (
+        rate(gitlab_sli_llm_completion_total{type="ai-gateway"}[30m] offset 30s)
+      )
+  - record: gitlab_component_errors:rate_30m
+    labels:
+      component: llm_completion
+      stage: main
+      tier: sv
+      type: ai-gateway
+    expr: |
+      (
+        sum by (env,environment) (
+          rate(gitlab_sli_llm_completion_error_total{type="ai-gateway"}[30m] offset 30s)
+        )
+      )
+      or
+      (
+        0 * group by(env,environment) (
+          gitlab_component_ops:rate_30m{component="llm_completion",stage="main",tier="sv",type="ai-gateway"}
+        )
+      )
   - record: gitlab_component_apdex:success:rate_30m
     labels:
       component: runway_ingress
@@ -564,6 +792,82 @@ groups:
     expr: |
       sum by (env,environment) (
         rate(code_suggestions_inference_requests_total{type="ai-gateway"}[1h] offset 30s)
+      )
+  - record: gitlab_component_ops:rate_1h
+    labels:
+      component: llm_client_request
+      stage: main
+      tier: sv
+      type: ai-gateway
+    expr: |
+      sum by (env,environment) (
+        rate(gitlab_sli_llm_client_request_total{type="ai-gateway"}[1h] offset 30s)
+      )
+  - record: gitlab_component_errors:rate_1h
+    labels:
+      component: llm_client_request
+      stage: main
+      tier: sv
+      type: ai-gateway
+    expr: |
+      (
+        sum by (env,environment) (
+          rate(gitlab_sli_llm_client_request_error_total{type="ai-gateway"}[1h] offset 30s)
+        )
+      )
+      or
+      (
+        0 * group by(env,environment) (
+          gitlab_component_ops:rate_1h{component="llm_client_request",stage="main",tier="sv",type="ai-gateway"}
+        )
+      )
+  - record: gitlab_component_apdex:success:rate_1h
+    labels:
+      component: llm_completion
+      stage: main
+      tier: sv
+      type: ai-gateway
+    expr: |
+      sum by (env,environment) (
+        rate(gitlab_sli_llm_completion_apdex_success_total{type="ai-gateway"}[1h] offset 30s)
+      )
+  - record: gitlab_component_apdex:weight:score_1h
+    labels:
+      component: llm_completion
+      stage: main
+      tier: sv
+      type: ai-gateway
+    expr: |
+      sum by (env,environment) (
+        rate(gitlab_sli_llm_completion_apdex_total{type="ai-gateway"}[1h] offset 30s)
+      )
+  - record: gitlab_component_ops:rate_1h
+    labels:
+      component: llm_completion
+      stage: main
+      tier: sv
+      type: ai-gateway
+    expr: |
+      sum by (env,environment) (
+        rate(gitlab_sli_llm_completion_total{type="ai-gateway"}[1h] offset 30s)
+      )
+  - record: gitlab_component_errors:rate_1h
+    labels:
+      component: llm_completion
+      stage: main
+      tier: sv
+      type: ai-gateway
+    expr: |
+      (
+        sum by (env,environment) (
+          rate(gitlab_sli_llm_completion_error_total{type="ai-gateway"}[1h] offset 30s)
+        )
+      )
+      or
+      (
+        0 * group by(env,environment) (
+          gitlab_component_ops:rate_1h{component="llm_completion",stage="main",tier="sv",type="ai-gateway"}
+        )
       )
   - record: gitlab_component_apdex:success:rate_1h
     labels:
@@ -739,6 +1043,82 @@ groups:
       sum by (env,environment) (
         rate(code_suggestions_inference_requests_total{type="ai-gateway"}[6h] offset 30s)
       )
+  - record: gitlab_component_ops:rate_6h
+    labels:
+      component: llm_client_request
+      stage: main
+      tier: sv
+      type: ai-gateway
+    expr: |
+      sum by (env,environment) (
+        rate(gitlab_sli_llm_client_request_total{type="ai-gateway"}[6h] offset 30s)
+      )
+  - record: gitlab_component_errors:rate_6h
+    labels:
+      component: llm_client_request
+      stage: main
+      tier: sv
+      type: ai-gateway
+    expr: |
+      (
+        sum by (env,environment) (
+          rate(gitlab_sli_llm_client_request_error_total{type="ai-gateway"}[6h] offset 30s)
+        )
+      )
+      or
+      (
+        0 * group by(env,environment) (
+          gitlab_component_ops:rate_6h{component="llm_client_request",stage="main",tier="sv",type="ai-gateway"}
+        )
+      )
+  - record: gitlab_component_apdex:success:rate_6h
+    labels:
+      component: llm_completion
+      stage: main
+      tier: sv
+      type: ai-gateway
+    expr: |
+      sum by (env,environment) (
+        rate(gitlab_sli_llm_completion_apdex_success_total{type="ai-gateway"}[6h] offset 30s)
+      )
+  - record: gitlab_component_apdex:weight:score_6h
+    labels:
+      component: llm_completion
+      stage: main
+      tier: sv
+      type: ai-gateway
+    expr: |
+      sum by (env,environment) (
+        rate(gitlab_sli_llm_completion_apdex_total{type="ai-gateway"}[6h] offset 30s)
+      )
+  - record: gitlab_component_ops:rate_6h
+    labels:
+      component: llm_completion
+      stage: main
+      tier: sv
+      type: ai-gateway
+    expr: |
+      sum by (env,environment) (
+        rate(gitlab_sli_llm_completion_total{type="ai-gateway"}[6h] offset 30s)
+      )
+  - record: gitlab_component_errors:rate_6h
+    labels:
+      component: llm_completion
+      stage: main
+      tier: sv
+      type: ai-gateway
+    expr: |
+      (
+        sum by (env,environment) (
+          rate(gitlab_sli_llm_completion_error_total{type="ai-gateway"}[6h] offset 30s)
+        )
+      )
+      or
+      (
+        0 * group by(env,environment) (
+          gitlab_component_ops:rate_6h{component="llm_completion",stage="main",tier="sv",type="ai-gateway"}
+        )
+      )
   - record: gitlab_component_apdex:success:rate_6h
     labels:
       component: runway_ingress
@@ -878,6 +1258,24 @@ groups:
   - record: gitlab_component_service:mapping
     labels:
       component: inference
+      global_aggregation: "yes"
+      regional_aggregation: "no"
+      service_aggregation: "no"
+      tier: sv
+      type: ai-gateway
+    expr: "1"
+  - record: gitlab_component_service:mapping
+    labels:
+      component: llm_client_request
+      global_aggregation: "yes"
+      regional_aggregation: "no"
+      service_aggregation: "no"
+      tier: sv
+      type: ai-gateway
+    expr: "1"
+  - record: gitlab_component_service:mapping
+    labels:
+      component: llm_completion
       global_aggregation: "yes"
       regional_aggregation: "no"
       service_aggregation: "no"
