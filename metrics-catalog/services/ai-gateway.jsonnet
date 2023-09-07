@@ -3,6 +3,7 @@ local metricsCatalog = import 'servicemetrics/metrics.libsonnet';
 local rateMetric = metricsCatalog.rateMetric;
 local histogramApdex = metricsCatalog.histogramApdex;
 local toolingLinks = import 'toolinglinks/toolinglinks.libsonnet';
+local sliLibrary = import 'gitlab-slis/library.libsonnet';
 
 local baseSelector = { type: 'ai-gateway' };
 
@@ -137,6 +138,24 @@ metricsCatalog.serviceDefinition(
           toolingLinks.grafana(title='WAF Overview', dashboardUid='waf-main/waf-overview'),
         ],
       },
-    },
+    }
+    + sliLibrary.get('llm_completion').generateServiceLevelIndicator(baseSelector, {
+        serviceAggregation: false,
+        severity: 's4',
+
+        monitoringThresholds+: {
+          apdexScore: 0.999,
+          errorRatio: 0.999
+        },
+    })
+    + sliLibrary.get('llm_client_request').generateServiceLevelIndicator(baseSelector, {
+        serviceAggregation: false,
+        severity: 's4',
+
+        monitoringThresholds+: {
+          apdexScore: 0.999,
+          errorRatio: 0.999
+        },
+    })
   }
 )
