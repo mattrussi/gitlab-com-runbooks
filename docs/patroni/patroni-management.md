@@ -72,7 +72,7 @@ patroni-01-db-gstg $ gitlab-patronictl list
 ```
 
 You may want to use it in conjunction with `watch`, to automatically refresh the command each 30 seconds or so:
-
+```
 +-----------------+------------------------------------------------+---------------+--------+---------+----+-----------+
 |     Cluster     |                     Member                     |      Host     |  Role  |  State  | TL | Lag in MB |
 +-----------------+------------------------------------------------+---------------+--------+---------+----+-----------+
@@ -109,8 +109,9 @@ Under certain circumnstances, you may see an extra column labeled `Pending resta
 +-----------------+-----------------------------------------------+--------------+--------+---------+---+-----------+----------------+
 
 ```
+`
 watch -n 30 'gitlab-patronictl list'
-```
+`
 
 Under certain circumnstances, you may see an extra column labeled `Pending restart`, which looks like this:
 
