@@ -166,8 +166,11 @@ metricsCatalog.serviceDefinition({
       {
         name: 'rails_db_connection_pool',
         parameters: {
-          changepoints: [
-            '2023-04-03',  // https://gitlab.com/gitlab-com/gl-infra/capacity-planning/-/issues/993
+          ignore_outliers: [
+            {
+              start: '2021-01-01',
+              end: '2023-04-10',
+            },
           ],
         },
       },
