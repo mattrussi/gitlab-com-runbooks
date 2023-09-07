@@ -124,7 +124,7 @@ groups:
         histogram_quantile(
           0.950000,
           sum by (env,environment,tier,stage,le) (
-            rate(stackdriver_cloud_run_revision_run_googleapis_com_request_latencies_bucket{environment="{{ $labels.environment }}",stage="{{ $labels.stage }}",type="ai-gateway"}[5m])
+            avg_over_time(stackdriver_cloud_run_revision_run_googleapis_com_request_latencies_bucket{environment="{{ $labels.environment }}",stage="{{ $labels.stage }}",type="ai-gateway"}[5m])
           )
         )
       runbook: docs/ai-gateway/README.md
@@ -174,7 +174,7 @@ groups:
         histogram_quantile(
           0.950000,
           sum by (env,environment,tier,stage,le) (
-            rate(stackdriver_cloud_run_revision_run_googleapis_com_request_latencies_bucket{environment="{{ $labels.environment }}",stage="{{ $labels.stage }}",type="ai-gateway"}[5m])
+            avg_over_time(stackdriver_cloud_run_revision_run_googleapis_com_request_latencies_bucket{environment="{{ $labels.environment }}",stage="{{ $labels.stage }}",type="ai-gateway"}[5m])
           )
         )
       runbook: docs/ai-gateway/README.md
