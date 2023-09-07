@@ -487,6 +487,7 @@ local aggregationSet = import 'servicemetrics/aggregation-set.libsonnet';
       errorRatio: 'gitlab_component_errors:ratio_%s',
     },
     aggregationFilter: 'global',
+    offset: '30s',
   }),
 
   globallyEvaluatedServiceSLIs: aggregationSet.AggregationSet({
@@ -503,5 +504,6 @@ local aggregationSet = import 'servicemetrics/aggregation-set.libsonnet';
     },
     // Only include components (SLIs) with service_aggregation="yes" and global_aggregation="yes"
     aggregationFilter: ['service', 'global'],
+    offset: '30s',
   }),
 }
