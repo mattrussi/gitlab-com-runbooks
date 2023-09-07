@@ -24,14 +24,14 @@ local getDirectExpr(sourceAggregationSet, targetAggregationSet, burnRate) =
   local sourceErrorRateMetric = sourceAggregationSet.getErrorRateMetricForBurnRate(burnRate, required=true);
 
   local errorRateExpr = |||
-    (%(sourceErrorRateMetric)s{%(sourceSelector)s} >= 0)%(aggregationFilterExpr)s
+    (%(sourceErrorRateMetric)s{%(sourceSelector)s}%(optionalOffset)s >= 0)%(aggregationFilterExpr)s
   ||| % formatConfig {
     sourceErrorRateMetric: sourceErrorRateMetric,
   };
 
   local sourceOpsRateMetric = sourceAggregationSet.getOpsRateMetricForBurnRate(burnRate);
   local opsRateExpr = |||
-    (%(sourceOpsRateMetric)s{%(sourceSelector)s} >= 0)%(aggregationFilterExpr)s
+    (%(sourceOpsRateMetric)s{%(sourceSelector)s}%(optionalOffset)s >= 0)%(aggregationFilterExpr)s
   ||| % formatConfig {
     sourceOpsRateMetric: sourceOpsRateMetric,
   };
