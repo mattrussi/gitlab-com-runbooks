@@ -57,7 +57,8 @@ Console URL: [https://clickhouse.cloud/service/57fa3208-48a1-494b-9f44-ea895895a
 
 GitLab.com Production Database has the following attributes:
 
-Not yet provisioned
+Name: gitlab-com-production
+Console URL: [https://clickhouse.cloud/service/ad02dd6a-1dde-4f8f-858d-37462fd06058](https://clickhouse.cloud/service/ad02dd6a-1dde-4f8f-858d-37462fd06058)
 
 <!-- ## Architecture -->
 
