@@ -110,6 +110,14 @@ metricsCatalog.serviceDefinition({
           ],
         },
       },
+      {
+        name: 'gitaly_active_node_available_space',
+        parameters: {
+          changepoints: [
+            '2023-09-04',  // https://gitlab.com/gitlab-com/runbooks/-/merge_requests/6160
+          ],
+        },
+      },
     ],
   },
 })

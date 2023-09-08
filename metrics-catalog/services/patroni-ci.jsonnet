@@ -68,6 +68,17 @@ metricsCatalog.serviceDefinition(
           },
         },
         {
+          name: 'disk_space',
+          parameters: {
+            ignore_outliers: [
+              {
+                start: '2021-01-01',
+                end: '2022-10-01',
+              },
+            ],
+          },
+        },
+        {
           name: 'pg_btree_bloat',
           parameters: {
             changepoints: [
