@@ -270,7 +270,7 @@ For the delayed replica use the following `dcs` object:
 
 Include th following `override_attributes` as well to both the delayed and archive replicas.
 
-```terraform
+```json
 "override_attributes": {
     "gitlab-patroni": {
       "postgresql": {
