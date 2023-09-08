@@ -119,6 +119,10 @@ variables:
         GKE_CLUSTER: gstg-us-east1-d
         GOOGLE_PROJECT: gitlab-staging-1
         LOCATION: us-east1-d
+      - DEPLOY_ENV: gstg-gitlab-36dv2
+        GKE_CLUSTER: gitlab-36dv2
+        GOOGLE_PROJECT: gitlab-staging-1
+        LOCATION: us-east1
       - DEPLOY_ENV: ops
         GKE_CLUSTER: ops-gitlab-gke
         GOOGLE_PROJECT: gitlab-ops

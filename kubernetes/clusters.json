@@ -23,6 +23,12 @@
     "region": "us-east1-d",
     "ssh_proxy": "console-01-sv-gstg.c.gitlab-staging-1.internal"
   },
+  "gstg-gitlab-36dv2": {
+    "name": "gitlab-36dv2",
+    "project": "gitlab-staging-1",
+    "region": "us-east1",
+    "ssh_proxy": "console-01-sv-gstg.c.gitlab-staging-1.internal"
+  },
 
   "gprd": {
     "name": "gprd-gitlab-gke",
