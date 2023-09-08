@@ -314,7 +314,7 @@ Include th following `override_attributes` as well to both the delayed and archi
   }
 ```
 
-The role for the DR replicas are similar to the roles of other replicas but with the above dcs and override attribites. Rembember to also set unique consul service names (for consul service discovery) as well as unique prometheus type (for monitoring purposes).
+The role for the DR replicas are similar to the roles of other replicas but with the above `dcs` and override attributes. Remember to also set unique consul service names (for consul service discovery) as well as unique Prometheus type (for monitoring purposes).
 
 #### 6.1.2 Building the replica instance from scratch
 
