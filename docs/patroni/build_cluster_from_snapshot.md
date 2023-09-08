@@ -393,7 +393,7 @@ The command `sudo gitlab-patroni list` is used to get the cluster name
 
 Confirm that the patroni starts as `Standby Leader`:
 
-Execute `sudo gitlab-patronictl show-config` You shoild see an output similar to the one below.
+Execute `sudo gitlab-patronictl show-config` You should see an output similar to the one below.
 
 ```yml
 loop_wait: 10
