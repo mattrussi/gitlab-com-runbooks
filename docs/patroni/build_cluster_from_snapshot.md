@@ -248,7 +248,7 @@ For the archive replica role make sure to include the following `dcs` object (st
 
 For the delayed replica use the following `dcs` object:
 
-```terraform
+```json
 "dcs": {
   "standby_cluster": {
     "restore_command": "/usr/bin/envdir /etc/wal-g.d/env /opt/wal-g/bin/wal-g wal-fetch --turbo %f %p",
