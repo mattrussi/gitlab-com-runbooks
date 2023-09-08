@@ -323,7 +323,7 @@ The role for the DR replicas are similar to the roles of other replicas but with
 * Once apply has completed (sometimes it may take upto 40 minutes, if you are executing this in a CR remember to account for that) check if the nodes are available on chef using the `knife search "role:<role>"` command like in the example shown below.
 
 ```sh
-knife search "role:gprd-base-db-patroni-ci-archive-v14 OR role:gprd-base-db-patroni-ci-delayed-v14" -i
+knife search "role:gstg-base-db-patroni-ci-archive-v14 OR role:gstg-base-db-patroni-ci-delayed-v14" -i
 2 items found
 
 postgres-ci-dr-archive-v14-01-db-gprd.c.gitlab-production.internal
