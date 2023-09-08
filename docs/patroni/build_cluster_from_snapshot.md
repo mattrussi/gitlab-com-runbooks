@@ -229,7 +229,7 @@ Before you create a VM instance you need a chef role for the VM instance. In the
 
 For the archive replica role make sure to include the following `dcs` object (stands for Distributed Configuration Store) under the `gitlab-patroni.patroni.config.bootstrap` structure, it stores the dynamic configurations to be applied on all cluster nodes ([official patroni documentation](https://patroni.readthedocs.io/en/latest/dynamic_configuration.html)).
 
-```terraform
+```json
 "dcs": {
   "standby_cluster": {
     "restore_command": "/usr/bin/envdir /etc/wal-g.d/env /opt/wal-g/bin/wal-g wal-fetch --turbo %f %p",
