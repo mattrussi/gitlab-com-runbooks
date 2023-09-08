@@ -321,7 +321,7 @@ Include th following `override_attributes` as well to both the delayed and archi
   }
 ```
 
-The role for the DR replicas are similar to the roles of other replicas but with the above `dcs` and override attributes. Remember to also set unique consul service names (for consul service discovery) as well as unique Prometheus type (for monitoring purposes) [example MR](https://gitlab.com/gitlab-com/gl-infra/chef-repo/-/merge_requests/3267). Since we are also specifying attributes for omnibus we should also include the `recipe[omnibus-gitlab::default]` recipe in the runlist.
+The role for the DR replicas are similar to the roles of other replicas but with the above `dcs` and override attributes. Remember to also set unique consul service names (for consul service discovery) as well as unique Prometheus type (for monitoring purposes) ([example MR](https://gitlab.com/gitlab-com/gl-infra/chef-repo/-/merge_requests/3267)). Since we are also specifying attributes for Omnibus we should also include the `recipe[omnibus-gitlab::default]` recipe in the runlist.
 
 #### 6.1.2A Building the replica instance from scratch
 
