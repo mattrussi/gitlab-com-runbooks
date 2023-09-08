@@ -65,7 +65,7 @@ Some `postgresql` settings need to be the SAME as the Source cluster for the phy
 The Chef role of the standby patroni cluster should have defined the `standby_cluster` settings under `override_attributes.gitlab-patroni.patroni.config.bootstrap.dcs` like the below example.
 Notice that `host` should point to the endpoint of the Primary/Master node of the source cluster, therefore if there's a failover we don't have to reconfigure the standby cluster.
 
-```sh
+```json
   "override_attributes": {
     "gitlab-patroni": {
       "patroni": {
