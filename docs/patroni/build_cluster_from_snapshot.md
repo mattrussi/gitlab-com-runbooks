@@ -246,7 +246,7 @@ For the archive replica role make sure to include the following `dcs` object (st
 }
 ```
 
-For the delayed replica use the following dcs
+For the delayed replica use the following `dcs` object:
 
 ```terraform
 "dcs": {
