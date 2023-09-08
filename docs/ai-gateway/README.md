@@ -18,13 +18,32 @@
 
 <!-- END_MARKER -->
 
-<!-- ## Summary -->
+## Summary
 
-<!-- ## Architecture -->
+The AI-gateway is a standalone-service that will give access to AI features to all users of GitLab, no matter which
+instance they are using: self-managed, dedicated or GitLab.com.
+
+## Architecture
+
+See the AI Gateway architecture blueprint at <https://docs.gitlab.com/ee/architecture/blueprints/ai_gateway/>
+
+For a higher level view of how the AI Gateway fits into our AI Architecture, see
+<https://docs.gitlab.com/ee/development/ai_architecture.html>
+
+## Deployment
+
+The AI Gateway is deployed through Runway. For more details, see [the Runway runbook](../runway/README.md).
 
 <!-- ## Performance -->
 
-<!-- ## Scalability -->
+## Scalability
+
+### GCP quotas usage
+
+Apart from our quota monitoring in our usual GCP projects, the AI Gateway relies on resources that live on the
+`unreview-poc-390200e5` project. Refer to
+<https://gitlab-com.gitlab.io/gl-infra/tamland/saturation.html?highlight=code_suggestions#other-utilization-and-saturation-forecasting-non-horizontally-scalable-resources>
+for quota usage trends and projections.
 
 <!-- ## Availability -->
 
