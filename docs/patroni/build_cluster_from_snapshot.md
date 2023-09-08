@@ -383,11 +383,10 @@ After that follow the steps above to recreate it and wait for chef to converge.
 Log into each of the VM instances and excute the following steps:
 
 ```sh
-- sudo gitlab-patronictl list
-- consul kv delete -recurse service/<clustername>
-- sudo rm -f /var/opt/gitlab/postgresql/data14
-- sudo systemctl start patroni
-- sudo chef-client
+consul kv delete -recurse service/$(/usr/local/bin/gitlab-patronictl list -f json | jq -r '.[0].Cluster')
+sudo rm -f /var/opt/gitlab/postgresql/data14
+sudo systemctl start patroni
+sudo chef-client
 ```
 
 The command `sudo gitlab-patroni list` is used to get the cluster name
