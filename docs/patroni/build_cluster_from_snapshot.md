@@ -215,7 +215,7 @@ In the output, the leader node of the new standby cluster should have its `Role`
 
 Once in a while we may find ourselves creating/rebuilding DR archive and delayed replicas from a source/existing Gitlab.com Patroni database, usually from GPRD or GSTG.
 
-DR archive and delayed replicas are physically replicated clusters, that stream or recover WALs from the source Patroni/PostgreSQL database, but have an independent Patroni configuration and management, therefore can be promoted if required.
+DR archive and delayed replicas are physically replicated clusters, that stream or recover WAL segments archived (by an independent Patroni/PostgreSQL database) in an object storage (in our case, GCP).
 
 This runbook describes the whole procedure and several takeaways to help you to create a new Patroni DR archive and delayed replicas from scratch.
 
