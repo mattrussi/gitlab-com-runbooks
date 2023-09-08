@@ -25,7 +25,7 @@ Generate four passwords, `REPLICA_REDACTED`, `RAILS_REDACTED`, `EXPORTER_REDACTE
 for I in REPLICA_REDACTED RAILS_REDACTED EXPORTER_REDACTED CONSOLE_REDACTED; do echo $I; openssl rand -hex 32; done
 ```
 
-Update the gkms vault secrets using this command in the chef-repo:
+Update the gkms vault secrets using this command in the `chef-repo`:
 
 ```
 ./bin/gkms-vault-edit redis-cluster <ENV>
@@ -101,7 +101,13 @@ gcloud compute --project=<gitlab-production/gitlab-staging-1> instances tail-ser
 
 ### 4. Initialising the cluster
 
-a. Run the following inside an instance by SSH-ing into it. Note that depending on the cluster-size, the for-loops will need to be updated.
+a. SSH into one of the instance:
+
+```
+ssh redis-cluster-<INSTANCE_TYPE>-shard-01-01-db-<ENV>.c.<gitlab-production/gitlab-staging-1>.internal
+```
+
+b. Run the following:
 
 ```
 export ENV=<ENV>
@@ -109,7 +115,7 @@ export PROJECT=gitlab-production # or gitlab-staging-1
 export DEPLOYMENT=redis-cluster-<INSTANCE_TYPE>
 ```
 
-b. Use the following command to connect the master-nodes and initialise a working cluster. Add more shard FQDN where necessary. e.g. `$DEPLOYMENT-shard-<shard_number>-01-db-$ENV.c.$PROJECT.internal:6379`.
+c. Use the following command to connect the master-nodes and initialise a working cluster. Add more shard FQDN where necessary. e.g. `$DEPLOYMENT-shard-<shard_number>-01-db-$ENV.c.$PROJECT.internal:6379`.
 
 ```
 sudo gitlab-redis-cli --cluster create \
@@ -119,7 +125,7 @@ sudo gitlab-redis-cli --cluster create \
 
 ```
 
-Use the following command to connect the remaining nodes to the cluster.  Update `{01, 02, 03, ... n}-{02,03,..n}` where necessary.
+Use the following command to connect the remaining nodes to the cluster.  Update `{01, 02, 03, ... n}-{02,03,..n}` where necessary depending on the cluster-size.
 
 ```
 
@@ -131,7 +137,7 @@ for i in {01,02,03}-{02,03}; do
 done
 ```
 
-Use the following command, to assign the replicas within each shard. Update `{01, 02, 03, ... n}-{02,03,..n}` where necessary.
+Use the following command, to assign the replicas within each shard. Update `{01, 02, 03, ... n}-{02,03,..n}` where necessary depending on the cluster-size.
 
 ```
 for i in {01,02,03}; do
@@ -171,17 +177,30 @@ cluster_size:3
 
 ### 1. Configure console instances
 
+a. Proxy and authenticate to Hashicorp Vault:
+
 ```
-➜  ~ vault kv get -format=json chef/env/<ENV>/shared/gitlab-omnibus-secrets | jq '.data.data' > data.json
-➜  ~ cat data.json | jq --arg PASSWORD <RAILS_REDACTED> '."omnibus-gitlab".gitlab_rb."gitlab-rails".redis_yml_override.<RAILS_INSTANCE_NAME_OMNIBUS>.password = $PASSWORD' > data.json.tmp
-➜  ~ diff -u data.json data.json.tmp
-➜  ~ mv data.json.tmp data.json
-➜  ~ vault kv patch chef/env/<ENV>/shared/gitlab-omnibus-secrets @data.json
-➜  ~ rm data.json
+glsh vault proxy
+
+export VAULT_PROXY_ADDR="socks5://localhost:18200"
+glsh vault login
+```
+
+```
+vault kv get -format=json chef/env/<ENV>/shared/gitlab-omnibus-secrets | jq '.data.data' > data.json
+cat data.json | jq --arg PASSWORD <RAILS_REDACTED> '."omnibus-gitlab".gitlab_rb."gitlab-rails".redis_yml_override.<RAILS_INSTANCE_NAME_OMNIBUS>.password = $PASSWORD' > data.json.tmp
+diff -u data.json data.json.tmp
+mv data.json.tmp data.json
+vault kv patch chef/env/<ENV>/shared/gitlab-omnibus-secrets @data.json
+rm data.json
 
 OR
 
-➜  ~ glsh vault edit-secret chef env/<ENV>/shared/gitlab-omnibus-secrets
+glsh vault edit-secret chef env/<ENV>/shared/gitlab-omnibus-secrets
+#  Add the following object in ."omnibus-gitlab".gitlab_rb."gitlab-rails".redis_yml_override :
+#  "<RAILS_INSTANCE_NAME_OMNIBUS>": {
+#    "password": <RAILS_REDACTED>
+#  }
 ```
 
 Update roles/<ENV>-base.json with the relevant connection details. An example MR can be found [here](https://gitlab.com/gitlab-com/gl-infra/chef-repo/-/merge_requests/3546).
@@ -197,15 +216,6 @@ Check the confirmation detail by using Rails console inside a console instance.
 ### 2. Configure Gitlab Rails
 
 a. Update secret
-
-Proxy and authenticate to Hashicorp Vault:
-
-```
-glsh vault proxy
-
-export VAULT_PROXY_ADDR="socks5://localhost:18200"
-glsh vault login
-```
 
 ```
 vault kv put k8s/env/<ENV>/ns/gitlab/redis-cluster-<INSTANCE_TYPE>-rails password=<RAILS_REDACTED>
