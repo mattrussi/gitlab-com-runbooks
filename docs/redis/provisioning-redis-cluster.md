@@ -125,7 +125,7 @@ sudo gitlab-redis-cli --cluster create \
 
 ```
 
-Use the following command to connect the remaining nodes to the cluster.  Update `{01, 02, 03, ... n}-{02,03,..n}` where necessary depending on the cluster-size.
+Use the following command to connect the remaining nodes to the cluster.  Update `{01, 02, 03, ... n}-{02,03,..m}` where `n` is the number of shards and `m` is the number of instances per shard.
 
 ```
 
