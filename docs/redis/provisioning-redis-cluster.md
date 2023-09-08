@@ -208,7 +208,7 @@ Update roles/<ENV>-base.json with the relevant connection details. An example MR
 Check the confirmation detail by using Rails console inside a console instance.
 
 ```
-[ gstg ] production> Gitlab::Redis::FeatureFlag.with{|c| c.ping}
+[ gstg ] production> Gitlab::Redis::FeatureFlag.with{|c| c.ping} # replace FeatureFlag with the name of the Redis class in Rails.
 => "PONG"
 [ gstg ] production>
 ```
