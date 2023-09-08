@@ -926,8 +926,9 @@ groups:
       runbook: docs/{{ $labels.type }}/README.md
     labels:
       alert_type: cause
+      pager: pagerduty
       rules_domain: general
-      severity: s4
+      severity: s2
     expr: |
       gitlab_component_saturation:ratio{component="go_goroutines",env!~"gprd|ops",monitor="global"} > on(component) group_left
       slo:max:hard:gitlab_component_saturation:ratio{component="go_goroutines",env!~"gprd|ops",monitor="global"}

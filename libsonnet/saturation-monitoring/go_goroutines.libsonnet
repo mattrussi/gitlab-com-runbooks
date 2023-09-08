@@ -4,7 +4,7 @@ local resourceSaturationPoint = (import 'servicemetrics/resource_saturation_poin
 {
   go_goroutines: resourceSaturationPoint({
     title: 'Go goroutines Utilization per Node',
-    severity: 's4',
+    severity: 's2',
     dangerouslyThanosEvaluated: true,
     horizontallyScalable: true,
     appliesTo: std.setInter(

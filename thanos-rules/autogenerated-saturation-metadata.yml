@@ -279,7 +279,7 @@ groups:
       component: go_goroutines
       horiz_scaling: "yes"
       quantile: max
-      severity: s4
+      severity: s2
     expr: "1"
   - record: gitlab_component_saturation_info
     labels:
