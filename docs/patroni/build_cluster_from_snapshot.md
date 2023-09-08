@@ -372,7 +372,7 @@ Deleted client postgres-ci-v14-dr-delayed-01-db-gstg.c.gitlab-staging-1.internal
 Delete the nodes from chef node list.
 
 ```sh
-knife node bulk delete "^postgres-ci-v14-dr-[a-z]+-01-db-gstg\.c\.gitlab-staging-1\.internal$"                 3 ↵ ──(Fri,Sep08)─┘
+$ knife node bulk delete "^postgres-ci-v14-dr-[a-z]+-01-db-gstg\.c\.gitlab-staging-1\.internal$"                 
 The following nodes will be deleted:
 
 postgres-ci-v14-dr-archive-01-db-gstg.c.gitlab-staging-1.internal
