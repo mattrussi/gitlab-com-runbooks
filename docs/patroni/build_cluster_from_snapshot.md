@@ -227,7 +227,7 @@ You may be required to create the replica instances from scratch or you might be
 
 Before you create a VM instance you need a chef role for the VM instance. In the [chef-repo](https://gitlab.com/gitlab-com/gl-infra/chef-repo/-/tree/master/roles) create a role for the DR replica.
 
-For the archive replica role make sure to include the following dcs (Distributed Configuration Store), the dcs stores the dynamic configurations to be applied on all cluster nodes [official patroni documentation](https://patroni.readthedocs.io/en/latest/dynamic_configuration.html).
+For the archive replica role make sure to include the following `dcs` object (stands for Distributed Configuration Store) under the `gitlab-patroni.patroni.config.bootstrap` structure, it stores the dynamic configurations to be applied on all cluster nodes ([official patroni documentation](https://patroni.readthedocs.io/en/latest/dynamic_configuration.html)).
 
 ```terraform
 "dcs": {
