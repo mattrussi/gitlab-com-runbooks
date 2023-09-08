@@ -333,8 +333,8 @@ The role for the DR replicas are similar to the roles of other replicas but with
 knife search "role:gstg-base-db-patroni-ci-archive-v14 OR role:gstg-base-db-patroni-ci-delayed-v14" -i
 2 items found
 
-postgres-ci-dr-archive-v14-01-db-gprd.c.gitlab-production.internal
-postgres-ci-dr-delayed-v14-01-db-gprd.c.gitlab-production.internal
+postgres-ci-v14-dr-delayed-01-db-gstg.c.gitlab-staging-1.internal
+postgres-ci-v14-dr-delayed-01-db-gstg.c.gitlab-staging-1.internal
 
 ```
 
