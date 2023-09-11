@@ -208,7 +208,7 @@ Update roles/<ENV>-base.json with the relevant connection details. An example MR
 
 ### 2. Verification of config in a VM
 
-Check the confirmation detail by using `gitlab-rails console` inside a console instance. This is important as the pipeline does not check the correctness of the config files. This may impact the deploy-node as GitLab Rails connects to Redis instances on start-up. There was a past incident of such an [issue](https://gitlab.com/gitlab-com/gl-infra/production/-/issues/16322) for reference.
+Check the confirmation detail by using `gitlab-rails console` inside a console instance. You may need to run `chef-client` to update the node and render the updated configuration files. This is important as the pipeline does not check the correctness of the config files. This may impact the deploy-node as GitLab Rails connects to Redis instances on start-up. There was a past incident of such an [issue](https://gitlab.com/gitlab-com/gl-infra/production/-/issues/16322) for reference.
 
 ```
 [ gstg ] production> Gitlab::Redis::FeatureFlag.with{|c| c.ping} # replace Gitlab::Redis::FeatureFlag with <RAILS_CLASS_NAME>
