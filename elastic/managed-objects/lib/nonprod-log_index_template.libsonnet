@@ -7,6 +7,7 @@ local mappings = {
   mailroom: import './index_mappings/mailroom.jsonnet',
   mlops: import './index_mappings/mlops.jsonnet',
   monitoring: import './index_mappings/monitoring.jsonnet',
+  packagecloud: import './index_mappings/packagecloud.jsonnet',
   pages: import './index_mappings/pages.jsonnet',
   postgres: import './index_mappings/postgres.jsonnet',
   praefect: import './index_mappings/praefect.jsonnet',
