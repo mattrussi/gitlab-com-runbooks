@@ -13,6 +13,7 @@ First, this guide defines a few variables in `<>`, namely:
 - `INSTANCE_TYPE`: `feature-flag`
 - `RAILS_INSTANCE_NAME`: The name that GitLab Rails would recognise. This matches `redis.xxx.yml` or the 2nd-top-level key in `redis.yml` (top-level key being `production`)
 - `RAILS_INSTANCE_NAME_OMNIBUS`: `RAILS_INSTANCE_NAME` but using underscore, i.e. `feature_flag` instead of `feature-flag`
+- `RAILS_CLASS_NAME`: The class which would connect to the new Redis Cluster. e.g. `Gitlab::Redis::FeatureFlag`.
 
 When configuring the application, note that the name of the instance must match the object name in lowercase and kebab-case/snake-case in the application.
 E.g. We have `redis-cluster-chat-cache` service but in GitLab Rails, the object is `Gitlab::Redis::Chat`. Hence `chat` should be used when configuring the secret for the application in console and Kubernetes.
@@ -205,15 +206,17 @@ glsh vault edit-secret chef env/<ENV>/shared/gitlab-omnibus-secrets
 
 Update roles/<ENV>-base.json with the relevant connection details. An example MR can be found [here](https://gitlab.com/gitlab-com/gl-infra/chef-repo/-/merge_requests/3546).
 
-Check the confirmation detail by using Rails console inside a console instance.
+### 2. Verification of config in a VM
+
+Check the confirmation detail by using `gitlab-rails console` inside a console instance. This is important as the pipeline does not check the correctness of the config files. This may impact the deploy-node as GitLab Rails connects to Redis instances on start-up. There was a past incident of such an [issue](https://gitlab.com/gitlab-com/gl-infra/production/-/issues/16322) for reference.
 
 ```
-[ gstg ] production> Gitlab::Redis::FeatureFlag.with{|c| c.ping} # replace FeatureFlag with the name of the Redis class in Rails.
+[ gstg ] production> Gitlab::Redis::FeatureFlag.with{|c| c.ping} # replace Gitlab::Redis::FeatureFlag with <RAILS_CLASS_NAME>
 => "PONG"
 [ gstg ] production>
 ```
 
-### 2. Configure Gitlab Rails
+### 3. Configure Gitlab Rails
 
 a. Update secret
 
@@ -266,7 +269,7 @@ b. Update Gitlab Rails `.Values.global.redis` accordingly.
 
 Either add a new key to `.Values.global.redis.<RAILS_INSTANCE_NAME>` or `.Values.global.redis.redisYmlOverride.<RAILS_INSTANCE_NAME>`. An example MR can be found [here](https://gitlab.com/gitlab-com/gl-infra/k8s-workloads/gitlab-com/-/merge_requests/2753).
 
-### 3. Troubleshooting
+### 4. Troubleshooting
 
 #### No metrics on dashboard
 
