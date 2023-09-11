@@ -132,6 +132,27 @@ local list = [
       Read more about this in the [runbooks doc](https://gitlab.com/gitlab-com/runbooks/-/blob/master/docs/sidekiq/sidekiq-slis.md).
     |||,
   }),
+  sliDefinition.new({
+    name: 'llm_completion',
+    kinds: [sliDefinition.apdexKind, sliDefinition.errorRateKind],
+    significantLabels: ['feature_category', 'service_class'],
+    description: |||
+      These signifies operations that reach out to a language model with a prompt. These interactions
+      with an AI provider are executed within `Llm::CompletionWorker`-jobs. The worker could execute multiple
+      requests to an AI provider for a single operation.
+
+      A success means that we were able to present the user with a response that is delivered to a client that is
+      subscribed to a websocket. An error could be that the AI-provider is not responding, or is erroring.
+
+      For the apdex, we consider an operation fast enough if we were able to get a complete response from the AI provider within
+      20 seconds. This not include the time it took for the Sidekiq job to get picked up, or the time it took to deliver
+      the response to the client.
+
+      The `service_class` label on the source metrics tells us which AI related features the operation is for.
+
+      These operations do not go through the API gateway yet, but will in the future.
+    |||,
+  }),
 ];
 
 local definitionsByName = std.foldl(

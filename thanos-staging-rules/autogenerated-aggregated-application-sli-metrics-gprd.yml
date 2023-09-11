@@ -420,3 +420,47 @@ spec:
         sum by (env,environment,tier,type,stage,worker,urgency,external_dependencies) (
           (sli_aggregations:gitlab_sli_sidekiq_queueing_apdex_success_total_rate1h{env="gprd",monitor!="global"} >= 0)
         )
+  - name: 'Application Defined SLI Global metrics: llm_completion (fast burn)'
+    interval: 1m
+    partial_response_strategy: warn
+    rules:
+    - record: application_sli_aggregation:llm_completion:error:rate_5m
+      expr: |
+        sum by (env,environment,tier,type,stage,feature_category,service_class) (
+          (application_sli_aggregation:llm_completion:error:rate_5m{env="gprd",monitor!="global"} >= 0)
+        )
+    - record: application_sli_aggregation:llm_completion:ops:rate_5m
+      expr: |
+        sum by (env,environment,tier,type,stage,feature_category,service_class) (
+          (application_sli_aggregation:llm_completion:ops:rate_5m{env="gprd",monitor!="global"} >= 0)
+        )
+    - record: application_sli_aggregation:llm_completion:apdex:weight:score_5m
+      expr: |
+        sum by (env,environment,tier,type,stage,feature_category,service_class) (
+          (application_sli_aggregation:llm_completion:apdex:weight:score_5m{env="gprd",monitor!="global"} >= 0)
+        )
+    - record: application_sli_aggregation:llm_completion:apdex:success:rate_5m
+      expr: |
+        sum by (env,environment,tier,type,stage,feature_category,service_class) (
+          (application_sli_aggregation:llm_completion:apdex:success:rate_5m{env="gprd",monitor!="global"} >= 0)
+        )
+    - record: application_sli_aggregation:llm_completion:error:rate_1h
+      expr: |
+        sum by (env,environment,tier,type,stage,feature_category,service_class) (
+          (application_sli_aggregation:llm_completion:error:rate_1h{env="gprd",monitor!="global"} >= 0)
+        )
+    - record: application_sli_aggregation:llm_completion:ops:rate_1h
+      expr: |
+        sum by (env,environment,tier,type,stage,feature_category,service_class) (
+          (application_sli_aggregation:llm_completion:ops:rate_1h{env="gprd",monitor!="global"} >= 0)
+        )
+    - record: application_sli_aggregation:llm_completion:apdex:weight:score_1h
+      expr: |
+        sum by (env,environment,tier,type,stage,feature_category,service_class) (
+          (application_sli_aggregation:llm_completion:apdex:weight:score_1h{env="gprd",monitor!="global"} >= 0)
+        )
+    - record: application_sli_aggregation:llm_completion:apdex:success:rate_1h
+      expr: |
+        sum by (env,environment,tier,type,stage,feature_category,service_class) (
+          (application_sli_aggregation:llm_completion:apdex:success:rate_1h{env="gprd",monitor!="global"} >= 0)
+        )
