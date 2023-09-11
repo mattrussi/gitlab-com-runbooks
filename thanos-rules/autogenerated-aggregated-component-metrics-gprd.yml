@@ -18,13 +18,13 @@ groups:
   - record: gitlab_component_errors:ratio
     expr: |
       sum by (env,environment,tier,type,stage,component)(
-        (gitlab_component_errors:rate{env="gprd",monitor!="global"} >= 0)
+        (gitlab_component_errors:rate{env="gprd",monitor!="global"} offset 30s >= 0)
       )
       /
       sum by (env,environment,tier,type,stage,component)(
-        (gitlab_component_ops:rate{env="gprd",monitor!="global"} >= 0)
+        (gitlab_component_ops:rate{env="gprd",monitor!="global"} offset 30s >= 0)
         and
-        (gitlab_component_errors:rate{env="gprd",monitor!="global"} >= 0)
+        (gitlab_component_errors:rate{env="gprd",monitor!="global"} offset 30s >= 0)
       )
   - record: gitlab_component_apdex:ratio
     expr: |
@@ -48,13 +48,13 @@ groups:
   - record: gitlab_component_errors:ratio_5m
     expr: |
       sum by (env,environment,tier,type,stage,component)(
-        (gitlab_component_errors:rate_5m{env="gprd",monitor!="global"} >= 0)
+        (gitlab_component_errors:rate_5m{env="gprd",monitor!="global"} offset 30s >= 0)
       )
       /
       sum by (env,environment,tier,type,stage,component)(
-        (gitlab_component_ops:rate_5m{env="gprd",monitor!="global"} >= 0)
+        (gitlab_component_ops:rate_5m{env="gprd",monitor!="global"} offset 30s >= 0)
         and
-        (gitlab_component_errors:rate_5m{env="gprd",monitor!="global"} >= 0)
+        (gitlab_component_errors:rate_5m{env="gprd",monitor!="global"} offset 30s >= 0)
       )
   - record: gitlab_component_apdex:ratio_5m
     expr: |
@@ -78,13 +78,13 @@ groups:
   - record: gitlab_component_errors:ratio_1h
     expr: |
       sum by (env,environment,tier,type,stage,component)(
-        (gitlab_component_errors:rate_1h{env="gprd",monitor!="global"} >= 0)
+        (gitlab_component_errors:rate_1h{env="gprd",monitor!="global"} offset 30s >= 0)
       )
       /
       sum by (env,environment,tier,type,stage,component)(
-        (gitlab_component_ops:rate_1h{env="gprd",monitor!="global"} >= 0)
+        (gitlab_component_ops:rate_1h{env="gprd",monitor!="global"} offset 30s >= 0)
         and
-        (gitlab_component_errors:rate_1h{env="gprd",monitor!="global"} >= 0)
+        (gitlab_component_errors:rate_1h{env="gprd",monitor!="global"} offset 30s >= 0)
       )
   - record: gitlab_component_apdex:ratio_1h
     expr: |
@@ -112,13 +112,13 @@ groups:
   - record: gitlab_component_errors:ratio_30m
     expr: |
       sum by (env,environment,tier,type,stage,component)(
-        (gitlab_component_errors:rate_30m{env="gprd",monitor!="global"} >= 0)
+        (gitlab_component_errors:rate_30m{env="gprd",monitor!="global"} offset 30s >= 0)
       )
       /
       sum by (env,environment,tier,type,stage,component)(
-        (gitlab_component_ops:rate_30m{env="gprd",monitor!="global"} >= 0)
+        (gitlab_component_ops:rate_30m{env="gprd",monitor!="global"} offset 30s >= 0)
         and
-        (gitlab_component_errors:rate_30m{env="gprd",monitor!="global"} >= 0)
+        (gitlab_component_errors:rate_30m{env="gprd",monitor!="global"} offset 30s >= 0)
       )
   - record: gitlab_component_apdex:ratio_30m
     expr: |
@@ -159,13 +159,13 @@ groups:
     expr: |
       (
         sum by (env,environment,tier,type,stage,component)(
-          (gitlab_component_errors:rate_6h{env="gprd",monitor!="global"} >= 0)
+          (gitlab_component_errors:rate_6h{env="gprd",monitor!="global"} offset 30s >= 0)
         )
         /
         sum by (env,environment,tier,type,stage,component)(
-          (gitlab_component_ops:rate_6h{env="gprd",monitor!="global"} >= 0)
+          (gitlab_component_ops:rate_6h{env="gprd",monitor!="global"} offset 30s >= 0)
           and
-          (gitlab_component_errors:rate_6h{env="gprd",monitor!="global"} >= 0)
+          (gitlab_component_errors:rate_6h{env="gprd",monitor!="global"} offset 30s >= 0)
         )
       )
       or
