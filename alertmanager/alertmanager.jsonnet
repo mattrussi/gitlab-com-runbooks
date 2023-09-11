@@ -347,9 +347,10 @@ local routingTree = Route(
         env: env,
         incident_project: issueChannel.name,
       },
+      group_by=defaultGroupBy,
       continue=true,
       group_wait='10m',
-      group_interval='1h',
+      group_interval='1d',
       repeat_interval='3d',
     )
     for issueChannel in secrets.issueChannels
