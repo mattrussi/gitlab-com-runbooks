@@ -102,9 +102,8 @@ local memoryUsage() =
   timeseriesGraph(
     title='Memory Usage',
     query=|||
-      sum(container_memory_working_set_bytes{pod=~"gitlab-gitlab-zoekt.*", container=~"zoekt.*", env="$environment"}) by (container, pod)
-      / sum(kube_pod_container_resource_limits{pod=~"gitlab-gitlab-zoekt.*", container=~"zoekt.*", env="$environment"}) by (container, pod)
-
+      (sum(go_memstats_heap_sys_bytes{pod=~"gitlab-gitlab-zoekt.*", container=~"zoekt.*", env="$environment"}) by (container, pod)
+      / sum(go_memstats_heap_alloc_bytes{pod=~"gitlab-gitlab-zoekt.*", container=~"zoekt.*", env="$environment"}) by (container, pod)) / 100
     |||,
   );
 
