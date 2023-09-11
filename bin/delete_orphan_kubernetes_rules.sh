@@ -42,12 +42,13 @@ shift $((OPTIND - 1))
 dry_run=${dry_run:-}
 
 : "${KUBE_NAMESPACE:=monitoring}"
+: "${PROMETHEUS_RULE_DIR:=rules-k8s}"
 KUBE_TYPE="prometheusrules"
 
 # Generate a list of resources in the cluster that don't exist in the rules-k8s directory
 # And tell kubectl to delete them
 comm -13 \
-  <(ruby -ryaml -e 'ARGV.each { |f| puts YAML.load_file(f)["metadata"]["name"] }' "${REPO_DIR}/rules-k8s/"*.yml | sort) \
+  <(ruby -ryaml -e 'ARGV.each { |f| puts YAML.load_file(f)["metadata"]["name"] }' "${REPO_DIR}/${PROMETHEUS_RULE_DIR}/"*.yml | sort) \
   <(kubectl get "${KUBE_TYPE}" -n "${KUBE_NAMESPACE}" -o=custom-columns=NAME:.metadata.name --no-headers | sort) |
   (
     if [[ -n $dry_run ]]; then
