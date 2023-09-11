@@ -39,7 +39,7 @@ Linux install instructions are [also available on the Teleport site](https://got
 3. Log in to the database with the appropriate database user
 4. Connect the database console
 
-The access will be temporary (`12h` max) and can be approved by any SRE or Reliability Manager.  The `@sre-oncall` can help if it's urgent, but if you can wait it is considerate to spread the load out by asking the wider SRE team in `#infrastructure-lounge`. Access can be extended before or after expiration using the same process.
+The access will be temporary (`12h` max) and can be approved by any SRE or Reliability Manager.  The `@reliability-ems` can help if it's urgent, but if you can wait it is considerate to spread the load out by asking the wider SRE team in `#infrastructure-lounge`. Access can be extended before or after expiration using the same process.
 
 There are two Teleport cluster/servers:
 
@@ -243,7 +243,7 @@ The request ID is shown in the output of `tsh login` when making the initial req
 #### Access approval
 
 Approvers will get your request via an automated notification in the `#infrastructure-lounge` Slack channel.  If you have additional context,
-or need to expedite an approval, please comment as a thread under that message.  If the request is urgent, you can ping `@sre-oncall`, but
+or need to expedite an approval, please comment as a thread under that message.  If the request is urgent, you can ping `@reliability-ems`, but
 to spread out the workload please try to allow some time for others to review first if possible. If the approval request **doesn't show up** in
 `#infrastructure-lounge` feel free to ask someone in that channel to take a look at your request, and provide the request ID.
 
