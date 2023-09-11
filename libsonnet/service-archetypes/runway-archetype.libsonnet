@@ -1,6 +1,6 @@
 local metricsCatalog = import 'servicemetrics/metrics.libsonnet';
 local histogramApdex = metricsCatalog.histogramApdex;
-local rateMetric = metricsCatalog.rateMetric;
+local gaugeMetric = metricsCatalog.gaugeMetric;
 local toolingLinks = import 'toolinglinks/toolinglinks.libsonnet';
 
 // Default SLIs/SLOs for Runway services
@@ -48,14 +48,16 @@ function(
           satisfiedThreshold=apdexSatisfiedThreshold
         ),
 
-        requestRate: rateMetric(
-          counter='stackdriver_cloud_run_revision_run_googleapis_com_request_count',
+        requestRate: gaugeMetric(
+          gauge='stackdriver_cloud_run_revision_run_googleapis_com_request_count',
           selector=baseSelector,
+          samplingInterval=60, //seconds. See https://cloud.google.com/monitoring/api/metrics_gcp#run/request_count
         ),
 
-        errorRate: rateMetric(
-          counter='stackdriver_cloud_run_revision_run_googleapis_com_request_count',
+        errorRate: gaugeMetric(
+          gauge='stackdriver_cloud_run_revision_run_googleapis_com_request_count',
           selector=baseSelector { response_code_class: '5xx' },
+          samplingInterval=60,
         ),
 
         significantLabels: ['revision_name', 'response_code'],

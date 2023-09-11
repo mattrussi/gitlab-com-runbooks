@@ -222,7 +222,7 @@ groups:
       grafana_variables: environment,stage
       promql_template_1: |
         sum by (env,environment,tier,stage) (
-          rate(stackdriver_cloud_run_revision_run_googleapis_com_request_count{environment="{{ $labels.environment }}",response_code_class="5xx",stage="{{ $labels.stage }}",type="ai-gateway"}[5m])
+          avg_over_time(stackdriver_cloud_run_revision_run_googleapis_com_request_count{environment="{{ $labels.environment }}",response_code_class="5xx",stage="{{ $labels.stage }}",type="ai-gateway"}[5m]) / 60
         )
       runbook: docs/ai-gateway/README.md
     labels:
@@ -269,7 +269,7 @@ groups:
       grafana_variables: environment,stage
       promql_template_1: |
         sum by (env,environment,tier,stage) (
-          rate(stackdriver_cloud_run_revision_run_googleapis_com_request_count{environment="{{ $labels.environment }}",response_code_class="5xx",stage="{{ $labels.stage }}",type="ai-gateway"}[5m])
+          avg_over_time(stackdriver_cloud_run_revision_run_googleapis_com_request_count{environment="{{ $labels.environment }}",response_code_class="5xx",stage="{{ $labels.stage }}",type="ai-gateway"}[5m]) / 60
         )
       runbook: docs/ai-gateway/README.md
     labels:
@@ -316,7 +316,7 @@ groups:
       grafana_variables: environment,stage
       promql_template_1: |
         sum by (env,environment,tier,stage) (
-          rate(stackdriver_cloud_run_revision_run_googleapis_com_request_count{environment="{{ $labels.environment }}",stage="{{ $labels.stage }}",type="ai-gateway"}[5m])
+          avg_over_time(stackdriver_cloud_run_revision_run_googleapis_com_request_count{environment="{{ $labels.environment }}",stage="{{ $labels.stage }}",type="ai-gateway"}[5m]) / 60
         )
       runbook: docs/ai-gateway/README.md
     labels:
@@ -352,7 +352,7 @@ groups:
       grafana_variables: environment,stage
       promql_template_1: |
         sum by (env,environment,tier,stage) (
-          rate(stackdriver_cloud_run_revision_run_googleapis_com_request_count{environment="{{ $labels.environment }}",stage="{{ $labels.stage }}",type="ai-gateway"}[5m])
+          avg_over_time(stackdriver_cloud_run_revision_run_googleapis_com_request_count{environment="{{ $labels.environment }}",stage="{{ $labels.stage }}",type="ai-gateway"}[5m]) / 60
         )
       runbook: docs/ai-gateway/README.md
     labels:
