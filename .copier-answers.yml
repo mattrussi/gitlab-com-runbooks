@@ -1,0 +1,11 @@
+# This project was initially generated with
+# https://gitlab.com/gitlab-com/gl-infra/common-template-copier
+# See the project for instructions on how to update the project
+#
+# Changes here will be overwritten by Copier; NEVER EDIT MANUALLY
+_commit: v1.12.1
+_src_path: https://gitlab.com/gitlab-com/gl-infra/common-template-copier.git
+ee_licensed: false
+golang: true
+initial_codeowners: '@andrewn @pguinoiseau @sxuereb @f_santos @jarv @reprazent'
+project_name: runbooks
