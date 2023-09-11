@@ -116,6 +116,12 @@ metricsCatalog.serviceDefinition({
           changepoints: [
             '2023-09-04',  // https://gitlab.com/gitlab-com/runbooks/-/merge_requests/6160
           ],
+          ignore_outliers: [
+            {
+              start: '2021-01-01',
+              end: '2023-07-20',
+            },
+          ],
         },
       },
     ],
