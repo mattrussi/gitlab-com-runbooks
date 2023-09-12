@@ -213,6 +213,14 @@ groups:
     labels:
       component: runway_container_memory_utilization
     expr: "0.9"
+  - record: slo:max:soft:gitlab_component_saturation:ratio
+    labels:
+      component: sidekiq_kube_pool_max_nodes
+    expr: "0.9"
+  - record: slo:max:hard:gitlab_component_saturation:ratio
+    labels:
+      component: sidekiq_kube_pool_max_nodes
+    expr: "0.95"
 - name: GitLab Component Saturation Metadata
   interval: 5m
   partial_response_strategy: warn
@@ -424,4 +432,12 @@ groups:
       horiz_scaling: "yes"
       quantile: max
       severity: s4
+    expr: "1"
+  - record: gitlab_component_saturation_info
+    labels:
+      capacity_planning_strategy: exclude
+      component: sidekiq_kube_pool_max_nodes
+      horiz_scaling: "yes"
+      quantile: max
+      severity: s3
     expr: "1"

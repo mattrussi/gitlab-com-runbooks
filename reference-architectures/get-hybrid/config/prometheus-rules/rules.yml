@@ -3712,13 +3712,13 @@ groups:
         clamp_min(
           clamp_max(
             sum by (type, pod, container) (
-              rate(container_cpu_usage_seconds_total:labeled{container!="", container!="POD", type=~"consul|gitlab-shell|registry|sidekiq|webservice"}[5m])
+              rate(container_cpu_usage_seconds_total:labeled{container!="", container!="POD", type=~"consul|gitlab-shell|registry|webservice"}[5m])
             )
             /
             sum by(type, pod, container) (
-              container_spec_cpu_quota:labeled{container!="", container!="POD", type=~"consul|gitlab-shell|registry|sidekiq|webservice"}
+              container_spec_cpu_quota:labeled{container!="", container!="POD", type=~"consul|gitlab-shell|registry|webservice"}
               /
-              container_spec_cpu_period:labeled{container!="", container!="POD", type=~"consul|gitlab-shell|registry|sidekiq|webservice"}
+              container_spec_cpu_period:labeled{container!="", container!="POD", type=~"consul|gitlab-shell|registry|webservice"}
             )
             ,
             1)
@@ -3732,9 +3732,9 @@ groups:
       max by(type) (
         clamp_min(
           clamp_max(
-            container_memory_working_set_bytes:labeled{container!="", container!="POD", type=~"consul|gitlab-shell|registry|sidekiq|webservice"}
+            container_memory_working_set_bytes:labeled{container!="", container!="POD", type=~"consul|gitlab-shell|registry|webservice"}
             /
-            (container_spec_memory_limit_bytes:labeled{container!="", container!="POD", type=~"consul|gitlab-shell|registry|sidekiq|webservice"} > 0)
+            (container_spec_memory_limit_bytes:labeled{container!="", container!="POD", type=~"consul|gitlab-shell|registry|webservice"} > 0)
             ,
             1)
         ,
@@ -3748,7 +3748,7 @@ groups:
         clamp_min(
           clamp_max(
             1 - avg by (type) (
-              rate(node_cpu_seconds_total:labeled{mode="idle", type=~"sidekiq|webservice"}[5m])
+              rate(node_cpu_seconds_total:labeled{mode="idle", type="webservice"}[5m])
             )
             ,
             1)
@@ -3783,6 +3783,72 @@ groups:
       )
     labels:
       component: node_schedstat_waiting
+    record: gitlab_component_saturation:ratio
+  - expr: |
+      max by(type) (
+        clamp_min(
+          clamp_max(
+            sum by (type, pod, container) (
+              rate(container_cpu_usage_seconds_total:labeled{container!="", container!="POD", type="sidekiq"}[5m])
+            )
+            /
+            sum by(type, pod, container) (
+              container_spec_cpu_quota:labeled{container!="", container!="POD", type="sidekiq"}
+              /
+              container_spec_cpu_period:labeled{container!="", container!="POD", type="sidekiq"}
+            )
+            ,
+            1)
+        ,
+        0)
+      )
+    labels:
+      component: sidekiq_kube_container_cpu
+    record: gitlab_component_saturation:ratio
+  - expr: |
+      max by(type) (
+        clamp_min(
+          clamp_max(
+            container_memory_working_set_bytes:labeled{container!="", container!="POD", type="sidekiq"}
+            /
+            (container_spec_memory_limit_bytes:labeled{container!="", container!="POD", type="sidekiq"} > 0)
+            ,
+            1)
+        ,
+        0)
+      )
+    labels:
+      component: sidekiq_kube_container_memory
+    record: gitlab_component_saturation:ratio
+  - expr: |
+      max by(type) (
+        clamp_min(
+          clamp_max(
+            container_memory_rss:labeled{container!="", container!="POD", type="sidekiq"}
+            /
+            (container_spec_memory_limit_bytes:labeled{container!="", container!="POD", type="sidekiq"} > 0)
+            ,
+            1)
+        ,
+        0)
+      )
+    labels:
+      component: sidekiq_kube_container_rss
+    record: gitlab_component_saturation:ratio
+  - expr: |
+      max by(type) (
+        clamp_min(
+          clamp_max(
+            1 - avg by (type) (
+              rate(node_cpu_seconds_total:labeled{mode="idle", type="sidekiq"}[5m])
+            )
+            ,
+            1)
+        ,
+        0)
+      )
+    labels:
+      component: sidekiq_kube_pool_cpu
     record: gitlab_component_saturation:ratio
   - expr: |
       max by(type) (
@@ -3882,6 +3948,38 @@ groups:
     record: slo:max:hard:gitlab_component_saturation:ratio
   - expr: "0.9"
     labels:
+      component: sidekiq_kube_container_cpu
+    record: slo:max:soft:gitlab_component_saturation:ratio
+  - expr: "0.99"
+    labels:
+      component: sidekiq_kube_container_cpu
+    record: slo:max:hard:gitlab_component_saturation:ratio
+  - expr: "0.8"
+    labels:
+      component: sidekiq_kube_container_memory
+    record: slo:max:soft:gitlab_component_saturation:ratio
+  - expr: "0.9"
+    labels:
+      component: sidekiq_kube_container_memory
+    record: slo:max:hard:gitlab_component_saturation:ratio
+  - expr: "0.8"
+    labels:
+      component: sidekiq_kube_container_rss
+    record: slo:max:soft:gitlab_component_saturation:ratio
+  - expr: "0.9"
+    labels:
+      component: sidekiq_kube_container_rss
+    record: slo:max:hard:gitlab_component_saturation:ratio
+  - expr: "0.8"
+    labels:
+      component: sidekiq_kube_pool_cpu
+    record: slo:max:soft:gitlab_component_saturation:ratio
+  - expr: "0.9"
+    labels:
+      component: sidekiq_kube_pool_cpu
+    record: slo:max:hard:gitlab_component_saturation:ratio
+  - expr: "0.9"
+    labels:
       component: single_node_cpu
     record: slo:max:soft:gitlab_component_saturation:ratio
   - expr: "0.95"
@@ -3970,6 +4068,38 @@ groups:
       horiz_scaling: "yes"
       quantile: max
       severity: s4
+    record: gitlab_component_saturation_info
+  - expr: "1"
+    labels:
+      capacity_planning_strategy: exclude
+      component: sidekiq_kube_container_cpu
+      horiz_scaling: "yes"
+      quantile: max
+      severity: s4
+    record: gitlab_component_saturation_info
+  - expr: "1"
+    labels:
+      capacity_planning_strategy: exclude
+      component: sidekiq_kube_container_memory
+      horiz_scaling: "yes"
+      quantile: max
+      severity: s4
+    record: gitlab_component_saturation_info
+  - expr: "1"
+    labels:
+      capacity_planning_strategy: exclude
+      component: sidekiq_kube_container_rss
+      horiz_scaling: "yes"
+      quantile: max
+      severity: s4
+    record: gitlab_component_saturation_info
+  - expr: "1"
+    labels:
+      capacity_planning_strategy: exclude
+      component: sidekiq_kube_pool_cpu
+      horiz_scaling: "yes"
+      quantile: max
+      severity: s3
     record: gitlab_component_saturation_info
   - expr: "1"
     labels:
@@ -4642,6 +4772,228 @@ groups:
       alert_type: cause
       rules_domain: general
       severity: s4
+  - alert: component_saturation_slo_out_of_bounds
+    annotations:
+      description: |+
+        This means that this resource is running close to capacity and is at risk of exceeding its current capacity limit.
+
+        Details of the Kube Container CPU Utilization resource:
+
+        Kubernetes containers are allocated a share of CPU. When this is exhausted, the container may be thottled.
+
+      grafana_dashboard_id: alerts-sat_sidekiq_kube_container_cpu
+      grafana_dashboard_link: https://dashboards.gitlab.net/d/alerts-sat_sidekiq_kube_container_cpu?from=now-6h/m&to=now-1m/m&var-type={{
+        $labels.type }}
+      grafana_min_zoom_hours: "6"
+      grafana_panel_id: "488486211"
+      grafana_variables: type
+      promql_query: |
+        max by(type, pod, container) (
+          clamp_min(
+            clamp_max(
+              sum by (type, pod, container) (
+                rate(container_cpu_usage_seconds_total:labeled{container!="", container!="POD", type="{{ $labels.type }}"}[5m])
+              )
+              /
+              sum by(type, pod, container) (
+                container_spec_cpu_quota:labeled{container!="", container!="POD", type="{{ $labels.type }}"}
+                /
+                container_spec_cpu_period:labeled{container!="", container!="POD", type="{{ $labels.type }}"}
+              )
+              ,
+              1)
+          ,
+          0)
+        )
+      promql_template_1: |
+        max by(type, pod, container) (
+          clamp_min(
+            clamp_max(
+              sum by (type, pod, container) (
+                rate(container_cpu_usage_seconds_total:labeled{container!="", container!="POD", type="{{ $labels.type }}"}[5m])
+              )
+              /
+              sum by(type, pod, container) (
+                container_spec_cpu_quota:labeled{container!="", container!="POD", type="{{ $labels.type }}"}
+                /
+                container_spec_cpu_period:labeled{container!="", container!="POD", type="{{ $labels.type }}"}
+              )
+              ,
+              1)
+          ,
+          0)
+        )
+      runbook: docs/{{ $labels.type }}/README.md
+      title: The Kube Container CPU Utilization resource of the {{ $labels.type }}
+        service has a saturation exceeding SLO and is close to its capacity limit.
+    expr: |
+      gitlab_component_saturation:ratio{component="sidekiq_kube_container_cpu"} > on(component) group_left
+      slo:max:hard:gitlab_component_saturation:ratio{component="sidekiq_kube_container_cpu"}
+    for: 15m
+    labels:
+      alert_type: cause
+      rules_domain: general
+      severity: s4
+  - alert: component_saturation_slo_out_of_bounds
+    annotations:
+      description: |+
+        This means that this resource is running close to capacity and is at risk of exceeding its current capacity limit.
+
+        Details of the Kube Container Memory Utilization resource:
+
+        This uses the working set size from cAdvisor for the cgroup's memory usage. That may not be a good measure as it includes filesystem cache pages that are not necessarily attributable to the application inside the cgroup, and are permitted to be evicted instead of being OOM killed.
+
+      grafana_dashboard_id: alerts-sat_sidekiq_kube_container_memory
+      grafana_dashboard_link: https://dashboards.gitlab.net/d/alerts-sat_sidekiq_kube_container_memory?from=now-6h/m&to=now-1m/m&var-type={{
+        $labels.type }}
+      grafana_min_zoom_hours: "6"
+      grafana_panel_id: "668394356"
+      grafana_variables: type
+      promql_query: |
+        max by(type) (
+          clamp_min(
+            clamp_max(
+              container_memory_working_set_bytes:labeled{container!="", container!="POD", type="{{ $labels.type }}"}
+              /
+              (container_spec_memory_limit_bytes:labeled{container!="", container!="POD", type="{{ $labels.type }}"} > 0)
+              ,
+              1)
+          ,
+          0)
+        )
+      promql_template_1: |
+        max by(type) (
+          clamp_min(
+            clamp_max(
+              container_memory_working_set_bytes:labeled{container!="", container!="POD", type="{{ $labels.type }}"}
+              /
+              (container_spec_memory_limit_bytes:labeled{container!="", container!="POD", type="{{ $labels.type }}"} > 0)
+              ,
+              1)
+          ,
+          0)
+        )
+      runbook: docs/{{ $labels.type }}/README.md
+      title: The Kube Container Memory Utilization resource of the {{ $labels.type
+        }} service has a saturation exceeding SLO and is close to its capacity limit.
+    expr: |
+      gitlab_component_saturation:ratio{component="sidekiq_kube_container_memory"} > on(component) group_left
+      slo:max:hard:gitlab_component_saturation:ratio{component="sidekiq_kube_container_memory"}
+    for: 15m
+    labels:
+      alert_type: cause
+      rules_domain: general
+      severity: s4
+  - alert: component_saturation_slo_out_of_bounds
+    annotations:
+      description: |+
+        This means that this resource is running close to capacity and is at risk of exceeding its current capacity limit.
+
+        Details of the Kube Container Memory Utilization (RSS) resource:
+
+        Records the total anonymous (unevictable) memory utilization for containers for this service, as a percentage of the memory limit as configured through Kubernetes.
+
+        This is computed using the container's resident set size (RSS), as opposed to kube_container_memory which uses the working set size. For our purposes, RSS is the better metric as cAdvisor's working set calculation includes pages from the filesystem cache that can (and will) be evicted before the OOM killer kills the cgroup.
+
+        A container's RSS (anonymous memory usage) is still not precisely what the OOM killer will use, but it's a better approximation of what the container's workload is actually using. RSS metrics can, however, be dramatically inflated if a process in the container uses MADV_FREE (lazy-free) memory. RSS will include the memory that is available to be reclaimed without a page fault, but not currently in use.
+
+        The most common case of OOM kills is for anonymous memory demand to overwhelm the container's memory limit. On swapless hosts, anonymous memory cannot be evicted from the page cache, so when a container's memory usage is mostly anonymous pages, the only remaining option to relieve memory pressure may be the OOM killer.
+
+        As container RSS approaches container memory limit, OOM kills become much more likely. Consequently, this ratio is a good leading indicator of memory saturation and OOM risk.
+
+      grafana_dashboard_id: alerts-sat_sidekiq_kube_container_rss
+      grafana_dashboard_link: https://dashboards.gitlab.net/d/alerts-sat_sidekiq_kube_container_rss?from=now-6h/m&to=now-1m/m&var-type={{
+        $labels.type }}
+      grafana_min_zoom_hours: "6"
+      grafana_panel_id: "3518017142"
+      grafana_variables: type
+      promql_query: |
+        max by(type) (
+          clamp_min(
+            clamp_max(
+              container_memory_rss:labeled{container!="", container!="POD", type="{{ $labels.type }}"}
+              /
+              (container_spec_memory_limit_bytes:labeled{container!="", container!="POD", type="{{ $labels.type }}"} > 0)
+              ,
+              1)
+          ,
+          0)
+        )
+      promql_template_1: |
+        max by(type) (
+          clamp_min(
+            clamp_max(
+              container_memory_rss:labeled{container!="", container!="POD", type="{{ $labels.type }}"}
+              /
+              (container_spec_memory_limit_bytes:labeled{container!="", container!="POD", type="{{ $labels.type }}"} > 0)
+              ,
+              1)
+          ,
+          0)
+        )
+      runbook: docs/{{ $labels.type }}/README.md
+      title: The Kube Container Memory Utilization (RSS) resource of the {{ $labels.type
+        }} service has a saturation exceeding SLO and is close to its capacity limit.
+    expr: |
+      gitlab_component_saturation:ratio{component="sidekiq_kube_container_rss"} > on(component) group_left
+      slo:max:hard:gitlab_component_saturation:ratio{component="sidekiq_kube_container_rss"}
+    for: 15m
+    labels:
+      alert_type: cause
+      rules_domain: general
+      severity: s4
+  - alert: component_saturation_slo_out_of_bounds
+    annotations:
+      description: |+
+        This means that this resource is running close to capacity and is at risk of exceeding its current capacity limit.
+
+        Details of the Average Node Pool CPU Utilization resource:
+
+        This resource measures average CPU utilization across an all cores in the node pool for a service fleet.
+
+        If it is becoming saturated, it may indicate that the fleet needs horizontal scaling.
+
+      grafana_dashboard_id: alerts-sat_sidekiq_kube_pool_cpu
+      grafana_dashboard_link: https://dashboards.gitlab.net/d/alerts-sat_sidekiq_kube_pool_cpu?from=now-6h/m&to=now-1m/m&var-type={{
+        $labels.type }}
+      grafana_min_zoom_hours: "6"
+      grafana_panel_id: "414569730"
+      grafana_variables: type
+      promql_query: |
+        max by(type) (
+          clamp_min(
+            clamp_max(
+              1 - avg by (type) (
+                rate(node_cpu_seconds_total:labeled{mode="idle", type="{{ $labels.type }}"}[5m])
+              )
+              ,
+              1)
+          ,
+          0)
+        )
+      promql_template_1: |
+        max by(type) (
+          clamp_min(
+            clamp_max(
+              1 - avg by (type) (
+                rate(node_cpu_seconds_total:labeled{mode="idle", type="{{ $labels.type }}"}[5m])
+              )
+              ,
+              1)
+          ,
+          0)
+        )
+      runbook: docs/{{ $labels.type }}/README.md
+      title: The Average Node Pool CPU Utilization resource of the {{ $labels.type
+        }} service has a saturation exceeding SLO and is close to its capacity limit.
+    expr: |
+      gitlab_component_saturation:ratio{component="sidekiq_kube_pool_cpu"} > on(component) group_left
+      slo:max:hard:gitlab_component_saturation:ratio{component="sidekiq_kube_pool_cpu"}
+    for: 5m
+    labels:
+      alert_type: cause
+      rules_domain: general
+      severity: s3
   - alert: component_saturation_slo_out_of_bounds
     annotations:
       description: |+
