@@ -45,16 +45,16 @@ metricsCatalog.serviceDefinition(
           name: 'pg_int4_id',
           events: [
             {
-              date: '2023-03-20',
-              name: 'Migration to int8 column to address int4 capacity saturation',
+              date: '2023-03-23',
+              name: 'Migrated merge_request_metrics.id',
             },
             {
-              date: '2023-04-06',
-              name: 'Migration to int8 column to address int4 capacity saturation',
+              date: '2023-04-14',
+              name: 'Migrated sent_notifications.id',
             },
             {
               date: '2023-06-15',
-              name: 'Migration to int8 column to address int4 capacity saturation',
+              name: 'Migrated note_id in >10 tables',
             },
           ],
           parameters: {

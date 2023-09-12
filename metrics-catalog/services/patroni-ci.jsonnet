@@ -57,6 +57,16 @@ metricsCatalog.serviceDefinition(
         },
         {
           name: 'pg_int4_id',
+          events: [
+            {
+              date: '2023-03-30',
+              name: 'Migrated ci_build_needs.id',
+            },
+            {
+              date: '2023-06-28',
+              name: 'Migrated ci_pipeline_variables.id',
+            },
+          ],
           parameters: {
             ignore_outliers: [
               // This is a hack to improve the forecast for this jumpy series of data

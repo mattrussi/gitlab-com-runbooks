@@ -133,4 +133,19 @@ metricsCatalog.serviceDefinition({
   skippedMaturityCriteria: {
     'Structured logs available in Kibana': 'Logs from HAProxy are available in BigQuery, and not ingested to ElasticSearch due to volume. Usually, workhorse logs will cover the same ground.',
   },
+  capacityPlanning: {
+    components: [
+      {
+        name: 'disk_space',
+        parameters: {
+          ignore_outliers: [
+            {
+              start: '2021-01-01',
+              end: '2023-08-20',
+            },
+          ],
+        },
+      },
+    ],
+  },
 })
