@@ -82,6 +82,7 @@ test.suite({
           'overviewDashboard',
           'owner',
           'resourceDashboard',
+          'saturationQuery',
         ],
       std.objectFields(self.actual.services)
     ),

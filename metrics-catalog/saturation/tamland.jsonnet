@@ -6,6 +6,7 @@ local saturation = import 'servicemetrics/saturation-resources.libsonnet';
 local serviceCatalog = import 'service-catalog/service-catalog.libsonnet';
 local metricsCatalog = import 'servicemetrics/metrics-catalog.libsonnet';
 local dashboard = import './grafana.libsonnet';
+local prom = import './prometheus.libsonnet';
 
 local uniqServices(saturationPoints) = std.foldl(
   function(memo, definition) std.set(memo + definition.appliesTo),
@@ -37,11 +38,18 @@ local resourceDashboardPerComponent(service) =
     for component in saturationPointsByService(service)
   };
 
+local saturationQueryPerComponent(service) =
+  {
+    [component]: prom.saturationQueryUrl(saturationPoint=saturation[component], service=service)
+    for component in saturationPointsByService(service)
+  };
+
 local services(services) = {
   [service]: {
     capacityPlanning: metricsCatalog.getService(service).capacityPlanning,
     overviewDashboard: dashboard.overviewDashboard(service),
     resourceDashboard: resourceDashboardPerComponent(service),
+    saturationQuery: saturationQueryPerComponent(service),
   } + truncateRawCatalogService(serviceCatalog.lookupService(service))
   for service in services
 };
@@ -56,14 +64,7 @@ local page(path, title, service_pattern) =
 
 {
   defaults: {
-    prometheus: {
-      baseURL: 'https://thanos.ops.gitlab.net',
-      defaultSelectors: {
-        env: 'gprd',
-        stage: 'main',
-      },
-      serviceLabel: 'type',
-    },
+    prometheus: prom.defaults,
   },
   services: services(uniqServices(saturation)),
   saturationPoints: saturation,
