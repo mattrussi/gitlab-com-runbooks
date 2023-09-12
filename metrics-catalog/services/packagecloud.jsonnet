@@ -68,7 +68,10 @@ metricsCatalog.serviceDefinition({
       projectId='gitlab-ops',
       additionalToolingLinks=[
         toolingLinks.kibana(title='Packagecloud', index='packagecloud'),
-      ]
+      ],
+      extra={
+        severity: 's3',  // don't page anyone yet
+      }
     ),
     loadbalancer_nonprod: googleLoadBalancerComponents.googleLoadBalancer(
       userImpacting=false,
@@ -77,7 +80,10 @@ metricsCatalog.serviceDefinition({
       projectId='gitlab-pre',
       additionalToolingLinks=[
         toolingLinks.kibana(title='Packagecloud', index='packagecloud_pre'),
-      ]
+      ],
+      extra={
+        severity: 's3',  // never page as it's non-prod
+      }
     ),
   },
 })
