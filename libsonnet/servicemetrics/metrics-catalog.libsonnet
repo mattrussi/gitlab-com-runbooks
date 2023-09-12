@@ -44,14 +44,14 @@ local serviceApplicableSaturationTypes(service)
     else
       null,
 
-  findServicesExcluding(first=null, excluding)::
+  findServicesExcluding(first=null, excluding=[])::
     findServiceTypesWithFirst(first, function(s) !std.setMember(s.type, excluding)),
 
-  findServicesWithTag(first=null, tag)::
-    findServiceTypesWithFirst(first, function(s) std.setMember(tag, s.tags)),
+  findServicesWithTag(first=null, tag, excluding=[])::
+    findServiceTypesWithFirst(first, function(s) std.setMember(tag, s.tags) && !std.setMember(s.type, excluding)),
 
-  findKubeProvisionedServices(first=null)::
-    findServiceTypesWithFirst(first, function(s) s.provisioning.kubernetes),
+  findKubeProvisionedServices(first=null, excluding=[])::
+    findServiceTypesWithFirst(first, function(s) s.provisioning.kubernetes && !std.setMember(s.type, excluding)),
 
   findRunwayProvisionedServices(first=null)::
     findServiceTypesWithFirst(first, function(s) std.objectHas(s.provisioning, 'runway') && s.provisioning.runway),
@@ -64,8 +64,8 @@ local serviceApplicableSaturationTypes(service)
 
   // Returns a list of all services that are provisioned on kubernetes that
   // also have dedicated node pools
-  findKubeProvisionedServicesWithDedicatedNodePool(first=null)::
-    findServiceTypesWithFirst(first, function(s) s.hasDedicatedKubeNodePool()),
+  findKubeProvisionedServicesWithDedicatedNodePool(first=null, excluding=[])::
+    findServiceTypesWithFirst(first, function(s) s.hasDedicatedKubeNodePool() && !std.setMember(s.type, excluding)),
 
   serviceExists(serviceType)::
     std.objectHas(serviceMap, serviceType),

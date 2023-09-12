@@ -8,10 +8,7 @@ local commonDefinition = {
   title: 'Ruby Thread Contention',
   severity: 's3',
   horizontallyScalable: true,  // Add more replicas for achieve greater scalability
-  appliesTo: std.filter(
-    function(service) service != 'sidekiq',
-    metricsCatalog.findServicesWithTag(tag='rails')
-  ),
+  appliesTo: metricsCatalog.findServicesWithTag(tag='rails', excluding=['sidekiq']),
   description: |||
     Ruby (technically Ruby MRI), like some other scripting languages, uses a Global VM lock (GVL) also known as a
     Global Interpreter Lock (GIL) to ensure that multiple threads can execute safely. Ruby code is only allowed to
