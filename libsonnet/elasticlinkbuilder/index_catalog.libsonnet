@@ -142,6 +142,17 @@ local indexDefaults = {
     kibanaEndpoint: 'https://nonprod-log.gitlab.net/app/kibana',
   },
 
+  packagecloud: indexDefaults {
+    timestamp: 'json.time',
+    indexPattern: 'pubsub-packagecloud-inf-ops',
+    defaultColumns: ['json.message', 'json.component', 'json.subcomponent'],
+    kibanaEndpoint: 'https://nonprod-log.gitlab.net/app/kibana',
+  },
+
+  packagecloud_pre: self.packagecloud {
+    indexPattern: 'pubsub-packagecloud-inf-pre',
+  },
+
   pages: indexDefaults {
     timestamp: 'json.time',
     indexPattern: 'AWRaEscWMdvjVyaYlI-L',
