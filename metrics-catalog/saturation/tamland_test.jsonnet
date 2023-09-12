@@ -60,7 +60,7 @@ test.suite({
     expectThat: {
       local promFields = std.objectFields(self.actual.prometheus),
       result: std.objectHas(self.actual, 'prometheus')
-        && promFields == ["baseURL", "defaultSelectors", "serviceLabel"],
+              && promFields == ['baseURL', 'defaultSelectors', 'serviceLabel'],
       description: 'Expect object to have default configurations',
     },
   },
@@ -72,9 +72,22 @@ test.suite({
     },
   },
   testHasServices: {
+    local servicesHaveExpectedFields = std.map(
+      function(name)
+        local fields = std.objectFields(self.actual.services[name]);
+        fields == [
+          'capacityPlanning',
+          'label',
+          'name',
+          'overviewDashboard',
+          'owner',
+          'resourceDashboard',
+        ],
+      std.objectFields(self.actual.services)
+    ),
     actual: manifest,
     expectThat: {
-      result: std.objectHas(self.actual, 'services') == true,
+      result: std.objectHas(self.actual, 'services') && std.all(servicesHaveExpectedFields),
       description: 'Expect object to have serviceCatalog field',
     },
   },

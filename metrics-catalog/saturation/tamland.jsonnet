@@ -4,8 +4,8 @@ local saturation = import 'servicemetrics/saturation-resources.libsonnet';
 local sidekiqHelpers = import 'services/lib/sidekiq-helpers.libsonnet';
 local saturation = import 'servicemetrics/saturation-resources.libsonnet';
 local serviceCatalog = import 'service-catalog/service-catalog.libsonnet';
-
 local metricsCatalog = import 'servicemetrics/metrics-catalog.libsonnet';
+local dashboard = import './grafana.libsonnet';
 
 local uniqServices(saturationPoints) = std.foldl(
   function(memo, definition) std.set(memo + definition.appliesTo),
@@ -22,9 +22,26 @@ local truncateRawCatalogService(service) =
     owner: service.owner,
   };
 
+local saturationPointsByService(service) = std.foldl(
+  function(arr, saturationPointName)
+    if std.member(saturation[saturationPointName].appliesTo, service)
+    then arr + [saturationPointName]
+    else arr,
+  std.objectFields(saturation),
+  []
+);
+
+local resourceDashboardPerComponent(service) =
+  {
+    [component]: dashboard.resourceDashboard(service, saturation[component].grafana_dashboard_uid, component)
+    for component in saturationPointsByService(service)
+  };
+
 local services(services) = {
   [service]: {
     capacityPlanning: metricsCatalog.getService(service).capacityPlanning,
+    overviewDashboard: dashboard.overviewDashboard(service),
+    resourceDashboard: resourceDashboardPerComponent(service),
   } + truncateRawCatalogService(serviceCatalog.lookupService(service))
   for service in services
 };
@@ -35,6 +52,7 @@ local page(path, title, service_pattern) =
     title: title,
     service_pattern: service_pattern,
   };
+
 
 {
   defaults: {
