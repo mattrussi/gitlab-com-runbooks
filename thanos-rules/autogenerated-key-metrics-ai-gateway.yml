@@ -51,7 +51,7 @@ groups:
       type: ai-gateway
     expr: |
       sum by (env,environment) (
-        rate(stackdriver_cloud_run_revision_run_googleapis_com_request_latencies_bucket{le="2048",type="ai-gateway"}[1m] offset 30s)
+        avg_over_time(stackdriver_cloud_run_revision_run_googleapis_com_request_latencies_bucket{le="2079.650567184067",type="ai-gateway"}[1m] offset 30s)
       )
   - record: gitlab_component_apdex:weight:score
     labels:
@@ -61,7 +61,7 @@ groups:
       type: ai-gateway
     expr: |
       sum by (env,environment) (
-        rate(stackdriver_cloud_run_revision_run_googleapis_com_request_latencies_bucket{le="+Inf",type="ai-gateway"}[1m] offset 30s)
+        avg_over_time(stackdriver_cloud_run_revision_run_googleapis_com_request_latencies_bucket{le="+Inf",type="ai-gateway"}[1m] offset 30s)
       )
   - record: gitlab_component_ops:rate
     labels:
@@ -225,7 +225,7 @@ groups:
       type: ai-gateway
     expr: |
       sum by (env,environment) (
-        rate(stackdriver_cloud_run_revision_run_googleapis_com_request_latencies_bucket{le="2048",type="ai-gateway"}[5m] offset 30s)
+        avg_over_time(stackdriver_cloud_run_revision_run_googleapis_com_request_latencies_bucket{le="2079.650567184067",type="ai-gateway"}[5m] offset 30s)
       )
   - record: gitlab_component_apdex:weight:score_5m
     labels:
@@ -235,7 +235,7 @@ groups:
       type: ai-gateway
     expr: |
       sum by (env,environment) (
-        rate(stackdriver_cloud_run_revision_run_googleapis_com_request_latencies_bucket{le="+Inf",type="ai-gateway"}[5m] offset 30s)
+        avg_over_time(stackdriver_cloud_run_revision_run_googleapis_com_request_latencies_bucket{le="+Inf",type="ai-gateway"}[5m] offset 30s)
       )
   - record: gitlab_component_ops:rate_5m
     labels:
@@ -399,7 +399,7 @@ groups:
       type: ai-gateway
     expr: |
       sum by (env,environment) (
-        rate(stackdriver_cloud_run_revision_run_googleapis_com_request_latencies_bucket{le="2048",type="ai-gateway"}[30m] offset 30s)
+        avg_over_time(stackdriver_cloud_run_revision_run_googleapis_com_request_latencies_bucket{le="2079.650567184067",type="ai-gateway"}[30m] offset 30s)
       )
   - record: gitlab_component_apdex:weight:score_30m
     labels:
@@ -409,7 +409,7 @@ groups:
       type: ai-gateway
     expr: |
       sum by (env,environment) (
-        rate(stackdriver_cloud_run_revision_run_googleapis_com_request_latencies_bucket{le="+Inf",type="ai-gateway"}[30m] offset 30s)
+        avg_over_time(stackdriver_cloud_run_revision_run_googleapis_com_request_latencies_bucket{le="+Inf",type="ai-gateway"}[30m] offset 30s)
       )
   - record: gitlab_component_ops:rate_30m
     labels:
@@ -573,7 +573,7 @@ groups:
       type: ai-gateway
     expr: |
       sum by (env,environment) (
-        rate(stackdriver_cloud_run_revision_run_googleapis_com_request_latencies_bucket{le="2048",type="ai-gateway"}[1h] offset 30s)
+        avg_over_time(stackdriver_cloud_run_revision_run_googleapis_com_request_latencies_bucket{le="2079.650567184067",type="ai-gateway"}[1h] offset 30s)
       )
   - record: gitlab_component_apdex:weight:score_1h
     labels:
@@ -583,7 +583,7 @@ groups:
       type: ai-gateway
     expr: |
       sum by (env,environment) (
-        rate(stackdriver_cloud_run_revision_run_googleapis_com_request_latencies_bucket{le="+Inf",type="ai-gateway"}[1h] offset 30s)
+        avg_over_time(stackdriver_cloud_run_revision_run_googleapis_com_request_latencies_bucket{le="+Inf",type="ai-gateway"}[1h] offset 30s)
       )
   - record: gitlab_component_ops:rate_1h
     labels:
@@ -747,7 +747,7 @@ groups:
       type: ai-gateway
     expr: |
       sum by (env,environment) (
-        rate(stackdriver_cloud_run_revision_run_googleapis_com_request_latencies_bucket{le="2048",type="ai-gateway"}[6h] offset 30s)
+        avg_over_time(stackdriver_cloud_run_revision_run_googleapis_com_request_latencies_bucket{le="2079.650567184067",type="ai-gateway"}[6h] offset 30s)
       )
   - record: gitlab_component_apdex:weight:score_6h
     labels:
@@ -757,7 +757,7 @@ groups:
       type: ai-gateway
     expr: |
       sum by (env,environment) (
-        rate(stackdriver_cloud_run_revision_run_googleapis_com_request_latencies_bucket{le="+Inf",type="ai-gateway"}[6h] offset 30s)
+        avg_over_time(stackdriver_cloud_run_revision_run_googleapis_com_request_latencies_bucket{le="+Inf",type="ai-gateway"}[6h] offset 30s)
       )
   - record: gitlab_component_ops:rate_6h
     labels:

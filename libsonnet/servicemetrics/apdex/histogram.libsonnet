@@ -26,15 +26,16 @@ local generateApdexComponentRateQuery(histogramApdex, additionalSelectors, range
   local resolvedRecordingRule = recordingRuleRegistry.resolveRecordingRuleFor(
     aggregationFunction=aggregationFunction,
     aggregationLabels=aggregationLabels,
-    rangeVectorFunction='rate',
+    rangeVectorFunction=histogramApdex.rangeVectorFunction,
     metricName=histogramApdex.histogram,
     rangeInterval=rangeInterval,
     selector=selectorWithout,
   );
 
   if !histogramApdex.useRecordingRuleRegistry || resolvedRecordingRule == null then
-    local query = 'rate(%(histogram)s{%(selector)s}[%(rangeInterval)s]%(optionalOffset)s)' % {
+    local query = '%(rangeVectorFunction)s(%(histogram)s{%(selector)s}[%(rangeInterval)s]%(optionalOffset)s)' % {
       histogram: histogramApdex.histogram,
+      rangeVectorFunction: histogramApdex.rangeVectorFunction,
       selector: selectors.serializeHash(selectorWithout),
       rangeInterval: rangeInterval,
       optionalOffset: optionalOffset(offset),
@@ -187,6 +188,7 @@ local generateApdexAttributionQuery(histogram, selector, rangeInterval, aggregat
 {
   histogramApdex(
     histogram,
+    rangeVectorFunction='rate',
     selector={},
     satisfiedThreshold=null,
     toleratedThreshold=null,
@@ -194,6 +196,7 @@ local generateApdexAttributionQuery(histogram, selector, rangeInterval, aggregat
     useRecordingRuleRegistry=true
   ):: {
     histogram: histogram,
+    rangeVectorFunction: rangeVectorFunction,
     selector: selector,
     satisfiedThreshold: satisfiedThreshold,
     toleratedThreshold: toleratedThreshold,

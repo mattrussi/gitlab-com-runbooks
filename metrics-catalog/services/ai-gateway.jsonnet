@@ -12,7 +12,7 @@ metricsCatalog.serviceDefinition(
     type='ai-gateway',
     team='code_creation',
     featureCategory='code_suggestions',
-    apdexSatisfiedThreshold=2048,
+    apdexSatisfiedThreshold="2079.650567184067",
     customToolingLinks=[
       toolingLinks.kibana(
         title='MLOps',

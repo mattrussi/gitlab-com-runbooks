@@ -9,7 +9,7 @@ function(
   team,
   apdexScore=0.999,
   errorRatio=0.999,
-  apdexSatisfiedThreshold=1024,
+  apdexSatisfiedThreshold="1067.1895716335973",
   featureCategory='not_owned',
   userImpacting=true,
   trafficCessationAlertConfig=true,
@@ -44,6 +44,7 @@ function(
 
         apdex: histogramApdex(
           histogram='stackdriver_cloud_run_revision_run_googleapis_com_request_latencies_bucket',
+          rangeVectorFunction='avg_over_time',
           selector=baseSelector,
           satisfiedThreshold=apdexSatisfiedThreshold
         ),
