@@ -17,7 +17,7 @@
   import 'saturation-monitoring/elastic_single_node_disk_space.libsonnet',
   import 'saturation-monitoring/elastic_thread_pools.libsonnet',
   import 'saturation-monitoring/filestore_disk.libsonnet',
-  import 'saturation-monitoring/gcp_quota_limit.libsonnet',
+  import 'saturation-monitoring/gcp_quota.libsonnet',
   import 'saturation-monitoring/gitaly_total_disk_space.libsonnet',
   import 'saturation-monitoring/gitaly_active_node_available_space.libsonnet',
   import 'saturation-monitoring/go_goroutines.libsonnet',
