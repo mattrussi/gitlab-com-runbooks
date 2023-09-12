@@ -2122,7 +2122,8 @@ services:
     owner: reliability_general
     technical:
       project:
-        - https://gitlab.com/gitlab-cookbooks/gitlab-packagecloud
+        - https://gitlab.com/gitlab-com/gl-infra/charts/-/tree/main/gitlab/packagecloud
+        - https://gitlab.com/gitlab-com/gl-infra/k8s-workloads/gitlab-helmfiles/-/tree/master/releases/packagecloud
       documents:
         design:
         architecture:
@@ -2132,12 +2133,14 @@ services:
         service:
         security:
       logging:
-        - name:
-          permalink:
+        - name: ops
+          permalink: https://nonprod-log.gitlab.net/app/r/s/xBFHH
+        - name: pre
+          permalink: https://nonprod-log.gitlab.net/app/r/s/5ATui
     observability:
       monitors:
-        grafana_folder:
-        primary_grafana_dashboard:
+        grafana_folder: packagecloud
+        primary_grafana_dashboard: packagecloud-main/packagecloud-overview
 
   - name: internal-api
     friendly_name: GitLab Internal API
@@ -2299,3 +2302,26 @@ services:
       monitors:
         primary_grafana_dashboard: gitlab-omnibus-versions
         sentry_slug:
+
+  - name: memorystore
+    tier: inf
+    friendly_name: Google Cloud Memorystore
+    label: GoogleCloudMemorystore
+    owner: reliability_foundations
+    technical:
+      project:
+      documents:
+        design: https://cloud.google.com/memorystore
+        architecture:
+        readiness_review:
+        sre_guide: https://gitlab.com/gitlab-com/runbooks/-/tree/master/docs/memorystore
+        developer_guide:
+        service:
+        security:
+      logging:
+        - name: Google Cloud Memorystore Logs
+          permalink: https://cloudlogging.app.goo.gl/n6GuqLwLek4w5LBv8
+    observability:
+      monitors:
+        grafana_folder: memorystore
+        primary_grafana_dashboard: memorystore-main/memorystore-overview
