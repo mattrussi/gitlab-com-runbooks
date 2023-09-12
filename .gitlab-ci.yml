@@ -1181,7 +1181,7 @@ deploy-thanos-rules:staging:
       changes:
         paths:
           - thanos-staging-rules/**/*
-          - *thanos-rules-patterns
+          - thanos-rules/**/*
   extends:
     - .deploy-prometheus-rules
 
