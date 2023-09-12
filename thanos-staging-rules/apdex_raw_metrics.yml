@@ -1,0 +1,39 @@
+---
+apiVersion: monitoring.coreos.com/v1
+kind: PrometheusRule
+metadata:
+  name: apdex-raw-metrics
+  labels:
+    ruler: thanos
+    shard: '0'
+  annotations: {}
+spec:
+  groups:
+  - name: experimental web Apdex calculation with offset numerator and denominator
+      in same transaction
+    interval: 1m
+    partial_response_strategy: abort
+    rules:
+    - record: offset_apdex_numerator_and_denominator
+      labels:
+        type: web
+        rate: 1h_offset_30s
+      expr: |
+        label_replace(
+          sum by (env, environment, stage)
+            (sum by (endpoint_id,environment,job,search_level,search_scope,search_type,shard,stage,tier,type) (
+              rate(gitlab_sli_rails_request_apdex_success_total{environment="gprd", type="web"}[1h] offset 30s))),
+          'ratio_part', 'numerator', '', '')
+        or
+        label_replace(
+          sum by (env, environment, stage) (sum by (endpoint_id,environment,feature_category,job,request_urgency,shard,stage,tier,type) (
+          rate(gitlab_sli_rails_request_total{environment="gprd", type="web"}[1h] offset 30s))),
+          'ratio_part', 'denominator', '', '')
+    - record: offset_apdex_calculation
+      labels:
+        type: web
+        rate: 1h_double_offset_30s_with_transactionally_consistent_inputs
+      expr: |
+        sum without (ratio_part) (offset_apdex_numerator_and_denominator{type="web", rate="1h_offset_30s", ratio_part="numerator"} offset 30s)
+        /
+        sum without (ratio_part) (offset_apdex_numerator_and_denominator{type="web", rate="1h_offset_30s", ratio_part="denominator"} offset 30s)
