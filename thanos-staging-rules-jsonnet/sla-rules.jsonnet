@@ -2,7 +2,7 @@ local availabilityPromql = import 'gitlab-availability/availability-promql.libso
 local metricsConfig = import 'gitlab-metrics-config.libsonnet';
 local selectors = import 'promql/selectors.libsonnet';
 local serviceCatalog = import 'service-catalog/service-catalog.libsonnet';
-local separateGlobalRecordingFiles = (import './lib/separate-global-recording-files.libsonnet').separateGlobalRecordingFiles;
+local separateGlobalRecordingFiles = (import 'recording-rules/lib/thanos/separate-global-recording-files.libsonnet').separateGlobalRecordingFiles;
 
 local keyServiceWeights = std.foldl(
   function(memo, item) memo {

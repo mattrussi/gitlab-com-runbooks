@@ -2,7 +2,7 @@ local services = (import 'gitlab-metrics-config.libsonnet').monitoredServices;
 local thresholds = import 'mwmbr/thresholds.libsonnet';
 local recordingRules = import 'recording-rules/recording-rules.libsonnet';
 local strings = import 'utils/strings.libsonnet';
-local separateGlobalRecordingFiles = (import './lib/separate-global-recording-files.libsonnet').separateGlobalRecordingFiles;
+local separateGlobalRecordingFiles = (import 'recording-rules/lib/thanos/separate-global-recording-files.libsonnet').separateGlobalRecordingFiles;
 
 local outputPromYaml(groups) =
   std.manifestYamlDoc({

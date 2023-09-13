@@ -1,6 +1,6 @@
 local saturationResources = import 'servicemetrics/saturation-resources.libsonnet';
 local saturationRules = import 'servicemetrics/saturation_rules.libsonnet';
-local separateGlobalRecordingFiles = (import './lib/separate-global-recording-files.libsonnet').separateGlobalRecordingFiles;
+local separateGlobalRecordingFiles = (import 'recording-rules/lib/thanos/separate-global-recording-files.libsonnet').separateGlobalRecordingFiles;
 
 local filesForSeparateSelector(selector) = {
   saturation:

@@ -2,7 +2,7 @@ local aggregationSets = (import 'gitlab-metrics-config.libsonnet').aggregationSe
 local aggregationSetTransformer = import 'servicemetrics/aggregation-set-transformer.libsonnet';
 local applicationSlis = (import 'gitlab-slis/library.libsonnet').all;
 local applicationSliAggregations = import 'gitlab-slis/aggregation-sets.libsonnet';
-local separateGlobalRecordingFiles = (import './lib/separate-global-recording-files.libsonnet').separateGlobalRecordingFiles;
+local separateGlobalRecordingFiles = (import 'recording-rules/lib/thanos/separate-global-recording-files.libsonnet').separateGlobalRecordingFiles;
 
 local defaultsForRecordingRuleGroup = { partial_response_strategy: 'warn' };
 
