@@ -193,6 +193,7 @@ local generateApdexAttributionQuery(histogram, selector, rangeInterval, aggregat
     satisfiedThreshold=null,
     toleratedThreshold=null,
     metricsFormat='prometheus',
+    unit='s',
     useRecordingRuleRegistry=true
   ):: {
     histogram: histogram,
@@ -201,6 +202,7 @@ local generateApdexAttributionQuery(histogram, selector, rangeInterval, aggregat
     satisfiedThreshold: satisfiedThreshold,
     toleratedThreshold: toleratedThreshold,
     metricsFormat: metricsFormat,
+    unit: unit,
     useRecordingRuleRegistry:: useRecordingRuleRegistry,
 
     apdexQuery(aggregationLabels, selector, rangeInterval, withoutLabels=[])::
