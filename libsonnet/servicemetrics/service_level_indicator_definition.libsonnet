@@ -1,5 +1,6 @@
 local aggregations = import 'promql/aggregations.libsonnet';
 local selectors = import 'promql/selectors.libsonnet';
+local transactionalRates = import 'recording-rules/transactional-rates/transactional-rates.libsonnet';
 local stages = import 'service-catalog/stages.libsonnet';
 local dependencies = import 'servicemetrics/dependencies_definition.libsonnet';
 local metricsCatalog = import 'servicemetrics/metrics-catalog.libsonnet';
@@ -162,6 +163,7 @@ local serviceLevelIndicatorDefinition(sliName, serviceLevelIndicator) =
 
         local apdexSuccessRateRecordingRuleName = aggregationSet.getApdexSuccessRateMetricForBurnRate(burnRate);
         local apdexWeightRecordingRuleName = aggregationSet.getApdexWeightMetricForBurnRate(burnRate);
+        local apdexRatesMetric = aggregationSet.getApdexRatesMetricForBurnRate(burnRate);
 
         local apdexSuccessRateExpr = serviceLevelIndicator.apdex.apdexSuccessRateQuery(
           aggregationLabels=aggregationLabelsWithoutStaticLabels,
@@ -176,6 +178,8 @@ local serviceLevelIndicatorDefinition(sliName, serviceLevelIndicator) =
           rangeInterval=burnRate,
           offset=aggregationSet.offset,
         );
+
+        local apdexRatesExpr = transactionalRates.apdexRatesExpr(apdexSuccessRateExpr, apdexWeightExpr);
 
         (
           if apdexSuccessRateRecordingRuleName != null then
@@ -194,6 +198,17 @@ local serviceLevelIndicatorDefinition(sliName, serviceLevelIndicator) =
               record: apdexWeightRecordingRuleName,
               labels: allStaticLabels,
               expr: apdexWeightExpr,
+            }]
+          else
+            []
+        )
+        +
+        (
+          if apdexRatesMetric != null then
+            [{
+              record: apdexRatesMetric,
+              labels: allStaticLabels,
+              expr: apdexRatesExpr,
             }]
           else
             []
@@ -230,12 +245,21 @@ local serviceLevelIndicatorDefinition(sliName, serviceLevelIndicator) =
         local errorRateRecordingRuleName = aggregationSet.getErrorRateMetricForBurnRate(burnRate, required=true);
         local filteredAggregationLabels = filterStaticLabelsFromAggregationLabels(aggregationSet.labels, allStaticLabels);
 
-        local expr = serviceLevelIndicator.errorRate.aggregatedRateQuery(
+        local errorRateExpr = serviceLevelIndicator.errorRate.aggregatedRateQuery(
           aggregationLabels=filterStaticLabelsFromAggregationLabels(aggregationSet.labels, allStaticLabels),
           selector={},
           rangeInterval=burnRate,
           offset=aggregationSet.offset,
         );
+
+        local opsRateExpr = serviceLevelIndicator.requestRate.aggregatedRateQuery(
+          aggregationLabels=filterStaticLabelsFromAggregationLabels(aggregationSet.labels, allStaticLabels),
+          selector={},
+          rangeInterval=burnRate,
+          offset=aggregationSet.offset,
+        );
+
+        local errorRatesMetric = aggregationSet.getErrorRatesMetricForBurnRate(burnRate);
 
         [{
           record: errorRateRecordingRuleName,
@@ -251,12 +275,23 @@ local serviceLevelIndicatorDefinition(sliName, serviceLevelIndicator) =
               )
             )
           ||| % {
-            expr: strings.indent(expr, 2),
+            expr: strings.indent(errorRateExpr, 2),
             filteredAggregationLabels: aggregations.serialize(filteredAggregationLabels),
             requestRateRecordingRuleName: requestRateRecordingRuleName,
             allStaticLabels: selectors.serializeHash(allStaticLabels),
           },
         }]
+        +
+        (
+          if errorRatesMetric != null then
+            [{
+              record: errorRatesMetric,
+              labels: allStaticLabels,
+              expr: transactionalRates.errorRatesExpr(errorRateExpr, opsRateExpr),
+            }]
+          else
+            []
+        )
       else
         [],
   };
