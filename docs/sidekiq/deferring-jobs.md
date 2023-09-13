@@ -1,11 +1,29 @@
 # Deferring Sidekiq jobs
 
-## Background
+## Details
 
 During an incident, some runaway worker instances could saturate infrastructure resources (database and database connection pool).
-If we let these workers to keep running, the entire system performance can be significantly impacted.
+If we let these workers to keep running, the entire system performance can be significantly impacted. Workers can be deferred to prevent such extreme cases, more development details can be found [here](https://docs.gitlab.com/ee/development/sidekiq/#deferring-sidekiq-workers).
 
-## Deferring jobs using feature flags via ChatOps
+Sidekiq workers can be deferred in two ways.
+
+### 1. Based on database health check
+
+Batched background migrations framework has a [throttling mechanism](https://docs.gitlab.com/ee/development/database/batched_background_migrations.html#throttling-batched-migrations) based on certain database health indicators, the same is extended for Sidekiq workers too.
+
+On getting a stop signal from any of those health indicators, the sidekiq worker will be deferred (by default for 5 seconds). To enable this automatic deferring each worker should explicitly opt-in by calling `defer_on_database_health_signal` with appropriate parameters.
+
+Example: [MR!127732](https://gitlab.com/gitlab-org/gitlab/-/merge_requests/127732)
+
+#### Possible downside
+
+With increased number of workers opting in for this, there can be an overload on database health check indicators. Current [indicators](https://gitlab.com/gitlab-org/gitlab/-/tree/master/lib/gitlab/database/health_status/indicators) query database and the prometheus to determine the overall health, there is an [issue!413961](https://gitlab.com/gitlab-org/gitlab/-/issues/413961) opened to cache the indicator results to make the process more performant.
+
+#### Controlling indicator checks using feature flags
+
+Each indicator has it's own feature flag (eg: [db_health_check_wal_rate](https://gitlab.com/gitlab-org/gitlab/-/blob/master/lib/gitlab/database/health_status/indicators/wal_rate.rb#L11)). They can be disabled to allow the sidekiq worker to ignore that particular indicator, but please be aware that those FFs are not worker specific (i.e: it applies to all opted in workers and batched background migrations).
+
+### 2. Using feature flags via ChatOps
 
 We have a mechanism to defer jobs from a Worker class by disabling a feature flag `run_sidekiq_jobs_{WorkerName}` via ChatOps.
 This feature flag is enabled for all workers by default.
@@ -40,7 +58,7 @@ The implementation can be found at [SkipJobs Sidekiq server middleware](https://
 
 More details can be found [here](https://docs.gitlab.com/ee/development/feature_flags/#deferring-sidekiq-jobs)
 
-### Example
+#### Example
 
 When the feature flag is set to true, 100% of the jobs will be deferred. Then, we can also use **percentage of time** rollout
 to progressively let the jobs processed. For example:
@@ -68,7 +86,7 @@ To ensure we are not leaving any worker being deferred forever, check all featur
 /chatops run feature list --match run_sidekiq_jobs
 ````
 
-### Production check in ChatOps
+#### Production check in ChatOps
 
 Setting a feature flag in production triggers a production check by default (noted by the ChatOps response `Production check initiated, this may take up to 300 seconds ...`).
 This production check might fail in case of:
@@ -101,7 +119,7 @@ Example:
 Note that `drop_sidekiq_jobs` FF has precedence over the `run_sidekiq_jobs` FF. This means when `drop_sidekiq_jobs` FF is enabled and `run_sidekiq_jobs` FF is disabled,
 `drop_sidekiq_jobs` FF takes priority, thus the job is dropped. Once `drop_sidekiq_jobs` FF is back to disabled, jobs are then deferred due to `run_sidekiq_jobs` still disabled.
 
-### Disabling the SkipJobs middleware
+## Disabling the SkipJobs middleware
 
 The [SkipJobs Sidekiq server middleware](https://gitlab.com/gitlab-org/gitlab/-/blob/master/lib/gitlab/sidekiq_middleware/skip_jobs.rb)
 introduces overhead for checking feature flag first (`Feature.enabled?`) before running every job.
@@ -118,8 +136,8 @@ by setting the environment variable `SIDEKIQ_SKIP_JOBS` to `false` or `1` and re
 
 ### Logging
 
-- Jobs deferred will be logged as `{"job_status": "deferred"}` instead of `done` or `fail`.
-- Jobs dropped will be logged as `{"job_status": "dropped"}`.
+- Instead of `done` or `fail`, jobs deferred will have 'job_status' as `deferred` and jobs dropped will have `dropped`.
+- `job_deferred_by` will have `feature_flag` or `database_health_check` as its value based on which mechanism deferred the job.
 - `deferred_count` field increases whenever a job is deferred.
 
 ### Alert
