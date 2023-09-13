@@ -247,6 +247,19 @@ services:
         sentry_slug: gitlab/customersgitlabcom/
         primary_grafana_dashboard: customersdot-main/customersdot-overview
 
+  - name: external_license_db
+    tier: sv
+    friendly_name: External License DB
+    teams:
+      - Secure Composition Analysis
+    label: LicenseDB
+    owner: composition analysis
+    technical:
+      project:
+        - https://gitlab.com/gitlab-org/security-products/license-db
+      documents:
+        readiness_review: https://gitlab.com/gitlab-com/gl-infra/readiness/-/merge_requests/183/diffs
+
   - name: forum
     tier: sv
     friendly_name: forum.gitlab.com
