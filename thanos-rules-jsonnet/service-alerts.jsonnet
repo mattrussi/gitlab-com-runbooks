@@ -1,6 +1,6 @@
 local alerts = import 'alerts/alerts.libsonnet';
 local stableIds = import 'stable-ids/stable-ids.libsonnet';
-local separateGlobalRecordingFiles = (import './lib/separate-global-recording-files.libsonnet').separateGlobalRecordingFiles;
+local separateGlobalRecordingFiles = (import 'recording-rules/lib/thanos/separate-global-recording-files.libsonnet').separateGlobalRecordingFiles;
 local selectors = import 'promql/selectors.libsonnet';
 
 local rules = function(extraSelector)

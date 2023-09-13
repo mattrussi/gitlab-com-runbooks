@@ -1,7 +1,7 @@
 local aggregationSets = (import 'gitlab-metrics-config.libsonnet').aggregationSets;
 local metricsCatalog = import 'servicemetrics/metrics-catalog.libsonnet';
 local serviceAlertsGenerator = import 'slo-alerts/service-alerts-generator.libsonnet';
-local separateGlobalRecordingFiles = (import './lib/separate-global-recording-files.libsonnet').separateGlobalRecordingFiles;
+local separateGlobalRecordingFiles = (import 'recording-rules/lib/thanos/separate-global-recording-files.libsonnet').separateGlobalRecordingFiles;
 
 // Minimum operation rate thresholds:
 // This is to avoid low-volume, noisy alerts.
