@@ -101,7 +101,7 @@ metricsCatalog.serviceDefinition({
       significantLabels: ['database_id'],
       serviceAggregation: false,  // Don't include cloudsql in the aggregated RPS for the service
       toolingLinks: [
-        toolingLinks.cloudSQL('gitlab-ops:packagecloud-f05c90f5'),
+        toolingLinks.cloudSQL('packagecloud-f05c90f5', 'gitlab-ops'),
       ],
     },
   },
