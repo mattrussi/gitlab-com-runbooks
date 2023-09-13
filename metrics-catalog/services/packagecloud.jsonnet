@@ -2,6 +2,8 @@ local googleLoadBalancerComponents = import './lib/google_load_balancer_componen
 local metricsCatalog = import 'servicemetrics/metrics.libsonnet';
 local toolingLinks = import 'toolinglinks/toolinglinks.libsonnet';
 
+local gaugeMetric = metricsCatalog.gaugeMetric;
+
 metricsCatalog.serviceDefinition({
   type: 'packagecloud',
   tier: 'inf',
@@ -65,13 +67,11 @@ metricsCatalog.serviceDefinition({
     loadbalancer: googleLoadBalancerComponents.googleLoadBalancer(
       userImpacting=true,
       loadBalancerName='k8s2-um-4zodnh0s-packagecloud-packagecloud-xnkztiio',
+      trafficCessationAlertConfig=false,  // for now until cutover
       projectId='gitlab-ops',
       additionalToolingLinks=[
         toolingLinks.kibana(title='Packagecloud', index='packagecloud'),
-      ],
-      extra={
-        severity: 's3',  // don't page anyone yet
-      }
+      ]
     ),
     loadbalancer_nonprod: googleLoadBalancerComponents.googleLoadBalancer(
       userImpacting=false,
@@ -82,8 +82,27 @@ metricsCatalog.serviceDefinition({
         toolingLinks.kibana(title='Packagecloud', index='packagecloud_pre'),
       ],
       extra={
-        severity: 's3',  // never page as it's non-prod
+        serviceAggregation: false,
+        severity: 's4',  // never page as it's non-prod
       }
     ),
+    cloudsql: {
+      userImpacting: true,
+      description: |||
+        Packagecloud uses a GCP CloudSQL MySQL instance. This SLI represents SQL queries executed by the server.
+      |||,
+
+      requestRate: gaugeMetric(
+        gauge='stackdriver_cloudsql_database_cloudsql_googleapis_com_database_mysql_queries',
+        selector={
+          database_id: { re: '.+:packagecloud-.+' },
+        }
+      ),
+      significantLabels: ['database_id'],
+      serviceAggregation: false,  // Don't include cloudsql in the aggregated RPS for the service
+      toolingLinks: [
+        toolingLinks.cloudSQL('gitlab-ops:packagecloud-f05c90f5'),
+      ],
+    },
   },
 })
