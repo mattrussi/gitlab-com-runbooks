@@ -18,14 +18,19 @@ local linksForService(type) =
   ];
 
 local panelsForDeployment(serviceType, deployment, selectorHash) =
-  local containerSelectorHash = selectorHash {
+  local deploymentSelectorHash = selectorHash {
     type: serviceType,
     deployment: deployment,
+  };
+
+  local containerSelectorHash = deploymentSelectorHash {
+    container: { ne: ['', 'POD'] },
   };
 
   local formatConfig = {
     type: serviceType,
     deployment: deployment,
+    deploymentSelector: selectors.serializeHash(deploymentSelectorHash),
     containerSelector: selectors.serializeHash(containerSelectorHash),
   };
 
@@ -64,7 +69,7 @@ local panelsForDeployment(serviceType, deployment, selectorHash) =
         sum by(cluster) (
           rate(
             container_network_transmit_bytes_total:labeled{
-              %(containerSelector)s
+              %(deploymentSelector)s
             }[$__rate_interval]
           )
         )
@@ -73,7 +78,7 @@ local panelsForDeployment(serviceType, deployment, selectorHash) =
         sum by(cluster) (
           rate(
             container_network_receive_bytes_total:labeled{
-              %(containerSelector)s
+              %(deploymentSelector)s
             }[$__rate_interval]
           )
         )
