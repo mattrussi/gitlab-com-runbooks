@@ -3,7 +3,7 @@ local metricsCatalog = import 'servicemetrics/metrics-catalog.libsonnet';
 local selectors = import 'promql/selectors.libsonnet';
 
 {
-  pg_int4_id: resourceSaturationPoint({  // DEPRECATED, replaced by `pg_int4_column` and `pg_int4_sequence`
+  pg_int4_id: resourceSaturationPoint({
     title: 'Postgres int4 ID capacity',
     severity: 's1',
     horizontallyScalable: false,
