@@ -153,6 +153,11 @@ metricsCatalog.serviceDefinition({
     shardLevelMonitoring: false,
     team: 'sre_reliability',
     severity: 's3',
+  }) + sliLibrary.get('llm_completion').generateServiceLevelIndicator({}, {
+    serviceAggregation: false,
+    shardLevelMonitoring: false,
+    severity: 's4',
+    toolingLinks: [],
   }),
 
   // Special per-worker recording rules
