@@ -18,7 +18,6 @@ metricsCatalog.serviceDefinition({
   },
 
   monitoringThresholds: {
-    apdexScore: 0.999,
     errorRatio: 0.999,
   },
 
