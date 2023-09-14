@@ -1,11 +1,14 @@
 local generateMarkdownLinks(toolingLinks) =
   [
-    |||
-      * [%(title)s](%(url)s)
-    ||| % {
-      title: tl.title,
-      url: tl.url,
-    }
+    if std.objectHas(tl, 'markdown') then
+      tl.markdown
+    else
+      |||
+        * [%(title)s](%(url)s)
+      ||| % {
+        title: tl.title,
+        url: tl.url,
+      }
 
     for tl in toolingLinks
   ];
@@ -20,6 +23,7 @@ local generateMarkdown(toolingLinks, options={}) =
   std.join('', generateMarkdownLinks(renderLinks(toolingLinks, options)));
 
 {
+  aesthetics: (import './aesthetics.libsonnet'),
   cloudflare:: (import './cloudflare.libsonnet').cloudflare,
   cloudSQL: (import './cloud_sql.libsonnet').cloudSQL,
   continuousProfiler:: (import './continuous_profiler.libsonnet').continuousProfiler,

@@ -66,25 +66,16 @@ metricsCatalog.serviceDefinition({
   serviceLevelIndicators: {
     loadbalancer: googleLoadBalancerComponents.googleLoadBalancer(
       userImpacting=true,
-      loadBalancerName='k8s2-um-4zodnh0s-packagecloud-packagecloud-xnkztiio',
+      loadBalancerName={ re: 'k8s2-.+-packagecloud-packagecloud-.+' },
+      projectId={ re: 'gitlab-(ops|pre)' },
       trafficCessationAlertConfig=false,  // for now until cutover
-      projectId='gitlab-ops',
       additionalToolingLinks=[
-        toolingLinks.kibana(title='Packagecloud', index='packagecloud'),
+        toolingLinks.kibana(title='Packagecloud (prod)', index='packagecloud'),
+        toolingLinks.googleLoadBalancer(instanceId='k8s2-um-4zodnh0s-packagecloud-packagecloud-xnkztiio', project='gitlab-ops', titleSuffix=' (prod)'),
+        toolingLinks.aesthetics.separator(),
+        toolingLinks.kibana(title='Packagecloud (nonprod)', index='packagecloud_pre'),
+        toolingLinks.googleLoadBalancer(instanceId='k8s2-um-spdr6cwv-packagecloud-packagecloud-cco5unyp', project='gitlab-pre', titleSuffix=' (nonprod)'),
       ]
-    ),
-    loadbalancer_nonprod: googleLoadBalancerComponents.googleLoadBalancer(
-      userImpacting=false,
-      trafficCessationAlertConfig=false,
-      loadBalancerName='k8s2-um-spdr6cwv-packagecloud-packagecloud-cco5unyp',
-      projectId='gitlab-pre',
-      additionalToolingLinks=[
-        toolingLinks.kibana(title='Packagecloud', index='packagecloud_pre'),
-      ],
-      extra={
-        serviceAggregation: false,
-        severity: 's4',  // never page as it's non-prod
-      }
     ),
     cloudsql: {
       userImpacting: true,
