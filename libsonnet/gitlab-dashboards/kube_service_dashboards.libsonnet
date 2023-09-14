@@ -49,6 +49,7 @@ local panelsForDeployment(serviceType, deployment, selectorHash) =
       format='short',  // We measure this in total number of cores across the whole fleet, not percentage of a single core
       linewidth=1,
       legendFormat='{{ cluster }}',
+      intervalFactor=2,
     ),
     basic.timeseries(
       title='%(deployment)s Deployment: Memory' % formatConfig,
@@ -84,6 +85,7 @@ local panelsForDeployment(serviceType, deployment, selectorHash) =
         )
       ||| % formatConfig,
       legendFormat='{{ cluster }}',
+      intervalFactor=2,
     ),
   ];
 
@@ -164,6 +166,7 @@ local rowsForContainer(container, deployment, selectorHash) =
         format='percentunit',
         linewidth=1,
         legendFormat='%s Container CPU' % [container],
+        intervalFactor=2,
       ),
       quantilePanel.timeseries(
         title='%(container)s container/%(deployment)s deployment - Memory' % formatConfig,
