@@ -5,11 +5,20 @@ local basic = import 'grafana/basic.libsonnet';
 local layout = import 'grafana/layout.libsonnet';
 
 local row = grafana.row;
+local template = grafana.template;
 
 local databaseId = 'gitlab-ops:packagecloud-f05c90f5';
 
 serviceDashboard.overview(
   'packagecloud',
+  omitEnvironmentDropdown=true,
+)
+.addTemplate(
+  template.custom(
+    'environment',
+    'ops,pre,',
+    'ops',
+  ),
 )
 .addPanel(
   row.new(title='💾 CloudSQL', collapse=true)

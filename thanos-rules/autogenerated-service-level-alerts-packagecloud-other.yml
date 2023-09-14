@@ -30,11 +30,11 @@ groups:
       alert_class: traffic_cessation
       alert_type: cause
       feature_category: not_owned
-      pager: pagerduty
       rules_domain: general
-      severity: s2
+      severity: s3
       sli_type: ops
       slo_alert: "no"
+      team: reliability_general
       user_impacting: "yes"
     expr: |
       gitlab_component_ops:rate_30m{component="cloudsql",env!~"gprd|ops",monitor="global",stage="main",type="packagecloud"} == 0
@@ -67,13 +67,173 @@ groups:
       alert_class: traffic_cessation
       alert_type: cause
       feature_category: not_owned
-      pager: pagerduty
       rules_domain: general
-      severity: s2
+      severity: s3
       sli_type: ops
       slo_alert: "no"
+      team: reliability_general
       user_impacting: "yes"
     expr: |
       gitlab_component_ops:rate_5m{component="cloudsql",env!~"gprd|ops",monitor="global",stage="main",type="packagecloud"} offset 1h
       unless
       gitlab_component_ops:rate_5m{component="cloudsql",env!~"gprd|ops",monitor="global",stage="main",type="packagecloud"}
+  - alert: PackagecloudServiceLoadbalancerErrorSLOViolation
+    for: 2m
+    annotations:
+      title: The loadbalancer SLI of the packagecloud service (`{{ $labels.stage }}`
+        stage) has an error rate violating SLO
+      description: |
+        Currently the error-rate is {{ $value | humanizePercentage }}.
+      grafana_dashboard_id: packagecloud-main/packagecloud-overview
+      grafana_dashboard_link: https://dashboards.gitlab.net/d/packagecloud-main/packagecloud-overview?from=now-6h/m&to=now-1m/m&var-environment={{
+        $labels.environment }}&var-stage={{ $labels.stage }}
+      grafana_min_zoom_hours: "6"
+      grafana_panel_id: "3255520955"
+      grafana_variables: environment,stage
+      promql_template_1: |
+        sum by (env,environment,tier,stage) (
+          rate(stackdriver_https_lb_rule_loadbalancing_googleapis_com_https_request_count{environment="{{ $labels.environment }}",project_id=~"gitlab-(ops|pre)",response_code_class="500",stage="{{ $labels.stage }}",url_map_name=~"k8s2-.+-packagecloud-packagecloud-.+"}[5m])
+        )
+      runbook: docs/packagecloud/README.md
+    labels:
+      aggregation: component
+      alert_class: slo_violation
+      alert_type: symptom
+      feature_category: not_owned
+      rules_domain: general
+      severity: s3
+      sli_type: error
+      slo_alert: "yes"
+      team: reliability_general
+      user_impacting: "yes"
+      window: 1h
+    expr: |
+      (
+        (
+          gitlab_component_errors:ratio_1h{component="loadbalancer",env!~"gprd|ops",monitor="global",type="packagecloud"}
+          > (14.4 * 0.001000)
+        )
+        and
+        (
+          gitlab_component_errors:ratio_5m{component="loadbalancer",env!~"gprd|ops",monitor="global",type="packagecloud"}
+          > (14.4 * 0.001000)
+        )
+      )
+      and on(env,environment,tier,type,stage,component)
+      (
+        sum by(env,environment,tier,type,stage,component) (gitlab_component_ops:rate_1h{component="loadbalancer",env!~"gprd|ops",monitor="global",type="packagecloud"}) >= 1
+      )
+  - alert: PackagecloudServiceLoadbalancerErrorSLOViolation
+    for: 2m
+    annotations:
+      title: The loadbalancer SLI of the packagecloud service (`{{ $labels.stage }}`
+        stage) has an error rate violating SLO
+      description: |
+        Currently the error-rate is {{ $value | humanizePercentage }}.
+      grafana_dashboard_id: packagecloud-main/packagecloud-overview
+      grafana_dashboard_link: https://dashboards.gitlab.net/d/packagecloud-main/packagecloud-overview?from=now-6h/m&to=now-1m/m&var-environment={{
+        $labels.environment }}&var-stage={{ $labels.stage }}
+      grafana_min_zoom_hours: "6"
+      grafana_panel_id: "3255520955"
+      grafana_variables: environment,stage
+      promql_template_1: |
+        sum by (env,environment,tier,stage) (
+          rate(stackdriver_https_lb_rule_loadbalancing_googleapis_com_https_request_count{environment="{{ $labels.environment }}",project_id=~"gitlab-(ops|pre)",response_code_class="500",stage="{{ $labels.stage }}",url_map_name=~"k8s2-.+-packagecloud-packagecloud-.+"}[5m])
+        )
+      runbook: docs/packagecloud/README.md
+    labels:
+      aggregation: component
+      alert_class: slo_violation
+      alert_type: symptom
+      feature_category: not_owned
+      rules_domain: general
+      severity: s3
+      sli_type: error
+      slo_alert: "yes"
+      team: reliability_general
+      user_impacting: "yes"
+      window: 6h
+    expr: |
+      (
+        (
+          gitlab_component_errors:ratio_6h{component="loadbalancer",env!~"gprd|ops",monitor="global",type="packagecloud"}
+          > (6 * 0.001000)
+        )
+        and
+        (
+          gitlab_component_errors:ratio_30m{component="loadbalancer",env!~"gprd|ops",monitor="global",type="packagecloud"}
+          > (6 * 0.001000)
+        )
+      )
+      and on(env,environment,tier,type,stage,component)
+      (
+        sum by(env,environment,tier,type,stage,component) (gitlab_component_ops:rate_6h{component="loadbalancer",env!~"gprd|ops",monitor="global",type="packagecloud"}) >= 0.16667
+      )
+  - alert: PackagecloudServiceLoadbalancerTrafficCessation
+    for: 5m
+    annotations:
+      title: The loadbalancer SLI of the packagecloud service (`{{ $labels.stage }}`
+        stage) has not received any traffic in the past 30m
+      description: |
+        This alert signifies that the SLI is reporting a cessation of traffic; the signal is present, but is zero.
+      grafana_dashboard_id: packagecloud-main/packagecloud-overview
+      grafana_dashboard_link: https://dashboards.gitlab.net/d/packagecloud-main/packagecloud-overview?from=now-6h/m&to=now-1m/m&var-environment={{
+        $labels.environment }}&var-stage={{ $labels.stage }}
+      grafana_min_zoom_hours: "6"
+      grafana_panel_id: "138982496"
+      grafana_variables: environment,stage
+      promql_template_1: |
+        sum by (env,environment,tier,stage) (
+          rate(stackdriver_https_lb_rule_loadbalancing_googleapis_com_https_request_count{environment="{{ $labels.environment }}",project_id=~"gitlab-(ops|pre)",stage="{{ $labels.stage }}",url_map_name=~"k8s2-.+-packagecloud-packagecloud-.+"}[5m])
+        )
+      runbook: docs/packagecloud/README.md
+    labels:
+      aggregation: component
+      alert_class: traffic_cessation
+      alert_type: cause
+      feature_category: not_owned
+      rules_domain: general
+      severity: s3
+      sli_type: ops
+      slo_alert: "no"
+      team: reliability_general
+      user_impacting: "yes"
+    expr: |
+      gitlab_component_ops:rate_30m{component="loadbalancer",env!~"gprd|ops",monitor="global",stage="main",type="packagecloud"} == 0
+      and
+      gitlab_component_ops:rate_30m{component="loadbalancer",env!~"gprd|ops",monitor="global",stage="main",type="packagecloud"} offset 1h >= 0.16666666666666666
+  - alert: PackagecloudServiceLoadbalancerTrafficAbsent
+    for: 30m
+    annotations:
+      title: The loadbalancer SLI of the packagecloud service (`{{ $labels.stage }}`
+        stage) has not reported any traffic in the past 30m
+      description: |
+        This alert signifies that the SLI was previously reporting traffic, but is no longer - the signal is absent.
+
+        This could be caused by a change to the metrics used in the SLI, or by the service not receiving traffic.
+      grafana_dashboard_id: packagecloud-main/packagecloud-overview
+      grafana_dashboard_link: https://dashboards.gitlab.net/d/packagecloud-main/packagecloud-overview?from=now-6h/m&to=now-1m/m&var-environment={{
+        $labels.environment }}&var-stage={{ $labels.stage }}
+      grafana_min_zoom_hours: "6"
+      grafana_panel_id: "138982496"
+      grafana_variables: environment,stage
+      promql_template_1: |
+        sum by (env,environment,tier,stage) (
+          rate(stackdriver_https_lb_rule_loadbalancing_googleapis_com_https_request_count{environment="{{ $labels.environment }}",project_id=~"gitlab-(ops|pre)",stage="{{ $labels.stage }}",url_map_name=~"k8s2-.+-packagecloud-packagecloud-.+"}[5m])
+        )
+      runbook: docs/packagecloud/README.md
+    labels:
+      aggregation: component
+      alert_class: traffic_cessation
+      alert_type: cause
+      feature_category: not_owned
+      rules_domain: general
+      severity: s3
+      sli_type: ops
+      slo_alert: "no"
+      team: reliability_general
+      user_impacting: "yes"
+    expr: |
+      gitlab_component_ops:rate_5m{component="loadbalancer",env!~"gprd|ops",monitor="global",stage="main",type="packagecloud"} offset 1h
+      unless
+      gitlab_component_ops:rate_5m{component="loadbalancer",env!~"gprd|ops",monitor="global",stage="main",type="packagecloud"}

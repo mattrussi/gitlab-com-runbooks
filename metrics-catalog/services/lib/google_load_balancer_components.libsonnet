@@ -44,11 +44,13 @@ local toolingLinks = import 'toolinglinks/toolinglinks.libsonnet';
 
       significantLabels: ['proxy_continent', 'response_code'],
 
-      toolingLinks: [
-        toolingLinks.googleLoadBalancer(
-          instanceId=loadBalancerName,
-          project=projectId
-        ),
-      ] + additionalToolingLinks,
+      toolingLinks:
+        if std.isString(loadBalancerName) && std.isString(projectId) then [
+          toolingLinks.googleLoadBalancer(
+            instanceId=loadBalancerName,
+            project=projectId
+          ),
+        ] else []
+               + additionalToolingLinks,
     }),
 }
