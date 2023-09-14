@@ -2837,7 +2837,7 @@ groups:
     labels:
       tier: sv
       type: websockets
-    expr: "0.998000"
+    expr: "0.950000"
   - record: slo:max:events:gitlab_service_errors:ratio
     labels:
       tier: sv
@@ -2848,7 +2848,7 @@ groups:
       component: loadbalancer
       tier: sv
       type: websockets
-    expr: "0.998000"
+    expr: "0.950000"
   - record: slo:max:events:gitlab_service_errors:ratio
     labels:
       component: loadbalancer
@@ -2860,7 +2860,7 @@ groups:
       component: rails_request
       tier: sv
       type: websockets
-    expr: "0.998000"
+    expr: "0.950000"
   - record: slo:max:events:gitlab_service_errors:ratio
     labels:
       component: rails_request
@@ -2872,7 +2872,7 @@ groups:
       component: workhorse
       tier: sv
       type: websockets
-    expr: "0.998000"
+    expr: "0.950000"
   - record: slo:max:events:gitlab_service_errors:ratio
     labels:
       component: workhorse

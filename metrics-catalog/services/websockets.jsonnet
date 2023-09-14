@@ -16,7 +16,7 @@ metricsCatalog.serviceDefinition({
   tags: ['golang', 'rails'],
 
   monitoringThresholds: {
-    apdexScore: 0.998,
+    apdexScore: 0.95,
     errorRatio: 0.9995,
   },
   otherThresholds: {
