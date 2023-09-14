@@ -18,6 +18,7 @@
 
 * [CustomersDot main troubleshoot documentation](../customersdot/overview.md)
 * [Google Cloud Snapshots](../disaster-recovery/gcp-snapshots.md)
+* [Frontend (HAProxy) Logging](../frontend/haproxy-logging.md)
 * [Gitaly is down](../gitaly/gitaly-down.md)
 * [../kube/k8s-operations.md](../kube/k8s-operations.md)
 * [Kubernetes](../kube/kubernetes.md)
