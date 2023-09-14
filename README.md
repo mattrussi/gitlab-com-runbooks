@@ -128,6 +128,7 @@ During an incident, we have [roles defined in the handbook](https://about.gitlab
 - [Rebuild a corrupt index](docs/patroni/postgresql.md#rebuild-a-corrupt-index)
 - [Checking PostgreSQL health with postgres-checkup](docs/patroni/postgres-checkup.md)
 - [Reducing table and index bloat using pg_repack](docs/patroni/pg_repack.md)
+- [Maintenance](docs/patroni/postgres-maintenance.md)
 
 ### Frontend Services
 
