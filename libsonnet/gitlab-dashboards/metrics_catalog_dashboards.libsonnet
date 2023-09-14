@@ -140,6 +140,7 @@ local sliDetailLatencyPanel(
       withoutLabels=withoutLabels,
     )),
     logBase=logBase,
+    format=sli.apdex.unit,
     legendFormat=legendFormat % formatConfig,
     min=min,
     intervalFactor=intervalFactor,

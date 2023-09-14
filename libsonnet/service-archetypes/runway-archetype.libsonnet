@@ -46,7 +46,8 @@ function(
           histogram='stackdriver_cloud_run_revision_run_googleapis_com_request_latencies_bucket',
           rangeVectorFunction='avg_over_time',
           selector=baseSelector,
-          satisfiedThreshold=apdexSatisfiedThreshold
+          satisfiedThreshold=apdexSatisfiedThreshold,
+          unit='ms',
         ),
 
         requestRate: gaugeMetric(
