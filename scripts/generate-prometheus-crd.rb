@@ -2,7 +2,7 @@
 # frozen_string_literal: true
 
 require 'yaml'
-require 'digest'
+require 'openssl'
 
 if ARGV.empty?
   puts "Usage: ruby generate-prometheus-crd.rb <directory_path>"
@@ -10,7 +10,6 @@ if ARGV.empty?
 end
 
 shards = 6
-shard_counter = 0
 
 parent_directory = File.expand_path('..', __dir__)
 rules_dir = File.join(parent_directory, ARGV[0])
@@ -41,7 +40,7 @@ rule_files.each do |rule_file|
 
   # Load mapping file if exists
 
-  mapping_yaml = YAML.load_file(mapping_file) if File.exist? mapping_file 
+  mapping_yaml = YAML.load_file(mapping_file) if File.exist? mapping_file
 
   # Get source filename without extension
   filename_base = File.basename(rule_file, File.extname(rule_file))
@@ -49,7 +48,7 @@ rule_files.each do |rule_file|
   if mapping_yaml[filename_base]
     shard_value = mapping_yaml[filename_base]
   else
-    hash_value = Digest::SHA1.hexdigest(filename_base)
+    hash_value = OpenSSL::Digest::SHA256.hexdigest(filename_base)
     shard_value = hash_value.to_i(16) % (shards + 1) unless mapping_yaml[filename_base]
   end
 
