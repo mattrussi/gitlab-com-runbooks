@@ -104,6 +104,7 @@ local union(sets) = std.foldl(function(memo, a) std.setUnion(std.set(a), memo), 
     'GitLab-Rails Service',
     'End-User Performance',  // for Tim Zallmann's performance dashboards
     'Kubernetes',
+    'Model Validation',
     'Operations',
     'Cloudflare',
     'PostgreSQL',
