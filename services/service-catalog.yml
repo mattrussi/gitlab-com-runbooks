@@ -253,8 +253,11 @@ services:
     teams:
       - Secure Composition Analysis
     label: LicenseDB
-    owner: composition analysis
+    owner: composition_analysis
     technical:
+      logging:
+        - name:
+          permalink:
       project:
         - https://gitlab.com/gitlab-org/security-products/license-db
       documents:
