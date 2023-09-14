@@ -26,6 +26,8 @@
     - [Elastic_indexer_worker.rb](#elastic_indexer_workerrb)
     - [Elastic_commit_indexer_worker.rb](#elastic_commit_indexer_workerrb)
     - [Elastic_index_bulk_cron_worker.rb](#elastic_index_bulk_cron_workerrb)
+- [Incident Management](#incident-management)
+  - [High CPU Usage](#high-cpu-usage)
 
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
 
@@ -191,3 +193,18 @@ Logs available in centralised logging, see [Logging](../logging/README.md)
 - Consumes a custom Redis queue implemented as a sorted set.
   The correct way to see the size is from the rails console using
   `Elastic::ProcessBookkeepingService.queue_size`
+
+# Incident Management
+
+## High CPU Usage
+
+When there is high CPU usage across all the Elasticsearch data nodes, here are the suggested steps to mitigate the issue
+
+- Check Slow logs to see whether there are obvious indicators that can be used to identify the possible root cause. To view the Slow logs, login the Elastic Cloud console using account in the `Infra Service - Elasticsearch` value in 1Password. In the `monitoring-cluster` cluster, you will find the production Elasticsearch cluster with `gprd-indexing` prefix in name and staging cluster with `gstg-indexing`. The Slow logs are under each of the Elasticsearch data nodes.
+- If the Slow logs can't help you fix the high CPU usage issue, you may consider restarting the Elasticsearch cluster.
+  - You may want to capture the thread dumps by following [the Elastic documentation](https://www.elastic.co/guide/en/cloud-enterprise/current/ece-capture-thread-dumps.html).
+  - Cancel the running tasks via [Elasticsearch API](https://www.elastic.co/guide/en/elasticsearch/reference/current/tasks.html#task-cancellation)
+  - Go to GitLab.com instance Admin UI, [pause the Elasticsearch indexing](https://docs.gitlab.com/ee/integration/advanced_search/elasticsearch.html#advanced-search-configuration)
+  - Go to the Elastic Cloud login page, click the `Manage` link under Actions column corresponding to the deployment under `Dedicated deployments` table. Click the `Actions` button on the top-right corner of the deployment page and click `Restart Elasticsearch`. In the popop window, choose `Full restart`. Please note, there are two other `No Downtime` restart options, `Restart instances one at a time` and `Restart all instances within an availability zone, before moving on to the next zone`. But, according to our experience, they may take much longer time than `Full restart`. Since the Advanced Search requests are very likely to time out in high CPU situation, `Full restart` will actually bring the service back quicker. The pausing indexing step above will also help minimize the impact of potential data loss during the `Downtime`.
+  - Monitor the CPU usage of the cluster nodes. [Unpause indexing](https://docs.gitlab.com/ee/integration/advanced_search/elasticsearch.html#unpause-indexing) from the GitLab instance's Admin UI after CPU usage is back to normal.
+  - File an Elastic Support ticket with the thread dumps taken in the step above.
