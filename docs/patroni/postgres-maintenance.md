@@ -1,6 +1,6 @@
 # Postgres maintenance
 
-### Prevent DDL operations before an upgrade with `disallow_database_ddl_feature_flags`
+## Prevent DDL operations before a database maintenance with `disallow_database_ddl_feature_flags`
 
 During database maintenances, DDL statements should be ceased to avoid conflicts with the common maintenance operations like logical replication, maintenance DDLs, etc..
 Each of these flags controls specific processes that can interfere with maintenance tasks:
