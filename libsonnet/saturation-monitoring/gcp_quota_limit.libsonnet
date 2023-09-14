@@ -46,8 +46,8 @@ local selectors = import 'promql/selectors.libsonnet';
     burnRatePeriod: '5m',
     query: |||
       (
-        stackdriver_aiplatform_googleapis_com_location_aiplatform_googleapis_com_quota_online_prediction_requests_per_base_model_usage{%(selector)s}
-      / ignoring (method)
+        sum without (method) (stackdriver_aiplatform_googleapis_com_location_aiplatform_googleapis_com_quota_online_prediction_requests_per_base_model_usage{%(selector)s})
+      /
         stackdriver_aiplatform_googleapis_com_location_aiplatform_googleapis_com_quota_online_prediction_requests_per_base_model_limit{%(selector)s}
       ) > 0
     |||,
