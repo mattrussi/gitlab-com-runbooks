@@ -17,6 +17,11 @@ metricsCatalog.serviceDefinition({
     vms: false,
   },
 
+  monitoringThresholds: {
+    apdexScore: 0.999,
+    errorRatio: 0.999,
+  },
+
   regional: false,
 
   serviceDependencies: {
@@ -63,22 +68,27 @@ metricsCatalog.serviceDefinition({
     },
   },
 
+  local sliCommon = {
+    userImpacting: true,
+    team: 'reliability_general',
+    severity: 's3',  // no pages for now
+  },
+
   serviceLevelIndicators: {
     loadbalancer: googleLoadBalancerComponents.googleLoadBalancer(
-      userImpacting=true,
+      userImpacting=sliCommon.userImpacting,
       loadBalancerName={ re: 'k8s2-.+-packagecloud-packagecloud-.+' },
       projectId={ re: 'gitlab-(ops|pre)' },
-      trafficCessationAlertConfig=false,  // for now until cutover
       additionalToolingLinks=[
         toolingLinks.kibana(title='Packagecloud (prod)', index='packagecloud'),
         toolingLinks.googleLoadBalancer(instanceId='k8s2-um-4zodnh0s-packagecloud-packagecloud-xnkztiio', project='gitlab-ops', titleSuffix=' (prod)'),
         toolingLinks.aesthetics.separator(),
         toolingLinks.kibana(title='Packagecloud (nonprod)', index='packagecloud_pre'),
         toolingLinks.googleLoadBalancer(instanceId='k8s2-um-spdr6cwv-packagecloud-packagecloud-cco5unyp', project='gitlab-pre', titleSuffix=' (nonprod)'),
-      ]
+      ],
+      extra=sliCommon,
     ),
-    cloudsql: {
-      userImpacting: true,
+    cloudsql: sliCommon {
       description: |||
         Packagecloud uses a GCP CloudSQL MySQL instance. This SLI represents SQL queries executed by the server.
       |||,
