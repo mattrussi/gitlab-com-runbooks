@@ -27,5 +27,5 @@ group :development, :test do
 end
 
 group :danger do
-  gem 'gitlab-dangerfiles', '~> 3.0', require: false
+  gem 'gitlab-dangerfiles', '~> 4.0', require: false
 end
