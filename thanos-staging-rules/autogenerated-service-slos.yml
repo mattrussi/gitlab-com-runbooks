@@ -1242,6 +1242,40 @@ spec:
       expr: '0.005000'
     - record: slo:min:events:gitlab_service_apdex:ratio
       labels:
+        tier: inf
+        type: packagecloud
+      expr: '0.999000'
+    - record: slo:max:events:gitlab_service_errors:ratio
+      labels:
+        tier: inf
+        type: packagecloud
+      expr: '0.001000'
+    - record: slo:min:events:gitlab_service_apdex:ratio
+      labels:
+        component: cloudsql
+        tier: inf
+        type: packagecloud
+      expr: '0.999000'
+    - record: slo:max:events:gitlab_service_errors:ratio
+      labels:
+        component: cloudsql
+        tier: inf
+        type: packagecloud
+      expr: '0.001000'
+    - record: slo:min:events:gitlab_service_apdex:ratio
+      labels:
+        component: loadbalancer
+        tier: inf
+        type: packagecloud
+      expr: '0.999000'
+    - record: slo:max:events:gitlab_service_errors:ratio
+      labels:
+        component: loadbalancer
+        tier: inf
+        type: packagecloud
+      expr: '0.001000'
+    - record: slo:min:events:gitlab_service_apdex:ratio
+      labels:
         tier: db
         type: patroni
       expr: '0.999000'
@@ -3650,15 +3684,6 @@ spec:
         global_aggregation: 'no'
         regional_aggregation: 'no'
         service_aggregation: 'yes'
-        tier: inf
-        type: packagecloud
-      expr: '1'
-    - record: gitlab_component_service:mapping
-      labels:
-        component: loadbalancer_nonprod
-        global_aggregation: 'no'
-        regional_aggregation: 'no'
-        service_aggregation: 'no'
         tier: inf
         type: packagecloud
       expr: '1'
