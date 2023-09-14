@@ -97,3 +97,36 @@ Runbook:
     ```
 
 1. The repositry should be moved in the next round `gitalyctl` fetches projects for the storage.
+
+### Move repository `state=failed`
+
+Symptoms:
+
+Move failed with `state="failed"`
+
+```json
+{
+  "caller": "snippet_repository.go:182",
+  "destination_storage": "gitaly-02-stor-gstg.c.gitlab-gitaly-gstg-380a.internal",
+  "event": "move repository state failed",
+  "level": "error",
+  "snippet": "https://staging.gitlab.com/-/snippets/1664763",
+  "snippet_repository_move_id": 1040466,
+  "state": "failed",
+  "storage": "nfs-file07",
+  "timeout_duration": "1h0m0s",
+  "ts": "2023-09-13T12:59:47.594007192Z"
+}
+```
+
+[source](https://dashboards.gitlab.net/explore?orgId=1&left=%7B%22datasource%22:%22R8ugoM-Vk%22,%22queries%22:%5B%7B%22refId%22:%22A%22,%22datasource%22:%7B%22type%22:%22loki%22,%22uid%22:%22R8ugoM-Vk%22%7D,%22editorMode%22:%22builder%22,%22expr%22:%22%7Bcontainer%3D%5C%22gitalyctl%5C%22%7D%20%7C%20json%20state%3D%5C%22state%5C%22%20%7C%20state%20%3D%20%60failed%60%22,%22queryType%22:%22range%22%7D%5D,%22range%22:%7B%22from%22:%22now-24h%22,%22to%22:%22now%22%7D%7D)
+
+Runbook:
+
+1. Find failed sidekiq jobs for `UpdateRepositoryStorageWorker`: [gstg](https://nonprod-log.gitlab.net/app/r/s/7NExg) | [gprd](https://log.gprd.gitlab.net/app/r/s/pMpgv)
+
+    ![screenshot of logs with failed moves](./img/gitalyctl-sidekiq-repo-move-fail-logs.png)
+
+1. If you need more context about the failure for example the failure came form Gitaly, fetch `json.correlation_id` and check the correlation dashboard: [gstg](https://nonprod-log.gitlab.net/app/r/s/F9zdz) | [gprd](https://log.gprd.gitlab.net/app/r/s/gOgAn)
+
+    ![screenshot of logs with failed moves using the correlation dashboard](./img/gitalyctl-repo-move-fail-correlation-logs.png)
