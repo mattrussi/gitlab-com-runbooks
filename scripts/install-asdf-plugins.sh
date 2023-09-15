@@ -97,17 +97,17 @@ setup_rtx() {
   current() {
     rtx current "$1" | awk '{print $2}'
   }
+
+  check_global_golang_install() {
+    (
+      pushd /
+      current golang
+      popd
+    ) >/dev/null 2>/dev/null
+  }
 }
 
-check_global_golang_install() {
-  (
-    pushd /
-    current golang
-    popd
-  ) >/dev/null 2>/dev/null
-}
-
-if command -v rtx >/dev/null; then
+if command -v rtx 2> /dev/null; then
   setup_rtx
 elif [[ -n ${ASDF_DIR-} ]]; then
   setup_asdf
