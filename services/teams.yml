@@ -153,7 +153,6 @@ teams:
   slack_error_budget_channel: g_govern_auth
   send_error_budget_weekly_to_slack: true
   product_stage_group: authentication_and_authorization
-  send_slo_alerts_to_team_slack_channel: true
   ignored_components:
   - graphql_query
 
