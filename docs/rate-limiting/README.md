@@ -250,6 +250,18 @@ often assume, and they can move/change sometimes without notice (or awareness), 
 use by the original user but we're not informed, and so on.  User ids are much less fungible, and carry implications of
 paid groups/users and permanent identities of customers.
 
+#### Bypasses
+
+To add an IP to the RackAttack whitelist:
+
+* Create a new version of the vault secret at
+  <https://vault.gitlab.net/ui/vault/secrets/shared/show/env/gprd/gitlab/rack-attack>
+  to append the desired IPs
+* Create a MR to bump the secret in our k8s deployment to your new version. Example MR:
+  <https://gitlab.com/gitlab-com/gl-infra/k8s-workloads/gitlab-com/-/merge_requests/3057>
+* Create a MR to remove the old secret version from our k8s deployment. Example MR:
+  <https://gitlab.com/gitlab-com/gl-infra/k8s-workloads/gitlab-com/-/merge_requests/3058>
+
 #### Application (ApplicationRateLimiter)
 
 The application has simple rate limit logic that can be used to throttle certain actions which is used when we need more
@@ -306,8 +318,12 @@ issue etc), use CloudFlare rate-limiting:
     * Decide if it needs to be a user-based bypass (preferred) implemented in Rails via the environment variable, or an
       IP-address based bypass (less preferred) configured in haproxy.
     * Raise a [rate-limiting issue](https://gitlab.com/gitlab-com/gl-infra/reliability/-/issues/new?issuable_template=request-rate-limiting)
-    * Get consensus/approval from some peers or managers that there's no other option (on the rate-limiting issue) and
-      then implement it
+    * Get consensus/approval from some peers or managers that there's no other option (on the rate-limiting issue)
+    * Establish what layer is the rate-limiting happening. Search for the affected IPs in the following links:
+      * Cloudflare: <https://dash.cloudflare.com/852e9d53d0f8adbd9205389356f2303d/gitlab.com/analytics/traffic?client-ip~in=ip1%2Cip2>
+      * HAProxy: <https://console.cloud.google.com/bigquery?sq=805818759045:1e5b45317ecd453ba6cc33818451f76f>
+      * RackAttack: <https://log.gprd.gitlab.net/app/r/s/oxJCB>
+    * Look for the "Bypasses" section on the relevant component on this page for instructions on implementing a rate-limit exception
     * Leave the issue open, linked to <https://gitlab.com/groups/gitlab-com/gl-infra/-/epics/374> for tracking and so we
       can try to make things better
 1. One endpoint (or related collection of endpoints) is being unduly rate-limited and we can safely increase the limit for them.  This is the same situation as the Package Registry exceptions, and there are two options:
