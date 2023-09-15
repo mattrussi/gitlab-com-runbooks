@@ -2341,3 +2341,22 @@ services:
       monitors:
         grafana_folder: memorystore
         primary_grafana_dashboard: memorystore-main/memorystore-overview
+
+  - name: transfer-data-pipeline
+    tier: sv
+    friendly_name: Transfer Data Pipeline
+    label: TransferDataPipeline
+    owner: source_code_management
+    technical:
+      project:
+        - https://gitlab.com/vyaklushin/dataflow-sample/
+      documents:
+        architecture: https://gitlab.com/gitlab-org/gitlab/-/tree/f973764100cefedd52125059928c0291e80de0ba/doc/architecture/blueprints/transfer_data
+        readiness_review: https://gitlab.com/gitlab-com/gl-infra/readiness/-/merge_requests/182
+      logging:
+        - name:
+          permalink:
+    observability:
+      monitors:
+        grafana_folder:
+        primary_grafana_dashboard:
