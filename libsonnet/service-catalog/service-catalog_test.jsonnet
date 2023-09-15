@@ -102,7 +102,7 @@ test.suite({
       issue_tracker: null,
       name: 'authentication_and_authorization',
       product_stage_group: 'authentication_and_authorization',
-      send_slo_alerts_to_team_slack_channel: true,
+      send_error_budget_weekly_to_slack: true,
       slack_alerts_channel: 'g_govern_auth',
       ignored_components: ['graphql_query'],
     },
