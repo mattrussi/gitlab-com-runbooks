@@ -5,7 +5,7 @@
 During an incident, some runaway worker instances could saturate infrastructure resources (database and database connection pool).
 If we let these workers to keep running, the entire system performance can be significantly impacted. Workers can be deferred to prevent such extreme cases, more development details can be found [here](https://docs.gitlab.com/ee/development/sidekiq/#deferring-sidekiq-workers).
 
-Sidekiq workers can be deferred in two ways.
+Sidekiq workers can be deferred in two ways, automatically based on database health check (opt-in per worker) or on-demand using feature flags (for all workers). If an incident is ongoing and you need to stop the worker from running immediately, refer to the [Using feature flags via ChatOps](#2-using-feature-flags-via-chatops) section below.
 
 ### 1. Based on database health check
 
