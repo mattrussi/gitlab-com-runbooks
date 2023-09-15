@@ -16,13 +16,13 @@ groups:
       type: thanos
     expr: |
       sum by () (
-        rate(prometheus_rule_group_iterations_total{job="thanos-ruler",type="thanos"}[1m] offset 30s)
+        rate(prometheus_rule_group_iterations_total{job="thanos-ruler",namespace="thanos",type="thanos"}[1m] offset 30s)
       ) - (
         sum by () (
-          rate(prometheus_rule_group_iterations_missed_total{job="thanos-ruler",type="thanos"}[1m] offset 30s)
+          rate(prometheus_rule_group_iterations_missed_total{job="thanos-ruler",namespace="thanos",type="thanos"}[1m] offset 30s)
         ) or
         0 * sum by () (
-          rate(prometheus_rule_group_iterations_total{job="thanos-ruler",type="thanos"}[1m] offset 30s)
+          rate(prometheus_rule_group_iterations_total{job="thanos-ruler",namespace="thanos",type="thanos"}[1m] offset 30s)
         )
       )
   - record: gitlab_component_apdex:weight:score
@@ -36,7 +36,7 @@ groups:
       type: thanos
     expr: |
       sum by () (
-        rate(prometheus_rule_group_iterations_total{job="thanos-ruler",type="thanos"}[1m] offset 30s)
+        rate(prometheus_rule_group_iterations_total{job="thanos-ruler",namespace="thanos",type="thanos"}[1m] offset 30s)
       )
   - record: gitlab_component_ops:rate
     labels:
@@ -49,7 +49,7 @@ groups:
       type: thanos
     expr: |
       sum by () (
-        rate(prometheus_rule_evaluations_total{job="thanos-ruler",type="thanos"}[1m] offset 30s)
+        rate(prometheus_rule_evaluations_total{job="thanos-ruler",namespace="thanos",type="thanos"}[1m] offset 30s)
       )
   - record: gitlab_component_errors:rate
     labels:
@@ -63,7 +63,7 @@ groups:
     expr: |
       (
         sum by () (
-          label_replace(rate(prometheus_rule_evaluation_failures_total{job="thanos-ruler",type="thanos"}[1m] offset 30s), "_c", "0", "", "")
+          label_replace(rate(prometheus_rule_evaluation_failures_total{job="thanos-ruler",namespace="thanos",type="thanos"}[1m] offset 30s), "_c", "0", "", "")
           or
           label_replace(rate(thanos_rule_evaluation_with_warnings_total{}[1m] offset 30s), "_c", "1", "", "")
         )
@@ -85,7 +85,7 @@ groups:
       type: thanos
     expr: |
       sum by () (
-        rate(thanos_compact_group_compactions_total{job=~"thanos-(.+)-compactor",type="thanos"}[1m] offset 30s)
+        rate(thanos_compact_group_compactions_total{job=~"thanos-(.+)-compactor",namespace="thanos",type="thanos"}[1m] offset 30s)
       )
   - record: gitlab_component_errors:rate
     labels:
@@ -99,7 +99,7 @@ groups:
     expr: |
       (
         sum by () (
-          rate(thanos_compact_group_compactions_failures_total{job=~"thanos-(.+)-compactor",type="thanos"}[1m] offset 30s)
+          rate(thanos_compact_group_compactions_failures_total{job=~"thanos-(.+)-compactor",namespace="thanos",type="thanos"}[1m] offset 30s)
         )
       )
       or
@@ -119,7 +119,7 @@ groups:
       type: thanos
     expr: |
       sum by () (
-        rate(thanos_memcached_operation_duration_seconds_bucket{grpc_type="unary",job=~"thanos-(labels|querier)-metrics|thanos-(.+)-(bucket|index)-metrics",le="0.1",type="thanos"}[1m] offset 30s)
+        rate(thanos_memcached_operation_duration_seconds_bucket{grpc_type="unary",job=~"thanos-(labels|querier)-metrics|thanos-(.+)-(bucket|index)-metrics",le="0.1",namespace="thanos",type="thanos"}[1m] offset 30s)
       )
   - record: gitlab_component_apdex:weight:score
     labels:
@@ -132,7 +132,7 @@ groups:
       type: thanos
     expr: |
       sum by () (
-        rate(thanos_memcached_operation_duration_seconds_bucket{grpc_type="unary",job=~"thanos-(labels|querier)-metrics|thanos-(.+)-(bucket|index)-metrics",le="+Inf",type="thanos"}[1m] offset 30s)
+        rate(thanos_memcached_operation_duration_seconds_bucket{grpc_type="unary",job=~"thanos-(labels|querier)-metrics|thanos-(.+)-(bucket|index)-metrics",le="+Inf",namespace="thanos",type="thanos"}[1m] offset 30s)
       )
   - record: gitlab_component_ops:rate
     labels:
@@ -145,7 +145,7 @@ groups:
       type: thanos
     expr: |
       sum by () (
-        rate(thanos_memcached_operations_total{grpc_type="unary",job=~"thanos-(labels|querier)-metrics|thanos-(.+)-(bucket|index)-metrics",type="thanos"}[1m] offset 30s)
+        rate(thanos_memcached_operations_total{grpc_type="unary",job=~"thanos-(labels|querier)-metrics|thanos-(.+)-(bucket|index)-metrics",namespace="thanos",type="thanos"}[1m] offset 30s)
       )
   - record: gitlab_component_errors:rate
     labels:
@@ -159,7 +159,7 @@ groups:
     expr: |
       (
         sum by () (
-          rate(thanos_memcached_operation_failures_total{grpc_type="unary",job=~"thanos-(labels|querier)-metrics|thanos-(.+)-(bucket|index)-metrics",type="thanos"}[1m] offset 30s)
+          rate(thanos_memcached_operation_failures_total{grpc_type="unary",job=~"thanos-(labels|querier)-metrics|thanos-(.+)-(bucket|index)-metrics",namespace="thanos",type="thanos"}[1m] offset 30s)
         )
       )
       or
@@ -179,7 +179,7 @@ groups:
       type: thanos
     expr: |
       sum by () (
-        rate(http_request_duration_seconds_bucket{job="thanos-query",le="30.0",type="thanos"}[1m] offset 30s)
+        rate(http_request_duration_seconds_bucket{job="thanos-query",le="30.0",namespace="thanos",type="thanos"}[1m] offset 30s)
       )
   - record: gitlab_component_apdex:weight:score
     labels:
@@ -192,7 +192,7 @@ groups:
       type: thanos
     expr: |
       sum by () (
-        rate(http_request_duration_seconds_bucket{job="thanos-query",le="+Inf",type="thanos"}[1m] offset 30s)
+        rate(http_request_duration_seconds_bucket{job="thanos-query",le="+Inf",namespace="thanos",type="thanos"}[1m] offset 30s)
       )
   - record: gitlab_component_ops:rate
     labels:
@@ -205,7 +205,7 @@ groups:
       type: thanos
     expr: |
       sum by () (
-        sli_aggregations:http_requests_total_rate1m{job="thanos-query",type="thanos"} offset 30s
+        sli_aggregations:http_requests_total_rate1m{job="thanos-query",namespace="thanos",type="thanos"} offset 30s
       )
   - record: gitlab_component_errors:rate
     labels:
@@ -219,7 +219,7 @@ groups:
     expr: |
       (
         sum by () (
-          sli_aggregations:http_requests_total_rate1m{code=~"^5.*",job="thanos-query",type="thanos"} offset 30s
+          sli_aggregations:http_requests_total_rate1m{code=~"^5.*",job="thanos-query",namespace="thanos",type="thanos"} offset 30s
         )
       )
       or
@@ -239,7 +239,7 @@ groups:
       type: thanos
     expr: |
       sum by () (
-        rate(http_request_duration_seconds_bucket{job="thanos-query-frontend",le="30.0",type="thanos"}[1m] offset 30s)
+        rate(http_request_duration_seconds_bucket{job="thanos-query-frontend",le="30.0",namespace="thanos",type="thanos"}[1m] offset 30s)
       )
   - record: gitlab_component_apdex:weight:score
     labels:
@@ -252,7 +252,7 @@ groups:
       type: thanos
     expr: |
       sum by () (
-        rate(http_request_duration_seconds_bucket{job="thanos-query-frontend",le="+Inf",type="thanos"}[1m] offset 30s)
+        rate(http_request_duration_seconds_bucket{job="thanos-query-frontend",le="+Inf",namespace="thanos",type="thanos"}[1m] offset 30s)
       )
   - record: gitlab_component_ops:rate
     labels:
@@ -265,7 +265,7 @@ groups:
       type: thanos
     expr: |
       sum by () (
-        sli_aggregations:http_requests_total_rate1m{job="thanos-query-frontend",type="thanos"} offset 30s
+        sli_aggregations:http_requests_total_rate1m{job="thanos-query-frontend",namespace="thanos",type="thanos"} offset 30s
       )
   - record: gitlab_component_errors:rate
     labels:
@@ -279,7 +279,7 @@ groups:
     expr: |
       (
         sum by () (
-          sli_aggregations:http_requests_total_rate1m{code=~"^5.*",job="thanos-query-frontend",type="thanos"} offset 30s
+          sli_aggregations:http_requests_total_rate1m{code=~"^5.*",job="thanos-query-frontend",namespace="thanos",type="thanos"} offset 30s
         )
       )
       or
@@ -299,7 +299,7 @@ groups:
       type: thanos
     expr: |
       sum by () (
-        rate(thanos_alert_sender_alerts_sent_total{job="thanos-ruler",type="thanos"}[1m] offset 30s)
+        rate(thanos_alert_sender_alerts_sent_total{job="thanos-ruler",namespace="thanos",type="thanos"}[1m] offset 30s)
       )
   - record: gitlab_component_errors:rate
     labels:
@@ -313,7 +313,7 @@ groups:
     expr: |
       (
         sum by () (
-          rate(thanos_alert_sender_alerts_dropped_total{job="thanos-ruler",type="thanos"}[1m] offset 30s)
+          rate(thanos_alert_sender_alerts_dropped_total{job="thanos-ruler",namespace="thanos",type="thanos"}[1m] offset 30s)
         )
       )
       or
@@ -334,11 +334,11 @@ groups:
     expr: |
       (
         sum by () (
-          rate(grpc_server_handling_seconds_bucket{grpc_type="unary",job=~"thanos-(.+)-storegateway-(.+)",le="1.0",type="thanos"}[1m] offset 30s)
+          rate(grpc_server_handling_seconds_bucket{grpc_type="unary",job=~"thanos-(.+)-storegateway-(.+)",le="1.0",namespace="thanos",type="thanos"}[1m] offset 30s)
         )
         +
         sum by () (
-          rate(grpc_server_handling_seconds_bucket{grpc_type="unary",job=~"thanos-(.+)-storegateway-(.+)",le="3.0",type="thanos"}[1m] offset 30s)
+          rate(grpc_server_handling_seconds_bucket{grpc_type="unary",job=~"thanos-(.+)-storegateway-(.+)",le="3.0",namespace="thanos",type="thanos"}[1m] offset 30s)
         )
       )
       /
@@ -354,7 +354,7 @@ groups:
       type: thanos
     expr: |
       sum by () (
-        rate(grpc_server_handling_seconds_bucket{grpc_type="unary",job=~"thanos-(.+)-storegateway-(.+)",le="+Inf",type="thanos"}[1m] offset 30s)
+        rate(grpc_server_handling_seconds_bucket{grpc_type="unary",job=~"thanos-(.+)-storegateway-(.+)",le="+Inf",namespace="thanos",type="thanos"}[1m] offset 30s)
       )
   - record: gitlab_component_ops:rate
     labels:
@@ -367,7 +367,7 @@ groups:
       type: thanos
     expr: |
       sum by () (
-        rate(grpc_server_handled_total{grpc_type="unary",job=~"thanos-(.+)-storegateway-(.+)",type="thanos"}[1m] offset 30s)
+        rate(grpc_server_handled_total{grpc_type="unary",job=~"thanos-(.+)-storegateway-(.+)",namespace="thanos",type="thanos"}[1m] offset 30s)
       )
   - record: gitlab_component_errors:rate
     labels:
@@ -381,7 +381,7 @@ groups:
     expr: |
       (
         sum by () (
-          rate(grpc_server_handled_total{grpc_code!="OK",grpc_type="unary",job=~"thanos-(.+)-storegateway-(.+)",type="thanos"}[1m] offset 30s)
+          rate(grpc_server_handled_total{grpc_code!="OK",grpc_type="unary",job=~"thanos-(.+)-storegateway-(.+)",namespace="thanos",type="thanos"}[1m] offset 30s)
         )
       )
       or
@@ -405,13 +405,13 @@ groups:
       type: thanos
     expr: |
       sum by () (
-        rate(prometheus_rule_group_iterations_total{job="thanos-ruler",type="thanos"}[5m] offset 30s)
+        rate(prometheus_rule_group_iterations_total{job="thanos-ruler",namespace="thanos",type="thanos"}[5m] offset 30s)
       ) - (
         sum by () (
-          rate(prometheus_rule_group_iterations_missed_total{job="thanos-ruler",type="thanos"}[5m] offset 30s)
+          rate(prometheus_rule_group_iterations_missed_total{job="thanos-ruler",namespace="thanos",type="thanos"}[5m] offset 30s)
         ) or
         0 * sum by () (
-          rate(prometheus_rule_group_iterations_total{job="thanos-ruler",type="thanos"}[5m] offset 30s)
+          rate(prometheus_rule_group_iterations_total{job="thanos-ruler",namespace="thanos",type="thanos"}[5m] offset 30s)
         )
       )
   - record: gitlab_component_apdex:weight:score_5m
@@ -425,7 +425,7 @@ groups:
       type: thanos
     expr: |
       sum by () (
-        rate(prometheus_rule_group_iterations_total{job="thanos-ruler",type="thanos"}[5m] offset 30s)
+        rate(prometheus_rule_group_iterations_total{job="thanos-ruler",namespace="thanos",type="thanos"}[5m] offset 30s)
       )
   - record: gitlab_component_ops:rate_5m
     labels:
@@ -438,7 +438,7 @@ groups:
       type: thanos
     expr: |
       sum by () (
-        rate(prometheus_rule_evaluations_total{job="thanos-ruler",type="thanos"}[5m] offset 30s)
+        rate(prometheus_rule_evaluations_total{job="thanos-ruler",namespace="thanos",type="thanos"}[5m] offset 30s)
       )
   - record: gitlab_component_errors:rate_5m
     labels:
@@ -452,7 +452,7 @@ groups:
     expr: |
       (
         sum by () (
-          label_replace(rate(prometheus_rule_evaluation_failures_total{job="thanos-ruler",type="thanos"}[5m] offset 30s), "_c", "0", "", "")
+          label_replace(rate(prometheus_rule_evaluation_failures_total{job="thanos-ruler",namespace="thanos",type="thanos"}[5m] offset 30s), "_c", "0", "", "")
           or
           label_replace(rate(thanos_rule_evaluation_with_warnings_total{}[5m] offset 30s), "_c", "1", "", "")
         )
@@ -474,7 +474,7 @@ groups:
       type: thanos
     expr: |
       sum by () (
-        rate(thanos_compact_group_compactions_total{job=~"thanos-(.+)-compactor",type="thanos"}[5m] offset 30s)
+        rate(thanos_compact_group_compactions_total{job=~"thanos-(.+)-compactor",namespace="thanos",type="thanos"}[5m] offset 30s)
       )
   - record: gitlab_component_errors:rate_5m
     labels:
@@ -488,7 +488,7 @@ groups:
     expr: |
       (
         sum by () (
-          rate(thanos_compact_group_compactions_failures_total{job=~"thanos-(.+)-compactor",type="thanos"}[5m] offset 30s)
+          rate(thanos_compact_group_compactions_failures_total{job=~"thanos-(.+)-compactor",namespace="thanos",type="thanos"}[5m] offset 30s)
         )
       )
       or
@@ -508,7 +508,7 @@ groups:
       type: thanos
     expr: |
       sum by () (
-        rate(thanos_memcached_operation_duration_seconds_bucket{grpc_type="unary",job=~"thanos-(labels|querier)-metrics|thanos-(.+)-(bucket|index)-metrics",le="0.1",type="thanos"}[5m] offset 30s)
+        rate(thanos_memcached_operation_duration_seconds_bucket{grpc_type="unary",job=~"thanos-(labels|querier)-metrics|thanos-(.+)-(bucket|index)-metrics",le="0.1",namespace="thanos",type="thanos"}[5m] offset 30s)
       )
   - record: gitlab_component_apdex:weight:score_5m
     labels:
@@ -521,7 +521,7 @@ groups:
       type: thanos
     expr: |
       sum by () (
-        rate(thanos_memcached_operation_duration_seconds_bucket{grpc_type="unary",job=~"thanos-(labels|querier)-metrics|thanos-(.+)-(bucket|index)-metrics",le="+Inf",type="thanos"}[5m] offset 30s)
+        rate(thanos_memcached_operation_duration_seconds_bucket{grpc_type="unary",job=~"thanos-(labels|querier)-metrics|thanos-(.+)-(bucket|index)-metrics",le="+Inf",namespace="thanos",type="thanos"}[5m] offset 30s)
       )
   - record: gitlab_component_ops:rate_5m
     labels:
@@ -534,7 +534,7 @@ groups:
       type: thanos
     expr: |
       sum by () (
-        rate(thanos_memcached_operations_total{grpc_type="unary",job=~"thanos-(labels|querier)-metrics|thanos-(.+)-(bucket|index)-metrics",type="thanos"}[5m] offset 30s)
+        rate(thanos_memcached_operations_total{grpc_type="unary",job=~"thanos-(labels|querier)-metrics|thanos-(.+)-(bucket|index)-metrics",namespace="thanos",type="thanos"}[5m] offset 30s)
       )
   - record: gitlab_component_errors:rate_5m
     labels:
@@ -548,7 +548,7 @@ groups:
     expr: |
       (
         sum by () (
-          rate(thanos_memcached_operation_failures_total{grpc_type="unary",job=~"thanos-(labels|querier)-metrics|thanos-(.+)-(bucket|index)-metrics",type="thanos"}[5m] offset 30s)
+          rate(thanos_memcached_operation_failures_total{grpc_type="unary",job=~"thanos-(labels|querier)-metrics|thanos-(.+)-(bucket|index)-metrics",namespace="thanos",type="thanos"}[5m] offset 30s)
         )
       )
       or
@@ -568,7 +568,7 @@ groups:
       type: thanos
     expr: |
       sum by () (
-        rate(http_request_duration_seconds_bucket{job="thanos-query",le="30.0",type="thanos"}[5m] offset 30s)
+        rate(http_request_duration_seconds_bucket{job="thanos-query",le="30.0",namespace="thanos",type="thanos"}[5m] offset 30s)
       )
   - record: gitlab_component_apdex:weight:score_5m
     labels:
@@ -581,7 +581,7 @@ groups:
       type: thanos
     expr: |
       sum by () (
-        rate(http_request_duration_seconds_bucket{job="thanos-query",le="+Inf",type="thanos"}[5m] offset 30s)
+        rate(http_request_duration_seconds_bucket{job="thanos-query",le="+Inf",namespace="thanos",type="thanos"}[5m] offset 30s)
       )
   - record: gitlab_component_ops:rate_5m
     labels:
@@ -594,7 +594,7 @@ groups:
       type: thanos
     expr: |
       sum by () (
-        sli_aggregations:http_requests_total_rate5m{job="thanos-query",type="thanos"} offset 30s
+        sli_aggregations:http_requests_total_rate5m{job="thanos-query",namespace="thanos",type="thanos"} offset 30s
       )
   - record: gitlab_component_errors:rate_5m
     labels:
@@ -608,7 +608,7 @@ groups:
     expr: |
       (
         sum by () (
-          sli_aggregations:http_requests_total_rate5m{code=~"^5.*",job="thanos-query",type="thanos"} offset 30s
+          sli_aggregations:http_requests_total_rate5m{code=~"^5.*",job="thanos-query",namespace="thanos",type="thanos"} offset 30s
         )
       )
       or
@@ -628,7 +628,7 @@ groups:
       type: thanos
     expr: |
       sum by () (
-        rate(http_request_duration_seconds_bucket{job="thanos-query-frontend",le="30.0",type="thanos"}[5m] offset 30s)
+        rate(http_request_duration_seconds_bucket{job="thanos-query-frontend",le="30.0",namespace="thanos",type="thanos"}[5m] offset 30s)
       )
   - record: gitlab_component_apdex:weight:score_5m
     labels:
@@ -641,7 +641,7 @@ groups:
       type: thanos
     expr: |
       sum by () (
-        rate(http_request_duration_seconds_bucket{job="thanos-query-frontend",le="+Inf",type="thanos"}[5m] offset 30s)
+        rate(http_request_duration_seconds_bucket{job="thanos-query-frontend",le="+Inf",namespace="thanos",type="thanos"}[5m] offset 30s)
       )
   - record: gitlab_component_ops:rate_5m
     labels:
@@ -654,7 +654,7 @@ groups:
       type: thanos
     expr: |
       sum by () (
-        sli_aggregations:http_requests_total_rate5m{job="thanos-query-frontend",type="thanos"} offset 30s
+        sli_aggregations:http_requests_total_rate5m{job="thanos-query-frontend",namespace="thanos",type="thanos"} offset 30s
       )
   - record: gitlab_component_errors:rate_5m
     labels:
@@ -668,7 +668,7 @@ groups:
     expr: |
       (
         sum by () (
-          sli_aggregations:http_requests_total_rate5m{code=~"^5.*",job="thanos-query-frontend",type="thanos"} offset 30s
+          sli_aggregations:http_requests_total_rate5m{code=~"^5.*",job="thanos-query-frontend",namespace="thanos",type="thanos"} offset 30s
         )
       )
       or
@@ -688,7 +688,7 @@ groups:
       type: thanos
     expr: |
       sum by () (
-        rate(thanos_alert_sender_alerts_sent_total{job="thanos-ruler",type="thanos"}[5m] offset 30s)
+        rate(thanos_alert_sender_alerts_sent_total{job="thanos-ruler",namespace="thanos",type="thanos"}[5m] offset 30s)
       )
   - record: gitlab_component_errors:rate_5m
     labels:
@@ -702,7 +702,7 @@ groups:
     expr: |
       (
         sum by () (
-          rate(thanos_alert_sender_alerts_dropped_total{job="thanos-ruler",type="thanos"}[5m] offset 30s)
+          rate(thanos_alert_sender_alerts_dropped_total{job="thanos-ruler",namespace="thanos",type="thanos"}[5m] offset 30s)
         )
       )
       or
@@ -723,11 +723,11 @@ groups:
     expr: |
       (
         sum by () (
-          rate(grpc_server_handling_seconds_bucket{grpc_type="unary",job=~"thanos-(.+)-storegateway-(.+)",le="1.0",type="thanos"}[5m] offset 30s)
+          rate(grpc_server_handling_seconds_bucket{grpc_type="unary",job=~"thanos-(.+)-storegateway-(.+)",le="1.0",namespace="thanos",type="thanos"}[5m] offset 30s)
         )
         +
         sum by () (
-          rate(grpc_server_handling_seconds_bucket{grpc_type="unary",job=~"thanos-(.+)-storegateway-(.+)",le="3.0",type="thanos"}[5m] offset 30s)
+          rate(grpc_server_handling_seconds_bucket{grpc_type="unary",job=~"thanos-(.+)-storegateway-(.+)",le="3.0",namespace="thanos",type="thanos"}[5m] offset 30s)
         )
       )
       /
@@ -743,7 +743,7 @@ groups:
       type: thanos
     expr: |
       sum by () (
-        rate(grpc_server_handling_seconds_bucket{grpc_type="unary",job=~"thanos-(.+)-storegateway-(.+)",le="+Inf",type="thanos"}[5m] offset 30s)
+        rate(grpc_server_handling_seconds_bucket{grpc_type="unary",job=~"thanos-(.+)-storegateway-(.+)",le="+Inf",namespace="thanos",type="thanos"}[5m] offset 30s)
       )
   - record: gitlab_component_ops:rate_5m
     labels:
@@ -756,7 +756,7 @@ groups:
       type: thanos
     expr: |
       sum by () (
-        rate(grpc_server_handled_total{grpc_type="unary",job=~"thanos-(.+)-storegateway-(.+)",type="thanos"}[5m] offset 30s)
+        rate(grpc_server_handled_total{grpc_type="unary",job=~"thanos-(.+)-storegateway-(.+)",namespace="thanos",type="thanos"}[5m] offset 30s)
       )
   - record: gitlab_component_errors:rate_5m
     labels:
@@ -770,7 +770,7 @@ groups:
     expr: |
       (
         sum by () (
-          rate(grpc_server_handled_total{grpc_code!="OK",grpc_type="unary",job=~"thanos-(.+)-storegateway-(.+)",type="thanos"}[5m] offset 30s)
+          rate(grpc_server_handled_total{grpc_code!="OK",grpc_type="unary",job=~"thanos-(.+)-storegateway-(.+)",namespace="thanos",type="thanos"}[5m] offset 30s)
         )
       )
       or
@@ -794,13 +794,13 @@ groups:
       type: thanos
     expr: |
       sum by () (
-        rate(prometheus_rule_group_iterations_total{job="thanos-ruler",type="thanos"}[30m] offset 30s)
+        rate(prometheus_rule_group_iterations_total{job="thanos-ruler",namespace="thanos",type="thanos"}[30m] offset 30s)
       ) - (
         sum by () (
-          rate(prometheus_rule_group_iterations_missed_total{job="thanos-ruler",type="thanos"}[30m] offset 30s)
+          rate(prometheus_rule_group_iterations_missed_total{job="thanos-ruler",namespace="thanos",type="thanos"}[30m] offset 30s)
         ) or
         0 * sum by () (
-          rate(prometheus_rule_group_iterations_total{job="thanos-ruler",type="thanos"}[30m] offset 30s)
+          rate(prometheus_rule_group_iterations_total{job="thanos-ruler",namespace="thanos",type="thanos"}[30m] offset 30s)
         )
       )
   - record: gitlab_component_apdex:weight:score_30m
@@ -814,7 +814,7 @@ groups:
       type: thanos
     expr: |
       sum by () (
-        rate(prometheus_rule_group_iterations_total{job="thanos-ruler",type="thanos"}[30m] offset 30s)
+        rate(prometheus_rule_group_iterations_total{job="thanos-ruler",namespace="thanos",type="thanos"}[30m] offset 30s)
       )
   - record: gitlab_component_ops:rate_30m
     labels:
@@ -827,7 +827,7 @@ groups:
       type: thanos
     expr: |
       sum by () (
-        rate(prometheus_rule_evaluations_total{job="thanos-ruler",type="thanos"}[30m] offset 30s)
+        rate(prometheus_rule_evaluations_total{job="thanos-ruler",namespace="thanos",type="thanos"}[30m] offset 30s)
       )
   - record: gitlab_component_errors:rate_30m
     labels:
@@ -841,7 +841,7 @@ groups:
     expr: |
       (
         sum by () (
-          label_replace(rate(prometheus_rule_evaluation_failures_total{job="thanos-ruler",type="thanos"}[30m] offset 30s), "_c", "0", "", "")
+          label_replace(rate(prometheus_rule_evaluation_failures_total{job="thanos-ruler",namespace="thanos",type="thanos"}[30m] offset 30s), "_c", "0", "", "")
           or
           label_replace(rate(thanos_rule_evaluation_with_warnings_total{}[30m] offset 30s), "_c", "1", "", "")
         )
@@ -863,7 +863,7 @@ groups:
       type: thanos
     expr: |
       sum by () (
-        rate(thanos_compact_group_compactions_total{job=~"thanos-(.+)-compactor",type="thanos"}[30m] offset 30s)
+        rate(thanos_compact_group_compactions_total{job=~"thanos-(.+)-compactor",namespace="thanos",type="thanos"}[30m] offset 30s)
       )
   - record: gitlab_component_errors:rate_30m
     labels:
@@ -877,7 +877,7 @@ groups:
     expr: |
       (
         sum by () (
-          rate(thanos_compact_group_compactions_failures_total{job=~"thanos-(.+)-compactor",type="thanos"}[30m] offset 30s)
+          rate(thanos_compact_group_compactions_failures_total{job=~"thanos-(.+)-compactor",namespace="thanos",type="thanos"}[30m] offset 30s)
         )
       )
       or
@@ -897,7 +897,7 @@ groups:
       type: thanos
     expr: |
       sum by () (
-        rate(thanos_memcached_operation_duration_seconds_bucket{grpc_type="unary",job=~"thanos-(labels|querier)-metrics|thanos-(.+)-(bucket|index)-metrics",le="0.1",type="thanos"}[30m] offset 30s)
+        rate(thanos_memcached_operation_duration_seconds_bucket{grpc_type="unary",job=~"thanos-(labels|querier)-metrics|thanos-(.+)-(bucket|index)-metrics",le="0.1",namespace="thanos",type="thanos"}[30m] offset 30s)
       )
   - record: gitlab_component_apdex:weight:score_30m
     labels:
@@ -910,7 +910,7 @@ groups:
       type: thanos
     expr: |
       sum by () (
-        rate(thanos_memcached_operation_duration_seconds_bucket{grpc_type="unary",job=~"thanos-(labels|querier)-metrics|thanos-(.+)-(bucket|index)-metrics",le="+Inf",type="thanos"}[30m] offset 30s)
+        rate(thanos_memcached_operation_duration_seconds_bucket{grpc_type="unary",job=~"thanos-(labels|querier)-metrics|thanos-(.+)-(bucket|index)-metrics",le="+Inf",namespace="thanos",type="thanos"}[30m] offset 30s)
       )
   - record: gitlab_component_ops:rate_30m
     labels:
@@ -923,7 +923,7 @@ groups:
       type: thanos
     expr: |
       sum by () (
-        rate(thanos_memcached_operations_total{grpc_type="unary",job=~"thanos-(labels|querier)-metrics|thanos-(.+)-(bucket|index)-metrics",type="thanos"}[30m] offset 30s)
+        rate(thanos_memcached_operations_total{grpc_type="unary",job=~"thanos-(labels|querier)-metrics|thanos-(.+)-(bucket|index)-metrics",namespace="thanos",type="thanos"}[30m] offset 30s)
       )
   - record: gitlab_component_errors:rate_30m
     labels:
@@ -937,7 +937,7 @@ groups:
     expr: |
       (
         sum by () (
-          rate(thanos_memcached_operation_failures_total{grpc_type="unary",job=~"thanos-(labels|querier)-metrics|thanos-(.+)-(bucket|index)-metrics",type="thanos"}[30m] offset 30s)
+          rate(thanos_memcached_operation_failures_total{grpc_type="unary",job=~"thanos-(labels|querier)-metrics|thanos-(.+)-(bucket|index)-metrics",namespace="thanos",type="thanos"}[30m] offset 30s)
         )
       )
       or
@@ -957,7 +957,7 @@ groups:
       type: thanos
     expr: |
       sum by () (
-        rate(http_request_duration_seconds_bucket{job="thanos-query",le="30.0",type="thanos"}[30m] offset 30s)
+        rate(http_request_duration_seconds_bucket{job="thanos-query",le="30.0",namespace="thanos",type="thanos"}[30m] offset 30s)
       )
   - record: gitlab_component_apdex:weight:score_30m
     labels:
@@ -970,7 +970,7 @@ groups:
       type: thanos
     expr: |
       sum by () (
-        rate(http_request_duration_seconds_bucket{job="thanos-query",le="+Inf",type="thanos"}[30m] offset 30s)
+        rate(http_request_duration_seconds_bucket{job="thanos-query",le="+Inf",namespace="thanos",type="thanos"}[30m] offset 30s)
       )
   - record: gitlab_component_ops:rate_30m
     labels:
@@ -983,7 +983,7 @@ groups:
       type: thanos
     expr: |
       sum by () (
-        sli_aggregations:http_requests_total_rate30m{job="thanos-query",type="thanos"} offset 30s
+        sli_aggregations:http_requests_total_rate30m{job="thanos-query",namespace="thanos",type="thanos"} offset 30s
       )
   - record: gitlab_component_errors:rate_30m
     labels:
@@ -997,7 +997,7 @@ groups:
     expr: |
       (
         sum by () (
-          sli_aggregations:http_requests_total_rate30m{code=~"^5.*",job="thanos-query",type="thanos"} offset 30s
+          sli_aggregations:http_requests_total_rate30m{code=~"^5.*",job="thanos-query",namespace="thanos",type="thanos"} offset 30s
         )
       )
       or
@@ -1017,7 +1017,7 @@ groups:
       type: thanos
     expr: |
       sum by () (
-        rate(http_request_duration_seconds_bucket{job="thanos-query-frontend",le="30.0",type="thanos"}[30m] offset 30s)
+        rate(http_request_duration_seconds_bucket{job="thanos-query-frontend",le="30.0",namespace="thanos",type="thanos"}[30m] offset 30s)
       )
   - record: gitlab_component_apdex:weight:score_30m
     labels:
@@ -1030,7 +1030,7 @@ groups:
       type: thanos
     expr: |
       sum by () (
-        rate(http_request_duration_seconds_bucket{job="thanos-query-frontend",le="+Inf",type="thanos"}[30m] offset 30s)
+        rate(http_request_duration_seconds_bucket{job="thanos-query-frontend",le="+Inf",namespace="thanos",type="thanos"}[30m] offset 30s)
       )
   - record: gitlab_component_ops:rate_30m
     labels:
@@ -1043,7 +1043,7 @@ groups:
       type: thanos
     expr: |
       sum by () (
-        sli_aggregations:http_requests_total_rate30m{job="thanos-query-frontend",type="thanos"} offset 30s
+        sli_aggregations:http_requests_total_rate30m{job="thanos-query-frontend",namespace="thanos",type="thanos"} offset 30s
       )
   - record: gitlab_component_errors:rate_30m
     labels:
@@ -1057,7 +1057,7 @@ groups:
     expr: |
       (
         sum by () (
-          sli_aggregations:http_requests_total_rate30m{code=~"^5.*",job="thanos-query-frontend",type="thanos"} offset 30s
+          sli_aggregations:http_requests_total_rate30m{code=~"^5.*",job="thanos-query-frontend",namespace="thanos",type="thanos"} offset 30s
         )
       )
       or
@@ -1077,7 +1077,7 @@ groups:
       type: thanos
     expr: |
       sum by () (
-        rate(thanos_alert_sender_alerts_sent_total{job="thanos-ruler",type="thanos"}[30m] offset 30s)
+        rate(thanos_alert_sender_alerts_sent_total{job="thanos-ruler",namespace="thanos",type="thanos"}[30m] offset 30s)
       )
   - record: gitlab_component_errors:rate_30m
     labels:
@@ -1091,7 +1091,7 @@ groups:
     expr: |
       (
         sum by () (
-          rate(thanos_alert_sender_alerts_dropped_total{job="thanos-ruler",type="thanos"}[30m] offset 30s)
+          rate(thanos_alert_sender_alerts_dropped_total{job="thanos-ruler",namespace="thanos",type="thanos"}[30m] offset 30s)
         )
       )
       or
@@ -1112,11 +1112,11 @@ groups:
     expr: |
       (
         sum by () (
-          rate(grpc_server_handling_seconds_bucket{grpc_type="unary",job=~"thanos-(.+)-storegateway-(.+)",le="1.0",type="thanos"}[30m] offset 30s)
+          rate(grpc_server_handling_seconds_bucket{grpc_type="unary",job=~"thanos-(.+)-storegateway-(.+)",le="1.0",namespace="thanos",type="thanos"}[30m] offset 30s)
         )
         +
         sum by () (
-          rate(grpc_server_handling_seconds_bucket{grpc_type="unary",job=~"thanos-(.+)-storegateway-(.+)",le="3.0",type="thanos"}[30m] offset 30s)
+          rate(grpc_server_handling_seconds_bucket{grpc_type="unary",job=~"thanos-(.+)-storegateway-(.+)",le="3.0",namespace="thanos",type="thanos"}[30m] offset 30s)
         )
       )
       /
@@ -1132,7 +1132,7 @@ groups:
       type: thanos
     expr: |
       sum by () (
-        rate(grpc_server_handling_seconds_bucket{grpc_type="unary",job=~"thanos-(.+)-storegateway-(.+)",le="+Inf",type="thanos"}[30m] offset 30s)
+        rate(grpc_server_handling_seconds_bucket{grpc_type="unary",job=~"thanos-(.+)-storegateway-(.+)",le="+Inf",namespace="thanos",type="thanos"}[30m] offset 30s)
       )
   - record: gitlab_component_ops:rate_30m
     labels:
@@ -1145,7 +1145,7 @@ groups:
       type: thanos
     expr: |
       sum by () (
-        rate(grpc_server_handled_total{grpc_type="unary",job=~"thanos-(.+)-storegateway-(.+)",type="thanos"}[30m] offset 30s)
+        rate(grpc_server_handled_total{grpc_type="unary",job=~"thanos-(.+)-storegateway-(.+)",namespace="thanos",type="thanos"}[30m] offset 30s)
       )
   - record: gitlab_component_errors:rate_30m
     labels:
@@ -1159,7 +1159,7 @@ groups:
     expr: |
       (
         sum by () (
-          rate(grpc_server_handled_total{grpc_code!="OK",grpc_type="unary",job=~"thanos-(.+)-storegateway-(.+)",type="thanos"}[30m] offset 30s)
+          rate(grpc_server_handled_total{grpc_code!="OK",grpc_type="unary",job=~"thanos-(.+)-storegateway-(.+)",namespace="thanos",type="thanos"}[30m] offset 30s)
         )
       )
       or
@@ -1183,13 +1183,13 @@ groups:
       type: thanos
     expr: |
       sum by () (
-        rate(prometheus_rule_group_iterations_total{job="thanos-ruler",type="thanos"}[1h] offset 30s)
+        rate(prometheus_rule_group_iterations_total{job="thanos-ruler",namespace="thanos",type="thanos"}[1h] offset 30s)
       ) - (
         sum by () (
-          rate(prometheus_rule_group_iterations_missed_total{job="thanos-ruler",type="thanos"}[1h] offset 30s)
+          rate(prometheus_rule_group_iterations_missed_total{job="thanos-ruler",namespace="thanos",type="thanos"}[1h] offset 30s)
         ) or
         0 * sum by () (
-          rate(prometheus_rule_group_iterations_total{job="thanos-ruler",type="thanos"}[1h] offset 30s)
+          rate(prometheus_rule_group_iterations_total{job="thanos-ruler",namespace="thanos",type="thanos"}[1h] offset 30s)
         )
       )
   - record: gitlab_component_apdex:weight:score_1h
@@ -1203,7 +1203,7 @@ groups:
       type: thanos
     expr: |
       sum by () (
-        rate(prometheus_rule_group_iterations_total{job="thanos-ruler",type="thanos"}[1h] offset 30s)
+        rate(prometheus_rule_group_iterations_total{job="thanos-ruler",namespace="thanos",type="thanos"}[1h] offset 30s)
       )
   - record: gitlab_component_ops:rate_1h
     labels:
@@ -1216,7 +1216,7 @@ groups:
       type: thanos
     expr: |
       sum by () (
-        rate(prometheus_rule_evaluations_total{job="thanos-ruler",type="thanos"}[1h] offset 30s)
+        rate(prometheus_rule_evaluations_total{job="thanos-ruler",namespace="thanos",type="thanos"}[1h] offset 30s)
       )
   - record: gitlab_component_errors:rate_1h
     labels:
@@ -1230,7 +1230,7 @@ groups:
     expr: |
       (
         sum by () (
-          label_replace(rate(prometheus_rule_evaluation_failures_total{job="thanos-ruler",type="thanos"}[1h] offset 30s), "_c", "0", "", "")
+          label_replace(rate(prometheus_rule_evaluation_failures_total{job="thanos-ruler",namespace="thanos",type="thanos"}[1h] offset 30s), "_c", "0", "", "")
           or
           label_replace(rate(thanos_rule_evaluation_with_warnings_total{}[1h] offset 30s), "_c", "1", "", "")
         )
@@ -1252,7 +1252,7 @@ groups:
       type: thanos
     expr: |
       sum by () (
-        rate(thanos_compact_group_compactions_total{job=~"thanos-(.+)-compactor",type="thanos"}[1h] offset 30s)
+        rate(thanos_compact_group_compactions_total{job=~"thanos-(.+)-compactor",namespace="thanos",type="thanos"}[1h] offset 30s)
       )
   - record: gitlab_component_errors:rate_1h
     labels:
@@ -1266,7 +1266,7 @@ groups:
     expr: |
       (
         sum by () (
-          rate(thanos_compact_group_compactions_failures_total{job=~"thanos-(.+)-compactor",type="thanos"}[1h] offset 30s)
+          rate(thanos_compact_group_compactions_failures_total{job=~"thanos-(.+)-compactor",namespace="thanos",type="thanos"}[1h] offset 30s)
         )
       )
       or
@@ -1286,7 +1286,7 @@ groups:
       type: thanos
     expr: |
       sum by () (
-        rate(thanos_memcached_operation_duration_seconds_bucket{grpc_type="unary",job=~"thanos-(labels|querier)-metrics|thanos-(.+)-(bucket|index)-metrics",le="0.1",type="thanos"}[1h] offset 30s)
+        rate(thanos_memcached_operation_duration_seconds_bucket{grpc_type="unary",job=~"thanos-(labels|querier)-metrics|thanos-(.+)-(bucket|index)-metrics",le="0.1",namespace="thanos",type="thanos"}[1h] offset 30s)
       )
   - record: gitlab_component_apdex:weight:score_1h
     labels:
@@ -1299,7 +1299,7 @@ groups:
       type: thanos
     expr: |
       sum by () (
-        rate(thanos_memcached_operation_duration_seconds_bucket{grpc_type="unary",job=~"thanos-(labels|querier)-metrics|thanos-(.+)-(bucket|index)-metrics",le="+Inf",type="thanos"}[1h] offset 30s)
+        rate(thanos_memcached_operation_duration_seconds_bucket{grpc_type="unary",job=~"thanos-(labels|querier)-metrics|thanos-(.+)-(bucket|index)-metrics",le="+Inf",namespace="thanos",type="thanos"}[1h] offset 30s)
       )
   - record: gitlab_component_ops:rate_1h
     labels:
@@ -1312,7 +1312,7 @@ groups:
       type: thanos
     expr: |
       sum by () (
-        rate(thanos_memcached_operations_total{grpc_type="unary",job=~"thanos-(labels|querier)-metrics|thanos-(.+)-(bucket|index)-metrics",type="thanos"}[1h] offset 30s)
+        rate(thanos_memcached_operations_total{grpc_type="unary",job=~"thanos-(labels|querier)-metrics|thanos-(.+)-(bucket|index)-metrics",namespace="thanos",type="thanos"}[1h] offset 30s)
       )
   - record: gitlab_component_errors:rate_1h
     labels:
@@ -1326,7 +1326,7 @@ groups:
     expr: |
       (
         sum by () (
-          rate(thanos_memcached_operation_failures_total{grpc_type="unary",job=~"thanos-(labels|querier)-metrics|thanos-(.+)-(bucket|index)-metrics",type="thanos"}[1h] offset 30s)
+          rate(thanos_memcached_operation_failures_total{grpc_type="unary",job=~"thanos-(labels|querier)-metrics|thanos-(.+)-(bucket|index)-metrics",namespace="thanos",type="thanos"}[1h] offset 30s)
         )
       )
       or
@@ -1346,7 +1346,7 @@ groups:
       type: thanos
     expr: |
       sum by () (
-        rate(http_request_duration_seconds_bucket{job="thanos-query",le="30.0",type="thanos"}[1h] offset 30s)
+        rate(http_request_duration_seconds_bucket{job="thanos-query",le="30.0",namespace="thanos",type="thanos"}[1h] offset 30s)
       )
   - record: gitlab_component_apdex:weight:score_1h
     labels:
@@ -1359,7 +1359,7 @@ groups:
       type: thanos
     expr: |
       sum by () (
-        rate(http_request_duration_seconds_bucket{job="thanos-query",le="+Inf",type="thanos"}[1h] offset 30s)
+        rate(http_request_duration_seconds_bucket{job="thanos-query",le="+Inf",namespace="thanos",type="thanos"}[1h] offset 30s)
       )
   - record: gitlab_component_ops:rate_1h
     labels:
@@ -1372,7 +1372,7 @@ groups:
       type: thanos
     expr: |
       sum by () (
-        sli_aggregations:http_requests_total_rate1h{job="thanos-query",type="thanos"} offset 30s
+        sli_aggregations:http_requests_total_rate1h{job="thanos-query",namespace="thanos",type="thanos"} offset 30s
       )
   - record: gitlab_component_errors:rate_1h
     labels:
@@ -1386,7 +1386,7 @@ groups:
     expr: |
       (
         sum by () (
-          sli_aggregations:http_requests_total_rate1h{code=~"^5.*",job="thanos-query",type="thanos"} offset 30s
+          sli_aggregations:http_requests_total_rate1h{code=~"^5.*",job="thanos-query",namespace="thanos",type="thanos"} offset 30s
         )
       )
       or
@@ -1406,7 +1406,7 @@ groups:
       type: thanos
     expr: |
       sum by () (
-        rate(http_request_duration_seconds_bucket{job="thanos-query-frontend",le="30.0",type="thanos"}[1h] offset 30s)
+        rate(http_request_duration_seconds_bucket{job="thanos-query-frontend",le="30.0",namespace="thanos",type="thanos"}[1h] offset 30s)
       )
   - record: gitlab_component_apdex:weight:score_1h
     labels:
@@ -1419,7 +1419,7 @@ groups:
       type: thanos
     expr: |
       sum by () (
-        rate(http_request_duration_seconds_bucket{job="thanos-query-frontend",le="+Inf",type="thanos"}[1h] offset 30s)
+        rate(http_request_duration_seconds_bucket{job="thanos-query-frontend",le="+Inf",namespace="thanos",type="thanos"}[1h] offset 30s)
       )
   - record: gitlab_component_ops:rate_1h
     labels:
@@ -1432,7 +1432,7 @@ groups:
       type: thanos
     expr: |
       sum by () (
-        sli_aggregations:http_requests_total_rate1h{job="thanos-query-frontend",type="thanos"} offset 30s
+        sli_aggregations:http_requests_total_rate1h{job="thanos-query-frontend",namespace="thanos",type="thanos"} offset 30s
       )
   - record: gitlab_component_errors:rate_1h
     labels:
@@ -1446,7 +1446,7 @@ groups:
     expr: |
       (
         sum by () (
-          sli_aggregations:http_requests_total_rate1h{code=~"^5.*",job="thanos-query-frontend",type="thanos"} offset 30s
+          sli_aggregations:http_requests_total_rate1h{code=~"^5.*",job="thanos-query-frontend",namespace="thanos",type="thanos"} offset 30s
         )
       )
       or
@@ -1466,7 +1466,7 @@ groups:
       type: thanos
     expr: |
       sum by () (
-        rate(thanos_alert_sender_alerts_sent_total{job="thanos-ruler",type="thanos"}[1h] offset 30s)
+        rate(thanos_alert_sender_alerts_sent_total{job="thanos-ruler",namespace="thanos",type="thanos"}[1h] offset 30s)
       )
   - record: gitlab_component_errors:rate_1h
     labels:
@@ -1480,7 +1480,7 @@ groups:
     expr: |
       (
         sum by () (
-          rate(thanos_alert_sender_alerts_dropped_total{job="thanos-ruler",type="thanos"}[1h] offset 30s)
+          rate(thanos_alert_sender_alerts_dropped_total{job="thanos-ruler",namespace="thanos",type="thanos"}[1h] offset 30s)
         )
       )
       or
@@ -1501,11 +1501,11 @@ groups:
     expr: |
       (
         sum by () (
-          rate(grpc_server_handling_seconds_bucket{grpc_type="unary",job=~"thanos-(.+)-storegateway-(.+)",le="1.0",type="thanos"}[1h] offset 30s)
+          rate(grpc_server_handling_seconds_bucket{grpc_type="unary",job=~"thanos-(.+)-storegateway-(.+)",le="1.0",namespace="thanos",type="thanos"}[1h] offset 30s)
         )
         +
         sum by () (
-          rate(grpc_server_handling_seconds_bucket{grpc_type="unary",job=~"thanos-(.+)-storegateway-(.+)",le="3.0",type="thanos"}[1h] offset 30s)
+          rate(grpc_server_handling_seconds_bucket{grpc_type="unary",job=~"thanos-(.+)-storegateway-(.+)",le="3.0",namespace="thanos",type="thanos"}[1h] offset 30s)
         )
       )
       /
@@ -1521,7 +1521,7 @@ groups:
       type: thanos
     expr: |
       sum by () (
-        rate(grpc_server_handling_seconds_bucket{grpc_type="unary",job=~"thanos-(.+)-storegateway-(.+)",le="+Inf",type="thanos"}[1h] offset 30s)
+        rate(grpc_server_handling_seconds_bucket{grpc_type="unary",job=~"thanos-(.+)-storegateway-(.+)",le="+Inf",namespace="thanos",type="thanos"}[1h] offset 30s)
       )
   - record: gitlab_component_ops:rate_1h
     labels:
@@ -1534,7 +1534,7 @@ groups:
       type: thanos
     expr: |
       sum by () (
-        rate(grpc_server_handled_total{grpc_type="unary",job=~"thanos-(.+)-storegateway-(.+)",type="thanos"}[1h] offset 30s)
+        rate(grpc_server_handled_total{grpc_type="unary",job=~"thanos-(.+)-storegateway-(.+)",namespace="thanos",type="thanos"}[1h] offset 30s)
       )
   - record: gitlab_component_errors:rate_1h
     labels:
@@ -1548,7 +1548,7 @@ groups:
     expr: |
       (
         sum by () (
-          rate(grpc_server_handled_total{grpc_code!="OK",grpc_type="unary",job=~"thanos-(.+)-storegateway-(.+)",type="thanos"}[1h] offset 30s)
+          rate(grpc_server_handled_total{grpc_code!="OK",grpc_type="unary",job=~"thanos-(.+)-storegateway-(.+)",namespace="thanos",type="thanos"}[1h] offset 30s)
         )
       )
       or
@@ -1572,13 +1572,13 @@ groups:
       type: thanos
     expr: |
       sum by () (
-        rate(prometheus_rule_group_iterations_total{job="thanos-ruler",type="thanos"}[6h] offset 30s)
+        rate(prometheus_rule_group_iterations_total{job="thanos-ruler",namespace="thanos",type="thanos"}[6h] offset 30s)
       ) - (
         sum by () (
-          rate(prometheus_rule_group_iterations_missed_total{job="thanos-ruler",type="thanos"}[6h] offset 30s)
+          rate(prometheus_rule_group_iterations_missed_total{job="thanos-ruler",namespace="thanos",type="thanos"}[6h] offset 30s)
         ) or
         0 * sum by () (
-          rate(prometheus_rule_group_iterations_total{job="thanos-ruler",type="thanos"}[6h] offset 30s)
+          rate(prometheus_rule_group_iterations_total{job="thanos-ruler",namespace="thanos",type="thanos"}[6h] offset 30s)
         )
       )
   - record: gitlab_component_apdex:weight:score_6h
@@ -1592,7 +1592,7 @@ groups:
       type: thanos
     expr: |
       sum by () (
-        rate(prometheus_rule_group_iterations_total{job="thanos-ruler",type="thanos"}[6h] offset 30s)
+        rate(prometheus_rule_group_iterations_total{job="thanos-ruler",namespace="thanos",type="thanos"}[6h] offset 30s)
       )
   - record: gitlab_component_ops:rate_6h
     labels:
@@ -1605,7 +1605,7 @@ groups:
       type: thanos
     expr: |
       sum by () (
-        rate(prometheus_rule_evaluations_total{job="thanos-ruler",type="thanos"}[6h] offset 30s)
+        rate(prometheus_rule_evaluations_total{job="thanos-ruler",namespace="thanos",type="thanos"}[6h] offset 30s)
       )
   - record: gitlab_component_errors:rate_6h
     labels:
@@ -1619,7 +1619,7 @@ groups:
     expr: |
       (
         sum by () (
-          label_replace(rate(prometheus_rule_evaluation_failures_total{job="thanos-ruler",type="thanos"}[6h] offset 30s), "_c", "0", "", "")
+          label_replace(rate(prometheus_rule_evaluation_failures_total{job="thanos-ruler",namespace="thanos",type="thanos"}[6h] offset 30s), "_c", "0", "", "")
           or
           label_replace(rate(thanos_rule_evaluation_with_warnings_total{}[6h] offset 30s), "_c", "1", "", "")
         )
@@ -1641,7 +1641,7 @@ groups:
       type: thanos
     expr: |
       sum by () (
-        rate(thanos_compact_group_compactions_total{job=~"thanos-(.+)-compactor",type="thanos"}[6h] offset 30s)
+        rate(thanos_compact_group_compactions_total{job=~"thanos-(.+)-compactor",namespace="thanos",type="thanos"}[6h] offset 30s)
       )
   - record: gitlab_component_errors:rate_6h
     labels:
@@ -1655,7 +1655,7 @@ groups:
     expr: |
       (
         sum by () (
-          rate(thanos_compact_group_compactions_failures_total{job=~"thanos-(.+)-compactor",type="thanos"}[6h] offset 30s)
+          rate(thanos_compact_group_compactions_failures_total{job=~"thanos-(.+)-compactor",namespace="thanos",type="thanos"}[6h] offset 30s)
         )
       )
       or
@@ -1675,7 +1675,7 @@ groups:
       type: thanos
     expr: |
       sum by () (
-        rate(thanos_memcached_operation_duration_seconds_bucket{grpc_type="unary",job=~"thanos-(labels|querier)-metrics|thanos-(.+)-(bucket|index)-metrics",le="0.1",type="thanos"}[6h] offset 30s)
+        rate(thanos_memcached_operation_duration_seconds_bucket{grpc_type="unary",job=~"thanos-(labels|querier)-metrics|thanos-(.+)-(bucket|index)-metrics",le="0.1",namespace="thanos",type="thanos"}[6h] offset 30s)
       )
   - record: gitlab_component_apdex:weight:score_6h
     labels:
@@ -1688,7 +1688,7 @@ groups:
       type: thanos
     expr: |
       sum by () (
-        rate(thanos_memcached_operation_duration_seconds_bucket{grpc_type="unary",job=~"thanos-(labels|querier)-metrics|thanos-(.+)-(bucket|index)-metrics",le="+Inf",type="thanos"}[6h] offset 30s)
+        rate(thanos_memcached_operation_duration_seconds_bucket{grpc_type="unary",job=~"thanos-(labels|querier)-metrics|thanos-(.+)-(bucket|index)-metrics",le="+Inf",namespace="thanos",type="thanos"}[6h] offset 30s)
       )
   - record: gitlab_component_ops:rate_6h
     labels:
@@ -1701,7 +1701,7 @@ groups:
       type: thanos
     expr: |
       sum by () (
-        rate(thanos_memcached_operations_total{grpc_type="unary",job=~"thanos-(labels|querier)-metrics|thanos-(.+)-(bucket|index)-metrics",type="thanos"}[6h] offset 30s)
+        rate(thanos_memcached_operations_total{grpc_type="unary",job=~"thanos-(labels|querier)-metrics|thanos-(.+)-(bucket|index)-metrics",namespace="thanos",type="thanos"}[6h] offset 30s)
       )
   - record: gitlab_component_errors:rate_6h
     labels:
@@ -1715,7 +1715,7 @@ groups:
     expr: |
       (
         sum by () (
-          rate(thanos_memcached_operation_failures_total{grpc_type="unary",job=~"thanos-(labels|querier)-metrics|thanos-(.+)-(bucket|index)-metrics",type="thanos"}[6h] offset 30s)
+          rate(thanos_memcached_operation_failures_total{grpc_type="unary",job=~"thanos-(labels|querier)-metrics|thanos-(.+)-(bucket|index)-metrics",namespace="thanos",type="thanos"}[6h] offset 30s)
         )
       )
       or
@@ -1735,7 +1735,7 @@ groups:
       type: thanos
     expr: |
       sum by () (
-        rate(http_request_duration_seconds_bucket{job="thanos-query",le="30.0",type="thanos"}[6h] offset 30s)
+        rate(http_request_duration_seconds_bucket{job="thanos-query",le="30.0",namespace="thanos",type="thanos"}[6h] offset 30s)
       )
   - record: gitlab_component_apdex:weight:score_6h
     labels:
@@ -1748,7 +1748,7 @@ groups:
       type: thanos
     expr: |
       sum by () (
-        rate(http_request_duration_seconds_bucket{job="thanos-query",le="+Inf",type="thanos"}[6h] offset 30s)
+        rate(http_request_duration_seconds_bucket{job="thanos-query",le="+Inf",namespace="thanos",type="thanos"}[6h] offset 30s)
       )
   - record: gitlab_component_ops:rate_6h
     labels:
@@ -1761,7 +1761,7 @@ groups:
       type: thanos
     expr: |
       sum by () (
-        sli_aggregations:http_requests_total_rate6h{job="thanos-query",type="thanos"} offset 30s
+        sli_aggregations:http_requests_total_rate6h{job="thanos-query",namespace="thanos",type="thanos"} offset 30s
       )
   - record: gitlab_component_errors:rate_6h
     labels:
@@ -1775,7 +1775,7 @@ groups:
     expr: |
       (
         sum by () (
-          sli_aggregations:http_requests_total_rate6h{code=~"^5.*",job="thanos-query",type="thanos"} offset 30s
+          sli_aggregations:http_requests_total_rate6h{code=~"^5.*",job="thanos-query",namespace="thanos",type="thanos"} offset 30s
         )
       )
       or
@@ -1795,7 +1795,7 @@ groups:
       type: thanos
     expr: |
       sum by () (
-        rate(http_request_duration_seconds_bucket{job="thanos-query-frontend",le="30.0",type="thanos"}[6h] offset 30s)
+        rate(http_request_duration_seconds_bucket{job="thanos-query-frontend",le="30.0",namespace="thanos",type="thanos"}[6h] offset 30s)
       )
   - record: gitlab_component_apdex:weight:score_6h
     labels:
@@ -1808,7 +1808,7 @@ groups:
       type: thanos
     expr: |
       sum by () (
-        rate(http_request_duration_seconds_bucket{job="thanos-query-frontend",le="+Inf",type="thanos"}[6h] offset 30s)
+        rate(http_request_duration_seconds_bucket{job="thanos-query-frontend",le="+Inf",namespace="thanos",type="thanos"}[6h] offset 30s)
       )
   - record: gitlab_component_ops:rate_6h
     labels:
@@ -1821,7 +1821,7 @@ groups:
       type: thanos
     expr: |
       sum by () (
-        sli_aggregations:http_requests_total_rate6h{job="thanos-query-frontend",type="thanos"} offset 30s
+        sli_aggregations:http_requests_total_rate6h{job="thanos-query-frontend",namespace="thanos",type="thanos"} offset 30s
       )
   - record: gitlab_component_errors:rate_6h
     labels:
@@ -1835,7 +1835,7 @@ groups:
     expr: |
       (
         sum by () (
-          sli_aggregations:http_requests_total_rate6h{code=~"^5.*",job="thanos-query-frontend",type="thanos"} offset 30s
+          sli_aggregations:http_requests_total_rate6h{code=~"^5.*",job="thanos-query-frontend",namespace="thanos",type="thanos"} offset 30s
         )
       )
       or
@@ -1855,7 +1855,7 @@ groups:
       type: thanos
     expr: |
       sum by () (
-        rate(thanos_alert_sender_alerts_sent_total{job="thanos-ruler",type="thanos"}[6h] offset 30s)
+        rate(thanos_alert_sender_alerts_sent_total{job="thanos-ruler",namespace="thanos",type="thanos"}[6h] offset 30s)
       )
   - record: gitlab_component_errors:rate_6h
     labels:
@@ -1869,7 +1869,7 @@ groups:
     expr: |
       (
         sum by () (
-          rate(thanos_alert_sender_alerts_dropped_total{job="thanos-ruler",type="thanos"}[6h] offset 30s)
+          rate(thanos_alert_sender_alerts_dropped_total{job="thanos-ruler",namespace="thanos",type="thanos"}[6h] offset 30s)
         )
       )
       or
@@ -1890,11 +1890,11 @@ groups:
     expr: |
       (
         sum by () (
-          rate(grpc_server_handling_seconds_bucket{grpc_type="unary",job=~"thanos-(.+)-storegateway-(.+)",le="1.0",type="thanos"}[6h] offset 30s)
+          rate(grpc_server_handling_seconds_bucket{grpc_type="unary",job=~"thanos-(.+)-storegateway-(.+)",le="1.0",namespace="thanos",type="thanos"}[6h] offset 30s)
         )
         +
         sum by () (
-          rate(grpc_server_handling_seconds_bucket{grpc_type="unary",job=~"thanos-(.+)-storegateway-(.+)",le="3.0",type="thanos"}[6h] offset 30s)
+          rate(grpc_server_handling_seconds_bucket{grpc_type="unary",job=~"thanos-(.+)-storegateway-(.+)",le="3.0",namespace="thanos",type="thanos"}[6h] offset 30s)
         )
       )
       /
@@ -1910,7 +1910,7 @@ groups:
       type: thanos
     expr: |
       sum by () (
-        rate(grpc_server_handling_seconds_bucket{grpc_type="unary",job=~"thanos-(.+)-storegateway-(.+)",le="+Inf",type="thanos"}[6h] offset 30s)
+        rate(grpc_server_handling_seconds_bucket{grpc_type="unary",job=~"thanos-(.+)-storegateway-(.+)",le="+Inf",namespace="thanos",type="thanos"}[6h] offset 30s)
       )
   - record: gitlab_component_ops:rate_6h
     labels:
@@ -1923,7 +1923,7 @@ groups:
       type: thanos
     expr: |
       sum by () (
-        rate(grpc_server_handled_total{grpc_type="unary",job=~"thanos-(.+)-storegateway-(.+)",type="thanos"}[6h] offset 30s)
+        rate(grpc_server_handled_total{grpc_type="unary",job=~"thanos-(.+)-storegateway-(.+)",namespace="thanos",type="thanos"}[6h] offset 30s)
       )
   - record: gitlab_component_errors:rate_6h
     labels:
@@ -1937,7 +1937,7 @@ groups:
     expr: |
       (
         sum by () (
-          rate(grpc_server_handled_total{grpc_code!="OK",grpc_type="unary",job=~"thanos-(.+)-storegateway-(.+)",type="thanos"}[6h] offset 30s)
+          rate(grpc_server_handled_total{grpc_code!="OK",grpc_type="unary",job=~"thanos-(.+)-storegateway-(.+)",namespace="thanos",type="thanos"}[6h] offset 30s)
         )
       )
       or

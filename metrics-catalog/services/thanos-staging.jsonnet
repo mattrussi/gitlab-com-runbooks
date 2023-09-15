@@ -11,17 +11,17 @@ local combined = metricsCatalog.combined;
 // Thanos operates across all stages and all environments,
 // so we use special labels to merge environments and stages...
 local staticLabels = {
-  environment: 'thanos',
-  env: 'thanos',
+  environment: 'thanos-staging',
+  env: 'thanos-staging',
   stage: 'main',
   // This will be included by Thanos Ruler, but having it here helps with the labels on absent values
   monitor: 'global',
 };
 
-local thanosServiceSelector = { type: 'thanos', namespace: 'thanos' };
+local thanosServiceSelector = { type: 'thanos', namespace: 'thanos-staging' };
 
 metricsCatalog.serviceDefinition({
-  type: 'thanos',
+  type: 'thanos-staging',
   tier: 'inf',
 
   tags: ['golang', 'thanos'],
