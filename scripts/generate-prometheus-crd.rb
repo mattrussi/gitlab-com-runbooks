@@ -45,7 +45,7 @@ rule_files.each do |rule_file|
   # Get source filename without extension
   filename_base = File.basename(rule_file, File.extname(rule_file))
 
-  if mapping_yaml[filename_base]
+  if !mapping_yaml.nil? && mapping_yaml[filename_base]
     shard_value = mapping_yaml[filename_base]
   else
     hash_value = OpenSSL::Digest::SHA256.hexdigest(filename_base)
