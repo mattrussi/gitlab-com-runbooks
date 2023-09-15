@@ -21,6 +21,7 @@
 * [../bastions/ops-bastions.md](../bastions/ops-bastions.md)
 * [../bastions/pre-bastions.md](../bastions/pre-bastions.md)
 * [Set up bastions for Release managers](../bastions/rm-bastion-access.md)
+* [AWS Managed Certificates](../certificates/aws.md)
 * [../certificates/chef_hybrid.md](../certificates/chef_hybrid.md)
 * [../certificates/chef_vault.md](../certificates/chef_vault.md)
 * [../certificates/cloudflare.md](../certificates/cloudflare.md)
