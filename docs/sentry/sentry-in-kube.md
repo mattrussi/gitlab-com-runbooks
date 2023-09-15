@@ -1,6 +1,25 @@
 # Managing Sentry in Kubernetes
 
-The following runbooks only applies to the instance of Sentry running in the `ops` GKE cluster (running Sentry 22.9.0+). They are **not applicable** to the old instance of Sentry running on a single VM (version 9.1.2).
+The following runbooks only applies to the instance of Sentry running in the `ops-gitlab-gke` cluster (running Sentry 22.9.0+). They are **not applicable** to the old instance of Sentry running on a single VM (version 9.1.2).
+
+## Charts
+
+The Helm chart we are using to manage the Sentry deployment is located [here](https://github.com/sentry-kubernetes/charts/tree/develop/sentry). The maintainers are very open to contributions!
+
+The Helm release for our deployment can be found [here](https://gitlab.com/gitlab-com/gl-infra/k8s-workloads/gitlab-helmfiles/-/tree/master/releases/sentry). Note the various extras needed:
+
+* [External secrets](https://gitlab.com/gitlab-com/gl-infra/k8s-workloads/gitlab-helmfiles/-/blob/master/releases/sentry/secrets-values.yaml.gotmpl)
+* [Nginx ingress](https://gitlab.com/gitlab-com/gl-infra/k8s-workloads/gitlab-helmfiles/-/blob/master/releases/sentry/ops-ingress.yaml.gotmpl)
+* [Cloud SQL proxy](https://gitlab.com/gitlab-com/gl-infra/k8s-workloads/gitlab-helmfiles/-/blob/master/releases/sentry/ops-sql-proxy.yaml.gotmpl) (which uses [this chart](https://github.com/rimusz/charts/tree/master/stable/gcloud-sqlproxy))
+* [Clickhouse](https://gitlab.com/gitlab-com/gl-infra/k8s-workloads/gitlab-helmfiles/-/blob/master/releases/sentry/charts/sentry-extras/templates/clickhouse.yaml) (managed via an [operator](https://github.com/Altinity/clickhouse-operator), which uses [this chart](https://github.com/Altinity/clickhouse-operator/tree/master/deploy/helm))
+
+## User Management
+
+Access to Sentry is granted through Okta assignment - i.e. if the user is in a group that is assigned Sentry in Okta, they can access it (see [this comment](https://gitlab.com/gitlab-com/team-member-epics/access-requests/-/issues/23666#note_1534063888) as an example).
+
+For teams that are requesting access, it is *preferable* that their team Okta group is assigned to Sentry, so that any changes in membership (e.g. people leaving/joining) are automatically synced over. This means creating an [access request](https://about.gitlab.com/handbook/business-technology/end-user-services/onboarding-access-requests/access-requests/) for IT to action as we do not have admin access to Okta.
+
+For individuals who are in teams that don't need day-to-day access to Sentry, the [`okta-sentry-member-users` Google group](https://groups.google.com/a/gitlab.com/g/okta-sentry-member-users/about) can be used to grant access. This is especially useful when we want to unblock people ASAP without having to wait on IT to action an AR. Simply add the person requesting access to the group and they should be able to access Sentry within an hour.
 
 ## Upgrading Sentry
 
@@ -11,6 +30,7 @@ The following runbooks only applies to the instance of Sentry running in the `op
 Minor upgrades should not require database migrations, and incur little to no downtime.
 
 1. Open an MR bumping the chart version [here](https://gitlab.com/gitlab-com/gl-infra/k8s-workloads/gitlab-helmfiles/-/blob/master/bases/environments.yaml#L165-168).
+1. Check if there have been any new stanzas added to the base [values file](https://github.com/sentry-kubernetes/charts/blob/develop/sentry/values.yaml) and add them to [values file for the release](https://gitlab.com/gitlab-com/gl-infra/k8s-workloads/gitlab-helmfiles/-/blob/master/releases/sentry/values.yaml.gotmpl) if necessary.
 1. Review the release diff to look out for any potential breaking changes/downtime.
 1. Merge the MR and get it applied in `ops`.
 1. Helm will update the manifests and wait for pods to rotate.
@@ -55,7 +75,7 @@ If the [stats page](https://new-sentry.gitlab.net/organizations/gitlab/stats/) l
 
 ![Sentry stats page showing events aren't getting processed](https://gitlab.com/gitlab-com/gl-infra/k8s-workloads/gitlab-helmfiles/uploads/77e6be93c01bbca7d65759ff2013529a/image.png)
 
-Check if the Snuba outcomes consumers are stuck on something - tail their logs using `k9s` or by running `kubectl logs deployment/sentry-snuba-outcomes-consumer --namespace=sentry`.
+Check if the Snuba outcomes consumers are stuck on something - tail their logs using `k9s` or by running `kubectl logs deployment/sentry-snuba-outcomes-consumer --namespace=sentry`. If you don't see any logs (because they're too old), try restarting the deployment: `kubectl rollout restart deployment/sentry-snuba-outcomes-consumer --namespace=sentry`.
 
 ### Kafka
 
@@ -105,6 +125,8 @@ This means Kafka has gone out of sync with the consumers. According to the [offi
 
 There are a few different reasons for this. Check the following:
 
+1. Try restarting the deployment of consumers responsible for the group.
+
 1. Is there enough free space on the Kafka data PVCs?
 
 1. If Sentry was upgraded recently and everything else is working (i.e. Sentry appears to be processing events promptly and stats look fine), it may simply be deprecated queues that need to be cleaned up. For example:
@@ -131,6 +153,13 @@ There are a few different reasons for this. Check the following:
     1. Bring up a shell on one of the Kafka pods (doesn't matter which).
     1. Run `JMX_PORT="" /opt/bitnami/kafka/bin/kafka-topics.sh --bootstrap-server localhost:9092 --topic <topic> --partitions <num-partitions>`
     1. Run `JMX_PORT="" /opt/bitnami/kafka/bin/kafka-consumer-groups.sh --bootstrap-server localhost:9092 --all-groups -describe`. If the repartitioning was successful, you should see a message like `Warning: Consumer group 'snuba-consumers' is rebalancing.`
+
+#### Pods crashlooping with `KafkaError: UNKNOWN_PARTITION`
+
+This occurs when a group/topic that a consumer is listening to disappears during a Helm upgrade for unknown reasons. You should be able to rectify this by:
+
+1. Bringing up a shell on one of the Snuba API pods
+1. Running `snuba migrations migrate --force`
 
 ### RabbitMQ
 
