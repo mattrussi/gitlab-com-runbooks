@@ -8,7 +8,7 @@ metricsCatalog.serviceDefinition({
   type: 'webservice',
   tier: 'sv',
 
-  tags: ['golang'],
+  tags: ['golang', 'rails', 'puma'],
 
   monitoringThresholds: {
     apdexScore: 0.998,

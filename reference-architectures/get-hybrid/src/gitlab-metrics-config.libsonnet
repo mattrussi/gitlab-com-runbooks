@@ -19,23 +19,25 @@ local options = validateReferenceArchitectureOptions(import 'gitlab-metrics-opti
   monitoredServices:: allServices,
 
   // Hash of all saturation metric types that are monitored on gitlab.com
-  saturationMonitoring:: objects.mergeAll([
-    import 'saturation-monitoring/cpu.libsonnet',
-    import 'saturation-monitoring/disk_inodes.libsonnet',
-    import 'saturation-monitoring/disk_space.libsonnet',
-    import 'saturation-monitoring/go_goroutines.libsonnet',
-    import 'saturation-monitoring/go_memory.libsonnet',
-    import 'saturation-monitoring/kube_container_cpu.libsonnet',
-    import 'saturation-monitoring/kube_container_memory.libsonnet',
-    import 'saturation-monitoring/kube_container_rss.libsonnet',
-    import 'saturation-monitoring/kube_pool_cpu.libsonnet',
-    import 'saturation-monitoring/opensearch_cpu.libsonnet',
-    import 'saturation-monitoring/opensearch_disk_space.libsonnet',
-    import 'saturation-monitoring/memory.libsonnet',
-    import 'saturation-monitoring/node_schedstat_waiting.libsonnet',
-    import 'saturation-monitoring/single_node_cpu.libsonnet',
-  ] +
-  std.get(options, 'saturationMonitoring', [])
+  saturationMonitoring:: objects.mergeAll(
+    [
+      import 'saturation-monitoring/cpu.libsonnet',
+      import 'saturation-monitoring/disk_inodes.libsonnet',
+      import 'saturation-monitoring/disk_space.libsonnet',
+      import 'saturation-monitoring/go_goroutines.libsonnet',
+      import 'saturation-monitoring/go_memory.libsonnet',
+      import 'saturation-monitoring/kube_container_cpu.libsonnet',
+      import 'saturation-monitoring/kube_container_memory.libsonnet',
+      import 'saturation-monitoring/kube_container_rss.libsonnet',
+      import 'saturation-monitoring/kube_pool_cpu.libsonnet',
+      import 'saturation-monitoring/memory.libsonnet',
+      import 'saturation-monitoring/node_schedstat_waiting.libsonnet',
+      import 'saturation-monitoring/opensearch_cpu.libsonnet',
+      import 'saturation-monitoring/opensearch_disk_space.libsonnet',
+      import 'saturation-monitoring/single_node_cpu.libsonnet',
+      import 'saturation-monitoring/single_node_puma_workers.libsonnet',
+    ] +
+    std.get(options, 'saturationMonitoring', [])
   ),
 
   // Hash of all utilization metric types that are monitored on gitlab.com

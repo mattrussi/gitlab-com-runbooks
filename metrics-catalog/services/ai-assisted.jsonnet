@@ -13,7 +13,7 @@ metricsCatalog.serviceDefinition({
   type: 'ai-assisted',
   tier: 'sv',
 
-  tags: ['golang', 'rails'],
+  tags: ['golang', 'rails', 'puma'],
 
   contractualThresholds: {
     apdexRatio: 0.9,

@@ -1304,9 +1304,9 @@ groups:
       max by(environment, tier, type, stage, shard) (
         clamp_min(
           clamp_max(
-            sum by(environment, tier, type, stage, shard, fqdn) (avg_over_time(instance:puma_active_connections:sum{type=~"web|api|git|sidekiq|websockets"}[1m]))
+            sum by(environment, tier, type, stage, shard, pod) (avg_over_time(sum without (pid,worker) (puma_active_connections{type=~"ai-assisted|api|internal-api|git|web|websockets"})[1m:]))
             /
-            sum by(environment, tier, type, stage, shard, fqdn) (instance:puma_max_threads:sum{type=~"web|api|git|sidekiq|websockets"})
+            sum by(environment, tier, type, stage, shard, pod) (sum without (pid,worker) (puma_max_threads{pid="puma_master", type=~"ai-assisted|api|internal-api|git|web|websockets"}))
             ,
             1)
         ,
@@ -7166,24 +7166,24 @@ groups:
       grafana_panel_id: "2677029523"
       grafana_variables: environment,type,stage
       promql_query: |
-        max by(environment, tier, type, stage, shard, fqdn) (
+        max by(environment, tier, type, stage, shard, pod) (
           clamp_min(
             clamp_max(
-              sum by(environment, tier, type, stage, shard, fqdn) (avg_over_time(instance:puma_active_connections:sum{environment="{{ $labels.environment }}",stage="{{ $labels.stage }}",type="{{ $labels.type }}"}[1m]))
+              sum by(environment, tier, type, stage, shard, pod) (avg_over_time(sum without (pid,worker) (puma_active_connections{environment="{{ $labels.environment }}",stage="{{ $labels.stage }}",type="{{ $labels.type }}"})[1m:]))
               /
-              sum by(environment, tier, type, stage, shard, fqdn) (instance:puma_max_threads:sum{environment="{{ $labels.environment }}",stage="{{ $labels.stage }}",type="{{ $labels.type }}"})
+              sum by(environment, tier, type, stage, shard, pod) (sum without (pid,worker) (puma_max_threads{pid="puma_master", environment="{{ $labels.environment }}",stage="{{ $labels.stage }}",type="{{ $labels.type }}"}))
               ,
               1)
           ,
           0)
         )
       promql_template_1: |
-        max by(environment, tier, type, stage, shard, fqdn) (
+        max by(environment, tier, type, stage, shard, pod) (
           clamp_min(
             clamp_max(
-              sum by(environment, tier, type, stage, shard, fqdn) (avg_over_time(instance:puma_active_connections:sum{environment="{{ $labels.environment }}",stage="{{ $labels.stage }}",type="{{ $labels.type }}"}[1m]))
+              sum by(environment, tier, type, stage, shard, pod) (avg_over_time(sum without (pid,worker) (puma_active_connections{environment="{{ $labels.environment }}",stage="{{ $labels.stage }}",type="{{ $labels.type }}"})[1m:]))
               /
-              sum by(environment, tier, type, stage, shard, fqdn) (instance:puma_max_threads:sum{environment="{{ $labels.environment }}",stage="{{ $labels.stage }}",type="{{ $labels.type }}"})
+              sum by(environment, tier, type, stage, shard, pod) (sum without (pid,worker) (puma_max_threads{pid="puma_master", environment="{{ $labels.environment }}",stage="{{ $labels.stage }}",type="{{ $labels.type }}"}))
               ,
               1)
           ,
