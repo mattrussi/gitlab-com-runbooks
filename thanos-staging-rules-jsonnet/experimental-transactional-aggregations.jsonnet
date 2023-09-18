@@ -3,6 +3,7 @@ local separateGlobalRecordingRuleFiles = (import 'recording-rules/lib/thanos/sep
 local metricsConfig = import 'gitlab-metrics-config.libsonnet';
 local intervalForDuration = import 'servicemetrics/interval-for-duration.libsonnet';
 local recordingRules = import 'recording-rules/recording-rules.libsonnet';
+local aggregationSetTransformer = import 'servicemetrics/aggregation-set-transformer.libsonnet';
 
 // Some source aggregation sets based on the ones we already have. These are rules
 // That primarily live in Prometheus now
@@ -22,6 +23,30 @@ local componentSLIs = AggregationSet({
     errorRates: 'experimental:gitlab_component_errors:rates_%s',
     // TODO: record ratio from source metrics
   },
+});
+
+local serviceSLIs = AggregationSet({
+  id: 'service',
+  name: 'Global Service-Aggregated Metrics',
+  intermediateSource: false,  // Used in dashboards and alerts
+  selector: { monitor: 'global' },  // Thanos Ruler
+  labels: ['env', 'environment', 'tier', 'type', 'stage'],
+  offset: '10s',
+  metricFormats: {
+    apdexSuccessRate: 'experimental:gitlab_service_apdex:success:rate_%s',
+    apdexWeight: 'experimental:gitlab_service_apdex:weight:score_%s',
+    apdexRatio: 'experimental:gitlab_service_apdex:ratio_%s',
+    apdexRates: 'experimental:gitlab_service_apdex:rates_%s',
+    opsRate: 'experimental:gitlab_service_ops:rate_%s',
+    errorRate: 'experimental:gitlab_service_errors:rate_%s',
+    errorRatio: 'experimental:gitlab_service_errors:ratio_%s',
+    errorRates: 'experimental:gitlab_component_errors:rates_%s',
+  },
+  // Only include components (SLIs) with service_aggregation="yes"
+  // The recording of this mapping is currently happening in prometheus and generated
+  // by the `prometheus-service-group-generator` adding the `gitlab_component_service:mapping` rules.
+  // These will also need to be moved to thanos, but for testing we can rely on the prometheus ones.
+  aggregationFilter: 'service',
 });
 
 local outputPromYaml(groups, groupExtras) =
@@ -72,4 +97,16 @@ std.foldl(
       pathFormat='experimental/%(envName)s/%(baseName)s.yml'
     )
   , testServices, {}
+) + separateGlobalRecordingRuleFiles(
+  function(selector)
+    {
+      'service-aggregation': outputPromYaml(
+        aggregationSetTransformer.generateRecordingRuleGroups(
+          sourceAggregationSet=componentSLIs { selector+: selector },
+          targetAggregationSet=serviceSLIs
+        ),
+        groupExtras={ partial_response_strategy: 'abort' },
+      ),
+    },
+  pathFormat='experimental/%(envName)s/%(baseName)s.yml'
 )
