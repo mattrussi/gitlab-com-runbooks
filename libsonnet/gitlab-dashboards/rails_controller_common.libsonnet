@@ -37,9 +37,12 @@ local elasticsearchExternalHTTPLink(type) = function(options)
 
 {
   dashboard(type, defaultController, defaultAction)::
+    local webserviceType = if type == null then '$type' else type;
+    local tags = if type == null then ['detail'] else ['type:%s' % type, 'detail'];
+
     local selector = {
       environment: '$environment',
-      type: type,
+      type: webserviceType,
       stage: '$stage',
       controller: '$controller',
       action: { re: '$action' },
@@ -49,10 +52,10 @@ local elasticsearchExternalHTTPLink(type) = function(options)
 
     basic.dashboard(
       'Rails Controller',
-      tags=['type:%s' % type, 'detail'],
+      tags=tags,
       includeEnvironmentTemplate=true,
     )
-    .addTemplate(templates.constant('type', type))
+    .addTemplate(if type == null then templates.webserviceType else templates.constant('type', type))
     .addTemplate(templates.stage)
     .addTemplate(templates.railsController(defaultController))
     .addTemplate(templates.railsControllerAction(defaultAction))
@@ -66,7 +69,7 @@ local elasticsearchExternalHTTPLink(type) = function(options)
           format='ops',
           yAxisLabel='Requests per Second',
           decimals=1,
-        ).addDataLink(elasticsearchLogSearchDataLink(type)),
+        ).addDataLink(elasticsearchLogSearchDataLink(webserviceType)),
         basic.multiTimeseries(
           stableId='latency',
           title='Latency',
@@ -85,7 +88,7 @@ local elasticsearchExternalHTTPLink(type) = function(options)
             legendFormat: '{{ action }} - mean',
           }],
           format='s',
-        ).addDataLink(elasticsearchLogSearchDataLink(type)),
+        ).addDataLink(elasticsearchLogSearchDataLink(webserviceType)),
       ])
       +
       layout.rowGrid('SQL', [
@@ -276,7 +279,7 @@ local elasticsearchExternalHTTPLink(type) = function(options)
           content=|||
             The metrics displayed in this row indicate all the network requests made inside a Rails process via the HTTP protocol. The requests may be triggered by Gitlab::HTTP utility inside the application code base or by any 3rd-party gems. We don't differentiate the destinations. So, the metrics include both internal/external dependencies.
           ||| + toolingLinks.generateMarkdown([
-            elasticsearchExternalHTTPLink(type),
+            elasticsearchExternalHTTPLink(webserviceType),
           ])
         ),
       ], startRow=601)

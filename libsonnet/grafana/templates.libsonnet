@@ -96,6 +96,15 @@ local library = import 'gitlab-slis/library.libsonnet';
       refresh='load',
       sort=1,
     ),
+  webserviceType::
+    template.new(
+      'type',
+      '$PROMETHEUS_DS',
+      'label_values(gitlab_component_service:mapping{component="rails_request", environment="$environment"}, type)',
+      current='web',
+      refresh='load',
+      sort=1,
+    ),
   shard::
     template.new(
       'shard',
