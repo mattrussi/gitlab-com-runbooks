@@ -5318,7 +5318,7 @@
           "dashes": false,
           "datasource": "$PROMETHEUS_DS",
           "decimals": 2,
-          "description": "This uses the working set size from cAdvisor for the cgroup's memory usage. That may\nnot be a good measure as it includes filesystem cache pages that are not necessarily\nattributable to the application inside the cgroup, and are permitted to be evicted\ninstead of being OOM killed.\n Lower is better.",
+          "description": "Records the total anonymous (unevictable) memory utilization for containers for this\nservice, as a percentage of the memory limit as configured through Kubernetes.\n\nThis is computed using the container's resident set size (RSS), as opposed to\nkube_container_memory which uses the working set size. For our purposes, RSS is the\nbetter metric as cAdvisor's working set calculation includes pages from the\nfilesystem cache that can (and will) be evicted before the OOM killer kills the\ncgroup.\n\nA container's RSS (anonymous memory usage) is still not precisely what the OOM\nkiller will use, but it's a better approximation of what the container's workload is\nactually using. RSS metrics can, however, be dramatically inflated if a process in\nthe container uses MADV_FREE (lazy-free) memory. RSS will include the memory that is\navailable to be reclaimed without a page fault, but not currently in use.\n\nThe most common case of OOM kills is for anonymous memory demand to overwhelm the\ncontainer's memory limit. On swapless hosts, anonymous memory cannot be evicted from\nthe page cache, so when a container's memory usage is mostly anonymous pages, the\nonly remaining option to relieve memory pressure may be the OOM killer.\n\nAs container RSS approaches container memory limit, OOM kills become much more\nlikely. Consequently, this ratio is a good leading indicator of memory saturation\nand OOM risk.\n Lower is better.",
           "fill": 0,
           "fillGradient": 0,
           "gridPos": {
@@ -5327,7 +5327,7 @@
             "x": 12,
             "y": 0
           },
-          "id": 172578411,
+          "id": 2875690100,
           "legend": {
             "alignAsTable": true,
             "avg": true,
@@ -5409,12 +5409,12 @@
             }
           ],
           "spaceLength": 10,
-          "stableId": "saturation-kube_container_memory",
+          "stableId": "saturation-kube_container_rss",
           "stack": false,
           "steppedLine": false,
           "targets": [
             {
-              "expr": "clamp_min(\n  clamp_max(\n    max by(type) (\n  clamp_min(\n    clamp_max(\n      container_memory_working_set_bytes:labeled{container!=\"\", container!=\"POD\", type=\"webservice\"}\n      /\n      (container_spec_memory_limit_bytes:labeled{container!=\"\", container!=\"POD\", type=\"webservice\"} \u003e 0)\n      ,\n      1)\n  ,\n  0)\n)\n\n  ,1)\n,0)\n",
+              "expr": "clamp_min(\n  clamp_max(\n    max by(type) (\n  clamp_min(\n    clamp_max(\n      container_memory_rss:labeled{container!=\"\", container!=\"POD\", type=\"webservice\"}\n      /\n      (container_spec_memory_limit_bytes:labeled{container!=\"\", container!=\"POD\", type=\"webservice\"} \u003e 0)\n      ,\n      1)\n  ,\n  0)\n)\n\n  ,1)\n,0)\n",
               "format": "time_series",
               "interval": "1m",
               "intervalFactor": 1,
@@ -5422,7 +5422,7 @@
               "refId": "A"
             },
             {
-              "expr": "clamp_min(\n  clamp_max(\n    max(\n      max_over_time(gitlab_component_saturation:ratio{type=\"webservice\", component=\"kube_container_memory\"}[$__interval])\n    ) by (component)\n  ,1)\n,0)\n",
+              "expr": "clamp_min(\n  clamp_max(\n    max(\n      max_over_time(gitlab_component_saturation:ratio{type=\"webservice\", component=\"kube_container_rss\"}[$__interval])\n    ) by (component)\n  ,1)\n,0)\n",
               "format": "time_series",
               "interval": "1m",
               "intervalFactor": 1,
@@ -5430,7 +5430,7 @@
               "refId": "B"
             },
             {
-              "expr": "max(\n  gitlab_component_saturation:ratio_quantile95_1w{type=\"webservice\", component=\"kube_container_memory\"}\n)\n",
+              "expr": "max(\n  gitlab_component_saturation:ratio_quantile95_1w{type=\"webservice\", component=\"kube_container_rss\"}\n)\n",
               "format": "time_series",
               "interval": "1m",
               "intervalFactor": 1,
@@ -5438,7 +5438,7 @@
               "refId": "C"
             },
             {
-              "expr": "max(\n  gitlab_component_saturation:ratio_quantile99_1w{type=\"webservice\", component=\"kube_container_memory\"}\n)\n",
+              "expr": "max(\n  gitlab_component_saturation:ratio_quantile99_1w{type=\"webservice\", component=\"kube_container_rss\"}\n)\n",
               "format": "time_series",
               "interval": "1m",
               "intervalFactor": 1,
@@ -5446,7 +5446,7 @@
               "refId": "D"
             },
             {
-              "expr": "avg(slo:max:soft:gitlab_component_saturation:ratio{component=\"kube_container_memory\"}) by (component)\n",
+              "expr": "avg(slo:max:soft:gitlab_component_saturation:ratio{component=\"kube_container_rss\"}) by (component)\n",
               "format": "time_series",
               "interval": "1m",
               "intervalFactor": 1,
@@ -5454,7 +5454,7 @@
               "refId": "E"
             },
             {
-              "expr": "avg(slo:max:hard:gitlab_component_saturation:ratio{component=\"kube_container_memory\"}) by (component)\n",
+              "expr": "avg(slo:max:hard:gitlab_component_saturation:ratio{component=\"kube_container_rss\"}) by (component)\n",
               "format": "time_series",
               "interval": "1m",
               "intervalFactor": 1,
@@ -5465,7 +5465,7 @@
           "thresholds": [],
           "timeFrom": null,
           "timeShift": null,
-          "title": "kube_container_memory component saturation: Kube Container Memory Utilization",
+          "title": "kube_container_rss component saturation: Kube Container Memory Utilization (RSS)",
           "tooltip": {
             "shared": true,
             "sort": 2,
@@ -5684,6 +5684,193 @@
               "show": false
             }
           ]
+        },
+        {
+          "aliasColors": {},
+          "bars": false,
+          "dashLength": 10,
+          "dashes": false,
+          "datasource": "$PROMETHEUS_DS",
+          "decimals": 2,
+          "description": "Puma thread utilization per node.\n\nPuma uses a fixed size thread pool to handle HTTP requests. This metric shows how many threads are busy handling requests. When this resource is saturated,\nwe will see puma queuing taking place. Leading to slowdowns across the application.\n\nPuma saturation is usually caused by latency problems in downstream services: usually Gitaly or Postgres, but possibly also Redis.\nPuma saturation can also be caused by traffic spikes.\n Lower is better.",
+          "fill": 0,
+          "fillGradient": 0,
+          "gridPos": {
+            "h": 10,
+            "w": 12,
+            "x": 12,
+            "y": 10
+          },
+          "id": 2677029523,
+          "legend": {
+            "alignAsTable": true,
+            "avg": true,
+            "current": true,
+            "hideEmpty": true,
+            "max": true,
+            "min": true,
+            "rightSide": false,
+            "show": true,
+            "sideWidth": null,
+            "sort": "max",
+            "sortDesc": true,
+            "total": false,
+            "values": true
+          },
+          "lines": true,
+          "linewidth": 1,
+          "links": [],
+          "nullPointMode": "null",
+          "percentage": false,
+          "pointradius": 5,
+          "points": false,
+          "renderer": "flot",
+          "repeat": null,
+          "seriesOverrides": [
+            {
+              "alias": "/^Soft SLO/",
+              "color": "#FF4500",
+              "dashLength": 4,
+              "dashes": true,
+              "legend": true,
+              "lines": true,
+              "linewidth": 2,
+              "nullPointMode": "connected",
+              "spaceLength": 10,
+              "zindex": -2
+            },
+            {
+              "alias": "/^Hard SLO/",
+              "color": "#F2495C",
+              "dashLength": 4,
+              "dashes": true,
+              "legend": true,
+              "lines": true,
+              "linewidth": 4,
+              "nullPointMode": "connected",
+              "spaceLength": 4,
+              "zindex": -2
+            },
+            {
+              "alias": "/aggregated /",
+              "color": "#E7D551",
+              "linewidth": 2,
+              "zindex": 3
+            },
+            {
+              "alias": "/^95th quantile for week/",
+              "color": "#37872D",
+              "dashLength": 4,
+              "dashes": true,
+              "legend": true,
+              "lines": true,
+              "linewidth": 1,
+              "nullPointMode": "connected",
+              "spaceLength": 10,
+              "zindex": -2
+            },
+            {
+              "alias": "/^99th quantile for week/",
+              "color": "#56A64B",
+              "dashLength": 4,
+              "dashes": true,
+              "legend": true,
+              "lines": true,
+              "linewidth": 2,
+              "nullPointMode": "connected",
+              "spaceLength": 4,
+              "zindex": -2
+            }
+          ],
+          "spaceLength": 10,
+          "stableId": "saturation-single_node_puma_workers",
+          "stack": false,
+          "steppedLine": false,
+          "targets": [
+            {
+              "expr": "clamp_min(\n  clamp_max(\n    max by(type, pod) (\n  clamp_min(\n    clamp_max(\n      sum by(type, pod) (avg_over_time(sum without (pid,worker) (puma_active_connections{type=\"webservice\"})[1m:]))\n      /\n      sum by(type, pod) (sum without (pid,worker) (puma_max_threads{pid=\"puma_master\", type=\"webservice\"}))\n      ,\n      1)\n  ,\n  0)\n)\n\n  ,1)\n,0)\n",
+              "format": "time_series",
+              "interval": "1m",
+              "intervalFactor": 1,
+              "legendFormat": "{{ pod }}",
+              "refId": "A"
+            },
+            {
+              "expr": "clamp_min(\n  clamp_max(\n    max(\n      max_over_time(gitlab_component_saturation:ratio{type=\"webservice\", component=\"single_node_puma_workers\"}[$__interval])\n    ) by (component)\n  ,1)\n,0)\n",
+              "format": "time_series",
+              "interval": "1m",
+              "intervalFactor": 1,
+              "legendFormat": "aggregated {{ component }}",
+              "refId": "B"
+            },
+            {
+              "expr": "max(\n  gitlab_component_saturation:ratio_quantile95_1w{type=\"webservice\", component=\"single_node_puma_workers\"}\n)\n",
+              "format": "time_series",
+              "interval": "1m",
+              "intervalFactor": 1,
+              "legendFormat": "95th quantile for week {{ component }}",
+              "refId": "C"
+            },
+            {
+              "expr": "max(\n  gitlab_component_saturation:ratio_quantile99_1w{type=\"webservice\", component=\"single_node_puma_workers\"}\n)\n",
+              "format": "time_series",
+              "interval": "1m",
+              "intervalFactor": 1,
+              "legendFormat": "99th quantile for week {{ component }}",
+              "refId": "D"
+            },
+            {
+              "expr": "avg(slo:max:soft:gitlab_component_saturation:ratio{component=\"single_node_puma_workers\"}) by (component)\n",
+              "format": "time_series",
+              "interval": "1m",
+              "intervalFactor": 1,
+              "legendFormat": "Soft SLO: {{ component }}",
+              "refId": "E"
+            },
+            {
+              "expr": "avg(slo:max:hard:gitlab_component_saturation:ratio{component=\"single_node_puma_workers\"}) by (component)\n",
+              "format": "time_series",
+              "interval": "1m",
+              "intervalFactor": 1,
+              "legendFormat": "Hard SLO: {{ component }}",
+              "refId": "F"
+            }
+          ],
+          "thresholds": [],
+          "timeFrom": null,
+          "timeShift": null,
+          "title": "single_node_puma_workers component saturation: Puma Worker Saturation per Node",
+          "tooltip": {
+            "shared": true,
+            "sort": 2,
+            "value_type": "individual"
+          },
+          "type": "graph",
+          "xaxis": {
+            "buckets": null,
+            "mode": "time",
+            "name": null,
+            "show": true,
+            "values": []
+          },
+          "yaxes": [
+            {
+              "format": "percentunit",
+              "label": "Saturation %",
+              "logBase": 1,
+              "max": 1,
+              "min": null,
+              "show": true
+            },
+            {
+              "format": "short",
+              "label": null,
+              "logBase": 1,
+              "max": 1,
+              "min": 0,
+              "show": false
+            }
+          ]
         }
       ],
       "repeat": null,
@@ -5703,7 +5890,7 @@
         "x": 0,
         "y": 110000
       },
-      "id": 51,
+      "id": 52,
       "mode": "markdown",
       "title": "Source",
       "type": "text"

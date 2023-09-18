@@ -17,7 +17,7 @@ metricsCatalog.serviceDefinition({
   type: 'git',
   tier: 'sv',
 
-  tags: ['golang', 'rails'],
+  tags: ['golang', 'rails', 'puma'],
 
   contractualThresholds: {
     apdexRatio: 0.9,

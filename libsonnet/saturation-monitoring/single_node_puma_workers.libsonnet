@@ -1,12 +1,12 @@
-local metricsCatalog = import 'servicemetrics/metrics.libsonnet';
-local resourceSaturationPoint = metricsCatalog.resourceSaturationPoint;
+local metricsCatalog = import 'servicemetrics/metrics-catalog.libsonnet';
+local resourceSaturationPoint = (import 'servicemetrics/metrics.libsonnet').resourceSaturationPoint;
 
 {
   single_node_puma_workers: resourceSaturationPoint({
     title: 'Puma Worker Saturation per Node',
     severity: 's2',
     horizontallyScalable: true,
-    appliesTo: ['web', 'api', 'git', 'sidekiq', 'websockets'],
+    appliesTo: metricsCatalog.findServicesWithTag(tag='puma'),
     description: |||
       Puma thread utilization per node.
 
@@ -17,11 +17,11 @@ local resourceSaturationPoint = metricsCatalog.resourceSaturationPoint;
       Puma saturation can also be caused by traffic spikes.
     |||,
     grafana_dashboard_uid: 'sat_single_node_puma_workers',
-    resourceLabels: ['fqdn'],
+    resourceLabels: ['pod'],
     query: |||
-      sum by(%(aggregationLabels)s) (avg_over_time(instance:puma_active_connections:sum{%(selector)s}[%(rangeInterval)s]))
+      sum by(%(aggregationLabels)s) (avg_over_time(sum without (pid,worker) (puma_active_connections{%(selector)s})[%(rangeInterval)s:]))
       /
-      sum by(%(aggregationLabels)s) (instance:puma_max_threads:sum{%(selector)s})
+      sum by(%(aggregationLabels)s) (sum without (pid,worker) (puma_max_threads{pid="puma_master", %(selector)s}))
     |||,
     slos: {
       soft: 0.85,

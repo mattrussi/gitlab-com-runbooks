@@ -98,25 +98,6 @@ groups:
   - record: operation:gitlab_cache_operation_duration_seconds:p99
     expr: histogram_quantile(0.99, operation:gitlab_cache_operation_duration_seconds_bucket:rate5m)
 
-- name: Puma Connections
-  interval: 15s
-  rules:
-  - record: instance:puma_active_connections:sum
-    expr: >
-      sum without (pid,worker) (
-        puma_active_connections
-      )
-  - record: instance:puma_queued_connections:sum
-    expr: >
-      sum without (pid,worker) (
-        puma_queued_connections
-      )
-  - record: instance:puma_max_threads:sum
-    expr: >
-      sum without (pid,worker) (
-        puma_max_threads{pid="puma_master"}
-      )
-
 - name: Rails Transactions 1m
   interval: 1m
   rules:
