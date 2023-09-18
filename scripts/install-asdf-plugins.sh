@@ -56,15 +56,6 @@ setup_asdf() {
   current() {
     asdf current "$1" | awk '{print $2}'
   }
-
-  check_global_golang_install() {
-    (
-      pushd /
-      current golang
-      popd
-    ) >/dev/null 2>/dev/null
-  }
-
 }
 
 setup_rtx() {
@@ -102,6 +93,18 @@ setup_rtx() {
       exit 1
     } >&2
   }
+
+  current() {
+    rtx current "$1" | awk '{print $2}'
+  }
+}
+
+check_global_golang_install() {
+  (
+    pushd /
+    current golang
+    popd
+  ) >/dev/null 2>/dev/null
 }
 
 if command -v rtx >/dev/null; then
