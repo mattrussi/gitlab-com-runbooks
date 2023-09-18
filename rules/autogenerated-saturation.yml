@@ -1471,7 +1471,7 @@ groups:
   - record: slo:max:soft:gitlab_component_saturation:ratio
     labels:
       component: elastic_disk_space
-    expr: "0.7"
+    expr: "0.8"
   - record: slo:max:hard:gitlab_component_saturation:ratio
     labels:
       component: elastic_disk_space
