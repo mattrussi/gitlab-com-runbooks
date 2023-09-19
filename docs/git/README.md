@@ -55,6 +55,7 @@
 * [Ad hoc observability tools on Kubernetes nodes](../kube/k8s-adhoc-observability.md)
 * [../kube/k8s-oncall-setup.md](../kube/k8s-oncall-setup.md)
 * [Kubernetes](../kube/kubernetes.md)
+* [Advisory Database Unresponsive Hosts/Outdated Repositories](../monitoring/advisory_db-unresponsive-hosts.md)
 * [Alerting](../monitoring/alerts_manual.md)
 * [../monitoring/apdex-alerts-guide.md](../monitoring/apdex-alerts-guide.md)
 * [Deleting series over a given interval from thanos](../monitoring/thanos-delete-series-interval.md)

@@ -48,6 +48,7 @@
 * [../kube/k8s-operations.md](../kube/k8s-operations.md)
 * [StatefulSet Guidelines](../kube/sts-guidelines.md)
 * [Traffic Cessation Alerts](../metrics-catalog/traffic-cessation-alerts.md)
+* [Advisory Database Unresponsive Hosts/Outdated Repositories](../monitoring/advisory_db-unresponsive-hosts.md)
 * [Alerting](../monitoring/alerts_manual.md)
 * [../monitoring/apdex-alerts-guide.md](../monitoring/apdex-alerts-guide.md)
 * [An impatient SRE's guide to deleting alerts](../monitoring/deleting-alerts.md)
