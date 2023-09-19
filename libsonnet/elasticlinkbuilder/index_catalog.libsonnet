@@ -266,6 +266,20 @@ local indexDefaults = {
     defaultFilters: [matchFilter('json.subcomponent', 'graphql_json')],
   },
 
+  rails_cdot: indexDefaults {
+    timestamp: 'json.time',
+    indexPattern: 'b881d9e0-5de8-49ce-ae7c-2b279a4f4741',
+    defaultColumns: [
+      'json.status',
+      'json.method',
+      'json.meta.feature_category',
+      'json.path',
+      'json.duration',
+    ],
+    defaultSeriesSplitField: 'json.path.keyword',
+    failureFilter: statusCode('json.status'),
+  },
+
   redis: indexDefaults {
     timestamp: 'json.time',
     indexPattern: 'AWSQX_Vf93rHTYrsexmk',
@@ -409,6 +423,20 @@ local indexDefaults = {
   sidekiq_queueing_ops: self.sidekiq_queueing {
     kibanaEndpoint: 'https://nonprod-log.gitlab.net/app/kibana',
     indexPattern: 'pubsub-sidekiq-inf-ops',
+  },
+
+  sidekiq_cdot: indexDefaults {
+    timestamp: 'json.time',
+    indexPattern: '8a2718cf-f1c7-4fd8-8447-c8528d34c9e8',
+    defaultColumns: [
+      'json.class',
+      'json.queue',
+      'json.job_status',
+      'json.duration',
+    ],
+    failureFilter: [matchFilter('json.job_status', 'fail')],
+    defaultSeriesSplitField: 'json.class.keyword',
+    defaultLatencyField: 'json.duration',
   },
 
   local sidekiq_viz = indexDefaults {
