@@ -26,18 +26,20 @@ Service responsible for providing [code completion for the user in their editor]
 
 ```mermaid
 sequenceDiagram
-    VSCode-->>Ingress: /v2/completions
+    VSCode-->>GitLab: /api/v4/code_suggestions/completions
+    GitLab-->>Ingress: /v2/completions
     Ingress-->>ModelGateway: /v2/completions
-    ModelGateway-->>TritonServer: code to complete
-    TritonServer-->>ModelGateway: code
+    ModelGateway-->>VertexAI: code to complete
+    VertextAI-->>ModelGateway: code
     ModelGateway-->>Ingress: 200 OK with code completion
-    Ingress-->>VSCode: 200 OK with code completion
+    Ingress-->>GitLab: 200 OK with code completion
+    GitLab-->>VSCode: 200 OK with code completion
 ```
 
-* VSCode: This the the client where the user is writing the and getting autocompletion.
+* VSCode: This is the client where the user is writing and getting autocompletion.
 * Ingress: NGINX Controller for Kubernetes to expose service to the internet.
 * ModelGateway: Entry point for code suggestions and will route requests accordingly.
-* TritonServer: [Inference Server](https://github.com/triton-inference-server/server) that loads our model data from the NFS server into memory.
+* VertexAI: Third-party API that provides inferences from ML models.
 
 Mode detailed architecture description avialable in:
 <https://docs.gitlab.com/ee/development/ai_architecture.html> and in
@@ -51,18 +53,15 @@ in the source repository.
 
 ### Horizontal
 
-We have the ability to scale horizontally both the Model Gateway and the Triton Server by increasing the [replica](https://gitlab.com/gitlab-org/modelops/applied-ml/code-suggestions/ai-assist/-/blob/main/infrastructure/ai-assist/values.yaml) count:
+We have the ability to scale the Model Gateway horizontally by increasing the [replica](https://gitlab.com/gitlab-org/modelops/applied-ml/code-suggestions/ai-assist/-/blob/main/infrastructure/ai-assist/values.yaml) count:
 
 1. [Model Gateway](https://gitlab.com/gitlab-org/modelops/applied-ml/code-suggestions/ai-assist/-/blob/d09f5635ee91e24d0e6059ef9d296ba89f94bd6b/infrastructure/ai-assist/values.yaml#L21)
-1. [Triton Server](https://gitlab.com/gitlab-org/modelops/applied-ml/code-suggestions/ai-assist/-/blob/d09f5635ee91e24d0e6059ef9d296ba89f94bd6b/infrastructure/ai-assist/values.yaml#L34)
 
 To apply these changes, refer to [deployment guide](https://gitlab.com/gitlab-org/modelops/applied-ml/code-suggestions/ai-assist#deploying-to-the-kubernetes-cluster).
 
 ### Vertical
 
 ## Availability
-
-* [Triton Server dashboard](https://dashboards.gitlab.net/d/code_suggestions-triton/code-suggestions-triton-server?orgId=1)
 
 <!-- ## Durability -->
 
