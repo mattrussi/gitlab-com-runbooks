@@ -1483,6 +1483,33 @@ services:
       monitors:
         primary_grafana_dashboard: redis-sidekiq-main/redis-sidekiq-overview
 
+  - name: redis-cluster-queues-meta
+    tier: db
+    friendly_name: Redis Cluster Queues Meta
+    label: RedisClusterQueuesMeta
+    owner: scalability
+    technical:
+      project:
+        - https://github.com/redis/redis
+      documents:
+        design:
+        architecture:
+        readiness_review:
+        sre_guide: https://gitlab.com/gitlab-com/runbooks/-/blob/master/docs/redis/redis-cluster.md
+        developer_guide: https://docs.gitlab.com/ee/development/redis.html#redis-guidelines
+        service:
+          - https://redis.io/documentation
+          - https://docs.gitlab.com/omnibus/settings/redis.html
+        security:
+      dependencies:
+        - service:
+      logging:
+        - name: system
+          permalink:
+    observability:
+      monitors:
+        primary_grafana_dashboard: redis-cluster-queues-meta-main/redis-cluster-queues-meta-overview
+
   - name: redis-tracechunks
     tier: db
     friendly_name: Redis TraceChunks

@@ -1743,6 +1743,52 @@ spec:
     - record: slo:min:events:gitlab_service_apdex:ratio
       labels:
         tier: db
+        type: redis-cluster-queues-meta
+      expr: '0.999900'
+    - record: slo:max:events:gitlab_service_errors:ratio
+      labels:
+        tier: db
+        type: redis-cluster-queues-meta
+      expr: '0.001000'
+    - record: slo:min:events:gitlab_service_apdex:ratio
+      labels:
+        component: primary_server
+        tier: db
+        type: redis-cluster-queues-meta
+      expr: '0.999900'
+    - record: slo:max:events:gitlab_service_errors:ratio
+      labels:
+        component: primary_server
+        tier: db
+        type: redis-cluster-queues-meta
+      expr: '0.001000'
+    - record: slo:min:events:gitlab_service_apdex:ratio
+      labels:
+        component: rails_redis_client
+        tier: db
+        type: redis-cluster-queues-meta
+      expr: '0.999900'
+    - record: slo:max:events:gitlab_service_errors:ratio
+      labels:
+        component: rails_redis_client
+        tier: db
+        type: redis-cluster-queues-meta
+      expr: '0.001000'
+    - record: slo:min:events:gitlab_service_apdex:ratio
+      labels:
+        component: secondary_servers
+        tier: db
+        type: redis-cluster-queues-meta
+      expr: '0.999900'
+    - record: slo:max:events:gitlab_service_errors:ratio
+      labels:
+        component: secondary_servers
+        tier: db
+        type: redis-cluster-queues-meta
+      expr: '0.001000'
+    - record: slo:min:events:gitlab_service_apdex:ratio
+      labels:
+        tier: db
         type: redis-sidekiq
       expr: '0.999900'
     - record: slo:max:events:gitlab_service_errors:ratio
@@ -4014,6 +4060,33 @@ spec:
         service_aggregation: 'no'
         tier: db
         type: redis-cluster-shared-state
+      expr: '1'
+    - record: gitlab_component_service:mapping
+      labels:
+        component: primary_server
+        global_aggregation: 'no'
+        regional_aggregation: 'no'
+        service_aggregation: 'no'
+        tier: db
+        type: redis-cluster-queues-meta
+      expr: '1'
+    - record: gitlab_component_service:mapping
+      labels:
+        component: rails_redis_client
+        global_aggregation: 'no'
+        regional_aggregation: 'no'
+        service_aggregation: 'yes'
+        tier: db
+        type: redis-cluster-queues-meta
+      expr: '1'
+    - record: gitlab_component_service:mapping
+      labels:
+        component: secondary_servers
+        global_aggregation: 'no'
+        regional_aggregation: 'no'
+        service_aggregation: 'no'
+        tier: db
+        type: redis-cluster-queues-meta
       expr: '1'
     - record: gitlab_component_service:mapping
       labels:
