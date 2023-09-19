@@ -120,7 +120,7 @@ storages_list() {
 
   local curl_opts jq_opts
   curl_opts=(
-    --silent --fail --show-error
+    --silent --fail-with-body --show-error
     --header "PRIVATE-TOKEN: $pat"
     --header "Content-Type: application/json"
     "$(api_for_env)/application/settings"
@@ -183,12 +183,6 @@ storages_validate() {
 
   local pat
   pat=$(admin_pat)
-
-  local curl_opts=(
-    --silent --fail --show-error
-    --header "PRIVATE-TOKEN: $pat"
-    --header "Content-Type: application/json"
-  )
 
   trap cleanup_tmp_files EXIT
   echo "Creating projects:"
@@ -378,7 +372,7 @@ create_project() {
   fi
 
   curl_opts=(
-    --silent --fail --show-error
+    --silent --fail-with-body --show-error
     --request POST
     --header "PRIVATE-TOKEN: $pat"
     --header "Content-Type: application/json"
@@ -416,7 +410,7 @@ move_project() {
 
   local curl_opts
   curl_opts=(
-    --silent --fail --show-error
+    --silent --fail-with-body --show-error
     --request POST
     --header "PRIVATE-TOKEN: $pat"
     --header "Content-Type: application/json"
@@ -448,7 +442,7 @@ wait_move_finished() {
   local web_url="$3"
   local curl_opts
   curl_opts=(
-    --silent --fail --show-error
+    --silent --fail-with-body --show-error
     --header "PRIVATE-TOKEN: $pat"
     --header "Content-Type: application/json"
     "$(api_for_env)/projects/${project_id}/repository_storage_moves/${move_id}"
@@ -500,7 +494,7 @@ project_info() {
 
   local curl_opts
   curl_opts=(
-    --silent --fail --show-error
+    --silent --fail-with-body --show-error
     --header "PRIVATE-TOKEN: $pat"
     --header "Content-Type: application/json"
     "$(api_for_env)/projects/$proj"
