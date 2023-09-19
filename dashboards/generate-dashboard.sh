@@ -73,6 +73,6 @@ generate_dashboards_for_file "${line}" | while IFS= read -r manifest; do
     echo "Dry Run: Would have written generated manifest for ${uid} with title ${title} in dashboards/generated/$folder/$uid.json"
   else
     echo "$manifest" >"generated/${folder}/${uid}.json"
-    echo "Wrote generated manifest for ${uid} in dashboards/generated/$folder/$uid.json"
+    echo "Wrote generated manifest for ${uid} in dashboards/generated/$folder/$uid.json from $1"
   fi
 done

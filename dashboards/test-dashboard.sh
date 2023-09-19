@@ -61,7 +61,7 @@ prepare
 dashboard_file=$1
 
 if [[ -n $dry_run ]]; then
-  generate_dashboards_for_file "${dashboard_file}"
+  cat $dashboard_file
   exit 0
 else
   if [[ -z ${GRAFANA_API_TOKEN:-} ]]; then
@@ -69,13 +69,7 @@ else
     exit 1
   fi
 
-  dashboard_json=$(generate_dashboards_for_file "${dashboard_file}")
-  if [[ -z "$dashboard_json" ]]; then
-    echo 'Empty dashboard. Ignored!'
-    exit 0
-  fi
-
-  echo "${dashboard_json}" | prepare_snapshot_requests | while IFS= read -r snapshot; do
+  cat $dashboard_file | prepare_snapshot_requests | while IFS= read -r snapshot; do
     # Use http1.1 and gzip compression to workaround unexplainable random errors that
     # occur when uploading some dashboards
     response=$(echo "${snapshot}" | call_grafana_api https://dashboards.gitlab.net/api/snapshots -d @-)
