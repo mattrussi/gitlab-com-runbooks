@@ -7,7 +7,7 @@ local aggregationSets = (import 'gitlab-metrics-config.libsonnet').aggregationSe
 /**
  * The source SLI recording rules are each kept in their own files, generated from this
  */
-local dangerouslyThanosEvaluatedServices = std.filter(function(service) service.dangerouslyThanosEvaluated, services);
+ local dangerouslyThanosEvaluatedServices = std.filter(function(service) service.dangerouslyThanosEvaluated && service.thanosType != 'thanos', services);
 
 /**
  *  These are not separated by environment, as they are only globally evaluated.

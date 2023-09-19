@@ -9,7 +9,7 @@ separateGlobalRecordingFiles(
           std.map(
             function(group)
               group { partial_response_strategy: 'warn' },
-            recordingRules.groupsWithFilter(function(service) service.dangerouslyThanosEvaluated, selector)
+            recordingRules.groupsWithFilter(function(service) service.dangerouslyThanosEvaluated && service.thanosType != 'thanos-staging', selector)
           ),
       }),
     },

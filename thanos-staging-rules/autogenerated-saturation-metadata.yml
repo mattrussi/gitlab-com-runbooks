@@ -15,6 +15,30 @@ spec:
     rules:
     - record: slo:max:soft:gitlab_component_saturation:ratio
       labels:
+        component: cpu
+      expr: '0.8'
+    - record: slo:max:hard:gitlab_component_saturation:ratio
+      labels:
+        component: cpu
+      expr: '0.9'
+    - record: slo:max:soft:gitlab_component_saturation:ratio
+      labels:
+        component: disk_inodes
+      expr: '0.75'
+    - record: slo:max:hard:gitlab_component_saturation:ratio
+      labels:
+        component: disk_inodes
+      expr: '0.8'
+    - record: slo:max:soft:gitlab_component_saturation:ratio
+      labels:
+        component: disk_space
+      expr: '0.85'
+    - record: slo:max:hard:gitlab_component_saturation:ratio
+      labels:
+        component: disk_space
+      expr: '0.9'
+    - record: slo:max:soft:gitlab_component_saturation:ratio
+      labels:
         component: filestore_disk_read_iops_saturation
       expr: '0.85'
     - record: slo:max:hard:gitlab_component_saturation:ratio
@@ -135,6 +159,30 @@ spec:
       expr: '0.95'
     - record: slo:max:soft:gitlab_component_saturation:ratio
       labels:
+        component: memory
+      expr: '0.9'
+    - record: slo:max:hard:gitlab_component_saturation:ratio
+      labels:
+        component: memory
+      expr: '0.98'
+    - record: slo:max:soft:gitlab_component_saturation:ratio
+      labels:
+        component: nf_conntrack_entries
+      expr: '0.95'
+    - record: slo:max:hard:gitlab_component_saturation:ratio
+      labels:
+        component: nf_conntrack_entries
+      expr: '0.98'
+    - record: slo:max:soft:gitlab_component_saturation:ratio
+      labels:
+        component: node_schedstat_waiting
+      expr: '0.1'
+    - record: slo:max:hard:gitlab_component_saturation:ratio
+      labels:
+        component: node_schedstat_waiting
+      expr: '0.15'
+    - record: slo:max:soft:gitlab_component_saturation:ratio
+      labels:
         component: nv_gpu_memory
       expr: '0.8'
     - record: slo:max:hard:gitlab_component_saturation:ratio
@@ -221,10 +269,50 @@ spec:
       labels:
         component: runway_container_memory_utilization
       expr: '0.9'
+    - record: slo:max:soft:gitlab_component_saturation:ratio
+      labels:
+        component: shard_cpu
+      expr: '0.85'
+    - record: slo:max:hard:gitlab_component_saturation:ratio
+      labels:
+        component: shard_cpu
+      expr: '0.95'
+    - record: slo:max:soft:gitlab_component_saturation:ratio
+      labels:
+        component: single_node_cpu
+      expr: '0.9'
+    - record: slo:max:hard:gitlab_component_saturation:ratio
+      labels:
+        component: single_node_cpu
+      expr: '0.95'
   - name: GitLab Component Saturation Metadata
     interval: 5m
     partial_response_strategy: warn
     rules:
+    - record: gitlab_component_saturation_info
+      labels:
+        capacity_planning_strategy: quantile95_1h
+        component: cpu
+        horiz_scaling: 'yes'
+        quantile: max
+        severity: s3
+      expr: '1'
+    - record: gitlab_component_saturation_info
+      labels:
+        capacity_planning_strategy: quantile95_1h
+        component: disk_inodes
+        horiz_scaling: 'yes'
+        quantile: max
+        severity: s2
+      expr: '1'
+    - record: gitlab_component_saturation_info
+      labels:
+        capacity_planning_strategy: quantile95_1h
+        component: disk_space
+        horiz_scaling: 'yes'
+        quantile: max
+        severity: s2
+      expr: '1'
     - record: gitlab_component_saturation_info
       labels:
         capacity_planning_strategy: quantile95_1h
@@ -348,6 +436,30 @@ spec:
     - record: gitlab_component_saturation_info
       labels:
         capacity_planning_strategy: quantile95_1h
+        component: memory
+        horiz_scaling: 'yes'
+        quantile: max
+        severity: s4
+      expr: '1'
+    - record: gitlab_component_saturation_info
+      labels:
+        capacity_planning_strategy: quantile95_1h
+        component: nf_conntrack_entries
+        horiz_scaling: 'yes'
+        quantile: max
+        severity: s3
+      expr: '1'
+    - record: gitlab_component_saturation_info
+      labels:
+        capacity_planning_strategy: quantile95_1h
+        component: node_schedstat_waiting
+        horiz_scaling: 'yes'
+        quantile: max
+        severity: s4
+      expr: '1'
+    - record: gitlab_component_saturation_info
+      labels:
+        capacity_planning_strategy: quantile95_1h
         component: nv_gpu_memory
         horiz_scaling: 'yes'
         quantile: max
@@ -429,6 +541,22 @@ spec:
       labels:
         capacity_planning_strategy: quantile95_1h
         component: runway_container_memory_utilization
+        horiz_scaling: 'yes'
+        quantile: max
+        severity: s4
+      expr: '1'
+    - record: gitlab_component_saturation_info
+      labels:
+        capacity_planning_strategy: quantile95_1h
+        component: shard_cpu
+        horiz_scaling: 'yes'
+        quantile: max
+        severity: s3
+      expr: '1'
+    - record: gitlab_component_saturation_info
+      labels:
+        capacity_planning_strategy: quantile95_1h
+        component: single_node_cpu
         horiz_scaling: 'yes'
         quantile: max
         severity: s4

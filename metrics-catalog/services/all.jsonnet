@@ -61,6 +61,7 @@
   import 'sentry.jsonnet',
   import 'sidekiq.jsonnet',
   import 'thanos.jsonnet',
+  import 'thanos-staging.jsonnet',
   import 'vault.jsonnet',
   import 'waf.jsonnet',
   import 'web-pages.jsonnet',

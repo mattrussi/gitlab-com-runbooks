@@ -11,17 +11,17 @@ local combined = metricsCatalog.combined;
 // Thanos operates across all stages and all environments,
 // so we use special labels to merge environments and stages...
 local staticLabels = {
-  environment: 'thanos',
-  env: 'thanos',
+  environment: 'thanos-staging',
+  env: 'thanos-staging',
   stage: 'main',
   // This will be included by Thanos Ruler, but having it here helps with the labels on absent values
   monitor: 'global',
 };
 
-local thanosServiceSelector = { type: 'thanos', namespace: 'thanos' };
+local thanosServiceSelector = { type: 'thanos', namespace: 'thanos-staging' };
 
 metricsCatalog.serviceDefinition({
-  type: 'thanos',
+  type: 'thanos-staging',
   tier: 'inf',
 
   tags: ['golang', 'thanos'],
@@ -30,10 +30,7 @@ metricsCatalog.serviceDefinition({
     environment: staticLabels.environment,
   },
 
-  monitoringThresholds: {
-    apdexScore: 0.999,
-    errorRatio: 0.999,
-  },
+  monitoringThresholds: {},
   /*
    * Our anomaly detection uses normal distributions and the monitoring service
    * is prone to spikes that lead to a non-normal distribution. For that reason,
@@ -45,7 +42,7 @@ metricsCatalog.serviceDefinition({
   // this should not be required for other services.
   dangerouslyThanosEvaluated: true,
 
-  thanosType: 'thanos',
+  thanosType: 'thanos-staging',
 
   // No stages for Thanos
   serviceIsStageless: true,

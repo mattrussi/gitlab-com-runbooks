@@ -2638,6 +2638,54 @@ spec:
       expr: '0.050000'
     - record: slo:min:events:gitlab_service_apdex:ratio
       labels:
+        component: thanos_memcached
+        tier: inf
+        type: thanos-staging
+      expr: '0.999000'
+    - record: slo:max:events:gitlab_service_errors:ratio
+      labels:
+        component: thanos_memcached
+        tier: inf
+        type: thanos-staging
+      expr: '0.050000'
+    - record: slo:min:events:gitlab_service_apdex:ratio
+      labels:
+        component: thanos_query
+        tier: inf
+        type: thanos-staging
+      expr: '0.950000'
+    - record: slo:max:events:gitlab_service_errors:ratio
+      labels:
+        component: thanos_query
+        tier: inf
+        type: thanos-staging
+      expr: '0.050000'
+    - record: slo:min:events:gitlab_service_apdex:ratio
+      labels:
+        component: thanos_query_frontend
+        tier: inf
+        type: thanos-staging
+      expr: '0.950000'
+    - record: slo:max:events:gitlab_service_errors:ratio
+      labels:
+        component: thanos_query_frontend
+        tier: inf
+        type: thanos-staging
+      expr: '0.050000'
+    - record: slo:min:events:gitlab_service_apdex:ratio
+      labels:
+        component: thanos_store
+        tier: inf
+        type: thanos-staging
+      expr: '0.950000'
+    - record: slo:max:events:gitlab_service_errors:ratio
+      labels:
+        component: thanos_store
+        tier: inf
+        type: thanos-staging
+      expr: '0.050000'
+    - record: slo:min:events:gitlab_service_apdex:ratio
+      labels:
         tier: inf
         type: vault
       expr: '0.999000'
@@ -2979,6 +3027,11 @@ spec:
       labels:
         tier: inf
         type: thanos
+      expr: '1'
+    - record: gitlab_service:mapping:disable_ops_rate_prediction
+      labels:
+        tier: inf
+        type: thanos-staging
       expr: '1'
     - record: gitlab_component_service:mapping
       labels:

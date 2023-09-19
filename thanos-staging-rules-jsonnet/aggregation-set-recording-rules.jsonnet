@@ -135,7 +135,7 @@ local filesForSeparateSelector(selector) = {
 
   local services = (import 'gitlab-metrics-config.libsonnet').monitoredServices,
   local dangerouslyThanosEvaluatedServices = std.filter(
-    function(service) service.dangerouslyThanosEvaluated && service.hasFeatureCategorySLIs(),
+    function(service) service.dangerouslyThanosEvaluated && service.thanosType != 'thanos' && service.hasFeatureCategorySLIs(),
     services
   ),
   local thanosEvaluatedServiceNames = std.map(function(s) s.type, dangerouslyThanosEvaluatedServices),
