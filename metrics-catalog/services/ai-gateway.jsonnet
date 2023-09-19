@@ -26,7 +26,6 @@ metricsCatalog.serviceDefinition(
   {
     serviceLevelIndicators+: {
       server: {
-        severity: 's4',
         userImpacting: true,
         serviceAggregation: false,
         team: 'code_creation',
@@ -68,7 +67,6 @@ metricsCatalog.serviceDefinition(
       },
       inference: {
         local inferenceSelector = baseSelector { model_engine: { ne: 'codegen' } },
-        severity: 's4',
         userImpacting: true,
         serviceAggregation: false,
         team: 'code_creation',
@@ -104,7 +102,6 @@ metricsCatalog.serviceDefinition(
       },
       waf: {
         local hostSelector = { zone: 'gitlab.com', host: { re: 'codesuggestions.gitlab.com.*' } },
-        severity: 's4',
         userImpacting: true,
         serviceAggregation: false,
         team: 'code_creation',
