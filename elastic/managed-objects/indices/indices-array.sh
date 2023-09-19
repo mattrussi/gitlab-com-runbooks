@@ -18,6 +18,7 @@ export indices=(
   mailroom
   mlops
   monitoring
+  observability
   packagecloud
   pages
   postgres
