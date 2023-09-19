@@ -13,7 +13,7 @@ local maxOverTime(query) =
   'max_over_time(%(query)s[$__interval])' % { query: query };
 
 {
-  saturationPanel(title, description, component, linewidth=1, query=null, legendFormat=null, selector=null, overTimeFunction=maxOverTime)::
+  capacityPanel(ident, title, description, component, linewidth=1, query=null, legendFormat=null, selector=null, overTimeFunction=maxOverTime)::
     local formatConfig = {
       component: component,
       query: query,
@@ -37,7 +37,72 @@ local maxOverTime(query) =
       legend_avg=true,
       legend_alignAsTable=true,
       legend_hideEmpty=true,
-      stableId='saturation-' + component,
+      stableId='saturation-' + ident + component,
+    );
+
+    local p2 = if query != null then
+      panel.addTarget(  // Primary metric
+        promQuery.target(
+          |||
+            clamp_min(
+              clamp_max(
+                %(query)s
+              ,1)
+            ,0)
+          ||| % formatConfig,
+          legendFormat=legendFormat,
+        )
+      )
+    else
+      panel;
+
+    local recordingRuleQuery = 'gitlab_component_saturation:ratio{%(selector)s, component="%(component)s"}' % formatConfig;
+
+    local recordingRuleQueryWithTimeFunction = if overTimeFunction != null then
+      overTimeFunction(recordingRuleQuery)
+    else
+      recordingRuleQuery;
+
+    p2.addTarget(  // Primary metric
+      promQuery.target(
+        |||
+          clamp_min(
+            clamp_max(
+              max(
+                %(recordingRuleQueryWithTimeFunction)s
+              ) by (component)
+            ,1)
+          ,0)
+        ||| % formatConfig { recordingRuleQueryWithTimeFunction: recordingRuleQueryWithTimeFunction },
+        legendFormat='aggregated {{ component }}',
+      )
+    )
+  ,
+  saturationPanel(ident, title, description, component, linewidth=1, query=null, legendFormat=null, selector=null, overTimeFunction=maxOverTime)::
+    local formatConfig = {
+      component: component,
+      query: query,
+      selector: selectors.serializeHash(selector),
+    };
+
+    local panel = basic.graphPanel(
+      title=title,
+      description=description,
+      sort='decreasing',
+      linewidth=linewidth,
+      fill=0,
+      datasource='$PROMETHEUS_DS',
+      decimals=2,
+      legend_show=true,
+      legend_values=true,
+      legend_min=true,
+      legend_max=true,
+      legend_current=true,
+      legend_total=false,
+      legend_avg=true,
+      legend_alignAsTable=true,
+      legend_hideEmpty=true,
+      stableId='saturation-' + ident + component,
     );
 
     local p2 = if query != null then
@@ -165,6 +230,22 @@ local maxOverTime(query) =
     local query = componentDetails.getQuery(selectorHash, componentDetails.getBurnRatePeriod(), maxAggregationLabels=componentDetails.resourceLabels);
 
     self.saturationPanel(
+      "saturation",
+      '%s component saturation: %s' % [component, componentDetails.title],
+      description=componentDetails.description + ' Lower is better.',
+      component=component,
+      linewidth=1,
+      query=query,
+      legendFormat=componentDetails.getLegendFormat(),
+      selector=selectorHash,
+    ),
+
+  componentCapacityPanel(component, selectorHash)::
+    local componentDetails = saturationResources[component];
+    local query = componentDetails.getQuery(selectorHash, componentDetails.getBurnRatePeriod(), maxAggregationLabels=componentDetails.resourceLabels, query=componentDetails.capacityQuery);
+
+    self.capacityPanel(
+      "capacity",
       '%s component saturation: %s' % [component, componentDetails.title],
       description=componentDetails.description + ' Lower is better.',
       component=component,

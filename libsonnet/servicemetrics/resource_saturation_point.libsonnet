@@ -60,6 +60,7 @@ local simpleDefaults = {
   dangerouslyThanosEvaluated: false,
   quantileAggregation: 'max',
   linear_prediction_saturation_alert: null,  // No linear interpolation by default
+  capacityQuery: "TODO: DO NOT USE ME :)",
 };
 
 local nestedDefaults = {
@@ -112,7 +113,7 @@ local resourceSaturationPoint = function(options)
   local serviceApplicator = function(type) std.setMember(type, std.set(definition.appliesTo));
 
   definition {
-    getQuery(selectorHash, rangeInterval, maxAggregationLabels=[], extraStaticLabels={})::
+    getQuery(selectorHash, rangeInterval, maxAggregationLabels=[], extraStaticLabels={}, query=self.query)::
       local staticLabels = self.getStaticLabels() + extraStaticLabels;
       local environmentLabelsLocal = (if self.dangerouslyThanosEvaluated == true then labelTaxonomy.labelTaxonomy(labelTaxonomy.labels.environmentThanos) else []) + environmentLabels;
       local queryAggregationLabels = environmentLabelsLocal + self.resourceLabels;
@@ -121,7 +122,7 @@ local resourceSaturationPoint = function(options)
       local maxAggregationLabelsExcludingStaticLabels = std.filter(function(label) !std.objectHas(staticLabels, label), allMaxAggregationLabels);
       local queryFormatConfig = self.queryFormatConfig;
 
-      local preaggregation = self.query % queryFormatConfig {
+      local preaggregation = query % queryFormatConfig {
         rangeInterval: rangeInterval,
         selector: selectors.serializeHash(selectorHash),
         aggregationLabels: std.join(', ', queryAggregationLabelsExcludingStaticLabels),

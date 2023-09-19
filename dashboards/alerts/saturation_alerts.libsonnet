@@ -14,6 +14,7 @@ local selector = { env: '$environment', type: '$type', stage: '$stage' };
     dashboardTitle,
     component,
     panel,
+    capacityPanel,
     helpPanel,
     defaultType
   )::
@@ -38,6 +39,7 @@ local selector = { env: '$environment', type: '$type', stage: '$stage' };
     .addTemplate(templates.stage)
     .addPanel(panel, gridPos={ x: 0, y: 0, h: 20, w: 18 })
     .addPanel(helpPanel, gridPos={ x: 18, y: 0, h: 14, w: 6 })
+    .addPanel(capacityPanel, gridPos={ x: 0, y: 21, h: 20, w: 18 })
     .addPanel(serviceHealth.activeAlertsPanel('alert_type="symptom", type="${type}", environment="$environment"', title='Potentially User Impacting Alerts'), gridPos={ x: 18, y: 14, h: 6, w: 6 })
     .trailer()
     + {
@@ -64,6 +66,7 @@ local selector = { env: '$environment', type: '$type', stage: '$stage' };
       dashboardTitle=std.strReplace(component, '_', ' ') + ': Saturation Detail',
       component=component,
       panel=saturationDetail.componentSaturationPanel(component, selector),
+      capacityPanel=saturationDetail.componentCapacityPanel(component, selector),
       helpPanel=saturationDetail.componentSaturationHelpPanel(component),
       defaultType=defaultType
     ),

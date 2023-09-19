@@ -24,6 +24,13 @@ local selectors = import 'promql/selectors.libsonnet';
         pg_int4_saturation_current_largest_value{%(selector)s,%(columnSelector)s} / pg_int4_saturation_column_max_value{%(selector)s,%(columnSelector)s}
       )
     |||,
+    # Open question: How do we get the actual query from below capacityQuery and usageQuery?
+    capacityQuery: |||
+      pg_int4_saturation_column_max_value{%(selector)s,%(columnSelector)s}
+    |||,
+    usageQuery: |||
+      pg_int4_saturation_current_largest_value{%(selector)s,%(columnSelector)s}
+    |||,
     queryFormatConfig: {
       columnSelector: selectors.serializeHash({ column_name: { nre: '.+(.|-|_)iid' } }),
     },
