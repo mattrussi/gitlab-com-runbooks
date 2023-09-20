@@ -3,7 +3,7 @@ local metricsCatalog = import 'servicemetrics/metrics-catalog.libsonnet';
 local misc = import 'utils/misc.libsonnet';
 
 local assertEvaluationType(evaluation) =
-  local knownTypes = ['prometheus', 'thanos', 'both'];
+  local knownTypes = ['prometheus', 'thanos', 'both', 'thanos-staging'];
   assert std.member(knownTypes, evaluation) : 'Evaluation type %s is needs to be one of %s' % [evaluation, knownTypes];
   evaluation;
 
@@ -35,7 +35,7 @@ local prepareGroups(
       ) =
   // When generating thanos-only rules, we need to add partial_response_strategy
   local groupBase =
-    if evaluation == 'thanos' then
+    if evaluation == 'thanos' || evaluation == 'thanos-staging' then
       { partial_response_strategy: 'warn' }
     else
       {};

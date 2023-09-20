@@ -16,8 +16,8 @@ spec:
     - record: gitlab_component_saturation:ratio
       labels:
         component: cpu
-        env: thanos
-        environment: thanos
+        env: thanos-staging
+        environment: thanos-staging
         stage: main
         tier: inf
       expr: |
@@ -25,7 +25,7 @@ spec:
           clamp_min(
             clamp_max(
               1 - avg by (type, shard) (
-                rate(node_cpu_seconds_total{mode="idle", env="ops",type="thanos"}[5m])
+                rate(node_cpu_seconds_total{mode="idle", env="ops",type="thanos-staging"}[5m])
               )
               ,
               1)
@@ -35,8 +35,8 @@ spec:
     - record: gitlab_component_saturation:ratio
       labels:
         component: disk_inodes
-        env: thanos
-        environment: thanos
+        env: thanos-staging
+        environment: thanos-staging
         stage: main
         tier: inf
       expr: |
@@ -44,9 +44,9 @@ spec:
           clamp_min(
             clamp_max(
               1 - (
-                node_filesystem_files_free{fstype=~"(ext.|xfs)", env="ops",type="thanos"}
+                node_filesystem_files_free{fstype=~"(ext.|xfs)", env="ops",type="thanos-staging"}
                 /
-                node_filesystem_files{fstype=~"(ext.|xfs)", env="ops",type="thanos"}
+                node_filesystem_files{fstype=~"(ext.|xfs)", env="ops",type="thanos-staging"}
               )
               ,
               1)
@@ -56,8 +56,8 @@ spec:
     - record: gitlab_component_saturation:ratio
       labels:
         component: disk_space
-        env: thanos
-        environment: thanos
+        env: thanos-staging
+        environment: thanos-staging
         stage: main
         tier: inf
       expr: |
@@ -65,7 +65,7 @@ spec:
           clamp_min(
             clamp_max(
               (
-                1 - node_filesystem_avail_bytes{fstype=~"ext.|xfs", env="ops",type="thanos"} / node_filesystem_size_bytes{fstype=~"ext.|xfs", env="ops",type="thanos"}
+                1 - node_filesystem_avail_bytes{fstype=~"ext.|xfs", env="ops",type="thanos-staging"} / node_filesystem_size_bytes{fstype=~"ext.|xfs", env="ops",type="thanos-staging"}
               )
               ,
               1)
@@ -75,8 +75,8 @@ spec:
     - record: gitlab_component_saturation:ratio
       labels:
         component: go_goroutines
-        env: thanos
-        environment: thanos
+        env: thanos-staging
+        environment: thanos-staging
         stage: main
         tier: inf
       expr: |
@@ -84,7 +84,7 @@ spec:
           clamp_min(
             clamp_max(
               sum by (type, shard, fqdn) (
-                go_goroutines{env="ops",type="thanos"}
+                go_goroutines{env="ops",type="thanos-staging"}
               )
               /
               250000
@@ -96,8 +96,8 @@ spec:
     - record: gitlab_component_saturation:ratio
       labels:
         component: go_memory
-        env: thanos
-        environment: thanos
+        env: thanos-staging
+        environment: thanos-staging
         stage: main
         tier: inf
       expr: |
@@ -105,11 +105,11 @@ spec:
           clamp_min(
             clamp_max(
               sum by (type, shard, fqdn) (
-                go_memstats_alloc_bytes{env="ops",type="thanos"}
+                go_memstats_alloc_bytes{env="ops",type="thanos-staging"}
               )
               /
               sum by (type, shard, fqdn) (
-                node_memory_MemTotal_bytes{env="ops",type="thanos"}
+                node_memory_MemTotal_bytes{env="ops",type="thanos-staging"}
               )
               ,
               1)
@@ -119,8 +119,8 @@ spec:
     - record: gitlab_component_saturation:ratio
       labels:
         component: kube_container_cpu
-        env: thanos
-        environment: thanos
+        env: thanos-staging
+        environment: thanos-staging
         stage: main
         tier: inf
       expr: |
@@ -128,13 +128,13 @@ spec:
           clamp_min(
             clamp_max(
               sum by (type, shard, pod, container) (
-                rate(container_cpu_usage_seconds_total:labeled{container!="", container!="POD", env="ops",type="thanos"}[5m])
+                rate(container_cpu_usage_seconds_total:labeled{container!="", container!="POD", env="ops",type="thanos-staging"}[5m])
               )
               /
               sum by(type, shard, pod, container) (
-                container_spec_cpu_quota:labeled{container!="", container!="POD", env="ops",type="thanos"}
+                container_spec_cpu_quota:labeled{container!="", container!="POD", env="ops",type="thanos-staging"}
                 /
-                container_spec_cpu_period:labeled{container!="", container!="POD", env="ops",type="thanos"}
+                container_spec_cpu_period:labeled{container!="", container!="POD", env="ops",type="thanos-staging"}
               )
               ,
               1)
@@ -144,17 +144,17 @@ spec:
     - record: gitlab_component_saturation:ratio
       labels:
         component: kube_container_memory
-        env: thanos
-        environment: thanos
+        env: thanos-staging
+        environment: thanos-staging
         stage: main
         tier: inf
       expr: |
         max by(type, shard) (
           clamp_min(
             clamp_max(
-              container_memory_working_set_bytes:labeled{container!="", container!="POD", env="ops",type="thanos"}
+              container_memory_working_set_bytes:labeled{container!="", container!="POD", env="ops",type="thanos-staging"}
               /
-              (container_spec_memory_limit_bytes:labeled{container!="", container!="POD", env="ops",type="thanos"} > 0)
+              (container_spec_memory_limit_bytes:labeled{container!="", container!="POD", env="ops",type="thanos-staging"} > 0)
               ,
               1)
           ,
@@ -163,18 +163,18 @@ spec:
     - record: gitlab_component_saturation:ratio
       labels:
         component: kube_go_memory
-        env: thanos
-        environment: thanos
+        env: thanos-staging
+        environment: thanos-staging
         stage: main
         tier: inf
       expr: |
         max by(type, shard) (
           clamp_min(
             clamp_max(
-              go_memstats_alloc_bytes{env="ops",type="thanos"}
+              go_memstats_alloc_bytes{env="ops",type="thanos-staging"}
               / on(type, shard, cluster, pod) group_left()
               topk by(type, shard, cluster, pod) (1,
-                container_spec_memory_limit_bytes:labeled{container=~"gitlab-pages|gitlab-workhorse|kas|registry|thanos-store",env="ops",type="thanos"}
+                container_spec_memory_limit_bytes:labeled{container=~"gitlab-pages|gitlab-workhorse|kas|registry|thanos-store",env="ops",type="thanos-staging"}
               )
               ,
               1)
@@ -184,17 +184,17 @@ spec:
     - record: gitlab_component_saturation:ratio
       labels:
         component: kube_horizontalpodautoscaler_desired_replicas
-        env: thanos
-        environment: thanos
+        env: thanos-staging
+        environment: thanos-staging
         stage: main
         tier: inf
       expr: |
         max by(type, shard) (
           clamp_min(
             clamp_max(
-              kube_horizontalpodautoscaler_status_desired_replicas:labeled{env="ops",type="thanos", shard!~"database-throttled|elasticsearch|gitaly-throttled|urgent-authorized-projects|urgent-other", namespace!~"pubsubbeat"}
+              kube_horizontalpodautoscaler_status_desired_replicas:labeled{env="ops",type="thanos-staging", shard!~"database-throttled|elasticsearch|gitaly-throttled|urgent-authorized-projects|urgent-other", namespace!~"pubsubbeat"}
               /
-              kube_horizontalpodautoscaler_spec_max_replicas:labeled{env="ops",type="thanos", shard!~"database-throttled|elasticsearch|gitaly-throttled|urgent-authorized-projects|urgent-other", namespace!~"pubsubbeat"}
+              kube_horizontalpodautoscaler_spec_max_replicas:labeled{env="ops",type="thanos-staging", shard!~"database-throttled|elasticsearch|gitaly-throttled|urgent-authorized-projects|urgent-other", namespace!~"pubsubbeat"}
               ,
               1)
           ,
@@ -203,15 +203,15 @@ spec:
     - record: gitlab_component_saturation:ratio
       labels:
         component: memory
-        env: thanos
-        environment: thanos
+        env: thanos-staging
+        environment: thanos-staging
         stage: main
         tier: inf
       expr: |
         max by(type, shard) (
           clamp_min(
             clamp_max(
-              instance:node_memory_utilization:ratio{env="ops",type="thanos"} or instance:node_memory_utilisation:ratio{env="ops",type="thanos"}
+              instance:node_memory_utilization:ratio{env="ops",type="thanos-staging"} or instance:node_memory_utilisation:ratio{env="ops",type="thanos-staging"}
               ,
               1)
           ,
@@ -220,17 +220,17 @@ spec:
     - record: gitlab_component_saturation:ratio
       labels:
         component: nf_conntrack_entries
-        env: thanos
-        environment: thanos
+        env: thanos-staging
+        environment: thanos-staging
         stage: main
         tier: inf
       expr: |
         max by(type, shard) (
           clamp_min(
             clamp_max(
-              max_over_time(node_nf_conntrack_entries{env="ops",type="thanos"}[1m])
+              max_over_time(node_nf_conntrack_entries{env="ops",type="thanos-staging"}[1m])
               /
-              node_nf_conntrack_entries_limit{env="ops",type="thanos"}
+              node_nf_conntrack_entries_limit{env="ops",type="thanos-staging"}
               ,
               1)
           ,
@@ -239,15 +239,15 @@ spec:
     - record: gitlab_component_saturation:ratio
       labels:
         component: node_schedstat_waiting
-        env: thanos
-        environment: thanos
+        env: thanos-staging
+        environment: thanos-staging
         stage: main
         tier: inf
       expr: |
         max by(type, shard) (
           clamp_min(
             clamp_max(
-              avg without (cpu) (rate(node_schedstat_waiting_seconds_total{env="ops",type="thanos"}[1h]))
+              avg without (cpu) (rate(node_schedstat_waiting_seconds_total{env="ops",type="thanos-staging"}[1h]))
               ,
               1)
           ,
@@ -256,8 +256,8 @@ spec:
     - record: gitlab_component_saturation:ratio
       labels:
         component: open_fds
-        env: thanos
-        environment: thanos
+        env: thanos-staging
+        environment: thanos-staging
         stage: main
         tier: inf
       expr: |
@@ -265,15 +265,15 @@ spec:
           clamp_min(
             clamp_max(
               (
-                process_open_fds{env="ops",type="thanos"}
+                process_open_fds{env="ops",type="thanos-staging"}
                 /
-                process_max_fds{env="ops",type="thanos"}
+                process_max_fds{env="ops",type="thanos-staging"}
               )
               or
               (
-                ruby_file_descriptors{env="ops",type="thanos"}
+                ruby_file_descriptors{env="ops",type="thanos-staging"}
                 /
-                ruby_process_max_fds{env="ops",type="thanos"}
+                ruby_process_max_fds{env="ops",type="thanos-staging"}
               )
               ,
               1)
@@ -283,8 +283,8 @@ spec:
     - record: gitlab_component_saturation:ratio
       labels:
         component: shard_cpu
-        env: thanos
-        environment: thanos
+        env: thanos-staging
+        environment: thanos-staging
         stage: main
         tier: inf
       expr: |
@@ -292,7 +292,7 @@ spec:
           clamp_min(
             clamp_max(
               1 - avg by (type, shard, shard) (
-                rate(node_cpu_seconds_total{mode="idle", env="ops",type="thanos"}[5m])
+                rate(node_cpu_seconds_total{mode="idle", env="ops",type="thanos-staging"}[5m])
               )
               ,
               1)
@@ -302,15 +302,15 @@ spec:
     - record: gitlab_component_saturation:ratio
       labels:
         component: single_node_cpu
-        env: thanos
-        environment: thanos
+        env: thanos-staging
+        environment: thanos-staging
         stage: main
         tier: inf
       expr: |
         max by(type, shard) (
           clamp_min(
             clamp_max(
-              avg without(cpu, mode) (1 - rate(node_cpu_seconds_total{mode="idle", env="ops",type="thanos"}[5m]))
+              avg without(cpu, mode) (1 - rate(node_cpu_seconds_total{mode="idle", env="ops",type="thanos-staging"}[5m]))
               ,
               1)
           ,
@@ -321,15 +321,15 @@ spec:
     partial_response_strategy: warn
     rules:
     - record: gitlab_component_saturation:ratio_quantile95_1w
-      expr: quantile_over_time(0.95, gitlab_component_saturation:ratio{monitor="global",type="thanos"}[1w])
+      expr: quantile_over_time(0.95, gitlab_component_saturation:ratio{type="thanos-staging"}[1w])
     - record: gitlab_component_saturation:ratio_quantile99_1w
-      expr: quantile_over_time(0.99, gitlab_component_saturation:ratio{monitor="global",type="thanos"}[1w])
+      expr: quantile_over_time(0.99, gitlab_component_saturation:ratio{type="thanos-staging"}[1w])
     - record: gitlab_component_saturation:ratio_quantile95_1h
-      expr: quantile_over_time(0.95, gitlab_component_saturation:ratio{monitor="global",type="thanos"}[1h])
+      expr: quantile_over_time(0.95, gitlab_component_saturation:ratio{type="thanos-staging"}[1h])
     - record: gitlab_component_saturation:ratio_quantile99_1h
-      expr: quantile_over_time(0.99, gitlab_component_saturation:ratio{monitor="global",type="thanos"}[1h])
+      expr: quantile_over_time(0.99, gitlab_component_saturation:ratio{type="thanos-staging"}[1h])
     - record: gitlab_component_saturation:ratio_avg_1h
-      expr: avg_over_time(gitlab_component_saturation:ratio{monitor="global",type="thanos"}[1h])
+      expr: avg_over_time(gitlab_component_saturation:ratio{type="thanos-staging"}[1h])
   - name: GitLab Saturation Alerts
     interval: 1m
     partial_response_strategy: warn
@@ -383,8 +383,8 @@ spec:
         rules_domain: general
         severity: s3
       expr: |
-        gitlab_component_saturation:ratio{component="cpu",monitor="global",type="thanos"} > on(component) group_left
-        slo:max:hard:gitlab_component_saturation:ratio{component="cpu",monitor="global",type="thanos"}
+        gitlab_component_saturation:ratio{component="cpu",type="thanos-staging"} > on(component) group_left
+        slo:max:hard:gitlab_component_saturation:ratio{component="cpu",type="thanos-staging"}
     - alert: component_saturation_slo_out_of_bounds
       for: 15m
       annotations:
@@ -441,8 +441,8 @@ spec:
         rules_domain: general
         severity: s2
       expr: |
-        gitlab_component_saturation:ratio{component="disk_inodes",monitor="global",type="thanos"} > on(component) group_left
-        slo:max:hard:gitlab_component_saturation:ratio{component="disk_inodes",monitor="global",type="thanos"}
+        gitlab_component_saturation:ratio{component="disk_inodes",type="thanos-staging"} > on(component) group_left
+        slo:max:hard:gitlab_component_saturation:ratio{component="disk_inodes",type="thanos-staging"}
     - alert: ComponentResourceRunningOut_disk_inodes
       for: 15m
       annotations:
@@ -500,9 +500,9 @@ spec:
         rules_domain: general
         severity: s2
       expr: |
-        predict_linear(gitlab_component_saturation:ratio{component="disk_inodes",monitor="global",type="thanos"}[6h], 21600)
+        predict_linear(gitlab_component_saturation:ratio{component="disk_inodes",type="thanos-staging"}[6h], 21600)
         > on (component) group_left
-        slo:max:hard:gitlab_component_saturation:ratio{component="disk_inodes",monitor="global",type="thanos"}
+        slo:max:hard:gitlab_component_saturation:ratio{component="disk_inodes",type="thanos-staging"}
     - alert: component_saturation_slo_out_of_bounds
       for: 15m
       annotations:
@@ -553,8 +553,8 @@ spec:
         rules_domain: general
         severity: s2
       expr: |
-        gitlab_component_saturation:ratio{component="disk_space",monitor="global",type="thanos"} > on(component) group_left
-        slo:max:hard:gitlab_component_saturation:ratio{component="disk_space",monitor="global",type="thanos"}
+        gitlab_component_saturation:ratio{component="disk_space",type="thanos-staging"} > on(component) group_left
+        slo:max:hard:gitlab_component_saturation:ratio{component="disk_space",type="thanos-staging"}
     - alert: ComponentResourceRunningOut_disk_space
       for: 15m
       annotations:
@@ -606,9 +606,9 @@ spec:
         rules_domain: general
         severity: s2
       expr: |
-        predict_linear(gitlab_component_saturation:ratio{component="disk_space",monitor="global",type="thanos"}[6h], 21600)
+        predict_linear(gitlab_component_saturation:ratio{component="disk_space",type="thanos-staging"}[6h], 21600)
         > on (component) group_left
-        slo:max:hard:gitlab_component_saturation:ratio{component="disk_space",monitor="global",type="thanos"}
+        slo:max:hard:gitlab_component_saturation:ratio{component="disk_space",type="thanos-staging"}
     - alert: component_saturation_slo_out_of_bounds
       for: 5m
       annotations:
@@ -667,8 +667,8 @@ spec:
         rules_domain: general
         severity: s2
       expr: |
-        gitlab_component_saturation:ratio{component="go_goroutines",monitor="global",type="thanos"} > on(component) group_left
-        slo:max:hard:gitlab_component_saturation:ratio{component="go_goroutines",monitor="global",type="thanos"}
+        gitlab_component_saturation:ratio{component="go_goroutines",type="thanos-staging"} > on(component) group_left
+        slo:max:hard:gitlab_component_saturation:ratio{component="go_goroutines",type="thanos-staging"}
     - alert: component_saturation_slo_out_of_bounds
       for: 5m
       annotations:
@@ -726,8 +726,8 @@ spec:
         rules_domain: general
         severity: s4
       expr: |
-        gitlab_component_saturation:ratio{component="go_memory",monitor="global",type="thanos"} > on(component) group_left
-        slo:max:hard:gitlab_component_saturation:ratio{component="go_memory",monitor="global",type="thanos"}
+        gitlab_component_saturation:ratio{component="go_memory",type="thanos-staging"} > on(component) group_left
+        slo:max:hard:gitlab_component_saturation:ratio{component="go_memory",type="thanos-staging"}
     - alert: component_saturation_slo_out_of_bounds
       for: 15m
       annotations:
@@ -789,8 +789,8 @@ spec:
         rules_domain: general
         severity: s4
       expr: |
-        gitlab_component_saturation:ratio{component="kube_container_cpu",monitor="global",type="thanos"} > on(component) group_left
-        slo:max:hard:gitlab_component_saturation:ratio{component="kube_container_cpu",monitor="global",type="thanos"}
+        gitlab_component_saturation:ratio{component="kube_container_cpu",type="thanos-staging"} > on(component) group_left
+        slo:max:hard:gitlab_component_saturation:ratio{component="kube_container_cpu",type="thanos-staging"}
     - alert: component_saturation_slo_out_of_bounds
       for: 15m
       annotations:
@@ -840,8 +840,8 @@ spec:
         rules_domain: general
         severity: s4
       expr: |
-        gitlab_component_saturation:ratio{component="kube_container_memory",monitor="global",type="thanos"} > on(component) group_left
-        slo:max:hard:gitlab_component_saturation:ratio{component="kube_container_memory",monitor="global",type="thanos"}
+        gitlab_component_saturation:ratio{component="kube_container_memory",type="thanos-staging"} > on(component) group_left
+        slo:max:hard:gitlab_component_saturation:ratio{component="kube_container_memory",type="thanos-staging"}
     - alert: component_saturation_slo_out_of_bounds
       for: 5m
       annotations:
@@ -895,8 +895,8 @@ spec:
         rules_domain: general
         severity: s4
       expr: |
-        gitlab_component_saturation:ratio{component="kube_go_memory",monitor="global",type="thanos"} > on(component) group_left
-        slo:max:hard:gitlab_component_saturation:ratio{component="kube_go_memory",monitor="global",type="thanos"}
+        gitlab_component_saturation:ratio{component="kube_go_memory",type="thanos-staging"} > on(component) group_left
+        slo:max:hard:gitlab_component_saturation:ratio{component="kube_go_memory",type="thanos-staging"}
     - alert: component_saturation_slo_out_of_bounds
       for: 25m
       annotations:
@@ -948,8 +948,8 @@ spec:
         rules_domain: general
         severity: s3
       expr: |
-        gitlab_component_saturation:ratio{component="kube_horizontalpodautoscaler_desired_replicas",monitor="global",type="thanos"} > on(component) group_left
-        slo:max:hard:gitlab_component_saturation:ratio{component="kube_horizontalpodautoscaler_desired_replicas",monitor="global",type="thanos"}
+        gitlab_component_saturation:ratio{component="kube_horizontalpodautoscaler_desired_replicas",type="thanos-staging"} > on(component) group_left
+        slo:max:hard:gitlab_component_saturation:ratio{component="kube_horizontalpodautoscaler_desired_replicas",type="thanos-staging"}
     - alert: component_saturation_slo_out_of_bounds
       for: 5m
       annotations:
@@ -995,8 +995,8 @@ spec:
         rules_domain: general
         severity: s4
       expr: |
-        gitlab_component_saturation:ratio{component="memory",monitor="global",type="thanos"} > on(component) group_left
-        slo:max:hard:gitlab_component_saturation:ratio{component="memory",monitor="global",type="thanos"}
+        gitlab_component_saturation:ratio{component="memory",type="thanos-staging"} > on(component) group_left
+        slo:max:hard:gitlab_component_saturation:ratio{component="memory",type="thanos-staging"}
     - alert: component_saturation_slo_out_of_bounds
       for: 5m
       annotations:
@@ -1048,8 +1048,8 @@ spec:
         rules_domain: general
         severity: s3
       expr: |
-        gitlab_component_saturation:ratio{component="nf_conntrack_entries",monitor="global",type="thanos"} > on(component) group_left
-        slo:max:hard:gitlab_component_saturation:ratio{component="nf_conntrack_entries",monitor="global",type="thanos"}
+        gitlab_component_saturation:ratio{component="nf_conntrack_entries",type="thanos-staging"} > on(component) group_left
+        slo:max:hard:gitlab_component_saturation:ratio{component="nf_conntrack_entries",type="thanos-staging"}
     - alert: component_saturation_slo_out_of_bounds
       for: 90m
       annotations:
@@ -1099,8 +1099,8 @@ spec:
         rules_domain: general
         severity: s4
       expr: |
-        gitlab_component_saturation:ratio{component="node_schedstat_waiting",monitor="global",type="thanos"} > on(component) group_left
-        slo:max:hard:gitlab_component_saturation:ratio{component="node_schedstat_waiting",monitor="global",type="thanos"}
+        gitlab_component_saturation:ratio{component="node_schedstat_waiting",type="thanos-staging"} > on(component) group_left
+        slo:max:hard:gitlab_component_saturation:ratio{component="node_schedstat_waiting",type="thanos-staging"}
     - alert: component_saturation_slo_out_of_bounds
       for: 5m
       annotations:
@@ -1171,8 +1171,8 @@ spec:
         rules_domain: general
         severity: s2
       expr: |
-        gitlab_component_saturation:ratio{component="open_fds",monitor="global",type="thanos"} > on(component) group_left
-        slo:max:hard:gitlab_component_saturation:ratio{component="open_fds",monitor="global",type="thanos"}
+        gitlab_component_saturation:ratio{component="open_fds",type="thanos-staging"} > on(component) group_left
+        slo:max:hard:gitlab_component_saturation:ratio{component="open_fds",type="thanos-staging"}
     - alert: component_saturation_slo_out_of_bounds
       for: 5m
       annotations:
@@ -1222,8 +1222,8 @@ spec:
         rules_domain: general
         severity: s3
       expr: |
-        gitlab_component_saturation:ratio{component="shard_cpu",monitor="global",type="thanos"} > on(component) group_left
-        slo:max:hard:gitlab_component_saturation:ratio{component="shard_cpu",monitor="global",type="thanos"}
+        gitlab_component_saturation:ratio{component="shard_cpu",type="thanos-staging"} > on(component) group_left
+        slo:max:hard:gitlab_component_saturation:ratio{component="shard_cpu",type="thanos-staging"}
     - alert: component_saturation_slo_out_of_bounds
       for: 10m
       annotations:
@@ -1271,5 +1271,5 @@ spec:
         rules_domain: general
         severity: s4
       expr: |
-        gitlab_component_saturation:ratio{component="single_node_cpu",monitor="global",type="thanos"} > on(component) group_left
-        slo:max:hard:gitlab_component_saturation:ratio{component="single_node_cpu",monitor="global",type="thanos"}
+        gitlab_component_saturation:ratio{component="single_node_cpu",type="thanos-staging"} > on(component) group_left
+        slo:max:hard:gitlab_component_saturation:ratio{component="single_node_cpu",type="thanos-staging"}

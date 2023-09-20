@@ -82,14 +82,16 @@ local filterServicesForResource(definition, evaluation, thanosSelfMonitoring) =
   std.filter(
     function(type)
       local service = metricsCatalog.getServiceOptional(type);
+      local thanosTypes = ['thanos', 'thanos-staging'];
+      local isThanosEvaluation = std.member(thanosTypes, evaluation);
       service != null && (
         if thanosSelfMonitoring then
-          assert evaluation == 'thanos' : 'thanos-saturation needs to be globally evaluated in thanos, not %s' % [evaluation];
-          type == 'thanos'
+          assert isThanosEvaluation : 'thanos-saturation needs to be globally evaluated in thanos or thanos-staging, not %s' % [evaluation];
+          type == evaluation
         else if evaluation == 'prometheus' then
           !service.dangerouslyThanosEvaluated && !definition.dangerouslyThanosEvaluated
-        else if evaluation == 'thanos' then
-          type != 'thanos' && (service.dangerouslyThanosEvaluated || definition.dangerouslyThanosEvaluated)
+        else if isThanosEvaluation then
+          !std.member(thanosTypes, type) && (service.dangerouslyThanosEvaluated || definition.dangerouslyThanosEvaluated)
         else if evaluation == 'both' then
           true
         else

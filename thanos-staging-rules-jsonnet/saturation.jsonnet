@@ -10,14 +10,14 @@ local filesForSeparateSelector(selector) = {
         saturationRules.generateSaturationRulesGroup(
           saturationResources=saturationResources,
           extraSourceSelector=selector,
-          evaluation='thanos',
+          evaluation='thanos-staging',
         )
         +
         // Alerts and long range quantiles
         saturationRules.generateSaturationAuxRulesGroup(
           saturationResources=saturationResources,
           extraSelector=selector,
-          evaluation='thanos',
+          evaluation='thanos-staging',
           thanosSelfMonitoring=false,
         ),
     }),
@@ -28,7 +28,7 @@ separateGlobalRecordingFiles(filesForSeparateSelector) {
   'saturation-metadata.yml': std.manifestYamlDoc({
     groups: saturationRules.generateSaturationMetadataRulesGroup(
       saturationResources=saturationResources,
-      evaluation='thanos',
+      evaluation='thanos-staging',
       thanosSelfMonitoring=false,
     ),
   }),
@@ -38,11 +38,11 @@ separateGlobalRecordingFiles(filesForSeparateSelector) {
       saturationRules.generateSaturationRulesGroup(
         saturationResources=saturationResources,
         extraSourceSelector={ env: 'ops' },
-        evaluation='thanos',
+        evaluation='thanos-staging',
         thanosSelfMonitoring=true,
         staticLabels={
-          env: 'thanos',
-          environment: 'thanos',
+          env: 'thanos-staging',
+          environment: 'thanos-staging',
           stage: 'main',
           tier: 'inf',
         },
@@ -52,8 +52,8 @@ separateGlobalRecordingFiles(filesForSeparateSelector) {
         saturationResources=saturationResources,
         // Only generate alerts for thanos here, the others evaluated in thanos
         // will be part of the environment specific files
-        extraSelector={ type: 'thanos' },
-        evaluation='thanos',
+        extraSelector={ type: 'thanos-staging' },
+        evaluation='thanos-staging',
         thanosSelfMonitoring=true,
       ),
   }),
