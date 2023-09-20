@@ -47,6 +47,10 @@ teams:
   engagement_policy:  # Link to doc that talks about engagement and escalation policy
   oncall_schedule:    # Link to pagerduty oncall schedule
 
+- name: product_analytics
+  url: https://about.gitlab.com/handbook/engineering/development/analytics/product-analytics/
+  slack_channel: g_analyze_product_analytics
+
 - name: release
   slack_channel: g_release
   slack_alerts_channel: feed_alerts_configure
