@@ -10,13 +10,20 @@ This document outlines the steps for provisioning a Redis Cluster. Former attemp
 First, this guide defines a few variables in `<>`, namely:
 
 - `ENV`: `pre`, `gstg`, `gprd`
+- `GCP_PROJECT`: `gitlab-production` or `gitlab-staging-1`
 - `INSTANCE_TYPE`: `feature-flag`
 - `RAILS_INSTANCE_NAME`: The name that GitLab Rails would recognise. This matches `redis.xxx.yml` or the 2nd-top-level key in `redis.yml` (top-level key being `production`)
 - `RAILS_INSTANCE_NAME_OMNIBUS`: `RAILS_INSTANCE_NAME` but using underscore, i.e. `feature_flag` instead of `feature-flag`
 - `RAILS_CLASS_NAME`: The class which would connect to the new Redis Cluster. e.g. `Gitlab::Redis::FeatureFlag`.
+- `REPLICA_REDACTED`: Generated in [Generate Redis passwords step](#1-generate-redis-passwords)
+- `RAILS_REDACTED`: Generated in [Generate Redis passwords step](#1-generate-redis-passwords)
+- `EXPORTER_REDACTED`: Generated in [Generate Redis passwords step](#1-generate-redis-passwords)
+- `CONSOLE_REDACTED`: Generated in [Generate Redis passwords step](#1-generate-redis-passwords)
 
 When configuring the application, note that the name of the instance must match the object name in lowercase and kebab-case/snake-case in the application.
 E.g. We have `redis-cluster-chat-cache` service but in GitLab Rails, the object is `Gitlab::Redis::Chat`. Hence `chat` should be used when configuring the secret for the application in console and Kubernetes.
+
+**Note:** To avoid mistakes in manually copy-pasting the variables in `<>` above during a provisioning session, it is recommended to prepare this doc with all the variables replaced beforehand.
 
 ### 1. Generate Redis passwords
 
@@ -40,13 +47,13 @@ Update the JSON payload to include the new instance details:
   "redis-cluster-<INSTANCE_TYPE>": {
     "redis_conf": {
       "masteruser": "replica",
-      "masterauth": "REPLICA_REDACTED",
+      "masterauth": "<REPLICA_REDACTED>",
       "user": [
         "default off",
-        "replica on ~* &* +@all >REPLICA_REDACTED",
-        "console on ~* &* +@all >CONSOLE_REDACTED",
-        "redis_exporter on +client +ping +info +config|get +cluster|info +slowlog +latency +memory +select +get +scan +xinfo +type +pfcount +strlen +llen +scard +zcard +hlen +xlen +eval allkeys >EXPORTER_REDACTED",
-        "rails on ~* &* +@all >RAILS_REDACTED"
+        "replica on ~* &* +@all ><REPLICA_REDACTED>",
+        "console on ~* &* +@all ><CONSOLE_REDACTED>",
+        "redis_exporter on +client +ping +info +config|get +cluster|info +slowlog +latency +memory +select +get +scan +xinfo +type +pfcount +strlen +llen +scard +zcard +hlen +xlen +eval allkeys ><EXPORTER_REDACTED>",
+        "rails on ~* &* +@all ><RAILS_REDACTED>"
       ]
     }
   }
@@ -67,7 +74,7 @@ Modify the existing JSON
   "redis_exporter": {
     "redis-cluster-<INSTANCE_TYPE>": {
       "env": {
-        "REDIS_PASSWORD": "EXPORTER_REDACTED"
+        "REDIS_PASSWORD": "<EXPORTER_REDACTED>"
       }
     }
   }
@@ -77,7 +84,7 @@ Modify the existing JSON
 
 ### 2. Create Chef roles
 
-Set the new chef roles and add the new role to the list of gitlab-redis roles in <env>-infra-prometheus-server role.
+Set the new chef roles and add the new role to the list of gitlab-redis roles in <ENV>-infra-prometheus-server role.
 
 An example MR can be found [here](https://gitlab.com/gitlab-com/gl-infra/chef-repo/-/merge_requests/3494).
 
@@ -88,7 +95,7 @@ Provision the VMs via the generic-stor/google terraform module. This is done in 
 After the MR is merged and applied, check the VM state via:
 
 ```
-gcloud compute instances list --project gitlab-production | grep 'redis-cluster-<INSTANCE_TYPE>'
+gcloud compute instances list --project <GCP_PROJECT> | grep 'redis-cluster-<INSTANCE_TYPE>'
 ```
 
 You need to wait for the initial chef-client run to complete.
@@ -96,7 +103,7 @@ You need to wait for the initial chef-client run to complete.
 One way to check is to tail the serial port output to check when the initial run is completed. An example:
 
 ```
-gcloud compute --project=<gitlab-production/gitlab-staging-1> instances tail-serial-port-output redis-cluster-<INSTANCE_TYPE>-shard-01-01-db-<ENV> --zone us-east1-{c/b/d}
+gcloud compute --project=<GCP_PROJECT> instances tail-serial-port-output redis-cluster-<INSTANCE_TYPE>-shard-01-01-db-<ENV> --zone us-east1-{c/b/d}
 
 ```
 
@@ -105,14 +112,14 @@ gcloud compute --project=<gitlab-production/gitlab-staging-1> instances tail-ser
 a. SSH into one of the instance:
 
 ```
-ssh redis-cluster-<INSTANCE_TYPE>-shard-01-01-db-<ENV>.c.<gitlab-production/gitlab-staging-1>.internal
+ssh redis-cluster-<INSTANCE_TYPE>-shard-01-01-db-<ENV>.c.<GCP_PROJECT>.internal
 ```
 
 b. Run the following:
 
 ```
 export ENV=<ENV>
-export PROJECT=gitlab-production # or gitlab-staging-1
+export PROJECT=<GCP_PROJECT>
 export DEPLOYMENT=redis-cluster-<INSTANCE_TYPE>
 ```
 
@@ -244,7 +251,7 @@ version            1
 ====== Data ======
 Key         Value
 ---         -----
-password    RAILS_REDACTED
+password    <RAILS_REDACTED>
 
 ```
 
