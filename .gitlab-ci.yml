@@ -121,6 +121,7 @@ variables:
         LOCATION: us-east1-d
       - DEPLOY_ENV: gstg-gitlab-36dv2
         GKE_CLUSTER: gitlab-36dv2
+        GKE_CLUSTER_VAULT: gstg-gitlab-36dv2
         GOOGLE_PROJECT: gitlab-staging-1
         LOCATION: us-east1
       - DEPLOY_ENV: ops
@@ -1087,7 +1088,7 @@ update-alertmanager:
     - export VAULT_TOKEN="$(vault write -field=token "auth/${VAULT_AUTH_PATH}/login" role="${RUNBOOKS_VAULT_AUTH_ROLE}" jwt="${VAULT_ID_TOKEN}")"
     - export CLOUDSDK_AUTH_ACCESS_TOKEN="$(vault read -field=token "gcp/impersonated-account/${VAULT_GCP_IMPERSONATED_ACCOUNT}/token")"
     - gcloud container clusters get-credentials "${GKE_CLUSTER}" --project "${GOOGLE_PROJECT}" --location "${LOCATION}"
-    - export KUBE_TOKEN="$(vault write -field=service_account_token "kubernetes/${GKE_CLUSTER}/creds/${VAULT_KUBERNETES_ROLE}" kubernetes_namespace="${KUBE_NAMESPACE}" ttl=30m)"
+    - export KUBE_TOKEN="$(vault write -field=service_account_token "kubernetes/${GKE_CLUSTER_VAULT:-${GKE_CLUSTER}}/creds/${VAULT_KUBERNETES_ROLE}" kubernetes_namespace="${KUBE_NAMESPACE}" ttl=30m)"
     - kubectl config set-credentials "${VAULT_KUBERNETES_ROLE}" --token "${KUBE_TOKEN}"
     - kubectl config set-context "$(kubectl config current-context)" --user "${VAULT_KUBERNETES_ROLE}"
 
