@@ -368,6 +368,22 @@ services:
       monitors:
         primary_grafana_dashboard:
 
+  - name: product_analytics
+    tier: sv
+    friendly_name: Product Analytics
+    teams:
+      - Product Analytics
+    label: ProductAnalytics
+    owner: product_analytics
+    technical:
+      logging:
+        - name:
+          permalink:
+      project:
+        - https://gitlab.com/gitlab-org/analytics-section/product-analytics
+      documents:
+        readiness_review: https://gitlab.com/gitlab-com/gl-infra/readiness/-/merge_requests/187
+
   - name: search
     tier: inf
     friendly_name: Global Search
