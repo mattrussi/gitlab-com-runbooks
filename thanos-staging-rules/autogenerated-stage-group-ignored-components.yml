@@ -39,6 +39,16 @@ spec:
         product_stage: growth
         stage_group: activation
       expr: '1'
+  - name: 'Stage group Ignored components: ai-powered - AI Framework'
+    interval: 1m
+    partial_response_strategy: warn
+    rules:
+    - record: gitlab:ignored_component:stage_group
+      labels:
+        component: graphql_query
+        product_stage: ai-powered
+        stage_group: ai_framework
+      expr: '1'
   - name: 'Stage group Ignored components: ai-powered - AI Model Validation'
     interval: 1m
     partial_response_strategy: warn

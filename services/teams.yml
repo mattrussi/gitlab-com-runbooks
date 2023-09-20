@@ -345,6 +345,13 @@ teams:
   - graphql_query
   slack_error_budget_channel: g_govern_threat_insights
   send_error_budget_weekly_to_slack: true
+- name: ai_framework
+  product_stage_group: ai_framework
+  ignored_components:
+  - graphql_query
+  slack_error_budget_channel: g_ai_framework
+  send_error_budget_weekly_to_slack: true
+  slack_alerts_channel: g_ai_framework
 - name: billing_and_subscription_management
   product_stage_group: billing_and_subscription_management
   ignored_components:
