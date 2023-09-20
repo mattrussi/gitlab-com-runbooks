@@ -29,6 +29,22 @@ local transactionSelector = {
   endpoint_id: { re: '$worker' },  //gitlab_transaction_* metrics have worker encoded in the endpoint_id label
 };
 
+local avgResourceUsageTimeSeries(title, metricName) =
+  basic.timeseries(
+    title=title,
+    query=|||
+      sum by (worker) (rate(%(metricName)s_sum{%(selector)s}[$__interval]))
+      /
+      sum by (worker) (rate(%(metricName)s_count{%(selector)s}[$__interval]))
+    ||| % {
+      selector: selectors.serializeHash(selector),
+      metricName: metricName,
+    },
+    legendFormat='{{ worker }}',
+    format='s',
+    yAxisLabel='Duration',
+  );
+
 local latencyKibanaViz(index, title, percentile) = sidekiq.latencyKibanaViz(index, title, 'class', percentile, templateField='worker');
 
 local recordingRuleRateQuery(recordingRule, selector, aggregator) =
@@ -347,20 +363,20 @@ basic.dashboard(
   ], startRow=601)
   +
   [
-    row.new(title='Resource Usage') { gridPos: { x: 0, y: 701, w: 24, h: 1 } },
+    row.new(title='Resource Usage') { gridPos: { x: 0, y: 700, w: 24, h: 1 } },
   ] +
   layout.grid(
     [
-      basic.multiQuantileTimeseries('CPU Time', selector, '{{ worker }}', bucketMetric='sidekiq_jobs_cpu_seconds_bucket', aggregators='worker'),
-      basic.multiQuantileTimeseries('Gitaly Time', selector, '{{ worker }}', bucketMetric='sidekiq_jobs_gitaly_seconds_bucket', aggregators='worker'),
-      basic.multiQuantileTimeseries('Database Time', selector, '{{ worker }}', bucketMetric='sidekiq_jobs_db_seconds_bucket', aggregators='worker'),
+      avgResourceUsageTimeSeries('Average CPU Time', 'sidekiq_jobs_cpu_seconds'),
+      avgResourceUsageTimeSeries('Average Gitaly Time', 'sidekiq_jobs_gitaly_seconds'),
+      avgResourceUsageTimeSeries('Average Database Time', 'sidekiq_jobs_db_seconds'),
     ], cols=3, startRow=702
   )
   +
   layout.grid(
     [
-      basic.multiQuantileTimeseries('Redis Time', selector, '{{ worker }}', bucketMetric='sidekiq_redis_requests_duration_seconds_bucket', aggregators='worker'),
-      basic.multiQuantileTimeseries('Elasticsearch Time', selector, '{{ worker }}', bucketMetric='sidekiq_elasticsearch_requests_duration_seconds_bucket', aggregators='worker'),
+      avgResourceUsageTimeSeries('Average Redis Time', 'sidekiq_redis_requests_duration_seconds'),
+      avgResourceUsageTimeSeries('Average Elasticsearch Time', 'sidekiq_elasticsearch_requests_duration_seconds'),
     ], cols=3, startRow=703
   )
   +
@@ -433,7 +449,7 @@ basic.dashboard(
         },
       ],
     ),
-  ], startRow=701)
+  ], startRow=750)
   +
   layout.rowGrid('Skipped Jobs', [
     basic.timeseries(

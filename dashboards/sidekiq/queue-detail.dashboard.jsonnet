@@ -56,6 +56,22 @@ local errorRateTimeseries(title, aggregators, legendFormat) =
     legendFormat=legendFormat,
   );
 
+local avgResourceUsageTimeSeries(title, metricName) =
+  basic.timeseries(
+    title=title,
+    query=|||
+      sum by (queue) (rate(%(metricName)s_sum{%(selector)s}[$__interval]))
+      /
+      sum by (queue) (rate(%(metricName)s_count{%(selector)s}[$__interval]))
+    ||| % {
+      selector: selectors.serializeHash(selector),
+      metricName: metricName,
+    },
+    legendFormat='{{ queue }}',
+    format='s',
+    yAxisLabel='Duration',
+  );
+
 local elasticFilters = [matching.matchFilter('json.stage.keyword', '$stage')];
 local elasticQueries = ['json.queue.keyword:${queue:lucene}'];
 
@@ -356,16 +372,16 @@ basic.dashboard(
   ] +
   layout.grid(
     [
-      basic.multiQuantileTimeseries('CPU Time', selector, '{{ queue }}', bucketMetric='sidekiq_jobs_cpu_seconds_bucket', aggregators='queue'),
-      basic.multiQuantileTimeseries('Gitaly Time', selector, '{{ queue }}', bucketMetric='sidekiq_jobs_gitaly_seconds_bucket', aggregators='queue'),
-      basic.multiQuantileTimeseries('Database Time', selector, '{{ queue }}', bucketMetric='sidekiq_jobs_db_seconds_bucket', aggregators='queue'),
+      avgResourceUsageTimeSeries('Average CPU Time', 'sidekiq_jobs_cpu_seconds'),
+      avgResourceUsageTimeSeries('Average Gitaly Time', 'sidekiq_jobs_gitaly_seconds'),
+      avgResourceUsageTimeSeries('Average Database Time', 'sidekiq_jobs_db_seconds'),
     ], cols=3, startRow=702
   )
   +
   layout.grid(
     [
-      basic.multiQuantileTimeseries('Redis Time', selector, '{{ queue }}', bucketMetric='sidekiq_redis_requests_duration_seconds_bucket', aggregators='queue'),
-      basic.multiQuantileTimeseries('Elasticsearch Time', selector, '{{ queue }}', bucketMetric='sidekiq_elasticsearch_requests_duration_seconds_bucket', aggregators='queue'),
+      avgResourceUsageTimeSeries('Average Redis Time', 'sidekiq_redis_requests_duration_seconds'),
+      avgResourceUsageTimeSeries('Average Elasticsearch Time', 'sidekiq_elasticsearch_requests_duration_seconds'),
     ], cols=3, startRow=703
   )
   +
