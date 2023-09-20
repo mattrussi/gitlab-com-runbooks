@@ -35,7 +35,7 @@ local options = validateReferenceArchitectureOptions(import 'gitlab-metrics-opti
       import 'saturation-monitoring/opensearch_cpu.libsonnet',
       import 'saturation-monitoring/opensearch_disk_space.libsonnet',
       import 'saturation-monitoring/single_node_cpu.libsonnet',
-      import 'saturation-monitoring/single_node_puma_workers.libsonnet',
+      import 'saturation-monitoring/puma_workers.libsonnet',
     ] +
     std.get(options, 'saturationMonitoring', [])
   ),

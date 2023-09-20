@@ -272,7 +272,7 @@ basic.dashboard(
     'open_fds',
     'sidekiq_shard_workers',
     'single_node_cpu',
-    'single_node_puma_workers',
+    'puma_workers',
   ]),
   gridPos={ x: 0, y: 5000, w: 24, h: 1 }
 )
