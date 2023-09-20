@@ -868,6 +868,21 @@ groups:
       )
   - record: gitlab_component_saturation:ratio
     labels:
+      component: puma_workers
+    expr: |
+      max by(environment, tier, type, stage, shard) (
+        clamp_min(
+          clamp_max(
+            sum by(environment, tier, type, stage, shard) (avg_over_time(sum without (pid,worker) (puma_active_connections{type=~"ai-assisted|api|internal-api|git|web|websockets"})[1m:]))
+            /
+            sum by(environment, tier, type, stage, shard) (sum without (pid,worker) (puma_max_threads{pid="puma_master", type=~"ai-assisted|api|internal-api|git|web|websockets"}))
+            ,
+            1)
+        ,
+        0)
+      )
+  - record: gitlab_component_saturation:ratio
+    labels:
       component: pvs_cloudrun_container_instances
       stage: main
       tier: inf
@@ -1292,21 +1307,6 @@ groups:
         clamp_min(
           clamp_max(
             avg without(cpu, mode) (1 - rate(node_cpu_seconds_total{mode="idle", type=~"gitaly|ci-runners|consul|customersdot|frontend|jaeger|monitoring|patroni|patroni-registry|patroni-embedding|patroni-ci|postgres-archive|pgbouncer|pgbouncer-registry|pgbouncer-embedding|pgbouncer-ci|praefect|redis-cluster-cache|redis-cluster-feature-flag|redis-cluster-shared-state|redis-sidekiq|redis-tracechunks|redis-cluster-ratelimiting|redis-cluster-chat-cache|redis-sessions|redis-registry-cache|redis-repository-cache|redis-db-load-balancing|redis-pubsub|redis|registry|sentry|web-pages"}[5m]))
-            ,
-            1)
-        ,
-        0)
-      )
-  - record: gitlab_component_saturation:ratio
-    labels:
-      component: single_node_puma_workers
-    expr: |
-      max by(environment, tier, type, stage, shard) (
-        clamp_min(
-          clamp_max(
-            sum by(environment, tier, type, stage, shard, pod) (avg_over_time(sum without (pid,worker) (puma_active_connections{type=~"ai-assisted|api|internal-api|git|web|websockets"})[1m:]))
-            /
-            sum by(environment, tier, type, stage, shard, pod) (sum without (pid,worker) (puma_max_threads{pid="puma_master", type=~"ai-assisted|api|internal-api|git|web|websockets"}))
             ,
             1)
         ,
@@ -1774,6 +1774,14 @@ groups:
     expr: "0.95"
   - record: slo:max:soft:gitlab_component_saturation:ratio
     labels:
+      component: puma_workers
+    expr: "0.85"
+  - record: slo:max:hard:gitlab_component_saturation:ratio
+    labels:
+      component: puma_workers
+    expr: "0.9"
+  - record: slo:max:soft:gitlab_component_saturation:ratio
+    labels:
       component: pvs_cloudrun_container_instances
     expr: "0.8"
   - record: slo:max:hard:gitlab_component_saturation:ratio
@@ -1964,14 +1972,6 @@ groups:
     labels:
       component: single_node_cpu
     expr: "0.95"
-  - record: slo:max:soft:gitlab_component_saturation:ratio
-    labels:
-      component: single_node_puma_workers
-    expr: "0.85"
-  - record: slo:max:hard:gitlab_component_saturation:ratio
-    labels:
-      component: single_node_puma_workers
-    expr: "0.9"
   - record: slo:max:soft:gitlab_component_saturation:ratio
     labels:
       component: windows_shared_runners
@@ -2394,6 +2394,14 @@ groups:
   - record: gitlab_component_saturation_info
     labels:
       capacity_planning_strategy: quantile95_1h
+      component: puma_workers
+      horiz_scaling: "yes"
+      quantile: max
+      severity: s2
+    expr: "1"
+  - record: gitlab_component_saturation_info
+    labels:
+      capacity_planning_strategy: quantile95_1h
       component: pvs_cloudrun_container_instances
       horiz_scaling: "yes"
       quantile: max
@@ -2582,14 +2590,6 @@ groups:
       horiz_scaling: "yes"
       quantile: max
       severity: s4
-    expr: "1"
-  - record: gitlab_component_saturation_info
-    labels:
-      capacity_planning_strategy: quantile95_1h
-      component: single_node_puma_workers
-      horiz_scaling: "yes"
-      quantile: max
-      severity: s2
     expr: "1"
   - record: gitlab_component_saturation_info
     labels:
@@ -5710,6 +5710,62 @@ groups:
   - alert: component_saturation_slo_out_of_bounds
     for: 5m
     annotations:
+      title: The Puma Worker Saturation resource of the {{ $labels.type }} service
+        ({{ $labels.stage }} stage) has a saturation exceeding SLO and is close to
+        its capacity limit.
+      description: |
+        This means that this resource is running close to capacity and is at risk of exceeding its current capacity limit.
+
+        Details of the Puma Worker Saturation resource:
+
+        Puma thread utilization.
+
+        Puma uses a fixed size thread pool to handle HTTP requests. This metric shows how many threads are busy handling requests. When this resource is saturated, we will see puma queuing taking place. Leading to slowdowns across the application.
+
+        Puma saturation is usually caused by latency problems in downstream services: usually Gitaly or Postgres, but possibly also Redis. Puma saturation can also be caused by traffic spikes.
+      grafana_dashboard_id: alerts-sat_puma_workers
+      grafana_dashboard_link: https://dashboards.gitlab.net/d/alerts-sat_puma_workers?from=now-6h/m&to=now-1m/m&var-environment={{
+        $labels.environment }}&var-type={{ $labels.type }}&var-stage={{ $labels.stage
+        }}
+      grafana_min_zoom_hours: "6"
+      grafana_panel_id: "3062464720"
+      grafana_variables: environment,type,stage
+      promql_query: |
+        max by(environment, tier, type, stage, shard) (
+          clamp_min(
+            clamp_max(
+              sum by(environment, tier, type, stage, shard) (avg_over_time(sum without (pid,worker) (puma_active_connections{environment="{{ $labels.environment }}",stage="{{ $labels.stage }}",type="{{ $labels.type }}"})[1m:]))
+              /
+              sum by(environment, tier, type, stage, shard) (sum without (pid,worker) (puma_max_threads{pid="puma_master", environment="{{ $labels.environment }}",stage="{{ $labels.stage }}",type="{{ $labels.type }}"}))
+              ,
+              1)
+          ,
+          0)
+        )
+      promql_template_1: |
+        max by(environment, tier, type, stage, shard) (
+          clamp_min(
+            clamp_max(
+              sum by(environment, tier, type, stage, shard) (avg_over_time(sum without (pid,worker) (puma_active_connections{environment="{{ $labels.environment }}",stage="{{ $labels.stage }}",type="{{ $labels.type }}"})[1m:]))
+              /
+              sum by(environment, tier, type, stage, shard) (sum without (pid,worker) (puma_max_threads{pid="puma_master", environment="{{ $labels.environment }}",stage="{{ $labels.stage }}",type="{{ $labels.type }}"}))
+              ,
+              1)
+          ,
+          0)
+        )
+      runbook: docs/{{ $labels.type }}/README.md
+    labels:
+      alert_type: cause
+      pager: pagerduty
+      rules_domain: general
+      severity: s2
+    expr: |
+      gitlab_component_saturation:ratio{component="puma_workers"} > on(component) group_left
+      slo:max:hard:gitlab_component_saturation:ratio{component="puma_workers"}
+  - alert: component_saturation_slo_out_of_bounds
+    for: 5m
+    annotations:
       title: The Cloud Run Container Instance Utilization resource of the {{ $labels.type
         }} service ({{ $labels.stage }} stage) has a saturation exceeding SLO and
         is close to its capacity limit.
@@ -7142,62 +7198,6 @@ groups:
     expr: |
       gitlab_component_saturation:ratio{component="single_node_cpu"} > on(component) group_left
       slo:max:hard:gitlab_component_saturation:ratio{component="single_node_cpu"}
-  - alert: component_saturation_slo_out_of_bounds
-    for: 5m
-    annotations:
-      title: The Puma Worker Saturation per Node resource of the {{ $labels.type }}
-        service ({{ $labels.stage }} stage) has a saturation exceeding SLO and is
-        close to its capacity limit.
-      description: |
-        This means that this resource is running close to capacity and is at risk of exceeding its current capacity limit.
-
-        Details of the Puma Worker Saturation per Node resource:
-
-        Puma thread utilization per node.
-
-        Puma uses a fixed size thread pool to handle HTTP requests. This metric shows how many threads are busy handling requests. When this resource is saturated, we will see puma queuing taking place. Leading to slowdowns across the application.
-
-        Puma saturation is usually caused by latency problems in downstream services: usually Gitaly or Postgres, but possibly also Redis. Puma saturation can also be caused by traffic spikes.
-      grafana_dashboard_id: alerts-sat_single_node_puma_workers
-      grafana_dashboard_link: https://dashboards.gitlab.net/d/alerts-sat_single_node_puma_workers?from=now-6h/m&to=now-1m/m&var-environment={{
-        $labels.environment }}&var-type={{ $labels.type }}&var-stage={{ $labels.stage
-        }}
-      grafana_min_zoom_hours: "6"
-      grafana_panel_id: "2677029523"
-      grafana_variables: environment,type,stage
-      promql_query: |
-        max by(environment, tier, type, stage, shard, pod) (
-          clamp_min(
-            clamp_max(
-              sum by(environment, tier, type, stage, shard, pod) (avg_over_time(sum without (pid,worker) (puma_active_connections{environment="{{ $labels.environment }}",stage="{{ $labels.stage }}",type="{{ $labels.type }}"})[1m:]))
-              /
-              sum by(environment, tier, type, stage, shard, pod) (sum without (pid,worker) (puma_max_threads{pid="puma_master", environment="{{ $labels.environment }}",stage="{{ $labels.stage }}",type="{{ $labels.type }}"}))
-              ,
-              1)
-          ,
-          0)
-        )
-      promql_template_1: |
-        max by(environment, tier, type, stage, shard, pod) (
-          clamp_min(
-            clamp_max(
-              sum by(environment, tier, type, stage, shard, pod) (avg_over_time(sum without (pid,worker) (puma_active_connections{environment="{{ $labels.environment }}",stage="{{ $labels.stage }}",type="{{ $labels.type }}"})[1m:]))
-              /
-              sum by(environment, tier, type, stage, shard, pod) (sum without (pid,worker) (puma_max_threads{pid="puma_master", environment="{{ $labels.environment }}",stage="{{ $labels.stage }}",type="{{ $labels.type }}"}))
-              ,
-              1)
-          ,
-          0)
-        )
-      runbook: docs/{{ $labels.type }}/README.md
-    labels:
-      alert_type: cause
-      pager: pagerduty
-      rules_domain: general
-      severity: s2
-    expr: |
-      gitlab_component_saturation:ratio{component="single_node_puma_workers"} > on(component) group_left
-      slo:max:hard:gitlab_component_saturation:ratio{component="single_node_puma_workers"}
   - alert: component_saturation_slo_out_of_bounds
     for: 5m
     annotations:

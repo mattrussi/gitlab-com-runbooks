@@ -66,6 +66,6 @@
   import 'saturation-monitoring/shard_cpu.libsonnet',
   import 'saturation-monitoring/sidekiq_shard_workers.libsonnet',
   import 'saturation-monitoring/single_node_cpu.libsonnet',
-  import 'saturation-monitoring/single_node_puma_workers.libsonnet',
+  import 'saturation-monitoring/puma_workers.libsonnet',
   import 'saturation-monitoring/workhorse_image_scaling.libsonnet',
 ]

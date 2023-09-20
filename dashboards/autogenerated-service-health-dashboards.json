@@ -83,7 +83,7 @@
     "https://dashboards.gitlab.net/d/alerts-sat_shared_runners_gitlab/alerts-shared_runners_gitlab-saturation-detail",
     "https://dashboards.gitlab.net/d/alerts-sat_sidekiq_shard_workers/alerts-sidekiq_shard_workers-saturation-detail",
     "https://dashboards.gitlab.net/d/alerts-sat_single_node_cpu/alerts-single_node_cpu-saturation-detail",
-    "https://dashboards.gitlab.net/d/alerts-sat_single_node_puma_workers/alerts-single_node_puma_workers-saturation-detail",
+    "https://dashboards.gitlab.net/d/alerts-sat_puma_workers/alerts-puma_workers-saturation-detail",
     "https://dashboards.gitlab.net/d/alerts-sat_wh_image_scaling/alerts-workhorse_image_scaling-saturation-detail",
     "https://dashboards.gitlab.net/d/alerts-saturation_component/alerts-saturation-component-alert",
     "https://dashboards.gitlab.net/d/alerts-service_node_slo_apdex/alerts-global-service-node-aggregated-metrics-apdex-slo-analysis",
