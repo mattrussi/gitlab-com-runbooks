@@ -53,7 +53,7 @@ groups:
     labels:
       tier: sv
       type: ai-gateway
-    expr: "0.999000"
+    expr: "0.990000"
   - record: slo:max:events:gitlab_service_errors:ratio
     labels:
       tier: sv
@@ -64,7 +64,7 @@ groups:
       component: inference
       tier: sv
       type: ai-gateway
-    expr: "0.999000"
+    expr: "0.990000"
   - record: slo:max:events:gitlab_service_errors:ratio
     labels:
       component: inference
@@ -76,7 +76,7 @@ groups:
       component: runway_ingress
       tier: sv
       type: ai-gateway
-    expr: "0.999000"
+    expr: "0.990000"
   - record: slo:max:events:gitlab_service_errors:ratio
     labels:
       component: runway_ingress
@@ -88,7 +88,7 @@ groups:
       component: server
       tier: sv
       type: ai-gateway
-    expr: "0.999000"
+    expr: "0.990000"
   - record: slo:max:events:gitlab_service_errors:ratio
     labels:
       component: server
@@ -100,7 +100,7 @@ groups:
       component: waf
       tier: sv
       type: ai-gateway
-    expr: "0.999000"
+    expr: "0.990000"
   - record: slo:max:events:gitlab_service_errors:ratio
     labels:
       component: waf
@@ -433,7 +433,7 @@ groups:
     labels:
       tier: sv
       type: code_suggestions
-    expr: "0.999000"
+    expr: "0.990000"
   - record: slo:max:events:gitlab_service_errors:ratio
     labels:
       tier: sv
@@ -444,7 +444,7 @@ groups:
       component: ingress
       tier: sv
       type: code_suggestions
-    expr: "0.999000"
+    expr: "0.990000"
   - record: slo:max:events:gitlab_service_errors:ratio
     labels:
       component: ingress
@@ -456,7 +456,7 @@ groups:
       component: model_gateway
       tier: sv
       type: code_suggestions
-    expr: "0.999000"
+    expr: "0.990000"
   - record: slo:max:events:gitlab_service_errors:ratio
     labels:
       component: model_gateway
@@ -468,7 +468,7 @@ groups:
       component: native_model_inference
       tier: sv
       type: code_suggestions
-    expr: "0.999000"
+    expr: "0.990000"
   - record: slo:max:events:gitlab_service_errors:ratio
     labels:
       component: native_model_inference
@@ -480,7 +480,7 @@ groups:
       component: third_party_model_inference
       tier: sv
       type: code_suggestions
-    expr: "0.999000"
+    expr: "0.990000"
   - record: slo:max:events:gitlab_service_errors:ratio
     labels:
       component: third_party_model_inference
@@ -492,7 +492,7 @@ groups:
       component: triton_server
       tier: sv
       type: code_suggestions
-    expr: "0.999000"
+    expr: "0.990000"
   - record: slo:max:events:gitlab_service_errors:ratio
     labels:
       component: triton_server
@@ -504,7 +504,7 @@ groups:
       component: waf
       tier: sv
       type: code_suggestions
-    expr: "0.999000"
+    expr: "0.990000"
   - record: slo:max:events:gitlab_service_errors:ratio
     labels:
       component: waf

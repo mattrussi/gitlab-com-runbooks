@@ -43,12 +43,12 @@ groups:
       (
         (
           gitlab_component_apdex:ratio_1h{component="inference",env!~"gprd|ops",monitor="global",type="ai-gateway"}
-          < (1 - 14.4 * 0.001000)
+          < (1 - 14.4 * 0.010000)
         )
         and
         (
           gitlab_component_apdex:ratio_5m{component="inference",env!~"gprd|ops",monitor="global",type="ai-gateway"}
-          < (1 - 14.4 * 0.001000)
+          < (1 - 14.4 * 0.010000)
         )
       )
       and on(env,environment,tier,type,stage,component)
@@ -93,12 +93,12 @@ groups:
       (
         (
           gitlab_component_apdex:ratio_6h{component="inference",env!~"gprd|ops",monitor="global",type="ai-gateway"}
-          < (1 - 6 * 0.001000)
+          < (1 - 6 * 0.010000)
         )
         and
         (
           gitlab_component_apdex:ratio_30m{component="inference",env!~"gprd|ops",monitor="global",type="ai-gateway"}
-          < (1 - 6 * 0.001000)
+          < (1 - 6 * 0.010000)
         )
       )
       and on(env,environment,tier,type,stage,component)
@@ -143,12 +143,12 @@ groups:
       (
         (
           gitlab_component_apdex:ratio_1h{component="runway_ingress",env!~"gprd|ops",monitor="global",type="ai-gateway"}
-          < (1 - 14.4 * 0.001000)
+          < (1 - 14.4 * 0.010000)
         )
         and
         (
           gitlab_component_apdex:ratio_5m{component="runway_ingress",env!~"gprd|ops",monitor="global",type="ai-gateway"}
-          < (1 - 14.4 * 0.001000)
+          < (1 - 14.4 * 0.010000)
         )
       )
       and on(env,environment,tier,type,stage,component)
@@ -193,12 +193,12 @@ groups:
       (
         (
           gitlab_component_apdex:ratio_6h{component="runway_ingress",env!~"gprd|ops",monitor="global",type="ai-gateway"}
-          < (1 - 6 * 0.001000)
+          < (1 - 6 * 0.010000)
         )
         and
         (
           gitlab_component_apdex:ratio_30m{component="runway_ingress",env!~"gprd|ops",monitor="global",type="ai-gateway"}
-          < (1 - 6 * 0.001000)
+          < (1 - 6 * 0.010000)
         )
       )
       and on(env,environment,tier,type,stage,component)
@@ -407,12 +407,12 @@ groups:
       (
         (
           gitlab_component_apdex:ratio_1h{component="server",env!~"gprd|ops",monitor="global",type="ai-gateway"}
-          < (1 - 14.4 * 0.001000)
+          < (1 - 14.4 * 0.010000)
         )
         and
         (
           gitlab_component_apdex:ratio_5m{component="server",env!~"gprd|ops",monitor="global",type="ai-gateway"}
-          < (1 - 14.4 * 0.001000)
+          < (1 - 14.4 * 0.010000)
         )
       )
       and on(env,environment,tier,type,stage,component)
@@ -457,12 +457,12 @@ groups:
       (
         (
           gitlab_component_apdex:ratio_6h{component="server",env!~"gprd|ops",monitor="global",type="ai-gateway"}
-          < (1 - 6 * 0.001000)
+          < (1 - 6 * 0.010000)
         )
         and
         (
           gitlab_component_apdex:ratio_30m{component="server",env!~"gprd|ops",monitor="global",type="ai-gateway"}
-          < (1 - 6 * 0.001000)
+          < (1 - 6 * 0.010000)
         )
       )
       and on(env,environment,tier,type,stage,component)
