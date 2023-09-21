@@ -85,6 +85,7 @@ local page(path, title, service_pattern) =
       page('ai-assisted.md', 'AI-assisted', 'ai-assisted'),
       page('search.md', 'Search', 'search'),
       page('sidekiq.md', 'Sidekiq', 'sidekiq'),
+      page('other.md', 'Other services', 'thanos-staging'),
       page('saturation.md', 'Other Utilization and Saturation Forecasting', 'camoproxy|cloud-sql|consul|frontend|google-cloud-storage|jaeger|kas|mailroom|nat|nginx|plantuml|pvs|registry|sentry|vault|web-pages|woodhouse|code_suggestions|ops-gitlab-net|memorystore|packagecloud'),
     ],
   },
