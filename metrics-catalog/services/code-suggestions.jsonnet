@@ -13,7 +13,7 @@ metricsCatalog.serviceDefinition({
   type: 'code_suggestions',
   tier: 'sv',
   monitoringThresholds: {
-    apdexScore: 0.999,
+    apdexScore: 0.99,
     errorRatio: 0.999,
   },
   provisioning: {
