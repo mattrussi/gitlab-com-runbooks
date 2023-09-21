@@ -26,10 +26,6 @@ metricsCatalog.serviceDefinition({
 
   tags: ['golang', 'thanos'],
 
-  capacityPlanning: {
-    environment: staticLabels.environment,
-  },
-
   monitoringThresholds: {},
   /*
    * Our anomaly detection uses normal distributions and the monitoring service
