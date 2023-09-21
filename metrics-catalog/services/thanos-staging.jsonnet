@@ -18,7 +18,7 @@ local staticLabels = {
   monitor: 'global',
 };
 
-local thanosServiceSelector = { type: 'thanos', namespace: 'thanos-staging' };
+local thanosServiceSelector = { namespace: 'thanos-staging' };
 
 metricsCatalog.serviceDefinition({
   type: 'thanos-staging',
@@ -116,6 +116,7 @@ metricsCatalog.serviceDefinition({
 
       local thanosQuerySelector = thanosServiceSelector {
         job: 'thanos-query',
+        type: 'thanos',
       },
 
       apdex: histogramApdex(
@@ -155,6 +156,7 @@ metricsCatalog.serviceDefinition({
 
       local thanosQuerySelector = thanosServiceSelector {
         job: 'thanos-query-frontend',
+        type: 'thanos',
       },
 
       apdex: histogramApdex(
@@ -197,8 +199,9 @@ metricsCatalog.serviceDefinition({
       |||,
 
       local thanosStoreSelector = thanosServiceSelector {
-        job: { re: 'thanos-(.+)-storegateway-(.+)' },  // TODO: FIXME: https://gitlab.com/gitlab-com/gl-infra/reliability/-/issues/17377
+        job: { re: '(.+)-thanos-storegateway' },  // TODO: FIXME: https://gitlab.com/gitlab-com/gl-infra/reliability/-/issues/17377
         grpc_type: 'unary',
+        type: 'thanos',
       },
 
       apdex: histogramApdex(
@@ -219,7 +222,7 @@ metricsCatalog.serviceDefinition({
         selector=thanosStoreSelector { grpc_code: { ne: 'OK' } }
       ),
 
-      significantLabels: ['pod'],
+      significantLabels: ['pod', 'job'],
 
       toolingLinks: [
         toolingLinks.kibana(title='Thanos Store (gprd)', index='monitoring_gprd', tag='monitoring.systemd.thanos-store'),
@@ -241,7 +244,8 @@ metricsCatalog.serviceDefinition({
       |||,
 
       local thanosCompactorSelector = thanosServiceSelector {
-        job: { re: 'thanos-(.+)-compactor' },
+        type: 'thanos',
+        job: { re: '(.+)-compactor' },
       },
 
       requestRate: rateMetric(
@@ -297,7 +301,7 @@ metricsCatalog.serviceDefinition({
     // This component represents rule evaluations in
     // Prometheus and thanos ruler
     local rulerSelector = thanosServiceSelector {
-      job: 'thanos-ruler',
+      job: { re: 'thanos-thanos-stack-ruler(.*)' },
     },
     rule_evaluation: {
       staticLabels: staticLabels,
@@ -334,7 +338,8 @@ metricsCatalog.serviceDefinition({
           selector=rulerSelector
         ),
         rateMetric(
-          counter='thanos_rule_evaluation_with_warnings_total'
+          counter='thanos_rule_evaluation_with_warnings_total',
+          selector=rulerSelector
         ),
       ]),
 

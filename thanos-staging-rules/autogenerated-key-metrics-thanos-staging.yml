@@ -24,13 +24,13 @@ spec:
         type: thanos-staging
       expr: |
         sum by () (
-          rate(prometheus_rule_group_iterations_total{job="thanos-ruler",namespace="thanos-staging",type="thanos"}[1m] offset 30s)
+          rate(prometheus_rule_group_iterations_total{job=~"thanos-thanos-stack-ruler(.*)",namespace="thanos-staging"}[1m] offset 30s)
         ) - (
           sum by () (
-            rate(prometheus_rule_group_iterations_missed_total{job="thanos-ruler",namespace="thanos-staging",type="thanos"}[1m] offset 30s)
+            rate(prometheus_rule_group_iterations_missed_total{job=~"thanos-thanos-stack-ruler(.*)",namespace="thanos-staging"}[1m] offset 30s)
           ) or
           0 * sum by () (
-            rate(prometheus_rule_group_iterations_total{job="thanos-ruler",namespace="thanos-staging",type="thanos"}[1m] offset 30s)
+            rate(prometheus_rule_group_iterations_total{job=~"thanos-thanos-stack-ruler(.*)",namespace="thanos-staging"}[1m] offset 30s)
           )
         )
     - record: gitlab_component_apdex:weight:score
@@ -44,7 +44,7 @@ spec:
         type: thanos-staging
       expr: |
         sum by () (
-          rate(prometheus_rule_group_iterations_total{job="thanos-ruler",namespace="thanos-staging",type="thanos"}[1m] offset 30s)
+          rate(prometheus_rule_group_iterations_total{job=~"thanos-thanos-stack-ruler(.*)",namespace="thanos-staging"}[1m] offset 30s)
         )
     - record: gitlab_component_ops:rate
       labels:
@@ -57,7 +57,7 @@ spec:
         type: thanos-staging
       expr: |
         sum by () (
-          rate(prometheus_rule_evaluations_total{job="thanos-ruler",namespace="thanos-staging",type="thanos"}[1m] offset 30s)
+          rate(prometheus_rule_evaluations_total{job=~"thanos-thanos-stack-ruler(.*)",namespace="thanos-staging"}[1m] offset 30s)
         )
     - record: gitlab_component_errors:rate
       labels:
@@ -71,9 +71,9 @@ spec:
       expr: |
         (
           sum by () (
-            label_replace(rate(prometheus_rule_evaluation_failures_total{job="thanos-ruler",namespace="thanos-staging",type="thanos"}[1m] offset 30s), "_c", "0", "", "")
+            label_replace(rate(prometheus_rule_evaluation_failures_total{job=~"thanos-thanos-stack-ruler(.*)",namespace="thanos-staging"}[1m] offset 30s), "_c", "0", "", "")
             or
-            label_replace(rate(thanos_rule_evaluation_with_warnings_total{}[1m] offset 30s), "_c", "1", "", "")
+            label_replace(rate(thanos_rule_evaluation_with_warnings_total{job=~"thanos-thanos-stack-ruler(.*)",namespace="thanos-staging"}[1m] offset 30s), "_c", "1", "", "")
           )
         )
         or
@@ -93,7 +93,7 @@ spec:
         type: thanos-staging
       expr: |
         sum by () (
-          rate(thanos_compact_group_compactions_total{job=~"thanos-(.+)-compactor",namespace="thanos-staging",type="thanos"}[1m] offset 30s)
+          rate(thanos_compact_group_compactions_total{job=~"(.+)-compactor",namespace="thanos-staging",type="thanos"}[1m] offset 30s)
         )
     - record: gitlab_component_errors:rate
       labels:
@@ -107,7 +107,7 @@ spec:
       expr: |
         (
           sum by () (
-            rate(thanos_compact_group_compactions_failures_total{job=~"thanos-(.+)-compactor",namespace="thanos-staging",type="thanos"}[1m] offset 30s)
+            rate(thanos_compact_group_compactions_failures_total{job=~"(.+)-compactor",namespace="thanos-staging",type="thanos"}[1m] offset 30s)
           )
         )
         or
@@ -127,7 +127,7 @@ spec:
         type: thanos-staging
       expr: |
         sum by () (
-          rate(thanos_memcached_operation_duration_seconds_bucket{grpc_type="unary",job=~"thanos-(labels|querier)-metrics|thanos-(.+)-(bucket|index)-metrics",le="0.1",namespace="thanos-staging",type="thanos"}[1m] offset 30s)
+          rate(thanos_memcached_operation_duration_seconds_bucket{grpc_type="unary",job=~"thanos-(labels|querier)-metrics|thanos-(.+)-(bucket|index)-metrics",le="0.1",namespace="thanos-staging"}[1m] offset 30s)
         )
     - record: gitlab_component_apdex:weight:score
       labels:
@@ -140,7 +140,7 @@ spec:
         type: thanos-staging
       expr: |
         sum by () (
-          rate(thanos_memcached_operation_duration_seconds_bucket{grpc_type="unary",job=~"thanos-(labels|querier)-metrics|thanos-(.+)-(bucket|index)-metrics",le="+Inf",namespace="thanos-staging",type="thanos"}[1m] offset 30s)
+          rate(thanos_memcached_operation_duration_seconds_bucket{grpc_type="unary",job=~"thanos-(labels|querier)-metrics|thanos-(.+)-(bucket|index)-metrics",le="+Inf",namespace="thanos-staging"}[1m] offset 30s)
         )
     - record: gitlab_component_ops:rate
       labels:
@@ -153,7 +153,7 @@ spec:
         type: thanos-staging
       expr: |
         sum by () (
-          rate(thanos_memcached_operations_total{grpc_type="unary",job=~"thanos-(labels|querier)-metrics|thanos-(.+)-(bucket|index)-metrics",namespace="thanos-staging",type="thanos"}[1m] offset 30s)
+          rate(thanos_memcached_operations_total{grpc_type="unary",job=~"thanos-(labels|querier)-metrics|thanos-(.+)-(bucket|index)-metrics",namespace="thanos-staging"}[1m] offset 30s)
         )
     - record: gitlab_component_errors:rate
       labels:
@@ -167,7 +167,7 @@ spec:
       expr: |
         (
           sum by () (
-            rate(thanos_memcached_operation_failures_total{grpc_type="unary",job=~"thanos-(labels|querier)-metrics|thanos-(.+)-(bucket|index)-metrics",namespace="thanos-staging",type="thanos"}[1m] offset 30s)
+            rate(thanos_memcached_operation_failures_total{grpc_type="unary",job=~"thanos-(labels|querier)-metrics|thanos-(.+)-(bucket|index)-metrics",namespace="thanos-staging"}[1m] offset 30s)
           )
         )
         or
@@ -307,7 +307,7 @@ spec:
         type: thanos-staging
       expr: |
         sum by () (
-          rate(thanos_alert_sender_alerts_sent_total{job="thanos-ruler",namespace="thanos-staging",type="thanos"}[1m] offset 30s)
+          rate(thanos_alert_sender_alerts_sent_total{job="thanos-ruler",namespace="thanos-staging"}[1m] offset 30s)
         )
     - record: gitlab_component_errors:rate
       labels:
@@ -321,7 +321,7 @@ spec:
       expr: |
         (
           sum by () (
-            rate(thanos_alert_sender_alerts_dropped_total{job="thanos-ruler",namespace="thanos-staging",type="thanos"}[1m] offset 30s)
+            rate(thanos_alert_sender_alerts_dropped_total{job="thanos-ruler",namespace="thanos-staging"}[1m] offset 30s)
           )
         )
         or
@@ -342,11 +342,11 @@ spec:
       expr: |
         (
           sum by () (
-            rate(grpc_server_handling_seconds_bucket{grpc_type="unary",job=~"thanos-(.+)-storegateway-(.+)",le="1.0",namespace="thanos-staging",type="thanos"}[1m] offset 30s)
+            rate(grpc_server_handling_seconds_bucket{grpc_type="unary",job=~"(.+)-thanos-storegateway",le="1.0",namespace="thanos-staging",type="thanos"}[1m] offset 30s)
           )
           +
           sum by () (
-            rate(grpc_server_handling_seconds_bucket{grpc_type="unary",job=~"thanos-(.+)-storegateway-(.+)",le="3.0",namespace="thanos-staging",type="thanos"}[1m] offset 30s)
+            rate(grpc_server_handling_seconds_bucket{grpc_type="unary",job=~"(.+)-thanos-storegateway",le="3.0",namespace="thanos-staging",type="thanos"}[1m] offset 30s)
           )
         )
         /
@@ -362,7 +362,7 @@ spec:
         type: thanos-staging
       expr: |
         sum by () (
-          rate(grpc_server_handling_seconds_bucket{grpc_type="unary",job=~"thanos-(.+)-storegateway-(.+)",le="+Inf",namespace="thanos-staging",type="thanos"}[1m] offset 30s)
+          rate(grpc_server_handling_seconds_bucket{grpc_type="unary",job=~"(.+)-thanos-storegateway",le="+Inf",namespace="thanos-staging",type="thanos"}[1m] offset 30s)
         )
     - record: gitlab_component_ops:rate
       labels:
@@ -375,7 +375,7 @@ spec:
         type: thanos-staging
       expr: |
         sum by () (
-          rate(grpc_server_handled_total{grpc_type="unary",job=~"thanos-(.+)-storegateway-(.+)",namespace="thanos-staging",type="thanos"}[1m] offset 30s)
+          rate(grpc_server_handled_total{grpc_type="unary",job=~"(.+)-thanos-storegateway",namespace="thanos-staging",type="thanos"}[1m] offset 30s)
         )
     - record: gitlab_component_errors:rate
       labels:
@@ -389,7 +389,7 @@ spec:
       expr: |
         (
           sum by () (
-            rate(grpc_server_handled_total{grpc_code!="OK",grpc_type="unary",job=~"thanos-(.+)-storegateway-(.+)",namespace="thanos-staging",type="thanos"}[1m] offset 30s)
+            rate(grpc_server_handled_total{grpc_code!="OK",grpc_type="unary",job=~"(.+)-thanos-storegateway",namespace="thanos-staging",type="thanos"}[1m] offset 30s)
           )
         )
         or
@@ -413,13 +413,13 @@ spec:
         type: thanos-staging
       expr: |
         sum by () (
-          rate(prometheus_rule_group_iterations_total{job="thanos-ruler",namespace="thanos-staging",type="thanos"}[5m] offset 30s)
+          rate(prometheus_rule_group_iterations_total{job=~"thanos-thanos-stack-ruler(.*)",namespace="thanos-staging"}[5m] offset 30s)
         ) - (
           sum by () (
-            rate(prometheus_rule_group_iterations_missed_total{job="thanos-ruler",namespace="thanos-staging",type="thanos"}[5m] offset 30s)
+            rate(prometheus_rule_group_iterations_missed_total{job=~"thanos-thanos-stack-ruler(.*)",namespace="thanos-staging"}[5m] offset 30s)
           ) or
           0 * sum by () (
-            rate(prometheus_rule_group_iterations_total{job="thanos-ruler",namespace="thanos-staging",type="thanos"}[5m] offset 30s)
+            rate(prometheus_rule_group_iterations_total{job=~"thanos-thanos-stack-ruler(.*)",namespace="thanos-staging"}[5m] offset 30s)
           )
         )
     - record: gitlab_component_apdex:weight:score_5m
@@ -433,7 +433,7 @@ spec:
         type: thanos-staging
       expr: |
         sum by () (
-          rate(prometheus_rule_group_iterations_total{job="thanos-ruler",namespace="thanos-staging",type="thanos"}[5m] offset 30s)
+          rate(prometheus_rule_group_iterations_total{job=~"thanos-thanos-stack-ruler(.*)",namespace="thanos-staging"}[5m] offset 30s)
         )
     - record: gitlab_component_ops:rate_5m
       labels:
@@ -446,7 +446,7 @@ spec:
         type: thanos-staging
       expr: |
         sum by () (
-          rate(prometheus_rule_evaluations_total{job="thanos-ruler",namespace="thanos-staging",type="thanos"}[5m] offset 30s)
+          rate(prometheus_rule_evaluations_total{job=~"thanos-thanos-stack-ruler(.*)",namespace="thanos-staging"}[5m] offset 30s)
         )
     - record: gitlab_component_errors:rate_5m
       labels:
@@ -460,9 +460,9 @@ spec:
       expr: |
         (
           sum by () (
-            label_replace(rate(prometheus_rule_evaluation_failures_total{job="thanos-ruler",namespace="thanos-staging",type="thanos"}[5m] offset 30s), "_c", "0", "", "")
+            label_replace(rate(prometheus_rule_evaluation_failures_total{job=~"thanos-thanos-stack-ruler(.*)",namespace="thanos-staging"}[5m] offset 30s), "_c", "0", "", "")
             or
-            label_replace(rate(thanos_rule_evaluation_with_warnings_total{}[5m] offset 30s), "_c", "1", "", "")
+            label_replace(rate(thanos_rule_evaluation_with_warnings_total{job=~"thanos-thanos-stack-ruler(.*)",namespace="thanos-staging"}[5m] offset 30s), "_c", "1", "", "")
           )
         )
         or
@@ -482,7 +482,7 @@ spec:
         type: thanos-staging
       expr: |
         sum by () (
-          rate(thanos_compact_group_compactions_total{job=~"thanos-(.+)-compactor",namespace="thanos-staging",type="thanos"}[5m] offset 30s)
+          rate(thanos_compact_group_compactions_total{job=~"(.+)-compactor",namespace="thanos-staging",type="thanos"}[5m] offset 30s)
         )
     - record: gitlab_component_errors:rate_5m
       labels:
@@ -496,7 +496,7 @@ spec:
       expr: |
         (
           sum by () (
-            rate(thanos_compact_group_compactions_failures_total{job=~"thanos-(.+)-compactor",namespace="thanos-staging",type="thanos"}[5m] offset 30s)
+            rate(thanos_compact_group_compactions_failures_total{job=~"(.+)-compactor",namespace="thanos-staging",type="thanos"}[5m] offset 30s)
           )
         )
         or
@@ -516,7 +516,7 @@ spec:
         type: thanos-staging
       expr: |
         sum by () (
-          rate(thanos_memcached_operation_duration_seconds_bucket{grpc_type="unary",job=~"thanos-(labels|querier)-metrics|thanos-(.+)-(bucket|index)-metrics",le="0.1",namespace="thanos-staging",type="thanos"}[5m] offset 30s)
+          rate(thanos_memcached_operation_duration_seconds_bucket{grpc_type="unary",job=~"thanos-(labels|querier)-metrics|thanos-(.+)-(bucket|index)-metrics",le="0.1",namespace="thanos-staging"}[5m] offset 30s)
         )
     - record: gitlab_component_apdex:weight:score_5m
       labels:
@@ -529,7 +529,7 @@ spec:
         type: thanos-staging
       expr: |
         sum by () (
-          rate(thanos_memcached_operation_duration_seconds_bucket{grpc_type="unary",job=~"thanos-(labels|querier)-metrics|thanos-(.+)-(bucket|index)-metrics",le="+Inf",namespace="thanos-staging",type="thanos"}[5m] offset 30s)
+          rate(thanos_memcached_operation_duration_seconds_bucket{grpc_type="unary",job=~"thanos-(labels|querier)-metrics|thanos-(.+)-(bucket|index)-metrics",le="+Inf",namespace="thanos-staging"}[5m] offset 30s)
         )
     - record: gitlab_component_ops:rate_5m
       labels:
@@ -542,7 +542,7 @@ spec:
         type: thanos-staging
       expr: |
         sum by () (
-          rate(thanos_memcached_operations_total{grpc_type="unary",job=~"thanos-(labels|querier)-metrics|thanos-(.+)-(bucket|index)-metrics",namespace="thanos-staging",type="thanos"}[5m] offset 30s)
+          rate(thanos_memcached_operations_total{grpc_type="unary",job=~"thanos-(labels|querier)-metrics|thanos-(.+)-(bucket|index)-metrics",namespace="thanos-staging"}[5m] offset 30s)
         )
     - record: gitlab_component_errors:rate_5m
       labels:
@@ -556,7 +556,7 @@ spec:
       expr: |
         (
           sum by () (
-            rate(thanos_memcached_operation_failures_total{grpc_type="unary",job=~"thanos-(labels|querier)-metrics|thanos-(.+)-(bucket|index)-metrics",namespace="thanos-staging",type="thanos"}[5m] offset 30s)
+            rate(thanos_memcached_operation_failures_total{grpc_type="unary",job=~"thanos-(labels|querier)-metrics|thanos-(.+)-(bucket|index)-metrics",namespace="thanos-staging"}[5m] offset 30s)
           )
         )
         or
@@ -696,7 +696,7 @@ spec:
         type: thanos-staging
       expr: |
         sum by () (
-          rate(thanos_alert_sender_alerts_sent_total{job="thanos-ruler",namespace="thanos-staging",type="thanos"}[5m] offset 30s)
+          rate(thanos_alert_sender_alerts_sent_total{job="thanos-ruler",namespace="thanos-staging"}[5m] offset 30s)
         )
     - record: gitlab_component_errors:rate_5m
       labels:
@@ -710,7 +710,7 @@ spec:
       expr: |
         (
           sum by () (
-            rate(thanos_alert_sender_alerts_dropped_total{job="thanos-ruler",namespace="thanos-staging",type="thanos"}[5m] offset 30s)
+            rate(thanos_alert_sender_alerts_dropped_total{job="thanos-ruler",namespace="thanos-staging"}[5m] offset 30s)
           )
         )
         or
@@ -731,11 +731,11 @@ spec:
       expr: |
         (
           sum by () (
-            rate(grpc_server_handling_seconds_bucket{grpc_type="unary",job=~"thanos-(.+)-storegateway-(.+)",le="1.0",namespace="thanos-staging",type="thanos"}[5m] offset 30s)
+            rate(grpc_server_handling_seconds_bucket{grpc_type="unary",job=~"(.+)-thanos-storegateway",le="1.0",namespace="thanos-staging",type="thanos"}[5m] offset 30s)
           )
           +
           sum by () (
-            rate(grpc_server_handling_seconds_bucket{grpc_type="unary",job=~"thanos-(.+)-storegateway-(.+)",le="3.0",namespace="thanos-staging",type="thanos"}[5m] offset 30s)
+            rate(grpc_server_handling_seconds_bucket{grpc_type="unary",job=~"(.+)-thanos-storegateway",le="3.0",namespace="thanos-staging",type="thanos"}[5m] offset 30s)
           )
         )
         /
@@ -751,7 +751,7 @@ spec:
         type: thanos-staging
       expr: |
         sum by () (
-          rate(grpc_server_handling_seconds_bucket{grpc_type="unary",job=~"thanos-(.+)-storegateway-(.+)",le="+Inf",namespace="thanos-staging",type="thanos"}[5m] offset 30s)
+          rate(grpc_server_handling_seconds_bucket{grpc_type="unary",job=~"(.+)-thanos-storegateway",le="+Inf",namespace="thanos-staging",type="thanos"}[5m] offset 30s)
         )
     - record: gitlab_component_ops:rate_5m
       labels:
@@ -764,7 +764,7 @@ spec:
         type: thanos-staging
       expr: |
         sum by () (
-          rate(grpc_server_handled_total{grpc_type="unary",job=~"thanos-(.+)-storegateway-(.+)",namespace="thanos-staging",type="thanos"}[5m] offset 30s)
+          rate(grpc_server_handled_total{grpc_type="unary",job=~"(.+)-thanos-storegateway",namespace="thanos-staging",type="thanos"}[5m] offset 30s)
         )
     - record: gitlab_component_errors:rate_5m
       labels:
@@ -778,7 +778,7 @@ spec:
       expr: |
         (
           sum by () (
-            rate(grpc_server_handled_total{grpc_code!="OK",grpc_type="unary",job=~"thanos-(.+)-storegateway-(.+)",namespace="thanos-staging",type="thanos"}[5m] offset 30s)
+            rate(grpc_server_handled_total{grpc_code!="OK",grpc_type="unary",job=~"(.+)-thanos-storegateway",namespace="thanos-staging",type="thanos"}[5m] offset 30s)
           )
         )
         or
@@ -802,13 +802,13 @@ spec:
         type: thanos-staging
       expr: |
         sum by () (
-          rate(prometheus_rule_group_iterations_total{job="thanos-ruler",namespace="thanos-staging",type="thanos"}[30m] offset 30s)
+          rate(prometheus_rule_group_iterations_total{job=~"thanos-thanos-stack-ruler(.*)",namespace="thanos-staging"}[30m] offset 30s)
         ) - (
           sum by () (
-            rate(prometheus_rule_group_iterations_missed_total{job="thanos-ruler",namespace="thanos-staging",type="thanos"}[30m] offset 30s)
+            rate(prometheus_rule_group_iterations_missed_total{job=~"thanos-thanos-stack-ruler(.*)",namespace="thanos-staging"}[30m] offset 30s)
           ) or
           0 * sum by () (
-            rate(prometheus_rule_group_iterations_total{job="thanos-ruler",namespace="thanos-staging",type="thanos"}[30m] offset 30s)
+            rate(prometheus_rule_group_iterations_total{job=~"thanos-thanos-stack-ruler(.*)",namespace="thanos-staging"}[30m] offset 30s)
           )
         )
     - record: gitlab_component_apdex:weight:score_30m
@@ -822,7 +822,7 @@ spec:
         type: thanos-staging
       expr: |
         sum by () (
-          rate(prometheus_rule_group_iterations_total{job="thanos-ruler",namespace="thanos-staging",type="thanos"}[30m] offset 30s)
+          rate(prometheus_rule_group_iterations_total{job=~"thanos-thanos-stack-ruler(.*)",namespace="thanos-staging"}[30m] offset 30s)
         )
     - record: gitlab_component_ops:rate_30m
       labels:
@@ -835,7 +835,7 @@ spec:
         type: thanos-staging
       expr: |
         sum by () (
-          rate(prometheus_rule_evaluations_total{job="thanos-ruler",namespace="thanos-staging",type="thanos"}[30m] offset 30s)
+          rate(prometheus_rule_evaluations_total{job=~"thanos-thanos-stack-ruler(.*)",namespace="thanos-staging"}[30m] offset 30s)
         )
     - record: gitlab_component_errors:rate_30m
       labels:
@@ -849,9 +849,9 @@ spec:
       expr: |
         (
           sum by () (
-            label_replace(rate(prometheus_rule_evaluation_failures_total{job="thanos-ruler",namespace="thanos-staging",type="thanos"}[30m] offset 30s), "_c", "0", "", "")
+            label_replace(rate(prometheus_rule_evaluation_failures_total{job=~"thanos-thanos-stack-ruler(.*)",namespace="thanos-staging"}[30m] offset 30s), "_c", "0", "", "")
             or
-            label_replace(rate(thanos_rule_evaluation_with_warnings_total{}[30m] offset 30s), "_c", "1", "", "")
+            label_replace(rate(thanos_rule_evaluation_with_warnings_total{job=~"thanos-thanos-stack-ruler(.*)",namespace="thanos-staging"}[30m] offset 30s), "_c", "1", "", "")
           )
         )
         or
@@ -871,7 +871,7 @@ spec:
         type: thanos-staging
       expr: |
         sum by () (
-          rate(thanos_compact_group_compactions_total{job=~"thanos-(.+)-compactor",namespace="thanos-staging",type="thanos"}[30m] offset 30s)
+          rate(thanos_compact_group_compactions_total{job=~"(.+)-compactor",namespace="thanos-staging",type="thanos"}[30m] offset 30s)
         )
     - record: gitlab_component_errors:rate_30m
       labels:
@@ -885,7 +885,7 @@ spec:
       expr: |
         (
           sum by () (
-            rate(thanos_compact_group_compactions_failures_total{job=~"thanos-(.+)-compactor",namespace="thanos-staging",type="thanos"}[30m] offset 30s)
+            rate(thanos_compact_group_compactions_failures_total{job=~"(.+)-compactor",namespace="thanos-staging",type="thanos"}[30m] offset 30s)
           )
         )
         or
@@ -905,7 +905,7 @@ spec:
         type: thanos-staging
       expr: |
         sum by () (
-          rate(thanos_memcached_operation_duration_seconds_bucket{grpc_type="unary",job=~"thanos-(labels|querier)-metrics|thanos-(.+)-(bucket|index)-metrics",le="0.1",namespace="thanos-staging",type="thanos"}[30m] offset 30s)
+          rate(thanos_memcached_operation_duration_seconds_bucket{grpc_type="unary",job=~"thanos-(labels|querier)-metrics|thanos-(.+)-(bucket|index)-metrics",le="0.1",namespace="thanos-staging"}[30m] offset 30s)
         )
     - record: gitlab_component_apdex:weight:score_30m
       labels:
@@ -918,7 +918,7 @@ spec:
         type: thanos-staging
       expr: |
         sum by () (
-          rate(thanos_memcached_operation_duration_seconds_bucket{grpc_type="unary",job=~"thanos-(labels|querier)-metrics|thanos-(.+)-(bucket|index)-metrics",le="+Inf",namespace="thanos-staging",type="thanos"}[30m] offset 30s)
+          rate(thanos_memcached_operation_duration_seconds_bucket{grpc_type="unary",job=~"thanos-(labels|querier)-metrics|thanos-(.+)-(bucket|index)-metrics",le="+Inf",namespace="thanos-staging"}[30m] offset 30s)
         )
     - record: gitlab_component_ops:rate_30m
       labels:
@@ -931,7 +931,7 @@ spec:
         type: thanos-staging
       expr: |
         sum by () (
-          rate(thanos_memcached_operations_total{grpc_type="unary",job=~"thanos-(labels|querier)-metrics|thanos-(.+)-(bucket|index)-metrics",namespace="thanos-staging",type="thanos"}[30m] offset 30s)
+          rate(thanos_memcached_operations_total{grpc_type="unary",job=~"thanos-(labels|querier)-metrics|thanos-(.+)-(bucket|index)-metrics",namespace="thanos-staging"}[30m] offset 30s)
         )
     - record: gitlab_component_errors:rate_30m
       labels:
@@ -945,7 +945,7 @@ spec:
       expr: |
         (
           sum by () (
-            rate(thanos_memcached_operation_failures_total{grpc_type="unary",job=~"thanos-(labels|querier)-metrics|thanos-(.+)-(bucket|index)-metrics",namespace="thanos-staging",type="thanos"}[30m] offset 30s)
+            rate(thanos_memcached_operation_failures_total{grpc_type="unary",job=~"thanos-(labels|querier)-metrics|thanos-(.+)-(bucket|index)-metrics",namespace="thanos-staging"}[30m] offset 30s)
           )
         )
         or
@@ -1085,7 +1085,7 @@ spec:
         type: thanos-staging
       expr: |
         sum by () (
-          rate(thanos_alert_sender_alerts_sent_total{job="thanos-ruler",namespace="thanos-staging",type="thanos"}[30m] offset 30s)
+          rate(thanos_alert_sender_alerts_sent_total{job="thanos-ruler",namespace="thanos-staging"}[30m] offset 30s)
         )
     - record: gitlab_component_errors:rate_30m
       labels:
@@ -1099,7 +1099,7 @@ spec:
       expr: |
         (
           sum by () (
-            rate(thanos_alert_sender_alerts_dropped_total{job="thanos-ruler",namespace="thanos-staging",type="thanos"}[30m] offset 30s)
+            rate(thanos_alert_sender_alerts_dropped_total{job="thanos-ruler",namespace="thanos-staging"}[30m] offset 30s)
           )
         )
         or
@@ -1120,11 +1120,11 @@ spec:
       expr: |
         (
           sum by () (
-            rate(grpc_server_handling_seconds_bucket{grpc_type="unary",job=~"thanos-(.+)-storegateway-(.+)",le="1.0",namespace="thanos-staging",type="thanos"}[30m] offset 30s)
+            rate(grpc_server_handling_seconds_bucket{grpc_type="unary",job=~"(.+)-thanos-storegateway",le="1.0",namespace="thanos-staging",type="thanos"}[30m] offset 30s)
           )
           +
           sum by () (
-            rate(grpc_server_handling_seconds_bucket{grpc_type="unary",job=~"thanos-(.+)-storegateway-(.+)",le="3.0",namespace="thanos-staging",type="thanos"}[30m] offset 30s)
+            rate(grpc_server_handling_seconds_bucket{grpc_type="unary",job=~"(.+)-thanos-storegateway",le="3.0",namespace="thanos-staging",type="thanos"}[30m] offset 30s)
           )
         )
         /
@@ -1140,7 +1140,7 @@ spec:
         type: thanos-staging
       expr: |
         sum by () (
-          rate(grpc_server_handling_seconds_bucket{grpc_type="unary",job=~"thanos-(.+)-storegateway-(.+)",le="+Inf",namespace="thanos-staging",type="thanos"}[30m] offset 30s)
+          rate(grpc_server_handling_seconds_bucket{grpc_type="unary",job=~"(.+)-thanos-storegateway",le="+Inf",namespace="thanos-staging",type="thanos"}[30m] offset 30s)
         )
     - record: gitlab_component_ops:rate_30m
       labels:
@@ -1153,7 +1153,7 @@ spec:
         type: thanos-staging
       expr: |
         sum by () (
-          rate(grpc_server_handled_total{grpc_type="unary",job=~"thanos-(.+)-storegateway-(.+)",namespace="thanos-staging",type="thanos"}[30m] offset 30s)
+          rate(grpc_server_handled_total{grpc_type="unary",job=~"(.+)-thanos-storegateway",namespace="thanos-staging",type="thanos"}[30m] offset 30s)
         )
     - record: gitlab_component_errors:rate_30m
       labels:
@@ -1167,7 +1167,7 @@ spec:
       expr: |
         (
           sum by () (
-            rate(grpc_server_handled_total{grpc_code!="OK",grpc_type="unary",job=~"thanos-(.+)-storegateway-(.+)",namespace="thanos-staging",type="thanos"}[30m] offset 30s)
+            rate(grpc_server_handled_total{grpc_code!="OK",grpc_type="unary",job=~"(.+)-thanos-storegateway",namespace="thanos-staging",type="thanos"}[30m] offset 30s)
           )
         )
         or
@@ -1191,13 +1191,13 @@ spec:
         type: thanos-staging
       expr: |
         sum by () (
-          rate(prometheus_rule_group_iterations_total{job="thanos-ruler",namespace="thanos-staging",type="thanos"}[1h] offset 30s)
+          rate(prometheus_rule_group_iterations_total{job=~"thanos-thanos-stack-ruler(.*)",namespace="thanos-staging"}[1h] offset 30s)
         ) - (
           sum by () (
-            rate(prometheus_rule_group_iterations_missed_total{job="thanos-ruler",namespace="thanos-staging",type="thanos"}[1h] offset 30s)
+            rate(prometheus_rule_group_iterations_missed_total{job=~"thanos-thanos-stack-ruler(.*)",namespace="thanos-staging"}[1h] offset 30s)
           ) or
           0 * sum by () (
-            rate(prometheus_rule_group_iterations_total{job="thanos-ruler",namespace="thanos-staging",type="thanos"}[1h] offset 30s)
+            rate(prometheus_rule_group_iterations_total{job=~"thanos-thanos-stack-ruler(.*)",namespace="thanos-staging"}[1h] offset 30s)
           )
         )
     - record: gitlab_component_apdex:weight:score_1h
@@ -1211,7 +1211,7 @@ spec:
         type: thanos-staging
       expr: |
         sum by () (
-          rate(prometheus_rule_group_iterations_total{job="thanos-ruler",namespace="thanos-staging",type="thanos"}[1h] offset 30s)
+          rate(prometheus_rule_group_iterations_total{job=~"thanos-thanos-stack-ruler(.*)",namespace="thanos-staging"}[1h] offset 30s)
         )
     - record: gitlab_component_ops:rate_1h
       labels:
@@ -1224,7 +1224,7 @@ spec:
         type: thanos-staging
       expr: |
         sum by () (
-          rate(prometheus_rule_evaluations_total{job="thanos-ruler",namespace="thanos-staging",type="thanos"}[1h] offset 30s)
+          rate(prometheus_rule_evaluations_total{job=~"thanos-thanos-stack-ruler(.*)",namespace="thanos-staging"}[1h] offset 30s)
         )
     - record: gitlab_component_errors:rate_1h
       labels:
@@ -1238,9 +1238,9 @@ spec:
       expr: |
         (
           sum by () (
-            label_replace(rate(prometheus_rule_evaluation_failures_total{job="thanos-ruler",namespace="thanos-staging",type="thanos"}[1h] offset 30s), "_c", "0", "", "")
+            label_replace(rate(prometheus_rule_evaluation_failures_total{job=~"thanos-thanos-stack-ruler(.*)",namespace="thanos-staging"}[1h] offset 30s), "_c", "0", "", "")
             or
-            label_replace(rate(thanos_rule_evaluation_with_warnings_total{}[1h] offset 30s), "_c", "1", "", "")
+            label_replace(rate(thanos_rule_evaluation_with_warnings_total{job=~"thanos-thanos-stack-ruler(.*)",namespace="thanos-staging"}[1h] offset 30s), "_c", "1", "", "")
           )
         )
         or
@@ -1260,7 +1260,7 @@ spec:
         type: thanos-staging
       expr: |
         sum by () (
-          rate(thanos_compact_group_compactions_total{job=~"thanos-(.+)-compactor",namespace="thanos-staging",type="thanos"}[1h] offset 30s)
+          rate(thanos_compact_group_compactions_total{job=~"(.+)-compactor",namespace="thanos-staging",type="thanos"}[1h] offset 30s)
         )
     - record: gitlab_component_errors:rate_1h
       labels:
@@ -1274,7 +1274,7 @@ spec:
       expr: |
         (
           sum by () (
-            rate(thanos_compact_group_compactions_failures_total{job=~"thanos-(.+)-compactor",namespace="thanos-staging",type="thanos"}[1h] offset 30s)
+            rate(thanos_compact_group_compactions_failures_total{job=~"(.+)-compactor",namespace="thanos-staging",type="thanos"}[1h] offset 30s)
           )
         )
         or
@@ -1294,7 +1294,7 @@ spec:
         type: thanos-staging
       expr: |
         sum by () (
-          rate(thanos_memcached_operation_duration_seconds_bucket{grpc_type="unary",job=~"thanos-(labels|querier)-metrics|thanos-(.+)-(bucket|index)-metrics",le="0.1",namespace="thanos-staging",type="thanos"}[1h] offset 30s)
+          rate(thanos_memcached_operation_duration_seconds_bucket{grpc_type="unary",job=~"thanos-(labels|querier)-metrics|thanos-(.+)-(bucket|index)-metrics",le="0.1",namespace="thanos-staging"}[1h] offset 30s)
         )
     - record: gitlab_component_apdex:weight:score_1h
       labels:
@@ -1307,7 +1307,7 @@ spec:
         type: thanos-staging
       expr: |
         sum by () (
-          rate(thanos_memcached_operation_duration_seconds_bucket{grpc_type="unary",job=~"thanos-(labels|querier)-metrics|thanos-(.+)-(bucket|index)-metrics",le="+Inf",namespace="thanos-staging",type="thanos"}[1h] offset 30s)
+          rate(thanos_memcached_operation_duration_seconds_bucket{grpc_type="unary",job=~"thanos-(labels|querier)-metrics|thanos-(.+)-(bucket|index)-metrics",le="+Inf",namespace="thanos-staging"}[1h] offset 30s)
         )
     - record: gitlab_component_ops:rate_1h
       labels:
@@ -1320,7 +1320,7 @@ spec:
         type: thanos-staging
       expr: |
         sum by () (
-          rate(thanos_memcached_operations_total{grpc_type="unary",job=~"thanos-(labels|querier)-metrics|thanos-(.+)-(bucket|index)-metrics",namespace="thanos-staging",type="thanos"}[1h] offset 30s)
+          rate(thanos_memcached_operations_total{grpc_type="unary",job=~"thanos-(labels|querier)-metrics|thanos-(.+)-(bucket|index)-metrics",namespace="thanos-staging"}[1h] offset 30s)
         )
     - record: gitlab_component_errors:rate_1h
       labels:
@@ -1334,7 +1334,7 @@ spec:
       expr: |
         (
           sum by () (
-            rate(thanos_memcached_operation_failures_total{grpc_type="unary",job=~"thanos-(labels|querier)-metrics|thanos-(.+)-(bucket|index)-metrics",namespace="thanos-staging",type="thanos"}[1h] offset 30s)
+            rate(thanos_memcached_operation_failures_total{grpc_type="unary",job=~"thanos-(labels|querier)-metrics|thanos-(.+)-(bucket|index)-metrics",namespace="thanos-staging"}[1h] offset 30s)
           )
         )
         or
@@ -1474,7 +1474,7 @@ spec:
         type: thanos-staging
       expr: |
         sum by () (
-          rate(thanos_alert_sender_alerts_sent_total{job="thanos-ruler",namespace="thanos-staging",type="thanos"}[1h] offset 30s)
+          rate(thanos_alert_sender_alerts_sent_total{job="thanos-ruler",namespace="thanos-staging"}[1h] offset 30s)
         )
     - record: gitlab_component_errors:rate_1h
       labels:
@@ -1488,7 +1488,7 @@ spec:
       expr: |
         (
           sum by () (
-            rate(thanos_alert_sender_alerts_dropped_total{job="thanos-ruler",namespace="thanos-staging",type="thanos"}[1h] offset 30s)
+            rate(thanos_alert_sender_alerts_dropped_total{job="thanos-ruler",namespace="thanos-staging"}[1h] offset 30s)
           )
         )
         or
@@ -1509,11 +1509,11 @@ spec:
       expr: |
         (
           sum by () (
-            rate(grpc_server_handling_seconds_bucket{grpc_type="unary",job=~"thanos-(.+)-storegateway-(.+)",le="1.0",namespace="thanos-staging",type="thanos"}[1h] offset 30s)
+            rate(grpc_server_handling_seconds_bucket{grpc_type="unary",job=~"(.+)-thanos-storegateway",le="1.0",namespace="thanos-staging",type="thanos"}[1h] offset 30s)
           )
           +
           sum by () (
-            rate(grpc_server_handling_seconds_bucket{grpc_type="unary",job=~"thanos-(.+)-storegateway-(.+)",le="3.0",namespace="thanos-staging",type="thanos"}[1h] offset 30s)
+            rate(grpc_server_handling_seconds_bucket{grpc_type="unary",job=~"(.+)-thanos-storegateway",le="3.0",namespace="thanos-staging",type="thanos"}[1h] offset 30s)
           )
         )
         /
@@ -1529,7 +1529,7 @@ spec:
         type: thanos-staging
       expr: |
         sum by () (
-          rate(grpc_server_handling_seconds_bucket{grpc_type="unary",job=~"thanos-(.+)-storegateway-(.+)",le="+Inf",namespace="thanos-staging",type="thanos"}[1h] offset 30s)
+          rate(grpc_server_handling_seconds_bucket{grpc_type="unary",job=~"(.+)-thanos-storegateway",le="+Inf",namespace="thanos-staging",type="thanos"}[1h] offset 30s)
         )
     - record: gitlab_component_ops:rate_1h
       labels:
@@ -1542,7 +1542,7 @@ spec:
         type: thanos-staging
       expr: |
         sum by () (
-          rate(grpc_server_handled_total{grpc_type="unary",job=~"thanos-(.+)-storegateway-(.+)",namespace="thanos-staging",type="thanos"}[1h] offset 30s)
+          rate(grpc_server_handled_total{grpc_type="unary",job=~"(.+)-thanos-storegateway",namespace="thanos-staging",type="thanos"}[1h] offset 30s)
         )
     - record: gitlab_component_errors:rate_1h
       labels:
@@ -1556,7 +1556,7 @@ spec:
       expr: |
         (
           sum by () (
-            rate(grpc_server_handled_total{grpc_code!="OK",grpc_type="unary",job=~"thanos-(.+)-storegateway-(.+)",namespace="thanos-staging",type="thanos"}[1h] offset 30s)
+            rate(grpc_server_handled_total{grpc_code!="OK",grpc_type="unary",job=~"(.+)-thanos-storegateway",namespace="thanos-staging",type="thanos"}[1h] offset 30s)
           )
         )
         or
@@ -1580,13 +1580,13 @@ spec:
         type: thanos-staging
       expr: |
         sum by () (
-          rate(prometheus_rule_group_iterations_total{job="thanos-ruler",namespace="thanos-staging",type="thanos"}[6h] offset 30s)
+          rate(prometheus_rule_group_iterations_total{job=~"thanos-thanos-stack-ruler(.*)",namespace="thanos-staging"}[6h] offset 30s)
         ) - (
           sum by () (
-            rate(prometheus_rule_group_iterations_missed_total{job="thanos-ruler",namespace="thanos-staging",type="thanos"}[6h] offset 30s)
+            rate(prometheus_rule_group_iterations_missed_total{job=~"thanos-thanos-stack-ruler(.*)",namespace="thanos-staging"}[6h] offset 30s)
           ) or
           0 * sum by () (
-            rate(prometheus_rule_group_iterations_total{job="thanos-ruler",namespace="thanos-staging",type="thanos"}[6h] offset 30s)
+            rate(prometheus_rule_group_iterations_total{job=~"thanos-thanos-stack-ruler(.*)",namespace="thanos-staging"}[6h] offset 30s)
           )
         )
     - record: gitlab_component_apdex:weight:score_6h
@@ -1600,7 +1600,7 @@ spec:
         type: thanos-staging
       expr: |
         sum by () (
-          rate(prometheus_rule_group_iterations_total{job="thanos-ruler",namespace="thanos-staging",type="thanos"}[6h] offset 30s)
+          rate(prometheus_rule_group_iterations_total{job=~"thanos-thanos-stack-ruler(.*)",namespace="thanos-staging"}[6h] offset 30s)
         )
     - record: gitlab_component_ops:rate_6h
       labels:
@@ -1613,7 +1613,7 @@ spec:
         type: thanos-staging
       expr: |
         sum by () (
-          rate(prometheus_rule_evaluations_total{job="thanos-ruler",namespace="thanos-staging",type="thanos"}[6h] offset 30s)
+          rate(prometheus_rule_evaluations_total{job=~"thanos-thanos-stack-ruler(.*)",namespace="thanos-staging"}[6h] offset 30s)
         )
     - record: gitlab_component_errors:rate_6h
       labels:
@@ -1627,9 +1627,9 @@ spec:
       expr: |
         (
           sum by () (
-            label_replace(rate(prometheus_rule_evaluation_failures_total{job="thanos-ruler",namespace="thanos-staging",type="thanos"}[6h] offset 30s), "_c", "0", "", "")
+            label_replace(rate(prometheus_rule_evaluation_failures_total{job=~"thanos-thanos-stack-ruler(.*)",namespace="thanos-staging"}[6h] offset 30s), "_c", "0", "", "")
             or
-            label_replace(rate(thanos_rule_evaluation_with_warnings_total{}[6h] offset 30s), "_c", "1", "", "")
+            label_replace(rate(thanos_rule_evaluation_with_warnings_total{job=~"thanos-thanos-stack-ruler(.*)",namespace="thanos-staging"}[6h] offset 30s), "_c", "1", "", "")
           )
         )
         or
@@ -1649,7 +1649,7 @@ spec:
         type: thanos-staging
       expr: |
         sum by () (
-          rate(thanos_compact_group_compactions_total{job=~"thanos-(.+)-compactor",namespace="thanos-staging",type="thanos"}[6h] offset 30s)
+          rate(thanos_compact_group_compactions_total{job=~"(.+)-compactor",namespace="thanos-staging",type="thanos"}[6h] offset 30s)
         )
     - record: gitlab_component_errors:rate_6h
       labels:
@@ -1663,7 +1663,7 @@ spec:
       expr: |
         (
           sum by () (
-            rate(thanos_compact_group_compactions_failures_total{job=~"thanos-(.+)-compactor",namespace="thanos-staging",type="thanos"}[6h] offset 30s)
+            rate(thanos_compact_group_compactions_failures_total{job=~"(.+)-compactor",namespace="thanos-staging",type="thanos"}[6h] offset 30s)
           )
         )
         or
@@ -1683,7 +1683,7 @@ spec:
         type: thanos-staging
       expr: |
         sum by () (
-          rate(thanos_memcached_operation_duration_seconds_bucket{grpc_type="unary",job=~"thanos-(labels|querier)-metrics|thanos-(.+)-(bucket|index)-metrics",le="0.1",namespace="thanos-staging",type="thanos"}[6h] offset 30s)
+          rate(thanos_memcached_operation_duration_seconds_bucket{grpc_type="unary",job=~"thanos-(labels|querier)-metrics|thanos-(.+)-(bucket|index)-metrics",le="0.1",namespace="thanos-staging"}[6h] offset 30s)
         )
     - record: gitlab_component_apdex:weight:score_6h
       labels:
@@ -1696,7 +1696,7 @@ spec:
         type: thanos-staging
       expr: |
         sum by () (
-          rate(thanos_memcached_operation_duration_seconds_bucket{grpc_type="unary",job=~"thanos-(labels|querier)-metrics|thanos-(.+)-(bucket|index)-metrics",le="+Inf",namespace="thanos-staging",type="thanos"}[6h] offset 30s)
+          rate(thanos_memcached_operation_duration_seconds_bucket{grpc_type="unary",job=~"thanos-(labels|querier)-metrics|thanos-(.+)-(bucket|index)-metrics",le="+Inf",namespace="thanos-staging"}[6h] offset 30s)
         )
     - record: gitlab_component_ops:rate_6h
       labels:
@@ -1709,7 +1709,7 @@ spec:
         type: thanos-staging
       expr: |
         sum by () (
-          rate(thanos_memcached_operations_total{grpc_type="unary",job=~"thanos-(labels|querier)-metrics|thanos-(.+)-(bucket|index)-metrics",namespace="thanos-staging",type="thanos"}[6h] offset 30s)
+          rate(thanos_memcached_operations_total{grpc_type="unary",job=~"thanos-(labels|querier)-metrics|thanos-(.+)-(bucket|index)-metrics",namespace="thanos-staging"}[6h] offset 30s)
         )
     - record: gitlab_component_errors:rate_6h
       labels:
@@ -1723,7 +1723,7 @@ spec:
       expr: |
         (
           sum by () (
-            rate(thanos_memcached_operation_failures_total{grpc_type="unary",job=~"thanos-(labels|querier)-metrics|thanos-(.+)-(bucket|index)-metrics",namespace="thanos-staging",type="thanos"}[6h] offset 30s)
+            rate(thanos_memcached_operation_failures_total{grpc_type="unary",job=~"thanos-(labels|querier)-metrics|thanos-(.+)-(bucket|index)-metrics",namespace="thanos-staging"}[6h] offset 30s)
           )
         )
         or
@@ -1863,7 +1863,7 @@ spec:
         type: thanos-staging
       expr: |
         sum by () (
-          rate(thanos_alert_sender_alerts_sent_total{job="thanos-ruler",namespace="thanos-staging",type="thanos"}[6h] offset 30s)
+          rate(thanos_alert_sender_alerts_sent_total{job="thanos-ruler",namespace="thanos-staging"}[6h] offset 30s)
         )
     - record: gitlab_component_errors:rate_6h
       labels:
@@ -1877,7 +1877,7 @@ spec:
       expr: |
         (
           sum by () (
-            rate(thanos_alert_sender_alerts_dropped_total{job="thanos-ruler",namespace="thanos-staging",type="thanos"}[6h] offset 30s)
+            rate(thanos_alert_sender_alerts_dropped_total{job="thanos-ruler",namespace="thanos-staging"}[6h] offset 30s)
           )
         )
         or
@@ -1898,11 +1898,11 @@ spec:
       expr: |
         (
           sum by () (
-            rate(grpc_server_handling_seconds_bucket{grpc_type="unary",job=~"thanos-(.+)-storegateway-(.+)",le="1.0",namespace="thanos-staging",type="thanos"}[6h] offset 30s)
+            rate(grpc_server_handling_seconds_bucket{grpc_type="unary",job=~"(.+)-thanos-storegateway",le="1.0",namespace="thanos-staging",type="thanos"}[6h] offset 30s)
           )
           +
           sum by () (
-            rate(grpc_server_handling_seconds_bucket{grpc_type="unary",job=~"thanos-(.+)-storegateway-(.+)",le="3.0",namespace="thanos-staging",type="thanos"}[6h] offset 30s)
+            rate(grpc_server_handling_seconds_bucket{grpc_type="unary",job=~"(.+)-thanos-storegateway",le="3.0",namespace="thanos-staging",type="thanos"}[6h] offset 30s)
           )
         )
         /
@@ -1918,7 +1918,7 @@ spec:
         type: thanos-staging
       expr: |
         sum by () (
-          rate(grpc_server_handling_seconds_bucket{grpc_type="unary",job=~"thanos-(.+)-storegateway-(.+)",le="+Inf",namespace="thanos-staging",type="thanos"}[6h] offset 30s)
+          rate(grpc_server_handling_seconds_bucket{grpc_type="unary",job=~"(.+)-thanos-storegateway",le="+Inf",namespace="thanos-staging",type="thanos"}[6h] offset 30s)
         )
     - record: gitlab_component_ops:rate_6h
       labels:
@@ -1931,7 +1931,7 @@ spec:
         type: thanos-staging
       expr: |
         sum by () (
-          rate(grpc_server_handled_total{grpc_type="unary",job=~"thanos-(.+)-storegateway-(.+)",namespace="thanos-staging",type="thanos"}[6h] offset 30s)
+          rate(grpc_server_handled_total{grpc_type="unary",job=~"(.+)-thanos-storegateway",namespace="thanos-staging",type="thanos"}[6h] offset 30s)
         )
     - record: gitlab_component_errors:rate_6h
       labels:
@@ -1945,7 +1945,7 @@ spec:
       expr: |
         (
           sum by () (
-            rate(grpc_server_handled_total{grpc_code!="OK",grpc_type="unary",job=~"thanos-(.+)-storegateway-(.+)",namespace="thanos-staging",type="thanos"}[6h] offset 30s)
+            rate(grpc_server_handled_total{grpc_code!="OK",grpc_type="unary",job=~"(.+)-thanos-storegateway",namespace="thanos-staging",type="thanos"}[6h] offset 30s)
           )
         )
         or
