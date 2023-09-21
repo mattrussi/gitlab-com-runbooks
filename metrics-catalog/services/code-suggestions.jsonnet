@@ -82,41 +82,6 @@ metricsCatalog.serviceDefinition({
       ],
     },
 
-    triton_server: {
-      local tritonSelector = baseSelector { container: 'triton' },
-      severity: 's4',  // NOTE: Do not page on-call SREs until production ready
-      userImpacting: true,
-      team: 'code_creation',
-      featureCategory: 'code_suggestions',
-      serviceAggregation: false,
-
-      requestRate: rateMetric(
-        counter='nv_inference_count',
-        selector=tritonSelector,
-        useRecordingRuleRegistry=false,
-      ),
-
-      errorRate: rateMetric(
-        counter='nv_inference_request_failure',
-        selector=tritonSelector,
-        useRecordingRuleRegistry=false,
-      ),
-
-      significantLabels: ['model'],
-
-      toolingLinks: [
-        toolingLinks.gkeDeployment(
-          'model-triton',
-          namespace='fauxpilot',
-          containerName='triton',
-          project=gkeDeploymentDetails.project,
-          region=gkeDeploymentDetails.region,
-          cluster=gkeDeploymentDetails.cluster,
-        ),
-        toolingLinks.grafana(title='Triton Server Detail', dashboardUid='code_suggestions-triton'),
-      ],
-    },
-
     waf: {
       local hostSelector = { zone: 'gitlab.com', host: { re: 'codesuggestions.gitlab.com.*' } },
       severity: 's4',  // NOTE: Do not page on-call SREs until production ready
