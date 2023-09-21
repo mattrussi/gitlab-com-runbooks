@@ -46,6 +46,7 @@
   import 'redis-cluster-cache.jsonnet',
   import 'redis-cluster-feature-flag.jsonnet',
   import 'redis-cluster-shared-state.jsonnet',
+  import 'redis-cluster-queues-meta.jsonnet',
   import 'redis-sidekiq.jsonnet',
   import 'redis-tracechunks.jsonnet',
   import 'redis-cluster-ratelimiting.jsonnet',
