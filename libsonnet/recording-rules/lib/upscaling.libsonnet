@@ -150,6 +150,24 @@ local upscaledErrorRateExpression(sourceAggregationSet, targetAggregationSet, bu
     extraSelectors=extraSelectors
   );
 
+local upscaledErrorRatesExpression(sourceAggregationSet, targetAggregationSet, burnRate, extraSelectors={}) =
+  upscaledRateExpression(
+    sourceAggregationSet,
+    targetAggregationSet,
+    burnRate,
+    metricName=sourceAggregationSet.getErrorRatesMetricForBurnRate('1h', required=true),
+    extraSelectors=extraSelectors
+  );
+
+local upscaledApdexRatesExpression(sourceAggregationSet, targetAggregationSet, burnRate, extraSelectors={}) =
+  upscaledRateExpression(
+    sourceAggregationSet,
+    targetAggregationSet,
+    burnRate,
+    metricName=sourceAggregationSet.getApdexRatesMetricForBurnRate('1h', required=true),
+    extraSelectors=extraSelectors
+  );
+
 // Generates a transformation expression that either uses direct, upscaled or
 // or combines both in cases where the source expression contains a mixture
 local combineUpscaleAndDirectTransformationExpressions(upscaledExprType, upscaleExpressionFn, sourceAggregationSet, targetAggregationSet, burnRate, directExpr) =
@@ -220,4 +238,8 @@ local curry(upscaledExprType, upscaleExpressionFn) =
   combinedApdexWeightExpression: curry('apdexWeight', upscaledApdexWeightExpression),
   combinedOpsRateExpression: curry('opsRate', upscaledOpsRateExpression),
   combinedErrorRateExpression: curry('errorRate', upscaledErrorRateExpression),
+
+  // Transactional rates
+  combinedTransactionalErrorRatesExpression: curry('errorRates', upscaledErrorRatesExpression),
+  combinedTransactionalApdexRatesExpression: curry('apdexRates', upscaledApdexRatesExpression),
 }

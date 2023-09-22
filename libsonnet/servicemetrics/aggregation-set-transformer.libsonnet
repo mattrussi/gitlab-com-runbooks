@@ -11,7 +11,9 @@ local generateRecordingRules(sourceAggregationSet, targetAggregationSet, burnRat
       recordingRules.aggregationSetErrorRatioRuleSet(sourceAggregationSet=sourceAggregationSet, targetAggregationSet=targetAggregationSet, burnRate=burnRate)
       +
       // Apdex Score and Apdex Weight and Apdex SuccessRate
-      recordingRules.aggregationSetApdexRatioRuleSet(sourceAggregationSet=sourceAggregationSet, targetAggregationSet=targetAggregationSet, burnRate=burnRate),
+      recordingRules.aggregationSetApdexRatioRuleSet(sourceAggregationSet=sourceAggregationSet, targetAggregationSet=targetAggregationSet, burnRate=burnRate)
+      +
+      recordingRules.aggregationSetTransactionalRatesRuleSet(sourceAggregationSet=sourceAggregationSet, targetAggregationSet=targetAggregationSet, burnRate=burnRate),
     burnRates
   );
 
