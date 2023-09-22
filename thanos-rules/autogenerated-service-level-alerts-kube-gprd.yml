@@ -26,7 +26,7 @@ groups:
         histogram_quantile(
           0.950000,
           sum by (env,environment,tier,stage,le) (
-            rate(apiserver_request_duration_seconds_bucket{environment="{{ $labels.environment }}",job="apiserver",scope!="",stage="{{ $labels.stage }}",verb!="WATCH"}[5m])
+            rate(apiserver_request_duration_seconds_bucket{environment="{{ $labels.environment }}",job="apiserver",scope!="",stage="{{ $labels.stage }}",verb!~"^(?:CONNECT|WATCHLIST|WATCH|PROXY)$"}[5m])
           )
         )
       runbook: docs/kube/README.md
@@ -79,7 +79,7 @@ groups:
         histogram_quantile(
           0.950000,
           sum by (env,environment,tier,stage,le) (
-            rate(apiserver_request_duration_seconds_bucket{environment="{{ $labels.environment }}",job="apiserver",scope!="",stage="{{ $labels.stage }}",verb!="WATCH"}[5m])
+            rate(apiserver_request_duration_seconds_bucket{environment="{{ $labels.environment }}",job="apiserver",scope!="",stage="{{ $labels.stage }}",verb!~"^(?:CONNECT|WATCHLIST|WATCH|PROXY)$"}[5m])
           )
         )
       runbook: docs/kube/README.md
