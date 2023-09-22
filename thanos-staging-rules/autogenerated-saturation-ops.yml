@@ -426,8 +426,14 @@ spec:
         max by(env, environment, type, shard) (
           clamp_min(
             clamp_max(
-              sum by (env, environment, type, shard, revision_name) (
+              (
+                sum by (env, environment, type, shard, revision_name) (
                 avg_over_time(stackdriver_cloud_run_revision_run_googleapis_com_container_memory_utilizations_sum{job="runway-exporter",env="ops",type="ai-gateway"}[30m])
+                )
+                /
+                sum by (env, environment, type, shard, revision_name) (
+                  stackdriver_cloud_run_revision_run_googleapis_com_container_instance_count{job="runway-exporter",state="active",env="ops",type="ai-gateway"}
+                ) > 0
               )
               ,
               1)
@@ -1776,8 +1782,14 @@ spec:
           max by(environment, type, shard, revision_name) (
             clamp_min(
               clamp_max(
-                sum by (environment, type, shard, revision_name) (
+                (
+                  sum by (environment, type, shard, revision_name) (
                   avg_over_time(stackdriver_cloud_run_revision_run_googleapis_com_container_memory_utilizations_sum{job="runway-exporter",environment="{{ $labels.environment }}",type="{{ $labels.type }}"}[30m])
+                  )
+                  /
+                  sum by (environment, type, shard, revision_name) (
+                    stackdriver_cloud_run_revision_run_googleapis_com_container_instance_count{job="runway-exporter",state="active",environment="{{ $labels.environment }}",type="{{ $labels.type }}"}
+                  ) > 0
                 )
                 ,
                 1)
@@ -1788,8 +1800,14 @@ spec:
           max by(environment, type, shard, revision_name) (
             clamp_min(
               clamp_max(
-                sum by (environment, type, shard, revision_name) (
+                (
+                  sum by (environment, type, shard, revision_name) (
                   avg_over_time(stackdriver_cloud_run_revision_run_googleapis_com_container_memory_utilizations_sum{job="runway-exporter",environment="{{ $labels.environment }}",type="{{ $labels.type }}"}[30m])
+                  )
+                  /
+                  sum by (environment, type, shard, revision_name) (
+                    stackdriver_cloud_run_revision_run_googleapis_com_container_instance_count{job="runway-exporter",state="active",environment="{{ $labels.environment }}",type="{{ $labels.type }}"}
+                  ) > 0
                 )
                 ,
                 1)
