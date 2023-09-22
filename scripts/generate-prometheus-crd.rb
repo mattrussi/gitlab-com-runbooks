@@ -28,7 +28,6 @@ metadata:
   labels:
     ruler: thanos
   annotations: {}
-spec: {}
 YAML
 
 rule_files.each do |rule_file|
@@ -54,10 +53,16 @@ rule_files.each do |rule_file|
 
   # Create new yaml
   rule_yaml = YAML.safe_load(prometheus_rule_yaml)
-  rule_yaml['spec'].merge!(source_yaml)
   rule_yaml['metadata']['name'] = filename_base.gsub('_', '-')
   rule_yaml['metadata']['labels']['shard'] = shard_value.to_s
 
+  # Read the file and indent it under `spec`. This will make sure that any
+  # comments inside the original yaml stay there.
+  rule_spec = ["spec:", File.read(rule_file).gsub!(/^(?!$)/, ' ' * 2)].join("\n")
+
   # Write the merged YAML content to an output file
-  File.open(rule_file, 'w') { |file| file.write(rule_yaml.to_yaml) }
+  File.open(rule_file, 'w') do |file|
+    file.write(rule_yaml.to_yaml)
+    file.write(rule_spec)
+  end
 end
