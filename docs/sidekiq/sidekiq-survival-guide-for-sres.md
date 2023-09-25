@@ -374,6 +374,19 @@ come.
 
 It also means we get Sidekiq logs from web and api nodes, but that should only ever be the job_status of `deduplicated`.
 
+### Unblocking jobs stuck in deduplication
+
+During Redis maintenance where master node failover occurs, the duplicate key deletion may fail and result in subsequent jobs being deduplicated during scheduling.
+From logs, find the `json.idempotency_key` of the job that is stuck in deduplication by filtering for the `json.class: "CLASS_NAME"` and `json.job_status: "deduplicated"`.
+
+On a Rails console, run the following:
+
+```ruby
+idempotency_key = <INSERT KEY FROM LOGS>
+duplicate_key = "resque:gitlab:#{idempotency_key}:cookie:v2"
+Gitlab::Redis::Queues.with { |c| c.del(duplicate_key) }
+```
+
 ## Sidekiq-cron
 
 This is an [additional gem](https://github.com/ondrejbartas/sidekiq-cron) that allows Sidekiq jobs to be scheduled
