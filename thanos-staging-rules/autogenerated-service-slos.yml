@@ -2492,18 +2492,6 @@ spec:
       expr: "0.005000"
     - record: slo:min:events:gitlab_service_apdex:ratio
       labels:
-        component: global_search_indexing
-        tier: sv
-        type: sidekiq
-      expr: "0.995000"
-    - record: slo:max:events:gitlab_service_errors:ratio
-      labels:
-        component: global_search_indexing
-        tier: sv
-        type: sidekiq
-      expr: "0.005000"
-    - record: slo:min:events:gitlab_service_apdex:ratio
-      labels:
         component: llm_completion
         tier: sv
         type: sidekiq
@@ -4532,6 +4520,15 @@ spec:
       expr: "1"
     - record: gitlab_component_service:mapping
       labels:
+        component: global_search_indexing
+        global_aggregation: "no"
+        regional_aggregation: "no"
+        service_aggregation: "no"
+        tier: inf
+        type: search
+      expr: "1"
+    - record: gitlab_component_service:mapping
+      labels:
         component: pg_transactions
         global_aggregation: "no"
         regional_aggregation: "no"
@@ -4547,15 +4544,6 @@ spec:
         service_aggregation: "yes"
         tier: inf
         type: sentry
-      expr: "1"
-    - record: gitlab_component_service:mapping
-      labels:
-        component: global_search_indexing
-        global_aggregation: "no"
-        regional_aggregation: "no"
-        service_aggregation: "no"
-        tier: sv
-        type: sidekiq
       expr: "1"
     - record: gitlab_component_service:mapping
       labels:

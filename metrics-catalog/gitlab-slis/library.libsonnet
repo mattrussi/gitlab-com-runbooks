@@ -75,6 +75,8 @@ local list = [
       The number of Global Search indexing calls meeting their duration target based on the 99.95th percentile of
       indexing. This indicates the duration between when an item was changed and when it became available in Elasticsearch.
 
+      This indexing duration is measured in the Sidekiq job triggering the indexing in ElasticSearch.
+
       The target duration can be found here:
       https://gitlab.com/gitlab-org/gitlab/-/blob/master/ee/lib/gitlab/metrics/global_search_indexing_slis.rb#L14-L15
     |||,

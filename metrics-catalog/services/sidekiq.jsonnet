@@ -87,12 +87,7 @@ metricsCatalog.serviceDefinition({
     sidekiqHelpers.shards.listAll(),
     {},
   ),
-  serviceLevelIndicators: {
-  } + sliLibrary.get('global_search_indexing').generateServiceLevelIndicator(baseSelector, {
-    serviceAggregation: false,  // Don't add this to the request rate of the service
-    severity: 's3',  // Don't page SREs for this SLI
-    shardLevelMonitoring: false,
-  }) + sliLibrary.get('sidekiq_execution').generateServiceLevelIndicator(baseSelector { external_dependencies: { ne: 'yes' } }, {
+  serviceLevelIndicators: sliLibrary.get('sidekiq_execution').generateServiceLevelIndicator(baseSelector { external_dependencies: { ne: 'yes' } }, {
     // TODO: For now, only sidekiq execution is considered towards service aggregation
     // which means queueing is not part of the service aggregation & SLA.
     // Future plan is to be able to specify either apdex, errors, or ops to be included in service aggregaiton.
