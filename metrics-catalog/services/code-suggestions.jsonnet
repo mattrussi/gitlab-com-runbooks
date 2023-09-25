@@ -46,6 +46,7 @@ metricsCatalog.serviceDefinition({
       userImpacting: true,
       team: 'code_creation',
       featureCategory: 'code_suggestions',
+      trafficCessationAlertConfig: false,
       serviceAggregation: false,
 
       requestRate: rateMetric(
@@ -124,6 +125,7 @@ metricsCatalog.serviceDefinition({
       userImpacting: true,
       team: 'code_creation',
       featureCategory: 'code_suggestions',
+      trafficCessationAlertConfig: false,
       serviceAggregation: true,
       description: |||
         Ingress-NGINX Controller for Kubernetes to expose service to the internet. Fronted by Cloudflare WAF.
