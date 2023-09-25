@@ -256,6 +256,12 @@ metricsCatalog.serviceDefinition(
             changepoints: ['2023-08-18'],
           },
         },
+        {
+          name: 'elastic_disk_space',
+          parameters: {
+            changepoints: ['2023-08-18'],
+          },
+        },
       ],
     },
   }
