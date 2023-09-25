@@ -11,7 +11,6 @@ local toolingLinks = import 'toolinglinks/toolinglinks.libsonnet';
 local platformLinks = import 'gitlab-dashboards/platform_links.libsonnet';
 local errorBudget = import 'stage-groups/error_budget.libsonnet';
 local errorBudgetUtils = import 'stage-groups/error-budget/utils.libsonnet';
-local sidekiqHelpers = import 'services/lib/sidekiq-helpers.libsonnet';
 local thresholds = import 'gitlab-dashboards/thresholds.libsonnet';
 local metricsCatalogDashboards = import 'gitlab-dashboards/metrics_catalog_dashboards.libsonnet';
 local gitlabMetricsConfig = import 'gitlab-metrics-config.libsonnet';
@@ -340,7 +339,6 @@ local sidekiqJobDurationByUrgency(urgencies, featureCategoriesSelector) =
   local unknownUrgencies = std.setDiff(urgencies, std.objectFields(urgencySLOMapping));
   assert std.length(unknownUrgencies) == 0 :
          'Unknown urgency %s' % unknownUrgencies;
-  local slos = sidekiqHelpers.slos;
   local featureCategoriesArr = std.split(featureCategoriesSelector, '|');
 
   layout.rowGrid('Sidekiq job duration', [
