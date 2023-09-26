@@ -21,8 +21,12 @@ local resourceSaturationPoint = (import 'servicemetrics/resource_saturation_poin
       stage: 'main',
     },
     query: |||
-      sum by (%(aggregationLabels)s) (
-        avg_over_time(stackdriver_cloud_run_revision_run_googleapis_com_container_cpu_utilizations_sum{job="runway-exporter",%(selector)s}[%(rangeInterval)s])
+      histogram_quantile(0.9999, sum by(le, %(aggregationLabels)s)
+        (
+          avg_over_time(
+            stackdriver_cloud_run_revision_run_googleapis_com_container_cpu_utilizations_bucket{job="runway-exporter",%(selector)s}[%(rangeInterval)s]
+          )
+        )
       )
     |||,
     slos: {
@@ -48,8 +52,12 @@ local resourceSaturationPoint = (import 'servicemetrics/resource_saturation_poin
       stage: 'main',
     },
     query: |||
-      sum by (%(aggregationLabels)s) (
-        avg_over_time(stackdriver_cloud_run_revision_run_googleapis_com_container_memory_utilizations_sum{job="runway-exporter",%(selector)s}[%(rangeInterval)s])
+      histogram_quantile(0.9999, sum by(le, %(aggregationLabels)s)
+        (
+          avg_over_time(
+            stackdriver_cloud_run_revision_run_googleapis_com_container_memory_utilizations_bucket{job="runway-exporter",%(selector)s}[%(rangeInterval)s]
+          )
+        )
       )
     |||,
     slos: {

@@ -369,8 +369,12 @@ spec:
         max by(env, environment, type, shard) (
           clamp_min(
             clamp_max(
-              sum by (env, environment, type, shard, revision_name) (
-                avg_over_time(stackdriver_cloud_run_revision_run_googleapis_com_container_cpu_utilizations_sum{job="runway-exporter",env="ops",type="ai-gateway"}[30m])
+              histogram_quantile(0.9999, sum by(le, env, environment, type, shard, revision_name)
+                (
+                  avg_over_time(
+                    stackdriver_cloud_run_revision_run_googleapis_com_container_cpu_utilizations_bucket{job="runway-exporter",env="ops",type="ai-gateway"}[30m]
+                  )
+                )
               )
               ,
               1)
@@ -426,8 +430,12 @@ spec:
         max by(env, environment, type, shard) (
           clamp_min(
             clamp_max(
-              sum by (env, environment, type, shard, revision_name) (
-                avg_over_time(stackdriver_cloud_run_revision_run_googleapis_com_container_memory_utilizations_sum{job="runway-exporter",env="ops",type="ai-gateway"}[30m])
+              histogram_quantile(0.9999, sum by(le, env, environment, type, shard, revision_name)
+                (
+                  avg_over_time(
+                    stackdriver_cloud_run_revision_run_googleapis_com_container_memory_utilizations_bucket{job="runway-exporter",env="ops",type="ai-gateway"}[30m]
+                  )
+                )
               )
               ,
               1)
@@ -1605,8 +1613,12 @@ spec:
           max by(environment, type, shard, revision_name) (
             clamp_min(
               clamp_max(
-                sum by (environment, type, shard, revision_name) (
-                  avg_over_time(stackdriver_cloud_run_revision_run_googleapis_com_container_cpu_utilizations_sum{job="runway-exporter",environment="{{ $labels.environment }}",type="{{ $labels.type }}"}[30m])
+                histogram_quantile(0.9999, sum by(le, environment, type, shard, revision_name)
+                  (
+                    avg_over_time(
+                      stackdriver_cloud_run_revision_run_googleapis_com_container_cpu_utilizations_bucket{job="runway-exporter",environment="{{ $labels.environment }}",type="{{ $labels.type }}"}[30m]
+                    )
+                  )
                 )
                 ,
                 1)
@@ -1617,8 +1629,12 @@ spec:
           max by(environment, type, shard, revision_name) (
             clamp_min(
               clamp_max(
-                sum by (environment, type, shard, revision_name) (
-                  avg_over_time(stackdriver_cloud_run_revision_run_googleapis_com_container_cpu_utilizations_sum{job="runway-exporter",environment="{{ $labels.environment }}",type="{{ $labels.type }}"}[30m])
+                histogram_quantile(0.9999, sum by(le, environment, type, shard, revision_name)
+                  (
+                    avg_over_time(
+                      stackdriver_cloud_run_revision_run_googleapis_com_container_cpu_utilizations_bucket{job="runway-exporter",environment="{{ $labels.environment }}",type="{{ $labels.type }}"}[30m]
+                    )
+                  )
                 )
                 ,
                 1)
@@ -1776,8 +1792,12 @@ spec:
           max by(environment, type, shard, revision_name) (
             clamp_min(
               clamp_max(
-                sum by (environment, type, shard, revision_name) (
-                  avg_over_time(stackdriver_cloud_run_revision_run_googleapis_com_container_memory_utilizations_sum{job="runway-exporter",environment="{{ $labels.environment }}",type="{{ $labels.type }}"}[30m])
+                histogram_quantile(0.9999, sum by(le, environment, type, shard, revision_name)
+                  (
+                    avg_over_time(
+                      stackdriver_cloud_run_revision_run_googleapis_com_container_memory_utilizations_bucket{job="runway-exporter",environment="{{ $labels.environment }}",type="{{ $labels.type }}"}[30m]
+                    )
+                  )
                 )
                 ,
                 1)
@@ -1788,8 +1808,12 @@ spec:
           max by(environment, type, shard, revision_name) (
             clamp_min(
               clamp_max(
-                sum by (environment, type, shard, revision_name) (
-                  avg_over_time(stackdriver_cloud_run_revision_run_googleapis_com_container_memory_utilizations_sum{job="runway-exporter",environment="{{ $labels.environment }}",type="{{ $labels.type }}"}[30m])
+                histogram_quantile(0.9999, sum by(le, environment, type, shard, revision_name)
+                  (
+                    avg_over_time(
+                      stackdriver_cloud_run_revision_run_googleapis_com_container_memory_utilizations_bucket{job="runway-exporter",environment="{{ $labels.environment }}",type="{{ $labels.type }}"}[30m]
+                    )
+                  )
                 )
                 ,
                 1)
