@@ -41,8 +41,13 @@ rule_files.each do |rule_file|
 
   mapping_yaml = YAML.load_file(mapping_file) if File.exist? mapping_file
 
-  # Get source filename without extension
-  filename_base = File.basename(rule_file, File.extname(rule_file))
+  # Get source path without extension and with relative path
+  filename_base = [
+    # The directory name relative to the rules dir passed in
+    File.dirname(rule_file).gsub(rules_dir, "").sub(%r{^/}, ""),
+    # The filename without the extension
+    File.basename(rule_file, File.extname(rule_file))
+  ].reject(&:empty?).join("/").gsub(%r{/}, "-")
 
   if !mapping_yaml.nil? && mapping_yaml[filename_base]
     shard_value = mapping_yaml[filename_base]
