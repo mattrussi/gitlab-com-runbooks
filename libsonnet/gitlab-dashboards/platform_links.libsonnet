@@ -3,8 +3,6 @@ local serviceCatalog = import 'service-catalog/service-catalog.libsonnet';
 local saturationResources = import '../servicemetrics/saturation-resources.libsonnet';
 local grafana = import '../../metrics-catalog/saturation/grafana.libsonnet';
 
-local GRAFANA_BASE_URL = 'https://dashboards.gitlab.net/d/';
-
 // These services do not yet have their own dashboards, remove from this list as they get their own dashboards
 local USES_GENERIC_DASHBOARD = {
   pages: true,
@@ -12,9 +10,9 @@ local USES_GENERIC_DASHBOARD = {
 
 local getServiceLink(serviceType) =
   if std.objectHas(USES_GENERIC_DASHBOARD, serviceType) then
-    'https://dashboards.gitlab.net/d/general-service/service-platform-metrics?orgId=1&var-type=' + serviceType
+    grafana.defaults.baseURL + '/general-service/service-platform-metrics?orgId=1&var-type=' + serviceType
   else
-    GRAFANA_BASE_URL + serviceCatalog.lookupService(serviceType).observability.monitors.primary_grafana_dashboard + '?orgId=1';
+    grafana.defaults.baseURL + '/' + serviceCatalog.lookupService(serviceType).observability.monitors.primary_grafana_dashboard + '?orgId=1';
 
 local getSaturationDetailLink(service, component) =
   local dashboard = grafana.resourceDashboard(service, saturationResources[component].grafana_dashboard_uid, component);
@@ -25,7 +23,7 @@ local getSaturationDetailLink(service, component) =
 
 {
   triage:: [
-    link.dashboards('Platform Triage', '', type='link', keepTime=true, url='https://dashboards.gitlab.net/d/general-triage/platform-triage?orgId=1'),
+    link.dashboards('Platform Triage', '', type='link', keepTime=true, url=grafana.defaults.baseURL + '/general-triage/platform-triage?orgId=1'),
   ],
   services:: [
     link.dashboards(
@@ -57,7 +55,7 @@ local getSaturationDetailLink(service, component) =
       type='dashboards',
     ),
   parameterizedServiceLink: [
-    link.dashboards('$type service', '', type='link', keepTime=true, url='https://dashboards.gitlab.net/d/general-service/service-platform-metrics?orgId=1&var-type=$type'),
+    link.dashboards('$type service', '', type='link', keepTime=true, url=grafana.defaults.baseURL + '/general-service/service-platform-metrics?orgId=1&var-type=$type'),
   ],
   serviceLink(type):: [
     link.dashboards(type + ' service', '', type='link', keepTime=true, url=getServiceLink(type)),
