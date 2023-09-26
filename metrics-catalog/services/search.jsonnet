@@ -1,6 +1,7 @@
 local metricsCatalog = import 'servicemetrics/metrics.libsonnet';
 local derivMetric = metricsCatalog.derivMetric;
 local toolingLinks = import 'toolinglinks/toolinglinks.libsonnet';
+local sliLibrary = import 'gitlab-slis/library.libsonnet';
 
 metricsCatalog.serviceDefinition({
   type: 'search',
@@ -66,5 +67,9 @@ metricsCatalog.serviceDefinition({
         toolingLinks.kibana(title='Elasticsearch', index='search', includeMatchersForPrometheusSelector=false),
       ],
     },
-  },
+  } + sliLibrary.get('global_search_indexing').generateServiceLevelIndicator({}, {
+    serviceAggregation: false,  // Don't add this to the request rate of the service
+    severity: 's3',  // Don't page SREs for this SLI
+    shardLevelMonitoring: false,
+  }),
 })
