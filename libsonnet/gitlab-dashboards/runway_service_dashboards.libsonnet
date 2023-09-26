@@ -31,6 +31,15 @@ local panelsForService(type) =
       ||| % formatConfig,
       legendFormat='{{revision}} {{kind}}',
     ),
+    basic.timeseries(
+      'Runway Container Instance Count',
+      description='Number of container instances that exist for the service.',
+      yAxisLabel='Instance Count',
+      query=|||
+        sum by (revision_name, state) (stackdriver_cloud_run_revision_run_googleapis_com_container_instance_count{%(selector)s})
+      ||| % formatConfig,
+      legendFormat='{{revision_name}} {{state}}',
+    ),
     basic.latencyTimeseries(
       title='Runway Container Startup Latency',
       description='Time spent starting a new container instance.',
