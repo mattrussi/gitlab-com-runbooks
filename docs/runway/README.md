@@ -76,3 +76,7 @@ Ultimately, Runway deployments are provisioned via GCP resources. Specifically, 
 Run](https://cloud.google.com/run/) for the service runtime, which is an offering we don't have too much previous
 experience with. Make sure to check the [Getting help with GCP support and Rackspace Runbook](../uncategorized/externalvendors/GCP-rackspace-support.md)
 in case you have any questions or suspect an issue related to the cloud resources.
+
+## Rollbacks
+
+The runway platform has redimentary support for rollbacks in case of a bad deployment, however "roll forward" (`git revert` bad code and deploy) is the preferred approach. Rollbacks are done by going to your service project, going to the pipeline history and finding the pipeline on the commit you wish to revert to, and re-running the "🚀 Production Deploy 100%" job from that pipeline.
