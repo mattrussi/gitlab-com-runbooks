@@ -41,8 +41,13 @@ rule_files.each do |rule_file|
 
   mapping_yaml = YAML.load_file(mapping_file) if File.exist? mapping_file
 
-  # Get source filename without extension
-  filename_base = File.basename(rule_file, File.extname(rule_file))
+  # Get source path without extension with relative path
+  filename_base = [
+    # The directory name relative to the rules dir passed in
+    File.dirname(rule_file).gsub(rules_dir, "").sub(%r{^/}, ""),
+    # The filename without the extension
+    File.basename(rule_file, File.extname(rule_file))
+  ].reject(&:empty?).join("/")
 
   if !mapping_yaml.nil? && mapping_yaml[filename_base]
     shard_value = mapping_yaml[filename_base]
@@ -53,7 +58,7 @@ rule_files.each do |rule_file|
 
   # Create new yaml
   rule_yaml = YAML.safe_load(prometheus_rule_yaml)
-  rule_yaml['metadata']['name'] = filename_base.gsub('_', '-')
+  rule_yaml['metadata']['name'] = filename_base.gsub("_", "-")
   rule_yaml['metadata']['labels']['shard'] = shard_value.to_s
 
   # Read the file and indent it under `spec`. This will make sure that any
