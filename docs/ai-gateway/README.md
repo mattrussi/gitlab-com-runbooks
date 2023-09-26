@@ -38,6 +38,18 @@ The AI Gateway is deployed through Runway. For more details, see [the Runway run
 
 ## Scalability
 
+### Horizontal
+
+The AI Gateway service is [automatically scaled](https://cloud.google.com/run/docs/container-contract#service-lifecycle) up to handle all incoming requests and scaled down when not receiving any traffic. To avoid cold-start latency, a minimum of 3 instances are running in production.
+
+If necessary, minimum and maximum instance count can be [configured](https://gitlab.com/gitlab-com/gl-infra/platform/runway/runwayctl/-/merge_requests/84) by platform engineers.
+
+### Vertical
+
+The AI Gateway service resources can be configured for [CPU](https://cloud.google.com/run/docs/configuring/services/cpu) and [memory](https://cloud.google.com/run/docs/configuring/services/memory-limits).
+
+If necessary, resources can be [configured](https://gitlab.com/gitlab-org/modelops/applied-ml/code-suggestions/ai-assist/-/merge_requests/363) by service owners.
+
 ### GCP quotas usage
 
 Apart from our quota monitoring in our usual GCP projects, the AI Gateway relies on resources that live on the
