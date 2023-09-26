@@ -22,7 +22,7 @@ stageGroupDashboards.dashboard(groupKey, components=[])
             title='Kibana Rails',
             index='rails_cdot',
             matches={
-              'json.meta.feature_category': featureCategories,
+              'json.feature_category': featureCategories,
             },
           ),
         ], { prometheusSelectorHash: {} })
@@ -35,7 +35,7 @@ stageGroupDashboards.dashboard(groupKey, components=[])
             title='Kibana Sidekiq',
             index='sidekiq_cdot',
             matches={
-              'json.meta.feature_category': featureCategories,
+              'json.feature_category': featureCategories,
             },
           ),
         ], { prometheusSelectorHash: {} })
