@@ -40,7 +40,7 @@ local serviceSLIs = AggregationSet({
     opsRate: 'experimental:gitlab_service_ops:rate_%s',
     errorRate: 'experimental:gitlab_service_errors:rate_%s',
     errorRatio: 'experimental:gitlab_service_errors:ratio_%s',
-    errorRates: 'experimental:gitlab_component_errors:rates_%s',
+    errorRates: 'experimental:gitlab_service_errors:rates_%s',
   },
   // Only include components (SLIs) with service_aggregation="yes"
   // The recording of this mapping is currently happening in prometheus and generated

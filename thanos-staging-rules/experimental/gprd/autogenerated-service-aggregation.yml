@@ -55,7 +55,7 @@ spec:
         sum by (env,environment,tier,type,stage) (
           (experimental:gitlab_component_apdex:weight:score_5m{env="gprd"} offset 10s >= 0) and on(component, type) (gitlab_component_service:mapping{monitor="global",service_aggregation="yes"})
         )
-    - record: experimental:gitlab_component_errors:rates_5m
+    - record: experimental:gitlab_service_errors:rates_5m
       expr: |
         sum by (env,environment,tier,type,stage,recorded_rate) (
           (experimental:gitlab_component_errors:rates_5m{env="gprd"} offset 10s) and on(component, type) (gitlab_component_service:mapping{monitor="global",service_aggregation="yes"})
@@ -105,7 +105,7 @@ spec:
         sum by (env,environment,tier,type,stage) (
           (experimental:gitlab_component_apdex:weight:score_1h{env="gprd"} offset 10s >= 0) and on(component, type) (gitlab_component_service:mapping{monitor="global",service_aggregation="yes"})
         )
-    - record: experimental:gitlab_component_errors:rates_1h
+    - record: experimental:gitlab_service_errors:rates_1h
       expr: |
         sum by (env,environment,tier,type,stage,recorded_rate) (
           (experimental:gitlab_component_errors:rates_1h{env="gprd"} offset 10s) and on(component, type) (gitlab_component_service:mapping{monitor="global",service_aggregation="yes"})
@@ -159,7 +159,7 @@ spec:
         sum by (env,environment,tier,type,stage) (
           (experimental:gitlab_component_apdex:weight:score_30m{env="gprd"} offset 10s >= 0) and on(component, type) (gitlab_component_service:mapping{monitor="global",service_aggregation="yes"})
         )
-    - record: experimental:gitlab_component_errors:rates_30m
+    - record: experimental:gitlab_service_errors:rates_30m
       expr: |
         sum by (env,environment,tier,type,stage,recorded_rate) (
           (experimental:gitlab_component_errors:rates_30m{env="gprd"} offset 10s) and on(component, type) (gitlab_component_service:mapping{monitor="global",service_aggregation="yes"})
@@ -267,7 +267,7 @@ spec:
             sum_over_time(experimental:gitlab_component_apdex:weight:score_1h{env="gprd",upscale_source="yes"}[6h] offset 10s) and on(component, type) (gitlab_component_service:mapping{monitor="global",service_aggregation="yes"})
           )
         )
-    - record: experimental:gitlab_component_errors:rates_6h
+    - record: experimental:gitlab_service_errors:rates_6h
       expr: |
         (
           sum by (env,environment,tier,type,stage,recorded_rate) (
@@ -333,7 +333,7 @@ spec:
         sum by (env,environment,tier,type,stage) (
           sum_over_time(experimental:gitlab_component_apdex:weight:score_1h{env="gprd"}[3d] offset 10s) and on(component, type) (gitlab_component_service:mapping{monitor="global",service_aggregation="yes"})
         )
-    - record: experimental:gitlab_component_errors:rates_3d
+    - record: experimental:gitlab_service_errors:rates_3d
       expr: |
         sum by (env,environment,tier,type,stage,recorded_rate) (
           avg_over_time(experimental:gitlab_component_errors:rates_1h{env="gprd"}[3d] offset 10s) and on(component, type) (gitlab_component_service:mapping{monitor="global",service_aggregation="yes"})
