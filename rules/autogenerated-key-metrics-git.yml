@@ -4,6 +4,40 @@ groups:
 - name: 'Component-Level SLIs: git - 1m burn-rate'
   interval: 1m
   rules:
+  - record: gitlab_component_apdex:weight:score
+    labels:
+      component: gitlab_shell
+      stage: main
+      tier: sv
+      type: git
+    expr: |
+      sum by (environment) (
+        rate(haproxy_ssh_request_duration_seconds_bucket{le="+Inf"}[1m])
+      )
+  - record: gitlab_component_apdex:ratio
+    labels:
+      component: gitlab_shell
+      stage: main
+      tier: sv
+      type: git
+    expr: |
+      (
+        sum by (environment) (
+          rate(haproxy_ssh_request_duration_seconds_bucket{le="16"}[1m])
+        )
+        +
+        sum by (environment) (
+          rate(haproxy_ssh_request_duration_seconds_bucket{le="32"}[1m])
+        )
+      )
+      /
+      2
+      /
+      (
+        sum by (environment) (
+          rate(haproxy_ssh_request_duration_seconds_bucket{le="+Inf"}[1m])
+        ) > 0
+      )
   - record: gitlab_component_ops:rate
     labels:
       component: gitlab_shell
@@ -303,6 +337,40 @@ groups:
 - name: 'Component-Level SLIs: git - 5m burn-rate'
   interval: 1m
   rules:
+  - record: gitlab_component_apdex:weight:score_5m
+    labels:
+      component: gitlab_shell
+      stage: main
+      tier: sv
+      type: git
+    expr: |
+      sum by (environment) (
+        rate(haproxy_ssh_request_duration_seconds_bucket{le="+Inf"}[5m])
+      )
+  - record: gitlab_component_apdex:ratio_5m
+    labels:
+      component: gitlab_shell
+      stage: main
+      tier: sv
+      type: git
+    expr: |
+      (
+        sum by (environment) (
+          rate(haproxy_ssh_request_duration_seconds_bucket{le="16"}[5m])
+        )
+        +
+        sum by (environment) (
+          rate(haproxy_ssh_request_duration_seconds_bucket{le="32"}[5m])
+        )
+      )
+      /
+      2
+      /
+      (
+        sum by (environment) (
+          rate(haproxy_ssh_request_duration_seconds_bucket{le="+Inf"}[5m])
+        ) > 0
+      )
   - record: gitlab_component_ops:rate_5m
     labels:
       component: gitlab_shell
@@ -602,6 +670,38 @@ groups:
 - name: 'Component-Level SLIs: git - 30m burn-rate'
   interval: 2m
   rules:
+  - record: gitlab_component_apdex:weight:score_30m
+    labels:
+      component: gitlab_shell
+      stage: main
+      tier: sv
+      type: git
+    expr: |
+      sum by (environment) (
+        rate(haproxy_ssh_request_duration_seconds_bucket{le="+Inf"}[30m])
+      )
+  - record: gitlab_component_apdex:ratio_30m
+    labels:
+      component: gitlab_shell
+      stage: main
+      tier: sv
+      type: git
+    expr: |
+      (
+        sum by (environment) (
+          rate(haproxy_ssh_request_duration_seconds_bucket{le="16"}[30m])
+        )
+        +
+        sum by (environment) (
+          rate(haproxy_ssh_request_duration_seconds_bucket{le="32"}[30m])
+        )
+      )
+      /
+      2
+      / on(environment) group_left()
+      (
+        gitlab_component_apdex:weight:score_30m{component="gitlab_shell",stage="main",tier="sv",type="git"} > 0
+      )
   - record: gitlab_component_ops:rate_30m
     labels:
       component: gitlab_shell
@@ -901,6 +1001,40 @@ groups:
 - name: 'Component-Level SLIs: git - 1h burn-rate'
   interval: 1m
   rules:
+  - record: gitlab_component_apdex:weight:score_1h
+    labels:
+      component: gitlab_shell
+      stage: main
+      tier: sv
+      type: git
+    expr: |
+      sum by (environment) (
+        rate(haproxy_ssh_request_duration_seconds_bucket{le="+Inf"}[1h])
+      )
+  - record: gitlab_component_apdex:ratio_1h
+    labels:
+      component: gitlab_shell
+      stage: main
+      tier: sv
+      type: git
+    expr: |
+      (
+        sum by (environment) (
+          rate(haproxy_ssh_request_duration_seconds_bucket{le="16"}[1h])
+        )
+        +
+        sum by (environment) (
+          rate(haproxy_ssh_request_duration_seconds_bucket{le="32"}[1h])
+        )
+      )
+      /
+      2
+      /
+      (
+        sum by (environment) (
+          rate(haproxy_ssh_request_duration_seconds_bucket{le="+Inf"}[1h])
+        ) > 0
+      )
   - record: gitlab_component_ops:rate_1h
     labels:
       component: gitlab_shell
@@ -1200,6 +1334,38 @@ groups:
 - name: 'Component-Level SLIs: git - 6h burn-rate'
   interval: 2m
   rules:
+  - record: gitlab_component_apdex:weight:score_6h
+    labels:
+      component: gitlab_shell
+      stage: main
+      tier: sv
+      type: git
+    expr: |
+      sum by (environment) (
+        rate(haproxy_ssh_request_duration_seconds_bucket{le="+Inf"}[6h])
+      )
+  - record: gitlab_component_apdex:ratio_6h
+    labels:
+      component: gitlab_shell
+      stage: main
+      tier: sv
+      type: git
+    expr: |
+      (
+        sum by (environment) (
+          rate(haproxy_ssh_request_duration_seconds_bucket{le="16"}[6h])
+        )
+        +
+        sum by (environment) (
+          rate(haproxy_ssh_request_duration_seconds_bucket{le="32"}[6h])
+        )
+      )
+      /
+      2
+      / on(environment) group_left()
+      (
+        gitlab_component_apdex:weight:score_6h{component="gitlab_shell",stage="main",tier="sv",type="git"} > 0
+      )
   - record: gitlab_component_ops:rate_6h
     labels:
       component: gitlab_shell
