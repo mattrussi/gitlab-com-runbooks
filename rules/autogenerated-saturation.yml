@@ -1043,6 +1043,27 @@ groups:
       )
   - record: gitlab_component_saturation:ratio
     labels:
+      component: redis_memory_shared_state
+    expr: |
+      max by(environment, tier, type, stage, shard) (
+        clamp_min(
+          clamp_max(
+            (
+              max by (environment, tier, type, stage, shard, fqdn, instance, shard) (
+                redis_memory_used_bytes{type="redis-cluster-shared-state"}
+              )
+              /
+              avg by (environment, tier, type, stage, shard, fqdn, instance, shard) (
+                redis_memory_max_bytes{type="redis-cluster-shared-state"}
+              )
+            ) and on (fqdn) redis_memory_max_bytes{type="redis-cluster-shared-state"} != 0
+            ,
+            1)
+        ,
+        0)
+      )
+  - record: gitlab_component_saturation:ratio
+    labels:
       component: redis_memory_tracechunks
     expr: |
       max by(environment, tier, type, stage, shard) (
@@ -1854,6 +1875,14 @@ groups:
     expr: "0.75"
   - record: slo:max:soft:gitlab_component_saturation:ratio
     labels:
+      component: redis_memory_shared_state
+    expr: "0.7"
+  - record: slo:max:hard:gitlab_component_saturation:ratio
+    labels:
+      component: redis_memory_shared_state
+    expr: "0.75"
+  - record: slo:max:soft:gitlab_component_saturation:ratio
+    labels:
       component: redis_memory_tracechunks
     expr: "0.4"
   - record: slo:max:hard:gitlab_component_saturation:ratio
@@ -2467,6 +2496,14 @@ groups:
     labels:
       capacity_planning_strategy: quantile95_1h
       component: redis_memory_sessions
+      horiz_scaling: "no"
+      quantile: max
+      severity: s2
+    expr: "1"
+  - record: gitlab_component_saturation_info
+    labels:
+      capacity_planning_strategy: quantile95_1h
+      component: redis_memory_shared_state
       horiz_scaling: "no"
       quantile: max
       severity: s2
@@ -6329,6 +6366,72 @@ groups:
     expr: |
       gitlab_component_saturation:ratio{component="redis_memory_sessions"} > on(component) group_left
       slo:max:hard:gitlab_component_saturation:ratio{component="redis_memory_sessions"}
+  - alert: component_saturation_slo_out_of_bounds
+    for: 5m
+    annotations:
+      title: The Redis Memory Utilization of Max Memory resource of the {{ $labels.type
+        }} service ({{ $labels.stage }} stage) has a saturation exceeding SLO and
+        is close to its capacity limit.
+      description: |
+        This means that this resource is running close to capacity and is at risk of exceeding its current capacity limit.
+
+        Details of the Redis Memory Utilization of Max Memory resource:
+
+        Redis maxmemory utilization per node
+
+        On the SharedState Redis we have maxmemory and a `noeviction` eviction policy. Keys will not be evicted in this policy. If the memory utilization reaches maxmemory, write requests will fail, so we want to be alerted some timne before that happens.
+      grafana_dashboard_id: alerts-sat_redis_memory_shared_state
+      grafana_dashboard_link: https://dashboards.gitlab.net/d/alerts-sat_redis_memory_shared_state?from=now-6h/m&to=now-1m/m&var-environment={{
+        $labels.environment }}&var-type={{ $labels.type }}&var-stage={{ $labels.stage
+        }}
+      grafana_min_zoom_hours: "6"
+      grafana_panel_id: "2731369815"
+      grafana_variables: environment,type,stage
+      promql_query: |
+        max by(environment, tier, type, stage, shard, fqdn, instance, shard) (
+          clamp_min(
+            clamp_max(
+              (
+                max by (environment, tier, type, stage, shard, fqdn, instance, shard) (
+                  redis_memory_used_bytes{environment="{{ $labels.environment }}",stage="{{ $labels.stage }}",type="{{ $labels.type }}"}
+                )
+                /
+                avg by (environment, tier, type, stage, shard, fqdn, instance, shard) (
+                  redis_memory_max_bytes{environment="{{ $labels.environment }}",stage="{{ $labels.stage }}",type="{{ $labels.type }}"}
+                )
+              ) and on (fqdn) redis_memory_max_bytes{environment="{{ $labels.environment }}",stage="{{ $labels.stage }}",type="{{ $labels.type }}"} != 0
+              ,
+              1)
+          ,
+          0)
+        )
+      promql_template_1: |
+        max by(environment, tier, type, stage, shard, fqdn, instance, shard) (
+          clamp_min(
+            clamp_max(
+              (
+                max by (environment, tier, type, stage, shard, fqdn, instance, shard) (
+                  redis_memory_used_bytes{environment="{{ $labels.environment }}",stage="{{ $labels.stage }}",type="{{ $labels.type }}"}
+                )
+                /
+                avg by (environment, tier, type, stage, shard, fqdn, instance, shard) (
+                  redis_memory_max_bytes{environment="{{ $labels.environment }}",stage="{{ $labels.stage }}",type="{{ $labels.type }}"}
+                )
+              ) and on (fqdn) redis_memory_max_bytes{environment="{{ $labels.environment }}",stage="{{ $labels.stage }}",type="{{ $labels.type }}"} != 0
+              ,
+              1)
+          ,
+          0)
+        )
+      runbook: docs/{{ $labels.type }}/README.md
+    labels:
+      alert_type: cause
+      pager: pagerduty
+      rules_domain: general
+      severity: s2
+    expr: |
+      gitlab_component_saturation:ratio{component="redis_memory_shared_state"} > on(component) group_left
+      slo:max:hard:gitlab_component_saturation:ratio{component="redis_memory_shared_state"}
   - alert: component_saturation_slo_out_of_bounds
     for: 5m
     annotations:

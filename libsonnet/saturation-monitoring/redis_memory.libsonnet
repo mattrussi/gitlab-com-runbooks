@@ -139,4 +139,20 @@ local excludedRedisInstances = ['redis-tracechunks'];
     },
   }),
 
+  redis_memory_shared_state: resourceSaturationPoint(maxMemoryDefinition {
+    appliesTo: ['redis-cluster-shared-state'],
+    description: |||
+      Redis maxmemory utilization per node
+
+      On the SharedState Redis we have maxmemory and a `noeviction` eviction policy.
+      Keys will not be evicted in this policy. If the memory utilization reaches maxmemory,
+      write requests will fail, so we want to be alerted some timne before that happens.
+    |||,
+    grafana_dashboard_uid: 'sat_redis_memory_shared_state',
+    slos: {
+      soft: 0.70,
+      hard: 0.75,
+    },
+  }),
+
 }
