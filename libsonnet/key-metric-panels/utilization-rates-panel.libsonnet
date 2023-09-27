@@ -1,3 +1,4 @@
+local platformLinks = import '../gitlab-dashboards/platform_links.libsonnet';
 local basic = import 'grafana/basic.libsonnet';
 local promQuery = import 'grafana/prom_query.libsonnet';
 local selectors = import 'promql/selectors.libsonnet';
@@ -51,7 +52,11 @@ local utilizationRatesPanel(
     max=1,
     min=0,
     show=false,
-  );
+  )
+  + {
+    links+: platformLinks.saturationDetails(serviceType),
+  }
+;
 
 {
   panel:: utilizationRatesPanel,

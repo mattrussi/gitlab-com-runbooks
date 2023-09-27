@@ -1058,6 +1058,24 @@
       },
       "lines": true,
       "linewidth": 1,
+      "links": [
+        {
+          "title": "webservice Service | kube_container_cpu resource Dashboard",
+          "url": "https://dashboards.gitlab.net/d/alerts-sat_kube_container_cpu/?var-environment=gprd\u0026var-type=webservice\u0026var-stage=main\u0026var-component=kube_container_cpu"
+        },
+        {
+          "title": "webservice Service | kube_container_rss resource Dashboard",
+          "url": "https://dashboards.gitlab.net/d/alerts-sat_kube_container_rss/?var-environment=gprd\u0026var-type=webservice\u0026var-stage=main\u0026var-component=kube_container_rss"
+        },
+        {
+          "title": "webservice Service | kube_pool_cpu resource Dashboard",
+          "url": "https://dashboards.gitlab.net/d/alerts-sat_kube_pool_cpu/?var-environment=gprd\u0026var-type=webservice\u0026var-stage=main\u0026var-component=kube_pool_cpu"
+        },
+        {
+          "title": "webservice Service | puma_workers resource Dashboard",
+          "url": "https://dashboards.gitlab.net/d/alerts-sat_puma_workers/?var-environment=gprd\u0026var-type=webservice\u0026var-stage=main\u0026var-component=puma_workers"
+        }
+      ],
       "nullPointMode": "null",
       "percentage": false,
       "pointradius": 5,

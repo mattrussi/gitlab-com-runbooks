@@ -14,7 +14,7 @@ test.suite({
     actual: grafana.overviewDashboard('web', baseURL=baseURL),
     expectContains: {
       name: 'web Service Overview Dashboard',
-      url: '%(baseURL)s/d/web-main' % { baseURL: baseURL },
+      url: '%(baseURL)s/web-main' % { baseURL: baseURL },
     },
   },
   testResourceDashboardWithDefaults: {
@@ -29,7 +29,7 @@ test.suite({
     actual: grafana.resourceDashboard('web', 'sat_kube_container_cpu', 'kube_container_cpu', baseURL=baseURL),
     expectContains: {
       name: 'web Service | kube_container_cpu resource Dashboard',
-      url: '%(baseURL)s/d/alerts-sat_kube_container_cpu/?var-environment=gprd&var-type=web&var-stage=main&var-component=kube_container_cpu' % { baseURL: baseURL },
+      url: '%(baseURL)s/alerts-sat_kube_container_cpu/?var-environment=gprd&var-type=web&var-stage=main&var-component=kube_container_cpu' % { baseURL: baseURL },
     },
   },
 })
