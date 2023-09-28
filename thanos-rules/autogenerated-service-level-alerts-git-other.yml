@@ -11,7 +11,7 @@ groups:
       title: The gitlab_shell SLI of the git service (`{{ $labels.stage }}` stage)
         has not received any traffic in the past 30m
       description: |
-        We monitor GitLab shell, using HAProxy SSH connection information.
+        We monitor GitLab shell, using HAProxy 2 SSH connection information.
 
         This alert signifies that the SLI is reporting a cessation of traffic; the signal is present, but is zero.
       grafana_dashboard_id: git-main/git-overview
@@ -22,7 +22,7 @@ groups:
       grafana_variables: environment,stage
       promql_template_1: |
         sum by (env,environment,tier,stage) (
-          sum by (environment) (haproxy_backend_current_session_rate{backend=~"ssh|altssh"})
+          rate(haproxy_backend_sessions_total{backend=~"altssh|ssh",environment="{{ $labels.environment }}",stage="{{ $labels.stage }}"}[5m])
         )
       runbook: docs/git/README.md
     labels:
@@ -46,7 +46,7 @@ groups:
       title: The gitlab_shell SLI of the git service (`{{ $labels.stage }}` stage)
         has not reported any traffic in the past 30m
       description: |
-        We monitor GitLab shell, using HAProxy SSH connection information.
+        We monitor GitLab shell, using HAProxy 2 SSH connection information.
 
         This alert signifies that the SLI was previously reporting traffic, but is no longer - the signal is absent.
 
@@ -59,7 +59,7 @@ groups:
       grafana_variables: environment,stage
       promql_template_1: |
         sum by (env,environment,tier,stage) (
-          sum by (environment) (haproxy_backend_current_session_rate{backend=~"ssh|altssh"})
+          rate(haproxy_backend_sessions_total{backend=~"altssh|ssh",environment="{{ $labels.environment }}",stage="{{ $labels.stage }}"}[5m])
         )
       runbook: docs/git/README.md
     labels:
@@ -83,7 +83,7 @@ groups:
       title: The gitlab_shell SLI of the git service in region `{{ $labels.region
         }}` has not received any traffic in the past 30m
       description: |
-        We monitor GitLab shell, using HAProxy SSH connection information.
+        We monitor GitLab shell, using HAProxy 2 SSH connection information.
 
         This alert signifies that the SLI is reporting a cessation of traffic; the signal is present, but is zero.
 
@@ -96,7 +96,7 @@ groups:
       grafana_variables: environment,stage
       promql_template_1: |
         sum by (env,environment,tier,stage,region) (
-          sum by (environment) (haproxy_backend_current_session_rate{backend=~"ssh|altssh"})
+          rate(haproxy_backend_sessions_total{backend=~"altssh|ssh",environment="{{ $labels.environment }}",region="{{ $labels.region }}",stage="{{ $labels.stage }}"}[5m])
         )
       runbook: docs/git/README.md
     labels:
@@ -120,7 +120,7 @@ groups:
       title: The gitlab_shell SLI of the git service in region `{{ $labels.region
         }}` has not reported any traffic in the past 30m
       description: |
-        We monitor GitLab shell, using HAProxy SSH connection information.
+        We monitor GitLab shell, using HAProxy 2 SSH connection information.
 
         This alert signifies that the SLI was previously reporting traffic, but is no longer - the signal is absent.
 
@@ -135,7 +135,7 @@ groups:
       grafana_variables: environment,stage
       promql_template_1: |
         sum by (env,environment,tier,stage,region) (
-          sum by (environment) (haproxy_backend_current_session_rate{backend=~"ssh|altssh"})
+          rate(haproxy_backend_sessions_total{backend=~"altssh|ssh",environment="{{ $labels.environment }}",region="{{ $labels.region }}",stage="{{ $labels.stage }}"}[5m])
         )
       runbook: docs/git/README.md
     labels:
@@ -153,154 +153,6 @@ groups:
       gitlab_regional_sli_ops:rate_5m{component="gitlab_shell",env!~"gprd|ops",monitor="global",stage="main",type="git"} offset 1h
       unless
       gitlab_regional_sli_ops:rate_5m{component="gitlab_shell",env!~"gprd|ops",monitor="global",stage="main",type="git"}
-  - alert: GitServiceGitlabShellV2TrafficCessation
-    for: 5m
-    annotations:
-      title: The gitlab_shell_v2 SLI of the git service (`{{ $labels.stage }}` stage)
-        has not received any traffic in the past 30m
-      description: |
-        We monitor GitLab shell, using HAProxy 2.6 SSH connection information.
-
-        This alert signifies that the SLI is reporting a cessation of traffic; the signal is present, but is zero.
-      grafana_dashboard_id: git-main/git-overview
-      grafana_dashboard_link: https://dashboards.gitlab.net/d/git-main/git-overview?from=now-6h/m&to=now-1m/m&var-environment={{
-        $labels.environment }}&var-stage={{ $labels.stage }}
-      grafana_min_zoom_hours: "6"
-      grafana_panel_id: "3729461084"
-      grafana_variables: environment,stage
-      promql_template_1: |
-        sum by (env,environment,tier,stage) (
-          rate(haproxy_backend_sessions_total{backend=~"altssh|ssh",environment="{{ $labels.environment }}",stage="{{ $labels.stage }}"}[5m])
-        )
-      runbook: docs/git/README.md
-    labels:
-      aggregation: component
-      alert_class: traffic_cessation
-      alert_type: cause
-      feature_category: not_owned
-      pager: pagerduty
-      rules_domain: general
-      severity: s2
-      sli_type: ops
-      slo_alert: "no"
-      user_impacting: "yes"
-    expr: |
-      gitlab_component_ops:rate_30m{component="gitlab_shell_v2",env!~"gprd|ops",monitor="global",stage="main",type="git"} == 0
-      and
-      gitlab_component_ops:rate_30m{component="gitlab_shell_v2",env!~"gprd|ops",monitor="global",stage="main",type="git"} offset 1h >= 0.16666666666666666
-  - alert: GitServiceGitlabShellV2TrafficAbsent
-    for: 30m
-    annotations:
-      title: The gitlab_shell_v2 SLI of the git service (`{{ $labels.stage }}` stage)
-        has not reported any traffic in the past 30m
-      description: |
-        We monitor GitLab shell, using HAProxy 2.6 SSH connection information.
-
-        This alert signifies that the SLI was previously reporting traffic, but is no longer - the signal is absent.
-
-        This could be caused by a change to the metrics used in the SLI, or by the service not receiving traffic.
-      grafana_dashboard_id: git-main/git-overview
-      grafana_dashboard_link: https://dashboards.gitlab.net/d/git-main/git-overview?from=now-6h/m&to=now-1m/m&var-environment={{
-        $labels.environment }}&var-stage={{ $labels.stage }}
-      grafana_min_zoom_hours: "6"
-      grafana_panel_id: "3729461084"
-      grafana_variables: environment,stage
-      promql_template_1: |
-        sum by (env,environment,tier,stage) (
-          rate(haproxy_backend_sessions_total{backend=~"altssh|ssh",environment="{{ $labels.environment }}",stage="{{ $labels.stage }}"}[5m])
-        )
-      runbook: docs/git/README.md
-    labels:
-      aggregation: component
-      alert_class: traffic_cessation
-      alert_type: cause
-      feature_category: not_owned
-      pager: pagerduty
-      rules_domain: general
-      severity: s2
-      sli_type: ops
-      slo_alert: "no"
-      user_impacting: "yes"
-    expr: |
-      gitlab_component_ops:rate_5m{component="gitlab_shell_v2",env!~"gprd|ops",monitor="global",stage="main",type="git"} offset 1h
-      unless
-      gitlab_component_ops:rate_5m{component="gitlab_shell_v2",env!~"gprd|ops",monitor="global",stage="main",type="git"}
-  - alert: GitServiceGitlabShellV2TrafficCessationRegional
-    for: 5m
-    annotations:
-      title: The gitlab_shell_v2 SLI of the git service in region `{{ $labels.region
-        }}` has not received any traffic in the past 30m
-      description: |
-        We monitor GitLab shell, using HAProxy 2.6 SSH connection information.
-
-        This alert signifies that the SLI is reporting a cessation of traffic; the signal is present, but is zero.
-
-        Note that this alert is specific to the `{{ $labels.region }}` region.
-      grafana_dashboard_id: git-main/git-overview
-      grafana_dashboard_link: https://dashboards.gitlab.net/d/git-main/git-overview?from=now-6h/m&to=now-1m/m&var-environment={{
-        $labels.environment }}&var-stage={{ $labels.stage }}
-      grafana_min_zoom_hours: "6"
-      grafana_panel_id: "3729461084"
-      grafana_variables: environment,stage
-      promql_template_1: |
-        sum by (env,environment,tier,stage,region) (
-          rate(haproxy_backend_sessions_total{backend=~"altssh|ssh",environment="{{ $labels.environment }}",region="{{ $labels.region }}",stage="{{ $labels.stage }}"}[5m])
-        )
-      runbook: docs/git/README.md
-    labels:
-      aggregation: regional_component
-      alert_class: traffic_cessation
-      alert_type: cause
-      feature_category: not_owned
-      pager: pagerduty
-      rules_domain: general
-      severity: s2
-      sli_type: ops
-      slo_alert: "no"
-      user_impacting: "yes"
-    expr: |
-      gitlab_regional_sli_ops:rate_30m{component="gitlab_shell_v2",env!~"gprd|ops",monitor="global",stage="main",type="git"} == 0
-      and
-      gitlab_regional_sli_ops:rate_30m{component="gitlab_shell_v2",env!~"gprd|ops",monitor="global",stage="main",type="git"} offset 1h >= 0.16666666666666666
-  - alert: GitServiceGitlabShellV2TrafficAbsentRegional
-    for: 30m
-    annotations:
-      title: The gitlab_shell_v2 SLI of the git service in region `{{ $labels.region
-        }}` has not reported any traffic in the past 30m
-      description: |
-        We monitor GitLab shell, using HAProxy 2.6 SSH connection information.
-
-        This alert signifies that the SLI was previously reporting traffic, but is no longer - the signal is absent.
-
-        This could be caused by a change to the metrics used in the SLI, or by the service not receiving traffic.
-
-        Note that this alert is specific to the `{{ $labels.region }}` region.
-      grafana_dashboard_id: git-main/git-overview
-      grafana_dashboard_link: https://dashboards.gitlab.net/d/git-main/git-overview?from=now-6h/m&to=now-1m/m&var-environment={{
-        $labels.environment }}&var-stage={{ $labels.stage }}
-      grafana_min_zoom_hours: "6"
-      grafana_panel_id: "3729461084"
-      grafana_variables: environment,stage
-      promql_template_1: |
-        sum by (env,environment,tier,stage,region) (
-          rate(haproxy_backend_sessions_total{backend=~"altssh|ssh",environment="{{ $labels.environment }}",region="{{ $labels.region }}",stage="{{ $labels.stage }}"}[5m])
-        )
-      runbook: docs/git/README.md
-    labels:
-      aggregation: regional_component
-      alert_class: traffic_cessation
-      alert_type: cause
-      feature_category: not_owned
-      pager: pagerduty
-      rules_domain: general
-      severity: s2
-      sli_type: ops
-      slo_alert: "no"
-      user_impacting: "yes"
-    expr: |
-      gitlab_regional_sli_ops:rate_5m{component="gitlab_shell_v2",env!~"gprd|ops",monitor="global",stage="main",type="git"} offset 1h
-      unless
-      gitlab_regional_sli_ops:rate_5m{component="gitlab_shell_v2",env!~"gprd|ops",monitor="global",stage="main",type="git"}
   - alert: GitServiceGitlabSshdApdexSLOViolation
     for: 2m
     annotations:

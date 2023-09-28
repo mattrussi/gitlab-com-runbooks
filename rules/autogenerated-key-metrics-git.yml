@@ -12,16 +12,6 @@ groups:
       type: git
     expr: |
       sum by (env,environment) (
-        sum by (environment) (haproxy_backend_current_session_rate{backend=~"ssh|altssh"})
-      )
-  - record: gitlab_component_ops:rate
-    labels:
-      component: gitlab_shell_v2
-      stage: main
-      tier: sv
-      type: git
-    expr: |
-      sum by (env,environment) (
         rate(haproxy_backend_sessions_total{backend=~"altssh|ssh"}[1m] offset 30s)
       )
   - record: gitlab_component_apdex:success:rate
@@ -306,16 +296,6 @@ groups:
   - record: gitlab_component_ops:rate_5m
     labels:
       component: gitlab_shell
-      stage: main
-      tier: sv
-      type: git
-    expr: |
-      sum by (env,environment) (
-        sum by (environment) (haproxy_backend_current_session_rate{backend=~"ssh|altssh"})
-      )
-  - record: gitlab_component_ops:rate_5m
-    labels:
-      component: gitlab_shell_v2
       stage: main
       tier: sv
       type: git
@@ -610,16 +590,6 @@ groups:
       type: git
     expr: |
       sum by (env,environment) (
-        sum by (environment) (haproxy_backend_current_session_rate{backend=~"ssh|altssh"})
-      )
-  - record: gitlab_component_ops:rate_30m
-    labels:
-      component: gitlab_shell_v2
-      stage: main
-      tier: sv
-      type: git
-    expr: |
-      sum by (env,environment) (
         rate(haproxy_backend_sessions_total{backend=~"altssh|ssh"}[30m] offset 30s)
       )
   - record: gitlab_component_apdex:success:rate_30m
@@ -904,16 +874,6 @@ groups:
   - record: gitlab_component_ops:rate_1h
     labels:
       component: gitlab_shell
-      stage: main
-      tier: sv
-      type: git
-    expr: |
-      sum by (env,environment) (
-        sum by (environment) (haproxy_backend_current_session_rate{backend=~"ssh|altssh"})
-      )
-  - record: gitlab_component_ops:rate_1h
-    labels:
-      component: gitlab_shell_v2
       stage: main
       tier: sv
       type: git
@@ -1208,16 +1168,6 @@ groups:
       type: git
     expr: |
       sum by (env,environment) (
-        sum by (environment) (haproxy_backend_current_session_rate{backend=~"ssh|altssh"})
-      )
-  - record: gitlab_component_ops:rate_6h
-    labels:
-      component: gitlab_shell_v2
-      stage: main
-      tier: sv
-      type: git
-    expr: |
-      sum by (env,environment) (
         rate(haproxy_backend_sessions_total{backend=~"altssh|ssh"}[6h] offset 30s)
       )
   - record: gitlab_component_apdex:success:rate_6h
@@ -1502,15 +1452,6 @@ groups:
   - record: gitlab_component_service:mapping
     labels:
       component: gitlab_shell
-      global_aggregation: "no"
-      regional_aggregation: "yes"
-      service_aggregation: "yes"
-      tier: sv
-      type: git
-    expr: "1"
-  - record: gitlab_component_service:mapping
-    labels:
-      component: gitlab_shell_v2
       global_aggregation: "no"
       regional_aggregation: "yes"
       service_aggregation: "yes"
