@@ -74,6 +74,7 @@
 * [Life of a Git Request](../tutorials/overview_life_of_a_git_request.md)
 * [Life of a Web Request](../tutorials/overview_life_of_a_web_request.md)
 * [about.gitlab.com](../uncategorized/about-gitlab-com.md)
+* [Alert Routing Howto](../uncategorized/alert-routing.md)
 * [Blocked user login attempts are high](../uncategorized/blocked-user-logins.md)
 * [Debug failed chef provisioning](../uncategorized/debug-failed-chef-provisioning.md)
 * [Domain Registration](../uncategorized/domain-registration.md)
