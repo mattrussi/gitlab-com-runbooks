@@ -814,7 +814,7 @@
             "type": "prometheus",
             "uid": "PA258B30F88C30650"
           },
-          "expr": "sum(rate(container_cpu_usage_seconds_total{container=\"istio-proxy\"environment=\"$environment\"}[1m]))",
+          "expr": "sum(rate(container_cpu_usage_seconds_total{container=\"istio-proxy\",environment=\"$environment\"}[1m]))",
           "format": "time_series",
           "hide": false,
           "intervalFactor": 2,
