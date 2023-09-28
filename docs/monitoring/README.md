@@ -65,6 +65,7 @@
 * [../spamcheck/index.md](../spamcheck/index.md)
 * [GET Monitoring Setup](../staging-ref/get-monitoring-setup.md)
 * [../uncategorized/access-gcp-hosts.md](../uncategorized/access-gcp-hosts.md)
+* [Alert Routing Howto](../uncategorized/alert-routing.md)
 * [GitLab Job Completion](../uncategorized/job_completion.md)
 * [../uncategorized/osquery.md](../uncategorized/osquery.md)
 * [Periodic Job Monitoring](../uncategorized/periodic_job_monitoring.md)

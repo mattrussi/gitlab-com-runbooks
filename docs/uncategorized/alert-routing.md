@@ -6,50 +6,48 @@ How to setup alert routing for your team.
 
 You must be in an elite stage group team! 😉🙂 Thank you for shifting right and focusing on GitLab.com.
 
-Luckily, this is easy to configure.
+Here is a high level overview of how the pieces (SLI metric(s), SLI definition(s), and Prometheus alert manager) are tied together (using the `global_search` SLI as an example):
 
-Step 1: Update the `teams` section in the
-[`teams.yml`](https://gitlab.com/gitlab-com/runbooks/blob/master/services/teams.yml)
-file, with a new `team` entry or update an existing team entry, as follows:
+![alert-manager](img/alert-routing.png)
 
-```yaml
-teams:
-- name: runner
-  product_stage_group: runner
-  slack_alerts_channel: alerts-ci-cd
-  send_slo_alerts_to_team_slack_channel: true
-```
+[Diagram source](img/alert-routing.excalidraw)
 
-1. `name` is name, using alphanumeric characters only
-1. `product_stage_group` should match the `group` key in <https://gitlab.com/gitlab-com/www-gitlab-com/blob/master/data/stages.yml>
-1. The `slack_alerts_channel` is the channel in Slack that the team would like to use for alerts (without the initial '#')
-1. `send_slo_alerts_to_team_slack_channel` send regular SLO alerts to the slack channel.
+See below the step by step.
 
-Step 2: Profit! Any alerts with a matching `product_stage_group` will then be routed to that team.
+### From features to slack notifications (associating SLIs with your stage group)
 
-**Note:** These alerts are currently only supported for Service Level Indicators with a fixed feature category.
-Support for SLIs with a feature category available in the source
-metrics will be added in [this
-project](https://gitlab.com/groups/gitlab-com/gl-infra/-/epics/615)
+In order to get a slack notifications sent to a specific channel, the steps below are required:
 
-### Associating SLIs with your stage group
+1. The SLOs should be defined for a specific service (from the [metrics-catalog](https://gitlab.com/gitlab-com/runbooks/-/tree/master/metrics-catalog/services)), under the monitoring thresholds field. See the service definition sample: <https://gitlab.com/gitlab-com/runbooks/-/tree/master/metrics-catalog#defining-service-monitoring>. Example: <https://gitlab.com/gitlab-com/runbooks/-/blob/e9ae5f09a1df3892aacf709a8657c186e99e054d/metrics-catalog/services/web.jsonnet#L24>
 
-This step is not always required, as some components are already configured with a `feature_category`.
+1. After the monitoring thresholds are in place, we need SLIs to measure whether we are meeting the SLO. The SLI(s) can be specified directly inside the `serviceLevelIndicators` field, or from our [SLI library](https://gitlab.com/gitlab-com/runbooks/-/blob/master/metrics-catalog/gitlab-slis/library.libsonnet)--SLIs are metrics that should be instrumented in the application, normally by the usage of a [custom SLI](https://docs.gitlab.com/ee/development/application_slis/) that's associated to a feature category. SLIs from the library should be appended to the `serviceLevelIndicators`, for example: <https://gitlab.com/gitlab-com/runbooks/-/blob/e9ae5f09a1df3892aacf709a8657c186e99e054d/metrics-catalog/services/web.jsonnet#L187>
 
-In the [metrics-catalog](https://gitlab.com/gitlab-com/runbooks/-/tree/master/metrics-catalog/services), ensure that the SLI is
-associated with a `feature_category` using the `featureCategory` annotation, as shown below.
+1. With SLI(s) in place, the only missing piece is an entry in the teams section in the [teams.yml](https://gitlab.com/gitlab-com/runbooks/-/blob/e9ae5f09a1df3892aacf709a8657c186e99e054d/services/teams.yml) file, where the team information should be added along with the flag  `send_slo_alerts_to_team_slack_channel` set to true and the `slack_alerts_channel` with the channel name. For example: <https://gitlab.com/gitlab-com/runbooks/-/blob/e9ae5f09a1df3892aacf709a8657c186e99e054d/services/teams.yml#L94>.
+
+    ```yaml
+    teams:
+    - name: runner
+      product_stage_group: runner
+      slack_alerts_channel: alerts-ci-cd
+      send_slo_alerts_to_team_slack_channel: true
+    ```
+
+    1. `name` is the team's name, using alphanumeric characters only
+    1. `product_stage_group` should match the `group` key in <https://gitlab.com/gitlab-com/www-gitlab-com/blob/master/data/stages.yml>
+    1. The `slack_alerts_channel` is the channel in Slack that the team would like to use for alerts (without the initial '#')
+    1. `send_slo_alerts_to_team_slack_channel` is a boolean flag to send regular SLO alerts to the slack channel.
+
+The steps above will allow Prometheus alert manager to route the SLO breaches from the service(s) to the teams' slack channel. The routing rules are generated from the [alertmanager.jsonnet](https://gitlab.com/gitlab-com/runbooks/-/blob/61e96ff6d0548700f1f4832aaf17d1bfae5b6d8f/alertmanager/alertmanager.jsonnet) file.
+
+**Notes**
+
+A piece of code--an endpoint, background job, a controller, etc--is attributed to a feature category, used to group a feature or multiple features under the same category. This feature category belongs to a stage group, a stage group can have an associated team in [teams.yml](https://gitlab.com/gitlab-com/runbooks/-/blob/e9ae5f09a1df3892aacf709a8657c186e99e054d/services/teams.yml).
 
 Valid feature categories can be found in <https://gitlab.com/gitlab-com/www-gitlab-com/blob/master/data/stages.yml> under the `categories` field.
 
-```jsonnet
-metricsCatalog.serviceDefinition({
-  type: 'ci-runners',
-  tier: 'runners',
-  serviceLevelIndicators: {
-    polling: {
-      userImpacting: true,
-      featureCategory: 'runner',
-```
+These alerts are currently only supported for Service Level Indicators with a fixed feature category.
+Support for SLIs with a feature category available in the source
+metrics will be added in [this project](https://gitlab.com/groups/gitlab-com/gl-infra/-/epics/615)
 
 If the metrics for the SLI are shared across multiple features, for
 example requests from the Rails app, please configure the feature
