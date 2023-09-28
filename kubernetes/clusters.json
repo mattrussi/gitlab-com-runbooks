@@ -54,6 +54,12 @@
     "region": "us-east1-d",
     "ssh_proxy": "console-01-sv-gprd.c.gitlab-production.internal"
   },
+  "gprd-gitlab-3okls": {
+    "name": "gitlab-3okls",
+    "project": "gitlab-production",
+    "region": "us-east1",
+    "ssh_proxy": "console-01-sv-gprd.c.gitlab-production.internal"
+  },
 
   "stgsub": {
     "name": "stgsub-customers-gke",

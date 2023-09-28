@@ -91,6 +91,11 @@ variables:
         GKE_CLUSTER: gprd-us-east1-d
         GOOGLE_PROJECT: gitlab-production
         LOCATION: us-east1-d
+      - DEPLOY_ENV: gprd-gitlab-3okls
+        GKE_CLUSTER: gitlab-3okls
+        GKE_CLUSTER_VAULT: gprd-gitlab-3okls
+        GOOGLE_PROJECT: gitlab-production
+        LOCATION: us-east1
       - DEPLOY_ENV: prdsub
         GKE_CLUSTER: prdsub-customers-gke
         GOOGLE_PROJECT: gitlab-subscriptions-prod
