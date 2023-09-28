@@ -1,126 +1,132 @@
 groups:
-- name: haproxy availability
-  interval: 60s
-  rules:
-  - record: instance:haproxy_availability:ratio
-    expr: >
-      avg_over_time(haproxy_up[1m])
-  - record: backend:haproxy_backend_availability:ratio
-    expr: >
-      avg without (fqdn, instance) (
-        avg_over_time(haproxy_backend_up[1m])
-      )
-  - record: server:haproxy_server_availability:ratio
-    expr: >
-      avg without (fqdn, instance, backend) (
-        avg_over_time(haproxy_server_up[1m])
-      )
+  - name: haproxy availability
+    interval: 60s
+    rules:
+      - record: instance:haproxy_availability:ratio
+        expr: >
+          sgn(avg_over_time(haproxy_process_uptime_seconds[1m]))
+      - record: backend:haproxy_backend_availability:ratio
+        expr: >
+          avg without (fqdn, instance) (
+            avg_over_time(haproxy_backend_status{state="UP"}[1m])
+          )
+      - record: server:haproxy_server_availability:ratio
+        expr: >
+          avg without (fqdn, instance, backend) (
+            avg_over_time(haproxy_server_status{state="UP"}[1m])
+          )
 
-- name: haproxy traffic
-  rules:
-  - record: backend_code:haproxy_server_http_responses_total:irate1m
-    expr: >
-      sum without (fqdn, instance, server) (
-        irate(haproxy_server_http_responses_total[1m])
-      )
-  - record: backend_code:haproxy_server_http_responses_total:rate5m
-    expr: >
-      sum without (fqdn, instance, server) (
-        rate(haproxy_server_http_responses_total[5m])
-      )
-  - record: frontend_code:haproxy_frontend_http_responses_total:irate1m
-    expr: >
-      sum without (fqdn, instance) (
-        irate(haproxy_frontend_http_responses_total[1m])
-      )
+  - name: haproxy traffic
+    rules:
+      - record: backend_code:haproxy_server_http_responses_total:irate1m
+        expr: >
+          sum without (fqdn, instance, server) (
+            irate(haproxy_server_http_responses_total[1m])
+          )
+      - record: backend_code:haproxy_server_http_responses_total:rate5m
+        expr: >
+          sum without (fqdn, instance, server) (
+            rate(haproxy_server_http_responses_total[5m])
+          )
+      - record: frontend_code:haproxy_frontend_http_responses_total:irate1m
+        expr: >
+          sum without (fqdn, instance) (
+            irate(haproxy_frontend_http_responses_total[1m])
+          )
+      - record: job_frontend:haproxy_frontend_bytes_in_total:irate1m
+        expr: >
+          sum without (fqdn, instance) (
+            irate(haproxy_frontend_bytes_in_total[1m])
+          )
+      - record: job_frontend:haproxy_frontend_bytes_out_total:irate1m
+        expr: >
+          sum without (fqdn, instance) (
+            irate(haproxy_frontend_bytes_out_total[1m])
+          )
+      - record: job_backend:haproxy_backend_response_errors_total:irate1m
+        expr: >
+          sum without (fqdn, instance) (
+            irate(haproxy_backend_response_errors_total[1m])
+          )
+      - record: job_frontend:haproxy_frontend_request_errors_total:irate1m
+        expr: >
+          sum without (fqdn, instance) (
+            irate(haproxy_frontend_request_errors_total[1m])
+          )
 
-  - record: job_frontend:haproxy_frontend_bytes_in_total:irate1m
-    expr: >
-      sum without (fqdn, instance) (
-        irate(haproxy_frontend_bytes_in_total[1m])
-      )
-  - record: job_frontend:haproxy_frontend_bytes_out_total:irate1m
-    expr: >
-      sum without (fqdn, instance) (
-        irate(haproxy_frontend_bytes_out_total[1m])
-      )
+      - alert: HighWebErrorRate
+        expr: |
+          sum by (environment) (backend_code:haproxy_server_http_responses_total:irate1m{backend=~"web|main_web",code="5xx",tier="lb"})
+          - sum by (environment) (backend_code:haproxy_server_http_responses_total:irate1m{backend=~"web|main_web",code!="5xx",tier="lb"})
+          > 0
+        for: 15s
+        labels:
+          pager: pagerduty
+          severity: s1
+          alert_type: symptom
+        annotations:
+          runbook: docs/frontend/haproxy.md
+          title: High Error Rate on Front End Web
+          description: |
+            We are having more 5xx returns than any other reply.
+            Web traffic is being impacted and the service is probably down.
+            Have you thought about turning it off and on again?
 
-  - record: job_backend:haproxy_backend_response_errors_total:irate1m
-    expr: >
-      sum without (fqdn, instance) (
-        irate(haproxy_backend_response_errors_total[1m])
-      )
-  - record: job_frontend:haproxy_frontend_request_errors_total:irate1m
-    expr: >
-      sum without (fqdn, instance) (
-        irate(haproxy_frontend_request_errors_total[1m])
-      )
+      - alert: HAProxyHighCPU
+        expr: haproxy_process_idle_time_percent < 5
+        for: 15m
+        labels:
+          pager: pagerduty
+          severity: s1
+          alert_type: cause
+        annotations:
+          runbook: docs/frontend/haproxy.md
+          title: HAProxy process high CPU usage on {{ $labels.fqdn }}
 
-  - alert: HighWebErrorRate
-    expr: sum(backend_code:haproxy_server_http_responses_total:irate1m{backend=~"web|main_web",code="5xx",tier="lb"}) by (environment)
-      - sum(backend_code:haproxy_server_http_responses_total:irate1m{backend=~"web|main_web",code!="5xx",tier="lb"}) by (environment)
-      > 0
-    for: 15s
-    labels:
-      pager: pagerduty
-      severity: s1
-      alert_type: symptom
-    annotations:
-      description: We are having more 5xx returns than any other reply. Web traffic
-        is being impacted and the service is probably down. Have you thought about
-        turning it off and on again?
-      runbook: docs/frontend/haproxy.md
-      title: High Error Rate on Front End Web
-  - alert: HAProxyHighCPU
-    expr: rate(haproxy_process_cpu_seconds_total[30s]) > 0.95
-    for: 15m
-    labels:
-      pager: pagerduty
-      severity: s1
-      alert_type: cause
-    annotations:
-      runbook: docs/frontend/haproxy.md
-      title: HAProxy process high CPU usage on {{ $labels.fqdn }}
-  - alert: SSHMaxStartupsMaybeBreached
-    # About the numbers here:
-    # I know that "for: 30s" and the actual threshold (0.25) look low, but this
-    # alert is meant to detect very brief spikes that occur for a few seconds at
-    # the top of the minute.  They absolutely should not occur at all; if they
-    # do then either the MaxStartups is being breached again, or something else
-    # is exploding.  See the runbook for more details
-    expr: sum(rate(haproxy_ssh_max_startups_breached_total[1m])) > 0.25
-    for: 30s
-    labels:
-      severity: s4
-      alert_type: cause
-    annotations:
-      description: We have detected conditions which suggest SSH's MaxStartups limit is being breached for git+ssh connections
-      runbook: docs/frontend/ssh-maxstartups-breach.md
-      title: Possible breach of SSH MaxStartups limit
-  - alert: HAProxyExtraneousProcesses
-    # DR environment is excluded here due to https://gitlab.com/gitlab-com/gl-infra/reliability/-/issues/8897
-    expr: sum(namedprocess_namegroup_num_procs{fqdn=~"fe-[0-9].*", groupname="haproxy", env!="dr"}) by (fqdn) > 2
-    for: 2h
-    labels:
-      severity: s3
-      alert_type: cause
-    annotations:
-      title: Extraneous processes detected on haproxy front-end
-      runbook: docs/frontend/haproxy.md
-      description: >
-        We are seeing extraneous processes on {{$labels.fqdn}}. These processes can interfere with state
-        changes and may cause issues with deployments. Normally on reload old HAProxy processes with active
-        connections should only remain active for 5 minutes. See the runbook for how to remove the extraneous
-        processes
-  - alert: HAProxyServerDown
-    expr: avg without (fqdn,instance) (avg_over_time(haproxy_server_up{env="gprd"}[10m])) <= 0.5
-    labels:
-      pager: pagerduty
-      severity: s2
-      alert_type: cause
-    annotations:
-      title: HAProxy failing backend server
-      runbook: docs/frontend/haproxy.md#server-down
-      description: >
-        More than half of the HAProxy instances think backend server={{ $labels.server }} backend={{ $labels.backend }}
-        is down for the last 10 minutes. The server may not be reachable or have failing health checks.
+      # About the numbers here:
+      #
+      # `for: 30s` and the actual threshold (0.25) look low,
+      #   but this alert is meant to detect very brief spikes that occur for a few seconds at the top of the minute.
+      # They absolutely should not occur at all;
+      #   if they do then either the MaxStartups is being breached again, or something else is exploding.
+      # See the runbook for more details
+      #
+      - alert: SSHMaxStartupsMaybeBreached
+        expr: sum(rate(haproxy_ssh_max_startups_breached_total[1m])) > 0.25  # This is an mtail metric!
+        for: 30s
+        labels:
+          severity: s4
+          alert_type: cause
+        annotations:
+          runbook: docs/frontend/ssh-maxstartups-breach.md
+          title: Possible breach of SSH MaxStartups limit
+          description: We have detected conditions which suggest SSH's MaxStartups limit is being breached for git+ssh connections.
+
+      - alert: HAProxyExtraneousProcesses
+        expr: sum by (fqdn) (namedprocess_namegroup_num_procs{groupname="haproxy", fqdn=~"haproxy-main-.*"})
+        for: 2h
+        labels:
+          severity: s3
+          alert_type: cause
+        annotations:
+          runbook: docs/frontend/haproxy.md
+          title: Extraneous processes detected on haproxy front-end
+          description: |
+            We are seeing extraneous processes on {{$labels.fqdn}}.
+            These processes can interfere with state changes and may cause issues with deployments.
+            Normally on reload old HAProxy processes with active connections should only remain active for 5 minutes.
+            See the runbook for how to remove the extraneous processes.
+
+      - alert: HAProxyServerDown
+        expr: avg without (fqdn,instance) (avg_over_time(haproxy_server_status{state="UP", env="gprd"}[10m])) <= 0.5
+        labels:
+          pager: pagerduty
+          severity: s2
+          alert_type: cause
+        annotations:
+          runbook: docs/frontend/haproxy.md#server-down
+          title: HAProxy failing backend server
+          description: |
+            More than half of the HAProxy instances think backend
+            server={{ $labels.server }} backend={{ $labels.backend }} is down for the last 10 minutes.
+            The server may not be reachable or have failing health checks.
