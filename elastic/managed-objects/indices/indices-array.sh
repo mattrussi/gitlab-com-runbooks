@@ -37,4 +37,5 @@ export indices=(
   vault
   workhorse
   zoekt
+  license-db
 )
