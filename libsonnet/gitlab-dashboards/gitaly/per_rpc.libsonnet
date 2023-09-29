@@ -82,4 +82,26 @@ local selectors = import 'promql/selectors.libsonnet';
       interval='$__interval',
       linewidth=1,
     ),
+  queueing_time(selectorHash)::
+    basic.timeseries(
+      title='95th queueing time (RPS)',
+      query=|||
+        histogram_quantile(0.95, sum(rate(gitaly_concurrency_limiting_acquiring_seconds_bucket{%(selector)s}[$__rate_interval])) by (le, fqdn, grpc_service, grpc_method))
+      ||| % { selector: selectors.serializeHash(selectorHash) },
+      legendFormat='/{{ grpc_service}}/{{ grpc_method }}',
+      interval='$__interval',
+      linewidth=1,
+      format='s',
+    ),
+  queueing_time_by_node(selectorHash)::
+    basic.timeseries(
+      title='95th queueing time (RPS)',
+      query=|||
+        histogram_quantile(0.95, sum(rate(gitaly_concurrency_limiting_acquiring_seconds_bucket{%(selector)s}[$__rate_interval])) by (le, fqdn))
+      ||| % { selector: selectors.serializeHash(selectorHash) },
+      legendFormat='{{ fqdn }}',
+      interval='$__interval',
+      linewidth=1,
+      format='s',
+    ),
 }

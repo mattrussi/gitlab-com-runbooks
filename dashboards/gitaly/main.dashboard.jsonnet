@@ -208,6 +208,9 @@ serviceDashboard.overview('gitaly')
 .addPanels(
   layout.grid([
     gitalyPackObjectsDashboards.in_process(selector, '{{ fqdn }}'),
+    gitalyPackObjectsDashboards.queued_commands(selector, '{{ fqdn }}'),
+    gitalyPackObjectsDashboards.queueing_time(selector, '{{ fqdn }}'),
+    gitalyPackObjectsDashboards.dropped_commands(selector, '{{ fqdn }}'),
     gitalyPackObjectsDashboards.cache_lookup(selector, '{{ result }}'),
   ], startRow=4001)
 )
@@ -224,6 +227,7 @@ serviceDashboard.overview('gitaly')
   layout.grid([
     gitalyPerRPCDashboards.in_progress_requests_by_node(selector),
     gitalyPerRPCDashboards.queued_requests_by_node(selector),
+    gitalyPerRPCDashboards.queueing_time_by_node(selector),
     gitalyPerRPCDashboards.dropped_requests_by_node(selector),
   ], startRow=5001)
 )

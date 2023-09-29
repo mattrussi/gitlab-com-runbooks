@@ -388,6 +388,7 @@ basic.dashboard(
       gitalyPerRPCDashboards.request_rate_by_code(selectorHash),
       gitalyPerRPCDashboards.in_progress_requests(selectorHash),
       gitalyPerRPCDashboards.queued_requests(selectorHash),
+      gitalyPerRPCDashboards.queueing_time(selectorHash),
       gitalyPerRPCDashboards.dropped_requests(selectorHash),
     ], startRow=5802)
   ),
@@ -404,6 +405,7 @@ basic.dashboard(
     layout.grid([
       gitalyPackObjectsDashboards.in_process(selectorHash, 'concurrency by repository'),
       gitalyPackObjectsDashboards.queued_commands(selectorHash, 'queued commands'),
+      gitalyPackObjectsDashboards.queueing_time(selectorHash, '95th queueing time'),
       gitalyPackObjectsDashboards.dropped_commands(selectorHash, '{{ reason }}'),
       gitalyPackObjectsDashboards.cache_served(selectorHash, 'cache served'),
       gitalyPackObjectsDashboards.cache_generated(selectorHash, 'cache generated'),
