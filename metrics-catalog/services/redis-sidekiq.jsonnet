@@ -24,4 +24,39 @@ metricsCatalog.serviceDefinition(
     },
   }
   + redisHelpers.gitlabcomObservabilityToolingForRedis('redis-sidekiq')
+  + {
+    capacityPlanning: {
+      components: [
+        {
+          name: 'redis_primary_cpu',
+          parameters: {
+            changepoints: ['2023-08-22', '2023-09-27'],
+
+          },
+          events: [
+            {
+              date: '2023-08-22',
+              name: 'A code change increased baseline load',
+              references: [
+                {
+                  title: 'gitlab-org/gitlab!119792',
+                  ref: 'https://gitlab.com/gitlab-org/gitlab/-/merge_requests/119792',
+                },
+              ],
+            },
+            {
+              date: '2023-09-27',
+              name: 'Shifting job deduplication out reduced baseline load',
+              references: [
+                {
+                  title: '&431',
+                  ref: 'https://gitlab.com/groups/gitlab-com/gl-infra/-/epics/431#note_1582594368',
+                },
+              ],
+            },
+          ],
+        },
+      ],
+    },
+  }
 )
