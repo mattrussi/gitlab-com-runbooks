@@ -12,8 +12,6 @@ Here is a high level overview of how the pieces (SLI metric(s), SLI definition(s
 
 [Diagram source](img/alert-routing.excalidraw)
 
-See below the step by step.
-
 ### From features to slack notifications (associating SLIs with your stage group)
 
 In order to get a slack notifications sent to a specific channel, the steps below are required:
