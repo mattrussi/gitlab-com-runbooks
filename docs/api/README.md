@@ -37,9 +37,9 @@
 * [../elastic/elastic-cloud.md](../elastic/elastic-cloud.md)
 * [../elastic/elasticsearch-integration-in-gitlab.md](../elastic/elasticsearch-integration-in-gitlab.md)
 * [ErrorTracking main troubleshooting document](../errortracking/overview.md)
-* [Blocking and disabling things in the HAProxy load balancers](../frontend/block-things-in-haproxy.md)
-* [HAProxy management at GitLab](../frontend/haproxy.md)
-* [Possible breach of SSH MaxStartups](../frontend/ssh-maxstartups-breach.md)
+* [Blocking and Disabling Things in HAProxy](../frontend/block-things-in-haproxy.md)
+* [HAProxy Management at GitLab](../frontend/haproxy.md)
+* [Possible Breach of SSH MaxStartups](../frontend/ssh-maxstartups-breach.md)
 * [Purge Git data](../git/purge-git-data.md)
 * [../gitaly/git-high-cpu-and-memory-usage.md](../gitaly/git-high-cpu-and-memory-usage.md)
 * [Gitaly multi-project migration](../gitaly/multi-proect-migration.md)
@@ -274,7 +274,7 @@ Scaling vertically by using a more powerful machine type also can be considered.
 ## Availability
 
 Healthchecks are defined here:
-<https://gitlab.com/gitlab-com/gl-infra/chef-repo/-/blob/1780142fd85f65e6599f94296f54df7da7346158/roles/gprd-base-lb-fe-config.json#L298>
+<https://gitlab.com/gitlab-com/gl-infra/chef-repo/-/blob/master/roles/gprd-base-haproxy-main-config.json>
 
 See our cookbook for how this configuration is built:
 <https://gitlab.com/gitlab-cookbooks/gitlab-haproxy/>

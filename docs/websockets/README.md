@@ -16,7 +16,7 @@
 
 ## Troubleshooting Pointers
 
-* [HAProxy management at GitLab](../frontend/haproxy.md)
+* [HAProxy Management at GitLab](../frontend/haproxy.md)
 * [../kube/k8s-operations.md](../kube/k8s-operations.md)
 * [Tuning and Modifying Alerts](../monitoring/alert_tuning.md)
 * [Gitlab.com on Kubernetes](../onboarding/gitlab.com_on_k8s.md)

@@ -345,8 +345,9 @@ such as a spike in the call rate or response time of `PostUploadPack` gRPC calls
   * Provides more background on how `git` client requests are translated into RPC calls to Gitaly, which then runs the server-side `git` commands on its local copy of the bare git repo.
 * [How Gitaly fits into GitLab](https://gitlab.com/gitlab-org/gitaly/tree/master#presentations)
   * A series of 1-hour training videos for contributors new to GitLab and Gitaly.
-* The live HAProxy config file (e.g. `/etc/haproxy/haproxy.cfg` on host `fe-01-lb-gprd.c.gitlab-production.internal`) and
-  the chef role that controls it ([gprd-base-lb-fe](https://gitlab.com/gitlab-com/gl-infra/chef-repo/-/blob/master/roles/gprd-base-lb-fe.json))
+* The live HAProxy config file (e.g. `/etc/haproxy/haproxy.cfg` on host `haproxy-main-01-lb-gprd.c.gitlab-production.internal`)
+  and the chef role that controls it
+  ([gprd-base-haproxy-main](https://gitlab.com/gitlab-com/gl-infra/chef-repo/-/blob/master/roles/gprd-base-haproxy-main.json))
   * To see exactly how HAProxy decides where to route which types of requests, all of its routing rules are in this one config file.
   * Looking at the live file is easier than looking in Chef because chef composes the file from attributes that are spread across several places (recipe, role, secrets).
 * Dashboard and Kibana links:

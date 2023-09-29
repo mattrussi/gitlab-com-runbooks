@@ -15,7 +15,7 @@ Not the actual numbers, but links to where to find the current active values:
 
 1. CloudFlare: <https://dash.cloudflare.com/852e9d53d0f8adbd9205389356f2303d/gitlab.com/security/waf/rate-limiting-rules>
    * Source at <https://ops.gitlab.net/gitlab-com/gl-infra/config-mgmt/-/blob/master/environments/gprd/cloudflare-rate-limits-waf-and-rules.tf>
-1. HAProxy: Basic per-IP API rate-limit: `knife node show fe-01-lb-gprd.c.gitlab-production.internal -a gitlab-haproxy.frontend.api.rate_limit_http_rate_per_minute`
+1. HAProxy: Basic per-IP API rate-limit: `knife node show haproxy-main-01-lb-gprd.c.gitlab-production.internal -a gitlab-haproxy.frontend.api.rate_limit_http_rate_per_minute`
    * There are exceptions, but this is the key one.
 1. RackAttack: <https://gitlab.com/admin/application_settings/network> (admin access only)
    * In `User and IP Rate Limits`, and also `Protected Paths`
@@ -108,13 +108,13 @@ termed `whitelist` in the config, but we will change that one day) that are perm
 
 There are two types:
 
-1. Internal: Full bypass, including some other protections.  Basically only the likes of CI runners.  Managed in
-[chef](https://ops.gitlab.net/gitlab-cookbooks/chef-repo/-/blob/3572d94fc666cc05ca7fea00dc9a619095aa5938/roles/gprd-base-lb-fe-config.json#L257).
+1. Internal: Full bypass, including some other protections.  Basically only the likes of CI runners.
+Managed in [chef](https://gitlab.com/gitlab-com/gl-infra/chef-repo/-/blob/b2c0ac60626c487be09ff6ef5eb9b5487deeef17/roles/gprd-base-haproxy-main-config.json#L320).
 1. Other API: Two lists which are functionally equivalent (believed to be a refactoring that never got completed),
 managed in chef at
-[gitlab-haproxy.frontend.https.rate_limit_whitelist](https://ops.gitlab.net/gitlab-cookbooks/chef-repo/-/blob/3572d94fc666cc05ca7fea00dc9a619095aa5938/roles/gprd-base-lb-fe-config.json#L127)
+[gitlab-haproxy.frontend.https.rate_limit_whitelist](https://gitlab.com/gitlab-com/gl-infra/chef-repo/-/blob/b2c0ac60626c487be09ff6ef5eb9b5487deeef17/roles/gprd-base-haproxy-main-config.json#L181)
 and
-[gitlab-haproxy.frontend.whitelist.api](https://ops.gitlab.net/gitlab-cookbooks/chef-repo/-/blob/3572d94fc666cc05ca7fea00dc9a619095aa5938/roles/gprd-base-lb-fe-config.json#L127).
+[gitlab-haproxy.frontend.whitelist.api](https://gitlab.com/gitlab-com/gl-infra/chef-repo/-/blob/b2c0ac60626c487be09ff6ef5eb9b5487deeef17/roles/gprd-base-haproxy-main-config.json#L181).
 These will [hopefully be merged](https://gitlab.com/gitlab-com/gl-infra/scalability/-/issues/632) in the near future.
 Requests from these IP address are still subject to some additional checks, before bypassing the rest of the
 rate-limiting.  The former is legacy, the latter the correct place for any additions.
@@ -156,11 +156,11 @@ more special-case (and a bit less interesting) and the justifications won't be r
 For the avoidance of doubt: we set X-GitLab-RateLimit-Bypass to 0 by default; any value for this in the client request
 is overwritten.
 
-See also related docs in [../frontend](../frontend/) for other information on blocking and haproxy config.
+See also related docs in [../frontend](../frontend/) for other information on blocking and HAProxy config.
 
-Graphs for HAProxy can be found at the [HAProxy
-page](https://dashboards.gitlab.net/d/ZOOh_aNik/haproxy?orgId=1) and you can look for 429 rates to get an
-idea on what is being rate limited at this level, though note that some may also be coming from the application.
+Graphs for HAProxy can be found at the [HAProxy dashboard](https://dashboards.gitlab.net/d/haproxy/haproxy)
+and you can look for 429 rates to get an idea on what is being rate limited at this level,
+though note that some may also be coming from the application.
 
 In the long run, these may be replaced by either rate limits in GitLab (below) or
 [Cloudflare](https://gitlab.com/gitlab-com/gl-infra/reliability/-/issues/9709), or a combination of both.

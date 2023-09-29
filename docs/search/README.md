@@ -26,7 +26,7 @@
 * [Google Cloud Snapshots](../disaster-recovery/gcp-snapshots.md)
 * [What is Programmable Search Engine?](../docs.gitlab.com/programmableSearch.md)
 * [../elastic/elasticsearch-integration-in-gitlab.md](../elastic/elasticsearch-integration-in-gitlab.md)
-* [Frontend (HAProxy) Logging](../frontend/haproxy-logging.md)
+* [HAProxy Logging](../frontend/haproxy-logging.md)
 * [Find a project from its hashed storage path](../gitaly/find-project-from-hashed-storage.md)
 * [Gitaly unusual activity alert](../gitaly/gitaly-unusual-activity.md)
 * [../kube/k8s-operations.md](../kube/k8s-operations.md)

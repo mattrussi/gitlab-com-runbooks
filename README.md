@@ -173,7 +173,7 @@ During an incident, we have [roles defined in the handbook](https://about.gitlab
 
 ## Non-Critical
 
-- [SSL certificate expires](docs/frontend/ssl_cert.md)
+- [SSL certificate expires](docs/haproxy/ssl_cert.md)
 - [Troubleshoot git stuck processes](docs/git/git-stuck-processes.md)
 
 ## Non-Core Applications
@@ -253,9 +253,9 @@ During an incident, we have [roles defined in the handbook](https://about.gitlab
 
 ### Mangle front end load balancers
 
-- [Isolate a worker by disabling the service in the LBs](docs/frontend/block-things-in-haproxy.md#disable-a-whole-service-in-a-load-balancer)
-- [Deny a path in the load balancers](docs/frontend/block-things-in-haproxy.md#deny-a-path-with-the-delete-http-method)
-- [Purchasing/Renewing SSL Certificates](docs/frontend/ssl_cert-1.md)
+- [Isolate a worker by disabling the service in the LBs](docs/haproxy/block-things-in-haproxy.md#disable-a-whole-service-in-a-load-balancer)
+- [Deny a path in the load balancers](docs/haproxy/block-things-in-haproxy.md#deny-a-path-with-the-delete-http-method)
+- [Purchasing/Renewing SSL Certificates](docs/haproxy/ssl_cert-1.md)
 
 ### Work with Chef
 
@@ -287,7 +287,7 @@ During an incident, we have [roles defined in the handbook](https://about.gitlab
 ### Manually ban an IP or netblock
 
 - [Ban a single IP using Redis and Rack Attack](docs/redis/ban-an-IP-with-redis.md)
-- [Ban a netblock on HAProxy](docs/frontend/ban-netblocks-on-haproxy.md)
+- [Ban a netblock on HAProxy](docs/haproxy/ban-netblocks-on-haproxy.md)
 
 ### Dealing with Spam
 

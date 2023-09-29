@@ -36,9 +36,9 @@ The following steps should be completed in the following order in the unlikely s
 
 **Note**: When the outage ends, it is not recommended to fail back or use the old infrastructure (if it is available) to avoid losing additional data.
 
-#### Draining frontend traffic to divert traffic away from the affected zone
+#### Draining HAProxy traffic to divert traffic away from the affected zone
 
-Frontend traffic is divided into multiple Kubernetes clusters by zone.
+HAProxy traffic is divided into multiple Kubernetes clusters by zone.
 Services like `web`, `api`, `registry`, `pages` run in these clusters and do not require any data recovery since they are stateless.
 In the case of a zonal outage, it is expected that checks will fail on the corresponding cluster and traffic will be routed to the unaffected zones which will trigger a scaling event.
 To ensure that traffic does not reach the failed zone, it is recommended to divert traffic away from it using the [`set-server-state`](/docs/frontend/haproxy.md#set-server-state) HAProxy script.

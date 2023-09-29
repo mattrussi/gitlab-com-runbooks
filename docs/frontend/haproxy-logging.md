@@ -1,15 +1,15 @@
-# Frontend (HAProxy) Logging
+# HAProxy Logging
 
-HAProxy logs are not indexed in Elastic due to the volume of content.
-You can view logs for a single HAProxy VM by connecting and tailing local logs,
-but that may not be ideal when trying to investigate a site wide issue.
+HAProxy logs are not indexed in *Elasticsearch* due to the volume of content.
+You can view logs for a single HAProxy node by connecting and tailing local logs.
+This may not be ideal when trying to investigate a site wide issue.
 
 ## Google BigQuery
 
-HAProxy logs are collected into a table that can be queried in BigQuery.
+HAProxy logs are collected into a table that can be queried in *BigQuery*.
 This can provide the ability to search for patterns and look for recurring errors, etc.
 
-### Finding the HAProxy Logs in BigQuery
+### Finding HAProxy Logs in BigQuery
 
 - Log into the Google Cloud web console and search or navigate to `BigQuery` in the appropriate project.
 - In the `Explorer` on the left, you should open a `node` for your environment.
@@ -26,18 +26,15 @@ Here is an example query that could show `tt` values:
 SELECT
   *
 FROM
-  `gitlab-production.haproxy_logs.haproxy_20210928`
+  `gitlab-production.haproxy_logs.haproxy_20231010`
 WHERE
   jsonPayload.tt is not null
-LIMIT
-  1000
+LIMIT 1000
 ```
 
 BigQuery access is in alpha for gcloud command line access at this time.
 
 ## Logging Pipeline
-
-## Context
 
 This is how the logging pipeline works for the `haproxy` nodes.
 

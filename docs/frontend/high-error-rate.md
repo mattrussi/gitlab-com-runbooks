@@ -2,8 +2,8 @@
 
 ## Symptoms
 
-- Message in prometheus-alerts _Increased Error Rate Across Fleet_
-- PagerDuty Alert: _HighRailsErrorRate_
+- Message in prometheus-alerts *Increased Error Rate Across Fleet*
+- PagerDuty Alert: `HighRailsErrorRate`
 
 ## Troubleshoot
 

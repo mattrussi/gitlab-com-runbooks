@@ -1,4 +1,4 @@
-# SSL Certificate expiring or expired
+# SSL Certificate Expiring or Expired
 
 ## Symptoms
 
@@ -8,7 +8,7 @@ You see alerts like
 @channel about.gitlab.com HTTP SSL Certificate WARNING - Certificate 'about.gitlab.com' will expire on Thu Nov 30 23:59:00 2016
 ```
 
-## Possible checks
+## Possible Checks
 
 Check with browser if this is really the case.
 
