@@ -32,6 +32,17 @@ local selectors = import 'promql/selectors.libsonnet';
       interval='$__interval',
       linewidth=1,
     ),
+  queueing_time(selectorHash, legend)::
+    basic.timeseries(
+      title='95th queueing time (RPS)',
+      query=|||
+        histogram_quantile(0.95, sum(rate(gitaly_pack_objects_acquiring_seconds_bucket{%(selector)s}[$__rate_interval])) by (le, fqdn))
+      ||| % { selector: selectors.serializeHash(selectorHash) },
+      legendFormat=legend,
+      interval='$__interval',
+      linewidth=1,
+      format='s',
+    ),
   cache_lookup(selectorHash, legend)::
     basic.timeseries(
       title='Gitaly pack-objects cache',
