@@ -40,8 +40,8 @@ The table below shows an overview of both deferring and dropping FFs and their b
 
 | Feature flag                     | Effect                   | Default state |
 |----------------------------------|--------------------------|---------------|
-| `run_sidekiq_jobs_{WorkerName}`  | Defer jobs when disabled | Enabled            |
-| `drop_sidekiq_jobs_{WorkerName}` | Drop jobs when enabled   | Disabled           |
+| `run_sidekiq_jobs_{WorkerName}`  | Defer jobs when disabled | Enabled       |
+| `drop_sidekiq_jobs_{WorkerName}` | Drop jobs when enabled   | Disabled      |
 
 Refer to the flowchart below to better understand the scenarios between dropping and deferring jobs:
 
