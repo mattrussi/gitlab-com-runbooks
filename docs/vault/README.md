@@ -34,7 +34,7 @@
 * [customers.gitlab.com](../customersdot/api-key-rotation.md)
 * [What is Programmable Search Engine?](../docs.gitlab.com/programmableSearch.md)
 * [../elastic/elastic-cloud.md](../elastic/elastic-cloud.md)
-* [HAProxy management at GitLab](../frontend/haproxy.md)
+* [HAProxy Management at GitLab](../frontend/haproxy.md)
 * [Gitaly token rotation](../gitaly/gitaly-token-rotation.md)
 * [CI Artifacts CDN](../google-cloud-storage/artifacts-cdn.md)
 * [Rebuilding a kubernetes cluster](../kube/k8s-cluster-rebuild.md)

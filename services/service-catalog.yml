@@ -488,7 +488,7 @@ services:
 
   - name: frontend
     tier: lb
-    friendly_name: HAProxy Frontend
+    friendly_name: HAProxy (Frontend)
     label: HAProxy
     owner: reliability_foundations
     technical:
@@ -501,7 +501,9 @@ services:
         sre_guide: https://gitlab.com/gitlab-com/runbooks/-/tree/master/docs/frontend
         developer_guide: https://docs.gitlab.com/ee/development/fe_guide/#frontend-development-guidelines
         service:
-          - https://cbonte.github.io/haproxy-dconv/1.7/intro.html
+          - http://docs.haproxy.org/2.8/intro.html
+          - http://docs.haproxy.org/2.8/configuration.html
+          - http://docs.haproxy.org/2.8/management.html
         security:
       dependencies:
         - service: api
@@ -606,7 +608,7 @@ services:
         security:
       dependencies:
         - service: gitaly
-        - service: frontend # through gitlab-shell
+        - service: haproxy # through gitlab-shell
         - service: redis # through gitlab-shell
       logging:
         - name: Gitaly

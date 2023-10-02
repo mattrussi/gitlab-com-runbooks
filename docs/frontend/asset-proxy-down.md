@@ -8,13 +8,10 @@ asset_proxy,asset-bucket,0,0,0,3,,162,337432,1765043,,0,,0,0,0,0,DOWN,1,1,0,3,1,
 asset_proxy,BACKEND,0,0,0,3,5000,162,337432,1765043,0,0,,0,0,0,0,DOWN,0,0,0,,1,213485,213485,,1,12,0,,162,,1,0,,6,,,,0,82,0,80,0,0,,,,162,0,0,0,0,0,0,213544,,,0,2,27,220,,,,,,,,,,,,,,http,roundrobin,,,,,,,0,43,119,0,0,,,0,5,114,9335,0,,,,,0,0,0,0,,,,,,,,,,,-,9562,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,40061,40180,9556632,1039258,0,0,
 ```
 
-We use [DNS as a
-backend](https://gitlab.com/gitlab-cookbooks/gitlab-haproxy/-/blob/aa118861af117894acc26a6eab2bfd3b4597b564/attributes/default.rb#L311)
-for `asset_proxy` and if an old IP no longer responds it will stay in the state
-file marking the backend as `DOWN`.
+We use [DNS as a backend](https://gitlab.com/gitlab-cookbooks/gitlab-haproxy/-/blob/aa118861af117894acc26a6eab2bfd3b4597b564/attributes/default.rb#L311)
+for `asset_proxy` and if an old IP no longer responds it will stay in the state file marking the backend as `DOWN`.
 
-This will be fixed with
-<https://gitlab.com/gitlab-com/gl-infra/reliability/-/issues/12421>.
+This will be fixed with <https://gitlab.com/gitlab-com/gl-infra/reliability/-/issues/12421>.
 
 ## Runbook
 

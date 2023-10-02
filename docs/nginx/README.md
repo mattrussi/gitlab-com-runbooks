@@ -19,7 +19,7 @@
 * [Disk space alerts (production)](../customersdot/disk-space.md)
 * [CustomersDot main troubleshoot documentation](../customersdot/overview.md)
 * [design.gitlab.com Runbook](../design/design-gitlab-com.md)
-* [HAProxy management at GitLab](../frontend/haproxy.md)
+* [HAProxy Management at GitLab](../frontend/haproxy.md)
 * [Service Error Rate](../monitoring/definition-service-error-rate.md)
 * [Service Operation Rate](../monitoring/definition-service-ops-rate.md)
 * [Filesystem errors are reported in LOG files](../monitoring/filesystem_alerts.md)

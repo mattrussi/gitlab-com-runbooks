@@ -68,7 +68,7 @@ To set up such a tunnel:
 1. Open a tunnel SSH session:
 
     ```sh
-    ssh -N -L 8443:fe-01-lb-gprd.c.gitlab-production.internal:443 lb-bastion.gprd.gitlab.com
+    ssh -N -L 8443:haproxy-main-01-lb-gprd.c.gitlab-production.internal:443 lb-bastion.gprd.gitlab.com
     ```
 
     While you leave the SSH session open, this will make it possible to browse to <https://localhost:8443/users/sign_in>,
@@ -101,7 +101,7 @@ tunnel for git-over-ssh traffic:
 1. Open a tunnel SSH session:
 
     ```sh
-    ssh -N -L 2222:fe-01-lb-gprd.c.gitlab-production.internal:22 lb-bastion.gprd.gitlab.com
+    ssh -N -L 2222:haproxy-main-01-lb-gprd.c.gitlab-production.internal:22 lb-bastion.gprd.gitlab.com
     ```
 
 1. Use `socat` to forward from local port `2222` to `22`.
@@ -127,8 +127,8 @@ tunnel for git-over-ssh traffic:
 You can create the ssh tunnel for both https **and** ssh at once:
 
 ```sh
-ssh -N -L 8443:fe-01-lb-gprd.c.gitlab-production.internal:443 \
-       -L 2222:fe-01-lb-gprd.c.gitlab-production.internal:22 \
+ssh -N -L 8443:haproxy-main-01-lb-gprd.c.gitlab-production.internal:443 \
+       -L 2222:haproxy-main-01-lb-gprd.c.gitlab-production.internal:22 \
        lb-bastion.gprd.gitlab.com
 ```
 

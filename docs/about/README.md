@@ -36,7 +36,7 @@
 * [../elastic/elasticsearch-integration-in-gitlab.md](../elastic/elasticsearch-integration-in-gitlab.md)
 * [ErrorTracking main troubleshooting document](../errortracking/overview.md)
 * [Management for forum.gitlab.com](../forum/discourse-forum.md)
-* [SSL Certificate expiring or expired](../frontend/ssl_cert.md)
+* [SSL Certificate Expiring or Expired](../frontend/ssl_cert.md)
 * [Upgrading the OS of Gitaly VMs](../gitaly/gitaly-os-upgrade.md)
 * [Gitaly repository cgroups](../gitaly/gitaly-repos-cgroup.md)
 * [Restoring gitaly data corruption on a project after an unclean shutdown](../gitaly/gitaly-repository-corruption.md)
