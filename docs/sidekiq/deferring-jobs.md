@@ -36,6 +36,13 @@ We've seen this happened during [incident 14758](https://gitlab.com/gitlab-com/g
 
 If we could get away with not processing the backlog jobs at all, we can [drop the jobs](#dropping-jobs-using-feature-flags-via-chatops) entirely instead of deferring them.
 
+The table below shows an overview of both deferring and dropping FFs and their behavior:
+
+| Feature flag                     | Effect                   | Default state |
+|----------------------------------|--------------------------|---------------|
+| `run_sidekiq_jobs_{WorkerName}`  | Defer jobs when disabled | Enabled       |
+| `drop_sidekiq_jobs_{WorkerName}` | Drop jobs when enabled   | Disabled      |
+
 Refer to the flowchart below to better understand the scenarios between dropping and deferring jobs:
 
 ```mermaid
@@ -60,21 +67,21 @@ More details can be found [here](https://docs.gitlab.com/ee/development/feature_
 
 #### Example
 
-When the feature flag is set to true, 100% of the jobs will be deferred. Then, we can also use **percentage of time** rollout
+When the feature flag is set to true, 100% of the jobs will be deferred. Then, we can also use **percentage of actors** rollout (an actor being each execution of job)
 to progressively let the jobs processed. For example:
 
 ```shell
 # not running any jobs, deferring all 100% of the jobs
-/chatops run feature set run_sidekiq_jobs_SlowRunningWorker false --ignore-feature-flag-consistency-check
+/chatops run feature set `run_sidekiq_jobs_SlowRunningWorker` false --ignore-feature-flag-consistency-check
 
 # only running 10% of the jobs, deferring 90% of the jobs
-/chatops run feature set run_sidekiq_jobs_SlowRunningWorker --random 10 --ignore-feature-flag-consistency-check
+/chatops run feature set `run_sidekiq_jobs_SlowRunningWorker` --actors 10 --ignore-feature-flag-consistency-check
 
 # running 50% of the jobs, deferring 50% of the jobs
-/chatops run feature set run_sidekiq_jobs_SlowRunningWorker --random 50 --ignore-feature-flag-consistency-check
+/chatops run feature set `run_sidekiq_jobs_SlowRunningWorker` --actors 50 --ignore-feature-flag-consistency-check
 
 # back to running all jobs normally
-/chatops run feature delete run_sidekiq_jobs_SlowRunningWorker --ignore-feature-flag-consistency-check
+/chatops run feature delete `run_sidekiq_jobs_SlowRunningWorker` --ignore-feature-flag-consistency-check
 ```
 
 Note that `--ignore-feature-flag-consistency-check` is necessary as it bypasses the consistency check between staging and production.
@@ -99,7 +106,7 @@ This production check might fail in case of:
 In this case, we can use `--ignore-production-check` in case the ongoing incident itself has ~"blocks feature-flags":
 
 ```
-/chatops run feature set run_sidekiq_jobs_SlowRunningWorker false --ignore-feature-flag-consistency-check --ignore-production-check
+/chatops run feature set `run_sidekiq_jobs_SlowRunningWorker` false --ignore-feature-flag-consistency-check --ignore-production-check
 ```
 
 ## Dropping jobs using feature flags via ChatOps
@@ -110,10 +117,10 @@ Example:
 
 ```shell
 # drop all jobs
-/chatops run feature set drop_sidekiq_jobs_SlowRunningWorker true --ignore-feature-flag-consistency-check
+/chatops run feature set `drop_sidekiq_jobs_SlowRunningWorker` true --ignore-feature-flag-consistency-check
 
 # back to running all jobs normally
-/chatops run feature delete drop_sidekiq_jobs_SlowRunningWorker --ignore-feature-flag-consistency-check
+/chatops run feature delete `drop_sidekiq_jobs_SlowRunningWorker` --ignore-feature-flag-consistency-check
 ```
 
 Note that `drop_sidekiq_jobs` FF has precedence over the `run_sidekiq_jobs` FF. This means when `drop_sidekiq_jobs` FF is enabled and `run_sidekiq_jobs` FF is disabled,
