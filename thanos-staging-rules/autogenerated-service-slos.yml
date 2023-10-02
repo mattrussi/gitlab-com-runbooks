@@ -475,18 +475,6 @@ spec:
       expr: "0.001000"
     - record: slo:min:events:gitlab_service_apdex:ratio
       labels:
-        component: native_model_inference
-        tier: sv
-        type: code_suggestions
-      expr: "0.990000"
-    - record: slo:max:events:gitlab_service_errors:ratio
-      labels:
-        component: native_model_inference
-        tier: sv
-        type: code_suggestions
-      expr: "0.001000"
-    - record: slo:min:events:gitlab_service_apdex:ratio
-      labels:
         component: third_party_model_inference
         tier: sv
         type: code_suggestions
