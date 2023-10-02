@@ -30,7 +30,7 @@ local generateShardSelectorsAndThreshold(sli, thresholdField) =
   if std.length(overridenShardsSelector) > 0 then
     local otherShardsSelector = [
       {
-        shard: { nre: std.join('|', overridenShards) },
+        shard: { noneOf: overridenShards },
         threshold: std.get(sli.monitoringThresholds, thresholdField),
       },
     ];
