@@ -29,7 +29,7 @@ GEM
       colored2 (~> 3.1)
     crack (0.4.5)
       rexml
-    danger (9.3.1)
+    danger (9.3.2)
       claide (~> 1.0)
       claide-plugins (>= 0.9.2)
       colored2 (~> 3.1)
@@ -64,7 +64,7 @@ GEM
     gitlab (4.19.0)
       httparty (~> 0.20)
       terminal-table (>= 1.5.1)
-    gitlab-dangerfiles (4.0.0)
+    gitlab-dangerfiles (4.1.0)
       danger (>= 9.3.0)
       danger-gitlab (>= 8.0.0)
       rake
