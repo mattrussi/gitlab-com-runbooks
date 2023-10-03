@@ -82,7 +82,7 @@ local getColumnWidths(
 
     local metricsCatalogServiceInfo = metricsCatalog.getServiceOptional(serviceType);
     local shardLabels =
-      if metricsCatalogServiceInfo != null && metricsCatalogServiceInfo.shardLevelMonitoring then
+      if metricsCatalogServiceInfo != null && metricsCatalogServiceInfo.shardLevelMonitoring.enabled then
         { shard: { re: '$shard' } }
       else
         {};

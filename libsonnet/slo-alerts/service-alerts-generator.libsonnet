@@ -13,15 +13,20 @@ local errorRatioThreshold(sli, alertDescriptor) =
   local specificThreshold = misc.dig(sli.monitoringThresholds, [alertDescriptor.aggregationSet.id, 'errorRatio']);
   if specificThreshold != {} then specificThreshold else sli.monitoringThresholds.errorRatio;
 
-local generateShardSelectorsAndThreshold(sli, thresholdField) =
-  local overridenShards = std.objectFields(sli.shardOverrides);
+local generateShardSelectorsAndThreshold(service, sli, thresholdField) =
+  local overridenShards = std.objectFields(
+    misc.dig(service, ['shardLevelMonitoring', 'overrides', sli.name])
+  );
   local overridenShardsSelector = std.filter(
     function(shardSelector) shardSelector.threshold != {},
     std.map(
       function(shard)
         {
           shard: shard,
-          threshold: misc.dig(sli.shardOverrides, [shard, 'monitoringThresholds', thresholdField]),
+          threshold: misc.dig(
+            service,
+            ['shardLevelMonitoring', 'overrides', sli.name, shard, 'monitoringThresholds', thresholdField]
+          ),
         },
       overridenShards
     )
@@ -44,8 +49,16 @@ local apdexAlertForSLIForAlertDescriptor(service, sli, alertDescriptor, extraSel
     serviceType: service.type,
   };
 
-  local shardSelectors = if sli.shardLevelMonitoring && std.length(std.objectFields(sli.shardOverrides)) > 0 then
-    generateShardSelectorsAndThreshold(sli, 'apdexScore')
+  local shardSelectors = if sli.shardLevelMonitoring &&
+                            std.length(
+                              std.objectFields(
+                                misc.dig(
+                                  service,
+                                  ['shardLevelMonitoring', 'overrides', sli.name]
+                                )
+                              )
+                            ) > 0 then
+    generateShardSelectorsAndThreshold(service, sli, 'apdexScore')
   else
     [];
 
@@ -84,8 +97,16 @@ local errorAlertForSLIForAlertDescriptor(service, sli, alertDescriptor, extraSel
     serviceType: service.type,
   };
 
-  local shardSelectors = if sli.shardLevelMonitoring && std.length(std.objectFields(sli.shardOverrides)) > 0 then
-    generateShardSelectorsAndThreshold(sli, 'errorRatio')
+  local shardSelectors = if sli.shardLevelMonitoring &&
+                            std.length(
+                              std.objectFields(
+                                misc.dig(
+                                  service,
+                                  ['shardLevelMonitoring', 'overrides', sli.name]
+                                )
+                              )
+                            ) > 0 then
+    generateShardSelectorsAndThreshold(service, sli, 'errorRatio')
   else
     [];
 

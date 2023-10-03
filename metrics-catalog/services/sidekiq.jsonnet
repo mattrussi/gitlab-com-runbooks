@@ -17,7 +17,26 @@ metricsCatalog.serviceDefinition({
   type: 'sidekiq',
   tier: 'sv',
   tags: ['rails'],
-  shardLevelMonitoring: true,  // SLIs will inherit shard-level monitoring by default
+
+  shardLevelMonitoring: {
+    enabled: true,  // SLIs will inherit shard-level monitoring by default
+    overrides: {
+      sidekiq_execution: {
+        'urgent-authorized-projects': {
+          monitoringThresholds+: {
+            apdexScore: 0.98,
+          },
+        },
+      },
+      sidekiq_queueing: {
+        'urgent-other': {
+          monitoringThresholds+: {
+            apdexScore: 0.97,
+          },
+        },
+      },
+    },
+  },
 
   contractualThresholds: {
     apdexRatio: 0.9,
@@ -100,13 +119,6 @@ metricsCatalog.serviceDefinition({
       toolingLinks.kibana(title='Sidekiq execution', index='sidekiq_execution', type='sidekiq'),
     ],
     trafficCessationAlertConfig: sidekiqHelpers.shardTrafficCessationAlertConfig,
-    shardOverrides: {
-      'urgent-authorized-projects': {
-        monitoringThresholds+: {
-          apdexScore: 0.98,
-        },
-      },
-    },
   }) + sliLibrary.get('sidekiq_queueing').generateServiceLevelIndicator(baseSelector { external_dependencies: { ne: 'yes' } }, {
     serviceAggregation: false,  // Don't add this to the request rate of the service
     severity: 's2',
@@ -115,13 +127,6 @@ metricsCatalog.serviceDefinition({
     ],
     featureCategory: 'not_owned',
     trafficCessationAlertConfig: sidekiqHelpers.shardTrafficCessationAlertConfig,
-    shardOverrides: {
-      'urgent-other': {
-        monitoringThresholds+: {
-          apdexScore: 0.97,
-        },
-      },
-    },
   }) + sliLibrary.get('sidekiq_execution_with_external_dependency').generateServiceLevelIndicator(baseSelector { external_dependencies: { eq: 'yes' } }, {
     serviceAggregation: false,  // Don't add this to the request rate of the service
     shardLevelMonitoring: false,

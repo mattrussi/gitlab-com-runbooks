@@ -30,7 +30,6 @@ local serviceLevelIndicatorDefaults = {
   severity: 's2',
   dependsOn: [],  // When an sli depends on another component, don't alert on this SLI if the downstream service is already firing. This is meant for hard dependencies managed by GitLab.
   shardLevelMonitoring: false,
-  shardOverrides: {},  // to specify monitoringThresholds for specified shards
 };
 
 local validateHasField(object, field, message) =

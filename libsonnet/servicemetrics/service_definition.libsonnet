@@ -11,7 +11,7 @@ local serviceDefaults = {
   autogenerateRecordingRules: true,
   disableOpsRatePrediction: false,
   nodeLevelMonitoring: false,  // By default we do not use node-level monitoring
-  shardLevelMonitoring: false,  // By default we do not use shard-level monitoring
+  shardLevelMonitoring: { enabled: false },  // By default we do not use shard-level monitoring
   kubeConfig: {},
   kubeResources: {},
   regional: false,  // By default we don't support regional monitoring for services
@@ -72,7 +72,7 @@ local validateAndApplyServiceDefaults(service) =
     )
     +
     (
-      if serviceWithDefaults.shardLevelMonitoring then
+      if serviceWithDefaults.shardLevelMonitoring.enabled then
         { shardLevelMonitoring: true }
       else
         {}
