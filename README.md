@@ -220,6 +220,7 @@ During an incident, we have [roles defined in the handbook](https://about.gitlab
 - [Deploy staging.GitLab.com](https://ops.gitlab.net/gitlab-cookbooks/chef-repo/blob/master/doc/staging.md)
 - [Refresh data on staging.gitlab.com](https://ops.gitlab.net/gitlab-cookbooks/chef-repo/blob/master/doc/staging.md)
 - [Background Migrations](https://gitlab.com/gitlab-org/release/docs/-/blob/master/runbooks/background-migrations.md)
+- [Migration Skipping](docs/uncategorized/migration-skipping.md)
 
 ### Work with the fleet and the rails app
 
