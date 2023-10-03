@@ -42,8 +42,10 @@ else
   warn "pre-commit is not installed. Skipping."
 fi
 
-# reshim just in case
-asdf reshim
+if [[ -n ${ASDF_DIR-} ]]; then
+  # reshim asdf just in case
+  asdf reshim
+fi
 
 # Install jsonnet-bundler packages
 ./scripts/bundler.sh
