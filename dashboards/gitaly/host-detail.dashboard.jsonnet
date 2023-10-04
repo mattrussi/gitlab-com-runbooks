@@ -18,6 +18,7 @@ local textPanel = grafana.text;
 local gitalyCommandStats = import 'gitlab-dashboards/gitaly/command_stats.libsonnet';
 local gitalyPackObjectsDashboards = import 'gitlab-dashboards/gitaly/pack_objects.libsonnet';
 local gitalyPerRPCDashboards = import 'gitlab-dashboards/gitaly/per_rpc.libsonnet';
+local gitalyAdaptiveLimitDashboards = import 'gitlab-dashboards/gitaly/adaptive_limit.libsonnet';
 
 local serviceType = 'gitaly';
 
@@ -384,6 +385,7 @@ basic.dashboard(
   row.new(title='gitaly per-RPC metrics', collapse=true)
   .addPanels(
     layout.grid([
+      gitalyAdaptiveLimitDashboards.per_rpc_current_limit(selectorHash, '{{ limit }}'),
       gitalyPerRPCDashboards.request_rate_by_method(selectorHash),
       gitalyPerRPCDashboards.request_rate_by_code(selectorHash),
       gitalyPerRPCDashboards.in_progress_requests(selectorHash),
@@ -403,6 +405,7 @@ basic.dashboard(
   row.new(title='gitaly pack-objects metrics', collapse=true)
   .addPanels(
     layout.grid([
+      gitalyAdaptiveLimitDashboards.pack_objects_current_limit(selectorHash, '{{ limit }}'),
       gitalyPackObjectsDashboards.in_process(selectorHash, 'concurrency by repository'),
       gitalyPackObjectsDashboards.queued_commands(selectorHash, 'queued commands'),
       gitalyPackObjectsDashboards.queueing_time(selectorHash, '95th queueing time'),
@@ -450,6 +453,21 @@ basic.dashboard(
     w: 24,
     h: 1,
   }
+)
+.addPanel(
+  row.new(title='Adaptive limit metrics', collapse=true),
+  gridPos={
+    x: 0,
+    y: 7000,
+    w: 24,
+    h: 1,
+  }
+)
+.addPanels(
+  layout.grid([
+    gitalyAdaptiveLimitDashboards.backoff_events(selectorHash, '{{ watcher }}'),
+    gitalyAdaptiveLimitDashboards.watcher_errors(selectorHash, '{{ watcher }}'),
+  ], startRow=7001)
 )
 .trailer()
 + {
