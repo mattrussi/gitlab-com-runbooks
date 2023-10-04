@@ -13,21 +13,5 @@ metricsCatalog.serviceDefinition(
     descriptiveName='Redis SharedState in Redis Cluster',
     redisCluster=true
   )
-  {
-    // TODO: set severity to s2 after migration is completed
-    serviceLevelIndicators+: {
-      rails_redis_client+: {
-        userImpacting: true,
-        severity: 's4',
-      },
-      primary_server+: {
-        userImpacting: true,
-        severity: 's4',
-      },
-      secondary_servers+: {
-        userImpacting: true,
-        severity: 's4',
-      },
-    },
-  } + redisHelpers.gitlabcomObservabilityToolingForRedis('redis-cluster-shared-state')
+  + redisHelpers.gitlabcomObservabilityToolingForRedis('redis-cluster-shared-state')
 )
