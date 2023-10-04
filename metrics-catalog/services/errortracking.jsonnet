@@ -1,43 +1,3 @@
-/*
-
-clamp_max(
-    sum by ()(
-        sum by (stage_group,component) (
-            label_replace(
-                sum_over_time(
-                    gitlab:component:stage_group:execution:apdex:success:rate_1h{
-                        environment=\"$environment\",
-                        monitor=\"global\",
-                        stage=\"$stage\",
-                        stage_group=\"observability\"
-                    }[$__range]
-                ), 'sli_kind', 'apdex', '', ''
-            )
-            or
-            label_replace(
-                sum_over_time(
-                    gitlab:component:stage_group:execution:ops:rate_1h{
-                        environment=\"$environment\",
-                        monitor=\"global\",
-                        stage=\"$stage\",
-                        stage_group=\"observability\"
-                    }[$__range]
-                )
-                -
-                sum_over_time(
-                    gitlab:component:stage_group:execution:error:rate_1h{
-                        environment=\"$environment\",
-                        monitor=\"global\",
-                        stage=\"$stage\",
-                        stage_group=\"observability\"
-                    }[$__range]
-                )
-            ), 'sli_kind', 'error', '', ''
-        ) unless on (stage_group,component) gitlab:ignored_component:stage_group\n  )\n  /\n  sum by ()(\n    sum by (stage_group,component) (\n      label_replace(\n        sum_over_time(\n          gitlab:component:stage_group:execution:apdex:weight:score_1h{environment=\"$environment\",monitor=\"global\",stage=\"$stage\",stage_group=\"observability\"}[$__range]\n        ),\n        'sli_kind', 'apdex', '', ''\n      )\n      or\n      label_replace(\n        sum_over_time(\n          gitlab:component:stage_group:execution:ops:rate_1h{environment=\"$environment\",monitor=\"global\",stage=\"$stage\",stage_group=\"observability\"}[$__range]\n        )\n        and sum_over_time(gitlab:component:stage_group:execution:error:rate_1h{environment=\"$environment\",monitor=\"global\",stage=\"$stage\",stage_group=\"observability\"}[$__range]),\n        'sli_kind', 'error', '', ''\n      )\n    ) unless on (stage_group,component) gitlab:ignored_component:stage_group\n  ),\n1)\n",
-      "format": "time_series",
-
-*/
-
 local metricsCatalog = import 'servicemetrics/metrics.libsonnet';
 local toolingLinks = import 'toolinglinks/toolinglinks.libsonnet';
 
@@ -51,7 +11,7 @@ metricsCatalog.serviceDefinition({
     api: true,
   },
   provisioning: {
-    kubernetes: true,
+    kubernetes: false,
     vms: false,
   },
   serviceLevelIndicators: {
@@ -74,7 +34,6 @@ metricsCatalog.serviceDefinition({
       requestRate: rateMetric(
         counter='traefik_service_requests_total',
         selector=errortrackingSelector,
-        useRecordingRuleRegistry=false,
       ),
 
       errorRate: rateMetric(
@@ -82,7 +41,6 @@ metricsCatalog.serviceDefinition({
         selector=errortrackingSelector {
           code: { re: '^5.*' },
         },
-        useRecordingRuleRegistry=false,
       ),
 
       significantLabels: [],

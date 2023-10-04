@@ -12,8 +12,6 @@
 
 ## Logging
 
-* []()
-
 ## Troubleshooting Pointers
 
 * [ErrorTracking main troubleshooting document](overview.md)
