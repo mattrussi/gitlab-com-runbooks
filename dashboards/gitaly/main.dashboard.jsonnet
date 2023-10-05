@@ -11,6 +11,7 @@ local selectors = import 'promql/selectors.libsonnet';
 
 local gitalyPackObjectsDashboards = import 'gitlab-dashboards/gitaly/pack_objects.libsonnet';
 local gitalyPerRPCDashboards = import 'gitlab-dashboards/gitaly/per_rpc.libsonnet';
+local gitalyAdaptiveLimitDashboards = import 'gitlab-dashboards/gitaly/adaptive_limit.libsonnet';
 
 local selector = {
   environment: '$environment',
@@ -207,6 +208,7 @@ serviceDashboard.overview('gitaly')
 )
 .addPanels(
   layout.grid([
+    gitalyAdaptiveLimitDashboards.pack_objects_current_limit(selector, '{{ fqdn }}'),
     gitalyPackObjectsDashboards.in_process(selector, '{{ fqdn }}'),
     gitalyPackObjectsDashboards.queued_commands(selector, '{{ fqdn }}'),
     gitalyPackObjectsDashboards.queueing_time(selector, '{{ fqdn }}'),
@@ -230,5 +232,20 @@ serviceDashboard.overview('gitaly')
     gitalyPerRPCDashboards.queueing_time_by_node(selector),
     gitalyPerRPCDashboards.dropped_requests_by_node(selector),
   ], startRow=5001)
+)
+.addPanel(
+  row.new(title='Adaptive limit metrics'),
+  gridPos={
+    x: 0,
+    y: 6000,
+    w: 24,
+    h: 1,
+  }
+)
+.addPanels(
+  layout.grid([
+    gitalyAdaptiveLimitDashboards.backoff_events(selector, '{{ fqdn }}'),
+    gitalyAdaptiveLimitDashboards.watcher_errors(selector, '{{ fqdn }}'),
+  ], startRow=6001)
 )
 .overviewTrailer()
