@@ -1,41 +1,62 @@
 # Re-indexing a package
 
-If the indexing of a package in PackageCloud fails, someone will need to re-index the package.
+If the indexing of a package in PackageCloud fails, you will need to manually trigger the reindexing of the package in question.
 
-Failed indexing will show stack traces in the `/var/log/packagecloud/packagecloud-rails/rpm_indexer.log` or `/var/log/packagecloud/packagecloud-rails/deb_indexer.log` (depending on the package type).
-And will still have the 'Indexing' yellow label in the UI. (Note that sometimes indexing can take an hour or two if the
-node is busy (if its in the middle of a backup for example), so verify that errors are occurring by checking the logs before re-indexing)
+Failed indexing will show stack traces in [Elasticsearch](https://nonprod-log.gitlab.net/app/r/s/Qg7LN) and you will see the `Indexing` yellow label in the UI. Indexing can sometimes take a while so seeing the label in the UI doesn't necessarily mean a package has failed indexing. Best to confirm that there are indexing errors in the [logs](https://nonprod-log.gitlab.net/app/r/s/Qg7LN) before you go through this process.
 
 ## Manually trigger a re-index
 
-Once sshed into the node, switch to the `packagecloud` user, navigate to the packagecloud rails service, and launch the rails console:
+1. Connect to the `ops-gitlab-gke` k8s cluster and switch context to it
 
-```sh
-sudo su - packagecloud
-bash
-cd /opt/packagecloud/embedded/service/packagecloud-rails/
-/opt/packagecloud/embedded/bin/bundle exec rails console -e onpremise
-```
+1. Open a shell on the toolbox pod:
 
-Once the rails console has loaded, copy in this helper function to help re-indexing.
+    ```sh
+    kubectl -n packagecloud exec -it deployments/packagecloud-toolbox -c packagecloud -- bash
+    ```
 
-```ruby
-def package_reindex(repo, path)
-  package_info = path.split('/')
-  distro_version = Distribution.find_by_index_name!(package_info[0]).distro_versions.find_by(index_name: package_info[1])
-  repository = Repository.find_by(name: repo, user_id: 7)
-  repository.find_package_by_dist_filename(distro_version_id:  distro_version.id, package: package_info[2]).reindex
-end
-```
+1. Open the rails console:
 
-Then you can call the function to re-index your packages.
+    ```sh
+    packagecloud-ctl console
+    ```
 
-```ruby
-package_reindex('gitlab-ce', 'el/7/gitlab-ce-11.4.12-ce.0.el7.x86_64.rpm')
-```
+1. Once the rails console has loaded, copy in this helper function to help re-indexing:
 
-- The first parameter is the repository (`gitlab-ce`, `gitlab-ee`, `unstable`, `nightly`)
-- The second parameter is the index path, indexed by distribution and filename. `(distro)/(distro_version)/(filename)`.
-  Which can be copied from the package url in the PackageCloud UI. For a package at
-  `https://packages.gitlab.com/gitlab/gitlab-ce/packages/el/7/gitlab-ce-11.4.12-ce.0.el7.x86_64.rpm` we would use
-  `el/7/gitlab-ce-11.4.12-ce.0.el7.x86_64.rpm`
+    ```ruby
+    def package_reindex(username, repo, path)
+      package_info = path.split('/')
+      distro_version = Distribution.find_by_index_name!(package_info[0]).distro_versions.find_by(index_name: package_info[1])
+      user = User.find_by(name: username)
+      repository = Repository.find_by(name: repo, user_id: user.id)
+      repository.find_package_by_dist_filename(
+        distro_version_id: distro_version.id,
+        package: package_info[2]
+      ).reindex
+    end
+    ```
+
+1. You can now call the function to re-index your packages:
+
+    ```ruby
+    package_reindex('<username>', '<repository>', '<file>')
+    ```
+
+    - First parameter is the username that the repository belongs to -- e.g., `gitlab`
+    - Second parameter is the repository name -- e.g., `gitlab-ce`, `gitlab-ee`, `unstable`, `nightly`
+    - Third parameter is the `<distro name>/<distro version>/<file>` to reindex -- e.g., `el/7/gitlab-ce-11.4.12-ce.0.el7.x86_64.rpm`
+
+    For example:
+
+    ```ruby
+    package_reindex('gitlab', 'gitlab-ce', 'el/7/gitlab-ce-11.4.12-ce.0.el7.x86_64.rpm')
+    ```
+
+    You should see something like the following:
+
+    ```text
+    irb(main):035:0> package_reindex('gitlab', 'gitlab-ce', 'el/7/gitlab-ce-11.4.12-ce.0.el7.x86_64.rpm')
+    Reindex: 7 30
+    Enqueuing Deb::IndexJob for 7 gitlab/gitlab-ce 30 7
+    added {"class":"Deb::IndexJob","args":[7,30]} to queue:indexer
+    => true
+    ```

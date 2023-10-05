@@ -59,6 +59,7 @@
 * [Session: Application architecture](../onboarding/architecture.md)
 * [Gitlab.com on Kubernetes](../onboarding/gitlab.com_on_k8s.md)
 * [Diagnosis with Kibana](../onboarding/kibana-diagnosis.md)
+* [Packagecloud Infrastructure and Backups](../packagecloud/infrastructure.md)
 * [../patroni/database_peak_analysis.md](../patroni/database_peak_analysis.md)
 * [Patroni Cluster Management](../patroni/patroni-management.md)
 * [../patroni/pg_collect_query_data.md](../patroni/pg_collect_query_data.md)

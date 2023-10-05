@@ -41,7 +41,6 @@
 * [StatefulSet Guidelines](../kube/sts-guidelines.md)
 * [Prometheus Dead Man's Snitch](../monitoring/prometheus-snitch.md)
 * [Thanos Receive](../monitoring/thanos-receive.md)
-* [PackageCloud Infrastructure and Backups](../packagecloud/infrastructure.md)
 * [GPG Keys for Package Signing](../packaging/manage-package-signing-keys.md)
 * [Credential rotation](../patroni/postgresql-role-credential-rotation.md)
 * [Rotating Rails' PostgreSQL password](../patroni/rotating-rails-postgresql-password.md)
