@@ -932,6 +932,7 @@ Chef secrets are available under the following paths:
 
 * `chef/env/<environment>/cookbook/<cookbook-name>/...`: to be used for secrets scoped to a cookbook, which are only accessible for this particular environment.
 * `chef/env/<environment>/shared/...`: to be used by secrets shared for all instances on the environment, or when the secret is shared between several cookbooks.
+* `chef/shared/...`: to be used by secrets shared across all instances and environments managed by Chef
 
 _Terminology:_
 
@@ -942,6 +943,7 @@ Examples:
 
 * `chef/env/db-benchmarking/cookbook/gitlab-foo/foo`: is a secret named `foo` for the `db-benchmarking` environment and only to be accessed by instances that use the `gitlab-foo` cookbook.
 * `chef/env/db-benchmarking/shared/foo-shared`: is a secret named `foo-shared` that is accessible by all instances and cookbooks on the `db-benchmarking` environment.
+* `chef/shared/bar`: is a secret named `bar` that is accessible by all instances, cookbooks and environments.
 
 #### Authorizing a GCP Project and Cookbooks
 
