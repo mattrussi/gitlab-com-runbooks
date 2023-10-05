@@ -67,6 +67,7 @@
 * [Stackdriver tracing for the Thanos stack](../monitoring/thanos-tracing.md)
 * [Session: Application architecture](../onboarding/architecture.md)
 * [Gitlab.com on Kubernetes](../onboarding/gitlab.com_on_k8s.md)
+* [Packagecloud Infrastructure and Backups](../packagecloud/infrastructure.md)
 * [Re-indexing a package](../packagecloud/reindex-package.md)
 * [Determine The GitLab Project Associated with a Domain](../pages/pages-domain-lookup.md)
 * [Troubleshooting LetsEncrypt for Pages](../pages/pages-letsencrypt.md)

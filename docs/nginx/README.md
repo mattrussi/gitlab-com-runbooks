@@ -26,7 +26,7 @@
 * [monitor.gitlab.net not accessible or return 5xx errors](../monitoring/monitor-gitlab-net-not-accessible.md)
 * [Thanos Receive](../monitoring/thanos-receive.md)
 * [Gitlab.com on Kubernetes](../onboarding/gitlab.com_on_k8s.md)
-* [PackageCloud Infrastructure and Backups](../packagecloud/infrastructure.md)
+* [Packagecloud Infrastructure and Backups](../packagecloud/infrastructure.md)
 * [Managing Sentry in Kubernetes](../sentry/sentry-in-kube.md)
 * [Sentry is down and gives error 500](../sentry/sentry-is-down.md)
 * [Thanos Architecture Overview](../thanos/architecture.md)

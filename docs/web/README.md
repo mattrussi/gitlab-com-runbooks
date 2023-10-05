@@ -50,6 +50,7 @@
 * [Prometheus Empty Service Discovery](../monitoring/prometheus-empty-sd.md)
 * [Session: Application architecture](../onboarding/architecture.md)
 * [Diagnosis with Kibana](../onboarding/kibana-diagnosis.md)
+* [Packagecloud Infrastructure and Backups](../packagecloud/infrastructure.md)
 * [../patroni/database_peak_analysis.md](../patroni/database_peak_analysis.md)
 * [Geo Patroni Cluster Management](../patroni/geo-patroni-cluster.md)
 * [../patroni/pg_collect_query_data.md](../patroni/pg_collect_query_data.md)

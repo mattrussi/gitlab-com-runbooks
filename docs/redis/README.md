@@ -27,7 +27,7 @@
 * [Service Apdex](../monitoring/definition-service-apdex.md)
 * [Session: Application architecture](../onboarding/architecture.md)
 * [Diagnosis with Kibana](../onboarding/kibana-diagnosis.md)
-* [PackageCloud Infrastructure and Backups](../packagecloud/infrastructure.md)
+* [Packagecloud Infrastructure and Backups](../packagecloud/infrastructure.md)
 * [Rotating Rails' PostgreSQL password](../patroni/rotating-rails-postgresql-password.md)
 * [Removing cache entries from Redis](../redis-cluster-cache/remove-cache-entries.md)
 * [Blocking individual IPs using Redis and Rack Attack](ban-an-IP-with-redis.md)
