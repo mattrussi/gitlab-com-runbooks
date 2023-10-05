@@ -74,9 +74,9 @@ The GCP Ingress that sits in front of these deployments is configured to route a
 - `/*` -> `web`
 - `/api/*` -> `rainbows`
 
-### Why do you run nginx & unicorn in the rainbows deployment?
+### Why does the rainbows container also run nginx & unicorn?
 
-The reason is that we can't configure the ingress to **only** route `POST` API requests to rainbows. It is simple path
+It's because we can't configure the ingress to **only** route `POST` API requests to rainbows. It is simple path
 based matching, so we route all of `/api/*` to rainbows. This means that if there's a `GET` request for the API, we need
 unicorn to process it, but it will get routed to the rainbows deployment due to the path match, so this is why we have
 nginx & unicorn running inside the rainbows container.
