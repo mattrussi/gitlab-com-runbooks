@@ -44,7 +44,7 @@ metricsCatalog.serviceDefinition(
   + patroniHelpers.gitlabcomObservabilityToolingForPatroni('patroni-ci')
   +
   {
-    capacityPlanning: {
+    capacityPlanning+: {
       components: [
         {
           name: 'memory',

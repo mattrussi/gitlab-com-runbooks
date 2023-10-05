@@ -248,7 +248,7 @@ metricsCatalog.serviceDefinition(
     skippedMaturityCriteria: {
       'Service exists in the dependency graph': 'The logging platform consumes logs via fluentd, but does not interact directly with any other services',
     },
-    capacityPlanning: {
+    capacityPlanning+: {
       components: [
         {
           name: 'elastic_single_node_disk_space',

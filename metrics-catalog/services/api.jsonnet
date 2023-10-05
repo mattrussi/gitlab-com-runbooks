@@ -191,7 +191,7 @@ metricsCatalog.serviceDefinition({
     serviceAggregation: false,  // Don't add this to the request rate of the service
     severity: 's3',  // Don't page SREs for this SLI
   }),
-  capacityPlanning: {
+  capacityPlanning+: {
     components: [
       {
         name: 'ruby_thread_contention',

@@ -17,7 +17,7 @@ metricsCatalog.serviceDefinition(
   + redisHelpers.gitlabcomObservabilityToolingForRedis('redis-db-load-balancing')
   +
   {
-    capacityPlanning: {
+    capacityPlanning+: {
       components: [
         {
           name: 'disk_space',
