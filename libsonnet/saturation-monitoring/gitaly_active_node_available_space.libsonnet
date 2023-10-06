@@ -31,10 +31,10 @@ local selectors = import 'promql/selectors.libsonnet';
         sum by (%(aggregationLabels)s) (
           (
             node_filesystem_avail_bytes{%(selector)s, %(gitalyDiskSelector)s} -
-            (node_filesystem_size_bytes{%(selector)s, %(gitalyDiskSelector)s} * 0.2)
+            (node_filesystem_size_bytes{%(selector)s, %(gitalyDiskSelector)s} * 0.25)
           )
           and
-          (instance:node_filesystem_avail:ratio{%(selector)s, %(gitalyDiskSelector)s} > 0.2)
+          (instance:node_filesystem_avail:ratio{%(selector)s, %(gitalyDiskSelector)s} > 0.25)
         )
         /
         sum by (%(aggregationLabels)s)(
