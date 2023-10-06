@@ -176,7 +176,7 @@ metricsCatalog.serviceDefinition(
   )
   +
   {
-    capacityPlanning: {
+    capacityPlanning+: {
       components: [
         {
           name: 'node_schedstat_waiting',

@@ -24,7 +24,7 @@ metricsCatalog.serviceDefinition(
   + patroniHelpers.gitlabcomObservabilityToolingForPatroni('patroni-registry')
   +
   {
-    capacityPlanning: {
+    capacityPlanning+: {
       events: [
         {
           date: '2023-06-10',
