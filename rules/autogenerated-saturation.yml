@@ -319,15 +319,15 @@ groups:
             1 - (
               sum by (environment, tier, type, stage, shard, shard) (
                 (
-                  node_filesystem_avail_bytes{type="gitaly", mountpoint="/var/opt/gitlab",shard=~"default|praefect"} -
-                  (node_filesystem_size_bytes{type="gitaly", mountpoint="/var/opt/gitlab",shard=~"default|praefect"} * 0.25)
+                  node_filesystem_avail_bytes{type="gitaly", fqdn=~"gitaly-.*-stor-.*",mountpoint="/var/opt/gitlab",shard=~"default|praefect"} -
+                  (node_filesystem_size_bytes{type="gitaly", fqdn=~"gitaly-.*-stor-.*",mountpoint="/var/opt/gitlab",shard=~"default|praefect"} * 0.25)
                 )
                 and
-                (instance:node_filesystem_avail:ratio{type="gitaly", mountpoint="/var/opt/gitlab",shard=~"default|praefect"} > 0.25)
+                (instance:node_filesystem_avail:ratio{type="gitaly", fqdn=~"gitaly-.*-stor-.*",mountpoint="/var/opt/gitlab",shard=~"default|praefect"} > 0.25)
               )
               /
               sum by (environment, tier, type, stage, shard, shard)(
-                node_filesystem_size_bytes{type="gitaly", mountpoint="/var/opt/gitlab",shard=~"default|praefect"}
+                node_filesystem_size_bytes{type="gitaly", fqdn=~"gitaly-.*-stor-.*",mountpoint="/var/opt/gitlab",shard=~"default|praefect"}
               )
             )
             ,
@@ -1548,11 +1548,11 @@ groups:
   - record: slo:max:soft:gitlab_component_saturation:ratio
     labels:
       component: gitaly_active_node_available_space
-    expr: "0.96"
+    expr: "0.8"
   - record: slo:max:hard:gitlab_component_saturation:ratio
     labels:
       component: gitaly_active_node_available_space
-    expr: "0.97"
+    expr: "0.85"
   - record: slo:max:soft:gitlab_component_saturation:ratio
     labels:
       component: gitaly_total_disk_space
@@ -3835,15 +3835,15 @@ groups:
               1 - (
                 sum by (environment, tier, type, stage, shard, shard) (
                   (
-                    node_filesystem_avail_bytes{environment="{{ $labels.environment }}",stage="{{ $labels.stage }}",type="{{ $labels.type }}", mountpoint="/var/opt/gitlab",shard=~"default|praefect"} -
-                    (node_filesystem_size_bytes{environment="{{ $labels.environment }}",stage="{{ $labels.stage }}",type="{{ $labels.type }}", mountpoint="/var/opt/gitlab",shard=~"default|praefect"} * 0.25)
+                    node_filesystem_avail_bytes{environment="{{ $labels.environment }}",stage="{{ $labels.stage }}",type="{{ $labels.type }}", fqdn=~"gitaly-.*-stor-.*",mountpoint="/var/opt/gitlab",shard=~"default|praefect"} -
+                    (node_filesystem_size_bytes{environment="{{ $labels.environment }}",stage="{{ $labels.stage }}",type="{{ $labels.type }}", fqdn=~"gitaly-.*-stor-.*",mountpoint="/var/opt/gitlab",shard=~"default|praefect"} * 0.25)
                   )
                   and
-                  (instance:node_filesystem_avail:ratio{environment="{{ $labels.environment }}",stage="{{ $labels.stage }}",type="{{ $labels.type }}", mountpoint="/var/opt/gitlab",shard=~"default|praefect"} > 0.25)
+                  (instance:node_filesystem_avail:ratio{environment="{{ $labels.environment }}",stage="{{ $labels.stage }}",type="{{ $labels.type }}", fqdn=~"gitaly-.*-stor-.*",mountpoint="/var/opt/gitlab",shard=~"default|praefect"} > 0.25)
                 )
                 /
                 sum by (environment, tier, type, stage, shard, shard)(
-                  node_filesystem_size_bytes{environment="{{ $labels.environment }}",stage="{{ $labels.stage }}",type="{{ $labels.type }}", mountpoint="/var/opt/gitlab",shard=~"default|praefect"}
+                  node_filesystem_size_bytes{environment="{{ $labels.environment }}",stage="{{ $labels.stage }}",type="{{ $labels.type }}", fqdn=~"gitaly-.*-stor-.*",mountpoint="/var/opt/gitlab",shard=~"default|praefect"}
                 )
               )
               ,
@@ -3858,15 +3858,15 @@ groups:
               1 - (
                 sum by (environment, tier, type, stage, shard, shard) (
                   (
-                    node_filesystem_avail_bytes{environment="{{ $labels.environment }}",stage="{{ $labels.stage }}",type="{{ $labels.type }}", mountpoint="/var/opt/gitlab",shard=~"default|praefect"} -
-                    (node_filesystem_size_bytes{environment="{{ $labels.environment }}",stage="{{ $labels.stage }}",type="{{ $labels.type }}", mountpoint="/var/opt/gitlab",shard=~"default|praefect"} * 0.25)
+                    node_filesystem_avail_bytes{environment="{{ $labels.environment }}",stage="{{ $labels.stage }}",type="{{ $labels.type }}", fqdn=~"gitaly-.*-stor-.*",mountpoint="/var/opt/gitlab",shard=~"default|praefect"} -
+                    (node_filesystem_size_bytes{environment="{{ $labels.environment }}",stage="{{ $labels.stage }}",type="{{ $labels.type }}", fqdn=~"gitaly-.*-stor-.*",mountpoint="/var/opt/gitlab",shard=~"default|praefect"} * 0.25)
                   )
                   and
-                  (instance:node_filesystem_avail:ratio{environment="{{ $labels.environment }}",stage="{{ $labels.stage }}",type="{{ $labels.type }}", mountpoint="/var/opt/gitlab",shard=~"default|praefect"} > 0.25)
+                  (instance:node_filesystem_avail:ratio{environment="{{ $labels.environment }}",stage="{{ $labels.stage }}",type="{{ $labels.type }}", fqdn=~"gitaly-.*-stor-.*",mountpoint="/var/opt/gitlab",shard=~"default|praefect"} > 0.25)
                 )
                 /
                 sum by (environment, tier, type, stage, shard, shard)(
-                  node_filesystem_size_bytes{environment="{{ $labels.environment }}",stage="{{ $labels.stage }}",type="{{ $labels.type }}", mountpoint="/var/opt/gitlab",shard=~"default|praefect"}
+                  node_filesystem_size_bytes{environment="{{ $labels.environment }}",stage="{{ $labels.stage }}",type="{{ $labels.type }}", fqdn=~"gitaly-.*-stor-.*",mountpoint="/var/opt/gitlab",shard=~"default|praefect"}
                 )
               )
               ,
