@@ -70,7 +70,6 @@ metricsCatalog.serviceDefinition({
   local sliCommon = {
     userImpacting: true,
     team: 'reliability_general',
-    severity: 's3',  // no pages for now
   },
 
   serviceLevelIndicators: {
