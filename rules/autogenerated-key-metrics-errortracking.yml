@@ -6,28 +6,28 @@ groups:
   rules:
   - record: gitlab_component_ops:rate
     labels:
-      component: errortracking
+      component: loadbalancer
       tier: sv
       type: errortracking
     expr: |
       sum by (env,environment,stage) (
-        rate(traefik_service_requests_total{cluster="opstrace-prod",job="default/traefik",service=~".*errortracking-api.*",team="observability"}[1m] offset 30s)
+        rate(traefik_service_requests_total{job="default/traefik",service=~".*errortracking-api.*",team="observability"}[1m] offset 30s)
       )
   - record: gitlab_component_errors:rate
     labels:
-      component: errortracking
+      component: loadbalancer
       tier: sv
       type: errortracking
     expr: |
       (
         sum by (env,environment,stage) (
-          rate(traefik_service_requests_total{cluster="opstrace-prod",code=~"^5.*",job="default/traefik",service=~".*errortracking-api.*",team="observability"}[1m] offset 30s)
+          rate(traefik_service_requests_total{code=~"^5.*",job="default/traefik",service=~".*errortracking-api.*",team="observability"}[1m] offset 30s)
         )
       )
       or
       (
         0 * group by(env,environment,stage) (
-          gitlab_component_ops:rate{component="errortracking",tier="sv",type="errortracking"}
+          gitlab_component_ops:rate{component="loadbalancer",tier="sv",type="errortracking"}
         )
       )
 - name: 'Component-Level SLIs: errortracking - 5m burn-rate'
@@ -35,28 +35,28 @@ groups:
   rules:
   - record: gitlab_component_ops:rate_5m
     labels:
-      component: errortracking
+      component: loadbalancer
       tier: sv
       type: errortracking
     expr: |
       sum by (env,environment,stage) (
-        rate(traefik_service_requests_total{cluster="opstrace-prod",job="default/traefik",service=~".*errortracking-api.*",team="observability"}[5m] offset 30s)
+        rate(traefik_service_requests_total{job="default/traefik",service=~".*errortracking-api.*",team="observability"}[5m] offset 30s)
       )
   - record: gitlab_component_errors:rate_5m
     labels:
-      component: errortracking
+      component: loadbalancer
       tier: sv
       type: errortracking
     expr: |
       (
         sum by (env,environment,stage) (
-          rate(traefik_service_requests_total{cluster="opstrace-prod",code=~"^5.*",job="default/traefik",service=~".*errortracking-api.*",team="observability"}[5m] offset 30s)
+          rate(traefik_service_requests_total{code=~"^5.*",job="default/traefik",service=~".*errortracking-api.*",team="observability"}[5m] offset 30s)
         )
       )
       or
       (
         0 * group by(env,environment,stage) (
-          gitlab_component_ops:rate_5m{component="errortracking",tier="sv",type="errortracking"}
+          gitlab_component_ops:rate_5m{component="loadbalancer",tier="sv",type="errortracking"}
         )
       )
 - name: 'Component-Level SLIs: errortracking - 30m burn-rate'
@@ -64,28 +64,28 @@ groups:
   rules:
   - record: gitlab_component_ops:rate_30m
     labels:
-      component: errortracking
+      component: loadbalancer
       tier: sv
       type: errortracking
     expr: |
       sum by (env,environment,stage) (
-        rate(traefik_service_requests_total{cluster="opstrace-prod",job="default/traefik",service=~".*errortracking-api.*",team="observability"}[30m] offset 30s)
+        rate(traefik_service_requests_total{job="default/traefik",service=~".*errortracking-api.*",team="observability"}[30m] offset 30s)
       )
   - record: gitlab_component_errors:rate_30m
     labels:
-      component: errortracking
+      component: loadbalancer
       tier: sv
       type: errortracking
     expr: |
       (
         sum by (env,environment,stage) (
-          rate(traefik_service_requests_total{cluster="opstrace-prod",code=~"^5.*",job="default/traefik",service=~".*errortracking-api.*",team="observability"}[30m] offset 30s)
+          rate(traefik_service_requests_total{code=~"^5.*",job="default/traefik",service=~".*errortracking-api.*",team="observability"}[30m] offset 30s)
         )
       )
       or
       (
         0 * group by(env,environment,stage) (
-          gitlab_component_ops:rate_30m{component="errortracking",tier="sv",type="errortracking"}
+          gitlab_component_ops:rate_30m{component="loadbalancer",tier="sv",type="errortracking"}
         )
       )
 - name: 'Component-Level SLIs: errortracking - 1h burn-rate'
@@ -93,28 +93,28 @@ groups:
   rules:
   - record: gitlab_component_ops:rate_1h
     labels:
-      component: errortracking
+      component: loadbalancer
       tier: sv
       type: errortracking
     expr: |
       sum by (env,environment,stage) (
-        rate(traefik_service_requests_total{cluster="opstrace-prod",job="default/traefik",service=~".*errortracking-api.*",team="observability"}[1h] offset 30s)
+        rate(traefik_service_requests_total{job="default/traefik",service=~".*errortracking-api.*",team="observability"}[1h] offset 30s)
       )
   - record: gitlab_component_errors:rate_1h
     labels:
-      component: errortracking
+      component: loadbalancer
       tier: sv
       type: errortracking
     expr: |
       (
         sum by (env,environment,stage) (
-          rate(traefik_service_requests_total{cluster="opstrace-prod",code=~"^5.*",job="default/traefik",service=~".*errortracking-api.*",team="observability"}[1h] offset 30s)
+          rate(traefik_service_requests_total{code=~"^5.*",job="default/traefik",service=~".*errortracking-api.*",team="observability"}[1h] offset 30s)
         )
       )
       or
       (
         0 * group by(env,environment,stage) (
-          gitlab_component_ops:rate_1h{component="errortracking",tier="sv",type="errortracking"}
+          gitlab_component_ops:rate_1h{component="loadbalancer",tier="sv",type="errortracking"}
         )
       )
 - name: 'Component-Level SLIs: errortracking - 6h burn-rate'
@@ -122,28 +122,28 @@ groups:
   rules:
   - record: gitlab_component_ops:rate_6h
     labels:
-      component: errortracking
+      component: loadbalancer
       tier: sv
       type: errortracking
     expr: |
       sum by (env,environment,stage) (
-        rate(traefik_service_requests_total{cluster="opstrace-prod",job="default/traefik",service=~".*errortracking-api.*",team="observability"}[6h] offset 30s)
+        rate(traefik_service_requests_total{job="default/traefik",service=~".*errortracking-api.*",team="observability"}[6h] offset 30s)
       )
   - record: gitlab_component_errors:rate_6h
     labels:
-      component: errortracking
+      component: loadbalancer
       tier: sv
       type: errortracking
     expr: |
       (
         sum by (env,environment,stage) (
-          rate(traefik_service_requests_total{cluster="opstrace-prod",code=~"^5.*",job="default/traefik",service=~".*errortracking-api.*",team="observability"}[6h] offset 30s)
+          rate(traefik_service_requests_total{code=~"^5.*",job="default/traefik",service=~".*errortracking-api.*",team="observability"}[6h] offset 30s)
         )
       )
       or
       (
         0 * group by(env,environment,stage) (
-          gitlab_component_ops:rate_6h{component="errortracking",tier="sv",type="errortracking"}
+          gitlab_component_ops:rate_6h{component="loadbalancer",tier="sv",type="errortracking"}
         )
       )
 - name: 'Component mapping: errortracking'
@@ -151,7 +151,7 @@ groups:
   rules:
   - record: gitlab_component_service:mapping
     labels:
-      component: errortracking
+      component: loadbalancer
       global_aggregation: "no"
       regional_aggregation: "no"
       service_aggregation: "no"

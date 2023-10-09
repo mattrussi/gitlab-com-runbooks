@@ -15,7 +15,7 @@ metricsCatalog.serviceDefinition({
     vms: false,
   },
   serviceLevelIndicators: {
-    errortracking: {
+    loadbalancer: {
       severity: 's3',  // Don't page SREs for this SLI
       userImpacting: false,
       serviceAggregation: false,
@@ -26,7 +26,6 @@ metricsCatalog.serviceDefinition({
 
       local errortrackingSelector = {
         team: 'observability',
-        cluster: 'opstrace-prod',
         job: 'default/traefik',
         service: { re: '.*errortracking-api.*' },
       },
@@ -46,7 +45,7 @@ metricsCatalog.serviceDefinition({
       significantLabels: [],
 
       toolingLinks: [
-        toolingLinks.kibana(title='Rails', index='rails'),
+        toolingLinks.kibana(title='Observability', index='observability'),
       ],
     },
   },

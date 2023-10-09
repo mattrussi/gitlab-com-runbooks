@@ -12,6 +12,8 @@
 
 ## Logging
 
+* [Kibana](https://log.gprd.gitlab.net/app/r/s/Kvsjn)
+
 ## Troubleshooting Pointers
 
 * [ErrorTracking main troubleshooting document](overview.md)
