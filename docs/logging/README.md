@@ -131,6 +131,7 @@ There are many entries missing from this list:
 | rails.application             | gitlab-rails/application.log                     | JSON             | pubsub-application-inf  |
 | rails.audit                   | gitlab-rails/audit_json.log                      | JSON             | pubsub-rails-inf        |
 | rails.auth                    | gitlab-rails/auth.log                            | JSON             | pubsub-rails-inf        |
+| rails.clickhouse              | gitlab-rails/clickhouse.log                      | JSON             | pubsub-rails-inf        |
 | rails.database_load_balancing | gitlab-rails/database_load_balancing.log         | JSON             | pubsub-rails-inf        |
 | rails.geo                     | gitlab-rails/geo.log                             | JSON             | pubsub-rails-inf        |
 | rails.git                     | gitlab-rails/git_json.log                        | JSON             | pubsub-rails-inf        |
