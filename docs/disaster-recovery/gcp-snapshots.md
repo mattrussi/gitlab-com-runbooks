@@ -39,10 +39,10 @@ One possible reason for snapshot errors is if we are at max quota for `Snapshots
 
 If the errors in stackdriver recommend to retry e.g. `"Internal error. Please try again or contact Google Support. (Code: '-5418078226953242804')"`, we can look up the disk name of failed snapshot by going to 'response' -> 'error' -> 'targetLink' in stackdriver log message. For example `https://www.googleapis.com/compute/v1/projects/gitlab-production/zones/us-east1-c/disks/file-97-stor-gprd-data`, which has disk name as the last part of Uri `file-97-stor-gprd-data`.
 
-Then run following command to create the snapshot (replace `<disk_name>` with the actual name e.g. `file-97-stor-gprd-data`):
+Then run following command to create the snapshot (replace `<disk_name>` with the actual name e.g. `file-97-stor-gprd-data`, and the `<zone>` with the disk's zone, can be found in [this list](https://console.cloud.google.com/compute/disks?referrer=search&project=gitlab-production)):
 
 ```shell
-gcloud compute disks snapshot <disk_name> --zone=us-central1-a --description="Retried manual snapshot for <disk_name>"
+gcloud --project gitlab-production compute disks snapshot <disk_name> --zone=<zone> --description="Retried manual snapshot for <disk_name>"
 ```
 
 The manually created snapshots will get cleaned up by a [scheduled cron job](https://ops.gitlab.net/gitlab-com/gl-infra/gitlab-restore/gitlab-production-snapshots/-/pipeline_schedules).
