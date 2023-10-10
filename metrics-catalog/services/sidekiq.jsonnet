@@ -18,19 +18,18 @@ metricsCatalog.serviceDefinition({
   tier: 'sv',
   tags: ['rails'],
 
-  shardLevelMonitoring: {
-    enabled: true,  // SLIs will inherit shard-level monitoring by default
-    overrides: {
-      sidekiq_execution: {
-        'urgent-authorized-projects': {
-          monitoringThresholds+: {
+  // overrides monitoringThresholds for specific shards and SLIs
+  monitoring: {
+    shard: {
+      enabled: true,
+      overrides: {
+        sidekiq_execution: {
+          'urgent-authorized-projects': {
             apdexScore: 0.98,
           },
         },
-      },
-      sidekiq_queueing: {
-        'urgent-other': {
-          monitoringThresholds+: {
+        sidekiq_queueing: {
+          'urgent-other': {
             apdexScore: 0.97,
           },
         },

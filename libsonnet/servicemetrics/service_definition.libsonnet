@@ -2,6 +2,8 @@ local kubeLabelSelectors = import 'kube_label_selectors.libsonnet';
 local multiburnExpression = import 'mwmbr/expression.libsonnet';
 local maturityLevels = import 'service-maturity/levels.libsonnet';
 local serviceLevelIndicatorDefinition = import 'service_level_indicator_definition.libsonnet';
+local misc = import 'utils/misc.libsonnet';
+local validator = import 'utils/validator.libsonnet';
 
 // For now we assume that services are provisioned on vms and not kubernetes
 local provisioningDefaults = { vms: true, kubernetes: false, runway: false };
@@ -11,7 +13,7 @@ local serviceDefaults = {
   autogenerateRecordingRules: true,
   disableOpsRatePrediction: false,
   nodeLevelMonitoring: false,  // By default we do not use node-level monitoring
-  shardLevelMonitoring: { enabled: false },  // By default we do not use shard-level monitoring
+  monitoring: {},
   kubeConfig: {},
   kubeResources: {},
   regional: false,  // By default we don't support regional monitoring for services
@@ -23,6 +25,42 @@ local serviceDefaults = {
     environment: 'gprd',
   },
 };
+
+local shardLevelMonitoringEnabled(serviceDefinition) = misc.dig(
+  serviceDefinition, ['monitoring', 'shard', 'enabled']
+) == true;
+
+local validateMonitoring(serviceDefinition) =
+  if std.length(std.objectFields(serviceDefinition.monitoring)) > 0 then
+    local shardValidator = if std.objectHas(serviceDefinition.monitoring, 'shard') then
+      validator.new({
+        monitoring: {
+          shard: {
+            enabled: validator.boolean,
+            overrides: validator.optional(validator.object),
+          },
+        },
+      })
+    else
+      validator.new({});
+
+    local shardValidated = shardValidator.assertValid(serviceDefinition);
+
+    local shardLevelSlis = [
+      sli.key
+      for sli in std.objectKeysValues(serviceDefinition.serviceLevelIndicators)
+      if sli.value.shardLevelMonitoring
+    ];
+    local overridenShardSlis = std.objectFields(misc.dig(shardValidated.monitoring, ['shard', 'overrides']));
+    assert misc.arrayDiff(
+      overridenShardSlis, shardLevelSlis
+    ) == [] : 'SLIs in `monitoring.shard.overrides` must be present and has shardLevelMonitoring enabled. Illegal SLIs: %s' % [
+      misc.arrayDiff(overridenShardSlis, shardLevelSlis),
+    ];
+
+    serviceDefinition
+  else
+    serviceDefinition;
 
 // Convience method, will wrap a raw definition in a serviceLevelIndicatorDefinition if needed
 local prepareComponent(definition) =
@@ -72,14 +110,14 @@ local validateAndApplyServiceDefaults(service) =
     )
     +
     (
-      if serviceWithDefaults.shardLevelMonitoring.enabled then
+      if shardLevelMonitoringEnabled(serviceWithDefaults) then
         { shardLevelMonitoring: true }
       else
         {}
     );
 
   // If this service is provisioned on kubernetes we should include a kubernetes deployment map
-  serviceWithDefaults {
+  validateMonitoring(serviceWithDefaults {
     tags: std.set(serviceWithDefaults.tags),
     serviceLevelIndicators: {
       [sliName]: prepareComponent(service.serviceLevelIndicators[sliName]).initServiceLevelIndicatorWithName(sliName, sliInheritedDefaults)
@@ -91,7 +129,7 @@ local validateAndApplyServiceDefaults(service) =
       else
         serviceWithDefaults.skippedMaturityCriteria + ({ 'SLA calculations driven from SLO metrics': 'Service is not user facing' })
     ),
-  };
+  });
 
 local serviceDefinition(service) =
   // Private functions
@@ -131,6 +169,9 @@ local serviceDefinition(service) =
     hasDedicatedKubeNodePool()::
       service.provisioning.kubernetes &&
       service.kubeConfig.labelSelectors.hasNodeSelector(),
+
+    isShardLevelMonitored():: shardLevelMonitoringEnabled(service),
+    shardMonitoringOverrides():: misc.dig(service, ['monitoring', 'shard', 'overrides']),
   };
 
 {
